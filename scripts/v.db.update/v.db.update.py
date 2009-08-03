@@ -79,12 +79,12 @@ def main():
 
     # does map exist in CURRENT mapset?
     if not grass.find_file(map, element = 'vector', mapset = mapset)['file']:
-	grass.fatal("Vector map '$GIS_OPT_MAP' not found in current mapset")
+	grass.fatal(_("Vector map '$GIS_OPT_MAP' not found in current mapset"))
 
     try:
         f = grass.vector_db(map)[int(layer)]
     except KeyError:
-	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
+	grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
     table = f['table']
     database = f['database']
@@ -94,16 +94,16 @@ def main():
     try:
         coltype = grass.vector_columns(map, layer)[column]
     except KeyError:
-	grass.fatal('Column <%s> not found' % column)
+	grass.fatal(_('Column <%s> not found') % column)
 
     if qcolumn:
 	if value:
-	    grass.fatal('value= and qcolumn= are mutually exclusive')
+	    grass.fatal(_('value= and qcolumn= are mutually exclusive'))
 	# special case: we copy from another column
 	value = qcolumn
     else:
 	if not value:
-	    grass.fatal('Either value= or qcolumn= must be given')
+	    grass.fatal(_('Either value= or qcolumn= must be given'))
 	# we insert a value
 	if coltype.upper() not in ["INTEGER", "DOUBLE PRECISION"]:
 	    value = "'%s'" % value

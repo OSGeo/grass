@@ -176,14 +176,14 @@ def main():
     gnuplot = flags['g']
 
     if not group and not raster:
-	grass.fatal("Either group= or raster= is required")
+	grass.fatal(_("Either group= or raster= is required"))
 
     if group and raster:
-	grass.fatal("group= and raster= are mutually exclusive")
+	grass.fatal(_("group= and raster= are mutually exclusive"))
 
     #check if present
     if gnuplot and not grass.find_program('gnuplot', ['-V']):
-	grass.fatal("gnuplot required, please install first")
+	grass.fatal(_("gnuplot required, please install first"))
 
     tmp1 = grass.tempfile()
     tmp2 = grass.tempfile()

@@ -67,7 +67,7 @@ def main():
 	for ch in ['r','g','b']:
 	    map = '%s.%s' % (output, ch)
 	    if grass.find_file(map, element = 'cell', mapset = mapset)['file']:
-		grass.fatal("Raster map <%s> already exists." % map)
+		grass.fatal(_("Raster map <%s> already exists.") % map)
 
     percent = int(percent)
     perc_inv = 100 - percent
@@ -75,7 +75,7 @@ def main():
     frac1 = percent / 100.0
     frac2 = perc_inv / 100.0
 
-    grass.message("Calculating the three component maps...")
+    grass.message(_("Calculating the three component maps..."))
 
     template = string.Template("$$output.$ch = $$frac1 * $ch#$$first + $$frac2 * $ch#$$second")
     cmd = [template.substitute(ch = ch) for ch in ['r','g','b']]
@@ -97,8 +97,8 @@ def main():
 			  history = "  %d%% of %s, %d%% of %s" % (percent, first, perc_inv, second))
 	grass.run_command('r.support', map = map, history = os.environ['CMDLINE'])
 
-    grass.message("Done. Use the following command to visualize the result:")
-    grass.message("d.rgb r=%s.r g=%s.g b=%s.b" % (output, output, output))
+    grass.message(_("Done. Use the following command to visualize the result:"))
+    grass.message(_("d.rgb r=%s.r g=%s.g b=%s.b") % (output, output, output))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

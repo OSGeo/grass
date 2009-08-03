@@ -113,7 +113,7 @@ def main():
 
     if not preserve:
 	for i in [red, green, blue]:
-	    grass.message("Processing <%s>..." % i)
+	    grass.message(_("Processing <%s>...") % i)
 	    v0 = get_percentile(i, 2)
 	    v1 = get_percentile(i, brightness)
 	    grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
@@ -122,7 +122,7 @@ def main():
 	all_max = 0
 	all_min = 255
 	for i in [red, green, blue]:
-	    grass.message("Processing <%s>..." % i)
+	    grass.message(_("Processing <%s>...") % i)
 	    v0 = get_percentile(i, 2)
 	    v1 = get_percentile(i, brightness)
 	    grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))

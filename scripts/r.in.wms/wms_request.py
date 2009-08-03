@@ -36,7 +36,7 @@ class WMSRequest:
         if self.flags['p']:
             self.proj_srs = grass.read_command('g.proj', flags='j')
             if not self.proj_srs:
-                grass.fatal('g.proj failed')
+                grass.fatal(_('g.proj failed'))
             self.srs_scale = int(grass.parse_key_val(proj_srs['+to_meter']))
         else:
             self.proj_srs = '+init=%s' % self.options['srs'].lower()
@@ -76,7 +76,7 @@ class WMSRequest:
             self.worldfile   = ".gfw"
             self.file_extent = ".gif"
         else:
-            grass.fatal("Uknown image format '%s'" % format_opt)
+            grass.fatal(_("Uknown image format '%s'") % format_opt)
         
         # create download directory
         if not os.path.exists(self.options['folder']):
@@ -106,7 +106,7 @@ class WMSRequest:
         return ret
     
     def GetTiles(self):
-        grass.message("Calculating tiles...")
+        grass.message(_("Calculating tiles..."))
         tiles = grass.read_command('r.tileset',
                                 quiet = True,
                                 flags = 'g',
@@ -117,7 +117,7 @@ class WMSRequest:
                                 maxrows = int(self.options['maxrows']),
                                 **self.tileset_options)
         if not tiles:
-            grass.fatal("r.tileset failed")
+            grass.fatal(_("r.tileset failed"))
         tiles = tiles.splitlines()
         
         if self.flags['c']:
@@ -173,7 +173,7 @@ class WMSRequest:
             i += 1
             
         rf.close()
-        grass.message("Done: requesting %d tiles" % len(tiles))
+        grass.message(_("Done: requesting %d tiles") % len(tiles))
         if len(tiles) > 200:
 	    grass.warning("Proceed with care. This number of tiles may \
 	      exceed the maximum command line arguments available from \

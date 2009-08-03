@@ -239,7 +239,7 @@ def main():
                                        quiet = True,
                                        flags = 'jf').rstrip('\n')
         if not dest_proj:
-            grass.fatal('g.proj failed')
+            grass.fatal(_('g.proj failed'))
     else:
         dest_proj = options['destproj']
     grass.debug("Getting destination projection -> '%s'" % dest_proj)
@@ -250,7 +250,7 @@ def main():
                                  quiet = True,
                                  flags = 'j')
         if not ret:
-            grass.fatal('g.proj failed')
+            grass.fatal(_('g.proj failed'))
         
         dest_scale = ret['+to_meter'].strip()
     else:
@@ -319,7 +319,7 @@ def main():
     # I'm going to make the numbers all simpler and add this extra cell to
     # every tile.
     
-    grass.message('Computing tiling...')
+    grass.message(_('Computing tiling...'))
     tiles = [-1, -1]
     tile_base_size = [-1, -1]
     tiles_extra_1 = [-1, -1]

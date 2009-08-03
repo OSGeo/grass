@@ -79,7 +79,7 @@ def main():
     if options['option'] == 'add':
         num_bound = grass.vector_info_topo(map = options['input'])['boundaries']
 	if num_bound == 0:
-	    grass.fatal("Input vector map contains no boundaries.")
+	    grass.fatal(_("Input vector map contains no boundaries."))
 
 	grass.exec_command("v.category", type = 'area', **options)
 

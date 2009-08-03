@@ -110,7 +110,7 @@ def main():
 
     #check whether gdalwarp is in path and executable
     if not grass.find_program('gdalwarp', ['--version']):
-        grass.fatal("gdalwarp is not in the path and executable")
+        grass.fatal(_("gdalwarp is not in the path and executable"))
 
     #create temporary file to hold gdalwarp output before importing to GRASS
     tempfile = grass.read_command("g.tempfile", pid = os.getpid()).strip() + '.tif'
@@ -120,7 +120,7 @@ def main():
 
     #currently only runs in projected location
     if "XY location" in proj:
-      grass.fatal("This module needs to be run in a projected location (found: %s)" % proj)
+      grass.fatal(_("This module needs to be run in a projected location (found: %s)") % proj)
 
 
     #process list of bands
@@ -138,22 +138,22 @@ def main():
                 srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (input, dataset)
                 import_aster(proj, srcfile, tempfile, band)
             else:
-                grass.fatal('band %s is not an available Terra/ASTER band' % band)
+                grass.fatal(_('band %s is not an available Terra/ASTER band') % band)
     elif proctype == "DEM": 
         srcfile = input
         import_aster(proj, srcfile, tempfile, "DEM")
 
     #cleanup
-    grass.message("Cleaning up ...")
+    grass.message(_("Cleaning up ..."))
     grass.try_remove(tempfile)
-    grass.message("Done.")
+    grass.message(_("Done."))
 
     return
 
 def import_aster(proj, srcfile, tempfile, band):
     #run gdalwarp with selected options (must be in $PATH)
     #to translate aster image to geotiff
-    grass.message("Georeferencing aster image ...")
+    grass.message(_("Georeferencing aster image ..."))
     grass.debug("gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile))
 
     if platform.system() == "Darwin":
@@ -166,7 +166,7 @@ def import_aster(proj, srcfile, tempfile, band):
         return
 
     #import geotiff to GRASS
-    grass.message("Importing into GRASS ...")
+    grass.message(_("Importing into GRASS ..."))
     outfile = "%s.%s" % (output, band)
     grass.run_command("r.in.gdal", overwrite = flags['o'], input = tempfile, output = outfile)
 

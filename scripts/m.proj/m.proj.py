@@ -106,20 +106,20 @@ def main():
 
     #### check for cs2cs
     if not grass.find_program('cs2cs'):
-	grass.fatal("cs2cs program not found, install PROJ.4 first: http://proj.maptools.org")
+	grass.fatal(_("cs2cs program not found, install PROJ.4 first: http://proj.maptools.org"))
 
     #### check for overenthusiasm
     if proj_in and ll_in:
-	grass.fatal("Choose only one input parameter method")
+	grass.fatal(_("Choose only one input parameter method"))
 
     if proj_out and ll_out:
-	grass.fatal("Choose only one output parameter method") 
+	grass.fatal(_("Choose only one output parameter method")) 
 
     if ll_in and ll_out:
-	grass.fatal("Choise only one auto-projection parameter method")
+	grass.fatal(_("Choise only one auto-projection parameter method"))
 
     if output and not grass.overwrite() and os.path.exists(output):
-	grass.fatal("Output file already exists") 
+	grass.fatal(_("Output file already exists")) 
 
     #### parse field separator
     # FIXME: input_x,y needs to split on multiple whitespace between them
@@ -140,11 +140,11 @@ def main():
         ifs = ','
     else:
         if len(ifs) > 1:
-            grass.warning("Invalid field separator, using '%s'" % ifs[0])
+            grass.warning(_("Invalid field separator, using '%s'") % ifs[0])
         try:
             ifs = ifs[0]
         except IndexError:
-            grass.fatal("Invalid field separator '%s'" % ifs)
+            grass.fatal(_("Invalid field separator '%s'") % ifs)
    
     if ofs.lower() == 'space':
         ofs = ' '
@@ -154,17 +154,17 @@ def main():
         ofs = ','
     else:
         if len(ofs) > 1:
-            grass.warning("Invalid field separator, using '%s'" % ofs[0])
+            grass.warning(_("Invalid field separator, using '%s'") % ofs[0])
         try:
             ofs = ofs[0]
         except IndexError:
-            grass.fatal("Invalid field separator '%s'" % ifs)
+            grass.fatal(_("Invalid field separator '%s'") % ifs)
 
     #### set up projection params
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if "XY location" in kv['+proj'] and (ll_in or ll_out):
-	grass.fatal("Unable to project to or from a XY location") 
+	grass.fatal(_("Unable to project to or from a XY location")) 
 
     in_proj = None
 
@@ -198,7 +198,7 @@ def main():
 	out_proj = proj_out
 
     if not out_proj:
-	grass.fatal("Missing output projection parameters ")
+	grass.fatal(_("Missing output projection parameters "))
     out_proj = out_proj.strip()
     grass.verbose("Output parameters: '%s'" % out_proj)
 
@@ -209,7 +209,7 @@ def main():
     else:
 	infile = input
 	if not os.path.exists(infile):
-	    grass.fatal("Unable to read input data")
+	    grass.fatal(_("Unable to read input data"))
 	inf = file(infile)
 	grass.debug("input file=[%s]" % infile)
 
@@ -253,7 +253,7 @@ def main():
     exitcode = p.wait()
 
     if exitcode != 0:
-	grass.warning("Projection transform probably failed, please investigate")
+	grass.warning(_("Projection transform probably failed, please investigate"))
 
 
     if not copy_input:

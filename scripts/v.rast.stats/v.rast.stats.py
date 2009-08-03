@@ -79,7 +79,7 @@ def cleanup():
     grass.run_command('g.remove', rast = '%s_%s' % (vector, tmpname), quiet = True)
     grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
     if mask_found:
-	grass.message("Restoring previous MASK...")
+	grass.message(_("Restoring previous MASK..."))
 	grass.run_command('g.rename', rast = (tmpname + "_origmask", 'MASK'), quiet = True)
 #    for f in [tmp, tmpname, sqltmp]:
 #	grass.try_remove(f)
@@ -113,18 +113,18 @@ def main():
 
     # does map exist in CURRENT mapset?
     if vect_mapset != mapset or not grass.find_file(vector, 'vector', mapset)['file']:
-	grass.fatal("Vector map <%s> not found in current mapset" % vector)
+	grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     vector = vs[0]
 
     #check the input raster map
     if not grass.find_file(raster, 'cell')['file']:
-	grass.fatal("Raster map <%s> not found" % raster)
+	grass.fatal(_("Raster map <%s> not found") % raster)
 
     #check presence of raster MASK, put it aside
     mask_found = bool(grass.find_file('MASK', 'cell')['file'])
     if mask_found:
-	grass.message("Raster MASK found, temporarily disabled")
+	grass.message(_("Raster MASK found, temporarily disabled"))
 	grass.run_command('g.rename', rast = ('MASK', tmpname + "_origmask"), quiet = True)
 
     #get RASTER resolution of map which we want to query:
@@ -143,7 +143,7 @@ def main():
     #prepare raster MASK
     if grass.run_command('v.to.rast', input = vector, output = "%s_%s" % (vector, tmpname),
 			 use = 'cat', quiet = True) != 0:
-	grass.fatal("An error occurred while converting vector to raster")
+	grass.fatal(_("An error occurred while converting vector to raster"))
 
     #dump cats to file to avoid "too many argument" problem:
     p = grass.pipe_command('r.category', map = '%s_%s' % (vector, tmpname), fs = ';', quiet = True)
@@ -155,19 +155,19 @@ def main():
     #echo "List of categories found: $CATSLIST"
     number = len(cats)
     if number < 1:
-	grass.fatal("No categories found in raster map")
+	grass.fatal(_("No categories found in raster map"))
 
     #check if DBF driver used, in this case cut to 10 chars col names:
     try:
         fi = grass.vector_db(map = vector)[int(layer)]
     except KeyError:
-	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
+	grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
     # we need this for non-DBF driver:
     dbfdriver = fi['driver'] == 'dbf'
 
     #Find out which table is linked to the vector map on the given layer
     if not fi['table']:
-	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
+	grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
     basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
 
@@ -208,7 +208,7 @@ def main():
     if addcols:
 	grass.verbose("Adding columns <%s>" % addcols)
 	if grass.run_command('v.db.addcol', map = vector, columns = addcols) != 0:
-	    grass.fatal("Cannot continue (problem adding columns).")
+	    grass.fatal(_("Cannot continue (problem adding columns)."))
 
     #loop over cats and calculate statistics:
     grass.verbose("Processing data ...")
@@ -226,7 +226,7 @@ def main():
     currnum = 1
 
     for i in cats:
-	grass.message("Processing category %s (%d/%d)..." % (i, currnum, number))
+	grass.message(_("Processing category %s (%d/%d)...") % (i, currnum, number))
 	grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
 	grass.mapcalc("MASK = if($name == $i, 1, null())",
 		      name = "%s_%s" % (vector, tmpname), i = i)
@@ -255,7 +255,7 @@ def main():
 
     f.close()
 
-    grass.message("Updating the database ...")
+    grass.message(_("Updating the database ..."))
     exitcode = grass.run_command('db.execute', input = sqltmp,
 				 database = fi['database'], driver = fi['driver'])
     

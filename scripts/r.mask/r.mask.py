@@ -58,7 +58,7 @@ def main():
     invert = flags['i']
 
     if not remove and not input:
-	grass.fatal("Required parameter <input> not set")
+	grass.fatal(_("Required parameter <input> not set"))
 
     mapset = grass.gisenv()['MAPSET']
     exists = bool(grass.find_file('MASK', element = 'cell', mapset = mapset)['file'])
@@ -66,12 +66,12 @@ def main():
     if remove:
 	if exists:
 	    grass.run_command('g.remove', rast = 'MASK')
-	    grass.message("Raster MASK removed")
+	    grass.message(_("Raster MASK removed"))
  	else:
-	    grass.warning("No existing MASK to remove")
+	    grass.warning(_("No existing MASK to remove"))
     else:
 	if exists and not grass.overwrite():
-	    grass.fatal("MASK already found in current mapset. Delete first or overwrite")
+	    grass.fatal(_("MASK already found in current mapset. Delete first or overwrite"))
 
 	p = grass.feed_command('r.reclass', input = input, output = 'MASK', overwrite = True)
 	p.stdin.write("%s = 1" % maskcats)
@@ -84,11 +84,11 @@ def main():
 	    grass.run_command('g.rename', rast = ('MASK',tmp), quiet = True)
 	    grass.mapcalc("MASK=if(isnull($tmp),1,null())", tmp = tmp)
 	    grass.run_command('g.remove', rast = tmp, quiet = True)
-	    grass.message("Inverted MASK created.")
+	    grass.message(_("Inverted MASK created."))
 	else:
-	    grass.message("MASK created.")
+	    grass.message(_("MASK created."))
 
-        grass.message("All subsequent raster operations will be limited to MASK area" +
+        grass.message(_("All subsequent raster operations will be limited to MASK area") +
 		      "Removing or renaming raster file named MASK will" +
 		      "restore raster operations to normal")
 

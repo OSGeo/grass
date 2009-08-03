@@ -31,18 +31,18 @@ def main():
     for site in grass.list_grouped('sites')[mapset]:
 	inmap = "%s@%s" % (site, mapset)
 	outmap = site.replace(".", "_") + "_points"
-	grass.message("Processing %s -> %s" % (inmap, outmap))
+	grass.message(_("Processing %s -> %s") % (inmap, outmap))
 	if grass.run_command("v.in.sites", input = inmap, output = outmap) == 0:
 	    converted += 1
 	else:
-	    grass.warning("Error converting map %s to %s" % (inmap, outmap))
+	    grass.warning(_("Error converting map %s to %s") % (inmap, outmap))
 	    ret = 1
 
 	if converted < 1:
-	    grass.warning("No sites maps converted as no old sites maps present in current mapset.")
+	    grass.warning(_("No sites maps converted as no old sites maps present in current mapset."))
 	else:
-	    grass.message("Total %u sites maps in current mapset converted to vector maps (original names extended by '_points')" % converted)
-	    grass.message("Please verify new vector map(s) before deleting old sites map(s).")
+	    grass.message(_("Total %u sites maps in current mapset converted to vector maps (original names extended by '_points')") % converted)
+	    grass.message(_("Please verify new vector map(s) before deleting old sites map(s)."))
 
 	sys.exit(ret)
 

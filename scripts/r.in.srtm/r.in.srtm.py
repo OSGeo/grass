@@ -136,7 +136,7 @@ def main():
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] != 'longlat':
-	grass.fatal("This module only operates in LatLong locations")
+	grass.fatal(_("This module only operates in LatLong locations"))
 
     # use these from now on:
     infile = input
@@ -154,21 +154,21 @@ def main():
     if os.path.isfile(zipfile):
         #### check if we have unzip
 	if not grass.find_program('unzip'):
-	    grass.fatal('The "unzip" program is required, please install it first')
+	    grass.fatal(_('The "unzip" program is required, please install it first'))
 
 	# really a ZIP file?
 	# make it quiet in a safe way (just in case -qq isn't portable)
 	tenv = os.environ.copy()
 	tenv['UNZIP'] = '-qq'
 	if grass.call(['unzip', '-t', zipfile], env = tenv) != 0:
-	    grass.fatal("'%s' does not appear to be a valid zip file." % zipfile)
+	    grass.fatal(_("'%s' does not appear to be a valid zip file.") % zipfile)
 
 	is_zip = True
     elif os.path.isfile(hgtfile):
 	# try and see if it's already unzipped
 	is_zip = False
     else:
-	grass.fatal("File '%s' or '%s' not found" % (zipfile, hgtfile))
+	grass.fatal(_("File '%s' or '%s' not found") % (zipfile, hgtfile))
 
     #make a temporary directory
     tmpdir = grass.tempfile()
@@ -190,11 +190,11 @@ def main():
 
     if is_zip:
         #unzip & rename data file:
-	grass.message("Extracting '%s'..." % infile)
+	grass.message(_("Extracting '%s'...") % infile)
 	if grass.call(['unzip', zipfile], env = tenv) != 0:
-	    grass.fatal("Unable to unzip file.")
+	    grass.fatal(_("Unable to unzip file."))
 
-    grass.message("Converting input file to BIL...")
+    grass.message(_("Converting input file to BIL..."))
     os.rename(hgtfile, bilfile)
 
     north = tile[0]
@@ -218,7 +218,7 @@ def main():
     if not one:
 	tmpl = tmpl3sec
     else:
-	grass.message("Attempting to import 1-arcsec data.")
+	grass.message(_("Attempting to import 1-arcsec data."))
 	tmpl = tmpl1sec
 
     header = tmpl % (ulxmap, ulymap)
@@ -234,7 +234,7 @@ def main():
     outf.close()
 
     if grass.run_command('r.in.gdal', input = bilfile, out = tileout) != 0:
-	grass.fatal("Unable to import data")
+	grass.fatal(_("Unable to import data"))
 
     # nice color table
     grass.run_command('r.colors', map = tileout, color = 'srtm')
@@ -242,8 +242,8 @@ def main():
     # write cmd history:
     grass.raster_history(tileout)
 
-    grass.message("Done: generated map " + tileout)
-    grass.message("(Note: Holes in the data can be closed with 'r.fillnulls' using splines)")
+    grass.message(_("Done: generated map ") + tileout)
+    grass.message(_("(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

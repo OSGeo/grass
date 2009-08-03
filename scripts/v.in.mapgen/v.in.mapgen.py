@@ -78,7 +78,7 @@ def main():
     opts = ""
 
     if not os.path.isfile(infile):
-	grass.fatal("Input file <%s> not found." % infile)
+	grass.fatal(_("Input file <%s> not found.") % infile)
 
     if output:
 	name = output
@@ -179,18 +179,18 @@ VERTI:
 
     if not name:
         #### if no name for vector file given, cat to stdout
-	grass.message("Output to stdout") 
+	grass.message(_("Output to stdout")) 
 	inf = file(digfile)
 	shutil.copyfileobj(inf, sys.stdout)
 	inf.close()
     else:
         #### import to binary vector file
-	grass.message("Importing with v.in.ascii ...") 
+	grass.message(_("Importing with v.in.ascii ...")) 
 	if grass.run_command('v.in.ascii', flags = do3D, input = digfile,
 			     output = name, format = 'standard') == 0:
-	    grass.message('"%s" successfully created' % name) 
+	    grass.message(_('"%s" successfully created') % name) 
 	else:
-	    grass.fatal('An error occured on creating "%s", please check' % name)
+	    grass.fatal(_('An error occured on creating "%s", please check') % name)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

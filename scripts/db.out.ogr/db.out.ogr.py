@@ -75,7 +75,7 @@ def main():
     #is there a simpler way of testing for --overwrite?
     dbffile = input + '.dbf'
     if os.path.exists(dbffile) and not grass.overwrite():
-	grass.fatal("File <%s> already exists" % dbffile)
+	grass.fatal(_("File <%s> already exists") % dbffile)
 
     if grass.run_command('v.out.ogr', quiet = True, input = input, dsn = dsn,
 			 format = format, type = 'point', olayer = olayer) != 0:
@@ -97,7 +97,7 @@ def main():
     else:
 	outname = input
 
-    grass.message("Exported table <%s>" % outname)
+    grass.message(_("Exported table <%s>") % outname)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

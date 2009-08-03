@@ -26,8 +26,8 @@ def main():
     ret = 0
     for vect in grass.list_grouped('vect')[mapset]:
 	map = "%s@%s" % (vect, mapset)
-	grass.message("Build topology for vector '%s'" % map)
-	grass.message("v.build map=%s" % map)
+	grass.message(_("Build topology for vector '%s'") % map)
+	grass.message(_("v.build map=%s") % map)
 	if grass.run_command("v.build", map = map) != 0:
 	    ret = 1
     sys.exit(ret)

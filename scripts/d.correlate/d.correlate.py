@@ -44,7 +44,7 @@ def main():
 
     for map in layers:
 	if not grass.find_file(map, element = 'cell')['file']:
-	    grass.fatal("Input map <%s> not found" % map)
+	    grass.fatal(_("Input map <%s> not found") % map)
 
     grass.write_command('d.text', color = 'black', size = 4, line = 1, stdin = "CORRELATION")
 

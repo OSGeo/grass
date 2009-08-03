@@ -61,17 +61,17 @@ def main():
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] != 'longlat':
-	grass.fatal("This module only operates in LatLong/WGS84 locations")
+	grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
 
     # input test
     if not os.access(infile, os.R_OK):
-	grass.fatal("File <%s> not found" % infile)
+	grass.fatal(_("File <%s> not found") % infile)
 
     # DBF doesn't support lengthy text fields
     kv = grass.db_connection()
     dbfdriver = kv['driver'] == 'dbf'
     if dbfdriver:
-	grass.warning("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content")
+	grass.warning(_("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
 
     #let's go
     #change TAB to vertical bar
@@ -86,7 +86,7 @@ def main():
     outf.close()
     inf.close()
 
-    grass.message("Converted %d place names." % num_places)
+    grass.message(_("Converted %d place names.") % num_places)
 
     # pump data into GRASS:
     #  http://download.geonames.org/export/dump/readme.txt

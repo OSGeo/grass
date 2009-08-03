@@ -60,7 +60,7 @@ def main():
 	if r != 0:
 	    grass.error("EXECUTE: ******** ERROR ********")
 	else:
-	    grass.message("EXECUTE: OK")
+	    grass.message(_("EXECUTE: OK"))
 
 	expf = file(expected, 'w')
 	while True:
@@ -74,7 +74,7 @@ def main():
 	    if grass.call(['diff', result, expected]) != 0:
 		grass.error("RESULT: ******** ERROR ********")
 	    else:
-		grass.message("RESULT: OK")
+		grass.message(_("RESULT: OK"))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

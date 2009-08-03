@@ -63,7 +63,7 @@ def main():
 
     # does map exist in CURRENT mapset?
     if not grass.find_file(map, element = 'vector', mapset = mapset):
-	grass.fatal("Vector map <%s> not found in current mapset" % map)
+	grass.fatal(_("Vector map <%s> not found in current mapset") % map)
 
     f = grass.vector_layer_db(map, layer)
 
@@ -73,13 +73,13 @@ def main():
     driver = f['driver']
 
     if not table:
-	grass.fatal("There is no table connected to the input vector map Cannot delete any column")
+	grass.fatal(_("There is no table connected to the input vector map Cannot delete any column"))
 
     if column == keycol:
-	grass.fatal("Cannot delete <$col> column as it is needed to keep table <%s> connected to the input vector map <%s>" % (table, map))
+	grass.fatal(_("Cannot delete <$col> column as it is needed to keep table <%s> connected to the input vector map <%s>") % (table, map))
 
     if not grass.vector_columns(map, layer).has_key(column):
-	grass.fatal("Column <%s> not found in table <%s>" % (column, table))
+	grass.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
     if driver == "sqlite":
 	#echo "Using special trick for SQLite"
@@ -112,7 +112,7 @@ def main():
 
     if grass.write_command('db.execute', input = '-', database = database, driver = driver,
 			   stdin = sql) != 0:
-	grass.fatal("Cannot continue (problem deleting column).")
+	grass.fatal(_("Cannot continue (problem deleting column)."))
 
     # write cmd history:
     grass.vector_history(map)

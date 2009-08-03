@@ -68,34 +68,34 @@ def main():
     kv = grass.parse_key_val(s, sep = ':')
     s = kv['projection'].strip().split()
     if s == '0':
-	grass.fatal("xy-locations are not supported")
-	grass.fatal("Need projected data with grids in meters")
+	grass.fatal(_("xy-locations are not supported"))
+	grass.fatal(_("Need projected data with grids in meters"))
 
     if not lesser and not greater:
-	grass.fatal("You have to specify either lesser= or greater=")
+	grass.fatal(_("You have to specify either lesser= or greater="))
     if lesser and greater:
-	grass.fatal("lesser= and greater= are mutually exclusive")
+	grass.fatal(_("lesser= and greater= are mutually exclusive"))
     if lesser:
 	limit = float(lesser)
     if greater:
 	limit = float(greater)
 
     if not grass.find_file(infile)['name']:
-	grass.fatal("Raster map <%s> not found" % infile)
+	grass.fatal(_("Raster map <%s> not found") % infile)
 
     clumpfile = "%s.clump.%s" % (infile.split('@')[0], outfile)
 
     if not grass.overwrite():
 	if grass.find_file(clumpfile)['name']:
-	    grass.fatal("Temporary raster map <%s> exists" % clumpfile)
+	    grass.fatal(_("Temporary raster map <%s> exists") % clumpfile)
 
-    grass.message("Generating a clumped raster file ...")
+    grass.message(_("Generating a clumped raster file ..."))
     grass.run_command('r.clump', input = infile, output = clumpfile)
 
     if lesser:
-	grass.message("Generating a reclass map with area size less than or equal to %f hectares..." % limit)
+	grass.message(_("Generating a reclass map with area size less than or equal to %f hectares...") % limit)
     else:
-	grass.message("Generating a reclass map with area size greater than or equal to %f hectares..." % limit)
+	grass.message(_("Generating a reclass map with area size greater than or equal to %f hectares...") % limit)
 
     recfile = outfile + '.recl'
 
@@ -116,7 +116,7 @@ def main():
     p2.stdin.close()
     p2.wait()
 
-    grass.message("Generating output raster map <$outfile>..." % outfile)
+    grass.message(_("Generating output raster map <$outfile>...") % outfile)
 
     grass.mapcalc("$outfile = $recfile", outfile = outfile, recfile = recfile)
     grass.run_command('g.remove', rast = [recfile, clumpfile], quiet = True)

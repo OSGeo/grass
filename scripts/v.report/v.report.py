@@ -71,7 +71,7 @@ def uniq(l):
 
 def main():
     if flags['r'] and flags['s']:
-	grass.fatal("Either -r or -s flag")
+	grass.fatal(_("Either -r or -s flag"))
 
     mapname = options['map']
     option = options['option']
@@ -81,7 +81,7 @@ def main():
     nuldev = file(os.devnull, 'w')
 
     if not grass.find_file(mapname, 'vector')['file']:
-	grass.fatal("Vector map '%s' not found in mapset search path." % mapname)
+	grass.fatal(_("Vector map '%s' not found in mapset search path.") % mapname)
 
     table_exists = grass.vector_columns(mapname, layer, stderr = nuldev)
 
@@ -120,7 +120,7 @@ def main():
 	if len(records1) == 0:
             try:
                 f = grass.vector_db(map = mapname)[int(layer)]
-                grass.fatal("There is a table connected to input vector map '%s', but" +
+                grass.fatal(_("There is a table connected to input vector map '%s', but") +
                             "there are no categories present in the key column '%s'. Consider using" +
                             "v.to.db to correct this." % (mapname, f['key']))
             except KeyError:

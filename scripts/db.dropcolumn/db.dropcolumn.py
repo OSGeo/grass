@@ -64,19 +64,19 @@ def main():
     # schema needed for PG?
 
     if force:
-	grass.message("Forcing ...")
+	grass.message(_("Forcing ..."))
 
     if column == "cat":
-	grass.warning("Deleting <%s> column which may be needed to keep table connected to a vector map" % column)
+	grass.warning(_("Deleting <%s> column which may be needed to keep table connected to a vector map") % column)
 
     cols = [f[0] for f in grass.db_describe()['cols']]
     if column not in cols:
-	grass.fatal("Column <%s> not found in table" % column)
+	grass.fatal(_("Column <%s> not found in table") % column)
 
     if not force:
-	grass.message("Column <%s> would be deleted." % column)
+	grass.message(_("Column <%s> would be deleted.") % column)
 	grass.message("")
-	grass.message("You must use the force flag to actually remove it. Exiting.")
+	grass.message(_("You must use the force flag to actually remove it. Exiting."))
 	sys.exit(0)
 
     if driver == "sqlite":
@@ -110,7 +110,7 @@ def main():
 
     if grass.write_command('db.execute', input = '-', database = database, driver = driver,
 			   stdin = sql) != 0:
-	grass.fatal("Cannot continue (problem deleting column).")
+	grass.fatal(_("Cannot continue (problem deleting column)."))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

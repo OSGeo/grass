@@ -44,7 +44,7 @@ def main():
     tmp = grass.tempfile()
     tmpxml = tmp + '.xml'
 
-    grass.message("Retrieving data ...")
+    grass.message(_("Retrieving data ..."))
     inf = urllib.urlopen(wfs_url)
     outf = file(tmpxml, 'wb')
     while True:
@@ -58,7 +58,7 @@ def main():
     grass.run_command('v.in.ogr', flags = 'o', dsn = tmpxml, out = out)
     grass.try_remove(tmpxml)
 
-    grass.message("Vector points map <%s> imported from WFS." % out)
+    grass.message(_("Vector points map <%s> imported from WFS.") % out)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

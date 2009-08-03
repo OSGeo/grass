@@ -119,7 +119,7 @@ def main():
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-	grass.fatal("<%s> does not exist." % input)
+	grass.fatal(_("<%s> does not exist.") % input)
 
     grass.run_command('r.grow.distance',  input = input, metric = metric,
 		      distance = temp_dist, value = temp_val)

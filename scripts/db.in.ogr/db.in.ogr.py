@@ -76,7 +76,7 @@ def main():
 	s = grass.read_command('db.tables', flags = 'p')
 	for l in s.splitlines():
 	    if l == output:
-		grass.fatal("Table <%s> already exists" % output)
+		grass.fatal(_("Table <%s> already exists") % output)
     else:
 	grass.write_command('db.execute', input = '-', stdin = "DROP TABLE %s" % output)
 
@@ -89,9 +89,9 @@ def main():
     if grass.run_command('v.in.ogr', flags = 'o', dsn = dsn, output = output,
 			 layer = layer, quiet = True) != 0:
 	if db_table:
-	    grass.fatal("Input table <%s> not found or not readable" % input)
+	    grass.fatal(_("Input table <%s> not found or not readable") % input)
 	else:
-	    grass.fatal("Input DSN <%s> not found or not readable" % input)
+	    grass.fatal(_("Input DSN <%s> not found or not readable") % input)
 
     nuldev = file(os.devnull, 'w')
 
@@ -107,7 +107,7 @@ def main():
     # ... and immediately drop the empty geometry
     vectfile = grass.find_file(output, element = 'vector', mapset = mapset)['file']
     if not vectfile:
-	grass.fatal("Something went wrong. Should not happen")
+	grass.fatal(_("Something went wrong. Should not happen"))
     else:
 	# remove the vector part
 	grass.try_remove(vectfile)
@@ -117,7 +117,7 @@ def main():
 		      colum = 'cat', stdout = nuldev, stderr = nuldev)
 
     records = grass.db_describe(output)['nrows']
-    grass.message("Imported table <%s> with %d rows" % (output, records))
+    grass.message(_("Imported table <%s> with %d rows") % (output, records))
 
 if __name__ == "__main__":
     options, flags = grass.parser()

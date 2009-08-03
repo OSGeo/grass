@@ -60,7 +60,7 @@ def main():
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] != 'longlat':
-	grass.fatal("This module only operates in LatLong/WGS84 locations")
+	grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
 
     #### setup temporary file
     tmpfile = grass.tempfile()
@@ -122,7 +122,7 @@ def main():
     outf.close()
     inf.close()
 
-    grass.message("Converted %d place names." % num_places)
+    grass.message(_("Converted %d place names.") % num_places)
 
     #TODO: fix dms_lat,dms_long DDMMSS -> DD:MM:SS
     # Solution:
