@@ -7,7 +7,7 @@
  *               
  * PURPOSE:      Print vector attributes
  *               
- * COPYRIGHT:    (C) 2005-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2009 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -15,22 +15,23 @@
  *               for details.
  *
  **************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-
 int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *map_opt, *field_opt, *fs_opt, *vs_opt, *nv_opt, *col_opt,
-	*where_opt;
+	*where_opt, *file_opt;
     struct Flag *c_flag, *v_flag, *r_flag;
     dbDriver *driver;
     dbString sql, value_string;
@@ -77,6 +78,12 @@ int main(int argc, char **argv)
     nv_opt->description = _("Null value indicator");
     nv_opt->guisection = _("Format");
 
+    file_opt = G_define_standard_option(G_OPT_F_OUTPUT); 
+    file_opt->key = "file";
+    file_opt->required = NO; 
+    file_opt->description = 
+	_("Name for output file (if omitted or \"-\" output to stdout)"); 
+    
     r_flag = G_define_flag();
     r_flag->key = 'r';
     r_flag->description =
@@ -100,6 +107,12 @@ int main(int argc, char **argv)
     /* set input vector map name and mapset */
     field = atoi(field_opt->answer);
 
+    if (file_opt->answer && strcmp(file_opt->answer, "-") != 0) { 
+	if (NULL == freopen(file_opt->answer, "w", stdout)) { 
+	    G_fatal_error(_("Unable to open file <%s> for writing"), file_opt->answer); 
+	} 
+    } 
+    
     if (r_flag->answer) {
 	min_box = (struct bound_box *) G_malloc(sizeof(struct bound_box));
 	G_zero((void *)min_box, sizeof(struct bound_box));
