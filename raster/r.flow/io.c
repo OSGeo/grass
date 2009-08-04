@@ -58,7 +58,7 @@ static const char *tmp_name(const char *fullname)
 
 static int open_existing_cell_file(char *fname, struct Cell_head *chd)
 {
-    const char *mapset = G_find_cell(fname, "");
+    const char *mapset = G_find_raster(fname, "");
 
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), fname);

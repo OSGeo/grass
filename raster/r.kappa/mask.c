@@ -18,7 +18,7 @@ char *maskinfo(void)
     int first, next;
 
     results = NULL;
-    if (G_find_cell("MASK", G_mapset()) == NULL)
+    if (G_find_raster("MASK", G_mapset()) == NULL)
 	return "none";
     if (Rast_get_reclass("MASK", G_mapset(), &reclass) <= 0) {
 	sprintf(text, "MASK in %s", G_mapset());

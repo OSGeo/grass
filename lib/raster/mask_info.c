@@ -60,7 +60,7 @@ int Rast__mask_info(char *name, char *mapset)
     strcpy(name, "MASK");
     strcpy(mapset, G_mapset());
 
-    if (!G_find_cell(name, mapset))
+    if (!G_find_raster(name, mapset))
 	return -1;
 
     if (Rast_is_reclass(name, mapset, rname, rmapset) > 0) {

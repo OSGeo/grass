@@ -29,7 +29,7 @@ int open_files(void)
     for (n = 0; n < ref.nfiles; n++) {
 	name = ref.file[n].name;
 	mapset = ref.file[n].mapset;
-	if (G_find_cell(name, mapset) == NULL) {
+	if (G_find_raster(name, mapset) == NULL) {
 	    missing = 1;
 	    G_warning(_("Raster map <%s> do not exists in subgroup <%s>"),
 		      G_fully_qualified_name(name, mapset), subgroup);

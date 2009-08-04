@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	G_warning("Direction map is D8 resolution, i.e. 45 degrees.");
 
     /* get the name of the elevation map layer for filling */
-    map_mapset = G_find_cell(map_name, "");
+    map_mapset = G_find_raster(map_name, "");
     if (!map_mapset)
 	G_fatal_error(_("Raster map <%s> not found"), map_name);
 

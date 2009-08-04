@@ -640,7 +640,7 @@ int main(int argc, char *argv[])
     if (ii > 0) {
 	if ((cellinp != NULL) && (cellout != NULL)) {
 	    mapset = NULL;
-	    mapset = G_find_cell2(cellinp, "");
+	    mapset = G_find_raster2(cellinp, "");
 	    if (mapset == NULL)
 		G_fatal_error(_("Raster map <%s> not found"), cellinp);
 	    fdcell = Rast_open_old(cellinp, mapset);

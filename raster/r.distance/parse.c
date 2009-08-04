@@ -59,14 +59,14 @@ void parse(int argc, char *argv[], struct Parms *parms)
 	exit(EXIT_FAILURE);
 
     name = parms->map1.name = maps->answers[0];
-    mapset = parms->map1.mapset = G_find_cell2(name, "");
+    mapset = parms->map1.mapset = G_find_raster2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     parms->map1.fullname = G_fully_qualified_name(name, mapset);
 
     name = parms->map2.name = maps->answers[1];
-    mapset = parms->map2.mapset = G_find_cell2(name, "");
+    mapset = parms->map2.mapset = G_find_raster2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 

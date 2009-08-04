@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     /* put out a title */
     display_title(VIEW_MAP1);
 
-    mapset = G_find_cell(bg_map->answer, "");
+    mapset = G_find_raster(bg_map->answer, "");
     if (Rast_get_cellhd(bg_map->answer, mapset, &cellhd) != 0)
 	G_fatal_error(_("Raster map <%s> not found"), bg_map->answer);
 
@@ -246,7 +246,7 @@ static int check_files(char *img_group, char *img_subgroup,
 
     any = 0;
     for (n = 0; n < Refer.nfiles; n++) {
-	if (G_find_cell(Refer.file[n].name, Refer.file[n].mapset) == NULL) {
+	if (G_find_raster(Refer.file[n].name, Refer.file[n].mapset) == NULL) {
 	    if (!any)
 		G_warning(_("** The following raster maps in subgroup "
 			    "[%s] do not exist:"), img_subgroup);

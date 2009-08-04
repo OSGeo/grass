@@ -387,7 +387,7 @@ int r_slope_aspect(int argc, char *argv[])
     }
 
     /* check elevation file existence */
-    mapset = G_find_cell2(elev_name, "");
+    mapset = G_find_raster2(elev_name, "");
     if (!mapset)
 	G_fatal_error(_("Raster map <%s> not found"), elev_name);
 

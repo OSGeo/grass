@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
     /*  Check if cost layer exists in data base  */
 
     strcpy(cost_layer, opt2->answer);
-    cost_mapset = G_find_cell2(cost_layer, "");
+    cost_mapset = G_find_raster2(cost_layer, "");
 
     if (cost_mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), cost_layer);
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
     if (dir == 1) {
 	strcpy(move_dir_layer, opt11->answer);
 	search_mapset = "";
-	move_dir_mapset = G_find_cell2(move_dir_layer, search_mapset);
+	move_dir_mapset = G_find_raster2(move_dir_layer, search_mapset);
     }
     /*  Find number of rows and columns in window    */
 

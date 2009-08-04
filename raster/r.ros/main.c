@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
     spotting = flag_s->answer;
 
     /*  Check if input layers exists in data base  */
-    if (G_find_cell2(parm.model->answer, "") == NULL)
+    if (G_find_raster2(parm.model->answer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.model->answer);
 
     if (!
@@ -298,22 +298,22 @@ int main(int argc, char *argv[])
     }
 
     if (parm.mois_1h->answer) {
-	if (G_find_cell2(parm.mois_1h->answer, "") == NULL)
+	if (G_find_raster2(parm.mois_1h->answer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),
 			  parm.mois_1h->answer);
     }
     if (parm.mois_10h->answer) {
-	if (G_find_cell2(parm.mois_10h->answer, "") == NULL)
+	if (G_find_raster2(parm.mois_10h->answer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),
 			  parm.mois_10h->answer);
     }
     if (parm.mois_100h->answer) {
-	if (G_find_cell2(parm.mois_100h->answer, "") == NULL)
+	if (G_find_raster2(parm.mois_100h->answer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),
 			  parm.mois_100h->answer);
     }
 
-    if (G_find_cell2(parm.mois_live->answer, "") == NULL)
+    if (G_find_raster2(parm.mois_live->answer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.mois_live->answer);
 
     if (parm.vel->answer && !(parm.dir->answer)) {
@@ -327,11 +327,11 @@ int main(int argc, char *argv[])
 		      parm.dir->answer);
     }
     if (parm.vel->answer) {
-	if (G_find_cell2(parm.vel->answer, "") == NULL)
+	if (G_find_raster2(parm.vel->answer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), parm.vel->answer);
     }
     if (parm.dir->answer) {
-	if (G_find_cell2(parm.dir->answer, "") == NULL)
+	if (G_find_raster2(parm.dir->answer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), parm.dir->answer);
     }
 
@@ -346,11 +346,11 @@ int main(int argc, char *argv[])
 		      parm.aspect->answer);
     }
     if (parm.slope->answer) {
-	if (G_find_cell2(parm.slope->answer, "") == NULL)
+	if (G_find_raster2(parm.slope->answer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), parm.slope->answer);
     }
     if (parm.aspect->answer) {
-	if (G_find_cell2(parm.aspect->answer, "") == NULL)
+	if (G_find_raster2(parm.aspect->answer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"),
 			  parm.aspect->answer);
     }
@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
 			    "if considering spotting"));
 	}
 	else {
-	    if (G_find_cell2(parm.elev->answer, "") == NULL)
+	    if (G_find_raster2(parm.elev->answer, "") == NULL)
 		G_fatal_error(_("Raster map <%s> not found"),
 			      parm.elev->answer);
 	}
@@ -374,22 +374,22 @@ int main(int argc, char *argv[])
 
     /*check if the output layer names EXIST */
     if (G_check_overwrite(argc, argv) == 0) {
-	if (G_find_cell2(name_base, G_mapset()))
+	if (G_find_raster2(name_base, G_mapset()))
 	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
 			  name_base, G_mapset());
 	
-	if (G_find_cell2(name_max, G_mapset()))
+	if (G_find_raster2(name_max, G_mapset()))
 	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
 			  name_max, G_mapset());
 	
-	if (G_find_cell2(name_maxdir, G_mapset()))
+	if (G_find_raster2(name_maxdir, G_mapset()))
 	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
 			  name_maxdir, G_mapset());
 	
 	/*assign a name to output SPOTTING distance layer */
 	if (spotting) {
 	    sprintf(name_spotdist, "%s.spotdist", parm.output->answer);
-	    if (G_find_cell2(name_spotdist, G_mapset()))
+	    if (G_find_raster2(name_spotdist, G_mapset()))
 		G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
 			      name_spotdist, G_mapset());
 	}
@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
 
     fuel_fd =
 	Rast_open_old(parm.model->answer,
-			G_find_cell2(parm.model->answer, ""));
+			G_find_raster2(parm.model->answer, ""));
     if (fuel_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      parm.model->answer);
@@ -432,7 +432,7 @@ int main(int argc, char *argv[])
     if (parm.mois_1h->answer) {
 	mois_1h_fd =
 	    Rast_open_old(parm.mois_1h->answer,
-			    G_find_cell2(parm.mois_1h->answer, ""));
+			    G_find_raster2(parm.mois_1h->answer, ""));
 	if (mois_1h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.mois_1h->answer);
@@ -440,7 +440,7 @@ int main(int argc, char *argv[])
     if (parm.mois_10h->answer) {
 	mois_10h_fd =
 	    Rast_open_old(parm.mois_10h->answer,
-			    G_find_cell2(parm.mois_10h->answer, ""));
+			    G_find_raster2(parm.mois_10h->answer, ""));
 	if (mois_10h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.mois_10h->answer);
@@ -448,7 +448,7 @@ int main(int argc, char *argv[])
     if (parm.mois_100h->answer) {
 	mois_100h_fd =
 	    Rast_open_old(parm.mois_100h->answer,
-			    G_find_cell2(parm.mois_100h->answer, ""));
+			    G_find_raster2(parm.mois_100h->answer, ""));
 	if (mois_100h_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.mois_100h->answer);
@@ -456,7 +456,7 @@ int main(int argc, char *argv[])
 
     mois_live_fd =
 	Rast_open_old(parm.mois_live->answer,
-			G_find_cell2(parm.mois_live->answer, ""));
+			G_find_raster2(parm.mois_live->answer, ""));
     if (mois_live_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      parm.mois_live->answer);
@@ -464,7 +464,7 @@ int main(int argc, char *argv[])
     if (parm.vel->answer) {
 	vel_fd =
 	    Rast_open_old(parm.vel->answer,
-			    G_find_cell2(parm.vel->answer, ""));
+			    G_find_raster2(parm.vel->answer, ""));
 	if (vel_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.vel->answer);
@@ -472,7 +472,7 @@ int main(int argc, char *argv[])
     if (parm.dir->answer) {
 	dir_fd =
 	    Rast_open_old(parm.dir->answer,
-			    G_find_cell2(parm.dir->answer, ""));
+			    G_find_raster2(parm.dir->answer, ""));
 	if (dir_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.dir->answer);
@@ -481,7 +481,7 @@ int main(int argc, char *argv[])
     if (parm.slope->answer) {
 	slope_fd =
 	    Rast_open_old(parm.slope->answer,
-			    G_find_cell2(parm.slope->answer, ""));
+			    G_find_raster2(parm.slope->answer, ""));
 	if (slope_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.slope->answer);
@@ -489,7 +489,7 @@ int main(int argc, char *argv[])
     if (parm.aspect->answer) {
 	aspect_fd =
 	    Rast_open_old(parm.aspect->answer,
-			    G_find_cell2(parm.aspect->answer, ""));
+			    G_find_raster2(parm.aspect->answer, ""));
 	if (aspect_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.aspect->answer);
@@ -498,7 +498,7 @@ int main(int argc, char *argv[])
     if (spotting) {
 	elev_fd =
 	    Rast_open_old(parm.elev->answer,
-			    G_find_cell2(parm.elev->answer, ""));
+			    G_find_raster2(parm.elev->answer, ""));
 	if (elev_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  parm.elev->answer);

@@ -99,7 +99,7 @@ static int process(char *name, int uncompress)
     RASTER_MAP_TYPE map_type;
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
 
-    if (G_find_cell(name, G_mapset()) == NULL) {
+    if (G_find_raster(name, G_mapset()) == NULL) {
 	G_warning(_("[%s] not found"), name);
 	return 1;
     }

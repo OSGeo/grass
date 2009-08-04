@@ -84,7 +84,7 @@ int G_check_input_output_name(const char *input, const char *output,
 	}
     }
 
-    mapset = G_find_cell2(input, "");
+    mapset = G_find_raster2(input, "");
 
     if (mapset == NULL) {
 	if (error == GR_FATAL_EXIT) {

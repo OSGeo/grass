@@ -212,8 +212,8 @@ char *G__file_name_misc(char *, const char *, const char *, const char *,
 			const char *);
 
 /* find_cell.c */
-const char *G_find_cell(char *, const char *);
-const char *G_find_cell2(const char *, const char *);
+const char *G_find_raster(char *, const char *);
+const char *G_find_raster2(const char *, const char *);
 
 /* find_file.c */
 const char *G_find_file(const char *, char *, const char *);

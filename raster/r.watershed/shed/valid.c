@@ -19,7 +19,7 @@ int valid_basins(char *accum_name, OUTPUT * output)
        nrows = G_window_rows ();
        ncols = G_window_cols ();
      */
-    if (NULL == (mapset = G_find_cell(accum_name, ""))) {
+    if (NULL == (mapset = G_find_raster(accum_name, ""))) {
 	free_output(output);
 	G_fatal_error(_("accum file missing in valid_basins()"));
     }

@@ -125,7 +125,7 @@ void check_input_maps(void)
 	mapset = NULL;
 	name = NULL;
 	name = param.top->answer;
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
 	if (mapset == NULL) {
 	    G3d_fatalError(_("Top cell map <%s> not found"),
 			   param.top->answer);
@@ -134,7 +134,7 @@ void check_input_maps(void)
 	mapset = NULL;
 	name = NULL;
 	name = param.bottom->answer;
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
 	if (mapset == NULL) {
 	    G3d_fatalError(_("Bottom cell map <%s> not found"),
 			   param.bottom->answer);
@@ -467,7 +467,7 @@ int main(int argc, char *argv[])
 	mapset = NULL;
 	name = NULL;
 	name = param.top->answer;
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
 	in->top = open_input_map(name, mapset);
 	in->topMapType = Rast_get_map_type(in->top);
 
@@ -475,7 +475,7 @@ int main(int argc, char *argv[])
 	mapset = NULL;
 	name = NULL;
 	name = param.bottom->answer;
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
 	in->bottom = open_input_map(name, mapset);
 	in->bottomMapType = Rast_get_map_type(in->bottom);
 

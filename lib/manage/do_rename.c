@@ -49,7 +49,7 @@ int do_rename(int n, const char *old, const char *new)
     }
     else {
 	if (G_strcasecmp(list[n].alias, "rast") == 0) {
-	    if ((mapset = G_find_cell2(old, "")) == NULL)
+	    if ((mapset = G_find_raster2(old, "")) == NULL)
 		G_warning(_("Raster map <%s> not found"), old);
 	}
 

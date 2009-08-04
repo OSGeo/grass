@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     name = G_store(opt1->answer);
-    if ((mapset = G_find_cell2(name, "")) == NULL)
+    if ((mapset = G_find_raster2(name, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     head_ok = Rast_get_cellhd(name, "", &cellhd) >= 0;

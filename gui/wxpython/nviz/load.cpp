@@ -34,7 +34,7 @@ int Nviz::LoadSurface(const char* name, const char *color_name, const char *colo
     const char *mapset;
     int id;
 
-    mapset = G_find_cell2 (name, "");
+    mapset = G_find_raster2 (name, "");
     if (mapset == NULL) {
 	G_warning(_("Raster map <%s> not found"),
 		  name);
@@ -47,7 +47,7 @@ int Nviz::LoadSurface(const char* name, const char *color_name, const char *colo
 			  data);
 
     if (color_name) { /* check for color map */
-	mapset = G_find_cell2 (color_name, "");
+	mapset = G_find_raster2 (color_name, "");
 	if (mapset == NULL) {
 	    G_warning(_("Raster map <%s> not found"),
 		      color_name);

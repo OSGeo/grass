@@ -175,7 +175,7 @@ int Rast__open_old(const char *name, const char *mapset)
     name = xname;
     mapset = xmapset;
 
-    if (!G_find_cell2(name, mapset)) {
+    if (!G_find_raster2(name, mapset)) {
 	G_warning(_("Unable to find <%s@%s>"), name, mapset);
 	return -1;
     }
@@ -191,7 +191,7 @@ int Rast__open_old(const char *name, const char *mapset)
     case 1:
 	r_name = reclass.name;
 	r_mapset = reclass.mapset;
-	if (G_find_cell2(r_name, r_mapset) == NULL) {
+	if (G_find_raster2(r_name, r_mapset) == NULL) {
 	    G_warning(_("Unable to open raster map <%s@%s> since it is a reclass "
 		       "of raster map <%s@%s> which does not exist"), name,
 		      mapset, r_name, r_mapset);
@@ -758,7 +758,7 @@ int Rast_map_is_fp(const char *name, const char *mapset)
     char path[GPATH_MAX];
     const char *xmapset;
 
-    xmapset = G_find_cell2(name, mapset);
+    xmapset = G_find_raster2(name, mapset);
     if (!xmapset) {
 	G_warning(_("Unable to find <%s@%s>"), name, mapset);
 	return -1;
@@ -790,7 +790,7 @@ RASTER_MAP_TYPE Rast_map_type(const char *name, const char *mapset)
     char path[GPATH_MAX];
     const char *xmapset;
 
-    xmapset = G_find_cell2(name, mapset);
+    xmapset = G_find_raster2(name, mapset);
     if (!xmapset) {
 	if (mapset && *mapset)
 	    G_warning(_("Raster map <%s> not found in mapset <%s>"), name,
@@ -847,7 +847,7 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
     RASTER_MAP_TYPE map_type;
     const char *xmapset;
 
-    xmapset = G_find_cell2(name, mapset);
+    xmapset = G_find_raster2(name, mapset);
     if (!xmapset) {
 	G_warning(_("Unable to find <%s@%s>"), name, mapset);
 	return -1;

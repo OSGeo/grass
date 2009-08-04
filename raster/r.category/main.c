@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	    fs = parm.fs->answer[0];
     }
 
-    mapset = G_find_cell2(name, "");
+    mapset = G_find_raster2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 	    int fd;
 	    const char *cmapset;
 
-	    cmapset = G_find_cell2(parm.raster->answer, "");
+	    cmapset = G_find_raster2(parm.raster->answer, "");
 	    if (cmapset == NULL)
 		G_fatal_error(_("Raster map <%s> not found"),
 			      parm.raster->answer);

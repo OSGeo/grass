@@ -146,8 +146,8 @@ int main(int argc, char **argv)
     strcpy(backrow_layer, opt2->answer);
     strcpy(backcol_layer, opt1->answer);
 
-    backrow_mapset = G_find_cell(backrow_layer, search_mapset);
-    backcol_mapset = G_find_cell(backcol_layer, search_mapset);
+    backrow_mapset = G_find_raster(backrow_layer, search_mapset);
+    backcol_mapset = G_find_raster(backcol_layer, search_mapset);
 
     if (backrow_mapset == NULL)
 	G_fatal_error("%s - not found", backrow_layer);
@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 
     strcpy(path_layer, opt4->answer);
 
-    path_mapset = G_find_cell(path_layer, search_mapset);
+    path_mapset = G_find_raster(path_layer, search_mapset);
 
     /*  find number of rows and cols in window    */
     nrows = G_window_rows();

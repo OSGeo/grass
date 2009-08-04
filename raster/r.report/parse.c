@@ -238,7 +238,7 @@ int parse_layer(char *s)
     int n;
 
     strcpy(name, s);
-    mapset = G_find_cell2(name, "");
+    mapset = G_find_raster2(name, "");
 
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), s);

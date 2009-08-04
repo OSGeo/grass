@@ -50,7 +50,7 @@ int Gp_set_color(const char *grassname, geopoint * gp)
     /* TODO: handle error messages */
 
     if (grassname) {
-	col_map = G_find_cell2(grassname, "");
+	col_map = G_find_raster2(grassname, "");
 	if (!col_map) {
 	    G_warning(_("Raster map <%s> not found"), grassname);
 	    return 0;

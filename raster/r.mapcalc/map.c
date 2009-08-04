@@ -467,7 +467,7 @@ int map_type(const char *name, int mod)
     switch (mod) {
     case 'M':
 	tmpname = G_store((char *)name);
-	mapset = G_find_cell2(tmpname, "");
+	mapset = G_find_raster2(tmpname, "");
 	result = mapset ? Rast_map_type(tmpname, mapset) : -1;
 	G_free(tmpname);
 	return result;
@@ -504,7 +504,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (col > max_col)
 	max_col = col;
 
-    mapset = G_find_cell2(name, "");
+    mapset = G_find_raster2(name, "");
     if (!mapset)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
@@ -653,7 +653,7 @@ void close_maps(void)
 
 int check_output_map(const char *name)
 {
-    return !!G_find_cell2(name, G_mapset());
+    return !!G_find_raster2(name, G_mapset());
 }
 
 int open_output_map(const char *name, int res_type)

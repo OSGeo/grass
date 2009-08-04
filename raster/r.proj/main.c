@@ -216,7 +216,7 @@ int main(int argc, char **argv)
 
     mapname = outmap->answer ? outmap->answer : inmap->answer;
     if (mapname && !list->answer && !overwrite &&
-	G_find_cell(mapname, G_mapset()))
+	G_find_raster(mapname, G_mapset()))
 	G_fatal_error(_("option <%s>: <%s> exists."), "output", mapname);
 
     setname = imapset->answer ? imapset->answer : G_store(G_mapset());
@@ -261,7 +261,7 @@ int main(int argc, char **argv)
     if (!inmap->answer)
 	G_fatal_error(_("Required parameter <%s> not set"), inmap->key);
 
-    if (!G_find_cell(inmap->answer, setname))
+    if (!G_find_raster(inmap->answer, setname))
 	G_fatal_error(_("Raster map <%s> in location <%s> in mapset <%s> not found"),
 		      inmap->answer, inlocation->answer, setname);
 

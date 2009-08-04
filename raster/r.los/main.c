@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Specified observer coordinate is outside current region bounds."));
 
     search_mapset = "";
-    old_mapset = G_find_cell2(elev_layer, search_mapset);
+    old_mapset = G_find_raster2(elev_layer, search_mapset);
 
     /*  check if elevation layer present in database    */
     if (old_mapset == NULL)
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 
     /* if pattern layer used, check if present in database  */
     if (patt_flag == TRUE) {
-	patt_mapset = G_find_cell(patt_layer, search_mapset);
+	patt_mapset = G_find_raster(patt_layer, search_mapset);
 	if (patt_mapset == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), patt_layer);
     }

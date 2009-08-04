@@ -29,7 +29,7 @@ int openfiles(struct parms *parms, struct files *files)
     files->band_cell = (DCELL **) G_calloc(Ref.nfiles, sizeof(DCELL *));
 
     /* open training map for reading */
-    mapset = G_find_cell2(parms->training_map, "");
+    mapset = G_find_raster2(parms->training_map, "");
     files->train_fd = Rast_open_old(parms->training_map, mapset);
     if (files->train_fd < 0)
 	G_fatal_error(_("Unable to open training map <%s>"),

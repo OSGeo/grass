@@ -25,12 +25,12 @@ int stats(void)
     char **tokens;
 
     strcpy(mname, maps[0]);
-    mmapset = G_find_cell2(mname, "");
+    mmapset = G_find_raster2(mname, "");
     if (mmapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), maps[0]);
 
     strcpy(rname, maps[1]);
-    rmapset = G_find_cell2(rname, "");
+    rmapset = G_find_raster2(rname, "");
     if (rmapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), maps[1]);
 

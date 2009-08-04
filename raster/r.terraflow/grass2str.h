@@ -55,7 +55,7 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
   }
   
   const char *mapset;
-  mapset = G_find_cell (cellname, "");
+  mapset = G_find_raster (cellname, "");
   if (mapset == NULL)
     G_fatal_error (_("Raster map <%s> not found"), cellname);
   

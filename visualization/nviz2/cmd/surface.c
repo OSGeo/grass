@@ -51,7 +51,7 @@ int load_rasters(const struct GParams *params, nv_data * data)
     for (i = 0; i < nelevs; i++) {
 	/* check maps */
 	if (i < nelev_map && strcmp(params->elev_map->answers[i], "")) {
-	    mapset = G_find_cell2(params->elev_map->answers[i], "");
+	    mapset = G_find_raster2(params->elev_map->answers[i], "");
 	    if (mapset == NULL) {
 		G_fatal_error(_("Raster map <%s> not found"),
 			      params->elev_map->answers[i]);
@@ -101,7 +101,7 @@ int load_rasters(const struct GParams *params, nv_data * data)
 	/* color */
 	/* check for color map */
 	if (i < ncolor_map && strcmp(params->color_map->answers[i], "")) {
-	    mapset = G_find_cell2(params->color_map->answers[i], "");
+	    mapset = G_find_raster2(params->color_map->answers[i], "");
 	    if (mapset == NULL) {
 		G_fatal_error(_("Raster map <%s> not found"),
 			      params->color_map->answers[i]);

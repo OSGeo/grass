@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
     name = parm.opt1->answer;
 
     /* Open Raster File */
-    if (NULL == (mapset = G_find_cell2(name, "")))
+    if (NULL == (mapset = G_find_raster2(name, "")))
 	G_fatal_error(_("Raster map <%s> not found"), name);
     if (0 > (fd = Rast_open_old(name, mapset)))
 	G_fatal_error(_("Unable to open raster map <%s>"), name);

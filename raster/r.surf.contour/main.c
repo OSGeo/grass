@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     con_name = opt1->answer;
     alt_name = opt2->answer;
 
-    con_mapset = G_find_cell2(con_name, "");
+    con_mapset = G_find_raster2(con_name, "");
     if (!con_mapset)
 	G_fatal_error("Contour raster map [%s] not found", con_name);
 
