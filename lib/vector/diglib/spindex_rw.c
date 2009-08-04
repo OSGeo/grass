@@ -732,7 +732,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 				(struct Node *)s[top].childpos[j];
 			}
 			else {
-			    newnode->branch[j].child = NULL;
+			    s[top].sn.branch[j].child = NULL;
 			}
 		    }
 		    s[top].branch_id = 0;
