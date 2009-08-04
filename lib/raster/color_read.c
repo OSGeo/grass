@@ -70,7 +70,7 @@ int Rast_read_colors(const char *name, const char *mapset,
     Rast_init_colors(colors);
 
     strcpy(xname, name);
-    mapset = G_find_cell(xname, mapset);
+    mapset = G_find_raster(xname, mapset);
     name = xname;
 
     if (fp)

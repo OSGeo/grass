@@ -174,18 +174,18 @@ int input_data(void)
 
     /* Check if data available in mapsets
      * if found, then open the files */
-    if ((mapset = G_find_cell(elevin, "")) == NULL)
+    if ((mapset = G_find_raster(elevin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), elevin);
 
     fd1 = Rast_open_old(elevin, mapset);
 
     /* TO REPLACE BY INTERNAL PROCESSING of dx, dy from Elevin */
-    if ((mapset = G_find_cell(dxin, "")) == NULL)
+    if ((mapset = G_find_raster(dxin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dxin);
 
     fd2 = Rast_open_old(dxin, mapset);
 
-    if ((mapset = G_find_cell(dyin, "")) == NULL)
+    if ((mapset = G_find_raster(dyin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dyin);
 
     fd3 = Rast_open_old(dyin, mapset);
@@ -194,7 +194,7 @@ int input_data(void)
     /* Rendered Mannings n input map optional to run! */
     /* Careful!                     (Yann, 20080212) */
     if (manin != NULL) {
-	if ((mapset = G_find_cell(manin, "")) == NULL)
+	if ((mapset = G_find_raster(manin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), manin);
 	fd5 = Rast_open_old(manin, mapset);
     }
@@ -202,47 +202,47 @@ int input_data(void)
     /* Rendered Rainfall input map optional to run! */
     /* Careful!                     (Yann, 20080212) */
     if (rain != NULL) {
-	if ((mapset = G_find_cell(rain, "")) == NULL)
+	if ((mapset = G_find_raster(rain, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), rain);
 	fd4 = Rast_open_old(rain, mapset);
     }
 
     if (infil != NULL) {
-	if ((mapset = G_find_cell(infil, "")) == NULL)
+	if ((mapset = G_find_raster(infil, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), infil);
 	fd4a = Rast_open_old(infil, mapset);
     }
 
     if (traps != NULL) {
-	if ((mapset = G_find_cell(traps, "")) == NULL)
+	if ((mapset = G_find_raster(traps, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), traps);
 
 	fd4b = Rast_open_old(traps, mapset);
     }
 
     if (detin != NULL) {
-	if ((mapset = G_find_cell(detin, "")) == NULL)
+	if ((mapset = G_find_raster(detin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), detin);
 
 	fd9 = Rast_open_old(detin, mapset);
     }
 
     if (tranin != NULL) {
-	if ((mapset = G_find_cell(tranin, "")) == NULL)
+	if ((mapset = G_find_raster(tranin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), tranin);
 
 	fd10 = Rast_open_old(tranin, mapset);
     }
 
     if (tauin != NULL) {
-	if ((mapset = G_find_cell(tauin, "")) == NULL)
+	if ((mapset = G_find_raster(tauin, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), tauin);
 
 	fd11 = Rast_open_old(tauin, mapset);
     }
 
     if (wdepth != NULL) {
-	if ((mapset = G_find_cell(wdepth, "")) == NULL)
+	if ((mapset = G_find_raster(wdepth, "")) == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), wdepth);
 
 	fd12 = Rast_open_old(wdepth, mapset);

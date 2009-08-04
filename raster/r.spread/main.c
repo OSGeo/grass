@@ -350,55 +350,55 @@ int main(int argc, char *argv[])
 
     /*  Check if input layers exists in data base  */
 
-    if (G_find_cell2(max_layer, "") == NULL)
+    if (G_find_raster2(max_layer, "") == NULL)
 	G_fatal_error("Raster map <%s> not found", max_layer);
 
-    if (G_find_cell2(dir_layer, "") == NULL)
+    if (G_find_raster2(dir_layer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dir_layer);
 
-    if (G_find_cell2(base_layer, "") == NULL)
+    if (G_find_raster2(base_layer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), base_layer);
 
-    if (G_find_cell2(start_layer, "") == NULL)
+    if (G_find_raster2(start_layer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), start_layer);
 
     if (spotting) {
-	if (G_find_cell2(spotdist_layer, "") == NULL)
+	if (G_find_raster2(spotdist_layer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), spotdist_layer);
 
-	if (G_find_cell2(velocity_layer, "") == NULL)
+	if (G_find_raster2(velocity_layer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), velocity_layer);
 
-	if (G_find_cell2(mois_layer, "") == NULL)
+	if (G_find_raster2(mois_layer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), mois_layer);
     }
 
     /*  Open input cell layers for reading  */
 
-    max_fd = Rast_open_old(max_layer, G_find_cell2(max_layer, ""));
+    max_fd = Rast_open_old(max_layer, G_find_raster2(max_layer, ""));
     if (max_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), max_layer);
 
-    dir_fd = Rast_open_old(dir_layer, G_find_cell2(dir_layer, ""));
+    dir_fd = Rast_open_old(dir_layer, G_find_raster2(dir_layer, ""));
     if (dir_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), dir_layer);
 
-    base_fd = Rast_open_old(base_layer, G_find_cell2(base_layer, ""));
+    base_fd = Rast_open_old(base_layer, G_find_raster2(base_layer, ""));
     if (base_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), base_layer);
 
     if (spotting) {
 	spotdist_fd =
-	    Rast_open_old(spotdist_layer, G_find_cell2(spotdist_layer, ""));
+	    Rast_open_old(spotdist_layer, G_find_raster2(spotdist_layer, ""));
 	if (spotdist_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), spotdist_layer);
 
 	velocity_fd =
-	    Rast_open_old(velocity_layer, G_find_cell2(velocity_layer, ""));
+	    Rast_open_old(velocity_layer, G_find_raster2(velocity_layer, ""));
 	if (velocity_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), velocity_layer);
 
-	mois_fd = Rast_open_old(mois_layer, G_find_cell2(mois_layer, ""));
+	mois_fd = Rast_open_old(mois_layer, G_find_raster2(mois_layer, ""));
 	if (mois_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), mois_layer);
     }
@@ -467,7 +467,7 @@ int main(int argc, char *argv[])
      *   Create an array of starting points (min_heap) ordered by costs.
      */
 
-    start_fd = Rast_open_old(start_layer, G_find_cell2(start_layer, ""));
+    start_fd = Rast_open_old(start_layer, G_find_raster2(start_layer, ""));
     if (start_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), start_layer);
 

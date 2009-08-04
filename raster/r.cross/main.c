@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     for (nfiles = 0; (name = parm.input->answers[nfiles]); nfiles++) {
 	if (nfiles >= NFILES)
 	    G_fatal_error(_("More than %d files not allowed"), NFILES);
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	names[nfiles] = name;
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     qsort(reclass, result + 1, sizeof(RECLASS), cmp);
     table = (CELL *) G_calloc(result + 1, sizeof(CELL));
     for (i = 0; i < nfiles; i++) {
-	mapset = G_find_cell2(names[i], "");
+	mapset = G_find_raster2(names[i], "");
 	Rast_read_cats(names[i], mapset, &labels[i]);
     }
 

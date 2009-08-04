@@ -358,7 +358,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 
   /** create a bitmap mask from given raster map **/
     if (maskmap != NULL) {
-	mapsetm = G_find_cell2(maskmap, "");
+	mapsetm = G_find_raster2(maskmap, "");
 	if (!mapsetm) {
 	    sprintf(buf, "mask raster map [%s] not found\n", maskmap);
 	    clean_fatal_error(buf);

@@ -288,7 +288,7 @@ G_add_keyword(_("interpolation"));
     if (!vector && map) {
 	grid = TRUE;
 	/*
-	   if (G_find_cell (out_map_opt->answer, G_mapset()) != NULL) 
+	   if (G_find_raster (out_map_opt->answer, G_mapset()) != NULL) 
 	   G_fatal_error (_("Raster <%s> already exist."), out_map_opt->answer);
 	 */
 

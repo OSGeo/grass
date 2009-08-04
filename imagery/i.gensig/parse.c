@@ -32,7 +32,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     parms->sigfile = sigfile->answer;
 
     /* check all the inputs */
-    if (G_find_cell(parms->training_map, "") == NULL)
+    if (G_find_raster(parms->training_map, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parms->training_map);
 
     if (!I_find_group(parms->group))

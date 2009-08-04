@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    old_mapset = G_find_cell2(parm.input->answer, "");
+    old_mapset = G_find_raster2(parm.input->answer, "");
     if (old_mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.input->answer);
 

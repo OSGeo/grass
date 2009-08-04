@@ -9,7 +9,7 @@ int open_cell_old(const char *name, const char *mapset)
     int fd;
 
     if (mapset == NULL)
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
     fd = Rast_open_old(name, mapset);
     if (fd >= 0)
 	return fd;

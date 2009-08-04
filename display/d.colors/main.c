@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     /* Make sure map is available */
     if (map->answer == NULL)
 	exit(0);
-    mapset = G_find_cell2(map->answer, "");
+    mapset = G_find_raster2(map->answer, "");
     if (mapset == NULL) {
 	char msg[256];
 

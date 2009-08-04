@@ -27,14 +27,14 @@
  * returned. If not found, the NULL pointer is returned.
  *
  * Note: If the user specifies a fully qualified raster map which
- * exists, then G_find_cell() modifies <i>name</i> by removing
+ * exists, then G_find_raster() modifies <i>name</i> by removing
  * the "@<i>mapset</i>".
  *
  * For example, to find a raster map anywhere in the database:
  \code
  char name[GNAME_MAX];
  char *mapset;
- if ((mapset = G_find_cell(name,"")) == NULL)
+ if ((mapset = G_find_raster(name,"")) == NULL)
  // not found
  \endcode
  *
@@ -42,7 +42,7 @@
  *
  \code
  char name[GNAME_MAX];
- if (G_find_cell(name, G_mapset()) == NULL)
+ if (G_find_raster(name, G_mapset()) == NULL)
  // not found
  \endcode
  *
@@ -52,7 +52,7 @@
  * \return mapset where raster map was found
  * \return NULL if not found
  */
-const char *G_find_cell(char *name, const char *mapset)
+const char *G_find_raster(char *name, const char *mapset)
 {
     return G_find_file("cell", name, mapset);
 }
@@ -60,7 +60,7 @@ const char *G_find_cell(char *name, const char *mapset)
 /*!
  * \brief Find a raster map (look but don't touch)
  *
- * The same as G_find_cell() but doesn't remove the "@<i>mapset</i>"
+ * The same as G_find_raster() but doesn't remove the "@<i>mapset</i>"
  * qualification from <i>name</i>, if present.
  *
  * Returns NULL if the map wasn't found, or the mapset the raster was
@@ -72,7 +72,7 @@ const char *G_find_cell(char *name, const char *mapset)
  * \return mapset where raster map was found
  * \return NULL if not found
  */
-const char *G_find_cell2(const char *name, const char *mapset)
+const char *G_find_raster2(const char *name, const char *mapset)
 {
     return G_find_file2("cell", name, mapset);
 }

@@ -262,7 +262,7 @@ int main(int argc, char **argv)
     if (is_from_stdin)
 	rules = NULL;
 
-    mapset = G_find_cell2(name, "");
+    mapset = G_find_raster2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
@@ -337,7 +337,7 @@ int main(int argc, char **argv)
     }
     else {
 	/* use color from another map (cmap) */
-	cmapset = G_find_cell2(cmap, "");
+	cmapset = G_find_raster2(cmap, "");
 	if (cmapset == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), cmap);
 

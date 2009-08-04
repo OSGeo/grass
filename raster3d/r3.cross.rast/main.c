@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
 
 	/**********************/
 
-	if (G_find_cell2(param.output->answer, ""))
+	if (G_find_raster2(param.output->answer, ""))
 	    G_message(_("Output map already exists. Will be overwritten!"));
 
 	if (output_type == FCELL_TYPE) {

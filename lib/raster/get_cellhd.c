@@ -73,7 +73,7 @@ int Rast_get_cellhd(const char *name, const char *mapset,
 	    sprintf(tail, _(" It is a reclass of raster map <%s@%s> "),
 		    real_name, real_mapset);
 	    tail = buf + strlen(buf);
-	    if (!G_find_cell(real_name, real_mapset))
+	    if (!G_find_raster(real_name, real_mapset))
 		sprintf(tail, _("which is missing."));
 	    else
 		sprintf(tail, _("whose header file can't be opened."));

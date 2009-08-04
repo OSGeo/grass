@@ -8,7 +8,7 @@ int opencell(char *fullname, char *name, char *mapset)
     int fd;
 
     strcpy(name, fullname);
-    m = G_find_cell2(name, "");
+    m = G_find_raster2(name, "");
     if (m == NULL) {
 	G_warning(_("Raster map <%s> not found"), name);
 	return -1;

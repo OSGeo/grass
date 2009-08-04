@@ -122,7 +122,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 
     G_debug(3, "Gs_loadmap_as_float(): name=%s", map_name);
 
-    map_set = G_find_cell2(map_name, "");
+    map_set = G_find_raster2(map_name, "");
     if (!map_set) {
 	G_warning(_("Raster map <%s> not found"), map_name);
 	return 0;
@@ -197,7 +197,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 
     G_debug(3, "Gs_loadmap_as_int");
 
-    map_set = G_find_cell2(map_name, "");
+    map_set = G_find_raster2(map_name, "");
     if (!map_set) {
 	G_warning(_("Raster map <%s> not found"), map_name);
 	return 0;
@@ -282,7 +282,7 @@ int Gs_numtype(const char *filename, int *negflag)
 	first = 0;
     }
 
-    mapset = G_find_cell2(filename, "");
+    mapset = G_find_raster2(filename, "");
     if (!mapset) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return -1;
@@ -355,7 +355,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 
     max_short -= 1;
 
-    map_set = G_find_cell2(map_name, "");
+    map_set = G_find_raster2(map_name, "");
     if (!map_set) {
 	G_warning(_("Raster map <%s> not found"), map_name);
 	return -1;
@@ -471,7 +471,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 
     max_char -= 1;
 
-    map_set = G_find_cell2(map_name, "");
+    map_set = G_find_raster2(map_name, "");
     if (!map_set) {
 	G_warning(_("Raster map <%s> not found"), map_name);
 	return -1;
@@ -568,7 +568,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 
     G_debug(3, "Gs_loadmap_as_bitmap");
 
-    map_set = G_find_cell2(map_name, "");
+    map_set = G_find_raster2(map_name, "");
     if (!map_set) {
 	G_warning(_("Raster map <%s> not found"), map_name);
 	return -1;
@@ -635,7 +635,7 @@ int Gs_build_256lookup(const char *filename, int *buff)
 
     G_debug(3, "building color table");
 
-    mapset = G_find_cell2(filename, "");
+    mapset = G_find_raster2(filename, "");
     if (!mapset) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return 0;
@@ -692,7 +692,7 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
     unsigned char *r, *g, *b, *set;
     int *cur, i, j;
 
-    mapset = G_find_cell2(filename, "");
+    mapset = G_find_raster2(filename, "");
     if (!mapset) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return;
@@ -762,7 +762,7 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
     int i, j, *icur;
     FCELL *fcur;
 
-    mapset = G_find_cell2(filename, "");
+    mapset = G_find_raster2(filename, "");
     if (!mapset) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return;
@@ -832,7 +832,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
     RASTER_MAP_TYPE map_type;
     int fd;
 
-    if ((mapset = G_find_cell2(filename, "")) == NULL) {
+    if ((mapset = G_find_raster2(filename, "")) == NULL) {
 	G_warning(_("Raster map <%s> not found"), filename);
 	return 0;
     }

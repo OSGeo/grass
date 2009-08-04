@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
 
     /* Make sure raster exists and set mapset */
     infile = raster->answer;
-    mapset = G_find_cell2(infile, G_mapset());	/* current mapset only for editing */
+    mapset = G_find_raster2(infile, G_mapset());	/* current mapset only for editing */
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
 	G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
 

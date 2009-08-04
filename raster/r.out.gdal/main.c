@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Required parameter <%s> not set"), input->key);
 
     /* Try to open input GRASS raster.. */
-    mapset = G_find_cell2(input->answer, "");
+    mapset = G_find_raster2(input->answer, "");
 
     if (mapset != NULL) {
 	/* Add input to "group". "Group" whith 1 raster (band) will exist only in memory. */

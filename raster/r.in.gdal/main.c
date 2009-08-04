@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Name for output raster map not specified"));
 
     if (!parm.outloc->answer) {	/* Check if the map exists */
-	if (G_find_cell2(output, G_mapset())) {
+	if (G_find_raster2(output, G_mapset())) {
 	    if (overwrite)
 		G_warning(_("Raster map <%s> already exists and will be overwritten"),
 			  output);

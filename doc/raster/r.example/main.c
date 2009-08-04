@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 
     /* returns NULL if the map was not found in any mapset, 
      * mapset name otherwise */
-    mapset = (char *) G_find_cell2(name, "");
+    mapset = (char *) G_find_raster2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 

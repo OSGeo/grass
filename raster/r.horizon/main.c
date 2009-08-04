@@ -550,7 +550,7 @@ int INPUT(void)
     }
     /*read Z raster */
 
-    if ((mapset = G_find_cell2(elevin, "")) == NULL)
+    if ((mapset = G_find_raster2(elevin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), elevin);
 
     fd1 = Rast_open_old(elevin, mapset);

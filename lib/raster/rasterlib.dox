@@ -38,12 +38,12 @@ with <tt>g.mapsets</tt> command).
 
 The following routines search the database for raster map files:
 
- - G_find_cell()
+ - G_find_raster()
 
 Looks for the raster file in the database. If found, the mapset where
 the raster file lives is returned. If not found, the NULL pointer is
 returned. If the user specifies a fully qualified raster map name which
-exists, then G_find_cell() modifies <i>name</i> by removing
+exists, then G_find_raster() modifies <i>name</i> by removing
 the "@<I>mapset</I>".
 
 For example, to find a raster map in all mapsets listed the mapset search
@@ -53,7 +53,7 @@ path:
 char name[GNAME_MAX];
 char *mapset;
 
-if ((mapset = G_find_cell(name,"")) == NULL)
+if ((mapset = G_find_raster(name,"")) == NULL)
   /* not found */
 \endcode
 
@@ -62,7 +62,7 @@ To check that the raster map exists in the current mapset:
 \code
 char name[GNAME_MAX];
 
-if (G_find_cell(name, G_mapset()) == NULL)
+if (G_find_raster(name, G_mapset()) == NULL)
   /* not found */
 \endcode
 
@@ -91,7 +91,7 @@ called first to make sure that raster map name is a valid name.
 <b>Note:</b> It is not an error for raster map to already exist. New
 raster maps are actually created as temporary files and moved into
 the cell or fcell directory when closed. This allows an existing raster map
-to be read at the same time that it is being rewritten. G_find_cell()
+to be read at the same time that it is being rewritten. G_find_raster()
 could be used to see if raster map already exists.
 
 <b>Warning:</b> However, there is a subtle trap. The temporary file,

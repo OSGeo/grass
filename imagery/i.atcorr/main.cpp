@@ -588,7 +588,7 @@ int main(int argc, char* argv[])
 	exit (EXIT_FAILURE);
 
     /* open input raster */
-    if ( (iimg_mapset = G_find_cell2 ( opts.iimg->answer, "") ) == NULL )
+    if ( (iimg_mapset = G_find_raster2 ( opts.iimg->answer, "") ) == NULL )
 	G_fatal_error ( _("Raster map <%s> not found"), opts.iimg->answer);
     if((iimg_fd = Rast_open_old(opts.iimg->answer, iimg_mapset)) < 0)
 	G_fatal_error (_("Unable to open raster map <%s>"),
@@ -597,7 +597,7 @@ int main(int argc, char* argv[])
     adjust_region(opts.iimg->answer, iimg_mapset);
         
     if(opts.ialt->answer) {
-	if ( (ialt_mapset = G_find_cell2 ( opts.ialt->answer, "") ) == NULL )
+	if ( (ialt_mapset = G_find_raster2 ( opts.ialt->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ialt->answer);
 	if((ialt_fd = Rast_open_old(opts.ialt->answer, ialt_mapset)) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),
@@ -605,7 +605,7 @@ int main(int argc, char* argv[])
     }
 
     if(opts.ivis->answer) {
-	if ( (iviz_mapset = G_find_cell2 ( opts.ivis->answer, "") ) == NULL )
+	if ( (iviz_mapset = G_find_raster2 ( opts.ivis->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ivis->answer);
 	if((ivis_fd = Rast_open_old(opts.ivis->answer, iviz_mapset)) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),

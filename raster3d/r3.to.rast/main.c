@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
 	G_asprintf(&RasterFileName, "%s_%05d", param.output->answer, i + 1);
 	G_message(_("Raster map %i Filename: %s"), i + 1, RasterFileName);
 
-	if (G_find_cell2(RasterFileName, ""))
+	if (G_find_raster2(RasterFileName, ""))
 	    G_message(_("Raster map %d Filename: %s already exists. Will be overwritten!"),
 		      i + 1, RasterFileName);
 

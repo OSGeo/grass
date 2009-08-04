@@ -187,7 +187,7 @@ parse_args(int argc, char *argv[]) {
 void check_header(char* cellname) {
 
   const char *mapset;
-  mapset = G_find_cell(cellname, "");
+  mapset = G_find_raster(cellname, "");
   if (mapset == NULL) {
     G_fatal_error(_("Raster map <%s> not found"), cellname);
   }
@@ -336,7 +336,7 @@ setFlowAccuColorTable(char* cellname) {
   const char *mapset;
   struct Range r;
 
-  mapset = G_find_cell(cellname, "");
+  mapset = G_find_raster(cellname, "");
   if (mapset == NULL) {
     G_fatal_error (_("Raster map <%s> not found"), cellname);
   }
@@ -376,7 +376,7 @@ setSinkWatershedColorTable(char* cellname) {
   const char *mapset;
   struct Range r;
 
-  mapset = G_find_cell(cellname, "");
+  mapset = G_find_raster(cellname, "");
   if (mapset == NULL) {
     G_fatal_error (_("Raster map <%s> not found"), cellname);
   }

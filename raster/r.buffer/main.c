@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     ZEROFLAG = 0;		/* default: use NULL for non-data cells */
     ZEROFLAG = (flag2->answer);
 
-    mapset = G_find_cell2(input, "");
+    mapset = G_find_raster2(input, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), input);
 

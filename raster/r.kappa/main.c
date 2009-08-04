@@ -139,7 +139,7 @@ static void layer(const char *s)
     int n;
 
     strcpy(name, s);
-    if ((mapset = G_find_cell2(name, "")) == NULL)
+    if ((mapset = G_find_raster2(name, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), s);
 
     n = nlayers++;

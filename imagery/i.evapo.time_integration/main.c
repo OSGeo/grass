@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 			  MAXFILES);
 	name = *ptr;
 	/* find map in mapset */
-	mapset = (char *) G_find_cell2(name, "");
+	mapset = (char *) G_find_raster2(name, "");
 	if (mapset == NULL) {
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	    ok = 0;
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 			  MAXFILES);
 	name1 = *ptr1;
 	/* find map in mapset */
-	mapset = (char *) G_find_cell2(name1, "");
+	mapset = (char *) G_find_raster2(name1, "");
 	if (mapset == NULL) {
 	    G_fatal_error(_("Raster map <%s> not found"), name1);
 	    ok = 0;
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 			  MAXFILES);
 	name2 = *ptr2;
 	/* find map in mapset */
-	mapset = (char *) G_find_cell2(name2, "");
+	mapset = (char *) G_find_raster2(name2, "");
 	if (mapset == NULL) {
 	    G_fatal_error(_("Raster map <%s> not found"), name2);
 	    ok = 0;

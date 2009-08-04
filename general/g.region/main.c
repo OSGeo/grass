@@ -450,7 +450,7 @@ int main(int argc, char *argv[])
 	    char rast_name[GNAME_MAX];
 
 	    strcpy(rast_name, *rast_ptr);
-	    mapset = G_find_cell2(rast_name, "");
+	    mapset = G_find_raster2(rast_name, "");
 	    if (!mapset)
 		G_fatal_error(_("Raster map <%s> not found"), rast_name);
 	    if (Rast_get_cellhd(rast_name, mapset, &temp_window) < 0)
@@ -776,7 +776,7 @@ int main(int argc, char *argv[])
 
     /* zoom= */
     if ((name = parm.zoom->answer)) {
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	zoom(&window, name, mapset);
@@ -784,7 +784,7 @@ int main(int argc, char *argv[])
 
     /* align= */
     if ((name = parm.align->answer)) {
-	mapset = G_find_cell2(name, "");
+	mapset = G_find_raster2(name, "");
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	if (Rast_get_cellhd(name, mapset, &temp_window) < 0)
