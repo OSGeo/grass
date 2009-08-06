@@ -180,6 +180,7 @@ int main(int argc, char *argv[])
     angle_opt->required = NO;
     angle_opt->answer = "0";
     angle_opt->description = _("Angle of major axis in degrees");
+    angle_opt->guisection = _("Distance");
 
     bufcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     bufcol_opt->key = "bufcolumn";
@@ -193,6 +194,7 @@ int main(int argc, char *argv[])
     scale_opt->required = NO;
     scale_opt->answer = "1.0";
     scale_opt->description = _("Scaling factor for attribute column values");
+    scale_opt->guisection = _("Distance");
 
     tol_opt = G_define_option();
     tol_opt->key = "tolerance";
