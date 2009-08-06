@@ -609,7 +609,7 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
     s[top].branch_id = i = 0;
     s[top].sn = t->root;
 
-    /* some sort of inorder traversal */
+    /* some sort of postorder traversal */
     /* root node is written out last */
 
     while (top >= 0) {
@@ -618,15 +618,13 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 	if (s[top].sn->level > 0) {	/* this is an internal node in the tree */
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		s[top].pos[i] = 0;
-		if (n->branch[i].child > 0) {
+		if (n->branch[i].child != NULL) {
 		    s[top++].branch_id = i + 1;
 		    s[top].sn = n->branch[i].child;
 		    s[top].branch_id = 0;
 		    writeout = 0;
 		    break;
 		}
-		else if (n->branch[i].child < 0)
-		    G_fatal_error("corrupt spatial index");
 	    }
 	    if (writeout) {
 		/* nothing else found, ready to write out */
@@ -682,7 +680,6 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     int i, j, writeout;
     struct spidxstack
     {
-	struct Node *node[MAXCARD];	/* pointer to already loaded child node */
 	off_t childpos[MAXCARD];
 	off_t pos;		/* file position of child node */
 	struct Node sn;		/* stack node */
@@ -702,11 +699,18 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     for (j = 0; j < MAXCARD; j++) {
 	dig__fread_port_D(s[top].sn.branch[j].rect.boundary, NUMSIDES, fp);
 	dig__fread_port_O(&(s[top].childpos[j]), 1, fp, off_t_size);
+	if (s[top].sn.level == 0 && s[top].childpos[j]) {	/* leaf node */
+	    s[top].sn.branch[j].child =
+		(struct Node *)s[top].childpos[j];
+	}
+	else {
+	    s[top].sn.branch[j].child = NULL;
+	}
     }
 
     s[top].branch_id = i = 0;
 
-    /* some sort of inorder traversal */
+    /* some sort of postorder traversal */
     /* root node is written out last */
 
     while (top >= 0) {
@@ -714,7 +718,6 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	writeout = 1;
 	if (s[top].sn.level > 0) {	/* this is an internal node in the tree */
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
-		s[top].sn.branch[i].child = NULL;
 		if (s[top].childpos[i] > 0) {
 		    s[top++].branch_id = i + 1;
 		    s[top].pos = last->childpos[i];
@@ -762,7 +765,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	    top--;
 	    /* update child of parent node */
 	    if (top >= 0) {
-		s[top].node[s[top].branch_id - 1] = newnode;
+		s[top].sn.branch[s[top].branch_id - 1].child = newnode;
 	    }
 	}
     }
