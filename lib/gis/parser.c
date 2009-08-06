@@ -2086,7 +2086,7 @@ static int check_opts(void)
     while (opt != NULL) {
 	/* Check answer against options if any */
 
-	if (opt->options && opt->answer) {
+	if (opt->answer) {
 	    if (opt->multiple == 0)
 		error += check_an_opt(opt->key, opt->type,
 				      opt->options, opt->opts, &opt->answer);
@@ -2166,6 +2166,9 @@ static int check_int(const char *ans, const char **opts)
     if (sscanf(ans, "%d", &d) != 1)
 	return MISSING_VALUE;
 
+    if (!opts)
+	return 0;
+
     for (i = 0; opts[i]; i++) {
 	const char *opt = opts[i];
 	int lo, hi;
@@ -2207,6 +2210,9 @@ static int check_double(const char *ans, const char **opts)
     if (sscanf(ans, "%lf", &d) != 1)
 	return MISSING_VALUE;
 
+    if (!opts)
+	return 0;
+
     for (i = 0; opts[i]; i++) {
 	const char *opt = opts[i];
 	double lo, hi;
@@ -2245,6 +2251,9 @@ static int check_string(const char *ans, const char **opts, int *result)
     int len = strlen(ans);
     int found = 0;
     int i;
+
+    if (!opts)
+	return 0;
 
     for (i = 0; opts[i]; i++) {
 	if (strcmp(ans, opts[i]) == 0)
