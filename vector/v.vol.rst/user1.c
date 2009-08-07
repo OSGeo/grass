@@ -26,8 +26,10 @@
  *
  *****************************************************************************/
 
+#include <grass/config.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -403,10 +405,9 @@ int OUTGR()
 
 	for (i = 0; i < nsizr; i++) {
 	    /* seek to the right row */
-	    if (fseek
-		(Tmp_fd_cell, (long)((nsizr - 1 - i) * nsizc * sizeof(FCELL)),
-		 0) == -1)
-		G_fatal_error("cannot fseek to the right spot");
+	    G_fseek
+		(Tmp_fd_cell, (off_t)((nsizr - 1 - i) * nsizc * sizeof(FCELL)),
+		 0);
 	    fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
 	    Rast_put_f_row(fdcout, cell);
 	}
