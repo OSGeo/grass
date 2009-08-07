@@ -36,7 +36,7 @@
 int main(int argc, char *argv[])
 {
     struct dxf_file *dxf;
-    struct Map_info *Map;
+    struct Map_info Map;
     char *output;
     int ret;
 
@@ -144,39 +144,36 @@ int main(int argc, char *argv[])
 	output = opt.output->answer;
 
 	/* create vector map */
-	Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));
-	if (Vect_open_new(Map, output, 1) < 0)
+	if (Vect_open_new(&Map, output, 1) < 0)
 	    G_fatal_error(_("Unable to create vector map <%s>"), output);
 
-	Vect_set_map_name(Map, output);
+	Vect_set_map_name(&Map, output);
 
-	Vect_hist_command(Map);
+	Vect_hist_command(&Map);
     }
 
     /* import */
-    ret = dxf_to_vect(dxf, Map);
+    ret = dxf_to_vect(dxf, &Map);
 
     dxf_close(dxf);
 
     if (flag_list)
 	init_list();
     else {
-	Vect_close(Map);
+	Vect_close(&Map);
 
 	if (ret) {
-	    if (Vect_open_old(Map, output, G_mapset())) {
+	    if (Vect_open_old(&Map, output, G_mapset())) {
 		if (!flag_topo)
-		    if (!Vect_build(Map))
+		    if (!Vect_build(&Map))
 			G_warning(_("Building topology failed"));
-		Vect_close(Map);
+		Vect_close(&Map);
 	    }
 	}
 	else {
 	    Vect_delete(output);
 	    G_fatal_error(_("Failed to import DXF file!"));
 	}
-
-	G_free(Map);
     }
 
     G_done_msg(" ");

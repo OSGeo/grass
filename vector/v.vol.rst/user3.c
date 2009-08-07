@@ -25,9 +25,10 @@
  *              for details.
  *
  *****************************************************************************/
-
+#include <grass/config.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -242,7 +243,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     int POINT();
     int ind, ind1;
     static int first_time_z = 1;
-    int offset, offset1, offset2;
+    off_t offset, offset1, offset2;
     int bmask = 1;
     static FCELL *cell = NULL;
 
@@ -566,9 +567,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 		offset2 = offset + ind;	/* rows*cols offset */
 
 		if ((cellinp != NULL) && (cellout != NULL) && (i == ngstl)) {
-		    if (fseek(Tmp_fd_cell, (long)(ind * sizeof(FCELL)), 0) ==
-			-1)
-			return 0;
+		    G_fseek(Tmp_fd_cell, (off_t)(ind * sizeof(FCELL)), 0);
 		    if (!
 			(fwrite
 			 (zero_array_cell + ind1, sizeof(FCELL),
@@ -577,9 +576,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    ("Not enough disk space--cannot write files");
 		}
 		if (outz != NULL) {
-		    if (fseek(Tmp_fd_z, (long)(offset2 * sizeof(float)), 0) ==
-			-1)
-			return 0;
+		    G_fseek(Tmp_fd_z, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array1 + ind1, sizeof(float), nszc - ngstc + 1,
@@ -588,9 +585,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    ("Not enough disk space--cannot write files");
 		}
 		if (gradient != NULL) {
-		    if (fseek(Tmp_fd_dx, (long)(offset2 * sizeof(float)), 0)
-			== -1)
-			return 0;
+		    G_fseek(Tmp_fd_dx, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array2 + ind1, sizeof(float), nszc - ngstc + 1,
@@ -599,9 +594,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    ("Not enough disk space--cannot write files");
 		}
 		if (aspect1 != NULL) {
-		    if (fseek(Tmp_fd_dy, (long)(offset2 * sizeof(float)), 0)
-			== -1)
-			return 0;
+		    G_fseek(Tmp_fd_dy, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array3 + ind1, sizeof(float), nszc - ngstc + 1,
@@ -610,9 +603,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    ("Not enough disk space--cannot write files");
 		}
 		if (aspect2 != NULL) {
-		    if (fseek(Tmp_fd_dz, (long)(offset2 * sizeof(float)), 0)
-			== -1)
-			return 0;
+		    G_fseek(Tmp_fd_dz, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array4 + ind1, sizeof(float), nszc - ngstc + 1,
@@ -621,9 +612,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    ("Not enough disk space--cannot write files");
 		}
 		if (ncurv != NULL) {
-		    if (fseek(Tmp_fd_xx, (long)(offset2 * sizeof(float)), 0)
-			== -1)
-			return 0;
+		    G_fseek(Tmp_fd_xx, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array5 + ind1, sizeof(float), nszc - ngstc + 1,
@@ -632,9 +621,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    ("Not enough disk space--cannot write files");
 		}
 		if (gcurv != NULL) {
-		    if (fseek(Tmp_fd_yy, (long)(offset2 * sizeof(float)), 0)
-			== -1)
-			return 0;
+		    G_fseek(Tmp_fd_yy, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array6 + ind1, sizeof(float), nszc - ngstc + 1,
@@ -643,9 +630,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			    ("Not enough disk space--cannot write files");
 		}
 		if (mcurv != NULL) {
-		    if (fseek(Tmp_fd_xy, (long)(offset2 * sizeof(float)), 0)
-			== -1)
-			return 0;
+		    G_fseek(Tmp_fd_xy, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array7 + ind1, sizeof(float), nszc - ngstc + 1,

@@ -1,3 +1,4 @@
+#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
 #include "global.h"
@@ -16,8 +17,8 @@ struct dxf_file *dxf_open(char *file)
 	return NULL;
 
     /* get the file size */
-    fseek(dxf->fp, 0L, SEEK_END);
-    dxf->size = ftell(dxf->fp);
+    G_fseek(dxf->fp, 0L, SEEK_END);
+    dxf->size = G_ftell(dxf->fp);
     rewind(dxf->fp);
 
     dxf->pos = 0;
@@ -30,7 +31,7 @@ struct dxf_file *dxf_open(char *file)
 	dxf->percent = 2;
 
     /* initialize G_percent() */
-    G_percent(0, dxf->size, dxf->percent);
+    G_percent(0, 100, dxf->percent);
 
     return dxf;
 }
@@ -83,10 +84,12 @@ int dxf_read_code(struct dxf_file *dxf, char *buf, int size)
 static char *dxf_fgets(char *buf, int size, struct dxf_file *dxf)
 {
     char *p;
+    double perc;
 
     if ((p = fgets(buf, size, dxf->fp))) {
 	dxf->pos += strlen(p);
-	G_percent(dxf->pos, dxf->size, dxf->percent);
+	perc = 1.0 * dxf->pos / dxf->size;
+	G_percent((int) (perc * 100.0), 100, dxf->percent);
 	G_squeeze(buf);
     }
 

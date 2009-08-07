@@ -1,7 +1,9 @@
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
+#include <grass/config.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
@@ -11,7 +13,8 @@ struct dxf_file
     char *name;
     FILE *fp;
     /* for G_percent() */
-    unsigned long size, pos;
+    off_t size, pos;
+    int curr_pos;
     int percent;
 };
 
