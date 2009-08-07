@@ -1,3 +1,5 @@
+#include <grass/config.h>
+#include <sys/types.h>
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
@@ -34,7 +36,8 @@ void check(CELL newdir, CELL * dir, void *center, void *edge, double cnst,
 void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir,
 		   struct metrics m)
 {
-    int j, offset, inc;
+    int j, inc;
+    off_t offset;
     CELL sdir;
     double slope;
     char *center;
@@ -97,7 +100,7 @@ void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir,
 
 void filldir(int fe, int fd, int nl, struct band3 *bnd, struct metrics *m)
 {
-    int i, bufsz;
+    int i, bufsz;  /* use off_t bufsz for large files ? MM */
     CELL *dir;
 
     /* determine the flow direction in each cell.  On outer rows and columns
