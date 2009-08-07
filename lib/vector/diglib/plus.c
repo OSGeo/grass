@@ -95,7 +95,7 @@ int dig_init_plus(struct Plus_head *Plus)
     Plus->Volume_spidx_offset = 0L;
     Plus->Hole_spidx_offset = 0L;
 
-    /* dig_spidx_init(Plus); */
+    dig_spidx_init(Plus);
     dig_cidx_init(Plus);
 
     return 1;

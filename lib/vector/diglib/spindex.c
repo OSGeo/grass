@@ -38,7 +38,6 @@ int dig_spidx_init(struct Plus_head *Plus)
     ndims = Plus->with_z ? 3 : 2;
 
     G_debug(1, "dig_spidx_init()");
-    G_debug(1, "Plus->spidx_separate = %d", Plus->Spidx_new);
 
     Plus->Node_spidx = RTreeNewIndex(ndims);
     Plus->Line_spidx = RTreeNewIndex(ndims);
@@ -56,6 +55,8 @@ int dig_spidx_init(struct Plus_head *Plus)
     Plus->Volume_spidx_offset = 0L;
     Plus->Hole_spidx_offset = 0L;
 
+    Plus->Spidx_built = 0;
+    
     return 1;
 }
 
