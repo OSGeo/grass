@@ -848,8 +848,6 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 	/* initialize spatial index */
 	Map->plus.Spidx_new = 0;
 
-	dig_spidx_init(Plus);
-
 	/* load head */
 	if (dig_Rd_spidx_head(&(Map->plus.spidx_fp), Plus) == -1) {
 	    fclose(Map->plus.spidx_fp.file);
@@ -883,8 +881,6 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     if (mode) {
 	/* open new spatial index */
 	Map->plus.Spidx_new = 1;
-
-	dig_spidx_init(Plus);
 
 	if (mode == 1) {
 	    /* load spatial index for update */
