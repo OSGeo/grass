@@ -25,6 +25,7 @@
  *
  *****************************************************************************/
 
+#include <grass/config.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -87,7 +88,8 @@ int main(int argc, char **argv)
 
     struct point *list;
     struct point *thispoint;
-    int ival, bsz, start_row, start_col, mode;
+    int ival, start_row, start_col, mode;
+    off_t bsz;
     int costmode = 0;
     double east, north, val;
     struct point *drain(int, struct point *, int, int);

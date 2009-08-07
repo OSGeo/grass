@@ -94,7 +94,7 @@ double slope_d(void *, void *, double);
 struct band3
 {
     int ns;			/* samples per line */
-    int sz;			/* bytes per line */
+    off_t sz;			/* bytes per line */
     char *b[3];			/* pointers to start of each line */
 };
 
