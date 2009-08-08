@@ -38,9 +38,9 @@ int edge_detection(struct Cell_head elaboration_reg, struct bound_box Overlap_Bo
 		   double *partial, double alpha, double residual,
 		   double gradHigh, double gradLow)
 {
-    /* 0 = PRE_TERRAIN */
-    /* 1 = PRE_EDGE */
-    /* 2 = UNKNOWN */
+    /* 1 = PRE_TERRAIN */
+    /* 2 = PRE_EDGE */
+    /* 3 = PRE_UNKNOWN */
 
     int c1, c2;
     double g[9][2], *gradient, gradPto, dirPto;
