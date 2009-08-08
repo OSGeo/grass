@@ -88,7 +88,7 @@ static char *dxf_fgets(char *buf, int size, struct dxf_file *dxf)
 
     if ((p = fgets(buf, size, dxf->fp))) {
 	dxf->pos += strlen(p);
-	perc = 1.0 * dxf->pos / dxf->size;
+	perc = (double) dxf->pos / dxf->size;
 	G_percent((int) (perc * 100.0), 100, dxf->percent);
 	G_squeeze(buf);
     }
