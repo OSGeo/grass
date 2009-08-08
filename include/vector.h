@@ -170,6 +170,7 @@ int Vect_get_scale(const struct Map_info *);
 int Vect_set_zone(struct Map_info *, int);
 int Vect_get_zone(const struct Map_info *);
 int Vect_get_proj(const struct Map_info *);
+int Vect_set_proj(struct Map_info *, int);
 const char *Vect_get_proj_name(const struct Map_info *);
 int Vect_set_thresh(struct Map_info *, double);
 double Vect_get_thresh(const struct Map_info *);
