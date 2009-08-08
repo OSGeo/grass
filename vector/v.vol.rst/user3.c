@@ -567,7 +567,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 		offset2 = offset + ind;	/* rows*cols offset */
 
 		if ((cellinp != NULL) && (cellout != NULL) && (i == ngstl)) {
-		    G_fseek(Tmp_fd_cell, (off_t)(ind * sizeof(FCELL)), 0);
+		    G_fseek(Tmp_fd_cell, ((off_t)ind * sizeof(FCELL)), 0);
 		    if (!
 			(fwrite
 			 (zero_array_cell + ind1, sizeof(FCELL),
