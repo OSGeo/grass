@@ -276,12 +276,6 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     byte_order = buf[4];
     ptr->spidx_port.off_t_size = buf[5];
 
-    if (ptr->spidx_port.off_t_size > (int)sizeof(off_t)) {
-	G_fatal_error("Spatial index was written with LFS but this "
-		      "GRASS version does not support LFS. "
-		      "Try to rebuild topology or upgrade GRASS.");
-    }
-
     G_debug(2,
 	    "Spidx header: file version %d.%d , supported from GRASS version %d.%d",
 	    ptr->spidx_Version_Major, ptr->spidx_Version_Minor,
@@ -318,6 +312,13 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 			    " Please rebuild topology."),
 			  ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
 	    return (-1);
+    }
+
+    /* can this library read the sidx file ? */
+    if (ptr->spidx_port.off_t_size > (int)sizeof(off_t)) {
+	G_fatal_error("Spatial index was written with LFS but this "
+		      "GRASS version does not support LFS. "
+		      "Please get a GRASS version with LFS support.");
     }
 
     dig_init_portable(&(ptr->spidx_port), byte_order);
