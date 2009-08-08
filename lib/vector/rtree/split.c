@@ -85,7 +85,7 @@ static void RTreeClassify(int i, int group, struct PartitionVars *p,
 
 /**********************************************************************
  *                                                                    *
- *            Toni Guttmann's quadratic splitting method              *
+ *            Toni Guttman's quadratic splitting method              *
  *                                                                    *
  **********************************************************************/
 
@@ -207,7 +207,7 @@ static void RTreePrintPVars(struct PartitionVars *p)
 }
 
 /*----------------------------------------------------------------------
-| Method #0 for choosing a partition: this is Toni Guttmann's quadratic
+| Method #0 for choosing a partition: this is Toni Guttman's quadratic
 | split
 |
 | As the seeds for the two groups, pick the two rects that would waste

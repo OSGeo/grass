@@ -45,10 +45,10 @@ typedef double RectReal;
  * this is LFS dependent, not good
  * on 32 bit without LFS this is 9.69
  * on 32 bit with LFS and on 64 bit this is 9 */
-#define MAXCARD 10
+#define MAXCARD 9
 
 /* R*-tree: number of branches to be force-reinserted when adding a branch */
-#define FORCECARD 3
+#define FORCECARD 2
 
 /* maximum no of levels = tree depth */
 #define MAXLEVEL 20        /* 4^MAXLEVEL items are guaranteed to fit into the tree */
