@@ -309,6 +309,16 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 		    " Consider to rebuild topology or upgrade GRASS."),
 		  ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
     }
+    if (ptr->spidx_Version_Major < GV_SIDX_VER_MAJOR ||
+	(ptr->spidx_Version_Major == GV_SIDX_VER_MAJOR &&
+	ptr->spidx_Version_Minor < GV_SIDX_VER_MINOR)) {
+	/* The file was created by GRASS library with lower version than this one */
+	    G_fatal_error(_("Spatial index format version %d.%d is not "
+			    "supported by this release."
+			    " Please rebuild topology."),
+			  ptr->spidx_Version_Major, ptr->spidx_Version_Minor);
+	    return (-1);
+    }
 
     dig_init_portable(&(ptr->spidx_port), byte_order);
     dig_set_cur_port(&(ptr->spidx_port));
