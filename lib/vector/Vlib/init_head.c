@@ -58,10 +58,13 @@ void Vect__init_head(struct Map_info *Map)
     Map->head.line_3 = NULL;
     Vect_set_comment(Map, "");
 
-    /* scale, zone, threshold */
+    /* scale, threshold */
     Vect_set_scale(Map, 1);
-    Vect_set_zone(Map, 0);
     Vect_set_thresh(Map, 0.0);
+
+    /* proj, zone */
+    Vect_set_proj(Map, -1);
+    Vect_set_zone(Map, -1);
 
     /* support variables */
     Map->plus.Spidx_built = 0;

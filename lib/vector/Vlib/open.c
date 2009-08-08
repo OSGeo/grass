@@ -224,6 +224,9 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	}
     }
     Map->format = format;
+
+    Vect_set_proj(Map, G_projection());
+    Vect_set_zone(Map, G_zone());
     
     /* Read vector head */
     if (!ogr_mapset && Vect__read_head(Map) != 0) {
@@ -234,7 +237,11 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	G_warning(_("Unable to read head file of vector <%s>"),
 		  Vect_get_full_name(Map));
     }
-    
+
+    /* zone not set */
+    if (Vect_get_zone(Map) == -1)
+	Vect_set_zone(Map, G_zone());
+
     G_debug(1, "Level request = %d", level_request);
 
     /* There are only 2 possible open levels, 1 and 2. Try first to open 'support' files
@@ -628,6 +635,9 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Map->Constraint_type_flag = 0;
     Map->head.with_z = with_z;
     Map->plus.do_uplist = 0;
+
+    Vect_set_proj(Map, G_projection());
+    Vect_set_zone(Map, G_zone());
 
     Map->dblnk = Vect_new_dblinks_struct();
 
