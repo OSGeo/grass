@@ -37,13 +37,13 @@
  */
 
 void format_double(double, char *);
-
+int level_one_info(struct Map_info *);
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *in_opt, *fieldopt;
-    struct Flag *histf, *columns, *gflag, *tflag, *mflag;
+    struct Flag *histf, *columns, *gflag, *tflag, *mflag, *lflag;
     struct Map_info Map;
     struct bound_box box;
     char line[200], buf[1001];
@@ -97,11 +97,27 @@ int main(int argc, char *argv[])
     tflag->description = _("Print topology information only");
     tflag->guisection = _("Print");
 
+    lflag = G_define_flag();
+    lflag->key = 'l';
+    lflag->description = _("Open Vector without topology (level 1)");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    Vect_set_open_level(2); /* topology required */
-    Vect_open_old_head(&Map, in_opt->answer, "");
+    if (lflag->answer) {
+	Vect_set_open_level(1); /* no topology */
+	tflag->answer = 0;
+    }
+    else
+	Vect_set_open_level(2); /* topology requested */
+
+    if (lflag->answer) {
+	Vect_open_old(&Map, in_opt->answer, "");
+	level_one_info(&Map);
+    }
+    else
+	Vect_open_old_head(&Map, in_opt->answer, "");
+
     with_z = Vect_is_3d(&Map);
 
     if (histf->answer) {
@@ -253,7 +269,7 @@ int main(int argc, char *argv[])
 
 	    printline(line);
 
-	    if (Vect_level(&Map) > 1) {
+	    if (Vect_level(&Map) > 0) {
 		printline("");
 		sprintf(line,
 			_("  Number of points:       %-9ld       Number of areas:      %-9ld"),
@@ -281,10 +297,6 @@ int main(int argc, char *argv[])
 		printline(line);
 		sprintf(line, _("  Number of dblinks:      %-9ld"),
 			(long)Vect_get_num_dblinks(&Map));
-		printline(line);
-	    }
-	    else {		/* should not be reached */
-		sprintf(line, _("                No topology present"));
 		printline(line);
 	    }
 
@@ -342,4 +354,89 @@ void format_double(double value, char *buf)
 {
     sprintf(buf, "%.8f", value);
     G_trim_decimal(buf);
+}
+
+/* code taken from Vect_build_nat() */
+int level_one_info(struct Map_info *Map)
+{
+    struct Plus_head *plus;
+    int i, type, first = 1;
+    off_t offset;
+    struct line_pnts *Points;
+    struct line_cats *Cats;
+    struct bound_box box;
+
+    int n_primitives, n_points, n_lines, n_boundaries, n_centroids, n_kernels;
+
+    G_debug(1, "Count vector objects for level 1");
+
+    plus = &(Map->plus);
+
+    n_primitives = n_points = n_lines = n_boundaries = n_centroids = n_kernels = 0;
+
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+    
+    Vect_rewind(Map);
+    /* G_message(_("Registering primitives...")); */
+    i = 1;
+    while (1) {
+	/* register line */
+	type = Vect_read_next_line(Map, Points, Cats);
+
+	/* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	if (type == -1) {
+	    G_warning(_("Unable to read vector map"));
+	    return 0;
+	}
+	else if (type == -2) {
+	    break;
+	}
+
+	/* count features */
+	n_primitives++;
+	
+	if (type & GV_POINT)  /* probably most common */
+	    n_points++;
+	else if (type & GV_LINE)
+	    n_lines++;
+	else if (type & GV_BOUNDARY)
+	    n_boundaries++;
+	else if (type & GV_CENTROID)
+	    n_centroids++;
+	else if (type & GV_KERNEL)
+	    n_kernels++;
+
+	offset = Map->head.last_offset;
+
+	G_debug(3, "Register line: offset = %lu", (unsigned long)offset);
+	dig_line_box(Points, &box);
+	if (first == 1) {
+	    Vect_box_copy(&(plus->box), &box);
+	    first = 0;
+	}
+	else
+	    Vect_box_extend(&(plus->box), &box);
+
+	/* can't print progress, unfortunately */
+/*
+	if (G_verbose() > G_verbose_min() && i % 1000 == 0) {
+	    if (format == G_INFO_FORMAT_PLAIN)
+		fprintf(stderr, "%d..", i);
+	    else
+		fprintf(stderr, "%11d\b\b\b\b\b\b\b\b\b\b\b", i);
+	}
+	i++;
+*/
+    }
+
+    /* save result in plus */
+    plus->n_lines = n_primitives;
+    plus->n_plines = n_points;
+    plus->n_llines = n_lines;
+    plus->n_blines = n_boundaries;
+    plus->n_clines = n_centroids;
+    plus->n_klines = n_kernels;
+
+    return 1;
 }
