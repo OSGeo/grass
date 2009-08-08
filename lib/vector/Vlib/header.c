@@ -130,7 +130,7 @@ int Vect__read_head(struct Map_info *Map)
     Vect_set_map_date(Map, "");
     Vect_set_scale(Map, 1);
     Vect_set_comment(Map, "");
-    Vect_set_zone(Map, 0);
+    Vect_set_zone(Map, -1);
     Vect_set_thresh(Map, 0.);
 
     G_debug(1, "Vect__read_head(): vector = %s@%s", Map->name, Map->mapset);
@@ -458,7 +458,6 @@ int Vect_set_zone(struct Map_info *Map, int zone)
     return 0;
 }
 
-
 /*!
    \brief Get projection zone from map header
 
@@ -472,20 +471,38 @@ int Vect_get_zone(const struct Map_info *Map)
 }
 
 /*!
+   \brief Set projection in map header
+
+   \param Map vector map
+
+   PROJECTION_XY  0 - x,y (Raw imagery),
+   PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
+   PROJECTION_SP  2 - State Plane (in feet),
+   PROJECTION_LL  3 - Latitude-Longitude
+   
+   \return 0 on success
+ */
+int Vect_set_proj(struct Map_info *Map, int proj)
+{
+    Map->proj = proj;
+    
+    return 0;
+}
+
+/*!
    \brief Get projection from map header
 
    \param Map vector map
 
-   \return PROJECTION_XY  - x,y (Raw imagery),
-   \return PROJECTION_UTM - UTM   Universal Transverse Mercator,
-   \return PROJECTION_SP  - State Plane (in feet),
-   \return PROJECTION_LL  - Latitude-Longitude
+   \return PROJECTION_XY  0 - x,y (Raw imagery),
+   \return PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
+   \return PROJECTION_SP  2 - State Plane (in feet),
+   \return PROJECTION_LL  3 - Latitude-Longitude
  */
 int Vect_get_proj(const struct Map_info *Map)
 {
     return (Map->proj);
 }
-
 
 /*!
    \brief Query cartographic projection name of vector map
