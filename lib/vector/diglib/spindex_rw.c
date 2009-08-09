@@ -244,7 +244,7 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     G_debug(1, "spidx body offset %lu", length);
 
     if (ptr->spidx_head_size != length)
-	G_fatal_error("wrong sidx head length %d", ptr->spidx_head_size);
+	G_fatal_error("wrong sidx head length %ld", ptr->spidx_head_size);
 
     return (0);
 }
@@ -514,13 +514,13 @@ static int rtree_dump_branch(FILE * fp, struct Branch *b, int with_z,
     r = &(b->rect);
 
     if (level == 0)
-	fprintf(fp, "  id = %d ", (int)b->child);
+	fprintf(fp, "  id = %d ", b->child.id);
 
     fprintf(fp, " %f %f %f %f %f %f\n", r->boundary[0], r->boundary[1],
 	    r->boundary[2], r->boundary[3], r->boundary[4], r->boundary[5]);
 
     if (level > 0) {
-	rtree_dump_node(fp, b->child, with_z);
+	rtree_dump_node(fp, b->child.ptr, with_z);
     }
     return 0;
 }
@@ -536,25 +536,29 @@ static int rtree_dump_branch(FILE * fp, struct Branch *b, int with_z,
  */
 int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
 {
-    int i, nn;
+    int i;
 
-    /* yuck! recursive traversal filling up memory */
-    /* TODO: change to non-recursive method as used in rtree_copy_inorder */
+    /* recursive nearly-but-a-bit-messy depth-first pre-order traversal
+     * potentially filling up memory */
+    /* TODO: change to non-recursive depth-first post-order traversal */
     /* left for comparison with GRASS6.x */
 
     fprintf(fp, "Node level=%d  count=%d\n", n->level, n->count);
 
     if (n->level > 0)
-	nn = NODECARD;
-    else
-	nn = LEAFCARD;
-
-    for (i = 0; i < nn; i++) {
-	if (n->branch[i].child) {
-	    fprintf(fp, "  Branch %d", i);
-	    rtree_dump_branch(fp, &n->branch[i], with_z, n->level);
+	for (i = 0; i < NODECARD; i++) {
+	    if (n->branch[i].child.ptr) {
+		fprintf(fp, "  Branch %d", i);
+		rtree_dump_branch(fp, &n->branch[i], with_z, n->level);
+	    }
 	}
-    }
+    else
+	for (i = 0; i < LEAFCARD; i++) {
+	    if (n->branch[i].child.id) {
+		fprintf(fp, "  Branch %d", i);
+		rtree_dump_branch(fp, &n->branch[i], with_z, n->level);
+	    }
+	}
 
     return 0;
 }
@@ -629,9 +633,9 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 	if (s[top].sn->level > 0) {	/* this is an internal node in the tree */
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		s[top].pos[i] = 0;
-		if (n->branch[i].child != NULL) {
+		if (n->branch[i].child.ptr != NULL) {
 		    s[top++].branch_id = i + 1;
-		    s[top].sn = n->branch[i].child;
+		    s[top].sn = n->branch[i].child.ptr;
 		    s[top].branch_id = 0;
 		    writeout = 0;
 		    break;
@@ -654,7 +658,7 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 		dig__fwrite_port_D(s[top].sn->branch[j].rect.boundary,
 				   NUMSIDES, fp);
 		if (s[top].sn->level == 0)	/* leaf node */
-		    s[top].pos[j] = (off_t) s[top].sn->branch[j].child;
+		    s[top].pos[j] = (off_t) s[top].sn->branch[j].child.id;
 		dig__fwrite_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
 	    }
 
@@ -688,7 +692,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 				  struct RTree *t, int off_t_size)
 {
     struct Node *newnode = NULL;
-    int i, j, writeout;
+    int i, j, loadnode;
     struct spidxstack
     {
 	off_t childpos[MAXCARD];
@@ -710,12 +714,16 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     for (j = 0; j < MAXCARD; j++) {
 	dig__fread_port_D(s[top].sn.branch[j].rect.boundary, NUMSIDES, fp);
 	dig__fread_port_O(&(s[top].childpos[j]), 1, fp, off_t_size);
-	if (s[top].sn.level == 0 && s[top].childpos[j]) {	/* leaf node */
-	    s[top].sn.branch[j].child =
-		(struct Node *)s[top].childpos[j];
+	if (s[top].sn.level == 0) {
+	    if (s[top].childpos[j]) {	/* leaf node */
+	    s[top].sn.branch[j].child.id =
+		(int)s[top].childpos[j];
+	    }
+	    else
+		s[top].sn.branch[j].child.id = 0;
 	}
 	else {
-	    s[top].sn.branch[j].child = NULL;
+	    s[top].sn.branch[j].child.ptr = NULL;
 	}
     }
 
@@ -726,7 +734,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 
     while (top >= 0) {
 	last = &(s[top]);
-	writeout = 1;
+	loadnode = 1;
 	if (s[top].sn.level > 0) {	/* this is an internal node in the tree */
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		if (s[top].childpos[i] > 0) {
@@ -741,30 +749,34 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 					  NUMSIDES, fp);
 			dig__fread_port_O(&(s[top].childpos[j]), 1, fp,
 					  off_t_size);
-			if (s[top].sn.level == 0 && s[top].childpos[j]) {	/* leaf node */
-			    s[top].sn.branch[j].child =
-				(struct Node *)s[top].childpos[j];
+			if (s[top].sn.level == 0) {
+			    if (s[top].childpos[j]) {	/* leaf node */
+				s[top].sn.branch[j].child.id =
+				    (int)s[top].childpos[j];
+			    }
+			    else
+				s[top].sn.branch[j].child.id = 0;
 			}
 			else {
-			    s[top].sn.branch[j].child = NULL;
+			    s[top].sn.branch[j].child.ptr = NULL;
 			}
 		    }
 		    s[top].branch_id = 0;
-		    writeout = 0;
+		    loadnode = 0;
 		    break;
 		}
 		else if (last->childpos[i] < 0)
 		    G_fatal_error("corrupt spatial index");
 	    }
-	    if (writeout) {
-		/* nothing else found, ready to write out */
+	    if (loadnode) {
+		/* nothing else found, ready to load */
 		s[top].branch_id = t->nodecard;
 	    }
 	}
-	if (writeout) {
+	if (loadnode) {
 	    /* not writeout but load node to memory */
 
-	    newnode = RTreeNewNode(t);
+	    newnode = RTreeNewNode(t, s[top].sn.level);
 	    /* copy from stack node */
 	    newnode->level = s[top].sn.level;
 	    newnode->count = s[top].sn.count;
@@ -776,7 +788,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	    top--;
 	    /* update child of parent node */
 	    if (top >= 0) {
-		s[top].sn.branch[s[top].branch_id - 1].child = newnode;
+		s[top].sn.branch[s[top].branch_id - 1].child.ptr = newnode;
 	    }
 	}
     }
