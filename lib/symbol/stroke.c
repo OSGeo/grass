@@ -139,19 +139,25 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
     return 0;
 }
 
-/* 
- *  Stroke symbol to form used for Xdriver.
+/*!
+ * \brief Stroke symbol to form used for Xdriver.
  *
  *  tolerance currently not supported
+ *
+ * \param Symb  pointer to 
+ * \param size  symbol size
+ * \param rotation  symbol rotation, degrees CCW from East
+ * \param tolerance  currently not supported
+ *
  */
-void S_stroke(SYMBOL *Symb, int size, double rotation, int tolerance)
+void S_stroke(SYMBOL *Symb, double size, double rotation, int tolerance)
 {
     int i, j;
     double s;
     SYMBPART *part;
 
-    G_debug(3, "S_stroke(): size = %d rotation = %f tolerance = %d", size,
-	    rotation, tolerance);
+    G_debug(3, "S_stroke(): size = %.2f, rotation = %.2f, tolerance = %d",
+	    size, rotation, tolerance);
 
     /* TODO: support for tolerance */
 

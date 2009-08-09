@@ -202,11 +202,11 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	G_debug(2, " %d records selected from table", nrec_size);
 
 	for (i = 0; i < cvarr_size.n_values; i++) {
-	    G_debug(4, "(size) cat = %d  %s = %d", cvarr_size.value[i].cat,
+	    G_debug(4, "(size) cat = %d  %s = %.2f", cvarr_size.value[i].cat,
 		    size_column,
 		    (cvarr_size.ctype ==
-		     DB_C_TYPE_INT ? cvarr_size.value[i].val.
-		     i : (int)cvarr_size.value[i].val.d));
+		     DB_C_TYPE_INT ? (double)cvarr_size.value[i].val.i
+		     : cvarr_size.value[i].val.d));
 	}
     }
 
@@ -233,11 +233,11 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	G_debug(2, " %d records selected from table", nrec_rot);
 
 	for (i = 0; i < cvarr_rot.n_values; i++) {
-	    G_debug(4, "(rot) cat = %d  %s = %d", cvarr_rot.value[i].cat,
+	    G_debug(4, "(rot) cat = %d  %s = %.2f", cvarr_rot.value[i].cat,
 		    rot_column,
 		    (cvarr_rot.ctype ==
-		     DB_C_TYPE_INT ? cvarr_rot.value[i].val.
-		     i : (int)cvarr_rot.value[i].val.d));
+		     DB_C_TYPE_INT ? (double)cvarr_rot.value[i].val.i
+		     : cvarr_rot.value[i].val.d));
 	}
     }
 
@@ -246,7 +246,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	if (Symb == NULL)
 	    G_warning(_("Unable to read symbol, unable to display points"));
 	else
-	    S_stroke(Symb, size, 0.0, 0);
+	    S_stroke(Symb, (double)size, 0.0, 0);
     }
 
     if (open_db)
@@ -440,8 +440,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		else {
 		    width =
 			width_scale * (cvarr_width.ctype ==
-				       DB_C_TYPE_INT ? cv_width->val.
-				       i : (int)cv_width->val.d);
+				       DB_C_TYPE_INT ? cv_width->val.i
+				       : (int)cv_width->val.d);
 		    if (width < 0) {
 			G_warning(_("Error in line width column (%s), element %d "
 				   "with cat %d: line width [%d]"),
@@ -537,8 +537,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    }		/* end if nrec_rot */
 
 	    if(nrec_size || nrec_rot) {
-		G_debug(3, ". dynamic symbol: cat=%d  size=%d  rotation=%.2f",
-			cat, (int)(var_size + 0.5), rotation);
+		G_debug(3, ". dynamic symbol: cat=%d  size=%.2f  rotation=%.2f",
+			cat, var_size, rotation);
 
 		/* symbol stroking is cumulative, so we need to reread it each time */
 		if(Symb) /* unclean free() on first iteration if variables are not init'd to NULL? */
@@ -547,7 +547,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		if (Symb == NULL)
 		    G_warning(_("Unable to read symbol, unable to display points"));
 		else
-		    S_stroke(Symb, (int)(var_size + 0.5), rotation, 0);
+		    S_stroke(Symb, var_size, rotation, 0);
 	    }
 
 	    /* use random or RGB column color if given, otherwise reset */
