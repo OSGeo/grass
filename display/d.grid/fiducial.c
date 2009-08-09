@@ -26,7 +26,7 @@ void plot_symbol(double easting, double northing, int color, double rotation,
     SYMBOL *Symb;
     RGBA_Color *line_color, *fill_color;
     int R, G, B;
-    int size = 16;
+    double size = 16.0;
     int tolerance = 0;
 
     line_color = G_malloc(sizeof(RGBA_Color));

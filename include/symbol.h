@@ -73,6 +73,6 @@ typedef struct
 
 /* prototypes */
 SYMBOL *S_read(char *sname);
-void S_stroke(SYMBOL * symb, int size, double rotation, int tolerance);
+void S_stroke(SYMBOL * symb, double size, double rotation, int tolerance);
 
 #endif
