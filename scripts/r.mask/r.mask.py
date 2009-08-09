@@ -60,6 +60,10 @@ def main():
     if not remove and not input:
 	grass.fatal(_("Required parameter <input> not set"))
 
+    #check if input file exists
+    if not grass.find_file(input)['file'] and not remove:
+        grass.fatal(_("<%s> does not exist.") % input)
+
     mapset = grass.gisenv()['MAPSET']
     exists = bool(grass.find_file('MASK', element = 'cell', mapset = mapset)['file'])
 
@@ -88,8 +92,8 @@ def main():
 	else:
 	    grass.message(_("MASK created."))
 
-        grass.message(_("All subsequent raster operations will be limited to MASK area") +
-		      "Removing or renaming raster file named MASK will" +
+        grass.message(_("All subsequent raster operations will be limited to MASK area. ") +
+		      "Removing or renaming raster file named MASK will " +
 		      "restore raster operations to normal")
 
 if __name__ == "__main__":
