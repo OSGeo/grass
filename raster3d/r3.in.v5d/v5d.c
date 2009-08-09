@@ -64,12 +64,12 @@
 
 
 
+#include <grass/config.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <grass/config.h>
 #include <grass/gis.h>
 #include "binio.h"
 #include "v5d.h"
@@ -337,8 +337,8 @@ void v5dPrintStruct(const v5dstruct * v)
     else {
 	printf("Compression:  %d bytes per gridpoint.\n", v->CompressMode);
     }
-    printf("header size=%d\n", v->FirstGridPos);
-    printf("sizeof(v5dstruct)=%d\n", sizeof(v5dstruct));
+    printf("header size=%d\n", (int)v->FirstGridPos);
+    printf("sizeof(v5dstruct)=%d\n", (int)sizeof(v5dstruct));
     printf("\n");
 
     printf("NumVars = %d\n", v->NumVars);
@@ -467,7 +467,8 @@ void v5dPrintStruct(const v5dstruct * v)
  */
 static int grid_position(const v5dstruct * v, int time, int var)
 {
-    int pos, i;
+    int i;
+    off_t pos;
 
     assert(time >= 0);
     assert(var >= 0);
@@ -1309,7 +1310,7 @@ static int read_comp_header(int f, v5dstruct * v)
 	/* Older COMP5D format */
 	int gridtimes, gridparms;
 	int i, j, it, iv, nl;
-	int gridsize;
+	off_t gridsize;
 	float hgttop, hgtinc;
 
 	/*char *compgrid; */
@@ -1377,7 +1378,7 @@ static int read_comp_header(int f, v5dstruct * v)
 	    v->VarName[i][4] = 0;
 	}
 
-	gridsize = ((v->Nr * v->Nc * nl + 3) / 4) * 4;
+	gridsize = (((off_t)v->Nr * v->Nc * nl + 3) / 4) * 4;
 	for (i = 0; i < v->NumVars; i++) {
 	    v->GridSize[i] = 8 + gridsize;
 	}
@@ -1421,7 +1422,8 @@ static int read_comp_header(int f, v5dstruct * v)
     }
     else if (id == 0x80808082 || id == 0x80808083) {
 	/* Newer COMP5D format */
-	int gridtimes, gridsize;
+	int gridtimes;
+	off_t gridsize;
 	int it, iv, nl, i, j;
 	float delta;
 
@@ -1503,7 +1505,7 @@ static int read_comp_header(int f, v5dstruct * v)
 
 	/* calculate grid storage sizes */
 	if (id == 0x80808082) {
-	    gridsize = nl * 2 * 4 + ((v->Nr * v->Nc * nl + 3) / 4) * 4;
+	    gridsize = nl * 2 * 4 + (((off_t)v->Nr * v->Nc * nl + 3) / 4) * 4;
 	}
 	else {
 	    /* McIDAS grid and file numbers present */

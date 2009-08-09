@@ -26,6 +26,7 @@
 #ifndef V5D_H
 #define V5D_H
 
+#include <sys/types.h>
 
 /*
  * A numeric version number which we can test for in utility programs which
@@ -232,10 +233,10 @@ typedef struct
     unsigned int FileFormat;	/* COMP5D file version or 0 if .v5d */
     int FileDesc;		/* Unix file descriptor */
     char Mode;			/* 'r' = read, 'w' = write */
-    int CurPos;			/* current position of file pointer */
-    int FirstGridPos;		/* position of first grid in file */
-    int GridSize[MAXVARS];	/* size of each grid */
-    int SumGridSizes;		/* sum of GridSize[0..NumVars-1] */
+    off_t CurPos;			/* current position of file pointer */
+    off_t FirstGridPos;		/* position of first grid in file */
+    off_t GridSize[MAXVARS];	/* size of each grid */
+    off_t SumGridSizes;		/* sum of GridSize[0..NumVars-1] */
 } v5dstruct;
 
 
