@@ -83,7 +83,7 @@
 #include <grass/glocale.h>
 
 #define TEST_PATTERN 1.3333
-#define OFF_T_TEST 0x0102030405060708
+#define OFF_T_TEST 0x0102030405060708LL
 #define LONG_TEST 0x01020304
 #define INT_TEST 0x01020304
 #define SHORT_TEST 0x0102
