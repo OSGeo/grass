@@ -64,12 +64,12 @@
 
 
 
+#include <grass/config.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <grass/config.h>
 #include <grass/gis.h>
 #include "binio.h"
 #include "v5d.h"
@@ -337,8 +337,8 @@ void v5dPrintStruct(const v5dstruct * v)
     else {
 	printf("Compression:  %d bytes per gridpoint.\n", v->CompressMode);
     }
-    printf("header size=%d\n", v->FirstGridPos);
-    printf("sizeof(v5dstruct)=%d\n", sizeof(v5dstruct));
+    printf("header size=%d\n", (int)v->FirstGridPos);
+    printf("sizeof(v5dstruct)=%d\n", (int)sizeof(v5dstruct));
     printf("\n");
 
     printf("NumVars = %d\n", v->NumVars);
@@ -465,9 +465,10 @@ void v5dPrintStruct(const v5dstruct * v)
  *         time, var - which timestep and variable.
  * Return:  file offset in bytes
  */
-static int grid_position(const v5dstruct * v, int time, int var)
+static off_t grid_position(const v5dstruct * v, int time, int var)
 {
-    int pos, i;
+    int i;
+    off_t pos;
 
     assert(time >= 0);
     assert(var >= 0);
@@ -1309,7 +1310,7 @@ static int read_comp_header(int f, v5dstruct * v)
 	/* Older COMP5D format */
 	int gridtimes, gridparms;
 	int i, j, it, iv, nl;
-	int gridsize;
+	off_t gridsize;
 	float hgttop, hgtinc;
 
 	/*char *compgrid; */
@@ -2026,7 +2027,8 @@ v5dstruct *v5dOpenFile(const char *filename, v5dstruct * v)
 int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
 			  float *ga, float *gb, void *compdata)
 {
-    int pos, n, k;
+    int n, k;
+    off_t pos;
 
     if (time < 0 || time >= v->NumTimes) {
 	printf("Error in v5dReadCompressedGrid: bad timestep argument (%d)\n",
@@ -2178,7 +2180,8 @@ static int write_tag(v5dstruct * v, int tag, int length, int newfile)
  */
 static int write_v5d_header(v5dstruct * v)
 {
-    int var, time, filler, maxnl;
+    int var, time, maxnl;
+    off_t filler;
     int f;
     int newfile;
 
@@ -2407,7 +2410,8 @@ int v5dWriteCompressedGrid(const v5dstruct * v, int time, int var,
 			   const float *ga, const float *gb,
 			   const void *compdata)
 {
-    int pos, n, k;
+    int n, k;
+    off_t pos;
 
     /* simple error checks */
     if (v->Mode != 'w') {
