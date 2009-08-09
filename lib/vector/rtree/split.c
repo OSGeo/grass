@@ -19,9 +19,14 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <float.h>
 #include "index.h"
 #include "card.h"
 #include "split.h"
+
+#ifndef DBL_MAX
+#define DBL_MAX 1.797693E308  /* DBL_MAX approximation */
+#endif
 
 struct Branch BranchBuf[MAXCARD + 1];
 int BranchCount;
@@ -37,18 +42,28 @@ struct PartitionVars Partitions[METHODS];
 static void RTreeGetBranches(struct Node *n, struct Branch *b,
 			     struct RTree *t)
 {
-    int i, maxkids;
+    int i, maxkids = 0;
 
     assert(n);
     assert(b);
 
-    maxkids = ((n)->level > 0 ? t->nodecard : t->leafcard);
-
-    /* load the branch buffer */
-    for (i = 0; i < maxkids; i++) {
-	assert(n->branch[i].child);	/* n should have every entry full */
-	BranchBuf[i] = n->branch[i];
+    if ((n)->level > 0) {
+	maxkids = t->nodecard;
+	/* load the branch buffer */
+	for (i = 0; i < maxkids; i++) {
+	    assert(n->branch[i].child.ptr);	/* n should have every entry full */
+	    BranchBuf[i] = n->branch[i];
+	}
     }
+    else {
+	maxkids = t->leafcard;
+	/* load the branch buffer */
+	for (i = 0; i < maxkids; i++) {
+	    assert(n->branch[i].child.id);	/* n should have every entry full */
+	    BranchBuf[i] = n->branch[i];
+	}
+    }
+
     BranchBuf[maxkids] = *b;
     BranchCount = maxkids + 1;
 
@@ -59,7 +74,7 @@ static void RTreeGetBranches(struct Node *n, struct Branch *b,
     }
     CoverSplitArea = RTreeRectSphericalVolume(&CoverSplit, t);
 
-    RTreeInitNode(n);
+    RTreeInitNode(n, n->level);
 }
 
 /*----------------------------------------------------------------------
@@ -463,6 +478,8 @@ static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 
     maxkids = (minfill == t->min_leaf_fill ? t->leafcard : t->nodecard);
 
+    margin = DBL_MAX;
+
     /* choose split axis */
     /* For each dimension, sort rectangles first by lower boundary then
      * by upper boundary. Get the smallest margin. */
@@ -471,8 +488,8 @@ static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 	best_cut[i] = 0;
 	best_side[i] = 0;
 
-	smallest_overlap = -1;
-	smallest_vol = -1;
+	smallest_overlap = DBL_MAX;
+	smallest_vol = DBL_MAX;
 
 	/* first lower then upper bounds for each axis */
 	for (s = 0; s < 2; s++) {
@@ -510,7 +527,7 @@ static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 				    t) + RTreeRectMargin(&testrect2, t);
 
 		/* remember best axis */
-		if (margin <= smallest_margin || first_time) {
+		if (margin <= smallest_margin) {
 		    smallest_margin = margin;
 		    best_axis = i;
 		    first_time = 0;
@@ -552,7 +569,7 @@ static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 				    t) + RTreeRectVolume(&testrect2, t);
 
 		/* get best cut for this axis */
-		if (overlap <= smallest_overlap || smallest_overlap < 0) {
+		if (overlap <= smallest_overlap) {
 		    smallest_overlap = overlap;
 		    smallest_vol = vol;
 		    best_cut[i] = j;
@@ -560,7 +577,7 @@ static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 		}
 		else if (overlap == smallest_overlap) {
 		    /* resolve ties by minimum volume */
-		    if (vol <= smallest_vol || smallest_vol < 0) {
+		    if (vol <= smallest_vol) {
 			smallest_vol = vol;
 			best_cut[i] = j;
 			best_side[i] = s;

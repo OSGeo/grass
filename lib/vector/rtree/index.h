@@ -60,10 +60,16 @@ struct Rect
 
 struct Node;               /* node for memory based index */
 
+union Child
+{
+    int id;              /* child id */
+    struct Node *ptr;    /* pointer to child node */
+};
+
 struct Branch              /* branch for memory based index */
 {
     struct Rect rect;
-    struct Node *child;    /* pointer to child node */
+    union Child child;
 };
 
 struct Node             /* node for memory based index */
@@ -128,8 +134,8 @@ extern int RTreeDeleteRect(struct Rect *, int, struct RTree *t);
 extern struct RTree *RTreeNewIndex(int);
 void RTreeFreeIndex(struct RTree *);
 /* node.c */
-extern struct Node *RTreeNewNode(struct RTree *);
-extern void RTreeInitNode(struct Node *);
+extern struct Node *RTreeNewNode(struct RTree *, int);
+extern void RTreeInitNode(struct Node *, int);
 extern void RTreeFreeNode(struct Node *);
 extern void RTreeDestroyNode(struct Node *, int);
 extern struct Rect RTreeNodeCover(struct Node *, struct RTree *);
