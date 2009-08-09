@@ -256,7 +256,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     /* Create the output v5d file */
 
      /*AV*/
-	if (!v5dCreate(fileout, NumTimes, NumVars, rows, cols, Nl, VarName,
+	if (!v5dCreate(fileout, NumTimes, NumVars, rows, cols, Nl, (const char (*)[10])VarName,
 		       TimeStamp, DateStamp, CompressMode, Projection,
 		       ProjArgs, Vertical, VertArgs))
 	G_fatal_error(_("Error: couldn't create %s"), fileout);
