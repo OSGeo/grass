@@ -1426,49 +1426,49 @@ members described in \ref Complete_Structure_Members_Table.
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int main(int argc , char *argv[] )
+int main(int argc, char *argv[])
 {
+    struct Option *opt, *coor;
+    struct Flag *flag;
+    double X, Y;
+    int n;
 
- struct Option *opt;
- struct Option *coor;
- struct Flag *flag;
- double X , Y;
- int n;
+    opt = G_define_option();
+    opt->key = "debug";
+    opt->type = TYPE_STRING;
+    opt->required = NO;
+    opt->answer = "0";
+    opt->description = _("Debug level");
 
- opt = G_define_option();
- opt->key = "debug";
- opt->type = TYPE_STRING;
- opt->required = NO;
- opt->answer = "0";
- opt->description = _("Debug level");
+    coor = G_define_option();
+    coor->key = "coordinate";
+    coor->key_desc = "x,y";
+    coor->type = TYPE_STRING;
+    coor->required = YES;
+    coor->multiple = YES;
+    coor->description = _("One or more coordinate(s)");
 
- coor = G_define_option();
- coor->key = "coordinate";
- coor->key_desc = "x,y";
- coor->type = TYPE_STRING;
- coor->required = YES;
- coor->multiple = YES;
- coor->description = _("One or more coordinates");
+    /* Note that coor->answer is not given a default value. */
+    flag = G_define_flag();
+    flag->key = 'v';
+    flag->description = _("Verbose execution");
 
- /* Note that coor->answer is not given a default value. */
- flag = G_define_flag();
- flag->key = 'v';
- flag->description = _("Verbose execution");
+    /* Note that flag->answer is not given a default value. */
 
- /* Note that flag->answer is not given a default value. */
+    if (G_parser(argc, argv))
+	exit (EXIT_FAILURE);
 
- if (G_parser( argc , argv ))
-    exit (EXIT_FAILURE);
+    G_message("For the option <%s> you chose: <%s>",
+	      opt->description, opt->answer);
+    G_message("The flag <%s> is: %s set", flag->key,
+	      flag->answer ? "" : "not");
+    G_message("You specified the following coordinates:");
 
-  G_message("For the option <%s> you chose: <%s>", opt->description, opt->answer);
-  G_message("The flag <%s> is: %s set", flag->key, flag->answer ? "" : "not");
-  G_message("You specified the following coordinates:");
-
- for ( n=0 ; coor->answers[n] != NULL ; n+=2 ) {
-   G_scan_easting ( coor->answers[n ] , &X , G_projection());
-   G_scan_northing ( coor->answers[n+1] , &Y , G_projection());
-   G_message( "%.31f,%.21f\n", X , Y);
- }
+    for (n=0; coor->answers[n] != NULL; n+=2) {
+	G_scan_easting(coor->answers[n], &X , G_projection());
+	G_scan_northing(coor->answers[n+1], &Y , G_projection());
+	fprintf(stdout, "%.15g,%.15g", X, Y);
+    }
 }
 \endcode
 
