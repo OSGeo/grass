@@ -217,6 +217,7 @@ nv white
 end
 </pre></div>
 
+
 <h2>EXAMPLES</h2>
 
 The below example shows how you can specify colors for a three category map,
@@ -244,7 +245,8 @@ r.colors map=threecats rules=rules.file
 </pre></div>
 
 <p><br>
-To create a natural looking LUT for true map layer <i>elevation</i>, use the
+To create a natural looking lookup table (LUT) for true map layer
+<i>elevation</i>, use the
 following rules specification file. It will assign light green shades to the
 lower elevations (first 20% of the LUT), and then darker greens (next 15%, and
 next 20%) and light browns (next 20%) for middle elevations, and darker browns
@@ -259,6 +261,12 @@ next 20%) and light browns (next 20%) for middle elevations, and darker browns
 75% 120:130:40
 90% 170:160:50
 100% 255:255:100
+</pre></div>
+
+<p><br>
+To invert the current rules: 
+<div class="code"><pre>
+r.colors current_raster -n rast=current_raster
 </pre></div>
 
 
