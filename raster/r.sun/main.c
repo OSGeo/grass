@@ -41,6 +41,7 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk Thomas.Huld@jrc.
 #include "local_proto.h"
 #include "rsunglobals.h"
 
+/* default values */
 #define NUM_PARTITIONS "1"
 #define SKIP    "1"
 #define BIG      1.e20
@@ -165,7 +166,7 @@ double o_orig, z1;
  */
 double horizonStep;
 double ltime, tim, timo;
-double declination;		/* Contains the negative of the declination at the chosen day */
+double declination;	/* Contains the negative of the declination at the chosen day */
 
 /*
  * double lum_C31_l, lum_C33_l;
@@ -174,12 +175,14 @@ double beam_e, diff_e, refl_e, rr, insol_t;
 double cbh, cdh;
 double TOLER;
 
-
+/* 1852m/nm * 60nm/degree = 111120 m/deg */
 #define DEGREEINMETERS 111120.
 
-int ll_correction = 0;
+int ll_correction = FALSE;
 double coslatsq;
 
+/* why not use G_distance() here which switches to geodesic/great
+  circle distace as needed? */
 double distance(double x1, double x2, double y1, double y2)
 {
     if (ll_correction) {
@@ -435,12 +438,12 @@ int main(int argc, char *argv[])
 	_("Output global (total) irradiance/irradiation [W.m-2] (mode 1) or irradiance/irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.glob_rad->guisection = _("Output_options");
 
-
     parm.day = G_define_option();
     parm.day->key = "day";
     parm.day->type = TYPE_INTEGER;
     parm.day->required = YES;
     parm.day->description = _("No. of day of the year (1-365)");
+    parm.day->options = "1-365";
 
     parm.step = G_define_option();
     parm.step->key = "step";
@@ -542,8 +545,6 @@ int main(int argc, char *argv[])
      * }
      */
     saveMemory = flag.saveMemory->answer;
-    civiltime = parm.civilTime->answer;
-
 
     elevin = parm.elevin->answer;
     aspin = parm.aspin->answer;
@@ -552,32 +553,33 @@ int main(int argc, char *argv[])
     albedo = parm.albedo->answer;
     latin = parm.latin->answer;
 
+    civiltime = parm.civilTime->answer;
 
     if (civiltime != NULL) {
-	setUseCivilTime(1);
+	setUseCivilTime(TRUE);
 	longin = parm.longin->answer;
 
 	if (longin == NULL) {
 	    G_fatal_error(_("You must give the longitude raster if you use civil time"));
 
 	}
-	sscanf(parm.civilTime->answer, "%lf", &civilTime);
+
+	if (sscanf(parm.civilTime->answer, "%lf", &civilTime) != 1)
+	    G_fatal_error(_("Error reading civil time zone value"));
+	if (civilTime < -24. || civilTime > 24.)
+	    G_fatal_error(_("Invalid civil time zone value"));
 
 	/* Normalize if somebody should be weird enough to give more than +- 12 
 	 * hours offset. */
-
-	civilTime -= 24 * ((int)(civilTime / 24.));
-	if (civilTime < -12.) {
+	if (civilTime < -12.)
 	    civilTime += 24.;
-	}
-	else if (civilTime > 12.) {
+	else if (civilTime > 12.)
 	    civilTime -= 24;
-	}
-
     }
     else {
-	setUseCivilTime(0);
+	setUseCivilTime(FALSE);
     }
+
     coefbh = parm.coefbh->answer;
     coefdh = parm.coefdh->answer;
     incidout = parm.incidout->answer;
@@ -593,12 +595,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("insol_time and incidout are incompatible options"));
 
     sscanf(parm.day->answer, "%d", &day);
-    sscanf(parm.step->answer, "%lf", &step);
 
-    if (parm.step->answer != NULL) {
-	if (sscanf(parm.step->answer, "%lf", &step) != 1)
-	    G_fatal_error(_("Error reading time step size"));
-    }
+    if (sscanf(parm.step->answer, "%lf", &step) != 1)
+	G_fatal_error(_("Error reading time step size"));
+    if (step <= 0.0 || step > 24.0)
+	G_fatal_error(_("Invalid time step size"));
+
     if (parm.horizonstep->answer != NULL) {
 	if (sscanf(parm.horizonstep->answer, "%lf", &horizonStep) != 1)
 	    G_fatal_error(_("Error reading horizon step size"));
@@ -758,13 +760,12 @@ int main(int argc, char *argv[])
 
 /**********end of parser - ******************************/
 
-    if ((G_projection() == PROJECTION_LL)) {
-	ll_correction = 1;
-    }
+    if ((G_projection() == PROJECTION_LL))
+	ll_correction = TRUE;
 
-    G_debug(3, "calculate starts...");
+    G_debug(3, "calculate() starts...");
     calculate(singleSlope, singleAspect, singleAlbedo, singleLinke, gridGeom);
-    G_debug(3, "OUTGR starts...");
+    G_debug(3, "OUTGR() starts...");
     OUTGR();
 
     exit(EXIT_SUCCESS);
@@ -2075,6 +2076,9 @@ double com_declin(int no_of_day)
 {
     double d1, decl;
 
+    /* stretch day number in the following calculation for siderial effect? */
+    /*   ? double siderial_day = no_of_day + ((no_of_day * 0.25) / 365.) ? */
+    /* or just change d1 to : d1 = pi2 * no_of_day / 365.0;  ? */
     d1 = pi2 * no_of_day / 365.25;
     decl = asin(0.3978 * sin(d1 - 1.4 + 0.0355 * sin(d1 - 0.0489)));
     decl = -decl;
