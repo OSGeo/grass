@@ -287,9 +287,10 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
 
-	ncats =
-	    db_select_int(driver, Fi->table, Fi->key, whereopt->answer,
+	ncats =db_select_int(driver, Fi->table, Fi->key, whereopt->answer,
 			  &cats);
+	if (ncats == -1)
+		G_fatal_error(_("Unable select records from table <%s>"), Fi->table);
 	G_message(_("%d categories loaded from table <%s>"), ncats,
 		  Fi->table);
 
