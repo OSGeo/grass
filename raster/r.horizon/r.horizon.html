@@ -26,11 +26,13 @@ East, North, West and South. The only exception of this feature is
 LOCATION with x,y coordinate system, where this correction is
 not applied. 
 
+
 <H3>Flags:</H3>
 <dl>
   <dt><B>-d</B>
   <dd>Output horizon height in degrees (the default is radians)</dd>
 </dl>
+
 
 <H3>Input parameters:</H3>
 <P>The <I>elevin</I> parameter is an input elevation raster map. If
@@ -97,6 +99,7 @@ be in meters. The buffer parameters must be in the same units as the
 raster coordinates.
 </p>
 
+
 <H2>METHOD</H2>
 <P>The calculation method is based on the method used in <B>r.sun</B>
 to calculate shadows. It starts at a very shallow angle and walks
@@ -114,18 +117,21 @@ actually are. It also accounts for the changes of angles towards
 cardinal directions caused by the projection (see above). 
 </P>
 
+
 <H2>EXAMPLE</H2>
 
 Single point mode:
 <div class="code"><pre>
-r.horizon elevin=DEM horizonstep=30 direction=15 bufferzone=200 coord=47.302,7.365 dist=0.7 &gt; horizon.out
+r.horizon elevin=DEM horizonstep=30 direction=15 bufferzone=200 \
+    coord=47.302,7.365 dist=0.7 &gt; horizon.out
 </pre></div>
 
 
 Raster map mode (for r.sun):
 <div class="code"><pre>
 # we put a bufferzone of 10% of maxdistance around the study area
-r.horizon elevin=DEM horizonstep=30 bufferzone=200 horizon=horangle dist=0.7 maxdistance=2000
+r.horizon elevin=DEM horizonstep=30 bufferzone=200 horizon=horangle \
+    dist=0.7 maxdistance=2000
 </pre></div>
 
 
@@ -133,7 +139,9 @@ r.horizon elevin=DEM horizonstep=30 bufferzone=200 horizon=horangle dist=0.7 max
 
 <em>
 <A HREF="r.sun.html">r.sun</A>,
+<A HREF="r.sunmask.html">r.sunmask</A>,
 <A HREF="r.los.html">r.los</A></em>
+
 
 <H2>REFERENCES</H2>
 <P>Hofierka J., 1997. Direct solar radiation modelling within an
@@ -154,6 +162,7 @@ Commission, DG Joint Research Centre 2001-2007</P>
 A New GIS-based Solar Radiation Model and Its Application for
 Photovoltaic Assessments. <A HREF="http://www.blackwellpublishing.com/toc.asp?ref=1361-1682">Transactions
 in GIS</A>, 8(2), 175-190</P>
+
 
 <H2>AUTHORS</H2>
 <P>
@@ -178,4 +187,5 @@ European Commission, Ispra, Italy</P>
 <A HREF="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</A> 
 </ADDRESS>
 
-<P><I>Last changed: $Date: 2007/05/16 16:22:04 $</I> 
+<P>
+<I>Last changed: $Date: 2007/05/16 16:22:04 $</I> 
