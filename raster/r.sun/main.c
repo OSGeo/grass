@@ -467,6 +467,7 @@ int main(int argc, char *argv[])
     parm.ltime->required = NO;
     parm.ltime->description =
 	_("Local (solar) time (to be set for mode 1 only) [decimal hours]");
+    parm.ltime->options = "0-24";
 
     /*
      * parm.startTime = G_define_option();
@@ -613,17 +614,18 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("If you use the horizon option you must also set the 'horizonstep' parameter."));
     }
 
-
     tt = parm.ltime->answer;
     if (parm.ltime->answer != NULL) {
 	if (insol_time != NULL)
 	    G_fatal_error(_("Time and insol_time are incompatible options"));
+
 	G_message(_("Mode 1: instantaneous solar incidence angle & irradiance using a set local time"));
 	sscanf(parm.ltime->answer, "%lf", &timo);
     }
     else {
 	if (incidout != NULL)
 	    G_fatal_error(_("incidout requires time parameter to be set"));
+
 	G_message(_("Mode 2: integrated daily irradiation for a given day of the year"));
     }
 
