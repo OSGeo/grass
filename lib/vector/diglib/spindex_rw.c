@@ -607,7 +607,7 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
     int i, j, writeout;
     struct spidxstack
     {
-	off_t pos[MAXCARD];	/* file position of child node */
+	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
 	struct Node *sn;	/* stack node */
 	int branch_id;		/* branch no to follow down */
     } s[50];
@@ -617,20 +617,27 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
     sidx_nodesize =
 	(int)(2 * PORT_INT + MAXCARD * (off_t_size + NUMSIDES * PORT_DOUBLE));
 
-    /* stack size of t->n_levels + 1 would be enough because of depth first search */
-    /* only one node per level on stack at any given time */
+    /* stack size of t->n_levels + 1 would be enough because of
+     * depth-first post-order traversal:
+     * only one node per level on stack at any given time */
 
     /* add root node position to stack */
     s[top].branch_id = i = 0;
     s[top].sn = t->root;
 
-    /* some sort of postorder traversal */
-    /* root node is written out last */
+    /* some sort of postorder traversal 
+     * all children of a node are visitied and written out first
+     * when a child is written out, its position in file is stored in pos[] for
+     * the parent node and written out with the parent node */
+    /* root node is written out last and its position returned */
 
     while (top >= 0) {
 	n = s[top].sn;
 	writeout = 1;
-	if (s[top].sn->level > 0) {	/* this is an internal node in the tree */
+	/* this is an internal node in the RTree
+	 * all its children are processed first,
+	 * before it is written out to the sidx file */
+	if (s[top].sn->level > 0) {
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		s[top].pos[i] = 0;
 		if (n->branch[i].child.ptr != NULL) {
@@ -657,13 +664,18 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 	    for (j = 0; j < MAXCARD; j++) {
 		dig__fwrite_port_D(s[top].sn->branch[j].rect.boundary,
 				   NUMSIDES, fp);
-		if (s[top].sn->level == 0)	/* leaf node */
+		/* leaf node: vector object IDs are stored in child.id */
+		if (s[top].sn->level == 0)
 		    s[top].pos[j] = (off_t) s[top].sn->branch[j].child.id;
 		dig__fwrite_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
 	    }
 
 	    top--;
-	    /* update child pos of parent node */
+	    /* update corresponding child position of parent node
+	     * this node is only updated if its level is > 0, i.e.
+	     * this is an internal node
+	     * children of internal nodes do not have an ID, instead
+	     * they hold the position in file of the next nodes down the tree */
 	    if (top >= 0) {
 		s[top].pos[s[top].branch_id - 1] = nextfreepos;
 		nextfreepos += sidx_nodesize;
@@ -702,8 +714,9 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     } s[50], *last;
     int top = 0;
 
-    /* stack size of t->n_levels + 1 would be enough because of depth first search */
-    /* only one node per level on stack at any given time */
+    /* stack size of t->n_levels + 1 would be enough because of
+     * depth-first post-order traversal:
+     * only one node per level on stack at any given time */
 
     /* add root node position to stack */
     last = &(s[top]);
@@ -714,8 +727,9 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     for (j = 0; j < MAXCARD; j++) {
 	dig__fread_port_D(s[top].sn.branch[j].rect.boundary, NUMSIDES, fp);
 	dig__fread_port_O(&(s[top].childpos[j]), 1, fp, off_t_size);
+	/* leaf node: vector object IDs are stored in child.id */
 	if (s[top].sn.level == 0) {
-	    if (s[top].childpos[j]) {	/* leaf node */
+	    if (s[top].childpos[j]) {
 	    s[top].sn.branch[j].child.id =
 		(int)s[top].childpos[j];
 	    }
@@ -730,12 +744,15 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     s[top].branch_id = i = 0;
 
     /* some sort of postorder traversal */
-    /* root node is written out last */
+    /* root node is loaded last and returned */
 
     while (top >= 0) {
 	last = &(s[top]);
 	loadnode = 1;
-	if (s[top].sn.level > 0) {	/* this is an internal node in the tree */
+	/* this is an internal node in the RTree
+	 * all its children are read first,
+	 * before it is transfered to the RTree in memory */
+	if (s[top].sn.level > 0) {
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		if (s[top].childpos[i] > 0) {
 		    s[top++].branch_id = i + 1;
@@ -749,8 +766,12 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 					  NUMSIDES, fp);
 			dig__fread_port_O(&(s[top].childpos[j]), 1, fp,
 					  off_t_size);
+			/* leaf node
+			 * vector object IDs are stored in file as
+			 * off_t but always fit into an int, see dig_structs.h
+			 * vector object IDs are transfered to child.id */
 			if (s[top].sn.level == 0) {
-			    if (s[top].childpos[j]) {	/* leaf node */
+			    if (s[top].childpos[j]) {
 				s[top].sn.branch[j].child.id =
 				    (int)s[top].childpos[j];
 			    }
@@ -774,7 +795,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	    }
 	}
 	if (loadnode) {
-	    /* not writeout but load node to memory */
+	    /* ready to load node to memory */
 
 	    newnode = RTreeNewNode(t, s[top].sn.level);
 	    /* copy from stack node */
@@ -786,7 +807,11 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	    }
 
 	    top--;
-	    /* update child of parent node */
+	    /* update child of parent node
+	     * this node is only updated if its level is > 0, i.e.
+	     * this is an internal node
+	     * children of internal nodes do not have an ID, instead
+	     * they point to the next nodes down the tree */
 	    if (top >= 0) {
 		s[top].sn.branch[s[top].branch_id - 1].child.ptr = newnode;
 	    }
