@@ -458,7 +458,9 @@ void operator delete[] (void *ptr) {
 MM_register MM_manager;
 int MM_register::instances = 0; // Number of instances. (init)
 // TPIE's "register memory requests" flag
-MM_mode MM_register::register_new = MM_ABORT_ON_MEMORY_EXCEEDED; 
+MM_mode MM_register::register_new = MM_IGNORE_MEMORY_EXCEEDED;
+//This causes constructors for static variables to fail
+//MM_mode MM_register::register_new = MM_ABORT_ON_MEMORY_EXCEEDED; 
 
 
 
