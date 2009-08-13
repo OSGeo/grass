@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <grass/gis.h>
 #include "viz.h"
 
 static unsigned char Buffer[10000];	/* buffer for outputting data to file */
