@@ -1,4 +1,5 @@
 #include <string.h>
+#include <grass/gis.h>
 #include "viz.h"
 
 
