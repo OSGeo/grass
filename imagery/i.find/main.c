@@ -107,7 +107,7 @@ static int find(FILE * fd, char *element)
     const char *mapset;
     int n;
 
-    fseek(fd, 0L, SEEK_SET);
+    G_fseek(fd, 0L, SEEK_SET);
     fwrite(&len1, sizeof(len1), 1L, fd);
     fwrite(&len2, sizeof(len2), 1L, fd);
 
@@ -141,7 +141,7 @@ static int find(FILE * fd, char *element)
 	return 0;
 
     fflush(fd);
-    fseek(fd, 0L, SEEK_SET);
+    G_fseek(fd, 0L, SEEK_SET);
     fwrite(&len1, sizeof(len1), 1L, fd);
     fwrite(&len2, sizeof(len2), 1L, fd);
 

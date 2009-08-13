@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 
     /* Check Endian State of File */
     fread(&format_block, sizeof(int), 1, fp1);
-    fseek(fp1, 0, SEEK_SET);	/* frewind() */
+    G_fseek(fp1, 0, SEEK_SET);	/* frewind() */
 
     file_endianness = format_block / 1000;	/* 0=little, 1=big */
     if (file_endianness != machine_endianness)
@@ -322,16 +322,16 @@ int main(int argc, char *argv[])
 	    switch (data_format) {
 		/*   0=double       1=float   2=32bit signed int   5=8bit unsigned int(text)   */
 	    case 0:
-		fseek(fp1, mrows * ncols * sizeof(double), SEEK_CUR);
+		G_fseek(fp1, mrows * ncols * sizeof(double), SEEK_CUR);
 		break;
 	    case 1:
-		fseek(fp1, mrows * ncols * sizeof(float), SEEK_CUR);
+		G_fseek(fp1, mrows * ncols * sizeof(float), SEEK_CUR);
 		break;
 	    case 2:
-		fseek(fp1, mrows * ncols * sizeof(int), SEEK_CUR);
+		G_fseek(fp1, mrows * ncols * sizeof(int), SEEK_CUR);
 		break;
 	    case 5:
-		fseek(fp1, mrows * ncols * sizeof(char), SEEK_CUR);
+		G_fseek(fp1, mrows * ncols * sizeof(char), SEEK_CUR);
 		break;
 	    default:
 		G_fatal_error("unusual array");

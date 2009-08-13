@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
 
 
     /* done! */
-    filesize = ftell(fp1);
+    filesize = G_ftell(fp1);
     fclose(fp1);
 
     G_verbose_message(_("%ld bytes written to '%s'"), filesize, outfile);

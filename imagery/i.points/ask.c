@@ -175,7 +175,7 @@ ask_gis_files(char *type, char *file, char *xname, char *xmapset,
      */
     page = 0;
     page_offset = (long *)G_calloc(npages = 1, sizeof(long));
-    *page_offset = ftell(fd);
+    *page_offset = G_ftell(fd);
 
     nlist = sizeof(list) / sizeof(list[0]);
     for (stat = -1; stat < 0;) {
@@ -184,7 +184,7 @@ ask_gis_files(char *type, char *file, char *xname, char *xmapset,
 	*cur_mapset = 0;
 	col = 0;
 	while (1) {
-	    offset = ftell(fd);
+	    offset = G_ftell(fd);
 	    if (fgets(buf, sizeof buf, fd) == NULL
 		|| sscanf(buf, "%s %s", name, mapset) != 2)
 		break;
@@ -244,7 +244,7 @@ ask_gis_files(char *type, char *file, char *xname, char *xmapset,
 	    stat = 1;
 	    continue;
 	}
-	fseek(fd, page_offset[page], 0);
+	G_fseek(fd, page_offset[page], 0);
 	R_standard_color(WHITE);
 	R_box_abs(left + 1, top + 1, right - 1, bottom - 1);
     }

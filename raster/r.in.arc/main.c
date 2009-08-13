@@ -221,7 +221,7 @@ int file_cpy(FILE * from, FILE * to)
 	if (!size) {
 	    if (written) {
 		fflush(to);
-		fseek(to, 0l, 0);
+		G_fseek(to, 0l, 0);
 	    }
 	    return (0);
 	}

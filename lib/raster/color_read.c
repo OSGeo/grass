@@ -133,7 +133,7 @@ static int read_colors(const char *element, const char *name,
 	fclose(fd);
 	return -1;
     }
-    fseek(fd, 0L, 0);
+    G_fseek(fd, 0L, 0);
 
     G_strip(buf);
     if (*buf == '%') {		/* 4.0 format */

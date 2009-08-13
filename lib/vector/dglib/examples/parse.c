@@ -237,8 +237,8 @@ int main(int argc, char **argv)
 
     while (fgets(sz, sizeof(sz), fp)) {
 #ifndef VERBOSE
-	if (!(cOut++ % 512) || ftell(fp) == statdata.st_size)
-	    printf("Parse input file ... status: %ld/%ld\r", ftell(fp),
+	if (!(cOut++ % 512) || G_ftell(fp) == statdata.st_size)
+	    printf("Parse input file ... status: %ld/%ld\r", G_ftell(fp),
 		   statdata.st_size);
 	fflush(stdout);
 #endif

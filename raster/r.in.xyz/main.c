@@ -472,7 +472,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open input file <%s>"), infile);
     }
 
-    can_seek = fseek(in_fp, 0, SEEK_SET) == 0;
+    can_seek = fseek(in_fp, 0L, SEEK_SET) == 0;
 
     /* can't rewind() non-files */
     if (!can_seek && npasses != 1) {
@@ -506,8 +506,8 @@ int main(int argc, char *argv[])
 		break;
 	    linesize = strlen(buff) + 1;
 	}
-	fseek(in_fp, 0L, SEEK_END);
-	filesize = ftell(in_fp);
+	G_fseek(in_fp, 0L, SEEK_END);
+	filesize = G_ftell(in_fp);
 	rewind(in_fp);
 	if (linesize < 6)	/* min possible: "0,0,0\n" */
 	    linesize = 6;

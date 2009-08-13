@@ -28,7 +28,7 @@ int write_PS_header(void)
     else
 	fprintf(PS.fp, "%%!PS-Adobe-3.0\n");
 
-    bb_offset = ftell(PS.fp);
+    bb_offset = G_ftell(PS.fp);
     fprintf(PS.fp, "                                       ");
     fprintf(PS.fp, "                                       \n");
     fprintf(PS.fp, "%%%%Title: ");
@@ -67,7 +67,7 @@ int write_bounding_box(void)
 	ury = (int)72.0 *PS.page_width;
     }
 
-    fseek(PS.fp, bb_offset, SEEK_SET);
+    G_fseek(PS.fp, bb_offset, SEEK_SET);
     fprintf(PS.fp, "%%%%BoundingBox: %d %d %d %d", llx, lly, urx, ury);
 
     return 0;

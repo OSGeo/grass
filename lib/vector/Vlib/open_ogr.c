@@ -160,7 +160,7 @@ int V2_open_old_ogr(struct Map_info *Map)
 	return (-1);
     G_debug(3, "  header size %ld", length);
 
-    fseek(fp.file, length, SEEK_SET);
+    G_fseek(fp.file, length, SEEK_SET);
 
     /* number of records  */
     if (0 >= dig__fread_port_I(&(Map->fInfo.ogr.offset_num), 1, &fp))

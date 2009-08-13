@@ -237,17 +237,17 @@ int main(int argc, char *argv[])
     sz = 0;
     if (direction < 0) {
 	sz = -ncols * Rast_cell_size(data_type);
-	fseek(ft, sz, SEEK_END);
+	G_fseek(ft, sz, SEEK_END);
 	sz *= 2;
     }
     else {
-	fseek(ft, 0L, SEEK_SET);
+	G_fseek(ft, 0L, SEEK_SET);
     }
 
     for (row = 0; row < nrows; row += 1) {
 	fread(rast, Rast_cell_size(data_type), ncols, ft);
 	Rast_put_row(cf, rast, data_type);
-	fseek(ft, sz, SEEK_CUR);
+	G_fseek(ft, sz, SEEK_CUR);
     }
     fclose(ft);
     unlink(temp);
@@ -278,7 +278,7 @@ static int file_cpy(FILE * from, FILE * to)
 	if (!size) {
 	    if (written) {
 		fflush(to);
-		fseek(to, 0L, SEEK_SET);
+		G_fseek(to, 0L, SEEK_SET);
 	    }
 	    return (0);
 	}

@@ -160,9 +160,9 @@ int ps_map(void)
 	do_psfiles();
 
     /* write the bounding box */
-    current_offset = ftell(PS.fp);
+    current_offset = G_ftell(PS.fp);
     write_bounding_box();
-    fseek(PS.fp, current_offset, SEEK_SET);
+    G_fseek(PS.fp, current_offset, SEEK_SET);
 
     fprintf(PS.fp, "showpage\n");
     fprintf(PS.fp, "%%%%Trailer\n");

@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 	    Vect_close(&Map);
 	    exit(EXIT_FAILURE);
 	}
-	fseek(Map.hist_fp, (long)0, SEEK_END);
+	G_fseek(Map.hist_fp, (long)0, SEEK_END);
 	Vect_hist_write(&Map,
 			"---------------------------------------------------------------------------------\n");
 	Vect_hist_write(&Map, "COMMAND: ");

@@ -432,7 +432,7 @@ int OUTGR()
 	}
 
 	/* seek to the beginning */
-	fseek(Tmp_fd_z, 0L, 0);
+	G_fseek(Tmp_fd_z, 0L, 0);
 
 	/* Read data in from temp file */
 	read_val =
@@ -483,7 +483,7 @@ int OUTGR()
 	}
 
 	/* seek to the beginning */
-	fseek(Tmp_fd_dx, 0L, 0);
+	G_fseek(Tmp_fd_dx, 0L, 0);
 
 	/* Read data in from temp file */
 	read_val =
@@ -534,7 +534,7 @@ int OUTGR()
 	}
 
 	/* seek to the beginning */
-	fseek(Tmp_fd_dy, 0L, 0);
+	G_fseek(Tmp_fd_dy, 0L, 0);
 
 	/* Read data in from temp file */
 	read_val =
@@ -585,7 +585,7 @@ int OUTGR()
 	}
 
 	/* seek to the beginning */
-	fseek(Tmp_fd_dz, 0L, 0);
+	G_fseek(Tmp_fd_dz, 0L, 0);
 
 	/* Read data in from temp file */
 	read_val =
@@ -636,7 +636,7 @@ int OUTGR()
 	}
 
 	/* seek to the beginning */
-	fseek(Tmp_fd_xx, 0L, 0);
+	G_fseek(Tmp_fd_xx, 0L, 0);
 
 	/* Read data in from temp file */
 	read_val =
@@ -687,7 +687,7 @@ int OUTGR()
 	}
 
 	/* seek to the beginning */
-	fseek(Tmp_fd_yy, 0L, 0);
+	G_fseek(Tmp_fd_yy, 0L, 0);
 
 	/* Read data in from temp file */
 	read_val =
@@ -738,7 +738,7 @@ int OUTGR()
 	}
 
 	/* seek to the beginning */
-	fseek(Tmp_fd_xy, 0L, 0);
+	G_fseek(Tmp_fd_xy, 0L, 0);
 
 	/* Read data in from temp file */
 	read_val =

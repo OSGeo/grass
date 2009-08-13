@@ -123,12 +123,12 @@ int main(int argc, char *argv[])
 		    fgets(buf2, 255, fp);
 		    fgets(buf2, 255, fp);
 
-		    ptr = ftell(fp);
-		    fseek(fp, 0L, SEEK_END);
-		    l = ftell(fp) - ptr;
+		    ptr = G_ftell(fp);
+		    G_fseek(fp, 0L, SEEK_END);
+		    l = G_ftell(fp) - ptr;
 
 		    str = (char *)G_malloc(l);
-		    fseek(fp, ptr, SEEK_SET);
+		    G_fseek(fp, ptr, SEEK_SET);
 		    fread(str, l, 1, fp);
 		    fclose(fp);
 

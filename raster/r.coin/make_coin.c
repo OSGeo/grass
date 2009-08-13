@@ -145,7 +145,7 @@ int make_coin(void)
 	    break;
 
     /* now read the statsfile and insert into the table */
-    fseek(statfd, 0L, 0);
+    G_fseek(statfd, 0L, 0);
     while (fread(&stats, sizeof(stats), 1, statfd)) {
 	long z;
 
