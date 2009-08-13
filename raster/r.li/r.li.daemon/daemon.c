@@ -102,7 +102,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
        ######################################################### */
 
     /* TODO: check if this path is portable */
-    sprintf(pathSetup, "%s/.r.li/history/%s", getenv("HOME"), file);
+    sprintf(pathSetup, "%s/.grass7/r.li/%s", getenv("HOME"), file);
     parsed = parseSetup(pathSetup, l, g, raster);
 
     /*########################################################

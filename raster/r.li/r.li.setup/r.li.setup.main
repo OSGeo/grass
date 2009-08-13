@@ -163,7 +163,7 @@ proc createNewConfiguration {} {
 	exec rm -f $env(TMP).set
 	exec rm -f *.tmp
 	destroy .newConf
-	openDir  .files "~/.r.li/history"
+	openDir  .files "~/.grass7/r.li"
 	}
 	# insert top label
 	label .newConf.topLabel -text "Insert new sampling area settings"
@@ -317,8 +317,7 @@ proc setSampleRegions {widget} {
 #MAIN WINDOW
 ##################################################
  # create directories
- catch { exec mkdir $env(HOME)/.r.li } 
-catch {  exec mkdir $env(HOME)/.r.li/history } 
+ catch { exec mkdir $env(HOME)/.grass7/r.li } 
  bind . <Control-c> {
  	exec rm -f $env(TMP).set
 	destroy .
@@ -336,8 +335,8 @@ catch {  exec mkdir $env(HOME)/.r.li/history }
  	      
 pack .files -side right -expand 1 -fill both -padx 7 -pady 7 
 
- # show configuration files in ~/.r.li/history
- openDir  .files "~/.r.li/history"
+ # show configuration files in ~/.grass7/r.li
+ openDir  .files "~/.grass7/r.li"
  
  #create load button
  
@@ -376,16 +375,16 @@ button .r -text "Remove" -width 8 -command {
 		
 	# create yes button
 	button .removeconf.buttons.y -text "Yes" -width 8 -command { 
-	      if { [ catch { exec rm $env(HOME)/.r.li/history/$selection } ] } then { 
+	      if { [ catch { exec rm $env(HOME)/.grass7/r.li/$selection } ] } then { 
 		tk_messageBox -message "'$selection' Not deleted" -type ok -icon error} else {
 		tk_messageBox -message "$selection  deleted" -type ok
-		openDir .files "~/.r.li/history"
+		openDir .files "~/.grass7/r.li"
 		destroy .removeconf}
 	}
 	
 	# create no button
 	button .removeconf.buttons.n -text "No" -width 8 -command { destroy .removeconf
-	openDir .files "~/.r.li/history"}
+	openDir .files "~/.grass7/r.li"}
 	grid .removeconf.buttons.y  .removeconf.buttons.n
 	}
 }
