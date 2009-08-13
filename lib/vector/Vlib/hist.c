@@ -132,7 +132,7 @@ int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
     if (Out->hist_fp == NULL)
 	return -1;
 
-    fseek(Out->hist_fp, (long)0, SEEK_END);
+    G_fseek(Out->hist_fp, (long)0, SEEK_END);
     rewind(In->hist_fp);
 
     while ((red = fread(buf, sizeof(char), sizeof(char) * 1000, In->hist_fp))) {
@@ -143,7 +143,7 @@ int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
     }
 
     /* In ends with \n ? */
-    fseek(In->hist_fp, (long)-1, SEEK_END);
+    G_fseek(In->hist_fp, (long)-1, SEEK_END);
     if (fread(buf, sizeof(char), sizeof(char), In->hist_fp) != 1) {
 	return -1;
     }

@@ -51,7 +51,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
 	if (npasses > 1)
 	    G_message(_("Pass #%d (of %d) ..."), pass, npasses);
 
-	fseek(ifd, 0L, 0);
+	G_fseek(ifd, 0L, 0);
 	while (get_item(ifd, &type, &cat, &x, &y, &count, &labels)) {
 	    set_cat(cat);
 	    switch (type) {

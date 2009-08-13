@@ -332,7 +332,7 @@ int Rast_put_reclass(const char *name, const struct Reclass *reclass)
 	return 1;
     }
 
-    fseek(fd, 0L, SEEK_SET);
+    G_fseek(fd, 0L, SEEK_SET);
 
     sprintf(buf2, "%s@%s\n", name, G_mapset());
     for (i = 0; !feof(fd) && fgets(buf3, 255, fd);) {

@@ -41,7 +41,7 @@ int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 
     /* read the feature's data */
     while (1) {
-	offset = ftell(fd);
+	offset = G_ftell(fd);
 
 	if (!G_getl2(buf, (sizeof buf) - 1, fd))
 	    break;
@@ -55,7 +55,7 @@ int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 	/* if we've found the next feature, rewind to the start of it and complete */
 	if (*buf == 'A' || *buf == 'a' ||
 	    *buf == 'L' || *buf == 'l' || *buf == 'P' || *buf == 'p') {
-	    fseek(fd, offset, 0);
+	    G_fseek(fd, offset, 0);
 	    break;
 	}
 

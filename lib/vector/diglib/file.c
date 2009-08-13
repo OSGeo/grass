@@ -240,9 +240,9 @@ int dig_file_load(struct gvfile * file)
 	if (file->start == NULL)
 	    return -1;
 
-	fseek(file->file, 0L, 0);
+	G_fseek(file->file, 0L, 0);
 	ret = fread(file->start, size, 1, file->file);	/* Better to read in smaller portions? */
-	fseek(file->file, 0L, 0);	/* reset to the beginning */
+	G_fseek(file->file, 0L, 0);	/* reset to the beginning */
 
 	if (ret <= 0) {
 	    G_free(file->start);

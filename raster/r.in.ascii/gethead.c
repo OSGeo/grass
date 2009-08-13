@@ -273,7 +273,7 @@ int file_scan(FILE * fd)
     char tmpbuf[TMPBUFSIZE];
     size_t size = TMPBUFSIZE;
 
-    if ((curpos = ftell(fd)) == -1)
+    if ((curpos = G_ftell(fd)) == -1)
 	return -1;
     while (!feof(fd)) {
 	if (size != fread(tmpbuf, sizeof(char), size, fd)) {
@@ -281,10 +281,10 @@ int file_scan(FILE * fd)
 		return -1;
 	}
 	if (strstr(tmpbuf, DOT) != NULL) {
-	    fseek(fd, curpos - 1L, SEEK_SET);
+	    G_fseek(fd, curpos - 1L, SEEK_SET);
 	    return 0;
 	}
     }
-    fseek(fd, curpos - 1L, SEEK_SET);
+    G_fseek(fd, curpos - 1L, SEEK_SET);
     return 1;
 }

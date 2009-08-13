@@ -51,8 +51,8 @@ int dfwrite_header(file_info * headp)
     /* write the offset to the lookup table */
     /* the first time this number is set to 0 */
     /*this information will be overwritten after dspf is done */
-    /* ftell keeps track of where this information is to be placed */
-    Where_lookoff = ftell(fp);
+    /* G_ftell keeps track of where this information is to be placed */
+    Where_lookoff = G_ftell(fp);
     headp->Lookoff = 0;
     if (1 != fwrite(&headp->Lookoff, sizeof(long), 1, fp))
 	return (-1);
@@ -60,7 +60,7 @@ int dfwrite_header(file_info * headp)
     /* code to determine the length of the binary file header */
     /* Dataoff = length of the header */
     /*Dataoff = strlen (DSPF_ID) + 7*isize + 5*flsize + linep->nthres*flsize; */
-    Where_dataoff = ftell(fp);
+    Where_dataoff = G_ftell(fp);
     headp->Dataoff = 0;
     if (1 != fwrite(&headp->Dataoff, sizeof(long), 1, fp))
 	return (-1);
@@ -68,12 +68,12 @@ int dfwrite_header(file_info * headp)
 
 
     /* End of header,  now go back and fill in what we can */
-    headp->Dataoff = ftell(fp);
-    fseek(fp, Where_dataoff, 0);
+    headp->Dataoff = G_ftell(fp);
+    G_fseek(fp, Where_dataoff, 0);
     if (1 != fwrite(&headp->Dataoff, sizeof(long), 1, fp))
 	return (-1);
 
-    fseek(fp, headp->Dataoff, 0);	/* and return to begin writing data */
+    G_fseek(fp, headp->Dataoff, 0);	/* and return to begin writing data */
 
     /* will still have to come back once more to fill in Lookup offset */
 
@@ -99,7 +99,7 @@ int dfread_header(file_info * headp)
 
 
     len = strlen(DSPF_ID);
-    fseek(fp, 0L, 0);		/* rewind file */
+    G_fseek(fp, 0L, 0);		/* rewind file */
     /*read in header information and store in File_info struct */
 
     if (!fread(buf, 1, len, fp))

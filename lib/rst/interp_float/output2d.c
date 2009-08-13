@@ -144,16 +144,11 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     }
 
     if (params->elev != NULL) {
-	fseek(params->Tmp_fd_z, 0L, 0);	/* seek to the beginning */
+	G_fseek(params->Tmp_fd_z, 0L, 0);	/* seek to the beginning */
 	for (i = 0; i < params->nsizr; i++) {
 	    /* seek to the right row */
-	    if (fseek(params->Tmp_fd_z, (long)
-		      ((params->nsizr - 1 -
-			i) * params->nsizc * sizeof(FCELL)), 0)
-		== -1) {
-		G_warning(_("Unable to fseek to the right spot"));
-		return -1;
-	    }
+	    G_fseek(params->Tmp_fd_z, (off_t) (params->nsizr - 1 - i) *
+		    params->nsizc * sizeof(FCELL), 0);
 	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z);
 	    /*
 	     * for(j=0;j<params->nsizc;j++) fprintf(stderr,"%f ",cell1[j]);
@@ -165,80 +160,55 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     }
 
     if (params->slope != NULL) {
-	fseek(params->Tmp_fd_dx, 0L, 0);	/* seek to the beginning */
+	G_fseek(params->Tmp_fd_dx, 0L, 0);	/* seek to the beginning */
 	for (i = 0; i < params->nsizr; i++) {
 	    /* seek to the right row */
-	    if (fseek(params->Tmp_fd_dx, (long)
-		      ((params->nsizr - 1 -
-			i) * params->nsizc * sizeof(FCELL)), 0)
-		== -1) {
-		G_warning(_("Unable to fseek to the right spot"));
-		return -1;
-	    }
+	    G_fseek(params->Tmp_fd_dx, (off_t) (params->nsizr - 1 - i) *
+		    params->nsizc * sizeof(FCELL), 0);
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
 	    Rast_put_f_row(cf2, cell1);
 	}
     }
 
     if (params->aspect != NULL) {
-	fseek(params->Tmp_fd_dy, 0L, 0);	/* seek to the beginning */
+	G_fseek(params->Tmp_fd_dy, 0L, 0);	/* seek to the beginning */
 	for (i = 0; i < params->nsizr; i++) {
 	    /* seek to the right row */
-	    if (fseek(params->Tmp_fd_dy, (long)
-		      ((params->nsizr - 1 -
-			i) * params->nsizc * sizeof(FCELL)), 0)
-		== -1) {
-		G_warning(_("Unable to fseek to the right spot"));
-		return -1;
-	    }
+	    G_fseek(params->Tmp_fd_dy, (off_t) (params->nsizr - 1 - i) *
+		    params->nsizc * sizeof(FCELL), 0);
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
 	    Rast_put_f_row(cf3, cell1);
 	}
     }
 
     if (params->pcurv != NULL) {
-	fseek(params->Tmp_fd_xx, 0L, 0);	/* seek to the beginning */
+	G_fseek(params->Tmp_fd_xx, 0L, 0);	/* seek to the beginning */
 	for (i = 0; i < params->nsizr; i++) {
 	    /* seek to the right row */
-	    if (fseek(params->Tmp_fd_xx, (long)
-		      ((params->nsizr - 1 -
-			i) * params->nsizc * sizeof(FCELL)), 0)
-		== -1) {
-		G_warning(_("Unable to fseek to the right spot"));
-		return -1;
-	    }
+	    G_fseek(params->Tmp_fd_xx, (off_t) (params->nsizr - 1 - i) *
+		    params->nsizc * sizeof(FCELL), 0);
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
 	    Rast_put_f_row(cf4, cell1);
 	}
     }
 
     if (params->tcurv != NULL) {
-	fseek(params->Tmp_fd_yy, 0L, 0);	/* seek to the beginning */
+	G_fseek(params->Tmp_fd_yy, 0L, 0);	/* seek to the beginning */
 	for (i = 0; i < params->nsizr; i++) {
 	    /* seek to the right row */
-	    if (fseek(params->Tmp_fd_yy, (long)
-		      ((params->nsizr - 1 -
-			i) * params->nsizc * sizeof(FCELL)), 0)
-		== -1) {
-		G_warning(_("Unable to fseek to the right spot"));
-		return -1;
-	    }
+	    G_fseek(params->Tmp_fd_yy, (off_t) (params->nsizr - 1 - i) *
+		    params->nsizc * sizeof(FCELL), 0);
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
 	    Rast_put_f_row(cf5, cell1);
 	}
     }
 
     if (params->mcurv != NULL) {
-	fseek(params->Tmp_fd_xy, 0L, 0);	/* seek to the beginning */
+	G_fseek(params->Tmp_fd_xy, 0L, 0);	/* seek to the beginning */
 	for (i = 0; i < params->nsizr; i++) {
 	    /* seek to the right row */
-	    if (fseek(params->Tmp_fd_xy, (long)
-		      ((params->nsizr - 1 -
-			i) * params->nsizc * sizeof(FCELL)), 0)
-		== -1) {
-		G_warning(_("Unable to fseek to the right spot"));
-		return -1;
-	    }
+	    G_fseek(params->Tmp_fd_xy, (off_t) (params->nsizr - 1 - i) *
+		    params->nsizc * sizeof(FCELL), 0);
 	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
 	    Rast_put_f_row(cf6, cell1);
 	}

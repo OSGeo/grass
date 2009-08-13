@@ -2,6 +2,9 @@
  * modified by Brown in June 1999 - added elatt & smatt
  * modified by Mitasova Nov. 9, 1999 - added parameter for dtens to output2d
  */
+#include <grass/config.h>
+#include <stdio.h>
+#include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/bitmap.h>

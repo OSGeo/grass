@@ -86,7 +86,7 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 	    D_Cap->Rows = yrc;
 	    D_Cap->Cols = xrc;
 	    for (y = ystart; y < yloop; y++) {
-		fseek(fp, D_offset +
+		G_fseek(fp, D_offset +
 		      (xysize * (D_spec->E[Z]) + y * xdim + offset) *
 		      sizeof(float), 0);
 		fread(DB, xrc, sizeof(float), fp);
@@ -105,7 +105,7 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 	    D_Cap->Rows = yrc;
 	    D_Cap->Cols = xrc;
 	    for (y = ystart; y < yloop; y++) {
-		fseek(fp, D_offset +
+		G_fseek(fp, D_offset +
 		      (xysize * (D_spec->B[Z] + offset) + y * xdim + offset) *
 		      sizeof(float), 0);
 		fread(DB, xrc, sizeof(float), fp);
@@ -125,7 +125,7 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 
 	    for (z = zstart; z < zloop; z++) {
 		for (y = ystart; y < yloop; y++) {
-		    fseek(fp, D_offset +
+		    G_fseek(fp, D_offset +
 			  (xysize * z + xdim * y + (D_spec->E[X] + offset)) *
 			  sizeof(float), 0);
 		    fread(DB++, sizeof(float), 1, fp);
@@ -146,7 +146,7 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 
 	    for (z = zstart; z < zloop; z++) {
 		for (y = ystart; y < yloop; y++) {
-		    fseek(fp, D_offset +
+		    G_fseek(fp, D_offset +
 			  (xysize * z + xdim * y + (D_spec->B[X] + offset)) *
 			  sizeof(float), 0);
 		    fread(DB++, sizeof(float), 1, fp);
@@ -164,7 +164,7 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 	    D_Cap->Cols = xrc;
 	    for (z = zstart; z < zloop; z++) {
 		/* fill in the buff one line at a time */
-		fseek(fp, D_offset +
+		G_fseek(fp, D_offset +
 		      (xysize * z + xdim * (D_spec->E[Y] + offset) + offset) *
 		      sizeof(float), 0);
 		fread(DB, sizeof(float), xrc, fp);
@@ -182,7 +182,7 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 	    D_Cap->Cols = xrc;
 	    for (z = zstart; z < zloop; z++) {
 		/* fill in the buff one line at a time */
-		fseek(fp, D_offset +
+		G_fseek(fp, D_offset +
 		      (xysize * z + xdim * (D_spec->B[Y] + offset) + offset) *
 		      sizeof(float), 0);
 		fread(DB, sizeof(float), xrc, fp);

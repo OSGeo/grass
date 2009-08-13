@@ -51,14 +51,14 @@ char *G__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
 
     /* Count lines */
     count = 0;
-    fseek(fd, 0L, 0);
+    G_fseek(fd, 0L, 0);
     while (G_getl(buf, sizeof(buf), fd))
 	count++;
 
     array = (char **)G_calloc(count + 1, sizeof(char **));
 
     count = 0;
-    fseek(fd, 0L, 0);
+    G_fseek(fd, 0L, 0);
     while (G_getl(buf, sizeof(buf), fd)) {
 	array[count] = G_store(buf);
 	count++;

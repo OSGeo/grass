@@ -392,7 +392,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	    fatal_error(ferror, errmsg);
 	    return (-1);
 	}
-	fseek(Map->hist_fp, (off_t) 0, SEEK_END);
+	G_fseek(Map->hist_fp, (off_t) 0, SEEK_END);
 	Vect_hist_write(Map,
 			"---------------------------------------------------------------------------------\n");
 
@@ -677,7 +677,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 #ifdef __MINGW32__
 	if (Map->open == VECT_OPEN_CODE) {
 	    dig_fseek(&(Map->dig_fp), 0L, SEEK_END);
-	    G_debug(2, "ftell = %d", dig_ftell(&(Map->dig_fp)));
+	    G_debug(2, "dig_ftell = %d", dig_ftell(&(Map->dig_fp)));
 	    Info->size = dig_ftell(&(Map->dig_fp));
 	}
 #endif

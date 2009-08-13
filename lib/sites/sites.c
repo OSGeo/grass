@@ -752,7 +752,7 @@ int G_oldsite_describe(FILE * ptr, int *dims, int *cat, int *strs, int *dbls)
     int itmp;
     float ftmp;
 
-    if (ftell(ptr) != 0L) {
+    if (G_ftell(ptr) != 0L) {
 	fprintf(stderr,
 		"\nPROGRAMMER ERROR: G_oldsite_describe() must be called\n");
 	fprintf(stderr, "        immediately after G_fopen_sites_old()\n");
