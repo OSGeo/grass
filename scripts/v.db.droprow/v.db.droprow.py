@@ -59,20 +59,13 @@ import sys
 import grass.script as grass
 
 def main():
-    file = grass.find_file(element = 'vector', name = options['input'],
-                           mapset = grass.gisenv()['MAPSET'])['name']
-    
-    if not file:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % \
-                        options['input'])
-    
     # delete vectors via reverse selection
     ret = grass.run_command('v.extract',
                             flags = 'r',
                             input = options['input'], layer = options['layer'],
                             output = options['output'], where = options['where'])
     if ret != 0:
-        grass.fatal(_("Error in 'where' statement"))
+        return 1
 
     # write cmd history:
     grass.vector_history(map = options['output'])
