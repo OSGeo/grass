@@ -44,6 +44,7 @@ SUBDIRS = \
 	v.db.addtable \
 	v.db.join \
 	v.db.dropcolumn \
+	v.db.droprow \
 	v.db.droptable \
 	v.db.renamecolumn \
 	v.db.reconnect.all \
