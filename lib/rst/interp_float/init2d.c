@@ -17,33 +17,40 @@
 #include <grass/interpf.h>
 
 void IL_init_params_2d(
-			  /* initialize parameters */
-			  struct interp_params *params, FILE * inp,	/* input stream */
-			  int elatt,	/* which fp att in sites file? 1 = first */
-			  int smatt,	/* which fp att in sites file to use for 
-					 * smoothing? (if zero use sm) 1 = first */
-			  double zm,	/* multiplier for z-values */
-			  int k1,	/* min number of points per segment for
-					 * interpolation */
-			  int k2,	/* max number of points per segment */
-			  char *msk,	/* name of mask */
-			  int rows, int cols,	/* number of rows and columns */
-			  DCELL * ar1, DCELL * ar2, DCELL * ar3, DCELL * ar4, DCELL * ar5, DCELL * ar6,	/* arrays for interpolated
-													 * values */
-			  double tension,	/* tension */
-			  int k3,	/* max num. of points for interp. */
-			  int sc1, int sc2, int sc3,	/* multipliers for interp. values */
-			  double sm,	/* smoothing */
-			  char *f1, char *f2, char *f3, char *f4, char *f5, char *f6,	/* output files */
-			  double dm,	/* min distance between points */
-			  double x_or, double y_or,	/* origin */
-			  int der,	/* 1 if compute partial derivs */
-			  double tet,	/* anisotropy angle, 0=East,counter-clockwise */
-			  double scl,	/* anisotropy scaling factor */
-			  FILE * t1, FILE * t2, FILE * t3, FILE * t4, FILE * t5, FILE * t6,	/* temp files for writing interp. values */
-			  FILE * dev,	/* pointer to deviations file */
-			  struct TimeStamp *ts, int c,	/* cross validation */
-			  const char *wheresql	/* SQL WHERE */
+    /* initialize parameters */
+    struct interp_params *params,
+    FILE * inp,			/* input stream */
+    int elatt,			/* which fp att in sites file? 1 = first */
+    int smatt,			/* which fp att in sites file to use for 
+				 * smoothing? (if zero use sm) 1 = first */
+    double zm,			/* multiplier for z-values */
+    int k1,			/* min number of points per segment for
+				 * interpolation */
+    int k2,			/* max number of points per segment */
+    char *msk,			/* name of mask */
+    int rows, int cols, 	/* number of rows and columns */
+    DCELL * ar1, DCELL * ar2,
+    DCELL * ar3, DCELL * ar4,
+    DCELL * ar5, DCELL * ar6,	/* arrays for interpolated values */
+    double tension,		/* tension */
+    int k3,			/* max num. of points for interp. */
+    int sc1, int sc2, int sc3,	/* multipliers for interp. values */
+    double sm,			/* smoothing */
+    char *f1, char *f2,
+    char *f3, char *f4,
+    char *f5, char *f6,		/* output files */
+    double dm,			/* min distance between points */
+    double x_or, double y_or,	/* origin */
+    int der,			/* 1 if compute partial derivs */
+    double tet,			/* anisotropy angle, 0=East,counter-clockwise */
+    double scl,			/* anisotropy scaling factor */
+    FILE * t1, FILE * t2,
+    FILE * t3, FILE * t4,
+    FILE * t5, FILE * t6,	/* temp files for writing interp. values */
+    FILE * dev,			/* pointer to deviations file */
+    struct TimeStamp *ts,
+    int c,			/* cross validation */
+    const char *wheresql	/* SQL WHERE */
     )
 {
     params->fdinp = inp;
@@ -61,7 +68,8 @@ void IL_init_params_2d(
     params->adxx = ar4;
     params->adyy = ar5;
     params->adxy = ar6;
-    params->fi = tension, params->KMAX2 = k3;
+    params->fi = tension;
+    params->KMAX2 = k3;
     params->scik1 = sc1;
     params->scik2 = sc2;
     params->scik3 = sc3;
@@ -90,15 +98,15 @@ void IL_init_params_2d(
     params->wheresql = wheresql;
 }
 
-void IL_init_func_2d(struct interp_params *params, int (*grid_f) (void),	/* calculates grid for given segm */
-		     int (*matr_f) (void),	/* creates matrix for a given segm */
-		     int (*point_f) (void),	/* checks interp. func. at points */
-		     int (*secp_f) (void),	/* calculates aspect,slope,curv. */
-		     double (*interp_f) (void),	/* radial  basis function */
-		     int (*interpder_f) (void),	/* derivatives of radial basis func. */
-		     int (*temp_f) (void)	/* writes temp files */
+void IL_init_func_2d(struct interp_params *params,
+		     grid_calc_fn *grid_f,	/* calculates grid for given segm */
+		     matrix_create_fn *matr_f,	/* creates matrix for a given segm */
+		     check_points_fn *point_f,	/* checks interp. func. at points */
+		     secpar_fn *secp_f,		/* calculates aspect,slope,curv. */
+		     interp_fn *interp_f,	/* radial  basis function */
+		     interpder_fn *interpder_f,	/* derivatives of radial basis func. */
+		     wr_temp_fn *temp_f		/* writes temp files */
     )
-
 /* initialize functions */
 {
     params->grid_calc = grid_f;
@@ -110,3 +118,5 @@ void IL_init_func_2d(struct interp_params *params, int (*grid_f) (void),	/* calc
     params->wr_temp = temp_f;
 
 }
+
+

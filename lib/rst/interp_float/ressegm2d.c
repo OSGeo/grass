@@ -30,7 +30,7 @@
 static int input_data(struct interp_params *,
 		      int, int, struct fcell_triple *, int, int, int, int,
 		      double, double, double);
-static int write_zeros(struct interp_params *, struct quaddata *, int);
+static int write_zeros(struct interp_params *, struct quaddata *, off_t);
 
 int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitmask,	/* bitmask */
 				   double zmin, double zmax,	/* min and max input z-values */
@@ -38,7 +38,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 				   double *gmin, double *gmax,	/* min and max inperp. slope val. */
 				   double *c1min, double *c1max, double *c2min, double *c2max,	/* min and max interp. curv. val. */
 				   double *ertot,	/* total interplating func. error */
-				   int offset1,	/* offset for temp file writing */
+				   off_t offset1,	/* offset for temp file writing */
 				   double *dnorm,
 				   int overlap,
 				   int inp_rows,
@@ -81,6 +81,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
     double xmax, xmin, ymax, ymin;
     int totsegm;		/* total number of segments */
     int total_points = 0;
+    struct triple triple;	/* contains garbage */
 
 
     xmin = params->x_orig;
@@ -202,7 +203,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 	b[0] = 0.;
 	G_lubksb(matrix, m1 + 1, indx, b);
 
-	params->check_points(params, data, b, ertot, zmin, *dnorm);
+	params->check_points(params, data, b, ertot, zmin, *dnorm, triple);
 
 	if (params->grid_calc(params, data, bitmask,
 			      zmin, zmax, zminac, zmaxac, gmin, gmax,
@@ -399,7 +400,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 		    G_lubksb(new_matrix, data->n_points + 1, new_indx, b);
 
 		    params->check_points(params, data, b, ertot, zmin,
-					 *dnorm);
+					 *dnorm, triple);
 
 		    if (params->grid_calc(params, data, bitmask,
 					  zmin, zmax, zminac, zmaxac, gmin,
@@ -445,7 +446,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 		    G_lubksb(matrix, data->n_points + 1, indx, b);
 
 		    params->check_points(params, data, b, ertot, zmin,
-					 *dnorm);
+					 *dnorm, triple);
 
 		    if (params->grid_calc(params, data, bitmask,
 					  zmin, zmax, zminac, zmaxac, gmin,
@@ -548,8 +549,9 @@ static int input_data(struct interp_params *params,
     return 1;
 }
 
-static int write_zeros(struct interp_params *params, struct quaddata *data,	/* given segment */
-		       int offset1	/* offset for temp file writing */
+static int write_zeros(struct interp_params *params,
+		       struct quaddata *data,	/* given segment */
+		       off_t offset1		/* offset for temp file writing */
     )
 {
 
@@ -564,7 +566,7 @@ static int write_zeros(struct interp_params *params, struct quaddata *data,	/* g
     int cond1, cond2;
     int k, l;
     int ngstc, nszc, ngstr, nszr;
-    int offset, offset2;
+    off_t offset, offset2;
     double ns_res, ew_res;
 
     ns_res = (((struct quaddata *)(data))->ymax -
