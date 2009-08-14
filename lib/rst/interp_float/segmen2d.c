@@ -21,8 +21,8 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 			  double *gmin, double *gmax,	/* min and max inperp. slope val. */
 			  double *c1min, double *c1max, double *c2min, double *c2max,	/* min and max interp. curv. val. */
 			  double *ertot,	/* total interplating func. error */
-			  int totsegm,	/* total number of segments */
-			  int offset1,	/* offset for temp file writing */
+			  int totsegm,		/* total number of segments */
+			  off_t offset1,	/* offset for temp file writing */
 			  double dnorm)
 /*
    Recursively processes each segment in a tree by

@@ -24,7 +24,7 @@
  * Writes az,adx,...,adxy into appropriate place (depending on ngstc, nszc
  * and offset) in corresponding temp file
  */
-int IL_write_temp_2d(struct interp_params *params, int ngstc, int nszc, int offset2)	/* begin. and end. column, offset */
+int IL_write_temp_2d(struct interp_params *params, int ngstc, int nszc, off_t offset2)	/* begin. and end. column, offset */
 {
     int j;
     static FCELL *array_cell = NULL;
