@@ -18,12 +18,6 @@
 #include <grass/vect/dig_defines.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
-#include <ogr_api.h>
-#endif
-
-static const char *find_ogr(const char *, const char *);
-
 /*!
   \brief Finds a vector map
  
@@ -66,51 +60,6 @@ const char *G_find_vector(char *name, const char *mapset)
  */
 const char *G_find_vector2(const char *name, const char *mapset)
 {
-    const char *ogr_mapset;
-
-    /* check OGR mapset first */
-    ogr_mapset = find_ogr(name, mapset);
-    if (ogr_mapset)
-	return ogr_mapset;
-    
     return G_find_file2(GV_DIRECTORY, name, mapset);
 }
 
-const char *find_ogr(const char *name, const char *mapset)
-{
-    const char *pname, *pmapset;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    
-    if(G_name_is_fully_qualified(name, xname, xmapset)) {
-	pname = xname;
-	pmapset = xmapset;
-    }
-    else {
-	pname = name;
-	pmapset = mapset;
-    }
-    
-    if(pmapset && strcmp(pmapset, "OGR") == 0) {
-	/* unique mapset "OGR", check OGR datasource instead */
-#ifdef HAVE_OGR
-	OGRDataSourceH Ogr_ds;
-	
-	G_debug(1, "OGR mapset detected");
-
-	OGRRegisterAll();
-
-	/* datasource handle */
-	Ogr_ds = OGROpen(pname, FALSE, NULL);
-	if (Ogr_ds == NULL)
-	    G_fatal_error(_("Unable to open OGR data source '%s'"),
-			  pname);
-	
-	return "OGR";
-#else
-	G_fatal_error(_("Unique OGR mapset detected, OGR support is missing"));
-#endif
-    }
-
-    /* OGR mapset not detected */
-    return NULL;
-}

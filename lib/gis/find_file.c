@@ -16,7 +16,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/vect/dig_defines.h>
 #include <grass/glocale.h>
 
 static const char *find_file(
