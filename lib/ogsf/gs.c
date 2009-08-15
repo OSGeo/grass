@@ -235,11 +235,11 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     geosurf *ps;
     int i;
 
-    G_debug(5, "gs_init_surf() id=%d", gs->gsurf_id);
-
     if (!gs) {
 	return (-1);
     }
+
+    G_debug(5, "gs_init_surf() id=%d", gs->gsurf_id);
 
     /* default attributes */
     for (i = 0; i < MAX_ATTS; i++) {
@@ -282,7 +282,7 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     gs->norms = NULL;
 
     gs->draw_mode = DM_GOURAUD;
-    
+
     /* default z_exag value */
     if (gs->gsurf_id == FIRST_SURF_ID) {
 	gs->z_exag = 1.0;
@@ -655,8 +655,8 @@ int gs_get_att_type(geosurf * gs, int desc)
  */
 int gs_get_att_src(geosurf * gs, int desc)
 {
-    G_debug(5, "gs_get_att_src(): id=%d desc=%d", gs->gsurf_id, desc);
-
+    if (gs)
+	G_debug(5, "gs_get_att_src(): id=%d, desc=%d", gs->gsurf_id, desc);
     if (!LEGAL_ATT(desc)) {
 	return (-1);
     }
@@ -683,10 +683,9 @@ typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
     typbuff *tb;
     geosurf *gsref;
 
-    G_debug(5, "gs_get_att_typbuff(): id=%d desc=%d to_write=%d",
-	    gs->gsurf_id, desc, to_write);
-
     if (gs) {
+	G_debug(5, "gs_get_att_typbuff(): id=%d desc=%d to_write=%d",
+		gs->gsurf_id, desc, to_write);
 	if ((tb = gsds_get_typbuff(gs->att[desc].hdata, to_write))) {
 	    tb->tfunc = NULL;
 
@@ -827,8 +826,9 @@ int gs_set_att_type(geosurf * gs, int desc, int type)
  */
 int gs_set_att_src(geosurf * gs, int desc, int src)
 {
-    G_debug(5, "gs_set_att_src(): id=%d desc=%d src=%d",
-	    gs->gsurf_id, desc, src);
+    if (gs)
+	G_debug(5, "gs_set_att_src(): id=%d desc=%d src=%d",
+		gs->gsurf_id, desc, src);
 
     /* check if old source was MAP_ATT, free buff */
     if (MAP_ATT == gs_get_att_src(gs, desc)) {
@@ -871,10 +871,10 @@ int gs_set_att_src(geosurf * gs, int desc, int src)
  */
 int gs_set_att_const(geosurf * gs, int desc, float constant)
 {
-    G_debug(5, "gs_set_att_const(): id=%d, desc=%d, const=%f",
-	    gs->gsurf_id, desc, constant);
 
     if (gs) {
+	G_debug(5, "gs_set_att_const(): id=%d, desc=%d, const=%f",
+		gs->gsurf_id, desc, constant);
 	gs->att[desc].constant = constant;
 
 	if (ATT_MASK == desc) {
