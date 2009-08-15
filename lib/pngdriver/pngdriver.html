@@ -64,31 +64,17 @@ of the PNG driver.
 </UL>
 
 <H3>Example</H3>
-<OL>
-  <LI>Define driver settings (here: bash shell syntax)
+
 <DIV class="code"><PRE>
-export GRASS_RENDER_IMMEDIATE=TRUE
+# Define driver settings (here: bash shell syntax)
+export GRASS_RENDER_IMMEDIATE=PNG
 export GRASS_TRUECOLOR=TRUE
-</PRE></DIV>
-  </LI>
-  <LI>Start up the driver
-<DIV class="code"><PRE>
-d.mon start=PNG
-</PRE></DIV>
-  </LI>
-  <LI>Display raster map and vector polygons
-<DIV class="code"><PRE>
+
+# Display raster map and vector polygons
 d.rast <i>somerastermap</i>
 d.vect <i>somevectormap</i> color=red
 </PRE></DIV>
-  </LI>
-  <LI> Stop the driver subsequently. This will write a 
-    file named <tt>map.png</tt> to be created in your current directory:
-<DIV class="code"><PRE>
-d.mon stop=PNG
-</PRE></DIV>
-  </LI>
-</OL>
+This writes a file named <tt>map.png</tt> in your current directory.
 
 <H2>NOTES</H2> 
 
@@ -108,16 +94,13 @@ can be done with 'pnmquant' of the <a href="http://netpbm.sourceforge.net/">netp
 
 <h2>SEE ALSO</h2>
 <EM>
-  <a href="displaydrivers.html">Display drivers</a>
-  <br>
-  <A HREF="htmlmapdriver.html">HTMLMAP driver</A>,
-  <A HREF="psdriver.html">PostScript driver</A>,
-  <A href="xdriver.html">XDRIVER</A>
-  <BR>
-  <A HREF="d.frame.html">d.frame</A>,
-  <A href="d.mon.html">d.mon</A>,
-  <A href="d.rast.html">d.rast</A>,
-  <A href="d.vect.html">d.vect</A>
+<a href="displaydrivers.html">Display drivers</a>
+<br>
+<A HREF="cairodriver.html">CAIRO driver</A>,
+<A HREF="psdriver.html">PostScript driver</A>,
+<BR>
+<A href="d.rast.html">d.rast</A>,
+<A href="d.vect.html">d.vect</A>
 </EM>
 
 <H2>AUTHOR</H2>
