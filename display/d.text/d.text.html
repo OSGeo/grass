@@ -21,6 +21,12 @@ within the standard input).
 (where <EM>color</EM> is one of the available colors) causes text appearing on 
 subsequent lines to be drawn in that color. 
 
+
+<DT><B>.G</B> <EM>color</EM>
+<DD>
+(where <EM>color</EM> is one of the available colors) causes the background of text
+appearing on subsequent lines to be drawn in that color.
+
 <DT><B>.S </B> <EM>size</EM>
 <DD>
 (where <EM>size</EM> is a percentage within the range 0 to
@@ -67,12 +73,13 @@ active frame's vertical space per line:
 
 
 <pre>
-    <B>d.text</B> << EOF
-    .C yellow 
-    .S 4 
-    .B 1
-    This is a test of d.text
-    EOF
+<B>d.text</B> << EOF
+.C yellow
+.G grey
+.S 4 
+.B 1
+This is a test of d.text
+EOF
 </pre>
 
 
