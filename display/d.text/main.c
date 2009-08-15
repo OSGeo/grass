@@ -4,7 +4,7 @@
  * MODULE:       d.text
  *
  * AUTHOR(S):    James Westervelt, US Army CERL
- *               Updated by Huidae Cho
+ *               Updated by Huidae Cho, Markus Neteler
  *
  * PURPOSE:      display text in active frame
  *
@@ -21,6 +21,7 @@
  *
  *      .F {font|path}[:charset]                font
  *      .C {color_name|RR:GG:BB|0xRRGGBB}       color
+ *      .G {color_name|RR:GG:BB|0xRRGGBB}       background color
  *      .S [+|-]size[p]                         text size
  *                                              +/-: relative size
  *                                              p: size in pixels
@@ -72,7 +73,7 @@ struct rectinfo
 static void set_color(char *);
 static int get_coordinates(double *, double *, double *, double *,
 			   struct rectinfo, char **, char, char);
-static void draw_text(char *, double *, double *, double, char *, double, char);
+static void draw_text(char *, double *, double *, double, char *, double, char, int, int, int);
 
 int main(int argc, char **argv)
 {
@@ -81,7 +82,8 @@ int main(int argc, char **argv)
     {
 	struct Option *text;
 	struct Option *size;
-	struct Option *color;
+	struct Option *fgcolor;
+	struct Option *bgcolor;
 	struct Option *line;
 	struct Option *at;
 	struct Option *rotation;
@@ -128,6 +130,7 @@ int main(int argc, char **argv)
     double prev_x, prev_y;
     double set_x, set_y;
     double east, north;
+    int do_background, fg_color, bg_color;
 
     /* initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -152,14 +155,22 @@ int main(int argc, char **argv)
     opt.size->description =
 	_("Height of letters in percentage of available frame height");
 
-    opt.color = G_define_option();
-    opt.color->key = "color";
-    opt.color->type = TYPE_STRING;
-    opt.color->answer = DEFAULT_COLOR;
-    opt.color->required = NO;
-    opt.color->description =
+    opt.fgcolor = G_define_option();
+    opt.fgcolor->key = "color";
+    opt.fgcolor->type = TYPE_STRING;
+    opt.fgcolor->answer = DEFAULT_COLOR;
+    opt.fgcolor->required = NO;
+    opt.fgcolor->description =
 	_("Text color, either a standard GRASS color or R:G:B triplet");
-    opt.color->gisprompt = GISPROMPT_COLOR;
+    opt.fgcolor->gisprompt = GISPROMPT_COLOR;
+
+    opt.bgcolor = G_define_option();
+    opt.bgcolor->key = "bgcolor";
+    opt.bgcolor->type = TYPE_STRING;
+    opt.bgcolor->required = NO;
+    opt.bgcolor->description =
+        _("Text background color, either a standard GRASS color or R:G:B triplet");
+    opt.bgcolor->gisprompt = GISPROMPT_COLOR;
 
     opt.line = G_define_option();
     opt.line->key = "line";
@@ -301,7 +312,13 @@ int main(int argc, char **argv)
 	size = atof(opt.size->answer) / 100.0 * (win.b - win.t);
 #endif
 
-    set_color(opt.color->answer);
+    fg_color = D_parse_color(opt.fgcolor->answer, 1);
+    if (opt.bgcolor->answer) {
+       do_background = 1;
+       bg_color = D_parse_color(opt.bgcolor->answer, 1);
+    } else
+       do_background = 0;
+    set_color(opt.fgcolor->answer);
 
     orig_x = orig_y = 0;
 
@@ -331,7 +348,7 @@ int main(int argc, char **argv)
 	y2 = y;
 
 	if (text[0])
-	    draw_text(text, &x2, &y2, size, align, rotation, bold);
+	    draw_text(text, &x2, &y2, size, align, rotation, bold, do_background, fg_color, bg_color);
 
 	/* reset */
 	D_text_size(5, 5);
@@ -386,6 +403,12 @@ int main(int argc, char **argv)
 	    case 'C':
 		/* color */
 		set_color(buf_ptr);
+		fg_color = D_parse_color(buf_ptr, 1);
+		break;
+	    case 'G':
+		/* background color */
+		bg_color = D_parse_color(buf_ptr, 1);
+		do_background = 1;
 		break;
 	    case 'S':
 		/* size */
@@ -508,7 +531,7 @@ int main(int argc, char **argv)
 	    }
 	    set_x = set_y = set_l = first_text = 0;
 
-	    draw_text(buf_ptr, &x, &y, size, align, rotation, bold);
+	    draw_text(buf_ptr, &x, &y, size, align, rotation, bold, do_background, fg_color, bg_color);
 	}
     }
 
@@ -587,11 +610,12 @@ get_coordinates(double *x, double *y, double *east, double *north,
 }
 
 static void draw_text(char *text, double *x, double *y, double size, char *align,
-		      double rotation, char bold)
+		      double rotation, char bold, int do_background, int fg_color, int bg_color)
 {
     double w, h;
     double t, b, l, r;
     double c, s;
+    int pt, pb, pl, pr;
 
     /* TODO: get text dimension */
     /* R_get_text_box() does not work with rotation and returns a little bit
@@ -645,6 +669,16 @@ static void draw_text(char *text, double *x, double *y, double size, char *align
 	    *y += w * s;
 	    break;
 	}
+    }
+
+    if (do_background) {
+ 	pl = *x - size/2; /* some pixels margin for both sides */
+ 	pt = *y + size/2;
+ 	pr = *x + w + size/2;
+ 	pb = *y - h - size/2;
+	D_use_color(bg_color);
+ 	D_box_abs(pl, pt, pr, pb);    /* draw the box */
+ 	D_use_color(fg_color); /* restore */
     }
 
     D_pos_abs(*x, *y);
