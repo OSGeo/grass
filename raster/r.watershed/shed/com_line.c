@@ -4,7 +4,8 @@
 #include "watershed.h"
 #include "string.h"
 
-
+/* make sure any useful info is transfered to the man page before ripping out the interactive help messages */
+/* in addition there seem to be some useful user options here which are not currently available from the main parrser */
 int com_line_Gwater(INPUT * input, OUTPUT * output)
 {
     struct Cell_head *window;
@@ -15,6 +16,7 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
     window = &(output->window);
     if (0 == G_yes("Continue?", 1))
 	exit(EXIT_SUCCESS);
+
     input->haf_name = (char *)G_calloc(40, sizeof(char));
     input->accum_name = (char *)G_calloc(40, sizeof(char));
 
@@ -44,7 +46,7 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 	input->com_line_ram = (char *)G_calloc(400, sizeof(char));
 	prog_name = G_store(RAM_NAME);
 	sprintf(input->com_line_ram,
-		"%s/etc/water/%s", G_getenv("GISBASE"), RAM_NAME);
+		"\"%s/etc/water/%s\"", G_gisbase(), RAM_NAME);
 	fprintf(stderr,
 		"\nIf there is not enough ram for the fast mode (%s) to run,\n",
 		RAM_NAME);
@@ -53,7 +55,7 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 	    input->slow = 1;
 	    input->com_line_seg = (char *)G_calloc(400, sizeof(char));
 	    sprintf(input->com_line_seg,
-		    "%s/etc/water/%s", G_getenv("GISBASE"), SEG_NAME);
+		    "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
 	}
     }
     else {
@@ -61,7 +63,7 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 	prog_name = G_store(SEG_NAME);
 	input->com_line_seg = (char *)G_calloc(400, sizeof(char));
 	sprintf(input->com_line_seg,
-		"%s/etc/water/%s", G_getenv("GISBASE"), SEG_NAME);
+		"\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
     }
 
     G_message(_("\nIf you hit <return> by itself for the next question, this"));
@@ -123,6 +125,7 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 
     if (!i)
 	exit(EXIT_SUCCESS);
+
     output->type_area = (char)i;
 
     G_message(_("\nHow large an area (or how many overland flow units) must a drainage basin"));

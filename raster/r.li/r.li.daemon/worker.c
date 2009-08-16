@@ -135,7 +135,7 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 	    ad->mask_name = mask_preprocessing(toReceive.f.f_ma.mask,
 					       raster, ad->rl, ad->cl);
 	    if (ad->mask_name == NULL) {
-		G_message(_("CHILD[pid = %i]: unable to open %s mask ... continue without!!!"),
+		G_message(_("CHILD[pid = %i]: unable to open <%s> mask ... continuing without!"),
 			  pid, toReceive.f.f_ma.mask);
 		ad->mask = -1;
 	    }
@@ -145,14 +145,13 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 		    erease_mask = 1;
 		ad->mask = open(ad->mask_name, O_WRONLY, 0755);
 		if (ad->mask == -1) {
-		    G_message(_("CHILD[pid = %i]: unable to open %s mask ... continue without!!!"),
+		    G_message(_("CHILD[pid = %i]: unable to open <%s> mask ... continuing without!"),
 			      pid, toReceive.f.f_ma.mask);
 		}
 
 	    }
-
-
 	}
+
 	/* memory menagement */
 	if (ad->rl > used) {
 	    /* allocate cache */
@@ -228,6 +227,7 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
     double add_row, add_col;
 
     buf = malloc(cl * sizeof(int));
+
     /* open raster */
     if (Rast_get_cellhd(raster, "", &cell) == -1)
 	return NULL;
@@ -238,10 +238,12 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
 
     add_row = 1.0 * oldcell.rows / rl;
     add_col = 1.0 * oldcell.cols / cl;
+
     tmp_file = G_tempfile();
     mask_fd = open(tmp_file, O_RDWR | O_CREAT, 0755);
     old_fd = Rast_open_old(mask, "");
     old = Rast_allocate_c_buf();
+
     for (i = 0; i < rl; i++) {
 	int riga;
 
