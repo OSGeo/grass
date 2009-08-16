@@ -45,8 +45,8 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
 	if (is_fp) {
 	    char minstr[64], maxstr[64];
 
-	    sprintf(minstr, "%.25f", (double)min);
-	    sprintf(maxstr, "%.25f", (double)max);
+	    sprintf(minstr, "%.15g", (double)min);
+	    sprintf(maxstr, "%.15g", (double)max);
 	    G_trim_decimal(minstr);
 	    G_trim_decimal(maxstr);
 	    fprintf(stderr, _("fp: Data range is %s to %s\n"), minstr,
@@ -61,7 +61,7 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
 	return 0;
 
     Rast_get_d_color_range(&rulemin, &rulemax, colors);
-    G_debug(3, "rulemin=%.1f rulemax=%.1f", rulemin, rulemax);
+    G_debug(3, "rulemin=%.3f  rulemax=%.3f", rulemin, rulemax);
 
     if (rulemin > min || rulemax < max)
 	G_warning(_("Your color rules do not cover the whole range of data!\n (rules %f to %f but data %f to %f)"),
