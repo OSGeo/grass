@@ -7,14 +7,13 @@ int run(char *cmd)
 
 
     if (G_system(cmd)) {
-	G_warning("Failed");
+	G_warning("Subprocess failed");
 	retval = 1;
     }
     else {
-	G_message("OK");
+	G_verbose_message("Subprocess complete.");
 	retval = 0;
     }
-
 
     return retval;
 }
@@ -24,7 +23,6 @@ void gregion(void)
 {
     char buf[GPATH_MAX];
     char *hdmap;
-
 
     hdmap = NULL;
     if (!flg.input) {
@@ -39,7 +37,7 @@ void gregion(void)
 
     if (hdmap) {
 	sprintf(buf, "g.region rast=%s --quiet", hdmap);
-	G_message("g.region rast=%s ... ", hdmap);
+	G_verbose_message("%s ...", buf);
 
 	if (run(buf))
 	    exit(1);
@@ -50,16 +48,15 @@ void gregion(void)
 void depressionless(void)
 {
     char buf[GPATH_MAX];
+
     sprintf(buf, "r.fill.dir input=%s elev=%s dir=%s type=grass --quiet",
 	    map.elev, map.fill, map.dir);
-    G_message("r.fill.dir input=%s elev=%s dir=%s type=grass ... ",
-	      map.elev, map.fill, map.dir);
+    G_verbose_message("%s ...", buf);
 
     if (run(buf))
 	exit(1);
 
     map.elev = map.fill;
-
 
     return;
 }
@@ -68,14 +65,13 @@ void depressionless(void)
 void basin_elevation(void)
 {
     char buf[GPATH_MAX];
-    sprintf(buf, "r.mapcalc expression='%s = if(%s == 0 || isnull(%s), null(), %s)' --quiet",
+
+    sprintf(buf, "r.mapcalc expression=\"%s = if(%s == 0 || isnull(%s), null(), %s)\" --quiet",
 	    map.belev, map.basin, map.basin, map.elev);
-    G_message("r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)'"
-	      " ... ", map.belev, map.basin, map.basin, map.elev);
+    G_verbose_message("%s ...", buf);
 
     if (run(buf))
 	exit(1);
-
 
     return;
 }
@@ -87,23 +83,20 @@ void top_index(void)
     if (map.belev) {
 	sprintf(buf, "r.topidx input=%s output=%s --quiet",
 		map.belev, map.topidx);
-	G_message("r.topidx input=%s output=%s ... ", map.belev, map.topidx);
+	G_verbose_message("%s ...", buf);
 
 	if (run(buf))
 	    exit(1);
     }
 
     if (map.topidx) {
-	sprintf(buf, "r.stats -Anc "
-		"input=%s nsteps=%d > %s",
+	sprintf(buf, "r.stats -Anc input=%s nsteps=%d output=\"%s\"",
 		map.topidx, misc.nidxclass, file.idxstats);
-	G_message("r.stats -Anc input=%s nsteps=%d > %s ... ",
-		  map.topidx, misc.nidxclass, file.idxstats);
+	G_verbose_message("%s ...", buf);
 
 	if (run(buf))
 	    exit(1);
     }
-
 
     return;
 }
