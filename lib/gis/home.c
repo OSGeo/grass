@@ -110,7 +110,7 @@ const char *G_rc_path(void)
     int ret;
     ret = G_mkdir(rcpath);
     if (ret == -1 && errno != EEXIST)
-	G_fatal_error(_("Cannot create directory [%s]"), rcpath);
+	G_fatal_error(_("Failed to create directory [%s]"), rcpath);
 #endif
 
     return G_store(rcpath);
