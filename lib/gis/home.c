@@ -102,7 +102,7 @@ const char *G_rc_path(void)
 /* HB: making a complete bollocks of this, but to express the idea... */
     const char *rcpath = 0;
 
-    sprintf(rcpath, "%s/%s", G_home(), RCDIR);
+    sprintf(rcpath, "%s%c%s", G_home(), HOST_DIRSEP, RCDIR);
 
 #ifdef POSSIBILITY
     /* create it if it doesn't exist */
