@@ -398,7 +398,7 @@ int main(int argc, char *argv[])
 			fprintf(stdout, "%c%s", fs, null_str);
 			continue;
 		    }
-		    sprintf(tmp_buf, "%.10f", cache[point].dvalue[i]);
+		    sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
 		    G_trim_decimal(tmp_buf);
 		    fprintf(stdout, "%c%s", fs, tmp_buf);
 		}
