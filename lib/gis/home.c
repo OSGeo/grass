@@ -34,7 +34,6 @@ const char *G_home(void)
 
     G_fatal_error(_("Unable to determine user's home directory"));
 
-    /* why return NULL when we've already exit(1)'d with G_fatal_error() ?? */
     return NULL;
 }
 
