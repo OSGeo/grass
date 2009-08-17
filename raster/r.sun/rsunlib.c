@@ -183,7 +183,6 @@ void com_par(struct SunGeometryConstDay *sungeom,
     costimeAngle = cos(sungeom->timeAngle);
 
 
-
     lum_Lx = -sungeom->lum_C22 * sin(sungeom->timeAngle);
     lum_Ly = sungeom->lum_C11 * costimeAngle + sungeom->lum_C13;
     sunVarGeom->sinSolarAltitude =
@@ -240,7 +239,7 @@ void com_par(struct SunGeometryConstDay *sungeom,
     inputAngle = (inputAngle >= pi2) ? inputAngle - pi2 : inputAngle;
 
 
-    delt_lat = -0.0001 * cos(inputAngle);	/* Arbitrary small distance in latitude */
+    delt_lat = -0.0001 * cos(inputAngle);  /* Arbitrary small distance in latitude */
     delt_lon = 0.0001 * sin(inputAngle) / cos(latitude);
 
     newLatitude = (latitude + delt_lat) * rad2deg;
@@ -257,7 +256,6 @@ void com_par(struct SunGeometryConstDay *sungeom,
     delt_nor = newLatitude - gridGeom->yp;
 
     delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
-
 
 
     sunVarGeom->stepsinangle = gridGeom->stepxy * delt_nor / delt_dist;
