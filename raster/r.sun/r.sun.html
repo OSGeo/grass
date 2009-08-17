@@ -44,7 +44,8 @@ model accounts for sky obstruction by local relief features. Several solar
 parameters are saved in the resultant maps' history files, which may be viewed
 with the <a href="r.info.html">r.info</a> command.
 </p>
-<p>The solar incidence angle raster map <i>incidout</i> is computed specifying 
+<p>
+The solar incidence angle raster map <i>incidout</i> is computed specifying 
 elevation raster map <i>elevin</i>, aspect raster map <i>aspin</i>, slope 
 steepness raster map <i>slopin,</i> given the day <i>day</i> and local time
 <i>time</i>. There is no need to define latitude for locations with known
@@ -52,8 +53,7 @@ and defined projection/coordinate system (check it with the <a href="g.proj.html
 g.proj</a>
  command). If you have undefined projection, (x,y) system, etc. then the latitude
 can be defined explicitely for large areas by input raster map <i>latin</i>
- with interpolated latitude values or, for smaller areas, a single region 
-latitude value <i>lat</i> can be used instead. All input raster maps must
+ with interpolated latitude values. All input raster maps must
 be floating point (FCELL) raster maps. Null data in maps are excluded from
 the computation (and also speeding-up the computation), so each output raster
 map will contain null data in cells according to all input raster maps. The
@@ -63,7 +63,8 @@ The specified day <i>day</i> is the number of the day of the general year
 where January 1 is day no.1 and December 31 is 365. Time <i>time</i> must
 be a local (solar) time (i.e. NOT a zone time, e.g. GMT, CET) in decimal system,
 e.g. 7.5 (= 7h 30m A.M.), 16.1 = 4h 6m P.M.. </p>
-<p>Setting the solar declination <i>declin</i> by user is an option to override
+<p>
+Setting the solar declination <i>declin</i> by user is an option to override
 the value computed by the internal routine for the day of the year. The value
 of geographical latitude can be set as a constant for the whole computed
 region or, as an option, a grid representing spatially distributed values
@@ -71,15 +72,17 @@ over a large region. The geographical latitude must be also in decimal system
 with positive values for northern hemisphere and negative for southern one.
 In similar principle the Linke turbidity factor (<i>linkein</i>, <i>lin</i>
 ) and ground albedo (<i>albedo</i>, <i>alb</i>) can be set. </p>
-<p>Besides clear-sky radiations, the user can compute a real-sky radiation (beam,
+<p>
+Besides clear-sky radiations, the user can compute a real-sky radiation (beam,
 diffuse) using <i>coefbh</i> and <i>coefdh </i>input raster maps defining
 the fraction of the respective clear-sky radiations reduced by atmospheric
 factors (e.g. cloudiness). The value is between 0-1. Usually these
 coefficients can be obtained from a long-terms meteorological measurements.</p>
-<p>The solar irradiation or irradiance raster maps <i>beam_rad</i>, <i>diff_rad</i>
-, <i>refl_rad</i> are computed for a given day <i>day,</i> latitude <i>lat
-(latin), </i>elevation <i>elevin</i>, slope <i>slopein</i> and aspect <i>
-aspin</i> raster maps. For convenience, the output raster given as <i>glob_rad</i>
+<p>
+The solar irradiation or irradiance raster maps <i>beam_rad</i>, <i>diff_rad</i>,
+<i>refl_rad</i> are computed for a given day <i>day,</i> latitude <i>latin</i>,
+elevation <i>elevin</i>, slope <i>slopein</i> and aspect <i>aspin</i> raster maps.
+For convenience, the output raster given as <i>glob_rad</i>
 will output the sum of the three radiation components. The program uses 
 the Linke atmosphere turbidity factor and ground albedo coefficient. 
 A default, single value of Linke factor is <i>lin</i>=3.0 and 
