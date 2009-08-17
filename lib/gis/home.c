@@ -33,7 +33,8 @@ const char *G_home(void)
 	return home;
 
     G_fatal_error(_("Unable to determine user's home directory"));
-    
+
+    /* why return NULL when we've already exit(1)'d with G_fatal_error() ?? */
     return NULL;
 }
 
@@ -77,3 +78,41 @@ const char *G__home(void)
     G_initialize_done(&initialized);
     return home;
 }
+
+
+#ifdef TODO
+#include <stdio.h>
+#define RCDIR ".grass7"
+
+/*!
+ * \brief Get user's .grass/ config path directory
+ *
+ * Returns a pointer to a string which is the full path name of the
+ * user's .grass/ config directory in their home directory.
+ *
+ * The path is not guaranteed to exist.
+(should it be?  see possible TODO below)
+ *
+ * \return pointer to string
+ * \return NULL on error
+ */
+const char *G_rc_path(void)
+{
+/* choose better name for fn? */
+/* HB: making a complete bollocks of this, but to express the idea... */
+    const char *rcpath = 0;
+
+    sprintf(rcpath, "%s/%s", G_home(), RCDIR);
+
+#ifdef POSSIBILITY
+    /* create it if it doesn't exist */
+#include <errno.h>
+    int ret;
+    ret = G_mkdir(rcpath);
+    if (ret == -1 && errno != EEXIST)
+	G_fatal_error(_("Cannot create directory [%s]"), rcpath);
+#endif
+
+    return G_store(rcpath);
+}
+#endif
