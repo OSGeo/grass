@@ -305,42 +305,50 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
     int sf_x, sf_y, sf_rl, sf_cl;
     int size;
 
+    /* TODO: if present, strip away G_home()/.r.li/history/ path from string */
+    /*  ? if(strncmp(G_rc_path(), path, strlen(G_rc_path()) ) == 0)
+	?     path += strlen(G_rc_path());
+	? */
     if (stat(path, &s) != 0)
-	G_fatal_error(_("Cannot make stat of %s configuration file"), path);
+	G_fatal_error(_("Cannot find configuration file <%s>"), path);
+
     size = s.st_size * sizeof(char);
     buf = G_malloc(size);
+
     setup = open(path, O_RDONLY, 0755);
     if (setup == -1)
 	G_fatal_error(_("Cannot read setup file"));
+
     letti = read(setup, buf, s.st_size);
     if (letti < s.st_size)
 	G_fatal_error(_("Cannot read setup file"));
 
-
     token = strtok(buf, " ");
     if (strcmp("SAMPLINGFRAME", token) != 0)
-	G_fatal_error(_("Illegal configuration file"));
+	G_fatal_error(_("Unable to parse configuration file"));
+
     rel_x = atof(strtok(NULL, "|"));
     rel_y = atof(strtok(NULL, "|"));
     rel_rl = atof(strtok(NULL, "|"));
     rel_cl = atof(strtok(NULL, "\n"));
 
-    /*finding raster map */
+    /* find raster map */
     if (Rast_get_cellhd(raster, "", &cellhd) == -1)
 	G_fatal_error(_("Cannot read raster header file"));
-    /*calculating absolute sampling frame definition */
+
+    /* calculate absolute sampling frame definition */
     sf_x = (int)rint(cellhd.cols * rel_x);
     sf_y = (int)rint(cellhd.rows * rel_y);
     sf_rl = (int)rint(cellhd.rows * rel_rl);
     sf_cl = (int)rint(cellhd.cols * rel_cl);
 
-    /*calculating sample frame boundaries */
+    /* calculate sample frame boundaries */
     sf_n = cellhd.north - (cellhd.ns_res * sf_y);
     sf_s = sf_n - (cellhd.ns_res * sf_rl);
     sf_w = cellhd.west + (cellhd.ew_res * sf_x);
     sf_e = sf_w + (cellhd.ew_res * sf_cl);
 
-    /* parsing configuration file */
+    /* parse configuration file */
     token = strtok(NULL, " ");
 
     if (strcmp("SAMPLEAREA", token) == 0) {
@@ -386,10 +394,12 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
 		aid++;
 		insertNode(l, m);
 	    }
-	}
-	while ((token = strtok(NULL, " ")) != NULL &&
+
+	} while ((token = strtok(NULL, " ")) != NULL &&
 	       strcmp(token, "SAMPLEAREA") == 0);
+
 	close(setup);
+
 	return toReturn;
     }
     else if (strcmp("MASKEDSAMPLEAREA", token) == 0) {
