@@ -744,7 +744,9 @@ int main(int argc, char *argv[])
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
 	G_warning(_("latin and longin raster maps have no effect when in a Lat/Lon location"));
 	/* true about longin= when civiltime is used? */
-    if ((latin == NULL && longin != NULL) || (latin != NULL && longin == NULL))
+	/* civiltime needs longin= but not latin= for non-LL projections -
+	     better would be it just use pj_proj() if it needs those?? */
+    if (latin != NULL && longin == NULL)
 	G_fatal_error(_("Both latin and longin raster maps must be given, or neither"));
 
 /**********end of parser - ******************************/
