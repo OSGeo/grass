@@ -229,7 +229,9 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 		/*printf("todo2 ");fflush(stdout); *//*TODO scrivere su raster */
 	    }
 	}
+
 	i--;
+
 	while (j < WORKERS && donePid != child[j].pid)
 	    j++;
 
@@ -237,20 +239,24 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	m.f.f_t.pid = mypid;
 	send(child[j].channel, &m);
 	wait(&status);
-	if (!(WIFEXITED(status)))
-	    G_message(_("r.li.worker (pid %i) exited with abnormal status %i"),
-		      donePid, status);
-	else
-	    G_message(_("r.li.worker (pid %i) terminated"), donePid);
 
-	/*remove pipe */
+	if (!(WIFEXITED(status)))
+	    G_warning(
+		    _("r.li.worker (pid %i) exited with abnormal status: %i"),
+		    donePid, status);
+	else
+	    G_verbose_message(
+		    _("r.li.worker (pid %i) terminated successfully"),
+		    donePid);
+
+	/* remove pipe */
 	if (close(child[j].channel) != 0)
 	    G_message(_("Cannot close %s file (PIPE)"), child[j].pipe);
 	if (unlink(child[j].pipe) != 0)
 	    G_message(_("Cannot delete %s file (PIPE)"), child[j].pipe);
     }
 
-    /*kill childs without Job */
+    /* kill children without Job */
     for (i = withoutJob; i < WORKERS; i++) {
 	int status;
 
@@ -258,21 +264,27 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	m.f.f_t.pid = mypid;
 	send(child[i].channel, &m);
 	wait(&status);
+
 	if (!(WIFEXITED(status)))
-	    G_message(_("r.li.worker (pid %i) exited with abnormal status %i"),
-		      child[i].pid, status);
+	    G_warning(
+		    _("r.li.worker (pid %i) exited with abnormal status: %i"),
+		    child[i].pid, status);
 	else
-	    G_message(_("r.li.worker (pid %i) terminated"), child[i].pid);
-	/*remove pipe */
+	    G_verbose_message(
+		    _("r.li.worker (pid %i) terminated successfully"),
+		    child[i].pid);
+
+	/* remove pipe */
 	if (close(child[i].channel) != 0)
 	    G_message(_("Cannot close %s file (PIPE2)"), child[i].pipe);
 	if (unlink(child[i].pipe) != 0)
 	    G_message(_("Cannot delete %s file (PIPE2)"), child[i].pipe);
     }
+
+
     /*################################################
        --------------delete tmp files------------------
        ################################################ */
-
 
     if (parsed == MVWIN) {
 	write_raster(mv_fd, random_access, g);
@@ -284,13 +296,15 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	Rast_write_history(output, &history);
     }
 
-
     if (close(receiveChannel) != 0)
 	G_message(_("Cannot close receive channel file"));
+
     if (unlink(reportChannelName) != 0)
 	G_message(_("Cannot delete %s file"), child[i].pipe);
+
     return 1;
 }
+
 
 int parseSetup(char *path, list l, g_areas g, char *raster)
 {
