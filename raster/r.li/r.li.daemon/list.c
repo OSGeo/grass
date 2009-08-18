@@ -29,11 +29,13 @@ void insertNode(list l, msg mess)
 {
     node new;
 
-    new = malloc(sizeof(node));
-    new->m = malloc(sizeof(msg));
+    new = G_malloc(sizeof(node));
+    new->m = G_malloc(sizeof(msg));
+
     if (new != NULL) {
 	memcpy(new->m, &mess, sizeof(msg));
 	new->next = new->prev = NULL;
+
 	if (l->head == NULL) {
 	    l->head = l->tail = new;
 	}
@@ -45,6 +47,7 @@ void insertNode(list l, msg mess)
     }
     else
 	G_message(_("Out of memory"));
+
     l->size++;
 }
 
