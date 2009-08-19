@@ -52,8 +52,8 @@ class SQLFrame(wx.Frame):
             self.vectmap = self.vectmap + "@" + grass.gisenv()['MAPSET']
         self.mapname, self.mapset = self.vectmap.split("@")
         self.layer,self.tablename, self.column, self.database, self.driver =\
-                 os.popen("v.db.connect -g map=%s" %\
-                (self.vectmap)).readlines()[0].strip().split()
+                 os.popen("v.db.connect -g fs='|' map=%s" %\
+                (self.vectmap)).readlines()[0].strip().split("|")
 
         self.qtype = qtype        # type of the uqery: SELECT, UPDATE, DELETE, ...
         self.column_names = []       # array with column names
