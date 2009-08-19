@@ -320,7 +320,7 @@ class SQLFrame(wx.Frame):
                 pass
     def OnVerify(self,event):
         if self.text_sql.GetValue():
-            if os.system("""!db.select -t driver=%s database="%s" sql="SELECT * FROM %s WHERE %s" """ % \
+            if os.system("""db.select -t --verbose driver=%s database="%s" sql="SELECT * FROM %s WHERE %s" """ % \
                     (self.driver, self.database,self.tablename,
                         self.text_sql.GetValue().strip().replace("\n"," "))):
                 # FIXME: LOG
