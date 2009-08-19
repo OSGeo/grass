@@ -84,6 +84,9 @@ int main(int argc, char **argv)
 	}
     }
 
+    if(parms.test_only)
+	G_verbose_message(_("Test %s."), stat ? _("failed") : _("succeeded"));
+
     db_close_database(driver);
     db_shutdown_driver(driver);
 
@@ -257,6 +260,7 @@ static void parse_command_line(int argc, char **argv)
 	parms.h = 1;
     else
 	parms.h = 0;
+
     parms.test_only = flag_test->answer;
 
     if (!parms.fs)
