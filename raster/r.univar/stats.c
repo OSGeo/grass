@@ -110,6 +110,7 @@ int print_stats(univar_stat * stats)
     if (param.shell_style->answer) {
 	fprintf(stdout, "n=%d\n", stats->n);
 	fprintf(stdout, "null_cells=%d\n", stats->size - stats->n);
+	fprintf(stdout, "cells=%d\n", stats->size);
 	fprintf(stdout, "min=%.15g\n", stats->min);
 	fprintf(stdout, "max=%.15g\n", stats->max);
 	fprintf(stdout, "range=%.15g\n", stats->max - stats->min);
