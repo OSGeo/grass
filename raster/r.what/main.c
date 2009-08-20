@@ -413,6 +413,10 @@ int main(int argc, char *argv[])
 		if (out_type[i] == CELL_TYPE) {
 		    if (Rast_is_c_null_value(&cache[point].value[i])) {
 			fprintf(stdout, "%c%s", fs, null_str);
+			if (label_flag->answer)
+			    fprintf(stdout, "%c", fs);
+			if (color_flag->answer)
+			    fprintf(stdout, "%c", fs);
 			continue;
 		    }
 		    fprintf(stdout, "%c%ld", fs, (long)cache[point].value[i]);
@@ -421,6 +425,10 @@ int main(int argc, char *argv[])
 
 		    if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
 			fprintf(stdout, "%c%s", fs, null_str);
+			if (label_flag->answer)
+			    fprintf(stdout, "%c", fs);
+			if (color_flag->answer)
+			    fprintf(stdout, "%c", fs);
 			continue;
 		    }
 		    if (out_type[i] == FCELL_TYPE)
