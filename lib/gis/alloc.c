@@ -38,7 +38,7 @@ void *G__malloc(const char *file, int line, size_t n)
 	
     buf = malloc(n);
     if (!buf)
-	G_fatal_error(_("G_malloc: unable to allocate %lu bytes at %s:%d"),
+	G_fatal_error(_("G_malloc: unable to allocate %lu bytes of memory at %s:%d"),
 		      (unsigned long) n, file, line);
 
     return buf;
@@ -73,7 +73,7 @@ void *G__calloc(const char *file, int line, size_t m, size_t n)
 
     buf = calloc(m, n);
     if (!buf)
-	G_fatal_error(_("G_calloc: unable to allocate %lu * %lu bytes at %s:%d"),
+	G_fatal_error(_("G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"),
 		      (unsigned long) m, (unsigned long) n, file, line);
 
     return buf;
@@ -112,7 +112,7 @@ void *G__realloc(const char *file, int line, void *buf, size_t n)
 	buf = realloc(buf, n);
 
     if (!buf)
-	G_fatal_error(_("G_realloc: unable to allocate %lu bytes at %s:%d"),
+	G_fatal_error(_("G_realloc: unable to allocate %lu bytes of memory at %s:%d"),
 		      (unsigned long) n, file, line);
 
     return buf;
