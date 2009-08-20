@@ -5,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,Brad Douglas <rez touchofmadness.com>,
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_nospam yahoo.com>, Soeren Gebbert <soeren.gebbert gmx.de>
+ *               Hamish Bowman <hamish_b yahoo.com>, Soeren Gebbert <soeren.gebbert gmx.de>
  * PURPOSE:      
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
 {
     int i, j;
     int nfiles;
-    int withcats;
     int fd[NFILES];
     struct Categories cats[NFILES];
     struct Cell_head window;
@@ -68,10 +67,10 @@ int main(int argc, char *argv[])
     char buffer[1024];
     char **ptr;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt_fs;
-    struct Flag *flag1, *flag2, *flag3, *flag4;
+    struct Flag *label_flag, *cache_flag, *int_flag, *color_flag, *header_flag;
     char fs;
     int Cache_size;
-    int done = 0;
+    int done = FALSE;
     int point, point_cnt;
     struct order *cache;
     int cur_row;
@@ -79,7 +78,7 @@ int main(int argc, char *argv[])
     int cache_hit = 0, cache_miss = 0;
     int cache_hit_tot = 0, cache_miss_tot = 0;
     int pass = 0;
-    int cache_report = 0;
+    int cache_report = FALSE;
     char tmp_buf[500], *null_str;
     int red, green, blue;
     struct GModule *module;
@@ -108,6 +107,7 @@ int main(int argc, char *argv[])
     opt2->multiple = NO;
     opt2->description = _("Size of point cache");
     opt2->answer = "500";
+    opt2->guisection = _("Advanced");
 
     opt3 = G_define_option();
     opt3->key = "null";
@@ -126,24 +126,30 @@ int main(int argc, char *argv[])
     opt4->multiple = YES;
     opt4->description = _("Coordinates for query");
 
-    flag1 = G_define_flag();
-    flag1->key = 'f';
-    flag1->description = _("Show the category label in the grid cell(s)");
+    header_flag = G_define_flag();
+    header_flag->key = 'n';
+    header_flag->description = _("Output header row");
 
-    flag2 = G_define_flag();
-    flag2->key = 'c';
-    flag2->description = _("Turn on cache reporting");
+    label_flag = G_define_flag();
+    label_flag->key = 'f';
+    label_flag->description = _("Show the category labels of the grid cell(s)");
 
-    flag3 = G_define_flag();
-    flag3->key = 'i';
-    flag3->description = _("Output integer category values, not cell values");
+    color_flag = G_define_flag();
+    color_flag->key = 'r';
+    color_flag->description = _("Output color values as RRR:GGG:BBB");
 
-    flag4 = G_define_flag();
-    flag4->key = 'r';
-    flag4->description = _("Output color values as RRR:GGG:BBB");
+    int_flag = G_define_flag();
+    int_flag->key = 'i';
+    int_flag->description = _("Output integer category values, not cell values");
+
+    cache_flag = G_define_flag();
+    cache_flag->key = 'c';
+    cache_flag->description = _("Turn on cache reporting");
+    cache_flag->guisection = _("Advanced");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     tty = isatty(0);
 
@@ -161,29 +167,26 @@ int main(int argc, char *argv[])
 	    fs = opt_fs->answer[0];
     }
 
-    withcats = 0;
-    nfiles = 0;
+    null_str = opt3->answer;
+
 
     if (tty)
 	Cache_size = 1;
     else
 	Cache_size = atoi(opt2->answer);
 
-    null_str = opt3->answer;
-
     if (Cache_size < 1)
 	Cache_size = 1;
 
     cache = (struct order *)G_malloc(sizeof(struct order) * Cache_size);
 
-    /* note this is not kosher */
-    withcats = flag1->answer;
-
     /*enable cache report */
-    if (flag2->answer)
-	cache_report = 1;
+    if (cache_flag->answer)
+	cache_report = TRUE;
+
 
     ptr = opt1->answers;
+    nfiles = 0;
     for (; *ptr != NULL; ptr++) {
 	char name[GNAME_MAX];
 
@@ -196,21 +199,22 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open <%s>"), name);
 
 	out_type[nfiles] = Rast_get_map_type(fd[nfiles]);
-	if (flag3->answer)
+	if (int_flag->answer)
 	    out_type[nfiles] = CELL_TYPE;
 
-	if (flag4->answer) {
+	if (color_flag->answer) {
 	    Rast_read_colors(name, "", &colors);
 	    ncolor[nfiles] = colors;
 	}
 
-	if (withcats && Rast_read_cats(name, "", &cats[nfiles]) < 0)
+	if (label_flag->answer && Rast_read_cats(name, "", &cats[nfiles]) < 0)
 	    G_fatal_error(_("Unable to read category file for <%s>"), name);
+
 	nfiles++;
     }
 
     for (i = 0; i < nfiles; i++) {
-	if (flag3->answer)
+	if (int_flag->answer)
 	    out_type[i] = CELL_TYPE;
 
 	cell[i] = Rast_allocate_c_buf();
@@ -220,18 +224,39 @@ int main(int argc, char *argv[])
 
     G_get_window(&window);
 
+
+    if(header_flag->answer) {
+	fprintf(stdout, "easting%cnorthing%csite_name", fs, fs);
+
+	ptr = opt1->answers;
+	for (; *ptr != NULL; ptr++) {
+	    char name[GNAME_MAX];
+	    strcpy(name, *ptr);
+
+	    fprintf(stdout, "%c%s", fs, name);
+
+	    if (label_flag->answer)
+		fprintf(stdout, "%c%s_label", fs, name);
+	    if (color_flag->answer)
+		fprintf(stdout, "%c%s_color", fs, name);
+	}
+
+	fprintf(stdout, "\n");
+    }
+
     line = 0;
     if (!opt4->answers && tty)
 	fprintf(stderr, "enter points, \"end\" to quit\n");
 
     j = 0;
-    done = 0;
+    done = FALSE;
     while (!done) {
 	pass++;
 	if (cache_report & !tty)
 	    fprintf(stderr, "Pass %3d  Line %6d   - ", pass, line);
 
 	cache_hit = cache_miss = 0;
+
 	if (!opt4->answers && tty) {
 	    fprintf(stderr, "\neast north [label] >  ");
 	    Cache_size = 1;
@@ -240,14 +265,14 @@ int main(int argc, char *argv[])
 	    point_cnt = 0;
 	    for (i = 0; i < Cache_size; i++) {
 		if (!opt4->answers && fgets(buffer, 1000, stdin) == NULL)
-		    done = 1;
+		    done = TRUE;
 		else {
 		    line++;
 		    if ((!opt4->answers &&
 			 (strncmp(buffer, "end\n", 4) == 0 ||
 			  strncmp(buffer, "exit\n", 5) == 0)) ||
 			(opt4->answers && !opt4->answers[j]))
-			done = 1;
+			done = TRUE;
 		    else {
 			*(cache[point_cnt].lab_buf) =
 			    *(cache[point_cnt].east_buf) =
@@ -354,7 +379,7 @@ int main(int argc, char *argv[])
 		    else
 			Rast_set_d_null_value(&(cache[point].dvalue[i]), 1);
 		}
-		if (flag4->answer) {
+		if (color_flag->answer) {
 		    if (out_type[i] == CELL_TYPE)
 			Rast_get_c_color(&cell[i][cache[point].col],
 					     &red, &green, &blue, &ncolor[i]);
@@ -398,14 +423,17 @@ int main(int argc, char *argv[])
 			fprintf(stdout, "%c%s", fs, null_str);
 			continue;
 		    }
-		    sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
-		    G_trim_decimal(tmp_buf);
+		    if (out_type[i] == FCELL_TYPE)
+			sprintf(tmp_buf, "%.7g", cache[point].dvalue[i]);
+		    else /* DCELL */
+			sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
+		    G_trim_decimal(tmp_buf); /* not needed with %g? */
 		    fprintf(stdout, "%c%s", fs, tmp_buf);
 		}
-		if (withcats)
+		if (label_flag->answer)
 		    fprintf(stdout, "%c%s", fs,
 			    Rast_get_c_cat(&(cache[point].value[i]), &cats[i]));
-		if (flag4->answer)
+		if (color_flag->answer)
 		    fprintf(stdout, "%c%s", fs, cache[point].clr_buf[i]);
 	    }
 	    fprintf(stdout, "\n");
@@ -419,9 +447,13 @@ int main(int argc, char *argv[])
 	cache_miss_tot += cache_miss;
 	cache_hit = cache_miss = 0;
     }
+
+    if (!opt4->answers && tty)
+	fprintf(stderr, "\n");
     if (cache_report & !tty)
 	fprintf(stderr, "Total:    Cache  Hit: %6d  Miss: %6d\n",
 		cache_hit_tot, cache_miss_tot);
+
     exit(EXIT_SUCCESS);
 }
 
