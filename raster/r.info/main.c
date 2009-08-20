@@ -238,8 +238,12 @@ int main(int argc, char **argv)
 				 "  Range of data:    min = %i  max = %i",
 				 (CELL) zmin, (CELL) zmax);
 	    }
+	    else if (data_type == FCELL_TYPE) {
+		compose_line(out, "  Range of data:    min = %.7g  max = %.7g",
+			     zmin, zmax);
+	    }
 	    else {
-		compose_line(out, "  Range of data:    min = %f  max = %f",
+		compose_line(out, "  Range of data:    min = %.15g  max = %.15g",
 			     zmin, zmax);
 	    }
 	}
@@ -318,7 +322,7 @@ int main(int argc, char **argv)
 
 	fprintf(out, "\n");
     }
-    else {			/* rflag or sflag or tflag or gflag or hflag or mflag */
+    else {	/* r,s,t,g,h, or m flag */
 
 	if (rflag->answer) {
 	    if (data_type == CELL_TYPE) {
@@ -331,10 +335,15 @@ int main(int argc, char **argv)
 		    fprintf(out, "max=%i\n", (CELL) zmax);
 		}
 	    }
+	    else if (data_type == FCELL_TYPE) {
+		fprintf(out, "min=%.7g\n", zmin);
+		fprintf(out, "max=%.7g\n", zmax);
+	    }
 	    else {
 		fprintf(out, "min=%.15g\n", zmin);
 		fprintf(out, "max=%.15g\n", zmax);
 	    }
+
 	}
 
 	if (gflag->answer) {
