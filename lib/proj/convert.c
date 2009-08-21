@@ -748,6 +748,8 @@ static const char *papszDatumEquiv[] = {
     "Campo_Inchauspe",
     "S_JTSK_Ferro",
     "Militar_Geographische_Institut",
+    "Potsdam_Datum_83",
+    "Deutsches_Hauptdreiecksnetz",
     NULL
 };
 
