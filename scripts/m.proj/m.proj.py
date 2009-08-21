@@ -224,7 +224,7 @@ def main():
 
     #### set up output style
     if not decimal:
-	outfmt = []
+	outfmt = ["-w5"]
     else:
 	outfmt = ["-f", "%.8f"]
     if not copy_input:
