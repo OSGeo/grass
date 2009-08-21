@@ -85,6 +85,7 @@ nad27   "towgs84=-9.0,151.0,185.0" "Alaska & Canada" "Old GRASS a-can parameters
 # http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/distortion-grid/
 nzgd49  "nadgrids=nzgd2kgrid0005.gsb"  "New Zealand"   "LINZ NZGD49 NTv2 Distortion Model, accuracy 10-30cm" 
 # http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/three-and-seven-parameter/
+#  note: values in above URL use the Helmert convention for the sign of rotation terms, while PROJ.4 uses the Bursa-Wolf convention.
 nzgd49  "towgs84=59.47,-5.04,187.44,0.47,-0.1,1.024,-4.5993" "New Zealand" "Accuracy approx. 4m"
 tokyo   "towgs84=-147.54,507.26,680.47" "Japan" " "
 tokyo   "towgs84=-147,506,687" "South Korea" " "
