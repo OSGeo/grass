@@ -82,9 +82,9 @@ ngo48   "towgs84=278.3,93.0,474.5,7.889,0.050,-6.610,6.21" "Norway" "Accuracy ab
 sam69   "towgs84=-60.0,-2.0,-41.0" "Brazil" " "
 sam69   "towgs84=-77.0,3.0,-45.0" "South America?" "Old GRASS sam69 parameters"
 nad27   "towgs84=-9.0,151.0,185.0" "Alaska & Canada" "Old GRASS a-can parameters"
-# http://www.linz.govt.nz/rcs/linz/pub/web/root/core/SurveySystem/GeodeticInfo/Software/softwaredownloads/index.jsp
+# http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/distortion-grid/
 nzgd49  "nadgrids=nzgd2kgrid0005.gsb"  "New Zealand"   "LINZ NZGD49 NTv2 Distortion Model, accuracy 10-30cm" 
-# http://www.linz.govt.nz/rcs/linz/6149/osgpol97_3.pdf
+# http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/three-and-seven-parameter/
 nzgd49  "towgs84=59.47,-5.04,187.44,0.47,-0.1,1.024,-4.5993" "New Zealand" "Accuracy approx. 4m"
 tokyo   "towgs84=-147.54,507.26,680.47" "Japan" " "
 tokyo   "towgs84=-147,506,687" "South Korea" " "
