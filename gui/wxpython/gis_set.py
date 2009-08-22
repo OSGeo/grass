@@ -8,7 +8,6 @@ Location/mapset management (selection, creation, etc.).
 
 Classes:
  - GRASSStartup
- - HelpWindow
  - StartUp
 
 (C) 2006-2009 by the GRASS Development Team
@@ -33,6 +32,8 @@ import gettext
 from gui_modules import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
     globalvar.CheckForWx()
+
+from gui_modules import help
 
 import wx
 import wx.html
@@ -720,10 +721,10 @@ class GRASSStartup(wx.Frame):
         # help text in lib/init/helptext.html
         file=os.path.join(self.gisbase, "docs", "html", "helptext.html")
 
-        helpFrame = HelpWindow(parent=self, id=wx.ID_ANY,
-                               title=_("GRASS Quickstart"),
-                               size=(640, 480),
-                               file=file)
+        helpFrame = help.HelpWindow(parent=self, id=wx.ID_ANY,
+                                    title=_("GRASS Quickstart"),
+                                    size=(640, 480),
+                                    file=file)
         helpFrame.Show(True)
 
         event.Skip()
@@ -732,31 +733,6 @@ class GRASSStartup(wx.Frame):
         """!Close window event"""
         event.Skip()
         sys.exit(2)
-
-class HelpWindow(wx.Frame):
-    """!GRASS Quickstart help window"""
-    def __init__(self, parent, id, title, size, file):
-
-        wx.Frame.__init__(self, parent=parent, id=id, title=title, size=size)
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
-
-        # text
-        helpFrame = wx.html.HtmlWindow(parent=self, id=wx.ID_ANY)
-        helpFrame.SetStandardFonts (size = 10)
-        helpFrame.SetBorders(10)
-        wx.InitAllImageHandlers()
-
-        helpFrame.LoadFile(file)
-        self.Ok = True
-
-        sizer.Add(item=helpFrame, proportion=1, flag=wx.EXPAND)
-
-        self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        #        sizer.Fit(self)
-        #        sizer.SetSizeHints(self)
-        self.Layout()
 
 class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """!Use wx.ListCtrl instead of wx.ListBox, different style for
