@@ -108,6 +108,29 @@ char *G_strchg(char *bug, char character, char new)
 }
 
 /*!
+ * \brief Copies the null-terminated string into a newly
+ * allocated string. The string is allocated using G_malloc().
+ *
+ * \param[in] string the string to duplicate
+ *
+ * \return pointer to a string that is a duplicate of the string
+ *  given to G_strdup().
+ * \return NULL if unable to allocate the required space
+ */
+char *G_strdup(const char *string)
+{
+    char *p;
+
+    p = G_malloc(strlen(string) + 1);
+
+    if (p != NULL) {
+	strcpy(p, string);
+    }
+
+    return p;
+}
+
+/*!
  * \brief Replace all occurencies of old_str in buffer with new_str
  *
  * Code example:

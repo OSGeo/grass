@@ -565,6 +565,7 @@ void G_str_to_upper(char *);
 void G_str_to_lower(char *);
 int G_str_to_sql(char *);
 char *G_squeeze(char *);
+char *G_strdup(const char *);
 
 /* system.c */
 int G_system(const char *);
