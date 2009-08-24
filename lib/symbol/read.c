@@ -193,7 +193,7 @@ void read_coor(FILE * fp, SYMBEL * e)
 
     G_debug(5, "    read_coor()");
 
-    while (fgets(buf, 500, fp) != NULL) {
+    while (G_getl2(buf, 500, fp) != 0) {
 	G_chop(buf);
 	get_key_data(buf);
 
@@ -286,7 +286,7 @@ SYMBOL *S_read(char *sname)
     current = OBJ_NONE;		/* no part */
 
     /* read file */
-    while (fgets(buf, 2000, fp) != NULL) {
+    while (G_getl2(buf, 2000, fp) != 0) {
 	G_chop(buf);
 	G_debug(3, "  BUF: %s", buf);
 	get_key_data(buf);
