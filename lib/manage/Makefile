@@ -9,4 +9,4 @@ EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
 EXTRA_LIBS = $(GISLIB) $(VECTLIB) $(G3DLIB)
 
-default: stlib $(ARCH_INCDIR)/list.h
+default: lib $(ARCH_INCDIR)/list.h
