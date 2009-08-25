@@ -195,6 +195,11 @@ void read_coor(FILE * fp, SYMBEL * e)
 
     while (G_getl2(buf, 500, fp) != 0) {
 	G_chop(buf);
+
+	/* skip empty and comment lines */
+	if ((buf[0] == '#') || (buf[0] == '\0'))
+	    continue;
+
 	get_key_data(buf);
 
 	if (strcmp(key, "END") == 0) {
@@ -288,7 +293,12 @@ SYMBOL *S_read(char *sname)
     /* read file */
     while (G_getl2(buf, 2000, fp) != 0) {
 	G_chop(buf);
-	G_debug(3, "  BUF: %s", buf);
+	G_debug(3, "  BUF: [%s]", buf);
+
+	/* skip empty and comment lines */
+	if ((buf[0] == '#') || (buf[0] == '\0'))
+	    continue;
+
 	get_key_data(buf);
 
 	if (strcmp(key, "VERSION") == 0) {
