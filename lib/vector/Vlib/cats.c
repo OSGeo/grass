@@ -75,10 +75,8 @@ struct line_cats *Vect__new_cats_struct()
    including the struct itself.
 
    \param p line_cats structure
-
-   \return 0
  */
-int Vect_destroy_cats_struct(struct line_cats *p)
+void Vect_destroy_cats_struct(struct line_cats *p)
 {
     if (p) {			/* probably a moot test */
 	if (p->n_cats) {
@@ -87,8 +85,6 @@ int Vect_destroy_cats_struct(struct line_cats *p)
 	}
 	G_free((void *)p);
     }
-
-    return 0;
 }
 
 /*!
@@ -325,11 +321,9 @@ struct cat_list *Vect_new_cat_list()
 /*!
    \brief Frees allocated cat_list memory.
 
-   \param[in] p line_cats structure
-
-   \return 0
+   \param p pointer to line_cats structure
  */
-int Vect_destroy_cat_list(struct cat_list *p)
+void Vect_destroy_cat_list(struct cat_list *p)
 {
     if (p) {			/* probably a moot test */
 	if (p->n_ranges) {
@@ -338,8 +332,6 @@ int Vect_destroy_cat_list(struct cat_list *p)
 	}
 	G_free((void *)p);
     }
-
-    return 0;
 }
 
 

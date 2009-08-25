@@ -18,6 +18,9 @@ int Vect_append_point(struct line_pnts *, double, double, double);
 int Vect_append_points(struct line_pnts *, const struct line_pnts *, int);
 int Vect_line_insert_point(struct line_pnts *, int, double, double, double);
 int Vect_line_delete_point(struct line_pnts *, int);
+int Vect_line_get_point(const struct line_pnts *, int ,
+			double *, double *, double *);
+int Vect_get_num_line_points(const struct line_pnts *);
 int Vect_line_prune(struct line_pnts *);
 int Vect_line_prune_thresh(struct line_pnts *, double);
 void Vect_line_reverse(struct line_pnts *);
@@ -25,8 +28,8 @@ int Vect_copy_xyz_to_pnts(struct line_pnts *, const double *, const double *, co
 			  int);
 int Vect_copy_pnts_to_xyz(const struct line_pnts *, double *, double *, double *,
 			  int *);
-int Vect_reset_line(struct line_pnts *);
-int Vect_destroy_line_struct(struct line_pnts *);
+void Vect_reset_line(struct line_pnts *);
+void Vect_destroy_line_struct(struct line_pnts *);
 int Vect_point_on_line(const struct line_pnts *, double, double *, double *,
 		       double *, double *, double *);
 int Vect_line_segment(const struct line_pnts *, double, double, struct line_pnts *);
@@ -36,7 +39,7 @@ double Vect_line_geodesic_length(const struct line_pnts *);
 int Vect_line_distance(const struct line_pnts *, double, double, double, int,
 		       double *, double *, double *, double *, double *,
 		       double *);
-int Vect_line_box(const struct line_pnts *, struct bound_box *);
+void Vect_line_box(const struct line_pnts *, struct bound_box *);
 void Vect_line_parallel(struct line_pnts *, double, double, int,
 			struct line_pnts *);
 void Vect_line_parallel2(struct line_pnts *, double, double,
@@ -65,7 +68,7 @@ int Vect_field_cat_del(struct line_cats *, int, int);
 int Vect_field_cat_get(const struct line_cats *, int, struct ilist *);
 int Vect_cat_in_array(int, const int *, int);
 int Vect_reset_cats(struct line_cats *);
-int Vect_destroy_cats_struct(struct line_cats *);
+void Vect_destroy_cats_struct(struct line_cats *);
 int Vect_get_area_cats(const struct Map_info *, int, struct line_cats *);
 int Vect_get_area_cat(const struct Map_info *, int, int);
 int Vect_get_line_cat(const struct Map_info *, int, int);
@@ -75,7 +78,7 @@ struct cat_list *Vect_new_cat_list(void);
 int Vect_str_to_cat_list(const char *, struct cat_list *);
 int Vect_array_to_cat_list(const int *, int, struct cat_list *);
 int Vect_cat_in_cat_list(int, const struct cat_list *);
-int Vect_destroy_cat_list(struct cat_list *);
+void Vect_destroy_cat_list(struct cat_list *);
 
 /* Vector array */
 struct varray *Vect_new_varray(int);
@@ -117,7 +120,7 @@ int Vect_list_delete(struct ilist *, int);
 int Vect_list_delete_list(struct ilist *, const struct ilist *);
 int Vect_val_in_list(const struct ilist *, int);
 int Vect_reset_list(struct ilist *);
-int Vect_destroy_list(struct ilist *);
+void Vect_destroy_list(struct ilist *);
 
 /* Bounding box (MBR) */
 int Vect_point_in_box(double, double, double, const struct bound_box *);

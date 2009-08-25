@@ -67,10 +67,8 @@ int Vect_reset_list(struct ilist *list)
  * the struct itself
  *
  * \param[in,out] list pointer to ilist structure
- *
- * \return 0
  */
-int Vect_destroy_list(struct ilist *list)
+void Vect_destroy_list(struct ilist *list)
 {
     if (list) {			/* probably a moot test */
 	if (list->alloc_values) {
@@ -79,8 +77,6 @@ int Vect_destroy_list(struct ilist *list)
 	G_free((void *)list);
     }
     list = NULL;
-
-    return 0;
 }
 
 /**
