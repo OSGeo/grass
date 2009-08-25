@@ -8,7 +8,7 @@
  *             Martin Landa, CTU in Prague, Czech Republic (v.out.ascii.db merged)
  *
  * PURPOSE:    v.out.ascii: writes GRASS vector data as ASCII files
- * COPYRIGHT:  (C) 2000-2008 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2000-2009 by the GRASS Development Team
  *
  *             This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -16,7 +16,6 @@
  *
  ****************************************************************************
  */
-/*  @(#)b_a_dig.c       2.1  6/26/87  */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,20 +43,21 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("ascii"));
     module->description =
 	_("Converts a GRASS binary vector map to a GRASS ASCII vector map.");
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
     output = G_define_standard_option(G_OPT_F_OUTPUT);
-    output->required = NO;
     output->description =
-	_("Path to resulting ASCII file or ASCII vector name if '-o' is defined");
+	_("Path to resulting ASCII file ('-' for standard output) "
+	  "or ASCII vector name if '-o' is defined");
 
     format_opt = G_define_option();
     format_opt->key = "format";
     format_opt->type = TYPE_STRING;
-    format_opt->required = NO;
+    format_opt->required = YES;
     format_opt->multiple = NO;
     format_opt->options = "point,standard";
     format_opt->answer = "point";
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Format 'point' is not supported for old version"));
     }
 
-    if (ver == 4 && output->answer == NULL) {
+    if (ver == 4 && strcmp(output->answer, "-") == 0) {
 	G_fatal_error(_("'output' must be given for old version"));
     }
 
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open vector map <%s>"),
 		      input->answer);
     
-    if (output->answer) {
+    if (strcmp(output->answer, "-") != 0) {
 	if (ver == 4) {
 	    ascii = G_fopen_new("dig_ascii", output->answer);
 	}
