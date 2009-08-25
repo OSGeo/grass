@@ -2,101 +2,52 @@
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-<h2>Table of contents</h2>
-
-Specifications:
+<b>Table of contents</b>
 
 - \subpage background
 - \subpage intro
-- \subpage libraries
- - \subpage vlib
-  - \subpage Directory_structure
+ - \subpage vector_map
+  - \subpage directory_structure
   - \subpage head_file_format
-  - \subpage Map_info
-  - \subpage Plus_head
-  - \subpage dig_head
+ - \subpage categories_layers
+ - \subpage attributes
+  - \subpage dbln_file_format
+- \subpage vlibs
+- \subpage vlib_structures
+ - \subpage Map_info
+ - \subpage Plus_head
+ - \subpage dig_head
 - \subpage feature_geom
  - \subpage ftypes
  - \subpage coor_file_format
   - \subpage coor_file_head
   - \subpage coor_file_body 
-- \subpage vlib_topology_management
+- \subpage topology_management
  - \subpage topo_file_format
   - \subpage topo_file_header
   - \subpage topo_file_body
  - \subpage topo_levels
  - \subpage topo_examples
- - \subpage vlib_topo_memory
-- \subpage vlib_spidx
+ - \subpage topo_memory
+- \subpage spidx
  - \subpage sidx_file_format
-- \subpage vlib_categories_layers
-- \subpage vlib_cidx
+- \subpage cidx
  - \subpage cidx_file_format
   - \subpage cidx_file_head
-- \subpage vlib_tin
-- \subpage vlib_attributes
+- \subpage tin
 - \subpage ogr_iface
  - \subpage frmt_file_format
  - \subpage fidx_file_format
 - \subpage grassdglib
-- \subpage vlib_ascii
-- \subpage vectmodules
- - \subpage vectmodules_oper
+- \subpage ascii
 
-\subpage vlibfunc
+- \subpage vlibfunc
 
-- \subpage area
-- \subpage array
-- \subpage box
-- \subpage break_lines
-- \subpage break_polygons
-- \subpage bridges
-- \subpage buffer
-- \subpage build
-- \subpage build_nat
-- \subpage build_ogr
-- \subpage cats
-- \subpage cindex
-- \subpage clean_nodes
-- \subpage close
-- \subpage constraint
-- \subpage dangles
-- \subpage dbcolumns
-- \subpage error
-- \subpage field
-- \subpage find
-- \subpage graph
-- \subpage header
-- \subpage hist
-- \subpage init_head
-- \subpage intersect
-- \subpage legal_vname
-- \subpage level
-- \subpage level_two
-- \subpage line
-- \subpage list
-- \subpage map
-- \subpage net
-- \subpage open
-- \subpage overlay
-- \subpage vpoly
-- \subpage read
-- \subpage remove_areas
-- \subpage remove_duplicates
-- \subpage rewind
-- \subpage select
-- \subpage sindex
-- \subpage snap
-- \subpage tin
-- \subpage type
-- \subpage delete
-- \subpage write
+- \subpage authors
 
-\subpage authors
+- \subpage references
 
-\subpage references
-
-\subpage seealso
+- \subpage seealso
 
 
 \section background Background
@@ -129,16 +80,24 @@ without requiring format conversion.
 
 The current implementation includes:   
 
-- multi-layer: features in one vector map may represent more layers and 
-    may be linked to more external tables (see \ref vlib_categories_layers);
-- 2D and 3D vector geometry with full topology support for 2D and partial topology support for 3D (see \ref vlib_topology_management);
-- multi-format: external data formats supported (SHAPE-file, OGR sources etc.);
-- portability: platform independent internal format, read- and writable on 32bit,
-      64bit etc. computer architectures;
+- <b>multi-layer</b>: features in one vector map may represent more
+    layers and may be linked to more external tables (see \ref
+    categories_layers);
+- 2D and 3D vector geometry with full topology support for 2D and
+  partial topology support for 3D (see \ref topology_management);
+- <b>multi-format</b>: external data formats supported (SHAPE-file,
+  OGR sources etc.);
+- <b>portability</b>: platform independent internal format, read- and
+      writable on 32bit, 64bit etc. computer architectures;
 - integrated \ref dglib - support for vector network analysis;
-- spatial index: based on R-tree method for fast vector geometry access (see \ref vlib_spidx);
-- multi-attribute: attributes saved in external Relational Database Management 
-      System (RDBMS) connected through DBMI library and drivers (\ref vlib_attributes);
+- <b>spatial index</b>: based on R-tree method for fast vector
+  geometry access (see \ref spidx);
+- <b>multi-attribute</b>: attributes saved in external Relational
+      Database Management System (RDBMS) connected through DBMI
+      library and drivers (\ref attributes);
+
+
+\subsection vector_map Vector map
 
 GRASS vector maps are stored in an <em>arc-node</em> representation,
 consisting of curves called arcs. An arc is stored as a series of
@@ -173,7 +132,209 @@ Topology also holds information about isles. Isles are located within an area, n
 touching the boundaries of the outer area. Isles consist of one or more areas
 and are used internally by the vector libraries to maintain correct topology of areas.
 
-\section libraries Vector libraries
+\subsubsection directory_structure Directory structure
+
+Vector map is stored in a number of data files. Vector map directory
+structure and file names were changed in GRASS 6 with respect to
+previous GRASS versions. All vector files for one vector map are
+stored in one directory:
+
+\verbatim
+$MAPSET/vector/vector_name/
+\endverbatim
+
+This directory contains these files:
+
+- <b>coor</b> - binary file, coordinates [former dig/ file] (see \ref coor_file_format)
+- <b>topo</b> - binary file, topology [former dig_plus/ file] (see \ref topo_file_format)
+- <b>sidx</b> - binary file, spatial index (see \ref sidx_file_format)
+- <b>cidx</b> - binary file, category index (see \ref cidx_file_format)
+- <b>head</b> - text file, header information [former part of dig/ file] (see \ref head_file_format)
+- <b>dbln</b> - text file, link(s) to attribute table(s) (see \ref dbln_file_format)
+- <b>hist</b> - text file, vector map change history
+- <b>frmt</b> - text file, format description (external format only)
+- <b>fidx</b> - binary file, feature index (OGR format only)
+
+\subsubsection head_file_format Head file format specification
+
+The header contains historical information, a description of the
+vector map and many other information. The file is an unordered list
+of key/value entries. The <i>key</i> is a string separated from
+<i>value</i> by a colon and optional whitespace. Keywords are:
+
+<table border="1" style="border-collapse: collapse">
+<tr><td>ORGANIZATION</td><td>organization that digitized the data</td></tr>
+<tr><td>DIGIT DATE</td><td>date the data was digitized</td></tr>
+<tr><td>DIGIT NAME</td><td>person who digitized the data</td></tr>
+<tr><td>MAP NAME</td><td>title of the original source map</td></tr>
+<tr><td>MAP DATE</td><td>date of the original source map</td></tr>
+<tr><td>MAP SCALE</td><td>scale of the original source map</td></tr>
+<tr><td>OTHER INFO</td><td>other comments about the map</td></tr>
+<tr><td>ZONE</td><td>zone of the map (e.g., UTM zone)</td></tr>
+<tr><td>MAP THRESH</td><td>digitizing threshold</td></tr>
+</table>
+
+\subsection categories_layers Categories and layers
+
+<i>Note: "layer" was called "field" in earlier version.</i>
+
+In GRASS, a "category" or "category number" is a vector feature ID
+used to link geometry to attributes which are stored in one or several
+(external) database table(s). This category number is stored into the
+vector geometry as well as a "cat" column (integer type) in each
+attribute database table. The category number is used to lookup an
+attribute assigned to a vector object. At user level, category numbers
+can be assigned to vector objects with the <tt>v.category</tt> command.
+
+In order to assign multiple attributes in different tables to vector
+objects, each map can hold multiple category numbers. This is achieved
+by assigning more than one "layer" to the map (<tt>v.db.connect</tt>
+command). The layer number determines which table to be used for
+attribute queries. For example, a cadastrial vector area map can be
+assigned on layer 1 to an attribute table containing landuse
+descriptions which are maintained by department A while layer 2 is
+assigned to an attribute table containing owner descriptions which are
+maintained by department B.
+
+Each vector feature inside a vector map has zero, one or more
+&lt;layer,category&gt; tuple(s). A user can (but not must) create
+attribute tables which are referenced by the layer, and rows which are
+essentially referenced by the &lt;layer,category&gt; pair.
+
+Categories start with 1 (category '0' is allowed for OGR
+layers). Categories do not have to be continuous.
+
+\subsection attributes Attributes
+
+The old GRASS 4.x 'dig_cats' files are not used any more and vectors'
+attributes are stored in external database. Connection with the
+database is done through drivers based on \ref dbmilib. Records in a
+table are linked to vector entities by layer and category number. The
+layer identifies table and the category identifies record.  I.e., for
+any unique combination
+
+\verbatim
+map+mapset+layer+category
+\endverbatim
+
+there exists one unique combination
+
+\verbatim
+driver+database+table+row
+\endverbatim
+
+Information about database links holds <tt>dblinks</tt> structure.
+
+\code
+struct dblinks
+{
+    struct field_info *field;   /* pointer to the first field_info structure */
+    int alloc_fields;           /* number of allocated slots */
+    int n_fields;               /* number of available fields */
+};
+\endcode
+
+The general DBMI settings are defined in the '$MAPSET/VAR' text file
+(maintained with <tt>db.connect</tt> command at user level).
+
+\subsection dbln_file_format Dbln file format specification
+
+Each vector maps has its own DBMI settings stored in the
+'$MAPSET/vector/vector_name/dbln' text file. For each pair <b>vector map +
+layer</b>, all of <b>table, key column, database, driver</b> must be
+defined in a new row. This definition must be written to
+'$MAPSET/vector/vector_name/dbln' text file. Each row in the 'dbln'
+file contains names separated by spaces in following order ([ ] -
+optional):
+
+\verbatim
+map[@mapset] layer table [key [database [driver]]]
+\endverbatim
+
+If key, database or driver are omitted (on second and higher row only)
+the last definition is used. When reading a vector map from another
+mapset (if mapset is specified along with map name), definitions in
+the related "dbln" file may overwrite the DBMI definition in the
+current mapset. This means that the map-wise definition is always
+"stronger".
+
+Wild cards <b>*</b> and <b>?</b> may be used in map and mapset names.
+
+Variables $GISDBASE, $LOCATION_NAME, $MAPSET, and $MAP may be used in
+table, key, database and driver names (function
+Vect_subst_var()). Note that $MAPSET is not the current mapset but
+mapset of the map the rule is defined for.
+
+Note that vector features in GRASS vector maps may have attributes in
+different tables or may be without attributes. Boundaries form areas
+but it may happen that some boundaries are not closed (such boundaries
+would not appear in polygon layer).  Boundaries may have
+attributes. All types may be mixed in one vector map.
+
+The link to the table is permanent and it is stored in 'dbln' file in
+vector directory. Tables are considered to be a part of the vector and
+the command <tt>g.remove</tt>, for example, deletes linked tables of
+the vector. Attributes must be joined with geometry.
+
+<b>Examples:</b>
+
+Examples are written mostly for the DBF driver, where database is full
+path to the directory with dbf files and table name is the name of dbf
+file without .dbf extension:
+
+\verbatim
+* 1 mytable id $GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP dbf
+\endverbatim
+
+This definition says that entities with category of layer 1 are linked
+to dbf tables with names "mytable.dbf" saved in vector directories of
+each map. The attribute column containing the category numbers is
+called "id".
+
+\verbatim
+* 1 $MAP id $GISDBASE/$LOCATION_NAME/$MAPSET/dbf dbf
+\endverbatim 
+
+Similar as above but all dbf files are in one directory dbf/ in mapset
+and names of dbf files are $MAP.dbf
+
+\verbatim
+water* 1 rivers id /home/grass/dbf dbf
+water* 2 lakes lakeid /home/guser/mydb
+trans* 1 roads key basedb odbc
+trans* 5 rails
+\endverbatim
+
+These definitions define more layers (called "field" in the API) for
+one vector map i.e. in one vector map may be more features linked to
+more attribute tables. Definitions on first 2 rows are applied for
+example on maps water1, water2, ... so that more maps may share one
+table.
+
+\verbatim
+water@PERMANENT 1 myrivers id /home/guser/mydbf dbf
+\endverbatim
+
+This definion overwrites the definition saved in PERMANENT/VAR and
+links the water map from PERMANENT mapset to the user's table.
+
+Modules should be written so that connections to databases for each
+vector layer are independent. It should be possible to read attributes
+of an input vector map from one database and write to some other and
+even with some other driver (should not be a problem).
+
+There are open questions, however. For one, how does one distinguish when
+new tables should be written and when not? For example, definitions:
+
+\verbatim
+river 1 river id water odbc
+river.backup* 1 NONE
+\endverbatim
+
+could be used to say that tables should not be copied for backups of
+map river because table is stored in a reliable RDBMS.
+
+\section vlibs Vector libraries
 
 Besides internal library functions there are two main libraries:
 
@@ -195,8 +356,9 @@ Old 4.x code:
 \endcode
 New 6.x/7.x functions:
 \code
-    Vect_get_area_centroid();
-    Vect_get_centroid_coor();
+    centroid = Vect_get_area_centroid(Map, area_num);
+    Vect_read_line(Map, line_p, NULL, centroid);
+    Vect_line_get_point(line_p, 0, &xx, NULL, NULL);
 \endcode
 
 In GRASS 6/7, all internal, mostly non-topological vector functions are
@@ -204,52 +366,12 @@ hidden from the modules' API (mainly dig_*(), V1_*() and V2_*()
 functions). All available Vect_*() functions are topological vector
 functions.
 
-\subsection vlib Introduction to Vlib (Vector library)
-
 <i>Note: For details please read Blazek et al. 2002 (see below) as well as the
 references in this document.</i>
 
-\subsubsection Directory_structure Directory structure
+\section vlib_structures Vector library structures
 
-Directory structure and file names are changed with respect to
-previous GRASS versions.  All vector files for one vector map are
-stored in one directory:
-
-\verbatim
-$MAPSET/vector/vector_name/
-\endverbatim
-
-This directory contains these files:
-
-- <b>coor</b> - binary file, coordinates [former dig/ file] (see \ref coor_file_format)
-- <b>topo</b> - binary file, topology [former dig_plus/ file] (see \ref topo_file_format)
-- <b>sidx</b> - binary file, spatial index (see \ref sidx_file_format)
-- <b>cidx</b> - binary file, category index (see \ref cidx_file_format)
-- <b>head</b> - text file, header information [former part of dig/ file] (see \ref head_file_format)
-- <b>dbln</b> - text file, link(s) to attribute table(s)
-- <b>hist</b> - text file, vector map change history
-- <b>frmt</b> - text file, format description (external format only)
-- <b>fidx</b> - binary file, feature index (OGR format only)
-
-\subsubsection head_file_format Head file format
-
-The file is an unordered list of key/value entries. The <i>key</i>
-is a string separated from <i>value</i> by a colon and optional
-whitespace. Key words are:<br>
-
-\verbatim
-ORGANIZATION
-DIGIT DATE
-DIGIT NAME
-MAP NAME
-MAP DATE
-MAP SCALE
-OTHER INFO
-ZONE
-MAP THRESH
-\endverbatim
-
-\subsubsection Map_info Map_info structure
+\subsection Map_info Map_info structure
 
 <tt>Map_info</tt> structure holds basic information about open vector map.
 
@@ -326,7 +448,7 @@ struct Map_info
 };
 \endcode
 
-\subsubsection Plus_head Plus_head structure
+\subsection Plus_head Plus_head structure
 
 <tt>Plus_head</tt> holds basic topology-related information about vector map.
 
@@ -470,7 +592,7 @@ struct Plus_head
 };
 \endcode
 
-\subsubsection dig_head dig_head structure
+\subsection dig_head dig_head structure
 
 <tt>dig_head</tt> holds header data of vector map (see \ref Map_info).
 
@@ -610,7 +732,7 @@ The body consists of line records:
 <tr><td>C</td><td>Char  </td><td>1</td></tr>
 </table>
 
-\section vlib_topology_management Vector library topology management
+\section topology_management Vector library topology management
 
 Topology general characteristics:
 
@@ -913,7 +1035,7 @@ Because lines are not used to build areas, we have only one
 area/centroid, instead of 4 which would be necessary in TIGER.
 
 
-\subsection vlib_topo_memory Topology memory management
+\subsection topo_memory Topology memory management
 
 Topology is generated for all kinds of vector types.  Memory is not
 released by default. The programmer can force the library to release
@@ -932,7 +1054,7 @@ to identify lines in 'coor' file. Currently it is not possible to build
 spatial index without topology.
 
 
-\section vlib_spidx Vector library spatial index management
+\section spidx Vector library spatial index management
 
 Spatial index (based on R-tree) is created with topology.
 
@@ -1084,37 +1206,7 @@ Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 </table>
 
 
-\section vlib_categories_layers Vector library categories and layers
-
-<i>Note: "layer" was called "field" in earlier version.</i>
-
-In GRASS, a "category" or "category number" is a vector feature ID
-used to link geometry to attributes which are stored in one or several
-(external) database table(s). This category number is stored into the
-vector geometry as well as a "cat" column (integer type) in each
-attribute database table. The category number is used to lookup an
-attribute assigned to a vector object. At user level, category numbers
-can be assigned to vector objects with the <tt>v.category</tt> command.
-
-In order to assign multiple attributes in different tables to vector
-objects, each map can hold multiple category numbers. This is achieved
-by assigning more than one "layer" to the map (<tt>v.db.connect</tt>
-command). The layer number determines which table to be used for
-attribute queries. For example, a cadastrial vector area map can be
-assigned on layer 1 to an attribute table containing landuse
-descriptions which are maintained by department A while layer 2 is
-assigned to an attribute table containing owner descriptions which are
-maintained by department B.
-
-Each vector feature inside a vector map has zero, one or more
-&lt;layer,category&gt; tuple(s). A user can (but not must) create
-attribute tables which are referenced by the layer, and rows which are
-essentially referenced by the &lt;layer,category&gt; pair.
-
-Categories start with 1 (category '0' is allowed for OGR
-layers). Categories do not have to be continuous.
-
-\section vlib_cidx Vector library category index management
+\section cidx Vector library category index management
 
 The category index (stored in the cidx file) improves the performance of all
 selections by cats/attributes (SQL, e.g. 'd.vect cats=27591', 'v.extract list=20000-21000').
@@ -1191,135 +1283,11 @@ Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 
 </table>
 
-\section vlib_tin Vector TINs
+\section tin Vector TINs
 
 TINs are simply created as 2D/3D vector polygons consisting of 
 3 vertices. See Vect_tin_get_z().
 
-
-\section vlib_attributes Vector library and attributes
-
-The old GRASS 4.x 'dig_cats' files are not used any more and vectors'
-attributes are stored in external database.  Connection with the
-database is done through drivers based on \ref dbmilib (DBF, SQLite,
-PostgreSQL, MySQL and ODBC drivers are available at this
-time). Records in a table are linked to vector entities by layer and
-category number. The layer identifies table and the category
-identifies record.  I.e., for any unique combination
-\verbatim
-map+mapset+layer+category,
-\endverbatim
-there exists one unique combination
-\verbatim
-driver+database+table+row.
-\endverbatim
-
-Information about database links holds <tt>dblinks</tt> structure.
-
-\code
-struct dblinks
-{
-    struct field_info *field;   /* pointer to the first field_info structure */
-    int alloc_fields;           /* number of allocated slots */
-    int n_fields;               /* number of available fields */
-};
-\endcode
-
-The general DBMI settings are defined in the '$MAPSET/VAR' text file
-(maintained with <tt>db.connect</tt> command at user level).
-
-Each vector maps has its own DBMI settings stored in the
-'$MAPSET/vector/vector_name/dbln' text file. For each pair <b>map +
-layer</b>, all of <b>table, key column, database, driver</b> must be
-defined in a new row. This definition must be written to
-'$MAPSET/vector/vector_name/dbln' text file.  Each row in the 'dbln'
-file contains names separated by spaces in following order ([ ] -
-optional):
-
-\verbatim
-map[@mapset] layer table [key [database [driver]]]
-\endverbatim
-
-If key, database or driver are omitted (on second and higher row only)
-the last definition is used. When reading a vector map from another
-mapset (if mapset is specified along with map name), definitions in
-the related "dbln" file may overwrite the DBMI definition in the
-current mapset. This means that the map-wise definition is always
-"stronger".
-
-Wild cards <B>*</B> and <B>?</B> may be used in map and mapset names.
-
-Variables <B>$GISDBASE, $LOCATION_NAME, $MAPSET, $MAP</B> may be used
-in table, key, database and driver names (function
-Vect_subst_var()). Note that $MAPSET is not the current mapset but
-mapset of the map the rule is defined for.
-
-Note that vector features in GRASS vector maps may have attributes in
-different tables or may be without attributes. Boundaries form areas
-but it may happen that some boundaries are not closed (such boundaries
-would not appear in polygon layer).  Boundaries may have
-attributes. All types may be mixed in one vector map.
-
-The link to the table is permanent and it is stored in 'dbln' file in
-vector directory. Tables are considered to be a part of the vector and
-the command <tt>g.remove</tt>, for example, deletes linked tables of
-the vector.  Attributes must be joined with geometry.
-
-<b>Examples:</b>
-
-Examples are written mostly for the DBF driver, where database is full
-path to the directory with dbf files and table name is the name of dbf
-file without .dbf extension:
-
-\verbatim
-* 1 mytable id $GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP dbf
-\endverbatim
-
-This definition says that entities with category of layer 1 are linked
-to dbf tables with names "mytable.dbf" saved in vector directories of
-each map. The attribute column containing the category numbers is
-called "id".
-
-\verbatim
-* 1 $MAP id $GISDBASE/$LOCATION_NAME/$MAPSET/dbf dbf
-\endverbatim 
-
-Similar as above but all dbf files are in one directory dbf/ in mapset
-and names of dbf files are $MAP.dbf
-
-\verbatim
-water* 1 rivers id /home/grass/dbf dbf
-water* 2 lakes lakeid /home/guser/mydb
-trans* 1 roads key basedb odbc
-trans* 5 rails
-\endverbatim
-
-These definitions define more layers (called "field" in the API) for one map 
-i.e. in one map may be more features linked to more tables. Definitions on
-first 2 rows are applied for example on maps water1, water2, ... so that more
-maps may share one table.
-
-\verbatim
-water@PERMANENT 1 myrivers id /home/guser/mydbf dbf
-\endverbatim
-
-This definion overwrites the definition saved in PERMANENT/VAR and 
-links the water map from PERMANENT mapset to the user's table.
-
-Modules should be written so that connections to databases for each
-vector layer are independent. It should be possible to read attributes
-of an input vector map from one database and write to some other and
-even with some other driver (should not be a problem).
-
-There are open questions, however. For one, how does one distinguish when
-new tables should be written and when not? For example, definitions:<BR>
-\verbatim
-river 1 river id water odbc
-river.backup* 1 NONE
-\endverbatim
-
-could be used to say that tables should not be copied for backups of
-map river because table is stored in a reliable RDBMS. 
 
 \section ogr_iface OGR interface
 
@@ -1403,15 +1371,19 @@ Related vector functions are:
  Vect_net_shortest_path_coor().
 
 
-\section vlib_ascii Vector ASCII Format Specifications
+\section ascii Vector ASCII Format Specifications
 
-<b>The GRASS ASCII vector map format</b> may contain a mix of primitives
-including points, lines, boundaries, centroids, areas, faces, and
-kernels. The GRASS ASCII vector format may contain a header with
-various metadata (see example below).
+The GRASS ASCII vector map format may contain a mix of primitives
+including points, lines, boundaries, centroids, faces, and
+kernels. The format may also contain a header with various metadata
+(see example below).
 
-The header is similar as the head file of vector binary format but
-contains bounding box also. Key words are:
+Vector map can be converted to the ASCII representation at user level
+by <tt>v.out.ascii format=standard</tt> command.
+
+
+The header is similar as the head file of vector binary format (see
+\ref head_file_format) but contains bounding box also. Keywords are:
 
 \verbatim
 ORGANIZATION
@@ -1427,6 +1399,20 @@ EAST EDGE
 SOUTH EDGE
 NORTH EDGE
 MAP THRESH
+\endverbatim
+
+Example:
+
+\verbatim
+ORGANIZATION: NC OneMap
+DIGIT DATE:   
+DIGIT NAME:   helena
+MAP NAME:     North Carolina selected bridges (points map)
+MAP DATE:     Mon Nov  6 15:32:39 2006
+MAP SCALE:    1
+OTHER INFO:   
+ZONE:         0
+MAP THRESH:   0.000000
 \endverbatim
 
 The body begins with the row:
@@ -1471,57 +1457,83 @@ The order of coordinates is
   X Y [Z]
 \endverbatim
 
-\section vectmodules Vector modules and their parameters/flags
+Note: The points are stored as y, x (i.e., east, north), which is the
+reserve of the way GRASS usually represents geographic coordinates.
 
-A module is a GRASS command invoked by the user.
+Example:
 
-\subsection vectmodules_oper Modules operation
+\verbatim
+P  1 1
+ 375171.4992779 317756.72097616
+ 1     1 
+B  5
+ 637740       219580      
+ 639530       219580      
+ 639530       221230      
+ 637740       221230      
+ 637740       219580      
+C  1 1
+ 638635       220405      
+ 1     2
+\endverbatim
 
-Each module which modifies and writes data must read from
-<b>input=</b> and write to <b>output=</b> so that data may not be
-lost. For example <tt>v.spag</tt> works on <b>map=</b> at in GRASS GIS
-5.0 but if program (system) crashes or threshold was specified
-incorrectly and vector was not backuped, data were lost. In this case
-</b>map=</b> option should be replaced by <b>input=</b> and
-<b>output=</b>.
-
-Topology is always built by default if the coor file was modified.
-
-Dimensionality is generally kept. Input 2D vector is written as 2D, 3D
-as 3D. There are a few modules which change the dimension on purpose.
-
-\subsection vectmodulesopt Modules parameters/flags
-
-<b>-b</b> do not build topo file; by default topo file is written
-
-<b>-t</b> create new table, default
-
-<b>-u</b> don't create new table
-
-<b>-z</b> write 3D vector map (if input was 2D)
-
-
-<b>map=</b> input vector map for modules without output
-
-<b>input=</b> input vector map
-
-<b>output=</b> output vector map
-
-<b>type=</b>  type of elements:  point,line,boundary,centroid,area
-
-<b>cat=</b> category or category list (example: 1,5,9-13,35)
-
-<b>layer=</b> layer number
-
-<b>where=</b> condition of SQL statement for selection of records
-
-<b>column=</b> column name (in external table)
-
+In this example, the first vector feature is a point with category
+number 1. The second vector feature is a boundary composed by 5
+points. The third feature is a centroid with category number 2. The
+boundary and the centroid form an area with category number 2. All
+vector feature mentioned above are located in layer 1.
 
 \section vlibfunc List of vector library functions
 
 The Vect_*() functions are the programmer's API for GRASS vector
 programming.
+
+- \subpage area
+- \subpage array
+- \subpage box
+- \subpage break_lines
+- \subpage break_polygons
+- \subpage bridges
+- \subpage buffer
+- \subpage build
+- \subpage build_nat
+- \subpage build_ogr
+- \subpage cats
+- \subpage cindex
+- \subpage clean_nodes
+- \subpage close
+- \subpage constraint
+- \subpage dangles
+- \subpage dbcolumns
+- \subpage error
+- \subpage field
+- \subpage find
+- \subpage graph
+- \subpage header
+- \subpage hist
+- \subpage init_head
+- \subpage intersect
+- \subpage legal_vname
+- \subpage level
+- \subpage level_two
+- \subpage line
+- \subpage list
+- \subpage map
+- \subpage net
+- \subpage open
+- \subpage overlay
+- \subpage vpoly
+- \subpage read
+- \subpage remove_areas
+- \subpage remove_duplicates
+- \subpage rewind
+- \subpage select
+- \subpage sindex
+- \subpage snap
+- \subpage tin
+- \subpage type
+- \subpage delete
+- \subpage write
 
 
 \section area Vector area functions
@@ -1978,6 +1990,8 @@ programming.
 
  - Vect_destroy_line_struct()
 
+ - Vect_get_num_line_points()
+
  - Vect_line_box()
 
  - Vect_line_delete_point()
@@ -1985,6 +1999,8 @@ programming.
  - Vect_line_distance()
 
  - Vect_line_geodesic_length()
+
+ - Vect_line_get_point()
 
  - Vect_line_insert_point()
 

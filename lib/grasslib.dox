@@ -4,34 +4,36 @@
      * updated 8/2005, 2006, 2007, 2008
   -->
 
-<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic Resources
-Analysis Support System</b>) is an open source, Free Software
-<em>Geographical Information System</em> (GIS) with raster,
+<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
+Resources Analysis Support System</b>) is an open source, Free
+Software <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
 functionality that operates on various platforms through a graphical
-user interface (GUI) or command line interface (CLI). It is released under GNU
-General Public License (GPL).
+user interface (GUI) or command line interface (CLI). It is released
+under GNU General Public License (GPL).
 
-This manual introduces the reader to the <i>Geographic Resources Analysis 
-Support System</i> from the programming perspective. Design theory, system
-support libraries, system maintenance, and system enhancement are all 
-presented. Standard GRASS 4.x conventions are still used in much of the
-code. This work is part of ongoing research being performed by the 
-<a href="http://grass.osgeo.org/community/team.php">GRASS Development Team</a>,
-an international team of programmers,
-GRASS module authors are cited within their module's source code and the 
-contributed manual pages.
+This manual introduces the reader to the <i>Geographic Resources
+Analysis Support System</i> from the programming perspective. Design
+theory, system support libraries, system maintenance, and system
+enhancement are all presented. Standard GRASS 4.x conventions are
+still used in much of the code. This work is part of ongoing research
+being performed by the <a
+href="http://grass.osgeo.org/community/team.php">GRASS Development
+Team</a>, an international team of programmers, GRASS module authors
+are cited within their module's source code and the contributed manual
+pages.
 
-&copy; 2000-2009 Markus Neteler / GRASS Development Team<br>
-Published under GNU Free Documentation License (GFDL)
+&copy; 2000-2009 Markus Neteler / GRASS Development Team<br> Published
+under GNU Free Documentation License (GFDL)
 http://www.fsf.org/copyleft/fdl.html
 
-This manual comes with ABSOLUTELY NO WARRANTY. The development of GRASS 
-software and this manual is kindly supported by the
-<a href="http://www.osgeo.org">Open Source Geospatial Foundation</a>,
-who provides the GRASS main infrastructure.
+This manual comes with ABSOLUTELY NO WARRANTY. The development of
+GRASS software and this manual is kindly supported by the <a
+href="http://www.osgeo.org">Open Source Geospatial Foundation</a>, who
+provides the GRASS main infrastructure.
 
-Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
+Main web site: <a
+href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 <b>Table of contents</b>
 
@@ -44,10 +46,12 @@ Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - \subpage Makefile_Variables
  - \subpage Constructing_a_Makefile
  - \subpage Multiple_Architecture_Conventions
+- \subpage vectmodules
+ - \subpage vectmodules_oper
 
-<p>
-<i>Missing entries below are either not yet uploaded to SVN (need to be migrated
-from GRASS 5 Programmer's manual) or are simply undocumented.</i>
+<i>Missing entries below are either not yet uploaded to SVN (need to
+be migrated from GRASS 5 Programmer's manual) or are simply
+undocumented.</i>
 
 <!-- original:
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
@@ -305,5 +309,51 @@ Linux architectures.
 
 Note that 'arch' is defined for a specific architecture during setup and 
 compilation of GRASS, it is not limited to sun4 or any specific string.
+
+\section vectmodules Vector modules and their parameters/flags
+
+A module is a GRASS command invoked by the user.
+
+\subsection vectmodules_oper Modules operation
+
+Each module which modifies and writes data must read from
+<b>input=</b> and write to <b>output=</b> so that data may not be
+lost. For example <tt>v.spag</tt> works on <b>map=</b> at in GRASS GIS
+5.0 but if program (system) crashes or threshold was specified
+incorrectly and vector was not backuped, data were lost. In this case
+</b>map=</b> option should be replaced by <b>input=</b> and
+<b>output=</b>.
+
+Topology is always built by default if the coor file was modified.
+
+Dimensionality is generally kept. Input 2D vector is written as 2D, 3D
+as 3D. There are a few modules which change the dimension on purpose.
+
+\subsection vectmodulesopt Modules parameters/flags
+
+<b>-b</b> do not build topo file; by default topo file is written
+
+<b>-t</b> create new table, default
+
+<b>-u</b> don't create new table
+
+<b>-z</b> write 3D vector map (if input was 2D)
+
+
+<b>map=</b> input vector map for modules without output
+
+<b>input=</b> input vector map
+
+<b>output=</b> output vector map
+
+<b>type=</b>  type of elements:  point,line,boundary,centroid,area
+
+<b>cat=</b> category or category list (example: 1,5,9-13,35)
+
+<b>layer=</b> layer number
+
+<b>where=</b> condition of SQL statement for selection of records
+
+<b>column=</b> column name (in external table)
 
 */
