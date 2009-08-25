@@ -27,7 +27,7 @@ POLYGONS and STRINGS are drawn using the default color and fill color
 (specified in module options such as 'd.vect color='). This color may be 
 overwritten by using the COLOR and FCOLOR keywords.
 
-
+Blank lines and lines starting with a #hash will be ignored.
 
 ---- DESCRIPTION OF OBJECTS ----
 
