@@ -1890,7 +1890,7 @@ class AttributeManager(wx.Frame):
         """!SQL Builder button pressed"""
         self.builder = sqlbuilder.SQLFrame(parent=self, id=wx.ID_ANY,
                                            title=_("SQL Builder"),
-                                           vectormap=self.vectorName)
+                                           vectmap=self.vectorName)
     def OnTextEnter(self, event):
         pass
 
