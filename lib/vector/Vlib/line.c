@@ -1,7 +1,7 @@
 /*!
-   \file line.c
+   \file vector/Vlib/line.c
 
-   \brief Vector library - geometry manipulation
+   \brief Vector library - vector feature geometry 
 
    (C) 2001-2009 by the GRASS Development Team
 
@@ -10,6 +10,7 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author Some updates for GRASS 7 by Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/config.h>
@@ -20,34 +21,26 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Creates and initializes a struct line_pnts.
+  \brief Creates and initializes a struct line_pnts (internal use only)
 
-   Use Vect_new_line_struct() instead.
+  Use Vect_new_line_struct() instead.
 
-   This structure is used for reading and writing vector lines and
-   polygons.  The library routines handle all memory allocation.  If
-   3 lines in memory are needed at the same time, then simply 3
-   line_pnts structures have to be used
-
-   \param void
-
-   \return pointer to line_pnts
-   \return NULL on error
+  \return pointer to allocated line_pnts structure
+  \return NULL on error
  */
 struct line_pnts *Vect__new_line_struct(void);
 
 /*!
-   \brief Creates and initializes a struct line_pnts.
+  \brief Creates and initializes a line_pnts structure
 
-   This structure is used for reading and writing vector lines and
-   polygons.  The library routines handle all memory allocation.  If
-   3 lines in memory are needed at the same time, then simply 3
-   line_pnts structures have to be used
+  This structure is used for reading and writing vector lines and
+  polygons.  The library routines handle all memory allocation.  If 3
+  lines in memory are needed at the same time, then simply 3 line_pnts
+  structures have to be used.
 
-   \param void
+  Calls G_fatal_error() on error.
 
-   \return pointer to line_pnts
-   \return NULL on error
+  \return pointer to line_pnts
  */
 struct line_pnts *Vect_new_line_struct()
 {
@@ -76,13 +69,12 @@ struct line_pnts *Vect__new_line_struct()
 }
 
 /*!
-   \brief Frees all memory associated with a struct line_pnts, including the struct itself
+   \brief Frees all memory associated with a line_pnts structure,
+   including the structure itself
 
    \param p pointer to line_pnts structure
-
-   \return 0
  */
-int Vect_destroy_line_struct(struct line_pnts *p)
+void Vect_destroy_line_struct(struct line_pnts *p)
 {
     if (p) {			/* probably a moot test */
 	if (p->alloc_points) {
@@ -92,28 +84,25 @@ int Vect_destroy_line_struct(struct line_pnts *p)
 	}
 	G_free((char *)p);
     }
-
-    return 0;
 }
 
 /*!
-   \brief Copy points from array to line structure
+   \brief Copy points from array to line_pnts structure
 
-   \param Points line structure
-   \param x,y,z  coordinates
+   \param Points pointer to line_ptns structure
+   \param x,y,z  array of coordinates
    \param number of points to be copied
 
    \return 0 on success
    \return -1 on out of memory
  */
-int
-Vect_copy_xyz_to_pnts(struct line_pnts *Points, const double *x, const double *y,
-		      const double *z, int n)
+int Vect_copy_xyz_to_pnts(struct line_pnts *Points, const double *x, const double *y,
+			  const double *z, int n)
 {
-    register int i;
+    int i;
 
     if (0 > dig_alloc_points(Points, n))
-	return (-1);
+	return -1;
 
     for (i = 0; i < n; i++) {
 	Points->x[i] = x[i];
@@ -124,41 +113,36 @@ Vect_copy_xyz_to_pnts(struct line_pnts *Points, const double *x, const double *y
 	    Points->z[i] = 0;
 	Points->n_points = n;
     }
-
-    return (0);
-}
-
-
-/*!
-   \brief Reset line
-
-   Make sure line structure is clean to be re-used, i.e. it
-   has no points associated with it Points must have previously been
-   created with Vect_new_line_struct().
-
-   \param Points line to be reset
-
-   \return 0
- */
-int Vect_reset_line(struct line_pnts *Points)
-{
-    Points->n_points = 0;
-
+    
     return 0;
 }
 
+
 /*!
-   \brief Appends one point to the end of a line.
+  \brief Reset line
 
-   Returns new number of points or -1 on out of memory Note, this will
-   append to whatever is in line struct.  If you are re-using a line
-   struct, be sure to clear out old data first by calling
-   Vect_reset_line().
+  Make sure line structure is clean to be re-used, i.e. it has no
+  points associated with it Points must have previously been created
+  with Vect_new_line_struct().
 
-   \param Points line
-   \param x,y,z point coordinates to be added
+  \param Points pointer to line_pnts structure to be reset
+ */
+void Vect_reset_line(struct line_pnts *Points)
+{
+    Points->n_points = 0;
+}
 
-   \return number of points
+/*!
+  \brief Appends one point to the end of a line.
+
+  If you are re-using a line struct, be sure to clear out old data
+  first by calling Vect_reset_line().
+  
+  \param Points pointer to line_pnts structure
+  \param x,y,z point coordinates to be added
+
+  \return number of points
+  \return -1 on error (out of memory)
  */
 int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
 {
@@ -176,27 +160,27 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
 }
 
 /*!
-   \brief Insert new point at index position and move all old points at that position and above up
+  \brief Insert new point at index position and move all old points
+  at that position and above up
+   
+  \param Points pointer to line_pnts structure 
+  \param index (from 0 to Points->n_points-1)
+  \param x,y,z point coordinates
 
-   \param Points line
-   \param index (from 0 to Points->n_points-1)
-   \param x,y,z point coordinates
-
-   \return number of points
-   \return -1 on error (alocation)
+  \return number of points
+  \return -1 on error (alocation)
  */
-int
-Vect_line_insert_point(struct line_pnts *Points, int index, double x,
-		       double y, double z)
+int Vect_line_insert_point(struct line_pnts *Points, int index, double x,
+			   double y, double z)
 {
-    register int n;
+    int n;
 
     if (index < 0 || index > Points->n_points - 1)
-	G_fatal_error("%s Vect_line_insert_point()",
+	G_fatal_error("Vect_line_insert_point(): %s",
 		      _("Index out of range in"));
 
     if (0 > dig_alloc_points(Points, Points->n_points + 1))
-	return (-1);
+	return -1;
 
     /* move up */
     for (n = Points->n_points; n > index; n--) {
@@ -208,25 +192,26 @@ Vect_line_insert_point(struct line_pnts *Points, int index, double x,
     Points->x[index] = x;
     Points->y[index] = y;
     Points->z[index] = z;
+    
     return ++(Points->n_points);
 }
 
 /*!
-   \brief Delete point at given index and move all points above down
+  \brief Delete point at given index and move all points above down
 
-   \param Points line
-   \param index (from 0 to Points->n_points-1)
+  \param Points pointer to line_pnts structure
+  \param index point (from 0 to Points->n_points-1)
 
-   \return number of points
+  \return number of points
  */
 int Vect_line_delete_point(struct line_pnts *Points, int index)
 {
-    register int n;
-
+    int n;
+    
     if (index < 0 || index > Points->n_points - 1)
-	G_fatal_error("%s Vect_line_insert_point()",
+	G_fatal_error("Vect_line_insert_point(): %s",
 		      _("Index out of range in"));
-
+    
     if (Points->n_points == 0)
 	return 0;
 
@@ -236,14 +221,56 @@ int Vect_line_delete_point(struct line_pnts *Points, int index)
 	Points->y[n] = Points->y[n + 1];
 	Points->z[n] = Points->z[n + 1];
     }
-
+    
     return --(Points->n_points);
+}
+
+/*!
+  \brief Get line point of given index
+
+  Calls G_fatal_error() when index is not range in.
+
+  \param Points pointer to line_pnts structure
+  \param index point index (from 0 to Points->n_points-1)
+  \param x pointer to x coordinate or NULL
+  \param y pointer to y coordinate or NULL
+  \param z pointer to z coordinate or NULL
+
+  \return number of points
+*/
+int Vect_line_get_point(const struct line_pnts *Points, int index,
+			double *x, double *y, double *z)
+{
+    if (index < 0 || index > Points->n_points - 1)
+	G_fatal_error("Vect_line_get_point(): %s",
+		      _("Index out of range in"));
+    
+    if (x)
+	*x = Points->x[index];
+    if (y)
+	*y = Points->y[index];
+    if (z)
+	*z = Points->z[index];
+    
+    return Points->n_points;
+}
+
+/*!
+  \brief Get number of line points
+
+  \param Points pointer to line_pnts structure
+  
+  \return number of points
+*/
+int Vect_get_num_line_points(const struct line_pnts *Points)
+{
+    return Points->n_points;
 }
 
 /*!
    \brief Remove duplicate points, i.e. zero length segments
 
-   \param Points line
+   \param Points pointer to line_pnts structure
 
    \return number of points
  */
@@ -272,7 +299,7 @@ int Vect_line_prune(struct line_pnts *Points)
 /*!
    \brief Remove points in threshold
 
-   \param Points line
+   \param Points pointer to line_pnts structure
    \param threshold threshold value
 
    \return number of points in result
@@ -290,22 +317,21 @@ int Vect_line_prune_thresh(struct line_pnts *Points, double threshold)
 }
 
 /*!
-   \brief Appends points to the end of a line.
+  \brief Appends points to the end of a line.
+  
+  Note, this will append to whatever is in line_pnts structure. If you
+  are re-using a line struct, be sure to clear out old data first by
+  calling Vect_reset_line().
 
-   Note, this will append to whatever is in line struct.  If you are
-   re-using a line struct, be sure to clear out old data first by
-   calling Vect_reset_line().
-
-   \param Points line
-   \param APoints points to be included
-   \param direction direction (GV_FORWARD, GV_BACKWARD)
-
-   \return new number of points
-   \return -1 on out of memory
- */
-int
-Vect_append_points(struct line_pnts *Points, const struct line_pnts *APoints,
-		   int direction)
+  \param Points pointer to line_pnts structure
+  \param APoints points to be included
+  \param direction direction (GV_FORWARD, GV_BACKWARD)
+  
+  \return new number of points
+  \return -1 on out of memory
+*/
+int Vect_append_points(struct line_pnts *Points, const struct line_pnts *APoints,
+		       int direction)
 {
     int i, n, on, an;
 
@@ -338,23 +364,22 @@ Vect_append_points(struct line_pnts *Points, const struct line_pnts *APoints,
 
 
 /*!
-   \brief Copy points from line structure to array
+  \brief Copy points from line structure to array
 
-   x/y/z arrays MUST be at least as large as Points->n_points
+  x/y/z arrays MUST be at least as large as Points->n_points
 
-   Also note that  n  is a pointer to int.
+  Also note that  n  is a pointer to int.
 
-   \param Points line
-   \param x,y,z coordinates arrays
-   \param n number of points
-
-   \return number of points copied
- */
-int
-Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x, double *y,
-		      double *z, int *n)
+  \param Points pointer to line_pnts structure
+  \param x,y,z coordinates arrays
+  \param n number of points
+  
+  \return number of points copied
+*/
+int Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x, double *y,
+			  double *z, int *n)
 {
-    register int i;
+    int i;
 
     for (i = 0; i < *n; i++) {
 	x[i] = Points->x[i];
@@ -368,26 +393,24 @@ Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x, double *y,
 }
 
 /*!
-   \brief  Find point on line in the specified distance.
+  \brief  Find point on line in the specified distance.
 
-   From the begining, measured along line.
+  From the begining, measured along line.
 
-   If the distance is greater than line length or negative, error is returned.
+  If the distance is greater than line length or negative, error is returned.
 
-   \param Points line
-   \param distance distance value
-   \param x,y,z pointers to point coordinates or NULL
-   \param angle pointer to angle of line in that point (radians, counter clockwise from x axis) or NULL
-   \param slope pointer to slope angle in radians (positive up)
-
-   \return number of segment the point is on (first is 1),
-   \return 0 error when point is outside the line 
-
+  \param Points pointer to line_pnts structure
+  \param distance distance value
+  \param x,y,z pointers to point coordinates or NULL
+  \param angle pointer to angle of line in that point (radians, counter clockwise from x axis) or NULL
+  \param slope pointer to slope angle in radians (positive up)
+  
+  \return number of segment the point is on (first is 1),
+  \return 0 error when point is outside the line 
  */
-int
-Vect_point_on_line(const struct line_pnts *Points, double distance,
-		   double *x, double *y, double *z, double *angle,
-		   double *slope)
+int Vect_point_on_line(const struct line_pnts *Points, double distance,
+		       double *x, double *y, double *z, double *angle,
+		       double *slope)
 {
     int j, np, seg = 0;
     double dist = 0, length;
@@ -472,25 +495,24 @@ Vect_point_on_line(const struct line_pnts *Points, double distance,
 }
 
 /*!
-   \brief Create line segment.
-
-   Creates segment of InPoints from start to end measured along the
-   line and write it to OutPoints.
-
-   If the distance is greater than line length or negative, error is
-   returned.
-
-   \param InPoints input line
-   \param start segment number
-   \param end segment number
-   \param OutPoints output line
-
-   \return 1 success
-   \return 0 error when start > length or end < 0 or start < 0 or end > length
- */
-int
-Vect_line_segment(const struct line_pnts *InPoints, double start, double end,
-		  struct line_pnts *OutPoints)
+  \brief Create line segment.
+  
+  Creates segment of InPoints from start to end measured along the
+  line and write it to OutPoints.
+  
+  If the distance is greater than line length or negative, error is
+  returned.
+  
+  \param InPoints input line
+  \param start segment number
+  \param end segment number
+  \param OutPoints output line
+  
+  \return 1 success
+  \return 0 error when start > length or end < 0 or start < 0 or end > length
+*/
+int Vect_line_segment(const struct line_pnts *InPoints, double start, double end,
+		      struct line_pnts *OutPoints)
 {
     int i, seg1, seg2;
     double length, tmp;
@@ -538,13 +560,13 @@ Vect_line_segment(const struct line_pnts *InPoints, double start, double end,
 }
 
 /*!
-   \brief Calculate line length, 3D-length in case of 3D vector line
+  \brief Calculate line length, 3D-length in case of 3D vector line
 
-   For Lat-Long use Vect_line_geodesic_length() instead.
-
-   \param Points line geometry
-
-   \return line length
+  For Lat-Long use Vect_line_geodesic_length() instead.
+  
+  \param Points pointer to line_pnts structure geometry
+  
+  \return line length
  */
 double Vect_line_length(const struct line_pnts *Points)
 {
@@ -566,14 +588,14 @@ double Vect_line_length(const struct line_pnts *Points)
 
 
 /*!
-   \brief Calculate line length.
-
-   If projection is LL, the length is measured along the geodesic.
-
-   \param Points line geometry
-
-   \return line length
- */
+  \brief Calculate line length.
+  
+  If projection is LL, the length is measured along the geodesic.
+  
+  \param Points pointer to line_pnts structure geometry
+  
+  \return line length
+*/
 double Vect_line_geodesic_length(const struct line_pnts *Points)
 {
     int j, dc;
@@ -603,37 +625,36 @@ double Vect_line_geodesic_length(const struct line_pnts *Points)
 }
 
 /*!
-   \brief Calculate line distance.
-
-   Sets (if not null):
+  \brief Calculate line distance.
+  
+  Sets (if not null):
    - px, py - point on line,
    - dist   - distance to line,
    - spdist - distance to point on line from segment beginning,
    - sldist - distance to point on line form line beginning along line
 
-   \param points line
-   \param ux,uy,uz point coordinates
-   \param with_z flag if to use z coordinate (3D calculation)
-   \param[out] px,py,pz point on line
-   \param[out] dist distance to line,
-   \param[out] spdist distance of point from segment beginning
-   \param[out] lpdist distance of point from line
+  \param points pointer to line_pnts structure
+  \param ux,uy,uz point coordinates
+  \param with_z flag if to use z coordinate (3D calculation)
+  \param[out] px,py,pz point on line
+  \param[out] dist distance to line,
+  \param[out] spdist distance of point from segment beginning
+  \param[out] lpdist distance of point from line
 
-   \return nearest segment (first is 1)
+  \return nearest segment (first is 1)
  */
-int
-Vect_line_distance(const struct line_pnts *points,
-		   double ux, double uy, double uz,
-		   int with_z,
-		   double *px, double *py, double *pz,
-		   double *dist, double *spdist, double *lpdist)
+int Vect_line_distance(const struct line_pnts *points,
+		       double ux, double uy, double uz,
+		       int with_z,
+		       double *px, double *py, double *pz,
+		       double *dist, double *spdist, double *lpdist)
 {
-    register int i;
-    register double distance;
-    register double new_dist;
+    int i;
+    double distance;
+    double new_dist;
     double tpx, tpy, tpz, tdist, tspdist, tlpdist = 0;
     double dx, dy, dz;
-    register int n_points;
+    int n_points;
     int segment;
 
     n_points = points->n_points;
@@ -726,16 +747,16 @@ Vect_line_distance(const struct line_pnts *points,
 
 
 /*!
-   \brief Calculate distance of 2 points
-
-   Simply uses Pythagoras.
-
-   \param x1,y1,z1 first point
-   \param x2,y2,z2 second point
-   \param with_z use z coordinate
-
-   \return distance
- */
+  \brief Calculate distance of 2 points
+  
+  Simply uses Pythagoras.
+  
+  \param x1,y1,z1 first point
+  \param x2,y2,z2 second point
+  \param with_z use z coordinate
+  
+  \return distance
+*/
 double Vect_points_distance(double x1, double y1, double z1,	/* point 1 */
 			    double x2, double y2, double z2,	/* point 2 */
 			    int with_z)
@@ -755,26 +776,21 @@ double Vect_points_distance(double x1, double y1, double z1,	/* point 1 */
 }
 
 /*!
-   \brief Get bounding box of line
-
-   \param Points line
-   \param[out] Box bounding box
-
-   \return 0
- */
-int Vect_line_box(const struct line_pnts *Points, struct bound_box * Box)
+  \brief Get bounding box of line
+  
+  \param Points pointer to line_pnts structure
+  \param[out] Box bounding box
+*/
+void Vect_line_box(const struct line_pnts *Points, struct bound_box *Box)
 {
     dig_line_box(Points, Box);
-    return 0;
 }
 
 /*!
-   \brief Reverse the order of vertices
-
-   \param Points line to be changed
-
-   \return void
- */
+  \brief Reverse the order of vertices
+  
+  \param Points pointer to line_pnts structure to be changed
+*/
 void Vect_line_reverse(struct line_pnts *Points)
 {
     int i, j, np;
@@ -797,14 +813,14 @@ void Vect_line_reverse(struct line_pnts *Points)
 }
 
 /*!
-   \brief Fetches FIRST category number for given vector line and field
+  \brief Fetches FIRST category number for given vector line and field
+  
+  \param Map pointer to Map_info structure
+  \param line line id
+  \param field layer number
 
-   \param Map vector map
-   \param line line id
-   \param field layer number
-
-   \return -1 no category
-   \return category number (>=0)
+  \return -1 no category
+  \return category number (>=0)
  */
 int Vect_get_line_cat(const struct Map_info *Map, int line, int field)
 {
