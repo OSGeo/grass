@@ -7740,22 +7740,22 @@ ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$GEOS_LIBS $LDFLAGS"
 
 
-echo $ac_n "checking for initGEOS in -lgeos_c""... $ac_c" 1>&6
-echo "configure:7745: checking for initGEOS in -lgeos_c" >&5
-ac_lib_var=`echo geos_c'_'initGEOS | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for GEOSGeom_createLinearRing in -lgeos""... $ac_c" 1>&6
+echo "configure:7745: checking for GEOSGeom_createLinearRing in -lgeos" >&5
+ac_lib_var=`echo geos'_'GEOSGeom_createLinearRing | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
-LIBS="-lgeos_c  $LIBS"
+LIBS="-lgeos  $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 7751 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
-char initGEOS();
+char GEOSGeom_createLinearRing();
 
 int main() {
-initGEOS()
+GEOSGeom_createLinearRing()
 ; return 0; }
 EOF
 if { (eval echo configure:7762: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
@@ -7772,7 +7772,7 @@ LIBS="$ac_save_LIBS"
 
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  GEOS_LIBS="$GEOS_LIBS -lgeos_c "
+  GEOS_LIBS="$GEOS_LIBS -lgeos "
 else
   echo "$ac_t""no" 1>&6
 
