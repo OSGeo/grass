@@ -3,9 +3,13 @@
  *
  * MODULE:       db.select
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>, Stephan Holl
- * PURPOSE:      process one sql select statement
- * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Markus Neteler <neteler itc.it>
+ *               Stephan Holl
+ * PURPOSE:      Process one sql select statement
+ * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -14,16 +18,17 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
+
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/codes.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 struct
 {
-    char *driver, *database, *table, *sql, *fs, *vs, *nv, *input;
+    char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
     int c, d, h, test_only;
 } parms;
 
@@ -120,6 +125,12 @@ static int sel(dbDriver * driver, dbString * stmt)
 	return OK;
     }
 
+    if (parms.output && strcmp(parms.output, "-") != 0) { 
+	if (NULL == freopen(parms.output, "w", stdout)) { 
+	    G_fatal_error(_("Unable to open file <%s> for writing"), parms.output); 
+	} 
+    } 
+    
     db_init_string(&value_string);
 
     /* column names if horizontal output */
@@ -167,7 +178,8 @@ static int sel(dbDriver * driver, dbString * stmt)
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table, *sql, *fs, *vs, *nv, *input;
+    struct Option *driver, *database, *table, *sql,
+      *fs, *vs, *nv, *input, *output;
     struct Flag *c, *d, *v, *flag_test;
     struct GModule *module;
     const char *drv, *db;
@@ -176,16 +188,19 @@ static void parse_command_line(int argc, char **argv)
     G_gisinit(argv[0]);
 
     table = G_define_standard_option(G_OPT_DB_TABLE);
+    table->guisection = _("Query");
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
 	database->answer = (char *) db;
+    database->guisection = _("Query");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
 	driver->answer = (char *) drv;
-
+    driver->guisection = _("Query");
+	
     sql = G_define_option();
     sql->key = "sql";
     sql->type = TYPE_STRING;
@@ -193,10 +208,12 @@ static void parse_command_line(int argc, char **argv)
     sql->label = _("SQL select statement");
     sql->description =
 	_("For example: 'select * from rybniky where kapri = 'hodne'");
+    sql->guisection = _("Query");
 
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->required = NO;
     input->description = _("Name of file with sql statement");
+    input->guisection = _("Query");
 
     fs = G_define_standard_option(G_OPT_F_SEP);
     fs->description = _("Output field separator");
@@ -215,6 +232,11 @@ static void parse_command_line(int argc, char **argv)
     nv->description = _("Null value indicator");
     nv->guisection = _("Format");
 
+    output = G_define_standard_option(G_OPT_F_OUTPUT); 
+    output->required = NO; 
+    output->description = 
+	_("Name for output file (if omitted or \"-\" output to stdout)"); 
+    
     c = G_define_flag();
     c->key = 'c';
     c->description = _("Do not include column names in output");
@@ -223,6 +245,7 @@ static void parse_command_line(int argc, char **argv)
     d = G_define_flag();
     d->key = 'd';
     d->description = _("Describe query only (don't run it)");
+    d->guisection = _("Query");
 
     v = G_define_flag();
     v->key = 'v';
@@ -232,13 +255,14 @@ static void parse_command_line(int argc, char **argv)
     flag_test = G_define_flag();
     flag_test->key = 't';
     flag_test->description = _("Only test query, do not execute");
+    flag_test->guisection = _("Query");
 
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("SQL"));
-    module->description = _("Selects data from table.");
+    module->description = _("Selects data from attribute table (performs SQL query statement(s)).");
 
     if (G_parser(argc, argv))
 	exit(EXIT_SUCCESS);
@@ -251,6 +275,8 @@ static void parse_command_line(int argc, char **argv)
     parms.vs = vs->answer;
     parms.nv = nv->answer;
     parms.input = input->answer;
+    parms.output = output->answer;
+
     if (!c->answer)
 	parms.c = 1;
     else
