@@ -19,7 +19,6 @@
 #include <grass/glocale.h>
 
 #ifdef HAVE_GEOS
-#include <geos_c.h>
 
 static GEOSGeometry *Vect__read_line_geos(struct Map_info *, long, int *);
 static GEOSCoordSequence *V1_read_line_geos(struct Map_info *, long, int *);
