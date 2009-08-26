@@ -307,19 +307,20 @@ static int reinvoke_script(const struct context *ctx, const char *filename)
     }
 
     for (option = ctx->first_option; option; option = option->next_opt) {
-	char buff[4096], upper[4096];
+	char upper[4096];
+	char *str;
 
-	sprintf(buff, "GIS_OPT_%s=%s", option->key,
-		option->answer ? option->answer : "");
-	putenv(G_store(buff));
+	G_asprintf(&str, "GIS_OPT_%s=%s", option->key,
+		   option->answer ? option->answer : "");
+	putenv(str);
 
 	strcpy(upper, option->key);
 	G_str_to_upper(upper);
-	sprintf(buff, "GIS_OPT_%s=%s", upper,
-		option->answer ? option->answer : "");
+	G_asprintf(&str, "GIS_OPT_%s=%s", upper,
+		   option->answer ? option->answer : "");
 
-	G_debug(2, "set %s", buff);
-	putenv(G_store(buff));
+	G_debug(2, "set %s", str);
+	putenv(str);
     }
 
 #ifdef __MINGW32__
