@@ -54,6 +54,8 @@ class Popen(subprocess.Popen):
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
+fatal_exit = True # abort on fatal()
+
 def call(*args, **kwargs):
     return Popen(*args, **kwargs).wait()
 
@@ -274,8 +276,6 @@ def message(msg, flag = None):
 
     @param msg message to be displayed
     @param flag flags (given as string)
-
-    @return g.message's exit code
     """
     run_command("g.message", flags = flag, message = msg)
 
@@ -284,8 +284,6 @@ def debug(msg, debug = 1):
 
     @param msg message to be displayed
     @param debug debug level (0-5)
-
-    @return g.message's exit code
     """
     run_command("g.message", flags = 'd', message = msg, debug = debug)
     
@@ -293,8 +291,6 @@ def verbose(msg):
     """!Display a verbose message using g.message -v
     
     @param msg message to be displayed
-
-    @return g.message's exit code
     """
     message(msg, flag = 'v')
 
@@ -302,39 +298,42 @@ def info(msg):
     """!Display an informational message using g.message -i
 
     @param msg message to be displayed
-
-    @return g.message's exit code
     """
     message(msg, flag = 'i')
 
 def warning(msg):
     """!Display a warning message using g.message -w
 
-    @param msg message to be displayed
-
-    @return g.message's exit code
+    @param msg warning message to be displayed
     """
     message(msg, flag = 'w')
 
 def error(msg):
     """!Display an error message using g.message -e
 
-    @param msg message to be displayed
-
-    @return g.message's exit code
+    @param msg error message to be displayed
     """
     message(msg, flag = 'e')
 
 def fatal(msg):
     """!Display an error message using g.message -e, then abort
 
-    @param msg message to be displayed
-
-    @return g.message's exit code
+    @param msg error message to be displayed
     """
     error(msg)
-    sys.exit(1)
+    
+    global fatal_exit
+    if fatal_exit:
+        sys.exit(1)
+    
+def set_fatal_exit(exit = True):
+    """!Set fatal_exit variable
 
+    @param exit True to abort on fatal() otherwise just error message
+    is printed"""
+    global fatal_exit
+    fatal_exit = exit
+    
 # interface to g.parser
 
 def _parse_opts(lines):

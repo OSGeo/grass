@@ -11,19 +11,19 @@ the end users.
 
 See code in:
 
- - core.py
- - db.py
- - raster.py
- - vector.py
+- core.py
+- db.py
+- raster.py
+- vector.py
 
-<h2>Table of content</h2>
+<b>Table of content</b>
 
- - \subpage scripting
- - \subpage modules
-  - \subpage core
-  - \subpage db
-  - \subpage raster
-  - \subpage vector
+- \subpage scripting
+- \subpage modules
+ - \subpage core
+ - \subpage db
+ - \subpage raster
+ - \subpage vector
 
 \section scripting GRASS scripting tasks for Python provided by "grass.script"
 
@@ -200,6 +200,8 @@ from grass.script import db as grass
  - db_connection()
 
  - db_describe()
+
+ - db_select()
 
 \section raster Raster
 

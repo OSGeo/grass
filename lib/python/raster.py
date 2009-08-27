@@ -7,9 +7,8 @@ Raster related functions to be used in Python scripts.
 Usage:
 
 @code
-from grass.script import core, raster as grass
+from grass.script import raster as grass
 
-grass.parser()
 grass.raster_history(map)
 ...
 @endcode

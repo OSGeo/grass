@@ -7,9 +7,8 @@ Database related functions to be used in Python scripts.
 Usage:
 
 @code
-from grass.script import core, db as grass
+from grass.script import db as grass
 
-grass.parser()
 grass.db_describe(table)
 ...
 @endcode
@@ -22,6 +21,8 @@ for details.
 @author Glynn Clements
 @author Martin Landa <landa.martin gmail.com>
 """
+
+import tempfile as pytempfile # conflict with core.tempfile
 
 from core import *
 
@@ -44,7 +45,8 @@ def db_describe(table, **args):
     """
     s = read_command('db.describe', flags = 'c', table = table, **args)
     if not s:
-	return None
+	grass.fatal(_("Unable to describe table <%s>") % table)
+    
     cols = []
     result = {}
     for l in s.splitlines():
@@ -59,6 +61,7 @@ def db_describe(table, **args):
 	else:
 	    result[key] = f[1:]
     result['cols'] = cols
+    
     return result
 
 # run "db.connect -p" and parse output
@@ -76,3 +79,30 @@ def db_connection():
     """
     s = read_command('db.connect', flags = 'p')
     return parse_key_val(s, sep = ':')
+
+def db_select(table, sql, file = False, **args):
+    """!Perform SQL select statement
+
+    @param table table name
+    @param sql   SQL select statement (string or file)
+    @param file  True if sql is filename
+    @param args  see db.select arguments
+    """
+    ofile = pytempfile.NamedTemporaryFile(mode = 'w+b')
+    if not file:
+        ret = run_command('db.select', quiet = True,
+                          flags = 'c',
+                          table = table,
+                          sql = sql,
+                          output = ofile.name)
+    else: # -> sql is file
+        ret = run_command('db.select', quiet = True,
+                          flags = 'c',
+                          table = table,
+                          input = sql,
+                          output = ofile.name)
+    
+    if ret != 0:
+        fatal(_("Fetching data from table <%s> failed") % table)
+        
+    return ofile.readlines()
