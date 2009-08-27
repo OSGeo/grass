@@ -25,10 +25,10 @@ if not os.getenv("GRASS_WXBUNDLED"):
 import wx
 import wx.lib.scrolledpanel as scrolled
 
-import dbm
 import gcmd
 from debug import Debug
 from preferences import globalSettings as UserSettings
+from dbm_base    import VectorDBInfo
 
 class DisplayAttributesDialog(wx.Dialog):
     """
@@ -62,7 +62,7 @@ class DisplayAttributesDialog(wx.Dialog):
         self.fid = -1 # feature id
         
         # get layer/table/column information
-        self.mapDBInfo = dbm.VectorDBInfo(self.map)
+        self.mapDBInfo = VectorDBInfo(self.map)
         
         layers = self.mapDBInfo.layers.keys() # get available layers
 

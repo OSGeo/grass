@@ -17,7 +17,6 @@ List of classes:
  - Log
  - VirtualAttributeList
  - AttributeManager
- - VectorDBInfo
 
 (C) 2007-2009 by the GRASS Development Team
 
@@ -51,7 +50,7 @@ import sqlbuilder
 import gcmd
 import utils
 import gdialogs
-import gselect
+import dbm_base
 from debug import Debug
 from dbm_dialogs import ModifyTableRecord
 from preferences import globalSettings as UserSettings
@@ -477,7 +476,7 @@ class AttributeManager(wx.Frame):
         self.qlayer = None
 
         # -> layers / tables description
-        self.mapDBInfo = VectorDBInfo(self.vectorName)
+        self.mapDBInfo = dbm_base.VectorDBInfo(self.vectorName)
 
         if len(self.mapDBInfo.layers.keys()) == 0:
             wx.MessageBox(parent=self.parent,
@@ -725,7 +724,7 @@ class AttributeManager(wx.Frame):
             dbBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
                                           label=" %s " % _("Database connection"))
             dbSizer = wx.StaticBoxSizer(dbBox, wx.VERTICAL)
-            dbSizer.Add(item=self.__createDbInfoDesc(panel, layer),
+            dbSizer.Add(item=dbm_base.createDbInfoDesc(panel, self.mapDBInfo, layer),
                         proportion=1,
                         flag=wx.EXPAND | wx.ALL,
                         border=3)
@@ -1853,34 +1852,10 @@ class AttributeManager(wx.Frame):
         
         return (cols, where)
     
-    def __createDbInfoDesc(self, panel, layer):
-        """!Create database connection information content"""
-        infoFlexSizer = wx.FlexGridSizer (cols=2, hgap=1, vgap=1)
-        infoFlexSizer.AddGrowableCol(1)
-        
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label="Driver:"))
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label=self.mapDBInfo.layers[layer]['driver']))
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label="Database:"))
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label=self.mapDBInfo.layers[layer]['database']))
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label="Table:"))
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label=self.mapDBInfo.layers[layer]['table']))
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label="Key:"))
-        infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label=self.mapDBInfo.layers[layer]['key']))
-
-        return infoFlexSizer
-        
     def OnCloseWindow(self, event):
         """!Cancel button pressed"""
         self.Close()
-        if self.parent.GetName() == 'LayerManager':
+        if self.parent and self.parent.GetName() == 'LayerManager':
             # deregister ATM
             self.parent.dialogs['atm'].remove(self)
         
@@ -2900,129 +2875,6 @@ class LayerBook(wx.Notebook):
             self.mapDBInfo = self.parentDialog.mapDBInfo
 
         event.Skip()
-
-class VectorDBInfo(gselect.VectorDBInfo):
-    """!Class providing information about attribute tables
-    linked to the vector map"""
-    def __init__(self, map):
-        gselect.VectorDBInfo.__init__(self, map)
-        
-    def GetColumns(self, table):
-        """!Return list of columns names (based on their index)"""
-        try:
-            names = [''] * len(self.tables[table].keys())
-        except KeyError:
-            return []
-        
-        for name, desc in self.tables[table].iteritems():
-            names[desc['index']] = name
-
-        return names
-
-    def SelectByPoint(self, queryCoords, qdist):
-        """!Get attributes by coordinates (all available layers)
-
-        Return line id or None if no line is found"""
-        line = None
-        nselected = 0
-        
-        if os.environ.has_key("LC_ALL"):
-            locale = os.environ["LC_ALL"]
-            os.environ["LC_ALL"] = "C"
-        
-        ### FIXME (implement script-style output)        
-        ret = gcmd.RunCommand('v.what',
-                              quiet = True,
-                              read = True,
-                              flags = 'a',
-                              map = self.map,
-                              east_north = '%f,%f' % \
-                                  (float(queryCoords[0]), float(queryCoords[1])),
-                              distance = float(qdist))
-        
-        if os.environ.has_key("LC_ALL"):
-            os.environ["LC_ALL"] = locale
-        
-        data = {}
-        if ret:
-            readAttrb = False
-            for item in ret.splitlines():
-                try:
-                    key, value = item.split(':', 1)
-                except ValueError:
-                    continue
-                
-                if key == 'Layer' and readAttrb:
-                    readAttrb = False
-                
-                if readAttrb:
-                    name, value = item.split(':', 1)
-                    name = name.strip()
-                    value = value.strip()
-                    # append value to the column
-                    if len(value) < 1:
-                        value = None
-                    else:
-                        if self.tables[table][name]['ctype'] != type(''):
-                            value = self.tables[table][name]['ctype'] (value.strip())
-                        else:
-                            value = unicodeValue(value.strip())
-                    self.tables[table][name]['values'].append(value)
-                else:
-                    if not data.has_key(key):
-                        data[key] = []
-                    data[key].append(value.strip())
-                    
-                    if key == 'Table':
-                        table = value.strip()
-                        
-                    if key == 'Key column': # skip attributes
-                        readAttrb = True
-
-        return data
-    
-    def SelectFromTable(self, layer, cols='*', where=None):
-        """!Select records from the table
-
-        Return number of selected records, -1 on error
-        """
-        if layer <= 0:
-            return -1
-
-        nselected = 0
-
-        table = self.layers[layer]["table"] # get table desc
-        # select values (only one record)
-        if where is None or where is '':
-            sql="SELECT %s FROM %s" % (cols, table)
-        else:
-            sql="SELECT %s FROM %s WHERE %s" % (cols, table, where)
-
-        ret = gcmd.RunCommand('db.select',
-                              parent = self,
-                              read = True,
-                              quiet = True,
-                              flags = 'v',
-                              sql= sql,
-                              database = self.layers[layer]["database"],
-                              driver = self.layers[layer]["driver"])
-        
-        # self.tables[table][key][1] = str(cat)
-        if ret:
-            for line in ret.splitlines():
-                name, value = line.split('|')
-                # casting ...
-                if value:
-                    if self.tables[table][name]['ctype'] != type(''):
-                        value = self.tables[table][name]['ctype'] (value)
-                    else:
-                        value = unicodeValue(value)
-                else:
-                    value = None
-                self.tables[table][name]['values'].append(value)
-                nselected = 1
-
-        return nselected
 
 def main(argv=None):
     if argv is None:

@@ -480,6 +480,15 @@ class VectorDBInfo:
         """
         return self.layers[layer]['table']
     
+    def GetDbSettings(self, layer):
+        """!Get database settins
+
+        @param layer layer number
+        
+        @return (driver, database)
+        """
+        return self.layers[layer]['driver'], self.layers[layer]['database']
+    
     def GetTableDesc(self, table):
         """!Get table columns
 
