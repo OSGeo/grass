@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-LIB_NAME = $(IOSTREAM_LIBNAME)
+LIB = IOSTREAM
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

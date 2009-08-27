@@ -4,7 +4,7 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 MOD_OBJS := $(filter-out %-template.o,$(AUTO_OBJS))
 
-LIB_NAME = $(GRAPH_LIBNAME)
+LIB = GRAPH
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make

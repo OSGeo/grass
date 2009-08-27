@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-LIB_NAME = $(INTERPDATA_LIBNAME)
+LIB = INTERPDATA
 DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make

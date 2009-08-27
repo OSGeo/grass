@@ -1,9 +1,8 @@
 
 MODULE_TOPDIR = ../..
 
-EXTRA_LIBS=$(GISLIB)
 
-LIB_NAME = $(ARRAYSTATS_LIBNAME)
+LIB = ARRAYSTATS
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

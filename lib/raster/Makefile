@@ -1,10 +1,6 @@
 MODULE_TOPDIR = ../..
 
-GDAL_LINK = $(USE_GDAL)
-GDAL_DYNAMIC = 1
-
-LIB_NAME = $(RASTER_LIBNAME)
-EXTRA_LIBS = $(GISLIB) $(XDRLIB) $(SOCKLIB) $(MATHLIB)
+LIB = RASTER
 EXTRA_INC = 
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
@@ -22,13 +18,6 @@ EXTRA_INC += $(PROJINC) $(GDALCFLAGS)
 
 ifneq ($(GDAL_DYNAMIC),)
 EXTRA_CFLAGS += -DGDAL_DYNAMIC=1
-ifneq ($(MINGW),)
-EXTRA_LIBS += -lkernel32
-else
-EXTRA_LIBS += $(DLLIB)
-endif
-else
-EXTRA_LIBS += $(GDALLIBS)
 endif
 
 endif

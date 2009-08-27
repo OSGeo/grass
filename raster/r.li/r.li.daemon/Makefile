@@ -1,8 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-EXTRA_LIBS=$(GISLIB) $(RASTERLIB)
-
-LIB_NAME = grass_rli
+LIB = RLI
 PGM = r.li.daemon
 
 DEPENDENCIES = $(GISDEP) $(RASTERDEP)

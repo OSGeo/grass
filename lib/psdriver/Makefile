@@ -2,8 +2,7 @@ MODULE_TOPDIR = ../..
 
 EXTRA_CFLAGS=-I../driver
 
-EXTRA_LIBS=$(DRIVERLIB) $(GISLIB)
-LIB_NAME = $(PSDRIVER_LIBNAME)
+LIB = PSDRIVER
 PGM = psdriver
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make

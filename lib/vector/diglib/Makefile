@@ -4,7 +4,7 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 MOD_OBJS := $(filter-out test.o port_test.o,$(AUTO_OBJS))
 
-LIB_NAME = $(DIG2_LIBNAME)
+LIB = DIG2
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

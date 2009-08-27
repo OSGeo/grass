@@ -1,7 +1,7 @@
 
 MODULE_TOPDIR = ../..
 
-LIB_NAME = $(DATETIME_LIBNAME)
+LIB = DATETIME
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

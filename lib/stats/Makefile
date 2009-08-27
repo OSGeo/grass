@@ -1,8 +1,7 @@
 MODULE_TOPDIR = ../..
 
-EXTRA_LIBS=$(GISLIB) $(RASTERLIB)
 
-LIB_NAME = $(STATS_LIBNAME)
+LIB = STATS
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

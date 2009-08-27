@@ -6,12 +6,11 @@ ifeq ($(USE_PNG),)
   MOD_OBJS := $(filter-out read_png.o write_png.o,$(AUTO_OBJS))
 endif
 
-LIB_NAME = $(PNGDRIVER_LIBNAME)
+LIB = PNGDRIVER
 PGM = pngdriver
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 EXTRA_CFLAGS=$(ZLIBINCPATH) $(PNGINC) -I../driver
 
-EXTRA_LIBS=$(DRIVERLIB) $(GISLIB) $(PNGLIB)
 
 default: lib
