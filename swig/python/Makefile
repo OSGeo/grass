@@ -47,10 +47,13 @@ DSTDIR = $(GDIR)/lib
 
 LIBFILES := $(patsubst %,$(DSTDIR)/_%.so,$(MODULES))
 PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
+LLIBFILES := $(patsubst %,_%.so,$(MODULES))
+WRAPFILES := $(patsubst %,%_wrap.c,$(MODULES))
+LPYFILES := $(patsubst %,%.py,$(MODULES))
 
 default:
 	$(MAKE) $(DSTDIR)
-	$(MAKE) $(LIBFILES) $(PYFILES)
+	$(MAKE) $(LLIBFILES) $(WRAPFILES) $(LPYFILES) $(LIBFILES) $(PYFILES)
 
 %_wrap.c %.py: ../include/%.i $(EXTRA_SWIG)
 	$(SWIG) $(SWIGFLAGS) -python -o $*_wrap.c -module $* -shadow $<
@@ -77,6 +80,10 @@ numptr:
 	$(MAKE) -C NumPtr
 
 .PHONY: numptr
+
+.SECONDARY: $(patsubst %,%.py,$(MODULES))
+
+.SECONDARY: $(patsubst %,%_wrap.c,$(MODULES))
 
 .SECONDARY: $(patsubst %,$(OBJDIR)/%_wrap.o,$(MODULES))
 
