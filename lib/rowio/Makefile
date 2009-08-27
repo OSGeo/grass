@@ -1,7 +1,6 @@
 MODULE_TOPDIR = ../..
 
-EXTRA_LIBS=$(GISLIB)
-LIB_NAME = $(ROWIO_LIBNAME)
+LIB = ROWIO
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make

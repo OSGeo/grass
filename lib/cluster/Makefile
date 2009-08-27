@@ -1,10 +1,9 @@
 MODULE_TOPDIR = ../..
 
-LIB_NAME = $(CLUSTER_LIBNAME)
+LIB = CLUSTER
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-EXTRA_LIBS = $(IMAGERYLIB) $(GMATHLIB) $(GISLIB) $(RASTERLIB)
 
 default: lib
 

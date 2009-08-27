@@ -1,12 +1,11 @@
 MODULE_TOPDIR = ../../..
 
-LIB_NAME = $(VEDIT_LIBNAME)
+LIB = VEDIT
 
 DEPENDENCIES = $(VECTDEP) $(GISDEP)
 
 EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
-EXTRA_LIBS = $(VECTLIB) $(DBMILIB) $(GISLIB)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make

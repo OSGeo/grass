@@ -1,7 +1,7 @@
 
 MODULE_TOPDIR = ../../..
 
-LIB_NAME = $(TRANS_LIBNAME)
+LIB = TRANS
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

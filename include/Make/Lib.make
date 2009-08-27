@@ -9,6 +9,11 @@ include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Html.make
 include $(MODULE_TOPDIR)/include/Make/Compile.make
 
+ifneq ($(LIB),)
+LIB_NAME := $($(LIB)_LIBNAME)
+EXTRA_LIBS := $($(LIB)DEPS)
+endif
+
 STLIB_NAME = $(LIB_NAME)
 STLIB_OBJS = $(ARCH_OBJS)
 SHLIB_NAME = $(LIB_NAME)

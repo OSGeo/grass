@@ -1,8 +1,7 @@
 MODULE_TOPDIR = ../..
 
-LIB_NAME = $(G3D_LIBNAME)
+LIB = G3D
 
-EXTRA_LIBS = $(GISLIB) $(RASTERLIB)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make

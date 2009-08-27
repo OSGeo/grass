@@ -4,11 +4,10 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 MOD_OBJS = generate.o open.o
 
-LIB_NAME = $(FORM_LIBNAME)
+LIB = FORM
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-EXTRA_LIBS=$(GISLIB) $(DBMILIB)
 EXTRA_CFLAGS = $(XCFLAGS) $(TCLINCDIR) $(TKINCDIR)
 
 FORMDIR=$(ARCH_DISTDIR)/etc/form

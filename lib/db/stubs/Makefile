@@ -1,8 +1,7 @@
 MODULE_TOPDIR = ../../..
 
-EXTRA_LIBS=$(DBMIBASELIB) $(GISLIB)
 
-LIB_NAME = $(DBSTUBS_LIBNAME)
+LIB = DBSTUBS
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

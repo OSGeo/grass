@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-LIB_NAME = $(CDHC_LIBNAME)
+LIB = CDHC
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

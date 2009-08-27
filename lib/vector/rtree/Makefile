@@ -1,10 +1,9 @@
 MODULE_TOPDIR = ../../..
 
-LIB_NAME = $(RTREE_LIBNAME)
+LIB = RTREE
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-EXTRA_LIBS = $(MATHLIB)
 
 #compile if LFS (Large File Support) present:
 ifneq ($(USE_LARGEFILES),)

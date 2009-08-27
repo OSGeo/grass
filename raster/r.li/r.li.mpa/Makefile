@@ -4,13 +4,11 @@ PGM = r.li.mpa
 
 EXTRA_CLEAN_DIRS=doxygenhtml
 
-LIB_NAME      = grass_rli
 
-RLI_LIB = -l$(LIB_NAME)
 
-LIBES = $(GISLIB) $(RASTERLIB) $(RLI_LIB)
+LIBES = $(GISLIB) $(RASTERLIB) $(RLILIB)
 
-DEPENDENCIES = $(GISDEP) $(RASTERDEP) $(LIB_NAME )
+DEPENDENCIES = $(GISDEP) $(RASTERDEP) $(RLIDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

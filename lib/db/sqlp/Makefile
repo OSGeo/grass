@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-LIB_NAME = $(SQLP_LIBNAME)
+LIB = SQLP
 PGM = sql
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make

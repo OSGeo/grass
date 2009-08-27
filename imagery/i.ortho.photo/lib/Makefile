@@ -1,8 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-EXTRA_LIBS=$(GISLIB) $(IMAGERYLIB)
-
-LIB_NAME = $(IORTHO_LIBNAME)
+LIB = IORTHO
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

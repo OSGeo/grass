@@ -1,11 +1,10 @@
 MODULE_TOPDIR = ../..
 
-LIB_NAME = $(GPROJ_LIBNAME)
+LIB = GPROJ
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make 
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
-EXTRA_LIBS=$(GISLIB) $(PROJLIB) $(GDALLIBS)
 EXTRA_CFLAGS = $(ZLIBINCPATH) $(GDALCFLAGS)
 EXTRA_INC = $(PROJINC)
 

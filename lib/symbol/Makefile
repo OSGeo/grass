@@ -1,8 +1,7 @@
 MODULE_TOPDIR = ../..
 
-EXTRA_LIBS=$(GISLIB)
 
-LIB_NAME = $(SYMB_LIBNAME)
+LIB = SYMB
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 

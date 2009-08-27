@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-LIB_NAME = $(QTREE_LIBNAME)
+LIB = QTREE
 DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
