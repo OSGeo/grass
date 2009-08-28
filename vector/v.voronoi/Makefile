@@ -8,8 +8,8 @@ SWEEP_OBJS = sw_edgelist.o sw_geometry.o sw_heap.o sw_main.o sw_memory.o sw_outp
 
 v_voronoi_OBJS = vo_main.o vo_extend.o vo_write.o $(SWEEP_OBJS)
 
-LIBES = $(VECTLIB) $(GISLIB)
-DEPENDENCIES= $(VECTDEP) $(GISDEP)
+LIBES = $(VECTORLIB) $(DBMILIB) $(GISLIB) $(MATHLIB)
+DEPENDENCIES = $(VECTORDEP) $(DBMIDEP) $(GISDEP)
 EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
 

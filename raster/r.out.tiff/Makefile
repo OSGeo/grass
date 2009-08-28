@@ -6,9 +6,9 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 
 EXTRA_CFLAGS = $(TIFFINCPATH)
 
-LIBES = $(GISLIB) $(RASTERLIB) $(TIFFLIBPATH) $(TIFFLIB)
-DEPENDENCIES = $(GISDEP) $(RASTERDEP)
+LIBES = $(RASTERLIB) $(GISLIB) $(TIFFLIBPATH) $(TIFFLIB)
+DEPENDENCIES = $(RASTERDEP) $(GISDEP)
 
-ifneq ($(strip $(TIFFLIB)),)
+ifneq ($(strip $(TIFFLIBPATH) $(TIFFLIB)),)
 default: cmd
 endif

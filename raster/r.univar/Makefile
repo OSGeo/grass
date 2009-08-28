@@ -1,7 +1,8 @@
 
 MODULE_TOPDIR = ../..
 
-LIBES = $(G3DLIB) $(GISLIB) $(RASTERLIB)
+LIBES2 = $(RASTERLIB) $(GISLIB) $(MATHLIB)
+LIBES3 = $(G3DLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(G3DDEP) $(GISDEP) $(RASTERDEP)
 
 PROGRAMS = r.univar r3.univar
@@ -12,3 +13,6 @@ r3_univar_OBJS = r3.univar_main.o sort.o stats.o
 include $(MODULE_TOPDIR)/include/Make/Multi.make
 
 default: multi
+
+$(BIN)/r.univar$(EXE): LIBES = $(LIBES2)
+$(BIN)/r3.univar$(EXE): LIBES = $(LIBES3)

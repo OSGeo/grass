@@ -10,7 +10,7 @@ ifneq ($(USE_LARGEFILES),)
 	EXTRA_CFLAGS += -D_FILE_OFFSET_BITS=64
 endif
 
-LIBES = $(G3DLIB) $(GISLIB)
+LIBES = $(G3DLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(G3DDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make

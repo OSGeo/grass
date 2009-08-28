@@ -4,7 +4,7 @@ PGM = m.cogo
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-LIBES = $(GISLIB)
+LIBES = $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(GISDEP)
 
 default: cmd

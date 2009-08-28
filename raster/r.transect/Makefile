@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../..
 
 PGM = r.transect
 
-LIBES = $(GISLIB)
+LIBES = $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make

@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = i.modis.qc
 
-LIBES = $(GISLIB) $(RASTERLIB)
-DEPENDENCIES = $(GISDEP) $(RASTERDEP)
+LIBES = $(RASTERLIB) $(GISLIB)
+DEPENDENCIES = $(RASTERDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
