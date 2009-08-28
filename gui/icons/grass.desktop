@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=GRASS GIS
+Comment=
+Categories=Application;Education;Geography;
+Exec=grass7
+Icon=/usr/share/icons/grass-48x48.png
+Terminal=true
