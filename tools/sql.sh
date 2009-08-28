@@ -287,21 +287,21 @@ psql -n -q -d "$dbname" << EOF
 CREATE TABLE stlib_exp (
 	library VARCHAR(80) NOT NULL,
 	object VARCHAR(40) NOT NULL,
-	symbol VARCHAR(150) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy stlib_exp FROM '$tmpdir/stlib_exp.lst'
 
 CREATE TABLE shlib_exp (
 	library VARCHAR(80) NOT NULL,
-	symbol VARCHAR(150) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy shlib_exp FROM '$tmpdir/shlib_exp.lst'
 
 CREATE TABLE obj_exp (
 	object VARCHAR(100) NOT NULL,
-	symbol VARCHAR(200) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy obj_exp FROM '$tmpdir/obj_exp.lst'
@@ -309,42 +309,42 @@ CREATE TABLE obj_exp (
 CREATE TABLE stlib_imp (
 	library VARCHAR(80) NOT NULL,
 	object VARCHAR(40) NOT NULL,
-	symbol VARCHAR(150) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy stlib_imp FROM '$tmpdir/stlib_imp.lst'
 
 CREATE TABLE shlib_imp (
 	library VARCHAR(80) NOT NULL,
-	symbol VARCHAR(150) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy shlib_imp FROM '$tmpdir/shlib_imp.lst'
 
 CREATE TABLE obj_imp (
 	object VARCHAR(100) NOT NULL,
-	symbol VARCHAR(200) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy obj_imp FROM '$tmpdir/obj_imp.lst'
 
 CREATE TABLE prog_imp (
 	program VARCHAR(80) NOT NULL,
-	symbol VARCHAR(200) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy prog_imp FROM '$tmpdir/prog_imp.lst'
 
 CREATE TABLE prog_exp (
 	program VARCHAR(80) NOT NULL,
-	symbol VARCHAR(180) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy prog_exp FROM '$tmpdir/prog_exp.lst'
 
 CREATE TABLE libs (
 	library VARCHAR(80) NOT NULL,
-	symbol VARCHAR(160) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy libs FROM '$tmpdir/libs.lst'
@@ -358,7 +358,7 @@ CREATE TABLE ldd (
 \copy ldd FROM '$tmpdir/ldd.lst'
 
 CREATE TABLE ansi (
-	symbol VARCHAR(150) NOT NULL
+	symbol VARCHAR(256) NOT NULL
 	) ;
 
 \copy ansi FROM '$tmpdir/ansi.lst'
