@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = r3.stats
 
-LIBES = $(GISLIB) $(G3DLIB)
-DEPENDENCIES = $(GISDEP) $(G3DDEP)
+LIBES = $(G3DLIB) $(GISLIB)
+DEPENDENCIES = $(G3DDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

@@ -3,7 +3,7 @@ MODULE_TOPDIR = ../..
 PGM = g.parser
 
 LIBES = $(GISLIB)
-DEPENDENCIES= $(GISDEP)
+DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

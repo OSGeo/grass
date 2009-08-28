@@ -4,8 +4,8 @@ PGM = i.atcorr
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-LIBES = $(GISLIB) $(RASTERLIB) 
-DEPENDENCIES = $(GISDEP) $(RASTERDEP)
+LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
+DEPENDENCIES = $(RASTERDEP) $(GISDEP)
 
 LINK = $(CXX)
 

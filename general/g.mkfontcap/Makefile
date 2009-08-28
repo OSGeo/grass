@@ -4,7 +4,7 @@ MODULE_TOPDIR = ../..
 PGM = g.mkfontcap
 CAPFILE = $(ETC)/fontcap
 
-LIBES     = $(GISLIB) $(FTLIB)
+LIBES = $(GISLIB) $(FTLIB)
 DEPENDENCIES = $(GISDEP)
 EXTRA_CFLAGS = $(FTINC)
 
