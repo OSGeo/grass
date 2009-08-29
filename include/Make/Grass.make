@@ -268,6 +268,10 @@ endef
 
 $(foreach lib,$(libs),$(eval $(call lib_rules,$(firstword $(subst :, ,$(lib))),$(lastword $(subst :, ,$(lib))))))
 
+ifneq ($(MINGW),)
+GISLIB += $(INTLLIB)
+endif
+
 DBMILIB     = $(DBMICLIENTLIB) $(DBMIBASELIB) $(DBMIEXTRALIB)
 GEOMLIB     = $(OPTRILIB) $(SOSLIB) $(LIALIB) $(BASICLIB)
 VECTLIB     = $(VECTORLIB) $(DIG2LIB) $(GRAPHLIB) $(RTREELIB) $(LINKMLIB) $(DBMILIB)
