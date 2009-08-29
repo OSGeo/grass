@@ -84,9 +84,7 @@
 
 #define TEST_PATTERN 1.3333
 #ifdef HAVE_LONG_LONG_INT
-#define OFF_T_TEST 0x0102030405060708LL
-#else
-#define OFF_T_TEST 0x01020304
+#define LONG_LONG_TEST 0x0102030405060708LL
 #endif
 #define LONG_TEST 0x01020304
 #define INT_TEST 0x01020304
@@ -214,9 +212,13 @@ void port_init(void)
      */
 
     if (nat_off_t == 8)
-	u_o = OFF_T_TEST;
+#ifdef HAVE_LONG_LONG_INT
+	u_o = (off_t) LONG_LONG_TEST;
+#else
+	G_fatal_error("Internal error: can't construct an off_t literal");
+#endif
     else
-	u_o = LONG_TEST;
+	u_o = (off_t) LONG_TEST;
 
     dbl_order =
 	find_offsets(&u_d, dbl_cnvrt, dbl_cmpr, PORT_DOUBLE, nat_dbl,
