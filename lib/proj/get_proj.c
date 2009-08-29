@@ -400,7 +400,7 @@ int pj_print_proj_params(struct pj_info *iproj, struct pj_info *oproj)
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
 		    str);
-	    pj_free(str);
+	    pj_dalloc(str);
 	    fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
 		    iproj->meters);
 	}
@@ -413,7 +413,7 @@ int pj_print_proj_params(struct pj_info *iproj, struct pj_info *oproj)
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
 		    str);
-	    pj_free(str);
+	    pj_dalloc(str);
 	    fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
 		    oproj->meters);
 	}
