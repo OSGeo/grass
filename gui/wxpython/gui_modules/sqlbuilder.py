@@ -47,7 +47,7 @@ import dbm_base
 class SQLFrame(wx.Frame):
     """!SQL Frame class"""
     def __init__(self, parent, title, vectmap, id = wx.ID_ANY,
-                 layer = 1, qtype = "select"):
+                 layer = 1, qtype = "select", evtheader = None):
         
         wx.Frame.__init__(self, parent, id, title)
         
@@ -55,6 +55,7 @@ class SQLFrame(wx.Frame):
                              wx.BITMAP_TYPE_ICO))
         
         self.parent = parent
+        self.evtHeader = evtheader
 
         #
         # variables
@@ -70,7 +71,7 @@ class SQLFrame(wx.Frame):
         self.tablename = self.dbInfo.GetTable(self.layer)
         self.driver, self.database = self.dbInfo.GetDbSettings(self.layer)
         
-        self.qtype = qtype      # type of the uqery: SELECT, UPDATE, DELETE, ...
+        self.qtype = qtype      # type of query: SELECT, UPDATE, DELETE, ...
         self.colvalues = []     # array with unique values in selected column
 
         # set dialog title
@@ -87,13 +88,17 @@ class SQLFrame(wx.Frame):
         # buttons
         #
         self.btn_clear  = wx.Button(parent = self.panel, id = wx.ID_CLEAR)
+        self.btn_clear.SetToolTipString(_("Set SQL statement to default"))
         self.btn_verify = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Verify"))
+        self.btn_verify.SetToolTipString(_("Verify SQL statement"))
         # self.btn_help = wx.Button(self.panel, -1, "Help")
         # self.btn_load = wx.Button(self.panel, -1, "Load")
         # self.btn_save = wx.Button(self.panel, -1, "Save")
         self.btn_apply  = wx.Button(parent = self.panel, id = wx.ID_APPLY)
+        self.btn_apply.SetToolTipString(_("Apply SQL statement and close the dialog"))
         self.btn_close  = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
+        self.btn_close.SetToolTipString(_("Close the dialog"))
         self.btn_unique = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Get all values"))
         self.btn_unique.Enable(False)
@@ -127,7 +132,9 @@ class SQLFrame(wx.Frame):
                                     style=wx.TE_MULTILINE)
         if self.qtype.lower() == "select":
             self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
-        
+        self.text_sql.SetInsertionPointEnd()
+        wx.CallAfter(self.text_sql.SetFocus)
+
         #
         # list boxes (columns, values)
         #
@@ -142,6 +149,10 @@ class SQLFrame(wx.Frame):
                                     label = " %s " % _("Add on double-click"),
                                     choices = [_("columns"), _("values")])
         self.radio_cv.SetSelection(1) # default 'values'
+
+        self.close_onapply = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
+                                         label = _("Close dialog on apply"))
+        self.close_onapply.SetValue(True)
         
         #
         # bindings
@@ -259,6 +270,8 @@ class SQLFrame(wx.Frame):
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
         pagesizer.Add(item = buttonsizer, proportion = 0,
                       flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        pagesizer.Add(item = self.close_onapply, proportion = 0,
+                      flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
         
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(pagesizer)
@@ -372,7 +385,15 @@ class SQLFrame(wx.Frame):
         
         if newsqlstr:
             self.text_sql.SetValue(newsqlstr)
-        
+
+    def GetSQLStatement(self):
+        """!Return SQL statement"""
+        return self.text_sql.GetValue().strip().replace("\n"," ")
+    
+    def CloseOnApply(self):
+        """!Return True if the dialog will be close on apply"""
+        return self.close_onapply.IsChecked()
+    
     def OnText(self, event):
         """Query string changed"""
         if len(self.text_sql.GetValue()) > 0:
@@ -382,12 +403,14 @@ class SQLFrame(wx.Frame):
         
     def OnApply(self, event):
         """Apply button pressed"""
-        if self.parent:
-            try:
-                self.parent.text_query.SetValue= self.text_sql.GetValue().strip().replace("\n"," ")
-            except:
-                pass
-        
+        if self.evtHeader:
+            self.evtHeader(event = 'apply')
+
+        if self.close_onapply.IsChecked():
+            self.Destroy()
+            
+        event.Skip()
+    
     def OnVerify(self, event):
         """!Verify button pressed"""
         ret, msg = gcmd.RunCommand('db.select',
@@ -415,6 +438,8 @@ class SQLFrame(wx.Frame):
     
     def OnClose(self, event):
         """!Close button pressed"""
+        if self.evtHeader:
+            self.evtHeader(event = 'close')
         self.Destroy()
 
         event.Skip()
