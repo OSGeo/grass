@@ -27,13 +27,13 @@
 !define RELEASE_GRASS_COMMAND "grass64"
 !define RELEASE_GRASS_BASE "GRASS"
 
-!define DEV6_VERSION_NUMBER "6-SVN"
+!define DEV6_VERSION_NUMBER "6.5.SVN"
 !define DEV6_SVN_REVISION "36599"
 !define DEV6_BINARY_REVISION "1"
 !define DEV6_GRASS_COMMAND "grass65"
 !define DEV6_GRASS_BASE "GRASS-6-SVN"
 
-!define DEV7_VERSION_NUMBER "7-SVN"
+!define DEV7_VERSION_NUMBER "7.0.SVN"
 !define DEV7_SVN_REVISION ""
 !define DEV7_BINARY_REVISION "1"
 !define DEV7_GRASS_COMMAND "grass7"
@@ -681,12 +681,16 @@ Section "GRASS" SecGRASS
 
 	;Create the $INSTALL_DIR\msys\grass link directory
 	CreateDirectory $INSTALL_DIR\msys\grass
+	
+	;Get the short form of the install path (to allow for paths with spaces)
+	VAR /GLOBAL INST_DIR_SHORT
+	GetFullPathName /SHORT $INST_DIR_SHORT $INSTALL_DIR
 
 	;create the $INSTALL_DIR\msys\etc\fstab with the main grass dir mount info
 	ClearErrors
 	FileOpen $0 $INSTALL_DIR\msys\etc\fstab w
 	IfErrors done_create_fstab
-	FileWrite $0 '$INSTALL_DIR   /grass$\r$\n'
+	FileWrite $0 '$INST_DIR_SHORT   /grass$\r$\n'
 	FileClose $0
 	done_create_fstab:
 	
