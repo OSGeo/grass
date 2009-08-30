@@ -79,6 +79,10 @@ class SQLFrame(wx.Frame):
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
+        # statusbar
+        self.statusbar = self.CreateStatusBar(number=1)
+        self.statusbar.SetStatusText(_("SQL statement not verified"), 0)
+
         #
         # buttons
         #
@@ -96,26 +100,27 @@ class SQLFrame(wx.Frame):
         self.btn_uniquesample = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                           label = _("Get sample"))
         self.btn_uniquesample.Enable(False)
-        self.btn_is    = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "=")
-        self.btn_isnot = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "!=")
-        self.btn_like  = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "LIKE")
-        self.btn_gt    = wx.Button(parent = self.panel, id = wx.ID_ANY, label = ">")
-        self.btn_gtis  = wx.Button(parent = self.panel, id = wx.ID_ANY, label = ">=")
-        self.btn_lt    = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "<")
-        self.btn_ltis  = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "<=")
-        self.btn_or    = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "OR")
-        self.btn_not   = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "NOT")
-        self.btn_and   = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "AND")
-        self.btn_brackets = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "()")
-        self.btn_prc   = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "%")
+        
+        self.btn_lv = { 'is'    : ['=', ],
+                        'isnot' : ['!=', ],
+                        'like'  : ['LIKE', ],
+                        'gt'    : ['>', ],
+                        'ge'    : ['>=', ],
+                        'lt'    : ['<', ],
+                        'le'    : ['<=', ],
+                        'or'    : ['OR', ],
+                        'not'   : ['NOT', ],
+                        'and'   : ['AND', ],
+                        'brac'  : ['()', ],
+                        'prc'   : ['%', ] }
+        
+        for key, value in self.btn_lv.iteritems():
+            btn = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                            label = value[0])
+            self.btn_lv[key].append(btn.GetId())
         
         #
-        # Text labels
-        #
-        # self.label_headding = wx.StaticText(self.panel, -1, '')
-        
-        #
-        # Textareas
+        # text areas
         #
         self.text_sql = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                     value = '', size = (-1, 75),
@@ -124,7 +129,7 @@ class SQLFrame(wx.Frame):
             self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
         
         #
-        # List Boxes
+        # list boxes (columns, values)
         #
         self.list_columns = wx.ListBox(parent = self.panel, id = wx.ID_ANY,
                                        choices = self.dbInfo.GetColumns(self.tablename),
@@ -133,33 +138,32 @@ class SQLFrame(wx.Frame):
                                       choices = self.colvalues,
                                       style = wx.LB_MULTIPLE)
         
+        self.radio_cv = wx.RadioBox(parent = self.panel, id = wx.ID_ANY,
+                                    label = " %s " % _("Add on double-click"),
+                                    choices = [_("columns"), _("values")])
+        self.radio_cv.SetSelection(1) # default 'values'
+        
         #
-        # Bindings
+        # bindings
         #
-        self.btn_unique.Bind(wx.EVT_BUTTON,       self.GetUniqueValues)
-        self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.GetSampleValues)
-        self.btn_is.Bind(wx.EVT_BUTTON,          self.AddMark)
-        self.btn_isnot.Bind(wx.EVT_BUTTON,       self.AddMark)
-        self.btn_like.Bind(wx.EVT_BUTTON,        self.AddMark)
-        self.btn_gt.Bind(wx.EVT_BUTTON,          self.AddMark)
-        self.btn_gtis.Bind(wx.EVT_BUTTON,        self.AddMark)
-        self.btn_or.Bind(wx.EVT_BUTTON,          self.AddMark)
-        self.btn_lt.Bind(wx.EVT_BUTTON,          self.AddMark)
-        self.btn_ltis.Bind(wx.EVT_BUTTON,        self.AddMark)
-        self.btn_not.Bind(wx.EVT_BUTTON,         self.AddMark)
-        self.btn_brackets.Bind(wx.EVT_BUTTON,    self.AddMark)
-        self.btn_prc.Bind(wx.EVT_BUTTON,         self.AddMark)
-        self.btn_and.Bind(wx.EVT_BUTTON,         self.AddMark)
+        self.btn_unique.Bind(wx.EVT_BUTTON,       self.OnUniqueValues)
+        self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.OnSampleValues)
+        
+        for key, value in self.btn_lv.iteritems():
+            self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
+        
         self.btn_close.Bind(wx.EVT_BUTTON,       self.OnClose)
         self.btn_clear.Bind(wx.EVT_BUTTON,       self.OnClear)
         self.btn_verify.Bind(wx.EVT_BUTTON,      self.OnVerify)
         self.btn_apply.Bind(wx.EVT_BUTTON,       self.OnApply)
 
-        self.list_columns.Bind(wx.EVT_LISTBOX,   self.AddColumnName)
-        self.list_values.Bind(wx.EVT_LISTBOX,    self.AddValue)
+        self.list_columns.Bind(wx.EVT_LISTBOX,   self.OnAddColumn)
+        self.list_values.Bind(wx.EVT_LISTBOX,    self.OnAddValue)
         
         self.text_sql.Bind(wx.EVT_TEXT,          self.OnText)
         
+        self.Bind(wx.EVT_CLOSE,                  self.OnClose)
+
         self.__doLayout()
 
     def __doLayout(self):
@@ -193,27 +197,31 @@ class SQLFrame(wx.Frame):
         buttonsizer.Add(item = self.btn_close)
         
         buttonsizer2 = wx.GridBagSizer(5, 5)
-        buttonsizer2.Add(item = self.btn_is, pos = (0,0))
-        buttonsizer2.Add(item = self.btn_isnot, pos = (1,0))
-        buttonsizer2.Add(item = self.btn_like, pos = (2, 0))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['is'][1]), pos = (0,0))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['isnot'][1]), pos = (1,0))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['like'][1]), pos = (2, 0))
 
-        buttonsizer2.Add(item = self.btn_gt, pos = (0, 1))
-        buttonsizer2.Add(item = self.btn_gtis, pos = (1, 1))
-        buttonsizer2.Add(item = self.btn_or, pos = (2, 1))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['gt'][1]), pos = (0, 1))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['ge'][1]), pos = (1, 1))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['or'][1]), pos = (2, 1))
 
-        buttonsizer2.Add(item = self.btn_lt, pos = (0, 2))
-        buttonsizer2.Add(item = self.btn_ltis, pos = (1, 2))
-        buttonsizer2.Add(item = self.btn_not, pos = (2, 2))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['lt'][1]), pos = (0, 2))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['le'][1]), pos = (1, 2))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['not'][1]), pos = (2, 2))
 
-        buttonsizer2.Add(item = self.btn_brackets, pos = (0, 3))
-        buttonsizer2.Add(item = self.btn_prc, pos = (1, 3))
-        buttonsizer2.Add(item = self.btn_and, pos = (2, 3))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['brac'][1]), pos = (0, 3))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['prc'][1]), pos = (1, 3))
+        buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['and'][1]), pos = (2, 3))
 
-        buttonsizer4 = wx.BoxSizer(wx.HORIZONTAL)
-        buttonsizer4.Add(item = self.btn_uniquesample, proportion = 0,
+        buttonsizer3 = wx.BoxSizer(wx.HORIZONTAL)
+        buttonsizer3.Add(item = self.btn_uniquesample, proportion = 0,
                          flag = wx.ALIGN_CENTER_HORIZONTAL | wx.RIGHT, border = 5)
-        buttonsizer4.Add(item = self.btn_unique, proportion = 0,
+        buttonsizer3.Add(item = self.btn_unique, proportion = 0,
                          flag = wx.ALIGN_CENTER_HORIZONTAL)
+
+        radiosizer = wx.BoxSizer(wx.HORIZONTAL)
+        radiosizer.Add(item = self.radio_cv, proportion = 1,
+                       flag = wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border = 5)
         
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         
@@ -226,11 +234,13 @@ class SQLFrame(wx.Frame):
         valuesizer = wx.StaticBoxSizer(valuesbox, wx.VERTICAL)
         columnsizer.Add(item = self.list_columns, proportion = 1,
                         flag = wx.EXPAND)
+        columnsizer.Add(item = radiosizer, proportion = 0,
+                        flag = wx.TOP | wx.EXPAND, border = 5)
         valuesizer.Add(item = self.list_values, proportion = 1,
                        flag = wx.EXPAND)
         # self.list_columns.SetMinSize((-1,130))
         # self.list_values.SetMinSize((-1,100))
-        valuesizer.Add(item = buttonsizer4, proportion = 0,
+        valuesizer.Add(item = buttonsizer3, proportion = 0,
                        flag = wx.TOP, border = 5)
         hsizer.Add(item = columnsizer, proportion = 1,
                    flag = wx.EXPAND)
@@ -255,9 +265,9 @@ class SQLFrame(wx.Frame):
         pagesizer.Fit(self.panel)
         
         self.Layout()
-        self.SetMinSize((660, 480))
+        self.SetMinSize((660, 525))
         
-    def GetUniqueValues(self, event, justsample = False):
+    def OnUniqueValues(self, event, justsample = False):
         """!Get unique values"""
         vals = []
         try:
@@ -269,27 +279,26 @@ class SQLFrame(wx.Frame):
         
         self.list_values.Clear()
         
-        i = 0
         querystring = "SELECT %s FROM %s" % (column, self.tablename)
         
         data = grass.db_select(table = self.tablename,
                                sql = querystring,
                                database = self.database,
                                driver = self.driver)
-        
+        i = 0
         for line in data:
             if justsample and i < 256 or \
                not justsample:
                 self.list_values.Append(line.strip())
             else:
                 break
-            i += 1
-    
-    def GetSampleValues(self, event):
+            i += 0
+        
+    def OnSampleValues(self, event):
         """!Get sample values"""
-        self.GetUniqueValues(None, True)
+        self.OnUniqueValues(None, True)
 
-    def AddColumnName(self, event):
+    def OnAddColumn(self, event):
         """!Add column name to the query"""
         idx = self.list_columns.GetSelections()
         for i in idx:
@@ -297,74 +306,70 @@ class SQLFrame(wx.Frame):
             self.__Add(element = 'column', value = column)
         
         if not self.btn_uniquesample.IsEnabled():
-            self.btn_uniquesample.Enable()
-            self.btn_unique.Enable()
+            self.btn_uniquesample.Enable(True)
+            self.btn_unique.Enable(True)
         
-    def AddValue(self,event):
+    def OnAddValue(self, event):
         """!Add value"""
         idx = self.list_values.GetSelections()[0]
         value = self.list_values.GetString(idx)
         idx = self.list_columns.GetSelections()[0]
         column = self.list_columns.GetString(idx)
         
-        if self.columns[column]['type'].lower().find("chara") > -1:
+        ctype = self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column]['type']
+        
+        if ctype == 'character':
             value = "'%s'" % value
-        self.__Add(value)
+        
+        self.__Add(element = 'value', value = value)
 
-    def AddMark(self,event):
+    def OnAddMark(self, event):
         """!Add mark"""
-        if event.GetId() == self.btn_is.GetId():
-            mark = "="
-        elif event.GetId() == self.btn_isnot.GetId():
-            mark = "!="
-        elif event.GetId() == self.btn_like.GetId():
-            mark = "LIKE"
-        elif event.GetId() == self.btn_gt.GetId():
-            mark = ">"
-        elif event.GetId() == self.btn_gtis.GetId():
-            mark = ">="
-        elif event.GetId() == self.btn_lt.GetId():
-            mark = "<"
-        elif event.GetId() == self.btn_ltis.GetId():
-            mark =  "<="
-        elif event.GetId() == self.btn_or.GetId():
-            mark =  "OR"
-        elif event.GetId() == self.btn_not.GetId():
-            mark = "NOT"
-        elif event.GetId() == self.btn_and.GetId():
-            mark = "AND"
-        elif event.GetId() == self.btn_brackets.GetId():
-            mark = "()"
-        elif event.GetId() == self.btn_prc.GetId():
-            mark = "%"
-        self.__Add(mark)
-
+        mark = None
+        for key, value in self.btn_lv.iteritems():
+            if event.GetId() == value[1]:
+                mark = value[0]
+                break
+        
+        self.__Add(element = 'mark', value = mark)
 
     def __Add(self, element, value):
         """!Add element to the query
 
-        @param what what to add
+        @param element element to add (column, value)
         """
         sqlstr = self.text_sql.GetValue()
         newsqlstr = ''
         if element == 'column':
-            idx1 = len('select')
-            idx2 = sqlstr.lower().find('from')
-            colstr = sqlstr[idx1:idx2].strip()
-            if colstr == '*':
-                cols = []
-            else:
-                cols = colstr.split(',')
-            if value in cols:
-                cols.remove(value)
-            else:
-                cols.append(value)
-            
-            if len(cols) < 1:
-                cols = ['*',]
-            
-            newsqlstr = 'SELECT ' + ','.join(cols) + ' ' + sqlstr[idx2:]
-            
+            if self.radio_cv.GetSelection() == 0: # -> column
+                idx1 = len('select')
+                idx2 = sqlstr.lower().find('from')
+                colstr = sqlstr[idx1:idx2].strip()
+                if colstr == '*':
+                    cols = []
+                else:
+                    cols = colstr.split(',')
+                if value in cols:
+                        cols.remove(value)
+                else:
+                    cols.append(value)
+                
+                if len(cols) < 1:
+                    cols = ['*',]
+                
+                newsqlstr = 'SELECT ' + ','.join(cols) + ' ' + sqlstr[idx2:]
+            else: # -> where
+                newsqlstr = sqlstr
+                if sqlstr.lower().find('where') < 0:
+                    newsqlstr += ' WHERE'
+                
+                newsqlstr += ' ' + value
+        
+        elif element == 'value':
+            newsqlstr = sqlstr + ' ' + value
+        elif element == 'mark':
+            newsqlstr = sqlstr + ' ' + value
+        
         if newsqlstr:
             self.text_sql.SetValue(newsqlstr)
         
@@ -394,10 +399,13 @@ class SQLFrame(wx.Frame):
                                    database = self.database)
 
         if ret != 0 and msg:
+            self.statusbar.SetStatusText(_("SQL statement is not valid"), 0)
             wx.MessageBox(parent=self,
                           message=_("SQL statement is not valid.\n\n%s") % msg,
                           caption=_("Warning"), style=wx.OK | wx.ICON_WARNING | wx.CENTRE)
-        
+        else:
+            self.statusbar.SetStatusText(_("SQL statement is valid"), 0)
+
     def OnClear(self, event):
         """!Clear button pressed"""
         if self.qtype.lower() == "select":
@@ -409,6 +417,8 @@ class SQLFrame(wx.Frame):
         """!Close button pressed"""
         self.Destroy()
 
+        event.Skip()
+        
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print >>sys.stderr, __doc__
