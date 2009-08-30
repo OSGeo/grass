@@ -478,6 +478,9 @@ class AttributeManager(wx.Frame):
         # -> layers / tables description
         self.mapDBInfo = dbm_base.VectorDBInfo(self.vectorName)
 
+        # sqlbuilder
+        self.builder = None
+        
         if len(self.mapDBInfo.layers.keys()) == 0:
             wx.MessageBox(parent=self.parent,
                           message=_("Database connection for vector map <%s> "
@@ -1862,16 +1865,28 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnBuilder(self,event):
-        """!SQL Builder button pressed"""
-        self.builder = sqlbuilder.SQLFrame(parent=self, id=wx.ID_ANY,
-                                           title=_("SQL Builder"),
-                                           vectmap=self.vectorName)
+        """!SQL Builder button pressed -> show the SQLBuilder dialog"""
+        if not self.builder:
+            self.builder = sqlbuilder.SQLFrame(parent = self, id = wx.ID_ANY,
+                                               title = _("SQL Builder"),
+                                               vectmap = self.vectorName,
+                                               evtheader = self.OnBuilderEvt)
+            self.builder.Show()
+        else:
+            self.builder.Raise()
+        
+    def OnBuilderEvt(self, event):
+        if event == 'apply':
+            sqlstr = self.builder.GetSQLStatement()
+            self.FindWindowById(self.layerPage[self.layer]['statement']).SetValue(sqlstr)
+            if self.builder.CloseOnApply():
+                self.builder = None
+        elif event == 'close':
+            self.builder = None
+        
     def OnTextEnter(self, event):
         pass
-
-    def OnSQLBuilder(self, event):
-        pass
-
+    
     def OnDataItemActivated(self, event):
         """!Item activated, highlight selected item"""
         self.OnDataDrawSelected(event)
