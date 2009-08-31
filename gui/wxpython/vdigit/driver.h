@@ -206,6 +206,7 @@ public:
 
     /* misc */
     std::vector<double> GetMapBoundingBox();
+    bool Is3D();
 
     /* set */
     void SetRegion(double, double, double, double,

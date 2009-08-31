@@ -711,6 +711,25 @@ class VDigit(AbstractDigit):
                                   UserSettings.Get(group='vdigit', key='catBoundary',
                                                    subkey='enabled'))
         
+    def ZBulkLines(self, pos1, pos2, start, step):
+        """!Z-bulk labeling
+
+        @param pos1 reference line (start point)
+        @param pos1 reference line (end point)
+        @param start starting value
+        @param step step value
+
+        @return number of modified lines
+        @return -1 on error
+        """
+        ret = self.digit.ZBulkLabeling(pos1[0], pos1[1], pos2[0], pos2[1],
+                                       start, step)
+        
+        if ret > 0:
+            self.toolbar.EnableUndo()
+        
+        return ret
+    
     def __getSnapThreshold(self):
         """!Get snap mode and threshold value
 
@@ -1018,6 +1037,13 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         return self.__display.GetMapBoundingBox()
 
+    def Is3D(self):
+        """!Check if open vector map is 3D
+
+        @return True if 3D
+        @return False if not 3D"""
+        return self.__display.Is3D()
+    
     def DrawSelected(self, draw=True):
         """!Show/hide selected features"""
         self.__display.DrawSelected(draw)
@@ -2463,7 +2489,7 @@ class VDigitZBulkDialog(wx.Dialog):
         flexSizer.Add(self.step, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
 
         sizer.Add(item=flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
-        border.Add(item=sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
 
         # buttons
         btnCancel = wx.Button(self, wx.ID_CANCEL)

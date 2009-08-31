@@ -1428,7 +1428,7 @@ class BufferedWindow(MapWindow, wx.Window):
             end   = self.Pixel2Cell(self.polycoords[-1])
             begin = self.Pixel2Cell(self.mouse['begin'])
             
-            self.DrawLines(self.pdcTmp, begin, end)
+            self.DrawLines(self.pdcTmp, polycoords = (begin, end))
         
     def OnLeftDown(self, event):
         """!
@@ -2143,8 +2143,8 @@ class BufferedWindow(MapWindow, wx.Window):
                 dlg = VDigitZBulkDialog(parent=self, title=_("Z bulk-labeling dialog"),
                                         nselected=len(selected))
                 if dlg.ShowModal() == wx.ID_OK:
-                    if digitClass.ZBulkLine(pos1, pos2, dlg.value.GetValue(),
-                                            dlg.step.GetValue()) < 0:
+                    if digitClass.ZBulkLines(pos1, pos2, dlg.value.GetValue(),
+                                             dlg.step.GetValue()) < 0:
                         return
                 self.UpdateMap(render=False, renderVector=True)
             elif digitToolbar.GetAction() == "typeConv":

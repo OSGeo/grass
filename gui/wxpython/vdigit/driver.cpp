@@ -617,3 +617,13 @@ int print_percent(int x)
     
     return 0;
 }
+
+/**
+   \brief Check if vector map is 3D
+
+   \return True for 3D otherwise False
+*/
+bool DisplayDriver::Is3D()
+{
+    return (bool) Vect_is_3d(mapInfo);
+}
