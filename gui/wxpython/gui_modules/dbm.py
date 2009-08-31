@@ -451,10 +451,10 @@ class AttributeManager(wx.Frame):
         
         # vector attributes can be changed only if vector map is in
         # the current mapset
-        if grass.find_file(element = 'vector', name = vectorName)['mapset'] == grass.gisenv()['MAPSET']:
-            editable = True
+        if grass.find_file(name = self.vectorName, element = 'vector')['mapset'] == grass.gisenv()['MAPSET']:
+            self.editable = True
         else:
-            editable = False
+            self.editable = False
         
         self.cmdLog     = log    # self.parent.goutput
         
@@ -534,7 +534,7 @@ class AttributeManager(wx.Frame):
                                                style=dbmStyle)
         #self.notebook.AddPage(self.manageTablePage, caption=_("Manage tables"))
         self.notebook.AddPage(self.manageTablePage, text=_("Manage tables")) # FN
-        if not editable:
+        if not self.editable:
             self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
         self.manageTablePage.SetTabAreaColour(globalvar.FNPageColor)
 
@@ -543,7 +543,7 @@ class AttributeManager(wx.Frame):
         #self.notebook.AddPage(self.manageLayerPage, caption=_("Manage layers"))
         self.notebook.AddPage(self.manageLayerPage, text=_("Manage layers")) # FN
         self.manageLayerPage.SetTabAreaColour(globalvar.FNPageColor)
-        if not editable:
+        if not self.editable:
             self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
         
         self.__createBrowsePage()
@@ -1015,11 +1015,15 @@ class AttributeManager(wx.Frame):
         menu = wx.Menu()
         menu.Append(self.popupDataID1, _("Edit selected record"))
         selected = list.GetFirstSelected()
-        if selected == -1 or list.GetNextSelected(selected) != -1:
+        if not self.editable or selected == -1 or list.GetNextSelected(selected) != -1:
             menu.Enable(self.popupDataID1, False)
         menu.Append(self.popupDataID2, _("Insert new record"))
         menu.Append(self.popupDataID3, _("Delete selected record(s)"))
         menu.Append(self.popupDataID4, _("Delete all records"))
+        if not self.editable:
+            menu.Enable(self.popupDataID2, False)
+            menu.Enable(self.popupDataID3, False)
+            menu.Enable(self.popupDataID4, False)
         menu.AppendSeparator()
         menu.Append(self.popupDataID5, _("Select all"))
         menu.Append(self.popupDataID6, _("Deselect all"))
@@ -1031,6 +1035,8 @@ class AttributeManager(wx.Frame):
             menu.Enable(self.popupDataID8, False)
         menu.Append(self.popupDataID9, _("Extract selected features"))
         menu.Append(self.popupDataID11, _("Delete selected features"))
+        if not self.editable:
+            menu.Enable(self.popupDataID11, False)
         if list.GetFirstSelected() == -1:
             menu.Enable(self.popupDataID3, False)
             menu.Enable(self.popupDataID9, False)
