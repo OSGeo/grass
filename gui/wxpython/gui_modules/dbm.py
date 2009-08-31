@@ -1,4 +1,4 @@
-"""
+"""!
 @package dbm.py
 
 @brief GRASS Attribute Table Manager
@@ -45,6 +45,8 @@ if not os.getenv("GRASS_WXBUNDLED"):
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.flatnotebook as FN
+
+import grass.script as grass
 
 import sqlbuilder
 import gcmd
@@ -446,7 +448,14 @@ class AttributeManager(wx.Frame):
             maptree = self.parent.curr_page.maptree
             name = maptree.GetPyData(self.treeItem)[0]['maplayer'].GetName()
             self.vectorName = name
-
+        
+        # vector attributes can be changed only if vector map is in
+        # the current mapset
+        if grass.find_file(element = 'vector', name = vectorName)['mapset'] == grass.gisenv()['MAPSET']:
+            editable = True
+        else:
+            editable = False
+        
         self.cmdLog     = log    # self.parent.goutput
         
         wx.Frame.__init__(self, parent, id, style=style)
@@ -522,9 +531,11 @@ class AttributeManager(wx.Frame):
         self.browsePage.SetTabAreaColour(globalvar.FNPageColor)
 
         self.manageTablePage = FN.FlatNotebook(self.panel, id=wx.ID_ANY,
-                                          style=dbmStyle)
+                                               style=dbmStyle)
         #self.notebook.AddPage(self.manageTablePage, caption=_("Manage tables"))
         self.notebook.AddPage(self.manageTablePage, text=_("Manage tables")) # FN
+        if not editable:
+            self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
         self.manageTablePage.SetTabAreaColour(globalvar.FNPageColor)
 
         self.manageLayerPage = FN.FlatNotebook(self.panel, id=wx.ID_ANY,
@@ -532,6 +543,8 @@ class AttributeManager(wx.Frame):
         #self.notebook.AddPage(self.manageLayerPage, caption=_("Manage layers"))
         self.notebook.AddPage(self.manageLayerPage, text=_("Manage layers")) # FN
         self.manageLayerPage.SetTabAreaColour(globalvar.FNPageColor)
+        if not editable:
+            self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
         
         self.__createBrowsePage()
         self.__createManageTablePage()
