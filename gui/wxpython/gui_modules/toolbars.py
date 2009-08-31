@@ -1008,6 +1008,12 @@ class VDigitToolbar(AbstractToolbar):
 
     def OnZBulk(self, event):
         """!Z bulk-labeling selected lines/boundaries"""
+        if not self.parent.digit.driver.Is3D():
+            wx.MessageBox(parent=self.parent,
+                          message=_("Vector map is not 3D. Operation canceled."),
+                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            return
+        
         if self.action['desc'] == 'zbulkLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
             self.toolbar[0].ToggleTool(self.additionalTools, False)
