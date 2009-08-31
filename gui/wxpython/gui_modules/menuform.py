@@ -273,7 +273,7 @@ class UpdateThread(Thread):
                         self.data[win.InsertTableColumns] = { 'table' : pTable.get('value'),
                                                               'driver' : driver,
                                                               'database' : db }
-                    else:
+                    elif pTable:
                         self.data[win.InsertTableColumns] = { 'table'  : pTable.get('value') }
         
 def UpdateDialog(parent, event, eventId, task):
