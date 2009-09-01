@@ -744,6 +744,33 @@ Topology general characteristics:
 Topology is written for native format while pseudo-topology is written
 for OGR sources, SHAPE-link.
 
+The following rules apply to the vector data:
+
+- Lines should not cross each other (i.e., lines which would cross must
+  be split at their intersection to form distict lines).
+- Linear primitives which share nodes at exactly same points (i.e.,
+  must be snapped together). This is particulary important since nodes
+  are not exactly represented in the coor file, but only implicitly as
+  endpoints of lines.
+- Common area boundaries should appear only once (i.e., should not be
+  double digitized).
+- Areas must be explicitly closed. This means that it must be possible
+  to complete each area by following one or more boundaries that are
+  connected by common nodes, and that such tracings result is closed
+  areas.
+- It is recommended that area features and linear features be placed
+  in separate layers. However if area features and linear features
+  must appear in one layer, common boundaries should be digitized only
+  once. A boundary that is also a line (e.g., a road which is also a
+  field boundary), should be digitized as a boundary to complete the
+  area. The area feature should be labeled by a centroid as an
+  area. Additionally, the common boundary itself (i.e., the boundary
+  which is also a line) should be labeled as a line by a distict
+  category number.
+
+Vector map topology can be cleaned at user level by <tt>v.clean</tt>
+command.
+
 \subsection topo_file_format Topo file format specification
 
 Topo file is read by Vect_open_topo().
