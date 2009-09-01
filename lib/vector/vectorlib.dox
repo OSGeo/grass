@@ -344,17 +344,21 @@ Besides internal library functions there are two main libraries:
 For historical reasons, there are two internal libraries:
 
 - diglib (with dig_*() functions), GRASS 3.x/4.x
-- Vlib (with V1_*(), V2_*() and Vect_*() functions), GRASS 4.x/5.x (except for the 5.7 interim version)
+- Vlib (with V1_*(), V2_*() and Vect_*() functions), GRASS 4.x/5.x
+  (except for the 5.7 interim version)
 
 The vector library was introduced in GRASS 4.0 to hide internal vector
 files' formats and structures.  In GRASS 6/7, everything is accessed via
 Vect_*() functions, for example:
 
 Old 4.x code:
+
 \code
     xx = Map.Att[Map.Area[area_num].att].x;
 \endcode
+
 New 6.x/7.x functions:
+
 \code
     centroid = Vect_get_area_centroid(Map, area_num);
     Vect_read_line(Map, line_p, NULL, centroid);
@@ -366,8 +370,18 @@ hidden from the modules' API (mainly dig_*(), V1_*() and V2_*()
 functions). All available Vect_*() functions are topological vector
 functions.
 
-<i>Note: For details please read Blazek et al. 2002 (see below) as well as the
-references in this document.</i>
+
+The following include file contains definitions and structures
+required by some of the routines in this library. The programmer
+should therefore include this file in any code that uses the vector
+library:
+
+\code
+#include <grass/vector.h>
+\endcode
+
+<i>Note: For details please read Blazek et al. 2002 (see below) as
+well as the references in this document.</i>
 
 \section vlib_structures Vector library structures
 
@@ -1512,8 +1526,21 @@ vector feature mentioned above are located in layer 1.
 
 \section vlibfunc List of vector library functions
 
+The vector library provides the GRASS programmer with routines to
+process vector data. The routines in the vector library are presented
+in functional groupings, rather than in alphabetical order. The order
+of presentation will, it is hoped, provide better understanding of how
+the library is to be used, as well as show the interrelationships
+among the various routines. Note that a good way to understand how to
+use these routines is to look at the source code for GRASS modules
+which use them.
+
+Note: All routines start with one of following prefixes Vect_, V1_,
+V2_ or dig_. To avoid name conficts, programmers should not create
+variables or routines in their own modules which use this prefix.
+
 The Vect_*() functions are the programmer's API for GRASS vector
-programming.
+programming. The programmer should use only routines with this prefix.
 
 - \subpage area
 - \subpage array
