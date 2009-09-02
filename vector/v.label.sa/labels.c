@@ -974,6 +974,8 @@ static double label_flatness(label_t * label, label_candidate_t * candidate)
 
     flatness /= sqrt((x2 - x0) * (x2 - x0) + (y2 - y0) * (y2 - y0));	/* this is d'' */
     flatness = (flatness * flatness) / (ideal_distance * ideal_distance);
+
+    Vect_destroy_line_struct(line);
     return flatness;
 }
 
@@ -1086,6 +1088,7 @@ static double label_lineover(label_t * label, label_candidate_t * candidate,
 		      sqrt(v.x * v.x + v.y * v.y)));
 	    lineover += 1.0 + 9.0 * cosvb;
 	}
+	Vect_destroy_line_struct(line);
     }
 
     Vect_destroy_list(il);
