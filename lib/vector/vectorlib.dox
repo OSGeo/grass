@@ -7,12 +7,14 @@ by GRASS Development Team (http://grass.osgeo.org)
 - \subpage background
 - \subpage intro
  - \subpage vector_map
+  - \subpage vector_map_levels
   - \subpage directory_structure
   - \subpage head_file_format
  - \subpage categories_layers
  - \subpage attributes
   - \subpage dbln_file_format
 - \subpage vlibs
+ - \subpage vlib_history
 - \subpage vlib_structures
  - \subpage Map_info
  - \subpage Plus_head
@@ -131,6 +133,38 @@ Note that all lines and boundaries can consist of multiple segments.
 Topology also holds information about isles. Isles are located within an area, not
 touching the boundaries of the outer area. Isles consist of one or more areas
 and are used internally by the vector libraries to maintain correct topology of areas.
+
+\subsubsection vector_map_levels Levels of read access
+
+There are two levels of read access to the vector data:
+
+- <i>Level One</i> provides simple access to the vector feature
+  information. There is no access to topology information at this
+  level.
+- <i>Level Two</i> provides full access to all the information
+  including topology information. This level requires more from the
+  programmer, more momory, and longer startup time.
+
+Level of access is retured by Vect_open_old().
+
+Note: Higher level of access are planned, so when checking success
+return codes for a particular level of access (when calling
+Vect_open_old() for example), the programmer should use >= instead of
+== for compatibility with future releases.
+
+An existing vector map can be open for reading by Vect_open_old(). New
+vector map can be created (or open for writing) by
+Vect_open_new(). Vect_open_old() attempts to open a vector map at the
+highest possible level of access. It will return the number of the
+level at which it opened. Vect_open_new() always opens at level 1
+only. If you require that a vector map be opened at a lower level
+(e.g. one), you can call the routine Vect_set_open_level(1);
+Vect_open_old() will then either open at level one or fail. If you
+instead require the highest level access possible, you should not use
+Vect_set_open_level(), but instead check the return value of
+Vect_open_old() to make sure it is greater than or equal to the lowest
+level at which you need access. This allows for future levels to work
+without need for module change.
 
 \subsubsection directory_structure Directory structure
 
@@ -383,11 +417,60 @@ library:
 <i>Note: For details please read Blazek et al. 2002 (see below) as
 well as the references in this document.</i>
 
+\subsection vlib_history Historical notes
+
+The vector library in GRASS 4.0 changed significantly from the
+<b>Digit Library</b> (diglib) used in GRASS 3.1. Below is an overview
+of why the changes were made.
+
+The Digit Library was a collage of subroutines created for developing
+the map development programs. Few of these subroutines were actually
+designed as a user access library. They required individuals to assume
+too much responsibility and control over what happened to the data
+file. Thus when it came time to change vector data file formats for
+GRASS 4.0, many modules also required modification. The two different
+access levels for 3.0 vector files provided very different ways of
+calling the library; they offered little consistency for the user.
+
+The Digit Library was originally designed to only have one file open
+for read or write at a time. Although it was possible in some cases to
+get around this, one restriction was the global head structure. Since
+there was only one instance of this, there could only be one copy of
+that information, and thus, only one open vector file.
+
+The solution to these problems was to design a new user library as an
+interface to the vector data files. This new library was designed to
+provide a simple consistent interface, which hides as much of the
+details of the data format as possible. It also could be extended for
+future enhancements without the need to change existing programs.
+
+The new vector library in GRASS 4 provided routines for opening,
+closing, reading, and writing vector files, as well as several support
+functions. The Digit Library has been replaced, so that all existing
+modules was converted to use the new library. Those routines that
+existed in the Digit Library and were not affected by these changes
+continue to exist in unmodified form, and were included in the vector
+library. Most of the commonly used routines have been discarded, and
+replaced by the new vector routines.
+
+Instead the global head structure was used own local version of
+it. The structure that replaced struct head is struct dig_head. There
+were still two levels of interface to the vector files (future
+releases may include more). Level one provided access only to arc
+(i.e. polyline) information and to the type of line (AREA, LINE,
+DOT). Level two provided access to polygons (areas), attributes, and
+network topology.
+
+
+
 \section vlib_structures Vector library structures
 
 \subsection Map_info Map_info structure
 
-<tt>Map_info</tt> structure holds basic information about open vector map.
+The token that is used to identify each vector map is the Map_info
+structure. It maintains all information about an individual open
+vector map. The structure must be passed to the mosy vector library
+routines.
 
 \code
 struct Map_info
@@ -975,7 +1058,10 @@ struct P_isle
 };
 \endcode
 
-\subsection topo_levels Topology levels
+\subpage topo_levels Topology levels
+
+The vector library defines more <i>topology levels</i> (only for level
+of access 2):
 
 \code
 #define GV_BUILD_NONE         0
