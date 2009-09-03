@@ -732,7 +732,7 @@ struct dig_head
 
 \section vlibGeometry Vector library feature geometry
 
-\subsection ftypes Feature types
+\subsection vlibFeatureTypes Feature types
 
 \code
 #define GV_POINT      0x01
@@ -1058,7 +1058,7 @@ struct P_isle
 };
 \endcode
 
-\subpage vlibTopoLevels Topology levels
+\subsection vlibTopoLevels Topology levels
 
 The vector library defines more <i>topology levels</i> (only for level
 of access 2):
@@ -1162,7 +1162,7 @@ Because lines are not used to build areas, we have only one
 area/centroid, instead of 4 which would be necessary in TIGER.
 
 
-\subsection vlibtopoMemory Topology memory management
+\subsection vlibTopoMemory Topology memory management
 
 Topology is generated for all kinds of vector types.  Memory is not
 released by default. The programmer can force the library to release
@@ -1333,7 +1333,7 @@ Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 </table>
 
 
-\section vlibSidx Vector library category index management
+\section vlibCidx Vector library category index management
 
 The category index (stored in the cidx file) improves the performance of all
 selections by cats/attributes (SQL, e.g. 'd.vect cats=27591', 'v.extract list=20000-21000').
@@ -1651,7 +1651,7 @@ programming. The programmer should use only routines with this prefix.
 - \subpage vlibGraph
 - \subpage vlibHeader
 - \subpage vlibHist
-- \subpage vlibInit_head
+- \subpage vlibInitHead
 - \subpage vlibIntersect
 - \subpage vlibLegalVname
 - \subpage vlibLevel
