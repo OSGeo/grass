@@ -1,27 +1,23 @@
-GRASS GIS 6 List of Authors
-===========================
-
-$Date$
-
+GRASS GIS List of Authors
+=========================
 
 Many people have contributed to GRASS GIS. Without any one of them the
 project would not exist in its current form.
 
-The authors of the individual programs are listed at the end of their 
-manual page in the GRASS users manuals or in the source code. However, 
-numerous authors of bug fixes and enhancements as well as people who 
-have been working on coordination, integration, translation, 
-documentation and testing are not mentioned. Therefore, this 
-page is an attempt to acknowledge those who contributed to GRASS 
-development.
+The authors of the individual programs are listed at the end of their
+manual page in the GRASS users manuals or in the source code. However,
+numerous authors of bug fixes and enhancements as well as people who
+have been working on coordination, integration, translation,
+documentation and testing are not mentioned. Therefore, this page is
+an attempt to acknowledge those who contributed to GRASS development.
 
-Please allow us to extend our most cordial thanks to all of you. If you 
-contributed to GRASS at any point during its existence, please let us 
-know your name and e-mail address so we can add your name.
+Please allow us to extend our most cordial thanks to all of you. If
+you contributed to GRASS at any point during its existence, please let
+us know your name and e-mail address so we can add your name.
 
-Active parts of the program have authors dating back to GRASS's 
+Active parts of the program have authors dating back to GRASS's
 inception in 1982. Please check the GRASS 1.x - 5.0 credits list at:
- http://www.grass-gis.org/devel/grasscredits.html
+http://grass.osgeo.org/devel/grasscredits.html
 
 
 GRASS 6.0 was made up of entirely new code for much of the vector and 
@@ -30,22 +26,22 @@ subsystems are largely directly inherited from GRASS 5.4 without change.
 The core GIS, GUI, and build subsystems are a hybrid of old and new code.
 
 Thus we must also thank and credit the members of the 5.0 core
-development team, listed below, as many are still active in the 
-project and GRASS 6 owes much of itself to the generosity of 
-their bright minds.
+development team, listed below, as many are still active in the
+project and GRASS 6 owes much of itself to the generosity of their
+bright minds.
 
 
 Email addresses below have been spam-proofed to protect the innocent;
 add "@" and "." as needed.
 
 A list of contributors with write access is available in
-./contributors.csv
+https://svn.osgeo.org/grass/grass/trunk/contributors.csv
 
 A list of contributors without write access is available in
-./contributors_extra.csv
+https://svn.osgeo.org/grass/grass/trunk/contributors_extra.csv
 
 A list of translators is available in
-./translators.csv
+https://svn.osgeo.org/grass/grass/trunk/translators.csv
 
 
 
@@ -101,12 +97,12 @@ PACKAGING
      o SuSE: Otto Dassau
      o Ubuntu: Jachym Cepicky
  - Mac OSX: William Kyngesburye
- - MS-Windows: Marco Pasetti
+ - MS-Windows: Colin Nielsen and Marco Pasetti
 
 Source code Quality assessment system
  - SOCCER Labs at Ecole Polytechnique de Montreal, Canada
    http://web.soccerlab.polymtl.ca/grass-evolution/grass-browsers/grass-index-en.html
-   http://www.grass-gis.org/mailman/listinfo/grass-qa
+   http://grass.osgeo.org/mailman/listinfo/grass-qa
 
 Power user tester:
    Maciej "Maciek" Sieczka <msieczka at sieczka.org>
@@ -247,7 +243,7 @@ GRASS GIS 5.4 Author List
 -------------------------
 
 Please check additionally the GRASS 1.x-5.0 credits list at:
- http://www.grass-gis.org/devel/grasscredits.html
+ http://grass.osgeo.org/devel/grasscredits.html
 
 While it is impossible for us to give credit to everyone (past 
 and present) who has contributed to GRASS, the following is the 
@@ -335,7 +331,7 @@ Former GRASS 4.2.0 development:
 Former GRASS 4 development (1984 to 1995):
    U.S. Army Construction Engineering Research Laboratories  (CERL)
    Jim Westervelt, Michael Shapiro, Chris Rewerts, Robert Lozar, David Gerdes, ...
-   See: http://www.grass-gis.org/devel/grasscredits.html
+   See: http://grass.osgeo.org/devel/grasscredits.html
 
 Former Institutions
  - University of Illinois at Urbana-Champaign, USA
@@ -362,8 +358,8 @@ Contact:
  Italy
  email: neteler AT cealp.it
 
-Internet:  http://www.grass-gis.org/ (main site)
+Internet:  http://grass.osgeo.org/ (main site)
            http://grass.ibiblio.org/ (mirror)
-           http://www.grass-gis.org/mirrors.php (list of mirrors)
+           http://grass.osgeo.org/mirrors.php (list of mirrors)
 
 with a worldwide distribution network.
