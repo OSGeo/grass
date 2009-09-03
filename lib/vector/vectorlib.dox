@@ -4,55 +4,55 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 <b>Table of contents</b>
 
-- \subpage background
-- \subpage intro
- - \subpage vector_map
-  - \subpage vector_map_levels
-  - \subpage directory_structure
-  - \subpage head_file_format
- - \subpage categories_layers
- - \subpage attributes
-  - \subpage dbln_file_format
+- \subpage vlibBackground
+- \subpage vlibIntro
+ - \subpage vlibVectorMap
+  - \subpage vlibVectorLevels
+  - \subpage vlibDirectoryStructure
+  - \subpage vlibHeadFileFormat
+ - \subpage vlibCategoriesLayers
+ - \subpage vlibAttributes
+  - \subpage vlibDblnFileFormat
 - \subpage vlibs
- - \subpage vlib_history
-- \subpage vlib_structures
- - \subpage Map_info
- - \subpage Plus_head
- - \subpage dig_head
-- \subpage feature_geom
- - \subpage ftypes
- - \subpage coor_file_format
-  - \subpage coor_file_head
-  - \subpage coor_file_body 
-- \subpage topology_management
- - \subpage topo_file_format
-  - \subpage topo_file_header
-  - \subpage topo_file_body
- - \subpage topo_levels
- - \subpage topo_examples
- - \subpage topo_memory
-- \subpage spidx
- - \subpage sidx_file_format
-- \subpage cidx
- - \subpage cidx_file_format
-  - \subpage cidx_file_head
-- \subpage tin
-- \subpage ogr_iface
- - \subpage frmt_file_format
- - \subpage fidx_file_format
-- \subpage grassdglib
-- \subpage ascii
+ - \subpage vlibHistory
+- \subpage vlibStructures
+ - \subpage vlibMap_info
+ - \subpage vlibPlus_head
+ - \subpage vlibDig_head
+- \subpage vlibGeometry
+ - \subpage vlibFeatureTypes
+ - \subpage vlibCoorFileFormat
+  - \subpage vlibCoorFileHead
+  - \subpage vlibCoorFileBody 
+- \subpage vlibTopoManagement
+ - \subpage vlibTopoFileFormat
+  - \subpage vlibTopoFileHead
+  - \subpage vlibTopoFileBody
+ - \subpage vlibTopoLevels
+ - \subpage vlibTopoExamples
+ - \subpage vlibTopoMemory
+- \subpage vlibSpidx
+ - \subpage vlibSidxFileFormat
+- \subpage vlibCidx
+ - \subpage vlibCidxFileFormat
+  - \subpage vlibCidxFileHead
+- \subpage vlibTin
+- \subpage vlibOgrIface
+ - \subpage vlibFrmtFileFormat
+ - \subpage vlibFidxFileFormat
+- \subpage vlibDglib
+- \subpage vlibAscii
 
-- \subpage vlibfunc
+- \subpage vlibFunc
 
-- \subpage authors
+- \subpage vlibAuthors
 
-- \subpage references
+- \subpage vlibReferences
 
-- \subpage seealso
+- \subpage vlibSeealso
 
 
-\section background Background
+\section vlibBackground Background
 
 Generally, the vector data model is used to describe geographic
 phenomena which may be represented by geometric entities like points,
@@ -65,7 +65,7 @@ between two adjacent areas is stored as a single line, simplifying the
 vector data maintenance.
 
 
-\section intro Introduction
+\section vlibIntro Introduction
 
 The GRASS 6/7 vector format is very similar to the previous GRASS 4.x
 (5.0/5.3) vector format.
@@ -99,7 +99,7 @@ The current implementation includes:
       library and drivers (\ref attributes);
 
 
-\subsection vector_map Vector map
+\subsection vlibVectorMap Vector map
 
 GRASS vector maps are stored in an <em>arc-node</em> representation,
 consisting of curves called arcs. An arc is stored as a series of
@@ -134,7 +134,7 @@ Topology also holds information about isles. Isles are located within an area, n
 touching the boundaries of the outer area. Isles consist of one or more areas
 and are used internally by the vector libraries to maintain correct topology of areas.
 
-\subsubsection vector_map_levels Levels of read access
+\subsubsection vlibVectorLevels Levels of read access
 
 There are two levels of read access to the vector data:
 
@@ -166,7 +166,7 @@ Vect_open_old() to make sure it is greater than or equal to the lowest
 level at which you need access. This allows for future levels to work
 without need for module change.
 
-\subsubsection directory_structure Directory structure
+\subsubsection vlibDirectoryStructure Directory structure
 
 Vector map is stored in a number of data files. Vector map directory
 structure and file names were changed in GRASS 6 with respect to
@@ -189,7 +189,7 @@ This directory contains these files:
 - <b>frmt</b> - text file, format description (external format only)
 - <b>fidx</b> - binary file, feature index (OGR format only)
 
-\subsubsection head_file_format Head file format specification
+\subsubsection vlibHeadFileFormat Head file format specification
 
 The header contains historical information, a description of the
 vector map and many other information. The file is an unordered list
@@ -208,7 +208,7 @@ of key/value entries. The <i>key</i> is a string separated from
 <tr><td>MAP THRESH</td><td>digitizing threshold</td></tr>
 </table>
 
-\subsection categories_layers Categories and layers
+\subsection vlibCategoriesLayers Categories and layers
 
 <i>Note: "layer" was called "field" in earlier version.</i>
 
@@ -238,7 +238,7 @@ essentially referenced by the &lt;layer,category&gt; pair.
 Categories start with 1 (category '0' is allowed for OGR
 layers). Categories do not have to be continuous.
 
-\subsection attributes Attributes
+\subsection vlibAttributes Attributes
 
 The old GRASS 4.x 'dig_cats' files are not used any more and vectors'
 attributes are stored in external database. Connection with the
@@ -271,7 +271,7 @@ struct dblinks
 The general DBMI settings are defined in the '$MAPSET/VAR' text file
 (maintained with <tt>db.connect</tt> command at user level).
 
-\subsection dbln_file_format Dbln file format specification
+\subsection vlibDblnFileFormat Dbln file format specification
 
 Each vector maps has its own DBMI settings stored in the
 '$MAPSET/vector/vector_name/dbln' text file. For each pair <b>vector map +
@@ -417,7 +417,7 @@ library:
 <i>Note: For details please read Blazek et al. 2002 (see below) as
 well as the references in this document.</i>
 
-\subsection vlib_history Historical notes
+\subsection vlibHistory Historical notes
 
 The vector library in GRASS 4.0 changed significantly from the
 <b>Digit Library</b> (diglib) used in GRASS 3.1. Below is an overview
@@ -463,9 +463,9 @@ network topology.
 
 
 
-\section vlib_structures Vector library structures
+\section vlibStructures Vector library structures
 
-\subsection Map_info Map_info structure
+\subsection vlibMap_info Map_info structure
 
 The token that is used to identify each vector map is the Map_info
 structure. It maintains all information about an individual open
@@ -545,7 +545,7 @@ struct Map_info
 };
 \endcode
 
-\subsection Plus_head Plus_head structure
+\subsection vlibPlus_head Plus_head structure
 
 <tt>Plus_head</tt> holds basic topology-related information about vector map.
 
@@ -689,7 +689,7 @@ struct Plus_head
 };
 \endcode
 
-\subsection dig_head dig_head structure
+\subsection vlibDig_head dig_head structure
 
 <tt>dig_head</tt> holds header data of vector map (see \ref Map_info).
 
@@ -730,7 +730,7 @@ struct dig_head
 };
 \endcode
 
-\section feature_geom Vector library feature geometry
+\section vlibGeometry Vector library feature geometry
 
 \subsection ftypes Feature types
 
@@ -753,13 +753,13 @@ is no support (yet) for 3D topology (volumes). Faces are used in a
 couple of modules including NVIZ to visualize 3D buildings and other
 volumetric figures.
 
-\subsection coor_file_format Coor file format specification
+\subsection vlibCoorFileFormat Coor file format specification
 
 In the coor file the following is stored: 'line' (element) type,
 number of attributes and layer number for each category. Coordinates
 in binary file are stored as double (8 bytes).
 
-\subsubsection coor_file_head Header
+\subsubsection vlibCoorFileHead Header
 
 <table border="1" style="border-collapse: collapse">
 <tr><td>Name</td><td>Type</td><td>Number</td><td>Description</td></tr>
@@ -782,7 +782,7 @@ in binary file are stored as double (8 bytes).
 
 </table>
 
-\subsubsection coor_file_body Body
+\subsubsection vlibCoorFileBody Body
 
 The body consists of line records:
 
@@ -829,7 +829,7 @@ The body consists of line records:
 <tr><td>C</td><td>Char  </td><td>1</td></tr>
 </table>
 
-\section topology_management Vector library topology management
+\section vlibTopoManagement Vector library topology management
 
 Topology general characteristics:
 
@@ -868,11 +868,11 @@ The following rules apply to the vector data:
 Vector map topology can be cleaned at user level by <tt>v.clean</tt>
 command.
 
-\subsection topo_file_format Topo file format specification
+\subsection vlibTopoFileFormat Topo file format specification
 
 Topo file is read by Vect_open_topo().
 
-\subsubsection topo_file_header Header
+\subsubsection vlibTopoFileHead Header
 
 Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 
@@ -908,7 +908,7 @@ areas, isles, volumes and holes</td></tr>
 <tr><td>plus->coor_size</td><td>L</td><td>1</td><td>File size</td></tr>
 </table>
 
-\subsubsection topo_file_body Body (nodes, lines, areas, isles)
+\subsubsection vlibTopoFileBody Body (nodes, lines, areas, isles)
 
 <b>Nodes</b>
 
@@ -1058,7 +1058,7 @@ struct P_isle
 };
 \endcode
 
-\subpage topo_levels Topology levels
+\subpage vlibTopoLevels Topology levels
 
 The vector library defines more <i>topology levels</i> (only for level
 of access 2):
@@ -1075,9 +1075,9 @@ of access 2):
 GV_BOUNDARY contains geometry and it is used to build areas.
 GV_LINE cannot form an area.
 
-\subsection topo_examples Topology examples
+\subsection vlibTopoExamples Topology examples
 
-\subsubsection Topology_Example_1 Topology Example 1
+\subsubsection vlibTopoExample1 Topology Example 1
 
 A polygon may be formed by many boundaries (more primitives but connected).
 One boundary is shared by adjacent areas.
@@ -1094,7 +1094,7 @@ A,B = 2 areas
 \endverbatim
 
 
-\subsubsection Topology_Example_2 Topology Example 2
+\subsubsection vlibTopoExample2 Topology Example 2
 
 This is handled correctly in GRASS: A can be filled, B filled differently.
 
@@ -1115,7 +1115,7 @@ exported from GRASS as polygon A with inner ring B because there are
 only 2 areas A and B and no island.
 
 
-\subsubsection Topology_Example_3 Topology Example 3
+\subsubsection vlibTopoExample3 Topology Example 3
 
 This is handled correctly in GRASS: Areas A1, A2, and A3 can be filled differently.
 
@@ -1138,7 +1138,7 @@ when searching for a centroid that can be attached to Area A1. A1
 above can be exported from GRASS as polygon A1 with inner ring I1.
 
 
-\subsubsection Topology_Example_4 Topology Example 4
+\subsubsection vlibTopoExample4 Topology Example 4
 
 v.in.ogr/v.clean can identify dangles and change the type from boundary
 to line (in TIGER data for example). 
@@ -1162,7 +1162,7 @@ Because lines are not used to build areas, we have only one
 area/centroid, instead of 4 which would be necessary in TIGER.
 
 
-\subsection topo_memory Topology memory management
+\subsection vlibtopoMemory Topology memory management
 
 Topology is generated for all kinds of vector types.  Memory is not
 released by default. The programmer can force the library to release
@@ -1181,7 +1181,7 @@ to identify lines in 'coor' file. Currently it is not possible to build
 spatial index without topology.
 
 
-\section spidx Vector library spatial index management
+\section vlibSpidx Vector library spatial index management
 
 Spatial index (based on R-tree) is created with topology.
 
@@ -1249,11 +1249,11 @@ int main
 }
 \endcode
 
-\subsection sidx_file_format Sidx file format specification
+\subsection vlibSidxFileFormat Sidx file format specification
 
 Spatial index file ('sidx') is read by Vect_open_sidx().
 
-\subsubsection sidx_file_header Header
+\subsubsection vlibSidxFileHead Header
 
 Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 
@@ -1333,7 +1333,7 @@ Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 </table>
 
 
-\section cidx Vector library category index management
+\section vlibSidx Vector library category index management
 
 The category index (stored in the cidx file) improves the performance of all
 selections by cats/attributes (SQL, e.g. 'd.vect cats=27591', 'v.extract list=20000-21000').
@@ -1371,11 +1371,11 @@ Stored values can be retrieved either by index in 'cat' array
 To create category index, it will be necessary to rebuild topology for all existing vectors.
 This is an opportunity to make (hopefully) last changes in 'topo', 'cidx' formats.
 
-\subsection cidx_file_format Cidx file format specification
+\subsection vlibCidxFileFormat Cidx file format specification
 
 Category index file ('cidx') is read by Vect_cidx_open().
 
-\subsubsection cidx_file_head Header
+\subsubsection vlibCidxFileHead Header
 
 Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 
@@ -1410,15 +1410,15 @@ Note: <tt>plus</tt> is instance of <tt>Plus_head</tt> structure.
 
 </table>
 
-\section tin Vector TINs
+\section vlibTin Vector TINs
 
 TINs are simply created as 2D/3D vector polygons consisting of 
 3 vertices. See Vect_tin_get_z().
 
 
-\section ogr_iface OGR interface
+\section vlibOgrIface OGR interface
 
-\subsection frmt_file_format Frmt file format specification
+\subsection vlibFrmtFileFormat Frmt file format specification
 
 Frmt is a plain text file which contains basic information about
 external format of linked vector map. Each line contains key, value
@@ -1443,7 +1443,7 @@ OGR layer pseudo-topology ('topo') is built including spatial index
 file ('sidx') and category index file ('cidx'). Additionally also
 feature index file (see \ref fidx_file_format) is created.
 
-\subsection fidx_file_format Fidx file format specification
+\subsection vlibFidxFileFormat Fidx file format specification
 
 Note: <tt>finfo</tt> is an instance of <tt>Format_info</tt> structure.
 
@@ -1468,7 +1468,7 @@ Note: <tt>finfo</tt> is an instance of <tt>Format_info</tt> structure.
 
 </table>
 
-\section grassdglib DGLib (Directed Graph Library)
+\section vlibDglib DGLib (Directed Graph Library)
 
 <b>The Directed Graph Library</b> or DGLib (Micarelli 2002, \ref dglib ,
 http://grass.osgeo.org/dglib/) provides functionality for vector network
@@ -1498,7 +1498,7 @@ Related vector functions are:
  Vect_net_shortest_path_coor().
 
 
-\section ascii Vector ASCII Format Specifications
+\section vlibAscii Vector ASCII Format Specifications
 
 The GRASS ASCII vector map format may contain a mix of primitives
 including points, lines, boundaries, centroids, faces, and
@@ -1610,7 +1610,7 @@ points. The third feature is a centroid with category number 2. The
 boundary and the centroid form an area with category number 2. All
 vector feature mentioned above are located in layer 1.
 
-\section vlibfunc List of vector library functions
+\section vlibFunc List of vector library functions
 
 The vector library provides the GRASS programmer with routines to
 process vector data. The routines in the vector library are presented
@@ -1628,55 +1628,55 @@ variables or routines in their own modules which use this prefix.
 The Vect_*() functions are the programmer's API for GRASS vector
 programming. The programmer should use only routines with this prefix.
 
-- \subpage area
-- \subpage array
-- \subpage box
-- \subpage break_lines
-- \subpage break_polygons
-- \subpage bridges
-- \subpage buffer
-- \subpage build
-- \subpage build_nat
-- \subpage build_ogr
-- \subpage cats
-- \subpage cindex
-- \subpage clean_nodes
-- \subpage close
-- \subpage constraint
-- \subpage dangles
-- \subpage dbcolumns
-- \subpage error
-- \subpage field
-- \subpage find
-- \subpage graph
-- \subpage header
-- \subpage hist
-- \subpage init_head
-- \subpage intersect
-- \subpage legal_vname
-- \subpage level
-- \subpage level_two
-- \subpage line
-- \subpage list
-- \subpage map
-- \subpage net
-- \subpage open
-- \subpage overlay
-- \subpage vpoly
-- \subpage read
-- \subpage remove_areas
-- \subpage remove_duplicates
-- \subpage rewind
-- \subpage select
-- \subpage sindex
-- \subpage snap
-- \subpage tin
-- \subpage type
-- \subpage delete
-- \subpage write
+- \subpage vlibArea
+- \subpage vlibArray
+- \subpage vlibBox
+- \subpage vlibBreakLines
+- \subpage vlibBreakPolygons
+- \subpage vlibBridges
+- \subpage vlibBuffer
+- \subpage vlibBuild
+- \subpage vlibBuildNat
+- \subpage vlibBuildOgr
+- \subpage vlibCats
+- \subpage vlibCindex
+- \subpage vlibCleanNodes
+- \subpage vlibClose
+- \subpage vlibConstraint
+- \subpage vlibDangles
+- \subpage vlibDbcolumns
+- \subpage vlibError
+- \subpage vlibField
+- \subpage vlibFind
+- \subpage vlibGraph
+- \subpage vlibHeader
+- \subpage vlibHist
+- \subpage vlibInit_head
+- \subpage vlibIntersect
+- \subpage vlibLegalVname
+- \subpage vlibLevel
+- \subpage vlibLevelTwo
+- \subpage vlibLine
+- \subpage vlibList
+- \subpage vlibMap
+- \subpage vlibNet
+- \subpage vlibOpen
+- \subpage vlibOverlay
+- \subpage vlibVpoly
+- \subpage vlibRead
+- \subpage vlibRemoveAreas
+- \subpage vlibRemoveDuplicates
+- \subpage vlibRewind
+- \subpage vlibSelect
+- \subpage vlibSindex
+- \subpage vlibSnap
+- \subpage vlibTin
+- \subpage vlibType
+- \subpage vlibDelete
+- \subpage vlibWrite
 
 
-\section area Vector area functions
+\section vlibArea Vector area functions
 
  - Vect_get_area_area()
 
@@ -1701,7 +1701,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_point_in_area()
 
 
-\section array Vector array functions
+\section vlibArray Vector array functions
 
  - Vect_new_varray()
 
@@ -1712,7 +1712,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_set_varray_from_db()
 
 
-\section box Vector bounding box functions
+\section vlibBox Vector bounding box functions
 
  - Vect_box_copy()
 
@@ -1735,33 +1735,33 @@ programming. The programmer should use only routines with this prefix.
  - Vect_region_box()
 
 
-\section break_lines Vector break lines functions
+\section vlibBreakLines Vector break lines functions
 
  - Vect_break_lines()
 
  - Vect_break_lines_list()
 
 
-\section break_polygons Vector break polygons functions
+\section vlibBreakPolygons Vector break polygons functions
 
  - Vect_break_polygons()
 
 
-\section bridges Vector bridges functions
+\section vlibBridges Vector bridges functions
 
  - Vect_chtype_bridges()
 
  - Vect_remove_bridges()
 
 
-\section buffer Vector buffer functions
+\section vlibBuffer Vector buffer functions
 
  - Vect_line_buffer()
 
  - Vect_line_parallel()
 
 
-\section build Vector build functions
+\section vlibBuild Vector build functions
 
  - Vect_build()
 
@@ -1782,7 +1782,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_topo_dump()
 
 
-\subsection build_nat Vector build (native) functions
+\subsection vlibBuildNat Vector build (native) functions
 
  - Vect_attach_centroids()
 
@@ -1797,12 +1797,12 @@ programming. The programmer should use only routines with this prefix.
  - Vect_isle_find_area()
 
 
-\subsection build_ogr Vector build (OGR) functions
+\subsection vlibBuildOgr Vector build (OGR) functions
 
  - Vect_build_ogr()
 
 
-\section cats Vector categories functions
+\section vlibCats Vector categories functions
 
  - Vect_array_to_cat_list()
 
@@ -1837,7 +1837,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_str_to_cat_list()
 
 
-\section cindex Vector category index functions
+\section vlibCindex Vector category index functions
 
 (note: vector layer is historically called "field")
 
@@ -1872,17 +1872,17 @@ programming. The programmer should use only routines with this prefix.
  - Vect_set_category_index_update()
 
 
-\section clean_nodes Vector clean nodes functions
+\section vlibCleanNodes Vector clean nodes functions
 
  - Vect_clean_small_angles_at_nodes()
 
 
-\section close Vector close functions
+\section vlibClose Vector close functions
 
  - Vect_close()
 
 
-\section constraint Vector constraint functions
+\section vlibConstraint Vector constraint functions
 
  - Vect_get_constraint_box()
 
@@ -1893,7 +1893,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_set_constraint_type()
 
 
-\section dangles Vector dangles functions
+\section vlibDangles Vector dangles functions
 
  - Vect_chtype_dangles()
 
@@ -1902,7 +1902,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_select_dangles()
 
 
-\section dbcolumns Vector dbcolumns functions
+\section vlibDbcolumns Vector dbcolumns functions
 
  - Vect_get_column_names()
 
@@ -1911,14 +1911,14 @@ programming. The programmer should use only routines with this prefix.
  - Vect_get_column_types()
 
 
-\section error Vector error functions
+\section vlibError Vector error functions
 
  - Vect_get_fatal_error()
 
  - Vect_set_fatal_error()
 
 
-\section field Vector field functions
+\section vlibField Vector field functions
 
 (note: vector layer is historically called "field")
 
@@ -1953,7 +1953,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_write_dblinks()
 
 
-\section find Vector find functions
+\section vlibFind Vector find functions
 
  - Vect_find_area()
 
@@ -1966,7 +1966,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_find_node()
 
 
-\section graph Vector graph functions
+\section vlibGraph Vector graph functions
 
  - Vect_graph_add_edge()
 
@@ -1979,7 +1979,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_graph_shortest_path()
 
 
-\section header Vector header functions
+\section vlibHeader Vector header functions
 
  - Vect_get_comment()
 
@@ -2038,7 +2038,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_write_header()
 
 
-\section hist Vector history functions
+\section vlibHist Vector history functions
 
  - Vect_hist_command()
 
@@ -2051,12 +2051,12 @@ programming. The programmer should use only routines with this prefix.
  - Vect_hist_write()
 
 
-\section init_head Vector header functions
+\section vlibInitHead Vector header functions
 
  - Vect_copy_head_data()
 
 
-\section intersect Vector intersection functions
+\section vlibIntersect Vector intersection functions
 
  - Vect_line_check_intersection()
 
@@ -2065,19 +2065,19 @@ programming. The programmer should use only routines with this prefix.
  - Vect_segment_intersection()
 
 
-\section legal_vname Vector valid map name functions
+\section vlibLegalVname Vector valid map name functions
 
  - Vect_check_input_output_name()
 
  - Vect_legal_filename()
 
 
-\section level Vector level functions
+\section vlibLevel Vector level functions
 
  - Vect_level()
 
 
-\section level_two Vector topological (level 2) functions
+\section vlibLevelTwo Vector topological (level 2) functions
 
  - Vect_get_centroid_area()
 
@@ -2118,7 +2118,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_set_release_support()
 
 
-\section line Vector feature functions
+\section vlibLine Vector feature functions
 
  - Vect_append_point()
 
@@ -2163,7 +2163,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_reset_line()
 
 
-\section list Vector list functions
+\section vlibList Vector list functions
 
  - Vect_destroy_list()
 
@@ -2182,7 +2182,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_val_in_list()
 
 
-\section map Vector map functions
+\section vlibMap Vector map functions
 
  - Vect_copy()
 
@@ -2199,7 +2199,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_rename()
 
 
-\section net Vector network functions
+\section vlibNet Vector network functions
 
  - Vect_net_build_graph()
 
@@ -2214,7 +2214,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_net_shortest_path_coor()
 
 
-\section open Vector open functions
+\section vlibOpen Vector open functions
 
  - Vect_coor_info()
 
@@ -2238,16 +2238,14 @@ programming. The programmer should use only routines with this prefix.
 
  - Vect_set_open_level()
 
-
-
-\section overlay Vector overlay functions
+\section vlibOverlay Vector overlay functions
 
  - Vect_overlay()
 
  - Vect_overlay_str_to_operator()
 
 
-\section vpoly Vector polygon functions
+\section vlibVpoly Vector polygon functions
 
  - Vect_find_poly_centroid()
 
@@ -2262,13 +2260,13 @@ programming. The programmer should use only routines with this prefix.
  - Vect_get_point_in_poly_isl()
 
 
-\section read Vector read functions
+\section vlibRead Vector read functions
 
-\subsection read1_2 Level 1 and 2
+\subsection vlibread1_2 Level 1 and 2
 
  - Vect_read_next_line()
 
-\subsection read2 Level 2 only
+\subsection vlibRead2 Level 2 only
 
  - Vect_area_alive()
 
@@ -2281,24 +2279,24 @@ programming. The programmer should use only routines with this prefix.
  - Vect_read_line()
 
 
-\section remove_areas Vector remove areas functions
+\section vlibRemoveAreas Vector remove areas functions
 
  - Vect_remove_small_areas()
 
 
-\section remove_duplicates Vector remove duplicates functions
+\section vlibRemoveDuplicates Vector remove duplicates functions
 
  - Vect_line_check_duplicate()
 
  - Vect_remove_duplicates()
 
 
-\section rewind Vector rewind functions
+\section vlibRewind Vector rewind functions
 
  - Vect_rewind()
 
 
-\section sindex Vector spatial index functions
+\section vlibSindex Vector spatial index functions
 
  - Vect_select_areas_by_box()
 
@@ -2313,7 +2311,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_select_nodes_by_box()
 
 
-\section select custom spatial index functions
+\section vlibSelect custom spatial index functions
 
  - Vect_spatial_index_add_item()
 
@@ -2326,40 +2324,40 @@ programming. The programmer should use only routines with this prefix.
  - Vect_spatial_index_select()
 
 
-\section snap Vector snap functions
+\section vlibSnap Vector snap functions
 
  - Vect_snap_lines()
 
  - Vect_snap_lines_list()
 
 
-\section tin Vector TIN functions
+\section vlibTin Vector TIN functions
 
  - Vect_tin_get_z()
 
 
-\section type Vector type option functions
+\section vlibType Vector type option functions
 
  - Vect_option_to_types()
 
 
-\section delete Vector delete functions
+\section vlibDelete Vector delete functions
 
-\subsection delete2 Level 2 only
+\subsection vlibDelete2 Level 2 only
 
  - Vect_delete_line()
 
-\section write Vector write functions
+\section vlibWrite Vector write functions
 
-\subsection write1_2 Level 1 and 2
+\subsection vlibWrite1_2 Level 1 and 2
 
  - Vect_write_line()
 
-\subsection write2 Level 2 only
+\subsection vlibWrite2 Level 2 only
 
  - Vect_rewrite_line()
 
-\section geos GEOS support
+\section vlibGeos GEOS support
 
 Note: The functions are available only if GRASS is compiled with
 <tt>--with-geos</tt> switch.
@@ -2375,21 +2373,21 @@ Note: The functions are available only if GRASS is compiled with
  - Vect_get_isle_points_geos()
 
 
-\section authors Authors
+\section vlibAuthors Authors
 
  Radim Blazek (vector architecture) <radim.blazek gmail.com>
 
  Roberto Micarelli (DGLib) <mi.ro iol.it>
 
 
-\section references References
+\section vlibReferences References
 
 Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
  vector architecture. In Open source GIS - GRASS users conference 2002,
  Trento, Italy, 11-13 September 2002. University of Trento, Italy, 2002.
  <a href="http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf">http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf</a>
  
-\section seealso See Also
+\section vlibSeealso See Also
 
  - \ref dglib
  
