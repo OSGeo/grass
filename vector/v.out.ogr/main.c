@@ -2,16 +2,16 @@
  ***************************************************************
  *
  * MODULE:       v.out.ogr
- * 
+ *
  * AUTHOR(S):    Radim Blazek
- *               Some extensions: Markus Neteler
+ *               Some extensions: Markus Neteler, Benjamin Ducke
  *
  * PURPOSE:      Category manipulations
- *               
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -31,7 +31,7 @@ int fout, fskip;		/* features written/ skip */
 int nocat, noatt, nocatskip;	/* number of features without cats/atts written/skip */
 
 int mk_att(int cat, struct field_info *Fi, dbDriver *Driver,
-	   int ncol, int doatt, OGRFeatureH Ogr_feature);
+	   int ncol, int doatt, int nocat, OGRFeatureH Ogr_feature);
 
 char *OGR_list_write_drivers();
 char OGRdrivers[2000];
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *dsn_opt, *layer_opt, *type_opt, *frmt_opt,
 	*field_opt, *dsco, *lco;
-    struct Flag *cat_flag, *esristyle, *poly_flag;
+    struct Flag *cat_flag, *esristyle, *poly_flag, *update_flag, *nocat_flag;
     char buf[2000];
     char key1[200], key2[200];
     struct Key_Value *projinfo, *projunits;
@@ -147,6 +147,14 @@ int main(int argc, char *argv[])
 	_("OGR layer creation option (format specific, NAME=VALUE)");
     lco->guisection = _("Creation");
 
+    update_flag = G_define_flag();
+    update_flag->key = 'u';
+    update_flag->description = _("Open an existing datasource for update");
+
+    nocat_flag = G_define_flag();
+    nocat_flag->key = 's';
+    nocat_flag->description = _("Skip export of GRASS category ID ('cat') attribute");
+
     cat_flag = G_define_flag();
     cat_flag->key = 'c';
     cat_flag->description = _("Also export features without category (not labeled). "
@@ -173,7 +181,7 @@ int main(int argc, char *argv[])
 
     if (!layer_opt->answer) {
 	char xname[GNAME_MAX],	xmapset[GMAPSET_MAX];
-	
+
 	if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset))
 	    layer_opt->answer = G_store(xname);
 	else
@@ -261,8 +269,14 @@ int main(int argc, char *argv[])
 	i++;
     }
 
-    G_debug(1, "Create OGR data source");
-    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn_opt->answer, papszDSCO);
+    if ( update_flag->answer )  {
+    	G_debug(1, "Update OGR data source");
+        Ogr_ds = OGR_Dr_Open(Ogr_driver, dsn_opt->answer, TRUE);
+    } else {
+    	G_debug(1, "Create OGR data source");
+    	Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn_opt->answer, papszDSCO);
+    }
+
     CSLDestroy(papszDSCO);
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
@@ -317,7 +331,12 @@ int main(int argc, char *argv[])
 	Fi = Vect_get_field(&In, field);
 	if (Fi == NULL) {
 	    G_warning(_("No attribute table found -> using only category numbers as attributes"));
-
+	    /* if we have no more than a 'cat' column, then that has to
+	       be exported in any case */
+	    if (nocat_flag->answer) {
+	        G_warning(_("Exporting 'cat' anyway, as it is the only attribute table field"));
+	        nocat_flag->answer=0;
+	    }
 	    Ogr_field = OGR_Fld_Create("cat", OFTInteger);
 	    OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
 	    OGR_Fld_Destroy(Ogr_field);
@@ -378,6 +397,20 @@ int main(int argc, char *argv[])
 		    OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
 		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
 		OGR_Fld_Destroy(Ogr_field);
+		if (!nocat_flag->answer) {
+		    Ogr_field =
+		        OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
+		    OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		    OGR_Fld_Destroy(Ogr_field);
+		} else {
+		    /* skip export of 'cat' field */
+		    if ( strcmp (Fi->key,db_get_column_name(Column)) != 0 ) {
+			Ogr_field =
+			    OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
+			OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+			OGR_Fld_Destroy(Ogr_field);
+		    }
+	    }
 	    }
 	    if (keycol == -1)
 		G_fatal_error(_("Key column '%s' not found"), Fi->key);
@@ -386,7 +419,6 @@ int main(int argc, char *argv[])
     }
 
     Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-    Ogr_feature = OGR_F_Create(Ogr_featuredefn);
 
     fout = fskip = nocat = noatt = nocatskip = 0;
 
@@ -481,6 +513,8 @@ int main(int argc, char *argv[])
 				   Points->z[j]);
 		}
 	    }
+	    Ogr_feature = OGR_F_Create(Ogr_featuredefn);
+
 	    OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
 	    /* Output one feature for each category */
@@ -496,10 +530,11 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
-		mk_att(cat, Fi, Driver, ncol, doatt, Ogr_feature);
+		mk_att(cat, Fi, Driver, ncol, doatt, nocat_flag->answer, Ogr_feature);
 		OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 	    }
 	    OGR_G_DestroyGeometry(Ogr_geometry);
+	    OGR_F_Destroy(Ogr_feature);
 	}
     }
 
@@ -553,6 +588,7 @@ int main(int argc, char *argv[])
 		OGR_G_AddGeometryDirectly(Ogr_geometry, ring);
 	    }
 
+        Ogr_feature = OGR_F_Create(Ogr_featuredefn);
 	    OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
 	    /* Output one feature for each category */
@@ -568,10 +604,11 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
-		mk_att(cat, Fi, Driver, ncol, doatt, Ogr_feature);
+		mk_att(cat, Fi, Driver, ncol, doatt, nocat_flag->answer, Ogr_feature);
 		OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 	    }
 	    OGR_G_DestroyGeometry(Ogr_geometry);
+	    OGR_F_Destroy(Ogr_feature);
 	}
     }
 
@@ -597,6 +634,8 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (type & GV_FACE) {
+
+        Ogr_feature = OGR_F_Create(Ogr_featuredefn);
 
 		/* Geometry */
 		Ogr_geometry = OGR_G_CreateGeometry(wkbPolygon25D);
@@ -625,18 +664,18 @@ int main(int argc, char *argv[])
 			    continue;
 		    }
 
-		    mk_att(cat, Fi, Driver, ncol, doatt, Ogr_feature);
+		    mk_att(cat, Fi, Driver, ncol, doatt, nocat_flag->answer, Ogr_feature);
 		    OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 		}
 
 		OGR_G_DestroyGeometry(Ogr_geometry);
+		OGR_F_Destroy(Ogr_feature);
 	    }			/* if type & GV_FACE */
 
 	}			/* for */
     }
 
 
-    OGR_F_Destroy(Ogr_feature);
     OGR_DS_Destroy(Ogr_ds);
 
     Vect_close(&In);
@@ -660,7 +699,7 @@ int main(int argc, char *argv[])
      *    all boundaries/centroids.
      *  OTOH why should be reported? */
     /*
-       if ( ((otype & GV_POINTS) || (otype & GV_LINES)) && fskip > 0 ) 
+       if ( ((otype & GV_POINTS) || (otype & GV_LINES)) && fskip > 0 )
        G_warning ( "%d features of different type skip", fskip);
      */
 
@@ -669,7 +708,7 @@ int main(int argc, char *argv[])
 
 
 int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
-       int doatt, OGRFeatureH Ogr_feature)
+       int doatt, int nocat, OGRFeatureH Ogr_feature)
 {
     int j, ogrfieldnum;
     char buf[2000];
@@ -710,9 +749,14 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 		if (!more) {
 		    /* G_warning ("No database record for cat = %d", cat); */
 		    /* Set at least key column to category */
-		    ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, Fi->key);
-		    OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum, cat);
-		    noatt++;
+		    if (!nocat) {
+                ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, Fi->key);
+                OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum, cat);
+                noatt++;
+		    } else {
+                G_fatal_error (_("No database record for cat = %d and export of 'cat' disabled"),
+                                cat);
+		    }
 		}
 		else {
 		    Table = db_get_cursor_table(&cursor);
@@ -758,6 +802,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 			}
 		    }
 		}
+		db_close_cursor ( &cursor );
 	    }
 
 	}
@@ -771,6 +816,8 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 	nocat++;
     }
     fout++;
+
+    db_free_string(&dbstring);
 
     return 1;
 }
