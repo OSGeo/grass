@@ -45,7 +45,7 @@ struct site_att
 };
 
 /*! \brief Bounding box */
-struct bound_box		
+struct bound_box
 {
     double N;			/* north */
     double S;			/* south */
@@ -165,7 +165,7 @@ struct Coor_info
 
 /*! \brief Non-native format info (OGR)
 
-  \todo Structure size should not change depending on compilation I think, do it better 
+  \todo Structure size should not change depending on compilation I think, do it better
 */
 struct Format_info_ogr
 {
@@ -284,9 +284,9 @@ struct Plus_head
     struct bound_box box;	 /* vector map bounding box */
 
     /*** topology ***/
-    struct P_node **Node;	 /* struct P_node array of pointers 
+    struct P_node **Node;	 /* struct P_node array of pointers
 				    1st item is 1 for  */
-    struct P_line **Line;	 /* struct P_line array of pointers 
+    struct P_line **Line;	 /* struct P_line array of pointers
 				    all these (not 0) */
     struct P_area **Area;
     struct P_isle **Isle;
@@ -307,7 +307,7 @@ struct Plus_head
     plus_t n_clines;		 /* current number of centroids */
     plus_t n_flines;		 /* current number of faces */
     plus_t n_klines;		 /* current number of kernels*/
-    plus_t n_vfaces;		 /* current number of volumes */
+    plus_t n_vfaces;		 /* current number of volume faces */
     plus_t n_hfaces;		 /* current number of hole faces */
 
     plus_t alloc_nodes;		 /* number of nodes we have alloc'ed
@@ -333,7 +333,7 @@ struct Plus_head
     int Spidx_new;               /* set to 1 if new spatial index will be generated */
 
     struct gvfile spidx_fp;	 /* spatial index file pointer */
-    
+
     char *spidx_node_fname;      /* node spatial index file name */
 
     off_t Node_spidx_offset;	 /* offset of nodes in sidx file */
@@ -400,9 +400,9 @@ struct Map_info
     double *node_costs;		/* node costs */
     int cost_multip;		/* edge and node costs
 				   multiplicator */
-    
+
     int open;			/* should be 0x5522AA22 (VECT_OPEN_CODE) if opened correctly
-				   or        0x22AA2255 (VECT_CLOSED_CODE) if closed          
+				   or        0x22AA2255 (VECT_CLOSED_CODE) if closed
 				   anything else implies that structure has
 				   never been initialized
 				*/
@@ -477,7 +477,7 @@ struct P_line
     plus_t N2;			/* end node   */
     plus_t left;		/* area/isle number to left, negative
 				   for isle area number for centroid,
-				   negative for duplicate centroid 
+				   negative for duplicate centroid
 				*/
     plus_t right;		/* area/isle number to right, negative
 				 * for isle */
