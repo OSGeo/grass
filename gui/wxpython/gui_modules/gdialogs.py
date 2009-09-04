@@ -975,7 +975,7 @@ class MultiImportDialog(wx.Dialog):
         self.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0] + 175, 300))
         width = self.GetSize()[0]
         self.list.SetColumnWidth(col=1, width=width/2 - 50)
-
+        
     def OnCancel(self, event=None):
         """!Close dialog"""
         self.Close()

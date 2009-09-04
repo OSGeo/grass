@@ -2697,19 +2697,26 @@
       <label>Help</label>
       <items>
 	<menuitem>
-	  <label>GRASS GIS help</label>
-	  <help>Display the HTML man pages of GRASS</help>
+	  <label>GRASS help</label>
+	  <help>Display the manual pages of GRASS</help>
 	  <keywords>general,manual,help</keywords>
           <handler>self.RunMenuCmd</handler>
 	  <command>g.manual -i</command>
 	</menuitem>
 	<menuitem>
-	  <label>GRASS GIS GUI help</label>
-	  <help>Display the HTML man pages of GRASS</help>
+	  <label>GUI help</label>
+	  <help>Display the manual pages of wxGUI</help>
 	  <keywords>general,manual,help</keywords>
           <handler>self.RunMenuCmd</handler>
 	  <command>g.manual wxGUI</command>
 	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Show menu tree</label>
+	  <help>Show menu tree in new window</help>
+          <handler>self.OnMenuTree</handler>
+	</menuitem>
+	<separator />
 	<menuitem>
 	  <label>About GRASS GIS</label>
 	  <help>About GRASS GIS</help>

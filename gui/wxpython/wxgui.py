@@ -87,8 +87,9 @@ import gui_modules.gdialogs as gdialogs
 import gui_modules.colorrules as colorrules
 import gui_modules.ogc_services as ogc_services
 import gui_modules.prompt as prompt
-from   gui_modules.debug import Debug as Debug
-from   icons.icon import Icons as Icons
+from   gui_modules.debug import Debug
+from   gui_modules.help import MenuTreeWindow
+from   icons.icon import Icons
 
 UserSettings = preferences.globalSettings
 
@@ -230,7 +231,7 @@ class GMFrame(wx.Frame):
         self.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
         return menu
 
-    def __createMenuItem(self, menu, label, help, handler, gcmd, kind=wx.ITEM_NORMAL):
+    def __createMenuItem(self, menu, label, help, handler, gcmd, keywords, kind = wx.ITEM_NORMAL):
         """!Creates menu items"""
 
         if not label:
@@ -475,7 +476,13 @@ class GMFrame(wx.Frame):
                                             lchecked=True,
                                             lopacity=1.0,
                                             lcmd=['d.vect', 'map=%s' % name])
-            
+           
+    def OnMenuTree(self, event):
+        """!Show dialog with menu tree"""
+        dlg = MenuTreeWindow(self)
+        dlg.CentreOnScreen()
+        dlg.Show()
+    
     def OnAboutGRASS(self, event):
         """!Display 'About GRASS' dialog"""
         info = wx.AboutDialogInfo()

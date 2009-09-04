@@ -5,6 +5,7 @@
 
 Classes:
  - Data
+ - MenuTree
 
 (C) 2007-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -33,17 +34,22 @@ class Data:
 
     def getMenuItem(self, mi):
 	if mi.tag == 'separator':
-	    return ('', '', '', '')
+	    return ('', '', '', '', '')
 	elif mi.tag == 'menuitem':
-	    label   = _(mi.find('label').text)
-	    help    = _(mi.find('help').text)
-	    handler = mi.find('handler').text
-	    gcmd    = mi.find('command')
+	    label    = _(mi.find('label').text)
+	    help     = _(mi.find('help').text)
+	    handler  = mi.find('handler').text
+	    gcmd     = mi.find('command')  # optional
+            keywords = mi.find('keywords') # optional
 	    if gcmd != None:
 		gcmd = gcmd.text
 	    else:
 		gcmd = ""
-	    return (label, help, handler, gcmd)
+            if keywords != None:
+                keywords = keywords.text
+            else:
+                keywords = ""
+	    return (label, help, handler, gcmd, keywords)
 	elif mi.tag == 'menu':
 	    return self.getMenu(mi)
 	else:
@@ -64,12 +70,40 @@ class Data:
 	return self.getMenuData(self.tree.getroot())
 
     def PrintStrings(self, fh):
+        """!Print menu strings to file (used for localization)
+
+        @param fh file descriptor"""
 	fh.write('menustrings = [\n')
 	for node in self.tree.getiterator():
 	    if node.tag in ['label', 'help']:
 		fh.write('     _(%r),\n' % node.text)
 	fh.write('    \'\']\n')
 
+    def PrintTree(self, fh):
+        """!Print menu tree to file
+
+        @param fh file descriptor"""
+        level = 0
+        for eachMenuData in self.GetMenu():
+            for label, items in eachMenuData:
+                print >> fh, '-', label
+                self.__PrintTreeItems(fh, level + 1, items)
+
+    def __PrintTreeItems(self, fh, level, menuData):
+        """!Print menu tree items to file (used by PrintTree)
+
+        @param fh file descriptor
+        @param level menu level
+        @param menuData menu data to print out"""
+        for eachItem in menuData:
+            if len(eachItem) == 2:
+                if eachItem[0]:
+                    print >> fh, ' ' * level, '-', eachItem[0]
+                self.__PrintTreeItems(fh, level + 1, eachItem[1])
+            else:
+                if eachItem[0]:
+                    print >> fh, ' ' * level, '-', eachItem[0]
+        
     def GetModules(self):
         """!Create dictionary of modules used to search module by
         keywords, description, etc."""
@@ -95,9 +129,16 @@ class Data:
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) < 2:
-        sys.exit(1)
+
+    # i18N
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
     
-    Data(sys.argv[1]).PrintStrings(sys.stdout)
+    if len(sys.argv) > 1:
+        data = Data(sys.argv[1])
+    else:
+        data = Data()
+    
+    data.PrintTree(sys.stdout)
     
     sys.exit(0)
