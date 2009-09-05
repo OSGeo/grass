@@ -90,8 +90,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "point,kernel,centroid,line,boundary,area,face";
+    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     type_opt->answer = "line,boundary";
     type_opt->description =
 	_("Feature type. Combination of types is not supported "
@@ -576,7 +575,7 @@ int main(int argc, char *argv[])
 
 		OGR_G_AddGeometryDirectly(Ogr_geometry, ring);
 	    }
-	    else if (type == GV_POINT) {
+	    else if ((type == GV_POINT) || ((type == GV_CENTROID) && (otype & GV_CENTROID))) {
 		Ogr_geometry = OGR_G_CreateGeometry(wkbPoint);
 		OGR_G_AddPoint(Ogr_geometry, Points->x[0], Points->y[0],
 			       Points->z[0]);
@@ -751,6 +750,70 @@ int main(int argc, char *argv[])
 	}			/* for */
     }
 
+    /* Kernels */
+    if (otype & GV_KERNEL) {
+	G_message(_("Exporting %i kernels..."), Vect_get_num_kernels(&In));
+	for (i = 1; i <= Vect_get_num_lines(&In); i++) {
+
+	    G_percent(i, Vect_get_num_lines(&In), 1);
+
+	    type = Vect_read_line(&In, Points, Cats, i);
+	    G_debug(2, "line = %d type = %d", i, type);
+	    if (!(otype & type)) {
+		G_debug(2, "type %d not specified -> skipping", type);
+		fskip++;
+		continue;
+	    }
+
+	    Vect_cat_get(Cats, field, &cat);
+	    if (cat < 0 && !donocat) {	/* Do not export not labeled */
+		nocatskip++;
+		continue;
+	    }
+
+
+	    /* Geometry */
+	    if (type == GV_KERNEL) {
+            Ogr_geometry = OGR_G_CreateGeometry(wkbPoint);
+            OGR_G_AddPoint(Ogr_geometry, Points->x[0], Points->y[0],
+                    Points->z[0]);
+
+            Ogr_feature = OGR_F_Create(Ogr_featuredefn);
+
+            OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
+
+            /* Output one feature for each category */
+            for (j = -1; j < Cats->n_cats; j++) {
+            if (j == -1) {
+                if (cat >= 0)
+                continue;	/* cat(s) exists */
+            }
+            else {
+                if (Cats->field[j] == field)
+                cat = Cats->cat[j];
+                else
+                continue;
+            }
+
+                mk_att(cat, Fi, Driver, ncol, doatt, nocat_flag->answer, Ogr_feature);
+                OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
+            }
+            OGR_G_DestroyGeometry(Ogr_geometry);
+            OGR_F_Destroy(Ogr_feature);
+	    }
+	}
+    }
+
+    /*
+        TODO:   Volumes. Do not export kernels here, that's already done.
+                We do need to worry about holes, though.
+        NOTE: We can probably just merge this with faces export function.
+              Except for GRASS, which output format would know the difference?
+    */
+    if ((otype & GV_VOLUME)) {
+        G_message(_("Exporting %i volumes..."), Vect_get_num_volumes(&In));
+        G_warning(_("Export of volumes not implemented yet. Skipping."));
+    }
 
     OGR_DS_Destroy(Ogr_ds);
 
