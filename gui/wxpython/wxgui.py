@@ -231,7 +231,7 @@ class GMFrame(wx.Frame):
         self.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
         return menu
 
-    def __createMenuItem(self, menu, label, help, handler, gcmd, keywords, kind = wx.ITEM_NORMAL):
+    def __createMenuItem(self, menu, label, help, handler, gcmd, keywords, shortcut = '', kind = wx.ITEM_NORMAL):
         """!Creates menu items"""
 
         if not label:
@@ -242,7 +242,10 @@ class GMFrame(wx.Frame):
             helpString = gcmd + ' -- ' + help
         else:
             helpString = help
-
+        
+        if shortcut:
+            label += '\t' + shortcut
+        
         menuItem = menu.Append(wx.ID_ANY, label, helpString, kind)
         
         self.menucmd[menuItem.GetId()] = gcmd

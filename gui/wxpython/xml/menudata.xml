@@ -643,6 +643,7 @@
 	  <label>E&amp;xit</label>
 	  <help>Exit GUI</help>
 	  <handler>self.OnCloseWindow</handler>
+	  <shortcut>Ctrl+Q</shortcut>
 	</menuitem>
       </items>
     </menu>

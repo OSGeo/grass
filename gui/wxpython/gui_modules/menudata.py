@@ -41,6 +41,7 @@ class Data:
 	    handler  = mi.find('handler').text
 	    gcmd     = mi.find('command')  # optional
             keywords = mi.find('keywords') # optional
+            shortcut = mi.find('shortcut') # optional
 	    if gcmd != None:
 		gcmd = gcmd.text
 	    else:
@@ -49,7 +50,11 @@ class Data:
                 keywords = keywords.text
             else:
                 keywords = ""
-	    return (label, help, handler, gcmd, keywords)
+            if shortcut != None:
+                shortcut = shortcut.text
+            else:
+                shortcut = ""
+	    return (label, help, handler, gcmd, keywords, shortcut)
 	elif mi.tag == 'menu':
 	    return self.getMenu(mi)
 	else:
