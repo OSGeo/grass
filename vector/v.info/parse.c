@@ -42,7 +42,7 @@ void parse_args(int argc, char** argv,
 
     level1_flag = G_define_flag();
     level1_flag->key = 'l';
-    level1_flag->description = _("Open Vector without topology (level 1)");
+    level1_flag->description = _("Open vector map without topology (level 1)");
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
