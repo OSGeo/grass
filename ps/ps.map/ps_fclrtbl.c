@@ -214,7 +214,7 @@ int PS_fcolortable(void)
 	k = strlen(buf) - 1;
 	while (buf[k] == '0')
 	    k--;
-	k = k - (int)(strchr(buf, '.') - (unsigned)buf);
+	k = k - (int)(strchr(buf, '.') - buf);
 	ddig = k;
     }
 
