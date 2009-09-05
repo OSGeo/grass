@@ -1,3 +1,5 @@
+#include <grass/raster.h>
+
 /* get_item.c */
 int get_item(FILE *, int *, long *, double **, double **, int *,
 	     struct Categories *);
