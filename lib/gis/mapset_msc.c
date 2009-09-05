@@ -61,7 +61,7 @@ int G__make_mapset_element(const char *p_element)
 				  p_element, path, strerror(errno));
 	    }
 	    if (access(path, 0) != 0)  /* directory not accessible */
-		G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
+		G_fatal_error(_("Unable to access mapset element %s (%s): %s"),
 			      p_element, path, strerror(errno));
 	    if (*element == 0)
 		return 1;
