@@ -186,15 +186,15 @@ int Vect_get_constraint_box(const struct Map_info *, struct bound_box *);
 
 /* Get map level 2 informations */
 int Vect_level(const struct Map_info *);
-int Vect_get_num_nodes(const struct Map_info *);
-int Vect_get_num_primitives(const struct Map_info *, int);
-int Vect_get_num_lines(const struct Map_info *);
-int Vect_get_num_areas(const struct Map_info *);
-int Vect_get_num_faces(const struct Map_info *);
-int Vect_get_num_kernels(struct Map_info *);
-int Vect_get_num_volumes(struct Map_info *);
-int Vect_get_num_islands(const struct Map_info *);
-int Vect_get_num_holes(struct Map_info *);
+long Vect_get_num_nodes(const struct Map_info *);
+long Vect_get_num_primitives(const struct Map_info *, int);
+long Vect_get_num_lines(const struct Map_info *);
+long Vect_get_num_areas(const struct Map_info *);
+long Vect_get_num_faces(const struct Map_info *);
+long Vect_get_num_kernels(const struct Map_info *);
+long Vect_get_num_volumes(const struct Map_info *);
+long Vect_get_num_islands(const struct Map_info *);
+long Vect_get_num_holes(const struct Map_info *);
 int Vect_get_line_box(const struct Map_info *, int, struct bound_box *);
 int Vect_get_area_box(const struct Map_info *, int, struct bound_box *);
 int Vect_get_isle_box(const struct Map_info *, int, struct bound_box *);
