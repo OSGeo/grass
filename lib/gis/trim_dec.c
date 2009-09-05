@@ -27,7 +27,7 @@ void G_trim_decimal(char *buf)
 
     /* don't trim e+20 into e+2 */
     if( strchr(buf, 'e') || strchr(buf, 'E') )
-	return 0;
+	return;
 
     /* find the . */
     while (*buf != '.')
