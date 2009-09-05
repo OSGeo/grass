@@ -60,7 +60,7 @@
  * \verbatim
  * command num=12
  * \endverbatim
- *    This command line is in error in two ways.  The user will be told 
+ *    This command line is in error in two ways.  The user will be told
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
  *
@@ -270,7 +270,7 @@ struct Option *G_define_option(void)
     opt->descriptions = NULL;
     opt->guisection = NULL;
     opt->guidependency = NULL;
-    
+
     st->current_option = opt;
     st->n_opts++;
 
@@ -300,7 +300,7 @@ struct Option *G_define_option(void)
  * It allocates memory for the Option structure and returns a pointer
  * to this memory.
  *
- * If an invalid parameter was specified a empty Option structure will 
+ * If an invalid parameter was specified a empty Option structure will
  * be returned (not NULL).
  *
  *  - general:
@@ -612,6 +612,15 @@ struct Option *G_define_standard_option(int opt)
 	Opt->options = "point,line,boundary,centroid,area";
 	Opt->description = _("Feature type");
 	break;
+    case G_OPT_V3_TYPE:
+	Opt->key = "type";
+	Opt->type = TYPE_STRING;
+	Opt->required = NO;
+	Opt->multiple = YES;
+	Opt->answer = "point,line,boundary,centroid,area,face,kernel";
+	Opt->options = "point,line,boundary,centroid,area,face,kernel";
+	Opt->description = _("Feature type");
+	break;
     case G_OPT_V_FIELD:
 	Opt->key = "layer";
 	Opt->type = TYPE_INTEGER;
@@ -723,7 +732,7 @@ struct GModule *G_define_module(void)
 
     /* Allocate keywords array */
     define_keywords();
-    
+
     return (module);
 }
 
@@ -736,9 +745,9 @@ struct GModule *G_define_module(void)
  * the user, and parses this input according to the input options
  * and/or flags that were defined by the programmer.
  *
- * <b>Note:</b> The only functions which can legitimately be called 
+ * <b>Note:</b> The only functions which can legitimately be called
  * before G_parser() are:
- * 
+ *
  *  - G_gisinit()
  *  - G_no_gisinit()
  *  - G_define_module()
@@ -1043,12 +1052,12 @@ static int uses_new_gisprompt(void)
 /*!
  * \brief Command line help/usage message.
  *
- * Calls to G_usage() allow the programmer to print the usage 
- * message at any time. This will explain the allowed and required 
- * command line input to the user. This description is given according 
- * to the programmer's definitions for options and flags. This function 
- * becomes useful when the user enters options and/or flags on the 
- * command line that are syntactically valid to the parser, but 
+ * Calls to G_usage() allow the programmer to print the usage
+ * message at any time. This will explain the allowed and required
+ * command line input to the user. This description is given according
+ * to the programmer's definitions for options and flags. This function
+ * becomes useful when the user enters options and/or flags on the
+ * command line that are syntactically valid to the parser, but
  * functionally invalid for the command (e.g. an invalid file name.)
  *
  * For example, the parser logic doesn't directly support grouping
@@ -1334,7 +1343,7 @@ static void usage_xml(void)
 	fprintf(stdout, "\n\t</keywords>\n");
     }
 
-	/***** Don't use parameter-groups for now.  We'll reimplement this later 
+	/***** Don't use parameter-groups for now.  We'll reimplement this later
 	 ***** when we have a concept of several mutually exclusive option
 	 ***** groups
 	if (st->n_opts || st->n_flags)
@@ -1487,7 +1496,7 @@ static void usage_xml(void)
 	}
     }
 
-	/***** Don't use parameter-groups for now.  We'll reimplement this later 
+	/***** Don't use parameter-groups for now.  We'll reimplement this later
 	 ***** when we have a concept of several mutually exclusive option
 	 ***** groups
 	if (st->n_opts || st->n_flags)
@@ -1752,7 +1761,7 @@ static void usage_html(void)
 }
 
 /*!
-  \brief Print a module parameter template to assist with creating 
+  \brief Print a module parameter template to assist with creating
   script wrappers.
 */
 static void script(void)
@@ -1864,7 +1873,7 @@ static void script(void)
 }
 
 /*!
-  \brief Invoke GUI dialog 
+  \brief Invoke GUI dialog
 */
 static void module_gui_wx(void)
 {
@@ -2617,14 +2626,14 @@ void G_add_keyword(const char *keyword)
 	st->module_info.keywords = (const char **) G_realloc(st->module_info.keywords,
 							     st->n_keys_alloc * sizeof(char *));
     }
-    
+
     st->module_info.keywords[st->n_keys++] = G_store(keyword);
 }
 
 void print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 {
     int i;
-    
+
     for(i = 0; i < st->n_keys; i++) {
 	if (!format) {
 	    fprintf(fd, "%s", st->module_info.keywords[i]);
@@ -2635,7 +2644,7 @@ void print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 	if (i < st->n_keys - 1)
 	    fprintf(fd, ", ");
     }
-    
+
     fflush(fd);
 }
 
