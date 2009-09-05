@@ -1,15 +1,15 @@
 /* ***************************************************************
  * *
  * * MODULE:       v.category
- * * 
+ * *
  * * AUTHOR(S):    Radim Blazek
- * *               
+ * *
  * * PURPOSE:      Category manipulations
- * *               
+ * *
  * * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
  * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
+ * *               This program is free software under the
+ * *               GNU General Public License (>=v2).
  * *               Read the file COPYING that comes with GRASS
  * *               for details.
  * *
@@ -27,15 +27,17 @@
 #define O_CHFIELD 6
 #define O_TYPE_REP 7		/* report number of features for each type */
 
-#define FRTYPES 7		/* number of field report types */
+#define FRTYPES 9		/* number of field report types */
 
 #define FR_POINT    0
 #define FR_LINE     1
 #define FR_BOUNDARY 2
 #define FR_CENTROID 3
 #define FR_AREA     4
-#define FR_UNKNOWN  5
-#define FR_ALL      6
+#define FR_FACE     5
+#define FR_KERNEL   6
+#define FR_UNKNOWN  7
+#define FR_ALL      8
 
 typedef struct
 {
@@ -89,7 +91,7 @@ int main(int argc, char *argv[])
 				 "report;print report (statistics), in shell style: layer type count min max;"
 				 "print;print category values, more cats in the same layer are separated by '/'");
 
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     type_opt->guisection = _("Selection");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -153,7 +155,7 @@ int main(int argc, char *argv[])
     if (cat < 0 && option == O_ADD)
 	G_fatal_error(_("Invalid category number (must be equal to or greater than 0). "
 			"Normally category number starts at 1."));
-    
+
     /* collect ids */
     if (id_opt->answer) {
 	Clist = Vect_new_cat_list();
@@ -225,7 +227,7 @@ int main(int argc, char *argv[])
 	option == O_SUM) {
 	G_message(_("Processing features..."));
     }
-    
+
     switch (option) {
     case (O_ADD):
 	/* Lines */
@@ -342,6 +344,12 @@ int main(int argc, char *argv[])
 	    case (GV_CENTROID):
 		rtype = FR_CENTROID;
 		break;
+	    case (GV_FACE):
+		rtype = FR_FACE;
+		break;
+	    case (GV_KERNEL):
+		rtype = FR_KERNEL;
+		break;
 	    default:
 		rtype = FR_UNKNOWN;
 	    }
@@ -431,6 +439,18 @@ int main(int argc, char *argv[])
 			    (freps[i]->min[FR_AREA] < 0 ? 0 : freps[i]->min[FR_AREA]),
 			    freps[i]->max[FR_AREA]);
 
+		if (freps[i]->count[FR_FACE] > 0)
+		    fprintf(stdout, "%d face %d %d %d\n", freps[i]->field,
+			    freps[i]->count[FR_FACE],
+			    (freps[i]->min[FR_FACE] < 0 ? 0 : freps[i]->min[FR_FACE]),
+			    freps[i]->max[FR_FACE]);
+
+		if (freps[i]->count[FR_KERNEL] > 0)
+		    fprintf(stdout, "%d kernel %d %d %d\n", freps[i]->field,
+			    freps[i]->count[FR_KERNEL],
+			    (freps[i]->min[FR_KERNEL] < 0 ? 0 : freps[i]->min[FR_KERNEL]),
+			    freps[i]->max[FR_KERNEL]);
+
 		if (freps[i]->count[FR_ALL] > 0)
 		    fprintf(stdout, "%d all %d %d %d\n", freps[i]->field,
 			    freps[i]->count[FR_ALL],
@@ -466,6 +486,14 @@ int main(int argc, char *argv[])
 			freps[i]->count[FR_AREA],
 			(freps[i]->min[FR_AREA] < 0) ? 0 : freps[i]->min[FR_AREA],
 			freps[i]->max[FR_AREA]);
+		fprintf(stdout, "%s     %7d %10d %10d\n", _("face"),
+			freps[i]->count[FR_FACE],
+			(freps[i]->min[FR_FACE] < 0) ? 0 : freps[i]->min[FR_FACE],
+			freps[i]->max[FR_FACE]);
+		fprintf(stdout, "%s   %7d %10d %10d\n", _("kernel"),
+			freps[i]->count[FR_KERNEL],
+			(freps[i]->min[FR_KERNEL] < 0) ? 0 : freps[i]->min[FR_KERNEL],
+			freps[i]->max[FR_KERNEL]);
 		fprintf(stdout, "%s      %7d %10d %10d\n", _("all"),
 			freps[i]->count[FR_ALL],
 			(freps[i]->min[FR_ALL] < 0) ? 0 : freps[i]->min[FR_ALL],
@@ -524,7 +552,7 @@ int main(int argc, char *argv[])
             G_warning(_("Failed to copy attribute table to output map"));
 	Vect_build(&Out);
 	Vect_close(&Out);
-	
+
 	G_done_msg(_("%d features modified"), nmodified);
     }
     Vect_close(&In);
