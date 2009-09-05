@@ -10,16 +10,19 @@
 	      <label>New</label>
 	      <help>Create new workspace</help>
 	      <handler>self.OnWorkspaceNew</handler>
+	      <shortcut>Ctrl+N</shortcut>
 	    </menuitem>
 	    <menuitem>
 	      <label>Open</label>
 	      <help>Load workspace from file</help>
 	      <handler>self.OnWorkspaceOpen</handler>
+	      <shortcut>Ctrl+O</shortcut>
 	    </menuitem>
 	    <menuitem>
 	      <label>Save</label>
 	      <help>Save workspace to open file</help>
 	      <handler>self.OnWorkspaceSave</handler>
+	      <shortcut>Ctrl+S</shortcut>
 	    </menuitem>
 	    <menuitem>
 	      <label>Save as</label>
@@ -30,6 +33,7 @@
 	      <label>Close</label>
 	      <help>Close loaded workspace</help>
 	      <handler>self.OnWorkspaceClose</handler>
+	      <shortcut>Ctrl+C</shortcut>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
