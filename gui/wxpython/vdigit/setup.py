@@ -25,10 +25,9 @@ extras = []
 for flag in ['GDALCFLAGS',
              'GDALLIBS',
              'GEOSCFLAGS',
+             'WXWIDGETSLIB',
              'WXWIDGETSCXXFLAGS']:
     update_opts(os.getenv(flag), macros, inc_dirs, lib_dirs, libs, extras)
-if sys.platform != 'darwin':
-    update_opts(os.getenv('WXWIDGETSLIB'), macros, inc_dirs, lib_dirs, libs, extras)
 
 setup(
     ext_modules= [
