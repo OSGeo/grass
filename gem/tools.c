@@ -53,7 +53,7 @@ char *basename(char *path)
 	if ((backup != NULL) && (element != NULL)) {
 	    free(backup);
 	}
-	if ((element != NULL) && (element != "")) {
+	if ((element != NULL) && (*element != '\0')) {
 	    backup = strdup(element);
 	}
     }
