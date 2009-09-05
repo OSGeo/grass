@@ -30,7 +30,7 @@
 #define PIPE '|'
 
 #define ispipe(c) (c==PIPE)
-#define isnull(c) (c==(char)NULL)
+#define isnull(c) (c=='\0')
 #define isquote(c) (c==DQUOTE)
 #define isbslash(c) (c==BSLASH)
 
@@ -618,7 +618,7 @@ int G__oldsite_get(FILE * ptr, Site * s, int fmt)
 	    return EOF;
 
     if (buf[strlen(buf) - 1] == '\n')
-	buf[strlen(buf) - 1] = (char)NULL;
+	buf[strlen(buf) - 1] = '\0';
 
     if (sscanf(buf, "%[^|]|%[^|]|%*[^\n]", ebuf, nbuf) < 2) {
 	fprintf(stderr, "ERROR: ebuf %s nbuf %s\n", ebuf, nbuf);
