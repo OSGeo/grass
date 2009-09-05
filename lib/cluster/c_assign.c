@@ -30,7 +30,7 @@ int I_cluster_assign(struct Cluster *C, int *interrupted)
     double d, q;
     double dmin;
 
-    G_debug("I_cluster_assign(npoints=%d,nclasses=%d,nbands=%d)",
+    G_debug(3, "I_cluster_assign(npoints=%d,nclasses=%d,nbands=%d)",
 	    C->npoints, C->nclasses, C->nbands);
     
     for (p = 0; p < C->npoints; p++) {
