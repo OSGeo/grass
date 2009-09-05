@@ -1,12 +1,12 @@
 #!/bin/sh
 
-#generates HTML man pages docs/html/index.html
-# Markus Neteler, 2003, 2004, 2005, 2006
-
+# generates HTML man pages docs/html/index.html
+# (c) The GRASS Development Team, and Markus Neteler, 2003, 2004, 2005, 2006, 2009
 
 ## TODO: better fix this in include/Make/Html.make, see bug RT #5361
 
-#exclude following list of modules from help index:
+# exclude following list of modules from help index:
+
 EXCLUDEMODS="\
 i.find \
 r.watershed.ram \
@@ -73,14 +73,14 @@ cat <<EOF
 
 <h2>GRASS GIS $GRASSVERSION Reference Manual</h2>
 
-<p>
-<em>Geographic Resources Analysis Support System</em>, commonly referred to as
-<a href="http://grass.osgeo.org">GRASS</a>, 
-is a Geographic Information System (GIS) used for geospatial data management
-and analysis, image processing, graphics/maps production, spatial modeling,
-and visualization. GRASS is currently used in academic and commercial settings
-around the world, as well as by many governmental agencies and environmental
-consulting companies.</p>
+<p><b>Geographic Resources Analysis Support System</b>, commonly
+referred to as <a href="http://grass.osgeo.org">GRASS</a>, is a <a
+href="http://en.wikipedia.org/wiki/Geographic_information_system">Geographic
+Information System</a> (GIS) used for geospatial data management and
+analysis, image processing, graphics/maps production, spatial
+modeling, and visualization. GRASS is currently used in academic and
+commercial settings around the world, as well as by many governmental
+agencies and environmental consulting companies.</p>
 
 <p>This reference manual details the use of modules distributed with
 Geographic Resources Analysis Support System (GRASS), an open source (GNU
@@ -97,19 +97,19 @@ cat <<EOF
 <table align="center" border="0" cellspacing="8">
   <tbody>
     <tr>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Quick Introduction</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Quick Introduction</h3>
       <ul>
       <li><a href="grass6.html">GRASS startup manual page</a></li>
       <li><a href="helptext.html">How to start with GRASS</a></li>
       </ul></td>
 
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;General</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;General</h3>
       <ul>
       <li><a href="general.html">General commands manual</a></li>
       </ul></td>
     </tr>
     <tr>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Raster/Image processing</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Raster/Image processing</h3>
 
        <ul>
         <li><a href="rasterintro.html">Intro 2D raster map processing</a></li>
@@ -117,7 +117,7 @@ cat <<EOF
         <li><a href="raster3dintro.html">Intro 3D raster map (voxel) processing</a></li>
         <li><a href="raster3D.html">Raster3D commands manual</a></li>
       </ul></td>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Vector processing</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Vector processing</h3>
 
        <ul>
         <li><a href="vectorintro.html">Intro vector map processing and network analysis</a></li>
@@ -125,18 +125,22 @@ cat <<EOF
        </ul></td>
     </tr>
     <tr>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
 
        <ul>
-       <li><a href="displaydrivers.html">Display drivers</a></li>
-        <li><a href="gis.m.html">gis.m</a> and <a href="d.m.html">d.m</a> GIS managers</li>
         <li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
+       </ul>
 
-        <li><a href="nviz.html">nviz</a> visualization and animation tool</li>
-        <li><a href="xganim.html">xganim</a> tool  for animating a raster map series</li>
+       <ul>
         <li><a href="display.html">Display commands manual</a></li>
+        <li><a href="displaydrivers.html">Display drivers</a></li>
+       </ul>
+
+       <ul>
+        <li><a href="nviz.html">nviz</a> 3D visualization and animation tool</li>
+        <li><a href="xganim.html">xganim</a> tool  for animating a raster map series</li>
        </ul></td>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Database</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Database</h3>
 
        <ul>
        <li><a href="databaseintro.html">Intro database management</a></li>
@@ -146,11 +150,11 @@ cat <<EOF
     </tr>
     <tr>
 
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Projections</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Projections</h3>
        <ul>
         <li><a href="projectionintro.html">Intro projections and spatial transformations</a></li>
        </ul></td>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Miscellaneous</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Miscellaneous</h3>
        <ul>
         <li><a href="variables.html">GRASS variables and environment variables</a></li>
 
@@ -159,13 +163,13 @@ cat <<EOF
        </ul></td>
     </tr>
     <tr>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Image processing</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Image processing</h3>
        <ul>
 
         <li><a href="imageryintro.html">Intro image processing</a></li>
         <li><a href="imagery.html">Imagery commands manual</a></li>
       </ul></td>
-      <td valign="top" bgcolor="#ddffaa" class="box"><h3>&nbsp;Printing</h3>
+      <td valign="top" bgcolor="e1ecd0" class="box"><h3>&nbsp;Printing</h3>
        <ul>
         <li><a href="postscript.html">Postscript commands manual</a></li>
        </ul></td>
