@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     }
 
     all = flag.region->answer ? 0 : 1;
-    verbose = (flag.q->answer == (char)NULL) ? 1 : 0;
+    verbose = flag.q->answer ? 0 : 1;
 
     /* Open input */
     Vect_set_open_level(2);
