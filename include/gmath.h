@@ -29,6 +29,7 @@
  /* only include if available */
 #include <grass/la.h>
 #endif
+#include <stddef.h>
 
 /* fft.c */
 int fft(int, double *[2], int, int, int);
