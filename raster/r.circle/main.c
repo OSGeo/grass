@@ -24,7 +24,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-typedef int FILEDESC;
 static double distance(double *, double *, double, double, int);
 
 #ifndef HUGE_VAL
@@ -41,7 +40,7 @@ int main(int argc, char *argv[])
     int *int_buf;
     struct Cell_head w;
     struct History history;
-    FILEDESC cellfile = (FILEDESC) NULL;
+    int cellfile;
     double east, north, pt[2], cur[2], row, col, fmult;
     double fmin, fmax;
     int binary;
