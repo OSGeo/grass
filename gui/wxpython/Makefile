@@ -26,7 +26,8 @@ $(ETCDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
 menustrings.py: gui_modules/menudata.py xml/menudata.xml
-	python $< $(GISBASE) > $@
+	GISBASE="$(GISBASE)" \
+	python $< > $@
 
 #doxygen:
 DOXNAME=wxpython
