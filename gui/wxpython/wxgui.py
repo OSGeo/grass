@@ -137,8 +137,8 @@ class GMFrame(wx.Frame):
         self.toolbar   = self.__createToolBar()
         
         # bindings
-        self.Bind(wx.EVT_CLOSE,     self.OnCloseWindow)
-        self.Bind(wx.EVT_LEFT_DOWN, self.AddRaster, self.notebook)
+        self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
+        self.Bind(wx.EVT_KEY_UP,   self.OnKey)
 
         # minimal frame size
         self.SetMinSize((500, 400))
@@ -1427,6 +1427,22 @@ class GMFrame(wx.Frame):
             if self.curr_page.maptree.GetPyData(layer)[0]['type'] == 'group':
                 self.curr_page.maptree.DeleteChildren(layer)
             self.curr_page.maptree.Delete(layer)
+        
+    def OnKey(self, event):
+        """!Check hotkey"""
+        try:
+            kc = chr(event.GetKeyCode())
+        except ValueError:
+            event.Skip()
+            return
+        
+        if event.AltDown():
+            if kc == 'R':
+                self.OnAddRaster(None)
+            elif kc == 'V':
+                self.OnAddVector(None)
+        
+        event.Skip()
         
     def OnCloseWindow(self, event):
         """!Cleanup when wxGUI is quit"""

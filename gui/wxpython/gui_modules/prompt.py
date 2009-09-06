@@ -556,8 +556,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         event.Skip()
         
     def OnKeyDown (self, event):
-        """
-        Do some work when the user press on the keys: up and down:
+        """!Do some work when the user press on the keys: up and down:
         move the cursor left and right: move the search
         """
         skip = True
