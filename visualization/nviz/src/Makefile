@@ -19,10 +19,11 @@ OGL_LIBS := $(OPENGLULIB) $(OPENGLLIB) -lgdi32 $(MATHLIB)
 endif
 ifeq ($(OPENGL_AQUA),1)
 OGL_LIBS := $(OPENGLULIB) $(OPENGLLIB) $(MATHLIB)
-ifneq ($(TCLTKAQUA_IS64BIT),1)
-CFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(CFLAGS)))
-LDFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(LDFLAGS)))
 endif
+# substitute OSX arch flags for tcltk
+ifneq ($(MACOSX_ARCHS),)
+CFLAGS := $(subst $(MACOSX_ARCHS),,$(CFLAGS)) $(MACOSX_ARCHS_TCLTK)
+LDFLAGS := $(subst $(MACOSX_ARCHS),,$(LDFLAGS)) $(MACOSX_ARCHS_TCLTK)
 endif
 
 SURFLIB = $(OGSFLIB)

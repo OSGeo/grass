@@ -9,11 +9,11 @@ DEPENDENCIES = $(RASTERDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-ifeq ($(findstring darwin,$(ARCH)),darwin)
-ifneq ($(WX_ISOSX64BIT),1)
-CFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(CFLAGS)))
-LDFLAGS := $(subst -arch ppc64,,$(subst -arch x86_64,,$(LDFLAGS)))
-endif
+# substitute OSX arch flags for wxpython
+ifneq ($(MACOSX_ARCHS),)
+CFLAGS := $(subst $(MACOSX_ARCHS),,$(CFLAGS)) $(MACOSX_ARCHS_WXPYTHON)
+CXXFLAGS := $(subst $(MACOSX_ARCHS),,$(CXXFLAGS)) $(MACOSX_ARCHS_WXPYTHON)
+LDFLAGS := $(subst $(MACOSX_ARCHS),,$(LDFLAGS)) $(MACOSX_ARCHS_WXPYTHON)
 endif
 
 LINK = $(CXX)

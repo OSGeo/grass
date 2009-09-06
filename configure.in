@@ -148,6 +148,55 @@ esac
 AC_MSG_RESULT("$enable_macosx_app")
 AC_SUBST(MACOSX_APP)
 
+# Check for MacOSX archs
+
+AC_MSG_CHECKING(for MacOSX architectures)
+
+MACOSX_ARCHS=
+
+if test "$with_macosx_archs" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  for a in $with_macosx_archs
+  do
+    # check if valid arch?
+    case "$a" in
+      i386|ppc|x86_64|ppc64)
+        MACOSX_ARCHS="$MACOSX_ARCHS -arch $a"
+        ;;
+    esac
+  done
+  AC_MSG_RESULT([$MACOSX_ARCHS])
+  LDFLAGS="$LDFLAGS $MACOSX_ARCHS"
+  CFLAGS="$CFLAGS $MACOSX_ARCHS"
+  CXXFLAGS="$CXXFLAGS $MACOSX_ARCHS"
+fi
+
+AC_SUBST(MACOSX_ARCHS)
+
+# Done checking MacOSX archs
+
+# Check for MacOSX SDK
+
+AC_MSG_CHECKING(for MacOSX SDK)
+
+MACOSX_SDK=
+
+if test "$with_macosx_sdk" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_CHECK_FILE($with_macosx_sdk/SDKSettings.plist, [
+    MACOSX_SDK="-isysroot $with_macosx_sdk"],[
+    AC_MSG_ERROR([*** specified SDK does not exist or is not a SDK])])
+  LDFLAGS="$LDFLAGS $MACOSX_SDK"
+  CFLAGS="$CFLAGS $MACOSX_SDK"
+  CXXFLAGS="$CXXFLAGS $MACOSX_SDK"
+fi
+
+AC_SUBST(MACOSX_SDK)
+
+# Done checking MacOSX SDK
+
 # Set INST_DIR
 
 if test -n "$MACOSX_APP" ; then
@@ -176,6 +225,15 @@ AC_ARG_ENABLE(w11,
 
 LOC_ARG_WITH(cxx, C++, no)
 #LOC_ARG_WITH(g77, GNU Fortran 77, no)
+
+AC_ARG_WITH(macosx-archs,
+[  --with-macosx-archs[=arch list]
+                          compile multiple architectures on MacOSX, ie.
+                          universal.  Valid architectures are i386, ppc,
+                          x86_64 and ppc64. (default: no [native])],, with_macosx_archs="no")
+AC_ARG_WITH(macosx-sdk,
+[  --with-macosx-sdk[=path/sdk]
+                          compile with a system SDK on MacOSX. (default: no)],, with_macosx_sdk="no")
 LOC_ARG_WITH(jpeg, JPEG)
 LOC_ARG_WITH(tiff, TIFF)
 LOC_ARG_WITH(png, PNG)
@@ -198,23 +256,30 @@ LOC_ARG_WITH(regex, regex)
 LOC_ARG_WITH(pthread, POSIX threads, no)
 
 AC_ARG_WITH(gdal,
-[  --with-gdal[=path/gdal-config] enable GDAL/OGR support (gdal-config with path, \
-e.g. '--with-gdal=/usr/local/bin/gdal-config')])
+[  --with-gdal[=path/gdal-config]
+                          enable GDAL/OGR support (gdal-config with path,
+                          e.g. '--with-gdal=/usr/local/bin/gdal-config')])
 
 AC_ARG_WITH(python,
-[  --with-python[=path/python-config] enable support for Python SWIG bindings and wxGUI Python extensions \
-(python-config with path, e.g. '--with-python=/usr/bin/python2.5-config', \
-default: no)],, with_python="no")
+[  --with-python[=path/python-config]
+                          enable support for Python SWIG bindings and wxGUI
+                          Python extensions (python-config with path, e.g.
+                          '--with-python=/usr/bin/python2.5-config',
+                          default: no)],, with_python="no")
 
 AC_ARG_WITH(wxwidgets,
-[  --with-wxwidgets[=path/wx-config] enable wxWidgets support (wx-config with path, \
-e.g. '--with-wxwidgets=/usr/local/bin/wx-config', default: no)],, with_wxwidgets="no")
+[  --with-wxwidgets[=path/wx-config]
+                          enable wxWidgets support (wx-config with path,
+                          e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
+                          default: no)],, with_wxwidgets="no")
 
 # With includes and libs options
 
 AC_ARG_WITH(geos,
-[  --with-geos[=path/geos-config] enable GEOS support (geos-config with path, \
-e.g. '--with-geos=/usr/local/bin/geos-config', default: no)],, with_geos="no")
+[  --with-geos[=path/geos-config]
+                          enable GEOS support (geos-config with path,
+                          e.g. '--with-geos=/usr/local/bin/geos-config',
+                          default: no)],, with_geos="no")
 
 AC_ARG_WITH(includes,
 [  --with-includes=DIRS    site include files are in DIRS])
@@ -1171,22 +1236,14 @@ LOC_CHECK_LIB_PATH(tcltk,Tcl/Tk,TCLTKLIBPATH)
 
 TCLLIB=
 TKLIB=
+MACOSX_ARCHS_TCLTK=
 
 # Can't test tcl/tk libs on 64bit OSX Aqua for now
-# assume that if OpenGL Aqua, then user specifies TclTk Aqua,
-# as there is no test for Tcl/Tk Aqua and Tck/Tk X11 won't work
-TCLTKAQUA_IS64BIT=
+# assume that if OpenGL Aqua, then user specifies TclTk Aqua
 if test "$OPENGL_AQUA" = 1 ; then
-    temp_CFLAGS="$CFLAGS"
+    save_CFLAGS="$CFLAGS"
     CFLAGS="`echo \"$CFLAGS\" | sed -E 's/-arch +x86_64//g' | sed -E 's/-arch +ppc64//g'`"
-    # can't save LDFLAGS, need to remember arch flags to insert back later
-    temp_ARCHES=
-    for a in x86_64 ppc64
-    do
-        if test -n "`echo \"$LDFLAGS\" | grep -E -e '-arch +'$a`" ; then
-            temp_ARCHES="$temp_ARCHES -arch $a"
-        fi
-    done
+    save_LDFLAGS="$LDFLAGS"
     LDFLAGS="`echo \"$LDFLAGS\" | sed -E 's/-arch +x86_64//g' | sed -E 's/-arch +ppc64//g'`"
 fi
 
@@ -1207,11 +1264,32 @@ LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHL
 # restore CFLAGS/LDLFAGS from Aqua 64bit strip
 # only Tcl/Tk-based makefiles will strip 64bit out during compile
 if test "$OPENGL_AQUA" = 1 ; then
-   CFLAGS="$temp_CFLAGS"
-   LDFLAGS="$temp_ARCHES $LDFLAGS"
+   CFLAGS="$save_CFLAGS"
+   LDFLAGS="$save_LDFLAGS"
 fi
 
 TCLTKLIBS="$TKLIB $TCLLIB"
+
+# check for available OSX archs in TclTk
+if test -n "$MACOSX_ARCHS" ; then
+  save_LDFLAGS="$LDFLAGS"
+  LDFLAGS=
+  save_CFLAGS="$CFLAGS"
+  CFLAGS=
+  tlib=`echo "$TCLLIB" | sed -E -e 's/-l//' -e 's/^ +//' -e 's/ +$//'`
+  for a in i386 ppc x86_64 ppc64
+  do
+    # add only if in MACOSX_ARCHS
+    AC_CHECK_LIB($tlib, Tcl_Init, [
+      if test -n "`echo "$MACOSX_ARCHS" | grep $a`" ; then
+        MACOSX_ARCHS_TCLTK="$MACOSX_ARCHS_TCLTK -arch $a"
+      fi
+      ],, -arch $a $MACOSX_SDK $TCLTKLIBPATH)
+  done
+  LDFLAGS="$save_LDFLAGS"
+  CFLAGS="$save_CFLAGS"
+fi
+
 AC_DEFINE(HAVE_TCLTK)
 
 fi # $USE_TCLTK
@@ -1222,7 +1300,7 @@ AC_SUBST(TCLINCDIR)
 AC_SUBST(TKINCDIR)
 AC_SUBST(TCLTKLIBPATH)
 AC_SUBST(TCLTKLIBS)
-AC_SUBST(TCLTKAQUA_IS64BIT)
+AC_SUBST(MACOSX_ARCHS_TCLTK)
 
 # Done checking Tcl/Tk
 
@@ -1342,7 +1420,8 @@ if test $blas_ok = yes; then
 fi
 
 # BLAS in Apple vecLib framework? (Mac OS-X)
-if test -n "$MACOSX_APP"; then
+#  not dependent on APP build
+#if test -n "$MACOSX_APP"; then
 if test $blas_ok = no; then
 	vlib_flags="-framework vecLib"
 	save_LIBS="$LIBS"
@@ -1352,7 +1431,7 @@ if test $blas_ok = no; then
 	AC_MSG_RESULT($blas_ok)
 	LIBS="$save_LIBS"
 fi
-fi # $MACOSX_APP
+#fi # $MACOSX_APP
 
 # BLAS in PhiPACK libraries? (requires generic BLAS, too)
 if test $blas_ok = no; then
@@ -1661,6 +1740,7 @@ PYTHONCFLAGS=
 PYTHONLDFLAGS=
 SWIG=
 USE_PYTHON=
+MACOSX_ARCHS_PYTHON=
 
 if test "$with_python" = "no" ; then
   AC_MSG_RESULT(no)
@@ -1684,6 +1764,13 @@ else
     # With Python library directory
 
     PYTHONLDFLAGS=`"$PY_CONFIG" --ldflags`
+
+    # shouldn't have arch flags in C/LD flags on OSX
+    for a in i386 ppc x86_64 ppc64
+    do
+      PYTHONCFLAGS=`echo "$PYTHONCFLAGS" | sed "s/-arch +$a//g"`
+      PYTHONLDFLAGS=`echo "$PYTHONLDFLAGS" | sed "s/-arch +$a//g"`
+    done
   fi
 
   # look for the swig program
@@ -1693,6 +1780,21 @@ else
     AC_MSG_ERROR([*** couldn't find swig])
   fi
 
+  # check for available OSX archs in Python, assume framework
+  if test -n "$MACOSX_ARCHS" ; then
+    pylib=`"$PY_CONFIG" --prefix`/Python
+    pylibinfo=`file "$pylib"`
+    for a in i386 ppc x86_64 ppc64
+    do
+      # add only if in MACOSX_ARCHS
+      if test -n "`echo \"$pylibinfo\" | grep \"library $a\"`" ; then
+        if test -n "`echo "$MACOSX_ARCHS" | grep $a`" ; then
+          MACOSX_ARCHS_PYTHON="$MACOSX_ARCHS_PYTHON -arch $a"
+        fi
+      fi
+    done
+  fi
+
 fi # Done checking Python
 
 AC_SUBST(PYTHONINC)
@@ -1700,6 +1802,7 @@ AC_SUBST(PYTHONCFLAGS)
 AC_SUBST(PYTHONLDFLAGS)
 AC_SUBST(SWIG)
 AC_SUBST(USE_PYTHON)
+AC_SUBST(MACOSX_ARCHS_PYTHON)
 
 # Enable wxWidgets support (for wxGUI)
 
@@ -1710,6 +1813,7 @@ WXWIDGETSCXXFLAGS=
 WXWIDGETSCPPFLAGS=  
 WXWIDGETSLIB=  
 USE_WXWIDGETS=
+MACOSX_ARCHS_WXPYTHON=
 
 if test "$with_wxwidgets" = "no" ; then
   AC_MSG_RESULT(no)
@@ -1759,6 +1863,30 @@ else
  # With wxWidgets library directory 
 
  WXWIDGETSLIB=`"$WX_CONFIG" --libs`
+
+ # shouldn't have arch flags in C/LD flags on OSX
+ for a in i386 ppc x86_64 ppc64
+ do
+   WXWIDGETSCXXFLAGS=`echo "$WXWIDGETSCXXFLAGS" | sed "s/-arch +$a//g"`
+   WXWIDGETSCPPFLAGS=`echo "$WXWIDGETSCPPFLAGS" | sed "s/-arch +$a//g"`
+   WXWIDGETSLIB=`echo "$WXWIDGETSLIB" | sed "s/-arch +$a//g"`
+ done
+
+  # check for available OSX archs in wxPython
+  if test -n "$MACOSX_ARCHS" ; then
+    wxver=`"$WX_CONFIG" --version`
+    wxlib=`"$WX_CONFIG" --prefix`/lib/lib`"$WX_CONFIG" --basename`-`echo "$wxver" | cut -d . -f1,2`.dylib
+    wxlibinfo=`file "$wxlib"`
+    for a in i386 ppc x86_64 ppc64
+    do
+      # add only if in MACOSX_ARCHS
+      if test -n "`echo \"$wxlibinfo\" | grep \"library $a\"`" ; then
+        if test -n "`echo \"$MACOSX_ARCHS\" | grep $a`" ; then
+          MACOSX_ARCHS_WXPYTHON="$MACOSX_ARCHS_WXPYTHON -arch $a"
+        fi
+      fi
+    done
+  fi
 fi # $USE_WXWIDGETS
 
 AC_SUBST(WXVERSION) 
@@ -1766,6 +1894,7 @@ AC_SUBST(WXWIDGETSCXXFLAGS)
 AC_SUBST(WXWIDGETSCPPFLAGS) 
 AC_SUBST(WXWIDGETSLIB) 
 AC_SUBST(USE_WXWIDGETS) 
+AC_SUBST(MACOSX_ARCHS_WXPYTHON)
 
 # Done checking wxWidgets
 
@@ -1805,6 +1934,8 @@ LOC_MSG([  64bit support:               ${do64bit}])
 LOC_MSG([  OpenGL platform:             ${OPENGL_TYPE}])
 LOC_MSG()
 LOC_MSG_USE(MacOSX application,MACOSX_APP)
+LOC_MSG([  MacOSX architectures:       ${MACOSX_ARCHS}])
+LOC_MSG([  MacOSX SDK:                 ${MACOSX_SDK}])
 LOC_MSG()
 LOC_MSG_USE(NVIZ,USE_TOGL)
 LOC_MSG()
