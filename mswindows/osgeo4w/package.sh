@@ -1,4 +1,4 @@
-#!/c/Programme/OSGeo4W/bin/sh
+#!/c/Programme/OSGeo4W/apps/msys/bin/sh
 
 set -e
 
@@ -32,8 +32,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	echo $(date): STARTING configure
 
 	./configure \
-		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-16/lib $OSGEO4W_ROOT_MSYS/lib /c/MinGW/lib" \
-		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-16/include $OSGEO4W_ROOT_MSYS/include /c/MinGW/include" \
+		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-16/lib $OSGEO4W_ROOT_MSYS/lib" \
+		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-16/include $OSGEO4W_ROOT_MSYS/include" \
 		--exec-prefix=$OSGEO4W_ROOT_MSYS/bin \
 		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
 		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
@@ -54,7 +54,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-regex \
 		--with-nls \
 		--without-swig \
-		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2
+		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
+		--with-odbc
 
 	echo $(date): STARTING make clean
 	make clean
@@ -96,7 +97,7 @@ mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/
 
 set -x
 echo $(date): BUILDING GDAL GRASS plugins
-cmd /c mswindows\\osgeo4w\\gdalplugins.cmd $VERSION
+cmd /c 'mswindows\\osgeo4w\\gdalplugins.cmd $VERSION'
 
 echo $(date): CREATING packages
 mkdir -p package/grass-devel package/grass-devel-mingw package/grass-devel-vc package/grass
