@@ -20,7 +20,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Save</label>
-	      <help>Save workspace to open file</help>
+	      <help>Save workspace</help>
 	      <handler>self.OnWorkspaceSave</handler>
 	      <shortcut>Ctrl+S</shortcut>
 	    </menuitem>
@@ -31,7 +31,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Close</label>
-	      <help>Close loaded workspace</help>
+	      <help>Close workspace file</help>
 	      <handler>self.OnWorkspaceClose</handler>
 	      <shortcut>Ctrl+C</shortcut>
 	    </menuitem>
@@ -645,7 +645,7 @@
 	<separator />
 	<menuitem>
 	  <label>E&amp;xit</label>
-	  <help>Exit GUI</help>
+	  <help>Quit GUI</help>
 	  <handler>self.OnCloseWindow</handler>
 	  <shortcut>Ctrl+Q</shortcut>
 	</menuitem>
