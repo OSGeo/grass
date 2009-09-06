@@ -187,9 +187,9 @@ Icons = {
                                 label=_("Save current workspace to file")),
     # TODO: "layer" is not conformant with GRASS vocabulary (vector layer: 1..x) ! 
     "addrast"    : MetaIcon (img=Icons["addrast"],
-                             label=_("Add raster map layer")),
+                             label=_("Add raster map layer (Alt+R)")),
     "addvect"    : MetaIcon (img=Icons["addvect"],
-                             label=_("Add vector map layer")),
+                             label=_("Add vector map layer (Alt+V)")),
     "addcmd"     : MetaIcon (img=Icons["addcmd"],
                              label=_("Add command layer")),
     "addgrp"     : MetaIcon (img=Icons["addgrp"],
