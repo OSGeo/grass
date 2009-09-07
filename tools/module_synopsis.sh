@@ -58,36 +58,23 @@ cd "$GISBASE"
 XML_MENU="$GISBASE/etc/wxpython/xml/menudata.xml"
 
 
+# generate menu hierarchy
+MDPY="$GISBASE/etc/wxpython/gui_modules/menudata.py"
+# python menudata.py commands
+# python menudata.py tree
+# python menudata.py strings
+python "$MDPY" commands | sed -e 's/ | /|/' -e 's/[ -].*|/|/' \
+  | sort -u > "$TMP.menu_hierarchy"
+
+
+
 # work in progress -- still rather buggy.
 find_menu_hierarchy()
 {
-unset MODULE_COUNT MODULE_LABEL MODULE_MENU1 MODULE_MENU2
+  MODL=$1
+  PLACEMENT=`grep "^$MODL|" "$TMP.menu_hierarchy" | cut -f2 -d'|'`
 
-MODULE_COUNT=`grep -c -w "$MODULE" "$XML_MENU"`
-
-if [ "$MODULE_COUNT" -ge 1 ] ; then
-    MODULE_LABEL=`xml2 < "$XML_MENU" | grep -w -B5 "$MODULE" | \
-       grep 'label=' | cut -f2 -d= | tr '\n' '>' | \
-       sed -e 's/>$//' -e 's/[^ ]>/ > /'`
-
-    MODULE_MENU1=`xml2 < "$XML_MENU" | grep -w -B5000 "$MODULE" | \
-       sed -e 's+^/menudata/menubar/menu/++' | tac | \
-       grep '/label=\|^label=' | grep -B1000 '^label=' -m 1 | \
-       grep -v menuitem | tail -n 1 | cut -f2 -d=`
-
-    MODULE_MENU2=`xml2 < "$XML_MENU" | grep -w -B5000 "$MODULE" | \
-       sed -e 's+^/menudata/menubar/menu/++' | tac | \
-       grep '/label=\|^label=' | grep -B1000 '^label=' -m 1 | \
-       grep -v menuitem | head -n 1 | cut -f2 -d= | tr '\n' ' ' | \
-       sed -e 's/ $//'`
-
-    if [ "$MODULE_COUNT" -eq 1 ] ; then
-        echo "$MODULE|$MODULE_MENU1 > $MODULE_MENU2 > $MODULE_LABEL"
-    else
-	# "*" indicates module appears more than once
-        echo "$MODULE*|$MODULE_MENU1 > $MODULE_MENU2 > $MODULE_LABEL"
-    fi
-fi
+  echo "$PLACEMENT"
 }
 
 for DIR in bin scripts ; do
@@ -109,7 +96,7 @@ for DIR in bin scripts ; do
 
 #    echo "mod=[$MODULE]  desc=[$desc]"
 
-#    find_menu_hierarchy
+#    find_menu_hierarchy $MODULE
 
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
