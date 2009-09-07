@@ -148,57 +148,58 @@ esac
 AC_MSG_RESULT("$enable_macosx_app")
 AC_SUBST(MACOSX_APP)
 
-if test -n "$MACOSX_APP" ; then
-    # Check for MacOSX archs
-    
-    AC_MSG_CHECKING(for MacOSX architectures)
-    
-    MACOSX_ARCHS=
-    
-    if test "$with_macosx_archs" = "no" ; then
-      AC_MSG_RESULT(no)
-    else
-      for a in $with_macosx_archs
-      do
-        # check if valid arch?
-        case "$a" in
-          i386|ppc|x86_64|ppc64)
-            MACOSX_ARCHS="$MACOSX_ARCHS -arch $a"
-            ;;
-        esac
-      done
-      AC_MSG_RESULT([$MACOSX_ARCHS])
-      LDFLAGS="$LDFLAGS $MACOSX_ARCHS"
-      CFLAGS="$CFLAGS $MACOSX_ARCHS"
-      CXXFLAGS="$CXXFLAGS $MACOSX_ARCHS"
-    fi
-    
-    AC_SUBST(MACOSX_ARCHS)
-    
-    # Done checking MacOSX archs
-    
-    # Check for MacOSX SDK
-    
-    AC_MSG_CHECKING(for MacOSX SDK)
-    
-    MACOSX_SDK=
-    
-    if test "$with_macosx_sdk" = "no" ; then
-      AC_MSG_RESULT(no)
-    else
-      AC_CHECK_FILE($with_macosx_sdk/SDKSettings.plist, [
-        MACOSX_SDK="-isysroot $with_macosx_sdk"],[
-        AC_MSG_ERROR([*** specified SDK does not exist or is not a SDK])])
-      LDFLAGS="$LDFLAGS $MACOSX_SDK"
-      CFLAGS="$CFLAGS $MACOSX_SDK"
-      CXXFLAGS="$CXXFLAGS $MACOSX_SDK"
-    fi
-    
-    AC_SUBST(MACOSX_SDK)
-    
-    # Done checking MacOSX SDK
+# Check for MacOSX archs
 
-    # Set INST_DIR
+AC_MSG_CHECKING(for MacOSX architectures)
+
+MACOSX_ARCHS=
+
+if test -z "$with_macosx_archs" ; then
+  AC_MSG_RESULT(no)
+else
+  for a in $with_macosx_archs
+  do
+    # check if valid arch?
+    case "$a" in
+      i386|ppc|x86_64|ppc64)
+        MACOSX_ARCHS="$MACOSX_ARCHS -arch $a"
+        ;;
+    esac
+  done
+  AC_MSG_RESULT([$MACOSX_ARCHS])
+  LDFLAGS="$LDFLAGS $MACOSX_ARCHS"
+  CFLAGS="$CFLAGS $MACOSX_ARCHS"
+  CXXFLAGS="$CXXFLAGS $MACOSX_ARCHS"
+fi
+
+AC_SUBST(MACOSX_ARCHS)
+
+# Done checking MacOSX archs
+
+# Check for MacOSX SDK
+
+AC_MSG_CHECKING(for MacOSX SDK)
+
+MACOSX_SDK=
+
+if test -z "$with_macosx_sdk" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_CHECK_FILE($with_macosx_sdk/SDKSettings.plist, [
+    MACOSX_SDK="-isysroot $with_macosx_sdk"],[
+    AC_MSG_ERROR([*** specified SDK does not exist or is not a SDK])])
+  LDFLAGS="$LDFLAGS $MACOSX_SDK"
+  CFLAGS="$CFLAGS $MACOSX_SDK"
+  CXXFLAGS="$CXXFLAGS $MACOSX_SDK"
+fi
+
+AC_SUBST(MACOSX_SDK)
+
+# Done checking MacOSX SDK
+
+# Set INST_DIR
+
+if test -n "$MACOSX_APP" ; then
     INSTDIR='${prefix}'"/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.app/Contents/MacOS"
 else
     INSTDIR='${prefix}'"/grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}"
