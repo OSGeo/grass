@@ -165,10 +165,14 @@ class MenuTreeWindow(wx.Frame):
             return # should not happen
         
         data = self.tree.GetPyData(self.tree.GetSelected())
-        if not data or not data.has_key('command'):
+        if not data:
             return
-        
-        gcmd.RunCommand(data['command'])
+
+        handler = 'self.parent.' + data['handler'].lstrip('self.')
+        if data['command']:
+            eval(handler)(event = None, cmd = data['command'].split())
+        else:
+            eval(handler)(None)
         
         if self.closeOnRun.IsChecked():
             self.OnCloseWindow(None)
@@ -197,7 +201,12 @@ class MenuTreeWindow(wx.Frame):
         if not data or not data.has_key('command'):
             return
         
-        self.statusbar.SetStatusText(data['command'] + ' -- ' + data['help'], 0)
+        if data['command']:
+            label = data['command'] + ' -- ' + data['help']
+        else:
+            label = data['help']
+        
+        self.statusbar.SetStatusText(label, 0)
         
     def OnShowItem(self, event):
         """!Highlight first found item in menu tree"""

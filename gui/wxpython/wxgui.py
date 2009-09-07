@@ -428,7 +428,8 @@ class GMFrame(wx.Frame):
         Return command as a list"""
         layer = None
         
-        cmd = self.menucmd[event.GetId()]
+        if event:
+            cmd = self.menucmd[event.GetId()]
         
         try:
             cmdlist = cmd.split(' ')
@@ -460,9 +461,10 @@ class GMFrame(wx.Frame):
         cmd = self.GetMenuCmd(event)
         self.goutput.RunCmd(cmd, switchPage=True)
 
-    def OnMenuCmd(self, event):
+    def OnMenuCmd(self, event, cmd = ''):
         """!Parse command selected from menu"""
-        cmd = self.GetMenuCmd(event)
+        if event:
+            cmd = self.GetMenuCmd(event)
         menuform.GUI().ParseCommand(cmd, parentframe=self)
 
     def OnNewVector(self, event):
