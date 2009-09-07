@@ -1768,8 +1768,8 @@ else
     # shouldn't have arch flags in C/LD flags on OSX
     for a in i386 ppc x86_64 ppc64
     do
-      PYTHONCFLAGS=`echo "$PYTHONCFLAGS" | sed "s/-arch +$a//g"`
-      PYTHONLDFLAGS=`echo "$PYTHONLDFLAGS" | sed "s/-arch +$a//g"`
+      PYTHONCFLAGS=`echo "$PYTHONCFLAGS" | sed -E "s/-arch +$a//g"`
+      PYTHONLDFLAGS=`echo "$PYTHONLDFLAGS" | sed -E "s/-arch +$a//g"`
     done
   fi
 
@@ -1867,9 +1867,9 @@ else
  # shouldn't have arch flags in C/LD flags on OSX
  for a in i386 ppc x86_64 ppc64
  do
-   WXWIDGETSCXXFLAGS=`echo "$WXWIDGETSCXXFLAGS" | sed "s/-arch +$a//g"`
-   WXWIDGETSCPPFLAGS=`echo "$WXWIDGETSCPPFLAGS" | sed "s/-arch +$a//g"`
-   WXWIDGETSLIB=`echo "$WXWIDGETSLIB" | sed "s/-arch +$a//g"`
+   WXWIDGETSCXXFLAGS=`echo "$WXWIDGETSCXXFLAGS" | sed -E "s/-arch +$a//g"`
+   WXWIDGETSCPPFLAGS=`echo "$WXWIDGETSCPPFLAGS" | sed -E "s/-arch +$a//g"`
+   WXWIDGETSLIB=`echo "$WXWIDGETSLIB" | sed -E "s/-arch +$a//g"`
  done
 
   # check for available OSX archs in wxPython
