@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("dxf"));
     module->description =
 	_("Converts files in DXF format to GRASS vector map format.");
 
@@ -131,8 +132,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open DXF file <%s>"), opt.input->answer);
 
     if (flag_list)
-	G_verbose_message(_
-			  ("Layer number: layer name / GRASS compliant name"));
+	G_verbose_message(_("Layer number: layer name / GRASS compliant name"));
     else {
 	int i;
 
