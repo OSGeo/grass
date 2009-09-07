@@ -23,14 +23,14 @@ LN_DIR = /bin/ln -sfh
 PYVER = `python -V 2>&1 | cut -d \  -f 2 | cut -d . -f 1,2`
 
 # packagemaker location, options and behaviour changed in xcode 3
-ifeq ($(findstring darwin9,$(ARCH)),darwin9)
-XCODE_VER = xcode3
-PACKAGEMAKER = /Developer/usr/bin/packagemaker
-PKG_INST_DIR = ${prefix}
-else
+ifeq ($(findstring darwin8,$(ARCH)),darwin8)
 XCODE_VER = xcode2
 PACKAGEMAKER = /Developer/Tools/packagemaker
 PKG_INST_DIR = ${prefix}/${MACOSX_APP_NAME}
+else
+XCODE_VER = xcode3
+PACKAGEMAKER = /Developer/usr/bin/packagemaker
+PKG_INST_DIR = ${prefix}
 endif
 
 default: subdirs
