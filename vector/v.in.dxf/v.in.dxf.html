@@ -1,62 +1,77 @@
 <h2>DESCRIPTION</h2>
 
-Converts DXF format CAD files to GRASS vector format. The following graphical
-objects (DXF entities) are supported:
+<em>v.in.dxf</em> converts DXF format CAD files to GRASS vector
+format. The following graphical objects (DXF entities) are supported:
 
 <ul>
-<li>GRASS point type:</li>
- <li><ul>
-  <li><B>DXF POINT</B></li>
- </ul></li>
-<li>GRASS line type:</li>
- <li><ul>
-  <li><B>DXF LINE</B></li>
-  <li><B>DXF POLYLINE</B></li>
-  <li><B>DXF LWPOLYLINE</B></li>
-  <li><B>DXF ARC</B></li>
-  <li><B>DXF CIRCLE</B></li>
-  <li><B>DXF TEXT</B></li>
- </ul></li>
-<li>GRASS face type:</li>
- <li><ul>
-  <li><B>DXF POLYFACE MESHES</B></li>
-  <li><B>DXF 3DFACE</B></li>
- </ul></li>
+  <li>point
+    <ul>
+      <li><b>DXF POINT</b></li>
+    </ul>
+  </li>
+  <li>line
+    <ul>
+      <li><b>DXF LINE</b></li>
+      <li><b>DXF POLYLINE</b></li>
+      <li><b>DXF LWPOLYLINE</b></li>
+      <li><b>DXF ARC</b></li>
+      <li><b>DXF CIRCLE</b></li>
+      <li><b>DXF TEXT</b></li>
+    </ul>
+  </li>
+  <li>face
+    <ul>
+      <li><b>DXF POLYFACE MESHES</b></li>
+      <li><b>DXF 3DFACE</b></li>
+  </ul>
+  </li>
 </ul>
 
-Table and column names are changed to lowercase characters for easier SQL usage
-(lowercase table/column names avoid the need to quote them if the attribute
-table is stored in a SQL DBMS such as PostgreSQL).<p>
+Table and column names are changed to lowercase characters for easier
+SQL usage (lowercase table/column names avoid the need to quote them
+if the attribute table is stored in a SQL DBMS such as PostgreSQL).
 
-The "layer" column will contain the name(s) of the DXF input layer(s). The DXF
-entity type string will be stored in the "entity" column as uppercase.<p>
+<p>
+The "layer" column will contain the name(s) of the DXF input
+layer(s). The DXF entity type string will be stored in the "entity"
+column as uppercase.
 
-The "handle" column can be used to store small bits of data associated with any
-entity in the DXF file (i.e., entity handle or unique object identifiers in the
-layer). The entity handle is a "text string of up to 16 hexadecimal digits",
-which is a 64-bit integer (currently not supported by GRASS database drivers).
-For text type entities, the text value will be stored in the "label" column of
-the GRASS vector output map. Neither the "handle" nor "label" column is
-mandatory.
+<p>
+The "handle" column can be used to store small bits of data associated
+with any entity in the DXF file (i.e., entity handle or unique object
+identifiers in the layer). The entity handle is a "text string of up
+to 16 hexadecimal digits", which is a 64-bit integer (currently not
+supported by GRASS database drivers).  For text type entities, the
+text value will be stored in the "label" column of the GRASS vector
+output map. Neither the "handle" nor "label" column is mandatory.
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 <a href="http://en.wikipedia.org/wiki/AutoCAD_DXF">AutoCad DXF</a> (from Wikipedia, the free encyclopedia)<br>
 <a href="http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853">DXF References</a> (Autodesk-supplied documentation)
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="v.out.dxf.html">v.out.dxf</A></EM>,
-<EM><a href="vectorintro.html">Introduction to GRASS vector map processing</a></EM>
+<em>
+  <a href="v.out.dxf.html">v.out.dxf</a>,
+  <a href="v.in.ogr.html">v.in.ogr</a>,
+  <a href="v.out.ogr.html">v.out.ogr</a>
+</em>
 
+<p>
+<em>
+  <a href="http://grass.osgeo.org/wiki/Import_DXF">How-to import DXF files in wxGUI</a> (from GRASS User Wiki)
+</em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
-Original written by Chuck Ehlschlaeger, 6/1989<BR>
-Revised by Dave Gerdes, 12/1989<BR>
+Original written by Chuck Ehlschlaeger, 6/1989<br>
+Revised by Dave Gerdes, 12/1989<br>
 US Army Construction Engineering Research Lab
-<P>
-Updated for GRASS 6 and 3D support. Huidae Cho, 3/2006<BR>
+
+<p>
+Updated for GRASS 6 and 3D support. Huidae Cho, 3/2006<br>
 With minor additions by Benjamin Ducke (Oxford Archaeology), 4/2009
 
-<P><I>Last changed: $Date$</I>
+<p>
+<i>Last changed: $Date$</i>
