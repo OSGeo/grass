@@ -14,6 +14,8 @@
 #############################################################################
 #
 # PDF output requires the Palatino font.
+# Run this script from the tools/ directory in the souce code.
+#   (TeX needs to be able to find grasslogo_vector.pdf)
 #
 
 if  [ -z "$GISBASE" ] ; then
@@ -96,16 +98,24 @@ for DIR in bin scripts ; do
 
 #    echo "mod=[$MODULE]  desc=[$desc]"
 
-#    find_menu_hierarchy $MODULE
+    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
 
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
     fi
+    BUFF=""
     if [ -z "$label" ] ; then
-	echo "$MODULE: $desc" >> "$TMP"
+	BUFF="$MODULE: $desc"
     else
-	echo "$MODULE: $label" >> "$TMP"
+	BUFF="$MODULE: $label"
     fi
+    if [ -n "$MODULE_MENU_LOC" ] ; then
+        BUFF="$BUFF [$MODULE_MENU_LOC]"
+    fi
+    if [ -n "$BUFF" ] ; then
+       echo "$BUFF" >> "$TMP"
+    fi
+
   done
 
   cd ..
