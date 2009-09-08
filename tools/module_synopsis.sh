@@ -110,7 +110,7 @@ for DIR in bin scripts ; do
 	BUFF="$MODULE: $label"
     fi
     if [ -n "$MODULE_MENU_LOC" ] ; then
-        BUFF="$BUFF [$MODULE_MENU_LOC]"
+        BUFF="$BUFF {$MODULE_MENU_LOC}"
     fi
     if [ -n "$BUFF" ] ; then
        echo "$BUFF" >> "$TMP"
@@ -243,7 +243,9 @@ EOF
     grep "^${SECTION}\." "${TMP}.txt" | \
       sed -e 's/: /| /' -e 's/^.*|/<li> <a href="&.html">&<\/a>:/' \
 	  -e 's/|.html">/.html">/' -e 's+|</a>:+</a>:+' \
-	  -e 's/&/\&amp;/g' >> "${TMP}.html"
+	  -e 's/&/\&amp;/g' \
+	  -e 's+ {+\n     <BR><i>+' -e 's+}+</i>+' \
+	  -e 's+ > + \&rarr; +g'  >> "${TMP}.html"
 
     if [ "$SECTION" = "i" ] ; then
 	# include imagery photo subsection
