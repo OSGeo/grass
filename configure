@@ -12124,7 +12124,7 @@ if test -n "$MACOSX_ARCHS" ; then
   LDFLAGS=
   save_CFLAGS="$CFLAGS"
   CFLAGS=
-  tlib=`echo "$TCLLIB" | sed -E -e 's/-l//' -e 's/^ +//' -e 's/ +$//'`
+  tlib=`echo "$TCLLIB" | sed -e 's/-l//' -e 's/^  *//' -e 's/  *$//'`
   for a in i386 ppc x86_64 ppc64
   do
     # add only if in MACOSX_ARCHS
@@ -15289,8 +15289,8 @@ CPPFLAGS=$ac_save_cppflags
     # shouldn't have arch flags in C/LD flags on OSX
     for a in i386 ppc x86_64 ppc64
     do
-      PYTHONCFLAGS=`echo "$PYTHONCFLAGS" | sed -E "s/-arch +$a//g"`
-      PYTHONLDFLAGS=`echo "$PYTHONLDFLAGS" | sed -E "s/-arch +$a//g"`
+      PYTHONCFLAGS=`echo "$PYTHONCFLAGS" | sed "s/-arch  *$a//g"`
+      PYTHONLDFLAGS=`echo "$PYTHONLDFLAGS" | sed "s/-arch  *$a//g"`
     done
   fi
 
@@ -15497,9 +15497,9 @@ CPPFLAGS=$ac_save_cppflags
  # shouldn't have arch flags in C/LD flags on OSX
  for a in i386 ppc x86_64 ppc64
  do
-   WXWIDGETSCXXFLAGS=`echo "$WXWIDGETSCXXFLAGS" | sed -E "s/-arch +$a//g"`
-   WXWIDGETSCPPFLAGS=`echo "$WXWIDGETSCPPFLAGS" | sed -E "s/-arch +$a//g"`
-   WXWIDGETSLIB=`echo "$WXWIDGETSLIB" | sed -E "s/-arch +$a//g"`
+   WXWIDGETSCXXFLAGS=`echo "$WXWIDGETSCXXFLAGS" | sed "s/-arch  *$a//g"`
+   WXWIDGETSCPPFLAGS=`echo "$WXWIDGETSCPPFLAGS" | sed "s/-arch  *$a//g"`
+   WXWIDGETSLIB=`echo "$WXWIDGETSLIB" | sed "s/-arch  *$a//g"`
  done
 
   # check for available OSX archs in wxPython
