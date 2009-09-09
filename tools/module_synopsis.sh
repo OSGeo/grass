@@ -94,15 +94,14 @@ for DIR in bin scripts ; do
     esac
 
     eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/'`
-
-#    echo "mod=[$MODULE]  desc=[$desc]"
-
-    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./'`
 
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
     fi
+
+    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
+
     BUFF=""
     if [ -z "$label" ] ; then
 	BUFF="$MODULE: $desc"
@@ -113,9 +112,9 @@ for DIR in bin scripts ; do
         BUFF="$BUFF {$MODULE_MENU_LOC}"
     fi
     if [ -n "$BUFF" ] ; then
+       #echo "$BUFF"
        echo "$BUFF" >> "$TMP"
     fi
-
   done
 
   cd ..
@@ -127,14 +126,26 @@ for MODULE in ps.map ; do
     unset desc
 
     eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/'`
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./'`
+
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
     fi
+
+    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
+
+    BUFF=""
     if [ -z "$label" ] ; then
-	echo "$MODULE: $desc" >> "$TMP"
+	BUFF="$MODULE: $desc"
     else
-	echo "$MODULE: $label" >> "$TMP"
+	BUFF="$MODULE: $label"
+    fi
+    if [ -n "$MODULE_MENU_LOC" ] ; then
+        BUFF="$BUFF {$MODULE_MENU_LOC}"
+    fi
+    if [ -n "$BUFF" ] ; then
+       #echo "$BUFF"
+       echo "$BUFF" >> "$TMP"
     fi
 done
 
@@ -156,11 +167,7 @@ EOF
 sort "$TMP" > "$SYNOP"
 \rm -f "$TMP"
 
-
-
-# add missing periods at end of descriptions
-sed -e 's/[^\.]$/&./' "$SYNOP" > "${TMP}.txt"
-
+cp "$SYNOP" "${TMP}.txt"
 
 ####### create HTML source #######
 # poor cousin to full_index.html from tools/build_html_index.sh
@@ -185,6 +192,11 @@ cat << EOF > "${TMP}.html"
 <h3>`date "+%e %B %Y"`</h3>
 </center>
 <BR><BR><BR>
+
+<i><font size="-1" color="#778877">
+   Menu position follows if available.</font></i>
+
+<BR><BR>
 
 <h4>Command types:</h4>
 <ul>
@@ -244,7 +256,8 @@ EOF
       sed -e 's/: /| /' -e 's/^.*|/<li> <a href="&.html">&<\/a>:/' \
 	  -e 's/|.html">/.html">/' -e 's+|</a>:+</a>:+' \
 	  -e 's/&/\&amp;/g' \
-	  -e 's+ {+\n     <BR><i>+' -e 's+}+</i>+' \
+	  -e 's+ {+\n     <BR><font size="-2" color="#778877"><i>+' \
+	  -e 's+}+</i></font>+' \
 	  -e 's+ > + \&rarr; +g'  >> "${TMP}.html"
 
     if [ "$SECTION" = "i" ] ; then
@@ -260,7 +273,10 @@ EOF
 	grep "^photo\." "${TMP}.txt" | \
 	  sed -e 's/: /| /' -e 's/^.*|/<li> <a href="&.html">&<\/a>:/' \
 	      -e 's/|.html">/.html">/' -e 's+|</a>:+</a>:+' \
-	      -e 's/&/\&amp;/g' >> "${TMP}.html"
+	      -e 's/&/\&amp;/g' \
+	      -e 's+ {+\n     <BR><font size="-2" color="#778877"><i>+' \
+	      -e 's+}+</i></font>+' \
+	      -e 's+ > + \&rarr; +g'  >> "${TMP}.html"
     fi
 
 done
@@ -296,6 +312,8 @@ cat << EOF > "${TMP}.tex"
 \usepackage[latin1]{inputenc}
 \usepackage{a4wide}
 \usepackage{graphicx}
+\usepackage{color}
+\definecolor{DarkSeaGreen3}{rgb}{0.412,0.545,0.412}
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
@@ -376,8 +394,17 @@ EOF
 
     grep "^${SECTION}\." "${TMP}.txt" | \
       sed -e 's/^/\\item [/' -e 's/: /]/' \
+          -e 's+ {+ \\\\\n$+' -e 's/}$/$/' \
+	  -e 's+ > +\\,\\triangleright\\,|+' \
           -e 's/\*/{*}/g' -e 's/_/\\_/g' -e 's/&/\\\&/g' \
-	  >> "${TMP}.tex"
+	| awk '/^\$/ { STR=$0; \
+		       gsub(" ", "\\, ", STR); \
+		       sub(/\|/," ",STR); \
+		       sub(/^/,"\\textcolor{DarkSeaGreen3}{\\footnotesize ",STR); \
+		       sub(/$/,"}",STR); \
+		       print STR \
+		     } ;
+	       /^\\/ {print}' >> "${TMP}.tex"
 
     if [ "$SECTION" = "i" ] ; then
 	# include imagery photo subsection
