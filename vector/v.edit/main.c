@@ -15,7 +15,7 @@
  *             Read the file COPYING that comes with GRASS
  *             for details.
  *
- * TODO:       3D support
+ * TODO:       3D support (done for move and vertexmove)
  ****************************************************************/
 
 #include "global.h"
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     int i;
     int move_first, snap;
     int ret, print, layer;
-    double move_x, move_y, thresh[3];
+    double move_x, move_y, move_z, thresh[3];
 
     struct line_pnts *coord;
 
@@ -261,18 +261,19 @@ int main(int argc, char *argv[])
     case MODE_MOVE:
 	move_x = atof(params.move->answers[0]);
 	move_y = atof(params.move->answers[1]);
+	move_z = atof(params.move->answers[2]);
 	G_verbose_message(_("Threshold value for snapping is %.2f"),
 			  thresh[THRESH_SNAP]);
-	ret = Vedit_move_lines(&Map, BgMap, nbgmaps, List, move_x, move_y, 0.0, snap, thresh[THRESH_SNAP]);	/* TODO: 3D */
+	ret = Vedit_move_lines(&Map, BgMap, nbgmaps, List, move_x, move_y, move_z, snap, thresh[THRESH_SNAP]);
 	G_message(_("%d features moved"), ret);
 	break;
     case MODE_VERTEX_MOVE:
 	move_x = atof(params.move->answers[0]);
 	move_y = atof(params.move->answers[1]);
+	move_z = atof(params.move->answers[2]);
 	G_verbose_message(_("Threshold value for snapping is %.2f"),
 			  thresh[THRESH_SNAP]);
-	ret = Vedit_move_vertex(&Map, BgMap, nbgmaps, List, coord, thresh[THRESH_COORDS], thresh[THRESH_SNAP], move_x, move_y, 0.0,	/* TODO: 3D */
-				move_first, snap);
+	ret = Vedit_move_vertex(&Map, BgMap, nbgmaps, List, coord, thresh[THRESH_COORDS], thresh[THRESH_SNAP], move_x, move_y, move_z, move_first, snap);
 	G_message(_("%d vertices moved"), ret);
 	break;
     case MODE_VERTEX_ADD:

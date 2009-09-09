@@ -15,7 +15,7 @@
  *             Read the file COPYING that comes with GRASS
  *             for details.
  *
- * TODO:       3D support
+ * TODO:       3D support (done for move and vertexmove)
  ****************************************************************/
 
 #include "global.h"
@@ -104,12 +104,12 @@ int parser(int argc, char *argv[], struct GParams *params,
 
     params->move = G_define_option();
     params->move->key = "move";
-    params->move->key_desc = "x,y";
+    params->move->key_desc = "x,y,z";
     params->move->type = TYPE_DOUBLE;
     params->move->required = NO;
     params->move->multiple = NO;
     params->move->description =
-	_("Difference in x,y direction for moving feature or vertex");
+	_("Difference in x,y,z direction for moving feature or vertex");
 
     params->maxdist = G_define_option();
     params->maxdist->key = "thresh";
