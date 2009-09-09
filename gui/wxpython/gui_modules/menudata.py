@@ -156,6 +156,7 @@ class Data:
                 if eachItem[3]:
                     fh.write('%s%s' % (eachItem[3], itemSep))
                     fh.write(menuSep.join(menuItems))
+                    fh.write('%s%s' % (menuSep, eachItem[0]))
                     fh.write('\n')
         
     def GetModules(self):
