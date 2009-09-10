@@ -7,7 +7,7 @@
 #               Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Facilitates creation of raster MASK using r.reclass
-# COPYRIGHT:	(C) 2005, 2007, 2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 2005, 2007-2009 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,32 +15,36 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Create a MASK for limiting raster operation
-#%  keywords: raster
-#%  keywords: mask
-#%End
+#%module
+#% description: Creates a mask for limiting raster operation.
+#% keywords: raster
+#% keywords: mask
+#%end
 #%option
 #% key: input
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: Raster map to use as MASK
+#% description: Raster map to use as mask
 #% required: no
-#%END
+#% guisection: Create
+#%end
 #%option
 #% key: maskcats
 #% type: string
-#% description: Category values to use for MASK (format: 1 2 3 thru 7 *)
+#% description: Category values to use for mask (format: 1 2 3 thru 7 *)
 #% answer: *
-#%END
+#% guisection: Create
+#%end
 #%flag
 #% key: i
-#% description: Create inverse MASK from specified 'maskcats' list
-#%END
+#% description: Create inverse mask from specified 'maskcats' list
+#% guisection: Create
+#%end
 #%flag
 #% key: r
-#% description: Remove existing MASK (overrides other options)
-#%END
+#% description: Remove existing mask (overrides other options)
+#% guisection: Remove
+#%end
 
 import sys
 import os
