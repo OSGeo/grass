@@ -61,7 +61,9 @@ except ImportError, err:
     GV_LINES = None
     PseudoDC = wx.PseudoDC
     errorMsg = err
-    print >> sys.stderr, "\nWARNING: Vector digitizer is not available (%s). " % err
+    print >> sys.stderr, "\nWARNING: Vector digitizer is not available (%s).\n\n" \
+        "Note that vector digitizer is currently not working under MS Windows (hopefully will be fixed soon). " \
+        "Please try more recent version of GRASS." % err
 
 class AbstractDigit:
     """
