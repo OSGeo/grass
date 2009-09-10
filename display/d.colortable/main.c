@@ -7,11 +7,11 @@
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Eric G. Miller <egm2 jps.net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      display the color table associated with a raster map layer in
  *               the active frame on the graphics monitor
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -39,20 +39,15 @@ int main(int argc, char **argv)
     double ratio;
     DCELL dmin, dmax, dval;
     int cats_num;
-    int cur_dot_row;
-    int cur_dot_col;
-    int dots_per_line;
-    int dots_per_col;
+    int cur_dot_row, cur_dot_col;
+    int dots_per_line, dots_per_col;
     int atcat;
-    int white;
-    int black;
-    int atcol;
-    int atline;
+    int white, black;
+    int atcol, atline;
     int count;
     double t, b, l, r;
     int fp, new_colr;
-    double x_box[5];
-    double y_box[5];
+    double x_box[5], y_box[5];
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4;
 
@@ -61,40 +56,38 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
-    G_add_keyword(_("setup"));
+    G_add_keyword(_("raster"));
     module->description =
 	_("Displays the color table associated with a raster map layer.");
 
-    opt1 = G_define_option();
-    opt1->key = "map";
-    opt1->type = TYPE_STRING;
-    opt1->required = YES;
-    opt1->gisprompt = "old,cell,raster";
-    opt1->description = "Name of existing raster map";
+    opt1 = G_define_standard_option(G_OPT_R_MAP);
+    opt1->description =
+	_("Name of raster map whose color table is to be displayed");
 
     opt2 = G_define_option();
     opt2->key = "color";
     opt2->type = TYPE_STRING;
-    opt2->answer = DEFAULT_FG_COLOR;
+    opt2->answer = DEFAULT_BG_COLOR;
     opt2->gisprompt = GISPROMPT_COLOR;
     opt2->description =
-	"Color of lines separating the colors of the color table";
+	_("Color of lines separating the colors of the color table");
 
     opt3 = G_define_option();
     opt3->key = "lines";
     opt3->type = TYPE_INTEGER;
     opt3->options = "1-1000";
-    opt3->description = "Number of lines";
+    opt3->description = _("Number of lines to appear in the color table");
 
     opt4 = G_define_option();
     opt4->key = "cols";
     opt4->type = TYPE_INTEGER;
     opt4->options = "1-1000";
-    opt4->description = "Number of columns";
+    opt4->description = _("Number of columns to appear in the color table");
 
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     map_name = opt1->answer;
     fp = Rast_map_is_fp(map_name, "");
@@ -108,9 +101,11 @@ int main(int argc, char **argv)
 	lines = 1;
     else
 	lines = 0;
+
     if (opt3->answer != NULL) {
 	if (fp)
-	    G_warning("<%s> is floating-point; ignoring lines and drawing continuous color ramp",
+	    G_warning(_("<%s> is floating-point; "
+			"ignoring [lines] and drawing continuous color ramp"),
 		      map_name);
 	else
 	    sscanf(opt3->answer, "%d", &lines);
@@ -120,9 +115,11 @@ int main(int argc, char **argv)
 	cols = 1;
     else
 	cols = 0;
+
     if (opt4->answer) {
 	if (fp)
-	    G_warning("<%s> is floating-point; ignoring cols and drawing continuous color ramp",
+	    G_warning(_("<%s> is floating-point; "
+			"ignoring [cols] and drawing continuous color ramp"),
 		      map_name);
 	else
 	    sscanf(opt4->answer, "%d", &cols);
@@ -141,8 +138,10 @@ int main(int argc, char **argv)
 
     Rast_get_fp_range_min_max(&fp_range, &dmin, &dmax);
     if (Rast_is_d_null_value(&dmin) || Rast_is_d_null_value(&dmax))
-	G_fatal_error("Data range is empty");
+	G_fatal_error(_("Data range is empty"));
+
     cats_num = (int)dmax - (int)dmin + 1;
+
     if (lines <= 0 && cols <= 0) {
 	double dx, dy;
 
@@ -175,6 +174,7 @@ int main(int argc, char **argv)
     white = D_translate_color("white");
     black = D_translate_color("black");
     Rast_set_c_null_value(&atcat, 1);
+
     if (!fp) {
 	for (atcol = 0; atcol < cols; atcol++) {
 	    cur_dot_row = t;
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
 	    count = 0;
 	    for (atline = 0; atline < lines; atline++) {
 		cur_dot_row += dots_per_line;
-		/* Draw white box */
+		/* Draw outer border box */
 		D_use_color(color);
 		D_begin();
 		D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
@@ -216,13 +216,15 @@ int main(int argc, char **argv)
 	    }
 	    if (atcat > (int)dmax)
 		break;
-	}			/* col loop */
-    }				/* int map */
-    else {			/* draw continuous color ramp for fp map */
+	} /* col loop */
+    } /* int map */
+
+    else {
+	/*** draw continuous color ramp for fp map ***/
 
 	cur_dot_row = t + dots_per_line;
 	cur_dot_col = l;
-	/* Draw white box */
+	/* Draw outer border box */
 	D_use_color(color);
 	D_begin();
 	D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
@@ -242,13 +244,15 @@ int main(int argc, char **argv)
 	D_cont_rel((4 - dots_per_col), 0);
 	D_end();
 	D_stroke();
-	/* Color ramp box */
 
-	/* get separate color for each pixel */
-	/* fisrt 5 pixels draw null color */
+	/* Color ramp box */
+	  /* get separate color for each pixel */
+	  /* fisrt 5 pixels draw null color */
 	y_box[1] = -1;
 	y_box[3] = 1;
-	fprintf(stdout, "dots_per_line: %d\n", dots_per_line);
+
+	G_debug(1, "dots_per_line: %d", dots_per_line);
+
 	for (r = 0; r < dots_per_line - 6; r++) {
 	    if (r <= 4)
 		Rast_set_d_null_value(&dval, 1);
@@ -263,5 +267,5 @@ int main(int argc, char **argv)
 
     D_close_driver();
 
-    return 0;
+    exit(EXIT_SUCCESS);
 }
