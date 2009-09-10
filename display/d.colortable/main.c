@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 	/* Draw outer border box */
 	D_use_color(color);
 	D_begin();
-	D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
+	D_move_abs(cur_dot_col + 1, (cur_dot_row - 1));
 	D_cont_rel(0, (2 - dots_per_line));
 	D_cont_rel((dots_per_col - 2), 0);
 	D_cont_rel(0, (dots_per_line - 2));
@@ -237,7 +237,7 @@ int main(int argc, char **argv)
 	/* Draw black box */
 	D_use_color(black);
 	D_begin();
-	D_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
+	D_move_abs(cur_dot_col + 2, (cur_dot_row - 2));
 	D_cont_rel(0, (4 - dots_per_line));
 	D_cont_rel((dots_per_col - 4), 0);
 	D_cont_rel(0, (dots_per_line - 4));
@@ -250,6 +250,8 @@ int main(int argc, char **argv)
 	  /* fisrt 5 pixels draw null color */
 	y_box[1] = -1;
 	y_box[3] = 1;
+	x_box[2] = (dots_per_col - 6);
+	x_box[4] = (6 - dots_per_col);
 
 	G_debug(1, "dots_per_line: %d", dots_per_line);
 
@@ -260,7 +262,7 @@ int main(int argc, char **argv)
 		dval =
 		    dmin + (r - 1) * (dmax - dmin) / (dots_per_line - 6 - 5);
 	    D_d_color(dval, &colors);
-	    D_pos_abs(cur_dot_col + 4, (cur_dot_row - 3) - r);
+	    D_pos_abs(cur_dot_col + 3, (cur_dot_row - 3) - r);
 	    D_polygon_rel(x_box, y_box, 5);
 	}
     }
