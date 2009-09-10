@@ -800,9 +800,9 @@ int main(int argc, char **argv)
 	    D_use_color(white);
 	    D_begin();
 	    D_move_abs(l + 2, (cur_dot_row - 1));
-	    D_cont_rel(0, (2 - dots_per_line));
-	    D_cont_rel((dots_per_line - 2), 0);
-	    D_cont_rel(0, (dots_per_line - 2));
+	    D_cont_rel(0, (3 - dots_per_line));
+	    D_cont_rel((dots_per_line - 3), 0);
+	    D_cont_rel(0, (dots_per_line - 3));
 	    D_close();
 	    D_end();
 	    D_stroke();
@@ -811,9 +811,9 @@ int main(int argc, char **argv)
 	    D_use_color(black);
 	    D_begin();
 	    D_move_abs(l + 3, (cur_dot_row - 2));
-	    D_cont_rel(0, (4 - dots_per_line));
-	    D_cont_rel((dots_per_line - 4), 0);
-	    D_cont_rel(0, (dots_per_line - 4));
+	    D_cont_rel(0, (5 - dots_per_line));
+	    D_cont_rel((dots_per_line - 5), 0);
+	    D_cont_rel(0, (dots_per_line - 5));
 	    D_close();
 	    D_end();
 	    D_stroke();
@@ -833,7 +833,7 @@ int main(int argc, char **argv)
 		    D_d_color(catlist[catlistCount - i - 1], &colors);
 	    }
 
-	    D_pos_abs(l + 4, (cur_dot_row - 2));
+	    D_pos_abs(l + 3, (cur_dot_row - 2));
 	    D_polygon_rel(x_box, y_box, 5);
 
 	    /* Draw text */
