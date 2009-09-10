@@ -57,10 +57,8 @@ SYNOP="$GISBASE/etc/module_synopsis.txt"
 OLDDIR="`pwd`"
 cd "$GISBASE"
 
-XML_MENU="$GISBASE/etc/wxpython/xml/menudata.xml"
 
-
-# generate menu hierarchy
+### generate menu hierarchy
 MDPY="$GISBASE/etc/wxpython/gui_modules/menudata.py"
 # python menudata.py commands
 # python menudata.py tree
@@ -69,16 +67,32 @@ python "$MDPY" commands | sed -e 's/ | /|/' -e 's/[ -].*|/|/' \
   | sort -u > "$TMP.menu_hierarchy"
 
 
-
-# work in progress -- still rather buggy.
+### given a module name return where it is in the menu tree
 find_menu_hierarchy()
 {
   MODL=$1
-  PLACEMENT=`grep "^$MODL|" "$TMP.menu_hierarchy" | cut -f2 -d'|'`
+
+  # unwrap wrapper scripts
+  if [ "$MODL" = "g.gui" ] ; then
+    MODL="g.change.gui.py"
+  elif  [ "$MODL" = "v.type" ] ; then
+    MODL="v.type_wrapper.py"
+  fi
+
+  PLACEMENT=`grep "^$MODL|" "$TMP.menu_hierarchy" | cut -f2 -d'|' | head -n 1`
+
+  # combine some modules which are listed twice
+  if [ "$MODL" = "g.region" ] ; then
+      PLACEMENT=`echo "$PLACEMENT" | sed -e 's/Display/Set or Display/'`
+  elif  [ "$MODL" = "r.reclass" ] || [ "$MODL" = "v.reclass" ] ; then
+      PLACEMENT=`echo "$PLACEMENT" | sed -e 's/Reclassify.*$/Reclassify/'`
+  fi
 
   echo "$PLACEMENT"
 }
 
+
+### execute the loop for all modules
 for DIR in bin scripts ; do
   cd $DIR
 
@@ -193,10 +207,11 @@ cat << EOF > "${TMP}.html"
 </center>
 <BR><BR><BR>
 
+<!--
 <i><font size="-1" color="#778877">
-   Menu position follows if available.</font></i>
-
+   Menu position follows description if applicable.</font></i>
 <BR><BR>
+-->
 
 <h4>Command types:</h4>
 <ul>
@@ -395,13 +410,13 @@ EOF
     grep "^${SECTION}\." "${TMP}.txt" | \
       sed -e 's/^/\\item [/' -e 's/: /]/' \
           -e 's+ {+ \\\\\n$+' -e 's/}$/$/' \
-	  -e 's+ > +\\,\\triangleright\\,|+' \
+	  -e 's+ > +\\,\\triangleright\\,|+g' \
           -e 's/\*/{*}/g' -e 's/_/\\_/g' -e 's/&/\\\&/g' \
 	| awk '/^\$/ { STR=$0; \
-		       gsub(" ", "\\, ", STR); \
-		       sub(/\|/," ",STR); \
-		       sub(/^/,"\\textcolor{DarkSeaGreen3}{\\footnotesize ",STR); \
-		       sub(/$/,"}",STR); \
+		       gsub(" ", "\\: ", STR); \
+		       gsub(/\|/, " ", STR); \
+		       sub(/^/, "\\textcolor{DarkSeaGreen3}{\\footnotesize ", STR); \
+		       sub(/$/, "}", STR); \
 		       print STR \
 		     } ;
 	       /^\\/ {print}' >> "${TMP}.tex"
