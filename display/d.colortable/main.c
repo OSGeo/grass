@@ -44,12 +44,14 @@ int main(int argc, char **argv)
     int atcat;
     int white, black;
     int atcol, atline;
-    int count;
+    int count, offset;
     double t, b, l, r;
     int fp, new_colr;
     double x_box[5], y_box[5];
+
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4;
+    struct Flag *skip_null;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -83,6 +85,11 @@ int main(int argc, char **argv)
     opt4->type = TYPE_INTEGER;
     opt4->options = "1-1000";
     opt4->description = _("Number of columns to appear in the color table");
+
+    skip_null = G_define_flag();
+    skip_null->key = 'n';
+    skip_null->description =
+	_("Don't draw a collar showing the NULL color in FP maps");
 
     /* Check command line */
     if (G_parser(argc, argv))
@@ -253,14 +260,21 @@ int main(int argc, char **argv)
 	x_box[2] = (dots_per_col - 6);
 	x_box[4] = (6 - dots_per_col);
 
-	G_debug(1, "dots_per_line: %d", dots_per_line);
+	G_debug(1, "dots_per_line: %d  dmin=%.2f dmax=%.2f",
+		dots_per_line, dmin, dmax);
+
+	if (skip_null->answer)
+	    offset = 1;
+	else
+	    offset = 4;
 
 	for (r = 0; r < dots_per_line - 6; r++) {
-	    if (r <= 4)
+	    if ((r <= 4) && !skip_null->answer)
 		Rast_set_d_null_value(&dval, 1);
 	    else
 		dval =
-		    dmin + (r - 1) * (dmax - dmin) / (dots_per_line - 6 - 5);
+		    dmin +  r*(dmax - dmin) / (dots_per_line - 6 - offset);
+
 	    D_d_color(dval, &colors);
 	    D_pos_abs(cur_dot_col + 3, (cur_dot_row - 3) - r);
 	    D_polygon_rel(x_box, y_box, 5);
