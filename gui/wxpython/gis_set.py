@@ -1,4 +1,4 @@
-"""
+"""!
 @package gis_set.py
 
 GRASS start-up screen.
@@ -517,17 +517,8 @@ class GRASSStartup(wx.Frame):
 
     def UpdateLocations(self, dbase):
         """!Update list of locations"""
-        self.listOfLocations = []
-
-        for location in glob.glob(os.path.join(dbase, "*")):
-            try:
-                if os.path.join(location, "PERMANENT") in glob.glob(os.path.join(location, "*")):
-                    self.listOfLocations.append(os.path.basename(location))
-            except:
-                pass
-
-        utils.ListSortLower(self.listOfLocations)
-
+        self.listOfLocations = utils.GetListOfLocations(dbase)
+        
         self.lblocations.Clear()
         self.lblocations.InsertItems(self.listOfLocations, 0)
 
@@ -542,18 +533,9 @@ class GRASSStartup(wx.Frame):
         """!Update list of mapsets"""
         self.FormerMapsetSelection = wx.NOT_FOUND # for non-selectable item
 
-        self.listOfMapsets = []
-        self.listOfMapsetsSelectable = []
-        
-        for mapset in glob.glob(os.path.join(self.gisdbase, location, "*")):
-            if os.path.isdir(mapset) and \
-                    os.path.isfile(os.path.join(self.gisdbase, location, mapset, "WIND")) and \
-                    os.path.basename(mapset) != 'PERMANENT':
-                self.listOfMapsets.append(os.path.basename(mapset))
-        
-        utils.ListSortLower(self.listOfMapsets)
-        self.listOfMapsets.insert(0, 'PERMANENT')
- 
+        self.listOfMapsetsSelectable = list()
+        self.listOfMapsets = utils.GetListOfMapsets(self.gisdbase, location)
+         
         self.lbmapsets.Clear()
 
         # disable mapset with denied permission

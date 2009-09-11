@@ -467,6 +467,47 @@ class GMFrame(wx.Frame):
             cmd = self.GetMenuCmd(event)
         menuform.GUI().ParseCommand(cmd, parentframe=self)
 
+    def OnChangeLocation(self, event):
+        """Change current location"""
+        dlg = gdialogs.LocationDialog(parent = self)
+        if dlg.ShowModal() == wx.ID_OK:
+            location, mapset = dlg.GetValues()
+            if location and mapset:
+                ret = gcmd.RunCommand("g.gisenv",
+                                      set = "LOCATION_NAME=%s" % location)
+                ret += gcmd.RunCommand("g.gisenv",
+                                       set = "MAPSET=%s" % mapset)
+                if ret > 0:
+                    wx.MessageBox(parent = self,
+                                  message = _("Unable to switch to location <%(loc)s> mapset <%(mapset)s>.") % \
+                                      { 'loc' : location, 'mapset' : mapset },
+                                  caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                else:
+                    # close workspace
+                    self.OnWorkspaceClose()
+                    self.OnWorkspaceNew()
+                    wx.MessageBox(parent = self,
+                                  message = _("Current location is <%(loc)s>.\n"
+                                              "Current mapset is <%(mapset)s>.") % \
+                                      { 'loc' : location, 'mapset' : mapset },
+                                  caption = _("Info"), style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+                    
+    def OnChangeMapset(self, event):
+        """Change current mapset"""
+        dlg = gdialogs.MapsetDialog(parent = self)
+        if dlg.ShowModal() == wx.ID_OK:
+            mapset = dlg.GetMapset()
+            if mapset:
+                if gcmd.RunCommand("g.gisenv",
+                                   set = "MAPSET=%s" % mapset) != 0:
+                    wx.MessageBox(parent = self,
+                                  message = _("Unable to switch to mapset <%s>.") % mapset,
+                                  caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                else:
+                    wx.MessageBox(parent = self,
+                                  message = _("Current mapset is <%s>.") % mapset,
+                                  caption = _("Info"), style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+        
     def OnNewVector(self, event):
         """!Create new vector map layer"""
         name, add = gdialogs.CreateNewVector(self, log = self.goutput,

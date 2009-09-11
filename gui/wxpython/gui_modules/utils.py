@@ -1,27 +1,27 @@
-"""
+"""!
 @package utils.py
 
-@brief Misc utilities for GRASS wxPython GUI
+@brief Misc utilities for wxGUI
 
-(C) 2007-2008 by the GRASS Development Team
+(C) 2007-2009 by the GRASS Development Team
 
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Martin Landa, Jachym Cepicky
-
-@date 2007-2008
+@author Martin Landa <landa.martin gmail.com>
+@author Jachym Cepicky
 """
 
 import os
 import sys
 import platform
 import string
+import glob
 
 import globalvar
 grassPath = os.path.join(globalvar.ETCDIR, "python")
 sys.path.append(grassPath)
+
 from grass.script import core as grass
 
 import gcmd
@@ -512,3 +512,58 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
                 return (None, None)
     
     return (None, None)
+
+def GetListOfLocations(dbase):
+    """!Get list of GRASS locations in given dbase
+
+    @param dbase GRASS database path
+
+    @return list of locations (sorted)
+    """
+    listOfLocations = list()
+    
+    for location in glob.glob(os.path.join(dbase, "*")):
+        try:
+            if os.path.join(location, "PERMANENT") in glob.glob(os.path.join(location, "*")):
+                listOfLocations.append(os.path.basename(location))
+        except:
+            pass
+    
+    ListSortLower(listOfLocations)
+    
+    return listOfLocations
+
+def GetListOfMapsets(dbase, location, selectable = False):
+    """!Get list of mapsets in given GRASS location
+
+    @param dbase      GRASS database path
+    @param location   GRASS location
+    @param selectable True to get list of selectable mapsets, otherwise all
+
+    @return list of mapsets - sorted (PERMANENT first)
+    """
+    listOfMapsets = list()
+    
+    if selectable:
+        ret = gcmd.RunCommand('g.mapset',
+                              read = True,
+                              flags = 'l',
+                              location = location,
+                              gisdbase = dbase)
+        
+        if not ret:
+            return listOfMapsets
+            
+        for line in ret.rstrip().splitlines():
+            listOfMapsets += line.split(' ')
+    else:
+        for mapset in glob.glob(os.path.join(dbase, location, "*")):
+            if os.path.isdir(mapset) and \
+                    os.path.isfile(os.path.join(dbase, location, mapset, "WIND")) and \
+                    os.path.basename(mapset) != 'PERMANENT':
+                listOfMapsets.append(os.path.basename(mapset))
+    
+        ListSortLower(listOfMapsets)
+        listOfMapsets.insert(0, 'PERMANENT')
+    
+    return listOfMapsets
