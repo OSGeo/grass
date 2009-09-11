@@ -12,6 +12,8 @@ Classes:
  - DriverSelect
  - DatabaseSelect
  - ColumnSelect
+ - LocationSelect
+ - MapsetSelect
 
 (C) 2007-2009 by the GRASS Development Team This program is free
 software under the GNU General Public License (>=v2). Read the file
@@ -669,3 +671,39 @@ class ColumnSelect(wx.ComboBox):
 
         self.SetItems(columns)
         
+class LocationSelect(wx.ComboBox):
+    """!Widget for selecting GRASS location"""
+    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
+                 gisdbase = None, **kwargs):
+        super(LocationSelect, self).__init__(parent, id, size = size, 
+                                             style = wx.CB_READONLY, **kwargs)
+
+        self.SetName("LocationSelect")
+        
+        if not gisdbase:
+            self.gisdbase = grass.gisenv()['GISDBASE']
+        else:
+            self.gisdbase = gisdbase
+
+        self.SetItems(utils.GetListOfLocations(self.gisdbase))
+
+class MapsetSelect(wx.ComboBox):
+    """!Widget for selecting GRASS mapset"""
+    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
+                 gisdbase = None, location = None, **kwargs):
+        super(MapsetSelect, self).__init__(parent, id, size = size, 
+                                           style = wx.CB_READONLY, **kwargs)
+        
+        self.SetName("MapsetSelect")
+        
+        if not gisdbase:
+            self.gisdbase = grass.gisenv()['GISDBASE']
+        else:
+            self.gisdbase = gisdbase
+        
+        if not location:
+            self.location = grass.gisenv()['LOCATION_NAME']
+        else:
+            self.location = location
+        
+        self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = True)) # selectable

@@ -682,6 +682,14 @@
 	      <handler>self.OnMapsets</handler>
 	    </menuitem>
 	    <menuitem>
+	      <label>User access</label>
+	      <help>Controls access to the current mapset for other users on the system.</help>
+	      <keywords>general</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>g.access</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
 	      <label>Change working environment</label>
 	      <help>Change current mapset.</help>
 	      <keywords>general,settings</keywords>
@@ -689,11 +697,14 @@
 	      <command>g.mapset</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>User access</label>
-	      <help>Controls access to the current mapset for other users on the system.</help>
-	      <keywords>general</keywords>
-              <handler>self.OnMenuCmd</handler>
-	      <command>g.access</command>
+	      <label>Change location and mapset</label>
+	      <help>Change current location and mapset (note that current workspace will be closed).</help>
+              <handler>self.OnChangeLocation</handler>
+	    </menuitem>
+	    <menuitem>
+	      <label>Change mapset</label>
+	      <help>Change current mapset.</help>
+              <handler>self.OnChangeMapset</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -746,6 +757,7 @@
 	    </menuitem>
 	  </items>
 	</menu>
+	<separator />
 	<menuitem>
 	  <label>Manage extensions</label>
 	  <help>Tool to maintain GRASS extensions in local GRASS installation.</help>

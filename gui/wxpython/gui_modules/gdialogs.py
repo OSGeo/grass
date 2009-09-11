@@ -1,9 +1,12 @@
-"""
+"""!
 @package gdialogs.py
 
-@brief Common dialog used in wxGUI.
+@brief Various dialogs used in wxGUI.
 
 List of classes:
+ - ElementDialog
+ - LocationDialog
+ - MapsetDialog
  - NewVectorDialog
  - SavedRegion
  - DecorationDialog
@@ -40,90 +43,195 @@ import menuform
 import utils
 from preferences import globalSettings as UserSettings
 
-class NewVectorDialog(wx.Dialog):
-    """!Create new vector map layer"""
-    def __init__(self, parent, id, title, disableAdd=False, 
-                style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-
-        wx.Dialog.__init__(self, parent, id, title, style=style)
-
-        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
-
-        self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
-        self.btnOK = wx.Button(self.panel, wx.ID_OK)
+class ElementDialog(wx.Dialog):
+    """!General dialog to choose given element (location, mapset, vector map, etc.)"""
+    def __init__(self, parent, title, label, id = wx.ID_ANY,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                 **kwargs):
+        
+        wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        self.btnOK     = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
-
-        self.label = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                   label=_("Name for new vector map:"))
-        self.mapName = gselect.Select(parent=self.panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-                                      type='vector', mapsets=[grass.gisenv()['MAPSET'],])
-        self.mapName.SetFocus()
         
-        self.table = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
-                                 label=_("Create attribute table"))
-        self.table.SetValue(True)
-
-        self.addbox = wx.CheckBox(parent=self.panel,
-                                  label=_('Add created map into layer tree'), style = wx.NO_BORDER)
-        if disableAdd:
-            self.addbox.SetValue(True)
-            self.addbox.Enable(False)
-        else:
-            self.addbox.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
+        self.label = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                   label = label)
         
-        self.mapName.Bind(wx.EVT_TEXT, self.OnMapName)
+        self.element = None # must be defined 
         
         self.__Layout()
-
-        self.SetMinSize(self.GetSize())
-
-    def OnMapName(self, event):
+        
+    def PostInit(self):
+        self.element.SetFocus()
+        self.element.Bind(wx.EVT_TEXT, self.OnElement)
+        
+    def OnElement(self, event):
         """!Name for vector map layer given"""
         if len(event.GetString()) > 0:
             self.btnOK.Enable(True)
         else:
             self.btnOK.Enable(False)
-
+        
     def __Layout(self):
         """!Do layout"""
-        sizer = wx.BoxSizer(wx.VERTICAL)
-
-        dataSizer = wx.BoxSizer(wx.VERTICAL)
-        dataSizer.Add(self.label, proportion=0,
-                      flag=wx.ALL, border=1)
-        dataSizer.Add(self.mapName, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=1)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
         
-        dataSizer.Add(self.table, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=1)
-
-        dataSizer.AddSpacer(5)
+        self.dataSizer = wx.BoxSizer(wx.VERTICAL)
+        self.dataSizer.Add(self.label, proportion=0,
+                           flag=wx.ALL, border=1)
         
-        dataSizer.Add(item=self.addbox, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=1)
-                
         # buttons
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
+        
+        self.sizer.Add(item=self.dataSizer, proportion=1,
+                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        
+        self.sizer.Add(item=btnSizer, proportion=0,
+                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        
+    def GetElement(self):
+        """!Return (mapName, overwrite)"""
+        return self.element.GetValue()
+    
+class LocationDialog(ElementDialog):
+    """!Dialog used to select location"""
+    def __init__(self, parent, title = _("Select GRASS location and mapset"), id =  wx.ID_ANY):
+        ElementDialog.__init__(self, parent, title, label = _("Name of GRASS location:"))
 
-        sizer.Add(item=dataSizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        self.element = gselect.LocationSelect(parent = self.panel, id = wx.ID_ANY,
+                                              size = globalvar.DIALOG_GSELECT_SIZE)
 
-        sizer.Add(item=btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        self.element1 = gselect.MapsetSelect(parent = self.panel, id = wx.ID_ANY,
+                                             size = globalvar.DIALOG_GSELECT_SIZE)
+        self.element1.SetItems([])
+        
+        self.PostInit()
+        
+        self.__Layout()
+        self.SetMinSize(self.GetSize())
+
+    def __Layout(self):
+        """!Do layout"""
+        self.dataSizer.Add(self.element, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+ 
+        self.dataSizer.Add(wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                         label = _("Name of mapset:")), proportion=0,
+                           flag=wx.EXPAND | wx.ALL, border=1)
+
+        self.dataSizer.Add(self.element1, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
        
-        self.panel.SetSizer(sizer)
-        sizer.Fit(self)
+        self.panel.SetSizer(self.sizer)
+        self.sizer.Fit(self)
+
+    def OnElement(self, event):
+        """!Name for vector map layer given"""
+        location = event.GetString()
+        mapset   = self.element1.GetValue()
+        
+        if location:
+            dbase = grass.gisenv()['GISDBASE']
+            self.element1.SetItems(utils.GetListOfMapsets(dbase, location, selectable = True))
+            self.element1.SetSelection(0)
+            mapset = self.element1.GetStringSelection()
+        
+        if location and mapset:
+            self.btnOK.Enable(True)
+        else:
+            self.btnOK.Enable(False)
+
+    def GetValues(self):
+        """!Get location, mapset"""
+        return (self.GetElement(), self.element1.GetValue())
+    
+class MapsetDialog(ElementDialog):
+    """!Dialog used to select mapset"""
+    def __init__(self, parent, title = _("Select mapset in GRASS location"),
+                 location = None, id =  wx.ID_ANY):
+        ElementDialog.__init__(self, parent, title, label = _("Name of mapset:"))
+        if location:
+            self.SetTitle(self.GetTitle() + '<%s>' % location)
+        else:
+            self.SetTitle(self.GetTitle() + '<%s>' % grass.gisenv()['LOCATION_NAME'])
+        
+        self.element = gselect.MapsetSelect(parent = self.panel, id = wx.ID_ANY,
+                                            size = globalvar.DIALOG_GSELECT_SIZE)
+        
+        self.PostInit()
+        
+        self.__Layout()
+        self.SetMinSize(self.GetSize())
+
+    def __Layout(self):
+        """!Do layout"""
+        self.dataSizer.Add(self.element, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+        
+        self.panel.SetSizer(self.sizer)
+        self.sizer.Fit(self)
+
+    def GetMapset(self):
+        return self.GetElement()
+    
+class NewVectorDialog(ElementDialog):
+    """!Dialog for creating new vector map"""
+    def __init__(self, parent, id, title, disableAdd=False, 
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+        
+        ElementDialog.__init__(self, parent, title, label = _("Name for new vector map:"))
+        
+        self.element = gselect.Select(parent=self.panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
+                                      type='vector', mapsets=[grass.gisenv()['MAPSET'],])
+        
+        self.table = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
+                                 label = _("Create attribute table"))
+        self.table.SetValue(True)
+        
+        self.addbox = wx.CheckBox(parent = self.panel,
+                                  label = _('Add created map into layer tree'), style = wx.NO_BORDER)
+        if disableAdd:
+            self.addbox.SetValue(True)
+            self.addbox.Enable(False)
+        else:
+            self.addbox.SetValue(UserSettings.Get(group = 'cmd', key = 'addNewLayer', subkey = 'enabled'))
+        
+        self.PostInit()
+        
+        self.__Layout()
+        self.SetMinSize(self.GetSize())
+        
+    def OnMapName(self, event):
+        """!Name for vector map layer given"""
+        self.OnElement(event)
+        
+    def __Layout(self):
+        """!Do layout"""
+        self.dataSizer.Add(self.element, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+        
+        self.dataSizer.Add(self.table, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+        
+        self.dataSizer.AddSpacer(5)
+        
+        self.dataSizer.Add(item=self.addbox, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+        
+        self.panel.SetSizer(self.sizer)
+        self.sizer.Fit(self)
 
     def GetName(self):
         """!Return (mapName, overwrite)"""
-        mapName = self.mapName.GetValue().split('@', 1)[0]
-
-        return mapName
-    
+        return self.GetElement().split('@', 1)[0]
+            
 def CreateNewVector(parent, cmd, title=_('Create new vector map'),
                     exceptMap=None, log=None, disableAdd=False):
     """!Create new vector map layer
