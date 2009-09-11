@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
     unsigned int wkbtype = wkbUnknown;	/* ?? */
     OGRSpatialReferenceH Ogr_projection;
     char **papszDSCO = NULL, **papszLCO = NULL;
+    int num_types;
 
     G_gisinit(argv[0]);
 
@@ -91,10 +92,9 @@ int main(int argc, char *argv[])
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
-    type_opt->answer = "line,boundary";
     type_opt->description =
-	_("Feature type. Combination of types is not supported "
-	  "by all formats.");
+	_("Feature type(s). Combination of types is not supported "
+	  "by all output formats. Default is to use first type found in input map.");
     type_opt->guisection = _("Input");
 
     dsn_opt = G_define_option();
@@ -176,6 +176,78 @@ int main(int argc, char *argv[])
     /* read options */
     field = atoi(field_opt->answer);
 
+    /* open input vector */
+    Vect_set_open_level(2);
+    Vect_open_old(&In, in_opt->answer, "");
+
+    /*
+        If no output type specified: determine one automatically.
+        Centroids, Boundaries and Kernels always have to be
+        exported explicitely, using the "type=" option.
+    */
+    if (!strcmp(type_opt->answer, "auto" )) {
+        G_debug(2, "Automatic type determination." );
+
+        type_opt->answers = G_malloc (sizeof(char*) * 100); /* should be big enough forever ;) */
+        for (i=0;i<100;i++) {
+            type_opt->answers[i] = NULL;
+        }
+        num_types = 0;
+
+        if ( Vect_get_num_primitives ( &In, GV_POINT ) > 0 ) {
+            type_opt->answers[num_types] = strdup ( "point" );
+            G_debug(3, "Adding points to export list." );
+            num_types ++;
+        }
+
+        if ( Vect_get_num_primitives ( &In, GV_LINE ) > 0 ) {
+            type_opt->answers[num_types] = strdup ( "line" );
+            G_debug(3, "Adding lines to export list." );
+            num_types ++;
+        }
+
+        if ( Vect_get_num_primitives ( &In, GV_BOUNDARY ) !=
+             Vect_get_num_areas ( &In ) )
+        {
+            G_warning(_("Skipping all boundaries that are not part of an area."));
+        }
+
+        if ( Vect_get_num_areas ( &In ) > 0  ) {
+            type_opt->answers[num_types] = strdup ( "area" );
+            G_debug(3, "Adding areas to export list." );
+            num_types ++;
+        }
+
+        /*  Faces and volumes:
+            For now, volumes will just be exported as sets of faces.
+        */
+        if ( Vect_get_num_primitives ( &In, GV_FACE ) > 0 ) {
+            type_opt->answers[num_types] = strdup ( "face" );
+            G_debug(3, "Adding faces to export list." );
+            num_types ++;
+        }
+        /* this check HAS TO FOLLOW RIGHT AFTER check for GV_FACE! */
+        if ( Vect_get_num_volumes ( &In ) > 0 ) {
+            G_warning(_("Volumes will be exported as sets of faces."));
+            if ( num_types == 0 ) {
+                /* no other types yet? */
+                type_opt->answers[num_types] = strdup ( "volume" );
+                G_debug(3, "Adding volumes to export list." );
+                num_types ++;
+            } else {
+                if ( strcmp ( type_opt->answers[num_types-1], "face" ) ) {
+                    /* only put faces on export list if that's not the case already */
+                    type_opt->answers[num_types] = strdup ( "volume" );
+                    G_debug(3, "Adding volumes to export list." );
+                    num_types ++;
+                }
+            }
+        }
+
+        if ( num_types == 0 )
+            G_fatal_error(_("Could not determine input map's feature type(s)."));
+    }
+
     /* Check output type */
     otype = Vect_option_to_types(type_opt);
 
@@ -205,14 +277,23 @@ int main(int argc, char *argv[])
     if (((GV_POINTS & otype) && (GV_LINES & otype)) ||
 	((GV_POINTS & otype) && (GV_AREA & otype)) ||
 	((GV_POINTS & otype) && (GV_FACE & otype)) ||
+	((GV_POINTS & otype) && (GV_KERNEL & otype)) ||
+	((GV_POINTS & otype) && (GV_VOLUME & otype)) ||
 	((GV_LINES & otype) && (GV_AREA & otype)) ||
-	((GV_LINES & otype) && (GV_FACE & otype))
+	((GV_LINES & otype) && (GV_FACE & otype)) ||
+	((GV_LINES & otype) && (GV_KERNEL & otype)) ||
+	((GV_LINES & otype) && (GV_VOLUME & otype)) ||
+	((GV_KERNEL & otype) && (GV_POINTS & otype)) ||
+	((GV_KERNEL & otype) && (GV_LINES & otype)) ||
+	((GV_KERNEL & otype) && (GV_AREA & otype)) ||
+	((GV_KERNEL & otype) && (GV_FACE & otype)) ||
+	((GV_KERNEL & otype) && (GV_VOLUME & otype))
+
 	) {
 	G_warning(_("The combination of types is not supported"
 		    " by all formats."));
 	wkbtype = wkbUnknown;
     }
-
 
     if (cat_flag->answer)
 	donocat = 1;
@@ -221,10 +302,6 @@ int main(int argc, char *argv[])
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-
-    /* open input vector */
-    Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
 
     if ((GV_AREA & otype) && Vect_get_num_islands(&In) > 0 && cat_flag->answer)
 	G_warning(_("The map contains islands. With the -c flag, "
