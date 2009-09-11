@@ -1674,7 +1674,7 @@ programming. The programmer should use only routines with this prefix.
 - \subpage vlibType
 - \subpage vlibDelete
 - \subpage vlibWrite
-
+- \subpage vlibGeos
 
 \section vlibArea Vector area functions
 
@@ -2357,7 +2357,7 @@ programming. The programmer should use only routines with this prefix.
 
  - Vect_rewrite_line()
 
-\section vlibGeos GEOS support
+\section vlibGeos Vector GEOS functions
 
 Note: The functions are available only if GRASS is compiled with
 <tt>--with-geos</tt> switch.
