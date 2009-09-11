@@ -177,7 +177,7 @@
 	    <menuitem>
 	      <label>Link to OGR</label>
 	      <help>Creates a new vector as a read-only link to OGR layer.</help>
-	      <keywords>vector</keywords>
+	      <keywords>vector,external,ogr</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.external</command>
 	    </menuitem>
@@ -205,7 +205,7 @@
 	    <menuitem>
 	      <label>DXF import</label>
 	      <help>Converts files in DXF format to GRASS vector map format.</help>
-	      <keywords>vector,import</keywords>
+	      <keywords>vector,import,dxf</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.in.dxf</command>
 	    </menuitem>
@@ -419,7 +419,7 @@
 	    <menuitem>
 	      <label>ASCII points/GRASS ASCII vector export</label>
 	      <help>Converts a GRASS binary vector map to a GRASS ASCII vector map.</help>
-	      <keywords>vector,export</keywords>
+	      <keywords>vector,export,ascii</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.out.ascii</command>
 	    </menuitem>
@@ -743,8 +743,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Manage projections</label>
-	      <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format). Can also be used to create GRASS locations.</help>
-	      <keywords>general</keywords>
+	      <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
+	      <keywords>general,projection</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>g.proj</command>
 	    </menuitem>
@@ -761,7 +761,7 @@
 	<menuitem>
 	  <label>Manage extensions</label>
 	  <help>Tool to maintain GRASS extensions in local GRASS installation.</help>
-	  <keywords>installation, extensions</keywords>
+	  <keywords>installation,extensions</keywords>
           <handler>self.OnMenuCmd</handler>
 	  <command>g.extension</command>
 	</menuitem>
@@ -947,7 +947,7 @@
 	</menuitem>
 	<menuitem>
 	  <label>Mask</label>
-	  <help>Create a MASK for limiting raster operation</help>
+	  <help>Creates a mask for limiting raster operation.</help>
 	  <keywords>raster,mask</keywords>
           <handler>self.OnMenuCmd</handler>
 	  <command>r.mask</command>
@@ -1340,8 +1340,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Rate of spread</label>
-	      <help>Generates three, or four raster map layers showing 1) the base (perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, 3) the direction of the maximum ROS, and optionally 4) the maximum potential spotting distance.</help>
-	      <keywords>raster</keywords>
+	      <help>Generates rate of spread raster map layers.</help>
+	      <keywords>raster,rate of spread</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>r.ros</command>
 	    </menuitem>
@@ -1560,7 +1560,7 @@
 	    <menuitem>
 	      <label>Basic raster metadata</label>
 	      <help>Output basic information about a raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,metadata</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>r.info</command>
 	    </menuitem>
@@ -2131,7 +2131,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Basic vector metadata</label>
-	      <help>Outputs basic information about a user-specified vector map.</help>
+	      <help>Outputs basic information about a vector map.</help>
 	      <keywords>vector,metadata,history</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.info</command>
@@ -2284,8 +2284,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Biomass Growth</label>
-	      <help>Calculates the growth of biomass for a day.</help>
-	      <keywords>imagery,biomass growth,vegetation index,biophysical parameters</keywords>
+	      <help>Computes biomass growth, precursor of crop yield calculation</help>
+	      <keywords>imagery,biomass,fpar,yield</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.biomass</command>
 	    </menuitem>
@@ -2304,8 +2304,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Soil Heat Flux</label>
-	      <help>Calculate Soil Heat Flux</help>
-	      <keywords>energy balance,land flux,soil heat flux</keywords>
+	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
+	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.soilheatflux</command>
 	    </menuitem>
@@ -2325,14 +2325,14 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Actual Evapotranspiration</label>
-	      <help>Computes the actual evapotranspiration (ETa)</help>
-	      <keywords>imagery,energy balance,land flux,actual evapotranspiration</keywords>
+	      <help>actual evapotranspiration for diurnal period (Bastiaanssen, 1995)</help>
+	      <keywords>imagery,actual evapotranspiration,energy balance,SEBAL</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.eta</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>ET Temporal Integration</label>
-	      <help>Temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
+	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
 	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>i.evapo.time_integration</command>
@@ -2597,7 +2597,7 @@
 	    <menuitem>
 	      <label>Connect</label>
 	      <help>Prints/sets general DB connection for current mapset and exits.</help>
-	      <keywords>database,attribute table</keywords>
+	      <keywords>database,attribute table,connection settings</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>db.connect</command>
 	    </menuitem>
@@ -2667,7 +2667,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Query any table</label>
-	      <help>Selects data from table.</help>
+	      <help>Selects data from attribute table (performs SQL query statement(s)).</help>
 	      <keywords>database,attribute table,SQL</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>db.select</command>
@@ -2715,14 +2715,14 @@
       <items>
 	<menuitem>
 	  <label>GRASS help</label>
-	  <help>Display the manual pages of GRASS</help>
+	  <help>Display the HTML man pages of GRASS</help>
 	  <keywords>general,manual,help</keywords>
           <handler>self.RunMenuCmd</handler>
 	  <command>g.manual -i</command>
 	</menuitem>
 	<menuitem>
 	  <label>GUI help</label>
-	  <help>Display the manual pages of wxGUI</help>
+	  <help>Display the HTML man pages of GRASS</help>
 	  <keywords>general,manual,help</keywords>
           <handler>self.RunMenuCmd</handler>
 	  <command>g.manual wxGUI</command>
