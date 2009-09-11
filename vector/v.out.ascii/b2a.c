@@ -22,7 +22,7 @@ int bin_to_asc(FILE *ascii,
     /* where */
     struct field_info *Fi;
     dbDriver *driver;
-    dbValue value;
+    dbValue value = {0};
     dbHandle handle;
     int *cats, ncats;
     
