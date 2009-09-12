@@ -29,6 +29,7 @@ for details.
 """
 
 import os
+import sys
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -180,7 +181,9 @@ class Data:
                 if module:
                     modules[module] = { 'desc': description,
                                         'keywords' : keywords }
-        
+                    if len(keywords) < 1:
+                        print >> sys.stderr, "WARNING: Module <%s> has no keywords" % module
+                
         return modules
 
 if __name__ == "__main__":
