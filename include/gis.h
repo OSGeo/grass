@@ -53,6 +53,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define FALSE 0
 #endif
 
+#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64
+#define PRI_OFF_T	"lld"
+#else
+#define PRI_OFF_T	"ld"
+#endif
+
 #define NEWLINE     '\n'
 
 #define METERS    1
