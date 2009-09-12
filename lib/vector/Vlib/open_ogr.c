@@ -1,17 +1,20 @@
 /*!
-   \file open_ogr.c
+   \file vector/Vlib/open_ogr.c
 
-   \brief Vector library - open vector map (OGR format)
+   \brief Vector library - Open OGR layer as vector map layer
 
    Higher level functions for reading/writing/manipulating vectors.
 
+   \todo Implement V1_open_new_ogr()
+   
    (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author Update to GRASS 7.0 Martin Landa <landa.martin gmail.com> (2009)
  */
 
 #include <grass/config.h>
@@ -28,14 +31,15 @@
 #include <ogr_api.h>
 
 /*!
-   \brief Open existing vector map
+   \brief Open existing OGR layer (level 1 - without feature index file)
 
-   Map->name and Map->mapset must be set before.
+   Map->name, Map->mapset, Map->fInfo.ogr.dsn and
+   Map->fInfo.ogr.layer_name must be set before.
 
-   \param[out] Map pointer to vector map
+   \param[in,out] Map pointer to Map_info structure
    \param update non-zero for write mode, otherwise read-only
    (write mode is currently not supported)
-
+   
    \return 0 success
    \return -1 error
 */
@@ -43,27 +47,39 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
 {
     int i, layer, nLayers;
     OGRDataSourceH Ogr_ds;
-    OGRLayerH Ogr_layer = NULL;
+    OGRLayerH Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
 
+    Ogr_layer = NULL;
+    
     if (update) {
-	G_warning(_("OGR format cannot be updated"));
+	G_warning(_("Write mode is not supported for OGR format"));
 	return -1;
     }
 
+    if (!Map->fInfo.ogr.dsn) {
+	G_warning(_("OGR datasource not defined"));
+	return -1;
+    }
+    
+    if (!Map->fInfo.ogr.layer_name) {
+	G_warning(_("OGR layer not defined"));
+	return -1;
+    }
+    
     G_debug(2, "V1_open_old_ogr(): dsn = %s layer = %s", Map->fInfo.ogr.dsn,
 	    Map->fInfo.ogr.layer_name);
 
     OGRRegisterAll();
 
-    /*Data source handle */
+    /* open data source handle */
     Ogr_ds = OGROpen(Map->fInfo.ogr.dsn, FALSE, NULL);
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
 		      Map->fInfo.ogr.dsn);
     Map->fInfo.ogr.ds = Ogr_ds;
 
-    /* Layer number */
+    /* get layer number */
     layer = -1;
     nLayers = OGR_DS_GetLayerCount(Ogr_ds);
     G_debug(2, "%d layers found in data source", nLayers);
@@ -71,40 +87,39 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     for (i = 0; i < nLayers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), Map->fInfo.ogr.layer_name)
-	    == 0) {
+	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), Map->fInfo.ogr.layer_name) == 0) {
 	    layer = i;
 	    break;
 	}
     }
     if (layer == -1) {
 	OGR_DS_Destroy(Ogr_ds);
-	G_fatal_error(_("Unable to open layer <%s>"),
+	G_fatal_error(_("Unable to open OGR layer <%s>"),
 		      Map->fInfo.ogr.layer_name);
     }
     G_debug(2, "OGR layer %d opened", layer);
 
     Map->fInfo.ogr.layer = Ogr_layer;
-
+    
     Map->fInfo.ogr.lines = NULL;
     Map->fInfo.ogr.lines_types = NULL;
     Map->fInfo.ogr.lines_alloc = 0;
     Map->fInfo.ogr.lines_num = 0;
     Map->fInfo.ogr.lines_next = 0;
-
+    
     Map->head.with_z = WITHOUT_Z;	/* TODO: 3D */
-
+    
     Map->fInfo.ogr.feature_cache = NULL;
     Map->fInfo.ogr.feature_cache_id = -1;	/* FID >= 0 */
-
+    
     return (0);
 }
 
 /*!
-   \brief Open OGR specific level 2 files (feature index)
+   \brief Open existing OGR layer (level 2 - feature index)
 
-   \param[out] Map pointer to Map_info structure
-
+   \param[in,out] Map pointer to Map_info structure
+   
    \return 0 success
    \return -1 error
 */
@@ -118,7 +133,7 @@ int V2_open_old_ogr(struct Map_info *Map)
     int Version_Major, Version_Minor, Back_Major, Back_Minor, byte_order;
 
     G_debug(3, "V2_open_old_ogr()");
-
+    
     sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
     dig_file_init(&fp);
     fp.file = G_fopen_old(elem, GV_FIDX_ELEMENT, Map->mapset);
@@ -136,8 +151,7 @@ int V2_open_old_ogr(struct Map_info *Map)
     Back_Major = buf[2];
     Back_Minor = buf[3];
     byte_order = buf[4];
-
-
+    
     /* check version numbers */
     if (Version_Major > 5 || Version_Minor > 0) {
 	if (Back_Major > 5 || Back_Minor > 0) {
@@ -179,7 +193,6 @@ int V2_open_old_ogr(struct Map_info *Map)
     fclose(fp.file);
 
     G_debug(3, "%d records read from fidx", Map->fInfo.ogr.offset_num);
-
 
     Map->fInfo.ogr.next_line = 1;
 

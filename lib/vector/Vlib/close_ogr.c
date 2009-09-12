@@ -23,9 +23,9 @@
 #include <ogr_api.h>
 
 /*!
-  \brief Close OGR layer
+  \brief Close vector map (OGR dsn & layer)
 
-  \param Map vector map
+  \param Map pointer to Map_info
 
   \return 0 on success
   \return non-zero on error

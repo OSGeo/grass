@@ -213,20 +213,27 @@ const char *Vect_get_mapset(const struct Map_info *Map)
 }
 
 /*!
-   \brief Get full map name
-
-   Allocated string should be freed by G_free().
-   \param Map vector map
-
-   \return poiter to map name (name@mapset)
+  \brief Get full vector map name (i.e., "name@mapset")
+  
+  Allocated string should be freed by G_free().
+  
+  \param Map pointer to Map_info structure
+  
+  \return pointer to map name (name@mapset)
  */
 const char *Vect_get_full_name(const struct Map_info *Map)
 {
     char *ptr;
 
     ptr = (char *)G_malloc(strlen(Map->name) + strlen(Map->mapset) + 2);
-    sprintf(ptr, "%s@%s", Map->name, Map->mapset);
-    return (ptr);
+    if (strlen(Map->mapset) > 0) {
+	sprintf(ptr, "%s@%s", Map->name, Map->mapset);
+    }
+    else {
+	sprintf(ptr, "%s", Map->name);
+    }
+
+    return ptr;
 }
 
 /*!
