@@ -77,6 +77,9 @@
 #if defined(HAVE_LANGINFO_H)
 #include <langinfo.h>
 #endif
+#if defined(__MINGW32__) && defined(USE_NLS)
+#include <localcharset.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1308,6 +1311,11 @@ static void usage_xml(void)
 
 #if defined(HAVE_LANGINFO_H)
     encoding = nl_langinfo(CODESET);
+    if (!encoding || strlen(encoding) == 0) {
+	encoding = "UTF-8";
+    }
+#elif defined(__MINGW32__) && defined(USE_NLS)
+    encoding = locale_charset();
     if (!encoding || strlen(encoding) == 0) {
 	encoding = "UTF-8";
     }
