@@ -22,7 +22,6 @@
 #include "index.h"
 #include "card.h"
 
-
 /* rectangle distances for forced removal */
 struct dist
 {
@@ -433,6 +432,9 @@ static void RTreeRemoveBranches(struct Node *n, struct Branch *b,
     RectReal center_n[NUMDIMS], center_r, delta;
     struct Branch branchbuf[MAXCARD + 1];
     struct dist rdist[MAXCARD + 1];
+    struct Rect new_cover;
+
+    assert(cover);
 
     if ((n)->level > 0) {
 	maxkids = t->nodecard;
@@ -442,13 +444,14 @@ static void RTreeRemoveBranches(struct Node *n, struct Branch *b,
 	maxkids = t->leafcard;
 	is_node = 0;
     }
-    maxkids = (n)->level > 0 ? t->nodecard : t->leafcard;
 
     assert(n->count == maxkids);	/* must be full */
 
+    new_cover = RTreeCombineRect(cover, &(b->rect), t);
+
     /* center coords of node cover */
     for (j = 0; j < t->ndims; j++) {
-	center_n[j] = (cover->boundary[j + NUMDIMS] + cover->boundary[j]) / 2;
+	center_n[j] = (new_cover.boundary[j + NUMDIMS] + new_cover.boundary[j]) / 2;
     }
 
     /* compute distances of child rectangle centers to node cover center */
@@ -458,8 +461,8 @@ static void RTreeRemoveBranches(struct Node *n, struct Branch *b,
 	rdist[i].id = i;
 	for (j = 0; j < t->ndims; j++) {
 	    center_r =
-		(n->branch[i].rect.boundary[j + NUMDIMS] +
-		 n->branch[i].rect.boundary[j]) / 2;
+		(branchbuf[i].rect.boundary[j + NUMDIMS] +
+		 branchbuf[i].rect.boundary[j]) / 2;
 	    delta = center_n[j] - center_r;
 	    rdist[i].distance += delta * delta;
 	}
@@ -470,7 +473,14 @@ static void RTreeRemoveBranches(struct Node *n, struct Branch *b,
     /* new branch */
     branchbuf[maxkids] = *b;
     rdist[maxkids].distance = 0;
-    rdist[maxkids].id = i;
+    for (j = 0; j < t->ndims; j++) {
+	center_r =
+	    (b->rect.boundary[j + NUMDIMS] +
+	     b->rect.boundary[j]) / 2;
+	delta = center_n[j] - center_r;
+	rdist[maxkids].distance += delta * delta;
+    }
+    rdist[maxkids].id = maxkids;
 
     /* quicksort dist */
     RTreeQuicksortDist(rdist, maxkids);
