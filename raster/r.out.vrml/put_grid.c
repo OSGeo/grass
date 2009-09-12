@@ -10,7 +10,7 @@
 
 void vrml_put_grid(FILE * vout,
 		   struct Cell_head *w,
-		   FILEDESC elevfd, FILEDESC colorfd,
+		   int elevfd, int colorfd,
 		   struct Colors *colr,
 		   int color_ok, int rows, int cols, int shh)
 {
