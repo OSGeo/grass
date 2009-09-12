@@ -19,9 +19,9 @@ round(x)
   numbers, and subtracting .5 from negatives.
 **********************************************************************/
 
-/* round(x) rounds x to nearest CELL value, handles negative correctly */
+/* i_round(x) rounds x to nearest CELL value, handles negative correctly */
 
-static int round(double x)
+static int i_round(double x)
 {
     int n;
 
@@ -77,7 +77,7 @@ int f_round(int argc, const int *argt, void **args)
 		if (IS_NULL_F(&arg1[i]))
 		    SET_NULL_C(&res[i]);
 		else
-		    res[i] = round(arg1[i]);
+		    res[i] = i_round(arg1[i]);
 	    return 0;
 	}
     case DCELL_TYPE:
@@ -88,7 +88,7 @@ int f_round(int argc, const int *argt, void **args)
 		if (IS_NULL_D(&arg1[i]))
 		    SET_NULL_C(&res[i]);
 		else
-		    res[i] = round(arg1[i]);
+		    res[i] = i_round(arg1[i]);
 	    return 0;
 	}
     default:
