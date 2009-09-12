@@ -174,8 +174,9 @@ class Data:
                     if child.tag == 'command':
                         module = child.text
                     if child.tag == 'keywords':
-                        keywords = child.text.split(',')
-                
+                        if child.text:
+                            keywords = child.text.split(',')
+                    
                 if module:
                     modules[module] = { 'desc': description,
                                         'keywords' : keywords }
