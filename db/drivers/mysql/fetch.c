@@ -55,7 +55,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	return DB_FAILED;
     }
 
-    G_debug(3, "row = %d nrows = %d", c->row, c->nrows);
+    G_debug(3, "nrows = %d", c->nrows);
     if (c->row == NULL) {
 	*more = 0;
 	return DB_OK;
