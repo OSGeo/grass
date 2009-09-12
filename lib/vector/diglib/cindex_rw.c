@@ -66,7 +66,7 @@ int dig_write_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 
 	ci = &(plus->cidx[i]);
 
-	G_debug(3, "cidx %d head offset: %ld", i, dig_ftell(fp));
+	G_debug(3, "cidx %d head offset: %"PRI_OFF_T, i, dig_ftell(fp));
 
 	/* Field number */
 	if (0 >= dig__fwrite_port_I(&(ci->field), 1, fp))
@@ -102,10 +102,10 @@ int dig_write_cidx_head(struct gvfile * fp, struct Plus_head *plus)
 	/* Offset */
 	if (0 >= dig__fwrite_port_O(&(ci->offset), 1, fp, plus->off_t_size))
 	    return (0);
-	G_debug(3, "cidx %d offset: %ld", i, ci->offset);
+	G_debug(3, "cidx %d offset: %"PRI_OFF_T, i, ci->offset);
     }
 
-    G_debug(3, "cidx body offset %ld", dig_ftell(fp));
+    G_debug(3, "cidx body offset %"PRI_OFF_T, dig_ftell(fp));
 
     return (0);
 }

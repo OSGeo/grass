@@ -16,9 +16,9 @@ int dig_list_add(struct ilist *, int);
 
 char *color_name(int);		/* pass it an int, returns the name of the color */
 
-float dig_calc_begin_angle(struct line_pnts *, double);
-float dig_calc_end_angle(struct line_pnts *, double);
-int dig_line_degenerate(struct line_pnts *);
+float dig_calc_begin_angle(const struct line_pnts *, double);
+float dig_calc_end_angle(const struct line_pnts *, double);
+int dig_line_degenerate(const struct line_pnts *);
 char *dig_float_point(char *, int, double);
 
 /* double dig_point_in_area (struct Map_info *, double, double, struct P_area *); */
@@ -95,7 +95,7 @@ int dig_area_get_box(struct Plus_head *, plus_t, struct bound_box *);
 int dig_isle_set_box(struct Plus_head *, plus_t, struct bound_box *);
 int dig_isle_get_box(struct Plus_head *, plus_t, struct bound_box *);
 
-int dig_is_line_degenerate(struct line_pnts *, double);
+int dig_is_line_degenerate(const struct line_pnts *, double);
 
 /* int dig_check_nodes (struct Map_info *, struct new_node *, struct line_pnts *);
    int dig_in_area_bbox (struct P_area *, double, double); */

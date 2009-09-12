@@ -29,17 +29,17 @@
 
 static double d_atan2(double, double);
 
-float dig_calc_begin_angle(struct line_pnts *points, double thresh)
+float dig_calc_begin_angle(const struct line_pnts *points, double thresh)
 {
     double last_x;
     double last_y;
-    double *xptr;
-    double *yptr;
+    const double *xptr;
+    const double *yptr;
     int short_line;
     int i;
     int n_points;
-    double *xarray;
-    double *yarray;
+    const double *xarray;
+    const double *yarray;
 
     /* temporary way to set up use of struct line_pnts */
     n_points = points->n_points;
@@ -80,17 +80,17 @@ float dig_calc_begin_angle(struct line_pnts *points, double thresh)
     return ((float)d_atan2(*yptr - last_y, *xptr - last_x));
 }				/*  calc_begin_angle()  */
 
-float dig_calc_end_angle(struct line_pnts *points, double thresh)
+float dig_calc_end_angle(const struct line_pnts *points, double thresh)
 {
     double last_x;
     double last_y;
-    double *xptr;
-    double *yptr;
+    const double *xptr;
+    const double *yptr;
     int short_line;
     int i;
     int n_points;
-    double *xarray;
-    double *yarray;
+    const double *xarray;
+    const double *yarray;
 
     short_line = 1;
 
@@ -133,17 +133,17 @@ float dig_calc_end_angle(struct line_pnts *points, double thresh)
     return ((float)d_atan2(*yptr - last_y, *xptr - last_x));
 }
 
-int dig_is_line_degenerate(struct line_pnts *points, double thresh)
+int dig_is_line_degenerate(const struct line_pnts *points, double thresh)
 {
     double last_x;
     double last_y;
-    double *xptr;
-    double *yptr;
+    const double *xptr;
+    const double *yptr;
     int short_line;
     int i;
     int n_points;
-    double *xarray;
-    double *yarray;
+    const double *xarray;
+    const double *yarray;
 
     /* temporary way to set up use of struct line_pnts */
     n_points = points->n_points;
@@ -178,7 +178,7 @@ int dig_is_line_degenerate(struct line_pnts *points, double thresh)
  *           1 one point
  *           2 more identical points
  */
-int dig_line_degenerate(struct line_pnts *points)
+int dig_line_degenerate(const struct line_pnts *points)
 {
     int i, ident;
     int n_points;
