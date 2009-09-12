@@ -1707,6 +1707,7 @@
 	      <label>Convert object types</label>
 	      <help>Change the type of geometry elements.</help>
 	      <handler>self.OnMenuCmd</handler>
+	      <keywords>vector,geometry</keywords>
 	      <command>v.type_wrapper.py</command>
 	    </menuitem>
 	    <separator />
@@ -1801,6 +1802,7 @@
 	      <label>Color rules</label>
 	      <help>Set colors interactively by entering color rules</help>
 	      <handler>self.RulesCmd</handler>
+	      <keywords>vector,colors</keywords>
 	      <command>vcolors</command>
 	    </menuitem>
 	  </items>
