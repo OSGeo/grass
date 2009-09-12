@@ -348,16 +348,14 @@ int write_area(struct area_table *a_list,	/* list of areas */
 		    sprintf(buf, "%d", (int)p->cat);
 		    break;
 		case FCELL_TYPE:
-		    sprintf(buf, "%f", (float)p->cat);
-		    break;
 		case DCELL_TYPE:
-		    sprintf(buf, "%lf", p->cat);
+		    sprintf(buf, "%f", p->cat);
 		    break;
 		}
 		db_append_string(&sql, buf);
 
 		if (has_cats) {
-		    temp_buf = Rast_get_c_cat(&(p->cat), &RastCats);
+		    temp_buf = Rast_get_d_cat(&p->cat, &RastCats);
 
 		    db_set_string(&label, temp_buf);
 		    db_double_quote_string(&label);
