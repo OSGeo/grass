@@ -32,7 +32,7 @@ IconsGrass2 = {
     "histogram"  : 'layer-raster-histogram.png',
     "font"       : 'font.png',
     # overlay (mapdisplay)
-    "overlay"    : 'element-add.png',
+    "overlay"    : 'overlay-add.png',
     "addtext"    : 'text-add.png',
     "addbarscale": 'scalebar-add.png',
     "addlegend"  : 'legend-add.png',
