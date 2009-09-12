@@ -53,7 +53,8 @@ int main(int argc, char *argv[])
     output->description =
 	_("Path to resulting ASCII file ('-' for standard output) "
 	  "or ASCII vector name if '-o' is defined");
-
+    output->answer = "-";
+    
     format_opt = G_define_option();
     format_opt->key = "format";
     format_opt->type = TYPE_STRING;
