@@ -51,9 +51,9 @@ static int (*Close_array[][2]) () = {
 
 
 /*!
-   \brief Close vector data file
+   \brief Close vector map
 
-   \param Map vector map to be closed
+   \param Map pointer to Map_info
 
    \return 0 on success
    \return non-zero on error

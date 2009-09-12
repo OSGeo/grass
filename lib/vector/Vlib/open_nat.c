@@ -1,17 +1,17 @@
 /*!
-   \file open_nat.c
-
-   \brief Vector library - open vector map (native format)
-
-   Higher level functions for reading/writing/manipulating vectors.
-
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+  \file vector/Vlib/open_nat.c
+  
+  \brief Vector library - open vector map (native format) - level 1
+  
+  Higher level functions for reading/writing/manipulating vectors.
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL, probably Dave Gerdes or Mike Higgins.
+  \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
 #include <grass/config.h>
@@ -27,15 +27,15 @@ static char name_buf[GPATH_MAX];
 static int check_coor(struct Map_info *Map);
 
 /*!
-   \brief Open existing vector map
+  \brief Open existing vector map (level 1)
+  
+  Map->name and Map->mapset must be set before.
+  
+  \param Map poiter to Map_info structure
+  \param update non-zero for write mode, otherwise read-only
 
-   Map->name and Map->mapset must be set before.
-
-   \param Map poiter to vector map
-   \param update non-zero for write mode, otherwise read-only
-
-   \return 0 success
-   \return -1 error
+  \return 0 success
+  \return -1 error
 */
 int V1_open_old_nat(struct Map_info *Map, int update)
 {
@@ -54,7 +54,8 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 	    G_fopen_old(buf, GV_COOR_ELEMENT, Map->mapset);
 
     if (Map->dig_fp.file == NULL) {
-        G_warning(_("Unable to open coor file for vector map <%s>"), Map->name);
+        G_warning(_("Unable to open coor file for vector map <%s>"),
+		  Vect_get_full_name(Map));
         return -1;
     }
 
@@ -78,10 +79,10 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 }
 
 /*!
-   \brief Open/Create new vector map (level 1)
+   \brief Create new vector map (level 1)
 
    \param[out] Map pointer to Map_info structure
-   \param name map name
+   \param name vector map name to be created
    \param with_z 2D or 3D (unused?)
 
    \return 0 success

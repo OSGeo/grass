@@ -3,7 +3,7 @@
  * MODULE:       v.info
  * 
  * AUTHOR(S):    CERL, updated to 5.7 by Markus Neteler
- *               Update to 7.0 by Martin Landa
+ *               Update to 7.0 by Martin Landa <landa.martin gmail.com> (2009)
  *               Support for level 1 by Markus Metz (2009)
  *               
  * PURPOSE:      Print vector map info
@@ -47,18 +47,20 @@ int main(int argc, char *argv[])
     if (level1_flag) {
 	Vect_set_open_level(1); /* no topology */
 	if (topo_flag)
-	    G_warning(_("Vector map requested on level1 (flag -t ignored)")); 
+	    G_warning(_("Vector map requested on level 1 (flag -t ignored)")); 
 	topo_flag = 0;
     }
-    else
-	Vect_set_open_level(2); /* topology requested */
     
     if (level1_flag) {
-	Vect_open_old(&Map, input_opt, "");      /* level 1 */
+	Vect_open_old2(&Map, input_opt, "", field_opt);      /* level 1 */
 	level_one_info(&Map);
     }
-    else
-	Vect_open_old_head(&Map, input_opt, ""); /* level 2 */
+    else {
+	 /* level 2 */
+	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2)
+	    G_fatal_error(_("Unable to open vector map <%s> on level 2"),
+			  Vect_get_full_name(&Map));
+    }
 
     if (hist_flag) {
 	char buf[1001];
@@ -92,4 +94,3 @@ int main(int argc, char *argv[])
 
     return (EXIT_SUCCESS);
 }
-
