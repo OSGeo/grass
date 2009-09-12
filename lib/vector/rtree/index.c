@@ -189,7 +189,10 @@ static int RTreeInsertRect2(struct Rect *r, union Child child, int level,
 	/* child field of leaves contains tid of data record */
 	b.child = child;
 	/* add branch, may split node or remove branches */
-	cover = &(s[top - 1].sn->branch[s[top - 1].branch_id].rect);
+	if (top)
+	    cover = &(s[top - 1].sn->branch[s[top - 1].branch_id].rect);
+	else 
+	    cover = NULL;
 	result = RTreeAddBranch(&b, s[top].sn, &n2, ee, cover, overflow, t);
 	/* update node count */
 	if (result == 1) {
@@ -222,7 +225,10 @@ static int RTreeInsertRect2(struct Rect *r, union Child child, int level,
 	    b.rect = RTreeNodeCover(b.child.ptr, t);
 
 	    /* add branch, may split node or remove branches */
-	    cover = &(s[top - 1].sn->branch[s[top - 1].branch_id].rect);
+	    if (top)
+		cover = &(s[top - 1].sn->branch[s[top - 1].branch_id].rect);
+	    else
+		cover = NULL;
 	    result =
 		RTreeAddBranch(&b, s[top].sn, &n2, ee, cover, overflow, t);
 
@@ -510,6 +516,7 @@ static int RTreeDeleteRect1(struct Rect *r, union Child child,
 	    }
 	    t->root = n->branch[i].child.ptr;
 	    RTreeFreeNode(n);
+	    t->n_levels--;
 	}
 	return 0;
     }

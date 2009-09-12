@@ -464,7 +464,7 @@ static void RTreeQuicksortBranchBuf(int side)
 static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 			   struct RTree *t)
 {
-    int i, j, k, l, s, maxkids, first_time = 1;
+    int i, j, k, l, s, maxkids;
     int axis = 0, best_axis = 0, side = 0, best_side[NUMDIMS];
     int best_cut[NUMDIMS];
     RectReal margin, smallest_margin = 0;
@@ -530,7 +530,6 @@ static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 		if (margin <= smallest_margin) {
 		    smallest_margin = margin;
 		    best_axis = i;
-		    first_time = 0;
 		}
 
 		/* remember best distribution for this axis */
