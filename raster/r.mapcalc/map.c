@@ -341,7 +341,7 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 	    values = vbuf;
 	    for (i = 0; i < NCATS; i++) {
 		CELL cat = i + key;
-		if ((label = Rast_get_c_cat((CELL *) cat, pcats)) == NULL
+		if ((label = Rast_get_c_cat(&cat, pcats)) == NULL
 		    || sscanf(label, "%lf", values) != 1)
 		    SET_NULL_D(values);
 		values++;
