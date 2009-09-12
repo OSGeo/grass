@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <grass/raster.h>
+
 #define DISTRIB 0
 #define AVERAGE 1
 #define MODE    2
