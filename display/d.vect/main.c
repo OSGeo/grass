@@ -3,9 +3,8 @@
  *
  * MODULE:       d.vect
  * AUTHOR(S):    CERL, Radim Blazek, others
- * PURPOSE:      Display the binary vector file that the user wants displayed 
- *               on top of the current image.
- * COPYRIGHT:    (C) 2004-2008 by the GRASS Development Team
+ * PURPOSE:      Display the vector map in map display
+ * COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -118,10 +117,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("vector"));
-    module->description =
-	_("Displays vector data in the active "
-	  "frame on the graphics monitor.");
-
+    module->description = _("Displays vector map layer in the active map display window.");
+    
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
     display_opt = G_define_option();
