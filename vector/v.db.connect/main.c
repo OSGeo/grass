@@ -41,6 +41,7 @@ int main(int argc, char **argv)
     dbHandle handle;
     struct field_info *fi;
     int field, ret, num_dblinks, i, ncols, col;
+    char *fieldname;
     struct Map_info Map;
 
     /* set up the options and flags for the command line parser */
@@ -56,10 +57,10 @@ int main(int argc, char **argv)
 
     dbdriver = G_define_standard_option(G_OPT_DB_DRIVER);
     dbdriver->options = db_list_drivers();
-    dbdriver->answer = db_get_default_driver_name();
+    dbdriver->answer = G_store(db_get_default_driver_name());
 
     dbdatabase = G_define_standard_option(G_OPT_DB_DATABASE);
-    dbdatabase->answer = db_get_default_database_name();
+    dbdatabase->answer = G_store(db_get_default_database_name());
 
     dbtable = G_define_standard_option(G_OPT_DB_TABLE);
 
@@ -70,6 +71,7 @@ int main(int argc, char **argv)
     dbkey->description = _("Must refer to an integer column");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->description = _("Format: layer number[/layer name]");
     field_opt->gisprompt = "new_layer,layer,layer";
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
@@ -118,10 +120,20 @@ int main(int argc, char **argv)
     /* set input vector map name */
     input = inopt->answer;
 
-    if (field_opt->answer)
+    if (field_opt->answer) {
+	fieldname = strchr(field_opt->answer, '/');
+	if (fieldname != NULL) {	/* field has name */
+	    fieldname[0] = 0;
+	    fieldname++;
+	}
+	
 	field = atoi(field_opt->answer);
-    else
+    }
+    else {
 	field = 1;
+	fieldname = NULL;
+    }
+    G_debug(0, "layer number %d, layer name %s", field, fieldname);
 
     if (print->answer && shell_print->answer)
 	G_fatal_error(_("Please choose only one print style"));
@@ -166,10 +178,18 @@ int main(int argc, char **argv)
 			}
 		    }
 		    else {
-			fprintf(stdout,
-				_("layer <%d> table <%s> in database <%s> through driver "
-				 "<%s> with key <%s>\n"), fi->number,
-				fi->table, fi->database, fi->driver, fi->key);
+			if (fi->name) {
+			    fprintf(stdout,
+				    _("layer <%d/%s> table <%s> in database <%s> through driver "
+				     "<%s> with key <%s>\n"), fi->number, fi->name,
+				    fi->table, fi->database, fi->driver, fi->key);
+			}
+			else {
+			    fprintf(stdout,
+				    _("layer <%d> table <%s> in database <%s> through driver "
+				     "<%s> with key <%s>\n"), fi->number,
+				    fi->table, fi->database, fi->driver, fi->key);
+			}
 		    }
 		}
 	    }			/* end print */
@@ -218,13 +238,13 @@ int main(int argc, char **argv)
 	    if (field_opt->answer && dbtable->answer && dbkey->answer
 		&& dbdatabase->answer && dbdriver->answer) {
 		fi = (struct field_info *)G_malloc(sizeof(struct field_info));
-		fi->name = NULL;
+		fi->name = fieldname;
 		fi->table = dbtable->answer;
 		fi->key = dbkey->answer;
 		fi->database = dbdatabase->answer;
 		fi->driver = dbdriver->answer;
 
-		ret = Vect_map_check_dblink(&Map, field);
+		ret = Vect_map_check_dblink(&Map, field, fieldname);
 		G_debug(3, "Vect_map_check_dblink = %d", ret);
 		if (ret == 1) {
 		    /* field already defined */
