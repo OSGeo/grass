@@ -98,12 +98,12 @@ struct dblinks *Vect_new_dblinks_struct(void);
 void Vect_reset_dblinks(struct dblinks *);
 int Vect_add_dblink(struct dblinks *, int, const char *,
 		    const char *, const char *, const char *, const char *);
-int Vect_check_dblink(const struct dblinks *, int);
+int Vect_check_dblink(const struct dblinks *, int, const char *);
 int Vect_map_add_dblink(struct Map_info *, int, const char *,
 			const char *, const char *, const char *,
 			const char *);
 int Vect_map_del_dblink(struct Map_info *, int);
-int Vect_map_check_dblink(const struct Map_info *, int);
+int Vect_map_check_dblink(const struct Map_info *, int, const char *);
 int Vect_read_dblinks(struct Map_info *);
 int Vect_write_dblinks(struct Map_info *);
 struct field_info *Vect_default_field_info(struct Map_info *, int,

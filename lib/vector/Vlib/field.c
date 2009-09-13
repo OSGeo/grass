@@ -160,9 +160,9 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
   \return 1 dblink for field exists
   \return 0 dblink does not exist for field
  */
-int Vect_map_check_dblink(const struct Map_info *Map, int field)
+int Vect_map_check_dblink(const struct Map_info *Map, int field, const char *name)
 {
-    return Vect_check_dblink(Map->dblnk, field);
+    return Vect_check_dblink(Map->dblnk, field, name);
 }
 
 /*!
@@ -174,15 +174,19 @@ int Vect_map_check_dblink(const struct Map_info *Map, int field)
   \return 1 dblink for field exists
   \return 0 dblink does not exist for field
  */
-int Vect_check_dblink(const struct dblinks *p, int field)
+int Vect_check_dblink(const struct dblinks *p, int field, const char *name)
 {
     int i;
 
-    G_debug(3, "Vect_check_dblink: field %d", field);
+    G_debug(3, "Vect_check_dblink: field %d, name %s", field, (name != NULL ? name : "not given"));
 
     for (i = 0; i < p->n_fields; i++) {
 	if (p->field[i].number == field) {
 	    return 1;
+	}
+	if (name != NULL && p->field[i].name != NULL) {
+	    if (strcmp(p->field[i].name, name) == 0)
+		return 1;
 	}
     }
     return 0;
@@ -209,7 +213,7 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
     int ret;
 
     G_debug(3, "Field number <%d>, name <%s>", number, name);
-    ret = Vect_check_dblink(p, number);
+    ret = Vect_check_dblink(p, number, name);
     if (ret == 1) {
 	G_warning(_("Layer number %d or name <%s> already exists"), number,
 		  name);
@@ -225,8 +229,11 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
 
     p->field[p->n_fields].number = number;
 
-    if (name != NULL)
+    if (name != NULL) {
 	p->field[p->n_fields].name = G_store(name);
+	/* replace all spaces with underscore, otherwise dbln can't be read */
+	G_strchg(p->field[p->n_fields].name, ' ', '_');
+    }
     else
 	p->field[p->n_fields].name = NULL;
 
