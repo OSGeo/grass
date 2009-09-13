@@ -779,10 +779,7 @@ class LoadMapLayersDialog(wx.Dialog):
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1,0))
 
-        self.mapset = wx.ComboBox(parent=self, id=wx.ID_ANY,
-                                  style=wx.CB_SIMPLE | wx.CB_READONLY,
-                                  choices=utils.ListOfMapsets(),
-                                  size=(250,-1))
+        self.mapset = gselect.MapsetSelect(parent = self)
         self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
         bodySizer.Add(item=self.mapset,
                       pos=(1,1), span=(1, 2))
