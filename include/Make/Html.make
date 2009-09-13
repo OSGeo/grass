@@ -7,20 +7,7 @@ html:
 
 else
 
-htmldesc = \
-	GISRC=$(RUN_GISRC) \
-	GISBASE=$(RUN_GISBASE) \
-	PATH="$(GISBASE)/bin:$$PATH" \
-	PYTHONPATH="$(call mkpath,$(GISBASE)/etc/python,$$PYTHONPATH)" \
-	$(LD_LIBRARY_PATH_VAR)="$(BIN):$(ARCH_LIBDIR):$(BASE_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
-	LC_ALL=C \
-	$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2)
-
-ifneq ($(MINGW),)
-mkpath = $(shell PATH="$(GISBASE)/bin:$(ARCH_LIBDIR):$$PATH" GISRC=$(RUN_GISRC) $(BIN)/g.dirseps$(EXE) -h $(1));$(2)
-else
-mkpath = $(1):$(2)
-endif
+htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2))
 
 $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC)
 	-test -d $(HTMLDIR) || $(MKDIR) $(HTMLDIR)

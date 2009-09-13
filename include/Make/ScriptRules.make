@@ -15,16 +15,10 @@ $(SCRIPTDIR)/%.py: %.py
 # These are only the options (parser.c) type things.
 # See locale/scriptstrings/README for more information
 
-strings = \
-	GISRC=$(RUN_GISRC) \
-	GISBASE=$(RUN_GISBASE) \
-	PATH=$(BIN):$$PATH \
-	$(LD_LIBRARY_PATH_VAR)="$(ARCH_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
-	g.parser -t $(1) | sed s/\"/\\\\\"/g | sed 's/.*/_("&")/' > \
-	$(2) ; true
+strings = $(call run_grass,g.parser -t $(1) | sed s/\"/\\\\\"/g | sed 's/.*/_("&")/' > $(2))
 
 $(STRINGDIR)/%_to_translate.c: %.py
-	$(call strings,$<,$@)
+	-$(call strings,$<,$@)
 
 $(STRINGDIR)/%_to_translate.c: %
-	$(call strings,$<,$@)
+	-$(call strings,$<,$@)
