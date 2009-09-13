@@ -11,8 +11,8 @@ Category index is created when Vect_build(), i.e. Vect_build_partial(, GV_BUILD_
 is called. Plus_head.cidx_up_to_date is set to 1 if Category index is created.
 Any later call to Vect_write_line() / Vect_rewrite_line() / Vect_delete_line() resets
 Plus_head.cidx_up_to_date to 0 and doesn't update category index. 
-All modules using update on level 2 mus call full build, i.e. Vect_build(), at the end.
+All modules using update on level 2 must call full build, i.e. Vect_build(), at the end.
 
 All features without category are written to category index of field 0. 
-In category index is stored also type of feture, that make s possible to find areas
-without centroid throug category index.
+The category index also stores type of feature, that makes it possible to find areas
+without centroid through category index.
