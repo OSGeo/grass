@@ -645,7 +645,7 @@ int main(int argc, char *argv[])
 	    if (ncnames > 0) {
 		cat_col_name = cnames_opt->answers[0];
 	    }
-	    Vect_map_add_dblink(&Map, layer + 1, NULL, Fi->table,
+	    Vect_map_add_dblink(&Map, layer + 1, layer_names[layer], Fi->table,
 				cat_col_name, Fi->database, Fi->driver);
 
 	    ncols = OGR_FD_GetFieldCount(Ogr_featuredefn);
