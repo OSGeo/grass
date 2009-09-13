@@ -50,14 +50,13 @@ class Select(wx.combo.ComboCtrl):
         self.GetChildren()[0].type = type
         
         self.tcp = TreeCtrlComboPopup()
-
         self.SetPopupControl(self.tcp)
         self.SetPopupExtents(0,100)
         if type:
             self.tcp.SetData(type = type, mapsets = mapsets,
                              exclude = exclude, multiple = multiple,
                              updateOnPopup = updateOnPopup)
-
+        
     def SetElementList(self, type, mapsets = None, exclude = []):
         """!Set element list
 
@@ -690,7 +689,7 @@ class LocationSelect(wx.ComboBox):
 class MapsetSelect(wx.ComboBox):
     """!Widget for selecting GRASS mapset"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
-                 gisdbase = None, location = None, **kwargs):
+                 gisdbase = None, location = None, setItems = True, **kwargs):
         super(MapsetSelect, self).__init__(parent, id, size = size, 
                                            style = wx.CB_READONLY, **kwargs)
         
@@ -706,4 +705,5 @@ class MapsetSelect(wx.ComboBox):
         else:
             self.location = location
         
-        self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = True)) # selectable
+        if setItems:
+            self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = True)) # selectable
