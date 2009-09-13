@@ -25,7 +25,7 @@
 
    \return number of nodes
  */
-long Vect_get_num_nodes(const struct Map_info *map)
+plus_t Vect_get_num_nodes(const struct Map_info *map)
 {
     return (map->plus.n_nodes);
 }
@@ -38,9 +38,9 @@ long Vect_get_num_nodes(const struct Map_info *map)
 
    \return number of primitives
  */
-long Vect_get_num_primitives(const struct Map_info *map, int type)
+plus_t Vect_get_num_primitives(const struct Map_info *map, int type)
 {
-    long int num = 0;
+    plus_t num = 0;
 
     if (type & GV_POINT)
 	num += map->plus.n_plines;
@@ -65,7 +65,7 @@ long Vect_get_num_primitives(const struct Map_info *map, int type)
 
    \return number of features
  */
-long Vect_get_num_lines(const struct Map_info *map)
+plus_t Vect_get_num_lines(const struct Map_info *map)
 {
     return (map->plus.n_lines);
 }
@@ -77,7 +77,7 @@ long Vect_get_num_lines(const struct Map_info *map)
 
    \return number of areas
  */
-long Vect_get_num_areas(const struct Map_info *map)
+plus_t Vect_get_num_areas(const struct Map_info *map)
 {
     return (map->plus.n_areas);
 }
@@ -89,7 +89,7 @@ long Vect_get_num_areas(const struct Map_info *map)
 
    \return number of kernels
  */
-long Vect_get_num_kernels(const struct Map_info *map)
+plus_t Vect_get_num_kernels(const struct Map_info *map)
 {
     return (map->plus.n_klines);
 }
@@ -102,7 +102,7 @@ long Vect_get_num_kernels(const struct Map_info *map)
 
    \return number of faces
  */
-long Vect_get_num_faces(const struct Map_info *map)
+plus_t Vect_get_num_faces(const struct Map_info *map)
 {
     return (map->plus.n_flines);
 }
@@ -115,7 +115,7 @@ long Vect_get_num_faces(const struct Map_info *map)
 
    \return number of volumes
  */
-long Vect_get_num_volumes(const struct Map_info *map)
+plus_t Vect_get_num_volumes(const struct Map_info *map)
 {
     return (map->plus.n_volumes);
 }
@@ -128,7 +128,7 @@ long Vect_get_num_volumes(const struct Map_info *map)
 
    \return number of islands
  */
-long Vect_get_num_islands(const struct Map_info *map)
+plus_t Vect_get_num_islands(const struct Map_info *map)
 {
     return (map->plus.n_isles);
 }
@@ -141,7 +141,7 @@ long Vect_get_num_islands(const struct Map_info *map)
 
    \return number of holes
  */
-long Vect_get_num_holes(const struct Map_info *map)
+plus_t Vect_get_num_holes(const struct Map_info *map)
 {
     return (map->plus.n_holes);
 }

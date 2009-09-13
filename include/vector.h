@@ -186,15 +186,15 @@ int Vect_get_constraint_box(const struct Map_info *, struct bound_box *);
 
 /* Get map level 2 informations */
 int Vect_level(const struct Map_info *);
-long Vect_get_num_nodes(const struct Map_info *);
-long Vect_get_num_primitives(const struct Map_info *, int);
-long Vect_get_num_lines(const struct Map_info *);
-long Vect_get_num_areas(const struct Map_info *);
-long Vect_get_num_faces(const struct Map_info *);
-long Vect_get_num_kernels(const struct Map_info *);
-long Vect_get_num_volumes(const struct Map_info *);
-long Vect_get_num_islands(const struct Map_info *);
-long Vect_get_num_holes(const struct Map_info *);
+plus_t Vect_get_num_nodes(const struct Map_info *);
+plus_t Vect_get_num_primitives(const struct Map_info *, int);
+plus_t Vect_get_num_lines(const struct Map_info *);
+plus_t Vect_get_num_areas(const struct Map_info *);
+plus_t Vect_get_num_faces(const struct Map_info *);
+plus_t Vect_get_num_kernels(const struct Map_info *);
+plus_t Vect_get_num_volumes(const struct Map_info *);
+plus_t Vect_get_num_islands(const struct Map_info *);
+plus_t Vect_get_num_holes(const struct Map_info *);
 int Vect_get_line_box(const struct Map_info *, int, struct bound_box *);
 int Vect_get_area_box(const struct Map_info *, int, struct bound_box *);
 int Vect_get_isle_box(const struct Map_info *, int, struct bound_box *);
@@ -462,7 +462,7 @@ off_t V1_write_line_nat(struct Map_info *, int, const struct line_pnts *,
 off_t V2_write_line_nat(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
 #if 0
-long V1_write_line_ogr(struct Map_info *, int, struct line_pnts *,
+off_t V1_write_line_ogr(struct Map_info *, int, struct line_pnts *,
 		       struct line_cats *);
 #endif
 off_t V1_rewrite_line_nat(struct Map_info *, off_t, int,
@@ -470,7 +470,7 @@ off_t V1_rewrite_line_nat(struct Map_info *, off_t, int,
 int V2_rewrite_line_nat(struct Map_info *, int, int,
 			const struct line_pnts *, const struct line_cats *);
 #if 0
-long V1_rewrite_line_ogr(struct Map_info *, long offset, int type,
+off_t V1_rewrite_line_ogr(struct Map_info *, off_t, int,
 			 struct line_pnts *, struct line_cats *);
 #endif
 
