@@ -39,7 +39,6 @@ int dig_init_plus(struct Plus_head *Plus)
     Plus->Version_Minor = 0;
     Plus->Back_Major = 0;
     Plus->Back_Minor = 0;
-    Plus->with_z = 0;
 
     Plus->off_t_size = 0;
 

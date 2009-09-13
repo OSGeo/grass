@@ -35,9 +35,8 @@ int dig_spidx_init(struct Plus_head *Plus)
 {
     int ndims;
 
-    ndims = Plus->with_z ? 3 : 2;
-
-    G_debug(1, "dig_spidx_init()");
+    ndims = (Plus->with_z != 0) ? 3 : 2;
+    Plus->spidx_with_z = (Plus->with_z != 0);
 
     Plus->Node_spidx = RTreeNewIndex(ndims);
     Plus->Line_spidx = RTreeNewIndex(ndims);

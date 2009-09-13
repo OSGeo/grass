@@ -883,7 +883,8 @@ int dig_Rd_spidx(struct gvfile * fp, struct Plus_head *Plus)
 {
     G_debug(1, "dig_read_spindx()");
 
-    /* TODO: free old tree */
+    /* free old trees, init new trees */
+    dig_spidx_free(Plus);
     dig_spidx_init(Plus);
 
     dig_rewind(fp);

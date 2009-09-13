@@ -175,12 +175,12 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fread_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
 	return (-1);
 
-    /* First node */
+    /* first node */
     if (ptr->type & (GV_POINTS | GV_LINES | GV_KERNEL))
 	if (0 >= dig__fread_port_P(&(ptr->N1), 1, fp))
 	    return -1;
 
-    /* Second node, for points/centroids not needed */
+    /* second node, for points/centroids not needed */
     if (ptr->type & (GV_LINE | GV_BOUNDARY)) {
 	if (0 >= dig__fread_port_P(&(ptr->N2), 1, fp))
 	    return -1;
@@ -215,7 +215,7 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 	if (0 >= dig__fread_port_P(&vol, 1, fp))
 	    return -1;
 
-    /* Bounding box */
+    /* bounding box */
     if (ptr->type & (GV_LINE | GV_BOUNDARY | GV_FACE)) {
 	if (0 >= dig__fread_port_D(&(ptr->N), 1, fp))
 	    return -1;
@@ -261,7 +261,7 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 
     ptr = Plus->Line[n];
 
-    /* If NULL i.e. dead write just 0 instead of type */
+    /* if NULL i.e. dead write just 0 instead of type */
     if (ptr == NULL) {
 	G_debug(3, "    line is dead -> write 0 only");
 	ch = 0;
@@ -280,12 +280,12 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fwrite_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
 	return (-1);
 
-    /* First node */
+    /* first node */
     if (ptr->type & (GV_POINTS | GV_LINES | GV_KERNEL))
 	if (0 >= dig__fwrite_port_P(&(ptr->N1), 1, fp))
 	    return (-1);
 
-    /* Second node, for points/centroids not needed */
+    /* second node, for points/centroids not needed */
     if (ptr->type & (GV_LINE | GV_BOUNDARY))
 	if (0 >= dig__fwrite_port_P(&(ptr->N2), 1, fp))
 	    return (-1);
@@ -317,7 +317,7 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 	if (0 >= dig__fwrite_port_P(&vol, 1, fp))
 	    return (-1);
 
-    /* Bounding box */
+    /* bounding box */
     if (ptr->type & (GV_LINE | GV_BOUNDARY | GV_FACE)) {
 	if (0 >= dig__fwrite_port_D(&(ptr->N), 1, fp))
 	    return (-1);
@@ -383,6 +383,7 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fread_port_P(&(ptr->centroid), 1, fp))
 	return -1;
 
+    /* bounding box */
     if (0 >= dig__fread_port_D(&(ptr->N), 1, fp))
 	return -1;
     if (0 >= dig__fread_port_D(&(ptr->S), 1, fp))
@@ -443,6 +444,7 @@ int dig_Wr_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fwrite_port_P(&(ptr->centroid), 1, fp))
 	return (-1);
 
+    /* bounding box */
     if (0 >= dig__fwrite_port_D(&(ptr->N), 1, fp))
 	return (-1);
     if (0 >= dig__fwrite_port_D(&(ptr->S), 1, fp))
@@ -495,6 +497,7 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fread_port_P(&(ptr->area), 1, fp))
 	return -1;
 
+    /* bounding box */
     if (0 >= dig__fread_port_D(&(ptr->N), 1, fp))
 	return -1;
     if (0 >= dig__fread_port_D(&(ptr->S), 1, fp))
@@ -547,6 +550,7 @@ int dig_Wr_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fwrite_port_P(&(ptr->area), 1, fp))
 	return (-1);
 
+    /* bounding box */
     if (0 >= dig__fwrite_port_D(&(ptr->N), 1, fp))
 	return (-1);
     if (0 >= dig__fwrite_port_D(&(ptr->S), 1, fp))
