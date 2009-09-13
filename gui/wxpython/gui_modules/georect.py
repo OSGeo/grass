@@ -294,20 +294,6 @@ class LocationPage(TitledPage):
         
         self.xylocation = ''
         self.xymapset = ''
-
-        tmplist = os.listdir(self.grassdatabase)
-        self.locList = []
-        self.mapsetList = []
-        
-        #
-        # create a list of valid locations
-        #
-        for item in tmplist:
-            if os.path.isdir(os.path.join(self.grassdatabase, item)) and \
-                    os.path.exists(os.path.join(self.grassdatabase, item, 'PERMANENT')):
-                self.locList.append(item)
-
-        utils.ListSortLower(self.locList)
         
         #
         # layout
@@ -326,9 +312,7 @@ class LocationPage(TitledPage):
         self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Select source location:')),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(2, 1))
-        self.cb_location = wx.ComboBox(parent=self, id=wx.ID_ANY, 
-                                     choices = self.locList, size=(300, -1),
-                                     style=wx.CB_DROPDOWN | wx.CB_READONLY)
+        self.cb_location = gselect.LocationSelect(parent = self, gisdbase = self.grassdatabase)
         self.sizer.Add(item=self.cb_location,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(2, 2))
@@ -337,9 +321,8 @@ class LocationPage(TitledPage):
         self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Select source mapset:')),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(3, 1))
-        self.cb_mapset = wx.ComboBox(parent=self, id=wx.ID_ANY,
-                                     choices = self.mapsetList, size=(300, -1),
-                                     style=wx.CB_DROPDOWN | wx.CB_READONLY)
+        self.cb_mapset = gselect.MapsetSelect(parent = self, gisdbase = self.grassdatabase,
+                                              setItems = False)
         self.sizer.Add(item=self.cb_mapset,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(3,2))
