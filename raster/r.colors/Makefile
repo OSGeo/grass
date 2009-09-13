@@ -24,3 +24,4 @@ $(BIN)/r.mapcalc$(EXE):
 
 .PHONY: thumbnails
 
+.INTERMEDIATE: r.colors.tmp.html
