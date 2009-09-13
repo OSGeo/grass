@@ -109,8 +109,8 @@ class LocationDialog(ElementDialog):
                                               size = globalvar.DIALOG_GSELECT_SIZE)
 
         self.element1 = gselect.MapsetSelect(parent = self.panel, id = wx.ID_ANY,
-                                             size = globalvar.DIALOG_GSELECT_SIZE)
-        self.element1.SetItems([])
+                                             size = globalvar.DIALOG_GSELECT_SIZE,
+                                             setItems = False)
         
         self.PostInit()
         
