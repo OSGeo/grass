@@ -38,7 +38,7 @@ class NvizToolWindow(wx.Frame):
 
     @todo integrate with Map display
     """
-    def __init__(self, parent=None, id=wx.ID_ANY, title=_("Nviz tools"),
+    def __init__(self, parent=None, id=wx.ID_ANY, title=_("3d view tools"),
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  mapWindow=None, 
                  style=wx.CAPTION|wx.MINIMIZE_BOX|wx.RESIZE_BORDER):
