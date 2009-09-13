@@ -52,10 +52,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("raster"));
-    module->description =
-	_("Displays and overlays raster map layers "
-	  "in the active display frame on the graphics monitor.");
-
+    module->description = _("Displays raster map layer in the active map display window.");
+    
     /* set up command line */
     map = G_define_standard_option(G_OPT_R_MAP);
     map->description = _("Raster map to be displayed");
