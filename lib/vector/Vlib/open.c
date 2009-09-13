@@ -150,6 +150,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 
     /* initialize Map->head */
     Vect__init_head(Map);
+    /* initialize support structures for 2D, update to 3D when reading support files */
+    Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = 0;
     /* initialize Map->plus */
     dig_init_plus(&(Map->plus));
 
@@ -293,6 +295,14 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 		G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
 			      Vect_get_full_name(Map));
 	    }
+	    /* check with_z consistency */
+	    if ((Map->plus.with_z != 0 && Map->plus.spidx_with_z == 0) ||
+	        (Map->plus.with_z == 0 && Map->plus.spidx_with_z != 0)) {
+		    G_warning("Vector map <%s>: topology is %s, but spatial index is %s",
+		    Vect_get_full_name(Map), (Map->plus.with_z != 0 ? "3D" : "2D"),
+		    (Map->plus.spidx_with_z != 0 ? "3D" : "2D"));
+		    level = 1;
+		}
 	}
 	/* open category index */
 	if (level == 2) {
@@ -630,6 +640,9 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 
     Map->format = GV_FORMAT_NATIVE;
 
+    /* set 2D/3D */
+    Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = (with_z != 0);
+
     if (V1_open_new_nat(Map, name, with_z) < 0) {
 	sprintf(errmsg, _("Unable to create vector map <%s>"),
 		Vect_get_full_name(Map));
@@ -652,7 +665,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     /* initialize topo */
     dig_init_plus(&(Map->plus));
 
-    /* initialize spatial index */
+    /* open new spatial index */
     Vect_open_sidx(Map, 2);
 
     Map->open = VECT_OPEN_CODE;
@@ -663,7 +676,6 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Map->mode = GV_MODE_RW;
     Map->Constraint_region_flag = 0;
     Map->Constraint_type_flag = 0;
-    Map->head.with_z = with_z;
     Map->plus.do_uplist = 0;
 
     Vect_set_proj(Map, G_projection());
