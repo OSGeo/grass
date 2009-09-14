@@ -25,7 +25,7 @@ Classes:
  The XML stream is read from executing the command given in the
  command line, thus you may call it for instance this way:
 
- python <this file.py> r.basins.fill
+ python menuform.py r.basins.fill
 
  Or you set an alias or wrap the call up in a nice shell script, GUI
  environment ... please contribute your idea.
@@ -1255,17 +1255,72 @@ class cmdPanel(wx.Panel):
                                                multiple=multiple, mapsets=mapsets)
                     if p.get('value','') != '':
                         selection.SetValue(p['value']) # parameter previously set
-
-                    which_sizer.Add(item=selection, proportion=0,
-                                    flag=wx.ADJUST_MINSIZE| wx.BOTTOM | wx.LEFT | wx.RIGHT, border=5)
                     
                     # A select.Select is a combobox with two children: a textctl and a popupwindow;
                     # we target the textctl here
-                    p['wxId'] = selection.GetChildren()[0].GetId()
+                    p['wxId'] = [selection.GetChildren()[0].GetId(), ]
                     selection.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetValue)
                     if p.get('prompt', '') == 'vector':
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
-                    
+                        
+                        if p.get('age', '') == 'old':
+                            # OGR supported (read-only)
+                            hsizer = wx.GridBagSizer(vgap=5, hgap=5)
+                            
+                            hsizer.Add(item=selection,
+                                       flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
+                                       border=5,
+                                       pos = (0, 0))
+                            
+                            # format (native / ogr)
+                            rbox = wx.RadioBox(parent = which_panel, id = wx.ID_ANY,
+                                               label = " %s " % _("Format"),
+                                               style = wx.RA_SPECIFY_ROWS,
+                                               size = (100, -1),
+                                               choices = [_("Native"), _("OGR")])
+                            rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
+                            
+                            hsizer.Add(item=rbox,
+                                       flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.ALIGN_TOP,
+                                       pos = (0, 1),
+                                       span = (3, 1),
+                                       border=5)
+                            
+                            ogrSelection = filebrowse.DirBrowseButton(parent = which_panel, id = wx.ID_ANY, 
+                                                                      size = globalvar.DIALOG_GSELECT_SIZE,
+                                                                      labelText = '',
+                                                                      dialogTitle = _('Choose OGR data source'),
+                                                                      buttonText = _('Browse'),
+                                                                      startDirectory = os.getcwd())
+                            ogrSelection.SetName('OgrSelect')
+                            ogrSelection.Enable(False)
+                            ogrSelection.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            
+                            hsizer.Add(item=wx.StaticText(parent = which_panel, id = wx.ID_ANY,
+                                                          label = _("Name of OGR data source:")),
+                                       flag=wx.ALIGN_BOTTOM | wx.LEFT,
+                                       pos = (1, 0),
+                                       border=5)
+                            
+                            hsizer.Add(item=ogrSelection,
+                                       flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.ALIGN_TOP,
+                                       pos = (2, 0),
+                                       border=5)
+                            
+                            which_sizer.Add(item = hsizer, proportion = 0)
+                            
+                            p['wxId'].append(rbox.GetId())
+                            p['wxId'].append(ogrSelection.GetId())
+                            p['wxId'].append(ogrSelection.GetChildren()[1].GetId()) # fix
+                        else:
+                            which_sizer.Add(item=selection, proportion=0,
+                                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                            border=5)
+                    else:
+                        which_sizer.Add(item=selection, proportion=0,
+                                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                        border=5)
+                        
                 # layer, dbdriver, dbname, dbcolumn, dbtable entry
                 elif p.get('prompt', '') in ('dbdriver',
                                              'dbname',
@@ -1499,6 +1554,37 @@ class cmdPanel(wx.Panel):
 
         self.Bind(EVT_DIALOG_UPDATE, self.OnUpdateDialog)
 
+    def OnVectorFormat(self, event):
+        """!Change vector format (native / ogr)"""
+        sel = event.GetSelection()
+        idEvent = event.GetId()
+        p = self.task.get_param(value = idEvent, element = 'wxId', raiseError = False)
+        if not p:
+            return # should not happen
+        
+        winNative = None
+        winOGR    = None
+        for id in p['wxId']:
+            if id == idEvent:
+                continue
+            name = self.FindWindowById(id).GetName()
+            if name == 'Select':
+                winNative = self.FindWindowById(id + 1)  # fix the mystery (also in nviz_tools.py)
+            elif name == 'OgrSelect':
+                winOgr = self.FindWindowById(id)
+        
+        # enable / disable widgets & update values
+        if sel == 0:   # -> native
+            winOgr.Enable(False)
+            winNative.Enable(True)
+            p['value'] = winNative.GetValue()
+        elif sel == 1: # -> OGR
+            winNative.Enable(False)
+            winOgr.Enable(True)
+            p['value'] = winOgr.GetValue()
+        
+        self.OnUpdateValues()
+        
     def OnUpdateDialog(self, event):
         for fn, kwargs in event.data.iteritems():
             fn(**kwargs)
@@ -1598,20 +1684,33 @@ class cmdPanel(wx.Panel):
         self.OnUpdateValues()
 
     def OnSetValue(self, event):
-        """
-        Retrieve the widget value and set the task value field accordingly.
+        """!
+        Retrieve the widget value and set the task value field
+        accordingly.
 
-        Use for widgets that have a proper GetValue() method, i.e. not for selectors.
+        Use for widgets that have a proper GetValue() method, i.e. not
+        for selectors.
         """
         myId = event.GetId()
         me = wx.FindWindowById( myId )
         
         for porf in self.task.params + self.task.flags:
-            if 'wxId' in porf and type( porf[ 'wxId' ] ) == type( 1 ) and porf['wxId'] == myId:
-                if porf.has_key('wxGetValue') and porf['wxGetValue']:
-                    porf['value'] = porf['wxGetValue']()
-                else:
-                    porf['value'] = me.GetValue()
+            if 'wxId' in porf:
+                found = False
+                porf['wxId']
+                if type(porf['wxId']) == types.IntType:
+                    if porf['wxId'] == myId:
+                        found = True
+                else: # -> list
+                    for id in porf['wxId']:
+                        if id == myId:
+                            found = True
+                            break
+                if found:
+                    if porf.has_key('wxGetValue') and porf['wxGetValue']:
+                        porf['value'] = porf['wxGetValue']()
+                    else:
+                        porf['value'] = me.GetValue()
         
         self.OnUpdateValues()
         
