@@ -163,8 +163,12 @@ set_defaults()
 
     # GRASS_PYTHON
     if [ ! "$GRASS_PYTHON" ] ; then
-	GRASS_PYTHON=python
-	export GRASS_PYTHON
+        if [ "$MACOSX" ] ; then
+            GRASS_PYTHON=pythonw
+        else
+            GRASS_PYTHON=python
+        fi
+        export GRASS_PYTHON
     fi
 
     # GRASS_GNUPLOT
