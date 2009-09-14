@@ -58,7 +58,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     dbCatVal *cv_rgb = NULL, *cv_width = NULL, *cv_size = NULL, *cv_rot = NULL;
     int nrec_rgb = 0, nrec_width = 0, nrec_size = 0, nrec_rot = 0;
     int nerror_rgb;
-    
+    int n_points, n_lines, n_centroids, n_boundaries, n_faces;
+
     int open_db;
     int custom_rgb = FALSE;
     char colorstring[12];	/* RRR:GGG:BBB */
@@ -263,6 +264,9 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	nlines = Vect_get_num_lines(Map);
 
     line = 0;
+    n_points = n_lines = 0;
+    n_centroids = n_boundaries = 0;
+    n_faces = 0;
     while (1) {
 	line++;
 	if (Vect_level(Map) >= 2) {
@@ -582,12 +586,43 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    else		/*use different user defined render methods */
 		D_polyline_abs(x, y, Points->n_points);
 	}
+	
+	switch (ltype) {
+	case GV_POINT:
+	    n_points++;
+	    break;
+	case GV_LINE:
+	    n_lines++;
+	    break;
+	case GV_CENTROID:
+	    n_centroids++;
+	    break;
+	case GV_BOUNDARY:
+	    n_boundaries++;
+	    break;
+	case GV_FACE:
+	    n_faces++;
+	    break;
+	default:
+	    break;
+	}
     }
-
+    
     if (nerror_rgb > 0) {
 	G_warning(_("Error in color definition column '%s': %d features affected"),
 		  rgb_column, nerror_rgb);
     }
+    
+    if (n_points > 0) 
+	G_verbose_message(_("%d points plotted"), n_points);
+    if (n_lines > 0) 
+	G_verbose_message(_("%d lines plotted"), n_lines);
+    if (n_centroids > 0) 
+	G_verbose_message(_("%d centroids plotted"), n_centroids);
+    if (n_boundaries > 0) 
+	G_verbose_message(_("%d boundaries plotted"), n_boundaries);
+    if (n_faces > 0) 
+	G_verbose_message(_("%d faces plotted"), n_faces);
     
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
