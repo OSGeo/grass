@@ -183,12 +183,11 @@ class UpdateThread(Thread):
                 if prompt == 'vector':
                     name = p.get('name', '')
                     if name in ('map', 'input'):
-                        self.eventId = p['wxId']
+                        self.eventId = p['wxId'][0]
             if self.eventId is None:
                 return
         
         p = self.task.get_param(self.eventId, element='wxId', raiseError=False)
-        
         if not p or \
                 not p.has_key('wxId-bind'):
             return
@@ -215,15 +214,18 @@ class UpdateThread(Thread):
             
             map = layer = None
             driver = db = table = None
-            if name in ('LayerSelect', 'ColumnSelect'):
-                if p.get('element', '') == 'vector': # -> vector 
+            if name in ('LayerSelect', 'LayerNameSelect',
+                        'ColumnSelect'):
+                if p.get('element', '') == 'vector': # -> vector
                     # get map name
                     map = p.get('value', '')
+                    
                     # get layer
                     for bid in p['wxId-bind']:
                         p = self.task.get_param(bid, element = 'wxId', raiseError = False)
                         if not p:
                             continue
+                        
                         if p.get('element', '') == 'layer':
                             layer = p.get('value', '')
                             if layer != '':
@@ -231,7 +233,7 @@ class UpdateThread(Thread):
                             else:
                                 layer = int(p.get('default', 1))
                             break
-                
+                        
                 elif p.get('element', '') == 'layer': # -> layer
                     # get layer
                     layer = p.get('value', '')
@@ -241,7 +243,7 @@ class UpdateThread(Thread):
                         layer = int(p.get('default', 1))
                     
                     # get map name
-                    pMap = self.task.get_param(p['wxId'], element = 'wxId-bind', raiseError = False)
+                    pMap = self.task.get_param(p['wxId'][0], element = 'wxId-bind', raiseError = False)
                     if pMap:
                         map = pMap.get('value', '')
             
@@ -260,6 +262,21 @@ class UpdateThread(Thread):
                 
             if name == 'LayerSelect':
                 self.data[win.InsertLayers] = { 'vector' : map }
+            
+            elif name == 'LayerNameSelect':
+                # determine format
+                native = True
+                for id in pMap['wxId']:
+                    winVec  = self.parent.FindWindowById(id)
+                    if winVec.GetName() == 'VectorFormat' and \
+                            winVec.GetSelection() != 0:
+                        native = False
+                        break
+                if not native:
+                    if map:
+                        self.data[win.InsertLayers] = { 'dsn' : map.rstrip('@OGR') }
+                    else:
+                        self.data[win.InsertLayers] = { }
             
             elif name == 'TableSelect':
                 self.data[win.InsertTables] = { 'driver' : driver,
@@ -1061,7 +1078,7 @@ class cmdPanel(wx.Panel):
                             flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
             which_sizer.Add(item=title_sizer, proportion=0,
                             flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
-            f['wxId'] = chk.GetId()
+            f['wxId'] = [ chk.GetId(), ]
             chk.Bind(wx.EVT_CHECKBOX, self.OnSetValue)
             if f['name'] in ('verbose', 'quiet'):
                 chk.Bind(wx.EVT_CHECKBOX, self.OnVerbosity)
@@ -1148,7 +1165,7 @@ class cmdPanel(wx.Panel):
                         isEnabled[ defval ] = 'yes'
                         # for multi checkboxes, this is an array of all wx IDs
                         # for each individual checkbox
-                        p[ 'wxId' ] = []
+                        p[ 'wxId' ] = list()
                     idx = 0
                     for val in valuelist:
                         try:
@@ -1202,7 +1219,7 @@ class cmdPanel(wx.Panel):
                         which_sizer.Add(item=txt2, proportion=0,
                                         flag=style, border=5)
 
-                        p['wxId'] = txt2.GetId()
+                        p['wxId'] = [ txt2.GetId(), ]
                         txt2.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
                         # list of values (combo)
@@ -1214,7 +1231,7 @@ class cmdPanel(wx.Panel):
                             cb.SetValue(p['value']) # parameter previously set
                         which_sizer.Add( item=cb, proportion=0,
                                          flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
-                        p['wxId'] = cb.GetId()
+                        p['wxId'] = [ cb.GetId(), ]
                         cb.Bind( wx.EVT_COMBOBOX, self.OnSetValue)
 
             # text entry
@@ -1249,7 +1266,7 @@ class cmdPanel(wx.Panel):
                 
                 which_sizer.Add(item=txt3, proportion=0,
                                 flag=style, border=5)
-                p['wxId'] = txt3.GetId()
+                p['wxId'] = [ txt3.GetId(), ]
 
             #
             # element selection tree combobox (maps, icons, regions, etc.)
@@ -1304,6 +1321,7 @@ class cmdPanel(wx.Panel):
                                                style = wx.RA_SPECIFY_ROWS,
                                                size = (100, -1),
                                                choices = [_("Native"), _("OGR")])
+                            rbox.SetName('VectorFormat')
                             rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
                             
                             hsizer.Add(item=rbox,
@@ -1318,10 +1336,12 @@ class cmdPanel(wx.Panel):
                                                                       dialogTitle = _('Choose OGR data source'),
                                                                       buttonText = _('Browse'),
                                                                       startDirectory = os.getcwd())
-                            ogrSelection.SetName('OgrSelect')
+                            for win in ogrSelection.GetChildren():
+                                win.SetName('OgrSelect')
                             ogrSelection.Enable(False)
+                            ogrSelection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             ogrSelection.Bind(wx.EVT_TEXT, self.OnSetValue)
-                            
+                                                        
                             hsizer.Add(item=wx.StaticText(parent = which_panel, id = wx.ID_ANY,
                                                           label = _("Name of OGR data source:")),
                                        flag=wx.ALIGN_BOTTOM | wx.LEFT,
@@ -1336,8 +1356,7 @@ class cmdPanel(wx.Panel):
                             which_sizer.Add(item = hsizer, proportion = 0)
                             
                             p['wxId'].append(rbox.GetId())
-                            p['wxId'].append(ogrSelection.GetId())
-                            p['wxId'].append(ogrSelection.GetChildren()[1].GetId()) # fix
+                            p['wxId'].append(ogrSelection.GetChildren()[1].GetId())
                         else:
                             which_sizer.Add(item=selection, proportion=0,
                                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
@@ -1365,23 +1384,29 @@ class cmdPanel(wx.Panel):
                                 all = True
                             else:
                                 all = False
+                            win = wx.BoxSizer(wx.HORIZONTAL)
                             if p.get('age', 'old_layer') == 'old_layer':
-                                win = gselect.LayerSelect(parent=which_panel,
+                                win1 = gselect.LayerSelect(parent=which_panel,
                                                           all=all,
                                                           default=p['default'])
-                                p['wxGetValue'] = win.GetStringSelection
-                                win.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
-                                win.Bind(wx.EVT_CHOICE, self.OnSetValue)
+                                win1.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
+                                win1.Bind(wx.EVT_CHOICE, self.OnSetValue)
                             else:
-                                win = wx.SpinCtrl(parent=which_panel, id=wx.ID_ANY,
+                                win1 = wx.SpinCtrl(parent=which_panel, id=wx.ID_ANY,
                                                   min=1, max=100, initial=int(p['default']))
-                                win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
-                                
+                                win1.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
+                            win2 = gselect.LayerNameSelect(parent = which_panel)
+                            win2.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            p['wxId'] = [ win1.GetId(), win2.GetId() ]
+                            win.Add(item = win1, proportion = 0)
+                            win.Add(item = win2, proportion = 0,
+                                    flag = wx.LEFT | wx.ALIGN_CENTER_VERTICAL,
+                                    border = 5)
+
                         elif p.get('prompt', '') == 'dbdriver':
                             win = gselect.DriverSelect(parent=which_panel,
                                                        choices=p['values'],
                                                        value=p['default'])
-                            p['wxGetValue'] = win.GetStringSelection
                             win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbname':
@@ -1392,7 +1417,6 @@ class cmdPanel(wx.Panel):
                         elif p.get('prompt', '') == 'dbtable':
                             if p.get('age', 'old_dbtable') == 'old_dbtable':
                                 win = gselect.TableSelect(parent=which_panel)
-                                p['wxGetValue'] = win.GetStringSelection
                                 win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                                 win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             else:
@@ -1401,10 +1425,12 @@ class cmdPanel(wx.Panel):
                                 win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbcolumn':
                             win = gselect.ColumnSelect(parent=which_panel)
-                            p['wxGetValue'] = win.GetStringSelection
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                            
-                    p['wxId'] = win.GetId()
+
+                    try:
+                        p['wxId'] = [ win.GetId(), ]
+                    except AttributeError:
+                        pass
                     
                     which_sizer.Add(item=win, proportion=0,
                                     flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
@@ -1460,7 +1486,7 @@ class cmdPanel(wx.Panel):
                     # A file browse button is a combobox with two children:
                     # a textctl and a button;
                     # we have to target the button here
-                    p['wxId'] = fbb.GetChildren()[1].GetId()
+                    p['wxId'] = [ fbb.GetChildren()[1].GetId(), ]
 
             if title_txt is not None:
                 # create tooltip if given
@@ -1477,8 +1503,8 @@ class cmdPanel(wx.Panel):
                     title_txt.SetToolTipString(tooltip)
 
             if p == first_param:
-                if type(p['wxId']) == type(1):
-                    self.FindWindowById(p['wxId']).SetFocus()
+                if len(p['wxId']) > 0:
+                    self.FindWindowById(p['wxId'][0]).SetFocus()
         
         #
         # set widget relations for OnUpdateSelection
@@ -1503,7 +1529,7 @@ class cmdPanel(wx.Panel):
                     if id:
                         if not p.has_key('wxId-bind'):
                             p['wxId-bind'] = list()
-                        p['wxId-bind'].append(pOpt['wxId'])
+                        p['wxId-bind'] += pOpt['wxId']
                 continue
             
             prompt = p.get('element', '')
@@ -1525,26 +1551,25 @@ class cmdPanel(wx.Panel):
         # collect ids
         pColumnIds = []
         for p in pColumn:
-            pColumnIds.append(p['wxId'])
+            pColumnIds += p['wxId']
         pLayerIds = []
         for p in pLayer:
-            pLayerIds.append(p['wxId']) 
+            pLayerIds += p['wxId']
         
         # set wxId-bindings
         if pMap:
             pMap['wxId-bind'] = copy.copy(pColumnIds)
             if pLayer:
                 pMap['wxId-bind'] += pLayerIds
-        
         if len(pLayer) == 1:
             # TODO: fix modules with more 'layer' options
             pLayer[0]['wxId-bind'] = copy.copy(pColumnIds)
 
         if pDriver and pTable:
-            pDriver['wxId-bind'] = [pTable['wxId'], ]
+            pDriver['wxId-bind'] = pTable['wxId']
 
         if pDatabase and pTable:
-            pDatabase['wxId-bind'] = [pTable['wxId'], ]
+            pDatabase['wxId-bind'] = pTable['wxId']
 
         if pTable and pColumnIds:
             pTable['wxId-bind'] = pColumnIds
@@ -1597,7 +1622,7 @@ class cmdPanel(wx.Panel):
             if name == 'Select':
                 winNative = self.FindWindowById(id + 1)  # fix the mystery (also in nviz_tools.py)
             elif name == 'OgrSelect':
-                winOgr = self.FindWindowById(id)
+                winOgr = self.FindWindowById(id + 2)
         
         # enable / disable widgets & update values
         if sel == 0:   # -> native
@@ -1610,6 +1635,7 @@ class cmdPanel(wx.Panel):
             p['value'] = winOgr.GetValue()
         
         self.OnUpdateValues()
+        self.OnUpdateSelection(event)
         
     def OnUpdateDialog(self, event):
         for fn, kwargs in event.data.iteritems():
@@ -1617,8 +1643,8 @@ class cmdPanel(wx.Panel):
         
     def OnVerbosity(self, event):
         """!Verbosity level changed"""
-        verbose = self.FindWindowById(self.task.get_flag('verbose')['wxId'])
-        quiet = self.FindWindowById(self.task.get_flag('quiet')['wxId'])
+        verbose = self.FindWindowById(self.task.get_flag('verbose')['wxId'][0])
+        quiet = self.FindWindowById(self.task.get_flag('quiet')['wxId'][0])
         if event.IsChecked():
             if event.GetId() == verbose.GetId():
                 if quiet.IsChecked():
@@ -1651,7 +1677,7 @@ class cmdPanel(wx.Panel):
     def OnColorChange( self, event ):
         myId = event.GetId()
         for p in self.task.params:
-            if 'wxId' in p and type( p['wxId'] ) == type( [] ) and myId in p['wxId']:
+            if 'wxId' in p and myId in p['wxId']:
                 has_button = p['wxId'][1] is not None
                 if has_button and wx.FindWindowById( p['wxId'][1] ).GetValue() == True:
                     p[ 'value' ] = 'none'
@@ -1683,7 +1709,7 @@ class cmdPanel(wx.Panel):
         me = event.GetId()
         theParam = None
         for p in self.task.params:
-            if 'wxId' in p and type( p['wxId'] ) == type( [] ) and me in p['wxId']:
+            if 'wxId' in p and me in p['wxId']:
                 theParam = p
                 myIndex = p['wxId'].index( me )
 
@@ -1718,26 +1744,28 @@ class cmdPanel(wx.Panel):
         for selectors.
         """
         myId = event.GetId()
-        me = wx.FindWindowById( myId )
+        me  = wx.FindWindowById(myId)
+        name = me.GetName()
         
         for porf in self.task.params + self.task.flags:
             if 'wxId' in porf:
                 found = False
                 porf['wxId']
-                if type(porf['wxId']) == types.IntType:
-                    if porf['wxId'] == myId:
+                for id in porf['wxId']:
+                    if id == myId:
                         found = True
-                else: # -> list
-                    for id in porf['wxId']:
-                        if id == myId:
-                            found = True
-                            break
+                        break
+                
                 if found:
-                    if porf.has_key('wxGetValue') and porf['wxGetValue']:
-                        porf['value'] = porf['wxGetValue']()
+                    if name in ('LayerSelect', 'DriverSelect', 'TableSelect',
+                                'ColumnSelect'):
+                        porf['value'] = me.GetStringSelection()
                     else:
                         porf['value'] = me.GetValue()
-        
+                    
+                    if name == 'OgrSelect':
+                        porf['value'] += '@OGR'
+                    
         self.OnUpdateValues()
         
         event.Skip()

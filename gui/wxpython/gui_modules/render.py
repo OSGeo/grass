@@ -159,12 +159,13 @@ class Layer(object):
                 
                 os.environ["GRASS_PNG_READ"] = "FALSE"
             else:
-                ret = gcmd.RunCommand(self.cmd[0],
-                                      quiet = True,
-                                      **self.cmd[1])
-                
+                ret, msg = gcmd.RunCommand(self.cmd[0],
+                                           getErrorMsg = True,
+                                           quiet = True,
+                                           **self.cmd[1])
             if ret != 0:
-                #clean up after probley
+                print >> sys.stderr, msg
+                # clean up after problem
                 try:
                     os.remove(self.mapfile)
                     os.remove(self.maskfile)
