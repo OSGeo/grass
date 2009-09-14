@@ -163,7 +163,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	    G_debug(1, "OGR mapset detected");
 	    ogr_mapset = 1;
 	    Map->fInfo.ogr.dsn = G_store(xname);
-	    Map->fInfo.ogr.layer_name = G_store(layer); /* no layer to be open */
+	    if (layer) {
+		Map->fInfo.ogr.layer_name = G_store(layer); /* no layer to be open */
+	    }
 	}
 	else {
 	    sprintf(buf,  "%s/%s", GV_DIRECTORY, xname);

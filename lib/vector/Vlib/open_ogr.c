@@ -58,12 +58,12 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     }
 
     if (!Map->fInfo.ogr.dsn) {
-	G_warning(_("OGR datasource not defined"));
+	G_fatal_error(_("OGR datasource not defined"));
 	return -1;
     }
     
     if (!Map->fInfo.ogr.layer_name) {
-	G_warning(_("OGR layer not defined"));
+	G_fatal_error(_("OGR layer not defined"));
 	return -1;
     }
     
