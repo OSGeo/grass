@@ -693,12 +693,12 @@ class mainFrame(wx.Frame):
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         # cancel
         self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_cancel.SetToolTipString(_("Close this window without executing the command"))
+        self.btn_cancel.SetToolTipString(_("Close this window without executing the command (Ctrl+Q)"))
         btnsizer.Add(item=self.btn_cancel, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # help
         self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
-        self.btn_help.SetToolTipString(_("Show manual page of the command"))
+        self.btn_help.SetToolTipString(_("Show manual page of the command (Ctrl+H)"))
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         if not hasattr(self.notebookpanel, "manual_tab_id"):
             self.btn_help.Hide()
@@ -719,19 +719,19 @@ class mainFrame(wx.Frame):
         else: # We're standalone
             # run
             self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label= _("&Run"))
-            self.btn_run.SetToolTipString(_("Run the command"))
+            self.btn_run.SetToolTipString(_("Run the command (Ctrl+R)"))
             self.btn_run.SetDefault()
             # abort
-            self.btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
-            self.btn_abort.SetToolTipString(_("Abort the running command"))
-            self.btn_abort.Enable(False)
+            ### self.btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
+            ### self.btn_abort.SetToolTipString(_("Abort the running command"))
+            ### self.btn_abort.Enable(False)
             # copy
-            self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
-            self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
+            self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY, label = _("C&opy"))
+            self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard (Ctrl+C)"))
 
-            btnsizer.Add(item=self.btn_abort, proportion=0,
-                         flag=wx.ALL | wx.ALIGN_CENTER,
-                         border=10)
+            ### btnsizer.Add(item=self.btn_abort, proportion=0,
+            ### flag=wx.ALL | wx.ALIGN_CENTER,
+            ### border=10)
 
             btnsizer.Add(item=self.btn_run, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
@@ -742,7 +742,7 @@ class mainFrame(wx.Frame):
                          border=10)
 
             self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-            self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
+            ### self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
             self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
 
         # add help button
@@ -774,8 +774,9 @@ class mainFrame(wx.Frame):
                          flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                          border=5)
 
-        self.Bind(wx.EVT_CLOSE, self.OnCancel)
-
+        self.Bind(wx.EVT_CLOSE,  self.OnCancel)
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+        
         #constrained_size = self.notebookpanel.GetSize()
         # 80 takes the tabbar into account
         #self.notebookpanel.SetSize( (constrained_size[0] + 25, constrained_size[1]) ) 
@@ -819,6 +820,30 @@ class mainFrame(wx.Frame):
     def updateValuesHook(self):
         """!Update status bar data"""
         self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)) )
+
+    def OnKeyUp(self, event):
+        """!Key released (check hot-keys)"""
+        try:
+            kc = chr(event.GetKeyCode())
+        except ValueError:
+            event.Skip()
+            return
+        
+        if not event.ControlDown():
+            return
+        
+        if kc == 'Q':
+            self.OnCancel(None)
+        elif kc == 'S':
+            self.OnAbort(None)
+        elif kc == 'H':
+            self.OnHelp(None)
+        elif kc == 'R':
+            self.OnRun(None)
+        elif kc == 'C':
+            self.OnCopy(None)
+        
+        event.Skip()
 
     def OnOK(self, event):
         """!OK button pressed"""
@@ -871,7 +896,7 @@ class mainFrame(wx.Frame):
                     self.btn_clipboard,
                     self.btn_help):
             btn.Enable(False)
-        self.btn_abort.Enable(True)
+        ### self.btn_abort.Enable(True)
 
     def OnAbort(self, event):
         """!Abort running command"""
@@ -917,8 +942,9 @@ class mainFrame(wx.Frame):
         if hasattr(self.notebookpanel, "manual_tab_id"):
             self.notebookpanel.notebook.SetSelection(self.notebookpanel.manual_tab_id)
             self.notebookpanel.OnPageChange(None)
-            
-        event.Skip()
+        
+        if event:    
+            event.Skip()
         
     def createCmd(self, ignoreErrors = False):
         """!Create command string (python list)"""

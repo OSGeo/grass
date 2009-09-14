@@ -533,7 +533,7 @@ class GMConsole(wx.Panel):
     def OnCmdAbort(self, event):
         """!Abort running command"""
         self.cmdThread.abort()
-
+                
     def OnCmdRun(self, event):
         """!Run command"""
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
@@ -548,17 +548,17 @@ class GMConsole(wx.Panel):
                                                    _('Command aborted'),
                                                    (time.time() - event.time)))
             # pid=self.cmdThread.requestId)
+            self.btn_abort.Enable(False)
         else:
             try:
                 # Process results here
                 self.WriteCmdLog('(%s) %s (%d sec)' % (str(time.ctime()),
                                                        _('Command finished'),
                                                        (time.time() - event.time)))
-                # pid=event.pid)
             except KeyError:
                 # stopped deamon
                 pass
-        
+            self.btn_abort.Enable(False)
         if event.onDone:
             event.onDone(returncode = event.returncode)
         
