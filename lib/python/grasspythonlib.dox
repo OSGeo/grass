@@ -1,8 +1,8 @@
-/*! \page pythonlib GRASS Python scripting library
+/*! \page pythonlib GRASS Python Scripting Library
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-\section intro Introduction
+\section pythonIntro Introduction
 
 The code in <tt>lib/python/</tt> provides <b>grass.script</b> in order
 to support GRASS scripts written in Python. The <tt>scripts/</tt>
@@ -18,14 +18,14 @@ See code in:
 
 <b>Table of content</b>
 
-- \subpage scripting
-- \subpage modules
- - \subpage core
- - \subpage db
- - \subpage raster
- - \subpage vector
+- \subpage pythonScripting
+- \subpage pythonModules
+ - \subpage pythonCore
+ - \subpage pythonDb
+ - \subpage pythonRaster
+ - \subpage pythonVector
 
-\section scripting GRASS scripting tasks for Python provided by "grass.script"
+\section pythonScripting GRASS scripting tasks for Python provided by "grass.script"
 
 Usage:
 
@@ -44,10 +44,10 @@ Sample script
 \code
 #!/usr/bin/env python
 
-#%Module
+#%module
 #% description: Checks if vector map is 3D
 #% keywords: vector
-#%End
+#%end
 #%option
 #% key: map
 #% type: string
@@ -76,9 +76,9 @@ if __name__ == "__main__":
     sys.exit(main())
 \endcode
 
-\section modules List of modules
+\section pythonModules List of modules
 
-\subsection core Core
+\subsection pythonCore Core
 
 <b>GRASS-oriented interface to subprocess module</b>
 
@@ -189,7 +189,7 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - float_or_dms()
 
-\section db Database
+\section pythonDb Database
 
 Interface for <tt>db.*</tt> modules.
 
@@ -203,7 +203,7 @@ from grass.script import db as grass
 
  - db_select()
 
-\section raster Raster
+\section pythonRaster Raster
 
 Interface for <tt>r.*</tt> modules.
 
@@ -217,7 +217,7 @@ from grass.script import raster as grass
 
  - mapcalc()
 
-\section vector Vector
+\section pythonVector Vector
 
 Interface for <tt>v.*</tt> modules.
 
@@ -237,5 +237,10 @@ from grass.script import vector as grass
 
  - vector_layer_db()
 
-*/
+\section pythonAuthors Authors
 
+ Glynn Clements
+
+ Martin Landa <landa.martin gmail.com>
+
+*/
