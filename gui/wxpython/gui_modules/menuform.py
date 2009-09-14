@@ -103,8 +103,6 @@ try:
 except:
     from compat import subprocess
 
-utils.reexec_with_pythonw()
-
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
 # From lib/gis/col_str.c, except purple which is mentioned

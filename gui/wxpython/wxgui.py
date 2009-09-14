@@ -1604,11 +1604,6 @@ def process_opt(opts, args):
 
 def main(argv=None):
     #
-    # reexec for MacOS
-    #
-    utils.reexec_with_pythonw()
-
-    #
     # process command-line arguments
     #
     if argv is None:

@@ -24,6 +24,9 @@ trap "echo 'User break!' ; exit" 2 3 9 15
 GRASS_OS_STARTUP="Mac.app"
 export GRASS_OS_STARTUP
 
+SYSARCH=`uname -p`
+SYSVER=`uname -r | cut -d . -f 1`
+
 GISBASE=`dirname "$0"`
 export GISBASE
 grass_ver=`cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER"`
@@ -133,22 +136,32 @@ fi # X11
 # change GRASS_WXBUNDLED and pyver_want here from bundle.make, or manually
 GRASS_WXBUNDLED=
 export GRASS_WXBUNDLED
+pyexe="pythonw"
 pyver_want="@PYVER@"
-if [ -d "$GISBASE/etc/wxpython" ] && [ "$GRASS_WXBUNDLED" = "1" ] ; then
+wx64bit="@WX64BIT@"
 # make sure python version used matches what wxpython wants
 py=""
-# did user set GRASS_PYTHON already? check it
+# did user set GRASS_PYTHON already? check it (must have pythonw)
 if [ "$GRASS_PYTHON" ] ; then
-	pyver=`$GRASS_PYTHON -V 2>&1 | grep " $pyver_want"`
-	if [ "$pyver" ] ; then
-		py="$GRASS_PYTHON"
+	py=`echo "$GRASS_PYTHON" | grep pythonw`
+	if [ "$py" ] ; then
+		case $GRASS_PYTHON in
+			/*) py="$GRASS_PYTHON" ;;
+			*) py=`type -p $GRASS_PYTHON`
+		esac
+		pyver=`$py -V 2>&1 | grep " $pyver_want"`
+		if [ ! "$pyver" ] ; then
+			py=""
+		fi
+	else
+		py=""
 	fi
 fi # GRASS_PYTHON
 # try in shell path
 if [ ! "$py" ] ; then
-	py=`type -p python`
+	py=`type -p pythonw$pyver_want`
 	if [ "$py" ] ; then
-		pyver=`python -V 2>&1 | grep " $pyver_want"`
+		pyver=`$py -V 2>&1 | grep " $pyver_want"`
 		if [ ! "$pyver" ] ; then
 			py=""
 		fi
@@ -163,7 +176,7 @@ if [ ! "$py" ] ; then
 fi
 # try system (may be the same as in shell path)
 if [ ! "$py" ] ; then
-	py="/usr/bin/python"
+	py="/usr/bin/pythonw$pyver_want"
 	pyver=`$py -V 2>&1 | grep " $pyver_want"`
 	if [ ! "$pyver" ] ; then
 		py=""
@@ -173,11 +186,22 @@ fi
 if [ "$py" ] ; then
 	echo "$pyver found."
 	GRASS_PYTHON="$py"
+	# can't run python 64bit if wx not 64bit, assume OSX 10.6+ 64bit
+	if [ $(($SYSVER)) -gt 9 ] && [ "$wx64bit" = "0" ] ; then
+		case $SYSARCH$wx64bit in
+			powerpc0) pyarch="ppc" ;;
+			i3860) pyarch="i386" ;;
+			*) pyarch="" ;;
+		esac
+		# make copy of pythonw 32bit because g.gui can't spawn multi-arg prog
+		ditto -arch $pyarch "$py" "$GISBASE_USER/Modules/bin/pythonw"
+		GRASS_PYTHON="pythonw"
+	fi
+	export GRASS_PYTHON
 else
 	echo "Warning: No Python $pyver_want found, needed by wxPython."
 	echo "         The wxPython GUI may not work properly."
 fi
-fi # bundled wx
 
 # if grassrc has text startup, switch back to Terminal (gotta duplicate some init.sh stuff)
 # only applies to Tiger - Leopard X11 opens automatically as needed
