@@ -51,15 +51,18 @@ int main(int argc, char *argv[])
 	topo_flag = 0;
     }
     
+    if (!level1_flag) {
+	 /* level 2 */
+	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2) {
+	    G_warning(_("Unable to open vector map <%s> on level 2"),
+		      Vect_get_full_name(&Map));
+	    level1_flag = 1;
+	}
+    }
+
     if (level1_flag) {
 	Vect_open_old2(&Map, input_opt, "", field_opt);      /* level 1 */
 	level_one_info(&Map);
-    }
-    else {
-	 /* level 2 */
-	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2)
-	    G_fatal_error(_("Unable to open vector map <%s> on level 2"),
-			  Vect_get_full_name(&Map));
     }
 
     if (hist_flag) {
