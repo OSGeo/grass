@@ -84,7 +84,6 @@ int main(int argc, char **argv)
     int size;
     int default_width;
     double width_scale;
-    int verbose = FALSE;
     double minreg, maxreg, reg;
     char map_name[128];
     struct GModule *module;
@@ -359,9 +358,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_verbose() > G_verbose_std())
-	verbose = TRUE;
-
     G_get_set_window(&window);
 
     if (D_open_driver() != 0)
@@ -439,7 +435,7 @@ int main(int argc, char **argv)
     Clist->field = atoi(field_opt->answer);
 
     /* open vector */
-    level = Vect_open_old(&Map, map_name, "");
+    level = Vect_open_old2(&Map, map_name, "", field_opt->answer);
 
     if (where_opt->answer) {
 	if (Clist->field < 1)
@@ -585,8 +581,7 @@ int main(int argc, char **argv)
 
     D_setup(0);
 
-    if (verbose)
-	G_message(_("Plotting ..."));
+    G_verbose_message(_("Plotting..."));
 
     if (level >= 2)
 	Vect_get_map_box(&Map, &box);
@@ -682,8 +677,7 @@ int main(int argc, char **argv)
 
     D_close_driver();
 
-    if (verbose)
-	G_done_msg(" ");
+    G_done_msg(" ");
 
     Vect_close(&Map);
     Vect_destroy_cat_list(Clist);
