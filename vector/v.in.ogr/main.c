@@ -308,13 +308,10 @@ int main(int argc, char *argv[])
 	    G_store((char *)OGR_FD_GetName(Ogr_featuredefn));
 
 	if (list_flag->answer) {
-	    if (i > 0)
-		fprintf(stdout, ", ");
-	    fprintf(stdout, "%s", available_layer_names[i]);
+	    fprintf(stdout, "%s\n", available_layer_names[i]);
 	}
     }
     if (list_flag->answer) {
-	fprintf(stdout, "\n");
 	fflush(stdout);
 	exit(EXIT_SUCCESS);
     }
