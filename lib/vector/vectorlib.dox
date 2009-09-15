@@ -84,19 +84,19 @@ The current implementation includes:
 
 - <b>multi-layer</b>: features in one vector map may represent more
     layers and may be linked to more external tables (see \ref
-    categories_layers);
+    vlibCategoriesLayers);
 - 2D and 3D vector geometry with full topology support for 2D and
-  partial topology support for 3D (see \ref topology_management);
+  partial topology support for 3D (see \ref vlibTopoManagement);
 - <b>multi-format</b>: external data formats supported (SHAPE-file,
   OGR sources etc.);
 - <b>portability</b>: platform independent internal format, read- and
       writable on 32bit, 64bit etc. computer architectures;
-- integrated \ref dglib - support for vector network analysis;
+- integrated \ref vlibDglib - support for vector network analysis;
 - <b>spatial index</b>: based on R-tree method for fast vector
-  geometry access (see \ref spidx);
+  geometry access (see \ref vlibSpidx);
 - <b>multi-attribute</b>: attributes saved in external Relational
       Database Management System (RDBMS) connected through DBMI
-      library and drivers (\ref attributes);
+      library and drivers (\ref vlibAttributes);
 
 
 \subsection vlibVectorMap Vector map
@@ -117,7 +117,7 @@ more categories (cats). More cats are distinguished by field number
 support on modules level are implemented. Z-coordinate is optional and
 both 2D and 3D files may be written.
 
-The following vector features are defined (see \ref ftypes):
+The following vector features are defined (see \ref vlibFeatureTypes):
 
 - point: a point;
 - line: a directed sequence of connected vertices with two endpoints called nodes;
@@ -179,12 +179,12 @@ $MAPSET/vector/vector_name/
 
 This directory contains these files:
 
-- <b>coor</b> - binary file, coordinates [former dig/ file] (see \ref coor_file_format)
-- <b>topo</b> - binary file, topology [former dig_plus/ file] (see \ref topo_file_format)
-- <b>sidx</b> - binary file, spatial index (see \ref sidx_file_format)
-- <b>cidx</b> - binary file, category index (see \ref cidx_file_format)
-- <b>head</b> - text file, header information [former part of dig/ file] (see \ref head_file_format)
-- <b>dbln</b> - text file, link(s) to attribute table(s) (see \ref dbln_file_format)
+- <b>coor</b> - binary file, coordinates [former dig/ file] (see \ref vlibCoorFileFormat)
+- <b>topo</b> - binary file, topology [former dig_plus/ file] (see \ref vlibTopoFileFormat)
+- <b>sidx</b> - binary file, spatial index (see \ref vlibSidxFileFormat)
+- <b>cidx</b> - binary file, category index (see \ref vlibCidxFileFormat)
+- <b>head</b> - text file, header information [former part of dig/ file] (see \ref vlibHeadFileFormat)
+- <b>dbln</b> - text file, link(s) to attribute table(s) (see \ref vlibDblnFileFormat)
 - <b>hist</b> - text file, vector map change history
 - <b>frmt</b> - text file, format description (external format only)
 - <b>fidx</b> - binary file, feature index (OGR format only)
@@ -372,8 +372,8 @@ map river because table is stored in a reliable RDBMS.
 
 Besides internal library functions there are two main libraries:
 
-- Vlib (Vector library), see \ref vlib
-- DGLib (Directed Graph Library), see \ref dglib
+- Vlib (Vector library), see \ref vlibIntro
+- DGLib (Directed Graph Library), see \ref vlibDglib
 
 For historical reasons, there are two internal libraries:
 
@@ -691,7 +691,7 @@ struct Plus_head
 
 \subsection vlibDig_head dig_head structure
 
-<tt>dig_head</tt> holds header data of vector map (see \ref Map_info).
+<tt>dig_head</tt> holds header data of vector map (see \ref vlibMap_info).
 
 \code
 struct dig_head
@@ -1441,7 +1441,7 @@ LAYER: p
 OGR layer can be linked via <tt>v.external</tt> command. When linking
 OGR layer pseudo-topology ('topo') is built including spatial index
 file ('sidx') and category index file ('cidx'). Additionally also
-feature index file (see \ref fidx_file_format) is created.
+feature index file (see \ref vlibFidxFileFormat) is created.
 
 \subsection vlibFidxFileFormat Fidx file format specification
 
@@ -1510,7 +1510,7 @@ by <tt>v.out.ascii format=standard</tt> command.
 
 
 The header is similar as the head file of vector binary format (see
-\ref head_file_format) but contains bounding box also. Keywords are:
+\ref vlibHeadFileFormat) but contains bounding box also. Keywords are:
 
 \verbatim
 ORGANIZATION
