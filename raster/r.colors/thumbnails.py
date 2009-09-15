@@ -104,6 +104,10 @@ def main():
     os.environ['GRASS_TRANSPARENT'] = 'FALSE'
     os.environ['GRASS_BACKGROUNDCOLOR'] = 'ffffff'
 
+    for var in ['GRASS_RENDER_IMMEDIATE','GRASS_LINE_WIDTH','GRASS_ANTIALIAS']:
+	if var in os.environ:
+	    del os.environ[var]
+
     grass.use_temp_region()
     grass.run_command('g.region', rows = 100, cols = 100)
 
