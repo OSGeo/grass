@@ -152,8 +152,6 @@ struct dig_head
     off_t last_offset;		/* offset of last read line */
 
     struct recycle *recycle;    /* recycle dead line, not implemented yet */
-
-    struct Map_info *Map;	/* X-ref to Map_info struct (needed?) */
 };
 
 /*! \brief Coor file info */
