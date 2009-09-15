@@ -117,16 +117,31 @@ more categories (cats). More cats are distinguished by field number
 support on modules level are implemented. Z-coordinate is optional and
 both 2D and 3D files may be written.
 
-The following vector features are defined (see \ref vlibFeatureTypes):
+The following vector feature types (primitives) are defined by the
+vector library (and holds by the coor file; see also \ref
+vlibFeatureTypes):
 
-- point: a point;
-- line: a directed sequence of connected vertices with two endpoints called nodes;
-- boundary: the border line to describe an area;
-- centroid: a point within a closed boundary;
-- area: the topological composition of centroid and boundary;
-- face: a 3D area;
-- kernel: a 3D centroid in a volume;
-- volume: a 3D corpus, the topological composition of faces and kernel.
+- point: a point (2D or 3D);
+- line: a directed sequence of connected vertices with two endpoints
+  called nodes (2D or 3D);
+- boundary: the border line to describe an area (2D only);
+- centroid: a point within a closed boundary(ies) to describe an area
+  (2D only);
+- edge: a 3D boundary (not implemented yet)
+- kernel: a 3D centroid in a volume.
+
+From vector feature types mentioned above are derived:
+
+- node: endpoint of a line (2D or 3D);
+- area: the topological composition of centroid and boundary(ies) (2D
+  only);
+- isle: an area within area, not touching the boundaries of the outer
+  area (2D only);
+- face: a 3D area (not implemented yet);
+- volume: a 3D corpus, the topological composition of faces and kernel
+  (not implemented yet);
+- hole: a volume within volume, 3D equivalent to isle within area (not
+  implemented yet).
 
 Note that all lines and boundaries can consist of multiple segments.
 
