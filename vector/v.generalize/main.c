@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     int look_ahead, iterations;
     int chcat;
     int ret, layer;
-    int n_areas, n_lines;
+    int n_areas, n_orig_areas, n_lines;
     double x, y;
     int simplification, mask_type;
     struct varray *varray;
@@ -342,7 +342,6 @@ int main(int argc, char *argv[])
 	varray = NULL;
     }
 
-
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -436,6 +435,7 @@ int main(int argc, char *argv[])
     /* remove incorrect boundaries
      * they may occur only if they were generalized */
     if (mask_type & GV_BOUNDARY) {
+	int n_del = 0;
 	Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
 	n_lines = Vect_get_num_lines(&Out);
 	for (i = 1; i <= n_lines; i++) {
@@ -446,8 +446,14 @@ int main(int argc, char *argv[])
 	    if (left == 0 || right == 0) {
 		Vect_delete_line(&Out, i);
 		total_output -= Points->n_points;
+		n_del++;
 	    }
 	}
+	if (n_del)
+	    G_warning(_("%d boundaries were deleted, input areas are not preserved"), n_del);
+
+	/* make sure that clean topo is built at the end */
+	Vect_build_partial(&Out, GV_BUILD_NONE);
     }
 
 
@@ -462,6 +468,8 @@ int main(int argc, char *argv[])
 	    /* skip dead area */
 	    if (!Vect_area_alive(&Out, i))
 		continue;
+
+	    /* area i in Out is not necessarily equal to area i in In! */
 	    Vect_get_area_cats(&In, i, Cats);
 	    ret = Vect_get_point_in_area(&Out, i, &x, &y);
 	    if (ret < 0) {
@@ -472,12 +480,16 @@ int main(int argc, char *argv[])
 	    Vect_append_point(Points, x, y, 0.0);
 	    Vect_write_line(&Out, GV_CENTROID, Points, Cats);
 	}
+	G_warning(_("New centroids were calculated, attribute attachment may be changed"));
     }
 
     /* remove small areas */
     if (rs_flag->answer && simplification && (mask_type & GV_AREA)) {
 	Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
 	Vect_remove_small_areas(&Out, thresh, NULL, &slide);
+
+	/* make sure that clean topo is built at the end */
+	Vect_build_partial(&Out, GV_BUILD_NONE);
     }
 
     Vect_build(&Out);
@@ -490,6 +502,12 @@ int main(int argc, char *argv[])
 	G_message(_("Number of vertices was reduced from %d to %d [%d%%]"),
 		  total_input, total_output,
 		  (total_output * 100) / total_input);
+
+    /* warning about area corruption */
+    if (mask_type & GV_BOUNDARY && (n_orig_areas = Vect_get_num_areas(&In)) > 0) {
+	G_warning(_("Areas may have disappeared and/or area attribute attachment may have changed"));
+	G_warning(_("Try v.clean tool=prune thresh=%f"), thresh);
+    }
 
     Vect_close(&In);
     Vect_close(&Out);
