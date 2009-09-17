@@ -127,9 +127,14 @@ the <em>break</em> tool but needs more memory.
 The <em>bpol</em> tool should be followed by <em>rmdupl</em>.
 
 <h3>Remove vertices in threshold from lines and boundaries</h3>
-
-The <em>prune</em> tool is currently broken, please use 
-<em><a href=v.generalize.html>v.generalize</a></em> instead.
+<em>tool=prune</em>
+<p>
+The <em>prune</em> tool simplifies lines and boundaries by removing
+vertices according to threshold. This tool preserves area topology,
+areas are never deleted and centroid attachment is never changed.
+<em><a href=v.generalize.html>v.generalize</a></em> offers much more
+functionality for line simplification but does not preserve area
+topology.
 
 <h3>Remove small areas</h3>
 <em>tool=rmarea</em>
