@@ -202,7 +202,16 @@ cat << EOF > "${TMP}.html"
 </head>
 <body bgcolor="white">
 
-<img src="grass_logo.png" alt="_\|/_ GRASS logo"><hr align=center size=6 noshade>
+<img src="grass_logo.png" alt="_\|/_ GRASS logo">
+<hr align=center size=6 noshade>
+
+<!-- prettier:
+<BR><BR><BR><BR>
+<center>
+<img src="../../images/grasslogo.gif" alt="_\|/_ GRASS logo">
+<BR><BR>
+<hr width="450" align=center size=6 noshade>
+-->
 
 <center>
 <H1>`g.version | cut -f1 -d'('` Command list</H1>
@@ -214,6 +223,12 @@ cat << EOF > "${TMP}.html"
 <i><font size="-1" color="#778877">
    Menu position follows description if applicable.</font></i>
 <BR><BR>
+-->
+
+<!--
+# so it works from $WEB/gdp/grassmanuals/
+#   untested:
+sed -i -e 's+\(a href="\)\([^#\.h]\)+\1../../grass64/manuals/html64_user/\2+'
 -->
 
 <h4>Command types:</h4>
