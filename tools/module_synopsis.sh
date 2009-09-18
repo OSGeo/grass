@@ -66,6 +66,9 @@ MDPY="$GISBASE/etc/wxpython/gui_modules/menudata.py"
 python "$MDPY" commands | sed -e 's/ | /|/' -e 's/[ -].*|/|/' \
   | sort -u > "$TMP.menu_hierarchy"
 
+# for running with GRASS 6.4 after generating with GRASS 6.5.
+#\cp "$TMP.menu_hierarchy" "$GISBASE/etc/gui/menu_hierarchy.txt"
+#\cp "$GISBASE/etc/gui/menu_hierarchy.txt" "$TMP.menu_hierarchy"
 
 ### given a module name return where it is in the menu tree
 find_menu_hierarchy()
@@ -215,18 +218,18 @@ cat << EOF > "${TMP}.html"
 
 <h4>Command types:</h4>
 <ul>
-<li> d.* - <a href="#d">display commands</a>
-<li> db.* - <a href="#db">database</a> commands
-<li> g.* - <a href="#g">general</a> commands
-<li> i.* - <a href="#i">imagery</a> commands
-<li> m.* - <a href="#m">miscellanous</a> commands
-<li> ps.* - <a href="#ps">PostScript</a> commands
-<li> r.* - <a href="#r">raster</a> commands
-<li> r3.* - <a href="#r3">raster3D</a> commands
-<li> v.* - <a href="#v">vector</a> commands
-<li> wxGUI - GUI frontend (wxPython)
-<li> nviz - visualization suite
-<li> xganim - raster map slideshow
+  <li> d.* - <a href="#d">display commands</a>
+  <li> db.* - <a href="#db">database</a> commands
+  <li> g.* - <a href="#g">general</a> commands
+  <li> i.* - <a href="#i">imagery</a> commands
+  <li> m.* - <a href="#m">miscellanous</a> commands
+  <li> ps.* - <a href="#ps">PostScript</a> commands
+  <li> r.* - <a href="#r">raster</a> commands
+  <li> r3.* - <a href="#r3">raster3D</a> commands
+  <li> v.* - <a href="#v">vector</a> commands
+  <li> <a href="wxGUI.html">wxGUI</a> - GUI frontend (wxPython)
+  <li> <a href="nviz.html">NVIZ</a> - <i>n</i>-dimensional visualization suite
+  <li> <a href="xganim.html">xganim</a> - raster map slideshow viewer
 EOF
 
 
@@ -366,8 +369,8 @@ cat << EOF > "${TMP}.tex"
 \item [r3.{*}]raster3D commands
 \item [v.{*}]vector commands
 \item [wxGUI]GUI frontend (wxPython)
-\item [nviz]visualization suite
-\item [xganim]raster map slideshow
+\item [NVIZ]$n$-dimensional visualization suite
+\item [xganim]raster map slideshow viewer
 EOF
 
 
@@ -415,7 +418,7 @@ EOF
 	| awk '/^\$/ { STR=$0; \
 		       gsub(" ", "\\: ", STR); \
 		       gsub(/\|/, " ", STR); \
-		       sub(/^/, "\\textcolor{DarkSeaGreen3}{\\footnotesize ", STR); \
+		       sub(/^/, "  \\textcolor{DarkSeaGreen3}{\\footnotesize ", STR); \
 		       sub(/$/, "}", STR); \
 		       print STR \
 		     } ;
@@ -449,6 +452,12 @@ EOF
 \mv "${TMP}.tex" "$GISBASE/etc/module_synopsis.tex"
 \rm -f "${TMP}.txt"
 
+
+##### FIXME
+# post generation tidy-up
+# - sort order isn't ideal. try 'sort -n'??
+#     fix: *.univar.sh, r.surf.idw2, v.to.rast3, r.out.ppm3, others..
+#####
 
 
 g.message "Converting LaTeX to PDF (writing to \$GISBASE/docs/pdf/) ..."
