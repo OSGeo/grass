@@ -123,7 +123,7 @@
 	      <command>r.in.gridatb</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>MAT-File (v.4) import</label>
+	      <label>Matlab 2D array import</label>
 	      <help>Imports a binary MAT-File(v4) to a GRASS raster.</help>
 	      <keywords>raster</keywords>
               <handler>self.OnMenuCmd</handler>
@@ -251,7 +251,7 @@
 	      <command>v.in.gns</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Matlab and MapGen import</label>
+	      <label>Matlab array and MapGen import</label>
 	      <help>Import Mapgen or Matlab vector maps into GRASS.</help>
 	      <keywords>vector,import</keywords>
               <handler>self.OnMenuCmd</handler>
@@ -332,7 +332,7 @@
 	      <command>r.out.gridatb</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>MAT-File (v.4) export</label>
+	      <label>Matlab 2D array export</label>
 	      <help>Exports a GRASS raster to a binary MAT-File.</help>
 	      <keywords>raster,export</keywords>
               <handler>self.OnMenuCmd</handler>
