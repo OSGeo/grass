@@ -15,8 +15,9 @@
 *
 *   1. if file exists, the pid is read out of the file. if this
 *      process is still running, the file is considered locked.
-*      exit(1)
-*   2. if file does not exist, or if file exists but process is not
+*      exit(2).
+*   2. something weird happened. G_fatal_error() aka exit(1)
+*   3. if file does not exist, or if file exists but process is not
 *      running (ie, lock was not removed), the file is locked for
 *      process pid by writing pid into the file.
 *      exit(0).
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
 	close(lock);
     }
     if (locked)
-	exit(1);
+	exit(2);
 
     if ((lock = creat(file, 0666)) < 0) {
 	perror(file);
