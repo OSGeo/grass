@@ -507,7 +507,7 @@ check_lock()
     "$ETC/lock" "$lockfile" $$
     case $? in
 	0) ;;
-	1)
+	2)
 	    echo "$USER is currently running GRASS in selected mapset (file $lockfile found). Concurrent use not allowed."
 	    cleanup_tmpdir
 	    exit 1 ;;
