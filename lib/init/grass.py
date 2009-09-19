@@ -523,7 +523,7 @@ def check_lock():
 		"%d" % os.getpid()])
     if ret == 0:
 	pass
-    elif ret == 1:
+    elif ret == 2:
 	fatal("%s is currently running GRASS in selected mapset (file %s found). Concurrent use not allowed."
 	      % (user, lockfile))
     else:
