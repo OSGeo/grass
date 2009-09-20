@@ -215,6 +215,11 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 		}
 	    }
 
+	    len = strlen(tokens[i]); 
+	    /* do not guess column type for missing values */ 
+	    if (len == 0) 
+		continue; 
+
 	    G_debug(4, "row %d col %d: '%s' is_int = %d is_double = %d",
 		    row, i, tokens[i], is_int(tokens[i]),
 		    is_double(tokens[i]));
@@ -230,7 +235,6 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 	    }
 	    /* string */
 	    coltype[i] = DB_C_TYPE_STRING;
-	    len = strlen(tokens[i]);
 	    if (len > collen[i])
 		collen[i] = len;
 	}
