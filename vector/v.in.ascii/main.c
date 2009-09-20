@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
 
     /* specifying zcol= implies that a 3D map is needed */
     if (zcol >= 0 && !zcoorf->answer)
-	zcoorf->answer = 1;
+	zcoorf->answer = TRUE;
 
     if (zcoorf->answer && format == FORMAT_POINT && zcol < 0)
 	G_fatal_error(_("Please specify reasonable z column"));
@@ -294,15 +294,15 @@ int main(int argc, char *argv[])
 	}
 
 	/* Create table */
-	make_table = 0;
+	make_table = FALSE;
 	for (i = 0; i < ncols; i++) {
 	    if (xcol != i && ycol != i && zcol != i && catcol != i) {
-		make_table = 1;
+		make_table = TRUE;
 		break;
 	    }
 	}
 	if (t_flag->answer) {
-	    make_table = 0;
+	    make_table = FALSE;
 	}
 
 	if (make_table) {
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 
 		switch (coltype[i]) {
 		case DB_C_TYPE_INT:
-		    G_verbose_message("Column: %d  type: integer", i + 1);
+		    G_message("Column: %d  type: integer", i + 1);
 		    if (!columns_opt->answer) {
 			sprintf(buf, "int_%d integer", n_int + 1);
 			db_append_string(&sql, buf);
@@ -349,7 +349,7 @@ int main(int argc, char *argv[])
 		    n_int++;
 		    break;
 		case DB_C_TYPE_DOUBLE:
-		    G_verbose_message("Column: %d  type: double", i + 1);
+		    G_message("Column: %d  type: double", i + 1);
 		    if (!columns_opt->answer) {
 			sprintf(buf, "dbl_%d double precision", n_double + 1);
 			db_append_string(&sql, buf);
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
 		    n_double++;
 		    break;
 		case DB_C_TYPE_STRING:
-		    G_verbose_message("Column: %d  type: string length: %d",
+		    G_message("Column: %d  type: string length: %d",
 				      i + 1, collen[i]);
 		    if (!columns_opt->answer) {
 			sprintf(buf, "str_%d varchar(%d)", n_string + 1,
