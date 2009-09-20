@@ -138,20 +138,9 @@ environment variable, e.g.
 $ export GRASS_WX_DEBUG=3
 
 
-6 - ICON THEMES
+6 - EXTENSIONS - VECTOR DIGITIZER AND 3D VIEWER
 
-Currently two icon themes are available:
-
-    * original GRASS (based on TCL/TK GUI prototype)
-    * Silk-based (default)
-
-User can change icon theme in Preferences dialog
-('Config->Preferences').
-
-
-7 - VECTOR DIGITIZER
-
-To enable digitizer you need to compile 'vdigit'
+To enable digitizer you need to compile 'vdigit' or 'nviz'
 component. Note that you must configure GRASS with C++ (--with-cxx),
 Python (--with-python) and wxWidgets (--with-wxwidgets) support.
 
