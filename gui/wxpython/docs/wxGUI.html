@@ -1,33 +1,33 @@
 <h2>DESCRIPTION</h2>
 
 <b>wxGUI</b> is a new generation of the GUI for GRASS GIS. It's a successor
-of the <em>Tcl/Tk GUI</em> from GRASS 6.
+of the <em><a href="gis.m.html">Tcl/Tk GUI</a></em> from GRASS 6.
 
 <p>
 If wxGUI is not your default GUI, you can define it as default by
 typing at GRASS command line prompt
 
 <div class="code"><pre>
-   g.gui -u wxpython 
+   g.gui -u wxpython& 
 </pre></div>
 
-or define in your <tt>.grassrc7</tt> file 'GRASS_GUI' variable
+or define in your <tt>.grassrc6</tt> file 'GRASS_GUI' variable
 
 <div class="code"><pre>
-    GRASS_GUI: gui
+    GRASS_GUI: wxpython
 </pre></div>
 
 The GUI can be quit by selecting the 'File->Exit' menu item. The GUI
 can be restarted from the GRASS command line prompt by typing
 
 <div class="code"><pre>
-    g.gui
+    g.gui wxpython&
 </pre></div>
 
 or  to restart with previously saved workspace type:
 
 <div class="code"><pre>
-    g.gui workspace=file.gxw
+    g.gui wxpython workspace=file.gxw
 </pre></div>
 
 <p>
@@ -35,31 +35,33 @@ You can also start GRASS from the shell command line with wxGUI
 defined by the <tt>-wxpython</tt> switch:
 
 <div class="code"><pre>
-    grass70 -wxpython
+    grass65 -wxpython
 </pre></div>
 
 <p>
 The GUI is composed by <em>two</em> main components:
 
 <ul>
-  <li><b>Layer Manager</b> which allows users to run different GRASS
-  modules from menu, includes map layer management, integrated
+  <li>The <b>Layer Manager</b> includes map layer management, integrated
   command-line prompt, and command output window tab.</li>
-  <li><b>Map Display Window</b> which integrates basic tools for
-  zooming, panning, data querying, decorations (north arrows,
-  barscale, etc.). The user is allowed to start various map display
-  instances during one session. The Layer Manager registers Map
-  Display Windows using different tabs.</li>
+  <li>The <b>Map Display Window</b> integrates basic tools for
+  zooming, panning, data querying, and map elements (north arrows,
+  barscale, etc.). Each display window is associated with its own 
+  set of map layers in the layer manager. The user may start multiple map 
+  displays during a session. The map layers for each display are grouped
+  under different tabs in the Layer Manager.</li>
 </ul>
 
 <h3>Layer Manager</h3>
 
-The <em>Layer Manager</em> provides an interactive graphical interface to GRASS
-commands. It includes a set of pull-down menus for all GRASS GIS
-functions (analysis, file I/O, GIS configuration and management), the
-toolbar to manage display map layers, a layer tree frame in which map layers
-to display are organized, command output window tab, and interactive
-command line prompt.
+The <em>Layer Manager</em> provides an interactive graphical interface for
+creating and managing GRASS displays. There is a toolbar to manage displayed 
+map layers, a layer tree frame in which map layers for display are organized, 
+a command output window tab, and interactive command line prompt. On Linux 
+and Windows platforms, the layer manager also has a menu bar with a set of 
+pull-down menus for all GRASS GIS functions (analysis, file I/O, GIS 
+configuration and management); on a Mac, the GRASS functions menu is at the 
+top of the screen.
 
 <center>
 <br><img src="wxGUI_layer_manager.jpg" border="1"><br><br>
@@ -73,11 +75,10 @@ additional buttons for saving or opening workspace file, and others.
 
 <p>
 Map layers are listed in the window frame below the toolbar. Layers can
-include raster and vector maps, text, map decorations (scale and
-north arrow, and grids), and commands (where any GRASS command can be
-written). Layers are displayed as arranged in the layer tree: the
-bottom layer is displayed first and the top layer is displayed last, as if
-the layers were a series of stacked overlays.
+include raster and vector maps, vector labels, and commands (where any 
+GRASS command can be written). Layers are displayed as arranged in the layer 
+tree: the bottom layer is displayed first and the top layer is displayed 
+last, as if the layers were a series of stacked overlays.
 
 <p>
 The check box to the left of each layer makes it active or inactive
@@ -88,16 +89,18 @@ composition can be saved to a workspace file and opened in subsequent
 sessions, restoring all layers and their display options.
 
 <p>
-Right mouse click on a layer opens a dropdown menu with options to 
-remove or rename the layer (g.remove, g.rename), 
-change its display properties (d.rast and d.vect options such as color, symbol, etc.),
-show its metadata (r.info, v.info) or attributes, if applicable.
+A right mouse click on a layer or left clicking the button to the right of 
+the layer opens a dropdown menu with options to remove or rename the layer 
+(g.remove, g.rename), change its display properties (d.rast and d.vect 
+options such as color, symbol, etc.), show its metadata (r.info, v.info) or 
+attributes, if applicable.
 <p>
-Left mouse double click on a layer opens GUI for its display options (d.rast, d.vect).
+A left mouse double click on a layer opens GUI for its display options 
+These options are those for the d.* command for each layer type (d.rast, 
+d.vect, or d.grid, for example).
 
 <h4>Layer Manager Toolbar</h4>
 
-New and old icons and explanation of their functionality:
 <dl>
 
 <dt><img src="icons/grass2/monitor-create.png">&nbsp;
@@ -105,7 +108,7 @@ New and old icons and explanation of their functionality:
 <dd>Opens a new map display and creates empty layer tree tab in Layer Manager.</dd>
 
 <dt><img src="icons/grass2/create.png">&nbsp;
-<em>Creates new workspace file</em></dt>
+<em>Create new workspace file</em></dt>
 <dd>Removes all layers in the layer tree and creates a new, empty tree
 where new layers can be added.</dd>
 
@@ -130,7 +133,7 @@ layers and their option settings.</dd>
 
 <dt><img src="icons/grass2/layer-shaded-relief-add.png">&nbsp;
 <em>Add various raster-based map layers</em></dt>
-<dd>opens a dropdown menu that allows user to select to:<br> 
+<dd>Opens a dropdown menu that allows user to select to:<br> 
 
   <ul>
     <li><dt><img src="icons/grass2/layer-shaded-relief-add.png">&nbsp;
@@ -139,16 +142,17 @@ layers and their option settings.</dd>
 	see <em><a href="d.shadedmap.html">d.shadedmap</a></em></li>
     <li><dt><img src="icons/grass2/layer-rgb-add.png">&nbsp;
 	<em>Add RGB raster layer</em></dt>
-      <dd>Combines and displays three raster maps defined as red, green, and blue
-	channels, see <em><a href="d.rgb.html">d.rgb</a></em>.</dd></li>
+      <dd>Combines and displays three raster maps defined as red, green, 
+    and blue channels to create an RGB color map, 
+    see <em><a href="d.rgb.html">d.rgb</a></em>.</dd></li>
     <li><dt><img src="icons/grass2/layer-his-add.png">&nbsp;
 	<em>Add HIS raster layer</em></dt>
       <dd>Combines and displays two or three raster maps defined as hue,
-	intensity, and (optionally) saturation channels,
+	intensity, and (optionally) saturation channels to create a color map,
 	see <em><a href="d.his.html">d.his</a></em>.</dd></li>
     <li><dt><img src="icons/grass2/layer-cell-cats-add.png">&nbsp;
 	<em>Add raster arrows layer</em></dt>
-      <dd>Adds map of raster cells with directional arrows drawn.  Arrow
+      <dd>Adds map of raster cells with directional arrows drawn. Arrow
 	direction and length are determined by separate aspect/directional map
 	and (optional) slope/intensity map,
 	see <em><a href="d.rast.arrow.html">d.rast.arrow</a></em>.</dd></li>
@@ -165,7 +169,7 @@ layers and their option settings.</dd>
 
 <dt><img src="icons/grass2/layer-vector-thematic-add.png">&nbsp;
 <em>Add various vector-based map layers </em></dt>
-<dd>opens a dropdown menu that allows user to select to:<br>
+<dd>Opens a dropdown menu that allows user to select to:<br>
 
   <ul>
     <li><dt><img src="icons/grass2/layer-vector-thematic-add.png">&nbsp;
@@ -214,7 +218,7 @@ d.text text=Population\ density
 
 <dt><img src="icons/grass2/layer-grid-add.png">&nbsp;
    <em>Add grid or vector labels overlay</em></dt>
-<dd>opens a dropdown menu that allows user to select to:<br>
+<dd>Opens a dropdown menu that allows user to select to:<br>
 
   <ul>
   <li><dt><img src="icons/grass2/layer-grid-add.png">&nbsp;
@@ -224,17 +228,17 @@ d.text text=Population\ density
 
   <li><dt><img src="icons/grass2/layer-label-add.png">&nbsp;
       <em>Add labels layer for vector objects (from existing labels file)</em></dt>
-    <dd>Add raster text layer from a labels file for vector objects
-      created with the <em><a href="v.label.html">v.label</a></em> module
-      (accessed from button in options panel). A labels file can also be
-      created with a text editor, see <em><a href="d.labels.html">d.labels</a></em>.</dd></li>
+    <dd>Add a layer of text from a labels file for vector objects
+      created with the <em><a href="v.label.html">v.label</a></em> module. 
+      A labels file can also be created with a text editor, 
+      see <em><a href="d.labels.html">d.labels</a></em>.</dd></li>
 
-  <li><dt><img src="icons/grass2/layer-grid-add.png">&nbsp;
+  <li><dt><img src="icons/grass/module-d.geodesic.gif">&nbsp;
       <em>Add geodesic line layer</em></dt>
     <dd>Add layer to display geodesic line for latitude/longitude locations only,
       see <em><a href="d.geodesic.html">d.geodesic</a></em></dd></li>
 
-  <li><dt><img src="icons/grass2/layer-grid-add.png">&nbsp;
+  <li><dt><img src="icons/grass/module-d.geodesic.gif">&nbsp;
       <em>Add rhumbline layer</em>
       <dd>Add layer to display rhumblines (for latitude/longitude locations only),
         see <em><a href="d.rhumbline.html">d.rhumbline</a></em>.</dd></li>
@@ -276,23 +280,30 @@ d.text text=Population\ density
 
 <h3>Map Display Window</h3>
 
-This component includes toolbar area (set of toolbars), map canvas
-where a map composition is displayed, and the statusbar.
+The map display window includes toolbar that can be docked and undocked from 
+the window, a map canvas where a map composition of one or more layers is 
+displayed, and a statusbar with information about the geographic region of
+the maps displayed.
 
 <center>
   <br><img src="wxGUI_map_display.jpg" alt="Map Display Window"><br><br>
 </center>
 
-Each Map Display Window has a unique layer tree and region
-setting. The window contains a toolbar with buttons to manage the map
-in the display (zoom and pan), providing tools for query and distance
-measurement, and exporting or printing the display.
+Each Map Display Window has a unique layer tree (in the layer manager) 
+and geographic <em>region</em> setting. At the top of the window is a 
+toolbar with buttons to manage the map in the display (render, erase, zoom 
+and pan), for query and and analysis (distance measurement, profile, 
+and histogram creation), to overlay map elements onto the display (scale,
+north arrow, legend, and custom text), and to export or print the display.
 
 <p>
-In the statusbar can be displayed the geographic coordinates under the
-cursor, current geographical region extent, computational region
-(including graphical visualization in map display), map display
-geometry (number of rows, columns, resolution) and map scale.
+In the statusbar, the user can choose to display the geographic coordinates 
+under the cursor, current geographical region extent, computational region
+(including graphical visualization in map display), map display geometry 
+(number of rows, columns, resolution) and map scale. Checking the 
+<em>render</em> button in the statusbar will cause the map display to update
+automatically any time a map is added to, removed from, or changed in its
+layer tree.
 
 <p>
 It is important to note that zooming in any display will
@@ -307,35 +318,39 @@ the computational region extents.
 <dl>
 
 <dt><img src="icons/grass2/show.png">&nbsp;
-  <em>Display active layers (current region)</em></dt>
-<dd>Displays all active layers from layer tree at current resolution
-and region extents for that map display window.</dd>
+  <em>Display map</em></dt>
+<dd>Displays all active layers from layer tree and re-renders for display
+any layers that have changed since the last time the display was updated, 
+including layers added or removed.</dd>
 
 <dt><img src="icons/grass2/layer-redraw.png">&nbsp;
-  <em>Re-render and display all active
-layers and zoom to current region</em></dt>
-<dd>Resets the region to the display resolution and extents and forces
-re-display and re-rendering all active layers.</dd>
+  <em>Re-render map</em></dt>
+<dd>Re-renders all active layers regardless of whether they have changed
+or not.</dd>
 
 <dt><img src="icons/grass2/erase.png">&nbsp;
-  <em>Erase display content</em></dt>
-<dd>Erases the currently selected map display to a white background;
-also removes all frames,
+  <em>Erase display</em></dt>
+<dd>Erases the currently selected map display to a white background.
 see <em><a href="d.erase.html">d.erase</a>, <a href="d.frame.html">d.frame
 -e</a></em>.</dd>
 
 <dt><img src="icons/grass2/pointer.png">&nbsp;
-  <em>Arrow cursor</em></dt>
+  <em>Pointer</em></dt>
 <dd>Select arrow cursor for map display.</dd>
 
 <dt><img src="icons/grass2/info.png">&nbsp;
-  <em>Query tool (select a map first)</em></dt>
-<dd>Query selected raster, RGB raster (all three map channels will be
+  <em>Query raster/vector maps</em></dt>
+<dd>Opens a dropdown menu that allows user to select to:<br>
+  <ul>
+    <li><dd>Query selected raster, RGB raster (all three map channels will be
 queried), or vector map(s) using the mouse. Map(s) must be selected
 before query.  Vector charts and thematic vector maps cannot be
-queried. The results of the query will be displayed in the console
-window,
-see <em><a href="r.what.html">r.what</a>, <a href="v.what.html">v.what</a></em>.</dd>
+queried. The results of the query will be displayed in the console window,
+see <em><a href="r.what.html">r.what</a>, <a href="v.what.html">v.what</a></em>.</dd></li>
+    <li><dd>Query selected vector map in edit mode. The results of the query 
+    will be displayed in a form that permits editing of the queried vector
+    attributes.</dd></li>
+  </ul>
 
 <dt><img src="icons/grass2/pan.png">&nbsp;
   <em>Pan</em></dt>
@@ -372,79 +387,107 @@ other GIS processes,
 see <em><a href="g.region.html">g.region</a></em>.</dd>
 
 <dt><img src="icons/grass2/zoom-last.png">&nbsp;
-  <em>Revert zoom</em></dt>
-<dd>Returns to the previous zoom. Up to 10 levels of zoom back are
+  <em>Return to pervious zoom</em></dt>
+<dd>Returns to the previous zoom extent. Up to 10 levels of zoom back are
 maintained, see <em><a href="g.region.html">g.region</a></em>.</dd>
 
 <dt><img src="icons/grass2/zoom-more.png">&nbsp;
-  <em>Zoom menu</em></dt>
-<dd>Automatic zoom settings menu. Zoom to match the extents of a selected
-map, zoom to match the computational region (set with
-<em>g.region</em>), zoom to match the extents of a saved region or
-save the current extents to a named region file, or to set
-computational region (the mapset's <tt>WIND</tt> file) to match the
-current display extents (does not change the resolution).
-See <em><a href="g.region.html">g.region</a></em>.</dd>
+  <em>Zoom options</em></dt>
+<dd>Opens a dropdown menu that allows user to:<br>
+  <ul>
+    <li>Zoom to match the extents of a selected map</li>
+    <li>Zoom to match the computational region (set with <em>g.region</em>)</li>
+    <li>Zoom to match the extents of the default region</li> 
+    <li>Zoom to match the extents of a saved region</li> 
+    <li>Set computational region (the mapset's <tt>WIND</tt> file) to match the
+        current display extents (does not change the resolution),
+        see <em><a href="g.region.html">g.region</a></em>.</dd>
+    <li>Save display geometry (current extents) to a named region file</li>
+  </ul>
 
 <dt><img src="icons/grass2/layer-raster-analyze.png">&nbsp;
   <em>Analyze menu</em></dt>
-<dd>Contains functions for distance measurement, creating histogram or
-profile tool.</dd>
+<dd>Opens a dropdown menu with:<br>
 
-<dt><img src="icons/grass2/measure-length.png">&nbsp;
-  <em>Distance measurement tool</em></dt>
-<dd>Interactive measurement of lengths defined with the mouse. The
-length of each segment and the cumulative length of all segments
-measuered is displayed in the command output window frame. Lengths are
-measured in the current measurement unit,
-see <em><a href="d.measure.html">d.measure</a></em>.</dd>
+  <ul>
+    <li> <dt><img src="icons/grass2/measure-length.png">&nbsp;
+         <em>Distance measurement tool</em></dt>
+        <dd>Interactive measurement of lengths defined with the mouse. The
+        length of each segment and the cumulative length of all segments
+        measuered is displayed in the command output window frame. Lengths are
+        measured in the current measurement unit,
+        see <em><a href="d.measure.html">d.measure</a></em>.</dd></li>
 
-<dt><img src="icons/grass2/layer-raster-profile.png">&nbsp;
-  <em>Profile tool</em></dt>
-<dd>Interactively create profile of a raster map. Profile transect is
-drawn with the mouse in map display. The profile may be of the
-displayed map or a different map,
-see <em><a href="gm_profile.html">Profile Tool help
-page</a></em>.</dd>
+    <li><dt><img src="icons/grass2/layer-raster-profile.png">&nbsp;
+        <em>Profile tool</em></dt>
+      <dd>Interactively create profile of a raster map. Profile transect is
+      drawn with the mouse in map display. The profile may be of the
+      displayed map or a different map. Up to three maps can be profiled 
+      simultaneously, 
+      see <em><a href="gm_profile.html">Profile Tool help page</a></em>.</dd></li>
 
-<dt><img src="icons/grass2/layer-raster-histogram.png">&nbsp;
-  Display histogram of selected raster map</dt>
-<dd>Displays histogram of selected raster map or image in new window,
-see <em><a href="d.histogram.html">d.histogram</a></em>.</dd>
+    <li><dt><img src="icons/grass2/layer-raster-histogram.png">&nbsp;
+        <em>Histogram tool</em></dt>
+        <dd>Displays histogram of selected raster map or image in new window,
+        see <em><a href="d.histogram.html">d.histogram</a></em>.</dd></li>
+   </ul>
 
-<dt><img src="icons/grass2/element-add.png">&nbsp;
-  Add overlay</dt>
-<dd>Adds overlay to map display like barscale, north arrow, text.</dd>
+<dt><img src="icons/grass2/overlay-add.png">&nbsp;
+    <em>Add overlay</em></dt>
+    <dd>opens a dropdown menu that allows user to:<br>
 
-<dt><img src="icons/grass2/scalebar-add.png">&nbsp;
-  <em>Add scalebar and north arrow</em></dt>
-<dd>Adds layer to display a combined scalebar and north arrow. Options
-include scalebar placement (using screen coordinates or a mouse),
-scalebar format, and scalebar colors,
-see <em><a href="d.barscale.html">d.barscale</a></em>.</dd>
+  <ul>
+    <li> <dt><img src="icons/grass2/scalebar-add.png">&nbsp;
+         <em>Add scalebar and north arrow</em></dt>
+         <dd>Adds layer to display a combined scalebar and north arrow. Options
+         include scalebar placement (using screen coordinates or a mouse),
+         scalebar format, and scalebar colors,
+         see <em><a href="d.barscale.html">d.barscale</a></em>.</dd></li>
 
-<dt><img src="icons/grass2/legend-add.png">&nbsp;
-  <em>Add raster map legend</em></dt>
-<dd>Adds layer to display with legend of selected raster map,
-see <em><a href="d.legend.html">d.legend</a></em>.</dd>
+    <li><dt><img src="icons/grass2/legend-add.png">&nbsp;
+        <em>Add raster map legend</em></dt>
+        <dd>Adds layer to display with legend of selected raster map,
+        see <em><a href="d.legend.html">d.legend</a></em>.</dd></li>
 
-<dt><img src="icons/grass2/text-add.png">&nbsp;
-  <em>Add text layer</em></dt>
-<dd>Adds layer to display a line of text using default GRASS font
-(selected with <em><a href="d.font.html">d.font</a></em>).  Options
-include: text placement (screen coordinates); and text size, bolding,
-and color, see <em><a href="d.text.html">d.text</a></em>.</dd>
+    <li><dt><img src="icons/grass2/text-add.png">&nbsp;
+        <em>Add text layer</em></dt>
+        <dd>Adds layer to display a line of text using default GRASS font
+        (selected with <em><a href="d.font.html">d.font</a></em>).  Options
+        include: text placement (screen coordinates); and text size, bolding,
+        and color, see <em><a href="d.text.html">d.text</a></em>.</dd></li>
+  </ul>
 
 <dt><img src="icons/grass2/map-export.png">&nbsp;
-  <em>Export map display</em></dt>
-<dd>Exports visible map display to different raster graphic formats.</dd>
+  <em>Save display to graphic file</em></dt>
+<dd>Save the visible image in map display to different raster graphic formats.</dd>
 
 <dt><img src="icons/grass2/print.png">&nbsp;
   <em>Print map</em></dt>
-<dd>Prints map on the UNIX <i>lpr</i> printer or PostScript device;
+<dd>Prints map on system native printer or PostScript device;
 saves visible map display (including PostScript text and labels) to PDF
-or EPS file. Requires <tt>ghostscript</tt> for all output except EPS.</dd>
+or EPS file.</dd>
 
+<br>
+<dt><em>Map display mode</em></dt>
+<dd>Opens a dropdown menu for selecting different display mode<br>
+  <ul>
+    <li><dt><em>2D view mode</em></dt>
+    <dd>Normal GIS display. All active layers are composited and displayed
+    in 2D mode.</dd></li>
+
+    <li><dt><em>3D view mode</em></dt>
+    <dd>Experimental replacement for NVIZ. Displays all active layers in 
+    3D perspective using OpenGL. A new control panel opens to manage the 
+    3D view. 3D view can be zoomed, panned, rotated, and tilted. The 
+    vertical exaggeration of rasters and 3D vectors can be set. Various 
+    color and lighten settings are possible. Not yet functional for 
+    Windows platforms</dd></li>
+
+    <li><dt><em>Digitize mode</em></dt>
+    <dd>Puts display into vector digitizing mode and opens a new digitizing 
+    toolbar. The user can digitize a new map or edit an existing
+    map. Not yet functional for Windows platforms</dd></li>
+  </ul>
 </dl>
 
 <h2>CONFIGURATION</h2>
@@ -468,11 +511,16 @@ this <a href="wxGUI.Icons.html">page</a>.
 <p>
 See also <a href="http://grass.osgeo.org/wiki/WxGUI">Wiki</a> page.
 
+<p>
+<em>
+<a href="gis.m.html">TCL/TK-based GIS Manager</a>,
+<a href="d.m.html">TCL/TK-based Display Manager</a>
+</em>
+
 <h2>AUTHORS</h2>
 
-Head developer: Martin Landa, FBK-irst, Trento, Italy<br><br>
-
-Michael Barton,<br>
+Michael Barton, Arizona State University, USA<br>
+Martin Landa, FBK-irst, Trento, Italy<br>
 Daniel Calvelo Aros,<br>
 Jachym Cepicky
 
