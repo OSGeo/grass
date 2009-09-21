@@ -119,7 +119,12 @@ def main():
         text = fh.read()
         fh.close()
         lines = text.splitlines()
-        records = [line.split() for line in lines]
+        records = list()
+        for line in lines:
+            if line.startswith("#"):
+                # skip comments
+                continue
+            records.append(line.split())
         records = [record for record in records if record[0] != 'nv']
         relative = False
         absolute = False
@@ -140,12 +145,12 @@ def main():
 		maxval = min(maxval, 2500000)
 	    grad = tmp_grad_abs
 	    grass.mapcalc("$grad = if(row()==1, float($min), float($max))",
-                          grad = tmp_grad_abs, min = minval, max = maxval)
+                          grad = tmp_grad_abs, min = minval, max = maxval, quiet = True)
 	else:
             grad = tmp_grad_rel
 
         grass.run_command("r.colors", map = grad, color = table, quiet = True)
-        grass.run_command("d.colortable", flags = 'n', map = grad)
+        grass.run_command("d.colortable", flags = 'n', map = grad, quiet = True)
 
 	outfile = os.path.join(output_dir, "Colortable_%s.png" % table)
 	convert_and_rotate(tmp_img, outfile)
