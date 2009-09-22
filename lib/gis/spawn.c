@@ -211,30 +211,58 @@ struct spawn
 
 #ifdef __MINGW32__
 
-static void do_redirects(struct redirect *redirects, int num_redirects)
+static void do_redirects(const struct redirect *redirects, int num_redirects)
 {
     if (num_redirects > 0)
 	G_fatal_error
 	    ("G_spawn_ex: redirection not (yet) supported on Windows");
 }
 
-static char **do_bindings(char **env, struct binding *bindings,
-			  int num_bindings)
+static void add_binding(const char **env, int *pnum, const struct binding *b)
 {
-    if (num_bindings > 0)
-	G_fatal_error
-	    ("G_spawn_ex: redirection not (yet) supported on Windows");
+    char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
+    int n = *pnum;
+    int i;
 
-    return env;
+    sprintf(str, "%s=%s", b->var, b->val);
+
+    for (i = 0; i < n; i++)
+	if (G_strcasecmp(env[i], b->var) == 0) {
+	    env[i] = str;
+	    return;
+	}
+
+    env[n++] = str;
+    *pnum = n;
 }
 
-static int do_spawn(struct spawn *sp, const char *command)
+static const char **do_bindings(const struct binding *bindings, int num_bindings)
 {
-    char **env;
+    const char **newenv;
+    int i, n;
+
+    for (i = 0; _environ[i]; i++)
+	;
+    n = i;
+
+    newenv = G_malloc((num_bindings + n + 1) * sizeof(char *));
+
+    for (i = 0; i < n; i++)
+	newenv[i] = _environ[i];
+
+    for (i = 0; i < num_bindings; i++)
+	add_binding(newenv, &n, &bindings[i]);
+
+    return newenv;
+}
+
+static int do_spawn(const struct spawn *sp, const char *command)
+{
+    const char **env;
     int status;
 
     do_redirects(sp->redirects, sp->num_redirects);
-    env = do_bindings(_environ, sp->bindings, sp->num_bindings);
+    env = do_bindings(sp->bindings, sp->num_bindings);
 
     status =
 	spawnvpe(sp->background ? _P_NOWAIT : _P_WAIT, command, sp->args, env);
@@ -247,13 +275,13 @@ static int do_spawn(struct spawn *sp, const char *command)
 
 #else /* __MINGW32__ */
 
-static int undo_signals(struct signal *signals, int num_signals, int which)
+static int undo_signals(const struct signal *signals, int num_signals, int which)
 {
     int error = 0;
     int i;
 
     for (i = num_signals - 1; i >= 0; i--) {
-	struct signal *s = &signals[i];
+	const struct signal *s = &signals[i];
 
 	if (s->which != which)
 	    continue;
@@ -380,12 +408,12 @@ static void do_redirects(struct redirect *redirects, int num_redirects)
     }
 }
 
-static void do_bindings(struct binding *bindings, int num_bindings)
+static void do_bindings(const struct binding *bindings, int num_bindings)
 {
     int i;
 
     for (i = 0; i < num_bindings; i++) {
-	struct binding *b = &bindings[i];
+	const struct binding *b = &bindings[i];
 	char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
 
 	sprintf(str, "%s=%s", b->var, b->val);
