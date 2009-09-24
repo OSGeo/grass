@@ -703,15 +703,10 @@ class ProfileFrame(wx.Frame):
         Calls OptDialog class.
         """
         dlg = OptDialog(parent=self, id=wx.ID_ANY, title=_('Profile settings'))
+        btnval = dlg.ShowModal()
 
-        if dlg.ShowModal() == wx.ID_OK:
-            dlg.UpdateSettings()
-
-            self.SetGraphStyle()
-            if self.profile:
-                self.DrawPlot()
-
-        dlg.Destroy()
+        if btnval == wx.ID_SAVE or btnval == wx.ID_CANCEL:
+            dlg.Destroy()
 
     def PrintMenu(self, event):
         """
@@ -1423,13 +1418,18 @@ class OptDialog(wx.Dialog):
         fileSettings['profile'] = UserSettings.Get(group='profile')
         file = UserSettings.SaveToFile(fileSettings)
         self.parent.parent.GetLayerManager().goutput.WriteLog(_('Profile settings saved to file \'%s\'.') % file)
+        self.parent.SetGraphStyle()
+        if self.parent.profile:
+            self.parent.DrawPlot()
         self.Close()
 
     def OnApply(self, event):
-        """!Button 'Apply' pressed"""
+        """!Button 'Apply' pressed. Does not close dialog"""
         self.UpdateSettings()
-        self.Close()
-
+        self.parent.SetGraphStyle()
+        if self.parent.profile:
+            self.parent.DrawPlot()
+        
     def OnCancel(self, event):
         """!Button 'Cancel' pressed"""
         self.Close()
