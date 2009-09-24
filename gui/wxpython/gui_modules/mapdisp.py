@@ -1842,7 +1842,7 @@ class MapFrame(wx.Frame):
         
         id = 1 # index for overlay layer in render
 
-        cmd = ['d.legend']
+        cmd = ['d.legend', 'at=5,50,2,5']
         if self.tree.layer_selected and \
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             cmd.append('map=%s' % self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
