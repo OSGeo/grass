@@ -134,6 +134,9 @@ class ProfileFrame(wx.Frame):
             # first (default) profile line
             self.raster[idx]['pline'] = None
             self.raster[idx]['prop'] = UserSettings.Get(group='profile', key='raster' + str(idx))
+            # changing color string to tuple
+            colstr = str(self.raster[idx]['prop']['pcolor'])
+            self.raster[idx]['prop']['pcolor'] = tuple(int(colval) for colval in colstr.strip('()').split(','))
 
         # set raster map name (if given)
         for idx in range(len(rasterList)):
@@ -170,8 +173,15 @@ class ProfileFrame(wx.Frame):
                                                     wx.FONTWEIGHT_NORMAL)
         
         self.properties['marker'] = UserSettings.Get(group='profile', key='marker')
+        # changing color string to tuple
+        colstr = str(self.properties['marker']['color'])
+        self.properties['marker']['color'] = tuple(int(colval) for colval in colstr.strip('()').split(','))
 
         self.properties['grid'] = UserSettings.Get(group='profile', key='grid')
+        # changing color string to tuple
+        colstr = str(self.properties['grid']['color'])
+        self.properties['grid']['color'] = tuple(int(colval) for colval in colstr.strip('()').split(','))
+                
         self.properties['x-axis'] = {}
         
         self.properties['x-axis']['prop'] = UserSettings.Get(group='profile', key='x-axis')
@@ -351,7 +361,6 @@ class ProfileFrame(wx.Frame):
         else:
             self.ylabel = self.ylabel.rstrip(',')
 
-
     def SetGraphStyle(self):
         """
         Set plot and text options
@@ -424,12 +433,12 @@ class ProfileFrame(wx.Frame):
         region = grass.region()
         curr_res = min(float(region['nsres']),float(region['ewres']))
         transect_rec = 0
-        print "transect length=",self.transect_length
-        print "current res=",curr_res
+        print "transect length = "+str(self.transect_length)
+        print "current resolution = "+str(curr_res)
         if self.transect_length / curr_res > 500:
             transect_res = self.transect_length / 500
         else: transect_res = curr_res
-        print "transect res=",transect_res
+        print "transect resolution = "+str(transect_res)
                 
         try:
             ret = gcmd.RunCommand("r.profile",
@@ -492,6 +501,18 @@ class ProfileFrame(wx.Frame):
 
         # graph the distance, value pairs for the transect
         self.plotlist = []
+        if len(self.seglist) > 0 :
+            self.ppoints = plot.PolyMarker(self.seglist,
+                                           legend=' ' + self.properties['marker']['legend'],
+                                           colour=wx.Color(self.properties['marker']['color'][0],
+                                                           self.properties['marker']['color'][1],
+                                                           self.properties['marker']['color'][2],
+                                                           255),
+                                           size=self.properties['marker']['size'],
+                                           fillstyle=self.ptfilldict[self.properties['marker']['fill']],
+                                           marker=self.properties['marker']['type'])
+            self.plotlist.append(self.ppoints)
+
         for r in self.raster.itervalues():
             if len(r['datalist']) > 0:
                 col = wx.Color(r['prop']['pcolor'][0],
@@ -505,18 +526,6 @@ class ProfileFrame(wx.Frame):
                                            legend=r['plegend'])
 
                 self.plotlist.append(r['pline'])
-
-        if len(self.seglist) > 0 :
-            self.ppoints = plot.PolyMarker(self.seglist,
-                                           legend=' ' + self.properties['marker']['legend'],
-                                           colour=wx.Color(self.properties['marker']['color'][0],
-                                                           self.properties['marker']['color'][1],
-                                                           self.properties['marker']['color'][2],
-                                                           255),
-                                           size=self.properties['marker']['size'],
-                                           fillstyle=self.ptfilldict[self.properties['marker']['fill']],
-                                           marker=self.properties['marker']['type'])
-            self.plotlist.append(self.ppoints)
 
         self.profile = plot.PlotGraphics(self.plotlist,
                                          self.ptitle,
@@ -705,7 +714,11 @@ class ProfileFrame(wx.Frame):
         dlg = OptDialog(parent=self, id=wx.ID_ANY, title=_('Profile settings'))
         btnval = dlg.ShowModal()
 
-        if btnval == wx.ID_SAVE or btnval == wx.ID_CANCEL:
+        if btnval == wx.ID_SAVE:
+            dlg.UpdateSettings()			
+            self.SetGraphStyle()			
+            dlg.Destroy()            
+        elif btnval == wx.ID_CANCEL:
             dlg.Destroy()
 
     def PrintMenu(self, event):
