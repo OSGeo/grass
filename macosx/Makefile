@@ -33,6 +33,8 @@ PACKAGEMAKER = /Developer/usr/bin/packagemaker
 PKG_INST_DIR = ${prefix}
 endif
 
+FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT
+
 default: subdirs
 
 include bundle.make
@@ -84,6 +86,7 @@ endif
 install-basic-macosx:
 	${MAKE_DIR_CMD} ${INST_DIR_TARGET}
 	-cd ${GISBASE} ; tar cBf - ${MACOSX_APP_NAME} | (cd ${PREFIX_TARGET} ; tar xBf - ) 2>/dev/null
+	-cd ${GISBASE} ; tar cBf - $(FILES) | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - bin | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - docs | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - driver | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
