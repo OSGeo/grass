@@ -763,7 +763,8 @@ class mainFrame(wx.Frame):
         # add help button
         btnsizer.Add(item=self.btn_help, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
 
-        guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER)
+        guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
+                     border = 30)
 
         if self.parent is not None:
             self.outputType = None
