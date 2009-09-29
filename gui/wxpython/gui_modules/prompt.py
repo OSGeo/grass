@@ -278,7 +278,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         self.Bind(wx.EVT_KILL_FOCUS, self.OnControlChanged)
         self.Bind(wx.EVT_TEXT, self.OnEnteredText)
         self.Bind(wx.EVT_KEY_DOWN , self.OnKeyDown)
-        self.Bind(wx.EVT_LEFT_DOWN, self.OnClick)
+        ### self.Bind(wx.EVT_LEFT_DOWN, self.OnClick)
 
         # if need drop down on left click
         self.dropdown.Bind(wx.EVT_LISTBOX , self.OnListItemSelected, self.dropdownlistbox)
