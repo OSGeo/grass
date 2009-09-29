@@ -71,7 +71,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                         layerType=None):
     """!Get map name from GRASS command
 
-    @param dcmd GRASS command (given as tuple)
+    @param dcmd GRASS command (given as list)
     @param fullyQualified change map name to be fully qualified
     @param force parameter otherwise 'input'/'map'
     @param update change map name in command
@@ -82,7 +82,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
     """
     mapname = ''
 
-    if not dcmd:
+    if len(dcmd) < 1:
         return mapname
     
     if 'd.grid' == dcmd[0]:
@@ -94,41 +94,54 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
     elif 'labels=' in dcmd[0]:
         mapname = dcmd[idx].split('=')[1]+' labels'
     else:
+        params = list()
         for idx in range(len(dcmd)):
-            if param and param in dcmd[idx]:
-                break
-            elif not param:
-                if 'map=' in dcmd[idx] or \
-                        'input=' in dcmd[idx] or \
-                        'red=' in dcmd[idx] or \
-                        'h_map=' in dcmd[idx] or \
-                        'reliefmap' in dcmd[idx]:
-                    break
-            
-        if idx < len(dcmd):
             try:
-                mapname = dcmd[idx].split('=')[1]
-            except IndexError:
-                return ''
+                p, v = dcmd[idx].split('=')
+            except ValueError:
+                continue
             
-            if fullyQualified and '@' not in mapname:
-                if layerType in ('raster', 'vector', '3d-raster'):
-                    try:
-                        if layerType == 'raster':
-                            findType = 'cell'
-                        else:
-                            findType = layerType
-                        result = grass.find_file(mapname, element=findType)
-                    except AttributeError, e: # not found
-                        return ''
-                    if result:
-                        mapname = result['fullname']
+            if p == param:
+                params.append((idx, p, v))
+                break
+            
+            if p in ('map', 'input',
+                     'red', 'blue', 'green',
+                     'h_map', 's_map', 'i_map',
+                     'reliefmap'):
+                params.append((idx, p, v))
+            
+        if len(params) < 1:
+            return mapname
+            
+        mapname = params[0][2]
+        mapset = ''
+        if fullyQualified and '@' not in mapname:
+            if layerType in ('raster', 'vector', '3d-raster'):
+                try:
+                    if layerType == 'raster':
+                        findType = 'cell'
                     else:
-                        mapname += '@' + grass.gisenv()['MAPSET']
+                        findType = layerType
+                    result = grass.find_file(mapname, element=findType)
+                except AttributeError, e: # not found
+                    return ''
+                if result:
+                    mapset = result['mapset']
                 else:
-                    mapname += '@' + grass.gisenv()['MAPSET']
-                dcmd[idx] = dcmd[idx].split('=')[0] + '=' + mapname
-                
+                    mapset = grass.gisenv()['MAPSET']
+            else:
+                mapset = grass.gisenv()['MAPSET']
+            
+            # update dcmd
+            for i, p, v in params:
+                dcmd[i] = p + '=' + v + '@' + mapset
+    
+        maps = list()
+        for i, p, v in params:
+            maps.append(dcmd[i].split('=')[1])
+        mapname = '\n'.join(maps)
+    
     return mapname
 
 def GetValidLayerName(name):
