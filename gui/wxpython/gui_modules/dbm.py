@@ -145,12 +145,13 @@ class VirtualAttributeList(wx.ListCtrl,
         self.mapDBInfo = mapDBInfo
         self.LoadData(self.layer)
 
-    def LoadData(self, layer, columns=None, where=None):
+    def LoadData(self, layer, columns=None, where=None, sql=None):
         """!Load data into list
 
         @param layer layer number
-        @param columns list of columns for output
-        @param where where statement
+        @param columns list of columns for output (-> v.db.select)
+        @param where where statement (-> v.db.select)
+        @param sql full sql statement (-> db.select)
         
         @return id of key column 
         @return -1 if key column is not displayed
@@ -195,23 +196,31 @@ class VirtualAttributeList(wx.ListCtrl,
         # TODO: more effective way should be implemented...
         outFile = tempfile.NamedTemporaryFile(mode='w+b')
         
-        if columns:
-            ret = gcmd.RunCommand('v.db.select',
+        if sql:
+            ret = gcmd.RunCommand('db.select',
                                   quiet = True,
+                                  parent = self,
                                   flags = 'c',
-                                  map = self.mapDBInfo.map,
-                                  layer = layer,
-                                  columns = ','.join(columns),
-                                  where = where,
-                                  stdout=outFile)
+                                  sql = sql,
+                                  output = outFile.name)
         else:
-           ret = gcmd.RunCommand('v.db.select',
-                                 quiet = True,
-                                 flags = 'c',
-                                 map = self.mapDBInfo.map,
-                                 layer = layer,
-                                 where = where,
-                                 stdout=outFile) 
+            if columns:
+                ret = gcmd.RunCommand('v.db.select',
+                                      quiet = True,
+                                      flags = 'c',
+                                      map = self.mapDBInfo.map,
+                                      layer = layer,
+                                      columns = ','.join(columns),
+                                      where = where,
+                                      stdout=outFile)
+            else:
+                ret = gcmd.RunCommand('v.db.select',
+                                      quiet = True,
+                                      flags = 'c',
+                                      map = self.mapDBInfo.map,
+                                      layer = layer,
+                                      where = where,
+                                      stdout=outFile) 
         
         # These two should probably be passed to init more cleanly
         # setting the numbers of items = number of elements in the dictionary
@@ -244,6 +253,7 @@ class VirtualAttributeList(wx.ListCtrl,
         while True:
             # os.linesep doesn't work here (MSYS)
             record = outFile.readline().replace('\n', '')
+            
             if not record:
                 break
            
@@ -1787,6 +1797,8 @@ class AttributeManager(wx.Frame):
         """!Apply simple/advanced sql statement"""
         keyColumn = -1 # index of key column
         listWin = self.FindWindowById(self.layerPage[self.layer]['data'])
+        sql = None
+        
         if self.FindWindowById(self.layerPage[self.layer]['simple']).GetValue():
             # simple sql statement
             whereCol = self.FindWindowById(self.layerPage[self.layer]['whereColumn']).GetStringSelection()
@@ -1806,6 +1818,8 @@ class AttributeManager(wx.Frame):
             win = self.FindWindowById(self.layerPage[self.layer]['statement'])
             try:
                 cols, where = self.ValidateSelectStatement(win.GetValue())
+                if cols is None and where is None:
+                    sql = win.GetValue()
             except TypeError:
                 wx.MessageBox(parent=self,
                               message=_("Loading attribute data failed.\n"
@@ -1815,10 +1829,10 @@ class AttributeManager(wx.Frame):
                 cols = None
                 where = None
             
-            if cols or where:
+            if cols or where or sql:
                 try:
                     keyColumn = listWin.LoadData(self.layer, columns=cols,
-                                                 where=where)
+                                                 where=where, sql=sql)
                 except gcmd.CmdError, e:
                     wx.MessageBox(parent=self,
                                   message=_("Loading attribute data failed.\n\n%s") % e.message,
@@ -1826,11 +1840,14 @@ class AttributeManager(wx.Frame):
                     win.SetValue("SELECT * FROM %s" % self.mapDBInfo.layers[self.layer]['table'])
         
         # sort by key column
-        if keyColumn > -1:
-            listWin.SortListItems(col=keyColumn, ascending=True)
+        if sql and 'order by' in sql.lower():
+            pass # don't order by key column
         else:
-            listWin.SortListItems(col=0, ascending=True) 
-
+            if keyColumn > -1:
+                listWin.SortListItems(col=keyColumn, ascending=True)
+            else:
+                listWin.SortListItems(col=0, ascending=True) 
+        
         # update statusbar
         self.log.write(_("Number of loaded records: %d") % \
                            self.FindWindowById(self.layerPage[self.layer]['data']).GetItemCount())
@@ -1868,7 +1885,7 @@ class AttributeManager(wx.Frame):
             if index > -1:
                 where = statement[index+6:]
             else:
-                return None
+                where = None
         else:
             where = None
         
@@ -2042,18 +2059,19 @@ class AttributeManager(wx.Frame):
         """!Get vector name"""
         return self.vectorName
     
-    def LoadData(self, layer, columns=None, where=None):
+    def LoadData(self, layer, columns=None, where=None, sql=None):
         """!Load data into list
 
         @param layer layer number
         @param columns list of columns for output
         @param where where statement
-        
+        @param sql full sql statement
+
         @return id of key column 
         @return -1 if key column is not displayed
         """
         listWin = self.FindWindowById(self.layerPage[layer]['data'])
-        return listWin.LoadData(layer, columns, where)
+        return listWin.LoadData(layer, columns, where, sql)
     
 class TableListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
