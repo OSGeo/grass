@@ -232,6 +232,11 @@ class MenuTreeWindow(wx.Frame):
                 self.tree.ToggleItemSelection(itemSelected)
             self.tree.itemSelected = None
 
+        if self.tree.itemSelected:
+            self.btnRun.Enable()
+        else:
+            self.btnRun.Enable(False)
+
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         element = self.searchDict[self.searchBy.GetStringSelection()]
@@ -244,12 +249,6 @@ class MenuTreeWindow(wx.Frame):
             self.statusbar.SetStatusText(_("%d items match") % nItems, 0)
         else:
             self.statusbar.SetStatusText("", 0)
-        
-        if nItems > 0:
-            self.tree.itemSelected = self.tree.itemsMarked[0]
-            self.btnRun.Enable()
-        else:
-            self.btnRun.Enable(False)
         
         event.Skip()
         
