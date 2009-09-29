@@ -1260,6 +1260,7 @@ class EPSGPage(TitledPage):
         # buttons
         self.bbrowse = self.MakeButton(_("Browse"))
         self.bbcodes = self.MakeButton(_("Reload EPSG Codes"))
+        self.bbsearch = self.MakeButton(_("Search"))
 
         # search box
         self.searchb = wx.SearchCtrl(self, size=(200,-1),
@@ -1307,7 +1308,12 @@ class EPSGPage(TitledPage):
         self.sizer.Add(item=self.bbcodes,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5, pos=(2, 4))
+        self.sizer.Add(item=self.bbsearch,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 4))
+
 
         self.sizer.AddGrowableRow(4)
         self.sizer.Add(item=self.epsglist,
@@ -1317,6 +1323,7 @@ class EPSGPage(TitledPage):
         # events
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
         self.bbcodes.Bind(wx.EVT_BUTTON, self.OnBrowseCodes)
+        self.bbsearch.Bind(wx.EVT_BUTTON, self.OnSearch)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.tcode.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
