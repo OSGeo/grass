@@ -5,8 +5,7 @@
 
 int do_astar(void)
 {
-    POINT *point;
-    int doer, count;
+    int count;
     SHORT upr, upc, r, c, ct_dir;
     CELL alt_val, alt_up, asp_up, wat_val;
     CELL in_val, drain_val;
@@ -17,44 +16,31 @@ int do_astar(void)
 
     count = 0;
     first_astar = heap_index[1];
+    first_cum = do_points;
 
-    /* A * Search: search uphill, get downhill path */
-    while (first_astar != -1) {
+    /* A* Search: search uphill, get downhill paths */
+    while (heap_size > 0) {
 	G_percent(count++, do_points, 1);
 
 	/* start with point with lowest elevation, in case of equal elevation
 	 * of following points, oldest point = point added earliest */
-	/* old routine: astar_pts[first_astar] (doer = first_astar) */
-	/* new routine: astar_pts[heap_index[1]] */
+	index_doer = astar_pts[1];
 
-	doer = heap_index[1];
-
-	point = &(astar_pts[doer]);
-
-	/* drop astar_pts[doer] from heap */
-	/* necessary to protect the current point (doer) from modification */
-	/* equivalent to first_astar = point->next in old code */
 	drop_pt();
 
-	/* can go, dragged on from old code: replace first_astar with heap_index[1] in line 22 */
-	first_astar = heap_index[1];
+	/* add astar points to sorted list for flow accumulation */
+	astar_pts[first_cum] = index_doer;
+	first_cum--;
 
-	/* downhill path for flow accumulation is set here */
-	/* this path determines the order for flow accumulation calculation */
-	point->nxt = first_cum;
-	first_cum = doer;
+	seg_index_rc(alt_seg, index_doer, &r, &c);
 
-	r = point->r;
-	c = point->c;
+	G_debug(3, "A* Search: row %d, column %d, ", r, c);
 
-	G_debug(3, "R:%2d C:%2d, ", r, c);
-
-	index_doer = SEG_INDEX(alt_seg, r, c);
 	alt_val = alt[index_doer];
 
 	FLAG_SET(worked, r, c);
 
-	/* check all neighbours */
+	/* check neighbours */
 	for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 	    /* get r, c (upr, upc) for this neighbour */
 	    upr = r + nextdr[ct_dir];
@@ -73,9 +59,8 @@ int do_astar(void)
 		    asp[index_up] = drain_val;
 		}
 		else {
-		    /* check if neighbour has been worked on,
-		     * if not, update values for asp and wat */
 		    in_val = FLAG_GET(worked, upr, upc);
+		    /* neighbour is edge in list, not yet worked */
 		    if (in_val == 0) {
 			asp_up = asp[index_up];
 			if (asp_up < 0) {
@@ -84,23 +69,33 @@ int do_astar(void)
 			    wat_val = wat[index_doer];
 			    if (wat_val > 0)
 				wat[index_doer] = -wat_val;
-
-			    /* replace(upr, upc, r, c); */	/* alt_up used to be */
 			}
 		    }
 		}
 	    }
 	}
     }
-    /* this was a lot of indentation, all in the sake of speed... */
-    /* improve code aesthetics? */
-    G_percent(count, do_points, 3);	/* finish it */
+    /* this was a lot of indentation, improve code aesthetics? */
+    G_percent(count, do_points, 1);	/* finish it */
     if (mfd == 0)
 	flag_destroy(worked);
 
     flag_destroy(in_list);
     G_free(heap_index);
 
+    return 0;
+}
+
+/* compare two heap points */
+/* return 1 if a < b else 0 */
+int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
+{
+    if (elea < eleb)
+	return 1;
+    else if (elea == eleb) {
+	if (addeda < addedb)
+	    return 1;
+    }
     return 0;
 }
 
@@ -117,14 +112,9 @@ int add_pt(SHORT r, SHORT c, CELL ele, CELL downe)
     if (heap_size > do_points)
 	G_fatal_error(_("heapsize too large"));
 
-    heap_index[heap_size] = nxt_avail_pt;
+    heap_index[heap_size] = nxt_avail_pt++;
 
-    astar_pts[nxt_avail_pt].r = r;
-    astar_pts[nxt_avail_pt].c = c;
-/*    astar_pts[nxt_avail_pt].downr = downr;
-    astar_pts[nxt_avail_pt].downc = downc; */
-
-    nxt_avail_pt++;
+    astar_pts[heap_size] = SEG_INDEX(alt_seg, r, c);
 
     /* sift up: move new point towards top of heap */
 
@@ -155,29 +145,18 @@ int drop_pt(void)
     while ((child = GET_CHILD(parent)) <= heap_size) {
 	/* select child with lower ele, if equal, older child
 	 * older child is older startpoint for flow path, important */
-	ele =
-	    alt[SEG_INDEX
-		(alt_seg, astar_pts[heap_index[child]].r,
-		 astar_pts[heap_index[child]].c)];
+	ele = alt[astar_pts[child]];
 	if (child < heap_size) {
 	    childr = child + 1;
-	    i = child + 3; /* change the number, GET_CHILD() and GET_PARENT() to play with different d-ary heaps */
+	    i = child + 3;
 	    while (childr <= heap_size && childr < i) {
-		eler =
-		    alt[SEG_INDEX
-			(alt_seg, astar_pts[heap_index[childr]].r,
-			 astar_pts[heap_index[childr]].c)];
-		if (eler < ele) {
+		eler = alt[astar_pts[childr]];
+		/* get smallest child */
+		if (cmp_pnt(eler, ele, heap_index[childr], heap_index[child])) {
 		    child = childr;
 		    ele = eler;
 		}
-		/* make sure we get the oldest child */
-		else if (ele == eler &&
-			 heap_index[child] > heap_index[childr]) {
-		    child = childr;
-		}
 		childr++;
-		/* i++; */
 	    }
 	    /* break if childr > last entry? that saves sifting up again
 	     * OTOH, this is another comparison
@@ -192,6 +171,7 @@ int drop_pt(void)
 	/* move hole down */
 
 	heap_index[parent] = heap_index[child];
+	astar_pts[parent] = astar_pts[child];
 	parent = child;
 
     }
@@ -199,14 +179,11 @@ int drop_pt(void)
     /* hole is in lowest layer, move to heap end */
     if (parent < heap_size) {
 	heap_index[parent] = heap_index[heap_size];
+	astar_pts[parent] = astar_pts[heap_size];
 
-	ele =
-	    alt[SEG_INDEX
-		(alt_seg, astar_pts[heap_index[parent]].r,
-		 astar_pts[heap_index[parent]].c)];
+	ele = alt[astar_pts[parent]];
 	/* sift up last swapped point, only necessary if hole moved to heap end */
 	sift_up(parent, ele);
-
     }
 
     /* the actual drop */
@@ -218,43 +195,33 @@ int drop_pt(void)
 /* standard sift-up routine for d-ary min heap */
 int sift_up(int start, CELL ele)
 {
-    register int parent, parentp, child, childp;
+    register int parent, child, child_idx, child_added;
     CELL elep;
 
     child = start;
-    childp = heap_index[child];
+    child_added = heap_index[child];
+    child_idx = astar_pts[child];
 
     while (child > 1) {
 	parent = GET_PARENT(child);
-	parentp = heap_index[parent];
 
-	elep =
-	    alt[SEG_INDEX
-		(alt_seg, astar_pts[parentp].r, astar_pts[parentp].c)];
-	/* parent ele higher */
-	if (elep > ele) {
-
+	elep = alt[astar_pts[parent]];
+	/* child smaller */
+	if (cmp_pnt(ele, elep, child_added, heap_index[parent])) {
 	    /* push parent point down */
-	    heap_index[child] = parentp;
+	    heap_index[child] = heap_index[parent];
+	    astar_pts[child] = astar_pts[parent];
 	    child = parent;
-
-	}
-	/* same ele, but parent is younger */
-	else if (elep == ele && parentp > childp) {
-
-	    /* push parent point down */
-	    heap_index[child] = parentp;
-	    child = parent;
-
 	}
 	else
 	    /* no more sifting up, found new slot for child */
 	    break;
     }
 
-    /* set heap_index for child */
+    /* put point in new slot */
     if (child < start) {
-	heap_index[child] = childp;
+	heap_index[child] = child_added;
+	astar_pts[child] = child_idx;
     }
 
     return 0;
@@ -286,6 +253,7 @@ int replace(			/* ele was in there */
 /* CELL ele;  */
 {
     int now, heap_run;
+    int r2, c2;
 
     /* find the current neighbour point and 
      * set flow direction to focus point */
@@ -294,7 +262,9 @@ int replace(			/* ele was in there */
 
     while (heap_run <= heap_size) {
 	now = heap_index[heap_run];
-	if (astar_pts[now].r == upr && astar_pts[now].c == upc) {
+	/* if (astar_pts[now].r == upr && astar_pts[now].c == upc) { */
+	seg_index_rc(alt_seg, astar_pts[now], &r2, &c2);
+	if (r2 == upr && c2 == upc) {
 	    /*astar_pts[now].downr = r;
 	    astar_pts[now].downc = c; */
 	    return 0;

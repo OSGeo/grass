@@ -36,7 +36,7 @@
 #define POINT       struct points
 POINT {
     SHORT r, c; /* , downr, downc */
-    int nxt;
+    /* int nxt; */
 };
 
 extern struct Cell_head window;
@@ -51,7 +51,7 @@ extern FLAG *worked, *in_list, *s_b, *swale;
 extern RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
 extern RAMSEG r_h_seg, dep_seg;
 extern RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
-extern POINT *astar_pts;
+extern int *astar_pts;
 extern CELL *dis, *alt, *asp, *bas, *haf, *r_h, *dep;
 extern DCELL *wat;
 extern int ril_fd;
@@ -115,6 +115,7 @@ int overland_cells(int, int, CELL, CELL, CELL *);
 
 /* ramseg.c */
 int size_array(int *, int, int);
+int seg_index_rc(int, int, int *, int *);
 
 /* sg_factor.c */
 int sg_factor(void);

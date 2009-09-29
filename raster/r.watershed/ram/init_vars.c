@@ -13,9 +13,10 @@ int init_vars(int argc, char *argv[])
     CELL *buf, alt_value, wat_value, asp_value, block_value;
     DCELL dvalue;
     void *elebuf, *ptr;
-    int fd, index, ele_map_type;
+    int fd, ele_map_type;
     size_t ele_size;
     char MASK_flag;
+    int seg_idx;
 
     G_gisinit(argv[0]);
     ele_flag = wat_flag = asp_flag = pit_flag = run_flag = ril_flag = 0;
@@ -159,7 +160,7 @@ int init_vars(int argc, char *argv[])
 	Rast_get_row(fd, elebuf, r, ele_map_type);
 	ptr = elebuf;
 	for (c = 0; c < ncols; c++) {
-	    index = SEG_INDEX(alt_seg, r, c);
+	    seg_idx = SEG_INDEX(alt_seg, r, c);
 
 	    /* all flags need to be manually set to zero */
 	    flag_unset(swale, r, c);
@@ -188,9 +189,9 @@ int init_vars(int argc, char *argv[])
 		    alt_value = ele_round(dvalue);
 		}
 	    }
-	    alt[index] = alt_value;
+	    alt[seg_idx] = alt_value;
 	    if (er_flag) {
-		r_h[index] = alt_value;
+		r_h[seg_idx] = alt_value;
 	    }
 	    ptr = G_incr_void_ptr(ptr, ele_size);
 	}
@@ -216,8 +217,8 @@ int init_vars(int argc, char *argv[])
 	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		if (MASK_flag) {
-		    index = FLAG_GET(worked, r, c);
-		    if (!index)
+		    block_value = FLAG_GET(worked, r, c);
+		    if (!block_value)
 			wat[SEG_INDEX(wat_seg, r, c)] = buf[c];
 		    else
 			wat[SEG_INDEX(wat_seg, r, c)] = 0.0;
@@ -233,8 +234,8 @@ int init_vars(int argc, char *argv[])
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++) {
 		if (MASK_flag) {
-		    index = FLAG_GET(worked, r, c);
-		    if (!index)
+		    block_value = FLAG_GET(worked, r, c);
+		    if (!block_value)
 			wat[SEG_INDEX(wat_seg, r, c)] = 1.0;
 		}
 		else
@@ -305,7 +306,7 @@ int init_vars(int argc, char *argv[])
 			       sizeof(double));
     }
 
-    astar_pts = (POINT *) G_malloc(do_points * sizeof(POINT));
+    astar_pts = (int *) G_malloc((do_points + 1) * sizeof(int));
 
     /* heap_index will track astar_pts in ternary min-heap */
     /* heap_index is one-based */
@@ -321,22 +322,23 @@ int init_vars(int argc, char *argv[])
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 3);
 	    for (c = 0; c < ncols; c++) {
+		seg_idx = SEG_INDEX(wat_seg, r, c);
 		if (FLAG_GET(worked, r, c)) {
-		    wat[SEG_INDEX(wat_seg, r, c)] = 0;
+		    wat[seg_idx] = 0;
 		}
 		else {
 		    if (er_flag)
-			s_l[SEG_INDEX(s_l_seg, r, c)] = half_res;
-		    asp_value = asp[SEG_INDEX(asp_seg, r, c)];
+			s_l[seg_idx] = half_res;
+		    asp_value = asp[seg_idx];
 		    if (r == 0 || c == 0 || r == nrows - 1 ||
 			c == ncols - 1 || asp_value != 0) {
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 			/* set depression */
 			if (asp_value) {
 			    asp_value = 0;
-			    wat[SEG_INDEX(wat_seg, r, c)] = ABS(wat_value);
+			    wat[seg_idx] = ABS(wat_value);
 			}
 			else if (r == 0)
 			    asp_value = -2;
@@ -346,73 +348,73 @@ int init_vars(int argc, char *argv[])
 			    asp_value = -6;
 			else if (c == ncols - 1)
 			    asp_value = -8;
-			asp[SEG_INDEX(asp_seg, r, c)] = asp_value;
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			asp[seg_idx] = asp_value;
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
 		    }
 		    else if (FLAG_GET(worked, r - 1, c)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -2;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -2;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		    else if (FLAG_GET(worked, r + 1, c)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -6;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -6;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		    else if (FLAG_GET(worked, r, c - 1)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -4;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -4;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		    else if (FLAG_GET(worked, r, c + 1)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -8;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -8;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		    else if (sides == 8 && FLAG_GET(worked, r - 1, c - 1)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -3;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -3;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		    else if (sides == 8 && FLAG_GET(worked, r - 1, c + 1)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -1;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -1;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		    else if (sides == 8 && FLAG_GET(worked, r + 1, c - 1)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -5;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -5;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		    else if (sides == 8 && FLAG_GET(worked, r + 1, c + 1)) {
-			alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+			alt_value = alt[seg_idx];
 			add_pt(r, c, alt_value, alt_value);
-			asp[SEG_INDEX(asp_seg, r, c)] = -7;
-			wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+			asp[seg_idx] = -7;
+			wat_value = wat[seg_idx];
 			if (wat_value > 0)
-			    wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			    wat[seg_idx] = -wat_value;
 		    }
 		}
 	    }
@@ -422,19 +424,20 @@ int init_vars(int argc, char *argv[])
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 3);
 	    for (c = 0; c < ncols; c++) {
+		seg_idx = SEG_INDEX(wat_seg, r, c);
 		if (er_flag)
-		    s_l[SEG_INDEX(s_l_seg, r, c)] = half_res;
-		asp_value = asp[SEG_INDEX(asp_seg, r, c)];
+		    s_l[seg_idx] = half_res;
+		asp_value = asp[seg_idx];
 		if (r == 0 || c == 0 || r == nrows - 1 ||
 		    c == ncols - 1 || asp_value != 0) {
-		    wat_value = wat[SEG_INDEX(wat_seg, r, c)];
+		    wat_value = wat[seg_idx];
 		    if (wat_value > 0) {
-			wat[SEG_INDEX(wat_seg, r, c)] = -wat_value;
+			wat[seg_idx] = -wat_value;
 		    }
 		    /* set depression */
 		    if (asp_value) {
 			asp_value = 0;
-			wat[SEG_INDEX(wat_seg, r, c)] = ABS(wat_value);
+			wat[seg_idx] = ABS(wat_value);
 		    }
 		    else if (r == 0)
 			asp_value = -2;
@@ -444,8 +447,8 @@ int init_vars(int argc, char *argv[])
 			asp_value = -6;
 		    else if (c == ncols - 1)
 			asp_value = -8;
-		    asp[SEG_INDEX(asp_seg, r, c)] = asp_value;
-		    alt_value = alt[SEG_INDEX(alt_seg, r, c)];
+		    asp[seg_idx] = asp_value;
+		    alt_value = alt[seg_idx];
 		    add_pt(r, c, alt_value, alt_value);
 		}
 	    }
