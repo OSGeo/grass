@@ -34,7 +34,7 @@ FLAG *worked, *in_list, *s_b, *swale;
 RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
 RAMSEG r_h_seg, dep_seg;
 RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
-POINT *astar_pts;
+int *astar_pts;
 CELL *dis, *alt, *asp, *bas, *haf, *r_h, *dep;
 DCELL *wat;
 int ril_fd;
