@@ -46,6 +46,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 {
     struct Map_info map;
     struct line_pnts *points;
+    struct line_cats *Cats = NULL;
     geoline *top, *gln, *prev;
     int np, i, n, nareas, nl = 0, area, type, is3d;
     struct Cell_head wind;
@@ -77,6 +78,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 #endif
 
     points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
 
     G_get_set_window(&wind);
     Vect_set_constraint_region(&map, wind.north, wind.south, wind.east,
@@ -90,7 +92,6 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     G_debug(3, "Reading vector areas (nareas = %d)", n);
     for (area = 1; area <= n; area++) {
 	G_debug(3, " area %d", area);
-
 	Vect_get_area_points(&map, area, points);
 	if (points->n_points < 3)
 	    continue;
@@ -159,9 +160,8 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 
     /* Read all lines */
     G_debug(3, "Reading vector lines ...");
-    while (-1 < (type = Vect_read_next_line(&map, points, NULL))) {
+    while (-1 < (type = Vect_read_next_line(&map, points, Cats))) {
 	G_debug(3, "line type = %d", type);
-
 	if (type & (GV_LINES | GV_FACE)) {
 	    if (type & (GV_LINES)) {
 		gln->type = OGSF_LINE;
@@ -217,6 +217,16 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 		GS_v3cross(vect[1], vect[0], gln->norm);
 		G_debug(3, "norm %f %f %f", gln->norm[0], gln->norm[1],
 			gln->norm[2]);
+	    }
+
+	    /* Store category info for thematic display */
+	    if (Cats->n_cats > 0) {
+		gln->cats = Cats;
+		Cats = Vect_new_cats_struct();
+	    }
+	    else {
+		gln->cats = NULL;
+		Vect_reset_cats(Cats);
 	    }
 
 	    gln->next = (geoline *) G_malloc(sizeof(geoline));	/* G_fatal_error */

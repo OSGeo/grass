@@ -239,8 +239,7 @@ int GVL_load_vol(int id, const char *filename)
     geovol *gvl;
     int handle;
 
-    G_debug(3, "GVL_load_vol(): id=%d, name=%s",
-	    id, filename);
+    G_debug(3, "GVL_load_vol(): id=%d, name=%s", id, filename);
 
     if (NULL == (gvl = gvl_get_vol(id))) {
 	return (-1);

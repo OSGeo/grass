@@ -28,130 +28,6 @@
 /* BOB -- border allowed outside of viewport */
 #define v_border 50
 
-/* ACS_MODIFY_BEGIN site_attr management ************************************** */
-static float _cur_size_;
-
-/*!
-   \brief Substitutes gpd_obj()
-
-   \param gs surface (geosurf)
-   \param gp site (geosite)
-   \param gpt point (point)
-   \param site point
-
-   \return 0
- */
-int gpd_obj_site_attr(geosurf * gs, geosite * gp, geopoint * gpt, Point3 site)
-{
-    float size, z, y, x, z_scale, z_offset;
-    int marker, color, i, ii, iii;
-    int use_attr, has_drawn;
-    int _put_aside_;
-
-    _put_aside_ = 0;
-    _cur_size_ = gp->size;
-
-    z_scale = GS_global_exag();
-    z_offset = 0.0;
-
-    has_drawn = 0;
-
-    for (i = 0; i < GPT_MAX_ATTR; i++) {
-	color = gp->color;
-	marker = gp->marker;
-	size = gp->size;
-	use_attr = 0;
-
-	if (gp->use_attr[i] & ST_ATT_COLOR) {
-	    use_attr = 1;
-	    color = gpt->color[i];
-	}
-
-	if (gp->use_attr[i] & ST_ATT_MARKER) {
-	    use_attr = 1;
-	    marker = gpt->marker[i];
-	}
-
-	if (gp->use_attr[i] & ST_ATT_SIZE) {
-	    use_attr = 1;
-	    size = gpt->size[i] * gp->size;
-	    if (gp->marker == ST_HISTOGRAM)
-		_put_aside_ = 1;
-	}
-
-	/* ACS_MODIFY_BEGIN site_highlight management ********************************* */
-	if (gpt->highlight_color)
-	    color = gpt->highlight_color_value;
-	if (gpt->highlight_marker)
-	    marker = gpt->highlight_marker_value;
-	if (gpt->highlight_size)
-	    size *= gpt->highlight_size_value;
-	/* ACS_MODIFY_END site_highlight management *********************************** */
-
-	if (_put_aside_) {
-	    if (use_attr == 1) {
-		has_drawn = 1;
-
-/*******************************************************************************
-		fixed size = gp->size
-		this is mailny intended for "histograms" that grow in z, but not in xy
-
-        square filling to right and then up
-
-         15 14 13 12
-          8  7  6 11
-          3  2  5 10
-          0  1  4  9
-
-*******************************************************************************/
-		x = site[X];
-		y = site[Y];
-
-		ii = (int)(sqrt(i));
-		iii = ii * ii + ii;
-
-		if (i <= iii) {
-		    site[X] += ii * 2.2 * gp->size;
-		    site[Y] += (i - ii) * 2.2 * gp->size;
-		}
-		else {
-		    site[X] += (ii - (i - iii)) * 2.2 * gp->size;
-		    site[Y] += ii * 2.2 * gp->size;
-
-		}
-
-		gpd_obj(gs, color, size, marker, site);
-
-		site[X] = x;
-		site[Y] = y;
-	    }
-	}
-	else {
-	    if (i > 0)
-		z_offset += size;
-	    if (use_attr == 1) {
-		has_drawn = 1;
-
-		z = site[Z];
-		site[Z] += z_offset / z_scale;
-
-		gpd_obj(gs, color, size, marker, site);
-
-		site[Z] = z;
-	    }
-
-	    z_offset += size;
-	}
-    }
-
-    if (has_drawn == 0)
-	gpd_obj(gs, color, size, marker, site);
-
-    return (0);
-}
-
-/* ACS_MODIFY_END site_attr management **************************************** */
-
 /*!
    \brief Check if point is in region
 
@@ -186,30 +62,26 @@ int gs_point_in_region(geosurf * gs, float *pt, float *region)
 }
 
 /*!
-   \brief ADD
+   \brief Draw point representing object
 
    Do normal transforms before calling
 
    Note gs: NULL if 3d obj or const elev surface
 
-   \todo add size1, size2 & dir1, dir2 (eg azimuth, elevation) variables
-
    \param gs surface (geosurf)
-   \param size
-   \param marker
+   \param style object displaying style (highlighted or not)
    \param pt 3d point (Point3)
  */
-void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
+void gpd_obj(geosurf * gs, gvstyle * style, Point3 pt)
 {
     float sz, lpt[3];
     float siz[3];
 
-    gsd_color_func(color);
+    gsd_color_func(style->color);
     sz = GS_global_exag();
     GS_v3eq(lpt, pt);		/* CHANGING Z OF POINT PASSED, so use copy */
 
-    switch (marker) {
-	/* ACS_MODIFY_BEGIN site_attr management ************************************** */
+    switch (style->symbol) {
     case ST_HISTOGRAM:
 	gsd_colormode(CM_DIFFUSE);
 	gsd_pushmatrix();
@@ -219,17 +91,16 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 	    gsd_scale(1.0, 1.0, 1. / sz);
 	}
 
-	siz[0] = _cur_size_;
-	siz[1] = _cur_size_;
-	siz[2] = size;
+	siz[0] = style->size;	/*TODO: Fix historgam drawing */
+	siz[1] = style->size;
+	siz[2] = style->size;
 
-	gsd_box(lpt, color, siz);
+	gsd_box(lpt, style->color, siz);
 
 	gsd_popmatrix();
 	gsd_colormode(CM_COLOR);
 
 	break;
-	/* ACS_MODIFY_END   site_attr management ************************************** */
     case ST_DIAMOND:
 	/*
 	   gsd_colormode(CM_AD);
@@ -242,7 +113,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 	    gsd_scale(1.0, 1.0, 1. / sz);
 	}
 
-	gsd_diamond(lpt, color, size);
+	gsd_diamond(lpt, style->color, style->size);
 	gsd_popmatrix();
 	gsd_colormode(CM_COLOR);
 
@@ -256,7 +127,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 	    gsd_scale(1.0, 1.0, 1. / sz);
 	}
 
-	gsd_draw_box(lpt, color, size);
+	gsd_draw_box(lpt, style->color, style->size);
 	gsd_popmatrix();
 
 	break;
@@ -272,7 +143,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 	    gsd_scale(1.0, 1.0, 1. / sz);
 	}
 
-	gsd_sphere(lpt, size);
+	gsd_sphere(lpt, style->size);
 	gsd_popmatrix();
 	gsd_colormode(CM_COLOR);
 
@@ -286,7 +157,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 	    gsd_scale(1.0, 1.0, 1. / sz);
 	}
 
-	gsd_draw_gyro(lpt, color, size);
+	gsd_draw_gyro(lpt, style->color, style->size);
 	gsd_popmatrix();
 
 	break;
@@ -299,7 +170,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 	    gsd_scale(1.0, 1.0, 1. / sz);
 	}
 
-	gsd_draw_asterisk(lpt, color, size);
+	gsd_draw_asterisk(lpt, style->color, style->size);
 	gsd_popmatrix();
 
 	break;
@@ -312,7 +183,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 	    gsd_scale(1.0, 1.0, 1. / sz);
 	}
 
-	gsd_cube(lpt, color, size);
+	gsd_cube(lpt, style->color, style->size);
 	gsd_popmatrix();
 	gsd_colormode(CM_COLOR);
 
@@ -320,7 +191,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
     default:
     case ST_X:
 	gsd_colormode(CM_COLOR);
-	gsd_x(gs, lpt, color, size);
+	gsd_x(gs, lpt, style->color, style->size);
 
 	break;
     }
@@ -349,8 +220,7 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 {
     float site[3], konst;
-    float size;
-    int src, check, marker, color;
+    int src, check;
     geopoint *gpt;
     typbuff *buf;
     GLdouble modelMatrix[16], projMatrix[16];
@@ -384,12 +254,8 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 
 	gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
 
-	gsd_linewidth(gp->width);
-
+	gsd_linewidth(gp->style->width);
 	check = 0;
-	color = gp->color;
-	marker = gp->marker;
-	size = gp->size;
 
 	for (gpt = gp->points; gpt; gpt = gpt->next) {
 	    if (!(++check % CHK_FREQ)) {
@@ -408,11 +274,6 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 		continue;
 	    }
 
-	    /* TODO: set other dynamic attributes */
-	    if (gp->attr_mode & ST_ATT_COLOR) {
-		color = gpt->iattr;
-	    }
-
 	    if (src == MAP_ATT) {
 		if (viewcell_tri_interp(gs, buf, site, 1)) {
 		    /* returns 0 if outside or masked */
@@ -421,10 +282,15 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 		    if (gsd_checkpoint
 			(site, window, viewport, modelMatrix, projMatrix))
 			continue;
+		    else {
+			if (gpt->highlighted > 0)
+			    gpd_obj(gs, gp->hstyle, site);
+			else if (gp->thematic_layer > 0)
+			    gpd_obj(gs, gpt->style, site);
 		    else
-			/* ACS_MODIFY_OneLine site_attr management - was: gpd_obj(gs, color, size, marker, site); */
-			gpd_obj_site_attr(gs, gp, gpt, site);
+			    gpd_obj(gs, gp->style, site);
 		}
+	    }
 	    }
 	    else if (src == CONST_ATT) {
 		if (gs_point_in_region(gs, site, NULL)) {
@@ -432,11 +298,16 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 		    if (gsd_checkpoint
 			(site, window, viewport, modelMatrix, projMatrix))
 			continue;
+		    else {
+			if (gpt->highlighted > 0)
+			    gpd_obj(gs, gp->hstyle, site);
+			else if (gp->thematic_layer > 0)
+			    gpd_obj(gs, gpt->style, site);
 		    else
-			/* ACS_MODIFY_OneLine site_attr management - was: gpd_obj(NULL, color, size, marker, site); */
-			gpd_obj_site_attr(NULL, gp, gpt, site);
+			    gpd_obj(gs, gp->style, site);
 		}
 	    }
+	}
 	}
 
 	gsd_linewidth(1);
@@ -459,8 +330,7 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
 {
     float site[3], tz;
-    float size;
-    int check, color, marker;
+    int check;
     geopoint *gpt;
     GLdouble modelMatrix[16], projMatrix[16];
     GLint viewport[4];
@@ -480,11 +350,8 @@ int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
     site[Z] = 0.0;
 
     check = 0;
-    color = gp->color;
-    marker = gp->marker;
-    size = gp->size;
 
-    gsd_linewidth(gp->width);
+    gsd_linewidth(gp->style->width);
 
     for (gpt = gp->points; gpt; gpt = gpt->next) {
 	if (!(++check % CHK_FREQ)) {
@@ -503,17 +370,18 @@ int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
 	    site[Z] = gpt->p3[Z] + gp->z_trans;
 	}
 
-	/* TODO: set other dynamic attributes */
-	if (gp->attr_mode & ST_ATT_COLOR) {
-	    color = gpt->iattr;
-	}
-
 	if (gsd_checkpoint(site, window, viewport, modelMatrix, projMatrix))
 	    continue;
 	else
 	    /* clip points outside default region? */
-	    /* ACS_MODIFY_OneLine site_attr management - was: gpd_obj(NULL, color, size, marker, site); */
-	    gpd_obj_site_attr(NULL, gp, gpt, site);
+	{
+	    if (gpt->highlighted > 0)
+		gpd_obj(NULL, gp->hstyle, site);
+	    else if (gp->thematic_layer > 0)
+		gpd_obj(NULL, gpt->style, site);
+	    else
+		gpd_obj(NULL, gp->style, site);
+    }
     }
 
     gsd_linewidth(1);

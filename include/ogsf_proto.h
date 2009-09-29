@@ -61,8 +61,8 @@ int *GP_get_site_list(int *);
 int GP_delete_site(int);
 int GP_load_site(int, const char *);
 int GP_get_sitename(int, char **);
-int GP_get_sitemode(int, int *, int *, int *, float *, int *);
-int GP_set_sitemode(int, int, int, int, float, int);
+int GP_get_style(int, int *, int *, float *, int *);
+int GP_set_style(int, int, int, float, int);
 int GP_attmode_color(int, const char *);
 int GP_attmode_none(int);
 int GP_set_zmode(int, int);
@@ -306,7 +306,7 @@ int GVL_slice_set_pos(int, int, float, float, float, float, float, float,
 
 /* From Gp3.c */
 int Gp_set_color(const char *, geopoint *);
-geopoint *Gp_load_sites(const char *, int *, int *, int *);
+geopoint *Gp_load_sites(const char *, int *, int *);
 
 /* From Gs3.c */
 double Gs_distance(double *, double *);
@@ -369,7 +369,7 @@ void gp_set_drapesurfs(geosite *, int *, int);
 
 /* From gpd.c */
 int gs_point_in_region(geosurf *, float *, float *);
-void gpd_obj(geosurf *, int, float, int, Point3);
+void gpd_obj(geosurf *, gvstyle *, Point3);
 int gpd_2dsite(geosite *, geosurf *, int);
 int gpd_3dsite(geosite *, float, float, int);
 

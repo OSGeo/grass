@@ -26,56 +26,6 @@
 #include <grass/gstypes.h>
 
 /*!
-   \brief Set color for point set
-
-   used when site attribute mode is ST_ATT_COLOR
-
-   Gets color structure for grass file, goes through points and
-   uses fattr as CAT, putting rgb color in iattr.
-
-   \param grassname raster map name
-   \param gp pointer to geopoint struct
-
-   \return 1 on success
-   \return 0 on failure
- */
-int Gp_set_color(const char *grassname, geopoint * gp)
-{
-    const char *col_map;
-    struct Colors sc;
-    CELL cat;
-    geopoint *tp;
-    int r, g, b, color;
-
-    /* TODO: handle error messages */
-
-    if (grassname) {
-	col_map = G_find_raster2(grassname, "");
-	if (!col_map) {
-	    G_warning(_("Raster map <%s> not found"), grassname);
-	    return 0;
-	}
-
-	Rast_read_colors(grassname, col_map, &sc);
-
-	for (tp = gp; tp; tp = tp->next) {
-	    cat = (int)tp->fattr;
-	    color = NULL_COLOR;
-
-	    if (Rast_get_c_color(&cat, &r, &g, &b, &sc)) {
-		color = (r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16);
-	    }
-
-	    tp->iattr = color;
-	}
-
-	return (1);
-    }
-
-    return (0);
-}
-
-/*!
    \brief Load to points to memory
 
    The other alternative may be to load to a tmp file.
@@ -83,17 +33,15 @@ int Gp_set_color(const char *grassname, geopoint * gp)
    \param grassname vector point map 
    \param nsites
    \param has_z 2D or 3D points?
-   \param has_att attributes included
 
    \return pointer to geopoint struct
    \return NULL on failure
  */
-geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
-			int *has_att)
+geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z)
 {
     struct Map_info map;
     static struct line_pnts *Points = NULL;
-    static struct line_cats *Cats = NULL;
+    struct line_cats *Cats = NULL;
     geopoint *top, *gpt, *prev;
     int np, ltype, eof;
     struct Cell_head wind;
@@ -103,7 +51,7 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
 
     np = 0;
     eof = 0;
-    *has_z = *has_att = 0;
+    *has_z = 0;
 
     mapset = G_find_vector2(grassname, "");
     if (!mapset) {
@@ -166,20 +114,17 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
 		*has_z = 0;
 	    }
 
+	    /* Store category info for thematic display */
 	    if (Cats->n_cats > 0) {
-		*has_att = 1;
-		gpt->fattr = Cats->field[0];	/* Is this correct? */
-		/* gpt->cat = ; ??** */
-		gpt->highlight_color = gpt->highlight_size =
-		    gpt->highlight_marker = FALSE;
+		gpt->cats = Cats;
+		Cats = Vect_new_cats_struct();
 	    }
 	    else {
-		gpt->fattr = 0;
-		*has_att = 0;
+		gpt->cats = NULL;
+		Vect_reset_cats(Cats);
 	    }
+	    gpt->highlighted = 0;
 
-	    gpt->iattr = gpt->fattr;
-	    gpt->cattr = NULL;
 
 	    G_debug(3, "loading vector point %d %f %f -- %d",
 		    np, Points->x[0], Points->y[0], Cats->n_cats);

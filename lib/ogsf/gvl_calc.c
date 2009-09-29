@@ -392,7 +392,8 @@ void iso_calc_cube(geovol_isosurf * isosurf, int x, int y, int z,
 	iso_get_cube_values(isosurf, ATT_EMIT, x, y, z, val[ATT_EMIT]);
     }
 
-    FOR_0_TO_N(3, d_sum[FOR_VAR] = 0.; n_sum[FOR_VAR] = 0.);
+    FOR_0_TO_N(3, d_sum[FOR_VAR] = 0.;
+	       n_sum[FOR_VAR] = 0.);
 
     /* loop in edges */
     for (i = 0; i < cell_table[c_ndx].nedges; i++) {

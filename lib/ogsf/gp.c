@@ -37,7 +37,7 @@ geosite *gp_get_site(int id)
 {
     geosite *gp;
 
-    G_debug(5, "gp_get_site");
+    G_debug(5, "gp_get_site(%d)", id);
 
     for (gp = Site_top; gp; gp = gp->next) {
 	if (gp->gsite_id == id) {
@@ -60,7 +60,7 @@ geosite *gp_get_prev_site(int id)
 {
     geosite *pp;
 
-    G_debug(5, "gp_get_prev_site");
+    G_debug(5, "gp_get_prev_site(%d)", id);
 
     for (pp = Site_top; pp; pp = pp->next) {
 	if (pp->gsite_id == id - 1) {
@@ -139,6 +139,12 @@ geosite *gp_get_new_site(void)
     }
 
     np->next = NULL;
+    np->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+    if (!np->style)
+	return NULL;
+    np->hstyle = (gvstyle *) G_malloc(sizeof(gvstyle));
+    if (!np->hstyle)
+	return NULL;
 
     return (np);
 }
@@ -196,47 +202,24 @@ int gp_set_defaults(geosite * gp)
     gp->filename = NULL;
     gp->n_sites = gp->use_z = gp->n_surfs = gp->use_mem = 0;
     gp->x_trans = gp->y_trans = gp->z_trans = 0.0;
-    gp->size = dim / 100.;
     gp->points = NULL;
-    gp->width = 1;
-    gp->color = 0xFFFFFF;
-    gp->marker = ST_X;
-    gp->has_z = gp->has_att = 0;
-    gp->attr_mode = ST_ATT_NONE;
+    gp->has_z = 0;
+    gp->thematic_layer = -1;
+    gp->style->color = 0xF0F0F0;
+    gp->style->size = dim / 100.;
+    gp->style->width = 1;
+    gp->style->symbol = ST_X;
+    gp->style->next = NULL;
+    gp->hstyle->color = 0xFF0000;
+    gp->hstyle->size = dim / 150.;
+    gp->hstyle->symbol = ST_X;
+    gp->hstyle->next = NULL;
     gp->next = NULL;
     for (i = 0; i < MAX_SURFS; i++) {
 	gp->drape_surf_id[i] = 0;
     }
 
     return (1);
-}
-
-/*!
-   \brief Print point set fields, debugging
-
-   \param gp pointer to geosite struct
- */
-void print_site_fields(geosite * gp)
-{
-    int i;
-
-    fprintf(stderr, "n_sites=%d use_z=%d n_surfs=%d use_mem=%d\n",
-	    gp->n_sites, gp->use_z, gp->n_surfs, gp->use_mem);
-    fprintf(stderr, "x_trans=%.2f x_trans=%.2f x_trans=%.2f\n",
-	    gp->x_trans, gp->y_trans, gp->z_trans);
-    fprintf(stderr, "size = %.2f\n", gp->size);
-    fprintf(stderr, "points = %lx\n", (unsigned long)gp->points);
-    fprintf(stderr, "width = %d\n", gp->width);
-    fprintf(stderr, "color = %x\n", gp->color);
-    fprintf(stderr, "marker = %d\n", gp->marker);
-    fprintf(stderr, "has_z = %d, has_att = %d\n", gp->has_z, gp->has_att);
-    fprintf(stderr, "attr_mode = %d\n", gp->attr_mode);
-
-    for (i = 0; i < MAX_SURFS; i++) {
-	fprintf(stderr, "drape_surf_id[%d] = %d\n", i, gp->drape_surf_id[i]);
-    }
-
-    return;
 }
 
 /*!
@@ -338,13 +321,23 @@ int gp_free_site(geosite * fp)
 void gp_free_sitemem(geosite * fp)
 {
     geopoint *gpt, *tmp;
+    gvstyle *gvs, *tmpstyle;
 
     G_free((void *)fp->filename);
     fp->filename = NULL;
+    if (fp->style)
+	G_free(fp->style);
+    if (fp->hstyle)
+	G_free(fp->hstyle);
     if (fp->points) {
 	for (gpt = fp->points; gpt;) {
-	    if (gpt->cattr) {
-		G_free(gpt->cattr);
+	    G_free(gpt->cats);
+	    if (fp->thematic_layer > -1) {	/* Style also exists for features */
+		for (gvs = fp->style; gvs;) {
+		    tmpstyle = gvs;
+		    gvs = gvs->next;
+		    G_free(tmpstyle);
+	    }
 	    }
 
 	    tmp = gpt;

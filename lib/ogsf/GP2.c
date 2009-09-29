@@ -39,6 +39,8 @@ int GP_site_exists(int id)
 {
     int i, found = 0;
 
+    G_debug(4, "GP_site_exists(%d)", id);
+
     if (NULL == gp_get_site(id)) {
 	return (0);
     }
@@ -132,7 +134,7 @@ int GP_delete_site(int id)
 {
     int i, j, found = 0;
 
-    G_debug(3, "GP_delete_site(): id=%d", id);
+    G_debug(4, "GP_delete_site(%d)", id);
 
     if (GP_site_exists(id)) {
 	gp_delete_site(id);
@@ -174,6 +176,8 @@ int GP_load_site(int id, const char *filename)
 {
     geosite *gp;
 
+    G_debug(3, "GP_load_site(%d, %s)", id, filename);
+
     if (NULL == (gp = gp_get_site(id))) {
 	return (-1);
     }
@@ -184,8 +188,7 @@ int GP_load_site(int id, const char *filename)
 
     gp->filename = G_store(filename);
 
-    gp->points = Gp_load_sites(filename, &(gp->n_sites),
-			       &(gp->has_z), &(gp->has_att));
+    gp->points = Gp_load_sites(filename, &(gp->n_sites), &(gp->has_z));
 
     if (gp->points) {
 	return (1);
@@ -209,6 +212,8 @@ int GP_get_sitename(int id, char **filename)
 {
     geosite *gp;
 
+    G_debug(4, "GP_get_sitename(%d)", id);
+
     if (NULL == (gp = gp_get_site(id))) {
 	return (-1);
     }
@@ -219,105 +224,56 @@ int GP_get_sitename(int id, char **filename)
 }
 
 /*!
-   \brief Get point set mode
- */
-int GP_get_sitemode(int id, int *atmod, int *color, int *width, float *size,
-		    int *marker)
-{
-    geosite *gp;
-
-    if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
-    }
-
-    *atmod = gp->attr_mode;
-    *color = gp->color;
-    *width = gp->width;
-    *marker = gp->marker;
-    *size = gp->size;
-
-    return (1);
-}
-
-/*!
-   \brief Set point set mode
+   \brief Get point set style
 
    \param id point set id
-   \param atmod
-   \param color icon color
-   \param width icon line width
-   \param size icon size
-   \param marker icon symbol
 
    \return -1 on error (point set not found)
  */
-int GP_set_sitemode(int id, int atmod, int color, int width, float size,
-		    int marker)
+int GP_get_style(int id, int *color, int *width, float *size, int *symbol)
 {
     geosite *gp;
+
+    G_debug(4, "GP_get_style(%d)", id);
 
     if (NULL == (gp = gp_get_site(id))) {
 	return (-1);
     }
 
-    gp->attr_mode = atmod;	/* FIX this - probably should be seperate */
-    gp->color = color;
-    gp->width = width;
-    gp->marker = marker;
-    gp->size = size;
+    *color = gp->style->color;
+    *width = gp->style->width;
+    *symbol = gp->style->symbol;
+    *size = gp->style->size;
 
     return (1);
 }
 
 /*!
-   \brief Set attribute mode color
-
-   \todo make similar routines for attmode_size, attmode_marker (use transform)
-
-   \param id surface id
-   \param filename filename
-
-   \return 1 for success
-   \return 0 for no attribute info
-   \return -1 for bad parameter
- */
-int GP_attmode_color(int id, const char *filename)
-{
-    geosite *gp;
-
-    if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
-    }
-
-    if (!gp->has_att) {
-	return (0);
-    }
-
-    if (Gp_set_color(filename, gp->points)) {
-	gp->attr_mode = ST_ATT_COLOR;
-	return (1);
-    }
-
-    return (-1);
-}
-
-/*!
-   \brief Set attribute mode to none
+   \brief Set point set style
 
    \param id point set id
+   \param color icon color
+   \param width icon line width
+   \param size icon size
+   \param symbol icon symbol
 
-   \return -1 on error (invalid point set id)
-   \return 1 on success
+   \return -1 on error (point set not found)
  */
-int GP_attmode_none(int id)
+int GP_set_style(int id, int color, int width, float size, int symbol)
 {
     geosite *gp;
+
+    G_debug(4, "GP_set_style(%d, %d, %d, %f, %d)", id, color, width, size,
+	    symbol);
 
     if (NULL == (gp = gp_get_site(id))) {
 	return (-1);
     }
 
-    gp->attr_mode = ST_ATT_NONE;
+    gp->style->color = color;
+    gp->style->symbol = symbol;
+    gp->style->size = size;
+    gp->style->width = width;
 
     return (1);
 }
@@ -332,9 +288,12 @@ int GP_attmode_none(int id)
    \return 0 no z
    \return -1 on error (invalid point set id)
  */
+/* I don't see who is using it? Why it's required? */
 int GP_set_zmode(int id, int use_z)
 {
     geosite *gp;
+
+    G_debug(3, "GP_set_zmode(%d,%d)", id, use_z);
 
     if (NULL == (gp = gp_get_site(id))) {
 	return (-1);
@@ -362,9 +321,12 @@ int GP_set_zmode(int id, int use_z)
    \return -1 on error (invalid point set id)
    \return 1 on success
  */
+/* Who's using this? */
 int GP_get_zmode(int id, int *use_z)
 {
     geosite *gp;
+
+    G_debug(4, "GP_get_zmode(%d)", id);
 
     if (NULL == (gp = gp_get_site(id))) {
 	return (-1);
@@ -434,6 +396,8 @@ int GP_select_surf(int hp, int hs)
 {
     geosite *gp;
 
+    G_debug(3, "GP_select_surf(%d,%d)", hp, hs);
+
     if (GP_surf_is_selected(hp, hs)) {
 	return (1);
     }
@@ -462,6 +426,8 @@ int GP_unselect_surf(int hp, int hs)
 {
     geosite *gp;
     int i, j;
+
+    G_debug(3, "GP_unselect_surf(%d,%d)", hp, hs);
 
     if (!GP_surf_is_selected(hp, hs)) {
 	return (1);
@@ -498,6 +464,8 @@ int GP_surf_is_selected(int hp, int hs)
 {
     int i;
     geosite *gp;
+
+    G_debug(3, "GP_surf_is_selected(%d,%d)", hp, hs);
 
     gp = gp_get_site(hp);
 
@@ -538,11 +506,8 @@ void GP_draw_site(int id)
 
 		if (gs) {
 		    gpd_2dsite(gp, gs, 0);
-#ifdef TRACE_GP_FUNCS
-		    G_debug(3, "Drawing site %d on Surf %d", id,
+		    G_debug(5, "Drawing site %d on Surf %d", id,
 			    gp->drape_surf_id[i]);
-		    print_site_fields(gp);
-#endif
 		}
 	    }
 	}

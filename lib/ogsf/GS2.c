@@ -616,7 +616,9 @@ void GS_set_Narrow(int *pt, int id, float *pos2)
 }
 
 /*!
-   \brief ADD
+   \brief Draw place marker
+
+   Used to display query point for raster queries.
 
    \param id surface id
    \param pt point, X, Y value in true world coordinates
@@ -626,10 +628,11 @@ void GS_draw_X(int id, float *pt)
     geosurf *gs;
     Point3 pos;
     float siz;
+    gvstyle style;
 
     if ((gs = gs_get_surf(id))) {
 	GS_get_longdim(&siz);
-	siz /= 200.;
+	style.size = siz / 200.;
 	pos[X] = pt[X] - gs->ox;
 	pos[Y] = pt[Y] - gs->oy;
 	_viewcell_tri_interp(gs, pos);
@@ -644,8 +647,9 @@ void GS_draw_X(int id, float *pt)
 	    pos[Z] = gs->att[ATT_TOPO].constant;
 	    gs = NULL;		/* tells gpd_obj to use given Z val */
 	}
-
-	gpd_obj(gs, Gd.bgcol, siz, ST_GYRO, pos);
+	style.color = Gd.bgcol;
+	style.symbol = ST_GYRO;
+	gpd_obj(gs, &style, pos);
 	gsd_flush();
 
 	gsd_popmatrix();
@@ -1646,7 +1650,8 @@ int GS_load_att_map(int id, const char *filename, int att)
 
 	if (0 < (hdata = gsds_findh(filename, &changed, &atty, begin))) {
 
-	    G_debug(3, "GS_load_att_map(): %s already has data handle %d.CF=%x",
+	    G_debug(3,
+		    "GS_load_att_map(): %s already has data handle %d.CF=%x",
 		    filename, hdata, changed);
 
 	    /* handle found */
@@ -1686,7 +1691,8 @@ int GS_load_att_map(int id, const char *filename, int att)
 		filename, hdata);
     }
     else {
-	G_debug(3, "GS_load_att_map(): %s not loaded in correct form - loading now",
+	G_debug(3,
+		"GS_load_att_map(): %s not loaded in correct form - loading now",
 		filename);
 
 	/* not loaded - need to get new dataset handle */

@@ -237,9 +237,9 @@ int GV_set_vectmode(int id, int mem, int color, int width, int flat)
     }
 
     gv->use_mem = mem;
-    gv->color = color;
-    gv->width = width;
     gv->flat_val = flat;
+    gv->style->color = color;
+    gv->style->width = width;
 
     return (1);
 }
@@ -265,8 +265,8 @@ int GV_get_vectmode(int id, int *mem, int *color, int *width, int *flat)
     }
 
     *mem = gv->use_mem;
-    *color = gv->color;
-    *width = gv->width;
+    *color = gv->style->color;
+    *width = gv->style->width;
     *flat = gv->flat_val;
 
     return (1);

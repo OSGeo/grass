@@ -137,6 +137,13 @@ geovect *gv_get_new_vect(void)
 
     nv->next = NULL;
 
+    nv->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+    if (NULL == nv->style)
+	return NULL;
+    nv->hstyle = (gvstyle *) G_malloc(sizeof(gvstyle));
+    if (NULL == nv->hstyle)
+	return NULL;
+
     G_debug(5, "gv_get_new_vect() id=%d", nv->gvect_id);
 
     return (nv);
@@ -192,9 +199,15 @@ int gv_set_defaults(geovect * gv)
     gv->x_trans = gv->y_trans = gv->z_trans = 0.0;
     gv->lines = NULL;
     gv->fastlines = NULL;
-    gv->width = 1;
-    gv->color = 0xFFFFFF;
     gv->flat_val = 0;
+    gv->thematic_layer = -1;
+    gv->style->color = 0xF0F0F0;
+    gv->style->width = 1;
+    gv->style->next = NULL;
+    gv->hstyle->color = 0xFF0000;
+    gv->hstyle->width = 2;
+    gv->hstyle->next = NULL;
+    gv->next = NULL;
 
     for (i = 0; i < MAX_SURFS; i++) {
 	gv->drape_surf_id[i] = 0;
@@ -301,9 +314,14 @@ int gv_free_vect(geovect * fv)
 void gv_free_vectmem(geovect * fv)
 {
     geoline *gln, *tmpln;
+    gvstyle *gvs, *tmpstyle;
 
     G_free((void *)fv->filename);
     fv->filename = NULL;
+    if (fv->style)
+	G_free(fv->style);
+    if (fv->hstyle)
+	G_free(fv->hstyle);
 
     if (fv->lines) {
 	for (gln = fv->lines; gln;) {
@@ -314,6 +332,15 @@ void gv_free_vectmem(geovect * fv)
 
 	    if (gln->dims == 3) {
 		G_free(gln->p3);
+	    }
+
+	    G_free(gln->cats);
+	    if (fv->thematic_layer > -1) {	/* Style also exists for features */
+		for (gvs = gln->style; gvs;) {
+		    tmpstyle = gvs;
+		    gvs = gvs->next;
+		    G_free(tmpstyle);
+		}
 	    }
 
 	    tmpln = gln;
