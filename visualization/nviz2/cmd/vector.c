@@ -180,8 +180,7 @@ int vpoints_set_attrb(const struct GParams *params)
 	else
 	    G_fatal_error(_("Unknown icon marker"));
 
-	GP_set_sitemode(site_list[i], ST_ATT_NONE,
-			color, width, size, marker);
+	GP_set_style(site_list[i], color, width, size, marker);
     }
 
     return 1;

@@ -136,7 +136,7 @@ int Nviz_new_map_obj(int type, const char *name, float value, nv_data * data)
 	}
 
 	/* initialize display parameters */
-	GP_set_sitemode(new_id, ST_ATT_NONE, 0xFF0000, 2, 100, ST_X);
+	GP_set_style(new_id, 0xFF0000, 2, 100, ST_X);
 	surf_list = GS_get_surf_list(&num_surfs);
 	for (i = 0; i < num_surfs; i++) {
 	    GP_select_surf(new_id, surf_list[i]);
@@ -339,9 +339,6 @@ int Nviz_set_vpoint_attr_default(int id)
 
     if (!gp)
 	return 0;
-
-    for (i = 0; i < GPT_MAX_ATTR; i++)
-	gp->use_attr[i] = ST_ATT_NONE;
 
     return 1;
 }

@@ -123,8 +123,8 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
     gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans + fudge);
 
     gsd_colormode(CM_COLOR);
-    gsd_color_func(gv->color);
-    gsd_linewidth(gv->width);
+    gsd_color_func(gv->style->color);
+    gsd_linewidth(gv->style->width);
 
     check = 0;
     if (do_fast) {
@@ -205,7 +205,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 		G_debug(5, "gvd_vect(): 3D vector line");
 		points = (Point3 *) malloc(sizeof(Point3));
 
-		gsd_color_func(gv->color);
+		gsd_color_func(gv->style->color);
 		gsd_bgnline();
 		for (k = 0; k < gln->npts; k++) {
 		    points[0][X] =
@@ -241,7 +241,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 
 		    glBegin(GL_POLYGON);
 		    glColor3f(1.0, 0, 0);
-		    gsd_color_func(gv->color);
+		    gsd_color_func(gv->style->color);
 		    glNormal3fv(gln->norm);
 
 		    for (k = 0; k < gln->npts; k++) {

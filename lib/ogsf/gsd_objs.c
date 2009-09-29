@@ -267,7 +267,7 @@ int gsd_nline_onsurf(geosurf * gs, float *v1, float *v2, float *pt, int n)
 }
 
 /*!
-   \brief ADD
+   \brief Draw X symbol
 
    Note gs: NULL if flat
 
@@ -823,6 +823,8 @@ void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
 
    \return 1
  */
+/*TODO: Store arrow somewhere to enable it's removal/change.
+   Add option to specify north text and font. */
 int gsd_north_arrow(float *pos2, float len, GLuint fontbase,
 		    unsigned long arw_clr, unsigned long text_clr)
 {

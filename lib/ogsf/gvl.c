@@ -578,8 +578,7 @@ geovol_isosurf *gvl_isosurf_get_isosurf(int id, int isosurf_id)
 {
     geovol *gvl;
 
-    G_debug(5, "gvl_isosurf_get_isosurf(): id=%d isosurf=%d",
-	    id, isosurf_id);
+    G_debug(5, "gvl_isosurf_get_isosurf(): id=%d isosurf=%d", id, isosurf_id);
     
     gvl = gvl_get_vol(id);
 

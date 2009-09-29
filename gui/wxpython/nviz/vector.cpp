@@ -119,8 +119,7 @@ int Nviz::SetVectorPointMode(int id, const char *color_str,
 
     color = Nviz_color_from_str(color_str);
 
-    if (GP_set_sitemode(id, ST_ATT_NONE,
-			color, width, size, marker) < 0)
+    if (GP_set_style(id, color, width, size, marker) < 0)
 	return -2;
     
     return 1;

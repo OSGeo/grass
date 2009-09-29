@@ -162,6 +162,22 @@ typedef struct g_surf
    vector file to have multiple attributes ?   Cached lines should
    usually be stored as 2d, since they may be draped on multiple
    surfaces & Z will vary depending upon surface. */
+
+/* Struct for vector feature displaying attributes */
+typedef struct g_vect_style
+{
+    int color; 		/* Line color */
+    int symbol;		/* Point symbol/line type */
+    float size;		/* Symbol size. Unset for lines. */
+    int width;		/* Line width. Also used for lines forming symbols i.e. X */
+    /*TODO:fill;	 Area fill pattern */
+    /*TODO:falpha;	 Area fill transparency */
+    /*TODO:lalpha;	 Line/boundary/point transparency */
+    /*TODO:struct *orientation;  Symbol orientation */
+    struct g_vect_style *next; /* Point to next gvstyle struct if single point has multiple styles. In such case feature with next style should be shifted.  */
+} gvstyle;
+
+/* Line instance */
 typedef struct g_line
 {
     int type;
@@ -169,9 +185,15 @@ typedef struct g_line
     int dims, npts;
     Point3 *p3;
     Point2 *p2;
+    
+    struct line_cats *cats;	/* Store information about all layers/cats for thematic display */
+    gvstyle *style;	/* Line instance look&feel */
+    signed char highlighted; /* >0 Feature is highlighted */
+    
     struct g_line *next;
 } geoline;
 
+/* Vector line layer */
 typedef struct g_vect
 {
     int gvect_id;
@@ -179,7 +201,6 @@ typedef struct g_vect
     int drape_surf_id[MAX_SURFS];	/* if you want 'em flat, define the surface */
     int flat_val;
     int n_surfs;
-    int color, width;
     char *filename;
     float x_trans, y_trans, z_trans;
     /* also maybe center & rotate? */
@@ -188,59 +209,47 @@ typedef struct g_vect
     int (*bgn_read) (), (*end_read) (), (*nxt_line) ();
     struct g_vect *next;
     void *clientdata;
+
+    int thematic_layer;		/* Layer number to use for thematic mapping. <0 == no thematic mapping; 
+				    0 == thematic mapping is unset but initialized; 
+				    >0 use specified layer */
+    gvstyle *style;	/* Vector default look&feel */
+    gvstyle *hstyle;	/* IMHO highlight should be per layer basis. */
 } geovect;
 
-/* ACS_MODIFY one line site_attr ********************************************** */
-#define GPT_MAX_ATTR 8
-
+/* Point instance */
 typedef struct g_point
 {
     int dims;
     Point3 p3;
-    float fattr;		/* may want to make these pointers or arrays for mult atts */
-    int iattr;
-    char *cattr;
-
-    /* ACS_MODIFY_BEGIN site_attr ************************************************* */
-    int cat;
-    int color[GPT_MAX_ATTR];
-    float size[GPT_MAX_ATTR];
-    int marker[GPT_MAX_ATTR];
-    /* ACS_MODIFY_END site_attr *************************************************** */
-
-    /* ACS_MODIFY_BEGIN highlight ************************************************* */
-    int highlight_color;
-    int highlight_size;
-    int highlight_marker;
-
-    int highlight_color_value;
-    float highlight_size_value;
-    int highlight_marker_value;
-    /* ACS_MODIFY_END highlight *************************************************** */
+    
+    struct line_cats *cats;	/* Store information about all layers/cats for thematic display */
+    gvstyle *style;
+    signed char highlighted; /* >0 Feature is highlighted */
 
     struct g_point *next;
 } geopoint;
 
+/* Point layer */
 typedef struct g_site
 {
     int gsite_id;
     int drape_surf_id[MAX_SURFS];	/* ditto */
     int n_surfs, n_sites;
-    int color, width, marker, use_z, use_mem;
-    int has_z, has_att;		/* set when file loaded */
-    int attr_mode;		/* ST_ATT_COLOR, ST_ATT_MARKER, ST_ATT_SIZE, ST_ATT_NONE */
-
-    /* ACS_MODIFY OneLine site_attr *********************************************** */
-    int use_attr[GPT_MAX_ATTR];	/* ST_ATT_COLOR, ST_ATT_MARKER, ST_ATT_SIZE, ST_ATT_NONE, for multiple attr's */
+    int use_z, use_mem;
+    int has_z;		/* set when file loaded */
 
     char *filename;
     transform attr_trans;
-    float size;
     float x_trans, y_trans, z_trans;
     geopoint *points;
     int (*bgn_read) (), (*end_read) (), (*nxt_site) ();
     struct g_site *next;
     void *clientdata;
+    
+    int thematic_layer; /* Layer number to use for thematic mapping. */
+    gvstyle *style; 	/* Vector default look&feel */
+    gvstyle *hstyle;	/* IMHO highlight should be per layer basis. */
 } geosite;
 
 typedef struct
