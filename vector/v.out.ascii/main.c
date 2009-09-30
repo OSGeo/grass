@@ -24,7 +24,6 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-#include "local_proto.h"
 
 int main(int argc, char *argv[])
 {
@@ -105,11 +104,11 @@ int main(int argc, char *argv[])
     field = atoi(field_opt->answer);
         
     if (format_opt->answer[0] == 'p')
-	format = FORMAT_POINT;
+	format = GV_ASCII_FORMAT_POINT;
     else
-	format = FORMAT_ALL;
+	format = GV_ASCII_FORMAT_ALL;
 
-    if (format == FORMAT_ALL && column_opt->answer) {
+    if (format == GV_ASCII_FORMAT_ALL && column_opt->answer) {
 	G_warning(_("Parameter '%s' ignored in standard mode"),
 		  column_opt->key);
     }
@@ -117,7 +116,7 @@ int main(int argc, char *argv[])
     if (verf->answer)
 	ver = 4;
 
-    if (ver == 4 && format == FORMAT_POINT) {
+    if (ver == 4 && format == GV_ASCII_FORMAT_POINT) {
 	G_fatal_error(_("Format 'point' is not supported for old version"));
     }
 
@@ -167,8 +166,8 @@ int main(int argc, char *argv[])
 	ascii = stdout;
     }
 
-    if (format == FORMAT_ALL) {
-	write_head(ascii, &Map);
+    if (format == GV_ASCII_FORMAT_ALL) {
+	Vect_write_ascii_head(ascii, &Map);
 	fprintf(ascii, "VERTI:\n");
     }
 
@@ -183,9 +182,9 @@ int main(int argc, char *argv[])
 			  output->answer);
     }
 
-    bin_to_asc(ascii, att, &Map, ver, format, dp, fs,
-	       region_flag->answer, field, where_opt->answer,
-	       column_opt->answers);
+    Vect_write_ascii(ascii, att, &Map, ver, format, dp, fs,
+		     region_flag->answer, field, where_opt->answer,
+		     column_opt->answers);
     
     if (ascii != NULL)
 	fclose(ascii);

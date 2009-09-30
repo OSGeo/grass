@@ -223,4 +223,8 @@ typedef enum overlay_operator OVERLAY_OPERATOR;
 /*! \brief Maximum category value */
 #define GV_CAT_MAX   PORT_INT_MAX
 
+/*! \brief GRASS ASCII vector format */
+#define GV_ASCII_FORMAT_POINT 0
+#define GV_ASCII_FORMAT_ALL   1
+
 #define HEADSTR	50

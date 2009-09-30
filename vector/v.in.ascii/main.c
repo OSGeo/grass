@@ -171,15 +171,15 @@ int main(int argc, char *argv[])
 
 
     if (format_opt->answer[0] == 'p')
-	format = FORMAT_POINT;
+	format = GV_ASCII_FORMAT_POINT;
     else
-	format = FORMAT_ALL;
+	format = GV_ASCII_FORMAT_ALL;
 
     skip_lines = atoi(skip_opt->answer);
     if (skip_lines < 0)
 	G_fatal_error(_("Please specify reasonable number of lines to skip"));
 
-    if (zcoorf->answer && format == FORMAT_POINT && !zcol_opt->answer)
+    if (zcoorf->answer && format == GV_ASCII_FORMAT_POINT && !zcol_opt->answer)
 	G_fatal_error(_("Please specify z column"));
 
     xcol = atoi(xcol_opt->answer) - 1;
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
     if (zcol >= 0 && !zcoorf->answer)
 	zcoorf->answer = TRUE;
 
-    if (zcoorf->answer && format == FORMAT_POINT && zcol < 0)
+    if (zcoorf->answer && format == GV_ASCII_FORMAT_POINT && zcol < 0)
 	G_fatal_error(_("Please specify reasonable z column"));
 
     catcol = atoi(catcol_opt->answer) - 1;
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (format == FORMAT_POINT) {
+    if (format == GV_ASCII_FORMAT_POINT) {
 	int i, rowlen, ncols, minncols, *coltype, *coltype2, *collen, nrows;
 	int n_int = 0, n_double = 0, n_string = 0;
 	char buf[1000];
@@ -529,9 +529,9 @@ int main(int argc, char *argv[])
 
     else {			/* FORMAT_ALL (standard mode) */
 	if (!noheader_flag->answer)
-	    read_head(ascii, &Map);
+	    Vect_read_ascii_head(ascii, &Map);
 
-	asc_to_bin(ascii, &Map);
+	Vect_read_ascii(ascii, &Map);
     }
 
     if (ascii != stdin)

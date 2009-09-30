@@ -407,6 +407,14 @@ void Vect_spatial_index_add_item(struct spatial_index *, int, const struct bound
 void Vect_spatial_index_del_item(struct spatial_index *, int, const struct bound_box *);
 int Vect_spatial_index_select(const struct spatial_index *, const struct bound_box *, struct ilist *);
 
+/* GRASS ASCII vector format */
+int Vect_read_ascii(FILE *, struct Map_info *);
+int Vect_read_ascii_head(FILE *, struct Map_info *);
+int Vect_write_ascii(FILE *, FILE *, struct Map_info *, int,
+		     int, int, char *, int,
+		     int, char*, char **);
+void Vect_write_ascii_head(FILE *, struct Map_info *);
+
 /*
  * Internal functions, MUST NOT be used in modules
  */
