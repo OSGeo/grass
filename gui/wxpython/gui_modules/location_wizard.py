@@ -1379,7 +1379,6 @@ class EPSGPage(TitledPage):
         try:
             self.epsgcode = self.epsglist.Search(index=self.csearch.GetSelection(),
                                                  pattern=value)[0]
-            self.tcode.SetValue(str(self.epsgcode))
         except IndexError: # -> no item found
             self.epsgcode = None
             self.tcode.SetValue('')
