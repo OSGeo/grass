@@ -401,7 +401,7 @@ class ProjectionsPage(TitledPage):
 
     def OnText(self, event):
         """!Projection name changed"""
-        self.proj = event.GetString()
+        self.proj = event.GetString().lower()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
         if len(self.proj) == 0 and nextButton.IsEnabled():
             nextButton.Enable(False)
@@ -435,7 +435,7 @@ class ProjectionsPage(TitledPage):
         index = event.m_itemIndex
 
         # set values
-        self.proj = self.projlist.GetItem(index, 0).GetText()
+        self.proj = self.projlist.GetItem(index, 0).GetText().lower()
         self.projdesc = self.projlist.GetItem(index, 0).GetText()
         self.tproj.SetValue(self.proj)
 
@@ -865,9 +865,9 @@ class DatumPage(TitledPage):
         event.Skip()
 
     def OnDText(self, event):
-        self.datum = event.GetString()
-        self.transformlist.Search(index=1, pattern=self.datum)
-        if self.transformlist.GetItemCount() > 0:
+        self.datum = event.GetString().lower()
+        tlist = self.transformlist.Search(index=1, pattern=self.datum)
+        if len(tlist) > 0:
             self.hastransform = True
         else:
             self.hastransform = False
@@ -917,7 +917,6 @@ class DatumPage(TitledPage):
         if str == '' or self.datum == '':
             self.transformlist.DeleteAllItems()
             self.transformlist.Refresh()
-        self.tdatum.SetValue(self.datum)
 
         event.Skip()
         
