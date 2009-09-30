@@ -1722,6 +1722,9 @@ class LocationWizard(wx.Object):
         # new location created?
         self.location = None 
         success = False
+        
+        # location created in different GIS database?
+        self.altdb = False
 
         #
         # run wizard...
@@ -1731,19 +1734,21 @@ class LocationWizard(wx.Object):
             if len(msg) < 1:
                 self.wizard.Destroy()
                 self.location = self.startpage.location
-                dlg = wx.MessageDialog(parent=self.parent,
-                                       message=_("Do you want to set the default "
-                                                 "region extents and resolution now?"),
-                                       caption=_("Location <%s> created") % self.location,
-                                       style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                dlg.CenterOnScreen()
-                if dlg.ShowModal() == wx.ID_YES:
-                    dlg.Destroy()
-                    defineRegion = RegionDef(self.parent, location=self.location)
-                    defineRegion.CenterOnScreen()
-                    defineRegion.Show()
-                else:
-                    dlg.Destroy()
+                
+                if self.altdb == False: 
+                    dlg = wx.MessageDialog(parent=self.parent,
+                                           message=_("Do you want to set the default "
+                                                     "region extents and resolution now?"),
+                                           caption=_("Location <%s> created") % self.location,
+                                           style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                    dlg.CenterOnScreen()
+                    if dlg.ShowModal() == wx.ID_YES:
+                        dlg.Destroy()
+                        defineRegion = RegionDef(self.parent, location=self.location)
+                        defineRegion.CenterOnScreen()
+                        defineRegion.Show()
+                    else:
+                        dlg.Destroy()
             else: # -> error
                 self.wizard.Destroy()
                 wx.MessageBox(parent=self.parent,
@@ -1876,6 +1881,8 @@ class LocationWizard(wx.Object):
                               { 'loc' : location, 'dir' : database},
                           caption=_("New GIS data directory"), 
                           style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            # location created in alternate GISDbase
+            self.altdb = True
             
         if coordsys == "xy":
             msg = self.XYCreate()
