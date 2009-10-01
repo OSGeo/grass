@@ -217,6 +217,7 @@ dbDriver *db_start_driver(const char *name)
      *    descriptors in driver (which is another problem)
      */
 
+    G_debug(2,"dbmi_client/start startup: %s", startup);
     pid = _spawnl(_P_NOWAIT, startup, startup, NULL);
 
     /* This does not help. It runs but pipe remains open when close() is 
