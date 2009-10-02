@@ -233,5 +233,6 @@ typedef enum overlay_operator OVERLAY_OPERATOR;
 #define SF_LINE	      0x02
 #define SF_LINESTRING 0x04
 #define SF_LINEARRING 0x08
+#define SF_POLYGON    0x10
 
 #define HEADSTR	50

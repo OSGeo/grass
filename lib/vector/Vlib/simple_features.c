@@ -74,7 +74,7 @@ int Vect_sfa_check_line_type(const struct line_pnts *Points, int type, int sftyp
 */
 void Vect_sfa_write_line_wkt(const struct line_pnts *Points, int type, int with_z, int precision, FILE *file)
 {
-    int sftype;
+    int i, sftype;
     
     sftype = Vect_sfa_get_line_type(Points, type, with_z);
     
@@ -86,7 +86,6 @@ void Vect_sfa_write_line_wkt(const struct line_pnts *Points, int type, int with_
 	break;
     }
     case SF_LINESTRING: case SF_LINE: case SF_LINEARRING: {
-	int i;
 	if (sftype == SF_LINESTRING)
 	    fprintf(file, "LINESTRING(");
 	else if (sftype ==  SF_LINE)
@@ -99,6 +98,17 @@ void Vect_sfa_write_line_wkt(const struct line_pnts *Points, int type, int with_
 		fprintf(file, ", ");
 	}
 	fprintf(file, ")\n");
+	break;
+    }
+    case SF_POLYGON: {
+	/* write only outter/inner ring */
+	fprintf(file, "(");
+	for (i = 0; i < Points->n_points; i++) {
+	    print_point(Points, i, with_z, precision, file);
+	    if (i < Points->n_points - 1)
+		fprintf(file, ", ");
+	}
+	fprintf(file, ")");
 	break;
     }
     default: {
@@ -136,6 +146,15 @@ int check_sftype(const struct line_pnts *points, int type, int sftype, int with_
 	}
     }
 
+    if (type == GV_BOUNDARY) {
+	int num = Vect_get_num_line_points(points);
+	if (sftype == SF_POLYGON &&
+	    points->x[0] == points->x[num-1] &&
+	    points->y[0] == points->y[num-1]) {
+	    return 1;
+	}
+    }
+
     return 0;
 }
 
@@ -152,6 +171,9 @@ int get_sftype(const struct line_pnts *points, int type, int with_z)
 
     if (check_sftype(points, type, SF_LINESTRING, with_z))
 	return SF_LINESTRING;
+
+    if (check_sftype(points, type, SF_POLYGON, with_z))
+	return SF_POLYGON;
 
     return -1;
 }

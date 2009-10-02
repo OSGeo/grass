@@ -348,7 +348,7 @@ int Vect_write_ascii(FILE *ascii,
 		db_close_database(driver);
 		db_shutdown_driver(driver);
 	    }
-	    return n_lines;
+	    break;
 	}
 
 	if (format == GV_ASCII_FORMAT_POINT && !(type & GV_POINTS))
@@ -559,6 +559,8 @@ int Vect_write_ascii(FILE *ascii,
 	    }
 	}
 	else if (format == GV_ASCII_FORMAT_WKT) {
+	    if (type & (GV_BOUNDARY | GV_CENTROID | GV_FACE | GV_KERNEL))
+		continue;
 	    /* Well-Known Text */
 	    Vect_sfa_write_line_wkt(Points, type, Vect_is_3d(Map), dp, ascii);
 	}
@@ -568,7 +570,46 @@ int Vect_write_ascii(FILE *ascii,
 	n_lines++;
     }
 
-    /* not reached */
+    if (format == GV_ASCII_FORMAT_WKT) {
+	/* process areas - topology required */
+	int i, area, nareas, isle, nisles;
+	if (Vect_level(Map) < 2) {
+	    G_warning(_("Topology not available, unable to process areas"));
+	    nareas = 0;
+	}
+	else {
+	    nareas = Vect_get_num_areas(Map);
+	}
+	for (area = 1; area <= nareas; area++) {
+	    if (!Vect_area_alive(Map, area)) /* skip dead areas */
+		continue;
+	    if (Vect_get_area_cat(Map, area, field) < 0)
+		continue;
+	    /* get boundary -> linearring */
+	    if (Vect_get_area_points(Map, area, Points) < 0) {
+		G_warning(_("Unable to get boundary of area id %d"), area);
+		continue;
+	    }
+	    fprintf(ascii, "POLYGON(");
+	    /* write outter ring */
+	    Vect_sfa_write_line_wkt(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
+	    /* get isles (holes) -> inner rings */
+	    nisles = Vect_get_area_num_isles(Map, area);
+	    for (i = 0; i < nisles; i++) {
+		/* get isle boundary -> linearring */
+		isle = Vect_get_area_isle(Map, area, i);
+		if (Vect_get_isle_points(Map, isle, Points) < 0) {
+		    G_warning(_("Unable to get boundary of isle id %d (area id %d)"), isle, area);
+		    continue;
+		}
+		fprintf(ascii, ", ");
+		/* write inner ring */
+		Vect_sfa_write_line_wkt(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
+	    }
+	    fprintf(ascii, ")\n");
+	}
+    }
+
     return n_lines;
 }
 
