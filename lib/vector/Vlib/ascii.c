@@ -11,6 +11,7 @@
   (>=v2).  Read the file COPYING that comes with GRASS for details.
   
   \author Original author CERL
+  \author Updated for GRASS 7 (SF support) by Martin Landa <landa.martin gmail.com>
 */
 #include <stdio.h>
 

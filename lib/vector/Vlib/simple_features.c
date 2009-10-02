@@ -119,6 +119,34 @@ void Vect_sfa_write_line_wkt(const struct line_pnts *Points, int type, int with_
     fflush(file);
 }
 
+/*!
+  \brief Check if feature is closed
+
+  \param Points pointer to line_pnts structure
+  \param type   feature type (GV_POINT, GV_LINE, ...)
+
+  \return 1  feature closed
+  \return 0  feature not closed
+  \return -1 feature type not supported (GV_POINT, GV_CENTROID, ...)
+*/
+int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type, int with_z)
+{
+    int npoints;
+    if (type & (GV_LINES)) {
+	npoints = Vect_get_num_line_points(Points);
+	if (npoints > 2 &&
+	    Points->x[0] == Points->x[npoints-1] &&
+	    Points->y[0] == Points->y[npoints-1]) {
+	    if (!with_z)
+		return 1;
+	    if (Points->z[0] == Points->z[npoints-1])
+		return 1;
+	}
+	return 0;
+    }
+    return -1;
+}
+
 int check_sftype(const struct line_pnts *points, int type, int sftype, int with_z)
 {
     if (type == GV_POINT && sftype == SF_POINT) {
@@ -133,26 +161,15 @@ int check_sftype(const struct line_pnts *points, int type, int sftype, int with_
 	    return 1;
 	}
 	if (sftype == SF_LINEARRING) {
-	    int num = Vect_get_num_line_points(points);
-	    if (points->x[0] == points->x[num-1] &&
-		points->y[0] == points->y[num-1]) {
-		if (!with_z) {
-		    return 1;
-		}
-		else if (points->z[0] == points->z[num-1]) {
-		    return 1;
-		}
-	    }
+	    if (Vect_sfa_is_line_closed(points, type, with_z))
+		return 1;
 	}
     }
 
     if (type == GV_BOUNDARY) {
-	int num = Vect_get_num_line_points(points);
 	if (sftype == SF_POLYGON &&
-	    points->x[0] == points->x[num-1] &&
-	    points->y[0] == points->y[num-1]) {
+	    Vect_sfa_is_line_closed(points, type, 0)) /* force 2D */
 	    return 1;
-	}
     }
 
     return 0;

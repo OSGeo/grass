@@ -419,6 +419,7 @@ void Vect_write_ascii_head(FILE *, struct Map_info *);
 void Vect_sfa_write_line_wkt(const struct line_pnts *, int, int, int, FILE *);
 int Vect_sfa_check_line_type(const struct line_pnts *, int, int, int);
 int Vect_sfa_get_line_type(const struct line_pnts *, int, int);
+int Vect_sfa_is_line_closed(const struct line_pnts *, int, int);
 
 /*
  * Internal functions, MUST NOT be used in modules
