@@ -66,10 +66,18 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("'output' must be given for old version"));
     }
 
-    Vect_set_open_level(1);	/* only need level I */
-    if (Vect_open_old(&Map, input, "") < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"),
+    if (format != GV_ASCII_FORMAT_WKT) {
+	Vect_set_open_level(1);	/* topology not needed */
+	if (Vect_open_old(&Map, input, "") < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			  input);
+    }
+    else {
+	if (Vect_open_old(&Map, input, "") < 2) /* topology required for polygons */
+	    G_warning(_("Unable to open vector map <%s> at topology level. "
+			"Only points, lines can be processed."),
 		      input);
+    }
     
     if (strcmp(output, "-") != 0) {
 	if (ver == 4) {
