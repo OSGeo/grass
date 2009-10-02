@@ -233,13 +233,20 @@ int main(int argc, char *argv[])
     case MODE_ADD:
 	print = 0;
 	if (!params.header->answer)
-	    read_head(ascii, &Map);
-	struct ilist *List_added;
-
-	List_added = Vect_new_list();
-	ret = asc_to_bin(ascii, &Map, List_added);
+	    Vect_read_ascii_head(ascii, &Map);
+	int num_lines;
+	num_lines = Vect_get_num_lines(&Map);
+	
+	ret = Vect_read_ascii(ascii, &Map);
 	G_message(_("%d features added"), ret);
 	if (ret > 0) {
+	    int iline;
+	    struct ilist *List_added;
+	    
+	    List_added = Vect_new_list();
+	    for (iline = num_lines + 1; iline <= Vect_get_num_lines(&Map); iline++)
+		Vect_list_append(List_added, iline);
+	    
 	    G_verbose_message(_("Threshold value for snapping is %.2f"),
 			      thresh[THRESH_SNAP]);
 	    if (snap != NO_SNAP) {	/* apply snapping */
@@ -251,8 +258,8 @@ int main(int argc, char *argv[])
 		nclosed = close_lines(&Map, GV_BOUNDARY, thresh[THRESH_SNAP]);
 		G_message(_("%d boundaries closed"), nclosed);
 	    }
+	    Vect_destroy_list(List_added);
 	}
-	Vect_destroy_list(List_added);
 	break;
     case MODE_DEL:
 	ret = Vedit_delete_lines(&Map, List);
