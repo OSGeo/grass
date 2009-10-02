@@ -1523,6 +1523,8 @@ kernels. The format may also contain a header with various metadata
 Vector map can be converted to the ASCII representation at user level
 by <tt>v.out.ascii format=standard</tt> command.
 
+See \ref vlibAsciiFn for list of related functions.
+
 
 The header is similar as the head file of vector binary format (see
 \ref vlibHeadFileFormat) but contains bounding box also. Keywords are:
@@ -1689,6 +1691,7 @@ programming. The programmer should use only routines with this prefix.
 - \subpage vlibType
 - \subpage vlibDelete
 - \subpage vlibWrite
+- \subpage vlibAsciiFn
 - \subpage vlibGeos
 
 \section vlibArea Vector area functions
@@ -2311,7 +2314,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_rewind()
 
 
-\section vlibSindex Vector spatial index functions
+\section vlibSelect Vector select functions
 
  - Vect_select_areas_by_box()
 
@@ -2326,7 +2329,7 @@ programming. The programmer should use only routines with this prefix.
  - Vect_select_nodes_by_box()
 
 
-\section vlibSelect custom spatial index functions
+\section vlibSindex Vector spatial index functions
 
  - Vect_spatial_index_add_item()
 
@@ -2371,6 +2374,16 @@ programming. The programmer should use only routines with this prefix.
 \subsection vlibWrite2 Level 2 only
 
  - Vect_rewrite_line()
+
+\subsection vlibAsciiFn Vector ASCII functions
+
+ - Vect_read_ascii()
+ 
+ - Vect_read_ascii_head()
+
+ - Vect_write_ascii()
+ 
+ - Vect_write_ascii_head()
 
 \section vlibGeos Vector GEOS functions
 
