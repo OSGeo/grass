@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     parse_args(argc, argv, &input, &output, &format, &dp, &delim,
 	       &field, &columns, &where, &region, &old_format);
 
-    if (format == GV_ASCII_FORMAT_ALL && columns) {
+    if (format == GV_ASCII_FORMAT_STD && columns) {
 	G_warning(_("Parameter 'column' ignored in standard mode"));
     }
 
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 	ascii = stdout;
     }
 
-    if (format == GV_ASCII_FORMAT_ALL) {
+    if (format == GV_ASCII_FORMAT_STD) {
 	Vect_write_ascii_head(ascii, &Map);
 	fprintf(ascii, "VERTI:\n");
     }

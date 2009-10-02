@@ -413,8 +413,6 @@ int Vect_write_ascii(FILE *ascii,
 	}
 
 	if (format == GV_ASCII_FORMAT_POINT) {
-	    /*fprintf(ascii, "%c", ctype); */
-
 	    if (region_flag) {
 		if ((window.east < Points->x[0]) ||
 		    (window.west > Points->x[0]))
@@ -497,7 +495,7 @@ int Vect_write_ascii(FILE *ascii,
 
 	    fprintf(ascii, "\n");
 	}
-	else {
+	else if (format == GV_ASCII_FORMAT_STD) {
 	    /* FORMAT_STANDARD */
 	    if (ver == 5 && Cats->n_cats > 0)
 		fprintf(ascii, "%c  %d %d\n", ctype, Points->n_points,
@@ -559,6 +557,13 @@ int Vect_write_ascii(FILE *ascii,
 		    }
 		}
 	    }
+	}
+	else if (format == GV_ASCII_FORMAT_WKT) {
+	    /* Well-Known Text */
+	    Vect_sfa_write_line_wkt(Points, type, Vect_is_3d(Map), dp, ascii);
+	}
+	else {
+	    G_fatal_error(_("Unknown format"));
 	}
 	n_lines++;
     }
