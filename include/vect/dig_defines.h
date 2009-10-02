@@ -225,6 +225,13 @@ typedef enum overlay_operator OVERLAY_OPERATOR;
 
 /*! \brief GRASS ASCII vector format */
 #define GV_ASCII_FORMAT_POINT 0
-#define GV_ASCII_FORMAT_ALL   1
+#define GV_ASCII_FORMAT_STD   1
+#define GV_ASCII_FORMAT_WKT   2
+
+/*! \brief Simple feature types */
+#define SF_POINT      0x01
+#define SF_LINE	      0x02
+#define SF_LINESTRING 0x04
+#define SF_LINEARRING 0x08
 
 #define HEADSTR	50

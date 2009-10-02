@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     if (format_opt->answer[0] == 'p')
 	format = GV_ASCII_FORMAT_POINT;
     else
-	format = GV_ASCII_FORMAT_ALL;
+	format = GV_ASCII_FORMAT_STD;
 
     skip_lines = atoi(skip_opt->answer);
     if (skip_lines < 0)

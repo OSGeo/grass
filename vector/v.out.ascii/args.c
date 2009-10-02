@@ -28,7 +28,7 @@ void parse_args(int argc, char **argv,
     format_opt->type = TYPE_STRING;
     format_opt->required = YES;
     format_opt->multiple = NO;
-    format_opt->options = "point,standard";
+    format_opt->options = "point,standard,wkt";
     format_opt->answer = "point";
     format_opt->description = _("Output format");
     
@@ -71,10 +71,12 @@ void parse_args(int argc, char **argv,
 
     *input = G_store(input_opt->answer);
     *output = G_store(output_opt->answer);
-    if (strcmp(format_opt->answer, "point") == 0)
+    if (format_opt->answer[0] == 'p')
 	*format = GV_ASCII_FORMAT_POINT;
+    else if (format_opt->answer[0] == 's')
+	*format = GV_ASCII_FORMAT_STD;
     else
-	*format = GV_ASCII_FORMAT_ALL;
+	*format = GV_ASCII_FORMAT_WKT;
     if (sscanf(dp_opt->answer, "%d", dp) != 1)
 	G_fatal_error(_("Failed to interpret 'dp' parameter as an integer"));
     /* the field separator */

@@ -415,6 +415,11 @@ int Vect_write_ascii(FILE *, FILE *, struct Map_info *, int,
 		     int, char*, char **);
 void Vect_write_ascii_head(FILE *, struct Map_info *);
 
+/* Simple Features */
+void Vect_sfa_write_line_wkt(const struct line_pnts *, int, int, int, FILE *);
+int Vect_sfa_check_line_type(const struct line_pnts *, int, int, int);
+int Vect_sfa_get_line_type(const struct line_pnts *, int, int);
+
 /*
  * Internal functions, MUST NOT be used in modules
  */
