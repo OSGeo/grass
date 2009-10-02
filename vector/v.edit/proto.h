@@ -4,9 +4,7 @@
 /* args.c */
 int parser(int, char *[], struct GParams *, enum mode *);
 
-/* a2b.c */
-int asc_to_bin(FILE *, struct Map_info *, struct ilist *);
-int read_head(FILE *, struct Map_info *);
+/* close.c */
 int close_lines(struct Map_info *, int, double);
 
 /* select.c */

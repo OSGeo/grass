@@ -28,7 +28,8 @@ static int srch(const void *, const void *);
   \param ascii pointer to the ASCII file
   \param Map   pointer to Map_info structure
 
-  \return 0
+  \return number of read features
+  \return -1 on error
 */
 int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 {
@@ -38,14 +39,13 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
     double *yarray;
     double *zarray;
     double *x, *y, *z;
-    int i, n_points, n_coors, n_cats;
+    int i, n_points, n_coors, n_cats, n_lines;
     int type;
     int alloc_points;
     int end_of_file;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    int catn;
-    int cat;
+    int catn, cat;
 
     /* Must always use this to create an initialized  line_pnts structure */
     Points = Vect_new_line_struct();
@@ -58,7 +58,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
     yarray = (double *)G_calloc(alloc_points, sizeof(double));
     zarray = (double *)G_calloc(alloc_points, sizeof(double));
 
-
+    n_lines = 0;
     while (G_getl2(buff, BUFFSIZE - 1, ascii) != 0) {
 	n_cats = 0;
 	if (buff[0] == '\0') {
@@ -184,12 +184,14 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 	    Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points))
 	    G_fatal_error(_("Out of memory"));
 
-	if (type > 0)
+	if (type > 0) {
 	    Vect_write_line(Map, type, Points, Cats);
-
+	    n_lines++;
+	}
+	
 	Vect_reset_cats(Cats);
     }
-    return 0;
+    return n_lines;
 }
 
 /*!
