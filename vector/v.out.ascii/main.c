@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     struct Option *input, *output, *format_opt, *dp_opt, *delim_opt,
 	*field_opt, *column_opt, *where_opt;
     struct Flag *verf, *region_flag;
-    int format, dp, field;
+    int format, dp, field, ret;
     char *fs;
     struct Map_info Map;
     int ver = 5, pnt = 0;
@@ -182,9 +182,18 @@ int main(int argc, char *argv[])
 			  output->answer);
     }
 
-    Vect_write_ascii(ascii, att, &Map, ver, format, dp, fs,
-		     region_flag->answer, field, where_opt->answer,
-		     column_opt->answers);
+    ret = Vect_write_ascii(ascii, att, &Map, ver, format, dp, fs,
+			   region_flag->answer, field, where_opt->answer,
+			   column_opt->answers);
+
+    if (ret < 1) {
+	if (format == GV_ASCII_FORMAT_POINT) {
+	    G_warning(_("No points found, nothing to be exported"));
+	}
+	else {
+	    G_warning(_("No features found, nothing to be exported"));
+	}
+    }
     
     if (ascii != NULL)
 	fclose(ascii);
