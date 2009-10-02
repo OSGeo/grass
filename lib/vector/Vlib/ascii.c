@@ -263,7 +263,7 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
   \param dascii pointer to the ASCII file
   \param Map    pointer to Map_info structure
 
-  \return 0 on sucess
+  \return number of written features
   \return -1 on error
 */
 int Vect_write_ascii(FILE *ascii,
@@ -271,7 +271,7 @@ int Vect_write_ascii(FILE *ascii,
 		     int format, int dp, char *fs, int region_flag,
 		     int field, char* where, char **columns)
 {
-    int type, ctype, i, cat, proj;
+    int type, ctype, i, cat, proj, n_lines;
     double *xptr, *yptr, *zptr, x, y;
     static struct line_pnts *Points;
     struct line_cats *Cats;
@@ -289,6 +289,7 @@ int Vect_write_ascii(FILE *ascii,
     /* get the region */
     G_get_window(&window);
 
+    n_lines = 0;
     ncats = 0;
     cats = NULL;
     
@@ -347,7 +348,7 @@ int Vect_write_ascii(FILE *ascii,
 		db_close_database(driver);
 		db_shutdown_driver(driver);
 	    }
-	    return 0;
+	    return n_lines;
 	}
 
 	if (format == GV_ASCII_FORMAT_POINT && !(type & GV_POINTS))
@@ -407,7 +408,7 @@ int Vect_write_ascii(FILE *ascii,
 	    break;
 	default:
 	    ctype = 'X';
-	    G_warning(_("got type %d"), (int)type);
+	    G_warning(_("Uknown feature type %d"), (int)type);
 	    break;
 	}
 
@@ -559,9 +560,11 @@ int Vect_write_ascii(FILE *ascii,
 		}
 	    }
 	}
+	n_lines++;
     }
 
     /* not reached */
+    return n_lines;
 }
 
 int srch(const void *pa, const void *pb)
