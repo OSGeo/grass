@@ -1,7 +1,7 @@
 /* Author: Bill Hoff,2-114C,8645,3563478 (hoff) at uicsl */
 
 /*!
- * \fn int mult (double *v1[2], int size1, double *v2[2], int size2, double *v3[2], int size3)
+ * \fn int G_math_complex_mult (double *v1[2], int size1, double *v2[2], int size2, double *v3[2], int size3)
  *
  * \brief Multiply two complex vectors, point by point
  *
@@ -20,7 +20,7 @@
  */
 
 int
-mult(double *v1[2], int size1, double *v2[2], int size2, double *v3[2],
+G_math_complex_mult(double *v1[2], int size1, double *v2[2], int size2, double *v3[2],
      int size3)
 {
     int i, n;

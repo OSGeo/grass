@@ -61,7 +61,7 @@ int del2g(double *img[2], int size, double w)
 
     /* multiply the complex vectors img and g, each of length size*size */
     G_message(_("    multiplying transforms..."));
-    mult(img, size * size, g, size * size, img, size * size);
+    G_math_complex_mult(img, size * size, g, size * size, img, size * size);
 
     G_message(_("    taking inverse FFT..."));
     fft(INVERSE, img, size * size, size, size);

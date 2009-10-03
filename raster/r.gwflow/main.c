@@ -21,6 +21,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/gmath.h>
 #include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include <grass/N_gwflow.h>
@@ -42,9 +43,10 @@ void set_params(void);		/*Fill the paramType structure */
 void copy_result(N_array_2d * status, N_array_2d * phead_start,
 		 double *result, struct Cell_head *region,
 		 N_array_2d * target);
+
 N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
-			N_les_callback_2d * call, const char *solver,
-			int maxit, double error, double sor);
+                        N_les_callback_2d * call, const char *solver, int maxit,
+                        double error);
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -185,7 +187,6 @@ void set_params(void)
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
     param.error = N_define_standard_option(N_OPT_ITERATION_ERROR);
     param.solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
-    param.sor = N_define_standard_option(N_OPT_SOR_VALUE);
 
     param.sparse = G_define_flag();
     param.sparse->key = 's';
@@ -206,7 +207,7 @@ int main(int argc, char *argv[])
     N_les_callback_2d *call = NULL;
     double *tmp_vect = NULL;
     struct Cell_head region;
-    double error, sor, max_norm = 0, tmp;
+    double error,  max_norm = 0, tmp;
     int maxit, i, inner_count = 0;
     char *solver;
     int x, y, stat;
@@ -264,15 +265,14 @@ int main(int argc, char *argv[])
     sscanf(param.maxit->answer, "%i", &(maxit));
     /*Set the calculation error break criteria */
     sscanf(param.error->answer, "%lf", &(error));
-    sscanf(param.sor->answer, "%lf", &(sor));
     /*set the solver */
     solver = param.solver->answer;
 
-    if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
 	G_fatal_error(_("The direct LU solver do not work with sparse matrices"));
-    if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
 	G_fatal_error(_("The direct Gauss solver do not work with sparse matrices"));
-    if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
 	G_fatal_error(_("The direct cholesky solver do not work with sparse matrices"));
 
 
@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
 
 
     /*assemble the linear equation system  and solve it */
-    les = create_solve_les(geom, data, call, solver, maxit, error, sor);
+    les = create_solve_les(geom, data, call, solver, maxit, error);
 
     /* copy the result into the phead array for output or unconfined calculation */
     copy_result(data->status, data->phead_start, les->x, &region,
@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
 
 	    /*assemble the linear equation system  and solve it */
 	    les =
-		create_solve_les(geom, data, call, solver, maxit, error, sor);
+		create_solve_les(geom, data, call, solver, maxit, error);
 
 	    /*calculate the maximum norm of the groundwater height difference */
 	    tmp = 0;
@@ -510,56 +510,46 @@ copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
 
     return;
 }
-
 /* *************************************************************** */
 /* ***** create and solve the linear equation system ************* */
 /* *************************************************************** */
 N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
-			N_les_callback_2d * call, const char *solver,
-			int maxit, double error, double sor)
+                        N_les_callback_2d * call, const char *solver, int maxit,
+                        double error)
 {
 
     N_les *les;
 
     /*assemble the linear equation system */
     if (param.sparse->answer)
-	les =
-	    N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status,
-					data->phead, (void *)data, call);
+        les = N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status, data->phead, (void *)data, call);
     else
-	les =
-	    N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-					data->phead, (void *)data, call);
+        les = N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead, (void *)data, call);
 
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead);
 
-    /*solve the equation system */
-    if (strcmp(solver, N_SOLVER_ITERATIVE_JACOBI) == 0)
-	N_solver_jacobi(les, maxit, sor, error);
+    /*solve the linear equation system */
+    if(les && les->type == N_NORMAL_LES)
+    {
+    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
+        G_math_solver_cg(les->A, les->x, les->b, les->rows, maxit, error);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_SOR) == 0)
-	N_solver_SOR(les, maxit, sor, error);
+    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
+        G_math_solver_pcg(les->A, les->x, les->b, les->rows, maxit, error, G_MATH_DIAGONAL_PRECONDITION);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_CG) == 0)
-	N_solver_cg(les, maxit, error);
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0)
+        G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
+    } else if (les && les->type == N_SPARSE_LES)
+    {
+    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
+        G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, maxit, error);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_PCG) == 0)
-	N_solver_pcg(les, maxit, error, N_DIAGONAL_PRECONDITION);
+    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
+        G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, maxit, error, G_MATH_DIAGONAL_PRECONDITION);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_BICGSTAB) == 0)
-	N_solver_bicgstab(les, maxit, error);
-
-    if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0)
-	N_solver_lu(les);
-
-    if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0)
-	N_solver_cholesky(les);
-
-    if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0)
-	N_solver_gauss(les);
-
+    }
     if (les == NULL)
-	G_fatal_error(_("Unable to create and solve the linear equation system"));
+        G_fatal_error(_("Unable to create and solve the linear equation system"));
 
     return les;
 }

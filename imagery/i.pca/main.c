@@ -104,21 +104,11 @@ int main(int argc, char *argv[])
     set_output_scale(opt_scale, &scale, &scale_min, &scale_max);
 
     /* allocate memory */
-    covar = (double **)G_calloc(bands, sizeof(double *));
-    mu = (double *)G_malloc(bands * sizeof(double));
-    inp_fd = (int *)G_malloc(bands * sizeof(int));
-    eigmat = (double **)G_calloc(bands, sizeof(double *));
-    eigval = (double *)G_calloc(bands, sizeof(double));
-
-    /* allocate memory for matrices */
-    for (i = 0; i < bands; i++) {
-	covar[i] = (double *)G_malloc(bands * sizeof(double));
-	eigmat[i] = (double *)G_calloc(bands, sizeof(double));
-
-	/* initialize covariance matrix */
-	for (j = 0; j < bands; j++)
-	    covar[i][j] = 0.;
-    }
+    covar = G_alloc_matrix(bands, bands);
+    mu = G_alloc_vector(bands);
+    inp_fd = G_alloc_ivector(bands);
+    eigmat = G_alloc_matrix(bands, bands);
+    eigval = G_alloc_vector(bands);
 
     /* open and check input/output files */
     for (i = 0; i < bands; i++) {
@@ -146,8 +136,9 @@ int main(int argc, char *argv[])
 	}
     }
 
+    G_math_d_copy(covar[0], eigmat[0], bands*bands);
     G_debug(1, "Calculating eigenvalues and eigenvectors...");
-    eigen(covar, eigmat, eigval, bands);
+    G_math_eigen(eigmat, eigval, bands);
 
 #ifdef PCA_DEBUG
     /* dump eigen matrix and eigen values */
@@ -155,10 +146,10 @@ int main(int argc, char *argv[])
 #endif
 
     G_debug(1, "Ordering eigenvalues in descending order...");
-    egvorder2(eigval, eigmat, bands);
+    G_math_egvorder(eigval, eigmat, bands);
 
     G_debug(1, "Transposing eigen matrix...");
-    transpose2(eigmat, bands);
+    G_math_d_A_T(eigmat, bands);
 
     /* write output images */
     write_pca(eigmat, inp_fd, opt_out->answer, bands, scale, scale_min,
@@ -176,6 +167,13 @@ int main(int argc, char *argv[])
 	/* close output file */
 	Rast_unopen(inp_fd[i]);
     }
+    
+    /* free memory */
+    G_free_matrix(covar);
+    G_free_vector(mu);
+    G_free_ivector(inp_fd);
+    G_free_matrix(eigmat);
+    G_free_vector(eigval);
 
     exit(EXIT_SUCCESS);
 }

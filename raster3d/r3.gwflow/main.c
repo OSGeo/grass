@@ -20,6 +20,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/G3d.h>
+#include <grass/gmath.h>
 #include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include <grass/N_gwflow.h>
@@ -29,7 +30,7 @@
 typedef struct
 {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *hc_z, *q, *s, *r,
-	*vector, *dt, *maxit, *error, *solver, *sor;
+	*vector, *dt, *maxit, *error, *solver;
     struct Flag *mask;
     struct Flag *sparse;
 } paramType;
@@ -37,10 +38,11 @@ typedef struct
 paramType param;		/*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-void set_params(void);		/*Fill the paramType structure */
-void write_result(N_array_3d * status, N_array_3d * phead_start,
-		  N_array_3d * phead, double *result, G3D_Region * region,
-		  char *name);
+static void set_params(void);	/*Fill the paramType structure */
+
+static void write_result(N_array_3d * status, N_array_3d * phead_start,
+			 N_array_3d * phead, double *result,
+			 G3D_Region * region, char *name);
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -60,7 +62,8 @@ void set_params(void)
     param.status->required = YES;
     param.status->gisprompt = "old,grid3,3d-raster";
     param.status->description =
-	_("The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
+	_
+	("The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
 
     param.hc_x = G_define_option();
     param.hc_x->key = "hc_x";
@@ -112,23 +115,23 @@ void set_params(void)
     param.output->type = TYPE_STRING;
     param.output->required = YES;
     param.output->gisprompt = "new,grid3,3d-raster";
-    param.output->description =
-	_("The piezometric head result of the numerical calculation will be written to this map");
+    param.output->description = _("The piezometric head result of the numerical calculation will be written to this map");
 
     param.vector = G_define_option();
     param.vector->key = "velocity";
     param.vector->type = TYPE_STRING;
     param.vector->required = NO;
     param.vector->gisprompt = "new,grid3,3d-raster";
-    param.vector->description =
-	_("Calculate the groundwater distance velocity vector field and write the x, y, and z components to maps named name_[xyz]. Name is basename for the new raster3d maps");
+    param.vector->description = _("Calculate the groundwater distance velocity vector field \n"
+	                          "and write the x, y, and z components to maps named name_[xyz].\n"
+	                          "Name is basename for the new raster3d maps");
 
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
     param.error = N_define_standard_option(N_OPT_ITERATION_ERROR);
     param.solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
-    param.sor = N_define_standard_option(N_OPT_SOR_VALUE);
+    param.solver->options = "cg,pcg,cholesky";
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
@@ -136,8 +139,7 @@ void set_params(void)
 
     param.sparse = G_define_flag();
     param.sparse->key = 's';
-    param.sparse->description =
-	_("Use a sparse linear equation system, only available with iterative solvers");
+    param.sparse->description = _("Use a sparse linear equation system, only available with iterative solvers");
 }
 
 /* ************************************************************************* */
@@ -146,19 +148,33 @@ void set_params(void)
 int main(int argc, char *argv[])
 {
     struct GModule *module = NULL;
+
     N_gwflow_data3d *data = NULL;
+
     N_geom_data *geom = NULL;
+
     N_les *les = NULL;
+
     N_les_callback_3d *call = NULL;
+
     G3D_Region region;
+
     N_gradient_field_3d *field = NULL;
+
     N_array_3d *xcomp = NULL;
+
     N_array_3d *ycomp = NULL;
+
     N_array_3d *zcomp = NULL;
-    double error, sor;
+
+    double error;
+
     int maxit;
+
     const char *solver;
+
     int x, y, z, stat;
+
     char *buff = NULL;
 
     /* Initialize GRASS */
@@ -167,8 +183,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("voxel"));
-    module->description =
-	_("Numerical calculation program for transient, confined groundwater flow in three dimensions");
+    module->description = _("Numerical calculation program for transient, confined groundwater flow in three dimensions");
 
     /* Get parameters from user */
     set_params();
@@ -181,15 +196,10 @@ int main(int argc, char *argv[])
     sscanf(param.maxit->answer, "%i", &(maxit));
     /*Set the calculation error break criteria */
     sscanf(param.error->answer, "%lf", &(error));
-    sscanf(param.sor->answer, "%lf", &(sor));
     /*Set the solver */
     solver = param.solver->answer;
 
-    if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
-	G_fatal_error(_("The direct LU solver do not work with sparse matrices"));
-    if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
-	G_fatal_error(_("The direct Gauss solver do not work with sparse matrices"));
-    if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
 	G_fatal_error(_("The direct cholesky solver do not work with sparse matrices"));
 
 
@@ -265,31 +275,27 @@ int main(int argc, char *argv[])
 			      (void *)data, call);
     }
 
+    if (les && les->type == N_NORMAL_LES) {
+	if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
+	    G_math_solver_cg(les->A, les->x, les->b, les->rows, maxit, error);
 
-    /*solve the equation system */
-    if (strcmp(solver, N_SOLVER_ITERATIVE_JACOBI) == 0)
-	N_solver_jacobi(les, maxit, sor, error);
+	if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
+	    G_math_solver_pcg(les->A, les->x, les->b, les->rows, maxit, error,
+			      G_MATH_DIAGONAL_PRECONDITION);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_SOR) == 0)
-	N_solver_SOR(les, maxit, sor, error);
+	if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0)
+	    G_math_solver_cholesky(les->A, les->x, les->b, les->rows,
+				   les->rows);
+    }
+    else if (les && les->type == N_SPARSE_LES) {
+	if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
+	    G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows,
+				    maxit, error);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_CG) == 0)
-	N_solver_cg(les, maxit, error);
-
-    if (strcmp(solver, N_SOLVER_ITERATIVE_PCG) == 0)
-	N_solver_pcg(les, maxit, error, N_DIAGONAL_PRECONDITION);
-
-    if (strcmp(solver, N_SOLVER_ITERATIVE_BICGSTAB) == 0)
-	N_solver_bicgstab(les, maxit, error);
-
-    if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0)
-	N_solver_lu(les);
-
-    if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0)
-	N_solver_gauss(les);
-
-    if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0)
-	N_solver_cholesky(les);
+	if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
+	    G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows,
+				     maxit, error, G_MATH_DIAGONAL_PRECONDITION);
+    }
 
     if (les == NULL)
 	G_fatal_error(_("Unable to create and solve the linear equation system"));
@@ -357,8 +363,11 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
 	     char *name)
 {
     void *map = NULL;
+
     int changemask = 0;
+
     int z, y, x, rows, cols, depths, count, stat;
+
     double d1 = 0;
 
     rows = region->rows;

@@ -7,6 +7,7 @@ SUBDIRS = \
 	datetime \
 	gis \
 	raster \
+	external \
 	gmath \
 	linkm \
 	driver \
@@ -18,7 +19,6 @@ SUBDIRS = \
 	btree \
 	display \
 	db \
-	external \
 	fonts \
 	gtcltk \
 	form \

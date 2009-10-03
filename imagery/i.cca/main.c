@@ -53,26 +53,26 @@ int main(int argc, char *argv[])
     int bands;			/* Number of image bands */
     int nclass;			/* Number of classes */
     int samptot;		/* Total number of sample points */
-    double mu[MC][MX];		/* Mean vector for image classes */
-    double w[MX][MX];		/* Within Class Covariance Matrix */
-    double p[MX][MX];		/* Between class Covariance Matrix */
-    double l[MX][MX];		/* Diagonal matrix of eigenvalues */
-    double q[MX][MX];		/* Transformation matrix */
-    double cov[MC][MX][MX];	/* Individual class Covariance Matrix */
-    double nsamp[MC];		/* Number of samples in a given class */
-    double eigval[MX];		/* Eigen value vector */
-    double eigmat[MX][MX];	/* Eigen Matrix */
-    char tempname[50];
+    double **mu;		/* Mean vector for image classes */
+    double **w;		/* Within Class Covariance Matrix */
+    double **p;		/* Between class Covariance Matrix */
+    double **l;		/* Diagonal matrix of eigenvalues */
+    double **q;		/* Transformation matrix */
+    double ***cov;	/* Individual class Covariance Matrix */
+    double *nsamp;		/* Number of samples in a given class */
+    double *eigval;		/* Eigen value vector */
+    double **eigmat;	/* Eigen Matrix */
+    char tempname[1024];
 
     /* used to make the color tables */
-    CELL outbandmax[MX];	/* will hold the maximums found in the out maps */
-    CELL outbandmin[MX];	/* will hold the minimums found in the out maps */
+    CELL *outbandmax;	/* will hold the maximums found in the out maps */
+    CELL *outbandmin;	/* will hold the minimums found in the out maps */
     struct Colors color_tbl;
     struct Signature sigs;
     FILE *sigfp;
     struct Ref refs;
-    int datafds[MX];
-    int outfds[MX];
+    int *datafds;
+    int *outfds;
 
     struct GModule *module;
     struct Option *grp_opt, *subgrp_opt, *sig_opt, *out_opt;
@@ -129,9 +129,28 @@ int main(int argc, char *argv[])
 
     /* check the number of input bands */
     bands = refs.nfiles;
-    if (bands > MX - 1)
-	G_fatal_error(_("Subgroup too large.  Maximum number of bands is %d\n."),
-		      MX - 1);
+
+    /*memory allocation*/
+    mu = G_alloc_matrix(nclass, bands);
+    w = G_alloc_matrix(bands, bands);
+    p = G_alloc_matrix(bands, bands);
+    l = G_alloc_matrix(bands, bands);
+    q = G_alloc_matrix(bands, bands);
+    eigmat = G_alloc_matrix(bands, bands);
+    nsamp = G_alloc_vector(nclass);
+    eigval = G_alloc_vector(bands);
+
+    cov = (double***)G_calloc(nclass, sizeof(double**));
+    for(i = 0; i < nclass; i++)
+    {
+        cov[i] = G_alloc_matrix(bands,bands);
+    }
+
+    outbandmax = (CELL*)G_calloc(nclass, sizeof(CELL));
+    outbandmin = (CELL*)G_calloc(nclass, sizeof(CELL));
+    datafds = (int*)G_calloc(nclass, sizeof(int));
+    outfds = (int*)G_calloc(nclass, sizeof(int));
+
 
     /*
        Here is where the information regarding
@@ -154,14 +173,26 @@ int main(int argc, char *argv[])
 
     within(samptot, nclass, nsamp, cov, w, bands);
     between(samptot, nclass, nsamp, mu, p, bands);
-    jacobi(w, (long)bands, eigval, eigmat);
-    egvorder(eigval, eigmat, (long)bands);
+    G_math_d_copy(w[0], eigmat[0], bands*bands);
+    G_math_eigen(eigmat, eigval, bands);
+    G_math_egvorder(eigval, eigmat, bands);
     setdiag(eigval, bands, l);
     getsqrt(w, bands, l, eigmat);
     solveq(q, bands, w, p);
-    jacobi(q, (long)bands, eigval, eigmat);
-    egvorder(eigval, eigmat, (long)bands);
-    matmul(q, eigmat, w, bands);
+    G_math_d_copy(q[0], eigmat[0], bands*bands);
+    G_math_eigen(eigmat, eigval, bands);
+    G_math_egvorder(eigval, eigmat, bands);
+    G_math_d_AB(eigmat, w, q, bands, bands, bands);
+
+    for(i = 0; i < bands; i++)
+    {
+        G_verbose_message("%i. eigen value: %+6.5f", i, eigval[i]);
+        G_verbose_message("eigen vector:");
+	for(j = 0; j < bands; j++)
+            G_verbose_message("%+6.5f ", eigmat[i][j]);
+
+    }
+
 
     /* open the cell maps */
     for (i = 1; i <= bands; i++) {
@@ -205,6 +236,25 @@ int main(int argc, char *argv[])
 
     I_free_signatures(&sigs);
     I_free_group_ref(&refs);
+    
+    /*free memory*/
+    G_free_matrix(mu);
+    G_free_matrix(w);
+    G_free_matrix(p);
+    G_free_matrix(l);
+    G_free_matrix(q);
+    G_free_matrix(eigmat);
+    for(i = 0; i < nclass; i++)
+        G_free_matrix(cov[i]);
+    G_free(cov);
+
+    G_free_vector(nsamp);
+    G_free_vector(eigval);
+
+    G_free(outbandmax);
+    G_free(outbandmin);
+    G_free(datafds);
+    G_free(outfds);
 
     exit(EXIT_SUCCESS);
 }

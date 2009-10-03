@@ -17,29 +17,9 @@
 *****************************************************************************/
 
 #include "grass/N_pde.h"
+#include "grass/gmath.h"
 #include <stdlib.h>
 
-/*!
- * \brief Allocate memory for a sparse vector
- *
- * \param cols int
- * \return N_spvector *
- *
- * */
-N_spvector *N_alloc_spvector(int cols)
-{
-    N_spvector *spvector;
-
-    G_debug(4, "Allocate memory for a sparse vector with %i cols\n", cols);
-
-    spvector = (N_spvector *) G_calloc(1, sizeof(N_spvector));
-
-    spvector->cols = cols;
-    spvector->index = (int *)G_calloc(cols, sizeof(int));
-    spvector->values = (double *)G_calloc(cols, sizeof(double));
-
-    return spvector;
-}
 
 /*!
  * \brief Allocate memory for a (not) quadratic linear equation system which includes the Matrix A, vector x and vector b
@@ -198,6 +178,7 @@ N_les *N_alloc_les_Ax_b(int rows, int type)
 N_les *N_alloc_les_param(int cols, int rows, int type, int parts)
 {
     N_les *les;
+
     int i;
 
     if (type == N_SPARSE_LES)
@@ -234,56 +215,15 @@ N_les *N_alloc_les_param(int cols, int rows, int type, int parts)
 	les->quad = 0;
 
     if (type == N_SPARSE_LES) {
-	les->Asp = (N_spvector **) G_calloc(rows, sizeof(N_spvector *));
+	les->Asp = G_math_alloc_spmatrix(rows);
 	les->type = N_SPARSE_LES;
     }
     else {
-	les->A = (double **)G_calloc(rows, sizeof(double *));
-	for (i = 0; i < rows; i++) {
-	    les->A[i] = (double *)G_calloc(cols, sizeof(double));
-	}
+	les->A = G_alloc_matrix(rows, cols);
 	les->type = N_NORMAL_LES;
     }
 
     return les;
-}
-
-
-/*!
- * \brief Adds a sparse vector to a sparse linear equation system at position row
- *
- * Return 1 for success and -1 for failure
- *
- * \param les N_les *
- * \param spvector N_spvector * 
- * \param row int
- * \return int
- *
- * */
-int N_add_spvector_to_les(N_les * les, N_spvector * spvector, int row)
-{
-
-
-    if (les != NULL) {
-	if (les->type != N_SPARSE_LES)
-	    return -1;
-
-	if (les->rows > row) {
-	    G_debug(5,
-		    "Add sparse vector %p to the sparse linear equation system at row %i\n",
-		    spvector, row);
-	    les->Asp[row] = spvector;
-	}
-	else
-	    return -1;
-
-    }
-    else {
-	return -1;
-    }
-
-
-    return 1;
 }
 
 /*!
@@ -354,29 +294,6 @@ void N_print_les(N_les * les)
 }
 
 /*!
- * \brief Release the memory of the sparse vector
- *
- * \param spvector N_spvector *
- * \return void
- *
- * */
-void N_free_spvector(N_spvector * spvector)
-{
-    if (spvector) {
-	if (spvector->values)
-	    G_free(spvector->values);
-	if (spvector->index)
-	    G_free(spvector->index);
-	G_free(spvector);
-
-	spvector = NULL;
-    }
-
-    return;
-}
-
-
-/*!
  * \brief Release the memory of the linear equation system
  *
  * \param les N_les *            
@@ -386,8 +303,6 @@ void N_free_spvector(N_spvector * spvector)
 
 void N_free_les(N_les * les)
 {
-    int i;
-
     if (les->type == N_SPARSE_LES)
 	G_debug(2, "Releasing memory of a sparse linear equation system\n");
     else
@@ -403,21 +318,13 @@ void N_free_les(N_les * les)
 	if (les->type == N_SPARSE_LES) {
 
 	    if (les->Asp) {
-		for (i = 0; i < les->rows; i++)
-		    if (les->Asp[i])
-			N_free_spvector(les->Asp[i]);
-
-		G_free(les->Asp);
+		G_math_free_spmatrix(les->Asp, les->rows);
 	    }
 	}
 	else {
 
 	    if (les->A) {
-		for (i = 0; i < les->rows; i++)
-		    if (les->A[i])
-			G_free(les->A[i]);
-
-		G_free(les->A);
+		G_free_matrix(les->A);
 	    }
 	}
 

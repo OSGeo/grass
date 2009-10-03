@@ -23,15 +23,17 @@
 /* local protos */
 static int make_les_entry_2d(int i, int j, int offset_i, int offset_j,
 			     int count, int pos, N_les * les,
-			     N_spvector * spvect, N_array_2d * cell_count,
-			     N_array_2d * status, N_array_2d * start_val,
-			     double entry, int cell_type);
+			     G_math_spvector * spvect,
+			     N_array_2d * cell_count, N_array_2d * status,
+			     N_array_2d * start_val, double entry,
+			     int cell_type);
 
 static int make_les_entry_3d(int i, int j, int k, int offset_i, int offset_j,
 			     int offset_k, int count, int pos, N_les * les,
-			     N_spvector * spvect, N_array_3d * cell_count,
-			     N_array_3d * status, N_array_3d * start_val,
-			     double entry, int cell_type);
+			     G_math_spvector * spvect,
+			     N_array_3d * cell_count, N_array_3d * status,
+			     N_array_3d * start_val, double entry,
+			     int cell_type);
 
 /* *************************************************************** * 
  * ********************** N_alloc_5star ************************** * 
@@ -658,11 +660,11 @@ N_les *N_assemble_les_2d_param(int les_type, N_geom_data * geom,
 	N_data_star *items = call->callback(data, geom, i, j);
 
 	/* we need a sparse vector pointer anytime */
-	N_spvector *spvect = NULL;
+	G_math_spvector *spvect = NULL;
 
 	/*allocate a sprase vector */
 	if (les_type == N_SPARSE_LES) {
-	    spvect = N_alloc_spvector(items->count);
+	    spvect = G_math_alloc_spvector(items->count);
 	}
 	/* initial conditions */
 	les->x[count] = N_get_array_2d_d_value(start_val, i, j);
@@ -737,7 +739,7 @@ N_les *N_assemble_les_2d_param(int les_type, N_geom_data * geom,
 	/*How many entries in the les */
 	if (les->type == N_SPARSE_LES) {
 	    spvect->cols = pos + 1;
-	    N_add_spvector_to_les(les, spvect, count);
+	    G_math_add_spvector(les->Asp, spvect, count);
 	}
 
 	if (items)
@@ -818,11 +820,11 @@ int N_les_integrate_dirichlet_2d(N_les * les, N_geom_data * geom,
 
 #pragma omp parallel default(shared)
     {
-	/*performe the matrix vector product */
+	/*performe the matrix vector product and */
 	if (les->type == N_SPARSE_LES)
-	    N_sparse_matrix_vector_product(les, dvect1, dvect2);
+	    G_math_Ax_sparse(les->Asp, dvect1, dvect2, les->rows);
 	else
-	    N_matrix_vector_product(les, dvect1, dvect2);
+	    G_math_d_Ax(les->A, dvect1, dvect2, les->rows, les->cols);
 #pragma omp for schedule (static) private(i)
 	for (i = 0; i < les->cols; i++)
 	    les->b[i] = les->b[i] - dvect2[i];
@@ -876,7 +878,7 @@ int N_les_integrate_dirichlet_2d(N_les * les, N_geom_data * geom,
 /* **** make an entry in the les (2d) ***************************** */
 /* **************************************************************** */
 int make_les_entry_2d(int i, int j, int offset_i, int offset_j, int count,
-		      int pos, N_les * les, N_spvector * spvect,
+		      int pos, N_les * les, G_math_spvector * spvect,
 		      N_array_2d * cell_count, N_array_2d * status,
 		      N_array_2d * start_val, double entry, int cell_type)
 {
@@ -1121,11 +1123,11 @@ N_les *N_assemble_les_3d_param(int les_type, N_geom_data * geom,
 	/*create the entries for the */
 	N_data_star *items = call->callback(data, geom, i, j, k);
 
-	N_spvector *spvect = NULL;
+	G_math_spvector *spvect = NULL;
 
 	/*allocate a sprase vector */
 	if (les_type == N_SPARSE_LES)
-	    spvect = N_alloc_spvector(items->count);
+	    spvect = G_math_alloc_spvector(items->count);
 	/* initial conditions */
 
 	les->x[count] = N_get_array_3d_d_value(start_val, i, j, k);
@@ -1191,7 +1193,7 @@ N_les *N_assemble_les_3d_param(int les_type, N_geom_data * geom,
 	/*How many entries in the les */
 	if (les->type == N_SPARSE_LES) {
 	    spvect->cols = pos + 1;
-	    N_add_spvector_to_les(les, spvect, count);
+	    G_math_add_spvector(les->Asp, spvect, count);
 	}
 
 	if (items)
@@ -1277,9 +1279,9 @@ int N_les_integrate_dirichlet_3d(N_les * les, N_geom_data * geom,
     {
 	/*performe the matrix vector product and */
 	if (les->type == N_SPARSE_LES)
-	    N_sparse_matrix_vector_product(les, dvect1, dvect2);
+	    G_math_Ax_sparse(les->Asp, dvect1, dvect2, les->rows);
 	else
-	    N_matrix_vector_product(les, dvect1, dvect2);
+	    G_math_d_Ax(les->A, dvect1, dvect2, les->rows, les->cols);
 #pragma omp for schedule (static) private(i)
 	for (i = 0; i < les->cols; i++)
 	    les->b[i] = les->b[i] - dvect2[i];
@@ -1335,7 +1337,7 @@ int N_les_integrate_dirichlet_3d(N_les * les, N_geom_data * geom,
 /* **************************************************************** */
 int make_les_entry_3d(int i, int j, int k, int offset_i, int offset_j,
 		      int offset_k, int count, int pos, N_les * les,
-		      N_spvector * spvect, N_array_3d * cell_count,
+		      G_math_spvector * spvect, N_array_3d * cell_count,
 		      N_array_3d * status, N_array_3d * start_val,
 		      double entry, int cell_type)
 {
@@ -1344,8 +1346,8 @@ int make_les_entry_3d(int i, int j, int k, int offset_i, int offset_j,
     int dj = offset_j;
     int dk = offset_k;
 
-    K = N_get_array_3d_d_value(cell_count, i + di, j + dj, k + dk) -
-	N_get_array_3d_d_value(cell_count, i, j, k);
+    K = (int)N_get_array_3d_d_value(cell_count, i + di, j + dj, k + dk) -
+	(int)N_get_array_3d_d_value(cell_count, i, j, k);
 
     if (cell_type == N_CELL_ACTIVE) {
 	if ((int)N_get_array_3d_d_value(status, i + di, j + dj, k + dk) >

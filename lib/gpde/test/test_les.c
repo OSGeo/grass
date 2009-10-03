@@ -17,6 +17,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/gmath.h>
 #include <grass/N_pde.h>
 #include "test_gpde_lib.h"
 
@@ -49,7 +50,7 @@ int unit_test_les_creation(void)
 /* *************************************************************** */
 int test_les(void)
 {
-    N_spvector *spvector = NULL;
+    G_math_spvector *spvector = NULL;
     N_les *les = NULL;
     N_les *sples = NULL;
     int i, j;
@@ -106,7 +107,7 @@ int test_les(void)
 
 #pragma omp parallel for private(i, j) shared(sples, spvector)
     for (i = 0; i < TEST_N_NUM_ROWS; i++) {
-	spvector = N_alloc_spvector(TEST_N_NUM_ROWS);
+	spvector = G_math_alloc_spvector(TEST_N_NUM_ROWS);
 
 	for (j = 0; j < TEST_N_NUM_ROWS; j++)
 	    if (i != j)
@@ -115,7 +116,7 @@ int test_les(void)
 	spvector->index[0] = i;
 	spvector->values[0] = -1e2 - i;
 
-	N_add_spvector_to_les(sples, spvector, i);
+	G_math_add_spvector(sples->Asp, spvector, i);
 	sples->x[i] = 273.15 + i;
 	sples->b[i] = 1e2 - i;
     }
@@ -139,7 +140,7 @@ int test_les(void)
     }
 
     for (i = 0; i < TEST_N_NUM_ROWS; i++) {
-	spvector = N_alloc_spvector(TEST_N_NUM_ROWS);
+	spvector = G_math_alloc_spvector(TEST_N_NUM_ROWS);
 
 	for (j = 0; j < TEST_N_NUM_ROWS; j++)
 	    if (i != j)
@@ -148,7 +149,7 @@ int test_les(void)
 	spvector->index[0] = i;
 	spvector->values[0] = -1e2 - i;
 
-	N_add_spvector_to_les(sples, spvector, i);
+	G_math_add_spvector(sples->Asp, spvector, i);
 	sples->x[i] = 273.15 + i;
 	sples->b[i] = 1e2 - i;
     }
