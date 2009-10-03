@@ -4,7 +4,8 @@ MODULE_TOPDIR = ../..
 #EXTRA_CFLAGS=-fopenmp
 #EXTRA_LIBS=$(GISLIB) $(G3DLIB) -lgomp $(MATHLIB)
 
-LIB = GPDE
+EXTRA_LIBS=$(GISLIB) $(RASTERLIB) $(G3DLIB) $(GMATHLIB) $(MATHLIB)
+LIB_NAME = $(GPDE_LIBNAME)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
