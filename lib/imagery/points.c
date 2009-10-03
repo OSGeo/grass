@@ -1,4 +1,5 @@
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 
 #define POINT_FILE "POINTS"
 
@@ -19,7 +20,7 @@ static int I_read_control_points(FILE * fd, struct Control_Points *cp)
     cp->n2 = NULL;
     cp->status = NULL;
 
-    while (G_getl(buf, sizeof buf, fd)) {
+    while (G_getl2(buf, sizeof buf, fd)) {
 	G_strip(buf);
 	if (*buf == '#' || *buf == 0)
 	    continue;
@@ -116,23 +117,20 @@ static int I_write_control_points(FILE * fd, const struct Control_Points *cp)
 int I_get_control_points(const char *group, struct Control_Points *cp)
 {
     FILE *fd;
-    char msg[100];
     int stat;
 
     fd = I_fopen_group_file_old(group, POINT_FILE);
     if (fd == NULL) {
-	sprintf(msg, "unable to open control point file for group [%s in %s]",
-		group, G_mapset());
-	G_warning(msg);
+	G_warning(_("Unable to open control point file for group [%s in %s]"),
+		  group, G_mapset());
 	return 0;
     }
 
     stat = I_read_control_points(fd, cp);
     fclose(fd);
     if (stat < 0) {
-	sprintf(msg, "bad format in control point file for group [%s in %s]",
-		group, G_mapset());
-	G_warning(msg);
+	G_warning(_("Bad format in control point file for group [%s in %s]"),
+		  group, G_mapset());
 	return 0;
     }
     return 1;
@@ -155,14 +153,11 @@ int I_get_control_points(const char *group, struct Control_Points *cp)
 int I_put_control_points(const char *group, const struct Control_Points *cp)
 {
     FILE *fd;
-    char msg[100];
 
     fd = I_fopen_group_file_new(group, POINT_FILE);
     if (fd == NULL) {
-	sprintf(msg,
-		"unable to create control point file for group [%s in %s]",
-		group, G_mapset());
-	G_warning(msg);
+	G_warning(_("Unable to create control point file for group [%s in %s]"),
+		  group, G_mapset());
 	return 0;
     }
 

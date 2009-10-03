@@ -11,7 +11,7 @@ int I_get_group_title(const char *group, char *title, int n)
     fd = I_fopen_group_file_old(group, "TITLE");
     G_suppress_warnings(0);
     if (fd != NULL) {
-	G_getl(title, n, fd);
+	G_getl2(title, n, fd);
 	fclose(fd);
     }
 

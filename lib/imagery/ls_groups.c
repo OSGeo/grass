@@ -44,7 +44,7 @@ int I_list_groups(int full)
 	strcat(buf, " -C");
     /* FIXME: use G__ls() */
     if ((ls = popen(buf, "r"))) {
-	while (G_getl(buf, sizeof(buf), ls)) {
+	while (G_getl2(buf, sizeof(buf), ls)) {
 	    any = 1;
 	    fprintf(temp, "%s", buf);
 	    if (full) {
@@ -105,7 +105,7 @@ int I_list_subgroups(const char *group, int full)
 	strcat(buf, " -C");
     /* FIXME: use G__ls() */
     if ((ls = popen(buf, "r"))) {
-	while (G_getl(buf, sizeof(buf), ls)) {
+	while (G_getl2(buf, sizeof(buf), ls)) {
 	    any = 1;
 	    fprintf(temp, "%s\n", buf);
 	    if (full) {

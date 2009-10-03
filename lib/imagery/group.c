@@ -25,9 +25,11 @@
 * I_init_group_ref (&Ref);
 * I_free_group_ref (&Ref);
 **********************************************************/
+
 #include <string.h>
 #include <stdlib.h>
 #include <grass/imagery.h>
+
 static int get_ref(const char *, const char *, struct Ref *);
 static int set_color(const char *, const char *, const char *, struct Ref *);
 static int put_ref(const char *, const char *, const struct Ref *);
@@ -154,8 +156,8 @@ static int get_ref(const char *group, const char *subgroup, struct Ref *ref)
     if (!fd)
 	return 0;
 
-    while (fgets(buf, sizeof buf, fd)) {
-	n = sscanf(buf, "%255s %255s %15s", name, mapset, color);	/* better use INAME_LEN */
+    while (G_getl2(buf, sizeof buf, fd)) {
+	n = sscanf(buf, "%255s %255s %15s", name, mapset, color);  /* better use INAME_LEN */
 	if (n == 2 || n == 3) {
 	    I_add_file_to_group_ref(name, mapset, ref);
 	    if (n == 3)
