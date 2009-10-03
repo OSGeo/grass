@@ -1,4 +1,13 @@
 TODO
+Date_ 2009-10-03
+* Add ATLAS wrapper for blas level 2 and level 3 functions.
+* Inlcude the HAVE_ATLAS definition in the configure system
+* Replace the lu-solver in lu.c with the one from the ccmath library
+  and patch alll modules using lu.c
+* Implement a robust parallelizable LU solver with pivoting
+
+
+TODO
 Date: 2006-11-20
 
 http://www.netlib.org/lapack/
@@ -32,11 +41,3 @@ row1: 13.59  20.12  19.61  70.66 34.82 16.35
 row2: 28.26  34.82  38.27  40.1 38.27 23.7
 row3: 10.54  16.35  23.7   38.98 40.1 38.98
 
------------------------------------------------------------------------
-eigen.c/jacobi.c:
- there are two conflicting
-  egvorder(), egvorder2()
-  transpose(), transpose2()
- both used in i.pca and i.cca. Header different, functionality identical.
- To be merged.
- -> some cleanup done by Glynn

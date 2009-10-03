@@ -15,9 +15,13 @@
 *
 *****************************************************************************/
 
+#include <grass/gmath.h>
+
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/N_pde.h>
+#include <grass/gmath.h>
 #include <grass/N_gwflow.h>
 #include "test_gpde_lib.h"
 
@@ -108,9 +112,7 @@ N_gwflow_data2d *create_gwflow_data_2d(void)
     int i, j;
     N_gwflow_data2d *data;
 
-    data =
-	N_alloc_gwflow_data2d(TEST_N_NUM_COLS_LOCAL, TEST_N_NUM_ROWS_LOCAL, 1,
-			      1);
+    data = N_alloc_gwflow_data2d(TEST_N_NUM_COLS_LOCAL, TEST_N_NUM_ROWS_LOCAL, 1, 1);
 
 #pragma omp parallel for private (i, j) shared (data)
     for (j = 0; j < TEST_N_NUM_ROWS_LOCAL; j++) {
@@ -179,37 +181,37 @@ int test_gwflow_3d(void)
      /*CG*/ les =
 	N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_cg(les, 100, 0.1e-8);
+    G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
-    /*PCG N_DIAGONAL_PRECONDITION */ les =
+     /*PCG G_MATH_DIAGONAL_PRECONDITION*/ les =
 	N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_pcg(les, 100, 0.1e-8, N_DIAGONAL_PRECONDITION);
+    G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_DIAGONAL_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
 
-    /*PCG N_ROWSCALE_EUKLIDNORM_PRECONDITION */ les =
+     /*PCG G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION*/ les =
 	N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_pcg(les, 100, 0.1e-8, N_ROWSCALE_EUKLIDNORM_PRECONDITION);
+    G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
 
-    /*PCG N_ROWSCALE_ABSSUMNORM_PRECONDITION */ les =
+     /*PCG G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION*/ les =
 	N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_pcg(les, 100, 0.1e-8, N_ROWSCALE_ABSSUMNORM_PRECONDITION);
+    G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
 
 
      /*CG*/ les =
-	N_assemble_les_3d_dirichlet(N_SPARSE_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_3d_dirichlet(N_SPARSE_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
-    N_solver_cg(les, 100, 0.1e-8);
+    G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
@@ -217,41 +219,41 @@ int test_gwflow_3d(void)
      /*CG*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-
-    N_solver_cg(les, 100, 0.1e-8);
+	  
+    G_math_solver_cg(les->A, les->x, les->b, les->rows,  100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
-    /*PCG N_DIAGONAL_PRECONDITION */ les =
+     /*PCG G_MATH_DIAGONAL_PRECONDITION*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-
-    N_solver_pcg(les, 100, 0.1e-8, N_DIAGONAL_PRECONDITION);
+	  
+    G_math_solver_pcg(les->A, les->x, les->b, les->rows,  100, 0.1e-8, G_MATH_DIAGONAL_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
 
-    /*PCG N_ROWSCALE_EUKLIDNORM_PRECONDITION */ les =
+     /*PCG G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-
-    N_solver_pcg(les, 100, 0.1e-8, N_ROWSCALE_EUKLIDNORM_PRECONDITION);
+	  
+    G_math_solver_pcg(les->A, les->x, les->b, les->rows,  100, 0.1e-8, G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
 
-    /*PCG N_ROWSCALE_ABSSUMNORM_PRECONDITION */ les =
+     /*PCG G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-
-    N_solver_pcg(les, 100, 0.1e-8, N_ROWSCALE_ABSSUMNORM_PRECONDITION);
+	  
+    G_math_solver_pcg(les->A, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
 
 
      /*CG*/ les =
-	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
-    N_solver_cg(les, 100, 0.1e-8);
+    G_math_solver_cg(les->A, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
@@ -259,30 +261,30 @@ int test_gwflow_3d(void)
      /*BICG*/ les =
 	N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_bicgstab(les, 100, 0.1e-8);
+    G_math_solver_sparse_bicgstab(les->Asp, les->x, les->b, les->rows,  100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
      /*BICG*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_bicgstab(les, 100, 0.1e-8);
+    G_math_solver_bicgstab(les->A, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
      /*BICG*/ les =
-	N_assemble_les_3d_dirichlet(N_SPARSE_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_3d_dirichlet(N_SPARSE_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
-    N_solver_bicgstab(les, 100, 0.1e-8);
+    G_math_solver_sparse_bicgstab(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
      /*BICG*/ les =
-	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
-    N_solver_bicgstab(les, 100, 0.1e-8);
+    G_math_solver_bicgstab(les->A, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
@@ -290,45 +292,45 @@ int test_gwflow_3d(void)
      /*GUASS*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_gauss(les);
+    G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
     N_free_les(les);
 
      /*LU*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_lu(les);
+    G_math_solver_lu(les->A, les->x, les->b, les->rows);
     N_print_les(les);
     N_free_les(les);
 
      /*GUASS*/ les =
-	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
-    N_solver_gauss(les);
+    G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
     N_free_les(les);
 
      /*LU*/ les =
-	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
-    N_solver_lu(les);
+    G_math_solver_lu(les->A, les->x, les->b, les->rows);
     N_print_les(les);
     N_free_les(les);
 
-    /*Cholesky */ les =
+     /*Cholesky*/ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_cholesky(les);
+    G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
     N_print_les(les);
     N_free_les(les);
 
-    /*Cholesky */ les =
-	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+     /*Cholesky*/ les =
+	N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
-    N_solver_cholesky(les);
+    G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
     N_print_les(les);
     N_free_les(les);
 
@@ -365,53 +367,85 @@ int test_gwflow_2d(void)
     geom->cols = TEST_N_NUM_COLS_LOCAL;
 
 
-    /*Assemble the matrix */
+     /*Assemble the matrix */
     /*  
      */
      /*CG*/ les =
 	N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_cg(les, 100, 0.1e-8);
+    G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
-     /*CG*/ les =
-	N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
-    N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_cg(les, 100, 0.1e-8);
+     /*PCG G_MATH_DIAGONAL_PRECONDITION*/ les =
+	N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+    G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_DIAGONAL_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
+
+     /*PCG G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION*/ les =
+	N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+    G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION);
+    N_print_les(les);
+    N_free_les(les);
+
+     /*PCG G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION*/ les =
+	N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+    G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION);
+    N_print_les(les);
+    N_free_les(les);
+
+
+     /*CG*/ les =
+	N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+    N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
+    G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8);
+    N_print_les(les);
+    N_free_les(les);
+
 
      /*CG*/ les =
 	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_cg(les, 100, 0.1e-8);
+	  
+    G_math_solver_cg(les->A, les->x, les->b, les->rows,  100, 0.1e-8);
+    N_print_les(les);
+    N_free_les(les);
+
+     /*PCG G_MATH_DIAGONAL_PRECONDITION*/ les =
+	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+	  
+    G_math_solver_pcg(les->A, les->x, les->b, les->rows,  100, 0.1e-8, G_MATH_DIAGONAL_PRECONDITION);
+    N_print_les(les);
+    N_free_les(les);
+
+     /*PCG G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION*/ les =
+	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+	  
+    G_math_solver_pcg(les->A, les->x, les->b, les->rows,  100, 0.1e-8, G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION);
+    N_print_les(les);
+    N_free_les(les);
+
+     /*PCG G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION*/ les =
+	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+	  
+    G_math_solver_pcg(les->A, les->x, les->b, les->rows, 100, 0.1e-8, G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION);
     N_print_les(les);
     N_free_les(les);
 
 
      /*CG*/ les =
-	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
-    N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_cg(les, 100, 0.1e-8);
-    N_print_les(les);
-    N_free_les(les);
-
-     /*PCG*/ les =
-	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
+	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_pcg(les, 100, 0.1e-8, N_DIAGONAL_PRECONDITION);
-    N_print_les(les);
-    N_free_les(les);
-
-
-     /*PCG*/ les =
-	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_pcg(les, 100, 0.1e-8, N_DIAGONAL_PRECONDITION);
+    G_math_solver_cg(les->A, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
@@ -419,83 +453,79 @@ int test_gwflow_2d(void)
      /*BICG*/ les =
 	N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_bicgstab(les, 100, 0.1e-8);
+    G_math_solver_sparse_bicgstab(les->Asp, les->x, les->b, les->rows,  100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
-
-     /*BICG*/ les =
-	N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
-    N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_bicgstab(les, 100, 0.1e-8);
-    N_print_les(les);
-    N_free_les(les);
-
 
      /*BICG*/ les =
 	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_bicgstab(les, 100, 0.1e-8);
+    G_math_solver_bicgstab(les->A, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
      /*BICG*/ les =
-	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_bicgstab(les, 100, 0.1e-8);
+    G_math_solver_sparse_bicgstab(les->Asp, les->x, les->b, les->rows, 100, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
-     /*GAUSS*/ les =
+     /*BICG*/ les =
+	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+    N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
+    G_math_solver_bicgstab(les->A, les->x, les->b, les->rows, 100, 0.1e-8);
+    N_print_les(les);
+    N_free_les(les);
+
+
+     /*GUASS*/ les =
 	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_gauss(les);
+    G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
     N_free_les(les);
-
-     /*GAUSS*/ les =
-	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
-    N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_gauss(les);
-    N_print_les(les);
-    N_free_les(les);
-
 
      /*LU*/ les =
 	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_lu(les);
+    G_math_solver_lu(les->A, les->x, les->b, les->rows);
+    N_print_les(les);
+    N_free_les(les);
+
+     /*GUASS*/ les =
+	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
+    N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
+    G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
     N_free_les(les);
 
      /*LU*/ les =
-	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_lu(les);
+    G_math_solver_lu(les->A, les->x, les->b, les->rows);
     N_print_les(les);
     N_free_les(les);
 
-    /*Cholesky */ les =
+     /*Cholesky*/ les =
 	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->phead_start,
 			  (void *)data, call);
-    N_solver_cholesky(les);
+    G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
     N_print_les(les);
     N_free_les(les);
 
-    /*Cholesky */ les =
-	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-				    data->phead_start, (void *)data, call);
+     /*Cholesky*/ les =
+	N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead_start,
+			  (void *)data, call);
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);
-    N_solver_cholesky(les);
+    G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
     N_print_les(les);
     N_free_les(les);
-
-
-
-
+    
     N_free_gwflow_data2d(data);
     G_free(geom);
     G_free(call);

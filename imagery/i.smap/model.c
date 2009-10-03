@@ -16,12 +16,15 @@ void extract_init(struct SigSet *S)
     int b1, b2;
     int nbands;
     double *lambda;
+    double **tmp_mat;
     struct ClassSig *C;
     struct SubSig *SubS;
 
     nbands = S->nbands;
     /* allocate scratch memory */
-    lambda = (double *)G_malloc(nbands * sizeof(double));
+    lambda = G_alloc_vector(nbands);
+    tmp_mat = G_alloc_matrix(nbands, nbands);
+
 
     /* invert matrix and compute constant for each subclass */
 
@@ -41,10 +44,12 @@ void extract_init(struct SigSet *S)
 				  m + 1, i + 1);
 
 		    SubS->Rinv[b1][b2] = SubS->R[b1][b2];
+		    tmp_mat[b1][b2] = SubS->R[b1][b2];
+
 		}
 
 	    /* Test for positive definite matrix */
-	    eigen(SubS->Rinv, NULL, lambda, nbands);
+	    G_math_eigen(tmp_mat, lambda, nbands);
 	    for (b1 = 0; b1 < nbands; b1++) {
 		if (lambda[b1] <= 0.0)
 		    G_warning(_("Nonpositive eigenvalues for class %d subclass %d"),
@@ -61,7 +66,8 @@ void extract_init(struct SigSet *S)
 	    invert(SubS->Rinv, nbands);
 	}
     }
-    G_free((char *)lambda);
+    G_free_vector(lambda);
+    G_free_matrix(tmp_mat);
 }
 
 

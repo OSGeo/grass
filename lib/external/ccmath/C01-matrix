@@ -1,0 +1,1280 @@
+                                Chapter 1
+
+                              LINEAR ALGEBRA
+
+                                 Summary
+
+               The matrix algebra library contains functions that
+               perform the standard computations of linear algebra.
+               General areas covered are:
+
+                         o Solution of Linear Systems
+                         o Matrix Inversion
+                         o Eigensystem Analysis
+                         o Matrix Utility Operations
+                         o Singular Value Decomposition
+
+               The operations covered here are fundamental to many
+               areas of mathematics and statistics. Thus, functions
+               in this library segment are called by other library
+               functions. Both real and complex valued matrices
+               are covered by functions in the first four of these
+               categories.
+
+
+ Notes on Contents
+
+     Functions in this library segment provide the basic operations of
+ numerical linear algebra and some useful utility functions for operations on
+ vectors and matrices. The following list describes the functions available for
+ operations with real-valued matrices.
+
+
+ o  Solving and Inverting Linear Systems:
+
+    solv  --------- solve a general system of real linear equations.
+    solvps  ------- solve a real symmetric linear system.
+    solvru  ------- solve a real right upper triangular linear system.
+    solvtd  ------- solve a tridiagonal real linear system.
+
+    minv  --------- invert a general real square matrix.
+    psinv  -------- invert a real symmetric matrix.
+    ruinv  -------- invert a right upper triangular matrix.
+
+
+     The solution of a general linear system and efficient algorithms for
+ solving special systems with symmetric and tridiagonal matrices are provided
+ by these functions. The general solution function employs a LU factorization
+ with partial pivoting and it is very robust. It will work efficiently on any
+ problem that is not ill-conditioned. The symmetric matrix solution is based
+ on a modified Cholesky factorization. It is best used on positive definite
+ matrices that do not require pivoting for numeric stability. Tridiagonal
+ solvers require order-N operations (N = dimension). Thus, they are highly
+ recommended for this important class of sparse systems. Two matrix inversion
+ routines are provided. The general inversion function is again LU based. It
+ is suitable for use on any stable (ie. well-conditioned) problem. The
+ Cholesky based symmetric matrix inversion is efficient and safe for use on
+ matrices known to be positive definite, such as the variance matrices
+ encountered in statistical computations. Both the solver and the inverse
+ functions are designed to enhance data locality. They are very effective
+ on modern microprocessors.
+
+
+ o  Eigensystem Analysis:
+
+    eigen  ------ extract all eigen values and vectors of a real
+                  symmetric matrix.
+    eigval  ----- extract the eigen values of a real symmetric matrix.
+    evmax  ------ compute the eigen value of maximum absolute magnitude
+                  and its corresponding vector for a symmetric matrix.
+
+
+     Eigensystem functions operate on real symmetric matrices. Two forms of
+ the general eigen routine are provided because the computation of eigen values
+ only is much faster when vectors are not required. The basic algorithms use
+ a Householder reduction to tridiagonal form followed by QR iterations with
+ shifts to enhance convergence. This has become the accepted standard for
+ symmetric eigensystem computation. The evmax function uses an efficient
+ iterative power method algorithm to extract the eigen value of maximum
+ absolute size and the corresponding eigenvector.
+
+
+ o Singular Value Decomposition:
+
+    svdval  ----- compute the singular values of a m by n real matrix.
+    sv2val  ----- compute the singular values of a real matrix
+                  efficiently for m >> n.
+    svduv  ------ compute the singular values and the transformation
+                  matrices u and v for a real m by n matrix.
+    sv2uv  ------ compute the singular values and transformation
+                  matrices efficiently for m >> n.
+    svdu1v  ----- compute the singular values and transformation
+                  matrices u1 and v, where u1 overloads the input
+                  with the first n column vectors of u.
+    sv2u1v  ----- compute the singular values and the transformation
+                  matrices u1 and v efficiently for m >> n.
+
+
+     Singular value decomposition is extremely useful when dealing with linear
+ systems that may be singular. Singular values with values near zero are flags
+ of a potential rank deficiency in the system matrix. They can be used to
+ identify the presence of an ill-conditioned problem and, in some cases, to
+ deal with the potential instability. They are applied to the linear least
+ squares problem in this library. Singular values also define some important
+ matrix norm parameters such as the 2-norm and the condition value. A complete
+ decomposition provides both singular values and an orthogonal decomposition of
+ vector spaces related to the matrix identifying the range and null-space.
+ Fortunately, a highly stable algorithm based on Householder reduction to
+ bidiagonal form and QR rotations can be used to implement the decomposition.
+ The library provides two forms with one more efficient when the dimensions
+ satisfy m > (3/2)n.
+
+
+ o  Real Matrix Utilities:
+
+    rmmult  ----- multiply two compatible real matrices.
+    mmul  ------- multiply two real square matrices.
+    vmul  ------- multiply a vector by a square matrix (transform).
+    mattr  ------ compute the transpose of a general matrix.
+    trnm  ------- transpose a real square matrix in place.
+    otrma  ------ compute orthogonal conjugate of a square matrix.
+    otrsm  ------ compute orthogonal conjugate of a symmetric matrix.
+    smgen  ------ construct a symmetric matrix from its eigen values
+                  and vectors.
+    ortho  ------ generate a general orthogonal matrix (uses random
+                  rotation generator).
+    mcopy  ------ make a copy of an array.
+    matprt  ----- print a matrix in row order with a specified
+                  format for elements to stdout or a file (fmatprt).
+
+
+     The utility functions perform simple matrix operations such as matrix
+ multiplication, transposition, matrix conjugation, and linear transformation
+ of a vector. They are used to facilitate the rapid production of test and
+ application code requiring these operations. The function call overhead
+ associated with use of these utilities becomes negligible as the dimension of
+ the matrices increases. The implementation of these routines is designed to
+ enhance data locality and thus execution performance. A generator for
+ orthogonal matrices can be used to  generate test matrices.
+
+
+ Linear Algebra with Complex Matrices
+
+     The complex section of the linear algebra library contains functions that
+ operate on general complex valued matrices and on Hermitian matrices.
+ Hermitian matrices are the complex analog of symmetric matrices. Complex
+ arithmetic is performed in-line in these functions to ensure efficient
+ execution.
+
+
+ o  Solving and Inverting Complex Linear Systems:
+
+    csolv  ------ solve a general complex system of linear equations.
+
+    cminv  ------ invert a general complex matrix.
+
+
+     Both these functions are based on the robust LU factorization algorithm
+ with row pivots. They can be expected to solve or invert any system that is
+ well conditioned.
+
+
+ o  Hermitian Eigensystem Analysis:
+
+    heigvec  ---- extract the eigen values and vectors of a Hermitian
+                  matrix.
+    heigval  ---- compute the eigenvalues of a Hermitian matrix.
+    hevmax  ----- compute the eigen value of largest absolute magnitude
+                  and the corresponding vector of a Hermitian matrix.
+
+
+     The algorithms used for complex eigensystems are complex generalizations
+ of those employed in the real systems. The eigen values of Hermitian matrices
+ are real and their eigenvectors form a unitary matrix. As in the real case,
+ the function for eigen values only is provided as a time saver. These
+ routines have important application to many quantum mechanical problems.
+
+
+ o Complex Matrix Utilities:
+
+    cmmult  ---- multiply two general, size compatible, complex matrices.
+    cmmul  ----- multiply two square complex matrices.
+    cvmul  ----- multiply a complex vector by a complex square matrix.
+    cmattr  ---- transpose a general complex matrix.
+    trncm  ----- transpose a complex square matrix in place.
+    hconj  ----- transform a square complex matrix to its Hermitian
+                 conjugate in place.
+    utrncm  ---- compute the unitary transform of a complex matrix.
+    utrnhm  ---- compute the unitary transform of a Hermitian matrix.
+    hmgen  ----- generate a general Hermitian from its eigen values
+                 and vectors.
+    unitary  --- generate a general unitary matrix (uses a random
+                 rotation generator).
+    cmcpy  ----- copy a complex array.
+    cmprt  ----- print a complex matrix in row order with a specified
+                 format for matrix elements.
+
+
+    These utility operations replicate the utilities available for real
+ matrices. Matrix computations implemented in a manner that enhances data
+ locality. This ensures their efficiency on modern computers with a memory
+ hierarchy.
+
+-------------------------------------------------------------------------------
+
+ General Technical Comments
+
+     Efficient computation with matrices on modern processors must be
+ adapted to the storage scheme employed for matrix elements. The functions
+ of this library segment do not employ the multidimensional array intrinsic
+ of the C language. Access to elements employs the simple row-major scheme
+ described here.
+
+     Matrices are modeled by the library functions as arrays with elements
+ stored in row order. Thus, the element in the jth row and kth column of
+ the n by n matrix M, stored in the array mat[], is addressed by
+
+           M[j,k] = mat[n*j+k]  , with   0 =< j,k <= n-1 .
+
+ (Remember that C employs zero as the starting index.) The storage order has
+ important implications for data locality.
+
+     The algorithms employed here all have excellent numerical stability, and
+ the default double precision arithmetic of C enhances this. Thus, any
+ problems encountered in using the matrix algebra functions will almost
+ certainly be due to an ill-conditioned matrix. (The Hilbert matrices,
+
+                 H[i,j] = 1/(1+i+j)  for i,j < n
+
+ form a good example of such ill-conditioned systems.) We remind the reader
+ that the appropriate response to such ill-conditioning is to seek an
+ alternative approach to the problem. The option of increasing precision has
+ already been exploited. Modification of the linear algebra algorithm code is
+ not normally effective in an ill-conditioned problem.
+
+------------------------------------------------------------------------------
+                      FUNCTION SYNOPSES
+------------------------------------------------------------------------------
+
+ Linear System Solutions:
+-----------------------------------------------------------------------------
+
+solv
+
+     Solve a general linear system  A*x = b.
+
+     int solv(double a[],double b[],int n)
+       a = array containing system matrix A in row order
+            (altered to L-U factored form by computation)
+       b = array containing system vector b at entry and
+           solution vector x at exit
+       n = dimension of system
+      return:  0 -> normal exit
+              -1 -> singular input
+
+     -----------------------------------------------------------
+
+solvps
+
+     Solve a symmetric positive definite linear system S*x = b.
+
+     int solvps(double a[],double b[],int n)
+       a = array containing system matrix S (altered to
+            Cholesky upper right factor by computation)
+       b = array containing system vector b as input and
+           solution vector x as output
+       n = dimension of system
+      return: 0 -> normal exit
+              1 -> input matrix not positive definite
+
+     --------------------------------------------------------------
+
+solvtd
+
+     Solve a tridiagonal linear system M*x = y.
+
+     void solvtd(double a[],double b[],double c[],double x[],int m)
+       a = array containing m+1 diagonal elements of M
+       b = array of m elements below the main diagonal of M
+       c = array of m elements above the main diagonal
+       x = array containing the system vector y initially, and
+           the solution vector at exit (m+1 elements)
+       m = dimension parameter ( M is (m+1)x(m+1) )
+
+     --------------------------------------------------------------
+
+solvru
+
+     Solve an upper right triangular linear system T*x = b.
+
+     int solvru(double *a,double *b,int n)
+       a = pointer to array of upper right triangular matrix T
+       b = pointer to array of system vector
+           The computation overloads this with the
+           solution vector x.
+       n = dimension (dim(a)=n*n,dim(b)=n)
+      return value: f = status flag, with 0 -> normal exit
+                                         -1 -> system singular
+
+------------------------------------------------------------------------------
+
+     Matrix Inversion:
+------------------------------------------------------------------------------
+
+minv
+
+     Invert (in place) a general real matrix A -> Inv(A).
+
+     int minv(double a[],int n)
+       a = array containing the input matrix A
+           This is converted to the inverse matrix.
+       n = dimension of the system (i.e. A is n x n )
+      return: 0 -> normal exit
+              1 -> singular input matrix
+
+     --------------------------------------------------------------
+
+psinv
+
+     Invert (in place) a symmetric real matrix, V -> Inv(V).
+
+     int psinv(double v[],int n)
+       v = array containing a symmetric input matrix
+           This is converted to the inverse matrix.
+       n = dimension of the system (dim(v)=n*n)
+      return: 0 -> normal exit
+              1 -> input matrix not positive definite
+
+           The input matrix V is symmetric (V[i,j] = V[j,i]).
+
+     --------------------------------------------------------------
+
+ruinv
+
+     Invert an upper right triangular matrix T -> Inv(T).
+
+     int ruinv(double *a,int n)
+       a = pointer to array of upper right triangular matrix
+           This is replaced by the inverse matrix.
+       n = dimension (dim(a)=n*n)
+      return value: status flag, with 0 -> matrix inverted
+                                     -1 -> matrix singular
+
+
+-----------------------------------------------------------------------------
+
+     Symmetric Eigensystem Analysis:
+-----------------------------------------------------------------------------
+
+eigval
+
+     Compute the eigenvalues of a real symmetric matrix A.
+
+     void eigval(double *a,double *ev,int n)
+       a = pointer to array of symmetric n by n input
+           matrix A. The computation alters these values.
+       ev = pointer to array of the output eigenvalues
+       n = dimension parameter (dim(a)= n*n, dim(ev)= n)
+
+     --------------------------------------------------------------
+
+eigen
+
+     Compute the eigenvalues and eigenvectors of a real symmetric
+     matrix A.
+
+     void eigen(double *a,double *ev,int n)
+     double *a,*ev; int n;
+       a = pointer to store for symmetric n by n input
+           matrix A. The computation overloads this with an
+           orthogonal matrix of eigenvectors E.
+       ev = pointer to the array of the output eigenvalues
+       n = dimension parameter (dim(a)= n*n, dim(ev)= n)
+
+     The input and output matrices are related by
+
+          A = E*D*E~ where D is the diagonal matrix of eigenvalues
+          D[i,j] = ev[i] if i=j and 0 otherwise.
+
+     The columns of E are the eigenvectors.
+
+     ---------------------------------------------------------------
+
+evmax
+
+     Compute the maximum (absolute) eigenvalue and corresponding
+     eigenvector of a real symmetric matrix A.
+
+     double evmax(double a[],double u[],int n)
+     double a[],u[]; int n;
+       a = array containing symmetric input matrix A
+       u = array containing the n components of the eigenvector
+           at exit (vector normalized to 1)
+       n = dimension of system
+      return: ev = eigenvalue of A with maximum absolute value
+              HUGE -> convergence failure
+
+
+-----------------------------------------------------------------------------
+ Eigensystem Auxiliaries:
+-----------------------------------------------------------------------------
+
+     The following routines are used by the eigensystem functions.
+     They are not normally called by the user.
+
+house
+
+     Transform a real symmetric matrix to tridiagonal form.
+
+     void house(double *a,double *d,double *dp,int n)
+       a = pointer to array of the symmetric input matrix A
+           These values are altered by the computation.
+       d = pointer to array of output diagonal elements
+       dp = pointer to array of n-1 elements neighboring the
+            diagonal in the symmetric transformed matrix
+       n = dimension (dim(a)= n*n, dim(d)=dim(dp)=n)
+
+     The output arrays are related to the tridiagonal matrix T by
+
+          T[i,i+1] = T[i+1,i] = dp[i] for i=0 to n-2, and
+          T[i,i] = d[i] for i=0 to n-1.
+     --------------------------------------------------------------
+
+housev
+
+     Transform a real symmetric matrix to tridiagonal form and
+     compute the orthogonal matrix of this transformation.
+
+     void housev(double *a,double *d,double *dp,int n)
+       a = pointer to array of symmetric input matrix A
+           The computation overloads this array with the
+           orthogonal transformation matrix O.
+       d = pointer to array of diagonal output elements
+       dp = pointer to array of n-1 elements neighboring the
+            diagonal in the symmetric transformed matrix
+       n = dimension (dim(a)= n*n, dim(d)=dim(dp)=n)
+
+     The orthogonal transformation matrix O satisfies  O~*T*O = A.
+     ----------------------------------------------------------------
+
+qreval
+
+     Perform a QR reduction of a real symmetric tridiagonal
+     matrix to diagonal form.
+
+     int qreval(double *ev,double *dp,int n)
+       ev = pointer to array of input diagonal elements
+            The computation overloads this array with
+            eigenvalues.
+       dp = pointer to array input elements neighboring the
+            diagonal. This array is altered by the computation.
+       n = dimension (dim(ev)=dim(dp)= n)
+
+     ---------------------------------------------------------------
+
+qrevec
+
+     Perform a QR reduction of a real symmetric tridiagonal matrix
+     to diagonal form and update an orthogonal transformation matrix.
+
+     int qrevec(double *ev,double *evec,double *dp,int n)
+       ev = pointer to array of input diagonal elements
+            that the computation overloads with eigenvalues
+       evec = pointer array of orthogonal input matrix
+              This is updated by the computation to a matrix
+              of eigenvectors.
+       dp = pointer to array input elements neighboring the
+            diagonal. This array is altered by the computation.
+       n = dimension (dim(ev)=dim(dp)= n)
+
+     This function operates on the output of 'housev'.
+
+------------------------------------------------------------------------------
+
+     Matrix Utilities:
+------------------------------------------------------------------------------
+
+mmul
+
+     Multiply two real square matrices C = A * B.
+
+     void mmul(double *c,double *a,double *b,int n)
+     double *a,*b,*c; int n;
+       a = pointer to store for left product matrix
+       b = pointer to store for right product matrix
+       c = pointer to store for output matrix
+       n = dimension (dim(a)=dim(b)=dim(c)=n*n)
+
+     -------------------------------------------------------
+
+rmmult
+
+     Multiply two matrices Mat = A*B.
+
+     void rmmult(double *mat,double *a,double *b,int m,int k,int n)
+     double mat[],a[],b[]; int m,k,n;
+       mat = array containing m by n product matrix at exit
+       a = input array containing m by k matrix
+       b = input array containing k by n matrix
+            (all matrices stored in row order)
+       m,k,n = dimension parameters of arrays
+
+     ----------------------------------------------------------
+
+vmul
+
+     Multiply a vector by a matrix Vp = Mat*V.
+
+     void vmul(double *vp,double *mat,double *v,int n)
+       vp = pointer to array containing output vector
+       mat = pointer to array containing input matrix in row order
+       v = pointer to array containing input vector
+       n = dimension of vectors (mat is n by n)
+
+     ----------------------------------------------------------------
+
+vnrm
+
+     Compute the inner product of two real vectors, p = u~*v.
+
+     double vnrm(double *u,double *v,int n)
+       u = pointer to array of input vector u
+       v = pointer to array of input vector v
+       n = dimension (dim(u)=dim(v)=n)
+      return value: p = u~*v (dot product of u and v)
+
+     -----------------------------------------------------
+
+trnm
+
+     Transpose a real square matrix in place A -> A~.
+
+     void trnm(double *a,int n)
+       a = pointer to array of n by n input matrix A
+           This is overloaded by the transpose of A.
+       n = dimension (dim(a)=n*n)
+
+     ---------------------------------------------------------
+
+mattr
+
+     Transpose an m by n matrix A = B~.
+
+     void mattr(double *a,double *b,int m,int n)
+       a = pointer to array containing output n by m matrix 
+       b = pointer to array containing input m by n matrix
+            (matrices stored in row order)
+       m,n = dimension parameters (dim(a)=dim(b)=n*m)
+
+     ------------------------------------------------------------
+
+otrma
+
+     Perform an orthogonal similarity transform C = A*B*A~.
+
+     void otrma(double *c,double *a,double *b,int n)
+       c = pointer to array of output matrix C
+       a = pointer to array of transformation A
+       b = pointer to array of input matrix B
+       n = dimension (dim(a)=dim(b)=dim(c)=n*n)
+
+     -----------------------------------------------------------
+
+otrsm
+
+     Perform a similarity transform on a symmetric matrix S = A*B*A~.
+
+     void otrsm(double *sm,double *a,double *b,int n)
+       sm = pointer to array of output matrix S
+       a = pointer to array of transformation matrix A
+       b = pointer to array of symmetric input matrix B
+       n = dimension (dim(a)=dim(b)=dim(sm)=n*n)
+
+     ---------------------------------------------------------------
+
+smgen
+
+     Construct a symmetric matrix from specified eigenvalues and
+     eigenvectors.
+
+     void smgen(double *a,double *eval,double *evec,int n)
+       a = pointer to array containing output matrix
+       eval = pointer to array containing the n eigenvalues
+       evec = pointer to array containing eigenvectors
+              (n by n with kth column the vector corresponding
+               to the kth eigenvalue)
+       n = system dimension
+           
+          If D is the diagonal matrix of eigenvalues
+          and  E[i,j] = evec[j+n*i] , then   A = E*D*E~.
+
+     ----------------------------------------------------------------
+
+ortho
+
+     Generate a general orthogonal transformation matrix, E~*E = I.
+
+     void ortho(double *e,int n)
+       e = pointer to array of orthogonal output matrix E
+       n = dimension of vector space (dim(e)=n*n)
+
+     This function calls on the uniform random generator 'unfl' to
+     produce random rotation angles. Therefore this random generator
+     should be initialized by a call of 'setunfl' before calling
+     ortho (see Chapter 7).
+
+     -----------------------------------------------------------------
+
+mcopy
+
+     Copy an array a = b.
+
+     void mcopy(double *a,double *b,int n)
+       a = array containing output values, identical to input
+           b at exit
+       b = input array
+       n = dimension of arrays
+
+     -----------------------------------------------------------
+
+matprt
+
+     Print an array in n rows of m columns to stdout.
+
+     void matprt(double *a,int n,int m,char *fmt)
+       a = pointer to input array stored in row order (size = n*m)
+       n = number of output rows
+       m = number of output columns
+       fmt= pointer to character array containing format string
+             (printf formats eg. " %f")
+
+     Long rows may overflow the print line.
+
+     ---------------------------------------------------------------
+
+fmatprt
+
+     Print formatted array output to a file.
+
+     void fmatprt(FILE *fp,double *a,int n,int m,char *fmt)
+       fp = pointer to file opened for writing
+       a = pointer to input array stored in row order (size = n*m)
+       n = number of output rows
+       m = number of output columns
+       fmt= pounter to character array containing format string
+             (printf formats eg. " %f")
+
+------------------------------------------------------------------------------
+
+ Singular Value Decomposition:
+------------------------------------------------------------------------------
+
+     A number of versions of the Singular Value Decomposition (SVD)
+     are implemented in the library. They support the efficient
+     computation of this important factorization for a real m by n
+     matrix A. The general form of the SVD is
+
+          A = U*S*V~     with S = | D |
+                                  | 0 |
+
+     where U is an m by m orthogonal matrix, V is an n by n orthogonal matrix,
+     D is the n by n diagonal matrix of singular value, and S is the singular
+     m by n matrix produced by the transformation.
+
+     The singular values computed by these functions provide important
+     information on the rank of the matrix A, and on several matrix
+     norms of A. The number of non-zero singular values d[i] in D
+     equal to the rank of A. The two norm of A is
+
+          ||A|| = max(d[i]) , and the condition number is
+
+          k(A) = max(d[i])/min(d[i]) .
+
+     The Frobenius norm of the matrix A is
+
+          Fn(A) = Sum(i=0 to n-1) d[i]^2 .
+
+     Singular values consistent with zero are easily recognized, since
+     the decomposition algorithms have excellent numerical stability.
+     The value of a 'zero' d[i] is no larger than a few times the
+     computational rounding error e.
+     
+     The matrix U1 is formed from the first n orthonormal column vectors
+     of U.  U1[i,j] = U[i,j] for i = 1 to m and j = 1 to n. A singular
+     value decomposition of A can also be expressed in terms of the m by\
+     n matrix U1, with
+
+                       A = U1*D*V~ .
+
+     SVD functions with three forms of output are provided. The first
+     form computes only the singular values, while the second computes
+     the singular values and the U and V orthogonal transformation
+     matrices. The third form of output computes singular values, the
+     V matrix, and saves space by overloading the input array with
+     the U1 matrix.
+
+     Two forms of decomposition algorithm are available for each of the
+     three output types. One is computationally efficient when m ~ n.
+     The second, distinguished by the prefix 'sv2' in the function name,
+     employs a two stage Householder reduction to accelerate computation
+     when m substantially exceeds n. Use of functions of the second form
+     is recommended for m > 2n.
+
+     Singular value output from each of the six SVD functions satisfies
+
+          d[i] >= 0 for i = 0 to n-1.
+-------------------------------------------------------------------------------
+
+svdval
+
+     Compute the singular values of a real m by n matrix A.
+
+     int svdval(double *d,double *a,int m,int n)
+       d = pointer to double array of dimension n
+           (output = singular values of A)
+       a = pointer to store of the m by n input matrix A
+           (A is altered by the computation)
+       m = number of rows in A
+       n = number of columns in A (m>=n required)
+      return value: status flag with:
+               0 -> success
+              -1 -> input error m < n
+
+     ------------------------------------------------------------
+
+sv2val
+
+     Compute singular values when m >> n.                         
+
+     int sv2val(double *d,double *a,int m,int n)
+       d = pointer to double array of dimension n
+           (output = singular values of A)
+       a = pointer to store of the m by n input matrix A
+           (A is altered by the computation)
+       m = number of rows in A
+       n = number of columns in A (m>=n required)
+      return value: status flag with:
+               0 -> success
+              -1 -> input error m < n
+     --------------------------------------------------------------
+
+svduv
+
+     Compute the singular value transformation S = U~*A*V.
+
+     int svduv(double *d,double *a,double *u,int m,double *v,int n)
+       d = pointer to double array of dimension n
+           (output = singular values of A)
+       a = pointer to store of the m by n input matrix A
+           (A is altered by the computation)
+       u = pointer to store for m by m orthogonal matrix U
+       v = pointer to store for n by n orthogonal matrix V
+       m = number of rows in A
+       n = number of columns in A (m>=n required)
+      return value: status flag with:
+               0 -> success
+              -1 -> input error m < n
+
+     --------------------------------------------------------------------
+
+sv2uv
+
+     Compute the singular value transformation when m >> n.
+
+     int sv2uv(double *d,double *a,double *u,int m,double *v,int n)
+       d = pointer to double array of dimension n
+           (output = singular values of A)
+       a = pointer to store of the m by n input matrix A
+           (A is altered by the computation)
+       u = pointer to store for m by m orthogonal matrix U
+       v = pointer to store for n by n orthogonal matrix V
+       m = number of rows in A
+       n = number of columns in A (m>=n required)
+      return value: status flag with:
+               0 -> success
+              -1 -> input error m < n
+
+     ----------------------------------------------------------------
+
+svdu1v
+
+     Compute the singular value transformation with A overloaded by
+     the partial U-matrix.
+
+     int svdu1v(double *d,double *a,int m,double *v,int n)
+       d = pointer to double array of dimension n
+           (output = singular values of A)
+       a = pointer to store of the m by n input matrix A
+           (At output a is overloaded by the matrix U1
+            whose n columns are orthogonal vectors equal to
+            the first n columns of U.)
+       v = pointer to store for n by n orthogonal matrix V
+       m = number of rows in A
+       n = number of columns in A (m>=n required)
+      return value: status flag with:
+               0 -> success
+              -1 -> input error m < n
+
+     ------------------------------------------------------------------
+
+sv2u1v
+
+     Compute the singular value transformation with partial U
+     matrix U1 efficiently for m >> n.
+
+     #include <math.h>
+     int sv2u1v(d,a,m,v,n)
+     double *d,*a,*v; int m,n;
+       d = pointer to double array of dimension n
+           (output = singular values of A)
+       a = pointer to store of the m by n input matrix A
+           (At output a is overloaded by the matrix U1
+            whose n columns are orthogonal vectors equal to
+            the first n columns of U.)
+       v = pointer to store for n by n orthogonal matrix V
+       m = number of rows in A
+       n = number of columns in A (m>=n required)
+      return value: status flag with:
+               0 -> success
+              -1 -> input error m < n
+
+-------------------------------------------------------------------------------
+ Auxiliary Functions used in SVD Computation:
+-------------------------------------------------------------------------------
+
+     The following routines are used by the singular value decomposition
+     functions. They are not normally called by the user.
+
+qrbdi
+
+     Perform a QR reduction of a bidiagonal matrix.
+
+     int qrbdi(double *d,double *e,int m)
+       d = pointer to n-dimensional array of diagonal values
+           (overloaded by diagonal elements of reduced matrix)
+       e = pointer to store of superdiagonal values (loaded in
+           first m-1 elements of the array). Values are altered
+           by the computation.
+       m = dimension of the d and e arrays
+      return value: N = number of QR iterations required
+
+     -------------------------------------------------------------
+
+qrbdv
+
+     Perform a QR reduction of a bidiagonal matrix and update the
+     the orthogonal transformation matrices U and V.
+
+     int qrbdv(double *d,double *e,double *u,int m,double *v,int n)
+       d = pointer to n-dimensional array of diagonal values
+           (overloaded by diagonal elements of reduced matrix)
+       e = pointer to store of superdiagonal values (loaded in
+           first m-1 elements of the array). Values are altered
+           by the computation.
+       u = pointer to store of m by m orthogonal matrix U updated
+           by the computation
+       v = pointer to store of n by n orthogonal matrix V updated
+           by the computation
+       m = dimension parameter of the U matrix
+       n = size of the d and e arrays and the number of rows and
+           columns in the V matrix
+      return value: N = number of QR iterations required
+
+     ---------------------------------------------------------------
+
+qrbd1
+
+     Perform a QR reduction of a bidiagonal matrix and update the
+     transformation matrices U1 and V.
+
+     int qrbdu1(double *d,double *e,double *u1,int m,double *v,int n)
+       d = pointer to n-dimensional array of diagonal values
+           (overloaded by diagonal elements of reduced matrix)
+       e = pointer to store of superdiagonal values (loaded in
+           first m-1 elements of the array). Values are altered
+           by the computation.
+       u1 = pointer to store of m by n transformation matrix U1
+            updated by the computation
+       v = pointer to store of n by n orthogonal matrix V updated
+           by the computation
+       m = number of rows in the U1 matrix
+       n = size of the d and e arrays, number of columns in the U1
+           matrix, and the number of rows and columns in the V matrix.
+      return value: N = number of QR iterations required
+
+     ------------------------------------------------------------------
+
+ldumat
+
+     Compute a left Householder transform matrix U from the vectors
+     specifying the Householder reflections.
+
+     void ldumat(double *a,double *u,int m,int n)
+       a = pointer to store of m by n input matrix A. Elements
+           of A on and below the main diagonal specify the
+           vectors of n Householder reflections (see note below).
+       u = pointer to store for the m by m orthogonal output
+           matrix U.
+       m = number of rows in A and U, and number of columns in U.
+       n = number of columns in A
+
+     --------------------------------------------------------------
+
+ldvmat
+
+     Compute a right Householder transform matrix from the vectors
+     specifying the Householder reflections.
+
+     void ldvmat(double *a,double *v,int n)
+       a = pointer to store of n by n input matrix A. Elements
+           of A on and above the superdiagonal specify vectors
+           of a sequence of Householder reflections (see note below).
+       v = pointer to store for the n by n orthogonal output
+           matrix V
+       n = number of rows and columns in A and V
+
+     -----------------------------------------------------------------
+
+atou1
+
+     Overload a Householder left-factored matrix A with the first
+     n columns of the Householder orthogonal matrix.
+
+     void atou1(double *a,int m,int n)
+       a = pointer to store of m by n input matrix A. Elements
+           of A on and below the main diagonal specify the
+           vectors of n Householder reflections (see note below).
+           This array is overloaded by the first n columns of the
+           Householder transformation matrix.
+       m = number of rows in A
+       n = number of columns in A
+
+     ---------------------------------------------------------------
+
+atovm
+ 
+    Overload a Householder right-factored square matrix A with the
+    Householder transformation matrix V.
+
+     void atovm(double *v,int n)
+       v = pointer to store for the n by n orthogonal
+           output matrix V
+       n = number of rows and columns in V
+
+-------------------------------------------------------------------------------
+
+     Individual Householder reflections are specified by a vector h.
+     The corresponding orthogonal reflection matrix is given by
+
+                     H = I - c* h~ .
+
+     Input matrices store the vector, normalized to have its leading
+     coefficient equal to one, and the normalization factor
+
+                    c = 2/(h~*h) .
+
+     Storage for the vectors is by column starting at the diagonal for
+     a left transform, and by row starting at the superdiagonal for a
+     right transform. The first location holds c followed by
+     components 2 to k of the vector.
+
+
+-------------------------------------------------------------------------------
+      Complex Linear Algebra
+-------------------------------------------------------------------------------
+
+ Solution and Inverse:
+-------------------------------------------------------------------------------
+
+csolv
+
+     Solve a complex linear system A*x = b.
+
+     int csolv(Cpx *a,Cpx *b,int n)
+       a = pointer to array of n by n system matrix A
+           The computation alters this array to a LU factorization.
+       b = pointer to input array of system vector b
+           This is replaced by the solution vector b -> x.
+       n = dimension of system (dim(a)=n*n, dim(b)=n)
+      return value: status flag with: 0 -> valid solution
+                                      1 -> system singular
+
+     ---------------------------------------------------------------
+
+cminv
+
+     Invert a general complex matrix in place A -> Inv(A).
+
+     int cminv(Cpx *a,int n)
+       a = pointer to input array of complex n by n matrix A
+           The computation replaces A by its inverse.
+       n = dimension of system (dim(a)=n*n)
+      return value: status flag with: 0 -> valid solution
+                                      1 -> system singular
+
+------------------------------------------------------------------------------
+
+ Hermitian Eigensystems:
+------------------------------------------------------------------------------
+
+heigval
+
+     Compute the eigenvalues of a Hermitian matrix.
+
+     void heigval(Cpx *a,double *ev,int n)
+       a = pointer to array for the Hermitian matrix H
+           These values are altered by the computation.
+       ev = pointer to array that is loaded with the
+            eigenvalues of H by the computation
+       n = dimension (dim(a)=n*n, dim(ev)=n)
+
+     --------------------------------------------------------
+
+heigvec
+
+     Compute the eigenvalues and eigenvectors of a Hermitian
+     matrix.
+
+     void heigvec(Cpx *a,double *ev,int n)
+       a = pointer to array for the hermitian matrix H
+           This array is loaded with a unitary matrix of
+           eigenvectors E by the computation.
+       ev = pointer to array that is loaded with the
+            eigenvalues of H by the computation
+       n = dimension (dim(a)=n*n, dim(ev)=n)
+
+     The eigen vector matrix output E satisfies
+
+          E^*E = I  and  A = E*D*E^
+
+     where  D[i,j] = ev[i] for i=j and 0 otherwise
+     and E^ is the Hermitian conjugate of E.
+     The columns of E are the eigenvectors of A.
+
+     ----------------------------------------------------------
+
+hevmax
+
+     Compute the eigenvalue of maximum absolute value and
+     the corresponding eigenvector of a Hermitian matrix.
+
+     double hevmax(Cpx *a,Cpx *u,int n)
+     Cpx *a,*u; int n;
+       a = pointer to array for the Hermitian matrix H
+       u = pointer to array for the eigenvector umax
+       n = dimension (dim(a)=n*n, dim(u)=n)
+      return value: emax = eigenvalue of H with largest
+                           absolute value
+
+     The eigenvector u and eigenvalue emax are related by  u^*A*u = emax.
+
+------------------------------------------------------------------------------
+     Hermitian Eigensystem Auxiliaries:
+------------------------------------------------------------------------------
+
+     The following routines are called by the Hermitian eigensystem
+     functions. They are not normally called by the user.
+
+chouse
+
+     Transform a Hermitian matrix H to real symmetric tridiagonal
+     form.
+
+     void chouse(Cpx *a,double *d,double *dp,int n)
+       a = pointer to input array of complex matrix elements of H
+           This array is altered by the computation
+       d = pointer to output array of real diagonal elements
+       dp = pointer to output array of real superdiagonal elements
+       n = system dimension, with:
+           dim(a) = n * n, dim(d) = dim(dn) = n;
+
+     -----------------------------------------------------------------
+
+chousv
+
+     Transform a Hermitian matrix H to real symmetric tridiagonal
+     form, and compute the unitary matrix of this transformation.
+
+     void chousv(Cpx *a,double *d,double *dp,int n)
+       a = pointer to input array of complex matrix elements of H
+           The computation replaces this with the unitary matrix
+           U of the transformation.
+       d = pointer to output array of real diagonal elements
+       dp = pointer to output array of real superdiagonal elements
+       n = system dimension, with:
+           dim(a) = n*n, dim(d) = dim(dn) = n;
+
+     The matrix U satisfies
+
+          A = U^*T*U  where T is real and tridiagonal,
+          with  T[i,i+1] = T[i+1,i] = dp[i]  and T[i,i] = d[i].
+
+     ------------------------------------------------------------
+
+qrecvc
+
+     Use QR transformations to reduce a real symmetric tridiagonal
+     matrix to diagonal form, and update a unitary transformation
+     matrix.
+
+     void qrecvc(double *ev,Cpx *evec,double *dp,int n)
+       ev = pointer to input array of diagonal elements
+            The computation transforms these to eigenvalues
+            of the input matrix.
+       evec = pointer to input array of a unitary transformation
+              matrix U. The computation applies the QR rotations
+              to this matrix.
+       dp = pointer to input array of elements neighboring the
+            diagonal. These values are altered by the computation.
+       n = dimension parameter (dim(ev)=dim(dp)=n, dim(evec)=n*n)
+
+     This function operates on the output of 'chousv'.
+
+-------------------------------------------------------------------------------
+
+ Complex Matrix Utilities:
+-------------------------------------------------------------------------------
+
+cvmul
+
+     Transform a complex vector  u = A*v.
+
+     void cvmul(Cpx *u,Cpx *a,Cpx *v,int n)
+       u = pointer to array of output vector u.
+       a = pointer to array of transform matrix A.
+       v = pointer to array of input vector v.
+       n = dimension (dim(u)=dim(v)=n, dim(a)=n*n)
+
+     -----------------------------------------------------------
+
+cvnrm
+
+     Compute a Hermitian inner product s = u^*v.
+
+     Cpx cvnrm(Cpx *u,Cpx *v,int n)
+       u = pointer to array of first vector u
+       v = pointer to array of second vector v
+       n = dimension (dim(u)=dim(v)=n)
+      return value: s = complex value of inner product
+
+     -----------------------------------------------------------
+
+cmmul
+
+     Multiply two square complex matrices C = A * B.
+
+     void cmmul(Cpx *c,Cpx *a,Cpx *b,int n)
+       a = pointer to input array of left matrix factor A
+       b = pointer to input array of right matrix factor B
+       c = pointer to array of output product matrix C
+       n = dimension parameter (dim(c)=dim(a)=dim(b)=n*n)
+
+     -------------------------------------------------------------
+
+cmmult
+
+     Multiply two complex matrices C = A * B.
+
+     void cmmult(Cpx *c,Cpx *a,Cpx *b,int n,int m,int l)
+       a = pointer to input array of right n by m factor matrix A
+       b = pointer to input array of left m by l factor matrix B
+       c = pointer to store for n by l output matrix C
+       n,m,l = system dimension parameters, with
+                 (dim(c)=n*l, dim(a)=n*m, dim(b)=m*l)
+
+     ----------------------------------------------------------------
+
+hconj
+
+     Compute the Hermitian conjugate in place, A -> A^.
+
+     void hconj(Cpx *a,int n)
+       a = pointer to input array for the complex matrix A
+           This is converted to the Hermitian conjugate A^.
+       n = dimension (dim(a)=n*n)
+
+     ----------------------------------------------------------
+
+utrncm
+
+     Perform a unitary similarity transformation  C = T*B*T^.
+
+     void utrncm(Cpx *cm,Cpx *a,Cpx *b,int n)
+       a = pointer to the array of the transform matrix T
+       b = pointer to the array of the input matrix B
+       cm = pointer to output array of the transformed matrix C
+       n = dimension (dim(cm)=dim(a)=dim(b)=n*n)
+
+     ---------------------------------------------------------------
+
+utrnhm
+
+     Perform a unitary similarity transformation on a Hermitian
+     matrix  H' = T*H*T^.
+
+     void utrnhm(Cpx *hm,Cpx *a,Cpx *b,int n)
+       a = pointer to the array of the transform matrix T
+       b = pointer to the array of the Hermitian input matrix H
+       hm = pointer to array containing Hermitian output matrix H'
+       n = dimension (dim(cm)=dim(a)=dim(b)=n*n)
+
+     -----------------------------------------------------------------
+
+trncm
+
+     Transpose a complex square matrix in place A -> A~.
+
+     void trncm(Cpx *a,int n)
+       a = pointer to array of n by n complex matrix A
+           The computation replaces A by its transpose
+       n = dimension (dim(a)=n*n)
+
+     ---------------------------------------------------------
+
+cmattr
+
+     Compute the transpose A = B~ of a complex m by n matrix.
+
+     void cmattr(Cpx *a,Cpx *b,int m,int n)
+       a = pointer to output array of matrix A
+       b = pointer to input array of matrix B
+       m, n = matrix dimensions, with  B m by n and A n by m
+               (dim(a)=dim(b)= m*n)
+
+     -----------------------------------------------------------------
+
+hmgen
+
+     Generate a Hermitian matrix with specified eigen values and
+     eigenvectors.
+  
+     void hmgen(Cpx *h,double *ev,Cpx *u,int n)
+       h = pointer to complex array of output matrix H
+       ev = pointer to real array of input eigen values
+       u = pointer to complex array of unitary matrix U
+       n = dimension (dim(h)=dim(u)=n*n, dim(ev)=n)
+
+     If D is a diagonal matrix with D[i,j] = ev[i] for i=j and 0
+     otherwise.  H = U*D*U^. The columns of U are eigenvectors.
+
+     -----------------------------------------------------------------
+
+unitary
+
+     Generate a random unitary transformation U.
+
+     void unitary(Cpx *u,int n)
+       u = pointer to complex output array for U
+       n = dimension (dim(u)=n*n)
+
+
+     This function calls on the uniform random generator 'unfl' to
+     produce random rotation angles. Therefore this random generator
+     should be initialized by a call of 'setunfl' before calling
+     'unitary' (see Chapter 7).
+
+     ---------------------------------------------------------------------
+
+cmcpy
+
+     Copy a complex array A = B.
+
+     void cmcpy(Cpx *a,Cpx *b,int n)
+       a = pointer to store for output array
+       b = pointer to store for input array
+       n = dimension of complex arrays A and B
+
+     -----------------------------------------------------------
+
+cmprt
+
+     Print rows of a complex matrix in a specified format.
+
+     void cmprt(Cpx *a,int m,int n,char *f)
+       a = pointer to array of complex m by n matrix
+       m = number of columns
+       n = number of rows
+       f = character array holding format for complex number
+           output  (ie., "%f, %f  ")
+
+     Long rows may overflow the print line.

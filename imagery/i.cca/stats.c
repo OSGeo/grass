@@ -1,25 +1,26 @@
 #include <grass/gis.h>
+#include <grass/gmath.h>
+
 #include "local_proto.h"
 
-
 int
-within(int samptot, int nclass, double nsamp[MC], double cov[MC][MX][MX],
-       double w[MX][MX], int bands)
+within(int samptot, int nclass, double *nsamp, double ***cov,
+       double **w, int bands)
 {
     int i, j, k;
 
     /* Initialize within class covariance matrix */
-    for (i = 1; i <= bands; i++)
-	for (j = 1; j <= bands; j++)
+    for (i = 0; i < bands; i++)
+	for (j = 0; j < bands; j++)
 	    w[i][j] = 0.0;
 
-    for (i = 1; i <= nclass; i++)
-	for (j = 1; j <= bands; j++)
-	    for (k = 1; k <= bands; k++)
+    for (i = 0; i < nclass; i++)
+	for (j = 0; j < bands; j++)
+	    for (k = 0; k < bands; k++)
 		w[j][k] += (nsamp[i] - 1) * cov[i][j][k];
 
-    for (i = 1; i <= bands; i++)
-	for (j = 1; j <= bands; j++)
+    for (i = 0; i < bands; i++)
+	for (j = 0; j < bands; j++)
 	    w[i][j] = (1.0 / ((double)(samptot - nclass))) * w[i][j];
 
     return 0;
@@ -27,50 +28,41 @@ within(int samptot, int nclass, double nsamp[MC], double cov[MC][MX][MX],
 
 
 int
-between(int samptot, int nclass, double nsamp[MC], double mu[MC][MX],
-	double p[MX][MX], int bands)
+between(int samptot, int nclass, double *nsamp, double **mu,
+	double **p, int bands)
 {
     int i, j, k;
-    double tmp0[MX][MX], tmp1[MX][MX], tmp2[MX][MX];
-    double newvec[MX];
+    double **tmp0, **tmp1, **tmp2;
+    double *newvec;
 
-    for (i = 0; i < MX; i++)
-	newvec[i] = 0.0;
+    tmp0 = G_alloc_matrix(bands, bands);
+    tmp1 = G_alloc_matrix(bands, bands);
+    tmp2 = G_alloc_matrix(bands, bands);
+    newvec = G_alloc_vector(bands);
 
-    for (i = 1; i <= bands; i++)
-	for (j = 1; j <= bands; j++)
-	    tmp1[i][j] = tmp2[i][j] = 0.0;
-
-    /*  for (i = 1 ; i <= nclass ; i++)
-       product(mu[i],nsamp[i],tmp0,tmp1,bands);
-       for (i = 1 ; i <= nclass ; i++)
-       for (j = 1 ; j <= bands ; j++)
-       newvec[j] += nsamp[i] * mu[i][j];
-       for (i = 1 ; i <= bands ; i++)
-       for (j = 1 ; i <= bands ; j++)
-       tmp2[i][j] = (newvec[i] * newvec[j]) / samptot;
-       for (i = 1 ; i <= bands ; i++)
-       for (j = 1 ; j <= bands ; j++)
-       p[i][j] = (tmp1[i][j] - tmp2[i][j]) / (nclass - 1);
-     */
-
-    for (i = 1; i <= nclass; i++)
-	for (j = 1; j <= bands; j++)
+    for (i = 0; i < nclass; i++)
+	for (j = 0; j < bands; j++)
 	    newvec[j] += nsamp[i] * mu[i][j];
-    for (i = 1; i <= bands; i++)
-	for (j = 1; j <= bands; j++)
+    for (i = 0; i < bands; i++)
+	for (j = 0; j < bands; j++)
 	    tmp1[i][j] = (newvec[i] * newvec[j]) / samptot;
 
-    for (k = 1; k <= nclass; k++) {
+    for (k = 0; k < nclass; k++) {
 	product(mu[k], nsamp[k], tmp0, bands);
-	for (i = 1; i <= bands; i++)
-	    for (j = 1; j <= bands; j++)
+	for (i = 0; i < bands; i++)
+	    for (j = 0; j < bands; j++)
 		tmp2[i][j] += tmp0[i][j] - tmp1[i][j];
     }
 
-    for (i = 1; i <= bands; i++)
-	for (j = 1; j <= bands; j++)
+    for (i = 0; i < bands; i++)
+	for (j = 0; j < bands; j++)
 	    p[i][j] = tmp2[i][j] / (nclass - 1);
+
+    G_free_matrix(tmp0);
+    G_free_matrix(tmp1);
+    G_free_matrix(tmp2);
+    G_free_vector(newvec);
 
     return 0;
 }
+

@@ -4,8 +4,8 @@
 * MODULE:       Grass PDE Numerical Library
 * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
 * 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:     	Array managment functions 
+*
+* PURPOSE:     	Array managment functions
 * 		part of the gpde library
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -26,21 +26,21 @@
 /* ******************** 2D ARRAY FUNCTIONS *********************** */
 
 /*!
- * \brief Allocate memory for a N_array_2d data structure. 
+ * \brief Allocate memory for a N_array_2d data structure.
  *
- * This function allocates memory for an array of type N_array_2d 
+ * This function allocates memory for an array of type N_array_2d
  * and returns the pointer to the new allocated memory.
  * <br><br>
- * The data type of this array is set by "type" and must be 
+ * The data type of this array is set by "type" and must be
  * CELL_TYPE, FCELL_TYPE or DCELL_TYPE accordingly to the raster map data types.
- * The offset sets the number of boundary cols and rows. 
- * This option is useful to generate homogeneous Neumann boundary conditions around  
+ * The offset sets the number of boundary cols and rows.
+ * This option is useful to generate homogeneous Neumann boundary conditions around
  * an array or to establish overlapping boundaries. The array is initialized with 0 by default.
  * <br><br>
  * If the offset is greater then 0, negative indices are possible.
  * <br><br>
  *
- * The data structure of a array with 3 rows and cols and an offset of 1 
+ * The data structure of a array with 3 rows and cols and an offset of 1
  * will looks like this:
  * <br><br>
  *
@@ -55,19 +55,19 @@
  * 0 is the boundary.
  * <br><br>
  * Internal a one dimensional array is allocated to save memory and to speed up the memory access.
- * To access the one dimensional array with a two dimensional index use the provided 
+ * To access the one dimensional array with a two dimensional index use the provided
  * get and put functions. The internal representation of the above data will look like this:
  *
  \verbatim
- 0 0 0 0 0 0 0 1 2 0 0 3 4 5 0 0 6 7 8 0 0 0 0 0 0 
+ 0 0 0 0 0 0 0 1 2 0 0 3 4 5 0 0 6 7 8 0 0 0 0 0 0
  \endverbatim
  *
- * \param cols int 
- * \param rows int 
+ * \param cols int
+ * \param rows int
  * \param offset int
  * \param type int
  * \return N_array_2d *
- * 
+ *
  * */
 N_array_2d *N_alloc_array_2d(int cols, int rows, int offset, int type)
 {
@@ -124,7 +124,7 @@ N_array_2d *N_alloc_array_2d(int cols, int rows, int offset, int type)
 /*!
  * \brief Release the memory of a N_array_2d structure
  *
- * \param data N_array_2d * 
+ * \param data N_array_2d *
  * \return void
  * */
 void N_free_array_2d(N_array_2d * data)
@@ -158,7 +158,7 @@ void N_free_array_2d(N_array_2d * data)
  *
  * The data type can be CELL_TYPE, FCELL_TYPE or DCELL_TYPE accordingly to the raster map data types.
  *
- * \param array N_array_2d * 
+ * \param array N_array_2d *
  * \return type int
  * */
 int N_get_array_2d_type(N_array_2d * array)
@@ -169,9 +169,9 @@ int N_get_array_2d_type(N_array_2d * array)
 /*!
  * \brief Write the value of the N_array_2d struct at position col, row to value
  *
- * The value must be from the same type as the array. Otherwise you will risk data losses.  
+ * The value must be from the same type as the array. Otherwise you will risk data losses.
  *
- * \param data N_array_2d * 
+ * \param data N_array_2d *
  * \param col int
  * \param row int
  * \param value void * - this variable contains the array value at col, row position
@@ -217,13 +217,13 @@ void N_get_array_2d_value(N_array_2d * data, int col, int row, void *value)
 }
 
 /*!
- * \brief Returns 1 if the value of N_array_2d struct at postion col, row 
- * is of type null, otherwise 0 
+ * \brief Returns 1 if the value of N_array_2d struct at postion col, row
+ * is of type null, otherwise 0
  *
  * This function checks automatically the type of the array and checks for the
  * data type null value.
  *
- * \param data N_array_2d * 
+ * \param data N_array_2d *
  * \param col int
  * \param row int
  * \return int - 1 = is null, 0 otherwise
@@ -301,15 +301,15 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 
 
 /*!
- * \brief Returns the value of type CELL at position col, row 
+ * \brief Returns the value of type CELL at position col, row
  *
  * The data array can be of type CELL, FCELL or DCELL, the value will be casted to the CELL type.
  *
- * \param data N_array_2d * 
+ * \param data N_array_2d *
  * \param col int
  * \param row int
  * \return CELL
- *        
+ *
  * */
 CELL N_get_array_2d_c_value(N_array_2d * data, int col, int row)
 {
@@ -333,11 +333,11 @@ CELL N_get_array_2d_c_value(N_array_2d * data, int col, int row)
 }
 
 /*!
- * \brief Returns the value of type FCELL at position col, row 
- *        
+ * \brief Returns the value of type FCELL at position col, row
+ *
  * The data array can be of type CELL, FCELL or DCELL, the value will be casted to the FCELL type.
  *
- * \param data N_array_2d * 
+ * \param data N_array_2d *
  * \param col int
  * \param row int
  * \return FCELL
@@ -365,15 +365,15 @@ FCELL N_get_array_2d_f_value(N_array_2d * data, int col, int row)
 }
 
 /*!
- * \brief Returns the value of type DCELL at position col, row 
+ * \brief Returns the value of type DCELL at position col, row
  *
  * The data array can be of type CELL, FCELL or DCELL, the value will be casted to the DCELL type.
- * 
+ *
  * \param data N_array_2d *
  * \param col int
  * \param row int
  * \return DCELL
- *        
+ *
  * */
 DCELL N_get_array_2d_d_value(N_array_2d * data, int col, int row)
 {
@@ -515,7 +515,7 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
 /*!
  * \brief Writes a CELL value to the N_array_2d struct at position col, row
  *
- * \param data N_array_2d * 
+ * \param data N_array_2d *
  * \param col int
  * \param row int
  * \param value CELL
@@ -660,19 +660,19 @@ void N_print_array_2d(N_array_2d * data)
 /* ******************** 3D ARRAY FUNCTIONS *********************** */
 
 /*!
- * \brief Allocate memory for a N_array_3d data structure. 
+ * \brief Allocate memory for a N_array_3d data structure.
  *
- * This functions allocates an array of type N_array_3d and returns a pointer 
+ * This functions allocates an array of type N_array_3d and returns a pointer
  * to the new allocated memory.
  * <br><br>
- * The data type of this array set by "type" must be 
+ * The data type of this array set by "type" must be
  * FCELL_TYPE or DCELL_TYPE accordingly to the raster3d map data types.
- * The offsets sets the number of boundary cols, rows and depths. 
- * This option is useful to generate homogeneous Neumann boundary conditions around  
+ * The offsets sets the number of boundary cols, rows and depths.
+ * This option is useful to generate homogeneous Neumann boundary conditions around
  * an array or to establish overlapping boundaries. The arrays are initialized with 0 by default.
  * <br><br>
  * If the offset is greater then 0, negative indices are possible.
- * The data structure of a array with 3 depths, rows and cols and an offset of 1 
+ * The data structure of a array with 3 depths, rows and cols and an offset of 1
  * will looks like this:
  *
  \verbatim
@@ -712,16 +712,16 @@ void N_print_array_2d(N_array_2d * data)
 
  * <br><br>
  * Internal a one dimensional array is allocated to speed up the memory access.
- * To access the dimensional array with a three dimensional indexing use the provided 
+ * To access the dimensional array with a three dimensional indexing use the provided
  * get and put functions.
  *
  * \param cols int
  * \param rows int
  * \param depths int
- * \param offset int 
+ * \param offset int
  * \param type int
  * \return N_array_3d *
- * 
+ *
  * */
 N_array_3d *N_alloc_array_3d(int cols, int rows, int depths, int offset,
 			     int type)
@@ -772,7 +772,7 @@ N_array_3d *N_alloc_array_3d(int cols, int rows, int depths, int offset,
 }
 
 /*!
- * \brief Release the memory of a N_array_3d 
+ * \brief Release the memory of a N_array_3d
  *
  * \param data N_array_3d *
  * \return void
@@ -816,7 +816,7 @@ int N_get_array_3d_type(N_array_3d * array)
  * \brief This function writes the value of N_array_3d data at position col, row, depth
  *        to the variable value
  *
- * The value must be from the same type as the array. Otherwise you will risk data losses.  
+ * The value must be from the same type as the array. Otherwise you will risk data losses.
  *
  * \param data N_array_3d *
  * \param col int
@@ -1012,7 +1012,7 @@ double N_get_array_3d_d_value(N_array_3d * data, int col, int row, int depth)
  *
  * \param data N_array_3d *
  * \param col int
- * \param row int 
+ * \param row int
  * \param depth int
  * \param value cahr *
  * \return void
@@ -1069,7 +1069,7 @@ N_put_array_3d_value(N_array_3d * data, int col, int row, int depth,
  *
  * \param data N_array_3d *
  * \param col int
- * \param row int 
+ * \param row int
  * \param depth int
  * \return void
  * */
