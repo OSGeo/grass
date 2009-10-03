@@ -282,7 +282,7 @@ class GMFrame(wx.Frame):
         self.goutput = goutput.GMConsole(self, pageid=1)
         self.outpage = self.notebook.AddPage(self.goutput, text=_("Command output"))
 
-        # bingings
+        # bindings
         self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosed)
@@ -528,36 +528,112 @@ class GMFrame(wx.Frame):
     
     def OnAboutGRASS(self, event):
         """!Display 'About GRASS' dialog"""
-        info = wx.AboutDialogInfo()
+        import  wx.lib.scrolledpanel as scrolled
         
-        # name
-        info.SetName("GRASS GIS")
-        # version
+        aboutwin = wx.Frame(self, id=wx.ID_ANY, size=(550,400), 
+                            title='About GRASS GIS')
+
+        # version and web site
         version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
                                                                  flags = 'r',
                                                                  read = True).splitlines()
-        version = version.replace('GRASS', '').strip()
-        info.SetVersion(version)
-        # description
-        copyrightFile = open(os.path.join(os.getenv("GISBASE"), "COPYING"), 'r')
-        copyrightOut = []
-        copyright = copyrightFile.readlines()
-        info.SetCopyright('GIS Library '+ svn_gis_h_rev + '(' + svn_gis_h_date.split(' ')[1] + ')' + 
-                          '\n\n' + wordwrap(''.join(copyright[:11] + copyright[26:-3]),
-                                                  575, wx.ClientDC(self)))
-        copyrightFile.close()
-        # website
-        info.SetWebSite(("http://grass.osgeo.org", _("The official GRASS site")))
-        # licence
-        licenceFile = open(os.path.join(os.getenv("GISBASE"), "GPL.TXT"), 'r')
-        info.SetLicence(''.join(licenceFile.readlines()))
-        licenceFile.close()
-        # credits
-        authorsFile = open(os.path.join(os.getenv("GISBASE"), "AUTHORS"), 'r')
-        info.SetDevelopers([unicode(''.join(authorsFile.readlines()), "utf-8")])
-        authorsFile.close()
+
+        info = version.replace('GRASS', 'GRASS GIS version ').strip()
+        info = ''.join([info,"\n\n",'Official GRASS site: http://grass.osgeo.org'])
+        infotxt = wx.StaticText(aboutwin, id=wx.ID_ANY, label=info)
         
-        wx.AboutBox(info)
+        # copyright information
+        copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
+        if os.path.exists(copyfile):
+            copyrightFile = open(copyfile, 'r')
+            copyrightOut = []
+            copyright = copyrightFile.readlines()
+            copytext = ('GIS Library '+ svn_gis_h_rev + '(' + svn_gis_h_date.split(' ')[1] + ')' + 
+                              '\n\n' + wordwrap(''.join(copyright[:11] + copyright[26:-3]),
+                                                      575, wx.ClientDC(self)))
+            copyrightFile.close()
+        else:
+            copytext = 'COPYING file missing'
+        # put text into a scrolling panel
+        copyrightwin = scrolled.ScrolledPanel(aboutwin, id=wx.ID_ANY, 
+                         size=wx.DefaultSize,
+                         style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        copyrighttxt = wx.StaticText(copyrightwin, id=wx.ID_ANY, label=copytext)
+        copyrightwin.SetAutoLayout(1)
+        copyrightwin.SetupScrolling()
+        copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
+        copyrightwin.sizer.Add(item=copyrighttxt, proportion=1,
+                flag=wx.EXPAND | wx.ALL, border=1)
+        copyrightwin.SetSizer(copyrightwin.sizer)
+        copyrightwin.Layout()
+
+        # license
+        licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
+        if os.path.exists(licfile):
+            licenceFile = open(licfile, 'r')
+            license = ''.join(licenceFile.readlines())
+            licenceFile.close()
+        else:
+            license = 'GPL.TXT file missing'
+        # put text into a scrolling panel
+        licensewin = scrolled.ScrolledPanel(aboutwin, id=wx.ID_ANY, 
+                         size=wx.DefaultSize,
+                         style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        licensetxt = wx.StaticText(licensewin, id=wx.ID_ANY, label=license)
+        licensewin.SetAutoLayout(1)
+        licensewin.SetupScrolling()
+        licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
+        licensewin.sizer.Add(item=licensetxt, proportion=1,
+                flag=wx.EXPAND | wx.ALL, border=1)
+        licensewin.SetSizer(licensewin.sizer)
+        licensewin.Layout()
+        
+        # credits
+        authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
+        if os.path.exists(authfile):
+            authorsFile = open(authfile, 'r')
+            authors = unicode(''.join(authorsFile.readlines()), "utf-8")
+            authorsFile.close()
+        else:
+            authors = 'AUTHORS file missing'
+        authorwin = scrolled.ScrolledPanel(aboutwin, id=wx.ID_ANY, 
+                         size=wx.DefaultSize,
+                         style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        authortxt = wx.StaticText(authorwin, id=wx.ID_ANY, label=str(authors))
+        authorwin.SetAutoLayout(1)
+        authorwin.SetupScrolling()
+        authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
+        authorwin.sizer.Add(item=authortxt, proportion=1,
+                flag=wx.EXPAND | wx.ALL, border=1)
+        authorwin.SetSizer(authorwin.sizer)
+        authorwin.Layout()      
+        
+        # create a flat notebook for displaying information about GRASS
+        nbstyle = FN.FNB_VC8 | \
+                FN.FNB_BACKGROUND_GRADIENT | \
+                FN.FNB_TABS_BORDER_SIMPLE | \
+                FN.FNB_NO_X_BUTTON | \
+                FN.FNB_NO_NAV_BUTTONS
+                
+        aboutgrass = FN.FlatNotebook(aboutwin, id=wx.ID_ANY, style=nbstyle)
+        aboutgrass.SetTabAreaColour(globalvar.FNPageColor)
+        
+        # make pages for About GRASS notebook
+        pg1 = aboutgrass.AddPage(infotxt, text=_("Info"))
+        pg2 = aboutgrass.AddPage(copyrightwin, text=_("Copyright"))
+        pg3 = aboutgrass.AddPage(licensewin, text=_("License"))
+        pg4 = aboutgrass.AddPage(authorwin, text=_("Authors"))
+
+        # bindings
+#        self.aboutgrass.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnAGPageChanged)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(item=aboutgrass, proportion=1,
+                  flag=wx.EXPAND | wx.ALL, border=1)
+        aboutwin.SetSizer(sizer)
+        aboutwin.Layout()
+        aboutwin.Centre()
+        aboutwin.Show(True)  
         
     def OnWorkspace(self, event):
         """!Workspace menu (new, load)"""
