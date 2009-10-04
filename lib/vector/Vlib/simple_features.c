@@ -195,7 +195,7 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z, i
   \return 0  feature not simple
   \return -1 feature type not supported (GV_POINT, GV_CENTROID, ...)
 */
-int Vect_sfa_is_line_is_simple(const struct line_pnts *Points, int type, int with_z)
+int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type, int with_z)
 {
     int sftype;
     
