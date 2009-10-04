@@ -416,10 +416,13 @@ int Vect_write_ascii(FILE *, FILE *, struct Map_info *, int,
 void Vect_write_ascii_head(FILE *, struct Map_info *);
 
 /* Simple Features */
-void Vect_sfa_write_line_wkt(const struct line_pnts *, int, int, int, FILE *);
-int Vect_sfa_check_line_type(const struct line_pnts *, int, int, int);
 int Vect_sfa_get_line_type(const struct line_pnts *, int, int);
-int Vect_sfa_is_line_closed(const struct line_pnts *, int, int);
+int Vect_sfa_check_line_type(const struct line_pnts *, int, int, int);
+int Vect_sfa_line_dimension(int);
+char *Vect_sfa_line_geometry_type(const struct line_pnts *, int);
+int Vect_sfa_line_astext(const struct line_pnts *, int, int, int, FILE *);
+int Vect_sfa_is_line_is_simple(const struct line_pnts *, int, int);
+int Vect_sfa_is_line_is_closed(const struct line_pnts *, int, int);
 
 /*
  * Internal functions, MUST NOT be used in modules

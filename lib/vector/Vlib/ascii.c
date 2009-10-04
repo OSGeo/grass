@@ -563,7 +563,7 @@ int Vect_write_ascii(FILE *ascii,
 	    if (type & (GV_BOUNDARY | GV_CENTROID | GV_FACE | GV_KERNEL))
 		continue;
 	    /* Well-Known Text */
-	    Vect_sfa_write_line_wkt(Points, type, Vect_is_3d(Map), dp, ascii);
+	    Vect_sfa_line_astext(Points, type, Vect_is_3d(Map), dp, ascii);
 	}
 	else {
 	    G_fatal_error(_("Unknown format"));
@@ -593,7 +593,7 @@ int Vect_write_ascii(FILE *ascii,
 	    }
 	    fprintf(ascii, "POLYGON(");
 	    /* write outter ring */
-	    Vect_sfa_write_line_wkt(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
+	    Vect_sfa_line_astext(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
 	    /* get isles (holes) -> inner rings */
 	    nisles = Vect_get_area_num_isles(Map, area);
 	    for (i = 0; i < nisles; i++) {
@@ -605,7 +605,7 @@ int Vect_write_ascii(FILE *ascii,
 		}
 		fprintf(ascii, ", ");
 		/* write inner ring */
-		Vect_sfa_write_line_wkt(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
+		Vect_sfa_line_astext(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
 	    }
 	    fprintf(ascii, ")\n");
 	}
