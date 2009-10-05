@@ -34,6 +34,7 @@ import sys
 import string
 import copy
 import textwrap
+import traceback
 
 from threading import Thread
 
@@ -122,9 +123,9 @@ class AbstractDigit:
             ret = self.driver.Reset(self.map)
         except StandardError, e:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
-                                  message="%s %s (%s)" % (_('Unable to initialize display driver, '
-                                                            'see README file for more information.\n\n'
-                                                            'Details:'), e, errorMsg))
+                                  message="%s %s (%s)" % (_("Unable to initialize display driver of vector "
+                                                            "digitizer. See 'Command output' for details.\n\n"
+                                                            "Details:"), e, errorMsg))
         
         if map and ret == -1:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
@@ -232,15 +233,22 @@ class VDigit(AbstractDigit):
         @param settings  initial settings of digitization tool
         """
         AbstractDigit.__init__(self, mapwindow)
-
+        
+        if not mapwindow.parent.IsStandalone():
+            self.log = mapwindow.parent.GetLayerManager().goutput.cmd_stderr
+        else:
+            self.log = sys.stderr
+        
+        self.toolbar = mapwindow.parent.toolbars['vdigit']
+        
         try:
             self.digit = wxvdigit.Digit(self.driver.GetDevice(),
                                         mapwindow)
-        except (ImportError, NameError):
+        except (ImportError, NameError, TypeError):
+            # print traceback
+            traceback.print_exc(file = self.log)
             self.digit = None
-
-        self.toolbar = mapwindow.parent.toolbars['vdigit']
-
+        
         self.UpdateSettings()
         
     def __del__(self):
@@ -699,6 +707,9 @@ class VDigit(AbstractDigit):
 
     def GetUndoLevel(self):
         """!Get undo level (number of active changesets)"""
+        if not self.digit:
+            return -1
+        
         return self.digit.GetUndoLevel()
 
     def UpdateSettings(self):
@@ -841,7 +852,8 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         @param pdc wx.PseudoDC instance
         """
-        self.__display.SetDevice(pdc)
+        if self.__display:
+            self.__display.SetDevice(pdc)
             
     def Reset(self, map):
         """!Reset map
@@ -879,6 +891,9 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         @return wx.Image instance
         """
+        if not self.__display:
+            return 0
+        
         nlines = self.__display.DrawMap(True) # force
         Debug.msg(3, "CDisplayDriver.DrawMap(): nlines=%d" % nlines)
 
@@ -931,6 +946,9 @@ class CDisplayDriver(AbstractDisplayDriver):
         
         @param grassId if grassId is True returns GRASS ids, otherwise
         internal ids of objects drawn in PseudoDC"""
+        if not self.__display:
+            return list()
+        
         if grassId:
             selected = self.__display.GetSelected(True)
         else:
@@ -1017,6 +1035,8 @@ class CDisplayDriver(AbstractDisplayDriver):
         """!Set geographical region
         
         Needed for 'cell2pixel' conversion"""
+        if not self.__display:
+            return
         
         map = self.mapwindow.Map
         reg = map.region

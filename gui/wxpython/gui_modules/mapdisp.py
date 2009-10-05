@@ -1,4 +1,4 @@
-"""
+"""!
 @package mapdisp.py
 
 @brief GIS map display canvas, with toolbar for various display
