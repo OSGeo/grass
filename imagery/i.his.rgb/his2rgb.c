@@ -19,7 +19,7 @@ ASSUMPTION:
 #include <grass/gis.h>
 #include "globals.h"
 
-void his2rgb(CELL * rowbuffer[3], int columns)
+void his2rgb(CELL *rowbuffer[3], int columns)
 {
     long sample;		/* sample indicator                          */
     double red;			/* the red band output                       */
@@ -121,16 +121,16 @@ void his2rgb(CELL * rowbuffer[3], int columns)
 	else
 	    blue = blue255;
 
-	if (red > 254.5)
-	    red = 254.5;
+	if (red > 255. - 0.5)
+	    red = 255. - 0.5;
 	if (red < 0.0)
 	    red = 0.0;
-	if (green > 254.5)
-	    green = 254.5;
+	if (green > 255. - 0.5)
+	    green = 255. - 0.5;
 	if (green < 0.0)
 	    green = 0.0;
-	if (blue > 254.5)
-	    blue = 254.5;
+	if (blue > 255. - 0.5)
+	    blue = 255. - 0.5;
 	if (blue < 0.0)
 	    blue = 0.0;
 
