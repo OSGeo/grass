@@ -120,7 +120,7 @@ def main():
 	    set_colors(i, v0, v1)
     else:
 	all_max = 0
-	all_min = 255
+	all_min = 999999
 	for i in [red, green, blue]:
 	    grass.message(_("Processing <%s>...") % i)
 	    v0 = get_percentile(i, 2)
