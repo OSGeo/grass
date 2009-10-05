@@ -32,6 +32,10 @@
 #include <gdal_version.h>	/* needed for FID detection */
 #endif	/* HAVE_GDAL */
 
+#ifdef HAVE_OGR
+#include <ogr_api.h>
+#endif
+
 /*!
   \brief Create and init new dblinks structure
   
@@ -476,7 +480,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 	G_fatal_error(_("The support for OGR vector maps wasn't"
 			" compiled in"));
 #else
-#if GDAL_VERSION_NUM > 1320	/* seems to be fixed after 1320 release */
+#if GDAL_VERSION_NUM > 1320 && HAVE_OGR /* seems to be fixed after 1320 release */
 	int layer, nLayers;
 	OGRDataSourceH Ogr_ds;
 	OGRLayerH Ogr_layer = NULL;
@@ -628,7 +632,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 		}
 	    }
 	}
-#endif /* GDAL_VERSION_NUM > 1320 */
+#endif /* GDAL_VERSION_NUM > 1320 && HAVE_OGR */
 	return (1);
 #endif	/* HAVE_GDAL */
     }
