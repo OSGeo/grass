@@ -41,7 +41,7 @@ from vdigit import GV_LINES as VDigit_Lines_Type
 from vdigit import VDigitCategoryDialog
 from vdigit import VDigitZBulkDialog
 from vdigit import VDigitDuplicatesDialog
-from vdigit import PseudoDC
+from vdigit import PseudoDC as VDigitPseudoDC
 
 class MapWindow(object):
     """!
@@ -225,14 +225,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # platforms at initialization, but little harm done.
         ### self.OnSize(None)
 
-        # create PseudoDC used for background map, map decorations like scales and legends
-        self.pdc = PseudoDC()
-        # used for digitization tool
-        self.pdcVector = None
-        # decorations (region box, etc.)
-        self.pdcDec = PseudoDC()
-        # pseudoDC for temporal objects (select box, measurement tool, etc.)
-        self.pdcTmp = PseudoDC()
+        self.DefinePseudoDC()
         # redraw all pdc's, pdcTmp layer is redrawn always (speed issue)
         self.redrawAll = True
 
@@ -245,6 +238,25 @@ class BufferedWindow(MapWindow, wx.Window):
         self.dragid   = -1
         self.lastpos  = (0, 0)
 
+    def DefinePseudoDC(self, vdigit = False):
+        """!Define PseudoDC class to use
+
+        @vdigit True to use PseudoDC from vdigit
+        """
+        if vdigit:
+            PseudoDC = VDigitPseudoDC
+        else:
+            PseudoDC = wx.PseudoDC
+        
+        # create PseudoDC used for background map, map decorations like scales and legends
+        self.pdc = PseudoDC()
+        # used for digitization tool
+        self.pdcVector = None
+        # decorations (region box, etc.)
+        self.pdcDec = PseudoDC()
+        # pseudoDC for temporal objects (select box, measurement tool, etc.)
+        self.pdcTmp = PseudoDC()
+        
     def Draw(self, pdc, img=None, drawid=None, pdctype='image', coords=[0, 0, 0, 0]):
         """!
         Draws map and overlay decorations
@@ -677,8 +689,9 @@ class BufferedWindow(MapWindow, wx.Window):
             # re-calculate threshold for digitization tool
             self.parent.digit.driver.GetThreshold()
             # draw map
-            self.pdcVector.Clear()
-            self.pdcVector.RemoveAll()
+            if self.pdcVector:
+                self.pdcVector.Clear()
+                self.pdcVector.RemoveAll()
             try:
                 item = self.tree.FindItemByData('maplayer', digitToolbar.GetLayer())
             except TypeError:
@@ -2543,15 +2556,15 @@ class BufferedWindow(MapWindow, wx.Window):
             if l.type == 'raster':
                 rast.append(l.name)
             elif l.type == 'vector':
-                if self.parent.digit and l.name == self.parent.digit.map and \
-                        self.parent.digit.type == 'vdigit':
+                digitToolbar = self.parent.toolbars['vdigit']
+                if digitToolbar and digitToolbar.GetLayer() == l.name:
                     w, s, b, e, n, t = self.parent.digit.driver.GetMapBoundingBox()
                     self.Map.GetRegion(n=n, s=s, w=w, e=e,
                                        update=True)
                     updated = True
                 else:
                     vect.append(l.name)
-
+        
         if not updated:
             self.Map.GetRegion(rast = rast,
                                vect = vect,

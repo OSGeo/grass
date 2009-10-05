@@ -1109,15 +1109,16 @@ class VDigitToolbar(AbstractToolbar):
         ### self.parent.MapWindow.EraseMap()
 
         # unset background map if needed
-        if UserSettings.Get(group='vdigit', key='bgmap',
-                            subkey='value', internal=True) == mapLayer.GetName():
-            UserSettings.Set(group='vdigit', key='bgmap',
-                             subkey='value', value='', internal=True)
-        
-        self.parent.statusbar.SetStatusText(_("Please wait, "
-                                              "opening vector map <%s> for editing...") % \
-                                                mapLayer.GetName(),
-                                            0)
+        if mapLayer:
+            if UserSettings.Get(group='vdigit', key='bgmap',
+                                subkey='value', internal=True) == mapLayer.GetName():
+                UserSettings.Set(group='vdigit', key='bgmap',
+                                 subkey='value', value='', internal=True)
+            
+            self.parent.statusbar.SetStatusText(_("Please wait, "
+                                                  "opening vector map <%s> for editing...") % \
+                                                    mapLayer.GetName(),
+                                                0)
         
         # reload vdigit module
         reload(vdigit)
@@ -1131,9 +1132,13 @@ class VDigitToolbar(AbstractToolbar):
             self.parent.digit.SetMapName(mapLayer.GetName())
         except gcmd.DigitError, e:
             self.mapLayer = None
+            self.StopEditing()
             print >> sys.stderr, e # wxMessageBox
             return False
-        
+
+        # use vdigit's PseudoDC
+        self.parent.MapWindow.DefinePseudoDC(vdigit = True)
+    
         # update toolbar
         self.combo.SetValue(mapLayer.GetName())
         self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
@@ -1158,42 +1163,43 @@ class VDigitToolbar(AbstractToolbar):
         
         return True
 
-    def StopEditing (self):
+    def StopEditing(self):
         """!Stop editing of selected vector map layer.
 
         @return True on success
         @return False on failure
         """
-        if not self.mapLayer:
-            return False
+        # use wx's PseudoDC
+        self.parent.MapWindow.DefinePseudoDC(vdigit = False)
         
-        Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % self.mapLayer.GetName())
         self.combo.SetValue (_('Select vector map'))
         
         # save changes
-        if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
-            if self.parent.digit.GetUndoLevel() > 0:
-                dlg = wx.MessageDialog(parent=self.parent,
-                                       message=_("Do you want to save changes "
-                                                 "in vector map <%s>?") % self.mapLayer.GetName(),
-                                       caption=_("Save changes?"),
-                                       style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                if dlg.ShowModal() == wx.ID_NO:
-                    # revert changes
-                    self.parent.digit.Undo(0)
-                dlg.Destroy()
+        if self.mapLayer:
+            Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % self.mapLayer.GetName())
+            if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
+                if self.parent.digit.GetUndoLevel() > 0:
+                    dlg = wx.MessageDialog(parent=self.parent,
+                                           message=_("Do you want to save changes "
+                                                     "in vector map <%s>?") % self.mapLayer.GetName(),
+                                           caption=_("Save changes?"),
+                                           style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                    if dlg.ShowModal() == wx.ID_NO:
+                        # revert changes
+                        self.parent.digit.Undo(0)
+                    dlg.Destroy()
         
-        self.parent.statusbar.SetStatusText(_("Please wait, "
-                                              "closing and rebuilding topology of "
-                                              "vector map <%s>...") % self.mapLayer.GetName(),
-                                            0)
+            self.parent.statusbar.SetStatusText(_("Please wait, "
+                                                  "closing and rebuilding topology of "
+                                                  "vector map <%s>...") % self.mapLayer.GetName(),
+                                                0)
         
-        self.parent.digit.SetMapName(None) # -> close map
+            self.parent.digit.SetMapName(None) # -> close map
         
-        # re-active layer 
-        item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
-        if item and self.parent.tree.IsItemChecked(item):
-            self.mapcontent.ChangeLayerActive(self.mapLayer, True)
+            # re-active layer 
+            item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
+            if item and self.parent.tree.IsItemChecked(item):
+                self.mapcontent.ChangeLayerActive(self.mapLayer, True)
         
         # change cursor
         self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
