@@ -490,12 +490,20 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
             event.Skip()
             return
         
-        cmd = shlex.split(str(text))
+        try:
+            cmd = shlex.split(str(text))
+        except ValueError, e:
+            self.statusbar.SetStatusText(str(e))
+            cmd = text.split(' ')
+        
         pattern = str(text)
         if len(cmd) > 1:
             # search for module's options
             if cmd[0] in self._choicesCmd and not self._module:
-                self._module = menuform.GUI().ParseInterface(cmd = cmd)
+                try:
+                    self._module = menuform.GUI().ParseInterface(cmd = cmd)
+                except IOError:
+                    self._module = None
 
             if self._module:
                 if len(cmd[-1].split('=', 1)) == 1:
