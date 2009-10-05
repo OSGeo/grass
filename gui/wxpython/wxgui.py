@@ -993,18 +993,19 @@ class GMFrame(wx.Frame):
         self.curr_page = None
         
 
-    def RulesCmd(self, event):
+    def RulesCmd(self, event, cmd = ''):
         """
         Launches dialog for commands that need rules
         input and processes rules
         """
-        command = self.GetMenuCmd(event)
+        if event:
+            cmd = self.GetMenuCmd(event)
                 
-        if command[0] == 'r.colors' or command[0] == 'vcolors':
-            ctable = colorrules.ColorTable(self, cmd=command[0])
+        if cmd[0] == 'r.colors' or cmd[0] == 'vcolors':
+            ctable = colorrules.ColorTable(self, cmd=cmd[0])
             ctable.Show()
         else:
-            dlg = rules.RulesText(self, cmd=command)
+            dlg = rules.RulesText(self, cmd=cmd)
             dlg.CenterOnScreen()
             if dlg.ShowModal() == wx.ID_OK:
                 gtemp = utils.GetTempfile()
@@ -1014,7 +1015,7 @@ class GMFrame(wx.Frame):
                 finally:
                     output.close()
     
-                cmdlist = [command[0],
+                cmdlist = [cmd[0],
                            'input=%s' % dlg.inmap,
                            'output=%s' % dlg.outmap,
                            'rules=%s' % gtemp]

@@ -1383,7 +1383,7 @@
 	    <menuitem>
 	      <label>Reclassify interactively</label>
 	      <help>Creates a new map layer whose category values are based upon a reclassification of the categories in an existing raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,statistics,aggregation</keywords>
               <handler>self.RulesCmd</handler>
 	      <command>r.reclass</command>
 	    </menuitem>
