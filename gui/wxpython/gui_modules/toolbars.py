@@ -1123,12 +1123,18 @@ class VDigitToolbar(AbstractToolbar):
         # reload vdigit module
         reload(vdigit)
         from vdigit import Digit as Digit
+        # use vdigit's PseudoDC
+        self.parent.MapWindow.DefinePseudoDC(vdigit = True)
         self.parent.digit = Digit(mapwindow=self.parent.MapWindow)
         
         self.mapLayer = mapLayer
         
         # open vector map
         try:
+            if not self.parent.MapWindow.CheckPseudoDC():
+                raise gcmd.DigitError(parent=self.parent,
+                                      message=_("Unable to initialize display driver of vector "
+                                                "digitizer. See 'Command output' for details."))
             self.parent.digit.SetMapName(mapLayer.GetName())
         except gcmd.DigitError, e:
             self.mapLayer = None
@@ -1136,9 +1142,6 @@ class VDigitToolbar(AbstractToolbar):
             print >> sys.stderr, e # wxMessageBox
             return False
 
-        # use vdigit's PseudoDC
-        self.parent.MapWindow.DefinePseudoDC(vdigit = True)
-    
         # update toolbar
         self.combo.SetValue(mapLayer.GetName())
         self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
