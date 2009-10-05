@@ -141,8 +141,9 @@ class AbstractDigit:
                                             'try to run v.build to rebuild '
                                             'the topology (Vector->Develop vector map->'
                                             'Create/rebuild topology).') % map)
-            
-        self.digit.InitCats()
+
+        if self.digit:
+            self.digit.InitCats()
         
     def SelectLinesByQueryThresh(self):
         """!Generic method used for SelectLinesByQuery()
@@ -244,11 +245,11 @@ class VDigit(AbstractDigit):
         try:
             self.digit = wxvdigit.Digit(self.driver.GetDevice(),
                                         mapwindow)
-        except (ImportError, NameError, TypeError):
+        except (ImportError, NameError, TypeError), e:
             # print traceback
             traceback.print_exc(file = self.log)
             self.digit = None
-        
+            
         self.UpdateSettings()
         
     def __del__(self):

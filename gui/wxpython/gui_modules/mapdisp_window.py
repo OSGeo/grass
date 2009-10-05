@@ -257,6 +257,21 @@ class BufferedWindow(MapWindow, wx.Window):
         # pseudoDC for temporal objects (select box, measurement tool, etc.)
         self.pdcTmp = PseudoDC()
         
+    def CheckPseudoDC(self):
+        """!Try to draw background
+        
+        @return True on success
+        @return False on failure
+        """
+        try:
+            self.pdc.BeginDrawing()
+            self.pdc.SetBackground(wx.Brush(self.GetBackgroundColour()))
+            self.pdc.BeginDrawing()
+        except:
+            return False
+        
+        return True
+    
     def Draw(self, pdc, img=None, drawid=None, pdctype='image', coords=[0, 0, 0, 0]):
         """!
         Draws map and overlay decorations
@@ -281,6 +296,7 @@ class BufferedWindow(MapWindow, wx.Window):
             bg = wx.Brush(self.GetBackgroundColour())
 
         pdc.SetBackground(bg)
+        
         ### pdc.Clear()
 
         Debug.msg (5, "BufferedWindow.Draw(): id=%s, pdctype=%s, coord=%s" % \
