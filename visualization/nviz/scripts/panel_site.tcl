@@ -173,16 +173,6 @@ proc mksitePanel { BASE } {
     pack $row1 $row2 $row3 $row4 $row5 -anchor w -side top -expand no -fill none -pady 2
     pack $mid1 -side top -padx 3
     
-	# frame for thematic point mapping
-	
-	set site_attr(FIELD_ATTR_PANEL) 0
-    
-	checkbutton $row4.themechk -text "thematic mapping for vector points" \
-		-variable site_attr(FIELD_ATTR_PANEL) -command "if {$curr!=0} {site_attr_gui $row5 $bottom $curr}" \
-		-offvalue 0 -onvalue 1
-	pack $row4.themechk -side left -anchor nw
-    
-
     return $panel
 }
 
