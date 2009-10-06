@@ -106,6 +106,8 @@ import sys
 import os
 import atexit
 import string
+import re
+
 import grass.script as grass
 
 def cleanup():
