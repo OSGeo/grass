@@ -64,12 +64,12 @@ proc mkpickPanel { BASE } {
 	set highlight(SIZE_VALUE) 1.5
 	set highlight(MARKER_VALUE) 4
 
-	Nsite_highlight_set_default size $highlight(SIZE)
-	Nsite_highlight_set_default color $highlight(COLOR)
-	Nsite_highlight_set_default marker $highlight(MARKER)
-	Nsite_highlight_set_default_value color $highlight(COLOR_VALUE)
-	Nsite_highlight_set_default_value size $highlight(SIZE_VALUE)
-	Nsite_highlight_set_default_value marker $highlight(MARKER_VALUE)
+	#Nsite_highlight_set_default size $highlight(SIZE)
+	#Nsite_highlight_set_default color $highlight(COLOR)
+	#Nsite_highlight_set_default marker $highlight(MARKER)
+	#Nsite_highlight_set_default_value color $highlight(COLOR_VALUE)
+	#Nsite_highlight_set_default_value size $highlight(SIZE_VALUE)
+	#Nsite_highlight_set_default_value marker $highlight(MARKER_VALUE)
 
 	# make main frames for panel
     set query [frame $BASE.query]

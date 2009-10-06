@@ -525,12 +525,6 @@ int Ninit(Tcl_Interp *interp, Tk_Window w)
 /*** ACS_MODIFY pick  ONE LINE ************************************************/
     pick_init_tcl(interp, &data);
 
-/*** ACS_MODIFY site_attr  ONE LINE ************************************************/
-    site_attr_init_tcl(interp, &data);
-
-/*** ACS_MODIFY site_highlight  ONE LINE ************************************************/
-    site_highlight_init_tcl(interp, &data);
-
     /*
        if (!script_mode)
        Tcl_Eval(interp, nviz_script); *//* source nviz_script to start main window */

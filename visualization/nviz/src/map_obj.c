@@ -495,9 +495,6 @@ int Nnew_map_obj_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
 	}
 	new_id = GP_new_site();
 
-	/* ACS_MODIFY One line (added) - site_attr management ************************* */
-	site_attr_init(new_id);
-
 	/* See if there is a default file name specified */
 	if ((argc >= 3) && (strncmp(argv[2], "name=", 5))) {
 	    arglist[2] = argv[2];
@@ -512,7 +509,7 @@ int Nnew_map_obj_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
 	}
 
 	/* Initialize display parameters */
-	GP_set_sitemode(new_id, ST_ATT_NONE, 0xFF0000, 2, 100, ST_X);
+	GP_set_style(new_id, 0xFF0000, 2, 100, ST_X);
 	surf_list = GS_get_surf_list(&num_surfs);
 	if (num_surfs) {
 	    for (i = 0; i < num_surfs; i++) {
@@ -1609,7 +1606,7 @@ int get_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 	    float size;
 	    char temp[128], *tempname;
 
-	    GP_get_sitemode(id, &atmod, &color, &width, &size, &marker);
+	    GP_get_style(id, &color, &width, &size, &marker);
 	    GP_get_zmode(id, &use_z);
 	    switch (sv_att_atoi(argv[2])) {
 	    case ATT_COLOR:
@@ -1644,13 +1641,7 @@ int get_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 		   Tcl_SetResult(interp, temp, TCL_VOLATILE);
 		   END original code */
 		{
-		    geosite *gp;
-
-		    if ((gp = gp_get_site(id))) {
-			if (TCL_OK !=
-			    site_attr_get(interp, gp, atoi(argv[3])))
 			    return (TCL_ERROR);
-		    }
 		    /* result should be in interp */
 		}
 
@@ -1864,7 +1855,7 @@ int set_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 		    return (TCL_ERROR);
 		}
 	    }
-	    GP_get_sitemode(id, &useatt, &col, &width, &size, &marker);
+	    GP_get_style(id, &col, &width, &size, &marker);
 	    col =
 		(strcmp(argv[2], "color")) ? col : tcl_color_to_int(argv[3]);
 	    width = (strcmp(argv[2], "width")) ? width : atoi(argv[3]);
@@ -1886,7 +1877,7 @@ int set_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 	     */
 
 
-	    if (!strcmp(argv[2], "useatt")) {
+	    /*if (!strcmp(argv[2], "useatt")) {
 		geosite *gp;
 
 		if ((gp = gp_get_site(id))) {
@@ -1906,11 +1897,11 @@ int set_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 			useatt |= ST_ATT_MARKER;
 		    }
 		}
-	    }
+	    }*/
 
 /*** ACS_MODIFY END - site_attr management *************************************/
 
-	    GP_set_sitemode(id, useatt, col, width, size, marker);
+	    GP_set_style(id, col, width, size, marker);
 	}
 	break;
 
@@ -1979,9 +1970,9 @@ int unset_att(int id, int type, Tcl_Interp * interp, int argc, char *argv[])
 
     if (type == SITE) {
 	if (!strcmp(argv[2], "useatt") && argc == 5) {
-	    GP_get_sitemode(id, &useatt, &col, &width, &size, &marker);
+	    GP_get_style(id, &col, &width, &size, &marker);
 	    if ((gp = gp_get_site(id))) {
-		site_attr_unset(interp, gp, atoi(argv[3]), argv[4]);
+/*		site_attr_unset(interp, gp, atoi(argv[3]), argv[4]);
 
 		if (!strcmp(argv[3], "size")) {
 		    useatt &= ~ST_ATT_SIZE;
@@ -1992,8 +1983,9 @@ int unset_att(int id, int type, Tcl_Interp * interp, int argc, char *argv[])
 		else if (!strcmp(argv[3], "marker")) {
 		    useatt &= ~ST_ATT_MARKER;
 		}
-	    }
-	    GP_set_sitemode(id, useatt, col, width, size, marker);
+*/	    }
+
+	    GP_set_style(id, col, width, size, marker);
 	}
 	return TCL_OK;
     }
