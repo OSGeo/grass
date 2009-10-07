@@ -62,8 +62,6 @@ import wx.html
 import wx.stc
 import wx.lib.customtreectrl as CT
 import wx.lib.flatnotebook as FN
-import  wx.lib.scrolledpanel as scrolled
-from wx.lib.wordwrap import wordwrap
 
 grassPath = os.path.join(globalvar.ETCDIR, "python")
 sys.path.append(grassPath)
@@ -90,6 +88,7 @@ import gui_modules.ogc_services as ogc_services
 import gui_modules.prompt as prompt
 from   gui_modules.debug import Debug
 from   gui_modules.help import MenuTreeWindow
+from   gui_modules.help import AboutWindow
 from   icons.icon import Icons
 
 UserSettings = preferences.globalSettings
@@ -1511,149 +1510,7 @@ class GMFrame(wx.Frame):
                       message=_("No map layer selected. Operation cancelled."),
                       caption=_("Message"),
                       style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-
-class AboutWindow(wx.Frame):
-    def __init__(self, parent):
-        """!Create custom About Window
-
-        @todo improve styling
-        """
-        wx.Frame.__init__(self, parent=parent, id=wx.ID_ANY, size=(550,400), 
-                          title=_('About GRASS GIS'))
-        
-        # version and web site
-        version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
-                                                                 flags = 'r',
-                                                                 read = True).splitlines()
-
-        infoTxt = wx.Panel(parent = self, id = wx.ID_ANY)
-        infoSizer = wx.BoxSizer(wx.VERTICAL)
-        logo = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass.ico")
-        logoBitmap = wx.StaticBitmap(parent = infoTxt, id = wx.ID_ANY,
-                                     bitmap = wx.Bitmap(name = logo,
-                                                        type = wx.BITMAP_TYPE_ICO))
-        infoSizer.Add(item = logoBitmap, proportion = 0,
-                      flag = wx.ALL | wx.ALIGN_CENTER, border = 10)
-        
-        i = 0
-        for label in [version.replace('GRASS', 'GRASS GIS').strip() + '\n\n',
-                      _('Official GRASS site: http://grass.osgeo.org') + '\n\n',
-                      _('GIS Library') + ' ' + svn_gis_h_rev + '(' + svn_gis_h_date.split(' ')[1] + ')']:
-            info = wx.StaticText(parent = infoTxt,
-                                 id = wx.ID_ANY,
-                                 label = label)
-            if i == 0:
-                info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
-            infoSizer.Add(item = info, proportion = 0,
-                          flag = wx.TOP | wx.ALIGN_CENTER, border = 5)
-            i += 1
-            
-        # copyright information
-        copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
-        if os.path.exists(copyfile):
-            copyrightFile = open(copyfile, 'r')
-            copyrightOut = []
-            copyright = copyrightFile.readlines()
-            copytext = wordwrap(''.join(copyright[:11] + copyright[26:-3]),
-                                575, wx.ClientDC(self))
-            copyrightFile.close()
-        else:
-            copytext = _('COPYING file missing')
-        # put text into a scrolling panel
-        copyrightwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                              size=wx.DefaultSize,
-                                              style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        copyrighttxt = wx.StaticText(copyrightwin, id=wx.ID_ANY, label=copytext)
-        copyrightwin.SetAutoLayout(1)
-        copyrightwin.SetupScrolling()
-        copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        copyrightwin.sizer.Add(item=copyrighttxt, proportion=1,
-                               flag=wx.EXPAND | wx.ALL, border=1)
-        copyrightwin.SetSizer(copyrightwin.sizer)
-        copyrightwin.Layout()
-
-        # license
-        licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
-        if os.path.exists(licfile):
-            licenceFile = open(licfile, 'r')
-            license = ''.join(licenceFile.readlines())
-            licenceFile.close()
-        else:
-            license = _('GPL.TXT file missing')
-        # put text into a scrolling panel
-        licensewin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                            size=wx.DefaultSize,
-                                            style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        licensetxt = wx.StaticText(licensewin, id=wx.ID_ANY, label=license)
-        licensewin.SetAutoLayout(1)
-        licensewin.SetupScrolling()
-        licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
-        licensewin.sizer.Add(item=licensetxt, proportion=1,
-                flag=wx.EXPAND | wx.ALL, border=1)
-        licensewin.SetSizer(licensewin.sizer)
-        licensewin.Layout()
-        
-        # credits
-        authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
-        if os.path.exists(authfile):
-            authorsFile = open(authfile, 'r')
-            authors = unicode(''.join(authorsFile.readlines()), "utf-8")
-            authorsFile.close()
-        else:
-            authors = _('AUTHORS file missing')
-        authorwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                           size=wx.DefaultSize,
-                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        authortxt = wx.StaticText(authorwin, id=wx.ID_ANY, label=str(authors))
-        authorwin.SetAutoLayout(1)
-        authorwin.SetupScrolling()
-        authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        authorwin.sizer.Add(item=authortxt, proportion=1,
-                flag=wx.EXPAND | wx.ALL, border=1)
-        authorwin.SetSizer(authorwin.sizer)
-        authorwin.Layout()      
-        
-        # create a flat notebook for displaying information about GRASS
-        nbstyle = FN.FNB_VC8 | \
-                FN.FNB_BACKGROUND_GRADIENT | \
-                FN.FNB_TABS_BORDER_SIMPLE | \
-                FN.FNB_NO_X_BUTTON | \
-                FN.FNB_NO_NAV_BUTTONS
-                
-        aboutNotebook = FN.FlatNotebook(self, id=wx.ID_ANY, style=nbstyle)
-        aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
-        
-        # make pages for About GRASS notebook
-        pg1 = aboutNotebook.AddPage(infoTxt,    text=_("Info"))
-        pg2 = aboutNotebook.AddPage(copyrightwin, text=_("Copyright"))
-        pg3 = aboutNotebook.AddPage(licensewin,   text=_("License"))
-        pg4 = aboutNotebook.AddPage(authorwin,    text=_("Authors"))
-
-        # buttons
-        btnClose = wx.Button(parent = self, id = wx.ID_CLOSE)
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = btnClose, proportion = 1,
-                     flag = wx.ALL | wx.EXPAND | wx.ALIGN_RIGHT,
-                     border = 5)
-        # bindings
-        # self.aboutNotebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnAGPageChanged)
-        btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
-
-        infoTxt.SetSizer(infoSizer)
-        infoSizer.Fit(infoTxt)
-        
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(item=aboutNotebook, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=1)
-        sizer.Add(item=btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=1)
-        self.SetSizer(sizer)
-        self.Layout()
     
-    def OnCloseWindow(self, event):
-        """!Close window"""
-        self.Close()
-        
 class GMApp(wx.App):
     def __init__(self, workspace = None):
         """!Main GUI class.
