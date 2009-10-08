@@ -148,11 +148,12 @@ dbDbmscap *db_read_dbmscap(void)
 #ifdef __MINGW32__
     dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) + 1);
     sprintf(dirpath, "%s\\driver\\db\\", G_gisbase());
+    G_convert_dirseps_to_host(dirpath);
 #else
     G_asprintf(&dirpath, "%s/driver/db/", G_gisbase());
 #endif
 
-    G_debug(2, "opendir %s\n", dirpath);
+    G_debug(2, "dbDbmscap(): opendir [%s]", dirpath);
     dir = opendir(dirpath);
     if (dir == NULL) {
 	db_syserror("Cannot open drivers directory");
@@ -175,6 +176,7 @@ dbDbmscap *db_read_dbmscap(void)
 	dirpath = G_malloc(strlen("\\driver\\db\\")
 			   + strlen(G_gisbase()) + strlen(ent->d_name) + 1);
 	sprintf(dirpath, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
+	G_convert_dirseps_to_host(dirpath);
 #else
 	G_asprintf(&dirpath, "%s/driver/db/%s", G_gisbase(), ent->d_name);
 #endif
