@@ -53,13 +53,14 @@ DSTDIR = $(GDIR)/lib
 
 LIBFILES := $(patsubst %,$(DSTDIR)/_%.so,$(MODULES))
 PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
+PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 LLIBFILES := $(patsubst %,_%.so,$(MODULES))
 WRAPFILES := $(patsubst %,%_wrap.c,$(MODULES))
 LPYFILES := $(patsubst %,%.py,$(MODULES))
 
 default:
 	$(MAKE) $(DSTDIR)
-	$(MAKE) $(LLIBFILES) $(WRAPFILES) $(LPYFILES) $(LIBFILES) $(PYFILES)
+	$(MAKE) $(LLIBFILES) $(WRAPFILES) $(LPYFILES) $(LIBFILES) $(PYFILES) $(PYCFILES)
 
 %_wrap.c %.py: ../include/%.i $(EXTRA_SWIG)
 	$(SWIG) $(SWIGFLAGS) -python -o $*_wrap.c -module $* -shadow $<

@@ -1,5 +1,4 @@
 
-PYTHON = python
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 PYMOD_LD = $(CXX) -bundle -undefined dynamic_lookup
 PYMOD_LDFLAGS := $(SHLIB_LDFLAGS) -L$(ARCH_LIBDIR)

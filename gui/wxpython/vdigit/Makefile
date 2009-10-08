@@ -40,7 +40,7 @@ $(SHLIB): $(LIB_NAME).i
 	GEOSCFLAGS="$(GEOSCFLAGS)" \
 	WXWIDGETSCXXFLAGS="$(WXWIDGETSCXXFLAGS)" \
 	WXWIDGETSLIB="$(WXWIDGETSLIB)" \
-	python setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
+	$(PYTHON) setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
 
