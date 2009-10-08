@@ -2579,7 +2579,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 rast.append(l.name)
             elif l.type == 'vector':
                 digitToolbar = self.parent.toolbars['vdigit']
-                if digitToolbar and digitToolbar.GetLayer() == l.name:
+                if digitToolbar and digitToolbar.GetLayer() == l:
                     w, s, b, e, n, t = self.parent.digit.driver.GetMapBoundingBox()
                     self.Map.GetRegion(n=n, s=s, w=w, e=e,
                                        update=True)
