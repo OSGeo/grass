@@ -16,9 +16,9 @@
 *
 *****************************************************************************/
 
+#include <stdlib.h>
 #include "grass/N_pde.h"
 #include "grass/gmath.h"
-#include <stdlib.h>
 
 
 /*!
