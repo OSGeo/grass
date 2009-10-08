@@ -6,11 +6,12 @@ CLEAN_SUBDIRS = vdigit nviz
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
+include $(MODULE_TOPDIR)/include/Make/Python.make
 
 ETCDIR = $(ETC)/wxpython
 
 SRCFILES := $(wildcard scripts/p.* compat/* gui_modules/* icons/*.* icons/silk/* images/* xml/*) gis_set.py wxgui.py README
-DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES))
+DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
 default: install_scripts
 	$(MAKE) parsubdirs
