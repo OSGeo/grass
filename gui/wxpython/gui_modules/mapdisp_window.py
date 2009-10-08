@@ -243,20 +243,24 @@ class BufferedWindow(MapWindow, wx.Window):
 
         @vdigit True to use PseudoDC from vdigit
         """
+        # create PseudoDC used for background map, map decorations like scales and legends
+        self.pdc = self.PseudoDC(vdigit)
+        # used for digitization tool
+        self.pdcVector = None
+        # decorations (region box, etc.)
+        self.pdcDec = self.PseudoDC(vdigit)
+        # pseudoDC for temporal objects (select box, measurement tool, etc.)
+        self.pdcTmp = self.PseudoDC(vdigit)
+        
+    def PseudoDC(self, vdigit = False):
+        """!Create PseudoDC instance"""
         if vdigit:
             PseudoDC = VDigitPseudoDC
         else:
             PseudoDC = wx.PseudoDC
         
-        # create PseudoDC used for background map, map decorations like scales and legends
-        self.pdc = PseudoDC()
-        # used for digitization tool
-        self.pdcVector = None
-        # decorations (region box, etc.)
-        self.pdcDec = PseudoDC()
-        # pseudoDC for temporal objects (select box, measurement tool, etc.)
-        self.pdcTmp = PseudoDC()
-        
+        return PseudoDC()
+    
     def CheckPseudoDC(self):
         """!Try to draw background
         
@@ -506,7 +510,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 # self.bufferLast = wx.BitmapFromImage(self.buffer.ConvertToImage())
                 self.bufferLast = dc.GetAsBitmap(wx.Rect(0, 0, self.Map.width, self.Map.height))
 
-            pdcLast = PseudoDC()
+            pdcLast = self.PseudoDC(vdigit = False)
             pdcLast.DrawBitmap(self.bufferLast, 0, 0, False)
             pdcLast.DrawToDC(dc)
 
