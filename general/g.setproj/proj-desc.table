@@ -33,7 +33,7 @@ OLONP:lon:o_lon_p:Longitude of New Pole
 QFACT:float:q:q factor
 ROTCONV:bool:rot_conv:Origin Convergence Angle
 SNUM:int:lsat:Satellite Number
-SOUTH:bool:south:South Hemisphere
+SOUTH:bool:south:Southern Hemisphere
 SPATH:int:path:Satellite Path Number
 THETA:lon:theta:Theta Angle
 TILT:float:tilt:Tilt Angle in Decimal Degrees
