@@ -19,17 +19,15 @@ produces a smoother approximate of the original.
 In some cases, this is achieved by inserting new vertices into the original line, and can 
 total up to 4000% of the number of vertices in the original. In such an instance, 
 it is always a good idea to simplify the line after smoothing.
-</p>
 
 <p>
 Smoothing and simplification algorithms implemented in this module work line by 
 line, i.e. simplification/smoothing of one line does not affect the other lines; 
 they are treated separately.  Also, the first and the last point of each line is
 never translated and/or deleted. 
-</p>
 
 <h3>SIMPLIFICATION</h3>
-<p>
+
 <em>v.generalise</em> contains following line simplification algorithms:
 <ul>
 <li>Douglas-Peucker Algorithm</li>
@@ -49,6 +47,7 @@ If the <b>-r</b> flag is passed, simplified lines that become shorter becomes sh
 and a simplification algorithm is selected, then areas less than <b>threshold</b> are also removed.
 
 <h4>ALGORITHM DESCRIPTIONS</h4>
+
 <ul>
 <li> <i>Douglas-Peucker</i> - "Quicksort" of line simplification, the most widely used
      algorithm. Input parameters: <b>input</b>, <b>threshold</b>. For more
@@ -71,7 +70,6 @@ and a simplification algorithm is selected, then areas less than <b>threshold</b
      Other lines/areas/boundaries are left unchanged. Input parameters: <b>input</b>, <b>threshold</b>             
 </ul>
 
-<p>
 <i>Douglas-Peucker</i> and <i>Douglas-Peucker Reduction Algorithm</i> use the same method
 to simplify the lines. Note that 
 <div class="code"><pre>
@@ -88,14 +86,13 @@ More importantly, the effect of
 <div class="code"><pre>
 v.generalise input=in output=out method=douglas_reduction threshold=0 reduction=X
 </pre></div>
-<p>
+
 is that 'out' contains approximately only X% of points of 'in'.
-</p>
 
 <h3>SMOOTHING</h3>
-<p>
+
 The following smoothing algorithms are implemented in <em>v.generalise</em>
-</p>
+
 <ul>
 <li><i>Boyle's Forward-Looking Algorithm</i> - The position of each point depends on the
     position of the previous points and the point <b>look_ahead</b> ahead. 
@@ -122,12 +119,11 @@ The following smoothing algorithms are implemented in <em>v.generalise</em>
      This algorithm works very well for small values of <b>alpha</b> and <b>beta</b> (between 0 and 5). These
      parameters affects the "sharpness" and the curvature of the computed line.</li>                          
 </ul>
-<p>
+
 One of the key advantages of <i>Hermite Interpolation</i> is the fact that the computed line
 always passes through the points of the original line, whereas the lines produced by the 
 remaining algorithms never pass through these points. In some sense, this algorithm outputs
 a line which "circumscribes" the input line.
-</p>
 
 <p>
 On the other hand, <i>Chaiken's Algorithm</i> outputs a line which "inscribes" a given line. 
@@ -136,41 +132,34 @@ consecutive points. For more iterations, the property above does not hold, but t
 lines are very similar to the Bezier Splines. The disadvantage of the two algorithms given above is that 
 they increase the number of points. However, <i>Hermite Interpolation</i> can be used as another 
 simplification algorithm. To achieve this, it is necessary to set <i>angle_thresh</i> to higher values (15 or so). 
-</p>
 
 <p>
 One restriction on both McMasters' Algorithms is that <i>look_ahead</i> parameter must be odd. Also
 note that these algorithms have no effect if <i>look_ahead = 1</i>. 
-</p>
 
 <p>
 Note that <i>Boyle's</i>, <i>McMasters'</i> and <i>Snakes</i> algorithm are sometimes used in the signal processing to smooth the signals.
 More importantly, these algorithms never change the number of points on the lines; they only
 translate the points, and do not insert any new points. 
-</p>
 
 <p>
 <i>Snakes</i> Algorithm is (asymptotically) the slowest among the algorithms presented above. Also,
 it requires quite a lot of memory. This means that it is not very efficient for maps with the lines
 consisting of many segments.
-</p>
 
 <h3>DISPLACEMENT</h3>
-<p>
+
 The displacement is used when the lines overlap and/or are close to each other at the current
 level of detail. In general, displacement methods moves the conflicting features apart so 
 that they do not interact and can be distinguished.   
-</p>
 
 <p>
 This module implements algorithm for displacement of linear features based on
 the <i>Snakes</i> approach. This method generally yields very good results; however, it
 requires a lot of memory and is not very efficient.
-</p>
 
 <p>
 Displacement is selected by <b>method=displacement</b>. It uses following parameters:
-</p>
 
 <ul>
 <li>
@@ -193,20 +182,19 @@ the lines are resolved. Good starting points for values of <b>iterations</b> are
 </li>
 
 </ul>
-<p>
+
 The lines affected by the algorithm can be specified by the <b>layer</b>,
 <b>cats</b> and <b>where</b> parameters.
-</p>
+
 <!-- TODO: example(s) -->
 
 <h3>NETWORK GENERALIZATION</h3>
-<p>
+
 Used for selecting "the most important" part of the network. This is based
 on the graph algorithms. Network generalization is applied if method=network.
 The algorithm calculates three centrality measures for each line in the
 network and only the lines with the values greater than thresholds are selected.
 The behaviour of algorithm can be altered by the following parameters:
-</p>
 
 <ul>
 <li>
@@ -229,27 +217,31 @@ which lie between other lines and lie on the paths between two parts of a networ
 In the terminology of the road networks, these are highways, bypasses, main roads/streets, etc.
 </li>
 </ul>
-<p>
+
 All three parameters above can be presented at the same time. In that case,
 the algorithm selects only the lines which meet each criterion. 
-</p>
+
 <p>
 Also, the outputed network may not be connected if the value of <b>betweeness_thresh</b>
 is too large.
-</p>
+
 <!-- TODO: example(s) -->
 
 <h2>SEE ALSO</h2>
-<em><a href="http://users.ox.ac.uk/~orie1848/tutorial.html">v.generalise Tutorial</a><br></em>
-<em><a href="v.clean.html">v.clean</a><br></em>
-<em><a href="v.dissolve.html">v.dissolve</a><br></em>
+
+<em>
+  <a href="v.clean.html">v.clean</a>,
+  <a href="v.dissolve.html">v.dissolve</a>
+</em>
 <br><br>
+<a href="http://grass.osgeo.org/wiki/V.generalize_tutorial">v.generalize Tutorial</a> (from GRASS-Wiki)
 
 <h2>AUTHORS</h2>
-Daniel Bundala, Google Summer of Code 2007, Student 
-<br>
+
+Daniel Bundala, Google Summer of Code 2007, Student<br>
 Wolf Bergenheim, Mentor
 
 <!-- TODO: references -->
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
