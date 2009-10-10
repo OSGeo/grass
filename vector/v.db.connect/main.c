@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 	field = 1;
 	fieldname = NULL;
     }
-    G_debug(0, "layer number %d, layer name %s", field, fieldname);
+    G_debug(1, "layer number %d, layer name %s", field, fieldname);
 
     if (print->answer && shell_print->answer)
 	G_fatal_error(_("Please choose only one print style"));
