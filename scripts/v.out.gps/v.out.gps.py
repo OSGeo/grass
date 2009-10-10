@@ -217,7 +217,7 @@ def main():
     tmp_proj = tmp + ".proj"
     tf = open(tmp_proj, 'w')
     p1 = grass.pipe_command('v.out.ascii', input = inmap, format = 'standard')
-    p2 = grass.feed_command('m.proj', flags = 'od', quiet = True, stdout = tf)
+    p2 = grass.feed_command('m.proj', input = '-', flags = 'od', quiet = True, stdout = tf)
     tf.close()
 
     lineno = 0
