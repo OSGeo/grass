@@ -1980,7 +1980,7 @@ class LocationWizard(wx.Object):
         elif proj == 'utm':
             proj4string = '+proj=%s +zone=%s' % (proj, utmzone)
             if utmhemisphere == 'south':
-                proj4string += '+south'
+                proj4string += ' +south'
         else:
             proj4string = '+proj=%s ' % (proj)
 
