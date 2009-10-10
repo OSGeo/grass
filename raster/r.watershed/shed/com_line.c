@@ -5,7 +5,7 @@
 #include "string.h"
 
 /* make sure any useful info is transfered to the man page before ripping out the interactive help messages */
-/* in addition there seem to be some useful user options here which are not currently available from the main parrser */
+/* in addition there seem to be some useful user options here which are not currently available from the main parser */
 int com_line_Gwater(INPUT * input, OUTPUT * output)
 {
     struct Cell_head *window;
