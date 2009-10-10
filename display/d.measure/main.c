@@ -10,7 +10,7 @@
  *               Huidae Cho <grass4u gmail.com>, 
  *               Eric G. Miller <egm2 jps.net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      interactive line and polygon measurement in display
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team

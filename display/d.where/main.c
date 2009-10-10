@@ -8,7 +8,7 @@
  *               Markus Neteler <neteler itc.it>,
  *               Eric G. Miller <egm2 jps.net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>, 
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      interactive query of location in active display

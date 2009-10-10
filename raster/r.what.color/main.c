@@ -5,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,Brad Douglas <rez touchofmadness.com>,
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_nospam yahoo.com>, Soeren Gebbert <soeren.gebbert gmx.de>
+ *               Hamish Bowman <hamish_b yahoo.com>, Soeren Gebbert <soeren.gebbert gmx.de>
  * PURPOSE:      
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *

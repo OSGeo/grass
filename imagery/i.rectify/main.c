@@ -10,7 +10,7 @@
  *               Markus Neteler <neteler itc.it>, 
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      calculate a transformation matrix and then convert x,y cell 
  *               coordinates to standard map coordinates for each pixel in the 
  *               image (control points can come from i.points or i.vpoints)

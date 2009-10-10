@@ -2,7 +2,7 @@
 /****************************************************************************
  *
  * MODULE:       display
- * AUTHOR(S):    Hamish Bowman <hamish_nospam yahoo.com> (original contributor)
+ * AUTHOR(S):    Hamish Bowman <hamish_b yahoo.com> (original contributor)
  *                      (adapted from Radim Blazek's d.vect code)
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      draw a symbol at pixel coordinates

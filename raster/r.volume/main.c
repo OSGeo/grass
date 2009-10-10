@@ -5,7 +5,7 @@
  * AUTHOR(S):    Dr. James Hinthorne, Central Washington University GIS Laboratory
  *               December 1988, (revised April 1989) (original contributor)
  *               Revised Jul 1995 to use new sites API (McCauley)
- *               GRASS 6 update: Hamish Bowman <hamish_nospam yahoo.com>
+ *               GRASS 6 update: Hamish Bowman <hamish_b yahoo.com>
  *               Glynn Clements <glynn gclements.plus.com>, Soeren Gebbert <soeren.gebbert gmx.de>
  * PURPOSE:      
  *               r.volume is a program to compute the total, and average of cell values

@@ -8,7 +8,7 @@
  *               Brad Douglas <rez touchofmadness.com>, 
  *               Huidae Cho <grass4u gmail.com>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      interpolates a raster elevation map from a rasterized
  *               contour map

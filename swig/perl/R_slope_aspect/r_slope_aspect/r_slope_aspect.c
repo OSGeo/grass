@@ -8,7 +8,7 @@
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_nospam yahoo.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Radim Blazek <radim.blazek gmail.com>

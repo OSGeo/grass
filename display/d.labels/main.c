@@ -6,7 +6,7 @@
  *               Radim Blazek <radim.blazek gmail.com>, 
  *               Stephan Holl <sholl gmx net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      displays a paint label file in the active display frame
  * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team

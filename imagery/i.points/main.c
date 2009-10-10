@@ -7,7 +7,7 @@
  *               Eric Mitchell,
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      enables user to mark points on (raster) image to be rectified,
  *               and then input the geographic coordinates of each point for
  *               calculation of a coordinate transformation matrix

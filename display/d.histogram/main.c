@@ -8,7 +8,7 @@
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Eric G. Miller <egm2 jps.net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      draw a bar-chart or a pie-chart representing the
  *               histogram statistics of a cell-file

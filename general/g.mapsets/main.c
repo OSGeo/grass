@@ -5,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro (CERL), Greg Koerper (ManTech Environmental
  *                    Technology) (original contributors), 
  *               Glynn Clements <glynn gclements.plus.com>
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Markus Neteler <neteler itc.it>, 
  *               Moritz Lennert <mlennert club.worldonline.be>,
  *               Martin Landa <landa.martin gmail.com>,

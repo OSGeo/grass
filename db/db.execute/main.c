@@ -3,7 +3,7 @@
  *
  * MODULE:       db.execute
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_nospam yahoo.com>, Markus Neteler <neteler itc.it>, Stephan Holl
+ *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>, Markus Neteler <neteler itc.it>, Stephan Holl
  * PURPOSE:      process one non-select sql statement
  * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *

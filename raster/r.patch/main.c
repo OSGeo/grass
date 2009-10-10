@@ -3,7 +3,7 @@
  *
  * MODULE:       r.patch
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Hamish Bowman <hamish_nospam yahoo.com>, Markus Neteler <neteler itc.it>
+ *               Hamish Bowman <hamish_b yahoo.com>, Markus Neteler <neteler itc.it>
  *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      

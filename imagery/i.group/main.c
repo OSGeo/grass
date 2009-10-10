@@ -8,7 +8,7 @@
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Brad Douglas <rez touchofmadness.com>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      collect raster map layers into an imagery group by assigning 
  *               them to user-named subgroups or other groups
  * COPYRIGHT:    (C) 2001-2007 by the GRASS Development Team
