@@ -1,5 +1,5 @@
 /*!
-   \file write.c
+   \file lib/vector/Vlib/write.c
 
    \brief Vector library - write vector features
 
@@ -11,7 +11,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek
-   \author Updated by Martin Landa <landa.martin gmail.com> (restore lines)
+   \author Updated by Martin Landa <landa.martin gmail.com> (restore lines, OGR support)
  */
 
 #include <grass/config.h>
@@ -66,7 +66,7 @@ static off_t (*Write_line_array[][3]) () = {
     write_dummy, V1_write_line_nat, V2_write_line_nat}
 #ifdef HAVE_OGR
     , {
-    write_dummy, write_dummy, write_dummy}
+    write_dummy, V1_write_line_ogr, write_dummy}
 #else
     , {
     write_dummy, format_l, format_l}
@@ -110,7 +110,7 @@ static int (*Vect_restore_line_array[][3]) () = {
 };
 
 /*!
-   \brief Writes new feature to the end of file (table)
+   \brief Writes new feature to the end of file
 
    The function calls G_fatal_error() on error.
 
@@ -119,7 +119,8 @@ static int (*Vect_restore_line_array[][3]) () = {
    \param points feature geometry
    \param cats feature categories
 
-   \return new feature id (level 2) or offset into file where the feature starts (level 1)
+   \return new feature id (level 2)
+   \return offset into file where the feature starts (level 1)
  */
 off_t
 Vect_write_line(struct Map_info *Map,

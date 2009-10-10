@@ -156,7 +156,7 @@ V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	Vect_get_constraint_box(Map, &mbox);
 
     while (1) {
-	/* Read feature to chache if necessary */
+	/* Read feature to cache if necessary */
 	while (Map->fInfo.ogr.lines_next == Map->fInfo.ogr.lines_num) {
 	    hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer);
 
