@@ -478,10 +478,8 @@ off_t V1_write_line_nat(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
 off_t V2_write_line_nat(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
-#if 0
-off_t V1_write_line_ogr(struct Map_info *, int, struct line_pnts *,
-		       struct line_cats *);
-#endif
+int V1_write_line_ogr(struct Map_info *, int, const struct line_pnts *,
+		      const struct line_cats *);
 off_t V1_rewrite_line_nat(struct Map_info *, off_t, int,
 			  const struct line_pnts *, const struct line_cats *);
 int V2_rewrite_line_nat(struct Map_info *, int, int,
