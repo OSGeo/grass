@@ -51,12 +51,14 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     OGRFeatureDefnH Ogr_featuredefn;
 
     Ogr_layer = NULL;
-    
+
+    /*
     if (update) {
 	G_warning(_("Write mode is not supported for OGR format"));
 	return -1;
     }
-
+    */
+    
     if (!Map->fInfo.ogr.dsn) {
 	G_fatal_error(_("OGR datasource not defined"));
 	return -1;
