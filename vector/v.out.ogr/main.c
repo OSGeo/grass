@@ -541,7 +541,7 @@ int main(int argc, char *argv[])
     num_to_export = 0;
     if (Vect_get_num_primitives(&In, GV_POINT) < 1 && (otype & GV_POINTS)) {
         G_warning(_("No points found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_POINT)
             num_to_export = num_to_export + Vect_get_num_primitives(&In, GV_POINT);
@@ -549,7 +549,7 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_primitives(&In, GV_LINE) < 1 && (otype & GV_LINE)) {
         G_warning(_("No lines found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_LINE)
             num_to_export = num_to_export + Vect_get_num_primitives(&In, GV_LINE);
@@ -557,7 +557,7 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_primitives(&In, GV_BOUNDARY) < 1 && (otype & GV_BOUNDARY)) {
         G_warning(_("No boundaries found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_BOUNDARY)
             num_to_export = num_to_export + Vect_get_num_primitives(&In, GV_BOUNDARY);
@@ -565,7 +565,7 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_areas(&In) < 1 && (otype & GV_AREA)) {
         G_warning(_("No areas found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_AREA)
             num_to_export = num_to_export + Vect_get_num_areas(&In);
@@ -573,7 +573,7 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_primitives(&In, GV_CENTROID) < 1 && (otype & GV_CENTROID)) {
         G_warning(_("No centroids found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_CENTROID)
             num_to_export = num_to_export + Vect_get_num_primitives(&In, GV_CENTROID);
@@ -581,7 +581,7 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_primitives(&In, GV_FACE) < 1 && (otype & GV_FACE)) {
         G_warning(_("No faces found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_FACE)
             num_to_export = num_to_export + Vect_get_num_primitives(&In, GV_FACE);
@@ -589,7 +589,7 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_primitives(&In, GV_KERNEL) < 1 && (otype & GV_KERNEL)) {
         G_warning(_("No kernels found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_KERNEL)
             num_to_export = num_to_export + Vect_get_num_primitives(&In, GV_KERNEL);
@@ -597,13 +597,13 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_volumes(&In) < 1 && (otype & GV_VOLUME)) {
         G_warning(_("No volumes found, but requested to be exported. "
-		    "Will skip this geometry type."));
+		    "Will skip this feature type."));
     } else {
         if (otype & GV_VOLUME)
             num_to_export = num_to_export + Vect_get_num_volumes(&In);
     }
 
-    G_debug(1, "Requested to export %d geometries", num_to_export);
+    G_debug(1, "Requested to export %d features", num_to_export);
 
     if (num_to_export < 1) {
         G_warning(_("Nothing to export"));
@@ -612,7 +612,7 @@ int main(int argc, char *argv[])
 
     /* Lines (run always to count features of different type) */
     if ((otype & GV_POINTS) || (otype & GV_LINES)) {
-	G_message(_("Exporting %i geometries..."), Vect_get_num_lines(&In));
+	G_message(_("Exporting %i features..."), Vect_get_num_lines(&In));
 	for (i = 1; i <= Vect_get_num_lines(&In); i++) {
 
 	    G_percent(i, Vect_get_num_lines(&In), 1);
@@ -692,7 +692,7 @@ int main(int argc, char *argv[])
     }
 
     /* Areas (run always to count features of different type) */
-    if (otype & GV_AREA) {
+    if (Vect_get_num_primitives(&In, GV_AREA) > 0 && otype & GV_AREA) {
 	G_message(_("Exporting %i areas (may take some time)..."),
 		  Vect_get_num_areas(&In));
 	for (i = 1; i <= Vect_get_num_areas(&In); i++) {
@@ -766,8 +766,8 @@ int main(int argc, char *argv[])
     }
 
     /* Faces (run always to count features of different type)  - Faces are similar to lines */
-    if (otype & GV_FACE) {
-	G_message(_("Exporting %i faces (may take some time) ..."),
+    if (Vect_get_num_primitives(&In, GV_FACE) > 0 && otype & GV_FACE) {
+	G_message(_("Exporting %i faces..."),
 		  Vect_get_num_faces(&In));
 	for (i = 1; i <= Vect_get_num_faces(&In); i++) {
 	    OGRGeometryH ring;
@@ -829,7 +829,7 @@ int main(int argc, char *argv[])
     }
 
     /* Kernels */
-    if (otype & GV_KERNEL) {
+    if (Vect_get_num_primitives(&In, GV_KERNEL) > 0 && otype & GV_KERNEL) {
 	G_message(_("Exporting %i kernels..."), Vect_get_num_kernels(&In));
 	for (i = 1; i <= Vect_get_num_lines(&In); i++) {
 
@@ -920,6 +920,8 @@ int main(int argc, char *argv[])
        G_warning ("%d features of different type skip", fskip);
      */
 
+    G_done_msg(" ");
+    
     exit(EXIT_SUCCESS);
 }
 
