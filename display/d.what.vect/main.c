@@ -8,7 +8,7 @@
  *               Stephan Holl <sholl gmx net>, 
  *               Alex Shevlakov <sixote yahoo.com>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      query category values / attributes in vector maps
  * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team

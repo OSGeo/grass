@@ -8,7 +8,7 @@
  *               Huidae Cho <grass4u gmail.com>, 
  *               Florian Goessmann <florian wallweg39.de>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Markus Neteler <neteler itc.it>, 
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      interactively change the current region using the mouse

@@ -12,7 +12,7 @@
  *               Markus Neteler <neteler itc.it>
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      REVISION of i.points to work with vector map layers
  *               and 2nd/3rd order transformations
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team

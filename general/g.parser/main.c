@@ -5,7 +5,7 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>, 
  *               Radim Blazek <radim.blazek gmail.com>
  * PURPOSE:      

@@ -5,7 +5,7 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
  *               Roberto Flor <flor itc.it>, 
  *               Bernhard Reiter <bernhard intevation.de>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Markus Neteler <neteler itc.it>, 
  *               Radim Blazek <radim.blazek gmail.com>
  * PURPOSE:      combine three rasters to form a colour image using red, green,

@@ -6,7 +6,7 @@
  *               M.L. Holko, USDA, SCS, NHQ-CGIS,
  *               R.L. Glenn, USDA, SCS, NHQ-CGIS (original contributors
  *               Update to GRASS 6: Radim Blazek <radim.blazek gmail.com> 
- *               Huidae Cho <grass4u gmail.com>, Hamish Bowman <hamish_nospam yahoo.com>,
+ *               Huidae Cho <grass4u gmail.com>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      

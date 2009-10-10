@@ -4,7 +4,7 @@
  * MODULE:       r.reclass
  * AUTHOR(S):    James Westervelt, Michael Shapiro, CERL (original contributors)
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_nospam yahoo.com>, Jan-Oliver Wagner <jan intevation.de>,
+ *               Hamish Bowman <hamish_b yahoo.com>, Jan-Oliver Wagner <jan intevation.de>,
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team

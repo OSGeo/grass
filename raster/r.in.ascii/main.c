@@ -3,7 +3,7 @@
  *
  * MODULE:       r.in.ascii
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, Hamish Bowman <hamish_nospam yahoo.com>,
+ *               Markus Neteler <neteler itc.it>, Hamish Bowman <hamish_b yahoo.com>,
  *               Roberto Flor <flor itc.it>, Roger Miller <rgrmill rt66 com>,
  *               Brad Douglas <rez touchofmadness.com>, Huidae Cho <grass4u gmail.com>,
  *               Glynn Clements <glynn gclements.plus.com>

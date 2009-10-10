@@ -7,7 +7,7 @@
 #   	    	Huidae Cho - Korea - grass4u@gmail.com
 #   	    	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
 #   	    	Markus Neteler - Germany/Italy - neteler@itc.it
-#		Hamish Bowman - New Zealand - hamish_nospam at yahoo,com
+#		Hamish Bowman - New Zealand - hamish_b at yahoo,com
 # PURPOSE:  	The source file for this shell script is in
 #   	    	src/general/init/init.sh. It sets up some environment
 #   	    	variables and the lock file. It also parses any remaining

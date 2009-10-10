@@ -7,7 +7,7 @@
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Eric G. Miller <egm2 jps.net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      user changes color table for raster map layers
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
  *

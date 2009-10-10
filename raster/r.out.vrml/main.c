@@ -3,7 +3,7 @@
  *
  * MODULE:       r.out.vrml
  * AUTHOR(S):    Bill Brown (CERL/UIUC GMSL Laboratory) (original contributor), 
- *               Hamish Bowman <hamish_nospam yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      This module exports a GRASS raster map to the Virtual Reality

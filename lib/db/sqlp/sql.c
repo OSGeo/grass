@@ -11,7 +11,7 @@
 *               Markus Neteler <neteler itc.it>,
 *               Martin Landa <landa.martin gmail.com>,
 *               Moritz Lennert <mlennert club.worldonline.be>,
-*               Hamish Bowman <hamish_nospam yahoo.com>,
+*               Hamish Bowman <hamish_b yahoo.com>,
 *               Daniel Calvelo Aros <dca.gis gmail.com>,
 *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
 *               Alex Shevlakov <sixote yahoo.com>

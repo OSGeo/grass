@@ -3,7 +3,7 @@
  *
  * MODULE:       r.resamp.stats
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      
  * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
  *

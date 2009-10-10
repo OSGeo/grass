@@ -6,7 +6,7 @@
  *               update to FP by Huidae Cho <grass4u gmail.com> 2001
  *               added solpos algorithm feature by Markus Neteler 2001
  *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_nospam yahoo.com>, Paul Kelly <paul-grass stjohnspoint.co.uk>
+ *               Hamish Bowman <hamish_b yahoo.com>, Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *

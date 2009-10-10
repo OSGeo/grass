@@ -4,7 +4,7 @@
  * MODULE:       r.resamp.interp
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor),
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
- *               Dylan Beaudette, Hamish Bowman <hamish_nospam yahoo.com>
+ *               Dylan Beaudette, Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      
  * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
  *

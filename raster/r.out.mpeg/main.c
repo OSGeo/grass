@@ -4,7 +4,7 @@
  * MODULE:       r.out.mpeg
  * AUTHOR(S):    Bill Brown, CERL (original contributor)
  *               Brad Douglas <rez touchofmadness.com>, Markus Neteler <neteler itc.it>,
- *               Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_nospam yahoo.com>,
+ *               Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>, Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      combines a series of GRASS raster maps into a single MPEG-1
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team

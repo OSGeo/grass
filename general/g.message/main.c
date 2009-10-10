@@ -3,7 +3,7 @@
  *
  * MODULE:       g.message 
  * AUTHOR(S):    Jachym Cepicky - jachym AT les-ejk cz
- *               Hamish Bowman - hamish_nospam AT yahoo com
+ *               Hamish Bowman - hamish_b AT yahoo com
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
  *               new projection information files.

@@ -4,7 +4,7 @@
  * MODULE:       v.overlay
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
  *               Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_nospam yahoo.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Markus Neteler <neteler itc.it>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>

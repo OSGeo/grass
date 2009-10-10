@@ -6,7 +6,7 @@
  *               Markus Neteler <neteler itc.it>
  *               Roberto Flor <flor itc.it>, Bernhard Reiter <bernhard intevation.de>, 
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_nospam yahoo.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
  *
