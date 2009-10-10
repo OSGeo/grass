@@ -115,12 +115,12 @@ undocumented.</i>
 
 \section interfaces Interfaces
 
- - GRASS <a href="../../swig/html/index.html">SWIG interface</a>
+ - GRASS <a href="http://download.osgeo.org/grass/grass7_progman/swig/">SWIG interface</a>
  - \ref pythonlib
 
 \section gui GUI
 
- - <a href="../../gui/wxpython/html/index.html">wxGUI</a></li>
+ - <a href="http://download.osgeo.org/grass/grass7_progman/gui/wxpython/">wxGUI</a></li>
 
 \section location File structure of GRASS Location
 
