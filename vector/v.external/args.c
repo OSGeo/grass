@@ -14,8 +14,9 @@ void parse_args(int argc, char **argv,
     options->dsn->gisprompt = "old_file,file,dsn";
     options->dsn->label = _("OGR data source name");
     options->dsn->description = _("Examples:\n"
-			     "\t\tESRI Shapefile: directory containing shapefiles\n"
-			     "\t\tMapInfo File: directory containing mapinfo files");
+				  "\t\tESRI Shapefile: directory containing shapefiles\n"
+				  "\t\tMapInfo File: directory containing mapinfo files\n"
+				  "\t\tPostGIS database: \"PG:dbname=<database>\"");
     options->dsn->guisection = _("Data source");
 
     options->layer = G_define_option();
@@ -25,8 +26,9 @@ void parse_args(int argc, char **argv,
     options->layer->multiple = NO;
     options->layer->label = _("OGR layer name");
     options->layer->description = _("Examples:\n"
-				   "\t\tESRI Shapefile: shapefile name\n"
-				   "\t\tMapInfo File: mapinfo file name");
+				    "\t\tESRI Shapefile: shapefile name\n"
+				    "\t\tMapInfo File: mapinfo file name\n"
+				    "\t\tPostGIS database: table name");
     options->layer->guisection = _("Data source");
     
     options->output = G_define_standard_option(G_OPT_V_OUTPUT);
