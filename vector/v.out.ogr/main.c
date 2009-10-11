@@ -86,8 +86,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("ogr"));
+
     module->description =
-	_("Converts to one of the supported OGR vector formats.");
+	_("Converts GRASS vector map to one of the supported OGR vector formats.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -158,7 +160,7 @@ int main(int argc, char *argv[])
     cat_flag = G_define_flag();
     cat_flag->key = 'c';
     cat_flag->description = _("Also export features without category (not labeled). "
-			      "Otherwise only features with category are exported");
+			      "Otherwise only features with category are exported.");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
