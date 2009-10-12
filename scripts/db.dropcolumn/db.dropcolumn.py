@@ -69,7 +69,7 @@ def main():
     if column == "cat":
 	grass.warning(_("Deleting <%s> column which may be needed to keep table connected to a vector map") % column)
 
-    cols = [f[0] for f in grass.db_describe()['cols']]
+    cols = [f[0] for f in grass.db_describe(table)['cols']]
     if column not in cols:
 	grass.fatal(_("Column <%s> not found in table") % column)
 
