@@ -1,4 +1,4 @@
-"""
+"""!
 @package global.py
 
 @brief Global variables
@@ -6,7 +6,7 @@
 This module provide the space for global variables
 used in the code.
 
-(C) 2007 by the GRASS Development Team
+(C) 2007-2009 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -34,7 +34,10 @@ def CheckForWx():
     
     minVersion = [2, 8, 1, 1]
     try:
-        import wxversion
+        try:
+            import wxversion
+        except ImportError, e:
+            raise ImportError(e)
         wxversion.select(str(minVersion[0]) + '.' + str(minVersion[1]))
         import wx
         version = wx.version().split(' ')[0]
@@ -46,7 +49,7 @@ def CheckForWx():
         sys.exit(1)
     except (ValueError, wxversion.VersionError), e:
         print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(minVersion) + \
-            '%s. Detailed information in README file.' % (str(e))
+            '%s.' % (str(e))
         sys.exit(1)
     except locale.Error, e:
         print >> sys.stderr, "Unable to set locale:", e
