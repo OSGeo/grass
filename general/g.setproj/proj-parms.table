@@ -105,7 +105,7 @@ TPERS:Tilted perspective:AZIM=ask,0.0;HEIGH=ask,10000.0;LAT0=ask,0.0;LON0=ask,20
 UPS:Universal Polar Stereographic:SOUTH=ask,nodfl
 URM5:Urmaev V:ALPHA=ask,0.0;LAT0=ask,0.0;LON0=ask,20.0;NFACT=ask,1.0;QFACT=ask,1.0
 URMFPS:Urmaev Flat-Polar Sinusoidal:LAT0=ask,0.0;LON0=ask,20.0;NFACT=ask,1.0
-UTM:Universal Transverse Mercator (UTM):SOUTH=ask,nodfl;ZONE=ask,nodfl
+UTM:Universal Transverse Mercator (UTM):ZONE=ask,nodfl;SOUTH=ask,nodfl
 VANDG2:van der Grinten II:LAT0=ask,0.0;LON0=ask,20.0
 VANDG3:van der Grinten III:LAT0=ask,0.0;LON0=ask,20.0
 VANDG4:van der Grinten IV:LAT0=ask,0.0;LON0=ask,20.0
