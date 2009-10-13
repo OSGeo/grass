@@ -203,6 +203,7 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
     dbValue *value;
     dbTable *table;
 
+    G_zero(val, sizeof(dbValue));
     sprintf(buf, "SELECT %s FROM %s WHERE %s = %d\n", col, tab, key, id);
     db_init_string(&stmt);
     db_append_string(&stmt, buf);
