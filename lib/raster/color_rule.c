@@ -197,9 +197,8 @@ int Rast_add_modular_c_color_rule(const CELL * val1, int r1, int g1, int b1,
 	return -1;		/* can;t use this on 3.0 colors */
     min = colors->cmin;
     max = colors->cmax;
-    add_color_rule((void *)&val1, r1, g1, b1, (void *)&val2, r2, g2, b2,
-		   &colors->modular, 0, &colors->cmin, &colors->cmax,
-		   CELL_TYPE);
+    add_color_rule(val1, r1, g1, b1, val2, r2, g2, b2, &colors->modular, 0,
+		   &colors->cmin, &colors->cmax, CELL_TYPE);
     colors->cmin = min;		/* don't reset these */
     colors->cmax = max;
 
