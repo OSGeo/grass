@@ -2402,6 +2402,13 @@
               <handler>self.OnMenuCmd</handler>
 	      <command>i.zc</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>Matrix/convolving filter</label>
+	      <help>Raster map matrix filter.</help>
+	      <keywords>raster,map algebra</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>r.mfilter</command>
+	    </menuitem>
 	  </items>
 	</menu>
 	<menuitem>
