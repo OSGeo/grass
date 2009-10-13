@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
     dbString sql;
     dbTable *table;
     dbCursor cursor;
+    const char *p;
+    int found;
 
 /*------------------------------------------------------------------------------------------*/
     /* Options' declaration */ ;
@@ -122,8 +124,18 @@ int main(int argc, char *argv[])
     /* Open input vector */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
-    if(G_name_is_fully_qualified(in_opt->answer, xname, xmapset) < 0 ) /* strip off mapset from input for SQL*/
-	G_fatal_error(_("Vector map <%s> not found"), xname);
+    sprintf(xname, "%s", in_opt->answer);
+    found = 0;
+    for (p = in_opt->answer; *p; p++)
+	if (*p == '@') {
+	    found = 1;
+	    break;
+	}
+
+    if (found) {
+	if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset) < 0)	/* strip off mapset from input for SQL */
+	    G_fatal_error(_("Vector map <%s> not found"), xname);
+    }
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
@@ -175,13 +187,12 @@ int main(int argc, char *argv[])
     db_init_string(&sql);
     db_zero_string(&sql);
 
-    sprintf(buf, "SELECT Interp,ID FROM %s_edge_Interpolation",
-	    xname);
-    G_debug(1,"buf: %s", buf);
+    sprintf(buf, "SELECT Interp,ID FROM %s_edge_Interpolation", xname);
+    G_debug(1, "buf: %s", buf);
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error(_("Unable to create table <%s_edge_Interpolation>"), xname);
+	G_fatal_error(_("Unable to open table <%s_edge_Interpolation>"), xname);
 
     count_obj = 1;
 
