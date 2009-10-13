@@ -1,4 +1,4 @@
-"""
+"""!
 @package render
 
 Rendering map layers and overlays into map composition image
@@ -9,15 +9,14 @@ Classes:
  - Overlay
  - Map
 
-C) 2006-2008 by the GRASS Development Team
+(C) 2006-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Michael Barton, Jachym Cepicky,
-Martin Landa <landa.martin gmail.com>
-
-@date 2006-2008
+@author Michael Barton
+@author Jachym Cepicky,
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
