@@ -411,16 +411,23 @@ def GetCmdString(cmd):
     """
     Get GRASS command as string.
     
-    @param cmd GRASS command given as tuple
+    @param cmd GRASS command given as dictionary
     
     @return command string
     """
     scmd = ''
     if not cmd:
-        return ''
+        return scmd
+    
     scmd = cmd[0]
+    
+    if cmd[1].has_key('flags'):
+        for flag in cmd[1]['flags']:
+            scmd += ' -' + flag
     for k, v in cmd[1].iteritems():
-        scmd += ' %s=%s' % (k, v)
+        if k != 'flags':
+            scmd += ' %s=%s' % (k, v)
+    
     return scmd
 
 def CmdToTuple(cmd):
