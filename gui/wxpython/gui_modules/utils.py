@@ -102,7 +102,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                 continue
             
             if p == param:
-                params.append((idx, p, v))
+                params = [(idx, p, v)]
                 break
             
             if p in ('map', 'input',
