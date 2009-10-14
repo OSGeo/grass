@@ -29,7 +29,7 @@ FAHEY:Fahey:LAT0=ask,0.0;LON0=ask,20.0
 FOUC:Foucaut:LAT0=ask,0.0;LON0=ask,20.0
 FOUC_S:Foucaut Sinusoidal:LAT0=ask,0.0;LON0=ask,20.0
 GALL:Gall (Gall Stereographic):LAT0=ask,0.0;LON0=ask,20.0
-GEOS:Geostationary Satellite View:HEIGH=ask,35800000.0;LON0=ask,20.0
+GEOS:Geostationary Satellite View:HEIGH=ask,35800000.0;LON0=ask,20.0;X0=ask,0.0;Y0=ask,0.0
 GINS8:Ginsburg VIII (TsNIIGAiK):LAT0=ask,0.0;LON0=ask,20.0
 GNOM:Gnomonic:LAT0=ask,0.0;LON0=ask,20.0
 GN_SINU:General Sinusoidal Series:LAT0=ask,0.0;LON0=ask,20.0;MFACT=ask,1.0;NFACT=ask,1.0
