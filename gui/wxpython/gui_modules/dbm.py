@@ -1747,7 +1747,7 @@ class AttributeManager(wx.Frame):
                                 parent = self,
                                 **cmd[1])
             
-            self.mapDBInfo = VectorDBInfo(self.vectorName)
+            self.mapDBInfo = dbm_base.VectorDBInfo(self.vectorName)
             table = self.mapDBInfo.layers[self.layer]['table']
 
             # update table description
@@ -2015,7 +2015,7 @@ class AttributeManager(wx.Frame):
             self.notebook.SetSelection(2)
             
         # fetch fresh db info
-        self.mapDBInfo = VectorDBInfo(self.vectorName)    
+        self.mapDBInfo = dbm_base.VectorDBInfo(self.vectorName)    
 
         #
         # add new page
