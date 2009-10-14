@@ -11,7 +11,7 @@ struct Options {
 };
 
 struct Flags {
-    struct Flag *cat, *esristyle, *poly, *update, *nocat;
+    struct Flag *cat, *esristyle, *poly, *update, *nocat, *new;
 };
 
 /* args.c */
@@ -24,3 +24,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver,
 
 /* list.c */
 char *OGR_list_write_drivers();
+
+/* create.c */
+void create_ogr_layer(const char *, const char *, const char *,
+		      unsigned int, const char **, const char **);
