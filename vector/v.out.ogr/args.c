@@ -8,10 +8,14 @@ void parse_args(int argc, char **argv,
     options->input = G_define_standard_option(G_OPT_V_INPUT);
 
     options->type = G_define_standard_option(G_OPT_V3_TYPE);
+    options->type->label = _("Feature type(s)");
     options->type->description =
-	_("Feature type(s). Combination of types is not supported "
-	  "by all output formats. Default is to use first type found in input map.");
+	_("Combination of types is not supported "
+	  "by all output formats. Default is to use first type found in input vector map.");
     options->type->guisection = _("Input");
+
+    options->field = G_define_standard_option(G_OPT_V_FIELD);
+    options->field->guisection = _("Input");
 
     options->dsn = G_define_option();
     options->dsn->key = "dsn";
@@ -29,9 +33,6 @@ void parse_args(int argc, char **argv,
 	_("OGR layer name. If not specified, input name is used.");
     options->layer->description = _("For example: ESRI Shapefile: shapefile name");
     options->layer->guisection = _("Creation");
-
-    options->field = G_define_standard_option(G_OPT_V_FIELD);
-    options->field->guisection = _("Input");
 
     options->format = G_define_option();
     options->format->key = "format";
@@ -85,6 +86,10 @@ void parse_args(int argc, char **argv,
     flags->poly->key = 'p';
     flags->poly->description = _("Export lines as polygons");
 
+    flags->new = G_define_flag();
+    flags->new->key = 'n';
+    flags->new->description = _("Create a new empty OGR layer in defined OGR datasource and exit. Nothing is read from input.");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 }

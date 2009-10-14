@@ -5,7 +5,7 @@
  *
  * AUTHOR(S):    Radim Blazek
  *               Some extensions: Markus Neteler, Benjamin Ducke
- *               Uodate for GRASS 7 by Martin Landa <landa.martin gmail.com>
+ *               Update for GRASS 7 by Martin Landa <landa.martin gmail.com> (create new OGR layer)
  *
  * PURPOSE:      Converts GRASS vector to one of supported OGR vector formats.
  *
@@ -90,6 +90,99 @@ int main(int argc, char *argv[])
 	       &options, &flags);
     field = atoi(options.field->answer);
 
+    /* parse dataset creation options */
+    i = 0;
+    while (options.dsco->answers[i]) {
+	tokens = G_tokenize(options.dsco->answers[i], "=");
+	if (G_number_of_tokens(tokens))
+	    papszDSCO = CSLSetNameValue(papszDSCO, tokens[0], tokens[1]);
+	G_free_tokens(tokens);
+	i++;
+    }
+
+    /* parse layer creation options */
+    i = 0;
+    while (options.lco->answers[i]) {
+	tokens = G_tokenize(options.lco->answers[i], "=");
+	if (G_number_of_tokens(tokens))
+	    papszLCO = CSLSetNameValue(papszLCO, tokens[0], tokens[1]);
+	G_free_tokens(tokens);
+	i++;
+    }
+
+    /* check output feature type */
+    otype = Vect_option_to_types(options.type);
+
+    if (!options.layer->answer) {
+	char xname[GNAME_MAX],	xmapset[GMAPSET_MAX];
+
+	if (G_name_is_fully_qualified(options.input->answer, xname, xmapset))
+	    options.layer->answer = G_store(xname);
+	else
+	    options.layer->answer = G_store(options.input->answer);
+    }
+
+    if (otype & GV_POINTS)
+	wkbtype = wkbPoint;
+    else if (otype & GV_LINES)
+	wkbtype = wkbLineString;
+    else if (otype & GV_AREA)
+	wkbtype = wkbPolygon;
+    else if (otype & GV_FACE)
+	wkbtype = wkbPolygon25D;
+    else if (otype & GV_VOLUME)
+	wkbtype = wkbPolygon25D;
+
+    if (flags.poly->answer)
+	wkbtype = wkbPolygon;
+
+    if (((GV_POINTS & otype) && (GV_LINES & otype)) ||
+	((GV_POINTS & otype) && (GV_AREA & otype)) ||
+	((GV_POINTS & otype) && (GV_FACE & otype)) ||
+	((GV_POINTS & otype) && (GV_KERNEL & otype)) ||
+	((GV_POINTS & otype) && (GV_VOLUME & otype)) ||
+	((GV_LINES & otype) && (GV_AREA & otype)) ||
+	((GV_LINES & otype) && (GV_FACE & otype)) ||
+	((GV_LINES & otype) && (GV_KERNEL & otype)) ||
+	((GV_LINES & otype) && (GV_VOLUME & otype)) ||
+	((GV_KERNEL & otype) && (GV_POINTS & otype)) ||
+	((GV_KERNEL & otype) && (GV_LINES & otype)) ||
+	((GV_KERNEL & otype) && (GV_AREA & otype)) ||
+	((GV_KERNEL & otype) && (GV_FACE & otype)) ||
+	((GV_KERNEL & otype) && (GV_VOLUME & otype))
+
+	) {
+	G_warning(_("The combination of types is not supported"
+		    " by all formats."));
+	wkbtype = wkbUnknown;
+    }
+
+    /* fetch PROJ info */
+    G_get_default_window(&cellhd);
+    if (cellhd.proj == PROJECTION_XY)
+	Ogr_projection = NULL;
+    else {
+	projinfo = G_get_projinfo();
+	projunits = G_get_projunits();
+	Ogr_projection = GPJ_grass_to_osr(projinfo, projunits);
+	if (flags.esristyle->answer &&
+	    (strcmp(options.format->answer, "ESRI_Shapefile") == 0))
+	    OSRMorphToESRI(Ogr_projection);
+    }
+
+    /* create new OGR layer in datasource */
+    if (flags.new->answer) {
+	const char *name;
+	name = options.layer->answer ? options.layer->answer : options.input->answer;
+	
+	create_ogr_layer(options.dsn->answer, options.format->answer, name,
+			 wkbtype, papszDSCO, papszLCO);
+	
+	G_message(_("OGR layer <%s> created in datasource <%s> (format '%s')"),
+		  name, options.dsn->answer, options.format->answer);
+	exit(EXIT_SUCCESS);
+    }
+
     /* open input vector (topology required) */
     Vect_set_open_level(2);
     Vect_open_old(&In, options.input->answer, "");
@@ -162,53 +255,6 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Could not determine input map's feature type(s)."));
     }
 
-    /* Check output type */
-    otype = Vect_option_to_types(options.type);
-
-    if (!options.layer->answer) {
-	char xname[GNAME_MAX],	xmapset[GMAPSET_MAX];
-
-	if (G_name_is_fully_qualified(options.input->answer, xname, xmapset))
-	    options.layer->answer = G_store(xname);
-	else
-	    options.layer->answer = G_store(options.input->answer);
-    }
-
-    if (otype & GV_POINTS)
-	wkbtype = wkbPoint;
-    else if (otype & GV_LINES)
-	wkbtype = wkbLineString;
-    else if (otype & GV_AREA)
-	wkbtype = wkbPolygon;
-    else if (otype & GV_FACE)
-	wkbtype = wkbPolygon25D;
-    else if (otype & GV_VOLUME)
-	wkbtype = wkbPolygon25D;
-
-    if (flags.poly->answer)
-	wkbtype = wkbPolygon;
-
-    if (((GV_POINTS & otype) && (GV_LINES & otype)) ||
-	((GV_POINTS & otype) && (GV_AREA & otype)) ||
-	((GV_POINTS & otype) && (GV_FACE & otype)) ||
-	((GV_POINTS & otype) && (GV_KERNEL & otype)) ||
-	((GV_POINTS & otype) && (GV_VOLUME & otype)) ||
-	((GV_LINES & otype) && (GV_AREA & otype)) ||
-	((GV_LINES & otype) && (GV_FACE & otype)) ||
-	((GV_LINES & otype) && (GV_KERNEL & otype)) ||
-	((GV_LINES & otype) && (GV_VOLUME & otype)) ||
-	((GV_KERNEL & otype) && (GV_POINTS & otype)) ||
-	((GV_KERNEL & otype) && (GV_LINES & otype)) ||
-	((GV_KERNEL & otype) && (GV_AREA & otype)) ||
-	((GV_KERNEL & otype) && (GV_FACE & otype)) ||
-	((GV_KERNEL & otype) && (GV_VOLUME & otype))
-
-	) {
-	G_warning(_("The combination of types is not supported"
-		    " by all formats."));
-	wkbtype = wkbUnknown;
-    }
-
     if (flags.cat->answer)
 	donocat = 1;
     else
@@ -220,19 +266,6 @@ int main(int argc, char *argv[])
     if ((GV_AREA & otype) && Vect_get_num_islands(&In) > 0 && flags.cat->answer)
 	G_warning(_("The map contains islands. With the -c flag, "
 	            "islands will appear as filled areas, not holes in the output map."));
-
-    /* fetch PROJ info */
-    G_get_default_window(&cellhd);
-    if (cellhd.proj == PROJECTION_XY)
-	Ogr_projection = NULL;
-    else {
-	projinfo = G_get_projinfo();
-	projunits = G_get_projunits();
-	Ogr_projection = GPJ_grass_to_osr(projinfo, projunits);
-	if (flags.esristyle->answer &&
-	    (strcmp(options.format->answer, "ESRI_Shapefile") == 0))
-	    OSRMorphToESRI(Ogr_projection);
-    }
 
     /* Open OGR DSN */
     G_debug(2, "driver count = %d", OGRGetDriverCount());
@@ -252,16 +285,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
     Ogr_driver = OGRGetDriver(drn);
 
-    /* parse dataset creation options */
-    i = 0;
-    while (options.dsco->answers[i]) {
-	tokens = G_tokenize(options.dsco->answers[i], "=");
-	if (G_number_of_tokens(tokens))
-	    papszDSCO = CSLSetNameValue(papszDSCO, tokens[0], tokens[1]);
-	G_free_tokens(tokens);
-	i++;
-    }
-
     if (flags.update->answer)  {
     	G_debug(1, "Update OGR data source");
         Ogr_ds = OGR_Dr_Open(Ogr_driver, options.dsn->answer, TRUE);
@@ -274,16 +297,6 @@ int main(int argc, char *argv[])
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
 		      options.dsn->answer);
-
-    /* parse layer creation options */
-    i = 0;
-    while (options.lco->answers[i]) {
-	tokens = G_tokenize(options.lco->answers[i], "=");
-	if (G_number_of_tokens(tokens))
-	    papszLCO = CSLSetNameValue(papszLCO, tokens[0], tokens[1]);
-	G_free_tokens(tokens);
-	i++;
-    }
 
     /* check if the map is 3d */
     if (Vect_is_3d(&In)) {
