@@ -264,12 +264,12 @@ int main(int argc, char *argv[])
     }
 
     /* Build command line */
-    sprintf(command, "\"%s/etc/", G_gisbase());
+    sprintf(command, "%s/etc/", G_gisbase());
 
     if (flag_seg->answer)
-	strcat(command, "r.watershed.seg\"");
+	strcat(command, "r.watershed.seg");
     else
-	strcat(command, "r.watershed.ram\"");
+	strcat(command, "r.watershed.ram");
 
     if (flag_sfd->answer) {
 	strcat(command, " -s");
@@ -392,11 +392,6 @@ int main(int argc, char *argv[])
 	strcat(command, " mb=");
 	strcat(command, opt17->answer);
     }
-
-#ifdef __MINGW32__
-    /* quoting seems to be greedy, so hack to make sure string doesn't end with \" */
-    strcat(command, " ");
-#endif
 
     G_debug(1, "Mode: %s", flag_seg->answer ? "Segmented" : "All in RAM");
     G_debug(1, "Running: %s", command);
