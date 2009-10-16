@@ -368,6 +368,16 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	    fatal_error(ferror, errmsg);
 	    return -1;
 	}
+	if (ogr_mapset && !head_only) {
+	    /* build pseudo-topology on the fly */
+	    int verbose;
+	    verbose = G_verbose();
+	    G_message(_("Building topology for OGR layer <%s> from datasource '%s'..."),
+		      Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
+	    G_set_verbose(0);
+	    Vect_build(Map);
+	    G_set_verbose(verbose);
+	}
     }
     else {
 	Map->head.with_z = Map->plus.with_z;	/* take dimension from topo */
