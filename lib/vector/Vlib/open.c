@@ -764,13 +764,28 @@ const char *Vect_maptype_info(const struct Map_info *Map)
 	sprintf(maptype, "ogr");
 	break;
     default:
-	sprintf(maptype, "unknown %d (update Vect_maptype_info)",
+	sprintf(maptype, _("unknown %d (update Vect_maptype_info)"),
 		Map->format);
     }
 
     return G_store(maptype);
 }
 
+/*!
+  \brief Gets vector map format
+
+  Currently are implemeted:
+   - Native format (GV_FORMAT_NATIVE)
+   - OGR format    (GV_FORMAT_OGR)
+
+  \param Map pointer to Map_info structure
+  
+  \return maptype code
+*/
+int Vect_maptype(const struct Map_info *Map)
+{
+    return Map->format;
+}
 
 /*!
  * \brief Open topology file ('topo')
