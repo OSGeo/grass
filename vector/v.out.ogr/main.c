@@ -287,6 +287,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
 		      options.dsn->answer);
 
+    /* check if OGR layer exists */
+    if (!G_check_overwrite(argc, argv) && OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer)) {
+	G_fatal_error(_("OGR layer <%s> already exists in '%s'"),
+		options.layer->answer, options.dsn->answer);
+    }
+    
     /* check if the map is 3d */
     if (Vect_is_3d(&In)) {
 	/* specific check for shp */
