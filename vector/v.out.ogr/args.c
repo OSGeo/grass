@@ -8,6 +8,9 @@ void parse_args(int argc, char **argv,
     options->input = G_define_standard_option(G_OPT_V_INPUT);
 
     options->type = G_define_standard_option(G_OPT_V3_TYPE);
+    options->type->options = "point,line,boundary,centroid,area,face,kernel,auto";
+    options->type->answer = "auto";
+    
     options->type->label = _("Feature type(s)");
     options->type->description =
 	_("Combination of types is not supported "
