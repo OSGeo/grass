@@ -45,6 +45,12 @@ static const char *find_file(
 	pmapset = mapset;
     }
 
+    if (strcmp(element, "vector") == 0 &&
+	strcasecmp(pmapset, "ogr") == 0) {
+	/* don't check for virtual OGR mapset */
+	return G_store(pmapset);
+    }
+    
     /*
      * reject illegal names and mapsets
      */

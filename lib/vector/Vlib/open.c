@@ -334,12 +334,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	}
 #endif
 	if (level_request == 2 && level < 2) {
-	    if (ogr_mapset) {
-		G_warning(_("Topology level (2) is not supported when reading "
-			    "OGR layers directly. For topology level "
-			    "is required link to OGR layer via v.external command."));
-	    }
-	    else {
+	    if (!ogr_mapset) {
+		/* for direct OGR read access is built pseudo-topology on the fly */
 		sprintf(errmsg,
 			_("Unable to open vector map <%s> on level %d. "
 			  "Try to rebuild vector topology by v.build."),
@@ -376,6 +372,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 		      Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
 	    G_set_verbose(0);
 	    Vect_build(Map);
+	    level = 2;
 	    G_set_verbose(verbose);
 	}
     }
@@ -418,8 +415,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 
     /* read db links */
     Map->dblnk = Vect_new_dblinks_struct();
-    if (!ogr_mapset)
-	Vect_read_dblinks(Map);
+    Vect_read_dblinks(Map);
 
     /* open history file */
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);

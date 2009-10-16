@@ -447,6 +447,27 @@ struct field_info *Vect_get_field_by_name(const struct Map_info *Map, const char
 }
 
 /*!
+  \brief Get information about link to database (by layer name or layer number)
+  
+  \param Map pointer to Map_info structure
+  \param field layer name or number
+  
+  \return pointer to new field_info structure
+  \return NULL if not found
+*/
+struct field_info *Vect_get_field2(const struct Map_info *Map, const char *field)
+{
+    struct field_info *fi = NULL;
+    G_debug(1, "Vect_get_field2(): field = %s", field);
+    
+    fi = Vect_get_field_by_name(Map, field);
+    if (fi)
+	return fi;
+
+    return Vect_get_field(Map, atoi(field));
+}
+
+/*!
   \brief Read dblinks to existing structure.
   
   Variables are not substituted by values.
