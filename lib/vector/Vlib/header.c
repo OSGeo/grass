@@ -1,5 +1,5 @@
 /*!
-   \file header.c
+   \file lib/vector/Vlib/header.c
 
    \brief Vector library - header manipulation
 
@@ -22,7 +22,6 @@
 #include <grass/glocale.h>
 
 static int lookup(const char *file, const char *key, char *value, size_t len);
-
 
 /*!
    \brief Print vector map header
@@ -236,6 +235,49 @@ const char *Vect_get_full_name(const struct Map_info *Map)
     return ptr;
 }
 
+/*!
+   \brief Get OGR datasource name (relevant only for OGR format)
+
+   \param Map pointer to Map_info structure
+
+   \return poiter to string with OGR datasource name
+ */
+const char *Vect_get_ogr_dsn_name(const struct Map_info *Map)
+{
+    return (Map->fInfo.ogr.dsn);
+}
+
+/*!
+   \brief Get OGR layer name (relevant only for OGR format)
+
+   \param Map pointer to Map_info structure
+
+   \return poiter to string with OGR layer name
+ */
+const char *Vect_get_ogr_layer_name(const struct Map_info *Map)
+{
+    return (Map->fInfo.ogr.layer_name);
+}
+
+/*!
+  \brief Get OGR format info (relevant only for OGR format)
+
+  \param Map pointer to Map_info structure
+  
+  \return poiter to string with OGR format info (allocated by G_store())
+  \return NULL on error
+*/
+const char *Vect_get_ogr_format_info(const struct Map_info *Map)
+{
+#ifdef HAVE_OGR
+    if (!Map->fInfo.ogr.ds)
+	return NULL;
+    
+    return G_store(OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds)));
+#endif
+    return NULL;
+}
+   
 /*!
    \brief Check if vector map is 3D (with z)
 

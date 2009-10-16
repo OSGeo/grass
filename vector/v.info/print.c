@@ -173,12 +173,23 @@ void print_info(const struct Map_info *Map)
     struct bound_box box;
     
     divider('+');
-    sprintf(line, "%-17s%s", _("Name:"),
-	    Vect_get_name(Map));
-    printline(line);
-    sprintf(line, "%-17s%s", _("Mapset:"),
-	    Vect_get_mapset(Map));
-    printline(line);
+    if (Vect_maptype(Map) == GV_FORMAT_OGR) {
+	/* for OGR format print also datasource and layer */
+	sprintf(line, "%-17s%s", _("OGR layer:"),
+		Vect_get_ogr_layer_name(Map));
+	printline(line);
+	sprintf(line, "%-17s%s", _("OGR datasource:"),
+		Vect_get_ogr_dsn_name(Map));
+	printline(line);
+    }
+    else {
+	sprintf(line, "%-17s%s", _("Name:"),
+		Vect_get_name(Map));
+	printline(line);
+	sprintf(line, "%-17s%s", _("Mapset:"),
+		Vect_get_mapset(Map));
+	printline(line);
+    }
     sprintf(line, "%-17s%s", _("Location:"),
 	    G_location());
     printline(line);
@@ -191,8 +202,14 @@ void print_info(const struct Map_info *Map)
     sprintf(line, "%-17s1:%d", _("Map scale:"),
 	    Vect_get_scale(Map));
     printline(line);
-    sprintf(line, "%-17s%s", _("Map format:"),
-	    Vect_maptype_info(Map));
+    if (Vect_maptype(Map) == GV_FORMAT_OGR) {
+	sprintf(line, "%-17s%s (%s)", _("Map format:"),
+		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
+    }
+    else {
+	sprintf(line, "%-17s%s", _("Map format:"),
+		Vect_maptype_info(Map));
+    }
     printline(line);
     sprintf(line, "%-17s%s", _("Name of creator:"),
 	    Vect_get_person(Map));
