@@ -2238,6 +2238,8 @@ programming. The programmer should use only routines with this prefix.
 
  - Vect_maptype_info()
 
+ - Vect_maptype()
+
  - Vect_open_new()
 
  - Vect__open_old()
