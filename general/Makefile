@@ -20,6 +20,7 @@ SUBDIRS = \
 	g.mremove \
 	g.parser \
 	g.pnmcomp \
+	g.ppmtopng \
 	g.proj \
 	g.region \
 	g.remove \

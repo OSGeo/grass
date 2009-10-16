@@ -17,7 +17,7 @@ r.colors.tmp.html: $(HTMLSRC) thumbnails.py
 	$(MAKE) thumbnails
 
 thumbnails: $(BIN)/r.mapcalc$(EXE)
-	$(call run_grass, ./thumbnails.py)
+	-$(call run_grass, ./thumbnails.py)
 
 $(BIN)/r.mapcalc$(EXE):
 	$(MAKE) -C ../r.mapcalc
