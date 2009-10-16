@@ -63,20 +63,22 @@ def rotate_ppm(srcd):
     return dstd
 
 def ppmtopng(dst, src):
-    fh = open(dst, 'wb')
-    grass.call(["pnmtopng", tmp_img], stdout = fh)
-    fh.close()
+    if grass.find_program("g.ppmtopng"):
+	grass.run_command('g.ppmtopng', input = src, output = dst)
+    elif grass.find_program("pnmtopng"):
+	fh = open(dst, 'wb')
+	grass.call(["pnmtopng", src], stdout = fh)
+	fh.close()
+    elif grass.find_program("convert"):
+	grass.call(["convert", src, dst])
+    else:
+	grass.fatal(_("Cannot find g.ppmtopng, pnmtopng or convert"))
 
 def convert_and_rotate(src, dst):
-    if grass.find_program("convert"):
-	grass.call(["convert", "-rotate", "90", src, dst])
-    elif grass.find_program("pnmtopng"):
-	srcd = read_ppm(src)
-	dstd = rotate_ppm(srcd)
-	write_ppm(tmp_img, dstd)
-	ppmtopng(dst, tmp_img)
-    else:
-	grass.fatal(_("Cannot find either convert or pnmtopng"))
+    srcd = read_ppm(src)
+    dstd = rotate_ppm(srcd)
+    write_ppm(tmp_img, dstd)
+    ppmtopng(dst, tmp_img)
 
 def main():
     global tmp_img, tmp_grad_abs, tmp_grad_rel
