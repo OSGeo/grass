@@ -111,6 +111,7 @@ struct field_info *Vect_default_field_info(struct Map_info *, int,
 struct field_info *Vect_get_dblink(const struct Map_info *, int);
 struct field_info *Vect_get_field(const struct Map_info *, int);
 struct field_info *Vect_get_field_by_name(const struct Map_info *, const char *);
+struct field_info *Vect_get_field2(const struct Map_info *, const char *);
 void Vect_set_db_updated(struct Map_info *);
 const char *Vect_get_column_names(const struct Map_info *, int);
 const char *Vect_get_column_types(const struct Map_info *, int);

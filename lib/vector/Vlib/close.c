@@ -105,7 +105,9 @@ int Vect_close(struct Map_info *Map)
     }
     else {
 	/* spatial index must also be closed when opened with topo but not modified */
-	if (Map->plus.Spidx_built == 1 && Map->plus.built == GV_BUILD_ALL)
+	if (Map->format == GV_FORMAT_NATIVE &&
+	    Map->plus.Spidx_built == 1 &&
+	    Map->plus.built == GV_BUILD_ALL)
 	    Vect_save_sidx(Map);
     }
 
