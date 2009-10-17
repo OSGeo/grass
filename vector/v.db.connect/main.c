@@ -7,7 +7,7 @@
  *               
  * PURPOSE:      sets/prints DB connection for a given vector map
  *               
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -138,8 +138,10 @@ int main(int argc, char **argv)
     if (print->answer && shell_print->answer)
 	G_fatal_error(_("Please choose only one print style"));
 
-    if (print->answer || shell_print->answer || columns->answer)
-	Vect_open_old(&Map, inopt->answer, "");
+    if (print->answer || shell_print->answer || columns->answer) {
+	Vect_set_open_level(1); /* no topology needed */
+	Vect_open_old2(&Map, inopt->answer, "", field_opt->answer);
+    }
     else {
 	if (Vect_open_update_head(&Map, inopt->answer, G_mapset()) < 1)
 	    G_fatal_error(_("Unable to modify vector map stored in other mapset"));
@@ -196,8 +198,8 @@ int main(int argc, char **argv)
 	    else {		/* columns */
 
 		if ((fi = Vect_get_field(&Map, field)) == NULL)
-		    G_fatal_error(_("Database connection not defined for layer %d"),
-				  field);
+		    G_fatal_error(_("Database connection not defined for layer <%s>"),
+				  field_opt->answer);
 		driver = db_start_driver(fi->driver);
 		if (driver == NULL)
 		    G_fatal_error(_("Unable to start driver <%s>"),
