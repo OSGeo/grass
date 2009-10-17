@@ -200,12 +200,13 @@ int Vect_check_dblink(const struct dblinks *p, int field, const char *name)
 /*!
   \brief Add new DB connection to dblinks structure
   
-  \param p pointer to existing dblinks structure
-  \param number layer number
-  \param name layer name
-  \param key key name
-  \param db database name
-  \param driver driver name
+  \param[in,out] p pointer to existing dblinks structure
+  \param number layer number (1 for OGR)
+  \param name   layer name (layer for OGR)
+  \param table  table name (layer for OGR)
+  \param key    key name
+  \param db     database name (datasource for OGR)
+  \param driver driver name (dbf, postgresql, ogr, ...)
   
   \return 0 on success
   \return -1 error
@@ -447,24 +448,31 @@ struct field_info *Vect_get_field_by_name(const struct Map_info *Map, const char
 }
 
 /*!
-  \brief Get information about link to database (by layer name or layer number)
+  \brief Get information about link to database (by layer number or layer name)
   
   \param Map pointer to Map_info structure
-  \param field layer name or number
+  \param field layer number or name
   
   \return pointer to new field_info structure
   \return NULL if not found
 */
 struct field_info *Vect_get_field2(const struct Map_info *Map, const char *field)
 {
-    struct field_info *fi = NULL;
-    G_debug(1, "Vect_get_field2(): field = %s", field);
-    
-    fi = Vect_get_field_by_name(Map, field);
-    if (fi)
-	return fi;
+    int ifield;
+    struct field_info *fi;
 
-    return Vect_get_field(Map, atoi(field));
+    G_debug(1, "Vect_get_field2(): field = %s", field);
+
+    fi = NULL;
+    ifield = atoi(field);
+    
+    if (ifield > 0) {
+	fi = Vect_get_field(Map, ifield);
+	if (fi)
+	    return fi;
+    }
+
+    return Vect_get_field_by_name(Map, field);
 }
 
 /*!
@@ -503,52 +511,45 @@ int Vect_read_dblinks(struct Map_info *Map)
 #else
 #if GDAL_VERSION_NUM > 1320 && HAVE_OGR /* seems to be fixed after 1320 release */
 	int layer, nLayers;
-	OGRDataSourceH Ogr_ds;
-	OGRLayerH Ogr_layer = NULL;
-	OGRFeatureDefnH Ogr_featuredefn;
-	char ogr_fid_col[1024];
-
+	char *ogr_fid_col;
 
 	G_debug(3, "GDAL_VERSION_NUM: %d", GDAL_VERSION_NUM);
 
-	/* we open the connection to fetch the FID column name */
-	OGRRegisterAll();
+	if (Map->fInfo.ogr.ds == NULL) {
+	    /* open the connection to fetch the FID column name */
+	    OGRRegisterAll();
 
-	/*Data source handle */
-	Ogr_ds = OGROpen(Map->fInfo.ogr.dsn, FALSE, NULL);
-	if (Ogr_ds == NULL)
-	    G_fatal_error(_("Unable to open OGR data source '%s'"),
-			  Map->fInfo.ogr.dsn);
-	Map->fInfo.ogr.ds = Ogr_ds;
-
-	/* Layer number */
-	layer = -1;
-	nLayers = OGR_DS_GetLayerCount(Ogr_ds);	/* Layers = Maps in OGR DB */
-
-	G_debug(3, "%d layers (maps) found in data source", nLayers);
-
-	G_debug(3, "Trying to open OGR layer: %s", Map->fInfo.ogr.layer_name);
-	if (Map->fInfo.ogr.layer_name) {
-	    Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, Map->fInfo.ogr.layer_name);
-	    if (Ogr_layer == NULL) {
-		OGR_DS_Destroy(Ogr_ds);
-		G_fatal_error(_("Unable to open OGR layer '%s'"),
-			      Map->fInfo.ogr.layer_name);
-	    }
-	    Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	    G_debug(3, "layer %s, FID col name: %s",
-		    OGR_FD_GetName(Ogr_featuredefn),
-		    OGR_L_GetFIDColumn(Ogr_layer));
-	    Map->fInfo.ogr.layer = Ogr_layer;
-	    G_debug(3, "OGR Map->fInfo.ogr.layer %p opened",
-		    Map->fInfo.ogr.layer);
-	    
-	    /* TODO what to do if OGR_L_GetFIDColumn() doesn't return FID name */
-	    sprintf(ogr_fid_col, "%s", OGR_L_GetFIDColumn(Map->fInfo.ogr.layer));
-	    G_debug(3, "Using FID column <%s> in OGR DB", ogr_fid_col);
-	    Vect_add_dblink(dbl, 1, NULL, Map->fInfo.ogr.layer_name, ogr_fid_col,
-			    Map->fInfo.ogr.dsn, "ogr");
+	    /* data source handle */
+	    Map->fInfo.ogr.ds = OGROpen(Map->fInfo.ogr.dsn, FALSE, NULL);
+	    if (Map->fInfo.ogr.ds == NULL)
+		G_fatal_error(_("Unable to open OGR data source '%s'"),
+			      Map->fInfo.ogr.dsn);
 	}
+	if (Map->fInfo.ogr.layer == NULL) {
+	    /* get layer number */
+	    layer = -1;
+	    nLayers = OGR_DS_GetLayerCount(Map->fInfo.ogr.ds);	/* Layers = Maps in OGR DB */
+	    
+	    G_debug(3, "%d layers (maps) found in data source", nLayers);
+	    
+	    G_debug(3, "Trying to open OGR layer: %s", Map->fInfo.ogr.layer_name);
+	    if (Map->fInfo.ogr.layer_name) {
+		Map->fInfo.ogr.layer = OGR_DS_GetLayerByName(Map->fInfo.ogr.ds, Map->fInfo.ogr.layer_name);
+		if (Map->fInfo.ogr.layer == NULL) {
+		    OGR_DS_Destroy(Map->fInfo.ogr.ds);
+		    Map->fInfo.ogr.ds = NULL;
+		    G_fatal_error(_("Unable to open OGR layer <%s>"),
+				  Map->fInfo.ogr.layer_name);
+		}
+	    }
+	}
+
+	/* get fid column */
+	ogr_fid_col = G_store(OGR_L_GetFIDColumn(Map->fInfo.ogr.layer));
+	G_debug(3, "Using FID column <%s> in OGR DB", ogr_fid_col);
+	Vect_add_dblink(dbl, 1,  Map->fInfo.ogr.layer_name,
+			Map->fInfo.ogr.layer_name, ogr_fid_col,
+			Map->fInfo.ogr.dsn, "ogr");
 #else
 	dbDriver *driver;
 	dbCursor cursor;
@@ -628,25 +629,25 @@ int Vect_read_dblinks(struct Map_info *Map)
 
 	if (FID) {
 	    G_debug(3, "Using FID column in OGR DB");
-	    Vect_add_dblink(dbl, 1, NULL, Map->fInfo.ogr.layer_name, "FID",
+	    Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name, Map->fInfo.ogr.layer_name, "FID",
 			    Map->fInfo.ogr.dsn, "ogr");
 	}
 	else {
 	    if (OGC_FID) {
 		G_debug(3, "Using ogc_fid column in OGR DB");
-		Vect_add_dblink(dbl, 1, NULL, Map->fInfo.ogr.layer_name,
+		Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name, Map->fInfo.ogr.layer_name,
 				"ogc_fid", Map->fInfo.ogr.dsn, "ogr");
 	    }
 	    else {
 		if (OGR_FID) {
 		    G_debug(3, "Using ogr_fid column in OGR DB");
-		    Vect_add_dblink(dbl, 1, NULL, Map->fInfo.ogr.layer_name,
+		    Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name, Map->fInfo.ogr.layer_name,
 				    "ogr_fid", Map->fInfo.ogr.dsn, "ogr");
 		}
 		else {
 		    if (GID) {
 			G_debug(3, "Using gid column in OGR DB");
-			Vect_add_dblink(dbl, 1, NULL,
+			Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
 					Map->fInfo.ogr.layer_name, "gid",
 					Map->fInfo.ogr.dsn, "ogr");
 		    }
