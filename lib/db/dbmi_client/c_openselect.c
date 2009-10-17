@@ -18,10 +18,13 @@
 /*!
   \brief Open select cursor
 
+  Open modes:
+   - DB_SEQUENTIAL
+
   \param driver db driver
   \param select SQL select statement
   \param cursor db cursor to be opened
-  \param mode open mode (?)
+  \param mode open mode
 
   \return DB_OK on success
   \return DB_FAILED on failure
