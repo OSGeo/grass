@@ -216,7 +216,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 
     /* Read vector format information */
     if (ogr_mapset) {
-	format = GV_FORMAT_OGR;
+	format = GV_FORMAT_OGR_DIRECT;
     }
     else {
 	format = 0;
@@ -733,6 +733,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 #endif
 	break;
     case GV_FORMAT_OGR:
+    case GV_FORMAT_OGR_DIRECT:
 	Info->size = 0L;
 	Info->mtime = 0L;
 	break;
@@ -767,6 +768,7 @@ const char *Vect_maptype_info(const struct Map_info *Map)
 	sprintf(maptype, "native");
 	break;
     case GV_FORMAT_OGR:
+    case GV_FORMAT_OGR_DIRECT:
 	sprintf(maptype, "ogr");
 	break;
     default:
