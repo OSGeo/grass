@@ -43,7 +43,11 @@ static int (*Close_array[][2]) () = {
 #ifdef HAVE_OGR
     , {
     clo_dummy, V1_close_ogr}
+    , {
+    clo_dummy, V1_close_ogr}
 #else
+    , {
+    clo_dummy, format}
     , {
     clo_dummy, format}
 #endif

@@ -53,7 +53,11 @@ static int (*Open_old_array[][2]) () = {
 #ifdef HAVE_OGR
     , {
     open_old_dummy, V1_open_old_ogr}
+    , {
+    open_old_dummy, V1_open_old_ogr}
 #else
+    , {
+    open_old_dummy, format}
     , {
     open_old_dummy, format}
 #endif

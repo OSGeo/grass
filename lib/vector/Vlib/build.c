@@ -37,8 +37,10 @@ static int (*Build_array[]) () = {
     Vect_build_nat
 #ifdef HAVE_OGR
 	, Vect_build_ogr
+	, Vect_build_ogr
 #else
 	, format
+        , format
 #endif
 };
 

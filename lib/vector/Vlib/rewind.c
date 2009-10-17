@@ -41,7 +41,11 @@ static int (*Rewind_array[][3]) () = {
 #ifdef HAVE_OGR
     , {
     rew_dummy, V1_rewind_ogr, V2_rewind_ogr}
+    , {
+    rew_dummy, V1_rewind_ogr, V2_rewind_ogr}
 #else
+    , {
+    rew_dummy, format, format}
     , {
     rew_dummy, format, format}
 #endif

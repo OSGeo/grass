@@ -38,7 +38,11 @@ static int (*Read_next_line_array[][3]) () = {
 #ifdef HAVE_OGR
     , {
     read_next_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
+    , {
+    read_next_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
 #else
+    , {
+    read_next_dummy, format, format}
     , {
     read_next_dummy, format, format}
 #endif
