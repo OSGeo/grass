@@ -60,47 +60,47 @@ void print_topo(const struct Map_info *Map)
     }
     
 
-    fprintf(stdout, "nodes=%ld\n",
+    fprintf(stdout, "nodes=%d\n",
 	    Vect_get_num_nodes(Map));
     fflush(stdout);
 
-    fprintf(stdout, "points=%ld\n",
+    fprintf(stdout, "points=%d\n",
 	    Vect_get_num_primitives(Map, GV_POINT));
     fflush(stdout);
     
-    fprintf(stdout, "lines=%ld\n",
+    fprintf(stdout, "lines=%d\n",
 	    Vect_get_num_primitives(Map, GV_LINE));
     fflush(stdout);
     
-    fprintf(stdout, "boundaries=%ld\n",
+    fprintf(stdout, "boundaries=%d\n",
 	    Vect_get_num_primitives(Map, GV_BOUNDARY));
     fflush(stdout);
     
-    fprintf(stdout, "centroids=%ld\n",
+    fprintf(stdout, "centroids=%d\n",
 	    Vect_get_num_primitives(Map, GV_CENTROID));
     fflush(stdout);
     
-    fprintf(stdout, "areas=%ld\n", Vect_get_num_areas(Map));
+    fprintf(stdout, "areas=%d\n", Vect_get_num_areas(Map));
     fflush(stdout);
     
-    fprintf(stdout, "islands=%ld\n",
+    fprintf(stdout, "islands=%d\n",
 	    Vect_get_num_islands(Map));
     fflush(stdout);
     
     if (with_z) {
-	fprintf(stdout, "faces=%ld\n",
+	fprintf(stdout, "faces=%d\n",
 		Vect_get_num_primitives(Map, GV_FACE));
 	fflush(stdout);
 	
-	fprintf(stdout, "kernels=%ld\n",
+	fprintf(stdout, "kernels=%d\n",
 		Vect_get_num_primitives(Map, GV_KERNEL));
 	fflush(stdout);
 	
-	fprintf(stdout, "volumes=%ld\n",
+	fprintf(stdout, "volumes=%d\n",
 		Vect_get_num_primitives(Map, GV_VOLUME));
 	fflush(stdout);
 	
-	fprintf(stdout, "holes=%ld\n",
+	fprintf(stdout, "holes=%d\n",
 		Vect_get_num_holes(Map));
 	fflush(stdout);
     }
@@ -114,7 +114,7 @@ void print_topo(const struct Map_info *Map)
 
 void print_columns(const struct Map_info *Map, const char *input_opt, const char *field_opt)
 {
-    int num_dblinks, field, col, ncols;
+    int num_dblinks, col, ncols;
 
     struct field_info *fi;
     dbDriver *driver = NULL;
@@ -129,13 +129,12 @@ void print_columns(const struct Map_info *Map, const char *input_opt, const char
 		      input_opt);
     }
 
-    field = atoi(field_opt);
-    G_message(_("Displaying column types/names for database connection of layer %d:"),
-	      field);
+    G_message(_("Displaying column types/names for database connection of layer <%s>:"),
+	      field_opt);
 
-    if ((fi = Vect_get_field(Map, field)) == NULL)
-	G_fatal_error(_("Database connection not defined for layer %d"),
-		      field);
+    if ((fi = Vect_get_field2(Map, field_opt)) == NULL)
+	G_fatal_error(_("Database connection not defined for layer <%s>"),
+		      field_opt);
     driver = db_start_driver(fi->driver);
     if (driver == NULL)
 	G_fatal_error(_("Unable to open driver <%s>"),
@@ -231,21 +230,21 @@ void print_info(const struct Map_info *Map)
     if (Vect_level(Map) > 0) {
 	printline("");
 	sprintf(line,
-		"  %-24s%-9ld       %-22s%-9ld",
+		"  %-24s%-9d       %-22s%-9d",
 		_("Number of points:"), 
 		Vect_get_num_primitives(Map, GV_POINT),
 		_("Number of centroids:"),
 		Vect_get_num_primitives(Map, GV_CENTROID));
 	printline(line);
 	sprintf(line,
-		"  %-24s%-9ld       %-22s%-9ld",
+		"  %-24s%-9d       %-22s%-9d",
 		_("Number of lines:"),
 		Vect_get_num_primitives(Map, GV_LINE),
 		_("Number of boundaries:"),
 		Vect_get_num_primitives(Map, GV_BOUNDARY));
 	printline(line);
 	sprintf(line,
-		"  %-24s%-9ld       %-22s%-9ld",
+		"  %-24s%-9d       %-22s%-9d",
 		_("Number of areas:"),
 		Vect_get_num_areas(Map),
 		_("Number of islands:"),
@@ -253,14 +252,14 @@ void print_info(const struct Map_info *Map)
 	printline(line);
 	if (Vect_is_3d(Map)) {
 	    sprintf(line,
-		    "  %-24s%-9ld       %-22s%-9ld",
+		    "  %-24s%-9d       %-22s%-9d",
 		    _("Number of faces:"),
 		    Vect_get_num_primitives(Map, GV_FACE),
 		    _("Number of kernels:"),
 		    Vect_get_num_primitives(Map, GV_KERNEL));
 	    printline(line);
 	    sprintf(line,
-		    "  %-24s%-9ld       %-22s%-9ld",
+		    "  %-24s%-9d       %-22s%-9d",
 		    _("Number of volumes:"),
 		    Vect_get_num_volumes(Map),
 		    _("Number of holes:"),
