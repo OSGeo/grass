@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
 	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2) {
 	    G_warning(_("Unable to open vector map <%s> on level 2"),
 		      Vect_get_full_name(&Map));
+	    Vect_close(&Map);
 	    level1_flag = 1;
 	}
     }
