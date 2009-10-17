@@ -364,7 +364,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	    fatal_error(ferror, errmsg);
 	    return -1;
 	}
-	if (ogr_mapset && !head_only) {
+	if (ogr_mapset && !head_only && level_request != 1) {
 	    /* build pseudo-topology on the fly */
 	    int verbose;
 	    verbose = G_verbose();
