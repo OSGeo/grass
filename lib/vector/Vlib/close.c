@@ -105,10 +105,10 @@ int Vect_close(struct Map_info *Map)
     }
     else {
 	/* spatial index must also be closed when opened with topo but not modified */
-	if (Map->format == GV_FORMAT_NATIVE &&
-	    Map->plus.Spidx_built == 1 &&
-	    Map->plus.built == GV_BUILD_ALL)
-	    Vect_save_sidx(Map);
+	/* NOTE: also close sidx for GV_FORMAT_OGR if not direct OGR access */
+	if (Map->plus.Spidx_built == 1 && Map->plus.built == GV_BUILD_ALL)
+	    if (strcasecmp(Map->mapset, "ogr") != 0)
+		Vect_save_sidx(Map);
     }
 
     if (Map->level == 2 && Map->plus.release_support) {
