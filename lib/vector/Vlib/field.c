@@ -503,7 +503,7 @@ int Vect_read_dblinks(struct Map_info *Map)
     Vect_reset_dblinks(dbl);
 
     G_debug(3, "Searching for FID column in OGR DB");
-    if (Map->format == GV_FORMAT_OGR) {
+    if (Map->format & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
 
 #ifndef HAVE_GDAL
 	G_fatal_error(_("The support for OGR vector maps wasn't"
