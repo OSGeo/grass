@@ -438,7 +438,7 @@ struct field_info *Vect_get_field_by_name(const struct Map_info *Map, const char
     G_debug(1, "Vect_get_field_by_name(): field = %s", field);
 
     for (i = 0; i < Map->dblnk->n_fields; i++) {
-	if (Map->dblnk->field[i].name == field) {
+	if (strcmp(Map->dblnk->field[i].name, field) == 0) {
 	    fi = Vect_get_dblink(Map, i);
 	    break;
 	}
