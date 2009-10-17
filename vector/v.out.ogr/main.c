@@ -614,7 +614,7 @@ int main(int argc, char *argv[])
     }
 
     /* Areas (run always to count features of different type) */
-    if (Vect_get_num_primitives(&In, GV_AREA) > 0 && otype & GV_AREA) {
+    if (Vect_get_num_areas(&In) > 0 && otype & GV_AREA) {
 	G_message(_("Exporting %i areas (may take some time)..."),
 		  Vect_get_num_areas(&In));
 	for (i = 1; i <= Vect_get_num_areas(&In); i++) {
