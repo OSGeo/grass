@@ -173,7 +173,7 @@ void print_info(const struct Map_info *Map)
     struct bound_box box;
     
     divider('+');
-    if (Vect_maptype(Map) == GV_FORMAT_OGR) {
+    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
 	/* for OGR format print also datasource and layer */
 	sprintf(line, "%-17s%s", _("OGR layer:"),
 		Vect_get_ogr_layer_name(Map));
@@ -202,7 +202,7 @@ void print_info(const struct Map_info *Map)
     sprintf(line, "%-17s1:%d", _("Map scale:"),
 	    Vect_get_scale(Map));
     printline(line);
-    if (Vect_maptype(Map) == GV_FORMAT_OGR) {
+    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
 	sprintf(line, "%-17s%s (%s)", _("Map format:"),
 		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
     }
