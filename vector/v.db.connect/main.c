@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 	    }			/* end print */
 	    else {		/* columns */
 
-		if ((fi = Vect_get_field(&Map, field)) == NULL)
+		if ((fi = Vect_get_field2(&Map, field_opt->answer)) == NULL)
 		    G_fatal_error(_("Database connection not defined for layer <%s>"),
 				  field_opt->answer);
 		driver = db_start_driver(fi->driver);
