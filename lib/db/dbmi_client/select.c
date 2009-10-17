@@ -134,6 +134,9 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
 
     table = db_get_cursor_table(&cursor);
     column = db_get_table_column(table, 0);	/* first column */
+    if (column == NULL) {
+	return -1;
+    }
     value = db_get_column_value(column);
     type = db_get_column_sqltype(column);
     type = db_sqltype_to_Ctype(type);
