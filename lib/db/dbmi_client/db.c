@@ -22,7 +22,7 @@
   \param drvname driver name
   \param dbname database name
 
-  \return poiner to dbDriver structure
+  \return pointer to dbDriver structure
   \return NULL on failure
  */
 dbDriver *db_start_driver_open_database(const char *drvname,
