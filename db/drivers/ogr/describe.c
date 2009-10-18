@@ -14,13 +14,15 @@
 *   	    	for details.
 *
 *****************************************************************************/
-#include <grass/dbmi.h>
-#include <grass/datetime.h>
+
 #include <grass/gis.h>
+#include <grass/datetime.h>
+#include <grass/dbmi.h>
+#include <grass/glocale.h>
+
 #include "ogr_api.h"
 #include "globals.h"
 #include "proto.h"
-#include <grass/glocale.h>
 
 int db__driver_describe_table(dbString * table_name, dbTable ** table)
 {
@@ -130,9 +132,6 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 	ogrType = OGR_Fld_GetType(hFieldDefn);
 	fieldName = OGR_Fld_GetNameRef(hFieldDefn);
 
-	G_debug(3, "field %d : ogrType = %d, name = %s", i, ogrType,
-		fieldName);
-
 	switch (ogrType) {
 	case OFTInteger:
 	    sqlType = DB_SQL_TYPE_INTEGER;
@@ -161,6 +160,9 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 	    G_warning(_("Unknown type"));
 	    break;
 	}
+
+	G_debug(3, "field %d : ogrType = %d, name = %s, size=%d precision=%d",
+		i, ogrType, fieldName, size, precision);
 
 	column = db_get_table_column(*table, i);
 
