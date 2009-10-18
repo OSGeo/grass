@@ -127,17 +127,17 @@ vlibFeatureTypes):
 - boundary: the border line to describe an area (2D only);
 - centroid: a point within a closed boundary(ies) to describe an area
   (2D only);
-- edge: a 3D boundary (not implemented yet)
+- face: a 3D boundary (not implemented yet);
 - kernel: a 3D centroid in a volume.
 
 From vector feature types mentioned above are derived:
 
-- node: endpoint of a line (2D or 3D);
-- area: the topological composition of centroid and boundary(ies) (2D
-  only);
+- node: start/endpoints of lines and boundaries (2D or 3D);
+- area: the topological composition of a closed ring of boundary(ies)
+  and optionally a centroid (2D only, 3D coordinates supported but ignored);
 - isle: an area within area, not touching the boundaries of the outer
-  area (2D only);
-- face: a 3D area (not implemented yet);
+  area (2D only, 3D coordinates supported but ignored);
+- edge: a 3D node connecting faces (not implemented yet)
 - volume: a 3D corpus, the topological composition of faces and kernel
   (not implemented yet);
 - hole: a volume within volume, 3D equivalent to isle within area (not
@@ -145,7 +145,7 @@ From vector feature types mentioned above are derived:
 
 Note that all lines and boundaries can consist of multiple segments.
 
-Topology also holds information about isles. Isles are located within an area, not
+Area topology also holds information about isles. Isles are located within an area, not
 touching the boundaries of the outer area. Isles consist of one or more areas
 and are used internally by the vector libraries to maintain correct topology of areas.
 
@@ -393,7 +393,7 @@ Besides internal library functions there are two main libraries:
 For historical reasons, there are two internal libraries:
 
 - diglib (with dig_*() functions), GRASS 3.x/4.x
-- Vlib (with V1_*(), V2_*() and Vect_*() functions), GRASS 4.x/5.x
+- Vlib (with V1_*(), V2_*() and Vect_*() functions), since GRASS 4.x
   (except for the 5.7 interim version)
 
 The vector library was introduced in GRASS 4.0 to hide internal vector
@@ -1127,7 +1127,7 @@ In GRASS, whenever an 'inner' ring touches the boundary of an outside
 area, even in one point, it is no longer an 'inner' ring (Isle in
 GRASS topology), it is simply another area. A, B above can never be
 exported from GRASS as polygon A with inner ring B because there are
-only 2 areas A and B and no island.
+only 2 areas A and B and one island formed by A and B together.
 
 
 \subsubsection vlibTopoExample3 Topology Example 3
