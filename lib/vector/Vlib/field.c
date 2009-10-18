@@ -70,7 +70,7 @@ void Vect_reset_dblinks(struct dblinks *p)
 
   \param Map pointer to Map_info structure
   \param number layer number
-  \param name layer name
+  \param name layer name (if not given use table name)
   \param table table name
   \param key key name
   \param db database name
@@ -85,25 +85,26 @@ int Vect_map_add_dblink(struct Map_info *Map, int number, const char *name,
 {
     int ret;
 
-    if (number == 0) {
+    if (number < 1) {
 	G_warning(_("Layer number must be 1 or greater"));
 	return -1;
     }
 
     if (Map->mode != GV_MODE_WRITE && Map->mode != GV_MODE_RW) {
-	G_warning(_("Unable to add database link, map is not opened in WRITE mode"));
+	G_warning(_("Unable to add attribute link, vector map is "
+		    "not opened in WRITE mode"));
 	return -1;
     }
 
     ret = Vect_add_dblink(Map->dblnk, number, name, table, key, db, driver);
     if (ret == -1) {
-	G_warning(_("Unable to add database link"));
+	G_warning(_("Unable to add attribute link"));
 	return -1;
     }
     /* write it immediately otherwise it is lost if module crashes */
     ret = Vect_write_dblinks(Map);
     if (ret == -1) {
-	G_warning(_("Unable to write database links"));
+	G_warning(_("Unable to write attribute links"));
 	return -1;
     }
     return 0;
@@ -202,7 +203,7 @@ int Vect_check_dblink(const struct dblinks *p, int field, const char *name)
   
   \param[in,out] p pointer to existing dblinks structure
   \param number layer number (1 for OGR)
-  \param name   layer name (layer for OGR)
+  \param name   layer name (layer for OGR) - if not given use table name
   \param table  table name (layer for OGR)
   \param key    key name
   \param db     database name (datasource for OGR)
@@ -218,6 +219,10 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
     int ret;
 
     G_debug(3, "Field number <%d>, name <%s>", number, name);
+    if (!name) {
+	/* if name is not given, use table name */
+	name = table;
+    }
     ret = Vect_check_dblink(p, number, name);
     if (ret == 1) {
 	G_warning(_("Layer number %d or name <%s> already exists"), number,
@@ -277,9 +282,8 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
 
   \return pointer to new field_info structure
  */
-struct field_info
-    *Vect_default_field_info(struct Map_info *Map,
-			     int field, const char *field_name, int type)
+struct field_info *Vect_default_field_info(struct Map_info *Map,
+					   int field, const char *field_name, int type)
 {
     struct field_info *fi;
     char buf[1000], buf2[1000];
@@ -295,8 +299,7 @@ struct field_info
     db = G__getenv2("DB_DATABASE", G_VAR_MAPSET);
 
     G_debug(2, "drv = %s db = %s", drv, db);
-
-
+    
     if (!connection.driverName && !connection.databaseName) {
 	/* Set default values and create dbf db dir */
 	db_set_default_connection();
