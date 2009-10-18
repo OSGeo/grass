@@ -4,6 +4,7 @@
  * MODULE:       v.db.select
  * 
  * AUTHOR(S):    Radim Blazek
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *               
  * PURPOSE:      Print vector attributes
  *               
@@ -40,7 +41,7 @@ int main(int argc, char **argv)
     dbColumn *column;
     dbValue *value;
     struct field_info *Fi;
-    int field, ncols, col, more;
+    int ncols, col, more;
     struct Map_info Map;
     char query[1024];
     struct ilist *list_lines;
@@ -105,8 +106,6 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     /* set input vector map name and mapset */
-    field = atoi(field_opt->answer);
-
     if (file_opt->answer && strcmp(file_opt->answer, "-") != 0) { 
 	if (NULL == freopen(file_opt->answer, "w", stdout)) { 
 	    G_fatal_error(_("Unable to open file <%s> for writing"), file_opt->answer); 
@@ -130,9 +129,9 @@ int main(int argc, char **argv)
 
     /* open input vector */
     if (!r_flag->answer)
-	Vect_open_old_head(&Map, map_opt->answer, "");
+	Vect_open_old_head2(&Map, map_opt->answer, "", field_opt->answer);
     else {
-	if (2 > Vect_open_old(&Map, map_opt->answer, "")) {
+	if (2 > Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer)) {
 	    Vect_close(&Map);
 	    G_fatal_error(_("Unable to open vector map <%s> at topology level. "
 			   "Flag '%c' requires topology level."),
@@ -140,9 +139,9 @@ int main(int argc, char **argv)
 	}
     }
 
-    if ((Fi = Vect_get_field(&Map, field)) == NULL)
-	G_fatal_error(_("Database connection not defined for layer %d"),
-		      field);
+    if ((Fi = Vect_get_field2(&Map, field_opt->answer)) == NULL)
+	G_fatal_error(_("Database connection not defined for layer <%s>"),
+		      field_opt->answer);
 
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
 
@@ -229,7 +228,7 @@ int main(int argc, char **argv)
 
 	if (r_flag->answer) {
 	    /* get minimal region extent */
-	    Vect_cidx_find_all(&Map, field, -1, cat, list_lines);
+	    Vect_cidx_find_all(&Map, atoi(field_opt->answer), -1, cat, list_lines);
 	    for (i = 0; i < list_lines->n_values; i++) {
 		line = list_lines->value[i];
 		area = Vect_get_centroid_area(&Map, line);
