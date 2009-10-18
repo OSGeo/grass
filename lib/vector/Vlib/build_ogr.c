@@ -1,5 +1,5 @@
 /*!
-   \file build_ogr.c
+   \file lib/vector/Vlib/build_ogr.c
 
    \brief Vector library - Building topology for OGR
 
@@ -339,7 +339,8 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 
     /* test layer capabilities */
     if (!OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCRandomRead)) {
-	G_warning(_("Random read is not supported by OGR for this layer, cannot build support"));
+	G_warning(_("Random read is not supported by OGR for this layer, "
+		    "unable to build topology"));
 	return 0;
     }
 

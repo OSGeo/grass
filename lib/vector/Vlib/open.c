@@ -375,8 +375,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	    G_message(_("Building topology for OGR layer <%s> from datasource '%s'..."),
 		      Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
 	    G_set_verbose(0);
-	    Vect_build(Map);
-	    level = 2;
+	    if (Vect_build(Map)) {
+		level = 2;
+	    }
 	    G_set_verbose(verbose);
 	}
     }
