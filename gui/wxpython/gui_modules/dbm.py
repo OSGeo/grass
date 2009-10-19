@@ -33,6 +33,7 @@ import os
 import locale
 import tempfile
 import copy
+import types
 
 ### i18N
 import gettext
@@ -289,7 +290,7 @@ class VirtualAttributeList(wx.ListCtrl,
         j = 0
         
         for value in record.split('|'):
-            if self.columns[columns[j]]['ctype'] != type(str):
+            if self.columns[columns[j]]['ctype'] != types.StringType:
                 try:
                     ### casting disabled (2009/03)
                     ### self.itemDataMap[i].append(self.columns[columns[j]]['ctype'](value))
