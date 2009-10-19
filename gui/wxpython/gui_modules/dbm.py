@@ -1931,7 +1931,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnExtractSelected(self, event):
-        """
+        """!
         Extract vector objects selected in attribute browse window
         to new vector map
         """
@@ -1945,12 +1945,21 @@ class AttributeManager(wx.Frame):
             return
         else:
             # dialog to get file name
-            gdialogs.CreateNewVector(parent = self, title = _('Extract selected features'),
-                                     log = self.cmdLog,
-                                     cmd = (('v.extract',
-                                             { 'input' : self.vectorName,
-                                               'list' : utils.ListOfCatsToRange(cats) },
-                                             'output')))
+            name, add = gdialogs.CreateNewVector(parent = self, title = _('Extract selected features'),
+                                                 log = self.cmdLog,
+                                                 cmd = (('v.extract',
+                                                         { 'input' : self.vectorName,
+                                                           'list' : utils.ListOfCatsToRange(cats) },
+                                                         'output')),
+                                                 disableTable = True)
+            if name and add:
+                # add layer to map layer tree
+                self.parent.curr_page.maptree.AddLayer(ltype='vector',
+                                                       lname=name,
+                                                       lchecked=True,
+                                                       lopacity=1.0,
+                                                       lcmd=['d.vect', 'map=%s' % name])
+            
     def OnDeleteSelected(self, event):
         """
         Delete vector objects selected in attribute browse window
