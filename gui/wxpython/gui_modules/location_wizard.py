@@ -43,6 +43,7 @@ import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.wizard as wiz
 import wx.lib.scrolledpanel as scrolled
+import time
 
 import gcmd
 import globalvar
@@ -850,7 +851,7 @@ class DatumPage(TitledPage):
         self.parent = parent
         self.datum = ''
         self.datumdesc = ''
-        self.ellipsoid = ''
+        self.ellipse = ''
         self.datumparams = ''
         self.proj4params = ''
 
@@ -909,17 +910,18 @@ class DatumPage(TitledPage):
 
     def OnPageChanging(self, event):
         self.proj4params = ''
+        proj = self.parent.projpage.p4proj
+                
         if event.GetDirection():
             if self.datum not in self.parent.datums:
                 event.Veto()
             else:
                 # check for datum tranforms            
-                proj4string = self.parent.CreateProj4String() + ' +datum=%s' % self.datum
+#                proj4string = self.parent.CreateProj4String() + ' +datum=%s' % self.datum
                 ret = gcmd.RunCommand('g.proj',
                                       read = True,
-                                      proj4 = proj4string, 
+                                      proj4 = '%s +datum=%s' % (proj, self.datum), 
                                       datumtrans = '-1')
-                
                 if ret != '':
                     dtrans = ''
                     # open a dialog to select datum transform number
@@ -938,8 +940,9 @@ class DatumPage(TitledPage):
                     
                     self.parent.datumtrans = dtrans
                 
-        self.GetNext().SetPrev(self)
-        self.parent.ellipsepage.ellipseparams = self.parent.ellipsoids[self.ellipsoid][1]
+            self.GetNext().SetPrev(self)
+            self.parent.ellipsepage.ellipse = self.ellipse
+            self.parent.ellipsepage.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
 
     def OnEnterPage(self,event):
         self.parent.datumtrans = 0
@@ -959,11 +962,22 @@ class DatumPage(TitledPage):
         if len(self.datum) == 0 or self.datum not in self.parent.datums:
             nextButton.Enable(False)
         else:
-            self.ellipsoid = self.parent.datums[self.datum][0]
+            self.ellipse = self.parent.datums[self.datum][0]
             self.datumdesc = self.parent.datums[self.datum][1]
             self.datumparams = self.parent.datums[self.datum][2]
-            for p in self.datumparams:
-                if p in ['dx=0.0','dy=0.0','dz=0.0']: self.datumparams.remove(p)
+            try:
+                self.datumparams.remove('dx=0.0')
+            except:
+                pass
+            try:
+                self.datumparams.remove('dy=0.0')
+            except:
+                pass
+            try:
+                self.datumparams.remove('dz=0.0')
+            except:
+                pass
+            
             nextButton.Enable(True)
             
         self.Update()    
@@ -2033,7 +2047,7 @@ class LocationWizard(wx.Object):
                 
         datum = self.datumpage.datum
         if self.datumpage.datumdesc:
-            datumdesc = self.datumpage.datumdesc +' - ' + self.datumpage.ellipsoid
+            datumdesc = self.datumpage.datumdesc +' - ' + self.datumpage.ellipse
         else:
             datumdesc = ''
         datumparams = self.datumpage.datumparams        
@@ -2048,13 +2062,16 @@ class LocationWizard(wx.Object):
         proj4string = '%s %s' % (proj, proj4params)
                             
         # set ellipsoid parameters
+        if ellipse != '': proj4string = '%s +ellps=%s' % (proj4string, ellipse)
         for item in ellipseparams:
             if item[:4] == 'f=1/':
-                item = '+rf='+item[4:]
+                item = ' +rf='+item[4:]
             else:
-                item = '+'+item
+                item = ' +'+item
             proj4string = '%s %s' % (proj4string, item)
+            
         # set datum and transform parameters if relevant
+        if datum != '': proj4string = '%s +datum=%s' % (proj4string, datum)
         if datumparams:
             for item in datumparams:
                 proj4string = '%s +%s' % (proj4string,item)
