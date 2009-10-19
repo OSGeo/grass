@@ -183,7 +183,7 @@ class MapsetDialog(ElementDialog):
     
 class NewVectorDialog(ElementDialog):
     """!Dialog for creating new vector map"""
-    def __init__(self, parent, id, title, disableAdd=False, 
+    def __init__(self, parent, id, title, disableAdd=False, disableTable=False,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         
         ElementDialog.__init__(self, parent, title, label = _("Name for new vector map:"))
@@ -194,6 +194,8 @@ class NewVectorDialog(ElementDialog):
         self.table = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                  label = _("Create attribute table"))
         self.table.SetValue(True)
+        if disableTable:
+            self.table.Enable(False)
         
         self.addbox = wx.CheckBox(parent = self.panel,
                                   label = _('Add created map into layer tree'), style = wx.NO_BORDER)
@@ -233,7 +235,7 @@ class NewVectorDialog(ElementDialog):
         return self.GetElement().split('@', 1)[0]
             
 def CreateNewVector(parent, cmd, title=_('Create new vector map'),
-                    exceptMap=None, log=None, disableAdd=False):
+                    exceptMap=None, log=None, disableAdd=False, disableTable=False):
     """!Create new vector map layer
 
     @cmd cmd (prog, **kwargs)
@@ -242,7 +244,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
     @return None of failure
     """
     dlg = NewVectorDialog(parent, wx.ID_ANY, title,
-                          disableAdd)
+                          disableAdd, disableTable)
     if dlg.ShowModal() == wx.ID_OK:
         outmap = dlg.GetName()
         if outmap == exceptMap:
@@ -290,7 +292,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
         #
         # create attribute table
         #
-        if dlg.table.IsChecked():
+        if dlg.table.IsEnabled() and dlg.table.IsChecked():
             key = UserSettings.Get(group='atm', key='keycolumn', subkey='value')
             sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
             
