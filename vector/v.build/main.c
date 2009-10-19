@@ -81,8 +81,10 @@ int main(int argc, char *argv[])
     /* build topology */
     if (build) {
 	Vect_set_open_level(1);
-	Vect_open_old(&Map, map_opt->answer, G_mapset());
-
+	if (Vect_open_update(&Map, map_opt->answer, G_mapset()) < 0) {
+	    G_fatal_error(_("Unable to build topology for <%s>"), map_opt->answer);
+	    exit(EXIT_FAILURE);
+	}
 	Vect_build(&Map);
     }
     /* dump topology */
