@@ -96,7 +96,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     }
     if (layer == -1) {
 	OGR_DS_Destroy(Ogr_ds);
-	G_fatal_error(_("Unable to open OGR layer <%s>"),
+	G_fatal_error(_("OGR layer <%s> not found"),
 		      Map->fInfo.ogr.layer_name);
     }
     G_debug(2, "OGR layer %d opened", layer);

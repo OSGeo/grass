@@ -19,7 +19,7 @@
   \brief Open database connection
 
   \param driver db driver
-  \param handle handle info
+  \param handle handle info (database and schema name)
 
   \return DB_OK on success
   \return DB_FAILED on failure
