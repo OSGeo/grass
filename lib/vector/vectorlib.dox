@@ -1692,7 +1692,8 @@ programming. The programmer should use only routines with this prefix.
 - \subpage vlibDelete
 - \subpage vlibWrite
 - \subpage vlibAsciiFn
-- \subpage vlibGeos
+- \subpage vlibSFAFn
+- \subpage vlibGeosFn
 
 \section vlibArea Vector area functions
 
@@ -2387,7 +2388,25 @@ programming. The programmer should use only routines with this prefix.
  
  - Vect_write_ascii_head()
 
-\section vlibGeos Vector GEOS functions
+\subsection vlibSFAFn Vector Simple Feature Access API
+
+Functions from GRASS Simple Feature API (in progress, incomplete).
+
+ - Vect_sfa_get_line_type()
+
+ - Vect_sfa_check_line_type()
+
+ - Vect_sfa_line_dimension()
+
+ - Vect_sfa_line_geometry_type()
+
+ - Vect_sfa_line_astext()
+
+ - Vect_sfa_is_line_simple()
+
+ - Vect_sfa_is_line_closed()
+
+\section vlibGeosFn Vector GEOS functions
 
 Note: The functions are available only if GRASS is compiled with
 <tt>--with-geos</tt> switch.
@@ -2405,10 +2424,15 @@ Note: The functions are available only if GRASS is compiled with
 
 \section vlibAuthors Authors
 
- Radim Blazek (vector architecture) <radim.blazek gmail.com>
+- Radim Blazek (vector architecture) <radim.blazek gmail.com>
 
- Roberto Micarelli (DGLib) <mi.ro iol.it>
+- Roberto Micarelli (DGLib) <mi.ro iol.it>
 
+Updates for GRASS 7:
+
+- Markus Metz (file-based spatial index)
+
+- Martin Landa (GEOS support, direct OGR read access) <landa.martin gmail.com>
 
 \section vlibReferences References
 
