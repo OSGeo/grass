@@ -424,7 +424,7 @@ class ProjectionsPage(TitledPage):
         """!Search projection by desc"""
         str = event.GetString()
         try:
-            self.proj, self.projdesc = self.projlist.Search(index=1, pattern=event.GetString())
+            self.proj, self.projdesc = self.projlist.Search(index=[0,1], pattern=event.GetString())
         except:
             self.proj = self.projdesc = ''
 
@@ -625,20 +625,22 @@ class ItemList(wx.ListCtrl,
 
         data = []
         pattern = pattern.lower()
-        for i in range(len(self.sourceData)):
-            try:
-                value = str(self.sourceData[i][index]).lower()
-                if pattern in value:
-                    data.append(self.sourceData[i])
-            except UnicodeDecodeError:
-                # osgeo4w problem (should be fixed)
-                pass
-        
+        for idx in index:
+            for i in range(len(self.sourceData)):
+                try:
+                    value = str(self.sourceData[i][idx]).lower()
+                    if pattern in value:
+                        data.append(self.sourceData[i])
+                except UnicodeDecodeError:
+                    # osgeo4w problem (should be fixed)
+                    pass
+
+        self.Populate(data)
         if len(data) > 0:
-            self.Populate(data)
+            
             return data[0]
         else:
-            self.Populate(self.sourceData)
+#            self.Populate(self.sourceData)
             return []
 
 class ProjTypePage(TitledPage):
@@ -768,7 +770,7 @@ class DatumPage(TitledPage):
 
         # text input
         self.tdatum = self.MakeTextCtrl("", size=(200,-1))
-        self.ttrans = self.MakeTextCtrl("", size=(200,-1))
+#        self.ttrans = self.MakeTextCtrl("", size=(200,-1))
 
         # search box
         self.searchb = wx.SearchCtrl(self, size=(200,-1),
@@ -782,14 +784,14 @@ class DatumPage(TitledPage):
                                   data=data,
                                   columns=[_('Code'), _('Description'), _('Ellipsoid')])
 
-        # create list control for datum transformation parameters list
-        data = []
-        for key in self.parent.transforms.keys():
-            data.append([key, self.parent.transforms[key][0], self.parent.transforms[key][1]])
-        self.transformlist = ItemList(self,
-                                      data=None,
-                                      columns=[_('Code'), _('Datum'), _('Description')])
-        self.transformlist.sourceData = data
+#        # create list control for datum transformation parameters list
+#        data = []
+#        for key in self.parent.transforms.keys():
+#            data.append([key, self.parent.transforms[key][0], self.parent.transforms[key][1]])
+#        self.transformlist = ItemList(self,
+#                                      data=None,
+#                                      columns=[_('Code'), _('Datum'), _('Description')])
+#        self.transformlist.sourceData = data
         
         # layout
         self.sizer.AddGrowableCol(4)
@@ -817,28 +819,28 @@ class DatumPage(TitledPage):
                        wx.ALIGN_LEFT |
                        wx.ALL, border=5, pos=(3, 1), span=(1, 4))
 
-        self.sizer.Add(item=self.MakeLabel(_("Transformation parameters:")),
-                       flag=wx.ALIGN_RIGHT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(5, 1))
-        self.sizer.Add(item=self.ttrans,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(5, 2))
+#        self.sizer.Add(item=self.MakeLabel(_("Transformation parameters:")),
+#                       flag=wx.ALIGN_RIGHT |
+#                       wx.ALIGN_CENTER_VERTICAL |
+#                       wx.ALL, border=5, pos=(5, 1))
+#        self.sizer.Add(item=self.ttrans,
+#                       flag=wx.ALIGN_LEFT |
+#                       wx.ALIGN_CENTER_VERTICAL |
+#                       wx.ALL, border=5, pos=(5, 2))
 
-        self.sizer.Add(item=self.transformlist,
-                       flag=wx.EXPAND |
-                       wx.ALIGN_LEFT |
-                       wx.ALL, border=5, pos=(6, 1), span=(1, 4))
+#        self.sizer.Add(item=self.transformlist,
+#                       flag=wx.EXPAND |
+#                       wx.ALIGN_LEFT |
+#                       wx.ALL, border=5, pos=(6, 1), span=(1, 4))
 
         # events
         self.datumlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnDatumSelected)
-        self.transformlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTransformSelected)
+#        self.transformlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTransformSelected)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnDSearch)
         self.tdatum.Bind(wx.EVT_TEXT, self.OnDText)
         self.tdatum.Bind(wx.EVT_TEXT_ENTER, self.OnDText)
-        self.ttrans.Bind(wx.EVT_TEXT, self.OnTText)
-        self.ttrans.Bind(wx.EVT_TEXT_ENTER, self.OnTText)
+#        self.ttrans.Bind(wx.EVT_TEXT, self.OnTText)
+#        self.ttrans.Bind(wx.EVT_TEXT_ENTER, self.OnTText)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -866,7 +868,8 @@ class DatumPage(TitledPage):
 
     def OnDText(self, event):
         self.datum = event.GetString().lower()
-        tlist = self.transformlist.Search(index=1, pattern=self.datum)
+#        tlist = self.transformlist.Search(index=1, pattern=self.datum)
+        tlist = []
         if len(tlist) > 0:
             self.hastransform = True
         else:
@@ -909,14 +912,14 @@ class DatumPage(TitledPage):
     def OnDSearch(self, event):
         str =  self.searchb.GetValue()
         try:
-            self.datum, self.datumdesc, self.ellipsoid = self.datumlist.Search(index=1, pattern=str)
-            self.transformlist.Search(index=1, pattern=self.datum)
+            self.datum, self.datumdesc, self.ellipsoid = self.datumlist.Search(index=[0,1,2], pattern=str)
+#            self.transformlist.Search(index=1, pattern=self.datum)
         except:
             self.datum = self.datumdesc = self.ellipsoid = ''
 
-        if str == '' or self.datum == '':
-            self.transformlist.DeleteAllItems()
-            self.transformlist.Refresh()
+#        if str == '' or self.datum == '':
+#            self.transformlist.DeleteAllItems()
+#            self.transformlist.Refresh()
 
         event.Skip()
         
@@ -1049,7 +1052,7 @@ class EllipsePage(TitledPage):
         str =  event.GetString()
         try:
             self.ellipse, self.ellipsedesc = \
-                self.ellipselist.Search(index=1, pattern=event.GetString())
+                self.ellipselist.Search(index=[0,1], pattern=event.GetString())
             self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
             self.proj4params = self.parent.ellipsoids[self.ellipse][2]
         except:
@@ -1259,7 +1262,6 @@ class EPSGPage(TitledPage):
         # buttons
         self.bbrowse = self.MakeButton(_("Browse"))
         self.bbcodes = self.MakeButton(_("Reload EPSG Codes"))
-        self.bbsearch = self.MakeButton(_("Search"))
 
         # search box
         self.searchb = wx.SearchCtrl(self, size=(200,-1),
@@ -1307,12 +1309,7 @@ class EPSGPage(TitledPage):
         self.sizer.Add(item=self.bbcodes,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(2, 4))
-        self.sizer.Add(item=self.bbsearch,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 4))
-
 
         self.sizer.AddGrowableRow(4)
         self.sizer.Add(item=self.epsglist,
@@ -1322,7 +1319,6 @@ class EPSGPage(TitledPage):
         # events
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
         self.bbcodes.Bind(wx.EVT_BUTTON, self.OnBrowseCodes)
-        self.bbsearch.Bind(wx.EVT_BUTTON, self.OnSearch)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.tcode.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
@@ -1377,7 +1373,7 @@ class EPSGPage(TitledPage):
             return
         
         try:
-            self.epsgcode = self.epsglist.Search(index=self.csearch.GetSelection(),
+            self.epsgcode = self.epsglist.Search(index=[self.csearch.GetSelection()],
                                                  pattern=value)[0]
         except IndexError: # -> no item found
             self.epsgcode = None
@@ -1650,6 +1646,11 @@ class LocationWizard(wx.Object):
         # get georeferencing information from tables in $GISBASE/etc
         #
         self.__readData()
+        
+        #
+        # datum transform number
+        #
+        self.datumtrans = 0
 
         #
         # define wizard pages
@@ -1890,6 +1891,7 @@ class LocationWizard(wx.Object):
             proj4string = self.CreateProj4String()
             msg = self.Proj4Create(proj4string)
         elif coordsys == 'custom':
+            wx.MessageBox('in custom')
             msg = self.CustomCreate()
         elif coordsys == "epsg":
             msg = self.EPSGCreate()
@@ -1966,24 +1968,26 @@ class LocationWizard(wx.Object):
         else:
             datumdesc = ''
         datumparams = self.datumpage.datumparams
-        transparams = self.datumpage.transparams
+#        transparams = self.datumpage.transparams
         
         ellipse = self.ellipsepage.ellipse
         ellipsedesc = self.ellipsepage.ellipsedesc
         ellipseparams = self.ellipsepage.ellipseparams
-        
+                
         #
         # creating PROJ.4 string
         #
         if proj == 'll':
             proj4string = '+proj=longlat'
         elif proj == 'utm':
-            proj4string = '+proj=%s +zone=%s' % (proj, utmzone)
+            proj4string = '+proj=%s +zone=%s' % (utm, utmzone)
             if utmhemisphere == 'south':
-                proj4string += ' +south'
+                proj4string += '+south'
         else:
             proj4string = '+proj=%s ' % (proj)
-
+            
+        self.shortproj4string = proj4string
+                            
         proj4params = ''
         # set ellipsoid parameters
         for item in ellipseparams:
@@ -1996,12 +2000,14 @@ class LocationWizard(wx.Object):
         if datumparams:
             for item in datumparams:
                 proj4params = '%s +%s' % (proj4params,item)
-            if transparams:
-                proj4params = '%s +no_defs +%s' % (proj4params,transparams)
-            else:
-                proj4params = '%s +no_defs' % proj4params
-        else:
-            proj4params = '%s +no_defs' % proj4params
+#            if transparams:
+#                proj4params = '%s +no_defs +%s' % (proj4params,transparams)
+#            else:
+#                proj4params = '%s +no_defs' % proj4params
+        proj4params = '%s +no_defs' % proj4params
+
+#        else:
+#            proj4params = '%s +no_defs' % proj4params
 
         return '%s %s' % (proj4string, proj4params)
         
@@ -2010,17 +2016,69 @@ class LocationWizard(wx.Object):
         
         @return error message (empty string on success)
         """
-        # creating location from PROJ.4 string passed to g.proj
+
+        datum = self.datumpage.datum
+        if datum != '':
+            proj4string = proj4string + ' +datum=%s' % datum
+            
+            # check for datum tranforms
+            ret = gcmd.RunCommand('g.proj',
+                                  read = True,
+                                  proj4 = proj4string, 
+                                  datumtrans = '-1')
+            
+            dtoptions = {}
+            
+            
+            if ret:
+                line = ret.splitlines()
+                i = 0
+                while i < len(line):
+                    if line[i] == '---':
+                        for j in range(3):
+                            dtoptions[line[i+1]] = (line[i+2],
+                                                    line[i+3],
+                                                    line[i+4])
+                        i += 5
+            if dtoptions != {}:
+                dtrans = ''
+                # open a dialog to select datum transform number
+                dlg = SelectDatumDialog(self.parent, datums=dtoptions)
+                
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetDatum()
+                    if dtrans == '':
+                        dlg.Destroy()
+                        return 'Datum transform is required.'
+                else:
+                    dlg.Destroy()
+                    return 'Datum transform is required.'
+                
+                self.datumtrans = dtrans
+
         ret, msg = gcmd.RunCommand('g.proj',
                                    flags = 'c',
                                    proj4 = proj4string,
                                    location = self.startpage.location,
+                                   datumtrans = self.datumtrans,
                                    getErrorMsg = True)
         
         if ret == 0:
             return ''
-        
+
         return msg
+        
+#        # creating location from PROJ.4 string passed to g.proj
+#        ret, msg = gcmd.RunCommand('g.proj',
+#                                   flags = 'c',
+#                                   proj4 = proj4string,
+#                                   location = self.startpage.location,
+#                                   getErrorMsg = True)
+        
+#        if ret == 0:
+#            return ''
+        
+#        return msg
 
     def CustomCreate(self):
         """!Create a new location based on given proj4 string
