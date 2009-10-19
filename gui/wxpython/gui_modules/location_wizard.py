@@ -20,7 +20,7 @@ Classes:
  - SummaryPage
  - RegionDef
  - LocationWizard
- - SelectDatumDialog
+ - SelectTransformDialog
 
 COPYRIGHT: (C) 2007-2009 by the GRASS Development Team
            This program is free software under the GNU General Public
@@ -42,6 +42,7 @@ import platform
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.wizard as wiz
+import wx.lib.scrolledpanel as scrolled
 
 import gcmd
 import globalvar
@@ -61,6 +62,7 @@ global east
 global west
 global resolution
 global wizerror
+global translist
 
 coordsys = ''
 north = ''
@@ -68,6 +70,7 @@ south = ''
 east = ''
 west = ''
 resolution = ''
+transformlist = []
 
 class BaseClass(wx.Object):
     """!Base class providing basic methods"""
@@ -354,6 +357,8 @@ class ProjectionsPage(TitledPage):
         # projection list
         self.projlist = ItemList(self, data=self.parent.projections.items(),
                                  columns=[_('Code'), _('Description')])
+        self.projlist.resizeLastColumn(30) 
+
         # layout
         self.sizer.AddGrowableCol(3)
         self.sizer.Add(item=self.MakeLabel(_("Projection code:")),
@@ -466,6 +471,9 @@ class ItemList(wx.ListCtrl,
 
         if self.sourceData:
             self.Populate()
+            #FIXME: auto sizing doesn't work for some reason
+            for i in range(self.GetColumnCount()):
+                self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
         else:
             for i in range(self.GetColumnCount()):
                 self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
@@ -531,11 +539,11 @@ class ItemList(wx.ListCtrl,
             self.SetItemCount(row)
             
             # set column width
-            # for i in range(self.GetColumnCount()):
-            # self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
-            # for i in range(self.GetColumnCount()):
-            # if self.GetColumnWidth(i) < 80:
-            # self.SetColumnWidth(i, 80)
+#            for i in range(self.GetColumnCount()):
+#                self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
+#            for i in range(self.GetColumnCount()):z
+#            if self.GetColumnWidth(i) < 80:
+#            self.SetColumnWidth(i, 80)
             self.SetColumnWidth(0, 80)
             self.SetColumnWidth(1, 300)
             
@@ -762,15 +770,10 @@ class DatumPage(TitledPage):
         self.datumdesc = ''
         self.ellipsoid = ''
         self.datumparams = ''
-        self.transform = ''
-        self.transregion = ''
-        self.transparams = ''
-        self.hastransform = False
         self.proj4params = ''
 
         # text input
         self.tdatum = self.MakeTextCtrl("", size=(200,-1))
-#        self.ttrans = self.MakeTextCtrl("", size=(200,-1))
 
         # search box
         self.searchb = wx.SearchCtrl(self, size=(200,-1),
@@ -783,15 +786,7 @@ class DatumPage(TitledPage):
         self.datumlist = ItemList(self,
                                   data=data,
                                   columns=[_('Code'), _('Description'), _('Ellipsoid')])
-
-#        # create list control for datum transformation parameters list
-#        data = []
-#        for key in self.parent.transforms.keys():
-#            data.append([key, self.parent.transforms[key][0], self.parent.transforms[key][1]])
-#        self.transformlist = ItemList(self,
-#                                      data=None,
-#                                      columns=[_('Code'), _('Datum'), _('Description')])
-#        self.transformlist.sourceData = data
+        self.datumlist.resizeLastColumn(10) 
         
         # layout
         self.sizer.AddGrowableCol(4)
@@ -819,28 +814,11 @@ class DatumPage(TitledPage):
                        wx.ALIGN_LEFT |
                        wx.ALL, border=5, pos=(3, 1), span=(1, 4))
 
-#        self.sizer.Add(item=self.MakeLabel(_("Transformation parameters:")),
-#                       flag=wx.ALIGN_RIGHT |
-#                       wx.ALIGN_CENTER_VERTICAL |
-#                       wx.ALL, border=5, pos=(5, 1))
-#        self.sizer.Add(item=self.ttrans,
-#                       flag=wx.ALIGN_LEFT |
-#                       wx.ALIGN_CENTER_VERTICAL |
-#                       wx.ALL, border=5, pos=(5, 2))
-
-#        self.sizer.Add(item=self.transformlist,
-#                       flag=wx.EXPAND |
-#                       wx.ALIGN_LEFT |
-#                       wx.ALL, border=5, pos=(6, 1), span=(1, 4))
-
         # events
         self.datumlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnDatumSelected)
-#        self.transformlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnTransformSelected)
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnDSearch)
         self.tdatum.Bind(wx.EVT_TEXT, self.OnDText)
         self.tdatum.Bind(wx.EVT_TEXT_ENTER, self.OnDText)
-#        self.ttrans.Bind(wx.EVT_TEXT, self.OnTText)
-#        self.ttrans.Bind(wx.EVT_TEXT_ENTER, self.OnTText)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -851,14 +829,39 @@ class DatumPage(TitledPage):
         self.proj4params = ''
         if event.GetDirection() and self.datum not in self.parent.datums:
             event.Veto()
-        if self.hastransform == True and self.transform == '':
-            event.Veto()
+        else:
+            # check for datum tranforms            
+            proj4string = self.parent.CreateProj4String() + ' +datum=%s' % self.datum
+            ret = gcmd.RunCommand('g.proj',
+                                  read = True,
+                                  proj4 = proj4string, 
+                                  datumtrans = '-1')
+            
+            if ret != '':
+                dtrans = ''
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+                
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == '':
+                        dlg.Destroy()
+                        event.Veto()
+                        return 'Datum transform is required.'
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return 'Datum transform is required.'
+                
+                self.parent.datumtrans = dtrans
+                
+        self.GetNext().SetPrev(self)
+
         self.GetNext().SetPrev(self)
         self.parent.ellipsepage.ellipseparams = self.parent.ellipsoids[self.ellipsoid][1]
 
     def OnEnterPage(self,event):
-        if len(self.datum) == 0 or \
-                (self.hastransform == True and self.transform == ''):
+        if len(self.datum) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
@@ -868,12 +871,6 @@ class DatumPage(TitledPage):
 
     def OnDText(self, event):
         self.datum = event.GetString().lower()
-#        tlist = self.transformlist.Search(index=1, pattern=self.datum)
-        tlist = []
-        if len(tlist) > 0:
-            self.hastransform = True
-        else:
-            self.hastransform = False
 
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
         if len(self.datum) == 0 and nextButton.IsEnabled():
@@ -882,57 +879,18 @@ class DatumPage(TitledPage):
             self.datumdesc = self.parent.datums[self.datum][0]
             self.ellipsoid = self.parent.datums[self.datum][1]
             self.datumparams = self.parent.datums[self.datum][2]
-            if self.hastransform == False or \
-                    (self.hastransform == True and self.transform != ''):
-                if not nextButton.IsEnabled():
-                    nextButton.Enable(True)
-            else:
-                if nextButton.IsEnabled():
-                    nextButton.Enable(False)
+            nextButton.Enable(True)
             
         event.Skip()
-
-    def OnTText(self, event):
-        if self.hastransform == False:
-            event.Skip()
-            return
-
-        self.transform = event.GetString()
-        nextButton = wx.FindWindowById(wx.ID_FORWARD)
-
-        if len(self.transform) == 0 and nextButton.IsEnabled():
-            nextButton.Enable(False)
-        elif self.transform in self.parent.transforms:
-            self.transdatum = self.parent.transforms[self.transform][0]
-            self.transregion = self.parent.transforms[self.transform][1]
-            self.transparams = self.parent.transforms[self.transform][2]
-            if not nextButton.IsEnabled():
-                nextButton.Enable()
 
     def OnDSearch(self, event):
         str =  self.searchb.GetValue()
         try:
             self.datum, self.datumdesc, self.ellipsoid = self.datumlist.Search(index=[0,1,2], pattern=str)
-#            self.transformlist.Search(index=1, pattern=self.datum)
         except:
             self.datum = self.datumdesc = self.ellipsoid = ''
 
-#        if str == '' or self.datum == '':
-#            self.transformlist.DeleteAllItems()
-#            self.transformlist.Refresh()
-
         event.Skip()
-        
-    def OnTransformSelected(self,event):
-        index = event.m_itemIndex
-        item = event.GetItem()
-
-        self.transform = self.transformlist.GetItem(index, 0).GetText()
-        self.transdatum = self.parent.transforms[self.transform][0]
-        self.transregion = self.parent.transforms[self.transform][1]
-        self.transparams = self.parent.transforms[self.transform][2]
-
-        self.ttrans.SetValue(str(self.transform))
 
     def OnDatumSelected(self,event):
         index = event.m_itemIndex
@@ -942,8 +900,8 @@ class DatumPage(TitledPage):
         self.datumdesc = self.parent.datums[self.datum][0]
         self.ellipsoid = self.parent.datums[self.datum][1]
         self.datumparams = self.parent.datums[self.datum][2]
-
         self.tdatum.SetValue(self.datum)
+        
         event.Skip()
 
 class EllipsePage(TitledPage):
@@ -1342,9 +1300,35 @@ class EPSGPage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event):
-        if event.GetDirection() and not self.epsgcode:
-            event.Veto()
-        self.GetNext().SetPrev(self)
+        if event.GetDirection():
+            if not self.epsgcode:
+                event.Veto()
+                return
+            else:              
+                # check for datum transforms
+                ret = gcmd.RunCommand('g.proj',
+                                      read = True,
+                                      epsg = self.epsgcode,
+                                      datumtrans = '-1')
+                
+                if ret != '':
+                    dtrans = ''
+                    # open a dialog to select datum transform number
+                    dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+                    
+                    if dlg.ShowModal() == wx.ID_OK:
+                        dtrans = dlg.GetTransform()
+                        if dtrans == '':
+                            dlg.Destroy()
+                            event.Veto()
+                            return 'Datum transform is required.'
+                    else:
+                        dlg.Destroy()
+                        event.Veto()
+                        return 'Datum transform is required.'
+                    
+                    self.parent.datumtrans = dtrans
+            self.GetNext().SetPrev(self)
 
     def OnText(self, event):
         self.epsgcode = event.GetString()
@@ -1475,8 +1459,37 @@ class CustomPage(TitledPage):
     def OnPageChanging(self, event):
         if event.GetDirection() and not self.customstring:
             event.Veto()
+        else:
+            # check for datum tranforms            
+            ret, out, err = gcmd.RunCommand('g.proj',
+                                  read = True, getErrorMsg = True,
+                                  proj4 = self.customstring, 
+                                  datumtrans = '-1')
+            if ret != 0:
+                wx.MessageBox(err, 'g.proj error: check PROJ4 parameter string')
+                event.Veto()
+                return
+            
+            if out != '':
+                dtrans = ''
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=out)
+                
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == '':
+                        dlg.Destroy()
+                        event.Veto()
+                        return 'Datum transform is required.'
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return 'Datum transform is required.'
+                
+                self.parent.datumtrans = dtrans
+                
         self.GetNext().SetPrev(self)
-
+            
     def GetProjstring(self, event):
         """!Change proj string"""
         # TODO: check PROJ.4 syntax
@@ -1585,9 +1598,6 @@ class SummaryPage(TitledPage):
         datumdesc = self.parent.datumpage.datumdesc
         ellipsoid = self.parent.datumpage.ellipsoid
         datumparams = self.parent.datumpage.datumparams
-        transform = self.parent.datumpage.transform
-        transregion = self.parent.datumpage.transregion
-        transparams = self.parent.datumpage.transparams
 
         self.ldatabase.SetLabel(str(database))
         self.llocation.SetLabel(str(location))
@@ -1648,7 +1658,7 @@ class LocationWizard(wx.Object):
         self.__readData()
         
         #
-        # datum transform number
+        # datum transform number and list of datum transforms
         #
         self.datumtrans = 0
 
@@ -1891,7 +1901,6 @@ class LocationWizard(wx.Object):
             proj4string = self.CreateProj4String()
             msg = self.Proj4Create(proj4string)
         elif coordsys == 'custom':
-            wx.MessageBox('in custom')
             msg = self.CustomCreate()
         elif coordsys == "epsg":
             msg = self.EPSGCreate()
@@ -1968,7 +1977,6 @@ class LocationWizard(wx.Object):
         else:
             datumdesc = ''
         datumparams = self.datumpage.datumparams
-#        transparams = self.datumpage.transparams
         
         ellipse = self.ellipsepage.ellipse
         ellipsedesc = self.ellipsepage.ellipsedesc
@@ -2000,14 +2008,8 @@ class LocationWizard(wx.Object):
         if datumparams:
             for item in datumparams:
                 proj4params = '%s +%s' % (proj4params,item)
-#            if transparams:
-#                proj4params = '%s +no_defs +%s' % (proj4params,transparams)
-#            else:
-#                proj4params = '%s +no_defs' % proj4params
-        proj4params = '%s +no_defs' % proj4params
 
-#        else:
-#            proj4params = '%s +no_defs' % proj4params
+        proj4params = '%s +no_defs' % proj4params
 
         return '%s %s' % (proj4string, proj4params)
         
@@ -2016,46 +2018,6 @@ class LocationWizard(wx.Object):
         
         @return error message (empty string on success)
         """
-
-        datum = self.datumpage.datum
-        if datum != '':
-            proj4string = proj4string + ' +datum=%s' % datum
-            
-            # check for datum tranforms
-            ret = gcmd.RunCommand('g.proj',
-                                  read = True,
-                                  proj4 = proj4string, 
-                                  datumtrans = '-1')
-            
-            dtoptions = {}
-            
-            
-            if ret:
-                line = ret.splitlines()
-                i = 0
-                while i < len(line):
-                    if line[i] == '---':
-                        for j in range(3):
-                            dtoptions[line[i+1]] = (line[i+2],
-                                                    line[i+3],
-                                                    line[i+4])
-                        i += 5
-            if dtoptions != {}:
-                dtrans = ''
-                # open a dialog to select datum transform number
-                dlg = SelectDatumDialog(self.parent, datums=dtoptions)
-                
-                if dlg.ShowModal() == wx.ID_OK:
-                    dtrans = dlg.GetDatum()
-                    if dtrans == '':
-                        dlg.Destroy()
-                        return 'Datum transform is required.'
-                else:
-                    dlg.Destroy()
-                    return 'Datum transform is required.'
-                
-                self.datumtrans = dtrans
-
         ret, msg = gcmd.RunCommand('g.proj',
                                    flags = 'c',
                                    proj4 = proj4string,
@@ -2068,17 +2030,6 @@ class LocationWizard(wx.Object):
 
         return msg
         
-#        # creating location from PROJ.4 string passed to g.proj
-#        ret, msg = gcmd.RunCommand('g.proj',
-#                                   flags = 'c',
-#                                   proj4 = proj4string,
-#                                   location = self.startpage.location,
-#                                   getErrorMsg = True)
-        
-#        if ret == 0:
-#            return ''
-        
-#        return msg
 
     def CustomCreate(self):
         """!Create a new location based on given proj4 string
@@ -2112,48 +2063,11 @@ class LocationWizard(wx.Object):
         if epsgcode == '':
             return _('EPSG code missing.')
         
-        # creating location
-        ret = gcmd.RunCommand('g.proj',
-                              read = True,
-                              epsg = epsgcode,
-                              datumtrans = '-1')
-        
-        dtoptions = {}
-        
-        if ret:
-            line = ret.splitlines()
-            i = 0
-            while i < len(line):
-                if line[i] == '---':
-                    for j in range(3):
-                        dtoptions[line[i+1]] = (line[i+2],
-                                                line[i+3],
-                                                line[i+4])
-                    i += 5
-        
-        if dtoptions != {}:
-            dtrans = ''
-            # open a dialog to select datum transform number
-            dlg = SelectDatumDialog(self.parent, datums=dtoptions)
-            
-            if dlg.ShowModal() == wx.ID_OK:
-                dtrans = dlg.GetDatum()
-                if dtrans == '':
-                    dlg.Destroy()
-                    return 'Datum transform is required.'
-            else:
-                dlg.Destroy()
-                return 'Datum transform is required.'
-            
-            datumtrans = dtrans
-        else:
-            datumtrans = '1'
-
         ret, msg = gcmd.RunCommand('g.proj',
                                    flags = 'c',
                                    epsg = epsgcode,
                                    location = location,
-                                   datumtrans = datumtrans,
+                                   datumtrans = self.datumtrans,
                                    getErrorMsg = True)
         
         if ret == 0:
@@ -2668,52 +2582,93 @@ class RegionDef(BaseClass, wx.Frame):
 
     def OnCancel(self, event):
         self.Destroy()
+        
+class TransList(wx.VListBox):
+    """!Creates a multiline listbox for selecting datum transforms"""
+        
+    def OnDrawItem(self, dc, rect, n):
+        if self.GetSelection() == n:
+            c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+        else:
+            c = self.GetForegroundColour()
+        dc.SetFont(self.GetFont())
+        dc.SetTextForeground(c)
+        dc.DrawLabel(self._getItemText(n), rect,
+                     wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
 
-class SelectDatumDialog(wx.Dialog):
+    def OnMeasureItem(self, n):
+        height = 0
+        if self._getItemText(n) == None: return
+        for line in self._getItemText(n).splitlines():
+            w, h = self.GetTextExtent(line)
+            height += h
+        return height + 5
+
+    def _getItemText(self, item):
+        global transformlist
+        transitem = transformlist[item]
+        if transitem.strip() !='':
+            return transitem
+
+
+class SelectTransformDialog(wx.Dialog):
     """!Dialog for selecting datum transformations"""
-    def __init__(self, parent, datums, title=_("Select datum transformation"),
-                 pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
+    def __init__(self, parent, transforms, title=_("Select datum transformation"),
+                 pos=wx.DefaultPosition, size=wx.DefaultSize, 
+                 style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER):
 
-        self.datums = datums
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
 
-        panel = wx.Panel(self, wx.ID_ANY)
-
+        global transformlist
+        self.CentreOnParent()
+        
+        # default transform number
+        self.transnum = 0
+        
+        panel = scrolled.ScrolledPanel(self, wx.ID_ANY)
         sizer = wx.BoxSizer(wx.VERTICAL)
+
+        #
+        # set panel sizer
+        #
+        panel.SetSizer(sizer)
+        panel.SetupScrolling()
 
         #
         # dialog body
         #
         bodyBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                               label=" %s " % _("List of datum transformations"))
-        bodySizer = wx.StaticBoxSizer(bodyBox, wx.HORIZONTAL)
-        gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+                               label=" %s " % _("Select from list of datum transformations"))
+        bodySizer = wx.StaticBoxSizer(bodyBox)
+
         
-        gridSizer.Add(item=wx.StaticText(parent=panel, label=_("Datums (select to see description):")),
-                      flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
+        transformlist = transforms.split('---')
+        tlistlen = len(transformlist)
+        
+        # calculate size for transform list
+        height = 0
+        width = 0
+        for line in transforms.splitlines():
+            w, h = self.GetTextExtent(line)
+            height += h
+            width = max(width, w)
+            
+        height = height + 5
+        if height > 400: height = 400
+        width = width + 5
+        if width > 400: width = 400
 
-        items = self.datums.keys()
-        utils.ListSortLower(items)
-        self.cdatums = wx.ComboBox(parent=panel, id=wx.ID_ANY,
-                              style=wx.CB_SIMPLE | wx.CB_READONLY,
-                              choices=items,
-                              size=(60,-1))
-        self.cdatums.SetSelection(0)
-        self.cdatums.Bind(wx.EVT_COMBOBOX, self.OnChangeDatum)
-        gridSizer.Add(item=self.cdatums, pos=(0, 1))
+        #
+        # VListBox for displaying and selecting transformations
+        #
+        self.translist = TransList(panel, id=-1, size=(width, height), style=wx.SUNKEN_BORDER)
+        self.translist.SetItemCount(tlistlen)
+        self.translist.SetSelection(1)
+        self.translist.SetFocus()
+        
+        self.Bind(wx.EVT_LISTBOX, self.ClickTrans, self.translist)
 
-        self.textWidth = self.GetSize()[0]
-
-        self.datumDesc = wx.StaticText(parent=panel, size=(self.textWidth,-1),
-                                label='\n'.join(self.datums[self.cdatums.GetStringSelection()]))
-                                
-        self.datumDesc.Wrap(self.textWidth)
-
-        gridSizer.Add(item=self.datumDesc, flag=wx.EXPAND,
-                      pos=(1, 0), span=(1, 2))
-
-        bodySizer.Add(item=gridSizer, proportion=1,
-                      flag=wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, border=5)
+        bodySizer.Add(item=self.translist, proportion=1, flag=wx.ALIGN_CENTER|wx.ALL|wx.EXPAND)
 
         #
         # buttons
@@ -2732,26 +2687,21 @@ class SelectDatumDialog(wx.Dialog):
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         sizer.Add(item=btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                  flag= wx.ALL | wx.ALIGN_RIGHT, border=5)
 
-        #
-        # set panel sizer
-        #
-        panel.SetSizer(sizer)
         sizer.Fit(panel)
+
+
         self.SetSize(self.GetBestSize())
-
-    def OnChangeDatum(self, event):
-        """!Datum changed, update description text"""
-        self.datumDesc.SetLabel('\n'.join(self.datums[event.GetString()]))
-#        self.textWidth = self.GetSize()[0]
-#        self.datumDesc.Wrap(self.textWidth)
-
-        event.Skip()
-
-    def GetDatum(self):
-        """!Get selected datum"""
-        return self.cdatums.GetStringSelection()
+        self.Layout()
+        
+    def ClickTrans(self, event):
+        """!Get the number of the datum transform to use in g.proj"""
+        self.transnum = event.GetSelection()
+    
+    def GetTransform(self):
+        self.transnum = self.translist.GetSelection()
+        return self.transnum
 
 if __name__ == "__main__":
     app = wx.PySimpleApp()
