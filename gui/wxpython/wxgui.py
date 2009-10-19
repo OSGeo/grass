@@ -23,7 +23,6 @@ import sys
 import os
 import time
 import traceback
-import types
 import re
 import string
 import getopt
