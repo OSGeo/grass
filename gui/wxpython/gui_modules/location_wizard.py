@@ -698,6 +698,12 @@ class ProjParamsPage(TitledPage):
                                 style = wx.RB_GROUP)
         self.radio2 = wx.RadioButton(parent=self, id=wx.ID_ANY,
                                 label=_("Ellipsoid only"))   
+        
+        # default button setting
+        if self.radio1.GetValue() == False and self.radio2.GetValue() == False:
+            self.radio1.SetValue(True)
+            self.SetNext(self.parent.datumpage)
+#            self.parent.sumpage.SetPrev(self.parent.datumpage)  
 
         radioSBSizer.Add(item=self.radio1,
                          flag=wx.ALIGN_LEFT | wx.RIGHT, border=20)
@@ -798,6 +804,7 @@ class ProjParamsPage(TitledPage):
                     self.Bind(wx.EVT_TEXT, self.OnParamEntry)
                     if paramgrp[1] == 'noask':
                         self.pentry[num].SetEditable(False)
+                        self.pentry[num].SetBackgroundColour(wx.LIGHT_GREY)
 
                 self.prjparamsizer.Add(item=label, pos=(num, 1),
                                flag=wx.ALIGN_RIGHT | wx.RIGHT, border=5)
@@ -817,7 +824,6 @@ class ProjParamsPage(TitledPage):
         event.Skip()
 
     def SetVal(self, event):
-        global coordsys
         if event.GetId() == self.radio1.GetId():
             self.SetNext(self.parent.datumpage)
             self.parent.sumpage.SetPrev(self.parent.datumpage)
@@ -861,7 +867,7 @@ class DatumPage(TitledPage):
             data.append([key, self.parent.datums[key][0], self.parent.datums[key][1]])
         self.datumlist = ItemList(self,
                                   data=data,
-                                  columns=[_('Code'), _('Description'), _('Ellipsoid')])
+                                  columns=[_('Code'), _('Ellipsoid'), _('Description')])
         self.datumlist.resizeLastColumn(10) 
         
         # layout
@@ -953,8 +959,8 @@ class DatumPage(TitledPage):
         if len(self.datum) == 0 or self.datum not in self.parent.datums:
             nextButton.Enable(False)
         else:
-            self.datumdesc = self.parent.datums[self.datum][0]
-            self.ellipsoid = self.parent.datums[self.datum][1]
+            self.ellipsoid = self.parent.datums[self.datum][0]
+            self.datumdesc = self.parent.datums[self.datum][1]
             self.datumparams = self.parent.datums[self.datum][2]
             for p in self.datumparams:
                 if p in ['dx=0.0','dy=0.0','dz=0.0']: self.datumparams.remove(p)
@@ -966,7 +972,7 @@ class DatumPage(TitledPage):
     def OnDSearch(self, event):
         str =  self.searchb.GetValue()
         try:
-            self.datum, self.datumdesc, self.ellipsoid = self.datumlist.Search(index=[0,1,2], pattern=str)
+            self.datum, self.ellipsoid, self.datumdesc = self.datumlist.Search(index=[0,1,2], pattern=str)
         except:
             self.datum = self.datumdesc = self.ellipsoid = ''
 
@@ -1270,12 +1276,6 @@ class EPSGPage(TitledPage):
                                     style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.lcode= self.MakeLabel(_("EPSG code:"),
                                     style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
-        self.lsearch = self.MakeLabel(_("Search in"),
-                                       style=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
-        self.csearch = wx.Choice(parent = self, id = wx.ID_ANY,
-                                 choices = [_("codes"), _("description"), _("parameters")])
-        self.csearch.SetStringSelection(_("description"))
-
         # text input
         epsgdir = utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
         self.tfile = self.MakeTextCtrl(text=epsgdir, size=(200,-1))
@@ -1283,7 +1283,7 @@ class EPSGPage(TitledPage):
 
         # buttons
         self.bbrowse = self.MakeButton(_("Browse"))
-        self.bbcodes = self.MakeButton(_("Reload EPSG Codes"))
+#        self.bbcodes = self.MakeButton(_("Reload EPSG Codes"))
 
         # search box
         self.searchb = wx.SearchCtrl(self, size=(200,-1),
@@ -1306,7 +1306,6 @@ class EPSGPage(TitledPage):
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 4))
-
         self.sizer.Add(item=self.lcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -1315,23 +1314,14 @@ class EPSGPage(TitledPage):
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 3))
-
-        self.sizer.Add(item=self.lsearch,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(3, 1))
-        self.sizer.Add(item=self.csearch,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(3, 2))
         self.sizer.Add(item=self.searchb,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 3))
-        self.sizer.Add(item=self.bbcodes,
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL |
-                       wx.ALL, border=5, pos=(3, 4))
+#        self.sizer.Add(item=self.bbcodes,
+#                       flag=wx.ALIGN_LEFT |
+#                       wx.ALIGN_CENTER_VERTICAL |
+#                       wx.ALL, border=5, pos=(3, 4))
 
         self.sizer.AddGrowableRow(4)
         self.sizer.Add(item=self.epsglist,
@@ -1340,7 +1330,7 @@ class EPSGPage(TitledPage):
 
         # events
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
-        self.bbcodes.Bind(wx.EVT_BUTTON, self.OnBrowseCodes)
+#        self.bbcodes.Bind(wx.EVT_BUTTON, self.OnBrowseCodes)
         self.tcode.Bind(wx.EVT_TEXT, self.OnText)
         self.tcode.Bind(wx.EVT_TEXT_ENTER, self.OnText)
         self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
@@ -1415,17 +1405,23 @@ class EPSGPage(TitledPage):
         
     def OnSearch(self, event):
         value =  self.searchb.GetValue()
-        if self.epsglist.GetItemCount() == 0:
-            event.Skip()
-            return
         
-        try:
-            self.epsgcode = self.epsglist.Search(index=[self.csearch.GetSelection()],
-                                                 pattern=value)[0]
-        except IndexError: # -> no item found
+        if value == '':
             self.epsgcode = None
+            self.epsgdesc = self.epsgparams = ''
             self.tcode.SetValue('')
             self.searchb.SetValue('')
+            self.OnBrowseCodes(None)
+        else:    
+            try:
+                self.epsgcode, self.epsgdesc, self.epsgparams = \
+                        self.epsglist.Search(index=[0,1,2], pattern=value)
+
+            except IndexError: # -> no item found
+                self.epsgcode = None
+                self.epsgdesc = self.epsgparams = ''
+                self.tcode.SetValue('')
+                self.searchb.SetValue('')
 
         event.Skip()
         
@@ -1887,7 +1883,7 @@ class LocationWizard(wx.Object):
             datumdesc = datumdesc.strip('"')
             paramlist = params.split()
             ellipsoid = paramlist.pop(0)
-            self.datums[datum] = (datumdesc.replace('_', ' '), ellipsoid, paramlist)
+            self.datums[datum] = (ellipsoid, datumdesc.replace('_', ' '), paramlist)
         f.close()
 
         # read ellipsiod definitions
@@ -2693,8 +2689,10 @@ class SelectTransformDialog(wx.Dialog):
         #
         bodyBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
                                label=" %s " % _("Select from list of datum transformations"))
-        bodySizer = wx.StaticBoxSizer(bodyBox)
-
+        bodySizer = wx.StaticBoxSizer(bodyBox)       
+        
+        # add no transform option
+        transforms = '---\n\n0\nDo not apply any datum transformations\n\n' + transforms
         
         transformlist = transforms.split('---')
         tlistlen = len(transformlist)
@@ -2751,9 +2749,12 @@ class SelectTransformDialog(wx.Dialog):
     def ClickTrans(self, event):
         """!Get the number of the datum transform to use in g.proj"""
         self.transnum = event.GetSelection()
+        self.transnum = self.transnum - 1
     
     def GetTransform(self):
+        """!Get the number of the datum transform to use in g.proj"""
         self.transnum = self.translist.GetSelection()
+        self.transnum = self.transnum - 1
         return self.transnum
 
 if __name__ == "__main__":
