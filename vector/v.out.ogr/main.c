@@ -52,7 +52,6 @@ int main(int argc, char *argv[])
     int doatt = 0, ncol = 0, colsqltype, colctype, keycol = -1;
     struct field_info *Fi = NULL;
     dbDriver *Driver = NULL;
-    dbHandle handle;
     dbTable *Table;
     dbString dbstring;
     dbColumn *Column;
@@ -345,16 +344,11 @@ int main(int argc, char *argv[])
 	    doatt = 0;
 	}
 	else {
-	    Driver = db_start_driver(Fi->driver);
-	    if (Driver == NULL)
-		G_fatal_error(_("Unable to start driver <%s>"), Fi->driver);
-
-	    db_init_handle(&handle);
-	    db_set_handle(&handle, Fi->database, NULL);
-	    if (db_open_database(Driver, &handle) != DB_OK)
+	    Driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	    if (!Driver)
 		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      Fi->database, Fi->driver);
-
+	    
 	    db_set_string(&dbstring, Fi->table);
 	    if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
 		G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
@@ -393,11 +387,7 @@ int main(int argc, char *argv[])
 		    keycol = i;
 		G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
 			db_get_column_name(Column), key1, key2, keycol);
-
-		Ogr_field =
-		    OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
-		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
-		OGR_Fld_Destroy(Ogr_field);
+		
 		if (!flags.nocat->answer) {
 		    Ogr_field =
 		        OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
@@ -405,16 +395,16 @@ int main(int argc, char *argv[])
 		    OGR_Fld_Destroy(Ogr_field);
 		} else {
 		    /* skip export of 'cat' field */
-		    if (strcmp (Fi->key,db_get_column_name(Column)) != 0) {
+		    if (strcmp (Fi->key, db_get_column_name(Column)) != 0) {
 			Ogr_field =
 			    OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
 			OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
 			OGR_Fld_Destroy(Ogr_field);
 		    }
-	    }
+		}
 	    }
 	    if (keycol == -1)
-		G_fatal_error(_("Key column '%s' not found"), Fi->key);
+		G_fatal_error(_("Key column <%s> not found"), Fi->key);
 	}
 
     }
@@ -552,8 +542,7 @@ int main(int argc, char *argv[])
 		nocatskip++;
 		continue;
 	    }
-
-
+	    
 	    /* Geometry */
 	    if (type == GV_LINE && flags.poly->answer) {
 		OGRGeometryH ring;

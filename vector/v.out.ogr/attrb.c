@@ -68,32 +68,34 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 
 			ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature,
 							  db_get_column_name(Column));
-
+			G_debug(2, "  column = %s -> fieldnum = %d", 
+				db_get_column_name(Column), ogrfieldnum);
+			
 			/* Reset */
 			OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
 
 			/* prevent writing NULL values */
 			if (!db_test_value_isnull(Value)) {
-				switch (colctype) {
-				case DB_C_TYPE_INT:
-					OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum,
-							db_get_value_int(Value));
-					break;
-				case DB_C_TYPE_DOUBLE:
-					OGR_F_SetFieldDouble(Ogr_feature, ogrfieldnum,
-							db_get_value_double(Value));
-					break;
-				case DB_C_TYPE_STRING:
-					OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
-							db_get_value_string(Value));
-					break;
-				case DB_C_TYPE_DATETIME:
-					db_convert_column_value_to_string(Column,
-									&dbstring);
-					OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
-							db_get_string(&dbstring));
-					break;
-				}
+			    switch (colctype) {
+			    case DB_C_TYPE_INT:
+				OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum,
+						      db_get_value_int(Value));
+				break;
+			    case DB_C_TYPE_DOUBLE:
+				OGR_F_SetFieldDouble(Ogr_feature, ogrfieldnum,
+						     db_get_value_double(Value));
+				break;
+			    case DB_C_TYPE_STRING:
+				OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
+						     db_get_value_string(Value));
+				break;
+			    case DB_C_TYPE_DATETIME:
+				db_convert_column_value_to_string(Column,
+								  &dbstring);
+				OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
+						     db_get_string(&dbstring));
+				break;
+			    }
 			}
 		    }
 		}
