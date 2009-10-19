@@ -594,4 +594,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     if not getErrorMsg:
         return stdout
     
+    if read and getErrorMsg:
+        return ret, stdout, stderr
+    
     return stdout, stderr
