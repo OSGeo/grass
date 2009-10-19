@@ -245,12 +245,11 @@ static int calc_mu(int *fds, double *mu, int bands)
 	if ((rowbuf = Rast_allocate_buf(maptype)) == NULL)
 	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
-	G_verbose_message(_("Computing means for band %d..."), i + 1);
+	G_message(_("Computing means for band %d..."), i + 1);
 	for (row = 0; row < rows; row++) {
 	    void *ptr = rowbuf;
 
-	    if(G_verbose() > G_verbose_std())
-		G_percent(row, rows - 1, 2);
+	    G_percent(row, rows - 1, 2);
 
 	    if (Rast_get_row(fds[i], rowbuf, row, maptype) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"), row);
@@ -295,13 +294,12 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 	if ((rowbuf1 = Rast_allocate_buf(maptype)) == NULL)
 	    G_fatal_error(_("Unable allocate memory for row buffer"));
 
-	G_verbose_message(_("Computing row %d of covariance matrix..."),
-			  j + 1);
+	G_message(_("Computing row %d (of %d) of covariance matrix..."),
+		  j + 1, bands);
 	for (row = 0; row < rows; row++) {
 	    void *ptr1, *ptr2;
 
-	    if(G_verbose() > G_verbose_std())
-		G_percent(row, rows - 1, 2);
+	    G_percent(row, rows - 1, 2);
 
 	    if (Rast_get_row(fds[j], rowbuf1, row, maptype) < 0)
 		G_fatal_error(_("Unable to read raster map row %d"), row);
@@ -384,7 +382,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 
 	sprintf(name, "%s.%d", out_basename, i + 1);
 
-	G_verbose_message(_("Transforming <%s>..."), name);
+	G_message(_("Transforming <%s>..."), name);
 
 	/* open a new file for output */
 	if (scale)
@@ -403,7 +401,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	    int row, col;
 
 	    if (scale && (pass == PASSES)) {
-		G_verbose_message(_("Rescaling <%s> to range %d,%d..."),
+		G_message(_("Rescaling <%s> to range %d,%d..."),
 			  name, scale_min, scale_max);
 
 		old_range = max - min;
@@ -413,8 +411,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	    for (row = 0; row < rows; row++) {
 		void *rowptr;
 
-		if(G_verbose() > G_verbose_std())
-		    G_percent(row, rows, 2);
+		G_percent(row, rows, 2);
 
 		/* reset d_buf */
 		for (col = 0; col < cols; col++)
@@ -516,8 +513,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		}
 	    }
 
-	    if(G_verbose() > G_verbose_std())
-		G_percent(row, rows, 2);
+	    G_percent(row, rows, 2);
 
 	    /* close output file */
 	    if (pass == PASSES)
