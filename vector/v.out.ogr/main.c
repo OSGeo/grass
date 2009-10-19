@@ -287,9 +287,16 @@ int main(int argc, char *argv[])
 		      options.dsn->answer);
 
     /* check if OGR layer exists */
-    if (!G_check_overwrite(argc, argv) && OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer)) {
-	G_fatal_error(_("OGR layer <%s> already exists in '%s'"),
-		options.layer->answer, options.dsn->answer);
+    if (OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer)) {
+	if (!G_check_overwrite(argc, argv)) {
+	    G_fatal_error(_("OGR layer <%s> already exists in '%s'"),
+			  options.layer->answer, options.dsn->answer);
+	}
+	else {
+	    G_warning(_("OGR layer <%s> already exists and will be overwritten"),
+		      options.layer->answer);
+	    papszLCO = CSLSetNameValue(papszLCO, "OVERWRITE", "YES");
+	}
     }
     
     /* check if the map is 3d */
