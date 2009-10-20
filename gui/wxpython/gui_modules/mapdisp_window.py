@@ -359,8 +359,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     return
                 i = 1
                 while i < len(coords):
-                    pdc.DrawLine(wx.Point(coords[i-1][0], coords[i-1][1]),
-                                 wx.Point(coords[i][0], coords[i][1]))
+                    pdc.DrawLinePoint(wx.Point(coords[i-1][0], coords[i-1][1]),
+                                      wx.Point(coords[i][0], coords[i][1]))
                     i += 1
 
                 # get bounding rectangle for polyline
