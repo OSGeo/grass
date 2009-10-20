@@ -719,14 +719,30 @@ class ProjParamsPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         
     def OnParamEntry(self, event):
-        self.pval[event.GetId() - 2000] = event.GetString()
+        num = 0
+        # deal with weird spin control text event behavior, sending dup. event with negative number        
+        if event.GetId() >= 2000:
+            num = event.GetId() - 2000
+        else:
+            pass
+        val = event.GetString()
+        if self.ptype[num] == 'zone':
+            if val.isdigit():
+                if int(val) < 0: self.pentry[num].SetValue(0)
+                if int(val) > 60: self.pentry[num].SetValue(60)
+            else: 
+                self.pentry[num].SetValue(0)
+            
+        self.pval[num] = val
+        
+        event.Skip()
 
     def OnPageChange(self,event=None):
         if event.GetDirection():
             self.p4projparams = ''
             for num in range(self.pcount + 1):
                 if self.ptype[num] == 'bool':
-                    if self.pval[num] == 'N':
+                    if self.pval[num] == 'No':
                         continue
                     else:
                         self.p4projparams += (' +' + self.proj4param[num])
@@ -781,25 +797,27 @@ class ProjParamsPage(TitledPage):
                 self.pdesc[num] = self.parent.paramdesc[paramgrp[0]][2]
 
                 # default values
-                if self.ptype[num] == 'bool': self.pval[num] = 'N'
-                elif self.ptype[num] == 'zone': self.pval[num] = '30' 
+                if self.ptype[num] == 'bool': self.pval[num] = 'No'
+                elif self.ptype[num] == 'zone': 
+                    self.pval[num] = '30' 
+                    self.pdesc[num] += ' (0-60)'
                 else: self.pval[num] = paramgrp[2]
 
                 label = wx.StaticText(self.panel, id=1000+num, label=self.pdesc[num], 
                                       style=wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE)
                 if self.ptype[num] == 'bool':
                     self.pentry[num] = wx.Choice(self.panel, id=2000+num, size=(100,-1), 
-                                                 choices = ['N','Y'])  
+                                                 choices = ['No','Yes'])  
                     self.pentry[num].SetStringSelection(self.pval[num])
                     self.Bind(wx.EVT_CHOICE, self.OnParamEntry)
                 elif self.ptype[num] == 'zone':
-                    zone = []
-                    for i in range(1, 61):
-                        zone.append(str(i))
-                    self.pentry[num] = wx.Choice(self.panel, id=2000+num, size=(100,-1), 
-                                                 choices = zone)  
-                    self.pentry[num].SetStringSelection(self.pval[num])
-                    self.Bind(wx.EVT_CHOICE, self.OnParamEntry)
+                    self.pentry[num] = wx.SpinCtrl(self.panel, id=2000+num,
+                                                   value='30',
+                                                   size=(100,-1), 
+                                                   style=wx.SP_ARROW_KEYS | wx.SP_WRAP,
+                                                   min=0, max=60, initial=30)  
+                    self.pentry[num].SetValue(int(self.pval[num]))
+                    self.Bind(wx.EVT_TEXT, self.OnParamEntry)
                 else:
                     self.pentry[num] = wx.TextCtrl(self.panel, id=2000+num, value=self.pval[num],
                                                    size=(100,-1))
@@ -809,9 +827,13 @@ class ProjParamsPage(TitledPage):
                         self.pentry[num].SetBackgroundColour(wx.LIGHT_GREY)
 
                 self.prjparamsizer.Add(item=label, pos=(num, 1),
-                               flag=wx.ALIGN_RIGHT | wx.RIGHT, border=5)
+                               flag=wx.ALIGN_RIGHT | 
+                               wx.ALIGN_CENTER_VERTICAL |
+                               wx.RIGHT, border=5)
                 self.prjparamsizer.Add(item=self.pentry[num], pos=(num, 2),
-                               flag=wx.ALIGN_LEFT | wx.LEFT, border=5)                
+                               flag=wx.ALIGN_LEFT | 
+                               wx.ALIGN_CENTER_VERTICAL |
+                               wx.LEFT, border=5)                
                 num += 1    
                 
         self.panel.SetSize(self.panel.GetBestSize())
