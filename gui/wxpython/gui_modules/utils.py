@@ -117,9 +117,9 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
         mapname = params[0][2]
         mapset = ''
         if fullyQualified and '@' not in mapname:
-            if layerType in ('raster', 'vector', '3d-raster'):
+            if layerType in ('raster', 'vector', '3d-raster', 'rgb', 'his'):
                 try:
-                    if layerType == 'raster':
+                    if layerType in ('raster', 'rgb', 'his'):
                         findType = 'cell'
                     else:
                         findType = layerType
