@@ -1,5 +1,7 @@
 #include "Gwater.h"
 #include <unistd.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
 
 int close_array_seg(void)
 {
@@ -7,6 +9,7 @@ int close_array_seg(void)
     int incr, max, red, green, blue, rd, gr, bl, flag;
     int c, r, map_fd;
     CELL *cellrow, value;
+    char cvalue;
     CSEG *theseg;
 
     if (seg_flag || bas_flag || haf_flag) {
@@ -72,17 +75,22 @@ int close_array_seg(void)
 
     /* stream segments map */
     if (seg_flag) {
+	G_message(_("Closing stream segments map"));
 	cellrow = (CELL *) G_malloc(ncols * sizeof(CELL));
 	map_fd = Rast_open_c_new(seg_name);
 	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
 	    Rast_set_c_null_value(cellrow, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {
-		bseg_get(&swale, &value, r, c);
-		if (value)
+		/* bseg_get(&swale, &cvalue, r, c); */
+		/* if (cvalue) */
+		bseg_get(&bitflags, &cvalue, r, c);
+		if (FLAG_GET(cvalue, SWALEFLAG))
 		    cseg_get(&bas, &(cellrow[c]), r, c);
 	    }
 	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
+	G_percent(nrows, nrows, 1);    /* finish it */
 	G_free(cellrow);
 	Rast_close(map_fd);
 	Rast_write_colors(seg_name, this_mapset, &colors);
@@ -90,12 +98,14 @@ int close_array_seg(void)
 
     /* basins map */
     if (bas_flag) {
+	G_message(_("Closing basins map"));
 	cseg_write_cellfile(&bas, bas_name);
 	Rast_write_colors(bas_name, this_mapset, &colors);
     }
 
     /* half.basins map */
     if (haf_flag) {
+	G_message(_("Closing half basins map"));
 	cseg_write_cellfile(&haf, haf_name);
 	Rast_write_colors(haf_name, this_mapset, &colors);
     }
@@ -106,6 +116,9 @@ int close_array_seg(void)
     cseg_close(&bas);
     if (arm_flag)
 	fclose(fp);
+
+    bseg_close(&bitflags);
+
     close_maps();
 
     return 0;

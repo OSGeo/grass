@@ -9,6 +9,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
     CELL downdir, asp_value, hih_ele, new_ele, aspect, value;
     DCELL dvalue, max_drain;	/* flow acc is now DCELL */
     SHORT updir, riteflag, leftflag, thisdir;
+    WAT_ALT wa;
 
     while (1) {
 	max_drain = -1;
@@ -18,10 +19,11 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 
 		    cseg_get(&asp, &aspect, r, c);
 		    if (aspect == drain[rr][cc]) {
-			dseg_get(&wat, &dvalue, r, c);
+			seg_get(&watalt, (char *)&wa, r, c);
+			dvalue = wa.wat;
 			if (dvalue < 0)
 			    dvalue = -dvalue;
-			if ((dvalue - max_drain) > 5E-8f) {	/* floating point comparison problem workaround */
+			if ((dvalue - max_drain) > 5E-8f) {
 			    uprow = r;
 			    upcol = c;
 			    max_drain = dvalue;

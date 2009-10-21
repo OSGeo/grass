@@ -42,13 +42,13 @@ SSEG {
 int bseg_close(BSEG *);
 
 /* bseg_get.c */
-int bseg_get(BSEG *, CELL *, int, int);
+int bseg_get(BSEG *, char *, int, int);
 
 /* bseg_open.c */
 int bseg_open(BSEG *, int, int, int);
 
 /* bseg_put.c */
-int bseg_put(BSEG *, CELL *, int, int);
+int bseg_put(BSEG *, char *, int, int);
 
 /* bseg_read.c */
 int bseg_read_cell(BSEG *, char *, char *);

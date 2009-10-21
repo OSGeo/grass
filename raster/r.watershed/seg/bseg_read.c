@@ -12,6 +12,7 @@ int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
     int map_fd;
     char msg[100];
     CELL *buffer;
+    char cbuf;
 
     bseg->name = NULL;
     bseg->mapset = NULL;
@@ -36,7 +37,8 @@ int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
 	    return -2;
 	}
 	for (col = ncols; col >= 0; col--) {
-	    bseg_put(bseg, &(buffer[col]), row, col);
+	    cbuf = (char) buffer[col];
+	    bseg_put(bseg, &cbuf, row, col);
 	}
     }
 

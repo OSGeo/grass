@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <unistd.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "Gwater.h"
@@ -7,47 +5,38 @@
 
 int do_astar(void)
 {
-    POINT point;
     int doer, count;
-    SHORT upr, upc, r, c, ct_dir;
-    CELL work_val, alt_val, alt_up, asp_up;
-    DCELL wat_val;
-    CELL in_val, drain_val;
-    HEAP heap_pos;
+    SHORT upr, upc, r = -1, c = -1, ct_dir;
+    CELL alt_val, alt_up;
+    CELL asp_val;
+    char flag_value; 
+    HEAP_PNT heap_p;
 
-    /* double slope; */
+    G_message(_("SECTION 2: A* Search."));
 
-    G_message(_("SECTION 2: A * Search."));
+    if (heap_size == 0)
+	G_fatal_error(_("No seeds for A* Search"));
+	
+    G_debug(1, "heap size %d, points %d", heap_size, do_points);
 
     count = 0;
-    seg_get(&heap_index, (char *)&heap_pos, 0, 1);
-    first_astar = heap_pos.point;
 
-    /* A * Search: downhill path through all not masked cells */
-    while (first_astar != -1) {
+    doer = do_points - 1;
+
+    /* A * Search
+     * determine downhill path through all not masked cells and
+     * set drainage direction */
+    while (heap_size > 0) {
 	G_percent(count++, do_points, 1);
 
-	seg_get(&heap_index, (char *)&heap_pos, 0, 1);
-	doer = heap_pos.point;
+	/* drop next point from heap */
+	heap_p = drop_pt();
 
-	seg_get(&astar_pts, (char *)&point, 0, doer);
+	r = heap_p.pnt.r;
+	c = heap_p.pnt.c;
+	G_debug(3, "heap size %d, r %d, c %d", heap_size, r, c);
 
-	/* drop astar_pts[doer] from heap */
-	drop_pt();
-
-	seg_get(&heap_index, (char *)&heap_pos, 0, 1);
-	first_astar = heap_pos.point;
-
-	point.nxt = first_cum;
-	seg_put(&astar_pts, (char *)&point, 0, doer);
-
-	first_cum = doer;
-	r = point.r;
-	c = point.c;
-
-	bseg_put(&worked, &one, r, c);
-	/* cseg_get(&alt, &alt_val, r, c); */
-	alt_val = heap_pos.ele;
+	alt_val = heap_p.ele;
 
 	/* check all neighbours, breadth first search */
 	for (ct_dir = 0; ct_dir < sides; ct_dir++) {
@@ -56,215 +45,166 @@ int do_astar(void)
 	    upc = c + nextdc[ct_dir];
 	    /* check that upr, upc are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
-		/* check if neighbour is in the list */
-		/* if not, add as new point */
-		bseg_get(&in_list, &in_val, upr, upc);
-		if (in_val == 0) {
+		/* put neighbour in search list if not yet in */
+		bseg_get(&bitflags, &flag_value, upr, upc);
+		if (!FLAG_GET(flag_value, INLISTFLAG)) {
 		    cseg_get(&alt, &alt_up, upr, upc);
-		    add_pt(upr, upc, alt_up, alt_val);
 		    /* flow direction is set here */
-		    drain_val = drain[upr - r + 1][upc - c + 1];
-		    cseg_put(&asp, &drain_val, upr, upc);
+		    asp_val = drain[upr - r + 1][upc - c + 1];
+		    add_pt(upr, upc, alt_up, asp_val, 0);
+		    cseg_put(&asp, &asp_val, upr, upc);
 		}
-		else {
-		    /* check if neighbour has not been worked on,
-		     * update values for asp and wat */
-		    bseg_get(&worked, &work_val, upr, upc);
-		    if (!work_val) {
-			cseg_get(&asp, &asp_up, upr, upc);
-			if (asp_up < 0) {
-			    drain_val = drain[upr - r + 1][upc - c + 1];
-			    cseg_put(&asp, &drain_val, upr, upc);
-			    dseg_get(&wat, &wat_val, r, c);
-			    if (wat_val > 0) {
-				wat_val = -wat_val;
-				dseg_put(&wat, &wat_val, r, c);
-			    }
-			    /* cseg_get(&alt, &alt_up, upr, upc); */
-			    /* replace(upr, upc, r, c); */	/* alt_up used to be */
-			    /* slope = get_slope (upr, upc, r, c, alt_up, alt_val);
-			       dseg_put (&slp, &slope, upr, upc); */
-			}
+		/* in list, not worked. is it edge ? */
+		else if (!FLAG_GET(flag_value, WORKEDFLAG) && FLAG_GET(flag_value, EDGEFLAG)){
+		    cseg_get(&asp, &asp_val, upr, upc);
+		    if (asp_val < 0) {
+			/* adjust flow direction for edge cell */
+			asp_val = drain[upr - r + 1][upc - c + 1];
+			cseg_put(&asp, &asp_val, upr, upc);
+			heap_p.pnt.guessed = 1;
 		    }
 		}
 	    }
 	}
+	cseg_get(&asp, &asp_val, r, c);
+	heap_p.pnt.asp = asp_val;
+	seg_put(&astar_pts, (char *)&heap_p.pnt, 0, doer);
+	doer--;
+	bseg_get(&bitflags, &flag_value, r, c);
+	FLAG_SET(flag_value, WORKEDFLAG);
+	bseg_put(&bitflags, &flag_value, r, c);
     }
+    if (doer != -1)
+	G_fatal_error(_("bug in A* Search: doer %d heap size %d count %d"), doer, heap_size, count);
 
-    if (mfd == 0)
-	bseg_close(&worked);
-
-    bseg_close(&in_list);
-    seg_close(&heap_index);
+    seg_close(&search_heap);
 
     G_percent(count, do_points, 1);	/* finish it */
+
     return 0;
 }
 
-/* new add point routine for min heap */
-int add_pt(SHORT r, SHORT c, CELL ele, CELL downe)
+/* compare two heap points */
+/* return 1 if a < b else 0 */
+int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b)
 {
-    POINT point;
-    HEAP heap_pos;
+    if (a->ele < b->ele)
+	return 1;
+    else if (a->ele == b->ele) {
+	if (a->added < b->added)
+	    return 1;
+    }
+    return 0;
+}
 
-    /* double slp_value; */
+/* add point routine for min heap */
+int add_pt(SHORT r, SHORT c, CELL ele, char asp, int is_edge)
+{
+    HEAP_PNT heap_p;
+    char flag_value;
 
-    /* slp_value = get_slope(r, c, downr, downc, ele, downe);
-       dseg_put (&slp, &slp_value, r, c); */
-    bseg_put(&in_list, &one, r, c);
+    bseg_get(&bitflags, &flag_value, r, c);
+    if (is_edge) {
+	FLAG_SET(flag_value, EDGEFLAG);
+	heap_p.pnt.guessed = 1;
+    }
+    else {
+	heap_p.pnt.guessed = 0;
+    }
+    FLAG_SET(flag_value, INLISTFLAG);
+    bseg_put(&bitflags, &flag_value, r, c);
 
     /* add point to next free position */
 
     heap_size++;
 
-    if (heap_size > do_points)
-	G_fatal_error(_("heapsize too large"));
-
-    heap_pos.point = nxt_avail_pt;
-    heap_pos.ele = ele;
-    seg_put(&heap_index, (char *)&heap_pos, 0, heap_size);
-
-    point.r = r;
-    point.c = c;
-/*    point.downr = downr;
-    point.downc = downc; */
-
-    seg_put(&astar_pts, (char *)&point, 0, nxt_avail_pt);
-
-    /* cseg_put(&pnt_index, &nxt_avail_pt, r, c); */
+    heap_p.added = nxt_avail_pt;
+    heap_p.ele = ele;
+    heap_p.pnt.r = r;
+    heap_p.pnt.c = c;
+    heap_p.pnt.asp = asp;
 
     nxt_avail_pt++;
 
     /* sift up: move new point towards top of heap */
+    sift_up(heap_size, heap_p);
 
-    sift_up(heap_size, ele);
-
-    return 0;
+    return 1;
 }
 
 /* drop point routine for min heap */
-int drop_pt(void)
+HEAP_PNT drop_pt(void)
 {
     int child, childr, parent;
-    int childp; /* , childrp */
-    CELL ele; /* , eler */
     int i;
-    HEAP heap_pos;
+    HEAP_PNT child_p, childr_p, last_p, root_p;
 
-    if (heap_size == 1) {
-	parent = -1;
-	heap_pos.point = -1;
-	heap_pos.ele = 0;
-	seg_put(&heap_index, (char *)&heap_pos, 0, 1);
-	heap_size = 0;
-	return 0;
-    }
+    seg_get(&search_heap, (char *)&last_p, 0, heap_size);
+    seg_get(&search_heap, (char *)&root_p, 0, 1);
 
-    /* start with heap root */
+    /* sift down */
     parent = 1;
-
-    /* sift down: move hole back towards bottom of heap */
-    /* sift-down routine customised for A * Search logic */
-
-    while ((child = GET_CHILD(parent)) <= heap_size) {
+    while ((child = GET_CHILD(parent)) < heap_size) {
 	/* select child with lower ele, if both are equal, older child
 	 * older child is older startpoint for flow path, important */
-	seg_get(&heap_index, (char *)&heap_pos, 0, child);
-	childp = heap_pos.point;
-	ele = heap_pos.ele;
+	
+	seg_get(&search_heap, (char *)&child_p, 0, child);
 	if (child < heap_size) {
 	    childr = child + 1;
-	    i = child + 3;
-	    while (childr <= heap_size && childr < i) {
-		seg_get(&heap_index, (char *)&heap_pos, 0, childr);
-		/* childrp = heap_pos.point;
-		eler = heap_pos.ele; */
-		if (heap_pos.ele < ele) {
+	    i = child + 4;
+	    while (childr < i && childr < heap_size) {
+		/* get smallest child */
+		seg_get(&search_heap, (char *)&childr_p, 0, childr);
+		if (cmp_pnt(&childr_p, &child_p)) {
 		    child = childr;
-		    childp = heap_pos.point;
-		    ele = heap_pos.ele;
-		}
-		/* make sure we get the oldest child */
-		else if (ele == heap_pos.ele && childp > heap_pos.point) {
-		    child = childr;
-		    childp = heap_pos.point;
+		    child_p = childr_p;
 		}
 		childr++;
-		/* i++; */
 	    }
 	}
 
+	if (cmp_pnt(&last_p, &child_p)) {
+	    break;
+	}
+
 	/* move hole down */
-	heap_pos.point = childp;
-	heap_pos.ele = ele;
-	seg_put(&heap_index, (char *)&heap_pos, 0, parent);
+	seg_put(&search_heap, (char *)&child_p, 0, parent);
 	parent = child;
-
     }
 
-    /* hole is in lowest layer, move to heap end */
-    if (parent < heap_size) {
-	seg_get(&heap_index, (char *)&heap_pos, 0, heap_size);
-	seg_put(&heap_index, (char *)&heap_pos, 0, parent);
-
-	ele = heap_pos.ele;
-
-	/* sift up last swapped point, only necessary if hole moved to heap end */
-	sift_up(parent, ele);
-
-    }
+    seg_put(&search_heap, (char *)&last_p, 0, parent);
 
     /* the actual drop */
     heap_size--;
 
-    return 0;
-
+    return root_p;
 }
 
 /* standard sift-up routine for d-ary min heap */
-int sift_up(int start, CELL ele)
+int sift_up(int start, HEAP_PNT child_p)
 {
-    int parent, child, childp; /* parentp, */
-    /* CELL elep; */
-    HEAP heap_pos;
+    int parent, child; /* parentp, */
+    HEAP_PNT heap_p;
 
     child = start;
-    seg_get(&heap_index, (char *)&heap_pos, 0, child);
-    childp = heap_pos.point;
 
     while (child > 1) {
 	parent = GET_PARENT(child);
-	seg_get(&heap_index, (char *)&heap_pos, 0, parent);
-	/* parentp = heap_pos.point;
-	elep = heap_pos.ele; */
+	seg_get(&search_heap, (char *)&heap_p, 0, parent);
 
-	/* parent ele higher */
-	if (heap_pos.ele > ele) {
-
-	    /* push parent point down */
-	    seg_put(&heap_index, (char *)&heap_pos, 0, child);
+	/* push parent point down if child is smaller */
+	if (cmp_pnt(&child_p, &heap_p)) {
+	    seg_put(&search_heap, (char *)&heap_p, 0, child);
 	    child = parent;
-
 	}
-	/* same ele, but parent is younger */
-	else if (heap_pos.ele == ele && heap_pos.point > childp) {
-
-	    /* push parent point down */
-	    seg_put(&heap_index, (char *)&heap_pos, 0, child);
-	    child = parent;
-
-	}
+	/* no more sifting up, found slot for child */
 	else
-	    /* no more sifting up, found new slot for child */
 	    break;
     }
 
-    /* no more sifting up, found new slot for child */
-    if (child < start) {
-	heap_pos.point = childp;
-	heap_pos.ele = ele;
-	seg_put(&heap_index, (char *)&heap_pos, 0, child);
-    }
+    /* add child to heap */
+    seg_put(&search_heap, (char *)&child_p, 0, child);
+
     return 0;
 }
 
@@ -282,25 +222,4 @@ get_slope(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
     if (slope < MIN_SLOPE)
 	return (MIN_SLOPE);
     return (slope);
-}
-
-int replace(SHORT upr, SHORT upc, SHORT r, SHORT c)
-{				/* ele was in there */
-    /* CELL ele;  */
-    int now;
-    POINT point;
-
-    now = 0;
-
-    /* cseg_get(&pnt_index, &now, upr, upc); */
-    seg_get(&astar_pts, (char *)&point, 0, now);
-    if (point.r != upr || point.c != upc) {
-	G_warning("pnt_index incorrect!");
-	return 1;
-    }
-/*    point.downr = r;
-    point.downc = c; */
-    seg_put(&astar_pts, (char *)&point, 0, now);
-
-    return 0;
 }

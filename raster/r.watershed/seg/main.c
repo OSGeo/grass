@@ -26,18 +26,19 @@
 struct Cell_head window;
 
 int mfd, c_fac, abs_acc, ele_scale;
-SSEG heap_index;
+SSEG search_heap;
 int heap_size;
 int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 SHORT nrows, ncols;
 double half_res, diag, max_length, dep_slope;
 int bas_thres, tot_parts;
 SSEG astar_pts;
-BSEG worked, in_list, s_b, swale;
+BSEG bitflags, s_b;
 CSEG dis, alt, asp, bas, haf, r_h, dep;
-DSEG wat;
+SSEG watalt;
 DSEG slp, s_l, s_g, l_s, ril;
-CELL one, zero;
+double segs_mb;
+char zero, one;
 double ril_value, d_zero, d_one;
 SHORT sides;
 SHORT drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
@@ -64,8 +65,10 @@ FILE *fp;
 
 int main(int argc, char *argv[])
 {
-    one = 1;
+    int num_open_segs;
+    
     zero = 0;
+    one = 1;
     d_zero = 0.0;
     d_one = 1.0;
     init_vars(argc, argv);
@@ -76,11 +79,14 @@ int main(int argc, char *argv[])
     else {
 	do_cum();
     }
+    if (st_flag && mfd) {
+	do_stream();
+    }
     if (sg_flag || ls_flag) {
 	sg_factor();
     }
 
-    if (bas_thres <= 0) {
+    if (!seg_flag && !bas_flag && !haf_flag) {
 	G_message(_("SECTION %d: Closing Maps."), tot_parts);
 	close_maps();
     }
@@ -88,8 +94,12 @@ int main(int argc, char *argv[])
 	if (arm_flag) {
 	    fp = fopen(arm_name, "w");
 	}
-	cseg_open(&bas, SROW, SCOL, 4);
-	cseg_open(&haf, SROW, SCOL, 4);
+	num_open_segs = segs_mb / 0.122;
+	if (num_open_segs > (ncols / SCOL + 1) * (nrows / SROW + 1)) {
+	    num_open_segs = (ncols / SCOL + 1) * (nrows / SROW + 1);
+	}
+	cseg_open(&bas, SROW, SCOL, num_open_segs);
+	cseg_open(&haf, SROW, SCOL, num_open_segs);
 	G_message(_("SECTION %d: Watershed determination."), tot_parts - 1);
 	find_pourpts();
 	G_message(_("SECTION %d: Closing Maps."), tot_parts);

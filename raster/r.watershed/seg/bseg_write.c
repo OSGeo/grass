@@ -10,7 +10,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
     int row, nrows;
     int col, ncols;
     CELL *buffer;
-    CELL value;
+    char value;
 
     map_fd = Rast_open_c_new(map_name);
     if (map_fd < 0) {
@@ -21,6 +21,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
     ncols = G_window_cols();
     buffer = Rast_allocate_c_buf();
     for (row = 0; row < nrows; row++) {
+	G_percent(row, nrows, 1);
 	for (col = 0; col < ncols; col++) {
 	    bseg_get(bseg, &value, row, col);
 	    buffer[col] = value;
@@ -33,6 +34,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
 	    return -2;
 	}
     }
+    G_percent(row, nrows, 1);    /* finish it */
     G_free(buffer);
     Rast_close(map_fd);
     return 0;
