@@ -6,11 +6,11 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 {
     int r, rr, c, cc, ct, new_r[9], new_c[9];
     CELL downdir, direction, asp_value, value, new_elev;
+    char cvalue;
     SHORT oldupdir, riteflag, leftflag, thisdir;
 
     for (;;) {
 	cseg_put(&bas, &basin_num, row, col);
-	bseg_put(&swale, &one, row, col);
 	cseg_get(&asp, &asp_value, row, col);
 	if (asp_value < 0)
 	    asp_value = -asp_value;
@@ -22,8 +22,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 		    if (value < -1)
 			value = -value;
 		    if (value == drain[rr][cc]) {
-			bseg_get(&swale, &value, r, c);
-			if (value) {
+			bseg_get(&bitflags, &cvalue, r, c);
+			if (FLAG_GET(cvalue, SWALEFLAG)) {
 			    new_r[++ct] = r;
 			    new_c[ct] = c;
 			}

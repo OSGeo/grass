@@ -6,64 +6,54 @@ int close_maps(void)
 {
     struct Colors colors;
     int r, c;
-    CELL is_swale;
     DCELL *dbuf = NULL;
     int fd;
     struct FPRange accRange;
     DCELL min, max;
     DCELL clr_min, clr_max;
     DCELL sum, sum_sqr, stddev, lstddev, dvalue;
+    WAT_ALT wa;
 
-    dseg_close(&slp);
+    /* bseg_close(&swale); */
     cseg_close(&alt);
     if (wat_flag) {
+	G_message(_("Closing accumulation map"));
 	sum = sum_sqr = stddev = 0.0;
 	dbuf = Rast_allocate_d_buf();
 	if (abs_acc) {
 	    G_warning("Writing out only positive flow accumulation values.");
 	    G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
-
-	    fd = Rast_open_new(wat_name, DCELL_TYPE);
-	    if (fd < 0) {
-		G_warning(_("unable to open new accum map layer."));
-	    }
-	    for (r = 0; r < nrows; r++) {
-		Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
-		for (c = 0; c < ncols; c++) {
-		    dseg_get(&wat, &dvalue, r, c);
-		    if (Rast_is_d_null_value(&dvalue) == 0 && dvalue) {
-			dvalue = ABS(dvalue);
-			dbuf[c] = dvalue;
-			sum += dvalue;
-			sum_sqr += dvalue * dvalue;
-		    }
-		}
-		Rast_put_row(fd, dbuf, DCELL_TYPE);
-	    }
-	    if (Rast_close(fd) < 0)
-		G_warning(_("Close failed."));
 	}
-	else {
-	    dseg_write_cellfile(&wat, wat_name);
 
-	    /* get standard deviation */
-	    fd = Rast_open_old(wat_name, "");
-	    if (fd < 0) {
-		G_fatal_error(_("unable to open flow accumulation map layer"));
-	    }
-
-	    for (r = 0; r < nrows; r++) {
-		Rast_get_d_row(fd, dbuf, r);
-		for (c = 0; c < ncols; c++) {
-		    dvalue = dbuf[c];
-		    if (Rast_is_d_null_value(&dvalue) == 0 && dvalue) {
-			dvalue = ABS(dvalue);
+	fd = Rast_open_new(wat_name, DCELL_TYPE);
+	if (fd < 0) {
+	    G_warning(_("unable to open new accum map layer."));
+	}
+	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
+	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+	    for (c = 0; c < ncols; c++) {
+		/* dseg_get(&wat, &dvalue, r, c); */
+		seg_get(&watalt, (char *)&wa, r, c);
+		dvalue = wa.wat;
+		if (Rast_is_d_null_value(&dvalue) == 0 && dvalue) {
+		    if (abs_acc) {
+			dvalue = fabs(dvalue);
 			sum += dvalue;
-			sum_sqr += dvalue * dvalue;
 		    }
+		    else
+			sum += fabs(dvalue);
+
+		    dbuf[c] = dvalue;
+		    sum_sqr += dvalue * dvalue;
 		}
 	    }
+	    Rast_put_row(fd, dbuf, DCELL_TYPE);
 	}
+	G_percent(r, nrows, 1);    /* finish it */
+
+	if (Rast_close(fd) < 0)
+	    G_warning(_("Close failed."));
 
 	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
 	G_debug(1, "stddev: %f", stddev);
@@ -132,55 +122,31 @@ int close_maps(void)
 	}
 	Rast_write_colors(wat_name, this_mapset, &colors);
     }
+    seg_close(&watalt);
     if (asp_flag) {
+	G_message(_("Closing flow direction map"));
 	cseg_write_cellfile(&asp, asp_name);
 	Rast_init_colors(&colors);
 	Rast_make_grey_scale_colors(&colors, 1, 8);
 	Rast_write_colors(asp_name, this_mapset, &colors);
     }
     cseg_close(&asp);
-    /* visual ouput no longer needed */
-    if (dis_flag) {
-	if (bas_thres <= 0)
-	    bas_thres = 60;
-	for (r = 0; r < nrows; r++) {
-	    for (c = 0; c < ncols; c++) {
-		dseg_get(&wat, &dvalue, r, c);
-		if (dvalue < 0) {
-		    dvalue = 0;
-		    dseg_put(&wat, &dvalue, r, c);
-		}
-		else {
-		    bseg_get(&swale, &is_swale, r, c);
-		    if (is_swale) {
-			dvalue = bas_thres;
-			dseg_put(&wat, &dvalue, r, c);
-		    }
-		}
-	    }
-	}
-	dseg_write_cellfile(&wat, dis_name);
-	Rast_init_colors(&colors);
-	Rast_make_rainbow_colors(&colors, 1, 120);
-	Rast_write_colors(dis_name, this_mapset, &colors);
-    }
-    /* error in gislib.a
-       Rast_free_colors(&colors);
-     */
-    dseg_close(&wat);
     if (ls_flag) {
+	G_message(_("Closing LS map"));
 	dseg_write_cellfile(&l_s, ls_name);
 	dseg_close(&l_s);
     }
-    bseg_close(&swale);
     if (sl_flag) {
+	G_message(_("Closing SL map"));
 	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
 	    for (c = 0; c < ncols; c++) {
 		dseg_get(&s_l, &dvalue, r, c);
 		if (dvalue > max_length)
 		    dseg_put(&s_l, &max_length, r, c);
 	    }
 	}
+	G_percent(r, nrows, 1);    /* finish it */
 	dseg_write_cellfile(&s_l, sl_name);
     }
     if (sl_flag || ls_flag || sg_flag)

@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include "Gwater.h"
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -11,24 +10,27 @@ int ele_round(double);
 int init_vars(int argc, char *argv[])
 {
     SHORT r, c;
-    int fd, num_cseg_total, num_open_segs;
-    int seg_rows, seg_cols;
-    double segs_mb;
+    int ele_fd, fd, wat_fd;
+    int seg_rows, seg_cols, num_cseg_total, num_open_segs, num_open_array_segs;
 
     /* int page_block, num_cseg; */
     int max_bytes;
-    CELL *buf, alt_value, asp_value, worked_value, block_value;
+    CELL *buf, alt_value, asp_value, block_value;
+    char worked_value, flag_value;
     DCELL wat_value;
     DCELL dvalue;
+    WAT_ALT wa;
     char MASK_flag;
-    void *elebuf, *ptr;
-    int ele_map_type;
-    size_t ele_size;
+    void *elebuf, *ptr, *watbuf, *watptr;
+    int ele_map_type, wat_map_type;
+    size_t ele_size, wat_size;
+    CELL cellone = 1;
+    int ct_dir, r_nbr, c_nbr;
 
     G_gisinit(argv[0]);
     ele_flag = wat_flag = asp_flag = pit_flag = run_flag = ril_flag = 0;
-    ob_flag = bas_flag = seg_flag = haf_flag = arm_flag = dis_flag = 0;
-    zero = sl_flag = sg_flag = ls_flag = er_flag = bas_thres = 0;
+    st_flag = bas_flag = seg_flag = haf_flag = arm_flag = dis_flag = 0;
+    ob_flag = sl_flag = sg_flag = ls_flag = er_flag = bas_thres = 0;
     nxt_avail_pt = 0;
     /* dep_flag = 0; */
     max_length = d_zero = 0.0;
@@ -42,6 +44,7 @@ int init_vars(int argc, char *argv[])
     abs_acc = 0;
     ele_scale = 1;
     segs_mb = 300;
+    /* scan options */
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
 	    ele_flag++;
@@ -93,6 +96,7 @@ int init_vars(int argc, char *argv[])
 	else
 	    usage(argv[0]);
     }
+    /* check options */
     if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
 	G_fatal_error("Convergence factor must be between 1 and 10.");
     }
@@ -107,17 +111,26 @@ int init_vars(int argc, char *argv[])
 	)
 	usage(argv[0]);
     tot_parts = 4;
-    if (ls_flag || sg_flag)
+    if (sl_flag || sg_flag || ls_flag)
+	er_flag = 1;
+    /* do RUSLE */
+    if (er_flag)
 	tot_parts++;
-    if (bas_thres > 0)
+    /* do stream extraction */
+    if (er_flag || seg_flag || bas_flag || haf_flag) {
+	st_flag = 1;
+	/* separate stream extraction only needed for MFD */
+	if (mfd)
+	    tot_parts++;
+    }
+    /* define basins */
+    if (seg_flag || bas_flag || haf_flag)
 	tot_parts++;
 
     G_message(_("SECTION 1 beginning: Initiating Variables. %d sections total."),
 	      tot_parts);
 
     this_mapset = G_mapset();
-    if (sl_flag || sg_flag || ls_flag)
-	er_flag = 1;
     /* for sd factor
        if (dep_flag)        {
        if (sscanf (dep_name, "%lf", &dep_slope) != 1)       {
@@ -140,8 +153,8 @@ int init_vars(int argc, char *argv[])
 	diag *= 0.5;
 
     /* segment parameters: one size fits all. Fine tune? */
-    /* Segment rows and cols: 200 */
-    /* 1 segment open for all rasters: 1.34 MB */
+    /* Segment rows and cols: 128 */
+    /* 1 segment open for all data structures: 0.122 MB */
 
     seg_rows = SROW;
     seg_cols = SCOL;
@@ -151,7 +164,7 @@ int init_vars(int argc, char *argv[])
 	G_warning(_("Maximum memory to be used was smaller than 3 MB, set to default = 300 MB."));
     }
 
-    num_open_segs = segs_mb / 1.34;
+    num_open_segs = segs_mb / 0.122;
 
     G_debug(1, "segs MB: %.0f", segs_mb);
     G_debug(1, "region rows: %d", nrows);
@@ -174,44 +187,74 @@ int init_vars(int argc, char *argv[])
 	num_open_segs = num_cseg_total;
     G_debug(1, "  open segments after adjusting:\t%d", num_open_segs);
 
-    cseg_open(&alt, seg_rows, seg_cols, num_open_segs);
-    cseg_read_cell(&alt, ele_name, "");
     if (er_flag) {
 	cseg_open(&r_h, seg_rows, seg_cols, num_open_segs);
 	cseg_read_cell(&r_h, ele_name, "");
     }
     
     /* read elevation input and mark NULL/masked cells */
-    bseg_open(&in_list, seg_rows, seg_cols, num_open_segs);
-    bseg_open(&worked, seg_rows, seg_cols, num_open_segs);
-    G_verbose_message("Checking for masked and NULL cells in input elevation <%s>", ele_name);
+
+    /* scattered access: alt, watalt, listflag, asp */
+    cseg_open(&alt, seg_rows, seg_cols, num_open_segs);
+    seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs, sizeof(WAT_ALT));
+    bseg_open(&bitflags, seg_rows, seg_cols, num_open_segs);
+    cseg_open(&asp, seg_rows, seg_cols, num_open_segs);
 
     /* open elevation input */
-    fd = Rast_open_old(ele_name, "");
-    if (fd < 0) {
+    ele_fd = Rast_open_old(ele_name, "");
+    if (ele_fd < 0) {
 	G_fatal_error(_("unable to open elevation map layer"));
     }
 
-    ele_map_type = Rast_get_map_type(fd);
+    ele_map_type = Rast_get_map_type(ele_fd);
     ele_size = Rast_cell_size(ele_map_type);
     elebuf = Rast_allocate_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 1000; 	/* should be enough to do the trick */
 
+    /* initial flow accumulation */
+    if (run_flag) {
+	wat_fd = Rast_open_old(run_name, "");
+	if (wat_fd < 0) {
+	    G_fatal_error(_("unable to open accumulation map layer"));
+	}
+
+	wat_map_type = Rast_get_map_type(ele_fd);
+	wat_size = Rast_cell_size(ele_map_type);
+	watbuf = Rast_allocate_buf(ele_map_type);
+    }
+    else {
+	watbuf = watptr = NULL;
+	wat_fd = wat_size = wat_map_type = -1;
+    }
+
     /* read elevation input and mark NULL/masked cells */
+    G_message("SECTION 1a: Mark masked and NULL cells");
     MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
-	Rast_get_row(fd, elebuf, r, ele_map_type);
+	G_percent(r, nrows, 1);
+	Rast_get_row(ele_fd, elebuf, r, ele_map_type);
 	ptr = elebuf;
+
+	if (run_flag) {
+	    Rast_get_row(wat_fd, watbuf, r, wat_map_type);
+	    watptr = watbuf;
+	}
+	
 	for (c = 0; c < ncols; c++) {
+
+	    flag_value = 0;
 
 	    /* check for masked and NULL cells */
 	    if (Rast_is_null_value(ptr, ele_map_type)) {
-		bseg_put(&worked, &one, r, c);
-		bseg_put(&in_list, &one, r, c);
+		FLAG_SET(flag_value, NULLFLAG);
+		FLAG_SET(flag_value, INLISTFLAG);
+		FLAG_SET(flag_value, WORKEDFLAG);
 		Rast_set_c_null_value(&alt_value, 1);
+		/* flow accumulation */
+		Rast_set_d_null_value(&wat_value, 1);
 		do_points--;
 	    }
 	    else {
@@ -228,50 +271,58 @@ int init_vars(int argc, char *argv[])
 		    dvalue *= ele_scale;
 		    alt_value = ele_round(dvalue);
 		}
+
+		/* flow accumulation */
+		if (run_flag) {
+		    if (Rast_is_null_value(watptr, wat_map_type)) {
+			wat_value = 0;    /* ok ? */
+		    }
+		    else {
+			if (wat_map_type == CELL_TYPE) {
+			    wat_value = *((CELL *)ptr);
+			}
+			else if (wat_map_type == FCELL_TYPE) {
+			    wat_value = *((FCELL *)ptr);
+			}
+			else if (ele_map_type == DCELL_TYPE) {
+			    wat_value = *((DCELL *)ptr);
+			}
+		    }
+		}
+		else {
+		    wat_value = 1;
+		}
+
 	    }
 	    cseg_put(&alt, &alt_value, r, c);
+	    wa.wat = wat_value;
+	    wa.ele = alt_value;
+	    seg_put(&watalt, (char *)&wa, r, c);
+
+	    if (flag_value)
+		bseg_put(&bitflags, &flag_value, r, c);
+	    
 	    if (er_flag) {
 		cseg_put(&r_h, &alt_value, r, c);
 	    }
 	    ptr = G_incr_void_ptr(ptr, ele_size);
-	}
-    }
-    Rast_close(fd);
-    G_free(elebuf);
-    if (do_points < nrows * ncols)
-	MASK_flag = 1;
-    
-    /* initial flow accumulation */
-    dseg_open(&wat, seg_rows, seg_cols, num_open_segs);
-    if (run_flag) {
-	dseg_read_cell(&wat, run_name, "");
-	if (MASK_flag) {
-	    for (r = 0; r < nrows; r++) {
-		for (c = 0; c < ncols; c++) {
-		    bseg_get(&worked, &worked_value, r, c);
-		    if (worked_value)
-			dseg_put(&wat, &d_zero, r, c);
-		}
+	    if (run_flag) {
+		watptr = G_incr_void_ptr(watptr, wat_size);
 	    }
 	}
     }
-    else {
-	for (r = 0; r < nrows; r++) {
-	    for (c = 0; c < ncols; c++)
-		if (MASK_flag) {
-		    bseg_get(&worked, &worked_value, r, c);
-		    if (worked_value)
-			dseg_put(&wat, &d_zero, r, c);
-		    else
-			dseg_put(&wat, &d_one, r, c);
-		}
-		else {
-		    if (-1 == dseg_put(&wat, &d_one, r, c))
-			exit(EXIT_FAILURE);
-		}
-	}
+    G_percent(nrows, nrows, 1);    /* finish it */
+    Rast_close(ele_fd);
+    G_free(elebuf);
+    
+    if (run_flag) {
+	Rast_close(wat_fd);
+	G_free(watbuf);
     }
-    cseg_open(&asp, seg_rows, seg_cols, num_open_segs);
+
+    if (do_points < nrows * ncols)
+	MASK_flag = 1;
+    
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
 	fd = Rast_open_old(pit_name, "");
@@ -280,28 +331,23 @@ int init_vars(int argc, char *argv[])
 	}
 	buf = Rast_allocate_c_buf();
 	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
 	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		asp_value = buf[c];
 		if (!Rast_is_c_null_value(&asp_value) && asp_value) {
-		    cseg_put(&asp, &one, r, c);
-		}
-		else {
-		    cseg_put(&asp, &zero, r, c);
+		    cseg_put(&asp, &cellone, r, c);
+		    bseg_get(&bitflags, &flag_value, r, c);
+		    FLAG_SET(flag_value, PITFLAG);
+		    bseg_put(&bitflags, &flag_value, r, c);
 		}
 	    }
 	}
+	G_percent(nrows, nrows, 1);    /* finish it */
 	Rast_close(fd);
 	G_free(buf);
     }
-    else {
-	for (r = 0; r < nrows; r++) {
-	    for (c = 0; c < ncols; c++)
-		if (-1 == cseg_put(&asp, &zero, r, c))
-		    exit(EXIT_FAILURE);
-	}
-    }
-    bseg_open(&swale, seg_rows, seg_cols, num_open_segs);
+
     if (ob_flag) {
 	fd = Rast_open_old(ob_name, "");
 	if (fd < 0) {
@@ -309,26 +355,22 @@ int init_vars(int argc, char *argv[])
 	}
 	buf = Rast_allocate_c_buf();
 	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
 	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
 		block_value = buf[c];
 		if (!Rast_is_c_null_value(&block_value) && block_value) {
-		    bseg_put(&swale, &one, r, c);
-		}
-		else {
-		    bseg_put(&swale, &zero, r, c);
+		    bseg_get(&bitflags, &flag_value, r, c);
+		    FLAG_SET(flag_value, RUSLEBLOCKFLAG);
+		    bseg_put(&bitflags, &flag_value, r, c);
 		}
 	    }
 	}
+	G_percent(nrows, nrows, 1);    /* finish it */
 	Rast_close(fd);
 	G_free(buf);
     }
-    else {
-	for (r = 0; r < nrows; r++) {
-	    for (c = 0; c < ncols; c++)
-		bseg_put(&swale, &zero, r, c);
-	}
-    }
+
     if (ril_flag) {
 	dseg_open(&ril, 1, seg_rows * seg_cols, num_open_segs);
 	dseg_read_cell(&ril, ril_name, "");
@@ -337,7 +379,6 @@ int init_vars(int argc, char *argv[])
     /* dseg_open(&slp, SROW, SCOL, num_open_segs); */
 
     /* RUSLE: LS and/or S factor */
-
     if (er_flag) {
 	dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
     }
@@ -346,15 +387,47 @@ int init_vars(int argc, char *argv[])
     if (ls_flag)
 	dseg_open(&l_s, 1, seg_rows * seg_cols, num_open_segs);
 
-    seg_open(&astar_pts, 1, do_points, 1, seg_rows * seg_cols * 2,
-	     num_open_segs / 2, sizeof(POINT));
+    G_debug(1, "open segments for A* points");
+    /* next smaller power of 2 */
+    seg_cols = (int) pow(2, (int)(log(num_open_segs / 8) / log(2)));
+    /* n cols in segment */
+    seg_cols *= seg_rows * seg_rows;
+    /* n segments in row */
+    num_cseg_total = do_points / seg_cols;
+    if (do_points % seg_cols > 0)
+	num_cseg_total++;
+    /* no need to have more segments open than exist */
+    if ((num_open_segs * seg_rows * seg_rows) / (seg_cols * 2) > num_cseg_total)
+	num_open_array_segs = num_cseg_total;
+    else
+	num_open_array_segs = (num_open_segs * seg_rows * seg_rows) / (seg_cols * 2);
+    
+    G_debug(2, "A* points open segments %d, target 4", num_open_array_segs);
+    
+    seg_open(&astar_pts, 1, do_points, 1, seg_cols, num_open_array_segs,
+	     sizeof(POINT));
 
-    /* heap_index will track astar_pts in ternary min-heap */
-    /* heap_index is one-based */
-    seg_open(&heap_index, 1, do_points + 1, 1, seg_cols * num_open_segs * seg_rows / 10,
-	     10, sizeof(HEAP));
+    /* one-based d-ary search_heap with astar_pts */
+    G_debug(1, "open segments for A* search heap");
+    /* next smaller power of 2 */
+    seg_cols = (int) pow(2, (int)(log(num_open_segs / 16) / log(2)));
+    /* n cols in segment */
+    seg_cols *= seg_rows * seg_rows;
+    /* n segments in row */
+    num_cseg_total = (do_points + 1) / seg_cols;
+    if ((do_points + 1) % seg_cols > 0)
+	num_cseg_total++;
+    /* no need to have more segments open than exist */
+    if ((num_open_segs * seg_rows * seg_rows) / (seg_cols * 2) > num_cseg_total)
+	num_open_array_segs = num_cseg_total;
+    else
+	num_open_array_segs = (num_open_segs * seg_rows * seg_rows) / (seg_cols * 2);
 
-    G_message(_("SECTION 1b (of %1d): Determining Offmap Flow."), tot_parts);
+    G_debug(2, "A* search heap open segments %d, target 8", num_open_array_segs);
+    seg_open(&search_heap, 1, do_points + 1, 1, seg_cols,
+	     num_open_array_segs, sizeof(HEAP_PNT));
+
+    G_message(_("SECTION 1b: Determining Offmap Flow."));
 
     /* heap is empty */
     heap_size = 0;
@@ -363,29 +436,32 @@ int init_vars(int argc, char *argv[])
 
     if (MASK_flag) {
 	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 2);
+	    G_percent(r, nrows, 1);
 	    for (c = 0; c < ncols; c++) {
-		bseg_get(&worked, &worked_value, r, c);
-		if (worked_value) {
-		    dseg_put(&wat, &d_zero, r, c);
-		}
-		else {
+		bseg_get(&bitflags, &flag_value, r, c);
+		if (!FLAG_GET(flag_value, NULLFLAG)) {
 		    if (er_flag)
 			dseg_put(&s_l, &half_res, r, c);
 		    cseg_get(&asp, &asp_value, r, c);
 		    if (r == 0 || c == 0 || r == nrows - 1 ||
 			c == ncols - 1 || asp_value != 0) {
-			dseg_get(&wat, &wat_value, r, c);
+			/* dseg_get(&wat, &wat_value, r, c); */
+			seg_get(&watalt, (char *)&wa, r, c);
+			wat_value = wa.wat;
 			if (wat_value > 0) {
 			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
+			    /* dseg_put(&wat, &wat_value, r, c); */
+			    wa.wat = wat_value;
+			    seg_put(&watalt, (char *)&wa, r, c);
 			}
 			/* set depression */
 			if (asp_value) {
 			    asp_value = 0;
 			    if (wat_value < 0) {
 				wat_value = -wat_value;
-				dseg_put(&wat, &wat_value, r, c);
+				/* dseg_put(&wat, &wat_value, r, c); */
+				wa.wat = wat_value;
+				seg_put(&watalt, (char *)&wa, r, c);
 			    }
 			}
 			else if (r == 0)
@@ -398,139 +474,59 @@ int init_vars(int argc, char *argv[])
 			    asp_value = -8;
 			if (-1 == cseg_put(&asp, &asp_value, r, c))
 			    exit(EXIT_FAILURE);
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-		    }
-		    else if (!bseg_get(&worked, &worked_value, r - 1, c)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -2;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
-		    }
-		    else if (!bseg_get(&worked, &worked_value, r + 1, c)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -6;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
-		    }
-		    else if (!bseg_get(&worked, &worked_value, r, c - 1)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -4;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
-		    }
-		    else if (!bseg_get(&worked, &worked_value, r, c + 1)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -8;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
-		    }
-		    else if (sides == 8 &&
-			     !bseg_get(&worked, &worked_value, r - 1, c - 1)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -3;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
-		    }
-		    else if (sides == 8 &&
-			     !bseg_get(&worked, &worked_value, r - 1, c + 1)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -1;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
-		    }
-		    else if (sides == 8 &&
-			     !bseg_get(&worked, &worked_value, r + 1, c - 1)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -5;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
-		    }
-		    else if (sides == 8 &&
-			     !bseg_get(&worked, &worked_value, r + 1, c + 1)
-			     && worked_value != 0) {
-			cseg_get(&alt, &alt_value, r, c);
-			add_pt(r, c, alt_value, alt_value);
-			asp_value = -7;
-			cseg_put(&asp, &asp_value, r, c);
-			dseg_get(&wat, &wat_value, r, c);
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
-			}
+			/* cseg_get(&alt, &alt_value, r, c); */
+			alt_value = wa.ele;
+			add_pt(r, c, alt_value, asp_value, 1);
 		    }
 		    else {
-			bseg_put(&in_list, &zero, r, c);
-			/* dseg_put(&slp, &dzero, r, c); */
+			seg_get(&watalt, (char *)&wa, r, c);
+			for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+			    /* get r, c (r_nbr, c_nbr) for neighbours */
+			    r_nbr = r + nextdr[ct_dir];
+			    c_nbr = c + nextdc[ct_dir];
+
+			    bseg_get(&bitflags, &worked_value, r_nbr, c_nbr);
+			    if (FLAG_GET(worked_value, NULLFLAG)) {
+				asp_value = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+				add_pt(r, c, wa.ele, asp_value, 1);
+				cseg_put(&asp, &asp_value, r, c);
+				wat_value = wa.wat;
+				if (wat_value > 0) {
+				    wa.wat = -wat_value;
+				    seg_put(&watalt, (char *)&wa, r, c);
+				}
+				break;
+			    }
+			}
 		    }
-		}
-	    }
+		}  /* end non-NULL cell */
+	    }  /* end column */
 	}
     }
     else {
 	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 2);
+	    G_percent(r, nrows, 1);
 	    for (c = 0; c < ncols; c++) {
-		bseg_put(&worked, &zero, r, c);
+		/* bseg_put(&worked, &zero, r, c); */
 		if (er_flag)
 		    dseg_put(&s_l, &half_res, r, c);
 		cseg_get(&asp, &asp_value, r, c);
 		if (r == 0 || c == 0 || r == nrows - 1 ||
 		    c == ncols - 1 || asp_value != 0) {
-		    dseg_get(&wat, &wat_value, r, c);
+		    seg_get(&watalt, (char *)&wa, r, c);
+		    wat_value = wa.wat;
 		    if (wat_value > 0) {
 			wat_value = -wat_value;
-			if (-1 == dseg_put(&wat, &wat_value, r, c))
-			    exit(EXIT_FAILURE);
+			wa.wat = wat_value;
+			seg_put(&watalt, (char *)&wa, r, c);
 		    }
 		    /* set depression */
 		    if (asp_value) {
 			asp_value = 0;
 			if (wat_value < 0) {
 			    wat_value = -wat_value;
-			    dseg_put(&wat, &wat_value, r, c);
+			    wa.wat = wat_value;
+			    seg_put(&watalt, (char *)&wa, r, c);
 			}
 		    }
 		    else if (r == 0)
@@ -543,12 +539,8 @@ int init_vars(int argc, char *argv[])
 			asp_value = -8;
 		    if (-1 == cseg_put(&asp, &asp_value, r, c))
 			exit(EXIT_FAILURE);
-		    cseg_get(&alt, &alt_value, r, c);
-		    add_pt(r, c, alt_value, alt_value);
-		}
-		else {
-		    bseg_put(&in_list, &zero, r, c);
-		    /* dseg_put(&slp, &dzero, r, c); */
+		    /* cseg_get(&alt, &alt_value, r, c); */
+		    add_pt(r, c, wa.ele, asp_value, 1);
 		}
 	    }
 	}

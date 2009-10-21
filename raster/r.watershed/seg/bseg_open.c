@@ -22,7 +22,7 @@ int bseg_open(BSEG * bseg, int srows, int scols, int nsegs_in_memory)
 	return -2;
     }
     if (0 > (errflag = segment_format(fd, G_window_rows(),
-				      (G_window_cols() + 7) / 8, srows, scols,
+				      G_window_cols(), srows, scols,
 				      sizeof(char)))) {
 	close(fd);
 	unlink(filename);

@@ -20,6 +20,7 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
     buffer = Rast_allocate_c_buf();
     segment_flush(&(cseg->seg));
     for (row = 0; row < nrows; row++) {
+	G_percent(row, nrows, 1);
 	segment_get_row(&(cseg->seg), buffer, row);
 	if (Rast_put_row(map_fd, buffer, CELL_TYPE) < 0) {
 	    G_free(buffer);
@@ -29,6 +30,7 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
 	    return -2;
 	}
     }
+    G_percent(row, nrows, 1);    /* finish it */
     G_free(buffer);
     Rast_close(map_fd);
     return 0;
