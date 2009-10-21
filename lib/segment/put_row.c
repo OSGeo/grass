@@ -9,7 +9,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2005-2006
+ * \date 2005-2009
  */
 
 #include <stdio.h>

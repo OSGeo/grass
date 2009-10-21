@@ -9,7 +9,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2005-2006
+ * \date 2005-2009
  */
 
 #include <stdio.h>
@@ -17,9 +17,7 @@
 #include <string.h>
 #include <errno.h>
 #include <grass/segment.h>
-
-
-static int segment_select(SEGMENT *, int);
+#include "rbtree.h"
 
 
 /**
@@ -38,37 +36,60 @@ static int segment_select(SEGMENT *, int);
 
 int segment_pagein(SEGMENT * SEG, int n)
 {
-    int age;
     int cur;
-    int i;
     int read_result;
+    SEGID *seg_found, seg_search;
 
     /* is n the current segment? */
     if (n == SEG->scb[SEG->cur].n)
 	return SEG->cur;
-
+	
     /* search the in memory segments */
-    for (i = 0; i < SEG->nseg; i++)
-	if (n == SEG->scb[i].n)
-	    return segment_select(SEG, i);
+    seg_search.i = 0;
+    seg_search.n = n;
+    seg_found = rbtree_find(SEG->loaded, &seg_search);
+    if (seg_found) {
+	cur = seg_found->i;
 
+	if (SEG->scb[cur].age != SEG->youngest) {
+	    /* splice out */
+	    SEG->scb[cur].age->younger->older = SEG->scb[cur].age->older;
+	    SEG->scb[cur].age->older->younger = SEG->scb[cur].age->younger;
+	    /* splice in */
+	    SEG->scb[cur].age->younger = SEG->youngest->younger;
+	    SEG->scb[cur].age->older = SEG->youngest;
+	    SEG->scb[cur].age->older->younger = SEG->scb[cur].age;
+	    SEG->scb[cur].age->younger->older = SEG->scb[cur].age;
+	    /* make it youngest */
+	    SEG->youngest = SEG->scb[cur].age;
+	}
+	
+	return SEG->cur = cur;
+    }
+    
     /* find a slot to use to hold segment */
-    age = 0;
-    cur = 0;
-    for (i = 0; i < SEG->nseg; i++)
-	if (SEG->scb[i].n < 0) {	/* free slot */
-	    cur = i;
-	    break;
-	}
-	else if (age < SEG->scb[i].age) {	/* find oldest segment */
-	    cur = i;
-	    age = SEG->scb[i].age;
-	}
+    if (SEG->nfreeslots) {  /* any free slots left ? */
+	cur = SEG->freeslot[--SEG->nfreeslots];
+    }
+    else {	/* find oldest segment */
+	SEG->oldest = SEG->oldest->younger;
+	cur = SEG->oldest->cur;
+	SEG->oldest->cur = -1;
+	SEG->scb[cur].age = NULL;
+    }
 
     /* if slot is used, write it out, if dirty */
-    if (SEG->scb[cur].n >= 0 && SEG->scb[cur].dirty)
+    if (SEG->scb[cur].n >= 0 && SEG->scb[cur].dirty) {
 	if (segment_pageout(SEG, cur) < 0)
 	    return -1;
+    }
+	
+    if (SEG->scb[cur].n >= 0) {
+	seg_search.n = SEG->scb[cur].n;
+	if (rbtree_remove(SEG->loaded, &seg_search) == 0)
+	    G_fatal_error("could not remove segment");
+	seg_search.n = n;
+    }
 
     /* read in the segment */
     SEG->scb[cur].n = n;
@@ -92,17 +113,18 @@ int segment_pagein(SEGMENT * SEG, int n)
 	return -1;
     }
 
-    return segment_select(SEG, cur);
-}
+    if (cur < 0 || n < 0)
+	G_fatal_error("segment not loaded");
 
+    /* remember loaded segment */
+    seg_search.i = cur;
+    if (rbtree_insert(SEG->loaded, &seg_search) == 0)
+	G_fatal_error("could not insert segment");
 
-static int segment_select(SEGMENT * SEG, int n)
-{
-    int i;
-
-    SEG->scb[n].age = 0;
-    for (i = 0; i < SEG->nseg; i++)
-	SEG->scb[i].age++;
-
-    return SEG->cur = n;
+    /* make it youngest segment */
+    SEG->youngest = SEG->youngest->younger;
+    SEG->scb[cur].age = SEG->youngest;
+    SEG->youngest->cur = cur;
+    
+    return SEG->cur = cur;
 }

@@ -6,9 +6,10 @@
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Brad Douglas <rez touchofmadness.com>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
- *               Markus Neteler <neteler itc.it>
+ *               Markus Neteler <neteler itc.it>,
+ *               Markus Metz <markus.metz.giswork googlemail.com>
  * PURPOSE:      Segment initialization routines
- * COPYRIGHT:    (C) 2000-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS

@@ -9,15 +9,15 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2005-2006
+ * \date 2005-2009
  */
 
+#include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/segment.h>
 
@@ -34,11 +34,9 @@
  * \return -1 if unable to seek
  */
 
-int segment_seek(const SEGMENT * SEG, int n, int index)
+int segment_seek_fast(const SEGMENT * SEG, int n, int index)
 {
-    off_t offset;
-
-    offset = (off_t) n *SEG->size + index + SEG->offset;
+    off_t offset = (((off_t) n) << SEG->sizebits) + index + SEG->offset;
 
     if (lseek(SEG->fd, offset, SEEK_SET) == (off_t) - 1) {
 	G_warning("segment_seek: %s", strerror(errno));
@@ -46,4 +44,27 @@ int segment_seek(const SEGMENT * SEG, int n, int index)
     }
 
     return 0;
+}
+
+int segment_seek_slow(const SEGMENT * SEG, int n, int index)
+{
+    off_t offset;
+
+    offset = (off_t) n * SEG->size + index + SEG->offset;
+
+    if (lseek(SEG->fd, offset, SEEK_SET) == (off_t) - 1) {
+	G_warning("segment_seek: %s", strerror(errno));
+	return -1;
+    }
+
+    return 0;
+}
+
+static int (*segment_seek_mode[2]) () = {
+    segment_seek_fast, segment_seek_slow
+};
+
+int segment_seek(const SEGMENT * SEG, int n, int index)
+{
+    return (*segment_seek_mode[SEG->slow_seek]) (SEG, n, index);
 }
