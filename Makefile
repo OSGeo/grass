@@ -150,7 +150,8 @@ libsclean: cleandistdirs
 distclean: clean
 	-rm -f config.cache config.log config.status config.status.${ARCH} 2>/dev/null
 	-rm -f ChangeLog ChangeLog.bak $(ERRORLOG) grass.pc
-	-rm -f include/config.h include/version.h include/Make/Platform.make 2>/dev/null
+	-rm -f include/config.h include/version.h
+	-rm -f include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex 2>/dev/null
 	-rm -f swig/perl/Makefile.PL swig/perl2/make.pl 2>/dev/null
 
 strip:
