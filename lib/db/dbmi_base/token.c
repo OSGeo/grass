@@ -1,3 +1,16 @@
+/*!
+  \file db/dbmi_base/token.c
+  
+  \brief DBMI Library (base) - tokens management
+  
+  (C) 1999-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+*/
 #include <grass/dbmi.h>
 
 /* these routines manage a mapping between tokens (ints) and memory addresses */
@@ -7,11 +20,13 @@ static dbAddress *list = NONE;
 static dbToken count = 0;
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Find token
+
+  \param token pointer to dbToken
+
+  \return dbAddress
+  \return NULL if no token found
+*/
 dbAddress db_find_token(dbToken token)
 {
     if (token >= 0 && token < count)
@@ -20,11 +35,10 @@ dbAddress db_find_token(dbToken token)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Drop token
+
+  \param token pointer to dbToken
+*/
 void db_drop_token(dbToken token)
 {
     if (token >= 0 && token < count)
@@ -32,10 +46,11 @@ void db_drop_token(dbToken token)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Add new token
+
+  \param address dbAddress of token to be added
+
+  \return dbToken
  */
 dbToken db_new_token(dbAddress address)
 {
