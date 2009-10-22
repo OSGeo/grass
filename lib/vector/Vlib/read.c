@@ -52,7 +52,9 @@ static int (*V2_read_line_array[]) () = {
     V2_read_line_nat
 #ifdef HAVE_OGR
 	, V2_read_line_ogr
+	, V2_read_line_ogr
 #else
+	, format
 	, format
 #endif
 };
