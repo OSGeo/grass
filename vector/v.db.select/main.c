@@ -228,6 +228,7 @@ int main(int argc, char **argv)
 
 	if (r_flag->answer) {
 	    /* get minimal region extent */
+	    /* TODO: support layer name */
 	    Vect_cidx_find_all(&Map, atoi(field_opt->answer), -1, cat, list_lines);
 	    for (i = 0; i < list_lines->n_values; i++) {
 		line = list_lines->value[i];

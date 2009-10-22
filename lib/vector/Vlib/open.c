@@ -379,6 +379,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 		level = 2;
 	    }
 	    G_set_verbose(verbose);
+	    if (level < level_request)
+	      G_fatal_error(_("Unable to open vector map <%s> on level %d"),
+			    Map->fInfo.ogr.layer_name, level_request);
 	}
     }
     else {

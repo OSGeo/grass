@@ -11,7 +11,7 @@
  *             boundaries for 1 or several areas of a list of
  *             user provided categories.
  *
- * COPYRIGHT:  (C) 2002-2007 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2002-2009 by the GRASS Development Team
  *
  *             This program is free software under the 
  *             GNU General Public License (>=v2). 
@@ -66,7 +66,7 @@ static int cmp(const void *pa, const void *pb)
 
 int main(int argc, char **argv)
 {
-    int i, new_cat, type, ncats, *cats, field, c;
+    int i, new_cat, type, ncats, *cats, c;
     int **ocats, *nocats, nfields, *fields;
     int dissolve = 0, x, y, type_only;
     char buffr[1024], text[80];
@@ -79,7 +79,6 @@ int main(int argc, char **argv)
     struct field_info *Fi;
     FILE *in;
     dbDriver *driver;
-    dbHandle handle;
     struct line_cats *Cats;
     struct Cat_index *ci;
     int ucat_count, *ucat_array = NULL, prnd, seed, nrandom, nfeatures;
@@ -195,18 +194,14 @@ int main(int argc, char **argv)
     if (d_flag->answer)
 	dissolve = 1;
 
-    field = atoi(fieldopt->answer);
-    if (field == 0)
-	G_fatal_error(_("Layer 0 not supported"));
-
     if (!newopt->answer)
 	new_cat = 0;
     else
 	new_cat = atoi(newopt->answer);
 
     /* Do initial read of input file */
-    Vect_set_open_level(2);
-    Vect_open_old(&In, input, "");
+    Vect_set_open_level(2); /* topology required */
+    Vect_open_old2(&In, input, "", fieldopt->answer);
 
     type = Vect_option_to_types(typopt);
     if (type & GV_AREA) {
@@ -266,29 +261,21 @@ int main(int argc, char **argv)
 
     }
     else if (whereopt->answer != NULL) {
-	if (field < 1) {
-	    G_fatal_error(_("'layer' must be > 0 for 'where'."));
-	}
-	Fi = Vect_get_field(&In, field);
+	Fi = Vect_get_field2(&In, fieldopt->answer);
 	if (!Fi) {
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  field);
+	    G_fatal_error(_("Database connection not defined for layer <%s>"),
+			  fieldopt->answer);
 	}
 
 	G_debug(1, "Loading categories from table <%s>", Fi->table);
 
-	driver = db_start_driver(Fi->driver);
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (driver == NULL)
-	    G_fatal_error(_("Unable to start driver <%s>"), Fi->driver);
-
-	db_init_handle(&handle);
-	db_set_handle(&handle, Fi->database, NULL);
-	if (db_open_database(driver, &handle) != DB_OK)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
-
-	ncats =db_select_int(driver, Fi->table, Fi->key, whereopt->answer,
-			  &cats);
+	
+	ncats = db_select_int(driver, Fi->table, Fi->key, whereopt->answer,
+			      &cats);
 	if (ncats == -1)
 		G_fatal_error(_("Unable select records from table <%s>"), Fi->table);
 	G_message(_("%d categories loaded from table <%s>"), ncats,
@@ -305,7 +292,7 @@ int main(int argc, char **argv)
     else if (nrandopt->answer != NULL) {	/* Generate random category list */
 
 	/* We operate on layer's CAT's and thus valid layer is required */
-	if (Vect_cidx_get_field_index(&In, field) < 0)
+	if (Vect_cidx_get_field_index(&In, atoi(fieldopt->answer)) < 0)
 	    G_fatal_error(_("This map has no categories attached. "
 			    "Use v.category to attach categories to this vector map."));
 
@@ -314,7 +301,7 @@ int main(int argc, char **argv)
 	if (nrandom < 1)
 	    G_fatal_error(_("Please specify random number larger than 0"));
 
-	nfeatures = Vect_cidx_get_type_count(&In, field, type);
+	nfeatures = Vect_cidx_get_type_count(&In, atoi(fieldopt->answer), type);
 	if (nrandom >= nfeatures)
 	    G_fatal_error(_("Random category count must be smaller than feature count. "
 			   "There are only %d features of type(s): %s"),
@@ -322,7 +309,7 @@ int main(int argc, char **argv)
 
 	/* Let's create an array of uniq CAT values
 	   According to Vlib/build.c, cidx should be allready sorted by dig_cidx_sort() */
-	ci = &(In.plus.cidx[Vect_cidx_get_field_index(&In, field)]);
+	ci = &(In.plus.cidx[Vect_cidx_get_field_index(&In, atoi(fieldopt->answer))]);
 	ucat_count = 0;
 	for (c = 0; c < ci->n_cats; c++) {
 	    /* Bitwise AND compares ci feature type with user's requested types */
@@ -378,7 +365,7 @@ int main(int argc, char **argv)
     
     G_message(_("Extracting features..."));
     xtract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve,
-		field, type_only, r_flag->answer ? 1 : 0);
+		fieldopt->answer, type_only, r_flag->answer ? 1 : 0);
 
     Vect_build(&Out);
 
@@ -451,7 +438,7 @@ int main(int argc, char **argv)
 		continue;
 	    if (nocats[i] == 0)
 		continue;
-	    if (fields[i] == field && new_cat != -1)
+	    if (fields[i] == atoi(fieldopt->answer) && new_cat != -1)
 		continue;
 
 	    G_verbose_message(_("Layer %d"), fields[i]);
