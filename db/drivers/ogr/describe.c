@@ -64,35 +64,37 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 /* describe table, if c is not NULL cur->cols and cur->ncols is also set 
  * cursor may be null
  */
-int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
+int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 {
-    int i, ncols, kcols;
+    int i, ifield, ncols, kcols;
     dbColumn *column;
     OGRFeatureDefnH hFeatureDefn;
     OGRFieldDefnH hFieldDefn;
-    const char *fieldName;
+    const char *fieldName, *fidcol;
     int ogrType;
     int *cols;
 
-    G_debug(3, "describe_table()");
+    G_debug(1, "describe_table()");
 
     hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
     ncols = OGR_FD_GetFieldCount(hFeatureDefn);
-
-    G_debug(3, "ncols = %d", ncols);
-
-    /* Identify known columns */
-    cols = (int *)G_malloc(ncols * sizeof(int));
+    G_debug(2, "   ncols = %d (without fid column)", ncols);
+    
+    /* for some formats fid column is not defined, e.g. ESRI Shapefile */
+    fidcol = OGR_L_GetFIDColumn(hLayer); 
+    G_debug(2, "   fidcol = %s", fidcol);
+    
+    /* identify known columns */
+    cols = (int *) G_malloc(ncols * sizeof(int));
     kcols = 0;
-    for (i = 0; i < ncols; i++) {
+    for(i = 0; i < ncols; i++) {
 	hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, i);
 	ogrType = OGR_Fld_GetType(hFieldDefn);
-	OGR_Fld_GetNameRef(hFieldDefn);
 	fieldName = OGR_Fld_GetNameRef(hFieldDefn);
 
 	if (ogrType != OFTInteger && ogrType != OFTReal &&
 	    ogrType != OFTString) {
-	    G_warning(_("OGR driver: column '%s', OGR type %d  is not supported"),
+	    G_warning(_("OGR driver: column '%s', OGR type %d is not supported"),
 		      fieldName, ogrType);
 	    cols[i] = 0;
 	}
@@ -101,15 +103,20 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 	    kcols++;
 	}
     }
-
+    
+    if (*fidcol)
+	kcols++;
+    G_debug(2, "   kcols = %d (including fid column)", kcols);
+    
+    /* allocate dbTable */
     if (!(*table = db_alloc_table(kcols))) {
 	return DB_FAILED;
     }
-
+    
     /* set the table name */
     /* TODO */
     db_set_table_name(*table, "");
-
+    
     /* set the table description */
     db_set_table_description(*table, "");
 
@@ -119,18 +126,24 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
        db_set_table_insert_priv_granted (*table);
        db_set_table_delete_priv_not_granted (*table);
        db_set_table_insert_priv_not_granted (*table);
-     */
+    */
 
-    for (i = 0; i < ncols; i++) {
+    for (i = 0, ifield = 0; ifield < ncols; i++) {
 	int sqlType;
 	int size, precision, scale;
 
-	if (!(cols[i]))
-	    continue;		/* unknown type */
-
-	hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, i);
-	ogrType = OGR_Fld_GetType(hFieldDefn);
-	fieldName = OGR_Fld_GetNameRef(hFieldDefn);
+	if (*fidcol && i == 0) {
+	    ogrType = OFTInteger; /* ??? */
+	    fieldName = fidcol;
+	}
+	else {
+	    hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, ifield);
+	    ogrType = OGR_Fld_GetType(hFieldDefn);
+	    fieldName = OGR_Fld_GetNameRef(hFieldDefn);
+	    
+	    if (!(cols[ifield++]))
+	      continue;		/* unknown type */
+	}
 
 	switch (ogrType) {
 	case OFTInteger:
@@ -160,10 +173,10 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 	    G_warning(_("Unknown type"));
 	    break;
 	}
-
-	G_debug(3, "field %d : ogrType = %d, name = %s, size=%d precision=%d",
-		i, ogrType, fieldName, size, precision);
-
+	
+	G_debug(3, "   %d: field %d : ogrType = %d, name = %s, size=%d precision=%d",
+		i, ifield, ogrType, fieldName, size, precision);
+	
 	column = db_get_table_column(*table, i);
 
 	db_set_column_host_type(column, ogrType);
