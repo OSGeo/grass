@@ -38,10 +38,15 @@
 */
 int db__driver_fetch(dbCursor * cn, int position, int *more)
 {
-    cursor *c;
+    int i, col;
+    int ogrType, sqlType;
+
     dbToken token;
     dbTable *table;
-    int i, col;
+    dbColumn *column;
+    dbValue *value;
+    
+    cursor *c;
     
     G_debug(3, "db_driver_fetch()");
 
@@ -92,12 +97,26 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
     /* get the data out of the descriptor into the table */
     table = db_get_cursor_table(cn);
-    col = -1;
+
+    /* check fid column */
+    if (strlen(OGR_L_GetFIDColumn(c->hLayer)) > 0) {
+	column = db_get_table_column(table, 0);
+	ogrType = db_get_column_host_type(column);
+	sqlType = db_get_column_sqltype(column);
+
+	value = db_get_column_value(column);
+	value->i = OGR_F_GetFID(c->hFeature);
+	G_debug(3, "fidcol '%s': ogrType %d, sqlType %d: val = %d",
+		db_get_column_name(column), ogrType, sqlType, value->i);
+
+	col = 0;
+    }
+    else {
+	col = -1;
+    }
+    
+    /* loop attributes */
     for (i = 0; i < c->ncols; i++) {
-	int ogrType, sqlType;
-	dbColumn *column;
-	dbValue *value;
-	
 	if (!(c->cols[i])) {
 	    continue;
 	}			/* unknown type */
