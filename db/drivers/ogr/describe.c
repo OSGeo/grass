@@ -84,7 +84,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
  */
 int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 {
-    int i, ifield, ncols, kcols;
+    int i, ncols, kcols, col;
     dbColumn *column;
     OGRFeatureDefnH hFeatureDefn;
     OGRFieldDefnH hFieldDefn;
@@ -146,21 +146,30 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
        db_set_table_insert_priv_not_granted (*table);
     */
 
-    for (i = 0, ifield = 0; ifield < ncols; i++) {
+    if (*fidcol) {
+	column = db_get_table_column(*table, 0);
+	db_set_column_host_type(column, OFTInteger);
+	db_set_column_sqltype(column, DB_SQL_TYPE_INTEGER);
+	db_set_column_name(column, fidcol);
+	db_set_column_length(column, 11); /* ??? */
+	db_set_column_precision(column, 0);
+	
+	col = 1;
+    }
+    else {
+	col = 0;
+    }
+
+    for (i = 0; i < ncols; i++, col++) {
 	int sqlType;
 	int size, precision, scale;
 
-	if (*fidcol && i == 0) {
-	    ogrType = OFTInteger; /* ??? */
-	    fieldName = fidcol;
-	}
-	else {
-	    hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, ifield);
-	    ogrType = OGR_Fld_GetType(hFieldDefn);
-	    fieldName = OGR_Fld_GetNameRef(hFieldDefn);
-	    
-	    if (!(cols[ifield++]))
-	      continue;		/* unknown type */
+	hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, i);
+	ogrType = OGR_Fld_GetType(hFieldDefn);
+	fieldName = OGR_Fld_GetNameRef(hFieldDefn);
+	
+	if (!(cols[i])) {
+	    continue;		/* unknown type */
 	}
 
 	switch (ogrType) {
@@ -193,9 +202,9 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 	}
 	
 	G_debug(3, "   %d: field %d : ogrType = %d, name = %s, size=%d precision=%d",
-		i, ifield, ogrType, fieldName, size, precision);
+		i, col, ogrType, fieldName, size, precision);
 	
-	column = db_get_table_column(*table, i);
+	column = db_get_table_column(*table, col);
 
 	db_set_column_host_type(column, ogrType);
 	db_set_column_sqltype(column, sqlType);

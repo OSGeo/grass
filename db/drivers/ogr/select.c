@@ -49,6 +49,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
 
+    G_debug(3, "SQL: '%s'", db_get_string(sel));
     c->hLayer = OGR_DS_ExecuteSQL(hDs, db_get_string(sel), NULL, NULL);
 
     if (c->hLayer == NULL) {
