@@ -4,10 +4,11 @@
 * MODULE:       OGR driver 
 *   	    	
 * AUTHOR(S):    Radim Blazek
+*               Some updates by Martin Landa <landa.martin gmail.com>
 *
 * PURPOSE:      DB driver for OGR sources     
 *
-* COPYRIGHT:    (C) 2004 by the GRASS Development Team
+* COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -24,15 +25,25 @@
 #include "globals.h"
 #include "proto.h"
 
+/*!
+  \brief Describe table using driver
+
+  \param table_name table name (as dbString)
+  \param table[out] pointer to dbTable
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
 int db__driver_describe_table(dbString * table_name, dbTable ** table)
 {
     int i, nlayers;
     OGRLayerH hLayer = NULL;
     OGRFeatureDefnH hFeatureDefn;
 
-    /* Find data source */
+    /* get number of OGR layers in the datasource */
     nlayers = OGR_DS_GetLayerCount(hDs);
 
+    /* find OGR layer */
     for (i = 0; i < nlayers; i++) {
 	hLayer = OGR_DS_GetLayer(hDs, i);
 	hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
@@ -45,7 +56,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     }
 
     if (hLayer == NULL) {
-	append_error("Table '%s' does not exist\n",
+	append_error(_("OGR layer <%s> does not exist\n"),
 		     db_get_string(table_name));
 	report_error();
 	return DB_FAILED;
@@ -53,7 +64,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 
     G_debug(3, "->>");
     if (describe_table(hLayer, table, NULL) == DB_FAILED) {
-	append_error("Cannot describe table\n");
+	append_error(_("Unable to describe table\n"));
 	report_error();
 	return DB_FAILED;
     }
@@ -61,8 +72,15 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     return DB_OK;
 }
 
-/* describe table, if c is not NULL cur->cols and cur->ncols is also set 
- * cursor may be null
+/*!
+  \brief Describe table
+
+  If c is not NULL cur->cols and cur->ncols is also set 
+  cursor may be null
+
+  \param hLayer OGR layer
+  \param[put] table pointer to dbTable
+  \param c pointer to cursor
  */
 int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 {
