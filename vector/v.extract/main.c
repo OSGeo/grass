@@ -365,7 +365,8 @@ int main(int argc, char **argv)
     
     G_message(_("Extracting features..."));
     xtract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve,
-		fieldopt->answer, type_only, r_flag->answer ? 1 : 0);
+		Vect_get_field_number(&In, fieldopt->answer),
+		type_only, r_flag->answer ? 1 : 0);
 
     Vect_build(&Out);
 
