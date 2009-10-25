@@ -123,7 +123,11 @@ $(ETC)/clean_temp$(EXE) $(ETC)/lock$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
 
 $(ETC)/VERSIONNUMBER:
 	rm -f $@
-	echo "$(GRASS_VERSION_NUMBER)" > $@
+	@if [ -n "$(GRASS_VERSION_SVN)" ] ; then \
+		echo "$(GRASS_VERSION_NUMBER) r$(GRASS_VERSION_SVN)" > $@ ; \
+	else \
+		echo "$(GRASS_VERSION_NUMBER)" > $@ ; \
+	fi
 	chmod +r $@
 
 $(ETC)/grass_intro $(ETC)/license $(ETC)/welcome: $(ETC)/%: %.txt version.sed 
