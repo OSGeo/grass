@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -50,11 +51,17 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-
-    fprintf(stdout, "GRASS %s (%s) %s\n",
-	    GRASS_VERSION_NUMBER, GRASS_VERSION_DATE,
-	    GRASS_VERSION_UPDATE_PKG);
-
+    if (strlen(GRASS_VERSION_SVN) > 0) {
+	fprintf(stdout, "GRASS %s (%s) - r%s\n",
+		GRASS_VERSION_NUMBER, GRASS_VERSION_DATE, 
+		GRASS_VERSION_SVN);
+    }
+    else {
+	fprintf(stdout, "GRASS %s (%s) %s\n",
+		GRASS_VERSION_NUMBER, GRASS_VERSION_DATE,
+		GRASS_VERSION_UPDATE_PKG);
+    }
+    
     if (copyright->answer) {
 	fprintf(stdout, "\n");
 	fputs(COPYING, stdout);
