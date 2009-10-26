@@ -95,6 +95,8 @@ public:
                 void DrawBitmap(const wxBitmap& bitmap, float x, float y, bool useMask) {
                         return self->DrawBitmap(bitmap, (wxCoord) x, (wxCoord) y, useMask);
                 }
-
+		void DrawLinePoint(const wxPoint& p1, const wxPoint& p2) {
+		        return self->DrawLine(p1, p2);
+                }
 	}
 };
