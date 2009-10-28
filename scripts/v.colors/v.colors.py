@@ -31,7 +31,7 @@
 #%option
 #% key: column
 #% type: string
-#% description: Name of column containg numeric data
+#% description: Name of column containing numeric data
 #% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #% required : yes
 #%end
