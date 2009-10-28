@@ -64,7 +64,7 @@
 #% key: color
 #% type: string
 #% key_desc: style
-#% options: aspect,aspectcolr,bcyr,bgyr,byg,byr,celsius,curvature,differences,elevation,etopo2,evi,grey,grey1.0,grey255,gyr,ndvi,population,precipitation,rainbow,ramp,ryb,ryg,sepia,slope,srtm,terrain,wave,random
+#% options: aspect,aspectcolr,bcyr,bgyr,byg,byr,celsius,corine,curvature,differences,elevation,etopo2,evi,gdd,grey,grey1.0,grey255,grey.eq,grey.log,gyr,ndvi,population,precipitation,rainbow,ramp,random,ryb,ryg,sepia,slope,srtm,terrain,wave
 #% description: Type of color table
 #% required: no
 #% guisection: Colors
