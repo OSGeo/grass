@@ -231,13 +231,13 @@ this (e.g., using the <b>-a</b> option).
 aggregate over the non-NULL cells in the neighborhood.
 <p>
 
-The <b>-c</b> flag and the <b>weights</b> parameter are mutually exclusive. 
-Any use of the two together will produce an error. Differently-shaped neighborhood 
-analysis windows may be achieved by using the <b>weight=</b> parameter to specify 
-a weights file where all values are equal (for <b>method</b>=sum, the sum of the 
-weights should be 1). The user can also vary the weights at the edge of the 
-neighborhood according to the proportion of the cell that lies inside the neighborhood circle, 
-effectively anti-aliasing the analysis mask.
+The <b>-c</b> flag and the <b>weights</b> parameter are mutually exclusive.  Any
+use of the two together will produce an error. Differently-shaped neighborhood
+analysis windows may be achieved by using the <b>weight=</b> parameter to
+specify a weights file where all values are equal. The user can also vary the
+weights at the edge of the neighborhood according to the proportion of the cell
+that lies inside the neighborhood circle, effectively anti-aliasing the analysis
+mask.
 <p>
 
 For aggregates where a weighted calculation isn't meaningful
