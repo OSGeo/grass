@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 #include <grass/segment.h>
+#include "rbtree.h"
 
 
 /**
@@ -42,6 +43,10 @@ int segment_release(SEGMENT * SEG)
     for (i = 0; i < SEG->nseg; i++)
 	free(SEG->scb[i].buf);
     free(SEG->scb);
+
+    free(SEG->freeslot);
+    free(SEG->agequeue);
+    rbtree_destroy(SEG->loaded);
 
     SEG->open = 0;
 
