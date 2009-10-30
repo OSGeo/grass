@@ -61,8 +61,7 @@ int segment_seek_slow(const SEGMENT * SEG, int n, int index)
 }
 
 static int (*segment_seek_mode[2]) () = {
-    segment_seek_fast, segment_seek_slow
-};
+segment_seek_fast, segment_seek_slow};
 
 int segment_seek(const SEGMENT * SEG, int n, int index)
 {

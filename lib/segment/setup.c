@@ -17,7 +17,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/segment.h>
-
 #include "rbtree.h"
 
 
@@ -81,7 +80,8 @@ int segment_setup(SEGMENT * SEG)
     /* adjust number of open segments if larger than number of total segments */
     if (SEG->nseg > SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows)) {
 	G_warning("segment: reducing number of open segments from %d to %d",
-		   SEG->nseg, SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows));
+		  SEG->nseg,
+		  SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows));
 	SEG->nseg = SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows);
     }
 
@@ -93,12 +93,13 @@ int segment_setup(SEGMENT * SEG)
     if ((SEG->freeslot = (int *)G_malloc(SEG->nseg * sizeof(int))) == NULL)
 	return -2;
 
-    if ((SEG->agequeue = (struct aq *)G_malloc((SEG->nseg + 1) * sizeof(struct aq))) == NULL)
+    if ((SEG->agequeue =
+	 (struct aq *)G_malloc((SEG->nseg + 1) * sizeof(struct aq))) == NULL)
 	return -2;
 
     SEG->srowscols = SEG->srows * SEG->scols;
     SEG->size = SEG->srowscols * SEG->len;
-    
+
     for (i = 0; i < SEG->nseg; i++) {
 	if ((SEG->scb[i].buf = G_malloc(SEG->size)) == NULL)
 	    return -2;
@@ -117,16 +118,16 @@ int segment_setup(SEGMENT * SEG)
 	    SEG->agequeue[i].older = &(SEG->agequeue[i + 1]);
 	}
     }
-    
+
     SEG->agequeue[SEG->nseg].cur = -1;
     SEG->agequeue[SEG->nseg].younger = &(SEG->agequeue[SEG->nseg - 1]);
     SEG->agequeue[SEG->nseg].older = &(SEG->agequeue[0]);
     SEG->youngest = SEG->oldest = &(SEG->agequeue[SEG->nseg]);
-    
+
     SEG->nfreeslots = SEG->nseg;
     SEG->cur = 0;
     SEG->open = 1;
-    
+
     SEG->loaded = rbtree_create(segment_compare, sizeof(SEGID));
 
     return 1;
@@ -135,14 +136,14 @@ int segment_setup(SEGMENT * SEG)
 int segment_compare(const void *sega, const void *segb)
 {
     SEGID *a, *b;
-    
-    a = (SEGID *)sega;
-    b = (SEGID *)segb;
-    
+
+    a = (SEGID *) sega;
+    b = (SEGID *) segb;
+
     if (a->n > b->n)
 	return 1;
     else if (a->n < b->n)
 	return -1;
-    
+
     return 0;
 }

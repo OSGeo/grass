@@ -47,7 +47,7 @@ int is_red(struct RB_NODE *);
 /* create new tree and initialize
  * returns pointer to new tree, NULL for memory allocation error
  */
-struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
+struct RB_TREE *rbtree_create(rb_compare_fn * compare, size_t rb_datasize)
 {
     struct RB_TREE *tree = G_malloc(sizeof(*tree));
 
@@ -64,7 +64,7 @@ struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
     tree->root = NULL;
 
     return tree;
-} 
+}
 
 /* add an item to a tree
  * non-recursive top-down insertion
@@ -74,7 +74,7 @@ struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
 int rbtree_insert(struct RB_TREE *tree, void *data)
 {
     assert(tree && data);
-    
+
     if (tree->root == NULL) {
 	/* create a new root node for tree */
 	tree->root = rbtree_make_node(tree->datasize, data);
@@ -82,10 +82,12 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
 	    return 0;
     }
     else {
-	struct RB_NODE head = {0}; /* False tree root */
+	struct RB_NODE head = { 0 };	/* False tree root */
 
-	struct RB_NODE *g, *t;     /* Grandparent & parent */
-	struct RB_NODE *p, *q;     /* Iterator & parent */
+	struct RB_NODE *g, *t;	/* Grandparent & parent */
+
+	struct RB_NODE *p, *q;	/* Iterator & parent */
+
 	int dir = 0, last = 0;
 
 	/* Set up helpers */
@@ -94,7 +96,7 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
 	q = t->link[1] = tree->root;
 
 	/* Search down the tree */
-	for ( ; ; ) {
+	for (;;) {
 	    if (q == NULL) {
 		/* Insert new node at the bottom */
 		p->link[dir] = q = rbtree_make_node(tree->datasize, data);
@@ -154,15 +156,15 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
  */
 int rbtree_remove(struct RB_TREE *tree, const void *data)
 {
-    struct RB_NODE head = {0}; /* False tree root */
-    struct RB_NODE *q, *p, *g; /* Helpers */
-    struct RB_NODE *f = NULL;  /* Found item */
+    struct RB_NODE head = { 0 };	/* False tree root */
+    struct RB_NODE *q, *p, *g;	/* Helpers */
+    struct RB_NODE *f = NULL;	/* Found item */
     int dir = 1, removed = 0;
 
     assert(tree && data);
 
     if (tree->root == NULL) {
-	return 0; /* empty tree, nothing to remove */
+	return 0;		/* empty tree, nothing to remove */
     }
 
     /* Set up helpers */
@@ -193,8 +195,7 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 		struct RB_NODE *s = p->link[!last];
 
 		if (s != NULL) {
-		    if (!is_red(s->link[!last]) &&
-		        !is_red(s->link[last])) {
+		    if (!is_red(s->link[!last]) && !is_red(s->link[last])) {
 			/* Color flip */
 			p->red = 0;
 			s->red = 1;
@@ -232,7 +233,7 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 
     /* Update root and make it black */
     tree->root = head.link[1];
-    if ( tree->root != NULL)
+    if (tree->root != NULL)
 	tree->root->red = 0;
 
     return removed;
@@ -251,7 +252,7 @@ void *rbtree_find(struct RB_TREE *tree, const void *data)
     while (curr_node != NULL) {
 	cmp = tree->rb_compare(curr_node->data, data);
 	if (cmp == 0)
-	    return curr_node->data;   /* found */
+	    return curr_node->data;	/* found */
 	else {
 	    curr_node = curr_node->link[cmp < 0];
 	}
@@ -283,7 +284,7 @@ int rbtree_init_trav(struct RB_TRAV *trav, struct RB_TREE *tree)
 void *rbtree_traverse(struct RB_TRAV *trav)
 {
     assert(trav);
-    
+
     if (trav->curr_node == NULL) {
 	if (trav->first)
 	    G_debug(1, "RB tree: empty tree");
@@ -292,7 +293,7 @@ void *rbtree_traverse(struct RB_TRAV *trav)
 
 	return NULL;
     }
-	
+
     if (!trav->first)
 	return rbtree_next(trav);
     else {
@@ -322,7 +323,7 @@ void *rbtree_traverse_start(struct RB_TRAV *trav, const void *data)
 
 	return NULL;
     }
-	
+
     if (!trav->first)
 	return rbtree_next(trav);
 
@@ -343,13 +344,13 @@ void *rbtree_traverse_start(struct RB_TRAV *trav, const void *data)
 	     * largest item is smaller than search template */
 	    if (trav->curr_node->link[dir] == NULL)
 		return trav->curr_node->data;
-		
+
 	    trav->up[trav->top++] = trav->curr_node;
 	    trav->curr_node = trav->curr_node->link[dir];
 	}
     }
 
-    return NULL; /* should not happen */
+    return NULL;		/* should not happen */
 }
 
 /* two functions needed to fully traverse the tree: initialize and continue
@@ -371,7 +372,7 @@ void *rbtree_first(struct RB_TRAV *trav)
 	trav->curr_node = trav->curr_node->link[0];
     }
 
-    return trav->curr_node->data; /* return smallest item */
+    return trav->curr_node->data;	/* return smallest item */
 }
 
 /* continue traversing the tree in ascending order
@@ -393,6 +394,7 @@ void *rbtree_next(struct RB_TRAV *trav)
     else {
 	/* at smallest item in this branch, go back up */
 	struct RB_NODE *last;
+
 	do {
 	    if (trav->top == 0) {
 		trav->curr_node = NULL;
@@ -406,12 +408,13 @@ void *rbtree_next(struct RB_TRAV *trav)
     if (trav->curr_node != NULL) {
 	return trav->curr_node->data;
     }
-    else	
-	return NULL; /* finished traversing */
+    else
+	return NULL;		/* finished traversing */
 }
 
 /* destroy the tree */
-void rbtree_destroy(struct RB_TREE *tree) {
+void rbtree_destroy(struct RB_TREE *tree)
+{
     rbtree_destroy2(tree->root);
     G_free(tree);
 }
@@ -430,7 +433,7 @@ void rbtree_destroy2(struct RB_NODE *root)
 int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
 {
     int lh, rh;
- 
+
     if (root == NULL)
 	return 1;
     else {
@@ -452,7 +455,7 @@ int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
 	if (ln) {
 	    lcmp = tree->rb_compare(ln->data, root->data);
 	}
-	
+
 	if (rn) {
 	    rcmp = tree->rb_compare(rn->data, root->data);
 	}
@@ -460,8 +463,8 @@ int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
 	/* Invalid binary search tree:
 	 * left node >= parent or right node <= parent */
 	if ((ln != NULL && lcmp > -1)
-	 || (rn != NULL && rcmp < 1)) {
-	    G_warning("Red Black Tree debugging: Binary tree violation" );
+	    || (rn != NULL && rcmp < 1)) {
+	    G_warning("Red Black Tree debugging: Binary tree violation");
 	    return 0;
 	}
 
@@ -496,9 +499,9 @@ struct RB_NODE *rbtree_make_node(size_t datasize, void *data)
     new_node->data = G_malloc(datasize);
     if (new_node->data == NULL)
 	G_fatal_error("RB Search Tree: Out of memory!");
-	
+
     memcpy(new_node->data, data, datasize);
-    new_node->red = 1;            /* 1 is red, 0 is black */
+    new_node->red = 1;		/* 1 is red, 0 is black */
     new_node->link[0] = NULL;
     new_node->link[1] = NULL;
 
@@ -527,7 +530,7 @@ struct RB_NODE *rbtree_single(struct RB_NODE *root, int dir)
 
     return newroot;
 }
- 
+
 /* double rotation */
 struct RB_NODE *rbtree_double(struct RB_NODE *root, int dir)
 {

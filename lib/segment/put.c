@@ -47,8 +47,8 @@ int segment_put(SEGMENT * SEG, const void *buf, int row, int col)
 
     segment_address(SEG, row, col, &n, &index);
     if ((i = segment_pagein(SEG, n)) < 0) {
-        G_warning("segment lib: put: pagein failed");
-        return -1;
+	G_warning("segment lib: put: pagein failed");
+	return -1;
     }
 
     SEG->scb[i].dirty = 1;

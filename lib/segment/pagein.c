@@ -43,7 +43,7 @@ int segment_pagein(SEGMENT * SEG, int n)
     /* is n the current segment? */
     if (n == SEG->scb[SEG->cur].n)
 	return SEG->cur;
-	
+
     /* search the in memory segments */
     seg_search.i = 0;
     seg_search.n = n;
@@ -63,33 +63,36 @@ int segment_pagein(SEGMENT * SEG, int n)
 	    /* make it youngest */
 	    SEG->youngest = SEG->scb[cur].age;
 	}
-	
+
 	return SEG->cur = cur;
     }
-    
+
     /* find a slot to use to hold segment */
-    if (SEG->nfreeslots) {  /* any free slots left ? */
-	cur = SEG->freeslot[--SEG->nfreeslots];
-    }
-    else {	/* find oldest segment */
+    if (!SEG->nfreeslots) {
+	/* use oldest segment */
 	SEG->oldest = SEG->oldest->younger;
 	cur = SEG->oldest->cur;
 	SEG->oldest->cur = -1;
-	SEG->scb[cur].age = NULL;
+
+	/* unload segment (remove from search tree) */
+	if (SEG->scb[cur].n >= 0) {
+	    seg_search.n = SEG->scb[cur].n;
+	    if (rbtree_remove(SEG->loaded, &seg_search) == 0)
+		G_fatal_error("could not remove segment");
+	    seg_search.n = n;
+
+	    /* write it out if dirty */
+	    if (SEG->scb[cur].dirty) {
+		if (segment_pageout(SEG, cur) < 0)
+		    return -1;
+	    }
+	}
+    }
+    else {
+	/* free slots left */
+	cur = SEG->freeslot[--SEG->nfreeslots];
     }
 
-    /* if slot is used, write it out, if dirty */
-    if (SEG->scb[cur].n >= 0 && SEG->scb[cur].dirty) {
-	if (segment_pageout(SEG, cur) < 0)
-	    return -1;
-    }
-	
-    if (SEG->scb[cur].n >= 0) {
-	seg_search.n = SEG->scb[cur].n;
-	if (rbtree_remove(SEG->loaded, &seg_search) == 0)
-	    G_fatal_error("could not remove segment");
-	seg_search.n = n;
-    }
 
     /* read in the segment */
     SEG->scb[cur].n = n;
@@ -113,9 +116,6 @@ int segment_pagein(SEGMENT * SEG, int n)
 	return -1;
     }
 
-    if (cur < 0 || n < 0)
-	G_fatal_error("segment not loaded");
-
     /* remember loaded segment */
     seg_search.i = cur;
     if (rbtree_insert(SEG->loaded, &seg_search) == 0)
@@ -125,6 +125,6 @@ int segment_pagein(SEGMENT * SEG, int n)
     SEG->youngest = SEG->youngest->younger;
     SEG->scb[cur].age = SEG->youngest;
     SEG->youngest->cur = cur;
-    
+
     return SEG->cur = cur;
 }
