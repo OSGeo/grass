@@ -56,20 +56,26 @@ DSTH := $(patsubst ../include/%.h,$(ARCH_INCDIR)/%.h,$(SRCH))
 SRCMAKE := $(wildcard ../include/Make/*.make)
 DSTMAKE := $(patsubst ../include/Make/%.make,$(ARCH_DISTDIR)/include/Make/%.make,$(SRCMAKE))
 
-default: headers
+default: $(DSTH) $(DSTMAKE)
 	$(MAKE) subdirs
 
-headers: 
-	if [ ! -d $(ARCH_DISTDIR)/include ]; then $(MKDIR) $(ARCH_DISTDIR)/include; fi
-	if [ ! -d $(ARCH_INCDIR) ]; then $(MKDIR) $(ARCH_INCDIR); fi
-	if [ ! -d $(ARCH_INCDIR)/vect ]; then $(MKDIR) $(ARCH_INCDIR)/vect; fi
-	if [ ! -d $(ARCH_INCDIR)/iostream ]; then $(MKDIR) $(ARCH_INCDIR)/iostream; fi
-	$(MAKE) $(DSTH)
-	if [ ! -d $(ARCH_DISTDIR)/include/Make ]; then $(MKDIR) $(ARCH_DISTDIR)/include/Make; fi
-	$(MAKE) $(DSTMAKE)
+$(ARCH_DISTDIR)/include:
+	$(MKDIR) $@
 
-$(ARCH_INCDIR)/%.h: ../include/%.h
+$(ARCH_INCDIR) | $(ARCH_DISTDIR)/include:
+	$(MKDIR) $@
+
+$(ARCH_INCDIR)/vect | $(ARCH_INCDIR):
+	$(MKDIR) $@
+
+$(ARCH_INCDIR)/iostream | $(ARCH_INCDIR):
+	$(MKDIR) $@
+
+$(ARCH_INCDIR)/%.h: ../include/%.h | $(ARCH_INCDIR) $(ARCH_INCDIR)/vect $(ARCH_INCDIR)/iostream
 	$(INSTALL_DATA) $< $@
 
-$(ARCH_DISTDIR)/include/Make/%.make: ../include/Make/%.make
+$(ARCH_DISTDIR)/include/Make/%.make: ../include/Make/%.make | $(ARCH_DISTDIR)/include/Make
 	$(INSTALL_DATA) $< $@
+
+$(ARCH_DISTDIR)/include/Make:
+	$(MKDIR) $@

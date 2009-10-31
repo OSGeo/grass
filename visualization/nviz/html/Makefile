@@ -7,13 +7,13 @@ GRASS_NVIZ_DOCS=$(ARCH_DISTDIR)/docs/html/nviz
 SRCFILES := $(wildcard  *.* img/nv/*.* nvimg/*/*.*)
 DSTFILES := $(patsubst %,$(GRASS_NVIZ_DOCS)/%,$(SRCFILES))
 
-default:
-	-if [ ! -d $(ARCH_DISTDIR)/docs ] ; then $(MKDIR) $(ARCH_DISTDIR)/docs ; fi
-	-if [ ! -d $(ARCH_DISTDIR)/docs/html ] ; then $(MKDIR) $(ARCH_DISTDIR)/docs/html ; fi
-	-for dir in '' img img/nv nvimg nvimg/panel nvimg/work ; do \
-	if [ ! -d $(GRASS_NVIZ_DOCS)/$$dir ] ; then $(MKDIR) $(GRASS_NVIZ_DOCS)/$$dir ; fi \
-	done
-	$(MAKE) $(DSTFILES)
+DSTDIRS := $(ARCH_DISTDIR)/docs $(ARCH_DISTDIR)/docs/html $(GRASS_NVIZ_DOCS) \
+	$(patsubst %,$(GRASS_NVIZ_DOCS)/%,img img/nv nvimg/panel nvimg/work)
 
-$(GRASS_NVIZ_DOCS)/%: %
+default: $(DSTFILES)
+
+$(DSTDIRS): %:
+	$(MKDIR) $@
+
+$(GRASS_NVIZ_DOCS)/%: % | $(DSTDIRS)
 	$(INSTALL_DATA) $< $@

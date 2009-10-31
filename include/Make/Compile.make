@@ -15,8 +15,6 @@ compiler_cxx = $(call compiler_x,$(CXX),$(CXXFLAGS) $($*_cc_FLAGS) $($*_cpp_FLAG
 compiler = $(call compiler_x,$(CC))
 
 # default cc rules
-ifeq ($(BROKEN_MAKE),)
-
 $(OBJDIR)/%.o : %.c $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
 	$(call compiler_c)
 
@@ -25,22 +23,6 @@ $(OBJDIR)/%.o : %.cc $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
 
 $(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
 	$(call compiler_cxx)
-
-else
-
-$(OBJDIR)/%.o : %.c $(LOCAL_HEADERS) $(EXTRA_HEADERS)
-	$(MAKE) $(OBJDIR)
-	$(call compiler_c)
-
-$(OBJDIR)/%.o : %.cc $(LOCAL_HEADERS) $(EXTRA_HEADERS)
-	$(MAKE) $(OBJDIR)
-	$(call compiler_cxx)
-
-$(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS)
-	$(MAKE) $(OBJDIR)
-	$(call compiler_cxx)
-
-endif
 
 # default parser generation rules, include prefix for files/vars
 %.yy.c: %.l

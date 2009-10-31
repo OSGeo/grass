@@ -22,12 +22,14 @@ DATA_SRC = circle.txt polygon.txt
 
 DATA_DST := $(patsubst %,$(TARGET)/%,$(DATA_SRC))
 
-default: script
-	if [ ! -d $(TARGET) ] ; then $(MKDIR) $(TARGET) ; fi
-	$(MAKE) $(SCRIPT_DST) $(DATA_DST)
+default: script $(SCRIPT_DST) $(DATA_DST)
 
-$(TARGET)/%.txt: %.txt
+$(TARGET)/%.txt: %.txt | $(TARGET)
 	$(INSTALL_DATA) $< $@
 
-$(TARGET)/%: %
+$(TARGET)/%: % | $(TARGET)
 	$(INSTALL) $< $@
+
+$(TARGET):
+	$(MKDIR) $@
+

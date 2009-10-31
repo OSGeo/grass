@@ -11,8 +11,8 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd $(GUI)
 
-$(ETC)/gui/scripts/%: %
-	if [ ! -d $(ETC) ]; then $(MKDIR) $(ETC); fi
-	if [ ! -d $(ETC)/gui ]; then $(MKDIR) $(ETC)/gui; fi
-	if [ ! -d $(ETC)/gui/scripts ]; then $(MKDIR) $(ETC)/gui/scripts; fi
+$(ETC)/gui/scripts/%: % | $(ETC)/gui/scripts
 	$(INSTALL) $< $@
+
+$(ETC)/gui/scripts:
+	$(MKDIR) $@

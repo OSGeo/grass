@@ -7,21 +7,16 @@ include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 SYMBOL_SRC := $(wildcard symbol/*/*)
 SYMBOL_DST := $(patsubst symbol/%,$(ETC)/symbol/%,$(SYMBOL_SRC))
+SYMBOL_DIRS := $(patsubst %,$(ETC)/symbol/%, demo basic extra geology)
 
 default: lib
-	$(MAKE) dirs
-	$(MAKE) symb
+	$(MAKE) $(SYMBOL_DST)
 
-dirs:
-	if [ ! -d $(ETC)/symbol ]; then $(MKDIR) $(ETC)/symbol ; fi
-	if [ ! -d $(ETC)/symbol/demo ]; then $(MKDIR) $(ETC)/symbol/demo ; fi
-	if [ ! -d $(ETC)/symbol/basic ]; then $(MKDIR) $(ETC)/symbol/basic ; fi
-	if [ ! -d $(ETC)/symbol/extra ]; then $(MKDIR) $(ETC)/symbol/extra ; fi
-	if [ ! -d $(ETC)/symbol/geology ]; then $(MKDIR) $(ETC)/symbol/geology ; fi
+$(SYMBOL_DIRS): %: | $(ETC)/symbol
+	$(MKDIR) $@
 
-symb:	$(SYMBOL_DST)
+$(ETC)/symbol:
+	$(MKDIR) $@
 
-$(ETC)/symbol/%: symbol/%
+$(ETC)/symbol/%: symbol/% | $(SYMBOL_DIRS)
 	$(INSTALL_DATA) $< $@
-
-.PHONY: dirs symb

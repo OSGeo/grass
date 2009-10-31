@@ -36,19 +36,27 @@ endif
 
 # Install the scripts in the appropriate directory
 install:
-	-if [ ! -d $(INSTALL_DIR) ] ; then $(MKDIR) $(INSTALL_DIR) ; fi
 	$(MAKE) $(INSTALL_DIR)/$(PGM)$(EXE)
 	$(MAKE) $(BIN)/$(PGM)
 ifneq ($(strip $(MINGW)),)
 	$(MAKE) $(BIN)/nviz.bat
 endif
-	-if [ ! -d $(INSTALL_DIR)/scripts ] ; then $(MKDIR) $(INSTALL_DIR)/scripts ; fi
 	$(MAKE) $(SCRIPT_DST)
-	-if [ ! -d $(INSTALL_DIR)/bitmaps ] ; then $(MKDIR) $(INSTALL_DIR)/bitmaps ; fi
-	-if [ ! -d $(INSTALL_DIR)/bitmaps/flythrough ] ; then $(MKDIR) $(INSTALL_DIR)/bitmaps/flythrough ; fi
 	$(MAKE) $(BITMAP_DST)
 
-$(INSTALL_DIR)/$(PGM)$(EXE): src/nvwish$(EXE)
+$(INSTALL_DIR):
+	$(MKDIR) $@
+
+$(INSTALL_DIR)/scripts: | $(INSTALL_DIR)
+	$(MKDIR) $@
+
+$(INSTALL_DIR)/bitmaps: | $(INSTALL_DIR)
+	$(MKDIR) $@
+
+$(INSTALL_DIR)/bitmaps/flythrough: | $(INSTALL_DIR)/bitmaps
+	$(MKDIR) $@
+
+$(INSTALL_DIR)/$(PGM)$(EXE): src/nvwish$(EXE) | $(INSTALL_DIR)
 	$(INSTALL) $< $@
 
 $(BIN)/$(PGM): scripts/$(PGM)
@@ -57,10 +65,10 @@ $(BIN)/$(PGM): scripts/$(PGM)
 $(BIN)/nviz.bat: scripts/nviz.bat
 	$(INSTALL) $< $@
 
-$(INSTALL_DIR)/scripts/%: scripts/%
+$(INSTALL_DIR)/scripts/%: scripts/% | $(INSTALL_DIR)/scripts
 	$(INSTALL) $< $@
 
-$(INSTALL_DIR)/bitmaps/%: bitmaps/%
+$(INSTALL_DIR)/bitmaps/%: bitmaps/% | $(INSTALL_DIR)/bitmaps
 	$(INSTALL_DATA) $< $@
 
 .PHONY: install

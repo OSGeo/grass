@@ -25,20 +25,19 @@ CFLAGS := $(subst $(MACOSX_ARCHS),,$(CFLAGS)) $(MACOSX_ARCHS_TCLTK)
 LDFLAGS := $(subst $(MACOSX_ARCHS),,$(LDFLAGS)) $(MACOSX_ARCHS_TCLTK)
 endif
 
+LIBES = $(DBMILIB) $(GISLIB) $(DATETIMELIB) $(TCLTKLIBPATH) $(TCLTKLIBS) \
+	$(MATHLIB) $(XDRLIB)
+
 default: lib $(GTCLTKFORM)
 
 $(FORMDIR):
-	if [ ! -d $@ ]; then $(MKDIR) $@; fi
+	$(MKDIR) $@
 
-$(HTMLLIB): html_library_grass.tcl
-	$(MAKE) $(FORMDIR)
+$(HTMLLIB): html_library_grass.tcl | $(FORMDIR)
 	$(INSTALL_DATA) $< $@
 
-$(FORM): form.tcl
-	$(MAKE) $(FORMDIR)
+$(FORM): form.tcl | $(FORMDIR)
 	$(INSTALL_DATA) $< $@
 
-$(FORMPROG): $(OBJDIR)/form.o
-	$(MAKE) $(FORMDIR)
-	$(CC) $(LDFLAGS) -o $@ $(OBJDIR)/form.o $(DBMILIB) $(GISLIB) $(DATETIMELIB) \
-				$(TCLTKLIBPATH) $(TCLTKLIBS) $(MATHLIB) $(XDRLIB)
+$(FORMPROG): $(OBJDIR)/form.o | $(FORMDIR)
+	$(CC) $(LDFLAGS) -o $@ $(OBJDIR)/form.o $(LIBES)
