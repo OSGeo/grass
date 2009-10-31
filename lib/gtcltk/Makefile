@@ -4,8 +4,14 @@ PGM=grocat
 include $(MODULE_TOPDIR)/include/Make/Etc.make
 include $(MODULE_TOPDIR)/include/Make/NoHtml.make
 
-default: etc $(ETC)/gtcltk
+TCLSRC := $(wildcard *.tcl)
+TCLDST := $(patsubst %.tcl,$(ETC)/gtcltk/%.tcl,$(TCLSRC))
 
-$(ETC)/gtcltk: *.tcl 
-	if [ ! -d $(ETC)/gtcltk ]; then $(MKDIR) $(ETC)/gtcltk; fi
-	for file in *.tcl ; do $(INSTALL_DATA) $$file $(ETC)/gtcltk/ ; done
+default: etc $(TCLDST)
+
+$(ETC)/gtcltk/%.tcl: %.tcl | $(ETC)/gtcltk
+	$(INSTALL_DATA) $< $@
+
+$(ETC)/gtcltk:
+	$(MKDIR) $@
+

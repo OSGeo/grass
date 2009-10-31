@@ -11,20 +11,21 @@ MODULES = core db raster vector
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 
-default: $(DSTDIR)
-	$(MAKE) $(PYFILES)
+default: $(PYFILES) $(GDIR)/__init__.py
 
 $(PYDIR):
-	test -d $@ || $(MKDIR) -p $@
+	$(MKDIR) $@
 
-$(GDIR): $(PYDIR)
-	test -d $@ || $(MKDIR) -p $@
+$(GDIR): | $(PYDIR)
+	$(MKDIR) $@
 
-$(DSTDIR): $(GDIR)
-	test -d $@ || $(MKDIR) -p $@
-	@cat grass__init__.py > $(GDIR)/__init__.py
+$(DSTDIR): | $(GDIR)
+	$(MKDIR) $@
 
-$(DSTDIR)/%: %
+$(GDIR)/__init__.py: grass__init__.py | $(GDIR)
+	$(INSTALL_DATA) $< $@
+
+$(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
 #doxygen:

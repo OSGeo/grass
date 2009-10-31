@@ -22,11 +22,7 @@ headers: $(HEADERS)
 $(RTLINC):
 	$(MKDIR) $@
 
-ifneq ($(BROKEN_MAKE),)
-$(RTLINC)/%.h: %.h $(RTLINC)
-else
 $(RTLINC)/%.h: %.h | $(RTLINC)
-endif
 	$(INSTALL_DATA) $< $@
 
 $(ARCH_INCDIR)/rtree.h: rtree.h

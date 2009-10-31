@@ -22,18 +22,22 @@ NT_DSTFILES  := $(patsubst %,$(NAD_DIR)/%,$(NT_TABLES))
 CSV_DSTFILES := $(patsubst %,$(CSV_DIR)/%,$(CSV_FILES))
 
 default: lib
-	if [ ! -d $(NAD_DIR) ] ; then $(MKDIR) $(NAD_DIR) ; fi
-	if [ ! -d $(CSV_DIR) ] ; then $(MKDIR) $(CSV_DIR) ; fi
 	$(MAKE) $(NAD_DSTFILES) $(CSV_DSTFILES)
 
-$(NAD_DIR)/%: %.lla
+$(NAD_DIR)/%: %.lla | $(NAD_DIR)
 	$(NAD2BIN) < $< $@
 
-$(NT_DSTFILES): $(NAD_DIR)/%: %
+$(NT_DSTFILES): $(NAD_DIR)/%: % | $(NAD_DIR)
 	$(INSTALL_DATA) $< $@
 
-$(CSV_DIR)/%.csv: %.csv
+$(CSV_DIR)/%.csv: %.csv | $(CSV_DIR)
 	$(INSTALL_DATA) $< $@
+
+$(NAD_DIR):
+	$(MKDIR) $@
+
+$(CSV_DIR):
+	$(MKDIR) $@
 
 # Note for future improvement:
 # To allow for cross-compilation, the above NAD_TABLES files should be

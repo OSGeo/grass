@@ -69,18 +69,18 @@ default:
 	$(SWIG) $(SWIGFLAGS) -python -o $*_wrap.c -module $* -shadow $<
 
 $(PYDIR):
-	test -d $@ || $(MKDIR) -p $@
+	$(MKDIR) $@
 
-$(GDIR): $(PYDIR)
-	test -d $@ || $(MKDIR) -p $@
+$(GDIR): | $(PYDIR)
+	$(MKDIR) $@
 
-$(DSTDIR): $(GDIR)
-	test -d $@ || $(MKDIR) -p $@
+$(DSTDIR): | $(GDIR)
+	$(MKDIR) $@
 
-$(DSTDIR)/_%.so: _%.so
+$(DSTDIR)/_%.so: _%.so | $(DSTDIR)
 	$(INSTALL) $< $@
 
-$(DSTDIR)/%.py: %.py
+$(DSTDIR)/%.py: %.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
 numptr:

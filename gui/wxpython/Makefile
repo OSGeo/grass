@@ -13,22 +13,23 @@ ETCDIR = $(ETC)/wxpython
 SRCFILES := $(wildcard scripts/p.* compat/* gui_modules/* icons/*.* icons/silk/* images/* xml/*) gis_set.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
-default: install_scripts
+DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat gui_modules icons icons/silk images scripts vdigit xml nviz)
+
+default: $(DSTFILES) menustrings.py
 	$(MAKE) parsubdirs
 
-install_scripts:
-	-for dir in '' compat gui_modules icons icons/silk images scripts vdigit xml nviz ; do \
-	if [ ! -d $(ETCDIR)/$$dir ] ; then $(MKDIR) $(ETCDIR)/$$dir ; fi ; \
-	done
-	$(MAKE) $(DSTFILES)
-	$(MAKE) menustrings.py
-
-$(ETCDIR)/%: %
+$(ETCDIR)/%: % | $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
 
 menustrings.py: gui_modules/menudata.py xml/menudata.xml
 	GISBASE="$(GISBASE)" \
 	$(PYTHON) $< > $@
+
+$(DSTDIRS): %: | $(ETCDIR)
+	$(MKDIR) $@
+
+$(ETCDIR):
+	$(MKDIR) $@
 
 #doxygen:
 DOXNAME=wxpython

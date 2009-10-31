@@ -18,12 +18,13 @@ headers: $(DGLINC)/avl.h $(DGLINC)/tavl.h $(DGLINC)/graph.h $(DGLINC)/heap.h \
 	 $(DGLINC)/tree.h $(DGLINC)/type.h $(DGLINC)/helpers.h $(DGLINC)/graph_v1.h $(DGLINC)/graph_v2.h \
 	 $(ARCH_INCDIR)/dgl.h
 
-$(DGLINC)/%.h: %.h
-	-test -d $(DGLINC) || $(MKDIR) $(DGLINC)
-	$(INSTALL_DATA) $^ $@
+$(DGLINC)/%.h: %.h | $(DGLINC)
+	$(INSTALL_DATA) $< $@
 
-$(ARCH_INCDIR)/dgl.h: dgl.h
-	$(INSTALL_DATA) $^ $@
+$(DGLINC):
+	$(MKDIR) $@
+
+.PHONY: headers
 
 #doxygen:
 DOXNAME=dg

@@ -17,25 +17,22 @@ SRCDEC := $(wildcard decorations/*.eps)
 DSTDEC := $(patsubst decorations/%.eps,$(ETC)/paint/decorations/%.eps,$(SRCDEC))
 
 
-default: cmd $(PROLOG) patt decor
+default: cmd $(PROLOG) $(DSTPAT) $(DSTDEC)
 
-$(PROLOG): prolog.ps
-	if [ ! -d $(ETC)/paint ] ; then $(MKDIR) $(ETC)/paint ; fi
+$(PROLOG): prolog.ps | $(ETC)/paint
 	$(INSTALL_DATA) $< $@
 
-patt:
-	if [ ! -d $(ETC)/paint/patterns ] ; then $(MKDIR) $(ETC)/paint/patterns ; fi
-	$(MAKE) $(DSTPAT)
-
-$(ETC)/paint/patterns/%.eps: patterns/%.eps
+$(ETC)/paint/patterns/%.eps: patterns/%.eps | $(ETC)/paint/patterns
 	$(INSTALL_DATA) $< $@
 
-decor:
-	if [ ! -d $(ETC)/paint/decorations ] ; then $(MKDIR) $(ETC)/paint/decorations ; fi
-	$(MAKE) $(DSTDEC)
-
-$(ETC)/paint/decorations/%.eps: decorations/%.eps
+$(ETC)/paint/decorations/%.eps: decorations/%.eps | $(ETC)/paint/decorations
 	$(INSTALL_DATA) $< $@
 
+$(ETC)/paint:
+	$(MKDIR) $@
 
-.PHONY: patt decor
+$(ETC)/paint/patterns: | $(ETC)/paint
+	$(MKDIR) $@
+
+$(ETC)/paint/decorations: | $(ETC)/paint
+	$(MKDIR) $@

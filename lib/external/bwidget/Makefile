@@ -8,10 +8,10 @@ SRCFILES := $(wildcard images/*.* lang/*.* *.tcl *.txt) README.grass
 DSTFILES := $(patsubst %,$(BWIDGETDIR)/%,$(SRCFILES))
 
 default:
-	if [ ! -d $(BWIDGETDIR) ]; then $(MKDIR) $(BWIDGETDIR); fi
-	if [ ! -d $(BWIDGETDIR)/images ]; then $(MKDIR) $(BWIDGETDIR)/images; fi
-	if [ ! -d $(BWIDGETDIR)/lang ]; then $(MKDIR) $(BWIDGETDIR)/lang; fi
 	$(MAKE) $(DSTFILES)
 
-$(BWIDGETDIR)/%: %
+$(BWIDGETDIR)/%: % | $(BWIDGETDIR) $(BWIDGETDIR)/images $(BWIDGETDIR)/lang
 	$(INSTALL_DATA) $< $@
+
+$(BWIDGETDIR) $(BWIDGETDIR)/images $(BWIDGETDIR)/lang: %:
+	$(MKDIR) $@
