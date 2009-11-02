@@ -31,10 +31,12 @@ OBJS =	at_exit_funcs.o \
 	actions.o \
 	main.o
 
-default: gem
+GEM = gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)$(EXE)
 
-gem: $(SRCS) $(HDRS) $(OBJS)
-	$(CC) $(OBJS) -o $@$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) $(CFLAGS) $(CLIBS) $(LDFLAGS)
+default: $(GEM)
+
+$(GEM): $(SRCS) $(HDRS) $(OBJS)
+	$(CC) $(OBJS) -o $@ $(CFLAGS) $(CLIBS) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
@@ -55,10 +57,13 @@ actions.o: actions.h globals.h
 
 main.o:	globals.h
 
-install: gem
-	strip gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR);
-	cp gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) /usr/local/bin
+install: $(UNIX_BIN)/$(GEM)
+
+$(UNIX_BIN)/$(GEM): $(GEM)
+	$(INSTALL)  $< $@
+	strip $@
 
 clean:
-	-rm -f *.o *.bak core *~ gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+	-rm -f *.o *.bak core *~ $(GEM)
 
+.PHONY: install
