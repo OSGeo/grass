@@ -16,8 +16,21 @@ DSTFILES := \
 	$(HTMLDIR)/nviz/grass_icon.png \
 	$(GEM_DST)
 
-IDXSRC = full_index index \
-	display database general imagery misc postscript raster raster3D vector
+categories = \
+	d:display \
+	db:database \
+	g:general \
+	i:imagery \
+	m:misc \
+	ps:postscript \
+	r:raster \
+	r3:raster3D \
+	v:vector
+
+IDXCATS := $(foreach cat,$(categories),$(lastword $(subst :, ,$(cat))))
+
+IDXSRC = full_index index $(IDXCATS)
+
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
 default: $(DSTFILES)
@@ -44,32 +57,12 @@ $(HTMLDIR)/full_index.html: $(wildcard $(HTMLDIR)/*.*.html)
 $(HTMLDIR)/index.html:
 	$(call build,index)
 
-$(HTMLDIR)/display.html: $(wildcard $(HTMLDIR)/d.*.html)
-	$(call build,class,d display)
+define category_rule
+$$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html)
+	$$(call build,class,$(1) $(2))
+endif
 
-$(HTMLDIR)/database.html: $(wildcard $(HTMLDIR)/db.*.html)
-	$(call build,class,db database)
-
-$(HTMLDIR)/general.html: $(wildcard $(HTMLDIR)/g.*.html)
-	$(call build,class,g general)
-
-$(HTMLDIR)/imagery.html: $(wildcard $(HTMLDIR)/i.*.html)
-	$(call build,class,i imagery)
-
-$(HTMLDIR)/misc.html: $(wildcard $(HTMLDIR)/m.*.html)
-	$(call build,class,m misc)
-
-$(HTMLDIR)/postscript.html: $(wildcard $(HTMLDIR)/ps.*.html)
-	$(call build,class,ps postscript)
-
-$(HTMLDIR)/raster.html: $(wildcard $(HTMLDIR)/r.*.html)
-	$(call build,class,r raster)
-
-$(HTMLDIR)/raster3D.html: $(wildcard $(HTMLDIR)/r3.*.html)
-	$(call build,class,r3 raster3D)
-
-$(HTMLDIR)/vector.html: $(wildcard $(HTMLDIR)/v.*.html)
-	$(call build,class,v vector)
+$(foreach cat,$(categories),$(eval $(call category_rule,$(firstword $(subst :, ,$(cat))),$(lastword $(subst :, ,$(cat))))))
 
 $(HTMLDIR)/grassdocs.css: grassdocs.css
 	$(INSTALL_DATA) $< $@
