@@ -519,6 +519,8 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
     
     ret = Vect__open_old(Map, name, mapset, NULL, 1, 0);
     
+    /* the update lists are unused, a waste of time and memory */
+    /*
     if (ret > 0) {
 	Map->plus.do_uplist = 1;
 
@@ -528,11 +530,8 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 	Map->plus.upnodes = NULL;
 	Map->plus.n_upnodes = 0;
 	Map->plus.alloc_upnodes = 0;
-
-	/* read spatial index */
-	/* Build spatial index from topo */
-	/* Vect_build_sidx_from_topo(Map); */
     }
+    */
 
     return ret;
 }
@@ -581,7 +580,9 @@ int Vect_open_update_head(struct Map_info *Map, const char *name,
 
     ret = Vect__open_old(Map, name, mapset, NULL, 1, 1);
 
-    if (ret > 0) {		/* Probably not important */
+    /* the update lists are unused, a waste of time and memory */
+    /*
+    if (ret > 0) {
 	Map->plus.do_uplist = 1;
 
 	Map->plus.uplines = NULL;
@@ -591,6 +592,7 @@ int Vect_open_update_head(struct Map_info *Map, const char *name,
 	Map->plus.n_upnodes = 0;
 	Map->plus.alloc_upnodes = 0;
     }
+    */
 
     return ret;
 }
