@@ -993,8 +993,18 @@ class MultiImportDialog(wx.Dialog):
             self.add.SetLabel(_("Add linked layers into layer tree"))
         else:
             self.add.SetLabel(_("Add imported layers into layer tree"))
+
+        if not link and self.inputType in ('gdal', 'ogr'):
+            self.overrideCheck = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
+                                             label=_("Override projection (use location's projection)"))
+            self.overrideCheck.SetValue(True)
+                                             
         self.add.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
 
+        self.overwrite = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
+                                     label=_("Allow output files to overwrite existing files"))
+        self.overwrite.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
+        
         #
         # buttons
         #
@@ -1053,6 +1063,13 @@ class MultiImportDialog(wx.Dialog):
         dialogSizer.Add(item=layerSizer, proportion=1,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
+        if hasattr(self, "overrideCheck"):
+            dialogSizer.Add(item=self.overrideCheck, proportion=0,
+                            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+
+        dialogSizer.Add(item=self.overwrite, proportion=0,
+                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+        
         dialogSizer.Add(item=self.add, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
@@ -1079,7 +1096,7 @@ class MultiImportDialog(wx.Dialog):
         
         self.Layout()
         # auto-layout seems not work here - FIXME
-        self.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0] + 175, 300))
+        self.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0] + 175, 400))
         width = self.GetSize()[0]
         self.list.SetColumnWidth(col=1, width=width/2 - 50)
         
@@ -1113,13 +1130,19 @@ class MultiImportDialog(wx.Dialog):
                            'output=%s' % output]
             else: # gdal
                 if self.link:
-                    cmd = ['r.external', '-o', # override projection by default
+                    cmd = ['r.external',
                            'input=%s' % (os.path.join(self.input.GetValue(), layer)),
                            'output=%s' % output]
                 else:
-                    cmd = ['r.in.gdal', '-o', # override projection by default
+                    cmd = ['r.in.gdal',
                            'input=%s' % (os.path.join(self.input.GetValue(), layer)),
                            'output=%s' % output]
+
+            if self.overwrite.IsChecked():
+                cmd.append('--overwrite')
+            
+            if hasattr(self, "overrideCheck") and self.overrideCheck.IsChecked():
+                cmd.append('-o')
             
             if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
                 cmd.append('--overwrite')
