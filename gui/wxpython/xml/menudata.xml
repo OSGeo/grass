@@ -644,9 +644,14 @@
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>E&amp;xit</label>
-	  <help>Quit GUI</help>
+	  <label>Quit GUI</label>
+	  <help>Quit wxGUI session</help>
 	  <handler>self.OnCloseWindow</handler>
+	</menuitem>
+	<menuitem>
+	  <label>Quit GRASS GIS</label>
+	  <help>Quit GRASS session including wxGUI</help>
+	  <handler>self.OnQuit</handler>
 	  <shortcut>Ctrl+Q</shortcut>
 	</menuitem>
       </items>
