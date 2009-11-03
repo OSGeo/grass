@@ -27,6 +27,7 @@ import re
 import string
 import getopt
 import platform
+import signal
 
 ### XML 
 try:
@@ -1456,6 +1457,19 @@ class GMFrame(wx.Frame):
                 self.OnAddVector(None)
         
         event.Skip()
+
+    def OnQuit(self, event):
+        """!Quit GRASS"""
+        # quit wxGUI session
+        self.OnCloseWindow(event)
+
+        # quit GRASS shell
+        try:
+            pid = os.environ['GRASS_SHELL_PID']
+        except KeyError:
+            return
+
+        os.kill(int(pid), signal.SIGQUIT)
         
     def OnCloseWindow(self, event):
         """!Cleanup when wxGUI is quit"""
