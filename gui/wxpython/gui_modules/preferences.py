@@ -102,7 +102,7 @@ class Settings:
                     'enabled' : False
                     },
                 'autoRendering': {
-                    'enabled' : False
+                    'enabled' : True
                     },
                 'autoZooming' : {
                     'enabled' : False
