@@ -29,7 +29,6 @@
 /*      point structure containing various attributes of       */
 /*      a grid cell.                                           */
 /*                                                             */
-
 /***************************************************************/
 
 #ifndef __COST_H__
@@ -38,22 +37,16 @@
 struct cost
 {
     double min_cost;
+    unsigned int age;
     int row;
     int col;
-    struct cost *lower;
-    struct cost *higher;
-    struct cost *above;
-    struct cost *nexttie;
-    struct cost *previoustie;
 };
 
-/* btree.c */
+/* heap.c */
 struct cost *insert(double, int, int);
-struct cost *find(double, int, int);
 struct cost *get_lowest(void);
-int show(struct cost *);
-int show_all();
 int delete(struct cost *);
-int check(char *, struct cost *);
+int init_heap(void);
+int free_heap(void);
 
 #endif /* __COST_H__ */
