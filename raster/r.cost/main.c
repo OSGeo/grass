@@ -10,13 +10,15 @@
  *
  *               Updated for calculation errors and directional surface generation
  *                 Colin Nielsen <colin.nielsen gmail com>
+ *               Use min heap instead of btree (faster, less memory)
+ *                 Markus Metz
  *
  * PURPOSE:      Outputs a raster map layer showing the cumulative cost 
  *               of moving between different geographic locations on an 
  *               input raster map layer whose cell category values 
  *               represent cost.
  *
- * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,7 +53,7 @@
  * if "output" doesn't exist, but is expected (this is bad design).
  */
 
-#define SEGCOLSIZE 	256
+#define SEGCOLSIZE 	64
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -66,7 +68,6 @@
 #include <grass/segment.h>
 #include "cost.h"
 #include "stash.h"
-#include "local_proto.h"
 #include <grass/glocale.h>
 
 struct Cell_head window;
@@ -524,10 +525,11 @@ int main(int argc, char *argv[])
 	}
     }
     /*   Scan the start_points layer searching for starting points.
-     *   Create a btree of starting points ordered by increasing costs.
+     *   Create a heap of starting points ordered by increasing costs.
      */
+    init_heap();
+    
     if (opt7->answer) {
-#if 1
 	struct Map_info *fp;
 	struct start_pt *new_start_pt;
 	Site *site = NULL;	/* pointer to Site */
@@ -574,11 +576,9 @@ int main(int argc, char *argv[])
 
 	if (!got_one)
 	    G_fatal_error(_("No start points"));
-#endif
     }
 
     if (opt8->answer) {
-#if 1
 	struct Map_info *fp;
 	struct start_pt *new_start_pt;
 	Site *site = NULL;	/* pointer to Site */
@@ -621,7 +621,6 @@ int main(int argc, char *argv[])
 
 	G_site_free_struct(site);
 	G_sites_close(fp);
-#endif
     }
 
     if (opt9->answer) {
@@ -703,10 +702,10 @@ int main(int argc, char *argv[])
 	/*              printf("--------+++++----------\n"); */
     }
 
-    /*  Loop through the btree and perform at each cell the following:
+    /*  Loop through the heap and perform at each cell the following:
      *   1) If an adjacent cell has not already been assigned a value compute
      *      the min cost and assign it.
-     *   2) Insert the adjacent cell in the btree.
+     *   2) Insert the adjacent cell in the heap.
      *   3) Free the memory allocated to the present cell.
      */
 
@@ -746,6 +745,8 @@ int main(int argc, char *argv[])
 	 *         12    11
 	 */
 	for (neighbor = 1; neighbor <= total_reviewed; neighbor++) {
+	    row = -1;
+	    col = -1;
 	    switch (neighbor) {
 	    case 1:
 		row = pres_cell->row;
@@ -753,6 +754,7 @@ int main(int argc, char *argv[])
 		cur_dir = 180.0;
 		break;
 	    case 2:
+		row = pres_cell->row;
 		col = pres_cell->col + 1;
 		cur_dir = 0.0;
 		break;
@@ -763,6 +765,7 @@ int main(int argc, char *argv[])
 		break;
 	    case 4:
 		row = pres_cell->row + 1;
+		col = pres_cell->col;
 		cur_dir = 270.0;
 		break;
 	    case 5:
@@ -771,14 +774,17 @@ int main(int argc, char *argv[])
 		cur_dir = 135.0;
 		break;
 	    case 6:
+		row = pres_cell->row - 1;
 		col = pres_cell->col + 1;
 		cur_dir = 45.0;
 		break;
 	    case 7:
 		row = pres_cell->row + 1;
+		col = pres_cell->col + 1;
 		cur_dir = 315.0;
 		break;
 	    case 8:
+		row = pres_cell->row + 1;
 		col = pres_cell->col - 1;
 		cur_dir = 225.0;
 		break;
@@ -788,14 +794,17 @@ int main(int argc, char *argv[])
 		cur_dir = 112.5;
 		break;
 	    case 10:
+		row = pres_cell->row - 2;
 		col = pres_cell->col + 1;
 		cur_dir = 67.5;
 		break;
 	    case 11:
 		row = pres_cell->row + 2;
+		col = pres_cell->col + 1;
 		cur_dir = 292.5;
 		break;
 	    case 12:
+		row = pres_cell->row + 2;
 		col = pres_cell->col - 1;
 		cur_dir = 247.5;
 		break;
@@ -805,14 +814,17 @@ int main(int argc, char *argv[])
 		cur_dir = 157.5;
 		break;
 	    case 14:
+		row = pres_cell->row - 1;
 		col = pres_cell->col + 2;
 		cur_dir = 22.5;
 		break;
 	    case 15:
 		row = pres_cell->row + 1;
+		col = pres_cell->col + 2;
 		cur_dir = 337.5;
 		break;
 	    case 16:
+		row = pres_cell->row + 1;
 		col = pres_cell->col - 2;
 		cur_dir = 202.5;
 		break;
@@ -964,17 +976,20 @@ int main(int argc, char *argv[])
 	    break;
 
 	ct = pres_cell;
+
 	delete(pres_cell);
 
 	pres_cell = get_lowest();
-	if (pres_cell == NULL) {
-	    G_message(_("No data"));
-	    goto OUT;
-	}
-	if (ct == pres_cell)
+
+	if (ct == pres_cell) {
 	    G_warning(_("Error, ct == pres_cell"));
+	}
     }
-  OUT:
+    G_percent(1, 1, 1);
+
+    /* free heap */
+    free_heap();
+    
     /*  Open cumulative cost layer for writing   */
 
     cum_fd = Rast_open_new(cum_cost_layer, data_type);
