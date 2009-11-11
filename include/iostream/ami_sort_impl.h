@@ -221,18 +221,18 @@ runFormation(AMI_STREAM<T> *instream, Compare *cmp) {
   }
   SDEBUG MM_manager.print();
  
-  //for (size_t i=0; i< nb_runs; i++) {
-  while(!instream->eof()) {
-    //crt_run_size = (i == nb_runs-1) ? last_run_size: run_size;
+  for (size_t i=0; i< nb_runs; i++) {
+  //while(!instream->eof()) {
+    crt_run_size = (i == nb_runs-1) ? last_run_size: run_size;
     
-    //SDEBUG cout << "i=" << i << ":  runsize=" << crt_run_size << ", ";  
+    SDEBUG cout << "i=" << i << ":  runsize=" << crt_run_size << ", ";  
 
-    crt_run_size = makeRun_Block(instream, data, run_size, cmp);
-/* #ifdef BLOCKED_RUN */
-/*     makeRun(instream, data, crt_run_size, cmp); */
-/* #else         */
-/*     makeRun_Block(instream, data, crt_run_size, cmp); */
-/* #endif */
+    //crt_run_size = makeRun_Block(instream, data, run_size, cmp);
+#ifdef BLOCKED_RUN 
+    makeRun(instream, data, crt_run_size, cmp);
+#else        
+    makeRun_Block(instream, data, crt_run_size, cmp);
+#endif
 
     SDEBUG MM_manager.print();
 
