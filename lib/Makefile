@@ -62,13 +62,13 @@ default: $(DSTH) $(DSTMAKE)
 $(ARCH_DISTDIR)/include:
 	$(MKDIR) $@
 
-$(ARCH_INCDIR) | $(ARCH_DISTDIR)/include:
+$(ARCH_INCDIR): | $(ARCH_DISTDIR)/include
 	$(MKDIR) $@
 
-$(ARCH_INCDIR)/vect | $(ARCH_INCDIR):
+$(ARCH_INCDIR)/vect: | $(ARCH_INCDIR)
 	$(MKDIR) $@
 
-$(ARCH_INCDIR)/iostream | $(ARCH_INCDIR):
+$(ARCH_INCDIR)/iostream: | $(ARCH_INCDIR)
 	$(MKDIR) $@
 
 $(ARCH_INCDIR)/%.h: ../include/%.h | $(ARCH_INCDIR) $(ARCH_INCDIR)/vect $(ARCH_INCDIR)/iostream
