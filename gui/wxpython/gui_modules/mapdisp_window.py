@@ -345,8 +345,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if self.pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(self.pen)
-                pdc.DrawLine(wx.Point(coords[0], coords[1]),
-                             wx.Point(coords[2], coords[3]))
+                pdc.DrawLinePoint(wx.Point(coords[0], coords[1]),wx.Point(coords[2], coords[3]))
                 pdc.SetIdBounds(drawid, wx.Rect(coords[0], coords[1], coords[2], coords[3]))
                 # self.ovlcoords[drawid] = coords
 
