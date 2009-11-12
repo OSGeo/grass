@@ -60,7 +60,7 @@ $(HTMLDIR)/index.html:
 define category_rule
 $$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html)
 	$$(call build,class,$(1) $(2))
-endif
+endef
 
 $(foreach cat,$(categories),$(eval $(call category_rule,$(firstword $(subst :, ,$(cat))),$(lastword $(subst :, ,$(cat))))))
 
