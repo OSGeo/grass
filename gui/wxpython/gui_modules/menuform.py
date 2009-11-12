@@ -642,7 +642,10 @@ class mainFrame(wx.Frame):
         self.parent = parent # LayerTree | None
 
         # module name + keywords
-        title = self.task.name.rstrip('.py').rstrip('.sh')
+        if self.task.name.split('.')[-1] in ('py', 'sh'):
+            title = self.task.name.split('.')[:-1]
+        else:
+            title = self.task.name
         try:
             title +=  " [" + ', '.join( self.task.keywords ) + "]"
         except ValueError:
