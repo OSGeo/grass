@@ -75,8 +75,8 @@ class SQLFrame(wx.Frame):
         self.colvalues = []     # array with unique values in selected column
 
         # set dialog title
-        self.SetTitle(_("GRASS SQL Builder (%s): vector map <%s>") % \
-                          (qtype.upper(), self.vectmap))
+        self.SetTitle(_("GRASS SQL Builder (%(type)s): vector map <%(map)s>") % \
+                          { 'type' : qtype.upper(), 'map' : self.vectmap })
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
