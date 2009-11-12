@@ -33,7 +33,6 @@
 	      <label>Close</label>
 	      <help>Close workspace file</help>
 	      <handler>self.OnWorkspaceClose</handler>
-	      <shortcut>Ctrl+C</shortcut>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
