@@ -34,6 +34,7 @@ GRASS_PDFDIR=		$(DOCSDIR)/pdf
 
 
 DIRS = \
+	demolocation \
 	tools \
 	lib \
 	db \
@@ -74,7 +75,7 @@ BIN_DIST_FILES = $(FILES) \
 	man \
 	scripts
 
-default: builddemolocation
+default:
 	@echo "GRASS GIS compilation log"     > $(ERRORLOG)
 	@echo "-------------------------"    >> $(ERRORLOG)
 	@echo "Started compilation: `date`"  >> $(ERRORLOG)
@@ -83,7 +84,7 @@ default: builddemolocation
 	chmod 755 install-sh
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
-		$(MAKE) -C $$subdir; \
+		$(MAKE) -C $$subdir || echo $(CURDIR)/$$subdir >> $(ERRORLOG) ; \
 	done
 	$(MAKE) $(FILES_DST)
 	$(MAKE) ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
@@ -402,14 +403,8 @@ changelog:
 	fi
 	sh svn2cl ./ChangeLog
 
-
-builddemolocation:
-	test -d ${ARCH_DISTDIR} || ${MAKE_DIR_CMD} ${ARCH_DISTDIR}
-	-tar cBf - demolocation | (cd ${ARCH_DISTDIR}/ ; tar xBfo - ) 2>/dev/null
-	sed 's!@GISDBASE@!$(RUN_GISBASE)!' < grassrc.tmpl > $(ARCH_DISTDIR)/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
-
 .PHONY: default libs cleandistdirs cleanscriptstrings clean libsclean
 .PHONY: distclean strip install real-install install-strip install-macosx
 .PHONY: bindist real-bindist bindist-macosx srcdist srclibsdist
 .PHONY: htmldocs-single htmldocs packagehtmldocs pdfdocs cleandocs html2pdfdoc
-.PHONY: html2pdfdoccomplete changelog builddemolocation
+.PHONY: html2pdfdoccomplete changelog
