@@ -317,8 +317,8 @@ int main(int argc, char *argv[])
 		G_free_tokens(tokens);
 	    }
 	    else {
-		G_fatal_error(_("Unable to tokenize column string: %s"),
-			      columns->answer[i]);
+		G_fatal_error(_("Unable to tokenize column string: [%s]"),
+			      columns->answers[i]);
 	    }
 	    i++;
 	}
