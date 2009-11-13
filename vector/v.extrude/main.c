@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
 
 	    centroid = Vect_get_area_centroid(&In, areanum);
 	    if (!centroid) {
-		G_warning(_("Skipping area %d without centroid"));
+		G_warning(_("Skipping area %d without centroid"), areanum);
 		continue;
 	    }
 
