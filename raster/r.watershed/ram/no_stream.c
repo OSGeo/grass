@@ -19,7 +19,7 @@ int no_stream(int row, int col, CELL basin_num,
 			dvalue = wat[SEG_INDEX(wat_seg, r, c)];
 			if (dvalue < 0)
 			    dvalue = -dvalue;
-			if ((dvalue - max_drain) > 5E-8f) {	/* floating point comparison problem workaround */
+			if (dvalue > max_drain) {
 			    uprow = r;
 			    upcol = c;
 			    max_drain = dvalue;

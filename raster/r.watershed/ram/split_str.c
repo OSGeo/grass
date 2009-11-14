@@ -10,6 +10,8 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
     SHORT thisdir, leftflag, riteflag;
     int r, c, rr, cc;
 
+    new_elev = 0;
+
     for (ctr = 1; ctr <= ct; ctr++)
 	splitdir[ctr] = drain[row - new_r[ctr] + 1][col - new_c[ctr] + 1];
     updir = splitdir[1];
@@ -57,16 +59,17 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
 	haf[SEG_INDEX(haf_seg, row, col)] = basin_num;
     }
     old_basin = basin_num;
-    new_elev = alt[SEG_INDEX(alt_seg, row, col)];
-    if ((slope = (new_elev - old_elev) / stream_length) < MIN_SLOPE)
-	slope = MIN_SLOPE;
-    if (arm_flag)
+    if (arm_flag) {
+	new_elev = alt[SEG_INDEX(alt_seg, row, col)];
+	if ((slope = (new_elev - old_elev) / stream_length) < MIN_SLOPE)
+	    slope = MIN_SLOPE;
 	fprintf(fp, " %f %f\n", slope, stream_length);
+    }
     for (r = 1; r <= ct; r++) {
 	basin_num += 2;
-	easting = window.west + (new_c[r] + .5) * window.ew_res;
-	northing = window.north - (new_r[r] + .5) * window.ns_res;
 	if (arm_flag) {
+	    easting = window.west + (new_c[r] + .5) * window.ew_res;
+	    northing = window.north - (new_r[r] + .5) * window.ns_res;
 	    fprintf(fp, "%5d drains into %5d at %3d %3d %.3f %.3f",
 		    (int)basin_num, old_basin, new_r[r], new_c[r], easting,
 		    northing);
