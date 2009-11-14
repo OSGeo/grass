@@ -63,12 +63,11 @@ GRASS_LIBRARY_TYPE  = @GRASS_LIBRARY_TYPE@
 #static libs:
 STLIB_LD            = @STLIB_LD@
 STLIB_PREFIX        = lib
-STLIB_SUFFIX        = .a
+STLIB_SUFFIX        = @STLIB_SUFFIX@
 
 #shared libs
 SHLIB_PREFIX        = lib
 SHLIB_LD            = @SHLIB_LD@
-SHLIB_LD_EXTRAS     = @GRASS_SHLIB_LD_EXTRAS@
 SHLIB_LD_FLAGS      = @SHLIB_LD_FLAGS@
 SHLIB_LD_LIBS       = @SHLIB_LD_LIBS@
 SHLIB_CFLAGS        = @SHLIB_CFLAGS@
