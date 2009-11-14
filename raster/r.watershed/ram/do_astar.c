@@ -3,16 +3,41 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+double get_slope2(CELL, CELL, double);
+
 int do_astar(void)
 {
     int count;
     SHORT upr, upc, r, c, ct_dir;
-    CELL alt_val, alt_up, asp_up, wat_val;
-    CELL in_val, drain_val;
+    CELL alt_val, alt_nbr[8];
+    CELL is_in_list, is_worked;
     int index_doer, index_up;
-
+    /* sides
+     * |7|1|4|
+     * |2| |3|
+     * |5|0|6|
+     */
+    int nbr_ew[8] = { 0, 1, 2, 3, 1, 0, 0, 1 };
+    int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2 };
+    double dx, dy, dist_to_nbr[8], ew_res, ns_res;
+    double slope[8];
 
     G_message(_("SECTION 2: A * Search."));
+
+    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+	/* get r, c (r_nbr, c_nbr) for neighbours */
+	upr = nextdr[ct_dir];
+	upc = nextdc[ct_dir];
+	/* account for rare cases when ns_res != ew_res */
+	dy = ABS(upr) * window.ns_res;
+	dx = ABS(upc) * window.ew_res;
+	if (ct_dir < 4)
+	    dist_to_nbr[ct_dir] = dx + dy;
+	else
+	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
+    }
+    ew_res = window.ew_res;
+    ns_res = window.ns_res;
 
     count = 0;
     first_astar = heap_index[1];
@@ -45,37 +70,56 @@ int do_astar(void)
 	    /* get r, c (upr, upc) for this neighbour */
 	    upr = r + nextdr[ct_dir];
 	    upc = c + nextdc[ct_dir];
-	    index_up = SEG_INDEX(alt_seg, upr, upc);
+	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
 	    /* check that r, c are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
-		/* check if neighbour is in the list */
-		/* if not, add as new point */
-		in_val = FLAG_GET(in_list, upr, upc);
-		if (in_val == 0) {
-		    alt_up = alt[index_up];
-		    /* flow direction is set here */
-		    add_pt(upr, upc, alt_up, alt_val);
-		    drain_val = drain[upr - r + 1][upc - c + 1];
-		    asp[index_up] = drain_val;
-		}
-		else {
-		    in_val = FLAG_GET(worked, upr, upc);
-		    /* neighbour is edge in list, not yet worked */
-		    if (in_val == 0) {
-			asp_up = asp[index_up];
-			if (asp_up < 0) {
-			    asp[index_up] = drain[upr - r + 1][upc - c + 1];
-
-			    wat_val = wat[index_doer];
-			    if (wat_val > 0)
-				wat[index_doer] = -wat_val;
+		index_up = SEG_INDEX(alt_seg, upr, upc);
+		is_in_list = FLAG_GET(in_list, upr, upc);
+		is_worked = FLAG_GET(worked, upr, upc);
+		/* avoid diagonal flow direction bias */
+		if (!is_worked) {
+		    alt_nbr[ct_dir] = alt[index_up];
+		    slope[ct_dir] =
+			get_slope2(alt_val, alt_nbr[ct_dir],
+				   dist_to_nbr[ct_dir]);
+		    if (ct_dir > 3) {
+			if (slope[nbr_ew[ct_dir]]) {
+			    /* slope to ew nbr > slope to center */
+			    if (slope[ct_dir] <
+				get_slope2(alt_nbr[nbr_ew[ct_dir]],
+					   alt_nbr[ct_dir], ew_res))
+				is_in_list = 1;
+			}
+			if (!is_in_list && slope[nbr_ns[ct_dir]]) {
+			    /* slope to ns nbr > slope to center */
+			    if (slope[ct_dir] <
+				get_slope2(alt_nbr[nbr_ns[ct_dir]],
+					   alt_nbr[ct_dir], ns_res))
+				is_in_list = 1;
 			}
 		    }
 		}
-	    }
-	}
+
+		/* add neighbour as new point if not in the list */
+		if (is_in_list == 0) {
+		    add_pt(upr, upc, alt_nbr[ct_dir], alt_val);
+		    /* set flow direction */
+		    asp[index_up] = drain[upr - r + 1][upc - c + 1];
+		}
+		else {
+		    if (is_worked == 0) {
+			/* neighbour is edge in list, not yet worked */
+			if (asp[index_up] < 0) {
+			    asp[index_up] = drain[upr - r + 1][upc - c + 1];
+
+			    if (wat[index_doer] > 0)
+				wat[index_doer] = -wat[index_doer];
+			}
+		    }
+		}
+	    }    /* end if in region */
+	}    /* end sides */
     }
-    /* this was a lot of indentation, improve code aesthetics? */
     G_percent(count, do_points, 1);	/* finish it */
     if (mfd == 0)
 	flag_destroy(worked);
@@ -102,22 +146,18 @@ int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
 /* new add point routine for min heap */
 int add_pt(SHORT r, SHORT c, CELL ele, CELL downe)
 {
-
     FLAG_SET(in_list, r, c);
 
     /* add point to next free position */
-
     heap_size++;
 
     if (heap_size > do_points)
 	G_fatal_error(_("heapsize too large"));
 
     heap_index[heap_size] = nxt_avail_pt++;
-
     astar_pts[heap_size] = SEG_INDEX(alt_seg, r, c);
 
     /* sift up: move new point towards top of heap */
-
     sift_up(heap_size, ele);
 
     return 0;
@@ -246,8 +286,15 @@ get_slope(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
     return (slope);
 }
 
+double get_slope2(CELL ele, CELL up_ele, double dist)
+{
+    if (ele == up_ele)
+	return 0.5 / dist;
+    else
+	return (double)(up_ele - ele) / dist;
+}
 
-/* new replace */
+/* replace is unused */
 int replace(			/* ele was in there */
 	       SHORT upr, SHORT upc, SHORT r, SHORT c)
 /* CELL ele;  */
@@ -265,7 +312,7 @@ int replace(			/* ele was in there */
 	/* if (astar_pts[now].r == upr && astar_pts[now].c == upc) { */
 	seg_index_rc(alt_seg, astar_pts[now], &r2, &c2);
 	if (r2 == upr && c2 == upc) {
-	    /*astar_pts[now].downr = r;
+	    /* astar_pts[now].downr = r;
 	    astar_pts[now].downc = c; */
 	    return 0;
 	}
