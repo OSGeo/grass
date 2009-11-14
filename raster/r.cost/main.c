@@ -393,7 +393,7 @@ int main(int argc, char *argv[])
 	segments_in_memory = 4 * (nrows / srows + ncols / scols + 2);
 
     /* report disk space and memory requirements */
-    G_verbose_message(("--------------------------------------------");
+    G_verbose_message("--------------------------------------------");
     if (dir == 1) {
 	double disk_mb, mem_mb;
 
@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
 	G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
     }
-    G_verbose_message(("--------------------------------------------");
+    G_verbose_message("--------------------------------------------");
 
     /*   Create segmented format files for cost layer and output layer  */
 
