@@ -9,10 +9,7 @@ CELL def_basin(int row, int col, CELL basin_num,
 
     for (;;) {
 	bas[SEG_INDEX(bas_seg, row, col)] = basin_num;
-	asp_value = asp[SEG_INDEX(asp_seg, row, col)];
 	FLAG_SET(swale, row, col);
-	if (asp_value < 0)
-	    asp_value = -asp_value;
 	ct = 0;
 	for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	    for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
@@ -80,6 +77,10 @@ CELL def_basin(int row, int col, CELL basin_num,
 		stream_length += window.ew_res;
 	}
 	else {			/* sides == 4 */
+
+	    asp_value = asp[SEG_INDEX(asp_seg, row, col)];
+	    if (asp_value < 0)
+		asp_value = -asp_value;
 
 	    if (asp_value == 2 || asp_value == 6) {
 		if (new_r[1] != row)
