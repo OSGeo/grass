@@ -3,16 +3,42 @@
 #include "Gwater.h"
 #include "do_astar.h"
 
+double get_slope2(CELL, CELL, double);
+
 int do_astar(void)
 {
     int doer, count;
     SHORT upr, upc, r = -1, c = -1, ct_dir;
-    CELL alt_val, alt_up;
+    CELL alt_val, alt_nbr[8], alt_up;
     CELL asp_val;
-    char flag_value; 
+    char flag_value, is_in_list, is_worked; 
     HEAP_PNT heap_p;
+    /* sides
+     * |7|1|4|
+     * |2| |3|
+     * |5|0|6|
+     */
+    int nbr_ew[8] = { 0, 1, 2, 3, 1, 0, 0, 1};
+    int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2};
+    double dx, dy, dist_to_nbr[8], ew_res, ns_res;
+    double slope[8];
 
     G_message(_("SECTION 2: A* Search."));
+
+    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+	/* get r, c (r_nbr, c_nbr) for neighbours */
+	upr = nextdr[ct_dir];
+	upc = nextdc[ct_dir];
+	/* account for rare cases when ns_res != ew_res */
+	dy = ABS(upr) * window.ns_res;
+	dx = ABS(upc) * window.ew_res;
+	if (ct_dir < 4)
+	    dist_to_nbr[ct_dir] = dx + dy;
+	else
+	    dist_to_nbr[ct_dir] = sqrt(dx * dx + dy * dy);
+    }
+    ew_res = window.ew_res;
+    ns_res = window.ns_res;
 
     if (heap_size == 0)
 	G_fatal_error(_("No seeds for A* Search"));
@@ -43,11 +69,34 @@ int do_astar(void)
 	    /* get r, c (upr, upc) for this neighbour */
 	    upr = r + nextdr[ct_dir];
 	    upc = c + nextdc[ct_dir];
+	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
 	    /* check that upr, upc are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
+		/* slope */
+		bseg_get(&bitflags, &flag_value, upr, upc);
+		is_in_list = FLAG_GET(flag_value, INLISTFLAG);
+		is_worked = FLAG_GET(flag_value, WORKEDFLAG);
+		if (!is_worked) {
+		    cseg_get(&alt, &alt_up, upr, upc);
+		    alt_nbr[ct_dir] = alt_up;
+		    slope[ct_dir] = get_slope2(alt_val, alt_nbr[ct_dir], dist_to_nbr[ct_dir]);
+		    /* avoid diagonal flow direction bias */
+		    if (ct_dir > 3) {
+			if (slope[nbr_ew[ct_dir]]) {
+			    /* slope to ew nbr > slope to center */
+			    if (slope[ct_dir] <= get_slope2(alt_nbr[nbr_ew[ct_dir]], alt_nbr[ct_dir], ew_res))
+				is_in_list = 1;
+			}
+			if (!is_in_list && slope[nbr_ns[ct_dir]]) {
+			    /* slope to ns nbr > slope to center */
+			    if (slope[ct_dir] <= get_slope2(alt_nbr[nbr_ns[ct_dir]], alt_nbr[ct_dir], ns_res))
+				is_in_list = 1;
+			}
+		    }
+		}
 		/* put neighbour in search list if not yet in */
 		bseg_get(&bitflags, &flag_value, upr, upc);
-		if (!FLAG_GET(flag_value, INLISTFLAG)) {
+		if (is_in_list == 0) {
 		    cseg_get(&alt, &alt_up, upr, upc);
 		    /* flow direction is set here */
 		    asp_val = drain[upr - r + 1][upc - c + 1];
@@ -73,6 +122,7 @@ int do_astar(void)
 	bseg_get(&bitflags, &flag_value, r, c);
 	FLAG_SET(flag_value, WORKEDFLAG);
 	bseg_put(&bitflags, &flag_value, r, c);
+
     }
     if (doer != -1)
 	G_fatal_error(_("bug in A* Search: doer %d heap size %d count %d"), doer, heap_size, count);
@@ -222,4 +272,12 @@ get_slope(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
     if (slope < MIN_SLOPE)
 	return (MIN_SLOPE);
     return (slope);
+}
+
+double get_slope2(CELL ele, CELL up_ele, double dist)
+{
+    if (ele == up_ele)
+	return 0.5 / dist;
+    else
+	return (double) (up_ele - ele) / dist;
 }
