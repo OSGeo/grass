@@ -29,6 +29,7 @@ int do_cum(void)
 	r = point.r;
 	c = point.c;
 	asp_val = point.asp;
+	/* skip user-defined depressions */
 	if (asp_val) {
 	    dr = r + asp_r[ABS(asp_val)];
 	    dc = c + asp_c[ABS(asp_val)];
@@ -171,6 +172,7 @@ int do_cum_mfd(void)
 	r = point.r;
 	c = point.c;
 	asp_val = point.asp;
+	/* skip user-defined depressions */
 	if (asp_val) {
 	    dr = r + asp_r[ABS(asp_val)];
 	    dc = c + asp_c[ABS(asp_val)];

@@ -20,6 +20,7 @@ int close_array_seg(void)
 	else
 	    theseg = &haf;
 	max = -9;
+	/*
 	for (r = 0; r < nrows; r++) {
 	    for (c = 0; c < ncols; c++) {
 		cseg_get(theseg, &value, r, c);
@@ -27,6 +28,8 @@ int close_array_seg(void)
 		    max = value;
 	    }
 	}
+	*/
+	max = n_basins;
 	G_debug(1, "%d basins created", max);
 	Rast_init_colors(&colors);
 	Rast_make_random_colors(&colors, 1, max);

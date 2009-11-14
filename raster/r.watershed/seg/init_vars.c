@@ -153,18 +153,22 @@ int init_vars(int argc, char *argv[])
 	diag *= 0.5;
 
     /* segment parameters: one size fits all. Fine tune? */
-    /* Segment rows and cols: 128 */
-    /* 1 segment open for all data structures: 0.122 MB */
+    /* Segment rows and cols: 64 */
+    /* 1 segment open for all data structures used in A* Search: 0.18 MB */
+    /* is really 0.22 MB but search heap holds max 5% of all points
+     * i.e. we will probably never need all open segments for search heap
+     */
 
     seg_rows = SROW;
     seg_cols = SCOL;
 
     if (segs_mb < 3.0) {
 	segs_mb = 300;
-	G_warning(_("Maximum memory to be used was smaller than 3 MB, set to default = 300 MB."));
+	G_warning(_("Maximum memory to be used was smaller than 3 MB,"
+	            " set to default = 300 MB."));
     }
 
-    num_open_segs = segs_mb / 0.122;
+    num_open_segs = segs_mb / 0.18;
 
     G_debug(1, "segs MB: %.0f", segs_mb);
     G_debug(1, "region rows: %d", nrows);
@@ -186,6 +190,12 @@ int init_vars(int argc, char *argv[])
     if (num_open_segs > num_cseg_total)
 	num_open_segs = num_cseg_total;
     G_debug(1, "  open segments after adjusting:\t%d", num_open_segs);
+
+    if (num_cseg_total * 0.18 < 1024.0)
+	G_verbose_message(_("Will need at most %.2f MB of disk space"), num_cseg_total * 0.18);
+    else
+	G_verbose_message(_("Will need at most %.2f GB (%.2f MB) of disk space"),
+	           (num_cseg_total * 0.18) / 1024.0, num_cseg_total * 0.18);
 
     if (er_flag) {
 	cseg_open(&r_h, seg_rows, seg_cols, num_open_segs);
@@ -348,48 +358,49 @@ int init_vars(int argc, char *argv[])
 	G_free(buf);
     }
 
-    if (ob_flag) {
-	fd = Rast_open_old(ob_name, "");
-	if (fd < 0) {
-	    G_fatal_error(_("unable to open blocking map layer"));
-	}
-	buf = Rast_allocate_c_buf();
-	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 1);
-	    Rast_get_c_row(fd, buf, r);
-	    for (c = 0; c < ncols; c++) {
-		block_value = buf[c];
-		if (!Rast_is_c_null_value(&block_value) && block_value) {
-		    bseg_get(&bitflags, &flag_value, r, c);
-		    FLAG_SET(flag_value, RUSLEBLOCKFLAG);
-		    bseg_put(&bitflags, &flag_value, r, c);
+    /* do RUSLE */
+    if (er_flag) {
+	if (ob_flag) {
+	    fd = Rast_open_old(ob_name, "");
+	    if (fd < 0) {
+		G_fatal_error(_("unable to open blocking map layer"));
+	    }
+	    buf = Rast_allocate_c_buf();
+	    for (r = 0; r < nrows; r++) {
+		G_percent(r, nrows, 1);
+		Rast_get_c_row(fd, buf, r);
+		for (c = 0; c < ncols; c++) {
+		    block_value = buf[c];
+		    if (!Rast_is_c_null_value(&block_value) && block_value) {
+			bseg_get(&bitflags, &flag_value, r, c);
+			FLAG_SET(flag_value, RUSLEBLOCKFLAG);
+			bseg_put(&bitflags, &flag_value, r, c);
+		    }
 		}
 	    }
+	    G_percent(nrows, nrows, 1);    /* finish it */
+	    Rast_close(fd);
+	    G_free(buf);
 	}
-	G_percent(nrows, nrows, 1);    /* finish it */
-	Rast_close(fd);
-	G_free(buf);
-    }
 
-    if (ril_flag) {
-	dseg_open(&ril, 1, seg_rows * seg_cols, num_open_segs);
-	dseg_read_cell(&ril, ril_name, "");
-    }
-    
-    /* dseg_open(&slp, SROW, SCOL, num_open_segs); */
+	if (ril_flag) {
+	    dseg_open(&ril, 1, seg_rows * seg_cols, num_open_segs);
+	    dseg_read_cell(&ril, ril_name, "");
+	}
+	
+	/* dseg_open(&slp, SROW, SCOL, num_open_segs); */
 
-    /* RUSLE: LS and/or S factor */
-    if (er_flag) {
-	dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
+	    dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
+	if (sg_flag)
+	    dseg_open(&s_g, 1, seg_rows * seg_cols, num_open_segs);
+	if (ls_flag)
+	    dseg_open(&l_s, 1, seg_rows * seg_cols, num_open_segs);
     }
-    if (sg_flag)
-	dseg_open(&s_g, 1, seg_rows * seg_cols, num_open_segs);
-    if (ls_flag)
-	dseg_open(&l_s, 1, seg_rows * seg_cols, num_open_segs);
 
     G_debug(1, "open segments for A* points");
-    /* next smaller power of 2 */
-    seg_cols = (int) pow(2, (int)(log(num_open_segs / 8) / log(2)));
+    /* rounded down power of 2 */
+    seg_cols = (int) pow(2, (int)(log(num_open_segs / 8.0) / log(2)));
+    num_open_array_segs = num_open_segs / seg_cols;
     /* n cols in segment */
     seg_cols *= seg_rows * seg_rows;
     /* n segments in row */
@@ -397,20 +408,20 @@ int init_vars(int argc, char *argv[])
     if (do_points % seg_cols > 0)
 	num_cseg_total++;
     /* no need to have more segments open than exist */
-    if ((num_open_segs * seg_rows * seg_rows) / (seg_cols * 2) > num_cseg_total)
+    if (num_open_array_segs > num_cseg_total)
 	num_open_array_segs = num_cseg_total;
-    else
-	num_open_array_segs = (num_open_segs * seg_rows * seg_rows) / (seg_cols * 2);
-    
-    G_debug(2, "A* points open segments %d, target 4", num_open_array_segs);
+
+    if (num_open_array_segs > 4)
+	num_open_array_segs = 4;
     
     seg_open(&astar_pts, 1, do_points, 1, seg_cols, num_open_array_segs,
 	     sizeof(POINT));
 
     /* one-based d-ary search_heap with astar_pts */
     G_debug(1, "open segments for A* search heap");
-    /* next smaller power of 2 */
-    seg_cols = (int) pow(2, (int)(log(num_open_segs / 16) / log(2)));
+    /* rounded down power of 2 */
+    seg_cols = (int) pow(2, (int)(log(num_open_segs / 8.0) / log(2)));
+    num_open_array_segs = num_open_segs / seg_cols;
     /* n cols in segment */
     seg_cols *= seg_rows * seg_rows;
     /* n segments in row */
@@ -418,12 +429,12 @@ int init_vars(int argc, char *argv[])
     if ((do_points + 1) % seg_cols > 0)
 	num_cseg_total++;
     /* no need to have more segments open than exist */
-    if ((num_open_segs * seg_rows * seg_rows) / (seg_cols * 2) > num_cseg_total)
+    if (num_open_array_segs > num_cseg_total)
 	num_open_array_segs = num_cseg_total;
-    else
-	num_open_array_segs = (num_open_segs * seg_rows * seg_rows) / (seg_cols * 2);
 
-    G_debug(2, "A* search heap open segments %d, target 8", num_open_array_segs);
+    G_debug(1, "A* search heap open segments %d, target 8", num_open_array_segs);
+    /* the search heap will not hold more than 5% of all points at any given time ? */
+    /* chances are good that the heap will fit into one large segment */
     seg_open(&search_heap, 1, do_points + 1, 1, seg_cols,
 	     num_open_array_segs, sizeof(HEAP_PNT));
 

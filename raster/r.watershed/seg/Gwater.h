@@ -5,7 +5,8 @@
 /* program to map out drainage basin structure  */
 /* this one uses the A * search algorithm       */
 /* written by Chuck Ehlschlaeger                */
-/* last modified 03/26/91                       */
+/* updated by Markus Metz                       */
+/* last modified 22/10/09                       */
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -62,12 +63,20 @@ WAT_ALT {
    DCELL wat;
 };
 
+#define OC_STACK struct overland_cells_stack
+OC_STACK {
+    int row, col;
+};
+
 extern struct Cell_head window;
 
 extern int mfd, c_fac, abs_acc, ele_scale;
 extern SSEG search_heap;
 extern int heap_size;
 extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+extern CELL n_basins;
+extern OC_STACK *ocs;
+extern int ocs_alloced;
 extern SHORT nrows, ncols;
 extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
