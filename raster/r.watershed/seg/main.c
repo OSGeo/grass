@@ -29,6 +29,9 @@ int mfd, c_fac, abs_acc, ele_scale;
 SSEG search_heap;
 int heap_size;
 int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+CELL n_basins;
+OC_STACK *ocs;
+int ocs_alloced;
 SHORT nrows, ncols;
 double half_res, diag, max_length, dep_slope;
 int bas_thres, tot_parts;
@@ -94,7 +97,7 @@ int main(int argc, char *argv[])
 	if (arm_flag) {
 	    fp = fopen(arm_name, "w");
 	}
-	num_open_segs = segs_mb / 0.122;
+	num_open_segs = segs_mb / 0.2;
 	if (num_open_segs > (ncols / SCOL + 1) * (nrows / SROW + 1)) {
 	    num_open_segs = (ncols / SCOL + 1) * (nrows / SROW + 1);
 	}

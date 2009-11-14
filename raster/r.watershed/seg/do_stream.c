@@ -42,7 +42,14 @@ int do_stream(void)
 	seg_get(&astar_pts, (char *)&point, 0, killer);
 	r = point.r;
 	c = point.c;
-	cseg_get(&asp, &asp_val, r, c);
+	/* here is original A* direction */
+	asp_val = point.asp;
+	/* do_stream() is only executed for MFD and if stream segments are needed
+	 * therefore it is ok to fetch asp from point.asp
+	 * if for some reason do_cum_mfd updates asp even if followed by
+	 * do_stream, the following line needs to be uncommented and
+	 * the above line can be commented out */
+	/* cseg_get(&asp, &asp_val, r, c); */
 	if (asp_val) {
 	    dr = r + asp_r[ABS(asp_val)];
 	    dc = c + asp_c[ABS(asp_val)];
@@ -174,7 +181,8 @@ int do_stream(void)
 	    is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
 	    /* start new stream */
 	    value = fabs(value) + 0.5;
-	    if (!is_swale && (int)value >= threshold && stream_cells < 4 &&
+	    /* can use stream_cells < 4 only for highres, nsres and ewres < 30 m? */
+	    if (!is_swale && (int)value >= threshold && stream_cells < 3 &&
 		swale_cells < 1) {
 		FLAG_SET(this_flag_value, SWALEFLAG);
 		is_swale = 1;

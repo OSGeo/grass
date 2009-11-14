@@ -11,9 +11,6 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 
     for (;;) {
 	cseg_put(&bas, &basin_num, row, col);
-	cseg_get(&asp, &asp_value, row, col);
-	if (asp_value < 0)
-	    asp_value = -asp_value;
 	ct = 0;
 	for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	    for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
@@ -75,28 +72,33 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 	else {
 	    cseg_put(&haf, &basin_num, row, col);
 	}
-	if (sides == 8) {
-	    if (new_r[1] != row && new_c[1] != col)
-		stream_length += diag;
-	    else if (new_r[1] != row)
-		stream_length += window.ns_res;
-	    else
-		stream_length += window.ew_res;
-	}
-	else {			/* sides == 4 */
-
-	    if (asp_value == 2 || asp_value == 6) {
-		if (new_r[1] != row)
+	if (arm_flag) {
+	    if (sides == 8) {
+		if (new_r[1] != row && new_c[1] != col)
+		    stream_length += diag;
+		else if (new_r[1] != row)
 		    stream_length += window.ns_res;
 		else
-		    stream_length += diag;
-	    }
-	    else {		/* asp_value == 4, 8 */
-
-		if (new_c[1] != col)
 		    stream_length += window.ew_res;
-		else
-		    stream_length += diag;
+	    }
+	    else {			/* sides == 4 */
+
+		cseg_get(&asp, &asp_value, row, col);
+		if (asp_value < 0)
+		    asp_value = -asp_value;
+		if (asp_value == 2 || asp_value == 6) {
+		    if (new_r[1] != row)
+			stream_length += window.ns_res;
+		    else
+			stream_length += diag;
+		}
+		else {		/* asp_value == 4, 8 */
+
+		    if (new_c[1] != col)
+			stream_length += window.ew_res;
+		    else
+			stream_length += diag;
+		}
 	    }
 	}
 	row = new_r[1];

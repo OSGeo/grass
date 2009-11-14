@@ -23,7 +23,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 			dvalue = wa.wat;
 			if (dvalue < 0)
 			    dvalue = -dvalue;
-			if ((dvalue - max_drain) > 5E-8f) {
+			if (dvalue > max_drain) {
 			    uprow = r;
 			    upcol = c;
 			    max_drain = dvalue;
@@ -37,29 +37,31 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	    cseg_get(&asp, &downdir, row, col);
 	    if (downdir < 0)
 		downdir = -downdir;
-	    if (sides == 8) {
-		if (uprow != row && upcol != col)
-		    stream_length += diag;
-		else if (uprow != row)
-		    stream_length += window.ns_res;
-		else
-		    stream_length += window.ew_res;
-	    }
-	    else {		/* sides == 4 */
-
-		cseg_get(&asp, &asp_value, uprow, upcol);
-		if (downdir == 2 || downdir == 6) {
-		    if (asp_value == 2 || asp_value == 6)
+	    if (arm_flag) {
+		if (sides == 8) {
+		    if (uprow != row && upcol != col)
+			stream_length += diag;
+		    else if (uprow != row)
 			stream_length += window.ns_res;
 		    else
-			stream_length += diag;
-		}
-		else {		/* downdir == 4,8 */
-
-		    if (asp_value == 4 || asp_value == 8)
 			stream_length += window.ew_res;
-		    else
-			stream_length += diag;
+		}
+		else {		/* sides == 4 */
+
+		    cseg_get(&asp, &asp_value, uprow, upcol);
+		    if (downdir == 2 || downdir == 6) {
+			if (asp_value == 2 || asp_value == 6)
+			    stream_length += window.ns_res;
+			else
+			    stream_length += diag;
+		    }
+		    else {		/* downdir == 4,8 */
+
+			if (asp_value == 4 || asp_value == 8)
+			    stream_length += window.ew_res;
+			else
+			    stream_length += diag;
+		    }
 		}
 	    }
 	    riteflag = leftflag = 0;
