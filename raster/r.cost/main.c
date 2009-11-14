@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     opt10->key_desc = "percent memory";
     opt10->required = NO;
     opt10->multiple = NO;
-    opt10->answer = "100";
+    opt10->answer = "40";
     opt10->description = _("Percent of map to keep in memory");
 
     flag2 = G_define_flag();
@@ -374,15 +374,46 @@ int main(int argc, char *argv[])
     }
     G_debug(1, "  %d rows, %d cols", nrows, ncols);
 
-    srows = scols = SEGCOLSIZE;
+    /* this is most probably the limitation of r.cost for large datasets
+     * segment size needs to be reduced to avoid unecessary disk IO
+     * but it doesn't make sense to go down to 1
+     * so we use 64 segment rows and cols for <= 200 million cells
+     * for larger regions 32 segment rows and cols
+     * maybe go down to 16 for > 500 million cells ? */
+    if ((double) nrows * ncols > 200000000)
+	srows = scols = SEGCOLSIZE / 2;
+    else
+	srows = scols = SEGCOLSIZE;
+	
     if (maxmem > 0)
 	segments_in_memory =
-	    2 + maxmem * (1 + nrows / SEGCOLSIZE) * (1 +
-						     ncols / SEGCOLSIZE) /
-	    100;
+	    maxmem * (1 + nrows / srows) * (1 + ncols / scols) / 100;
+    /* maxmem = 0 */
     else
-	segments_in_memory =
-	    4 * (nrows / SEGCOLSIZE + ncols / SEGCOLSIZE + 2);
+	segments_in_memory = 4 * (nrows / srows + ncols / scols + 2);
+
+    /* report disk space and memory requirements */
+    G_verbose_message(("--------------------------------------------");
+    if (dir == 1) {
+	double disk_mb, mem_mb;
+
+	disk_mb = (double) nrows * ncols * 24. / 1048576.;
+	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
+	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
+	G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
+	G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
+	
+    }
+    else {
+	double disk_mb, mem_mb;
+
+	disk_mb = (double) nrows * ncols * 16. / 1048576.;
+	mem_mb  = (double) srows * scols * 16. / 1048576. * segments_in_memory;
+	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
+	G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
+	G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
+    }
+    G_verbose_message(("--------------------------------------------");
 
     /*   Create segmented format files for cost layer and output layer  */
 
@@ -734,9 +765,12 @@ int main(int argc, char *argv[])
 	    }
 	}
 
+	row = pres_cell->row;
+	col = pres_cell->col;
+
 	segment_get(&in_seg, &my_cost, pres_cell->row, pres_cell->col);
 
-	G_percent(++n_processed, total_cells, 1);
+	G_percent(n_processed++, total_cells, 1);
 
 	/*          9    10       Order in which neighbors 
 	 *       13 5  3  6 14    are visited (Knight move).
@@ -745,16 +779,12 @@ int main(int argc, char *argv[])
 	 *         12    11
 	 */
 	for (neighbor = 1; neighbor <= total_reviewed; neighbor++) {
-	    row = -1;
-	    col = -1;
 	    switch (neighbor) {
 	    case 1:
-		row = pres_cell->row;
 		col = pres_cell->col - 1;
 		cur_dir = 180.0;
 		break;
 	    case 2:
-		row = pres_cell->row;
 		col = pres_cell->col + 1;
 		cur_dir = 0.0;
 		break;
@@ -765,7 +795,6 @@ int main(int argc, char *argv[])
 		break;
 	    case 4:
 		row = pres_cell->row + 1;
-		col = pres_cell->col;
 		cur_dir = 270.0;
 		break;
 	    case 5:
@@ -774,17 +803,14 @@ int main(int argc, char *argv[])
 		cur_dir = 135.0;
 		break;
 	    case 6:
-		row = pres_cell->row - 1;
 		col = pres_cell->col + 1;
 		cur_dir = 45.0;
 		break;
 	    case 7:
 		row = pres_cell->row + 1;
-		col = pres_cell->col + 1;
 		cur_dir = 315.0;
 		break;
 	    case 8:
-		row = pres_cell->row + 1;
 		col = pres_cell->col - 1;
 		cur_dir = 225.0;
 		break;
@@ -794,17 +820,14 @@ int main(int argc, char *argv[])
 		cur_dir = 112.5;
 		break;
 	    case 10:
-		row = pres_cell->row - 2;
 		col = pres_cell->col + 1;
 		cur_dir = 67.5;
 		break;
 	    case 11:
 		row = pres_cell->row + 2;
-		col = pres_cell->col + 1;
 		cur_dir = 292.5;
 		break;
 	    case 12:
-		row = pres_cell->row + 2;
 		col = pres_cell->col - 1;
 		cur_dir = 247.5;
 		break;
@@ -814,17 +837,14 @@ int main(int argc, char *argv[])
 		cur_dir = 157.5;
 		break;
 	    case 14:
-		row = pres_cell->row - 1;
 		col = pres_cell->col + 2;
 		cur_dir = 22.5;
 		break;
 	    case 15:
 		row = pres_cell->row + 1;
-		col = pres_cell->col + 2;
 		cur_dir = 337.5;
 		break;
 	    case 16:
-		row = pres_cell->row + 1;
 		col = pres_cell->col - 2;
 		cur_dir = 202.5;
 		break;
@@ -841,109 +861,102 @@ int main(int argc, char *argv[])
 	    case 1:
 		value = &W;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((W / 2.0) + (my_cost / 2.0));
+		fcost = (double)((W + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * EW_fac;
 		break;
 	    case 2:
 		value = &E;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((E / 2.0) + (my_cost / 2.0));
+		fcost = (double)((E + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * EW_fac;
 		break;
 	    case 3:
 		value = &N;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((N / 2.0) + (my_cost / 2.0));
+		fcost = (double)((N + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * NS_fac;
 		break;
 	    case 4:
 		value = &S;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((S / 2.0) + (my_cost / 2.0));
+		fcost = (double)((S + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * NS_fac;
 		break;
 	    case 5:
 		value = &NW;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((NW / 2.0) + (my_cost / 2.0));
+		fcost = (double)((NW + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 6:
 		value = &NE;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((NE / 2.0) + (my_cost / 2.0));
+		fcost = (double)((NE + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 7:
 		value = &SE;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((SE / 2.0) + (my_cost / 2.0));
+		fcost = (double)((SE + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 8:
 		value = &SW;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((SW / 2.0) + (my_cost / 2.0));
+		fcost = (double)((SW + my_cost) / 2.0);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 9:
 		value = &NNW;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((N / 4.0) + (NW / 4.0) + (NNW / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((N + NW + NNW + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 10:
 		value = &NNE;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((N / 4.0) + (NE / 4.0) + (NNE / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((N + NE + NNE + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 11:
 		value = &SSE;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((S / 4.0) + (SE / 4.0) + (SSE / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((S + SE + SSE + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 12:
 		value = &SSW;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((S / 4.0) + (SW / 4.0) + (SSW / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((S + SW + SSW + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 13:
 		value = &WNW;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((W / 4.0) + (NW / 4.0) + (WNW / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((W + NW + WNW + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    case 14:
 		value = &ENE;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((E / 4.0) + (NE / 4.0) + (ENE / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((E + NE + ENE + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    case 15:
 		value = &ESE;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((E / 4.0) + (SE / 4.0) + (ESE / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((E + SE + ESE + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    case 16:
 		value = &WSW;
 		segment_get(&in_seg, value, row, col);
-		fcost = (double)((W / 4.0) + (SW / 4.0) + (WSW / 4.0) +
-			     (my_cost / 4.0));
+		fcost = (double)((W + SW + WSW + my_cost) / 4.0);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    }
 
+	    /* skip if costs could not be calculated */
 	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
@@ -952,6 +965,7 @@ int main(int argc, char *argv[])
 		segment_get(&out_seg2, &old_cur_dir, row, col);
 	    }
 
+	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		segment_put(&out_seg, &min_cost, row, col);
 		new_cell = insert(min_cost, row, col);
@@ -960,6 +974,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    else {
+		/* update with lower costs */
 		if (old_min_cost > min_cost) {
 		    segment_put(&out_seg, &min_cost, row, col);
 		    new_cell = insert(min_cost, row, col);
@@ -1127,8 +1142,8 @@ int main(int argc, char *argv[])
 	    Rast_put_row(dir_fd, dir_cell, dir_data_type);
 	    G_percent(row, nrows, 2);
 	}
+	G_percent(1, 1, 1);
     }
-    G_percent(1, 1, 1);
 
     segment_release(&in_seg);	/* release memory  */
     segment_release(&out_seg);
