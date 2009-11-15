@@ -28,6 +28,7 @@ import platform
 
 ### i18N
 import gettext
+gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
 from gui_modules import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
@@ -62,6 +63,10 @@ class GRASSStartup(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=id, style=style)
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+
+        # i18N
+        import gettext
+        gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
         #
         # graphical elements
