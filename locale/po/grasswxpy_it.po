@@ -9,36 +9,34 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-12 15:58+0100\n"
-"PO-Revision-Date: 2009-07-18 00:59+0200\n"
-"Last-Translator: luca delucchi <lucadeluge@gmail.com>\n"
-"Language-Team: Italiano <en@li.org>\n"
+"PO-Revision-Date: 2009-11-12 17:39+0100\n"
+"Last-Translator: \n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.3\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../gui/wxpython/icons/icon.py:81
-#, fuzzy
 msgid "Unable to load icon theme..."
-msgstr "icona."
+msgstr "Impossibile caricare i temi delle icone..."
 
 #: ../gui/wxpython/icons/icon.py:141
 msgid "Display map"
-msgstr ""
+msgstr "Visualizza mappa"
 
 #: ../gui/wxpython/icons/icon.py:143
 msgid "Re-render map"
-msgstr ""
+msgstr "Aggiorna mappa"
 
 #: ../gui/wxpython/icons/icon.py:144
 msgid "Force re-rendering of all layers"
-msgstr ""
+msgstr "Forza l'aggiornamento di tutti i layers"
 
 #: ../gui/wxpython/icons/icon.py:146
-#, fuzzy
 msgid "Erase display"
-msgstr "mostra"
+msgstr "Cancella display"
 
 #: ../gui/wxpython/icons/icon.py:148
 #, fuzzy
@@ -46,14 +44,12 @@ msgid "Pointer"
 msgstr "Puntatore"
 
 #: ../gui/wxpython/icons/icon.py:150
-#, fuzzy
 msgid "Zoom in"
-msgstr "Zoom"
+msgstr "Zoom in"
 
 #: ../gui/wxpython/icons/icon.py:151
-#, fuzzy
 msgid "Drag or click mouse to zoom"
-msgstr "Trascina o clicca sul mouse per zoom"
+msgstr "Trascina o clicca sul mouse per zoomare"
 
 #: ../gui/wxpython/icons/icon.py:153
 #, fuzzy
@@ -61,29 +57,24 @@ msgid "Zoom out"
 msgstr "Zoom out"
 
 #: ../gui/wxpython/icons/icon.py:154
-#, fuzzy
 msgid "Drag or click mouse to unzoom"
-msgstr "Trascina o clicca sul mouse per unzoom"
+msgstr "Trascina o clicca sul mouse per diminuire "
 
 #: ../gui/wxpython/icons/icon.py:156
-#, fuzzy
 msgid "Pan"
-msgstr "Finestra"
+msgstr "Muovi"
 
 #: ../gui/wxpython/icons/icon.py:157
-#, fuzzy
 msgid "Drag with mouse to pan"
-msgstr "Trascina con il mouse per area"
+msgstr "Trascina con il mouse per muovere la mappa"
 
 #: ../gui/wxpython/icons/icon.py:159
-#, fuzzy
 msgid "Query raster/vector map(s)"
-msgstr "Silenziosamente"
+msgstr "Interroga mappe raster/vettoriale"
 
 #: ../gui/wxpython/icons/icon.py:160
-#, fuzzy
 msgid "Query selected raster/vector map(s)"
-msgstr "Silenziosamente"
+msgstr "Interroga mappe raster/vettoriale selezionate"
 
 #: ../gui/wxpython/icons/icon.py:162
 #, fuzzy
@@ -91,18 +82,16 @@ msgid "Return to previous zoom"
 msgstr "Ritorna allo zoom precedente"
 
 #: ../gui/wxpython/icons/icon.py:164
-#, fuzzy
 msgid "Zoom options"
-msgstr "Zoom"
+msgstr "Opzioni di zoom"
 
 #: ../gui/wxpython/icons/icon.py:165
 msgid "Display zoom management"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:167
-#, fuzzy
 msgid "Add map elements"
-msgstr "Aggiungi legenda"
+msgstr "Aggiungi elementi alla mappa"
 
 #: ../gui/wxpython/icons/icon.py:168
 msgid "Overlay elements like scale and legend onto map"
@@ -113,42 +102,37 @@ msgid "Add scalebar and north arrow"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:172
-#, fuzzy
 msgid "Add legend"
-msgstr "Aggiungi legenda"
+msgstr "Aggiunge legenda"
 
 #: ../gui/wxpython/icons/icon.py:174
-#, fuzzy
 msgid "Save display to graphic file"
-msgstr "mostra"
+msgstr "Salva il display in un file"
 
 #: ../gui/wxpython/icons/icon.py:176
 #: ../gui/wxpython/gui_modules/mapdisp.py:1243
 msgid "Print display"
-msgstr "Visualizza stampa"
+msgstr "Stampa il display"
 
 #: ../gui/wxpython/icons/icon.py:179
-#, fuzzy
 msgid "Start new display"
-msgstr "mostra"
+msgstr "Apri nuovo display"
 
 #: ../gui/wxpython/icons/icon.py:181
 msgid "Create new workspace file"
-msgstr ""
+msgstr "Crea nuovo ambiente di lavoro"
 
 #: ../gui/wxpython/icons/icon.py:183
 msgid "Load map layers into workspace"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:185
-#, fuzzy
 msgid "Open existing workspace file"
-msgstr "Apri file workspace"
+msgstr "Apri un esistente file d'ambiente di lavoro"
 
 #: ../gui/wxpython/icons/icon.py:187
-#, fuzzy
 msgid "Save current workspace to file"
-msgstr "Salva"
+msgstr "Salva il corrente ambiente di lavoro in un file"
 
 #: ../gui/wxpython/icons/icon.py:190
 #, fuzzy
@@ -167,17 +151,15 @@ msgstr "Aggiungi livello comando"
 
 #: ../gui/wxpython/icons/icon.py:196
 msgid "Add layer group"
-msgstr ""
+msgstr "Aggiungi un gruppo di layer"
 
 #: ../gui/wxpython/icons/icon.py:198
-#, fuzzy
 msgid "Add grid or vector labels overlay"
-msgstr "vettoriale"
+msgstr "Aggiungi un grid o etichette vettoriali"
 
 #: ../gui/wxpython/icons/icon.py:200
-#, fuzzy
 msgid "Delete selected layer"
-msgstr "Elimina"
+msgstr "Elimina il layer selezionato"
 
 #: ../gui/wxpython/icons/icon.py:202
 #, fuzzy
@@ -186,15 +168,15 @@ msgstr "Esci"
 
 #: ../gui/wxpython/icons/icon.py:204
 msgid "Show attribute table"
-msgstr ""
+msgstr "Mostra la tabella degli attributi"
 
 #: ../gui/wxpython/icons/icon.py:206
 msgid "Add RGB layer"
-msgstr ""
+msgstr "Aggiungi RGB layer"
 
 #: ../gui/wxpython/icons/icon.py:208
 msgid "Add HIS layer"
-msgstr ""
+msgstr "Aggiungi HIS layer"
 
 #: ../gui/wxpython/icons/icon.py:210
 msgid "Add shaded relief map layer"
@@ -210,7 +192,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:216
 msgid "Add thematic layer"
-msgstr ""
+msgstr "Aggiungi layer tematico"
 
 #: ../gui/wxpython/icons/icon.py:218
 msgid "Add thematic chart layer"
@@ -218,7 +200,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:220
 msgid "Add grid layer"
-msgstr ""
+msgstr "Aggiungi layer grid"
 
 #: ../gui/wxpython/icons/icon.py:222
 msgid "Add geodesic line layer"
@@ -230,7 +212,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:226
 msgid "Add labels"
-msgstr ""
+msgstr "Aggiungi etichette"
 
 #: ../gui/wxpython/icons/icon.py:228
 #: ../gui/wxpython/gui_modules/mapdisp.py:1881
@@ -239,49 +221,44 @@ msgstr "Aggiungi layer testuale"
 
 #: ../gui/wxpython/icons/icon.py:230
 msgid "Add 3D raster map"
-msgstr ""
+msgstr "Aggiungi mappa raster 3D"
 
 #: ../gui/wxpython/icons/icon.py:233
-#, fuzzy
 msgid "Digitize new point"
-msgstr "Stampa"
+msgstr "Digitalizza nuovo punto"
 
 #: ../gui/wxpython/icons/icon.py:234 ../gui/wxpython/icons/icon.py:243
-#, fuzzy
 msgid "Left: new point"
-msgstr "Stampa"
+msgstr "Sinistro: nuovo punto"
 
 #: ../gui/wxpython/icons/icon.py:236
-#, fuzzy
 msgid "Digitize new line"
-msgstr "Digitalizza una nuova linea"
+msgstr "Digitalizza nuova linea"
 
 #: ../gui/wxpython/icons/icon.py:237 ../gui/wxpython/icons/icon.py:240
 #: ../gui/wxpython/icons/icon.py:261
-#, fuzzy
 msgid "Left: new point; Middle: undo last point; Right: close line"
-msgstr "Stampa Stampa"
+msgstr ""
+"Sinistro: nuovo punto; Centrale: torna all'ultimo punto; Destro: chiudi linea"
 
 #: ../gui/wxpython/icons/icon.py:239
-#, fuzzy
 msgid "Digitize new boundary"
-msgstr "Limiti"
+msgstr "Digitalizza nuova superficie"
 
 #: ../gui/wxpython/icons/icon.py:242
-#, fuzzy
 msgid "Digitize new centroid"
-msgstr "Digitalizza un nuovo centroide"
+msgstr "Digitalizza nuovo centroide"
 
 #: ../gui/wxpython/icons/icon.py:245
 msgid "Add new vertex"
-msgstr ""
+msgstr "Aggiungi nuovo vertice"
 
 #: ../gui/wxpython/icons/icon.py:246 ../gui/wxpython/icons/icon.py:249
 #: ../gui/wxpython/icons/icon.py:252 ../gui/wxpython/icons/icon.py:264
 #: ../gui/wxpython/icons/icon.py:267 ../gui/wxpython/icons/icon.py:270
 #: ../gui/wxpython/icons/icon.py:276 ../gui/wxpython/icons/icon.py:282
 msgid "Left: Select; Middle: Unselect; Right: Confirm"
-msgstr ""
+msgstr "Sinistro: Seleziona; Centrale: Deseleziona; Destro: Conferma"
 
 #: ../gui/wxpython/icons/icon.py:248
 #: ../gui/wxpython/gui_modules/toolbars.py:753
@@ -290,31 +267,28 @@ msgid "Copy categories"
 msgstr "Copia categorie"
 
 #: ../gui/wxpython/icons/icon.py:251
-#, fuzzy
 msgid "Delete feature(s)"
-msgstr "Elimina"
+msgstr "Elimina  elemento/i"
 
 #: ../gui/wxpython/icons/icon.py:254
 msgid "Display/update attributes"
-msgstr ""
+msgstr "Visualizza/aggiorna attributi"
 
 #: ../gui/wxpython/icons/icon.py:255 ../gui/wxpython/icons/icon.py:258
 msgid "Left: Select"
-msgstr ""
+msgstr "Sinistro: Seleziona"
 
 #: ../gui/wxpython/icons/icon.py:257
-#, fuzzy
 msgid "Display/update categories"
-msgstr "categorie"
+msgstr "Visualizza/aggiorna categorie"
 
 #: ../gui/wxpython/icons/icon.py:260
-#, fuzzy
 msgid "Edit line/boundary"
-msgstr "Limiti"
+msgstr "Edita linee/confini"
 
 #: ../gui/wxpython/icons/icon.py:263
 msgid "Move feature(s)"
-msgstr ""
+msgstr "Muovi elemento/i"
 
 #: ../gui/wxpython/icons/icon.py:266
 #, fuzzy
@@ -334,19 +308,16 @@ msgid "Settings"
 msgstr "Impostazioni"
 
 #: ../gui/wxpython/icons/icon.py:273
-#, fuzzy
 msgid "Settings dialog for digitization tool"
-msgstr "Impostazioni"
+msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:275
-#, fuzzy
 msgid "Split line/boundary"
-msgstr "Limiti"
+msgstr "Dividi linea/confine"
 
 #: ../gui/wxpython/icons/icon.py:278
-#, fuzzy
 msgid "Quit digitizing tool"
-msgstr "Esci"
+msgstr "Esci dal tool di digitalizzazione"
 
 #: ../gui/wxpython/icons/icon.py:280
 msgid "Additional tools (copy, flip, connect, etc.)"
@@ -354,41 +325,39 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:284
 msgid "Undo"
-msgstr ""
+msgstr "Indietro"
 
 #: ../gui/wxpython/icons/icon.py:285
 msgid "Undo previous changes"
-msgstr ""
+msgstr "Indietro al cambiamento precedente"
 
 #: ../gui/wxpython/icons/icon.py:288
 msgid "Analyze map"
-msgstr ""
+msgstr "Analizza mappa"
 
 #: ../gui/wxpython/icons/icon.py:290
-#, fuzzy
 msgid "Measure distance"
-msgstr "Misura"
+msgstr "Misura distanza"
 
 #: ../gui/wxpython/icons/icon.py:292
-#, fuzzy
 msgid "Draw transect in map display window to profile"
-msgstr "mostra"
+msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:294
 msgid "Profile surface map"
-msgstr ""
+msgstr "Profilo della mappa della superfice"
 
 #: ../gui/wxpython/icons/icon.py:296
 msgid "Draw/re-draw profile"
-msgstr ""
+msgstr "Disegna/aggiorna profilo"
 
 #: ../gui/wxpython/icons/icon.py:298
 msgid "Profile options"
-msgstr ""
+msgstr "Opzioni del profilo"
 
 #: ../gui/wxpython/icons/icon.py:300
 msgid "Create histogram of image or raster file"
-msgstr ""
+msgstr "Crea istogramma di immagini o file raster"
 
 #: ../gui/wxpython/icons/icon.py:302
 #, fuzzy
@@ -396,27 +365,25 @@ msgid "Select font"
 msgstr "Seleziona font"
 
 #: ../gui/wxpython/icons/icon.py:304
-#, fuzzy
 msgid "Select color"
-msgstr "colore"
+msgstr "Seleziona colore"
 
 #: ../gui/wxpython/icons/icon.py:306
 #: ../gui/wxpython/gui_modules/gdialogs.py:409
 msgid "Set options"
-msgstr ""
+msgstr "Imposta opzioni"
 
 #: ../gui/wxpython/icons/icon.py:308
 msgid "Analyze"
-msgstr ""
+msgstr "Analizza"
 
 #: ../gui/wxpython/icons/icon.py:311
 msgid "Set GCP"
-msgstr ""
+msgstr "Imposta GCP"
 
 #: ../gui/wxpython/icons/icon.py:312
-#, fuzzy
 msgid "Define GCP (Ground Control Points)"
-msgstr "Stampa"
+msgstr "Definisci GCP (Punti di controllo sul terreno)"
 
 #: ../gui/wxpython/icons/icon.py:314
 #: ../gui/wxpython/gui_modules/georect.py:148
@@ -428,54 +395,47 @@ msgstr "Georettifica"
 
 #: ../gui/wxpython/icons/icon.py:316
 msgid "Recalculate RMS error"
-msgstr ""
+msgstr "Ricalcola l'errore RMS"
 
 #: ../gui/wxpython/icons/icon.py:318
-#, fuzzy
 msgid "Redraw GCP markers in map displays"
-msgstr "Ridisegna"
+msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:320
-#, fuzzy
 msgid "Save GCPs to POINTS file"
-msgstr "Salva GCPs in file POINTS"
+msgstr "Salva GCPs in un file POINTS"
 
 #: ../gui/wxpython/icons/icon.py:322
 msgid "Add new GCP"
-msgstr ""
+msgstr "Aggiungi un nuove GCP"
 
 #: ../gui/wxpython/icons/icon.py:324
-#, fuzzy
 msgid "Delete selected GCP"
-msgstr "Elimina"
+msgstr "Elimina il GCP selezionato"
 
 #: ../gui/wxpython/icons/icon.py:326
-#, fuzzy
 msgid "Clear selected GCP"
-msgstr "Annulla"
+msgstr "Cancella GCP selezionati"
 
 #: ../gui/wxpython/icons/icon.py:328
 msgid "Reload GCPs from selected POINTS file"
-msgstr ""
+msgstr "Ricarica GCP dal file POINTS selezionato"
 
 #: ../gui/wxpython/icons/icon.py:330
-#, fuzzy
 msgid "Quit georectification module"
-msgstr "Esci"
+msgstr "Esci dal modulo di georettifica"
 
 #: ../gui/wxpython/icons/icon.py:333
-#, fuzzy
 msgid "Settings dialog for georectification tool"
-msgstr "Impostazioni"
+msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:337
 msgid "Show Nviz settings dialog"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/colorrules.py:94
-#, fuzzy
 msgid "Create new color table for raster map"
-msgstr "colore"
+msgstr "Crea nuova tavola dei colori per raster"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:96
 #: ../gui/wxpython/gui_modules/colorrules.py:389
@@ -483,45 +443,36 @@ msgid "Enter raster cat values or percents"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/colorrules.py:98
-#, fuzzy
 msgid "Create new color table for vector map"
-msgstr "colore vettoriale"
+msgstr "Crea nuova tavola dei colori per vettoriale"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:100
-#, fuzzy
 msgid "Enter vector attribute values or ranges (n or n1 to n2)"
-msgstr "vettoriale"
+msgstr "Inserisci attributi o range per il vettore"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:111
 msgid "Select raster map:"
-msgstr ""
+msgstr "Seleziona raster:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:113
-#, fuzzy
 msgid "Select vector map:"
-msgstr "vettoriale:"
+msgstr "Seleziona vettore:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:122
-#, fuzzy
 msgid "replace existing color table"
-msgstr "colore"
+msgstr "Rimpiazza la tavola dei colori esistenti"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:128
-#, fuzzy
 msgid "Layer:"
-msgstr ""
-"Layer: %d\n"
-"categoria: %d\n"
-":"
+msgstr "Layer:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:130
 msgid "Attribute column:"
-msgstr ""
+msgstr "Colonna degli attributi:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:132
-#, fuzzy
 msgid "RGB color column:"
-msgstr "colore:"
+msgstr "Colonna del colore RGB:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:161
 #, fuzzy
@@ -529,14 +480,13 @@ msgid "Preview"
 msgstr "Anteprima"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:392
-#, fuzzy, python-format
+#, python-format
 msgid "Enter raster cat values or percents (range = %(min)d-%(max)d)"
-msgstr "min max"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/colorrules.py:468
-#, fuzzy
 msgid "Please select attribute column and RGB color column first"
-msgstr "colore"
+msgstr "Prima selezionare la colonna degli attributi e quella colore RGB"
 
 #: ../gui/wxpython/gui_modules/menuform.py:141
 #: ../gui/wxpython/gui_modules/menuform.py:1440
@@ -555,7 +505,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/menuform.py:402
 #, python-format
 msgid "Flag not found: %s"
-msgstr ""
+msgstr "Flag non trovata: %s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:435
 msgid "<required>"
@@ -564,7 +514,7 @@ msgstr "<richiesto>"
 #: ../gui/wxpython/gui_modules/menuform.py:436
 #, python-format
 msgid "Parameter %(name)s (%(desc)s) is missing.\n"
-msgstr ""
+msgstr "Parametro %(name)s (%(desc)s) manca.\n"
 
 #: ../gui/wxpython/gui_modules/menuform.py:696
 msgid "Enter parameters for "
@@ -605,12 +555,12 @@ msgstr "Copia la seguente stringa di comando negli appunti"
 #: ../gui/wxpython/gui_modules/gdialogs.py:201
 #: ../gui/wxpython/gui_modules/preferences.py:1181
 msgid "Add created map into layer tree"
-msgstr ""
+msgstr "Aggiungi la mappa creata nel layer tree"
 
 #: ../gui/wxpython/gui_modules/menuform.py:787
 #: ../gui/wxpython/gui_modules/preferences.py:1171
 msgid "Close dialog on finish"
-msgstr ""
+msgstr "Chiudi dialogo alla fine"
 
 #: ../gui/wxpython/gui_modules/menuform.py:932
 #, python-format
@@ -643,7 +593,7 @@ msgstr "[multiplo]"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1190
 msgid "Valid range"
-msgstr ""
+msgstr "Range valido"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1319
 msgid "Format"
@@ -671,7 +621,6 @@ msgstr "Scegli la directory dei dati GRASS:"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1322
 #: ../gui/wxpython/gui_modules/gdialogs.py:963
 #: ../gui/wxpython/gui_modules/gdialogs.py:972 ../gui/wxpython/gis_set.py:123
-#, fuzzy
 msgid "Browse"
 msgstr "Naviga"
 
@@ -680,7 +629,6 @@ msgid "Name of OGR data source:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/menuform.py:1459
-#, fuzzy
 msgid "Transparent"
 msgstr "Trasparente"
 
@@ -712,7 +660,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/menuform.py:2019
 #, python-format
 msgid "usage: %s <grass command>"
-msgstr ""
+msgstr "usa: %s <grass command>"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:141
 msgid "Define GRASS Database and Location Name"
@@ -734,7 +682,7 @@ msgstr "Scegli la directory dei dati GRASS:"
 #: ../gui/wxpython/gui_modules/location_wizard.py:220
 #: ../gui/wxpython/gui_modules/location_wizard.py:1966
 msgid "Location already exists in GRASS Database."
-msgstr "La location esiste gi? nel Database GRASS"
+msgstr "La location esiste già nel Database GRASS"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:223
 msgid "Unable to create location"
@@ -797,9 +745,8 @@ msgid "Choose method for creating a new location"
 msgstr "Scegli il metodo per creare una nuova location"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:256
-#, fuzzy
 msgid "Select coordinate system parameters from a list"
-msgstr "Seleziona il sistema di coordinate"
+msgstr "Seleziona il sistema di coordinate da una lista"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:259
 #, fuzzy
@@ -808,20 +755,19 @@ msgstr "Seleziona il codice EPSG del sistema di coordinate"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:261
 msgid "Read projection and datum terms from a georeferenced data file"
-msgstr ""
+msgstr "Leggi proiezioni e datum da un file georiferito"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:264
 msgid "Read projection and datum terms from a WKT or PRJ file"
-msgstr ""
+msgstr "Leggi proiezione e datum da un file WKT o PRJ"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:267
 msgid "Specify projection and datum terms using custom PROJ.4 parameters"
-msgstr ""
+msgstr "Specifica proiezione e datum utilizzando parametri PROJ.4"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:270
-#, fuzzy
 msgid "Create an arbitrary non-earth coordinate system (XY)"
-msgstr "Usa"
+msgstr "Crea un sistema di coordinate non terrestre (XY) "
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:359
 msgid "Choose projection"
@@ -857,29 +803,25 @@ msgid "Unable to read list: %s"
 msgstr "Impossibile leggere la lista: %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:673
-#, fuzzy
 msgid "Choose projection parameters"
-msgstr "Scegli la proiezione"
+msgstr "Scegli i parametri della proiezione"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:693
-#, fuzzy
 msgid "Select datum or ellipsoid (next page)"
-msgstr "Selezione datum con elissoide associato"
+msgstr "Seleziona datum con elissoide associato (prossima pagina)"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:699
-#, fuzzy
 msgid "Datum with associated ellipsoid"
-msgstr "Selezione datum con elissoide associato"
+msgstr "Datum con elissoide associato"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:702
-#, fuzzy
 msgid "Ellipsoid only"
-msgstr "Elissoide"
+msgstr "Solo Elissoide"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:766
-#, fuzzy, python-format
+#, python-format
 msgid " Enter parameters for %s projection "
-msgstr "Inserisci parametro per"
+msgstr "Inserisci parametro per la proiezione %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:872
 msgid "Specify geodetic datum"
@@ -933,7 +875,6 @@ msgid "EPSG code:"
 msgstr "codice EPSG:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1330
-#, fuzzy
 msgid "Parameters"
 msgstr "Parametri"
 
@@ -942,9 +883,9 @@ msgid "Choose EPSG codes file"
 msgstr "Scegli file dei codici EPSG"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1499
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to read EPGS codes: %s"
-msgstr "Impossibile leggere la lista: %s"
+msgstr "Impossibile leggere i codici EPSG: %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1519
 msgid "Choose method of specifying georeferencing parameters"
@@ -952,7 +893,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1527
 msgid "Enter PROJ.4 parameters string:"
-msgstr "Inserisci la stringa dei parametri PROJ.4"
+msgstr "Inserisci la stringa dei parametri PROJ.4:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1604
 msgid "Summary"
@@ -972,7 +913,7 @@ msgstr "Proiezione:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1673
 msgid "PROJ.4 definition:"
-msgstr "Definizione PROJ.4"
+msgstr "Definizione PROJ.4:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1729
 #, python-format
@@ -990,11 +931,12 @@ msgstr "Definisci la nuova GRASS location"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1855
 msgid "Do you want to set the default region extents and resolution now?"
 msgstr ""
+"Vuoi impostare l'estensione e la risoluzione della region di default ora?"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1857
-#, fuzzy, python-format
+#, python-format
 msgid "Location <%s> created"
-msgstr "Location %s creata!"
+msgstr "Location <%s> creata!"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1870
 #, fuzzy, python-format
@@ -1002,7 +944,10 @@ msgid ""
 "Unable to create new location. Location <%(loc)s> not created.\n"
 "\n"
 "Details: %(err)s"
-msgstr "Impossibile creare nuova location. La location <%s> non ? stata creata"
+msgstr ""
+"Impossibile creare nuova location. La location <%s> non è stata create.\n"
+"\n"
+"Dettagli: %(err)s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1875
 #: ../gui/wxpython/gui_modules/location_wizard.py:1881
@@ -1026,19 +971,17 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1992
-#, fuzzy
 msgid "New GIS data directory"
-msgstr "Cartella del Database GIS:"
+msgstr "Nuova cartella del Database GIS:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2154
 msgid "EPSG code missing."
-msgstr "Codice EPSG mancante"
+msgstr "Codice EPSG mancante."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2178
 #: ../gui/wxpython/gui_modules/location_wizard.py:2202
-#, fuzzy
 msgid "File not found."
-msgstr "file non trovato"
+msgstr "File non trovato."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2221
 msgid "Set default region extent and resolution"
@@ -1086,7 +1029,7 @@ msgstr "Celle: %d"
 #: ../gui/wxpython/gui_modules/location_wizard.py:2654
 #, python-format
 msgid "Depth: %d"
-msgstr ""
+msgstr "Profondità: %d"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2413
 #: ../gui/wxpython/gui_modules/location_wizard.py:2655
@@ -1103,9 +1046,8 @@ msgid "Bottom"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2432
-#, fuzzy
 msgid "T-B resolution"
-msgstr "B"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2495
 msgid "North"
@@ -1141,9 +1083,8 @@ msgid "Select datum transformation"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2731
-#, fuzzy
 msgid "Select from list of datum transformations"
-msgstr "Usa lista"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:105
 #, fuzzy
@@ -1167,49 +1108,46 @@ msgid "Select mapset in GRASS location"
 msgstr "Seleziona mappa raster 2 (opzionale)"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:189
-#, fuzzy
 msgid "Name for new vector map:"
-msgstr "vettoriale:"
+msgstr "Nome per il nuovo vettore:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:195
 msgid "Create attribute table"
-msgstr ""
+msgstr "Crea tabella degli attributi"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:237
 #: ../gui/wxpython/menustrings.py:458
-#, fuzzy
 msgid "Create new vector map"
-msgstr "vettoriale"
+msgstr "Crea nuovo vettore"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:252
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to create vector map <%s>."
-msgstr "vettoriale."
+msgstr "Impossibile creare vettore <%s>."
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:270
 #, python-format
 msgid ""
 "Vector map <%s> already exists in the current mapset. Do you want to "
 "overwrite it?"
-msgstr ""
+msgstr "Il vettore <%s> esiste già nel corrente mapset. Vuoi sovrascriverlo?"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:273
 msgid "Overwrite?"
-msgstr ""
+msgstr "Sovrascrivi?"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:318
-#, fuzzy, python-format
+#, python-format
 msgid "New vector map <%s> created"
-msgstr "Nuovo vettoriale"
+msgstr "Nuovo vettore <%s> creato"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:342
 msgid "Load region:"
-msgstr ""
+msgstr "Carica region:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:346
-#, fuzzy
 msgid "Save region:"
-msgstr "Salva:"
+msgstr "Salva region:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:416
 #, python-format
@@ -1219,24 +1157,23 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:419
-#, fuzzy
 msgid ""
 "\n"
 "Define raster map name for legend in properties dialog."
-msgstr "nnome."
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:471
 #, python-format
 msgid "Legend of raster map <%s>"
-msgstr ""
+msgstr "Legenda del raster <%s>"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:595
 msgid "Enter text:"
-msgstr ""
+msgstr "Inserisci testo:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:611
 msgid "Rotation:"
-msgstr ""
+msgstr "Rotazione:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:624
 #: ../gui/wxpython/gui_modules/preferences.py:1017
@@ -1251,11 +1188,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:732
 msgid "Load"
-msgstr ""
+msgstr "Carica"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:761
 msgid "Map layer type:"
-msgstr ""
+msgstr "Tipologia del layer:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:773
 #, fuzzy
@@ -1264,16 +1201,15 @@ msgstr "Seleziona colore"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:780
 msgid "Mapset:"
-msgstr ""
+msgstr "Mapset:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:790
 msgid "Filter:"
-msgstr ""
+msgstr "Filtro:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:802
-#, fuzzy
 msgid "List of maps:"
-msgstr "Usa lista:"
+msgstr "Lista delle mappe:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:858
 #: ../gui/wxpython/gui_modules/gdialogs.py:1279
@@ -1294,36 +1230,32 @@ msgstr "Deseleziona tutto"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:933
 msgid "Multiple import"
-msgstr ""
+msgstr "Importazione multiplo"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:946
-#, fuzzy
 msgid "Input DXF file"
-msgstr "Mappa di input"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:948
-#, fuzzy
 msgid "Input directory"
-msgstr "Mappa di input"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:953
-#, fuzzy, python-format
+#, python-format
 msgid " List of %s layers "
-msgstr "Usa lista "
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:959
-#, fuzzy
 msgid "Choose DXF file:"
-msgstr "DXF:"
+msgstr "Scegli file DXF:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:962
-#, fuzzy
 msgid "Choose DXF file to import"
-msgstr "DXF"
+msgstr "Scegli file DXF da importare"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:968
 msgid "Choose directory:"
-msgstr ""
+msgstr "Scegli directory:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:971
 msgid "Choose input directory"
@@ -1331,7 +1263,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:975
 msgid "Select file extension:"
-msgstr ""
+msgstr "Seleziona l'estensione del file:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:993
 msgid "Add linked layers into layer tree"
@@ -1354,19 +1286,16 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gdialogs.py:1013
 #: ../gui/wxpython/gui_modules/help.py:99
 #: ../gui/wxpython/gui_modules/ogc_services.py:77
-#, fuzzy
 msgid "Close dialog"
-msgstr "Chiudi"
+msgstr "Chiudi dialogo"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1017
-#, fuzzy
 msgid "&Link"
-msgstr "Linea"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1018
-#, fuzzy
 msgid "Link selected layers"
-msgstr "Importa"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1020
 #: ../gui/wxpython/gui_modules/ogc_services.py:85
@@ -1376,9 +1305,8 @@ msgstr "&Importa"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1021
 #: ../gui/wxpython/gui_modules/ogc_services.py:86
-#, fuzzy
 msgid "Import selected layers"
-msgstr "Importa"
+msgstr "Importa layer selezionati"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1242
 #: ../gui/wxpython/gui_modules/dbm_dialogs.py:427
@@ -1393,44 +1321,36 @@ msgid "Layer"
 msgstr "Layer"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1243
-#, fuzzy
 msgid "Layer name"
-msgstr ""
-"Layer: %d\n"
-"categoria: %d\n"
-" nnome"
+msgstr "Layer name"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1244
-#, fuzzy
 msgid "Name for GRASS map"
-msgstr "vettoriale:"
+msgstr "Nome per la mappa GRASS"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1326
-#, fuzzy
 msgid "Set Map Layer Opacity"
-msgstr ""
-"Layer: %d\n"
-"categoria: %d\n"
+msgstr "Imposta l'opacità del layer"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1350
 msgid "transparent"
-msgstr ""
+msgstr "trasparenza"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1353
 msgid "opaque"
-msgstr ""
+msgstr "opaco"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:90
 msgid "GRASS GIS - Map display"
-msgstr ""
+msgstr "GRASS GIS - Map display"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:167
 msgid "Render"
-msgstr ""
+msgstr "Visualizza"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:172
 msgid "Enable/disable auto-rendering"
-msgstr ""
+msgstr "Abilita/disabilita auto-visualizzazione"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:175
 msgid "Show computational extent"
@@ -1473,14 +1393,14 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:323
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:505
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to start vector digitizer.\n"
 "The VDigit python extension was not found or loaded properly.\n"
 "Switching back to 2D display mode.\n"
 "\n"
 "Details: %s"
-msgstr "mostra"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:327
 #: ../gui/wxpython/gui_modules/mapdisp.py:385
@@ -1500,24 +1420,24 @@ msgid "Georectification toolbar"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:375
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to switch to 3D display mode.\n"
 "The GLCanvas class has not been included with this build of wxPython!\n"
 "Switching back to 2D display mode.\n"
 "\n"
 "Details: %s"
-msgstr "mostra"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:380
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to switch to 3D display mode.\n"
 "The Nviz python extension was not found or loaded properly.\n"
 "Switching back to 2D display mode.\n"
 "\n"
 "Details: %s"
-msgstr "mostra"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:414
 msgid "Please wait, loading data..."
@@ -1556,28 +1476,26 @@ msgid "Print preview"
 msgstr "Anteprima di stampa"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1341
-#, fuzzy
 msgid "No raster or vector map layer selected for querying."
-msgstr "Nessuna mappa vettoriale selezionata per interrogazione"
+msgstr "Nessun raster o vettore selezionata per interrogazione del layer."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1342
-#, fuzzy
 msgid "No map layer selected"
-msgstr "Nessuna mappa selezionata per interrogazione."
+msgstr "Nessuna mappa selezionata"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1438
 msgid "No vector map selected for querying."
-msgstr "Nessuna mappa vettoriale selezionata per interrogazione"
+msgstr "Nessuna mappa vettoriale selezionata per interrogazione."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1439
 #: ../gui/wxpython/gui_modules/mapdisp.py:1447
-#, fuzzy
 msgid "Vector querying"
-msgstr "Impostazione del vettore"
+msgstr "Interrogazione di vettori"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1446
 msgid "Only vector map from the current mapset can be modified."
-msgstr "Solo le mappe vettoriali del mapset corrente possono essere modificate"
+msgstr ""
+"Solo le mappe vettoriali del mapset corrente possono essere modificate."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1516
 msgid "Query raster/vector map(s) (display mode)"
@@ -1689,7 +1607,7 @@ msgstr "Visualizza i selezionati"
 
 #: ../gui/wxpython/gui_modules/preferences.py:558
 msgid "box"
-msgstr ""
+msgstr "box"
 
 #: ../gui/wxpython/gui_modules/preferences.py:559
 msgid "sphere"
@@ -1776,10 +1694,9 @@ msgstr "Applica i cambiamenti per la sessione corrente"
 #: ../gui/wxpython/gui_modules/profile.py:1037
 #: ../gui/wxpython/gui_modules/profile.py:1382
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1277
-#, fuzzy
 msgid ""
 "Apply and save changes to user settings file (default for next sessions)"
-msgstr "Applica salva"
+msgstr "Applica e salva cambiamenti per le impostazione per l'utente"
 
 #: ../gui/wxpython/gui_modules/preferences.py:875
 #: ../gui/wxpython/gui_modules/georect.py:1741
@@ -2518,12 +2435,11 @@ msgstr "Mappa <%s> non trovata."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:791
 msgid "MASK"
-msgstr ""
+msgstr "MASK"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:1406
-#, fuzzy
 msgid "Update categories"
-msgstr "categorie"
+msgstr "Aggiorna categorie"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:1501
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2038
@@ -2549,9 +2465,8 @@ msgid "Region <%s> not found. Operation canceled."
 msgstr "richiesto."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2694
-#, fuzzy
 msgid "Save display extents to region file"
-msgstr "salva le geometrie del display alla regione denominata"
+msgstr "Salva l'estensione del display in un file"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2704
 #, python-format
@@ -2723,17 +2638,16 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/help.py:362 ../gui/wxpython/menustrings.py:744
 #: ../gui/wxpython/menustrings.py:745
-#, fuzzy
 msgid "About GRASS GIS"
-msgstr "Benvenuti in GRASS GIS"
+msgstr "Informazioni su GRASS GIS"
 
 #: ../gui/wxpython/gui_modules/help.py:380
 msgid "Official GRASS site: http://grass.osgeo.org"
-msgstr ""
+msgstr "Sito ufficiale di GRASS: http://grass.osgeo.org"
 
 #: ../gui/wxpython/gui_modules/help.py:381
 msgid "GIS Library"
-msgstr ""
+msgstr "Librerie GIS"
 
 #: ../gui/wxpython/gui_modules/help.py:401
 #, fuzzy
@@ -2751,20 +2665,19 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/help.py:467 ../gui/wxpython/wxgui.py:490
 #: ../gui/wxpython/wxgui.py:506
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../gui/wxpython/gui_modules/help.py:468
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: ../gui/wxpython/gui_modules/help.py:469
-#, fuzzy
 msgid "License"
-msgstr "Linea"
+msgstr "Licenza"
 
 #: ../gui/wxpython/gui_modules/help.py:470
 msgid "Authors"
-msgstr ""
+msgstr "Autori"
 
 #: ../gui/wxpython/gui_modules/georect.py:114
 msgid "Setup for georectification"
@@ -4788,9 +4701,8 @@ msgstr "Salva"
 
 #: ../gui/wxpython/menustrings.py:9 ../gui/wxpython/wxgui.py:817
 #: ../gui/wxpython/wxgui.py:835
-#, fuzzy
 msgid "Save workspace"
-msgstr "Salva"
+msgstr "Salva ambiente di lavoro"
 
 #: ../gui/wxpython/menustrings.py:10
 msgid "Save as"
@@ -7737,45 +7649,40 @@ msgid "Outputs basic information about a user-specified 3D raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:697
-#, fuzzy
 msgid "Database information"
-msgstr "Connessione al database"
+msgstr "Informazione database"
 
 #: ../gui/wxpython/menustrings.py:698
-#, fuzzy
 msgid "Describe table"
-msgstr "Imposta il colore della tabella"
+msgstr "Descrive tabella"
 
 #: ../gui/wxpython/menustrings.py:699
 msgid "Describes a table in detail."
-msgstr ""
+msgstr "Descrive una tabella in dettaglia"
 
 #: ../gui/wxpython/menustrings.py:700
-#, fuzzy
 msgid "List columns"
-msgstr "Usa lista:"
+msgstr "Visualizza colonne"
 
 #: ../gui/wxpython/menustrings.py:701
 msgid "List all columns for a given table."
-msgstr ""
+msgstr "Visualizza tutte le colonne per una tabella"
 
 #: ../gui/wxpython/menustrings.py:702
-#, fuzzy
 msgid "List drivers"
-msgstr "Lista dei layer"
+msgstr "Visualizza driver"
 
 #: ../gui/wxpython/menustrings.py:703
 msgid "List all database drivers."
-msgstr ""
+msgstr "Visualizza tutti i driver"
 
 #: ../gui/wxpython/menustrings.py:704
-#, fuzzy
 msgid "List tables"
-msgstr "Lista dei layer"
+msgstr "Visualizza tabelle"
 
 #: ../gui/wxpython/menustrings.py:705
 msgid "Lists all tables for a given database."
-msgstr ""
+msgstr "Visualizza tutte le tabelle per un database"
 
 #: ../gui/wxpython/menustrings.py:706
 msgid "Manage databases"
@@ -7783,46 +7690,44 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:707
 msgid "Connect"
-msgstr ""
+msgstr "Connessione"
 
 #: ../gui/wxpython/menustrings.py:708
 msgid "Prints/sets general DB connection for current mapset and exits."
 msgstr ""
+"Stampa/imposta la connessione generale al DB per il mapset corrente ed esce."
 
 #: ../gui/wxpython/menustrings.py:709
-#, fuzzy
 msgid "Login"
-msgstr "Linea"
+msgstr "Login"
 
 #: ../gui/wxpython/menustrings.py:710
 msgid "Sets user/password for driver/database."
-msgstr ""
+msgstr "Imposta utente/password per driver/database"
 
 #: ../gui/wxpython/menustrings.py:711
-#, fuzzy
 msgid "Copy table"
-msgstr "Crea tabella"
+msgstr "Copia tabella"
 
 #: ../gui/wxpython/menustrings.py:712
-#, fuzzy
 msgid "Copy a table."
-msgstr "Crea tabella"
+msgstr "Copia una tabella"
 
 #: ../gui/wxpython/menustrings.py:713
-#, fuzzy
 msgid "New table"
-msgstr "Crea tabella"
+msgstr "Nuova tabella"
 
 #: ../gui/wxpython/menustrings.py:714
 msgid ""
 "Creates and adds a new attribute table to a given layer of an existing "
 "vector map."
 msgstr ""
+"Crea e aggiunge una nuova tabella degli attributi per un certo layer di una "
+"mappa vettoriale esistente"
 
 #: ../gui/wxpython/menustrings.py:715
-#, fuzzy
 msgid "Remove table"
-msgstr "Rimuovi vertici"
+msgstr "Rimuovi tabella"
 
 #: ../gui/wxpython/menustrings.py:716
 #, fuzzy
@@ -7839,48 +7744,52 @@ msgid ""
 "Adds one or more columns to the attribute table connected to a given vector "
 "map."
 msgstr ""
+"Aggiunge una o più colonne alla tabella degli attributi connessa ad una "
+"mappa vettoriale"
 
 #: ../gui/wxpython/menustrings.py:719
-#, fuzzy
 msgid "Change values"
-msgstr "Valori della cella"
+msgstr "Cambia valori"
 
 #: ../gui/wxpython/menustrings.py:720
 msgid ""
 "Allows to update a column in the attribute table connected to a vector map."
 msgstr ""
+"Permette di aggiornare una colonna nella tabella degli attributi connessa a "
+"una mappa vettoriale"
 
 #: ../gui/wxpython/menustrings.py:722
 msgid ""
 "Renames a column in the attribute table connected to a given vector map."
 msgstr ""
+"Rinomina una colonna nella tabella degli attributi connessa a una mappa "
+"vettoriale"
 
 #: ../gui/wxpython/menustrings.py:723
-#, fuzzy
 msgid "Test"
-msgstr "Resetta"
+msgstr "Prova"
 
 #: ../gui/wxpython/menustrings.py:724
 msgid "Test database driver, database must exist and set by db.connect."
 msgstr ""
+"Prova il driver del database, il database deve esistere e impostato "
+"utilizzando db.connect"
 
 #: ../gui/wxpython/menustrings.py:726
-#, fuzzy
 msgid "Query any table"
-msgstr "Silenziosamente"
+msgstr "Interroga tabella"
 
 #: ../gui/wxpython/menustrings.py:727
 msgid "Selects data from attribute table (performs SQL query statement(s))."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:728
-#, fuzzy
 msgid "Query vector attribute data"
-msgstr "Mostra gli attributi dei dati"
+msgstr "Interroga gli attributi del vettoriale"
 
 #: ../gui/wxpython/menustrings.py:729
 msgid "Prints vector map attributes."
-msgstr ""
+msgstr "Visualizza gli attributi del vettoriale"
 
 #: ../gui/wxpython/menustrings.py:730
 msgid "SQL statement"
@@ -7891,31 +7800,30 @@ msgid "Executes any SQL statement."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:732
-#, fuzzy
 msgid "Vector database connections"
-msgstr "Connessione al database"
+msgstr "Connessione al database vettoriale"
 
 #: ../gui/wxpython/menustrings.py:733
-#, fuzzy
 msgid "Reconnect vector to database"
-msgstr "vettoriale"
+msgstr "Riconnetti vettoriale al database"
 
 #: ../gui/wxpython/menustrings.py:734
 msgid "Reconnects vectors to a new database."
-msgstr ""
+msgstr "Riconnetti vettoriale a un nuovo database"
 
 #: ../gui/wxpython/menustrings.py:735
-#, fuzzy
 msgid "Set vector map - database connection"
-msgstr "Connessione al database"
+msgstr "Imposta connessione al database della mappa vettoriale"
 
 #: ../gui/wxpython/menustrings.py:736
 msgid "Prints/sets DB connection for a vector map to attribute table."
 msgstr ""
+"Visualizza/imposta la connessione per una mappa vettoriale alla tabella "
+"degli attributi"
 
 #: ../gui/wxpython/menustrings.py:737
 msgid "Help"
-msgstr ""
+msgstr "Aiuto"
 
 #: ../gui/wxpython/menustrings.py:738
 msgid "GRASS help"
@@ -7923,7 +7831,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:739 ../gui/wxpython/menustrings.py:741
 msgid "Display the HTML man pages of GRASS"
-msgstr ""
+msgstr "Visualizza la pagina di supporto HTML di GRASS "
 
 #: ../gui/wxpython/menustrings.py:740
 msgid "GUI help"
@@ -8100,7 +8008,7 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:503
 msgid "Delete selected location"
-msgstr "Elimina la location selezionato"
+msgstr "Elimina la location selezionata"
 
 #: ../gui/wxpython/gis_set.py:514
 msgid "Unable to delete location"
@@ -8143,29 +8051,25 @@ msgstr ""
 "tua home"
 
 #: ../gui/wxpython/wxgui.py:102
-#, fuzzy
 msgid "GRASS GIS Layer Manager"
-msgstr "Tabella"
+msgstr ""
 
 #: ../gui/wxpython/wxgui.py:279
-#, fuzzy
 msgid "Map layers for each display"
-msgstr "mostra"
+msgstr ""
 
 #: ../gui/wxpython/wxgui.py:387 ../gui/wxpython/wxgui.py:1484
-#, fuzzy
 msgid "Do you want to save changes in the workspace?"
-msgstr "salva vettoriale?"
+msgstr "Vuoi salvare i cambiamenti nell'ambiente di lavoro?"
 
 #: ../gui/wxpython/wxgui.py:389 ../gui/wxpython/wxgui.py:1486
-#, fuzzy
 msgid "Do you want to store current settings to workspace file?"
-msgstr "Workspace?"
+msgstr "Vuoi salvare le impostazioni correnti in un file d'ambiente di lavoro?"
 
 #: ../gui/wxpython/wxgui.py:396
-#, fuzzy, python-format
+#, python-format
 msgid "Close Map Display %d"
-msgstr "mostra"
+msgstr "Chiudi map display %d"
 
 #: ../gui/wxpython/wxgui.py:479
 #, python-format
@@ -8190,20 +8094,20 @@ msgid "Current mapset is <%s>."
 msgstr "Salva?"
 
 #: ../gui/wxpython/wxgui.py:570
-#, fuzzy
 msgid ""
 "Current workspace is not empty. Do you want to store current settings to "
 "workspace file?"
-msgstr "Workspace?"
+msgstr ""
+"L'ambiente di lavoro corrente non è vuoto. Vuoi salvare le impostazioni "
+"correnti in un file d'ambiente di lavoro?"
 
 #: ../gui/wxpython/wxgui.py:573
-#, fuzzy
 msgid "Create new workspace?"
-msgstr "Salva"
+msgstr "Creare nuovo ambiente di lavoro?"
 
 #: ../gui/wxpython/wxgui.py:598
 msgid "Choose workspace file"
-msgstr ""
+msgstr "Scegli il file dell'ambiente di lavoro"
 
 #: ../gui/wxpython/wxgui.py:633
 #, fuzzy, python-format
@@ -8217,80 +8121,74 @@ msgstr "File di input."
 #: ../gui/wxpython/wxgui.py:638 ../gui/wxpython/wxgui.py:741
 #: ../gui/wxpython/wxgui.py:777
 msgid "Please wait, loading workspace..."
-msgstr ""
+msgstr "Attendere, sto caricando l'ambiente di lavoro..."
 
 #: ../gui/wxpython/wxgui.py:761
 msgid "Choose GRC file to load"
-msgstr ""
+msgstr "Scegli il file GRC da caricare"
 
 #: ../gui/wxpython/wxgui.py:800
-#, fuzzy
 msgid "Choose file to save current workspace"
-msgstr "salva"
+msgstr "Scegli il file dove salvare il corrente ambiente di lavoro"
 
 #: ../gui/wxpython/wxgui.py:815 ../gui/wxpython/wxgui.py:832
-#, fuzzy, python-format
+#, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
-msgstr "Workspace?"
+msgstr ""
+"Il file dell'ambiente di lavoro <%s> esiste già. Vuoi sovrascrivvere questo "
+"file?"
 
 #: ../gui/wxpython/wxgui.py:854
 #, python-format
 msgid "Unable to open workspace file <%s> for writing."
-msgstr ""
+msgstr "Impossibile aprire il file dell'ambiente di lavoro <%s> per scriverci."
 
 #: ../gui/wxpython/wxgui.py:863
-#, fuzzy, python-format
+#, python-format
 msgid "Writing current settings to workspace file failed (%s)."
-msgstr "File di input."
+msgstr ""
+"Scrittura delle impostazioni correnti nel file dell'ambiente di lavoro "
+"fallita (%s)"
 
 #: ../gui/wxpython/wxgui.py:1001
-#, fuzzy
 msgid "Add various raster-based map layers"
-msgstr "vettoriale"
+msgstr "Aggiungi diversi layer raster"
 
 #: ../gui/wxpython/wxgui.py:1005
-#, fuzzy
 msgid "Add various vector-based map layer"
-msgstr "vettoriale"
+msgstr "Aggiungi diversi layer vettoriali"
 
 #: ../gui/wxpython/wxgui.py:1022
-#, fuzzy
 msgid "Import DXF layers"
-msgstr "Importa"
+msgstr "Importa layers DXF"
 
 #: ../gui/wxpython/wxgui.py:1028
-#, fuzzy
 msgid "Import GDAL layers"
-msgstr "Importa"
+msgstr "Importa layers GDAL"
 
 #: ../gui/wxpython/wxgui.py:1034
-#, fuzzy
 msgid "Link GDAL layers"
-msgstr "Importa"
+msgstr "Collegati a layers GDAL"
 
 #: ../gui/wxpython/wxgui.py:1041
-#, fuzzy
 msgid "Import OGR layers"
-msgstr "Importa"
+msgstr "Importa layers OGR"
 
 #: ../gui/wxpython/wxgui.py:1047
-#, fuzzy
 msgid "Link OGR layers"
-msgstr "Lista dei layer"
+msgstr "Collegati a layers OGR"
 
 #: ../gui/wxpython/wxgui.py:1070
 msgid "Nothing to import. No WMS layer selected."
 msgstr ""
 
 #: ../gui/wxpython/wxgui.py:1096
-#, fuzzy
 msgid "Attribute management is available only for vector maps."
-msgstr "vettoriale."
+msgstr ""
 
 #: ../gui/wxpython/wxgui.py:1108
-#, fuzzy
 msgid "Please wait, loading attribute data..."
-msgstr "dati."
+msgstr "Attendere, caricamento attributi..."
 
 #: ../gui/wxpython/wxgui.py:1424
 #, python-format
@@ -8298,19 +8196,19 @@ msgid ""
 "Do you want to remove map layer(s)\n"
 "%s\n"
 "from layer tree?"
-msgstr ""
+msgstr "Vuoi rimuovere i layer %s dal layer tree"
 
 #: ../gui/wxpython/wxgui.py:1427
 msgid "Do you want to remove selected map layer(s) from layer tree?"
-msgstr ""
+msgstr "Vuoi rimuove i layer selezionati dal layer tree"
 
 #: ../gui/wxpython/wxgui.py:1431
 msgid "Remove map layer"
-msgstr ""
+msgstr "Rimuovi layer"
 
 #: ../gui/wxpython/wxgui.py:1493
 msgid "Quit GRASS GUI"
-msgstr ""
+msgstr "Esci dalla GUI di GRASS"
 
 #: ../gui/wxpython/wxgui.py:1523
 msgid "No map layer selected. Operation cancelled."
@@ -8390,16 +8288,8 @@ msgstr ""
 #~ msgid "Reclassify vector objects interactively by entering SQL rules"
 #~ msgstr "vettoriale"
 
-#, fuzzy
 #~ msgid "Selects data from table."
-#~ msgstr "Elimina"
-
-#, fuzzy
-#~ msgid ""
-#~ "File <%(file)s>: Unable to get list of DXF layers.\n"
-#~ "\n"
-#~ "%(details)s"
-#~ msgstr "DXF"
+#~ msgstr "Seleziona dati dalla tabella"
 
 #, fuzzy
 #~ msgid "GRASS GIS Layer Manager (Experimental Prototype)"
@@ -8421,3 +8311,44 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ortho Photo rectification"
 #~ msgstr "Esci"
+
+#~ msgid "Add raster map layer"
+#~ msgstr "Aggiunge un layer raster"
+
+#~ msgid "Add vector map layer"
+#~ msgstr "Aggiunge un layer vettoriale"
+
+#~ msgid "Close this window without executing the command"
+#~ msgstr "Chiudi questa finestra senza eseguire il comando"
+
+#~ msgid "Show manual page of the command"
+#~ msgstr "Mostra la pagine del manuale del comando"
+
+#~ msgid "Run the command"
+#~ msgstr "Esegui il commando"
+
+#~ msgid "Copy the current command string to the clipboard"
+#~ msgstr "Copia la seguente stringa di comando negli appunti"
+
+#, fuzzy
+#~ msgid "Error in command execution %s"
+#~ msgstr "Errore nell'esecuzione del comando '%s'"
+
+#~ msgid "Drops an attribute table."
+#~ msgstr "Elimina una tabella degli attributi"
+
+#~ msgid "GRASS GIS help"
+#~ msgstr "Aiuto GRASS GIS"
+
+#~ msgid "GRASS GIS GUI help"
+#~ msgstr "Aiuto GRASS GIS GUI "
+
+#~ msgid ""
+#~ "Reading workspace file <%s> failed. Invalid file, unable to parse XML "
+#~ "document."
+#~ msgstr ""
+#~ "Lettura file dell'ambiente di lavoro <%s> fallita. File invalido, "
+#~ "impossibile parsare il documento XML."
+
+#~ msgid "Unable to read workspace file"
+#~ msgstr "Impossibile leggere il file dell'ambiente di lavoro"
