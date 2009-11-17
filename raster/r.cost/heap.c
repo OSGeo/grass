@@ -47,11 +47,10 @@
 #define GET_PARENT(c) (int) (((c) - 2) / 3 + 1)
 #define GET_CHILD(p) (int) (((p) * 3) - 1)
 
-unsigned int next_point = 0;
-unsigned int heap_size = 0;
-unsigned int heap_alloced = 0;
-struct cost **heap_index, *free_point;
-
+static unsigned int next_point = 0;
+static unsigned int heap_size = 0;
+static unsigned int heap_alloced = 0;
+static struct cost **heap_index, *free_point;
 
 int init_heap(void)
 {

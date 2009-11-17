@@ -44,6 +44,7 @@
  *********************************************************************/
 
 /* BUG 2005: r.cost probably hangs with negative costs.
+ *           Positive costs could be a condition for Dijkstra search? MM
  * 
  * 08 april 2000 - Pierre de Mouveaux. pmx@audiovu.com
  * Updated to use the Grass 5.0 floating point raster cell format.
@@ -53,7 +54,12 @@
  * if "output" doesn't exist, but is expected (this is bad design).
  */
 
-#define SEGCOLSIZE 	64
+/* TODO
+ * use Vect_*() functions
+ * use search tree for stop points
+ * re-organize and clean up code for better readability
+ * compartmentalize code, start with putting Dijkstra search into a separate function
+ */
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -70,6 +76,8 @@
 #include "stash.h"
 #include <grass/glocale.h>
 
+#define SEGCOLSIZE 	64
+
 struct Cell_head window;
 
 struct variables
@@ -83,8 +91,8 @@ struct variables
     {"outdir", MOVE_DIR_LAYER}
 };
 
-char cum_cost_layer[64], move_dir_layer[64];
-char cost_layer[64];
+char cum_cost_layer[GNAME_MAX], move_dir_layer[GNAME_MAX];
+char cost_layer[GNAME_MAX];
 struct start_pt *head_start_pt = NULL;
 struct start_pt *head_end_pt = NULL;
 
@@ -92,7 +100,7 @@ struct start_pt *head_end_pt = NULL;
 int main(int argc, char *argv[])
 {
     void *cell, *cell2, *dir_cell;
-    SEGMENT in_seg, out_seg, out_seg2;
+    SEGMENT cost_seg, dir_seg;
     const char *cost_mapset, *move_dir_mapset;
     const char *in_file, *out_file, *dir_out_file;
     const char *search_mapset;
@@ -101,16 +109,15 @@ int main(int argc, char *argv[])
     double NS_fac, EW_fac, DIAG_fac, H_DIAG_fac, V_DIAG_fac;
     double fcost;
     double min_cost, old_min_cost;
-    double cur_dir, old_cur_dir;
+    double cur_dir;
     double zero = 0.0;
     int at_percent = 0;
     int col, row, nrows, ncols;
     int maxcost;
     int maxmem;
-    double cost;
     int cost_fd, cum_fd, dir_fd;
     int have_stop_points = 0, dir = 0;
-    int in_fd, out_fd, dir_out_fd;
+    int in_fd, dir_out_fd;
     double my_cost;
     double null_cost;
     int srows, scols;
@@ -122,12 +129,15 @@ int main(int argc, char *argv[])
     long n_processed = 0;
     long total_cells;
     struct GModule *module;
-    struct Flag *flag2, *flag3, *flag4;
+    struct Flag *flag2, *flag3, *flag4, *flag5;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
     struct Option *opt9, *opt10, *opt11;
     struct cost *pres_cell, *new_cell;
     struct start_pt *pres_start_pt = NULL;
     struct start_pt *pres_stop_pt = NULL;
+    struct cc {
+	double cost_in, cost_out;
+    } costs;
 
     void *ptr2;
     RASTER_MAP_TYPE data_type, dir_data_type = DCELL_TYPE;
@@ -238,6 +248,10 @@ int main(int argc, char *argv[])
     flag4->description = _("Start with values in raster map");
     flag4->guisection = _("Start");
 
+    flag5 = G_define_flag();
+    flag5->key = 'i';
+    flag5->description = _("Only print info about disk space and memory requirements");
+
     /*   Parse command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -263,6 +277,12 @@ int main(int argc, char *argv[])
 	(double)sqrt((double)(4 * NS_fac * NS_fac + EW_fac * EW_fac));
     H_DIAG_fac =
 	(double)sqrt((double)(NS_fac * NS_fac + 4 * EW_fac * EW_fac));
+
+    EW_fac /= 2.0;
+    NS_fac /= 2.0;
+    DIAG_fac /= 2.0;
+    V_DIAG_fac /= 4.0;
+    H_DIAG_fac /= 4.0;
 
     Rast_set_d_null_value(&null_cost, 1);
 
@@ -313,7 +333,7 @@ int main(int argc, char *argv[])
 	G_debug(1, "Null cell will be retained into output raster map");
 
     if (opt7->answer) {
-	search_mapset = G_find_vector(opt7->answer, "");
+	search_mapset = G_find_vector2(opt7->answer, "");
 	if (search_mapset == NULL)
 	    G_fatal_error(_("Vector map <%s> not found"), opt7->answer);
     }
@@ -343,11 +363,11 @@ int main(int argc, char *argv[])
 	search_mapset = "";
 	move_dir_mapset = G_find_raster2(move_dir_layer, search_mapset);
     }
+    
     /*  Find number of rows and columns in window    */
 
     nrows = G_window_rows();
     ncols = G_window_cols();
-
 
     /*  Open cost cell layer for reading  */
 
@@ -384,7 +404,10 @@ int main(int argc, char *argv[])
 	srows = scols = SEGCOLSIZE / 2;
     else
 	srows = scols = SEGCOLSIZE;
-	
+
+    if (maxmem == 100)
+	srows = scols = 256;  /* large enough, avoid too much spill */
+
     if (maxmem > 0)
 	segments_in_memory =
 	    maxmem * (1 + nrows / srows) * (1 + ncols / scols) / 100;
@@ -393,15 +416,15 @@ int main(int argc, char *argv[])
 	segments_in_memory = 4 * (nrows / srows + ncols / scols + 2);
 
     /* report disk space and memory requirements */
-    G_verbose_message("--------------------------------------------");
+    G_message("--------------------------------------------");
     if (dir == 1) {
 	double disk_mb, mem_mb;
 
 	disk_mb = (double) nrows * ncols * 24. / 1048576.;
 	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
-	G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
-	G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
+	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
+	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
 	
     }
     else {
@@ -410,22 +433,23 @@ int main(int argc, char *argv[])
 	disk_mb = (double) nrows * ncols * 16. / 1048576.;
 	mem_mb  = (double) srows * scols * 16. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
-	G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
-	G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
+	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
+	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
     }
-    G_verbose_message("--------------------------------------------");
+    G_message("--------------------------------------------");
+    
+    if (flag5->answer) {
+	Rast_close(cost_fd);
+	exit(EXIT_SUCCESS);
+    }
 
-    /*   Create segmented format files for cost layer and output layer  */
+    /* Create segmented format files for cost layer and output layer */
 
     G_verbose_message(_("Creating some temporary files..."));
 
     in_fd = creat(in_file, 0666);
-    segment_format(in_fd, nrows, ncols, srows, scols, sizeof(double));
+    segment_format(in_fd, nrows, ncols, srows, scols, sizeof(struct cc));
     close(in_fd);
-
-    out_fd = creat(out_file, 0666);
-    segment_format(out_fd, nrows, ncols, srows, scols, sizeof(double));
-    close(out_fd);
 
     if (dir == 1) {
 	dir_out_fd = creat(dir_out_file, 0600);
@@ -433,26 +457,27 @@ int main(int argc, char *argv[])
 		       sizeof(double));
 	close(dir_out_fd);
     }
-    /*   Open initialize and segment all files  */
+    
+    /* Open initialize and segment all files */
 
     in_fd = open(in_file, 2);
-    segment_init(&in_seg, in_fd, segments_in_memory);
-
-
-    out_fd = open(out_file, 2);
-    segment_init(&out_seg, out_fd, segments_in_memory);
+    segment_init(&cost_seg, in_fd, segments_in_memory);
 
     if (dir == 1) {
 	dir_out_fd = open(dir_out_file, 2);
-	segment_init(&out_seg2, dir_out_fd, segments_in_memory);
+	segment_init(&dir_seg, dir_out_fd, segments_in_memory);
     }
+    
     /*   Write the cost layer in the segmented file  */
 
-    G_message(_("Reading raster map <%s>..."),
+    G_message(_("Reading raster map <%s>, initializing output..."),
 	      G_fully_qualified_name(cost_layer, cost_mapset));
     {
 	int i;
 	double p;
+	double dnullval;
+
+	Rast_set_d_null_value(&dnullval, 1);
 
 	dsize = Rast_cell_size(data_type);
 	p = 0.0;
@@ -465,95 +490,49 @@ int main(int argc, char *argv[])
 
 	    /* INPUT NULL VALUES: ??? */
 	    ptr2 = cell;
-	    switch (data_type) {
-	    case CELL_TYPE:
-		for (i = 0; i < ncols; i++) {
-		    if (Rast_is_null_value(ptr2, data_type)) {
-			p = null_cost;
-		    }
-		    else {
-			p = *(int *)ptr2;
-		    }
-		    segment_put(&in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, dsize);
-		}
-		break;
-	    case FCELL_TYPE:
-		for (i = 0; i < ncols; i++) {
-		    if (Rast_is_null_value(ptr2, data_type)) {
-			p = null_cost;
-		    }
-		    else {
-			p = *(float *)ptr2;
-		    }
-		    segment_put(&in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, dsize);
-		}
-		break;
-
-	    case DCELL_TYPE:
-		for (i = 0; i < ncols; i++) {
-		    if (Rast_is_null_value(ptr2, data_type)) {
-			p = null_cost;
-		    }
-		    else {
-			p = *(double *)ptr2;
-		    }
-		    segment_put(&in_seg, &p, row, i);
-		    ptr2 = G_incr_void_ptr(ptr2, dsize);
-		}
-		break;
-	    }
-	}
-	G_percent(1, 1, 1);
-    }
-    segment_flush(&in_seg);
-
-    /* Initialize output map with NULL VALUES */
-
-    /*   Initialize segmented output file  */
-    G_message(_("Initializing output..."));
-
-    {
-	double *fbuff;
-	int i;
-
-	fbuff = (double *)G_malloc(ncols * sizeof(double));
-	
-	Rast_set_d_null_value(fbuff, ncols);
-
-	for (row = 0; row < nrows; row++) {
-	    G_percent(row, nrows, 2);
-
 	    for (i = 0; i < ncols; i++) {
-		segment_put(&out_seg, &fbuff[i], row, i);
+		if (Rast_is_null_value(ptr2, data_type)) {
+		    p = null_cost;
+		}
+		else {
+		    switch (data_type) {
+		    case CELL_TYPE:
+			p = *(CELL *)ptr2;
+			break;
+		    case FCELL_TYPE:
+			p = *(FCELL *)ptr2;
+			break;
+		    case DCELL_TYPE:
+			p = *(DCELL *)ptr2;
+			break;
+		    }
+		}
+		costs.cost_in = p;
+		costs.cost_out = dnullval;
+		segment_put(&cost_seg, &costs, row, i);
+		ptr2 = G_incr_void_ptr(ptr2, dsize);
 	    }
 	}
 	G_percent(1, 1, 1);
-	segment_flush(&out_seg);
-	G_free(fbuff);
     }
 
     if (dir == 1) {
+	double *fbuff;
+	int i;
+
 	G_message(_("Initializing directional output "));
-	{
-	    double *fbuff;
-	    int i;
-	    fbuff =
-		(double *)G_malloc((unsigned int)(ncols * sizeof(double)));
-	    Rast_set_d_null_value(fbuff, ncols);
-	    for (row = 0; row < nrows; row++) {
-		{
-		    G_percent(row, nrows, 2);
-		}
-		for (i = 0; i < ncols; i++) {
-		    segment_put(&out_seg2, &fbuff[i], row, i);
-		}
+
+	fbuff =
+	    (double *)G_malloc((unsigned int)(ncols * sizeof(double)));
+	Rast_set_d_null_value(fbuff, ncols);
+	for (row = 0; row < nrows; row++) {
+	    G_percent(row, nrows, 2);
+	    for (i = 0; i < ncols; i++) {
+		segment_put(&dir_seg, &fbuff[i], row, i);
 	    }
-	    G_percent(1, 1, 1);
-	    segment_flush(&out_seg2);
-	    G_free(fbuff);
 	}
+	G_percent(1, 1, 1);
+	G_free(fbuff);
     }
     /*   Scan the start_points layer searching for starting points.
      *   Create a heap of starting points ordered by increasing costs.
@@ -660,8 +639,11 @@ int main(int argc, char *argv[])
 	RASTER_MAP_TYPE data_type2;
 	int got_one = 0;
 
-	search_mapset = G_find_file("cell", opt9->answer, "");
+	search_mapset = G_find_raster(opt9->answer, "");
 
+	if (search_mapset == NULL)
+	    G_fatal_error(_("Raster map <%s> not found"), opt9->answer);
+	    
 	fd = Rast_open_old(opt9->answer, search_mapset);
 	if (fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
@@ -688,15 +670,19 @@ int main(int argc, char *argv[])
 		if (!Rast_is_null_value(ptr2, data_type2)) {
 		    double cellval;
 
+		    segment_get(&cost_seg, &costs, row, col);
+
 		    if (start_with_raster_vals == 1) {
 			cellval = Rast_get_d_value(ptr2, data_type2);
 			new_cell = insert(cellval, row, col);
-			segment_put(&out_seg, &cellval, row, col);
+			costs.cost_out = cellval;
+			segment_put(&cost_seg, &costs, row, col);
 		    }
 		    else {
 			value = &zero;
 			new_cell = insert(zero, row, col);
-			segment_put(&out_seg, value, row, col);
+			costs.cost_out = *value;
+			segment_put(&cost_seg, &costs, row, col);
 		    }
 		    got_one = 1;
 		}
@@ -712,7 +698,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("No start points"));
     }
 
-
     /*  If the starting points are given on the command line start a linked
      *  list of cells ordered by increasing costs
      */
@@ -726,11 +711,15 @@ int main(int argc, char *argv[])
 		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
 		G_fatal_error(_("Specified starting location outside database window"));
 	    new_cell = insert(zero, top_start_pt->row, top_start_pt->col);
-	    segment_put(&out_seg, value, top_start_pt->row,
+	    segment_get(&cost_seg, &costs, top_start_pt->row,
+			top_start_pt->col);
+
+	    costs.cost_out = *value;
+
+	    segment_put(&cost_seg, &costs, top_start_pt->row,
 			top_start_pt->col);
 	    top_start_pt = top_start_pt->next;
 	}
-	/*              printf("--------+++++----------\n"); */
     }
 
     /*  Loop through the heap and perform at each cell the following:
@@ -756,7 +745,8 @@ int main(int argc, char *argv[])
 	    break;
 
 	/* If I've already been updated, delete me */
-	segment_get(&out_seg, &old_min_cost, pres_cell->row, pres_cell->col);
+	segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col);
+	old_min_cost = costs.cost_out;
 	if (!Rast_is_d_null_value(&old_min_cost)) {
 	    if (pres_cell->min_cost > old_min_cost) {
 		delete(pres_cell);
@@ -768,7 +758,7 @@ int main(int argc, char *argv[])
 	row = pres_cell->row;
 	col = pres_cell->col;
 
-	segment_get(&in_seg, &my_cost, pres_cell->row, pres_cell->col);
+	my_cost = costs.cost_in;
 
 	G_percent(n_processed++, total_cells, 1);
 
@@ -855,103 +845,101 @@ int main(int argc, char *argv[])
 	    if (col < 0 || col >= ncols)
 		continue;
 
-	    value = &cost;
-
 	    switch (neighbor) {
 	    case 1:
-		value = &W;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((W + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		W = costs.cost_in;
+		fcost = (double)(W + my_cost);
 		min_cost = pres_cell->min_cost + fcost * EW_fac;
 		break;
 	    case 2:
-		value = &E;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((E + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		E = costs.cost_in;
+		fcost = (double)(E + my_cost);
 		min_cost = pres_cell->min_cost + fcost * EW_fac;
 		break;
 	    case 3:
-		value = &N;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((N + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		N = costs.cost_in;
+		fcost = (double)(N + my_cost);
 		min_cost = pres_cell->min_cost + fcost * NS_fac;
 		break;
 	    case 4:
-		value = &S;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((S + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		S = costs.cost_in;
+		fcost = (double)(S + my_cost);
 		min_cost = pres_cell->min_cost + fcost * NS_fac;
 		break;
 	    case 5:
-		value = &NW;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((NW + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		NW = costs.cost_in;
+		fcost = (double)(NW + my_cost);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 6:
-		value = &NE;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((NE + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		NE = costs.cost_in;
+		fcost = (double)(NE + my_cost);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 7:
-		value = &SE;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((SE + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		SE = costs.cost_in;
+		fcost = (double)(SE + my_cost);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 8:
-		value = &SW;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((SW + my_cost) / 2.0);
+		segment_get(&cost_seg, &costs, row, col);
+		SW = costs.cost_in;
+		fcost = (double)(SW + my_cost);
 		min_cost = pres_cell->min_cost + fcost * DIAG_fac;
 		break;
 	    case 9:
-		value = &NNW;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((N + NW + NNW + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		NNW = costs.cost_in;
+		fcost = (double)(N + NW + NNW + my_cost);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 10:
-		value = &NNE;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((N + NE + NNE + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		NNE = costs.cost_in;
+		fcost = (double)(N + NE + NNE + my_cost);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 11:
-		value = &SSE;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((S + SE + SSE + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		SSE = costs.cost_in;
+		fcost = (double)(S + SE + SSE + my_cost);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 12:
-		value = &SSW;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((S + SW + SSW + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		SSW = costs.cost_in;
+		fcost = (double)(S + SW + SSW + my_cost);
 		min_cost = pres_cell->min_cost + fcost * V_DIAG_fac;
 		break;
 	    case 13:
-		value = &WNW;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((W + NW + WNW + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		WNW = costs.cost_in;
+		fcost = (double)(W + NW + WNW + my_cost);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    case 14:
-		value = &ENE;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((E + NE + ENE + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		ENE = costs.cost_in;
+		fcost = (double)(E + NE + ENE + my_cost);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    case 15:
-		value = &ESE;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((E + SE + ESE + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		ESE = costs.cost_in;
+		fcost = (double)(E + SE + ESE + my_cost);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    case 16:
-		value = &WSW;
-		segment_get(&in_seg, value, row, col);
-		fcost = (double)((W + SW + WSW + my_cost) / 4.0);
+		segment_get(&cost_seg, &costs, row, col);
+		WSW = costs.cost_in;
+		fcost = (double)(W + SW + WSW + my_cost);
 		min_cost = pres_cell->min_cost + fcost * H_DIAG_fac;
 		break;
 	    }
@@ -960,29 +948,24 @@ int main(int argc, char *argv[])
 	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
-	    segment_get(&out_seg, &old_min_cost, row, col);
-	    if (dir == 1) {
-		segment_get(&out_seg2, &old_cur_dir, row, col);
-	    }
+	    old_min_cost = costs.cost_out;
 
 	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
-		segment_put(&out_seg, &min_cost, row, col);
+		costs.cost_out = min_cost;
+		segment_put(&cost_seg, &costs, row, col);
 		new_cell = insert(min_cost, row, col);
 		if (dir == 1) {
-		    segment_put(&out_seg2, &cur_dir, row, col);
+		    segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
-	    else {
-		/* update with lower costs */
-		if (old_min_cost > min_cost) {
-		    segment_put(&out_seg, &min_cost, row, col);
-		    new_cell = insert(min_cost, row, col);
-		    if (dir == 1) {
-			segment_put(&out_seg2, &cur_dir, row, col);
-		    }
-		}
-		else {
+	    /* update with lower costs */
+	    else if (old_min_cost > min_cost) {
+		costs.cost_out = min_cost;
+		segment_put(&cost_seg, &costs, row, col);
+		new_cell = insert(min_cost, row, col);
+		if (dir == 1) {
+		    segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
 	}
@@ -1009,28 +992,18 @@ int main(int argc, char *argv[])
 
     cum_fd = Rast_open_new(cum_cost_layer, data_type);
 
-    if (dir == 1) {
-	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
-	dir_cell = Rast_allocate_buf(dir_data_type);
-    }
-
-    /*  Write pending updates by segment_put() to output map   */
-
-    segment_flush(&out_seg);
-    if (dir == 1) {
-	segment_flush(&out_seg2);
-    }
-
     /*  Copy segmented map to output map  */
     G_message(_("Writing raster map <%s>..."), cum_cost_layer);
 
-    if (keep_nulls) {
-	cell2 = Rast_allocate_buf(data_type);
-    }
+    {
+	void *p;
+	void *p2;
 
-    if (data_type == CELL_TYPE) {
-	int *p;
-	int *p2;
+	if (keep_nulls) {
+	    cell2 = Rast_allocate_buf(data_type);
+	}
+	else
+	    cell2 = NULL;
 
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
@@ -1043,100 +1016,55 @@ int main(int argc, char *argv[])
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
-		    if (Rast_is_null_value(p2++, data_type)) {
-			Rast_set_null_value((p + col), 1, data_type);
+		    if (Rast_is_null_value(p2, data_type)) {
+			Rast_set_null_value(p, 1, data_type);
 			continue;
 		    }
 		}
-		segment_get(&out_seg, &min_cost, row, col);
+		segment_get(&cost_seg, &costs, row, col);
+		min_cost = costs.cost_out;
 		if (Rast_is_d_null_value(&min_cost)) {
-		    Rast_set_null_value((p + col), 1, data_type);
+		    Rast_set_null_value(p, 1, data_type);
 		}
 		else {
 		    if (min_cost > peak)
 			peak = min_cost;
-		    *(p + col) = (int)(min_cost + .5);
-		}
-	    }
-	    Rast_put_row(cum_fd, cell, data_type);
-	}
-    }
-    else if (data_type == FCELL_TYPE) {
-	float *p;
-	float *p2;
+		    *(CELL *)p = (CELL)(min_cost + .5);
 
-	for (row = 0; row < nrows; row++) {
-	    G_percent(row, nrows, 2);
-	    if (keep_nulls) {
-		if (Rast_get_row(cost_fd, cell2, row, data_type) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  cost_layer, row);
-	    }
-	    p = cell;
-	    p2 = cell2;
-	    for (col = 0; col < ncols; col++) {
-		if (keep_nulls) {
-		    if (Rast_is_null_value(p2++, data_type)) {
-			Rast_set_null_value((p + col), 1, data_type);
-			continue;
+		    switch (data_type) {
+		    case CELL_TYPE:
+			*(CELL *)p = (CELL)(min_cost + .5);
+			break;
+		    case FCELL_TYPE:
+			*(FCELL *)p = (FCELL)(min_cost);
+			break;
+		    case DCELL_TYPE:
+			*(DCELL *)p = (DCELL)(min_cost);
+			break;
 		    }
+		    
 		}
-		segment_get(&out_seg, &min_cost, row, col);
-		if (Rast_is_d_null_value(&min_cost)) {
-		    Rast_set_null_value((p + col), 1, data_type);
-		}
-		else {
-		    if (min_cost > peak)
-			peak = min_cost;
-		    *(p + col) = (float)(min_cost);
-		}
+		p = G_incr_void_ptr(p, dsize);
+		p2 = G_incr_void_ptr(p2, dsize);
 	    }
 	    Rast_put_row(cum_fd, cell, data_type);
 	}
+	G_percent(1, 1, 1);
+	if (keep_nulls)
+	    G_free(cell2);
     }
-    else if (data_type == DCELL_TYPE) {
-	double *p;
-	double *p2;
-
-	for (row = 0; row < nrows; row++) {
-	    G_percent(row, nrows, 2);
-	    if (keep_nulls) {
-		if (Rast_get_row(cost_fd, cell2, row, data_type) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  cost_layer, row);
-	    }
-	    p = cell;
-	    p2 = cell2;
-	    for (col = 0; col < ncols; col++) {
-		if (keep_nulls) {
-		    if (Rast_is_null_value(p2++, data_type)) {
-			Rast_set_null_value((p + col), 1, data_type);
-			continue;
-		    }
-		}
-		segment_get(&out_seg, &min_cost, row, col);
-		if (Rast_is_d_null_value(&min_cost)) {
-		    Rast_set_null_value((p + col), 1, data_type);
-		}
-		else {
-		    if (min_cost > peak)
-			peak = min_cost;
-		    *(p + col) = min_cost;
-		}
-	    }
-	    Rast_put_row(cum_fd, cell, data_type);
-	}
-    }
-    G_percent(1, 1, 1);
-
-    double *p;
 
     if (dir == 1) {
+	double *p;
+
+	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
+	dir_cell = Rast_allocate_buf(dir_data_type);
+
 	G_message(_("Writing movement direction file %s..."), move_dir_layer);
 	for (row = 0; row < nrows; row++) {
 	    p = dir_cell;
 	    for (col = 0; col < ncols; col++) {
-		segment_get(&out_seg2, &cur_dir, row, col);
+		segment_get(&dir_seg, &cur_dir, row, col);
 		*(p + col) = cur_dir;
 	    }
 	    Rast_put_row(dir_fd, dir_cell, dir_data_type);
@@ -1145,10 +1073,9 @@ int main(int argc, char *argv[])
 	G_percent(1, 1, 1);
     }
 
-    segment_release(&in_seg);	/* release memory  */
-    segment_release(&out_seg);
+    segment_release(&cost_seg);	/* release memory  */
     if (dir == 1) {
-	segment_release(&out_seg2);
+	segment_release(&dir_seg);
     }
     Rast_close(cost_fd);
     Rast_close(cum_fd);
@@ -1156,12 +1083,10 @@ int main(int argc, char *argv[])
 	Rast_close(dir_fd);
     }
     close(in_fd);		/* close all files */
-    close(out_fd);
     if (dir == 1) {
 	close(dir_out_fd);
     }
     unlink(in_file);		/* remove submatrix files  */
-    unlink(out_file);
     if (dir == 1) {
 	unlink(dir_out_file);
     }
