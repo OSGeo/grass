@@ -632,8 +632,6 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         start = time.clock()
         
-        print 'render: '+str(render)
-                
         self.resize = False
 
         # if len(self.Map.GetListOfLayers()) == 0:
