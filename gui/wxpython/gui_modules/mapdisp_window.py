@@ -376,7 +376,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     y2=max(ylist)
                     pdc.SetIdBounds(drawid, wx.Rect(x1,y1,x2,y2))
                     # self.ovlcoords[drawid] = [x1,y1,x2,y2]
-
+                    
         elif pdctype == 'point': # draw point
             if self.pen:
                 pdc.SetPen(self.pen)
@@ -632,6 +632,8 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         start = time.clock()
         
+        print 'render: '+str(render)
+                
         self.resize = False
 
         # if len(self.Map.GetListOfLayers()) == 0:
@@ -911,7 +913,7 @@ class BufferedWindow(MapWindow, wx.Window):
         If not given from self.mouse['begin'] to self.mouse['end'].
 
         """
-        self.redrawAll = False
+#        self.redrawAll = False
         
         if not pdc:
             return
