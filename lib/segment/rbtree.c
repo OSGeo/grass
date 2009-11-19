@@ -83,11 +83,8 @@ int rbtree_insert(struct RB_TREE *tree, void *data)
     }
     else {
 	struct RB_NODE head = { 0 };	/* False tree root */
-
 	struct RB_NODE *g, *t;	/* Grandparent & parent */
-
 	struct RB_NODE *p, *q;	/* Iterator & parent */
-
 	int dir = 0, last = 0;
 
 	/* Set up helpers */
@@ -245,7 +242,7 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 void *rbtree_find(struct RB_TREE *tree, const void *data)
 {
     struct RB_NODE *curr_node = tree->root;
-    int cmp = 0;
+    int cmp;
 
     assert(tree && data);
 
@@ -253,9 +250,8 @@ void *rbtree_find(struct RB_TREE *tree, const void *data)
 	cmp = tree->rb_compare(curr_node->data, data);
 	if (cmp == 0)
 	    return curr_node->data;	/* found */
-	else {
-	    curr_node = curr_node->link[cmp < 0];
-	}
+
+	curr_node = curr_node->link[cmp < 0];
     }
     return NULL;
 }

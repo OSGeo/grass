@@ -135,10 +135,12 @@ int segment_setup(SEGMENT * SEG)
 
 int segment_compare(const void *sega, const void *segb)
 {
-    SEGID *a, *b;
+    SEGID *a = (SEGID *) sega;
+    SEGID *b = (SEGID *) segb;
 
-    a = (SEGID *) sega;
-    b = (SEGID *) segb;
+    return a->n < b->n ? -1 : (a->n > b->n);
+
+    /* short version of
 
     if (a->n > b->n)
 	return 1;
@@ -146,4 +148,5 @@ int segment_compare(const void *sega, const void *segb)
 	return -1;
 
     return 0;
+    */
 }

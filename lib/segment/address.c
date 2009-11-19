@@ -25,6 +25,11 @@ int segment_address_fast(const SEGMENT * SEG, int row, int col, int *n,
 	*index =
 	    ((row - (seg_r << SEG->srowbits)) << SEG->scolbits) + col -
 	    (seg_c << SEG->scolbits);
+
+	/*
+	*n = (row >> SEG->srowbits) * SEG->spr + (col >> SEG->scolbits);
+	*index = ((row & (SEG->srows - 1)) << SEG->scolbits) + (col & (SEG->scols - 1));
+	*/
     }
     /* for simple arrays */
     else {
