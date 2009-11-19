@@ -17,6 +17,7 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include <limits.h>
 #include <grass/segment.h>
 
 
@@ -116,6 +117,19 @@ static int _segment_format(int fd,
 	G_warning("segment_format(fd,%d,%d,%d,%d,%d): illegal value(s)",
 		  nrows, ncols, srows, scols, len);
 	return -3;
+    }
+
+    /* no LFS, file size within 2GB limit ? */
+    if (sizeof(off_t) == 4) {
+	double file_size;
+
+	file_size = (double) nrows * ncols * len > INT_MAX;
+
+	if (file_size > INT_MAX) {
+	    G_warning("segment file size would be %.2fGB, but file size limit is 2GB", file_size / (1 << 30));
+	    G_warning("please recompile with LFS");
+	    G_fatal_error("can not create temporary segment file");
+	}
     }
 
     if (lseek(fd, 0L, SEEK_SET) == (off_t) - 1) {
