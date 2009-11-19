@@ -2,15 +2,15 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2008, 2009, GRASS Development Team
 # Milena Nowotarska <do.milenki*gmail.com>, 2008, 2009.
-#
+# Robert Szczepanek <robert@szczepanek.pl>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-12 15:58+0100\n"
-"PO-Revision-Date: 2009-10-28 23:18+0100\n"
-"Last-Translator: Milena Nowotarska <do.milenki*gmail.com>\n"
-"Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2009-11-19 22:07+0200\n"
+"Last-Translator: Robert Szczepanek <robert@szczepanek.pl>\n"
+"Language-Team: grass-gis.pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:81
 msgid "Unable to load icon theme..."
-msgstr ""
+msgstr "Jest problem z wczytaniem motywu ikon..."
 
 #: ../gui/wxpython/icons/icon.py:141
 msgid "Display map"
@@ -91,13 +91,12 @@ msgid "Display zoom management"
 msgstr "Wyświetl menadżera zoom"
 
 #: ../gui/wxpython/icons/icon.py:167
-#, fuzzy
 msgid "Add map elements"
-msgstr "Dodaj legendę"
+msgstr "Dodaj elementy mapy"
 
 #: ../gui/wxpython/icons/icon.py:168
 msgid "Overlay elements like scale and legend onto map"
-msgstr ""
+msgstr "Wyświetl na mapie takie elementy jak skala i legenda"
 
 #: ../gui/wxpython/icons/icon.py:170
 msgid "Add scalebar and north arrow"
@@ -108,9 +107,8 @@ msgid "Add legend"
 msgstr "Dodaj legendę"
 
 #: ../gui/wxpython/icons/icon.py:174
-#, fuzzy
 msgid "Save display to graphic file"
-msgstr "Zapisz okno do pliku PNG"
+msgstr "Zapisz wyświetlane okno do pliku graficznego"
 
 #: ../gui/wxpython/icons/icon.py:176
 #: ../gui/wxpython/gui_modules/mapdisp.py:1243
@@ -158,7 +156,7 @@ msgstr "Dodaj grupę warstw"
 
 #: ../gui/wxpython/icons/icon.py:198
 msgid "Add grid or vector labels overlay"
-msgstr ""
+msgstr "Dodaj warstwę etykiet"
 
 #: ../gui/wxpython/icons/icon.py:200
 msgid "Delete selected layer"
@@ -345,7 +343,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:294
 msgid "Profile surface map"
-msgstr ""
+msgstr "Profil terenu"
 
 #: ../gui/wxpython/icons/icon.py:296
 msgid "Draw/re-draw profile"
@@ -744,9 +742,8 @@ msgid "Choose method for creating a new location"
 msgstr "Wybierz metodę utworzenia nowej lokacji"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:256
-#, fuzzy
 msgid "Select coordinate system parameters from a list"
-msgstr "Wybierz odwzorowanie kartograficzne"
+msgstr "Wybierz parametry układu współrzędnych z listy"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:259
 #, fuzzy
@@ -766,13 +763,12 @@ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:270
-#, fuzzy
 msgid "Create an arbitrary non-earth coordinate system (XY)"
-msgstr "Użyj odwzorowania kartezjańskiego (XY)"
+msgstr "Stwórz kartezjańskiego układ współrzędnych użytkownika (XY)"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:359
 msgid "Choose projection"
-msgstr "Wybierz projekcję"
+msgstr "Wybierz odwzorowanie"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:375
 #: ../gui/wxpython/gui_modules/location_wizard.py:894
@@ -786,11 +782,11 @@ msgstr "Kod"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1056
 #: ../gui/wxpython/gui_modules/location_wizard.py:1330
 msgid "Description"
-msgstr "Popis"
+msgstr "Opis"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:380
 msgid "Projection code:"
-msgstr "Kod projekcji:"
+msgstr "Kod odwzorowania:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:388
 #: ../gui/wxpython/gui_modules/location_wizard.py:908
@@ -804,29 +800,26 @@ msgid "Unable to read list: %s"
 msgstr "Nie można przeczytać listy: %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:673
-#, fuzzy
 msgid "Choose projection parameters"
-msgstr "Wybierz projekcję"
+msgstr "Podaj parametry odwzorowania"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:693
 #, fuzzy
 msgid "Select datum or ellipsoid (next page)"
-msgstr "Vybrat geodetické datum daného elipsoidu"
+msgstr "Wybierz datum lub elipsoidę (następna strona)"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:699
-#, fuzzy
 msgid "Datum with associated ellipsoid"
-msgstr "Vybrat geodetické datum daného elipsoidu"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:702
-#, fuzzy
 msgid "Ellipsoid only"
-msgstr "Elipsoida"
+msgstr "Tylko elipsoida"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:766
-#, fuzzy, python-format
+#, python-format
 msgid " Enter parameters for %s projection "
-msgstr "Wpisz parametry dla"
+msgstr "Podaj parametry odwzorowania %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:872
 msgid "Specify geodetic datum"
@@ -927,7 +920,7 @@ msgstr "Czy chcesz utworzyć lokację GRASS-a <%s>?"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1730
 msgid "Create new location?"
-msgstr "Utworzyć nową lokacjęi?"
+msgstr "Utworzyć nową lokację?"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1772
 msgid "Define new GRASS Location"
@@ -943,12 +936,15 @@ msgid "Location <%s> created"
 msgstr "Lokacja <%s> została utworzona"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1870
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to create new location. Location <%(loc)s> not created.\n"
 "\n"
 "Details: %(err)s"
-msgstr "Nie można utworzyć nowej lokacji. Lokacja <%s> nie została utworzona."
+msgstr ""
+"Nie można utworzyć nowej lokacji. Lokacja <%loc)s> nie została utworzona.\n"
+"\n"
+"Szczegóły: %(err)s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1875
 #: ../gui/wxpython/gui_modules/location_wizard.py:1881
@@ -970,6 +966,8 @@ msgid ""
 "Location <%(loc)s> will be created in GIS data directory <%(dir)s>.You will "
 "need to change the default GIS data directory in the GRASS startup screen."
 msgstr ""
+"Lokacja <%(loc)s> zostanie utworzona w kartotece z danymi <%(dir)s>. Dostęp "
+"do niej będzie możliwy w trakcie uruchamiania programu. "
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1992
 #, fuzzy
@@ -982,9 +980,8 @@ msgstr "Brak kodu EPSG."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2178
 #: ../gui/wxpython/gui_modules/location_wizard.py:2202
-#, fuzzy
 msgid "File not found."
-msgstr "plik nie został odnaleziony"
+msgstr "Nie znaleziono pliku."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2221
 msgid "Set default region extent and resolution"
@@ -1301,14 +1298,12 @@ msgid "Close dialog"
 msgstr "Zamknij okno dialogu"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1017
-#, fuzzy
 msgid "&Link"
-msgstr "Linia"
+msgstr "&Link"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1018
-#, fuzzy
 msgid "Link selected layers"
-msgstr "Modyfikuj wybraną warstwę"
+msgstr "Linkuj wybrane warstwy"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1020
 #: ../gui/wxpython/gui_modules/ogc_services.py:85
@@ -1337,9 +1332,8 @@ msgid "Layer name"
 msgstr "Nazwa warstwy"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1244
-#, fuzzy
 msgid "Name for GRASS map"
-msgstr "Nazwa nowej wektorowej mapy:"
+msgstr "Nazwa mapy GRASS"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1326
 msgid "Set Map Layer Opacity"
@@ -1407,7 +1401,7 @@ msgstr "Lista narzędzi mapy"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:323
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:505
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to start vector digitizer.\n"
 "The VDigit python extension was not found or loaded properly.\n"
@@ -1415,8 +1409,9 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
-"Nie można otworzyć . Rozszerzenie Python dla Nviz nie zostało znalezione lub "
-"załadowane poprawnie. Nastąpi przełączenie do trybu 2D.\n"
+"Nie można uruchomić digitalizacji wektorów. Rozszerzenie Pythona VDigit nie "
+"zostało znalezione lub załadowane poprawnie. Nastąpi przełączenie do trybu "
+"2D.\n"
 "\n"
 "Szczegóły: %s"
 
@@ -1438,7 +1433,7 @@ msgid "Georectification toolbar"
 msgstr "Lista narzędzi georektyfikaci"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:375
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to switch to 3D display mode.\n"
 "The GLCanvas class has not been included with this build of wxPython!\n"
@@ -1446,13 +1441,13 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
-"Nie można otworzyć Nviz.  GLCanvas class nie jest wbudowana do tej wersji "
-"wxPython! Nastąpi przełączenie do trybu 2D.\n"
+"Nie można przełączyć w tryb wyświetlania 3D. Klasa GLCanvas nie jest "
+"dostępna w tej wersji wxPython! Nastąpi przełączenie do trybu 2D.\n"
 "\n"
 "Szczegóły: %s"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:380
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to switch to 3D display mode.\n"
 "The Nviz python extension was not found or loaded properly.\n"
@@ -1460,8 +1455,9 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
-"Nie można otworzyć . Rozszerzenie Python dla Nviz nie zostało znalezione lub "
-"załadowane poprawnie. Nastąpi przełączenie do trybu 2D.\n"
+"Nie można przełączyć w tryb wyświetlania 3D. Rozszerzenie Python dla Nviz "
+"nie zostało znalezione lub załadowane poprawnie. Nastąpi przełączenie do "
+"trybu 2D.\n"
 "\n"
 "Szczegóły: %s"
 
@@ -1471,7 +1467,7 @@ msgstr "Proszę czekać, ładuję dane..."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:443
 msgid "Nviz toolbar"
-msgstr "Lista narzędzi Nviz"
+msgstr "Pasek narzędzi Nviz"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:572
 #: ../gui/wxpython/gui_modules/mapdisp.py:821
@@ -1500,14 +1496,12 @@ msgid "Print preview"
 msgstr "Podgląd wydruku"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1341
-#, fuzzy
 msgid "No raster or vector map layer selected for querying."
-msgstr "Nie została wybrana mapa wektorowa do zapytania."
+msgstr "Nie wybrano warstwy rastrowej ani wektorowej do zapytania."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1342
-#, fuzzy
 msgid "No map layer selected"
-msgstr "Nie została wybrana warstwa do zapytania."
+msgstr "Nie wybrano warstwy mapy"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1438
 msgid "No vector map selected for querying."
@@ -1515,9 +1509,8 @@ msgstr "Nie została wybrana mapa wektorowa do zapytania."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1439
 #: ../gui/wxpython/gui_modules/mapdisp.py:1447
-#, fuzzy
 msgid "Vector querying"
-msgstr "Ustawienia wektora"
+msgstr "Zapytanie do mapy wektorowej"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1446
 msgid "Only vector map from the current mapset can be modified."
@@ -1568,9 +1561,8 @@ msgstr "legenda"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1931
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:273
-#, fuzzy
 msgid "Zoom to selected map(s)"
-msgstr "Powiększ do mapy"
+msgstr "Powiększ do wybranych map"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1935
 msgid "Zoom to computational region (set with g.region)"
@@ -1602,24 +1594,23 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:526
 msgid "Collapse all except PERMANENT and current"
-msgstr "Minimlizuj wszystkie za wyjątkiem PERMANENT i bieżącej"
+msgstr "Zwiń wszystkie za wyjątkiem PERMANENT i bieżącej"
 
 #: ../gui/wxpython/gui_modules/preferences.py:527
 msgid "Collapse all except PERMANENT"
-msgstr "Minimlizuj wszystkie za wyjątkiem PERMANENT"
+msgstr "Zwiń wszystkie za wyjątkiem PERMANENT"
 
 #: ../gui/wxpython/gui_modules/preferences.py:528
-#, fuzzy
 msgid "Collapse all except current"
-msgstr "Minimlizuj wszystkie za wyjątkiem PERMANENT i bieżącej"
+msgstr "Zwiń wszystkie za wyjątkiem bieżącej"
 
 #: ../gui/wxpython/gui_modules/preferences.py:529
 msgid "Collapse all"
-msgstr "Minimlizuj wszystkie"
+msgstr "Zwiń wszystkie"
 
 #: ../gui/wxpython/gui_modules/preferences.py:530
 msgid "Expand all"
-msgstr "Powiększ wszystkie"
+msgstr "Rozwiń wszystkie"
 
 #: ../gui/wxpython/gui_modules/preferences.py:531
 #: ../gui/wxpython/gui_modules/dbm.py:1027
@@ -1679,7 +1670,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:666
 msgid "Uknown settings file location."
-msgstr "Nieznana likalizacja pliku ustawień."
+msgstr "Nieznana lokalizacja pliku ustawień."
 
 #: ../gui/wxpython/gui_modules/preferences.py:697
 #, python-format
@@ -1751,7 +1742,7 @@ msgstr "Lista elementów:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:941
 msgid "Save current window layout as default"
-msgstr ""
+msgstr "Zapisz wygląd bieżącego okna jako domyślny"
 
 #: ../gui/wxpython/gui_modules/preferences.py:944
 msgid ""
@@ -1771,7 +1762,7 @@ msgstr "Pytaj przy usuwaniu warstwy z listy warstw"
 
 #: ../gui/wxpython/gui_modules/preferences.py:979
 msgid "Ask when quiting wxGUI or closing display"
-msgstr ""
+msgstr "Pytaj przy zamykaniu wxGUI lub okna"
 
 #: ../gui/wxpython/gui_modules/preferences.py:997
 #: ../gui/wxpython/gui_modules/vdigit.py:1249
@@ -1799,7 +1790,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1060
 msgid "Statusbar mode:"
-msgstr ""
+msgstr "Tryb paska statusu:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1080
 #: ../gui/wxpython/gui_modules/nviz_tools.py:968
@@ -1976,6 +1967,7 @@ msgid ""
 "Note: For changing the icon theme, you must save the settings and restart "
 "this GUI."
 msgstr ""
+"Uwaga: Po zmianie motywu ikon musisz zapisać ustawienia i zrestartować GUI."
 
 #: ../gui/wxpython/gui_modules/preferences.py:1646
 #, fuzzy, python-format
@@ -2099,9 +2091,8 @@ msgid "GRASS SQL Builder (%(type)s): vector map <%(map)s>"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:85
-#, fuzzy
 msgid "SQL statement not verified"
-msgstr "Polecenie SQL"
+msgstr "Nie sprawdzone zapytanie SQL"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:91
 #, fuzzy
@@ -2109,24 +2100,20 @@ msgid "Set SQL statement to default"
 msgstr "Przywrócenie wartości domyślnych"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:93
-#, fuzzy
 msgid "Verify"
-msgstr "Georektyfikacja"
+msgstr "Sprawdź"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:94
-#, fuzzy
 msgid "Verify SQL statement"
-msgstr "Polecenie SQL"
+msgstr "Sprawdź zapytanie SQL"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:99
-#, fuzzy
 msgid "Apply SQL statement and close the dialog"
-msgstr "Zastosuj zmiany i zamknij okno"
+msgstr "Wykonaj zapytanie SQL i zamknij okno"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:101
-#, fuzzy
 msgid "Close the dialog"
-msgstr "Zamknij okno dialogu"
+msgstr "Zamknij okno dialogowe"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:103
 #, fuzzy
@@ -2144,19 +2131,16 @@ msgid "Add on double-click"
 msgstr "Podwójnie kliknij lewym"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:150
-#, fuzzy
 msgid "columns"
-msgstr "Dodaj kolumny"
+msgstr "kolumny"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:150
-#, fuzzy
 msgid "values"
-msgstr "(wartość)"
+msgstr "wartości"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:154
-#, fuzzy
 msgid "Close dialog on apply"
-msgstr "Zamknij dialog po zatwierdzeniu"
+msgstr "Zamknij okno dialogowe po wykonaniu"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:185
 #: ../gui/wxpython/gui_modules/dbm.py:752
@@ -2169,19 +2153,16 @@ msgid "Query"
 msgstr "Odpytaj"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:240
-#, fuzzy
 msgid "Columns"
-msgstr "Raster 3d (volumes)"
+msgstr "Kolumny"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:242
-#, fuzzy
 msgid "Values"
-msgstr "Raster 3d (volumes)"
+msgstr "Wartości"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:425
-#, fuzzy
 msgid "SQL statement is not valid"
-msgstr "Polecenie SQL"
+msgstr "Niepoprawne zapytanie SQL"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:427
 #, python-format
@@ -2198,9 +2179,8 @@ msgid "Warning"
 msgstr "Uwaga"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:430
-#, fuzzy
 msgid "SQL statement is valid"
-msgstr "Polecenie SQL"
+msgstr "Poprawne zapytanie SQL"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:453
 #: ../gui/wxpython/gui_modules/dbm.py:643
@@ -2501,9 +2481,8 @@ msgid "Region <%s> not found. Operation canceled."
 msgstr "Co najmniej jeden %d punkt GCP jest niezbędzny. Operacja przerwana."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2694
-#, fuzzy
 msgid "Save display extents to region file"
-msgstr "Zapisz geometrię bierzącego wyświetlania jako region"
+msgstr "Zapisz zakres widoku jako region"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2704
 #, python-format
@@ -2677,7 +2656,7 @@ msgstr "O GRASS GIS"
 
 #: ../gui/wxpython/gui_modules/help.py:380
 msgid "Official GRASS site: http://grass.osgeo.org"
-msgstr ""
+msgstr "Oficjalna strona GRASS'a: http://grass.osgeo.org"
 
 #: ../gui/wxpython/gui_modules/help.py:381
 msgid "GIS Library"
@@ -2690,16 +2669,16 @@ msgstr "Brak kodu EPSG."
 
 #: ../gui/wxpython/gui_modules/help.py:422
 msgid "GPL.TXT file missing"
-msgstr ""
+msgstr "Brak pliku GPL.TXT"
 
 #: ../gui/wxpython/gui_modules/help.py:443
 msgid "AUTHORS file missing"
-msgstr ""
+msgstr "Brak pliku AUTHORS"
 
 #: ../gui/wxpython/gui_modules/help.py:467 ../gui/wxpython/wxgui.py:490
 #: ../gui/wxpython/wxgui.py:506
 msgid "Info"
-msgstr ""
+msgstr "Informacje"
 
 #: ../gui/wxpython/gui_modules/help.py:468
 #, fuzzy
@@ -2713,7 +2692,7 @@ msgstr "Linia"
 
 #: ../gui/wxpython/gui_modules/help.py:470
 msgid "Authors"
-msgstr ""
+msgstr "Autorzy"
 
 #: ../gui/wxpython/gui_modules/georect.py:114
 msgid "Setup for georectification"
@@ -2769,9 +2748,8 @@ msgid "Create/edit group..."
 msgstr "Stwórz/edytuj grupę..."
 
 #: ../gui/wxpython/gui_modules/georect.py:443
-#, fuzzy
 msgid "Add vector map to group..."
-msgstr "Dodaj warstwę wektorową"
+msgstr "Dodaj warstwę wektorową do grupy..."
 
 #: ../gui/wxpython/gui_modules/georect.py:455
 msgid "Extension for output maps:"
@@ -3294,9 +3272,8 @@ msgid "Number of loaded records: %d"
 msgstr "Liczba załadowanych obiektów: %d"
 
 #: ../gui/wxpython/gui_modules/dbm.py:299
-#, fuzzy
 msgid "Unknown value"
-msgstr "Nieznany"
+msgstr "Nieznana wartość"
 
 #: ../gui/wxpython/gui_modules/dbm.py:314
 #, fuzzy, python-format
@@ -3771,9 +3748,8 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:41
-#, fuzzy
 msgid "3d view tools"
-msgstr "Lista narzędzi Nviz"
+msgstr "Narzędzia widoku 3d"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:116
 #: ../gui/wxpython/gui_modules/nviz_tools.py:990
@@ -4444,11 +4420,11 @@ msgstr "dłuższy niż"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1432
 msgid "dangle"
-msgstr ""
+msgstr "wiszący"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1437
 msgid "Select dangles"
-msgstr ""
+msgstr "Wybierz wiszące"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1477
 msgid "Digitize new feature"
@@ -4937,16 +4913,20 @@ msgid "DXF import"
 msgstr "Import DXF"
 
 #: ../gui/wxpython/menustrings.py:63
+#, fuzzy
 msgid "Converts files in DXF format to GRASS vector map format."
-msgstr ""
+msgstr "Konwertuje warstwy wektorowe OGR na wektorowe mapy GRASS."
 
 #: ../gui/wxpython/menustrings.py:64
 msgid "Multiple DXF layers import"
 msgstr "Import wielu warstw DXF"
 
 #: ../gui/wxpython/menustrings.py:65
+#, fuzzy
 msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)."
 msgstr ""
+"Konwertuje wybrane warstwy OGR do mapy rastrowej GRASS-a przy użyciu r.in."
+"ogr."
 
 #: ../gui/wxpython/menustrings.py:66
 msgid "ESRI e00 import"
@@ -4991,10 +4971,11 @@ msgid "GEOnet import"
 msgstr "Import GEOnet"
 
 #: ../gui/wxpython/menustrings.py:75
+#, fuzzy
 msgid ""
 "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector "
 "points map."
-msgstr ""
+msgstr "Importuje starsze wersje wektorowych map GRASS-a"
 
 #: ../gui/wxpython/menustrings.py:76
 #, fuzzy
@@ -5126,10 +5107,13 @@ msgid "PPM export"
 msgstr "Eksport do PPM"
 
 #: ../gui/wxpython/menustrings.py:106
+#, fuzzy
 msgid ""
 "Converts a GRASS raster map to a PPM image file at the pixel resolution of "
 "the currently defined region."
 msgstr ""
+"Konwertuje 3 warstwy rastrowe GRASS (R,G,B) do pliku obrazu PPM o "
+"rozdzielczości piksela aktualnie zdefiniowanego regionu"
 
 #: ../gui/wxpython/menustrings.py:107
 msgid "PPM from RGB export"
@@ -5157,10 +5141,13 @@ msgid "TIFF export"
 msgstr "Eksport do TIFF"
 
 #: ../gui/wxpython/menustrings.py:112
+#, fuzzy
 msgid ""
 "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel "
 "resolution of the currently defined region."
 msgstr ""
+"Konwertuje 3 warstwy rastrowe GRASS (R,G,B) do pliku obrazu PPM o "
+"rozdzielczości piksela aktualnie zdefiniowanego regionu"
 
 #: ../gui/wxpython/menustrings.py:113
 msgid "VRML export"
@@ -5658,8 +5645,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:238
+#, fuzzy
 msgid "Support file maintenance"
-msgstr ""
+msgstr "Utrzymanie sieci"
 
 #: ../gui/wxpython/menustrings.py:239
 msgid "Allows creation and/or modification of raster map layer support files."
@@ -5721,8 +5709,9 @@ msgid "Color rules"
 msgstr "Reguły kolorów"
 
 #: ../gui/wxpython/menustrings.py:253
+#, fuzzy
 msgid "Blend 2 color rasters"
-msgstr ""
+msgstr "Buforuj rastry"
 
 #: ../gui/wxpython/menustrings.py:254
 msgid "Blends color components of two raster maps by a given ratio."
@@ -5752,8 +5741,10 @@ msgid "Query by coordinates"
 msgstr "Zapytanie według współrzędnych"
 
 #: ../gui/wxpython/menustrings.py:260
+#, fuzzy
 msgid "Queries raster map layers on their category values and category labels."
 msgstr ""
+"Generuje warstwę mapy rastrowej of distance to features in input layer."
 
 #: ../gui/wxpython/menustrings.py:261
 msgid "Buffer rasters"
@@ -5812,11 +5803,15 @@ msgid "Neighborhood points"
 msgstr "Punkty sąsiedztwa"
 
 #: ../gui/wxpython/menustrings.py:273
+#, fuzzy
 msgid ""
 "Makes each cell value a function of the attribute values assigned to the "
 "vector points or centroids around it, and stores new cell values in an "
 "output raster map layer."
 msgstr ""
+"Czyni wartość kategorii każdej komórki rastra funkcją wartości kategorii "
+"przypisanych do komórek dookoła niej, i zachowuje nową wartość komórki w "
+"wyjściowej wastwie mapy rastrowej"
 
 #: ../gui/wxpython/menustrings.py:274
 #, fuzzy
@@ -5848,8 +5843,9 @@ msgstr ""
 "odpowiadających komórek wejściowych warstw rastrowych."
 
 #: ../gui/wxpython/menustrings.py:279
+#, fuzzy
 msgid "Patch raster maps"
-msgstr ""
+msgstr "Mapa rastrowa 3D"
 
 #: ../gui/wxpython/menustrings.py:280
 msgid ""
@@ -5901,12 +5897,16 @@ msgid "Cumulative movement costs"
 msgstr "Skumulowany koszt przemieszczenia pomiędzy dwiema lokalizacjami"
 
 #: ../gui/wxpython/menustrings.py:290
+#, fuzzy
 msgid ""
 "Outputs a raster map layer showing the anisotropic cumulative cost of moving "
 "between different geographic locations on an input elevation raster map "
 "layer whose cell category values represent elevation combined with an input "
 "raster map layer whose cell values represent friction cost."
 msgstr ""
+"Tworzy wasrstwę mapy rastrowej ukazującą skumulowany koszt przemieszczania "
+"się pomiędzy dwoma lokalizacjami geograficznymi na wejściowej warstwie "
+"rastrowej której wartości kategorii komórek rastra reprezentują koszt."
 
 #: ../gui/wxpython/menustrings.py:291
 msgid "Cost surface"
@@ -5964,8 +5964,9 @@ msgid "Textural features"
 msgstr "Obiekty teksturalne"
 
 #: ../gui/wxpython/menustrings.py:302
+#, fuzzy
 msgid "Generate images with textural features from a raster map."
-msgstr ""
+msgstr "Edytuj interaktywnie wartości komórek na mapie rastrwej."
 
 #: ../gui/wxpython/menustrings.py:303
 msgid "Visibility"
@@ -5976,8 +5977,9 @@ msgid "Line-of-sight raster analysis program."
 msgstr "Program rastrowy do wyznaczania linii maksymalnego widoku."
 
 #: ../gui/wxpython/menustrings.py:305
+#, fuzzy
 msgid "Distance to features"
-msgstr ""
+msgstr "Długość linii profilu"
 
 #: ../gui/wxpython/menustrings.py:306
 #, fuzzy
@@ -6015,8 +6017,10 @@ msgid "Grow"
 msgstr "Zrób grubsze"
 
 #: ../gui/wxpython/menustrings.py:313
+#, fuzzy
 msgid "Generates a raster map layer with contiguous areas grown by one cell."
 msgstr ""
+"Generuje warstwę mapy rastrowej of distance to features in input layer."
 
 #: ../gui/wxpython/menustrings.py:314
 msgid "Thin"
@@ -6033,8 +6037,9 @@ msgid "Hydrologic modeling"
 msgstr "Modelowanie hydrologiczne"
 
 #: ../gui/wxpython/menustrings.py:317
+#, fuzzy
 msgid "Carve stream channels"
-msgstr ""
+msgstr "Zapisz zmiany"
 
 #: ../gui/wxpython/menustrings.py:318
 msgid ""
@@ -6086,8 +6091,9 @@ msgid "Topographic index map"
 msgstr "Mapa wskaźnika topograficznego"
 
 #: ../gui/wxpython/menustrings.py:328
+#, fuzzy
 msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
-msgstr ""
+msgstr "Tworzy mapęcieniowanego reliefu z mapy wysokości (DEM)."
 
 #: ../gui/wxpython/menustrings.py:329
 msgid "TOPMODEL simulation"
@@ -6138,8 +6144,9 @@ msgid "Watershed basin creation program."
 msgstr "Program do tworzenia działów wodnych zlewni."
 
 #: ../gui/wxpython/menustrings.py:341
+#, fuzzy
 msgid "Landscape patch analysis"
-msgstr ""
+msgstr "Analiza Kappa"
 
 #: ../gui/wxpython/menustrings.py:342
 msgid "Set up sampling and analysis framework"
@@ -6150,8 +6157,9 @@ msgid "Configuration editor for r.li.'index'"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:344
+#, fuzzy
 msgid "Edge density"
-msgstr ""
+msgstr "Wykrywanie krawędzi"
 
 #: ../gui/wxpython/menustrings.py:345
 msgid ""
@@ -6163,84 +6171,97 @@ msgid "Contrast weighted edge density"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:347
+#, fuzzy
 msgid "Calculates contrast weighted edge density index on a raster map"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:348
 msgid "Patch area mean"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:349
+#, fuzzy
 msgid ""
 "Calculates mean patch size index on a raster map, using a 4 neighbour "
 "algorithm"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:350
 msgid "Patch area range"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:351
+#, fuzzy
 msgid "Calculates range of patch area size on a raster map"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:352
 msgid "Patch area Std Dev"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:353
+#, fuzzy
 msgid "Calculates standard deviation of patch area a raster map"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:354
 msgid "Patch area Coeff Var"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:355
+#, fuzzy
 msgid "Calculates coefficient of variation of patch area on a raster map"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:356
 msgid "Patch density"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:357
+#, fuzzy
 msgid ""
 "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:358
+#, fuzzy
 msgid "Patch number"
-msgstr ""
+msgstr "Numer kategorii"
 
 #: ../gui/wxpython/menustrings.py:359
+#, fuzzy
 msgid ""
 "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:360
 msgid "Dominance's diversity"
 msgstr "Dominanceova diverzita"
 
 #: ../gui/wxpython/menustrings.py:361 ../gui/wxpython/menustrings.py:367
+#, fuzzy
 msgid "Calculates dominance's diversity index on a raster map"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:362
+#, fuzzy
 msgid "Shannon's diversity"
-msgstr ""
+msgstr "Dominanceova diverzita"
 
 #: ../gui/wxpython/menustrings.py:363
+#, fuzzy
 msgid "Calculates Shannon's diversity index on a raster map"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:364
+#, fuzzy
 msgid "Simpson's diversity"
-msgstr ""
+msgstr "Dominanceova diverzita"
 
 #: ../gui/wxpython/menustrings.py:365
+#, fuzzy
 msgid "Calculates Simpson's diversity index on a raster map"
-msgstr ""
+msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:366
 msgid "Richness"
@@ -6349,10 +6370,11 @@ msgid "Rescale with histogram"
 msgstr "Przeskaluj z histogramem"
 
 #: ../gui/wxpython/menustrings.py:391
+#, fuzzy
 msgid ""
 "Rescales histogram equalized the range of category values in a raster map "
 "layer."
-msgstr ""
+msgstr "Przeskalowanie zakresu wartości kategorii w warstwie mapy rastrowej."
 
 #: ../gui/wxpython/menustrings.py:392
 msgid "Concentric circles"
@@ -6411,8 +6433,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:404
+#, fuzzy
 msgid "Gaussian deviates surface"
-msgstr ""
+msgstr "Utwórz powierzchnie"
 
 #: ../gui/wxpython/menustrings.py:405
 msgid ""
@@ -6432,8 +6455,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:408
+#, fuzzy
 msgid "Random deviates surface"
-msgstr ""
+msgstr "Utwórz powierzchnie"
 
 #: ../gui/wxpython/menustrings.py:409
 msgid ""
@@ -6491,16 +6515,19 @@ msgstr ""
 "Squared Weighting (IDW)."
 
 #: ../gui/wxpython/menustrings.py:421
+#, fuzzy
 msgid "Raster contours"
-msgstr ""
+msgstr "Raster do wektora"
 
 #: ../gui/wxpython/menustrings.py:422
+#, fuzzy
 msgid "Surface generation program from rasterized contours."
-msgstr ""
+msgstr "Oszacowanie powierzchni obszaru dla map rastrowych."
 
 #: ../gui/wxpython/menustrings.py:423
+#, fuzzy
 msgid "Regularized spline tension"
-msgstr ""
+msgstr "Przepróbkowanie z użyciem  RST (regularized spline tension)"
 
 #: ../gui/wxpython/menustrings.py:424
 msgid ""
@@ -6527,18 +6554,20 @@ msgid "Basic raster metadata"
 msgstr "Podstawowe metadane rastra"
 
 #: ../gui/wxpython/menustrings.py:429
+#, fuzzy
 msgid "Output basic information about a raster map layer."
-msgstr ""
+msgstr "Narzędzie interpolacji powierzchni dla warstw map rastrowych."
 
 #: ../gui/wxpython/menustrings.py:430
 msgid "Manage category information"
 msgstr "Zarządzaj informacjami o kategoriach"
 
 #: ../gui/wxpython/menustrings.py:431
+#, fuzzy
 msgid ""
 "Manages category values and labels associated with user-specified raster map "
 "layers."
-msgstr ""
+msgstr "Tworzy/modyfikuje paletę kolorów związaną z warstwą mapy rastrowej."
 
 #: ../gui/wxpython/menustrings.py:432
 msgid "General statistics"
@@ -6567,8 +6596,9 @@ msgstr ""
 "rastrowej."
 
 #: ../gui/wxpython/menustrings.py:438
+#, fuzzy
 msgid "Sum area by raster map and category"
-msgstr ""
+msgstr "Kalkulator mapy rastrowej 3D"
 
 #: ../gui/wxpython/menustrings.py:439
 msgid "Reports statistics for raster map layers."
@@ -6593,8 +6623,9 @@ msgid "Surface area estimation for rasters."
 msgstr "Oszacowanie powierzchni obszaru dla map rastrowych."
 
 #: ../gui/wxpython/menustrings.py:444
+#, fuzzy
 msgid "Univariate raster statistics"
-msgstr ""
+msgstr "Aktualizuj statystyki mapy rastrowej"
 
 #: ../gui/wxpython/menustrings.py:445
 msgid ""
@@ -6612,13 +6643,17 @@ msgstr ""
 "przez użytkownika."
 
 #: ../gui/wxpython/menustrings.py:448
+#, fuzzy
 msgid "Sample transects (bearing/distance)"
-msgstr ""
+msgstr "Próbkuj wartości wzdłuż przecięć"
 
 #: ../gui/wxpython/menustrings.py:449
+#, fuzzy
 msgid ""
 "Outputs raster map layer values lying along user defined transect line(s)."
 msgstr ""
+"Tworzy plik wartości mapy rastrowej leżących na linii/liniach zdefiniowanych "
+"przez użytkownika."
 
 #: ../gui/wxpython/menustrings.py:450
 msgid "Covariance/correlation"
@@ -6641,14 +6676,16 @@ msgid "Calculates linear regression from two raster maps: y = a + b*x"
 msgstr "Oblicza regresję linearną dla dwóch map rastrowych: y = a + b*x"
 
 #: ../gui/wxpython/menustrings.py:454
+#, fuzzy
 msgid "Mutual category occurrences"
-msgstr ""
+msgstr "Sumuj wartości kategorii"
 
 #: ../gui/wxpython/menustrings.py:455
+#, fuzzy
 msgid ""
 "Tabulates the mutual occurrence (coincidence) of categories for two raster "
 "map layers."
-msgstr ""
+msgstr "Przeskalowanie zakresu wartości kategorii w warstwie mapy rastrowej."
 
 #: ../gui/wxpython/menustrings.py:456
 msgid "Vector"
@@ -6663,8 +6700,9 @@ msgid "Create new empty vector map"
 msgstr "Utwórz nową pustą mapę wektorową"
 
 #: ../gui/wxpython/menustrings.py:460
+#, fuzzy
 msgid "Edit vector map (non-interactively)"
-msgstr ""
+msgstr "Przekoduj interaktywnie"
 
 #: ../gui/wxpython/menustrings.py:461
 msgid ""
@@ -6691,7 +6729,7 @@ msgstr "Narzędzia do usuwania topologii mapy wektorowej."
 
 #: ../gui/wxpython/menustrings.py:466
 msgid "Smooth or simplify"
-msgstr ""
+msgstr "Wygładź lub uprość"
 
 #: ../gui/wxpython/menustrings.py:467
 #, fuzzy
@@ -6740,8 +6778,9 @@ msgid "Creates parallel line to input vector lines."
 msgstr "Utwórz linie równoległe do podanych linii"
 
 #: ../gui/wxpython/menustrings.py:478
+#, fuzzy
 msgid "Dissolve boundaries"
-msgstr ""
+msgstr "Granice regionu"
 
 #: ../gui/wxpython/menustrings.py:479
 msgid ""
@@ -6754,8 +6793,9 @@ msgid "Create 3D vector over raster"
 msgstr "Utwórz wektor 3D nad rastrem"
 
 #: ../gui/wxpython/menustrings.py:481
+#, fuzzy
 msgid "Converts vector map to 3D by sampling of elevation raster map."
-msgstr ""
+msgstr "Konwertuje mapy rastrowe 3D do map rastrowych 2D"
 
 #: ../gui/wxpython/menustrings.py:482
 msgid "Extrude 3D vector map"
@@ -6770,12 +6810,14 @@ msgid "Create labels"
 msgstr "Utwórz etykiety"
 
 #: ../gui/wxpython/menustrings.py:485
+#, fuzzy
 msgid "Creates paint labels for a vector map from attached attributes."
-msgstr ""
+msgstr "Wyświetla atrybuty mapy wektorowej."
 
 #: ../gui/wxpython/menustrings.py:486
+#, fuzzy
 msgid "Reposition vector map"
-msgstr ""
+msgstr "Zmień projekcję mapy wektorowej"
 
 #: ../gui/wxpython/menustrings.py:487
 msgid ""
@@ -6851,8 +6893,9 @@ msgid "Detects the object's edges from a LIDAR data set."
 msgstr "Wykrywa granice obiektów z danych LIDAR."
 
 #: ../gui/wxpython/menustrings.py:506
+#, fuzzy
 msgid "Detect interiors"
-msgstr ""
+msgstr "Wybierz linie"
 
 #: ../gui/wxpython/menustrings.py:507
 msgid ""
@@ -6871,8 +6914,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:510
+#, fuzzy
 msgid "Linear referencing"
-msgstr ""
+msgstr "Regresja linearna"
 
 #: ../gui/wxpython/menustrings.py:511
 msgid "Create LRS"
@@ -6911,8 +6955,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:519
+#, fuzzy
 msgid "Nearest features"
-msgstr ""
+msgstr "Odpytaj obiekty"
 
 #: ../gui/wxpython/menustrings.py:520
 msgid ""
@@ -6963,7 +7008,7 @@ msgstr "Rozdziel sieć"
 
 #: ../gui/wxpython/menustrings.py:531
 msgid "Splits net by cost isolines."
-msgstr ""
+msgstr "Podziel sieć izoliniami kosztów."
 
 #: ../gui/wxpython/menustrings.py:532
 msgid "Steiner tree"
@@ -6982,28 +7027,34 @@ msgid "Creates a cycle connecting given nodes (Traveling salesman problem)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:536 ../gui/wxpython/menustrings.py:537
+#, fuzzy
 msgid "Overlay vector maps"
-msgstr ""
+msgstr "Przykryj mapy rastrowe"
 
 #: ../gui/wxpython/menustrings.py:538
+#, fuzzy
 msgid "Overlays two vector maps."
-msgstr ""
+msgstr "Przykryj mapy rastrowe"
 
 #: ../gui/wxpython/menustrings.py:539
+#, fuzzy
 msgid "Patch vector maps"
-msgstr ""
+msgstr "Wyczyśc mapę wektorową"
 
 #: ../gui/wxpython/menustrings.py:540
+#, fuzzy
 msgid "Create a new vector map layer by combining other vector map layers."
 msgstr ""
+"Tworzy nową warstwę wektorową jako link do warstwy OGR tylko do odczytu."
 
 #: ../gui/wxpython/menustrings.py:541
 msgid "Change attributes"
 msgstr "Zmiana atrybutów"
 
 #: ../gui/wxpython/menustrings.py:542
+#, fuzzy
 msgid "Manage or report categories"
-msgstr ""
+msgstr "Zakres wartości kategorii"
 
 #: ../gui/wxpython/menustrings.py:543
 msgid "Attach, delete or report vector categories to map geometry."
@@ -7020,16 +7071,18 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:546
+#, fuzzy
 msgid "Reclassify objects using rules file"
-msgstr ""
+msgstr "Reklasyfikuj przy użyciu pliku reguł"
 
 #: ../gui/wxpython/menustrings.py:548
 msgid "Generate area for current region"
 msgstr "Tworzenie obiektów poligonowych dla zasięgu bieżącego regionu"
 
 #: ../gui/wxpython/menustrings.py:549
+#, fuzzy
 msgid "Create a new vector from the current region."
-msgstr ""
+msgstr "Tworzenie obiektów poligonowych dla zasięgu bieżącego regionu"
 
 #: ../gui/wxpython/menustrings.py:550
 msgid "Generate areas from points"
@@ -7040,8 +7093,11 @@ msgid "Convex hull"
 msgstr "Otoczka wypukła"
 
 #: ../gui/wxpython/menustrings.py:552
+#, fuzzy
 msgid "Uses a GRASS vector points map to produce a convex hull vector map."
 msgstr ""
+"Konwertuje binarną mapę wektorową GRASS-a do wektorowej mapy GRASS-a typu "
+"ASCII."
 
 #: ../gui/wxpython/menustrings.py:553
 msgid "Delaunay triangles"
@@ -7068,8 +7124,9 @@ msgid "Generate grid"
 msgstr "Utwórz GRID"
 
 #: ../gui/wxpython/menustrings.py:558
+#, fuzzy
 msgid "Creates a GRASS vector map of a user-defined grid."
-msgstr ""
+msgstr "Eksportuje mapę wektorową GRASS-a do SVG."
 
 #: ../gui/wxpython/menustrings.py:559
 msgid "Generate points"
@@ -7097,8 +7154,9 @@ msgid "Generate random points"
 msgstr "Utwórz przypadkowo rozmieszczone punkty"
 
 #: ../gui/wxpython/menustrings.py:565
+#, fuzzy
 msgid "Randomly generate a 2D/3D vector points map."
-msgstr ""
+msgstr "Przypadkowo rozmieszczone komórki i punkty (wektorowe)"
 
 #: ../gui/wxpython/menustrings.py:566
 msgid "Perturb points"
@@ -7125,8 +7183,9 @@ msgid "Randomly partition points into test/train sets."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:572
+#, fuzzy
 msgid "Update area attributes from raster"
-msgstr ""
+msgstr "Modyfikuj atrybuty"
 
 #: ../gui/wxpython/menustrings.py:573
 msgid ""
@@ -7135,20 +7194,23 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:574
+#, fuzzy
 msgid "Update point attributes from areas"
-msgstr ""
+msgstr "Modyfikuj atrybuty"
 
 #: ../gui/wxpython/menustrings.py:575
 msgid "Uploads vector values at positions of vector points to the table."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:576
+#, fuzzy
 msgid "Update point attributes from raster"
-msgstr ""
+msgstr "Modyfikuj atrybuty"
 
 #: ../gui/wxpython/menustrings.py:577
+#, fuzzy
 msgid "Sample raster maps at point locations"
-msgstr ""
+msgstr "Próbkuje mapę rastrową w sąsiedztwie punktów wektorowych."
 
 #: ../gui/wxpython/menustrings.py:578
 msgid "Uploads raster values at positions of vector points to the table."
@@ -7183,16 +7245,18 @@ msgid "Reports geometry statistics for vectors."
 msgstr "Tworzy raport geometrii mapy rastrowej."
 
 #: ../gui/wxpython/menustrings.py:586
+#, fuzzy
 msgid "Upload or report topology"
-msgstr ""
+msgstr "Utwórz/przebuduj topologię"
 
 #: ../gui/wxpython/menustrings.py:587
 msgid "Populates database values from vector features."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:588
+#, fuzzy
 msgid "Univariate attribute statistics"
-msgstr ""
+msgstr "Aktualizuj statystyki mapy"
 
 #: ../gui/wxpython/menustrings.py:589
 msgid ""
@@ -7416,8 +7480,9 @@ msgid "Classify image"
 msgstr "Klasyfikuj obraz"
 
 #: ../gui/wxpython/menustrings.py:640
+#, fuzzy
 msgid "Clustering input for unsupervised classification"
-msgstr ""
+msgstr "Interaktywny input dla klasifikacj nadzorowanej"
 
 #: ../gui/wxpython/menustrings.py:641
 msgid ""
@@ -7510,8 +7575,9 @@ msgid "Transform image"
 msgstr "Przekształć obraz"
 
 #: ../gui/wxpython/menustrings.py:662
+#, fuzzy
 msgid "Canonical correlation"
-msgstr ""
+msgstr "Kowariancja/korelacja"
 
 #: ../gui/wxpython/menustrings.py:663
 msgid "Canonical components analysis (cca) program for image processing."
@@ -7608,8 +7674,9 @@ msgid "3D Mask"
 msgstr "Maska 3D"
 
 #: ../gui/wxpython/menustrings.py:686
+#, fuzzy
 msgid "Establishes the current working 3D raster mask."
-msgstr ""
+msgstr "Nie można utworzyć profilu dla mapy rastrowej."
 
 #: ../gui/wxpython/menustrings.py:687
 msgid "3D raster map calculator"
@@ -7630,8 +7697,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:691
+#, fuzzy
 msgid "Interpolate volume from points"
-msgstr ""
+msgstr "Utwórz obszary z punktów"
 
 #: ../gui/wxpython/menustrings.py:692
 msgid ""
@@ -7648,8 +7716,11 @@ msgid "Basic volume metadata"
 msgstr "Podstawowe metadane mapy rastrowej 3D"
 
 #: ../gui/wxpython/menustrings.py:695
+#, fuzzy
 msgid "Outputs basic information about a user-specified 3D raster map layer."
 msgstr ""
+"Tworzy matrycę kowariancji/korelacji dla określonej przez użytkownika "
+"warstwy/warstw mapy rastrowej."
 
 #: ../gui/wxpython/menustrings.py:697
 msgid "Database information"
@@ -7787,8 +7858,9 @@ msgid "Selects data from attribute table (performs SQL query statement(s))."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:728
+#, fuzzy
 msgid "Query vector attribute data"
-msgstr ""
+msgstr "Utwórz zapytanie za pomocą atrybutów"
 
 #: ../gui/wxpython/menustrings.py:729
 msgid "Prints vector map attributes."
@@ -8034,7 +8106,7 @@ msgstr "Nie można utworzyć nowego mapsetu: %s"
 
 #: ../gui/wxpython/gis_set.py:707
 msgid "GRASS Quickstart"
-msgstr ""
+msgstr "Szybki start GRASS'a"
 
 #: ../gui/wxpython/gis_set.py:784
 msgid "Starting GRASS for the first time"
@@ -8219,6 +8291,14 @@ msgstr "O GRASS GIS"
 msgid "No map layer selected. Operation cancelled."
 msgstr "Nie została wybrana żadna warstwa mapy. Operacja przerwana"
 
+#, fuzzy
+msgid "GRASS SQL Builder: %s"
+msgstr "GRASS SQL Builder: %s"
+
+#, fuzzy
+msgid "Interactive input for supervised classification"
+msgstr "Interaktywny input dla klasifikacj nadzorowanej"
+
 #~ msgid "Click here to show database connection information"
 #~ msgstr "Aby zobaczyć informację o połączeniu z bazą danych, kliknij tutaj"
 
@@ -8263,10 +8343,6 @@ msgstr "Nie została wybrana żadna warstwa mapy. Operacja przerwana"
 
 #~ msgid "Output vector map name"
 #~ msgstr "Nazwa wektorowej mapy wyjściowej"
-
-#, fuzzy
-#~ msgid "GRASS SQL Builder: %s"
-#~ msgstr "GRASS SQL Builder: %s"
 
 #, fuzzy
 #~ msgid "Add overlay"
@@ -8445,10 +8521,6 @@ msgstr "Nie została wybrana żadna warstwa mapy. Operacja przerwana"
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
 #~ msgstr "Interaktywny input dla klasifikacj nadzorowanej (wymaga Xterm)"
 
-#, fuzzy
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "Interaktywny input dla klasifikacj nadzorowanej"
-
 #~ msgid "Not implemented yet"
 #~ msgstr "Jeszcze nie zaimplementowano"
 
@@ -8479,3 +8551,83 @@ msgstr "Nie została wybrana żadna warstwa mapy. Operacja przerwana"
 
 #~ msgid "About wxPython GRASS GUI"
 #~ msgstr "O wxPython GRASS GUI"
+
+#~ msgid "Add raster map layer"
+#~ msgstr "Dodaj warstwę rastrową"
+
+#~ msgid "Add vector map layer"
+#~ msgstr "Dodaj warstwę wektorową"
+
+#~ msgid "Close this window without executing the command"
+#~ msgstr "Zamknij okno bez wykonywania komendy"
+
+#~ msgid "Show manual page of the command"
+#~ msgstr "Wyświetl pomoc dla tej komendy"
+
+#~ msgid "Run the command"
+#~ msgstr "Uruchom komendę"
+
+#~ msgid "Copy the current command string to the clipboard"
+#~ msgstr "Kopiuj bieżącą komendę do schowka"
+
+#, fuzzy
+#~ msgid "GRASS SQL Builder (%s): vector map <%s>"
+#~ msgstr "GRASS SQL Builder: %s"
+
+#, fuzzy
+#~ msgid "Error in command execution %s"
+#~ msgstr "Wykonanie polecenia '%s' nie powiodło się"
+
+#~ msgid ""
+#~ "Georeference, rectify and import Terra-ASTER imagery and relative DEM's "
+#~ "using gdalwarp."
+#~ msgstr ""
+#~ "Nadaje georeferencje, rektifikuje i importuje zobrazowania w formacie "
+#~ "Terra-ASTER i związane DEM przy pomocy gdalwarp."
+
+#~ msgid "Matlab and MapGen import"
+#~ msgstr "Import Matlab i MapGen"
+
+#~ msgid "Exit GUI"
+#~ msgstr "Zakończ GUI"
+
+#~ msgid "Convert coordinates from one projection to another (cs2cs frontend)."
+#~ msgstr "Konwertuj współrzędne z danej projekcji do innej (cs2cs)"
+
+#, fuzzy
+#~ msgid "Digitize raster (requires XTerm)"
+#~ msgstr "Ustawienia (wymaga XTerm)"
+
+#~ msgid "Create a MASK for limiting raster operation"
+#~ msgstr "Tworzy MASKĘ do zawężenia operacji na rastrze"
+
+#, fuzzy
+#~ msgid "Analyze patches"
+#~ msgstr "Analiza mapy"
+
+#, fuzzy
+#~ msgid "Display shortest route (requires XTerm)"
+#~ msgstr "Ustawienia (wymaga XTerm)"
+
+#, fuzzy
+#~ msgid "Outputs basic information about a user-specified vector map."
+#~ msgstr ""
+#~ "Tworzy matrycę kowariancji/korelacji dla określonej przez użytkownika "
+#~ "warstwy/warstw mapy rastrowej."
+
+#~ msgid "GRASS GIS help"
+#~ msgstr "Pomoc GRASS GIS"
+
+#~ msgid ""
+#~ "Reading workspace file <%s> failed. Invalid file, unable to parse XML "
+#~ "document."
+#~ msgstr ""
+#~ "Odczyt pliku pola pracy <%s> nie powiódł się. Plik uszkodzony, nie można "
+#~ "przeanalizować dokumentu XML."
+
+#~ msgid "Use for all loaded surfaces"
+#~ msgstr "Zastosuj dla wszystkich powierzchni"
+
+#, fuzzy
+#~ msgid "14 types of vegetation Indices."
+#~ msgstr "14 typów indeksów wegetacji"
