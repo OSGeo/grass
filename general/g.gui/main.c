@@ -106,11 +106,11 @@ int main(int argc, char *argv[])
     if (strcmp(type->answer, "wxpython") == 0) {
 	sprintf(progname, "%s/etc/wxpython/wxgui.py", G_gisbase());
 	if (rc_file->answer) {
-	    G_spawn_ex(getenv("GRASS_PYTHON"), "wxgui", progname,
+	    G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
 		    "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
 	}
 	else {
-	    G_spawn_ex(getenv("GRASS_PYTHON"), "wxgui", progname,
+	    G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
 		    SF_BACKGROUND, NULL);
 	}
     }
