@@ -93,7 +93,6 @@ int segment_pagein(SEGMENT * SEG, int n)
 	cur = SEG->freeslot[--SEG->nfreeslots];
     }
 
-
     /* read in the segment */
     SEG->scb[cur].n = n;
     SEG->scb[cur].dirty = 0;
