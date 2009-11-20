@@ -59,7 +59,7 @@ DIRS = \
 
 SUBDIRS = $(DIRS)
 
-FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT
+FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT contributors.csv translators.csv
 FILES_DST = $(patsubst %,${ARCH_DISTDIR}/%,$(FILES))
 
 # why no locale directory?
