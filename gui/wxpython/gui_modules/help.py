@@ -361,7 +361,10 @@ class AboutWindow(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=wx.ID_ANY, size=(550,400), 
                           title=_('About GRASS GIS'))
         
-        # version and web site
+        # icon
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+
+        # get version and web site
         version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
                                                                  flags = 'r',
                                                                  read = True).splitlines()
@@ -387,72 +390,16 @@ class AboutWindow(wx.Frame):
             infoSizer.Add(item = info, proportion = 0,
                           flag = wx.TOP | wx.ALIGN_CENTER, border = 5)
             i += 1
-            
-        # copyright information
-        copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
-        if os.path.exists(copyfile):
-            copyrightFile = open(copyfile, 'r')
-            copyrightOut = []
-            copyright = copyrightFile.readlines()
-            copytext = wordwrap(''.join(copyright[:11] + copyright[26:-3]),
-                                575, wx.ClientDC(self))
-            copyrightFile.close()
-        else:
-            copytext = _('COPYING file missing')
-        # put text into a scrolling panel
-        copyrightwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                              size=wx.DefaultSize,
-                                              style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        copyrighttxt = wx.StaticText(copyrightwin, id=wx.ID_ANY, label=copytext)
-        copyrightwin.SetAutoLayout(1)
-        copyrightwin.SetupScrolling()
-        copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        copyrightwin.sizer.Add(item=copyrighttxt, proportion=1,
-                               flag=wx.EXPAND | wx.ALL, border=1)
-        copyrightwin.SetSizer(copyrightwin.sizer)
-        copyrightwin.Layout()
+        
+        #
+        # create pages
+        #
+        copyrightwin = self.PageCopyright()
+        licensewin   = self.PageLicense()
+        authorwin    = self.PageCredit()
+        contribwin   = self.PageContributors()
+        transwin     = self.PageTranslators()
 
-        # license
-        licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
-        if os.path.exists(licfile):
-            licenceFile = open(licfile, 'r')
-            license = ''.join(licenceFile.readlines())
-            licenceFile.close()
-        else:
-            license = _('GPL.TXT file missing')
-        # put text into a scrolling panel
-        licensewin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                            size=wx.DefaultSize,
-                                            style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        licensetxt = wx.StaticText(licensewin, id=wx.ID_ANY, label=license)
-        licensewin.SetAutoLayout(1)
-        licensewin.SetupScrolling()
-        licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
-        licensewin.sizer.Add(item=licensetxt, proportion=1,
-                flag=wx.EXPAND | wx.ALL, border=1)
-        licensewin.SetSizer(licensewin.sizer)
-        licensewin.Layout()
-        
-        # credits
-        authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
-        if os.path.exists(authfile):
-            authorsFile = open(authfile, 'r')
-            authors = unicode(''.join(authorsFile.readlines()), "utf-8")
-            authorsFile.close()
-        else:
-            authors = _('AUTHORS file missing')
-        authorwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                           size=wx.DefaultSize,
-                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        authortxt = wx.StaticText(authorwin, id=wx.ID_ANY, label=str(authors))
-        authorwin.SetAutoLayout(1)
-        authorwin.SetupScrolling()
-        authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        authorwin.sizer.Add(item=authortxt, proportion=1,
-                flag=wx.EXPAND | wx.ALL, border=1)
-        authorwin.SetSizer(authorwin.sizer)
-        authorwin.Layout()      
-        
         # create a flat notebook for displaying information about GRASS
         nbstyle = FN.FNB_VC8 | \
                 FN.FNB_BACKGROUND_GRADIENT | \
@@ -464,11 +411,13 @@ class AboutWindow(wx.Frame):
         aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
         
         # make pages for About GRASS notebook
-        pg1 = aboutNotebook.AddPage(infoTxt,    text=_("Info"))
+        pg1 = aboutNotebook.AddPage(infoTxt,      text=_("Info"))
         pg2 = aboutNotebook.AddPage(copyrightwin, text=_("Copyright"))
         pg3 = aboutNotebook.AddPage(licensewin,   text=_("License"))
         pg4 = aboutNotebook.AddPage(authorwin,    text=_("Authors"))
-
+        pg5 = aboutNotebook.AddPage(contribwin,   text=_("Contributors"))
+        pg5 = aboutNotebook.AddPage(transwin,     text=_("Translators"))
+        
         # buttons
         btnClose = wx.Button(parent = self, id = wx.ID_CLOSE)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -489,6 +438,174 @@ class AboutWindow(wx.Frame):
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=1)
         self.SetSizer(sizer)
         self.Layout()
+    
+    def PageCopyright(self):
+        """Copyright information"""
+        copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
+        if os.path.exists(copyfile):
+            copyrightFile = open(copyfile, 'r')
+            copyrightOut = []
+            copyright = copyrightFile.readlines()
+            copytext = wordwrap(''.join(copyright[:11] + copyright[26:-3]),
+                                575, wx.ClientDC(self))
+            copyrightFile.close()
+        else:
+            copytext = _('%s file missing') % 'COPYING'
+        
+        # put text into a scrolling panel
+        copyrightwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+                                              size=wx.DefaultSize,
+                                              style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        copyrighttxt = wx.StaticText(copyrightwin, id=wx.ID_ANY, label=copytext)
+        copyrightwin.SetAutoLayout(True)
+        copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
+        copyrightwin.sizer.Add(item=copyrighttxt, proportion=1,
+                               flag=wx.EXPAND | wx.ALL, border=3)
+        copyrightwin.SetSizer(copyrightwin.sizer)
+        copyrightwin.Layout()
+        copyrightwin.SetupScrolling()
+        
+        return copyrightwin
+    
+    def PageLicense(self):
+        """Licence about"""
+        licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
+        if os.path.exists(licfile):
+            licenceFile = open(licfile, 'r')
+            license = ''.join(licenceFile.readlines())
+            licenceFile.close()
+        else:
+            license = _('%s file missing') % 'GPL.TXT'
+        # put text into a scrolling panel
+        licensewin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+                                            style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        licensetxt = wx.StaticText(licensewin, id=wx.ID_ANY, label=license)
+        licensewin.SetAutoLayout(True)
+        licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
+        licensewin.sizer.Add(item=licensetxt, proportion=1,
+                flag=wx.EXPAND | wx.ALL, border=3)
+        licensewin.SetSizer(licensewin.sizer)
+        licensewin.Layout()
+        licensewin.SetupScrolling()
+        
+        return licensewin
+    
+    def PageCredit(self):
+        """Credit about"""
+                # credits
+        authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
+        if os.path.exists(authfile):
+            authorsFile = open(authfile, 'r')
+            authors = unicode(''.join(authorsFile.readlines()), "utf-8")
+            authorsFile.close()
+        else:
+            authors = _('%s file missing') % 'AUTHORS'
+        authorwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        authortxt = wx.StaticText(authorwin, id=wx.ID_ANY, label=str(authors))
+        authorwin.SetAutoLayout(1)
+        authorwin.SetupScrolling()
+        authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
+        authorwin.sizer.Add(item=authortxt, proportion=1,
+                flag=wx.EXPAND | wx.ALL, border=3)
+        authorwin.SetSizer(authorwin.sizer)
+        authorwin.Layout()      
+        
+        return authorwin
+
+    def PageContributors(self):
+        """Contributors info"""
+        contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
+        if os.path.exists(contribfile):
+            contribFile = open(contribfile, 'r')
+            contribs = list()
+            for line in contribFile.readlines():
+                cvs_id, name, email, country, osgeo_id, rfc2_agreed = line.split(',')
+                contribs.append((name, email, country, osgeo_id))
+            contribs[0] = (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID'))
+            contribFile.close()
+        else:
+            contribs = None
+        
+        contribwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        contribwin.SetAutoLayout(1)
+        contribwin.SetupScrolling()
+        contribwin.sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        if not contribs:
+            contribtxt = wx.StaticText(contribwin, id=wx.ID_ANY,
+                                       label=_('%s file missing') % 'contibutors.csv')
+            contribwin.sizer.Add(item=contribtxt, proportion=1,
+                                 flag=wx.EXPAND | wx.ALL, border=3)
+        else:
+            contribBox = wx.FlexGridSizer(cols=4, vgap=5, hgap=5)
+            for developer in contribs:
+                for item in developer:
+                    contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
+                                                        label = item))
+            contribwin.sizer.Add(item=contribBox, proportion=1,
+                                 flag=wx.EXPAND | wx.ALL, border=3)
+        
+        contribwin.SetSizer(contribwin.sizer)
+        contribwin.Layout()      
+        
+        return contribwin
+
+    def PageTranslators(self):
+        """Translators info"""
+        translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
+        if os.path.exists(translatorsfile):
+            translatorsFile = open(translatorsfile, 'r')
+            translators = dict()
+            for line in translatorsFile.readlines()[1:]:
+                name, email, languages = line.rstrip('\n').split(',')
+                for language in languages.split(' '):
+                    if not translators.has_key(language):
+                        translators[language] = list()
+                    translators[language].append((name, email))
+            translatorsFile.close()
+        else:
+            translators = None
+        
+        translatorswin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        translatorswin.SetAutoLayout(1)
+        translatorswin.SetupScrolling()
+        translatorswin.sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        if not translators:
+            translatorstxt = wx.StaticText(translatorswin, id=wx.ID_ANY,
+                                           label=_('%s file missing') % 'translators.csv')
+            translatorswin.sizer.Add(item=translatorstxt, proportion=1,
+                                 flag=wx.EXPAND | wx.ALL, border=3)
+        else:
+            translatorsBox = wx.FlexGridSizer(cols=3, vgap=5, hgap=5)
+            languages = translators.keys()
+            languages.sort()
+            translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                                    label = _('Name')))
+            translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                                    label = _('E-mail')))
+            translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                                    label = _('Language')))
+            for lang in languages:
+                for translator in translators[lang]:
+                    name, email = translator
+                    translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                                        label = name))
+                    translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                                        label = email))
+                    translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
+                                                        label = lang))
+            
+            translatorswin.sizer.Add(item=translatorsBox, proportion=1,
+                                 flag=wx.EXPAND | wx.ALL, border=3)
+        
+        translatorswin.SetSizer(translatorswin.sizer)
+        translatorswin.Layout()      
+        
+        return translatorswin
     
     def OnCloseWindow(self, event):
         """!Close window"""
