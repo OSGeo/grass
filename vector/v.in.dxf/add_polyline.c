@@ -43,7 +43,7 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 	switch (code) {
 	case 66:		/* vertices follow flag */
 	    vert_flag = atoi(dxf_buf);
-	    if (vert_flag != 1)	/* flag must always be 1 */
+	    if (vert_flag != 1)	/* flag must be always 1 */
 		if (warn_flag66) {
 		    G_warning(_("vertices following flag missing"));
 		    warn_flag66 = 0;
@@ -151,7 +151,7 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 	     8 = Spline vertex created by spline-fitting
 	     16 = Spline frame control point
 	     32 = 3D polyline vertex
-	     64 = 3D polygon mesh
+	     64 = 3D polygon mesh vertex
 	     128 = Polyface mesh vertex
 	     ******************************************************************/
 		    if (vertex_flag == 16) {
@@ -168,6 +168,7 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 		case 74:
 		    if (!((vertex_flag & 128) && !(vertex_flag & 64)))
 			break;
+
 		    if (!polyface_mesh_started) {
 			/* save vertex coordinates to mesh_?pnts */
 			mesh_xpnts =
@@ -180,11 +181,6 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 			memcpy(mesh_ypnts, ypnts, arr_size * sizeof(double));
 			memcpy(mesh_zpnts, zpnts, arr_size * sizeof(double));
 
-			/*
-			 * if (flag_frame)
-			 * write_pnts(Map, layer, polyline_flag, zflag,
-			 * arr_size);
-			 */
 			polyface_mesh_started = 1;
 			arr_size = 0;
 			mesh_pnts = 0;
@@ -195,43 +191,38 @@ void add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 			ypnts[arr_size] = mesh_ypnts[vertex_idx - 1];
 			zpnts[arr_size] = mesh_zpnts[vertex_idx - 1];
 			arr_size++;
-		    }
-		    if (++mesh_pnts == 4 || vertex_idx == 0) {
-			/* check if there are any vertices when vertex_idx is 0
-			 */
-			if (arr_size > 0) {
-			    /* close a mesh */
-			    xpnts[arr_size] = xpnts[0];
-			    ypnts[arr_size] = ypnts[0];
-			    zpnts[arr_size] = zpnts[0];
-			    arr_size++;
-			    if (flag_frame)
-				write_vect(Map, layer, "POLYFACE FRAME",
-					   handle, "", arr_size, GV_LINE);
-			    else
-				write_vect(Map, layer, "POLYFACE", handle, "",
-					   arr_size, GV_FACE);
-			    arr_size = 0;
-			}
-			mesh_pnts = 0;
+			mesh_pnts++;
 		    }
 		    break;
 		}
 	    }
-	}
 
-	if (polyface_mesh_started) {
-	    /* discard a premature mesh */
-	    arr_size = 0;
-	    mesh_pnts = 0;
-	    continue;
-	}
+	    if (polyface_mesh_started) {
+		if (mesh_pnts > 0) {
+		    /* close a mesh */
+		    xpnts[arr_size] = xpnts[0];
+		    ypnts[arr_size] = ypnts[0];
+		    zpnts[arr_size] = zpnts[0];
+		    arr_size++;
+		    if (flag_frame)
+			write_vect(Map, layer, "POLYFACE FRAME", handle, "",
+				   arr_size, GV_LINE);
+		    else
+			write_vect(Map, layer, "POLYFACE", handle, "",
+				   arr_size, GV_FACE);
+		    arr_size = 0;
+		    mesh_pnts = 0;
+		}
+		continue;
+	    }
 
-	if (xflag && yflag) {
-	    arr_size = make_arc_from_polyline(arr_size, bulge, prev_bulge);
-	    prev_bulge = bulge;
-	    bulge = 0.0;
-	}			/* processing polyline vertex */
+	    if (xflag && yflag) {
+		arr_size =
+		    make_arc_from_polyline(arr_size, bulge, prev_bulge);
+		prev_bulge = bulge;
+		bulge = 0.0;
+	    }			/* processing polyline vertex */
+	}
     }				/* vertex loop */
 
     if (polyface_mesh_started) {
