@@ -464,6 +464,28 @@ class GMFrame(wx.Frame):
             cmd = self.GetMenuCmd(event)
         menuform.GUI().ParseCommand(cmd, parentframe=self)
 
+    def OnRunScript(self, event):
+        """!Run script"""
+        # open dialog and choose script file
+        dlg = wx.FileDialog(parent = self, message = _("Choose script file"),
+                            defaultDir = os.getcwd(), wildcard = "Bash script (*.sh)|*.sh|Python script (*.py)|*.py")
+        
+        filename = None
+        if dlg.ShowModal() == wx.ID_OK:
+            filename = dlg.GetPath()
+        
+        if not filename:
+            return False
+
+        if not os.path.exists(filename):
+            wx.MessageBox(parent = self,
+                          message = _("Script file '%s' doesn't exist. Operation cancelled.") % filename,
+                          caption = _("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            return
+        
+        self.goutput.WriteCmdLog(_("Launching script '%s'...") % filename)
+        self.goutput.RunCmd(filename, switchPage = True)
+        
     def OnChangeLocation(self, event):
         """Change current location"""
         dlg = gdialogs.LocationDialog(parent = self)

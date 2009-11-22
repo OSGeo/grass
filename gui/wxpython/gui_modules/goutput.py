@@ -413,17 +413,13 @@ class GMConsole(wx.Panel):
         else:
             # Send any other command to the shell. Send output to
             # console output window
-
-            # if command is not a GRASS command, treat it like a shell command
-            # process GRASS command with argument
+            
             self.cmdThread.RunCmd(GrassCmd,
                                   onDone,
                                   cmdlist,
                                   self.cmd_stdout, self.cmd_stderr)                                          
             self.btn_abort.Enable()
             self.cmd_output_timer.Start(50)
-            
-            return None
         
         return None
 

@@ -643,6 +643,12 @@
 	</menuitem>
 	<separator />
 	<menuitem>
+	  <label>Launch script</label>
+	  <help>Launches script file.</help>
+	  <handler>self.OnRunScript</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
 	  <label>Quit GUI</label>
 	  <help>Quit wxGUI session</help>
 	  <handler>self.OnCloseWindow</handler>
