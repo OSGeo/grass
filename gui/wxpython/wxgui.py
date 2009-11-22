@@ -468,7 +468,7 @@ class GMFrame(wx.Frame):
         """!Run script"""
         # open dialog and choose script file
         dlg = wx.FileDialog(parent = self, message = _("Choose script file"),
-                            defaultDir = os.getcwd(), wildcard = "Bash script (*.sh)|*.sh|Python script (*.py)|*.py")
+                            defaultDir = os.getcwd(), wildcard = _("Bash script (*.sh)|*.sh|Python script (*.py)|*.py"))
         
         filename = None
         if dlg.ShowModal() == wx.ID_OK:
@@ -618,7 +618,7 @@ class GMFrame(wx.Frame):
     def OnWorkspaceOpen(self, event=None):
         """!Open file with workspace definition"""
         dlg = wx.FileDialog(parent=self, message=_("Choose workspace file"),
-                            defaultDir=os.getcwd(), wildcard="*.gxw")
+                            defaultDir=os.getcwd(), wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"))
 
         filename = ''
         if dlg.ShowModal() == wx.ID_OK:
@@ -781,7 +781,7 @@ class GMFrame(wx.Frame):
     def OnWorkspaceLoadGrcFile(self, event):
         """!Load map layers from GRC file (Tcl/Tk GUI) into map layer tree"""
         dlg = wx.FileDialog(parent=self, message=_("Choose GRC file to load"),
-                            defaultDir=os.getcwd(), wildcard="*.grc")
+                            defaultDir=os.getcwd(), wildcard=_("Old GRASS Workspace File (*.grc)|*.grc"))
 
         filename = ''
         if dlg.ShowModal() == wx.ID_OK:
@@ -820,7 +820,7 @@ class GMFrame(wx.Frame):
         """!Save workspace definition to selected file"""
 
         dlg = wx.FileDialog(parent=self, message=_("Choose file to save current workspace"),
-                            defaultDir=os.getcwd(), wildcard="*.gxw", style=wx.FD_SAVE)
+                            defaultDir=os.getcwd(), wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"), style=wx.FD_SAVE)
 
         filename = ''
         if dlg.ShowModal() == wx.ID_OK:
