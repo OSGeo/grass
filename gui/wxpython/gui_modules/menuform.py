@@ -374,7 +374,7 @@ class grassTask:
                     if value in val:
                         return p
                 else:
-                    if p[element] == value:
+                    if p[element][:len(value)] == value:
                         return p
         except KeyError:
             pass
@@ -407,7 +407,7 @@ class grassTask:
         """
         param = self.get_flag(aFlag)
         param['value'] = aValue
-        
+                
     def getCmd(self, ignoreErrors = False):
         """
         Produce an array of command name and arguments for feeding
@@ -1921,7 +1921,10 @@ class GUI:
             cmd_validated = [cmd[0]]
             for option in cmd[1:]:
                 if option[0] == '-': # flag
-                    self.grass_task.set_flag(option[1], True)
+                    if option[1] == '-':
+                        self.grass_task.set_flag(option[2:], True)
+                    else:
+                        self.grass_task.set_flag(option[1], True)
                     cmd_validated.append(option)
                 else: # parameter
                     try:
@@ -1943,27 +1946,30 @@ class GUI:
 
             # update original command list
             cmd = cmd_validated
-
-        self.mf = mainFrame(parent=self.parent, ID=wx.ID_ANY,
-                            task_description=self.grass_task,
-                            get_dcmd=get_dcmd, layer=layer)
+        
+        if show is not None:
+            self.mf = mainFrame(parent=self.parent, ID=wx.ID_ANY,
+                                task_description=self.grass_task,
+                                get_dcmd=get_dcmd, layer=layer)
+        else:
+            self.mf = None
         
         if get_dcmd is not None:
             # update only propwin reference
             get_dcmd(dcmd=None, layer=layer, params=None,
                      propwin=self.mf)
 
-        self.mf.notebookpanel.OnUpdateSelection(None)
+        if show is not None:
+            self.mf.notebookpanel.OnUpdateSelection(None)
+            if show is True:
+                if self.parent:
+                    self.mf.CentreOnParent()
+                self.mf.Show(show)
+                self.mf.MakeModal(modal)
+            else:
+                self.mf.OnApply(None)
         
-        if show:
-            if self.parent:
-                self.mf.CentreOnParent()
-            self.mf.Show(show)
-            self.mf.MakeModal(modal)
-        else:
-            self.mf.OnApply(None)
-        
-        return cmd
+        return self.grass_task
 
     def GetCommandInputMapParamKey(self, cmd):
         """!Get parameter key for input raster/vector map
