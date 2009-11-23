@@ -34,6 +34,7 @@ import grass.script as grass
 import globalvar
 import gcmd
 import utils
+import menuform
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
@@ -98,6 +99,20 @@ class CmdThread(threading.Thread):
                 aborted = False
             
             time.sleep(.1)
+            
+            # set default color table for raster data
+            if UserSettings.Get(group='cmd', key='rasterColorTable', subkey='enabled') and \
+                    args[0][0][:2] == 'r.':
+                moduleInterface = menuform.GUI().ParseCommand(args[0], show = None)
+                outputParam = moduleInterface.get_param(value = 'output', raiseError = False)
+                colorTable = UserSettings.Get(group='cmd', key='rasterColorTable', subkey='selection')
+                if outputParam and outputParam['prompt'] == 'raster':
+                    argsColor = list(args)
+                    argsColor[0] = [ 'r.colors',
+                                     'map=%s' % outputParam['value'],
+                                     'color=%s' % colorTable]
+                    self.requestCmdColor = callable(*argsColor, **kwds)
+                    self.resultQ.put((requestId, self.requestCmdColor.run()))
             
             event = wxCmdDone(aborted = aborted,
                               returncode = returncode,
@@ -554,6 +569,7 @@ class GMConsole(wx.Panel):
             except KeyError:
                 # stopped deamon
                 pass
+            
             self.btn_abort.Enable(False)
         if event.onDone:
             event.onDone(returncode = event.returncode)

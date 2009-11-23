@@ -458,7 +458,7 @@ class CommandThread(Thread):
         """
         Thread.__init__(self)
 	
-        self.cmd    = cmd
+        self.cmd = cmd
 	
 	# hack around platform-specific extension for binaries
 	if self.cmd[0] in globalvar.grassCmd['script']:

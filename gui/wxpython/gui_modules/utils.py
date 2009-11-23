@@ -589,3 +589,13 @@ def GetListOfMapsets(dbase, location, selectable = False):
         listOfMapsets.insert(0, 'PERMANENT')
     
     return listOfMapsets
+
+def GetColorTables():
+    """!Get list of color tables"""
+    ret = gcmd.RunCommand('r.colors',
+                          read = True,
+                          flags = 'l')
+    if not ret:
+        return list()
+    
+    return ret.splitlines()
