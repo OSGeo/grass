@@ -53,6 +53,7 @@ import time
 import types
 import copy
 import locale
+import types
 from threading import Thread
 import Queue
 
@@ -370,11 +371,16 @@ class grassTask:
         try:
             for p in self.params:
                 val = p[element]
+                if val is None:
+                    continue
                 if type(val) in (types.ListType, types.TupleType):
                     if value in val:
                         return p
-                else:
+                elif type(val) == types.StringType:
                     if p[element][:len(value)] == value:
+                        return p
+                else:
+                    if p[element] == value:
                         return p
         except KeyError:
             pass
@@ -1866,7 +1872,12 @@ class GUI:
     def __init__(self, parent=-1):
         self.parent = parent
         self.grass_task = None
+        self.cmd = list()
 
+    def GetCmd(self):
+        """Get validated command"""
+        return self.cmd
+    
     def ParseInterface(self, cmd, parser = processTask):
         """!Parse interface
 
@@ -1968,6 +1979,8 @@ class GUI:
                 self.mf.MakeModal(modal)
             else:
                 self.mf.OnApply(None)
+        
+        self.cmd = cmd
         
         return self.grass_task
 
