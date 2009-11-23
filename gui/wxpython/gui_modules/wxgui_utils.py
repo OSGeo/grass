@@ -846,10 +846,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                    ltype)
 
         if self.GetPyData(layer)[0]['cmd']:
-            cmdValidated = menuform.GUI().ParseCommand(self.GetPyData(layer)[0]['cmd'],
-                                                       completed=(self.GetOptData,layer,params),
-                                                       parentframe=self, show=show)
-            self.GetPyData(layer)[0]['cmd'] = cmdValidated
+            module = menuform.GUI()
+            module.ParseCommand(self.GetPyData(layer)[0]['cmd'],
+                                completed=(self.GetOptData,layer,params),
+                                parentframe=self, show=show)
+            
+            self.GetPyData(layer)[0]['cmd'] = module.GetCmd()
         elif ltype == 'raster':
             cmd = ['d.rast']
             
