@@ -123,7 +123,7 @@ static int _segment_format(int fd,
     if (sizeof(off_t) == 4) {
 	double file_size;
 
-	file_size = (double) nrows * ncols * len > INT_MAX;
+	file_size = (double) nrows * ncols * len;
 
 	if (file_size > INT_MAX) {
 	    G_warning("segment file size would be %.2fGB, but file size limit is 2GB", file_size / (1 << 30));
