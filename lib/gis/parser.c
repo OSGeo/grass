@@ -2986,12 +2986,12 @@ static void wps_print_ProcessDescription()
 
 static void wps_print_ProcessDescriptions_begin()
 {
-    fprintf(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    fprintf(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     fprintf(stdout, "<wps:ProcessDescriptions xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"\n");
     fprintf(stdout, "xmlns:ows=\"http://www.opengis.net/ows/1.1\"\n");
     fprintf(stdout, "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n");
     fprintf(stdout, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-    fprintf(stdout, "xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd\" service=\"WPS\" version=\"1.0.0\" xml:lang=\"en-US\"> \n");
+    fprintf(stdout, "xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0\n http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd\"\n service=\"WPS\" version=\"1.0.0\" xml:lang=\"en-US\"> \n");
 }
 
 /* ************************************************************************** */
@@ -3013,7 +3013,9 @@ static void wps_print_ProcessDescription_begin(int store, int status, const char
     wps_print_ident_title_abstract(identifier, title, abstract);
     for(i = 0; i < num_keywords; i++)
     {
-        fprintf(stdout,"\t\t<ows:Metadata xlink:title=\"%s\" />\n", keywords[i]);
+        fprintf(stdout,"\t\t<ows:Metadata xlink:title=\"");
+        print_escaped_for_xml(stdout, keywords[i]);
+        fprintf(stdout, "\" />\n");
     }
 }
 
@@ -3132,13 +3134,25 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
 static void wps_print_ident_title_abstract(const char *identifier, const char *title, const char *abstract)
 {
     if(identifier)
-        fprintf(stdout,"\t\t\t\t<ows:Identifier>%s</ows:Identifier>\n", identifier);
+    {
+        fprintf(stdout,"\t\t\t\t<ows:Identifier>");
+        print_escaped_for_xml(stdout, identifier);
+        fprintf(stdout,"</ows:Identifier>\n");
+    }
 
     if(title)
-        fprintf(stdout,"\t\t\t\t<ows:Title>%s</ows:Title>\n", title);
+    {
+        fprintf(stdout,"\t\t\t\t<ows:Title>");
+        print_escaped_for_xml(stdout, title);
+        fprintf(stdout, "</ows:Title>\n");
+    }
 
     if(abstract)
-        fprintf(stdout,"\t\t\t\t<ows:Abstract>%s</ows:Abstract>\n", abstract);
+    {
+        fprintf(stdout,"\t\t\t\t<ows:Abstract>");
+        print_escaped_for_xml(stdout, abstract);
+        fprintf(stdout, "</ows:Abstract>\n");
+    }
 }
 
 /* ************************************************************************** */
@@ -3188,14 +3202,20 @@ static void wps_print_literal_input_output(int inout_type, int min, int max, con
         {
             for(i = 0; i < num_choices; i++)
             {
-                fprintf(stdout,"\t\t\t\t\t\t<ows:Value>%s</ows:Value>\n", choices[i]);
+                fprintf(stdout,"\t\t\t\t\t\t<ows:Value>");
+                print_escaped_for_xml(stdout, choices[i]);
+                fprintf(stdout,"</ows:Value>\n");
             }
         }
         fprintf(stdout,"\t\t\t\t\t</ows:AllowedValues>\n");
     }
 
     if(default_value)
-        fprintf(stdout,"\t\t\t\t\t<DefaultValue>%s</DefaultValue>\n", default_value);
+    {
+        fprintf(stdout,"\t\t\t\t\t<DefaultValue>");
+        print_escaped_for_xml(stdout, default_value);
+        fprintf(stdout,"</DefaultValue>\n");
+    }
     fprintf(stdout,"\t\t\t\t</LiteralData>\n");
 
 
