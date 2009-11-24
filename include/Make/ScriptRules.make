@@ -3,13 +3,14 @@
 
 STRINGDIR = $(GRASS_HOME)/locale/scriptstrings
 
-$(SCRIPTDIR)/%: %.py
-	if [ ! -d $(SCRIPTDIR) ]; then $(MKDIR) $(SCRIPTDIR); fi
+$(SCRIPTDIR)/%: %.py | $(SCRIPTDIR)
 	$(INSTALL) $< $@
 
-$(SCRIPTDIR)/%.py: %.py
-	if [ ! -d $(SCRIPTDIR) ]; then $(MKDIR) $(SCRIPTDIR); fi
+$(SCRIPTDIR)/%.py: %.py | $(SCRIPTDIR)
 	$(INSTALL) $< $@
+
+$(SCRIPTDIR):
+	$(MKDIR) $(SCRIPTDIR)
 
 # Make strings in a fake .c file so that they get picked up by the internationalizer stuff.
 # These are only the options (parser.c) type things.
