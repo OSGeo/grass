@@ -12,7 +12,7 @@ htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</bod
 IMGSRC := $(wildcard *.png) $(wildcard *.jpg)
 
 $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) | $(HTMLDIR)
-	$(GISBASE)/tools/mkhtml.sh $* > $@
+	$(PYTHON) $(GISBASE)/tools/mkhtml.py $* > $@
 	$(MAKE) $(patsubst %,$(HTMLDIR)/%,$(IMGSRC))
 
 $(HTMLDIR)/%.png: %.png | $(HTMLDIR)
