@@ -256,12 +256,12 @@ static int calc_mu(int *fds, double *mu, int bands)
 
 	    for (col = 0; col < cols; col++) {
 		/* skip null cells */
-		if (Rast_is_null_value(rowbuf, maptype)) {
+		if (Rast_is_null_value(ptr, maptype)) {
 		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
 		    continue;
 		}
 
-		sum += Rast_get_d_value(rowbuf, maptype);
+		sum += Rast_get_d_value(ptr, maptype);
 		ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
 	    }
 	}
