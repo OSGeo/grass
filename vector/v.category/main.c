@@ -3,10 +3,11 @@
  * * MODULE:       v.category
  * *
  * * AUTHOR(S):    Radim Blazek
+ * *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
  * *
  * * PURPOSE:      Category manipulations
  * *
- * * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
+ * * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
  * *
  * *               This program is free software under the
  * *               GNU General Public License (>=v2).
@@ -15,6 +16,7 @@
  * *
  * **************************************************************/
 #include <stdlib.h>
+
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -69,7 +71,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("category"));
     module->description =
-	_("Attach, delete or report vector categories to map geometry.");
+	_("Attaches, deletes or reports vector categories to map geometry.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -79,10 +81,9 @@ int main(int argc, char *argv[])
     option_opt = G_define_option();
     option_opt->key = "option";
     option_opt->type = TYPE_STRING;
-    option_opt->required = NO;
+    option_opt->required = YES;
     option_opt->multiple = NO;
     option_opt->options = "add,del,chlayer,sum,report,print";
-    option_opt->answer = "add";
     option_opt->description = _("Action to be done");
     option_opt->descriptions = _("add;add a new category;"
 				 "del;delete category (-1 to delete all categories of given layer);"
@@ -95,7 +96,6 @@ int main(int argc, char *argv[])
     type_opt->guisection = _("Selection");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->answer = "1";
     field_opt->multiple = YES;
     field_opt->guisection = _("Selection");
 
@@ -169,25 +169,6 @@ int main(int argc, char *argv[])
 	Clist = NULL;
     }
 
-    /* read fields */
-    i = 0;
-    nfields = 0;
-    while (field_opt->answers[i]) {
-	nfields++;
-	i++;
-    }
-    fields = (int *)G_malloc(nfields * sizeof(int));
-    i = 0;
-    while (field_opt->answers[i]) {
-	fields[i] = atoi(field_opt->answers[i]);
-	i++;
-    }
-    if (nfields > 1 && option != O_PRN && option != O_CHFIELD)
-	G_fatal_error(_("Too many layers for this operation"));
-
-    if (nfields != 2 && option == O_CHFIELD)
-	G_fatal_error(_("2 layers must be specified"));
-
     if ((option != O_REP) && (option != O_PRN)) {
 	if (out_opt->answer == NULL)
 	    G_fatal_error(_("Output vector wasn't entered"));
@@ -201,7 +182,24 @@ int main(int argc, char *argv[])
 
     /* open input vector */
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
+    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+
+    /* read fields */
+    i = nfields = 0;
+    while (field_opt->answers[i++])
+	nfields++;
+    fields = (int *)G_malloc(nfields * sizeof(int));
+    
+    i = 0;
+    while (field_opt->answers[i]) {
+	fields[i] = Vect_get_field_number(&In, field_opt->answers[i]);
+	i++;
+    }
+    if (nfields > 1 && option != O_PRN && option != O_CHFIELD)
+	G_fatal_error(_("Too many layers for this operation"));
+    
+    if (nfields != 2 && option == O_CHFIELD)
+	G_fatal_error(_("2 layers must be specified"));
 
     /* open output vector if needed */
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
@@ -553,7 +551,7 @@ int main(int argc, char *argv[])
 	Vect_build(&Out);
 	Vect_close(&Out);
 
-	G_done_msg(_("%d features modified"), nmodified);
+	G_done_msg(_("%d features modified."), nmodified);
     }
     Vect_close(&In);
 
