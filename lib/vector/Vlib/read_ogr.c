@@ -239,7 +239,7 @@ int
 V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		      struct line_cats *line_c)
 {
-    if (Map->next_line >= Map->plus.n_lines)
+    if (Map->next_line > Map->plus.n_lines)
 	return -2;
 
     return V2_read_line_ogr(Map, line_p, line_c, Map->next_line++);
