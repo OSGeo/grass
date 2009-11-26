@@ -10,10 +10,9 @@
  *               
  * COPYRIGHT:    (C) 2005-2009 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 
@@ -229,7 +228,7 @@ int main(int argc, char **argv)
 	if (r_flag->answer) {
 	    /* get minimal region extent */
 	    /* TODO: support layer name */
-	    Vect_cidx_find_all(&Map, atoi(field_opt->answer), -1, cat, list_lines);
+	    Vect_cidx_find_all(&Map, Vect_get_field_number(&Map, field_opt->answer), -1, cat, list_lines);
 	    for (i = 0; i < list_lines->n_values; i++) {
 		line = list_lines->value[i];
 		area = Vect_get_centroid_area(&Map, line);
