@@ -104,7 +104,7 @@ def main():
 	else:
 	    colspec = "%s %s" % (newcol, oldcoltype)
 
-	grass.run_command('v.db.addcol', map = map, layer = layer, column = colspec)
+	grass.run_command('v.db.addcolumn', map = map, layer = layer, column = colspec)
 	sql = "UPDATE %s SET %s=%s" % (table, newcol, oldcol)
 	grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
 	grass.run_command('v.db.dropcolumn', map = map, layer = layer, column = oldcol)

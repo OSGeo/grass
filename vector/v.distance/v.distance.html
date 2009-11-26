@@ -15,7 +15,7 @@ that if a point is in an island (area WITHOUT category), <EM>v.distance</EM>
 does not search for the nearest area WITH category; the island is identified 
 as the nearest and category updated to null.
 <p>
-The upload <em>column</em>(s) must already exist. Create one with <em>v.db.addcol</em>.
+The upload <em>column</em>(s) must already exist. Create one with <em>v.db.addcolumn</em>.
 <p>
 In lat-long locations <em>v.distance</em> gives distances (<em>dist</em>
 and <em>to_along</em>) in meters not in degrees calculated as geodesic
@@ -101,7 +101,7 @@ upload=cat,dist column=nearest_id,dist_to_nr</tt>.
 g.copy vect=bugsites,bugs
 
 # add new attribute column to hold nearest archsite category number
-v.db.addcol map=bugs column="nrst_arch INTEGER"
+v.db.addcolumn map=bugs column="nrst_arch INTEGER"
 
 v.distance from=bugs to=archsites to_type=point upload=to_attr \
   to_column=cat column=nrst_arch out=vdistance_vectors_raw
@@ -131,7 +131,7 @@ given upload option.
 
 <EM>
 <a href="r.distance.html">r.distance</a>,
-<a href="v.db.addcol.html">v.db.addcol</a>,
+<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
 <a href="v.what.vect.html">v.what.vect</a>
 </EM>
 

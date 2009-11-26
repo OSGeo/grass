@@ -9,7 +9,7 @@ Traveling salesman for 6 digitized nodes (Spearfish):
 
 <div class="code"><pre>
 g.copy vect=roads,myroads
-v.db.addcol myroads col="cost double precision"
+v.db.addcolumn myroads col="cost double precision"
 
 # define traveling costs as inverse of speed limit:
 v.db.update myroads col=cost val=1/50

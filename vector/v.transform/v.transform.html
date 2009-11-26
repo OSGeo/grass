@@ -88,7 +88,7 @@ Spearfish example with automated elevation extraction for vertical shift:
 # work on own map copy:
 g.copy vect=archsites@PERMANENT,myarchsites
 # add new 'zs' column to later store height of each site:
-v.db.addcol myarchsites col="zs double precision"
+v.db.addcolumn myarchsites col="zs double precision"
 
 # set region to elevation map and fetch individual heights:
 g.region rast=elevation.10m -p

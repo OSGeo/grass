@@ -1,12 +1,12 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.addcol</em> adds one or more column(s) to the attribute table
+<em>v.db.addcolumn</em> adds one or more column(s) to the attribute table
 connected to a given vector map. It automatically checks the connection for the
 specified layer.
 
 <h2>NOTES</h2>
 
-v.db.addcol is a front-end to <em>db.execute</em> to allow easier usage.
+v.db.addcolumn is a front-end to <em>db.execute</em> to allow easier usage.
 
 The supported types of columns depend on the database backend. However, all
 backends should support VARCHAR, INT, DOUBLE PRECISION and DATE. The default
@@ -18,14 +18,14 @@ The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 Adding a single column:<br>
 <div class="code"><pre>
-v.db.addcol sentiero_brenta_points columns="slope double precision"
+v.db.addcolumn sentiero_brenta_points columns="slope double precision"
 v.info -c sentiero_brenta_points
 </pre></div>
 
 <p>
 Adding two columns:<br>
 <div class="code"><pre>
-v.db.addcol sentiero_brenta_points columns="slope double precision,myname varchar(15)"
+v.db.addcolumn sentiero_brenta_points columns="slope double precision,myname varchar(15)"
 v.info -c sentiero_brenta_points
 </pre></div>
 

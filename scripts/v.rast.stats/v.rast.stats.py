@@ -207,7 +207,7 @@ def main():
 
     if addcols:
 	grass.verbose("Adding columns <%s>" % addcols)
-	if grass.run_command('v.db.addcol', map = vector, columns = addcols) != 0:
+	if grass.run_command('v.db.addcolumn', map = vector, columns = addcols) != 0:
 	    grass.fatal(_("Cannot continue (problem adding columns)."))
 
     #loop over cats and calculate statistics:

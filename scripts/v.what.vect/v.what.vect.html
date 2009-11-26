@@ -7,7 +7,7 @@ attribute table into the attribute table of <u>points</u> present in the
 <h2>NOTES</h2>
 
 The upload <b>column</b>, into which the query results are stored, must be
-present in the <b>vector</b> map. Use <em>v.db.addcol</em> to add one if needed.
+present in the <b>vector</b> map. Use <em>v.db.addcolumn</em> to add one if needed.
 <p>
 Use dmax parameter to control query distance tolerance (how far points can be from 
 <b>qvector</b> features). For more options, use
@@ -26,7 +26,7 @@ map at points' locations:
 
 <div class="code"><pre>
 g.copy vect=archsites,myarchsites
-v.db.addcol myarchsites col="owner varchar(25)"
+v.db.addcolumn myarchsites col="owner varchar(25)"
 v.what.vect myarchsites qvect=fields column=owner qcolumn=label
 # verification:
 v.db.select myarchsites
@@ -36,7 +36,7 @@ v.db.select myarchsites
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="v.db.addcol.html">v.db.addcol</a>,
+<a HREF="v.db.addcolumn.html">v.db.addcolumn</a>,
 <a HREF="v.db.select.html">v.db.select</a>,
 <a HREF="v.distance.html">v.distance</a>,
 <a HREF="v.rast.stats.html">v.rast.stats</a>,

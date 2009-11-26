@@ -63,7 +63,7 @@ Shortest path from two digitized nodes (Spearfish):
 
 <div class="code"><pre>
 g.copy vect=roads,myroads
-v.db.addcol myroads col="forward double precision, backward double precision"
+v.db.addcolumn myroads col="forward double precision, backward double precision"
 
 # define traveling costs as inverse of speed limit:
 v.db.update myroads col=forward val=1/50
