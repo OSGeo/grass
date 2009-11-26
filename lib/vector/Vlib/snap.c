@@ -148,8 +148,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     point = 1;			/* index starts from 1 ! */
     nvertices = 0;
 
-    G_verbose_message(_("Snap vertices Pass 1: select points"));
-
+    G_message(_("Snap vertices (pass 1: select points)..."));
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
 	int v;
 
@@ -192,7 +191,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
      * points within threshold.
      * Update anchor for marked points if new anchor is closer. */
 
-    G_verbose_message(_("Snap vertices Pass 2: assign anchor vertices"));
+    G_message(_("Snap vertices (pass 2: assign anchor vertices)..."));
 
     nanchors = ntosnap = 0;
     rbtree_init_trav(&RBTrav1, RBTree);
@@ -273,7 +272,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
 
     nsnapped = ncreated = 0;
 
-    G_verbose_message(_("Snap vertices Pass 3: snap to assigned points"));
+    G_message(_("Snap vertices (pass 3: snap to assigned points)..."));
 
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
 	int v;
