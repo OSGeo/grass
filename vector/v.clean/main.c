@@ -3,10 +3,11 @@
  * * MODULE:       v.clean
  * * 
  * * AUTHOR(S):    Radim Blazek
+ * *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
+ * *
+ * * PURPOSE:      Clean vector features
  * *               
- * * PURPOSE:      Clean lines
- * *               
- * * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
  * *
  * *               This program is free software under the 
  * *               GNU General Public License (>=v2). 
@@ -17,9 +18,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
 #include "proto.h"
 
 int main(int argc, char *argv[])
@@ -27,7 +30,7 @@ int main(int argc, char *argv[])
     struct Map_info In, Out, Err, *pErr;
     int i, otype, with_z;
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *type_opt, *tool_opt, *thresh_opt,
+    struct Option *in_opt, *field_opt, *out_opt, *type_opt, *tool_opt, *thresh_opt,
 	*err_opt;
     struct Flag *no_build_flag;
     int *tools, ntools, atools;
@@ -44,9 +47,12 @@ int main(int argc, char *argv[])
     module->description = _("Toolset for cleaning topology of vector map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->guisection = _("Selection");
+    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
+    type_opt->guisection = _("Selection");
+
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "point,line,boundary,centroid,area,face,kernel";
 
     err_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     err_opt->key = "error";
@@ -89,10 +95,8 @@ int main(int argc, char *argv[])
     thresh_opt->type = TYPE_DOUBLE;
     thresh_opt->required = NO;
     thresh_opt->multiple = YES;
-    thresh_opt->label = "Threshold";
-    thresh_opt->description =
-	_("Threshold in map units, one value for each tool "
-	  "(default: 0.0[,0.0,...])");
+    thresh_opt->label = _("Threshold in map units, one value for each tool");
+    thresh_opt->description = _("Default: 0.0[,0.0,...])");
 
     no_build_flag = G_define_flag();
     no_build_flag->key = 'b';
@@ -240,7 +244,7 @@ int main(int argc, char *argv[])
      * virtual centroids (shapefile/OGR) and level 1 is better if input is too big 
      * and build in previous module (like v.in.ogr or other call to v.clean) would take 
      * a long time */
-    level = Vect_open_old(&In, in_opt->answer, "");
+    level = Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -265,13 +269,13 @@ int main(int argc, char *argv[])
     }
 
     /* Copy input to output */
-    G_message(_("Copying vector lines..."));
+    G_message(_("Copying vector features..."));
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
     /* This works for both level 1 and 2 */
-    Vect_copy_map_lines(&In, &Out);
+    Vect_copy_map_lines_field(&In, Vect_get_field_number(&In, field_opt->answer), &Out);
     if (Vect_copy_tables(&In, &Out, 0))
         G_warning(_("Failed to copy attribute table to output map"));
 

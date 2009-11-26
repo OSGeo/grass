@@ -385,6 +385,7 @@ double Vect_points_distance(double, double, double, double, double, double,
 			    int);
 int Vect_option_to_types(const struct Option *);
 int Vect_copy_map_lines(struct Map_info *, struct Map_info *);
+int Vect_copy_map_lines_field(struct Map_info *, int, struct Map_info *);
 int Vect_copy(const char *, const char *, const char *);
 int Vect_rename(const char *, const char *);
 int Vect_copy_table(const struct Map_info *, struct Map_info *, int, int,

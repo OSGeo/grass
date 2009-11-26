@@ -31,7 +31,8 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Copy all alive elements of opened vector map to another opened vector map
+   \brief Copy all alive vector features of opened vector map to
+   another opened vector map
 
    \param In input vector map
    \param[out] Out output vector map
@@ -40,6 +41,22 @@
    \return 1 on error
  */
 int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
+{
+    return Vect_copy_map_lines_field(In, -1, Out);
+}
+
+/*!
+   \brief Copy all alive vector features from given layer of opened
+   vector map to another opened vector map
+
+   \param In input vector map
+   \param field layer number (-1 for all layers)
+   \param[out] Out output vector map
+
+   \return 0 on success
+   \return 1 on error
+ */
+int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *Out)
 {
     int i, type, nlines, ret;
     struct line_pnts *Points;
@@ -70,7 +87,10 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
 	    }
 	    if (type == 0)
 		continue;	/* dead line */
-
+	    
+	    if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
+		continue;       /* different layer */
+	    
 	    Vect_write_line(Out, type, Points, Cats);
 	}
     }
@@ -90,6 +110,10 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
 	    else if (type == 0) {	/* dead line */
 		continue;
 	    }
+	    
+	    if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
+		continue;       /* different layer */
+	    
 	    Vect_write_line(Out, type, Points, Cats);
 	}
     }
@@ -153,8 +177,7 @@ static int copy_file(const char *src, const char *dst)
    \return -1 error
    \return 0 success
  */
-int
-Vect_copy(const char *in, const char *mapset, const char *out)
+int Vect_copy(const char *in, const char *mapset, const char *out)
 {
     int i, n, ret, type;
     struct Map_info In, Out;
