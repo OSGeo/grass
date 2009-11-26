@@ -15,9 +15,10 @@
 #############################################################################
 
 #%Module
-#%  description: Convert all old GRASS < Ver5.7 vector maps in current mapset to current format
+#%  description: Converts all older versions of GRASS vector maps in current mapset to current format.
 #%  keywords: vector
 #%  keywords: import
+#%  keywords: conversion
 #%end
 
 import sys
