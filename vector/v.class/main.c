@@ -4,15 +4,15 @@
  * MODULE:       v.class
  * 
  * AUTHOR(S):    Moritz Lennert
- *               
+ *               OGR support by Martin Landa <landa.martin gmail.com>
+ *
  * PURPOSE:      Create data classes, mainly for thematic mapping
  *               
- * COPYRIGHT:    (C) 2004-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 #include <stdlib.h>
@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("attributes"));
     G_add_keyword(_("statistics"));
     module->description =
 	_("Classifies attribute data, e.g. for thematic mapping");
@@ -50,11 +51,8 @@ int main(int argc, char *argv[])
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
-    col_opt = G_define_option();
-    col_opt->key = "column";
-    col_opt->type = TYPE_STRING;
+    col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->required = YES;
-    col_opt->multiple = NO;
     col_opt->description = _("Column name or expression");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
@@ -87,12 +85,12 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    ofield = atoi(field_opt->answer);
-
+    
     /* open input vector */
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map_opt->answer, "");
+    Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer);
+
+    ofield = Vect_get_field_number(&Map, field_opt->answer);
 
     /* Read attributes */
     db_CatValArray_init(&Cvarr);
@@ -105,7 +103,7 @@ int main(int argc, char *argv[])
 
     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (Driver == NULL)
-	G_fatal_error("Unable to open database <%s> by driver <%s>",
+	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
 
     /* Note: do not check if the column exists in the table because it may be an expression */
@@ -126,7 +124,7 @@ int main(int argc, char *argv[])
 
     ret = db_CatValArray_sort_by_value(&Cvarr);
     if (ret == DB_FAILED)
-	G_fatal_error("Could not sort array of values..");
+	G_fatal_error(_("Unable to sort array of values"));
 
 
     data = (double *)G_malloc((nrec) * sizeof(double));
@@ -160,7 +158,9 @@ int main(int argc, char *argv[])
 
 
     if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
-	G_warning(_("The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."));
+	G_warning(_("The discontinuities algorithm indicates that some "
+		    "class breaks are not statistically significant at "
+		    "alpha=0.05. You are advised to reduce the number of classes."));
 
     /*output to be piped to other modules ? */
     if (shell_flag->answer) {
@@ -214,11 +214,8 @@ int main(int argc, char *argv[])
 
 	fprintf(stdout, _("\nNote: Minimum of first class is including\n\n"));
     }
-
-
-
+    
     fflush(stdout);
-
-
+    
     exit(EXIT_SUCCESS);
 }
