@@ -5,19 +5,20 @@
  * 
  * AUTHOR(S):    Radim Blazek
  *               Upgraded by Rosen Matev (Google Summer of Code 2008)
+ *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *               
  * PURPOSE:      Vector buffer
  *               
- * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 #include <stdlib.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
@@ -118,13 +119,13 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     struct line_pnts *Points;
     struct line_cats *Cats, *BCats;
-    const char *mapset;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *dista_opt, *distb_opt,
 	*angle_opt;
     struct Flag *straight_flag, *nocaps_flag;
     struct Option *tol_opt, *bufcol_opt, *scale_opt, *field_opt;
 
+    int verbose;
     double da, db, dalpha, tolerance, unit_tolerance;
     int type;
     int i, j, ret, nareas, area, nlines, line;
@@ -143,9 +144,10 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("geometry"));
     G_add_keyword(_("buffer"));
     module->description =
-	_("Creates a buffer around features of given type (areas must contain centroid).");
+	_("Creates a buffer around vector features of given type.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -219,7 +221,6 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     type = Vect_option_to_types(type_opt);
-    field = atoi(field_opt->answer);
 
     if ((dista_opt->answer && bufcol_opt->answer) ||
 	(!(dista_opt->answer || bufcol_opt->answer)))
@@ -265,15 +266,13 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
 
-    /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
+    Vect_set_open_level(2); /* topology required */
 
-    Vect_set_open_level(2);
-
-    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
+    if (1 > Vect_open_old2(&In, in_opt->answer, "", field_opt->answer))
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
+    field = Vect_get_field_number(&In, field_opt->answer);
+    
     if (0 > Vect_open_new(&Out, out_opt->answer, WITHOUT_Z)) {
 	Vect_close(&In);
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
@@ -340,7 +339,7 @@ int main(int argc, char *argv[])
 	int ltype;
 
 	if (nlines > 0)
-	    G_message(_("Buffering lines..."));
+	    G_message(_("Buffering features..."));
 	for (line = 1; line <= nlines; line++) {
 	    int cat;
 
@@ -458,21 +457,28 @@ int main(int argc, char *argv[])
     }
 
     /* write all buffer contours */
+    G_message(_("Writting buffers..."));
     for (i = 0; i < buffers_count; i++) {
+	G_percent(i, buffers_count, 2);
 	Vect_write_line(&Out, GV_BOUNDARY, arr_bc[i].oPoints, BCats);
 	for (j = 0; j < arr_bc[i].inner_count; j++)
 	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc[i].iPoints[j], BCats);
     }
-
-    /* Create areas */
-
+    G_percent(1, 1, 1);
+    
+    verbose = G_verbose();
+    if (verbose < G_verbose_max()) {
+	G_message(_("Cleaning buffers..."));
+	G_set_verbose(0);
+    }
+    
     /* Break lines */
-    G_verbose_message(_("Building parts of topology..."));
+    G_message(_("Building parts of topology..."));
     Vect_build_partial(&Out, GV_BUILD_BASE);
 
     G_message(_("Snapping boundaries..."));
     Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
-
+    
     G_message(_("Breaking boundaries..."));
     Vect_break_lines(&Out, GV_BOUNDARY, NULL);
 
@@ -600,6 +606,7 @@ int main(int argc, char *argv[])
     G_message(_("Attaching centroids..."));
     Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
 
+    G_set_verbose(verbose);
     stop(&In, &Out);
     exit(EXIT_SUCCESS);
 }
