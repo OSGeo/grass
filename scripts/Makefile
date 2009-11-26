@@ -40,7 +40,7 @@ SUBDIRS = \
 	v.centroids \
 	v.colors \
 	v.convert.all \
-	v.db.addcol \
+	v.db.addcolumn \
 	v.db.addtable \
 	v.db.join \
 	v.db.dropcolumn \
