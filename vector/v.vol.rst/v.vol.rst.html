@@ -76,7 +76,7 @@ g.region res=50 tbres=50 b=0 t=1500 -ap3
 r.random elevation.10m vector_output=elevrand n=200
 
 # conversion to 3D
-v.db.addcol elevrand col="x double precision, y double precision"
+v.db.addcolumn elevrand col="x double precision, y double precision"
 v.to.db elevrand option=coor col=x,y
 v.db.select elevrand
 
@@ -94,7 +94,7 @@ v.db.dropcolumn elevrand_3d col=value
 # (Soil range types taken from the USDA Soil Survey)
 d.rast soils.range
 d.vect elevrand_3d
-v.db.addcol elevrand_3d col="soilrange integer"
+v.db.addcolumn elevrand_3d col="soilrange integer"
 v.what.rast elevrand_3d col=soilrange rast=soils.range
 
 # fix 0 (no data in raster map) to NULL:

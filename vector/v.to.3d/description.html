@@ -20,7 +20,7 @@ NULL values are silently converted to height 0.0.
 
 <div class="code"><pre>
 # convert z-values from string to double
-v.db.addcol map=geodetic_pts columns="Z_VALUE_D double precision"
+v.db.addcolumn map=geodetic_pts columns="Z_VALUE_D double precision"
 v.db.update map=geodetic_pts column=Z_VALUE_D qcolumn=Z_VALUE
 v.db.select map=geodetic_pts columns=cat,Z_VALUE,Z_VALUE_
 

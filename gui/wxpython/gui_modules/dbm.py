@@ -1660,10 +1660,10 @@ class AttributeManager(wx.Frame):
         list.SetStringItem(index, 1, str(type))
         list.SetStringItem(index, 2, str(length))
         
-        # add v.db.addcol command to the list
+        # add v.db.addcolumn command to the list
         if type == 'varchar':
             type += ' (%d)' % length
-        self.listOfCommands.append(('v.db.addcol',
+        self.listOfCommands.append(('v.db.addcolumn',
                                     { 'map' : self.vectorName,
                                       'layer' : self.layer,
                                       'columns' : '%s %s' % (name, type) }
@@ -1740,7 +1740,7 @@ class AttributeManager(wx.Frame):
 
     def ApplyCommands(self):
         """!Apply changes"""
-        # perform GRASS commands (e.g. v.db.addcol)
+        # perform GRASS commands (e.g. v.db.addcolumn)
         if len(self.listOfCommands) > 0:
             for cmd in self.listOfCommands:
                 gcmd.RunCommand(prog = cmd[0],

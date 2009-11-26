@@ -2,7 +2,7 @@
 #
 ############################################################################
 #
-# MODULE:       v.db.addcolumn
+# MODULE:       v.db.addcolumnumn
 # AUTHOR(S):   	Moritz Lennert 
 #               Converted to Python by Glynn Clements
 # PURPOSE:      interface to db.execute to add a column to the attribute table

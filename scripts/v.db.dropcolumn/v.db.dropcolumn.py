@@ -7,7 +7,7 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      interface to db.execute to drop a column from the 
 #               attribute table connected to a given vector map
-#               - Based on v.db.addcol
+#               - Based on v.db.addcolumn
 #               - with special trick for SQLite
 # COPYRIGHT:    (C) 2007 by the GRASS Development Team
 #

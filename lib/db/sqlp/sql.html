@@ -107,7 +107,7 @@ v.db.select mysites where="id LIKE 'P%'"
 
 <p><b>Example</b> of null handling:
 <div class="code"><pre>
-v.db.addcol map=roads col="nulltest int"
+v.db.addcolumn map=roads col="nulltest int"
 v.db.update map=roads col=nulltest value=1 where="cat &gt; 2"
 d.vect roads where="nulltest is null"
 v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
@@ -116,7 +116,7 @@ v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
 
 <p><b>Examples</b> of complex expressions in updates (using v.db.* modules):
 <div class="code"><pre>
-v.db.addcol map=roads col="exprtest double precision"
+v.db.addcolumn map=roads col="exprtest double precision"
 v.db.update map=roads col=exprtest value=cat/nulltest
 v.db.update map=roads col=exprtest value=cat/nulltest+cat where=cat=1
 </pre></div>
@@ -146,7 +146,7 @@ d.vect roads where="cat&gt;exprtest"
 # North Carolina data set: convert string column to double precision
 #  copy map into current mapset
 g.copy vect=geodetic_pts,mygeodetic_pts
-v.db.addcol mygeodetic_pts col="zval double precision"
+v.db.addcolumn mygeodetic_pts col="zval double precision"
 
 # the 'z_value' col contains 'N/A' strings, not to be converted
 v.db.update mygeodetic_pts col=zval \

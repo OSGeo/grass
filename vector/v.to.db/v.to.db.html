@@ -41,7 +41,7 @@ needed.
 Updating the table has to be done column-wise. The <em>column</em> must be
 present in the table, except when using the <b>print only</b> (<b>-p</b>)
 mode. Use <em><a href="db.execute.html">db.execute</a></em> or
-<em><a href="v.db.addcol.html">v.db.addcol</a></em> to add new columns if
+<em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em> to add new columns if
 needed.
 
 <H2>EXAMPLES</H2>
@@ -82,7 +82,7 @@ v.to.db map=pointsmap option=coor col=x,y,z
 Transfer attributes from a character column (with numeric contents) to a new
 integer column:<br>
 <div class="code"><pre>
-v.db.addcol usa_income_employment2002 col="FIPS_NUM integer"
+v.db.addcolumn usa_income_employment2002 col="FIPS_NUM integer"
 v.to.db usa_income_employment2002 option=query col=FIPS_NUM qcol=STATE_FIPS
 </pre></div>
 
@@ -108,7 +108,7 @@ D = 2 * (log perimeter) / (log area):<br>
 </tt>
 <div class="code"><pre>
 g.copy vect=soils,mysoils
-v.db.addcol mysoils col="d double precision"
+v.db.addcolumn mysoils col="d double precision"
 v.to.db mysoils option=fd column="d"
 
 g.region vect=mysoils res=50
@@ -159,7 +159,7 @@ v.to.db -p roads option=count type=line
 <a href="db.execute.html">db.execute</a>,
 <a href="v.category.html">v.category</a>,
 <a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.addcol.html">v.db.addcol</a>,
+<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
 <a href="v.db.connect.html">v.db.connect</a>,
 <a href="v.distance.html">v.distance</a>,
 <a href="v.report.html">v.report</a>,

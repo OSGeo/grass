@@ -14,7 +14,7 @@ For complex SQL UPDATE statements, <em>db.execute</em> should be used.
 Spearfish: adding new column, inserting selectively a specified value:
 <div class="code"><pre>
 g.copy vect=fields,myfields
-v.db.addcol myfields col="polynum integer"
+v.db.addcolumn myfields col="polynum integer"
 v.db.update myfields col=polynum val=42 where="label='V. White#1'"
 v.db.select myfields
 </pre></div>
@@ -24,7 +24,7 @@ Spearfish: adding new column, copying values from other table column with
 on the fly calculation:
 <div class="code"><pre>
 g.copy vect=fields,myfields
-v.db.addcol myfields col="polynum integer"
+v.db.addcolumn myfields col="polynum integer"
 v.db.update myfields col=polynum qcol="cat*2"
 v.db.select myfields
 </pre></div>
@@ -39,7 +39,7 @@ v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
 <h2>SEE ALSO</h2>
 
 <em><a HREF="db.execute.html">db.execute</a></em>,
-<em><a HREF="v.db.addcol.html">v.db.addcol</a></em>,
+<em><a HREF="v.db.addcolumn.html">v.db.addcolumn</a></em>,
 <em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
 <em><a HREF="v.db.connect.html">v.db.connect</a></em>,
 <em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,

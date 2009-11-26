@@ -192,7 +192,7 @@ def main():
     if rgb_column not in cols:
         # RGB Column not found, create it
 	grass.message(_("Creating column <%s> ...") % rgb_column)
-	if 0 != grass.run_command('v.db.addcol', map = map, layer = layer, column = "%s varchar(11)" % rgb_column):
+	if 0 != grass.run_command('v.db.addcolumn', map = map, layer = layer, column = "%s varchar(11)" % rgb_column):
 	    grass.fatal(_("Creating color column"))
     else:
 	column_type = cols[rgb_column]
