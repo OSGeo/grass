@@ -314,10 +314,10 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 }
 
 /*!
-   \brief Build topology 
+   \brief Build pseudo-topology for OGR layer
 
-   \param Map_info vector map
-   \param build build level 
+   \param Map pointer to Map_info structure
+   \param build build level (only GV_BUILD_ALL currently supported)
 
    \return 1 on success
    \return 0 on error
@@ -329,6 +329,9 @@ int Vect_build_ogr(struct Map_info *Map, int build)
     OGRFeatureH hFeature;
     OGRGeometryH hGeom;
 
+    G_debug(1, "Vect_build_ogr(): dsn=%s layer=%s",
+	    Map->fInfo.ogr.dsn, Map->fInfo.ogr.layer_name);
+    
     if (build != GV_BUILD_ALL)
 	G_fatal_error(_("Partial build for OGR is not supported"));
 
@@ -344,18 +347,17 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 	return 0;
     }
 
+    /* initialize data structures */
     init_parts(&parts);
-
-    /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features)!!! */
-    G_verbose_message(_("Feature: "));
-
+    
+    /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
     OGR_L_ResetReading(Map->fInfo.ogr.layer);
     count = iFeature = 0;
     while ((hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer)) != NULL) {
 	iFeature++;
 	count++;
 
-	G_debug(4, "---- Feature %d ----", iFeature);
+	G_debug(3, "   Feature %d", iFeature);
 
 	hGeom = OGR_F_GetGeometryRef(hFeature);
 	if (hGeom == NULL) {
@@ -363,23 +365,23 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 	    OGR_F_Destroy(hFeature);
 	    continue;
 	}
-
+	
 	FID = (int)OGR_F_GetFID(hFeature);
 	if (FID == OGRNullFID) {
-	    G_warning(_("OGR feature without ID ignored"));
+	    G_warning(_("OGR feature %d without ID ignored"), iFeature);
 	    OGR_F_Destroy(hFeature);
 	    continue;
 	}
-	G_debug(3, "FID =  %d", FID);
-
+	G_debug(4, "    FID = %d", FID);
+	
 	reset_parts(&parts);
 	add_part(&parts, FID);
 	add_geometry(Map, hGeom, FID, &parts);
-
+	
 	OGR_F_Destroy(hFeature);
     }				/* while */
     free_parts(&parts);
-
+    
     Map->plus.built = GV_BUILD_ALL;
     return 1;
 }

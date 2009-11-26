@@ -5,15 +5,16 @@
  *               
  * AUTHOR(S):    Michael Shapiro,
  *               U.S.Army Construction Engineering Research Laboratory
+ *               Some updates by various authors from GRASS Development Team
  *               
- * PURPOSE:      Lists available GRASS data base files of the
- *               user-specified data type to standard output
+ * PURPOSE:      Lists available GRASS data base elements of the user-specified data type to
+ *               standard output
  *
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -44,12 +45,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
     module->description =
-	_("Lists available GRASS data base files "
-	  "of the user-specified data type to standard output.");
+	_("Lists available GIS elements "
+	  "of the user-specified data type.");
 
     element = G_define_option();
     element->key = "type";
-    element->key_desc = "datatype";
     element->type = TYPE_STRING;
     element->required = YES;
     element->multiple = YES;
@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
     mapset_opt->type = TYPE_STRING;
     mapset_opt->required = NO;
     mapset_opt->multiple = NO;
-    mapset_opt->description = _("Mapset to list (default: current search path)");
+    mapset_opt->label = _("Mapset to list (default: current search path");
+    mapset_opt->description = _("'.' for current mapset");
 
     full = G_define_flag();
     full->key = 'f';
