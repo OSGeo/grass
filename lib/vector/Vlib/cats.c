@@ -146,33 +146,35 @@ int Vect_cat_set(struct line_cats *Cats, int field, int cat)
 
    \param Cats line_cats structure
    \param field layer number
-   \param[out] cat pointer to variable where cat will be written
+   \param[out] cat pointer to variable where cat will be written (can be NULL)
 
    \return 1 found
    \return 0 layer does not exist
  */
 int Vect_cat_get(const struct line_cats *Cats, int field, int *cat)
 {
-    register int n;
+    int n;
 
     /* check input value */
     /*
        if (field < 1 || field > GV_FIELD_MAX)
        return (0);
      */
-
-    *cat = -1;
+    
+    if (cat)
+	*cat = -1;
 
     /* go through cats and find if field exist */
     for (n = 0; n < Cats->n_cats; n++) {
 	if (Cats->field[n] == field) {
-	    *cat = Cats->cat[n];
-	    return (1);
+	    if (cat)
+		*cat = Cats->cat[n];
+	    return 1;
 	}
     }
 
     /* field was not found */
-    return (0);
+    return 0;
 }
 
 /*!
