@@ -46,7 +46,7 @@ int list_layers(FILE *fd, const char *dsn, const char *layer)
 	layer_name = (char *) OGR_FD_GetName(Ogr_featuredefn);
 
 	if (fd)
-	    fprintf(fd, " %s\n", layer_name);
+	    fprintf(fd, "%s\n", layer_name);
 	
 	if (layer)
 	    if (strcmp(layer_name, layer) == 0) {
