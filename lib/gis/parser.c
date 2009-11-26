@@ -70,74 +70,16 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
- * \author Soeren Gebbert added Dec. 2009 WPS ProcessDescription document 
+ * \author Soeren Gebbert added Dec. 2009 WPS process_description document
  */
 
-#include <grass/config.h>
+#include "parser_local_proto.h"
 
-#if defined(HAVE_LANGINFO_H)
-#include <langinfo.h>
-#endif
-#if defined(__MINGW32__) && defined(USE_NLS)
-#include <localcharset.h>
-#endif
+/* initialize the global struct */
+struct state state;
+struct state *st = &state;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <unistd.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <grass/gis.h>
-#include <grass/glocale.h>
-#include <grass/spawn.h>
-
-
-#define BAD_SYNTAX    1
-#define OUT_OF_RANGE  2
-#define MISSING_VALUE 3
-#define AMBIGUOUS     4
-#define REPLACED      5
-#define KEYLENGTH 64
-
-struct Item
-{
-    struct Option *option;
-    struct Flag *flag;
-    struct Item *next_item;
-};
-
-static struct state {
-    int no_interactive;
-    int n_opts;
-    int n_flags;
-    int n_keys;
-    int n_keys_alloc;
-    int overwrite;
-    int quiet;
-    int has_required;
-
-    struct GModule module_info;	/* general information on the corresponding module */
-
-    const char *pgm_name;
-    const char *pgm_path;
-
-    struct Flag first_flag;	/* First flag in a linked list      */
-    struct Flag *current_flag;	/* Pointer for traversing list      */
-
-    struct Option first_option;
-    struct Option *current_option;
-
-    struct Item first_item;
-    struct Item *current_item;
-    int n_items;
-} state;
-
-static struct state *st = &state;
-
-static void show_options(int, const char *);
-static int show(const char *, int);
+/* local prototypes */
 static int set_flag(int);
 static int contains(const char *, int);
 static int is_option(const char *);
@@ -151,54 +93,9 @@ static int check_required(void);
 static void split_opts(void);
 static int check_multiple_opts(void);
 static int check_overwrite(void);
-static void split_gisprompt(const char *, char *, char *, char *);
 static void define_keywords(void);
-static void print_keywords(FILE *, void (*)(FILE *, const char *));
-
+static void split_gisprompt(const char *gisprompt, char *age, char *element, char *desc);
 static void module_gui_wx(void);
-static void usage_xml(void);
-static void usage_html(void);
-static void script(void);
-
-
-/* Defines and prototypes for WPS ProcessDescription XML document generation
- */
-#define TYPE_OTHER -1
-#define TYPE_RASTER 0
-#define TYPE_VECTOR 1
-#define TYPE_PLAIN_TEXT 2
-#define TYPE_RANGE 3
-#define TYPE_LIST 4
-#define WPS_INPUT 0
-#define WPS_OUTPUT 1
-
-
-static void wps_print_ProcessDescriptions_begin();
-static void wps_print_ProcessDescriptions_end();
-static void wps_print_ProcessDescription_begin(int , int , const char *, const char *, const char *, const char **, int );
-static void wps_print_ProcessDescription_end();
-static void wps_print_DataInputs_begin();
-static void wps_print_DataInputs_end();
-static void wps_print_ProcessOutputs_begin();
-static void wps_print_ProcessOutputs_end();
-static void wps_print_mimetype_text_plain();
-static void wps_print_mimetype_raster_tiff();
-static void wps_print_mimetype_raster_png();
-static void wps_print_mimetype_raster_grass_binary();
-static void wps_print_mimetype_raster_grass_ascii();
-static void wps_print_mimetype_vector_gml310();
-static void wps_print_mimetype_vector_grass_ascii();
-static void wps_print_mimetype_vector_grass_binary();
-static void wps_print_ident_title_abstract(const char *, const char *, const char *);
-static void wps_print_complex_input(int , int , const char *, const char *, const char *, int , int );
-static void wps_print_complex_output(const char *, const char *, const char *, int );
-static void wps_print_comlpex_input_output(int , int , int , const char *, const char *, const char *, int , int );
-static void wps_print_literal_input_output(int , int , int , const char *,
-                                const char *, const char *, const char *, int ,
-                                const char **, int , const char *, int );
-/* Print the WPS ProcessDescription XML document to stdout */
-static void wps_print_ProcessDescription();
-
 
 /*!
  * \brief Disables the ability of the parser to operate interactively.
@@ -335,429 +232,6 @@ struct Option *G_define_option(void)
 
     return (opt);
 }
-
-/*!
- * \brief Create standardised Option structure.
- *
- * This function will create a standardised Option structure defined
- * by parameter opt. A list of valid parameters can be found in gis.h.
- * It allocates memory for the Option structure and returns a pointer
- * to this memory.
- *
- * If an invalid parameter was specified a empty Option structure will
- * be returned (not NULL).
- *
- *  - general:
- *   - G_OPT_DB_WHERE
- *   - G_OPT_DB_COLUMN
- *   - G_OPT_DB_COLUMNS
- *   - G_OPT_DB_TABLE
- *   - G_OPT_DB_DRIVER
- *   - G_OPT_DB_DATABASE
- *   - G_OPT_DB_SCHEMA
- *
- *  - imagery:
- *   - G_OPT_I_GROUP
- *   - G_OPT_I_SUBGROUP
- *
- *  - raster:
- *   - G_OPT_R_INPUT
- *   - G_OPT_R_INPUTS
- *   - G_OPT_R_OUTPUT
- *   - G_OPT_R_MAP
- *   - G_OPT_R_MAPS
- *   - G_OPT_R_BASE
- *   - G_OPT_R_COVER
- *   - G_OPT_R_ELEV
- *   - G_OPT_R_ELEVS
- *
- *  - raster3d:
- *   - G_OPT_R3_INPUT
- *   - G_OPT_R3_INPUTS
- *   - G_OPT_R3_OUTPUT
- *   - G_OPT_R3_MAP
- *   - G_OPT_R3_MAPS
- *
- *  - vector:
- *   - G_OPT_V_INPUT
- *   - G_OPT_V_INPUTS
- *   - G_OPT_V_OUTPUT
- *   - G_OPT_V_MAP
- *   - G_OPT_V_MAPS
- *   - G_OPT_V_TYPE
- *   - G_OPT_V_FIELD
- *   - G_OPT_V_CAT
- *   - G_OPT_V_CATS
- *
- * \param opt type of Option struct to create
- *
- * \return pointer to an Option struct
- */
-
-struct Option *G_define_standard_option(int opt)
-{
-    struct Option *Opt;
-
-    Opt = G_define_option();
-
-    switch (opt) {
-    case G_OPT_DB_WHERE:
-	Opt->key = "where";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "sql_query";
-	Opt->required = NO;
-	Opt->label = _("WHERE conditions of SQL statement without 'where' keyword");
-	Opt->description = _("Example: income < 1000 and inhab >= 10000");
-	break;
-    case G_OPT_DB_TABLE:
-	Opt->key = "table";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->multiple = NO;
-	Opt->description = _("Table name");
-	Opt->gisprompt = "old_dbtable,dbtable,dbtable";
-	break;
-    case G_OPT_DB_DRIVER:
-	Opt->key = "driver";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->multiple = NO;
-	Opt->description = _("Driver name");
-	Opt->gisprompt = "old_dbdriver,dbdriver,dbdriver";
-	break;
-    case G_OPT_DB_DATABASE:
-	Opt->key = "database";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->multiple = NO;
-	Opt->description = _("Database name");
-	Opt->gisprompt = "old_dbname,dbname,dbname";
-	break;
-    case G_OPT_DB_SCHEMA:
-	Opt->key = "schema";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->multiple = NO;
-	Opt->label = _("Database schema");
-	Opt->description = _("Do not use this option if schemas "
-			     "are not supported by driver/database server");
-	break;
-    case G_OPT_DB_COLUMN:
-	Opt->key = "column";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->multiple = NO;
-	Opt->description = _("Name of attribute column");
-	Opt->gisprompt = "old_dbcolumn,dbcolumn,dbcolumn";
-	break;
-    case G_OPT_DB_COLUMNS:
-	Opt->key = "columns";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->multiple = YES;
-	Opt->description = _("Name of attribute column(s)");
-	Opt->gisprompt = "old_dbcolumn,dbcolumn,dbcolumn";
-	break;
-
-	/* imagery group */
-    case G_OPT_I_GROUP:
-	Opt->key = "group";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,group,group";
-	Opt->description = _("Name of input imagery group");
-	break;
-    case G_OPT_I_SUBGROUP:
-	Opt->key = "subgroup";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,subgroup,subgroup";
-	Opt->description = _("Name of input imagery subgroup");
-	break;
-
-	/* raster maps */
-    case G_OPT_R_INPUT:
-	Opt->key = "input";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of input raster map");
-	break;
-    case G_OPT_R_INPUTS:
-	Opt->key = "input";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->multiple = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of input raster map(s)");
-	break;
-    case G_OPT_R_OUTPUT:
-	Opt->key = "output";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "new,cell,raster";
-	Opt->description = _("Name for output raster map");
-	break;
-    case G_OPT_R_MAP:
-	Opt->key = "map";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of input raster map");
-	break;
-    case G_OPT_R_MAPS:
-	Opt->key = "map";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->multiple = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of input raster map(s)");
-	break;
-    case G_OPT_R_BASE:
-	Opt->key = "base";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of base raster map");
-	break;
-    case G_OPT_R_COVER:
-	Opt->key = "cover";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of cover raster map");
-	break;
-    case G_OPT_R_ELEV:
-	Opt->key = "elevation";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of elevation raster map");
-	break;
-    case G_OPT_R_ELEVS:
-	Opt->key = "elevation";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->multiple = YES;
-	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of elevation raster map(s)");
-	break;
-
-	/*g3d maps */
-    case G_OPT_R3_INPUT:
-	Opt->key = "input";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map");
-	break;
-    case G_OPT_R3_INPUTS:
-	Opt->key = "input";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->multiple = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map(s)");
-	break;
-    case G_OPT_R3_OUTPUT:
-	Opt->key = "output";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "new,grid3,3d-raster";
-	Opt->description = _("Name for output raster3d map");
-	break;
-    case G_OPT_R3_MAP:
-	Opt->key = "map";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map");
-	break;
-    case G_OPT_R3_MAPS:
-	Opt->key = "map";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->multiple = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map(s)");
-	break;
-
-	/*vector maps */
-    case G_OPT_V_INPUT:
-	Opt->key = "input";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map");
-	break;
-    case G_OPT_V_INPUTS:
-	Opt->key = "input";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->multiple = YES;
-	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map(s)");
-	break;
-    case G_OPT_V_OUTPUT:
-	Opt->key = "output";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "new,vector,vector";
-	Opt->description = _("Name for output vector map");
-	break;
-    case G_OPT_V_MAP:
-	Opt->key = "map";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map");
-	break;
-    case G_OPT_V_MAPS:
-	Opt->key = "map";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->multiple = YES;
-	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map(s)");
-	break;
-    case G_OPT_V_TYPE:
-	Opt->key = "type";
-	Opt->type = TYPE_STRING;
-	Opt->required = NO;
-	Opt->multiple = YES;
-	Opt->answer = "point,line,boundary,centroid,area";
-	Opt->options = "point,line,boundary,centroid,area";
-	Opt->description = _("Feature type");
-	break;
-    case G_OPT_V3_TYPE:
-	Opt->key = "type";
-	Opt->type = TYPE_STRING;
-	Opt->required = NO;
-	Opt->multiple = YES;
-	Opt->answer = "point,line,boundary,centroid,area,face,kernel";
-	Opt->options = "point,line,boundary,centroid,area,face,kernel";
-	Opt->description = _("Feature type");
-	break;
-    case G_OPT_V_FIELD:
-	Opt->key = "layer";
-	Opt->type = TYPE_STRING;
-	Opt->required = NO;
-	Opt->answer = "1";
-	Opt->label = _("Layer number or name");
-	Opt->description =
-	    _("A single vector map can be connected to multiple database "
-	      "tables. This number determines which table to use.");
-	Opt->gisprompt = "old_layer,layer,layer";
-	break;
-    case G_OPT_V_CAT:
-	Opt->key = "cat";
-	Opt->type = TYPE_INTEGER;
-	Opt->required = NO;
-	Opt->description = _("Category value");
-	break;
-    case G_OPT_V_CATS:
-	Opt->key = "cats";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "range";
-	Opt->required = NO;
-	Opt->label = _("Category values");
-	Opt->description = _("Example: 1,3,7-9,13");
-	break;
-    case G_OPT_V_ID:
-	Opt->key = "id";
-	Opt->type = TYPE_INTEGER;
-	Opt->required = NO;
-	Opt->description = _("Feature id");
-	break;
-    case G_OPT_V_IDS:
-	Opt->key = "ids";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "range";
-	Opt->required = NO;
-	Opt->label = _("Feature ids");
-	Opt->description = _("Example: 1,3,7-9,13");
-	break;
-
-	/* files */
-    case G_OPT_F_INPUT:
-	Opt->key = "input";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "old_file,file,input";
-	Opt->description = _("Name of input file");
-	break;
-    case G_OPT_F_OUTPUT:
-	Opt->key = "output";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = YES;
-	Opt->gisprompt = "new_file,file,output";
-	Opt->description = _("Name for output file");
-	break;
-    case G_OPT_F_SEP:
-	Opt->key = "fs";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "character";
-	Opt->required = NO;
-	Opt->answer = "|";
-	Opt->description = _("Field separator");
-	break;
-
-	/* colors */
-    case G_OPT_C_FG:
-	Opt->key = "color";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->answer = DEFAULT_FG_COLOR;
-	Opt->gisprompt = "old_color,color,color";
-	Opt->label = _("Color");
-	Opt->description = _("Either a standard color name or R:G:B triplet");
-	break;
-    case G_OPT_C_BG:
-	Opt->key = "bgcolor";
-	Opt->type = TYPE_STRING;
-	Opt->key_desc = "name";
-	Opt->required = NO;
-	Opt->answer = DEFAULT_BG_COLOR;
-	Opt->gisprompt = "old_color,color,color_none";
-	Opt->label = _("Background color");
-	Opt->description =
-	    _("Either a standard GRASS color, R:G:B triplet, or \"none\"");
-	break;
-    }
-
-    return (Opt);
-}
-
 
 /*!
  * \brief Initializes a new module.
@@ -959,7 +433,7 @@ int G_parser(int argc, char **argv)
 	/* If first arg is "--wps-process-description" then print out
 	 * the wps process description of the task */
 	if (strcmp(argv[1], "--wps-process-description") == 0) {
-	    wps_print_ProcessDescription();
+	    wps_print_process_description();
 	    exit(EXIT_SUCCESS);
 	}
 
@@ -1072,8 +546,144 @@ int G_parser(int argc, char **argv)
     return (0);
 }
 
+/*!
+ * \brief Creates command to run non-interactive.
+ *
+ * Creates a command-line that runs the current command completely
+ * non-interactive.
+ *
+ * \return pointer to a char string
+ */
+char *G_recreate_command(void)
+{
+    char *buff;
+    char flg[4];
+    char *cur;
+    const char *tmp;
+    struct Flag *flag;
+    struct Option *opt;
+    int n, len, slen;
+    int nalloced = 0;
 
-static int uses_new_gisprompt(void)
+    G_debug(3, "G_recreate_command()");
+
+    /* Flag is not valid if there are no flags to set */
+
+    buff = G_calloc(1024, sizeof(char));
+    nalloced += 1024;
+    tmp = G_program_name();
+    len = strlen(tmp);
+    if (len >= nalloced) {
+	nalloced += (1024 > len) ? 1024 : len + 1;
+	buff = G_realloc(buff, nalloced);
+    }
+    cur = buff;
+    strcpy(cur, tmp);
+    cur += len;
+
+    if (st->n_flags) {
+	flag = &st->first_flag;
+	while (flag != '\0') {
+	    if (flag->answer == 1) {
+		flg[0] = ' ';
+		flg[1] = '-';
+		flg[2] = flag->key;
+		flg[3] = '\0';
+		slen = strlen(flg);
+		if (len + slen >= nalloced) {
+		    nalloced +=
+			(nalloced + 1024 > len + slen) ? 1024 : slen + 1;
+		    buff = G_realloc(buff, nalloced);
+		    cur = buff + len;
+		}
+		strcpy(cur, flg);
+		cur += slen;
+		len += slen;
+	    }
+	    flag = flag->next_flag;
+	}
+    }
+
+    opt = &st->first_option;
+    while (opt != '\0') {
+	if (opt->answer != '\0' && opt->answers[0] != NULL) {
+	    slen = strlen(opt->key) + strlen(opt->answers[0]) + 4;	/* +4 for: ' ' = " " */
+	    if (len + slen >= nalloced) {
+		nalloced += (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
+		buff = G_realloc(buff, nalloced);
+		cur = buff + len;
+	    }
+	    strcpy(cur, " ");
+	    cur++;
+	    strcpy(cur, opt->key);
+	    cur = strchr(cur, '\0');
+	    strcpy(cur, "=");
+	    cur++;
+	    if (opt->type == TYPE_STRING) {
+		strcpy(cur, "\"");
+		cur++;
+	    }
+	    strcpy(cur, opt->answers[0]);
+	    cur = strchr(cur, '\0');
+	    len = cur - buff;
+	    for (n = 1; opt->answers[n] != NULL && opt->answers[n] != '\0';
+		 n++) {
+		if (opt->answers[n] == NULL)
+		    break;
+		slen = strlen(opt->answers[n]) + 2;	/* +2 for , " */
+		if (len + slen >= nalloced) {
+		    nalloced +=
+			(nalloced + 1024 > len + slen) ? 1024 : slen + 1;
+		    buff = G_realloc(buff, nalloced);
+		    cur = buff + len;
+		}
+		strcpy(cur, ",");
+		cur++;
+		strcpy(cur, opt->answers[n]);
+		cur = strchr(cur, '\0');
+		len = cur - buff;
+	    }
+	    if (opt->type == TYPE_STRING) {
+		strcpy(cur, "\"");
+		cur++;
+		len = cur - buff;
+	    }
+	}
+	opt = opt->next_opt;
+    }
+
+    return (buff);
+}
+
+/*!
+  \brief Add keyword to the list
+
+  \param keyword keyword string
+*/
+void G_add_keyword(const char *keyword)
+{
+    if (st->n_keys >= st->n_keys_alloc) {
+	st->n_keys_alloc += 10;
+	st->module_info.keywords = (const char **) G_realloc(st->module_info.keywords,
+							     st->n_keys_alloc * sizeof(char *));
+    }
+
+    st->module_info.keywords[st->n_keys++] = G_store(keyword);
+}
+
+/*!
+  \brief Set keywords from the string
+
+  \param keywords keywords separated by commas
+*/
+void G_set_keywords(const char *keywords)
+{
+    st->module_info.keywords = (const char**)G_tokenize(keywords, ",");
+    st->n_keys = st->n_keys_alloc = G_number_of_tokens((char **)st->module_info.keywords);
+}
+
+
+int uses_new_gisprompt(void)
 {
     struct Option *opt;
     char age[KEYLENGTH];
@@ -1100,833 +710,37 @@ static int uses_new_gisprompt(void)
     return 0;
 }
 
-/*!
- * \brief Command line help/usage message.
- *
- * Calls to G_usage() allow the programmer to print the usage
- * message at any time. This will explain the allowed and required
- * command line input to the user. This description is given according
- * to the programmer's definitions for options and flags. This function
- * becomes useful when the user enters options and/or flags on the
- * command line that are syntactically valid to the parser, but
- * functionally invalid for the command (e.g. an invalid file name.)
- *
- * For example, the parser logic doesn't directly support grouping
- * options. If two options be specified together or not at all, the
- * parser must be told that these options are not required and the
- * programmer must check that if one is specified the other must be as
- * well. If this additional check fails, then G_parser() will succeed,
- * but the programmer can then call G_usage() to print the standard
- * usage message and print additional information about how the two
- * options work together.
- */
-void G_usage(void)
+void print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 {
-    struct Option *opt;
-    struct Flag *flag;
-    char item[256];
-    const char *key_desc;
-    int maxlen;
-    int len, n;
-    int new_prompt = 0;
-
-    new_prompt = uses_new_gisprompt();
-
-    if (!st->pgm_name)		/* v.dave && r.michael */
-	st->pgm_name = G_program_name();
-    if (!st->pgm_name)
-	st->pgm_name = "??";
-
-    if (st->module_info.label || st->module_info.description) {
-	fprintf(stderr, _("\nDescription:\n"));
-	if (st->module_info.label)
-	    fprintf(stderr, " %s\n", st->module_info.label);
-	if (st->module_info.description)
-	    fprintf(stderr, " %s\n", st->module_info.description);
-    }
-    if (st->module_info.keywords) {
-	fprintf(stderr, _("\nKeywords:\n "));
-	print_keywords(stderr, NULL);
-	fprintf(stderr, "\n");
-    }
-
-    fprintf(stderr, _("\nUsage:\n "));
-
-    len = show(st->pgm_name, 1);
-
-    /* Print flags */
-
-    if (st->n_flags) {
-	item[0] = ' ';
-	item[1] = '[';
-	item[2] = '-';
-	flag = &st->first_flag;
-	for (n = 3; flag != NULL; n++, flag = flag->next_flag)
-	    item[n] = flag->key;
-	item[n++] = ']';
-	item[n] = 0;
-	len = show(item, len);
-    }
-
-    maxlen = 0;
-    if (st->n_opts) {
-	opt = &st->first_option;
-	while (opt != NULL) {
-	    if (opt->key_desc != NULL)
-		key_desc = opt->key_desc;
-	    else if (opt->type == TYPE_STRING)
-		key_desc = "string";
-	    else
-		key_desc = "value";
-
-	    n = strlen(opt->key);
-	    if (n > maxlen)
-		maxlen = n;
-
-	    strcpy(item, " ");
-	    if (!opt->required)
-		strcat(item, "[");
-	    strcat(item, opt->key);
-	    strcat(item, "=");
-	    strcat(item, key_desc);
-	    if (opt->multiple) {
-		strcat(item, "[,");
-		strcat(item, key_desc);
-		strcat(item, ",...]");
-	    }
-	    if (!opt->required)
-		strcat(item, "]");
-
-	    len = show(item, len);
-
-	    opt = opt->next_opt;
-	}
-    }
-    if (new_prompt) {
-	strcpy(item, " [--overwrite]");
-	len = show(item, len);
-    }
-
-    strcpy(item, " [--verbose]");
-    len = show(item, len);
-
-    strcpy(item, " [--quiet]");
-    len = show(item, len);
-
-
-    fprintf(stderr, "\n");
-
-    /* Print help info for flags */
-
-    fprintf(stderr, _("\nFlags:\n"));
-
-    if (st->n_flags) {
-	flag = &st->first_flag;
-	while (flag != NULL) {
-	    fprintf(stderr, "  -%c   ", flag->key);
-
-	    if (flag->label) {
-		fprintf(stderr, "%s\n", flag->label);
-		if (flag->description)
-		    fprintf(stderr, "        %s\n", flag->description);
-
-	    }
-	    else if (flag->description) {
-		fprintf(stderr, "%s\n", flag->description);
-	    }
-
-	    flag = flag->next_flag;
-	}
-    }
-
-    if (new_prompt)
-	fprintf(stderr, " --o   %s\n",
-		_("Allow output files to overwrite existing files"));
-
-    fprintf(stderr, " --v   %s\n", _("Verbose module output"));
-    fprintf(stderr, " --q   %s\n", _("Quiet module output"));
-
-    /* Print help info for options */
-
-    if (st->n_opts) {
-	fprintf(stderr, _("\nParameters:\n"));
-	opt = &st->first_option;
-	while (opt != NULL) {
-	    fprintf(stderr, "  %*s   ", maxlen, opt->key);
-
-	    if (opt->label) {
-		fprintf(stderr, "%s\n", opt->label);
-		if (opt->description) {
-		    fprintf(stderr, "  %*s    %s\n",
-			    maxlen, " ", opt->description);
-		}
-	    }
-	    else if (opt->description) {
-		fprintf(stderr, "%s\n", opt->description);
-	    }
-
-	    if (opt->options)
-		show_options(maxlen, opt->options);
-	    /*
-	       fprintf (stderr, "  %*s   options: %s\n", maxlen, " ",
-	       _(opt->options)) ;
-	     */
-	    if (opt->def)
-		fprintf(stderr, _("  %*s   default: %s\n"), maxlen, " ",
-			opt->def);
-
-	    if (opt->descs) {
-		int i = 0;
-
-		while (opt->opts[i]) {
-		    if (opt->descs[i])
-			fprintf(stderr, "  %*s    %s: %s\n",
-				maxlen, " ", opt->opts[i], opt->descs[i]);
-
-		    i++;
-		}
-	    }
-
-	    opt = opt->next_opt;
-	}
-    }
-}
-
-/*!
- * \brief Formats text for XML.
- *
- * \param[in,out] fp file to write to
- * \param str string to write
- */
-static void print_escaped_for_xml(FILE * fp, const char *str)
-{
-    for (; *str; str++) {
-	switch (*str) {
-	case '&':
-	    fputs("&amp;", fp);
-	    break;
-	case '<':
-	    fputs("&lt;", fp);
-	    break;
-	case '>':
-	    fputs("&gt;", fp);
-	    break;
-	default:
-	    fputc(*str, fp);
-	}
-    }
-}
-
-
-/*!
- * \brief Format text for HTML output
- */
-#define do_escape(c,escaped) case c: fputs(escaped,f);break
-static void print_escaped_for_html(FILE * f, const char *str)
-{
-    const char *s;
-
-    for (s = str; *s; s++) {
-	switch (*s) {
-	    do_escape('&', "&amp;");
-	    do_escape('<', "&lt;");
-	    do_escape('>', "&gt;");
-	    do_escape('\n', "<br>");
-	default:
-	    fputc(*s, f);
-	}
-    }
-}
-
-#undef do_escape
-
-/*!
-  \brief Print module usage description in XML format.
-*/
-static void usage_xml(void)
-{
-    struct Option *opt;
-    struct Flag *flag;
-    char *type;
-    char *s, *top;
     int i;
-    char *encoding;
-    int new_prompt = 0;
 
-    new_prompt = uses_new_gisprompt();
-
-    /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
-
-#if defined(HAVE_LANGINFO_H)
-    encoding = nl_langinfo(CODESET);
-    if (!encoding || strlen(encoding) == 0) {
-	encoding = "UTF-8";
-    }
-#elif defined(__MINGW32__) && defined(USE_NLS)
-    encoding = locale_charset();
-    if (!encoding || strlen(encoding) == 0) {
-	encoding = "UTF-8";
-    }
-#else
-    encoding = "UTF-8";
-#endif
-
-    if (!st->pgm_name)		/* v.dave && r.michael */
-	st->pgm_name = G_program_name();
-    if (!st->pgm_name)
-	st->pgm_name = "??";
-
-    fprintf(stdout, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", encoding);
-    fprintf(stdout, "<!DOCTYPE task SYSTEM \"grass-interface.dtd\">\n");
-
-    fprintf(stdout, "<task name=\"%s\">\n", st->pgm_name);
-
-    if (st->module_info.label) {
-	fprintf(stdout, "\t<label>\n\t\t");
-	print_escaped_for_xml(stdout, st->module_info.label);
-	fprintf(stdout, "\n\t</label>\n");
-    }
-
-    if (st->module_info.description) {
-	fprintf(stdout, "\t<description>\n\t\t");
-	print_escaped_for_xml(stdout, st->module_info.description);
-	fprintf(stdout, "\n\t</description>\n");
-    }
-
-    if (st->module_info.keywords) {
-	fprintf(stdout, "\t<keywords>\n\t\t");
-	print_keywords(stdout, print_escaped_for_xml);
-	fprintf(stdout, "\n\t</keywords>\n");
-    }
-
-	/***** Don't use parameter-groups for now.  We'll reimplement this later
-	 ***** when we have a concept of several mutually exclusive option
-	 ***** groups
-	if (st->n_opts || st->n_flags)
-		fprintf(stdout, "\t<parameter-group>\n");
-	 *****
-	 *****
-	 *****/
-
-    if (st->n_opts) {
-	opt = &st->first_option;
-	while (opt != NULL) {
-	    /* TODO: make this a enumeration type? */
-	    switch (opt->type) {
-	    case TYPE_INTEGER:
-		type = "integer";
-		break;
-	    case TYPE_DOUBLE:
-		type = "float";
-		break;
-	    case TYPE_STRING:
-		type = "string";
-		break;
-	    default:
-		type = "string";
-		break;
-	    }
-	    fprintf(stdout, "\t<parameter "
-		    "name=\"%s\" "
-		    "type=\"%s\" "
-		    "required=\"%s\" "
-		    "multiple=\"%s\">\n",
-		    opt->key,
-		    type,
-		    opt->required == YES ? "yes" : "no",
-		    opt->multiple == YES ? "yes" : "no");
-
-	    if (opt->label) {
-		fprintf(stdout, "\t\t<label>\n\t\t\t");
-		print_escaped_for_xml(stdout, opt->label);
-		fprintf(stdout, "\n\t\t</label>\n");
-	    }
-
-	    if (opt->description) {
-		fprintf(stdout, "\t\t<description>\n\t\t\t");
-		print_escaped_for_xml(stdout, opt->description);
-		fprintf(stdout, "\n\t\t</description>\n");
-	    }
-
-	    if (opt->key_desc) {
-		fprintf(stdout, "\t\t<keydesc>\n");
-		top = G_calloc(strlen(opt->key_desc) + 1, 1);
-		strcpy(top, opt->key_desc);
-		s = strtok(top, ",");
-		for (i = 1; s != NULL; i++) {
-		    fprintf(stdout, "\t\t\t<item order=\"%d\">", i);
-		    print_escaped_for_xml(stdout, s);
-		    fprintf(stdout, "</item>\n");
-		    s = strtok(NULL, ",");
-		}
-		fprintf(stdout, "\t\t</keydesc>\n");
-		G_free(top);
-	    }
-
-	    if (opt->gisprompt) {
-		const char *atts[] = { "age", "element", "prompt", NULL };
-		top = G_calloc(strlen(opt->gisprompt) + 1, 1);
-		strcpy(top, opt->gisprompt);
-		s = strtok(top, ",");
-		fprintf(stdout, "\t\t<gisprompt ");
-		for (i = 0; s != NULL && atts[i] != NULL; i++) {
-		    fprintf(stdout, "%s=\"%s\" ", atts[i], s);
-		    s = strtok(NULL, ",");
-		}
-		fprintf(stdout, "/>\n");
-		G_free(top);
-	    }
-
-	    if (opt->def) {
-		fprintf(stdout, "\t\t<default>\n\t\t\t");
-		print_escaped_for_xml(stdout, opt->def);
-		fprintf(stdout, "\n\t\t</default>\n");
-	    }
-
-	    if (opt->options) {
-		/* TODO:
-		 * add something like
-		 *       <range min="xxx" max="xxx"/>
-		 * to <values> */
-		i = 0;
-		fprintf(stdout, "\t\t<values>\n");
-		while (opt->opts[i]) {
-		    fprintf(stdout, "\t\t\t<value>\n");
-		    fprintf(stdout, "\t\t\t\t<name>");
-		    print_escaped_for_xml(stdout, opt->opts[i]);
-		    fprintf(stdout, "</name>\n");
-		    if (opt->descs && opt->opts[i] && opt->descs[i]) {
-			fprintf(stdout, "\t\t\t\t<description>");
-			print_escaped_for_xml(stdout, opt->descs[i]);
-			fprintf(stdout, "</description>\n");
-		    }
-		    fprintf(stdout, "\t\t\t</value>\n");
-		    i++;
-		}
-		fprintf(stdout, "\t\t</values>\n");
-	    }
-	    if (opt->guisection) {
-		fprintf(stdout, "\t\t<guisection>\n\t\t\t");
-		print_escaped_for_xml(stdout, opt->guisection);
-		fprintf(stdout, "\n\t\t</guisection>\n");
-	    }
-	    if (opt->guidependency) {
-		fprintf(stdout, "\t\t<guidependency>\n\t\t\t");
-		print_escaped_for_xml(stdout, opt->guidependency);
-		fprintf(stdout, "\n\t\t</guidependency>\n");
-	    }
-	    /* TODO:
-	     * - key_desc?
-	     * - there surely are some more. which ones?
-	     */
-
-	    opt = opt->next_opt;
-	    fprintf(stdout, "\t</parameter>\n");
+    for(i = 0; i < st->n_keys; i++) {
+	if (!format) {
+	    fprintf(fd, "%s", st->module_info.keywords[i]);
 	}
-    }
-
-
-    if (st->n_flags) {
-	flag = &st->first_flag;
-	while (flag != NULL) {
-	    fprintf(stdout, "\t<flag name=\"%c\">\n", flag->key);
-
-	    if (flag->label) {
-		fprintf(stdout, "\t\t<label>\n\t\t\t");
-		print_escaped_for_xml(stdout, flag->label);
-		fprintf(stdout, "\n\t\t</label>\n");
-	    }
-
-	    if (flag->description) {
-		fprintf(stdout, "\t\t<description>\n\t\t\t");
-		print_escaped_for_xml(stdout, flag->description);
-		fprintf(stdout, "\n\t\t</description>\n");
-	    }
-	    if (flag->guisection) {
-		fprintf(stdout, " \t\t<guisection>\n\t\t\t");
-		print_escaped_for_xml(stdout, flag->guisection);
-		fprintf(stdout, "\n\t\t</guisection>\n");
-	    }
-	    flag = flag->next_flag;
-	    fprintf(stdout, "\t</flag>\n");
+	else {
+	    format(fd, st->module_info.keywords[i]);
 	}
+	if (i < st->n_keys - 1)
+	    fprintf(fd, ", ");
     }
 
-	/***** Don't use parameter-groups for now.  We'll reimplement this later
-	 ***** when we have a concept of several mutually exclusive option
-	 ***** groups
-	if (st->n_opts || st->n_flags)
-		fprintf(stdout, "\t</parameter-group>\n");
-	 *****
-	 *****
-	 *****/
-
-    if (new_prompt) {
-	/* overwrite */
-	fprintf(stdout, "\t<flag name=\"%s\">\n", "overwrite");
-	fprintf(stdout, "\t\t<description>\n\t\t\t");
-	print_escaped_for_xml(stdout,
-			      "Allow output files to overwrite existing files");
-	fprintf(stdout, "\n\t\t</description>\n");
-	fprintf(stdout, "\t</flag>\n");
-    }
-
-    /* verbose */
-    fprintf(stdout, "\t<flag name=\"%s\">\n", "verbose");
-    fprintf(stdout, "\t\t<description>\n\t\t\t");
-    print_escaped_for_xml(stdout, "Verbose module output");
-    fprintf(stdout, "\n\t\t</description>\n");
-    fprintf(stdout, "\t</flag>\n");
-
-    /* quiet */
-    fprintf(stdout, "\t<flag name=\"%s\">\n", "quiet");
-    fprintf(stdout, "\t\t<description>\n\t\t\t");
-    print_escaped_for_xml(stdout, "Quiet module output");
-    fprintf(stdout, "\n\t\t</description>\n");
-    fprintf(stdout, "\t</flag>\n");
-
-    fprintf(stdout, "</task>\n");
+    fflush(fd);
 }
 
-/*!
-  \brief Print module usage description in HTML format.
-*/
-static void usage_html(void)
+
+void define_keywords(void)
 {
-    struct Option *opt;
-    struct Flag *flag;
-    const char *type;
-    int new_prompt = 0;
-
-    new_prompt = uses_new_gisprompt();
-
-    if (!st->pgm_name)		/* v.dave && r.michael */
-	st->pgm_name = G_program_name();
-    if (!st->pgm_name)
-	st->pgm_name = "??";
-
-    fprintf(stdout,
-	    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
-    fprintf(stdout, "<html>\n<head>\n");
-    fprintf(stdout, "<title>GRASS GIS manual: %s</title>\n", st->pgm_name);
-    fprintf(stdout,
-	    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n");
-    fprintf(stdout,
-	    "<link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">\n");
-    fprintf(stdout, "</head>\n");
-    fprintf(stdout, "<body bgcolor=\"white\">\n\n");
-    fprintf(stdout,
-	    "<img src=\"grass_logo.png\" alt=\"GRASS logo\"><hr align=center size=6 noshade>\n\n");
-    fprintf(stdout, "<h2>%s</h2>\n", _("NAME"));
-    fprintf(stdout, "<em><b>%s</b></em> ", st->pgm_name);
-
-    if (st->module_info.label || st->module_info.description)
-	fprintf(stdout, " - ");
-
-    if (st->module_info.label)
-	fprintf(stdout, "%s<BR>\n", st->module_info.label);
-
-    if (st->module_info.description)
-	fprintf(stdout, "%s\n", st->module_info.description);
-
-
-    fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
-    if (st->module_info.keywords) {
-	print_keywords(stdout, NULL);
-	fprintf(stdout, "\n");
-    }
-    fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
-    fprintf(stdout, "<b>%s</b><br>\n", st->pgm_name);
-    fprintf(stdout, "<b>%s help</b><br>\n", st->pgm_name);
-
-    fprintf(stdout, "<b>%s</b>", st->pgm_name);
-
-
-
-    /* print short version first */
-    if (st->n_flags) {
-	flag = &st->first_flag;
-	fprintf(stdout, " [-<b>");
-	while (flag != NULL) {
-	    fprintf(stdout, "%c", flag->key);
-	    flag = flag->next_flag;
-	}
-	fprintf(stdout, "</b>] ");
-    }
-    else
-	fprintf(stdout, " ");
-
-    if (st->n_opts) {
-	opt = &st->first_option;
-
-	while (opt != NULL) {
-	    if (opt->key_desc != NULL)
-		type = opt->key_desc;
-	    else
-		switch (opt->type) {
-		case TYPE_INTEGER:
-		    type = "integer";
-		    break;
-		case TYPE_DOUBLE:
-		    type = "float";
-		    break;
-		case TYPE_STRING:
-		    type = "string";
-		    break;
-		default:
-		    type = "string";
-		    break;
-		}
-	    if (!opt->required)
-		fprintf(stdout, " [");
-	    fprintf(stdout, "<b>%s</b>=<em>%s</em>", opt->key, type);
-	    if (opt->multiple) {
-		fprintf(stdout, "[,<i>%s</i>,...]", type);
-	    }
-	    if (!opt->required)
-		fprintf(stdout, "] ");
-
-	    opt = opt->next_opt;
-	    fprintf(stdout, " ");
-	}
-    }
-    if (new_prompt)
-	fprintf(stdout, " [--<b>overwrite</b>] ");
-
-    fprintf(stdout, " [--<b>verbose</b>] ");
-    fprintf(stdout, " [--<b>quiet</b>] ");
-
-    fprintf(stdout, "\n");
-
-
-    /* now long version */
-    fprintf(stdout, "\n");
-    if (st->n_flags || new_prompt) {
-	flag = &st->first_flag;
-	fprintf(stdout, "<h3>%s:</h3>\n", _("Flags"));
-	fprintf(stdout, "<DL>\n");
-	while (st->n_flags && flag != NULL) {
-	    fprintf(stdout, "<DT><b>-%c</b></DT>\n", flag->key);
-
-	    if (flag->label) {
-		fprintf(stdout, "<DD>");
-		fprintf(stdout, "%s", flag->label);
-		fprintf(stdout, "</DD>\n");
-	    }
-
-	    if (flag->description) {
-		fprintf(stdout, "<DD>");
-		fprintf(stdout, "%s", flag->description);
-		fprintf(stdout, "</DD>\n");
-	    }
-
-	    flag = flag->next_flag;
-	    fprintf(stdout, "\n");
-	}
-	if (new_prompt) {
-	    fprintf(stdout, "<DT><b>--overwrite</b></DT>\n");
-	    fprintf(stdout, "<DD>%s</DD>\n",
-		    _("Allow output files to overwrite existing files"));
-	}
-
-	fprintf(stdout, "<DT><b>--verbose</b></DT>\n");
-	fprintf(stdout, "<DD>%s</DD>\n", _("Verbose module output"));
-
-	fprintf(stdout, "<DT><b>--quiet</b></DT>\n");
-	fprintf(stdout, "<DD>%s</DD>\n", _("Quiet module output"));
-
-	fprintf(stdout, "</DL>\n");
-    }
-
-    fprintf(stdout, "\n");
-    if (st->n_opts) {
-	opt = &st->first_option;
-	fprintf(stdout, "<h3>%s:</h3>\n", _("Parameters"));
-	fprintf(stdout, "<DL>\n");
-
-	while (opt != NULL) {
-	    /* TODO: make this a enumeration type? */
-	    if (opt->key_desc != NULL)
-		type = opt->key_desc;
-	    else
-		switch (opt->type) {
-		case TYPE_INTEGER:
-		    type = "integer";
-		    break;
-		case TYPE_DOUBLE:
-		    type = "float";
-		    break;
-		case TYPE_STRING:
-		    type = "string";
-		    break;
-		default:
-		    type = "string";
-		    break;
-		}
-	    fprintf(stdout, "<DT><b>%s</b>=<em>%s", opt->key, type);
-	    if (opt->multiple) {
-		fprintf(stdout, "[,<i>%s</i>,...]", type);
-	    }
-	    fprintf(stdout, "</em></DT>\n");
-
-	    if (opt->label) {
-		fprintf(stdout, "<DD>");
-		print_escaped_for_html(stdout, opt->label);
-		fprintf(stdout, "</DD>\n");
-	    }
-	    if (opt->description) {
-		fprintf(stdout, "<DD>");
-		print_escaped_for_html(stdout, opt->description);
-		fprintf(stdout, "</DD>\n");
-	    }
-
-	    if (opt->options) {
-		fprintf(stdout, "<DD>%s: <em>", _("Options"));
-		print_escaped_for_html(stdout, opt->options);
-		fprintf(stdout, "</em></DD>\n");
-	    }
-
-	    if (opt->def) {
-		fprintf(stdout, "<DD>%s: <em>", _("Default"));
-		print_escaped_for_html(stdout, opt->def);
-		fprintf(stdout, "</em></DD>\n");
-	    }
-
-	    if (opt->descs) {
-		int i = 0;
-
-		while (opt->opts[i]) {
-		    if (opt->descs[i]) {
-			fprintf(stdout, "<DD><b>");
-			print_escaped_for_html(stdout, opt->opts[i]);
-			fprintf(stdout, "</b>: ");
-			print_escaped_for_html(stdout, opt->descs[i]);
-			fprintf(stdout, "</DD>\n");
-		    }
-		    i++;
-		}
-	    }
-
-	    opt = opt->next_opt;
-	    fprintf(stdout, "\n");
-	}
-	fprintf(stdout, "</DL>\n");
-    }
-
-    fprintf(stdout, "</body>\n</html>\n");
+    st->n_keys = 0;
+    st->n_keys_alloc = 0;
 }
 
-/*!
-  \brief Print a module parameter template to assist with creating
-  script wrappers.
-*/
-static void script(void)
-{
-    FILE *fp = stdout;
-    char *type;
-
-    fprintf(fp,
-	    "############################################################################\n");
-    fprintf(fp, "#\n");
-    fprintf(fp, "# MODULE:       %s_wrapper\n", G_program_name());
-    fprintf(fp, "# AUTHOR(S):    %s\n", G_whoami());
-    fprintf(fp, "# PURPOSE:      \n");
-    fprintf(fp, "# COPYRIGHT:    (C) 2009 by %s, and The GRASS Development Team\n",
-	    G_whoami());
-    fprintf(fp, "#\n");
-    fprintf(fp,
-	    "#  This program is free software; you can redistribute it and/or modify\n");
-    fprintf(fp,
-	    "#  it under the terms of the GNU General Public License as published by\n");
-    fprintf(fp,
-	    "#  the Free Software Foundation; either version 2 of the License, or\n");
-    fprintf(fp, "#  (at your option) any later version.\n");
-    fprintf(fp, "#\n");
-    fprintf(fp,
-	    "#  This program is distributed in the hope that it will be useful,\n");
-    fprintf(fp,
-	    "#  but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-    fprintf(fp,
-	    "#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
-    fprintf(fp, "#  GNU General Public License for more details.\n");
-    fprintf(fp, "#\n");
-    fprintf(fp,
-	    "############################################################################\n\n");
-
-    fprintf(fp, "#%%module\n");
-    if (st->module_info.label)
-	fprintf(fp, "#%% label: %s\n", st->module_info.label);
-    if (st->module_info.description)
-	fprintf(fp, "#%% description: %s\n", st->module_info.description);
-    if (st->module_info.keywords) {
-	fprintf(fp, "#%% keywords: ");
-	print_keywords(fp, NULL);
-	fprintf(fp, "\n");
-    }
-    fprintf(fp, "#%%end\n");
-
-    if (st->n_flags) {
-	struct Flag *flag;
-
-	for (flag = &st->first_flag; flag; flag = flag->next_flag) {
-	    fprintf(fp, "#%%flag\n");
-	    fprintf(fp, "#%% key: %c\n", flag->key);
-	    if (flag->label)
-		fprintf(fp, "#%% label: %s\n", flag->label);
-	    if (flag->description)
-		fprintf(fp, "#%% description: %s\n", flag->description);
-	    if (flag->guisection)
-		fprintf(fp, "#%% guisection: %s\n", flag->guisection);
-	    fprintf(fp, "#%%end\n");
-	}
-    }
-
-    if (st->n_opts) {
-	struct Option *opt;
-
-	for (opt = &st->first_option; opt; opt = opt->next_opt) {
-	    switch (opt->type) {
-	    case TYPE_INTEGER:
-		type = "integer";
-		break;
-	    case TYPE_DOUBLE:
-		type = "double";
-		break;
-	    case TYPE_STRING:
-		type = "string";
-		break;
-	    default:
-		type = "string";
-		break;
-	    }
-
-	    fprintf(fp, "#%%option\n");
-	    fprintf(fp, "#%% key: %s\n", opt->key);
-	    fprintf(fp, "#%% type: %s\n", type);
-	    fprintf(fp, "#%% required: %s\n", opt->required ? "yes" : "no");
-	    fprintf(fp, "#%% multiple: %s\n", opt->multiple ? "yes" : "no");
-	    if (opt->options)
-		fprintf(fp, "#%% options: %s\n", opt->options);
-	    if (opt->key_desc)
-		fprintf(fp, "#%% key_desc: %s\n", opt->key_desc);
-	    if (opt->label)
-		fprintf(fp, "#%% label: %s\n", opt->label);
-	    if (opt->description)
-		fprintf(fp, "#%% description: %s\n", opt->description);
-	    if (opt->descriptions)
-		fprintf(fp, "#%% descriptions: %s\n", opt->descriptions);
-	    if (opt->answer)
-		fprintf(fp, "#%% answer: %s\n", opt->answer);
-	    if (opt->gisprompt)
-		fprintf(fp, "#%% gisprompt: %s\n", opt->gisprompt);
-	    if (opt->guisection)
-		fprintf(fp, "#%% guisection: %s\n", opt->guisection);
-	    if (opt->guidependency)
-		fprintf(fp, "#%% guidependency: %s\n", opt->guidependency);
-	    fprintf(fp, "#%%end\n");
-	}
-    }
-}
+/**************************************************************************
+ *
+ * The remaining routines are all local (static) routines used to support
+ * the parsing process.
+ *
+ **************************************************************************/
 
 /*!
   \brief Invoke GUI dialog
@@ -1943,55 +757,6 @@ static void module_gui_wx(void)
     sprintf(script, "%s/etc/wxpython/gui_modules/menuform.py",
 	    getenv("GISBASE"));
     G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script, st->pgm_path, NULL);
-}
-
-/**************************************************************************
- *
- * The remaining routines are all local (static) routines used to support
- * the parsing process.
- *
- **************************************************************************/
-
-static void show_options(int maxlen, const char *str)
-{
-    char *buff = G_store(str);
-    char *p1, *p2;
-    int totlen, len;
-
-    fprintf(stderr, _("  %*s   options: "), maxlen, " ");
-    totlen = maxlen + 13;
-    p1 = buff;
-    while ((p2 = G_index(p1, ','))) {
-	*p2 = '\0';
-	len = strlen(p1) + 1;
-	if ((len + totlen) > 76) {
-	    totlen = maxlen + 13;
-	    fprintf(stderr, "\n %*s", maxlen + 13, " ");
-	}
-	fprintf(stderr, "%s,", p1);
-	totlen += len;
-	p1 = p2 + 1;
-    }
-    len = strlen(p1);
-    if ((len + totlen) > 76)
-	fprintf(stderr, "\n %*s", maxlen + 13, " ");
-    fprintf(stderr, "%s\n", p1);
-
-    G_free(buff);
-}
-
-static int show(const char *item, int len)
-{
-    int n;
-
-    n = strlen(item) + (len > 0);
-    if (n + len > 76) {
-	if (len)
-	    fprintf(stderr, "\n  ");
-	len = 0;
-    }
-    fprintf(stderr, "%s", item);
-    return n + len;
 }
 
 static int set_flag(int f)
@@ -2526,7 +1291,7 @@ static int check_overwrite(void)
     return (error);
 }
 
-static void split_gisprompt(const char *gisprompt, char *age, char *element,
+void split_gisprompt(const char *gisprompt, char *age, char *element,
 			    char *desc)
 {
     const char *ptr1;
@@ -2552,748 +1317,4 @@ static void split_gisprompt(const char *gisprompt, char *age, char *element,
 	*ptr2 = *ptr1;
     }
     *ptr2 = '\0';
-}
-
-/*!
- * \brief Creates command to run non-interactive.
- *
- * Creates a command-line that runs the current command completely
- * non-interactive.
- *
- * \return pointer to a char string
- */
-char *G_recreate_command(void)
-{
-    char *buff;
-    char flg[4];
-    char *cur;
-    const char *tmp;
-    struct Flag *flag;
-    struct Option *opt;
-    int n, len, slen;
-    int nalloced = 0;
-
-    G_debug(3, "G_recreate_command()");
-
-    /* Flag is not valid if there are no flags to set */
-
-    buff = G_calloc(1024, sizeof(char));
-    nalloced += 1024;
-    tmp = G_program_name();
-    len = strlen(tmp);
-    if (len >= nalloced) {
-	nalloced += (1024 > len) ? 1024 : len + 1;
-	buff = G_realloc(buff, nalloced);
-    }
-    cur = buff;
-    strcpy(cur, tmp);
-    cur += len;
-
-    if (st->n_flags) {
-	flag = &st->first_flag;
-	while (flag != '\0') {
-	    if (flag->answer == 1) {
-		flg[0] = ' ';
-		flg[1] = '-';
-		flg[2] = flag->key;
-		flg[3] = '\0';
-		slen = strlen(flg);
-		if (len + slen >= nalloced) {
-		    nalloced +=
-			(nalloced + 1024 > len + slen) ? 1024 : slen + 1;
-		    buff = G_realloc(buff, nalloced);
-		    cur = buff + len;
-		}
-		strcpy(cur, flg);
-		cur += slen;
-		len += slen;
-	    }
-	    flag = flag->next_flag;
-	}
-    }
-
-    opt = &st->first_option;
-    while (opt != '\0') {
-	if (opt->answer != '\0' && opt->answers[0] != NULL) {
-	    slen = strlen(opt->key) + strlen(opt->answers[0]) + 4;	/* +4 for: ' ' = " " */
-	    if (len + slen >= nalloced) {
-		nalloced += (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
-		buff = G_realloc(buff, nalloced);
-		cur = buff + len;
-	    }
-	    strcpy(cur, " ");
-	    cur++;
-	    strcpy(cur, opt->key);
-	    cur = strchr(cur, '\0');
-	    strcpy(cur, "=");
-	    cur++;
-	    if (opt->type == TYPE_STRING) {
-		strcpy(cur, "\"");
-		cur++;
-	    }
-	    strcpy(cur, opt->answers[0]);
-	    cur = strchr(cur, '\0');
-	    len = cur - buff;
-	    for (n = 1; opt->answers[n] != NULL && opt->answers[n] != '\0';
-		 n++) {
-		if (opt->answers[n] == NULL)
-		    break;
-		slen = strlen(opt->answers[n]) + 2;	/* +2 for , " */
-		if (len + slen >= nalloced) {
-		    nalloced +=
-			(nalloced + 1024 > len + slen) ? 1024 : slen + 1;
-		    buff = G_realloc(buff, nalloced);
-		    cur = buff + len;
-		}
-		strcpy(cur, ",");
-		cur++;
-		strcpy(cur, opt->answers[n]);
-		cur = strchr(cur, '\0');
-		len = cur - buff;
-	    }
-	    if (opt->type == TYPE_STRING) {
-		strcpy(cur, "\"");
-		cur++;
-		len = cur - buff;
-	    }
-	}
-	opt = opt->next_opt;
-    }
-
-    return (buff);
-}
-
-void define_keywords(void)
-{
-    st->n_keys = 0;
-    st->n_keys_alloc = 0;
-}
-
-/*!
-  \brief Add keyword to the list
-
-  \param module pointer to GModule structure
-  \param keyword keyword string
-*/
-void G_add_keyword(const char *keyword)
-{
-    if (st->n_keys >= st->n_keys_alloc) {
-	st->n_keys_alloc += 10;
-	st->module_info.keywords = (const char **) G_realloc(st->module_info.keywords,
-							     st->n_keys_alloc * sizeof(char *));
-    }
-
-    st->module_info.keywords[st->n_keys++] = G_store(keyword);
-}
-
-void print_keywords(FILE *fd, void (*format)(FILE *, const char *))
-{
-    int i;
-
-    for(i = 0; i < st->n_keys; i++) {
-	if (!format) {
-	    fprintf(fd, "%s", st->module_info.keywords[i]);
-	}
-	else {
-	    format(fd, st->module_info.keywords[i]);
-	}
-	if (i < st->n_keys - 1)
-	    fprintf(fd, ", ");
-    }
-
-    fflush(fd);
-}
-
-/*!
-  \brief Set keywords from the string
-
-  \param keywords keywords separated by commas
-*/
-void G_set_keywords(const char *keywords)
-{
-    st->module_info.keywords = (const char**)G_tokenize(keywords, ",");
-    st->n_keys = st->n_keys_alloc = G_number_of_tokens((char **)st->module_info.keywords);
-}
-
-
-/**************************************************************************
- *
- * The remaining routines are all local (static) routines used to support
- * the the creation of the WPS ProcessDescription document.
- *
- **************************************************************************/
-
-static void wps_print_ProcessDescription()
-{
-    struct Option *opt;
-    struct Flag *flag;
-    char *type;
-    char *s, *top;
-    const char *value = NULL;
-    int i;
-    char *encoding;
-    int new_prompt = 0;
-    int store = 1;
-    int status = 1;
-    const char *identifier = NULL;
-    const char *title = NULL;
-    const char *abstract = NULL;
-    const char **keywords = NULL;
-    int data_type, is_input, is_output;
-    int min = 0, max = 0;
-    int num_keywords = 0;
-    int found_output = 0;
-    new_prompt = uses_new_gisprompt();
-
-    /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
-
-#if defined(HAVE_LANGINFO_H)
-    encoding = nl_langinfo(CODESET);
-    if (!encoding || strlen(encoding) == 0) {
-	encoding = "UTF-8";
-    }
-#elif defined(__MINGW32__) && defined(USE_NLS)
-    encoding = locale_charset();
-    if (!encoding || strlen(encoding) == 0) {
-	encoding = "UTF-8";
-    }
-#else
-    encoding = "UTF-8";
-#endif
-
-    if (!st->pgm_name)
-	st->pgm_name = G_program_name();
-    if (!st->pgm_name)
-	st->pgm_name = "??";
-
-    /* the identifier of the process is the module name */
-    identifier = st->pgm_name;
-
-    if (st->module_info.description) {
-        title = st->module_info.description;
-        abstract = st->module_info.description;
-    }
-
-    if (st->module_info.keywords) {
-        keywords = st->module_info.keywords;
-        num_keywords = st->n_keys;
-    }
-
-    wps_print_ProcessDescriptions_begin();
-    /* store and status are supported as default. The WPS server should change this if nessessary */
-    wps_print_ProcessDescription_begin(store, status, identifier, title, abstract, keywords, num_keywords);
-    wps_print_DataInputs_begin();
-
-    /* We parse only the inputs at the beginning */
-    if (st->n_opts) {
-	opt = &st->first_option;
-	while (opt != NULL) {
-
-            identifier = NULL;
-            title = NULL;
-            abstract = NULL;
-            keywords = NULL;
-            num_keywords = 0;
-            value = NULL;
-            is_input = 1;
-            data_type = TYPE_OTHER;
-
-	    if (opt->gisprompt) {
-		const char *atts[] = { "age", "element", "prompt", NULL };
-		top = G_calloc(strlen(opt->gisprompt) + 1, 1);
-		strcpy(top, opt->gisprompt);
-		s = strtok(top, ",");
-		for (i = 0; s != NULL && atts[i] != NULL; i++) {
-
-                    char *token = G_store(s);
-
-                    /* we print only input parameter, sort out the output parameter */
-                    if(strcmp(token, "new") == 0)
-                        is_input = 0;
-                    if(strcmp(token, "raster") == 0)
-                    {
-                        data_type = TYPE_RASTER;
-                    }
-                    if(strcmp(token, "vector") == 0)
-                    {
-                        data_type = TYPE_VECTOR;
-                    }
-                    s = strtok(NULL, ",");
-                    G_free(token);
-		}
-		G_free(top);
-	    }
-            /* We have an input option */
-            if(is_input == 1)
-            {
-                switch (opt->type) {
-                case TYPE_INTEGER:
-                    type = "integer";
-                    break;
-                case TYPE_DOUBLE:
-                    type = "float";
-                    break;
-                case TYPE_STRING:
-                    type = "string";
-                    break;
-                default:
-                    type = "string";
-                    break;
-                }
-
-                identifier = opt->key;
-                if(opt->required == YES)
-                    min = 1;
-                else
-                    min = 0;
-
-                if(opt->multiple == YES)
-                    max = 1024;
-                else
-                    max = 1;
-
-                if (opt->description) {
-                    title = opt->description;
-                    abstract = opt->description;
-                }
-                if (opt->def) {
-                    value = opt->def;
-                }
-                if (opt->options) {
-                    /* TODO:
-                     * add something like
-                     *       <range min="xxx" max="xxx"/>
-                     * to <values> */
-                    i = 0;
-                    while (opt->opts[i]) {
-                        i++;
-                    }
-                    keywords = opt->opts;
-                    num_keywords = i;
-                }
-
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR)
-                {
-                    /* 2048 is the maximum size of the map in mega bytes */
-                    wps_print_complex_input(min, max, identifier, title, abstract, 2048, data_type);
-                }
-                else
-                {
-                    /* The keyword array is missused for options, type means the type of the value (integer, float ... )*/
-                    wps_print_literal_input_output(WPS_INPUT, min, max, identifier, title, abstract, type, 0, keywords, num_keywords, value, TYPE_OTHER);
-                }
-            }
-	    opt = opt->next_opt;
-	}
-    }
-
-    /* Flags are always input options and can be false or true (boolean) */
-    if (st->n_flags) {
-	flag = &st->first_flag;
-	while (flag != NULL) {
-
-            /* The identifier is the flag "-x" */
-            char* ident = (char*)G_calloc(3, sizeof(char));
-            ident[0] = '-';
-            ident[1] = flag->key;
-            ident[2] = '\0';
-            title = NULL;
-            abstract = NULL;
-
-	    if (flag->description) {
-                title = flag->description;
-                abstract = flag->description;
-	    }
-            const char *val[] = {"true","false"};
-            wps_print_literal_input_output(WPS_INPUT, 0, 1, ident, title, abstract, "boolean", 0, val, 2, "false", TYPE_OTHER);
-	    flag = flag->next_flag;
-	}
-    }
-
-    /* End of inputs */
-    wps_print_DataInputs_end();
-    /* Start of the outputs */
-    wps_print_ProcessOutputs_begin();
-
-    found_output = 0;
-
-    /*parse the ouput. only raster and vector map and stdout are supported */
-    if (st->n_opts) {
-	opt = &st->first_option;
-	while (opt != NULL) {
-
-            identifier = NULL;
-            title = NULL;
-            abstract = NULL;
-            value = NULL;
-            is_output = 0;
-            data_type = TYPE_OTHER;
-
-	    if (opt->gisprompt) {
-		const char *atts[] = { "age", "element", "prompt", NULL };
-		top = G_calloc(strlen(opt->gisprompt) + 1, 1);
-		strcpy(top, opt->gisprompt);
-		s = strtok(top, ",");
-		for (i = 0; s != NULL && atts[i] != NULL; i++) {
-
-                    char *token = G_store(s);
-
-                    /* we print only the output parameter */
-                    if(strcmp(token, "new") == 0)
-                        is_output = 1;
-                    if(strcmp(token, "raster") == 0)
-                    {
-                        data_type = TYPE_RASTER;
-                    }
-                    if(strcmp(token, "vector") == 0)
-                    {
-                        data_type = TYPE_VECTOR;
-                    }
-                    s = strtok(NULL, ",");
-                    G_free(token);
-		}
-		G_free(top);
-	    }
-            /* Only single module output is supported */
-            if(is_output == 1 && opt->multiple == NO)
-            {
-                identifier = opt->key;
-                if (opt->description) {
-                    title = opt->description;
-                    abstract = opt->description;
-                }
-
-                /* Only raster and vector output is supported by option */
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR)
-                {
-                    wps_print_complex_output(identifier, title, abstract, data_type);
-                    found_output = 1;
-                }
-            }
-	    opt = opt->next_opt;
-	}
-        /* we assume the computatuon output on stdout, if no raster/vector output was found*/
-        if(found_output == 0)
-            wps_print_complex_output("stdout", "Module output on stdout", "The output of the module written to stdout", TYPE_PLAIN_TEXT);
-    }
-
-    wps_print_ProcessOutputs_end();
-    wps_print_ProcessDescription_end();
-    wps_print_ProcessDescriptions_end();
-}
-
-/* ************************************************************************** */
-
-static void wps_print_ProcessDescriptions_begin()
-{
-    fprintf(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fprintf(stdout, "<wps:ProcessDescriptions xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"\n");
-    fprintf(stdout, "xmlns:ows=\"http://www.opengis.net/ows/1.1\"\n");
-    fprintf(stdout, "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n");
-    fprintf(stdout, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-    fprintf(stdout, "xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0\n http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd\"\n service=\"WPS\" version=\"1.0.0\" xml:lang=\"en-US\"> \n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_ProcessDescriptions_end()
-{
-    fprintf(stdout,"</wps:ProcessDescriptions>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_ProcessDescription_begin(int store, int status, const char *identifier,
-                                               const char *title, const char *abstract,
-                                               const char **keywords, int num_keywords)
-{
-    int i;
-
-    fprintf(stdout,"\t<ProcessDescription wps:processVersion=\"1\" storeSupported=\"%s\" statusSupported=\"%s\">\n", (store?"true":"false"), (status?"true":"false"));
-    wps_print_ident_title_abstract(identifier, title, abstract);
-    for(i = 0; i < num_keywords; i++)
-    {
-        fprintf(stdout,"\t\t<ows:Metadata xlink:title=\"");
-        print_escaped_for_xml(stdout, keywords[i]);
-        fprintf(stdout, "\" />\n");
-    }
-}
-
-/* ************************************************************************** */
-
-static void wps_print_ProcessDescription_end()
-{
-    fprintf(stdout,"\t</ProcessDescription>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_DataInputs_begin()
-{
-    fprintf(stdout,"\t\t<DataInputs>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_DataInputs_end()
-{
-    fprintf(stdout,"\t\t</DataInputs>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_ProcessOutputs_begin()
-{
-    fprintf(stdout,"\t\t<ProcessOutputs>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_ProcessOutputs_end()
-{
-    fprintf(stdout,"\t\t</ProcessOutputs>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_complex_input(int min, int max, const char *identifier, const char *title, const char *abstract, int megs, int type)
-{
-    wps_print_comlpex_input_output(WPS_INPUT, min, max, identifier, title, abstract, megs, type);
-}
-
-/* ************************************************************************** */
-
-static void wps_print_complex_output(const char *identifier, const char *title, const char *abstract, int type)
-{
-    wps_print_comlpex_input_output(WPS_OUTPUT, 0, 0, identifier, title, abstract, 0, type);
-}
-
-/* ************************************************************************** */
-
-static void wps_print_comlpex_input_output(int inout_type, int min, int max, const char *identifier, const char *title, const char *abstract, int megs, int type)
-{
-    if(inout_type == WPS_INPUT)
-        fprintf(stdout,"\t\t\t<Input minOccurs=\"%i\" maxOccurs=\"%i\">\n", min, max);
-    else if(inout_type == WPS_OUTPUT)
-        fprintf(stdout,"\t\t\t<Output>\n");
-
-    wps_print_ident_title_abstract(identifier, title, abstract);
-
-    if(inout_type == WPS_INPUT)
-        fprintf(stdout,"\t\t\t\t<ComplexData maximumMegabytes=\"%i\">\n", megs);
-    else if(inout_type == WPS_OUTPUT)
-        fprintf(stdout,"\t\t\t\t<ComplexOutput>\n");
-
-    fprintf(stdout,"\t\t\t\t\t<Default>\n");
-    if(type == TYPE_RASTER)
-    {
-            wps_print_mimetype_raster_tiff();
-    }
-    else if(type == TYPE_VECTOR)
-    {
-            wps_print_mimetype_vector_gml310();
-    }
-    else if(type == TYPE_PLAIN_TEXT)
-    {
-            wps_print_mimetype_text_plain();
-    }
-    fprintf(stdout,"\t\t\t\t\t</Default>\n");
-    fprintf(stdout,"\t\t\t\t\t<Supported>\n");
-    if(type == TYPE_RASTER)
-    {
-            wps_print_mimetype_raster_tiff();
-            wps_print_mimetype_raster_png();
-            wps_print_mimetype_raster_grass_ascii();
-            wps_print_mimetype_raster_grass_binary();
-    }
-    else if(type == TYPE_VECTOR)
-    {
-            wps_print_mimetype_vector_gml310();
-            wps_print_mimetype_vector_grass_ascii();
-            wps_print_mimetype_vector_grass_binary();
-    }
-    else if(type == TYPE_PLAIN_TEXT)
-    {
-            wps_print_mimetype_text_plain();
-    }
-    fprintf(stdout,"\t\t\t\t\t</Supported>\n");
-
-    if(inout_type == WPS_INPUT)
-        fprintf(stdout,"\t\t\t\t</ComplexData>\n");
-    else if(inout_type == WPS_OUTPUT)
-        fprintf(stdout,"\t\t\t\t</ComplexOutput>\n");
-
-    if(inout_type == WPS_INPUT)
-        fprintf(stdout,"\t\t\t</Input>\n");
-    else if(inout_type == WPS_OUTPUT)
-        fprintf(stdout,"\t\t\t</Output>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_ident_title_abstract(const char *identifier, const char *title, const char *abstract)
-{
-    if(identifier)
-    {
-        fprintf(stdout,"\t\t\t\t<ows:Identifier>");
-        print_escaped_for_xml(stdout, identifier);
-        fprintf(stdout,"</ows:Identifier>\n");
-    }
-
-    if(title)
-    {
-        fprintf(stdout,"\t\t\t\t<ows:Title>");
-        print_escaped_for_xml(stdout, title);
-        fprintf(stdout, "</ows:Title>\n");
-    }
-
-    if(abstract)
-    {
-        fprintf(stdout,"\t\t\t\t<ows:Abstract>");
-        print_escaped_for_xml(stdout, abstract);
-        fprintf(stdout, "</ows:Abstract>\n");
-    }
-}
-
-/* ************************************************************************** */
-
-static void wps_print_literal_input_output(int inout_type, int min, int max, const char *identifier,
-                                const char *title, const char *abstract, const char *datatype, int unitofmesure,
-                                const char **choices, int num_choices, const char *default_value, int type)
-{
-    int i;
-
-    if(inout_type == WPS_INPUT)
-        fprintf(stdout,"\t\t\t<Input minOccurs=\"%i\" maxOccurs=\"%i\">\n", min, max);
-    else if(inout_type == WPS_OUTPUT)
-        fprintf(stdout,"\t\t\t<Output>\n");
-
-    wps_print_ident_title_abstract(identifier, title, abstract);
-
-    fprintf(stdout,"\t\t\t\t<LiteralData>\n");
-
-    if(datatype)
-        fprintf(stdout,"\t\t\t\t\t<ows:DataType ows:reference=\"xs:%s\">%s</ows:DataType>\n", datatype, datatype);
-
-    if(unitofmesure)
-    {
-        fprintf(stdout,"\t\t\t\t\t<UOMs>\n");
-        fprintf(stdout,"\t\t\t\t\t<Default>\n");
-        fprintf(stdout,"\t\t\t\t\t\t<ows:UOM>meters</ows:UOM>\n");
-        fprintf(stdout,"\t\t\t\t\t</Default>\n");
-        fprintf(stdout,"\t\t\t\t\t<Supported>\n");
-        fprintf(stdout,"\t\t\t\t\t\t<ows:UOM>meters</ows:UOM>\n");
-        fprintf(stdout,"\t\t\t\t\t</Supported>\n");
-        fprintf(stdout,"\t\t\t\t\t</UOMs>\n");
-    }
-    if(num_choices == 0 || choices == NULL)
-        fprintf(stdout,"\t\t\t\t\t<ows:AnyValue/>\n");
-    else
-    {
-        fprintf(stdout,"\t\t\t\t\t<ows:AllowedValues>\n");
-        if(type == TYPE_RANGE && num_choices > 1)
-        {
-        fprintf(stdout,"\t\t\t\t\t\t<ows:Range ows:rangeClosure=\"%s\">\n", "0");
-        fprintf(stdout,"\t\t\t\t\t\t\t<ows:MinimumValue>%s</ows:MinimumValue>\n", choices[0]);
-        fprintf(stdout,"\t\t\t\t\t\t\t<ows:MaximumValue>%s</ows:MaximumValue>\n", choices[1]);
-        fprintf(stdout,"\t\t\t\t\t\t</ows:Range>\n");
-        }
-        else
-        {
-            for(i = 0; i < num_choices; i++)
-            {
-                fprintf(stdout,"\t\t\t\t\t\t<ows:Value>");
-                print_escaped_for_xml(stdout, choices[i]);
-                fprintf(stdout,"</ows:Value>\n");
-            }
-        }
-        fprintf(stdout,"\t\t\t\t\t</ows:AllowedValues>\n");
-    }
-
-    if(default_value)
-    {
-        fprintf(stdout,"\t\t\t\t\t<DefaultValue>");
-        print_escaped_for_xml(stdout, default_value);
-        fprintf(stdout,"</DefaultValue>\n");
-    }
-    fprintf(stdout,"\t\t\t\t</LiteralData>\n");
-
-
-    if(inout_type == WPS_INPUT)
-        fprintf(stdout,"\t\t\t</Input>\n");
-    else if(inout_type == WPS_OUTPUT)
-        fprintf(stdout,"\t\t\t</Output>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_mimetype_text_plain()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>text/plain</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
-}
-/* ************************************************************************** */
-
-static void wps_print_mimetype_raster_tiff()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>image/tiff</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_mimetype_raster_png()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>image/png</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
-}
-
-/* *** Native GRASS raster format urn:grass:raster:location/mapset/raster *** */
-
-static void wps_print_mimetype_raster_grass_binary()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/grass-raster-binary</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
-}
-
-/* *** GRASS raster maps exported via r.out.ascii ************************** */
-
-static void wps_print_mimetype_raster_grass_ascii()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/grass-raster-ascii</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
-}
-
-/* ************************************************************************** */
-
-static void wps_print_mimetype_vector_gml310()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>text/xml</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<Encoding>UTF-8</Encoding>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<Schema>http://schemas.opengis.net/gml/3.1.0/polygon.xsd</Schema>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
-}
-
-/* *** GRASS vector format exported via v.out.ascii ************************** */
-
-static void wps_print_mimetype_vector_grass_ascii()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/grass-vector-ascii</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
-}
-
-/* *** Native GRASS vector format urn:grass:vector:location/mapset/vector *** */
-
-static void wps_print_mimetype_vector_grass_binary()
-{
-    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
-    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/grass-vector-binary</MimeType>\n");
-    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
