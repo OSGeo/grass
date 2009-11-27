@@ -7,11 +7,11 @@
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -19,10 +19,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
 #include "grid_structs.h"
 #include "local_proto.h"
 
@@ -60,8 +62,9 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("geometry"));
     module->description =
-	_("Creates a GRASS vector map of a user-defined grid.");
+	_("Creates a vector map of a user-defined grid.");
 
     vectname = G_define_standard_option(G_OPT_V_OUTPUT);
     vectname->key = "map";
