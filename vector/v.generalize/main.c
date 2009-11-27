@@ -4,15 +4,15 @@
  * MODULE:     v.generalize
  *
  * AUTHOR(S):  Daniel Bundala
+ *             OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *
  * PURPOSE:    Module for line simplification and smoothing
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2007-2009 by the GRASS Development Team
  *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ *             This program is free software under the GNU General
+ *             Public License (>=v2).  Read the file COPYING that
+ *             comes with GRASS for details.
  *
  ****************************************************************/
 
@@ -81,15 +81,19 @@ int main(int argc, char *argv[])
     G_add_keyword(_("smoothing"));
     G_add_keyword(_("displacement"));
     G_add_keyword(_("network generalization"));
-    module->description = _("Vector based generalization.");
+    module->description = _("Tool for vector based generalization.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
-    map_out = G_define_standard_option(G_OPT_V_OUTPUT);
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "line,boundary,area";
     type_opt->answer = "line,boundary,area";
+
+    map_out = G_define_standard_option(G_OPT_V_OUTPUT);
+
 
     method_opt = G_define_option();
     method_opt->key = "method";
@@ -204,7 +208,6 @@ int main(int argc, char *argv[])
     iterations_opt->answer = "1";
     iterations_opt->description = _("Number of iterations");
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
@@ -302,7 +305,7 @@ int main(int argc, char *argv[])
 
     Vect_set_open_level(2);
 
-    if (Vect_open_old(&In, map_in->answer, "") < 1)
+    if (Vect_open_old2(&In, map_in->answer, "", field_opt->answer) < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
@@ -498,16 +501,16 @@ int main(int argc, char *argv[])
     if (ca_flag->answer)
 	copy_tables_by_cats(&In, &Out);
 
-    if (total_input != 0)
-	G_message(_("Number of vertices was reduced from %d to %d [%d%%]"),
-		  total_input, total_output,
-		  (total_output * 100) / total_input);
-
     /* warning about area corruption */
     if (mask_type & GV_BOUNDARY && (n_orig_areas = Vect_get_num_areas(&In)) > 0) {
 	G_warning(_("Areas may have disappeared and/or area attribute attachment may have changed"));
 	G_warning(_("Try v.clean tool=prune thresh=%f"), thresh);
     }
+
+    if (total_input != 0)
+	G_done_msg(_("Number of vertices reduced from %d to %d (%d%%)."),
+		  total_input, total_output,
+		  (total_output * 100) / total_input);
 
     Vect_close(&In);
     Vect_close(&Out);
