@@ -65,43 +65,49 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
 
 
 /*!
-   \brief fully qualified file name
+   \brief Get fully qualified element name
 
-   Returns a fully qualified name for the file <b>name</b> in 
-   <b>mapset.</b> Currently this string is in the form <i>name @ mapset</i>, 
-   but the programmer should pretend not to know this and always call this 
-   routine to get the fully qualified name.
-   The following example shows how an interactive version of <i>d.rast</i>
-   interfaces with the command-line version of <i>d.rast</i>:
+   Returns a fully qualified name for GIS element <i>name</i> in
+   <i>mapset</i>. Currently this string is in the form
+   <b>name@mapset</b>, but the programmer should pretend not to know
+   this and always call this routine to get the fully qualified name.
 
+   String is allocated by G_store().
+   
    \code
-   #include "gis.h"
+   #include <grass/gis.h>
    int main(char *argc, char **argv)
    {
-   char name[GNAME_MAX], *mapset, *fqn;
-   char command[1024];
-   G_gisinit(argv[0]);
-   mapset = G_ask_cell_old ("", name, "");
-   if (mapset == NULL) exit(EXIT_SUCCESS);
-   fqn = G_fully_qualified_name (name, mapset);
-   sprintf (command, "d.rast map='%s'", fqn);
-   system(command);
+       char name[GNAME_MAX], *mapset, *fqn;
+       char command[1024];
+
+       G_gisinit(argv[0]);
+       mapset = G_find_rast(name, "");
+       if (mapset == NULL)
+           exit(EXIT_SUCCESS);
+
+       fqn = G_fully_qualified_name (name, mapset);
+       printf (stdout, "map='%s'", fqn);
+
+       exit(EXIT_SUCCESS);
    }
    \endcode
 
-   \param name map name
+   \param name element name
    \param mapset mapset name
 
-   \return pointer to full map name (map @ mapset)
+   \return pointer to full element name (map@mapset)
  */
 char *G_fully_qualified_name(const char *name, const char *mapset)
 {
     char fullname[GNAME_MAX + GMAPSET_MAX];
 
-    if (strchr(name, '@'))
+    if (strchr(name, '@') || strlen(mapset) < 1) {
 	sprintf(fullname, "%s", name);
-    else
+    }
+    else {
 	sprintf(fullname, "%s@%s", name, mapset);
+    }
 
     return G_store(fullname);
 }
