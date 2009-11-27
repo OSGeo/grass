@@ -323,7 +323,7 @@ void wps_print_process_description()
 static void wps_print_process_descriptions_begin(void)
 {
     fprintf(stdout, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fprintf(stdout, "<wps:process_descriptions xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"\n");
+    fprintf(stdout, "<wps:ProcessDescriptions xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"\n");
     fprintf(stdout, "xmlns:ows=\"http://www.opengis.net/ows/1.1\"\n");
     fprintf(stdout, "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n");
     fprintf(stdout, "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
@@ -334,7 +334,7 @@ static void wps_print_process_descriptions_begin(void)
 
 static void wps_print_process_descriptions_end(void)
 {
-    fprintf(stdout,"</wps:process_descriptions>\n");
+    fprintf(stdout,"</wps:ProcessDescriptions>\n");
 }
 
 /* ************************************************************************** */
@@ -345,7 +345,7 @@ static void wps_print_process_description_begin(int store, int status, const cha
 {
     int i;
 
-    fprintf(stdout,"\t<process_description wps:processVersion=\"1\" storeSupported=\"%s\" statusSupported=\"%s\">\n", (store?"true":"false"), (status?"true":"false"));
+    fprintf(stdout,"\t<ProcessDescription wps:processVersion=\"1\" storeSupported=\"%s\" statusSupported=\"%s\">\n", (store?"true":"false"), (status?"true":"false"));
     wps_print_ident_title_abstract(identifier, title, abstract);
     for(i = 0; i < num_keywords; i++)
     {
@@ -359,35 +359,35 @@ static void wps_print_process_description_begin(int store, int status, const cha
 
 static void wps_print_process_description_end(void)
 {
-    fprintf(stdout,"\t</process_description>\n");
+    fprintf(stdout,"\t</ProcessDescription>\n");
 }
 
 /* ************************************************************************** */
 
 static void wps_print_data_inputs_begin(void)
 {
-    fprintf(stdout,"\t\t<data_inputs>\n");
+    fprintf(stdout,"\t\t<DataInputs>\n");
 }
 
 /* ************************************************************************** */
 
 static void wps_print_data_inputs_end(void)
 {
-    fprintf(stdout,"\t\t</data_inputs>\n");
+    fprintf(stdout,"\t\t</DataInputs>\n");
 }
 
 /* ************************************************************************** */
 
 static void wps_print_process_outputs_begin(void)
 {
-    fprintf(stdout,"\t\t<process_outputs>\n");
+    fprintf(stdout,"\t\t<ProcessOutputs>\n");
 }
 
 /* ************************************************************************** */
 
 static void wps_print_process_outputs_end(void)
 {
-    fprintf(stdout,"\t\t</process_outputs>\n");
+    fprintf(stdout,"\t\t</ProcessOutputs>\n");
 }
 
 /* ************************************************************************** */
