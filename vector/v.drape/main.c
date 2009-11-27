@@ -5,30 +5,20 @@
  * 
  * AUTHOR(S):    Radim Blazek, Dylan Beaudette
  *               Maris Nartiss - WHERE support and raster NULL support
+ *               OGR support by Martin Landa <landa.martin gmail.com>
+ *
  * PURPOSE:      Convert 2D vector to 3D vector by sampling of elevation raster.
  *               
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2009 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  * 
  **********************************************************/
 
-
-/** Doxygen Style Comments
-\file main.c
-\brief v.drape module for converting 2D vectors into 3D vectors by means of sampling an elevation raster.
- 
-\author Radim Blazek
-\author Dylan Beaudette
-\date 2005.09.20
- 
-\todo add support for areas
-*/
-
 #include <stdlib.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
@@ -137,7 +127,8 @@ int main(int argc, char *argv[])
     INTERP_TYPE method = UNKNOWN;
     int fdrast;			/* file descriptor for raster map is int */
     struct Cell_head window;
-
+    struct bound_box map_box;
+    
     dbDriver *driver;
     dbHandle handle;
     dbTable *table;
@@ -149,19 +140,20 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("sampling"));
+    G_add_keyword(_("3D"));
+
     module->description =
 	_("Converts vector map to 3D by sampling of elevation raster map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "point,centroid,line,boundary,face,kernel";
-    type_opt->answer = "point,centroid,line,boundary,face,kernel";
+    layer_opt = G_define_standard_option(G_OPT_V_FIELD);
 
+    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
+    
     /* raster sampling */
     rast_opt = G_define_standard_option(G_OPT_R_MAP);
     rast_opt->key = "rast";
-    rast_opt->required = NO;
     rast_opt->description = _("Elevation raster map for height extraction");
     
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -186,10 +178,6 @@ int main(int argc, char *argv[])
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
-    layer_opt = G_define_standard_option(G_OPT_V_FIELD);
-    layer_opt->answer = "1";
-    layer_opt->description = _("Layer is only used for WHERE SQL statement");
-
     null_opt = G_define_option();
     null_opt->key = "null_value";
     null_opt->type = TYPE_DOUBLE;
@@ -199,11 +187,7 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    layer = atoi(layer_opt->answer);
-    if (layer == 0)
-	G_fatal_error(_("Layer 0 not supported"));
-
+    
     if (null_opt->answer)
 	null_val = atof(null_opt->answer);
 
@@ -229,14 +213,14 @@ int main(int argc, char *argv[])
     if ((fdrast = Rast_open_old(rast_opt->answer, "")) < 0) {
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
     }
-
-    Vect_set_open_level(2);
-
+    
     /* check input/output vector maps */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
-
-    Vect_open_old(&In, in_opt->answer, "");
+    
+    Vect_set_open_level(2);
+    Vect_open_old2(&In, in_opt->answer, "", layer_opt->answer);
+    layer = Vect_get_field_number(&In, layer_opt->answer);
 
     if (where_opt->answer) {
 	/* Let's get vector layers db connections information */
@@ -323,9 +307,6 @@ int main(int argc, char *argv[])
 				out_num++;
 			    }
 		    }
-		    else
-			G_fatal_error
-			    ("Error in Vect_cidx_find_next function! Report a bug.");
 		    c = Vect_cidx_find_next(&In, field_index, cats[i],
 					    otype, c, &ltype, &id);
 		}
@@ -391,6 +372,9 @@ int main(int argc, char *argv[])
                     NULL, otype, new_cats, Out.plus.cidx[i].n_cats))
                     G_warning(_("Due to error attribute data to new map are not transferred"));
         }
+
+	Vect_get_map_box(&Out, &map_box);
+
 	/* close output vector */
 	Vect_close(&Out);
     }
@@ -400,8 +384,11 @@ int main(int argc, char *argv[])
 	G_warning(_("No features drapped. Check Your computational region and input raster map."));
 	exit(EXIT_FAILURE);
     }
+
     /* close input vector */
     Vect_close(&In);
+
+    G_done_msg("T: %f B: %f.", map_box.T, map_box.B);
     
     exit(EXIT_SUCCESS);
 }
