@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *input, *tests, *dfield;
+	struct Option *input, *tests, *dfield, *layer;
     } parm;
     struct
     {
@@ -78,6 +78,8 @@ int main(int argc, char **argv)
 
     parm.input = G_define_standard_option(G_OPT_V_MAP);
 
+    parm.layer = G_define_standard_option(G_OPT_V_FIELD);
+    
     parm.tests = G_define_option();
     parm.tests->key = "tests";
     parm.tests->key_desc = "range";
@@ -105,8 +107,8 @@ int main(int argc, char **argv)
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old(&Map, parm.input->answer, "");
-    field = 1;
+    Vect_open_old2(&Map, parm.input->answer, "", parm.layer->answer);
+    field = Vect_get_field_number(&Map, parm.layer->answer);
     
     /* Read attributes */
     Fi = Vect_get_field(&Map, field);
