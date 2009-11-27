@@ -1,29 +1,21 @@
-/*
- * from s.kcv
- * Copyright (C) 1993-1994. James Darrell McCauley.
+
+/****************************************************************
  *
- * Author: James Darrell McCauley darrell@mccauley-usa.com
- *                                http://mccauley-usa.com/
+ * MODULE:     v.kcv
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * AUTHOR(S):  James Darrell McCauley darrell@mccauley-usa.com
+ *             OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * PURPOSE:    Randomly partition points into test/train sets.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * COPYRIGHT:  (C) 2001-2009 by James Darrell McCauley, and the GRASS Development Team
  *
- * Modification History:
- * 4.2B <27 Jan 1994>  fixed RAND_MAX for Solaris 2.3
- * <13 Sep 2000> released under GPL
- * 10/2004 Upgrade to 5.7 Radim Blazek
- */
+ *             This program is free software under the GNU General
+ *             Public License (>=v2).  Read the file COPYING that
+ *             comes with GRASS for details.
+ *
+ ****************************************************************/
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
@@ -54,14 +46,14 @@ int main(int argc, char *argv[])
 {
     int line, nlines, nlinks;
     double east, north, (*rng) (), max, myrand();
-    int i, j, n, nsites, verbose, np, *p, dcmp();
+    int i, j, n, nsites, np, *p, dcmp();
     int *pnt_part;
     struct Map_info In, Out;
     static struct line_pnts *Points;
     struct line_cats *Cats;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *col_opt, *npart_opt;
-    struct Flag *drand48_flag, *q_flag;
+    struct Flag *drand48_flag;
     struct bound_box box;
     double maxdist;
 
@@ -74,6 +66,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("points"));
     module->description =
 	_("Randomly partition points into test/train sets.");
 
@@ -100,17 +93,11 @@ int main(int argc, char *argv[])
     drand48_flag->key = 'd';
     drand48_flag->description = _("Use drand48()");
 
-    /* please remove in GRASS 7 */
-    q_flag = G_define_flag();
-    q_flag->key = 'q';
-    q_flag->description = _("Quiet");
-
     G_gisinit(argv[0]);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    verbose = (!q_flag->answer);
     np = atoi(npart_opt->answer);
 
     if (drand48_flag->answer) {
@@ -139,7 +126,7 @@ int main(int argc, char *argv[])
     nsites = Vect_get_num_primitives(&In, GV_POINT);
 
     if (nsites < np) {
-	G_fatal_error("Sites found: %i\nMore partitions than sites.", nsites);
+	G_fatal_error(_("More partitions than points (%d)"), nsites);
     }
 
     Vect_set_fatal_error(GV_FATAL_PRINT);
@@ -191,7 +178,7 @@ int main(int argc, char *argv[])
 
     if (db_execute_immediate(Driver, &sql) != DB_OK) {
 	Vect_delete(Out.name);
-	G_fatal_error(_("Cannot alter table: %s"), db_get_string(&sql));
+	G_fatal_error(_("Unable to alter table: %s"), db_get_string(&sql));
     }
     if (nlinks < 1)
 	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fi->table, Fi->key,
