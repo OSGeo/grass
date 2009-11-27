@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     static struct line_pnts *Points;
     struct line_cats *Cats;
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *col_opt, *npart_opt;
+    struct Option *in_opt, *out_opt, *col_opt, *npart_opt, *field_opt;
     struct Flag *drand48_flag;
     struct bound_box box;
     double maxdist;
@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
 	_("Randomly partition points into test/train sets.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     npart_opt = G_define_option();
@@ -116,7 +119,7 @@ int main(int argc, char *argv[])
 
     /* open input vector */
     Vect_set_open_level(2);
-    if (Vect_open_old(&In, in_opt->answer, "") < 2) {
+    if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 2) {
 	G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 		      in_opt->answer, 2);
     }
@@ -137,7 +140,7 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Out);
 
     /* Copy vector lines */
-    Vect_copy_map_lines(&In, &Out);
+    Vect_copy_map_lines_field(&In, Vect_get_field_number(&In, field_opt->answer), &Out);
 
     /* Copy tables */
     if (Vect_copy_tables(&In, &Out, 0))
