@@ -7,17 +7,16 @@
  *             Based on v.example by Radim Blazek
  *             Inspired by d.vect and v.drape
  *             Coding help and code cleaning by Markus Neteler
- *             Support for points added by Martin Landa (08/2007)
+ *             Support for points & OGR support added by Martin Landa (08/2007 / 2009)
  *
  * PURPOSE:    "Extrudes" flat polygons and lines to 3D with defined height
  *              Useful for creating buildings for displaying with NVIZ
  *
- * COPYRIGHT:  (C) 2005-2007 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2005-2009 by the GRASS Development Team
  *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ *             This program is free software under the GNU General
+ *             Public License (>=v2). Read the file COPYING that comes
+ *             with GRASS for details.
  ****************************************************************/
 
 #include <stdio.h>
@@ -42,6 +41,7 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
+    struct bound_box map_box;
 
     struct Cell_head window;
     struct cat_list *Clist;
@@ -69,17 +69,21 @@ int main(int argc, char *argv[])
     G_add_keyword(_("geometry"));
     G_add_keyword(_("3D"));
     module->description =
-	_("Extrudes flat vector object to 3D with defined height.");
+	_("Extrudes flat vector features to 3D with defined height.");
 
     t_flag = G_define_flag();
     t_flag->key = 't';
     t_flag->description = _("Trace elevation");
 
     old = G_define_standard_option(G_OPT_V_INPUT);
-    old->description = _("Name of input 2D vector map");
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+
+    type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt->answer = "point,line,boundary,area";
+    type_opt->options = "point,line,boundary,area";
 
     new = G_define_standard_option(G_OPT_V_OUTPUT);
-    new->description = _("Name of resulting 3D vector map");
 
     zshift = G_define_option();
     zshift->key = "zshift";
@@ -104,12 +108,6 @@ int main(int argc, char *argv[])
     hcolumn->key = "hcolumn";
     hcolumn->multiple = NO;
     hcolumn->description = _("Name of attribute column with object heights");
-
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->answer = "point,line,boundary,area";
-    type_opt->options = "point,line,boundary,area";
-
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     G_gisinit(argv[0]);
 
@@ -150,7 +148,7 @@ int main(int argc, char *argv[])
     Vect_open_new(&Out, new->answer, WITH_Z);
 
     /* opening old vector */
-    Vect_open_old(&In, old->answer, "");
+    Vect_open_old2(&In, old->answer, "", field_opt->answer);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
@@ -250,7 +248,7 @@ int main(int argc, char *argv[])
 	i = 1;
 	/* loop through each line in the dataset */
 	nelements = Vect_get_num_lines(&In);
-	G_message(_("Extruding vector primitives..."));
+	G_message(_("Extruding features..."));
 	for (line = 1; line <= nelements; line++) {
 
 	    /* read line */
@@ -336,12 +334,16 @@ int main(int argc, char *argv[])
     Vect_set_comment(&Out, comment);
     G_free(comment);
 
+    Vect_get_map_box(&Out, &map_box);
+
     Vect_close(&In);
     Vect_close(&Out);
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
+    G_done_msg("T: %f B: %f.", map_box.T, map_box.B);
+    
     exit(EXIT_SUCCESS);
 }
 
