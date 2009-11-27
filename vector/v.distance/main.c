@@ -7,10 +7,11 @@
  *                 Faculty of Forestry, Finland
  *               - some additions 2002 Markus Neteler
  *               - updated to 5.7 by Radim Blazek 2003
+ *               - OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *               
  * PURPOSE:      Calculates distance from a point to nearest line or point in vector layer. 
  *               
- * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -23,11 +24,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
-
 
 /* TODO: support all types (lines, boundaries, areas for 'from' (from_type) */
 
@@ -122,10 +123,10 @@ int main(int argc, char *argv[])
     from_opt->description = _("Name of existing vector map (from)");
     from_opt->guisection = _("From");
 
-    to_opt = G_define_standard_option(G_OPT_V_INPUT);
-    to_opt->key = "to";
-    to_opt->description = _("Name of existing vector map (to)");
-    to_opt->guisection = _("To");
+    from_field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    from_field_opt->key = "from_layer";
+    from_field_opt->label = _("Layer number or name (from)");
+    from_field_opt->guisection = _("From");
 
     from_type_opt = G_define_standard_option(G_OPT_V_TYPE);
     from_type_opt->key = "from_type";
@@ -134,6 +135,16 @@ int main(int argc, char *argv[])
     from_type_opt->label = _("Feature type (from)");
     from_type_opt->guisection = _("From");
 
+    to_opt = G_define_standard_option(G_OPT_V_INPUT);
+    to_opt->key = "to";
+    to_opt->description = _("Name of existing vector map (to)");
+    to_opt->guisection = _("To");
+
+    to_field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    to_field_opt->key = "to_layer";
+    to_field_opt->label = _("Layer number or name (to)");
+    to_field_opt->guisection = _("To");
+
     to_type_opt = G_define_standard_option(G_OPT_V_TYPE);
     to_type_opt->key = "to_type";
     to_type_opt->options = "point,line,boundary,centroid,area";
@@ -141,16 +152,6 @@ int main(int argc, char *argv[])
     to_type_opt->label = _("Feature type (to)");
     to_type_opt->guisection = _("To");
 
-    from_field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    from_field_opt->key = "from_layer";
-    from_field_opt->label = _("Layer number (from)");
-    from_field_opt->guisection = _("From");
-    
-    to_field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    to_field_opt->key = "to_layer";
-    to_field_opt->label = _("Layer number (to)");
-    to_field_opt->guisection = _("To");
-    
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->key = "output";
     out_opt->required = NO;
@@ -238,7 +239,6 @@ int main(int argc, char *argv[])
     to_type = Vect_option_to_types(to_type_opt);
 
     from_field = atoi(from_field_opt->answer);
-    to_field = atoi(to_field_opt->answer);
 
     max = atof(max_opt->answer);
     min = atof(min_opt->answer);
@@ -307,7 +307,9 @@ int main(int argc, char *argv[])
 
     /* Open 'to' vector */
     Vect_set_open_level(2);
-    Vect_open_old(&To, to_opt->answer, "");
+    Vect_open_old2(&To, to_opt->answer, "", to_field_opt->answer);
+
+    to_field = Vect_get_field_number(&To, to_field_opt->answer);
 
     /* Open output vector */
     if (out_opt->answer) {
@@ -508,7 +510,7 @@ int main(int argc, char *argv[])
 	else {
 	    LLPoints = NULL;
 	}
-	G_verbose_message(_("Finding nearest lines..."));
+	G_message(_("Finding nearest feature..."));
 	for (fline = 1; fline <= nfrom; fline++) {
 	    int tmp_tcat;
 	    double tmp_tangle, tangle;
@@ -638,7 +640,7 @@ int main(int argc, char *argv[])
 
     /* Find nearest areas */
     if (to_type & GV_AREA) {
-	G_verbose_message(_("Finding nearest areas..."));
+	G_message(_("Finding nearest areas..."));
 	for (fline = 1; fline <= nfrom; fline++) {
 	    G_debug(3, "fline = %d", fline);
 	    G_percent(fline, nfrom, 2);
