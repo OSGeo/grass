@@ -111,7 +111,7 @@ int Rast_open_old(const char *name, const char *mapset)
     int fd;
 
     if ((fd = Rast__open_old(name, mapset)) < 0) {
-	G_warning(_("Unable to open raster map <%s@%s>"), name, mapset);
+	G_warning(_("Unable to open raster map <%s>"), G_fully_qualified_name(name, mapset));
 	return fd;
     }
 
@@ -176,7 +176,7 @@ int Rast__open_old(const char *name, const char *mapset)
     mapset = xmapset;
 
     if (!G_find_raster2(name, mapset)) {
-	G_warning(_("Unable to find <%s@%s>"), name, mapset);
+	G_warning(_("Unable to find <%s>"), G_fully_qualified_name(name, mapset));
 	return -1;
     }
 
