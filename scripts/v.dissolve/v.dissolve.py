@@ -39,8 +39,8 @@
 #%end
 #%option
 #% key: layer
-#% type: integer
-#% label: Layer number. If -1, all layers are extracted.
+#% type: string
+#% label: Layer number or name. If -1, all layers are extracted.
 #% description: A single vector map can be connected to multiple database tables. This number determines which table to use.
 #% answer: 1
 #% gisprompt: old_layer,layer,layer_all
