@@ -4,26 +4,26 @@
  * MODULE:       v.neighbors
  * 
  * AUTHOR(S):    Radim Blazek, original code taken from r.neighbors/main.c
+ *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *               
  * PURPOSE:      Category manipulations
  *               
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-
-/* TODO: add more methods */
 
 int main(int argc, char *argv[])
 {
@@ -31,8 +31,9 @@ int main(int argc, char *argv[])
     CELL *result, *rp;
     int nrows, ncols;
     int row, col;
+    int field;
     struct GModule *module;
-    struct Option *in_opt, *out_opt;
+    struct Option *in_opt, *out_opt, *field_opt;
     struct Option *method_opt, *size_opt;
     struct Map_info In;
     double radius;
@@ -48,11 +49,15 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("raster"));
     G_add_keyword(_("aggregation"));
-    module->description = "Makes each cell value a "
-	"function of the attribute values assigned to the vector points or centroids "
-	"around it, and stores new cell values in an output raster map layer.";
+    module->label = _("Neighborhood analysis tool for vector point maps.");
+    module->description = _("Makes each cell value a "
+			    "function of the attribute values assigned to the vector points or centroids "
+			    "around it, and stores new cell values in an output raster map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+
     out_opt = G_define_standard_option(G_OPT_R_OUTPUT);
 
     method_opt = G_define_option();
@@ -61,13 +66,13 @@ int main(int argc, char *argv[])
     method_opt->required = YES;
     method_opt->options = "count";
     method_opt->answer = "count";
-    method_opt->description = "Neighborhood operation";
+    method_opt->description = _("Neighborhood operation");
 
     size_opt = G_define_option();
     size_opt->key = "size";
     size_opt->type = TYPE_DOUBLE;
     size_opt->required = YES;
-    size_opt->description = "Neighborhood diameter in map units";
+    size_opt->description = _("Neighborhood diameter in map units");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -76,7 +81,8 @@ int main(int argc, char *argv[])
 
     /* open input vector */
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
+    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+    field = Vect_get_field_number(&In, field_opt->answer);
 
     G_get_set_window(&region);
     nrows = G_window_rows();
@@ -98,7 +104,7 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	double x, y;
 
-	G_percent(row, nrows, 1);
+	G_percent(row, nrows, 2);
 
 	y = G_row_to_northing(row + 0.5, &region);
 	box.N = y + radius;
@@ -122,16 +128,14 @@ int main(int argc, char *argv[])
 	    count = 0;
 
 	    for (i = 0; i < List->n_values; i++) {
-		double distance;
-
 		Vect_read_line(&In, Points, Cats, List->value[i]);
-		distance =
-		    Vect_points_distance(x, y, 0.0, Points->x[0],
-					 Points->y[0], 0.0, 0);
 
-		if (distance <= radius) {
+		if (Vect_cat_get(Cats, field, NULL) == 0)
+		    continue;
+		
+		if (Vect_points_distance(x, y, 0.0, Points->x[0],
+					 Points->y[0], 0.0, 0) <= radius)
 		    count++;
-		}
 	    }
 
 	    if (count > 0) {
@@ -143,7 +147,7 @@ int main(int argc, char *argv[])
 
 	Rast_put_row(out_fd, result, CELL_TYPE);
     }
-    G_percent(row, nrows, 1);
+    G_percent(1, 1, 1);
 
     Vect_close(&In);
     Rast_close(out_fd);
