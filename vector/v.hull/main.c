@@ -76,6 +76,7 @@ int main(int argc, char **argv)
     Vect_check_input_output_name(input->answer, output->answer,
 				 GV_FATAL_EXIT);
 
+    Vect_set_open_level(1);
     if (Vect_open_old2(&Map, sitefile, "", field->answer) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), sitefile);
 
