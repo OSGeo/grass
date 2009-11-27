@@ -26,7 +26,9 @@ void output_edges(struct vertex *sites_sorted[], unsigned int n, int mode3d,
     }
     double x1, y1, z1, x2, y2, z2;
 
+    G_message(_("Creating edges..."));
     for (i = 0; i < n; i++) {
+	G_percent(i, n, 2);
 	u = sites_sorted[i];
 	e_start = e = u->entry_pt;
 	do {
@@ -54,6 +56,7 @@ void output_edges(struct vertex *sites_sorted[], unsigned int n, int mode3d,
 	    e = NEXT(e, u);
 	} while (!SAME_EDGE(e, e_start));
     }
+    G_percent(1, 1, 1);
 }
 
 /* Print the ring of triangles about each vertex. */
@@ -160,24 +163,33 @@ void remove_duplicates(struct vertex *list[], unsigned int *size)
 }
 
 /* returns number of sites read */
-int read_sites(int mode3d, int complete_map, struct Map_info map_in,
-	       struct bound_box Box)
+int read_sites(int mode3d, int complete_map, struct Map_info* map_in,
+	       struct bound_box Box, int field)
 {
     int nlines, line, allocated, nsites;
     struct line_pnts *Points;
-
+    struct line_cats *Cats;
+    
     Points = Vect_new_line_struct();
-    nlines = Vect_get_num_lines(&map_in);
+    Cats = Vect_new_cats_struct();
+
+    nlines = Vect_get_num_lines(map_in);
     alloc_sites(nlines);
     allocated = nlines;
 
     nsites = 0;
+    G_message(_("Reading point features..."));
     for (line = 1; line <= nlines; line++) {
 	int type;
 
-	type = Vect_read_line(&map_in, Points, NULL, line);
+	G_percent(line, nlines, 2);
+	type = Vect_read_line(map_in, Points, Cats, line);
 	if (!(type & GV_POINTS))
 	    continue;
+	
+	if (Vect_cat_get(Cats, field, NULL) == 0)
+	    continue;
+	
 	if (!complete_map) {
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
 		continue;
@@ -203,6 +215,9 @@ int read_sites(int mode3d, int complete_map, struct Map_info map_in,
     if (nsites != nlines)
 	realloc_sites(nsites);
     alloc_edges(nsites);
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 
     return nsites;
 }

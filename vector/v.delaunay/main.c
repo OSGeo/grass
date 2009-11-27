@@ -2,25 +2,26 @@
  *
  * MODULE:       v.delaunay
  *
- * AUTHOR(S):    Martin Pavlovsky (Paul Kelly mentor)
+ * AUTHOR(S):    Martin Pavlovsky (Google SoC 2008, Paul Kelly mentor)
  *
- * PURPOSE:      creates a Delaunay triangulation vector map
+ * PURPOSE:      Creates a Delaunay triangulation vector map
  *
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008-2009 by the GRASS Development Team
  *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
 #include "data_types.h"
 #include "memory.h"
 #include "geometry.h"
@@ -33,13 +34,12 @@ int main(int argc, char *argv[])
 {
 
     /* GRASS related variables */
-    const char *mapset;
     struct Map_info map_in, map_out;
     struct Cell_head Window;
     struct bound_box Box;
     struct GModule *module;
     struct Flag *reg_flag, *line_flag;
-    struct Option *in_opt, *out_opt;
+    struct Option *in_opt, *out_opt, *field_opt;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -48,9 +48,7 @@ int main(int argc, char *argv[])
     int Type;
     int complete_map;
     int mode3d;
-
-    /* ---------------------- */
-
+    
     unsigned int i;
     unsigned int n;
     struct edge *l_cw, *r_ccw;
@@ -60,10 +58,13 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("geometry"));
+    G_add_keyword(_("triangulation"));
     module->description = _("Creates a Delaunay triangulation from an input "
 			    "vector map containing points or centroids.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     reg_flag = G_define_flag();
@@ -87,13 +88,9 @@ int main(int argc, char *argv[])
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-
-    /* open files */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-
+    
     Vect_set_open_level(2);
-    Vect_open_old(&map_in, in_opt->answer, mapset);
+    Vect_open_old2(&map_in, in_opt->answer, "", field_opt->answer);
 
     /* check if we have a 3D input points map */
     mode3d = Vect_is_3d(&map_in);
@@ -111,20 +108,21 @@ int main(int argc, char *argv[])
 
     /* initialize working region */
     G_get_window(&Window);
-    G_percent(0, 100, 1);
     Vect_region_box(&Window, &Box);
 
-    n = read_sites(mode3d, complete_map, map_in, Box);
+    n = read_sites(mode3d, complete_map, &map_in, Box,
+		   Vect_get_field_number(&map_in, field_opt->answer));
 
     /* Sort. */
     sites_sorted =
 	(struct vertex **)G_malloc((unsigned)n * sizeof(struct vertex *));
     if (sites_sorted == MY_NULL)
-	G_fatal_error(_("Not enough memory."));
+	G_fatal_error(_("Not enough memory"));
     for (i = 0; i < n; i++)
 	sites_sorted[i] = sites + i;
     qsort(sites_sorted, n, sizeof(struct vertex *), (void *)compare);
 
+    G_verbose_message(_("Removing duplicates..."));
     remove_duplicates(sites_sorted, &n);
 
     /* Triangulate. */
@@ -132,16 +130,23 @@ int main(int argc, char *argv[])
 
     output_edges(sites_sorted, n, mode3d, Type, map_out);
 
-    free((char *)sites_sorted);
+    G_free((char *)sites_sorted);
     free_memory();
 
     Vect_close(&map_in);
 
     if (Type == GV_BOUNDARY) {
+	int verbose = G_verbose();
+	if (verbose < G_verbose_max()) {
+	    G_message(_("Building topology..."));
+	    G_set_verbose(0);
+	}
 	Vect_build_partial(&map_out, GV_BUILD_AREAS);
+	G_set_verbose(verbose);
 	nareas = Vect_get_num_areas(&map_out);
 	G_debug(3, "nareas = %d", nareas);
 	/*  Assign centroid to each area */
+	G_message(_("Writing areas..."));
 	for (area = 1; area <= nareas; area++) {
 	    double x, y, z, angle, slope;
 	    int ret;
