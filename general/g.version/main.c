@@ -24,6 +24,14 @@
 #define GRASS_VERSION_UPDATE_PKG "0.1"
 #endif
 
+static const char COPYING[] =
+#include "copying.h"
+;
+
+static const char GRASS_CONFIGURE_PARAMS[] =
+#include "confparms.h"
+;
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
