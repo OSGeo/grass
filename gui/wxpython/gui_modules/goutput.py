@@ -34,6 +34,7 @@ import grass.script as grass
 import globalvar
 import gcmd
 import utils
+import preferences
 import menuform
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
@@ -257,6 +258,9 @@ class GMConsole(wx.Panel):
         @param style text style (see GMStc)
         @param stdout write to stdout or stderr
         """
+
+        self.cmd_output.SetStyle()
+
         if switchPage and \
                 self._notebook.GetSelection() != self.parent.goutput.pageid:
             self._notebook.SetSelection(self.parent.goutput.pageid)
@@ -749,35 +753,9 @@ class GMStc(wx.stc.StyledTextCtrl):
 
         #
         # styles
-        #
-        self.StyleDefault     = 0
-        self.StyleDefaultSpec = "face:Courier New,size:10,fore:#000000,back:#FFFFFF"
-        self.StyleCommand     = 1
-        self.StyleCommandSpec = "face:Courier New,size:10,fore:#000000,back:#bcbcbc"
-        self.StyleOutput      = 2
-        self.StyleOutputSpec  = "face:Courier New,size:10,fore:#000000,back:#FFFFFF"
-        # fatal error
-        self.StyleError       = 3
-        self.StyleErrorSpec   = "face:Courier New,size:10,fore:#7F0000,back:#FFFFFF"
-        # warning
-        self.StyleWarning     = 4
-        self.StyleWarningSpec = "face:Courier New,size:10,fore:#0000FF,back:#FFFFFF"
-        # message
-        self.StyleMessage     = 5
-        self.StyleMessageSpec = "face:Courier New,size:10,fore:#000000,back:#FFFFFF"
-        # unknown
-        self.StyleUnknown     = 6
-        self.StyleUnknownSpec = "face:Courier New,size:10,fore:#000000,back:#FFFFFF"
+        #                
+        self.SetStyle()
         
-        # default and clear => init
-        self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, self.StyleDefaultSpec)
-        self.StyleClearAll()
-        self.StyleSetSpec(self.StyleCommand, self.StyleCommandSpec)
-        self.StyleSetSpec(self.StyleOutput,  self.StyleOutputSpec)
-        self.StyleSetSpec(self.StyleError,   self.StyleErrorSpec)
-        self.StyleSetSpec(self.StyleWarning, self.StyleWarningSpec)
-        self.StyleSetSpec(self.StyleMessage, self.StyleMessageSpec)
-        self.StyleSetSpec(self.StyleUnknown, self.StyleUnknownSpec)
 
         #
         # line margins
@@ -805,6 +783,47 @@ class GMStc(wx.stc.StyledTextCtrl):
         # bindins
         #
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
+        
+    def SetStyle(self):
+        """!Set styles for styled text output windows with type face 
+        and point size selected by user (Courier New 10 is default)"""
+
+        settings = preferences.Settings()
+        
+        self.typeface = settings.Get(group='display', key='outputfont', subkey='type')   
+        if self.typeface == "": self.typeface = "Courier New"
+                           
+        self.typesize = settings.Get(group='display', key='outputfont', subkey='size')
+        if self.typesize == None or self.typesize <= 0: self.typesize = 10
+
+        self.StyleDefault     = 0
+        self.StyleDefaultSpec = "face:%s,size:%d,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        self.StyleCommand     = 1
+        self.StyleCommandSpec = "face:%s,size:%d,,fore:#000000,back:#bcbcbc" % (self.typeface, self.typesize)
+        self.StyleOutput      = 2
+        self.StyleOutputSpec  = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        # fatal error
+        self.StyleError       = 3
+        self.StyleErrorSpec   = "face:%s,size:%d,,fore:#7F0000,back:#FFFFFF" % (self.typeface, self.typesize)
+        # warning
+        self.StyleWarning     = 4
+        self.StyleWarningSpec = "face:%s,size:%d,,fore:#0000FF,back:#FFFFFF" % (self.typeface, self.typesize)
+        # message
+        self.StyleMessage     = 5
+        self.StyleMessageSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        # unknown
+        self.StyleUnknown     = 6
+        self.StyleUnknownSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        
+        # default and clear => init
+        self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, self.StyleDefaultSpec)
+        self.StyleClearAll()
+        self.StyleSetSpec(self.StyleCommand, self.StyleCommandSpec)
+        self.StyleSetSpec(self.StyleOutput,  self.StyleOutputSpec)
+        self.StyleSetSpec(self.StyleError,   self.StyleErrorSpec)
+        self.StyleSetSpec(self.StyleWarning, self.StyleWarningSpec)
+        self.StyleSetSpec(self.StyleMessage, self.StyleMessageSpec)
+        self.StyleSetSpec(self.StyleUnknown, self.StyleUnknownSpec)        
 
     def OnDestroy(self, evt):
         """!The clipboard contents can be preserved after
