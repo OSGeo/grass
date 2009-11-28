@@ -6,14 +6,14 @@ static void print_escaped_for_html(FILE * f, const char *str);
 /*!
   \brief Print module usage description in HTML format.
 */
-void usage_html(void)
+void G__usage_html(void)
 {
     struct Option *opt;
     struct Flag *flag;
     const char *type;
     int new_prompt = 0;
 
-    new_prompt = uses_new_gisprompt();
+    new_prompt = G__uses_new_gisprompt();
 
     if (!st->pgm_name)		/* v.dave && r.michael */
 	st->pgm_name = G_program_name();
@@ -47,7 +47,7 @@ void usage_html(void)
 
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-	print_keywords(stdout, NULL);
+	G__print_keywords(stdout, NULL);
 	fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));

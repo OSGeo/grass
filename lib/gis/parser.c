@@ -84,7 +84,7 @@ static int set_flag(int);
 static int contains(const char *, int);
 static int is_option(const char *);
 static int set_option(const char *);
-static int check_opts();
+static int check_opts(void);
 static int check_an_opt(const char *, int, const char *, const char **, char **);
 static int check_int(const char *, const char **);
 static int check_double(const char *, const char **);
@@ -419,28 +419,28 @@ int G_parser(int argc, char **argv)
 	/* If first arg is "--interface-description" then print out
 	 * a xml description of the task */
 	if (strcmp(argv[1], "--interface-description") == 0) {
-	    usage_xml();
+	    G__usage_xml();
 	    exit(EXIT_SUCCESS);
 	}
 
 	/* If first arg is "--html-description" then print out
 	 * a html description of the task */
 	if (strcmp(argv[1], "--html-description") == 0) {
-	    usage_html();
+	    G__usage_html();
 	    exit(EXIT_SUCCESS);
 	}
 
 	/* If first arg is "--wps-process-description" then print out
 	 * the wps process description of the task */
 	if (strcmp(argv[1], "--wps-process-description") == 0) {
-	    wps_print_process_description();
+	    G__wps_print_process_description();
 	    exit(EXIT_SUCCESS);
 	}
 
 	/* If first arg is "--script" then then generate
 	 * g.parser boilerplate */
 	if (strcmp(argv[1], "--script") == 0) {
-	    script();
+	    G__script();
 	    exit(EXIT_SUCCESS);
 	}
 
@@ -683,7 +683,7 @@ void G_set_keywords(const char *keywords)
 }
 
 
-int uses_new_gisprompt(void)
+int G__uses_new_gisprompt(void)
 {
     struct Option *opt;
     char age[KEYLENGTH];
@@ -710,7 +710,7 @@ int uses_new_gisprompt(void)
     return 0;
 }
 
-void print_keywords(FILE *fd, void (*format)(FILE *, const char *))
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 {
     int i;
 
@@ -1291,7 +1291,7 @@ static int check_overwrite(void)
     return (error);
 }
 
-void split_gisprompt(const char *gisprompt, char *age, char *element,
+static void split_gisprompt(const char *gisprompt, char *age, char *element,
 			    char *desc)
 {
     const char *ptr1;

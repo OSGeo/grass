@@ -7,7 +7,7 @@
  * \param[in,out] fp file to write to
  * \param str string to write
  */
-void print_escaped_for_xml(FILE * fp, const char *str)
+static void print_escaped_for_xml(FILE * fp, const char *str)
 {
     for (; *str; str++) {
 	switch (*str) {
@@ -29,7 +29,7 @@ void print_escaped_for_xml(FILE * fp, const char *str)
 /*!
   \brief Print module usage description in XML format.
 */
-void usage_xml(void)
+void G__usage_xml(void)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -39,7 +39,7 @@ void usage_xml(void)
     char *encoding;
     int new_prompt = 0;
 
-    new_prompt = uses_new_gisprompt();
+    new_prompt = G__uses_new_gisprompt();
 
     /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
 
@@ -81,7 +81,7 @@ void usage_xml(void)
 
     if (st->module_info.keywords) {
 	fprintf(stdout, "\t<keywords>\n\t\t");
-	print_keywords(stdout, print_escaped_for_xml);
+	G__print_keywords(stdout, print_escaped_for_xml);
 	fprintf(stdout, "\n\t</keywords>\n");
     }
 
