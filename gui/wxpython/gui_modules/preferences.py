@@ -95,6 +95,10 @@ class Settings:
                     'type' : '',
                     'encoding': 'ISO-8859-1',
                     },
+                'outputfont' : {
+                    'type' : 'Courier New',
+                    'size': '10',
+                    },
                 'driver': {
                     'type': 'cairo'
                     },
@@ -850,7 +854,7 @@ class PreferencesDialog(wx.Dialog):
 
         # dict for window ids
         self.winId = {}
-
+        
         # create notebook pages
         self.__CreateGeneralPage(notebook)
         self.__CreateDisplayPage(notebook)
@@ -997,6 +1001,7 @@ class PreferencesDialog(wx.Dialog):
 
     def __CreateDisplayPage(self, notebook):
         """!Create notebook page for display settings"""
+   
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Display"))
 
@@ -1026,6 +1031,19 @@ class PreferencesDialog(wx.Dialog):
 
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
+        row = 1
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Font for command output:")),
+                      flag=wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        outfontButton = wx.Button(parent=panel, id=wx.ID_ANY,
+                               label=_("Set font"), size=(100, -1))
+        gridSizer.Add(item=outfontButton,
+                      flag=wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 1))
 
         #
         # display settings
@@ -1138,9 +1156,10 @@ class PreferencesDialog(wx.Dialog):
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
         
         panel.SetSizer(border)
-        
+                
         # bindings
         fontButton.Bind(wx.EVT_BUTTON, self.OnSetFont)
+        outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
         
         return panel
 
@@ -1753,6 +1772,33 @@ class PreferencesDialog(wx.Dialog):
         dlg.Destroy()
         
         event.Skip()
+
+    def OnSetOutputFont(self, event):
+        """'Set font' button pressed"""
+
+        type = self.settings.Get(group='display', key='outputfont', subkey='type')   
+                           
+        size = self.settings.Get(group='display', key='outputfont', subkey='size')
+        if size == None or size == 0: size = 9
+        
+        data = wx.FontData()
+        data.EnableEffects(True)
+        data.SetInitialFont(wx.Font(pointSize=size, family=wx.FONTFAMILY_MODERN, faceName=type, style=wx.NORMAL, weight=0))
+
+        dlg = wx.FontDialog(self, data)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            data = dlg.GetFontData()
+            font = data.GetChosenFont()
+
+            self.settings.Set(group='display', value=font.GetFaceName(),
+                                  key='outputfont', subkey='type')
+            self.settings.Set(group='display', value=font.GetPointSize(),
+                                  key='outputfont', subkey='size')
+                
+        dlg.Destroy()
+
+        event.Skip()
         
     def OnSave(self, event):
         """!Button 'Save' pressed"""
@@ -1764,6 +1810,7 @@ class PreferencesDialog(wx.Dialog):
     def OnApply(self, event):
         """!Button 'Apply' pressed"""
         if self.__UpdateSettings():
+            self.parent.goutput.WriteLog(_('Settings applied to current session but not saved'))
             self.Close()
 
     def OnCloseWindow(self, event):
