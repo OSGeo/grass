@@ -33,7 +33,7 @@ void G_usage(void)
     int len, n;
     int new_prompt = 0;
 
-    new_prompt = uses_new_gisprompt();
+    new_prompt = G__uses_new_gisprompt();
 
     if (!st->pgm_name)		/* v.dave && r.michael */
 	st->pgm_name = G_program_name();
@@ -49,7 +49,7 @@ void G_usage(void)
     }
     if (st->module_info.keywords) {
 	fprintf(stderr, _("\nKeywords:\n "));
-	print_keywords(stderr, NULL);
+	G__print_keywords(stderr, NULL);
 	fprintf(stderr, "\n");
     }
 

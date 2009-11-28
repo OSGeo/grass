@@ -1,6 +1,6 @@
 #include "parser_local_proto.h"
 
-void script(void)
+void G__script(void)
 {
     FILE *fp = stdout;
     char *type;
@@ -40,7 +40,7 @@ void script(void)
 	fprintf(fp, "#%% description: %s\n", st->module_info.description);
     if (st->module_info.keywords) {
 	fprintf(fp, "#%% keywords: ");
-	print_keywords(fp, NULL);
+	G__print_keywords(fp, NULL);
 	fprintf(fp, "\n");
     }
     fprintf(fp, "#%%end\n");

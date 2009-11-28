@@ -36,6 +36,25 @@ static void wps_print_literal_input_output(int , int , int , const char *,
                                 const char *, const char *, const char *, int ,
                                 const char **, int , const char *, int );
 
+static void print_escaped_for_xml(FILE * fp, const char *str)
+{
+    for (; *str; str++) {
+	switch (*str) {
+	case '&':
+	    fputs("&amp;", fp);
+	    break;
+	case '<':
+	    fputs("&lt;", fp);
+	    break;
+	case '>':
+	    fputs("&gt;", fp);
+	    break;
+	default:
+	    fputc(*str, fp);
+	}
+    }
+}
+
 /*!
  * \brief Print the WPS 1.0.0 process description XML document to stdout
  *
@@ -53,7 +72,7 @@ static void wps_print_literal_input_output(int , int , int , const char *,
  *
  * */
 
-void wps_print_process_description()
+void G__wps_print_process_description(void)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -73,7 +92,7 @@ void wps_print_process_description()
     int min = 0, max = 0;
     int num_keywords = 0;
     int found_output = 0;
-    new_prompt = uses_new_gisprompt();
+    new_prompt = G__uses_new_gisprompt();
 
     /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
 

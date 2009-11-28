@@ -28,7 +28,7 @@ struct Item
     struct Item *next_item;
 };
 
-typedef struct state {
+struct state {
     int no_interactive;
     int n_opts;
     int n_flags;
@@ -52,10 +52,10 @@ typedef struct state {
     struct Item first_item;
     struct Item *current_item;
     int n_items;
-}state_type;
+};
 
 
-extern state_type *st;
+extern struct state *st;
 
 #define BAD_SYNTAX    1
 #define OUT_OF_RANGE  2
@@ -66,12 +66,12 @@ extern state_type *st;
 
 /* functions which are used by several parser functions in different files */
 
-void usage_xml(void);
-void usage_html(void);
-void script(void);
-void wps_print_process_description(void);
-void print_escaped_for_xml(FILE * fp, const char *str);
-int  uses_new_gisprompt(void);
-void print_keywords(FILE *fd, void (*format)(FILE *, const char *));
+void G__usage_xml(void);
+void G__usage_html(void);
+void G__script(void);
+void G__wps_print_process_description(void);
+int  G__uses_new_gisprompt(void);
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *));
 
 #endif
+
