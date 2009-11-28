@@ -1778,7 +1778,7 @@ class PreferencesDialog(wx.Dialog):
 
         type = self.settings.Get(group='display', key='outputfont', subkey='type')   
                            
-        size = self.settings.Get(group='display', key='outputfont', subkey='size')
+        size = float(self.settings.Get(group='display', key='outputfont', subkey='size'))
         if size == None or size == 0: size = 9
         
         data = wx.FontData()
@@ -1793,7 +1793,7 @@ class PreferencesDialog(wx.Dialog):
 
             self.settings.Set(group='display', value=font.GetFaceName(),
                                   key='outputfont', subkey='type')
-            self.settings.Set(group='display', value=font.GetPointSize(),
+            self.settings.Set(group='display', value=str(font.GetPointSize()),
                                   key='outputfont', subkey='size')
                 
         dlg.Destroy()

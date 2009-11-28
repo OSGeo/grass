@@ -793,7 +793,7 @@ class GMStc(wx.stc.StyledTextCtrl):
         self.typeface = settings.Get(group='display', key='outputfont', subkey='type')   
         if self.typeface == "": self.typeface = "Courier New"
                            
-        self.typesize = settings.Get(group='display', key='outputfont', subkey='size')
+        self.typesize = float(settings.Get(group='display', key='outputfont', subkey='size'))
         if self.typesize == None or self.typesize <= 0: self.typesize = 10
 
         self.StyleDefault     = 0
