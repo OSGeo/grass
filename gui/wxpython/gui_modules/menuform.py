@@ -649,14 +649,15 @@ class mainFrame(wx.Frame):
 
         # module name + keywords
         if self.task.name.split('.')[-1] in ('py', 'sh'):
-            title = self.task.name.split('.')[:-1]
+            title = str(self.task.name.rsplit('.',1)[0])
         else:
             title = self.task.name
         try:
-            title +=  " [" + ', '.join( self.task.keywords ) + "]"
+            if self.task.keywords != ['']:
+                title +=  " [" + ', '.join( self.task.keywords ) + "]"
         except ValueError:
             pass
-
+        
         wx.Frame.__init__(self, parent=parent, id=ID, title=title,
                           pos=wx.DefaultPosition, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
