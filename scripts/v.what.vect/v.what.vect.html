@@ -9,15 +9,19 @@ attribute table into the attribute table of <u>points</u> present in the
 The upload <b>column</b>, into which the query results are stored, must be
 present in the <b>vector</b> map. Use <em>v.db.addcolumn</em> to add one if needed.
 <p>
-Use dmax parameter to control query distance tolerance (how far points can be from 
-<b>qvector</b> features). For more options, use
+Use dmax parameter to control query distance tolerance (how far points/centroids
+can be from <b>qvector</b> features). For more options, use
 <em>v.distance</em> instead.
 <P>
 In case of a multipoint input <b>vector</b> map, with several points having the
 same category number, it can happen, that the query result is NULL, if the same
 category number falls into different <b>qvector</b> polygons.
+<P>
+When transferring attributes from a point map to a polygon map, usually <b>dmax</b>
+has to be larger than zero (determined by distance between query points and
+polygon centroids).
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 In this example, the 'archsites' point map in the Spearfish location is copied
 to the current mapset, a new attribute column is added and the owner
@@ -31,7 +35,26 @@ v.what.vect myarchsites qvect=fields column=owner qcolumn=label
 # verification:
 v.db.select myarchsites
 </pre></div>
+<P>
 
+In this example, city names, population data and more from
+<a href="http://download.geonames.org/export/dump/">Geonames.org country files</a> are
+transferred to selected EU CORINE landuse/landcover classes
+("Continuous urban fabric", 111, and "Discontinuous urban fabric", 112).
+Note: Example in UTM projection to which the input maps have been projected
+beforehand to have metric distances support:
+
+<div class="code"><pre>
+# extract populated places from geonames
+v.extract geonames_IT where="featurecla='P'" out=geonames_IT_cities
+# add new column 
+v.db.addcol corine_code111_112_cities col="gnameid double precision"
+# transfer geonameid (3000m maximal distance between points and centroids)
+v.what.vect corine_code111_112_cities qvect=geonames_IT_cities col=gnameid \
+            qcol=geonameid dmax=3000
+# now gnameid can be used for v.db.join to join further
+# attributes in from Geonames.org
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
