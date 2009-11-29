@@ -25,7 +25,7 @@
 #% type: string
 #% key_desc: name
 #% gisprompt: old,vector,vector
-#% description: Points vector map to modify
+#% description: Vector map to modify
 #% required : yes
 #%end
 #%option
