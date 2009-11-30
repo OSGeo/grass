@@ -790,30 +790,31 @@ class GMStc(wx.stc.StyledTextCtrl):
 
         settings = preferences.Settings()
         
-        self.typeface = settings.Get(group='display', key='outputfont', subkey='type')   
-        if self.typeface == "": self.typeface = "Courier New"
+        typeface = settings.Get(group='display', key='outputfont', subkey='type')   
+        if typeface == "": typeface = "Courier New"
                            
-        self.typesize = float(settings.Get(group='display', key='outputfont', subkey='size'))
-        if self.typesize == None or self.typesize <= 0: self.typesize = 10
+        typesize = settings.Get(group='display', key='outputfont', subkey='size')
+        if typesize == None or typesize <= 0: typesize = 10
+        typesize = float(typesize)
 
         self.StyleDefault     = 0
-        self.StyleDefaultSpec = "face:%s,size:%d,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        self.StyleDefaultSpec = "face:%s,size:%d,fore:#000000,back:#FFFFFF" % (typeface, typesize)
         self.StyleCommand     = 1
-        self.StyleCommandSpec = "face:%s,size:%d,,fore:#000000,back:#bcbcbc" % (self.typeface, self.typesize)
+        self.StyleCommandSpec = "face:%s,size:%d,,fore:#000000,back:#bcbcbc" % (typeface, typesize)
         self.StyleOutput      = 2
-        self.StyleOutputSpec  = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        self.StyleOutputSpec  = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (typeface, typesize)
         # fatal error
         self.StyleError       = 3
-        self.StyleErrorSpec   = "face:%s,size:%d,,fore:#7F0000,back:#FFFFFF" % (self.typeface, self.typesize)
+        self.StyleErrorSpec   = "face:%s,size:%d,,fore:#7F0000,back:#FFFFFF" % (typeface, typesize)
         # warning
         self.StyleWarning     = 4
-        self.StyleWarningSpec = "face:%s,size:%d,,fore:#0000FF,back:#FFFFFF" % (self.typeface, self.typesize)
+        self.StyleWarningSpec = "face:%s,size:%d,,fore:#0000FF,back:#FFFFFF" % (typeface, typesize)
         # message
         self.StyleMessage     = 5
-        self.StyleMessageSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        self.StyleMessageSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (typeface, typesize)
         # unknown
         self.StyleUnknown     = 6
-        self.StyleUnknownSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (self.typeface, self.typesize)
+        self.StyleUnknownSpec = "face:%s,size:%d,,fore:#000000,back:#FFFFFF" % (typeface, typesize)
         
         # default and clear => init
         self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, self.StyleDefaultSpec)
