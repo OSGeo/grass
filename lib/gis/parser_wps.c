@@ -58,15 +58,37 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
 /*!
  * \brief Print the WPS 1.0.0 process description XML document to stdout
  *
- * Currently only raster and vector maps are supported as inputs and outputs.
- * Literal data of type boolean, integer, double and string are supported
- * as input parameter. FLags are managed as boolean literal data and are always input parameter.
+ * A module started with the parameter "--wps-process-description"
+ * will write a process description XML document to stdout and exit.
+ *
+ * Currently only raster and vector modules are supported, but the
+ * generation works with any module (more or less meaningful).
+ * Most of the input options are catched:
+ * * single and multiple raster and vector maps
+ * * single and multiple string, float and integer data with default
+ * values and value options (range is missing)
+ * Flags are supported as boolean values.
+ *
+ * The mime types for vector maps are GML 3.1 and grass ascii and binary vectors.
+ * mime type: application/grass-vector-ascii  -> a text file generated with v.out.asci
+ * Example.: urn:file:///path/name
+ * mime type: application/grass-vector-binary -> the binary vectors must be addressed with a non standard urn:
+ * Example: urn:grass:vector:location/mapset/name
+ *
+ * The mime types for raster maps are tiff and png as well as grass ascii
+ * and binary raster maps, following the same scheme as the vector maps
+ *
+ * The mime types are reflecting the capabilities of gdal and may be extended.
+ *
+ * BoundignBox support is currently not available for inputs and outputs.
+ * Literal data output (string, float or integer)  is currently not supported.
  *
  * In case no output parameter was set (new raster of vector map) the stdout output
  * is noticed as output parameter of mime type text/plain.
  *
- * Multiple vector or raster map outputs are not supported (wps 1.0.0 specification
- * does not allow multiple outputs). Multiple outputs must be wrapped via a python script.
+ * Multiple vector or raster map outputs marked as one option are not supported (wps 1.0.0 specification
+ * does not allow multiple outputs with only one identifier).
+ * Multiple outputs must be wrapped via a python script.
  *
  * There is not support for optional outputs.
  *
