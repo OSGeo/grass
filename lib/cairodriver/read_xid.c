@@ -16,7 +16,7 @@ void cairo_read_xid(void)
     if (!fgets(buf, sizeof(buf), fp))
 	G_fatal_error(_("Unable to read input file <%s>"), ca.file_name);
 
-    if (sscanf(buf, "%lu", &xid) != 1)
+    if (sscanf(buf, "%lx", &xid) != 1)
 	G_fatal_error(_("Unable to parse input file <%s>"), ca.file_name);
 
     fclose(fp);

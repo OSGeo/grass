@@ -185,7 +185,7 @@ static void init_file(void)
 #if CAIRO_HAS_XLIB_XRENDER_SURFACE
     if (is_xlib) {
 	if (do_read)
-	    cairo_read_image();
+	    cairo_read_xid();
 	else
 	    ca.win = 0;
 	init_xlib();
