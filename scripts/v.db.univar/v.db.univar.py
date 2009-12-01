@@ -27,25 +27,30 @@
 #%option
 #% key: table
 #% type: string
-#% gisprompt: old,vector,vector
+#% gisprompt: old_dbtable,dbtable,dbtable
 #% description: Name of data table
 #% required : yes
 #%End
 #%option
 #% key: column
 #% type: string
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #% description: Column on which to calculate statistics (must be numeric)
 #% required : yes
 #%end
 #%option
 #% key: database
 #% type: string
+#% gisprompt: old_dbname,dbname,dbname
+#% answer: DEFAULT_DBNAME
 #% description: Database/directory for table
 #% required : no
 #%end
 #%option
 #% key: driver
 #% type: string
+#% gisprompt: old_dbdriver,dbdriver,dbdriver
+#% options: dbf,odbc,ogr,sqlite
 #% description: Database driver
 #% required : no
 #%end
@@ -64,23 +69,23 @@ from grass.script import core as grass
 
 def cleanup():
     for ext in ['', '.sort']:
-	grass.try_remove(tmp + ext)
+        grass.try_remove(tmp + ext)
 
 def sortfile(infile, outfile):
     inf = file(infile, 'r')
     outf = file(outfile, 'w')
 
     if grass.find_program('sort', ['-n']):
-	grass.run_command('sort', flags = 'n', stdin = inf, stdout = outf)
+        grass.run_command('sort', flags = 'n', stdin = inf, stdout = outf)
     else:
-	# FIXME: we need a large-file sorting function
-	grass.warning(_("'sort' not found: sorting in memory"))
-	lines = inf.readlines()
-	for i in range(len(lines)):
-	    lines[i] = float(lines[i].rstrip('\r\n'))
-	lines.sort()
-	for line in lines:
-	    outf.write(str(line) + '\n')
+        # FIXME: we need a large-file sorting function
+        grass.warning(_("'sort' not found: sorting in memory"))
+        lines = inf.readlines()
+        for i in range(len(lines)):
+            lines[i] = float(lines[i].rstrip('\r\n'))
+        lines.sort()
+        for line in lines:
+            outf.write(str(line) + '\n')
 
     inf.close()
     outf.close()
@@ -101,25 +106,25 @@ def main():
 
     sql = "SELECT %s FROM %s" % (column, table)
     if where:
-	sql += " WHERE " + where
+        sql += " WHERE " + where
 
     if not database:
-	database = None
+        database = None
 
     if not driver:
-	driver = None
+        driver = None
 
     tmpf = file(tmp, 'w')
     grass.run_command('db.select', flags = 'c', table = table,
-		      database = database, driver = driver, sql = sql,
-		      stdout = tmpf)
+        database = database, driver = driver, sql = sql,
+        stdout = tmpf)
     tmpf.close()
 
     # check if result is empty
     tmpf = file(tmp)
     if tmpf.read(1) == '':
-	grass.fatal(_("Table <%s> contains no data."), table)
-    tmpf.close()
+        grass.fatal(_("Table <%s> contains no data."), table)
+        tmpf.close()
 
     # calculate statistics
     grass.message(_("Calculating statistics..."))
@@ -133,17 +138,17 @@ def main():
 
     tmpf = file(tmp)
     for line in tmpf:
-	x = float(line.rstrip('\r\n'))
-	N += 1
-	sum += x
-	sum2 += x * x
-	sum3 += abs(x)
-	maxv = max(maxv, x)
-	minv = min(minv, x)
+        x = float(line.rstrip('\r\n'))
+        N += 1
+        sum += x
+        sum2 += x * x
+        sum3 += abs(x)
+        maxv = max(maxv, x)
+        minv = min(minv, x)
     tmpf.close()
 
     if N <= 0:
-	grass.fatal(_("No non-null values found"))
+        grass.fatal(_("No non-null values found"))
 
     print ""
     print "Number of values:", N
@@ -159,7 +164,7 @@ def main():
     print "-----"
 
     if not extend:
-	return
+        return
 
     #preparations:
     sortfile(tmp, tmp + ".sort")
@@ -177,17 +182,17 @@ def main():
     inf = file(tmp + ".sort")
     l = 1
     for line in inf:
-	if l == q25pos:
-	    q25 = float(line.rstrip('\r\n'))
-	if l == q50apos:
-	    q50a = float(line.rstrip('\r\n'))
-	if l == q50bpos:
-	    q50b = float(line.rstrip('\r\n'))
-	if l == q75pos:
-	    q75 = float(line.rstrip('\r\n'))
-	if l == q90pos:
-	    q90 = float(line.rstrip('\r\n'))
-	l += 1
+        if l == q25pos:
+            q25 = float(line.rstrip('\r\n'))
+        if l == q50apos:
+            q50a = float(line.rstrip('\r\n'))
+        if l == q50bpos:
+            q50b = float(line.rstrip('\r\n'))
+        if l == q75pos:
+            q75 = float(line.rstrip('\r\n'))
+        if l == q90pos:
+            q90 = float(line.rstrip('\r\n'))
+        l += 1
 
     q50 = (q50a + q50b) / 2
 
