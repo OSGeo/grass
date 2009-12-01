@@ -717,7 +717,7 @@
 	      <help>Outputs and modifies the user's current GRASS variable settings</help>
 	      <keywords>general</keywords>
               <handler>self.RunMenuCmd</handler>
-	      <command>g.gisenv --v</command>
+	      <command>g.gisenv -n</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Change settings</label>
