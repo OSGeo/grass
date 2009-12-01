@@ -139,7 +139,8 @@ class VirtualAttributeList(wx.ListCtrl,
         # events
         self.Bind(wx.EVT_LIST_ITEM_SELECTED,   self.OnItemSelected)
         self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselected)
-        self.Bind(wx.EVT_LIST_COL_CLICK,       self.OnColumnClick)     # sorting
+        self.Bind(wx.EVT_LIST_COL_CLICK,       self.OnColumnSort)     
+        self.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, self.OnColumnMenu)     
         
     def Update(self, mapDBInfo):
         """!Update list according new mapDBInfo description"""
@@ -383,10 +384,112 @@ class VirtualAttributeList(wx.ListCtrl,
         else:
             return self.attr1
 
-    def OnColumnClick(self, event):
-        """!Column heading clicked -> sorting"""
+    def OnColumnMenu(self, event):
+        """!Column heading right mouse button -> pop-up menu"""
         self._col = event.GetColumn()
+        
+        popupMenu = wx.Menu()
 
+        if not hasattr (self, "popupID1"):
+            self.popupID1 = wx.NewId()
+            self.popupID2 = wx.NewId()
+            self.popupID3 = wx.NewId()
+            self.popupID4 = wx.NewId()
+            self.popupID5 = wx.NewId()
+            self.popupID6 = wx.NewId()
+            self.popupID7 = wx.NewId()
+            self.popupID8 = wx.NewId()
+            self.popupID9 = wx.NewId()
+            self.popupID10 = wx.NewId()
+            self.popupID11 = wx.NewId()
+            self.popupID12 = wx.NewId()
+        
+        popupMenu.Append(self.popupID1, text=_("Sort ascending"))
+        popupMenu.Append(self.popupID2, text=_("Sort descending"))
+        popupMenu.AppendSeparator()
+        subMenu = wx.Menu()
+        popupMenu.AppendMenu(self.popupID3, _("Calculate (only numeric columns)"),
+                             subMenu)
+        if not self.log.parent.editable or \
+                self.columns[self.GetColumn(self._col).GetText()]['ctype'] not in (types.IntType, types.FloatType):
+            popupMenu.Enable(self.popupID3, False)
+        
+        subMenu.Append(self.popupID4,  text=_("Area size"))
+        subMenu.Append(self.popupID5,  text=_("Line length"))
+        subMenu.Append(self.popupID6,  text=_("Compactness of an area"))
+        subMenu.Append(self.popupID7,  text=_("Fractal dimension of boundary defining a polygon"))
+        subMenu.Append(self.popupID8,  text=_("Perimeter length of an area"))
+        subMenu.Append(self.popupID9,  text=_("Number of features for each category"))
+        subMenu.Append(self.popupID10, text=_("Slope steepness of 3D line"))
+        subMenu.Append(self.popupID11, text=_("Line sinuousity"))
+        subMenu.Append(self.popupID12, text=_("Line azimuth"))
+        
+        self.Bind (wx.EVT_MENU, self.OnColumnSortAsc,  id=self.popupID1)
+        self.Bind (wx.EVT_MENU, self.OnColumnSortDesc, id=self.popupID2)
+        for id in (self.popupID4, self.popupID5, self.popupID6,
+                   self.popupID7, self.popupID8, self.popupID9,
+                   self.popupID10, self.popupID11, self.popupID12):
+            self.Bind(wx.EVT_MENU, self.OnColumnCompute, id = id)
+        
+        self.PopupMenu(popupMenu)
+        popupMenu.Destroy()
+
+    def OnColumnSort(self, event):
+        """!Column heading left mouse button -> sorting"""
+        self._col = event.GetColumn()
+        
+        self.ColumnSort()
+        
+        event.Skip()
+
+    def OnColumnSortAsc(self, event):
+        """!Sort values of selected column (ascending)"""
+        self.SortListItems(col = self._col, ascending = True)
+        event.Skip()
+
+    def OnColumnSortDesc(self, event):
+        """!Sort values of selected column (descending)"""
+        self.SortListItems(col = self._col, ascending = False)
+        event.Skip()
+        
+    def OnColumnCompute(self, event):
+        """!Compute values of selected column"""
+        id = event.GetId()
+        
+        option = None
+        if id == self.popupID4:
+            option = 'area'
+        elif id == self.popupID5:
+            option = 'length'
+        elif id == self.popupID6:
+            option = 'compact'
+        elif id == self.popupID7:
+            option = 'fd'
+        elif id == self.popupID8:
+            option = 'perimeter'
+        elif id == self.popupID9:
+            option = 'count'
+        elif id == self.popupID10:
+            option = 'slope'
+        elif id == self.popupID11:
+            option = 'sinuous'
+        elif id == self.popupID12:
+            option = 'azimuth'
+        
+        if not option:
+            return
+        
+        gcmd.RunCommand('v.to.db',
+                        parent = self.parent,
+                        map = self.mapDBInfo.map,
+                        layer = self.layer, 
+                        option = option,
+                        columns = self.GetColumn(self._col).GetText())
+        
+        self.LoadData(self.layer)
+        
+    def ColumnSort(self):
+        """!Sort values of selected column (self._col)"""
         # remove duplicated arrow symbol from column header
         # FIXME: should be done automatically
         info = wx.ListItem()
@@ -395,9 +498,7 @@ class VirtualAttributeList(wx.ListCtrl,
         for column in range(self.GetColumnCount()):
             info.m_text = self.GetColumn(column).GetText()
             self.SetColumn(column, info)
-
-        event.Skip()
-
+        
     def SortItems(self, sorter=cmp):
         """!Sort items"""
         items = list(self.itemDataMap.keys())
@@ -426,7 +527,7 @@ class VirtualAttributeList(wx.ListCtrl,
         # If the items are equal then pick something else to make the sort value unique
         if cmpVal == 0:
             cmpVal = apply(cmp, self.GetSecondarySortValues(self._col, key1, key2))
-
+        
         if ascending:
             return cmpVal
         else:
