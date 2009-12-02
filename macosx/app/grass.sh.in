@@ -205,7 +205,7 @@ fi
 
 # if grassrc has text startup, switch back to Terminal (gotta duplicate some init.sh stuff)
 # only applies to Tiger - Leopard X11 opens automatically as needed
-GRASSRC="$HOME/.grassrc7"
+GRASSRC="$HOME/$GRASS_CONFIG_DIR/rc"
 if [ ! "$GRASS_GUI" ] ; then
 	if [ -f "$GRASSRC" ] ; then
 		GRASS_GUI=`awk '/GRASS_GUI/ {print $2}' "$GRASSRC"`

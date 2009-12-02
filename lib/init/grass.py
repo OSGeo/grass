@@ -36,6 +36,7 @@ cmd_name = "@START_UP@"
 grass_version = "@GRASS_VERSION_NUMBER@"
 ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
 config_projshare = "@CONFIG_PROJSHARE@"
+grass_config_dir = os.path.join(os.getenv('HOME'), "@GRASS_CONFIG_DIR@")
 
 gisbase = os.path.normpath(gisbase)
 
@@ -840,11 +841,11 @@ os.environ['GIS_LOCK'] = gis_lock
 # Set the global grassrc file
 batch_job = os.getenv('GRASS_BATCH_JOB')
 if batch_job:
-    gisrcrc = os.path.join(os.getenv('HOME'), ".grassrc7.%s" % os.uname()[1])
+    gisrcrc = os.path.join(grass_config_dir, "rc.%s" % os.uname()[1])
     if not os.access(gisrcrc, os.R_OK):
-	gisrcrc = os.path.join(os.getenv('HOME'), ".grassrc7")
+	gisrcrc = os.path.join(grass_config_dir, "rc")
 else:
-    gisrcrc = os.path.join(os.getenv('HOME'), ".grassrc7")
+    gisrcrc = os.path.join(grass_config_dir, "rc")
 
 # Set the username and working directory
 get_username()
@@ -948,6 +949,8 @@ try_remove(lockfile)
 
 # Save GISRC
 s = readfile(gisrc)
+if not os.path.exists(grass_config_dir):
+    os.mkdir(grass_config_dir)
 writefile(gisrcrc, s)
 
 cleanup()

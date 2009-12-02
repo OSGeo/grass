@@ -91,6 +91,7 @@ endif
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@START_UP@#$(START_UP)#' \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
 	$< > $@
 	chmod +x $@
 
@@ -101,6 +102,7 @@ $(ETC)/Init.sh: init.sh
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#g' \
 	-e 's#@START_UP@#$(START_UP)#' \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
+	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
 	$< > $@
 	chmod +x $@
 
@@ -109,6 +111,7 @@ $(ETC)/Init.bat: init.bat
 	sed \
 	-e 's#GRASS_VERSION_NUMBER#$(GRASS_VERSION_NUMBER)#' \
 	-e 's#CONFIG_PROJSHARE#$(PROJSHARE)#' \
+	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
 	$< > $@
 	chmod +x $@
 

@@ -366,10 +366,8 @@ class GRASSStartup(wx.Frame):
         self.Layout()
 
     def _read_grassrc(self):
+        """!Read variables from $HOME/.grass7/rc file
         """
-        Read variables from $HOME/.grassrc7 file
-        """
-
         grassrc = {}
 
         gisrc = os.getenv("GISRC")
