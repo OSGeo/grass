@@ -14,7 +14,7 @@
 #   	    	command line options for setting the GISDBASE, LOCATION, and/or
 #   	    	MAPSET. Finally it starts GRASS with the appropriate user
 #   	    	interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -67,12 +67,12 @@ export GIS_LOCK
 
 # Set the global grassrc file
 if [ -n "$GRASS_BATCH_JOB" ] ; then
-	GISRCRC="$HOME/.grassrc7.`uname -n`"
+	GISRCRC="$HOME/$GRASS_CONFIG_DIR/rc.`uname -n`"
 	if [ ! -f "$GISRCRC" ] ; then
-		GISRCRC="$HOME/.grassrc7"
+		GISRCRC="$HOME/$GRASS_CONGIG_DIR/rc"
 	fi
 else
-	GISRCRC="$HOME/.grassrc7"
+	GISRCRC="$HOME/$GRASS_CONFIG_DIR/rc"
 fi
 
 # Set PATH to GRASS bin, ETC to GRASS etc

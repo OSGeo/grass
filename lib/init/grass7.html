@@ -108,7 +108,7 @@ these.
 
 <P>
 In addition to these shell environment variables GRASS maintains a number of
-GIS environment variables in the <tt>$HOME/.grassrc7</tt> file. User changes
+GIS environment variables in the <tt>$HOME/.grass7/rc</tt> file. User changes
 to this file will be read during the next startup of GRASS. If this file
 becomes corrupted the user may edit it by hand or remove it to start afresh.
 See the list of <a href=variables.html>implemented GRASS variables</a> for
@@ -122,7 +122,7 @@ The rest of this help page will only consider shell environment variables.
 The <EM>grass70</EM> program will check for the existence of an environment
 variable called GRASS_GUI which indicates the type of user interface for
 GRASS to use. If this variable is not set when <EM>grass70</EM> is run, then
-it will be created and then saved in the <tt>$HOME/.grassrc7</tt> file for
+it will be created and then saved in the <tt>$HOME/.grass7/rc</tt> file for
 the next time GRASS is run. It can be set to "text" or "wxpython".
 
 <P>
@@ -134,7 +134,7 @@ lowest.
  <DT><B>Interface precedence</B>
  <DD>&bull; Command line argument<BR>
      &bull; Environment variable GRASS_GUI<BR>
-     &bull; Value set in <tt>$HOME/.grassrc7</tt><BR>
+     &bull; Value set in <tt>$HOME/.grass7/rc</tt><BR>
      &bull; Default value - wxpython
 </DL>
 

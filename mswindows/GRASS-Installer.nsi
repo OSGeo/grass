@@ -544,7 +544,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'rem Set GRASS Installation Directory Variable$\r$\n'
 	FileWrite $0 'set GRASSDIR=$INSTALL_DIR$\r$\n'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 'rem Directory where your .grassrc6 file will be stored$\r$\n'
+	FileWrite $0 'rem Directory where your .grass7\rc file will be stored$\r$\n'
 	FileWrite $0 'set HOME=%USERPROFILE%$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem Name of the wish (Tk) executable$\r$\n'	
@@ -700,18 +700,19 @@ Section "GRASS" SecGRASS
 	;replace \ with / in $GIS_DATABASE
 	${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
   
-	;create $PROFILE\.grassrc6
+	;create $PROFILE\.grass7
+	;create $PROFILE\.grass7\rc
 	SetShellVarContext current
 	ClearErrors
-	FileOpen $0 $PROFILE\.grassrc6 w
-	IfErrors done_create_.grassrc6
+	FileOpen $0 $PROFILE\.grass7\rc w
+	IfErrors done_create_.grass7\rc
 	FileWrite $0 'GISDBASE: $UNIX_LIKE_GIS_DATABASE_PATH$\r$\n'
 	FileWrite $0 'LOCATION_NAME: demolocation$\r$\n'
 	FileWrite $0 'MAPSET: PERMANENT$\r$\n'
 	FileClose $0	
-	done_create_.grassrc6:
+	done_create_.grass7\rc:
 	
-	CopyFiles $PROFILE\.grassrc6 $INSTALL_DIR\msys\home\$USERNAME
+	CopyFiles $PROFILE\.grass7\rc $INSTALL_DIR\msys\home\$USERNAME
                  
 SectionEnd
 
@@ -852,9 +853,9 @@ Section "Uninstall"
 	SetShellVarContext all
 	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
 	
-	;remove the .grassrc6 file
+	;remove the .grass7\rc file
 	SetShellVarContext current
-	Delete "$PROFILE\.grassrc6"	
+	RMDir \r "$PROFILE\.grass7"
 
 	;remove the Registry Entries
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"
