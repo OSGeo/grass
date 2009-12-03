@@ -1,3 +1,17 @@
+/*!
+ * \file gis/parser_help.c
+ *
+ * \brief GIS Library - Argument parsing functions (help)
+ *
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ * \author Soeren Gebbert added Dec. 2009 WPS process_description document
+ */
+
 #include "parser_local_proto.h"
 
 static void show_options(int, const char *);
