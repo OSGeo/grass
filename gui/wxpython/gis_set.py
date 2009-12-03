@@ -338,7 +338,7 @@ class GRASSStartup(wx.Frame):
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.BOTTOM,
-                  border=1)
+                  border=5)
         sizer.Add(item=self.ltitle, # title
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
