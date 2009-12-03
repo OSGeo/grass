@@ -9,7 +9,7 @@
 
 void parse_args(int argc, char **argv,
 		char **input, char**output, int *format, int *dp, char **delim,
-		int *field, char ***columns, char **where, int *region, int *old_format)
+		char **field, char ***columns, char **where, int *region, int *old_format)
 {
     struct Option *input_opt, *output_opt, *format_opt, *dp_opt, *delim_opt,
 	*field_opt, *column_opt, *where_opt;
@@ -17,12 +17,22 @@ void parse_args(int argc, char **argv,
     
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
 
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->guisection = _("Selection");
+    
     output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     output_opt->description =
 	_("Path to resulting ASCII file ('-' for standard output) "
 	  "or ASCII vector name if '-o' is defined");
     output_opt->answer = "-";
+
+    column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
+    column_opt->description = _("Name of attribute column(s) to be exported (point mode)");
+    column_opt->guisection = _("Points");
     
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    where_opt->guisection = _("Selection");
+
     format_opt = G_define_option();
     format_opt->key = "format";
     format_opt->type = TYPE_STRING;
@@ -46,16 +56,6 @@ void parse_args(int argc, char **argv,
 	_("Number of significant digits (floating point only)");
     dp_opt->guisection = _("Points");
     
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->guisection = _("Selection");
-
-    column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
-    column_opt->description = _("Name of attribute column(s) to be exported (point mode)");
-    column_opt->guisection = _("Points");
-    
-    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-    where_opt->guisection = _("Selection");
-
     old_flag = G_define_flag();
     old_flag->key = 'o';
     old_flag->description = _("Create old (version 4) ASCII file");
@@ -91,7 +91,7 @@ void parse_args(int argc, char **argv,
     else
 	*delim = G_store(delim_opt->answer);
     
-    *field = atoi(field_opt->answer);
+    *field = G_store(field_opt->answer);
     *columns = NULL;
     if (column_opt->answer) {
 	int i, nopt;
