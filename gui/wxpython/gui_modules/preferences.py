@@ -45,12 +45,6 @@ class Settings:
     """!Generic class where to store settings"""
     def __init__(self):
         #
-        # settings filename
-        #
-        self.fileName = ".grasswx7"
-        self.filePath = None
-
-        #
         # key/value separator
         #
         self.sep = ';'
@@ -135,9 +129,6 @@ class Settings:
             # advanced
             #
             'advanced' : {
-                'settingsFile' : {
-                    'type' : 'home'
-                    }, # home, gisdbase, location, mapset
                 'iconTheme' : {
                     'type' : 'grass2'
                     }, # grass2, grass, silk
@@ -538,10 +529,6 @@ class Settings:
              _("Expand all"))
         self.internalSettings['atm']['leftDbClick']['choices'] = (_('Edit selected record'),
                                                                   _('Display selected'))
-        self.internalSettings['advanced']['settingsFile']['choices'] = ('home',
-                                                                        'gisdbase',
-                                                                        'location',
-                                                                        'mapset')
         self.internalSettings['advanced']['iconTheme']['choices'] = ('grass',
                                                                      'grass2',
                                                                      'silk')
@@ -589,22 +576,9 @@ class Settings:
         location_name = gisenv['LOCATION_NAME']
         mapset_name = gisenv['MAPSET']
 
-        mapset_file = os.path.join(gisdbase, location_name, mapset_name, self.fileName)
-        location_file = os.path.join(gisdbase, location_name, self.fileName)
-        gisdbase_file = os.path.join(gisdbase, self.fileName)
-        home_file = os.path.join(os.path.expanduser("~"), self.fileName) # MS Windows fix ?
+        filePath = os.path.join(os.path.expanduser("~"), '.grass7', 'wx') # MS Windows fix ?
         
-        if os.path.isfile(mapset_file):
-            self.filePath = mapset_file
-        elif os.path.isfile(location_file):
-            self.filePath = location_file
-        elif os.path.isfile(gisdbase_file):
-            self.filePath = gisdbase_file
-        elif os.path.isfile(home_file):
-            self.filePath = home_file
-        
-        if self.filePath:
-            self.__ReadFile(self.filePath, settings)
+        self.__ReadFile(filePath, settings)
         
         # set environment variables
         os.environ["GRASS_FONT"] = self.Get(group='display',
@@ -613,10 +587,20 @@ class Settings:
                                                 key='font', subkey='encoding')
         
     def __ReadFile(self, filename, settings=None):
-        """!Read settings from file to dict"""
+        """!Read settings from file to dict
+
+        @param filename settings file path
+        @param settings dict where to store settings (None for self.userSettings)
+        
+        @return True on success
+        @return False on failure
+        """
         if settings is None:
             settings = self.userSettings
 
+        if not os.path.exists(filename):
+            return False
+        
         try:
             file = open(filename, "r")
             line = ''
@@ -645,34 +629,25 @@ class Settings:
                                                                   'detail' : e,
                                                                   'line' : line }
             file.close()
-
+            return False
+        
         file.close()
+        return True
 
     def SaveToFile(self, settings=None):
         """!Save settings to the file"""
         if settings is None:
             settings = self.userSettings
         
-        loc = self.Get(group='advanced', key='settingsFile', subkey='type')
         home = os.path.expanduser("~") # MS Windows fix ?
         
         gisenv = grass.gisenv()
         gisdbase = gisenv['GISDBASE']
         location_name = gisenv['LOCATION_NAME']
         mapset_name = gisenv['MAPSET']
-        filePath = None
-        if loc == 'home':
-            filePath = os.path.join(home, self.fileName)
-        elif loc == 'gisdbase':
-            filePath = os.path.join(gisdbase, self.fileName)
-        elif loc == 'location':
-            filePath = os.path.join(gisdbase, location_name, self.fileName)
-        elif loc == 'mapset':
-            filePath = os.path.join(gisdbase, location_name, mapset_name, self.fileName)
         
-        if filePath is None:
-            raise gcmd.SettingsError(_('Uknown settings file location.'))
-
+        filePath = os.path.join(home, '.grass7', 'wx')
+        
         try:
             file = open(filePath, "w")
             for group in settings.keys():
@@ -1624,28 +1599,6 @@ class PreferencesDialog(wx.Dialog):
         gridSizer.AddGrowableCol(0)
 
         row = 0
-
-        #
-        # place where to store settings
-        #
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Place where to store settings:")),
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL,
-                       pos=(row, 0))
-        settingsFile = wx.Choice(parent=panel, id=wx.ID_ANY, size=(125, -1),
-                                 choices=self.settings.Get(group='advanced', key='settingsFile',
-                                                           subkey='choices', internal=True),
-                                 name='GetStringSelection')
-        settingsFile.SetStringSelection(self.settings.Get(group='advanced', key='settingsFile', subkey='type'))
-        self.winId['advanced:settingsFile:type'] = settingsFile.GetId()
-
-        gridSizer.Add(item=settingsFile,
-                      flag=wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos=(row, 1))
-        row += 1
-
         #
         # icon theme
         #
