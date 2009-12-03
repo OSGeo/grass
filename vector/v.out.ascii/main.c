@@ -5,7 +5,7 @@
  * AUTHOR(S):  Michael Higgins, U.S. Army Construction Engineering Research Laboratory
  *             James Westervelt, U.S. Army Construction Engineering Research Laboratory
  *             Radim Blazek, ITC-Irst, Trento, Italy
- *             Martin Landa, CTU in Prague, Czech Republic (v.out.ascii.db merged & update for GRASS7)
+ *             Martin Landa, CTU in Prague, Czech Republic (v.out.ascii.db merged & update (OGR) for GRASS7)
  *
  * PURPOSE:    Writes GRASS vector data as ASCII files
  * COPYRIGHT:  (C) 2000-2009 by the GRASS Development Team
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     struct Map_info Map;
 
     FILE *ascii, *att;
-    char *input, *output, *delim, **columns, *where;
+    char *input, *output, *delim, **columns, *where, *field_name;
     int format, dp, field, ret, region, old_format;
     int ver, pnt;
 
@@ -44,11 +44,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("export"));
     G_add_keyword(_("ascii"));
     module->description =
-	_("Converts a GRASS binary vector map to a GRASS ASCII vector map.");
+	_("Exports a vector map to a GRASS ASCII vector representation.");
 
     parse_args(argc, argv, &input, &output, &format, &dp, &delim,
-	       &field, &columns, &where, &region, &old_format);
-
+	       &field_name, &columns, &where, &region, &old_format);
+    
     if (format == GV_ASCII_FORMAT_STD && columns) {
 	G_warning(_("Parameter 'column' ignored in standard mode"));
     }
@@ -68,16 +68,18 @@ int main(int argc, char *argv[])
 
     if (format != GV_ASCII_FORMAT_WKT) {
 	Vect_set_open_level(1);	/* topology not needed */
-	if (Vect_open_old(&Map, input, "") < 0)
+	if (Vect_open_old2(&Map, input, "", field_name) < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"),
 			  input);
     }
     else {
-	if (Vect_open_old(&Map, input, "") < 2) /* topology required for polygons */
+	if (Vect_open_old2(&Map, input, "", field_name) < 2) /* topology required for polygons */
 	    G_warning(_("Unable to open vector map <%s> at topology level. "
 			"Only points, lines can be processed."),
 		      input);
     }
+    
+    field = Vect_get_field_number(&Map, field_name);
     
     if (strcmp(output, "-") != 0) {
 	if (ver == 4) {
