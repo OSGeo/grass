@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     color_opt->type = TYPE_STRING;
     color_opt->answer = DEFAULT_FG_COLOR;
     color_opt->description = _("Original line color");
-    color_opt->gisprompt = GISPROMPT_COLOR;
+    color_opt->gisprompt = "old_color,color,color";
     color_opt->guisection = _("Rendering");
 
     hcolor_opt = G_define_option();
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     hcolor_opt->type = TYPE_STRING;
     hcolor_opt->answer = "red";
     hcolor_opt->description = _("Highlight color");
-    hcolor_opt->gisprompt = GISPROMPT_COLOR;
+    hcolor_opt->gisprompt = "old_color,color,color";
     hcolor_opt->guisection = _("Rendering");
 
     bgcolor_opt = G_define_option();
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     bgcolor_opt->type = TYPE_STRING;
     bgcolor_opt->answer = DEFAULT_BG_COLOR;
     bgcolor_opt->description = _("Background color");
-    bgcolor_opt->gisprompt = GISPROMPT_COLOR;
+    bgcolor_opt->gisprompt = "old_color,color,color";
     bgcolor_opt->guisection = _("Rendering");
 
     geo_f = G_define_flag();

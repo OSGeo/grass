@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     parm.lcolor->type = TYPE_STRING;
     parm.lcolor->required = NO;
     parm.lcolor->description = _("Line color");
-    parm.lcolor->gisprompt = GISPROMPT_COLOR;
+    parm.lcolor->gisprompt = "old_color,color,color";
     parm.lcolor->answer = DEFAULT_FG_COLOR;
 
     parm.tcolor = G_define_option();
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     parm.tcolor->type = TYPE_STRING;
     parm.tcolor->required = NO;
     parm.tcolor->description = _("Text color or \"none\"");
-    parm.tcolor->gisprompt = GISPROMPT_COLOR;
+    parm.tcolor->gisprompt = "old_color,color,color";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

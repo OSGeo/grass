@@ -104,8 +104,6 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define YES           1
 #define NO            0
 
-#define GISPROMPT_COLOR    "old_color,color,color"
-
 /* File/directory name lengths */
 #define GNAME_MAX 256
 #define GMAPSET_MAX 256

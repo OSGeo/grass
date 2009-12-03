@@ -146,7 +146,7 @@ int main(int argc, char **argv)
     y_color_opt->type = TYPE_STRING;
     y_color_opt->required = NO;
     y_color_opt->multiple = YES;
-    y_color_opt->gisprompt = GISPROMPT_COLOR;
+    y_color_opt->gisprompt = "old_color,color,color";
     y_color_opt->answers = NULL;
 
     t_color_opt = G_define_option();
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
     t_color_opt->description = _("Color for axis, tics, numbers, and title");
     t_color_opt->type = TYPE_STRING;
     t_color_opt->required = NO;
-    t_color_opt->gisprompt = GISPROMPT_COLOR;
+    t_color_opt->gisprompt = "old_color,color,color";
     t_color_opt->answer = DEFAULT_FG_COLOR;
 
     title[0] = G_define_option();

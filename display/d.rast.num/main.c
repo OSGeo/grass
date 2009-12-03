@@ -89,7 +89,7 @@ int main(int argc, char **argv)
     opt3->type = TYPE_STRING;
     opt3->required = NO;
     opt3->answer = DEFAULT_FG_COLOR;
-    opt3->gisprompt = GISPROMPT_COLOR;
+    opt3->gisprompt = "old_color,color,color";
     opt3->key_desc = "color";
     opt3->description = _("Color for drawing text");
 

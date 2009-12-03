@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     opt2->key = "color";
     opt2->type = TYPE_STRING;
     opt2->answer = DEFAULT_BG_COLOR;
-    opt2->gisprompt = GISPROMPT_COLOR;
+    opt2->gisprompt = "old_color,color,color";
     opt2->description =
 	_("Color of lines separating the colors of the color table");
 
