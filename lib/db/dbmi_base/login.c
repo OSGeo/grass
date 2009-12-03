@@ -1,11 +1,27 @@
+/*!
+  \file db/dbmi_base/login.c
+  
+  \brief DBMI Library (base) - login settings
+  
+  (C) 1999-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 typedef struct
 {
@@ -27,12 +43,12 @@ static const char *login_filename(void)
 
     if (!file) {
 	file = (char *)malloc(1000);
-	sprintf(file, "%s/.grasslogin6", G_home());
+	sprintf(file, "%s/%s/dblogin", G_home(), CONFIG_DIR);
     }
     return file;
 }
 
-void init_login(LOGIN * login)
+static void init_login(LOGIN * login)
 {
     login->n = 0;
     login->a = 10;
@@ -40,9 +56,8 @@ void init_login(LOGIN * login)
     login->data = (DATA *) malloc(login->a * sizeof(DATA));
 }
 
-void
-add_login(LOGIN * login, const char *dr, const char *db, const char *usr,
-	  const char *pwd)
+static void add_login(LOGIN * login, const char *dr, const char *db, const char *usr,
+		      const char *pwd)
 {
     if (login->n == login->a) {
 	login->a += 10;
@@ -62,7 +77,7 @@ add_login(LOGIN * login, const char *dr, const char *db, const char *usr,
    return: -1 error (cannot read file)
    number of items (0 also if file does not exist)
  */
-int read_file(LOGIN * login)
+static int read_file(LOGIN * login)
 {
     int ret;
     const char *file;
@@ -93,7 +108,7 @@ int read_file(LOGIN * login)
 	G_debug(3, "ret = %d : %s %s %s %s", ret, dr, db, usr, pwd);
 
 	if (ret < 2) {
-	    G_warning("Login file corrupted");
+	    G_warning(_("Login file corrupted"));
 	    continue;
 	}
 
@@ -110,7 +125,7 @@ int read_file(LOGIN * login)
    return: -1 error (cannot read file)
    0 OK
  */
-int write_file(LOGIN * login)
+static int write_file(LOGIN * login)
 {
     int i;
     const char *file;
@@ -146,12 +161,17 @@ int write_file(LOGIN * login)
 
 /*!
    \brief Set user/password for driver/database
+   
+   \param driver driver name
+   \param database database name
+   \param user user name
+   \param password password string
+   
    \return DB_OK
    \return DB_FAILED
  */
-int
-db_set_login(const char *driver, const char *database, const char *user,
-	     const char *password)
+int db_set_login(const char *driver, const char *database, const char *user,
+		 const char *password)
 {
     int i, found;
     LOGIN login;
@@ -193,14 +213,18 @@ db_set_login(const char *driver, const char *database, const char *user,
 }
 
 /*!
-   \brief Get user/password for driver/database
-   if driver/database is not found, user/password are set to NULL
+   \brief Get user/password for driver/database if driver/database is not found, user/password are set to NULL
+
+   \param driver driver name
+   \param database database name
+   \param[out] user name
+   \param[out] password string
+   
    \return DB_OK
    \return DB_FAILED
  */
-int
-db_get_login(const char *driver, const char *database, const char **user,
-	     const char **password)
+int db_get_login(const char *driver, const char *database, const char **user,
+		 const char **password)
 {
     int i;
     LOGIN login;
