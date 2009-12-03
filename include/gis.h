@@ -72,7 +72,9 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define PROJECTION_OTHER  99
 
 #define PROJECTION_FILE "PROJ_INFO"
-#define UNIT_FILE "PROJ_UNITS"
+#define UNIT_FILE       "PROJ_UNITS"
+
+#define CONFIG_DIR ".grass7"
 
 /* define PI and friends */
 #undef M_PI
