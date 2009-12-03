@@ -118,7 +118,7 @@ int main(int argc, char **argv)
     opt3->type = TYPE_STRING;
     opt3->required = NO;
     opt3->answer = "green";
-    opt3->gisprompt = GISPROMPT_COLOR;
+    opt3->gisprompt = "old_color,color,color";
     opt3->description = _("Color for drawing arrows");
 
     opt4 = G_define_option();

@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     colors_opt->multiple = YES;
     colors_opt->description = _("Colors (one per class).");
     /* This won't work. We would need multiple color prompt.
-     * colors_opt->gisprompt = GISPROMPT_COLOR; */
+     * colors_opt->gisprompt = "old_color,color,color"; */
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->description =
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     bcolor_opt->answer = DEFAULT_FG_COLOR;
     bcolor_opt->description = _("Boundary color");
     bcolor_opt->guisection = _("Boundaries");
-    bcolor_opt->gisprompt = GISPROMPT_COLOR;
+    bcolor_opt->gisprompt = "old_color,color,color";
 
     legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     legend_file_opt->key = "legendfile";

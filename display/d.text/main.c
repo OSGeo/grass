@@ -162,7 +162,7 @@ int main(int argc, char **argv)
     opt.fgcolor->required = NO;
     opt.fgcolor->description =
 	_("Text color, either a standard GRASS color or R:G:B triplet");
-    opt.fgcolor->gisprompt = GISPROMPT_COLOR;
+    opt.fgcolor->gisprompt = "old_color,color,color";
 
     opt.bgcolor = G_define_option();
     opt.bgcolor->key = "bgcolor";
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
     opt.bgcolor->required = NO;
     opt.bgcolor->description =
         _("Text background color, either a standard GRASS color or R:G:B triplet");
-    opt.bgcolor->gisprompt = GISPROMPT_COLOR;
+    opt.bgcolor->gisprompt = "old_color,color,color";
 
     opt.line = G_define_option();
     opt.line->key = "line";

@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     color->answer = DEFAULT_BG_COLOR;
     color->description =
 	_("Color to erase with, either a standard GRASS color or R:G:B triplet (separated by colons)");
-    color->gisprompt = GISPROMPT_COLOR;
+    color->gisprompt = "old_color,color,color";
 
     eraseframe = G_define_flag();
     eraseframe->key = 'f';
