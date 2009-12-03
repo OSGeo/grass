@@ -1,3 +1,17 @@
+/*!
+ * \file gis/parser_standard_options.c
+ *
+ * \brief GIS Library - Argument parsing functions (standard options)
+ *
+ * (C) 2001-2009 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Original author CERL
+ * \author Soeren Gebbert added Dec. 2009 WPS process_description document
+ */
+
 #include "parser_local_proto.h"
 
 /*!
@@ -275,7 +289,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map");
+	Opt->label = _("Name of input vector map");
+	Opt->description = _("Data source for OGR access");
 	break;
     case G_OPT_V_INPUTS:
 	Opt->key = "input";
@@ -284,7 +299,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map(s)");
+	Opt->label = _("Name of input vector map(s)");
+	Opt->description = _("Data source(s) for OGR access");
 	break;
     case G_OPT_V_OUTPUT:
 	Opt->key = "output";
@@ -300,7 +316,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map");
+	Opt->label = _("Name of input vector map");
+	Opt->description = _("Data source for OGR access");
 	break;
     case G_OPT_V_MAPS:
 	Opt->key = "map";
@@ -337,7 +354,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->label = _("Layer number or name");
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
-	      "tables. This number determines which table to use.");
+	      "tables. This number determines which table to use. If reasonable '-1' selects all vector map layers. "
+	      "Layer name for OGR access.");
 	Opt->gisprompt = "old_layer,layer,layer";
 	break;
     case G_OPT_V_CAT:
