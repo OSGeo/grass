@@ -82,13 +82,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("ogr"));
 
     module->description =
-	_("Converts GRASS vector map to one of the supported OGR vector formats.");
+	_("Converts vector map to one of the supported OGR vector formats.");
     
     /* parse & read options */
     parse_args(argc, argv,
 	       &options, &flags);
-    field = atoi(options.field->answer);
-
+    
     /* parse dataset creation options */
     i = 0;
     while (options.dsco->answers[i]) {
@@ -117,7 +116,7 @@ int main(int argc, char *argv[])
     if (!flags.new->answer) {
 	/* open input vector (topology required) */
 	Vect_set_open_level(2);
-	Vect_open_old(&In, options.input->answer, "");
+	Vect_open_old2(&In, options.input->answer, "", options.field->answer);
 	
 	if (strcmp(options.type->answer, "auto") == 0) {
 	    G_debug(2, "Automatic type determination.");
@@ -169,6 +168,8 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to determine input map's vector feature type(s)."));
 	}
     }
+
+    field = Vect_get_field_number(&In, options.field->answer);
     
     /* check output feature type */
     otype = Vect_option_to_types(options.type);
@@ -821,7 +822,6 @@ int main(int argc, char *argv[])
     }
 
     /* Summary */
-    G_message(_("%d features written"), fout);
     if (nocat > 0)
 	G_warning(_("%d features without category were written"), nocat);
     if (noatt > 0)
@@ -838,7 +838,8 @@ int main(int argc, char *argv[])
        G_warning ("%d features of different type skip", fskip);
      */
 
-    G_done_msg(" ");
+    G_done_msg(_("%d features written to <%s> (%s)."), fout,
+	       options.layer->answer, options.format->answer);
     
     exit(EXIT_SUCCESS);
 }
