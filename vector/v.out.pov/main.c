@@ -1,12 +1,13 @@
 /* ***************************************************************
  * *
- * * MODULE:       v.out.render
+ * * MODULE:       v.out.pov
  * * 
  * * AUTHOR(S):    Radim Blazek
+ * *               OGR support by Martin Landa <landa.martin gmail.com>
  * *               
  * * PURPOSE:      Export vector to renderers' format (PovRay)
  * *               
- * * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
  * *
  * *               This program is free software under the 
  * *               GNU General Public License (>=v2). 
@@ -14,8 +15,10 @@
  * *               for details.
  * *
  * **************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
@@ -23,9 +26,10 @@
 int main(int argc, char *argv[])
 {
     int i, j, centroid, otype, count;
-    int field = 1;
+    int nlines, nareas;
+    int field;
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *type_opt;
+    struct Option *in_opt, *field_opt, *out_opt, *type_opt;
     struct Option *size_opt, *zmod_opt, *objmod_opt;
     FILE *fd;
 
@@ -33,7 +37,7 @@ int main(int argc, char *argv[])
     struct Map_info In;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    int type, cat;
+    int type;
 
     G_gisinit(argv[0]);
 
@@ -42,46 +46,44 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
     module->description =
-	"Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y";
+	_("Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "point,centroid,line,boundary,area,face,kernel";
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    
+    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     type_opt->answer = "point,line,area,face";
 
-    out_opt = G_define_option();
-    out_opt->key = "output";
-    out_opt->type = TYPE_STRING;
+    out_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     out_opt->required = YES;
-    out_opt->description = "Output file";
+    out_opt->description = _("Name for output POV file");
 
     size_opt = G_define_option();
     size_opt->key = "size";
     size_opt->type = TYPE_STRING;
     size_opt->required = NO;
     size_opt->answer = "10";
-    size_opt->description = "Radius of sphere for points and tube for lines. "
-	"May be also variable, e.g. grass_r.";
+    size_opt->label = _("Radius of sphere for points and tube for lines");
+    size_opt->description = _("May be also variable, e.g. grass_r.");
 
     zmod_opt = G_define_option();
     zmod_opt->key = "zmod";
     zmod_opt->type = TYPE_STRING;
     zmod_opt->required = NO;
     zmod_opt->answer = "";
-    zmod_opt->description =
-	"Modifier for z coordinates, this string is appended to each z coordinate.\n"
-	"\t\tExamples: '*10', '+1000', '*10+100', '*exaggeration'";
+    zmod_opt->description = _("Modifier for z coordinates");
+    zmod_opt->description = _("This string is appended to each z coordinate. "
+			      "Examples: '*10', '+1000', '*10+100', '*exaggeration'");
 
     objmod_opt = G_define_option();
     objmod_opt->key = "objmod";
     objmod_opt->type = TYPE_STRING;
     objmod_opt->required = NO;
     objmod_opt->answer = "";
-    objmod_opt->description =
-	"Object modifier (OBJECT_MODIFIER in POV-Ray documentation).\n"
-	"\t\tExample: \"pigment { color red 0 green 1 blue 0 }\"";
-
+    objmod_opt->label = _("Object modifier (OBJECT_MODIFIER in POV-Ray documentation)");
+    objmod_opt->description = _("Example: \"pigment { color red 0 green 1 blue 0 }\"");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -93,28 +95,35 @@ int main(int argc, char *argv[])
 
     /* open input vector */
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
-
+    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+    
+    field = Vect_get_field_number(&In, field_opt->answer);
+    
     /* Open output file */
     if ((fd = fopen(out_opt->answer, "w")) == NULL) {
 	Vect_close(&In);
-	G_fatal_error("Cannot open output file '%s'", out_opt->answer);
+	G_fatal_error(_("Unable to create output file <%s>"), out_opt->answer);
     }
 
+    nlines = Vect_get_num_lines(&In);
+    nareas = Vect_get_num_areas(&In);
     count = 0;
     /* Lines */
     if ((otype &
 	 (GV_POINTS | GV_LINES | GV_BOUNDARY | GV_CENTROID | GV_FACE |
 	  GV_KERNEL))) {
-	for (i = 1; i <= Vect_get_num_lines(&In); i++) {
+	for (i = 1; i <= nlines; i++) {
+	    G_percent(i, nlines, 2);
 	    type = Vect_read_line(&In, Points, Cats, i);
 	    G_debug(2, "line = %d type = %d", i, type);
+	    
+	    if (Vect_cat_get(Cats, field, NULL) == 0)
+		continue;
+	    
 	    if (!(otype & type)) {
 		continue;
 	    }
-
-	    /* Vect_cat_get (Cats, field, &cat); */
-
+	    
 	    switch (type) {
 	    case GV_POINT:
 	    case GV_CENTROID:
@@ -158,14 +167,16 @@ int main(int argc, char *argv[])
     }
 
     /* Areas (run always to count features of different type) */
-    if (otype & GV_AREA) {
-	for (i = 1; i <= Vect_get_num_areas(&In); i++) {
+    if (otype & GV_AREA && nareas > 0) {
+	G_message(_("Processing areas..."));
+	for (i = 1; i <= nareas; i++) {
+	    G_percent(i, nareas, 2);
 	    /* TODO : Use this later for attributes from database: */
 	    centroid = Vect_get_area_centroid(&In, i);
-	    cat = -1;
 	    if (centroid > 0) {
 		Vect_read_line(&In, NULL, Cats, centroid);
-		Vect_cat_get(Cats, field, &cat);
+		if (Vect_cat_get(Cats, field, NULL) < 0)
+		    continue;
 	    }
 	    G_debug(2, "area = %d centroid = %d", i, centroid);
 
@@ -200,7 +211,7 @@ int main(int argc, char *argv[])
     Vect_close(&In);
 
     /* Summary */
-    G_message(_("%d features written"), count);
+    G_done_msg(_("%d features written."), count);
 
     exit(EXIT_SUCCESS);
 }
