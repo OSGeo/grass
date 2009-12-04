@@ -120,8 +120,6 @@ int close_array_seg(void)
     if (arm_flag)
 	fclose(fp);
 
-    bseg_close(&bitflags);
-
     close_maps();
 
     return 0;
