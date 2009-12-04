@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     out_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     out_opt->description = _("Name for SVG output file");
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
 	    for (i = 1; i <= Vect_get_num_primitives(&In, GV_POINTS); i++) {
 		G_percent(i, Vect_get_num_primitives(&In, GV_POINTS), 10);
 		Vect_read_line(&In, Points, Cats, i);
-		if (field > 0 && !Vect_cat_get(Cats, field, NULL))
+		if (field != -1 && !Vect_cat_get(Cats, field, NULL))
 		    continue;
 		for (j = 0; j < Points->n_points; j++) {
 		    fprintf(fpsvg, "  <circle ");

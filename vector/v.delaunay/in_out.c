@@ -187,7 +187,7 @@ int read_sites(int mode3d, int complete_map, struct Map_info* map_in,
 	if (!(type & GV_POINTS))
 	    continue;
 	
-	if (Vect_cat_get(Cats, field, NULL) == 0)
+	if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
 	    continue;
 	
 	if (!complete_map) {

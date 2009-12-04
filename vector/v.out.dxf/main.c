@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
-    field = G_define_standard_option(G_OPT_V_FIELD);
+    field = G_define_standard_option(G_OPT_V_FIELD_ALL);
     
     output = G_define_standard_option(G_OPT_F_OUTPUT);
     output->required = YES;
@@ -157,7 +157,7 @@ int add_plines(struct Map_info *Map, int field, double textsize)
 
 	ltype = Vect_read_line(Map, Points, Cats, line);
 	Vect_cat_get(Cats, field, &cat);
-	if (cat < 0)
+	if (field != -1 && cat < 0)
 	    continue;
 	
 	sprintf(cat_num, "%d", cat);

@@ -24,7 +24,7 @@ int loadSiteCoordinates(struct Map_info *Map, struct Point **points, int all,
 	if (type != GV_POINT)
 	    continue;
 
-	if (Vect_cat_get(cats, field, &cat) == 0)
+	if (field != -1 && Vect_cat_get(cats, field, &cat) == 0)
 	    continue;
 
 	G_debug(4, "Point: %f|%f|%f|#%d", sites->x[0], sites->y[0],

@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct cat_list *Clist;
 
+    int field;
     int i, only_type, cat, ctype, fdrast = 0, areanum = 0;
     int nelements;
     int line, type;
@@ -77,7 +78,7 @@ int main(int argc, char *argv[])
 
     old = G_define_standard_option(G_OPT_V_INPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->answer = "point,line,boundary,area";
@@ -149,6 +150,8 @@ int main(int argc, char *argv[])
 
     /* opening old vector */
     Vect_open_old2(&In, old->answer, "", field_opt->answer);
+    field = Vect_get_field_number(&In, field_opt->answer);
+
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
@@ -261,7 +264,7 @@ int main(int argc, char *argv[])
 		continue;
 
 	    /* fetch categories */
-	    if (Vect_cat_get(Cats, 1, &cat) == 0) {
+	    if (field != -1 && !Vect_cat_get(Cats, field, &cat)) {
 		Vect_cat_set(Cats, 1, i);
 		i++;
 	    }

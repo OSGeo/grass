@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 			    "vector map containing points or centroids.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     reg_flag = G_define_flag();

@@ -485,6 +485,7 @@ struct field_info *Vect_get_field2(const struct Map_info *Map, const char *field
   \param field layer name
 
   \return layer number
+  \return -1 for all layers
   \return 0 if layer not found
 */
 int Vect_get_field_number(const struct Map_info *Map, const char *field)
@@ -493,6 +494,9 @@ int Vect_get_field_number(const struct Map_info *Map, const char *field)
 
     G_debug(1, "Vect_get_field_number(): field = %s", field);
 
+    if (strcmp(field, "-1") == 0)
+	return -1;
+    
     fi = Vect_get_field2(Map, field);
 
     if (fi)

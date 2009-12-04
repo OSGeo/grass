@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     module->description = _("Toolset for cleaning topology of vector map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     field_opt->guisection = _("Selection");
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     type_opt->guisection = _("Selection");

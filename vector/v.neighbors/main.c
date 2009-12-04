@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     int out_fd;
     CELL *result, *rp;
     int nrows, ncols;
-    int row, col;
+    int row, col, count_sum;
     int field;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *field_opt;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     out_opt = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -101,6 +101,7 @@ int main(int argc, char *argv[])
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
 
+    count_sum = 0;
     for (row = 0; row < nrows; row++) {
 	double x, y;
 
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
 	    for (i = 0; i < List->n_values; i++) {
 		Vect_read_line(&In, Points, Cats, List->value[i]);
 
-		if (Vect_cat_get(Cats, field, NULL) == 0)
+		if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
 		    continue;
 		
 		if (Vect_points_distance(x, y, 0.0, Points->x[0],
@@ -143,6 +144,7 @@ int main(int argc, char *argv[])
 		Rast_set_d_value(rp, value, CELL_TYPE);
 	    }
 	    rp = G_incr_void_ptr(rp, Rast_cell_size(CELL_TYPE));
+	    count_sum += count;
 	}
 
 	Rast_put_row(out_fd, result, CELL_TYPE);
@@ -152,5 +154,8 @@ int main(int argc, char *argv[])
     Vect_close(&In);
     Rast_close(out_fd);
 
+    if (count_sum < 1)
+	G_warning(_("No points found"));
+    
     exit(EXIT_SUCCESS);
 }

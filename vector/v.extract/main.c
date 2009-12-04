@@ -68,6 +68,7 @@ int main(int argc, char **argv)
 {
     int i, new_cat, type, ncats, *cats, c;
     int **ocats, *nocats, nfields, *fields;
+    int field;
     int dissolve = 0, x, y, type_only;
     char buffr[1024], text[80];
     char *input, *output;
@@ -116,10 +117,7 @@ int main(int argc, char **argv)
     typopt->label = _("Types to be extracted");
     typopt->guisection = _("Selection");
 
-    fieldopt = G_define_standard_option(G_OPT_V_FIELD);
-    fieldopt->gisprompt = "old_layer,layer,layer_all";
-    fieldopt->label =
-	_("Layer number (if -1, all features in all layers of given type " "are extracted)");
+    fieldopt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     fieldopt->guisection = _("Selection");
     
     listopt = G_define_standard_option(G_OPT_V_CATS);
@@ -202,7 +200,9 @@ int main(int argc, char **argv)
     /* Do initial read of input file */
     Vect_set_open_level(2); /* topology required */
     Vect_open_old2(&In, input, "", fieldopt->answer);
-
+    
+    field = Vect_get_field_number(&In, fieldopt->answer);
+    
     type = Vect_option_to_types(typopt);
     if (type & GV_AREA) {
 	type |= GV_CENTROID;
@@ -261,7 +261,7 @@ int main(int argc, char **argv)
 
     }
     else if (whereopt->answer != NULL) {
-	Fi = Vect_get_field2(&In, fieldopt->answer);
+	Fi = Vect_get_field(&In, field);
 	if (!Fi) {
 	    G_fatal_error(_("Database connection not defined for layer <%s>"),
 			  fieldopt->answer);
@@ -292,7 +292,7 @@ int main(int argc, char **argv)
     else if (nrandopt->answer != NULL) {	/* Generate random category list */
 
 	/* We operate on layer's CAT's and thus valid layer is required */
-	if (Vect_cidx_get_field_index(&In, atoi(fieldopt->answer)) < 0)
+	if (Vect_cidx_get_field_index(&In, field) < 0)
 	    G_fatal_error(_("This map has no categories attached. "
 			    "Use v.category to attach categories to this vector map."));
 
@@ -301,7 +301,7 @@ int main(int argc, char **argv)
 	if (nrandom < 1)
 	    G_fatal_error(_("Please specify random number larger than 0"));
 
-	nfeatures = Vect_cidx_get_type_count(&In, atoi(fieldopt->answer), type);
+	nfeatures = Vect_cidx_get_type_count(&In, field, type);
 	if (nrandom >= nfeatures)
 	    G_fatal_error(_("Random category count must be smaller than feature count. "
 			   "There are only %d features of type(s): %s"),
@@ -309,7 +309,7 @@ int main(int argc, char **argv)
 
 	/* Let's create an array of uniq CAT values
 	   According to Vlib/build.c, cidx should be allready sorted by dig_cidx_sort() */
-	ci = &(In.plus.cidx[Vect_cidx_get_field_index(&In, atoi(fieldopt->answer))]);
+	ci = &(In.plus.cidx[Vect_cidx_get_field_index(&In, field)]);
 	ucat_count = 0;
 	for (c = 0; c < ci->n_cats; c++) {
 	    /* Bitwise AND compares ci feature type with user's requested types */
@@ -364,8 +364,7 @@ int main(int argc, char **argv)
     Vect_copy_head_data(&In, &Out);
     
     G_message(_("Extracting features..."));
-    xtract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve,
-		Vect_get_field_number(&In, fieldopt->answer),
+    xtract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve, field,
 		type_only, r_flag->answer ? 1 : 0);
 
     Vect_build(&Out);
