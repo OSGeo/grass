@@ -15,6 +15,7 @@ int close_maps(void)
     WAT_ALT wa;
 
     /* bseg_close(&swale); */
+    bseg_close(&bitflags);
     cseg_close(&alt);
     if (wat_flag) {
 	G_message(_("Closing accumulation map"));
