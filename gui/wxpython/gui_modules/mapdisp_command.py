@@ -17,6 +17,7 @@ for details.
 import sys
 import time
 
+from debug import Debug
 from threading import Thread
 
 class Command(Thread):
@@ -48,10 +49,21 @@ class Command(Thread):
                 try:
                     Debug.msg (3, "Command.run(): cmd=%s" % (line))
 
-                    self.map.AddLayer(item=None, type="raster",
+                    cmd = line.split(" ")
+                    opacity = 1
+                    if " opacity=" in line:
+                        cmd2 = cmd
+                        cmd = []
+                        for c in cmd2:
+                            if c.find("opacity=") == 0:
+                                opacity = float(c.split("=")[1]) / 100
+                            else:
+                                cmd.append(c)
+
+                    self.map.AddLayer(type="raster",
                                       name='',
-                                      command=line,
-                                      l_opacity=1)
+                                      command=cmd,
+                                      l_opacity=opacity)
 
                     self.parent.redraw =True
 
