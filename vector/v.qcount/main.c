@@ -1,24 +1,10 @@
-
-/*-
- * from s.qcount - GRASS program to sample a raster map at site locations.
- * Copyright (C) 1993-1995. James Darrell McCauley.
+/****************************************************************************
  *
- * Author: James Darrell McCauley darrell@mccauley-usa.com
+ * MODULE:       v.qcount
+ * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
  * 	                          http://mccauley-usa.com/
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *               OGR support by Martin Landa <landa.martin gmail.com>
+ * PURPOSE:      GRASS program to sample a raster map at site locations (based on s.qcount)
  *
  * Modification History:
  * <03 Mar 1993> - began coding (jdm)
@@ -29,16 +15,23 @@
  * <25 Jun 1995> - v 0.7B, new site API (jdm)
  * <13 Sep 2000> - released under GPL
  *
- */
-
+ * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
 #include "quaddefs.h"
 
 int main(int argc, char **argv)
@@ -51,7 +44,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *input, *output, *n, *r;
+	struct Option *input, *field, *output, *n, *r;
     } parm;
     struct
     {
@@ -68,34 +61,26 @@ int main(int argc, char **argv)
     G_add_keyword(_("statistics"));
     module->description = _("Indices for quadrat counts of sites lists.");
 
-    parm.input = G_define_option();
-    parm.input->key = "input";
-    parm.input->type = TYPE_STRING;
-    parm.input->required = YES;
-    parm.input->description = _("Vector of points defining sample points");
-    parm.input->gisprompt = "old,vector,vector";
+    parm.input = G_define_standard_option(G_OPT_V_INPUT);
 
-    parm.output = G_define_option();
-    parm.output->key = "output";
-    parm.output->type = TYPE_STRING;
+    parm.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    
+    parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.output->required = NO;
     parm.output->description =
-	_("Output quadrant centres, number of points is written as category");
-    parm.output->gisprompt = "new,vector,vector";
+	_("Name for output quadrant centres map (number of points is written as category)");
 
     parm.n = G_define_option();
     parm.n->key = "n";
     parm.n->type = TYPE_INTEGER;
     parm.n->required = YES;
     parm.n->description = _("Number of quadrats");
-    parm.n->options = NULL;
 
     parm.r = G_define_option();
     parm.r->key = "r";
     parm.r->type = TYPE_DOUBLE;
     parm.r->required = YES;
     parm.r->description = _("Quadrat radius");
-    parm.r->options = NULL;
 
     flag.g = G_define_flag();
     flag.g->key = 'g';
@@ -111,7 +96,7 @@ int main(int argc, char **argv)
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old(&Map, parm.input->answer, "");
+    Vect_open_old2(&Map, parm.input->answer, "", parm.field->answer);
 
     /* Get the quadrats */
     G_message(_("Finding quadrats..."));
@@ -119,10 +104,11 @@ int main(int argc, char **argv)
     quads = find_quadrats(nquads, radius, window);
 
     /* Get the counts per quadrat */
-    G_message(_("Counting sites in quadrats..."));
+    G_message(_("Counting points quadrats..."));
 
     counts = (int *)G_malloc(nquads * (sizeof(int)));
-    count_sites(quads, nquads, counts, radius, &Map);
+    count_sites(quads, nquads, counts, radius, &Map,
+		Vect_get_field_number(&Map, parm.field->answer));
 
     Vect_close(&Map);
 
