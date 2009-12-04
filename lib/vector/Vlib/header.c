@@ -212,8 +212,11 @@ const char *Vect_get_mapset(const struct Map_info *Map)
 }
 
 /*!
-  \brief Get full vector map name (i.e., "name@mapset")
+  \brief Get full vector map name
   
+  - for GV_FORMAT_NATIVE and GV_FORMAT_OGR returns "map@mapset"
+  - for GV_FORMAT_OGR_DIRECT returns "layer@datasourse"
+
   Allocated string should be freed by G_free().
   
   \param Map pointer to Map_info structure
@@ -224,7 +227,16 @@ const char *Vect_get_full_name(const struct Map_info *Map)
 {
     char *ptr;
 
-    ptr = (char *)G_malloc(strlen(Map->name) + strlen(Map->mapset) + 2);
+    if (Map->format == GV_FORMAT_OGR_DIRECT) {
+	ptr = (char *) G_malloc(strlen(Map->fInfo.ogr.layer_name) +
+				strlen(Map->fInfo.ogr.dsn) + 2);	
+	sprintf(ptr, "%s@%s", Map->fInfo.ogr.layer_name,
+		Map->fInfo.ogr.dsn);
+
+	return ptr;
+    }
+
+    ptr = (char *) G_malloc(strlen(Map->name) + strlen(Map->mapset) + 2);
     if (strlen(Map->mapset) > 0) {
 	sprintf(ptr, "%s@%s", Map->name, Map->mapset);
     }

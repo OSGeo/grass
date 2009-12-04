@@ -8,21 +8,25 @@
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Markus Neteler <neteler itc.it>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
 #include "local.h"
 
 int main(int argc, char *argv[])
@@ -56,7 +60,7 @@ int main(int argc, char *argv[])
     module->description = _("Overlays two vector maps.");
 
     in_opt[0] = G_define_standard_option(G_OPT_V_INPUT);
-    in_opt[0]->description = _("Name of input vector map (A)");
+    in_opt[0]->label = _("Name of input vector map (A)");
     in_opt[0]->key = "ainput";
 
     type_opt[0] = G_define_standard_option(G_OPT_V_TYPE);
@@ -66,11 +70,11 @@ int main(int argc, char *argv[])
     type_opt[0]->answer = "area";
 
     field_opt[0] = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt[0]->label = _("Layer number (vector map A)");
+    field_opt[0]->label = _("Layer number or name (vector map A)");
     field_opt[0]->key = "alayer";
 
     in_opt[1] = G_define_standard_option(G_OPT_V_INPUT);
-    in_opt[1]->description = _("Name of input vector map (B)");
+    in_opt[1]->label = _("Name of input vector map (B)");
     in_opt[1]->key = "binput";
 
     type_opt[1] = G_define_standard_option(G_OPT_V_TYPE);
@@ -80,18 +84,15 @@ int main(int argc, char *argv[])
     type_opt[1]->answer = "area";
 
     field_opt[1] = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt[1]->label = _("Layer number (vector map B)");
+    field_opt[1]->label = _("Layer number or name (vector map B)");
     field_opt[1]->key = "blayer";
-
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     operator_opt = G_define_option();
     operator_opt->key = "operator";
     operator_opt->type = TYPE_STRING;
-    operator_opt->required = NO;
+    operator_opt->required = YES;
     operator_opt->multiple = NO;
     operator_opt->options = "and,or,not,xor";
-    operator_opt->answer = "or";
     operator_opt->label = _("Operator defines features written to "
 			    "output vector map");
     operator_opt->description =
@@ -107,6 +108,8 @@ int main(int argc, char *argv[])
 	  "not those from ainput overlayed by binput (only "
 	  "for atype=area)");
 
+    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    
     ofield_opt = G_define_standard_option(G_OPT_V_FIELD);
     ofield_opt->key = "olayer";
     ofield_opt->multiple = YES;
@@ -124,7 +127,6 @@ int main(int argc, char *argv[])
 
     for (input = 0; input < 2; input++) {
 	type[input] = Vect_option_to_types(type_opt[input]);
-	field[input] = atoi(field_opt[input]->answer);
     }
 
     ofield[0] = ofield[1] = ofield[2] = 0;
@@ -196,11 +198,12 @@ int main(int argc, char *argv[])
     for (input = 0; input < 2; input++) {
 	int ncats, index;
 
-	G_message(_("Copying vector objects from vector map <%s>..."),
-		  in_opt[input]->answer);
-
 	Vect_set_open_level(2);
-	Vect_open_old(&(In[input]), in_opt[input]->answer, "");
+	Vect_open_old2(&(In[input]), in_opt[input]->answer, "", field_opt[input]->answer);
+	field[input] = Vect_get_field_number(&(In[input]), field_opt[input]->answer);
+
+	G_message(_("Copying vector features from <%s>..."),
+		  Vect_get_full_name(&(In[input])));
 
 	nlines = Vect_get_num_lines(&(In[input]));
 
@@ -253,7 +256,7 @@ int main(int argc, char *argv[])
 
 	G_debug(3, "%d cats read from index", attr[input].n);
 
-	G_message(_("Collecting input attributes..."));
+	G_verbose_message(_("Collecting input attributes..."));
 
 	attr[input].null_values = NULL;
 	attr[input].columns = NULL;
@@ -466,7 +469,7 @@ int main(int argc, char *argv[])
 			    Fi->database, Fi->driver);
     }
 
-    G_message(_("Building partial topology..."));
+    G_verbose_message(_("Building partial topology..."));
     /* do not print output, because befor cleaning it is nonsense */
     Vect_build_partial(&Out, GV_BUILD_BASE);
 
