@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
-    field = G_define_standard_option(G_OPT_V_FIELD);
+    field = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     output = G_define_standard_option(G_OPT_V_OUTPUT);
 
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Error loading vector points map <%s>"), sitefile);
 
     if (numSitePoints < 3)
-	G_fatal_error(_("Convex hull calculation requires at least three points"));
+	G_fatal_error(_("Convex hull calculation requires at least three points (%d found)"), numSitePoints);
 
 
     /* create a 2D or a 3D hull? */

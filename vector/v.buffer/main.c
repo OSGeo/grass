@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     type_opt->answer = "point,line,area";
     type_opt->guisection = _("Selection");
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     field_opt->guisection = _("Selection");
 
     dista_opt = G_define_option();
@@ -350,7 +350,7 @@ int main(int argc, char *argv[])
 	    if (!(ltype & type))
 		continue;
 
-	    if (!Vect_cat_get(Cats, field, &cat))
+	    if (field != -1 && !Vect_cat_get(Cats, field, &cat))
 		continue;
 
 	    if (bufcol_opt->answer) {
@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
 		continue;
 
 	    Vect_read_line(&In, NULL, Cats, centroid);
-	    if (!Vect_cat_get(Cats, field, &cat))
+	    if (field > 0 && !Vect_cat_get(Cats, field, &cat))
 		continue;
 
 	    if (bufcol_opt->answer) {

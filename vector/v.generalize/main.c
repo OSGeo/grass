@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "line,boundary,area";
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
 
 
     /* parse filter option and select appropriate lines */
-    layer = atoi(field_opt->answer);
+    layer = Vect_get_field_number(&In, field_opt->answer);
     if (where_opt->answer) {
 	if (layer < 1)
 	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
@@ -372,6 +372,10 @@ int main(int argc, char *argv[])
 	   (type = Vect_read_next_line(&In, Points, Cats)) > 0) {
 	i++;
 	G_percent(i, n_lines, 1);
+
+	if (layer != -1 && !Vect_cat_get(Cats, layer, NULL))
+	    continue;
+	
 	if (type == GV_CENTROID && (mask_type & GV_BOUNDARY))
 	    continue;		/* skip old centroids,
 				 * we calculate new if we generalize boundarie */
@@ -443,6 +447,10 @@ int main(int argc, char *argv[])
 	n_lines = Vect_get_num_lines(&Out);
 	for (i = 1; i <= n_lines; i++) {
 	    type = Vect_read_line(&Out, Points, Cats, i);
+	    
+	    if (layer > 0 && !Vect_cat_get(Cats, layer, NULL))
+		continue;
+	    
 	    if (type != GV_BOUNDARY)
 		continue;
 	    Vect_get_line_areas(&Out, i, &left, &right);

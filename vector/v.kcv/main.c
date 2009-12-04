@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 

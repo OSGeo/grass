@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     
@@ -323,7 +323,9 @@ int main(int argc, char *argv[])
 
 		/* get the line type */
 		ltype = Vect_read_line(&In, Points, Cats, line);
-
+		if (layer != -1 && !Vect_cat_get(Cats, layer, NULL))
+		    continue;
+		
 		/* write the new line file, with the updated Points struct */
 		if (sample_raster
 		    (ltype, fdrast, window, Points, method, scale, null_opt,
@@ -381,8 +383,8 @@ int main(int argc, char *argv[])
     else {
         /* close input vector */
         Vect_close(&In);
-	G_warning(_("No features drapped. Check Your computational region and input raster map."));
-	exit(EXIT_FAILURE);
+	G_warning(_("No features drapped. Check your computational region and input vector map."));
+	exit(EXIT_SUCCESS);
     }
 
     /* close input vector */

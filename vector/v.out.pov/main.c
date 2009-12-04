@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     type_opt->answer = "point,line,area,face";
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 	    type = Vect_read_line(&In, Points, Cats, i);
 	    G_debug(2, "line = %d type = %d", i, type);
 	    
-	    if (Vect_cat_get(Cats, field, NULL) == 0)
+	    if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
 		continue;
 	    
 	    if (!(otype & type)) {
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 	    centroid = Vect_get_area_centroid(&In, i);
 	    if (centroid > 0) {
 		Vect_read_line(&In, NULL, Cats, centroid);
-		if (Vect_cat_get(Cats, field, NULL) < 0)
+		if (field != -1 && Vect_cat_get(Cats, field, NULL) < 0)
 		    continue;
 	    }
 	    G_debug(2, "area = %d centroid = %d", i, centroid);

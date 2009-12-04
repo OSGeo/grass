@@ -354,9 +354,21 @@ struct Option *G_define_standard_option(int opt)
 	Opt->label = _("Layer number or name");
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
-	      "tables. This number determines which table to use. If reasonable '-1' selects all vector map layers. "
+	      "tables. This number determines which table to use. "
 	      "Layer name for OGR access.");
 	Opt->gisprompt = "old_layer,layer,layer";
+	break;
+    case G_OPT_V_FIELD_ALL:
+	Opt->key = "layer";
+	Opt->type = TYPE_STRING;
+	Opt->required = NO;
+	Opt->answer = "1";
+	Opt->label = _("Layer number or name ('-1' for all layers)");
+	Opt->description =
+	    _("A single vector map can be connected to multiple database "
+	      "tables. This number determines which table to use. "
+	      "Layer name for OGR access.");
+	Opt->gisprompt = "old_layer,layer,layer_all";
 	break;
     case G_OPT_V_CAT:
 	Opt->key = "cat";
