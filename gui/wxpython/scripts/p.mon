@@ -81,7 +81,7 @@ command_file="`g.tempfile pid=$$`"
 g.gisenv set="GRASS_PYCMDFILE=${command_file}"
 
 if [ -n "$start" ] ; then
-    "$GRASS_PYTHON" "$PYTHONPATH/gui_modules/mapdisp.py" "$start" "${command_file}" &
+    "$GRASS_PYTHON" "$GISBASE/etc/wxpython/gui_modules/mapdisp.py" "$start" "${command_file}" &
 fi
 
 if [[ -n "$stop" || -n "$select" || -n "$unlock" ]] ; then

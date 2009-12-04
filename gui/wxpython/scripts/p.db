@@ -31,6 +31,6 @@ else
 fi
 export PYTHONPATH
 
-"$GRASS_PYTHON" "$PYTHONPATH/gui_modules/dbm.py" "$GIS_OPT_TABLE"
+"$GRASS_PYTHON" "$GISBASE/etc/wxpython/gui_modules/dbm.py" "$GIS_OPT_TABLE"
 
 exit 0
