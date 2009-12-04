@@ -1335,14 +1335,12 @@ if __name__ == "__main__":
     map.width = 640
     map.height = 480
 
-    map.AddLayer(item=None,
-                 type="raster",
+    map.AddLayer(type="raster",
                  name="elevation.dem",
                  command = ["d.rast", "elevation.dem@PERMANENT", "catlist=1000-1500", "-i"],
                  l_opacity=.7)
 
-    map.AddLayer(item=None,
-                 type="vector",
+    map.AddLayer(type="vector",
                  name="streams",
                  command = ["d.vect", "streams@PERMANENT", "color=red", "width=3", "type=line"])
 
