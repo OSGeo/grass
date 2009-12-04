@@ -11,7 +11,7 @@ typedef struct
     double x, y;
 } COOR;
 
-void count_sites(COOR *, int, int *, double, struct Map_info *);
+void count_sites(COOR *, int, int *, double, struct Map_info *, int);
 COOR *find_quadrats(int, double, struct Cell_head);
 void qindices(int *, int, double *, double *,
 	      double *, double *, double *, double *);
