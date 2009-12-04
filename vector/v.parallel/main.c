@@ -5,19 +5,21 @@
  * 
  * AUTHOR(S):    Radim Blazek
  *               Upgraded by Rosen Matev (Google Summer of Code 2008)
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *               
  * PURPOSE:      Create parallel lines
  *               
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008-2009 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
+
 #include <stdlib.h>
 #include <math.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
@@ -25,7 +27,7 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *dista_opt;
+    struct Option *in_opt, *layer_opt, *out_opt, *dista_opt;
     struct Option *distb_opt, *angle_opt, *side_opt;
     struct Option *tol_opt;
     struct Flag *round_flag, *buf_flag;
@@ -34,6 +36,7 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
 
     int line, nlines, inner_count, j;
+    int layer;
     double da, db, dalpha, tolerance;
     int side;
 
@@ -45,8 +48,11 @@ int main(int argc, char *argv[])
     module->description = _("Creates parallel line to input vector lines.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
+    
+    layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    /* layer_opt = G_define_standard_option(G_OPT_V_FIELD); */
+
 
     dista_opt = G_define_option();
     dista_opt->key = "distance";
@@ -104,7 +110,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* layer = atoi ( layer_opt->answer ); */
     da = atof(dista_opt->answer);
 
     if (distb_opt->answer)
@@ -130,8 +135,11 @@ int main(int argc, char *argv[])
 	side = 0;
 
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
+    Vect_open_old2(&In, in_opt->answer, "", layer_opt->answer);
+    layer = Vect_get_field_number(&In, layer_opt->answer);
+
     Vect_open_new(&Out, out_opt->answer, 0);
+    
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -149,6 +157,9 @@ int main(int argc, char *argv[])
 
 	ltype = Vect_read_line(&In, Points, Cats, line);
 
+	if (layer != -1 && !Vect_cat_get(Cats, layer, NULL))
+	    continue;
+	
 	if (ltype & GV_LINES) {
 	    if (!(buf_flag->answer)) {
 		if (side != 0) {
