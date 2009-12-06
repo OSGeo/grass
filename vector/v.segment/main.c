@@ -5,21 +5,23 @@
  * 
  * AUTHOR(S):    Radim Blazek
  *               Hamish Bowman (offset bits)
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *               
  * PURPOSE:      Generate segments or points from input map and segments read from stdin 
  *               
- * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
@@ -55,22 +57,16 @@ int main(int argc, char **argv)
 	_("Creates points/segments from input vector lines and positions.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    in_opt->description = _("Name of input vector map containing lines");
-
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    out_opt->description =
-	_("Name for output vector map where segments will be written");
+    in_opt->label = _("Name of input vector lines map");
 
     lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    lfield_opt->key = "llayer";
-    lfield_opt->answer = "1";
-    lfield_opt->label = _("Line layer");
 
+    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    
     file_opt = G_define_standard_option(G_OPT_F_INPUT);
     file_opt->key = "file";
-    file_opt->required = NO;
-    file_opt->description = _("Name of file containing segment rules. "
-			      "If not given, read from stdin.");
+    file_opt->label = _("Name of file containing segment rules");
+    file_opt->description = _("'-' for standard input");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -82,21 +78,22 @@ int main(int argc, char **argv)
     SPoints = Vect_new_line_struct();
     PlPoints = Vect_new_line_struct();
 
-    lfield = atoi(lfield_opt->answer);
-
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
 
-    if (file_opt->answer) {
+    if (strcmp(file_opt->answer, "-")) {
 	/* open input file */
 	if ((in_file = fopen(file_opt->answer, "r")) == NULL)
 	    G_fatal_error(_("Unable to open input file <%s>"),
 			  file_opt->answer);
     }
+    else
+	in_file = stdin;
 
     /* Open input lines */
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
+    Vect_open_old2(&In, in_opt->answer, "", lfield_opt->answer);
+    lfield = Vect_get_field_number(&In, lfield_opt->answer);
 
     /* Open output segments */
     Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));
@@ -222,6 +219,8 @@ int main(int argc, char **argv)
 
     }
 
+    Vect_build(&Out);
+
     G_message(_("%d points read from input"), points_read);
     G_message(_("%d points written to output map (%d lost)"),
 	      points_written, points_read - points_written);
@@ -229,11 +228,9 @@ int main(int argc, char **argv)
     G_message(_("%d lines written to output map (%d lost)"),
 	      lines_written, lines_read - lines_written);
 
-    Vect_build(&Out);
     /* Free, close ... */
     Vect_close(&In);
     Vect_close(&Out);
-
     if (file_opt->answer)
 	fclose(in_file);
 
