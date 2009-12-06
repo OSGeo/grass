@@ -707,6 +707,11 @@
 	      <command>g.mapset</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Change location and mapset</label>
+	      <help>Change current location and mapset.</help>
+              <handler>self.OnChangeLocation</handler>
+	    </menuitem>
+	    <menuitem>
 	      <label>Change mapset</label>
 	      <help>Change current mapset.</help>
               <handler>self.OnChangeMapset</handler>
