@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.xlist
+ * MODULE:       g.mlist
  *
  * AUTHOR(S):    Huidae Cho
  * 		 Based on general/manage/cmd/list.c by Michael Shapiro.
@@ -25,7 +25,7 @@
 #include <grass/list.h>
 #include "global.h"
 
-static int any;
+static int any = 0;
 
 static void make_list(const struct list *,
 		      const char *, const char *,
