@@ -103,11 +103,13 @@ def updateData(data, modules):
     
 def writeData(data):
     """!Write updated menudata.xml"""
-    file = os.path.join('..', 'xml', 'menudata.xml')
+    file = os.path.join('xml', 'menudata.xml')
     try:
+        if not os.path.exists(file):
+            raise IOError
         data.tree.write(file)
     except IOError:
-        print >> sys.stderr, "'menudata.xml' not found. Please run the script from 'gui/wxpython/support'."
+        print >> sys.stderr, "'%s' not found. Please run the script from 'gui/wxpython'." % file
         
 
 def main(argv = None):
