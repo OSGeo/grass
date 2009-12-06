@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.xremove
+ * MODULE:       g.mremove
  *
  * AUTHOR(S):    Huidae Cho <grass4u gmail.com>
  *
