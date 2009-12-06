@@ -5,18 +5,10 @@
  *
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
  * 	         http://mccauley-usa.com/
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Randomly generate a 2D/3D GRASS vector points map.
  *
- * COPYRIGHT:    (C) 2003-2007 by the GRASS Development Team
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
- *
-**************************************************************/
-/*
  * Modification History:
  *
  * s.rand v 0.5B <25 Jun 1995> Copyright (c) 1993-1995. James Darrell McCauley
@@ -28,13 +20,21 @@
  * <25 Feb 1995> - cleaned 'gcc -Wall' warnings (jdm)
  * <25 Jun 1995> - new site API (jdm)
  * <13 Sep 2000> - released under GPL
- */
+ *
+ * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
+ *
+**************************************************************/
 
 #include <stdlib.h>
 #include <math.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
-    module->description = _("Randomly generate a 2D/3D vector points map.");
+    module->description = _("Generates randomly 2D/3D vector points map.");
 
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
 
@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
     parm.zmin->description =
 	_("Minimum z height (needs -z flag or column name)");
     parm.zmin->answer = "0.0";
+    parm.zmin->guisection = _("3D output");
 
     parm.zmax = G_define_option();
     parm.zmax->key = "zmax";
@@ -108,19 +109,19 @@ int main(int argc, char *argv[])
     parm.zmax->description =
 	_("Maximum z height (needs -z flag or column name)");
     parm.zmax->answer = "0.0";
+    parm.zmax->guisection = _("3D output");
 
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    parm.zcol->key = "column";
-    parm.zcol->required = NO;
-    parm.zcol->multiple = NO;
     parm.zcol->label =
-	_("Column name and type (i.e. INTEGER, DOUBLE PRECISION) for z values");
+	_("Name of column for z values (only numeric type)");
     parm.zcol->description =
-	_("Writes Z data to column instead of 3D vector");
+	_("Writes z values to column instead of 3D vector");
+    parm.zcol->guisection = _("3D output");
 
     flag.z = G_define_flag();
     flag.z->key = 'z';
     flag.z->description = _("Create 3D output");
+    flag.z->guisection = _("3D output");
 
     flag.drand48 = G_define_flag();
     flag.drand48->key = 'd';
@@ -134,7 +135,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (flag.z->answer && parm.zcol->answer) {
-	G_fatal_error(_("v.random can't create 3D vector and attribute table at same time"));
+	G_fatal_error(_("Unable to create 3D vector and attribute table at same time"));
     }
 
     output = parm.output->answer;
@@ -290,7 +291,8 @@ int main(int argc, char *argv[])
 	Vect_cat_set(Cats, 1, i + 1);
 	Vect_write_line(&Out, GV_POINT, Points, Cats);
     }
-
+    G_percent(1, 1, 1);
+    
     if (parm.zcol->answer) {
 	db_commit_transaction(driver);
 	db_close_database_shutdown_driver(driver);
