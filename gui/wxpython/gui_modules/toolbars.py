@@ -270,7 +270,8 @@ class MapToolbar(AbstractToolbar):
         elif tool == 2 and not self.mapdisplay.toolbars['vdigit']:
             self.ExitToolbars()
             self.mapdisplay.AddToolbar("vdigit")
-
+            self.mapdisplay.MapWindow.SetFocus()
+        
     def ExitToolbars(self):
         if self.mapdisplay.toolbars['vdigit']:
             self.mapdisplay.toolbars['vdigit'].OnExit()
@@ -613,9 +614,8 @@ class VDigitToolbar(AbstractToolbar):
             
             self.action['id'] = event.GetId()
             event.Skip()
-        else:
-            # initialize toolbar
-            self.toolbar[0].ToggleTool(self.action['id'], True)
+        
+        self.toolbar[0].ToggleTool(self.action['id'], True)
 
         # clear tmp canvas
         if self.action['id'] != id:

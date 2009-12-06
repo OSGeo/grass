@@ -87,6 +87,9 @@ class MapWindow(object):
     def OnLeftUp(self, event):
         pass
 
+    def OnKeyDown(self, event):
+        pass
+    
     def OnMouseMotion(self, event):
         pass
 
@@ -233,7 +236,8 @@ class BufferedWindow(MapWindow, wx.Window):
         self._buffer = ''
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
-
+        self.Bind(wx.EVT_KEY_DOWN , self.OnKeyDown)
+        
         # vars for handling mouse clicks
         self.dragid   = -1
         self.lastpos  = (0, 0)
@@ -446,6 +450,25 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return coords, boxw, boxh
 
+    def OnKeyDown(self, event):
+        """!Key pressed"""
+        shift = event.ShiftDown()
+        kc = event.GetKeyCode()
+        vdigitToolbar = self.parent.toolbars['vdigit']
+        ### vdigit
+        if vdigitToolbar:
+            if not shift:
+                event = None
+                if kc == ord('P'):
+                    event = wx.CommandEvent(winid = vdigitToolbar.addPoint)
+                    tool = vdigitToolbar.OnAddPoint
+                elif kc == ord('L'):
+                    event = wx.CommandEvent(winid = vdigitToolbar.addLine)
+                    tool = vdigitToolbar.OnAddLine
+                if event:
+                    vdigitToolbar.OnTool(event)
+                    # tool(event)
+                
     def OnPaint(self, event):
         """!
         Draw PseudoDC's to buffered paint DC
