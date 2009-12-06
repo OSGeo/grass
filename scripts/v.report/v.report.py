@@ -5,7 +5,7 @@
 # MODULE:	v.report
 # AUTHOR(S):	Markus Neteler, converted to Python by Glynn Clements
 # PURPOSE:	Reports geometry statistics for vector maps
-# COPYRIGHT:	(C) 2005, 2007 by MN and the GRASS Development Team
+# COPYRIGHT:	(C) 2005, 2007-2009 by MN and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -14,9 +14,9 @@
 #############################################################################
 
 #%Module
-#%  description: Reports geometry statistics for vectors.
+#%  description: Reports geometry statistics for vector maps.
 #%  keywords: vector
-#%  keywords: report
+#%  keywords: geometry
 #%  keywords: statistics
 #%End
 #%Flag
@@ -31,14 +31,17 @@
 #% key: map
 #% type: string
 #% gisprompt: old,vector,vector
-#% description: Name of input vector map
+#% label: Name of input vector map
+#% description: Data source for OGR access
 #% required: yes
 #%end
 #%option
 #% key: layer
-#% type: integer
+#% type: string
 #% answer: 1
-#% description: Layer number
+#% label: Layer number or name
+#% description: A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for OGR access.
+#% gisprompt: old_layer,layer,layer
 #% required: no
 #%end
 #%option
@@ -51,8 +54,8 @@
 #%option
 #% key: units
 #% type: string
-#% description: mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),p(ercent)
-#% options: mi,miles,f,feet,me,meters,k,kilometers,a,acres,h,hectares,p,percent
+#% description: Units
+#% options: miles,feet,meters,kilometers,acres,hectares,percent
 #% required: no
 #%end
 
@@ -83,11 +86,8 @@ def main():
     if not grass.find_file(mapname, 'vector')['file']:
 	grass.fatal(_("Vector map '%s' not found in mapset search path.") % mapname)
 
-    table_exists = grass.vector_columns(mapname, layer, stderr = nuldev)
-
-    if table_exists:
-	colnames = table_exists.keys()
-    else:
+    colnames = grass.vector_columns(mapname, layer, getDict = False, stderr = nuldev)
+    if not colnames:
 	colnames = ['cat']
 
     if option == 'coor':
@@ -106,8 +106,8 @@ def main():
 
     # NOTE: we suppress -1 cat and 0 cat
 
-    if table_exists:
-	p = grass.pipe_command('v.db.select', flags='c', map = mapname, layer = layer)
+    if colnames:
+	p = grass.pipe_command('v.db.select', quiet = True, flags='c', map = mapname, layer = layer)
 	records1 = []
 	for line in p.stdout:
 	    cols = line.rstrip('\r\n').split('|')
@@ -115,6 +115,9 @@ def main():
 		continue
 	    records1.append([int(cols[0])] + cols[1:])
 	p.wait()
+        if p.returncode != 0:
+            sys.exit(1)
+        
 	records1.sort()
 
 	if len(records1) == 0:
@@ -128,6 +131,7 @@ def main():
 
 	#fetch the requested attribute sorted by cat:
 	p = grass.pipe_command('v.to.db', flags = 'p',
+                               quiet = True,
 			       map = mapname, option = option, columns = columns,
 			       layer = layer, units = unitsp)
 	records2 = []
