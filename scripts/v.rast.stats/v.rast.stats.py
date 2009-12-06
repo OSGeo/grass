@@ -6,17 +6,16 @@
 # AUTHOR(S):	Markus Neteler, converted to Python by Glynn Clements
 # PURPOSE:	Calculates univariate statistics from a GRASS raster map
 #		only for areas covered by vector objects on a per-category base
-# COPYRIGHT:	(C) 2005-2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 2005-2009 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
 #		for details.
 #
-# TODO: do we need layer= management?
 #############################################################################
 
 #%Module
-#%  description: Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns.
+#%  description: Calculates univariate statistics from a raster map based on vector polygons and uploads statistics to new attribute columns.
 #%  keywords: vector
 #%  keywords: raster
 #%  keywords: statistics
@@ -30,17 +29,20 @@
 #%  description: Calculate extended statistics
 #%END
 #%option
-#% key: vector
+#% key: input
 #% type: string
 #% key_desc: name
 #% gisprompt: old,vector,vector
-#% description: Name of vector polygon map
+#% label: Name of input vector polygon map
+#% description: Data source for OGR access
 #% required : yes
 #%End
 #%option
 #% key: layer
 #% type: integer
-#% description: Layer to which the table to be changed is connected
+#% label: Layer number or name
+#% description: A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for OGR access.
+#% gisprompt: old_layer,layer,layer
 #% answer: 1
 #% required : no
 #%end
@@ -49,7 +51,7 @@
 #% type: string
 #% key_desc: name
 #% gisprompt: old,cell,raster
-#% description: Name of raster map to calculate statistics from
+#% description: Name of input raster map to calculate statistics from
 #% required : yes
 #%END
 #%option
