@@ -1,24 +1,13 @@
 
-/*-
- * s.sample - GRASS program to sample a raster map at site locations.
- * Copyright (C) 1994. James Darrell McCauley.
+/****************************************************************
  *
- * Author: James Darrell McCauley darrell@mccauley-usa.com
- * 	                          http://mccauley-usa.com/
+ * MODULE:       v.sample (based on s.sample)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
+ * 	         http://mccauley-usa.com/
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * PURPOSE:      GRASS program to sample a raster map at site locations.   
  *
  * Modification History:
  * <04 Jan 1994> - began coding (jdm)
@@ -34,20 +23,24 @@
  *                 0.8B (jdm)
  * <13 Sep 2000> - released under GPL
  *
- */
-
-/* s.sample v 0.8B <15 Jun 1995>; Copyright (c) 1994-1995. James Darrell McCauley" */
+ * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
+ *
+**************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
-
 
 int main(int argc, char **argv)
 {
@@ -59,13 +52,9 @@ int main(int argc, char **argv)
     struct Map_info In, Out;
     struct
     {
-	struct Option *input, *output, *rast, *z, *column;
+	struct Option *input, *output, *rast, *z, *column, *method, *field;
     } parm;
-    struct
-    {
-	struct Flag *B, *C;
-    } flag;
-
+    
     int line, nlines;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -84,77 +73,73 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("resample"));
     module->description =
 	_("Samples a raster map at vector point locations.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
-    parm.input->description = _("Vector map defining sample points");
+    parm.input->label = _("Name of input vector point map");
 
-    parm.column = G_define_option();
-    parm.column->key = "column";
-    parm.column->type = TYPE_STRING;
+    parm.field = G_define_standard_option(G_OPT_V_FIELD);
+    
+    parm.column = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.column->required = YES;
     parm.column->description =
-	_("Vector map attribute column to use for comparison");
+	_("Name of attribute column to use for comparison");
 
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
-    parm.output->description = _("Vector map to store differences");
+    parm.output->description = _("Name for output vector map to store differences");
 
     parm.rast = G_define_standard_option(G_OPT_R_INPUT);
     parm.rast->key = "raster";
-    parm.rast->description = _("Raster map to be sampled");
+    parm.rast->description = _("Name of raster map to be sampled");
+
+    parm.method = G_define_option();
+    parm.method->key = "method";
+    parm.method->type = TYPE_STRING;
+    parm.method->required = NO;
+    parm.method->description = _("Interpolation method");
+    parm.method->options = "nearest,bilinear,bicubic";
+    parm.method->answer = "nearest";
 
     parm.z = G_define_option();
     parm.z->key = "z";
     parm.z->type = TYPE_DOUBLE;
     parm.z->required = NO;
     parm.z->answer = "1.0";
-    parm.z->description =
-	_("Option scaling factor for values read from raster map. "
-	  "Sampled values will be multiplied by this factor");
-
-    flag.B = G_define_flag();
-    flag.B->key = 'b';
-    flag.B->description =
-	_("Bilinear interpolation (default is nearest neighbor)");
-
-    flag.C = G_define_flag();
-    flag.C->key = 'c';
-    flag.C->description =
-	_("Cubic convolution interpolation (default is nearest neighbor)");
-
+    parm.z->label =
+	_("Scaling factor for values read from raster map");
+    parm.z->description = 
+	_("Sampled values will be multiplied by this factor");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     sscanf(parm.z->answer, "%lf", &scale);
 
-    if (flag.B->answer || flag.C->answer) {
-	if (flag.C->answer)
-	    method = CUBIC;
-	if (flag.B->answer)
-	    method = BILINEAR;
-	if (flag.B->answer && flag.C->answer)
-	    G_fatal_error(_("Flags -b & -c are mutually exclusive. Choose only one."));
-    }
-    else {
+    if (parm.method->answer[0] == 'c')
+	method = CUBIC;
+    else if (parm.method->answer[0] == 'b')
+	method = BILINEAR;
+    else
 	method = NEAREST;
-    }
-
+    
     G_get_window(&window);
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old(&In, parm.input->answer, "");
-
+    Vect_open_old2(&In, parm.input->answer, "", parm.field->answer);
+    field = Vect_get_field_number(&In, parm.field->answer);
+    
     if ((fdrast = Rast_open_old(parm.rast->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), parm.rast->answer);
 
     /* Read attributes */
-    field = 1;
     Fi = Vect_get_field(&In, field);
     if (Fi == NULL)
-	G_fatal_error(_("Database connection not defined for layer %d"),
-		      field);
+	G_fatal_error(_("Database connection not defined for layer %s"),
+		      parm.field->answer);
 
     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (Driver == NULL)
@@ -173,7 +158,7 @@ int main(int argc, char **argv)
     if (nrecords < 0)
 	G_fatal_error(_("Unable to select data from table"));
 
-    G_message(_("%d records selected from table"), nrecords);
+    G_verbose_message(_("%d records selected from table"), nrecords);
 
     db_close_database_shutdown_driver(Driver);
 
@@ -212,7 +197,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to grant privileges on table <%s>"),
 		      Fi->table);
 
-    G_message(_("Checking vector points..."));
+    G_message(_("Reading points..."));
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
@@ -224,12 +209,14 @@ int main(int argc, char **argv)
 
 	G_debug(3, "line = %d", line);
 
+	G_percent(line, nlines, 2);
+	
 	type = Vect_read_line(&In, Points, Cats, line);
 	if (!(type & GV_POINT))
 	    continue;
-
-	Vect_cat_get(Cats, 1, &cat);
-
+	if (field != -1 && !Vect_cat_get(Cats, field, &cat))
+	    continue;
+	
 	G_debug(4, "cat = %d", cat);
 
 	/* find actual value */
