@@ -88,22 +88,40 @@ def vector_layer_db(map, layer):
 
 # run "v.info -c ..." and parse output
 
-def vector_columns(map, layer = None, **args):
-    """!Return a dictionary of the columns for the database table connected to
-    a vector map (interface to `v.info -c').
+def vector_columns(map, layer = None, getDict = True, **args):
+    """!Return a dictionary (or a list) of the columns for the
+    database table connected to a vector map (interface to `v.info
+    -c').
 
-    @param map map name
-    @param layer layer number (None for all layers)
-    @param args
+    @code
+    >>> vector_columns(urbanarea, getDict = True)
+    {'UA_TYPE': {'index': 4, 'type': 'CHARACTER'}, 'UA': {'index': 2, 'type': 'CHARACTER'}, 'NAME': {'index': 3, 'type': 'CHARACTER'}, 'OBJECTID': {'index': 1, 'type': 'INTEGER'}, 'cat': {'index': 0, 'type': 'INTEGER'}}
+
+    >>> vector_columns(urbanarea, getDict = False)
+    ['cat', 'OBJECTID', 'UA', 'NAME', 'UA_TYPE']
+    @endcode
     
-    @return parsed output
+    @param map map name
+    @param layer layer number or name (None for all layers)
+    @param getDict True to return dictionary of columns otherwise list of column names is returned
+    @param args (v.info's arguments)
+    
+    @return dictionary/list of columns
     """
     s = read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True, **args)
-    result = {}
+    if getDict:
+        result = dict()
+    else:
+        result = list()
+    i = 0
     for line in s.splitlines():
-	f = line.split('|')
-	if len(f) == 2:
-            result[f[1]] = f[0]
+	ctype, cname = line.split('|')
+        if getDict:
+            result[cname] = { 'type' : ctype,
+                              'index' : i }
+        else:
+            result.append(cname)
+        i+=1
     
     return result
 
