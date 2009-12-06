@@ -133,9 +133,8 @@ class LocationDialog(ElementDialog):
         self.sizer.Fit(self)
 
     def OnElement(self, event):
-        """!Name for vector map layer given"""
+        """!Select mapset given location name"""
         location = event.GetString()
-        mapset   = self.element1.GetValue()
         
         if location:
             dbase = grass.gisenv()['GISDBASE']
@@ -150,7 +149,7 @@ class LocationDialog(ElementDialog):
 
     def GetValues(self):
         """!Get location, mapset"""
-        return (self.GetElement(), self.element1.GetValue())
+        return (self.GetElement(), self.element1.GetStringSelection())
     
 class MapsetDialog(ElementDialog):
     """!Dialog used to select mapset"""
