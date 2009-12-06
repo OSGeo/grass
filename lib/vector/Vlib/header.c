@@ -227,7 +227,9 @@ const char *Vect_get_full_name(const struct Map_info *Map)
 {
     char *ptr;
 
-    if (Map->format == GV_FORMAT_OGR_DIRECT) {
+    if (Map->format == GV_FORMAT_OGR_DIRECT &&
+	Map->fInfo.ogr.dsn &&
+	Map->fInfo.ogr.layer_name) {
 	ptr = (char *) G_malloc(strlen(Map->fInfo.ogr.layer_name) +
 				strlen(Map->fInfo.ogr.dsn) + 2);	
 	sprintf(ptr, "%s@%s", Map->fInfo.ogr.layer_name,
