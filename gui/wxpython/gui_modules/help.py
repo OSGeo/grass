@@ -65,7 +65,7 @@ class MenuTreeWindow(wx.Frame):
 
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         self.dataBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                               label=" %s " % _("Menu tree (double-click to run command)"))        
+                                    label=" %s " % _("Menu tree (double-click to run command)"))        
         # tree
         self.tree = MenuTree(parent = self.panel, data = menudata.Data())
         self.tree.Load()
@@ -116,9 +116,6 @@ class MenuTreeWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         # body
-#        dataBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-#                               label=" %s " % _("Menu tree (double-click to run command)"))
-        
         dataSizer = wx.StaticBoxSizer(self.dataBox, wx.HORIZONTAL)
         dataSizer.Add(item = self.tree, proportion =1,
                       flag = wx.EXPAND)
@@ -177,14 +174,15 @@ class MenuTreeWindow(wx.Frame):
             return
 
         handler = 'self.parent.' + data['handler'].lstrip('self.')
-        print 'handler = '+data['handler']
         if data['handler'] == 'self.OnXTerm':
-            wx.MessageBox('You must run this command from the menu or command line',
-                          'This command require an XTerm')
+            wx.MessageBox(parent = self,
+                          message = _('You must run this command from the menu or command line',
+                                      'This command require an XTerm'),
+                          caption = _('Message'), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
         elif data['command']:
-            self.parent.goutput.RunCmd(data['command'], switchPage = True)
+            eval(handler)(event = None, cmd = data['command'].split())
         else:
-            pass
+            eval(handler)(None)
         
         if self.closeOnRun.IsChecked():
             self.OnCloseWindow(None)
