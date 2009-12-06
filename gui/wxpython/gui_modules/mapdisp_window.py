@@ -457,18 +457,18 @@ class BufferedWindow(MapWindow, wx.Window):
         vdigitToolbar = self.parent.toolbars['vdigit']
         ### vdigit
         if vdigitToolbar:
+            event = None
             if not shift:
-                event = None
                 if kc == ord('P'):
                     event = wx.CommandEvent(winid = vdigitToolbar.addPoint)
                     tool = vdigitToolbar.OnAddPoint
                 elif kc == ord('L'):
                     event = wx.CommandEvent(winid = vdigitToolbar.addLine)
                     tool = vdigitToolbar.OnAddLine
-                if event:
-                    vdigitToolbar.OnTool(event)
-                    # tool(event)
-                
+            if event:
+                vdigitToolbar.OnTool(event)
+                tool(event)
+        
     def OnPaint(self, event):
         """!
         Draw PseudoDC's to buffered paint DC

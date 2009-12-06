@@ -625,6 +625,9 @@ class VDigitToolbar(AbstractToolbar):
                 # cancel action
                 self.parent.MapWindow.OnMiddleDown(None)
         
+        # set focus
+        self.parent.MapWindow.SetFocus()
+        
     def OnAddPoint(self, event):
         """!Add point to the vector map Laier"""
         Debug.msg (2, "VDigitToolbar.OnAddPoint()")
