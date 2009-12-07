@@ -37,6 +37,7 @@
 int segment_setup(SEGMENT * SEG)
 {
     int i;
+    int seg_exp;
 
     SEG->open = 0;
 
@@ -57,10 +58,18 @@ int segment_setup(SEGMENT * SEG)
 
     /* fast address */
     SEG->slow_adrs = 1;
-    if (SEG->scols - pow(2, (log(SEG->scols) / log(2))) == 0) {
-	if (SEG->srows - pow(2, (log(SEG->srows) / log(2))) == 0) {
-	    SEG->scolbits = log(SEG->scols) / log(2) + 0.1;
-	    SEG->srowbits = log(SEG->srows) / log(2) + 0.1;
+
+    seg_exp = 0;
+    while (SEG->scols - (1 << seg_exp) > 0)
+	seg_exp++;
+
+    if (SEG->scols - (1 << seg_exp) == 0) {
+	SEG->scolbits = seg_exp;
+	seg_exp = 0;
+	while (SEG->srows - (1 << seg_exp) > 0)
+	    seg_exp++;
+	if (SEG->srows - (1 << seg_exp) == 0) {
+	    SEG->srowbits = seg_exp;
 	    SEG->segbits = SEG->srowbits + SEG->scolbits;
 	    SEG->slow_adrs = 0;
 	    G_debug(1, "segment lib: fast address activated");
@@ -69,8 +78,11 @@ int segment_setup(SEGMENT * SEG)
     /* fast seek */
     SEG->slow_seek = 1;
     if (SEG->slow_adrs == 0) {
-	if (SEG->len - pow(2, (log(SEG->len) / log(2))) == 0) {
-	    SEG->lenbits = log(SEG->len) / log(2) + 0.1;
+	seg_exp = 0;
+	while (SEG->len - (1 << seg_exp) > 0)
+	    seg_exp++;
+	if (SEG->len - (1 << seg_exp) == 0) {
+	    SEG->lenbits = seg_exp;
 	    SEG->sizebits = SEG->segbits + SEG->lenbits;
 	    SEG->slow_seek = 0;
 	    G_debug(1, "segment lib: fast seek activated");
