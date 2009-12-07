@@ -651,8 +651,8 @@ class Settings:
             try:
                 os.mkdir(dirPath)
             except:
-                wx.MessageBox('Cannot write settings to configuration file in [home]/.grass7',
-                              'Error saving preferences')
+                wx.MessageBox(_('Cannot create directory for settings [home]/.grass7'),
+                              _('Error saving preferences'))
 
         filePath = os.path.join(home, '.grass7', 'wx')
         
