@@ -240,9 +240,10 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         # some variables
         self._choices = choices
         self._hideOnNoMatch = True
-        self._module = None # currently selected module
-        self._choiceType = None # type of choice (module, params, flags, raster, vector ...)
+        self._module = None      # currently selected module
+        self._choiceType = None  # type of choice (module, params, flags, raster, vector ...)
         self._screenheight = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
+        self._historyItem = 0   # last item
         
         # sort variable needed by listmix
         self.itemDataMap = dict()
@@ -571,18 +572,37 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         sel = self.dropdownlistbox.GetFirstSelected()
         visible = self.dropdown.IsShown()
         KC = event.GetKeyCode()
-        if KC == wx.WXK_DOWN:
-            if sel < (self.dropdownlistbox.GetItemCount() - 1):
-                self.dropdownlistbox.Select(sel + 1)
-                self._listItemVisible()
-            self._showDropDown()
-            skip = False
+        if KC == wx.WXK_RIGHT:
+            if len(self.GetValue()) < 1 and not visible:
+                if sel < (self.dropdownlistbox.GetItemCount() - 1):
+                    self.dropdownlistbox.Select(sel + 1)
+                    self._listItemVisible()
+                self._showDropDown()
+                skip = False
         elif KC == wx.WXK_UP:
-            if sel > 0:
-                self.dropdownlistbox.Select(sel - 1)
-                self._listItemVisible()
-            self._showDropDown()
-            skip = False
+            if visible:
+                if sel > 0:
+                    self.dropdownlistbox.Select(sel - 1)
+                    self._listItemVisible()
+                self._showDropDown()
+                skip = False
+            else:
+                self._historyItem -= 1
+                try:
+                    self.SetValue(self.GetItems()[self._historyItem])
+                except IndexError:
+                    self._historyItem += 1
+        elif KC == wx.WXK_DOWN:
+            if visible:
+                if sel < (self.dropdownlistbox.GetItemCount() - 1):
+                    self.dropdownlistbox.Select(sel + 1)
+                    self._listItemVisible()
+                self._showDropDown()
+                skip = False
+            else:
+                if self._historyItem < -1:
+                    self._historyItem += 1
+                    self.SetValue(self.GetItems()[self._historyItem])
         
         if visible:
             if event.GetKeyCode() == wx.WXK_RETURN:
