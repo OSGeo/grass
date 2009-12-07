@@ -646,6 +646,14 @@ class Settings:
         location_name = gisenv['LOCATION_NAME']
         mapset_name = gisenv['MAPSET']
         
+        dirPath = os.path.join(home, '.grass7')
+        if os.path.exists(dirPath) == False:
+            try:
+                os.mkdir(dirPath)
+            except:
+                wx.MessageBox('Cannot write settings to configuration file in [home]/.grass7',
+                              'Error saving preferences')
+
         filePath = os.path.join(home, '.grass7', 'wx')
         
         try:
