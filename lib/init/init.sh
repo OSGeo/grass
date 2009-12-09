@@ -65,6 +65,12 @@ esac
 GIS_LOCK=$$
 export GIS_LOCK
 
+# Set the config subdir
+if [ ! "$GRASS_CONFIG_DIR" ] ; then
+	GRASS_CONFIG_DIR=@GRASS_CONFIG_DIR@
+	export $GRASS_CONFIG_DIR
+fi
+
 # Set the global grassrc file
 if [ -n "$GRASS_BATCH_JOB" ] ; then
 	GISRCRC="$HOME/$GRASS_CONFIG_DIR/rc.`uname -n`"
