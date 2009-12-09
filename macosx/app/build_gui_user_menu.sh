@@ -12,9 +12,9 @@
 # may be my limited knowledge of sh scripting and there could be a way.
 
 GRASS_MMVER=`cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER"`
-BINDIR="$HOME/Library/GRASS/$GRASS_MMVER/Modules/bin"
-BINDIRG="/Library/GRASS/$GRASS_MMVER/Modules/bin"
-MENUDIR="$HOME/Library/GRASS/$GRASS_MMVER/Modules/etc"
+BINDIR="$GISBASE_USER/Modules/bin"
+BINDIRG="$GISBASE_SYSTEM/Modules/bin"
+MENUDIR="$GISBASE_USER/Modules/etc"
 
 echo "Rebuilding Addon menu..."
 
