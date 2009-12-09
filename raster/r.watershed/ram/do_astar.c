@@ -21,6 +21,7 @@ int do_astar(void)
     int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2 };
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
+    int skip_diag;
 
     G_message(_("SECTION 2: A * Search."));
 
@@ -76,45 +77,44 @@ int do_astar(void)
 		index_up = SEG_INDEX(alt_seg, upr, upc);
 		is_in_list = FLAG_GET(in_list, upr, upc);
 		is_worked = FLAG_GET(worked, upr, upc);
+		skip_diag = 0;
 		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
 		    alt_nbr[ct_dir] = alt[index_up];
 		    slope[ct_dir] =
 			get_slope2(alt_val, alt_nbr[ct_dir],
 				   dist_to_nbr[ct_dir]);
-		    if (ct_dir > 3) {
-			if (slope[nbr_ew[ct_dir]]) {
+		    if (ct_dir > 3 && slope[ct_dir] > 0) {
+			if (slope[nbr_ew[ct_dir]] > 0) {
 			    /* slope to ew nbr > slope to center */
 			    if (slope[ct_dir] <
 				get_slope2(alt_nbr[nbr_ew[ct_dir]],
 					   alt_nbr[ct_dir], ew_res))
-				is_in_list = 1;
+				skip_diag = 1;
 			}
-			if (!is_in_list && slope[nbr_ns[ct_dir]]) {
+			if (!skip_diag && slope[nbr_ns[ct_dir]] > 0) {
 			    /* slope to ns nbr > slope to center */
 			    if (slope[ct_dir] <
 				get_slope2(alt_nbr[nbr_ns[ct_dir]],
 					   alt_nbr[ct_dir], ns_res))
-				is_in_list = 1;
+				skip_diag = 1;
 			}
 		    }
 		}
 
 		/* add neighbour as new point if not in the list */
-		if (is_in_list == 0) {
+		if (is_in_list == 0 && skip_diag == 0) {
 		    add_pt(upr, upc, alt_nbr[ct_dir], alt_val);
 		    /* set flow direction */
 		    asp[index_up] = drain[upr - r + 1][upc - c + 1];
 		}
-		else {
-		    if (is_worked == 0) {
-			/* neighbour is edge in list, not yet worked */
-			if (asp[index_up] < 0) {
-			    asp[index_up] = drain[upr - r + 1][upc - c + 1];
+		else if (is_in_list == 1 && is_worked == 0) {
+		    /* neighbour is edge in list, not yet worked */
+		    if (asp[index_up] < 0) {
+			asp[index_up] = drain[upr - r + 1][upc - c + 1];
 
-			    if (wat[index_doer] > 0)
-				wat[index_doer] = -wat[index_doer];
-			}
+			if (wat[index_doer] > 0)
+			    wat[index_doer] = -wat[index_doer];
 		    }
 		}
 	    }    /* end if in region */
