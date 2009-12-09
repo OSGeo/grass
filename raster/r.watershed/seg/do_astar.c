@@ -11,17 +11,19 @@ int do_astar(void)
     SHORT upr, upc, r = -1, c = -1, ct_dir;
     CELL alt_val, alt_nbr[8], alt_up;
     CELL asp_val;
-    char flag_value, is_in_list, is_worked; 
+    char flag_value, is_in_list, is_worked;
     HEAP_PNT heap_p;
+
     /* sides
      * |7|1|4|
      * |2| |3|
      * |5|0|6|
      */
-    int nbr_ew[8] = { 0, 1, 2, 3, 1, 0, 0, 1};
-    int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2};
+    int nbr_ew[8] = { 0, 1, 2, 3, 1, 0, 0, 1 };
+    int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2 };
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
+    int skip_diag;
 
     G_message(_("SECTION 2: A* Search."));
 
@@ -42,7 +44,7 @@ int do_astar(void)
 
     if (heap_size == 0)
 	G_fatal_error(_("No seeds for A* Search"));
-	
+
     G_debug(1, "heap size %d, points %d", heap_size, do_points);
 
     count = 0;
@@ -76,27 +78,34 @@ int do_astar(void)
 		bseg_get(&bitflags, &flag_value, upr, upc);
 		is_in_list = FLAG_GET(flag_value, INLISTFLAG);
 		is_worked = FLAG_GET(flag_value, WORKEDFLAG);
+		skip_diag = 0;
+		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
 		    cseg_get(&alt, &alt_up, upr, upc);
 		    alt_nbr[ct_dir] = alt_up;
-		    slope[ct_dir] = get_slope2(alt_val, alt_nbr[ct_dir], dist_to_nbr[ct_dir]);
-		    /* avoid diagonal flow direction bias */
-		    if (ct_dir > 3) {
-			if (slope[nbr_ew[ct_dir]]) {
+		    slope[ct_dir] =
+			get_slope2(alt_val, alt_nbr[ct_dir],
+				   dist_to_nbr[ct_dir]);
+		    if (ct_dir > 3 && slope[ct_dir] > 0) {
+			if (slope[nbr_ew[ct_dir]] > 0) {
 			    /* slope to ew nbr > slope to center */
-			    if (slope[ct_dir] <= get_slope2(alt_nbr[nbr_ew[ct_dir]], alt_nbr[ct_dir], ew_res))
-				is_in_list = 1;
+			    if (slope[ct_dir] <
+				get_slope2(alt_nbr[nbr_ew[ct_dir]],
+					   alt_nbr[ct_dir], ew_res))
+				skip_diag = 1;
 			}
-			if (!is_in_list && slope[nbr_ns[ct_dir]]) {
+			if (!skip_diag && slope[nbr_ns[ct_dir]] > 0) {
 			    /* slope to ns nbr > slope to center */
-			    if (slope[ct_dir] <= get_slope2(alt_nbr[nbr_ns[ct_dir]], alt_nbr[ct_dir], ns_res))
-				is_in_list = 1;
+			    if (slope[ct_dir] <
+				get_slope2(alt_nbr[nbr_ns[ct_dir]],
+					   alt_nbr[ct_dir], ns_res))
+				skip_diag = 1;
 			}
 		    }
 		}
 		/* put neighbour in search list if not yet in */
 		bseg_get(&bitflags, &flag_value, upr, upc);
-		if (is_in_list == 0) {
+		if (is_in_list == 0 && skip_diag == 0) {
 		    cseg_get(&alt, &alt_up, upr, upc);
 		    /* flow direction is set here */
 		    asp_val = drain[upr - r + 1][upc - c + 1];
@@ -104,7 +113,8 @@ int do_astar(void)
 		    cseg_put(&asp, &asp_val, upr, upc);
 		}
 		/* in list, not worked. is it edge ? */
-		else if (!FLAG_GET(flag_value, WORKEDFLAG) && FLAG_GET(flag_value, EDGEFLAG)){
+		else if (is_in_list == 1 && is_worked == 0 &&
+			 FLAG_GET(flag_value, EDGEFLAG)) {
 		    cseg_get(&asp, &asp_val, upr, upc);
 		    if (asp_val < 0) {
 			/* adjust flow direction for edge cell */
@@ -125,7 +135,8 @@ int do_astar(void)
 
     }
     if (doer != -1)
-	G_fatal_error(_("bug in A* Search: doer %d heap size %d count %d"), doer, heap_size, count);
+	G_fatal_error(_("bug in A* Search: doer %d heap size %d count %d"),
+		      doer, heap_size, count);
 
     seg_close(&search_heap);
 
@@ -136,7 +147,7 @@ int do_astar(void)
 
 /* compare two heap points */
 /* return 1 if a < b else 0 */
-int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b)
+int cmp_pnt(HEAP_PNT * a, HEAP_PNT * b)
 {
     if (a->ele < b->ele)
 	return 1;
@@ -197,7 +208,7 @@ HEAP_PNT drop_pt(void)
     while ((child = GET_CHILD(parent)) < heap_size) {
 	/* select child with lower ele, if both are equal, older child
 	 * older child is older startpoint for flow path, important */
-	
+
 	seg_get(&search_heap, (char *)&child_p, 0, child);
 	if (child < heap_size) {
 	    childr = child + 1;
@@ -233,7 +244,7 @@ HEAP_PNT drop_pt(void)
 /* standard sift-up routine for d-ary min heap */
 int sift_up(int start, HEAP_PNT child_p)
 {
-    int parent, child; /* parentp, */
+    int parent, child;		/* parentp, */
     HEAP_PNT heap_p;
 
     child = start;
@@ -279,5 +290,5 @@ double get_slope2(CELL ele, CELL up_ele, double dist)
     if (ele == up_ele)
 	return 0.5 / dist;
     else
-	return (double) (up_ele - ele) / dist;
+	return (double)(up_ele - ele) / dist;
 }
