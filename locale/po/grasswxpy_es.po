@@ -4852,7 +4852,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:29
 msgid "ASCII grid import"
-msgstr "Importación de cuadrícula ASCII."
+msgstr "Importar cuadrícula ASCII."
 
 #: ../gui/wxpython/menustrings.py:30
 msgid "Converts ASCII raster file to binary raster map layer."
@@ -4860,7 +4860,7 @@ msgstr "Convierte un archivo raster ASCII en una capa de mapa raster binaria."
 
 #: ../gui/wxpython/menustrings.py:31
 msgid "ASCII polygons and lines import"
-msgstr "Importación de polígonos y líneas ASCII."
+msgstr "Importar polígonos y líneas ASCII."
 
 #: ../gui/wxpython/menustrings.py:32
 msgid "Creates raster maps from ASCII polygon/line/point data files."
@@ -4878,7 +4878,7 @@ msgstr "Importar un archivo raster binario a una capa de mapa raster de GRASS."
 
 #: ../gui/wxpython/menustrings.py:35
 msgid "ESRI ASCII grid import"
-msgstr "Importación de cuadrícula ASCII de ESRI."
+msgstr "Importar cuadrícula ASCII de ESRI."
 
 #: ../gui/wxpython/menustrings.py:36
 msgid ""
@@ -4907,7 +4907,7 @@ msgstr "Importa un archivo binario MAT(v4) a un raster de GRASS."
 
 #: ../gui/wxpython/menustrings.py:41
 msgid "SPOT NDVI import"
-msgstr "Importación de SPOT NDVI."
+msgstr "Importar SPOT NDVI."
 
 #: ../gui/wxpython/menustrings.py:42
 msgid "Import of SPOT VGT NDVI file into a raster map"
@@ -4915,7 +4915,7 @@ msgstr "Importa un archivo SPOT VGT NDVI a un mapa raster."
 
 #: ../gui/wxpython/menustrings.py:43
 msgid "SRTM HGT import"
-msgstr "Importación de SRTM HGT."
+msgstr "Importar SRTM HGT."
 
 #: ../gui/wxpython/menustrings.py:44
 msgid "Import SRTM HGT files into GRASS"
@@ -4923,7 +4923,7 @@ msgstr "Importar a GRASS, archivos SRTM HGT."
 
 #: ../gui/wxpython/menustrings.py:45
 msgid "Terra ASTER HDF import"
-msgstr "Importación de Terra ASTER HDF."
+msgstr "Importar Terra ASTER HDF."
 
 #: ../gui/wxpython/menustrings.py:46
 #, fuzzy
@@ -4992,7 +4992,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:60
 msgid "Old GRASS vector import"
-msgstr "Importación de mapa vectorial del antiguo GRASS."
+msgstr "Importar mapa vectorial del antiguo GRASS."
 
 #: ../gui/wxpython/menustrings.py:61
 msgid "Imports older versions of GRASS vector maps."
@@ -5000,7 +5000,7 @@ msgstr "Importa mapas vectoriales de versiones anteriores de GRASS."
 
 #: ../gui/wxpython/menustrings.py:62
 msgid "DXF import"
-msgstr "Importación de DXF."
+msgstr "Importar DXF."
 
 #: ../gui/wxpython/menustrings.py:63
 msgid "Converts files in DXF format to GRASS vector map format."
@@ -5027,7 +5027,7 @@ msgstr "Importar archivo E00 en un mapa vectorial."
 
 #: ../gui/wxpython/menustrings.py:68
 msgid "Garmin GPS import"
-msgstr "Importación de GPS Garmin."
+msgstr "Importar GPS Garmin."
 
 #: ../gui/wxpython/menustrings.py:69
 msgid ""
@@ -5039,7 +5039,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:70
 msgid "GPSBabel GPS import"
-msgstr "Importación de GPS desde GPSBabel."
+msgstr "Importar GPS desde GPSBabel."
 
 #: ../gui/wxpython/menustrings.py:71
 msgid ""
@@ -5051,7 +5051,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:72
 msgid "Geonames import"
-msgstr "Importación de GEOnet"
+msgstr "Importar GEOnet"
 
 #: ../gui/wxpython/menustrings.py:73
 msgid "Imports geonames.org country files into a GRASS vector points map."
@@ -5061,7 +5061,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:74
 msgid "GEOnet import"
-msgstr "Importación de GEOnet."
+msgstr "Importar GEOnet."
 
 #: ../gui/wxpython/menustrings.py:75
 msgid ""
@@ -5086,7 +5086,7 @@ msgstr "Importar volúmenes grid3D."
 
 #: ../gui/wxpython/menustrings.py:79
 msgid "ASCII 3D import"
-msgstr "Importación de ASCII 3D."
+msgstr "Importar ASCII 3D."
 
 #: ../gui/wxpython/menustrings.py:80
 msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
@@ -5096,7 +5096,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:81
 msgid "Vis5D import"
-msgstr "Importación de Vis5D."
+msgstr "Importar Vis5D."
 
 #: ../gui/wxpython/menustrings.py:82
 msgid ""
@@ -9015,7 +9015,7 @@ msgstr "Clasificación supervisada de entrada interactiva"
 #~ "relativos usando gdalwarp."
 
 #~ msgid "Matlab and MapGen import"
-#~ msgstr "Importación de Matlab y MapGen."
+#~ msgstr "Importar Matlab y MapGen."
 
 #~ msgid "Exit GUI"
 #~ msgstr "Salir de la interfaz gráfica de usuario (GUI)."
