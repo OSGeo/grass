@@ -1467,8 +1467,18 @@ class GMFrame(wx.Frame):
         
     def OnKey(self, event):
         """!Check hotkey"""
+        kc = event.GetKeyCode()
+                
+        if event.ControlDown():
+            if kc == wx.WXK_TAB:
+                # switch layer list / command output
+                if self.notebook.GetSelection() == 0:
+                    self.notebook.SetSelection(1)
+                else:
+                    self.notebook.SetSelection(0)
+        
         try:
-            kc = chr(event.GetKeyCode())
+            ckc = chr(kc)
         except ValueError:
             event.Skip()
             return
