@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     struct Option *map_opt, *opt, *err_opt;
     struct Map_info Map;
     int i, build = 0, dump = 0, sdump = 0, cdump = 0;
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_gisinit(argv[0]);
 
@@ -80,9 +81,17 @@ int main(int argc, char *argv[])
 
     /* build topology */
     if (build) {
+	if (G_name_is_fully_qualified(map_opt->answer, xname, xmapset)) {
+	    if (0 != strcmp(xmapset, G_mapset())) {
+		G_fatal_error(_("Vector map <%s> is not in current mapset"),
+			      map_opt->answer);
+		exit(EXIT_FAILURE);
+	    }
+	}
 	Vect_set_open_level(1);
-	if (Vect_open_update(&Map, map_opt->answer, G_mapset()) < 0) {
-	    G_fatal_error(_("Unable to build topology for <%s>"), map_opt->answer);
+	if (Vect_open_old(&Map, map_opt->answer, G_mapset()) < 0) {
+	    G_fatal_error(_("Unable to build topology for <%s>"),
+			  map_opt->answer);
 	    exit(EXIT_FAILURE);
 	}
 	Vect_build(&Map);
