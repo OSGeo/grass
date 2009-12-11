@@ -2735,7 +2735,7 @@
 	      <help>Adds one or more columns to the attribute table connected to a given vector map</help>
 	      <keywords>vector,database,attribute table</keywords>
               <handler>self.OnMenuCmd</handler>
-	      <command>v.db.addcol</command>
+	      <command>v.db.addcolumn</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Change values</label>
