@@ -24,13 +24,7 @@ int close_array_seg(void)
 	    theseg = haf;
 	    thesegseg = haf_seg;
 	}
-	max = -9;
-	for (r = 0; r < nrows; r++) {
-	    for (c = 0; c < ncols; c++) {
-		if (max < theseg[SEG_INDEX(thesegseg, r, c)])
-		    max = theseg[SEG_INDEX(thesegseg, r, c)];
-	    }
-	}
+	max = n_basins;
 	G_debug(1, "%d basins created", max);
 	Rast_init_colors(&colors);
 	Rast_make_random_colors(&colors, 1, max);

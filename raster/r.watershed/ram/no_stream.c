@@ -10,6 +10,7 @@ int no_stream(int row, int col, CELL basin_num,
     SHORT updir, riteflag, leftflag, thisdir;
 
     while (1) {
+	bas[SEG_INDEX(bas_seg, row, col)] = basin_num;
 	max_drain = -1;
 	for (r = row - 1, rr = 0; r <= row + 1; r++, rr++) {
 	    for (c = col - 1, cc = 0; c <= col + 1; c++, cc++) {
@@ -33,29 +34,29 @@ int no_stream(int row, int col, CELL basin_num,
 	    downdir = asp[SEG_INDEX(asp_seg, row, col)];
 	    if (downdir < 0)
 		downdir = -downdir;
-	    if (sides == 8) {
-		if (uprow != row && upcol != col)
-		    stream_length += diag;
-		else if (uprow != row)
-		    stream_length += window.ns_res;
-		else
-		    stream_length += window.ew_res;
-	    }
-	    else {		/* sides == 4 */
-
-		asp_value = asp[SEG_INDEX(asp_seg, uprow, upcol)];
-		if (downdir == 2 || downdir == 6) {
-		    if (asp_value == 2 || asp_value == 6)
+	    if (arm_flag) {
+		if (sides == 8) {
+		    if (uprow != row && upcol != col)
+			stream_length += diag;
+		    else if (uprow != row)
 			stream_length += window.ns_res;
 		    else
-			stream_length += diag;
-		}
-		else {		/* downdir == 4,8 */
-
-		    if (asp_value == 4 || asp_value == 8)
 			stream_length += window.ew_res;
-		    else
-			stream_length += diag;
+		}
+		else {		/* sides == 4 */
+		    asp_value = asp[SEG_INDEX(asp_seg, uprow, upcol)];
+		    if (downdir == 2 || downdir == 6) {
+			if (asp_value == 2 || asp_value == 6)
+			    stream_length += window.ns_res;
+			else
+			    stream_length += diag;
+		    }
+		    else {		/* downdir == 4,8 */
+			if (asp_value == 4 || asp_value == 8)
+			    stream_length += window.ew_res;
+			else
+			    stream_length += diag;
+		    }
 		}
 	    }
 	    riteflag = leftflag = 0;
@@ -65,23 +66,24 @@ int no_stream(int row, int col, CELL basin_num,
 			aspect = asp[SEG_INDEX(asp_seg, r, c)];
 			if (aspect == drain[rr][cc]) {
 			    thisdir = updrain[rr][cc];
-			    if (haf_basin_side(updir,
-					       (SHORT) downdir,
-					       thisdir) == RITE) {
-				overland_cells(r, c, basin_num, basin_num,
-					       &new_ele);
-				riteflag++;
-			    }
-			    else {
+			    switch (haf_basin_side
+			            (updir, (SHORT) downdir, thisdir)) {
+			    case LEFT:
 				overland_cells(r, c, basin_num, basin_num - 1,
 					       &new_ele);
 				leftflag++;
+				break;
+			    case RITE:
+				overland_cells(r, c, basin_num, basin_num,
+					       &new_ele);
+				riteflag++;
+				break;
 			    }
 			}
 		    }
 		}
 	    }
-	    if (leftflag >= riteflag)
+	    if (leftflag > riteflag)
 		haf[SEG_INDEX(haf_seg, row, col)] = basin_num - 1;
 	    else
 		haf[SEG_INDEX(haf_seg, row, col)] = basin_num;
@@ -96,6 +98,7 @@ int no_stream(int row, int col, CELL basin_num,
 		    slope = MIN_SLOPE;
 		fprintf(fp, " %f %f\n", slope, stream_length);
 	    }
+	    haf[SEG_INDEX(haf_seg, row, col)] = basin_num;
 	    return 0;
 	}
     }

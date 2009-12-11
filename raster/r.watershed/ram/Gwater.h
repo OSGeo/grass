@@ -39,6 +39,11 @@ POINT {
     /* int nxt; */
 };
 
+#define OC_STACK struct overland_cells_stack
+OC_STACK {
+    int row, col;
+};
+
 extern struct Cell_head window;
 
 extern int mfd, c_fac, abs_acc, ele_scale;
@@ -47,6 +52,9 @@ extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 extern SHORT nrows, ncols;
 extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
+extern CELL n_basins;
+extern OC_STACK *ocs;
+extern int ocs_alloced;
 extern FLAG *worked, *in_list, *s_b, *swale;
 extern RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
 extern RAMSEG r_h_seg, dep_seg;
