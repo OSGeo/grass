@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    field_opt->answer = "-1";
     field_opt->guisection = _("Selection");
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
     type_opt->guisection = _("Selection");
