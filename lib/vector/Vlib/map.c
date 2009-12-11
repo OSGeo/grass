@@ -288,6 +288,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     }
 
     /* Open output */
+    Vect_set_open_level(1);
     Vect_open_update_head(&Out, out, G_mapset());
 
     /* Copy tables */
