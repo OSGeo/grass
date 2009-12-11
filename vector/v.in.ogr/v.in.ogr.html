@@ -7,7 +7,9 @@ OGR (Simple Features Library) is part of the
 install GDAL to use <em>v.in.ogr</em>. 
 <P>
 If the <b>layer</b> parameter is not given, all available layers 
-are imported.
+are imported as separate GRASS layers into one GRASS vector map. If
+several OGR layer names are given, all these layers are imported as
+separate GRASS layers into one GRASS vector map.
 <P>
 The optional <b>spatial</b> parameter defines spatial query extents.
 This parameter allows the user to restrict the region to a spatial subset
