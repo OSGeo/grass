@@ -6,6 +6,9 @@ int find_pourpts(void)
     double easting, northing, stream_length;
     CELL old_elev, basin_num;
 
+    ocs_alloced = 2 * bas_thres;
+    ocs = (OC_STACK *)G_malloc(ocs_alloced * sizeof(OC_STACK));
+
     basin_num = 0;
     stream_length = old_elev = 0;
     for (row = 0; row < nrows; row++) {
@@ -36,6 +39,8 @@ int find_pourpts(void)
 	}
     }
     G_percent(nrows, nrows, 1);	/* finish it */
+    n_basins = basin_num;
+    G_free(ocs);
 
     return 0;
 }

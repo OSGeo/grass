@@ -84,6 +84,8 @@ int do_astar(void)
 		    slope[ct_dir] =
 			get_slope2(alt_val, alt_nbr[ct_dir],
 				   dist_to_nbr[ct_dir]);
+		}
+		if (!is_in_list) {
 		    if (ct_dir > 3 && slope[ct_dir] > 0) {
 			if (slope[nbr_ew[ct_dir]] > 0) {
 			    /* slope to ew nbr > slope to center */
