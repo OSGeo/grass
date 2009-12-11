@@ -58,12 +58,14 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
  */
 int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *Out)
 {
-    int i, type, nlines, ret;
-    struct line_pnts *Points;
-    struct line_cats *Cats;
+    int i, type, nlines, ret, left, rite, centroid;
+    struct line_pnts *Points, *CPoints;
+    struct line_cats *Cats, *CCats;
 
     Points = Vect_new_line_struct();
+    CPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    CCats = Vect_new_cats_struct();
 
     if (Vect_level(In) < 1)
 	G_fatal_error("Vect_copy_map_lines(): %s",
@@ -88,8 +90,34 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *O
 	    if (type == 0)
 		continue;	/* dead line */
 	    
-	    if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
-		continue;       /* different layer */
+	    /* don't skips boundaries if field != -1 */
+	    if (field != -1) {
+		if (type & GV_BOUNDARY) {
+		    if (Vect_cat_get(Cats, field, NULL) == 0) {
+			int skip_bndry = 1;
+			
+			Vect_get_line_areas(In, i, &left, &rite);
+			if (left > 0) {
+			    if ((centroid = Vect_get_area_centroid(In, left)) > 0) {
+				Vect_read_line(In, CPoints, CCats, centroid);
+				if (Vect_cat_get(CCats, field, NULL) != 0)
+				    skip_bndry = 0;
+			    }
+			}
+			if (rite > 0 && skip_bndry) {
+			    if ((centroid = Vect_get_area_centroid(In, rite)) > 0) {
+				Vect_read_line(In, CPoints, CCats, centroid);
+				if (Vect_cat_get(CCats, field, NULL) != 0)
+				    skip_bndry = 0;
+			    }
+			}
+			if (skip_bndry)
+			    continue;
+		    }
+		}
+		else if (Vect_cat_get(Cats, field, NULL) == 0)
+		    continue;       /* different layer */
+	    }
 	    
 	    Vect_write_line(Out, type, Points, Cats);
 	}
@@ -110,7 +138,8 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *O
 	    else if (type == 0) {	/* dead line */
 		continue;
 	    }
-	    
+
+	    /* NOTE: this skips boundaries if field != -1 */
 	    if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
 		continue;       /* different layer */
 	    
@@ -118,7 +147,9 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *O
 	}
     }
     Vect_destroy_line_struct(Points);
+    Vect_destroy_line_struct(CPoints);
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(CCats);
 
     return ret;
 }
