@@ -826,7 +826,7 @@ class mainFrame(wx.Frame):
         guisizer.SetSizeHints(self.panel)
         # called automatically by SetSizer()
         self.panel.SetAutoLayout(True) 
-        self.panel.SetSizer(guisizer)
+#        self.panel.SetSizer(guisizer)
         guisizer.Fit(self.panel)
 
         sizeFrame = self.GetBestSize()
@@ -841,6 +841,7 @@ class mainFrame(wx.Frame):
         self.resultQ = Queue.Queue()
         self.updateThread = UpdateQThread(self.notebookpanel, self.requestQ, self.resultQ)
 
+        self.SetSizer(guisizer)
         self.Layout()
 
     def updateValuesHook(self):
