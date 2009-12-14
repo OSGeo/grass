@@ -691,7 +691,23 @@ class mainFrame(wx.Frame):
                                                      type=wx.BITMAP_TYPE_PNG))
         topsizer.Add (item=self.logo, proportion=0, border=3,
                       flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL)
+
+        #
+        # put module description
+        #
+        if self.task.label != '':
+            module_desc = self.task.label + ' ' + self.task.description
+        else:
+            module_desc = self.task.description
+        self.description = StaticWrapText (parent=self.panel,
+                                           label=module_desc)
+        topsizer.Add (item=self.description, proportion=1, border=5,
+                      flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+                      
         guisizer.Add (item=topsizer, proportion=0, flag=wx.EXPAND)
+        
+        self.panel.SetSizerAndFit(guisizer)
+        self.Layout()
 
         # notebooks
         self.notebookpanel = cmdPanel (parent=self.panel, task=self.task, standalone=self.standalone,
@@ -809,26 +825,13 @@ class mainFrame(wx.Frame):
         #self.notebookpanel.Layout()
 
         #
-        # put module description
-        #
-        if self.task.label != '':
-            module_desc = self.task.label + os.linesep + self.task.description
-        else:
-            module_desc = self.task.description
-        self.description = StaticWrapText (parent=self.panel,
-                                           label=module_desc)
-        topsizer.Add (item=self.description, proportion=1, border=5,
-                      flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
-
-        #
         # do layout
         #
         guisizer.SetSizeHints(self.panel)
         # called automatically by SetSizer()
         self.panel.SetAutoLayout(True) 
-#        self.panel.SetSizer(guisizer)
-        guisizer.Fit(self.panel)
-
+        self.panel.SetSizerAndFit(guisizer)
+        
         sizeFrame = self.GetBestSize()
         self.SetMinSize(sizeFrame)
         self.SetSize((sizeFrame[0], sizeFrame[1] +
@@ -841,8 +844,13 @@ class mainFrame(wx.Frame):
         self.resultQ = Queue.Queue()
         self.updateThread = UpdateQThread(self.notebookpanel, self.requestQ, self.resultQ)
 
-        self.SetSizer(guisizer)
         self.Layout()
+
+        #keep initial window size limited for small screens
+        width,height = self.GetSizeTuple()
+        if width > 640: width = 640
+        if height > 480: height = 480
+        self.SetSize((width,height))
 
     def updateValuesHook(self):
         """!Update status bar data"""
