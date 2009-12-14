@@ -29,6 +29,7 @@ int do_cum(void)
 	    dr = r + asp_r[ABS(aspect)];
 	    dc = c + asp_c[ABS(aspect)];
 	}
+	/* skip user-defined depressions */
 	else
 	    dr = dc = -1;
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) { /* if ((dr = astar_pts[killer].downr) > -1) { */
@@ -343,7 +344,7 @@ int do_cum_mfd(void)
 	    }
 	    /* start new stream */
 	    value = ABS(value) + 0.5;
-	    if (!is_swale && (int)value >= threshold && stream_cells < 1 &&
+	    if (!is_swale && (int)value >= threshold && stream_cells < 3 &&
 		swale_cells < 1) {
 		FLAG_SET(swale, r, c);
 		is_swale = 1;

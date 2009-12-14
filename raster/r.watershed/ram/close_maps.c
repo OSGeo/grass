@@ -82,7 +82,7 @@ int close_maps(void)
 
 	    if (min < 0) {
 		if (min < (-stddev - 1)) {
-		    clr_min = min;
+		    clr_min = min - 1;
 		    clr_max = -stddev - 1;
 		    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
 					      0, 0, &colors);
@@ -127,7 +127,7 @@ int close_maps(void)
 
 	    if (max > 0 && max > stddev + 1) {
 		clr_min = stddev + 1;
-		clr_max = max;
+		clr_max = max + 1;
 		Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
 					  0, &colors);
 	    }
