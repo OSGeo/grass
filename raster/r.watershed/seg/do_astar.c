@@ -74,18 +74,19 @@ int do_astar(void)
 	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
 	    /* check that upr, upc are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
-		/* slope */
+		/* avoid diagonal flow direction bias */
 		bseg_get(&bitflags, &flag_value, upr, upc);
 		is_in_list = FLAG_GET(flag_value, INLISTFLAG);
 		is_worked = FLAG_GET(flag_value, WORKEDFLAG);
 		skip_diag = 0;
-		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
 		    cseg_get(&alt, &alt_up, upr, upc);
 		    alt_nbr[ct_dir] = alt_up;
 		    slope[ct_dir] =
 			get_slope2(alt_val, alt_nbr[ct_dir],
 				   dist_to_nbr[ct_dir]);
+		}
+		if (!is_in_list) {
 		    if (ct_dir > 3 && slope[ct_dir] > 0) {
 			if (slope[nbr_ew[ct_dir]] > 0) {
 			    /* slope to ew nbr > slope to center */
@@ -103,8 +104,8 @@ int do_astar(void)
 			}
 		    }
 		}
+
 		/* put neighbour in search list if not yet in */
-		bseg_get(&bitflags, &flag_value, upr, upc);
 		if (is_in_list == 0 && skip_diag == 0) {
 		    cseg_get(&alt, &alt_up, upr, upc);
 		    /* flow direction is set here */
@@ -113,7 +114,7 @@ int do_astar(void)
 		    cseg_put(&asp, &asp_val, upr, upc);
 		}
 		/* in list, not worked. is it edge ? */
-		else if (is_in_list == 1 && is_worked == 0 &&
+		else if (is_in_list && is_worked == 0 &&
 			 FLAG_GET(flag_value, EDGEFLAG)) {
 		    cseg_get(&asp, &asp_val, upr, upc);
 		    if (asp_val < 0) {
