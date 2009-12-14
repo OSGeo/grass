@@ -1561,11 +1561,25 @@ class MapFrame(wx.Frame):
             str(color[1]) + ":" + \
             str(color[2])
 
+        # icon used in vector display and its size
+        icon = ''
+        size = 0
+        vparam = self.tree.GetPyData(self.tree.layer_selected)[0]['cmd']
+        for p in vparam:
+            if '=' in p:
+                parg,pval = p.split('=')
+                if parg == 'icon': icon = pval
+                elif parg == 'size': size = int(pval)
+
         pattern = ["d.vect",
                    "map=%s" % name,
                    "color=%s" % colorStr,
                    "fcolor=%s" % colorStr,
                    "width=%d"  % UserSettings.Get(group='atm', key='highlight', subkey='width')]
+        if icon != '':
+            pattern.append('icon=%s' % icon)
+        if size > 0:
+            pattern.append('size=%i' % size)
         
         if useId:
             cmd = pattern
