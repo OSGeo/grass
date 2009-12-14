@@ -36,7 +36,7 @@
 #define NULLFLAG         0      /* elevation is NULL */
 #define EDGEFLAG         1      /* edge cell */
 #define INLISTFLAG       2      /* in open A* list */
-#define WORKEDFLAG       3      /* in closed A* list/ accumulation done/streams done */
+#define WORKEDFLAG       3      /* in closed A* list/ accumulation done */
 #define SWALEFLAG        4      /* swale */
 #define PITFLAG          5      /* user-defined real depression */
 #define RUSLEBLOCKFLAG   6      /* is RUSLE block */

@@ -82,9 +82,6 @@ int main(int argc, char *argv[])
     else {
 	do_cum();
     }
-    if (st_flag && mfd) {
-	do_stream();
-    }
     if (sg_flag || ls_flag) {
 	sg_factor();
     }

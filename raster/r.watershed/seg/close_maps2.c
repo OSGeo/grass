@@ -8,7 +8,8 @@ int close_array_seg(void)
     struct Colors colors;
     int incr, max, red, green, blue, rd, gr, bl, flag;
     int c, r, map_fd;
-    CELL *cellrow, value;
+    CELL *cellrow;
+    /* CELL value; */
     char cvalue;
     CSEG *theseg;
 

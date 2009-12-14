@@ -126,12 +126,12 @@ int do_cum_mfd(void)
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
     double *dist_to_nbr, *weight, sum_weight, max_weight;
-    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side;
+    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side, max_side;
     double dx, dy;
-    CELL ele, *ele_nbr, asp_val;
+    CELL ele, *ele_nbr, asp_val, asp_val_down;
     double prop, max_acc;
-    int edge;
-    char workedon, *flag_nbr, this_flag_value;
+    int workedon, edge, is_swale;
+    char *flag_nbr, this_flag_value, flag_value;
     SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
@@ -172,11 +172,11 @@ int do_cum_mfd(void)
 	r = point.r;
 	c = point.c;
 	asp_val = point.asp;
-	/* skip user-defined depressions */
 	if (asp_val) {
 	    dr = r + asp_r[ABS(asp_val)];
 	    dc = c + asp_c[ABS(asp_val)];
 	}
+	/* skip user-defined depressions */
 	else
 	    dr = dc = -1;
 
@@ -192,12 +192,6 @@ int do_cum_mfd(void)
 	FLAG_UNSET(this_flag_value, WORKEDFLAG);
 	
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
-	    /* do not distribute flow along edges, this causes artifacts */
-	    if (FLAG_GET(this_flag_value, EDGEFLAG)) {
-		bseg_put(&bitflags, &this_flag_value, r, c);
-		continue;
-	    }
-
 	    r_max = dr;
 	    c_max = dc;
 
@@ -231,11 +225,18 @@ int do_cum_mfd(void)
 		    c_nbr < ncols) {
 
 		    bseg_get(&bitflags, &flag_nbr[ct_dir], r_nbr, c_nbr);
-		    if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
+		    seg_get(&watalt, (char *)&wa, r_nbr, c_nbr);
+		    wat_nbr[ct_dir] = wa.wat;
+		    ele_nbr[ct_dir] = wa.ele;
 
-			seg_get(&watalt, (char *)&wa, r_nbr, c_nbr);
-			wat_nbr[ct_dir] = wa.wat;
-			ele_nbr[ct_dir] = wa.ele;
+		    /* check for swale or stream cells */
+		    is_swale = FLAG_GET(flag_nbr[ct_dir], SWALEFLAG);
+		    if (is_swale)
+			swale_cells++;
+		    if ((ABS(wat_nbr[ct_dir]) + 0.5) >= threshold)
+			stream_cells++;
+
+		    if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
 
 			edge = is_null = FLAG_GET(flag_nbr[ct_dir], NULLFLAG);
 			if (!is_null && ele_nbr[ct_dir] <= ele) {
@@ -270,10 +271,13 @@ int do_cum_mfd(void)
 		if (edge)
 		    break;
 	    }
-	    /* do not distribute flow along edges, this causes artifacts */
+	    /* do not continue streams along edges, this causes artifacts */
 	    if (edge) {
-		G_debug(3, "edge: should not get to here");
-		bseg_put(&bitflags, &this_flag_value, r, c);
+		is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
+		if (is_swale && asp_val > 0) {
+		    asp_val = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+		    cseg_put(&asp, &asp_val, r, c);
+		}
 		continue;
 	    }
 
@@ -288,10 +292,12 @@ int do_cum_mfd(void)
 		mfd_cells++;
 		sum_weight += max_weight;
 		weight[np_side] = max_weight;
+		max_side = np_side;
 	    }
 
 	    /* set flow accumulation for neighbours */
 	    max_acc = -1;
+	    max_side = np_side;
 
 	    if (mfd_cells > 1) {
 		prop = 0.0;
@@ -332,6 +338,7 @@ int do_cum_mfd(void)
 				max_acc = ABS(wat_nbr[ct_dir]);
 				r_max = r_nbr;
 				c_max = c_nbr;
+				max_side = ct_dir;
 			    }
 			}
 			else if (ct_dir == np_side) {
@@ -340,22 +347,22 @@ int do_cum_mfd(void)
 			}
 		    }
 		}
+
+		/* adjust main drainage direction to A* path if possible */
+		/*if (fabs(wat_nbr[np_side]) >= max_acc) {
+		    max_acc = fabs(wat_nbr[ct_dir]);
+		    r_max = dr;
+		    c_max = dc;
+		} */
+
 		if (ABS(prop - 1.0) > 5E-6f) {
 		    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
 			      prop);
 		}
-
-		/* adjust main drainage direction to A* path if possible */
-		if (fabs(wat_nbr[np_side]) >= max_acc) {
-		    max_acc = fabs(wat_nbr[ct_dir]);
-		    r_max = dr;
-		    c_max = dc;
-		}
 	    }
 	    /* SFD-like accumulation */
 	    else {
-		seg_get(&watalt, (char *)&wa, dr, dc);
-		valued = wa.wat;
+		valued = wat_nbr[np_side];
 		if (value > 0) {
 		    if (valued > 0)
 			valued += value;
@@ -369,17 +376,46 @@ int do_cum_mfd(void)
 			valued = value - valued;
 		}
 		wa.wat = valued;
+		wa.ele = ele_nbr[np_side];
 		seg_put(&watalt, (char *)&wa, dr, dc);
 	    }
 
-	    if (!st_flag) {
-		/* update asp */
-		if (dr != r_max || dc != c_max) {
-		    if (asp_val > 0) {
-			asp_val = drain[r - r_max + 1][c - c_max + 1];
-			cseg_put(&asp, &asp_val, r, c);
-		    }
+	    /* update asp */
+	    if (dr != r_max || dc != c_max) {
+		if (asp_val < 0) {
+		    asp_val = -1 * drain[r - r_max + 1][c - c_max + 1];
 		}
+		else
+		    asp_val = drain[r - r_max + 1][c - c_max + 1];
+		    
+		cseg_put(&asp, &asp_val, r, c);
+	    }
+	    is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
+	    /* start new stream */
+	    value = ABS(value) + 0.5;
+	    /* can use stream_cells < 4 only for highres, nsres and ewres < 30 m? */
+	    if (!is_swale && (int)value >= threshold && stream_cells < 3 &&
+		swale_cells < 1) {
+		FLAG_SET(this_flag_value, SWALEFLAG);
+		is_swale = 1;
+	    }
+	    /* update asp for depression */
+	    if (is_swale && pit_flag) {
+		cseg_get(&asp, &asp_val_down, dr, dc);
+		if (asp_val > 0 && asp_val_down == 0) {
+		    asp_val = -asp_val;
+		    cseg_put(&asp, &asp_val, r, c);
+		}
+	    }
+	    /* continue stream */
+	    if (is_swale) {
+		flag_value = flag_nbr[max_side];
+		FLAG_SET(flag_value, SWALEFLAG);
+		bseg_put(&bitflags, &flag_value, r_max, c_max);
+	    }
+	    else {
+		if (er_flag && !is_swale && !FLAG_GET(this_flag_value, RUSLEBLOCKFLAG))
+		    slope_length(r, c, r_max, c_max);
 	    }
 	}
 	bseg_put(&bitflags, &this_flag_value, r, c);

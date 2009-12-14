@@ -40,7 +40,6 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 {
     int r, rr, c, cc, next_r, next_c;
     CELL value;
-    OC_STACK cur;
     int top = 0;
 
     /* put root on stack */
@@ -53,9 +52,8 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 
     while (top) {
 	/* assign basin numbers */
-	cur = ocs[--top];
-	next_r = cur.row;
-	next_c = cur.col;
+	next_r = ocs[--top].row;
+	next_c = ocs[top].col;
 
 	/* add all neighbours pouring into current cell to stack */
 	for (r = next_r - 1, rr = 0; r <= next_r + 1; r++, rr++) {

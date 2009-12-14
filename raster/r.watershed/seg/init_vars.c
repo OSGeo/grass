@@ -399,7 +399,7 @@ int init_vars(int argc, char *argv[])
 
     G_debug(1, "open segments for A* points");
     /* rounded down power of 2 */
-    seg_cols = (int) pow(2, (int)(log(num_open_segs / 8.0) / log(2)));
+    seg_cols = (int) (pow(2, (int)(log(num_open_segs / 8.0) / log(2) + 0.1)) + 0.1);
     num_open_array_segs = num_open_segs / seg_cols;
     /* n cols in segment */
     seg_cols *= seg_rows * seg_rows;
@@ -420,7 +420,7 @@ int init_vars(int argc, char *argv[])
     /* one-based d-ary search_heap with astar_pts */
     G_debug(1, "open segments for A* search heap");
     /* rounded down power of 2 */
-    seg_cols = (int) pow(2, (int)(log(num_open_segs / 8.0) / log(2)));
+    seg_cols = (int) (pow(2, (int)(log(num_open_segs / 8.0) / log(2) + 0.1)) + 0.1);
     num_open_array_segs = num_open_segs / seg_cols;
     /* n cols in segment */
     seg_cols *= seg_rows * seg_rows;
