@@ -110,7 +110,7 @@ int do_astar(void)
 		    /* set flow direction */
 		    asp[index_up] = drain[upr - r + 1][upc - c + 1];
 		}
-		else if (is_in_list == 1 && is_worked == 0) {
+		else if (is_in_list && is_worked == 0) {
 		    /* neighbour is edge in list, not yet worked */
 		    if (asp[index_up] < 0) {
 			asp[index_up] = drain[upr - r + 1][upc - c + 1];
