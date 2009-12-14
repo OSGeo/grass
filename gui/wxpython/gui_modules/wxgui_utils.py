@@ -1075,6 +1075,19 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.layer_selected = layer
         
         try:
+            if self.IsSelected(oldlayer):
+                self.SetItemWindowEnabled(oldlayer, True)
+            else:
+                self.SetItemWindowEnabled(oldlayer, False)
+
+            if self.IsSelected(layer):
+                self.SetItemWindowEnabled(layer, True)
+            else:
+                self.SetItemWindowEnabled(layer, False)
+        except:
+            pass
+
+        try:
             self.RefreshLine(oldlayer)
             self.RefreshLine(layer)
         except:
