@@ -2100,7 +2100,6 @@ class LocationWizard(wx.Object):
 
         proj4string = '%s +no_defs' % proj4string
         
-        wx.MessageBox(proj4string, 'final proj4 string')
         return proj4string
         
     def Proj4Create(self, proj4string):
