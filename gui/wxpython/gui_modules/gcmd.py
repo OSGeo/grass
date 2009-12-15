@@ -456,16 +456,10 @@ class CommandThread(Thread):
         @param stdout redirect standard output or None
         @param stderr redirect standard error output or None
         """
+
         Thread.__init__(self)
-	
-        self.cmd = cmd
-	
-	# hack around platform-specific extension for binaries
-	if self.cmd[0] in globalvar.grassCmd['script']:
-	    self.cmd[0] = self.cmd[0] + globalvar.EXT_SCT
-	else:
-	    self.cmd[0] = self.cmd[0] + globalvar.EXT_BIN
-        
+
+        self.cmd    = cmd
         self.stdin  = stdin
         self.stdout = stdout
         self.stderr = stderr
@@ -499,7 +493,8 @@ class CommandThread(Thread):
             self.module = Popen(self.cmd,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+                                stderr=subprocess.PIPE,
+                                shell=sys.platform=="win32")
         except OSError, e:
             self.error = str(e)
             return 1
