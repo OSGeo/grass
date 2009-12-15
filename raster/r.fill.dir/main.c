@@ -42,7 +42,7 @@
 /* for using the "open" statement */
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/fcntl.h>
+#include <fcntl.h>
 
 /* for using the close statement */
 #include <unistd.h>
