@@ -35,7 +35,7 @@ void print_window(struct Cell_head *window, int print_flag)
     G_format_resolution(window->ew_res3, ewres3, x);
     G_format_resolution(window->ns_res, nsres, x);
     G_format_resolution(window->ns_res3, nsres3, x);
-    G_format_resolution(window->tb_res, tbres, x);
+    G_format_resolution(window->tb_res, tbres, -1);
     G_begin_distance_calculations();
 
     /* EW Dist at North edge */
