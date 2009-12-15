@@ -98,6 +98,6 @@ void G__write_Cell_head3(FILE * fd,
     G_format_resolution(cellhd->ns_res3, buf, fmt);
     fprintf(fd, "n-s resol3: %s\n", buf);
 
-    G_format_resolution(cellhd->tb_res, buf, fmt);
+    G_format_resolution(cellhd->tb_res, buf, -1);
     fprintf(fd, "t-b resol:  %s\n", buf);
 }
