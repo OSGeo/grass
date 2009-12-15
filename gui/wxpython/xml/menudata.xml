@@ -1710,6 +1710,13 @@
 	      <handler>self.OnNewVector</handler>
 	    </menuitem>
 	    <menuitem>
+	      <label>Digitize vector map (requires TclTk)</label>
+	      <help>Interactive editing and digitization of vector maps</help>
+	      <keywords>vector, editing, digitization</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.digit</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Edit vector map (non-interactively)</label>
 	      <help>Edits a vector map, allows adding, deleting and modifying selected vector features.</help>
 	      <keywords>vector,editing,geometry</keywords>
