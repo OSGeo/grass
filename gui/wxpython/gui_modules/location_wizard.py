@@ -728,11 +728,11 @@ class ProjParamsPage(TitledPage):
         val = event.GetString()
         if self.ptype[num] == 'zone':
             if val.isdigit():
-                if int(val) < 0: self.pentry[num].SetValue(0)
+                if int(val) < 1: self.pentry[num].SetValue(1)
                 if int(val) > 60: self.pentry[num].SetValue(60)
             else: 
-                self.pentry[num].SetValue(0)
-            
+                self.pentry[num].SetValue(1)
+
         self.pval[num] = val
         
         event.Skip()
@@ -800,7 +800,7 @@ class ProjParamsPage(TitledPage):
                 if self.ptype[num] == 'bool': self.pval[num] = 'No'
                 elif self.ptype[num] == 'zone': 
                     self.pval[num] = '30' 
-                    self.pdesc[num] += ' (0-60)'
+                    self.pdesc[num] += ' (1-60)'
                 else: self.pval[num] = paramgrp[2]
 
                 label = wx.StaticText(self.panel, id=1000+num, label=self.pdesc[num], 
@@ -815,7 +815,7 @@ class ProjParamsPage(TitledPage):
                                                    value='30',
                                                    size=(100,-1), 
                                                    style=wx.SP_ARROW_KEYS | wx.SP_WRAP,
-                                                   min=0, max=60, initial=30)  
+                                                   min=1, max=60, initial=30)  
                     self.pentry[num].SetValue(int(self.pval[num]))
                     self.Bind(wx.EVT_TEXT, self.OnParamEntry)
                 else:
