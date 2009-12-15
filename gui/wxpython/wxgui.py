@@ -247,7 +247,7 @@ class GMFrame(wx.Frame):
             label += '\t' + shortcut
         
         menuItem = menu.Append(wx.ID_ANY, label, helpString, kind)
-        
+
         self.menucmd[menuItem.GetId()] = gcmd
 
         if len(gcmd) > 0 and \
@@ -407,14 +407,14 @@ class GMFrame(wx.Frame):
                     dlg.Destroy()
                     return
                 dlg.Destroy()
-        
+
         self.gm_cb.GetPage(event.GetSelection()).maptree.Map.Clean()
         self.gm_cb.GetPage(event.GetSelection()).maptree.Close(True)
-        
+
         self.curr_page = None
-        
+
         event.Skip()
-        
+
     def GetLogWindow(self):
         """!Get widget for command output"""
         return self.goutput
@@ -1289,7 +1289,7 @@ class GMFrame(wx.Frame):
         self.curr_page.maptree.mapdisplay.Show()
 
     def OnAddOverlay(self, event):
-        """!Add overlay menu""" 
+        """!Add decoration overlay menu""" 
         # start new map display if no display is available
         if not self.curr_page:
             self.NewDisplay(show=False)
