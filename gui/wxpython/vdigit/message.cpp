@@ -12,6 +12,10 @@
    \author Martin Landa <landa.martin gmail.com>
 */
 
+extern "C" {
+#include <grass/glocale.h>
+}
+
 #include "driver.h"
 #include "digit.h"
 

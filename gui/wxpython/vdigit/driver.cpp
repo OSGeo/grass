@@ -15,6 +15,7 @@
    \author Martin Landa <landa.martin gmail.com>
 */
 
+#include <unistd.h>
 #include <cmath>
 
 #include "driver.h"

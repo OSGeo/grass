@@ -15,7 +15,9 @@
 extern "C" {
 #include <grass/vedit.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 }
+
 #include "driver.h"
 #include "digit.h"
 
