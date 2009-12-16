@@ -12,17 +12,21 @@
    \author Martin Landa <landa.martin gmail.com>
 */
 
+extern "C" {
+#include <grass/glocale.h>
+}
+
 #include "driver.h"
 #include "digit.h"
 
-#ifdef _WIN32
+#if defined _WIN32 && defined MSVC_VER
 #ifndef _CPPRTTI
 #error "compile with /GR!"
 #endif
 #endif
 
 /**
-   \brief Initialize digit interface used by SWIG
+   \brief Initialize digit interface
 
    \param driver display driver instance
    \param window parent window for message dialog
