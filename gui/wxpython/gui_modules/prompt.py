@@ -1,7 +1,7 @@
 """!
 @package prompt.py
 
-@brief GRASS prompt
+@brief wxGUI prompt
 
 Classes:
  - GPrompt
@@ -51,7 +51,7 @@ class GPrompt:
         # search
         #
         searchTxt = wx.StaticText(parent = cmdprompt, id = wx.ID_ANY,
-                                  label = _("Search:"))
+                                  label = _("Find module:"))
         
         self.searchBy = wx.Choice(parent = cmdprompt, id = wx.ID_ANY,
                              choices = [_("description"),
@@ -62,7 +62,7 @@ class GPrompt:
                              value = "", size = (-1, 25))
         
         label = wx.Button(parent = cmdprompt, id = wx.ID_ANY,
-                          label = _("Cmd >"), size = (-1, winHeight))
+                          label = _("&Cmd >"), size = (-1, winHeight))
         label.SetToolTipString(_("Click for erasing command prompt"))
 
         ### todo: fix TextCtrlAutoComplete to work also on Macs
@@ -95,6 +95,7 @@ class GPrompt:
         
         # layout
         sizer = wx.GridBagSizer(hgap=5, vgap=5)
+        sizer.AddGrowableRow(1)
         sizer.AddGrowableCol(2)
 
         sizer.Add(item = searchTxt,
@@ -344,42 +345,83 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         if toSel == -1:
             return
         self.dropdownlistbox.EnsureVisible(toSel)
+
+    def _setModule(self, name):
+        """!Set module's choices (flags, parameters)""" 
+        # get module's description
+        if name in self._choicesCmd and not self._module:
+            try:
+                self._module = menuform.GUI().ParseInterface(cmd = [name])
+            except IOError:
+                self._module = None
+             
+        # set choices (flags)
+        self._choicesMap['flag'] = self._module.get_list_flags()
+        for idx in range(len(self._choicesMap['flag'])):
+            item = self._choicesMap['flag'][idx]
+            desc = self._module.get_flag(item)['label']
+            if not desc:
+                desc = self._module.get_flag(item)['description']
+            
+            self._choicesMap['flag'][idx] = '%s (%s)' % (item, desc)
+        
+        # set choices (parameters)
+        self._choicesMap['param'] = self._module.get_list_params()
+        for idx in range(len(self._choicesMap['param'])):
+            item = self._choicesMap['param'][idx]
+            desc = self._module.get_param(item)['label']
+            if not desc:
+                desc = self._module.get_param(item)['description']
+            
+            self._choicesMap['param'][idx] = '%s (%s)' % (item, desc)
     
     def _setValueFromSelected(self):
          """!Sets the wx.TextCtrl value from the selected wx.ListCtrl item.
          Will do nothing if no item is selected in the wx.ListCtrl.
          """
          sel = self.dropdownlistbox.GetFirstSelected()
-         if sel > -1:
-            if self._colFetch != -1:
-                col = self._colFetch
-            else:
-                col = self._colSearch
-            itemtext = self.dropdownlistbox.GetItem(sel, col).GetText()
-            
-            cmd = shlex.split(str(self.GetValue()))
-            if len(cmd) > 1:
-                # -> append text (skip last item)
-                if self._choiceType == 'param':
-                    self.SetValue(' '.join(cmd[:-1]) + ' ' + itemtext + '=')
-                    optType = self._module.get_param(itemtext)['prompt']
-                    if optType in ('raster', 'vector'):
-                        # -> raster/vector map
-                        self.SetChoices(self._choicesMap[optType], optType)
-                elif self._choiceType == 'flag':
-                    if len(itemtext) > 1:
-                        prefix = '--'
-                    else:
-                        prefix = '-'
-                    self.SetValue(' '.join(cmd[:-1]) + ' ' + prefix + itemtext)
-                elif self._choiceType in ('raster', 'vector'):
-                    self.SetValue(' '.join(cmd[:-1]) + ' ' + cmd[-1].split('=', 1)[0] + '=' + itemtext)
-            else:
-                # -> reset text
-                self.SetValue(itemtext + ' ')
-            self.SetInsertionPointEnd()
-            
-            self._showDropDown(False)
+         if sel < 0:
+             return
+         
+         if self._colFetch != -1:
+             col = self._colFetch
+         else:
+             col = self._colSearch
+         itemtext = self.dropdownlistbox.GetItem(sel, col).GetText()
+         
+         cmd = shlex.split(str(self.GetValue()))
+         if len(cmd) > 0 and cmd[0] in self._choicesCmd:
+             # -> append text (skip last item)
+             if self._choiceType == 'param':
+                 itemtext = itemtext.split(' ')[0]
+                 self.SetValue(' '.join(cmd) + ' ' + itemtext + '=')
+                 optType = self._module.get_param(itemtext)['prompt']
+                 if optType in ('raster', 'vector'):
+                     # -> raster/vector map
+                     self.SetChoices(self._choicesMap[optType], optType)
+             elif self._choiceType == 'flag':
+                 itemtext = itemtext.split(' ')[0]
+                 if len(itemtext) > 1:
+                     prefix = '--'
+                 else:
+                     prefix = '-'
+                 self.SetValue(' '.join(cmd[:-1]) + ' ' + prefix + itemtext)
+             elif self._choiceType in ('raster', 'vector'):
+                 self.SetValue(' '.join(cmd[:-1]) + ' ' + cmd[-1].split('=', 1)[0] + '=' + itemtext)
+         else:
+             # -> reset text
+             self.SetValue(itemtext + ' ')
+             
+             # define module
+             self._setModule(itemtext)
+             
+             # use parameters as default choices
+             self._choiceType = 'param'
+             self.SetChoices(self._choicesMap['param'], type = 'param')
+         
+         self.SetInsertionPointEnd()
+         
+         self._showDropDown(False)
          
     def GetListCtrl(self):
         """!Method required by listmix.ColumnSorterMixin"""
@@ -412,12 +454,15 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
     def SetChoices(self, choices, type = 'module'):
         """!Sets the choices available in the popup wx.ListBox.
         The items will be sorted case insensitively.
+
+        @param choices list of choices
+        @param type type of choices (module, param, flag, raster, vector)
         """
         self._choices = choices
         self._choiceType = type
         
-        self.dropdownlistbox.SetWindowStyleFlag(wx.LC_REPORT | wx.LC_SINGLE_SEL | \
-                                                    wx.LC_SORT_ASCENDING | wx.LC_NO_HEADER)
+        self.dropdownlistbox.SetWindowStyleFlag(wx.LC_REPORT | wx.LC_SINGLE_SEL |
+                                                wx.LC_SORT_ASCENDING | wx.LC_NO_HEADER)
         if not isinstance(choices, list):
             self._choices = [ x for x in choices ]
         if self._choiceType not in ('raster', 'vector'):
@@ -452,6 +497,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         
     def OnCommandSelect(self, event):
         """!Command selected from history"""
+        self._historyItem = event.GetSelection() - len(self.GetItems())
         self.SetFocus()
         
     def OnListClick(self, evt):
@@ -496,26 +542,21 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         except ValueError, e:
             self.statusbar.SetStatusText(str(e))
             cmd = text.split(' ')
-        
         pattern = str(text)
-        if len(cmd) > 1:
-            # search for module's options
-            if cmd[0] in self._choicesCmd and not self._module:
-                try:
-                    self._module = menuform.GUI().ParseInterface(cmd = cmd)
-                except IOError:
-                    self._module = None
-
+        
+        if len(cmd) > 0 and cmd[0] in self._choicesCmd and not self._module:
+            self._setModule(cmd[0])
+        elif len(cmd) > 1 and cmd[0] in self._choicesCmd:
             if self._module:
                 if len(cmd[-1].split('=', 1)) == 1:
                     # new option
                     if cmd[-1][0] == '-':
                         # -> flags
-                        self.SetChoices(self._module.get_list_flags(), type = 'flag')
+                        self.SetChoices(self._choicesMap['flag'], type = 'flag')
                         pattern = cmd[-1].lstrip('-')
                     else:
                         # -> options
-                        self.SetChoices(self._module.get_list_params(), type = 'param')
+                        self.SetChoices(self._choicesMap['param'], type = 'param')
                         pattern = cmd[-1]
                 else:
                     # value
@@ -528,6 +569,8 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
                 self._module = None
                 self._choiceType = None
         
+        self._choiceType
+        self._choicesMap
         found = False
         choices = self._choices
         for numCh, choice in enumerate(choices):
@@ -547,10 +590,10 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
                 if self._module and '=' not in cmd[-1]:
                     message = ''
                     if cmd[-1][0] == '-': # flag
-                        message = "Warning: flag <%s> not found in '%s'" % \
+                        message = _("Warning: flag <%s> not found in '%s'") % \
                             (cmd[-1][1:], self._module.name)
                     else: # option
-                        message = "Warning: option <%s> not found in '%s'" % \
+                        message = _("Warning: option <%s> not found in '%s'") % \
                             (cmd[-1], self._module.name)
                     self.statusbar.SetStatusText(message)
         
@@ -572,13 +615,14 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         sel = self.dropdownlistbox.GetFirstSelected()
         visible = self.dropdown.IsShown()
         KC = event.GetKeyCode()
+        
         if KC == wx.WXK_RIGHT:
-            if len(self.GetValue()) < 1 and not visible:
-                if sel < (self.dropdownlistbox.GetItemCount() - 1):
-                    self.dropdownlistbox.Select(sel + 1)
-                    self._listItemVisible()
-                self._showDropDown()
-                skip = False
+            # right -> show choices
+            if sel < (self.dropdownlistbox.GetItemCount() - 1):
+                self.dropdownlistbox.Select(sel + 1)
+                self._listItemVisible()
+            self._showDropDown()
+            skip = False
         elif KC == wx.WXK_UP:
             if visible:
                 if sel > 0:

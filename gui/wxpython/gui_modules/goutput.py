@@ -618,23 +618,23 @@ class GMConsole(wx.Panel):
                         mapTree = self.parent.parent.parent.curr_page.maptree
                     else: # GMConsole
                         mapTree = self.parent.parent.parent.parent.curr_page.maptree
+                    if not mapTree.GetMap().GetListOfLayers(l_name = name):
+                        if dialog.outputType == 'raster':
+                            lcmd = ['d.rast',
+                                    'map=%s' % name]
+                        else:
+                            lcmd = ['d.vect',
+                                    'map=%s' % name]
+                        mapTree.AddLayer(ltype=dialog.outputType,
+                                         lcmd=lcmd,
+                                         lname=name)
                     
-                    if dialog.outputType == 'raster':
-                        lcmd = ['d.rast',
-                                'map=%s' % name]
-                    else:
-                        lcmd = ['d.vect',
-                                'map=%s' % name]
-                    mapTree.AddLayer(ltype=dialog.outputType,
-                                     lcmd=lcmd,
-                                     lname=name)
-            
             if hasattr(dialog, "get_dcmd") and \
                     dialog.get_dcmd is None and \
                     dialog.closebox.IsChecked():
                 time.sleep(1)
                 dialog.Close()
-
+        
         event.Skip()
         
     def OnProcessPendingOutputWindowEvents(self, event):

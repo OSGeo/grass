@@ -1,9 +1,9 @@
-"""
+"""!
 @package ogc_services.py
 
 @brief Dialogs for OGC services
 
-Currently is implemeted only WMS.
+Currently only implemeted WMS.
 
 List of classes:
  - WMSDialog
@@ -279,20 +279,20 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
     def GetSelectedLayers(self):
         """!Get selected layers/styles"""
-        layers = {}
+        layers = dict()
 
         for item in self.GetSelections():
             parent = self.GetItemParent(item)
             if parent == self.root: # -> layer
                 layer = self.GetItemText(item, 0)
-                layers[layer] = []
+                layers[layer] = list()
                 sitem, cookie = self.GetFirstChild(item)
                 while sitem:
                     layers[layer].append(self.GetItemText(sitem, 0))
                     sitem, cookie = self.GetNextChild(item, cookie)
             else: # -> style
                 layer = self.GetItemText(parent, 0)
-                layers[layer] = []
+                layers[layer] = list()
                 layers[layer].append(self.GetItemText(item, 0))
         
         return layers

@@ -728,7 +728,7 @@ class LoadMapLayersDialog(wx.Dialog):
         # buttons
         #
         btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnOk = wx.Button(self, wx.ID_OK, _("Load") )
+        btnOk = wx.Button(self, wx.ID_OK, _("&Load") )
         btnOk.SetDefault()
         
         #

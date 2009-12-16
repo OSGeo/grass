@@ -366,15 +366,18 @@ class AboutWindow(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=wx.ID_ANY, size=(550,400), 
                           title=_('About GRASS GIS'))
         
+        panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
         # icon
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         # get version and web site
         version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
+                                                                 verbose = True, # -> svn revision
                                                                  flags = 'r',
                                                                  read = True).splitlines()
 
-        infoTxt = wx.Panel(parent = self, id = wx.ID_ANY)
+        infoTxt = wx.Panel(parent = panel, id = wx.ID_ANY)
         infoSizer = wx.BoxSizer(wx.VERTICAL)
         logo = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass.ico")
         logoBitmap = wx.StaticBitmap(parent = infoTxt, id = wx.ID_ANY,
@@ -412,7 +415,7 @@ class AboutWindow(wx.Frame):
                 FN.FNB_NO_X_BUTTON | \
                 FN.FNB_NO_NAV_BUTTONS
                 
-        aboutNotebook = FN.FlatNotebook(self, id=wx.ID_ANY, style=nbstyle)
+        aboutNotebook = FN.FlatNotebook(panel, id=wx.ID_ANY, style=nbstyle)
         aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
         
         # make pages for About GRASS notebook
@@ -424,7 +427,7 @@ class AboutWindow(wx.Frame):
         pg5 = aboutNotebook.AddPage(transwin,     text=_("Translators"))
         
         # buttons
-        btnClose = wx.Button(parent = self, id = wx.ID_CLOSE)
+        btnClose = wx.Button(parent = panel, id = wx.ID_CLOSE)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item = btnClose, proportion = 1,
                      flag = wx.ALL | wx.EXPAND | wx.ALIGN_RIGHT,
@@ -441,7 +444,7 @@ class AboutWindow(wx.Frame):
                   flag=wx.EXPAND | wx.ALL, border=1)
         sizer.Add(item=btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=1)
-        self.SetSizer(sizer)
+        panel.SetSizer(sizer)
         self.Layout()
     
     def PageCopyright(self):

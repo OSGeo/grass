@@ -117,8 +117,9 @@ class Settings:
             #
             'projection' : {
                 'statusbar' : {
-                    'proj4'   : '',
-                    'epsg'    : '',
+                    'proj4'    : '',
+                    'epsg'     : '',
+                    'projFile' : utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg'),
                     },
                 'format' : {
                     'll'  : 'DMS',
@@ -197,7 +198,7 @@ class Settings:
                         },
                     },
                 'addNewLayer' : {
-                    'enabled' : False
+                    'enabled' : True,
                     },
                 },
             #
@@ -1469,7 +1470,7 @@ class PreferencesDialog(wx.Dialog):
         label = wx.StaticText(parent=panel, id=wx.ID_ANY,
                               label=_("EPSG file:"))
         projFile = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                               value=utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg'),
+                               value = self.settings.Get(group='projection', key='statusbar', subkey='projFile'),
                                name="GetValue", size=(400, -1))
         self.winId['projection:statusbar:projFile'] = projFile.GetId()
         gridSizer.Add(item=label,
