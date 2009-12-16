@@ -33,12 +33,14 @@
 	      <label>Close</label>
 	      <help>Close workspace file</help>
 	      <handler>self.OnWorkspaceClose</handler>
+	      <shortcut>Ctrl+C</shortcut>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Load map layers</label>
 	      <help>Load map layers into layer tree</help>
 	      <handler>self.OnWorkspaceLoad</handler>
+	      <shortcut>Ctrl+L</shortcut>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -649,9 +651,10 @@
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>Quit GUI</label>
+	  <label>Exit GUI</label>
 	  <help>Quit wxGUI session</help>
 	  <handler>self.OnCloseWindow</handler>
+	  <shortcut>Ctrl+E</shortcut>
 	</menuitem>
 	<menuitem>
 	  <label>Quit GRASS GIS</label>

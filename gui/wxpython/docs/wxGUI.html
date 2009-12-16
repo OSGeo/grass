@@ -1,10 +1,13 @@
 <h2>DESCRIPTION</h2>
 
+wxGUI is native <em>Graphical User Interface</em> (GUI) from GRASS GIS.
+
+<p>
 If wxGUI is not your default UI, you can define it as default by
 typing at GRASS command line prompt
 
 <div class="code"><pre>
-   g.gui -u wxpython& 
+   g.gui -u wxpython 
 </pre></div>
 
 or define in your <tt>.grass7/rc</tt> file 'GRASS_GUI' variable
@@ -17,7 +20,7 @@ The GUI can be quit by selecting the 'File->Exit' menu item. The GUI
 can be restarted from the GRASS command line prompt by typing
 
 <div class="code"><pre>
-    g.gui wxpython&
+    g.gui wxpython
 </pre></div>
 
 or  to restart with previously saved workspace type:
@@ -262,8 +265,12 @@ d.text text=Population\ density
   <dd>Save workspace</dd>
   <dt>Ctrl+C</dt>
   <dd>Close workspace</dd>
+  <dt>Ctrl+L</dt>
+  <dd>Load map layers</dd>
+  <dt>Ctrl+E</dt>
+  <dd>Exit GUI</dd>
   <dt>Ctrl+Q</dt>
-  <dd>Quit GUI</dd>
+  <dd>Quit GRASS</dd>
 </dl>
 
 <b>Global</b>
