@@ -195,7 +195,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         # self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
-                
+
+    def GetMap(self):
+        """!Get map instace"""
+        return self.Map
+    
     def OnIdle(self, event):
         """
         Only re-order and re-render a composite map image from GRASS during
