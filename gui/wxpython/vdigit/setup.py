@@ -10,7 +10,12 @@ from build_ext import update_opts
 
 from distutils.core import setup, Extension
 
-macros = [('PACKAGE', '"grasslibs"')]
+if sys.platform == "win32":
+    package = '\\"grasslibs\\"'
+else:
+    package = '"grasslibs"'
+macros = [('PACKAGE', package)]
+
 inc_dirs = [os.path.join(os.path.normpath(os.getenv('ARCH_DISTDIR')), 'include'),
 	    os.path.join(os.path.normpath(os.getenv('GISBASE')), 'include')]
 lib_dirs = [os.path.join(os.path.normpath(os.getenv('ARCH_DISTDIR')), 'lib'),
