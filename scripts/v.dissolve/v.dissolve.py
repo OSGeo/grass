@@ -88,7 +88,7 @@ def main():
         except KeyError:
             grass.fatal(_('Column <%s> not found') % column)
         
-	if coltype not in ('INTEGER', 'CHARACTER'):
+	if coltype['type'] not in ('INTEGER', 'CHARACTER'):
 	    grass.fatal(_("Key column must be of type integer or string"))
 
         f = grass.vector_layer_db(input, layer)
