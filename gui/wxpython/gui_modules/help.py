@@ -601,11 +601,11 @@ class AboutWindow(wx.Frame):
                 for translator in translators[lang]:
                     name, email = translator
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
-                                                        label = name))
+                                                            label =  unicode(name, "utf-8")))
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
-                                                        label = email))
+                                                            label = email))
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
-                                                        label = lang))
+                                                            label = lang))
             
             translatorswin.sizer.Add(item=translatorsBox, proportion=1,
                                  flag=wx.EXPAND | wx.ALL, border=3)
