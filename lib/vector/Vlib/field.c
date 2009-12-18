@@ -496,6 +496,9 @@ int Vect_get_field_number(const struct Map_info *Map, const char *field)
 
     if (strcmp(field, "-1") == 0)
 	return -1;
+
+    if (Vect_get_num_dblinks(Map) == 0)
+	return atoi(field);
     
     fi = Vect_get_field2(Map, field);
 
