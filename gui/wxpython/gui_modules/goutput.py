@@ -411,7 +411,7 @@ class GMConsole(wx.Panel):
                     if os.environ.has_key("GRASS_REGION"):
                         del os.environ["GRASS_REGION"]
                     
-                if len(cmdlist) == 1:
+                if len(cmdlist) == 1 and cmdlist[0] not in ('v.krige'):
                     import menuform
                     # process GRASS command without argument
                     menuform.GUI().ParseCommand(cmdlist, parentframe=self)

@@ -1,4 +1,4 @@
-"""
+"""!
 @brief Support script for wxGUI - only for developers needs. Updates
 menudata.xml file.
 
@@ -12,7 +12,7 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-Usage: python update_menudata.py
+Usage: python support/update_menudata.py
 
 @author Martin Landa <landa.martin gmail.com>
 """
