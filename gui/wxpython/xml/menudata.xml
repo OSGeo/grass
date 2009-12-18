@@ -1584,6 +1584,14 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
+	      <label>Ordinary or block kriging</label>
+	      <help>Performs ordinary or block kriging.</help>
+	      <keywords>vector,interpolation,kriging</keywords>
+              <handler>self.RunMenuCmd</handler>
+	      <command>v.krige</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
 	      <label>Fill NULL cells</label>
 	      <help>Fills no-data areas in raster maps using v.surf.rst splines interpolation</help>
 	      <keywords>raster,elevation,interpolation</keywords>
@@ -2030,7 +2038,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Patch vector maps</label>
-	      <help>Creates a vector map by combining other vector maps.</help>
+	      <help>Creates a new vector map by combining other vector maps.</help>
 	      <keywords>vector,geometry</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.patch</command>
@@ -2735,7 +2743,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Add columns</label>
-	      <help>Adds one or more columns to the attribute table connected to a given vector map</help>
+	      <help>Adds one or more columns to the attribute table connected to a given vector map.</help>
 	      <keywords>vector,database,attribute table</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.db.addcolumn</command>

@@ -454,7 +454,7 @@ class GMFrame(wx.Frame):
         if event:
             cmd = self.GetMenuCmd(event)
         self.goutput.RunCmd(cmd, switchPage=True)
-
+        
     def OnMenuCmd(self, event, cmd = ''):
         """!Parse command selected from menu"""
         if event:

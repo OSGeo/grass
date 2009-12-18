@@ -60,7 +60,8 @@ SUBDIRS = \
 	v.rast.stats \
 	v.report \
 	v.out.gps \
-	v.what.vect
+	v.what.vect \
+	v.krige
 
 #	d.vect.thematic \
 #	d.out.gpsdrive \
