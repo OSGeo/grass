@@ -116,6 +116,7 @@ if not os.getenv("GRASS_WXBUNDLED"):
 import gselect
 import goutput
 import menuform
+from preferences import globalSettings as UserSettings
 #import help
 
 import wx
@@ -369,7 +370,7 @@ class KrigingPanel(wx.Panel):
         
         self.OverwriteCheckBox = wx.CheckBox(self, id = wx.ID_ANY,
                                              label = _("Allow output files to overwrite existing files"))
-        self.OverwriteCheckBox.SetValue(state = False)
+        self.OverwriteCheckBox.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
         OutputParameters.Add(item = self.OverwriteCheckBox,
                              pos = (2, 0), span = (1, 2))
         
