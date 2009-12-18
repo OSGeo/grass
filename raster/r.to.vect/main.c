@@ -38,7 +38,7 @@
 int data_type;
 int data_size;
 struct Map_info Map;
-int input_fd;		/*    input_fd     input raster map descriptor */
+int input_fd;			/* input raster map descriptor */
 struct line_cats *Cats;
 struct Cell_head cell_head;
 
@@ -49,10 +49,9 @@ int row_length, row_count, n_rows;
 int total_areas;
 
 int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
-int value_flag;		/* use raster values as categories */
-
+int value_flag;			/* use raster values as categories */
 struct Categories RastCats;
-int has_cats;		/* Category labels available */
+int has_cats;			/* Category labels available */
 struct field_info *Fi;
 dbDriver *driver;
 dbString sql, label;
@@ -156,7 +155,9 @@ int main(int argc, char *argv[])
 	Vect_map_add_dblink(&Map, 1, NULL, Fi->table, "cat", Fi->database,
 			    Fi->driver);
 
-	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	driver =
+	    db_start_driver_open_database(Fi->driver,
+					  Vect_subst_var(Fi->database, &Map));
 	if (driver == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
@@ -290,7 +291,7 @@ int main(int argc, char *argv[])
     }
 
     Vect_close(&Map);
-    G_done_msg("");
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
