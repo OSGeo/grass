@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
 	db_begin_transaction(driver);
 
 	db_init_string(&sql);
-	sprintf(buf, "create table %s (cat integer, %s)", Fi->table,
+	sprintf(buf, "create table %s (cat integer, %s double precision)", Fi->table,
 		parm.zcol->answer);
 	db_set_string(&sql, buf);
 	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, "cat", Fi->database,
