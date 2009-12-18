@@ -66,8 +66,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    module->description = _("Create a new vector map layer "
-			    "by combining other vector map layers.");
+    G_add_keyword(_("geometry"));
+    module->description = _("Creates a new vector map "
+			    "by combining other vector maps.");
 
     old = G_define_standard_option(G_OPT_V_INPUTS);
 
@@ -359,7 +360,7 @@ int main(int argc, char *argv[])
     if (bbox_name) {
 	Vect_set_map_name(&BBoxMap, "Output from v.patch (bounding boxes)");
 	Vect_set_person(&BBoxMap, G_whoami());
-	G_important_message("");
+	G_important_message(" ");
 	G_important_message(_("Building topology for vector map <%s>..."),
 			    bbox_name);
 	Vect_build(&BBoxMap);

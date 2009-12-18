@@ -45,8 +45,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("export"));
     module->description =
-	_("Converts a GRASS binary vector map to VTK ASCII output.");
+	_("Converts a vector map to VTK ASCII output.");
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
