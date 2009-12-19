@@ -465,20 +465,12 @@ class GMConsole(wx.SplitterWindow):
         else:
             # Send any other command to the shell. Send output to
             # console output window
-
-            # if command is not a GRASS command, treat it like a shell command
-            try:
-#                gcmd.Command(cmdlist,
-#                         stdout=self.cmd_stdout,
-#                         stderr=self.cmd_stderr)
-                self.cmdThread.RunCmd(GrassCmd,
-                                      onDone,
-                                      cmdlist,
-                                      self.cmd_stdout, self.cmd_stderr)
-                self.btn_abort.Enable()
-                self.cmd_output_timer.Start(50)
-            except gcmd.CmdError, e:
-                print >> sys.stderr, e
+            self.cmdThread.RunCmd(GrassCmd,
+                                  onDone,
+                                  cmdlist,
+                                  self.cmd_stdout, self.cmd_stderr)                                         
+            self.btn_abort.Enable()
+            self.cmd_output_timer.Start(50)
         
         # reset output window to read only
         self.cmd_output.SetReadOnly(True)
