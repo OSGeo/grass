@@ -1,0 +1,123 @@
+<H2>DESCRIPTION</H2>
+This numerical program calculates transient
+solute transport in two dimensions based on  
+raster maps and the current region resolution.
+All starting- and boundary-conditions must be provided as 
+raster maps.
+<br>
+<br>
+This module calculates the concentration and optional the 
+velocity field, based on the hydraulic conductivity, 
+the effective porosity and the 
+initial piecometric heads. 
+The vector components can be visualized with paraview if they are exported
+with r.out.vtk.
+<br>
+<br>
+The solute transport will always be calculated transient. 
+If you want to calculate stady state, set the timestep 
+to a large number (billions of seconds).
+
+
+<H2>NOTES</H2>
+The solute transport partial 
+differential equation is of the following form:
+
+<p>
+(dc/dt)*R = div ( D grad c - uc) + cs -q/nf(c - c_in)
+
+<ul>
+<li>c -- the concentration </li>
+<li>dt -- the time step for transient calculation in seconds [s]</li>
+<li>R -- the linear retardation coefficient </li>
+<li>D -- the diffusion and dispersion tensor</li>
+<li>cs -- inner concentration sources/sinks</li>
+<li>c_in -- the solute concentration of influent water</li>
+<li>q -- inner well sources/sinks</li>
+<li>nf -- the effective porosity </li>
+</ul>
+
+<br>
+<br>
+Two different boundary conditions are implemented, 
+the Dirichlet and Neumann conditions. 
+The calculation and boundary status of single cells can be set with the status map, 
+the following states are supportet:
+
+<ul>
+<li>0 == inactive - the cell with status 0 will not be calulated, active cells will have a no flow boundary to an inactive cell</li>
+<li>1 == active - this cell is used for sloute transport calculation, inner sources can be defined for those cells</li>
+<li>2 == Dirichlet - cells of this type will have a fixed concentration value which do not change over time </li>
+<li>3 == Transmission - cells of this type should be paced on out-flow boundaries to assure the flow of the solute stream out </li>
+</ul>
+
+<br>
+<br>
+The solute transport equation can be solved with several solvers.
+Several iterative solvers with unsymmetric sparse and quadratic matrices support are implemented.
+The jacobi method, the Gauss-Seidel method and the biconjugate gradients-stabilized (bicgstab) method. 
+Aditionally a direct Gauss solver and LU solver are available. Those direct solvers
+only work with quadratic matrices, so be careful using them with large maps 
+(maps of size 10.000 cells will need more than one gigabyte of ram).
+
+<H2>EXAMPLE</H2>
+Use this small script to create a working
+groundwater flow / solute transport area and data. 
+Make sure you are not in a lat/lon projection.
+
+<div class="code"><pre>
+#!/bin/sh
+# set the region accordingly
+g.region res=10 res3=10 t=100 b=0 n=1000 s=0 w=0 e=2000
+r.mapcalc "phead=if(col() == 1 , 50, 40)"
+r.mapcalc "phead=if(col() ==200  , 20 + row()/5, phead)"
+r.mapcalc "status=if(col() == 1 || col() == 200 , 2, 1)"
+r.mapcalc "well=if((row() == 50 && col() == 175) || (row() == 10 && col() == 135) , -0.01, 0)"
+r.mapcalc "hydcond=0.00005"
+r.mapcalc "reacharge=0"
+r.mapcalc "top_conf=20"
+r.mapcalc "top_unconf=60"
+r.mapcalc "bottom=0"
+r.mapcalc "poros=0.17"
+r.mapcalc "syield=0.0001"
+r.mapcalc "null=0.0"
+
+#First compute a steady state groundwater flow
+r.gwflow --o -s solver=cg top=top_conf bottom=bottom phead=phead status=status hc_x=hydcond hc_y=hydcond \
+  q=well s=syield r=reacharge output=gwresult_conf dt=8640000000000 type=confined
+
+#create the flow direction vectors
+r.flow elevin=gwresult_conf flout=gwresult_conf_flow skip=15 --o
+# create contour lines
+r.contour input=gwresult_conf output=gwresult_conf_contour step=2 --o
+
+#generate the transport data
+r.mapcalc "c=if(col() == 15 && row() == 75 , 500.0, 0.0)"
+r.mapcalc "cs=if(col() == 15 && row() == 75 , 0.0, 0.0)"
+r.mapcalc "tstatus=if(col() == 1 || col() == 200 , 3, 1)"
+r.mapcalc "diff=0.00001"
+r.mapcalc "R=1.0"
+
+r.solute.transport --o -s solver=bicgstab top=top_conf bottom=bottom phead=gwresult_conf status=tstatus \
+  hc_x=hydcond hc_y=hydcond R=R cs=cs q=null nf=nf output=stresult_conf dt=2592000 diff_x=diff diff_y=diff \
+  c=c
+
+
+#compute in an infinite loop the transport with a timestept of 30 days
+while true ; do
+r.solute.transport --o -s solver=bicgstab top=top_conf bottom=bottom phead=gwresult_conf status=tstatus \
+  hc_x=hydcond hc_y=hydcond R=R cs=cs q=null nf=nf output=stresult_conf dt=2592000 diff_x=diff diff_y=diff \
+  c=stresult_conf
+done
+
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r3.gwflow.html">r3.gwflow</A></EM><br>
+<EM><A HREF="r.out.vtk.html">r.out.vtk</A></EM><br>
+
+<H2>AUTHOR</H2>
+Soeren Gebbert
+
+<p><i>Last changed: $Date: 2007/02/15 23:27:58 $</i>
