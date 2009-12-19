@@ -412,9 +412,8 @@ class AboutWindow(wx.Frame):
         nbstyle = FN.FNB_VC8 | \
                 FN.FNB_BACKGROUND_GRADIENT | \
                 FN.FNB_TABS_BORDER_SIMPLE | \
-                FN.FNB_NO_X_BUTTON | \
-                FN.FNB_NO_NAV_BUTTONS
-                
+                FN.FNB_NO_X_BUTTON
+        
         aboutNotebook = FN.FlatNotebook(panel, id=wx.ID_ANY, style=nbstyle)
         aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
         
@@ -429,8 +428,8 @@ class AboutWindow(wx.Frame):
         # buttons
         btnClose = wx.Button(parent = panel, id = wx.ID_CLOSE)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = btnClose, proportion = 1,
-                     flag = wx.ALL | wx.EXPAND | wx.ALIGN_RIGHT,
+        btnSizer.Add(item = btnClose, proportion = 0,
+                     flag = wx.ALL | wx.ALIGN_RIGHT,
                      border = 5)
         # bindings
         # self.aboutNotebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnAGPageChanged)
@@ -443,7 +442,7 @@ class AboutWindow(wx.Frame):
         sizer.Add(item=aboutNotebook, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=1)
         sizer.Add(item=btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=1)
+                  flag=wx.ALL | wx.ALIGN_RIGHT, border=1)
         panel.SetSizer(sizer)
         self.Layout()
     
