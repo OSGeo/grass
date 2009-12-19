@@ -425,6 +425,8 @@ class AboutWindow(wx.Frame):
         pg5 = aboutNotebook.AddPage(contribwin,   text=_("Contributors"))
         pg5 = aboutNotebook.AddPage(transwin,     text=_("Translators"))
         
+        wx.CallAfter(aboutNotebook.SetSelection, 0)
+        
         # buttons
         btnClose = wx.Button(parent = panel, id = wx.ID_CLOSE)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
