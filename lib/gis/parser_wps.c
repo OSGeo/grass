@@ -387,7 +387,27 @@ static void wps_print_process_description_begin(int store, int status, const cha
     int i;
 
     fprintf(stdout,"\t<ProcessDescription wps:processVersion=\"1\" storeSupported=\"%s\" statusSupported=\"%s\">\n", (store?"true":"false"), (status?"true":"false"));
-    wps_print_ident_title_abstract(identifier, title, abstract);
+       if(identifier)
+    {
+        fprintf(stdout,"\t\t<ows:Identifier>");
+        print_escaped_for_xml(stdout, identifier);
+        fprintf(stdout,"</ows:Identifier>\n");
+    }
+
+    if(title)
+    {
+        fprintf(stdout,"\t\t<ows:Title>");
+        print_escaped_for_xml(stdout, title);
+        fprintf(stdout, "</ows:Title>\n");
+    }
+
+    if(abstract)
+    {
+        fprintf(stdout,"\t\t<ows:Abstract>\n");
+        G__usage_html();
+        fprintf(stdout, "\n\t\t</ows:Abstract>\n");
+    }
+
     for(i = 0; i < num_keywords; i++)
     {
         fprintf(stdout,"\t\t<ows:Metadata xlink:title=\"");
