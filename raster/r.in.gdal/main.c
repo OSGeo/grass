@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *input, *output, *target, *title, *outloc, *band;
     } parm;
-    struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l;
+    struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c;
 
     /* -------------------------------------------------------------------- */
     /*      Initialize.                                                     */
@@ -146,6 +146,12 @@ int main(int argc, char *argv[])
     flag_k->description =
 	_("Keep band numbers instead of using band color names");
 
+    flag_c = G_define_flag();
+    flag_c->key = 'c';
+    flag_c->description =
+	_("Create the location specified by the \"location\" parameter and exit."
+          " Do not import the raster file.");
+
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
      * in the module after the parser */
@@ -166,6 +172,10 @@ int main(int argc, char *argv[])
     if (parm.target->answer && parm.outloc->answer
 	&& strcmp(parm.target->answer, parm.outloc->answer) == 0) {
 	G_fatal_error(_("You have to specify a target location different from output location"));
+    }
+
+    if (flag_c->answer && parm.outloc->answer == NULL ) {
+	G_fatal_error(_("You need to specify valid location name."));
     }
 
     if (flag_l->answer && G_projection() != PROJECTION_LL)
@@ -319,6 +329,12 @@ int main(int argc, char *argv[])
 			    proj_info, proj_units, NULL);
 	    G_message(_("Location <%s> created"), parm.outloc->answer);
 	}
+
+        /* If the c flag is set, clean up? and exit here */
+        if(flag_c->answer)
+        {
+            exit(EXIT_SUCCESS);
+        }
     }
     else {
 	/* Projection only required for checking so convert non-interactively */
