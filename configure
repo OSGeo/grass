@@ -1316,7 +1316,7 @@ else
 fi
 
 if test "$SVN_VERSION" != "no" ; then
-   GRASS_VERSION_SVN=`$SVN_VERSION`
+   GRASS_VERSION_SVN=`$SVN_VERSION -c`
 fi
 
 
