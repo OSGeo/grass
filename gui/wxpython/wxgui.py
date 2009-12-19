@@ -132,7 +132,6 @@ class GMFrame(wx.Frame):
         self.notebook  = self.__createNoteBook()
         self.menubar, self.menudata = self.__createMenuBar()
         self.statusbar = self.CreateStatusBar(number=1)
-        self.cmdprompt, self.cmdinput = self.__createCommandPrompt()
         self.toolbar   = self.__createToolBar()
         
         # bindings
@@ -146,16 +145,11 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(self.notebook, wx.aui.AuiPaneInfo().
                              Left().CentrePane().BestSize((-1,-1)).Dockable(False).
                              CloseButton(False).DestroyOnClose(True).Row(1).Layer(0))
-        self._auimgr.AddPane(self.cmdprompt, wx.aui.AuiPaneInfo().
-                             Bottom().BestSize((-1, -1)).Dockable(False).
-                             CloseButton(False).DestroyOnClose(True).
-                             PaneBorder(False).Row(1).Layer(0).Position(0).
-                             CaptionVisible(False))
 
         self._auimgr.Update()
 
         wx.CallAfter(self.notebook.SetSelection, 0)
-        wx.CallAfter(self.cmdinput.SetFocus)
+        wx.CallAfter(self.goutput.cmd_prompt.SetFocus)
         
         # use default window layout ?
         if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
@@ -192,13 +186,7 @@ class GMFrame(wx.Frame):
         # start with layer manager on top
         self.curr_page.maptree.mapdisplay.Raise()
         self.Raise()
-        
-    def __createCommandPrompt(self):
-        """!Creates command-line input area"""
-        p = prompt.GPrompt(self)
-
-        return p.GetPanel(), p.GetInput()
-    
+            
     def __createMenuBar(self):
         """!Creates menubar"""
 
@@ -276,7 +264,7 @@ class GMFrame(wx.Frame):
 
         # create command output text area and add it to main notebook page
         self.goutput = goutput.GMConsole(self, pageid=1)
-        self.outpage = self.notebook.AddPage(self.goutput, text=_("Command output"))
+        self.outpage = self.notebook.AddPage(self.goutput, text=_("Command console"))
 
         # bindings
         self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
@@ -367,7 +355,7 @@ class GMFrame(wx.Frame):
         page = event.GetSelection()
         if page == self.goutput.pageid:
             # remove '(...)'
-            self.notebook.SetPageText(page, _("Command output"))
+            self.notebook.SetPageText(page, _("Command console"))
         
         event.Skip()
 
@@ -454,7 +442,7 @@ class GMFrame(wx.Frame):
         if event:
             cmd = self.GetMenuCmd(event)
         self.goutput.RunCmd(cmd, switchPage=True)
-        
+
     def OnMenuCmd(self, event, cmd = ''):
         """!Parse command selected from menu"""
         if event:
@@ -1491,7 +1479,7 @@ class GMFrame(wx.Frame):
         """!Quit GRASS session (wxGUI and shell)"""
         # quit wxGUI session
         self.OnCloseWindow(event)
-        
+
         # quit GRASS shell
         try:
             pid = int(os.environ['GIS_LOCK'])
