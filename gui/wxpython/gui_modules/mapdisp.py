@@ -194,11 +194,19 @@ class MapFrame(wx.Frame):
                                                                  "Default value for new map displays can "
                                                                  "be set up in 'User GUI settings' dialog.")))
         # map scale
-        self.statusbarWin['mapscale'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                                                    value="", style=wx.TE_PROCESS_ENTER,
+        self.statusbarWin['mapscale'] = wx.ComboBox(parent = self.statusbar, id = wx.ID_ANY,
+                                                    style = wx.TE_PROCESS_ENTER,
                                                     size=(150, -1))
+        self.statusbarWin['mapscale'].SetItems(['1:1000',
+                                                '1:5000',
+                                                '1:10000',
+                                                '1:25000',
+                                                '1:50000',
+                                                '1:100000',
+                                                '1:1000000'])
         self.statusbarWin['mapscale'].Hide()
         self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMapScale, self.statusbarWin['mapscale'])
+        self.statusbar.Bind(wx.EVT_COMBOBOX, self.OnChangeMapScale, self.statusbarWin['mapscale'])
 
         # go to
         self.statusbarWin['goto'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
