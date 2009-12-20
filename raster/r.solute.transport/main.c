@@ -82,12 +82,12 @@ void set_params()
     param.diff_x = G_define_standard_option(G_OPT_R_INPUT);
     param.diff_x->key = "diff_x";
     param.diff_x->description =
-	_("The x-part of the diffusion tensor in [m�/s]");
+	_("The x-part of the diffusion tensor in [m^2/s]");
 
     param.diff_y = G_define_standard_option(G_OPT_R_INPUT);
     param.diff_y->key = "diff_y";
     param.diff_y->description =
-	_("The y-part of the diffusion tensor in [m�/s]");
+	_("The y-part of the diffusion tensor in [m^2/s]");
 
     param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
@@ -97,14 +97,21 @@ void set_params()
     param.cin = G_define_standard_option(G_OPT_R_INPUT);
     param.cin->key = "cin";
     param.cin->required = NO;
-    param.cin->description = _("Concentration sources and sinks in [kg/m^3]");
+    param.cin->gisprompt = "old,raster,raster";
+    param.cin->description = _("concentration sources and sinks bounded to a "
+            "water source or sink in [kg/s]");
+
 
     param.cs = G_define_standard_option(G_OPT_R_INPUT);
     param.cs->key = "cs";
-    param.cs->description = _("Concentration sources and sinks in [kg/m^3]");
+    param.cs->type = TYPE_STRING;
+    param.cs->required = YES;
+    param.cs->gisprompt = "old,raster,raster";
+    param.cs->description = _("concentration of inner sources and inner sinks in [kg/s] "
+            "(i.e. a chemical reaction)");
 
     param.r = G_define_standard_option(G_OPT_R_INPUT);
-    param.r->key = "R";
+    param.r->key = "r";
     param.r->description = _("Retardation factor [-]");
 
     param.nf = G_define_standard_option(G_OPT_R_INPUT);
@@ -120,16 +127,15 @@ void set_params()
     param.bottom->description = _("Bottom surface of the aquifer in [m]");
 
     param.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.output->description =
-	_("The result of the numericalsolute transport calculation "
-	  "will be written to this map. [kg/m�]");
+    param.output->description =	_("The resulting concentration of the numerical solute "
+            "transport calculation will be written to this map. [kg/m^3]");
 
     param.vector = G_define_standard_option(G_OPT_R_OUTPUT);
     param.vector->key = "velocity";
     param.vector->required = NO;
     param.vector->description =
-	_("Calculate the groundwater distance velocity vector "
-	  "field and write the x, and y components to maps named name_(xy), [m/s]");
+            _("Calculate the groundwater distance velocity vector field and "
+            "write the x, and y components to maps named name_(xy), [m/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -168,7 +174,7 @@ void set_params()
     param.stab->answer = "full";
     param.stab->options = "full,exp";
     param.stab->description =
-	_("Set the flow stabilizing scheme.");
+	_("Set the flow stabilizing scheme (full or exponential upwinding).");
 
 
     param.sparse = G_define_flag();
@@ -213,7 +219,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("solute transport"));
     module->description =
-	_("Numerical calculation program for transient, confined and unconfined solute transport in two dimensions.");
+	_("Numerical calculation program for transient, confined and unconfined "
+            "solute transport in two dimensions");
 
     /* Get parameters from user */
     set_params();
