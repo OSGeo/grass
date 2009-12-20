@@ -30,9 +30,12 @@ import sys
 import wx
 import wx.combo
 
+import globalvar
+
+grassPath = os.path.join(globalvar.ETCDIR, "python")
+sys.path.append(grassPath)
 import grass.script as grass
 
-import globalvar
 import gcmd
 import utils
 from preferences import globalSettings as UserSettings
