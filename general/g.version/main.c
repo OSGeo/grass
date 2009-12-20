@@ -59,10 +59,14 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (strlen(GRASS_VERSION_SVN) > 0) {
-	fprintf(stdout, "GRASS %s (%s) - r%s\n",
-		GRASS_VERSION_NUMBER, GRASS_VERSION_DATE, 
-		GRASS_VERSION_SVN);
+    if (G_verbose() > G_verbose_std() && strlen(GRASS_VERSION_SVN) > 0) {
+	fprintf(stdout, "GRASS %s.%s (%s)\n",
+		GRASS_VERSION_NUMBER, GRASS_VERSION_SVN,
+		GRASS_VERSION_DATE);
+    }
+    else if (G_verbose() < G_verbose_std()) {
+	fprintf(stdout, "GRASS %s\n",
+		GRASS_VERSION_NUMBER);
     }
     else {
 	fprintf(stdout, "GRASS %s (%s) %s\n",
