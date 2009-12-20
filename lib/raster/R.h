@@ -55,6 +55,8 @@ struct fileinfo			/* Information for opened cell files */
     int null_cur_row;		/* Current null row in memory   */
     int cur_nbytes;		/* nbytes per cell for current row */
     unsigned char *data;	/* Decompressed data buffer     */
+    int null_fd;		/* Null bitmap fd               */
+    unsigned char *null_bits;	/* Null bitmap buffer           */
     int nbytes;			/* bytes per cell               */
     RASTER_MAP_TYPE map_type;	/* type: int, float or double map */
     char *temp_name;		/* Temporary name for NEW files */
@@ -64,8 +66,6 @@ struct fileinfo			/* Information for opened cell files */
     char *mapset;		/* Mapset of open file          */
     int io_error;		/* io error warning given       */
     XDR xdrstream;		/* xdr stream for reading fp    */
-    unsigned char *NULL_ROWS[NULL_ROWS_INMEM];
-    int min_null_row;		/* Minimum row null row number in memory */
     struct Quant quant;
     struct GDAL_link *gdal;
 };

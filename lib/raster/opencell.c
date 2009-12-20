@@ -28,6 +28,7 @@
 #include "../gis/G.h"
 #include "R.h"
 #define FORMAT_FILE "f_format"
+#define NULL_FILE   "null"
 
 static struct fileinfo *new_fileinfo(int fd)
 {
@@ -54,7 +55,6 @@ static struct fileinfo *new_fileinfo(int fd)
 
     return &R__.fileinfo[fd];
 }
-
 
 /*!
  * \brief Open raster file
@@ -162,7 +162,7 @@ int Rast__open_old(const char *name, const char *mapset)
     struct Cell_head cellhd;
     int CELL_nbytes = 0;	/* bytes per cell in CELL map */
     int INTERN_SIZE;
-    int reclass_flag, i;
+    int reclass_flag;
     int MAP_NBYTES;
     RASTER_MAP_TYPE MAP_TYPE;
     struct Reclass reclass;
@@ -286,10 +286,9 @@ int Rast__open_old(const char *name, const char *mapset)
     G_copy((char *)&fcb->cellhd, (char *)&cellhd, sizeof(cellhd));
 
     /* allocate null bitstream buffers for reading null rows */
-    for (i = 0; i < NULL_ROWS_INMEM; i++)
-	fcb->NULL_ROWS[i] = Rast__allocate_null_bits(G__.window.cols);
-    /* initialize : no NULL rows in memory */
-    fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
+    fcb->null_fd = -1;
+    fcb->null_cur_row = -1;
+    fcb->null_bits = Rast__allocate_null_bits(cellhd.cols);
 
     /* mark closed */
     fcb->open_mode = -1;
@@ -300,8 +299,6 @@ int Rast__open_old(const char *name, const char *mapset)
 
     /* mark no data row in memory  */
     fcb->cur_row = -1;
-    /* fcb->null_cur_row is not used for reading, only for writing */
-    fcb->null_cur_row = -1;
 
     /* if reclass, copy reclass structure */
     if ((fcb->reclass_flag = reclass_flag))
@@ -341,7 +338,17 @@ int Rast__open_old(const char *name, const char *mapset)
     fcb->io_error = 0;
     fcb->map_type = MAP_TYPE;
     fcb->nbytes = MAP_NBYTES;
-    fcb->null_file_exists = -1;
+
+    if (!gdal) {
+	if (!G_find_file2_misc("cell_misc", NULL_FILE, r_name, r_mapset)) {
+	    /* G_warning("unable to find [%s]",path); */
+	    fcb->null_file_exists = 0;
+	}
+	else {
+	    fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
+	    fcb->null_file_exists = fcb->null_fd >= 0;
+	}
+    }
 
     if (fcb->map_type != CELL_TYPE)
 	xdrmem_create(&fcb->xdrstream, (caddr_t) fcb->data,
@@ -493,7 +500,6 @@ static int G__open_raster_new_gdal(char *map, char *mapset,
 {
     int fd;
     struct fileinfo *fcb;
-    int i;
 
     /* dummy descriptor to reserve the fileinfo slot */
     fd = open("/dev/null", O_RDONLY);
@@ -525,9 +531,8 @@ static int G__open_raster_new_gdal(char *map, char *mapset,
     fcb->temp_name = NULL;
     fcb->null_temp_name = NULL;
     fcb->null_cur_row = 0;
-    fcb->min_null_row = 0;
-    for (i = 0; i < NULL_ROWS_INMEM; i++)
-	fcb->NULL_ROWS[i] = NULL;
+    fcb->null_bits = NULL;
+    fcb->null_fd = -1;
 
     if (fcb->map_type != CELL_TYPE)
 	Rast_quant_init(&(fcb->quant));
@@ -557,7 +562,7 @@ static int G__open_raster_new(const char *name, int open_mode,
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     struct fileinfo *fcb;
-    int i, null_fd, fd;
+    int fd;
     char *tempname;
     char *map;
     char *mapset;
@@ -671,8 +676,8 @@ static int G__open_raster_new(const char *name, int open_mode,
 
     /* open a null tempfile name */
     tempname = G_tempfile();
-    null_fd = creat(tempname, 0666);
-    if (null_fd < 0) {
+    fcb->null_fd = creat(tempname, 0666);
+    if (fcb->null_fd < 0) {
 	G_warning(_("G__open_raster_new(): no temp files available"));
 	G_free(tempname);
 	G_free(fcb->name);
@@ -683,15 +688,12 @@ static int G__open_raster_new(const char *name, int open_mode,
     }
 
     fcb->null_temp_name = tempname;
-    close(null_fd);
 
     /* next row to be written (in order) is zero */
     fcb->null_cur_row = 0;
 
-    /* allocate null bitstream buffers for writing */
-    for (i = 0; i < NULL_ROWS_INMEM; i++)
-	fcb->NULL_ROWS[i] = Rast__allocate_null_bits(fcb->cellhd.cols);
-    fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
+    /* allocate null bitstream buffer for writing */
+    fcb->null_bits = Rast__allocate_null_bits(fcb->cellhd.cols);
 
     /* init cell stats */
     /* now works only for int maps */

@@ -115,7 +115,6 @@ int Rast_unopen(int fd)
 static int close_old(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int i;
 
     /* if R__.auto_mask was only allocated for reading map rows to create
        non-existant null rows, and not for actuall mask, free R__.mask_row 
@@ -127,8 +126,11 @@ static int close_old(int fd)
     if (fcb->gdal)
 	Rast_close_gdal_link(fcb->gdal);
 
-    for (i = 0; i < NULL_ROWS_INMEM; i++)
-	G_free(fcb->NULL_ROWS[i]);
+    if (fcb->null_bits)
+	G_free(fcb->null_bits);
+    if (fcb->null_fd >= 0)
+	close(fcb->null_fd);
+    fcb->null_fd = -1;
 
     if (fcb->cellhd.compressed)
 	G_free(fcb->row_ptr);
@@ -315,11 +317,15 @@ static int close_new(int fd, int ok)
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int stat;
     char path[GPATH_MAX];
-    int row, i;
+    int row;
     const char *CELL_DIR;
 
     if (fcb->gdal)
 	return close_new_gdal(fd, ok);
+
+    if (fcb->null_fd >= 0)
+	close(fcb->null_fd);
+    fcb->null_fd = -1;
 
     if (ok) {
 	switch (fcb->open_mode) {
@@ -347,35 +353,8 @@ static int close_new(int fd, int ok)
 
 	if (fcb->null_cur_row > 0) {
 	    /* if temporary NULL file exists, write it into cell_misc/name/null */
-	    int null_fd;
-
-	    null_fd = Rast__open_null_write(fd);
-	    if (null_fd <= 0)
-		return -1;
-	    if (null_fd < 1)
-		return -1;
-
-	    /* first finish writing null file */
-	    /* write out the rows stored in memory */
-	    for (row = fcb->min_null_row; row < fcb->null_cur_row; row++)
-		Rast__write_null_bits(null_fd,
-				      fcb->NULL_ROWS[row - fcb->min_null_row],
-				      row, fcb->cellhd.cols, fd);
-
-	    /* write missing rows */
-	    if (fcb->null_cur_row < fcb->cellhd.rows) {
-		unsigned char *null_work_buf =
-		    Rast__allocate_null_bits(fcb->cellhd.cols);
-		Rast__init_null_bits(null_work_buf, fcb->cellhd.cols);
-		for (row = fcb->null_cur_row; row < fcb->cellhd.rows; row++)
-		    Rast__write_null_bits(null_fd, null_work_buf, row,
-					  fcb->cellhd.cols, fd);
-		G_free(null_work_buf);
-	    }
-	    close(null_fd);
-
 	    if (rename(fcb->null_temp_name, path)) {
-		G_warning(_("Unable to renae null file '%s'"),
+		G_warning(_("Unable to rename null file '%s'"),
 			  fcb->null_temp_name, path);
 		stat = -1;
 	    }
@@ -464,8 +443,7 @@ static int close_new(int fd, int ok)
     G_free(fcb->name);
     G_free(fcb->mapset);
 
-    for (i = 0; i < NULL_ROWS_INMEM; i++)
-	G_free(fcb->NULL_ROWS[i]);
+    G_free(fcb->null_bits);
 
     if (fcb->map_type != CELL_TYPE)
 	Rast_quant_free(&fcb->quant);

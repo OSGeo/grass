@@ -25,8 +25,6 @@
 #include "../gis/G.h"
 #include "R.h"
 
-#define NULL_FILE   "null"
-
 static int embed_nulls(int, void *, int, RASTER_MAP_TYPE, int, int);
 
 static int compute_window_row(int fd, int row, int *cellRow)
@@ -901,44 +899,12 @@ int Rast_get_d_row(int fd, DCELL * buf, int row)
     return Rast_get_row(fd, buf, row, DCELL_TYPE);
 }
 
-static int open_null_read(int fd)
+static int read_null_bits(int fd, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    const char *name, *mapset, *dummy;
-    int null_fd;
-
-    if (fcb->null_file_exists == 0)
-	return -1;
-
-    if (fcb->reclass_flag) {
-	name = fcb->reclass.name;
-	mapset = fcb->reclass.mapset;
-    }
-    else {
-	name = fcb->name;
-	mapset = fcb->mapset;
-    }
-
-    dummy = G_find_file2_misc("cell_misc", NULL_FILE, name, mapset);
-
-    if (!dummy) {
-	/* G_warning("unable to find [%s]",path); */
-	fcb->null_file_exists = 0;
-	return -1;
-    }
-
-    null_fd = G_open_old_misc("cell_misc", NULL_FILE, name, mapset);
-    if (null_fd < 0)
-	return -1;
-
-    fcb->null_file_exists = 1;
-
-    return null_fd;
-}
-
-static int read_null_bits(int null_fd, unsigned char *flags, int row,
-			  int cols, int fd)
-{
+    int null_fd = fcb->null_fd;
+    unsigned char *flags = fcb->null_bits;
+    int cols = fcb->cellhd.cols;
     off_t offset;
     ssize_t size;
     int R;
@@ -952,7 +918,7 @@ static int read_null_bits(int null_fd, unsigned char *flags, int row,
 	return -1;
 
     size = Rast__null_bitstream_size(cols);
-    offset = (off_t) size *R;
+    offset = (off_t) size * R;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0) {
 	G_warning(_("Error reading null row %d"), R);
@@ -970,92 +936,48 @@ static int read_null_bits(int null_fd, unsigned char *flags, int row,
 static void get_null_value_row_nomask(int fd, char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int i, j, null_fd;
+    int j;
 
     if (row > G__.window.rows || row < 0) {
 	G_warning(_("Reading raster map <%s@%s> request for row %d is outside region"),
 		  fcb->name, fcb->mapset, row);
+	for (j = 0; j < G__.window.cols; j++)
+	    flags[j] = 1;
+	return;
     }
 
-    if ((fcb->min_null_row > row) ||
-	(fcb->min_null_row + NULL_ROWS_INMEM - 1 < row))
-	/* the null row row is not in memory */
-    {
-	unsigned char *null_work_buf =
-	    G__alloca(Rast__null_bitstream_size(fcb->cellhd.cols));
+    if (row != fcb->null_cur_row) {
+	if (read_null_bits(fd, row) < 0) {
+	    fcb->null_cur_row = -1;
+	    if (fcb->map_type == CELL_TYPE) {
+		/* If can't read null row, assume  that all map 0's are nulls */
+		CELL *mask_buf = G__alloca(G__.window.cols * sizeof(CELL));
 
-	/* read in NULL_ROWS_INMEM rows from null file 
-	   so that the requested row is between fcb->min_null_row
-	   and fcb->min_null_row + NULL_ROWS_INMEM */
+		get_map_row_nomask(fd, mask_buf, row, CELL_TYPE);
+		for (j = 0; j < G__.window.cols; j++)
+		    flags[j] = (mask_buf[j] == 0);
 
-	fcb->min_null_row = (row / NULL_ROWS_INMEM) * NULL_ROWS_INMEM;
-
-	null_fd = open_null_read(fd);
-
-	for (i = 0; i < NULL_ROWS_INMEM; i++) {
-	    /* G__.window.rows doesn't have to be a multiple of NULL_ROWS_INMEM */
-	    if (i + fcb->min_null_row >= G__.window.rows)
-		break;
-
-	    if (read_null_bits(null_fd, null_work_buf,
-			       i + fcb->min_null_row, fcb->cellhd.cols,
-			       fd) < 0) {
-		if (fcb->map_type == CELL_TYPE) {
-		    /* If can't read null row, assume  that all map 0's are nulls */
-		    CELL *mask_buf =
-			G__alloca(G__.window.cols * sizeof(CELL));
-
-		    get_map_row_nomask(fd, mask_buf, i + fcb->min_null_row,
-				       CELL_TYPE);
-		    for (j = 0; j < G__.window.cols; j++)
-			flags[j] = (mask_buf[j] == 0);
-
-		    G__freea(mask_buf);
-		}
-		else {		/* fp map */
-
-		    /* if can't read null row, assume  that all data is valid */
-		    G_zero(flags, sizeof(char) * G__.window.cols);
-		    /* the flags row is ready now */
-		}
-	    }			/*if no null file */
-	    else {
-		/* copy null row to flags row translated by window column mapping */
-		/* the fcb->NULL_ROWS[row-fcb->min_null_row] has G__.window.cols bits, */
-		/* the null_work_buf has size fcb->cellhd.cols */
-		for (j = 0; j < G__.window.cols; j++) {
-		    if (!fcb->col_map[j])
-			flags[j] = 1;
-		    else
-			flags[j] = Rast__check_null_bit(null_work_buf,
-							fcb->col_map[j] - 1,
-							fcb->cellhd.cols);
-		}
+		G__freea(mask_buf);
 	    }
-	    /* remember the null row for i for the future reference */
+	    else {		/* fp map */
+		/* if can't read null row, assume  that all data is valid */
+		G_zero(flags, sizeof(char) * G__.window.cols);
+		/* the flags row is ready now */
+	    }
+	}			/*if no null file */
+	else
+	    fcb->null_cur_row = row;
+    }
 
-	    /*bf-We should take of the size - or we get 
-	       zeros running on their own after flags convertions -A.Sh. */
-	    fcb->NULL_ROWS[i] = G_realloc(fcb->NULL_ROWS[i],
-					  Rast__null_bitstream_size(G__.window.cols) +1);
-	    if (fcb->NULL_ROWS[i] == NULL)
-		G_fatal_error("get_null_value_row_nomask: %s",
-			      _("Unable to realloc buffer"));
-
-	    Rast__convert_01_flags(flags, fcb->NULL_ROWS[i], G__.window.cols);
-
-	}			/* for loop */
-
-	if (null_fd > 0)
-	    close(null_fd);
-
-	G__freea(null_work_buf);
-    }				/* row is not in memory */
-
-    /* copy null file data translated by column mapping to user null row */
-    /* the user requested flags row is of size G__.window.cols */
-    Rast__convert_flags_01(flags, fcb->NULL_ROWS[row - fcb->min_null_row],
-			   G__.window.cols);
+    /* copy null row to flags row translated by window column mapping */
+    for (j = 0; j < G__.window.cols; j++) {
+	if (!fcb->col_map[j])
+	    flags[j] = 1;
+	else
+	    flags[j] = Rast__check_null_bit(fcb->null_bits,
+					    fcb->col_map[j] - 1,
+					    fcb->cellhd.cols);
+    }
 }
 
 /*--------------------------------------------------------------------------*/

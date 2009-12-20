@@ -602,41 +602,16 @@ static int put_raster_data(int fd, char *null_buf, const void *rast,
 static int put_null_data(int fd, const char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int null_fd, i;
 
-    if (fcb->min_null_row + NULL_ROWS_INMEM <= row) {
-	/* the row is out of the range of rows stored in memory */
-	/* write out all the rows kept in memory, and initialize memory
-	   for keeping new NULL_ROWS_INMEM rows */
+    if (fcb->null_fd < 0)
+	return -1;
 
-	if (fcb->min_null_row >= 0) {
-	    null_fd = Rast__open_null_write(fd);
-	    if (null_fd < 0)
-		return -1;
-
-	    for (i = 0; i < NULL_ROWS_INMEM; i++) {
-		/* fcb->cellhd.rows doesn't have to be a miultiple of NULL_ROWS_INMEM */
-		if (i + fcb->min_null_row >= fcb->cellhd.rows)
-		    break;
-
-		if (Rast__write_null_bits(null_fd, fcb->NULL_ROWS[i],
-					  i + fcb->min_null_row,
-					  fcb->cellhd.cols, fd) < 0)
-		    return -1;
-
-	    }			/* done writing out memory rows */
-	    if (null_fd >= 0)
-		close(null_fd);
-	}
-
-	/* now initialize memory to store new NULL_ROWS_INMEM rows */
-	fcb->min_null_row = fcb->min_null_row + NULL_ROWS_INMEM;
-	/* init memory to store next NULL_ROWS_INMEM rows */
-    }
-
-    /* remember the null row for i for the future writing */
-    Rast__convert_01_flags(flags, fcb->NULL_ROWS[row - fcb->min_null_row],
+    Rast__convert_01_flags(flags, fcb->null_bits,
 			   fcb->cellhd.cols);
+
+    if (Rast__write_null_bits(fcb->null_fd, fcb->null_bits, row,
+			      fcb->cellhd.cols, fd) < 0)
+	return -1;
 
     return 1;
 }
