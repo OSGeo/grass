@@ -1,4 +1,4 @@
-"""
+"""!
 @package preferences
 
 @brief User preferences dialog
@@ -49,6 +49,11 @@ class Settings:
         #
         self.sep = ';'
 
+        try:
+            projFile = utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
+        except KeyError:
+            projFile = ''
+        
         #
         # default settings
         #
@@ -119,7 +124,7 @@ class Settings:
                 'statusbar' : {
                     'proj4'    : '',
                     'epsg'     : '',
-                    'projFile' : utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg'),
+                    'projFile' : projFile,
                     },
                 'format' : {
                     'll'  : 'DMS',
