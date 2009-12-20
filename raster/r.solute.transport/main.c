@@ -9,7 +9,7 @@
 * PURPOSE:      Calculates transient two dimensional solute transport
 * 		in porous media
 *
-* COPYRIGHT:    (C) 2006 by the GRASS Development Team
+* COPYRIGHT:    (C) 2006-2009 by Soeren Gebbert, and the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -54,128 +54,82 @@ N_les *create_solve_les(N_geom_data * geom, N_solute_transport_data2d * data,
 /* ************************************************************************* */
 void set_params()
 {
-    param.c = G_define_option();
+    param.c = G_define_standard_option(G_OPT_R_INPUT);
     param.c->key = "c";
-    param.c->type = TYPE_STRING;
-    param.c->required = YES;
-    param.c->gisprompt = "old,raster,raster";
     param.c->description = _("The initial concentration in [kg/m^3]");
 
-    param.phead = G_define_option();
+    param.phead = G_define_standard_option(G_OPT_R_INPUT);
     param.phead->key = "phead";
-    param.phead->type = TYPE_STRING;
-    param.phead->required = YES;
-    param.phead->gisprompt = "old,raster,raster";
     param.phead->description = _("The piezometric head in [m]");
 
-    param.hc_x = G_define_option();
+    param.hc_x = G_define_standard_option(G_OPT_R_INPUT);
     param.hc_x->key = "hc_x";
-    param.hc_x->type = TYPE_STRING;
-    param.hc_x->required = YES;
-    param.hc_x->gisprompt = "old,raster,raster";
     param.hc_x->description =
 	_("The x-part of the hydraulic conductivity tensor in [m/s]");
 
-    param.hc_y = G_define_option();
+    param.hc_y = G_define_standard_option(G_OPT_R_INPUT);
     param.hc_y->key = "hc_y";
-    param.hc_y->type = TYPE_STRING;
-    param.hc_y->required = YES;
-    param.hc_y->gisprompt = "old,raster,raster";
     param.hc_y->description =
 	_("The y-part of the hydraulic conductivity tensor in [m/s]");
 
 
-    param.status = G_define_option();
+    param.status = G_define_standard_option(G_OPT_R_INPUT);
     param.status->key = "status";
-    param.status->type = TYPE_STRING;
-    param.status->required = YES;
-    param.status->gisprompt = "old,raster,raster";
     param.status->description =
-	_
-	("The status for each cell, = 0 - inactive cell, 1 - active cell, 2 - dirichlet- and 3 - transfer boundary condition");
+	_("The status for each cell, = 0 - inactive cell, 1 - active cell, "
+	  "2 - dirichlet- and 3 - transfer boundary condition");
 
-    param.diff_x = G_define_option();
+    param.diff_x = G_define_standard_option(G_OPT_R_INPUT);
     param.diff_x->key = "diff_x";
-    param.diff_x->type = TYPE_STRING;
-    param.diff_x->required = YES;
-    param.diff_x->gisprompt = "old,raster,raster";
     param.diff_x->description =
 	_("The x-part of the diffusion tensor in [m�/s]");
 
-    param.diff_y = G_define_option();
+    param.diff_y = G_define_standard_option(G_OPT_R_INPUT);
     param.diff_y->key = "diff_y";
-    param.diff_y->type = TYPE_STRING;
-    param.diff_y->required = YES;
-    param.diff_y->gisprompt = "old,raster,raster";
     param.diff_y->description =
 	_("The y-part of the diffusion tensor in [m�/s]");
 
-    param.q = G_define_option();
+    param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
-    param.q->type = TYPE_STRING;
     param.q->required = NO;
-    param.q->gisprompt = "old,raster,raster";
-    param.q->description = _("groundwater sources and sinks in [m^3/s]");
+    param.q->description = _("Groundwater sources and sinks in [m^3/s]");
 
-    param.cin = G_define_option();
+    param.cin = G_define_standard_option(G_OPT_R_INPUT);
     param.cin->key = "cin";
-    param.cin->type = TYPE_STRING;
     param.cin->required = NO;
-    param.cin->gisprompt = "old,raster,raster";
-    param.cin->description = _("concentration sources and sinks in [kg/m^3]");
+    param.cin->description = _("Concentration sources and sinks in [kg/m^3]");
 
-    param.cs = G_define_option();
+    param.cs = G_define_standard_option(G_OPT_R_INPUT);
     param.cs->key = "cs";
-    param.cs->type = TYPE_STRING;
-    param.cs->required = YES;
-    param.cs->gisprompt = "old,raster,raster";
-    param.cs->description = _("concentration sources and sinks in [kg/m^3]");
+    param.cs->description = _("Concentration sources and sinks in [kg/m^3]");
 
-    param.r = G_define_option();
+    param.r = G_define_standard_option(G_OPT_R_INPUT);
     param.r->key = "R";
-    param.r->type = TYPE_STRING;
-    param.r->required = YES;
-    param.r->gisprompt = "old,raster,raster";
     param.r->description = _("Retardation factor [-]");
 
-    param.nf = G_define_option();
+    param.nf = G_define_standard_option(G_OPT_R_INPUT);
     param.nf->key = "nf";
-    param.nf->type = TYPE_STRING;
-    param.nf->required = YES;
-    param.nf->gisprompt = "old,raster,raster";
     param.nf->description = _("Effective porosity [-]");
 
-    param.top = G_define_option();
+    param.top = G_define_standard_option(G_OPT_R_INPUT);
     param.top->key = "top";
-    param.top->type = TYPE_STRING;
-    param.top->required = YES;
-    param.top->gisprompt = "old,raster,raster";
     param.top->description = _("Top surface of the aquifer in [m]");
 
-    param.bottom = G_define_option();
+    param.bottom = G_define_standard_option(G_OPT_R_INPUT);
     param.bottom->key = "bottom";
-    param.bottom->type = TYPE_STRING;
-    param.bottom->required = YES;
-    param.bottom->gisprompt = "old,raster,raster";
     param.bottom->description = _("Bottom surface of the aquifer in [m]");
 
-    param.output = G_define_option();
-    param.output->key = "output";
-    param.output->type = TYPE_STRING;
-    param.output->required = YES;
-    param.output->gisprompt = "new,raster,raster";
+    param.output = G_define_standard_option(G_OPT_R_OUTPUT);
     param.output->description =
-	_
-	("The result of the numericalsolute transport calculation will be written to this map. [kg/m�]");
+	_("The result of the numericalsolute transport calculation "
+	  "will be written to this map. [kg/m�]");
 
-    param.vector = G_define_option();
+    param.vector = G_define_standard_option(G_OPT_R_OUTPUT);
     param.vector->key = "velocity";
-    param.vector->type = TYPE_STRING;
     param.vector->required = NO;
-    param.vector->gisprompt = "new,raster,raster";
     param.vector->description =
-	_
-	("Calculate the groundwater distance velocity vector field and write the x, and y components to maps named name_(xy), [m/s]");
+	_("Calculate the groundwater distance velocity vector "
+	  "field and write the x, and y components to maps named name_(xy), [m/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -220,16 +174,12 @@ void set_params()
     param.sparse = G_define_flag();
     param.sparse->key = 's';
     param.sparse->description =
-	_
-	("Use a sparse linear equation system, only available with iterative solvers");
+	_("Use a sparse linear equation system, only available with iterative solvers");
 
     param.cfl = G_define_flag();
     param.cfl->key = 'c';
     param.cfl->description =
-	_
-	("Use the Courant-Friedrichs-Lewy criteria for time step calculation");
-
-
+	_("Use the Courant-Friedrichs-Lewy criteria for time step calculation");
 }
 
 /* ************************************************************************* */
@@ -263,8 +213,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("solute transport"));
     module->description =
-	_
-	("Numerical calculation program for transient, confined and unconfined solute transport in two dimensions");
+	_("Numerical calculation program for transient, confined and unconfined solute transport in two dimensions.");
 
     /* Get parameters from user */
     set_params();
@@ -283,11 +232,9 @@ int main(int argc, char *argv[])
     solver = param.solver->answer;
 
     if (strcmp(solver, G_MATH_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct LU solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct LU solver do not work with sparse matrices"));
     if (strcmp(solver, G_MATH_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct Gauss solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct Gauss solver do not work with sparse matrices"));
 
 
     /*get the current region */
@@ -399,8 +346,8 @@ int main(int argc, char *argv[])
 	time_step = 1*length / fabs(data->grad->min);
     }
 
-    G_message("The Courant-Friedrichs-Lewy criteria is %g it should be within [0:1]", cfl);
-    G_message("The largest stable time step is %g", time_step);
+    G_message(_("The Courant-Friedrichs-Lewy criteria is %g it should be within [0:1]"), cfl);
+    G_message(_("The largest stable time step is %g"), time_step);
 
     /*Set the number of inner loops and the time step*/
     if (data->dt > time_step && param.cfl->answer) {
@@ -409,12 +356,12 @@ int main(int argc, char *argv[])
 	time_loops = data->dt / time_step;
 	time_loops = floor(time_loops) + 1;
 	data->dt = data->dt / time_loops;
-	G_message("Number of inner loops is %g", time_loops);
-	G_message("Time step for each loop %g", data->dt);
+	G_message(_("Number of inner loops is %g"), time_loops);
+	G_message(_("Time step for each loop %g"), data->dt);
     }
     else {
         if(data->dt > time_step)
-	G_warning("The time step is to large: %gs. The largest time step should be of size %gs.", data->dt, time_step);
+	    G_warning(_("The time step is to large: %gs. The largest time step should be of size %gs."), data->dt, time_step);
 
 	time_loops = loops;
 	data->dt = data->dt / loops;
@@ -426,7 +373,7 @@ int main(int argc, char *argv[])
 
      /*Compute for each time step*/
      for (i = 0; i < time_loops; i++) {
-        G_message("Time step %i with time sum %g", i + 1, (i + 1)*data->dt);
+	 G_message(_("Time step %i with time sum %g"), i + 1, (i + 1)*data->dt);
 
 	/*assemble the linear equation system  and solve it */
 	les = create_solve_les(geom, data, call, solver, maxit, error, sor);
@@ -574,8 +521,7 @@ N_les *create_solve_les(N_geom_data * geom, N_solute_transport_data2d * data,
 	G_math_solver_gauss(les->A, les->x, les->b, les->rows);
 
     if (les == NULL)
-	G_fatal_error(_
-		      ("Could not create and solve the linear equation system"));
+	G_fatal_error(_("Could not create and solve the linear equation system"));
 
     return les;
 }
