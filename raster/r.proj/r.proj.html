@@ -158,6 +158,33 @@ whole map in memory anyway. Besides that, world "edges" are hard (or
 impossible) to find in projections other than latitude-longitude so results
 may be odd with trimming.
 
+<h2>EXAMPLES</h2>
+
+<div class="code"><pre>
+
+# In the source location, use v.in.region to generate a bounding box around the
+# region of interest:
+
+v.in.region output=bounds type=area
+
+# Now switch to the target location and import the vector bounding box 
+# (you can run v.proj -l to get a list of vector maps in the source location):
+
+v.proj input=bounds location=source_location_name output=bounds_reprojected
+
+# Set the region in the target location with that of the newly-imported vector
+# bounds map, and align the resolution to the desired cell resolution of the 
+# final, reprojected raster map:
+
+g.region vect=bounds_reprojected res=5 -a
+
+# Now reproject the raster into the target location
+
+r.proj input=elevation.dem output=elevation.dem.reproj \
+location=source_location_name mapset=PERMANENT res=5 method=cubic
+</pre></div>
+
+
 <h2>REFERENCES</h2>
 
 [1] Evenden, G.I.  (1990) <a href="http://proj.maptools.org/">Cartographic projection procedures for
