@@ -65,9 +65,8 @@ int main(int argc, char *argv[])
 		GRASS_VERSION_DATE);
     }
     else {
-	fprintf(stdout, "GRASS %s (%s) %s\n",
-		GRASS_VERSION_NUMBER, GRASS_VERSION_DATE,
-		GRASS_VERSION_UPDATE_PKG);
+	fprintf(stdout, "GRASS %s\n",
+		GRASS_VERSION_NUMBER);
     }
     
     if (copyright->answer) {
