@@ -37,6 +37,7 @@ NIBDST := $(patsubst English.lproj/%,$(APPDIR)/Resources/English.lproj/%,$(NIBSR
 FILES = \
 	$(APPDIR)/MacOS/etc/build_html_user_index.sh \
 	$(APPDIR)/MacOS/etc/build_gui_user_menu.sh \
+	$(APPDIR)/MacOS/bin/python \
 	$(APPDIR)/Resources/app.icns \
 	$(APPDIR)/Info.plist \
 	$(APPDIR)/PkgInfo \
@@ -50,7 +51,7 @@ default: macosxapp
 macosxapp:
 	-$(MAKE_DIR_CMD) $(OBJDIR)
 	-$(MAKE_DIR_CMD) $(APPDIR)/Resources/Scripts
-	-$(MAKE_DIR_CMD) $(APPDIR)/MacOS/scripts
+	-$(MAKE_DIR_CMD) $(APPDIR)/MacOS/bin
 	-$(MAKE_DIR_CMD) $(APPDIR)/MacOS/etc
 	-$(MAKE_DIR_CMD) $(APPDIR)/Resources/English.lproj/MainMenu.nib
 	$(MAKE) $(FILES)
@@ -74,6 +75,9 @@ $(APPDIR)/MacOS/grass.sh: $(OBJDIR)/grass.sh
 	$(INSTALL) $< $@
 
 $(APPDIR)/MacOS/etc/%.sh: %.sh
+	$(INSTALL) $< $@
+
+$(APPDIR)/MacOS/bin/python: python_wrapper
 	$(INSTALL) $< $@
 
 $(OBJDIR)/main.o: main.m
