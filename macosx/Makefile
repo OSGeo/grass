@@ -97,7 +97,6 @@ install-basic-macosx:
 	if [ ${LOCALE} -eq 1 ] ; then cd ${GISBASE} ; tar cBf - locale | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null ; fi
 	-cd ${GISBASE} ; tar cBf - include | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - lib | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
-	-sed 's#'${GISBASE}'#'${INST_DIR_TARGET}'#g' ${GISBASE}/etc/monitorcap > ${INST_DIR_TARGET}/etc/monitorcap
 	-chmod -R a+rX ${PREFIX_TARGET}/${MACOSX_APP_NAME} 2>/dev/null
 	@#-cd ${GRASS_HOME} ; tar cBf - gem/skeleton | (cd ${INST_DIR_TARGET}/etc ; tar xBf - ) 2>/dev/null
 	@#-${INSTALL} ${GRASS_HOME}/gem/gem6 ${INST_DIR_TARGET} 2>/dev/null
