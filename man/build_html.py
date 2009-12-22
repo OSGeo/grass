@@ -78,7 +78,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Quick Introduction</h3>
       <ul>
-      <li><a href="grass6.html">GRASS startup manual page</a></li>
+      <li><a href="grass7.html">GRASS startup manual page</a></li>
       <li><a href="helptext.html">How to start with GRASS</a></li>
       </ul></td>
 
@@ -331,7 +331,10 @@ arch_dist_dir = os.environ['ARCH_DISTDIR']
 html_dir = os.path.join(arch_dist_dir, "docs", "html")
 gisbase = os.environ['GISBASE']
 ver = read_file(os.path.join(gisbase, "etc", "VERSIONNUMBER"))
-grass_version = ver.strip()
+try:
+    grass_version = ver.split()[0].strip()
+except IndexError:
+    grass_version = ver.split().strip()
 grass_mmver = '.'.join(ver.split('.')[0:2])
 macosx = "darwin" in os.environ['ARCH'].lower()
 

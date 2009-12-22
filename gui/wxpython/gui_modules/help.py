@@ -373,7 +373,6 @@ class AboutWindow(wx.Frame):
 
         # get version and web site
         version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
-                                                                 verbose = True, # -> svn revision
                                                                  flags = 'r',
                                                                  read = True).splitlines()
 
