@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
     outmap = output_opt->answer;
 
     if (shell_style->answer && !scan_flag->answer) {
-	scan_flag->answer = 1;
+	scan_flag->answer = 1; /* pointer not int, so set = shell_style->answer ? */
     }
 
     fs = delim_opt->answer;
