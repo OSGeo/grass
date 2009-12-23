@@ -108,7 +108,7 @@ only be supported for certain data types (depends on vendor and version).
 <em>r.out.gdal</em> exports may appear all black or gray on initial
 display in other GIS software. This is not a bug of <em>r.out.gdal</em>,
 but often caused by the default color table assigned by that software.
-The dafault color table may be grayscale covering the whole range of
+The default color table may be grayscale covering the whole range of
 possible values which is very large for e.g. Int32 or Float32. E.g.
 stretching the color table to actual min/max would help (sometimes under
 symbology).
@@ -132,7 +132,7 @@ This issue only arises when writing out multi-band imagery groups.
 
 <h4>Improving GeoTIFF compatibility</h4>
 
-To create a GeoTIFF that is highly compatibility with various other GIS
+To create a GeoTIFF that is highly compatible with various other GIS
 software packages, it is recommended to keep the GeoTIFF file as simple
 as possible. You will have to experiment with which options your
 software is compatible with, as this varies widely between vendors and
