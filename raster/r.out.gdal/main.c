@@ -366,11 +366,9 @@ int main(int argc, char *argv[])
 		if (export_max < dfCellMax)
 		    export_max = dfCellMax;
 	    }
-
 	}
 	G_debug(3, "Range of <%s>: min: %f, max: %f", ref.file[band].name,
 		dfCellMin, dfCellMax);
-
     }
     if (bHaveMinMax == FALSE) {
 	export_min = TYPE_FLOAT64_MIN;
@@ -489,6 +487,34 @@ int main(int argc, char *argv[])
 	    set_default_nodata_value(datatype, export_min, export_max);
     }
 
+    /* exact range and nodata checks for each band */
+    G_message(_("Checking GDAl data type and nodata value"));
+    for (band = 0; band < ref.nfiles; band++) {
+	if (ref.nfiles > 1) {
+	    G_verbose_message(_("Checking options for raster map <%s> (band %d)..."),
+			      G_fully_qualified_name(ref.file[band].name,
+						     ref.file[band].mapset),
+			      band + 1);
+	}
+
+	retval = exact_checks
+	    (datatype, ref.file[band].name, ref.file[band].mapset,
+	     &cellhead, maptype, nodataval, nodataopt->key,
+	     default_nodataval);
+
+	/* nodata problem */
+	if (retval == -1) {
+	    if (flag_f->answer)
+		G_warning(_("Forcing raster export."));
+	    else
+		G_fatal_error(_("Raster export aborted."));
+	}
+	/* data don't fit into range of GDAL datatype */
+	else if (retval == -2) {
+	    G_fatal_error(_("Raster export aborted."));
+	}
+    }
+
     /* Create dataset for output with target driver or, if needed, with in-memory driver */
     char **papszOptions = NULL;
 
@@ -550,6 +576,7 @@ int main(int argc, char *argv[])
     AttachMetadata(hCurrDS, metaopt->answers);
 
     /* Export to GDAL raster */
+    G_message(_("Exporting to GDAL raster"));
     for (band = 0; band < ref.nfiles; band++) {
 	if (ref.nfiles > 1) {
 	    G_verbose_message(_("Exporting raster map <%s> (band %d)..."),
@@ -567,17 +594,6 @@ int main(int argc, char *argv[])
 	if (retval == -1) {
 	    G_warning(_("Unable to export raster map <%s>"),
 		      ref.file[band].name);
-	}
-	/* nodata problem */
-	else if (retval == -2) {
-	    if (flag_f->answer)
-		G_warning(_("Forcing raster export."));
-	    else
-		G_fatal_error(_("Raster export aborted."));
-	}
-	/* data don't fit into range of GDAL datatype */
-	else if (retval == -3) {
-	    G_fatal_error(_("Raster export aborted."));
 	}
     }
 
@@ -686,17 +702,8 @@ int range_check(double min, double max, GDALDataType datatype)
 
     case GDT_Float64:
     case GDT_CFloat64:
-	/* not possible because DCELL is FLOAT64, not 128bit floating point, but anyway... */
-	if (max < TYPE_FLOAT64_MIN || min > TYPE_FLOAT64_MAX) {
-	    G_warning(_("Selected GDAL datatype does not cover data range."));
-	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
-		      GDALGetDataTypeName(datatype), TYPE_FLOAT64_MIN,
-		      TYPE_FLOAT64_MAX);
-	    G_warning(_("Range to be exported: %f - %f"), min, max);
-	    return 1;
-	}
-	else
-	    return 0;
+	/* not needed because FLOAT64 should always cover the data range */
+	return 0;
 
     default:
 	return 0;
@@ -793,7 +800,7 @@ int nodataval_check(double nodataval, GDALDataType datatype)
 
     case GDT_Float64:
     case GDT_CFloat64:
-	/* not needed because FLOAT64 is double */
+	/* not needed because FLOAT64 is equal to double */
 	return 0;
 
     default:
@@ -854,7 +861,6 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
     case GDT_CFloat64:
 	return 0.0 / 0.0;
 
-    /* should not happen: */
     default:
 	return 0;
     }
