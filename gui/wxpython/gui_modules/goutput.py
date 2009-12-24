@@ -139,7 +139,8 @@ class GMConsole(wx.SplitterWindow):
         wx.SplitterWindow.__init__(self, parent, id, style = style, *kwargs)
         self.SetName("GMConsole")
 
-        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        self.panelOutput = wx.Panel(parent = self, id = wx.ID_ANY)
+        self.panelPrompt = wx.Panel(parent = self, id = wx.ID_ANY)
         
         # initialize variables
         self.Map             = None
@@ -163,7 +164,7 @@ class GMConsole(wx.SplitterWindow):
         #
         # progress bar
         #
-        self.console_progressbar = wx.Gauge(parent=self.panel, id=wx.ID_ANY,
+        self.console_progressbar = wx.Gauge(parent=self.panelOutput, id=wx.ID_ANY,
                                             range=100, pos=(110, 50), size=(-1, 25),
                                             style=wx.GA_HORIZONTAL)
         self.console_progressbar.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
@@ -171,7 +172,7 @@ class GMConsole(wx.SplitterWindow):
         #
         # text control for command output
         #
-        self.cmd_output = GMStc(parent=self, id=wx.ID_ANY, margin=margin,
+        self.cmd_output = GMStc(parent=self.panelOutput, id=wx.ID_ANY, margin=margin,
                                 wrap=None) 
         self.cmd_output_timer = wx.Timer(self.cmd_output, id=wx.ID_ANY)
         self.cmd_output.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
@@ -180,11 +181,19 @@ class GMConsole(wx.SplitterWindow):
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
 
         #
-        # command prompt
+        # search & command prompt
         #
-        self.cmd_prompt = prompt.GPromptSTC(parent = self.panel, id=wx.ID_ANY,
-                                            onRun = self.RunCmd)
+        self.searchBy = wx.Choice(parent = self.panelPrompt, id = wx.ID_ANY,
+                                  choices = [_("description"),
+                                             _("keywords")])
+        
+        self.search = wx.TextCtrl(parent = self.panelPrompt, id = wx.ID_ANY,
+                                  value = "", size = (-1, 25))
+        
+        self.cmd_prompt = prompt.GPromptSTC(parent = self)
         if self.parent.GetName() != 'LayerManager':
+            self.searchBy.Hide()
+            self.search.Hide()
             self.cmd_prompt.Hide()
         
         #
@@ -201,16 +210,16 @@ class GMConsole(wx.SplitterWindow):
         #
         # buttons
         #
-        self.btn_console_clear = wx.Button(parent = self.panel, id = wx.ID_ANY,
+        self.btn_console_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
                                            label = _("C&lear output"), size=(125,-1))
-        self.btn_cmd_clear = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                       label = _("Cl&ear command"), size=(125,-1))
+        self.btn_cmd_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
+                                       label = _("&Clear command"), size=(125,-1))
         if self.parent.GetName() != 'LayerManager':
             self.btn_cmd_clear.Hide()
-        self.btn_console_save  = wx.Button(parent = self.panel, id = wx.ID_ANY,
+        self.btn_console_save  = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
                                            label = _("&Save output"), size=(125,-1))
         # abort
-        self.btn_abort = wx.Button(parent = self.panel, id = wx.ID_ANY, label = _("&Abort command"),
+        self.btn_abort = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY, label = _("&Abort command"),
                                    size=(125,-1))
         self.btn_abort.SetToolTipString(_("Abort the running command"))
         self.btn_abort.Enable(False)
@@ -221,48 +230,81 @@ class GMConsole(wx.SplitterWindow):
         self.btn_abort.Bind(wx.EVT_BUTTON,         self.OnCmdAbort)
         self.btn_abort.Bind(EVT_CMD_ABORT,         self.OnCmdAbort)
         
+        self.search.Bind(wx.EVT_TEXT,              self.OnSearchModule)
+        
         self.__layout()
 
     def __layout(self):
         """!Do layout"""
-        boxsizer = wx.BoxSizer(wx.VERTICAL)
-        buttonsizer = wx.BoxSizer(wx.HORIZONTAL)
-        
-        boxsizer.Add(item=self.cmd_prompt, proportion=1,
-                         flag=wx.EXPAND | wx.ALL, border=1)
-        
-        buttonsizer.Add(item=self.btn_console_clear, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        buttonsizer.Add(item=self.btn_console_save, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        buttonsizer.Add(item=self.btn_cmd_clear, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        buttonsizer.Add(item=self.btn_abort, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        boxsizer.Add(item=buttonsizer, proportion=0,
-                      flag=wx.ALIGN_CENTER)
-        
-        boxsizer.Add(item=self.console_progressbar, proportion=1,
-                      flag=wx.EXPAND | wx.ALIGN_CENTRE_VERTICAL | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=3)
-        
-        boxsizer.Fit(self)
-        boxsizer.SetSizeHints(self)
+        OutputSizer = wx.BoxSizer(wx.VERTICAL)
+        PromptSizer = wx.BoxSizer(wx.VERTICAL)
+        SearchSizer = wx.BoxSizer(wx.HORIZONTAL)
+        ButtonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.panel.SetSizer(boxsizer)
+        OutputSizer.Add(item=self.cmd_output, proportion=1,
+                        flag=wx.EXPAND | wx.ALL, border=1)
+        OutputSizer.Add(item=self.console_progressbar, proportion=0,
+                        flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
+        
+        if self.searchBy.IsShown():
+            SearchSizer.Add(item = wx.StaticText(parent = self.panelPrompt, id = wx.ID_ANY,
+                                                 label = _("Find module:")),
+                            proportion = 0, flag = wx.LEFT | wx.ALIGN_CENTER_VERTICAL, border = 3)
+        SearchSizer.Add(item = self.searchBy,
+                        proportion = 0, flag = wx.LEFT, border = 3)
+        SearchSizer.Add(item = self.search,
+                        proportion = 1, flag = wx.LEFT | wx.EXPAND, border = 3)
+        
+        PromptSizer.Add(item=SearchSizer, proportion=0,
+                        flag=wx.EXPAND | wx.ALL, border=1)
+        PromptSizer.Add(item=self.cmd_prompt, proportion=1,
+                        flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=2)
+        
+        ButtonSizer.Add(item=self.btn_console_clear, proportion=0,
+                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
+        ButtonSizer.Add(item=self.btn_console_save, proportion=0,
+                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
+        ButtonSizer.Add(item=self.btn_cmd_clear, proportion=0,
+                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
+        ButtonSizer.Add(item=self.btn_abort, proportion=0,
+                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
+        PromptSizer.Add(item=ButtonSizer, proportion=0,
+                        flag=wx.ALIGN_CENTER)
+        
+        OutputSizer.Fit(self)
+        OutputSizer.SetSizeHints(self)
+
+        PromptSizer.Fit(self)
+        PromptSizer.SetSizeHints(self)
+
+        self.panelOutput.SetSizer(OutputSizer)
+        self.panelPrompt.SetSizer(PromptSizer)
         
         # split window
         if self.parent.GetName() == 'LayerManager':
-            self.SplitHorizontally(self.cmd_output, self.panel, -75)
+            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -75)
             self.SetMinimumPaneSize(100)
         else:
-            self.SplitHorizontally(self.cmd_output, self.panel, -10)
-            self.SetMinimumPaneSize(65)
+            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -10)
+            self.SetMinimumPaneSize(45)
         self.Fit()
         
         # layout
         self.SetAutoLayout(True)
         self.Layout()
 
+    def GetPanel(self, prompt = True):
+        """!Get panel
+
+        @param prompt get prompt / output panel
+
+        @return wx.Panel reference
+        """
+        if prompt:
+            return self.panelPrompt
+
+        return self.panelOutput
+    
     def Redirect(self):
         """!Redirect stderr
 
@@ -512,6 +554,38 @@ class GMConsole(wx.SplitterWindow):
     def GetCmd(self):
         """!Get running command or None"""
         return self.requestQ.get()
+
+    def OnSearchModule(self, event):
+        """!Search module by keywords or description"""
+        text = event.GetString()
+        if not text:
+            self.cmd_prompt.SetFilter(None)
+            return
+        
+        modules = dict()
+        iFound = 0
+        for module, data in self.cmd_prompt.moduleDesc.iteritems():
+            found = False
+            if self.searchBy.GetSelection() == 0: # -> description
+                if text in data['desc']:
+                    found = True
+            else: # -> keywords
+                if self.__checkKey(text, data['keywords']):
+                    found = True
+
+            if found:
+                iFound += 1
+                try:
+                    group, name = module.split('.')
+                except ValueError:
+                    continue # TODO
+                
+                if not modules.has_key(group):
+                    modules[group] = list()
+                modules[group].append(name)
+        
+        self.parent.statusbar.SetStatusText(_("%d modules found") % iFound)
+        self.cmd_prompt.SetFilter(modules)
         
     def OnCmdOutput(self, event):
         """!Print command output"""

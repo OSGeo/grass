@@ -129,9 +129,9 @@ class GMFrame(wx.Frame):
         
         # creating widgets
         # -> self.notebook, self.goutput, self.outpage
-        self.notebook  = self.__createNoteBook()
         self.menubar, self.menudata = self.__createMenuBar()
         self.statusbar = self.CreateStatusBar(number=1)
+        self.notebook  = self.__createNoteBook()
         self.toolbar   = self.__createToolBar()
         
         # bindings
