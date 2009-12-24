@@ -614,7 +614,7 @@ class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
         self.Bind(wx.EVT_TEXT,       self.OnUpdateStatusBar)
         
     def __checkKey(self, text, keywords):
-        """!Check if text is in keywords"""
+        """!Check if text is in keywords (unused)"""
         found = 0
         keys = text.split(',')
         if len(keys) > 1: # -> multiple keys
@@ -646,7 +646,7 @@ class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
 
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     """!Styled wxGUI prompt with autocomplete and calltips"""    
-    def __init__(self, parent, id = wx.ID_ANY, margin = False, wrap = None):
+    def __init__(self, parent, id = wx.ID_ANY, margin = False):
         GPrompt.__init__(self, parent)
         wx.stc.StyledTextCtrl.__init__(self, self.panel, id)
         
@@ -869,7 +869,18 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             if len(self.cmdbuffer) > 200:
                 del self.cmdbuffer[0]
             self.cmdindex = len(self.cmdbuffer)
-            
+
+        elif event.GetKeyCode() == wx.WXK_SPACE:
+            items = self.GetTextLeft().split()
+            if len(items) == 1:
+                cmd = items[0].strip()
+                if not self.cmdDesc or cmd != self.cmdDesc.get_name():
+                    try:
+                        self.cmdDesc = menuform.GUI().ParseInterface(cmd = [cmd])
+                    except IOError:
+                        self.cmdDesc = None
+            event.Skip()
+        
         else:
             event.Skip()
         
