@@ -497,7 +497,7 @@ class GPrompt(object):
     def __init__(self, parent):
         self.parent = parent                 # GMConsole
         self.panel  = self.parent.GetPanel()
-
+        
         if self.parent.parent.GetName() != "LayerManager":
             self.standAlone = True
         else:
@@ -747,7 +747,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             
             pos = self.GetCurrentPos()
             entry = self.GetTextLeft()
-            cmd = entry.split()[0].strip()
+            try:
+                cmd = entry.split()[0].strip()
+            except IndexError:
+                cmd = ''
+            
             if cmd not in globalvar.grassCmd['all']:
                 return
             
