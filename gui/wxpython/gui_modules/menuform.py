@@ -349,7 +349,11 @@ class grassTask:
         if grassModule is not None:
             processTask(tree = etree.fromstring(getInterfaceDescription(grassModule)),
                         task = self)
-        
+
+    def get_name(self):
+        """!Get task name"""
+        return self.name
+    
     def get_list_params(self, element = 'name'):
         """!Get list of parameters"""
         params = []
