@@ -45,7 +45,7 @@ def db_describe(table, **args):
     """
     s = read_command('db.describe', flags = 'c', table = table, **args)
     if not s:
-	grass.fatal(_("Unable to describe table <%s>") % table)
+	fatal(_("Unable to describe table <%s>") % table)
     
     cols = []
     result = {}
