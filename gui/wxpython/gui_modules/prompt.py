@@ -97,12 +97,11 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         self.SetChoices(self._choicesCmd)
         
         self.SetMinSize(self.GetSize())
-        # read history
-        self.SetHistoryItems()
         
         # bindings...
         self.Bind(wx.EVT_KILL_FOCUS, self.OnControlChanged)
         self.Bind(wx.EVT_TEXT, self.OnEnteredText)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnRunCmd)
         self.Bind(wx.EVT_KEY_DOWN , self.OnKeyDown)
         ### self.Bind(wx.EVT_LEFT_DOWN, self.OnClick)
 
@@ -251,30 +250,6 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         """!Method required by listmix.ColumnSorterMixin"""
         return self.dropdownlistbox
     
-    def SetHistoryItems(self):
-        """!Read history file and update combobox items"""
-        env = grass.gisenv()
-        try:
-            fileHistory = open(os.path.join(env['GISDBASE'],
-                                            env['LOCATION_NAME'],
-                                            env['MAPSET'],
-                                            '.bash_history'), 'r')
-        except IOError:
-            self.SetItems([])
-            return
-        
-        try:
-            hist = []
-            for line in fileHistory.readlines():
-                hist.append(line.replace('\n', ''))
-            
-            self.SetItems(hist)
-        finally:
-            fileHistory.close()
-            return
-        
-        self.SetItems([])
-        
     def SetChoices(self, choices, type = 'module'):
         """!Sets the choices available in the popup wx.ListBox.
         The items will be sorted case insensitively.
@@ -579,9 +554,9 @@ class GPrompt(object):
         
         cmd = shlex.split(str(cmdString))
         if len(cmd) > 1:
-            self.parent.goutput.RunCmd(cmd, switchPage = True)
+            self.parent.RunCmd(cmd, switchPage = True)
         else:
-            self.parent.goutput.RunCmd(cmd, switchPage = False)
+            self.parent.RunCmd(cmd, switchPage = False)
         
         self.OnUpdateStatusBar(None)
         
@@ -591,9 +566,9 @@ class GPrompt(object):
             return
         
         if event is None:
-            self.parent.statusbar.SetStatusText("")
+            self.parent.parent.statusbar.SetStatusText("")
         else:
-            self.parent.statusbar.SetStatusText(_("Type GRASS command and run by pressing ENTER"))
+            self.parent.parent.statusbar.SetStatusText(_("Type GRASS command and run by pressing ENTER"))
             event.Skip()
         
     def GetPanel(self):
@@ -616,6 +591,7 @@ class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
                                           value = "",
                                           style = wx.TE_LINEWRAP | wx.TE_PROCESS_ENTER,
                                           statusbar = self.parent.parent.statusbar)
+            self.SetItems(self._readHistory())
         except NotImplementedError:
             # wx.PopupWindow may be not available in wxMac
             # see http://trac.wxwidgets.org/ticket/9377
