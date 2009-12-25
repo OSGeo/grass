@@ -717,12 +717,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         @todo event.ControlDown() for manual autocomplete
         """
         # keycodes used: "." = 46, "=" = 61, "," = 44 
-        line = ''
-        entry = ''
-        usage = ''
-        cmdtype = ''
-        cmdname = ''
-        cmd = ''
         
         if event.GetKeyCode() == 46 and not event.ShiftDown():
             # GRASS command autocomplete when '.' is pressed after 'r', 'v', 'i', 'g', 'db', or 'd'
@@ -802,16 +796,15 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             elif event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown():
                 # manual autocompletion
                 # map entries without arguments (as in r.info [mapname]) use ctrl-shift
-                
-                maplist = []
+                cmdtype = self.GetTextLeft().split('.')[0]
                 if cmdtype=='r' or cmdtype=='i':
-                    self.maptype = 'rast'
+                    self.promptType = 'raster'
                 elif cmdtype=='v':
-                    self.maptype = 'vect'
+                    self.promptType = 'vector'
                 elif cmdtype=='r3':
-                    self.maptype = 'rast3d'
-                    
-            if self.promptType and self.promptType in ('raster', 'vector'):
+                    self.promptType = 'raster3d'
+                
+            if self.promptType and self.promptType in ('raster', 'raster3d', 'vector'):
                 self.autoCompList = self.mapList[self.promptType]
                 self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))
             
@@ -886,10 +879,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         
     def GetTextLeft(self):
         """!Returns all text left of the caret"""
-        entry = ''
         pos = self.GetCurrentPos()
         self.HomeExtend()
-        entry = self.GetSelectedText().strip()
+        entry = self.GetSelectedText()
         self.SetCurrentPos(pos)
         
         return entry
