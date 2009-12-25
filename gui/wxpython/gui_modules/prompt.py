@@ -796,14 +796,15 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             elif event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown():
                 # manual autocompletion
                 # map entries without arguments (as in r.info [mapname]) use ctrl-shift
-                cmdtype = self.GetTextLeft().split('.')[0]
-                if cmdtype=='r' or cmdtype=='i':
-                    self.promptType = 'raster'
-                elif cmdtype=='v':
-                    self.promptType = 'vector'
-                elif cmdtype=='r3':
-                    self.promptType = 'raster3d'
+                if not self.cmdDesc:
+                    return
                 
+                try:
+                    param = self.cmdDesc.get_list_params()[0]
+                    self.promptType = self.cmdDesc.get_param(param)['prompt']
+                except IndexError:
+                    return
+            
             if self.promptType and self.promptType in ('raster', 'raster3d', 'vector'):
                 self.autoCompList = self.mapList[self.promptType]
                 self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))
