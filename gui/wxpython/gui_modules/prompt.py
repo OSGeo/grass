@@ -517,7 +517,28 @@ class GPrompt(object):
         
         # command description (menuform.grassTask)
         self.cmdDesc = None
-        self.cmdbuffer = list()
+        self.cmdbuffer = self._readHistory()
+        self.cmdindex = len(self.cmdbuffer)
+        
+    def _readHistory(self):
+        """!Get list of commands from history file"""
+        hist = list()
+        env = grass.gisenv()
+        try:
+            fileHistory = open(os.path.join(env['GISDBASE'],
+                                            env['LOCATION_NAME'],
+                                            env['MAPSET'],
+                                            '.bash_history'), 'r')
+        except IOError:
+            return hist
+        
+        try:
+            for line in fileHistory.readlines():
+                hist.append(line.replace('\n', ''))
+        finally:
+            fileHistory.close()
+        
+        return hist
         
     def _getListOfModules(self):
         """!Get list of modules"""
@@ -811,12 +832,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             
         elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and event.ControlDown():
             # Command history using ctrl-up and ctrl-down   
-            
             if len(self.cmdbuffer) < 1:
                 return
             
-            txt = ''
-
             self.DocumentEnd()
             
             # move through command history list index values
@@ -832,8 +850,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             try:
                 txt = self.cmdbuffer[self.cmdindex]
             except:
-                pass
-                
+                txt = ''
+            
             # clear current line and insert command history    
             self.DelLineLeft()
             self.DelLineRight()
