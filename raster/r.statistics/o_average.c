@@ -5,19 +5,14 @@
 #include <grass/glocale.h>
 #include "method.h"
 
-#define STATS "r.stats"
-#define RECLASS "r.reclass"
-
 /* function prototypes */
 static int out(FILE *, long, double, double);
-
 
 int
 o_average(const char *basemap, const char *covermap, const char *outputmap, int usecats,
 	  struct Categories *cats)
 {
     char *me = "o_average";
-    char command[1024];
     long catb, basecat, covercat;
     double x, area, sum1, sum2;
     int stat;
@@ -27,12 +22,7 @@ o_average(const char *basemap, const char *covermap, const char *outputmap, int 
     tempfile1 = G_tempfile();
     tempfile2 = G_tempfile();
 
-    sprintf(command, "%s -an input=\"%s,%s\" fs=space > %s",
-	    STATS, basemap, covermap, tempfile1);
-    if (stat = system(command)) {
-	unlink(tempfile1);
-	G_fatal_error(_("%s: running %s command"), me, STATS);
-    }
+    run_stats(basemap, covermap, "-a", tempfile1);
 
     fd1 = fopen(tempfile1, "r");
     fd2 = fopen(tempfile2, "w");
@@ -63,9 +53,7 @@ o_average(const char *basemap, const char *covermap, const char *outputmap, int 
     out(fd2, basecat, sum1, sum2);
     fclose(fd1);
     fclose(fd2);
-    sprintf(command, "%s input=\"%s\" output=\"%s\" < %s",
-	    RECLASS, basemap, outputmap, tempfile2);
-    stat = system(command);
+    stat = run_reclass(basemap, outputmap, tempfile2);
     unlink(tempfile1);
     unlink(tempfile2);
 

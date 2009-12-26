@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/spawn.h>
 #include "kappa.h"
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -23,6 +24,8 @@ int stats(void)
     size_t ns;
     FILE *fd;
     char **tokens;
+    const char *argv[9];
+    int argc = 0;
 
     strcpy(mname, maps[0]);
     mmapset = G_find_raster2(mname, "");
@@ -35,19 +38,28 @@ int stats(void)
 	G_fatal_error(_("Raster map <%s> not found"), maps[1]);
 
     stats_file = G_tempfile();
-    strcpy(buf, "r.stats -cin");
-    strcat(buf, " fs=:");
-    strcat(buf, " input=");
-    strcat(buf, G_fully_qualified_name(maps[0], mmapset));
-    strcat(buf, ",");
-    strcat(buf, G_fully_qualified_name(maps[1], rmapset));
-    strcat(buf, " > \"");
-    strcat(buf, stats_file);
-    strcat(buf, "\"");
 
-    if (system(buf)) {
-	unlink(stats_file);
-	exit(1);
+    argv[argc++] = "r.stats";
+
+    argv[argc++] = "-cin";
+
+    argv[argc++] = "fs=:";
+
+    sprintf(buf, "input=%s,%s",
+	    G_fully_qualified_name(maps[0], mmapset),
+	    G_fully_qualified_name(maps[1], rmapset));
+    argv[argc++] = buf;
+
+    argv[argc++] = SF_REDIRECT_FILE;
+    argv[argc++] = SF_STDOUT;
+    argv[argc++] = SF_MODE_OUT;
+    argv[argc++] = stats_file;
+
+    argv[argc++] = NULL;
+
+    if (G_vspawn_ex(argv[0], argv) != 0) {
+	remove(stats_file);
+	G_fatal_error("error running r.stats");
     }
 
     fd = fopen(stats_file, "r");
