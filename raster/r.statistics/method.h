@@ -32,6 +32,11 @@ struct menu
 
 extern struct menu menu[];
 
+/* run_cmd.c */
+
+extern void run_stats(const char *, const char *, const char *, const char *);
+extern int run_reclass(const char *, const char *, const char *);
+
 /* o_adev.c */
 int o_adev(const char *, const char *, const char *, int, struct Categories *);
 

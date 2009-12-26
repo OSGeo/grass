@@ -20,13 +20,27 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#include <grass/spawn.h>
 
 int write_hist(char *, char *, char *, int, int);
 
+static const char *new_argv[22];
+static int new_argc;
+
+static void do_opt(const struct Option *opt)
+{
+    char *buf;
+    if (!opt->answer)
+	return;
+    buf = G_malloc(strlen(opt->key) + 1 + strlen(opt->answer) + 1);
+    sprintf(buf, "%s=%s", opt->key, opt->answer);
+    new_argv[new_argc++] = buf;
+}
+
 int main(int argc, char *argv[])
 {
+    char command[GPATH_MAX];
     int err, ret;
-    char command[512];
     struct Option *opt1;
     struct Option *opt2;
     struct Option *opt3;
@@ -264,151 +278,42 @@ int main(int argc, char *argv[])
     }
 
     /* Build command line */
-#ifdef __MINGW32__
-    sprintf(command, "\"\"%s/etc/", G_gisbase());
-#else
-    sprintf(command, "%s/etc/", G_gisbase());
-#endif
+    sprintf(command, "%s/etc/r.watershed.%s",
+	    G_gisbase(),
+	    flag_seg->answer ? "seg" : "ram");
+    new_argv[new_argc++] = command;
 
-    if (flag_seg->answer)
-	strcat(command, "r.watershed.seg");
-    else
-	strcat(command, "r.watershed.ram");
-
-#ifdef __MINGW32__
-    strcat(command, "\"");
-#endif
-
-    if (flag_sfd->answer) {
-	strcat(command, " -s");
-    }
+    if (flag_sfd->answer)
+	new_argv[new_argc++] = "-s";
 
     if (flag_flow->answer)
-	strcat(command, " -4");
+	new_argv[new_argc++] = "-4";
 
     if (flag_abs->answer)
-	strcat(command, " -a");
+	new_argv[new_argc++] = "-a";
 
-    if (opt1->answer) {
-	strcat(command, " el=");
-	strcat(command, "\"");
-	strcat(command, opt1->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt2->answer) {
-	strcat(command, " de=");
-	strcat(command, "\"");
-	strcat(command, opt2->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt3->answer) {
-	strcat(command, " ov=");
-	strcat(command, "\"");
-	strcat(command, opt3->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt4->answer) {
-	strcat(command, " r=");
-	strcat(command, "\"");
-	strcat(command, opt4->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt5->answer) {
-	strcat(command, " ob=");
-	strcat(command, "\"");
-	strcat(command, opt5->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt6->answer) {
-	strcat(command, " t=");
-	strcat(command, opt6->answer);
-    }
-
-    if (opt7->answer) {
-	strcat(command, " ms=");
-	strcat(command, opt7->answer);
-    }
-
-    if (opt8->answer) {
-	strcat(command, " ac=");
-	strcat(command, "\"");
-	strcat(command, opt8->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt9->answer) {
-	strcat(command, " dr=");
-	strcat(command, "\"");
-	strcat(command, opt9->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt10->answer) {
-	strcat(command, " ba=");
-	strcat(command, "\"");
-	strcat(command, opt10->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt11->answer) {
-	strcat(command, " se=");
-	strcat(command, "\"");
-	strcat(command, opt11->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt12->answer) {
-	strcat(command, " ha=");
-	strcat(command, "\"");
-	strcat(command, opt12->answer);
-	strcat(command, "\"");
-    }
-
-/*    if (opt13->answer) {
-	strcat(command, " di=");
-	strcat(command, "\"");
-	strcat(command, opt13->answer);
-	strcat(command, "\"");
-    }
-*/
-
-    if (opt14->answer) {
-	strcat(command, " LS=");
-	strcat(command, "\"");
-	strcat(command, opt14->answer);
-	strcat(command, "\"");
-    }
-
-    if (opt15->answer) {
-	strcat(command, " S=");
-	strcat(command, "\"");
-	strcat(command, opt15->answer);
-	strcat(command, "\"");
-    }
-
-    if (!flag_sfd->answer && opt16->answer) {
-	strcat(command, " conv=");
-	strcat(command, opt16->answer);
-    }
-
-    if (flag_seg->answer && opt17->answer) {
-	strcat(command, " mb=");
-	strcat(command, opt17->answer);
-    }
-
-#ifdef __MINGW32__
-    strcat(command, "\"");
-#endif
+    do_opt(opt1);
+    do_opt(opt2);
+    do_opt(opt3);
+    do_opt(opt4);
+    do_opt(opt5);
+    do_opt(opt6);
+    do_opt(opt7);
+    do_opt(opt8);
+    do_opt(opt9);
+    do_opt(opt10);
+    do_opt(opt11);
+    do_opt(opt12);
+/*  do_opt(opt13); */
+    do_opt(opt14);
+    do_opt(opt15);
+    do_opt(opt16);
+    do_opt(opt17);
+    new_argv[new_argc++] = NULL;
 
     G_debug(1, "Mode: %s", flag_seg->answer ? "Segmented" : "All in RAM");
-    G_debug(1, "Running: %s", command);
 
-    ret = system(command);
+    ret = G_vspawn_ex(new_argv[0], new_argv);
 
     if (ret != EXIT_SUCCESS)
 	G_warning(_("Subprocess failed with exit code %d"), ret);

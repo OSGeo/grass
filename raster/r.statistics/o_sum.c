@@ -17,7 +17,6 @@ o_sum(const char *basemap, const char *covermap, const char *outputmap, int usec
       struct Categories *cats)
 {
     char *me = "o_sum";
-    char command[1024];
 
     long catb, basecat, covercat;
     double x, area, sum1;
@@ -28,13 +27,7 @@ o_sum(const char *basemap, const char *covermap, const char *outputmap, int usec
     tempfile1 = G_tempfile();
     tempfile2 = G_tempfile();
 
-    sprintf(command, "%s -cn input=\"%s,%s\" fs=space > %s", STATS, basemap,
-	    covermap, tempfile1);
-
-    if (stat = system(command)) {
-	unlink(tempfile1);
-	G_fatal_error(_("%s: running %s command"), me, STATS);
-    }
+    run_stats(basemap, covermap, "-c", tempfile1);
 
     fd1 = fopen(tempfile1, "r");
     fd2 = fopen(tempfile2, "w");
@@ -66,9 +59,7 @@ o_sum(const char *basemap, const char *covermap, const char *outputmap, int usec
     sum_out(fd2, basecat, sum1);
     fclose(fd1);
     fclose(fd2);
-    sprintf(command, "%s input=\"%s\" output=\"%s\" < %s",
-	    RECLASS, basemap, outputmap, tempfile2);
-    stat = system(command);
+    stat = run_reclass(basemap, outputmap, tempfile2);
     unlink(tempfile1);
     unlink(tempfile2);
 

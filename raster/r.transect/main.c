@@ -12,7 +12,7 @@
  *               which lie along one or more user-defined transect lines.
  *               The transects are described by their starting coordinates,
  *               azimuth, and distance. 
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006,2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -24,16 +24,70 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
+#include <grass/spawn.h>
+
+static int profile(int coords, const char *map, const char *nulls, char **line)
+{
+    double e1, n1, e2, n2;
+    char buf[1024], profile[1024];
+    const char *argv[7];
+    int argc = 0;
+    int n;
+    int projection;
+
+    projection = G_projection();
+
+    argv[argc++] = "r.profile";
+
+    if (coords)
+	argv[argc++] = "-g";
+
+    sprintf(buf, "input=%s", map);
+    argv[argc++] = G_store(buf);
+
+    argv[argc++] = "output=-";
+
+    sprintf(buf, "null=%s", nulls);
+    argv[argc++] = G_store(buf);
+
+    strcpy(profile, "profile=");
+    for (n = 0; line[n]; n += 4) {
+	int err = parse_line("line", &line[n], &e1, &n1, &e2, &n2, projection);
+
+	if (err) {
+	    G_usage();
+	    exit(EXIT_FAILURE);
+	}
+
+	if (n > 0)
+	    strcat(profile, ",");
+	G_format_easting(e1, buf, projection);
+	strcat(profile, buf);
+
+	G_format_northing(n1, buf, projection);
+	strcat(profile, ",");
+	strcat(profile, buf);
+
+	G_format_easting(e2, buf, projection);
+	strcat(profile, ",");
+	strcat(profile, buf);
+
+	G_format_northing(n2, buf, projection);
+	strcat(profile, ",");
+	strcat(profile, buf);
+    }
+
+    argv[argc++] = profile;
+
+    argv[argc++] = NULL;
+
+    G_verbose_message(_("End coordinate: %.15g, %.15g"), e2, n2);
+
+    return G_vspawn_ex(argv[0], argv);
+}
 
 int main(int argc, char *argv[])
 {
-    double e1, n1, e2, n2;
-    char buf[256];
-    char command[GPATH_MAX];
-
-    int n, err;
-    int projection;
-
     struct GModule *module;
     struct
     {
@@ -42,7 +96,6 @@ int main(int argc, char *argv[])
 	struct Option *null_str;
     } parms;
     struct Flag *coord;
-    char coord_str[3];
 
     G_gisinit(argv[0]);
 
@@ -78,44 +131,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-
-    projection = G_projection();
-
-    if (coord->answer)
-	strcpy(coord_str, "-g");
-    else
-	strcpy(coord_str, "");
-
-    sprintf(command,
-	    "r.profile %s input=\"%s\" output=\"-\" null=\"%s\" profile=",
-	    coord_str, parms.map->answer, parms.null_str->answer);
-
-    err = 0;
-    for (n = 0; parms.line->answers[n]; n += 4) {
-	err += parse_line(parms.line->key, parms.line->answers + n,
-			  &e1, &n1, &e2, &n2, projection);
-	if (!err) {
-	    if (n)
-		strcat(command, ",");
-	    G_format_easting(e1, buf, projection);
-	    strcat(command, buf);
-	    G_format_northing(n1, buf, projection);
-	    strcat(command, ",");
-	    strcat(command, buf);
-	    G_format_easting(e2, buf, projection);
-	    strcat(command, ",");
-	    strcat(command, buf);
-	    G_format_northing(n2, buf, projection);
-	    strcat(command, ",");
-	    strcat(command, buf);
-	}
-    }
-    if (err) {
-	G_usage();
-	exit(EXIT_FAILURE);
-    }
-
-    G_verbose_message(_("End coordinate: %.15g, %.15g"), e2, n2);
-
-    exit(system(command));
+    return profile(coord->answer,
+		   parms.map->answer,
+		   parms.null_str->answer,
+		   parms.line->answers) != 0;
 }

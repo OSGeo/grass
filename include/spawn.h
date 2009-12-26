@@ -2,6 +2,18 @@
 #ifndef GRASS_SPAWN_H
 #define GRASS_SPAWN_H
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#define SF_MODE_IN	((const char *) (O_RDONLY))
+#define SF_MODE_OUT	((const char *) (O_WRONLY|O_CREAT|O_TRUNC))
+#define SF_MODE_APPEND	((const char *) (O_WRONLY|O_CREAT|O_APPEND))
+
+#define SF_STDIN	((const char *) STDIN_FILENO)
+#define SF_STDOUT	((const char *) STDOUT_FILENO)
+#define SF_STDERR	((const char *) STDERR_FILENO)
+
 #define SF_REDIRECT_FILE		((const char *) 1)
 #define SF_REDIRECT_DESCRIPTOR		((const char *) 2)
 #define SF_CLOSE_DESCRIPTOR		((const char *) 3)

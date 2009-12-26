@@ -4,8 +4,6 @@
 #include <grass/glocale.h>
 #include "method.h"
 
-#define STATS "r.stats"
-
 /* function prototypes */
 static int o_out(FILE *, long, long);
 
@@ -13,7 +11,6 @@ static int o_out(FILE *, long, long);
 int o_distrib(const char *basemap, const char *covermap, const char *outputmap, int usecats)
 {
     char *me = "o_distrib";
-    char command[1024];
     long csum, area, catb, basecat, covercat;
     double sum, tot;
     long stat, cat, total_count;
@@ -23,13 +20,7 @@ int o_distrib(const char *basemap, const char *covermap, const char *outputmap, 
     tempfile1 = G_tempfile();
     tempfile2 = G_tempfile();
 
-    sprintf(command, "%s -cn input=\"%s,%s\" fs=space > %s", STATS, basemap,
-	    covermap, tempfile1);
-
-    if (stat = system(command)) {
-	unlink(tempfile1);
-	G_fatal_error(_("%s: running %s command"), me, STATS);
-    }
+    run_stats(basemap, covermap, "-c", tempfile1);
 
     fd1 = fopen(tempfile1, "r");
     fd2 = fopen(tempfile2, "w");
