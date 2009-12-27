@@ -13,7 +13,9 @@ IMGSRC := $(wildcard *.png) $(wildcard *.jpg)
 
 $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) | $(HTMLDIR)
 	$(PYTHON) $(GISBASE)/tools/mkhtml.py $* > $@
+ifneq ($(strip $(IMGSRC)),)
 	$(MAKE) $(patsubst %,$(HTMLDIR)/%,$(IMGSRC))
+endif
 
 $(HTMLDIR)/%.png: %.png | $(HTMLDIR)
 	$(INSTALL_DATA) $< $@
