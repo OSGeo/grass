@@ -23,6 +23,8 @@ entities = {
     'bull': "*"
     }
 
+omit_start = ["body", "tbody", "head", "html"]
+
 single = ["area", "base", "basefont", "br", "col", "frame",
 	  "hr", "img", "input", "isindex", "link", "meta", "param"]
 single = frozenset(single)
@@ -48,6 +50,15 @@ head_content = ["title", "isindex", "base"]
 
 def setify(d):
     return dict([(key, frozenset(val)) for key, val in d.iteritems()])
+
+def omit(allowed, tags):
+    result = {}
+    for k, v in allowed.iteritems():
+	for t in tags:
+	    if t in v:
+		v = v.union(allowed[t])
+	result[k] = v
+    return result
 
 allowed = {
     "a": inline,
@@ -115,8 +126,7 @@ allowed = {
     "style": [],
     "sub": inline,
     "sup": inline,
-    "table": ["caption", "col", "colgroup", "thead", "tfoot", "tbody",
-	      "tr"], # to allow for <table>[implied <tbody>]<tr>
+    "table": ["caption", "col", "colgroup", "thead", "tfoot", "tbody"],
     "tbody": ["tr"],
     "td": flow,
     "textarea": [],
@@ -132,6 +142,7 @@ allowed = {
     }
 
 allowed = setify(allowed)
+allowed = omit(allowed, omit_start)
 
 excluded = {
     "a": ["a"],
