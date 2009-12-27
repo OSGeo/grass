@@ -24,8 +24,16 @@
 #include <errno.h>
 #include <sys/types.h>
 
+#define USE_CREATE_PROCESS 1
+
 #ifndef __MINGW32__
 #include <sys/wait.h>
+#else
+#ifdef USE_CREATE_PROCESS
+#include <windows.h>
+#else
+typedef void *HANDLE;
+#endif
 #endif
 #include <grass/config.h>
 #include <grass/gis.h>
@@ -211,12 +219,324 @@ struct spawn
 
 #ifdef __MINGW32__
 
-static void do_redirects(const struct redirect *redirects, int num_redirects)
+#ifdef USE_CREATE_PROCESS
+
+struct buffer {
+    char *str;
+    size_t len;
+    size_t size;
+};
+
+static const int INCREMENT = 50;
+
+static void clear(struct buffer *b)
+{
+    b->len = 0;
+    b->str[b->len] = '\0';
+}
+
+static void init(struct buffer *b)
+{
+    b->str = G_malloc(1);
+    b->size = 1;
+    clear(b);
+}
+
+static char *release(struct buffer *b)
+{
+    char *p = b->str;
+
+    b->str = NULL;
+    b->size = 0;
+    b->len = 0;
+
+    return p;
+}
+
+static void finish(struct buffer *b)
+{
+    if (b->str)
+	G_free(b->str);
+    release(b);
+}
+
+static void ensure(struct buffer *b, size_t n)
+{
+    if (b->size <= b->len + n + 1) {
+	b->size = b->len + n + INCREMENT;
+	b->str = G_realloc(b->str, b->size);
+    }
+}
+
+static void append(struct buffer *b, const char *str)
+{
+    size_t n = strlen(str);
+
+    ensure(b, n);
+    memcpy(&b->str[b->len], str, n);
+    b->len += n;
+    b->str[b->len] = '\0';
+}
+
+static void append_char(struct buffer *b, char c)
+{
+    ensure(b, 1);
+    b->str[b->len] = c;
+    b->len++;
+    b->str[b->len] = '\0';
+}
+
+static char *make_command_line(const char **argv)
+{
+    struct buffer result;
+    struct buffer buf;
+    int i;
+
+    init(&result);
+    init(&buf);
+
+    for (i = 0; argv[i]; i++) {
+	const char *arg = argv[i];
+	int quote;
+	int j;
+
+	clear(&buf);
+
+	if (result.len > 0)
+	    append_char(&result, ' ');
+
+	quote = arg[0] == '\0' || strchr(arg, ' ') || strchr(arg, '\t');
+
+        if (quote)
+            append_char(&result, '\"');
+
+	for (j = 0; arg[j]; j++) {
+	    int c = arg[j];
+	    int k;
+
+            switch (c) {
+	    case '\\':
+		append_char(&buf, '\\');
+		break;
+	    case '\"':
+		for (k = 0; k < buf.len; k++)
+		    append(&result, "\\\\");
+		clear(&buf);
+		append(&result, "\\\"");
+		break;
+	    default:
+		if (buf.len > 0) {
+		    append(&result, buf.str);
+		    clear(&buf);
+		}
+		append_char(&result, c);
+	    }
+	}
+
+	if (buf.len > 0)
+	    append(&result, buf.str);
+
+        if (quote) {
+	    append(&result, buf.str);
+	    append_char(&result, '\"');
+	}
+    }
+
+    finish(&buf);
+    return release(&result);
+}
+
+static char *make_environment(const char **envp)
+{
+    struct buffer result;
+    int i;
+
+    init(&result);
+
+    for (i = 0; envp[i]; i++) {
+	const char *env = envp[i];
+
+	append(&result, env);
+	append_char(&result, '\0');
+    }
+
+    return release(&result);
+}
+
+static char *check_program(const char *pgm, const char *dir, const char *ext)
+{
+    char pathname[GPATH_MAX];
+
+    sprintf(pathname, "%s%s%s%s", dir, *dir ? "\\" : "", pgm, ext);
+    return access(pathname, 0) == 0
+	? G_store(pathname)
+	: NULL;
+}
+
+static char *find_program_ext(const char *pgm, const char *dir, char **pathext)
+{
+    char *result;
+    int i;
+
+    if (result = check_program(pgm, dir, ""), result)
+	return result;
+
+    for (i = 0; pathext[i]; i++) {
+	const char *ext = pathext[i];
+	if (result = check_program(pgm, dir, ext), result)
+	    return result;
+    }
+
+    return NULL;
+}
+
+static char *find_program_dir_ext(const char *pgm, char **path, char **pathext)
+{
+    char *result = NULL;
+    int i;
+
+    if (strchr(pgm, '\\') || strchr(pgm, '/')) {
+	if (result = find_program_ext(pgm, "", pathext), result)
+	    return result;
+    }
+    else {
+	if (result = find_program_ext(pgm, ".", pathext), result)
+	    return result;
+
+	for (i = 0; path[i]; i++) {
+	    const char *dir = path[i];
+	    if (result = find_program_ext(pgm, dir, pathext), result)
+		return result;
+	}
+    }
+
+    return NULL;
+}
+
+static char *find_program(const char *pgm)
+{
+    char **path = G_tokenize(getenv("PATH"), ";");
+    char **pathext = G_tokenize(getenv("PATHEXT"), ";");
+    char *result = find_program_dir_ext(pgm, path, pathext);
+    G_free_tokens(path);
+    G_free_tokens(pathext);
+    return result;
+}
+
+static HANDLE get_handle(int fd)
+{
+    HANDLE h1, h2;
+
+    if (fd < 0)
+	return INVALID_HANDLE_VALUE;
+
+    h1 = (HANDLE) _get_osfhandle(fd);
+    if (!DuplicateHandle(GetCurrentProcess(), h1,
+			 GetCurrentProcess(), &h2,
+			 DUPLICATE_SAME_ACCESS, 1, 0))
+	return INVALID_HANDLE_VALUE;
+
+    return h2;
+}
+
+static int win_spawn(const char *cmd, const char **argv, const char **envp,
+		     const char *cwd, HANDLE handles[3], int background)
+{
+    char *args = make_command_line(argv);
+    char *env = make_environment(envp);
+    char *program = find_program(cmd);
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+    BOOL result;
+    DWORD exitcode;
+
+    if (!program) {
+	G_free(args);
+	G_free(env);
+	return -1;
+    }
+
+    memset(&si, 0, sizeof(si));
+    si.cb = sizeof(si);
+
+    si.dwFlags |= STARTF_USESTDHANDLES;
+    si.hStdInput  = handles[0];
+    si.hStdOutput = handles[1];
+    si.hStdError  = handles[2];
+
+    result = CreateProcess(
+	program,	/* lpApplicationName */
+	args,		/* lpCommandLine */
+	NULL,		/* lpProcessAttributes */
+	NULL,		/* lpThreadAttributes */
+	1,		/* bInheritHandles */
+	0,		/* dwCreationFlags */
+	env,		/* lpEnvironment */
+	cwd,		/* lpCurrentDirectory */
+	&si,		/* lpStartupInfo */
+	&pi		/* lpProcessInformation */
+	);
+
+    G_free(args);
+    G_free(env);
+    G_free(program);
+
+    if (!background) {
+	WaitForSingleObject(pi.hProcess, INFINITE);
+	if (!GetExitCodeProcess(pi.hProcess, &exitcode))
+	    return -1;
+	return (int) exitcode;
+    }
+
+    return pi.dwProcessId;
+}
+
+static void do_redirects(struct redirect *redirects, int num_redirects, HANDLE handles[3])
+{
+    int i;
+
+    for (i = 0; i < 3; i++)
+	handles[i] = get_handle(i);
+
+    for (i = 0; i < num_redirects; i++) {
+	struct redirect *r = &redirects[i];
+
+	if (r->dst_fd < 0 || r->dst_fd > 2) {
+	    G_warning(_("G_spawn: unable to redirect descriptor %d"), r->dst_fd);
+	    continue;
+	}
+
+	if (r->file) {
+	    r->src_fd = open(r->file, r->mode, 0666);
+
+	    if (r->src_fd < 0) {
+		G_warning(_("G_spawn: unable to open file %s"), r->file);
+		_exit(127);
+	    }
+
+	    handles[r->dst_fd] = get_handle(r->src_fd);
+
+	    close(r->src_fd);
+
+	}
+	else if (r->src_fd >= 0) {
+	    handles[r->dst_fd] = get_handle(r->src_fd);
+	}
+	else
+	    handles[r->dst_fd] = INVALID_HANDLE_VALUE;
+    }
+}
+
+#else
+
+static void do_redirects(struct redirect *redirects, int num_redirects, HANDLE handles[3])
 {
     if (num_redirects > 0)
 	G_fatal_error
 	    ("G_spawn_ex: redirection not (yet) supported on Windows");
 }
+
+#endif
 
 static void add_binding(const char **env, int *pnum, const struct binding *b)
 {
@@ -256,16 +576,20 @@ static const char **do_bindings(const struct binding *bindings, int num_bindings
     return newenv;
 }
 
-static int do_spawn(const struct spawn *sp, const char *command)
+static int do_spawn(struct spawn *sp, const char *command)
 {
+    HANDLE handles[3];
     const char **env;
     int status;
 
-    do_redirects(sp->redirects, sp->num_redirects);
+    do_redirects(sp->redirects, sp->num_redirects, handles);
     env = do_bindings(sp->bindings, sp->num_bindings);
 
-    status =
-	spawnvpe(sp->background ? _P_NOWAIT : _P_WAIT, command, sp->args, env);
+#ifdef USE_CREATE_PROCESS
+    status = win_spawn(command, sp->args, env, sp->directory, handles, sp->background);
+#else
+    status = spawnvpe(sp->background ? _P_NOWAIT : _P_WAIT, command, sp->args, env);
+#endif
 
     if (!sp->background && status < 0)
 	G_warning(_("Unable to execute command"));
@@ -499,11 +823,11 @@ static void parse_argvec(struct spawn *sp, const char **va)
 	const char *arg = NEXT_ARG(va, const char *);
 	const char *var, *val;
 
-	switch ((int)arg) {
-	case 0:
+	if (!arg) {
 	    sp->args[sp->num_args++] = NULL;
 	    break;
-	case ((int)SF_REDIRECT_FILE):
+	}
+	else if (arg == SF_REDIRECT_FILE) {
 	    sp->redirects[sp->num_redirects].dst_fd = NEXT_ARG(va, int);
 
 	    sp->redirects[sp->num_redirects].src_fd = -1;
@@ -511,59 +835,53 @@ static void parse_argvec(struct spawn *sp, const char **va)
 	    sp->redirects[sp->num_redirects].file = NEXT_ARG(va, const char *);
 
 	    sp->num_redirects++;
-	    break;
-	case ((int)SF_REDIRECT_DESCRIPTOR):
+	}
+	else if (arg == SF_REDIRECT_DESCRIPTOR) {
 	    sp->redirects[sp->num_redirects].dst_fd = NEXT_ARG(va, int);
 	    sp->redirects[sp->num_redirects].src_fd = NEXT_ARG(va, int);
 
 	    sp->redirects[sp->num_redirects].file = NULL;
 	    sp->num_redirects++;
-	    break;
-	case ((int)SF_CLOSE_DESCRIPTOR):
+	}
+	else if (arg == SF_CLOSE_DESCRIPTOR) {
 	    sp->redirects[sp->num_redirects].dst_fd = NEXT_ARG(va, int);
 
 	    sp->redirects[sp->num_redirects].src_fd = -1;
 	    sp->redirects[sp->num_redirects].file = NULL;
 	    sp->num_redirects++;
-	    break;
-	case ((int)SF_SIGNAL):
+	}
+	else if (arg == SF_SIGNAL) {
 	    sp->signals[sp->num_signals].which = NEXT_ARG(va, int);
 	    sp->signals[sp->num_signals].action = NEXT_ARG(va, int);
 	    sp->signals[sp->num_signals].signum = NEXT_ARG(va, int);
 
 	    sp->signals[sp->num_signals].valid = 0;
 	    sp->num_signals++;
-	    break;
-	case ((int)SF_VARIABLE):
+	}
+	else if (arg == SF_VARIABLE) {
 	    var = NEXT_ARG(va, const char *);
 
 	    val = getenv(var);
 	    sp->args[sp->num_args++] = val ? val : "";
-	    break;
-	case ((int)SF_BINDING):
+	}
+	else if (arg == SF_BINDING) {
 	    sp->bindings[sp->num_bindings].var = NEXT_ARG(va, const char *);
 	    sp->bindings[sp->num_bindings].val = NEXT_ARG(va, const char *);
 
 	    sp->num_bindings++;
-	    break;
-	case ((int)SF_BACKGROUND):
+	}
+	else if (arg == SF_BACKGROUND) {
 	    sp->background = 1;
-	    break;
-	case ((int)SF_DIRECTORY):
+	}
+	else if (arg == SF_DIRECTORY) {
 	    sp->directory = NEXT_ARG(va, const char *);
 
-	    break;
-	case ((int)SF_ARGVEC):
-	    parse_argvec(sp, NEXT_ARG(va, const char **));
-
-	    break;
-	default:
-	    sp->args[sp->num_args++] = arg;
-	    break;
 	}
-
-	if (!arg)
-	    break;
+	else if (arg == SF_ARGVEC) {
+	    parse_argvec(sp, NEXT_ARG(va, const char **));
+	}
+	else
+	    sp->args[sp->num_args++] = arg;
     }
 }
 
@@ -573,11 +891,11 @@ static void parse_arglist(struct spawn *sp, va_list va)
 	const char *arg = va_arg(va, const char *);
 	const char *var, *val;
 
-	switch ((int)arg) {
-	case 0:
+	if (!arg) {
 	    sp->args[sp->num_args++] = NULL;
 	    break;
-	case ((int)SF_REDIRECT_FILE):
+	}
+	else if (arg == SF_REDIRECT_FILE) {
 	    sp->redirects[sp->num_redirects].dst_fd = va_arg(va, int);
 
 	    sp->redirects[sp->num_redirects].src_fd = -1;
@@ -585,59 +903,52 @@ static void parse_arglist(struct spawn *sp, va_list va)
 	    sp->redirects[sp->num_redirects].file = va_arg(va, const char *);
 
 	    sp->num_redirects++;
-	    break;
-	case ((int)SF_REDIRECT_DESCRIPTOR):
+	}
+	else if (arg == SF_REDIRECT_DESCRIPTOR) {
 	    sp->redirects[sp->num_redirects].dst_fd = va_arg(va, int);
 	    sp->redirects[sp->num_redirects].src_fd = va_arg(va, int);
 
 	    sp->redirects[sp->num_redirects].file = NULL;
 	    sp->num_redirects++;
-	    break;
-	case ((int)SF_CLOSE_DESCRIPTOR):
+	}
+	else if (arg == SF_CLOSE_DESCRIPTOR) {
 	    sp->redirects[sp->num_redirects].dst_fd = va_arg(va, int);
 
 	    sp->redirects[sp->num_redirects].src_fd = -1;
 	    sp->redirects[sp->num_redirects].file = NULL;
 	    sp->num_redirects++;
-	    break;
-	case ((int)SF_SIGNAL):
+	}
+	else if (arg == SF_SIGNAL) {
 	    sp->signals[sp->num_signals].which = va_arg(va, int);
 	    sp->signals[sp->num_signals].action = va_arg(va, int);
 	    sp->signals[sp->num_signals].signum = va_arg(va, int);
 
 	    sp->signals[sp->num_signals].valid = 0;
 	    sp->num_signals++;
-	    break;
-	case ((int)SF_VARIABLE):
+	}
+	else if (arg == SF_VARIABLE) {
 	    var = va_arg(va, char *);
 
 	    val = getenv(var);
 	    sp->args[sp->num_args++] = val ? val : "";
-	    break;
-	case ((int)SF_BINDING):
+	}
+	else if (arg == SF_BINDING) {
 	    sp->bindings[sp->num_bindings].var = va_arg(va, const char *);
 	    sp->bindings[sp->num_bindings].val = va_arg(va, const char *);
 
 	    sp->num_bindings++;
-	    break;
-	case ((int)SF_BACKGROUND):
-	    sp->background = 1;
-	    break;
-	case ((int)SF_DIRECTORY):
-	    sp->directory = va_arg(va, const char *);
-
-	    break;
-	case ((int)SF_ARGVEC):
-	    parse_argvec(sp, va_arg(va, const char **));
-
-	    break;
-	default:
-	    sp->args[sp->num_args++] = arg;
-	    break;
 	}
-
-	if (!arg)
-	    break;
+	else if (arg == SF_BACKGROUND) {
+	    sp->background = 1;
+	}
+	else if (arg == SF_DIRECTORY) {
+	    sp->directory = va_arg(va, const char *);
+	}
+	else if (arg == SF_ARGVEC) {
+	    parse_argvec(sp, va_arg(va, const char **));
+	}
+	else
+	    sp->args[sp->num_args++] = arg;
     }
 }
 
@@ -685,3 +996,4 @@ int G_spawn_ex(const char *command, ...)
 
     return do_spawn(&sp, command);
 }
+
