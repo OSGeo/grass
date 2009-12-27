@@ -63,7 +63,7 @@ def rotate_ppm(srcd):
     return dstd
 
 def ppmtopng(dst, src):
-    if grass.find_program("g.ppmtopng"):
+    if grass.find_program("g.ppmtopng", ["help"]):
 	grass.run_command('g.ppmtopng', input = src, output = dst)
     elif grass.find_program("pnmtopng"):
 	fh = open(dst, 'wb')
