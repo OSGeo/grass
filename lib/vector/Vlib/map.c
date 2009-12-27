@@ -56,7 +56,8 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
    \return 0 on success
    \return 1 on error
  */
-int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *Out)
+int Vect_copy_map_lines_field(struct Map_info *In, int field,
+			      struct Map_info *Out)
 {
     int i, type, nlines, ret, left, rite, centroid;
     struct line_pnts *Points, *CPoints;
@@ -78,8 +79,8 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *O
 	nlines = Vect_get_num_lines(In);
 	for (i = 1; i <= nlines; i++) {
 	    if (!Vect_line_alive(In, i))
-	    	continue;
-	    
+		continue;
+
 	    type = Vect_read_line(In, Points, Cats, i);
 	    if (type == -1) {
 		G_warning(_("Unable to read vector map <%s>"),
@@ -89,26 +90,35 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *O
 	    }
 	    if (type == 0)
 		continue;	/* dead line */
-	    
+
 	    /* don't skips boundaries if field != -1 */
 	    if (field != -1) {
 		if (type & GV_BOUNDARY) {
 		    if (Vect_cat_get(Cats, field, NULL) == 0) {
 			int skip_bndry = 1;
-			
+
 			Vect_get_line_areas(In, i, &left, &rite);
+			if (left < 0)
+			    left = Vect_get_isle_area(In, abs(left));
 			if (left > 0) {
-			    if ((centroid = Vect_get_area_centroid(In, left)) > 0) {
+			    if ((centroid =
+				 Vect_get_area_centroid(In, left)) > 0) {
 				Vect_read_line(In, CPoints, CCats, centroid);
 				if (Vect_cat_get(CCats, field, NULL) != 0)
 				    skip_bndry = 0;
 			    }
 			}
-			if (rite > 0 && skip_bndry) {
-			    if ((centroid = Vect_get_area_centroid(In, rite)) > 0) {
-				Vect_read_line(In, CPoints, CCats, centroid);
-				if (Vect_cat_get(CCats, field, NULL) != 0)
-				    skip_bndry = 0;
+			if (skip_bndry) {
+			    if (rite < 0)
+				rite = Vect_get_isle_area(In, abs(rite));
+			    if (rite > 0) {
+				if ((centroid =
+				     Vect_get_area_centroid(In, rite)) > 0) {
+				    Vect_read_line(In, CPoints, CCats,
+						   centroid);
+				    if (Vect_cat_get(CCats, field, NULL) != 0)
+					skip_bndry = 0;
+				}
 			    }
 			}
 			if (skip_bndry)
@@ -116,9 +126,9 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *O
 		    }
 		}
 		else if (Vect_cat_get(Cats, field, NULL) == 0)
-		    continue;       /* different layer */
+		    continue;	/* different layer */
 	    }
-	    
+
 	    Vect_write_line(Out, type, Points, Cats);
 	}
     }
@@ -139,10 +149,11 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field, struct Map_info *O
 		continue;
 	    }
 
-	    /* NOTE: this skips boundaries if field != -1 */
-	    if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
-		continue;       /* different layer */
-	    
+	    /* don't skip boundaries if field != -1 */
+	    if (field != -1 && !(type & GV_BOUNDARY) &&
+		Vect_cat_get(Cats, field, NULL) == 0)
+		continue;	/* different layer */
+
 	    Vect_write_line(Out, type, Points, Cats);
 	}
     }
@@ -309,6 +320,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 	G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'",
 		Fi->driver, Fi->database, Fi->table, Fin->driver,
 		Fin->database, Fin->table);
+
 	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fin->table, Fi->key,
 			    Fin->database, Fin->driver);
 
@@ -417,7 +429,6 @@ int Vect_rename(const char *in, const char *out)
 
     for (i = 0; i < n; i++) {
 	Fin = Vect_get_dblink(&Map, i);
-
 	fields[i] = Fin->number;
     }
 
@@ -558,7 +569,8 @@ int Vect_delete(const char *map)
 		    ret =
 			db_delete_table(Fi->driver, Fi->database, Fi->table);
 		    if (ret == DB_FAILED) {
-			G_warning(_("Unable to delete table <%s>"), Fi->table);
+			G_warning(_("Unable to delete table <%s>"),
+				  Fi->table);
 			Vect_close(&Map);
 			return -1;
 		    }
@@ -569,7 +581,6 @@ int Vect_delete(const char *map)
 		}
 	    }
 	}
-
 	Vect_close(&Map);
     }
 
@@ -638,7 +649,8 @@ int Vect_delete(const char *map)
    \return 0 on success
    \return -1 on error
  */
-int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
+int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out,
+		     int field)
 {
     int i, n, ret, type;
     struct field_info *Fi, *Fin;
@@ -646,7 +658,7 @@ int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
 
     n = Vect_get_num_dblinks(In);
 
-    G_debug(2, "Vect_copy_tables(): copying %d tables",n);
+    G_debug(2, "Vect_copy_tables(): copying %d tables", n);
 
     type = GV_1TABLE;
     if (n > 1)
