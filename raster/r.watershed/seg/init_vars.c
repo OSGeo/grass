@@ -46,49 +46,49 @@ int init_vars(int argc, char *argv[])
     segs_mb = 300;
     /* scan options */
     for (r = 1; r < argc; r++) {
-	if (sscanf(argv[r], "el=%[^\n]", ele_name) == 1)
+	if (sscanf(argv[r], "elevation=%s", ele_name) == 1)
 	    ele_flag++;
-	else if (sscanf(argv[r], "ac=%[^\n]", wat_name) == 1)
+	else if (sscanf(argv[r], "accumulation=%s", wat_name) == 1)
 	    wat_flag++;
-	else if (sscanf(argv[r], "dr=%[^\n]", asp_name) == 1)
+	else if (sscanf(argv[r], "drainage=%s", asp_name) == 1)
 	    asp_flag++;
-	else if (sscanf(argv[r], "de=%[^\n]", pit_name) == 1)
+	else if (sscanf(argv[r], "depression=%s", pit_name) == 1)
 	    pit_flag++;
-	else if (sscanf(argv[r], "t=%d", &bas_thres) == 1) ;
-	else if (sscanf(argv[r], "ms=%lf", &max_length) == 1) ;
-	else if (sscanf(argv[r], "ba=%[^\n]", bas_name) == 1)
+	else if (sscanf(argv[r], "threshold=%d", &bas_thres) == 1) ;
+	else if (sscanf(argv[r], "max_slope_length=%lf", &max_length) == 1) ;
+	else if (sscanf(argv[r], "basin=%s", bas_name) == 1)
 	    bas_flag++;
-	else if (sscanf(argv[r], "se=%[^\n]", seg_name) == 1)
+	else if (sscanf(argv[r], "stream=%s", seg_name) == 1)
 	    seg_flag++;
-	else if (sscanf(argv[r], "ha=%[^\n]", haf_name) == 1)
+	else if (sscanf(argv[r], "half_basin=%s", haf_name) == 1)
 	    haf_flag++;
-	else if (sscanf(argv[r], "ov=%[^\n]", run_name) == 1)
+	else if (sscanf(argv[r], "flow=%s", run_name) == 1)
 	    run_flag++;
-	else if (sscanf(argv[r], "ar=%[^\n]", arm_name) == 1)
+	else if (sscanf(argv[r], "ar=%s", arm_name) == 1)
 	    arm_flag++;
-	else if (sscanf(argv[r], "di=%[^\n]", dis_name) == 1)
-	    dis_flag++;
-	else if (sscanf(argv[r], "sl=%[^\n]", sl_name) == 1)
-	    sl_flag++;
-	else if (sscanf(argv[r], "S=%[^\n]", sg_name) == 1)
+	/* slope length
+	else if (sscanf(argv[r], "slope_length=%s", sl_name) == 1)
+	    sl_flag++; */
+	else if (sscanf(argv[r], "slope_steepness=%s", sg_name) == 1)
 	    sg_flag++;
-	else if (sscanf(argv[r], "LS=%[^\n]", ls_name) == 1)
+	else if (sscanf(argv[r], "length_slope=%s", ls_name) == 1)
 	    ls_flag++;
-	else if (sscanf(argv[r], "ob=%[^\n]", ob_name) == 1)
+	else if (sscanf(argv[r], "blocking=%s", ob_name) == 1)
 	    ob_flag++;
-	else if (sscanf(argv[r], "mb=%lf", &segs_mb) == 1) ;
-	else if (sscanf(argv[r], "r=%[^\n]", ril_name) == 1) {
+	else if (sscanf(argv[r], "memory=%lf", &segs_mb) == 1) ;
+	else if (sscanf(argv[r], "disturbed_land=%s", ril_name) == 1) {
 	    if (sscanf(ril_name, "%lf", &ril_value) == 0) {
 		ril_value = -1.0;
 		ril_flag++;
 	    }
 	}
-	/* else if (sscanf (argv[r], "sd=%[^\n]", dep_name) == 1) dep_flag++; */
+	/* slope deposition
+	else if (sscanf (argv[r], "sd=%[^\n]", dep_name) == 1) dep_flag++; */
 	else if (sscanf(argv[r], "-%d", &sides) == 1) {
 	    if (sides != 4)
 		usage(argv[0]);
 	}
-	else if (sscanf(argv[r], "conv=%d", &c_fac) == 1) ;
+	else if (sscanf(argv[r], "convergence=%d", &c_fac) == 1) ;
 	else if (strcmp(argv[r], "-s") == 0)
 	    mfd = 0;
 	else if (strcmp(argv[r], "-a") == 0)
@@ -192,9 +192,9 @@ int init_vars(int argc, char *argv[])
     G_debug(1, "  open segments after adjusting:\t%d", num_open_segs);
 
     if (num_cseg_total * 0.18 < 1024.0)
-	G_verbose_message(_("Will need at most %.2f MB of disk space"), num_cseg_total * 0.18);
+	G_verbose_message(_("Will need up to %.2f MB of disk space"), num_cseg_total * 0.18);
     else
-	G_verbose_message(_("Will need at most %.2f GB (%.2f MB) of disk space"),
+	G_verbose_message(_("Will need up to %.2f GB (%.2f MB) of disk space"),
 	           (num_cseg_total * 0.18) / 1024.0, num_cseg_total * 0.18);
 
     if (er_flag) {
