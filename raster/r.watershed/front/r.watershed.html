@@ -5,7 +5,7 @@
 2) the LS and S factors of the Revised Universal Soil Loss Equation (RUSLE).
 
 <p>
-<!-- Interactive mode not activated in GRASS 6.
+<!-- Interactive mode not activated in GRASS 7.
 <em>r.watershed</em> can be run either interactively or non-interactively.
 The interactive version of
 <em>r.watershed</em> can prepare inputs to lumped-parameter hydrologic models.
@@ -24,9 +24,8 @@ lumped-parameter hydrologic model program.  The non-interactive version of
 
 <dd>Without this flag set, the entire analysis is run in memory
 maintained by the operating system.  This can be limiting, but is
-very fast.  Setting the flag causes the program to manage memory
-on disk which allows larger maps to be processed but is considerably
-slower.
+very fast.  Setting this flag causes the program to manage memory
+on disk which allows very large maps to be processed but is slower.
 
 <dt><em>-s</em> 
 
@@ -243,7 +242,9 @@ cannot be increased, either more memory needs to be added to the computer,
 or the swap space size needs to be increased. If <em>seg</em> runs out of
 memory, additional disk space needs to be freed up for the program to run.
 The <em>r.terraflow</em> module was specifically designed with huge
-regions in mind and may be useful here as an alternative.
+regions in mind and may be useful here as an alternative, although disk
+space requirements of <em>r.terraflow</em> are several times higher than
+of <em>seg</em>.
 
 <h4>Large regions with many cells</h4>
 In some situations, the region size (number of cells) may be too large for

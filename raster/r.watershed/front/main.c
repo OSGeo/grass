@@ -53,10 +53,10 @@ int main(int argc, char *argv[])
     struct Option *opt10;
     struct Option *opt11;
     struct Option *opt12;
+    struct Option *opt13;
     struct Option *opt14;
     struct Option *opt15;
     struct Option *opt16;
-    struct Option *opt17;
     struct Flag *flag_sfd;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     module->description = _("Watershed basin analysis program.");
 
-    opt1 = G_define_standard_option(G_OPT_R_ELEV);
+    opt1 = G_define_standard_option(G_OPT_R_INPUT);
+    opt1->key = "elevation";
     opt1->description =
 	_("Input map: elevation on which entire analysis is based");
     opt1->guisection = _("Input_options");
@@ -171,52 +172,42 @@ int main(int argc, char *argv[])
     opt12->gisprompt = "new,cell,raster";
     opt12->guisection = _("Output_options");
 
-/* to be removed completely. visual display of results is now done with accumulation output
     opt13 = G_define_option();
-    opt13->key = "visual";
+    opt13->key = "length_slope";
     opt13->description =
-	_("Output map: useful for visual display of results");
+	_("Output map: slope length and steepness (LS) factor for USLE");
     opt13->required = NO;
     opt13->type = TYPE_STRING;
     opt13->gisprompt = "new,cell,raster";
     opt13->guisection = _("Output_options");
-*/
+
     opt14 = G_define_option();
-    opt14->key = "length_slope";
-    opt14->description =
-	_("Output map: slope length and steepness (LS) factor for USLE");
+    opt14->key = "slope_steepness";
+    opt14->description = _("Output map: slope steepness (S) factor for USLE");
     opt14->required = NO;
     opt14->type = TYPE_STRING;
     opt14->gisprompt = "new,cell,raster";
     opt14->guisection = _("Output_options");
 
     opt15 = G_define_option();
-    opt15->key = "slope_steepness";
-    opt15->description = _("Output map: slope steepness (S) factor for USLE");
+    opt15->key = "convergence";
+    opt15->type = TYPE_INTEGER;
     opt15->required = NO;
-    opt15->type = TYPE_STRING;
-    opt15->gisprompt = "new,cell,raster";
-    opt15->guisection = _("Output_options");
-
-    opt16 = G_define_option();
-    opt16->key = "convergence";
-    opt16->type = TYPE_INTEGER;
-    opt16->required = NO;
-    opt16->answer = "5";
-    opt16->label = _("Convergence factor for MFD (1-10)");
-    opt16->description =
+    opt15->answer = "5";
+    opt15->label = _("Convergence factor for MFD (1-10)");
+    opt15->description =
 	_("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
 
-    opt17 = G_define_option();
-    opt17->key = "memory";
-    opt17->type = TYPE_INTEGER;
-    opt17->required = NO;
-    opt17->answer = "300";	/* 300MB default value, please keep in sync with r.terraflow */
-    opt17->description = _("Maximum memory to be used with -m flag (in MB)");
+    opt16 = G_define_option();
+    opt16->key = "memory";
+    opt16->type = TYPE_INTEGER;
+    opt16->required = NO;
+    opt16->answer = "300";	/* 300MB default value, please keep r.terraflow in sync */
+    opt16->description = _("Maximum memory to be used with -m flag (in MB)");
 
     flag_sfd = G_define_flag();
     flag_sfd->key = 's';
-    flag_sfd->label = _("SFD (D8) flow (default is MFD)");	/* copied straight from terraflow */
+    flag_sfd->label = _("SFD (D8) flow (default is MFD)");
     flag_sfd->description =
 	_("SFD: single flow direction, MFD: multiple flow direction");
 
@@ -264,9 +255,9 @@ int main(int argc, char *argv[])
     /* half_basin and basin threshold */
     err += (opt12->answer != NULL && opt6->answer == NULL);
     /* LS factor and basin threshold */
-    err += (opt14->answer != NULL && opt6->answer == NULL);
+    err += (opt13->answer != NULL && opt6->answer == NULL);
     /* S factor and basin threshold */
-    err += (opt15->answer != NULL && opt6->answer == NULL);
+    err += (opt14->answer != NULL && opt6->answer == NULL);
 
     if (err) {
 	G_message(_("Sorry, if any of the following options are set:\n"
@@ -304,11 +295,11 @@ int main(int argc, char *argv[])
     do_opt(opt10);
     do_opt(opt11);
     do_opt(opt12);
-/*  do_opt(opt13); */
+    do_opt(opt13);
     do_opt(opt14);
     do_opt(opt15);
-    do_opt(opt16);
-    do_opt(opt17);
+    if (flag_seg->answer)
+	do_opt(opt16);
     new_argv[new_argc++] = NULL;
 
     G_debug(1, "Mode: %s", flag_seg->answer ? "Segmented" : "All in RAM");
@@ -325,7 +316,7 @@ int main(int argc, char *argv[])
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt9->answer)
 	write_hist(opt9->answer,
-		   "Watershed drainage direction (divided by 45deg)",
+		   "Watershed drainage direction (CCW from East divided by 45deg)",
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt10->answer)
 	write_hist(opt10->answer,
@@ -339,16 +330,12 @@ int main(int argc, char *argv[])
 	write_hist(opt12->answer,
 		   "Watershed half-basins", opt1->answer, flag_seg->answer, 
 		   flag_sfd->answer);
-    /* if (opt13->answer)
+    if (opt13->answer)
 	write_hist(opt13->answer,
-		   "Watershed visualization map (filtered accumulation map)",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer); */
-    if (opt14->answer)
-	write_hist(opt14->answer,
 		   "Watershed slope length and steepness (LS) factor",
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
-    if (opt15->answer)
-	write_hist(opt15->answer,
+    if (opt14->answer)
+	write_hist(opt14->answer,
 		   "Watershed slope steepness (S) factor",
 		   opt1->answer, flag_seg->answer, flag_sfd->answer);
 
