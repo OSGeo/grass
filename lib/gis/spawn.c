@@ -66,114 +66,7 @@ typedef void *HANDLE;
 
 #ifdef __MINGW32__
 
-int G_spawn(const char *command, ...)
-{
-    va_list va;
-    const char *args[MAX_ARGS];
-    int num_args = 0;
-
-    va_start(va, command);
-
-    for (num_args = 0; num_args < MAX_ARGS;) {
-	const char *arg = va_arg(va, const char *);
-
-	args[num_args++] = arg;
-	if (!arg)
-	    break;
-    }
-
-    va_end(va);
-
-    if (num_args >= MAX_ARGS) {
-	G_warning(_("Too many arguments"));
-	return -1;
-    }
-
-    G_debug(3, "spawning '%s' ...", command);
-
-    return _spawnvp(_P_WAIT, command, args);
-}
-
 #else
-
-int G_spawn(const char *command, ...)
-{
-    va_list va;
-    char *args[MAX_ARGS];
-    int num_args = 0;
-    struct sigaction act, intr, quit;
-    sigset_t block, oldmask;
-    int status = -1;
-    pid_t pid;
-
-    va_start(va, command);
-
-    for (num_args = 0; num_args < MAX_ARGS;) {
-	char *arg = va_arg(va, char *);
-
-	args[num_args++] = arg;
-	if (!arg)
-	    break;
-    }
-
-    va_end(va);
-
-    if (num_args >= MAX_ARGS) {
-	G_warning(_("Too many arguments"));
-	return -1;
-    }
-
-    sigemptyset(&act.sa_mask);
-    act.sa_flags = SA_RESTART;
-
-    act.sa_handler = SIG_IGN;
-    if (sigaction(SIGINT, &act, &intr) < 0)
-	goto error_1;
-    if (sigaction(SIGQUIT, &act, &quit) < 0)
-	goto error_2;
-
-    sigemptyset(&block);
-    sigaddset(&block, SIGCHLD);
-    if (sigprocmask(SIG_BLOCK, &block, &oldmask) < 0)
-	goto error_3;
-
-    G_debug(3, "forking '%s' ...", command);
-
-    pid = fork();
-
-    if (pid < 0) {
-	G_warning(_("Unable to create a new process"));
-	goto error_4;
-    }
-
-    if (pid == 0) {
-	sigaction(SIGINT, &intr, NULL);
-	sigaction(SIGQUIT, &quit, NULL);
-
-	execvp(command, args);
-	G_warning(_("Unable to execute command"));
-	_exit(127);
-    }
-    else {
-	pid_t n;
-
-	do
-	    n = waitpid(pid, &status, 0);
-	while (n == (pid_t) - 1 && errno == EINTR);
-
-	if (n != pid)
-	    status = -1;
-    }
-
-  error_4:
-    sigprocmask(SIG_SETMASK, &oldmask, NULL);
-  error_3:
-    sigaction(SIGQUIT, &quit, NULL);
-  error_2:
-    sigaction(SIGINT, &intr, NULL);
-  error_1:
-    return status;
-}
 
 #endif /*__MINGW32__*/
 
@@ -286,63 +179,77 @@ static void append_char(struct buffer *b, char c)
     b->str[b->len] = '\0';
 }
 
-static char *make_command_line(const char **argv)
+static void escape_arg(struct buffer *result, const char *arg)
 {
-    struct buffer result;
     struct buffer buf;
-    int i;
+    int quote, j;
 
-    init(&result);
     init(&buf);
 
-    for (i = 0; argv[i]; i++) {
-	const char *arg = argv[i];
-	int quote;
-	int j;
+    quote = arg[0] == '\0' || strchr(arg, ' ') || strchr(arg, '\t');
 
-	clear(&buf);
+    if (quote)
+	append_char(result, '\"');
 
-	if (result.len > 0)
-	    append_char(&result, ' ');
+    for (j = 0; arg[j]; j++) {
+	int c = arg[j];
+	int k;
 
-	quote = arg[0] == '\0' || strchr(arg, ' ') || strchr(arg, '\t');
-
-        if (quote)
-            append_char(&result, '\"');
-
-	for (j = 0; arg[j]; j++) {
-	    int c = arg[j];
-	    int k;
-
-            switch (c) {
-	    case '\\':
-		append_char(&buf, '\\');
-		break;
-	    case '\"':
-		for (k = 0; k < buf.len; k++)
-		    append(&result, "\\\\");
+	switch (c) {
+	case '\\':
+	    append_char(&buf, '\\');
+	    break;
+	case '\"':
+	    for (k = 0; k < buf.len; k++)
+		append(result, "\\\\");
+	    clear(&buf);
+	    append(result, "\\\"");
+	    break;
+	default:
+	    if (buf.len > 0) {
+		append(result, buf.str);
 		clear(&buf);
-		append(&result, "\\\"");
-		break;
-	    default:
-		if (buf.len > 0) {
-		    append(&result, buf.str);
-		    clear(&buf);
-		}
-		append_char(&result, c);
 	    }
-	}
-
-	if (buf.len > 0)
-	    append(&result, buf.str);
-
-        if (quote) {
-	    append(&result, buf.str);
-	    append_char(&result, '\"');
+	    append_char(result, c);
 	}
     }
 
+    if (buf.len > 0)
+	append(result, buf.str);
+
+    if (quote) {
+	append(result, buf.str);
+	append_char(result, '\"');
+    }
+
     finish(&buf);
+}
+
+static const char *escaped(const char *arg)
+{
+    struct buffer result;
+
+    if (!arg)
+	return NULL;
+
+    init(&result);
+    escape_arg(&result, arg);
+    return release(&result);
+}
+
+static char *make_command_line(const char **argv)
+{
+    struct buffer result;
+    int i;
+
+    init(&result);
+
+    for (i = 0; argv[i]; i++) {
+	if (result.len > 0)
+	    append_char(&result, ' ');
+	escape_arg(&result, argv[i]);
+    }
+
     return release(&result);
 }
 
@@ -433,7 +340,7 @@ static HANDLE get_handle(int fd)
     h1 = (HANDLE) _get_osfhandle(fd);
     if (!DuplicateHandle(GetCurrentProcess(), h1,
 			 GetCurrentProcess(), &h2,
-			 DUPLICATE_SAME_ACCESS, 1, 0))
+			 0, TRUE, DUPLICATE_SAME_ACCESS))
 	return INVALID_HANDLE_VALUE;
 
     return h2;
@@ -449,6 +356,9 @@ static int win_spawn(const char *cmd, const char **argv, const char **envp,
     PROCESS_INFORMATION pi;
     BOOL result;
     DWORD exitcode;
+
+    G_debug(3, "win_spawn: program = %s", program);
+    G_debug(3, "win_spawn: args = %s", args);
 
     if (!program) {
 	G_free(args);
@@ -480,6 +390,11 @@ static int win_spawn(const char *cmd, const char **argv, const char **envp,
     G_free(args);
     G_free(env);
     G_free(program);
+
+    if (!result) {
+	G_warning(_("CreateProcess() failed: error = %d"), GetLastError());
+	return -1;
+    }
 
     if (!background) {
 	WaitForSingleObject(pi.hProcess, INFINITE);
@@ -595,6 +510,46 @@ static int do_spawn(struct spawn *sp, const char *command)
 	G_warning(_("Unable to execute command"));
 
     return status;
+}
+
+int G_spawn(const char *command, ...)
+{
+    va_list va;
+    char *program = find_program(command);
+    const char *args[MAX_ARGS];
+    int num_args = 0;
+    int result, i;
+
+    va_start(va, command);
+
+    for (num_args = 0; num_args < MAX_ARGS;) {
+	const char *arg = va_arg(va, const char *);
+
+	args[num_args++] = escaped(arg);
+	if (!arg)
+	    break;
+	G_debug(3, "argv[%d]='%s'", num_args-1, args[num_args-1]);
+    }
+
+    va_end(va);
+
+    if (num_args >= MAX_ARGS) {
+	G_warning(_("Too many arguments"));
+	result = -1;
+    }
+    else {
+	G_debug(3, "spawning '%s' ...", program);
+	result = _spawnvp(_P_WAIT, program, args);
+	G_debug(3, "result = %d", result);
+	if (result < 0)
+	    G_debug(3, "error: %s", strerror(errno));
+    }
+
+    G_free(program);
+    for (i = 0; i < num_args; i++)
+	G_free((char *) args[i]);
+
+    return result;
 }
 
 #else /* __MINGW32__ */
@@ -800,6 +755,85 @@ static int do_spawn(struct spawn *sp, const char *command)
     undo_signals(sp->signals, sp->num_signals, SST_POST);
     undo_signals(sp->signals, sp->num_signals, SST_PRE);
 
+    return status;
+}
+
+int G_spawn(const char *command, ...)
+{
+    va_list va;
+    char *args[MAX_ARGS];
+    int num_args = 0;
+    struct sigaction act, intr, quit;
+    sigset_t block, oldmask;
+    int status = -1;
+    pid_t pid;
+
+    va_start(va, command);
+
+    for (num_args = 0; num_args < MAX_ARGS;) {
+	char *arg = va_arg(va, char *);
+
+	args[num_args++] = arg;
+	if (!arg)
+	    break;
+    }
+
+    va_end(va);
+
+    if (num_args >= MAX_ARGS) {
+	G_warning(_("Too many arguments"));
+	return -1;
+    }
+
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = SA_RESTART;
+
+    act.sa_handler = SIG_IGN;
+    if (sigaction(SIGINT, &act, &intr) < 0)
+	goto error_1;
+    if (sigaction(SIGQUIT, &act, &quit) < 0)
+	goto error_2;
+
+    sigemptyset(&block);
+    sigaddset(&block, SIGCHLD);
+    if (sigprocmask(SIG_BLOCK, &block, &oldmask) < 0)
+	goto error_3;
+
+    G_debug(3, "forking '%s' ...", command);
+
+    pid = fork();
+
+    if (pid < 0) {
+	G_warning(_("Unable to create a new process"));
+	goto error_4;
+    }
+
+    if (pid == 0) {
+	sigaction(SIGINT, &intr, NULL);
+	sigaction(SIGQUIT, &quit, NULL);
+
+	execvp(command, args);
+	G_warning(_("Unable to execute command"));
+	_exit(127);
+    }
+    else {
+	pid_t n;
+
+	do
+	    n = waitpid(pid, &status, 0);
+	while (n == (pid_t) - 1 && errno == EINTR);
+
+	if (n != pid)
+	    status = -1;
+    }
+
+  error_4:
+    sigprocmask(SIG_SETMASK, &oldmask, NULL);
+  error_3:
+    sigaction(SIGQUIT, &quit, NULL);
+  error_2:
+    sigaction(SIGINT, &intr, NULL);
+  error_1:
     return status;
 }
 
