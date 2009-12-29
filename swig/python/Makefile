@@ -45,6 +45,11 @@ EXTRA_CFLAGS = $(PYMOD_CFLAGS)
 EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M)_wrap.o $(M)_wrap.c $(M).pyc $(M).py _$(M).so)
 CLEAN_SUBDIRS = NumPtr
 
+ifneq ($(MINGW),)
+SWIGFLAGS += -D__MINGW32__
+EXTRA_LIBS = $(INTLLIB)
+endif
+
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
 PYDIR = $(ETC)/python
