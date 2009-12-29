@@ -605,7 +605,9 @@ void G_free_tokens(char **);
 void G_trim_decimal(char *);
 
 /* user_config.c */
+#ifndef __MINGW32__
 char *G_rc_path(const char *, const char *);
+#endif
 
 /* verbose.c */
 int G_verbose(void);
