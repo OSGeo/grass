@@ -52,7 +52,10 @@ min, max, sum</em> will also use less memory, while <em>stddev, variance,
 and coeff_var</em> will use more.
 
 The aggregate functions <em>median, percentile, skewness</em> and
-<em>trimmed mean</em> will also use more memory.
+<em>trimmed mean</em> will use even more memory and may not be appropriate
+for use with arbitrarily large input files<!-- without a small value for percent= -->.
+<!-- explained: memory use for regular stats will be based solely on region size,
+ but for the aggregate fns it will also depend on the number of data points. (?) -->
 
 <p>
 
