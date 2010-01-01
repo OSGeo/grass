@@ -569,10 +569,10 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         ps.stdin.write(stdin)
         ps.stdin.close()
         ps.stdin = None
-
-    ret = ps.wait()
     
     stdout, stderr = ps.communicate()
+
+    ret = ps.returncode
         
     if ret != 0 and parent:
         e = CmdError(cmd = prog,
