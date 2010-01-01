@@ -53,7 +53,6 @@ install-macosx:
 real-install-macosx: INST_DIR_TARGET = ${INST_DIR}
 real-install-macosx: PREFIX_TARGET = ${prefix}
 real-install-macosx: install-basic-macosx macosx-support-dir bundle-macosx
-	-cd ${GISBASE} ; tar cBf - modbuild | (cd ${MACOSX_SUPPDIR} ; tar xBf - ) 2>/dev/null
 	@# help file package
 	${LN_DIR} "${INST_DIR_TARGET}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}
 
@@ -72,7 +71,6 @@ bindist-macosx: install-basic-macosx bundle-macosx
 	-sed -e "s#@GRASS_VERSION_MAJOR@#${GRASS_VERSION_MAJOR}#g" -e "s#@GRASS_VERSION_MINOR@#${GRASS_VERSION_MINOR}#g" -e "s#@GRASS_VERSION_RELEASE@#${GRASS_VERSION_RELEASE}#g" -e "s#@VER_MINOR_REL@#${VER_MINOR_REL}#g" -e "s#@VER_DATE@#${VER_DATE}#g" -e "s#@PKG_INST_DIR@#${PKG_INST_DIR}#g" pkg/resources/Info.plist.in > dist/Info.plist
 	-${INSTALL_DATA} pkg/resources/License.rtf dist/resources
 	-${INSTALL_DATA} pkg/resources/ReadMe.rtf dist/resources
-	@#-cd ${GISBASE} ; tar cBf - modbuild | (cd ${GRASS_HOME}/macosx/dist/resources ; tar xBf - ) 2>/dev/null
 	@# build the package
 ifeq ($(XCODE_VER),xcode3)
 	${PACKAGEMAKER} --target 10.4 --root-volume-only --id org.osgeo.grass --root dist/${MACOSX_APP_NAME} --info dist/Info.plist --out "GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.pkg" --resources dist/resources
