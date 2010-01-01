@@ -83,7 +83,7 @@ option add *activeBackground gray80 widgetDefault
 option add *font -*-helvetica-medium-r-normal-*-12-*-iso8859-1 widgetDefault
 option add *Label.font -*-helvetica-bold-r-normal-*-12-*-iso8859-1
 option add *label.font -*-helvetica-medium-r-normal-*-12-*-iso8859-1
-option add *Label.foreground "medium blue"
+option add *Label.foreground "#226333"
 option add *label.foreground "black"
 option add *Radiobutton.relief flat
 option add *Checkbutton.relief flat
@@ -105,7 +105,4 @@ option add *menubutton.relief raised
 option add *menubutton.indicatoron 1
 option add *menubutton.borderwidth 1
 option add *button.borderWidth 1
-
-
-
 

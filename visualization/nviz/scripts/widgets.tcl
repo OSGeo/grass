@@ -29,7 +29,7 @@ proc Nv_itemDrag {c info x y} {
 	set y [$c canvasy $y]
 	if { $item == "puck"} {
 	$c delete line
-	$c create line $x $y [expr $w/2] [expr $h/2] -fill green3 -arrow last -tags line
+	$c create line $x $y [expr $w/2] [expr $h/2] -fill gray70 -arrow last -tags line
 	}
 	$c move $item [expr $x-$lastx] [expr $y-$lasty]
 	St_set $info lastx $x
@@ -72,14 +72,14 @@ proc Nv_mkXYScale {C {type puck} {name null} {height 100} {width 100} {x 50} {y 
 		$C create text [expr $width/2] 2 -text N -fill black -anchor n
 		$C create text [expr $width/2] $height -text S -fill black -anchor s
 		$C create line $x $y [expr $width/2] [expr $height/2] -tags line \
-		   -fill green3 -arrow last
-		$C create oval $x1 $y1 $x2 $y2 -width 1 -outline green3 -fill green3 \
+		   -fill gray70 -arrow last
+		$C create oval $x1 $y1 $x2 $y2 -width 1 -outline gray70 -fill LightGoldenrod \
 			-tags puck
 	} else {
 		$C create line [expr 0 -$width] $x [expr 2 * $width] $x \
-			-width 1 -tags cross -fill green3
+			-width 1 -tags cross -fill gray70
 		$C create line $y [expr 0 - $height] $y [expr 2*$height] \
-			-width 1 -tags cross -fill green3
+			-width 1 -tags cross -fill gray70
 	}
 	if {[string compare $name null] == 0} {set name $C.item}
 	set Nv_($name) [St_create {item lastx lasty width height} $type $x $y $width $height]
