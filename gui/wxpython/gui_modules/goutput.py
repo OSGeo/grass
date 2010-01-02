@@ -515,7 +515,9 @@ class GMConsole(wx.SplitterWindow):
 
     def ClearHistory(self, event):
         """!Clear history of commands"""
+        self.cmd_output.SetReadOnly(False)
         self.cmd_output.ClearAll()
+        self.cmd_output.SetReadOnly(True)
         self.console_progressbar.SetValue(0)
 
     def SaveHistory(self, event):
