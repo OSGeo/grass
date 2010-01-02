@@ -5,12 +5,13 @@
  * AUTHOR(S):    Original s.to.rast3: Jaro Hofierka, Geomodel s.r.o. (original contributor)
  *               9/2005 Upgrade to GRASS 6 by Radim Blazek
  *               Soeren Gebbert <soeren.gebbert gmx.de>
- * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
+ *               OGR support by Martin Landa <landa.martin gmail.com>
+ * PURPOSE:      Converts vector points to 3D raster
+ * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 #include <stdlib.h>
@@ -41,44 +42,39 @@ int main(int argc, char *argv[])
     dbDriver *Driver;
     dbCatValArray cvarr;
 
+    G_gisinit(argv[0]);
+
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("volume"));
     G_add_keyword(_("conversion"));
-    module->description = _("Converts a binary GRASS vector map "
-			    "(only points) layer into a 3D GRASS raster map layer.");
+    module->description = _("Converts a vector map "
+			    "(only points) into a 3D raster map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    out_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
-
-    col_opt = G_define_option();
-    col_opt->key = "column";
-    col_opt->type = TYPE_STRING;
-    col_opt->key_desc = "name";
-    col_opt->required = YES;
-    col_opt->multiple = NO;
-    col_opt->description = _("Column name (type must be numeric)");
-
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
-    G_gisinit(argv[0]);
+    out_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
 
+    col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
+    col_opt->required = YES;
+    col_opt->description = _("Name or attrbitute column (data type must be numeric)");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     G3d_getWindow(&region);
     G3d_readWindow(&region, NULL);
 
-    field = atoi(field_opt->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&Map, in_opt->answer, "");
+    Vect_open_old2(&Map, in_opt->answer, "", field_opt->answer);
+    field = Vect_get_field_number(&Map, field_opt->answer);
 
     db_CatValArray_init(&cvarr);
     Fi = Vect_get_field(&Map, field);
     if (Fi == NULL)
-	G_fatal_error(_("Unable to get layer info for vector map"));
+	G_fatal_error(_("Database connection not defined for layer <%s>"), field_opt->answer);
 
     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (Driver == NULL)
@@ -113,7 +109,9 @@ int main(int argc, char *argv[])
     for (line = 1; line <= nlines; line++) {
 	int type, cat, depth, row, col, ret;
 	double value;
-
+	
+	G_percent(line, nlines, 2);
+	
 	type = Vect_read_line(&Map, Points, Cats, line);
 	if (!(type & GV_POINT))
 	    continue;
@@ -159,7 +157,6 @@ int main(int argc, char *argv[])
 
     if (!G3d_closeCell(map))
 	G_fatal_error(_("Unable to close new 3d raster map"));
-
-
+    
     exit(EXIT_SUCCESS);
 }

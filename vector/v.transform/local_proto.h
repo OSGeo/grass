@@ -3,7 +3,7 @@
 int set_default_options(struct file_info *, struct file_info *,
 			struct file_info *, struct command_flags *);
 /* creat_trans.c */
-int create_transform_from_file(struct file_info *, int);
+int create_transform_from_file(struct file_info *);
 
 /* get_coor.c */
 int get_coor_from_file(FILE *);

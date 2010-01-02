@@ -13,10 +13,10 @@
  * mccauley
  */
 
-void read_sites(char *name, int field, char *col, int noindex)
+void read_sites(const char *name, const char *field_name, const char *col, int noindex, int with_z)
 {
     extern long npoints;
-    int nrec, ctype = 0, type;
+    int nrec, ctype = 0, type, field;
     struct Map_info Map;
     struct field_info *Fi;
     dbDriver *Driver;
@@ -24,15 +24,16 @@ void read_sites(char *name, int field, char *col, int noindex)
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    Vect_open_old(&Map, name, "");
-
-    if (field > 0) {
+    Vect_open_old2(&Map, name, "", field_name);
+    field = Vect_get_field_number(&Map, field_name);
+    
+    if (!with_z) {
 	db_CatValArray_init(&cvarr);
 
 	Fi = Vect_get_field(&Map, field);
 	if (Fi == NULL)
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  field);
+	    G_fatal_error(_("Database connection not defined for layer %s"),
+			  field_name);
 
 	Driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (Driver == NULL)
@@ -51,7 +52,7 @@ void read_sites(char *name, int field, char *col, int noindex)
 	if (nrec < 0)
 	    G_fatal_error(_("Unable to select data from table"));
 
-	G_message(_("%d records selected from table"), nrec);
+	G_verbose_message(_("%d records selected from table"), nrec);
 
 	db_close_database_shutdown_driver(Driver);
     }
@@ -66,7 +67,7 @@ void read_sites(char *name, int field, char *col, int noindex)
 	if (!(type & GV_POINTS))
 	    continue;
 
-	if (field > 0) {
+	if (!with_z) {
 	    int cat, ival, ret;
 
 	    /* TODO: what to do with multiple cats */
@@ -93,7 +94,7 @@ void read_sites(char *name, int field, char *col, int noindex)
 	newpoint(dval, Points->x[0], Points->y[0], noindex);
     }
 
-    if (field > 0)
+    if (!with_z)
 	db_CatValArray_free(&cvarr);
 
     Vect_set_release_support(&Map);

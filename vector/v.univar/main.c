@@ -5,16 +5,15 @@
  * 
  * AUTHOR(S):    Radim Blazek
  *               Hamish Bowman, University of Otago, New Zealand (r.univar2)
- *               Martin Landa (extended stats)
+ *               Martin Landa (extended stats & OGR support)
  *               
  * PURPOSE:      Univariate Statistics for attribute
  *               
- * COPYRIGHT:    (C) 2004-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2010 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 #include <stdlib.h>
@@ -63,25 +62,22 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
-    module->description =
-	_("Calculates univariate statistics for attribute. Variance and standard "
-	 "deviation is calculated only for points if specified.");
+    module->label =
+	_("Calculates univariate statistics for attribute.");
+    module->description = _("Variance and standard "
+			    "deviation is calculated only for points if specified.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "point,line,boundary,centroid,area";
 
-    col_opt = G_define_option();
-    col_opt->key = "column";
-    col_opt->type = TYPE_STRING;
+    col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->required = YES;
-    col_opt->multiple = NO;
-    col_opt->description = _("Column name");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     percentile = G_define_option();
     percentile->key = "percentile";
@@ -101,11 +97,11 @@ int main(int argc, char *argv[])
     extended->description = _("Calculate extended statistics");
 
     G_gisinit(argv[0]);
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     otype = Vect_option_to_types(type_opt);
-    ofield = atoi(field_opt->answer);
     perc = atoi(percentile->answer);
 
     Points = Vect_new_line_struct();
@@ -113,7 +109,8 @@ int main(int argc, char *argv[])
 
     /* open input vector */
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map_opt->answer, "");
+    Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer);
+    ofield = Vect_get_field_number(&Map, field_opt->answer);
 
     /* Check if types are compatible */
     if ((otype & GV_POINTS) && ((otype & GV_LINES) || (otype & GV_AREA)))
@@ -134,7 +131,7 @@ int main(int argc, char *argv[])
     db_CatValArray_init(&Cvarr);
     Fi = Vect_get_field(&Map, ofield);
     if (Fi == NULL) {
-	G_fatal_error(_("Unable to get layer info for vector map"));
+	G_fatal_error(_(" Database connection not defined for layer <%s>"), field_opt->answer);
     }
 
     Driver = db_start_driver_open_database(Fi->driver, Fi->database);

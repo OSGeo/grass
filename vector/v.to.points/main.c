@@ -4,15 +4,15 @@
  * MODULE:       v.to.points
  * 
  * AUTHOR(S):    Radim Blazek
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *               
  * PURPOSE:      Create points along lines 
  *               
- * COPYRIGHT:    (C) 2002 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 #include <stdlib.h>
@@ -172,22 +172,24 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     module->description =
-	_("Create points along input lines in new vector with 2 layers.");
+	_("Creates points along input lines in new vector map with 2 layers.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    in_opt->description = _("Input vector map containing lines");
-
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    out_opt->description =
-	_("Output vector map where points will be written");
-
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->answer = "point,line,boundary,centroid";
+    in_opt->label = _("Name of vector map containing lines");
 
     lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     lfield_opt->key = "llayer";
     lfield_opt->answer = "1";
-    lfield_opt->description = "Line layer";
+    lfield_opt->label = "Line layer number or name";
+    lfield_opt->guisection = _("Selection");
+
+    type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt->answer = "point,line,boundary,centroid";
+    type_opt->guisection = _("Selection");
+
+    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    out_opt->description =
+	_("Name for output vector map where points will be written");
 
     node_flag = G_define_flag();
     node_flag->key = 'n';
@@ -221,7 +223,6 @@ int main(int argc, char **argv)
     PPoints = Vect_new_line_struct();
     db_init_string(&stmt);
 
-    field = atoi(lfield_opt->answer);
     type = Vect_option_to_types(type_opt);
     dmax = atof(dmax_opt->answer);
 
@@ -240,8 +241,9 @@ int main(int argc, char **argv)
 
     /* Open input lines */
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
-
+    Vect_open_old2(&In, in_opt->answer, "", lfield_opt->answer);
+    field = Vect_get_field_number(&In, lfield_opt->answer);
+    
     /* Open output segments */
     Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));
     Vect_copy_head_data(&In, &Out);
@@ -319,8 +321,8 @@ int main(int argc, char **argv)
 	    ltype = Vect_read_line(&In, LPoints, LCats, line);
 	    if (!(ltype & type))
 		continue;
-
-	    Vect_cat_get(LCats, field, &cat);
+	    if (!Vect_cat_get(LCats, field, &cat))
+		continue;
 
 	    if (LPoints->n_points <= 1) {
 		write_point(&Out, LPoints->x[0], LPoints->y[0], LPoints->z[0],
@@ -345,7 +347,8 @@ int main(int argc, char **argv)
 	    cat = -1;
 	    if (centroid > 0) {
 		Vect_read_line(&In, NULL, LCats, centroid);
-		Vect_cat_get(LCats, field, &cat);
+		if (!Vect_cat_get(LCats, field, &cat))
+		  continue;
 	    }
 
 	    Vect_get_area_points(&In, area, LPoints);
@@ -377,7 +380,7 @@ int main(int argc, char **argv)
     Vect_close(&In);
     Vect_close(&Out);
 
-    G_done_msg(_("%d points written to output vector map"), point_cat - 1);
+    G_done_msg(_("%d points written to output vector map."), point_cat - 1);
 
     exit(EXIT_SUCCESS);
 }

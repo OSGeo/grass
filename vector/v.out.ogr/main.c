@@ -302,22 +302,34 @@ int main(int argc, char *argv[])
     
     /* check if the map is 3d */
     if (Vect_is_3d(&In)) {
-	/* specific check for shp */
+	/* specific check for ESRI ShapeFile */
 	if (strcmp(options.format->answer, "ESRI_Shapefile") == 0) {
 	    const char *shpt;
 
 	    shpt = CSLFetchNameValue(papszLCO, "SHPT");
 	    if (!shpt || shpt[strlen(shpt) - 1] != 'Z') {
 		G_warning(_("Vector map <%s> is 3D. "
-			    "Use format specific layer creation options (parameter 'lco') "
+			    "Use format specific layer creation options SHPT (parameter 'lco') "
 			    "to export in 3D rather than 2D (default)"),
+			  options.input->answer);
+	    }
+	}
+	/* specific check for PostgreSQL */
+	else if (strcmp(options.format->answer, "PostgreSQL") == 0) {
+	    const char *dim;
+
+	    dim = CSLFetchNameValue(papszLCO, "DIM");
+	    if (!dim || strcmp(dim, "3") != 0) {
+		G_warning(_("Vector map <%s> is 3D. "
+			    "Use format specific layer creation options DIM (parameter 'lco') "
+			    "to export in 3D rather than 2D (default)."),
 			  options.input->answer);
 	    }
 	}
 	else {
 	    G_warning(_("Vector map <%s> is 3D. "
 			"Use format specific layer creation options (parameter 'lco') "
-			"to export in 3D rather than 2D (default)"),
+			"to export in 3D rather than 2D (default)."),
 		      options.input->answer);
 	}
     }
@@ -578,7 +590,6 @@ int main(int argc, char *argv[])
 			       Points->z[0]);
 	    }
 	    else {		/* GV_LINE or GV_BOUNDARY */
-
 		Ogr_geometry = OGR_G_CreateGeometry(wkbLineString);
 		for (j = 0; j < Points->n_points; j++) {
 		    OGR_G_AddPoint(Ogr_geometry, Points->x[j], Points->y[j],

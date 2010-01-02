@@ -102,7 +102,7 @@ static void F_generate(const char *drvname, const char *dbname,
     db_free_string(&str);
 }
 
-void what(double east, double north, double maxdist, int topo, int showextra, int script)
+void what(double east, double north, double maxdist, int topo, int showextra, int script, int *field)
 {
     int type;
     char east_buf[40], north_buf[40];
@@ -199,6 +199,10 @@ void what(double east, double north, double maxdist, int topo, int showextra, in
 
 	if (line > 0) {
 	    type = Vect_read_line(&Map[i], Points, Cats, line);
+
+	    if (field[i] != -1 && !Vect_cat_get(Cats, field[i], NULL))
+	      continue;
+	    
 	    switch (type) {
 	    case GV_POINT:
 		sprintf(buf, "Point\n");

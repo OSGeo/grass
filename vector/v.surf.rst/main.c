@@ -1,31 +1,25 @@
 
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
- * University of Illinois
- * US Army Construction Engineering Research Lab
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
+/****************************************************************************
  *
- *   This program is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU General Public License
- *   as published by the Free Software Foundation; either version 2
- *   of the License, or (at your option) any later version.
+ * MODULE:       v.surf.rst
+ * AUTHOR(S):    H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
+ *               University of Illinois
+ *               I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
+ *               Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+ *               modified by McCauley in August 1995
+ *               modified by Mitasova in August 1995
+ *               modified by Mitasova in November 1999 (dmax, timestamp update)
+ *               dnorm independent tension - -t flag
+ *               cross-validation -v flag by Jaro Hofierka 2004
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * PURPOSE:      Surface interpolation from vector point data by splines
+ * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995
- * modified by Mitasova in November 1999 (dmax, timestamp update)
- * dnorm independent tension - -t flag
- * cross-validation -v flag by Jaro Hofierka 2004
- */
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,10 +36,10 @@
 #include <grass/interpf.h>
 
 #include <grass/qtree.h>
-#include "surf.h"
 #include <grass/dataquad.h>
 #include <grass/gmath.h>
 
+#include "surf.h"
 
 #define SCIK1 1			/*100000 */
 #define SCIK2 1			/*100000 */
@@ -116,7 +110,7 @@ static int n_rows, n_cols;
 
 int main(int argc, char *argv[])
 {
-    int per, npmin;
+    int npmin;
     int ii;
     double x_orig, y_orig, dnorm, deltx, delty, xm, ym;
     char dmaxchar[200];
@@ -146,6 +140,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("surface"));
+    G_add_keyword(_("interpolation"));
     module->description =
 	_("Spatial approximation and topographic analysis from given "
 	  "point or isoline data in vector format to floating point "
@@ -170,7 +166,7 @@ int main(int argc, char *argv[])
 
     flag.withz = G_define_flag();
     flag.withz->key = 'z';
-    flag.withz->description = _("Use z coordinates for approximation");
+    flag.withz->description = _("Use z coordinates for approximation (3D vector maps only)");
     flag.withz->guisection = _("Parameters");
     
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
@@ -179,87 +175,84 @@ int main(int argc, char *argv[])
     parm.field->answer = "1";
     parm.field->guisection = _("Selection");
 
+    parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    parm.zcol->key = "zcolumn";
+    parm.zcol->required = NO;
+    parm.zcol->description =
+	_("Name of the attribute column with values to be used for approximation");
+    parm.zcol->guisection = _("Parameters");
+
     parm.wheresql = G_define_standard_option(G_OPT_DB_WHERE);
     parm.wheresql->guisection = _("Selection");
 
     parm.elev = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.elev->key = "elev";
     parm.elev->required = NO;
-    parm.elev->description = _("Output surface raster map (elevation)");
+    parm.elev->description = _("Name for output surface raster map (elevation)");
     parm.elev->guisection = _("Outputs");
 
     parm.slope = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.slope->key = "slope";
     parm.slope->required = NO;
-    parm.slope->description = _("Output slope raster map");
+    parm.slope->description = _("Name for output slope raster map");
     parm.slope->guisection = _("Outputs");
 
     parm.aspect = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.aspect->key = "aspect";
     parm.aspect->required = NO;
-    parm.aspect->description = _("Output aspect raster map");
+    parm.aspect->description = _("Name for output aspect raster map");
     parm.aspect->guisection = _("Outputs");
 
     parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.pcurv->key = "pcurv";
     parm.pcurv->required = NO;
-    parm.pcurv->description = _("Output profile curvature raster map");
+    parm.pcurv->description = _("Name for output profile curvature raster map");
     parm.pcurv->guisection = _("Outputs");
 
     parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.tcurv->key = "tcurv";
     parm.tcurv->required = NO;
-    parm.tcurv->description = _("Output tangential curvature raster map");
+    parm.tcurv->description = _("Name for output tangential curvature raster map");
     parm.tcurv->guisection = _("Outputs");
 
     parm.mcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.mcurv->key = "mcurv";
     parm.mcurv->required = NO;
-    parm.mcurv->description = _("Output mean curvature raster map");
+    parm.mcurv->description = _("Name for output mean curvature raster map");
     parm.mcurv->guisection = _("Outputs");
 
-    parm.devi = G_define_option();
+    parm.devi = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.devi->key = "devi";
-    parm.devi->type = TYPE_STRING;
     parm.devi->required = NO;
-    parm.devi->gisprompt = "new,vector,vector";
-    parm.devi->description = _("Output deviations vector point file");
+    parm.devi->description = _("Name for output deviations vector point map");
     parm.devi->guisection = _("Outputs");
 
     parm.cvdev = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.cvdev->key = "cvdev";
     parm.cvdev->required = NO;
     parm.cvdev->description =
-	_("Output cross-validation errors vector point file");
+	_("Name for output cross-validation errors vector point map");
     parm.cvdev->guisection = _("Outputs");
 
     parm.treefile = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.treefile->key = "treefile";
     parm.treefile->required = NO;
     parm.treefile->description =
-	_("Output vector map showing quadtree segmentation");
+	_("Name for output vector map showing quadtree segmentation");
     parm.treefile->guisection = _("Outputs");
 
     parm.overfile = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.overfile->key = "overfile";
     parm.overfile->required = NO;
     parm.overfile->description =
-	_("Output vector map showing overlapping windows");
+	_("Name for output vector map showing overlapping windows");
     parm.overfile->guisection = _("Outputs");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
     parm.maskmap->key = "maskmap";
     parm.maskmap->required = NO;
-    parm.maskmap->description = _("Name of the raster map used as mask");
+    parm.maskmap->description = _("Name of raster map used as mask");
     parm.maskmap->guisection = _("Parameters");
-
-    parm.zcol = G_define_option();
-    parm.zcol->key = "zcolumn";
-    parm.zcol->type = TYPE_STRING;
-    parm.zcol->required = NO;
-    parm.zcol->description =
-	_("Name of the attribute column with values to be used for approximation");
-    parm.zcol->guisection = _("Parameters");
 
     parm.fi = G_define_option();
     parm.fi->key = "tension";
@@ -363,14 +356,20 @@ int main(int argc, char *argv[])
     sprintf(dmaxchar, "%f", dmin * 5);
     sprintf(dminchar, "%f", dmin);
 
-    if (!parm.dmin->answer)
-	parm.dmin->answer = dminchar;
-    if (!parm.dmax->answer)
-	parm.dmax->answer = dmaxchar;
-
-    per = 1;
+    if (!parm.dmin->answer) {
+	parm.dmin->answer = G_store(dminchar);
+	parm.dmin->answers = (char **) G_malloc(2 * sizeof(char *));
+	parm.dmin->answers[0] = G_store(dminchar);
+	parm.dmin->answers[1] = NULL;
+    }
+    if (!parm.dmax->answer) {
+	parm.dmax->answer = G_store(dmaxchar);
+	parm.dmax->answers = (char **) G_malloc(2 * sizeof(char *));
+	parm.dmax->answers[0] = G_store(dmaxchar);
+	parm.dmax->answers[1] = NULL;
+    }
+    
     input = parm.input->answer;
-    field = atoi(parm.field->answer);
     zcol = parm.zcol->answer;
     scol = parm.scol->answer;
     wheresql = parm.wheresql->answer;
@@ -526,7 +525,11 @@ int main(int argc, char *argv[])
     if ((info = MT_tree_info_new(root, functions, dmin, KMAX)) == NULL)
 	G_fatal_error(_("Cannot create tree info"));
 
-    open_check = Vect_open_old(&Map, input, "");
+    open_check = Vect_open_old2(&Map, input, "", parm.field->answer);
+    field = Vect_get_field_number(&Map, parm.field->answer);
+    if (!flag.withz->answer && field < 1)
+	G_fatal_error(_("Layer <%s> not found"), parm.field->answer);
+    
     if (open_check < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), input);
     /*    if (open_check < 2)
@@ -580,9 +583,7 @@ int main(int argc, char *argv[])
     }
 
     ertot = 0.;
-    if (per)
-	G_message(_("Percent complete: "));
-
+    
     create_temp_files();
 
     IL_init_params_2d(&params, NULL, 1, 1, zmult, KMIN, KMAX, maskmap, n_rows,
@@ -598,7 +599,7 @@ int main(int argc, char *argv[])
 		    IL_crstg, IL_write_temp_2d);
 
     totsegm =
-	IL_vector_input_data_2d(&params, &Map, flag.withz ? 0 : field,
+	IL_vector_input_data_2d(&params, &Map, flag.withz->answer ? 0 : field,
 				zcol, scol,
 				info, &xmin, &xmax,
 				&ymin, &ymax, &zmin, &zmax, &NPOINT, &dmax);
@@ -643,8 +644,8 @@ int main(int argc, char *argv[])
     if (mcurv != NULL)
 	ddisk += disk;
     ddisk += sddisk;
-    G_message(_("Processing all selected output files\n"
-		"will require %d bytes of disk space for temp files"), ddisk);
+    G_verbose_message(_("Processing all selected output files "
+			"will require %d bytes of disk space for temp files"), ddisk);
 
     deltx = xmax - xmin;
     delty = ymax - ymin;
@@ -652,18 +653,18 @@ int main(int argc, char *argv[])
 
     if (dtens) {
 	params.fi = params.fi * dnorm / 1000.;
-	G_message("dnorm = %f, rescaled tension = %f", dnorm, params.fi);
+	G_debug(1, "dnorm = %f, rescaled tension = %f", dnorm, params.fi);
     }
-
+    
     bitmask = IL_create_bitmask(&params);
+    
     if (totsegm <= 0) {
 	clean();
 	G_fatal_error(_("Input failed"));
     }
 
     ertot = 0.;
-    if (per)
-	G_message(_("Percent complete: "));
+    G_message(_("Processing segments..."));    
     if (IL_interp_segments_2d(&params, info, info->root, bitmask,
 			      zmin, zmax, &zminac, &zmaxac, &gmin, &gmax,
 			      &c1min, &c1max, &c2min, &c2max, &ertot, totsegm,
@@ -687,7 +688,7 @@ int main(int argc, char *argv[])
 		      dtens, 1, NPOINT);
     if (ii < 0) {
 	clean();
-	G_fatal_error(_("Cannot write raster maps -- try to increase resolution"));
+	G_fatal_error(_("Unable to write raster maps - try to increase resolution"));
     }
 
     G_free(zero_array_cell);
@@ -707,7 +708,7 @@ int main(int argc, char *argv[])
     if (overfile != NULL) {
 	if (0 > Vect_open_new(&OverMap, overfile, 0)) {
 	    clean();
-	    G_fatal_error(_("Unable to open vector map <%s>"), overfile);
+	    G_fatal_error(_("Unable to create vector map <%s>"), overfile);
 	}
 	Vect_hist_command(&OverMap);
 
@@ -742,7 +743,7 @@ int main(int argc, char *argv[])
 	Vect_close(&Map2);
     }
 
-    G_done_msg("\n");
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
 

@@ -75,6 +75,17 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->multiple = YES;
+    field_opt->guisection = _("Selection");
+
+    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
+    type_opt->guisection = _("Selection");
+
+    id_opt = G_define_standard_option(G_OPT_V_IDS);
+    id_opt->label = _("Feature ids (by default all features are processed)");
+    id_opt->guisection = _("Selection");
+
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->required = NO;
 
@@ -91,18 +102,7 @@ int main(int argc, char *argv[])
 				 "sum;add the value specified by cat option to the current category value;"
 				 "report;print report (statistics), in shell style: layer type count min max;"
 				 "print;print category values, more cats in the same layer are separated by '/'");
-
-    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
-    type_opt->guisection = _("Selection");
-
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->multiple = YES;
-    field_opt->guisection = _("Selection");
-
-    id_opt = G_define_standard_option(G_OPT_V_IDS);
-    id_opt->label = _("Feature ids (by default all features are processed)");
-    id_opt->guisection = _("Selection");
-
+    
     cat_opt = G_define_standard_option(G_OPT_V_CAT);
     cat_opt->answer = "1";
 

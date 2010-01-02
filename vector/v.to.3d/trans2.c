@@ -19,9 +19,9 @@
    \return -1 on error
  */
 int trans2d(struct Map_info *In, struct Map_info *Out, int type,
-	    double height, int field, const char *column)
+	    double height, const char *field_name, const char *column)
 {
-    int i, ltype, line;
+    int i, ltype, line, field;
     int cat;
     int ret, ctype;
 
@@ -35,6 +35,8 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 
     db_CatValArray_init(&cvarr);
 
+    field = Vect_get_field_number(In, field_name);
+    
     if (column) {
 	struct field_info *Fi;
 
@@ -42,8 +44,8 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 
 	Fi = Vect_get_field(In, field);
 	if (!Fi) {
-	    G_warning(_("Database connection not defined for layer %d"),
-		      field);
+	    G_warning(_("Database connection not defined for layer <%s>"),
+		      field_name);
 	    return -1;
 	}
 
@@ -92,6 +94,9 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 	if (!(ltype & type))
 	    continue;
 
+	if (field != -1 && !Vect_cat_get(Cats, field, &cat))
+	    continue;
+	
 	if (column) {
 	    Vect_cat_get(Cats, field, &cat);
 	    if (cat < 0) {

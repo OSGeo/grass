@@ -29,7 +29,7 @@
 #include "trans.h"
 #include "local_proto.h"
 
-int create_transform_from_file(struct file_info *Coord, int quiet)
+int create_transform_from_file(struct file_info *Coord)
 {
     int status;
     int n_points;
@@ -50,7 +50,7 @@ int create_transform_from_file(struct file_info *Coord, int quiet)
 	G_fatal_error(_("Error creating transformation"));
     }
 
-    if (!quiet)
+    if (G_verbose() > G_verbose_std())
 	print_transform_resids(n_points);
 
     return (0);

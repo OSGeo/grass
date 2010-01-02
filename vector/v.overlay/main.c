@@ -63,29 +63,29 @@ int main(int argc, char *argv[])
     in_opt[0]->label = _("Name of input vector map (A)");
     in_opt[0]->key = "ainput";
 
+    field_opt[0] = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt[0]->label = _("Layer number or name (vector map A)");
+    field_opt[0]->key = "alayer";
+
     type_opt[0] = G_define_standard_option(G_OPT_V_TYPE);
     type_opt[0]->label = _("Feature type (vector map A)");
     type_opt[0]->key = "atype";
     type_opt[0]->options = "line,area";
     type_opt[0]->answer = "area";
 
-    field_opt[0] = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt[0]->label = _("Layer number or name (vector map A)");
-    field_opt[0]->key = "alayer";
-
     in_opt[1] = G_define_standard_option(G_OPT_V_INPUT);
     in_opt[1]->label = _("Name of input vector map (B)");
     in_opt[1]->key = "binput";
+
+    field_opt[1] = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt[1]->label = _("Layer number or name (vector map B)");
+    field_opt[1]->key = "blayer";
 
     type_opt[1] = G_define_standard_option(G_OPT_V_TYPE);
     type_opt[1]->label = _("Feature type (vector map B)");
     type_opt[1]->key = "btype";
     type_opt[1]->options = "area";
     type_opt[1]->answer = "area";
-
-    field_opt[1] = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt[1]->label = _("Layer number or name (vector map B)");
-    field_opt[1]->key = "blayer";
 
     operator_opt = G_define_option();
     operator_opt->key = "operator";

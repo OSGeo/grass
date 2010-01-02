@@ -109,24 +109,24 @@ int main(int argc, char **argv)
 
     inopt = G_define_standard_option(G_OPT_V_INPUT);
 
-    outopt = G_define_standard_option(G_OPT_V_OUTPUT);
-
+    fieldopt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    fieldopt->guisection = _("Selection");
+    
     typopt = G_define_standard_option(G_OPT_V_TYPE);
     typopt->answer = "point,line,boundary,centroid,area,face";
     typopt->options = "point,line,boundary,centroid,area,face";
     typopt->label = _("Types to be extracted");
     typopt->guisection = _("Selection");
 
-    fieldopt = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    fieldopt->guisection = _("Selection");
-    
     listopt = G_define_standard_option(G_OPT_V_CATS);
     listopt->key = "list";
     listopt->guisection = _("Selection");
 
     whereopt = G_define_standard_option(G_OPT_DB_WHERE);
     whereopt->guisection = _("Selection");
-
+    
+    outopt = G_define_standard_option(G_OPT_V_OUTPUT);
+    
     fileopt = G_define_standard_option(G_OPT_F_INPUT);
     fileopt->key = "file";
     fileopt->required = NO;
