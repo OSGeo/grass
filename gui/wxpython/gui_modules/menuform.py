@@ -1898,12 +1898,12 @@ class GUI:
 
         @param cmd command to be parsed (given as list)
         """
-        enc = locale.getdefaultlocale()[1]
-        if enc and enc.lower() not in ("utf8", "utf-8"):
-            tree = etree.fromstring(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"))
-        else:
-            tree = etree.fromstring(getInterfaceDescription(cmd[0]))
-            
+        # enc = locale.getdefaultlocale()[1]
+        # if enc and enc.lower() not in ("utf8", "utf-8"):
+        #     tree = etree.fromstring(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"))
+        # else:
+        tree = etree.fromstring(getInterfaceDescription(cmd[0]))
+        
         return processTask(tree).GetTask()
     
     def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=None,
