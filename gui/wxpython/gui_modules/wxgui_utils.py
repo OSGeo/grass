@@ -214,15 +214,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnKeyUp(self, event):
         """!Key pressed"""
         key = event.GetKeyCode()
+        
         if key == wx.WXK_DELETE and self.lmgr:
             self.lmgr.OnDeleteLayer(None)
 
         event.Skip()
-
-    #def OnChangeLayerName (self, event):
-    #    """!Change layer name"""
-    #    Debug.msg (3, "LayerTree.OnChangeLayerName: name=%s" % event.GetLabel())
-
+        
     def OnLayerContextMenu (self, event):
         """!Contextual menu for item/layer"""
         if not self.layer_selected:

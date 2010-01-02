@@ -94,10 +94,10 @@ from   icons.icon import Icons
 UserSettings = preferences.globalSettings
 
 class GMFrame(wx.Frame):
-    """
+    """!
     GIS Manager frame with notebook widget for controlling
     GRASS GIS. Includes command console page for typing GRASS
-    (and other) commands, tree widget page for managing GIS map layers.
+    (and other) commands, tree widget page for managing map layers.
     """
     def __init__(self, parent, id=wx.ID_ANY, title=_("GRASS GIS Layer Manager"),
                  workspace=None):
@@ -136,7 +136,7 @@ class GMFrame(wx.Frame):
         
         # bindings
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
-        self.Bind(wx.EVT_KEY_UP,   self.OnKey)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
         # minimal frame size
         self.SetMinSize((500, 400))
@@ -1449,10 +1449,10 @@ class GMFrame(wx.Frame):
                 self.curr_page.maptree.DeleteChildren(layer)
             self.curr_page.maptree.Delete(layer)
         
-    def OnKey(self, event):
-        """!Check hotkey"""
+    def OnKeyDown(self, event):
+        """!Key pressed"""
         kc = event.GetKeyCode()
-                
+        print kc
         if event.ControlDown():
             if kc == wx.WXK_TAB:
                 # switch layer list / command output
@@ -1467,7 +1467,7 @@ class GMFrame(wx.Frame):
             event.Skip()
             return
         
-        if event.AltDown():
+        if event.CtrlDown():
             if kc == 'R':
                 self.OnAddRaster(None)
             elif kc == 'V':

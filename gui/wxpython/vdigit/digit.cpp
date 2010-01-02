@@ -34,8 +34,9 @@ extern "C" {
 Digit::Digit(DisplayDriver *ddriver, wxWindow *window)
 {
     display = ddriver;
-    display->parentWin = window;
-
+    if (!display)
+	return;
+    
     if (display->mapInfo) {
 	InitCats();
     }

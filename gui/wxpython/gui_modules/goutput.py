@@ -422,10 +422,7 @@ class GMConsole(wx.SplitterWindow):
                 self.parent.cmdinput.SetHistoryItems()
             except AttributeError:
                 pass
-
-        # allow writing to output window
-        self.cmd_output.SetReadOnly(False)
-                
+        
         if cmdlist[0] in globalvar.grassCmd['all']:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
@@ -513,10 +510,7 @@ class GMConsole(wx.SplitterWindow):
                                   self.cmd_stdout, self.cmd_stderr)                                         
             self.btn_abort.Enable()
             self.cmd_output_timer.Start(50)
-        
-        # reset output window to read only
-        self.cmd_output.SetReadOnly(True)
-        
+                
         return None
 
     def ClearHistory(self, event):
@@ -948,6 +942,9 @@ class GMStc(wx.stc.StyledTextCtrl):
 
         String is wrapped and linesep is also added to the end
         of the string"""
+        # allow writing to output window
+        self.SetReadOnly(False)
+        
         if wrap:
             txt = textwrap.fill(txt, wrap) + '\n'
         else:
@@ -976,4 +973,8 @@ class GMStc(wx.stc.StyledTextCtrl):
                 else:
                     txt = _('Unable to encode text. Please set encoding in GUI preferences.') + '\n'
                     
-                self.AddText(txt) 
+                self.AddText(txt)
+        
+        # reset output window to read only
+        self.SetReadOnly(True)
+    

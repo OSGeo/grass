@@ -869,6 +869,7 @@ class mainFrame(wx.Frame):
             return
         
         if not event.ControlDown():
+            event.Skip()
             return
         
         if kc == 'Q':

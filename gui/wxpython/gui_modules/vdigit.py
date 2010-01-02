@@ -224,16 +224,13 @@ class AbstractDigit:
         return ids
 
 class VDigit(AbstractDigit):
-    """
-    Prototype of digitization class based on v.digit reimplementation
-
-    Under development (wxWidgets C/C++ background)
+    """!Prototype of digitization class based on v.digit
+    reimplementation (wxWidgets C/C++)
     """
     def __init__(self, mapwindow):
-        """!Initialization
-
+        """!VDigit constructor
+        
         @param mapwindow reference to mapwindow (MapFrame) instance
-        @param settings  initial settings of digitization tool
         """
         AbstractDigit.__init__(self, mapwindow)
         
@@ -251,7 +248,6 @@ class VDigit(AbstractDigit):
             # print traceback
             traceback.print_exc(file = self.log)
             self.digit = None
-            
         self.UpdateSettings()
         
     def __del__(self):
@@ -763,15 +759,6 @@ class VDigit(AbstractDigit):
 
         return (snap, thresh)
 
-class Digit(VDigit):
-    """!Default digit class"""
-    def __init__(self, mapwindow):
-        VDigit.__init__(self, mapwindow)
-        self.type = 'vdigit'
-        
-    def __del__(self):
-        VDigit.__del__(self)
-        
 class AbstractDisplayDriver:
     """!Abstract classs for display driver"""
     def __init__(self, parent, mapwindow):
