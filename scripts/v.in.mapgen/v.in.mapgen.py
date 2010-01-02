@@ -153,11 +153,11 @@ def main():
     t = string.Template(\
 """ORGANIZATION: GRASSroots organization
 DIGIT DATE:   $date
-DIGIT NAME:   $prog
+DIGIT NAME:   $user@$host
 MAP NAME:     $name
 MAP DATE:     $year
 MAP SCALE:    1
-OTHER INFO:   Imported by $user@$host
+OTHER INFO:   Imported with $proj
 ZONE:         0
 MAP THRESH:   0
 VERTI:
