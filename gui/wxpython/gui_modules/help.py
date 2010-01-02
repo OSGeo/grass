@@ -326,7 +326,7 @@ class MenuTree(CT.CustomTreeCtrl):
         for eachMenuData in data.GetMenu():
             for label, items in eachMenuData:
                 item = self.AppendItem(parentId = self.root,
-                                       text = label)
+                                       text = label.replace('&', ''))
                 self.__AppendItems(item, items)
         
     def __AppendItems(self, item, data):
