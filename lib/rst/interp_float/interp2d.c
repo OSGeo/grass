@@ -29,6 +29,7 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 #include <grass/bitmap.h>
 
 #include <grass/interpf.h>
@@ -117,13 +118,13 @@ int IL_grid_calc_2d(struct interp_params *params, struct quaddata *data,	/* give
 
     if (!w) {
 	if (!(w = (double *)G_malloc(sizeof(double) * (params->KMAX2 + 9)))) {
-	    fprintf(stderr, "Cannot allocate w\n");
+	    G_warning(_("Out of memory"));
 	    return -1;
 	}
     }
     if (!w2) {
 	if (!(w2 = (double *)G_malloc(sizeof(double) * (params->KMAX2 + 9)))) {
-	    fprintf(stderr, "Cannot allocate w2\n");
+	    G_warning(_("Out of memory"));
 	    return -1;
 	}
     }
@@ -210,22 +211,15 @@ int IL_grid_calc_2d(struct interp_params *params, struct quaddata *data,	/* give
 
 		    if (!once) {
 			once = 1;
-			fprintf(stderr, "WARNING:\n");
-			fprintf(stderr,
-				"Overshoot -- increase in tension suggested.\n");
-			fprintf(stderr, "Overshoot occures at (%d,%d) cell\n",
-				l, k);
-			fprintf(stderr,
-				"The z-value is %f,zmin is %f,zmax is %f\n",
-				zz, zmin, zmax);
+			G_warning(_("Overshoot - increase in tension suggested. "
+				    "Overshoot occures at (%d,%d) cell. "
+				    "Z-value %f, zmin %f, zmax %f."),
+				  l, k, zz, zmin, zmax);
 		    }
 		}
-
-
+		
 		params->az[l] = (FCELL) zz;
-		/*
-		 * fprintf(stderr,"%f ",zz);
-		 */
+		
 		if (cond1) {
 		    params->adx[l] = (FCELL) (-dx * tfsta2);
 		    params->ady[l] = (FCELL) (-dy * tfsta2);

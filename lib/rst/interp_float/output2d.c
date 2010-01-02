@@ -123,7 +123,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 
     ncols = cellhd->cols;
     if (ncols != params->nsizc) {
-	G_warning(_("First change your cols number to nsizc! %d %d"),
+	G_warning(_("First change your cols number to nsizc %d %d"),
 		  ncols, params->nsizc);
 	return -1;
     }
@@ -583,8 +583,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	Rast_short_history(params->elev, type, &hist);
 
 	params->dmin = sqrt(params->dmin);
-	fprintf(stdout, "history initiated\n");
-	fflush(stdout);
+
 	/*
 	 * sprintf (hist.edhist[0], "tension=%f, smoothing=%f", params->fi *
 	 * dnorm / 1000., params->rsm);
