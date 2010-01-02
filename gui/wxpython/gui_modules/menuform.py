@@ -723,11 +723,7 @@ class mainFrame(wx.Frame):
         guisizer.Add (item=self.notebookpanel, proportion=1, flag=wx.EXPAND)
 
         # status bar
-        status_text = _("Enter parameters for ") + self.task.name
-        if self.notebookpanel.hasMain:
-            # We have to wait for the notebookpanel to be filled in order
-            # to know if there actually is a Main tab
-            status_text += _(" (those in bold typeface are required)")
+        status_text = _("Enter parameters for '") + self.task.name + "'"
         try:
             self.task.getCmd()
             self.updateValuesHook()
