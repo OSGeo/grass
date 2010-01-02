@@ -245,7 +245,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map");
+	Opt->description = _("Name of input 3D raster map");
 	break;
     case G_OPT_R3_INPUTS:
 	Opt->key = "input";
@@ -254,7 +254,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map(s)");
+	Opt->description = _("Name of input 3D raster map(s)");
 	break;
     case G_OPT_R3_OUTPUT:
 	Opt->key = "output";
@@ -262,7 +262,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "new,grid3,3d-raster";
-	Opt->description = _("Name for output raster3d map");
+	Opt->description = _("Name for output 3D raster map");
 	break;
     case G_OPT_R3_MAP:
 	Opt->key = "map";
@@ -270,7 +270,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map");
+	Opt->description = _("Name of input 3D raster map");
 	break;
     case G_OPT_R3_MAPS:
 	Opt->key = "map";
@@ -279,7 +279,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input raster3d map(s)");
+	Opt->description = _("Name of input 3D raster map(s)");
 	break;
 
 	/*vector maps */
@@ -362,7 +362,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key = "layer";
 	Opt->type = TYPE_STRING;
 	Opt->required = NO;
-	Opt->answer = "1";
+	Opt->answer = "-1";
 	Opt->label = _("Layer number or name ('-1' for all layers)");
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
