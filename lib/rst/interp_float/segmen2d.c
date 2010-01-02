@@ -56,7 +56,6 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
     /* find the size of the smallest segment once */
     if (first_time) {
 	smseg = smallest_segment(info->root, 4);
-	/*      fprintf(stderr, "smseg=%lf, first=%d,\n", smseg, first_time); */
 	first_time = 0;
     }
     ns_res = (((struct quaddata *)(info->root->data))->ymax -
@@ -109,10 +108,9 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 
 	while ((npt < MINPTS) || (npt > params->KMAX2)) {
 	    if (i >= 70) {
-		fprintf(stderr, "\n");
-		G_warning(_("taking too long to find points for interpolation--"
-			   "please change the region to area where your points are. "
-			   "Continuing calculations..."));
+		G_warning(_("Taking too long to find points for interpolation - "
+			    "please change the region to area where your points are. "
+			    "Continuing calculations..."));
 		break;
 	    }
 	    i++;
@@ -152,7 +150,7 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 	    data->n_points = 0;
 	    npt = MT_region_data(info, info->root, data, params->KMAX2, 4);
 	}
-	/* show before to catch 0% */
+	
 	if (totsegm != 0) {
 	    G_percent(cursegm, totsegm, 1);
 	}
@@ -174,19 +172,19 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 	    if (!
 		(matrix =
 		 G_alloc_matrix(params->KMAX2 + 1, params->KMAX2 + 1))) {
-		fprintf(stderr, "Cannot allocate memory for matrix\n");
+		G_warning(_("Out of memory"));
 		return -1;
 	    }
 	}
 	if (!indx) {
 	    if (!(indx = G_alloc_ivector(params->KMAX2 + 1))) {
-		fprintf(stderr, "Cannot allocate memory for indx\n");
+		G_warning(_("Out of memory"));
 		return -1;
 	    }
 	}
 	if (!b) {
 	    if (!(b = G_alloc_vector(params->KMAX2 + 3))) {
-		fprintf(stderr, "Cannot allocate memory for b\n");
+		G_warning(_("Out of memory"));
 		return -1;
 	    }
 	}
@@ -196,7 +194,7 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 		(point =
 		 (struct triple *)G_malloc(sizeof(struct triple) *
 					   data->n_points))) {
-		fprintf(stderr, "Cannot allocate memory for point\n");
+		G_warning(_("Out of memory"));
 		return -1;
 	    }
 	}
@@ -305,7 +303,8 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 	/* show after to catch 100% */
 	cursegm++;
 	if (totsegm < cursegm)
-	    fprintf(stderr, "%d %d\n", totsegm, cursegm);
+	    G_debug(1, "%d %d", totsegm, cursegm);
+	
 	if (totsegm != 0) {
 	    G_percent(cursegm, totsegm, 1);
 	}
@@ -314,8 +313,8 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 	   G_free_ivector(indx);
 	   G_free_vector(b);
 	 */
-	free(data->points);
-	free(data);
+	G_free(data->points);
+	G_free(data);
     }
     return 1;
 }
@@ -337,11 +336,9 @@ static double smallest_segment(struct multtree *tree, int n_leafs)
 	    if (first_time) {
 		minside = side;
 		first_time = 0;
-		/*          fprintf(stderr, "FIRST,side=%lf, minside=%lf,\n", side, minside); */
 	    }
 	    if (side < minside)
 		minside = side;
-	    /*        fprintf(stderr, "SEC side=%lf, minside=%lf,\n", side, minside); */
 	}
     }
     else {
@@ -349,6 +346,6 @@ static double smallest_segment(struct multtree *tree, int n_leafs)
 	    ((struct quaddata *)(tree->data))->x_orig;
 	return side;
     }
-    /*    fprintf(stderr, "OUT side=%lf, minside=%lf,\n", side, minside); */
+    
     return minside;
 }
