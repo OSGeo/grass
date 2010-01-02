@@ -7,12 +7,14 @@
  *               points outside current region) by Paul Kelly
  *               further: Radim Blazek <radim.blazek gmail.com>,  Huidae Cho <grass4u gmail.com>,
  *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
- * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
+ *               OGR support by Martin Landa <landa.martin gmail.com>
+ * PURPOSE:      Surface interpolation from vector point data by Inverse
+ *               Distance Squared Weighting
+ * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 #include <stdlib.h>
@@ -20,6 +22,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#include "proto.h"
 
 int search_points = 12;
 
@@ -43,11 +46,6 @@ struct Point ***points;
 struct Point *noidxpoints = NULL;
 struct list_Point *list;
 static struct Cell_head window;
-void calculate_distances(int, int, double, double, int *);
-void calculate_distances_noindex(double, double);
-
-/* read_sites.c */
-void read_sites(char *, int, char *, int);
 
 int main(int argc, char *argv[])
 {
@@ -63,7 +61,7 @@ int main(int argc, char *argv[])
     double north, east;
     double dist;
     double sum1, sum2, interp_value;
-    int n, field;
+    int n;
     struct
     {
 	struct Option *input, *npoints, *output, *dfield, *col;
@@ -85,12 +83,19 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
     module->description =
 	_("Surface interpolation from vector point data by Inverse "
 	  "Distance Squared Weighting.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
+
+    parm.dfield = G_define_standard_option(G_OPT_V_FIELD);
+    
+    parm.col = G_define_standard_option(G_OPT_DB_COLUMN);
+    parm.col->required = NO;
+    parm.col->description = _("Name of attribute column with values to interpolate");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -102,44 +107,32 @@ int main(int argc, char *argv[])
     parm.npoints->description = _("Number of interpolation points");
     parm.npoints->answer = "12";
 
-    parm.dfield = G_define_standard_option(G_OPT_V_FIELD);
-    parm.dfield->answer = "1";
-
-    parm.col = G_define_option();
-    parm.col->key = "column";
-    parm.col->type = TYPE_STRING;
-    parm.col->required = NO;
-    parm.col->description = _("Attribute table column with values to interpolate");
-
     flag.noindex = G_define_flag();
     flag.noindex->key = 'n';
     flag.noindex->label = _("Don't index points by raster cell");
     flag.noindex->description = _("Slower but uses"
-			     " less memory and includes points from outside region"
-			     " in the interpolation");
+				  " less memory and includes points from outside region"
+				  " in the interpolation");
 
     flag.withz = G_define_flag();
     flag.withz->key = 'z';
-    flag.withz->description = _("Use z coordinates for approximation");
+    flag.withz->description = _("Use z coordinates for approximation (3D vector maps only)");
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (sscanf(parm.npoints->answer, "%d", &search_points) != 1 ||
 	search_points < 1)
-	G_fatal_error(_("%s=%s - illegal number of interpolation points"),
+	G_fatal_error(_("Illegal number of interpolation points"),
 		      parm.npoints->key, parm.npoints->answer);
-
-    sscanf(parm.dfield->answer, "%d", &field);
-
+    
     if (!flag.withz->answer && !parm.col->answer)
 	G_fatal_error(_("No attribute column specified"));
 
     list =
-	(struct list_Point *)G_calloc((size_t) search_points,
-				      sizeof(struct list_Point));
-
-
+	(struct list_Point *) G_calloc((size_t) search_points,
+				       sizeof(struct list_Point));
+    
     /* get the window, dimension arrays */
     G_get_window(&window);
 
@@ -164,11 +157,11 @@ int main(int argc, char *argv[])
     }
 
     /* read the elevation points from the input sites file */
-    read_sites(parm.input->answer, flag.withz->answer ? 0 : field,
-	       parm.col->answer, flag.noindex->answer);
-
+    read_sites(parm.input->answer, parm.dfield->answer,
+	       parm.col->answer, flag.noindex->answer, flag.withz->answer);
+    
     if (npoints == 0)
-	G_fatal_error(_("No data points found"));
+	G_fatal_error(_("No points found"));
     nsearch = npoints < search_points ? npoints : search_points;
 
     if (!flag.noindex->answer) {
@@ -258,7 +251,7 @@ int main(int argc, char *argv[])
 
     north = window.north + window.ns_res / 2.0;
     for (row = 0; row < window.rows; row++) {
-	G_percent(row, window.rows - 1, 1);
+	G_percent(row, window.rows, 1);
 
 	if (mask) {
 	    if (Rast_get_c_row(maskfd, mask, row) < 0)
@@ -397,12 +390,15 @@ int main(int argc, char *argv[])
 	}
 	Rast_put_d_row(fd, dcell);
     }
+    G_percent(1, 1, 1);
+
     Rast_close(fd);
+
     /* writing history file */
     Rast_short_history(parm.output->answer, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(parm.output->answer, &history);
-
+    
     G_done_msg(" ");
 
     exit(EXIT_SUCCESS);

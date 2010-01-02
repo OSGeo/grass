@@ -74,6 +74,9 @@ transform_digit_file(struct Map_info *Old, struct Map_info *New,
 	if (type == -2)		/* EOF */
 	    return 1;
 
+	if (field != -1 && !Vect_cat_get(Cats, field, NULL))
+	    continue;
+	
 	/* get transformation parameters */
 	if (table) {
 	    Vect_cat_get(Cats, field, &cat);	/* get first category */

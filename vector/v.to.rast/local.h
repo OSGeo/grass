@@ -6,8 +6,6 @@
 #include <grass/vector.h>
 
 
-#undef DEBUG
-
 /* 2 * PI */
 #define M_2PI 6.283185307179586232
 
@@ -52,7 +50,7 @@ int update_cats(const char *);
 int update_fcolors(const char *);
 
 /* vect2rast.c */
-int vect_to_rast(const char *, const char *, int, const char *, int, int,
+int vect_to_rast(const char *, const char *, const char *, const char *, int, int,
 		 double, int, const char *, const char *, int);
 
 #endif

@@ -150,16 +150,17 @@ int main(int argc, char *argv[])
 	_("Creates a buffer around vector features of given type.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    field_opt->guisection = _("Selection");
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "point,line,boundary,centroid,area";
     type_opt->answer = "point,line,area";
     type_opt->guisection = _("Selection");
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    field_opt->guisection = _("Selection");
-
+    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    
     dista_opt = G_define_option();
     dista_opt->key = "distance";
     dista_opt->type = TYPE_DOUBLE;

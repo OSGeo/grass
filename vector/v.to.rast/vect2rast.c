@@ -7,16 +7,14 @@
 #include "local.h"
 
 
-int vect_to_rast(const char *vector_map, const char *raster_map, int field,
+int vect_to_rast(const char *vector_map, const char *raster_map, const char *field_name,
 		 const char *column, int nrows, int use, double value,
 		 int value_type, const char *rgbcolumn, const char *labelcolumn,
 		 int ftype)
 {
-#ifdef DEBUG
-    int i;
-#endif
     struct Map_info Map;
     struct line_pnts *Points;
+    int i, field;
     int fd;			/* for raster map */
     int nareas, nlines;		/* number of converted features */
     int nareas_all, nplines_all;	/* number of all areas, points/lines */
@@ -34,9 +32,10 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
 
     nareas = 0;
 
-    G_message(_("Loading data..."));
+    G_verbose_message(_("Loading data..."));
     Vect_set_open_level(2);
-    Vect_open_old(&Map, vector_map, "");
+    Vect_open_old2(&Map, vector_map, "", field_name);
+    field = Vect_get_field_number(&Map, field_name);
 
     if ((use == USE_Z) && !(Vect_is_3d(&Map)))
 	G_fatal_error(_("Vector map <%s> is not 3D"),
@@ -46,8 +45,8 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
     case USE_ATTR:
 	db_CatValArray_init(&cvarr);
 	if (!(Fi = Vect_get_field(&Map, field)))
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  field);
+	    G_fatal_error(_("Database connection not defined for layer <%s>"),
+			  field_name);
 
 	if ((Driver =
 	     db_start_driver_open_database(Fi->driver, Fi->database)) == NULL)
@@ -75,7 +74,6 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
 
 	db_close_database_shutdown_driver(Driver);
 
-#ifdef DEBUG
 	for (i = 0; i < cvarr.n_values; i++) {
 	    if (ctype == DB_C_TYPE_INT) {
 		G_debug(3, "cat = %d val = %d", cvarr.value[i].cat,
@@ -86,8 +84,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, int field,
 			cvarr.value[i].val.d);
 	    }
 	}
-#endif
-
+	
 	switch (ctype) {
 	case DB_C_TYPE_INT:
 	    format = USE_CELL;

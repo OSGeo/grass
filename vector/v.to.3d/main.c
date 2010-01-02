@@ -7,7 +7,7 @@
  *               
  * PURPOSE:      Performs transformation of 2D vector features to 3D
  *
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -28,14 +28,14 @@ int main(int argc, char **argv)
     struct opts opt;
     struct Map_info In, Out;
     struct bound_box box;
-    int field, type;
+    int type;
     int ret;
     
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("transformation"));
+    G_add_keyword(_("geometry"));
     G_add_keyword(_("3D"));
     module->description =
 	_("Performs transformation of 2D vector features to 3D.");
@@ -44,8 +44,7 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    field = atoi(opt.field->answer);
+    
     type = Vect_option_to_types(opt.type);
 
     if (!opt.reverse->answer) {
@@ -67,12 +66,12 @@ int main(int argc, char **argv)
 
     Vect_check_input_output_name(opt.input->answer, opt.output->answer,
 				 GV_FATAL_EXIT);
-
+    
     /* open input vector, topology not needed */
     Vect_set_open_level(1);
-    if (Vect_open_old(&In, opt.input->answer, "") < 1)
+    if (Vect_open_old2(&In, opt.input->answer, "", opt.field->answer) < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), opt.input->answer);
-
+    
     if (opt.reverse->answer && !Vect_is_3d(&In)) {
 	Vect_close(&In);
 	G_fatal_error(_("Vector map <%s> is 2D"), opt.input->answer);
@@ -106,7 +105,7 @@ int main(int argc, char **argv)
     ret = 0;
     if (opt.reverse->answer) {
 	/* 3d -> 2d */
-	ret = trans3d(&In, &Out, type, field, opt.column->answer);
+	ret = trans3d(&In, &Out, type, opt.field->answer, opt.column->answer);
     }
     else {
 	/* 2d -> 3d */
@@ -115,7 +114,7 @@ int main(int argc, char **argv)
 	if (opt.height->answer) {
 	    height = atof(opt.height->answer);
 	}
-	ret = trans2d(&In, &Out, type, height, field, opt.column->answer);
+	ret = trans2d(&In, &Out, type, height, opt.field->answer, opt.column->answer);
     }
 
     if (ret < 0) {

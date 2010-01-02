@@ -30,6 +30,9 @@ int parse_command_line(int argc, char *argv[])
 
     parms.vect = G_define_standard_option(G_OPT_V_MAP);
 
+    parms.field = G_define_standard_option(G_OPT_V_FIELD);
+    parms.field->label = _("Layer number or name (write to)");
+
     parms.type = G_define_standard_option(G_OPT_V_TYPE);
     parms.type->options = "point,line,boundary,centroid";
     parms.type->answer = "point,line,boundary,centroid";
@@ -37,13 +40,10 @@ int parse_command_line(int argc, char *argv[])
     parms.type->description =
 	_("For coor valid point/centroid, "
 	  "for length valid line/boundary");
-
-    parms.field = G_define_standard_option(G_OPT_V_FIELD);
-    parms.field->label = _("Layer number (write to)");
-
+    
     parms.qfield = G_define_standard_option(G_OPT_V_FIELD);
     parms.qfield->key = "qlayer";
-    parms.qfield->label = _("Query layer number (read from)");
+    parms.qfield->label = _("Query layer number or name (read from)");
     parms.qfield->guisection = _("Query");
 
     parms.option = G_define_option();
@@ -81,21 +81,18 @@ int parse_command_line(int argc, char *argv[])
     parms.units->required = NO;
     parms.units->multiple = NO;
     parms.units->options =
-	"mi,miles,f,feet,me,meters,k,kilometers,a,acres,h,hectares,r,radians,d,degrees";
+	"miles,feet,meters,kilometers,acres,hectares,radians,degrees";
     parms.units->label = _("Units");
     parms.units->description =
-	_("mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),r(adians),d(egrees)");
+	_("miles,feet,meters,kilometers,acres,hectares,radians,degrees");
 
     parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
 
-    parms.qcol = G_define_option();
+    parms.qcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parms.qcol->key = "qcolumn";
     parms.qcol->label = _("Name of attribute column used for 'query' option");
     parms.qcol->description = _("E.g. 'cat', 'count(*)', 'sum(val)'");
-    parms.qcol->type = TYPE_STRING;
-    parms.qcol->key_desc = "name";
     parms.qcol->required = NO;
-    parms.qcol->multiple = NO;
     parms.qcol->guisection = _("Query");
 
     flags.p = G_define_flag();

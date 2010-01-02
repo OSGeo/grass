@@ -20,12 +20,12 @@ static int srch(const void *, const void *);
    \return -1 on error
  */
 int trans3d(struct Map_info *In, struct Map_info *Out, int type,
-	    int field, const char *zcolumn)
+	    const char *field_name, const char *zcolumn)
 {
-    int ltype;
-    int line;
+    int ltype, line;
     int ctype;
-
+    int field;
+    
     struct line_pnts *Points;
     struct line_cats *Cats;
 
@@ -40,11 +40,13 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 
     db_init_string(&stmt);
 
+    field = Vect_get_field_number(In, field_name);
+
     if (zcolumn) {
 	Fi = Vect_get_field(Out, field);
 	if (!Fi) {
-	    G_warning(_("Database connection not defined for layer %d"),
-		      field);
+	    G_warning(_("Database connection not defined for layer <%s>"),
+		      field_name);
 	    return -1;
 	}
 
@@ -92,7 +94,8 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 	if (!(ltype & type))
 	    continue;
 
-	Vect_cat_get(Cats, field, &cat);
+	if (field != -1 && !Vect_cat_get(Cats, field, &cat))
+	    continue;
 
 	/* get first cat */
 	if (cat == -1) {

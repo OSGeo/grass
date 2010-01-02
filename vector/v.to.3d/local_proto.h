@@ -15,8 +15,8 @@ void parse_args(struct opts *);
 
 /* trans2.c */
 int trans2d(struct Map_info *, struct Map_info *, int,
-	    double, int, const char *);
+	    double, const char *, const char *);
 
 /* trans3.c */
 int trans3d(struct Map_info *, struct Map_info *, int,
-	    int, const char *);
+	    const char *, const char *);

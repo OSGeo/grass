@@ -10,29 +10,29 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
     parm->input[0]->description = _("Name of input vector map (A)");
     parm->input[0]->key = "ainput";
 
-    parm->type[0] = G_define_standard_option(G_OPT_V_TYPE);
-    parm->type[0]->label = _("Feature type (vector map A)");
-    parm->type[0]->key = "atype";
-    parm->type[0]->guisection = _("Selection");
-
     parm->field[0] = G_define_standard_option(G_OPT_V_FIELD);
     parm->field[0]->label = _("Layer number (vector map A)");
     parm->field[0]->key = "alayer";
     parm->field[0]->guisection = _("Selection");
 
+    parm->type[0] = G_define_standard_option(G_OPT_V_TYPE);
+    parm->type[0]->label = _("Feature type (vector map A)");
+    parm->type[0]->key = "atype";
+    parm->type[0]->guisection = _("Selection");
+
     parm->input[1] = G_define_standard_option(G_OPT_V_INPUT);
     parm->input[1]->description = _("Name of input vector map (B)");
     parm->input[1]->key = "binput";
 
-    parm->type[1] = G_define_standard_option(G_OPT_V_TYPE);
-    parm->type[1]->label = _("Feature type (vector map B)");
-    parm->type[1]->key = "btype";
-    parm->type[1]->guisection = _("Selection");
-    
     parm->field[1] = G_define_standard_option(G_OPT_V_FIELD);
     parm->field[1]->label = _("Layer number (vector map B)");
     parm->field[1]->key = "blayer";
     parm->field[1]->guisection = _("Selection");
+    
+    parm->type[1] = G_define_standard_option(G_OPT_V_TYPE);
+    parm->type[1]->label = _("Feature type (vector map B)");
+    parm->type[1]->key = "btype";
+    parm->type[1]->guisection = _("Selection");
     
     parm->output = G_define_standard_option(G_OPT_V_OUTPUT);
 
