@@ -454,6 +454,7 @@ class BufferedWindow(MapWindow, wx.Window):
         """!Key pressed"""
         shift = event.ShiftDown()
         kc = event.GetKeyCode()
+        
         vdigitToolbar = self.parent.toolbars['vdigit']
         ### vdigit
         if vdigitToolbar:

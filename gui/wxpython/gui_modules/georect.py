@@ -1,4 +1,4 @@
-"""
+"""!
 @package georect.py
 
 @brief Georectification module for GRASS GIS. Includes ground control
@@ -15,7 +15,7 @@ Classes:
  - EditGCP
  - GrSettingsDialog
 
-(C) 2006-2008 by the GRASS Development Team
+(C) 2006-2009 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -735,7 +735,7 @@ class GCP(wx.Frame):
         #
         # toolbar and display for xy map
         #
-        self.toolbar = toolbars.GCPToolbar(parent=self, tbframe=self).GetToolbar()
+        self.toolbar = toolbars.GCPToolbar(parent=self)
         self.SetToolBar(self.toolbar)
         
         self.SetMapDisplay(self.mapdisp)

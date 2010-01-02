@@ -314,14 +314,14 @@ class MapFrame(wx.Frame):
         if name == "map":
             self.toolbars['map'] = toolbars.MapToolbar(self, self.Map)
 
-            self._mgr.AddPane(self.toolbars['map'].toolbar,
+            self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
                               Name("maptoolbar").Caption(_("Map Toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2).
-                              BestSize((self.toolbars['map'].GetToolbar().GetSize())))
+                              BestSize((self.toolbars['map'].GetSize())))
 	
         # vector digitizer
         elif name == "vdigit":
@@ -343,20 +343,19 @@ class MapFrame(wx.Frame):
                 log = self._layerManager.goutput
             else:
                 log = None
-            self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent=self, map=self.Map,
+            self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent=self, mapcontent=self.Map,
                                                              layerTree=self.tree,
                                                              log=log)
-
-            for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
-                self._mgr.AddPane(self.toolbars['vdigit'].toolbar[toolRow],
-                                  wx.aui.AuiPaneInfo().
-                                  Name("vdigittoolbar" + str(toolRow)).Caption(_("Vector digitizer toolbar")).
-                                  ToolbarPane().Top().Row(toolRow + 1).
-                                  LeftDockable(False).RightDockable(False).
-                                  BottomDockable(False).TopDockable(True).
-                                  CloseButton(False).Layer(2).
-                                  BestSize((self.toolbars['vdigit'].GetToolbar().GetSize())))
-	
+            
+            self._mgr.AddPane(self.toolbars['vdigit'],
+                              wx.aui.AuiPaneInfo().
+                              Name("vdigittoolbar").Caption(_("Vector digitizer toolbar")).
+                              ToolbarPane().Top().Row(1).
+                              LeftDockable(False).RightDockable(False).
+                              BottomDockable(False).TopDockable(True).
+                              CloseButton(False).Layer(2).
+                              BestSize((self.toolbars['vdigit'].GetSize())))
+            
             # change mouse to draw digitized line
             self.MapWindow.mouse['box'] = "point"
             self.MapWindow.zoomtype = 0
@@ -366,7 +365,7 @@ class MapFrame(wx.Frame):
         elif name == "georect":
             self.toolbars['georect'] = toolbars.GRToolbar(self, self.Map)
 
-            self._mgr.AddPane(self.toolbars['georect'].toolbar,
+            self._mgr.AddPane(self.toolbars['georect'],
                               wx.aui.AuiPaneInfo().
                               Name("georecttoolbar").Caption(_("Georectification toolbar")).
                               ToolbarPane().Top().
@@ -446,7 +445,7 @@ class MapFrame(wx.Frame):
                               Dockable(False).BestSize((-1,-1)).
                               CloseButton(False).DestroyOnClose(True).
                               Layer(0))
-            self._mgr.AddPane(self.toolbars['nviz'].toolbar,
+            self._mgr.AddPane(self.toolbars['nviz'],
                               wx.aui.AuiPaneInfo().
                               Name("nviztoolbar").Caption(_("Nviz toolbar")).
                               ToolbarPane().Top().Row(1).
@@ -471,12 +470,11 @@ class MapFrame(wx.Frame):
             return
         elif name == "vdigit":
             # TODO: not destroy only hide
-            for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
-                self._mgr.DetachPane (self.toolbars['vdigit'].toolbar[toolRow])
-                self.toolbars['vdigit'].toolbar[toolRow].Destroy()
+            self._mgr.DetachPane(self.toolbars['vdigit'])
+            self.toolbars['vdigit'].Destroy()
         else:
-            self._mgr.DetachPane (self.toolbars[name].toolbar)
-            self.toolbars[name].toolbar.Destroy()
+            self._mgr.DetachPane (self.toolbars[name])
+            self.toolbars[name].Destroy()
 
         self.toolbars[name] = None
 

@@ -91,7 +91,7 @@ class ProfileFrame(wx.Frame):
         #
         # Add toolbar
         #
-        self.toolbar = toolbars.ProfileToolbar(parent=self, tbframe=self).GetToolbar()
+        self.toolbar = toolbars.ProfileToolbar(parent=self)
         self.SetToolBar(self.toolbar)
         
         #

@@ -32,7 +32,8 @@ $(LIB_NAME).i: digit.i dig_types.i pseudodc.i driver.h digit.h
 
 $(LIB_NAME).py: $(SHLIB)
 
-$(SHLIB): $(LIB_NAME).i
+$(SHLIB): $(LIB_NAME).i cats.cpp digit.cpp driver.cpp driver_draw.cpp \
+	driver_select.cpp line.cpp message.cpp select.cpp undo.cpp vertex.cpp
 	GISBASE="$(GISBASE)" \
 	ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	GDALCFLAGS="$(GDALCFLAGS)" \
