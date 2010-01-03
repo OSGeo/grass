@@ -88,7 +88,7 @@ static const char *find_file(
 		G_warning(_("Using <%s@%s>"),
 			  pname, pselmapset);
 	    
-	    return pselmapset;
+	    return G_store(pselmapset);
 	}
     }
     /*
