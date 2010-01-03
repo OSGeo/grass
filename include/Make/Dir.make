@@ -12,14 +12,12 @@ IMGSRC :=
 subdirs:
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
-	    echo $$subdir ; \
 	    $(MAKE) -C $$subdir || echo $(CURDIR)/$$subdir >> $(ERRORLOG) ; \
 	done
 
 cleansubdirs:
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
-	    echo $$subdir ; \
 	    $(MAKE) -C $$subdir clean; \
 	done
 

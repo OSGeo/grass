@@ -36,6 +36,7 @@ GRASS_PDFDIR=		$(DOCSDIR)/pdf
 DIRS = \
 	demolocation \
 	tools \
+	include \
 	lib \
 	db \
 	display \

@@ -41,7 +41,8 @@ clean:
 	-rm -rf $(OBJDIR) $(EXTRA_CLEAN_DIRS)
 	-rm -f $(EXTRA_CLEAN_FILES) *.tab.[ch] *.yy.c *.output *.backup *.tmp.html *.pyc
 	-if [ "$(CLEAN_SUBDIRS)" != "" ] ; then \
-		for dir in $(CLEAN_SUBDIRS) ; do \
+		@list='$(CLEAN_SUBDIRS)' ; \
+		for dir in $$list ; do \
 			$(MAKE) -C $$dir clean ; \
 		done ; \
 	fi
