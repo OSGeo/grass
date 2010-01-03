@@ -40,7 +40,7 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
 {
     int layer, type;
 
-    layer = atoi(params->fld->answer);
+    layer = Vect_get_field_number(Map, params->fld->answer);
     type = Vect_option_to_types(params->type);
 
     /* select by id's */

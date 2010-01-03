@@ -7,12 +7,12 @@
 
    Inspired by v.out.ogr's code.
 
-   (C) 2009 by the GRASS Development Team
+   (C) 2009-2010 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Martin Landa <landa.martin gmail.com> (2009)
+   \author Martin Landa <landa.martin gmail.com>
  */
 
 #include <grass/config.h>
@@ -49,7 +49,7 @@ int V1_write_line_ogr(struct Map_info *Map,
     OGRFeatureDefnH Ogr_featuredefn;
     
     if (!Map->fInfo.ogr.layer) {
-	G_warning(_("Unable to write feature, OGR layer not defined"));
+	G_warning(_("OGR layer not defined"));
 	return -1;
     }
 
@@ -210,6 +210,47 @@ int write_attributes(int cat, const struct field_info *Fi,
     db_free_string(&dbstring);
     
     return 1;
+}
+
+/*!
+  \brief Deletes feature at the given offset (level 1)
+  
+  \param Map pointer Map_info structure
+  \param offset feature offset
+  
+  \return  0 on success
+  \return -1 on error
+*/
+int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
+{
+    G_debug(3, "V1_delete_line_ogr(), offset = %lu", (unsigned long) offset);
+
+    if (!Map->fInfo.ogr.layer) {
+	G_warning(_("OGR layer not defined"));
+	return -1;
+    }
+    
+    if (offset >= Map->fInfo.ogr.offset_num)
+	return -1;
+    
+    if (OGR_L_DeleteFeature(Map->fInfo.ogr.layer, Map->fInfo.ogr.offset[offset]) != OGRERR_NONE)
+	return -1;
+    
+    return 0;
+}
+
+/*!
+  \brief Deletes feature (topology level).
+  
+  \param Map pointer to Map_info structure
+  \param line feature id
+  
+  \return 0 on success
+  \return -1 on error
+*/
+int V2_delete_line_ogr(struct Map_info *Map, int line)
+{
+    return V2__delete_line(Map, line, V1_delete_line_ogr);
 }
 
 #endif /* HAVE_OGR */

@@ -35,7 +35,7 @@ int parser(int argc, char *argv[], struct GParams *params,
 {
     /* parameters */
     params->map = G_define_standard_option(G_OPT_V_MAP);
-    params->map->description = _("Name of vector map to edit");
+    params->map->label = _("Name of vector map to edit");
 
     params->fld = G_define_standard_option(G_OPT_V_FIELD);
     params->fld->gisprompt = "new_layer,layer,layer";

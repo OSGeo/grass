@@ -222,6 +222,7 @@ int Vect_open_old_head(struct Map_info *, const char *, const char *);
 int Vect_open_old_head2(struct Map_info *, const char *, const char *, const char *);
 int Vect_open_new(struct Map_info *, const char *, int);
 int Vect_open_update(struct Map_info *, const char *, const char *);
+int Vect_open_update2(struct Map_info *, const char *, const char *, const char *);
 int Vect_open_update_head(struct Map_info *, const char *, const char *);
 int Vect_copy_head_data(const struct Map_info *, struct Map_info *);
 int Vect_build(struct Map_info *);
@@ -435,6 +436,9 @@ int Vect_sfa_is_line_closed(const struct line_pnts *, int, int);
  */
 int Vect_print_header(const struct Map_info *);
 void Vect__init_head(struct Map_info *);
+void Vect__delete_area_cats_from_cidx(struct Map_info *, int);
+void Vect__add_area_cats_to_cidx(struct Map_info *, int);
+int V2__delete_line(struct Map_info *, int, int (*fn) (struct Map_info *, off_t));
 
 /* Open/close/rewind map */
 int Vect_coor_info(const struct Map_info *, struct Coor_info *);
@@ -478,7 +482,9 @@ int V2_read_next_line_nat(struct Map_info *, struct line_pnts *,
 int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V1_delete_line_nat(struct Map_info *, off_t);
+int V1_delete_line_ogr(struct Map_info *, off_t);
 int V2_delete_line_nat(struct Map_info *, int);
+int V2_delete_line_ogr(struct Map_info *, int);
 int V1_restore_line_nat(struct Map_info *, off_t);
 int V2_restore_line_nat(struct Map_info *, int, off_t);
 off_t V1_write_line_nat(struct Map_info *, int, const struct line_pnts *,

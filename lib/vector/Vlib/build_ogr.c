@@ -62,7 +62,7 @@ static void reset_parts(GEOM_PARTS * parts)
 /* Free parts */
 static void free_parts(GEOM_PARTS * parts)
 {
-    free(parts->part);
+    G_free(parts->part);
     parts->a_parts = parts->n_parts = 0;
 }
 
@@ -317,7 +317,7 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
    \brief Build pseudo-topology for OGR layer
 
    \param Map pointer to Map_info structure
-   \param build build level (only GV_BUILD_ALL currently supported)
+   \param build build level (GV_BUILD_NONE and GV_BUILD_ALL currently supported)
 
    \return 1 on success
    \return 0 on error
@@ -325,17 +325,26 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 int Vect_build_ogr(struct Map_info *Map, int build)
 {
     int iFeature, count, FID;
+    struct Plus_head *plus;
+    
     GEOM_PARTS parts;
     OGRFeatureH hFeature;
     OGRGeometryH hGeom;
 
-    G_debug(1, "Vect_build_ogr(): dsn=%s layer=%s",
-	    Map->fInfo.ogr.dsn, Map->fInfo.ogr.layer_name);
+    G_debug(1, "Vect_build_ogr(): dsn=%s layer=%s, build=%d",
+	    Map->fInfo.ogr.dsn, Map->fInfo.ogr.layer_name, build);
     
-    if (build != GV_BUILD_ALL)
-	G_fatal_error(_("Partial build for OGR is not supported"));
+    if (build != GV_BUILD_ALL && build != GV_BUILD_NONE) {
+	G_warning(_("Partial build for OGR is not supported"));
+	return 0;
+    }
 
+    plus = &(Map->plus);
+    if (build == plus->built)
+	return 1;		/* do nothing */
+    
     /* TODO move this init to better place (Vect_open_ ?), because in theory build may be reused on level2 */
+    G_free((void *) Map->fInfo.ogr.offset);
     Map->fInfo.ogr.offset = NULL;
     Map->fInfo.ogr.offset_num = 0;
     Map->fInfo.ogr.offset_alloc = 0;
@@ -349,40 +358,56 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 
     /* initialize data structures */
     init_parts(&parts);
-    
-    /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
-    OGR_L_ResetReading(Map->fInfo.ogr.layer);
-    count = iFeature = 0;
-    while ((hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer)) != NULL) {
-	iFeature++;
-	count++;
 
-	G_debug(3, "   Feature %d", iFeature);
+    /* Check if upgrade or downgrade */
+    if (build < plus->built) {	/* lower level request, currently only GV_BUILD_NONE */
+	dig_free_plus_areas(plus);
+	dig_spidx_free_areas(plus);
+	dig_free_plus_isles(plus);
+	dig_spidx_free_isles(plus);
+	
+	dig_free_plus_nodes(plus);
+	dig_spidx_free_nodes(plus);
+	dig_free_plus_lines(plus);
+	dig_spidx_free_lines(plus);
+    }
+    else {
+	/* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
+	OGR_L_ResetReading(Map->fInfo.ogr.layer);
+	count = iFeature = 0;
+	while ((hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer)) != NULL) {
+	    iFeature++;
+	    count++;
+	    
+	    G_debug(3, "   Feature %d", iFeature);
+	    
+	    hGeom = OGR_F_GetGeometryRef(hFeature);
+	    if (hGeom == NULL) {
+		G_warning(_("Feature %d without geometry ignored"), iFeature);
+		OGR_F_Destroy(hFeature);
+		continue;
+	    }
+	    
+	    FID = (int)OGR_F_GetFID(hFeature);
+	    if (FID == OGRNullFID) {
+		G_warning(_("OGR feature %d without ID ignored"), iFeature);
+		OGR_F_Destroy(hFeature);
+		continue;
+	    }
+	    G_debug(4, "    FID = %d", FID);
+	    
+	    reset_parts(&parts);
+	    add_part(&parts, FID);
+	    add_geometry(Map, hGeom, FID, &parts);
+	    
+	    OGR_F_Destroy(hFeature);
+	}				/* while */
+    }
 
-	hGeom = OGR_F_GetGeometryRef(hFeature);
-	if (hGeom == NULL) {
-	    G_warning(_("Feature %d without geometry ignored"), iFeature);
-	    OGR_F_Destroy(hFeature);
-	    continue;
-	}
-	
-	FID = (int)OGR_F_GetFID(hFeature);
-	if (FID == OGRNullFID) {
-	    G_warning(_("OGR feature %d without ID ignored"), iFeature);
-	    OGR_F_Destroy(hFeature);
-	    continue;
-	}
-	G_debug(4, "    FID = %d", FID);
-	
-	reset_parts(&parts);
-	add_part(&parts, FID);
-	add_geometry(Map, hGeom, FID, &parts);
-	
-	OGR_F_Destroy(hFeature);
-    }				/* while */
     free_parts(&parts);
     
-    Map->plus.built = GV_BUILD_ALL;
+    Map->plus.built = build;
+    
     return 1;
 }
 #endif

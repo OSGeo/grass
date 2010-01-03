@@ -127,7 +127,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
     plus = &(Map->plus);
     if (build > GV_BUILD_NONE) {
 	G_message(_("Building topology for vector map <%s>..."),
-		  Vect_get_name(Map));
+		  Vect_get_full_name(Map));
     }
     plus->with_z = Map->head.with_z;
     plus->spidx_with_z = Map->head.with_z;
