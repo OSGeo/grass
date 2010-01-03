@@ -22,7 +22,7 @@ $(ARCH_INCDIR)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 ifneq ($(MINGW),)
-mkpath = $(shell PATH="$(GISBASE)/bin:$(ARCH_LIBDIR):$$PATH" GISRC=$(RUN_GISRC) $(BIN)/g.dirseps$(EXE) -h $(1));$(2)
+mkpath = $(shell $(TOOLSDIR)/g.echo$(EXE) $(1));$(2)
 else
 mkpath = $(1):$(2)
 endif
