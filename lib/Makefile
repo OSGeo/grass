@@ -56,14 +56,12 @@ DSTH := $(patsubst ../include/%.h,$(ARCH_INCDIR)/%.h,$(SRCH))
 SRCMAKE := $(wildcard ../include/Make/*.make)
 DSTMAKE := $(patsubst ../include/Make/%.make,$(ARCH_DISTDIR)/include/Make/%.make,$(SRCMAKE))
 
-default: $(DSTH) $(DSTMAKE)
+default: headers
 	$(MAKE) subdirs
 
-$(ARCH_DISTDIR)/include:
-	$(MKDIR) $@
+headers: $(DSTH) $(DSTMAKE)
 
-$(ARCH_INCDIR): | $(ARCH_DISTDIR)/include
-	$(MKDIR) $@
+.PHONY: headers
 
 $(ARCH_INCDIR)/vect: | $(ARCH_INCDIR)
 	$(MKDIR) $@
