@@ -50,30 +50,5 @@ DOXNAME=grass
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
-SRCH := $(wildcard ../include/*.h ../include/vect/*.h ../include/iostream/*.h)
-DSTH := $(patsubst ../include/%.h,$(ARCH_INCDIR)/%.h,$(SRCH))
+default: subdirs
 
-SRCMAKE := $(wildcard ../include/Make/*.make)
-DSTMAKE := $(patsubst ../include/Make/%.make,$(ARCH_DISTDIR)/include/Make/%.make,$(SRCMAKE))
-
-default: headers
-	$(MAKE) subdirs
-
-headers: $(DSTH) $(DSTMAKE)
-
-.PHONY: headers
-
-$(ARCH_INCDIR)/vect: | $(ARCH_INCDIR)
-	$(MKDIR) $@
-
-$(ARCH_INCDIR)/iostream: | $(ARCH_INCDIR)
-	$(MKDIR) $@
-
-$(ARCH_INCDIR)/%.h: ../include/%.h | $(ARCH_INCDIR) $(ARCH_INCDIR)/vect $(ARCH_INCDIR)/iostream
-	$(INSTALL_DATA) $< $@
-
-$(ARCH_DISTDIR)/include/Make/%.make: ../include/Make/%.make | $(ARCH_DISTDIR)/include/Make
-	$(INSTALL_DATA) $< $@
-
-$(ARCH_DISTDIR)/include/Make:
-	$(MKDIR) $@
