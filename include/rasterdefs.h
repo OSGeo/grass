@@ -390,14 +390,14 @@ void Rast_set_cell_format(int);
 int Rast_get_cell_format(CELL);
 int Rast_open_fp_new(const char *);
 int Rast_open_fp_new_uncompressed(const char *);
-int Rast_set_fp_type(RASTER_MAP_TYPE);
+void Rast_set_fp_type(RASTER_MAP_TYPE);
 int Rast_map_is_fp(const char *, const char *);
 RASTER_MAP_TYPE Rast_map_type(const char *, const char *);
 RASTER_MAP_TYPE Rast__check_fp_type(const char *, const char *);
 RASTER_MAP_TYPE Rast_get_map_type(int);
 int Rast_open_new(const char *, RASTER_MAP_TYPE);
 int Rast_open_new_uncompressed(const char *, RASTER_MAP_TYPE);
-int Rast_set_quant_rules(int, struct Quant *);
+void Rast_set_quant_rules(int, struct Quant *);
 
 /* put_cellhd.c */
 int Rast_put_cellhd(const char *, struct Cell_head *);
