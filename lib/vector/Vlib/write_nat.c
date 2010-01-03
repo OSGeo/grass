@@ -1,7 +1,7 @@
 /*!
-   \file write_nat.c
+   \file lib/vector/Vlib/write_nat.c
 
-   \brief Vector library - write vector feature (native format)
+   \brief Vector library - write/modify vector feature (native format)
 
    Higher level functions for reading/writing/manipulating vectors.
 
@@ -11,7 +11,7 @@
     - Delete feature
     - Restore feature
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2010 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -29,72 +29,6 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-
-/*!
-  \brief Deletes area (i.e. centroid) categories from category index
-
-  \param Map pointer to vector map
-  \param area area id
-*/
-static void delete_area_cats_from_cidx(struct Map_info *Map, int area)
-{
-    int i;
-    struct P_area *Area;
-    static struct line_cats *Cats = NULL;
-
-    G_debug(3, "delete_area_cats_from_cidx() area = %d", area);
-
-    Area = Map->plus.Area[area];
-    if (!Area)
-	G_fatal_error(_("%s: Area %d does not exist"),
-		      "delete_area_cats_from_cidx()", area);
-    
-    if (Area->centroid == 0) /* no centroid found */
-	return;
-
-    if (!Cats)
-	Cats = Vect_new_cats_struct();
-
-    V2_read_line_nat(Map, NULL, Cats, Area->centroid);
-
-    for (i = 0; i < Cats->n_cats; i++) {
-	dig_cidx_del_cat(&(Map->plus), Cats->field[i], Cats->cat[i], area,
-			 GV_AREA);
-    }
-}
-
-/*!
-  \brief Adds area (i.e. centroid) categories from category index
-
-  \param Map pointer to vector map
-  \param area area id
-*/
-static void add_area_cats_to_cidx(struct Map_info *Map, int area)
-{
-    int i;
-    struct P_area *Area;
-    static struct line_cats *Cats = NULL;
-
-    G_debug(3, "add_area_cats_to_cidx() area = %d", area);
-
-    Area = Map->plus.Area[area];
-    if (!Area)
-	G_fatal_error(_("%s: Area %d does not exist"),
-		      "add_area_cats_to_cidx():", area);
-
-    if (Area->centroid == 0) /* no centroid found */
-	return;
-
-    if (!Cats)
-	Cats = Vect_new_cats_struct();
-
-    V2_read_line_nat(Map, NULL, Cats, Area->centroid);
-
-    for (i = 0; i < Cats->n_cats; i++) {
-	dig_cidx_add_cat_sorted(&(Map->plus), Cats->field[i], Cats->cat[i],
-				area, GV_AREA);
-    }
-}
 
 /*!
   \brief Add line to topo file
@@ -196,7 +130,7 @@ static void add_line_to_topo(struct Map_info *Map, int line,
 				Vect_box_extend(&abox, &box);
 
 			    if (plus->update_cidx) {
-				delete_area_cats_from_cidx(Map, area);
+				Vect__delete_area_cats_from_cidx(Map, area);
 			    }
 			    dig_del_area(plus, area);
 			}
@@ -255,7 +189,7 @@ static void add_line_to_topo(struct Map_info *Map, int line,
 	    if (plus->update_cidx) {
 		for (s = 1; s < 3; s++) {
 		    if (new_area[s - 1] > 0) {
-			add_area_cats_to_cidx(Map, new_area[s - 1]);
+			Vect__add_area_cats_to_cidx(Map, new_area[s - 1]);
 		    }
 		}
 	    }
@@ -275,7 +209,7 @@ static void add_line_to_topo(struct Map_info *Map, int line,
 		    Area->centroid = line;
 		    Line->left = sel_area;
 		    if (plus->update_cidx) {
-			add_area_cats_to_cidx(Map, sel_area);
+			Vect__add_area_cats_to_cidx(Map, sel_area);
 		    }
 		}
 		else {		/* duplicate centroid */
@@ -302,7 +236,7 @@ static off_t V1__rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
 /*!
   \brief Writes feature to 'coor' file
   
-  \param Map pointer to vector map
+  \param Map pointer to Map_info structure
   \param type feature type
   \param points feature geometry
   \param cats feature categories
@@ -328,7 +262,7 @@ off_t V1_write_line_nat(struct Map_info *Map,
 /*!
   \brief Writes feature to 'coor' file (topology level)
   
-  \param Map pointer to vector map
+  \param Map pointer to Map_info structure
   \param type feature type
   \param points feature geometry
   \param cats feature categories
@@ -386,7 +320,7 @@ off_t V2_write_line_nat(struct Map_info *Map,
   
   Old feature is deleted (marked as dead), new feature written.
   
-  \param Map pointer to vector map
+  \param Map pointer to Map_info structure
   \param offset feature offset
   \param type feature type
   \param points feature geometry
@@ -446,7 +380,7 @@ off_t V1_rewrite_line_nat(struct Map_info *Map,
    
   Old feature is deleted (marked as dead), new feature written.
   
-  \param Map pointer to vector map
+  \param Map pointer to Map_info structure
   \param line feature id
   \param type feature type
   \param points feature geometry
@@ -474,7 +408,7 @@ int V2_rewrite_line_nat(struct Map_info *Map,
 /*!
   \brief Rewrites feature at the given offset.
   
-  \param Map pointer to vector map
+  \param Map pointer to Map_info structure
   \param offset feature offset
   \param type feature type
   \param points feature geometry
@@ -572,9 +506,9 @@ off_t V1__rewrite_line_nat(struct Map_info *Map,
 }
 
 /*!
-  \brief Deletes feature at the given offset.
+  \brief Deletes feature at the given offset (level 1)
   
-  \param Map pointer to vector map
+  \param Map pointer Map_info structure
   \param offset feature offset
   
   \return  0 on success
@@ -614,7 +548,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 /*!
   \brief Deletes feature (topology level).
   
-  \param pointer to vector map
+  \param pointer to Map_info structure
   \param line feature id
   
   \return 0 on success
@@ -622,198 +556,13 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 */
 int V2_delete_line_nat(struct Map_info *Map, int line)
 {
-    int ret, i, side, type = 0, first = 0, next_line, area;
-    struct P_line *Line = NULL;
-    struct P_area *Area;
-    struct Plus_head *plus;
-    struct bound_box box, abox;
-    int adjacent[4], n_adjacent = 0;
-    static struct line_cats *Cats = NULL;
-
-    G_debug(3, "V2_delete_line_nat(), line = %d", line);
-
-    plus = &(Map->plus);
-
-    if (plus->built >= GV_BUILD_BASE) {
-	Line = Map->plus.Line[line];
-
-	if (Line == NULL)
-	    G_fatal_error(_("Attempt to delete dead feature"));
-	type = Line->type;
-    }
-
-    if (!Cats) {
-	Cats = Vect_new_cats_struct();
-    }
-
-    /* Update category index */
-    if (plus->update_cidx) {
-	type = V2_read_line_nat(Map, NULL, Cats, line);
-
-	for (i = 0; i < Cats->n_cats; i++) {
-	    dig_cidx_del_cat(plus, Cats->field[i], Cats->cat[i], line, type);
-	}
-    }
-
-    /* delete the line from coor */
-    ret = V1_delete_line_nat(Map, Line->offset);
-
-    if (ret == -1) {
-	return ret;
-    }
-
-    /* Update topology */
-    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
-	/* Store adjacent boundaries at nodes (will be used to rebuild area/isle) */
-	/* Adjacent are stored: > 0 - we want right side; < 0 - we want left side */
-	n_adjacent = 0;
-
-	next_line = dig_angle_next_line(plus, line, GV_RIGHT, GV_BOUNDARY);
-	if (next_line != 0 && abs(next_line) != line) {
-	    /* N1, to the right -> we want the right side for > 0  and left for < 0 */
-	    adjacent[n_adjacent] = next_line;
-	    n_adjacent++;
-	}
-	next_line = dig_angle_next_line(plus, line, GV_LEFT, GV_BOUNDARY);
-	if (next_line != 0 && abs(next_line) != line) {
-	    /* N1, to the left -> we want the left side for > 0  and right for < 0 */
-	    adjacent[n_adjacent] = -next_line;
-	    n_adjacent++;
-	}
-	next_line = dig_angle_next_line(plus, -line, GV_RIGHT, GV_BOUNDARY);
-	if (next_line != 0 && abs(next_line) != line) {
-	    /* N2, to the right -> we want the right side for > 0  and left for < 0 */
-	    adjacent[n_adjacent] = next_line;
-	    n_adjacent++;
-	}
-	next_line = dig_angle_next_line(plus, -line, GV_LEFT, GV_BOUNDARY);
-	if (next_line != 0 && abs(next_line) != line) {
-	    /* N2, to the left -> we want the left side for > 0  and right for < 0 */
-	    adjacent[n_adjacent] = -next_line;
-	    n_adjacent++;
-	}
-
-	/* Delete area(s) and islands this line forms */
-	first = 1;
-	if (Line->left > 0) {	/* delete area */
-	    Vect_get_area_box(Map, Line->left, &box);
-	    if (first) {
-		Vect_box_copy(&abox, &box);
-		first = 0;
-	    }
-	    else
-		Vect_box_extend(&abox, &box);
-
-	    if (plus->update_cidx) {
-		delete_area_cats_from_cidx(Map, Line->left);
-	    }
-	    dig_del_area(plus, Line->left);
-	}
-	else if (Line->left < 0) {	/* delete isle */
-	    dig_del_isle(plus, -Line->left);
-	}
-	if (Line->right > 0) {	/* delete area */
-	    Vect_get_area_box(Map, Line->right, &box);
-	    if (first) {
-		Vect_box_copy(&abox, &box);
-		first = 0;
-	    }
-	    else
-		Vect_box_extend(&abox, &box);
-
-	    if (plus->update_cidx) {
-		delete_area_cats_from_cidx(Map, Line->right);
-	    }
-	    dig_del_area(plus, Line->right);
-	}
-	else if (Line->right < 0) {	/* delete isle */
-	    dig_del_isle(plus, -Line->right);
-	}
-    }
-
-    /* Delete reference from area */
-    if (plus->built >= GV_BUILD_CENTROIDS && type == GV_CENTROID) {
-	if (Line->left > 0) {
-	    G_debug(3, "Remove centroid %d from area %d", line, Line->left);
-	    if (plus->update_cidx) {
-		delete_area_cats_from_cidx(Map, Line->left);
-	    }
-	    Area = Map->plus.Area[Line->left];
-	    Area->centroid = 0;
-	}
-    }
-
-    /* delete the line from topo */
-    dig_del_line(plus, line);
-
-    /* Rebuild areas/isles and attach centroids and isles */
-    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
-	int *new_areas, nnew_areas;
-
-	nnew_areas = 0;
-	new_areas = (int *)G_malloc(2 * n_adjacent * sizeof(int));
-	/* Rebuild areas/isles */
-	for (i = 0; i < n_adjacent; i++) {
-	    if (adjacent[i] > 0)
-		side = GV_RIGHT;
-	    else
-		side = GV_LEFT;
-
-	    G_debug(3, "Build area for line = %d, side = %d", adjacent[i],
-		    side);
-
-	    area = Vect_build_line_area(Map, abs(adjacent[i]), side);
-	    if (area > 0) {	/* area */
-		Vect_get_area_box(Map, area, &box);
-		if (first) {
-		    Vect_box_copy(&abox, &box);
-		    first = 0;
-		}
-		else
-		    Vect_box_extend(&abox, &box);
-
-		new_areas[nnew_areas] = area;
-		nnew_areas++;
-	    }
-	    else if (area < 0) {
-		/* isle -> must be attached -> add to abox */
-		Vect_get_isle_box(Map, -area, &box);
-		if (first) {
-		    Vect_box_copy(&abox, &box);
-		    first = 0;
-		}
-		else
-		    Vect_box_extend(&abox, &box);
-	    }
-	}
-	/* Reattach all centroids/isles in deleted areas + new area.
-	 *  Because isles are selected by box it covers also possible new isle created above */
-	if (!first) {		/* i.e. old area/isle was deleted or new one created */
-	    /* Reattache isles */
-	    if (plus->built >= GV_BUILD_ATTACH_ISLES)
-		Vect_attach_isles(Map, &abox);
-
-	    /* Reattach centroids */
-	    if (plus->built >= GV_BUILD_CENTROIDS)
-		Vect_attach_centroids(Map, &abox);
-	}
-
-	if (plus->update_cidx) {
-	    for (i = 0; i < nnew_areas; i++) {
-		add_area_cats_to_cidx(Map, new_areas[i]);
-	    }
-	}
-    }
-
-    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
-	    plus->n_upnodes);
-    return ret;
+    return V2__delete_line(Map, line, V1_delete_line_nat);
 }
 
 /*!
   \brief Restores feature at the given offset.
   
-  \param Map pointer to vector map
+  \param Map pointer to Map_info structure
   \param offset feature offset
   
   \return  0 on success
@@ -855,7 +604,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
 /*!
   \brief Restores feature (topology level)
   
-  \param Map pointer to vector map
+  \param Map pointer to Map_info structure
   \param line feature id
   \param offset feature offset
   

@@ -8,12 +8,11 @@
  * AUTHOR(S):  GRASS Development Team
  *             Wolf Bergenheim, Jachym Cepicky, Martin Landa
  *
- * COPYRIGHT:  (C) 2006-2008 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2006-2010 by the GRASS Development Team
  *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ *             This program is free software under the GNU General
+ *             Public License (>=v2).  Read the file COPYING that
+ *             comes with GRASS for details.
  *
  * TODO:       3D support (done for move and vertexmove)
  ****************************************************************/
@@ -108,7 +107,7 @@ int main(int argc, char *argv[])
 	if (action_mode == MODE_ADD)	/* write */
 	    ret = Vect_open_update(&Map, params.map->answer, G_mapset());
 	else			/* read-only -- select features */
-	    ret = Vect_open_old(&Map, params.map->answer, G_mapset());
+	    ret = Vect_open_old2(&Map, params.map->answer, G_mapset(), params.fld->answer);
 
 	if (ret < 2)
 	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
@@ -146,7 +145,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    layer = atoi(params.fld->answer);
+    layer = Vect_get_field_number(&Map, params.fld->answer);
     i = 0;
     while (params.maxdist->answers[i]) {
 	switch (i) {
@@ -207,7 +206,7 @@ int main(int argc, char *argv[])
 	    }
 	    Vect_close(&Map);
 
-	    Vect_open_update(&Map, params.map->answer, G_mapset());
+	    Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer);
 	}
     }
 
