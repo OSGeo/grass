@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     }
     else {			/* open selected vector file */
 	if (action_mode == MODE_ADD)	/* write */
-	    ret = Vect_open_update(&Map, params.map->answer, G_mapset());
+	    ret = Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer);
 	else			/* read-only -- select features */
 	    ret = Vect_open_old2(&Map, params.map->answer, G_mapset(), params.fld->answer);
 

@@ -24,7 +24,7 @@
 #include <ogr_api.h>
 
 static int write_attributes(int, const struct field_info *,
-			    OGRFeatureH);
+			    OGRLayerH, OGRFeatureH);
 
 /*!
   \brief Writes feature on level 1 (OGR format)
@@ -34,13 +34,13 @@ static int write_attributes(int, const struct field_info *,
   \param points pointer to line_pnts structure (feature geometry) 
   \param cats pointer to line_cats structure (feature categories)
   
-  \return 0 on success
+  \return feature offset into file
   \return -1 on error
 */
-int V1_write_line_ogr(struct Map_info *Map,
-		      int type, const struct line_pnts *points, const struct line_cats *cats)
+off_t V1_write_line_ogr(struct Map_info *Map,
+			int type, const struct line_pnts *points, const struct line_cats *cats)
 {
-    int i, cat;
+    int i, cat, ret;
 
     struct field_info *Fi;
     
@@ -97,119 +97,40 @@ int V1_write_line_ogr(struct Map_info *Map,
 	    G_fatal_error(_("Database connection not defined for layer %d"),
 			  cats->field[0]);
 	}
-	write_attributes(cat, Fi, Ogr_feature);
+	write_attributes(cat, Fi, Map->fInfo.ogr.layer, Ogr_feature);
     }
     else { /* no attributes */
 	G_warning(_("Feature has no categories"));
     }
     
     /* write feature into layer */
-    OGR_L_CreateFeature(Map->fInfo.ogr.layer, Ogr_feature);
+    ret = OGR_L_CreateFeature(Map->fInfo.ogr.layer, Ogr_feature);
 
     /* destroy */
     OGR_G_DestroyGeometry(Ogr_geometry);
     OGR_F_Destroy(Ogr_feature);
     
-    return 0;
+    if (ret != OGRERR_NONE)
+	return -1;
+    
+    return Map->fInfo.ogr.offset_num++;
 }
 
-int write_attributes(int cat, const struct field_info *Fi,
-		     OGRFeatureH Ogr_feature)
+/*!
+  \brief Writes feature to 'coor' file (topology level)
+  
+  \param Map pointer to Map_info structure
+  \param type feature type
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return new feature id
+  \return -1 on error
+*/
+off_t V2_write_line_ogr(struct Map_info *Map,
+			int type, const struct line_pnts *points, const struct line_cats *cats)
 {
-    int j, ogrfieldnum;
-    char buf[2000];
-    int ncol, colsqltype, colctype, more;
-    dbDriver *Driver;
-    dbTable *Table;
-    dbString dbstring;
-    dbColumn *Column;
-    dbCursor cursor;
-    dbValue *Value;
-
-    G_debug(3, "write_attributes(): cat = %d", cat);
-
-    if (cat < 0) {
-	G_warning ("Feature without category of layer %d", Fi->number);
-	return 0;
-    }
-
-    db_init_string(&dbstring);
-    
-    /* read & set attributes */
-    sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key,
-	    cat);
-    G_debug(4, "SQL: %s", buf);
-    db_set_string(&dbstring, buf);
-
-    /* open driver & select data */
-    Driver = db_start_driver(Fi->driver);
-    if (db_open_select_cursor(Driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
-	G_fatal_error(_("Unable to select attributes for category %d"),
-		      cat);
-    }
-    
-    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-	G_fatal_error(_("Unable to fetch data from table <%s>"),
-		      Fi->table);
-    }
-    
-    if (!more) {
-	G_warning (_("No database record for category %d - export of 'cat' disabled"),
-		   cat);
-	return -1;
-    }
-
-    Table = db_get_cursor_table(&cursor);
-    ncol = db_get_table_number_of_columns(Table);
-    for (j = 0; j < ncol; j++) {
-	Column = db_get_table_column(Table, j);
-	Value = db_get_column_value(Column);
-	db_convert_column_value_to_string(Column, &dbstring);	/* for debug only */
-	G_debug(2, "col %d : val = %s", j,
-		db_get_string(&dbstring));
-	
-	colsqltype = db_get_column_sqltype(Column);
-	colctype = db_sqltype_to_Ctype(colsqltype);
-	G_debug(2, "  colctype = %d", colctype);
-	
-	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature,
-					  db_get_column_name(Column));
-	
-	/* Reset */
-	OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
-	
-	/* prevent writing NULL values */
-	if (!db_test_value_isnull(Value)) {
-	    switch (colctype) {
-	    case DB_C_TYPE_INT:
-		OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum,
-				      db_get_value_int(Value));
-		break;
-	    case DB_C_TYPE_DOUBLE:
-		OGR_F_SetFieldDouble(Ogr_feature, ogrfieldnum,
-				     db_get_value_double(Value));
-		break;
-	    case DB_C_TYPE_STRING:
-		OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
-				     db_get_value_string(Value));
-		break;
-	    case DB_C_TYPE_DATETIME:
-		db_convert_column_value_to_string(Column,
-						  &dbstring);
-		OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
-				     db_get_string(&dbstring));
-		break;
-	    }
-	}
-    }
-
-    db_close_cursor (&cursor);
-    db_close_database(Driver);
-    db_shutdown_driver(Driver);
-    
-    db_free_string(&dbstring);
-    
-    return 1;
+    return V2__write_line(Map, type, points, cats, V1_write_line_ogr);
 }
 
 /*!
@@ -251,6 +172,119 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 int V2_delete_line_ogr(struct Map_info *Map, int line)
 {
     return V2__delete_line(Map, line, V1_delete_line_ogr);
+}
+
+int write_attributes(int cat, const struct field_info *Fi,
+		     OGRLayerH Ogr_layer, OGRFeatureH Ogr_feature)
+{
+    int j, ogrfieldnum;
+    char buf[2000];
+    int ncol, colsqltype, colctype, more;
+    char *fidcol;
+    dbDriver *Driver;
+    dbTable *Table;
+    dbString dbstring;
+    dbColumn *Column;
+    dbCursor cursor;
+    dbValue *Value;
+
+    G_debug(3, "write_attributes(): cat = %d", cat);
+
+    if (cat < 0) {
+	G_warning ("Feature without category of layer %d", Fi->number);
+	return 0;
+    }
+
+    db_init_string(&dbstring);
+    
+    /* read & set attributes */
+    sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key,
+	    cat);
+    G_debug(4, "SQL: %s", buf);
+    db_set_string(&dbstring, buf);
+
+    /* open driver & select data */
+    Driver = db_start_driver_open_database(Fi->driver, Fi->database);
+    if (!Driver)
+	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+		      Fi->database, Fi->driver);
+    if (db_open_select_cursor(Driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
+	G_fatal_error(_("Unable to select attributes for category %d"),
+		      cat);
+    }
+    
+    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+	G_fatal_error(_("Unable to fetch data from table <%s>"),
+		      Fi->table);
+    }
+    
+    if (!more) {
+	G_warning (_("No database record for category %d - export of 'cat' disabled"),
+		   cat);
+	return -1;
+    }
+
+    fidcol = OGR_L_GetFIDColumn(Ogr_layer); 
+
+    Table = db_get_cursor_table(&cursor);
+    ncol = db_get_table_number_of_columns(Table);
+    for (j = 0; j < ncol; j++) {
+	Column = db_get_table_column(Table, j);
+	if (fidcol && strcmp(db_get_column_name(Column), fidcol) == 0) {
+	    /* skip fid column */
+	    continue;
+	}
+	Value = db_get_column_value(Column);
+	db_convert_column_value_to_string(Column, &dbstring);	/* for debug only */
+	G_debug(2, "col %d : val = %s", j,
+		db_get_string(&dbstring));
+	
+	colsqltype = db_get_column_sqltype(Column);
+	colctype = db_sqltype_to_Ctype(colsqltype);
+	G_debug(2, "  colctype = %d", colctype);
+	
+	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature,
+					  db_get_column_name(Column));
+	if (ogrfieldnum < 0) {
+	    G_warning(_("Uknown column <%s>"),
+		      db_get_column_name(Column));
+	    continue;
+	}
+	/* Reset */
+	OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
+	
+	/* prevent writing NULL values */
+	if (!db_test_value_isnull(Value)) {
+	    switch (colctype) {
+	    case DB_C_TYPE_INT:
+		OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum,
+				      db_get_value_int(Value));
+		break;
+	    case DB_C_TYPE_DOUBLE:
+		OGR_F_SetFieldDouble(Ogr_feature, ogrfieldnum,
+				     db_get_value_double(Value));
+		break;
+	    case DB_C_TYPE_STRING:
+		OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
+				     db_get_value_string(Value));
+		break;
+	    case DB_C_TYPE_DATETIME:
+		db_convert_column_value_to_string(Column,
+						  &dbstring);
+		OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
+				     db_get_string(&dbstring));
+		break;
+	    }
+	}
+    }
+
+    db_close_cursor (&cursor);
+    db_close_database(Driver);
+    db_shutdown_driver(Driver);
+    
+    db_free_string(&dbstring);
+    
+    return 1;
 }
 
 #endif /* HAVE_OGR */
