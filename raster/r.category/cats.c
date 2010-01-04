@@ -32,9 +32,7 @@ int get_cats(const char *name, const char *mapset)
     struct Cell_head cellhd;
 
     /* set the window to the cell header */
-    if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
-	G_fatal_error(_("Cannot read header of raster map <%s> in <%s>"),
-		      name, mapset);
+    Rast_get_cellhd(name, mapset, &cellhd);
 
     Rast_set_window(&cellhd);
 

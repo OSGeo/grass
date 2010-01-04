@@ -139,8 +139,7 @@ int main(int argc, char **argv)
     if (align->answer) {
 	struct Cell_head wind;
 
-	if (Rast_get_cellhd(map_name, "", &wind) < 0)
-	    G_fatal_error(_("Unable to read header of raster map <%s>"), map_name);
+	Rast_get_cellhd(map_name, "", &wind);
 
 	/* expand window extent by one wind resolution */
 	wind.west += wind.ew_res * ((int)((window.west - wind.west) / wind.ew_res) - (window.west < wind.west));

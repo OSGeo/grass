@@ -171,11 +171,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     int new, old, nrows, row;
     void *rast;
 
-    if (Rast_get_cellhd(name, G_mapset(), &cellhd) < 0) {
-	G_warning("Problem reading cell header for [%s]", name);
-	return 1;
-    }
-
+    Rast_get_cellhd(name, G_mapset(), &cellhd);
 
     /* check if already compressed/decompressed */
     if (uncompress && cellhd.compressed == 0) {

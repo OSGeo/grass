@@ -63,8 +63,8 @@ int patchAreaDistributionRANGE(int fd, char **par, area_des ad,
     struct Cell_head hd;
     int ris = RLI_OK;
 
-    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
-	return RLI_ERRORE;
+    Rast_get_cellhd(ad->raster, "", &hd);
+
     switch (ad->data_type)
     {
     case CELL_TYPE:

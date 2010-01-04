@@ -368,8 +368,7 @@ int main(int argc, char *argv[])
 
 	fdsmooth = Rast_open_old(smooth, "");
 
-	if (Rast_get_cellhd(smooth, "", &smhd) < 0)
-	    G_fatal_error(_("Unable to read header for <%s>"), smooth);
+	Rast_get_cellhd(smooth, "", &smhd);
 
 	if ((winhd.ew_res != smhd.ew_res) || (winhd.ns_res != smhd.ns_res))
 	    G_fatal_error(_("Map <%s> is the wrong resolution"), smooth);
@@ -383,8 +382,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Smoothing values can not be negative or NULL"));
     }
 
-    if (Rast_get_cellhd(input, "", &inphd) < 0)
-	G_fatal_error(_("Unable to read header for <%s>"), input);
+    Rast_get_cellhd(input, "", &inphd);
 
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
 	G_fatal_error(_("Input map resolution differs from current region resolution!"));

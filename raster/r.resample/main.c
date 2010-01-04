@@ -95,8 +95,7 @@ int main(int argc, char *argv[])
     data_type = Rast_get_map_type(infd);
     out_type = data_type;
 
-    if (Rast_get_cellhd(name, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header for <%s>"), name);
+    Rast_get_cellhd(name, "", &cellhd);
 
     /* raster buffer is big enough to hold data */
     rast = Rast_allocate_buf(data_type);

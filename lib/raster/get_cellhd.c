@@ -39,17 +39,14 @@
    \param mapset mapset that map belongs to
    \param[out] cellhd structure to hold cell header info
 
-   \return 0 on success
-   \return -1 on error
+   \return void
  */
-int Rast_get_cellhd(const char *name, const char *mapset,
-		    struct Cell_head *cellhd)
+void Rast_get_cellhd(const char *name, const char *mapset,
+		     struct Cell_head *cellhd)
 {
-    FILE *fd;
+    FILE *fp;
     int is_reclass;
     char real_name[GNAME_MAX], real_mapset[GMAPSET_MAX];
-    char buf[1024];
-    char *tail;
 
     /*
        is_reclass = Rast_is_reclass (name, mapset, real_name, real_mapset);
@@ -64,34 +61,22 @@ int Rast_get_cellhd(const char *name, const char *mapset,
      */
     is_reclass = (Rast_is_reclass(name, mapset, real_name, real_mapset) > 0);
     if (is_reclass) {
-	fd = G_fopen_old("cellhd", real_name, real_mapset);
-	if (fd == NULL) {
-	    sprintf(buf,
-		    _("Unable to read header file for raster map <%s@%s>."),
-		    name, mapset);
-	    tail = buf + strlen(buf);
-	    sprintf(tail, _(" It is a reclass of raster map <%s@%s> "),
-		    real_name, real_mapset);
-	    tail = buf + strlen(buf);
-	    if (!G_find_raster(real_name, real_mapset))
-		sprintf(tail, _("which is missing."));
-	    else
-		sprintf(tail, _("whose header file can't be opened."));
-	    G_warning("%s", buf);
-	    return -1;
-	}
+	fp = G_fopen_old("cellhd", real_name, real_mapset);
+	if (!fp)
+	    G_fatal_error(_("Unable to read header file for raster map <%s@%s>."
+			    "It is a reclass of raster map <%s@%s> %s"),
+			  name, mapset, real_name, real_mapset,
+			  !G_find_raster(real_name, real_mapset)
+			  ? _("which is missing.")
+			  : _("whose header file can't be opened."));
     }
     else {
-	fd = G_fopen_old("cellhd", name, mapset);
-	if (fd == NULL) {
-	    G_warning(_("Unable to open header file for raster map <%s@%s>"),
-		      name, mapset);
-	    return -1;
-	}
+	fp = G_fopen_old("cellhd", name, mapset);
+	if (!fp)
+	    G_fatal_error(_("Unable to open header file for raster map <%s@%s>"),
+			  name, mapset);
     }
 
-    G__read_Cell_head(fd, cellhd, 1);
-    fclose(fd);
-
-    return 0;
+    G__read_Cell_head(fp, cellhd, 1);
+    fclose(fp);
 }

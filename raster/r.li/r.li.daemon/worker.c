@@ -61,10 +61,7 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 
     /* open raster map */
     fd = Rast_open_old(raster, "");
-    if (Rast_get_cellhd(raster, "", &hd) == -1) {
-	G_message(_("CHILD[pid = %i] cannot open raster map"), pid);
-	exit(EXIT_FAILURE);
-    }
+    Rast_get_cellhd(raster, "", &hd);
 
     /* read data type to allocate cache */
     data_type = Rast_map_type(raster, "");
@@ -235,12 +232,10 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
 	    raster, mask, rl, cl);
 
     /* open raster */
-    if (Rast_get_cellhd(raster, "", &cell) == -1)
-	return NULL;
+    Rast_get_cellhd(raster, "", &cell);
 
     /* open raster */
-    if (Rast_get_cellhd(mask, "", &oldcell) == -1)
-	return NULL;
+    Rast_get_cellhd(mask, "", &oldcell);
 
     add_row = 1.0 * oldcell.rows / rl;
     add_col = 1.0 * oldcell.cols / cl;

@@ -481,14 +481,12 @@ int main(int argc, char *argv[])
 	    write_vtk_unstructured_grid_cells(fp, region);
 	}
 
-	if (Rast_close(in->top) < 0) {
-	    G_fatal_error(_("unable to close top raster map"));
-	}
+	Rast_close(in->top);
+
 	in->top = -1;
 
-	if (Rast_close(in->bottom) < 0) {
-	    G_fatal_error(_("unable to close bottom raster map"));
-	}
+	Rast_close(in->bottom);
+
 	in->bottom = -1;
     }
     else {

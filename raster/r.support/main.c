@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
     struct Option *map_opt, *units_opt, *vdatum_opt;
     struct Option *load_opt, *save_opt;
     struct Flag *stats_flag, *null_flag, *del_flag;
-    int cellhd_ok;		/* Is cell header OK? */
     int is_reclass;		/* Is raster reclass? */
     const char *infile;
     char title[MAX_TITLE_LEN + 1], datasrc[RECORD_LEN + 1];
@@ -148,7 +147,7 @@ int main(int argc, char *argv[])
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
 	G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
 
-    cellhd_ok = (Rast_get_cellhd(raster->answer, "", &cellhd) >= 0);
+    Rast_get_cellhd(raster->answer, "", &cellhd);
     is_reclass = (Rast_is_reclass(raster->answer, "", rname, rmapset) > 0);
 
     if (title_opt->answer) {

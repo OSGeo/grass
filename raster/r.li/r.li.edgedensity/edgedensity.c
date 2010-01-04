@@ -84,9 +84,7 @@ int edgedensity(int fd, char **valore, area_des ad, double *result)
     int ris = -1;
     double indice = 0;
 
-    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
-	return RLI_ERRORE;
-
+    Rast_get_cellhd(ad->raster, "", &hd);
 
     switch (ad->data_type) {
     case CELL_TYPE:

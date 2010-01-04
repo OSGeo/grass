@@ -82,8 +82,8 @@ int Rast_cell_stats_histo_eq(struct Cell_stats *, CELL, CELL, CELL, CELL, int,
 			  void (*)(CELL, CELL, CELL));
 
 /* closecell.c */
-int Rast_close(int);
-int Rast_unopen(int);
+void Rast_close(int);
+void Rast_unopen(int);
 
 /* color_compat.c */
 void Rast_make_ryg_colors(struct Colors *, CELL, CELL);
@@ -294,7 +294,7 @@ void Rast_close_gdal_link(struct GDAL_link *);
 int Rast_close_gdal_write_link(struct GDAL_link *);
 
 /* get_cellhd.c */
-int Rast_get_cellhd(const char *, const char *, struct Cell_head *);
+void Rast_get_cellhd(const char *, const char *, struct Cell_head *);
 
 /* get_row.c */
 int Rast_get_row_nomask(int, void *, int, RASTER_MAP_TYPE);

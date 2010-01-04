@@ -168,8 +168,7 @@ int main(int argc, char *argv[])
 	/* Allocate input buffer */
 	in_data_type[nfiles] = Rast_map_type(name, mapset);
 	infd[nfiles] = Rast_open_old(name, mapset);
-	if ((Rast_get_cellhd(name, mapset, &cellhd)) < 0)
-	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name);
+	Rast_get_cellhd(name, mapset, &cellhd);
 	inrast[nfiles] = Rast_allocate_buf(in_data_type[nfiles]);
 	nfiles++;
     }
@@ -195,8 +194,7 @@ int main(int argc, char *argv[])
 	/* Allocate input buffer */
 	in_data_type1[nfiles1] = Rast_map_type(name1, mapset);
 	infd1[nfiles1] = Rast_open_old(name1, mapset);
-	if ((Rast_get_cellhd(name1, mapset, &cellhd)) < 0)
-	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name1);
+	Rast_get_cellhd(name1, mapset, &cellhd);
 	inrast1[nfiles1] = Rast_allocate_buf(in_data_type1[nfiles1]);
 	nfiles1++;
     }
@@ -228,8 +226,7 @@ int main(int argc, char *argv[])
 	/* Allocate input buffer */
 	in_data_type2[nfiles2] = Rast_map_type(name2, mapset);
 	infd2[nfiles2] = Rast_open_old(name2, mapset);
-	if ((Rast_get_cellhd(name2, mapset, &cellhd)) < 0)
-	    G_fatal_error(_("Unable to read file header of raster map <%s>"), name2);
+	Rast_get_cellhd(name2, mapset, &cellhd);
 	inrast2[nfiles2] = Rast_allocate_d_buf();
 	nfiles2++;
     }

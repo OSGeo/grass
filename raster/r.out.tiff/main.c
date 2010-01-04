@@ -140,9 +140,7 @@ int main(int argc, char *argv[])
     palette = pflag->answer;
     tfw = tflag->answer;
 
-    if ((Rast_get_cellhd(inopt->answer, "", &cellhd) < 0))
-	G_fatal_error(_("Unable to read header of raster map <%s>"),
-		      inopt->answer);
+    Rast_get_cellhd(inopt->answer, "", &cellhd);
 
     G_get_window(&cellhd);
 

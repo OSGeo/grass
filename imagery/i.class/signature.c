@@ -304,8 +304,8 @@ int display_signature(void)
     Rast_write_colors(MASK, G_mapset(), &mask_colors);
 
     /* display new mask */
-    if (Rast_get_cellhd(MASK, G_mapset(), &cellhd) != 0)
-	G_fatal_error(_("Did not find input cell map MASK."));
+    Rast_get_cellhd(MASK, G_mapset(), &cellhd);
+
     G_adjust_window_to_box(&cellhd, &VIEW_MASK1->cell.head, VIEW_MASK1->nrows,
 			   VIEW_MASK1->ncols);
     draw_cell(VIEW_MASK1, OVER_LAY);

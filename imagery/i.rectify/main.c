@@ -191,18 +191,11 @@ int main(int argc, char *argv[])
     }
     else {
 	/* Calculate smallest region */
-	if (a->answer) {
-	    if (Rast_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd) <
-		0)
-		G_fatal_error(_("Unable to read header of raster map <%s>"),
-			      ref.file[0].name);
-	}
-	else {
-	    if (Rast_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd) <
-		0)
-		G_fatal_error(_("Unable to read header of raster map <%s>"),
-			      ifile->answers[0]);
-	}
+	if (a->answer)
+	    Rast_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd);
+	else
+	    Rast_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd);
+
 	georef_window(&cellhd, &target_window, order);
     }
 

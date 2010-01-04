@@ -159,8 +159,7 @@ int main(int argc, char *argv[])
     }
     G_free(bas);
     G_free(cell_buf);
-    if (Rast_close(basin_fd) < 0)
-	G_fatal_error(_("Unable to close new basin map layer"));
+    Rast_close(basin_fd);
 
     return 0;
 }

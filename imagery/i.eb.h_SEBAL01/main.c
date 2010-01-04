@@ -209,14 +209,10 @@ int main(int argc, char *argv[])
     infd_z0m = Rast_open_old(z0m, "");
     infd_t0dem = Rast_open_old(t0dem, "");
 
-    if (Rast_get_cellhd(Rn, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s>"), Rn);
-    if (Rast_get_cellhd(g0, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s>"), g0);
-    if (Rast_get_cellhd(z0m, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s>"), z0m);
-    if (Rast_get_cellhd(t0dem, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s>"), t0dem);
+    Rast_get_cellhd(Rn, "", &cellhd);
+    Rast_get_cellhd(g0, "", &cellhd);
+    Rast_get_cellhd(z0m, "", &cellhd);
+    Rast_get_cellhd(t0dem, "", &cellhd);
 
     /* Allocate input buffer */
     inrast_Rn = Rast_allocate_d_buf();
@@ -243,8 +239,7 @@ int main(int argc, char *argv[])
     /***************************************************/
     outrast = Rast_allocate_d_buf();
 
-    if ((outfd = Rast_open_new(h0, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), h0);
+    outfd = Rast_open_new(h0, DCELL_TYPE);
 
     /***************************************************/
     /* Allocate memory for temporary images            */

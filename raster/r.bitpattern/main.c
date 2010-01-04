@@ -101,8 +101,7 @@ int main(int argc, char *argv[])
     /* determine the inputmap type (CELL/FCELL/DCELL) */
     data_type = Rast_get_map_type(infd);
 
-    if (Rast_get_cellhd(name, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
+    Rast_get_cellhd(name, "", &cellhd);
 
     /* Allocate input buffer */
     inrast = Rast_allocate_buf(data_type);

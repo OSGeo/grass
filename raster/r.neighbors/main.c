@@ -204,8 +204,7 @@ int main(int argc, char *argv[])
     ncb.newcell = parm.output->answer;
 
     if (!flag.align->answer) {
-	if (Rast_get_cellhd(ncb.oldcell, "", &cellhd) < 0)
-	    exit(EXIT_FAILURE);
+	Rast_get_cellhd(ncb.oldcell, "", &cellhd);
 	G_get_window(&window);
 	G_align_window(&window, &cellhd);
 	Rast_set_window(&window);

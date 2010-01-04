@@ -49,10 +49,7 @@ void fatal_error(char *errorMsg, input_maps * in)
 int CloseInputRasterMap(int fd)
 {
     if (fd != -1)
-	if (Rast_close(fd) < 0) {
-	    G_warning(_("unable to close input raster map"));
-	    return 1;
-	}
+	Rast_close(fd);
 
     return 0;
 

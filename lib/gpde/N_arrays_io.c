@@ -154,8 +154,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     }
 
     /* Close file */
-    if (Rast_close(map) < 0)
-	G_fatal_error(_("Unable to close input map"));
+    Rast_close(map);
 
     return data;
 }
@@ -234,11 +233,7 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
     }
 
     /* Close file */
-    if (Rast_close(map) < 0)
-	G_fatal_error(_("Unable to close input map"));
-
-    return;
-
+    Rast_close(map);
 }
 
 

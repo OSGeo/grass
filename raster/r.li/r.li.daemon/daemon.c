@@ -350,8 +350,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
     rel_cl = atof(strtok(NULL, "\n"));
 
     /* find raster map */
-    if (Rast_get_cellhd(raster, "", &cellhd) == -1)
-	G_fatal_error(_("Cannot read raster header file"));
+    Rast_get_cellhd(raster, "", &cellhd);
 
     /* calculate absolute sampling frame definition */
     sf_x = (int)rint(cellhd.cols * rel_x);

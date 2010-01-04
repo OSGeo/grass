@@ -161,8 +161,7 @@ int main(int argc, char *argv[])
     display_title(VIEW_MAP1);
 
     mapset = G_find_raster(bg_map->answer, "");
-    if (Rast_get_cellhd(bg_map->answer, mapset, &cellhd) != 0)
-	G_fatal_error(_("Raster map <%s> not found"), bg_map->answer);
+    Rast_get_cellhd(bg_map->answer, mapset, &cellhd);
 
     G_adjust_window_to_box(&cellhd, &VIEW_MAP1->cell.head, VIEW_MAP1->nrows,
 			   VIEW_MAP1->ncols);
@@ -265,9 +264,7 @@ static int check_files(char *img_group, char *img_subgroup,
 	G_fatal_error(_("The subgroup must have at least 2 files to run"));
     }
 
-    if (Rast_get_cellhd(Refer.file[0].name, Refer.file[0].mapset, &Band_cellhd)
-	!= 0)
-	G_fatal_error(_("Unable to read cell header for first band file"));
+    Rast_get_cellhd(Refer.file[0].name, Refer.file[0].mapset, &Band_cellhd);
 
     /* allocate space for signature routines */
     init_sig_routines((size_t) Refer.nfiles);

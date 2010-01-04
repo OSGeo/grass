@@ -55,11 +55,10 @@ int Rast__check_for_auto_masking(void)
 	return 0;
 
     /* check MASK projection/zone against current region */
-    if (Rast_get_cellhd("MASK", G_mapset(), &cellhd) >= 0) {
-	if (cellhd.zone != G_zone() || cellhd.proj != G_projection()) {
-	    R__.auto_mask = 0;
-	    return 0;
-	}
+    Rast_get_cellhd("MASK", G_mapset(), &cellhd);
+    if (cellhd.zone != G_zone() || cellhd.proj != G_projection()) {
+	R__.auto_mask = 0;
+	return 0;
     }
 
     Rast_unopen(R__.mask_fd);

@@ -185,8 +185,7 @@ int open_output_map(const char *name, int res_type)
 /* ************************************************************************* */
 void close_output_map(int fd)
 {
-    if (Rast_close(fd) < 0)
-	G_fatal_error(_("Unable to close output map"));
+    Rast_close(fd);
 }
 
 /* ************************************************************************* */

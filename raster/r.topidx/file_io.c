@@ -15,8 +15,7 @@ void getcells(void)
     fd = Rast_open_old(iname, "");
 
     data_type = Rast_get_map_type(fd);
-    if (Rast_get_cellhd(iname, "", &inhead) < 0 )
-	G_fatal_error(_("Unable to read header of raster map <%s>"), iname);
+    Rast_get_cellhd(iname, "", &inhead);
 
     if (data_type == CELL_TYPE)
 	ccell = (CELL *) G_malloc(sizeof(CELL) * window.cols);
