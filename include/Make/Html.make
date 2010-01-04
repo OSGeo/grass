@@ -14,7 +14,9 @@ IMGSRC := $(wildcard *.png) $(wildcard *.jpg)
 $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) | $(HTMLDIR)
 	$(PYTHON) $(GISBASE)/tools/mkhtml.py $* > $@
 ifneq ($(strip $(IMGSRC)),)
-	$(MAKE) $(patsubst %,$(HTMLDIR)/%,$(IMGSRC))
+	if test -n "$(IMGSRC)" ; then \
+		$(MAKE) $(patsubst %,$(HTMLDIR)/%,$(IMGSRC)) ; \
+	fi
 endif
 
 $(HTMLDIR)/%.png: %.png | $(HTMLDIR)
