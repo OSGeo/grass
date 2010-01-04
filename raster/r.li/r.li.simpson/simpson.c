@@ -69,8 +69,7 @@ int simpson(int fd, char **par, area_des ad, double *result)
     double indice = 0;
     struct Cell_head hd;
 
-    if (Rast_get_cellhd(ad->raster, "", &hd) == -1)
-	return RLI_ERRORE;
+    Rast_get_cellhd(ad->raster, "", &hd);
 
     switch (ad->data_type) {
     case CELL_TYPE:

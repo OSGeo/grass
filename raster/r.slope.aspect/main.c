@@ -367,10 +367,9 @@ int main(int argc, char *argv[])
     /* set the window from the header for the elevation file */
     if (!flag.a->answer) {
 	G_get_window(&window);
-	if (Rast_get_cellhd(elev_name, "", &cellhd) >= 0) {
-	    G_align_window(&window, &cellhd);
-	    Rast_set_window(&window);
-	}
+	Rast_get_cellhd(elev_name, "", &cellhd);
+	G_align_window(&window, &cellhd);
+	Rast_set_window(&window);
     }
 
     if (strcmp(parm.out_precision->answer, "double") == 0)

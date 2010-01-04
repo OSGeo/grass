@@ -103,9 +103,7 @@ int main(int argc, char **argv)
     if (!strlen(map_name))
 	G_fatal_error(_("No map name given"));
 
-    if (Rast_get_cellhd(map_name, "", &window) == -1)
-	G_fatal_error(_("Unable to read header of raster map <%s>"),
-		      map_name);
+    Rast_get_cellhd(map_name, "", &window);
 
     if (Rast_read_cats(map_name, "", &cats) == -1)
 	G_fatal_error(_("Unable to read category file of raster map <%s>"),

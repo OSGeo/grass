@@ -29,10 +29,9 @@ int do_recode(void)
     /* set the window from the header for the input file */
     if (align_wind) {
 	G_get_window(&window);
-	if (Rast_get_cellhd(name, "", &cellhd) >= 0) {
-	    G_align_window(&window, &cellhd);
-	    Rast_set_window(&window);
-	}
+	Rast_get_cellhd(name, "", &cellhd);
+	G_align_window(&window, &cellhd);
+	Rast_set_window(&window);
     }
 
     G_get_set_window(&window);

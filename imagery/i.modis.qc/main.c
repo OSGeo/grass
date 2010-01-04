@@ -199,8 +199,7 @@ int main(int argc, char *argv[])
 
     infd = Rast_open_old(qcchan, "");
 
-    if (Rast_get_cellhd(qcchan, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s> "), qcchan);
+    Rast_get_cellhd(qcchan, "", &cellhd);
 
     inrast = Rast_allocate_c_buf();
 

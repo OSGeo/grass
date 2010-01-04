@@ -453,9 +453,7 @@ int main(int argc, char *argv[])
 	    mapset = G_find_raster2(rast_name, "");
 	    if (!mapset)
 		G_fatal_error(_("Raster map <%s> not found"), rast_name);
-	    if (Rast_get_cellhd(rast_name, mapset, &temp_window) < 0)
-		G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
-			      rast_name, mapset);
+	    Rast_get_cellhd(rast_name, mapset, &temp_window);
 	    if (!first) {
 		G_copy(&window, &temp_window, sizeof(window));
 		first = 1;
@@ -787,9 +785,7 @@ int main(int argc, char *argv[])
 	mapset = G_find_raster2(name, "");
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
-	if (Rast_get_cellhd(name, mapset, &temp_window) < 0)
-	    G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
-			  name, mapset);
+	Rast_get_cellhd(name, mapset, &temp_window);
 	if ((err = G_align_window(&window, &temp_window)))
 	    G_fatal_error(_("Raster map <%s@%s>: %s"), name, mapset, err);
     }

@@ -51,8 +51,7 @@ int close_maps(void)
 	}
 	G_percent(r, nrows, 1);    /* finish it */
 
-	if (Rast_close(fd) < 0)
-	    G_warning(_("Close failed."));
+	Rast_close(fd);
 
 	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
 	G_debug(1, "stddev: %f", stddev);

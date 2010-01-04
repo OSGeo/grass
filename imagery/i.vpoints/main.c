@@ -181,7 +181,8 @@ int main(int argc, char *argv[])
 	    quit(0);
 	/* display this file in "map1" */
     }
-    while (Rast_get_cellhd(name, mapset, &cellhd) < 0);
+    while (!G_find_raster2(name, mapset));
+    Rast_get_cellhd(name, mapset, &cellhd);
 
     G_adjust_window_to_box(&cellhd, &VIEW_MAP1->cell.head, VIEW_MAP1->nrows,
 			   VIEW_MAP1->ncols);

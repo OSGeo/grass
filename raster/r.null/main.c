@@ -155,9 +155,7 @@ int main(int argc, char *argv[])
 
     parse_vallist(parms.setnull->answers, &d_mask);
 
-    if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
+    Rast_get_cellhd(name, mapset, &cellhd);
 
     if (create) {
 	/* write a file of no-nulls */

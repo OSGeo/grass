@@ -79,8 +79,7 @@ int main(int argc, char *argv[])
 
     /***************************************************/ 
     infd = Rast_open_old(in, "");
-    if (Rast_get_cellhd(in, "", &cellhd) < 0)
-	G_fatal_error(_("Cannot read file header of [%s])"), in);
+    Rast_get_cellhd(in, "", &cellhd);
     inrast = Rast_allocate_d_buf();
     
     /***************************************************/ 

@@ -20,8 +20,7 @@ int rectify(char *name, char *mapset, char *result, int order)
     void *rast;
 
     select_current_env();
-    if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
-	return 0;
+    Rast_get_cellhd(name, mapset, &cellhd);
 
     /* open the result file into target window
      * this open must be first since we change the window later

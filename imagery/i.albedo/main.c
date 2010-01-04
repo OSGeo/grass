@@ -154,8 +154,7 @@ int main(int argc, char *argv[])
 	in_data_type[nfiles] = Rast_map_type(name, "");
 	infd[nfiles] = Rast_open_old(name, "");
 
-	if ((Rast_get_cellhd(name, "", &cellhd)) < 0)
-	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
+	Rast_get_cellhd(name, "", &cellhd);
 
 	inrast[nfiles] = Rast_allocate_buf(in_data_type[nfiles]);
 	nfiles++;

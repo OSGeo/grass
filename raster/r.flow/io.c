@@ -63,8 +63,8 @@ static int open_existing_cell_file(char *fname, struct Cell_head *chd)
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), fname);
 
-    if (chd && (Rast_get_cellhd(fname, mapset, chd) < 0))
-	G_fatal_error(_("Unable to get header for %s"), fname);
+    if (chd)
+	Rast_get_cellhd(fname, mapset, chd);
 
     return Rast_open_old(fname, mapset);
 }

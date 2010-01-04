@@ -193,9 +193,7 @@ int Rast__open_old(const char *name, const char *mapset)
     }
 
     /* read the cell header */
-    if (Rast_get_cellhd(r_name, r_mapset, &cellhd) < 0)
-	G_fatal_error(_("Error reading cellhd file for <%s>"),
-		      G_fully_qualified_name(name, mapset));
+    Rast_get_cellhd(r_name, r_mapset, &cellhd);
 
     /* now check the type */
     MAP_TYPE = Rast_map_type(r_name, r_mapset);

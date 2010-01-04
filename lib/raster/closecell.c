@@ -67,16 +67,17 @@ static int write_fp_format(int fd);
  * \return -1 on error
  * \return 1 on success
  */
-int Rast_close(int fd)
+void Rast_close(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     if (fd < 0 || fd >= R__.fileinfo_count || fcb->open_mode <= 0)
-	return -1;
-    if (fcb->open_mode == OPEN_OLD)
-	return close_old(fd);
+	G_fatal_error(_("Invalid descriptor: %d"), fd);
 
-    return close_new(fd, 1);
+    if (fcb->open_mode == OPEN_OLD)
+	close_old(fd);
+    else
+	close_new(fd, 1);
 }
 
 /*!
@@ -100,16 +101,17 @@ int Rast_close(int fd)
  * \return -1 on error
  * \return 1 on success
  */
-int Rast_unopen(int fd)
+void Rast_unopen(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     if (fd < 0 || fd >= R__.fileinfo_count || fcb->open_mode <= 0)
-	return -1;
+	G_fatal_error(_("Invalid descriptor: %d"), fd);
+
     if (fcb->open_mode == OPEN_OLD)
-	return close_old(fd);
+	close_old(fd);
     else
-	return close_new(fd, 0);
+	close_new(fd, 0);
 }
 
 static int close_old(int fd)

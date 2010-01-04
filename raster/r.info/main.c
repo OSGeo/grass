@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     struct History hist;
     struct TimeStamp ts;
     int time_ok = 0, first_time_ok = 0, second_time_ok = 0;
-    int head_ok, cats_ok, hist_ok;
+    int cats_ok, hist_ok;
     int is_reclass;
     RASTER_MAP_TYPE data_type;
     struct Reclass reclass;
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     if ((mapset = G_find_raster2(name, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    head_ok = Rast_get_cellhd(name, "", &cellhd) >= 0;
+    Rast_get_cellhd(name, "", &cellhd);
     cats_ok = Rast_read_cats(name, "", &cats) >= 0;
     hist_ok = Rast_read_history(name, "", &hist) >= 0;
     is_reclass = Rast_get_reclass(name, "", &reclass);
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 			 units, vdatum);
 	}
 
-	if (head_ok) {
+	{
 	    compose_line(out, "  Rows:         %d", cellhd.rows);
 	    compose_line(out, "  Columns:      %d", cellhd.cols);
 #ifdef HAVE_LONG_LONG_INT

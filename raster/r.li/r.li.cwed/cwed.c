@@ -162,11 +162,7 @@ int contrastWeightedEdgeDensity(int fd, char **par, area_des ad,
 	return RLI_ERRORE;
     }
 
-    if (Rast_get_cellhd(ad->raster, "", &hd) == -1) {
-	G_fatal_error("can't read raster header");
-	return RLI_ERRORE;
-    }
-
+    Rast_get_cellhd(ad->raster, "", &hd);
 
     for (i = 0; i < totRow; i++) {
 	long num = 0;

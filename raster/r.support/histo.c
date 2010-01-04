@@ -18,8 +18,7 @@ int do_histogram(const char *name)
     int row;
     int fd;
 
-    if (Rast_get_cellhd(name, "", &cellhd) < 0)
-	G_fatal_error(_("Unable to read header for <%s>"), name);
+    Rast_get_cellhd(name, "", &cellhd);
 
     Rast_set_window(&cellhd);
     fd = Rast_open_old(name, "");

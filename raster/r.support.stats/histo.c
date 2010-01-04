@@ -34,8 +34,7 @@ int do_histogram(const char *name)
     int row;
     int fd;
 
-    if (Rast_get_cellhd(name, "", &cellhd) < 0)
-	return 1;
+    Rast_get_cellhd(name, "", &cellhd);
 
     Rast_set_window(&cellhd);
     fd = Rast_open_old(name, "");

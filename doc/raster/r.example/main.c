@@ -111,8 +111,7 @@ int main(int argc, char *argv[])
     infd = Rast_open_old(name, mapset);
 
     /* controlling, if we can open input raster */
-    if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
-	G_fatal_error(_("Unable to read file header of <%s>"), name);
+    Rast_get_cellhd(name, mapset, &cellhd);
 
     G_debug(3, "number of rows %d", cellhd.rows);
 

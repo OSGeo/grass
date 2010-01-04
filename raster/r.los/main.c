@@ -180,13 +180,11 @@ int main(int argc, char *argv[])
     }
 
     /*  read header info for elevation layer        */
-    if (Rast_get_cellhd(elev_layer, old_mapset, &cellhd_elev) < 0)
-	G_fatal_error(_("[%s]: Cannot read map header"), elev_layer);
+    Rast_get_cellhd(elev_layer, old_mapset, &cellhd_elev);
 
     /*  if pattern layer present, read in its header info   */
     if (patt_flag == TRUE) {
-	if (Rast_get_cellhd(patt_layer, patt_mapset, &cellhd_patt) < 0)
-	    G_fatal_error(_("[%s]: Cannot read map header"), patt_layer);
+	Rast_get_cellhd(patt_layer, patt_mapset, &cellhd_patt);
 
 	/*  allocate buffer space for row-io to layer           */
 	cell = Rast_allocate_buf(CELL_TYPE);

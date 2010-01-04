@@ -153,8 +153,7 @@ int main(int argc, char *argv[])
 
     name = parm.map->answer;
 
-    if (Rast_get_cellhd(name, G_mapset(), &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
+    Rast_get_cellhd(name, G_mapset(), &cellhd);
 
     G_copy(&window, &cellhd, sizeof(window));
 
@@ -197,8 +196,7 @@ int main(int argc, char *argv[])
     }
 
     if ((name = parm.raster->answer)) {	/* raster= */
-	if (Rast_get_cellhd(name, "", &window) < 0)
-	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
+	Rast_get_cellhd(name, "", &window);
     }
 
     if ((name = parm.vect->answer)) {	/* vect= */
@@ -311,8 +309,8 @@ int main(int argc, char *argv[])
     if ((name = parm.align->answer)) {	/* align= */
 	struct Cell_head temp_window;
 
-	if (Rast_get_cellhd(name, "", &temp_window) < 0)
-	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
+	Rast_get_cellhd(name, "", &temp_window);
+
 	if ((err = G_align_window(&window, &temp_window)))
 	    G_fatal_error("%s: %s", name, err);
     }
