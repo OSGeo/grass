@@ -180,7 +180,6 @@ int main(int argc, char *argv[])
 
     /* Definition for dimension and region check */
     struct Cell_head dtm_cellhd, cost_cellhd;
-    int dtm_head_ok, cost_head_ok;
 
     G_gisinit(argv[0]);
 
@@ -544,15 +543,8 @@ int main(int argc, char *argv[])
     dtm_fd = Rast_open_old(dtm_layer, "");
     cost_fd = Rast_open_old(cost_layer, "");
 
-    dtm_head_ok = Rast_get_cellhd(dtm_layer, "", &dtm_cellhd) >= 0;
-    cost_head_ok = Rast_get_cellhd(cost_layer, "", &cost_cellhd) >= 0;
-
-    /*Reading headers from maps */
-
-    if (!dtm_head_ok)
-	G_fatal_error(_("Unable to read %s"), dtm_layer);
-    if (!cost_head_ok)
-	G_fatal_error(_("Unable to read %s"), cost_layer);
+    Rast_get_cellhd(dtm_layer, "", &dtm_cellhd);
+    Rast_get_cellhd(cost_layer, "", &cost_cellhd);
 
     /*Projection */
 
