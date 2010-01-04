@@ -211,8 +211,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	Rast_get_row_nomask(old, rast, row, map_type);
-	if (Rast_put_row(new, rast, map_type) < 0)
-	    break;
+	Rast_put_row(new, rast, map_type);
     }
     G_free(rast);
     Rast_close(old);

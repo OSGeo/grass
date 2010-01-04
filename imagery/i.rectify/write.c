@@ -52,11 +52,7 @@ int write_map(char *name)
 	if (read(temp_fd, rast, target_window.cols * Rast_cell_size(map_type))
 	    != target_window.cols * Rast_cell_size(map_type))
 	    G_fatal_error(_("Error writing row %d"), row);
-	if (Rast_put_row(fd, rast, map_type) < 0) {
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
-			  name, row);
-	    unlink(temp_name);
-	}
+	Rast_put_row(fd, rast, map_type);
     }
     close(temp_fd);
     unlink(temp_name);

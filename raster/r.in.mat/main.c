@@ -468,10 +468,7 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "]\n");
 #endif
 
-	if (1 != Rast_put_row(cf, raster, map_type)) {
-	    Rast_close(cf);
-	    G_fatal_error(_("Writing raster map, row %d"), row);
-	}
+	Rast_put_row(cf, raster, map_type);
 
 	G_percent(row, mrows, 5);
     }

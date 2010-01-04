@@ -2,8 +2,6 @@
 #include <grass/raster.h>
 #include "cseg.h"
 
-static char *me = "bseg_write_cell";
-
 int bseg_write_cellfile(BSEG * bseg, char *map_name)
 {
     int map_fd;
@@ -22,13 +20,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
 	    bseg_get(bseg, &value, row, col);
 	    buffer[col] = value;
 	}
-	if (Rast_put_row(map_fd, buffer, CELL_TYPE) < 0) {
-	    G_free(buffer);
-	    Rast_unopen(map_fd);
-	    G_warning("%s(): unable to write new map layer [%s], row %d",
-		      me, map_name, row);
-	    return -2;
-	}
+	Rast_put_row(map_fd, buffer, CELL_TYPE);
     }
     G_percent(row, nrows, 1);    /* finish it */
     G_free(buffer);

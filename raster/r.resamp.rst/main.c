@@ -124,7 +124,7 @@ static void clean(void);
 
 int main(int argc, char *argv[])
 {
-    int m1, ret_val;
+    int m1;
     struct FPRange range;
     DCELL cellmin, cellmax;
     FCELL *cellrow, fcellmin;

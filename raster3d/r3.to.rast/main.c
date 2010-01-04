@@ -103,7 +103,7 @@ void set_params()
 void g3d_to_raster(void *map, G3D_Region region, int *fd)
 {
     double d1 = 0, f1 = 0;
-    int x, y, z, check = 0;
+    int x, y, z;
     int rows, cols, depths, typeIntern, pos = 0;
     FCELL *fcell = NULL;
     DCELL *dcell = NULL;
@@ -146,19 +146,11 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
 			dcell[x] = (DCELL) d1;
 		}
 	    }
-	    if (typeIntern == FCELL_TYPE) {
-		check = Rast_put_f_row(fd[pos], fcell);
-		if (check != 1)
-		    fatal_error(map, fd, depths,
-				_("Unable to write raster row"));
-	    }
+	    if (typeIntern == FCELL_TYPE)
+		Rast_put_f_row(fd[pos], fcell);
 
-	    if (typeIntern == DCELL_TYPE) {
-		check = Rast_put_d_row(fd[pos], dcell);
-		if (check != 1)
-		    fatal_error(map, fd, depths,
-				_("Unable to write raster row"));
-	    }
+	    if (typeIntern == DCELL_TYPE)
+		Rast_put_d_row(fd[pos], dcell);
 	}
 	G_debug(2, "Finished writing map %d.", z + 1);
 	pos++;

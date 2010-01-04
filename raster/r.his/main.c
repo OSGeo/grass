@@ -239,16 +239,13 @@ int main(int argc, char **argv)
 	}
 
 	if (r_used)
-	    if (Rast_put_row(r_file, r_array, CELL_TYPE) < 0)
-		r_used = 0;
+	    Rast_put_row(r_file, r_array, CELL_TYPE);
 
 	if (g_used)
-	    if (Rast_put_row(g_file, g_array, CELL_TYPE) < 0)
-		g_used = 0;
+	    Rast_put_row(g_file, g_array, CELL_TYPE);
 
 	if (b_used)
-	    if (Rast_put_row(b_file, b_array, CELL_TYPE) < 0)
-		b_used = 0;
+	    Rast_put_row(b_file, b_array, CELL_TYPE);
     }
     G_percent(window.rows, window.rows, 5);
 

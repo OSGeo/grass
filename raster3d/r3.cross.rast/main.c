@@ -118,7 +118,7 @@ void set_params()
 void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 {
     double d1 = 0, f1 = 0;
-    int x, y, z, check = 0;
+    int x, y, z;
     int rows, cols, depths, typeIntern;
     FCELL *fcell = NULL;
     DCELL *dcell = NULL;
@@ -221,19 +221,11 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 	}
 
 	/*Write the data to the output map */
-	if (typeIntern == FCELL_TYPE) {
-	    check = Rast_put_f_row(outfd, fcell);
-	    if (check != 1)
-		fatal_error(map, elevfd, outfd,
-			    _("Could not write raster row"));
-	}
+	if (typeIntern == FCELL_TYPE)
+	    Rast_put_f_row(outfd, fcell);
 
-	if (typeIntern == DCELL_TYPE) {
-	    check = Rast_put_d_row(outfd, dcell);
-	    if (check != 1)
-		fatal_error(map, elevfd, outfd,
-			    _("Could not write raster row"));
-	}
+	if (typeIntern == DCELL_TYPE)
+	    Rast_put_d_row(outfd, dcell);
     }
     G_debug(3, "\nDone\n");
 

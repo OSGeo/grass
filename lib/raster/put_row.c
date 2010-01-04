@@ -29,39 +29,7 @@
 #include "../gis/G.h"
 #include "R.h"
 
-static int put_raster_data(int, char *, const void *, int, int, int,
-			   RASTER_MAP_TYPE);
-static int put_data(int, char *, const CELL *, int, int, int);
-static int check_open(const char *, int);
-static void write_error(int, int);
-static int same(const unsigned char *, const unsigned char *, int);
-static void set_file_pointer(int, int);
-static int put_fp_data(int, char *, const void *, int, int, RASTER_MAP_TYPE);
-static int put_null_data(int, const char *, int);
-static int convert_and_write_if(int, const CELL *);
-static int convert_and_write_id(int, const CELL *);
-static int convert_and_write_df(int, const DCELL *);
-static int convert_and_write_fd(int, const FCELL *);
-static int put_raster_row(int, const void *, RASTER_MAP_TYPE, int);
-
-static int put_null_value_row(int fd, const char *buf)
-{
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-
-    if (fcb->gdal)
-	G_fatal_error(_("GDAL output doesn't support writing null rows separately"));
-
-    switch (put_null_data(fd, buf, fcb->null_cur_row)) {
-    case -1:
-	return -1;
-    case 0:
-	return 1;
-    }
-
-    fcb->null_cur_row++;
-
-    return 1;
-}
+static void put_raster_row(int, const void *, RASTER_MAP_TYPE, int);
 
 /*!
    \brief Writes the next row for cell/fcell/dcell file
@@ -92,12 +60,11 @@ static int put_null_value_row(int fd, const char *buf)
    \param buf     buffer holding data
    \param data_type raster map type (CELL_TYPE, FCELL_TYPE, DCELL_TYPE)
 
-   \return 1 on success
-   \return -1 on failure
+   \return void
  */
-int Rast_put_row(int fd, const void *buf, RASTER_MAP_TYPE data_type)
+void Rast_put_row(int fd, const void *buf, RASTER_MAP_TYPE data_type)
 {
-    return put_raster_row(fd, buf, data_type, data_type);
+    put_raster_row(fd, buf, data_type, data_type);
 }
 
 /*!
@@ -108,12 +75,11 @@ int Rast_put_row(int fd, const void *buf, RASTER_MAP_TYPE data_type)
    \param fd file descriptor where data is to be written
    \param buf     buffer holding data
 
-   \return 1 on success
-   \return -1 on failure
+   \return void
  */
-int Rast_put_c_row(int fd, const CELL * buf)
+void Rast_put_c_row(int fd, const CELL * buf)
 {
-    return Rast_put_row(fd, buf, CELL_TYPE);
+    Rast_put_row(fd, buf, CELL_TYPE);
 }
 
 /*!
@@ -124,12 +90,11 @@ int Rast_put_c_row(int fd, const CELL * buf)
    \param fd file descriptor where data is to be written
    \param buf     buffer holding data
 
-   \return 1 on success
-   \return -1 on failure
+   \return void
  */
-int Rast_put_f_row(int fd, const FCELL * buf)
+void Rast_put_f_row(int fd, const FCELL * buf)
 {
-    return Rast_put_row(fd, buf, FCELL_TYPE);
+    Rast_put_row(fd, buf, FCELL_TYPE);
 }
 
 /*!
@@ -140,71 +105,31 @@ int Rast_put_f_row(int fd, const FCELL * buf)
    \param fd file descriptor where data is to be written
    \param buf     buffer holding data
 
-   \return 1 on success
-   \return -1 on failure
+   \return void
  */
-int Rast_put_d_row(int fd, const DCELL * buf)
+void Rast_put_d_row(int fd, const DCELL * buf)
 {
-    return Rast_put_row(fd, buf, DCELL_TYPE);
+    Rast_put_row(fd, buf, DCELL_TYPE);
 }
 
-static int check_open(const char *me, int fd)
-{
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-
-    switch (fcb->open_mode) {
-    case OPEN_OLD:
-	G_warning(_("%s: raster map <%s> not open for write - request ignored"),
-		  me, fcb->name);
-	break;
-    case OPEN_NEW_COMPRESSED:
-    case OPEN_NEW_UNCOMPRESSED:
-	return 1;
-	break;
-    default:
-	G_warning(_("%s: unopened file descriptor - request ignored"), me);
-	break;
-    }
-
-    return 0;
-}
-
-static void write_error(int fd, int row)
-{
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-
-    if (fcb->io_error)
-	return;
-
-    G_warning(_("Raster map <%s> - unable to write row %d"), fcb->name, row);
-
-    fcb->io_error = 1;
-}
-
-static int write_data(int fd, int row, unsigned char *buf, int n)
+static void write_data(int fd, int row, unsigned char *buf, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     ssize_t nwrite = fcb->nbytes * n;
 
-    if (write(fd, buf, nwrite) != nwrite) {
-	write_error(fd, row);
-	return -1;
-    }
-
-    return 0;
+    if (write(fd, buf, nwrite) != nwrite)
+	G_fatal_error(_("Error writing uncompressed FP data for row %d of <%s>"),
+		      fcb->name, row);
 }
 
-static int write_data_compressed(int fd, int row, unsigned char *buf, int n)
+static void write_data_compressed(int fd, int row, unsigned char *buf, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int nwrite = fcb->nbytes * n;
 
-    if (G_zlib_write(fd, buf, nwrite) < 0) {
-	write_error(fd, row);
-	return -1;
-    }
-
-    return 0;
+    if (G_zlib_write(fd, buf, nwrite) < 0)
+	G_fatal_error(_("Error writing compressed FP data for row %d of <%s>"),
+		      fcb->name, row);
 }
 
 static void set_file_pointer(int fd, int row)
@@ -214,8 +139,8 @@ static void set_file_pointer(int fd, int row)
     fcb->row_ptr[row] = lseek(fd, 0L, SEEK_CUR);
 }
 
-static int convert_float(XDR * xdrs, char *null_buf, const FCELL * rast,
-			 int row, int n)
+static void convert_float(XDR * xdrs, char *null_buf, const FCELL * rast,
+			  int row, int n)
 {
     int i;
 
@@ -230,17 +155,13 @@ static int convert_float(XDR * xdrs, char *null_buf, const FCELL * rast,
 	else
 	    f = rast[i];
 
-	if (!xdr_float(xdrs, &f)) {
-	    G_warning(_("xdr_float failed for index %d of row %d"), i, row);
-	    return -1;
-	}
+	if (!xdr_float(xdrs, &f))
+	    G_fatal_error(_("xdr_float failed for index %d of row %d"), i, row);
     }
-
-    return 0;
 }
 
-static int convert_double(XDR * xdrs, char *null_buf, const DCELL * rast,
-			  int row, int n)
+static void convert_double(XDR * xdrs, char *null_buf, const DCELL * rast,
+			   int row, int n)
 {
     int i;
 
@@ -255,18 +176,14 @@ static int convert_double(XDR * xdrs, char *null_buf, const DCELL * rast,
 	else
 	    d = rast[i];
 
-	if (!xdr_double(xdrs, &d)) {
-	    G_warning(_("xdr_double failed for index %d of row %d"), i, row);
-	    return -1;
-	}
+	if (!xdr_double(xdrs, &d))
+	    G_fatal_error(_("xdr_double failed for index %d of row %d"), i, row);
     }
-
-    return 0;
 }
 
 /* writes data to fcell file for either full or partial rows */
-static int put_fp_data(int fd, char *null_buf, const void *rast,
-		       int row, int n, RASTER_MAP_TYPE data_type)
+static void put_fp_data(int fd, char *null_buf, const void *rast,
+			int row, int n, RASTER_MAP_TYPE data_type)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int compressed = (fcb->open_mode == OPEN_NEW_COMPRESSED);
@@ -274,10 +191,10 @@ static int put_fp_data(int fd, char *null_buf, const void *rast,
     char *work_buf;
 
     if (row < 0 || row >= fcb->cellhd.rows)
-	return 0;
+	return;
 
     if (n <= 0)
-	return 0;
+	return;
 
     work_buf = G__alloca(G__.window.cols * fcb->nbytes + 1);
 
@@ -288,35 +205,19 @@ static int put_fp_data(int fd, char *null_buf, const void *rast,
 		  (unsigned int)fcb->nbytes * fcb->cellhd.cols, XDR_ENCODE);
     xdr_setpos(xdrs, 0);
 
-    if (data_type == FCELL_TYPE) {
-	if (convert_float(xdrs, null_buf, rast, row, n) < 0) {
-	    G__freea(work_buf);
-	    return -1;
-	}
-    }
-    else {
-	if (convert_double(xdrs, null_buf, rast, row, n) < 0) {
-	    G__freea(work_buf);
-	    return -1;
-	}
-    }
+    if (data_type == FCELL_TYPE)
+	convert_float(xdrs, null_buf, rast, row, n);
+    else
+	convert_double(xdrs, null_buf, rast, row, n);
 
     xdr_destroy(&fcb->xdrstream);
 
-    if (compressed) {
-	if (write_data_compressed(fd, row, work_buf, n) == -1) {
-	    G__freea(work_buf);
-	    return -1;
-	}
-    }
-    else if (write_data(fd, row, work_buf, n) == -1) {
-	G__freea(work_buf);
-	return -1;
-    }
+    if (compressed)
+	write_data_compressed(fd, row, work_buf, n);
+    else
+	write_data(fd, row, work_buf, n);
 
     G__freea(work_buf);
-
-    return 1;
 }
 
 static void convert_int(unsigned char *wk, char *null_buf, const CELL * rast,
@@ -441,8 +342,8 @@ static int zlib_compress(unsigned char *dst, unsigned char *src, int n,
     return (nwrite >= total) ? 0 : nwrite;
 }
 
-static int put_data(int fd, char *null_buf, const CELL * cell,
-		    int row, int n, int zeros_r_nulls)
+static void put_data(int fd, char *null_buf, const CELL * cell,
+		     int row, int n, int zeros_r_nulls)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int compressed = fcb->cellhd.compressed;
@@ -451,10 +352,10 @@ static int put_data(int fd, char *null_buf, const CELL * cell,
     ssize_t nwrite;
 
     if (row < 0 || row >= fcb->cellhd.rows)
-	return 0;
+	return;
 
     if (n <= 0)
-	return 0;
+	return;
 
     work_buf = G__alloca(G__.window.cols * sizeof(CELL) + 1);
     wk = work_buf;
@@ -493,21 +394,15 @@ static int put_data(int fd, char *null_buf, const CELL * cell,
 	if (nwrite > 0) {
 	    nwrite++;
 
-	    if (write(fd, compressed_buf, nwrite) != nwrite) {
-		write_error(fd, row);
-		G__freea(compressed_buf);
-		G__freea(work_buf);
-		return -1;
-	    }
+	    if (write(fd, compressed_buf, nwrite) != nwrite)
+		G_fatal_error(_("Error writing compressed data for row %d of <%s>"),
+			      row, fcb->name);
 	}
 	else {
 	    nwrite = nbytes * n + 1;
-	    if (write(fd, work_buf, nwrite) != nwrite) {
-		write_error(fd, row);
-		G__freea(compressed_buf);
-		G__freea(work_buf);
-		return -1;
-	    }
+	    if (write(fd, work_buf, nwrite) != nwrite)
+		G_fatal_error(_("Error writing compressed data for row %d of <%s>"),
+			      row, fcb->name);
 	}
 
 	G__freea(compressed_buf);
@@ -515,20 +410,16 @@ static int put_data(int fd, char *null_buf, const CELL * cell,
     else {
 	nwrite = fcb->nbytes * n;
 
-	if (write(fd, work_buf, nwrite) != nwrite) {
-	    write_error(fd, row);
-	    G__freea(work_buf);
-	    return -1;
-	}
+	if (write(fd, work_buf, nwrite) != nwrite)
+	    G_fatal_error(_("Error writing uncompressed data for row %d of <%s>"),
+			  row, fcb->name);
     }
 
     G__freea(work_buf);
-
-    return 1;
 }
 
-static int put_data_gdal(int fd, const void *rast, int row, int n,
-			 int zeros_r_nulls, RASTER_MAP_TYPE map_type)
+static void put_data_gdal(int fd, const void *rast, int row, int n,
+			  int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
 #ifdef HAVE_GDAL
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -541,10 +432,10 @@ static int put_data_gdal(int fd, const void *rast, int row, int n,
     int i;
 
     if (row < 0 || row >= fcb->cellhd.rows)
-	return 0;
+	return;
 
     if (n <= 0)
-	return 0;
+	return;
 
     work_buf = G__alloca(n * size);
 
@@ -573,47 +464,55 @@ static int put_data_gdal(int fd, const void *rast, int row, int n,
 	dst = G_incr_void_ptr(dst, size);
     }
 
-    err =
-	Rast_gdal_raster_IO(fcb->gdal->band, GF_Write, 0, row, n, 1, work_buf,
-			    n, 1, datatype, 0, 0);
+    err = Rast_gdal_raster_IO(fcb->gdal->band, GF_Write, 0, row, n, 1,
+			      work_buf, n, 1, datatype, 0, 0);
 
     G__freea(work_buf);
 
-    return err == CE_None ? 1 : -1;
-#else
-    return -1;
+    if (err != CE_None)
+	G_fatal_error(_("Error writing data via GDAL for row %d of <%s>"),
+		      row, fcb->name);
 #endif
 }
 
-static int put_raster_data(int fd, char *null_buf, const void *rast,
-			   int row, int n,
-			   int zeros_r_nulls, RASTER_MAP_TYPE map_type)
+static void put_raster_data(int fd, char *null_buf, const void *rast,
+			    int row, int n,
+			    int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     if (fcb->gdal)
-	return put_data_gdal(fd, rast, row, n, zeros_r_nulls, map_type);
-
-    return (map_type == CELL_TYPE)
-	? put_data(fd, null_buf, rast, row, n, zeros_r_nulls)
-	: put_fp_data(fd, null_buf, rast, row, n, map_type);
+	put_data_gdal(fd, rast, row, n, zeros_r_nulls, map_type);
+    else if (map_type == CELL_TYPE)
+	put_data(fd, null_buf, rast, row, n, zeros_r_nulls);
+    else
+	put_fp_data(fd, null_buf, rast, row, n, map_type);
 }
 
-static int put_null_data(int fd, const char *flags, int row)
+static void put_null_data(int fd, const char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     if (fcb->null_fd < 0)
-	return -1;
+	G_fatal_error(_("No null file for <%s>"), fcb->name);
 
     Rast__convert_01_flags(flags, fcb->null_bits,
 			   fcb->cellhd.cols);
 
-    if (Rast__write_null_bits(fcb->null_fd, fcb->null_bits, row,
-			      fcb->cellhd.cols, fd) < 0)
-	return -1;
+    Rast__write_null_bits(fcb->null_fd, fcb->null_bits, row,
+			  fcb->cellhd.cols, fd);
+}
 
-    return 1;
+static void put_null_value_row(int fd, const char *buf)
+{
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+
+    if (fcb->gdal)
+	G_fatal_error(_("GDAL output doesn't support writing null rows separately"));
+
+    put_null_data(fd, buf, fcb->null_cur_row);
+
+    fcb->null_cur_row++;
 }
 
 /*!
@@ -622,22 +521,20 @@ static int put_null_data(int fd, const char *flags, int row)
    \param fd file descriptor of raster cell data file
 
    \return field descriptor of null data file
-   \return -1 on failure
  */
 int Rast__open_null_write(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int null_fd;
 
-    if (access(fcb->null_temp_name, 0) != 0) {
-	G_warning(_("Unable to find a temporary null file <%s>"),
-		  fcb->null_temp_name);
-	return -1;
-    }
+    if (access(fcb->null_temp_name, 0) != 0)
+	G_fatal_error(_("Unable to find a temporary null file <%s>"),
+		      fcb->null_temp_name);
 
     null_fd = open(fcb->null_temp_name, O_WRONLY);
     if (null_fd < 0)
-	return -1;
+	G_fatal_error(_("Unable to open null file <%s>"),
+		      fcb->null_temp_name);
 
     return null_fd;
 }
@@ -651,11 +548,10 @@ int Rast__open_null_write(int fd)
    \param col col number
    \param fd file descriptor of cell data file
 
-   \return 1 on success
-   \return -1 on failure
+   \return void
  */
-int Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
-			  int cols, int fd)
+void Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
+			   int cols, int fd)
 {
     off_t offset;
     size_t size;
@@ -663,21 +559,16 @@ int Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
     size = Rast__null_bitstream_size(cols);
     offset = (off_t) size *row;
 
-    if (lseek(null_fd, offset, SEEK_SET) < 0) {
-	G_warning(_("Error writing null row %d"), row);
-	return -1;
-    }
+    if (lseek(null_fd, offset, SEEK_SET) < 0)
+	G_fatal_error(_("Error writing null row %d"), row);
 
-    if (write(null_fd, flags, size) != size) {
-	G_warning(_("Error writing null row %d"), row);
-	return -1;
-    }
-
-    return 1;
+    if (write(null_fd, flags, size) != size)
+	G_fatal_error(_("Error writing null row %d"), row);
 }
 
-static int convert_and_write_if(int fd, const CELL * buf)
+static void convert_and_write_if(int fd, const void *vbuf)
 {
+    const CELL *buf = vbuf;
     struct fileinfo *fcb = &R__.fileinfo[fd];
     FCELL *p = (FCELL *) fcb->data;
     int i;
@@ -688,11 +579,12 @@ static int convert_and_write_if(int fd, const CELL * buf)
 	else
 	    p[i] = (FCELL) buf[i];
 
-    return Rast_put_f_row(fd, p);
+    Rast_put_f_row(fd, p);
 }
 
-static int convert_and_write_df(int fd, const DCELL * buf)
+static void convert_and_write_df(int fd, const void *vbuf)
 {
+    const DCELL *buf = vbuf;
     struct fileinfo *fcb = &R__.fileinfo[fd];
     FCELL *p = (FCELL *) fcb->data;
     int i;
@@ -703,11 +595,12 @@ static int convert_and_write_df(int fd, const DCELL * buf)
 	else
 	    p[i] = (FCELL) buf[i];
 
-    return Rast_put_f_row(fd, p);
+    Rast_put_f_row(fd, p);
 }
 
-static int convert_and_write_id(int fd, const CELL * buf)
+static void convert_and_write_id(int fd, const void *vbuf)
 {
+    const CELL *buf = vbuf;
     struct fileinfo *fcb = &R__.fileinfo[fd];
     DCELL *p = (DCELL *) fcb->data;
     int i;
@@ -718,11 +611,12 @@ static int convert_and_write_id(int fd, const CELL * buf)
 	else
 	    p[i] = (DCELL) buf[i];
 
-    return Rast_put_d_row(fd, p);
+    Rast_put_d_row(fd, p);
 }
 
-static int convert_and_write_fd(int fd, const FCELL * buf)
+static void convert_and_write_fd(int fd, const void *vbuf)
 {
+    const FCELL *buf = vbuf;
     struct fileinfo *fcb = &R__.fileinfo[fd];
     DCELL *p = (DCELL *) fcb->data;
     int i;
@@ -733,11 +627,12 @@ static int convert_and_write_fd(int fd, const FCELL * buf)
 	else
 	    p[i] = (DCELL) buf[i];
 
-    return Rast_put_d_row(fd, p);
+    Rast_put_d_row(fd, p);
 }
 
-static int convert_and_write_fi(int fd, const FCELL * buf)
+static void convert_and_write_fi(int fd, const void *vbuf)
 {
+    const FCELL *buf = vbuf;
     struct fileinfo *fcb = &R__.fileinfo[fd];
     CELL *p = (CELL *) fcb->data;
     int i;
@@ -748,11 +643,12 @@ static int convert_and_write_fi(int fd, const FCELL * buf)
 	else
 	    p[i] = (CELL) buf[i];
 
-    return Rast_put_c_row(fd, p);
+    Rast_put_c_row(fd, p);
 }
 
-static int convert_and_write_di(int fd, const DCELL * buf)
+static void convert_and_write_di(int fd, const void *vbuf)
 {
+    const DCELL *buf = vbuf;
     struct fileinfo *fcb = &R__.fileinfo[fd];
     CELL *p = (CELL *) fcb->data;
     int i;
@@ -763,7 +659,7 @@ static int convert_and_write_di(int fd, const DCELL * buf)
 	else
 	    p[i] = (CELL) buf[i];
 
-    return Rast_put_c_row(fd, p);
+    Rast_put_c_row(fd, p);
 }
 
 /*!
@@ -777,41 +673,42 @@ static int convert_and_write_di(int fd, const DCELL * buf)
    \param fd file descriptor where data is to be written
    \param buf buffer holding null data
 
-   \return 0  if successful
-   \return -1  on fail
+   \return void
  */
-static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
-			  int zeros_r_nulls)
+static void put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
+			   int zeros_r_nulls)
 {
-    static int (*convert_and_write_FtypeOtype[3][3]) () = {
-	{
-	NULL, convert_and_write_if, convert_and_write_id}, {
-	convert_and_write_fi, NULL, convert_and_write_fd}, {
-	convert_and_write_di, convert_and_write_df, NULL}
+    static void (*convert_and_write_FtypeOtype[3][3])(int, const void *) = {
+	{NULL, convert_and_write_if, convert_and_write_id},
+	{convert_and_write_fi, NULL, convert_and_write_fd},
+	{convert_and_write_di, convert_and_write_df, NULL}
     };
     struct fileinfo *fcb = &R__.fileinfo[fd];
     char *null_buf;
-    int stat;
 
-    if (!check_open("put_raster_row", fd))
-	return -1;
+    switch (fcb->open_mode) {
+    case OPEN_OLD:
+	G_fatal_error(_("put_raster_row: raster map <%s> not open for write - request ignored"),
+		      fcb->name);
+	break;
+    case OPEN_NEW_COMPRESSED:
+    case OPEN_NEW_UNCOMPRESSED:
+	break;
+    default:
+	G_fatal_error(_("put_raster_row: unopened file descriptor - request ignored"));
+	break;
+    }
 
-    if (fcb->map_type != data_type)
-	return convert_and_write_FtypeOtype[data_type][fcb->map_type] (fd,
-								       buf);
+    if (fcb->map_type != data_type) {
+	convert_and_write_FtypeOtype[data_type][fcb->map_type](fd, buf);
+	return;
+    }
 
     null_buf = G__alloca(fcb->cellhd.cols);
     G_zero(null_buf, fcb->cellhd.cols);
 
-    switch (put_raster_data(fd, null_buf, buf, fcb->cur_row, fcb->cellhd.cols,
-			    zeros_r_nulls, data_type)) {
-    case -1:
-	G__freea(null_buf);
-	return -1;
-    case 0:
-	G__freea(null_buf);
-	return 1;
-    }
+    put_raster_data(fd, null_buf, buf, fcb->cur_row, fcb->cellhd.cols,
+		    zeros_r_nulls, data_type);
 
     /* only for integer maps */
     if (data_type == CELL_TYPE) {
@@ -827,10 +724,8 @@ static int put_raster_row(int fd, const void *buf, RASTER_MAP_TYPE data_type,
     fcb->cur_row++;
 
     /* write the null row for the data row */
-    if (fcb->gdal)
-	stat = 0;
-    else
-	stat = put_null_value_row(fd, null_buf);
+    if (!fcb->gdal)
+	put_null_value_row(fd, null_buf);
+
     G__freea(null_buf);
-    return stat;
 }

@@ -39,8 +39,7 @@ int renumber(int in, int out)
 	    *c = table[*c];
 	    c++;
 	}
-	if (Rast_put_row(out, cell, CELL_TYPE) < 0)
-	    exit(1);
+	Rast_put_row(out, cell, CELL_TYPE);
     }
     G_percent(row, nrows, 10);
     G_free(cell);

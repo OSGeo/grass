@@ -346,9 +346,7 @@ int main(int argc, char *argv[])
 		    outrast[col] = va_ri(d_redchan, d_greenchan, d_bluechan);
 	    }
 	}
-	if (Rast_put_d_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
-			  result, row);
+	Rast_put_d_row(outfd, outrast);
     }
 
     G_free(inrast_redchan);

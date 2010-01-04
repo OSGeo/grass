@@ -160,8 +160,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* write raster row to output raster map */
-	if (Rast_put_row(outfd, outrast, data_type) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s>"), result);
+	Rast_put_row(outfd, outrast, data_type);
     }
 
     /* memory cleanup */

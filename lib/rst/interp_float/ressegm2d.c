@@ -494,7 +494,6 @@ static int input_data(struct interp_params *params,
 {
     double x, y, sm;		/* input data and smoothing */
     int m1, m2;			/* loop counters */
-    int ret_val, ret_val1;	/* return values of Rast_get_c_row */
     static FCELL *cellinp = NULL;	/* cell buffer for input data */
     static FCELL *cellsmooth = NULL;	/* cell buffer for smoothing */
 

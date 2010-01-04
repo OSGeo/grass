@@ -386,8 +386,7 @@ int main(int argc, char *argv[])
 		}	
 	    }
 	}
-	if (Rast_put_row(outfd, outrast, out_data_type) < 0)
-	    G_fatal_error(_("Unable to write to raster map<%s>"), result);
+	Rast_put_row(outfd, outrast, out_data_type);
     }
 
     for (i = 1; i <= nfiles; i++) {

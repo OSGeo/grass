@@ -655,8 +655,7 @@ int open_output_map(const char *name, int res_type)
 
 void put_map_row(int fd, void *buf, int res_type)
 {
-    if (Rast_put_row(fd, buf, res_type) < 0)
-	G_fatal_error(_("Failed writing raster map row"));
+    Rast_put_row(fd, buf, res_type);
 }
 
 void close_output_map(int fd)

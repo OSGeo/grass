@@ -76,8 +76,7 @@ void save_map(FCELL ** out, int out_fd, int rows, int cols, int flag,
 	    if (out[row][col] < *min_depth)
 		*min_depth = out[row][col];
 	}
-	if (Rast_put_f_row(out_fd, out[row]) == -1)
-	    G_fatal_error(_("Failed writing output raster map row %d"), row);
+	Rast_put_f_row(out_fd, out[row]);
 	G_percent(row + 1, rows, 5);
     }
 }

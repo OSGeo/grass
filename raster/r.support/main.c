@@ -326,9 +326,7 @@ int main(int argc, char *argv[])
 	G_message(_("Writing new null file for [%s]... "), raster->answer);
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
-	    if (Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0) <
-		0)
-		G_fatal_error(_("Error writing null row [%d]."), row);
+	    Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0);
 	}
 	G_percent(row, cellhd.rows, 1);
 

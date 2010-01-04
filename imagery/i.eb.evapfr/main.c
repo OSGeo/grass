@@ -158,13 +158,9 @@ int main(int argc, char *argv[])
 		}
 	    }
         }
-	if (Rast_put_d_row(outfd1, outrast1) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s>"), result1);
+	Rast_put_d_row(outfd1, outrast1);
 	if (makin) 
-        {
-            if (Rast_put_d_row(outfd2, outrast2) < 0)
-		G_fatal_error(_("Failed writing raster map <%s>"), result2);
-        }
+            Rast_put_d_row(outfd2, outrast2);
     }
     G_free(inrast_rnet);
     G_free(inrast_g0);

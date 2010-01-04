@@ -47,8 +47,7 @@ transform(int *datafds, int *outfds, int rows, int cols,
 
 	/* output the row of data */
 	for (j = 0; j < bands; j++)
-	    if (Rast_put_row(outfds[j], rowbufs[j], CELL_TYPE) < 0)
-		G_fatal_error(_("Error writing cell map during transform."));
+	    Rast_put_row(outfds[j], rowbufs[j], CELL_TYPE);
     }
     for (i = 0; i < bands; i++)
 	G_free(rowbufs[i]);
