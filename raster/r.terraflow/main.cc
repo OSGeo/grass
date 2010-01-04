@@ -193,8 +193,7 @@ void check_header(char* cellname) {
   }
   /* read cell header */
   struct Cell_head cell_hd;
-  if (Rast_get_cellhd (cellname, mapset, &cell_hd) < 0)
-    G_fatal_error(_("Cannot read header of [%s]"), cellname);
+  Rast_get_cellhd (cellname, mapset, &cell_hd);
   
   /* check compatibility with module region */
   if (!((region->ew_res == cell_hd.ew_res)

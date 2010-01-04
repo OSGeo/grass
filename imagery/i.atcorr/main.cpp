@@ -96,9 +96,7 @@ static void adjust_region (char *name, const char *mapset)
 {
     struct Cell_head iimg_head;	/* the input image header file */
 
-    if(Rast_get_cellhd(name, mapset, &iimg_head) < 0) 
-	G_fatal_error (_("Unable to read header of raster map <%s>"),
-		       G_fully_qualified_name(name, mapset));
+    Rast_get_cellhd(name, mapset, &iimg_head);
 
     if(Rast_set_window(&iimg_head) < 0) 
 	G_fatal_error (_("Invalid graphics region coordinates"));
