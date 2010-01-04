@@ -39,10 +39,6 @@ int draw_cell(View * view, int overlay)
     }
 
     fd = Rast_open_old(view->cell.name, view->cell.mapset);
-    if (fd < 0) {
-	Rast_free_colors(&colr);
-	return 0;
-    }
     dcell = Rast_allocate_d_buf();
     
     sprintf(msg, "Plotting %s ...", view->cell.name);

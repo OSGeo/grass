@@ -46,10 +46,6 @@ int exact_checks(GDALDataType export_datatype,
 
     /* Open GRASS raster */
     fd = Rast_open_old(name, mapset);
-    if (fd < 0) {
-	G_warning(_("Unable to open raster map <%s>"), name);
-	return -1;
-    }
 
     /* Get min/max values. */
     if (Rast_read_fp_range(name, mapset, &sRange) == -1) {
@@ -248,10 +244,6 @@ int export_band(GDALDatasetH hMEMDS, GDALDataType export_datatype, int band,
 
     /* Open GRASS raster */
     fd = Rast_open_old(name, mapset);
-    if (fd < 0) {
-	G_warning(_("Unable to open raster map <%s>"), name);
-	return -1;
-    }
 
     /* Get raster band  */
     GDALRasterBandH hBand = GDALGetRasterBand(hMEMDS, band);

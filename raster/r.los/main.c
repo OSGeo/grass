@@ -201,19 +201,13 @@ int main(int argc, char *argv[])
 
     /*      open elevation overlay file for reading         */
     old = Rast_open_old(elev_layer, old_mapset);
-    if (old < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), elev_layer);
 
     /*      open cell layer for writing output              */
     new = Rast_open_new(out_layer, FCELL_TYPE);
-    if (new < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), out_layer);
 
     /* if pattern layer specified, open it for reading      */
     if (patt_flag == TRUE) {
 	patt = Rast_open_old(patt_layer, patt_mapset);
-	if (patt < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), patt_layer);
 	if (Rast_get_map_type(patt) != CELL_TYPE)
 	    G_fatal_error(_("Pattern map should be a binary 0/1 CELL map"));
     }

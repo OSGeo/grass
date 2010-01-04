@@ -11,9 +11,6 @@ CELL **read_cell(const char *name, const char *mapset)
     int row;
 
     fd = Rast_open_old(name, mapset);
-    if (fd < 0)
-	G_fatal_error(_("unable to open map <%s> in <%s>"),
-		      name, mapset);
 
     buf = G_malloc((size_t) nrows * ncols * sizeof(CELL));
     idx = G_malloc(nrows * sizeof(CELL *));

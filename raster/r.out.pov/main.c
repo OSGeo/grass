@@ -163,9 +163,6 @@ int main(int argc, char *argv[])
     name = parm.map->answer;
 
     fd = Rast_open_old(name, "");
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
-
 
     outfilename = parm.tga->answer;
     if (outfilename == NULL)

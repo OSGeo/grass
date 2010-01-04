@@ -122,8 +122,7 @@ int main(int argc, char **argv)
     name_h = opt_h->answer;
 
     /* Make sure map is available */
-    if ((hue_file = Rast_open_old(name_h, "")) == -1)
-	G_fatal_error(_("Unable to open raster map <%s>"), name_h);
+    hue_file = Rast_open_old(name_h, "");
 
     hue_r = G_malloc(window.cols);
     hue_g = G_malloc(window.cols);
@@ -143,8 +142,7 @@ int main(int argc, char **argv)
 	name_i = opt_i->answer;
 	int_used = 1;
 	/* Make sure map is available */
-	if ((int_file = Rast_open_old(name_i, "")) == -1)
-	    G_fatal_error(_("Unable to open raster map <%s>"), name_i);
+	int_file = Rast_open_old(name_i, "");
 
 	int_r = G_malloc(window.cols);
 	int_n = G_malloc(window.cols);
@@ -162,8 +160,7 @@ int main(int argc, char **argv)
 	    sat_used = 1;
 
 	    /* Make sure map is available */
-	    if ((sat_file = Rast_open_old(name_s, "")) == -1)
-		G_fatal_error(_("Unable to open raster map <%s>"), name_s);
+	    sat_file = Rast_open_old(name_s, "");
 
 	    sat_r = G_malloc(window.cols);
 	    sat_n = G_malloc(window.cols);
@@ -177,33 +174,24 @@ int main(int argc, char **argv)
 
     if (opt_r->answer != NULL) {
 	name_r = opt_r->answer;
-
-	if ((r_file = Rast_open_c_new(name_r)) < 0)
-	    r_used = 0;
-	else
-	    r_used = 1;
+	r_file = Rast_open_c_new(name_r);
+	r_used = 1;
     }
 
     g_used = 0;
 
     if (opt_g->answer != NULL) {
 	name_g = opt_g->answer;
-
-	if ((g_file = Rast_open_c_new(name_g)) < 0)
-	    g_used = 0;
-	else
-	    g_used = 1;
+	g_file = Rast_open_c_new(name_g);
+	g_used = 1;
     }
 
     b_used = 0;
 
     if (opt_b->answer != NULL) {
 	name_b = opt_b->answer;
-
-	if ((b_file = Rast_open_c_new(name_b)) < 0)
-	    b_used = 0;
-	else
-	    b_used = 1;
+	b_file = Rast_open_c_new(name_b);
+	b_used = 1;
     }
 
     r_array = Rast_allocate_c_buf();

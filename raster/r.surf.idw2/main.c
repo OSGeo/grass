@@ -105,9 +105,6 @@ int main(int argc, char *argv[])
 	mask = NULL;
 
     fd = Rast_open_c_new(parm.output->answer);
-    if (fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"),
-		      parm.output->answer);
 
     G_message(_("Interpolating raster map <%s>... %d rows... "),
 	      parm.output->answer, window.rows);

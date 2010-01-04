@@ -34,9 +34,6 @@ int perform_filter(const char *in_name, const char *out_name,
 
 		G_debug(1, "Open raster map %s = %d", in_name, in);
 
-		if (in < 0) {
-		    G_fatal_error(_("Cannot open raster map <%s>"), in_name);
-		}
 		close(creat(tmp1 = G_tempfile(), 0666));
 		out = open(tmp1, 2);
 		if (out < 0)
@@ -80,9 +77,6 @@ int perform_filter(const char *in_name, const char *out_name,
     /* copy final result to output raster map */
     in = out;
     out = Rast_open_fp_new(out_name);
-    if (out < 0) {
-	G_fatal_error(_("Cannot create raster map <%s>"), out_name);
-    }
 
     G_message(_("Writing raster map <%s>"), out_name);
     for (row = 0; row < nrows; row++) {

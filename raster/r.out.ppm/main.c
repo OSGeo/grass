@@ -97,8 +97,7 @@ int main(int argc, char *argv[])
     G_message(_("rows = %d, cols = %d"), w.rows, w.cols);
 
     /* open raster map for reading */
-    if ((cellfile = Rast_open_old(rast->answer, "")) == -1)
-	G_fatal_error(_("Unable to open raster map <%s>"), rast->answer);
+    cellfile = Rast_open_old(rast->answer, "");
 
     cell_buf = Rast_allocate_c_buf();
     fcell_buf = Rast_allocate_f_buf();

@@ -133,8 +133,7 @@ int main(int argc, char *argv[])
     }
 
     /* Open raster */
-    if ((fd = Rast_open_old(rast_opt->answer, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
+    fd = Rast_open_old(rast_opt->answer, "");
 
     out_type = Rast_get_map_type(fd);
 

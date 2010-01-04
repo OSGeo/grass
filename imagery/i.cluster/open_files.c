@@ -54,9 +54,7 @@ int open_files(void)
 	
 	name = ref.file[n].name;
 	mapset = ref.file[n].mapset;
-	if ((cellfd[n] = Rast_open_old(name, mapset)) < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  G_fully_qualified_name(name, mapset));
+	cellfd[n] = Rast_open_old(name, mapset);
     }
 
     I_init_signatures(&in_sig, ref.nfiles);

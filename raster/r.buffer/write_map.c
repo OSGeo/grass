@@ -37,14 +37,10 @@ int write_output_map(char *output, int offset)
     int k;
 
     fd_out = Rast_open_c_new(output);
-    if (fd_out < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
-    if (offset) {
+    if (offset)
 	fd_in = Rast_open_old(output, G_mapset());
-	if (fd_in < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), output);
-    }
+
     cell = Rast_allocate_c_buf();
     G_message(_("Writing output raster map <%s>..."), output);
 

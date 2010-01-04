@@ -155,8 +155,6 @@ int main(int argc, char **argv)
 
     /*  Open input cell layer for reading                           */
     fd = Rast_open_old(input, "");
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), input);
 
     /* Store input data in array-indexed doubly-linked lists and close input file */
     rowlist = row_lists(nrows, ncols, &datarows, &n, fd, cell);
@@ -167,8 +165,6 @@ int main(int argc, char **argv)
 
     /* open cell layer for writing output              */
     fd = Rast_open_c_new(output);
-    if (fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
     /* call the interpolation function                              */
     interpolate(rowlist, nrows, ncols, datarows, npoints, fd, maskfd);

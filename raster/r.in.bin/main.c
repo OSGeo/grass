@@ -494,10 +494,6 @@ int main(int argc, char *argv[])
     }
 
     cf = Rast_open_new(output, map_type);
-    if (cf < 0) {
-	G_fatal_error(_("Unable to create raster map <%s>"), output);
-	exit(EXIT_FAILURE);
-    }
 
     x_v = G_malloc(ncols * bytes);
     x_f = (float *)x_v;

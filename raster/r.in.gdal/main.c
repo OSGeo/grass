@@ -695,8 +695,6 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     double dfNoData;
     char outputReal[GNAME_MAX], outputImg[GNAME_MAX];
     char *nullFlags = NULL;
-    int (*raster_open_new_func) (const char *, RASTER_MAP_TYPE) =
-	Rast_open_new;
     struct History history;
 
     /* -------------------------------------------------------------------- */
@@ -717,7 +715,6 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	eGDT = GDT_Int32;
 	complex = FALSE;
 	Rast_set_cell_format(0);
-	/* raster_open_new_func = Rast_open_new_uncompressed; *//* ?? */
 	break;
 
     case GDT_Int16:
@@ -726,7 +723,6 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	eGDT = GDT_Int32;
 	complex = FALSE;
 	Rast_set_cell_format(1);
-	/* raster_open_new_func = Rast_open_new_uncompressed; *//* ?? */
 	break;
 
     default:
@@ -745,14 +741,10 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
     if (complex) {
 	sprintf(outputReal, "%s.real", output);
-	cfR = (*raster_open_new_func) ((char *)outputReal, data_type);
-	if (cfR < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), outputReal);
+	cfR = Rast_open_new(outputReal, data_type);
 	sprintf(outputImg, "%s.imaginary", output);
 
-	cfI = (*raster_open_new_func) ((char *)outputImg, data_type);
-	if (cfI < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), outputImg);
+	cfI = Rast_open_new(outputImg, data_type);
 
 	cellReal = Rast_allocate_buf(data_type);
 	cellImg = Rast_allocate_buf(data_type);
@@ -764,9 +756,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	}
     }
     else {
-	cf = (*raster_open_new_func) ((char *)output, data_type);
-	if (cf < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), output);
+	cf = Rast_open_new(output, data_type);
 
 	if (group_ref != NULL)
 	    I_add_file_to_group_ref((char *)output, G_mapset(), group_ref);

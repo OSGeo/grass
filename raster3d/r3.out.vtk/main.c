@@ -92,19 +92,10 @@ input_maps *create_input_maps_struct(void)
 /* ************************************************************************* */
 int open_input_map(const char *name, const char *mapset)
 {
-    int fd;
-
     G_debug(3, "Open Raster file %s in Mapset %s", name, mapset);
 
-
     /* open raster map */
-    fd = Rast_open_old(name, mapset);
-
-    if (fd < 0)
-	G_fatal_error(_("Could not open map %s"), name);
-
-
-    return fd;
+    return Rast_open_old(name, mapset);
 }
 
 

@@ -23,10 +23,7 @@ int valid_basins(char *accum_name, OUTPUT * output)
 	free_output(output);
 	G_fatal_error(_("accum file missing in valid_basins()"));
     }
-    if (-1 == (fd = Rast_open_old(accum_name, mapset))) {
-	free_output(output);
-	G_fatal_error(_("unable to open accum file in valid_basins()"));
-    }
+    fd = Rast_open_old(accum_name, mapset);
 
     buf = Rast_allocate_c_buf();
     basin_facts = output->basin_facts;

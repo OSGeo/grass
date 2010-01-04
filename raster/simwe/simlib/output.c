@@ -48,7 +48,7 @@ int output_data(int tt, double ft)
 	ndigit = 6;
 
 /*
-    if (outwalk != NULL) {
+    if (outwalk) {
 	if (ts == 1) {
 	    sprintf(buf, "%s%.*d", outwalk, ndigit, tt);
 	    outwalk0 = G_store(buf);
@@ -88,7 +88,7 @@ int output_data(int tt, double ft)
 	}
     }
 */
-    if (depth != NULL) {
+    if (depth) {
 	cell6 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", depth, ndigit, tt);
@@ -97,11 +97,9 @@ int output_data(int tt, double ft)
 	}
 	else
 	    fd6 = Rast_open_fp_new(depth);
-	if (fd6 < 0)
-	    G_fatal_error("unable to create raster map %s", depth);
     }
 
-    if (disch != NULL) {
+    if (disch) {
 	cell7 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", disch, ndigit, tt);
@@ -110,11 +108,9 @@ int output_data(int tt, double ft)
 	}
 	else
 	    fd7 = Rast_open_fp_new(disch);
-	if (fd7 < 0)
-	    G_fatal_error("unable to create raster map %s", disch);
     }
 
-    if (err != NULL) {
+    if (err) {
 	cell8 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", err, ndigit, tt);
@@ -123,13 +119,10 @@ int output_data(int tt, double ft)
 	}
 	else
 	    fd8 = Rast_open_fp_new(err);
-
-	if (fd8 < 0)
-	    G_fatal_error("unable to create raster map %s", err);
     }
 
 
-    if (conc != NULL) {
+    if (conc) {
 	cell14 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", conc, ndigit, tt);
@@ -138,12 +131,9 @@ int output_data(int tt, double ft)
 	}
 	else
 	    fd14 = Rast_open_fp_new(conc);
-
-	if (fd14 < 0)
-	    G_fatal_error("unable to create raster map %s", conc);
     }
 
-    if (flux != NULL) {
+    if (flux) {
 	cell15 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", flux, ndigit, tt);
@@ -152,12 +142,9 @@ int output_data(int tt, double ft)
 	}
 	else
 	    fd15 = Rast_open_fp_new(flux);
-
-	if (fd15 < 0)
-	    G_fatal_error("unable to create raster map %s", flux);
     }
 
-    if (erdep != NULL) {
+    if (erdep) {
 	cell16 = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", erdep, ndigit, tt);
@@ -166,9 +153,6 @@ int output_data(int tt, double ft)
 	}
 	else
 	    fd16 = Rast_open_fp_new(erdep);
-
-	if (fd16 < 0)
-	    G_fatal_error("unable to create raster map %s", erdep);
     }
 
 
@@ -184,7 +168,7 @@ int output_data(int tt, double ft)
 
     for (iarc = 0; iarc < my; iarc++) {
 	i = my - iarc - 1;
-	if (depth != NULL) {
+	if (depth) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
 		    Rast_set_f_null_value(cell6 + j, 1);
@@ -197,7 +181,7 @@ int output_data(int tt, double ft)
 	    Rast_put_f_row(fd6, cell6);
 	}
 
-	if (disch != NULL) {
+	if (disch) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
 		    cchez[i][j] == UNDEF)
@@ -211,7 +195,7 @@ int output_data(int tt, double ft)
 	    Rast_put_f_row(fd7, cell7);
 	}
 
-	if (err != NULL) {
+	if (err) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gammas[i][j] == UNDEF)
 		    Rast_set_f_null_value(cell8 + j, 1);
@@ -224,7 +208,7 @@ int output_data(int tt, double ft)
 	}
 
 
-	if (conc != NULL) {
+	if (conc) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
 		    Rast_set_f_null_value(cell14 + j, 1);
@@ -237,7 +221,7 @@ int output_data(int tt, double ft)
 	}
 
 
-	if (flux != NULL) {
+	if (flux) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
 		    slope[i][j] == UNDEF)
@@ -252,7 +236,7 @@ int output_data(int tt, double ft)
 	}
 
 
-	if (erdep != NULL) {
+	if (erdep) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
 		    Rast_set_f_null_value(cell16 + j, 1);
@@ -267,20 +251,20 @@ int output_data(int tt, double ft)
 
     }
 
-    if (depth != NULL)
+    if (depth)
 	Rast_close(fd6);
-    if (disch != NULL)
+    if (disch)
 	Rast_close(fd7);
-    if (err != NULL)
+    if (err)
 	Rast_close(fd8);
-    if (conc != NULL)
+    if (conc)
 	Rast_close(fd14);
-    if (flux != NULL)
+    if (flux)
 	Rast_close(fd15);
-    if (erdep != NULL)
+    if (erdep)
 	Rast_close(fd16);
 
-    if (depth != NULL) {
+    if (depth) {
 
 	Rast_init_colors(&colors);
 
@@ -324,7 +308,7 @@ int output_data(int tt, double ft)
 
     }
 
-    if (disch != NULL) {
+    if (disch) {
 
 	Rast_init_colors(&colors);
 
@@ -367,7 +351,7 @@ int output_data(int tt, double ft)
 	}
     }
 
-    if (flux != NULL) {
+    if (flux) {
 
 	Rast_init_colors(&colors);
 
@@ -408,7 +392,7 @@ int output_data(int tt, double ft)
     }
 
 
-    if (erdep != NULL) {
+    if (erdep) {
 
 	Rast_init_colors(&colors);
 
@@ -479,7 +463,7 @@ int output_data(int tt, double ft)
 
     /* history section */
 
-    if (depth != NULL) {
+    if (depth) {
 	type = "raster";
 	if (ts == 0) {
 	    mapst = G_find_file("cell", depth, "");
@@ -519,7 +503,7 @@ int output_data(int tt, double ft)
 	    Rast_write_history(depth, &hist);
     }
 
-    if (disch != NULL) {
+    if (disch) {
 	type = "raster";
 	if (ts == 0) {
 	    mapst = G_find_file("cell", disch, "");
@@ -557,7 +541,7 @@ int output_data(int tt, double ft)
 	    Rast_write_history(disch, &hist);
     }
 
-    if (flux != NULL) {
+    if (flux) {
 	type = "raster";
 	if (ts == 0) {
 	    mapst = G_find_file("cell", flux, "");
@@ -618,7 +602,7 @@ int output_et()
 
 
 
-    if (et != NULL) {
+    if (et) {
 	cell17 = Rast_allocate_f_buf();
 	/*      if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",et,ndigit,tt);
@@ -627,12 +611,9 @@ int output_et()
 	   }
 	   else */
 	fd17 = Rast_open_fp_new(et);
-
-	if (fd17 < 0)
-	    G_fatal_error("unable to create raster map %s", et);
     }
 
-    if (tc != NULL) {
+    if (tc) {
 	cell13 = Rast_allocate_f_buf();
 	/*   if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",tc,ndigit,tt);
@@ -641,9 +622,6 @@ int output_et()
 	   }
 	   else */
 	fd13 = Rast_open_fp_new(tc);
-
-	if (fd13 < 0)
-	    G_fatal_error("unable to create raster map %s", tc);
     }
 
 
@@ -659,7 +637,7 @@ int output_et()
 
     for (iarc = 0; iarc < my; iarc++) {
 	i = my - iarc - 1;
-	if (et != NULL) {
+	if (et) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
 		    Rast_set_f_null_value(cell17 + j, 1);
@@ -672,7 +650,7 @@ int output_et()
 	    Rast_put_f_row(fd17, cell17);
 	}
 
-	if (tc != NULL) {
+	if (tc) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || sigma[i][j] == UNDEF ||
 		    si[i][j] == UNDEF)
@@ -691,13 +669,13 @@ int output_et()
     }
 
 
-    if (tc != NULL)
+    if (tc)
 	Rast_close(fd13);
 
-    if (et != NULL)
+    if (et)
 	Rast_close(fd17);
 
-    if (et != NULL) {
+    if (et) {
 
 	Rast_init_colors(&colors);
 

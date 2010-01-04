@@ -272,10 +272,8 @@ int display_signature(void)
 	Rast_set_window(&VIEW_MAP1->cell.head);
 	open_band_files();
 
-	if ((fd = Rast_open_c_new(MASK)) < 0)
-	    G_fatal_error(_("Unable to open the cell map MASK."));
-	if ((buffer = Rast_allocate_c_buf()) == NULL)
-	    G_fatal_error(_("Unable to allocate the cell buffer in display_signature()."));
+	fd = Rast_open_c_new(MASK);
+	buffer = Rast_allocate_c_buf();
 	nrows = G_window_rows();
 	ncols = G_window_cols();
 

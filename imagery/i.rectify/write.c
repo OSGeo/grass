@@ -48,9 +48,6 @@ int write_map(char *name)
     temp_fd = open(temp_name, 0);
     fd = Rast_open_new(name, map_type);
 
-    if (fd <= 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), name);
-
     for (row = 0; row < target_window.rows; row++) {
 	if (read(temp_fd, rast, target_window.cols * Rast_cell_size(map_type))
 	    != target_window.cols * Rast_cell_size(map_type))

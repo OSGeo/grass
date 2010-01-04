@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
     int nfiles;
     char *rname;
     int i;
-    int ok;
     int row, nrows, ncols;
     int ZEROFLAG;
     char *new_name;
@@ -78,7 +77,6 @@ int main(int argc, char *argv[])
 
     ZEROFLAG = (zeroflag->answer);
 
-    ok = 1;
     names = opt1->answers;
 
     out_type = CELL_TYPE;
@@ -95,14 +93,7 @@ int main(int argc, char *argv[])
 	const char *name = names[i];
 	int fd;
 
-	if (!ok)
-	    continue;
-
 	fd = Rast_open_old(name, "");
-	if (fd < 0) {
-	    ok = 0;
-	    continue;
-	}
 
 	infd[i] = fd;
 
@@ -115,13 +106,8 @@ int main(int argc, char *argv[])
 	Rast_init_cell_stats(&statf[i]);
     }
 
-    if (!ok)
-	G_fatal_error(_("One or more input raster maps not found"));
-
     rname = opt2->answer;
     outfd = Rast_open_new(new_name = rname, out_type);
-    if (outfd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), new_name);
 
     presult = Rast_allocate_buf(out_type);
     patch = Rast_allocate_buf(out_type);

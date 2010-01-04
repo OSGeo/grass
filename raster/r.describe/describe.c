@@ -50,8 +50,6 @@ int describe(const char *name, int compact, char *no_data_str,
 	get_row = Rast_get_c_row_nomask;
     }
     fd = Rast_open_old(name, "");
-    if (fd < 0)
-	return 0;
 
     map_type = Rast_get_map_type(fd);
     if (as_int)

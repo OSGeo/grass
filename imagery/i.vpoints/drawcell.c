@@ -60,8 +60,6 @@ int drawcell(View * view, int initflag)
 	return 1;
 
     fd = Rast_open_old(view->cell.name, view->cell.mapset);
-    if (fd < 0)
-	return 0;
     dcell = Rast_allocate_d_buf();
 
     sprintf(msg, "Displaying %s ...", view->cell.name);

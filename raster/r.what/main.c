@@ -195,8 +195,7 @@ int main(int argc, char *argv[])
 			  NFILES);
 
 	strcpy(name, *ptr);
-	if ((fd[nfiles] = Rast_open_old(name, "")) < 0)
-	    G_fatal_error(_("Unable to open <%s>"), name);
+	fd[nfiles] = Rast_open_old(name, "");
 
 	out_type[nfiles] = Rast_get_map_type(fd[nfiles]);
 	if (int_flag->answer)

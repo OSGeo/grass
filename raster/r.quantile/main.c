@@ -309,8 +309,6 @@ int main(int argc, char *argv[])
     }
 
     infile = Rast_open_old(opt.input->answer, "");
-    if (infile < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), opt.input->answer);
 
     Rast_read_fp_range(opt.input->answer, "", &range);
     Rast_get_fp_range_min_max(&range, &min, &max);

@@ -499,8 +499,6 @@ int main(int argc, char *argv[])
 
     /* open output map */
     out_fd = Rast_open_new(outmap, rtype);
-    if (out_fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), outmap);
 
     if (can_seek) {
 	/* guess at number of lines in the file without actually reading it all in */

@@ -20,8 +20,6 @@ int opencell(char *fullname, char *name, char *mapset)
 	strcpy(mapset, m);
 
     fd = Rast_open_old(name, mapset);
-    if (fd < 0)
-	G_warning(_("Unable to open raster map <%s>"), name);
 
     return fd;
 }

@@ -644,11 +644,7 @@ int main(int argc, char *argv[])
 	    if (mapset == NULL)
 		G_fatal_error(_("Raster map <%s> not found"), cellinp);
 	    fdcell = Rast_open_old(cellinp, mapset);
-	    if (fdcell < 0)
-		G_fatal_error(_("Unable to open raster map <%s>"), cellinp);
 	    fdcout = Rast_open_fp_new(cellout);
-	    if (fdcout < 0)
-		G_fatal_error(_("Cannot open %s"), cellout);
 	    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
 	    if (!zero_array_cell)
 		clean_fatal_error("Not enough memory for zero_array_cell\n");

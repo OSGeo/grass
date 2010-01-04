@@ -203,8 +203,6 @@ int main(int argc, char *argv[])
     rast_ptr = Rast_allocate_buf(data_type);
     rast = rast_ptr;
     cf = Rast_open_new(output, data_type);
-    if (cf < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), output);
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	for (col = 0; col < ncols; col++) {

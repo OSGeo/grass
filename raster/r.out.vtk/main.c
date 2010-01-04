@@ -124,9 +124,6 @@ int main(int argc, char *argv[])
 
 	/* open raster map */
 	fd = Rast_open_old(param.elevationmap->answer, "");
-	if (fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  param.elevationmap->answer);
 
 	out_type = Rast_get_map_type(fd);
 
@@ -187,9 +184,6 @@ int main(int argc, char *argv[])
 
 	    /* open raster map */
 	    fd = Rast_open_old(param.input->answers[i], "");
-	    if (fd < 0)
-		G_fatal_error(_("Unable to open raster map <%s>"),
-			      param.input->answers[i]);
 	    out_type = Rast_get_map_type(fd);
 	    /*Now write the data */
 	    write_vtk_data(fd, fp, param.input->answers[i], region, out_type,
@@ -212,9 +206,6 @@ int main(int argc, char *argv[])
 
 		/* open raster map */
 		rgbfd[i] = Rast_open_old(param.rgbmaps->answers[i], "");
-		if (rgbfd[i] < 0)
-		    G_fatal_error(_("Unable to open raster map <%s>"),
-				  param.rgbmaps->answers[i]);
 		celltype[i] = Rast_get_map_type(rgbfd[i]);
 	    }
 
@@ -253,11 +244,7 @@ int main(int argc, char *argv[])
 			param.vectmaps->answers[i]);
 
 		/* open raster map */
-		vectfd[i] =
-		    Rast_open_old(param.vectmaps->answers[i], "");
-		if (vectfd[i] < 0)
-		    G_fatal_error(_("Unable to open raster map <%s>"),
-				  param.vectmaps->answers[i]);
+		vectfd[i] = Rast_open_old(param.vectmaps->answers[i], "");
 		celltype[i] = Rast_get_map_type(vectfd[i]);
 	    }
 

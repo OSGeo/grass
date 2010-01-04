@@ -509,8 +509,6 @@ int open_map(const char *name, int mod, int row, int col)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
     fd = Rast_open_old(name, mapset);
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
 
     switch (mod) {
     case 'M':
@@ -574,9 +572,6 @@ int open_map(const char *name, int mod, int row, int col)
 	init_colors(m);
 
     m->fd = Rast_open_old(name, mapset);
-
-    if (m->fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s@%s>"), name, mapset);
 
     return num_maps++;
 }
@@ -658,13 +653,7 @@ int check_output_map(const char *name)
 
 int open_output_map(const char *name, int res_type)
 {
-    int fd;
-
-    fd = Rast_open_new((char *)name, res_type);
-    if (fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), name);
-
-    return fd;
+    return Rast_open_new((char *)name, res_type);
 }
 
 void put_map_row(int fd, void *buf, int res_type)

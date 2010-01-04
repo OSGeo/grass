@@ -129,9 +129,6 @@ int main(int argc, char *argv[])
     ncols_less_one = ncols - 1;
     drain_fd = Rast_open_old(drain_name, "");
 
-    if (drain_fd < 0)
-	G_fatal_error(_("Unable to open drainage pointer map"));
-
     drain_ptrs =
 	(char *)G_malloc(sizeof(char) * size_array(&pt_seg, nrows, ncols));
     bas = (CELL *) G_calloc(size_array(&ba_seg, nrows, ncols), sizeof(CELL));
@@ -153,9 +150,6 @@ int main(int argc, char *argv[])
     G_free(drain_ptrs);
     cell_buf = Rast_allocate_c_buf();
     basin_fd = Rast_open_c_new(basin_name);
-
-    if (basin_fd < 0)
-	G_fatal_error(_("Unable to open new basin map"));
 
     for (row = 0; row < nrows; row++) {
 	for (col = 0; col < ncols; col++) {

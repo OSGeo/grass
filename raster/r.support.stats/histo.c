@@ -38,8 +38,7 @@ int do_histogram(const char *name)
 	return 1;
 
     Rast_set_window(&cellhd);
-    if ((fd = Rast_open_old(name, "")) < 0)
-	return 1;
+    fd = Rast_open_old(name, "");
 
     nrows = G_window_rows();
     ncols = G_window_cols();

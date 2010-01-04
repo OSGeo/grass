@@ -95,8 +95,7 @@ int main(int argc, char *argv[])
     seen = flag_create(nrows, ncols);
     mask = flag_create(nrows, ncols);
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
-	if ((file_fd = Rast_open_old("MASK", G_mapset())) < 0)
-	    G_fatal_error("Unable to open MASK");
+	file_fd = Rast_open_old("MASK", G_mapset());
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row_nomask(file_fd, alt_row, r);
 	    for (c = 0; c < ncols; c++)
@@ -111,8 +110,6 @@ int main(int argc, char *argv[])
     maxr = nrows - 1;
     array_size = INIT_AR;
     file_fd = Rast_open_c_new(alt_name);
-    if (!file_fd)
-	G_fatal_error("Unable to open output map");
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 1);
 	for (c = 0; c < ncols; c++) {

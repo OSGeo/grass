@@ -18,7 +18,6 @@ int rectify(char *name, char *mapset, char *result, int order)
     int row, col;
     int infd;
     void *rast;
-    char buf[2048] = "";
 
     select_current_env();
     if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
@@ -43,10 +42,6 @@ int rectify(char *name, char *mapset, char *result, int order)
      */
     Rast_set_window(&cellhd);
     infd = Rast_open_old(name, mapset);
-    if (infd < 0) {
-	close(infd);
-	return 0;
-    }
     map_type = Rast_get_map_type(infd);
     rast = (void *)G_calloc(G_window_cols() + 1, Rast_cell_size(map_type));
     Rast_set_null_value(rast, G_window_cols() + 1, map_type);

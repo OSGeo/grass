@@ -151,8 +151,6 @@ int main(int argc, char *argv[])
 	break;
     }
     cf = Rast_open_new(output, rtype);
-    if (cf < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 5);

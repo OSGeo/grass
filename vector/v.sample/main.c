@@ -132,8 +132,7 @@ int main(int argc, char **argv)
     Vect_open_old2(&In, parm.input->answer, "", parm.field->answer);
     field = Vect_get_field_number(&In, parm.field->answer);
     
-    if ((fdrast = Rast_open_old(parm.rast->answer, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), parm.rast->answer);
+    fdrast = Rast_open_old(parm.rast->answer, "");
 
     /* Read attributes */
     Fi = Vect_get_field(&In, field);

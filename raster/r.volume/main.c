@@ -150,9 +150,6 @@ int main(int argc, char *argv[])
     rows = window.rows;
     cols = window.cols;
 
-    if (fd_data < 0 || fd_clump < 0)
-	G_fatal_error(_("Data or Clump file not open"));
-
     /* now get the data -- first pass */
     G_message("Complete ...");
     for (row = 0; row < rows; row++) {

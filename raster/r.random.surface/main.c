@@ -124,9 +124,6 @@ int main(int argc, char **argv)
 
     for (DoMap = 0; DoMap < NumMaps; DoMap++) {
 	OutFD = Rast_open_c_new(OutNames[DoMap]);
-	if (OutFD < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  OutNames[DoMap]);
 
 	G_message(_("Generating raster map <%s>..."), OutNames[DoMap]);
 

@@ -211,8 +211,7 @@ int main(int argc, char *argv[])
 	&& moc2 && mcc)
 	G_fatal_error(_("Nothing to compute. Use at least one of the flags."));
 
-    if ((infd = Rast_open_old(name, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
+    infd = Rast_open_old(name, "");
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
     data_type = Rast_get_map_type(infd);
@@ -284,10 +283,8 @@ int main(int argc, char *argv[])
 	    || (t_measure == 52 && mcc))
 	    t_measure += 3;
 	else {
-	    if ((outfd =
-		 Rast_open_new(strcat(filename, suffixes[t_measure]),
-				   out_data_type)) < 0)
-		G_fatal_error(_("Unable to create raster map <%s>"), result);
+	    outfd = Rast_open_new(strcat(filename, suffixes[t_measure]),
+				  out_data_type);
 	    *result = '\0';
 
 	    for (row = 0; row < nrows - (size - 1); row++) {

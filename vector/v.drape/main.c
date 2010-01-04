@@ -210,9 +210,7 @@ int main(int argc, char *argv[])
     otype = Vect_option_to_types(type_opt);
 
     /* open the elev raster, and check for error condition */
-    if ((fdrast = Rast_open_old(rast_opt->answer, "")) < 0) {
-	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
-    }
+    fdrast = Rast_open_old(rast_opt->answer, "");
     
     /* check input/output vector maps */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,

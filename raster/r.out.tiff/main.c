@@ -158,8 +158,7 @@ int main(int argc, char *argv[])
 			"than 256 colors for the available range of data"));
 
     cell = Rast_allocate_c_buf();
-    if ((in = Rast_open_old(inopt->answer, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), inopt->answer);
+    in = Rast_open_old(inopt->answer, "");
 
     basename = G_store(outopt->answer);
     G_basename(basename, "tiff");

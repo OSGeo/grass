@@ -42,8 +42,6 @@ int do_recode(void)
 
     /* open the input file for reading */
     in_fd = Rast_open_old(name, "");
-    if (in_fd < 0)
-	G_fatal_error("Can't open input map");
 
     out_fd = Rast_open_new(result, out_type);
 

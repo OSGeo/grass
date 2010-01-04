@@ -70,13 +70,11 @@ int main(int argc, char *argv[])
     result1 = output1->answer;
 
     /***************************************************/ 
-    if ((infd_doy = Rast_open_old(doy, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), doy);
+    infd_doy = Rast_open_old(doy, "");
     inrast_doy = Rast_allocate_d_buf();
 
     /***************************************************/ 
-    if ((infd_lat = Rast_open_old(lat, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), lat);
+    infd_lat = Rast_open_old(lat, "");
     inrast_lat = Rast_allocate_d_buf();
 
     /***************************************************/ 
@@ -84,9 +82,7 @@ int main(int argc, char *argv[])
     ncols = G_window_cols();
 
     outrast1 = Rast_allocate_d_buf();
-
-    if ((outfd1 = Rast_open_new(result1, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result1);
+    outfd1 = Rast_open_new(result1, DCELL_TYPE);
 
     for (row = 0; row < nrows; row++)
     {

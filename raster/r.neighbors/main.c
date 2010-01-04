@@ -215,9 +215,7 @@ int main(int argc, char *argv[])
     ncols = G_window_cols();
 
     /* open raster maps */
-    if ((in_fd = Rast_open_old(ncb.oldcell, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"),
-		      ncb.oldcell);
+    in_fd = Rast_open_old(ncb.oldcell, "");
 
     map_type = Rast_get_map_type(in_fd);
 
@@ -286,13 +284,9 @@ int main(int argc, char *argv[])
 
     /* open raster map */
     in_fd = Rast_open_old(ncb.oldcell, "");
-    if (in_fd < 0)
-	exit(EXIT_FAILURE);
 
     /*open the new raster map */
     out_fd = Rast_open_new(ncb.newcell, map_type);
-    if (out_fd < 0)
-	exit(EXIT_FAILURE);
 
     if (flag.circle->answer)
 	circle_mask();

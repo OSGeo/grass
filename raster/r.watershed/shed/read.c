@@ -46,29 +46,27 @@ int read_basins(char *haf_name, OUTPUT * output)
 	    map->basins[r].sum_values = 0.0;
 	}
 	fd = Rast_open_old(map->name, map->mapset);
-	if (fd >= 0) {
-	    for (r = 0; r < nrows; r++) {
-		Rast_get_c_row(fd, buf, r);
-		Rast_get_c_row(bas_fd, bas_buf, r);
-		for (c = 0; c < ncols; c++) {
-		    v = buf[c];
-		    b = bas_buf[c] / 2 - 1;
-		    if (b >= 0) {
-			map->basins[b].sum_values += v;
-			if (map->do_cats != 0) {
-			    cat = &(map->basins[b].first_cat);
-			    if (cat->num_cat == -1) {
-				cat->num_cat = 1;
-				cat->cat_val = v;
-			    }
-			    else
-				insert_cat(cat, v, (int)1);
+	for (r = 0; r < nrows; r++) {
+	    Rast_get_c_row(fd, buf, r);
+	    Rast_get_c_row(bas_fd, bas_buf, r);
+	    for (c = 0; c < ncols; c++) {
+		v = buf[c];
+		b = bas_buf[c] / 2 - 1;
+		if (b >= 0) {
+		    map->basins[b].sum_values += v;
+		    if (map->do_cats != 0) {
+			cat = &(map->basins[b].first_cat);
+			if (cat->num_cat == -1) {
+			    cat->num_cat = 1;
+			    cat->cat_val = v;
 			}
+			else
+			    insert_cat(cat, v, (int)1);
 		    }
 		}
 	    }
-	    Rast_close(fd);
 	}
+	Rast_close(fd);
     }
 
     return 0;

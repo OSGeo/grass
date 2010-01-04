@@ -315,13 +315,8 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
     Rast_set_window(&cellhd);
 
     old = Rast_open_old(name, mapset);
-    if (old < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     new = Rast_open_new(name, map_type);
-
-    if (new < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
     rast = Rast_allocate_buf(map_type);
 

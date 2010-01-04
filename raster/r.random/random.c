@@ -52,9 +52,7 @@ int execute_random(struct rr_state *theState)
 	    type = theState->cover.type;
 	else
 	    type = theState->buf.type;
-	if ((outfd = Rast_open_new(theState->outraster, type)) < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"),
-			  theState->outraster);
+	outfd = Rast_open_new(theState->outraster, type);
 	theState->fd_new = outfd;
 
     }

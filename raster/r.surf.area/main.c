@@ -114,10 +114,7 @@ int main(int argc, char *argv[])
     G_get_set_window(&w);
 
     /* open raster map for reading */
-    {
-	if ((cellfile = Rast_open_old(surf->answer, "")) == -1)
-	    G_fatal_error(_("Unable to open raster map <%s>"), surf->answer);
-    }
+    cellfile = Rast_open_old(surf->answer, "");
 
     cell_buf[0] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
     cell_buf[1] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));

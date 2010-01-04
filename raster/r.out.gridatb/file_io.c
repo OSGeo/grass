@@ -15,8 +15,6 @@ void rdwr_gridatb(void)
     RASTER_MAP_TYPE data_type;
 
     fd = Rast_open_old(iname, "");
-    if (fd < 0)
-	G_fatal_error("%s - could not read", iname);
 
     data_type = Rast_get_map_type(fd);
     switch (data_type) {

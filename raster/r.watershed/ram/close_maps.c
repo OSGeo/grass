@@ -27,10 +27,7 @@ int close_maps(void)
     sum = sum_sqr = stddev = 0.0;
     if (wat_flag) {
 	fd = Rast_open_new(wat_name, DCELL_TYPE);
-	if (fd < 0) {
-	    G_warning(_("unable to open new accum map layer."));
-	}
-	else {
+	{
 	    if (abs_acc) {
 		G_warning("Writing out only positive flow accumulation values.");
 		G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
@@ -139,10 +136,7 @@ int close_maps(void)
     /* keep drainage direction == 0 for real depressions */
     if (asp_flag) {
 	fd = Rast_open_c_new(asp_name);
-	if (fd < 0) {
-	    G_warning(_("unable to open new aspect map layer."));
-	}
-	else {
+	{
 	    for (r = 0; r < nrows; r++) {
 		Rast_set_c_null_value(buf, ncols);	/* reset row to all NULL */
 		for (c = 0; c < ncols; c++) {
@@ -162,10 +156,7 @@ int close_maps(void)
     /* visual output no longer needed */
     if (dis_flag) {
 	fd = Rast_open_c_new(dis_name);
-	if (fd < 0) {
-	    G_warning(_("unable to open new accum map layer."));
-	}
-	else {
+	{
 	    if (bas_thres <= 0)
 		bas_thres = 60;
 	    for (r = 0; r < nrows; r++) {
@@ -198,10 +189,7 @@ int close_maps(void)
 
     if (ls_flag) {
 	fd = Rast_open_new(ls_name, DCELL_TYPE);
-	if (fd < 0) {
-	    G_warning(_("unable to open new LS factor map layer."));
-	}
-	else {
+	{
 	    for (r = 0; r < nrows; r++) {
 		for (c = 0; c < ncols; c++) {
 		    dbuf[c] = l_s[SEG_INDEX(l_s_seg, r, c)];
@@ -216,10 +204,7 @@ int close_maps(void)
 
     if (sl_flag) {
 	fd = Rast_open_new(sl_name, DCELL_TYPE);
-	if (fd < 0) {
-	    G_warning(_("unable to open new slope length map layer."));
-	}
-	else {
+	{
 	    for (r = 0; r < nrows; r++) {
 		for (c = 0; c < ncols; c++) {
 		    dbuf[c] = s_l[SEG_INDEX(s_l_seg, r, c)];
@@ -238,10 +223,7 @@ int close_maps(void)
 
     if (sg_flag) {
 	fd = Rast_open_new(sg_name, DCELL_TYPE);
-	if (fd < 0) {
-	    G_warning(_("unable to open new S factor map layer."));
-	}
-	else {
+	{
 	    for (r = 0; r < nrows; r++) {
 		for (c = 0; c < ncols; c++) {
 		    dbuf[c] = s_g[SEG_INDEX(s_g_seg, r, c)];

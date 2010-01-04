@@ -95,8 +95,6 @@ int main(int argc, char *argv[])
 
     /*open the new cellfile */
     out_fd = Rast_open_new(out_opt->answer, CELL_TYPE);
-    if (out_fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), out_opt->answer);
 
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;

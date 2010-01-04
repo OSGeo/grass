@@ -84,8 +84,6 @@ int main(int argc, char *argv[])
     sprintf(outfile, "%s.mat", basename);
 
     fd = Rast_open_old(infile, "");
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
     map_type = Rast_get_map_type(fd);
 

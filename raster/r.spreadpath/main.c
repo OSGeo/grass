@@ -169,12 +169,7 @@ int main(int argc, char **argv)
 
     /*  Open back cell layers for reading  */
     backrow_fd = Rast_open_old(backrow_layer, backrow_mapset);
-    if (backrow_fd < 0)
-	G_fatal_error("%s - can't open raster map", backrow_layer);
-
     backcol_fd = Rast_open_old(backcol_layer, backcol_mapset);
-    if (backcol_fd < 0)
-	G_fatal_error("%s - can't open raster map", backcol_layer);
 
     /*   Parameters for map submatrices   */
     len = sizeof(CELL);
@@ -278,8 +273,6 @@ int main(int argc, char **argv)
     /* create a linked list of of them  */
     if (flag == 1) {
 	path_fd = Rast_open_old(path_layer, path_mapset);
-	if (path_fd < 0)
-	    G_fatal_error("%s -can't open raster map", path_layer);
 
 	/*  Search for the marked starting pts and make list    */
 	for (row = 0; row < nrows; row++) {

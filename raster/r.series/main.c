@@ -189,9 +189,6 @@ int main(int argc, char *argv[])
 	p->name = parm.input->answers[i];
 	G_message(_("Reading raster map <%s>..."), p->name);
 	p->fd = Rast_open_old(p->name, "");
-	if (p->fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  p->name);
 	p->buf = Rast_allocate_d_buf();
     }
 
@@ -221,8 +218,6 @@ int main(int argc, char *argv[])
 	out->buf = Rast_allocate_d_buf();
 	out->fd = Rast_open_new(output_name,
 				menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
-	if (out->fd < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), out->name);
     }
 
     /* initialise variables */

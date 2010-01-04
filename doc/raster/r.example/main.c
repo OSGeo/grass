@@ -108,9 +108,7 @@ int main(int argc, char *argv[])
     data_type = Rast_map_type(name, mapset);
 
     /* Rast_open_old - returns file destriptor (>0) */
-    if ((infd = Rast_open_old(name, mapset)) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
-
+    infd = Rast_open_old(name, mapset);
 
     /* controlling, if we can open input raster */
     if (Rast_get_cellhd(name, mapset, &cellhd) < 0)
@@ -127,8 +125,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_buf(data_type);
 
     /* controlling, if we can write the raster */
-    if ((outfd = Rast_open_new(result, data_type)) < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), result);
+    outfd = Rast_open_new(result, data_type);
 
     /* for each row */
     for (row = 0; row < nrows; row++) {

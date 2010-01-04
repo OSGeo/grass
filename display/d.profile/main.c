@@ -213,8 +213,6 @@ int main(int argc, char **argv)
     mapname = map->answer;
 
     fd = Rast_open_old(mapname, "");
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), mapname);
 
     if (stored->answer)
 	get_map_range();

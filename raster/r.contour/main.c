@@ -136,8 +136,6 @@ int main(int argc, char *argv[])
     name = map->answer;
 
     fd = Rast_open_old(name, "");
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     if (Rast_read_fp_range(name, "", &range) < 0)
 	G_fatal_error(_("Unable to read fp range of raster map <%s>"),

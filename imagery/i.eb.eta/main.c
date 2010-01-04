@@ -76,24 +76,20 @@ int main(int argc, char *argv[])
     tempk = input3->answer;
     result1 = output1->answer;
     
-    if ((infd_rnetday = Rast_open_old(rnetday, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), rnetday);
+    infd_rnetday = Rast_open_old(rnetday, "");
     inrast_rnetday = Rast_allocate_d_buf();
     
-    if ((infd_evapfr = Rast_open_old(evapfr, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), evapfr);
+    infd_evapfr = Rast_open_old(evapfr, "");
     inrast_evapfr = Rast_allocate_d_buf();
     
-    if ((infd_tempk = Rast_open_old(tempk, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), tempk);
+    infd_tempk = Rast_open_old(tempk, "");
     inrast_tempk = Rast_allocate_d_buf();
     
     nrows = G_window_rows();
     ncols = G_window_cols();
     outrast1 = Rast_allocate_d_buf();
     
-    if ((outfd1 = Rast_open_new(result1, DCELL_TYPE)) < 0)
-        G_fatal_error(_("Unable to create raster map <%s>"), result1);
+    outfd1 = Rast_open_new(result1, DCELL_TYPE);
     
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)

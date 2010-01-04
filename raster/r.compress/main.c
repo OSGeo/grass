@@ -192,8 +192,6 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     Rast_set_window(&cellhd);
 
     old = Rast_open_old(name, G_mapset());
-    if (old < 0)
-	return 1;
 
     if (uncompress) {
 	if (map_type == CELL_TYPE) {
@@ -208,8 +206,6 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     else
 	new = Rast_open_new(name, map_type);
 
-    if (new < 0)
-	return 1;
     nrows = G_window_rows();
     rast = Rast_allocate_buf(map_type);
 
