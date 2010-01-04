@@ -168,7 +168,8 @@ int Rast__open_old(const char *name, const char *mapset)
     mapset = xmapset;
 
     if (!G_find_raster2(name, mapset))
-	G_fatal_error(_("Unable to find <%s>"), G_fully_qualified_name(name, mapset));
+	G_fatal_error(_("Raster map <%s> not found"),
+		      G_fully_qualified_name(name, mapset));
 
     /* Check for reclassification */
     reclass_flag = Rast_get_reclass(name, mapset, &reclass);
@@ -187,7 +188,7 @@ int Rast__open_old(const char *name, const char *mapset)
 			  name, mapset, r_name, r_mapset);
 	break;
     default:			/* Error reading cellhd/reclass file */
-	G_fatal_error(_("Error reading reclass file for <%s>"),
+	G_fatal_error(_("Error reading reclass file for raster map <%s>"),
 		      G_fully_qualified_name(name, mapset));
 	break;
     }
@@ -198,7 +199,7 @@ int Rast__open_old(const char *name, const char *mapset)
     /* now check the type */
     MAP_TYPE = Rast_map_type(r_name, r_mapset);
     if (MAP_TYPE < 0)
-	G_fatal_error(_("Error reading map type for <%s>"),
+	G_fatal_error(_("Error reading map type for raster map <%s>"),
 		      G_fully_qualified_name(name, mapset));
 
     if (MAP_TYPE == CELL_TYPE)
@@ -249,7 +250,7 @@ int Rast__open_old(const char *name, const char *mapset)
 	/* dummy descriptor to reserve the fileinfo slot */
 	fd = open(G_DEV_NULL, O_RDONLY);
 #else
-	G_fatal_error(_("map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"),
+	G_fatal_error(_("Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"),
 		      r_name, r_mapset);
 #endif
     }
@@ -258,7 +259,7 @@ int Rast__open_old(const char *name, const char *mapset)
 	fd = G_open_old(cell_dir, r_name, r_mapset);
 
     if (fd < 0)
-	G_fatal_error(_("Unable to open %s file for map <%s@%s>"),
+	G_fatal_error(_("Unable to open %s file for raster map <%s@%s>"),
 		      cell_dir, r_name, r_mapset);
 
     fcb = new_fileinfo(fd);
@@ -739,7 +740,7 @@ int Rast_map_is_fp(const char *name, const char *mapset)
 
     xmapset = G_find_raster2(name, mapset);
     if (!xmapset)
-	G_fatal_error(_("Unable to find <%s>"),
+	G_fatal_error(_("Raster map <%s> not found"),
 		      G_fully_qualified_name(name, mapset));
 
     G__file_name(path, "fcell", name, xmapset);
@@ -829,7 +830,7 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
 
     xmapset = G_find_raster2(name, mapset);
     if (!xmapset)
-	G_fatal_error(_("Unable to find <%s>"),
+	G_fatal_error(_("Raster map <%s> not found"),
 		      G_fully_qualified_name(name, mapset));
 
     G__file_name_misc(path, "cell_misc", FORMAT_FILE, name, xmapset);
