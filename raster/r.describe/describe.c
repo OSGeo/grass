@@ -37,7 +37,7 @@ int describe(const char *name, int compact, char *no_data_str,
     struct Quant q;
     struct FPRange r;
     DCELL dmin, dmax;
-    int (*get_row)(int, CELL *, int);
+    void (*get_row)(int, CELL *, int);
 
     if (windowed) {
 	get_row = Rast_get_c_row;
@@ -94,8 +94,7 @@ int describe(const char *name, int compact, char *no_data_str,
     G_verbose_message(_("Reading <%s> ..."), name);
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if ((*get_row) (fd, b = buf, row) < 0)
-	    break;
+	(*get_row) (fd, b = buf, row);
 	if (range) {
 	    for (col = ncols; col-- > 0; b++) {
 		if (Rast_is_c_null_value(b))

@@ -109,9 +109,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	for (band = 0; band < Ref.nfiles; band++)
-	    if (Rast_get_d_row(cellfd[band], cell[band], row) < 0)
-		G_fatal_error(_("Unable to read raster map row %d"),
-			      row);
+	    Rast_get_d_row(cellfd[band], cell[band], row);
 	
 	classify(class_cell, reject_cell, ncols);
 	Rast_put_row(class_fd, class_cell, CELL_TYPE);

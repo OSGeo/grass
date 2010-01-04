@@ -27,7 +27,7 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     int fd;
     CELL *map;
     int row;
-    int (*get_row)(int, CELL *, int);
+    void (*get_row)(int, CELL *, int);
 
     /* allocate entire map */
     map = (CELL *) G_malloc(nrows * ncols * sizeof(CELL));
@@ -45,8 +45,7 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 10);
-	if ((*get_row) (fd, map + row * ncols, row) < 0)
-	    G_fatal_error(_("Error reading <%s>"), name);
+	(*get_row)(fd, map + row * ncols, row);
     }
     G_percent(nrows, nrows, 10);
 

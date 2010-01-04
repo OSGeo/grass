@@ -118,18 +118,10 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
 	/* read soil input maps */ 
-	if (Rast_get_d_row(infd_psand, inrast_psand, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  psand, row);
-	if (Rast_get_d_row(infd_psilt, inrast_psilt, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  psilt, row);
-	if (Rast_get_d_row(infd_pclay, inrast_pclay, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  pclay, row);
-	if (Rast_get_d_row(infd_pomat, inrast_pomat, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  pomat, row);
+	Rast_get_d_row(infd_psand, inrast_psand, row);
+	Rast_get_d_row(infd_psilt, inrast_psilt, row);
+	Rast_get_d_row(infd_pclay, inrast_pclay, row);
+	Rast_get_d_row(infd_pomat, inrast_pomat, row);
 	
         /*process the data */ 
 	for (col = 0; col < ncols; col++)

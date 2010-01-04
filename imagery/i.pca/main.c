@@ -249,8 +249,7 @@ static int calc_mu(int *fds, double *mu, int bands)
 
 	    G_percent(row, rows - 1, 2);
 
-	    if (Rast_get_row(fds[i], rowbuf, row, maptype) < 0)
-		G_fatal_error(_("Unable to read raster map row %d"), row);
+	    Rast_get_row(fds[i], rowbuf, row, maptype);
 
 	    for (col = 0; col < cols; col++) {
 		/* skip null cells */
@@ -299,8 +298,7 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 
 	    G_percent(row, rows - 1, 2);
 
-	    if (Rast_get_row(fds[j], rowbuf1, row, maptype) < 0)
-		G_fatal_error(_("Unable to read raster map row %d"), row);
+	    Rast_get_row(fds[j], rowbuf1, row, maptype);
 
 	    for (k = j; k < bands; k++) {
 		RASTER_MAP_TYPE maptype2 = Rast_get_map_type(fds[k]);
@@ -311,8 +309,7 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		if ((rowbuf2 = Rast_allocate_buf(maptype2)) == NULL)
 		    G_fatal_error(_("Unable to allocate memory for row buffer"));
 
-		if (Rast_get_row(fds[k], rowbuf2, row, maptype2) < 0)
-		    G_fatal_error(_("Unable to read raster map row %d"), row);
+		Rast_get_row(fds[k], rowbuf2, row, maptype2);
 
 		ptr1 = rowbuf1;
 		ptr2 = rowbuf2;
@@ -421,8 +418,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		    if (!(rowbuf = Rast_allocate_buf(maptype)))
 			G_fatal_error(_("Unable allocate memory for row buffer"));
 
-		    if (Rast_get_row(inp_fd[j], rowbuf, row, maptype) < 0)
-			G_fatal_error(_("Unable to read raster map row %d"), row);
+		    Rast_get_row(inp_fd[j], rowbuf, row, maptype);
 
 		    rowptr = rowbuf;
 		    outptr = outbuf;

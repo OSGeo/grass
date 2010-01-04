@@ -39,9 +39,7 @@ void getcells(void)
 	a[i] = (DCELL *) G_malloc(sizeof(DCELL) * window.cols);
 
 	if (data_type == CELL_TYPE) {
-	    if (Rast_get_c_row(fd, ccell, i) < 0) {
-		Rast_close(fd);
-	    }
+	    Rast_get_c_row(fd, ccell, i);
 	    for (j = 0; j < window.cols; j++) {
 		if (Rast_is_c_null_value(&ccell[j]))
 		    Rast_set_d_null_value(&cell[i][j], 1);
@@ -50,9 +48,7 @@ void getcells(void)
 	    }
 	}
 	else if (data_type == FCELL_TYPE) {
-	    if (Rast_get_f_row(fd, fcell, i) < 0) {
-		Rast_close(fd);
-	    }
+	    Rast_get_f_row(fd, fcell, i);
 	    for (j = 0; j < window.cols; j++) {
 		if (Rast_is_f_null_value(&fcell[j]))
 		    Rast_set_d_null_value(&cell[i][j], 1);
@@ -60,11 +56,8 @@ void getcells(void)
 		    cell[i][j] = (DCELL) fcell[j];
 	    }
 	}
-	else if (Rast_get_d_row(fd, cell[i], i) < 0) {
-	    Rast_close(fd);
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), iname,
-			  i);
-	}
+	else
+	    Rast_get_d_row(fd, cell[i], i);
     }
     if (data_type == CELL_TYPE)
 	G_free(ccell);

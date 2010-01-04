@@ -395,10 +395,8 @@ int main(int argc, char **argv)
 
 	for (row = 0; row < window.rows; row++) {
 	    G_percent(row, window.rows, 2);
-	    if (mask) {
-		if (Rast_get_c_row(maskfd, mask, row) < 0)
-		    G_fatal_error(_("Unable to read MASK"));
-	    }
+	    if (mask)
+		Rast_get_c_row(maskfd, mask, row);
 
 	    for (col = 0; col < window.cols; col++) {
 		/* don't interpolate outside of the mask */

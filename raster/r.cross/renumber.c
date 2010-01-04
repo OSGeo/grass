@@ -33,8 +33,7 @@ int renumber(int in, int out)
     G_message(_("%s: STEP 3 ... "), G_program_name());
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 5);
-	if (Rast_get_c_row(in, c = cell, row) < 0)
-	    exit(1);
+	Rast_get_c_row(in, c = cell, row);
 	col = ncols;
 	while (col-- > 0) {
 	    *c = table[*c];

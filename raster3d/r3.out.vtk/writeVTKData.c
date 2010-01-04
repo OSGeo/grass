@@ -128,12 +128,9 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
 	    G_percent(status, (rows * depths - 1), 10);
 	    status++;
 
-	    if (!Rast_get_row(in->top, rast_top, y, in->topMapType))
-		fatal_error(_("Could not get top raster row \n"), in);
+	    Rast_get_row(in->top, rast_top, y, in->topMapType);
 
-	    if (!Rast_get_row
-		(in->bottom, rast_bottom, y, in->bottomMapType))
-		fatal_error(_("Could not get bottom raster row \n"), in);
+	    Rast_get_row(in->bottom, rast_bottom, y, in->bottomMapType);
 
 	    for (x = 0, ptr_top = rast_top, ptr_bottom = rast_bottom;
 		 x < cols;

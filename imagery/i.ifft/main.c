@@ -140,12 +140,8 @@ int main(int argc, char *argv[])
     /* Read in cell map values */
     G_message(_("Reading raster maps..."));
     for (i = 0; i < rows; i++) {
-	if (Rast_get_d_row(realfd, cell_real, i) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  Cellmap_real, i);
-	if (Rast_get_d_row(imagfd, cell_imag, i) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  Cellmap_imag, i);
+	Rast_get_d_row(realfd, cell_real, i);
+	Rast_get_d_row(imagfd, cell_imag, i);
 	for (j = 0; j < cols; j++) {
 	    data[C(i, j)][0] = cell_real[j];
 	    data[C(i, j)][1] = cell_imag[j];

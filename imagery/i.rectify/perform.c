@@ -39,9 +39,7 @@ int perform_georef(int infd, void *rast)
 	   fprintf (stderr, "read row %d\n", row);
 	 */
 
-	if (Rast_get_row_nomask
-	    (infd, G_incr_void_ptr(rast, rast_size), row, map_type) < 0)
-	    return 0;
+	Rast_get_row_nomask(infd, G_incr_void_ptr(rast, rast_size), row, map_type);
 
 	for (i = curidx; i < matrix_rows; i++) {
 	    idx = row_idx[i];

@@ -291,9 +291,7 @@ static int load_files(void)
 	    voidc = Rast_allocate_buf(rtype);
 
 	    for (row = 0; row < vrows; row++) {
-		if (Rast_get_row(fd, voidc,
-				     (int)(row / vscale), rtype) < 0)
-		    G_fatal_error(_("Error reading row <%d>"), row);
+		Rast_get_row(fd, voidc, (int)(row / vscale), rtype);
 
 		rowoff = (vyoff + row) * ncols;
 		Rast_lookup_colors(voidc, tr, tg, tb,

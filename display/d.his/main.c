@@ -187,19 +187,14 @@ int main(int argc, char **argv)
     for (atrow = 0; atrow < window.rows;) {
 	G_percent(atrow, window.rows, 2);
 
-	if (Rast_get_row_colors
-	    (hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b, hue_n) < 0)
-	    G_fatal_error(_("Error reading hue data"));
+	Rast_get_row_colors
+	    (hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b, hue_n);
 
-	if (int_used &&
-	    (Rast_get_row_colors
-	     (int_file, atrow, &int_colors, int_r, dummy, dummy, int_n) < 0))
-	    G_fatal_error(_("Error reading intensity data"));
+	if (int_used)
+	    Rast_get_row_colors(int_file, atrow, &int_colors, int_r, dummy, dummy, int_n);
 
-	if (sat_used &&
-	    (Rast_get_row_colors
-	     (sat_file, atrow, &sat_colors, sat_r, dummy, dummy, sat_n) < 0))
-	    G_fatal_error(_("Error reading saturation data"));
+	if (sat_used)
+	    Rast_get_row_colors(sat_file, atrow, &sat_colors, sat_r, dummy, dummy, sat_n);
 
 	for (atcol = 0; atcol < window.cols; atcol++) {
 	    if (nulldraw->answer) {

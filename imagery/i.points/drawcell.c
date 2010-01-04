@@ -57,8 +57,7 @@ int drawcell(View * view)
 
     D_cell_draw_setup(top, top + nrows, left, left + ncols);
     for (row = 0; row < nrows; row++) {
-	if (Rast_get_d_row_nomask(fd, dcell, row) < 0)
-	    break;
+	Rast_get_d_row_nomask(fd, dcell, row);
 	D_draw_d_raster(row, dcell, colors);
     }
     D_cell_draw_end();

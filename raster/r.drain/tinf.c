@@ -11,9 +11,9 @@ void (*set_null_value) (void *, int);
 int (*bpe) ();
 void *(*get_max) (void *, void *);
 void *(*get_min) (void *, void *);
-int (*get_row) (int, void *, int);
+void (*get_row) (int, void *, int);
 void *(*get_buf) ();
-int (*put_row) (int, void *);
+void (*put_row) (int, void *);
 double (*slope) (void *, void *, double);
 void (*set_min) (void *);
 void (*set_max) (void *);
@@ -198,35 +198,35 @@ void *get_max_d(void *v1, void *v2)
 }
 
 /* Read one line from a raster map */
-int get_row_c(int fd, void *row, int n)
+void get_row_c(int fd, void *row, int n)
 {
-    return Rast_get_c_row(fd, (CELL *) row, n);
+    Rast_get_c_row(fd, (CELL *) row, n);
 }
 
-int get_row_f(int fd, void *row, int n)
+void get_row_f(int fd, void *row, int n)
 {
-    return Rast_get_f_row(fd, (FCELL *) row, n);
+    Rast_get_f_row(fd, (FCELL *) row, n);
 }
 
-int get_row_d(int fd, void *row, int n)
+void get_row_d(int fd, void *row, int n)
 {
-    return Rast_get_d_row(fd, (DCELL *) row, n);
+    Rast_get_d_row(fd, (DCELL *) row, n);
 }
 
 /* Write one row to a raster map */
-int put_row_c(int fd, void *row)
+void put_row_c(int fd, void *row)
 {
-    return Rast_put_c_row(fd, (CELL *) row);
+    Rast_put_c_row(fd, (CELL *) row);
 }
 
-int put_row_f(int fd, void *row)
+void put_row_f(int fd, void *row)
 {
-    return Rast_put_f_row(fd, (FCELL *) row);
+    Rast_put_f_row(fd, (FCELL *) row);
 }
 
-int put_row_d(int fd, void *row)
+void put_row_d(int fd, void *row)
 {
-    return Rast_put_d_row(fd, (DCELL *) row);
+    Rast_put_d_row(fd, (DCELL *) row);
 }
 
 /* Allocate memory for one line of data */

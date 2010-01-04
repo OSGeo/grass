@@ -48,8 +48,7 @@ int get_cats(const char *name, const char *mapset)
     for (row = 0; row < nrows; row++) {
 	if (G_verbose() > G_verbose_std())
 	    G_percent(row, nrows, 2);
-	if (Rast_get_c_row_nomask(fd, cell, row) < 0)
-	    exit(EXIT_SUCCESS);
+	Rast_get_c_row_nomask(fd, cell, row);
 	Rast_update_cell_stats(cell, ncols, &statf);
     }
     /* done */

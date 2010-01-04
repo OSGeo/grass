@@ -53,10 +53,7 @@ void rdwr_gridatb(void)
 	G_percent(row, cellhd.rows, 2);
 	switch (data_type) {
 	case CELL_TYPE:
-	    if (Rast_get_c_row(fd, cell, row) < 0) {
-		Rast_close(fd);
-		exit(1);
-	    }
+	    Rast_get_c_row(fd, cell, row);
 
 	    for (col = 0; col < cellhd.cols; col++) {
 		if (Rast_is_c_null_value(&cell[col]))
@@ -68,10 +65,7 @@ void rdwr_gridatb(void)
 	    }
 	    break;
 	case FCELL_TYPE:
-	    if (Rast_get_f_row(fd, fcell, row) < 0) {
-		Rast_close(fd);
-		exit(1);
-	    }
+	    Rast_get_f_row(fd, fcell, row);
 
 	    for (col = 0; col < cellhd.cols; col++) {
 		if (Rast_is_f_null_value(&fcell[col]))
@@ -83,10 +77,7 @@ void rdwr_gridatb(void)
 	    }
 	    break;
 	case DCELL_TYPE:
-	    if (Rast_get_d_row(fd, dcell, row) < 0) {
-		Rast_close(fd);
-		exit(1);
-	    }
+	    Rast_get_d_row(fd, dcell, row);
 
 	    for (col = 0; col < cellhd.cols; col++) {
 		if (Rast_is_d_null_value(&dcell[col]))

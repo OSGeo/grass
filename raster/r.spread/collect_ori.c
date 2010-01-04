@@ -59,8 +59,7 @@ void collect_ori(int start_fd)
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_c_row(start_fd, cell, row) < 0)
-	    exit(1);
+	Rast_get_c_row(start_fd, cell, row);
 
 	for (col = 0; col < ncols; col++) {
 	    if (*(cell + col) > 0) {

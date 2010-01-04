@@ -26,8 +26,7 @@ transform(int *datafds, int *outfds, int rows, int cols,
     for (i = 0; i < rows; i++) {
 	/* get one row of data */
 	for (j = 0; j < bands; j++)
-	    if (Rast_get_c_row(datafds[j], rowbufs[j], i) < 0)
-		G_fatal_error(_("Error reading cell map during transform."));
+	    Rast_get_c_row(datafds[j], rowbufs[j], i);
 
 	/* transform each cell in the row */
 	for (l = 0; l < cols; l++) {

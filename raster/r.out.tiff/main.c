@@ -249,10 +249,8 @@ int main(int argc, char *argv[])
 		 imagelength) ? imagelength - row : tilelength;
 	    uint32 colb = 0;
 
-	    for (i = 0; i < nrow; i++) {
-		if (Rast_get_c_row(in, cells[i], row + i) < 0)
-		    G_fatal_error(_("Reading raster map..."));
-	    }
+	    for (i = 0; i < nrow; i++)
+		Rast_get_c_row(in, cells[i], row + i);
 
 	    for (col = 0; col < imagewidth; col += tilewidth) {
 		tsample_t s;
@@ -337,8 +335,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, h.ras_height, 2);
 
-	    if (Rast_get_c_row(in, cell, row) < 0)
-		exit(EXIT_FAILURE);
+	    Rast_get_c_row(in, cell, row);
 
 	    cellptr = cell;
 	    if (palette) {

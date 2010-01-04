@@ -206,8 +206,7 @@ int main(int argc, char **argv)
     /*   Write the back cell layers in the segmented files, and  
      *   Change UTM coordinates to ROWs and COLUMNs */
     for (row = 0; row < nrows; row++) {
-	if (Rast_get_c_row(backrow_fd, cell, row) < 0)
-	    G_fatal_error("unable to get map row %d", row);
+	Rast_get_c_row(backrow_fd, cell, row);
 
 	for (col = 0; col < ncols; col++)
 	    if (cell[col] > 0)
@@ -216,8 +215,7 @@ int main(int argc, char **argv)
 	    else
 		cell[col] = -1;
 	segment_put_row(&in_row_seg, cell, row);
-	if (Rast_get_c_row(backcol_fd, cell, row) < 0)
-	    G_fatal_error("unable to get map row %d", row);
+	Rast_get_c_row(backcol_fd, cell, row);
 
 	for (col = 0; col < ncols; col++)
 	    if (cell[col] > 0)
@@ -276,8 +274,7 @@ int main(int argc, char **argv)
 
 	/*  Search for the marked starting pts and make list    */
 	for (row = 0; row < nrows; row++) {
-	    if (Rast_get_c_row(path_fd, cell, row) < 0)
-		G_fatal_error("unable to get map row %d", row);
+	    Rast_get_c_row(path_fd, cell, row);
 
 	    for (col = 0; col < ncols; col++) {
 		if (cell[col] > 0) {

@@ -169,11 +169,9 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_row(fd, raster, row, out_type) < 0)
-	    exit(EXIT_FAILURE);
+	Rast_get_row(fd, raster, row, out_type);
 	/*
-	   if (Rast_get_null_value_row(fd, null_row, row) < 0)
-	   exit(EXIT_FAILURE);
+	   Rast_get_null_value_row(fd, null_row, row);
 	 */
 	for (col = 0, ptr = raster; col < ncols; col++,
 	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
