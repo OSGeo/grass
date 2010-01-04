@@ -102,14 +102,7 @@ int main(int argc, char *argv[])
 
     /* open input raster map */
     realfd = Rast_open_old(Cellmap_real, "");
-    if (realfd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"),
-		      Cellmap_real);
-
     imagfd = Rast_open_old(Cellmap_imag, "");
-    if (imagfd < 0)	
-	G_fatal_error(_("Unable to open raster map <%s>"),
-		      Cellmap_imag);
 
     /* get and compare the original window data */
     Rast_get_cellhd(Cellmap_real, "", &realhead);
@@ -212,10 +205,7 @@ int main(int argc, char *argv[])
     fft2(1, data, totsize, cols, rows);
 
     /* open the output cell map */
-    if ((outputfd = Rast_open_fp_new(Cellmap_orig)) < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"),
-		      Cellmap_orig);
-
+    outputfd = Rast_open_fp_new(Cellmap_orig);
 
     /* Write out result to a new cell map */
     G_message(_("Writing raster map <%s>..."),

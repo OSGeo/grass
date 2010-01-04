@@ -376,31 +376,19 @@ int main(int argc, char *argv[])
     /*  Open input cell layers for reading  */
 
     max_fd = Rast_open_old(max_layer, G_find_raster2(max_layer, ""));
-    if (max_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), max_layer);
 
     dir_fd = Rast_open_old(dir_layer, G_find_raster2(dir_layer, ""));
-    if (dir_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), dir_layer);
 
     base_fd = Rast_open_old(base_layer, G_find_raster2(base_layer, ""));
-    if (base_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), base_layer);
 
     if (spotting) {
 	spotdist_fd =
 	    Rast_open_old(spotdist_layer, G_find_raster2(spotdist_layer, ""));
-	if (spotdist_fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), spotdist_layer);
 
 	velocity_fd =
 	    Rast_open_old(velocity_layer, G_find_raster2(velocity_layer, ""));
-	if (velocity_fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), velocity_layer);
 
 	mois_fd = Rast_open_old(mois_layer, G_find_raster2(mois_layer, ""));
-	if (mois_fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), mois_layer);
     }
 
     /*  Allocate memories for a row  */
@@ -468,8 +456,6 @@ int main(int argc, char *argv[])
      */
 
     start_fd = Rast_open_old(start_layer, G_find_raster2(start_layer, ""));
-    if (start_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), start_layer);
 
     Rast_read_range(start_layer, G_find_file("cell", start_layer, ""), &range);
     Rast_get_range_min_max(&range, &range_min, &range_max);

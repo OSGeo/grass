@@ -27,9 +27,7 @@ int close_maps(void)
 	}
 
 	fd = Rast_open_new(wat_name, DCELL_TYPE);
-	if (fd < 0) {
-	    G_warning(_("unable to open new accum map layer."));
-	}
+
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 1);
 	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */

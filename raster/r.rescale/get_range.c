@@ -19,8 +19,6 @@ int get_range(const char *name, long *min, long *max)
 	Rast_set_window(&cellhd);
 	cell = Rast_allocate_c_buf();
 	fd = Rast_open_old(name, "");
-	if (fd < 0)
-	    exit(1);
 	nrows = G_window_rows();
 	ncols = G_window_cols();
 	G_message(_("Reading %s ..."), name);

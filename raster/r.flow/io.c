@@ -163,9 +163,8 @@ void open_output_files(void)
 	    ds.sfd = open_segment_file(tmp_name(G_tempfile()), ds, TEMP);
     }
 
-    if (parm.lgout &&
-	((lgfd = Rast_open_new(parm.lgout, FCELL_TYPE)) < 0))
-	G_fatal_error(_("Unable to create raster map <%s>"), parm.lgout);
+    if (parm.lgout)
+	lgfd = Rast_open_new(parm.lgout, FCELL_TYPE);
 
     if (parm.flout && (Vect_open_new(&fl, parm.flout, 0) < 0))
 	G_fatal_error(_("Unable to create vector map <%s>"), parm.flout);
@@ -200,8 +199,6 @@ void write_density_file(void)
 
     G_message(_("Writing density file"));
     dsfd = Rast_open_new(parm.dsout, DCELL_TYPE);
-    if (dsfd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), parm.dsout);
 
     for (row = 0; row < region.rows; row++) {
 	Rast_put_row(dsfd, get_row(ds, row), DCELL_TYPE);

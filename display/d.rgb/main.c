@@ -89,8 +89,7 @@ int main(int argc, char **argv)
 	char *name = B[i].opt->answer;
 
 	/* Make sure map is available */
-	if ((B[i].file = Rast_open_old(name, "")) == -1)
-	    G_fatal_error(_("Unable to open raster map <%s>"), name);
+	B[i].file = Rast_open_old(name, "");
 
 	B[i].type = Rast_get_map_type(B[i].file);
 

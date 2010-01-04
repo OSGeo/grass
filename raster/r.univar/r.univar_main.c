@@ -139,13 +139,7 @@ int main(int argc, char *argv[])
 
 static int open_raster(const char *infile)
 {
-    int fd;
-
-    fd = Rast_open_old(infile, "");
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), infile);
-
-    return fd;
+    return Rast_open_old(infile, "");
 }
 
 static univar_stat *univar_stat_with_percentiles(int map_type, int size)

@@ -373,9 +373,6 @@ int main(int argc, char *argv[])
 
     cost_fd = Rast_open_old(cost_layer, cost_mapset);
 
-    if (cost_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), cost_layer);
-
     data_type = Rast_get_map_type(cost_fd);
     cell = Rast_allocate_buf(data_type);
 
@@ -645,9 +642,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Raster map <%s> not found"), opt9->answer);
 	    
 	fd = Rast_open_old(opt9->answer, search_mapset);
-	if (fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  opt9->answer);
 
 	data_type2 = Rast_get_map_type(fd);
 

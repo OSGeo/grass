@@ -174,107 +174,72 @@ int input_data(void)
 
     /* Check if data available in mapsets
      * if found, then open the files */
-    if ((mapset = G_find_raster(elevin, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), elevin);
-
-    fd1 = Rast_open_old(elevin, mapset);
+    fd1 = Rast_open_old(elevin, "");
 
     /* TO REPLACE BY INTERNAL PROCESSING of dx, dy from Elevin */
     if ((mapset = G_find_raster(dxin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dxin);
 
-    fd2 = Rast_open_old(dxin, mapset);
+    fd2 = Rast_open_old(dxin, "");
 
-    if ((mapset = G_find_raster(dyin, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), dyin);
-
-    fd3 = Rast_open_old(dyin, mapset);
+    fd3 = Rast_open_old(dyin, "");
     /* END OF REPLACEMENT */
 
     /* Rendered Mannings n input map optional to run! */
     /* Careful!                     (Yann, 20080212) */
-    if (manin != NULL) {
-	if ((mapset = G_find_raster(manin, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), manin);
-	fd5 = Rast_open_old(manin, mapset);
-    }
+    if (manin)
+	fd5 = Rast_open_old(manin, "");
 
     /* Rendered Rainfall input map optional to run! */
     /* Careful!                     (Yann, 20080212) */
-    if (rain != NULL) {
-	if ((mapset = G_find_raster(rain, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), rain);
-	fd4 = Rast_open_old(rain, mapset);
-    }
+    if (rain)
+	fd4 = Rast_open_old(rain, "");
 
-    if (infil != NULL) {
-	if ((mapset = G_find_raster(infil, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), infil);
-	fd4a = Rast_open_old(infil, mapset);
-    }
+    if (infil)
+	fd4a = Rast_open_old(infil, "");
 
-    if (traps != NULL) {
-	if ((mapset = G_find_raster(traps, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), traps);
+    if (traps)
+	fd4b = Rast_open_old(traps, "");
 
-	fd4b = Rast_open_old(traps, mapset);
-    }
+    if (detin)
+	fd9 = Rast_open_old(detin, "");
 
-    if (detin != NULL) {
-	if ((mapset = G_find_raster(detin, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), detin);
+    if (tranin)
+	fd10 = Rast_open_old(tranin, "");
 
-	fd9 = Rast_open_old(detin, mapset);
-    }
+    if (tauin)
+	fd11 = Rast_open_old(tauin, "");
 
-    if (tranin != NULL) {
-	if ((mapset = G_find_raster(tranin, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), tranin);
-
-	fd10 = Rast_open_old(tranin, mapset);
-    }
-
-    if (tauin != NULL) {
-	if ((mapset = G_find_raster(tauin, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), tauin);
-
-	fd11 = Rast_open_old(tauin, mapset);
-    }
-
-    if (wdepth != NULL) {
-	if ((mapset = G_find_raster(wdepth, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), wdepth);
-
-	fd12 = Rast_open_old(wdepth, mapset);
-    }
+    if (wdepth)
+	fd12 = Rast_open_old(wdepth, "");
 
     for (row = 0; row < my; row++) {
 	Rast_get_f_row(fd1, cell1, row);
 	Rast_get_d_row(fd2, cell2, row);
 	Rast_get_d_row(fd3, cell3, row);
 
-	if (manin != NULL)
+	if (manin)
 	    Rast_get_f_row(fd5, cell5, row);
 
-	if (rain != NULL)
+	if (rain)
 	    Rast_get_d_row(fd4, cell4, row);
 
-	if (infil != NULL)
+	if (infil)
 	    Rast_get_d_row(fd4a, cell4a, row);
 
-	if (traps != NULL)
+	if (traps)
 	    Rast_get_f_row(fd4b, cell4b, row);
 
-	if (detin != NULL)
+	if (detin)
 	    Rast_get_f_row(fd9, cell9, row);
 
-	if (tranin != NULL)
+	if (tranin)
 	    Rast_get_f_row(fd10, cell10, row);
 
-	if (tauin != NULL)
+	if (tauin)
 	    Rast_get_f_row(fd11, cell11, row);
 
-	if (wdepth != NULL)
+	if (wdepth)
 	    Rast_get_d_row(fd12, cell12, row);
 
 	for (j = 0; j < mx; j++) {
@@ -309,7 +274,7 @@ int input_data(void)
 	     *//*printout warning? */
 
 	    /* If Rain Exists, then load data */
-	    if (rain != NULL) {
+	    if (rain) {
 		if (!Rast_is_d_null_value(cell4 + j))
 		    si[row_rev][j] = ((double)cell4[j]) * unitconv;
 		/*conv mm/hr to m/s */
@@ -321,7 +286,7 @@ int input_data(void)
 		}
 
 		/* Load infiltration map too if it exists */
-		if (infil != NULL) {
+		if (infil) {
 		    if (!Rast_is_d_null_value(cell4a + j))
 			inf[row_rev][j] = (double)cell4a[j] * unitconv;
 		    /*conv mm/hr to m/s */
@@ -343,7 +308,7 @@ int input_data(void)
 		    }
 		}
 
-		if (traps != NULL) {
+		if (traps) {
 		    if (!Rast_is_f_null_value(cell4b + j))
 			trap[row_rev][j] = (float)cell4b[j];	/* no conv, unitless */
 		    else {
@@ -363,7 +328,7 @@ int input_data(void)
 		    zz[row_rev][j] = UNDEF;
 		}
 
-		if (infil != NULL) {
+		if (infil) {
 		    if (!Rast_is_d_null_value(cell4a + j))
 			inf[row_rev][j] = (double)cell4a[j] * unitconv;	/*conv mm/hr to m/s */
 		    /*printf("\nINPUT infilt,convert %f %f",inf[row_rev][j],unitconv); */
@@ -384,7 +349,7 @@ int input_data(void)
 		    }
 		}
 
-		if (traps != NULL) {
+		if (traps) {
 		    if (!Rast_is_f_null_value(cell4b + j))
 			trap[row_rev][j] = (float)cell4b[j];	/* no conv, unitless */
 		    else {
@@ -393,7 +358,7 @@ int input_data(void)
 		    }
 		}
 	    }			/* End of added by Yann 20080213 */
-	    if (manin != NULL) {
+	    if (manin) {
 		if (!Rast_is_f_null_value(cell5 + j)) {
 		    cchez[row_rev][j] = (float)cell5[j];	/* units in manual */
 		}
@@ -409,7 +374,7 @@ int input_data(void)
 		G_fatal_error(_("Raster map <%s> not found, and manin_val undefined, choose one to be allowed to process"),
 			      manin);
 	    }
-	    if (detin != NULL) {
+	    if (detin) {
 		if (!Rast_is_f_null_value(cell9 + j))
 		    dc[row_rev][j] = (float)cell9[j];	/*units in manual */
 		else {
@@ -418,7 +383,7 @@ int input_data(void)
 		}
 	    }
 
-	    if (tranin != NULL) {
+	    if (tranin) {
 		if (!Rast_is_f_null_value(cell10 + j))
 		    ct[row_rev][j] = (float)cell10[j];	/*units in manual */
 		else {
@@ -427,7 +392,7 @@ int input_data(void)
 		}
 	    }
 
-	    if (tauin != NULL) {
+	    if (tauin) {
 		if (!Rast_is_f_null_value(cell11 + j))
 		    tau[row_rev][j] = (float)cell11[j];	/*units in manual */
 		else {
@@ -436,7 +401,7 @@ int input_data(void)
 		}
 	    }
 
-	    if (wdepth != NULL) {
+	    if (wdepth) {
 		if (!Rast_is_d_null_value(cell12 + j))
 		    gama[row_rev][j] = (double)cell12[j];	/*units in manual */
 		else {
@@ -450,29 +415,29 @@ int input_data(void)
     Rast_close(fd2);
     Rast_close(fd3);
 
-    if (rain != NULL)
+    if (rain)
 	Rast_close(fd4);
 
-    if (infil != NULL)
+    if (infil)
 	Rast_close(fd4a);
 
-    if (traps != NULL)
+    if (traps)
 	Rast_close(fd4b);
     /* Maybe a conditional to manin!=NULL here ! */
     Rast_close(fd5);
 
 	/****************/
 
-    if (detin != NULL)
+    if (detin)
 	Rast_close(fd9);
 
-    if (tranin != NULL)
+    if (tranin)
 	Rast_close(fd10);
 
-    if (tauin != NULL)
+    if (tauin)
 	Rast_close(fd11);
 
-    if (wdepth != NULL)
+    if (wdepth)
 	Rast_close(fd12);
 
     return 1;
@@ -546,7 +511,7 @@ int grad_check(void)
 		    slope[k][l] = 0.;
 		}
 		else {
-		    if (wdepth != NULL)
+		    if (wdepth)
 			hh = pow(gama[k][l], 2. / 3.);
 		    /* hh = 1 if there is no water depth input */
 		    v1[k][l] = (double)hh *cchez[k][l] * zx / zd4;
@@ -555,7 +520,7 @@ int grad_check(void)
 		    slope[k][l] =
 			sqrt(v1[k][l] * v1[k][l] + v2[k][l] * v2[k][l]);
 		}
-		if (wdepth != NULL) {
+		if (wdepth) {
 		    sheer = (double)(cmul2 * gama[k][l] * sinsl);	/* shear stress */
 		    /* if critical shear stress >= shear then all zero */
 		    if ((sheer <= tau[k][l]) || (ct[k][l] == 0.)) {
@@ -570,7 +535,7 @@ int grad_check(void)
 		sisum += si[k][l];
 		smin = amin1(smin, si[k][l]);
 		smax = amax1(smax, si[k][l]);
-		if (inf != NULL) {
+		if (inf) {
 		    infsum += inf[k][l];
 		    infmin = amin1(infmin, inf[k][l]);
 		    infmax = amax1(infmax, inf[k][l]);
@@ -580,7 +545,7 @@ int grad_check(void)
 		chsum += cchez[k][l];
 		zmin = amin1(zmin, (double)zz[k][l]);
 		zmax = amax1(zmax, (double)zz[k][l]);	/* not clear were needed */
-		if (wdepth != NULL)
+		if (wdepth)
 		    sigmax = amax1(sigmax, sigma[k][l]);
 		cchezmax = amax1(cchezmax, cchez[k][l]);
 		/* saved sqrt(sinsl)*cchez to cchez array for output */
@@ -597,10 +562,10 @@ int grad_check(void)
     vmean = vsum / cc;
     chmean = chsum / cc;
 
-    if (inf != NULL)
+    if (inf)
 	infmean = infsum / cc;
 
-    if (wdepth != NULL)
+    if (wdepth)
 	deltaw = 0.8 / (sigmax * vmax);	/*time step for sediment */
     deltap = 0.25 * sqrt(stepx * stepy) / vmean;	/*time step for water */
 
@@ -624,14 +589,14 @@ int grad_check(void)
 
     G_message(_("Number of iterations \t= %d cells\n"), miter);
     G_message(_("Time step \t= %.2f s\n"), deltap);
-    if (wdepth != NULL) {
+    if (wdepth) {
 	G_message(_("Sigmax \t= %f\nMax velocity \t= %f m/s\n"), sigmax,
 		  vmax);
 	G_message(_("Time step used \t= %.2f s\n"), deltaw);
     }
-    /*    if (wdepth != NULL) deltap = 0.1; 
+    /*    if (wdepth) deltap = 0.1; 
      *    deltap for sediment is ar. average deltap and deltaw */
-    /*    if (wdepth != NULL) deltap = (deltaw+deltap)/2.; 
+    /*    if (wdepth) deltap = (deltaw+deltap)/2.; 
      *    deltap for sediment is ar. average deltap and deltaw */
 
 
@@ -655,11 +620,11 @@ int grad_check(void)
 		/*if(v1[k][l]*v1[k][l]+v2[k][l]*v2[k][l] > cellsize, warning, napocitaj
 		 *ak viac ako 10%a*/
 		/* THIS IS CORRECT SOLUTION currently commented out */
-		if (inf != NULL)
+		if (inf)
 		    inf[k][l] *= timesec;
-		if (wdepth != NULL)
+		if (wdepth)
 		    gama[k][l] = 0.;
-		if (et != NULL) {
+		if (et) {
 		    if (sigma[k][l] == 0. || slope[k][l] == 0.)
 			si[k][l] = 0.;
 		    else
@@ -676,7 +641,7 @@ int grad_check(void)
      D_T({\bf r})= \nabla\cdot {\bf T}({\bf r})
      *   \f$
      */
-    if (et != NULL) {
+    if (et) {
 	erod(si);		/* compute divergence of t.capc */
 	if (output_et() != 1)
 	    G_fatal_error(_("Unable to write et file"));
@@ -686,12 +651,12 @@ int grad_check(void)
      *   sigma does not store the first order reaction coefficient but the operator
      *   WRITE the equation here
      */
-    if (wdepth != NULL) {
+    if (wdepth) {
 	for (k = 0; k < my; k++) {
 	    for (l = 0; l < mx; l++) {
 		if (zz[k][l] != UNDEF) {
 		    /* get back from temp */
-		    if (et != NULL)
+		    if (et)
 			si[k][l] = si[k][l] * slope[k][l] * sigma[k][l];
 		    if (sigma[k][l] != 0.)
 			/* rate of weight loss - w=w*sigma ,

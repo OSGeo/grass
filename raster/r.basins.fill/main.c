@@ -105,8 +105,6 @@ int main(int argc, char *argv[])
     ridge = read_map(ridge_name, NOMASK, nrows, ncols);
 
     partfd = Rast_open_c_new(part_name);
-    if (partfd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), part_name);
 
     /* run through file and set streams to zero at locations where ridges exist */
     for (row = 0; row < nrows; row++) {

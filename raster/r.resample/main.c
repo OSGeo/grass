@@ -88,8 +88,6 @@ int main(int argc, char *argv[])
     }
 
     infd = Rast_open_old(name, "");
-    if (infd < 0)
-	G_fatal_error(_("Unable to open input map <%s>"), name);
 
     /* determine the map type;
        data_type is the type of data being processed,
@@ -110,9 +108,6 @@ int main(int argc, char *argv[])
 
     outfd = Rast_open_new(result, out_type);
     Rast_set_null_value(rast, ncols, out_type);
-
-    if (outfd < 0)
-	G_fatal_error(_("Unable to open output map <%s>"), name);
 
     G_message(_("Percent complete: "));
 

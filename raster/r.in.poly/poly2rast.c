@@ -33,8 +33,6 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
     }
 
     rfd = Rast_open_c_new(raster_map);
-    if (rfd < 0)
-	G_fatal_error(_("Can't create raster map <%s>"), raster_map);
 
     if (title == NULL)
 	title = "";

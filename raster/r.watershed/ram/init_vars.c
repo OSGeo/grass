@@ -145,9 +145,6 @@ int init_vars(int argc, char *argv[])
 
     /* open elevation input */
     fd = Rast_open_old(ele_name, "");
-    if (fd < 0) {
-	G_fatal_error(_("unable to open elevation map layer"));
-    }
 
     ele_map_type = Rast_get_map_type(fd);
     ele_size = Rast_cell_size(ele_map_type);
@@ -213,9 +210,6 @@ int init_vars(int argc, char *argv[])
     if (run_flag) {
 	/* ... with input map flow: amount of overland flow per cell */
 	fd = Rast_open_old(run_name, "");
-	if (fd < 0) {
-	    G_fatal_error(_("unable to open runoff map layer"));
-	}
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
@@ -252,9 +246,6 @@ int init_vars(int argc, char *argv[])
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
 	fd = Rast_open_old(pit_name, "");
-	if (fd < 0) {
-	    G_fatal_error(_("unable to open depression map layer"));
-	}
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
@@ -269,9 +260,6 @@ int init_vars(int argc, char *argv[])
     /* this is also creating streams... */
     if (ob_flag) {
 	fd = Rast_open_old(ob_name, "");
-	if (fd < 0) {
-	    G_fatal_error(_("unable to open blocking map layer"));
-	}
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
@@ -284,12 +272,8 @@ int init_vars(int argc, char *argv[])
     }
     G_free(buf);
 
-    if (ril_flag) {
+    if (ril_flag)
 	ril_fd = Rast_open_old(ril_name, "");
-	if (ril_fd < 0) {
-	    G_fatal_error(_("unable to open rill map layer"));
-	}
-    }
 
     /* RUSLE: LS and/or S factor */
     if (er_flag) {

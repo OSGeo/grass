@@ -117,9 +117,7 @@ int main(int argc, char *argv[])
 	sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
 	G_check_input_output_name(opt_in->answers[i], tmpbuf, GR_FATAL_EXIT);
 
-	if ((inp_fd[i] = Rast_open_old(opt_in->answers[i], "")) < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  opt_in->answers[i]);
+	inp_fd[i] = Rast_open_old(opt_in->answers[i], "");
     }
 
     G_verbose_message(_("Calculating covariance matrix..."));
@@ -391,10 +389,6 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	    out_fd = Rast_open_fp_new(name);
 	    Rast_set_fp_type(DCELL_TYPE);
 	}
-
-	if (out_fd < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"),
-			  G_fully_qualified_name(name, G_mapset()));
 
 	for (pass = 1; pass <= PASSES; pass++) {
 	    void *rowbuf = NULL;

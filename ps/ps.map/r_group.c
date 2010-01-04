@@ -50,14 +50,8 @@ int read_group(void)
     }
 
     /* open raster maps for reading */
-    for (i = 0; i < 3; i++) {
-	if ((grp.fd[i] = Rast_open_old(grp.name[i], grp.mapset[i])) < 0) {
-	    sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
-	    error(fullname, "", "can't open raster map");
-	    Rast_free_colors(&(grp.colors[i]));
-	    return 0;
-	}
-    }
+    for (i = 0; i < 3; i++)
+	grp.fd[i] = Rast_open_old(grp.name[i], grp.mapset[i]);
 
     strcpy(PS.celltitle, grp.group_name);
     G_strip(PS.celltitle);

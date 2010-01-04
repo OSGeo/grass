@@ -91,10 +91,7 @@ int open_file(char *name)
 
     /* open raster map */
     strcpy(cell, name);
-    if ((cell_file = Rast_open_old(cell, "")) < 0) {
-	unlink(work_file_name);
-	G_fatal_error(_("Unable to open raster map <%s>"), cell);
-    }
+    cell_file = Rast_open_old(cell, "");
 
     n_rows = G_window_rows();
     n_cols = G_window_cols();
@@ -159,10 +156,7 @@ int close_file(char *name)
     int row_count, col_count, col;
     CELL *buf;
 
-    if ((cell_file = Rast_open_c_new(name)) < 0) {
-	unlink(work_file_name);
-	G_fatal_error(_("Unable to create raster map <%s>"), name);
-    }
+    cell_file = Rast_open_c_new(name);
 
     row_count = n_rows - (PAD << 1);
     col_count = n_cols - (PAD << 1);

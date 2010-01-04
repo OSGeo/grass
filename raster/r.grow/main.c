@@ -183,14 +183,10 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unknown metric: [%s]."), opt.met->answer);
 
     in_fd = Rast_open_old(in_name, "");
-    if (in_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 
     type = Rast_get_map_type(in_fd);
 
     out_fd = Rast_open_new(out_name, type);
-    if (out_fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
 
     if (Rast_read_cats(in_name, "", &cats) == -1) {
 	G_warning(_("Error reading category file for <%s>"), in_name);

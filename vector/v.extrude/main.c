@@ -176,9 +176,7 @@ int main(int argc, char *argv[])
 	G_get_window(&window);
 
 	/* open the elev raster, and check for error condition */
-	if ((fdrast = Rast_open_old(elevation->answer, "")) < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  elevation->answer);
+	fdrast = Rast_open_old(elevation->answer, "");
     }
 
     /* if area */

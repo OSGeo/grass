@@ -170,12 +170,8 @@ int main(int argc, char **argv)
     method = menu[i].val;
 
     base_fd = Rast_open_old(basemap, "");
-    if (base_fd < 0)
-	G_fatal_error(_("Unable to open base map <%s>"), basemap);
 
     cover_fd = Rast_open_old(covermap, "");
-    if (cover_fd < 0)
-	G_fatal_error(_("Unable to open cover map <%s>"), covermap);
 
     if (usecats && Rast_read_cats(covermap, "", &cats) < 0)
 	G_fatal_error(_("Unable to read category file of cover map <%s>"), covermap);
@@ -498,8 +494,6 @@ int main(int argc, char **argv)
 	G_message(_("Writing output map"));
 
 	out_fd = Rast_open_fp_new(output);
-	if (out_fd < 0)
-	    G_fatal_error(_("Unable to open output map <%s>"), output);
 
 	out_buf = Rast_allocate_d_buf();
 

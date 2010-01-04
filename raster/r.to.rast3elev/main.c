@@ -108,17 +108,9 @@ void check_input_maps(Database * db)
 /* ************************************************************************* */
 int open_input_raster_map(const char *name)
 {
-    int fd;
-
     G_debug(3, "Open Raster file %s", name);
 
-    /* open raster map */
-    fd = Rast_open_old(name, "");
-
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
-
-    return fd;
+    return Rast_open_old(name, "");
 }
 
 /* ************************************************************************* */

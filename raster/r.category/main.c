@@ -147,8 +147,7 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Raster map <%s> not found"),
 			      parm.raster->answer);
 
-	    if ((fd = Rast_open_old(name, mapset)) < 0)
-		G_fatal_error(_("Unable to open raster map <%s>"), name);
+	    fd = Rast_open_old(name, mapset);
 
 	    Rast_init_cats("", &cats);
 

@@ -40,9 +40,6 @@ int get_cats(const char *name, const char *mapset)
 
     /* open the raster map */
     fd = Rast_open_old(name, mapset);
-    if (fd < 0)
-	G_fatal_error(_("Cannot open cell file of raster map <%s> in <%s>"),
-		      name, mapset);
     nrows = G_window_rows();
     ncols = G_window_cols();
     cell = Rast_allocate_c_buf();

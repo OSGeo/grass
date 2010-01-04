@@ -21,15 +21,9 @@ void get_stats(struct rr_state *theState)
     int nrows, ncols, row, col;
 
     theState->fd_old = Rast_open_old(theState->inraster, "");
-    if (theState->fd_old < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"),
-		      theState->inraster);
-    if (theState->docover == 1) {
+    if (theState->docover == 1)
 	theState->fd_cold = Rast_open_old(theState->inrcover, "");
-	if (theState->fd_cold < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  theState->inrcover);
-    }
+
     theState->buf.type = Rast_get_map_type(theState->fd_old);
     theState->buf.data.v = Rast_allocate_buf(theState->buf.type);
     if (theState->docover == 1) {

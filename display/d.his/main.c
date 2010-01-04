@@ -121,8 +121,7 @@ int main(int argc, char **argv)
     name_h = opt_h->answer;
 
     /* Make sure map is available */
-    if ((hue_file = Rast_open_old(name_h, "")) == -1)
-	G_fatal_error(_("Unable to open raster map <%s>"), name_h);
+    hue_file = Rast_open_old(name_h, "");
 
     hue_r = G_malloc(window.cols);
     hue_g = G_malloc(window.cols);
@@ -143,8 +142,7 @@ int main(int argc, char **argv)
 	int_used = 1;
 
 	/* Make sure map is available */
-	if ((int_file = Rast_open_old(name_i, "")) == -1)
-	    G_fatal_error(_("Unable to open raster map <%s>"), name_i);
+	int_file = Rast_open_old(name_i, "");
 
 	int_r = G_malloc(window.cols);
 	int_n = G_malloc(window.cols);
@@ -162,8 +160,7 @@ int main(int argc, char **argv)
 	sat_used = 1;
 
 	/* Make sure map is available */
-	if ((sat_file = Rast_open_old(name_s, "")) == -1)
-	    G_fatal_error("Unable to open raster map <%s>", name_s);
+	sat_file = Rast_open_old(name_s, "");
 
 	sat_r = G_malloc(window.cols);
 	sat_n = G_malloc(window.cols);

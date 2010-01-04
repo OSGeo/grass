@@ -12,8 +12,7 @@ void getcells(void)
     FCELL *fcell = NULL;
     struct Cell_head inhead;
 
-    if ((fd = Rast_open_old(iname, "")) < 0)
-	G_fatal_error(_("Cannot open raster map <%s>"), iname);
+    fd = Rast_open_old(iname, "");
 
     data_type = Rast_get_map_type(fd);
     if (Rast_get_cellhd(iname, "", &inhead) < 0 )
@@ -82,8 +81,7 @@ void putcells(void)
     int fd, i;
     struct History history;
 
-    if ((fd = Rast_open_new(oname, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Cannot create raster map <%s>"), oname);
+    fd = Rast_open_new(oname, DCELL_TYPE);
 
     G_important_message(_("Writing topographic index map..."));
 

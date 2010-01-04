@@ -101,8 +101,6 @@ int main(int argc, char *argv[])
 
     /* open input cell map */
     inputfd = Rast_open_old(input_map->answer, "");
-    if (inputfd < 0)
-	exit(EXIT_FAILURE);
 
     sscanf(threshold->answer, "%1lf", &Thresh);
     if (Thresh <= 0.0)
@@ -172,8 +170,7 @@ int main(int argc, char *argv[])
 
     /* open the output cell maps and allocate cell row buffers */
     G_message(_("Writing transformed data to file..."));
-    if ((zcfd = Rast_open_c_new(output_map->answer)) < 0)
-	exit(EXIT_FAILURE);
+    zcfd = Rast_open_c_new(output_map->answer);
 
     cell_row = Rast_allocate_c_buf();
 

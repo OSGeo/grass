@@ -291,8 +291,6 @@ int main(int argc, char **argv)
 
     /* open the raster map */
     layer_fd = Rast_open_old(layer_name, "");
-    if (layer_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), layer_name);
 
     raster_type = Rast_get_map_type(layer_fd);
 
@@ -303,8 +301,6 @@ int main(int argc, char **argv)
     if (opt7->answer) {
 	/* open the magnitude raster map */
 	mag_fd = Rast_open_old(mag_map, "");
-	if (mag_fd < 0)
-	    G_fatal_error("Unable to open raster map <%s>", mag_map);
 
 	mag_raster_type = Rast_get_map_type(mag_fd);
 

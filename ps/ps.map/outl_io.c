@@ -64,8 +64,7 @@ RASTER_MAP_TYPE o_open_file(char *cell)
 {
     /* open raster map */
     sscanf(cell, "%s", cell_name);
-    if ((in_file_d = Rast_open_old(cell_name, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), cell_name);
+    in_file_d = Rast_open_old(cell_name, "");
 
     map_type = Rast_get_map_type(in_file_d);
     raster_size = Rast_cell_size(map_type);

@@ -544,12 +544,6 @@ int main(int argc, char *argv[])
     dtm_fd = Rast_open_old(dtm_layer, "");
     cost_fd = Rast_open_old(cost_layer, "");
 
-    if (dtm_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), dtm_layer);
-
-    if (cost_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), cost_layer);
-
     dtm_head_ok = Rast_get_cellhd(dtm_layer, "", &dtm_cellhd) >= 0;
     cost_head_ok = Rast_get_cellhd(cost_layer, "", &cost_cellhd) >= 0;
 
@@ -885,9 +879,6 @@ int main(int argc, char *argv[])
 	int dsize2;
 
 	cum_fd = Rast_open_old(start_layer, "");
-	if (cum_fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  start_layer);
 
 	data_type2 = Rast_get_map_type(cum_fd);
 

@@ -177,13 +177,7 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
 /* ************************************************************************* */
 int open_output_map(const char *name, int res_type)
 {
-    int fd;
-
-    fd = Rast_open_new((char *)name, res_type);
-    if (fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), name);
-
-    return fd;
+    return Rast_open_new(name, res_type);
 }
 
 /* ************************************************************************* */

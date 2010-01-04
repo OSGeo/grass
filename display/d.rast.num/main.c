@@ -127,8 +127,6 @@ int main(int argc, char **argv)
 	fixed_color = 1;
 
     layer_fd = Rast_open_old(map_name, "");
-    if (layer_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
     inmap_type = Rast_get_map_type(layer_fd);

@@ -260,8 +260,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     /* init raster categories */
     Rast_init_cats("Categories", &rast_cats);
 
-    if (!(fd = Rast_open_old(rast_name, G_mapset())))
-	G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
+    fd = Rast_open_old(rast_name, G_mapset());
 
     switch (use) {
     case USE_ATTR:
@@ -417,13 +416,11 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    RASTER_MAP_TYPE map_type;
 	    long count;
 
-	    if (!(fd = Rast_open_old(rast_name, G_mapset())))
-		G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
+	    fd = Rast_open_old(rast_name, G_mapset());
 
 	    map_type = Rast_map_type(rast_name, G_mapset());
 
-	    if (!(rowbuf = Rast_allocate_buf(map_type)))
-		G_fatal_error(_("Cannot allocate memory for row buffer"));
+	    rowbuf = Rast_allocate_buf(map_type);
 
 	    Rast_init_cell_stats(&stats);
 	    Rast_set_cats_title("Categories", &rast_cats);

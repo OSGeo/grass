@@ -212,9 +212,6 @@ int init_vars(int argc, char *argv[])
 
     /* open elevation input */
     ele_fd = Rast_open_old(ele_name, "");
-    if (ele_fd < 0) {
-	G_fatal_error(_("unable to open elevation map layer"));
-    }
 
     ele_map_type = Rast_get_map_type(ele_fd);
     ele_size = Rast_cell_size(ele_map_type);
@@ -226,9 +223,6 @@ int init_vars(int argc, char *argv[])
     /* initial flow accumulation */
     if (run_flag) {
 	wat_fd = Rast_open_old(run_name, "");
-	if (wat_fd < 0) {
-	    G_fatal_error(_("unable to open accumulation map layer"));
-	}
 
 	wat_map_type = Rast_get_map_type(ele_fd);
 	wat_size = Rast_cell_size(ele_map_type);
@@ -336,9 +330,6 @@ int init_vars(int argc, char *argv[])
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
 	fd = Rast_open_old(pit_name, "");
-	if (fd < 0) {
-	    G_fatal_error(_("unable to open depression map layer"));
-	}
 	buf = Rast_allocate_c_buf();
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 1);
@@ -362,9 +353,6 @@ int init_vars(int argc, char *argv[])
     if (er_flag) {
 	if (ob_flag) {
 	    fd = Rast_open_old(ob_name, "");
-	    if (fd < 0) {
-		G_fatal_error(_("unable to open blocking map layer"));
-	    }
 	    buf = Rast_allocate_c_buf();
 	    for (r = 0; r < nrows; r++) {
 		G_percent(r, nrows, 1);

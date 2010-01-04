@@ -101,8 +101,6 @@ int main(int argc, char *argv[])
     Cellmap_imag = opt.imag->answer;
 
     inputfd = Rast_open_old(Cellmap_orig, "");
-    if (inputfd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), Cellmap_orig);
 
     if (Rast_maskfd() >= 0)
 	G_warning(_("Raster MASK found, consider to remove "
@@ -150,10 +148,8 @@ int main(int argc, char *argv[])
     fft2(-1, data, totsize, cols, rows);
 
     /* open the output cell maps */
-    if ((realfd = Rast_open_fp_new(Cellmap_real)) < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), Cellmap_real);
-    if ((imagfd = Rast_open_fp_new(Cellmap_imag)) < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), Cellmap_imag);
+    realfd = Rast_open_fp_new(Cellmap_real);
+    imagfd = Rast_open_fp_new(Cellmap_imag);
 
 #define SWAP1(a, b)				\
     do {					\

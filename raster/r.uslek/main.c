@@ -88,20 +88,16 @@ int main(int argc, char *argv[])
     result = output1->answer;
     
     /***************************************************/ 
-    if ((infd_psand = Rast_open_old(psand, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), psand);
+    infd_psand = Rast_open_old(psand, "");
     inrast_psand = Rast_allocate_d_buf();
     
-    if ((infd_psilt = Rast_open_old(psilt, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), psilt);
+    infd_psilt = Rast_open_old(psilt, "");
     inrast_psilt = Rast_allocate_d_buf();
     
-    if ((infd_pclay = Rast_open_old(pclay, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), pclay);
+    infd_pclay = Rast_open_old(pclay, "");
     inrast_pclay = Rast_allocate_d_buf();
     
-    if ((infd_pomat = Rast_open_old(pomat, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), pomat);
+    infd_pomat = Rast_open_old(pomat, "");
     inrast_pomat = Rast_allocate_d_buf();
     /***************************************************/ 
     nrows = G_window_rows();
@@ -109,8 +105,7 @@ int main(int argc, char *argv[])
     outrast = Rast_allocate_d_buf();
     
     /* Create New raster files */ 
-    if ((outfd = Rast_open_new(result, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), result);
+    outfd = Rast_open_new(result, DCELL_TYPE);
     
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)

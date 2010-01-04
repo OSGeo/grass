@@ -131,8 +131,6 @@ int main(int argc, char *argv[])
 
     /* open old map */
     infile = Rast_open_old(rastin->answer, "");
-    if (infile < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), rastin->answer);
 
     /* reset window to current region */
     Rast_set_window(&dst_w);
@@ -141,8 +139,6 @@ int main(int argc, char *argv[])
 
     /* open new map */
     outfile = Rast_open_new(rastout->answer, DCELL_TYPE);
-    if (outfile < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), rastout->answer);
 
     G_suppress_warnings(1);
     /* otherwise get complaints about window changes */

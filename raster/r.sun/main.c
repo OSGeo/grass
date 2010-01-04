@@ -801,12 +801,7 @@ int INPUT_part(int offset, double *zmax)
 	}
     }
 
-
-    if ((mapset = G_find_raster2(elevin, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), elevin);
-
-
-    fd1 = Rast_open_old(elevin, mapset);
+    fd1 = Rast_open_old(elevin, "");
 
     if (slopein != NULL) {
 	cell3 = Rast_allocate_f_buf();
@@ -817,9 +812,7 @@ int INPUT_part(int offset, double *zmax)
 		s[l] = (float *)G_malloc(sizeof(float) * (n));
 	    }
 	}
-	if ((mapset = G_find_raster2(slopein, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), slopein);
-	fd3 = Rast_open_old(slopein, mapset);
+	fd3 = Rast_open_old(slopein, "");
 
     }
 
@@ -833,10 +826,7 @@ int INPUT_part(int offset, double *zmax)
 		o[l] = (float *)G_malloc(sizeof(float) * (n));
 	    }
 	}
-
-	if ((mapset = G_find_raster2(aspin, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), aspin);
-	fd2 = Rast_open_old(aspin, mapset);
+	fd2 = Rast_open_old(aspin, "");
 
     }
 
@@ -848,9 +838,7 @@ int INPUT_part(int offset, double *zmax)
 		li[l] = (float *)G_malloc(sizeof(float) * (n));
 
 	}
-	if ((mapset = G_find_raster2(linkein, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), linkein);
-	fd4 = Rast_open_old(linkein, mapset);
+	fd4 = Rast_open_old(linkein, "");
     }
 
     if (albedo != NULL) {
@@ -860,9 +848,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		a[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_raster2(albedo, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), albedo);
-	fd5 = Rast_open_old(albedo, mapset);
+	fd5 = Rast_open_old(albedo, "");
     }
 
     if (latin != NULL) {
@@ -872,9 +858,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		latitudeArray[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_raster2(latin, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), latin);
-	fd6 = Rast_open_old(latin, mapset);
+	fd6 = Rast_open_old(latin, "");
     }
 
     if (longin != NULL) {
@@ -883,9 +867,7 @@ int INPUT_part(int offset, double *zmax)
 	for (l = 0; l < numRows; l++)
 	    longitudeArray[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	if ((mapset = G_find_raster2(longin, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), longin);
-	fd7 = Rast_open_old(longin, mapset);
+	fd7 = Rast_open_old(longin, "");
     }
 
     if (coefbh != NULL) {
@@ -895,9 +877,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		cbhr[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_raster2(coefbh, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), coefbh);
-	fr1 = Rast_open_old(coefbh, mapset);
+	fr1 = Rast_open_old(coefbh, "");
     }
 
     if (coefdh != NULL) {
@@ -907,9 +887,7 @@ int INPUT_part(int offset, double *zmax)
 	    for (l = 0; l < numRows; l++)
 		cdhr[l] = (float *)G_malloc(sizeof(float) * (n));
 	}
-	if ((mapset = G_find_raster2(coefdh, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), coefdh);
-	fr2 = Rast_open_old(coefdh, mapset);
+	fr2 = Rast_open_old(coefdh, "");
     }
 
     if (useHorizonData()) {
@@ -940,10 +918,7 @@ int INPUT_part(int offset, double *zmax)
 	for (i = 0; i < arrayNumInt; i++) {
 	    horizonbuf[i] = Rast_allocate_f_buf();
 	    sprintf(shad_filename, formatString, horizon, i);
-	    if ((mapset = G_find_raster2(shad_filename, "")) == NULL)
-		G_fatal_error(_("Horizon file no. %d <%s> not found"), i,
-			      shad_filename);
-	    fd_shad[i] = Rast_open_old(shad_filename, mapset);
+	    fd_shad[i] = Rast_open_old(shad_filename, "");
 	}
     }
     /*
@@ -1155,43 +1130,31 @@ int OUTGR(void)
     if (incidout != NULL) {
 	cell7 = Rast_allocate_f_buf();
 	fd7 = Rast_open_fp_new(incidout);
-	if (fd7 < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), incidout);
     }
 
     if (beam_rad != NULL) {
 	cell8 = Rast_allocate_f_buf();
 	fd8 = Rast_open_fp_new(beam_rad);
-	if (fd8 < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), beam_rad);
     }
 
     if (insol_time != NULL) {
 	cell11 = Rast_allocate_f_buf();
 	fd11 = Rast_open_fp_new(insol_time);
-	if (fd11 < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), insol_time);
     }
 
     if (diff_rad != NULL) {
 	cell9 = Rast_allocate_f_buf();
 	fd9 = Rast_open_fp_new(diff_rad);
-	if (fd9 < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), diff_rad);
     }
 
     if (refl_rad != NULL) {
 	cell10 = Rast_allocate_f_buf();
 	fd10 = Rast_open_fp_new(refl_rad);
-	if (fd10 < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), refl_rad);
     }
 
     if (glob_rad != NULL) {
 	cell12 = Rast_allocate_f_buf();
 	fd12 = Rast_open_fp_new(glob_rad);
-	if (fd12 < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), glob_rad);
     }
 
 

@@ -59,8 +59,6 @@ void find_edge_cells(struct Map *map)
     }
 
     fd = Rast_open_old(map->name, map->mapset);
-    if (fd < 0)
-	exit(1);
 
     init_edge_list(map);
 

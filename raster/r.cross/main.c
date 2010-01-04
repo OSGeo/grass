@@ -109,8 +109,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	names[nfiles] = name;
 	fd[nfiles] = Rast_open_old(name, mapset);
-	if (fd[nfiles] < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 	Rast_read_range(name, mapset, &range);
 	ncats = range.max - range.min;
 
@@ -124,10 +122,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Must specify 2 or more input maps"));
     output = parm.output->answer;
     outfd = Rast_open_c_new(output);
-
-    if (outfd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"),
-		      parm.output->answer);
 
     sprintf(buf, "Cross of %s", names[0]);
     for (i = 1; i < nfiles - 1; i++) {

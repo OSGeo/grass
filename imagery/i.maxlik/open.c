@@ -38,9 +38,7 @@ int open_files(void)
 	cell[n] = Rast_allocate_d_buf();
 	name = Ref.file[n].name;
 	mapset = Ref.file[n].mapset;
-	if ((cellfd[n] = Rast_open_old(name, mapset)) < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  G_fully_qualified_name(name, mapset));
+	cellfd[n] = Rast_open_old(name, mapset);
     }
 
     I_init_signatures(&S, Ref.nfiles);
@@ -63,19 +61,12 @@ int open_files(void)
     invert_signatures();
 
     class_fd = Rast_open_c_new(class_name);
-    if (class_fd < 0)
-	exit(EXIT_FAILURE);
-
     class_cell = Rast_allocate_c_buf();
 
     reject_cell = NULL;
     if (reject_name) {
 	reject_fd = Rast_open_c_new(reject_name);
-	if (reject_fd < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"),
-			  reject_name);
-	else
-	    reject_cell = Rast_allocate_c_buf();
+	reject_cell = Rast_allocate_c_buf();
     }
 
     return 0;

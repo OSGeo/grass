@@ -242,9 +242,6 @@ int main(int argc, char *argv[])
 
 
     fd = Rast_open_new(parm.output->answer, DCELL_TYPE);
-    if (fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"),
-		      parm.output->answer);
 
     G_important_message(_("Interpolating raster map <%s> (%d rows, %d cols)... "),
 			parm.output->answer, window.rows, window.cols);

@@ -336,8 +336,6 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
 	const char *output = outputs[quant];
 
 	out_fd[quant] = Rast_open_fp_new(output);
-	if (out_fd[quant] < 0)
-	    G_fatal_error(_("Unable to open output map <%s>"), output);
     }
 
     have_colors = Rast_read_colors(covermap, "", &colors) > 0;
@@ -473,12 +471,8 @@ int main(int argc, char *argv[])
     }
 
     base_fd = Rast_open_old(basemap, "");
-    if (base_fd < 0)
-	G_fatal_error(_("Unable to open base map <%s>"), basemap);
 
     cover_fd = Rast_open_old(covermap, "");
-    if (cover_fd < 0)
-	G_fatal_error(_("Unable to open cover map <%s>"), covermap);
 
     if (Rast_map_is_fp(basemap, "") != 0)
 	G_fatal_error(_("The base map must be an integer (CELL) map"));

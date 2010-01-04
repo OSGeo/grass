@@ -451,10 +451,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if ((elev_fd = Rast_open_old(name, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
-    if ((output_fd = Rast_open_c_new(outname)) < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), outname);
+    elev_fd = Rast_open_old(name, "");
+    output_fd = Rast_open_c_new(outname);
 
     data_type = Rast_get_map_type(elev_fd);
     elevbuf.v = Rast_allocate_buf(data_type);

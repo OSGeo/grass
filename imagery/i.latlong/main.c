@@ -78,8 +78,7 @@ int main(int argc, char *argv[])
     result1 = output1->answer;
 
     /***************************************************/ 
-    if ((infd = Rast_open_old(in, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), in);
+    infd = Rast_open_old(in, "");
     if (Rast_get_cellhd(in, "", &cellhd) < 0)
 	G_fatal_error(_("Cannot read file header of [%s])"), in);
     inrast = Rast_allocate_d_buf();
@@ -119,8 +118,7 @@ int main(int argc, char *argv[])
 
     outrast1 = Rast_allocate_d_buf();
 
-    if ((outfd1 = Rast_open_new(result1,DCELL_TYPE)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result1);
+    outfd1 = Rast_open_new(result1, DCELL_TYPE);
 
     for (row = 0; row < nrows; row++)
     {

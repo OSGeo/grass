@@ -144,8 +144,6 @@ int main(int argc, char *argv[])
 
     /* open raster map */
     fd = Rast_open_old(name, "");
-    if (fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     map_type = Rast_get_map_type(fd);
 

@@ -41,11 +41,9 @@ void Init()
 
     Cells = FlagCreate(Rs, Cs);
     CellCount = 0;
-    if (NULL != G_find_file("cell", "MASK", G_mapset())) {
-	if ((FD = Rast_open_old("MASK", G_mapset())) < 0) {
-	    G_fatal_error(_("Unable to open raster map <%s>"), "MASK");
-	}
-	else {
+    if (G_find_raster2("MASK", G_mapset())) {
+	FD = Rast_open_old("MASK", G_mapset());
+	{
 	    for (row = 0; row < Rs; row++) {
 		Rast_get_c_row_nomask(FD, CellBuffer, row);
 		for (col = 0; col < Cs; col++) {

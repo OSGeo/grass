@@ -204,14 +204,10 @@ int main(int argc, char *argv[])
     if (G_legal_filename(h0) < 0)
 	G_fatal_error(_("<%s> is an illegal name"), h0);
 
-    if ((infd_Rn = Rast_open_old(Rn, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), Rn);
-    if ((infd_g0 = Rast_open_old(g0, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), g0);
-    if ((infd_z0m = Rast_open_old(z0m, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), z0m);
-    if ((infd_t0dem = Rast_open_old(t0dem, "")) < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), t0dem);
+    infd_Rn = Rast_open_old(Rn, "");
+    infd_g0 = Rast_open_old(g0, "");
+    infd_z0m = Rast_open_old(z0m, "");
+    infd_t0dem = Rast_open_old(t0dem, "");
 
     if (Rast_get_cellhd(Rn, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s>"), Rn);

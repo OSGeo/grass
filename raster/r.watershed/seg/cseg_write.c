@@ -12,10 +12,6 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
     CELL *buffer;
 
     map_fd = Rast_open_c_new(map_name);
-    if (map_fd < 0) {
-	G_warning("%s(): unable to open new map layer [%s]", me, map_name);
-	return -1;
-    }
     nrows = G_window_rows();
     buffer = Rast_allocate_c_buf();
     segment_flush(&(cseg->seg));

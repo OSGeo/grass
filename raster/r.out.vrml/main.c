@@ -83,8 +83,7 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&W);
 
-    if ((elevfd = Rast_open_old(rast_el->answer, "")) == -1)
-	G_fatal_error("Unable to open cellfile for <%s>", rast_el->answer);
+    elevfd = Rast_open_old(rast_el->answer, "");
 
     {
 	CELL cmin, cmax;
@@ -115,12 +114,9 @@ int main(int argc, char *argv[])
     }
 
     if (rast_co->answer) {
-	if ((colorfd = Rast_open_old(rast_co->answer, "")) == -1)
-	    G_warning(_("Unable to open cellfile for <%s>"), rast_co->answer);
-	else {
-	    Rast_read_colors(rast_co->answer, "", &colr);
-	    color_ok = 1;
-	}
+	colorfd = Rast_open_old(rast_co->answer, "");
+	Rast_read_colors(rast_co->answer, "", &colr);
+	color_ok = 1;
     }
 
     /* TODO: if file exists, just append new objects */

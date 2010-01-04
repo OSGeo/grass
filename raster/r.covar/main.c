@@ -77,8 +77,6 @@ int main(int argc, char *argv[])
 	dcell[i] = Rast_allocate_d_buf();
 	name = maps->answers[i];
 	fd[i] = Rast_open_old(name, "");
-	if (fd[i] < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), name);
     }
 
     nrows = G_window_rows();

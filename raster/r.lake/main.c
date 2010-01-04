@@ -212,11 +212,8 @@ int main(int argc, char *argv[])
     lakemap = lake_opt->answer;
 
     /* If lakemap is set, write to it, else is set overwrite flag and we should write to seedmap. */
-    if (lakemap) {
+    if (lakemap)
 	lake_fd = Rast_open_new(lakemap, 1);
-	if (lake_fd < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), lakemap);
-    }
 
     rows = G_window_rows();
     cols = G_window_cols();
@@ -239,15 +236,10 @@ int main(int argc, char *argv[])
 
     /* Open terran map */
     in_terran_fd = Rast_open_old(terrainmap, "");
-    if (in_terran_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), terrainmap);
 
     /* Open seed map */
-    if (smap_opt->answer) {
+    if (smap_opt->answer)
 	out_fd = Rast_open_old(seedmap, "");
-	if (out_fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), seedmap);
-    }
 
     /* Pointers to rows. Row = ptr to 'col' size array. */
     in_terran = (FCELL **) G_malloc(rows * sizeof(FCELL *));
@@ -288,14 +280,10 @@ int main(int argc, char *argv[])
 	Rast_close(out_fd);
 
     /* Open output map for writing. */
-    if (lakemap) {
+    if (lakemap)
 	out_fd = lake_fd;
-    }
-    else {
+    else
 	out_fd = Rast_open_new(seedmap, 1);
-	if (out_fd < 0)
-	    G_fatal_error(_("Unable to create raster map <%s>"), seedmap);
-    }
 
     /* More pases are renudant. Real pases count is controled by altered cell count. */
     pases = (int)(rows * cols) / 2;
