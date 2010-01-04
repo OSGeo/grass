@@ -134,9 +134,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
-    }
+    cellfile = Rast_open_old(map_name, map_set);
 
     G_message(_("Loading raster map <%s>..."),
 	      G_fully_qualified_name(map_name, map_set));
@@ -209,9 +207,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
-    }
+    cellfile = Rast_open_old(map_name, map_set);
 
     G_message(_("Loading raster map <%s>..."),
 	      G_fully_qualified_name(map_name, map_set));
@@ -367,9 +363,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
-    }
+    cellfile = Rast_open_old(map_name, map_set);
 
     tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));	/* G_fatal_error */
     if (!tmp_buf) {
@@ -483,9 +477,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
-    }
+    cellfile = Rast_open_old(map_name, map_set);
 
     tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));	/* G_fatal_error */
     if (!tmp_buf) {
@@ -574,9 +566,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	return -1;
     }
 
-    if ((cellfile = Rast_open_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
-    }
+    cellfile = Rast_open_old(map_name, map_set);
 
     tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));	/* G_fatal_error */
     if (!tmp_buf) {

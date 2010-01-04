@@ -66,59 +66,23 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
     cell1 = Rast_allocate_f_buf();
 
-    if (params->elev != NULL) {
+    if (params->elev)
 	cf1 = Rast_open_fp_new(params->elev);
-	if (cf1 < 0) {
-	    G_warning(_("Unable to create raster map <%s>"),
-		      params->elev);
-	    return -1;
-	}
-    }
 
-    if (params->slope != NULL) {
+    if (params->slope)
 	cf2 = Rast_open_fp_new(params->slope);
-	if (cf2 < 0) {
-	    G_warning(_("Unable to create raster map <%s>"),
-		      params->elev);
-	    return -1;
-	}
-    }
 
-    if (params->aspect != NULL) {
+    if (params->aspect)
 	cf3 = Rast_open_fp_new(params->aspect);
-	if (cf3 < 0) {
-	    G_warning(_("Unable to create raster map <%s>"),
-		      params->elev);
-	    return -1;
-	}
-    }
 
-    if (params->pcurv != NULL) {
+    if (params->pcurv)
 	cf4 = Rast_open_fp_new(params->pcurv);
-	if (cf4 < 0) {
-	    G_warning(_("Unable to create raster map <%s>"),
-		      params->elev);
-	    return -1;
-	}
-    }
 
-    if (params->tcurv != NULL) {
+    if (params->tcurv)
 	cf5 = Rast_open_fp_new(params->tcurv);
-	if (cf5 < 0) {
-	    G_warning(_("Unable to create raster map <%s>"),
-		      params->elev);
-	    return -1;
-	}
-    }
 
-    if (params->mcurv != NULL) {
+    if (params->mcurv)
 	cf6 = Rast_open_fp_new(params->mcurv);
-	if (cf6 < 0) {
-	    G_warning(_("Unable to create raster map <%s>"),
-		      params->elev);
-	    return -1;
-	}
-    }
 
     nrows = outhd->rows;
     if (nrows != params->nsizr) {

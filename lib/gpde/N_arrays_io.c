@@ -53,9 +53,6 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     struct Cell_head region;
     N_array_2d *data = array;
 
-    if (NULL == G_find_raster2(name, ""))
-	G_fatal_error(_("Raster map <%s> not found"), name);
-
     /* Get the active region */
     G_get_set_window(&region);
 
@@ -64,9 +61,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     cols = region.cols;
 
     /*open the raster map */
-    map = Rast_open_old(name, G_find_raster2(name, ""));
-    if (map < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), name);
+    map = Rast_open_old(name, "");
 
     type = Rast_get_map_type(map);
 
@@ -200,8 +195,6 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
 
     /*Open the new map */
     map = Rast_open_new(name, type);
-    if (map < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), name);
 
     if (type == CELL_TYPE)
 	rast = Rast_allocate_buf(type);
