@@ -324,11 +324,7 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
     for (row = 0; row < cellhd.rows; row++) {
 	G_percent(row, cellhd.rows, 1);
 
-	if (Rast_get_row_nomask(old, rast, row, map_type) < 0) {
-	    G_warning(_("Unable to read raster map <%s> row %d"),
-		      name, row);
-	    break;
-	}
+	Rast_get_row_nomask(old, rast, row, map_type);
 
 	mask_raster_array(rast, cellhd.cols, change_null, map_type);
 

@@ -24,8 +24,6 @@
 
 /* prototypes */
 static double scancatlabel(const char *);
-static void raster_row_error(const struct Cell_head *window, double north,
-			     double east);
 
 /*!
  *  \brief Extract a cell value from raster map.
@@ -109,8 +107,7 @@ DCELL Rast_get_sample_nearest(int fd,
 	goto done;
     }
 
-    if (Rast_get_d_row(fd, maprow, row) < 0)
-	raster_row_error(window, north, east);
+    Rast_get_d_row(fd, maprow, row);
 
     if (Rast_is_d_null_value(&maprow[col])) {
 	Rast_set_d_null_value(&result, 1);
@@ -176,10 +173,8 @@ DCELL Rast_get_sample_bilinear(int fd,
 	goto done;
     }
 
-    if (Rast_get_d_row(fd, arow, row) < 0)
-	raster_row_error(window, north, east);
-    if (Rast_get_d_row(fd, brow, row + 1) < 0)
-	raster_row_error(window, north, east);
+    Rast_get_d_row(fd, arow, row);
+    Rast_get_d_row(fd, brow, row + 1);
 
     if (Rast_is_d_null_value(&arow[col]) ||
 	Rast_is_d_null_value(&arow[col + 1]) ||
@@ -271,8 +266,7 @@ DCELL Rast_get_sample_cubic(int fd,
     }
 
     for (i = 0; i < 4; i++)
-	if (Rast_get_d_row(fd, rows[i], row + i) < 0)
-	    raster_row_error(window, north, east);
+	Rast_get_d_row(fd, rows[i], row + i);
 
     for (i = 0; i < 4; i++)
 	for (j = 0; j < 4; j++)
@@ -337,13 +331,3 @@ static double scancatlabel(const char *str)
     return val;
 }
 
-
-static void raster_row_error(const struct Cell_head *window, double north,
-			     double east)
-{
-    G_debug(3, "DIAG: \tRegion is: n=%g s=%g e=%g w=%g",
-	    window->north, window->south, window->east, window->west);
-    G_debug(3, "      \tData point is north=%g east=%g", north, east);
-
-    G_fatal_error(_("Problem reading raster map"));
-}

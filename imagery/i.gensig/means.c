@@ -29,8 +29,7 @@ int compute_means(struct files *files, struct Signature *S)
 	G_percent(row, nrows, 2);
 	read_training_map(class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++) {	/* NOTE: files->nbands == S->nbands */
-	    if (Rast_get_d_row(files->band_fd[b], cell = files->band_cell[b], row) < 0)
-		exit(1);
+	    Rast_get_d_row(files->band_fd[b], cell = files->band_cell[b], row);
 	    for (col = 0; col < ncols; col++) {
 		if (Rast_is_d_null_value(&cell[col])) {
 		    n_nulls++;

@@ -25,13 +25,13 @@ void *get_max_c(void *, void *);
 void *get_max_f(void *, void *);
 void *get_max_d(void *, void *);
 
-int get_row_c(int, void *, int);
-int get_row_f(int, void *, int);
-int get_row_d(int, void *, int);
+void get_row_c(int, void *, int);
+void get_row_f(int, void *, int);
+void get_row_d(int, void *, int);
 
-int put_row_c(int, void *);
-int put_row_f(int, void *);
-int put_row_d(int, void *);
+void put_row_c(int, void *);
+void put_row_f(int, void *);
+void put_row_d(int, void *);
 
 void *get_buf_c();
 void *get_buf_f();
@@ -69,9 +69,9 @@ extern int (*is_null) (void *);
 extern int (*bpe) ();
 extern void *(*get_max) (void *, void *);
 extern void *(*get_min) (void *, void *);
-extern int (*get_row) (int, void *, int);
+extern void (*get_row) (int, void *, int);
 extern void *(*get_buf) ();
-extern int (*put_row) (int, void *);
+extern void (*put_row) (int, void *);
 extern double (*slope) (void *, void *, double);
 extern void (*set_min) (void *);
 extern void (*set_max) (void *);

@@ -244,8 +244,7 @@ int MyApp::load_files(void)
 		G_fatal_error(_("Unable to read color file"));
 
 	    for (row = 0; row < vrows; row++) {
-		if (Rast_get_d_row(fd, dcell, (int)(row / vscale)) < 0)
-		    G_fatal_error(_("Unable to read raster row"));
+		Rast_get_d_row(fd, dcell, (int)(row / vscale));
 
 		rowoff = (vyoff + row) * ncols;
 		Rast_lookup_d_colors(dcell, tr, tg, tb, tset, tsiz, &colors);

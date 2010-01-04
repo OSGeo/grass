@@ -259,16 +259,13 @@ int main(int argc, char *argv[])
 
 	/* read input map */
 	for (i = 1; i <= nfiles; i++) 
-	    if ((Rast_get_d_row(infd[i], inrast[i], row)) <	0) 
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), name, row);
+	    Rast_get_d_row(infd[i], inrast[i], row);
 	
 	for (i = 1; i <= nfiles1; i++) 
-	    if ((Rast_get_d_row(infd1[i], inrast1[i], row)) < 0) 
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), name1, row);
+	    Rast_get_d_row(infd1[i], inrast1[i], row);
 
 	for (i = 1; i <= nfiles2; i++) 
-	    if ((Rast_get_d_row (infd2[i], inrast2[i], row)) < 0) 
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), name2, row);
+	    Rast_get_d_row (infd2[i], inrast2[i], row);
 
 	/*process the data */
 	for (col = 0; col < ncols; col++) 

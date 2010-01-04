@@ -110,8 +110,7 @@ int main(int argc, char **argv)
 	G_percent(row, window.rows, 5);
 
 	for (i = 0; i < 3; i++)
-	    if (Rast_get_row(B[i].file, B[i].array, row, B[i].type) < 0)
-		G_fatal_error(_("Error reading row of data"));
+	    Rast_get_row(B[i].file, B[i].array, row, B[i].type);
 
 	if (row == next_row)
 	    next_row = D_draw_raster_RGB(next_row,

@@ -216,9 +216,7 @@ int main(int argc, char *argv[])
     {
 	CELL c;
 	G_percent(row, nrows, 2);
-	if (Rast_get_c_row(infd, inrast, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  qcchan, row);
+	Rast_get_c_row(infd, inrast, row);
 
 	/*process the data */ 
 	for (col = 0; col < ncols; col++)

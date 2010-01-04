@@ -261,16 +261,10 @@ int main(int argc, char *argv[])
 	    continue;		/* duplicate cats */
 
 	if (cur_row != cache[point].row) {
-	    if (out_type == CELL_TYPE) {
-		if (Rast_get_c_row(fd, cell, cache[point].row) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  cell, cache[point].row);
-	    }
-	    else {
-		if (Rast_get_d_row(fd, dcell, cache[point].row) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  dcell, cache[point].row);
-	    }
+	    if (out_type == CELL_TYPE)
+		Rast_get_c_row(fd, cell, cache[point].row);
+	    else
+		Rast_get_d_row(fd, dcell, cache[point].row);
 	}
 	cur_row = cache[point].row;
 

@@ -86,10 +86,9 @@ int main(int argc, char *argv[])
     count = 0;
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	for (i = 0; i < nfiles; i++) {
-	    if (Rast_get_d_row(fd[i], dcell[i], row) < 0)
-		exit(1);
-	}
+	for (i = 0; i < nfiles; i++)
+	    Rast_get_d_row(fd[i], dcell[i], row);
+
 	for (col = 0; col < ncols; col++) {
 	    /* ignore cells where any of the maps has null value */
 	    for (i = 0; i < nfiles; i++)

@@ -41,9 +41,7 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf)
 		      G_fully_qualified_name(name, mapset));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_c_row(fd, cell, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  G_fully_qualified_name(name, mapset), row);
+	Rast_get_c_row(fd, cell, row);
 	Rast_update_cell_stats(cell, ncols, statf);
     }
     G_percent(row, nrows, 2);
@@ -106,9 +104,7 @@ void get_fp_stats(const char *name, const char *mapset,
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_d_row(fd, dcell, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  G_fully_qualified_name(name, mapset), row);
+	Rast_get_d_row(fd, dcell, row);
 	
 	for (col = 0; col < ncols; col++) {
 	    DCELL x;

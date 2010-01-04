@@ -440,8 +440,7 @@ int read_rast
 
     if (data_type == CELL_TYPE) {
 	cell = Rast_allocate_c_buf();
-	if (Rast_get_c_row(fd, cell, row) < 0)
-	    exit(1);
+	Rast_get_c_row(fd, cell, row);
 
 	if (Rast_is_c_null_value(&cell[col]))
 	    camera_height = (double)9999.;
@@ -451,8 +450,7 @@ int read_rast
 
     if (data_type == FCELL_TYPE) {
 	fcell = Rast_allocate_f_buf();
-	if (Rast_get_f_row(fd, fcell, row) < 0)
-	    exit(1);
+	Rast_get_f_row(fd, fcell, row);
 	if (Rast_is_f_null_value(&fcell[col]))
 	    camera_height = (double)9999.;
 	else
@@ -461,8 +459,7 @@ int read_rast
 
     if (data_type == DCELL_TYPE) {
 	dcell = Rast_allocate_d_buf();
-	if (Rast_get_d_row(fd, dcell, row) < 0)
-	    exit(1);
+	Rast_get_d_row(fd, dcell, row);
 	if (Rast_is_d_null_value(&dcell[col]))
 	    camera_height = (double)9999.;
 	else

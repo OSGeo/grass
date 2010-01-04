@@ -181,10 +181,7 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 	colcount = 0;
 	G_percent((row - nrows) * (-1), nrows, 2);
 
-	if (Rast_get_row(fd, raster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
+	Rast_get_row(fd, raster, row, out_type);
 
 	nspos = region.ns_res / 2 + region.south + rowcount * region.ns_res;
 	nspos -= y_extent;
@@ -242,10 +239,7 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 	colcount = 0;
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_row(fd, raster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
+	Rast_get_row(fd, raster, row, out_type);
 
 	nspos = region.ns_res / 2 + region.south + rowcount * region.ns_res;
 	nspos -= y_extent;
@@ -354,10 +348,7 @@ write_vtk_data(int fd, FILE * fp, char *varname, struct Cell_head region,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_row(fd, raster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
+	Rast_get_row(fd, raster, row, out_type);
 
 	for (col = 0, ptr = raster; col < ncols;
 	     col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
@@ -401,18 +392,9 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_row(redfd, redraster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
-	if (Rast_get_row(greenfd, greenraster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
-	if (Rast_get_row(bluefd, blueraster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
+	Rast_get_row(redfd, redraster, row, out_type);
+	Rast_get_row(greenfd, greenraster, row, out_type);
+	Rast_get_row(bluefd, blueraster, row, out_type);
 
 	for (col = 0, redptr = redraster, greenptr = greenraster, blueptr =
 	     blueraster; col < ncols;
@@ -468,18 +450,9 @@ write_vtk_vector_data(int xfd, int yfd, int zfd, FILE * fp,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 10);
 
-	if (Rast_get_row(xfd, xraster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
-	if (Rast_get_row(yfd, yraster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
-	if (Rast_get_row(zfd, zraster, row, out_type) < 0) {
-	    G_fatal_error(_("Unable to read row %i\n"), row);
-	    return;
-	}
+	Rast_get_row(xfd, xraster, row, out_type);
+	Rast_get_row(yfd, yraster, row, out_type);
+	Rast_get_row(zfd, zraster, row, out_type);
 
 	for (col = 0, xptr = xraster, yptr = yraster, zptr =
 	     zraster; col < ncols;

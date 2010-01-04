@@ -5,11 +5,10 @@
 
 int readbands(int nbands, int cur)
 {
-    register int i;
+    int i;
 
     for (i = 0; i < nbands; i++)
-	if (Rast_get_c_row_nomask(Bandfd[i], Bandbuf[i], cur) < 0)
-	    G_fatal_error(_("Error reading raster map in function readbands."));
+	Rast_get_c_row_nomask(Bandfd[i], Bandbuf[i], cur);
 
     return 0;
 }

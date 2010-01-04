@@ -259,8 +259,7 @@ void processProfiles(int inputFile, FILE * outputF)
 
     cell = Rast_allocate_c_buf();
     for (r = 0; r < rowCount; r++) {
-	if (Rast_get_c_row(inputFile, cell, r) < 0)
-	    exit(1);
+	Rast_get_c_row(inputFile, cell, r);
 	/* break; */
 
 	for (c = 0; c < columnCount; c++) {

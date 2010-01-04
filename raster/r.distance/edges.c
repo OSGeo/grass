@@ -71,8 +71,7 @@ void find_edge_cells(struct Map *map)
 	buf2 = tmp;
 
 	/* read a row */
-	if (Rast_get_c_row(fd, &buf1[1], row) < 0)
-	    exit(1);
+	Rast_get_c_row(fd, &buf1[1], row);
 
 	for (col = 1; col <= ncols; col++) {
 	    if (buf1[col]	/* is a valid category */

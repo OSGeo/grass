@@ -158,8 +158,7 @@ int main(int argc, char **argv)
 	G_percent(row, w.rows, 5);
 
 	for (i = 0; i < 3; i++) {
-	    if (Rast_get_row(B[i].file, B[i].array, row, B[i].type) < 0)
-		G_fatal_error("Rast_get_row failed");
+	    Rast_get_row(B[i].file, B[i].array, row, B[i].type);
 
 	    Rast_lookup_colors(B[i].array,
 				   (i == 0) ? B[i].buf : dummy,

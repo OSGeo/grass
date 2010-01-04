@@ -367,8 +367,7 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 
 static void read_row(int fd, void *buf, int row, int res_type)
 {
-    if (Rast_get_row(fd, buf, row, res_type) < 0)
-	G_fatal_error(_("Unable to read raster map row %d"), row);
+    Rast_get_row(fd, buf, row, res_type);
 }
 
 static void setup_map(struct map *m)

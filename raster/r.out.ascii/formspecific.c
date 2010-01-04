@@ -38,8 +38,7 @@ int write_GRASS(int fd,
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_row(fd, raster, row, out_type) < 0)
-	    return (row);
+	Rast_get_row(fd, raster, row, out_type);
 
 	for (col = 0, ptr = raster; col < ncols; col++,
 	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
@@ -91,8 +90,7 @@ int write_MODFLOW(int fd,
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (Rast_get_row(fd, raster, row, out_type) < 0)
-	    return (row);
+	Rast_get_row(fd, raster, row, out_type);
 
 	colcnt = 0;
 	for (col = 0, ptr = raster; col < ncols; col++,
@@ -177,8 +175,7 @@ int write_GSGRID(int fd,
     for (row = nrows - 1; row >= 0; row--) {
 	G_percent((row - nrows) * (-1), nrows, 2);
 
-	if (Rast_get_row(fd, raster, row, out_type) < 0)
-	    return (row);
+	Rast_get_row(fd, raster, row, out_type);
 
 	colcnt = 0;
 	for (col = 0, ptr = raster; col < ncols; col++,

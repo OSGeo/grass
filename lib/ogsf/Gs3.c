@@ -834,10 +834,8 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	if (map_type == CELL_TYPE) {
 	    buf = Rast_allocate_c_buf();
 
-	    if (Rast_get_c_row(fd, buf, drow) < 0) {
-		sprintf(catstr, "error");
-	    }
-	    else if (Rast_is_c_null_value(&buf[dcol])) {
+	    Rast_get_c_row(fd, buf, drow);
+	    if (Rast_is_c_null_value(&buf[dcol])) {
 		sprintf(catstr, "(NULL) %s",
 			Rast_get_c_cat(&buf[dcol], &cats));
 	    }
@@ -853,10 +851,8 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 	    /* fp map */
 	    dbuf = Rast_allocate_d_buf();
 
-	    if (Rast_get_d_row(fd, dbuf, drow) < 0) {
-		sprintf(catstr, "error");
-	    }
-	    else if (Rast_is_d_null_value(&dbuf[dcol])) {
+	    Rast_get_d_row(fd, dbuf, drow);
+	    if (Rast_is_d_null_value(&dbuf[dcol])) {
 		sprintf(catstr, "(NULL) %s",
 			Rast_get_d_cat(&dbuf[dcol], &cats));
 	    }

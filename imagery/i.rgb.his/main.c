@@ -93,8 +93,7 @@ int main(int argc, char **argv)
 	G_percent(i, rows, 2);
 
 	for (band = 0; band < 3; band++)
-	    if (Rast_get_c_row(fd_input[band], rowbuffer[band], i) < 0)
-		G_fatal_error(_("Unable to read raster map row %ld"), i);
+	    Rast_get_c_row(fd_input[band], rowbuffer[band], i);
 
 	/* process this row of the map */
 	rgb2his(rowbuffer, cols);

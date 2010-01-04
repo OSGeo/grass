@@ -101,9 +101,7 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
 	/* read input map */ 
-	if (Rast_get_d_row(infd_annual_pmm, inrast_annual_pmm, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			  annual_pmm, row);
+	Rast_get_d_row(infd_annual_pmm, inrast_annual_pmm, row);
 	
 	/*process the data */ 
 	for (col = 0; col < ncols; col++)

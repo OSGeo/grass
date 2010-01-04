@@ -428,10 +428,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    rows = G_window_rows();
 
 	    for (row = 0; row < rows; row++) {
-		if (Rast_get_row(fd, rowbuf, row, map_type) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  rast_name, row);
-
+		Rast_get_row(fd, rowbuf, row, map_type);
 		Rast_update_cell_stats(rowbuf, G_window_cols(), &stats);
 	    }
 

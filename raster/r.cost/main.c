@@ -481,9 +481,7 @@ int main(int argc, char *argv[])
 
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_row(cost_fd, cell, row, data_type) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			      cost_layer, row);
+	    Rast_get_row(cost_fd, cell, row, data_type);
 
 	    /* INPUT NULL VALUES: ??? */
 	    ptr2 = cell;
@@ -655,9 +653,7 @@ int main(int argc, char *argv[])
 	G_message(_("Reading raster map <%s>..."), opt9->answer);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_row(fd, cell2, row, data_type2) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			      opt9->answer, row);
+	    Rast_get_row(fd, cell2, row, data_type2);
 	    ptr2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		/* Did I understand that concept of cummulative cost map? - (pmx) 12 april 2000 */
@@ -1001,11 +997,9 @@ int main(int argc, char *argv[])
 
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    if (keep_nulls) {
-		if (Rast_get_row(cost_fd, cell2, row, data_type) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  cost_layer, row);
-	    }
+	    if (keep_nulls)
+		Rast_get_row(cost_fd, cell2, row, data_type);
+
 	    p = cell;
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {

@@ -25,7 +25,7 @@
 #include "../gis/G.h"
 #include "R.h"
 
-static int embed_nulls(int, void *, int, RASTER_MAP_TYPE, int, int);
+static void embed_nulls(int, void *, int, RASTER_MAP_TYPE, int, int);
 
 static int compute_window_row(int fd, int row, int *cellRow)
 {
@@ -35,10 +35,8 @@ static int compute_window_row(int fd, int row, int *cellRow)
 
     /* check for row in window */
     if (row < 0 || row >= G__.window.rows) {
-	G_warning(_("Reading raster map <%s@%s> request for row %d is outside region"),
-		  fcb->name, fcb->mapset, row);
-
-	return -1;
+	G_fatal_error(_("Reading raster map <%s@%s> request for row %d is outside region"),
+		      fcb->name, fcb->mapset, row);
     }
 
     /* convert window row to cell file row */
@@ -86,8 +84,8 @@ static void do_reclass_int(int fd, void *cell, int null_is_zero)
     }
 }
 
-static int read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
-				   int *nbytes)
+static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
+				    int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     off_t t1 = fcb->row_ptr[row];
@@ -96,14 +94,12 @@ static int read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
 
     if (lseek(fd, t1, SEEK_SET) < 0)
-	return -1;
+	G_fatal_error(_("Error reading raster data"));
 
     *nbytes = fcb->nbytes;
 
     if ((size_t) G_zlib_read(fd, readamount, data_buf, bufsize) != bufsize)
-	return -1;
-
-    return 0;
+	G_fatal_error(_("Error reading raster data"));
 }
 
 static void rle_decompress(unsigned char *dst, const unsigned char *src,
@@ -125,8 +121,8 @@ static void rle_decompress(unsigned char *dst, const unsigned char *src,
     }
 }
 
-static int read_data_compressed(int fd, int row, unsigned char *data_buf,
-				int *nbytes)
+static void read_data_compressed(int fd, int row, unsigned char *data_buf,
+				 int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     off_t t1 = fcb->row_ptr[row];
@@ -136,13 +132,13 @@ static int read_data_compressed(int fd, int row, unsigned char *data_buf,
     int n;
 
     if (lseek(fd, t1, SEEK_SET) < 0)
-	return -1;
+	G_fatal_error(_("Error reading raster data"));
 
     cmp = G__alloca(readamount);
 
     if (read(fd, cmp, readamount) != readamount) {
 	G__freea(cmp);
-	return -1;
+	G_fatal_error(_("Error reading raster data"));
     }
 
     /* Now decompress the row */
@@ -165,12 +161,10 @@ static int read_data_compressed(int fd, int row, unsigned char *data_buf,
 	memcpy(data_buf, cmp, readamount);
 
     G__freea(cmp);
-
-    return 0;
 }
 
-static int read_data_uncompressed(int fd, int row, unsigned char *data_buf,
-				  int *nbytes)
+static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
+				   int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     ssize_t bufsize = fcb->cellhd.cols * fcb->nbytes;
@@ -178,17 +172,15 @@ static int read_data_uncompressed(int fd, int row, unsigned char *data_buf,
     *nbytes = fcb->nbytes;
 
     if (lseek(fd, (off_t) row * bufsize, SEEK_SET) == -1)
-	return -1;
+	G_fatal_error(_("Error reading raster data"));
 
     if (read(fd, data_buf, bufsize) != bufsize)
-	return -1;
-
-    return 0;
+	G_fatal_error(_("Error reading raster data"));
 }
 
 #ifdef HAVE_GDAL
-static int read_data_gdal(int fd, int row, unsigned char *data_buf,
-			  int *nbytes)
+static void read_data_gdal(int fd, int row, unsigned char *data_buf,
+			   int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char *buf;
@@ -217,28 +209,28 @@ static int read_data_gdal(int fd, int row, unsigned char *data_buf,
 	G__freea(buf);
     }
 
-    return err == CE_None ? 0 : -1;
+    if (err != CE_None)
+	G_fatal_error(_("Error reading raster data via GDAL"));
 }
 #endif
 
-static int read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
+static void read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
 #ifdef HAVE_GDAL
-    if (fcb->gdal)
-	return read_data_gdal(fd, row, data_buf, nbytes);
+    if (fcb->gdal) {
+	read_data_gdal(fd, row, data_buf, nbytes);
+	return;
+    }
 #endif
 
     if (!fcb->cellhd.compressed)
-	return read_data_uncompressed(fd, row, data_buf, nbytes);
-
-    /* map is in compressed form */
-
-    if (fcb->map_type == CELL_TYPE)
-	return read_data_compressed(fd, row, data_buf, nbytes);
+	read_data_uncompressed(fd, row, data_buf, nbytes);
+    else if (fcb->map_type == CELL_TYPE)
+	read_data_compressed(fd, row, data_buf, nbytes);
     else
-	return read_data_fp_compressed(fd, row, data_buf, nbytes);
+	read_data_fp_compressed(fd, row, data_buf, nbytes);
 }
 
 /* copy cell file data to user buffer translated by window column mapping */
@@ -591,35 +583,20 @@ static int get_map_row_nomask(int fd, void *rast, int row,
     };
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int r;
-    int rowStatus;
+    int row_status;
 
-    rowStatus = compute_window_row(fd, row, &r);
+    row_status = compute_window_row(fd, row, &r);
 
-    if (rowStatus <= 0) {
+    if (!row_status) {
 	fcb->cur_row = -1;
 	Rast_zero_buf(rast, data_type);
-	return rowStatus;
+	return 0;
     }
 
     /* read cell file row if not in memory */
     if (r != fcb->cur_row) {
 	fcb->cur_row = r;
-
-	if (read_data(fd, fcb->cur_row, fcb->data, &fcb->cur_nbytes) < 0) {
-	    Rast_zero_buf(rast, data_type);
-
-	    if (!fcb->io_error) {
-		if (fcb->cellhd.compressed)
-		    G_warning(_("Error reading compressed map <%s@%s>, row %d"),
-			      fcb->name, fcb->mapset, r);
-		else
-		    G_warning(_("Error reading map <%s@%s>, row %d"),
-			      fcb->name, fcb->mapset, r);
-
-		fcb->io_error = 1;
-	    }
-	    return -1;
-	}
+	read_data(fd, fcb->cur_row, fcb->data, &fcb->cur_nbytes);
     }
 
     (transfer_to_cell_FtypeOtype[fcb->map_type][data_type]) (fd, rast);
@@ -627,32 +604,22 @@ static int get_map_row_nomask(int fd, void *rast, int row,
     return 1;
 }
 
-static int get_map_row_no_reclass(int fd, void *rast, int row,
-				  RASTER_MAP_TYPE data_type, int null_is_zero,
-				  int with_mask)
+static void get_map_row_no_reclass(int fd, void *rast, int row,
+				   RASTER_MAP_TYPE data_type, int null_is_zero,
+				   int with_mask)
 {
-    int stat;
-
-    stat = get_map_row_nomask(fd, rast, row, data_type);
-    if (stat < 0)
-	return stat;
-
-    stat = embed_nulls(fd, rast, row, data_type, null_is_zero, with_mask);
-    if (stat < 0)
-	return stat;
-
-    return 1;
+    get_map_row_nomask(fd, rast, row, data_type);
+    embed_nulls(fd, rast, row, data_type, null_is_zero, with_mask);
 }
 
-static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
-		       int null_is_zero, int with_mask)
+static void get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
+			int null_is_zero, int with_mask)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int size = Rast_cell_size(data_type);
     CELL *temp_buf = NULL;
     void *buf;
     int type;
-    int stat;
     int i;
 
     if (fcb->reclass_flag && data_type != CELL_TYPE) {
@@ -665,16 +632,10 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 	type = data_type;
     }
 
-    stat =
-	get_map_row_no_reclass(fd, buf, row, type, null_is_zero, with_mask);
-    if (stat < 0) {
-	if (temp_buf)
-	    G__freea(temp_buf);
-	return stat;
-    }
+    get_map_row_no_reclass(fd, buf, row, type, null_is_zero, with_mask);
 
     if (!fcb->reclass_flag)
-	return 1;
+	return;
 
     /* if the map is reclass table, get and
        reclass CELL row and copy results to needed type  */
@@ -682,7 +643,7 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
     do_reclass_int(fd, buf, null_is_zero);
 
     if (data_type == CELL_TYPE)
-	return 1;
+	return;
 
     for (i = 0; i < G__.window.cols; i++) {
 	Rast_set_c_value(rast, temp_buf[i], data_type);
@@ -690,8 +651,6 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
     }
 
     G__freea(temp_buf);
-
-    return 1;
 }
 
 /*!
@@ -719,13 +678,11 @@ static int get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
  * \param row data row desired
  * \param data_type data type
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_row_nomask(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
+void Rast_get_row_nomask(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
-    return get_map_row(fd, buf, row, data_type, 0, 0);
+    get_map_row(fd, buf, row, data_type, 0, 0);
 }
 
 /*!
@@ -738,13 +695,11 @@ int Rast_get_row_nomask(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  * \param row data row desired
  * \param data_type data type
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_c_row_nomask(int fd, CELL * buf, int row)
+void Rast_get_c_row_nomask(int fd, CELL * buf, int row)
 {
-    return Rast_get_row_nomask(fd, buf, row, CELL_TYPE);
+    Rast_get_row_nomask(fd, buf, row, CELL_TYPE);
 }
 
 /*!
@@ -757,13 +712,11 @@ int Rast_get_c_row_nomask(int fd, CELL * buf, int row)
  * \param row data row desired
  * \param data_type data type
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_f_row_nomask(int fd, FCELL * buf, int row)
+void Rast_get_f_row_nomask(int fd, FCELL * buf, int row)
 {
-    return Rast_get_row_nomask(fd, buf, row, FCELL_TYPE);
+    Rast_get_row_nomask(fd, buf, row, FCELL_TYPE);
 }
 
 /*!
@@ -776,13 +729,11 @@ int Rast_get_f_row_nomask(int fd, FCELL * buf, int row)
  * \param row data row desired
  * \param data_type data type
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_d_row_nomask(int fd, DCELL * buf, int row)
+void Rast_get_d_row_nomask(int fd, DCELL * buf, int row)
 {
-    return Rast_get_row_nomask(fd, buf, row, DCELL_TYPE);
+    Rast_get_row_nomask(fd, buf, row, DCELL_TYPE);
 }
 
 /*!
@@ -823,13 +774,11 @@ int Rast_get_d_row_nomask(int fd, DCELL * buf, int row)
  * \param row data row desired
  * \param data_type data type
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
+void Rast_get_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
-    return get_map_row(fd, buf, row, data_type, 0, 1);
+    get_map_row(fd, buf, row, data_type, 0, 1);
 }
 
 /*!
@@ -849,13 +798,11 @@ int Rast_get_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  * \param buf buffer for the row to be placed into
  * \param row data row desired
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_c_row(int fd, CELL * buf, int row)
+void Rast_get_c_row(int fd, CELL * buf, int row)
 {
-    return Rast_get_row(fd, buf, row, CELL_TYPE);
+    Rast_get_row(fd, buf, row, CELL_TYPE);
 }
 
 /*!
@@ -871,13 +818,11 @@ int Rast_get_c_row(int fd, CELL * buf, int row)
  * \param buf buffer for the row to be placed into
  * \param row data row desired
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_f_row(int fd, FCELL * buf, int row)
+void Rast_get_f_row(int fd, FCELL * buf, int row)
 {
-    return Rast_get_row(fd, buf, row, FCELL_TYPE);
+    Rast_get_row(fd, buf, row, FCELL_TYPE);
 }
 
 /*!
@@ -890,13 +835,11 @@ int Rast_get_f_row(int fd, FCELL * buf, int row)
  * \param buf buffer for the row to be placed into
  * \param row data row desired
  *
- * \return 1 on success
- * \return 0 row requested not within window
- * \return -1 on error
+ * \return void
  */
-int Rast_get_d_row(int fd, DCELL * buf, int row)
+void Rast_get_d_row(int fd, DCELL * buf, int row)
 {
-    return Rast_get_row(fd, buf, row, DCELL_TYPE);
+    Rast_get_row(fd, buf, row, DCELL_TYPE);
 }
 
 static int read_null_bits(int fd, int row)
@@ -915,20 +858,16 @@ static int read_null_bits(int fd, int row)
     }
 
     if (null_fd < 0)
-	return -1;
+	return 0;
 
     size = Rast__null_bitstream_size(cols);
     offset = (off_t) size * R;
 
-    if (lseek(null_fd, offset, SEEK_SET) < 0) {
-	G_warning(_("Error reading null row %d"), R);
-	return -1;
-    }
+    if (lseek(null_fd, offset, SEEK_SET) < 0)
+	G_fatal_error(_("Error reading null row %d"), R);
 
-    if (read(null_fd, flags, size) != size) {
-	G_warning(_("Error reading null row %d"), R);
-	return -1;
-    }
+    if (read(null_fd, flags, size) != size)
+	G_fatal_error(_("Error reading null row %d"), R);
 
     return 1;
 }
@@ -947,7 +886,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
     }
 
     if (row != fcb->null_cur_row) {
-	if (read_null_bits(fd, row) < 0) {
+	if (!read_null_bits(fd, row)) {
 	    fcb->null_cur_row = -1;
 	    if (fcb->map_type == CELL_TYPE) {
 		/* If can't read null row, assume  that all map 0's are nulls */
@@ -1048,8 +987,8 @@ static void get_null_value_row(int fd, char *flags, int row, int with_mask)
 	embed_mask(flags, row);
 }
 
-static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
-		       int null_is_zero, int with_mask)
+static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
+			int null_is_zero, int with_mask)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     char *null_buf;
@@ -1059,7 +998,7 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
        in data row or mask */
     if (null_is_zero && !fcb->null_file_exists
 	&& (R__.auto_mask <= 0 || !with_mask))
-	return 1;
+	return;
 
     null_buf = G__alloca(G__.window.cols);
 
@@ -1077,8 +1016,6 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
     }
 
     G__freea(null_buf);
-
-    return 1;
 }
 
 /*!
@@ -1095,11 +1032,9 @@ static int embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
    \param buf buffer for the row to be placed into
    \param row data row desired
 
-   \return 1
+   \return void
  */
-int Rast_get_null_value_row(int fd, char *flags, int row)
+void Rast_get_null_value_row(int fd, char *flags, int row)
 {
     get_null_value_row(fd, flags, row, 1);
-
-    return 1;
 }

@@ -129,12 +129,9 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 	
         /* read input maps */ 
-        if (Rast_get_d_row(infd_rnet, inrast_rnet, row)<0)
-	  G_fatal_error(_("Unable to read raster map <%s> row %d"), rnet, row);
-	if (Rast_get_d_row(infd_g0, inrast_g0, row) < 0)
-	  G_fatal_error(_("Unable to read raster map <%s> row %d"), g0, row);
-	if (Rast_get_d_row(infd_h0, inrast_h0, row) < 0)
-	  G_fatal_error(_("Unable to read raster map <%s> row %d"), h0, row);
+        Rast_get_d_row(infd_rnet, inrast_rnet, row);
+	Rast_get_d_row(infd_g0, inrast_g0, row);
+	Rast_get_d_row(infd_h0, inrast_h0, row);
 	
         /*process the data */ 
         for (col = 0; col < ncols; col++)

@@ -505,21 +505,10 @@ static int input_data(struct interp_params *params,
 	cellsmooth = Rast_allocate_f_buf();
 
     for (m1 = 0; m1 <= last_row - first_row; m1++) {
-	ret_val =
-	    Rast_get_f_row(fdinp, cellinp, inp_rows - m1 - first_row);
-	if (ret_val < 0) {
-	    fprintf(stderr, "Cannot get row %d (return value = %d)\n", m1,
-		    ret_val);
-	    return -1;
-	}
-	if (fdsmooth >= 0) {
-	    ret_val1 =
-		Rast_get_f_row(fdsmooth, cellsmooth,
-				   inp_rows - m1 - first_row);
-	    if (ret_val1 < 0) {
-		fprintf(stderr, "Cannot get smoothing row\n");
-	    }
-	}
+	Rast_get_f_row(fdinp, cellinp, inp_rows - m1 - first_row);
+	if (fdsmooth >= 0)
+	    Rast_get_f_row(fdsmooth, cellsmooth, inp_rows - m1 - first_row);
+
 	y = params->y_orig + (m1 + first_row - 1 + 0.5) * inp_ns_res;
 	for (m2 = 0; m2 < inp_cols; m2++) {
 	    x = params->x_orig + (m2 + 0.5) * inp_ew_res;

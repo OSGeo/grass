@@ -693,9 +693,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_row(dtm_fd, dtm_cell, row, dtm_data_type) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			      dtm_layer, row);
+	    Rast_get_row(dtm_fd, dtm_cell, row, dtm_data_type);
 	    /* INPUT NULL VALUES: ??? */
 	    ptr2 = dtm_cell;
 	    switch (dtm_data_type) {
@@ -752,9 +750,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_row(cost_fd, cost_cell, row, cost_data_type) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			      cost_layer, row);
+	    Rast_get_row(cost_fd, cost_cell, row, cost_data_type);
 	    /* INPUT NULL VALUES: ??? */
 	    ptr2 = cost_cell;
 	    switch (cost_data_type) {
@@ -882,9 +878,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (Rast_get_row(cum_fd, cell2, row, data_type2) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"),
-			      cum_cost_layer, row);
+	    Rast_get_row(cum_fd, cell2, row, data_type2);
 	    ptr2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		/* Did I understand that concept of cummulative cost map? - (pmx) 12 april 2000 */
@@ -1459,11 +1453,9 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (keep_nulls) {
-		if (Rast_get_row(dtm_fd, cell2, row, dtm_data_type) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  dtm_layer, row);
-	    }
+	    if (keep_nulls)
+		Rast_get_row(dtm_fd, cell2, row, dtm_data_type);
+
 	    p = cum_cell;
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {
@@ -1494,11 +1486,9 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (keep_nulls) {
-		if (Rast_get_row(dtm_fd, cell2, row, dtm_data_type) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  dtm_layer, row);
-	    }
+	    if (keep_nulls)
+		Rast_get_row(dtm_fd, cell2, row, dtm_data_type);
+
 	    p = cum_cell;
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {
@@ -1529,11 +1519,9 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 2);
-	    if (keep_nulls) {
-		if (Rast_get_row(dtm_fd, cell2, row, dtm_data_type) < 0)
-		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
-				  cell2, row);
-	    }
+	    if (keep_nulls)
+		Rast_get_row(dtm_fd, cell2, row, dtm_data_type);
+
 	    p = cum_cell;
 	    p2 = cell2;
 	    for (col = 0; col < ncols; col++) {

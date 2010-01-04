@@ -530,8 +530,7 @@ int main(int argc, char *argv[])
     /*if considering spotting, read elevation map into an array */
     if (spotting)
 	for (row = 0; row < nrows; row++) {
-	    if (Rast_get_c_row(elev_fd, elev, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.elev->answer, row);
+	    Rast_get_c_row(elev_fd, elev, row);
 	    for (col = 0; col < ncols; col++)
 		DATA(map_elev, row, col) = elev[col];
 	}
@@ -539,31 +538,22 @@ int main(int argc, char *argv[])
     /*major computation: compute ROSs one cell a time */
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
-	if (Rast_get_c_row(fuel_fd, fuel, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.model->answer, row);
+	Rast_get_c_row(fuel_fd, fuel, row);
 	if (parm.mois_1h->answer)
-	    if (Rast_get_c_row(mois_1h_fd, mois_1h, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_1h->answer, row);
+	    Rast_get_c_row(mois_1h_fd, mois_1h, row);
 	if (parm.mois_10h->answer)
-	    if (Rast_get_c_row(mois_10h_fd, mois_10h, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_10h->answer, row);
+	    Rast_get_c_row(mois_10h_fd, mois_10h, row);
 	if (parm.mois_100h->answer)
-	    if (Rast_get_c_row(mois_100h_fd, mois_100h, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_100h->answer, row);
-	if (Rast_get_c_row(mois_live_fd, mois_live, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.mois_live->answer, row);
+	    Rast_get_c_row(mois_100h_fd, mois_100h, row);
+	Rast_get_c_row(mois_live_fd, mois_live, row);
 	if (parm.vel->answer)
-	    if (Rast_get_c_row(vel_fd, vel, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.vel->answer, row);
+	    Rast_get_c_row(vel_fd, vel, row);
 	if (parm.dir->answer)
-	    if (Rast_get_c_row(dir_fd, dir, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.dir->answer, row);
+	    Rast_get_c_row(dir_fd, dir, row);
 	if (parm.slope->answer)
-	    if (Rast_get_c_row(slope_fd, slope, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.slope->answer, row);
+	    Rast_get_c_row(slope_fd, slope, row);
 	if (parm.aspect->answer)
-	    if (Rast_get_c_row(aspect_fd, aspect, row) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), parm.aspect->answer, row);
+	    Rast_get_c_row(aspect_fd, aspect, row);
 
 	/*initialize cell buffers for output map layers */
 	for (col = 0; col < ncols; col++) {

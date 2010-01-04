@@ -67,14 +67,12 @@ void get_stats(struct rr_state *theState)
     }
     G_message(_("Collecting Stats..."));
     for (row = 0; row < nrows; row++) {
-	if (Rast_get_row(theState->fd_old, theState->buf.data.v,
-			     row, theState->buf.type) < 0)
-	    G_fatal_error(_("Cannot read raster row [%d]"), row);
-	if (theState->docover == 1) {
-	    if (Rast_get_row(theState->fd_cold, theState->cover.data.v,
-				 row, theState->cover.type) < 0)
-		G_fatal_error(_("Cannot read cover raster row [%d]"), row);
-	}
+	Rast_get_row(theState->fd_old, theState->buf.data.v,
+		     row, theState->buf.type);
+	if (theState->docover == 1)
+	    Rast_get_row(theState->fd_cold, theState->cover.data.v,
+			 row, theState->cover.type);
+
 	for (col = 0; col < ncols; col++) {
 	    if (is_null_value(theState->buf, col)) {
 		theState->nNulls++;

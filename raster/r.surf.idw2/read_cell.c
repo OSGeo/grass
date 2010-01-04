@@ -30,8 +30,7 @@ int read_cell(char *name)
     for (row = 0; row < window.rows; row++) {
 	G_percent(row, window.rows, 1);
 	north += window.ns_res;
-	if (Rast_get_c_row_nomask(fd, cell, row) < 0)
-	    exit(1);
+	Rast_get_c_row_nomask(fd, cell, row);
 	for (col = 0; col < window.cols; col++)
 	    if ((z = cell[col]))
 		newpoint(z, window.west + (col + .5) * window.ew_res, north);
