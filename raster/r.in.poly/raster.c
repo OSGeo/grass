@@ -186,8 +186,7 @@ int output_raster(int fd)
 	}
 
 	G_percent(i, page.rows, 2);
-	if (Rast_put_row(fd, cell, CELL_TYPE) < 0)
-	    return ERROR;
+	Rast_put_row(fd, cell, CELL_TYPE);
     }
     G_percent(i, page.rows, 2);
     return configure_plot();

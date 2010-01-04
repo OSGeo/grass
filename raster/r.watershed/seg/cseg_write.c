@@ -3,8 +3,6 @@
 #include <grass/segment.h>
 #include "cseg.h"
 
-static char *me = "cseg_write_cell";
-
 int cseg_write_cellfile(CSEG * cseg, char *map_name)
 {
     int map_fd;
@@ -18,13 +16,7 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 1);
 	segment_get_row(&(cseg->seg), buffer, row);
-	if (Rast_put_row(map_fd, buffer, CELL_TYPE) < 0) {
-	    G_free(buffer);
-	    Rast_unopen(map_fd);
-	    G_warning("%s(): unable to write new map layer [%s], row %d",
-		      me, map_name, row);
-	    return -2;
-	}
+	Rast_put_row(map_fd, buffer, CELL_TYPE);
     }
     G_percent(row, nrows, 1);    /* finish it */
     G_free(buffer);

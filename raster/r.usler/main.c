@@ -126,9 +126,7 @@ int main(int argc, char *argv[])
 		outrast[col] = d ;
 	    }
 	}
-	if (Rast_put_d_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
-			  result, row);
+	Rast_put_d_row(outfd, outrast);
     }
     G_free(inrast_annual_pmm);
     Rast_close(infd_annual_pmm);

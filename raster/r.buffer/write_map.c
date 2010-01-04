@@ -69,9 +69,7 @@ int write_output_map(char *output, int offset)
 	    if (cell[k] == 0)
 		Rast_set_null_value(&cell[k], 1, CELL_TYPE);
 
-	if (Rast_put_row(fd_out, cell, CELL_TYPE) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"), output,
-			  row);
+	Rast_put_row(fd_out, cell, CELL_TYPE);
     }
 
     G_percent(row, window.rows, 2);

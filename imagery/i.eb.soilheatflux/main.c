@@ -153,8 +153,7 @@ int main(int argc, char *argv[])
 		outrast[col] = d;
 	    }
 	}
-	if (Rast_put_d_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s>"), result);
+	Rast_put_d_row(outfd, outrast);
     }
     G_free(inrast_albedo);
     G_free(inrast_ndvi);

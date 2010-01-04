@@ -438,9 +438,7 @@ int main(int argc, char **argv)
 	    ycoord1 = ycoord2;
 	}
 
-	if (Rast_put_row(fdo, obuffer, cell_type) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"), mapname,
-			  row);
+	Rast_put_row(fdo, obuffer, cell_type);
 
 	xcoord1 = xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
 	ycoord2 -= outcellhd.ns_res;

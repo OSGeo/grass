@@ -376,9 +376,7 @@ int main(int argc, char *argv[])
 	    }
 	    ((DCELL *) outrast)[col] = de;
 	}
-	if (Rast_put_row(outfd, outrast, out_data_type) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
-			  result, row);
+	Rast_put_row(outfd, outrast, out_data_type);
     }
     for (i = 1; i <= nfiles; i++) {
 	G_free(inrast[i]);

@@ -318,9 +318,7 @@ int main(int argc, char *argv[])
 	    outrast[col] = c;
 	}
 
-	if (Rast_put_c_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
-			  output->answer, row);
+	Rast_put_c_row(outfd, outrast);
     }
 
     G_free(inrast);

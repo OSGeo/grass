@@ -113,8 +113,7 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	Rast_get_row(infd, rast, row, data_type);
-	if (Rast_put_row(outfd, rast, out_type) < 0)
-	    G_fatal_error(_("Error writing row %d"), row);
+	Rast_put_row(outfd, rast, out_type);
 	Rast_mark_cats(rast, ncols, &cats, data_type);
     }
 

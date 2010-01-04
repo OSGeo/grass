@@ -328,21 +328,14 @@ int main(int argc, char *argv[])
 		/* The early (size/2) samples take value from (size/2+1)'th sample */
 		if (row == 0)
 		    for (j = 0; j < (size / 2); j++)
-			if (Rast_put_row(outfd, outrast, out_data_type) <
-			    0)
-			    G_fatal_error(_("Failed writing raster map <%s> row %d"),
-					  result, row);
+			Rast_put_row(outfd, outrast, out_data_type);
 
-		if (Rast_put_row(outfd, outrast, out_data_type) < 0)
-		    G_fatal_error(_("Failed writing raster map <%s> row %d"),
-				  result, row);
+		Rast_put_row(outfd, outrast, out_data_type);
 	    }
 	    /* The last few (size/2) samples take value from nrows-(size/2+1)'th sample */
 	    if ((row >= nrows - (size - 1)) && (row < nrows))
 		for (j = 0; j < (size / 2); j++)
-		    if (Rast_put_row(outfd, outrast, out_data_type) < 0)
-			G_fatal_error(_("Failed writing raster map <%s> row %d"),
-				      result, row);
+		    Rast_put_row(outfd, outrast, out_data_type);
 
 	    Rast_close(outfd);
 	    strcpy(mapname, filename);

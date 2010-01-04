@@ -138,8 +138,7 @@ int main(int argc, char *argv[])
 	        d = latitude;
 	    outrast1[col] = d;
 	}
-	if (Rast_put_d_row(outfd1, outrast1) < 0)
-	    G_fatal_error(_("Cannot write to output raster file"));
+	Rast_put_d_row(outfd1, outrast1);
     }
     G_free(inrast);
     Rast_close(infd);

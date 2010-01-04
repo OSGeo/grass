@@ -171,9 +171,7 @@ int main(int argc, char *argv[])
 
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
-	    if (Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0) <
-		0)
-		G_fatal_error(_("Error writing null row %d"), row);
+	    Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0);
 	}
 	G_percent(row, cellhd.rows, 1);
 	close(null_fd);
@@ -328,11 +326,7 @@ int doit(const char *name, const char *mapset, int change_null, RASTER_MAP_TYPE 
 
 	mask_raster_array(rast, cellhd.cols, change_null, map_type);
 
-	if (Rast_put_row(new, rast, map_type) < 0) {
-	    G_warning(_("Failed writing raster map <%s> row %d"),
-		      name, row);
-	    break;
-	}
+	Rast_put_row(new, rast, map_type);
     }
     G_percent(row, cellhd.rows, 1);
     G_free(rast);
