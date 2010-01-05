@@ -558,6 +558,38 @@ of the map's title <!-- from hist file -->
 and the location's description.<!-- PERMANENT/MYNAME -->
 The text will be centered on the page above the map.
 The default text color is black.
+<P>
+If the <EM>file</EM> sub-instruction is given the header will consist
+of the text in the text file specified, with some special formatting keys:
+
+<ul>
+<li><tt>%%</tt>  - a literal %
+<li><tt>%n</tt>  - ? newline ?
+<li><tt>%_</tt>  - horizontal bar
+<li><tt>%c</tt>  - "&lt;raster name&gt; in mapset &lt;mapset name&gt;"
+<li><tt>%d</tt>  - today's date
+<li><tt>%l</tt>  - location name
+<li><tt>%L</tt>  - Location's text description
+<li><tt>%m</tt>  - mapset name
+<li><tt>%u</tt>  - user name
+<li><tt>%x</tt>  - mask info
+<li><tt>%-</tt>  - advance to this character column number (see example below)
+
+</ul>
+
+Example header file:
+<div class="code"><pre>
+%_
+LOCATION: %-27l  DATE: %d
+MAPSET:   %-27m  USER: %u
+
+RASTER MAP: %c
+MASK:     %x
+%_
+Produced by: US Army CERL, Champaign Illinois
+Software:    GRASS
+%_
+</pre></div>
 
 <P>
 
