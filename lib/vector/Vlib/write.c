@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2010 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -79,12 +79,12 @@ static off_t (*Write_line_array[][3]) () = {
 
 static int (*Vect_rewrite_line_array[][3]) () = {
     {
-    rewrite_dummy, rewrite_dummy, V2_rewrite_line_nat}
+    rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
 #ifdef HAVE_OGR
     , {
-    rewrite_dummy, rewrite_dummy, rewrite_dummy}
+    rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
     , {
-    rewrite_dummy, rewrite_dummy, rewrite_dummy}
+    rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_ogr}
 #else
     , {
     rewrite_dummy, format, format}
