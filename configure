@@ -14129,7 +14129,7 @@ fi
   # check for available OSX archs in Python, assume framework
   if test -n "$MACOSX_ARCHS" ; then
     pylib=`"$PY_CONFIG" --prefix`/Python
-    pylibinfo=`file "$pylib"`
+    pylibinfo=`file -L "$pylib"`
     for a in i386 ppc x86_64 ppc64
     do
       # add only if in MACOSX_ARCHS
