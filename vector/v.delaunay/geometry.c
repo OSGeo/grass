@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include "defs.h"
 #include "data_types.h"
 #include "memory.h"
 #include "geometry.h"
@@ -16,7 +17,7 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
 		  struct edge *l_ccw_r, struct vertex *u,
 		  struct edge **l_tangent);
 
-void divide(struct vertex *sites_sorted[], unsigned int l, unsigned int r,
+void divide(unsigned int l, unsigned int r,
 	    struct edge **l_ccw, struct edge **r_cw)
 {
 
@@ -30,26 +31,25 @@ void divide(struct vertex *sites_sorted[], unsigned int l, unsigned int r,
     if (n == 2) {
 	/* Base case #1 - 2 sites in region. Construct an edge from 
 	   two sites in the region       */
-	*l_ccw = *r_cw = create_edge(sites_sorted[l], sites_sorted[r]);
+	*l_ccw = *r_cw = create_edge(&(sites[l]), &(sites[r]));
     }
     else if (n == 3) {
 	/* Base case #2 - 3 sites. Construct a triangle or two edges */
-	a = create_edge(sites_sorted[l], sites_sorted[l + 1]);
-	b = create_edge(sites_sorted[l + 1], sites_sorted[r]);
-	splice(a, b, sites_sorted[l + 1]);
+	a = create_edge(&(sites[l]), &(sites[l + 1]));
+	b = create_edge(&(sites[l + 1]), &(sites[r]));
+	splice(a, b, &(sites[l + 1]));
 	c_p =
-	    CROSS_PRODUCT_3P(sites_sorted[l], sites_sorted[l + 1],
-			     sites_sorted[r]);
+	    CROSS_PRODUCT_3P(&(sites[l]), &(sites[l + 1]), &(sites[r]));
 
 	if (c_p > 0.0) {
 	    /* Create a triangle */
-	    c = join(a, sites_sorted[l], b, sites_sorted[r], right);
+	    c = join(a, &(sites[l]), b, &(sites[r]), RIGHT);
 	    *l_ccw = a;
 	    *r_cw = b;
 	}
 	else if (c_p < 0.0) {
 	    /* Create a triangle */
-	    c = join(a, sites_sorted[l], b, sites_sorted[r], left);
+	    c = join(a, &(sites[l]), b, &(sites[r]), LEFT);
 	    *l_ccw = c;
 	    *r_cw = c;
 	}
@@ -67,18 +67,18 @@ void divide(struct vertex *sites_sorted[], unsigned int l, unsigned int r,
 	split = (l + r) / 2;
 
 	/* Divide into two halves */
-	divide(sites_sorted, l, split, &l_ccw_l, &r_cw_l);
-	divide(sites_sorted, split + 1, r, &l_ccw_r, &r_cw_r);
+	divide(l, split, &l_ccw_l, &r_cw_l);
+	divide(split + 1, r, &l_ccw_r, &r_cw_r);
 
 	/* Merge the two triangulations */
-	merge(r_cw_l, sites_sorted[split], l_ccw_r, sites_sorted[split + 1],
+	merge(r_cw_l, &(sites[split]), l_ccw_r, &(sites[split + 1]),
 	      &l_tangent);
 
 	/* The lower tangent added by merge may have invalidated 
 	   l_ccw_l or r_cw_r. Update them if necessary. */
-	if (ORG(l_tangent) == sites_sorted[l])
+	if (ORG(l_tangent) == &(sites[l]))
 	    l_ccw_l = l_tangent;
-	if (DEST(l_tangent) == sites_sorted[r])
+	if (DEST(l_tangent) == &(sites[r]))
 	    r_cw_r = l_tangent;
 
 	/* Update leftmost ccw edge and rightmost cw edge */
@@ -99,7 +99,7 @@ static void find_lowest_cross_edge(struct edge *r_cw_l, struct vertex *s,
 {
     struct edge *l, *r;
     struct vertex *o_l, *o_r, *d_l, *d_r;
-    boolean ready;
+    unsigned char ready;
 
     l = r_cw_l;
     r = l_ccw_r;
@@ -109,7 +109,7 @@ static void find_lowest_cross_edge(struct edge *r_cw_l, struct vertex *s,
     d_r = OTHER_VERTEX(r, u);
     ready = FALSE;
 
-    while (!ready)
+    while (ready == FALSE)
 	/* left_of */
 	if (LEFT_OF(o_l, d_l, o_r)) {
 	    l = PREV(l, d_l);
@@ -140,24 +140,24 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
 {
     struct edge *base, *l_cand, *r_cand;
     struct vertex *org_base, *dest_base;
-    long double u_l_c_o_b, v_l_c_o_b, u_l_c_d_b, v_l_c_d_b;
-    long double u_r_c_o_b, v_r_c_o_b, u_r_c_d_b, v_r_c_d_b;
+    double u_l_c_o_b, v_l_c_o_b, u_l_c_d_b, v_l_c_d_b;
+    double u_r_c_o_b, v_r_c_o_b, u_r_c_d_b, v_r_c_d_b;
 
     /* cross product */
-    long double c_p_l_cand, c_p_r_cand;
+    double c_p_l_cand, c_p_r_cand;
 
     /* dot product */
-    long double d_p_l_cand, d_p_r_cand;
-    boolean above_l_cand, above_r_cand, above_next, above_prev;
+    double d_p_l_cand, d_p_r_cand;
+    unsigned char above_l_cand, above_r_cand, above_next, above_prev;
     struct vertex *dest_l_cand, *dest_r_cand;
-    long double cot_l_cand, cot_r_cand;
+    double cot_l_cand, cot_r_cand;
     struct edge *l_lower, *r_lower;
     struct vertex *org_r_lower, *org_l_lower;
 
     /* Create first cross edge by joining lower common tangent */
     find_lowest_cross_edge(r_cw_l, s, l_ccw_r, u, &l_lower, &org_l_lower,
 			   &r_lower, &org_r_lower);
-    base = join(l_lower, org_l_lower, r_lower, org_r_lower, right);
+    base = join(l_lower, org_l_lower, r_lower, org_r_lower, RIGHT);
     org_base = org_l_lower;
     dest_base = org_r_lower;
 
@@ -275,12 +275,12 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
 	if (!above_l_cand ||
 	    (above_l_cand && above_r_cand && cot_r_cand < cot_l_cand)) {
 	    /* Connect to the right */
-	    base = join(base, org_base, r_cand, dest_r_cand, right);
+	    base = join(base, org_base, r_cand, dest_r_cand, RIGHT);
 	    dest_base = dest_r_cand;
 	}
 	else {
 	    /* Connect to the left */
-	    base = join(l_cand, dest_l_cand, base, dest_base, right);
+	    base = join(l_cand, dest_l_cand, base, dest_base, RIGHT);
 	    org_base = dest_l_cand;
 	}
     }
