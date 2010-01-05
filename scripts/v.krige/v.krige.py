@@ -7,7 +7,7 @@ AUTHOR(S): Anne Ghisla <a.ghisla AT gmail.com>
 
 PURPOSE:   Performs ordinary or block kriging
 
-DEPENDS:   R 2.x, packages gstat and spgrass6, optional: automap
+DEPENDS:   R 2.x, packages gstat, maptools and spgrass6, optional: automap
 
 COPYRIGHT: (C) 2009 by the GRASS Development Team
 
@@ -152,21 +152,36 @@ class Controller():
     """ Executes analysis. For the moment, only with gstat functions."""
     
     def ImportMap(self, map, column):
-        """ Adds x,y columns to the GRASS map and then imports it in R.
+        """ Imports GRASS map as SpatialPointsDataFrame and adds x/y columns to attribute table.
         Checks for NULL values in the provided column and exits if they are present."""
-        #@NOTE: it alters original data. Is it correct? Shall I remove those columns
-        # if they were absent from original data?
-        cols = grass.vector_columns(map = map, layer = 1)
-        if not cols.has_key('x') and not cols.has_key('y'):
-            grass.run_command('v.db.addcolumn', map = map,
-                              columns = 'x double precision, y double precision')
-            grass.run_command('v.to.db', map = map, option = 'coor', col = 'x,y')
-        nulls = int(grass.parse_command('v.univar', map = map, column = column, type = 'point', \
-                                            parse = (grass.parse_key_val, \
-                                     {'sep':': '}))['number of NULL attributes'])
+
+        #@NOTE: new way with R - as it doesn't alter original data
+        Rpointmap = robjects.r.readVECT6(map, type =  'point')
+        # checks if x,y columns are present in dataframe. If they do are present, but with different names,
+        # they'll be duplicated.
+        if "x" not in robjects.r.names(Rpointmap): 
+            # extract coordinates with S4 method
+            coordinatesPreDF = robjects.r['as.data.frame'](robjects.r.coordinates(Rpointmap))
+            coordinatesDF = robjects.r['data.frame'](x = coordinatesPreDF.r['coords.x1'][0],
+                                                     y = coordinatesPreDF.r['coords.x2'][0])
+            # match coordinates with data slot of SpatialPointsDataFrame - maptools function
+            # match is done on row.names
+            Rpointmap = robjects.r.spCbind(Rpointmap, coordinatesDF)
+            
+        # GRASS checks for null values in the chosen column. R can hardly handle column as a variable,
+        # looks for a hardcoded string.
+        cols = grass.vector_columns(map=map, layer=1)
+        nulls = int(grass.parse_command('v.univar',
+                                        map=map,
+                                        column=column,
+                                        type='point',
+                                        parse = (grass.parse_key_val,
+                                                 {'sep':': '}
+                                                 )
+                                        )['number of NULL attributes'])
         if nulls > 0: 
             grass.fatal(_("%d NULL value(s) in the selected column - unable to perform kriging.") % nulls)
-        return robjects.r.readVECT6(map, type =  'point')
+        return Rpointmap
     
     def CreateGrid(self, inputdata):
         Grid = robjects.r.gmeta2grd()
@@ -853,7 +868,7 @@ def importR():
         
     # R packages check.
     # @FIXME: it leaves a Rtmpxxxx folder into the make tempfolder and causes make complain. [markus]
-    for each in ["gstat", "spgrass6"]:
+    for each in ["gstat", "spgrass6", "maptools"]:
         if not robjects.r.require(each, quietly = True)[0]:
             sys.exit(_("R package % is missing. Install it and re-run v.krige.") % each)
     
