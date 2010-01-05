@@ -27,7 +27,7 @@ static int write_attributes(int, const struct field_info *,
 			    OGRLayerH, OGRFeatureH);
 
 /*!
-  \brief Writes feature on level 1 (OGR format)
+  \brief Writes feature on level 1
 
   \param Map pointer to Map_info structure
   \param type feature type
@@ -117,7 +117,7 @@ off_t V1_write_line_ogr(struct Map_info *Map,
 }
 
 /*!
-  \brief Writes feature to 'coor' file (topology level)
+  \brief Writes feature (topology level)
   
   \param Map pointer to Map_info structure
   \param type feature type
@@ -174,13 +174,64 @@ int V2_delete_line_ogr(struct Map_info *Map, int line)
     return V2__delete_line(Map, line, V1_delete_line_ogr);
 }
 
+/*!
+  \brief Rewrites feature at the given offset (level 1)
+  
+  \param Map pointer to Map_info structure
+  \param offset feature offset
+  \param type feature type
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return feature offset (rewriten feature)
+  \return -1 on error
+*/
+off_t V1_rewrite_line_ogr(struct Map_info *Map,
+			  off_t offset,
+			  int type,
+			  const struct line_pnts *points, const struct line_cats *cats)
+{
+    if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
+	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
+	return -1;
+    }
+
+    /* delete old */
+    V1_delete_line_ogr(Map, offset);
+
+    return V1_write_line_ogr(Map, type, points, cats);
+}
+
+/*!
+  \brief Rewrites feature (topology level)
+  
+  \param Map pointer to Map_info structure
+  \param line feature id
+  \param type feature type
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return feature offset (rewriten feature)
+  \return -1 on error
+*/
+int V2_rewrite_line_ogr(struct Map_info *Map,
+			int line,
+			int type,
+			const struct line_pnts *points, const struct line_cats *cats)
+{
+    /* delete old */
+    V2_delete_line_ogr(Map, line);
+
+    return V2_write_line_ogr(Map, type, points, cats);
+}
+
 int write_attributes(int cat, const struct field_info *Fi,
 		     OGRLayerH Ogr_layer, OGRFeatureH Ogr_feature)
 {
     int j, ogrfieldnum;
     char buf[2000];
     int ncol, colsqltype, colctype, more;
-    char *fidcol;
+    const char *fidcol;
     dbDriver *Driver;
     dbTable *Table;
     dbString dbstring;

@@ -77,7 +77,7 @@ off_t V2_write_line_nat(struct Map_info *Map,
 }
 
 /*!
-  \brief Rewrites feature at the given offset.
+  \brief Rewrites feature at the given offset (level 1)
   
   If the number of points or cats differs from the original one or
   the type is changed: GV_POINTS -> GV_LINES or GV_LINES ->
