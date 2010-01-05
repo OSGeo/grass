@@ -312,12 +312,14 @@ int main(int argc, char **argv)
 	size = atof(opt.size->answer) / 100.0 * (win.b - win.t);
 #endif
 
-    fg_color = D_parse_color(opt.fgcolor->answer, 1);
+    fg_color = D_parse_color(opt.fgcolor->answer, TRUE);
     if (opt.bgcolor->answer) {
-       do_background = 1;
-       bg_color = D_parse_color(opt.bgcolor->answer, 1);
+	do_background = 1;
+	bg_color = D_parse_color(opt.bgcolor->answer, TRUE);
+	if (bg_color == 0) /* ie color="none" */
+	    do_background = 0;
     } else
-       do_background = 0;
+	do_background = 0;
     set_color(opt.fgcolor->answer);
 
     orig_x = orig_y = 0;
