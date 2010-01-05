@@ -179,9 +179,11 @@ class GMFrame(wx.Frame):
         # -> OnSize() -> UpdateMap()
         if self.curr_page and not self.curr_page.maptree.mapdisplay.IsShown():
             self.curr_page.maptree.mapdisplay.Show()
-
+        
         # redirect stderr to log area    
         self.goutput.Redirect()
+        # fix goutput's pane size
+        self.goutput.SetSashPosition(int(self.GetSize()[1] * .45))
         
         # start with layer manager on top
         self.curr_page.maptree.mapdisplay.Raise()

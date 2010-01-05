@@ -851,6 +851,9 @@ class mainFrame(wx.Frame):
         if width > 640: width = 640
         if height > 480: height = 480
         self.SetSize((width,height))
+        
+        # fix goutput's pane size
+        self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
 
     def updateValuesHook(self):
         """!Update status bar data"""

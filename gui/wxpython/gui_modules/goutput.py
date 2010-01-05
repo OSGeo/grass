@@ -283,10 +283,9 @@ class GMConsole(wx.SplitterWindow):
         # split window
         if self.parent.GetName() == 'LayerManager':
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -75)
-            self.SetMinimumPaneSize(100)
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -10)
-            self.SetMinimumPaneSize(45)
+        self.SetMinimumPaneSize(35)
         self.Fit()
         
         # layout
