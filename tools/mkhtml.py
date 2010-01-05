@@ -40,7 +40,7 @@ header_tmpl = string.Template(\
 footer_tmpl = string.Template(\
 """<hr>
 <p><a href="index.html">Main index</a> - <a href="$INDEXNAME.html">$INDEXNAME index</a> - <a href="full_index.html">Full index</a></p>
-<p>&copy; 2003-2009 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+<p>&copy; 2003-2010 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 </body>
 </html>
 """)

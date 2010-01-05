@@ -57,7 +57,7 @@ following rules:
  *               be used. Note that most linked list functionality (add,
  *               remove, get) is supported, but there is no sorting
  *               functionality.
- * COPYRIGHT:    (C) 2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the COPYING file that comes with GRASS
