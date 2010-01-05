@@ -1,12 +1,13 @@
-#include  "data_types.h"
-#include  "memory.h"
-#include  "edge.h"
+#include <stdlib.h>
+#include "data_types.h"
+#include "memory.h"
+#include "edge.h"
 
 /* 
  *  Construct an edge from vertices v1, v2 and add it to rings of edges e1, e2
  */
 struct edge *join(struct edge *e1, struct vertex *v1,
-		  struct edge *e2, struct vertex *v2, side s)
+		  struct edge *e2, struct vertex *v2, int side)
 {
 
     struct edge *new_edge;
@@ -16,7 +17,7 @@ struct edge *join(struct edge *e1, struct vertex *v1,
 
     new_edge = create_edge(v1, v2);
 
-    if (s == left) {
+    if (side == LEFT) {
 	if (ORG(e1) == v1)
 	    splice(OPREV(e1), new_edge, v1);
 	else
@@ -118,9 +119,9 @@ struct edge *create_edge(struct vertex *v1, struct vertex *v2)
 	new_edge;
     ORG(new_edge) = v1;
     DEST(new_edge) = v2;
-    if (v1->entry_pt == MY_NULL)
+    if (v1->entry_pt == NULL)
 	v1->entry_pt = new_edge;
-    if (v2->entry_pt == MY_NULL)
+    if (v2->entry_pt == NULL)
 	v2->entry_pt = new_edge;
     return new_edge;
 }

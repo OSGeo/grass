@@ -8,14 +8,17 @@
 #define DNEXT(e) ((e)->dnext)
 #define DPREV(e) ((e)->dprev)
 
-#define OTHER_VERTEX(e,p) (ORG(e) == p ? DEST(e) : ORG(e))
-#define NEXT(e,p)         (ORG(e) == p ? ONEXT(e) : DNEXT(e))
-#define PREV(e,p)         (ORG(e) == p ? OPREV(e) : DPREV(e))
+#define OTHER_VERTEX(e,p) (ORG(e) == (p) ? DEST(e) : ORG(e))
+#define NEXT(e,p)         (ORG(e) == (p) ? ONEXT(e) : DNEXT(e))
+#define PREV(e,p)         (ORG(e) == (p) ? OPREV(e) : DPREV(e))
 
-#define SAME_EDGE(e1,e2) (e1 == e2)
+#define SAME_EDGE(e1,e2) ((e1) == (e2))
+
+#define LEFT  0
+#define RIGHT 1
 
 struct edge *join(struct edge *e1, struct vertex *v1,
-		  struct edge *e2, struct vertex *v2, side s);
+		  struct edge *e2, struct vertex *v2, int side);
 void delete_edge(struct edge *e);
 void splice(struct edge *a, struct edge *b, struct vertex *v);
 struct edge *create_edge(struct vertex *v1, struct vertex *v2);

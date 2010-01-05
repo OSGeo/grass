@@ -5,17 +5,38 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+#include "defs.h"
 #include "data_types.h"
 #include "memory.h"
 #include "edge.h"
-#include "geom_primitives.h"
 
-void output_edges(struct vertex *sites_sorted[], unsigned int n, int mode3d,
-		  int Type, struct Map_info map_out)
+/* compare first according to x-coordinate, if equal then y-coordinate */
+int cmp(const void *a, const void *b)
+{
+    struct vertex *p1 = (struct vertex *)a;
+    struct vertex *p2 = (struct vertex *)b;
+
+    if (p1->x < p2->x)
+	return 1;
+    else if (p1->x > p2->x)
+	return -1;
+    else {
+	if (p1->y < p2->y)
+	    return 1;
+	else if (p1->y > p2->y)
+	    return -1;
+    }
+    
+    return 0;
+}
+
+void output_edges(unsigned int n, int mode3d, int Type,
+		  struct Map_info map_out)
 {
     struct edge *e_start, *e;
     struct vertex *u, *v;
     unsigned int i;
+    double x1, y1, z1, x2, y2, z2;
 
     static struct line_pnts *Points = NULL;
     static struct line_cats *Cats = NULL;
@@ -24,33 +45,26 @@ void output_edges(struct vertex *sites_sorted[], unsigned int n, int mode3d,
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
     }
-    double x1, y1, z1, x2, y2, z2;
 
-    G_message(_("Creating edges..."));
+    G_message(_("Writing edges..."));
     for (i = 0; i < n; i++) {
 	G_percent(i, n, 2);
-	u = sites_sorted[i];
+	u = &(sites[i]);
 	e_start = e = u->entry_pt;
 	do {
 	    v = OTHER_VERTEX(e, u);
-	    if (u < v) {
-		x1 = sites[u - sites].x;
-		y1 = sites[u - sites].y;
-		x2 = sites[v - sites].x;
-		y2 = sites[v - sites].y;
+	    if (cmp(u, v) == 1) {
+		x1 = u->x;
+		y1 = u->y;
+		z1 = u->z;
+		x2 = v->x;
+		y2 = v->y;
+		z2 = v->z;
 
 		Vect_reset_line(Points);
 
-		if (mode3d) {
-		    z1 = sites[u - sites].z;
-		    z2 = sites[v - sites].z;
-		    Vect_append_point(Points, x1, y1, z1);
-		    Vect_append_point(Points, x2, y2, z2);
-		}
-		else {
-		    Vect_append_point(Points, x1, y1, 0.0);
-		    Vect_append_point(Points, x2, y2, 0.0);
-		}
+		Vect_append_point(Points, x1, y1, z1);
+		Vect_append_point(Points, x2, y2, z2);
 		Vect_write_line(&map_out, Type, Points, Cats);
 	    }
 	    e = NEXT(e, u);
@@ -61,7 +75,7 @@ void output_edges(struct vertex *sites_sorted[], unsigned int n, int mode3d,
 
 /* Print the ring of triangles about each vertex. */
 
-void output_triangles(struct vertex *sites_sorted[], unsigned int n,
+void output_triangles(unsigned int n,
 		      int mode3d, int Type, struct Map_info map_out)
 {
     struct edge *e_start, *e, *next;
@@ -75,63 +89,45 @@ void output_triangles(struct vertex *sites_sorted[], unsigned int n,
     double x1, y1, z1, x2, y2, z2, x3, y3, z3;
 
     for (i = 0; i < n; i++) {
-	u = sites_sorted[i];
+	u = &(sites[i]);
 	e_start = e = u->entry_pt;
 	do {
 	    v = OTHER_VERTEX(e, u);
-	    if (u < v) {
+	    if (cmp(u, v) == 1) {
 		next = NEXT(e, u);
 		w = OTHER_VERTEX(next, u);
-		if (u < w)
+		if (cmp(u, w) == 1)
 		    if (SAME_EDGE(NEXT(next, w), PREV(e, v))) {
 			/* Triangle. */
-			if (v > w) {
+			if (cmp(w, v) == 1) {
 			    temp = v;
 			    v = w;
 			    w = temp;
 			}
-			x1 = sites[u - sites].x;
-			y1 = sites[u - sites].y;
-			x2 = sites[v - sites].x;
-			y2 = sites[v - sites].y;
-			x3 = sites[w - sites].x;
-			y3 = sites[w - sites].y;
+			x1 = u->x;
+			y1 = u->y;
+			x2 = v->x;
+			y2 = v->y;
+			x3 = w->x;
+			y3 = w->y;
+			z1 = u->z;
+			z2 = v->z;
+			z3 = w->z;
 
-			if (mode3d) {
-			    z1 = sites[u - sites].z;
-			    z2 = sites[v - sites].z;
-			    z3 = sites[w - sites].z;
-			    Vect_reset_line(Points);
-			    Vect_append_point(Points, x1, y1, z1);
-			    Vect_append_point(Points, x2, y2, z2);
-			    Vect_write_line(&map_out, Type, Points, Cats);
+			Vect_reset_line(Points);
+			Vect_append_point(Points, x1, y1, z1);
+			Vect_append_point(Points, x2, y2, z2);
+			Vect_write_line(&map_out, Type, Points, Cats);
 
-			    Vect_reset_line(Points);
-			    Vect_append_point(Points, x2, y2, z2);
-			    Vect_append_point(Points, x3, y3, z3);
-			    Vect_write_line(&map_out, Type, Points, Cats);
+			Vect_reset_line(Points);
+			Vect_append_point(Points, x2, y2, z2);
+			Vect_append_point(Points, x3, y3, z3);
+			Vect_write_line(&map_out, Type, Points, Cats);
 
-			    Vect_reset_line(Points);
-			    Vect_append_point(Points, x3, y3, z3);
-			    Vect_append_point(Points, x1, y1, z1);
-			    Vect_write_line(&map_out, Type, Points, Cats);
-			}
-			else {
-			    Vect_reset_line(Points);
-			    Vect_append_point(Points, x1, y1, 0.0);
-			    Vect_append_point(Points, x2, y2, 0.0);
-			    Vect_write_line(&map_out, Type, Points, Cats);
-
-			    Vect_reset_line(Points);
-			    Vect_append_point(Points, x2, y2, 0.0);
-			    Vect_append_point(Points, x3, y3, 0.0);
-			    Vect_write_line(&map_out, Type, Points, Cats);
-
-			    Vect_reset_line(Points);
-			    Vect_append_point(Points, x3, y3, 0.0);
-			    Vect_append_point(Points, x1, y1, 0.0);
-			    Vect_write_line(&map_out, Type, Points, Cats);
-			}
+			Vect_reset_line(Points);
+			Vect_append_point(Points, x3, y3, z3);
+			Vect_append_point(Points, x1, y1, z1);
+			Vect_write_line(&map_out, Type, Points, Cats);
 		    }
 	    }
 	    /* Next edge around u. */
@@ -140,26 +136,22 @@ void output_triangles(struct vertex *sites_sorted[], unsigned int n,
     }
 }
 
-void remove_duplicates(struct vertex *list[], unsigned int *size)
+void remove_duplicates(unsigned int *size)
 {
-    int n = *size - 1;
-    int left = 0;
-    int right = 1;
-    int shift = 0;
-    int empty = 0;
+    unsigned int n = *size;
+    unsigned int prev = 0;
+    unsigned int next;
 
-    if (n > 0)
-	for (; right < n; left++, right++)
-	    if (list[left]->x == list[right]->x &&
-		list[left]->y == list[right]->y) {
-		if (shift == 0) {
-		    shift = 1;
-		    empty = right;
-		}
-		(*size)--;
-	    }
-	    else if (shift == 1)
-		list[empty++] = list[right];
+    if (n > 0) {
+	for (next = 1; next < n; next++) {
+	    if (sites[prev].x != sites[next].x ||
+		sites[prev].y != sites[next].y) {
+		sites[++prev].x = sites[next].x;
+		sites[prev].y = sites[next].y;
+	    }	
+	}
+	*size = prev + 1;
+    }
 }
 
 /* returns number of sites read */
@@ -200,12 +192,15 @@ int read_sites(int mode3d, int complete_map, struct Map_info* map_in,
 	    G_debug(3, "Points->z[0]: %f", Points->z[0]);
 	    sites[nsites].z = Points->z[0];
 	}
+	else {
+	    sites[nsites].z = 0.0;
+	}
 	/* Initialise entry edge vertices. */
-	sites[nsites].entry_pt = MY_NULL;
+	sites[nsites].entry_pt = NULL;
 
-	nsites += 1;
-	/* number 100 was arbitrarily chosen */
+	nsites++;
 #if 0
+	/* number 100 was arbitrarily chosen */
 	if (nsites == allocated && line != nlines){
 	    allocated += 100;
 	    realloc_sites(allocated);
