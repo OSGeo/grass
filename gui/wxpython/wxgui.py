@@ -149,7 +149,6 @@ class GMFrame(wx.Frame):
         self._auimgr.Update()
 
         wx.CallAfter(self.notebook.SetSelection, 0)
-        wx.CallAfter(self.goutput.cmd_prompt.SetFocus)
         
         # use default window layout ?
         if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
@@ -1454,7 +1453,7 @@ class GMFrame(wx.Frame):
     def OnKeyDown(self, event):
         """!Key pressed"""
         kc = event.GetKeyCode()
-        print kc
+        
         if event.ControlDown():
             if kc == wx.WXK_TAB:
                 # switch layer list / command output
