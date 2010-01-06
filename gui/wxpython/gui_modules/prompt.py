@@ -494,6 +494,33 @@ class GPrompt(object):
         self.cmdDesc = None
         self.cmdbuffer = self._readHistory()
         self.cmdindex = len(self.cmdbuffer)
+
+    def CheckKey(self, text, keywords):
+        """!Check if text is in keywords (unused)"""
+        found = 0
+        keys = text.split(',')
+        if len(keys) > 1: # -> multiple keys
+            for k in keys[:-1]:
+                k = k.strip()
+                for key in keywords: 
+                    if k == key: # full match
+                        found += 1
+                        break
+            k = keys[-1].strip()
+            for key in keywords:
+                if k in key: # partial match
+                    found +=1
+                    break
+        else:
+            for key in keywords:
+                if text in key: # partial match
+                    found +=1
+                    break
+        
+        if found == len(keys):
+            return True
+        
+        return False
         
     def _readHistory(self):
         """!Get list of commands from history file"""
@@ -610,33 +637,6 @@ class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
         self.Bind(wx.EVT_TEXT_ENTER, self.OnRunCmd)
         self.Bind(wx.EVT_TEXT,       self.OnUpdateStatusBar)
         
-    def __checkKey(self, text, keywords):
-        """!Check if text is in keywords (unused)"""
-        found = 0
-        keys = text.split(',')
-        if len(keys) > 1: # -> multiple keys
-            for k in keys[:-1]:
-                k = k.strip()
-                for key in keywords: 
-                    if k == key: # full match
-                        found += 1
-                        break
-            k = keys[-1].strip()
-            for key in keywords:
-                if k in key: # partial match
-                    found +=1
-                    break
-        else:
-            for key in keywords:
-                if text in key: # partial match
-                    found +=1
-                    break
-        
-        if found == len(keys):
-            return True
-        
-        return False
-    
     def OnCmdErase(self, event):
         """!Erase command prompt"""
         self.input.SetValue('')
