@@ -9,7 +9,7 @@ Classes:
  - GMStdout
  - GMStderr
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -242,7 +242,7 @@ class GMConsole(wx.SplitterWindow):
         ButtonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         OutputSizer.Add(item=self.cmd_output, proportion=1,
-                        flag=wx.EXPAND | wx.ALL, border=1)
+                        flag=wx.EXPAND | wx.ALL, border=3)
         OutputSizer.Add(item=self.console_progressbar, proportion=0,
                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
         
@@ -258,7 +258,7 @@ class GMConsole(wx.SplitterWindow):
         PromptSizer.Add(item=SearchSizer, proportion=0,
                         flag=wx.EXPAND | wx.ALL, border=1)
         PromptSizer.Add(item=self.cmd_prompt, proportion=1,
-                        flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=2)
+                        flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
         
         ButtonSizer.Add(item=self.btn_console_clear, proportion=0,
                         flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
