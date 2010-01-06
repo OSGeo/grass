@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <grass/gis.h>
 #include "sw_defs.h"
 
 int ntry, totalsearch;
@@ -7,10 +8,10 @@ int ELinitialize(void)
 {
     int i;
 
-    freeinit(&hfl, sizeof **ELhash);
+    freeinit(&hfl, sizeof(struct Halfedge));
     ELhashsize = 2 * sqrt_nsites;
-    ELhash = (struct Halfedge **)myalloc(sizeof *ELhash * ELhashsize);
-    for (i = 0; i < ELhashsize; i += 1)
+    ELhash = (struct Halfedge **)G_malloc(ELhashsize * sizeof(struct Halfedge *));
+    for (i = 0; i < ELhashsize; i++)
 	ELhash[i] = (struct Halfedge *)NULL;
     ELleftend = HEcreate((struct Edge *)NULL, 0);
     ELrightend = HEcreate((struct Edge *)NULL, 0);
@@ -62,7 +63,7 @@ struct Halfedge *ELgethash(int b)
 
     /* Hash table points to deleted half edge.  Patch as necessary. */
     ELhash[b] = (struct Halfedge *)NULL;
-    if ((he->ELrefcnt -= 1) == 0)
+    if (--(he->ELrefcnt) == 0)
 	makefree((struct Freenode *)he, &hfl);
     return ((struct Halfedge *)NULL);
 }
@@ -80,15 +81,15 @@ struct Halfedge *ELleftbnd(struct Point *p)
 	bucket = ELhashsize - 1;
     he = ELgethash(bucket);
     if (he == (struct Halfedge *)NULL) {
-	for (i = 1; 1; i += 1) {
+	for (i = 1; 1; i++) {
 	    if ((he = ELgethash(bucket - i)) != (struct Halfedge *)NULL)
 		break;
 	    if ((he = ELgethash(bucket + i)) != (struct Halfedge *)NULL)
 		break;
-	};
+	}
 	totalsearch += i;
-    };
-    ntry += 1;
+    }
+    ntry++;
     /* Now search linear list of halfedges for the corect one */
     if (he == ELleftend || (he != ELrightend && right_of(he, p))) {
 	do {
@@ -104,10 +105,10 @@ struct Halfedge *ELleftbnd(struct Point *p)
     /* Update hash table and reference counts */
     if (bucket > 0 && bucket < ELhashsize - 1) {
 	if (ELhash[bucket] != (struct Halfedge *)NULL)
-	    ELhash[bucket]->ELrefcnt -= 1;
+	    ELhash[bucket]->ELrefcnt--;
 	ELhash[bucket] = he;
-	ELhash[bucket]->ELrefcnt += 1;
-    };
+	ELhash[bucket]->ELrefcnt++;
+    }
     return (he);
 }
 

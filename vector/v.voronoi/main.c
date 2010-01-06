@@ -55,19 +55,18 @@ int cmp(void *a, void *b)
 {
     COOR *ca = (COOR *) a;
     COOR *cb = (COOR *) b;
-    double thresh = 1e-10;
     double ma, mb;
 
     /* calculate measure */
     ma = mb = 0.0;
 
-    if (fabs(ca->y - Box.S) < thresh) {	/* bottom */
+    if (fabs(ca->y - Box.S) < GRASS_EPSILON) {	/* bottom */
 	ma = ca->x - Box.W;
     }
-    else if (fabs(ca->x - Box.E) < thresh) {	/* right */
+    else if (fabs(ca->x - Box.E) < GRASS_EPSILON) {	/* right */
 	ma = (Box.E - Box.W) + (ca->y - Box.S);
     }
-    else if (fabs(ca->y - Box.N) < thresh) {	/* top */
+    else if (fabs(ca->y - Box.N) < GRASS_EPSILON) {	/* top */
 	ma = (Box.E - Box.W) + (Box.N - Box.S) + (Box.E - ca->x);
     }
     else {			/* left */
@@ -75,13 +74,13 @@ int cmp(void *a, void *b)
     }
 
 
-    if (fabs(cb->y - Box.S) < thresh) {	/* bottom */
+    if (fabs(cb->y - Box.S) < GRASS_EPSILON) {	/* bottom */
 	mb = cb->x - Box.W;
     }
-    else if (fabs(cb->x - Box.E) < thresh) {	/* right */
+    else if (fabs(cb->x - Box.E) < GRASS_EPSILON) {	/* right */
 	mb = (Box.E - Box.W) + (cb->y - Box.S);
     }
-    else if (fabs(cb->y - Box.N) < thresh) {	/* top */
+    else if (fabs(cb->y - Box.N) < GRASS_EPSILON) {	/* top */
 	mb = (Box.E - Box.W) + (Box.N - Box.S) + (Box.E - cb->x);
     }
     else {			/* left */
@@ -164,8 +163,9 @@ int main(int argc, char **argv)
     G_get_window(&Window);
     Vect_region_box(&Window, &Box);
 
-    freeinit(&sfl, sizeof *sites);
+    freeinit(&sfl, sizeof(struct Site));
 
+    G_message(_("Reading sites..."));
     readsites();
 
     siteidx = 0;
@@ -174,9 +174,11 @@ int main(int argc, char **argv)
     triangulate = 0;
     plot = 0;
     debug = 0;
+
+    G_message(_("Voronoi triangulation..."));
     voronoi(triangulate, nextone);
 
-    /* Close free ends by cyrrent region */
+    /* Close free ends by current region */
     Vect_build_partial(&Out, GV_BUILD_BASE);
 
     ncoor = 0;
@@ -249,11 +251,20 @@ int main(int argc, char **argv)
     }
 
     if (1) {
-	int line, nlines, type;
+	int line, nlines, type, ctype;
+
+	if (line_flag->answer)
+	    ctype = GV_POINT;
+	else
+	    ctype = GV_CENTROID;
 
 	nlines = Vect_get_num_lines(&In);
 
+	G_message(_("Writing sites to output..."));
+
 	for (line = 1; line <= nlines; line++) {
+
+	    G_percent(line, nlines, 2);
 
 	    type = Vect_read_line(&In, Points, Cats, line);
 	    if (!(type & GV_POINTS))
@@ -262,7 +273,7 @@ int main(int argc, char **argv)
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
 		continue;
 
-	    Vect_write_line(&Out, GV_CENTROID, Points, Cats);
+	    Vect_write_line(&Out, ctype, Points, Cats);
 
 
 	    for (i = 0; i < Cats->n_cats; i++) {
@@ -339,7 +350,6 @@ int main(int argc, char **argv)
 		Vect_map_add_dblink(&Out, OFi->number, OFi->name, OFi->table,
 				    IFi->key, OFi->database, OFi->driver);
 	    }
-	    G_done_msg(" ");
 	}
     }
 
@@ -350,5 +360,6 @@ int main(int argc, char **argv)
     Vect_build(&Out);
     Vect_close(&Out);
 
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }

@@ -146,7 +146,7 @@ int clip_line(struct Edge *e)
     else {
 	s1 = e->ep[0];
 	s2 = e->ep[1];
-    };
+    }
 
     if (e->a == 1.0) {
 	y1 = pymin;
@@ -167,19 +167,19 @@ int clip_line(struct Edge *e)
 	if (x1 > pxmax) {
 	    x1 = pxmax;
 	    y1 = (e->c - x1) / e->b;
-	};
+	}
 	if (x1 < pxmin) {
 	    x1 = pxmin;
 	    y1 = (e->c - x1) / e->b;
-	};
+	}
 	if (x2 > pxmax) {
 	    x2 = pxmax;
 	    y2 = (e->c - x2) / e->b;
-	};
+	}
 	if (x2 < pxmin) {
 	    x2 = pxmin;
 	    y2 = (e->c - x2) / e->b;
-	};
+	}
     }
     else {
 	x1 = pxmin;
@@ -200,20 +200,20 @@ int clip_line(struct Edge *e)
 	if (y1 > pymax) {
 	    y1 = pymax;
 	    x1 = (e->c - y1) / e->a;
-	};
+	}
 	if (y1 < pymin) {
 	    y1 = pymin;
 	    x1 = (e->c - y1) / e->a;
-	};
+	}
 	if (y2 > pymax) {
 	    y2 = pymax;
 	    x2 = (e->c - y2) / e->a;
-	};
+	}
 	if (y2 < pymin) {
 	    y2 = pymin;
 	    x2 = (e->c - y2) / e->a;
-	};
-    };
+	}
+    }
 
     line(x1, y1, x2, y2);
 
