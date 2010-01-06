@@ -303,8 +303,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_get_set_window(&cellhd) == -1)
-	exit(EXIT_FAILURE);
+    G_get_set_window(&cellhd);
 
     conv = G_database_units_to_meters_factor();
 

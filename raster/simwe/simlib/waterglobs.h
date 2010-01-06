@@ -11,6 +11,8 @@
 #define GLOBAL extern
 #endif
 
+#include <grass/raster.h>
+
 /*
 GLOBAL FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
     *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers;
