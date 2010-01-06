@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <grass/gis.h>
 #include "sw_defs.h"
 
 
@@ -15,10 +16,10 @@ int PQinsert(struct Halfedge *he, struct Site *v, double offset)
 	    (he->ystar == next->ystar && v->coord.x > next->vertex->coord.x)))
     {
 	last = next;
-    };
+    }
     he->PQnext = last->PQnext;
     last->PQnext = he;
-    PQcount += 1;
+    PQcount++;
     return 0;
 }
 
@@ -31,10 +32,10 @@ int PQdelete(struct Halfedge *he)
 	while (last->PQnext != he)
 	    last = last->PQnext;
 	last->PQnext = he->PQnext;
-	PQcount -= 1;
+	PQcount--;
 	deref(he->vertex);
 	he->vertex = (struct Site *)NULL;
-    };
+    }
     return 0;
 }
 
@@ -65,10 +66,11 @@ struct Point PQ_min(void)
     struct Point answer;
 
     while (PQhash[PQmin].PQnext == (struct Halfedge *)NULL) {
-	PQmin += 1;
-    };
+	PQmin++;
+    }
     answer.x = PQhash[PQmin].PQnext->vertex->coord.x;
     answer.y = PQhash[PQmin].PQnext->ystar;
+    answer.z = PQhash[PQmin].PQnext->vertex->coord.z;
     return (answer);
 }
 
@@ -78,7 +80,7 @@ struct Halfedge *PQextractmin(void)
 
     curr = PQhash[PQmin].PQnext;
     PQhash[PQmin].PQnext = curr->PQnext;
-    PQcount -= 1;
+    PQcount--;
     return (curr);
 }
 
@@ -90,8 +92,8 @@ int PQinitialize(void)
     PQcount = 0;
     PQmin = 0;
     PQhashsize = 4 * sqrt_nsites;
-    PQhash = (struct Halfedge *)myalloc(PQhashsize * sizeof *PQhash);
-    for (i = 0; i < PQhashsize; i += 1)
+    PQhash = (struct Halfedge *)G_malloc(PQhashsize * sizeof(struct Halfedge));
+    for (i = 0; i < PQhashsize; i++)
 	PQhash[i].PQnext = (struct Halfedge *)NULL;
 
     return 0;

@@ -37,13 +37,13 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 	    if ((p = intersect(lbnd, bisector)) != (struct Site *)NULL) {
 		PQdelete(lbnd);
 		PQinsert(lbnd, p, dist(p, newsite));
-	    };
+	    }
 	    lbnd = bisector;
 	    bisector = HEcreate(e, re);
 	    ELinsert(lbnd, bisector);
 	    if ((p = intersect(bisector, rbnd)) != (struct Site *)NULL) {
 		PQinsert(bisector, p, dist(p, newsite));
-	    };
+	    }
 	    /* get next site, but ensure that it doesn't have the same
 	       coordinates as the previous. If so, step over to the following
 	       site. Andrea Aime 4/7/2001 */
@@ -87,19 +87,19 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 	    if ((p = intersect(llbnd, bisector)) != (struct Site *)NULL) {
 		PQdelete(llbnd);
 		PQinsert(llbnd, p, dist(p, bot));
-	    };
+	    }
 	    if ((p = intersect(bisector, rrbnd)) != (struct Site *)NULL) {
 		PQinsert(bisector, p, dist(p, bot));
-	    };
+	    }
 	}
 	else
 	    break;
-    };
+    }
 
     for (lbnd = ELright(ELleftend); lbnd != ELrightend; lbnd = ELright(lbnd)) {
 	e = lbnd->ELedge;
 	out_ep(e);
-    };
+    }
 
     return 0;
 }
