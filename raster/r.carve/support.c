@@ -28,10 +28,8 @@
 /*
  * update_rast_history - Update a history file.  Some of the digit file 
  * information is placed in the history file.
- * returns  0  -  successful creation of history file
- *         -1  -  error
  */
-int update_rast_history(struct parms *parm)
+void update_rast_history(struct parms *parm)
 {
     struct History hist;
 
@@ -43,6 +41,5 @@ int update_rast_history(struct parms *parm)
     sprintf(hist.datsrc_2, "vector stream file: %s", parm->invect->answer);
     hist.edlinecnt = 2;
     Rast_command_history(&hist);
-
-    return Rast_write_history(parm->outrast->answer, &hist);
+    Rast_write_history(parm->outrast->answer, &hist);
 }

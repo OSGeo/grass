@@ -275,12 +275,10 @@ int main(int argc, char **argv)
     Rast_close(in_fd);
     Rast_close(out_fd);
 
-    if (Rast_write_cats(out_name, &cats) == -1)
-	G_warning(_("Error writing category file for <%s>"), out_name);
+    Rast_write_cats(out_name, &cats);
 
     if (colrfile)
-	if (Rast_write_colors(out_name, G_mapset(), &colr) == -1)
-	    G_warning(_("Error writing color file for <%s>"), out_name);
+	Rast_write_colors(out_name, G_mapset(), &colr);
 
     Rast_short_history(out_name, "raster", &history);
     Rast_command_history(&history);

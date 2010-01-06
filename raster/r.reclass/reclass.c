@@ -241,8 +241,7 @@ int reclass(const char *old_name, const char *old_mapset,
     fclose(fd);
 
     Rast_set_cats_title(title, cats);
-    if (Rast_write_cats(new_name, cats) == -1)
-	G_fatal_error(_("Cannot create category file of <%s>"), new_name);
+    Rast_write_cats(new_name, cats);
 
     Rast_free_cats(cats);
 

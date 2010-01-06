@@ -79,8 +79,8 @@ static void get_cond(char **, char *, DCELL);
 static int get_fmt(char **, char *, int *);
 static int cmp(const void *, const void *);
 
-static int write_cats(const char *element, const char *name,
-		      struct Categories *cats);
+static void write_cats(const char *element, const char *name,
+		       struct Categories *cats);
 static CELL read_cats(const char *element, const char *name,
 		      const char *mapset, struct Categories *pcats, int full);
 
@@ -925,12 +925,11 @@ int Rast_set_cat(const void *rast1, const void *rast2,
  * \param name map name
  * \param cats pointer to Categories structure
  *
- * \return 1 on success
- * \return -1 is returned (no diagnostic is printed)
+ * \return void
  */
-int Rast_write_cats(const char *name, struct Categories *cats)
+void Rast_write_cats(const char *name, struct Categories *cats)
 {
-    return write_cats("cats", name, cats);
+    write_cats("cats", name, cats);
 }
 
 /*!
@@ -943,16 +942,15 @@ int Rast_write_cats(const char *name, struct Categories *cats)
  * \param name map name
  * \param cats pointer to Categories structure
  *
- * \return 1 on success
- * \return -1 is returned (no diagnostic is printed)
+ * \return void
  */
-int Rast_write_vector_cats(const char *name, struct Categories *cats)
+void Rast_write_vector_cats(const char *name, struct Categories *cats)
 {
-    return write_cats("dig_cats", name, cats);
+    write_cats("dig_cats", name, cats);
 }
 
-static int write_cats(const char *element, const char *name,
-		      struct Categories *cats)
+static void write_cats(const char *element, const char *name,
+		       struct Categories *cats)
 {
     FILE *fd;
     int i, fp_map;
@@ -960,8 +958,9 @@ static int write_cats(const char *element, const char *name,
     DCELL val1, val2;
     char str1[100], str2[100];
 
-    if (!(fd = G_fopen_new(element, name)))
-	return -1;
+    fd = G_fopen_new(element, name);
+    if (!fd)
+	G_fatal_error(_("Unable to open %s file for map <%s>"), element, name);
 
     /* write # cats - note # indicate 3.0 or later */
     fprintf(fd, "# %ld categories\n", (long)cats->num);
@@ -1003,7 +1002,6 @@ static int write_cats(const char *element, const char *name,
 	}
     }
     fclose(fd);
-    return (1);
 }
 
 /*!

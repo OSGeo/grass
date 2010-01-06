@@ -74,7 +74,7 @@ void *read_raster(void *, const int, const RASTER_MAP_TYPE);
 void *write_raster(void *, const int, const RASTER_MAP_TYPE);
 
 /* support.c */
-extern int update_rast_history(struct parms *);
+extern void update_rast_history(struct parms *);
 
 /* vect.c */
 extern int open_new_vect(struct Map_info *, char *);

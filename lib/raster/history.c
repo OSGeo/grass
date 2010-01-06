@@ -107,18 +107,13 @@ int Rast_read_history(const char *name, const char *mapset,
     return 0;
 }
 
-void print_history_error(const char *name, const char *mapset, FILE * fd)
+static void print_history_error(const char *name, const char *mapset, FILE *fp)
 {
-    if (fd != NULL)
-	fclose(fd);
+    if (fp)
+	fclose(fp);
 
-    if (mapset) {
-	G_warning(_("Unable to get history information for <%s@%s>"),
-		  name, mapset);
-    }
-    else {			/* write */
-	G_warning(_("Unable to write history information for <%s>"), name);
-    }
+    G_warning(_("Unable to get history information for <%s@%s>"),
+	      name, mapset);
 }
 
 /*!
@@ -136,35 +131,30 @@ void print_history_error(const char *name, const char *mapset, FILE * fd)
  * \param name map name
  * \param[out] hist pointer to History structure which holds history info
  *
- * \return -1 on error
- * \return 0 on success
+ * \return void
  */
-int Rast_write_history(const char *name, struct History *hist)
+void Rast_write_history(const char *name, struct History *hist)
 {
-    FILE *fd;
+    FILE *fp;
     int i;
 
-    fd = G_fopen_new("hist", name);
-    if (!fd) {
-	print_history_error(name, NULL, fd);
-	return -1;
-    }
+    fp = G_fopen_new("hist", name);
+    if (!fp)
+	G_fatal_error(_("Unable to write history information for <%s>"), name);
 
-    fprintf(fd, "%s\n", hist->mapid);
-    fprintf(fd, "%s\n", hist->title);
-    fprintf(fd, "%s\n", hist->mapset);
-    fprintf(fd, "%s\n", hist->creator);
-    fprintf(fd, "%s\n", hist->maptype);
-    fprintf(fd, "%s\n", hist->datsrc_1);
-    fprintf(fd, "%s\n", hist->datsrc_2);
-    fprintf(fd, "%s\n", hist->keywrd);
+    fprintf(fp, "%s\n", hist->mapid);
+    fprintf(fp, "%s\n", hist->title);
+    fprintf(fp, "%s\n", hist->mapset);
+    fprintf(fp, "%s\n", hist->creator);
+    fprintf(fp, "%s\n", hist->maptype);
+    fprintf(fp, "%s\n", hist->datsrc_1);
+    fprintf(fp, "%s\n", hist->datsrc_2);
+    fprintf(fp, "%s\n", hist->keywrd);
 
     for (i = 0; i < hist->edlinecnt; i++)
-	fprintf(fd, "%s\n", hist->edhist[i]);
+	fprintf(fp, "%s\n", hist->edhist[i]);
 
-    fclose(fd);
-
-    return 0;
+    fclose(fp);
 }
 
 /*!

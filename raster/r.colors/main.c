@@ -378,10 +378,10 @@ int main(int argc, char **argv)
     if (fp)
 	Rast_mark_colors_as_fp(&colors);
 
-    if (Rast_write_colors(name, mapset, &colors) >= 0)
-	G_message(_("Color table for raster map <%s> set to '%s'"), name,
-		  is_from_stdin ? "rules" : style ? style : rules ? rules :
-		  cmap);
+    Rast_write_colors(name, mapset, &colors);
+    G_message(_("Color table for raster map <%s> set to '%s'"), name,
+	      is_from_stdin ? "rules" : style ? style : rules ? rules :
+	      cmap);
 
     exit(EXIT_SUCCESS);
 }

@@ -2,13 +2,13 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-
+#include "local_proto.h"
 
 /* function prototypes */
-static int write_history(int, char *, double **, double *);
+static void write_history(int, char *, double **, double *);
 
 
-int write_support(int bands, char *outname, double **eigmat, double *eigval)
+void write_support(int bands, char *outname, double **eigmat, double *eigval)
 {
     const char *mapset = G_mapset();
     struct Colors colors;
@@ -24,14 +24,13 @@ int write_support(int bands, char *outname, double **eigmat, double *eigval)
     if (Rast_map_is_fp(outname, mapset))
 	Rast_mark_colors_as_fp(&colors);
 
-    if (Rast_write_colors(outname, mapset, &colors) < 0)
-	G_message(_("Unable to write color table for raster map <%s>"), outname);
+    Rast_write_colors(outname, mapset, &colors);
 
-    return write_history(bands, outname, eigmat, eigval);
+    write_history(bands, outname, eigmat, eigval);
 }
 
 
-static int write_history(int bands, char *outname, double **eigmat, double *eigval)
+static void write_history(int bands, char *outname, double **eigmat, double *eigval)
 {
     int i, j;
     static int first_map = TRUE;     /* write to stderr? */
@@ -77,5 +76,5 @@ static int write_history(int bands, char *outname, double **eigmat, double *eigv
     /* only write to stderr the first time (this fn runs for every output map) */
     first_map = FALSE;
 
-    return Rast_write_history(outname, &hist);
+    Rast_write_history(outname, &hist);
 }

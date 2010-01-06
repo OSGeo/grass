@@ -381,9 +381,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to read color table for %s"),
 			  parm.rastin->answer);
 	Rast_mark_colors_as_fp(&colors);
-	if (Rast_write_colors(parm.rastout->answer, G_mapset(), &colors) < 0)
-	    G_fatal_error(_("Unable to write color table for %s"),
-			  parm.rastout->answer);
+	Rast_write_colors(parm.rastout->answer, G_mapset(), &colors);
     }
 
     return (EXIT_SUCCESS);
