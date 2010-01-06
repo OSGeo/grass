@@ -565,7 +565,7 @@ class GMConsole(wx.SplitterWindow):
                 if text in data['desc']:
                     found = True
             else: # -> keywords
-                if self.__checkKey(text, data['keywords']):
+                if self.cmd_prompt.CheckKey(text, data['keywords']):
                     found = True
 
             if found:
