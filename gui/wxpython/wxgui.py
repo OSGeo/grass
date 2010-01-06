@@ -357,7 +357,8 @@ class GMFrame(wx.Frame):
         if page == self.goutput.pageid:
             # remove '(...)'
             self.notebook.SetPageText(page, _("Command console"))
-        
+            self.goutput.cmd_prompt.SetSTCFocus(True)
+            
         event.Skip()
 
     def OnCBPageClosed(self, event):
