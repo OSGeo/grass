@@ -155,9 +155,9 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
 			      parm.raster->answer, cmapset);
 
-	    if (Rast_write_cats(name, &cats) >= 0)
-		G_message(_("Category table for <%s> set from <%s>"), name,
-			  parm.raster->answer);
+	    Rast_write_cats(name, &cats);
+	    G_message(_("Category table for <%s> set from <%s>"),
+		      name, parm.raster->answer);
 
 	    Rast_close(fd);
 	}
@@ -193,9 +193,7 @@ int main(int argc, char *argv[])
 		    Rast_set_d_cat(&d1, &d1, label, &cats);
 	    }
 
-	    if (Rast_write_cats(name, &cats) < 0)
-		G_fatal_error(_("Cannot create category file for <%s>"),
-			      name);
+	    Rast_write_cats(name, &cats);
 
 	    if (!from_stdin)
 		fclose(fp);
@@ -239,9 +237,7 @@ int main(int argc, char *argv[])
 
 	    Rast_set_cats_fmt(fmt_str, m1, a1, m2, a2, &cats);
 
-	    if (Rast_write_cats(name, &cats) != 1)
-		G_fatal_error(_("Cannot create category file for <%s>"),
-			      name);
+	    Rast_write_cats(name, &cats);
 	}
 
 	Rast_free_cats(&cats);

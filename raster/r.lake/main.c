@@ -365,9 +365,7 @@ int main(int argc, char *argv[])
 				  &max_depth, 0, 50, 170, &colr);
     }
 
-    if (Rast_write_colors(lakemap, G_mapset(), &colr) != 1)
-	G_fatal_error(_("Unable to read color file of raster map <%s>"),
-		      lakemap);
+    Rast_write_colors(lakemap, G_mapset(), &colr);
 
     Rast_short_history(lakemap, "raster", &history);
     Rast_command_history(&history);

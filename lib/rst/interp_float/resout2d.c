@@ -240,11 +240,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 		return -1;
 	    }
 
-	    if (Rast_write_colors(params->elev, maps, &colors2) < 0) {
-		G_warning(_("Unable to write color file of raster map <%s>"),
-			  params->elev);
-		return -1;
-	    }
+	    Rast_write_colors(params->elev, maps, &colors2);
 	    Rast_quantize_fp_map_range(params->elev, mapset,
 				    zminac - 0.5, zmaxac + 0.5,
 				    (CELL) (zminac - 0.5),

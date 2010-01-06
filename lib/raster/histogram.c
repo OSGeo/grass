@@ -38,8 +38,7 @@ void Rast_init_histogram(struct Histogram *histogram)
  * \param mapset: mapset that map belongs to 
  * \param histogram: struct for histogram
  * \return 1  if successful,
- *               0  if no histogram file,
- *              -1  on fail
+ *         0  if no histogram file,
  */
 
 int Rast_read_histogram(const char *name, const char *mapset,
@@ -52,38 +51,26 @@ int Rast_read_histogram(const char *name, const char *mapset,
 
     Rast_init_histogram(histogram);
 
-    if (G_find_file2_misc("cell_misc", "histogram", name, mapset) == NULL) {
+    if (!G_find_file2_misc("cell_misc", "histogram", name, mapset)) {
 	G_warning(_("Histogram for [%s in %s] missing (run r.support)"), name,
 		  mapset);
-
 	return 0;
     }
 
     fd = G_fopen_old_misc("cell_misc", "histogram", name, mapset);
-    if (!fd) {
-	G_warning(_("Can't read histogram for [%s in %s]"), name, mapset);
-
-	return -1;
-    }
+    if (!fd)
+	G_fatal_error(_("Can't read histogram for [%s in %s]"), name, mapset);
 
     while (fgets(buf, sizeof buf, fd)) {
-	if (sscanf(buf, "%ld:%ld", &cat, &count) != 2) {
-	    Rast_free_histogram(histogram);
-	    fclose(fd);
-	    G_warning(_("Invalid histogram file for [%s in %s]"), name,
-		      mapset);
-
-	    return -1;
-	}
+	if (sscanf(buf, "%ld:%ld", &cat, &count) != 2)
+	    G_fatal_error(_("Invalid histogram file for [%s in %s]"),
+			  name, mapset);
 	Rast_extend_histogram((CELL) cat, count, histogram);
     }
     fclose(fd);
 
-    if (histogram->num == 0) {
-	G_warning(_("Invalid histogram file for [%s in %s]"), name, mapset);
-
-	return -1;
-    }
+    if (histogram->num == 0)
+	G_fatal_error(_("Invalid histogram file for [%s in %s]"), name, mapset);
 
     Rast_sort_histogram(histogram);
 
@@ -97,28 +84,24 @@ int Rast_read_histogram(const char *name, const char *mapset,
  *  Writes the histogram information associated with map layer "name"
  * \param name: name of map
  * \param histogram: struct for histogram
- * \return  1  if successful,
- *              -1  on fail
+ * \return  void
  */
 
-int Rast_write_histogram(const char *name, const struct Histogram *histogram)
+void Rast_write_histogram(const char *name, const struct Histogram *histogram)
 {
-    FILE *fd;
+    FILE *fp;
     int n;
     LIST *list;
 
-    fd = fopen_histogram_new(name);
-    if (fd == NULL)
-	return -1;
+    fp = fopen_histogram_new(name);
 
     list = histogram->list;
     for (n = 0; n < histogram->num; n++) {
 	if (list[n].count)
-	    fprintf(fd, "%ld:%ld\n", (long)list[n].cat, list[n].count);
+	    fprintf(fp, "%ld:%ld\n", (long)list[n].cat, list[n].count);
     }
-    fclose(fd);
 
-    return 1;
+    fclose(fp);
 }
 
 
@@ -127,28 +110,24 @@ int Rast_write_histogram(const char *name, const struct Histogram *histogram)
  *
  * \param name: name of map
  * \param statf: cell statistics
- * \return 1 on success
- *        -1 on failure
+ * \return void
  */
 
-int Rast_write_histogram_cs(const char *name, struct Cell_stats *statf)
+void Rast_write_histogram_cs(const char *name, struct Cell_stats *statf)
 {
-    FILE *fd;
+    FILE *fp;
     CELL cat;
     long count;
 
-    fd = fopen_histogram_new(name);
-    if (fd == NULL)
-	return -1;
+    fp = fopen_histogram_new(name);
 
     Rast_rewind_cell_stats(statf);
     while (Rast_next_cell_stat(&cat, &count, statf)) {
 	if (count > 0)
-	    fprintf(fd, "%ld:%ld\n", (long)cat, count);
+	    fprintf(fp, "%ld:%ld\n", (long)cat, count);
     }
-    fclose(fd);
 
-    return 1;
+    fclose(fp);
 }
 
 
@@ -345,16 +324,14 @@ static int cmp_count(const void *aa, const void *bb)
 
 static FILE *fopen_histogram_new(const char *name)
 {
-    FILE *fd;
+    FILE *fp;
 
-    fd = G_fopen_new_misc("cell_misc", "histogram", name);
-    if (fd == NULL)
-	G_warning(_("can't create histogram for [%s in %s]"), name,
-		  G_mapset());
+    fp = G_fopen_new_misc("cell_misc", "histogram", name);
+    if (!fp)
+	G_fatal_error(_("Unable to create histogram file for <%s>"), name);
 
-    return fd;
+    return fp;
 }
-
 
 /*!
  * \brief Removes the histogram

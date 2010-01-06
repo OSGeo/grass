@@ -48,8 +48,8 @@ int Rast_set_f_cat(const FCELL *, const FCELL *, const char *, struct Categories
 int Rast_set_d_cat(const DCELL *, const DCELL *, const char *, struct Categories *);
 int Rast_set_cat(const void *, const void *, const char *, struct Categories *,
 		 RASTER_MAP_TYPE);
-int Rast_write_cats(const char *, struct Categories *);
-int Rast_write_vector_cats(const char *, struct Categories *);
+void Rast_write_cats(const char *, struct Categories *);
+void Rast_write_vector_cats(const char *, struct Categories *);
 char *Rast_get_ith_d_cat(const struct Categories *, int, DCELL *,
 			 DCELL *);
 char *Rast_get_ith_f_cat(const struct Categories *, int, void *, void *);
@@ -232,7 +232,7 @@ void Rast_shift_c_colors(CELL, struct Colors *);
 void Rast_shift_d_colors(DCELL, struct Colors *);
 
 /* color_write.c */
-int Rast_write_colors(const char *, const char *, struct Colors *);
+void Rast_write_colors(const char *, const char *, struct Colors *);
 void Rast__write_colors(FILE *, struct Colors *);
 
 /* color_xform.c */
@@ -318,8 +318,8 @@ void Rast_histogram_eq(const struct Histogram *, unsigned char **,
 /* histogram.c */
 void Rast_init_histogram(struct Histogram *);
 int Rast_read_histogram(const char *, const char *, struct Histogram *);
-int Rast_write_histogram(const char *, const struct Histogram *);
-int Rast_write_histogram_cs(const char *, struct Cell_stats *);
+void Rast_write_histogram(const char *, const struct Histogram *);
+void Rast_write_histogram_cs(const char *, struct Cell_stats *);
 void Rast_make_histogram_cs(struct Cell_stats *, struct Histogram *);
 int Rast_get_histogram_num(const struct Histogram *);
 CELL Rast_get_histogram_cat(int, const struct Histogram *);
@@ -335,7 +335,7 @@ void Rast_zero_histogram(struct Histogram *);
 
 /* history.c */
 int Rast_read_history(const char *, const char *, struct History *);
-int Rast_write_history(const char *, struct History *);
+void Rast_write_history(const char *, struct History *);
 void Rast_short_history(const char *, const char *, struct History *);
 int Rast_command_history(struct History *);
 
@@ -400,7 +400,7 @@ int Rast_open_new_uncompressed(const char *, RASTER_MAP_TYPE);
 void Rast_set_quant_rules(int, struct Quant *);
 
 /* put_cellhd.c */
-int Rast_put_cellhd(const char *, struct Cell_head *);
+void Rast_put_cellhd(const char *, struct Cell_head *);
 
 /* put_row.c */
 void Rast_put_row(int, const void *, RASTER_MAP_TYPE);

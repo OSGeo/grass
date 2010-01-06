@@ -23,20 +23,16 @@
    \param name name of map
    \param cellhd structure holding cell header info
 
-   \return 0 on success
-   \return -1 on failure
+   \return void
  */
-int Rast_put_cellhd(const char *name, struct Cell_head *cellhd)
+void Rast_put_cellhd(const char *name, struct Cell_head *cellhd)
 {
-    FILE *fd;
+    FILE *fp;
 
-    if (!(fd = G_fopen_new("cellhd", name))) {
-	G_warning(_("Unable to create header file for <%s>"), name);
-	return -1;
-    }
+    fp = G_fopen_new("cellhd", name);
+    if (!fp)
+	G_fatal_error(_("Unable to create header file for <%s>"), name);
 
-    G__write_Cell_head(fd, cellhd, 1);
-    fclose(fd);
-
-    return 0;
+    G__write_Cell_head(fp, cellhd, 1);
+    fclose(fp);
 }

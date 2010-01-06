@@ -287,9 +287,9 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to read category file of raster map <%s>"),
 			  map_opt->answer);
 
-	if (Rast_write_cats(infile, &cats) >= 0)
-	    G_message(_("cats table for [%s] set to %s"), infile,
-		      map_opt->answer);
+	Rast_write_cats(infile, &cats);
+	G_message(_("cats table for [%s] set to %s"),
+		  infile, map_opt->answer);
 	Rast_close(fd);
 	Rast_free_cats(&cats);
     }

@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/raster.h>
 
 static void write_rules(FILE *, struct _Color_Rule_ *, DCELL, DCELL);
@@ -66,10 +67,9 @@ static void format_max(char *, double);
  * \param mapset mapset name
  * \param colors pointer to structure Colors which holds color info
  *
- * \return 1 on success
- * \return -1 on failure
+ * \return void
  */
-int Rast_write_colors(const char *name, const char *mapset,
+void Rast_write_colors(const char *name, const char *mapset,
 		      struct Colors *colors)
 {
     char element[512];
@@ -78,7 +78,8 @@ int Rast_write_colors(const char *name, const char *mapset,
 
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, mapset) != 0)
-	    return -1;
+	    G_fatal_error(_("Qualified name <%s> doesn't match mapset <%s>"),
+			  name, mapset);
 	name = xname;
     }
     /*
@@ -92,11 +93,11 @@ int Rast_write_colors(const char *name, const char *mapset,
 	strcpy(element, "colr");
     }
     if (!(fd = G_fopen_new(element, name)))
-	return -1;
+	G_fatal_error(_("Unable to create <%s> file for map <%s>"),
+		      element, name);
 
     Rast__write_colors(fd, colors);
     fclose(fd);
-    return 1;
 }
 
 /*!

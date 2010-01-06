@@ -360,10 +360,8 @@ setFlowAccuColorTable(char* cellname) {
   Rast_add_c_color_rule(&v[3],   0,127,255,  &v[4],       0,0,255,   &colors);
   Rast_add_c_color_rule(&v[4],   0,0,255,    &v[5],   0,0,0,     &colors);
 
- 
-  if (Rast_write_colors(cellname, mapset, &colors) == -1) {
-    G_fatal_error(_("cannot write colors"));
-  }
+  Rast_write_colors(cellname, mapset, &colors);
+
   Rast_free_colors(&colors);
 }
 
@@ -386,9 +384,8 @@ setSinkWatershedColorTable(char* cellname) {
   Rast_init_colors(&colors);
   Rast_make_random_colors(&colors, 1, r.max);
 
-  if (Rast_write_colors(cellname, mapset, &colors) == -1) {
-    G_fatal_error(_("cannot write colors"));
-  }
+  Rast_write_colors(cellname, mapset, &colors);
+
   Rast_free_colors(&colors);
 }
 

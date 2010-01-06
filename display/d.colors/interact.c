@@ -318,13 +318,7 @@ static int save_colors(char *name, char *mapset, struct Colors *colors)
     Clear_message();
     Write_message(2, "Writing color table      ");
 
-    if (Rast_write_colors(name, mapset, colors) == -1) {
-	G_sleep(1);
-	Write_message(2, "Can't write color table  ");
-	G_sleep(2);
-	return 0;
-    }
-    else
-	Clear_message();
+    Rast_write_colors(name, mapset, colors);
+    Clear_message();
     return 1;
 }

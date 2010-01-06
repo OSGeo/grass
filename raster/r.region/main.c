@@ -326,8 +326,7 @@ int main(int argc, char *argv[])
     cellhd.east = window.east;
     cellhd.west = window.west;
 
-    if (Rast_put_cellhd(parm.map->answer, &cellhd) < 0)
-	G_fatal_error(_("Unable to update boundaries"));
+    Rast_put_cellhd(parm.map->answer, &cellhd);
 
     G_done_msg(" ");
 

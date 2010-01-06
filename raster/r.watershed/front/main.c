@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
-int write_hist(char *, char *, char *, int, int);
+static void write_hist(char *, char *, char *, int, int);
 
 static const char *new_argv[22];
 static int new_argc;
@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
 }
 
 /* record map history info */
-int write_hist(char *map_name, char *title, char *source_name, int mode, int sfd)
+static void write_hist(char *map_name, char *title, char *source_name, int mode, int sfd)
 {
     struct History history;
 
@@ -359,5 +359,5 @@ int write_hist(char *map_name, char *title, char *source_name, int mode, int sfd
     history.edlinecnt = 2;
     Rast_command_history(&history);
 
-    return Rast_write_history(map_name, &history);
+    Rast_write_history(map_name, &history);
 }

@@ -35,7 +35,9 @@ int update_hist(const char *raster_name, const char *vector_name, long scale)
     /* store command line options */
     Rast_command_history(&hist);
 
-    return (Rast_write_history(raster_name, &hist));
+    Rast_write_history(raster_name, &hist);
+
+    return 0;
 }
 
 
@@ -482,9 +484,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     }
 
     Rast_close(fd);
-    if (Rast_write_cats(rast_name, &rast_cats) <= 0)
-	G_warning(_("Unable to write categories for raster map <%s>"),
-		  rast_name);
+    Rast_write_cats(rast_name, &rast_cats);
     Rast_free_cats(&rast_cats);
 
     return 1;
