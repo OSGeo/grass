@@ -19,6 +19,7 @@
 #ifndef _N_GWFLOW_H_
 #define _N_GWFLOW_H_
 #include "N_pde.h"
+#include <math.h>
 
 #define N_GW_CONFINED 0		/*confined groundwater */
 #define N_GW_UNCONFINED 1	/*unconfined groundwater */
@@ -99,6 +100,8 @@ extern N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom,
 					 int col, int row, int depth);
 extern N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom,
 					 int col, int row);
+extern void N_gwflow_2d_calc_water_balance(N_gwflow_data2d * data,
+        N_geom_data * geom, N_array_2d * balance);
 extern N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
 					      int river, int drain);
 extern N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river,
