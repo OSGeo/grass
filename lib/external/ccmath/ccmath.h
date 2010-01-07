@@ -5,7 +5,7 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  *
  * Modified by Soeren gebbert 2009/01/08
- * Removed al unued functions in grass. Only the linear algebra
+ * Removed al unused functions in GRASS. Only the linear algebra
  * functions are used. 
  * ------------------------------------------------------------------------
  */
