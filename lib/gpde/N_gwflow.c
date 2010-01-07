@@ -556,7 +556,7 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
  *
  * */
 void
-N_gwflow_2d_calc_water_budgede(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * budged)
+N_gwflow_2d_calc_water_budged(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * budged)
 {
     int y, x, stat;
     double h, hc;
