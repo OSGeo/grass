@@ -58,7 +58,7 @@ grass.run_command("r.mapcalc", expression="c_1=if(col() == 20 && row() == 20 , 0
 # One inner sources (result of chemical reaction)
 grass.run_command("r.mapcalc", expression="cs_1=if(col() == 20 && row() == 20 , 0.0013888, 0.0)")
 # No pollution by well
-grass.run_command("r.mapcalc", expression="cin_1=0.0)")
+grass.run_command("r.mapcalc", expression="cin_1=0.0")
 # We have a transfer boundary condition
 grass.run_command("r.mapcalc", expression="tstatus_1=if(col() == 1 || col() == 80 , 3, 1)")
 # No diffusion coefficient known for the solution
@@ -74,7 +74,7 @@ AT=10
 grass.run_command("r.solute.transport", "c", "s", error=0.000000000000001, maxit=1000, solver="bicgstab",\
   top="top_conf_1", bottom="bottom_1", phead="gwresult_conf_1", status="tstatus_1", hc_x="hydcond_1",\
   hc_y="hydcond_1", r="R_1", cs="cs_1", q="well_1", nf="poros_1", output="stresult_conf_1", dt=86400000,\
-  diff_x="diff_1", diff_y="diff_1", cin="cin_1", c="c_1", al=AL, at=AT, velocity="stresult_conf_vel_1")
+  diff_x="diff_1", diff_y="diff_1", cin="cin_1", c="c_1", al=AL, at=AT, vx="stresult_conf_vel_1_x", vy="stresult_conf_vel_1_y")
 
 # The second computation uses different porosity for higher groundwater velocity
 
@@ -83,6 +83,6 @@ grass.run_command("r.mapcalc", expression="poros_2=1")
 
 # Compute the solute transport using the above defined dispersivity coefficients for a timestep of 1000d
 grass.run_command("r.solute.transport", "c", "s", error=0.000000000000001, maxit=1000, solver="bicgstab",\
-  top="top_conf_1", bottom="bottom_1", phead="gwresult_conf_2", status="tstatus_1", hc_x="hydcond_1",\
+  top="top_conf_1", bottom="bottom_1", phead="gwresult_conf_1", status="tstatus_1", hc_x="hydcond_1",\
   hc_y="hydcond_1", r="R_1", cs="cs_1", q="well_1", nf="poros_2", output="stresult_conf_2", dt=86400000,\
-  diff_x="diff_1", diff_y="diff_1", cin="cin_1", c="c_1", al=AL, at=AT, velocity="stresult_conf_vel_2")
+  diff_x="diff_1", diff_y="diff_1", cin="cin_1", c="c_1", al=AL, at=AT, vx="stresult_conf_vel_2_x", vy="stresult_conf_vel_2_y")

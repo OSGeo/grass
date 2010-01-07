@@ -8,7 +8,7 @@ import grass.script as grass
 # Overwrite existing maps
 grass.run_command("g.gisenv", set="OVERWRITE=1")
 
-grass.message(_("Set the region"))
+grass.message("Set the region")
 
 # The area is 200m x 100m with a cell size of 1m x 1m
 grass.run_command("g.region", res=1, res3=1, t=10, b=0, n=100, s=0, w=0, e=200)
@@ -49,5 +49,5 @@ for dt in range(30):
     grass.run_command("r.solute.transport", "s", solver="bicgstab", top="top_conf",\
     bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
     r="R", cs="cs", q="well", nf="poros", output="stresult_conf_" + str(dt + 1), dt=864000, diff_x="diff",\
-    diff_y="diff", c="stresult_conf_" + str(dt), al=0.1, at=0.01)
+    diff_y="diff", c="stresult_conf_" + str(dt), al=0.1, at=0.01, vx="vx", vy="vy")
 

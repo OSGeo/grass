@@ -33,7 +33,7 @@ typedef struct
 {
     struct Option *output, *phead, *hc_x, *hc_y,
 	*c, *status, *diff_x, *diff_y, *q, *cs, *r, *top, *nf, *cin,
-	*bottom, *vector, *type, *dt, *maxit, *error, *solver, *sor,
+	*bottom, *vector_x, *vector_y, *bugded, *type, *dt, *maxit, *error, *solver, *sor,
 	*al, *at, *loops, *stab;
     struct Flag *sparse;
     struct Flag *cfl;
@@ -130,12 +130,22 @@ void set_params()
     param.output->description =	_("The resulting concentration of the numerical solute "
             "transport calculation will be written to this map. [kg/m^3]");
 
-    param.vector = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.vector->key = "velocity";
-    param.vector->required = NO;
-    param.vector->description =
-            _("Calculate the groundwater distance velocity vector field and "
-            "write the x, and y components to maps named name_(xy), [m/s]");
+
+    param.vector_x = G_define_option();
+    param.vector_x->key = "vx";
+    param.vector_x->type = TYPE_STRING;
+    param.vector_x->required = NO;
+    param.vector_x->gisprompt = "new,raster,raster";
+    param.vector_x->description =
+	_("Calculate and store the groundwater filter velocity vector part in x direction [m/s]\n");
+
+    param.vector_y = G_define_option();
+    param.vector_y->key = "vy";
+    param.vector_y->type = TYPE_STRING;
+    param.vector_y->required = NO;
+    param.vector_y->gisprompt = "new,raster,raster";
+    param.vector_y->description =
+	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -208,7 +218,6 @@ int main(int argc, char *argv[])
     N_array_2d *hc_x = NULL;
     N_array_2d *hc_y = NULL;
     N_array_2d *phead = NULL;
-    char *buff;
 
     double time_step, cfl, length, time_loops, time_sum;
 
@@ -331,8 +340,6 @@ int main(int argc, char *argv[])
     N_math_array_2d(hc_y, data->nf, hc_y, N_ARRAY_DIV);
     N_compute_gradient_field_2d(phead, hc_x, hc_y, geom, data->grad);
 
-    N_print_gradient_field_2d_info(data->grad);
-
     /*Now compute the dispersivity tensor*/
     N_calc_solute_transport_disptensor_2d(data);
 
@@ -403,18 +410,16 @@ int main(int argc, char *argv[])
     N_write_array_2d_to_rast(data->c, param.output->answer);
 
     /*Compute the the velocity field if required and write the result into three rast maps */
-    if (param.vector->answer) {
+    if (param.vector_x->answer || param.vector_y->answer) {
 	xcomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
 	ycomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
 
 	N_compute_gradient_field_components_2d(data->grad, xcomp, ycomp);
 
-	G_asprintf(&buff, "%s_x", param.vector->answer);
-	N_write_array_2d_to_rast(xcomp, buff);
-	G_asprintf(&buff, "%s_y", param.vector->answer);
-	N_write_array_2d_to_rast(ycomp, buff);
-	if (buff)
-	    G_free(buff);
+        if (param.vector_x->answer)
+            N_write_array_2d_to_rast(xcomp, param.vector_x->answer);
+        if (param.vector_y->answer)
+            N_write_array_2d_to_rast(ycomp, param.vector_y->answer);
 
 	if (xcomp)
 	    N_free_array_2d(xcomp);

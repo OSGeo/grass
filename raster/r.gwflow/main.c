@@ -31,7 +31,7 @@
 typedef struct
 {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *q, *s, *r, *top,
-	*bottom, *vector_x, *vector_y, *water_balance, *type, *dt, *maxit, *error, *solver, *sor,
+	*bottom, *vector_x, *vector_y, *budged, *type, *dt, *maxit, *error, *solver, *sor,
 	*river_head, *river_bed, *river_leak, *drain_bed, *drain_leak;
     struct Flag *sparse;
 } paramType;
@@ -43,12 +43,9 @@ static void set_params(void);		/*Fill the paramType structure */
 static void copy_result(N_array_2d * status, N_array_2d * phead_start,
 		 double *result, struct Cell_head *region,
 		 N_array_2d * target);
-static void calc_water_balance(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * balance);
 static N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
                         N_les_callback_2d * call, const char *solver, int maxit,
                         double error);
-static void copy_water_balance(N_gwflow_data2d * data, double *result,
-	    struct Cell_head *region, N_array_2d * target);
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 /* ************************************************************************* */
@@ -145,12 +142,12 @@ void set_params(void)
 	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
 
 
-    param.water_balance = G_define_option();
-    param.water_balance->key = "budged";
-    param.water_balance->type = TYPE_STRING;
-    param.water_balance->required = NO;
-    param.water_balance->gisprompt = "new,raster,raster";
-    param.water_balance->description =
+    param.budged = G_define_option();
+    param.budged->key = "budged";
+    param.budged->type = TYPE_STRING;
+    param.budged->required = NO;
+    param.budged->gisprompt = "new,raster,raster";
+    param.budged->description =
 	_("Store the groundwater budged for each cell\n");
 
     param.type = G_define_option();
@@ -455,9 +452,9 @@ int main(int argc, char *argv[])
     N_write_array_2d_to_rast(data->phead, param.output->answer);
 
     /*Write the water balance */
-    if(param.water_balance->answer)
+    if(param.budged->answer)
     {
-	N_write_array_2d_to_rast(budged, param.water_balance->answer);
+	N_write_array_2d_to_rast(budged, param.budged->answer);
     }
 
     /*Compute the the velocity field if required and write the result into three rast maps */
@@ -494,40 +491,6 @@ int main(int argc, char *argv[])
 	G_free(call);
 
     return (EXIT_SUCCESS);
-}
-
-/* ************************************************************************* */
-/* this function copies the water balance into a N_array_2d struct           */
-/* ************************************************************************* */
-void
-copy_water_balance(N_gwflow_data2d * data, double *result,
-	    struct Cell_head *region, N_array_2d * target)
-{
-    int y, x, rows, cols, count, stat;
-    double d1 = 0;
-    DCELL val;
-
-    rows = region->rows;
-    cols = region->cols;
-
-    count = 0;
-    for (y = 0; y < rows; y++) {
-	G_percent(y, rows - 1, 10);
-	for (x = 0; x < cols; x++) {
-	    stat = (int)N_get_array_2d_d_value(data->status, x, y);
-	    if (stat == N_CELL_ACTIVE || stat == N_CELL_DIRICHLET) {
-		d1 = result[count];
-		val = (DCELL) d1;
-	    }
-	    else {
-		Rast_set_null_value(&val, 1, DCELL_TYPE);
-	    }
-	    N_put_array_2d_d_value(target, x, y, val);
-            count++;
-	}
-    }
-
-    return;
 }
 
 /* ************************************************************************* */
