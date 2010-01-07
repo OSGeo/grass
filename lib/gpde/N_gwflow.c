@@ -534,3 +534,87 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
 
     return mat_pos;
 }
+
+
+
+/* *************************************************************** */
+/* ****************** N_gwflow_2d_calc_water_balance************** */
+/* *************************************************************** */
+/*!
+ * \brief This function computes the water balance of the entire groundwater
+ *
+ * The water balance is calculated for each active and dirichlet cell from
+ * its surrounding neighbours. This is based on the 5 star mass balance computation
+ * of N_callback_gwflow_2d and the gradient of the water heights in the cells.
+ * The sum of the water balance of each active/dirichlet cell must be near zero
+ * due the effect of numerical inaccuracy of cpu's.
+ *
+ * \param gwdata N_gwflow_data2d *
+ * \param geom N_geom_data *
+ * \param balance N_array_2d
+ * \returnvoid
+ *
+ * */
+void
+N_gwflow_2d_calc_water_balance(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * balance)
+{
+    int y, x, stat;
+    double h, hc;
+    double val;
+    double sum;
+    N_data_star *dstar;
+
+    int rows = data->status->rows;
+    int cols = data->status->cols;
+
+    sum = 0;
+
+    for (y = 0; y < rows; y++) {
+	G_percent(y, rows - 1, 10);
+	for (x = 0; x < cols; x++) {
+	    stat = (int)N_get_array_2d_d_value(data->status, x, y);
+
+            val = 0.0;
+
+	    if (stat != N_CELL_INACTIVE ) {	/*all active/dirichlet cells */
+
+                /* Compute the flow parameter */
+                dstar = N_callback_gwflow_2d(data, geom, x, y);
+                /* Compute the gradient in each direction pointing from the center */
+                hc = N_get_array_2d_d_value(data->phead, x, y);
+
+                if((int)N_get_array_2d_d_value(data->status, x + 1, y    ) != N_CELL_INACTIVE) {
+                    h = N_get_array_2d_d_value(data->phead,  x + 1, y);
+                    val += dstar->E * (hc - h);
+                }
+                if((int)N_get_array_2d_d_value(data->status, x - 1, y    ) != N_CELL_INACTIVE) {
+                    h = N_get_array_2d_d_value(data->phead,  x - 1, y);
+                    val += dstar->W * (hc - h);
+                }
+                if((int)N_get_array_2d_d_value(data->status, x    , y + 1) != N_CELL_INACTIVE) {
+                    h = N_get_array_2d_d_value(data->phead,  x    , y + 1);
+                    val += dstar->S * (hc - h);
+                }
+                if((int)N_get_array_2d_d_value(data->status, x    , y - 1) != N_CELL_INACTIVE) {
+                    h = N_get_array_2d_d_value(data->phead,  x    , y - 1);
+                    val += dstar->N * (hc - h);
+                }
+
+                sum += val;
+
+                G_free(dstar);
+	    }
+	    else {
+		Rast_set_null_value(&val, 1, DCELL_TYPE);
+	    }
+	    N_put_array_2d_d_value(balance, x, y, val);
+	}
+    }
+
+    if(fabs(sum) < 0.0000000001)
+        G_message("The total sum of the water balance: %g\n", sum);
+    else
+        G_warning("The total sum of the water balance is significant larger then 0: %g\n", sum);
+
+    return;
+}
