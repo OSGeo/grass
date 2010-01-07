@@ -8,6 +8,7 @@
 #include <grass/bitmap.h>
 #include <grass/glocale.h>
 #include <grass/linkm.h>
+#include <grass/gmath.h>
 #include <grass/waterglobs.h>
 
 
@@ -114,61 +115,31 @@ int input_data(void)
 
     /* Allocate some double dimension arrays for each input */
     /* with length of matrix Y */
-    zz = (float **)G_malloc(sizeof(float *) * (my));
-    v1 = (double **)G_malloc(sizeof(double *) * (my));
-    v2 = (double **)G_malloc(sizeof(double *) * (my));
-    if (rain != NULL || rain_val >= 0.0) {
-	si = (double **)G_malloc(sizeof(double *) * (my));
-    }
+    zz = G_alloc_fmatrix(my, mx);
+    v1 = G_alloc_matrix(my, mx);
+    v2 = G_alloc_matrix(my, mx);
+    cchez = G_alloc_fmatrix(my, mx);
+    
+    if (rain != NULL || rain_val >= 0.0) 
+	si = G_alloc_matrix(my, mx);
 
     if (infil != NULL || infil_val >= 0.0)
-	inf = (double **)G_malloc(sizeof(double *) * (my));
+	inf = G_alloc_matrix(my, mx);
 
     if (traps != NULL)
-	trap = (float **)G_malloc(sizeof(float *) * (my));
-    cchez = (float **)G_malloc(sizeof(float *) * (my));
+	trap = G_alloc_fmatrix(my, mx);
 
     if (detin != NULL)
-	dc = (float **)G_malloc(sizeof(float *) * (my));
+	dc = G_alloc_fmatrix(my, mx);
 
     if (tranin != NULL)
-	ct = (float **)G_malloc(sizeof(float *) * (my));
+	ct = G_alloc_fmatrix(my, mx);
 
     if (tauin != NULL)
-	tau = (float **)G_malloc(sizeof(float *) * (my));
+	tau = G_alloc_fmatrix(my, mx);
 
     if (wdepth != NULL)
-	gama = (double **)G_malloc(sizeof(double *) * (my));
-
-    for (l = 0; l < my; l++) {
-	/*for each my, allocate a second dimension in array
-	 * for each input with length of matrix X*/
-	zz[l] = (float *)G_malloc(sizeof(float) * (mx));
-	v1[l] = (double *)G_malloc(sizeof(double) * (mx));
-	v2[l] = (double *)G_malloc(sizeof(double) * (mx));
-
-	if (rain != NULL || rain_val >= 0.0)
-	    si[l] = (double *)G_malloc(sizeof(double) * (mx));
-
-	if (infil != NULL || infil_val >= 0.0)
-	    inf[l] = (double *)G_malloc(sizeof(double) * (mx));
-
-	if (traps != NULL)
-	    trap[l] = (float *)G_malloc(sizeof(float) * (mx));
-	cchez[l] = (float *)G_malloc(sizeof(float) * (mx));
-
-	if (detin != NULL)
-	    dc[l] = (float *)G_malloc(sizeof(float) * (mx));
-
-	if (tranin != NULL)
-	    ct[l] = (float *)G_malloc(sizeof(float) * (mx));
-
-	if (tauin != NULL)
-	    tau[l] = (float *)G_malloc(sizeof(float) * (mx));
-
-	if (wdepth != NULL)
-	    gama[l] = (double *)G_malloc(sizeof(double) * (mx));
-    }
+	gama = G_alloc_matrix(my, mx);
 
     G_debug(3, "Running MAY 10 version, started modifications on 20080211");
 
