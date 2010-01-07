@@ -19,29 +19,16 @@ r.mapcalc --o expression="bottom=0"
 r.mapcalc --o expression="syield=0.0001"
 r.mapcalc --o expression="null=0.0"
 
-#First compute the steady state groundwater flow
-r.gwflow --o solver=cholesky top=top_conf bottom=bottom phead=phead\
+#First compute the initial groundwater flow
+r.gwflow --o solver=cg top=top_conf bottom=bottom phead=phead\
  status=status hc_x=hydcond hc_y=hydcond q=well s=syield\
- r=recharge output=gwresult_conf dt=500 type=confined 
+ r=recharge output=gwresult_conf dt=500 type=confined budged=water_budged
 
 count=500
-
+# loop over the timesteps
 while [ `expr $count \< 10000` -eq 1 ] ; do
-  r.gwflow --o solver=cholesky top=top_conf bottom=bottom phead=gwresult_conf\
+  r.gwflow --o solver=cg top=top_conf bottom=bottom phead=gwresult_conf\
      status=status hc_x=hydcond hc_y=hydcond q=well s=syield\
-     r=recharge output=gwresult_conf dt=500 type=confined
+     r=recharge output=gwresult_conf dt=500 type=confined budged=water_budged
   count=`expr $count + 500`
 done
-
-export GRASS_WIDTH=640
-export GRASS_HEIGHT=480
-
-#export as png and convert into eps and pdf
-export GRASS_TRUECOLOR=TRUE
-export GRASS_PNGFILE=valid_calc_7x7.png
-d.rast gwresult_conf
-d.rast.num gwresult_conf dp=2
-d.barscale at=1,10 &
-echo "Groundwater flow 10.000s" | d.text size=6 color=black
-convert valid_calc_7x7.png valid_calc_7x7.eps
-convert valid_calc_7x7.png valid_calc_7x7.pdf

@@ -31,7 +31,7 @@
 typedef struct
 {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *q, *s, *r, *top,
-	*bottom, *vector, *type, *dt, *maxit, *error, *solver, *sor,
+	*bottom, *vector_x, *vector_y, *water_balance, *type, *dt, *maxit, *error, *solver, *sor,
 	*river_head, *river_bed, *river_leak, *drain_bed, *drain_leak;
     struct Flag *sparse;
 } paramType;
@@ -39,15 +39,16 @@ typedef struct
 paramType param;		/*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-void set_params(void);		/*Fill the paramType structure */
-void copy_result(N_array_2d * status, N_array_2d * phead_start,
+static void set_params(void);		/*Fill the paramType structure */
+static void copy_result(N_array_2d * status, N_array_2d * phead_start,
 		 double *result, struct Cell_head *region,
 		 N_array_2d * target);
-
-N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
+static void calc_water_balance(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * balance);
+static N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
                         N_les_callback_2d * call, const char *solver, int maxit,
                         double error);
-
+static void copy_water_balance(N_gwflow_data2d * data, double *result,
+	    struct Cell_head *region, N_array_2d * target);
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 /* ************************************************************************* */
@@ -127,14 +128,30 @@ void set_params(void)
     param.output->gisprompt = "new,raster,raster";
     param.output->description = _("The map storing the numerical result [m]");
 
-    param.vector = G_define_option();
-    param.vector->key = "velocity";
-    param.vector->type = TYPE_STRING;
-    param.vector->required = NO;
-    param.vector->gisprompt = "new,raster,raster";
-    param.vector->description =
-	_("Calculate the groundwater filter velocity vector field [m/s]\n"
-	  "and write the x, and y components to maps named name_[xy]");
+    param.vector_x = G_define_option();
+    param.vector_x->key = "vx";
+    param.vector_x->type = TYPE_STRING;
+    param.vector_x->required = NO;
+    param.vector_x->gisprompt = "new,raster,raster";
+    param.vector_x->description =
+	_("Calculate and store the groundwater filter velocity vector part in x direction [m/s]\n");
+
+    param.vector_y = G_define_option();
+    param.vector_y->key = "vy";
+    param.vector_y->type = TYPE_STRING;
+    param.vector_y->required = NO;
+    param.vector_y->gisprompt = "new,raster,raster";
+    param.vector_y->description =
+	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
+
+
+    param.water_balance = G_define_option();
+    param.water_balance->key = "budged";
+    param.water_balance->type = TYPE_STRING;
+    param.water_balance->required = NO;
+    param.water_balance->gisprompt = "new,raster,raster";
+    param.water_balance->description =
+	_("Store the groundwater budged for each cell\n");
 
     param.type = G_define_option();
     param.type->key = "type";
@@ -426,16 +443,25 @@ int main(int argc, char *argv[])
 	    free(tmp_vect);
     }
 
-    /*write the result to the output file */
-    N_write_array_2d_to_rast(data->phead, param.output->answer);
-
     /*release the memory */
     if (les)
 	N_free_les(les);
 
+    /* Compute the water budged for each cell */
+    N_array_2d *budged = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
+    N_gwflow_2d_calc_water_budged(data, geom, budged);
+
+    /*write the result to the output file */
+    N_write_array_2d_to_rast(data->phead, param.output->answer);
+
+    /*Write the water balance */
+    if(param.water_balance->answer)
+    {
+	N_write_array_2d_to_rast(budged, param.water_balance->answer);
+    }
 
     /*Compute the the velocity field if required and write the result into three rast maps */
-    if (param.vector->answer) {
+    if (param.vector_x->answer && param.vector_y->answer) {
 	field =
 	    N_compute_gradient_field_2d(data->phead, data->hc_x, data->hc_y,
 					geom, NULL);
@@ -445,10 +471,8 @@ int main(int argc, char *argv[])
 
 	N_compute_gradient_field_components_2d(field, xcomp, ycomp);
 
-	G_asprintf(&buff, "%s_x", param.vector->answer);
-	N_write_array_2d_to_rast(xcomp, buff);
-	G_asprintf(&buff, "%s_y", param.vector->answer);
-	N_write_array_2d_to_rast(ycomp, buff);
+	N_write_array_2d_to_rast(xcomp, param.vector_x->answer);
+	N_write_array_2d_to_rast(ycomp, param.vector_y->answer);
 	if (buff)
 	    G_free(buff);
 
@@ -460,7 +484,8 @@ int main(int argc, char *argv[])
 	    N_free_gradient_field_2d(field);
     }
 
-
+    if(budged)
+        N_free_array_2d(budged);
     if (data)
 	N_free_gwflow_data2d(data);
     if (geom)
@@ -471,9 +496,42 @@ int main(int argc, char *argv[])
     return (EXIT_SUCCESS);
 }
 
+/* ************************************************************************* */
+/* this function copies the water balance into a N_array_2d struct           */
+/* ************************************************************************* */
+void
+copy_water_balance(N_gwflow_data2d * data, double *result,
+	    struct Cell_head *region, N_array_2d * target)
+{
+    int y, x, rows, cols, count, stat;
+    double d1 = 0;
+    DCELL val;
+
+    rows = region->rows;
+    cols = region->cols;
+
+    count = 0;
+    for (y = 0; y < rows; y++) {
+	G_percent(y, rows - 1, 10);
+	for (x = 0; x < cols; x++) {
+	    stat = (int)N_get_array_2d_d_value(data->status, x, y);
+	    if (stat == N_CELL_ACTIVE || stat == N_CELL_DIRICHLET) {
+		d1 = result[count];
+		val = (DCELL) d1;
+	    }
+	    else {
+		Rast_set_null_value(&val, 1, DCELL_TYPE);
+	    }
+	    N_put_array_2d_d_value(target, x, y, val);
+            count++;
+	}
+    }
+
+    return;
+}
 
 /* ************************************************************************* */
-/* this function copies the result from the x vector to a N_array_2d struct  */
+/* this function copies the result into a N_array_2d struct                  */
 /* ************************************************************************* */
 void
 copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
@@ -510,6 +568,7 @@ copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
 
     return;
 }
+
 /* *************************************************************** */
 /* ***** create and solve the linear equation system ************* */
 /* *************************************************************** */
@@ -529,24 +588,22 @@ N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead);
 
     /*solve the linear equation system */
-    if(les && les->type == N_NORMAL_LES)
-    {
-    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
-        G_math_solver_cg(les->A, les->x, les->b, les->rows, maxit, error);
+    if(les && les->type == N_NORMAL_LES) {
+        if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
+            G_math_solver_cg(les->A, les->x, les->b, les->rows, maxit, error);
 
-    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
-        G_math_solver_pcg(les->A, les->x, les->b, les->rows, maxit, error, G_MATH_DIAGONAL_PRECONDITION);
+        if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
+            G_math_solver_pcg(les->A, les->x, les->b, les->rows, maxit, error, G_MATH_DIAGONAL_PRECONDITION);
 
-    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0)
-        G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
-    } else if (les && les->type == N_SPARSE_LES)
-    {
-    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
-        G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, maxit, error);
+        if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0)
+            G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
+    }
+    else if (les && les->type == N_SPARSE_LES) {
+        if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
+            G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, maxit, error);
 
-    if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
-        G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, maxit, error, G_MATH_DIAGONAL_PRECONDITION);
-
+        if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
+            G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, maxit, error, G_MATH_DIAGONAL_PRECONDITION);
     }
     if (les == NULL)
         G_fatal_error(_("Unable to create and solve the linear equation system"));
