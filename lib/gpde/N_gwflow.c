@@ -538,25 +538,25 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
 
 
 /* *************************************************************** */
-/* ****************** N_gwflow_2d_calc_water_balance************** */
+/* ****************** N_gwflow_2d_calc_water_budged ************** */
 /* *************************************************************** */
 /*!
- * \brief This function computes the water balance of the entire groundwater
+ * \brief This function computes the water budged of the entire groundwater
  *
- * The water balance is calculated for each active and dirichlet cell from
+ * The water budged is calculated for each active and dirichlet cell from
  * its surrounding neighbours. This is based on the 5 star mass balance computation
  * of N_callback_gwflow_2d and the gradient of the water heights in the cells.
- * The sum of the water balance of each active/dirichlet cell must be near zero
+ * The sum of the water budged of each active/dirichlet cell must be near zero
  * due the effect of numerical inaccuracy of cpu's.
  *
  * \param gwdata N_gwflow_data2d *
  * \param geom N_geom_data *
- * \param balance N_array_2d
+ * \param budged N_array_2d
  * \returnvoid
  *
  * */
 void
-N_gwflow_2d_calc_water_balance(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * balance)
+N_gwflow_2d_calc_water_budgede(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * budged)
 {
     int y, x, stat;
     double h, hc;
@@ -607,7 +607,7 @@ N_gwflow_2d_calc_water_balance(N_gwflow_data2d * data, N_geom_data * geom, N_arr
 	    else {
 		Rast_set_null_value(&val, 1, DCELL_TYPE);
 	    }
-	    N_put_array_2d_d_value(balance, x, y, val);
+	    N_put_array_2d_d_value(budged, x, y, val);
 	}
     }
 
