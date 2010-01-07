@@ -31,7 +31,7 @@
 typedef struct
 {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *q, *s, *r, *top,
-	*bottom, *vector_x, *vector_y, *budged, *type, *dt, *maxit, *error, *solver, *sor,
+	*bottom, *vector_x, *vector_y, *budget, *type, *dt, *maxit, *error, *solver, *sor,
 	*river_head, *river_bed, *river_leak, *drain_bed, *drain_leak;
     struct Flag *sparse;
 } paramType;
@@ -142,13 +142,13 @@ void set_params(void)
 	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
 
 
-    param.budged = G_define_option();
-    param.budged->key = "budged";
-    param.budged->type = TYPE_STRING;
-    param.budged->required = NO;
-    param.budged->gisprompt = "new,raster,raster";
-    param.budged->description =
-	_("Store the groundwater budged for each cell\n");
+    param.budget = G_define_option();
+    param.budget->key = "budget";
+    param.budget->type = TYPE_STRING;
+    param.budget->required = NO;
+    param.budget->gisprompt = "new,raster,raster";
+    param.budget->description =
+	_("Store the groundwater budget for each cell\n");
 
     param.type = G_define_option();
     param.type->key = "type";
@@ -444,17 +444,17 @@ int main(int argc, char *argv[])
     if (les)
 	N_free_les(les);
 
-    /* Compute the water budged for each cell */
-    N_array_2d *budged = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
-    N_gwflow_2d_calc_water_budged(data, geom, budged);
+    /* Compute the water budget for each cell */
+    N_array_2d *budget = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
+    N_gwflow_2d_calc_water_budget(data, geom, budget);
 
     /*write the result to the output file */
     N_write_array_2d_to_rast(data->phead, param.output->answer);
 
     /*Write the water balance */
-    if(param.budged->answer)
+    if(param.budget->answer)
     {
-	N_write_array_2d_to_rast(budged, param.budged->answer);
+	N_write_array_2d_to_rast(budget, param.budget->answer);
     }
 
     /*Compute the the velocity field if required and write the result into three rast maps */
@@ -481,8 +481,8 @@ int main(int argc, char *argv[])
 	    N_free_gradient_field_2d(field);
     }
 
-    if(budged)
-        N_free_array_2d(budged);
+    if(budget)
+        N_free_array_2d(budget);
     if (data)
 	N_free_gwflow_data2d(data);
     if (geom)

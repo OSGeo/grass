@@ -538,25 +538,25 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
 
 
 /* *************************************************************** */
-/* ****************** N_gwflow_2d_calc_water_budged ************** */
+/* ****************** N_gwflow_2d_calc_water_budget ************** */
 /* *************************************************************** */
 /*!
- * \brief This function computes the water budged of the entire groundwater
+ * \brief This function computes the water budget of the entire groundwater
  *
- * The water budged is calculated for each active and dirichlet cell from
+ * The water budget is calculated for each active and dirichlet cell from
  * its surrounding neighbours. This is based on the 5 star mass balance computation
  * of N_callback_gwflow_2d and the gradient of the water heights in the cells.
- * The sum of the water budged of each active/dirichlet cell must be near zero
+ * The sum of the water budget of each active/dirichlet cell must be near zero
  * due the effect of numerical inaccuracy of cpu's.
  *
  * \param gwdata N_gwflow_data2d *
  * \param geom N_geom_data *
- * \param budged N_array_2d
+ * \param budget N_array_2d
  * \returnvoid
  *
  * */
 void
-N_gwflow_2d_calc_water_budged(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * budged)
+N_gwflow_2d_calc_water_budget(N_gwflow_data2d * data, N_geom_data * geom, N_array_2d * budget)
 {
     int y, x, stat;
     double h, hc;
@@ -607,14 +607,14 @@ N_gwflow_2d_calc_water_budged(N_gwflow_data2d * data, N_geom_data * geom, N_arra
 	    else {
 		Rast_set_null_value(&val, 1, DCELL_TYPE);
 	    }
-	    N_put_array_2d_d_value(budged, x, y, val);
+	    N_put_array_2d_d_value(budget, x, y, val);
 	}
     }
 
     if(fabs(sum) < 0.0000000001)
-        G_message("The total sum of the water budged: %g\n", sum);
+        G_message("The total sum of the water budget: %g\n", sum);
     else
-        G_warning("The total sum of the water budged is significant larger then 0: %g\n", sum);
+        G_warning("The total sum of the water budget is significant larger then 0: %g\n", sum);
 
     return;
 }
