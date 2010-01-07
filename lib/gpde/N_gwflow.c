@@ -612,9 +612,9 @@ N_gwflow_2d_calc_water_budged(N_gwflow_data2d * data, N_geom_data * geom, N_arra
     }
 
     if(fabs(sum) < 0.0000000001)
-        G_message("The total sum of the water balance: %g\n", sum);
+        G_message("The total sum of the water budged: %g\n", sum);
     else
-        G_warning("The total sum of the water balance is significant larger then 0: %g\n", sum);
+        G_warning("The total sum of the water budged is significant larger then 0: %g\n", sum);
 
     return;
 }
