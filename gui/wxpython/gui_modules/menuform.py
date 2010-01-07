@@ -680,11 +680,7 @@ class mainFrame(wx.Frame):
             self.standalone   = False
         else:
             self.standalone = True
-            #             try:
-            #                 self.goutput  = self.parent.GetLogWindow()
-            #             except:
-            #                 self.goutput  = None
-
+        
         # logo+description
         topsizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -853,7 +849,8 @@ class mainFrame(wx.Frame):
         self.SetSize((width,height))
         
         # fix goutput's pane size
-        self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
+        if self.goutput:
+            self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
 
     def updateValuesHook(self):
         """!Update status bar data"""
