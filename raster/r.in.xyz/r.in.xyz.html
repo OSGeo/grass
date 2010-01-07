@@ -2,7 +2,8 @@
 
 The <em>r.in.xyz</em> module will load and bin ungridded x,y,z ASCII data
 into a new raster map. The user may choose from a variety of statistical
-methods in creating the new raster.
+methods in creating the new raster. Gridded data provided as a stream of
+x,y,z points may also be imported.
 <p>
 
 <em>r.in.xyz</em> is designed for processing massive point cloud datasets,
@@ -38,6 +39,26 @@ Available statistics for populating the raster are:<br>
 <br>
 
 <h2>NOTES</h2>
+
+<h4>Gridded data</h4>
+
+If data is known to be on a regular grid <em>r.in.xyz</em> can reconstruct
+the map perfectly as long as some care is taken to set up the region
+correctly and that the data's native map projection is used. A typical
+method would involve determining the grid resolution either by examining
+the data's associated documentation or by studying the text file. Next scan
+the data with <em>r.in.xyz</em>'s <b>-s</b> (or <b>-g</b>) flag to find the
+input data's bounds. GRASS uses the cell-center raster convention where
+data points fall within the center of a cell, as opposed to the grid-node
+convention. Therefore you will need to grow the region out by half a cell
+in all directions beyond what the scan found in the file. After the region
+bounds and resolution are set correctly with <em>g.region</em>, run
+<em>r.in.xyz</em> using the <i>n</i> method and verify that n=1 at all places.
+<em>r.univar</em> can help. Once you are confident that the region exactly
+matches the data proceed to run <em>r.in.xyz</em> using one of the <i>mean,
+min, max</i>, or <i>median</i> methods. With n=1 throughout, the result
+should be identical regardless of which of those methods are used.
+
 
 <h4>Memory use</h4>
 
