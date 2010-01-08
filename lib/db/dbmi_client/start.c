@@ -278,7 +278,7 @@ dbDriver *db_start_driver(const char *name)
 
     return driver;
 
-#else /* __MINGW32__ */
+#else /* not __MINGW32__ */
 
     /* open the pipes */
     if ((pipe(p1) < 0) || (pipe(p2) < 0)) {
