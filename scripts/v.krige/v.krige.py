@@ -412,7 +412,7 @@ def importR():
     # @FIXME: it leaves a Rtmpxxxx folder into the make tempfolder and causes make complain. [markus]
     for each in ["gstat", "spgrass6", "maptools"]:
         if not robjects.r.require(each, quietly = True)[0]:
-            sys.exit(_("R package % is missing. Install it and re-run v.krige.") % each)
+            sys.exit(_("R package '%s' is missing. Install it and re-run v.krige.") % each)
     
 if __name__ == '__main__':
     if len(sys.argv) > 1:
