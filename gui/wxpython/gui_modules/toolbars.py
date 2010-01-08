@@ -12,7 +12,7 @@ Classes:
  - ProfileToolbar
  - NvizToolbar
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -47,12 +47,9 @@ class AbstractToolbar(wx.ToolBar):
         self.parent = parent
         wx.ToolBar.__init__(self, parent = self.parent, id = wx.ID_ANY)
         
+        self.Bind(wx.EVT_TOOL, self.OnTool)
+        
         self.SetToolBitmapSize(globalvar.toolbarSize)
-        
-        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        
-    def OnKeyDown(self, event):
-        pass
         
     def InitToolbar(self, toolData):
         """!Initialize toolbar, add tools to the toolbar
@@ -451,8 +448,8 @@ class VDigitToolbar(AbstractToolbar):
         self.settingsDialog   = None
         
         # create toolbars (two rows optionally)
-        self.Bind(wx.EVT_TOOL, self.OnTool)
         self.InitToolbar(self.ToolbarData())
+        self.Bind(wx.EVT_TOOL, self.OnTool)
         
         # default action (digitize new point, line, etc.)
         self.action = { 'desc' : 'addLine',
@@ -566,7 +563,6 @@ class VDigitToolbar(AbstractToolbar):
     
     def OnTool(self, event):
         """!Tool selected -> disable selected tool in map toolbar"""
-        # update map toolbar (unselect currently selected tool)
         id = self.parent.toolbars['map'].GetAction(type='id')
         self.parent.toolbars['map'].ToggleTool(id, False)
         
@@ -586,6 +582,7 @@ class VDigitToolbar(AbstractToolbar):
                 self.ToggleTool(self.action['id'], True)
             
             self.action['id'] = event.GetId()
+            
             event.Skip()
         
         self.ToggleTool(self.action['id'], True)
@@ -608,7 +605,7 @@ class VDigitToolbar(AbstractToolbar):
                         'type' : "point",
                         'id'   : self.addPoint }
         self.parent.MapWindow.mouse['box'] = 'point'
-
+        
     def OnAddLine(self, event):
         """!Add line to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddLine()")
@@ -617,7 +614,7 @@ class VDigitToolbar(AbstractToolbar):
                         'id'   : self.addLine }
         self.parent.MapWindow.mouse['box'] = 'line'
         ### self.parent.MapWindow.polycoords = [] # reset temp line
-
+                
     def OnAddBoundary(self, event):
         """!Add boundary to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
@@ -628,7 +625,7 @@ class VDigitToolbar(AbstractToolbar):
                         'type' : "boundary",
                         'id'   : self.addBoundary }
         self.parent.MapWindow.mouse['box'] = 'line'
-
+        
     def OnAddCentroid(self, event):
         """!Add centroid to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
