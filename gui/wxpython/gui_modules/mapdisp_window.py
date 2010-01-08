@@ -22,6 +22,7 @@ import time
 import math
 import sys
 import tempfile
+import traceback
 
 import wx
 
@@ -275,7 +276,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.pdc.BeginDrawing()
             self.pdc.SetBackground(wx.Brush(self.GetBackgroundColour()))
             self.pdc.BeginDrawing()
-        except:
+        except StandardError, e:
+            traceback.print_exc(file = sys.stderr)
             return False
         
         return True
