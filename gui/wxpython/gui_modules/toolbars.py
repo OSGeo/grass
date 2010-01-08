@@ -1230,7 +1230,7 @@ class VDigitToolbar(AbstractToolbar):
 
             if not self.comboid:
                 self.combo = wx.ComboBox(self, id=wx.ID_ANY, value=value,
-                                         choices=[_('New vector map'), ] + layerNameList, size=(85, -1),
+                                         choices=[_('New vector map'), ] + layerNameList, size=(115, -1),
                                          style=wx.CB_READONLY)
                 self.comboid = self.InsertControl(0, self.combo)
                 self.parent.Bind(wx.EVT_COMBOBOX, self.OnSelectMap, self.comboid)
