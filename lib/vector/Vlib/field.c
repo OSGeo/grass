@@ -722,7 +722,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 	if (strlen(buf) == 0)
 	    continue;
  
-	tokens = G_tokenize(buf, " ");
+	tokens = G_tokenize(buf, " |");
 	ntok = G_number_of_tokens(tokens);
 
 	if (ntok < 2 || (ntok < 5 && rule < 1)) {
@@ -807,10 +807,10 @@ int Vect_write_dblinks(struct Map_info *Map)
 	else
 	    sprintf(buf, "%d", dbl->field[i].number);
 
-	fprintf(fd, "%s %s %s %s %s\n", buf, dbl->field[i].table,
+	fprintf(fd, "%s|%s|%s|%s|%s\n", buf, dbl->field[i].table,
 		dbl->field[i].key, dbl->field[i].database,
 		dbl->field[i].driver);
-	G_debug(1, "%s %s %s %s %s", buf, dbl->field[i].table,
+	G_debug(1, "%s|%s|%s|%s|%s", buf, dbl->field[i].table,
 		dbl->field[i].key, dbl->field[i].database,
 		dbl->field[i].driver);
     }
