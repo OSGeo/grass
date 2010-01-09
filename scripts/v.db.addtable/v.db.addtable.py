@@ -15,7 +15,7 @@
 #############################################################################
 
 #%Module
-#%  description: Creates and adds a new attribute table to a given layer of an existing vector map.
+#%  description: Creates and connects a new attribute table to a given layer of an existing vector map.
 #%  keywords: vector
 #%  keywords: database
 #%  keywords: attribute table
@@ -83,21 +83,13 @@ def main():
     # check if DB parameters are set, and if not set them.
     grass.run_command('db.connect', flags = 'c')
 
-    #check if anything is connected:
-    nuldev = file(os.devnull, 'w')
-    db = grass.vector_db(map, stderr = nuldev)
-    if db:
-	f = db[min(db.keys())]
-	database = f['database']
-	driver = f['driver']
-    else:
-	# nothing defined
-	grass.message(_("Creating new DB connection based on default mapset settings..."))
-	kv = grass.db_connection()
-	database = kv['database']
-	driver = kv['driver']
+    grass.message(_("Creating new DB connection based on default mapset settings..."))
+    kv = grass.db_connection()
+    database = kv['database']
+    driver = kv['driver']
 
     # maybe there is already a table linked to the selected layer?
+    nuldev = file(os.devnull, 'w')
     try:
         grass.vector_db(map, stderr = nuldev)[int(layer)]
 	grass.fatal(_("There is already a table linked to layer <%s>") % layer)
