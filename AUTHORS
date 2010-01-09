@@ -74,10 +74,12 @@ INSTITUTIONAL SUPPORT
  - The Open Source Geospatial Foundation (http://www.osgeo.org)
 
 Additional authors:
+
 GUI
  - Martin Landa <landa.martin gmail com>: wxPython GUI lead
  - Michael Barton <michael.barton asu edu>: wxPython, Tcl/Tk GUI lead
  - Cedrik Shock <cedricpublic at shockfamily.net>: Tcl/Tk enhancements
+ - Maris Nartiss <maris.gis gmail com>: Tcl/Tk portability
 
 Google Summer of Code awards:
  - Wolf Bergenheim: Mentor team lead
@@ -87,6 +89,9 @@ Google Summer of Code awards:
  - Daniel Bundala: v.generalize; 2007
  - Maximilian Maldacke:r v.net.visibility; 2007
 
+ALGORITHM OPTIMIZATION
+ - Markus Metz <markus.metz.giswork googlemail com>
+
 NVIZ
  - ACS/Massimo Cuomo <m.cuomo at acsys.it>: New flythrough navigation
 
@@ -95,9 +100,9 @@ PACKAGING
      o DebianGIS Project <pkg-grass-devel lists.alioth.debian.org>
      o Mandriva:
      o SuSE: Otto Dassau
-     o Ubuntu: Jachym Cepicky
+     o Ubuntu: Jachym Cepicky and the UbuntuGIS Team
  - Mac OSX: William Kyngesburye
- - MS-Windows: Colin Nielsen and Marco Pasetti
+ - MS-Windows: Marco Pasetti, Colin Nielsen, and Helmut Kudrnovsky
 
 Source code Quality assessment system
  - SOCCER Labs at Ecole Polytechnique de Montreal, Canada
