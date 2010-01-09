@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     display_opt = G_define_option();
     display_opt->key = "display";
     display_opt->type = TYPE_STRING;
-    display_opt->required = NO;
+    display_opt->required = YES;
     display_opt->multiple = YES;
     display_opt->answer = "shape";
     display_opt->options = "shape,cat,topo,dir,attr,zcoor";
