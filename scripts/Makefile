@@ -54,6 +54,7 @@ SUBDIRS = \
 	v.in.e00 \
 	v.in.geonames \
 	v.in.gns \
+	v.in.lines \
 	v.in.mapgen \
 	v.in.sites.all \
 	v.in.wfs \
