@@ -520,7 +520,6 @@ int Vect_get_field_number(const struct Map_info *Map, const char *field)
  */
 int Vect_read_dblinks(struct Map_info *Map)
 {
-    int ndef;
     FILE *fd;
     char file[1024], buf[2001];
     char tab[1024], col[1024], db[1024], drv[1024], fldstr[1024], *fldname;
@@ -528,6 +527,8 @@ int Vect_read_dblinks(struct Map_info *Map)
     char *c;
     int row, rule;
     struct dblinks *dbl;
+    char **tokens;
+    int ntok, i;
 
     G_debug(1, "Vect_read_dblinks(): map = %s, mapset = %s", Map->name,
 	    Map->mapset);
@@ -720,13 +721,31 @@ int Vect_read_dblinks(struct Map_info *Map)
 
 	if (strlen(buf) == 0)
 	    continue;
+ 
+	tokens = G_tokenize(buf, " ");
+	ntok = G_number_of_tokens(tokens);
 
-	ndef = sscanf(buf, "%s %s %s %s %s", fldstr, tab, col, db, drv);
-
-	if (ndef < 2 || (ndef < 5 && rule < 1)) {
+	if (ntok < 2 || (ntok < 5 && rule < 1)) {
 	    G_warning(_("Error in rule on row %d in %s"), row, file);
 	    continue;
 	}
+
+	strcpy(fldstr, tokens[0]);
+	strcpy(tab, tokens[1]);
+	if (ntok > 2) {
+	    strcpy(col, tokens[2]);
+	    if (ntok > 3) {
+		strcpy(db, tokens[3]);
+		/* allow for spaces in path names */
+		for (i=4; i < ntok-1; i++) {
+		    strcat(db, " ");
+		    strcat(db, tokens[i]);
+		}
+
+		strcpy(drv, tokens[ntok-1]);
+	    }
+	}
+	G_free_tokens(tokens);
 
 	/* get field and field name */
 	fldname = strchr(fldstr, '/');
