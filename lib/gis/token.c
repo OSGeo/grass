@@ -23,7 +23,19 @@
  *
  * Given a string, <b>buf</b>, turn delimiter, <b>delim</b>, into '\0' 
  * (NULL) and place pointers to tokens in tokens.  <b>buf</b> must not 
- * contain a new line (\n).
+ * contain a new line (\n). <b>delim</b> may consist of more than one
+ * character. <i>G_free_tokens()</i> must be called when finished with 
+ * tokens to release memory.
+ *
+ * Example:
+ *   char **tokens;
+ *   int ntok, i;
+ *   tokens = G_tokenize(buf, " |:,");
+ *   ntok = G_number_of_tokens(tokens);
+ *   for (i=0; i < ntok; i++) {
+ *       G_debug(0, "%d=[%s]", i, tokens[i]);
+ *   }
+ *   G_free_tokens(tokens);
  *
  * \param[in] buf input string
  * \param[in] delim string delimiter
