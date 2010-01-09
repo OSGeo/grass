@@ -196,6 +196,13 @@
 	      <command>v.in.ascii</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>ASCII points as a vector lines</label>
+	      <help>Creates a lines vector map from an ASCII x,y points file.</help>
+	      <keywords>vector,import</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.in.lines</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Old GRASS vector import</label>
 	      <help>Imports older versions of GRASS vector maps.</help>
 	      <keywords>vector,import,conversion</keywords>
