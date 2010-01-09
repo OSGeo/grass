@@ -75,7 +75,6 @@ int main(int argc, char **argv)
     field_opt->gisprompt = "new_layer,layer,layer";
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
-    sep_opt->answer = " ";
 
     print = G_define_flag();
     print->key = 'p';
