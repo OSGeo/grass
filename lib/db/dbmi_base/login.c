@@ -73,7 +73,7 @@ static void add_login(LOGIN * login, const char *dr, const char *db, const char 
 }
 
 /*
-   Read file if exists
+   Read the DB login file if it exists
    return: -1 error (cannot read file)
    number of items (0 also if file does not exist)
  */
@@ -88,7 +88,7 @@ static int read_file(LOGIN * login)
     login->n = 0;
     file = login_filename();
 
-    G_debug(3, "file = <%s>", file);
+    G_debug(3, "DB login file = <%s>", file);
 
     if (stat(file, &info) != 0) {
 	G_debug(3, "login file does not exist");
@@ -103,10 +103,10 @@ static int read_file(LOGIN * login)
 	G_chop(buf);
 
 	usr[0] = pwd[0] = '\0';
-	/* FIXME: not safe for spaces in DB path name */
-	ret = sscanf(buf, "%[^ ] %[^ ] %[^ ] %[^ ]", dr, db, usr, pwd);
+	/* is last scan ok? the newline is already stripped by G_getl2() */
+	ret = sscanf(buf, "%[^|]|%[^|]|%[^|]|%[^\n]", dr, db, usr, pwd);
 
-	G_debug(3, "ret = %d : dr=[%s] db=[%s] us=[%s] pw=[%s]",
+	G_debug(3, "ret = %d : drv=[%s] db=[%s] usr=[%s] pwd=[%s]",
 		ret, dr, db, usr, pwd);
 
 	if (ret < 2) {
@@ -123,7 +123,7 @@ static int read_file(LOGIN * login)
 }
 
 /*
-   Write file
+   Write the DB login file
    return: -1 error (cannot read file)
    0 OK
  */
@@ -135,7 +135,7 @@ static int write_file(LOGIN * login)
 
     file = login_filename();
 
-    G_debug(3, "file = %s", file);
+    G_debug(3, "DB login file = <%s>", file);
 
     fd = fopen(file, "w");
     if (fd == NULL)
@@ -146,12 +146,12 @@ static int write_file(LOGIN * login)
     chmod(file, S_IRUSR | S_IWUSR);
 
     for (i = 0; i < login->n; i++) {
-	fprintf(fd, "%s %s", login->data[i].driver, login->data[i].database);
+	fprintf(fd, "%s|%s", login->data[i].driver, login->data[i].database);
 	if (login->data[i].user) {
-	    fprintf(fd, " %s", login->data[i].user);
+	    fprintf(fd, "|%s", login->data[i].user);
 
 	    if (login->data[i].password)
-		fprintf(fd, " %s", login->data[i].password);
+		fprintf(fd, "|%s", login->data[i].password);
 	}
 	fprintf(fd, "\n");
     }
@@ -178,8 +178,8 @@ int db_set_login(const char *driver, const char *database, const char *user,
     int i, found;
     LOGIN login;
 
-    G_debug(3, "db_set_login(): %s %s %s %s", driver, database, user,
-	    password);
+    G_debug(3, "db_set_login(): drv=[%s] db=[%s] usr=[%s] pwd=[%s]",
+	    driver, database, user, password);
 
     init_login(&login);
 
