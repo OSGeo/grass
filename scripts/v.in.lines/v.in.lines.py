@@ -135,9 +135,9 @@ def main():
             continue
         numcols = len(line.split())
         break
+    inf.close()
     if (do3D and numcols < 3) or (not do3D and numcols < 2):
         grass.fatal(_("Not enough data columns. (incorrect fs setting?)"))
-    inf.close()
 
 
     grass.run_command('v.in.mapgen', flags = 'f' + do3D,
