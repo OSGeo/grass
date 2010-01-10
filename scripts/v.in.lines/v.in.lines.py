@@ -58,14 +58,10 @@ def cleanup():
 def main():
     global tmp
 
-    infile_opt = options['input']
-    output = options['output']
     fs = options['fs']
     threeD = flags['z']
 
     prog = 'v.in.lines'
-
-    opts = ""
 
     if threeD:
         do3D = 'z'
@@ -90,11 +86,11 @@ def main():
             grass.fatal(_("Invalid field separator '%s'") % fs)
 
     #### set up input file
-    if infile_opt == '-':
+    if options['input'] == '-':
         infile = None
         inf = sys.stdin
     else:
-        infile = infile_opt
+        infile = options['input']
         if not os.path.exists(infile):
             grass.fatal(_("Unable to read input file <%s>") % infile)
         grass.debug("input file=[%s]" % infile)
@@ -141,7 +137,7 @@ def main():
 
 
     grass.run_command('v.in.mapgen', flags = 'f' + do3D,
-                      input = runfile, output = output)
+                      input = runfile, output = options['output'])
 
 
 if __name__ == "__main__":
