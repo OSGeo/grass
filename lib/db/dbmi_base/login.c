@@ -103,7 +103,6 @@ static int read_file(LOGIN * login)
 	G_chop(buf);
 
 	usr[0] = pwd[0] = '\0';
-	/* is last scan ok? the newline is already stripped by G_getl2() */
 	ret = sscanf(buf, "%[^|]|%[^|]|%[^|]|%[^\n]", dr, db, usr, pwd);
 
 	G_debug(3, "ret = %d : drv=[%s] db=[%s] usr=[%s] pwd=[%s]",
