@@ -721,12 +721,21 @@ int Vect_read_dblinks(struct Map_info *Map)
 
 	if (strlen(buf) == 0)
 	    continue;
- 
+
+#ifdef NOT_ABLE_TO_READ_GRASS_6
+	int ndef;
+	ndef = sscanf(buf, "%s|%s|%s|%s|%s", fldstr, tab, col, db, drv);
+
+        if (ndef < 2 || (ndef < 5 && rule < 1)) {
+            G_warning(_("Error in rule on row %d in <%s>"), row, file);
+            continue;
+        }
+#else
 	tokens = G_tokenize(buf, " |");
 	ntok = G_number_of_tokens(tokens);
 
 	if (ntok < 2 || (ntok < 5 && rule < 1)) {
-	    G_warning(_("Error in rule on row %d in %s"), row, file);
+	    G_warning(_("Error in rule on row %d in <%s>"), row, file);
 	    continue;
 	}
 
@@ -746,6 +755,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 	    }
 	}
 	G_free_tokens(tokens);
+#endif
 
 	/* get field and field name */
 	fldname = strchr(fldstr, '/');
