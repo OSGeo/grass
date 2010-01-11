@@ -230,7 +230,7 @@ int db_get_login(const char *driver, const char *database, const char **user,
     int i;
     LOGIN login;
 
-    G_debug(3, "db_get_login(): %s %s", driver, database);
+    G_debug(3, "db_get_login(): drv=[%s] db=[%s]", driver, database);
 
     user[0] = '\0';
     password[0] = '\0';
