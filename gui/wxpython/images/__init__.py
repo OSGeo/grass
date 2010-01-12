@@ -1,7 +1,7 @@
 all = [
     "grass_form.png",
-    "intro.png",
-    "intro.xcf",
+    "grass_splash.png",
+    "grass_splash.xcf",
     "loc_wizard.png",
     "loc_wizard_qgis.png",
     "qgis_world.png",
