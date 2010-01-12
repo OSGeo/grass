@@ -150,6 +150,9 @@ void G_free_key_value(struct Key_Value *kv)
 {
     int n;
 
+    if (!kv)
+	return;
+
     for (n = 0; n < kv->nitems; n++) {
 	G_free(kv->key[n]);
 	G_free(kv->value[n]);
