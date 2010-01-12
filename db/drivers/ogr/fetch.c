@@ -152,6 +152,9 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    break;
 
 	case OFTString:
+	case OFTDate:
+	case OFTTime:
+	case OFTDateTime:
 	    db_set_string(&(value->s),
 			  (char *)OGR_F_GetFieldAsString(c->hFeature, i));
 	    break;
