@@ -90,15 +90,16 @@ Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
 			 struct ilist *list)
 {
     int i;
-    const char *dstr;
-    int debug_level;
+    static int debug_level = -1;
 
-    dstr = G__getenv("DEBUG");
+    if (debug_level == -1) {
+	const char *dstr = G__getenv("DEBUG");
 
-    if (dstr != NULL)
-	debug_level = atoi(dstr);
-    else
-	debug_level = 0;
+	if (dstr != NULL)
+	    debug_level = atoi(dstr);
+	else
+	    debug_level = 0;
+    }
 
     G_debug(3, "Vect_select_areas_by_box()");
     G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
@@ -224,6 +225,8 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
 
     /* Select first all lines by box */
     dig_line_box(Polygon, &box);
+    box.T = PORT_DOUBLE_MAX;
+    box.B = -PORT_DOUBLE_MAX;
     Vect_select_lines_by_box(Map, &box, type, LocList);
     G_debug(3, "  %d lines selected by box", LocList->n_values);
 
