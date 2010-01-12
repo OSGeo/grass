@@ -111,7 +111,8 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 	fieldName = OGR_Fld_GetNameRef(hFieldDefn);
 
 	if (ogrType != OFTInteger && ogrType != OFTReal &&
-	    ogrType != OFTString) {
+	    ogrType != OFTString  && ogrType != OFTDate &&
+	    ogrType != OFTTime    && ogrType != OFTDateTime ) {
 	    G_warning(_("OGR driver: column '%s', OGR type %d is not supported"),
 		      fieldName, ogrType);
 	    cols[i] = 0;
@@ -186,6 +187,9 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 	    break;
 
 	case OFTString:
+	case OFTDate:
+	case OFTTime:
+	case OFTDateTime:
 	    sqlType = DB_SQL_TYPE_CHARACTER;
 	    size = OGR_Fld_GetWidth(hFieldDefn);
 	    if (size == 0) {
