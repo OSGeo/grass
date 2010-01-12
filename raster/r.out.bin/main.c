@@ -1,8 +1,9 @@
 /*
  *   r.out.bin
  *
- *   Copyright (C) 2000 by the GRASS Development Team
+ *   Copyright (C) 2000,2010 by the GRASS Development Team
  *   Author: Bob Covill <bcovill@tekmap.ns.ca>
+ *   Modified by Glynn Clements, 2010-01-10
  *
  *   This program is free software under the GPL (>=v2)
  *   Read the file COPYING coming with GRASS for details.
@@ -16,46 +17,261 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "./gmt_grd.h"
-#include "./swab.h"
+#include "gmt_grd.h"
+
+static void swap_2(void *p)
+{
+    unsigned char *q = p;
+    unsigned char t;
+    t = q[0]; q[0] = q[1]; q[1] = t;
+}
+
+static void swap_4(void *p)
+{
+    unsigned char *q = p;
+    unsigned char t;
+    t = q[0]; q[0] = q[3]; q[3] = t;
+    t = q[1]; q[1] = q[2]; q[2] = t;
+}
+
+static void swap_8(void *p)
+{
+    unsigned char *q = p;
+    unsigned char t;
+    t = q[0]; q[0] = q[7]; q[7] = t;
+    t = q[1]; q[1] = q[6]; q[6] = t;
+    t = q[2]; q[2] = q[5]; q[5] = t;
+    t = q[3]; q[3] = q[4]; q[4] = t;
+}
+
+static void write_int(FILE *fp, int swap_flag, int x)
+{
+    if (swap_flag)
+	swap_4(&x);
+
+    if (fwrite(&x, 4, 1, fp) != 1)
+	G_fatal_error(_("Error writing data"));
+}
+
+static void write_double(FILE *fp, int swap_flag, double x)
+{
+    if (swap_flag)
+	swap_8(&x);
+
+    if (fwrite(&x, 8, 1, fp) != 1)
+	G_fatal_error(_("Error writing data"));
+}
+
+static void make_gmt_header(
+    struct GRD_HEADER *header,
+    const char *name, const char *outfile,
+    const struct Cell_head *region, double null_val)
+{
+    struct FPRange range;
+    DCELL z_min, z_max;
+
+    Rast_read_fp_range(name, "", &range);
+    Rast_get_fp_range_min_max(&range, &z_min, &z_max);
+
+    header->nx = region->cols;
+    header->ny = region->rows;
+    header->node_offset = 1;	/* 1 is pixel registration */
+    header->x_min = region->west;
+    header->x_max = region->east;
+    header->y_min = region->south;
+    header->y_max = region->north;
+    header->z_min = (double) z_min;
+    header->z_max = (double) z_max;
+    header->x_inc = region->ew_res;
+    header->y_inc = region->ns_res;
+    header->z_scale_factor = 1.0;
+    header->z_add_offset = 0.0;
+
+    if (region->proj == PROJECTION_LL) {
+	strcpy(header->x_units, "degrees");
+	strcpy(header->y_units, "degrees");
+    }
+    else {
+	strcpy(header->x_units, "Meters");
+	strcpy(header->y_units, "Meters");
+    }
+
+    strcpy(header->z_units, "elevation");
+    strcpy(header->title, name);
+    sprintf(header->command, "r.out.bin -h input=%s output=%s", name, outfile);
+    sprintf(header->remark, "%g used for NULL", null_val);
+}
+
+static void write_gmt_header(const struct GRD_HEADER *header, int swap_flag, FILE *fp)
+{
+    /* Write Values 1 at a time if byteswapping */
+    write_int(fp, swap_flag, header->nx);
+    write_int(fp, swap_flag, header->ny);
+    write_int(fp, swap_flag, header->node_offset);
+
+    write_double(fp, swap_flag, header->x_min);
+    write_double(fp, swap_flag, header->x_max);
+    write_double(fp, swap_flag, header->y_min);
+    write_double(fp, swap_flag, header->y_max);
+    write_double(fp, swap_flag, header->z_min);
+    write_double(fp, swap_flag, header->z_max);
+    write_double(fp, swap_flag, header->x_inc);
+    write_double(fp, swap_flag, header->y_inc);
+    write_double(fp, swap_flag, header->z_scale_factor);
+    write_double(fp, swap_flag, header->z_add_offset);
+
+    fwrite(header->x_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
+    fwrite(header->y_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
+    fwrite(header->z_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
+    fwrite(header->title,   sizeof(char[GRD_TITLE_LEN]),   1, fp);
+    fwrite(header->command, sizeof(char[GRD_COMMAND_LEN]), 1, fp);
+    fwrite(header->remark,  sizeof(char[GRD_REMARK_LEN]),  1, fp);
+}
+
+static void write_bil_hdr(
+    const char *outfile, const struct Cell_head *region,
+    int size, int order, int header, double null_val)
+{
+    char out_tmp[GPATH_MAX];
+    FILE *fp;
+
+    sprintf(out_tmp, "%s.hdr", outfile);
+    G_verbose_message(_("Header File = %s"), out_tmp);
+
+    /* Open Header File */
+    fp = fopen(out_tmp, "w");
+    if (!fp)
+	G_fatal_error(_("Unable to create file <%s>"), out_tmp);
+
+    fprintf(fp, "nrows %d\n", region->rows);
+    fprintf(fp, "ncols %d\n", region->cols);
+    fprintf(fp, "nbands 1\n");
+    fprintf(fp, "nbits %d\n", size * 8);
+    fprintf(fp, "byteorder %s\n", order == 0 ? "M" : "I");
+    fprintf(fp, "layout bil\n");
+    fprintf(fp, "skipbytes %d\n", header ? 892 : 0);
+    fprintf(fp, "nodata %g\n", null_val);
+
+    fclose(fp);
+}
+
+static void convert_cell(
+    unsigned char *out_cell, const DCELL in_cell,
+    int is_fp, int size, int swap_flag)
+{
+    if (is_fp) {
+	switch (size) {
+	case 4:
+	    *(float *) out_cell = (float) in_cell;
+	    break;
+	case 8:
+	    *(double *) out_cell = (double) in_cell;
+	    break;
+	}
+    }
+    else {
+	switch (size) {
+	case 1:
+	    *(unsigned char *) out_cell = (unsigned char) in_cell;
+	    break;
+	case 2:
+	    *(short *) out_cell = (short) in_cell;
+	    break;
+	case 4:
+	    *(int *) out_cell = (int) in_cell;
+	    break;
+#ifdef HAVE_LONG_LONG_INT
+	case 8:
+	    *(long long *) out_cell = (long long) in_cell;
+	    break;
+#endif
+	}
+    }
+
+    if (swap_flag) {
+	switch (size) {
+	case 1:				break;
+	case 2:	swap_2(out_cell);	break;
+	case 4:	swap_4(out_cell);	break;
+	case 8:	swap_8(out_cell);	break;
+	}
+    }
+}
+
+static void convert_row(
+    unsigned char *out_buf, const DCELL *raster, int ncols,
+    int is_fp, int size, int swap_flag, double null_val)
+{
+    unsigned char *ptr = out_buf;
+    int i;
+
+    for (i = 0; i < ncols; i++) {
+	DCELL x = Rast_is_d_null_value(&raster[i])
+	    ? null_val
+	    : raster[i];
+	convert_cell(ptr, x, is_fp, size, swap_flag);
+	ptr += size;
+    }
+}
+
+static void write_bil_wld(const char *outfile, const struct Cell_head *region)
+{
+    char out_tmp[GPATH_MAX];
+    FILE *fp;
+
+    sprintf(out_tmp, "%s.wld", outfile);
+    G_verbose_message(_("World File = %s"), out_tmp);
+
+    /* Open World File */
+    fp = fopen(out_tmp, "w");
+    if (!fp)
+	G_fatal_error(_("Unable to create file <%s>"), out_tmp);
+
+    fprintf(fp, "%f\n", region->ew_res);
+    fprintf(fp, "0.0\n");
+    fprintf(fp, "0.0\n");
+    fprintf(fp, "-%f\n", region->ns_res);
+    fprintf(fp, "%f\n", region->west + (region->ew_res / 2));
+    fprintf(fp, "%f\n", region->north - (region->ns_res / 2));
+
+    fclose(fp);
+}
 
 int main(int argc, char *argv[])
 {
-    void *raster, *ptr;
-    RASTER_MAP_TYPE out_type, map_type;
-    char *name;
-    char outfile[GNAME_MAX];
-    int null_str = 0;
-    char buf[128];
-    int fd;
-    int row, col;
-    int nrows, ncols;
-    short number_i;
-    int do_stdout = 0;
-    int swapFlag;
-    FILE *fp;
-    struct GRD_HEADER header;
-    struct FPRange range;
-    DCELL Z_MIN, Z_MAX;
-
-    float number_f;
-    double number_d;
-    short null_val_i;
-    float null_val_f;
-    double null_val_d;
-    struct Cell_head region;
     struct GModule *module;
     struct
     {
 	struct Option *input;
 	struct Option *output;
 	struct Option *null;
+	struct Option *size;
+	struct Option *order;
     } parm;
     struct
     {
-	struct Flag *int_out, *gmt_hd, *BIL_hd, *swap;
+	struct Flag *int_out;
+	struct Flag *float_out;
+	struct Flag *gmt_hd;
+	struct Flag *bil_hd;
+	struct Flag *swap;
     } flag;
-
+    char *name;
+    char *outfile;
+    double null_val;
+    int do_stdout;
+    int is_fp;
+    int size;
+    int order;
+    int swap_flag;
+    struct Cell_head region;
+    int nrows, ncols;
+    DCELL *in_buf;
+    unsigned char *out_buf;
+    int fd;
+    FILE *fp;
+    struct GRD_HEADER header;
+    int row;
 
     G_gisinit(argv[0]);
 
@@ -81,23 +297,41 @@ int main(int argc, char *argv[])
 
     parm.null = G_define_option();
     parm.null->key = "null";
-    parm.null->type = TYPE_INTEGER;
+    parm.null->type = TYPE_DOUBLE;
     parm.null->required = NO;
     parm.null->answer = "0";
     parm.null->description = _("Value to write out for null");
 
+    parm.size = G_define_option();
+    parm.size->key = "size";
+    parm.size->type = TYPE_INTEGER;
+    parm.size->required = NO;
+    parm.size->options = "1,2,4,8";
+    parm.size->description = _("Number of bytes per cell");
+
+    parm.order = G_define_option();
+    parm.order->key = "order";
+    parm.order->type = TYPE_STRING;
+    parm.order->required = NO;
+    parm.order->options = "big,little,native,swap";
+    parm.order->description = _("Output byte order");
+    parm.order->answer = "native";
+
     flag.int_out = G_define_flag();
     flag.int_out->key = 'i';
-    flag.int_out->description =
-	_("Output integer category values, not cell values");
+    flag.int_out->description = _("Generate integer output");
+
+    flag.float_out = G_define_flag();
+    flag.float_out->key = 'f';
+    flag.float_out->description = _("Generate floating-point output");
 
     flag.gmt_hd = G_define_flag();
     flag.gmt_hd->key = 'h';
     flag.gmt_hd->description = _("Export array with GMT compatible header");
 
-    flag.BIL_hd = G_define_flag();
-    flag.BIL_hd->key = 'b';
-    flag.BIL_hd->description = _("Generate BIL world and header files");
+    flag.bil_hd = G_define_flag();
+    flag.bil_hd->key = 'b';
+    flag.bil_hd->description = _("Generate BIL world and header files");
 
     flag.swap = G_define_flag();
     flag.swap->key = 's';
@@ -106,30 +340,65 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (sscanf(parm.null->answer, "%d", &null_str) != 1)
+    if (sscanf(parm.null->answer, "%lf", &null_val) != 1)
 	G_fatal_error(_("Invalid value for null (integers only)"));
 
     name = parm.input->answer;
 
     if (parm.output->answer)
-	strncpy(outfile, parm.output->answer, sizeof(outfile) - 1);
+	outfile = parm.output->answer;
     else {
-	strncpy(outfile, name, sizeof(outfile) - 1 - 4);
-	strcat(outfile, ".bin");
+	outfile = G_malloc(strlen(name) + 4 + 1);
+	sprintf(outfile, "%s.bin", name);
     }
 
-    if ((strcmp("-", outfile)) == 0)
-	do_stdout = 1;
+    if (G_strcasecmp(parm.order->answer, "big") == 0)
+	order = 0;
+    else if (G_strcasecmp(parm.order->answer, "little") == 0)
+	order = 1;
+    else if (G_strcasecmp(parm.order->answer, "native") == 0)
+	order = G_is_little_endian() ? 1 : 0;
+    else if (G_strcasecmp(parm.order->answer, "swap") == 0)
+	order = G_is_little_endian() ? 0 : 1;
 
-    G_get_window(&region);
+    if (flag.swap->answer) {
+	if (strcmp(parm.order->answer, "native") != 0)
+	    G_fatal_error(_("order= and -s are mutually exclusive"));
+	order = G_is_little_endian() ? 0 : 1;
+    }
+
+    swap_flag = order == (G_is_little_endian() ? 0 : 1);
+
+    do_stdout = strcmp("-", outfile) == 0;
+
+    if (flag.int_out->answer && flag.float_out->answer)
+	G_fatal_error(_("-i and -f are mutually exclusive"));
 
     fd = Rast_open_old(name, "");
 
-    map_type = Rast_get_map_type(fd);
-    if (!flag.int_out->answer)
-	out_type = map_type;
+    if (flag.int_out->answer)
+	is_fp = 0;
+    else if (flag.float_out->answer)
+	is_fp = 1;
     else
-	out_type = CELL_TYPE;
+	is_fp = Rast_get_map_type(fd) != CELL_TYPE;
+
+    if (parm.size->answer)
+	size = atoi(parm.size->answer);
+    else if (is_fp)
+	size = 4;
+    else
+	size = 2;
+
+    if (is_fp && size < 4)
+	G_fatal_error(_("Floating-point output requires size=4 or size=8"));
+
+#ifndef HAVE_LONG_LONG_INT
+    if (!is_fp && size > 4)
+	G_fatal_error(_("Integer output doesn't support size=8 in this build"));
+#endif
+
+    G_get_window(&region);
 
     /* open bin file for writing */
     if (do_stdout)
@@ -137,274 +406,66 @@ int main(int argc, char *argv[])
     else if (NULL == (fp = fopen(outfile, "w")))
 	G_fatal_error(_("Unable to create file <%s>"), outfile);
 
-    /* Check Endian State of Host Computer */
-    if (G_is_little_endian()) {
-	swapFlag = 1;		/*true: little endian */
-	if (flag.swap->answer)
-	    swapFlag = 0;	/* Swapping enabled */
-    }
-    else {
-	swapFlag = 0;
-	if (flag.swap->answer)
-	    swapFlag = 1;	/* Swapping enabled */
-    }
-
-
     /* Set up Parameters for GMT header */
     if (flag.gmt_hd->answer) {
-	Rast_read_fp_range(name, "", &range);
-	Rast_get_fp_range_min_max(&range, &Z_MIN, &Z_MAX);
-
-	header.nx = region.cols;
-	header.ny = region.rows;
-	header.node_offset = 1;	/* 1 is pixel registration */
-	header.x_min = (double)region.west;
-	header.x_max = (double)region.east;
-	header.y_min = (double)region.south;
-	header.y_max = (double)region.north;
-	header.z_min = (double)Z_MIN;
-	header.z_max = (double)Z_MAX;
-	header.x_inc = (double)region.ew_res;
-	header.y_inc = (double)region.ns_res;
-	header.z_scale_factor = (double)1.0;
-	header.z_add_offset = (double)0.0;
-
-	/* Swap Header if Required */
-	if (flag.swap->answer) {
-	    G_message(_("Swapping header data"));
-	    TIFFSwabLong((uint32 *) & header.nx);
-	    TIFFSwabLong((uint32 *) & header.ny);
-	    TIFFSwabLong((uint32 *) & header.node_offset);
-
-	    TIFFSwabDouble((double *)&header.x_min);
-	    TIFFSwabDouble((double *)&header.x_max);
-	    TIFFSwabDouble((double *)&header.y_min);
-	    TIFFSwabDouble((double *)&header.y_max);
-	    TIFFSwabDouble((double *)&header.z_min);
-	    TIFFSwabDouble((double *)&header.z_max);
-	    TIFFSwabDouble((double *)&header.x_inc);
-	    TIFFSwabDouble((double *)&header.y_inc);
-	    TIFFSwabDouble((double *)&header.z_scale_factor);
-	    TIFFSwabDouble((double *)&header.z_add_offset);
-	}
-
-	if (region.proj == PROJECTION_LL) {
-	    strcpy(header.x_units, "degrees");
-	    strcpy(header.y_units, "degrees");
-	}
-	else {
-	    strcpy(header.x_units, "Meters");
-	    strcpy(header.y_units, "Meters");
-	}
-	strcpy(header.z_units, "elevation");
-	strcpy(header.title, name);
-	strcpy(header.command, "r.out.bin -h input=");
-	strcat(header.command, name);
-	strcat(header.command, " output=");
-	strcat(header.command, outfile);
-	if (flag.swap->answer)
-	    TIFFSwabLong((uint32 *) & null_str);
-	sprintf(buf, "%d", null_str);
-	strcpy(header.remark, buf);
-	strcat(header.remark, " used for NULL");
+	if (!is_fp && size > 4)
+	    G_fatal_error(_("GMT grid doesn't support 64-bit integers"));
+	make_gmt_header(&header, name, outfile, &region, null_val);
     }
 
     /* Write out BIL support files compatible with Arc-View */
-    if (flag.BIL_hd->answer) {
-	char out_tmp1[GPATH_MAX], out_tmp2[GPATH_MAX];
-	FILE *fp_1, *fp_2;
-
-	strcpy(out_tmp1, outfile);
-	strcat(out_tmp1, ".hdr");
-	strcpy(out_tmp2, outfile);
-	strcat(out_tmp2, ".wld");
-
-	/* Open Header File */
-	if (NULL == (fp_1 = fopen(out_tmp1, "w")))
-	    G_fatal_error(_("Unable to create file <%s>"), out_tmp1);
-
-	/* Open World File */
-	if (NULL == (fp_2 = fopen(out_tmp2, "w")))
-	    G_fatal_error(_("Unable to create file <%s>"), out_tmp2);
-
-
+    if (flag.bil_hd->answer) {
 	G_message(_("Creating BIL support files..."));
-	G_message(_("Header File = %s"), out_tmp1);
-	G_message(_("World File = %s"), out_tmp2);
-
-	fprintf(fp_1, "nrows %d\n", region.rows);
-	fprintf(fp_1, "ncols %d\n", region.cols);
-	fprintf(fp_1, "nbands 1\n");
-
-	if (out_type == CELL_TYPE)
-	    fprintf(fp_1, "nbits 16\n");
-	if (out_type == FCELL_TYPE)
-	    fprintf(fp_1, "nbits 32\n");
-	if (out_type == DCELL_TYPE)
-	    fprintf(fp_1, "nbits 64\n");
-	if (swapFlag == 1)
-	    fprintf(fp_1, "byteorder I\n");	/* Intel - little endian */
-	if (swapFlag == 0)
-	    fprintf(fp_1, "byteorder M\n");	/* Motorola - big endian */
-
-	fprintf(fp_1, "layout bil\n");
-
-	if (flag.gmt_hd->answer) {
-	    if (swapFlag == 1)
-		fprintf(fp_1, "skipbytes 892\n");	/* Real size of struct - little endian */
-	    else
-		fprintf(fp_1, "skipbytes 896\n");	/* Pad size of struct - big endian */
-	}
-	else
-	    fprintf(fp_1, "skipbytes 0\n");
-
-	fprintf(fp_1, "nodata %d\n", null_str);
-
-	fclose(fp_1);
-
-	fprintf(fp_2, "%f\n", region.ew_res);
-	fprintf(fp_2, "0.0\n");
-	fprintf(fp_2, "0.0\n");
-	fprintf(fp_2, "-%f\n", region.ns_res);
-	fprintf(fp_2, "%f\n", region.west + (region.ew_res / 2));
-	fprintf(fp_2, "%f\n", region.north - (region.ns_res / 2));
-
-	fclose(fp_2);
+	write_bil_hdr(outfile, &region,
+		      size, order, flag.gmt_hd->answer, null_val);
+	write_bil_wld(outfile, &region);
     }
-
-    raster = Rast_allocate_buf(out_type);
 
     /* Write out GMT Header if required */
-    if (flag.gmt_hd->answer) {
-	/* Write Values 1 at a time if byteswapping */
-	fwrite(&header.nx, sizeof(int), 1, fp);
-	fwrite(&header.ny, sizeof(int), 1, fp);
-	fwrite(&header.node_offset, sizeof(int), 1, fp);
-	if (swapFlag == 0)	/* Padding needed for big-endian */
-	    fwrite(&header.node_offset, sizeof(int), 1, fp);
-
-	fwrite(&header.x_min, sizeof(double), 1, fp);
-	fwrite(&header.x_max, sizeof(double), 1, fp);
-	fwrite(&header.y_min, sizeof(double), 1, fp);
-	fwrite(&header.y_max, sizeof(double), 1, fp);
-	fwrite(&header.z_min, sizeof(double), 1, fp);
-	fwrite(&header.z_max, sizeof(double), 1, fp);
-	fwrite(&header.x_inc, sizeof(double), 1, fp);
-	fwrite(&header.y_inc, sizeof(double), 1, fp);
-	fwrite(&header.z_scale_factor, sizeof(double), 1, fp);
-	fwrite(&header.z_add_offset, sizeof(double), 1, fp);
-
-	fwrite(&header.x_units, sizeof(char[GRD_UNIT_LEN]), 1, fp);
-	fwrite(&header.y_units, sizeof(char[GRD_UNIT_LEN]), 1, fp);
-	fwrite(&header.z_units, sizeof(char[GRD_UNIT_LEN]), 1, fp);
-	fwrite(&header.title, sizeof(char[GRD_TITLE_LEN]), 1, fp);
-	fwrite(&header.command, sizeof(char[GRD_COMMAND_LEN]), 1, fp);
-	fwrite(&header.remark, sizeof(char[GRD_REMARK_LEN]), 1, fp);
-    }
+    if (flag.gmt_hd->answer)
+	write_gmt_header(&header, swap_flag, fp);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    if (out_type == CELL_TYPE) {
-	G_message(_("Exporting raster as integer values (bytes=%d)"),
-		  sizeof(short));
-	if (flag.gmt_hd->answer)
-	    G_message(_("Writing GMT integer format ID=2"));
-    }
-    if (out_type == FCELL_TYPE) {
-	G_message(_("Exporting raster as floating values (bytes=%d)"),
-		  sizeof(float));
+    in_buf = Rast_allocate_d_buf();
+    out_buf = G_malloc(ncols * size);
+
+    if (is_fp) {
+	G_message(_("Exporting raster as floating values (bytes=%d)"), size);
 	if (flag.gmt_hd->answer)
 	    G_message(_("Writing GMT float format ID=1"));
     }
-    if (out_type == DCELL_TYPE)
-	G_message(_("Exporting raster as double values (bytes=%d)"),
-		  sizeof(double));
+    else {
+	G_message(_("Exporting raster as integer values (bytes=%d)"), size);
+	if (flag.gmt_hd->answer)
+	    G_message(_("Writing GMT integer format ID=2"));
+    }
 
-    G_message(_("Using the current region settings..."));
-    G_message(_("north=%f"), region.north);
-    G_message(_("south=%f"), region.south);
-    G_message(_("east=%f"), region.east);
-    G_message(_("west=%f"), region.west);
-    G_message(_("r=%d"), region.rows);
-    G_message(_("c=%d"), region.cols);
+    G_verbose_message(_("Using the current region settings..."));
+    G_verbose_message(_("north=%f"), region.north);
+    G_verbose_message(_("south=%f"), region.south);
+    G_verbose_message(_("east=%f"), region.east);
+    G_verbose_message(_("west=%f"), region.west);
+    G_verbose_message(_("r=%d"), region.rows);
+    G_verbose_message(_("c=%d"), region.cols);
 
     for (row = 0; row < nrows; row++) {
-	Rast_get_row(fd, raster, row, out_type);
 	G_percent(row, nrows, 2);
 
-	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
-	    if (!Rast_is_null_value(ptr, out_type)) {
-		if (out_type == CELL_TYPE) {
-		    number_i = *((CELL *) ptr);
-		    if (flag.swap->answer)
-			TIFFSwabShort((uint16 *) & number_i);
-		    fwrite(&number_i, sizeof(short), 1, fp);
-		}
-		else if (out_type == FCELL_TYPE) {
-		    number_f = *((FCELL *) ptr);
-		    if (flag.swap->answer)
-			TIFFSwabLong((uint32 *) & number_f);
-		    fwrite(&number_f, sizeof(float), 1, fp);
-		}
-		else if (out_type == DCELL_TYPE) {
-		    number_d = *((DCELL *) ptr);
-		    if (flag.swap->answer)
-			TIFFSwabDouble((double *)&number_d);
-		    fwrite(&number_d, sizeof(double), 1, fp);
-		}
-	    }
-	    else {
-		if (out_type == CELL_TYPE) {
-		    null_val_i = (int)null_str;
-		    if (flag.swap->answer)
-			TIFFSwabShort((uint16 *) & null_val_i);
-		    fwrite(&null_val_i, sizeof(short), 1, fp);
-		}
-		if (out_type == FCELL_TYPE) {
-		    null_val_f = (float)null_str;
-		    if (flag.swap->answer)
-			TIFFSwabLong((uint32 *) & null_val_f);
-		    fwrite(&null_val_f, sizeof(float), 1, fp);
-		}
-		if (out_type == DCELL_TYPE) {
-		    null_val_d = (double)null_str;
-		    if (flag.swap->answer)
-			TIFFSwabDouble((double *)&null_val_d);
-		    fwrite(&null_val_d, sizeof(double), 1, fp);
-		}
+	Rast_get_d_row(fd, in_buf, row);
 
-	    }
-	}
+	convert_row(out_buf, in_buf, ncols, is_fp, size, swap_flag, null_val);
+
+	if (fwrite(out_buf, size, ncols, fp) != ncols)
+	    G_fatal_error(_("Error writing data"));
     }
+
     G_percent(row, nrows, 2);	/* finish it off */
 
     Rast_close(fd);
     fclose(fp);
 
-    exit(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
-#ifdef UNUSED
-int set_type(char *str, RASTER_MAP_TYPE * out_type)
-{
-    char *ch;
-
-    ch = str;
-    if (*ch != '%')
-	G_fatal_error("wrong format: %s", str);
-
-    while (*(++ch)) ;
-    ch--;
-    if (*ch == 'd' || *ch == 'i' || *ch == 'o' || *ch == 'u' || *ch == 'x' ||
-	*ch == 'X')
-	*out_type = CELL_TYPE;
-    else if (*ch == 'f' || *ch == 'e' || *ch == 'E' || *ch == 'g' ||
-	     *ch == 'G')
-	*out_type = DCELL_TYPE;
-    /*      *out_type = FCELL_TYPE; */
-
-    return 0;
-}
-#endif
