@@ -452,10 +452,7 @@ class AboutWindow(wx.Frame):
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
             copyrightFile = open(copyfile, 'r')
-            copyrightOut = []
-            copyright = copyrightFile.readlines()
-            copytext = wordwrap(''.join(copyright[:11] + copyright[26:-3]),
-                                575, wx.ClientDC(self))
+            copytext = copyrightFile.read()
             copyrightFile.close()
         else:
             copytext = _('%s file missing') % 'COPYING'
