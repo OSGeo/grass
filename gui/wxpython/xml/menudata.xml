@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE menudata SYSTEM "menudata.dtd">
 <menudata>
   <menubar>
     <menu>
@@ -1760,8 +1762,8 @@
 	    <menuitem>
 	      <label>Convert object types</label>
 	      <help>Change the type of geometry elements</help>
-	      <handler>self.OnMenuCmd</handler>
 	      <keywords>vector,geometry</keywords>
+	      <handler>self.OnMenuCmd</handler>
 	      <command>v.type_wrapper.py</command>
 	    </menuitem>
 	    <separator />
@@ -1877,8 +1879,8 @@
 	    <menuitem>
 	      <label>Color rules</label>
 	      <help>Set colors interactively by entering color rules</help>
-	      <handler>self.RulesCmd</handler>
 	      <keywords>vector,colors</keywords>
+	      <handler>self.RulesCmd</handler>
 	      <command>vcolors</command>
 	    </menuitem>
 	  </items>
