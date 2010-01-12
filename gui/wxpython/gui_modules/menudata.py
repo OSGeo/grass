@@ -30,6 +30,7 @@ for details.
 
 import os
 import sys
+import pprint
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -37,10 +38,10 @@ except ImportError:
 
 class Data:
     '''!Data object that returns menu descriptions to be used in wxgui.py.'''
-    def __init__(self, gisbase=None):
-        if not gisbase:
+    def __init__(self, filename=None):
+        if not filename:
             gisbase = os.getenv('GISBASE')
-	filename = os.path.join(gisbase, 'etc', 'wxpython', 'xml', 'menudata.xml')
+	    filename = os.path.join(gisbase, 'etc', 'wxpython', 'xml', 'menudata.xml')
 	self.tree = etree.parse(filename)
 
     def getMenuItem(self, mi):
@@ -159,7 +160,7 @@ class Data:
                     fh.write(menuSep.join(menuItems))
                     fh.write('%s%s' % (menuSep, eachItem[0]))
                     fh.write('\n')
-        
+
     def GetModules(self):
         """!Create dictionary of modules used to search module by
         keywords, description, etc."""
@@ -212,5 +213,7 @@ if __name__ == "__main__":
         data.PrintTree(sys.stdout)
     elif action == 'commands':
         data.PrintCommands(sys.stdout)
+    elif action == 'dump':
+	pprint.pprint(data.GetMenu(), stream = sys.stdout, indent = 2)
     
     sys.exit(0)
