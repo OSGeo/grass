@@ -1220,7 +1220,7 @@ msgstr ""
 #: ../lib/vector/diglib/file.c:204
 #, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "����� ���� ���\n"
+msgstr "���"
 
 #: ../lib/vector/diglib/file.c:219
 msgid "Vector memory mode not supported, using 'AUTO'"
@@ -1735,8 +1735,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:350
+#, fuzzy
 msgid "Feature: "
-msgstr ""
+msgstr "種類"
 
 #: ../lib/vector/Vlib/build_ogr.c:362
 #, c-format
@@ -3058,16 +3059,19 @@ msgid "Example: income < 1000 and inhab >= 10000"
 msgstr ""
 
 #: ../lib/gis/parser.c:377
+#, fuzzy
 msgid "Table name"
-msgstr ""
+msgstr "テーブル"
 
 #: ../lib/gis/parser.c:386
+#, fuzzy
 msgid "Driver name"
-msgstr ""
+msgstr "ドライバ"
 
 #: ../lib/gis/parser.c:395
+#, fuzzy
 msgid "Database name"
-msgstr ""
+msgstr "データベース"
 
 #: ../lib/gis/parser.c:404
 msgid "Database schema"
@@ -3101,7 +3105,7 @@ msgstr "���"
 #: ../lib/gis/parser.c:452 ../lib/gis/parser.c:477
 #, fuzzy
 msgid "Name of input raster map"
-msgstr "���"
+msgstr "入力するファイル"
 
 #: ../lib/gis/parser.c:461 ../lib/gis/parser.c:486
 #, fuzzy
@@ -3162,8 +3166,9 @@ msgid "Name for output vector map"
 msgstr "���"
 
 #: ../lib/gis/parser.c:616 ../lib/gis/parser.c:625
+#, fuzzy
 msgid "Feature type"
-msgstr ""
+msgstr "地物型"
 
 #: ../lib/gis/parser.c:632
 msgid "Layer number or name"
@@ -3180,8 +3185,9 @@ msgid "Category value"
 msgstr ""
 
 #: ../lib/gis/parser.c:649
+#, fuzzy
 msgid "Category values"
-msgstr ""
+msgstr "属性値"
 
 #: ../lib/gis/parser.c:650 ../lib/gis/parser.c:664
 msgid "Example: 1,3,7-9,13"
@@ -3206,20 +3212,23 @@ msgid "Name for output file"
 msgstr "���"
 
 #: ../lib/gis/parser.c:690
+#, fuzzy
 msgid "Field separator"
-msgstr ""
+msgstr "区切り"
 
 #: ../lib/gis/parser.c:701
+#, fuzzy
 msgid "Color"
-msgstr ""
+msgstr "カラー"
 
 #: ../lib/gis/parser.c:702
 msgid "Either a standard color name or R:G:B triplet"
 msgstr ""
 
 #: ../lib/gis/parser.c:711
+#, fuzzy
 msgid "Background color"
-msgstr ""
+msgstr "背景の色"
 
 #: ../lib/gis/parser.c:713
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
@@ -3333,12 +3342,14 @@ msgstr ""
 "パラメータ:\n"
 
 #: ../lib/gis/parser.c:1736
+#, fuzzy
 msgid "Options"
-msgstr ""
+msgstr "オプション "
 
 #: ../lib/gis/parser.c:1742
+#, fuzzy
 msgid "Default"
-msgstr ""
+msgstr "既定値"
 
 #: ../lib/gis/parser.c:1893
 #, fuzzy
@@ -4037,7 +4048,7 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "���"
+msgstr "����� ���� ���\n"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5000,6 +5011,98 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Cannot open database %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "���"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot read topo for line [%d]"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid rast name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot get field info"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open database"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid vector name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot open existing vector map <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot delete existing vector <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open new vector %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open history file for vector '%s'"
+msgstr "���"
+
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "���"
+
+#, fuzzy
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "����������<%s> � �����.\n"
+
+#, fuzzy
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "�����\"d.mon\" ����� �����������\n"
+
+#, fuzzy
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "��� - ����<%s> ���\n"
+
+#, fuzzy
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "��� - � �� ����������(lock) ������<%s>.\n"
+
+#, fuzzy
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "��� - ����� (pipe) ������� �����.\n"
+
+#, fuzzy
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "��� - ����������<%s> � ����\n"
+
+#, fuzzy
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "���� ����������<%s>.\n"
+
+#, fuzzy
+msgid "Not connected...\n"
+msgstr "�������...\n"
+
+#, fuzzy
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "����� ����� ���� ���� ����\n"
+
+#, fuzzy
+msgid "ERROR: GISBASE not set\n"
+msgstr "���: GISBASE � �����\n"
+
+#, fuzzy
 #~ msgid "Unable to open category index file for vector map <%s@%s>"
 #~ msgstr "���"
 
@@ -5017,18 +5120,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to spawn the 'wish' program"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open database %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
 #~ msgstr "���"
 
 #, fuzzy
@@ -5092,89 +5183,49 @@ msgstr ""
 #~ msgstr "��������n"
 
 #, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "���."
-
-#, fuzzy
 #~ msgid "    5:  Aspect\n"
 #~ msgstr "傾斜方位またはdy値を出力するファイル"
 
 #, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "����������<%s> � �����.\n"
-
-#, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "�����\"d.mon\" ����� �����������\n"
-
-#, fuzzy
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "��� - ����<%s> ���\n"
-
-#, fuzzy
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "��� - � �� ����������(lock) ������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "��� - ����� (pipe) ������� �����.\n"
-
-#, fuzzy
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "��� - ����������<%s> � ����\n"
-
-#, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "���� ����������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Not connected...\n"
-#~ msgstr "�������...\n"
-
-#, fuzzy
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "����� ����� ���� ���� ����\n"
-
-#, fuzzy
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "���: GISBASE � �����\n"
-
-#, fuzzy
 #~ msgid "Unable to allocate memory\n"
 #~ msgstr "����� ���� ���\n"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "��"
+
+#, fuzzy
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Run quietly"
+#~ msgstr "説明なし"
