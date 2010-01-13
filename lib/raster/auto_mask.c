@@ -61,7 +61,8 @@ int Rast__check_for_auto_masking(void)
 	return 0;
     }
 
-    Rast_unopen(R__.mask_fd);
+    if (R__.mask_fd >= 0)
+	Rast_unopen(R__.mask_fd);
     R__.mask_fd = Rast__open_old("MASK", G_mapset());
     if (R__.mask_fd < 0) {
 	R__.auto_mask = 0;
