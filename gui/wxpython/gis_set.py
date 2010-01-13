@@ -121,9 +121,11 @@ class GRASSStartup(wx.Frame):
         self.bstart = wx.Button(parent=self.panel, id=wx.ID_ANY,
                                 label=_("Start GRASS"))
         self.bstart.SetDefault()
-        self.bexit = wx.Button(parent=self.panel, id=wx.ID_EXIT)
+        self.bexit = wx.Button(parent=self.panel, id=wx.ID_EXIT,
+                                label=_("Quit"))
         self.bstart.SetMinSize((180, self.bexit.GetSize()[1]))
-        self.bhelp = wx.Button(parent=self.panel, id=wx.ID_HELP)
+        self.bhelp = wx.Button(parent=self.panel, id=wx.ID_HELP,
+                                label=_("Help"))
         self.bbrowse = wx.Button(parent=self.panel, id=wx.ID_ANY,
                                  label=_("Browse"))
         self.bmapset = wx.Button(parent=self.panel, id=wx.ID_ANY,
