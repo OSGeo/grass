@@ -83,6 +83,7 @@ static int init(void)
 
     /* Set masking flag unknown */
     R__.auto_mask = -1;
+    R__.mask_fd = -1;
 
     R__.nbytes = sizeof(CELL);
     R__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
