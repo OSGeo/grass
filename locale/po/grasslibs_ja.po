@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-14 04:33+0100\n"
+"POT-Creation-Date: 2010-01-14 07:50+0100\n"
 "PO-Revision-Date: 2005-12-30 17:41+0100\n"
 "Last-Translator: Markus Neteler <neteler@itc.it>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
@@ -5105,112 +5105,112 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
 #, fuzzy
-msgid "Raster map <%s> - unable to write row %d"
-msgstr "���"
+#~ msgid "Raster map <%s> - unable to write row %d"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Unable to write feature, OGR layer not defined"
-msgstr "���"
+#~ msgid "Unable to write feature, OGR layer not defined"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Failed writing raster map"
-msgstr "���"
+#~ msgid "Failed writing raster map"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Unable to write color file of raster map <%s>"
-msgstr "����� ���� ���\n"
+#~ msgid "Unable to write color file of raster map <%s>"
+#~ msgstr "����� ���� ���\n"
 
 #, fuzzy
-msgid "Cannot open database %s"
-msgstr "���"
+#~ msgid "Cannot open database %s"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Unable to query drawable"
-msgstr "���"
+#~ msgid "Unable to query drawable"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Failed to initialize Xlib surface"
-msgstr "���"
+#~ msgid "Failed to initialize Xlib surface"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Cannot read topo for line [%d]"
-msgstr "���"
+#~ msgid "Cannot read topo for line [%d]"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Output name '%s' is not valid rast name."
-msgstr "���."
+#~ msgid "Output name '%s' is not valid rast name."
+#~ msgstr "���."
 
 #, fuzzy
-msgid "Cannot get field info"
-msgstr "���"
+#~ msgid "Cannot get field info"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Cannot open database"
-msgstr "���"
+#~ msgid "Cannot open database"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Output name '%s' is not valid vector name."
-msgstr "���."
+#~ msgid "Output name '%s' is not valid vector name."
+#~ msgstr "���."
 
 #, fuzzy
-msgid "Cannot open existing vector map <%s>"
-msgstr "���"
+#~ msgid "Cannot open existing vector map <%s>"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Cannot delete existing vector <%s>"
-msgstr "���"
+#~ msgid "Cannot delete existing vector <%s>"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Cannot open new vector %s"
-msgstr "���"
+#~ msgid "Cannot open new vector %s"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Cannot open history file for vector '%s'"
-msgstr "���"
+#~ msgid "Cannot open history file for vector '%s'"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "Can't open directory %s"
-msgstr "���"
+#~ msgid "Can't open directory %s"
+#~ msgstr "���"
 
 #, fuzzy
-msgid "No such graphics monitor as <%s>.\n"
-msgstr "����������<%s> � �����.\n"
+#~ msgid "No such graphics monitor as <%s>.\n"
+#~ msgstr "����������<%s> � �����.\n"
 
 #, fuzzy
-msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-msgstr "�����\"d.mon\" ����� �����������\n"
+#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+#~ msgstr "�����\"d.mon\" ����� �����������\n"
 
 #, fuzzy
-msgid "Error - Monitor <%s> is in use.\n"
-msgstr "��� - ����<%s> ���\n"
+#~ msgid "Error - Monitor <%s> is in use.\n"
+#~ msgstr "��� - ����<%s> ���\n"
 
 #, fuzzy
-msgid "Error - Could not complete locking process for monitor <%s>.\n"
-msgstr "��� - � �� ����������(lock) ������<%s>.\n"
+#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
+#~ msgstr "��� - � �� ����������(lock) ������<%s>.\n"
 
 #, fuzzy
-msgid "Error - Can't set up pipe to graphics device.\n"
-msgstr "��� - ����� (pipe) ������� �����.\n"
+#~ msgid "Error - Can't set up pipe to graphics device.\n"
+#~ msgstr "��� - ����� (pipe) ������� �����.\n"
 
 #, fuzzy
-msgid "Error - Graphics monitor <%s> not running!\n"
-msgstr "��� - ����������<%s> � ����\n"
+#~ msgid "Error - Graphics monitor <%s> not running!\n"
+#~ msgstr "��� - ����������<%s> � ����\n"
 
 #, fuzzy
-msgid "Please start graphics monitor <%s>.\n"
-msgstr "���� ����������<%s>.\n"
+#~ msgid "Please start graphics monitor <%s>.\n"
+#~ msgstr "���� ����������<%s>.\n"
 
 #, fuzzy
-msgid "Not connected...\n"
-msgstr "�������...\n"
+#~ msgid "Not connected...\n"
+#~ msgstr "�������...\n"
 
 #, fuzzy
-msgid "Couldn't connect to monitor. Will try once more.\n"
-msgstr "����� ����� ���� ���� ����\n"
+#~ msgid "Couldn't connect to monitor. Will try once more.\n"
+#~ msgstr "����� ����� ���� ���� ����\n"
 
 #, fuzzy
-msgid "ERROR: GISBASE not set\n"
-msgstr "���: GISBASE � �����\n"
+#~ msgid "ERROR: GISBASE not set\n"
+#~ msgstr "���: GISBASE � �����\n"
 
 #, fuzzy
 #~ msgid "Unable to open raster map <%s>"
