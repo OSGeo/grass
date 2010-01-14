@@ -1559,9 +1559,8 @@ msgid "Launches script file."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:184
-#, fuzzy
 msgid "Exit GUI"
-msgstr "終了"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:185
 msgid "Quit wxGUI session"
@@ -8875,6 +8874,44 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Output vector map name"
+msgstr "ベクトル"
+
+#, fuzzy
+msgid "Create/edit projection information for current location"
+msgstr "の"
+
+#, fuzzy
+msgid "Digitize raster map"
+msgstr "デジタイズ"
+
+#, fuzzy
+msgid "Reclassify vector objects interactively by entering SQL rules"
+msgstr "ベクトル"
+
+#, fuzzy
+msgid ""
+"Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
+"transformation function."
+msgstr "色."
+
+#, fuzzy
+msgid ""
+"Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
+"transformation function"
+msgstr "色"
+
+#, fuzzy
+msgid "Interactive input for supervised classification"
+msgstr "入力 の"
+
+#, fuzzy
+msgid ""
+"Copy a table. Either 'from_table' (optionally with 'where') can be used or "
+"'select' option, but not 'from_table' and 'select' at the same time."
+msgstr "コピー."
+
+#, fuzzy
 #~ msgid ""
 #~ "Makes each cell value a function of the attribute values assigned to the "
 #~ "vector points or centroids around it, and stores new cell values in an "
@@ -8884,44 +8921,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Uses a GRASS vector points map to produce a convex hull vector map."
 #~ msgstr "ベクトル ベクトル."
-
-#, fuzzy
-#~ msgid "Output vector map name"
-#~ msgstr "ベクトル"
-
-#, fuzzy
-#~ msgid "Create/edit projection information for current location"
-#~ msgstr "の"
-
-#, fuzzy
-#~ msgid "Digitize raster map"
-#~ msgstr "デジタイズ"
-
-#, fuzzy
-#~ msgid "Reclassify vector objects interactively by entering SQL rules"
-#~ msgstr "ベクトル"
-
-#, fuzzy
-#~ msgid ""
-#~ "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
-#~ "transformation function."
-#~ msgstr "色."
-
-#, fuzzy
-#~ msgid ""
-#~ "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
-#~ "transformation function"
-#~ msgstr "色"
-
-#, fuzzy
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "入力 の"
-
-#, fuzzy
-#~ msgid ""
-#~ "Copy a table. Either 'from_table' (optionally with 'where') can be used "
-#~ "or 'select' option, but not 'from_table' and 'select' at the same time."
-#~ msgstr "コピー."
 
 #, fuzzy
 #~ msgid "Save workspace to open file"
@@ -8974,3 +8973,105 @@ msgstr ""
 #, fuzzy
 #~ msgid "Outputs basic information about a user-specified vector map."
 #~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Open existing workspace file"
+#~ msgstr "ワークスペースを開く"
+
+#, fuzzy
+#~ msgid "Save current workspace to file"
+#~ msgstr "保存"
+
+#, fuzzy
+#~ msgid "Creates a new vector as a read-only link to OGR layer."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid ""
+#~ "Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
+#~ "vector map."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid ""
+#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+#~ "file into a vector map."
+#~ msgstr "インポート ベクトル."
+
+#, fuzzy
+#~ msgid "Converts to one of the supported OGR vector formats."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
+#~ msgstr "ベクトル ベクトル."
+
+#, fuzzy
+#~ msgid "Exports GRASS vector map layers to DXF file format."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Exports a GRASS vector map to SVG."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Config"
+#~ msgstr "設定"
+
+#, fuzzy
+#~ msgid "Raster"
+#~ msgstr "ファイル"
+
+#, fuzzy
+#~ msgid "Vector"
+#~ msgstr "ファイル"
+
+#, fuzzy
+#~ msgid "Digitize vector map (requires TclTk)"
+#~ msgstr "デジタイズ"
+
+#, fuzzy
+#~ msgid "Extrudes flat vector object to 3D with defined height."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Create optimally placed labels for vector map(s)"
+#~ msgstr "色 ベクトル"
+
+#, fuzzy
+#~ msgid "Create a new vector map layer by combining other vector map layers."
+#~ msgstr "ベクトル ベクトル."
+
+#, fuzzy
+#~ msgid "Attach, delete or report vector categories to map geometry."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Creates a GRASS vector map of a user-defined grid."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Randomly generate a 2D/3D vector points map."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Random location perturbations of GRASS vector points"
+#~ msgstr "ベクトル"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from a GRASS raster map based on vector "
+#~ "polygons and uploads statistics to new attribute columns."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Imagery"
+#~ msgstr "映像"
+
+#, fuzzy
+#~ msgid "Load"
+#~ msgstr "読み込み"
