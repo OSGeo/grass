@@ -24,16 +24,10 @@
 #include <errno.h>
 #include <sys/types.h>
 
-#define USE_CREATE_PROCESS 1
-
 #ifndef __MINGW32__
 #include <sys/wait.h>
 #else
-#ifdef USE_CREATE_PROCESS
 #include <windows.h>
-#else
-typedef void *HANDLE;
-#endif
 #endif
 #include <grass/config.h>
 #include <grass/gis.h>
@@ -63,12 +57,6 @@ typedef void *HANDLE;
  * \return -1 on error
  * \return process status on success
  */
-
-#ifdef __MINGW32__
-
-#else
-
-#endif /*__MINGW32__*/
 
 struct redirect
 {
@@ -110,9 +98,10 @@ struct spawn
     const char *directory;
 };
 
-#ifdef __MINGW32__
+static void parse_arglist(struct spawn *sp, va_list va);
+static void parse_argvec(struct spawn *sp, const char **va);
 
-#ifdef USE_CREATE_PROCESS
+#ifdef __MINGW32__
 
 struct buffer {
     char *str;
@@ -225,51 +214,6 @@ static void escape_arg(struct buffer *result, const char *arg)
     finish(&buf);
 }
 
-static const char *escaped(const char *arg)
-{
-    struct buffer result;
-
-    if (!arg)
-	return NULL;
-
-    init(&result);
-    escape_arg(&result, arg);
-    return release(&result);
-}
-
-static char *make_command_line(const char **argv)
-{
-    struct buffer result;
-    int i;
-
-    init(&result);
-
-    for (i = 0; argv[i]; i++) {
-	if (result.len > 0)
-	    append_char(&result, ' ');
-	escape_arg(&result, argv[i]);
-    }
-
-    return release(&result);
-}
-
-static char *make_environment(const char **envp)
-{
-    struct buffer result;
-    int i;
-
-    init(&result);
-
-    for (i = 0; envp[i]; i++) {
-	const char *env = envp[i];
-
-	append(&result, env);
-	append_char(&result, '\0');
-    }
-
-    return release(&result);
-}
-
 static char *check_program(const char *pgm, const char *dir, const char *ext)
 {
     char pathname[GPATH_MAX];
@@ -330,6 +274,46 @@ static char *find_program(const char *pgm)
     return result;
 }
 
+static char *make_command_line(int shell, const char *cmd, const char **argv)
+{
+    struct buffer result;
+    int i;
+
+    init(&result);
+
+    if (shell) {
+	const char *comspec = getenv("COMSPEC");
+	append(&result, comspec ? comspec : "cmd.exe");
+	append(&result, " /c ");
+	escape_arg(&result, cmd);
+    }
+
+    for (i = shell ? 1 : 0; argv[i]; i++) {
+	if (result.len > 0)
+	    append_char(&result, ' ');
+	escape_arg(&result, argv[i]);
+    }
+
+    return release(&result);
+}
+
+static char *make_environment(const char **envp)
+{
+    struct buffer result;
+    int i;
+
+    init(&result);
+
+    for (i = 0; envp[i]; i++) {
+	const char *env = envp[i];
+
+	append(&result, env);
+	append_char(&result, '\0');
+    }
+
+    return release(&result);
+}
+
 static HANDLE get_handle(int fd)
 {
     HANDLE h1, h2;
@@ -347,24 +331,28 @@ static HANDLE get_handle(int fd)
 }
 
 static int win_spawn(const char *cmd, const char **argv, const char **envp,
-		     const char *cwd, HANDLE handles[3], int background)
+		     const char *cwd, HANDLE handles[3], int background,
+		     int shell)
 {
-    char *args = make_command_line(argv);
+    char *args = make_command_line(shell, cmd, argv);
     char *env = make_environment(envp);
-    char *program = find_program(cmd);
+    char *program = shell ? NULL : find_program(cmd);
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
     BOOL result;
     DWORD exitcode;
 
-    G_debug(3, "win_spawn: program = %s", program);
-    G_debug(3, "win_spawn: args = %s", args);
+    if (!shell) {
+	G_debug(3, "win_spawn: program = %s", program);
 
-    if (!program) {
-	G_free(args);
-	G_free(env);
-	return -1;
+	if (!program) {
+	    G_free(args);
+	    G_free(env);
+	    return -1;
+	}
     }
+
+    G_debug(3, "win_spawn: args = %s", args);
 
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(si);
@@ -442,17 +430,6 @@ static void do_redirects(struct redirect *redirects, int num_redirects, HANDLE h
     }
 }
 
-#else
-
-static void do_redirects(struct redirect *redirects, int num_redirects, HANDLE handles[3])
-{
-    if (num_redirects > 0)
-	G_fatal_error
-	    ("G_spawn_ex: redirection not (yet) supported on Windows");
-}
-
-#endif
-
 static void add_binding(const char **env, int *pnum, const struct binding *b)
 {
     char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
@@ -500,56 +477,12 @@ static int do_spawn(struct spawn *sp, const char *command)
     do_redirects(sp->redirects, sp->num_redirects, handles);
     env = do_bindings(sp->bindings, sp->num_bindings);
 
-#ifdef USE_CREATE_PROCESS
-    status = win_spawn(command, sp->args, env, sp->directory, handles, sp->background);
-#else
-    status = spawnvpe(sp->background ? _P_NOWAIT : _P_WAIT, command, sp->args, env);
-#endif
+    status = win_spawn(command, sp->args, env, sp->directory, handles, sp->background, 1);
 
     if (!sp->background && status < 0)
 	G_warning(_("Unable to execute command"));
 
     return status;
-}
-
-int G_spawn(const char *command, ...)
-{
-    va_list va;
-    char *program = find_program(command);
-    const char *args[MAX_ARGS];
-    int num_args = 0;
-    int result, i;
-
-    va_start(va, command);
-
-    for (num_args = 0; num_args < MAX_ARGS;) {
-	const char *arg = va_arg(va, const char *);
-
-	args[num_args++] = escaped(arg);
-	if (!arg)
-	    break;
-	G_debug(3, "argv[%d]='%s'", num_args-1, args[num_args-1]);
-    }
-
-    va_end(va);
-
-    if (num_args >= MAX_ARGS) {
-	G_warning(_("Too many arguments"));
-	result = -1;
-    }
-    else {
-	G_debug(3, "spawning '%s' ...", program);
-	result = _spawnvp(_P_WAIT, program, args);
-	G_debug(3, "result = %d", result);
-	if (result < 0)
-	    G_debug(3, "error: %s", strerror(errno));
-    }
-
-    G_free(program);
-    for (i = 0; i < num_args; i++)
-	G_free((char *) args[i]);
-
-    return result;
 }
 
 #else /* __MINGW32__ */
@@ -758,85 +691,6 @@ static int do_spawn(struct spawn *sp, const char *command)
     return status;
 }
 
-int G_spawn(const char *command, ...)
-{
-    va_list va;
-    char *args[MAX_ARGS];
-    int num_args = 0;
-    struct sigaction act, intr, quit;
-    sigset_t block, oldmask;
-    int status = -1;
-    pid_t pid;
-
-    va_start(va, command);
-
-    for (num_args = 0; num_args < MAX_ARGS;) {
-	char *arg = va_arg(va, char *);
-
-	args[num_args++] = arg;
-	if (!arg)
-	    break;
-    }
-
-    va_end(va);
-
-    if (num_args >= MAX_ARGS) {
-	G_warning(_("Too many arguments"));
-	return -1;
-    }
-
-    sigemptyset(&act.sa_mask);
-    act.sa_flags = SA_RESTART;
-
-    act.sa_handler = SIG_IGN;
-    if (sigaction(SIGINT, &act, &intr) < 0)
-	goto error_1;
-    if (sigaction(SIGQUIT, &act, &quit) < 0)
-	goto error_2;
-
-    sigemptyset(&block);
-    sigaddset(&block, SIGCHLD);
-    if (sigprocmask(SIG_BLOCK, &block, &oldmask) < 0)
-	goto error_3;
-
-    G_debug(3, "forking '%s' ...", command);
-
-    pid = fork();
-
-    if (pid < 0) {
-	G_warning(_("Unable to create a new process"));
-	goto error_4;
-    }
-
-    if (pid == 0) {
-	sigaction(SIGINT, &intr, NULL);
-	sigaction(SIGQUIT, &quit, NULL);
-
-	execvp(command, args);
-	G_warning(_("Unable to execute command"));
-	_exit(127);
-    }
-    else {
-	pid_t n;
-
-	do
-	    n = waitpid(pid, &status, 0);
-	while (n == (pid_t) - 1 && errno == EINTR);
-
-	if (n != pid)
-	    status = -1;
-    }
-
-  error_4:
-    sigprocmask(SIG_SETMASK, &oldmask, NULL);
-  error_3:
-    sigaction(SIGQUIT, &quit, NULL);
-  error_2:
-    sigaction(SIGINT, &intr, NULL);
-  error_1:
-    return status;
-}
-
 #endif /* __MINGW32__ */
 
 static void begin_spawn(struct spawn *sp)
@@ -914,6 +768,9 @@ static void parse_argvec(struct spawn *sp, const char **va)
 	else if (arg == SF_ARGVEC) {
 	    parse_argvec(sp, NEXT_ARG(va, const char **));
 	}
+	else if (arg == SF_ARGLIST) {
+	    parse_arglist(sp, NEXT_ARG(va, va_list));
+	}
 	else
 	    sp->args[sp->num_args++] = arg;
     }
@@ -981,6 +838,9 @@ static void parse_arglist(struct spawn *sp, va_list va)
 	else if (arg == SF_ARGVEC) {
 	    parse_argvec(sp, va_arg(va, const char **));
 	}
+	else if (arg == SF_ARGLIST) {
+	    parse_arglist(sp, va_arg(va, va_list));
+	}
 	else
 	    sp->args[sp->num_args++] = arg;
     }
@@ -1029,5 +889,35 @@ int G_spawn_ex(const char *command, ...)
     va_end(va);
 
     return do_spawn(&sp, command);
+}
+
+/**
+ * \brief Spawn new process based on <b>command</b>.
+ *
+ * \param[in] command
+ * \return -1 on error
+ * \return process status on success
+ */
+
+int G_spawn(const char *command, ...)
+{
+    va_list va;
+    int status = -1;
+
+    va_start(va, command);
+
+    status = G_spawn_ex(
+	command,
+#ifndef __MINGW32__
+	SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT,
+	SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGQUIT,
+	SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
+#endif
+	SF_ARGLIST, va,
+	NULL);
+
+    va_end(va);
+
+    return status;
 }
 

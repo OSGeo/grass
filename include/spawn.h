@@ -23,6 +23,7 @@
 #define SF_BACKGROUND			((const char *) 7)
 #define SF_DIRECTORY			((const char *) 8)
 #define SF_ARGVEC			((const char *) 9)
+#define SF_ARGLIST			((const char *) 10)
 
 enum signal_action
 {
@@ -41,7 +42,7 @@ enum signal_type
 };
 
 extern int G_spawn(const char *command, ...);
-extern int G_spawn_ex(const char *command, ...);
 extern int G_vspawn_ex(const char *command, const char **args);
+extern int G_spawn_ex(const char *command, ...);
 
 #endif
