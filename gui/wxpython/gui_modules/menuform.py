@@ -763,7 +763,7 @@ class mainFrame(wx.Frame):
             ### self.btn_abort.SetToolTipString(_("Abort the running command"))
             ### self.btn_abort.Enable(False)
             # copy
-            self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY, label = _("C&opy"))
+            self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
             self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard (Ctrl+C)"))
 
             ### btnsizer.Add(item=self.btn_abort, proportion=0,
