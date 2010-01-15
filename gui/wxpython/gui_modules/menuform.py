@@ -662,10 +662,6 @@ class mainFrame(wx.Frame):
         except ValueError:
             pass
         
-        # i18N
-        import gettext
-        gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
-
         wx.Frame.__init__(self, parent=parent, id=ID, title=title,
                           pos=wx.DefaultPosition, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
@@ -733,18 +729,18 @@ class mainFrame(wx.Frame):
         # buttons
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         # cancel
-        self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE, label=_("&Close"))
+        self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btn_cancel.SetToolTipString(_("Close this window without executing the command (Ctrl+Q)"))
         btnsizer.Add(item=self.btn_cancel, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # help
-        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP, label=_("&Help"))
+        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
         self.btn_help.SetToolTipString(_("Show manual page of the command (Ctrl+H)"))
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         if not hasattr(self.notebookpanel, "manual_tab_id"):
             self.btn_help.Hide()
         if self.get_dcmd is not None: # A callback has been set up
-            btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY, label=_("&Apply"))
+            btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
             btn_ok = wx.Button(parent=self.panel, id=wx.ID_OK)
             btn_ok.SetDefault()
 
