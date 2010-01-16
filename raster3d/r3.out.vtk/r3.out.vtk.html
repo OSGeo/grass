@@ -75,10 +75,10 @@ the default region).
 <div class="code"><pre>
 g.region -d
 g.region res=150 res3=150 t=80 b=0 tbres=10
-r.mapcalc "bottom=1800. - elevation.10m"
+r.mapcalc "bottom = 1800. - elevation.10m"
 
 # synthetic data, could be geological structures:
-r3.mapcalc "map3d=row()+col()+depth()"
+r3.mapcalc "map3d = row()+col()+depth()"
 
 #export of volume to VTK:
 r3.out.vtk -s input=map3d top=elevation.10m bottom=bottom output=/tmp/out.vtk
@@ -95,10 +95,10 @@ g.region -d
 g.region n=4926970 s=4914857 w=591583 e=607793 res=50 res3=50 t=80 b=0 tbres=10
 
 #create a bottom surface
-r.mapcalc "bottom=1800. - elevation.10m"
+r.mapcalc "bottom = 1800. - elevation.10m"
 
 # synthetic data, could be geological structures:
-r3.mapcalc "map3d=row()+col()+depth()"
+r3.mapcalc "map3d = row()+col()+depth()"
 
 #get some satellite images with r.in.onearth
 r.in.onearth -l output=Sat tmband=Red
@@ -125,15 +125,15 @@ g.region -d
 g.region n=4926970 s=4914857 w=591583 e=607793 res=50 res3=50 t=80 b=0 tbres=10
 
 # create a bottom surface
-r.mapcalc "bottom=1800. - elevation.10m"
+r.mapcalc "bottom = 1800. - elevation.10m"
 
 # synthetic data, could be geological structures:
-r3.mapcalc "map3d=row()+col()+depth()"
+r3.mapcalc "map3d = row()+col()+depth()"
 
 # synthetic vector data, could be groundwater stream vectors
-r3.mapcalc "x_part =sin(row())"
-r3.mapcalc "y_part =cos(col())"
-r3.mapcalc "z_part =sin(depth())"
+r3.mapcalc "x_part = sin(row())"
+r3.mapcalc "y_part = cos(col())"
+r3.mapcalc "z_part = sin(depth())"
 
 
 # export the stuff data to VTK:
@@ -150,7 +150,7 @@ paraview --data=/tmp/out.vtk
 <div class="code"><pre>
 #reduce resolution:
 g.region -dp3 res=1000 res3=1000
-r.mapcalc "bottom=100"
+r.mapcalc "bottom = 100"
 
 #export of volume to VTK:
 r3.out.vtk -s in=precip3d.500z50 top=dem500 bottom=bottom out=/tmp/slovakia3d.vtk

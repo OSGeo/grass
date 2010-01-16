@@ -67,12 +67,12 @@ groundwater flow area and data. Make sure you are not in a lat/lon projection.
 g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000
 
 #now create the input raster maps for a confined aquifer
-r3.mapcalc "phead=if(row() == 1 && depth() == 4, 50, 40)"
-r3.mapcalc "status=if(row() == 1 && depth() == 4, 2, 1)"
-r3.mapcalc "well=if(row() == 20 && col() == 20 , -0.00025, 0)"
-r3.mapcalc "hydcond=0.00025"
-r3.mapcalc "syield=0.0001"
-r.mapcalc  "recharge=0.0"
+r3.mapcalc "phead = if(row() == 1 && depth() == 4, 50, 40)"
+r3.mapcalc "status = if(row() == 1 && depth() == 4, 2, 1)"
+r3.mapcalc "well = if(row() == 20 && col() == 20 , -0.00025, 0)"
+r3.mapcalc "hydcond = 0.00025"
+r3.mapcalc "syield = 0.0001"
+r.mapcalc  "recharge = 0.0"
 
 r3.gwflow --o -s solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
 hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 velocity=gwresult_velocity
