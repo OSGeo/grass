@@ -671,7 +671,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'export PYTHONPATH$\r$\n'
 	FileWrite $0 'PYTHONHOME="$INSTALL_DIR\Python25"$\r$\n'
 	FileWrite $0 'export PYTHONHOME$\r$\n'
-	FileWrite $0 'if [ -z "$$GRASS_PYTHON" ] ; then$$\r$\n'
+	FileWrite $0 'if [ -z "$$GRASS_PYTHON" ] ; then$\r$\n'
 	FileWrite $0 '   GRASS_PYTHON=python$\r$\n'
 	FileWrite $0 '   export GRASS_PYTHON$\r$\n'
 	FileWrite $0 'fi$\r$\n'
