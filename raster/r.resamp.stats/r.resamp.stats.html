@@ -32,12 +32,14 @@ cells.
 
 <h2>EXAMPLE</h2>
 
+<p>
 Resample elevation raster map to a lower resolution (from 6m to 20m;
 North Carolina sample dataset):
+</p>
 
 <div class="code"><pre>
 g.region rast=el_D782_6m -p
-g.region res=20m -ap
+g.region res=20 -ap
 r.resamp.stats input=el_D782_6m output=el_D782_20m
 </pre></div>
 
