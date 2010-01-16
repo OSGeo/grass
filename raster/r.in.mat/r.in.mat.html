@@ -51,7 +51,7 @@ floating point array, so this usually isn't an issue. To save space, once the
 map is loaded into GRASS you can convert it back to an integer map with the 
 following command:
 <div class="code"><pre>
-r.mapcalc int_map="int(MATFile_map)"
+r.mapcalc "int_map = int(MATFile_map)"
 </pre></div>
 
 <tt>NaN</tt> values in either floating point or double-precision floating point

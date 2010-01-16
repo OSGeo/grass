@@ -27,7 +27,7 @@ Example of <em>v.hull</em> output:
 Example of <em>v.hull</em> 3D output (using two random 3D point clouds):
 <div class="code"><pre>
 g.region rural_1m -p
-r.mapcalc zero=0
+r.mapcalc "zero = 0"
 v.random -z out=random3d_a n=10 zmin=0 zmax=200
 v.random -z out=random3d_b n=15 zmin=400 zmax=600
 v.hull random3d_a out=random3d_a_hull

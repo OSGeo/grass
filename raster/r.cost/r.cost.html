@@ -221,13 +221,13 @@ used. The calculation is done with <em>r.cost</em> as follows
 
 <div class="code"><pre>
   g.region rast=roads -p
-  r.mapcalc "area.one=1"
+  r.mapcalc "area.one = 1"
   r.cost -k input=area.one output=distance start_rast=roads
   d.rast distance
   d.rast.num distance
 
   #transform to metric distance from cell distance using the raster resolution:
-  r.mapcalc "dist_meters=distance * (ewres()+nsres())/2."
+  r.mapcalc "dist_meters = distance * (ewres()+nsres())/2."
   d.rast dist_meters
 </pre></div>
 

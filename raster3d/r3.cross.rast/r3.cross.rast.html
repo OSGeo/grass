@@ -51,7 +51,7 @@ g.region -d
 g.region res=150 res3=150 t=1000 b=0 tbres=100
 
 # synthetic data, could be geological structures:
-r3.mapcalc "map3d=sin(row())+sin(col())+sin(depth()*depth())"
+r3.mapcalc "map3d = sin(row())+sin(col())+sin(depth()*depth())"
 
 #create a cutplane map
 r.mapcalc "cutplane = col()*10"
