@@ -54,11 +54,16 @@ const char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
 const char *G_align_window(struct Cell_head *, const struct Cell_head *);
 
 /* alloc.c */
+#define G_incr_void_ptr(ptr, size) \
+    ((void *)((const unsigned char *)(ptr) + (size)))
+
 void *G__malloc(const char *, int, size_t);
 void *G__calloc(const char *, int, size_t, size_t);
 void *G__realloc(const char *, int, void *, size_t);
 void G_free(void *);
-void *G_incr_void_ptr(const void *, const size_t);
+#ifndef G_incr_void_ptr
+void *G_incr_void_ptr(const void *, size_t);
+#endif
 
 #define G_malloc(n)     G__malloc(__FILE__, __LINE__, (n))
 #define G_calloc(m, n)  G__calloc(__FILE__, __LINE__, (m), (n))

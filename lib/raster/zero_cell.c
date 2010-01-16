@@ -11,6 +11,7 @@
  * \author Original author CERL
  */
 
+#include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 
@@ -40,17 +41,9 @@ void Rast_zero_c_buf(CELL * buf)
  * using Rast_allocate_c_buf().
  *
  * \param rast data buffer
- * \param data_type raster type (CELL, FCELL, DCELL)
+ * \param data_type raster type (CELL_TYPE, FCELL_TYPE, DCELL_TYPE)
  */
 void Rast_zero_buf(void *rast, RASTER_MAP_TYPE data_type)
 {
-    int i;
-    unsigned char *ptr;
-
-    /* assuming that the size of unsigned char is 1 byte */
-    i = G_window_cols() * Rast_cell_size(data_type);
-    ptr = (unsigned char *)rast;
-
-    while (i--)
-	*ptr++ = 0;
+    memset(rast, 0, G_window_cols() * Rast_cell_size(data_type));
 }

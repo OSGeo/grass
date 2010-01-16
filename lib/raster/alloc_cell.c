@@ -15,6 +15,7 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 
 /* convert type "RASTER_MAP_TYPE" into index */
 #define F2I(map_type) \
@@ -142,13 +143,13 @@ unsigned char *Rast__allocate_null_bits(int cols)
  *
  * \param cols number of columns
  *
- * \return -1 if <i>cols</i> is invalid (<= 0)
  * \return size of null bistream
  */
 int Rast__null_bitstream_size(int cols)
 {
     if (cols <= 0)
-	return -1;
+	G_fatal_error(_("Rast__null_bitstream_size: cols (%d) is negative"),
+		      cols);
 
-    return (cols / 8 + (cols % 8 != 0));
+    return (cols + 7) / 8;
 }

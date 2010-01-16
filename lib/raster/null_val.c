@@ -205,11 +205,13 @@ int Rast_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
    \return TRUE if CELL raster value is NULL
    \return FALSE otherwise
  */
+#ifndef Rast_is_c_null_value
 int Rast_is_c_null_value(const CELL * cellVal)
 {
     /* Check if the CELL value matches the null pattern */
     return *cellVal == (CELL) 0x80000000;
 }
+#endif
 
 /*!
    \brief To check if a FCELL raster value is set to NULL
@@ -236,10 +238,12 @@ int Rast_is_c_null_value(const CELL * cellVal)
    \return TRUE if FCELL raster value is NULL
    \return FALSE otherwise
  */
+#ifndef Rast_is_f_null_value
 int Rast_is_f_null_value(const FCELL * fcellVal)
 {
     return *fcellVal != *fcellVal;
 }
+#endif
 
 /*!
    \brief To check if a DCELL raster value is set to NULL
@@ -253,10 +257,12 @@ int Rast_is_f_null_value(const FCELL * fcellVal)
    \return TRUE if DCELL raster value is NULL
    \return FALSE otherwise
  */
+#ifndef Rast_is_f_null_value
 int Rast_is_d_null_value(const DCELL * dcellVal)
 {
     return *dcellVal != *dcellVal;
 }
+#endif
 
 /*!
    \brief To insert null values into a map.
@@ -323,32 +329,29 @@ void Rast_insert_d_null_values(DCELL * dcellVal, char *null_row, int ncols)
 
    Note: Only for internal use.
 
-   \param flags ?
-   \param bit_num ?
-   \param n ?
+   \param flags null bitmap
+   \param bit_num index of bit to check
+   \param n size of null bitmap (in bits)
 
-   \return -1 on error
+   \return 1 if set, 0 if unset
  */
 int Rast__check_null_bit(const unsigned char *flags, int bit_num, int n)
 {
     int ind;
     int offset;
 
+    /* check that bit_num is in range */
+    if (bit_num < 0 || bit_num >= n)
+	G_fatal_error("Rast__check_null_bit: index %d out of range (size = %d).",
+		      bit_num, n);
+
+
     /* find the index of the unsigned char in which this bit appears */
-    ind = Rast__null_bitstream_size(bit_num + 1) - 1;
+    ind = bit_num / 8;
 
-    /* find how many unsigned chars the buffer with bit_num+1 (counting from 0
-       has and subtract 1 to get unsigned char index */
-    if (ind > Rast__null_bitstream_size(n) - 1) {
-	G_warning("Rast__check_null_bit: Unable to access index %d. "
-		  "Size of flags is %d (bit # is %d)",
-		  ind, Rast__null_bitstream_size(n) - 1, bit_num);
-	return -1;
-    }
+    offset = bit_num & 7;
 
-    offset = (ind + 1) * 8 - bit_num - 1;
-
-    return ((flags[ind] & ((unsigned char)1 << offset)) != 0);
+    return ((flags[ind] & ((unsigned char)0x80 >> offset)) != 0);
 }
 
 /*!

@@ -206,7 +206,8 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
     int found, r, g, b;
     int cell_type;
     int lookup, max_ind, min_ind, try;
-    int (*lower) ();
+    int (*lower)();
+    size_t size = Rast_cell_size(data_type);
 
     if (mod)
 	cp = &colors->modular;
@@ -246,9 +247,8 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
     ptr = raster;
 
     for (; n-- > 0;
-	 ptr =
-	 G_incr_void_ptr(ptr, Rast_cell_size(data_type)), red++, grn++, blu++,
-	 *set++ = found) {
+	 ptr = G_incr_void_ptr(ptr, size),
+	     red++, grn++, blu++, *set++ = found) {
 	/* if the cell is the same as last one, use the prev color values */
 	if (ptr != raster && Rast_raster_cmp(ptr, last_ptr, data_type) == 0) {
 	    *red = *(red - 1);

@@ -872,6 +872,8 @@ static int read_null_bits(int fd, int row)
     return 1;
 }
 
+#define check_null_bit(flags, bit_num) ((flags)[(bit_num)>>3] & ((unsigned char)0x80>>((bit_num)&7)) ? 1 : 0)
+
 static void get_null_value_row_nomask(int fd, char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -913,9 +915,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 	if (!fcb->col_map[j])
 	    flags[j] = 1;
 	else
-	    flags[j] = Rast__check_null_bit(fcb->null_bits,
-					    fcb->col_map[j] - 1,
-					    fcb->cellhd.cols);
+	    flags[j] = check_null_bit(fcb->null_bits, fcb->col_map[j] - 1);
     }
 }
 
@@ -991,6 +991,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 			int null_is_zero, int with_mask)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
+    size_t size = Rast_cell_size(map_type);
     char *null_buf;
     int i;
 
@@ -1012,7 +1013,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 	       is not set and calls G_set_[f/d]_null_value() otherwise */
 	    Rast__set_null_value(buf, 1, null_is_zero, map_type);
 	}
-	buf = G_incr_void_ptr(buf, Rast_cell_size(map_type));
+	buf = G_incr_void_ptr(buf, size);
     }
 
     G__freea(null_buf);
