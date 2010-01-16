@@ -665,6 +665,8 @@ class mainFrame(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=ID, title=title,
                           pos=wx.DefaultPosition, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
+        self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
+
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         # statusbar
