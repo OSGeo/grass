@@ -30,6 +30,18 @@ that, when multiple destination cells overlap a source cell, the
 source cell is included in the calculation of all of the destination
 cells.
 
+<h2>EXAMPLE</h2>
+
+Resample elevation raster map to a lower resolution (from 6m to 20m;
+North Carolina sample dataset):
+
+<div class="code"><pre>
+g.region rast=el_D782_6m -p
+g.region res=20m -ap
+r.resamp.stats input=el_D782_6m output=el_D782_20m
+</pre></div>
+
+
 <h2>SEE ALSO</h2>
 
 <em><a href="g.region.html">g.region</a></em>,
