@@ -462,7 +462,7 @@ Example: The users wants the NULL-valued cells to be treated like zeros. To
 add maps A and B (where B contains NULLs) to get a map C the user can use a
 construction like:<p>
 <div class="code"><pre>
-C=A + if(isnull(B),0,B)
+C = A + if(isnull(B),0,B)
 </pre></div>
 <p>
 <b>NULL and conditions:</b>
