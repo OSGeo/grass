@@ -152,6 +152,8 @@ void G_fatal_error(const char *msg, ...)
     vfprint_error(ERR, msg, ap);
     va_end(ap);
 
+    G__call_error_handlers();
+
     exit(EXIT_FAILURE);
 }
 

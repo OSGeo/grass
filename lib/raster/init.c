@@ -71,6 +71,11 @@ void Rast__init(void)
     G_initialize_done(&initialized);
 }
 
+void Rast__error_handler(void *p)
+{
+    Rast__unopen_all();
+}
+
 static int init(void)
 {
     G__init_window();
@@ -87,6 +92,8 @@ static int init(void)
 
     R__.nbytes = sizeof(CELL);
     R__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
+
+    G_add_error_handler(Rast__error_handler, NULL);
 
     initialized = 1;
 

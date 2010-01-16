@@ -84,6 +84,7 @@ int Rast_cell_stats_histo_eq(struct Cell_stats *, CELL, CELL, CELL, CELL, int,
 /* closecell.c */
 void Rast_close(int);
 void Rast_unopen(int);
+void Rast__unopen_all(void);
 
 /* color_compat.c */
 void Rast_make_ryg_colors(struct Colors *, CELL, CELL);
@@ -344,6 +345,7 @@ void Rast_init(void);
 void Rast__check_init(void);
 void Rast_init_all(void);
 void Rast__init(void);
+void Rast__error_handler(void *);
 
 /* interp.c */
 DCELL Rast_interp_linear(double, DCELL, DCELL);
