@@ -64,8 +64,7 @@ static int write_fp_format(int fd);
  *
  * \param fd file descriptor
  *
- * \return -1 on error
- * \return 1 on success
+ * \return void
  */
 void Rast_close(int fd)
 {
@@ -98,8 +97,7 @@ void Rast_close(int fd)
  *
  * \param fd file descriptor
  *
- * \return -1 on error
- * \return 1 on success
+ * \return void
  */
 void Rast_unopen(int fd)
 {
@@ -112,6 +110,30 @@ void Rast_unopen(int fd)
 	close_old(fd);
     else
 	close_new(fd, 0);
+}
+
+/*!
+ * \brief Unopen all raster maps
+ *
+ * Unopen all raster maps opened for write. Memory allocated for
+ * raster processing is freed, and the temporary file created when the
+ * raster map was opened is removed (see \ref
+ * Creating_and_Opening_New_Raster_Files). This routine is useful when
+ * errors are detected and it is desired to remove temporary files.
+ *
+ * \return void
+ */
+void Rast__unopen_all(void)
+{
+    int i;
+
+    for (i = 0; i < R__.fileinfo_count; i++) {
+	struct fileinfo *fcb = &R__.fileinfo[i];
+
+	if (fcb->open_mode == OPEN_NEW_COMPRESSED ||
+	    fcb->open_mode == OPEN_NEW_UNCOMPRESSED)
+	    close_new(i, 0);
+    }
 }
 
 static int close_old(int fd)

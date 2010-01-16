@@ -281,6 +281,11 @@ void G__no_gisinit(const char *);
 void G__check_gisinit(void);
 void G_init_all(void);
 
+/* handler.c */
+void G_add_error_handler(void (*)(void *), void *);
+void G_remove_error_handler(void (*)(void *), void *);
+void G__call_error_handlers(void);
+
 /* home.c */
 const char *G_home(void);
 const char *G__home(void);
