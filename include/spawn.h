@@ -23,7 +23,6 @@
 #define SF_BACKGROUND			((const char *) 7)
 #define SF_DIRECTORY			((const char *) 8)
 #define SF_ARGVEC			((const char *) 9)
-#define SF_ARGLIST			((const char *) 10)
 
 enum signal_action
 {

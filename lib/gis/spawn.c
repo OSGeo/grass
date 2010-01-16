@@ -768,9 +768,6 @@ static void parse_argvec(struct spawn *sp, const char **va)
 	else if (arg == SF_ARGVEC) {
 	    parse_argvec(sp, NEXT_ARG(va, const char **));
 	}
-	else if (arg == SF_ARGLIST) {
-	    parse_arglist(sp, NEXT_ARG(va, va_list));
-	}
 	else
 	    sp->args[sp->num_args++] = arg;
     }
@@ -838,9 +835,6 @@ static void parse_arglist(struct spawn *sp, va_list va)
 	else if (arg == SF_ARGVEC) {
 	    parse_argvec(sp, va_arg(va, const char **));
 	}
-	else if (arg == SF_ARGLIST) {
-	    parse_arglist(sp, va_arg(va, va_list));
-	}
 	else
 	    sp->args[sp->num_args++] = arg;
     }
@@ -901,10 +895,21 @@ int G_spawn_ex(const char *command, ...)
 
 int G_spawn(const char *command, ...)
 {
+    const char *args[MAX_ARGS];
+    int num_args = 0, i;
     va_list va;
     int status = -1;
 
     va_start(va, command);
+
+    for (i = 0; ; i++) {
+	const char *arg = va_arg(va, const char *);
+	args[num_args++] = arg;
+	if (!arg)
+	    break;
+    }
+
+    va_end(va);
 
     status = G_spawn_ex(
 	command,
@@ -913,10 +918,8 @@ int G_spawn(const char *command, ...)
 	SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGQUIT,
 	SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
 #endif
-	SF_ARGLIST, va,
+	SF_ARGVEC, args,
 	NULL);
-
-    va_end(va);
 
     return status;
 }
