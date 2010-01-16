@@ -364,15 +364,28 @@ int Rast__mask_info(char *, char *);
 int Rast_maskfd(void);
 
 /* null_val.c */
+#define Rast_is_c_null_value(cellVal)	\
+    (*(const CELL *)(cellVal) == (CELL) 0x80000000)
+#define Rast_is_f_null_value(fcellVal)	\
+    (*(const FCELL *)(fcellVal) != *(const FCELL *)(fcellVal))
+#define Rast_is_d_null_value(dcellVal)	\
+    (*(const DCELL *)(dcellVal) != *(const DCELL *)(dcellVal))
+
 void Rast__set_null_value(void *, int, int, RASTER_MAP_TYPE);
 void Rast_set_null_value(void *, int, RASTER_MAP_TYPE);
 void Rast_set_c_null_value(CELL *, int);
 void Rast_set_f_null_value(FCELL *, int);
 void Rast_set_d_null_value(DCELL *, int);
 int Rast_is_null_value(const void *, RASTER_MAP_TYPE);
+#ifndef Rast_is_c_null_value
 int Rast_is_c_null_value(const CELL *);
+#endif
+#ifndef Rast_is_f_null_value
 int Rast_is_f_null_value(const FCELL *);
+#endif
+#ifndef Rast_is_f_null_value
 int Rast_is_d_null_value(const DCELL *);
+#endif
 void Rast_insert_null_values(void *, char *, int, RASTER_MAP_TYPE);
 void Rast_insert_c_null_values(CELL *, char *, int);
 void Rast_insert_f_null_values(FCELL *, char *, int);

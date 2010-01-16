@@ -463,7 +463,8 @@ void Rast_row_update_fp_range(const void *rast, int n,
 			      struct FPRange *range,
 			      RASTER_MAP_TYPE data_type)
 {
-    DCELL val = 0L;
+    size_t size = Rast_cell_size(data_type);
+    DCELL val = 0.0;
 
     while (n-- > 0) {
 	switch (data_type) {
@@ -479,7 +480,7 @@ void Rast_row_update_fp_range(const void *rast, int n,
 	}
 
 	if (Rast_is_null_value(rast, data_type)) {
-	    rast = G_incr_void_ptr(rast, Rast_cell_size(data_type));
+	    rast = G_incr_void_ptr(rast, size);
 	    continue;
 	}
 	if (range->first_time) {
@@ -494,7 +495,7 @@ void Rast_row_update_fp_range(const void *rast, int n,
 		range->max = val;
 	}
 
-	rast = G_incr_void_ptr(rast, Rast_cell_size(data_type));
+	rast = G_incr_void_ptr(rast, size);
     }
 }
 

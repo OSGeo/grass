@@ -161,8 +161,10 @@ void G_free(void *buf)
  *
  * \return pointer to the data
  */
-void *G_incr_void_ptr(const void *ptr, const size_t size)
+#ifndef G_incr_void_ptr
+void *G_incr_void_ptr(const void *ptr, size_t size)
 {
     /* assuming that the size of unsigned char is 1 */
     return (void *)((const unsigned char *)ptr + size);
 }
+#endif

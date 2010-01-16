@@ -554,6 +554,7 @@ int Rast_mark_cats(const void *rast_row,
 		   int ncols, struct Categories *pcats,
 		   RASTER_MAP_TYPE data_type)
 {
+    size_t size = Rast_cell_size(data_type);
     CELL i;
 
     while (ncols-- > 0) {
@@ -564,7 +565,7 @@ int Rast_mark_cats(const void *rast_row,
 	if (i > pcats->ncats)
 	    return -1;
 	pcats->marks[i]++;
-	rast_row = G_incr_void_ptr(rast_row, Rast_cell_size(data_type));
+	rast_row = G_incr_void_ptr(rast_row, size);
     }
     return 1;
 }
