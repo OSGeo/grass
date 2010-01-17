@@ -905,6 +905,8 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 		G_zero(flags, sizeof(char) * G__.window.cols);
 		/* the flags row is ready now */
 	    }
+
+	    return;
 	}			/*if no null file */
 	else
 	    fcb->null_cur_row = row;
