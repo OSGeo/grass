@@ -3,7 +3,7 @@
 ;GRASS Installer for Windows
 ;Written by Marco Pasetti
 ;Updated for OSGeo4W by Colin Nielsen, Helmut Kudrnovsky, and Martin Landa
-;Last Update: 17 Jan 2010
+;Last Update: $Id$
 ;Mail to: grass-dev@lists.osgeo.org 
 
 ;----------------------------------------------------------------------------------------------------------------------------
