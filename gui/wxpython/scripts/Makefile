@@ -14,5 +14,3 @@ $(ETCDIR)/%: % | $(ETC)/gui
 
 $(ETC)/gui:
 	$(MKDIR) $@
-
-clean: cleansubdirs

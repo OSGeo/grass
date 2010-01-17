@@ -1,6 +1,3 @@
-# to force make to use /bin/sh
-SHELL           = /bin/sh
-
 #########################################################################
 #                         Variable names
 # xxxINCDIR  directory(ies) including header files (example: /usr/include)
@@ -68,6 +65,8 @@ FONTDIR         = $(ARCH_DISTDIR)/fonts
 
 GRASS_VERSION_NUMBER  = $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE)
 GRASS_VERSION_NAME    = $(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)$(GRASS_VERSION_RELEASE)
+
+GRASS_NAME	= grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
 ##################### other #############################################
 
