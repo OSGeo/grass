@@ -91,13 +91,16 @@ int Cairo_raster(int n, int row,
     G_debug(3, "Cairo_raster: %d %d", n, row);
 
     for (i = 0; i < n; i++) {
-	unsigned int r = red[i];
-	unsigned int g = grn[i];
-	unsigned int b = blu[i];
-	unsigned int a = (masked && nul && nul[i])
-	    ? 0x00 : 0xFF;
+	if (masked && nul && nul[i])
+	    *dst++ = 0;
+	else {
+	    unsigned int r = red[i];
+	    unsigned int g = grn[i];
+	    unsigned int b = blu[i];
+	    unsigned int a = 0xFF;
 
-	*dst++ = (a << 24) + (r << 16) + (g << 8) + (b << 0);
+	    *dst++ = (a << 24) + (r << 16) + (g << 8) + (b << 0);
+	}
     }
 
     return row + 1;
