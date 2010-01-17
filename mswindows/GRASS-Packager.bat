@@ -3,7 +3,7 @@ rem Self Contained GRASS Automated Packager
 rem -----------------------------------------------------------------------------------------------------------------------
 rem Edited by: Marco Pasetti
 rem Revised for OSGeo4W by: Colin Nielsen, Helmut Kudrnovsky, and Martin Landa
-rem Last Update: 17 Jan 2010
+rem Last Update: $Id$
 rem -----------------------------------------------------------------------------------------------------------------------
 
 @echo off
