@@ -188,7 +188,7 @@ static void put_fp_data(int fd, char *null_buf, const void *rast,
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int compressed = (fcb->open_mode == OPEN_NEW_COMPRESSED);
     XDR *xdrs = &fcb->xdrstream;
-    char *work_buf;
+    void *work_buf;
 
     if (row < 0 || row >= fcb->cellhd.rows)
 	return;
@@ -455,8 +455,8 @@ static void put_data_gdal(int fd, const void *rast, int row, int n,
     dst = work_buf;
 
     for (i = 0; i < n; i++) {
-	if (Rast_is_null_value(src, map_type) || zeros_r_nulls &&
-	    !*(CELL *) src)
+	if (Rast_is_null_value(src, map_type) ||
+	    (zeros_r_nulls && !*(CELL *) src))
 	    Rast_set_d_value(dst, null_val, map_type);
 	else
 	    memcpy(dst, src, size);
