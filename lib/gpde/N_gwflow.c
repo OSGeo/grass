@@ -385,7 +385,7 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom, N_arra
         for (y = 0; y < rows; y++) {
             G_percent(y, rows - 1, 10);
             for (x = 0; x < cols; x++) {
-                stat = (int)N_get_array_3d_d_value(data->status, x, y);
+                stat = (int)N_get_array_3d_d_value(data->status, x, y, z);
 
                 val = 0.0;
 
@@ -394,7 +394,7 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom, N_arra
                     /* Compute the flow parameter */
                     dstar = N_callback_gwflow_3d(data, geom, x, y, z);
                     /* Compute the gradient in each direction pointing from the center */
-                    hc = N_get_array_3d_d_value(data->phead, x, y);
+                    hc = N_get_array_3d_d_value(data->phead, x, y, z);
 
                     if((int)N_get_array_3d_d_value(data->status, x + 1, y, z ) != N_CELL_INACTIVE) {
                         h = N_get_array_3d_d_value(data->phead,  x + 1, y, z );
@@ -408,8 +408,8 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom, N_arra
                         h = N_get_array_3d_d_value(data->phead,  x    , y + 1, z);
                         val += dstar->S * (hc - h);
                     }
-                    if((int)N_get_array_3d_d_value(data->status, x    , y - 1) != N_CELL_INACTIVE) {
-                        h = N_get_array_3d_d_value(data->phead,  x    , y - 1);
+                    if((int)N_get_array_3d_d_value(data->status, x    , y - 1, z) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x    , y - 1, z);
                         val += dstar->N * (hc - h);
                     }
                     if((int)N_get_array_3d_d_value(data->status, x    , y, z + 1) != N_CELL_INACTIVE) {
