@@ -33,7 +33,7 @@ typedef struct
     struct Option *output, *phead, *status, *hc_x, *hc_y, *q, *s, *r, *top,
 	*bottom, *vector_x, *vector_y, *budget, *type, *dt, *maxit, *error, *solver, *sor,
 	*river_head, *river_bed, *river_leak, *drain_bed, *drain_leak;
-    struct Flag *sparse;
+    struct Flag *full_les;
 } paramType;
 
 paramType param;		/*Parameters */
@@ -201,11 +201,12 @@ void set_params(void)
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
     param.error = N_define_standard_option(N_OPT_ITERATION_ERROR);
     param.solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
+    param.solver->options = "cg,pcg,cholesky";
 
-    param.sparse = G_define_flag();
-    param.sparse->key = 's';
-    param.sparse->description =
-	_("Use a sparse matrix, only available with iterative solvers");
+    param.full_les = G_define_flag();
+    param.full_les->key = 'f';
+    param.full_les->description = _("Use a full filled quadratic linear equation system,"
+            " default is a sparse linear equation system.");
 
 }
 
@@ -237,6 +238,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("groundwater flow"));
     module->description =
 	_("Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.");
 
@@ -282,12 +284,9 @@ int main(int argc, char *argv[])
     /*set the solver */
     solver = param.solver->answer;
 
-    if (strcmp(solver, G_MATH_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
-	G_fatal_error(_("The direct LU solver do not work with sparse matrices"));
-    if (strcmp(solver, G_MATH_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
-	G_fatal_error(_("The direct Gauss solver do not work with sparse matrices"));
-    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
-	G_fatal_error(_("The direct cholesky solver do not work with sparse matrices"));
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && !param.full_les->answer)
+	G_fatal_error(_("The cholesky solver dos not work with sparse matrices.\n"
+                "You may choose a full filled quadratic matrix, flag -f. "));
 
 
     /*get the current region */
@@ -543,7 +542,7 @@ N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
     N_les *les;
 
     /*assemble the linear equation system */
-    if (param.sparse->answer)
+    if (!param.full_les->answer)
         les = N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status, data->phead, (void *)data, call);
     else
         les = N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status, data->phead, (void *)data, call);
