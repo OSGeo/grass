@@ -38,6 +38,10 @@ set GISRC=junk
 rem Generate GISBASE by converting dirsep characters from \ to /
 FOR /F "usebackq delims==" %%i IN (`g.dirseps -g "%WINGISBASE%"`) DO @set GISBASE=%%i
 
+if not "%LANG%"=="" goto langset
+FOR /F "usebackq delims==" %%i IN (`"%WINGISBASE%\etc\winlocale"`) DO @set LANG=%%i
+:langset
+
 set GRASS_PAGER=more
 if "%GRASS_WISH%"=="" set GRASS_WISH=wish.exe
 if "%GRASS_SH%"=="" set GRASS_SH=c:\msys\1.0\bin\sh.exe
