@@ -53,10 +53,12 @@ the following cell states are supportet:
 <br>
 <br>
 The groundwater flow equation can be solved with several solvers.
-
-Aditionally a direct Gauss solver and LU solver are available. Those direct solvers
-only work with quadratic matrices, so be careful using them with large maps 
-(maps of size 10.000 cells will need more than one gigabyte of ram).
+An iterative solvers with sparse and quadratic matrices support is implemented.
+The conjugate gradients method with (pcg) and without (cg) precondition.
+Aditionally a direct Cholesky solver is available. This direct solver
+only work with normal quadratic matrices, so be careful using them with large maps
+(maps of size 10.000 cells will need more than one gigabyte of RAM).
+Always prefer a sparse matrix solver.
 
 <H2>EXAMPLE</H2>
 Use this small script to create a working
@@ -67,18 +69,18 @@ groundwater flow area and data. Make sure you are not in a lat/lon projection.
 g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000
 
 #now create the input raster maps for a confined aquifer
-r3.mapcalc "phead = if(row() == 1 && depth() == 4, 50, 40)"
-r3.mapcalc "status = if(row() == 1 && depth() == 4, 2, 1)"
-r3.mapcalc "well = if(row() == 20 && col() == 20 , -0.00025, 0)"
-r3.mapcalc "hydcond = 0.00025"
-r3.mapcalc "syield = 0.0001"
-r.mapcalc  "recharge = 0.0"
+r3.mapcalc --o expression="phead = if(row() == 1 && depth() == 4, 50, 40)"
+r3.mapcalc --o expression="status = if(row() == 1 && depth() == 4, 2, 1)"
+r3.mapcalc --o expression="well = if(row() == 20 && col() == 20 && depth() == 2, -0.25, 0)"
+r3.mapcalc --o expression="hydcond = 0.00025"
+r3.mapcalc --o expression="syield = 0.0001"
+r.mapcalc  --o expression="recharge = 0.0"
 
-r3.gwflow --o -s solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
-hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 velocity=gwresult_velocity
+r3.gwflow --o solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
+hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
 
 # The data can be visulaized with paraview when exported with r3.out.vtk
-r3.out.vtk -p in=gwresult,status vector=gwresult_velocity_x,gwresult_velocity_y,gwresult_velocity_z out=/tmp/gwdata3d.vtk
+r3.out.vtk -p in=gwresult,status,budget vector=vx,vy,vz out=/tmp/gwdata3d.vtk
 
 #now load the data into paraview
 </pre></div>

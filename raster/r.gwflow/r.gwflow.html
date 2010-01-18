@@ -67,9 +67,9 @@ the following states are supportet:
 <br>
 <br>
 The groundwater flow equation can be solved with several solvers.
-Two iterative solvers with sparse and quadratic matrices support are implemented.
-The conjugate gradients (cg) method and the biconjugate gradients-stabilized (bicgstab) method. 
-Aditionally a direct Gauss solver and LU solver are available. Those direct solvers
+An iterative solvers with sparse and quadratic matrices support is implemented.
+The conjugate gradients method with (pcg) and without (cg) precondition.
+Aditionally a direct Cholesky solver is available. This direct solver
 only work with normal quadratic matrices, so be careful using them with large maps 
 (maps of size 10.000 cells will need more than one gigabyte of RAM).
 Always prefer a sparse matrix solver.
@@ -77,6 +77,7 @@ Always prefer a sparse matrix solver.
 <h2>EXAMPLE</h2>
 Use this small script to create a working
 groundwater flow area and data. Make sure you are not in a lat/lon projection.
+It includes drainage and river input as well.
 
 <div class="code"><pre>
 # set the region accordingly
@@ -85,7 +86,7 @@ g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000
 #now create the input raster maps for confined and unconfined aquifers
 r.mapcalc --o expression="phead=if(row() == 1 , 50, 40)"
 r.mapcalc --o expression="status=if(row() == 1 , 2, 1)"
-r.mapcalc --o expression="well=if(row() == 20 && col() == 20 , -0.001, 0)"
+r.mapcalc --o expression="well=if(row() == 20 && col() == 20 , -0.01, 0)"
 r.mapcalc --o expression="hydcond=0.00025"
 r.mapcalc --o expression="recharge=0"
 r.mapcalc --o expression="top_conf=20.0"
@@ -95,15 +96,28 @@ r.mapcalc --o expression="null=0.0"
 r.mapcalc --o expression="poros=0.15"
 r.mapcalc --o expression="syield=0.0001"
 
-#confined groundwater flow with cg solver and sparse matrix
-r.gwflow --o -s solver=cg top=top_conf bottom=bottom phead=phead status=status \
-hc_x=hydcond hc_y=hydcond q=well s=syield r=recharge output=gwresult_conf \
-dt=8640000 type=confined vx=gwresult_conf_velocity_x vy=gwresult_conf_velocity_y
+# The maps of the river
+r.mapcalc --o expression="river_bed=if(col() == 35 , 48, null())"
+r.mapcalc --o expression="river_head=if(col() == 35 , 49, null())"
+r.mapcalc --o expression="river_leak=if(col() == 35 , 0.0001, null())"
 
-#unconfined groundwater flow with cg solver and sparse matrix
-r.gwflow --o -s solver=cg top=top_unconf bottom=bottom phead=phead \
+# The maps of the drainage
+r.mapcalc --o expression="drain_bed=if(col() == 5 , 48, null())"
+r.mapcalc --o expression="drain_leak=if(col() == 5 , 0.01, null())"
+
+#confined groundwater flow with cg solver and sparse matrix, river and drain
+#do not work with this confined aquifer (top == 20m)
+r.gwflow --o solver=cg top=top_conf bottom=bottom phead=phead status=status \
+hc_x=hydcond hc_y=hydcond q=well s=syield r=recharge output=gwresult_conf \
+dt=8640000 type=confined vx=gwresult_conf_velocity_x vy=gwresult_conf_velocity_y budget=budget_conf
+
+#unconfined groundwater flow with cg solver and sparse matrix, river and drain are enabled
+r.gwflow --o solver=cg top=top_unconf bottom=bottom phead=phead \
 status=status hc_x=hydcond hc_y=hydcond q=well s=poros r=recharge \
-output=gwresult_unconf dt=8640000 type=unconfined vx=gwresult_unconf_velocity_x vy=gwresult_unconf_velocity_y
+river_bed=river_bed river_head=river_head river_leak=river_leak \
+drain_bed=drain_bed drain_leak=drain_leak \
+output=gwresult_unconf dt=8640000 type=unconfined vx=gwresult_unconf_velocity_x \
+budget=budget_unconf vy=gwresult_unconf_velocity_y
 
 # The data can be visulaized with paraview when exported with r.out.vtk
 r.out.vtk -p in=gwresult_conf,status vector=gwresult_conf_velocity_x,gwresult_conf_velocity_y,null out=/tmp/gwdata_conf2d.vtk

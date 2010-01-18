@@ -30,9 +30,9 @@
 typedef struct
 {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *hc_z, *q, *s, *r,
-	*vector, *dt, *maxit, *error, *solver;
+	*vector_x, *vector_y, *vector_z, *budget, *dt, *maxit, *error, *solver;
     struct Flag *mask;
-    struct Flag *sparse;
+    struct Flag *full_les;
 } paramType;
 
 paramType param;		/*Parameters */
@@ -117,15 +117,37 @@ void set_params(void)
     param.output->gisprompt = "new,grid3,3d-raster";
     param.output->description = _("The piezometric head result of the numerical calculation will be written to this map");
 
-    param.vector = G_define_option();
-    param.vector->key = "velocity";
-    param.vector->type = TYPE_STRING;
-    param.vector->required = NO;
-    param.vector->gisprompt = "new,grid3,3d-raster";
-    param.vector->description = _("Calculate the groundwater distance velocity vector field \n"
-	                          "and write the x, y, and z components to maps named name_[xyz].\n"
-	                          "Name is basename for the new raster3d maps");
+    param.vector_x = G_define_option();
+    param.vector_x->key = "vx";
+    param.vector_x->type = TYPE_STRING;
+    param.vector_x->required = NO;
+    param.vector_x->gisprompt = "new,grid3,3d-raster";
+    param.vector_x->description =
+	_("Calculate and store the groundwater filter velocity vector part in x direction [m/s]\n");
 
+    param.vector_y = G_define_option();
+    param.vector_y->key = "vy";
+    param.vector_y->type = TYPE_STRING;
+    param.vector_y->required = NO;
+    param.vector_y->gisprompt = "new,grid3,3d-raster";
+    param.vector_y->description =
+	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
+
+    param.vector_z = G_define_option();
+    param.vector_z->key = "vz";
+    param.vector_z->type = TYPE_STRING;
+    param.vector_z->required = NO;
+    param.vector_z->gisprompt = "new,grid3,3d-raster";
+    param.vector_z->description =
+	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
+
+    param.budget = G_define_option();
+    param.budget->key = "budget";
+    param.budget->type = TYPE_STRING;
+    param.budget->required = NO;
+    param.budget->gisprompt = "new,grid3,3d-raster";
+    param.budget->description =
+	_("Store the groundwater budget for each cell\n");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -137,9 +159,10 @@ void set_params(void)
     param.mask->key = 'm';
     param.mask->description = _("Use G3D mask (if exists)");
 
-    param.sparse = G_define_flag();
-    param.sparse->key = 's';
-    param.sparse->description = _("Use a sparse linear equation system, only available with iterative solvers");
+    param.full_les = G_define_flag();
+    param.full_les->key = 'f';
+    param.full_les->description = _("Use a full filled quadratic linear equation system,"
+            " default is a sparse linear equation system.");
 }
 
 /* ************************************************************************* */
@@ -148,34 +171,19 @@ void set_params(void)
 int main(int argc, char *argv[])
 {
     struct GModule *module = NULL;
-
     N_gwflow_data3d *data = NULL;
-
     N_geom_data *geom = NULL;
-
     N_les *les = NULL;
-
     N_les_callback_3d *call = NULL;
-
     G3D_Region region;
-
     N_gradient_field_3d *field = NULL;
-
     N_array_3d *xcomp = NULL;
-
     N_array_3d *ycomp = NULL;
-
     N_array_3d *zcomp = NULL;
-
     double error;
-
     int maxit;
-
     const char *solver;
-
     int x, y, z, stat;
-
-    char *buff = NULL;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -183,6 +191,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("voxel"));
+    G_add_keyword(_("groundwater"));
+    G_add_keyword(_("numeric"));
+    G_add_keyword(_("simulation"));
     module->description = _("Numerical calculation program for transient, confined groundwater flow in three dimensions");
 
     /* Get parameters from user */
@@ -199,8 +210,9 @@ int main(int argc, char *argv[])
     /*Set the solver */
     solver = param.solver->answer;
 
-    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
-	G_fatal_error(_("The direct cholesky solver do not work with sparse matrices"));
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && !param.full_les->answer)
+	G_fatal_error(_("The cholesky solver dos not work with sparse matrices.\n"
+                "You may choose a full filled quadratic matrix, flag -f. "));
 
 
 
@@ -264,7 +276,7 @@ int main(int argc, char *argv[])
     }
 
     /*assemble the linear equation system */
-    if (param.sparse->answer) {
+    if (!param.full_les->answer) {
 	les =
 	    N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead,
 			      (void *)data, call);
@@ -306,8 +318,18 @@ int main(int argc, char *argv[])
 		 &region, param.output->answer);
     N_free_les(les);
 
+    /* Compute the water budget for each cell */
+    N_array_3d *budget = N_alloc_array_3d(geom->cols, geom->rows, geom->depths, 1, DCELL_TYPE);
+    N_gwflow_3d_calc_water_budget(data, geom, budget);
+    
+    /*Write the water balance */
+    if(param.budget->answer)
+    {
+	N_write_array_3d_to_rast3d(budget, param.budget->answer, 1);
+    }
+
     /*Compute the the velocity field if required and write the result into three rast3d maps */
-    if (param.vector->answer) {
+    if (param.vector_x->answer || param.vector_y->answer || param.vector_z->answer) {
 	field =
 	    N_compute_gradient_field_3d(data->phead, data->hc_x, data->hc_y,
 					data->hc_z, geom, NULL);
@@ -324,14 +346,13 @@ int main(int argc, char *argv[])
 
 	N_compute_gradient_field_components_3d(field, xcomp, ycomp, zcomp);
 
-	G_asprintf(&buff, "%s_x", param.vector->answer);
-	N_write_array_3d_to_rast3d(xcomp, buff, 1);
-	G_asprintf(&buff, "%s_y", param.vector->answer);
-	N_write_array_3d_to_rast3d(ycomp, buff, 1);
-	G_asprintf(&buff, "%s_z", param.vector->answer);
-	N_write_array_3d_to_rast3d(zcomp, buff, 1);
-	if (buff)
-	    G_free(buff);
+
+        if(param.vector_x->answer)
+            N_write_array_3d_to_rast3d(xcomp, param.vector_x->answer, 1);
+        if(param.vector_y->answer)
+            N_write_array_3d_to_rast3d(ycomp, param.vector_y->answer, 1);
+        if(param.vector_z->answer)
+            N_write_array_3d_to_rast3d(zcomp, param.vector_z->answer, 1);
 
 	if (xcomp)
 	    N_free_array_3d(xcomp);

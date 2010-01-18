@@ -34,6 +34,6 @@ grass.run_command("r.mapcalc", expression="syield=0.001")
 grass.run_command("r.mapcalc", expression="null=0.0")
 
 #compute a steady state groundwater flow
-grass.run_command("r.gwflow", solver="cholesky", top="top", bottom="bottom", phead="phead", \
+grass.run_command("r.gwflow", "f", solver="cholesky", top="top", bottom="bottom", phead="phead", \
  status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield", \
  r="recharge", output="gwresult", dt=864000000000, type="unconfined", budget="water_budget")

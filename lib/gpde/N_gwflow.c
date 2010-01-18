@@ -364,7 +364,7 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
  * \param gwdata N_gwflow_data3d *
  * \param geom N_geom_data *
  * \param budget N_array_3d
- * \returnvoid
+ * \return void
  *
  * */
 void
@@ -396,12 +396,12 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom, N_arra
                     /* Compute the gradient in each direction pointing from the center */
                     hc = N_get_array_3d_d_value(data->phead, x, y, z);
 
-                    if((int)N_get_array_3d_d_value(data->status, x + 1, y, z ) != N_CELL_INACTIVE) {
-                        h = N_get_array_3d_d_value(data->phead,  x + 1, y, z );
+                    if((int)N_get_array_3d_d_value(data->status, x + 1, y    , z) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x + 1, y    , z);
                         val += dstar->E * (hc - h);
                     }
-                    if((int)N_get_array_3d_d_value(data->status, x - 1, y, z ) != N_CELL_INACTIVE) {
-                        h = N_get_array_3d_d_value(data->phead,  x - 1, y, z);
+                    if((int)N_get_array_3d_d_value(data->status, x - 1, y    , z) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x - 1, y    , z);
                         val += dstar->W * (hc - h);
                     }
                     if((int)N_get_array_3d_d_value(data->status, x    , y + 1, z) != N_CELL_INACTIVE) {
@@ -412,12 +412,12 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom, N_arra
                         h = N_get_array_3d_d_value(data->phead,  x    , y - 1, z);
                         val += dstar->N * (hc - h);
                     }
-                    if((int)N_get_array_3d_d_value(data->status, x    , y, z + 1) != N_CELL_INACTIVE) {
-                        h = N_get_array_3d_d_value(data->phead,  x    , y, z + 1);
+                    if((int)N_get_array_3d_d_value(data->status, x    , y    , z + 1) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x    , y    , z + 1);
                         val += dstar->T * (hc - h);
                     }
-                    if((int)N_get_array_3d_d_value(data->status, x    , y, z - 1) != N_CELL_INACTIVE) {
-                        h = N_get_array_3d_d_value(data->phead,  x    , y, z - 1);
+                    if((int)N_get_array_3d_d_value(data->status, x    , y    , z - 1) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x    , y    , z - 1);
                         val += dstar->B * (hc - h);
                     }
                     sum += val;
@@ -652,7 +652,7 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
  * \param gwdata N_gwflow_data2d *
  * \param geom N_geom_data *
  * \param budget N_array_2d
- * \returnvoid
+ * \return void
  *
  * */
 void
