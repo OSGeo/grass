@@ -28,14 +28,55 @@ be used for <b>input</b> and <b>output</b>, the
 <b>method</b> used to analyze neighborhood
 values (i.e., the neighborhood function or operation to be
 performed), and the <b>size</b> of the neighborhood.
+<p>
+The user can optionally
+specify a <b>selection</b> map, to compute new values only where the raster
+cells of the selection map are not NULL. In case of a NULL cells,
+the values from the input map are copied into the output map.
+This may useful to smooth only parts of an elevation map (pits, peaks, ...).
+
+<p>
+<em>Example how to use a selection map with method=average:</em><br>
+input map:
+<pre>
+1 1  1 1 1
+1 1  1 1 1
+1 1 10 1 1
+1 1  1 1 1
+1 1  1 1 1
+</pre>
+selection map, NULL values are marked as *:
+<pre>
+* * * * *
+* * 1 * *
+* 1 1 1 *
+* * 1 * *
+* * * * *
+</pre>
+The output map:
+<pre>
+1 1 1 1 1
+1 1 2 1 1
+1 2 2 2 1
+1 1 2 1 1
+1 1 1 1 1
+</pre>
+Without using the selection map, the output map would look like this:
+<pre>
+1 1 1 1 1
+1 2 2 2 1
+1 2 2 2 1
+1 2 2 2 1
+1 1 1 1 1
+</pre>
+
+<p>
 Optionally, the user can also specify the <b>TITLE</b> to
 be assigned to the raster map layer <b>output</b>, elect
 to not align the resolution of the output with that of the
 input (the <b>-a</b> option), and run <em><b>r.neighbors</b></em>
 with a custom matrix weights with the <em>weight</em> option.
 These options are described further below.
-
-
 <p>
 
 <em>Neighborhood Operation Methods:</em>
@@ -222,7 +263,7 @@ The <em><b>r.neighbors</b></em> program works in the current geographic region
 with the current mask, if any.  It is recommended, but not required,
 that the resolution of the geographic region be the same as that
 of the raster map layer.  By default, <em><b>r.neighbors</b></em> will align
-these geographic region settings.  However, the user can elect to keep
+these geographic region settings.  However, the user can select to keep
 original input and output resolutions which are not aligned by specifying
 this (e.g., using the <b>-a</b> option).
 <p>
