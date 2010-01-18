@@ -17,10 +17,10 @@
 #include <unistd.h>
 #include <time.h>
 #include <stdarg.h>
+#include <signal.h>
 #include <sys/types.h>
 #include <grass/glocale.h>
 #include <grass/gis.h>
-
 /*!
  * \def MSG
  *
@@ -158,6 +158,13 @@ void G_fatal_error(const char *msg, ...)
     va_end(ap);
 
     G__call_error_handlers();
+
+    /* Raise SIGSEGV, useful for debugging only.
+     * Type "export GRASS_SIGSEGV_ON_ERROR=1"
+     * to enable this feature using bash.
+     */
+    if (getenv("GRASS_SIGSEGV_ON_ERROR"))
+        raise(SIGSEGV);
 
     exit(EXIT_FAILURE);
 }
