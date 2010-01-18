@@ -719,22 +719,23 @@ class ProjParamsPage(TitledPage):
         if not self.pparam.has_key(id):
             event.Skip()
             return
-        
+
         param = self.pparam[id]
         win = self.FindWindowById(id)
         if param['type'] == 'zone':
-            if val.isdigit():
-                if int(val) < 1:
-                    win.SetValue(1)
-                if int(val) > 60:
-                    win.SetValue(60)
-            else: 
+            val = event.GetInt()
+            if val < 1:
                 win.SetValue(1)
+            elif val > 60:
+                    win.SetValue(60)
         
-        param['value'] = val
+        if param['type'] == 'bool':
+            param['value'] = event.GetSelection()
+        else:
+            param['value'] = val
         
         event.Skip()
-
+        
     def OnPageChange(self,event=None):
         """!Go to next page"""
         if event.GetDirection():
@@ -752,7 +753,7 @@ class ProjParamsPage(TitledPage):
                                       caption = _('Error'), style = wx.ICON_ERROR | wx.CENTRE)
                         event.Veto()
                     else:
-                        self.p4projparams += (' +' + param['proj4'] + '=' + param['value'])
+                        self.p4projparams += (' +' + param['proj4'] + '=' + str(param['value']))
 
     def OnEnterPage(self,event):
         """!Page entered"""
@@ -783,7 +784,7 @@ class ProjParamsPage(TitledPage):
             row = 0
             for paramgrp in self.parent.projections[self.parent.projpage.proj][1]:
                 # get parameters
-                id = wx.ID_ANY
+                id = wx.NewId()
                 param = self.pparam[id] = { 'type' : self.parent.paramdesc[paramgrp[0]][0],
                                             'proj4': self.parent.paramdesc[paramgrp[0]][1],
                                             'desc' : self.parent.paramdesc[paramgrp[0]][2] }
@@ -808,8 +809,9 @@ class ProjParamsPage(TitledPage):
                     win = wx.SpinCtrl(parent = self.panel, id = id,
                                       size = (100, -1), 
                                       style = wx.SP_ARROW_KEYS | wx.SP_WRAP,
-                                      min = 1, max = 60, initial = 30)  
+                                      min = 1, max = 60)
                     win.SetValue(param['value'])
+                    win.Bind(wx.EVT_SPINCTRL, self.OnParamEntry)
                     win.Bind(wx.EVT_TEXT, self.OnParamEntry)
                 else:
                     win = wx.TextCtrl(parent = self.panel, id = id,
