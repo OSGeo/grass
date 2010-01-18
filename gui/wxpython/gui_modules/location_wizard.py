@@ -494,13 +494,12 @@ class ItemList(wx.ListCtrl,
 
         if self.sourceData:
             self.Populate()
-            #FIXME: auto sizing doesn't work for some reason
-            for i in range(self.GetColumnCount()):
-                self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
-        else:
-            for i in range(self.GetColumnCount()):
-                self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
-
+        
+        for i in range(self.GetColumnCount()):
+            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
+            if self.GetColumnWidth(i) < 80:
+                self.SetColumnWidth(i, 80)
+        
         #
         # listmix
         #
