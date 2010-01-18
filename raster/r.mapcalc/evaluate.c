@@ -241,12 +241,9 @@ static expr_list *exprs;
 
 /****************************************************************************/
 
-static int error_handler(const char *msg, int fatal)
+static void error_handler(void *p)
 {
     expr_list *l;
-
-    if (!fatal)
-	return 0;
 
     for (l = exprs; l; l = l->next) {
 	expression *e = l->exp;
@@ -255,10 +252,6 @@ static int error_handler(const char *msg, int fatal)
 	if (fd >= 0)
 	    unopen_output_map(fd);
     }
-
-    G_unset_error_routine();
-    G_fatal_error("%s", msg);
-    return 0;
 }
 
 static void setup_rand(void)
@@ -291,7 +284,7 @@ void execute(expr_list * ee)
     setup_rand();
 
     exprs = ee;
-    G_set_error_routine(error_handler);
+    G_add_error_handler(error_handler, NULL);
 
     for (l = ee; l; l = l->next) {
 	expression *e = l->exp;
