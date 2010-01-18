@@ -56,6 +56,7 @@ ifneq ($(strip $(MINGW)),)
 	FILES += \
 		$(ARCH_BINDIR)/$(START_UP).py \
 		$(ARCH_BINDIR)/$(START_UP).bat \
+		$(ETC)/winlocale$(EXE) \
 		$(ETC)/Init.bat
 else
 	FILES += \
@@ -123,6 +124,9 @@ $(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
 
 $(ETC)/clean_temp$(EXE) $(ETC)/lock$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
 	$(call linker)
+
+$(ETC)/winlocale$(EXE): $(OBJDIR)/winlocale.o
+	$(CC) $(LDFLAGS) $(EXTRA_LDFLAGS) -o $@ $^ -lkernel32
 
 $(ETC)/VERSIONNUMBER:
 	rm -f $@
