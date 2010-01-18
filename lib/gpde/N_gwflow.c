@@ -348,6 +348,100 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
     return mat_pos;
 }
 
+
+/* *************************************************************** */
+/* ****************** N_gwflow_3d_calc_water_budget ************** */
+/* *************************************************************** */
+/*!
+ * \brief This function computes the water budget of the entire groundwater
+ *
+ * The water budget is calculated for each active and dirichlet cell from
+ * its surrounding neighbours. This is based on the 7 star mass balance computation
+ * of N_callback_gwflow_3d and the gradient of the water heights in the cells.
+ * The sum of the water budget of each active/dirichlet cell must be near zero
+ * due the effect of numerical inaccuracy of cpu's.
+ *
+ * \param gwdata N_gwflow_data3d *
+ * \param geom N_geom_data *
+ * \param budget N_array_3d
+ * \returnvoid
+ *
+ * */
+void
+N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom, N_array_3d * budget)
+{
+    int z, y, x, stat;
+    double h, hc;
+    double val;
+    double sum;
+    N_data_star *dstar;
+
+    int rows = data->status->rows;
+    int cols = data->status->cols;
+    int depths = data->status->depths;
+    sum = 0;
+
+    for (z = 0; z < depths; z++) {
+        for (y = 0; y < rows; y++) {
+            G_percent(y, rows - 1, 10);
+            for (x = 0; x < cols; x++) {
+                stat = (int)N_get_array_3d_d_value(data->status, x, y);
+
+                val = 0.0;
+
+                if (stat != N_CELL_INACTIVE ) {	/*all active/dirichlet cells */
+
+                    /* Compute the flow parameter */
+                    dstar = N_callback_gwflow_3d(data, geom, x, y, z);
+                    /* Compute the gradient in each direction pointing from the center */
+                    hc = N_get_array_3d_d_value(data->phead, x, y);
+
+                    if((int)N_get_array_3d_d_value(data->status, x + 1, y, z ) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x + 1, y, z );
+                        val += dstar->E * (hc - h);
+                    }
+                    if((int)N_get_array_3d_d_value(data->status, x - 1, y, z ) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x - 1, y, z);
+                        val += dstar->W * (hc - h);
+                    }
+                    if((int)N_get_array_3d_d_value(data->status, x    , y + 1, z) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x    , y + 1, z);
+                        val += dstar->S * (hc - h);
+                    }
+                    if((int)N_get_array_3d_d_value(data->status, x    , y - 1) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x    , y - 1);
+                        val += dstar->N * (hc - h);
+                    }
+                    if((int)N_get_array_3d_d_value(data->status, x    , y, z + 1) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x    , y, z + 1);
+                        val += dstar->T * (hc - h);
+                    }
+                    if((int)N_get_array_3d_d_value(data->status, x    , y, z - 1) != N_CELL_INACTIVE) {
+                        h = N_get_array_3d_d_value(data->phead,  x    , y, z - 1);
+                        val += dstar->B * (hc - h);
+                    }
+                    sum += val;
+
+                    G_free(dstar);
+                }
+                else {
+                    Rast_set_null_value(&val, 1, DCELL_TYPE);
+                }
+                N_put_array_3d_d_value(budget, x, y, z, val);
+            }
+        }
+    }
+
+    if(fabs(sum) < 0.0000000001)
+        G_message("The total sum of the water budget: %g\n", sum);
+    else
+        G_warning("The total sum of the water budget is significant larger then 0: %g\n", sum);
+
+    return;
+}
+
+
+
 /* *************************************************************** */
 /* ****************** N_callback_gwflow_2d *********************** */
 /* *************************************************************** */
@@ -480,9 +574,12 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     T_n = N_calc_harmonic_mean(hc_yn, hc_y) * z_n;
     T_s = N_calc_harmonic_mean(hc_ys, hc_y) * z_s;
 
-    /*compute the river leakage, this is an explicit method */
+    /* Compute the river leakage, this is an explicit method
+     * Rivers are only enabled, if the river bed is lower or equal to the surface
+     */
     if (data->river_leak &&
-	(N_get_array_2d_d_value(data->river_leak, col, row) != 0)) {
+	(N_get_array_2d_d_value(data->river_leak, col, row) != 0) &&
+            N_get_array_2d_d_value(data->river_bed, col, row) <= top) {
 	if (hc > N_get_array_2d_d_value(data->river_bed, col, row)) {
 	    river_vect = N_get_array_2d_d_value(data->river_head, col, row) *
 		N_get_array_2d_d_value(data->river_leak, col, row);
@@ -496,9 +593,12 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
 	}
     }
 
-    /*compute the drainage, this is an explicit method */
+    /* compute the drainage, this is an explicit method
+     * Drainage is only enabled, if the drain bed is lower or equal to the surface
+     */
     if (data->drain_leak &&
-	(N_get_array_2d_d_value(data->drain_leak, col, row) != 0)) {
+	(N_get_array_2d_d_value(data->drain_leak, col, row) != 0) &&
+            N_get_array_2d_d_value(data->drain_bed, col, row) <= top) {
 	if (hc > N_get_array_2d_d_value(data->drain_bed, col, row)) {
 	    drain_vect = N_get_array_2d_d_value(data->drain_bed, col, row) *
 		N_get_array_2d_d_value(data->drain_leak, col, row);
