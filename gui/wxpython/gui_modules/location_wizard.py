@@ -22,10 +22,10 @@ Classes:
  - LocationWizard
  - SelectTransformDialog
 
-COPYRIGHT: (C) 2007-2009 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+(C) 2007-2010 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
 @author Jachym Cepicky
@@ -672,196 +672,182 @@ class ProjParamsPage(TitledPage):
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Choose projection parameters"))
         global coordsys
-
-        self.utmzone = ''
-        self.utmhemisphere = ''
-        self.hemischoices = ["north","south"]
+        
         self.parent = parent
-        self.panel = ''
-        self.prjparamsizer = ''
-        self.pentry = {}
-        self.pdesc = {}
-        self.ptype = {}
-        self.pval = {}
-        self.proj4param = {}
-        self.pcount = 0
-        self.paramlist = []
+        self.panel = None
+        self.prjParamSizer = None
+        
+        self.pparam = dict()
+        
         self.p4projparams = ''
         self.projdesc = ''
         
-        radioSBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                               label=" %s " % _("Select datum or ellipsoid (next page)"))
+        radioSBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                 label = " %s " % _("Select datum or ellipsoid (next page)"))
         radioSBSizer = wx.StaticBoxSizer(radioSBox)
-        self.sizer.Add(radioSBSizer, pos=(0,1), span=(1,2), 
-                           flag=wx.EXPAND | wx.ALIGN_TOP | wx.TOP, border=10)
-
+        self.sizer.Add(item = radioSBSizer, pos = (0, 1),
+                       flag = wx.EXPAND | wx.ALIGN_TOP | wx.TOP, border = 10)
+        
         self.radio1 = wx.RadioButton(parent=self, id=wx.ID_ANY, 
-                                label=_("Datum with associated ellipsoid"),
-                                style = wx.RB_GROUP)
+                                     label=_("Datum with associated ellipsoid"),
+                                     style = wx.RB_GROUP)
         self.radio2 = wx.RadioButton(parent=self, id=wx.ID_ANY,
-                                label=_("Ellipsoid only"))   
+                                     label=_("Ellipsoid only"))   
         
         # default button setting
         if self.radio1.GetValue() == False and self.radio2.GetValue() == False:
             self.radio1.SetValue(True)
             self.SetNext(self.parent.datumpage)
-#            self.parent.sumpage.SetPrev(self.parent.datumpage)  
-
+            #            self.parent.sumpage.SetPrev(self.parent.datumpage)  
+        
         radioSBSizer.Add(item=self.radio1,
                          flag=wx.ALIGN_LEFT | wx.RIGHT, border=20)
         radioSBSizer.Add(item=self.radio2,
                          flag=wx.ALIGN_LEFT)
-
+        
         # bindings
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radio1.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radio2.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio1.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio2.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChange)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         
     def OnParamEntry(self, event):
-        num = 0
-        # deal with weird spin control text event behavior, sending dup. event with negative number        
-        if event.GetId() >= 2000:
-            num = event.GetId() - 2000
-        else:
-            pass
+        """!Parameter value changed"""
+        id  = event.GetId()
         val = event.GetString()
-        if self.ptype[num] == 'zone':
+        
+        if not self.pparam.has_key(id):
+            event.Skip()
+            return
+        
+        param = self.pparam[id]
+        win = self.FindWindowById(id)
+        if param['type'] == 'zone':
             if val.isdigit():
-                if int(val) < 1: self.pentry[num].SetValue(1)
-                if int(val) > 60: self.pentry[num].SetValue(60)
+                if int(val) < 1:
+                    win.SetValue(1)
+                if int(val) > 60:
+                    win.SetValue(60)
             else: 
-                self.pentry[num].SetValue(1)
-
-        self.pval[num] = val
+                win.SetValue(1)
+        
+        param['value'] = val
         
         event.Skip()
 
     def OnPageChange(self,event=None):
+        """!Go to next page"""
         if event.GetDirection():
             self.p4projparams = ''
-            for num in range(self.pcount + 1):
-                if self.ptype[num] == 'bool':
-                    if self.pval[num] == 'No':
+            for id, param in self.pparam.iteritems():
+                if param['type'] == 'bool':
+                    if param['value'] == False:
                         continue
                     else:
-                        self.p4projparams += (' +' + self.proj4param[num])
+                        self.p4projparams += (' +' + param['proj4'])
                 else:
-                    if self.pval[num] == '':
-                        wx.MessageBox('You must enter a value for %s' % self.pdesc[num],
-                                      'Something is missing!', wx.ICON_ERROR)
+                    if param['value'] is None:
+                        wx.MessageBox(parent = self,
+                                      message = _('You must enter a value for %s') % param['desc'],
+                                      caption = _('Error'), style = wx.ICON_ERROR | wx.CENTRE)
                         event.Veto()
                     else:
-                        self.p4projparams += (' +' + self.proj4param[num] + '=' + self.pval[num])
+                        self.p4projparams += (' +' + param['proj4'] + '=' + param['value'])
 
     def OnEnterPage(self,event):
+        """!Page entered"""
         self.projdesc = self.parent.projections[self.parent.projpage.proj][0]
-        try:
-            # page already formatted
-            if self.pagesizer.GetItem(self.panel) != '':
-                pass
-        except:
+        if self.prjParamSizer is None:
             # entering page for the first time
-            paramSBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                   label=_(" Enter parameters for %s projection ") % self.projdesc)
+            paramSBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                     label=_(" Enter parameters for %s projection ") % self.projdesc)
             paramSBSizer = wx.StaticBoxSizer(paramSBox)
-
-            self.panel = scrolled.ScrolledPanel(self, wx.ID_ANY)
-            self.prjparamsizer = wx.GridBagSizer(vgap=0, hgap=0) 
-
+            
+            self.panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
             self.panel.SetupScrolling()
-
-#            this ought to work but it doesn't
-#            self.sizer.Add(paramSBSizer, pos=(2,1), span=(3,2), 
-#                           flag=wx.EXPAND )
-
-            self.pagesizer.Add(paramSBSizer, proportion=1, 
-                               flag=wx.EXPAND | wx.ALIGN_TOP | wx.ALL, border=10)
-            paramSBSizer.Add(self.panel, proportion=1, 
-                             flag=wx.ALIGN_CENTER|wx.EXPAND)
-
+            
+            self.prjParamSizer = wx.GridBagSizer(vgap=0, hgap=0) 
+            
+            self.pagesizer.Add(item = paramSBSizer, proportion = 1, 
+                               flag = wx.EXPAND | wx.ALIGN_TOP | wx.ALL, border = 10)
+            paramSBSizer.Add(item = self.panel, proportion = 1, 
+                             flag = wx.ALIGN_CENTER | wx.EXPAND)
+            
             paramSBSizer.Fit(self.panel)
-            self.panel.SetSizer(self.prjparamsizer)
+            self.panel.SetSizer(self.prjParamSizer)
                     
         if event.GetDirection(): 
-            self.pcount = 0
-            self.prjparamsizer.Clear(True)
-            num = 0
-            
+            self.prjParamSizer.Clear(True)
+
+            self.pparam = dict()
+            row = 0
             for paramgrp in self.parent.projections[self.parent.projpage.proj][1]:
-                
                 # get parameters
-                self.pcount = num
-                self.ptype[num] = self.parent.paramdesc[paramgrp[0]][0]
-                self.proj4param[num] = self.parent.paramdesc[paramgrp[0]][1]
-                self.pdesc[num] = self.parent.paramdesc[paramgrp[0]][2]
-
-                # default values
-                if self.ptype[num] == 'bool': self.pval[num] = 'No'
-                elif self.ptype[num] == 'zone': 
-                    self.pval[num] = '30' 
-                    self.pdesc[num] += ' (1-60)'
-                else: self.pval[num] = paramgrp[2]
-
-                label = wx.StaticText(self.panel, id=1000+num, label=self.pdesc[num], 
-                                      style=wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE)
-                if self.ptype[num] == 'bool':
-                    self.pentry[num] = wx.Choice(self.panel, id=2000+num, size=(100,-1), 
-                                                 choices = ['No','Yes'])  
-                    self.pentry[num].SetStringSelection(self.pval[num])
-                    self.Bind(wx.EVT_CHOICE, self.OnParamEntry)
-                elif self.ptype[num] == 'zone':
-                    self.pentry[num] = wx.SpinCtrl(self.panel, id=2000+num,
-                                                   value='30',
-                                                   size=(100,-1), 
-                                                   style=wx.SP_ARROW_KEYS | wx.SP_WRAP,
-                                                   min=1, max=60, initial=30)  
-                    self.pentry[num].SetValue(int(self.pval[num]))
-                    self.Bind(wx.EVT_TEXT, self.OnParamEntry)
-                else:
-                    self.pentry[num] = wx.TextCtrl(self.panel, id=2000+num, value=self.pval[num],
-                                                   size=(100,-1))
-                    self.Bind(wx.EVT_TEXT, self.OnParamEntry)
-                    if paramgrp[1] == 'noask':
-                        self.pentry[num].SetEditable(False)
-                        self.pentry[num].SetBackgroundColour(wx.LIGHT_GREY)
-
-                self.prjparamsizer.Add(item=label, pos=(num, 1),
-                               flag=wx.ALIGN_RIGHT | 
-                               wx.ALIGN_CENTER_VERTICAL |
-                               wx.RIGHT, border=5)
-                self.prjparamsizer.Add(item=self.pentry[num], pos=(num, 2),
-                               flag=wx.ALIGN_LEFT | 
-                               wx.ALIGN_CENTER_VERTICAL |
-                               wx.LEFT, border=5)                
-                num += 1    
+                id = wx.ID_ANY
+                param = self.pparam[id] = { 'type' : self.parent.paramdesc[paramgrp[0]][0],
+                                            'proj4': self.parent.paramdesc[paramgrp[0]][1],
+                                            'desc' : self.parent.paramdesc[paramgrp[0]][2] }
                 
+                # default values
+                if param['type'] == 'bool':
+                    param['value'] = 0
+                elif param['type'] == 'zone': 
+                    param['value'] = 30 
+                    param['desc'] += ' (1-60)'
+                else:
+                    param['value'] = paramgrp[2]
+                
+                label = wx.StaticText(parent = self.panel, id = wx.ID_ANY, label = param['desc'], 
+                                      style = wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE)
+                if param['type'] == 'bool':
+                    win = wx.Choice(parent = self.panel, id = id, size = (100,-1), 
+                                    choices = [_('No'), _('Yes')])  
+                    win.SetSelection(param['value'])
+                    win.Bind(wx.EVT_CHOICE, self.OnParamEntry)
+                elif param['type'] == 'zone':
+                    win = wx.SpinCtrl(parent = self.panel, id = id,
+                                      size = (100, -1), 
+                                      style = wx.SP_ARROW_KEYS | wx.SP_WRAP,
+                                      min = 1, max = 60, initial = 30)  
+                    win.SetValue(param['value'])
+                    win.Bind(wx.EVT_TEXT, self.OnParamEntry)
+                else:
+                    win = wx.TextCtrl(parent = self.panel, id = id,
+                                      value = param['value'],
+                                      size=(100, -1))
+                    win.Bind(wx.EVT_TEXT, self.OnParamEntry)
+                    if paramgrp[1] == 'noask':
+                        win.Enable(False)
+                    
+                self.prjParamSizer.Add(item = label, pos = (row, 1),
+                                       flag = wx.ALIGN_RIGHT | 
+                                       wx.ALIGN_CENTER_VERTICAL |
+                                       wx.RIGHT, border = 5)
+                self.prjParamSizer.Add(item = win, pos = (row, 2),
+                                       flag = wx.ALIGN_LEFT | 
+                                       wx.ALIGN_CENTER_VERTICAL |
+                                       wx.LEFT, border = 5)           
+                row += 1
+        
         self.panel.SetSize(self.panel.GetBestSize())
         self.panel.Layout()
         self.Layout()
         self.Update()
-
-
+        
         if not wx.FindWindowById(wx.ID_FORWARD).IsEnabled():
             wx.FindWindowById(wx.ID_FORWARD).Enable()
-
+        
         event.Skip()
 
     def SetVal(self, event):
+        """!Set value"""
         if event.GetId() == self.radio1.GetId():
             self.SetNext(self.parent.datumpage)
             self.parent.sumpage.SetPrev(self.parent.datumpage)
         elif event.GetId() == self.radio2.GetId():
             self.SetNext(self.parent.ellipsepage)
             self.parent.sumpage.SetPrev(self.parent.ellipsepage)
-
-    def GetUTM(self, event):
-        self.utmzone = event.GetString()
-
-    def OnHemisphere(self, event):
-        self.utmhemisphere = event.GetString()
-
-
+    
 class DatumPage(TitledPage):
     """
     Wizard page for selecting datum (with associated ellipsoid)
