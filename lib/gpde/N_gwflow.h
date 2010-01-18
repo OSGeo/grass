@@ -100,6 +100,8 @@ extern N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom,
 					 int col, int row, int depth);
 extern N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom,
 					 int col, int row);
+extern void N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data,
+        N_geom_data * geom, N_array_3d * budget);
 extern void N_gwflow_2d_calc_water_budget(N_gwflow_data2d * data,
         N_geom_data * geom, N_array_2d * balance);
 extern N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
