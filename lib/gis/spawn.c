@@ -284,7 +284,7 @@ static char *make_command_line(int shell, const char *cmd, const char **argv)
     if (shell) {
 	const char *comspec = getenv("COMSPEC");
 	append(&result, comspec ? comspec : "cmd.exe");
-	append(&result, " /c ");
+	append(&result, " /c \"");
 	escape_arg(&result, cmd);
     }
 
@@ -293,6 +293,8 @@ static char *make_command_line(int shell, const char *cmd, const char **argv)
 	    append_char(&result, ' ');
 	escape_arg(&result, argv[i]);
     }
+
+    append(&result, "\"");
 
     return release(&result);
 }
