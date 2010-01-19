@@ -21,8 +21,11 @@ NAD_DSTFILES := $(patsubst %.lla,$(NAD_DIR)/%,$(NAD_TABLES))
 NT_DSTFILES  := $(patsubst %,$(NAD_DIR)/%,$(NT_TABLES))
 CSV_DSTFILES := $(patsubst %,$(CSV_DIR)/%,$(CSV_FILES))
 
+PROJ_TABLES := proj-desc.table proj-parms.table proj-units.table
+PROJ_DSTFILES := $(patsubst %,$(ETC)/%,$(PROJ_TABLES))
+
 default: lib
-	$(MAKE) $(NAD_DSTFILES) $(CSV_DSTFILES)
+	$(MAKE) $(NAD_DSTFILES) $(CSV_DSTFILES) $(PROJ_DSTFILES)
 
 $(NAD_DIR)/%: %.lla | $(NAD_DIR)
 	$(NAD2BIN) < $< $@
@@ -31,6 +34,9 @@ $(NT_DSTFILES): $(NAD_DIR)/%: % | $(NAD_DIR)
 	$(INSTALL_DATA) $< $@
 
 $(CSV_DIR)/%.csv: %.csv | $(CSV_DIR)
+	$(INSTALL_DATA) $< $@
+
+$(ETC)/proj-%.table: proj-%.table
 	$(INSTALL_DATA) $< $@
 
 $(NAD_DIR):
