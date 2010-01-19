@@ -28,7 +28,6 @@
 #include "ncb.h"
 #include "local_proto.h"
 
-
 typedef int (*ifunc) (void);
 
 struct menu
@@ -75,8 +74,8 @@ int main(int argc, char *argv[])
     int selection_fd;
     int out_fd;
     DCELL *result;
-    void *selection_ptr, *selection, *input, *input_ptr;
-    RASTER_MAP_TYPE map_type, selection_type;
+    char *selection;
+    RASTER_MAP_TYPE map_type;
     int row, col;
     int readrow;
     int nrows, ncols;
@@ -122,13 +121,14 @@ int main(int argc, char *argv[])
 	  "map layer.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
+
     parm.selection = G_define_standard_option(G_OPT_R_INPUT);
     parm.selection->key = "selection";
     parm.selection->required = NO;
-    parm.selection->description = "Name of an input raster map to select the cells which should be processed";
+    parm.selection->description = _("Name of an input raster map to select the cells which should be processed");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    
+
     parm.method = G_define_option();
     parm.method->key = "method";
     parm.method->type = TYPE_STRING;
@@ -288,12 +288,10 @@ int main(int argc, char *argv[])
 	readcell(in_fd, readrow++, nrows, ncols);
 
     /* open the selection raster map */
-    if(parm.selection->answer) {
-	G_message("Opening selection map %s\n", parm.selection->answer);
+    if (parm.selection->answer) {
+	G_message(_("Opening selection map <%s>"), parm.selection->answer);
 	selection_fd = Rast_open_old(parm.selection->answer, "");
-        selection_type = Rast_get_map_type(selection_fd);
-        selection = Rast_allocate_buf(selection_type);
-        input = Rast_allocate_buf(map_type);
+        selection = Rast_allocate_null_buf();
     } else {
         selection_fd = -1;
         selection = NULL;
@@ -314,43 +312,36 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	readcell(in_fd, readrow++, nrows, ncols);
-        /* if selection map is enabled read each row of the
-           selection and intput map
-         */
-	if(selection != NULL) {
-            Rast_get_row(selection_fd, selection, row, selection_type);
-            Rast_get_row(in_fd, input, row, map_type);
-            selection_ptr = selection;
-            input_ptr = input;
-        }
+
+	if (selection)
+            Rast_get_null_value_row(selection_fd, selection, row);
 
 	for (col = 0; col < ncols; col++) {
 	    DCELL *rp = &result[col];
-            if((selection != NULL && Rast_is_null_value(selection_ptr, selection_type) == 1)) {
-		*rp = Rast_get_d_value((const void *)input_ptr, map_type);
-            }else {
+
+            if (selection && selection[col]) {
+		*rp = ncb.buf[ncb.dist][col];
+		continue;
+	    }
+
+	    if (newvalue_w)
+		n = gather_w(values_w, col);
+	    else
+		n = gather(values, col);
+
+	    if (n < 0)
+		Rast_set_d_null_value(rp, 1);
+	    else {
 		if (newvalue_w)
-		    n = gather_w(values_w, col);
+		    newvalue_w(rp, values_w, n, closure);
 		else
-		    n = gather(values, col);
+		    newvalue(rp, values, n, closure);
 
-		if (n < 0)
-		    Rast_set_d_null_value(rp, 1);
-		else {
-		    if (newvalue_w)
-		        newvalue_w(rp, values_w, n, closure);
-		    else
-		        newvalue(rp, values, n, closure);
-
-		    if (half && !Rast_is_d_null_value(rp))
-		        *rp += 0.5;
-		}
-            }
-            if(selection != NULL) {
-                selection_ptr = G_incr_void_ptr(selection_ptr, Rast_cell_size(selection_type));
-                input_ptr = G_incr_void_ptr(input_ptr, Rast_cell_size(map_type));
-            }
+		if (half && !Rast_is_d_null_value(rp))
+		    *rp += 0.5;
+	    }
 	}
+
 	Rast_put_d_row(out_fd, result);
     }
     G_percent(row, nrows, 2);
@@ -358,9 +349,8 @@ int main(int argc, char *argv[])
     Rast_close(out_fd);
     Rast_close(in_fd);
 
-    if(selection != NULL)
+    if (selection)
         Rast_close(selection_fd);
-
 
     /* put out category info */
     null_cats();
