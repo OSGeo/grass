@@ -90,7 +90,8 @@ int main(int argc, char **argv)
       row, col,			/* counters                     */
       irows, icols,		/* original rows, cols          */
       orows, ocols, have_colors,	/* Input map has a colour table */
-      overwrite;		/* Overwrite                    */
+      overwrite,		/* Overwrite                    */
+      curr_proj;		/* output projection (see gis.h) */
 
     void *obuffer,		/* buffer that holds one output row     */
      *obufptr;			/* column ptr in output buffer  */
@@ -103,6 +104,7 @@ int main(int argc, char **argv)
       row_idx,			/* row index in input matrix    */
       onorth, osouth,		/* save original border coords  */
       oeast, owest, inorth, isouth, ieast, iwest;
+    char north_str[30], south_str[30], east_str[30], west_str[30];
 
     struct Colors colr;		/* Input map colour table       */
     struct History history;
@@ -117,7 +119,9 @@ int main(int argc, char **argv)
     struct GModule *module;
 
     struct Flag *list,		/* list files in source location */
-     *nocrop;			/* don't crop output map        */
+     *nocrop,			/* don't crop output map        */
+     *print_bounds,		/* print output bounds and exit */
+     *gprint_bounds;		/* same but print shell style	*/
 
     struct Option *imapset,	/* name of input mapset         */
      *inmap,			/* name of input layer          */
@@ -196,6 +200,17 @@ int main(int argc, char **argv)
     nocrop->key = 'n';
     nocrop->description = _("Do not perform region cropping optimization");
 
+    print_bounds = G_define_flag();
+    print_bounds->key = 'p';
+    print_bounds->description =
+	_("Print input map's bounds in the current projection and exit");
+
+    gprint_bounds = G_define_flag();
+    gprint_bounds->key = 'g';
+    gprint_bounds->description =
+	_("Print bounds and exit (shell style)");
+
+
     /* The parser checks if the map already exists in current mapset,
        we switch out the check and do it
        in the module after the parser */
@@ -203,6 +218,7 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     /* get the method */
     for (method = 0; (ipolname = menu[method].name); method++)
@@ -226,6 +242,10 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Input and output locations can not be the same"));
 
     G_get_window(&outcellhd);
+
+    if(gprint_bounds->answer && !print_bounds->answer)
+	print_bounds->answer = gprint_bounds->answer;
+    curr_proj = G_projection();
 
     /* Get projection info for output mapset */
     if ((out_proj_info = G_get_projinfo()) == NULL)
@@ -306,6 +326,35 @@ int main(int argc, char **argv)
     owest = outcellhd.west;
     orows = outcellhd.rows;
     ocols = outcellhd.cols;
+
+
+    if (print_bounds->answer) {
+	G_message(_("Input map <%s@%s> in location <%s>:"),
+	    inmap->answer, setname, inlocation->answer);
+
+	G_format_northing(onorth, north_str, curr_proj);
+	G_format_northing(osouth, south_str, curr_proj);
+	G_format_easting(oeast, east_str, curr_proj);
+	G_format_easting(owest, west_str, curr_proj);
+
+	if(gprint_bounds->answer) {
+	    fprintf(stdout, "n=%s s=%s w=%s e=%s\n",
+		north_str, south_str, west_str, east_str);
+	}
+	else {
+	    fprintf(stdout, "Source cols: %d\n", icols);
+	    fprintf(stdout, "Source rows: %d\n", irows);
+	    fprintf(stdout, "Local north: %s\n",  north_str);
+	    fprintf(stdout, "Local south: %s\n", south_str);
+	    fprintf(stdout, "Local west: %s\n", west_str);
+	    fprintf(stdout, "Local east: %s\n", east_str);
+	}
+
+	/* somehow approximate local ewres, nsres ?? (use 'g.region -m' on lat/lon side) */
+
+	exit(EXIT_SUCCESS);
+    }
+
 
     /* Cut non-overlapping parts of input map */
     if (!nocrop->answer)
