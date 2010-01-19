@@ -480,7 +480,10 @@ def region():
     @return dictionary of region values
     """
     s = read_command("g.region", flags='g')
-    return parse_key_val(s, val_type = float)
+    reg = parse_key_val(s, val_type = float)
+    for k in ['rows', 'cols']:
+	reg[k] = int(reg[k])
+    return reg
 
 def use_temp_region():
     """!Copies the current region to a temporary region with "g.region save=",
