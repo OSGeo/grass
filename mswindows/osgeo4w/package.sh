@@ -113,7 +113,7 @@ set -x
 echo $(date): BUILDING GDAL GRASS plugins
 cmd /c 'mswindows\\osgeo4w\\gdalplugins.cmd $VERSION'
 
-echo $(date): CREATING packages
+echo $(date): CREATING packages in $(PDIR)
 mkdir -p package/grass-devel \
          package/grass-devel-mingw \
          package/grass-devel-vc \
