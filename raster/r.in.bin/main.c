@@ -555,7 +555,11 @@ int main(int argc, char *argv[])
 		    cell[col] = (CELL) (unsigned int)x_i[col];
 	    }
 	    if (parm.anull->answer) {
-		if (flag.f->answer) {
+		if (flag.d->answer) {
+		    if (dcell[col] == nul_val)
+			Rast_set_d_null_value(&dcell[col], 1);
+		}
+		else if (flag.f->answer) {
 		    if (fcell[col] == (float)nul_val)
 			Rast_set_f_null_value(&fcell[col], 1);
 		}
