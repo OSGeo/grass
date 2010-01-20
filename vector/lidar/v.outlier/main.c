@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 		      dvr);
 
-    /*Something went wrong in a previous v.outlier execution */
+    /* Something went wrong in a previous v.outlier execution */
     if (db_table_exists(dvr, db, table_name)) {
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
 	    G_fatal_error(_("Old auxiliar table could not be dropped"));
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
 
-    /* Fixxing parameters of the elaboration region */
+    /* Fixing parameters of the elaboration region */
     /*! Each original_region will be divided into several subregions. These
      *  subregion will be overlapped by its neibourgh subregions. This overlapping
      *  is calculated as OVERLAP_PASS times the east-west resolution. */
