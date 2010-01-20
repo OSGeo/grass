@@ -115,6 +115,11 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
 
     G_debug(3, "db_select_int()");
 
+    if (col == NULL || strlen(col) == 0) {
+	G_warning(_("Missing column name"));
+	return -1;
+    }
+
     /* allocate */
     alloc = 1000;
     val = (int *)G_malloc(alloc * sizeof(int));
@@ -206,6 +211,16 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
     dbValue *value;
     dbTable *table;
 
+    if (key == NULL || strlen(key) == 0) {
+	G_warning(_("Missing key column name"));
+	return -1;
+    }
+
+    if (col == NULL || strlen(col) == 0) {
+	G_warning(_("Missing column name"));
+	return -1;
+    }
+
     G_zero(val, sizeof(dbValue));
     sprintf(buf, "SELECT %s FROM %s WHERE %s = %d\n", col, tab, key, id);
     db_init_string(&stmt);
@@ -260,8 +275,17 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
     dbValue *value;
     dbTable *table;
 
-    G_debug(3, "db_select_db_select_CatValArray ()");
+    G_debug(3, "db_select_CatValArray ()");
 
+    if (key == NULL || strlen(key) == 0) {
+	G_warning(_("Missing key column name"));
+	return -1;
+    }
+
+    if (col == NULL || strlen(col) == 0) {
+	G_warning(_("Missing column name"));
+	return -1;
+    }
     db_init_string(&stmt);
 
     sprintf(buf, "SELECT %s, %s FROM %s", key, col, tab);
@@ -279,8 +303,12 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 
     nrows = db_get_num_rows(&cursor);
     G_debug(3, "  %d rows selected", nrows);
-    if (nrows < 0)
-	G_fatal_error(_("Unable select records from table <%s>"), tab);
+    if (nrows < 0) {
+	G_warning(_("Unable select records from table <%s>"), tab);
+	db_close_cursor(&cursor);
+	db_free_string(&stmt);
+	return -1;
+    }
 
     db_CatValArray_alloc(cvarr, nrows);
 
@@ -292,7 +320,10 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
     G_debug(3, "  key type = %d", type);
 
     if (type != DB_C_TYPE_INT) {
-	G_fatal_error("Key column type is not integer");
+	G_warning(_("Key column type is not integer"));
+	db_close_cursor(&cursor);
+	db_free_string(&stmt);
+	return -1;
     }
 
     column = db_get_table_column(table, 1);
