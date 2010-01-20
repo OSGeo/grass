@@ -412,6 +412,9 @@ int main(int argc, char *argv[])
     else
 	segments_in_memory = 4 * (nrows / srows + ncols / scols + 2);
 
+    if (segments_in_memory == 0)
+	segments_in_memory = 1;
+
     /* report disk space and memory requirements */
     G_message("--------------------------------------------");
     if (dir == 1) {
@@ -445,24 +448,29 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Creating some temporary files..."));
 
     in_fd = creat(in_file, 0666);
-    segment_format(in_fd, nrows, ncols, srows, scols, sizeof(struct cc));
+    if (segment_format(in_fd, nrows, ncols, srows, scols, sizeof(struct cc)) != 1)
+	G_fatal_error("can not create temporary file");
     close(in_fd);
 
     if (dir == 1) {
 	dir_out_fd = creat(dir_out_file, 0600);
-	segment_format(dir_out_fd, nrows, ncols, srows, scols,
-		       sizeof(double));
+	if (segment_format(dir_out_fd, nrows, ncols, srows, scols,
+		       sizeof(double)) != 1)
+	    G_fatal_error("can not create temporary file");
+		       
 	close(dir_out_fd);
     }
     
     /* Open initialize and segment all files */
 
     in_fd = open(in_file, 2);
-    segment_init(&cost_seg, in_fd, segments_in_memory);
+    if (segment_init(&cost_seg, in_fd, segments_in_memory) != 1)
+    	G_fatal_error("can not initialize temporary file");
 
     if (dir == 1) {
 	dir_out_fd = open(dir_out_file, 2);
-	segment_init(&dir_seg, dir_out_fd, segments_in_memory);
+	if (segment_init(&dir_seg, dir_out_fd, segments_in_memory) != 1)
+	    G_fatal_error("can not initialize temporary file");
     }
     
     /*   Write the cost layer in the segmented file  */
