@@ -61,6 +61,7 @@ mkdir %PACKAGE_DIR%\extralib
 copy %OSGEO4W_DIR%\bin\*.dll %PACKAGE_DIR%\extralib
 del %PACKAGE_DIR%\extralib\libgrass_*6.4*.dll
 del %PACKAGE_DIR%\extralib\libgrass_*6.5*.dll
+del %PACKAGE_DIR%\extralib\Qt*4.dll
 rem copy %OSGEO4W_DIR%\pgsql\lib\libpq.dll %PACKAGE_DIR%\extralib
 
 @echo.
@@ -72,6 +73,7 @@ rem copy %OSGEO4W_DIR%\pgsql\lib\libpq.dll %PACKAGE_DIR%\extralib
 mkdir %PACKAGE_DIR%\extrabin
 
 copy %OSGEO4W_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
+del %PACKAGE_DIR%\extrabin\svn*.exe
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
