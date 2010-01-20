@@ -40,7 +40,7 @@ struct FNode			/* node for file based index */
 
 
 /*!
-   \brief Write spatial index to the file
+   \brief Write spatial index header to file
 
    \param[in,out] fp pointer to struct gvfile
    \param ptr pointer to Plus_head structure
@@ -250,7 +250,7 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 }
 
 /*!
-   \brief Read spatial index to the file
+   \brief Read spatial index header from sidx file
 
    \param fp pointer to struct gvfile
    \param[in,out] ptr pointer to Plus_head structure
@@ -566,7 +566,7 @@ int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
 /*
  * all following methods to transfer spatial indices (rtrees) are based
  * on the same idea
- * do an inorder-like non-recursive traversal of the rtree
+ * do a postorder depth-first non-recursive traversal of the rtree
  * a leaf node is transfered first
  * the root node is transfered last
  * 
@@ -625,7 +625,7 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
     s[top].branch_id = i = 0;
     s[top].sn = t->root;
 
-    /* some sort of postorder traversal 
+    /* depth-first postorder traversal 
      * all children of a node are visitied and written out first
      * when a child is written out, its position in file is stored in pos[] for
      * the parent node and written out with the parent node */
@@ -696,7 +696,6 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
    \param t pointer to RTree
    \param off_t_size size of off_t used to read struct gvfile
 
-   \return -1 on error
    \return pointer to root node on success
  */
 
@@ -715,7 +714,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     int top = 0;
 
     /* stack size of t->n_levels + 1 would be enough because of
-     * depth-first post-order traversal:
+     * depth-first postorder traversal:
      * only one node per level on stack at any given time */
 
     /* add root node position to stack */
@@ -822,7 +821,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 }
 
 /*!
-   \brief Write spatial index to the file
+   \brief Write spatial index to file
 
    \param[out] fp pointer to struct gvfile
    \param Plus pointer to Plus_head structure
@@ -871,7 +870,7 @@ int dig_Wr_spidx(struct gvfile * fp, struct Plus_head *Plus)
 }
 
 /*!
-   \brief Read spatial index from spidx file
+   \brief Read spatial index from sidx file
    Only needed when old vector is opened in update mode
 
    \param fp pointer to struct gvfile
@@ -950,7 +949,9 @@ int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
    with dig__fread_port_*() functions
 
    \param t pointer to RTree
-   \param[out] fp pointer to FILE
+   \param r search rectangle
+   \param shcb user-provided callback
+   \param cbarg argument for shcb
    \param Plus pointer to Plus_head structure
 
    \return number of qualifying rectangles
