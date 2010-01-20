@@ -249,7 +249,7 @@ int db__copy_table(const char *from_drvname, const char *from_dbname,
 
     if (db_create_table(to_driver, out_table) != DB_OK) {
 	G_warning(_("Unable to create table <%s>"),
-		  out_table);
+		  to_tblname);
 	db_close_database_shutdown_driver(to_driver);
 	if (from_driver != to_driver) {
 	    db_close_database_shutdown_driver(from_driver);
