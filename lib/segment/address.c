@@ -22,9 +22,8 @@ int segment_address_fast(const SEGMENT * SEG, int row, int col, int *n,
 	int seg_c = col >> SEG->scolbits;
 
 	*n = seg_r * SEG->spr + seg_c;
-	*index =
-	    ((row - (seg_r << SEG->srowbits)) << SEG->scolbits) + col -
-	    (seg_c << SEG->scolbits);
+	*index = ((row - (seg_r << SEG->srowbits)) << SEG->scolbits) +
+	         col - (seg_c << SEG->scolbits);
 
 	/*
 	*n = (row >> SEG->srowbits) * SEG->spr + (col >> SEG->scolbits);

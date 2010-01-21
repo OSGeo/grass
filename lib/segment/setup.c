@@ -91,7 +91,7 @@ int segment_setup(SEGMENT * SEG)
 
     /* adjust number of open segments if larger than number of total segments */
     if (SEG->nseg > SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows)) {
-	G_warning("segment: reducing number of open segments from %d to %d",
+	G_debug(1, "segment: reducing number of open segments from %d to %d",
 		  SEG->nseg,
 		  SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows));
 	SEG->nseg = SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows);
