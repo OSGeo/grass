@@ -20,6 +20,7 @@ static void wps_print_data_inputs_begin(void);
 static void wps_print_data_inputs_end(void);
 static void wps_print_process_outputs_begin(void);
 static void wps_print_process_outputs_end(void);
+static void wps_print_bounding_box_data(void);
 static void wps_print_mimetype_text_plain(void);
 static void wps_print_mimetype_raster_tiff(void);
 static void wps_print_mimetype_raster_png(void);
@@ -155,6 +156,19 @@ void G__wps_print_process_description(void)
     wps_print_process_description_begin(store, status, identifier, title, abstract, keywords, num_keywords);
     wps_print_data_inputs_begin();
 
+    /* We have two default options, which define the resolution of the created mapset */
+    wps_print_literal_input_output(WPS_INPUT, 0, 1, "resolution_ns", "Resolution of the mapset in north-south direction in [m] or [°]",
+        "This parameter defines the north-south resolution of the mapset in meter or degrees, which should be used ot process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
+        "float", 0, NULL, 0, "25", TYPE_OTHER);
+    wps_print_literal_input_output(WPS_INPUT, 0, 1, "resolution_ew", "Resolution of the mapset in east-west direction in [m] or [°]",
+        "This parameter defines the east-west resolution of the mapset in meters or degrees, which should be used ot process the input and output raster data.  To enable this setting, you need to specify north-south and east-west resolution.",
+        "float", 0, NULL, 0, "25", TYPE_OTHER);
+
+    /* Print the bounding box element with all the coordinate reference systems, which are supported by grass*/
+    /* Currently Disabled! A list of all proj4 supported EPSG coordinate reference systems must be implemented*/
+    if(1 == 0)
+        wps_print_bounding_box_data();
+
     /* We parse only the inputs at the beginning */
     if (st->n_opts) {
 	opt = &st->first_option;
@@ -188,6 +202,10 @@ void G__wps_print_process_description(void)
                     if(strcmp(token, "vector") == 0)
                     {
                         data_type = TYPE_VECTOR;
+                    }
+                    if(strcmp(token, "file") == 0)
+                    {
+                        data_type = TYPE_PLAIN_TEXT;
                     }
                     s = strtok(NULL, ",");
                     G_free(token);
@@ -243,15 +261,15 @@ void G__wps_print_process_description(void)
                     num_keywords = i;
                 }
 
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR)
+                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || data_type == TYPE_PLAIN_TEXT)
                 {
                     /* 2048 is the maximum size of the map in mega bytes */
-                    wps_print_complex_input(min, max, identifier, title, abstract, 2048, data_type);
+                    wps_print_complex_input(min, max, identifier, title, NULL, 2048, data_type);
                 }
                 else
                 {
                     /* The keyword array is missused for options, type means the type of the value (integer, float ... )*/
-                    wps_print_literal_input_output(WPS_INPUT, min, max, identifier, title, abstract, type, 0, keywords, num_keywords, value, TYPE_OTHER);
+                    wps_print_literal_input_output(WPS_INPUT, min, max, identifier, title, NULL, type, 0, keywords, num_keywords, value, TYPE_OTHER);
                 }
             }
 	    opt = opt->next_opt;
@@ -276,7 +294,7 @@ void G__wps_print_process_description(void)
                 abstract = flag->description;
 	    }
             const char *val[] = {"true","false"};
-            wps_print_literal_input_output(WPS_INPUT, 0, 1, ident, title, abstract, "boolean", 0, val, 2, "false", TYPE_OTHER);
+            wps_print_literal_input_output(WPS_INPUT, 0, 1, ident, title, NULL, "boolean", 0, val, 2, "false", TYPE_OTHER);
 	    flag = flag->next_flag;
 	}
     }
@@ -320,6 +338,10 @@ void G__wps_print_process_description(void)
                     {
                         data_type = TYPE_VECTOR;
                     }
+                    if(strcmp(token, "file") == 0)
+                    {
+                        data_type = TYPE_PLAIN_TEXT;
+                    }
                     s = strtok(NULL, ",");
                     G_free(token);
 		}
@@ -334,10 +356,10 @@ void G__wps_print_process_description(void)
                     abstract = opt->description;
                 }
 
-                /* Only raster and vector output is supported by option */
-                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR)
+                /* Only file, raster and vector output is supported by option */
+                if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR  || data_type == TYPE_PLAIN_TEXT)
                 {
-                    wps_print_complex_output(identifier, title, abstract, data_type);
+                    wps_print_complex_output(identifier, title, NULL, data_type);
                     found_output = 1;
                 }
             }
@@ -404,8 +426,9 @@ static void wps_print_process_description_begin(int store, int status, const cha
     if(abstract)
     {
         fprintf(stdout,"\t\t<ows:Abstract>\n");
-        G__usage_html();
-        fprintf(stdout, "\n\t\t</ows:Abstract>\n");
+        fprintf(stdout, "\t\t\tThe manual page of this module is available here:\n");
+        fprintf(stdout, "\t\t\thttp://grass.osgeo.org/grass70/manuals/html70_user/%s.html\n", identifier);
+        fprintf(stdout, "\t\t</ows:Abstract>\n");
     }
 
     for(i = 0; i < num_keywords; i++)
@@ -499,15 +522,21 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
     if(type == TYPE_RASTER)
     {
             wps_print_mimetype_raster_tiff();
-            wps_print_mimetype_raster_png();
-            wps_print_mimetype_raster_grass_ascii();
-            wps_print_mimetype_raster_grass_binary();
+            /* These mime types are currently not meaningful */
+            if(1 == 0) {
+                wps_print_mimetype_raster_png();
+                wps_print_mimetype_raster_grass_ascii();
+                wps_print_mimetype_raster_grass_binary();
+            }
     }
     else if(type == TYPE_VECTOR)
     {
             wps_print_mimetype_vector_gml310();
-            wps_print_mimetype_vector_grass_ascii();
-            wps_print_mimetype_vector_grass_binary();
+            /* These mime types are currently not meaningful */
+            if(1 == 0) {
+                wps_print_mimetype_vector_grass_ascii();
+                wps_print_mimetype_vector_grass_binary();
+            }
     }
     else if(type == TYPE_PLAIN_TEXT)
     {
@@ -693,4 +722,27 @@ static void wps_print_mimetype_vector_grass_binary(void)
     fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
     fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/grass-vector-binary</MimeType>\n");
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+/* Bounding box data input. Do not use! Under construction. A list of coordinate reference systems must be created.*/
+
+static void wps_print_bounding_box_data(void)
+{
+    int i;
+
+    fprintf(stdout,"\t\t\t<Input minOccurs=\"0\" maxOccurs=\"1\">\n");
+    wps_print_ident_title_abstract("BoundingBox", "Bounding box to process data",
+      "The bounding box is uesed to create the reference coordinate system in grass, as well as the lower left and upper right corner of the processing area.");
+    fprintf(stdout,"\t\t\t\t<BoundingBoxData>\n");
+    /* A meaningful default boundingbox should be chosen*/
+    fprintf(stdout,"\t\t\t\t\t<Default>\n");
+    fprintf(stdout,"\t\t\t\t\t\t<CRS>urn:ogc:def:crs,crs:EPSG:6.3:32760</CRS>\n");
+    fprintf(stdout,"\t\t\t\t\t</Default>\n");
+    /* A list of all proj4 supported EPSG coordinate systems should be created */
+    fprintf(stdout,"\t\t\t\t\t<Supported>\n");
+    for(i = 0; i < 1; i++)
+        fprintf(stdout,"\t\t\t\t\t\t<CRS>urn:ogc:def:crs,crs:EPSG:6.3:32760</CRS>\n");
+    fprintf(stdout,"\t\t\t\t\t</Supported>\n");
+    fprintf(stdout,"\t\t\t\t</BoundingBoxData>\n");
+    fprintf(stdout,"\t\t\t</Input>\n");
 }
