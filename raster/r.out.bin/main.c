@@ -130,7 +130,7 @@ static void write_gmt_header(const struct GRD_HEADER *header, int swap_flag, FIL
 
 static void write_bil_hdr(
     const char *outfile, const struct Cell_head *region,
-    int size, int order, int header, double null_val)
+    int bytes, int order, int header, double null_val)
 {
     char out_tmp[GPATH_MAX];
     FILE *fp;
@@ -146,7 +146,7 @@ static void write_bil_hdr(
     fprintf(fp, "nrows %d\n", region->rows);
     fprintf(fp, "ncols %d\n", region->cols);
     fprintf(fp, "nbands 1\n");
-    fprintf(fp, "nbits %d\n", size * 8);
+    fprintf(fp, "nbits %d\n", bytes * 8);
     fprintf(fp, "byteorder %s\n", order == 0 ? "M" : "I");
     fprintf(fp, "layout bil\n");
     fprintf(fp, "skipbytes %d\n", header ? 892 : 0);
@@ -157,10 +157,10 @@ static void write_bil_hdr(
 
 static void convert_cell(
     unsigned char *out_cell, const DCELL in_cell,
-    int is_fp, int size, int swap_flag)
+    int is_fp, int bytes, int swap_flag)
 {
     if (is_fp) {
-	switch (size) {
+	switch (bytes) {
 	case 4:
 	    *(float *) out_cell = (float) in_cell;
 	    break;
@@ -170,7 +170,7 @@ static void convert_cell(
 	}
     }
     else {
-	switch (size) {
+	switch (bytes) {
 	case 1:
 	    *(unsigned char *) out_cell = (unsigned char) in_cell;
 	    break;
@@ -189,7 +189,7 @@ static void convert_cell(
     }
 
     if (swap_flag) {
-	switch (size) {
+	switch (bytes) {
 	case 1:				break;
 	case 2:	swap_2(out_cell);	break;
 	case 4:	swap_4(out_cell);	break;
@@ -200,7 +200,7 @@ static void convert_cell(
 
 static void convert_row(
     unsigned char *out_buf, const DCELL *raster, int ncols,
-    int is_fp, int size, int swap_flag, double null_val)
+    int is_fp, int bytes, int swap_flag, double null_val)
 {
     unsigned char *ptr = out_buf;
     int i;
@@ -209,8 +209,8 @@ static void convert_row(
 	DCELL x = Rast_is_d_null_value(&raster[i])
 	    ? null_val
 	    : raster[i];
-	convert_cell(ptr, x, is_fp, size, swap_flag);
-	ptr += size;
+	convert_cell(ptr, x, is_fp, bytes, swap_flag);
+	ptr += bytes;
     }
 }
 
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
 	struct Option *input;
 	struct Option *output;
 	struct Option *null;
-	struct Option *size;
+	struct Option *bytes;
 	struct Option *order;
     } parm;
     struct
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
     double null_val;
     int do_stdout;
     int is_fp;
-    int size;
+    int bytes;
     int order;
     int swap_flag;
     struct Cell_head region;
@@ -302,12 +302,12 @@ int main(int argc, char *argv[])
     parm.null->answer = "0";
     parm.null->description = _("Value to write out for null");
 
-    parm.size = G_define_option();
-    parm.size->key = "size";
-    parm.size->type = TYPE_INTEGER;
-    parm.size->required = NO;
-    parm.size->options = "1,2,4,8";
-    parm.size->description = _("Number of bytes per cell");
+    parm.bytes = G_define_option();
+    parm.bytes->key = "bytes";
+    parm.bytes->type = TYPE_INTEGER;
+    parm.bytes->required = NO;
+    parm.bytes->options = "1,2,4,8";
+    parm.bytes->description = _("Number of bytes per cell");
 
     parm.order = G_define_option();
     parm.order->key = "order";
@@ -383,19 +383,19 @@ int main(int argc, char *argv[])
     else
 	is_fp = Rast_get_map_type(fd) != CELL_TYPE;
 
-    if (parm.size->answer)
-	size = atoi(parm.size->answer);
+    if (parm.bytes->answer)
+	bytes = atoi(parm.bytes->answer);
     else if (is_fp)
-	size = 4;
+	bytes = 4;
     else
-	size = 2;
+	bytes = 2;
 
-    if (is_fp && size < 4)
-	G_fatal_error(_("Floating-point output requires size=4 or size=8"));
+    if (is_fp && bytes < 4)
+	G_fatal_error(_("Floating-point output requires bytes=4 or bytes=8"));
 
 #ifndef HAVE_LONG_LONG_INT
-    if (!is_fp && size > 4)
-	G_fatal_error(_("Integer output doesn't support size=8 in this build"));
+    if (!is_fp && bytes > 4)
+	G_fatal_error(_("Integer output doesn't support bytes=8 in this build"));
 #endif
 
     G_get_window(&region);
@@ -408,7 +408,7 @@ int main(int argc, char *argv[])
 
     /* Set up Parameters for GMT header */
     if (flag.gmt_hd->answer) {
-	if (!is_fp && size > 4)
+	if (!is_fp && bytes > 4)
 	    G_fatal_error(_("GMT grid doesn't support 64-bit integers"));
 	make_gmt_header(&header, name, outfile, &region, null_val);
     }
@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
     if (flag.bil_hd->answer) {
 	G_message(_("Creating BIL support files..."));
 	write_bil_hdr(outfile, &region,
-		      size, order, flag.gmt_hd->answer, null_val);
+		      bytes, order, flag.gmt_hd->answer, null_val);
 	write_bil_wld(outfile, &region);
     }
 
@@ -429,15 +429,15 @@ int main(int argc, char *argv[])
     ncols = G_window_cols();
 
     in_buf = Rast_allocate_d_buf();
-    out_buf = G_malloc(ncols * size);
+    out_buf = G_malloc(ncols * bytes);
 
     if (is_fp) {
-	G_message(_("Exporting raster as floating values (bytes=%d)"), size);
+	G_message(_("Exporting raster as floating values (bytes=%d)"), bytes);
 	if (flag.gmt_hd->answer)
 	    G_message(_("Writing GMT float format ID=1"));
     }
     else {
-	G_message(_("Exporting raster as integer values (bytes=%d)"), size);
+	G_message(_("Exporting raster as integer values (bytes=%d)"), bytes);
 	if (flag.gmt_hd->answer)
 	    G_message(_("Writing GMT integer format ID=2"));
     }
@@ -455,9 +455,9 @@ int main(int argc, char *argv[])
 
 	Rast_get_d_row(fd, in_buf, row);
 
-	convert_row(out_buf, in_buf, ncols, is_fp, size, swap_flag, null_val);
+	convert_row(out_buf, in_buf, ncols, is_fp, bytes, swap_flag, null_val);
 
-	if (fwrite(out_buf, size, ncols, fp) != ncols)
+	if (fwrite(out_buf, bytes, ncols, fp) != ncols)
 	    G_fatal_error(_("Error writing data"));
     }
 
