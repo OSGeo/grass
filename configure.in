@@ -1730,7 +1730,7 @@ dnl Warning do not run this test. it interferes with the test
 dnl AC_CHECK_FUNCS(fseeko ftello) from above.
 dnl The test AC_HAVE_LARGEFILES will check whether ftello/fseeko
 dnl are available in Large File mode
-dnl AC_FUNC_FSEEKO
+AC_FUNC_FSEEKO
 AC_HAVE_LARGEFILES
 
 USE_LARGEFILES=

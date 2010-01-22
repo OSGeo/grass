@@ -1,5 +1,4 @@
 
-#include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/gis.h>
@@ -7,7 +6,7 @@
 
 off_t G_ftell(FILE *fp)
 {
-#ifdef HAVE_LARGEFILES
+#ifdef HAVE_FSEEKO
     return ftello(fp);
 #else
     return (off_t) ftell(fp);
@@ -16,7 +15,7 @@ off_t G_ftell(FILE *fp)
 
 void G_fseek(FILE *fp, off_t offset, int whence)
 {
-#ifdef HAVE_LARGEFILES
+#ifdef HAVE_FSEEKO
     if (fseeko(fp, offset, whence) != 0)
 	G_fatal_error(_("unable to seek"));
 #else

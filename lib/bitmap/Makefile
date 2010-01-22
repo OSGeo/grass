@@ -8,16 +8,12 @@ LIB = BITMAP
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-
 default: lib
 
+$(OBJDIR)/main$(EXE): $(OBJDIR)/main.o $(BITMAPDEP) $(LINKMDEP)
+	$(call linker)
 
-#$(OBJ): #linkm.h
+$(OBJDIR)/smain$(EXE): $(OBJDIR)/smain.o $(BITMAPDEP) $(LINKMDEP)
+	$(call linker)
 
-main: main.o $(BITMAPLIB) $(LINKMLIB)
-	$(CC) $(LDFLAGS) main.o $(BITMAPLIB) $(LINKMLIB) -o main
-
-smain: smain.o $(BITMAPLIB) $(LINKMLIB)
-	$(CC) $(LDFLAGS) smain.o $(BITMAPLIB) $(LINKMLIB) -o smain
-
-#$(LINKMLIB): #
+$(OBJDIR)/main$(EXE) $(OBJDIR)/smain$(EXE): LIBES = $(BITMAPLIB) $(LINKMLIB)

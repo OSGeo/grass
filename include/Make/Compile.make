@@ -9,9 +9,9 @@ linker_c = $(call linker_x,$(CC))
 linker_cxx = $(call linker_x,$(CXX))
 linker = $(call linker_x,$(LINK))
 
-compiler_x = $(1) $(2) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -o $@ -c $<
-compiler_c = $(call compiler_x,$(CC),$(CFLAGS) $($*_c_FLAGS))
-compiler_cxx = $(call compiler_x,$(CXX),$(CXXFLAGS) $($*_cc_FLAGS) $($*_cpp_FLAGS))
+compiler_x = $(1) $(2) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -o $@ -c $<
+compiler_c = $(call compiler_x,$(CC),$(COMPILE_FLAGS_C) $($*_c_FLAGS))
+compiler_cxx = $(call compiler_x,$(CXX),$(COMPILE_FLAGS_CXX) $($*_cc_FLAGS) $($*_cpp_FLAGS) $($*_cxx_FLAGS))
 compiler = $(call compiler_x,$(CC))
 
 # default cc rules
