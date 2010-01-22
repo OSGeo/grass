@@ -748,7 +748,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             
             usage, description = self.GetCommandUsage(cmd)
                                         
-            self.CallTipSetBackground("GREY")
+            self.CallTipSetBackground("PALE GREEN")
             self.CallTipSetForeground("BLACK")
             self.CallTipShow(pos, usage + '\n\n' + description)
             
