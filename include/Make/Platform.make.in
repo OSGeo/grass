@@ -80,8 +80,8 @@ DEFAULT_DATABASE    =
 DEFAULT_LOCATION    =
 
 CPPFLAGS            = @CPPFLAGS@
-CFLAGS1             = @CFLAGS@
-CXXFLAGS1           = @CXXFLAGS@
+CFLAGS              = @CFLAGS@
+CXXFLAGS            = @CXXFLAGS@
 INCLUDE_DIRS        = @INCLUDE_DIRS@
 LINK_FLAGS          = @LDFLAGS@
 

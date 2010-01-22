@@ -18,11 +18,6 @@ DATAFILES := $(patsubst %,$(ETC)/%,$(DATASRC))
 COLORSRC := $(filter-out colors/CVS,$(wildcard colors/[abcdefghijklmnopqrstuvwxyz]*))
 COLORFILES := $(patsubst colors/%,$(ETC)/colors/%,$(COLORSRC))
 
-#compile if LFS Large File Support present:
-ifneq ($(USE_LARGEFILES),)
-	EXTRA_CFLAGS = -D_FILE_OFFSET_BITS=64
-endif
-
 default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/element_list
 
 ifdef MINGW

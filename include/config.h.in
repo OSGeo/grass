@@ -242,6 +242,9 @@
 /* define if pthread.h exists */
 #undef HAVE_PTHREAD_H
 
+/* define if fseeko() exists */
+#undef HAVE_FSEEKO
+
 /*
  * configuration information solely dependent on the above
  * nothing below this point should need changing

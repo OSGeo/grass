@@ -19,15 +19,20 @@ else
 	TESTFILE = test32.ok
 endif
 
-TEST = $(OBJDIR)/test
+TEST = $(OBJDIR)/test$(EXE)
 
 default: lib
-	$(MAKE) $(TEST)
+	@echo "==============TEST============="
+	$(MAKE) test
+
+test: $(OBJDIR)/test.tmp $(TESTFILE)
+	diff $(OBJDIR)/test.tmp $(TESTFILE)
+
+$(OBJDIR)/test.tmp: $(TEST)
+	cd $(OBJDIR) && $(call run_grass,./test)
 
 #  Test portable read/write functions
-$(OBJDIR)/test: test.c $(DIG2DEP)
-	echo "==============TEST============="
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(LDFLAGS) $(INC) $(VECT_INC) -o $@ test.c $(DIG2LIB) $(RTREELIB) \
-				$(GISLIB) $(DATETIMELIB) $(MATHLIB) $(XDRLIB) 
-	cd $(OBJDIR); $(LD_LIBRARY_PATH_VAR)="$($(LD_LIBRARY_PATH_VAR)):$(GISBASE)/lib" ./test; diff ./test.tmp ../$(TESTFILE)
+$(TEST):  $(OBJDIR)/test.o $(DIG2DEP)
+	$(call linker)
 
+$(TEST): LIBES = $(DIG2LIB)

@@ -70,18 +70,16 @@ GRASS_NAME	= grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
 ##################### other #############################################
 
-COMPILE_FLAGS      = $(CPPFLAGS) $(CFLAGS1) $(INCLUDE_DIRS)
-COMPILE_FLAGS_CXX  = $(CPPFLAGS) $(CXXFLAGS1) $(INCLUDE_DIRS)
+COMPILE_FLAGS_C    = $(CPPFLAGS) $(CFLAGS) $(INCLUDE_DIRS) $(INC)
+COMPILE_FLAGS_CXX  = $(CPPFLAGS) $(CXXFLAGS) $(INCLUDE_DIRS) $(INC)
 
 # crude hack for vector LFS, LFS_FLAGS should be set by configure
 ifdef USE_LARGEFILES
-VECT_LFS_FLAGS = -D_FILE_OFFSET_BITS=64
+LFS_CFLAGS = -D_FILE_OFFSET_BITS=64
 endif
 
-CFLAGS      =  $(INC) $(COMPILE_FLAGS)
-CXXFLAGS    =  $(INC) $(COMPILE_FLAGS_CXX)
 LDFLAGS     =  $(LIBPATH) $(LINK_FLAGS) $(LD_SEARCH_FLAGS) $(PQLIBPATH)
-VECT_CFLAGS =  $(GDALCFLAGS) $(GEOSCFLAGS) $(VECT_LFS_FLAGS)
+VECT_CFLAGS =  $(GDALCFLAGS) $(GEOSCFLAGS)
 
 # Object with _fmode which must be linked to each executable on Windows
 ifdef MINGW
