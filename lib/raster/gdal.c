@@ -121,6 +121,22 @@ static void init_gdal(void)
 {
     load_library();
 
+# ifdef _WIN32
+    pGDALAllRegister = get_symbol("_GDALAllRegister@0");
+    pGDALOpen = get_symbol("_GDALOpen@8");
+    pGDALClose = get_symbol("_GDALClose@4");
+    pGDALGetRasterBand = get_symbol("_GDALGetRasterBand@8");
+    pGDALRasterIO = get_symbol("_GDALRasterIO@48");
+    pGDALGetDriverByName = get_symbol("_GDALGetDriverByName@4");
+    pGDALGetMetadataItem = get_symbol("_GDALGetMetadataItem@12");
+    pGDALCreate = get_symbol("_GDALCreate@28");
+    pGDALCreateCopy = get_symbol("_GDALCreateCopy@28");
+    pGDALSetRasterNoDataValue = get_symbol("_GDALSetRasterNoDataValue@12");
+    pGDALSetGeoTransform = get_symbol("_GDALSetGeoTransform@8");
+    pGDALSetProjection = get_symbol("_GDALSetProjection@8");
+    pGDALGetDriverShortName = get_symbol("_GDALGetDriverShortName@4");
+    pGDALGetDatasetDriver = get_symbol("_GDALGetDatasetDriver@4");
+#else
     pGDALAllRegister = get_symbol("GDALAllRegister");
     pGDALOpen = get_symbol("GDALOpen");
     pGDALClose = get_symbol("GDALClose");
@@ -135,6 +151,7 @@ static void init_gdal(void)
     pGDALSetProjection = get_symbol("GDALSetProjection");
     pGDALGetDriverShortName = get_symbol("GDALGetDriverShortName");
     pGDALGetDatasetDriver = get_symbol("GDALGetDatasetDriver");
+#endif
 }
 
 #else /* GDAL_DYNAMIC */
