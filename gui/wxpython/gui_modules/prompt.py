@@ -770,7 +770,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             except:
                 arg = ''
             
-            self.promptType = self.cmdDesc.get_param(arg)['prompt']
+            try:
+                self.promptType = self.cmdDesc.get_param(arg)['prompt']
+            except:
+                pass
             
             if event.GetKeyCode() == 61:
                 # autocompletion after '='
