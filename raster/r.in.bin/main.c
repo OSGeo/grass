@@ -15,106 +15,219 @@
 #include <sys/stat.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include "gmt_grd.h"
 #include <grass/glocale.h>
 
-typedef unsigned short uint16;
-typedef unsigned int uint32;
+#include "gmt_grd.h"
 
-static double nul_val;
-
-static void SwabShort(uint16 * wp)
+static void swap_2(void *p)
 {
-    register char *cp = (char *)wp;
-    int t;
-
-    t = cp[1];
-    cp[1] = cp[0];
-    cp[0] = t;
+    unsigned char *q = p;
+    unsigned char t;
+    t = q[0]; q[0] = q[1]; q[1] = t;
 }
 
-static void SwabLong(uint32 * lp)
+static void swap_4(void *p)
 {
-    register char *cp = (char *)lp;
-    int t;
-
-    t = cp[3];
-    cp[3] = cp[0];
-    cp[0] = t;
-    t = cp[2];
-    cp[2] = cp[1];
-    cp[1] = t;
+    unsigned char *q = p;
+    unsigned char t;
+    t = q[0]; q[0] = q[3]; q[3] = t;
+    t = q[1]; q[1] = q[2]; q[2] = t;
 }
 
-static void SwabFloat(float *fp)
+static void swap_8(void *p)
 {
-    SwabLong((uint32 *) fp);
+    unsigned char *q = p;
+    unsigned char t;
+    t = q[0]; q[0] = q[7]; q[7] = t;
+    t = q[1]; q[1] = q[6]; q[6] = t;
+    t = q[2]; q[2] = q[5]; q[5] = t;
+    t = q[3]; q[3] = q[4]; q[4] = t;
 }
 
-static void SwabDouble(double *dp)
+static void read_int(FILE *fp, int swap_flag, int *x)
 {
-    register char *cp = (char *)dp;
-    int t;
+    if (fread(x, 4, 1, fp) != 1)
+	G_fatal_error(_("Error reading data"));
 
-    t = cp[7];
-    cp[7] = cp[0];
-    cp[0] = t;
-    t = cp[6];
-    cp[6] = cp[1];
-    cp[1] = t;
-    t = cp[5];
-    cp[5] = cp[2];
-    cp[2] = t;
-    t = cp[4];
-    cp[4] = cp[3];
-    cp[3] = t;
+    if (swap_flag)
+	swap_4(x);
+}
+
+static void read_double(FILE *fp, int swap_flag, double *x)
+{
+    if (fread(x, 8, 1, fp) != 1)
+	G_fatal_error(_("Error reading data"));
+
+    if (swap_flag)
+	swap_8(x);
+}
+
+static void read_gmt_header(struct GRD_HEADER *header, int swap_flag, FILE *fp)
+{
+    read_int(fp, swap_flag, &header->nx);
+    read_int(fp, swap_flag, &header->ny);
+    read_int(fp, swap_flag, &header->node_offset);
+
+    read_double(fp, swap_flag, &header->x_min);
+    read_double(fp, swap_flag, &header->x_max);
+    read_double(fp, swap_flag, &header->y_min);
+    read_double(fp, swap_flag, &header->y_max);
+    read_double(fp, swap_flag, &header->z_min);
+    read_double(fp, swap_flag, &header->z_max);
+    read_double(fp, swap_flag, &header->x_inc);
+    read_double(fp, swap_flag, &header->y_inc);
+    read_double(fp, swap_flag, &header->z_scale_factor);
+    read_double(fp, swap_flag, &header->z_add_offset);
+
+    fread(&header->x_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
+    fread(&header->y_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
+    fread(&header->z_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
+    fread(&header->title,   sizeof(char[GRD_TITLE_LEN]),   1, fp);
+    fread(&header->command, sizeof(char[GRD_COMMAND_LEN]), 1, fp);
+    fread(&header->remark,  sizeof(char[GRD_REMARK_LEN]),  1, fp);
+}
+
+static void get_gmt_header(const struct GRD_HEADER *header, struct Cell_head *region)
+{
+    region->cols   = header->nx;
+    region->rows   = header->ny;
+    region->west   = header->x_min;
+    region->east   = header->x_max;
+    region->south  = header->y_min;
+    region->north  = header->y_max;
+    region->ew_res = header->x_inc;
+    region->ns_res = header->y_inc;
+}
+
+static void convert_cell(
+    DCELL *out_cell, unsigned char *in_cell,
+    int is_fp, int is_signed, int bytes, int swap_flag)
+{
+    if (swap_flag) {
+	switch (bytes) {
+	case 1:				break;
+	case 2:	swap_2(in_cell);	break;
+	case 4:	swap_4(in_cell);	break;
+	case 8:	swap_8(in_cell);	break;
+	}
+    }
+
+    if (is_fp) {
+	switch (bytes) {
+	case 4:
+	    *out_cell = (DCELL) *(float *) in_cell;
+	    break;
+	case 8:
+	    *out_cell = (DCELL) *(double *) in_cell;
+	    break;
+	}
+    }
+    else if (is_signed) {
+	switch (bytes) {
+	case 1:
+	    *out_cell = (DCELL) *(signed char *) in_cell;
+	    break;
+	case 2:
+	    *out_cell = (DCELL) *(short *) in_cell;
+	    break;
+	case 4:
+	    *out_cell = (DCELL) *(int *) in_cell;
+	    break;
+#ifdef HAVE_LONG_LONG_INT
+	case 8:
+	    *out_cell = (DCELL) *(long long *) in_cell;
+	    break;
+#endif
+	}
+    }
+    else {
+	switch (bytes) {
+	case 1:
+	    *out_cell = (DCELL) *(unsigned char *) in_cell;
+	    break;
+	case 2:
+	    *out_cell = (DCELL) *(unsigned short *) in_cell;
+	    break;
+	case 4:
+	    *out_cell = (DCELL) *(unsigned int *) in_cell;
+	    break;
+#ifdef HAVE_LONG_LONG_INT
+	case 8:
+	    *out_cell = (DCELL) *(unsigned long long *) in_cell;
+	    break;
+#endif
+	}
+    }
+}
+
+static void convert_row(
+    DCELL *raster, unsigned char *in_buf, int ncols,
+    int is_fp, int is_signed, int bytes, int swap_flag,
+    double null_val)
+{
+    unsigned char *ptr = in_buf;
+    int i;
+
+    for (i = 0; i < ncols; i++) {
+	DCELL x;
+	convert_cell(&x, ptr, is_fp, is_signed, bytes, swap_flag);
+	if (x == null_val)
+	    Rast_set_d_null_value(&raster[i], 1);
+	else
+	    raster[i] = x;
+	ptr += bytes;
+    }
 }
 
 int main(int argc, char *argv[])
 {
-    const char *input;
-    const char *output;
-    const char *title;
-    FILE *fd;
-    int cf;
-    struct Cell_head cellhd;
-    struct History history;
-    CELL *cell;
-    FCELL *fcell;
-    DCELL *dcell;
-    RASTER_MAP_TYPE map_type;
-    int row, col;
-    int nrows = 0, ncols = 0;
-    int grass_nrows = 0, grass_ncols = 0;
-    int bytes, sflag, swap;
-    int no_coord = 0, no_dim = 0;
-    void *x_v;
-    char *x_c;
-    uint16 *x_s;
-    uint32 *x_i;
-    float *x_f;
-    double *x_d;
-    struct stat fileinfo;
-    int FILE_SIZE;
-    const char *err;
-    char dummy[2];
-    struct GRD_HEADER header;
+    struct GModule *module;
     struct
     {
-	struct Option *input, *output, *title, *bytes,
-	    *north, *south, *east, *west, *rows, *cols, *anull;
+	struct Option *input;
+	struct Option *output;
+	struct Option *null;
+	struct Option *bytes;
+	struct Option *order;
+	struct Option *title;
+	struct Option *north;
+	struct Option *south;
+	struct Option *east;
+	struct Option *west;
+	struct Option *rows;
+	struct Option *cols;
     } parm;
     struct
     {
-	struct Flag *s, *f, *d, *b, *gmt_hd;
+	struct Flag *float_in;
+	struct Flag *double_in;
+	struct Flag *gmt_hd;
+	struct Flag *sign;
+	struct Flag *swap;
     } flag;
-    struct GModule *module;
-    union
-    {
-	int testWord;
-	char testByte[4];
-    } endianTest;
-    int swapFlag;
+    const char *input;
+    const char *output;
+    const char *title;
+    double null_val = 0;
+    int is_fp;
+    int is_signed;
+    int bytes;
+    int order;
+    int swap_flag;
+    struct Cell_head cellhd;
+    int nrows, ncols;
+    int grass_nrows, grass_ncols;
+    unsigned char *in_buf;
+    DCELL *out_buf;
+    RASTER_MAP_TYPE map_type;
+    int fd;
+    FILE *fp;
+    off_t file_size;
+    struct GRD_HEADER header;
+    int row;
+    struct History history;
+    const char *err;
+    off_t expected;
 
     G_gisinit(argv[0]);
 
@@ -125,26 +238,25 @@ int main(int argc, char *argv[])
     module->description =
 	_("Import a binary raster file into a GRASS raster map layer.");
 
+    flag.float_in = G_define_flag();
+    flag.float_in->key = 'f';
+    flag.float_in->description =
+	_("Import as floating-point data (default: integer)");
 
-    flag.f = G_define_flag();
-    flag.f->key = 'f';
-    flag.f->description =
-	_("Import as Floating Point Data (default: Integer)");
+    flag.double_in = G_define_flag();
+    flag.double_in->key = 'd';
+    flag.double_in->description =
+	_("Import as double-precision floating-point data (default: integer)");
 
-    flag.d = G_define_flag();
-    flag.d->key = 'd';
-    flag.d->description =
-	_("Import as Double Precision Data (default: Integer)");
+    flag.sign = G_define_flag();
+    flag.sign->key = 's';
+    flag.sign->description = _("Signed data (two's complement)");
+    flag.sign->guisection = _("Settings");
 
-    flag.s = G_define_flag();
-    flag.s->key = 's';
-    flag.s->description = _("Signed data (high bit means negative value)");
-    flag.s->guisection = _("Settings");
-
-    flag.b = G_define_flag();
-    flag.b->key = 'b';
-    flag.b->description = _("Byte Swap the Data During Import");
-    flag.b->guisection = _("Settings");
+    flag.swap = G_define_flag();
+    flag.swap->key = 'b';
+    flag.swap->description = _("Byte Swap the Data During Import");
+    flag.swap->guisection = _("Settings");
 
     flag.gmt_hd = G_define_flag();
     flag.gmt_hd->key = 'h';
@@ -170,10 +282,18 @@ int main(int argc, char *argv[])
     parm.bytes = G_define_option();
     parm.bytes->key = "bytes";
     parm.bytes->type = TYPE_INTEGER;
-    parm.bytes->answer = "1";
     parm.bytes->required = NO;
-    parm.bytes->description = _("Number of bytes per cell (1, 2, 4)");
+    parm.bytes->options = "1,2,4,8";
+    parm.bytes->description = _("Number of bytes per cell");
     parm.bytes->guisection = _("Settings");
+
+    parm.order = G_define_option();
+    parm.order->key = "order";
+    parm.order->type = TYPE_STRING;
+    parm.order->required = NO;
+    parm.order->options = "big,little,native,swap";
+    parm.order->description = _("Output byte order");
+    parm.order->answer = "native";
 
     parm.north = G_define_option();
     parm.north->key = "north";
@@ -221,12 +341,12 @@ int main(int argc, char *argv[])
     parm.cols->description = _("Number of columns");
     parm.cols->guisection = _("Bounds");
 
-    parm.anull = G_define_option();
-    parm.anull->key = "anull";
-    parm.anull->type = TYPE_DOUBLE;
-    parm.anull->required = NO;
-    parm.anull->description = _("Set Value to NULL");
-    parm.anull->guisection = _("Settings");
+    parm.null = G_define_option();
+    parm.null->key = "anull";
+    parm.null->type = TYPE_DOUBLE;
+    parm.null->required = NO;
+    parm.null->description = _("Set Value to NULL");
+    parm.null->guisection = _("Settings");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -235,63 +355,83 @@ int main(int argc, char *argv[])
     output = parm.output->answer;
     title = parm.title->answer;
 
-    if (flag.f->answer)
-	bytes = 4;
-    else if (flag.d->answer)
-	bytes = 8;
-    else if (sscanf(parm.bytes->answer, "%d%1s", &bytes, dummy) != 1)
-	G_fatal_error(_("Parsing bytes per cell"));
-    if (bytes <= 0)
-	G_fatal_error(_("Bad number of bytes per cell"));
-    sflag = flag.s->answer;
+    if (G_strcasecmp(parm.order->answer, "big") == 0)
+	order = 0;
+    else if (G_strcasecmp(parm.order->answer, "little") == 0)
+	order = 1;
+    else if (G_strcasecmp(parm.order->answer, "native") == 0)
+	order = G_is_little_endian() ? 1 : 0;
+    else if (G_strcasecmp(parm.order->answer, "swap") == 0)
+	order = G_is_little_endian() ? 0 : 1;
 
-    swap = 0;
-    if (flag.b->answer) {
-	swap = 1;
-	G_message(_("Byte Swapping Turned On."));
+    if (flag.swap->answer) {
+	if (strcmp(parm.order->answer, "native") != 0)
+	    G_fatal_error(_("order= and -b are mutually exclusive"));
+	order = G_is_little_endian() ? 0 : 1;
     }
 
-    /* Check Endian State of Host Computer */
-    endianTest.testWord = 1;
-    if (endianTest.testByte[0] == 1) {
-	swapFlag = 1;		/*true: little endian */
-	if (swap == 1)
-	    swapFlag = 0;	/* Swapping enabled */
+    swap_flag = order == (G_is_little_endian() ? 0 : 1);
+
+    is_signed = !!flag.sign->answer;
+
+    is_fp = 0;
+    bytes = 0;
+
+    if (parm.bytes->answer)
+	bytes = atoi(parm.bytes->answer);
+
+    if (flag.float_in->answer && flag.double_in->answer)
+	G_fatal_error(_("-f and -d are mutually exclusive"));
+
+    if (flag.float_in->answer) {
+	if (bytes && bytes < 4)
+	    G_fatal_error(_("-f incompatible with bytes=%d; must be 4 or 8"), bytes);
+	if (!bytes)
+	    bytes = 4;
+	is_fp = 1;
     }
-    else {
-	swapFlag = 0;
-	if (swap == 1)
-	    swapFlag = 1;	/* Swapping enabled */
+
+    if (flag.double_in->answer) {
+	if (bytes && bytes != 8)
+	    G_fatal_error(_("-d incompatible with bytes=%d; must be 8"), bytes);
+	if (!bytes)
+	    bytes = 8;
+	is_fp = 1;
     }
+
+    if (!is_fp && !bytes)
+	G_fatal_error(_("bytes= required for integer data"));
+
+#ifndef HAVE_LONG_LONG_INT
+    if (!is_fp && bytes > 4)
+	G_fatal_error(_("Integer input doesn't support size=8 in this build"));
+#endif
+
+    if (bytes != 1 && bytes != 2 && bytes != 4 && bytes != 8)
+	G_fatal_error(_("bytes= must be 1, 2, 4 or 8"));
+
+    if (parm.null->answer)
+	null_val = atof(parm.null->answer);
 
     cellhd.zone = G_zone();
     cellhd.proj = G_projection();
 
-    if (!flag.gmt_hd->answer) {	/* NO GMT header */
+    if (!flag.gmt_hd->answer) {
+	/* NO GMT header */
+	int num_bounds;
 
-	/* Check for optional parameters */
-	if (!parm.north->answer && !parm.south->answer && !parm.east->answer
-	    && !parm.west->answer) {
-	    no_coord = 1;
-	    /* No coordinates provided */
-	}
-	if (!parm.rows->answer && !parm.cols->answer) {
-	    no_dim = 1;
-	    /* No dimensions provided */
-	}
-	/* Done check */
+	if (!parm.rows->answer || !parm.cols->answer)
+	    G_fatal_error(_("Either -h or rows= and cols= must be given"));
 
+	num_bounds = !!parm.north->answer + !!parm.south->answer +
+	    !!parm.east->answer + !!parm.west->answer;
+	if (num_bounds != 0 && num_bounds != 4)
+	    G_fatal_error(_("Either all or none of north=, south=, east= and west= must be given"));
 
-	/* CASE 0 - Not enough parameters - exit */
-	if (no_dim == 1 && no_coord == 1)
-	    G_fatal_error(_("Missing parameters ...\nMust provide at least"
-			    "[north= south= east= west=] OR [r=	c=]"));
+	cellhd.rows = atoi(parm.rows->answer);
+	cellhd.cols = atoi(parm.cols->answer);
 
-	/* CASE 1 - All parameters supplied */
-	if (no_coord == 0 && no_dim == 0) {	/* Get all parmameters */
-	    if (!parm.north->answer || !parm.south->answer ||
-		!parm.west->answer || !parm.east->answer)
-		G_fatal_error(_("You have to provide all limits of geographic region (n,s,e,w)"));
+	if (num_bounds > 0) {
 	    if (!G_scan_northing(parm.north->answer, &cellhd.north, cellhd.proj))
 		G_fatal_error(_("Illegal north coordinate <%s>"), parm.north->answer);
 	    if (!G_scan_northing(parm.south->answer, &cellhd.south, cellhd.proj))
@@ -300,288 +440,92 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Illegal east coordinate <%s>"), parm.east->answer);
 	    if (!G_scan_easting(parm.west->answer, &cellhd.west, cellhd.proj))
 		G_fatal_error(_("Illegal west coordinate <%s>"), parm.west->answer);
-	    if (sscanf(parm.rows->answer, "%d%1s", &cellhd.rows, dummy) != 1)
-		G_fatal_error(_("Illegal number of rows <%s>"), parm.rows->answer);
-	    if (sscanf(parm.cols->answer, "%d%1s", &cellhd.cols, dummy) != 1)
-		G_fatal_error(_("Illegal number of columns <%s>"), parm.cols->answer);
 	}
-
-	/* CASE 2 - Get only rows and columns and calculate N S E W */
-	/* Only works with resolution = 1 */
-	if (no_dim == 0 && no_coord == 1) {	/* Get rows and cols only */
-	    if (sscanf(parm.rows->answer, "%d%1s", &cellhd.rows, dummy) != 1
-		|| cellhd.rows <= 0)
-		G_fatal_error(_("Illegal number of rows <%s>"), parm.rows->answer);
-	    if (sscanf(parm.cols->answer, "%d%1s", &cellhd.cols, dummy) != 1
-		|| cellhd.cols <= 0)
-		G_fatal_error(_("Illegal number of columns <%s>"), parm.cols->answer);
-	    cellhd.north = (double)cellhd.rows;
-	    cellhd.south = 0.;
-	    cellhd.east = (double)cellhd.cols;
-	    cellhd.west = 0.;
-	    G_message(_("Using N=%f S=%f E=%f W=%f"), cellhd.north,
-		      cellhd.south, cellhd.east, cellhd.west);
-	}
-
-
-	/* CASE 3 - Get only N S E & W */
-	/* No rows and columns supplied - calculate from parameters */
-	/* Assumes 1x1 resolution */
-	if (no_coord == 0 && no_dim == 1) {	/* Get n, s, e, w */
-	    if (!parm.north->answer || !parm.south->answer ||
-		!parm.west->answer || !parm.east->answer)
-		G_fatal_error(
-		    _("You have to provide all limits of geographic region (n,s,e,w)"));
-	    if (!G_scan_northing(parm.north->answer, &cellhd.north, cellhd.proj))
-		G_fatal_error(_("Illegal north coordinate <%s>"), parm.north->answer);
-	    if (!G_scan_northing(parm.south->answer, &cellhd.south, cellhd.proj))
-		G_fatal_error(_("Illegal south coordinate <%s>"), parm.south->answer);
-	    if (!G_scan_easting(parm.east->answer, &cellhd.east, cellhd.proj))
-		G_fatal_error(_("Illegal east coordinate <%s>"), parm.east->answer);
-	    if (!G_scan_easting(parm.west->answer, &cellhd.west, cellhd.proj))
-		G_fatal_error(_("Illegal west coordinate <%s>"), parm.west->answer);
-
-	    /* Calculate rows and cols */
-	    cellhd.rows = (int)cellhd.north - cellhd.south;
-	    cellhd.cols = (int)cellhd.east - cellhd.west;
-	    G_message(_("Using rows=%d cols=%d\n"), cellhd.rows, cellhd.cols);
-	}			/* DONE */
     }
 
+    fp = fopen(input, "rb");
+    if (!fp)
+	G_fatal_error(_("Unable to open <%s>"), input);
 
-    if (parm.anull->answer != NULL)
-	sscanf(parm.anull->answer, "%lf", &nul_val);
-
-    fd = fopen(input, "r");
-    if (fd == NULL) {
-	perror(input);
-	G_usage();
-	exit(EXIT_FAILURE);
-    }
+    /* Find File Size in Byte and Check against byte size */
+    G_fseek(fp, 0, SEEK_END);
+    file_size = G_ftell(fp);
+    G_fseek(fp, 0, SEEK_SET);
 
     /* Read binary GMT style header */
     if (flag.gmt_hd->answer) {
-	fread(&header.nx, sizeof(int), 1, fd);
-	fread(&header.ny, sizeof(int), 1, fd);
-	fread(&header.node_offset, sizeof(int), 1, fd);
-	if (swapFlag == 0)
-	    fread(&header.node_offset, sizeof(int), 1, fd);
-
-	fread(&header.x_min, sizeof(double), 1, fd);
-	fread(&header.x_max, sizeof(double), 1, fd);
-	fread(&header.y_min, sizeof(double), 1, fd);
-	fread(&header.y_max, sizeof(double), 1, fd);
-	fread(&header.z_min, sizeof(double), 1, fd);
-	fread(&header.z_max, sizeof(double), 1, fd);
-	fread(&header.x_inc, sizeof(double), 1, fd);
-	fread(&header.y_inc, sizeof(double), 1, fd);
-	fread(&header.z_scale_factor, sizeof(double), 1, fd);
-	fread(&header.z_add_offset, sizeof(double), 1, fd);
-
-	fread(&header.x_units, sizeof(char[GRD_UNIT_LEN]), 1, fd);
-	fread(&header.y_units, sizeof(char[GRD_UNIT_LEN]), 1, fd);
-	fread(&header.z_units, sizeof(char[GRD_UNIT_LEN]), 1, fd);
-	fread(&header.title, sizeof(char[GRD_TITLE_LEN]), 1, fd);
-	fread(&header.command, sizeof(char[GRD_COMMAND_LEN]), 1, fd);
-	fread(&header.remark, sizeof(char[GRD_REMARK_LEN]), 1, fd);
-
-	cellhd.cols = header.nx;
-	cellhd.rows = header.ny;
-	cellhd.west = header.x_min;
-	cellhd.east = header.x_max;
-	cellhd.south = header.y_min;
-	cellhd.north = header.y_max;
-	cellhd.ew_res = header.x_inc;
-	cellhd.ns_res = header.y_inc;
-
-	if (swap == 1) {
-	    /* Swapping Header Values */
-	    SwabLong((uint32 *) & cellhd.cols);
-	    SwabLong((uint32 *) & cellhd.rows);
-	    SwabDouble(&cellhd.west);
-	    SwabDouble(&cellhd.east);
-	    SwabDouble(&cellhd.south);
-	    SwabDouble(&cellhd.north);
-	    SwabDouble(&cellhd.ew_res);
-	    SwabDouble(&cellhd.ns_res);
-	}
-
-	/* Adjust Cell Header to match resolution */
-	if (err = G_adjust_Cell_head(&cellhd, 0, 0)) {
-	    G_fatal_error("%s", err);
-	    exit(EXIT_FAILURE);
-	}
-	nrows = header.ny;
-	ncols = header.nx;
-	grass_nrows = cellhd.rows;
-	grass_ncols = cellhd.cols;
+	read_gmt_header(&header, swap_flag, fp);
+	get_gmt_header(&header, &cellhd);
     }
 
-    if (!flag.gmt_hd->answer) {
-	/* Adjust Cell Header to New Values */
-	if (err = G_adjust_Cell_head(&cellhd, 1, 1)) {
-	    G_fatal_error("%s", err);
-	    exit(EXIT_FAILURE);
-	}
-	grass_nrows = nrows = cellhd.rows;
-	grass_ncols = ncols = cellhd.cols;
-    }
+    /* Adjust Cell Header to New Values */
+    if (err = G_adjust_Cell_head(&cellhd, 1, 1))
+	G_fatal_error("%s", err);
+
+    if (cellhd.proj == PROJECTION_LL && cellhd.ew_res / cellhd.ns_res > 10.)
+	/* TODO: find a reasonable value */
+	G_warning(
+	    _("East-West (ewres: %f) and North-South (nwres: %f) "
+	      "resolution differ significantly. "
+	      "Did you assign east= and west= correctly?"),
+	    cellhd.ew_res, cellhd.ns_res);
+
+    grass_nrows = nrows = cellhd.rows;
+    grass_ncols = ncols = cellhd.cols;
 
     if (Rast_set_window(&cellhd) < 0)
-	exit(3);
+	G_fatal_error(_("Unable to set window"));
 
     if (grass_nrows != G_window_rows())
-	G_fatal_error("rows changed from %d to %d\n", grass_nrows,
-		      G_window_rows());
+	G_fatal_error("rows changed from %d to %d",
+		      grass_nrows, G_window_rows());
 
     if (grass_ncols != G_window_cols())
-	G_fatal_error("cols changed from %d to %d\n", grass_ncols,
-		      G_window_cols());
+	G_fatal_error("cols changed from %d to %d",
+		      grass_ncols, G_window_cols());
 
+    expected = (off_t) ncols * nrows * bytes;
+    if (flag.gmt_hd->answer)
+	expected += 892;
 
-    /* Find File Size in Byte and Check against byte size */
-    if (stat(input, &fileinfo) < 0) {
-	perror("fstat");
-	exit(1);
-    }
-    FILE_SIZE = fileinfo.st_size;
-
-    if (flag.gmt_hd->answer) {
-	if (swapFlag == 0) {
-	    if (FILE_SIZE != (896 + (ncols * nrows * bytes))) {
-		G_warning(_("Bytes do not match File size"));
-		G_warning(_("File Size %d ... Total Bytes %d"), FILE_SIZE,
-			  896 + (ncols * nrows * bytes));
-		G_warning(_("Try bytes=%d or adjusting input parameters"),
-			  (FILE_SIZE - 896) / (ncols * nrows));
-		exit(EXIT_FAILURE);
-	    }
-	}
-	else {
-	    if (FILE_SIZE != (892 + (ncols * nrows * bytes))) {
-		G_warning(_("Bytes do not match File size"));
-		G_warning(_("File Size %d ... Total Bytes %d"), FILE_SIZE,
-			  892 + (ncols * nrows * bytes));
-		G_warning(_("Try bytes=%d or adjusting input parameters"),
-			  (FILE_SIZE - 892) / (ncols * nrows));
-		exit(EXIT_FAILURE);
-	    }
-	}
-    }
-    else {
-	/* No Header */
-	if (FILE_SIZE != (ncols * nrows * bytes)) {
-	    G_warning(_("Bytes do not match File size"));
-	    G_warning(_("File Size %d ... Total Bytes %d"), FILE_SIZE,
-		      ncols * nrows * bytes);
-	    G_warning(_("Try bytes=%d or adjusting input parameters"),
-		      FILE_SIZE / (ncols * nrows));
-	    exit(EXIT_FAILURE);
-	}
+    if (file_size != expected) {
+	G_warning(_("File Size "PRI_OFF_T" ... Total Bytes "PRI_OFF_T),
+		  file_size, expected);
+	G_fatal_error(_("Bytes do not match file size"));
     }
 
-    if (flag.f->answer) {
-	map_type = FCELL_TYPE;
-	fcell = Rast_allocate_f_buf();
-    }
-    else if (flag.d->answer) {
-	map_type = DCELL_TYPE;
-	dcell = Rast_allocate_d_buf();
-    }
-    else {
-	cell = Rast_allocate_c_buf();
-	map_type = CELL_TYPE;
-    }
+    in_buf = G_malloc(ncols * bytes);
+    out_buf = Rast_allocate_d_buf();
 
-    cf = Rast_open_new(output, map_type);
+    map_type = is_fp
+	? (bytes > 4
+	   ? DCELL_TYPE
+	   : FCELL_TYPE)
+	: CELL_TYPE;
 
-    x_v = G_malloc(ncols * bytes);
-    x_f = (float *)x_v;
-    x_d = (double *)x_v;
-    x_i = (uint32 *) x_v;
-    x_s = (uint16 *) x_v;
-    x_c = (char *)x_v;
+    in_buf = G_malloc(ncols * bytes);
+    out_buf = Rast_allocate_d_buf();
 
-    if (cellhd.proj == PROJECTION_LL && cellhd.ew_res / cellhd.ns_res > 10.)	/* TODO: find a reasonable value */
-	G_warning(
-	   _("East-West (ewres: %f) and North-South (nwres: %f) "
-	     "resolution differ significantly. "
-	     "Did you assign east= and west= correctly?"),
-	     cellhd.ew_res, cellhd.ns_res);
+    fd = Rast_open_new(output, map_type);
 
     for (row = 0; row < grass_nrows; row++) {
-	if (fread(x_v, bytes * ncols, 1, fd) != 1) {
-	    Rast_unopen(cf);
-	    G_fatal_error(_("Conversion failed at row %d"), row);
-	    exit(EXIT_FAILURE);
-	}
+	G_percent(row, nrows, 2);
 
-	for (col = 0; col < grass_ncols; col++) {
-	    if (flag.f->answer) {
-		/* Import Float */
-		if (swap)
-		    SwabFloat(&x_f[col]);
-		fcell[col] = (FCELL) x_f[col];
-	    }
-	    else if (flag.d->answer) {
-		/* Import Double */
-		if (swap)
-		    SwabDouble(&x_d[col]);
-		dcell[col] = (DCELL) x_d[col];
-	    }
-	    else if (bytes == 1) {
-		/* Import 1 byte Byte */
-		if (sflag)
-		    cell[col] = (CELL) (signed char)x_c[col];
-		else
-		    cell[col] = (CELL) (unsigned char)x_c[col];
-	    }
-	    else if (bytes == 2) {
-		/* Import 2 byte Short */
-		if (swap)
-		    SwabShort(&x_s[col]);
-		if (sflag)
-		    cell[col] = (CELL) (signed short)x_s[col];
-		else
-		    cell[col] = (CELL) (unsigned short)x_s[col];
-	    }
-	    else {
-		/* Import 4 byte Int */
-		if (swap)
-		    SwabLong(&x_i[col]);
-		if (sflag)
-		    cell[col] = (CELL) (signed int)x_i[col];
-		else
-		    cell[col] = (CELL) (unsigned int)x_i[col];
-	    }
-	    if (parm.anull->answer) {
-		if (flag.d->answer) {
-		    if (dcell[col] == nul_val)
-			Rast_set_d_null_value(&dcell[col], 1);
-		}
-		else if (flag.f->answer) {
-		    if (fcell[col] == (float)nul_val)
-			Rast_set_f_null_value(&fcell[col], 1);
-		}
-		else {
-		    if (cell[col] == (int)nul_val)
-			Rast_set_c_null_value(&cell[col], 1);
-		}
-	    }
-	}
+	if (fread(in_buf, bytes, ncols, fp) != ncols)
+	    G_fatal_error(_("Error reading data"));
 
-	if (flag.f->answer)
-	    Rast_put_f_row(cf, fcell);
-	else if (flag.d->answer)
-	    Rast_put_d_row(cf, dcell);
-	else
-	    Rast_put_c_row(cf, cell);
+	convert_row(out_buf, in_buf, ncols, is_fp, is_signed,
+		    bytes, swap_flag, null_val);
 
-	G_percent(row + 1, nrows, 2);
+	Rast_put_d_row(fd, out_buf);
     }
 
+    G_percent(row, nrows, 2);	/* finish it off */
+
+    Rast_close(fd);
+    fclose(fp);
+
     G_debug(1, "Creating support files for %s", output);
-    Rast_close(cf);
 
     if (title)
 	Rast_put_cell_title(output, title);
@@ -590,6 +534,5 @@ int main(int argc, char *argv[])
     Rast_command_history(&history);
     Rast_write_history(output, &history);
 
-
-    exit(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
