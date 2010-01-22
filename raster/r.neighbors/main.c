@@ -161,12 +161,10 @@ int main(int argc, char *argv[])
     parm.title->required = NO;
     parm.title->description = _("Title of the output raster map");
 
-    parm.weight = G_define_option();
+    parm.weight = G_define_standard_option(G_OPT_F_INPUT);
     parm.weight->key = "weight";
-    parm.weight->type = TYPE_STRING;
     parm.weight->required = NO;
-    parm.weight->gisprompt = "old_file,file,input";
-    parm.weight->description = _("File containing weights");
+    parm.weight->description = _("Text file containing weights");
 
     parm.gauss = G_define_option();
     parm.gauss->key = "gauss";
