@@ -68,7 +68,7 @@ class array(numpy.memmap):
 	    flags = flags,
 	    input = mapname,
 	    output = self.filename,
-	    size = size,
+	    bytes = size,
 	    null = null,
 	    quiet = True)
 	
