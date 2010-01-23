@@ -53,10 +53,10 @@ typedef struct
 
 } N_heatflow_data2d;
 
-extern N_les_row_entries *N_callback_heatflow_3d(void *heatdata,
+extern N_data_star *N_callback_heatflow_3d(void *heatdata,
 						 N_geom_data * geom,
 						 int depth, int row, int col);
-extern N_les_row_entries *N_callback_heatflow_2d(void *heatdata,
+extern N_data_star *N_callback_heatflow_2d(void *heatdata,
 						 N_geom_data * geom, int row,
 						 int col);
 extern N_heatflow_data3d *N_alloc_heatflow_data3d(int depths, int rows,

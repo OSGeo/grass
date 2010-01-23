@@ -169,7 +169,7 @@ int N_get_array_2d_type(N_array_2d * array)
 /*!
  * \brief Write the value of the N_array_2d struct at position col, row to value
  *
- * The value must be from the same type as the array. Otherwise you will risk data losses.
+ * The value must be of the same type as the array. Otherwise you will risk data losses.
  *
  * \param data N_array_2d *
  * \param col int
