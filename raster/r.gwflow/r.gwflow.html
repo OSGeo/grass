@@ -1,10 +1,12 @@
 <h2>DESCRIPTION</h2>
-This numerical program calculates transient, confined and
+This numerical program calculates implicit transient, confined and
 unconfined groundwater flow in two dimensions based on  
-raster maps and the current region resolution.
+raster maps and the current region settings.
 All initial and boundary conditions must be provided as 
-raster maps.
-
+raster maps. The unit in the location must be meters.
+<p>
+This module is sensitive to mask settings. All cells which are outside the mask
+are ignored and handled as no flow boundaries.
 <p>
 <center>
 <img src=r_gwflow_concept.png border=0><br>
@@ -24,9 +26,9 @@ with <em>r.out.vtk</em>.
 <br>
 <br>
 The groundwater flow will always be calculated transient. 
-If you want to calculate stady state, set the timestep 
+For stady state computation set the timestep
 to a large number (billions of seconds) or set the 
-specific yield/ effective porosity raster maps to zero.
+specific yield/ effective porosity raster map to zero.
 <br>
 <br>
 The water budget is calculated for each non inactive cell. The
@@ -35,12 +37,17 @@ This is an indicator of the quality of the numerical result.
 
 <h2>NOTES</h2>
 
-The groundwater flow calculation is based on Darcy's law and a 
-finite volume discretization. The solved groundwater flow partial 
+The groundwater flow calculation is based on Darcy's law and a numerical implicit
+finite volume discretization. The discretization results in a symmetric and positive definit
+linear equation system in form of <i>Ax = b</i>, which must be solved. The groundwater flow partial
 differential equation is of the following form:
 
 <p>
-(dh/dt)*Ss = Kxx * (d^2h/dx^2) + Kyy * (d^2h/dy^2) + q
+(dh/dt)*S = div (K grad h) + q
+<p>
+In detail for 2 dimensions:
+<p>
+(dh/dt)*S = Kxx * (d^2h/dx^2) + Kyy * (d^2h/dy^2) + q
 
 <ul>
 <li>h -- the piezometric head im [m]</li>
@@ -48,7 +55,7 @@ differential equation is of the following form:
 <li>S -- the specific yield [1/m]</li>
 <li>Kxx -- the hydraulic conductivity tensor part in x direction in [m/s]</li>
 <li>Kyy -- the hydraulic conductivity tensor part in y direction in [m/s]</li>
-<li>q - inner source in meter per second [1/s]</li>
+<li>q - inner source/sink in meter per second [1/s]</li>
 </ul>
 
 <br>
@@ -63,10 +70,14 @@ the following states are supportet:
 <li>1 == active - this cell is used for groundwater floaw calculation, inner sources and recharge can be defined for those cells</li>
 <li>2 == Dirichlet - cells of this type will have a fixed piezometric head value which do not change over the time </li>
 </ul>
-
 <br>
 <br>
-The groundwater flow equation can be solved with several solvers.
+Note that all required raster maps are read into main memory. Additionally the
+linear equation system will be allocated, so the memory consumption of this
+module rapidely grow with the size of the input maps.
+<br>
+<br>
+The resulting linear equation system <i>Ax = b</i> can be solved with several solvers.
 An iterative solvers with sparse and quadratic matrices support is implemented.
 The conjugate gradients method with (pcg) and without (cg) precondition.
 Aditionally a direct Cholesky solver is available. This direct solver
@@ -130,10 +141,15 @@ paraview --data=/tmp/gwdata_unconf2d.vtk &
 
 <h2>SEE ALSO</h2>
 
+<em><a href="r.solute.transport.html">r.solute.transport</a></em><br>
 <em><a href="r3.gwflow.html">r3.gwflow</a></em><br>
 <em><a href="r.out.vtk.html">r.out.vtk</a></em><br>
 
 <h2>AUTHOR</h2>
-Soeren Gebbert
+S&ouml;ren Gebbert
+<p>
+This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
+<a href="http://www.hydrogeologie.tu-berlin.de/fileadmin/fg66/_hydro/Diplomarbeiten/2007_Diplomarbeit_Soeren_Gebbert.pdf">here</a>
+at Technical University Berlin in Germany.
 
 <p><i>Last changed: $Date$</i>

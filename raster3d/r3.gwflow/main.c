@@ -139,7 +139,7 @@ void set_params(void)
     param.vector_z->required = NO;
     param.vector_z->gisprompt = "new,grid3,3d-raster";
     param.vector_z->description =
-	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
+	_("Calculate and store the groundwater filter velocity vector part in z direction [m/s]\n");
 
     param.budget = G_define_option();
     param.budget->key = "budget";
@@ -147,7 +147,7 @@ void set_params(void)
     param.budget->required = NO;
     param.budget->gisprompt = "new,grid3,3d-raster";
     param.budget->description =
-	_("Store the groundwater budget for each cell\n");
+	_("Store the groundwater budget for each cell [m^3/s]\n");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);

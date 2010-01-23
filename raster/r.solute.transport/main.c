@@ -35,7 +35,7 @@ typedef struct
 	*c, *status, *diff_x, *diff_y, *q, *cs, *r, *top, *nf, *cin,
 	*bottom, *vector_x, *vector_y, *bugded, *type, *dt, *maxit, *error, *solver, *sor,
 	*al, *at, *loops, *stab;
-    struct Flag *sparse;
+    struct Flag *full_les;
     struct Flag *cfl;
 } paramType;
 
@@ -186,11 +186,10 @@ void set_params()
     param.stab->description =
 	_("Set the flow stabilizing scheme (full or exponential upwinding).");
 
-
-    param.sparse = G_define_flag();
-    param.sparse->key = 's';
-    param.sparse->description =
-	_("Use a sparse linear equation system, only available with iterative solvers");
+    param.full_les = G_define_flag();
+    param.full_les->key = 'f';
+    param.full_les->description = _("Use a full filled quadratic linear equation system,"
+            " default is a sparse linear equation system.");
 
     param.cfl = G_define_flag();
     param.cfl->key = 'c';
@@ -247,9 +246,9 @@ int main(int argc, char *argv[])
     /*Set the solver */
     solver = param.solver->answer;
 
-    if (strcmp(solver, G_MATH_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_LU) == 0 && !param.full_les->answer)
 	G_fatal_error(_("The direct LU solver do not work with sparse matrices"));
-    if (strcmp(solver, G_MATH_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
+    if (strcmp(solver, G_MATH_SOLVER_DIRECT_GAUSS) == 0 && !param.full_les->answer)
 	G_fatal_error(_("The direct Gauss solver do not work with sparse matrices"));
 
 
@@ -492,19 +491,19 @@ N_les *create_solve_les(N_geom_data * geom, N_solute_transport_data2d * data,
     N_les *les;
 
     /*assemble the linear equation system */
-    if (param.sparse->answer)
+    if (param.full_les->answer)
 	les =
-	    N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->c,
+	    N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->c,
 			      (void *)data, call);
     else
 	les =
-	    N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->c,
+	    N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->c,
 			      (void *)data, call);
 
     /*solve the equation system */
     if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_JACOBI) == 0)
     {
-        if (param.sparse->answer)
+        if (!param.full_les->answer)
             G_math_solver_sparse_jacobi(les->Asp, les->x, les->b, les->rows, maxit, sor, error);
         else
             G_math_solver_jacobi(les->A, les->x, les->b, les->rows, maxit, sor, error);
@@ -512,7 +511,7 @@ N_les *create_solve_les(N_geom_data * geom, N_solute_transport_data2d * data,
 
     if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_SOR) == 0)
     {
-        if (param.sparse->answer)
+        if (!param.full_les->answer)
             G_math_solver_sparse_gs(les->Asp, les->x, les->b, les->rows, maxit, sor, error);
         else
             G_math_solver_gs(les->A, les->x, les->b, les->rows, maxit, sor, error);
@@ -520,7 +519,7 @@ N_les *create_solve_les(N_geom_data * geom, N_solute_transport_data2d * data,
 
     if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_BICGSTAB) == 0)
     {
-        if (param.sparse->answer)
+        if (!param.full_les->answer)
             G_math_solver_sparse_bicgstab(les->Asp, les->x, les->b, les->rows,  maxit, error);
         else
             G_math_solver_bicgstab(les->A, les->x, les->b, les->rows, maxit, error);
