@@ -19,7 +19,6 @@ grass.run_command("r.mapcalc", expression="well=if((row() == 50 && col() == 175)
 grass.run_command("r.mapcalc", expression="hydcond=0.00005")
 grass.run_command("r.mapcalc", expression="recharge=0")
 grass.run_command("r.mapcalc", expression="top_conf=20")
-grass.run_command("r.mapcalc", expression="top_unconf=60")
 grass.run_command("r.mapcalc", expression="bottom=0")
 grass.run_command("r.mapcalc", expression="poros=0.17")
 grass.run_command("r.mapcalc", expression="syield=0.0001")
@@ -27,7 +26,7 @@ grass.run_command("r.mapcalc", expression="null=0.0")
 #
 grass.message(_("Compute a steady state groundwater flow"))
 
-grass.run_command("r.gwflow", "s", solver="cg", top="top_conf", bottom="bottom", phead="phead",\
+grass.run_command("r.gwflow", solver="cg", top="top_conf", bottom="bottom", phead="phead",\
   status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield",\
   r="recharge", output="gwresult_conf", dt=8640000000000, type="confined")
 
@@ -39,14 +38,14 @@ grass.run_command("r.mapcalc", expression="diff=0.0000001")
 grass.run_command("r.mapcalc", expression="R=1.0")
 
 # Compute the initial state
-grass.run_command("r.solute.transport", "s", solver="bicgstab", top="top_conf",\
+grass.run_command("r.solute.transport", solver="bicgstab", top="top_conf",\
   bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
   r="R", cs="cs", q="well", nf="poros", output="stresult_conf_0", dt=3600, diff_x="diff",\
   diff_y="diff", c="c", al=0.1, at=0.01)
 
 # Compute the solute transport for 300 days in 10 day steps
 for dt in range(30):
-    grass.run_command("r.solute.transport", "s", solver="bicgstab", top="top_conf",\
+    grass.run_command("r.solute.transport", solver="bicgstab", top="top_conf",\
     bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
     r="R", cs="cs", q="well", nf="poros", output="stresult_conf_" + str(dt + 1), dt=864000, diff_x="diff",\
     diff_y="diff", c="stresult_conf_" + str(dt), al=0.1, at=0.01, vx="vx", vy="vy")

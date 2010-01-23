@@ -148,7 +148,7 @@ void set_params(void)
     param.budget->required = NO;
     param.budget->gisprompt = "new,raster,raster";
     param.budget->description =
-	_("Store the groundwater budget for each cell\n");
+	_("Store the groundwater budget for each cell [m^3/s]\n");
 
     param.type = G_define_option();
     param.type->key = "type";
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
 
     /*Set the calculation time */
     sscanf(param.dt->answer, "%lf", &(data->dt));
-    G_message("Calculation time: %g", data->dt);
+    G_message(_("Calculation time: %g"), data->dt);
 
     /*read all input maps into the memory and take care of the
      * null values.*/

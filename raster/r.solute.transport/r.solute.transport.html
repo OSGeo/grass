@@ -1,37 +1,42 @@
 <H2>DESCRIPTION</H2>
-This numerical program calculates transient
-solute transport in porous media in the saturated zone of an aquifer in two dimensions based on
-raster maps and the current region resolution.
-All initial- and boundary-conditions must be provided as
-raster maps.
+This numerical program calculates numerical implicit transient and steady state
+solute transport in porous media in the saturated zone of an aquifer. The computation is based on
+raster maps and the current region settings. All initial- and boundary-conditions must be provided as
+raster maps. The unit in the location must be meters.
 <br>
+<p>
+This module is sensitive to mask settings. All cells which are outside the mask
+are ignored and handled as no flow boundaries.
 <br>
 This module calculates the concentration of the solution and optional the
 velocity field, based on the hydraulic conductivity, 
-the effective porosity and the 
-initial piecometric heads. 
+the effective porosity and the initial piecometric heads. 
 The vector components can be visualized with paraview if they are exported
 with r.out.vtk.
 <br>
 <br>
-Use <A HREF="r.gwflow.html">r.gwflow</A> to compute the piezometric hights
-of the aqufer. The piezometric heights and the hydraulic conductivity
+Use <A HREF="r.gwflow.html">r.gwflow</A> to compute the piezometric heights
+of the aquifer. The piezometric heights and the hydraulic conductivity
 are used to compute the flow direction and the mean velocity of the groundwater.
-They are the base of the concentration computation.
+This is the base of the solute transport computation.
 
 <br>
 <br>
 The solute transport will always be calculated transient. 
-If you want to calculate stady state, set the timestep 
+For stady state computation set the timestep
 to a large number (billions of seconds).
 <br>
 <br>
-To reduce the numerical dispersion you have to use small time steps.
-You can choose additionally between full and exponential upwinding to reduce
-the numerical dispersion.
+To reduce the numerical dispersion, which is a consequence of the convection term and
+the finite volume discretization, you can use small time steps and choose between full
+and exponential upwinding.
 
 <H2>NOTES</H2>
-The solute transport partial 
+The solute transport calculation is based on a diffusion/convection partial differential equation and
+a numerical implicit finite volume discretization. Specific for this kind of differential
+equation is the combination of a diffusion/dispersion term and a convection term.
+The discretization results in an unsymmetric linear equation system in form of <i>Ax = b</i>,
+which must be solved. The solute transport partial
 differential equation is of the following form:
 
 <p>
@@ -39,6 +44,7 @@ differential equation is of the following form:
 
 <ul>
 <li>c -- the concentration [kg/m^3]</li>
+<li>u -- vector of mean groundwater flow velocity</li>
 <li>dt -- the time step for transient calculation in seconds [s]</li>
 <li>R -- the linear retardation coefficient [-]</li>
 <li>D -- the diffusion and dispersion tensor [m^2/s]</li>
@@ -50,10 +56,10 @@ differential equation is of the following form:
 
 <br>
 <br>
-Two different boundary conditions are implemented, 
-the Dirichlet and Neumann conditions. 
-The calculation and boundary status of single cells can be set with the status map, 
-the following states are supportet:
+Three different boundary conditions are implemented,
+the Dirichlet, Transmission and Neumann conditions.
+The calculation and boundary status of single cells can be set with the status map.
+The following states are supportet:
 
 <ul>
 <li>0 == inactive - the cell with status 0 will not be calulated, active cells will have a no flow boundary to an inactive cell</li>
@@ -70,15 +76,16 @@ module rapidely grow with the size of the input maps.
 
 <br>
 <br>
-The solute transport equation can be solved with several solvers.
+The resulting linear equation system <i>Ax = b</i> can be solved with several solvers.
 Several iterative solvers with unsymmetric sparse and quadratic matrices support are implemented.
 The jacobi method, the Gauss-Seidel method and the biconjugate gradients-stabilized (bicgstab) method. 
 Aditionally a direct Gauss solver and LU solver are available. Those direct solvers
 only work with quadratic matrices, so be careful using them with large maps 
 (maps of size 10.000 cells will need more than one gigabyte of ram).
+Always prefer a sparse matrix solver.
 
 <H2>EXAMPLE</H2>
-Use this small script to create a working
+Use this small python script to create a working
 groundwater flow / solute transport area and data. 
 Make sure you are not in a lat/lon projection.
 
@@ -104,7 +111,6 @@ grass.run_command("r.mapcalc", expression="well=if((row() == 50 && col() == 175)
 grass.run_command("r.mapcalc", expression="hydcond=0.00005")
 grass.run_command("r.mapcalc", expression="recharge=0")
 grass.run_command("r.mapcalc", expression="top_conf=20")
-grass.run_command("r.mapcalc", expression="top_unconf=60")
 grass.run_command("r.mapcalc", expression="bottom=0")
 grass.run_command("r.mapcalc", expression="poros=0.17")
 grass.run_command("r.mapcalc", expression="syield=0.0001")
@@ -112,7 +118,7 @@ grass.run_command("r.mapcalc", expression="null=0.0")
 
 grass.message(_("Compute a steady state groundwater flow"))
 
-grass.run_command("r.gwflow", "s", solver="cg", top="top_conf", bottom="bottom", phead="phead",\
+grass.run_command("r.gwflow", solver="cg", top="top_conf", bottom="bottom", phead="phead",\
   status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield",\
   r="recharge", output="gwresult_conf", dt=8640000000000, type="confined")
 
@@ -124,14 +130,14 @@ grass.run_command("r.mapcalc", expression="diff=0.0000001")
 grass.run_command("r.mapcalc", expression="R=1.0")
 
 # Compute the initial state
-grass.run_command("r.solute.transport", "s", solver="bicgstab", top="top_conf",\
+grass.run_command("r.solute.transport", solver="bicgstab", top="top_conf",\
   bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
   r="R", cs="cs", q="well", nf="poros", output="stresult_conf_0", dt=3600, diff_x="diff",\
   diff_y="diff", c="c", al=0.1, at=0.01)
 
 # Compute the solute transport for 300 days in 10 day steps
 for dt in range(30):
-    grass.run_command("r.solute.transport", "s", solver="bicgstab", top="top_conf",\
+    grass.run_command("r.solute.transport", solver="bicgstab", top="top_conf",\
     bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
     r="R", cs="cs", q="well", nf="poros", output="stresult_conf_" + str(dt + 1), dt=864000, diff_x="diff",\
     diff_y="diff", c="stresult_conf_" + str(dt), al=0.1, at=0.01)
@@ -145,7 +151,12 @@ for dt in range(30):
 <EM><A HREF="r3.gwflow.html">r3.gwflow</A></EM><br>
 <EM><A HREF="r.out.vtk.html">r.out.vtk</A></EM><br>
 
-<H2>AUTHOR</H2>
-Soeren Gebbert
+<h2>AUTHOR</h2>
+S&ouml;ren Gebbert
+<p>
+This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
+<a href="http://www.hydrogeologie.tu-berlin.de/fileadmin/fg66/_hydro/Diplomarbeiten/2007_Diplomarbeit_Soeren_Gebbert.pdf">here</a>
+at Technical University Berlin in Germany.
+
 
 <p><i>Last changed: $Date: 2007/02/15 23:27:58 $</i>
