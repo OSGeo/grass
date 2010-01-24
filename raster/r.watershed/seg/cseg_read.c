@@ -9,7 +9,6 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
 {
     int row, nrows;
     int map_fd;
-    char msg[100];
     CELL *buffer;
 
     cseg->name = NULL;
@@ -23,9 +22,8 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
 	if (segment_put_row(&(cseg->seg), buffer, row) < 0) {
 	    G_free(buffer);
 	    Rast_close(map_fd);
-	    sprintf(msg, "%s(): unable to segment put row for [%s] in [%s]",
+	    G_warning("%s(): unable to segment put row for [%s] in [%s]",
 		    me, map_name, mapset);
-	    G_warning(msg);
 	    return (-1);
 	}
     }

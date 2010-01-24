@@ -1,6 +1,6 @@
 #include "Gwater.h"
 
-int slope_length(SHORT r, SHORT c, SHORT dr, SHORT dc)
+int slope_length(int r, int c, int dr, int dc)
 {
     CELL top_alt, bot_alt, asp_value;
     double res, top_ls, bot_ls;

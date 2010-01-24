@@ -8,7 +8,6 @@ int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
     int row, nrows;
     int col, ncols;
     int map_fd;
-    char msg[100];
     CELL *buffer;
     char cbuf;
 

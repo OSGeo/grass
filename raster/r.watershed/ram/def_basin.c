@@ -5,7 +5,7 @@ CELL def_basin(int row, int col, CELL basin_num,
 {
     int r, rr, c, cc, ct, new_r[9], new_c[9];
     CELL downdir, direction, asp_value, value, new_elev;
-    SHORT oldupdir, riteflag, leftflag, thisdir;
+    int oldupdir, riteflag, leftflag, thisdir;
 
     for (;;) {
 	bas[SEG_INDEX(bas_seg, row, col)] = basin_num;
@@ -48,7 +48,7 @@ CELL def_basin(int row, int col, CELL basin_num,
 		    if (direction == drain[rr][cc]) {
 			thisdir = updrain[rr][cc];
 			switch (haf_basin_side
-				(oldupdir, (SHORT) downdir, thisdir)) {
+				(oldupdir, (int) downdir, thisdir)) {
 			case LEFT:
 			    overland_cells(r, c, basin_num, basin_num - 1,
 					   &new_elev);

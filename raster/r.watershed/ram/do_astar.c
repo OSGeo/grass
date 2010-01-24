@@ -8,7 +8,7 @@ double get_slope2(CELL, CELL, double);
 int do_astar(void)
 {
     int count;
-    SHORT upr, upc, r, c, ct_dir;
+    int upr, upc, r, c, ct_dir;
     CELL alt_val, alt_nbr[8];
     CELL is_in_list, is_worked;
     int index_doer, index_up;
@@ -23,10 +23,10 @@ int do_astar(void)
     double slope[8];
     int skip_diag;
 
-    G_message(_("SECTION 2: A * Search."));
+    G_message(_("SECTION 2: A* Search."));
 
     for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-	/* get r, c (r_nbr, c_nbr) for neighbours */
+	/* get r, c (upr, upc) for neighbours */
 	upr = nextdr[ct_dir];
 	upc = nextdc[ct_dir];
 	/* account for rare cases when ns_res != ew_res */
@@ -48,7 +48,7 @@ int do_astar(void)
     while (heap_size > 0) {
 	G_percent(count++, do_points, 1);
 
-	/* start with point with lowest elevation, in case of equal elevation
+	/* get point with lowest elevation, in case of equal elevation
 	 * of following points, oldest point = point added earliest */
 	index_doer = astar_pts[1];
 
@@ -66,13 +66,13 @@ int do_astar(void)
 
 	FLAG_SET(worked, r, c);
 
-	/* check neighbours */
+	/* check all neighbours, breadth first search */
 	for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 	    /* get r, c (upr, upc) for this neighbour */
 	    upr = r + nextdr[ct_dir];
 	    upc = c + nextdc[ct_dir];
 	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
-	    /* check that r, c are within region */
+	    /* check if r, c are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
 		index_up = SEG_INDEX(alt_seg, upr, upc);
 		is_in_list = FLAG_GET(in_list, upr, upc);
@@ -145,8 +145,8 @@ int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
     return 0;
 }
 
-/* new add point routine for min heap */
-int add_pt(SHORT r, SHORT c, CELL ele, CELL downe)
+/* add point routine for min heap */
+int add_pt(int r, int c, CELL ele, CELL downe)
 {
     FLAG_SET(in_list, r, c);
 
@@ -165,7 +165,7 @@ int add_pt(SHORT r, SHORT c, CELL ele, CELL downe)
     return 0;
 }
 
-/* new drop point routine for min heap */
+/* drop point routine for min heap */
 int drop_pt(void)
 {
     register int child, childr, parent;
@@ -182,10 +182,9 @@ int drop_pt(void)
     parent = 1;
 
     /* sift down: move hole back towards bottom of heap */
-    /* sift-down routine customised for A * Search logic */
 
     while ((child = GET_CHILD(parent)) <= heap_size) {
-	/* select child with lower ele, if equal, older child
+	/* select child with lower ele, if both are equal, older child
 	 * older child is older startpoint for flow path, important */
 	ele = alt[astar_pts[child]];
 	if (child < heap_size) {
@@ -193,21 +192,12 @@ int drop_pt(void)
 	    i = child + 3;
 	    while (childr <= heap_size && childr < i) {
 		eler = alt[astar_pts[childr]];
-		/* get smallest child */
 		if (cmp_pnt(eler, ele, heap_index[childr], heap_index[child])) {
 		    child = childr;
 		    ele = eler;
 		}
 		childr++;
 	    }
-	    /* break if childr > last entry? that saves sifting up again
-	     * OTOH, this is another comparison
-	     * we have a max heap height of 20: log(INT_MAX)/log(n children per node)
-	     * that would give us in the worst case 20*2 additional comparisons with 3 children
-	     * the last entry will never go far up again, less than half the way
-	     * so the additional comparisons for going all the way down
-	     * and then a bit up again are likely less than 20*2 */
-	    /* find the error in this reasoning */
 	}
 
 	/* move hole down */
@@ -271,7 +261,7 @@ int sift_up(int start, CELL ele)
 }
 
 double
-get_slope(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
+get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
 {
     double slope;
 
@@ -290,15 +280,15 @@ get_slope(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
 
 double get_slope2(CELL ele, CELL up_ele, double dist)
 {
-    if (ele == up_ele)
-	return 0.5 / dist;
+    if (ele >= up_ele)
+	return 0.0;
     else
 	return (double)(up_ele - ele) / dist;
 }
 
 /* replace is unused */
 int replace(			/* ele was in there */
-	       SHORT upr, SHORT upc, SHORT r, SHORT c)
+	       int upr, int upc, int r, int c)
 /* CELL ele;  */
 {
     int now, heap_run;

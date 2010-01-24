@@ -8,7 +8,7 @@ double get_slope2(CELL, CELL, double);
 int do_astar(void)
 {
     int doer, count;
-    SHORT upr, upc, r = -1, c = -1, ct_dir;
+    int upr, upc, r = -1, c = -1, ct_dir;
     CELL alt_val, alt_nbr[8], alt_up;
     CELL asp_val;
     char flag_value, is_in_list, is_worked;
@@ -24,11 +24,12 @@ int do_astar(void)
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
     int skip_diag;
+    int count_edge = 0, count_diag = 0, count_edge_sink = 0, count_diag_sink = 0;
 
     G_message(_("SECTION 2: A* Search."));
 
     for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-	/* get r, c (r_nbr, c_nbr) for neighbours */
+	/* get r, c (upr, upc) for neighbours */
 	upr = nextdr[ct_dir];
 	upc = nextdc[ct_dir];
 	/* account for rare cases when ns_res != ew_res */
@@ -51,13 +52,10 @@ int do_astar(void)
 
     doer = do_points - 1;
 
-    /* A * Search
-     * determine downhill path through all not masked cells and
-     * set drainage direction */
+    /* A* Search: search uphill, get downhill paths */
     while (heap_size > 0) {
 	G_percent(count++, do_points, 1);
 
-	/* drop next point from heap */
 	heap_p = drop_pt();
 
 	r = heap_p.pnt.r;
@@ -72,13 +70,13 @@ int do_astar(void)
 	    upr = r + nextdr[ct_dir];
 	    upc = c + nextdc[ct_dir];
 	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
-	    /* check that upr, upc are within region */
+	    /* check if upr, upc are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
-		/* avoid diagonal flow direction bias */
 		bseg_get(&bitflags, &flag_value, upr, upc);
 		is_in_list = FLAG_GET(flag_value, INLISTFLAG);
 		is_worked = FLAG_GET(flag_value, WORKEDFLAG);
 		skip_diag = 0;
+		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
 		    cseg_get(&alt, &alt_up, upr, upc);
 		    alt_nbr[ct_dir] = alt_up;
@@ -105,17 +103,31 @@ int do_astar(void)
 		    }
 		}
 
-		/* put neighbour in search list if not yet in */
+		/* add neighbour as new point if not in the list */
 		if (is_in_list == 0 && skip_diag == 0) {
-		    cseg_get(&alt, &alt_up, upr, upc);
-		    /* flow direction is set here */
+		    /* set flow direction */
 		    asp_val = drain[upr - r + 1][upc - c + 1];
-		    add_pt(upr, upc, alt_up, asp_val, 0);
+		    add_pt(upr, upc, alt_nbr[ct_dir], asp_val, 0);
 		    cseg_put(&asp, &asp_val, upr, upc);
+
+
+		    if (alt_nbr[ct_dir] < alt_val) {
+			if (ct_dir < 4)
+			    count_edge_sink++;
+			else
+			    count_diag_sink++;
+		    }
+		    /* includes flat areas */
+		    else {
+			if (ct_dir < 4)
+			    count_edge++;
+			else
+			    count_diag++;
+		    }
 		}
-		/* in list, not worked. is it edge ? */
 		else if (is_in_list && is_worked == 0 &&
 			 FLAG_GET(flag_value, EDGEFLAG)) {
+		    /* neighbour is edge in list, not yet worked */
 		    cseg_get(&asp, &asp_val, upr, upc);
 		    if (asp_val < 0) {
 			/* adjust flow direction for edge cell */
@@ -126,6 +138,7 @@ int do_astar(void)
 		}
 	    }
 	}
+	/* add astar points to sorted list for flow accumulation */
 	cseg_get(&asp, &asp_val, r, c);
 	heap_p.pnt.asp = asp_val;
 	seg_put(&astar_pts, (char *)&heap_p.pnt, 0, doer);
@@ -142,6 +155,11 @@ int do_astar(void)
     seg_close(&search_heap);
 
     G_percent(count, do_points, 1);	/* finish it */
+
+    G_debug(1, "edge direction: %d (%.2f%%)", count_edge, (double) 100. * count_edge / (count_edge + count_diag));
+    G_debug(1, "diag direction: %d (%.2f%%)", count_diag, (double) 100. * count_diag / (count_edge + count_diag));
+    G_debug(1, "edge out of depression: %d (%.2f%%)", count_edge_sink, (double) 100. * count_edge_sink / (count_edge_sink + count_diag_sink));
+    G_debug(1, "diag out of depression: %d (%.2f%%)", count_diag_sink, (double) 100. * count_diag_sink / (count_edge_sink + count_diag_sink));
 
     return 0;
 }
@@ -160,7 +178,7 @@ int cmp_pnt(HEAP_PNT * a, HEAP_PNT * b)
 }
 
 /* add point routine for min heap */
-int add_pt(SHORT r, SHORT c, CELL ele, char asp, int is_edge)
+int add_pt(int r, int c, CELL ele, char asp, int is_edge)
 {
     HEAP_PNT heap_p;
     char flag_value;
@@ -204,7 +222,7 @@ HEAP_PNT drop_pt(void)
     seg_get(&search_heap, (char *)&last_p, 0, heap_size);
     seg_get(&search_heap, (char *)&root_p, 0, 1);
 
-    /* sift down */
+    /* sift down: move hole back towards bottom of heap */
     parent = 1;
     while ((child = GET_CHILD(parent)) < heap_size) {
 	/* select child with lower ele, if both are equal, older child
@@ -215,7 +233,6 @@ HEAP_PNT drop_pt(void)
 	    childr = child + 1;
 	    i = child + 4;
 	    while (childr < i && childr < heap_size) {
-		/* get smallest child */
 		seg_get(&search_heap, (char *)&childr_p, 0, childr);
 		if (cmp_pnt(&childr_p, &child_p)) {
 		    child = childr;
@@ -245,7 +262,7 @@ HEAP_PNT drop_pt(void)
 /* standard sift-up routine for d-ary min heap */
 int sift_up(int start, HEAP_PNT child_p)
 {
-    int parent, child;		/* parentp, */
+    int parent, child;
     HEAP_PNT heap_p;
 
     child = start;
@@ -271,7 +288,7 @@ int sift_up(int start, HEAP_PNT child_p)
 }
 
 double
-get_slope(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
+get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
 {
     double slope;
 
@@ -288,8 +305,8 @@ get_slope(SHORT r, SHORT c, SHORT downr, SHORT downc, CELL ele, CELL downe)
 
 double get_slope2(CELL ele, CELL up_ele, double dist)
 {
-    if (ele == up_ele)
-	return 0.5 / dist;
+    if (ele >= up_ele)
+	return 0.0;
     else
 	return (double)(up_ele - ele) / dist;
 }

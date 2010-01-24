@@ -9,7 +9,7 @@ int ele_round(double);
 
 int init_vars(int argc, char *argv[])
 {
-    SHORT r, c;
+    int r, c;
     int ele_fd, fd, wat_fd;
     int seg_rows, seg_cols, num_cseg_total, num_open_segs, num_open_array_segs;
 
@@ -116,13 +116,6 @@ int init_vars(int argc, char *argv[])
     /* do RUSLE */
     if (er_flag)
 	tot_parts++;
-    /* do stream extraction */
-    if (er_flag || seg_flag || bas_flag || haf_flag) {
-	st_flag = 1;
-	/* separate stream extraction only needed for MFD */
-	if (mfd)
-	    tot_parts++;
-    }
     /* define basins */
     if (seg_flag || bas_flag || haf_flag)
 	tot_parts++;
@@ -288,7 +281,7 @@ int init_vars(int argc, char *argv[])
 			else if (wat_map_type == FCELL_TYPE) {
 			    wat_value = *((FCELL *)ptr);
 			}
-			else if (ele_map_type == DCELL_TYPE) {
+			else if (wat_map_type == DCELL_TYPE) {
 			    wat_value = *((DCELL *)ptr);
 			}
 		    }
@@ -324,8 +317,7 @@ int init_vars(int argc, char *argv[])
 	G_free(watbuf);
     }
 
-    if (do_points < nrows * ncols)
-	MASK_flag = 1;
+    MASK_flag = (do_points < nrows * ncols);
     
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
@@ -388,7 +380,11 @@ int init_vars(int argc, char *argv[])
     G_debug(1, "open segments for A* points");
     /* rounded down power of 2 */
     seg_cols = (int) (pow(2, (int)(log(num_open_segs / 8.0) / log(2) + 0.1)) + 0.1);
+    if (seg_cols < 2)
+	seg_cols = 2;
     num_open_array_segs = num_open_segs / seg_cols;
+    if (num_open_array_segs == 0)
+	num_open_array_segs = 1;
     /* n cols in segment */
     seg_cols *= seg_rows * seg_rows;
     /* n segments in row */
@@ -409,7 +405,11 @@ int init_vars(int argc, char *argv[])
     G_debug(1, "open segments for A* search heap");
     /* rounded down power of 2 */
     seg_cols = (int) (pow(2, (int)(log(num_open_segs / 8.0) / log(2) + 0.1)) + 0.1);
+    if (seg_cols < 2)
+	seg_cols = 2;
     num_open_array_segs = num_open_segs / seg_cols;
+    if (num_open_array_segs == 0)
+	num_open_array_segs = 1;
     /* n cols in segment */
     seg_cols *= seg_rows * seg_rows;
     /* n segments in row */

@@ -1,8 +1,8 @@
 #include "Gwater.h"
 
-int haf_basin_side(SHORT updir, SHORT downdir, SHORT thisdir)
+int haf_basin_side(int updir, int downdir, int thisdir)
 {
-    SHORT newup, newthis;
+    int newup, newthis;
 
     newup = updir - downdir;
     if (newup < 0)
