@@ -9,7 +9,6 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
 {
     int row, nrows, ncols;
     int map_fd;
-    char msg[100];
     double *dbuffer;
 
     dseg->name = NULL;
@@ -24,9 +23,8 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
 	if (segment_put_row(&(dseg->seg), (DCELL *) dbuffer, row) < 0) {
 	    G_free(dbuffer);
 	    Rast_close(map_fd);
-	    sprintf(msg, "%s(): unable to segment put row for [%s] in [%s]",
+	    G_warning("%s(): unable to segment put row for [%s] in [%s]",
 		    me, map_name, mapset);
-	    G_warning(msg);
 	    return (-1);
 	}
     }

@@ -6,8 +6,8 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
 {
     CELL downdir, old_basin, new_elev, aspect;
     double slope, easting, northing;
-    SHORT doit, ctr, updir, splitdir[9];
-    SHORT thisdir, leftflag, riteflag;
+    int doit, ctr, updir, splitdir[9];
+    int thisdir, leftflag, riteflag;
     int r, c, rr, cc;
 
     new_elev = 0;
@@ -35,7 +35,7 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
 		    if (doit) {
 			thisdir = updrain[rr][cc];
 			switch (haf_basin_side
-				(updir, (SHORT) downdir, thisdir)) {
+				(updir, (int) downdir, thisdir)) {
 			case LEFT:
 			    overland_cells(r, c, basin_num, basin_num - 1,
 					   &new_elev);

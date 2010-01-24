@@ -8,7 +8,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
     double slope;
     CELL downdir, asp_value, hih_ele, new_ele, aspect, value;
     DCELL dvalue, max_drain;	/* flow acc is now DCELL */
-    SHORT updir, riteflag, leftflag, thisdir;
+    int updir, riteflag, leftflag, thisdir;
     WAT_ALT wa;
 
     while (1) {
@@ -73,7 +73,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 			if (aspect == drain[rr][cc]) {
 			    thisdir = updrain[rr][cc];
 			    switch (haf_basin_side(updir,
-					       (SHORT) downdir,
+					       (int) downdir,
 					       thisdir)) {
 			    case RITE:
 				overland_cells(r, c, basin_num, basin_num,

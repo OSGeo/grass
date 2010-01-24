@@ -15,7 +15,6 @@
 
 #define AR_SIZE			16
 #define AR_INCR			16
-#define SHORT			int
 #define NOMASK			1
 #define MIN_SLOPE		.00001
 #define MIN_GRADIENT_DEGREES	1
@@ -45,7 +44,7 @@
 
 #define POINT       struct points
 POINT {
-    SHORT r, c; /* , downr, downc */
+    int r, c; /* , downr, downc */
     char asp;      /* drainage direction */
     char guessed;   /* accumulation will likely be an underestimate */
 };
@@ -77,7 +76,7 @@ extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 extern CELL n_basins;
 extern OC_STACK *ocs;
 extern int ocs_alloced;
-extern SHORT nrows, ncols;
+extern int nrows, ncols;
 extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
 extern SSEG astar_pts;
@@ -88,11 +87,11 @@ extern DSEG slp, s_l, s_g, l_s, ril;
 extern double segs_mb;
 extern char zero, one;
 extern double ril_value, d_zero, d_one;
-extern SHORT sides;
-extern SHORT drain[3][3];
-extern SHORT updrain[3][3];
-extern SHORT nextdr[8];
-extern SHORT nextdc[8];
+extern int sides;
+extern int drain[3][3];
+extern int updrain[3][3];
+extern int nextdr[8];
+extern int nextdc[8];
 extern char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 extern char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 extern char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
@@ -140,14 +139,14 @@ CELL def_basin(int, int, CELL, double, CELL);
 
 /* do_astar.c */
 int do_astar(void);
-int add_pt(SHORT, SHORT, CELL, char, int);
+int add_pt(int, int, CELL, char, int);
 HEAP_PNT drop_pt(void);
 int sift_up(int, HEAP_PNT);
 int sift_up_mem(int, HEAP_PNT);
 int sift_down_disk(void);
 int fill_mem_heap(void);
 int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b);
-double get_slope(SHORT, SHORT, SHORT, SHORT, CELL, CELL);
+double get_slope(int, int, int, int, CELL, CELL);
 
 /* do_cum.c */
 int do_cum(void);
@@ -161,7 +160,7 @@ int do_stream(void);
 int find_pourpts(void);
 
 /* haf_side.c */
-int haf_basin_side(SHORT, SHORT, SHORT);
+int haf_basin_side(int, int, int);
 
 /* init_vars.c */
 int init_vars(int, char *[]);
@@ -178,7 +177,7 @@ int sg_factor(void);
 int len_slp_equ(double, double, double, int, int);
 
 /* slope_len.c */
-int slope_length(SHORT, SHORT, SHORT, SHORT);
+int slope_length(int, int, int, int);
 
 /* split_str.c */
 CELL split_stream(int, int, int[], int[], int, CELL, double, CELL);

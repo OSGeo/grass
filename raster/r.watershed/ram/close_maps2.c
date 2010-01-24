@@ -29,7 +29,7 @@ int close_array_seg(void)
 	Rast_init_colors(&colors);
 	Rast_make_random_colors(&colors, 1, max);
 
-	if (max < 10000) {
+	if (max < 1000) {
 	    Rast_set_c_color((CELL) 0, 0, 0, 0, &colors);
 	    r = 1;
 	    incr = 0;
@@ -53,10 +53,6 @@ int close_array_seg(void)
 				    flag = 0;
 				    incr = -1;
 				}
-				if (r % 200 == 0)
-				    G_debug(5,
-					    "adjusting colors: r=%d\tof %d basins",
-					    r, max);
 			    }
 			}
 		    }

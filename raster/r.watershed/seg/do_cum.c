@@ -7,14 +7,14 @@
 
 int do_cum(void)
 {
-    SHORT r, c, dr, dc;
+    int r, c, dr, dc;
     CELL asp_val, asp_val_down;
     char is_swale, this_flag_value, flag_value;
     DCELL value, valued;
     POINT point;
     int killer, threshold;
-    SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
+    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     WAT_ALT wa, wadown;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
@@ -29,11 +29,11 @@ int do_cum(void)
 	r = point.r;
 	c = point.c;
 	asp_val = point.asp;
-	/* skip user-defined depressions */
 	if (asp_val) {
 	    dr = r + asp_r[ABS(asp_val)];
 	    dc = c + asp_c[ABS(asp_val)];
 	}
+	/* skip user-defined depressions */
 	else
 	    dr = dc = -1;
 
@@ -130,10 +130,10 @@ int do_cum_mfd(void)
     double dx, dy;
     CELL ele, *ele_nbr, asp_val, asp_val_down;
     double prop, max_acc;
-    int workedon, edge, is_swale;
+    int workedon, edge, is_swale, flat;
     char *flag_nbr, this_flag_value, flag_value;
-    SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
+    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
     G_message(_("SECTION 3: Accumulating Surface Flow with MFD."));
     G_debug(1, "MFD convergence factor set to %d.", c_fac);
@@ -206,6 +206,7 @@ int do_cum_mfd(void)
 	    ele = wa.ele;
 	    is_null = 0;
 	    edge = 0;
+	    flat = 1;
 	    /* this loop is needed to get the sum of weights */
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
@@ -224,6 +225,9 @@ int do_cum_mfd(void)
 		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
 		    c_nbr < ncols) {
 
+		    if (dr == r_nbr && dc == c_nbr)
+			np_side = ct_dir;
+
 		    bseg_get(&bitflags, &flag_nbr[ct_dir], r_nbr, c_nbr);
 		    seg_get(&watalt, (char *)&wa, r_nbr, c_nbr);
 		    wat_nbr[ct_dir] = wa.wat;
@@ -233,10 +237,14 @@ int do_cum_mfd(void)
 		    is_swale = FLAG_GET(flag_nbr[ct_dir], SWALEFLAG);
 		    if (is_swale)
 			swale_cells++;
-		    if ((ABS(wat_nbr[ct_dir]) + 0.5) >= threshold)
+		    if ((ABS(wat_nbr[ct_dir]) + 0.5) >= threshold &&
+		        ct_dir != np_side && ele_nbr[ct_dir] > ele)
 			stream_cells++;
 
 		    if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
+
+			if (ele_nbr[ct_dir] != ele)
+			    flat = 0;
 
 			edge = is_null = FLAG_GET(flag_nbr[ct_dir], NULLFLAG);
 			if (!is_null && ele_nbr[ct_dir] <= ele) {
@@ -263,8 +271,6 @@ int do_cum_mfd(void)
 			    }
 			}
 		    }
-		    if (dr == r_nbr && dc == c_nbr)
-			np_side = ct_dir;
 		}
 		else
 		    edge = 1;
@@ -302,7 +308,6 @@ int do_cum_mfd(void)
 	    if (mfd_cells > 1) {
 		prop = 0.0;
 		for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-		    /* get r, c (r_nbr, c_nbr) for neighbours */
 		    r_nbr = r + nextdr[ct_dir];
 		    c_nbr = c + nextdc[ct_dir];
 
@@ -313,7 +318,7 @@ int do_cum_mfd(void)
 			if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
 
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
-			    /* check everything sums up to 1.0 */
+			    /* check everything adds up to 1.0 */
 			    prop += weight[ct_dir];
 
 			    if (value > 0) {
@@ -393,9 +398,8 @@ int do_cum_mfd(void)
 	    is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
 	    /* start new stream */
 	    value = ABS(value) + 0.5;
-	    /* can use stream_cells < 4 only for highres, nsres and ewres < 30 m? */
-	    if (!is_swale && (int)value >= threshold && stream_cells < 3 &&
-		swale_cells < 1) {
+	    if (!is_swale && (int)value >= threshold && stream_cells < 1 &&
+		swale_cells < 1 && !flat) {
 		FLAG_SET(this_flag_value, SWALEFLAG);
 		is_swale = 1;
 	    }
@@ -426,9 +430,7 @@ int do_cum_mfd(void)
 	G_warning(_("MFD: A * path already processed when distributing flow: %d of %d cells"),
 		  workedon, do_points);
 
-    if (!st_flag) {
-	seg_close(&astar_pts);
-    }
+    seg_close(&astar_pts);
     
     G_free(dist_to_nbr);
     G_free(weight);

@@ -6,11 +6,11 @@
 
 int do_cum(void)
 {
-    SHORT r, c, dr, dc;
+    int r, c, dr, dc;
     CELL is_swale, value, valued, aspect;
     int killer, threshold, count;
-    SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
+    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int this_index, down_index;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
@@ -110,9 +110,9 @@ int do_cum_mfd(void)
     double dx, dy;
     CELL ele, ele_nbr, aspect, is_worked;
     double prop, max_acc;
-    int workedon, edge;
-    SHORT asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    SHORT asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int workedon, edge, flat;
+    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
+    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int this_index, down_index, nbr_index;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with MFD."));
@@ -174,6 +174,7 @@ int do_cum_mfd(void)
 	    ele = alt[this_index];
 	    is_null = 0;
 	    edge = 0;
+	    flat = 1;
 	    /* this loop is needed to get the sum of weights */
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
@@ -184,6 +185,9 @@ int do_cum_mfd(void)
 		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
 		    c_nbr < ncols) {
 
+		    if (dr == r_nbr && dc == c_nbr)
+			np_side = ct_dir;
+
 		    nbr_index = SEG_INDEX(wat_seg, r_nbr, c_nbr);
 
 		    /* check for swale or stream cells */
@@ -191,12 +195,15 @@ int do_cum_mfd(void)
 		    if (is_swale)
 			swale_cells++;
 		    valued = wat[nbr_index];
-		    if ((ABS(valued) + 0.5) >= threshold)
+		    ele_nbr = alt[nbr_index];
+		    if ((ABS(valued) + 0.5) >= threshold  &&
+		        ct_dir != np_side && ele_nbr > ele)
 			stream_cells++;
 
 		    is_worked = FLAG_GET(worked, r_nbr, c_nbr);
 		    if (is_worked == 0) {
-			ele_nbr = alt[nbr_index];
+			if (ele_nbr != ele)
+			    flat = 0;
 			is_null = Rast_is_c_null_value(&ele_nbr);
 			edge = is_null;
 			if (!is_null && ele_nbr <= ele) {
@@ -223,8 +230,6 @@ int do_cum_mfd(void)
 			    }
 			}
 		    }
-		    if (dr == r_nbr && dc == c_nbr)
-			np_side = ct_dir;
 		}
 		else
 		    edge = 1;
@@ -260,7 +265,6 @@ int do_cum_mfd(void)
 	    if (mfd_cells > 1) {
 		prop = 0.0;
 		for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-		    /* get r, c (r_nbr, c_nbr) for neighbours */
 		    r_nbr = r + nextdr[ct_dir];
 		    c_nbr = c + nextdc[ct_dir];
 
@@ -273,7 +277,7 @@ int do_cum_mfd(void)
 			    nbr_index = SEG_INDEX(wat_seg, r_nbr, c_nbr);
 
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
-			    /* check everything sums up to 1.0 */
+			    /* check everything adds up to 1.0 */
 			    prop += weight[ct_dir];
 
 			    valued = wat[nbr_index];
@@ -344,8 +348,8 @@ int do_cum_mfd(void)
 	    }
 	    /* start new stream */
 	    value = ABS(value) + 0.5;
-	    if (!is_swale && (int)value >= threshold && stream_cells < 3 &&
-		swale_cells < 1) {
+	    if (!is_swale && (int)value >= threshold && stream_cells < 1 &&
+		swale_cells < 1 && !flat) {
 		FLAG_SET(swale, r, c);
 		is_swale = 1;
 	    }

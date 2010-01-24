@@ -9,7 +9,7 @@ int ele_round(double);
 
 int init_vars(int argc, char *argv[])
 {
-    SHORT r, c;
+    int r, c;
     CELL *buf, alt_value, wat_value, asp_value, block_value;
     DCELL dvalue;
     void *elebuf, *ptr;
@@ -34,8 +34,6 @@ int init_vars(int argc, char *argv[])
     c_fac = 5;
     abs_acc = 0;
     ele_scale = 1;
-    for (r = 0; r < argc; r++)
-	G_debug(0, "%s", argv[r]);
 
     for (r = 1; r < argc; r++) {
 	if (sscanf(argv[r], "elevation=%s", ele_name) == 1)
