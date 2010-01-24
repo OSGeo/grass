@@ -333,7 +333,7 @@ dbDriver *db_start_driver(const char *name)
 	    _exit(EXIT_FAILURE);
 	}
 
-	execl("/bin/sh", "sh", "-c", startup, NULL);
+	execl(startup, startup, NULL);
 
 	db_syserror("execl");
 	return NULL;		/* to keep lint, et. al. happy */
