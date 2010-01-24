@@ -44,12 +44,12 @@
 #include <grass/glocale.h>
 #include "cost.h"
 
-#define GET_PARENT(c) (int) (((c) - 2) / 3 + 1)
-#define GET_CHILD(p) (int) (((p) * 3) - 1)
+#define GET_PARENT(c) (((c) - 2) / 3 + 1)
+#define GET_CHILD(p) (((p) * 3) - 1)
 
-static unsigned int next_point = 0;
-static unsigned int heap_size = 0;
-static unsigned int heap_alloced = 0;
+static long next_point = 0;
+static long heap_size = 0;
+static long heap_alloced = 0;
 static struct cost **heap_index, *free_point;
 
 int init_heap(void)
@@ -89,9 +89,9 @@ int cmp_costs(struct cost *a, struct cost *b)
     return 0;
 }
 
-unsigned int sift_up(unsigned int start, struct cost * child_pnt)
+long sift_up(long start, struct cost * child_pnt)
 {
-    register unsigned int parent, child;
+    register long parent, child;
     int r, c;
 
     r = child_pnt->row;
@@ -153,7 +153,7 @@ struct cost *insert(double min_cost, int row, int col)
 struct cost *get_lowest(void)
 {
     struct cost *next_cell;
-    register unsigned int parent, child, childr, i;
+    register long parent, child, childr, i;
 
     if (heap_size == 0)
 	return NULL;
