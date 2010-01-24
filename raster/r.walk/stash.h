@@ -10,8 +10,8 @@
 
 /***************************************************************/
 
-#ifndef __R_COST_STASH_H__
-#define __R_COST_STASH_H__
+#ifndef __STASH_H__
+#define __STASH_H__
 
 #include <stdio.h>
 #define      CUM_COST_LAYER        1
@@ -33,5 +33,3 @@ int process_answers(char **, struct start_pt **, struct start_pt **);
 int time_to_stop(int, int);
 
 #endif
-
-/****************END OF "GCOST_CMD_LINE.H"**********************/
