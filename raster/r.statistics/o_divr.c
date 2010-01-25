@@ -4,34 +4,27 @@
 #include <grass/raster.h>
 #include "method.h"
 
-int
-o_divr(const char *basemap, const char *covermap, const char *outputmap, int usecats,
-       struct Categories *cats)
+int o_divr(const char *basemap, const char *covermap, const char *outputmap,
+	   int usecats, struct Categories *cats)
 {
-    char command[1024];
-    FILE *stats_fd, *reclass_fd;
+    struct Popen stats_child, reclass_child;
+    FILE *stats_fp, *reclass_fp;
     int first;
     long basecat, covercat, catb, catc;
     double area;
 
-
-    sprintf(command, "r.stats -an input=\"%s,%s\" fs=space", basemap,
-	    covermap);
-    stats_fd = popen(command, "r");
-
-
-    sprintf(command, "r.reclass i=\"%s\" o=\"%s\"", basemap, outputmap);
-    reclass_fd = popen(command, "w");
+    stats_fp = run_stats(&stats_child, basemap, covermap, "-an");
+    reclass_fp = run_reclass(&reclass_child, basemap, outputmap);
 
     first = 1;
-    while (read_stats(stats_fd, &basecat, &covercat, &area)) {
+    while (read_stats(stats_fp, &basecat, &covercat, &area)) {
 	if (first) {
 	    first = 0;
 	    catb = basecat;
 	    catc = 0;
 	}
 	if (basecat != catb) {
-	  write_reclass(reclass_fd, catb, catc, Rast_get_c_cat((CELL *) &catc, cats),
+	  write_reclass(reclass_fp, catb, catc, Rast_get_c_cat((CELL *) &catc, cats),
 			  usecats);
 	    catb = basecat;
 	    catc = 0;
@@ -39,10 +32,11 @@ o_divr(const char *basemap, const char *covermap, const char *outputmap, int use
 	catc++;
     }
     if (!first)
-      write_reclass(reclass_fd, catb, catc, Rast_get_c_cat((CELL *) &catc, cats), usecats);
+      write_reclass(reclass_fp, catb, catc, Rast_get_c_cat((CELL *) &catc, cats), usecats);
 
-    pclose(stats_fd);
-    pclose(reclass_fd);
+    G_popen_close(&stats_child);
+    G_popen_close(&reclass_child);
 
-    exit(EXIT_SUCCESS);
+    return 0;
 }
+

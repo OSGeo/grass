@@ -746,3 +746,4 @@ static void wps_print_bounding_box_data(void)
     fprintf(stdout,"\t\t\t\t</BoundingBoxData>\n");
     fprintf(stdout,"\t\t\t</Input>\n");
 }
+

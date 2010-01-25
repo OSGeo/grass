@@ -38,7 +38,10 @@ int main(int argc, char *argv[])
     char *basemap;
     char *covermap;
     char *outmap;
-    char command[1024];
+    char input[GNAME_MAX*2+8];
+    char output[GNAME_MAX+8];
+    const char *args[4];
+    struct Popen stats_child, reclass_child;
     struct Categories cover_cats;
     FILE *stats, *reclass;
     int first;
@@ -86,15 +89,24 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("%s: Unable to read category labels"), covermap);
     }
 
-    sprintf(command, "r.stats -an \"%s,%s\"", basemap, covermap);
+    sprintf(input, "input=%s,%s", basemap, covermap);
 
-    /* printf(command); */
-    stats = popen(command, "r");
+    args[0] = "r.stats";
+    args[1] = "-an";
+    args[2] = input;
+    args[3] = NULL;
 
-    sprintf(command, "r.reclass i=\"%s\" o=\"%s\"", basemap, outmap);
+    stats = G_popen_read(&stats_child, "r.stats", args);
 
-    /* printf(command); */
-    reclass = popen(command, "w");
+    sprintf(input, "input=%s", basemap);
+    sprintf(output, "output=%s", outmap);
+
+    args[0] = "r.reclass";
+    args[1] = input;
+    args[2] = output;
+    args[3] = NULL;
+
+    reclass = G_popen_write(&reclass_child, "r.reclass", args);
 
     first = 1;
     while (read_stats(stats, &basecat, &covercat, &value)) {
@@ -120,8 +132,8 @@ int main(int argc, char *argv[])
     }
     write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, &cover_cats));
 
-    pclose(stats);
-    pclose(reclass);
+    G_popen_close(&reclass_child);
+    G_popen_close(&stats_child);
 
-    exit(0);
+    return 0;
 }

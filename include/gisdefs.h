@@ -444,6 +444,12 @@ FILE *G_fopen_modify_misc(const char *, const char *, const char *);
 /* overwrite.c */
 int G_check_overwrite(int argc, char **argv);
 
+/* pager.c */
+FILE *G_open_pager(struct Popen *);
+void G_close_pager(struct Popen *);
+FILE *G_open_mail(struct Popen *);
+void G_close_mail(struct Popen *);
+
 /* parser.c */
 void G_disable_interactive(void);
 struct GModule *G_define_module(void);
@@ -472,6 +478,11 @@ void G_percent_reset(void);
 void G_set_percent_routine(int (*) (int));
 void G_unset_percent_routine(void);
 
+/* popen.c */
+FILE *G_popen_write(struct Popen *, const char *, const char **);
+FILE *G_popen_read(struct Popen *, const char *, const char **);
+void G_popen_close(struct Popen *);
+
 /* plot.c */
 void G_setup_plot(double, double, double, double, int (*)(int, int),
 		  int (*)(int, int));
@@ -487,10 +498,6 @@ void G_plot_fx(double (*)(double), double, double);
 
 /* pole_in_poly.c */
 int G_pole_in_polygon(const double *, const double *, int);
-
-/* popen.c */
-FILE *G_popen(const char *, const char *);
-int G_pclose(FILE *);
 
 /* progrm_nme.c */
 const char *G_program_name(void);

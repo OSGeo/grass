@@ -21,12 +21,16 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-static FILE *fd;
+static FILE *fp;
 static void reclass(CELL, CELL, CELL);
 
 int main(int argc, char *argv[])
 {
-    char buf[GPATH_MAX];
+    char input[GNAME_MAX+8];
+    char output[GNAME_MAX+8];
+    char title[GPATH_MAX];
+    const char *args[5];
+    struct Popen child;
     CELL old_min, old_max;
     CELL new_min, new_max;
     long cat;
@@ -117,29 +121,36 @@ int main(int argc, char *argv[])
     G_message(_("Rescale %s[%d,%d] to %s[%d,%d]"),
 	      old_name, old_min, old_max, new_name, new_min, new_max);
 
-    sprintf(buf, "r.reclass input=\"%s\" output=\"%s\" title=\"",
-	    old_name, new_name);
-    if (parm.title->answer)
-	strcat(buf, parm.title->answer);
-    else {
-	strcat(buf, "rescale of ");
-	strcat(buf, old_name);
-    }
-    strcat(buf, "\"");
+    sprintf(input, "input=%s", old_name);
+    sprintf(output, "output=%s", new_name);
 
-    fd = popen(buf, "w");
-    Rast_cell_stats_histo_eq(&statf, (CELL) old_min, (CELL) old_max,
-			  (CELL) new_min, (CELL) new_max, 0, reclass);
-    if (fd != stdout)
-	pclose(fd);
-    exit(EXIT_SUCCESS);
+    if (parm.title->answer)
+	sprintf(title, "title=%s", parm.title->answer);
+    else
+	sprintf(title, "title=rescale of %s", old_name);
+
+    args[0] = "r.reclass";
+    args[1] = input;
+    args[2] = output;
+    args[3] = title;
+    args[4] = NULL;
+
+    fp = G_popen_write(&child, "r.reclass", args);
+
+    Rast_cell_stats_histo_eq(&statf,
+			     old_min, old_max,
+			     new_min, new_max,
+			     0, reclass);
+    G_popen_close(&child);
+
+    return EXIT_SUCCESS;
 }
 
 static void reclass(CELL cat1, CELL cat2, CELL value)
 {
-    fprintf(fd, "%ld thru %ld = %ld %ld",
+    fprintf(fp, "%ld thru %ld = %ld %ld",
 	    (long)cat1, (long)cat2, (long)value, (long)cat1);
     if (cat1 != cat2)
-	fprintf(fd, " thru %ld", (long)cat2);
-    fprintf(fd, "\n");
+	fprintf(fp, " thru %ld", (long)cat2);
+    fprintf(fp, "\n");
 }
