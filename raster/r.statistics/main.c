@@ -25,25 +25,20 @@
 
 /* modify this table to add new methods */
 struct menu menu[] = {
-    {"diversity", DIV, "diversity of values in specified objects in %%"},
-    {"distribution", DISTRIB,
-     "distribution of values in specified objects in %%"},
-    {"average", AVERAGE, "average of values in specified objects"},
-    {"mode", MODE, "mode of values in specified objects"},
-    {"median", MEDIAN, "median of values in specified objects"},
-    {"avedev", ADEV, "Average deviation of values in specified objects"},
-    {"stddev", SDEV, "Standard deviation of values in specified objects"},
-    {"variance", VARIANC, "Variance of values in specified objects"},
-    {"skewness", SKEWNES, "Skewnes of values in specified objects"},
-    {"kurtosis", KURTOSI, "Kurtosis of values in specified objects"},
-    {"min", MIN, "Minimum of values in specified objects"},
-    {"max", MAX, "Maximum of values in specified objects"},
-    {"sum", SUM, "Sum of values in specified objects"},
-    {0, 0, 0}
+    {"diversity", o_divr,    "Diversity of values in specified objects in %%"},
+    {"average",   o_average, "Average of values in specified objects"},
+    {"mode",      o_mode,    "Mode of values in specified objects"},
+    {"median",    o_median,  "Median of values in specified objects"},
+    {"avedev",    o_adev,    "Average deviation of values in specified objects"},
+    {"stddev",    o_sdev,    "Standard deviation of values in specified objects"},
+    {"variance",  o_var,     "Variance of values in specified objects"},
+    {"skewness",  o_skew,    "Skewnes of values in specified objects"},
+    {"kurtosis",  o_kurt,    "Kurtosis of values in specified objects"},
+    {"min",       o_min,     "Minimum of values in specified objects"},
+    {"max",       o_max,     "Maximum of values in specified objects"},
+    {"sum",       o_sum,     "Sum of values in specified objects"},
+    {NULL,        NULL,      NULL}
 };
-
-/* function prototypes */
-static int is_ok(char *, char *);
 
 int main(int argc, char **argv)
 {
@@ -82,9 +77,8 @@ int main(int argc, char **argv)
     method->options = methods;
 
     outputmap = G_define_standard_option(G_OPT_R_OUTPUT);
-    outputmap->description =
-	_("Resultant raster map (not used with 'distribution')");
-    outputmap->required = NO;
+    outputmap->description = _("Resultant raster map");
+    outputmap->required = YES;
 
     flag_c = G_define_flag();
     flag_c->key = 'c';
@@ -100,10 +94,9 @@ int main(int argc, char **argv)
     if (Rast_map_is_fp(covermap->answer, "") != 0)
 	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
-    if (Rast_read_cats(covermap->answer, "", &cats) < 0) {
+    if (Rast_read_cats(covermap->answer, "", &cats) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s>"),
 		      covermap->answer);
-    }
 
     for (o_method = 0; menu[o_method].name; o_method++)
 	if (strcmp(menu[o_method].name, method->answer) == 0)
@@ -117,88 +110,10 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
     }
 
-    switch (menu[o_method].val) {
-    case DISTRIB:
-	if (outputmap->answer != NULL)
-	    G_warning(_("Output map <%s> ignored"), outputmap->answer);
-
-	o_distrib(basemap->answer, covermap->answer,
-		  outputmap->answer, flag_c->answer);
-	break;
-    case AVERAGE:
-	is_ok(method->answer, outputmap->answer);
-	o_average(basemap->answer, covermap->answer,
-		  outputmap->answer, flag_c->answer, &cats);
-	break;
-    case MODE:
-	is_ok(method->answer, outputmap->answer);
-	o_mode(basemap->answer, covermap->answer,
-	       outputmap->answer, flag_c->answer, &cats);
-	break;
-    case ADEV:
-	is_ok(method->answer, outputmap->answer);
-	o_adev(basemap->answer, covermap->answer,
-	       outputmap->answer, flag_c->answer, &cats);
-	break;
-    case SDEV:
-	is_ok(method->answer, outputmap->answer);
-	o_sdev(basemap->answer, covermap->answer,
-	       outputmap->answer, flag_c->answer, &cats);
-	break;
-    case VARIANC:
-	is_ok(method->answer, outputmap->answer);
-	o_var(basemap->answer, covermap->answer,
-	      outputmap->answer, flag_c->answer, &cats);
-	break;
-    case SKEWNES:
-	is_ok(method->answer, outputmap->answer);
-	o_skew(basemap->answer, covermap->answer,
-	       outputmap->answer, flag_c->answer, &cats);
-	break;
-    case KURTOSI:
-	is_ok(method->answer, outputmap->answer);
-	o_kurt(basemap->answer, covermap->answer,
-	       outputmap->answer, flag_c->answer, &cats);
-	break;
-    case MEDIAN:
-	is_ok(method->answer, outputmap->answer);
-	o_median(basemap->answer, covermap->answer,
-		 outputmap->answer, flag_c->answer, &cats);
-	break;
-    case MIN:
-	is_ok(method->answer, outputmap->answer);
-	o_min(basemap->answer, covermap->answer,
-	      outputmap->answer, flag_c->answer, &cats);
-	break;
-    case MAX:
-	is_ok(method->answer, outputmap->answer);
-	o_max(basemap->answer, covermap->answer,
-	      outputmap->answer, flag_c->answer, &cats);
-	break;
-    case SUM:
-	is_ok(method->answer, outputmap->answer);
-	o_sum(basemap->answer, covermap->answer,
-	      outputmap->answer, flag_c->answer, &cats);
-	break;
-    case DIV:
-	is_ok(method->answer, outputmap->answer);
-	o_divr(basemap->answer, covermap->answer,
-	       outputmap->answer, flag_c->answer, &cats);
-	break;
-
-    default:
-	G_fatal_error(_("Not yet implemented!"));
-    }
+    (*menu[o_method].func)(basemap->answer, covermap->answer,
+			   outputmap->answer,
+			   flag_c->answer, &cats);
 
     return 0;
 }
 
-
-static int is_ok(char *method, char *map)
-{
-    if (map == NULL)
-	G_fatal_error(_("An output raster map needs to be defined with method '%s'"),
-		      method);
-
-    return 0;
-}

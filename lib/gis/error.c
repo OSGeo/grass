@@ -54,7 +54,7 @@ static struct Counter message_id;
 static int print_word(FILE *, char **, int *, const int);
 static void print_sentence(FILE *, const int, const char *);
 static void print_error(const char *, const int);
-static int mail_msg(const char *, int);
+static void mail_msg(const char *, int);
 static int write_error(const char *, int, time_t, const char *);
 static void log_error(const char *, int);
 
@@ -388,23 +388,15 @@ static int write_error(const char *msg, int fatal,
 }
 
 /* Mail a message */
-static int mail_msg(const char *msg, int fatal)
+static void mail_msg(const char *msg, int fatal)
 {
-    FILE *mail;
-    char command[64];
-    const char *user;
+    struct Popen mail;
+    FILE *fp = G_open_mail(&mail);
 
-    user = G_whoami();
-    if (user == 0 || *user == 0)
-	return 1;
+    if (fp)
+	fprintf(fp, "GIS %s: %s\n", fatal ? "ERROR" : "WARNING", msg);
 
-    sprintf(command, "mail '%s'", G_whoami());
-    if ((mail = G_popen(command, "w"))) {
-	fprintf(mail, "GIS %s: %s\n", fatal ? "ERROR" : "WARNING", msg);
-	G_pclose(mail);
-    }
-
-    return 0;
+    G_close_mail(&mail);
 }
 
 /* Print one word, new line if necessary */

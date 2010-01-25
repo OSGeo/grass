@@ -364,6 +364,11 @@ struct Counter {
     int value;
 };
 
+struct Popen {
+    FILE *fp;
+    int pid;
+};
+
 /*============================== Prototypes ================================*/
 
 /* Since there are so many prototypes for the gis library they are stored */

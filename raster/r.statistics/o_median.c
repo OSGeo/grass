@@ -8,28 +8,21 @@
 static long median(struct stats *);
 
 
-int
-o_median(const char *basemap, const char *covermap, const char *outputmap, int usecats,
-	 struct Categories *cats)
+int o_median(const char *basemap, const char *covermap, const char *outputmap,
+	     int usecats, struct Categories *cats)
 {
-    char command[1024];
-    FILE *stats_fd, *reclass_fd;
+    struct Popen stats_child, reclass_child;
+    FILE *stats_fp, *reclass_fp;
     int first;
     long basecat, covercat, catb, catc;
     double area;
     struct stats stats;
 
-
-    sprintf(command, "r.stats -an input=\"%s,%s\" fs=space", basemap,
-	    covermap);
-    stats_fd = popen(command, "r");
-
-
-    sprintf(command, "r.reclass i=\"%s\" o=\"%s\"", basemap, outputmap);
-    reclass_fd = popen(command, "w");
+    stats_fp = run_stats(&stats_child, basemap, covermap, "-an");
+    reclass_fp = run_reclass(&reclass_child, basemap, outputmap);
 
     first = 1;
-    while (read_stats(stats_fd, &basecat, &covercat, &area)) {
+    while (read_stats(stats_fp, &basecat, &covercat, &area)) {
 	if (first) {
 	    stats.n = 0;
 	    stats.nalloc = 16;
@@ -42,7 +35,7 @@ o_median(const char *basemap, const char *covermap, const char *outputmap, int u
 	}
 	if (basecat != catb) {
 	    catc = median(&stats);
-	    write_reclass(reclass_fd, catb, catc, Rast_get_c_cat((CELL *) &catc, cats),
+	    write_reclass(reclass_fp, catb, catc, Rast_get_c_cat((CELL *) &catc, cats),
 			  usecats);
 	    catb = basecat;
 	    stats.n = 0;
@@ -60,13 +53,13 @@ o_median(const char *basemap, const char *covermap, const char *outputmap, int u
     }
     if (!first) {
 	catc = median(&stats);
-	write_reclass(reclass_fd, catb, catc, Rast_get_c_cat((CELL *) &catc, cats), usecats);
+	write_reclass(reclass_fp, catb, catc, Rast_get_c_cat((CELL *) &catc, cats), usecats);
     }
 
-    pclose(stats_fd);
-    pclose(reclass_fd);
+    G_popen_close(&stats_child);
+    G_popen_close(&reclass_child);
 
-    exit(EXIT_SUCCESS);
+    return 0;
 }
 
 

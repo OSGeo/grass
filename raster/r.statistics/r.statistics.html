@@ -13,7 +13,6 @@ identified, which can be done with <em>r.clump</em>.
 
 The available methods are the following (english - german):
 <ul>
-<li>distribution - Verteilung in Prozent</li>
 <li>average - Durchschnitt</li>
 <li>mode - Modalwert</li>
 <li>median - Median</li>
@@ -36,38 +35,10 @@ in raster maps because using category values floating point numbers can be
 stored.
 
 <p>
-All calculations except "distribution" create an output layer.  The output 
+All calculations create an output layer.  The output 
 layer is a reclassified version of the base layer with identical
 category values, but modified category labels - the results of the calculations
 are stored in the category labels of the output layer.
-
-<p>
-For distributions, the output is printed to the user interface (stdout). 
-If an output file name was specified, it will be ignored. The result will 
-be a text table with three columns. 
-In the first column are the category values of the base layer (a), in the second
-column the associated value of the cover layers (b), and in the third column the
-percentage of area in that base layer category (a) that falls into that row's
-value in the cover layer(b). Example:
-
-<div class="code"><pre>
-1   124  23
-1   201  47
-1   273  30
-2   101  5
-2   152  16
-2   167  60
-2   187  19
-     .
-     .
-     .
-</pre></div>
-
-So for the first line in the output above, we see that 23% of the cells of the
-base layer category 1 have a value of 124 in the cover layer.
-
-To transfer the values stored as category labels into cell values,
-<em>r.mapcalc</em> can be used ('@' operator).
 
 <h2>EXAMPLES</h2>
 

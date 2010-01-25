@@ -21,8 +21,12 @@
 
 int main(int argc, char *argv[])
 {
-    char buf[GPATH_MAX];
-    FILE *fd;
+    char input[GNAME_MAX+8];
+    char output[GNAME_MAX+8];
+    char title[GPATH_MAX];
+    const char *args[5];
+    struct Popen child;
+    FILE *fp;
     long old_min, old_max;
     long new_min, new_max;
     long new_delta, old_delta;
@@ -112,17 +116,22 @@ int main(int argc, char *argv[])
     G_message(_("Rescale %s[%ld,%ld] to %s[%ld,%ld]"),
 	      old_name, old_min, old_max, new_name, new_min, new_max);
 
-    sprintf(buf, "r.reclass input=\"%s\" output=\"%s\" title=\"",
-	    old_name, new_name);
-    if (parm.title->answer)
-	strcat(buf, parm.title->answer);
-    else {
-	strcat(buf, "rescale of ");
-	strcat(buf, old_name);
-    }
-    strcat(buf, "\"");
+    sprintf(input, "input=%s", old_name);
+    sprintf(output, "output=%s", new_name);
 
-    fd = popen(buf, "w");
+    if (parm.title->answer)
+	sprintf(title, "title=%s", parm.title->answer);
+    else
+	sprintf(title, "title=rescale of %s", old_name);
+
+    args[0] = "r.reclass";
+    args[1] = input;
+    args[2] = output;
+    args[3] = title;
+    args[4] = NULL;
+
+    fp = G_popen_write(&child, "r.reclass", args);
+
     old_delta = old_max - old_min;
     new_delta = new_max - new_min;
     divisor = (float)new_delta / (float)old_delta;
@@ -132,20 +141,21 @@ int main(int argc, char *argv[])
     for (cat = old_min; cat <= old_max; cat++) {
 	value = (int)(divisor * (cat - old_min) + new_min + .5);
 	if (value != prev) {
-	    fprintf(fd, "%ld thru %ld = %ld %ld", first, cat - 1, prev,
+	    fprintf(fp, "%ld thru %ld = %ld %ld", first, cat - 1, prev,
 		    first);
 	    if (cat - 1 != first)
-		fprintf(fd, " thru %ld", cat - 1);
-	    fprintf(fd, "\n");
+		fprintf(fp, " thru %ld", cat - 1);
+	    fprintf(fp, "\n");
 	    prev = value;
 	    first = cat;
 	}
     }
-    fprintf(fd, "%ld thru %ld = %ld %ld", first, cat - 1, prev, first);
+    fprintf(fp, "%ld thru %ld = %ld %ld", first, cat - 1, prev, first);
     if (cat - 1 != first)
-	fprintf(fd, " thru %ld", cat - 1);
-    fprintf(fd, "\n");
+	fprintf(fp, " thru %ld", cat - 1);
+    fprintf(fp, "\n");
 
-    pclose(fd);
-    exit(EXIT_SUCCESS);
+    G_popen_close(&child);
+
+    return EXIT_SUCCESS;
 }

@@ -28,8 +28,8 @@ static int cmp(const void *, const void *);
 
 int make_coin(void)
 {
-    FILE *fd;
-    FILE *statfd;
+    FILE *fp;
+    FILE *stat_fp;
     struct stats
     {
 	long cat1;
@@ -39,43 +39,48 @@ int make_coin(void)
     } stats;
     int n, n1, n2;
     int reversed;
+    char input[GNAME_MAX*2+8];
+    const char *args[5];
+    struct Popen child;
     char buf[512];
     int count;
 
     G_message(_("Tabulating Coincidence between '%s' and '%s'"),
 	      map1name, map2name);
 
-    sprintf(buf, "r.stats -anrc fs=: input=\"");
-    strcat(buf, map1name);
-    strcat(buf, ",");
-    strcat(buf, map2name);
-    strcat(buf, "\"");
-    statfd = fopen(statname, "w");
-    if (statfd == NULL)
+    sprintf(input, "input=%s,%s", map1name, map2name);
+
+    args[0] = "r.stats";
+    args[1] = "-anrc";
+    args[2] = "fs=:";
+    args[3] = input;
+    args[4] = NULL;
+
+    stat_fp = fopen(statname, "w");
+    if (!stat_fp)
 	G_fatal_error(_("Unable to create any tempfiles"));
 
-    fd = popen(buf, "r");
-    if (fd == NULL)
+    fp = G_popen_read(&child, "r.stats", args);
+    if (!fp)
 	G_fatal_error(_("Unable to run r.stats"));
 
     /* need to find the number of cats in each file */
     count = 0;
-    while (fgets(buf, sizeof buf, fd)) {
+    while (fgets(buf, sizeof buf, fp)) {
 	if (sscanf(buf, "%ld:%ld:%lf:%ld",
 		   &stats.cat1, &stats.cat2, &stats.area, &stats.count) != 4)
-	{
-	    pclose(fd);
 	    G_fatal_error(_("Unexpected output from r.stats"));
-	}
-	fwrite(&stats, sizeof(stats), 1, statfd);
+
+	fwrite(&stats, sizeof(stats), 1, stat_fp);
 	count++;
     }
 
-    pclose(fd);
-    fclose(statfd);
+    G_popen_close(&child);
 
-    statfd = fopen(statname, "r");
-    if (statfd == NULL)
+    fclose(stat_fp);
+
+    stat_fp = fopen(statname, "r");
+    if (!stat_fp)
 	G_fatal_error(_("Unable to open tempfile"));
 
     /* build a sorted list of cats in both maps */
@@ -84,7 +89,7 @@ int make_coin(void)
 
     /* read the statsfile to get the cat lists */
     count = 0;
-    while (fread(&stats, sizeof(stats), 1, statfd)) {
+    while (fread(&stats, sizeof(stats), 1, stat_fp)) {
 	catlist1[count] = stats.cat1;
 	catlist2[count++] = stats.cat2;
     }
@@ -145,8 +150,8 @@ int make_coin(void)
 	    break;
 
     /* now read the statsfile and insert into the table */
-    G_fseek(statfd, 0L, 0);
-    while (fread(&stats, sizeof(stats), 1, statfd)) {
+    G_fseek(stat_fp, 0L, 0);
+    while (fread(&stats, sizeof(stats), 1, stat_fp)) {
 	long z;
 
 	if (reversed) {
@@ -172,7 +177,7 @@ int make_coin(void)
 	table[n].count = stats.count;
 	table[n].area = stats.area;
     }
-    fclose(statfd);
+    fclose(stat_fp);
 
     return 0;
 }

@@ -61,10 +61,6 @@ int I_list_subgroup_simple(const struct Ref *, FILE *);
 /* loc_info.c */
 int I_location_info(char *, const char *);
 
-/* ls_groups.c */
-int I_list_groups(int);
-int I_list_subgroups(const char *, int);
-
 /* points.c */
 int I_new_control_point(struct Control_Points *, double, double, double,
 			double, int);

@@ -5,46 +5,29 @@
 #include <grass/glocale.h>
 #include "method.h"
 
-#define STATS "r.stats"
-#define RECLASS "r.reclass"
-
 /* function prototypes */
 static void sum_out(FILE *, long, double);
 
-
-int
-o_sum(const char *basemap, const char *covermap, const char *outputmap, int usecats,
-      struct Categories *cats)
+int o_sum(const char *basemap, const char *covermap, const char *outputmap,
+	  int usecats, struct Categories *cats)
 {
-    char *me = "o_sum";
-
     long catb, basecat, covercat;
     double x, area, sum1;
     int stat;
-    char *tempfile1, *tempfile2;
-    FILE *fd1, *fd2;
+    struct Popen stats_child, reclass_child;
+    FILE *stats, *reclass;
 
-    tempfile1 = G_tempfile();
-    tempfile2 = G_tempfile();
+    stats = run_stats(&stats_child, basemap, covermap, "-cn");
+    reclass = run_reclass(&reclass_child, basemap, outputmap);
 
-    run_stats(basemap, covermap, "-c", tempfile1);
-
-    fd1 = fopen(tempfile1, "r");
-    fd2 = fopen(tempfile2, "w");
-    if (fd1 == NULL || fd2 == NULL) {
-	unlink(tempfile1);
-	unlink(tempfile2);
-	G_fatal_error(_("%s: unable to open temporary file"), me);
-    }
-    sum_out(fd2, 0L, 0.0);	/* force at least one reclass rule */
+    sum_out(reclass, 0L, 0.0);	/* force at least one reclass rule */
 
     catb = 0;
     sum1 = 0.0;
 
-
-    while (fscanf(fd1, "%ld %ld %lf", &basecat, &covercat, &area) == 3) {
+    while (fscanf(stats, "%ld %ld %lf", &basecat, &covercat, &area) == 3) {
 	if (catb != basecat) {
-	    sum_out(fd2, catb, sum1);
+	    sum_out(reclass, catb, sum1);
 	    sum1 = 0.0;
 	    catb = basecat;
 	}
@@ -56,18 +39,15 @@ o_sum(const char *basemap, const char *covermap, const char *outputmap, int usec
 	/*        fprintf(stderr,"sum: %d\n",(int)sum1); */
 
     }
-    sum_out(fd2, basecat, sum1);
-    fclose(fd1);
-    fclose(fd2);
-    stat = run_reclass(basemap, outputmap, tempfile2);
-    unlink(tempfile1);
-    unlink(tempfile2);
+    sum_out(reclass, basecat, sum1);
 
-    return (stat);
+    G_popen_close(&stats_child);
+    G_popen_close(&reclass_child);
+
+    return stat;
 }
 
-
-static void sum_out(FILE * fd, long cat, double sum1)
+static void sum_out(FILE *fp, long cat, double sum1)
 {
     char buf[64];
 
@@ -78,5 +58,6 @@ static void sum_out(FILE * fd, long cat, double sum1)
 	G_trim_decimal(buf);
     }
 
-    fprintf(fd, "%ld = %ld %s\n", cat, cat, buf);
+    fprintf(fp, "%ld = %ld %s\n", cat, cat, buf);
 }
+

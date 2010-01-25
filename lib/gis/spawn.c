@@ -386,12 +386,17 @@ static int win_spawn(const char *cmd, const char **argv, const char **envp,
 	return -1;
     }
 
+    CloseHandle(pi.hThread);
+
     if (!background) {
 	WaitForSingleObject(pi.hProcess, INFINITE);
 	if (!GetExitCodeProcess(pi.hProcess, &exitcode))
 	    return -1;
+	CloseHandle(pi.hProcess);
 	return (int) exitcode;
     }
+
+    CloseHandle(pi.hProcess);
 
     return pi.dwProcessId;
 }
@@ -932,5 +937,44 @@ int G_spawn(const char *command, ...)
 	NULL);
 
     return status;
+}
+
+int G_wait(int i_pid)
+{
+#ifdef __MINGW32__
+    DWORD rights = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
+    HANDLE hProcess = OpenProcess(rights, FALSE, (DWORD) i_pid);
+    DWORD exitcode;
+
+    if (!hProcess)
+	return -1;
+
+    WaitForSingleObject(hProcess, INFINITE);
+    if (!GetExitCodeProcess(hProcess, &exitcode))
+	exitcode = (DWORD) -1;
+
+    CloseHandle(hProcess);
+
+    return (int) exitcode;
+#else
+    pid_t pid = (pid_t) i_pid;
+    int status = -1;
+    pid_t n;
+
+    do
+	n = waitpid(pid, &status, 0);
+    while (n == (pid_t) - 1 && errno == EINTR);
+
+    if (n != pid)
+	return -1;
+    else {
+	if (WIFEXITED(status))
+	    return WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	    return WTERMSIG(status);
+	else
+	    return -0x100;
+    }
+#endif
 }
 

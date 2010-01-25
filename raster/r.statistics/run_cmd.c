@@ -4,62 +4,49 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <grass/gis.h>
-#include <grass/spawn.h>
 #include "method.h"
 
-void run_stats(const char *basemap, const char *covermap, const char *mode,
-	       const char *tempfile)
+FILE *run_stats(struct Popen *child,
+		const char *basemap, const char *covermap, const char *mode)
 {
-    char buf[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1 + GNAME_MAX + 1 + GMAPSET_MAX + 1];
-    const char *argv[10];
-    int argc = 0;
+    char input[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1 + GNAME_MAX + 1 + GMAPSET_MAX + 1];
+    const char *argv[5];
+    FILE *fp;
 
-    argv[argc++] = "r.stats";
+    sprintf(input, "input=%s,%s", basemap, covermap);
 
-    argv[argc++] = mode;
+    argv[0] = "r.stats";
+    argv[1] = mode;
+    argv[2] = input;
+    argv[3] = "fs=space";
+    argv[4] = NULL;
 
-    argv[argc++] = "-n";
-
-    sprintf(buf, "input=%s,%s", basemap, covermap);
-    argv[argc++] = buf;
-
-    argv[argc++] = "fs=space";
-
-    argv[argc++] = SF_REDIRECT_FILE;
-    argv[argc++] = SF_STDOUT;
-    argv[argc++] = SF_MODE_OUT;
-    argv[argc++] = tempfile;
-
-    argv[argc++] = NULL;
-
-    if (G_vspawn_ex(argv[0], argv) != 0) {
-	remove(tempfile);
+    fp = G_popen_read(child, argv[0], argv);
+    if (!fp)
 	G_fatal_error("error running r.stats");
-    }
+
+    return fp;
 }
 
-int run_reclass(const char *basemap, const char *outputmap, const char *tempfile)
+FILE *run_reclass(struct Popen *child, const char *basemap, const char *outputmap)
 {
-    char buf1[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1];
-    char buf2[7 + GNAME_MAX + 1];
-    const char *argv[8];
-    int argc = 0;
+    char input[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1];
+    char output[7 + GNAME_MAX + 1];
+    const char *argv[4];
+    FILE *fp;
 
-    argv[argc++] = "r.reclass";
+    sprintf(input, "input=%s", basemap);
+    sprintf(output, "output=%s", outputmap);
 
-    sprintf(buf1, "input=%s", basemap);
-    argv[argc++] = buf1;
+    argv[0] = "r.reclass";
+    argv[1] = input;
+    argv[2] = output;
+    argv[3] = NULL;
 
-    sprintf(buf2, "output=%s", outputmap);
-    argv[argc++] = buf2;
+    fp = G_popen_write(child, argv[0], argv);
+    if (!fp)
+	G_fatal_error("error running r.stats");
 
-    argv[argc++] = SF_REDIRECT_FILE;
-    argv[argc++] = SF_STDIN;
-    argv[argc++] = SF_MODE_IN;
-    argv[argc++] = tempfile;
-
-    argv[argc++] = NULL;
-
-    return G_vspawn_ex(argv[0], argv);
+    return fp;
 }
 
