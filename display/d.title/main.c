@@ -21,6 +21,7 @@
 #include <grass/display.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/spawn.h>
 #include <grass/glocale.h>
 
 #include "options.h"
@@ -39,7 +40,6 @@ int main(int argc, char **argv)
     struct Option *opt1, *opt2, *opt3;
     struct Flag *fancy_mode, *simple_mode, *draw;
     char *tmpfile;
-    char command[GPATH_MAX + 12];
     FILE *fp;
 
     /* Initialize the GIS calls */
@@ -126,10 +126,10 @@ int main(int argc, char **argv)
 
 
     if (draw->answer) {
+	char inarg[GPATH_MAX];
 	fclose(fp);
-	sprintf(command, "d.text < \"%s\"", tmpfile);
-	G_debug(3, "cmd = [%s]", command);
-	G_system(command);
+	sprintf(inarg, "input=%s", tmpfile);
+	G_spawn("d.text", "d.text", inarg, NULL);
 	unlink(tmpfile);
 	/* note a tmp file will remain, created by d.text so it can survive d.redraw */
     }

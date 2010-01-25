@@ -685,6 +685,14 @@ static int do_spawn(struct spawn *sp, const char *command)
 
 	if (n != pid)
 	    status = -1;
+	else {
+	    if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	    else if (WIFSIGNALED(status))
+		status = WTERMSIG(status);
+	    else
+		status = -0x100;
+	}
     }
 
     undo_signals(sp->signals, sp->num_signals, SST_POST);

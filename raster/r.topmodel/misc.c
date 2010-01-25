@@ -1,27 +1,8 @@
 #include "global.h"
-
-
-int run(char *cmd)
-{
-    int retval;
-
-
-    if (G_system(cmd)) {
-	G_warning("Subprocess failed");
-	retval = 1;
-    }
-    else {
-	G_verbose_message("Subprocess complete.");
-	retval = 0;
-    }
-
-    return retval;
-}
-
+#include <grass/spawn.h>
 
 void gregion(void)
 {
-    char buf[GPATH_MAX];
     char *hdmap;
 
     hdmap = NULL;
@@ -36,29 +17,34 @@ void gregion(void)
     }
 
     if (hdmap) {
-	sprintf(buf, "g.region rast=%s --quiet", hdmap);
-	G_verbose_message("%s ...", buf);
+	char buf[GPATH_MAX];
 
-	if (run(buf))
-	    exit(1);
+	sprintf(buf, "rast=%s", hdmap);
+
+	G_verbose_message("g.region %s ...", buf);
+
+	if (G_spawn("g.region", "g.region", "--quiet", buf, NULL) != 0)
+	    G_fatal_error("g.region failed");
     }
 }
 
 
 void depressionless(void)
 {
-    char buf[GPATH_MAX];
+    char input[GPATH_MAX];
+    char elev[GPATH_MAX];
+    char dir[GPATH_MAX];
 
-    sprintf(buf, "r.fill.dir input=%s elev=%s dir=%s type=grass --quiet",
-	    map.elev, map.fill, map.dir);
-    G_verbose_message("%s ...", buf);
+    sprintf(input, "input=%s", map.elev);
+    sprintf(elev, "elev=%s", map.fill);
+    sprintf(dir, "dir=%s", map.dir);
 
-    if (run(buf))
-	exit(1);
+    G_verbose_message("r.fill.dir %s %s %s", input, elev, dir);
+
+    if (G_spawn("r.fill.dir", "r.fill.dir", "--quiet", input, elev, dir, NULL) != 0)
+	G_fatal_error("r.fill.dir failed");
 
     map.elev = map.fill;
-
-    return;
 }
 
 
@@ -66,37 +52,40 @@ void basin_elevation(void)
 {
     char buf[GPATH_MAX];
 
-    sprintf(buf, "r.mapcalc expression=\"%s = if(%s == 0 || isnull(%s), null(), %s)\" --quiet",
+    sprintf(buf, "expression=%s = if(%s == 0 || isnull(%s), null(), %s)",
 	    map.belev, map.basin, map.basin, map.elev);
-    G_verbose_message("%s ...", buf);
+    G_verbose_message("r.mapcalc \"%s\" ...", buf);
 
-    if (run(buf))
-	exit(1);
-
-    return;
+    if (G_spawn("r.mapcalc", "r.mapcalc", "--quiet", buf, NULL) != 0)
+	G_fatal_error("r.mapcalc failed");
 }
 
 
 void top_index(void)
 {
-    char buf[GPATH_MAX];
-    if (map.belev) {
-	sprintf(buf, "r.topidx input=%s output=%s --quiet",
-		map.belev, map.topidx);
-	G_verbose_message("%s ...", buf);
+    char input[GPATH_MAX];
+    char output[GPATH_MAX];
+    char nsteps[32];
 
-	if (run(buf))
-	    exit(1);
+    if (map.belev) {
+	sprintf(input, "input=%s", map.belev);
+	sprintf(output, "output=%s", map.topidx);
+
+	G_verbose_message("r.topidx %s %s ...", input, output);
+
+	if (G_spawn("r.topidx", "r.topidx", "--quiet", input, output, NULL) != 0)
+	    G_fatal_error("r.topidx failed");
     }
 
     if (map.topidx) {
-	sprintf(buf, "r.stats -Anc input=%s nsteps=%d output=\"%s\"",
-		map.topidx, misc.nidxclass, file.idxstats);
-	G_verbose_message("%s ...", buf);
+	sprintf(input, "input=%s", map.topidx);
+	sprintf(input, "nsteps=%d", misc.nidxclass);
+	sprintf(output, "output=%s", file.idxstats);
 
-	if (run(buf))
-	    exit(1);
+	G_verbose_message("r.stats -Anc %s %s %s ...", input, nsteps, output);
+
+	if (G_spawn("r.stats", "r.stats", "-Anc", input, nsteps, output, NULL) != 0)
+	    G_fatal_error("r.stats failed");
     }
-
-    return;
 }
+

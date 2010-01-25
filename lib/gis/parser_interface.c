@@ -12,7 +12,35 @@
  * \author Soeren Gebbert added Dec. 2009 WPS process_description document
  */
 
+#include <grass/config.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <stdarg.h>
+#include <sys/types.h>
+
+#if defined(HAVE_LANGINFO_H)
+#include <langinfo.h>
+#endif
+#if defined(__MINGW32__) && defined(USE_NLS)
+#include <localcharset.h>
+#endif
+#ifdef HAVE_ICONV_H
+#include <iconv.h>
+#endif
+
+#include <grass/gis.h>
+#include <grass/glocale.h>
+#include <grass/spawn.h>
+
 #include "parser_local_proto.h"
+
+#ifdef HAVE_ICONV_H
+static const char *src_enc;
+#endif
 
 /*!
  * \brief Formats text for XML.
@@ -20,8 +48,30 @@
  * \param[in,out] fp file to write to
  * \param str string to write
  */
-static void print_escaped_for_xml(FILE * fp, const char *str)
+static void print_escaped_for_xml(FILE *fp, const char *str)
 {
+#ifdef HAVE_ICONV_H
+    iconv_t conv = iconv_open("UTF-8", src_enc);
+    char *enc = NULL;
+
+    if (conv != (iconv_t) -1)
+    {
+	char *src = (char *) str;
+	size_t srclen = strlen(src);
+	size_t dstlen = srclen * 4 + 1;
+	char *dst = G__alloca(dstlen);
+	size_t ret;
+
+	enc = dst;
+
+	ret = iconv(conv, (char **)&src, &srclen, &dst, &dstlen);
+	if (ret != (size_t) -1 && srclen == 0) {
+	    str = enc;
+	    *dst = '\0';
+	}
+    }
+#endif
+
     for (; *str; str++) {
 	switch (*str) {
 	case '&':
@@ -37,6 +87,14 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
 	    fputc(*str, fp);
 	}
     }
+
+#ifdef HAVE_ICONV_H
+    if (enc)
+	G__freea(enc);
+
+    if (conv != (iconv_t) -1)
+	iconv_close(conv);
+#endif
 }
 
 /*!
@@ -49,7 +107,7 @@ void G__usage_xml(void)
     char *type;
     char *s, *top;
     int i;
-    char *encoding;
+    const char *encoding;
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
@@ -58,15 +116,15 @@ void G__usage_xml(void)
 
 #if defined(HAVE_LANGINFO_H)
     encoding = nl_langinfo(CODESET);
-    if (!encoding || strlen(encoding) == 0) {
-	encoding = "UTF-8";
-    }
 #elif defined(__MINGW32__) && defined(USE_NLS)
     encoding = locale_charset();
-    if (!encoding || strlen(encoding) == 0) {
+#endif
+
+    if (!encoding || strlen(encoding) == 0)
 	encoding = "UTF-8";
-    }
-#else
+
+#ifdef HAVE_ICONV_H
+    src_enc = encoding;
     encoding = "UTF-8";
 #endif
 
@@ -265,7 +323,7 @@ void G__usage_xml(void)
 	fprintf(stdout, "\t<flag name=\"%s\">\n", "overwrite");
 	fprintf(stdout, "\t\t<description>\n\t\t\t");
 	print_escaped_for_xml(stdout,
-			      "Allow output files to overwrite existing files");
+			      _("Allow output files to overwrite existing files"));
 	fprintf(stdout, "\n\t\t</description>\n");
 	fprintf(stdout, "\t</flag>\n");
     }
@@ -273,14 +331,14 @@ void G__usage_xml(void)
     /* verbose */
     fprintf(stdout, "\t<flag name=\"%s\">\n", "verbose");
     fprintf(stdout, "\t\t<description>\n\t\t\t");
-    print_escaped_for_xml(stdout, "Verbose module output");
+    print_escaped_for_xml(stdout, _("Verbose module output"));
     fprintf(stdout, "\n\t\t</description>\n");
     fprintf(stdout, "\t</flag>\n");
 
     /* quiet */
     fprintf(stdout, "\t<flag name=\"%s\">\n", "quiet");
     fprintf(stdout, "\t\t<description>\n\t\t\t");
-    print_escaped_for_xml(stdout, "Quiet module output");
+    print_escaped_for_xml(stdout, _("Quiet module output"));
     fprintf(stdout, "\n\t\t</description>\n");
     fprintf(stdout, "\t</flag>\n");
 
