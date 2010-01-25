@@ -28,7 +28,6 @@ int check_names(void);
 int check_io(void);
 
 /* misc.c */
-int run(char *buf);
 void gregion(void);
 void depressionless(void);
 void basin_elevation(void);

@@ -326,16 +326,11 @@ void write_params(char *mpfilename, char *yfiles[], char *outfile,
 /*******************************************************/
 void clean_files(char *file, char *files[], int num)
 {
-    char cmd[1000];
     int i;
 
-    sprintf(cmd, "\\rm %s", file);
-    G_system(cmd);
-
-    for (i = 0; i < num; i++) {
-	sprintf(cmd, "\\rm %s", files[i]);
-	G_system(cmd);
-    }
+    remove(file);
+    for (i = 0; i < num; i++)
+	remove(files[i]);
 }
 
 /*******************************************************/

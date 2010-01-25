@@ -41,6 +41,7 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/spawn.h>
 #include <grass/glocale.h>
 
 #include "rom_proto.h"
@@ -66,11 +67,26 @@ int frames;
 /* function prototypes */
 static int load_files(void);
 static int use_r_out(void);
-static char **gee_wildfiles(char *wildarg, char *element, int *num);
+static char **gee_wildfiles(const char *wildarg, const char *element, int *num);
 static void parse_command(struct Option **viewopts,
 			  char *vfiles[MAXVIEWS][MAXIMAGES],
 			  int *numviews, int *numframes);
 
+static int check_encoder(const char *encoder)
+{
+    int status, prev;
+
+    prev = G_suppress_warnings(1);
+
+    status = G_spawn_ex(
+	encoder, encoder,
+	SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, "/dev/null",
+	NULL);
+
+    G_suppress_warnings(prev);
+
+    return status >= 0 && status != 127;
+}
 
 int main(int argc, char **argv)
 {
@@ -150,9 +166,9 @@ int main(int argc, char **argv)
 	strcpy(outfile, "gmovie.mpg");
 
     /* find a working encoder */
-    if (256 == G_system("ppmtompeg 2> /dev/null"))
+    if (check_encoder("ppmtompeg"))
 	encoder = "ppmtompeg";
-    else if (256 == G_system("mpeg_encode 2> /dev/null"))
+    else if (check_encoder("mpeg_encode"))
 	encoder = "mpeg_encode";
     else
 	G_fatal_error(_("Either mpeg_encode or ppmtompeg must be installed"));
@@ -233,8 +249,9 @@ static int load_files(void)
     char *pr, *pg, *pb;
     unsigned char *tr, *tg, *tb, *tset;
     char *mpfilename, *name;
-    char cmd[1000], *yfiles[MAXIMAGES];
+    char *yfiles[MAXIMAGES];
     struct Colors colors;
+    int ret;
 
     size = nrows * ncols;
 
@@ -324,15 +341,17 @@ static int load_files(void)
     }
 
     mpfilename = G_tempfile();
-    write_params(mpfilename, yfiles, outfile, cnt, quality, y_rows, y_cols,
-		 0);
+    write_params(mpfilename, yfiles, outfile, cnt, quality, y_rows, y_cols, 0);
 
     if (quiet)
-	sprintf(cmd, "%s %s 2> /dev/null > /dev/null", encoder, mpfilename);
+	ret = G_spawn(encoder, encoder, mpfilename,
+		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, "/dev/null",
+		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, "/dev/null",
+		      NULL);
     else
-	sprintf(cmd, "%s %s", encoder, mpfilename);
+	ret = G_spawn(encoder, encoder, mpfilename, NULL);
 
-    if (0 != G_system(cmd))
+    if (ret != 0)
 	G_warning(_("mpeg_encode ERROR"));
 
     clean_files(mpfilename, yfiles, cnt);
@@ -349,20 +368,23 @@ static int load_files(void)
     return (cnt);
 }
 
-
 static int use_r_out(void)
 {
-    char *mpfilename, cmd[1000];
+    char *mpfilename;
+    int ret;
 
     mpfilename = G_tempfile();
     write_params(mpfilename, vfiles[0], outfile, frames, quality, 0, 0, 1);
 
     if (quiet)
-	sprintf(cmd, "%s %s 2> /dev/null > /dev/null", encoder, mpfilename);
+	ret = G_spawn(encoder, encoder, mpfilename,
+		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, "/dev/null",
+		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, "/dev/null",
+		      NULL);
     else
-	sprintf(cmd, "%s %s", encoder, mpfilename);
+	ret = G_spawn(encoder, encoder, mpfilename, NULL);
 
-    if (0 != G_system(cmd))
+    if (ret != 0)
 	G_warning(_("mpeg_encode ERROR"));
 
     clean_files(mpfilename, NULL, 0);
@@ -370,59 +392,83 @@ static int use_r_out(void)
     return (1);
 }
 
-
 /* ###################################################### */
-static char **gee_wildfiles(char *wildarg, char *element, int *num)
+
+static void mlist(const char *element, const char *wildarg, const char *outfile)
 {
-    int n, cnt = 0;
-    char path[GPATH_MAX], cmd[GPATH_MAX], buf[512];
+    int n;
     const char *mapset;
-    char *p, *tfile;
-    static char *newfiles[MAXIMAGES];
-    FILE *tf;
 
-    *num = 0;
-    tfile = G_tempfile();
-
-    /* build list of filenames */
     for (n = 0; (mapset = G__mapset_name(n)); n++) {
+	char type_arg[GNAME_MAX];
+	char pattern_arg[GNAME_MAX];
+	char mapset_arg[GMAPSET_MAX];
+
 	if (strcmp(mapset, ".") == 0)
 	    mapset = G_mapset();
 
-	G__file_name(path, element, "", mapset);
-	if (access(path, 0) == 0) {
-	    sprintf(cmd, "cd %s; \\ls %s >> %s 2> /dev/null",
-		    path, wildarg, tfile);
-	    G_system(cmd);
-	}
+	sprintf(type_arg, "type=%s", element);
+	sprintf(pattern_arg, "pattern=%s", wildarg);
+	sprintf(mapset_arg, "mapset=%s", mapset);
+
+	G_spawn_ex("g.mlist", "g.mlist",
+		   type_arg, pattern_arg, mapset_arg,
+		   SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_APPEND, outfile,
+		   NULL);
     }
-
-    if (NULL == (tf = fopen(tfile, "r")))
-	G_warning(_("Error reading wildcard"));
-    else {
-	while (NULL != fgets(buf, 512, tf)) {
-	    /* replace newline with null */
-	    if ((p = strchr(buf, '\n')))
-		*p = '\0';
-	    /* replace first space with null */
-	    else if ((p = strchr(buf, ' ')))
-		*p = '\0';
-
-	    if (strlen(buf) > 1)
-		newfiles[cnt++] = G_store(buf);
-	}
-
-	fclose(tf);
-    }
-
-    *num = cnt;
-    sprintf(cmd, "\\rm %s", tfile);
-    G_system(cmd);
-    G_free(tfile);
-
-    return (newfiles);
 }
 
+static char **parse(const char *filename, int *num)
+{
+    char buf[GNAME_MAX];
+    char **files = NULL;
+    int max_files = 0;
+    int num_files = 0;
+    FILE *fp;
+
+    fp = fopen(filename, "r");
+    if (!fp)
+	G_fatal_error(_("Error reading wildcard"));
+
+    while (fgets(buf, sizeof(buf), fp)) {
+	char *p = strchr(buf, '\n');
+	if (p)
+	    *p = '\0';
+
+	if (!*buf)
+	    continue;
+
+	if (num_files >= max_files) {
+	    max_files += 50;
+	    files = (char **) G_realloc((void *) files,
+					max_files * sizeof(char *));
+	}
+
+	files[num_files++] = G_store(buf);
+    }
+
+    fclose(fp);
+
+    *num = num_files;
+
+    return files;
+}
+
+static char **gee_wildfiles(const char *wildarg, const char *element, int *num)
+{
+    char *tfile;
+    char **files;
+
+    tfile = G_tempfile();
+
+    mlist(element, wildarg, tfile);
+    files = parse(tfile, num);
+
+    remove(tfile);
+    G_free(tfile);
+
+    return files;
+}
 
 /********************************************************************/
 static void parse_command(struct Option **viewopts,
@@ -444,7 +490,7 @@ static void parse_command(struct Option **viewopts,
 		    (NULL != strchr(viewopts[i]->answers[j], '?')) ||
 		    (NULL != strchr(viewopts[i]->answers[j], '['))) {
 		    char **wildfiles = gee_wildfiles(viewopts[i]->answers[j],
-						     "cell", &wildnum);
+						     "rast", &wildnum);
 
 		    for (k = 0; k < wildnum; k++)
 			vfiles[i][numi++] = wildfiles[k];

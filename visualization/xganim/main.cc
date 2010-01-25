@@ -31,6 +31,7 @@
 extern "C" {
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/spawn.h>
 #include <grass/glocale.h>
 }
 
@@ -40,9 +41,10 @@ extern "C" {
 #define DEF_MIN 600
 #define BORDER_W    2
 
-static char **gee_wildfiles(char *wildarg, char *element, int *num);
+static char **gee_wildfiles(const char *wildarg, const char *element, int *num);
 static void parse_command(
-    struct Option **viewopts, char *vfiles[MAXVIEWS][MAXIMAGES],
+    struct Option **viewopts,
+    char *vfiles[MAXVIEWS][MAXIMAGES],
     int *numviews, int *numframes);
 
 struct Option *viewopts[MAXVIEWS];
@@ -354,60 +356,85 @@ void MyApp::do_run(wxIdleEvent &ev)
     }
 }
 
-
 /* ###################################################### */
 
-char **gee_wildfiles(char *wildarg, char *element, int *num)
+static void mlist(const char *element, const char *wildarg, const char *outfile)
 {
-    int n, cnt = 0;
-    char path[GPATH_MAX], cmd[GPATH_MAX], buf[512];
+    int n;
     const char *mapset;
-    char *p, *tfile;
-    static char *newfiles[MAXIMAGES];
-    FILE *tf;
 
-    *num = 0;
-    tfile = G_tempfile();
-
-    /* build list of filenames */
     for (n = 0; (mapset = G__mapset_name(n)); n++) {
+	char type_arg[GNAME_MAX];
+	char pattern_arg[GNAME_MAX];
+	char mapset_arg[GMAPSET_MAX];
+
 	if (strcmp(mapset, ".") == 0)
 	    mapset = G_mapset();
 
-	G__file_name(path, element, "", mapset);
-	if (access(path, 0) == 0) {
-	    sprintf(cmd, "cd %s; \\ls %s >> %s 2> /dev/null", path, wildarg,
-		    tfile);
-	    system(cmd);
-	}
+	sprintf(type_arg, "type=%s", element);
+	sprintf(pattern_arg, "pattern=%s", wildarg);
+	sprintf(mapset_arg, "mapset=%s", mapset);
+
+	G_spawn_ex("g.mlist", "g.mlist",
+		   type_arg, pattern_arg, mapset_arg,
+		   SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_APPEND, outfile,
+		   NULL);
     }
-
-    if (NULL == (tf = fopen(tfile, "r")))
-	G_warning(_("Error reading wildcard"));
-    else {
-	while (NULL != fgets(buf, 512, tf)) {
-	    /* replace newline with null */
-	    if ((p = strchr(buf, '\n')))
-		*p = '\0';
-	    /* replace first space with null */
-	    else if ((p = strchr(buf, ' ')))
-		*p = '\0';
-
-	    if (strlen(buf) > 1) {
-		newfiles[cnt++] = G_store(buf);
-	    }
-	}
-	fclose(tf);
-    }
-    *num = cnt;
-    G_free(tfile);
-
-    return (newfiles);
 }
 
+static char **parse(const char *filename, int *num)
+{
+    char buf[GNAME_MAX];
+    char **files = NULL;
+    int max_files = 0;
+    int num_files = 0;
+    FILE *fp;
 
-/********************************************************************/
-void parse_command(struct Option **viewopts,
+    fp = fopen(filename, "r");
+    if (!fp)
+	G_fatal_error(_("Error reading wildcard"));
+
+    while (fgets(buf, sizeof(buf), fp)) {
+	char *p = strchr(buf, '\n');
+	if (p)
+	    *p = '\0';
+
+	if (!*buf)
+	    continue;
+
+	if (num_files >= max_files) {
+	    max_files += 50;
+	    files = (char **) G_realloc((void *) files,
+					max_files * sizeof(char *));
+	}
+
+	files[num_files++] = G_store(buf);
+    }
+
+    fclose(fp);
+
+    *num = num_files;
+
+    return files;
+}
+
+static char **gee_wildfiles(const char *wildarg, const char *element, int *num)
+{
+    char *tfile;
+    char **files;
+
+    tfile = G_tempfile();
+
+    mlist(element, wildarg, tfile);
+    files = parse(tfile, num);
+
+    remove(tfile);
+    G_free(tfile);
+
+    return files;
+}
+
+static void parse_command(struct Option **viewopts,
 			  char *vfiles[MAXVIEWS][MAXIMAGES],
 			  int *numviews, int *numframes)
 {
@@ -426,7 +453,7 @@ void parse_command(struct Option **viewopts,
 		    (NULL != strchr(viewopts[i]->answers[j], '?')) ||
 		    (NULL != strchr(viewopts[i]->answers[j], '['))) {
 		    char **wildfiles = gee_wildfiles(viewopts[i]->answers[j],
-						     "cell", &wildnum);
+						     "rast", &wildnum);
 
 		    for (k = 0; k < wildnum; k++)
 			vfiles[i][numi++] = wildfiles[k];
@@ -440,6 +467,8 @@ void parse_command(struct Option **viewopts,
 	}
     }
 }
+
+/********************************************************************/
 
 IMPLEMENT_APP_NO_MAIN(MyApp)
 
