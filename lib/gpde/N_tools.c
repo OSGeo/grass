@@ -16,9 +16,9 @@
 *
 *****************************************************************************/
 
-#include "grass/N_pde.h"
-#include "grass/glocale.h"
 #include <math.h>
+#include <grass/N_pde.h>
+#include <grass/glocale.h>
 
 
 /*!

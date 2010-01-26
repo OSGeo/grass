@@ -18,7 +18,7 @@
 
 
 #include <math.h>
-#include "grass/N_pde.h"
+#include <grass/N_pde.h>
 
 /* local protos */
 static int make_les_entry_2d(int i, int j, int offset_i, int offset_j,

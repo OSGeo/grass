@@ -20,9 +20,9 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include "grass/gis.h"
-#include "grass/glocale.h"
-#include "grass/gmath.h"
+#include <grass/gis.h>
+#include <grass/gmath.h>
+#include <grass/glocale.h>
 
 #define TINY 1.0e-20
 #define COMP_PIVOT 100
