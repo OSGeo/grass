@@ -21,8 +21,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "grass/gmath.h"
 #include <grass/gis.h>
+#include <grass/gmath.h>
 
 
 /*!

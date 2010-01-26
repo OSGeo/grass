@@ -17,7 +17,7 @@
 *****************************************************************************/
 
 #include <math.h>
-#include "grass/N_pde.h"
+#include <grass/N_pde.h>
 
 
 /*! \brief full upwinding stabilization algorithm
