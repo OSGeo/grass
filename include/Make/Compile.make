@@ -9,7 +9,9 @@ linker_c = $(call linker_x,$(CC))
 linker_cxx = $(call linker_x,$(CXX))
 linker = $(call linker_x,$(LINK))
 
-compiler_x = $(1) $(2) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -o $@ -c $<
+ALL_CFLAGS = $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC)
+
+compiler_x = $(1) $(2) $(ALL_CFLAGS) -o $@ -c $<
 compiler_c = $(call compiler_x,$(CC),$(COMPILE_FLAGS_C) $($*_c_FLAGS))
 compiler_cxx = $(call compiler_x,$(CXX),$(COMPILE_FLAGS_CXX) $($*_cc_FLAGS) $($*_cpp_FLAGS) $($*_cxx_FLAGS))
 compiler = $(call compiler_x,$(CC))
@@ -30,3 +32,8 @@ $(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
 
 %.output %.tab.h %.tab.c: %.y
 	$(YACC) -b$* $(YFLAGS) $<
+
+depend: $(C_SOURCES) $(CC_SOURCES) $(CPP_SOURCES)
+	-$(CC) -E -MM -MG $(ALL_CFLAGS) $^ | sed 's!^[0-9a-zA-Z_.-]*\.o:!$$(OBJDIR)/&!' > $(DEPFILE)
+
+-include $(DEPFILE)
