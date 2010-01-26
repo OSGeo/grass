@@ -59,7 +59,7 @@ default:
 	@echo "Started compilation: `date`"  >> $(ERRORLOG)
 	@echo "--"                           >> $(ERRORLOG)
 	@echo "Errors in:"                   >> $(ERRORLOG)
-	chmod 755 install-sh
+	-$(CHMOD) 755 install-sh
 	$(MAKE) subdirs
 	$(MAKE) $(FILES_DST)
 	$(MAKE) $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
