@@ -25,11 +25,11 @@
 #endif
 
 static const char COPYING[] =
-#include "copying.h"
+#include <grass/copying.h>
 ;
 
 static const char GRASS_CONFIGURE_PARAMS[] =
-#include "confparms.h"
+#include <grass/confparms.h>
 ;
 
 int main(int argc, char *argv[])
