@@ -1,69 +1,19 @@
-GRASS_VERSION_MAJOR=7
-GRASS_VERSION_MINOR=0
-CC=gcc
-CFLAGS=-g -Wall -pedantic -Werror-implicit-function-declaration -fno-common
-CLIBS=
+MODULE_TOPDIR = ..
 
-SRCS =  at_exit_funcs.c \
-	error.c \
-	tools.c \
-	reg_deps.c \
-	reg_entries.c \
-	reg_html.c \
-	actions.c \
-	main.c
+include $(MODULE_TOPDIR)/include/Make/Other.make
+include $(MODULE_TOPDIR)/include/Make/Compile.make
 
-HDRS =	globals.h \
-	at_exit_funcs.h \
-	error.h \
-	tools.h \
-	reg_deps.h \
-	reg_entries.h \
-	reg_html.h \
-	actions.h
+GEM = gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
-OBJS =	at_exit_funcs.o \
-	error.o \
-	tools.o \
-	reg_deps.o \
-	reg_entries.o \
-	reg_html.o \
-	actions.o \
-	main.o
+default: $(ARCH_BINDIR)/$(GEM)$(EXE)
 
-GEM = gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)$(EXE)
+$(ARCH_BINDIR)/$(GEM)$(EXE): $(ARCH_OBJS)
+	$(CC) $(LDFLAGS) $(EXTRA_LDFLAGS) -o $@ $(filter %.o,$^) $(FMODE_OBJ) $(LIBES) $(EXTRA_LIBS)
 
-default: $(GEM)
+install: $(UNIX_BIN)/$(GEM)$(EXE)
 
-$(GEM): $(SRCS) $(HDRS) $(OBJS)
-	$(CC) $(OBJS) -o $@ $(CFLAGS) $(CLIBS) $(LDFLAGS)
-
-%.o: %.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
-
-at_exit_funcs.o: at_exit_funcs.h globals.h
-
-error.o: error.h globals.h
-
-tools.o: tools.h globals.h
-
-reg_deps.o: reg_deps.h globals.h
-
-reg_entries.o: reg_entries.h globals.h
-
-reg_html.o: reg_html.h globals.h
-
-actions.o: actions.h globals.h
-
-main.o:	globals.h
-
-install: $(UNIX_BIN)/$(GEM)
-
-$(UNIX_BIN)/$(GEM): $(GEM)
+$(UNIX_BIN)/$(GEM)$(EXE): $(ARCH_BINDIR)/$(GEM)$(EXE)
 	$(INSTALL)  $< $@
-	strip $@
-
-clean:
-	-rm -f *.o *.bak core *~ $(GEM)
+	-strip $@
 
 .PHONY: install
