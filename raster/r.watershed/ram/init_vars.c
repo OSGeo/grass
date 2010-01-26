@@ -10,8 +10,8 @@ int ele_round(double);
 int init_vars(int argc, char *argv[])
 {
     int r, c;
-    CELL *buf, alt_value, wat_value, asp_value, block_value;
-    DCELL dvalue;
+    CELL *buf, alt_value, asp_value, block_value;
+    DCELL dvalue, wat_value;
     void *elebuf, *ptr;
     int fd, ele_map_type;
     size_t ele_size;
@@ -132,6 +132,12 @@ int init_vars(int argc, char *argv[])
 
     alt =
 	(CELL *) G_malloc(sizeof(CELL) * size_array(&alt_seg, nrows, ncols));
+    wat =
+	(DCELL *) G_malloc(sizeof(DCELL) *
+			   size_array(&wat_seg, nrows, ncols));
+    asp =
+	(CELL *) G_malloc(size_array(&asp_seg, nrows, ncols) * sizeof(CELL));
+
     if (er_flag) {
 	r_h =
 	    (CELL *) G_malloc(sizeof(CELL) * size_array(&r_h_seg, nrows, ncols));
@@ -152,6 +158,7 @@ int init_vars(int argc, char *argv[])
 	ele_scale = 1000; 	/* should be enough to do the trick */
 
     /* read elevation input and mark NULL/masked cells */
+    /* intialize accumulation and drainage direction */
     MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
@@ -170,6 +177,7 @@ int init_vars(int argc, char *argv[])
 		FLAG_SET(worked, r, c);
 		FLAG_SET(in_list, r, c);
 		Rast_set_c_null_value(&alt_value, 1);
+		Rast_set_d_null_value(&wat_value, 1);
 		do_points--;
 	    }
 	    else {
@@ -186,8 +194,11 @@ int init_vars(int argc, char *argv[])
 		    dvalue *= ele_scale;
 		    alt_value = ele_round(dvalue);
 		}
+		wat_value = 1.0;
 	    }
 	    alt[seg_idx] = alt_value;
+	    wat[seg_idx] = wat_value;
+	    asp[seg_idx] = 0;
 	    if (er_flag) {
 		r_h[seg_idx] = alt_value;
 	    }
@@ -199,14 +210,9 @@ int init_vars(int argc, char *argv[])
     if (do_points < nrows * ncols)
 	MASK_flag = 1;
 
-    /* initialize flow accumulation ... */
-    wat =
-	(DCELL *) G_malloc(sizeof(DCELL) *
-			   size_array(&wat_seg, nrows, ncols));
-
+    /* read flow accumulation from input map flow: amount of overland flow per cell */
     buf = Rast_allocate_c_buf();
     if (run_flag) {
-	/* ... with input map flow: amount of overland flow per cell */
 	fd = Rast_open_old(run_name, "");
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row(fd, buf, r);
@@ -224,22 +230,6 @@ int init_vars(int argc, char *argv[])
 	}
 	Rast_close(fd);
     }
-    else {
-	/* ... with 1.0 */
-	for (r = 0; r < nrows; r++) {
-	    for (c = 0; c < ncols; c++) {
-		if (MASK_flag) {
-		    block_value = FLAG_GET(worked, r, c);
-		    if (!block_value)
-			wat[SEG_INDEX(wat_seg, r, c)] = 1.0;
-		}
-		else
-		    wat[SEG_INDEX(wat_seg, r, c)] = 1.0;
-	    }
-	}
-    }
-    asp =
-	(CELL *) G_malloc(size_array(&asp_seg, nrows, ncols) * sizeof(CELL));
 
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
