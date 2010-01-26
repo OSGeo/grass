@@ -15,17 +15,19 @@ subdirs:
 	    $(MAKE) -C $$subdir || echo $(CURDIR)/$$subdir >> $(ERRORLOG) ; \
 	done
 
-cleansubdirs:
+%-recursive:
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
-	    $(MAKE) -C $$subdir clean; \
+	    $(MAKE) -C $$subdir $*; \
 	done
 
-clean: cleansubdirs
+clean: clean-recursive
+
+depend: depend-recursive
 
 htmldir: html
 
-.PHONY: subdirs cleansubdirs parsubdirs htmldir $(SUBDIRS)
+.PHONY: subdirs parsubdirs htmldir $(SUBDIRS)
 
 parsubdirs: $(SUBDIRS)
 

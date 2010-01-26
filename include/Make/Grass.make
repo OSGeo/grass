@@ -100,6 +100,8 @@ HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/tools/g.html2man.py
 GDAL_LINK = $(USE_GDAL)
 GDAL_DYNAMIC = 1
 
+DEPFILE = depend.mk
+
 ##################### library switches ##################################
 
 libs = \

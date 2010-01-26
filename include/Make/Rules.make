@@ -39,7 +39,7 @@ run_grass = \
 # default clean rules
 clean:
 	-rm -rf $(OBJDIR) $(EXTRA_CLEAN_DIRS)
-	-rm -f $(EXTRA_CLEAN_FILES) *.tab.[ch] *.yy.c *.output *.backup *.tmp.html *.pyc
+	-rm -f $(EXTRA_CLEAN_FILES) *.tab.[ch] *.yy.c *.output *.backup *.tmp.html *.pyc $(DEPFILE)
 	-if [ "$(CLEAN_SUBDIRS)" != "" ] ; then \
 		list='$(CLEAN_SUBDIRS)' ; \
 		for dir in $$list ; do \
@@ -47,3 +47,6 @@ clean:
 		done ; \
 	fi
 
+depend:
+
+.PHONY: clean depend
