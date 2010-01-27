@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
     const char *value;
     const char *name;
     const char *mapset;
-    const char *err;
     char **rast_ptr, **vect_ptr;
 
     struct GModule *module;
@@ -396,9 +395,7 @@ int main(int argc, char *argv[])
 	mapset = G_find_file2("windows", name, "");
 	if (!mapset)
 	    G_fatal_error(_("Region <%s> not found"), name);
-	if (G__get_window(&window, "windows", name, mapset) != NULL)
-	    G_fatal_error(_("Unable to read region <%s> in <%s>"), name,
-			  mapset);
+	G__get_window(&window, "windows", name, mapset);
     }
 
     /* 3dview= */
@@ -786,19 +783,18 @@ int main(int argc, char *argv[])
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	Rast_get_cellhd(name, mapset, &temp_window);
-	if ((err = G_align_window(&window, &temp_window)))
-	    G_fatal_error(_("Raster map <%s@%s>: %s"), name, mapset, err);
+	G_align_window(&window, &temp_window);
     }
 
     /* save= */
     if ((name = parm.save->answer)) {
 	G_copy(&temp_window, &window, sizeof(window));
-	adjust_window(&temp_window, 0, 0, 0);
+	G_adjust_Cell_head3(&temp_window, 0, 0, 0);
 	if (G__put_window(&temp_window, "windows", name) < 0)
 	    G_fatal_error(_("Unable to set region <%s>"), name);
     }
 
-    adjust_window(&window, row_flag, col_flag, 0);
+    G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
     if (set_flag) {
 	if (G_put_window(&window) < 0)
 	    G_fatal_error(_("Unable to update current region"));

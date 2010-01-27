@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
     float *pval_f;		/* for misc use */
     double *pval_d;		/* for misc use */
     char c;			/* for misc use */
-    const char *err;
 
     char map_name[65], map_title[1024];	/* 65 = 64 + null-terminator */
     double map_name_d[1024];	/* I'm not sure why you'd save char strings as double, but whatever */
@@ -389,9 +388,7 @@ int main(int argc, char *argv[])
 
     region.proj = G_projection();
     region.zone = G_zone();
-    err = G_adjust_Cell_head(&region, 1, 1);
-    if (err)
-	G_fatal_error(err);
+    G_adjust_Cell_head(&region, 1, 1);
     Rast_set_window(&region);
 
     G_verbose_message("");

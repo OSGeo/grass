@@ -87,7 +87,6 @@ int gethead(FILE * fd,
     int n, s, e, w, r, c;
     char label[100], value[100];
     char buf[1024];
-    const char *err;
     int ret, len;
 
     /* rsb fix */
@@ -221,10 +220,7 @@ int gethead(FILE * fd,
 	}
     }
 
-    if ((err = G_adjust_Cell_head(cellhd, 1, 1))) {
-	G_warning(err);
-	return 0;
-    }
+    G_adjust_Cell_head(cellhd, 1, 1);
 
     return 1;
 }

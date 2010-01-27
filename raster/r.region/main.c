@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd, window;
     const char *value;
     const char *name;
-    const char *err;
 
     struct GModule *module;
     struct
@@ -163,10 +162,8 @@ int main(int argc, char *argv[])
     if (flag.cur->answer)
 	G_get_window(&window);
 
-    if ((name = parm.region->answer)) {	/* region= */
-	if (G__get_window(&window, "windows", name, "") != NULL)
-	    G_fatal_error(_("Unable to read region <%s>"), name);
-    }
+    if ((name = parm.region->answer))	/* region= */
+	G__get_window(&window, "windows", name, "");
 
     if ((name = parm.view->answer)) {	/* 3dview= */
 	struct G_3dview v;
@@ -311,15 +308,13 @@ int main(int argc, char *argv[])
 
 	Rast_get_cellhd(name, "", &temp_window);
 
-	if ((err = G_align_window(&window, &temp_window)))
-	    G_fatal_error("%s: %s", name, err);
+	G_align_window(&window, &temp_window);
     }
 
     window.rows = cellhd.rows;
     window.cols = cellhd.cols;
 
-    if ((err = G_adjust_Cell_head(&window, 1, 1)))
-	G_fatal_error(_("Invalid region: %s"), err);
+    G_adjust_Cell_head(&window, 1, 1);
 
     cellhd.north = window.north;
     cellhd.south = window.south;

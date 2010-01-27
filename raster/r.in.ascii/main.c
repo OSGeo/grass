@@ -189,8 +189,7 @@ int main(int argc, char *argv[])
 
     nrows = cellhd.rows;
     ncols = cellhd.cols;
-    if (Rast_set_window(&cellhd) < 0)
-	G_fatal_error(_("Can't set window"));
+    Rast_set_window(&cellhd);
 
     if (nrows != G_window_rows())
 	G_fatal_error(_("OOPS: rows changed from %d to %d"), nrows,

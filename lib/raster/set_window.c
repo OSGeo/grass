@@ -23,15 +23,11 @@
  * Any opened cell files has its file-to-window mapping reworked.
  *
  * \param window window to become operative window
- * 
- * \return -1 on error
- * \return  1 on success
  */
-int Rast_set_window(struct Cell_head *window)
+void Rast_set_window(struct Cell_head *window)
 {
     int i;
     int maskfd;
-    const char *err;
 
     Rast__init();
 
@@ -41,10 +37,7 @@ int Rast_set_window(struct Cell_head *window)
        window = &twindow;
      */
 
-    if ((err = G_adjust_Cell_head(window, 0, 0))) {
-	G_warning("Rast_set_window(): %s", err);
-	return -1;
-    }
+    G_adjust_Cell_head(window, 0, 0);
 
     /* except for MASK, cell files open for read must have same projection
      * and zone as new window
@@ -57,11 +50,9 @@ int Rast_set_window(struct Cell_head *window)
 	    if (fcb->cellhd.zone == window->zone &&
 		fcb->cellhd.proj == window->proj)
 		continue;
-	    if (i != maskfd) {
-		G_warning(_("Rast_set_window(): projection/zone differs from that of "
-			   "currently open raster maps"));
-		return -1;
-	    }
+	    if (i != maskfd)
+		G_fatal_error(_("Rast_set_window(): projection/zone differs from that of "
+				"currently open raster maps"));
 	}
     }
 
@@ -122,6 +113,4 @@ int Rast_set_window(struct Cell_head *window)
 
     /* we want the number of bytes per cell to be maximum
        so that there is enough memory for reading and writing rows */
-
-    return 1;
 }

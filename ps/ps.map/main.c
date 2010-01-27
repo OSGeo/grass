@@ -288,8 +288,7 @@ int main(int argc, char *argv[])
 
     /* set current window */
     G_get_set_window(&PS.w);
-    if (Rast_set_window(&PS.w) == -1)
-	G_fatal_error(_("Current region cannot be set."));
+    Rast_set_window(&PS.w);
 
     while (1) {
 	char *key;

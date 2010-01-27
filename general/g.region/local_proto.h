@@ -12,9 +12,6 @@
 #define PRINT_NANGLE 0x100
 #define PRINT_GMT    0x200
 
-/* adjust.c */
-void adjust_window(struct Cell_head *, int, int, int);
-
 /* zoom.c */
 int zoom(struct Cell_head *, const char *, const char *);
 

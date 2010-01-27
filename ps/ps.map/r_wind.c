@@ -29,11 +29,7 @@ int read_wind(char *name, char *mapset)
 
     sprintf(fullname, "%s in %s", name, mapset);
 
-    if (G__get_window(&window, "windows", name, mapset) != NULL) {
-	error(fullname, "", "can't read region definition file");
-	gobble_input();
-	return 0;
-    }
+    G__get_window(&window, "windows", name, mapset);
 
     width = 1.;
     color_R = color_G = color_B = 0;

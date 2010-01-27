@@ -46,7 +46,7 @@ static struct state *st = &state;
 
 void G_get_window(struct Cell_head *window)
 {
-    const char *regvar, *err;
+    const char *regvar;
 
     if (G_is_initialized(&st->initialized)) {
 	*window = st->dbwindow;
@@ -58,20 +58,16 @@ void G_get_window(struct Cell_head *window)
 
     if (regvar) {
 	char **tokens = G_tokenize(regvar, ";");
-	err = G__read_Cell_head_array(tokens, &st->dbwindow, 0);
+	G__read_Cell_head_array(tokens, &st->dbwindow, 0);
 	G_free_tokens(tokens);
     }
     else {
 	char *wind = getenv("WIND_OVERRIDE");
 	if (wind)
-	    err = G__get_window(&st->dbwindow, "windows", wind, G_mapset());
+	    G__get_window(&st->dbwindow, "windows", wind, G_mapset());
 	else
-	    err = G__get_window(&st->dbwindow, "", "WIND", G_mapset());
+	    G__get_window(&st->dbwindow, "", "WIND", G_mapset());
     }
-
-    if (err)
-	G_fatal_error(_("Region for current mapset %s. "
-			"Run \"g.region\" to fix the current region."), err);
 
     *window = st->dbwindow;
 
@@ -97,10 +93,7 @@ void G_get_window(struct Cell_head *window)
 
 void G_get_default_window(struct Cell_head *window)
 {
-    const char *err = G__get_window(window, "", "DEFAULT_WIND", "PERMANENT");
-
-    if (err)
-	G_fatal_error(_("Default region %s"), err);
+    G__get_window(window, "", "DEFAULT_WIND", "PERMANENT");
 }
 
 /*!
@@ -114,29 +107,19 @@ void G_get_default_window(struct Cell_head *window)
   \return string on error
   \return NULL on success
 */
-char *G__get_window(struct Cell_head *window,
-		    const char *element, const char *name, const char *mapset)
+void G__get_window(struct Cell_head *window,
+		   const char *element, const char *name, const char *mapset)
 {
     FILE *fp;
-    char *err;
 
     G_zero(window, sizeof(struct Cell_head));
 
     /* Read from file */
     fp = G_fopen_old(element, name, mapset);
     if (!fp)
-	return G_store(_("is not set"));
+	G_fatal_error(_("Unable to open element file <%s> for <%s@%s>"),
+			element, name, mapset);
 
-    err = G__read_Cell_head(fp, window, 0);
+    G__read_Cell_head(fp, window, 0);
     fclose(fp);
-
-    if (err) {
-	char msg[1024];
-
-	sprintf(msg, _("is invalid\n%s"), err);
-	G_free(err);
-	return G_store(msg);
-    }
-
-    return NULL;
 }
