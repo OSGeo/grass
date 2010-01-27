@@ -47,7 +47,6 @@ int G__make_location(const char *location_name,
 		     struct Key_Value *proj_units, FILE * report_file)
 {
     char path[GPATH_MAX];
-    int out_stat;
 
     /* Try to create the location directory, under the gisdbase. */
     sprintf(path, "%s/%s", G_gisdbase(), location_name);
@@ -70,16 +69,12 @@ int G__make_location(const char *location_name,
     /* Write out the PROJ_INFO, and PROJ_UNITS if available. */
     if (proj_info != NULL) {
 	G__file_name(path, "", "PROJ_INFO", "PERMANENT");
-	G_write_key_value_file(path, proj_info, &out_stat);
-	if (out_stat != 0)
-	    return -2;
+	G_write_key_value_file(path, proj_info);
     }
 
     if (proj_units != NULL) {
 	G__file_name(path, "", "PROJ_UNITS", "PERMANENT");
-	G_write_key_value_file(path, proj_units, &out_stat);
-	if (out_stat != 0)
-	    return -2;
+	G_write_key_value_file(path, proj_units);
     }
 
     return 0;

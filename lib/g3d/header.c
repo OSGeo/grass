@@ -119,7 +119,6 @@ G3d_readHeader(G3D_Map * map, int *proj, int *zone, double *north,
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
-    int status;
 
     G3d_filename(path, G3D_HEADER_ELEMENT, map->fileName, map->mapset);
     if (access(path, R_OK) != 0) {
@@ -127,11 +126,7 @@ G3d_readHeader(G3D_Map * map, int *proj, int *zone, double *north,
 	return 0;
     }
 
-    headerKeys = G_read_key_value_file(path, &status);
-    if (status != 0) {
-	G3d_error("G3d_readHeader: Unable to open %s", path);
-	return 0;
-    }
+    headerKeys = G_read_key_value_file(path);
 
     if (!G3d_readWriteHeader(headerKeys, 1,
 			     proj, zone,
@@ -162,7 +157,6 @@ G3d_writeHeader(G3D_Map * map, int proj, int zone, double north, double south,
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
-    int status;
 
     headerKeys = G_create_key_value();
 
@@ -182,15 +176,11 @@ G3d_writeHeader(G3D_Map * map, int proj, int zone, double north, double south,
 
     G3d_filename(path, G3D_HEADER_ELEMENT, map->fileName, map->mapset);
     G3d_makeMapsetMapDirectory(map->fileName);
-    G_write_key_value_file(path, headerKeys, &status);
+    G_write_key_value_file(path, headerKeys);
 
     G_free_key_value(headerKeys);
 
-    if (status == 0)
-	return 1;
-
-    G3d_error("G3d_writeHeader: error writing header file %s", path);
-    return 0;
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/

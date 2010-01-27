@@ -66,7 +66,7 @@ static int get_ellipsoid_parameters(struct Key_Value *, double *, double *);
  */
 int G_get_ellipsoid_parameters(double *a, double *e2)
 {
-    int in_stat, stat;
+    int stat;
     char ipath[GPATH_MAX];
     struct Key_Value *proj_keys;
 
@@ -80,12 +80,7 @@ int G_get_ellipsoid_parameters(double *a, double *e2)
 	return 0;
     }
 
-    proj_keys = G_read_key_value_file(ipath, &in_stat);
-
-    if (in_stat != 0) {
-	G_fatal_error(_("Unable to open file %s in <%s>"),
-		      PROJECTION_FILE, PERMANENT);
-    }
+    proj_keys = G_read_key_value_file(ipath);
 
     stat = get_ellipsoid_parameters(proj_keys, a, e2);
 
