@@ -98,8 +98,7 @@ static void adjust_region (char *name, const char *mapset)
 
     Rast_get_cellhd(name, mapset, &iimg_head);
 
-    if(Rast_set_window(&iimg_head) < 0) 
-	G_fatal_error (_("Invalid graphics region coordinates"));
+    Rast_set_window(&iimg_head);
 }
 
 

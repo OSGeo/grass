@@ -35,10 +35,9 @@
  * \param ref pointer to Cell_head
  *
  * \return NULL on success
- * \return Pointer to an error string on failure
  */
 
-const char *G_align_window(struct Cell_head *window, const struct Cell_head *ref)
+void G_align_window(struct Cell_head *window, const struct Cell_head *ref)
 {
     int preserve;
 
@@ -71,5 +70,5 @@ const char *G_align_window(struct Cell_head *window, const struct Cell_head *ref
 		window->east -= window->ew_res;
     }
 
-    return G_adjust_Cell_head(window, 0, 0);
+    G_adjust_Cell_head(window, 0, 0);
 }

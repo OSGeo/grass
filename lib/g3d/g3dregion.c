@@ -152,12 +152,9 @@ G3d_regionFromToCellHead(struct Cell_head *region2d, G3D_Region * region3d)
 void G3d_adjustRegion(G3D_Region * region)
 {
     struct Cell_head region2d;
-    const char *err;
 
     G3d_regionToCellHead(region, &region2d);
-    if ((err = G_adjust_Cell_head3(&region2d, 1, 1, 1)) != NULL) {
-	G_fatal_error("G3d_adjustRegion: %s", err);
-    }
+    G_adjust_Cell_head3(&region2d, 1, 1, 1);
     G3d_regionFromToCellHead(&region2d, region);
 
     if (region->depths <= 0)
@@ -181,12 +178,9 @@ void G3d_adjustRegion(G3D_Region * region)
 void G3d_adjustRegionRes(G3D_Region * region)
 {
     struct Cell_head region2d;
-    const char *err;
 
     G3d_regionToCellHead(region, &region2d);
-    if ((err = G_adjust_Cell_head3(&region2d, 1, 1, 1)) != NULL) {
-	G_fatal_error("G3d_adjustRegionRes: %s", err);
-    }
+    G_adjust_Cell_head3(&region2d, 1, 1, 1);
     G3d_regionFromToCellHead(&region2d, region);
 
     if (region->tb_res <= 0)

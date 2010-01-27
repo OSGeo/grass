@@ -194,8 +194,7 @@ void write_density_file(void)
     struct Colors colors;
     CELL val1, val2;
 
-    if (Rast_set_window(&region) < 0)
-	G_fatal_error(_("Cannot reset current region"));
+    Rast_set_window(&region);
 
     G_message(_("Writing density file"));
     dsfd = Rast_open_new(parm.dsout, DCELL_TYPE);

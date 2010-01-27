@@ -20,7 +20,6 @@ int gethead(FILE * fd, struct Cell_head *cellhd, int *missingval)
     int nodata, res, s, w, r, c;
     char label[100], value[100];
     char buf[1024];
-    const char *err;
 
     s = nodata = res = w = r = c = 0;
 
@@ -98,10 +97,7 @@ int gethead(FILE * fd, struct Cell_head *cellhd, int *missingval)
 	return 0;
     }
 
-    if (err = G_adjust_Cell_head(cellhd, 1, 1)) {
-	G_warning(err);
-	return 0;
-    }
+    G_adjust_Cell_head(cellhd, 1, 1);
 
     return 1;
 }

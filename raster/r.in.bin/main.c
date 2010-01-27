@@ -226,7 +226,6 @@ int main(int argc, char *argv[])
     struct GRD_HEADER header;
     int row;
     struct History history;
-    const char *err;
     off_t expected;
 
     G_gisinit(argv[0]);
@@ -459,8 +458,7 @@ int main(int argc, char *argv[])
     }
 
     /* Adjust Cell Header to New Values */
-    if (err = G_adjust_Cell_head(&cellhd, 1, 1))
-	G_fatal_error("%s", err);
+    G_adjust_Cell_head(&cellhd, 1, 1);
 
     if (cellhd.proj == PROJECTION_LL && cellhd.ew_res / cellhd.ns_res > 10.)
 	/* TODO: find a reasonable value */
@@ -473,8 +471,7 @@ int main(int argc, char *argv[])
     grass_nrows = nrows = cellhd.rows;
     grass_ncols = ncols = cellhd.cols;
 
-    if (Rast_set_window(&cellhd) < 0)
-	G_fatal_error(_("Unable to set window"));
+    Rast_set_window(&cellhd);
 
     if (grass_nrows != G_window_rows())
 	G_fatal_error("rows changed from %d to %d",

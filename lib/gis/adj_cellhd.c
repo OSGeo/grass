@@ -36,25 +36,24 @@
  * \param col_flag compute e-w resolution
 
  * \return NULL on success
- * \return localized text string on error
  */
-const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
+void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    return (_("Illegal n-s resolution value"));
+	    G_fatal_error(_("Illegal n-s resolution value"));
     }
     else {
 	if (cellhd->rows <= 0)
-	    return (_("Illegal row value"));
+	    G_fatal_error(_("Illegal row value"));
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
-	    return (_("Illegal e-w resolution value"));
+	    G_fatal_error(_("Illegal e-w resolution value"));
     }
     else {
 	if (cellhd->cols <= 0)
-	    return (_("Illegal col value"));
+	    G_fatal_error(_("Illegal col value"));
     }
 
     /* for lat/lon, check north,south. force east larger than west */
@@ -79,7 +78,7 @@ const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_f
 		cellhd->north = 90.0;
 	    }
 	    else
-		return (_("Illegal latitude for North"));
+		G_fatal_error(_("Illegal latitude for North"));
 	}
 
 	if (cellhd->south < -90.0) {
@@ -90,7 +89,7 @@ const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_f
 		cellhd->south = -90.0;
 	    }
 	    else
-		return (_("Illegal latitude for South"));
+		G_fatal_error(_("Illegal latitude for South"));
 	}
 
 #if 0
@@ -126,12 +125,12 @@ const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_f
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
 	if (cellhd->proj == PROJECTION_LL)
-	    return (_("North must be north of South"));
+	    G_fatal_error(_("North must be north of South"));
 	else
-	    return (_("North must be larger than South"));
+	    G_fatal_error(_("North must be larger than South"));
     }
     if (cellhd->east <= cellhd->west)
-	return (_("East must be larger than West"));
+	G_fatal_error(_("East must be larger than West"));
 
     /* compute rows and columns, if not set */
     if (!row_flag) {
@@ -150,15 +149,13 @@ const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_f
     }
 
     if (cellhd->cols < 0 || cellhd->rows < 0) {
-	return (_("Invalid coordinates"));
+	G_fatal_error(_("Invalid coordinates"));
     }
 
 
     /* (re)compute the resolutions */
     cellhd->ns_res = (cellhd->north - cellhd->south) / cellhd->rows;
     cellhd->ew_res = (cellhd->east - cellhd->west) / cellhd->cols;
-
-    return NULL;
 }
 
 /*!
@@ -186,42 +183,41 @@ const char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_f
  * \param depth_flag compute t-b resolution
  *
  * \return NULL on success
- * \return localized text string on error
  */
-const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
-				int col_flag, int depth_flag)
+void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
+			 int col_flag, int depth_flag)
 {
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    return (_("Illegal n-s resolution value"));
+	    G_fatal_error(_("Illegal n-s resolution value"));
 	if (cellhd->ns_res3 <= 0)
-	    return (_("Illegal n-s3 resolution value"));
+	    G_fatal_error(_("Illegal n-s3 resolution value"));
     }
     else {
 	if (cellhd->rows <= 0)
-	    return (_("Illegal row value"));
+	    G_fatal_error(_("Illegal row value"));
 	if (cellhd->rows3 <= 0)
-	    return (_("Illegal row3 value"));
+	    G_fatal_error(_("Illegal row3 value"));
     }
     if (!col_flag) {
 	if (cellhd->ew_res <= 0)
-	    return (_("Illegal e-w resolution value"));
+	    G_fatal_error(_("Illegal e-w resolution value"));
 	if (cellhd->ew_res3 <= 0)
-	    return (_("Illegal e-w3 resolution value"));
+	    G_fatal_error(_("Illegal e-w3 resolution value"));
     }
     else {
 	if (cellhd->cols <= 0)
-	    return (_("Illegal col value"));
+	    G_fatal_error(_("Illegal col value"));
 	if (cellhd->cols3 <= 0)
-	    return (_("Illegal col3 value"));
+	    G_fatal_error(_("Illegal col3 value"));
     }
     if (!depth_flag) {
 	if (cellhd->tb_res <= 0)
-	    return (_("Illegal t-b3 resolution value"));
+	    G_fatal_error(_("Illegal t-b3 resolution value"));
     }
     else {
 	if (cellhd->depths <= 0)
-	    return (_("Illegal depths value"));
+	    G_fatal_error(_("Illegal depths value"));
     }
 
     /* for lat/lon, check north,south. force east larger than west */
@@ -246,7 +242,7 @@ const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 		cellhd->north = 90.0;
 	    }
 	    else
-		return (_("Illegal latitude for North"));
+		G_fatal_error(_("Illegal latitude for North"));
 	}
 
 	if (cellhd->south < -90.0) {
@@ -257,7 +253,7 @@ const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 		cellhd->south = -90.0;
 	    }
 	    else
-		return (_("Illegal latitude for South"));
+		G_fatal_error(_("Illegal latitude for South"));
 	}
 
 #if 0
@@ -293,14 +289,14 @@ const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
 	if (cellhd->proj == PROJECTION_LL)
-	    return (_("North must be north of South"));
+	    G_fatal_error(_("North must be north of South"));
 	else
-	    return (_("North must be larger than South"));
+	    G_fatal_error(_("North must be larger than South"));
     }
     if (cellhd->east <= cellhd->west)
-	return (_("East must be larger than West"));
+	G_fatal_error(_("East must be larger than West"));
     if (cellhd->top <= cellhd->bottom)
-	return (_("Top must be larger than Bottom"));
+	G_fatal_error(_("Top must be larger than Bottom"));
 
 
     /* compute rows and columns, if not set */
@@ -342,7 +338,7 @@ const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 
     if (cellhd->cols < 0 || cellhd->rows < 0 || cellhd->cols3 < 0 ||
 	cellhd->rows3 < 0 || cellhd->depths < 0) {
-	return (_("Invalid coordinates"));
+	G_fatal_error(_("Invalid coordinates"));
     }
 
     /* (re)compute the resolutions */
@@ -351,6 +347,4 @@ const char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
     cellhd->ew_res = (cellhd->east - cellhd->west) / cellhd->cols;
     cellhd->ew_res3 = (cellhd->east - cellhd->west) / cellhd->cols3;
     cellhd->tb_res = (cellhd->top - cellhd->bottom) / cellhd->depths;
-
-    return NULL;
 }

@@ -162,7 +162,7 @@ int read_text(char *east, char *north, char *text)
 		width = 1.;
 		error(key, data, "illegal width request");
 	    }
-	    if (t1 && t1[0] == 'i')
+	    if (t1[0] == 'i')
 		width = width / 72.0;
 	    continue;
 	}
@@ -174,7 +174,7 @@ int read_text(char *east, char *north, char *text)
 		hwidth = 0.;
 		error(key, data, "illegal width request");
 	    }
-	    if (t1 && t1[0] == 'i')
+	    if (t1[0] == 'i')
 		hwidth = hwidth / 72.0;
 	    continue;
 	}

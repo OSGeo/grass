@@ -463,8 +463,7 @@ int main(int argc, char *argv[])
 	n100 = ceil(n / 100.);
 	m100 = ceil(m / 100.);
 
-	if (Rast_set_window(&new_cellhd) == -1)
-	    exit(EXIT_FAILURE);
+	Rast_set_window(&new_cellhd);
     }
 
     struct Key_Value *in_proj_info, *in_unit_info;
@@ -501,20 +500,7 @@ int main(int argc, char *argv[])
 	      (int)(wbufferZone / stepx), (int)(sbufferZone / stepy),
 	      (int)(nbufferZone / stepy));
 
-    if (bufferZone > 0.) {
-	/* Set the region window back to the original */
-	if (Rast_set_window(&cellhd) == -1)
-	    exit(EXIT_FAILURE);
-    }
-
-    /* sorry, I've moved OUTGR() to calculate() - into the loop */
-    /*      if(isMode(WHOLE_RASTER))
-       {
-       OUTGR(cellhd.rows,cellhd.cols);
-       }
-     */
-    if (Rast_set_window(&cellhd) == -1)
-	exit(EXIT_FAILURE);
+    Rast_set_window(&cellhd);
 
     exit(EXIT_SUCCESS);
 }
@@ -601,8 +587,7 @@ int OUTGR(int numrows, int numcols)
     int fd1 = 0;
     int i, iarc, j;
 
-    if (Rast_set_window(&cellhd) < 0)
-	exit(EXIT_FAILURE);
+    Rast_set_window(&cellhd);
 
     if (horizon != NULL) {
 	cell1 = Rast_allocate_f_buf();
@@ -1239,10 +1224,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	    }
 
 	    /* return back the buffered region */
-	    if (bufferZone > 0.) {
-		if (Rast_set_window(&new_cellhd) == -1)
-		    exit(0);
-	    }
+	    if (bufferZone > 0.)
+		Rast_set_window(&new_cellhd);
 
 	    /* write metadata */
 	    Rast_short_history(shad_filename, "raster", &history);

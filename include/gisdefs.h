@@ -47,11 +47,11 @@
 #include <sys/types.h>
 
 /* adj_cellhd.c */
-const char *G_adjust_Cell_head(struct Cell_head *, int, int);
-const char *G_adjust_Cell_head3(struct Cell_head *, int, int, int);
+void G_adjust_Cell_head(struct Cell_head *, int, int);
+void G_adjust_Cell_head3(struct Cell_head *, int, int, int);
 
 /* align_window.c */
-const char *G_align_window(struct Cell_head *, const struct Cell_head *);
+void G_align_window(struct Cell_head *, const struct Cell_head *);
 
 /* alloc.c */
 #define G_incr_void_ptr(ptr, size) \
@@ -264,8 +264,8 @@ struct Key_Value *G_get_projinfo(void);
 /* get_window.c */
 void G_get_window(struct Cell_head *);
 void G_get_default_window(struct Cell_head *);
-char *G__get_window(struct Cell_head *, const char *, const char *,
-		    const char *);
+void G__get_window(struct Cell_head *, const char *, const char *,
+		   const char *);
 
 /* getl.c */
 int G_getl(char *, int, FILE *);
@@ -531,8 +531,8 @@ double G_transverse_radius_of_curvature(double, double, double);
 double G_radius_of_conformal_tangent_sphere(double, double, double);
 
 /* rd_cellhd.c */
-char *G__read_Cell_head(FILE *, struct Cell_head *, int);
-char *G__read_Cell_head_array(char **, struct Cell_head *, int);
+void G__read_Cell_head(FILE *, struct Cell_head *, int);
+void G__read_Cell_head_array(char **, struct Cell_head *, int);
 
 /* remove.c */
 int G_remove(const char *, const char *);
@@ -556,7 +556,7 @@ void G_fseek(FILE *, off_t, int);
 
 /* set_window.c */
 void G_get_set_window(struct Cell_head *);
-int G_set_window(struct Cell_head *);
+void G_set_window(struct Cell_head *);
 
 /* short_way.c */
 void G_shortest_way(double *, double *);

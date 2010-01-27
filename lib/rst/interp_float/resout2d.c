@@ -58,10 +58,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
     /* change region to output cell file region */
     G_verbose_message(_("Temporarily changing the region to desired resolution..."));
-    if (Rast_set_window(outhd) < 0) {
-	G_warning(_("Unable to set region"));
-	return -1;
-    }
+    Rast_set_window(outhd);
     mapset = G_mapset();
 
     cell1 = Rast_allocate_f_buf();
@@ -481,10 +478,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
 /* change region to initial region */
     G_verbose_message(_("Changing the region back to initial..."));
-    if (Rast_set_window(winhd) < 0) {
-	G_warning(_("Unable to set region"));
-	return -1;
-    }
+    Rast_set_window(winhd);
 
     return 1;
 }

@@ -451,8 +451,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     /*      Set the active window to match the available data.              */
     /* -------------------------------------------------------------------- */
-    if (Rast_set_window(&cellhd) < 0)
-	exit(EXIT_FAILURE);
+    Rast_set_window(&cellhd);
 
     /* -------------------------------------------------------------------- */
     /*      Do we want to generate a simple raster, or an imagery group?    */

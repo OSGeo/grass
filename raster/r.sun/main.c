@@ -1157,9 +1157,7 @@ int OUTGR(void)
 	fd12 = Rast_open_fp_new(glob_rad);
     }
 
-
-    if (Rast_set_window(&cellhd) < 0)
-	G_fatal_error("Cannot set region to output region!");
+    Rast_set_window(&cellhd);
 
     if (m != G_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d", m, G_window_rows());

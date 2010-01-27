@@ -93,8 +93,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	return -1;
     }
 
-    if (Rast_set_window(cellhd) < 0)
-	return -1;
+    Rast_set_window(cellhd);
 
     if (nrows != G_window_rows()) {
 	G_warning(_("Rows changed from %d to %d"), nrows,
