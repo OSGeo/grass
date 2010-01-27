@@ -80,7 +80,7 @@ def main():
 	to = options['qvector'],
 	column = options['column'],
 	to_column = options['qcolumn'],
-	upload = to_attr,
+	upload = "to_attr",
 	dmax = options['dmax'],
 	from_layer = options['layer'],
 	to_layer = options['qlayer '])
