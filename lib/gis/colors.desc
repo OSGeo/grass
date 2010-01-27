@@ -18,6 +18,7 @@ grey255: grey scale for raster values between 0-255
 grey.eq: histogram-equalized grey scale
 grey.log: histogram logarithmic transformed grey scale
 gyr: green through yellow to red
+haxby: relative colors for bathymetry or topography
 ndvi: Normalized Difference Vegetation Index colors
 population: color table covering human population classification breaks
 precipitation: precipitation color table (0..2000mm)
