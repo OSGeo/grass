@@ -4,12 +4,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/raster.h>
 /* #include <grass/site.h> */
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 
 #include <grass/waterglobs.h>
-
+#include <grass/glocale.h>
 
 int output_data(int tt, double ft)
 {
@@ -156,8 +157,7 @@ int output_data(int tt, double ft)
     }
 
 
-    if (Rast_set_window(&cellhd) < 0)
-	exit(3);
+    Rast_set_window(&cellhd);
 
     if (my != G_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
@@ -625,8 +625,7 @@ int output_et()
     }
 
 
-    if (Rast_set_window(&cellhd) < 0)
-	G_fatal_error("Rast_set_window");
+    Rast_set_window(&cellhd);
 
     if (my != G_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
