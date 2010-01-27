@@ -137,7 +137,6 @@ except ImportError:
 
 # globals
 
-Region = grass.region()
 Command = None
 InputData = None
 Variogram = None
@@ -419,4 +418,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         sys.exit(main(argv = grass.parser()))
     else:
+        Region = grass.region()
         main()
