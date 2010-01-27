@@ -45,9 +45,11 @@ FOR /F "usebackq delims==" %%i IN (`"%WINGISBASE%\etc\winlocale"`) DO @set LANG=
 set GRASS_PAGER=more
 if "%GRASS_WISH%"=="" set GRASS_WISH=wish.exe
 if "%GRASS_SH%"=="" set GRASS_SH=c:\msys\1.0\bin\sh.exe
+
 rem Should do something with "assoc .html" and ftype here but would require
 rem a new g.manual.bat too so leaving it like this for now...
 if "%GRASS_HTML_BROWSER%"=="" set GRASS_HTML_BROWSER=%SYSTEMDRIVE%/PROGRA~1/INTERN~1/IEXPLORE.EXE
+
 if "%GRASS_PROJSHARE%"=="" set GRASS_PROJSHARE=CONFIG_PROJSHARE
 
 rem Add python scripts to the PATHEXT variable

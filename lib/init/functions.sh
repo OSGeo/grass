@@ -745,15 +745,19 @@ bash_startup()
 
 default_startup()
 {
-    PS1="GRASS $GRASS_VERSION ($LOCATION_NAME):\w > "
-    export PS1
-
     if [ "$MINGW" ] ; then
+	GRASS_MAJOR_VERSION=`echo "$GRASS_VERSION" | cut -f1 -d.`
+	PS1="GRASS $GRASS_MAJOR_VERSION> "
+	export PS1
+
 	# "$ETC/run" doesn't work at all???
-        "$SHELL"
+	"$SHELL"
 	rm -rf "$LOCATION/.tmp"/*  # remove GUI session files from .tmp
     else
-    	"$ETC/run" "$SHELL"
+	PS1="GRASS $GRASS_VERSION ($LOCATION_NAME):\w > "
+	export PS1
+
+	"$ETC/run" "$SHELL"
 	EXIT_VAL=$?
     fi
 }

@@ -730,13 +730,13 @@ def bash_startup():
 def default_startup():
     global exit_val
 
-    os.environ['PS1'] = "GRASS %s (%s):\w > " % (grass_version, location_name)
-
     if windows:
+	os.environ['PS1'] = "GRASS %s> " % (grass_version, location_name)
 	# "$ETC/run" doesn't work at all???
 	exit_val = call([os.getenv('SHELL')])
 	cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
+	os.environ['PS1'] = "GRASS %s (%s):\w > " % (grass_version, location_name)
 	exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
 
 def done_message():

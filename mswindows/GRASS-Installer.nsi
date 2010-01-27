@@ -647,8 +647,6 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'GRASS_PROJSHARE="$INSTALL_DIR\proj"$\r$\n'
 	FileWrite $0 'export GRASS_PROJSHARE$\r$\n'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 'export PS1="GRASS 7> "$\r$\n'
-	FileWrite $0 '$\r$\n'
 	FileWrite $0 'exec "$$GISBASE/etc/Init.sh" "$$@"'
 	FileClose $0
 	done_create_grass_command:
