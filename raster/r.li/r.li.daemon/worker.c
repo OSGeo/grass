@@ -38,26 +38,29 @@
 
 #define CACHESIZE 4194304
 
-void worker(char *raster, int f(int, char **, area_des, double *),
-	    char *server_channel, char *mychannel, char **parameters)
-{
-    int fd, aid;
-    int rec_ch, send_ch, erease_mask = 0, data_type = 0;
-    int cache_rows, used = 0;
-    msg toReceive, toSend;
-    area_des ad;
-    double result;
-    int pid;
-    struct Cell_head hd;
-    cell_manager cm;
-    dcell_manager dm;
-    fcell_manager fm;
+static int fd, aid;
+static int erease_mask = 0, data_type = 0;
+static int cache_rows, used = 0;
+static area_des ad;
+static double result;
+static struct Cell_head hd;
+static cell_manager cm;
+static dcell_manager dm;
+static fcell_manager fm;
+static char *raster;
+static char **parameters;
+static int (*func)(int, char **, area_des, double *);
 
+void worker_init(char *r, int f(int, char **, area_des, double *), char **p)
+{
     cm = G_malloc(sizeof(struct cell_memory_entry));
     fm = G_malloc(sizeof(struct fcell_memory_entry));
     dm = G_malloc(sizeof(struct dcell_memory_entry));
-    pid = getpid();
     ad = G_malloc(sizeof(struct area_entry));
+
+    raster = r;
+    parameters = p;
+    func = f;
 
     /* open raster map */
     fd = Rast_open_old(raster, "");
@@ -68,154 +71,134 @@ void worker(char *raster, int f(int, char **, area_des, double *),
     /* calculate rows in cache */
     switch (data_type) {
     case CELL_TYPE:{
-	    cache_rows = CACHESIZE / (hd.cols * sizeof(CELL));
-	    cm->cache = G_malloc(cache_rows * sizeof(CELL *));
-	    cm->contents = G_malloc(cache_rows * sizeof(int));
-	    cm->used = 0;
-	    cm->contents[0] = -1;
-	} break;
+	cache_rows = CACHESIZE / (hd.cols * sizeof(CELL));
+	cm->cache = G_malloc(cache_rows * sizeof(CELL *));
+	cm->contents = G_malloc(cache_rows * sizeof(int));
+	cm->used = 0;
+	cm->contents[0] = -1;
+    } break;
     case DCELL_TYPE:{
-	    cache_rows = CACHESIZE / (hd.cols * sizeof(DCELL));
-	    dm->cache = G_malloc(cache_rows * sizeof(DCELL *));
-	    dm->contents = G_malloc(cache_rows * sizeof(int));
-	    dm->used = 0;
-	    dm->contents[0] = -1;
-	} break;
+	cache_rows = CACHESIZE / (hd.cols * sizeof(DCELL));
+	dm->cache = G_malloc(cache_rows * sizeof(DCELL *));
+	dm->contents = G_malloc(cache_rows * sizeof(int));
+	dm->used = 0;
+	dm->contents[0] = -1;
+    } break;
     case FCELL_TYPE:{
-	    cache_rows = CACHESIZE / (hd.cols * sizeof(FCELL));
-	    fm->cache = G_malloc(cache_rows * sizeof(FCELL *));
-	    fm->contents = G_malloc(cache_rows * sizeof(int));
-	    fm->used = 0;
-	    fm->contents[0] = -1;
-	} break;
+	cache_rows = CACHESIZE / (hd.cols * sizeof(FCELL));
+	fm->cache = G_malloc(cache_rows * sizeof(FCELL *));
+	fm->contents = G_malloc(cache_rows * sizeof(int));
+	fm->used = 0;
+	fm->contents[0] = -1;
+    } break;
     }
     ad->data_type = data_type;
     ad->cm = cm;
     ad->fm = fm;
     ad->dm = dm;
+}
 
-    /* open receive channel */
-    rec_ch = open(mychannel, O_RDONLY, 0755);
-    if (rec_ch == -1) {
-	G_message(_("CHILD[pid = %i] cannot open receive channel"), pid);
-	exit(0);
-    }
+void worker_process(msg *ret, msg *m)
+{
+    switch (m->type) {
+    case AREA:
+	aid = m->f.f_a.aid;
+	ad->x = m->f.f_a.x;
+	ad->y = m->f.f_a.y;
+	ad->rl = m->f.f_a.rl;
+	ad->cl = m->f.f_a.cl;
+	ad->raster = raster;
+	ad->mask = -1;
+	break;
+    case MASKEDAREA:
+	aid = m->f.f_ma.aid;
+	ad->x = m->f.f_ma.x;
+	ad->y = m->f.f_ma.y;
+	ad->rl = m->f.f_ma.rl;
+	ad->cl = m->f.f_ma.cl;
+	ad->raster = raster;
 
-    /* open send channel */
-    send_ch = open(server_channel, O_WRONLY, 0755);
-    if (send_ch == -1) {
-	G_message(_("CHILD[pid = %i] cannot open receive channel"), pid);
-	exit(0);
-    }
-
-    /* receive loop */
-    receive(rec_ch, &toReceive);
-
-    while (toReceive.type != TERM) {
-	if (toReceive.type == AREA) {
-	    aid = toReceive.f.f_ma.aid;
-	    ad->x = toReceive.f.f_a.x;
-	    ad->y = toReceive.f.f_a.y;
-	    ad->rl = toReceive.f.f_a.rl;
-	    ad->cl = toReceive.f.f_a.cl;
-	    ad->raster = raster;
+	/* mask preprocessing */
+	ad->mask_name = mask_preprocessing(m->f.f_ma.mask,
+					   raster, ad->rl, ad->cl);
+	if (ad->mask_name == NULL) {
+	    G_message(_("unable to open <%s> mask ... continuing without!"),
+		      m->f.f_ma.mask);
 	    ad->mask = -1;
 	}
-	else if (toReceive.type == MASKEDAREA) {
-	    aid = toReceive.f.f_ma.aid;
-	    ad->x = toReceive.f.f_ma.x;
-	    ad->y = toReceive.f.f_ma.y;
-	    ad->rl = toReceive.f.f_ma.rl;
-	    ad->cl = toReceive.f.f_ma.cl;
-	    ad->raster = raster;
-
-	    /* mask preprocessing */
-	    ad->mask_name = mask_preprocessing(toReceive.f.f_ma.mask,
-					       raster, ad->rl, ad->cl);
-	    if (ad->mask_name == NULL) {
-		G_message(_("CHILD[pid = %i]: unable to open <%s> mask ... continuing without!"),
-			  pid, toReceive.f.f_ma.mask);
-		ad->mask = -1;
-	    }
-	    else {
-		if (strcmp(toReceive.f.f_ma.mask, ad->mask_name) != 0)
-		    /* temporary mask created */
-		    erease_mask = 1;
-		ad->mask = open(ad->mask_name, O_WRONLY, 0755);
-		if (ad->mask == -1) {
-		    G_message(_("CHILD[pid = %i]: unable to open <%s> mask ... continuing without!"),
-			      pid, toReceive.f.f_ma.mask);
-		}
-	    }
-	}
-	else
-	    G_fatal_error("Program error, worker() toReceive.type=%d",
-			  toReceive.type);
-
-	/* memory menagement */
-	if (ad->rl > used) {
-	    /* allocate cache */
-	    int i;
-
-	    switch (data_type) {
-	    case CELL_TYPE:{
-		    for (i = 0; i < (ad->rl - used); i++) {
-			cm->cache[used + i] = Rast_allocate_c_buf();
-		    }
-		}
-		break;
-	    case DCELL_TYPE:{
-		    for (i = 0; i < ad->rl - used; i++) {
-			dm->cache[used + i] = Rast_allocate_d_buf();
-		    }
-		}
-		break;
-	    case FCELL_TYPE:{
-		    for (i = 0; i < ad->rl - used; i++) {
-			fm->cache[used + i] = Rast_allocate_f_buf();
-		    }
-		}
-		break;
-	    }
-	    cm->used = ad->rl;
-	    dm->used = ad->rl;
-	    fm->used = ad->rl;
-	    used = ad->rl;
-	}
-
-	/* calculate function */
-
-	if (f(fd, parameters, ad, &result) == RLI_OK) {
-	    /* success */
-	    toSend.type = DONE;
-	    toSend.f.f_d.aid = aid;
-	    toSend.f.f_d.pid = getpid();
-	    toSend.f.f_d.res = result;
-	}
 	else {
-	    /* fail */
-	    toSend.type = ERROR;
-	    toSend.f.f_e.aid = aid;
-	    toSend.f.f_e.pid = getpid();
+	    if (strcmp(m->f.f_ma.mask, ad->mask_name) != 0)
+		/* temporary mask created */
+		erease_mask = 1;
+	    ad->mask = open(ad->mask_name, O_WRONLY, 0755);
+	    if (ad->mask == -1) {
+		G_message(_("unable to open <%s> mask ... continuing without!"),
+			  m->f.f_ma.mask);
+	    }
 	}
-
-	send(send_ch, &toSend);
-
-	if (erease_mask == 1) {
-	    erease_mask = 0;
-	    unlink(ad->mask_name);
-	}
-
-	receive(rec_ch, &toReceive);
+	break;
+    default:
+	G_fatal_error("Program error, worker() type=%d", m->type);
+	break;
     }
+
+    /* memory menagement */
+    if (ad->rl > used) {
+	/* allocate cache */
+	int i;
+
+	switch (data_type) {
+	case CELL_TYPE:{
+	    for (i = 0; i < (ad->rl - used); i++) {
+		cm->cache[used + i] = Rast_allocate_c_buf();
+	    }
+	}
+	    break;
+	case DCELL_TYPE:{
+	    for (i = 0; i < ad->rl - used; i++) {
+		dm->cache[used + i] = Rast_allocate_d_buf();
+	    }
+	}
+	    break;
+	case FCELL_TYPE:{
+	    for (i = 0; i < ad->rl - used; i++) {
+		fm->cache[used + i] = Rast_allocate_f_buf();
+	    }
+	}
+	    break;
+	}
+	cm->used = ad->rl;
+	dm->used = ad->rl;
+	fm->used = ad->rl;
+	used = ad->rl;
+    }
+
+    /* calculate function */
+
+    if (func(fd, parameters, ad, &result) == RLI_OK) {
+	/* success */
+	ret->type = DONE;
+	ret->f.f_d.aid = aid;
+	ret->f.f_d.pid = 0;
+	ret->f.f_d.res = result;
+    }
+    else {
+	/* fail */
+	ret->type = ERROR;
+	ret->f.f_e.aid = aid;
+	ret->f.f_e.pid = 0;
+    }
+
+    if (erease_mask == 1) {
+	erease_mask = 0;
+	unlink(ad->mask_name);
+    }
+}
+
+void worker_end(void)
+{
     /* close raster map */
     Rast_close(fd);
-
-    /* close channels */
-    close(rec_ch);
-    close(send_ch);
-
-    return;
 }
 
 char *mask_preprocessing(char *mask, char *raster, int rl, int cl)

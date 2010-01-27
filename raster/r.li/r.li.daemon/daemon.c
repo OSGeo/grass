@@ -41,13 +41,11 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 {
 
     char pathSetup[GPATH_MAX], out[GPATH_MAX], parsed;
-    char *reportChannelName, *random_access_name;
+    char *random_access_name;
     struct History history;
     g_areas g;
-    int receiveChannel;
     int res;
-    wd child[WORKERS];
-    int i, mypid, doneDir, withoutJob, mv_fd, random_access;
+    int i, doneDir, mv_fd, random_access;
 
     /*int mv_rows, mv_cols; */
     list l;
@@ -57,47 +55,8 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 
     g = (g_areas) G_malloc(sizeof(struct generatore));
     l = (list) G_malloc(sizeof(struct lista));
-    mypid = getpid();
 
-    /* create report pipe */
-    reportChannelName = G_tempfile();
-    if (mkfifo(reportChannelName, 0644) == -1)
-	G_fatal_error("Error in pipe creation");
-
-
-    /*###############################################
-       --------------create childs-------------------
-       ############################################### */
-
-    i = 0;
-    while (i < WORKERS) {
-	int childpid;
-
-	/*creating pipe */
-	child[i].pipe = G_tempfile();
-	if (mkfifo(child[i].pipe, 0755) == -1)
-	    G_fatal_error(_("Error in pipe creation"));
-	childpid = fork();
-	if (childpid) {
-	    /*father process */
-	    child[i].pid = childpid;
-	    child[i].channel = open(child[i].pipe, O_WRONLY | O_CREAT, 0755);
-
-	    if (child[i].channel == -1) {
-		G_fatal_error(_("Error opening channel %i"), i);
-	    }
-	    i++;
-	}
-	else {
-	    /*child process */
-	    worker(raster, f, reportChannelName, child[i].pipe, parameters);
-	    exit(0);
-	}
-    }
-
-    /*open reportChannel */
-    receiveChannel = open(reportChannelName, O_RDONLY, 0755);
-
+    worker_init(raster, f, parameters);
 
     /*########################################################      
        -----------------create area queue----------------------
@@ -110,7 +69,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	file += strlen(testpath);
 
     /* TODO: check if this path is portable */
-/* TODO: use G_rc_path() */
+    /* TODO: use G_rc_path() */
     sprintf(pathSetup, "%s/.grass7/r.li/%s", G_home(), file);
     G_debug(1, "r.li.daemon pathSetup: [%s]", pathSetup);
     parsed = parseSetup(pathSetup, l, g, raster);
@@ -161,23 +120,17 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
        ------------------analysis loop----------------------
        ####################################################### */
     /*first job scheduling */
-    while ((i < WORKERS) && next_Area(parsed, l, g, &m) != 0) {
-	send(child[i].channel, &m);
-	i++;
-    }
-
+    if (next_Area(parsed, l, g, &m) != 0)
 
     /*body */
     while (next_Area(parsed, l, g, &m) != 0) {
-	int j = 0, donePid;
+	worker_process(&doneJob, &m);
 
-	receive(receiveChannel, &doneJob);
 	/*perc++; */
 	/*G_percent (perc, WORKERS, 1); */
 	if (doneJob.type == DONE) {
 	    double result;
 
-	    donePid = doneJob.f.f_d.pid;
 	    result = doneJob.f.f_d.res;
 	    /*output */
 	    if (parsed != MVWIN) {
@@ -190,7 +143,6 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	    }
 	}
 	else {
-	    donePid = doneJob.f.f_e.pid;
 	    if (parsed != MVWIN) {
 		error_Output(res, doneJob);
 	    }
@@ -198,96 +150,9 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 		/*printf("todo ");fflush(stdout); *//* TODO scrivere su raster NULL ??? */
 	    }
 	}
-	j = 0;
-
-
-	while (j < WORKERS && donePid != child[j].pid)
-	    j++;
-	send(child[j].channel, &m);
-
     }
 
-    /*kill childs */
-    withoutJob = i;
-    while (i > 0) {
-	int j = 0, donePid, status;
-
-	receive(receiveChannel, &doneJob);
-	if (doneJob.type == DONE) {
-	    double result;
-
-	    donePid = doneJob.f.f_d.pid;
-	    result = doneJob.f.f_d.res;
-	    if (parsed != MVWIN) {
-		print_Output(res, doneJob);
-	    }
-	    else {
-		/* raster */
-		raster_Output(random_access, doneJob.f.f_d.aid, g,
-			      doneJob.f.f_d.res);
-	    }
-	}
-	else {
-	    donePid = doneJob.f.f_e.pid;
-	    if (parsed != MVWIN) {
-		error_Output(res, doneJob);
-	    }
-	    else {
-		/*printf("todo2 ");fflush(stdout); *//*TODO scrivere su raster */
-	    }
-	}
-
-	i--;
-
-	while (j < WORKERS && donePid != child[j].pid)
-	    j++;
-
-	m.type = TERM;
-	m.f.f_t.pid = mypid;
-	send(child[j].channel, &m);
-	wait(&status);
-
-	if (!(WIFEXITED(status)))
-	    G_warning(
-		    _("r.li.worker (pid %i) exited with abnormal status: %i"),
-		    donePid, status);
-	else
-	    G_verbose_message(
-		    _("r.li.worker (pid %i) terminated successfully"),
-		    donePid);
-
-	/* remove pipe */
-	if (close(child[j].channel) != 0)
-	    G_message(_("Cannot close %s file (PIPE)"), child[j].pipe);
-	if (unlink(child[j].pipe) != 0)
-	    G_message(_("Cannot delete %s file (PIPE)"), child[j].pipe);
-    }
-
-    /* kill children without Job */
-    for (i = withoutJob; i < WORKERS; i++) {
-	int status;
-
-	m.type = TERM;
-	m.f.f_t.pid = mypid;
-	send(child[i].channel, &m);
-	wait(&status);
-
-	if (!(WIFEXITED(status)))
-	    G_warning(
-		    _("r.li.worker (pid %i) exited with abnormal status: %i"),
-		    child[i].pid, status);
-	else
-	    G_verbose_message(
-		    _("r.li.worker (pid %i) terminated successfully"),
-		    child[i].pid);
-
-	/* remove pipe */
-	if (close(child[i].channel) != 0)
-	    G_message(_("Cannot close %s file (PIPE2)"), child[i].pipe);
-	if (unlink(child[i].pipe) != 0)
-	    G_message(_("Cannot delete %s file (PIPE2)"), child[i].pipe);
-    }
-
+    worker_end();
 
     /*################################################
        --------------delete tmp files------------------
@@ -302,12 +167,6 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	Rast_command_history(&history);
 	Rast_write_history(output, &history);
     }
-
-    if (close(receiveChannel) != 0)
-	G_message(_("Cannot close receive channel file"));
-
-    if (unlink(reportChannelName) != 0)
-	G_message(_("Cannot delete %s file"), child[i].pipe);
 
     return 1;
 }
@@ -539,7 +398,7 @@ int disposeAreas(list l, g_areas g, char *def)
 	    G_fatal_error(_("Too many units to place"));
 	assigned = G_malloc(units * sizeof(int));
 	i = 0;
-	srandom(getpid());
+	srandom(0);
 	while (i < units) {
 	    int j, position, found = FALSE;
 
@@ -607,7 +466,7 @@ int disposeAreas(list l, g_areas g, char *def)
 	if (r_strat_len < g->rl || c_strat_len < g->cl)
 	    G_fatal_error(_("Too many strats for raster map"));
 	loop = r_strat * c_strat;
-	srandom(getpid());
+	srandom(0);
 	for (i = 0; i < loop; i++) {
 	    msg m;
 

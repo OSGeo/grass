@@ -25,7 +25,6 @@
 /**
  * \brief number of r.li.workers to use
  */
-#define WORKERS 10
 #define NORMAL 1
 #define MVWIN 2
 #define GEN 3
@@ -200,12 +199,12 @@ int error_Output(int out, msg m);
  * \brief client implementation
  * \param raster the raster map to analyze
  * \param f the function used for index computing
- * \param server_channel the channel where to send the result
- * \param mychannel the channel where to receive the area messages
  * \param result where to put the result of index computing
  */
-void worker(char *raster, int f(int, char **, area_des, double *),
-	    char *server_channel, char *mychannel, char **parameters);
+void worker_init(char *raster, int f(int, char **, area_des, double *),
+		 char **parameters);
+void worker_process(msg *ret, msg *m);
+void worker_end(void);
 
  /**
   * \brief adapts the mask at current raster file
