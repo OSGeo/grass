@@ -81,12 +81,11 @@ static char *rules_descriptions(void)
     int result_len = 0;
     int result_max = 2000;
     char *result = G_malloc(result_max);
-    int stat;
     int i;
 
     sprintf(path, "%s/etc/colors.desc", G_gisbase());
-    kv = G_read_key_value_file(path, &stat);
-    if (!kv || stat < 0)
+    kv = G_read_key_value_file(path);
+    if (!kv)
 	return NULL;
 
     for (i = 0; i < nrules; i++) {

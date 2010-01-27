@@ -22,31 +22,16 @@
    \param[in] file  filename to be updated
    \param[in] key   key value
    \param[in] value value to be updated
-
-   \return -1 can't open file for reading
-   \return -2 no memory for key,value info, file not modified
-   \return -3 can't open file for re-write
-   \return -4 error writing the file (might be damaged)
  */
-int G_update_key_value_file(const char *file, const char *key,
-			    const char *value)
+void G_update_key_value_file(const char *file,
+			     const char *key, const char *value)
 {
     struct Key_Value *kv;
-    int stat;
 
-    kv = G_read_key_value_file(file, &stat);
-    if (stat != 0)
-	return stat;
-
-    if (!G_set_key_value(key, value, kv)) {
-	G_free_key_value(kv);
-	return -2;
-    }
-
-    G_write_key_value_file(file, kv, &stat);
+    kv = G_read_key_value_file(file);
+    G_set_key_value(key, value, kv);
+    G_write_key_value_file(file, kv);
     G_free_key_value(kv);
-
-    return stat;
 }
 
 /*!
@@ -57,7 +42,6 @@ int G_update_key_value_file(const char *file, const char *key,
    \param[out] value value for key
    \param[in]  n     number of characters to be copied
 
-   \return <0 are file/memory errors
    \return 0 not found
    \return 1 ok
  */
@@ -65,22 +49,19 @@ int G_lookup_key_value_from_file(const char *file,
 				 const char *key, char value[], int n)
 {
     struct Key_Value *kv;
-    int stat;
     const char *v;
 
-    *value = 0;
-    kv = G_read_key_value_file(file, &stat);
-    if (stat != 0)
-	return stat;
+    *value = '\0';
+    kv = G_read_key_value_file(file);
 
     v = G_find_key_value(key, kv);
+
     if (v) {
 	strncpy(value, v, n);
-	value[n - 1] = 0;
-	stat = 1;
+	value[n - 1] = '\0';
     }
-    else
-	stat = 0;
+
     G_free_key_value(kv);
-    return stat;
+
+    return v ? 1 : 0;
 }

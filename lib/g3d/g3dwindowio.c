@@ -141,7 +141,6 @@ int G3d_readWindow(G3D_Region * window, const char *windowName)
     struct Cell_head win;
     struct Key_Value *windowKeys;
     char path[GPATH_MAX];
-    int status;
 
 
     if (windowName == NULL) {
@@ -170,11 +169,7 @@ int G3d_readWindow(G3D_Region * window, const char *windowName)
 	    return 0;
 	}
 
-	windowKeys = G_read_key_value_file(path, &status);
-	if (status != 0) {
-	    G3d_error("G3d_readWindow: Unable to open %s", path);
-	    return 0;
-	}
+	windowKeys = G_read_key_value_file(path);
 
 	if (!G3d_readWriteWindow(windowKeys, 1,
 				 &(window->proj), &(window->zone),

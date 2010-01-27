@@ -193,22 +193,17 @@ void create_location(char *location)
 	}
 
 	{
-	    int out_stat;
 	    char path[GPATH_MAX];
 
 	    /* Write out the PROJ_INFO, and PROJ_UNITS if available. */
 	    if (projinfo != NULL) {
 		G__file_name(path, "", "PROJ_INFO", "PERMANENT");
-		G_write_key_value_file(path, projinfo, &out_stat);
-		if (out_stat != 0)
-		    G_fatal_error(_("Error writing PROJ_INFO"));
+		G_write_key_value_file(path, projinfo);
 	    }
 
 	    if (projunits != NULL) {
 		G__file_name(path, "", "PROJ_UNITS", "PERMANENT");
-		G_write_key_value_file(path, projunits, &out_stat);
-		if (out_stat != 0)
-		    G_fatal_error(_("Error writing PROJ_UNITS"));
+		G_write_key_value_file(path, projunits);
 	    }
 
 	    if ((old_cellhd.zone != cellhd.zone) ||

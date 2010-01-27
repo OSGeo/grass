@@ -823,7 +823,6 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
     struct Key_Value *format_keys;
-    int in_stat;
     const char *str, *str1;
     RASTER_MAP_TYPE map_type;
     const char *xmapset;
@@ -838,9 +837,7 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
     if (access(path, 0) != 0)
 	G_fatal_error(_("Unable to find '%s'"), path);
 
-    format_keys = G_read_key_value_file(path, &in_stat);
-    if (in_stat != 0)
-	G_fatal_error(_("Unable to open '%s'"), path);
+    format_keys = G_read_key_value_file(path);
 
     if ((str = G_find_key_value("type", format_keys)) != NULL) {
 	if (strcmp(str, "double") == 0)

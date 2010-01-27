@@ -93,7 +93,8 @@ int G3d_keySetInt(struct Key_Value *keys, const char *key, const int *i)
     char keyValStr[200];
 
     sprintf(keyValStr, "%d", *i);
-    return (G_set_key_value(key, keyValStr, keys) != 0);
+    G_set_key_value(key, keyValStr, keys);
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -103,7 +104,8 @@ int G3d_keySetDouble(struct Key_Value *keys, const char *key, const double *d)
     char keyValStr[200];
 
     sprintf(keyValStr, "%.50f", *d);
-    return (G_set_key_value(key, keyValStr, keys) != 0);
+    G_set_key_value(key, keyValStr, keys);
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -112,7 +114,8 @@ int
 G3d_keySetString(struct Key_Value *keys, const char *key,
 		 char *const *keyValStr)
 {
-    return (G_set_key_value(key, *keyValStr, keys) != 0);
+    G_set_key_value(key, *keyValStr, keys);
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -122,10 +125,15 @@ G3d_keySetValue(struct Key_Value *keys, const char *key, const char *val1,
 		const char *val2, int keyval1, int keyval2,
 		const int *keyvalVar)
 {
-    if (*keyvalVar == keyval1)
-	return (G_set_key_value(key, val1, keys) != 0);
-    if (*keyvalVar == keyval2)
-	return (G_set_key_value(key, val2, keys) != 0);
+    if (*keyvalVar == keyval1) {
+	G_set_key_value(key, val1, keys);
+	return 1;
+    }
+
+    if (*keyvalVar == keyval2) {
+	G_set_key_value(key, val2, keys);
+	return 1;
+    }
 
     G3d_error("G3d_keySetValue: wrong key value");
     return 0;

@@ -14,30 +14,30 @@
  */
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 /*!
    \brief Write key/value pairs to file
 
    \param[in]  file filename for writing
    \param[in]  kv   Key_Value structure
-   \param[out] stat status (0 ok, -3 cannot open file, -4 error writing key/value)
 
    \return 0 success
    \return 1 error writing
  */
 
-int G_write_key_value_file(const char *file,
-			   const struct Key_Value *kv, int *stat)
+void G_write_key_value_file(const char *file,
+			    const struct Key_Value *kv)
 {
-    FILE *fd;
+    FILE *fp = fopen(file, "w");
+    if (!fp)
+	G_fatal_error(_("Unable to open output file <%s>"), file);
 
-    *stat = 0;
-    fd = fopen(file, "w");
-    if (fd == NULL)
-	*stat = -3;
-    else if (G_fwrite_key_value(fd, kv) != 0 || fclose(fd) == EOF)
-	*stat = -4;
-    return (*stat != 0);
+    if (G_fwrite_key_value(fp, kv) != 0)
+	G_fatal_error(_("Error writing file <%s>"), file);
+
+    if (fclose(fp) != 0)
+	G_fatal_error(_("Error closing output file <%s>"), file);
 }
 
 /*!
@@ -51,20 +51,21 @@ int G_write_key_value_file(const char *file,
    \return poiter to allocated Key_Value structure
    \return NULL on error
  */
-struct Key_Value *G_read_key_value_file(const char *file, int *stat)
+struct Key_Value *G_read_key_value_file(const char *file)
 {
-    FILE *fd;
+    FILE *fp;
     struct Key_Value *kv;
 
-    *stat = 0;
-    fd = fopen(file, "r");
-    if (fd == NULL) {
-	*stat = -1;
-	return NULL;
-    }
-    kv = G_fread_key_value(fd);
-    fclose(fd);
-    if (kv == NULL)
-	*stat = -2;
+    fp = fopen(file, "r");
+    if (!fp)
+	G_fatal_error(_("Unable to open input file <%s>"), file);
+
+    kv = G_fread_key_value(fp);
+    if (!kv)
+	G_fatal_error(_("Error reading file <%s>"), file);
+
+    if (fclose(fp) != 0)
+	G_fatal_error(_("Error closing input file <%s>"), file);
+
     return kv;
 }

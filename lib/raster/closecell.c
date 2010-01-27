@@ -36,7 +36,7 @@
 static int close_old(int);
 static int close_new(int, int);
 
-static int write_fp_format(int fd);
+static void write_fp_format(int fd);
 
 /*!
  * \brief Close a raster map
@@ -287,11 +287,7 @@ static int close_new_gdal(int fd, int ok)
 	close(cell_fd);
 
 	if (fcb->map_type != CELL_TYPE) {	/* floating point map */
-	    if (write_fp_format(fd) != 0) {
-		G_warning(_("Error writing floating point format file for map %s"),
-			  fcb->name);
-		stat = -1;
-	    }
+	    write_fp_format(fd);
 
 	    /* write 0-length fcell file */
 	    G__make_mapset_element("fcell");
@@ -399,11 +395,7 @@ static int close_new(int fd, int ok)
 	if (fcb->map_type != CELL_TYPE) {	/* floating point map */
 	    int cell_fd;
 
-	    if (write_fp_format(fd) != 0) {
-		G_warning(_("Error writing floating point format file for map <%s>"),
-			  fcb->name);
-		stat = -1;
-	    }
+	    write_fp_format(fd);
 
 	    /* now write 0-length cell file */
 	    G__make_mapset_element("cell");
@@ -476,16 +468,15 @@ static int close_new(int fd, int ok)
 }
 
 /* returns 0 on success, 1 on failure */
-static int write_fp_format(int fd)
+static void write_fp_format(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     struct Key_Value *format_kv;
     char path[GPATH_MAX];
-    int stat;
 
     if (fcb->map_type == CELL_TYPE) {
 	G_warning(_("unable to write f_format file for CELL maps"));
-	return 0;
+	return;
     }
     format_kv = G_create_key_value();
     if (fcb->map_type == FCELL_TYPE)
@@ -500,9 +491,7 @@ static int write_fp_format(int fd)
 
     G__make_mapset_element_misc("cell_misc", fcb->name);
     G__file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name, fcb->mapset);
-    G_write_key_value_file(path, format_kv, &stat);
+    G_write_key_value_file(path, format_kv);
 
     G_free_key_value(format_kv);
-
-    return stat;
 }

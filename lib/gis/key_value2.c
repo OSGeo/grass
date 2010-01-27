@@ -66,10 +66,7 @@ struct Key_Value *G_fread_key_value(FILE * fd)
 	*value++ = 0;
 	G_strip(key);
 	G_strip(value);
-	if (!G_set_key_value(key, value, kv)) {
-	    G_free_key_value(kv);
-	    return NULL;
-	}
+	G_set_key_value(key, value, kv);
     }
     return kv;
 }

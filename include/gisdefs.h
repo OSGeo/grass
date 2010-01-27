@@ -308,7 +308,7 @@ int G_is_mapset(const char *);
 
 /* key_value1.c */
 struct Key_Value *G_create_key_value(void);
-int G_set_key_value(const char *, const char *, struct Key_Value *);
+void G_set_key_value(const char *, const char *, struct Key_Value *);
 const char *G_find_key_value(const char *, const struct Key_Value *);
 void G_free_key_value(struct Key_Value *);
 
@@ -317,11 +317,11 @@ int G_fwrite_key_value(FILE *, const struct Key_Value *);
 struct Key_Value *G_fread_key_value(FILE *);
 
 /* key_value3.c */
-int G_write_key_value_file(const char *, const struct Key_Value *, int *);
-struct Key_Value *G_read_key_value_file(const char *, int *);
+void G_write_key_value_file(const char *, const struct Key_Value *);
+struct Key_Value *G_read_key_value_file(const char *);
 
 /* key_value4.c */
-int G_update_key_value_file(const char *, const char *, const char *);
+void G_update_key_value_file(const char *, const char *, const char *);
 int G_lookup_key_value_from_file(const char *, const char *, char[], int);
 
 /* legal_name.c */

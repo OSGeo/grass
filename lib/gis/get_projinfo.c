@@ -24,7 +24,6 @@
  */
 struct Key_Value *G_get_projunits(void)
 {
-    int stat;
     struct Key_Value *in_units_keys;
     char path[GPATH_MAX];
 
@@ -36,12 +35,7 @@ struct Key_Value *G_get_projunits(void)
 	}
 	return NULL;
     }
-    in_units_keys = G_read_key_value_file(path, &stat);
-    if (stat != 0) {
-	G_warning(_("ERROR in reading <%s> file for location <%s>"),
-		  UNIT_FILE, G_location());
-	return NULL;
-    }
+    in_units_keys = G_read_key_value_file(path);
 
     return in_units_keys;
 }
@@ -53,7 +47,6 @@ struct Key_Value *G_get_projunits(void)
  */
 struct Key_Value *G_get_projinfo(void)
 {
-    int stat;
     struct Key_Value *in_proj_keys;
     char path[GPATH_MAX];
 
@@ -65,11 +58,7 @@ struct Key_Value *G_get_projinfo(void)
 	}
 	return NULL;
     }
-    in_proj_keys = G_read_key_value_file(path, &stat);
-    if (stat != 0) {
-	G_warning(_("ERROR in reading <%s> file for location <%s>"),
-		  PROJECTION_FILE, G_location());
-	return NULL;
-    }
+    in_proj_keys = G_read_key_value_file(path);
+
     return in_proj_keys;
 }
