@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../..
 
 LIB = GIS
 
-EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH)
+EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH) $(REGEXINCPATH)
 
 DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections
 

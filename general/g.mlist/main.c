@@ -9,7 +9,7 @@
  * PURPOSE:      Lists available GRASS data base files of the
  *               user-specified data type to standard output
  *
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -20,10 +20,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <regex.h>
-#include <grass/spawn.h>
+#include <grass/gis.h>
 #include <grass/list.h>
-#include "global.h"
+#include <grass/glocale.h>
+#include <grass/spawn.h>
 
 static int any = 0;
 
@@ -31,7 +31,6 @@ static void make_list(const struct list *,
 		      const char *, const char *,
 		      int, int, int);
 static int parse(const char *);
-static int ls_filter(const char *, void *);
 
 int main(int argc, char *argv[])
 {
@@ -54,10 +53,9 @@ int main(int argc, char *argv[])
 	struct Flag *full;
     } flag;
     int i, n, all, num_types;
-    char *pattern = NULL, *exclude = NULL;
+    void *filter = NULL, *exclude = NULL;
     const char *mapset;
     char separator[2], *buf;
-    regex_t regex, regex_ex;
 
     G_gisinit(argv[0]);
 
@@ -157,24 +155,16 @@ int main(int argc, char *argv[])
 
     if (opt.pattern->answer) {
 	if (flag.regex->answer || flag.extended->answer)
-	    pattern = G_store(opt.pattern->answer);
+	    filter = G_ls_regex_filter(opt.pattern->answer, 0, (int) flag.extended->answer);
 	else
-	    pattern = wc2regex(opt.pattern->answer);
-
-	if (regcomp(&regex, pattern, (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
-	    G_fatal_error(_("Unable to compile regular expression %s"), pattern);
-	G_set_ls_filter(ls_filter, &regex);
+	    filter = G_ls_glob_filter(opt.pattern->answer, 0);
     }
 
     if (opt.exclude->answer) {
 	if (flag.regex->answer || flag.extended->answer)
-	    exclude = G_store(opt.exclude->answer);
+	    exclude = G_ls_regex_filter(opt.pattern->answer, 1, (int) flag.extended->answer);
 	else
-	    exclude = wc2regex(opt.exclude->answer);
-
-	if (regcomp(&regex_ex, exclude, (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
-	    G_fatal_error(_("Unable to compile regular expression %s"), exclude);
-	G_set_ls_exclude_filter(ls_filter, &regex_ex);
+	    exclude = G_ls_glob_filter(opt.pattern->answer, 1);
     }
 
     if (strcmp(opt.separator->answer, "newline") == 0)
@@ -235,15 +225,11 @@ int main(int argc, char *argv[])
     if (!flag.pretty->answer && any)
 	fprintf(stdout, "\n");
 
-    if (pattern) {
-	G_free(pattern);
-	regfree(&regex);
-    }
+    if (filter)
+	G_free_ls_filter(filter);
 
-    if (exclude) {
-	G_free(exclude);
-	regfree(&regex_ex);
-    }
+    if (exclude)
+	G_free_ls_filter(exclude);
 
     exit(EXIT_SUCCESS);
 }
@@ -315,8 +301,3 @@ static int parse(const char *data_type)
     return n;
 }
 
-static int ls_filter(const char *filename, void *closure)
-{
-    return filename[0] != '.' &&
-	regexec((regex_t *) closure, filename, 0, NULL, 0) == 0;
-}

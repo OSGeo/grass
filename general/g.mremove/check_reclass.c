@@ -1,8 +1,9 @@
 #include <string.h>
 
+#include <grass/gis.h>
+#include <grass/list.h>
 #include <grass/raster.h>
-
-#include "global.h"
+#include <grass/glocale.h>
 
 int check_reclass(const char *name, const char *mapset, int force)
 {
