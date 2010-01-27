@@ -17,7 +17,7 @@
  *
  * PURPOSE:      lets users remove GRASS database files
  *
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -27,10 +27,13 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include <regex.h>
-#include "global.h"
 
-static int ls_filter(const char *, void *);
+#include <grass/gis.h>
+#include <grass/list.h>
+#include <grass/glocale.h>
+
+/* check_reclass.c */
+int check_reclass(const char *, const char *, int);
 
 int main(int argc, char *argv[])
 {
@@ -48,7 +51,7 @@ int main(int argc, char *argv[])
     char *buf, *buf2;
     int num_files, rast, result = EXIT_SUCCESS;
     int i, j, n;
-    regex_t regex;
+    void *filter;
 
     G_gisinit(argv[0]);
 
@@ -122,18 +125,17 @@ int main(int argc, char *argv[])
 	    rast = !G_strcasecmp(list[n].alias, "rast");
 	    for (i = 0; (name = opt[n]->answers[i]); i++) {
 		if (!flag.regex->answer && !flag.extended->answer)
-		    name = wc2regex(name);
-		if (regcomp(&regex, name,
-			    (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
-		    G_fatal_error(
-				  _("Unable to compile regular expression %s"),
+		    filter = G_ls_glob_filter(name, 0);
+		else
+		    filter = G_ls_regex_filter(name, 0,
+					       (int) flag.extended->answer);
+		if (!filter)
+		    G_fatal_error(_("Unable to compile pattern <%s>"),
 				  name);
-		if (!flag.regex->answer && !flag.extended->answer)
-		    G_free(name);
 
-		G_set_ls_filter(ls_filter, &regex);
 		files = G__ls(path, &num_files);
-		regfree(&regex);
+
+		G_free_ls_filter(filter);
 
 		for (j = 0; j < num_files; j++) {
 		    if (!flag.force->answer) {
@@ -160,8 +162,3 @@ int main(int argc, char *argv[])
     exit(result);
 }
 
-static int ls_filter(const char *filename, void *closure)
-{
-    return filename[0] != '.' &&
-	regexec((regex_t *) closure, filename, 0, NULL, 0) == 0;
-}
