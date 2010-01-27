@@ -120,23 +120,3 @@ typedef struct msg
     fields f;
 } msg;
 
-/**
- * \brief send the specified message through the pipe channel.
- * \param pipe the pipe used to send message
- * \param m the message to send
- * \return 1 message sent, 0 otherwise
- */
-int send(int pipe, msg * m);
-
-/**
- * \brief receive a message through the pipe channel
- * \param pipe the pipe used to receive message
- * \param m the message to receive
- * \return 1 message sent, 0 otherwise
- */
-int receive(int pipe, msg * m);
-
-/**
- * \brief debug function, print a message to STDOUT
- */
-void printMsg(msg m);
