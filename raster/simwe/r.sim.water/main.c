@@ -82,6 +82,7 @@
 #include <grass/bitmap.h>
 /* #include <grass/site.h> */
 #include <grass/glocale.h>
+#include <grass/gmath.h>
 
 /********************************/
 /* Specific stuff               */
@@ -484,34 +485,10 @@ int main(int argc, char *argv[])
     /* memory allocation for output grids */
     G_debug(2, "beginning memory allocation for output grids");
 
-    gama = (double **)G_malloc(sizeof(double *) * (my));
-    for (l = 0; l < my; l++) {
-	gama[l] = (double *)G_malloc(sizeof(double) * (mx));
-    }
-    for (j = 0; j < my; j++) {
-	for (i = 0; i < mx; i++)
-	    gama[j][i] = 0.;
-    }
-
-    if (err != NULL) {
-	gammas = (double **)G_malloc(sizeof(double *) * (my));
-	for (l = 0; l < my; l++) {
-	    gammas[l] = (double *)G_malloc(sizeof(double) * (mx));
-	}
-	for (j = 0; j < my; j++) {
-	    for (i = 0; i < mx; i++)
-		gammas[j][i] = 0.;
-	}
-    }
-
-    dif = (float **)G_malloc(sizeof(float *) * (my));
-    for (l = 0; l < my; l++) {
-	dif[l] = (float *)G_malloc(sizeof(float) * (mx));
-    }
-    for (j = 0; j < my; j++) {
-	for (i = 0; i < mx; i++)
-	    dif[j][i] = 0.;
-    }
+    gama = G_alloc_matrix(my, mx);
+    if (err != NULL)
+	gammas = G_alloc_matrix(my, mx);
+    dif = G_alloc_fmatrix(my, mx);
 
     /*  if (maskmap != NULL)
        bitmask = BM_create (cols, rows);

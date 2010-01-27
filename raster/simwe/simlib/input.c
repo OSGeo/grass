@@ -27,15 +27,15 @@
 int input_data(void)
 {
 
-    FCELL *cell1, *cell4b, *cell5;
-    FCELL *cell9, *cell10, *cell11;
-    DCELL *cell2, *cell3, *cell4, *cell4a, *cell12;
-    int fd1, fd2, fd3, fd4, fd4a, fd4b, fd5, row, row_rev;
-    int fd9, fd10, fd11, fd12;
+    FCELL *elevin_cell, *traps_cell, *manin_cell;
+    FCELL *detin_cell, *trainin_cell, *tauin_cell;
+    DCELL *dxin_cell, *dyin_cell, *rain_cell, *infil_cell, *wdepth_cell;
+    int elevin_fd, dxin_fd, dyin_fd, rain_fd, infil_fd, traps_fd, manin_fd, row, row_rev;
+    int detin_fd, trainin_fd, tauin_fd, wdepth_fd;
     int l, j;
 /*    int nn, cc, ii, dd; */
     double unitconv = 0.0000002;	/* mm/hr to m/s */
-    char *mapset;
+    const char *mapset;
 /* output water depth and discharge at outlet points given in site file*/
 /*    Site *site; 
 
@@ -87,31 +87,33 @@ int input_data(void)
 */
 
     /* Allocate raster buffers */
-    cell1 = Rast_allocate_f_buf();
-    cell2 = Rast_allocate_d_buf();
-    cell3 = Rast_allocate_d_buf();
+    elevin_cell = Rast_allocate_f_buf();
+    dxin_cell = Rast_allocate_d_buf();
+    dyin_cell = Rast_allocate_d_buf();
+
+    if(manin != NULL)
+        manin_cell = Rast_allocate_f_buf();
 
     if (rain != NULL)
-	cell4 = Rast_allocate_d_buf();
+	rain_cell = Rast_allocate_d_buf();
 
     if (infil != NULL)
-	cell4a = Rast_allocate_d_buf();
+	infil_cell = Rast_allocate_d_buf();
 
     if (traps != NULL)
-	cell4b = Rast_allocate_f_buf();
-    cell5 = Rast_allocate_f_buf();
+	traps_cell = Rast_allocate_f_buf();
 
     if (detin != NULL)
-	cell9 = Rast_allocate_f_buf();
+	detin_cell = Rast_allocate_f_buf();
 
     if (tranin != NULL)
-	cell10 = Rast_allocate_f_buf();
+	trainin_cell = Rast_allocate_f_buf();
 
     if (tauin != NULL)
-	cell11 = Rast_allocate_f_buf();
+	tauin_cell = Rast_allocate_f_buf();
 
     if (wdepth != NULL)
-	cell12 = Rast_allocate_d_buf();
+	wdepth_cell = Rast_allocate_d_buf();
 
     /* Allocate some double dimension arrays for each input */
     /* with length of matrix Y */
@@ -141,93 +143,93 @@ int input_data(void)
     if (wdepth != NULL)
 	gama = G_alloc_matrix(my, mx);
 
-    G_debug(3, "Running MAY 10 version, started modifications on 20080211");
+    G_debug(3, "Running JAN 2010 version, started modifications on 20080211");
 
     /* Check if data available in mapsets
      * if found, then open the files */
-    fd1 = Rast_open_old(elevin, "");
+    elevin_fd = Rast_open_old(elevin, "");
 
     /* TO REPLACE BY INTERNAL PROCESSING of dx, dy from Elevin */
     if ((mapset = G_find_raster(dxin, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dxin);
 
-    fd2 = Rast_open_old(dxin, "");
+    dxin_fd = Rast_open_old(dxin, "");
 
-    fd3 = Rast_open_old(dyin, "");
+    dyin_fd = Rast_open_old(dyin, "");
     /* END OF REPLACEMENT */
 
     /* Rendered Mannings n input map optional to run! */
     /* Careful!                     (Yann, 20080212) */
     if (manin)
-	fd5 = Rast_open_old(manin, "");
+	manin_fd = Rast_open_old(manin, "");
 
     /* Rendered Rainfall input map optional to run! */
     /* Careful!                     (Yann, 20080212) */
     if (rain)
-	fd4 = Rast_open_old(rain, "");
+	rain_fd = Rast_open_old(rain, "");
 
     if (infil)
-	fd4a = Rast_open_old(infil, "");
+	infil_fd = Rast_open_old(infil, "");
 
     if (traps)
-	fd4b = Rast_open_old(traps, "");
+	traps_fd = Rast_open_old(traps, "");
 
     if (detin)
-	fd9 = Rast_open_old(detin, "");
+	detin_fd = Rast_open_old(detin, "");
 
     if (tranin)
-	fd10 = Rast_open_old(tranin, "");
+	trainin_fd = Rast_open_old(tranin, "");
 
     if (tauin)
-	fd11 = Rast_open_old(tauin, "");
+	tauin_fd = Rast_open_old(tauin, "");
 
     if (wdepth)
-	fd12 = Rast_open_old(wdepth, "");
+	wdepth_fd = Rast_open_old(wdepth, "");
 
     for (row = 0; row < my; row++) {
-	Rast_get_f_row(fd1, cell1, row);
-	Rast_get_d_row(fd2, cell2, row);
-	Rast_get_d_row(fd3, cell3, row);
+	Rast_get_f_row(elevin_fd, elevin_cell, row);
+	Rast_get_d_row(dxin_fd, dxin_cell, row);
+	Rast_get_d_row(dyin_fd, dyin_cell, row);
 
 	if (manin)
-	    Rast_get_f_row(fd5, cell5, row);
+	    Rast_get_f_row(manin_fd, manin_cell, row);
 
 	if (rain)
-	    Rast_get_d_row(fd4, cell4, row);
+	    Rast_get_d_row(rain_fd, rain_cell, row);
 
 	if (infil)
-	    Rast_get_d_row(fd4a, cell4a, row);
+	    Rast_get_d_row(infil_fd, infil_cell, row);
 
 	if (traps)
-	    Rast_get_f_row(fd4b, cell4b, row);
+	    Rast_get_f_row(traps_fd, traps_cell, row);
 
 	if (detin)
-	    Rast_get_f_row(fd9, cell9, row);
+	    Rast_get_f_row(detin_fd, detin_cell, row);
 
 	if (tranin)
-	    Rast_get_f_row(fd10, cell10, row);
+	    Rast_get_f_row(trainin_fd, trainin_cell, row);
 
 	if (tauin)
-	    Rast_get_f_row(fd11, cell11, row);
+	    Rast_get_f_row(tauin_fd, tauin_cell, row);
 
 	if (wdepth)
-	    Rast_get_d_row(fd12, cell12, row);
+	    Rast_get_d_row(wdepth_fd, wdepth_cell, row);
 
 	for (j = 0; j < mx; j++) {
 	    row_rev = my - row - 1;
 	    /*if elevation data exists store in zz[][] */
-	    if (!Rast_is_f_null_value(cell1 + j))
-		zz[row_rev][j] = (float)(conv * cell1[j]);
+	    if (!Rast_is_f_null_value(elevin_cell + j))
+		zz[row_rev][j] = (float)(conv * elevin_cell[j]);
 	    else
 		zz[row_rev][j] = UNDEF;
 
-	    if (!Rast_is_d_null_value(cell2 + j))
-		v1[row_rev][j] = (double)cell2[j];
+	    if (!Rast_is_d_null_value(dxin_cell + j))
+		v1[row_rev][j] = (double)dxin_cell[j];
 	    else
 		v1[row_rev][j] = UNDEF;
 
-	    if (!Rast_is_d_null_value(cell3 + j))
-		v2[row_rev][j] = (double)cell3[j];
+	    if (!Rast_is_d_null_value(dyin_cell + j))
+		v2[row_rev][j] = (double)dyin_cell[j];
 	    else
 		v2[row_rev][j] = UNDEF;
 
@@ -246,8 +248,8 @@ int input_data(void)
 
 	    /* If Rain Exists, then load data */
 	    if (rain) {
-		if (!Rast_is_d_null_value(cell4 + j))
-		    si[row_rev][j] = ((double)cell4[j]) * unitconv;
+		if (!Rast_is_d_null_value(rain_cell + j))
+		    si[row_rev][j] = ((double)rain_cell[j]) * unitconv;
 		/*conv mm/hr to m/s */
 		/*printf("\n INPUTrain, convert %f %f",si[row_rev][j],unitconv); */
 
@@ -258,8 +260,8 @@ int input_data(void)
 
 		/* Load infiltration map too if it exists */
 		if (infil) {
-		    if (!Rast_is_d_null_value(cell4a + j))
-			inf[row_rev][j] = (double)cell4a[j] * unitconv;
+		    if (!Rast_is_d_null_value(infil_cell + j))
+			inf[row_rev][j] = (double)infil_cell[j] * unitconv;
 		    /*conv mm/hr to m/s */
 		    /*printf("\nINPUT infilt,convert %f %f",inf[row_rev][j],unitconv); */
 		    else {
@@ -280,8 +282,8 @@ int input_data(void)
 		}
 
 		if (traps) {
-		    if (!Rast_is_f_null_value(cell4b + j))
-			trap[row_rev][j] = (float)cell4b[j];	/* no conv, unitless */
+		    if (!Rast_is_f_null_value(traps_cell + j))
+			trap[row_rev][j] = (float)traps_cell[j];	/* no conv, unitless */
 		    else {
 			trap[row_rev][j] = UNDEF;
 			zz[row_rev][j] = UNDEF;
@@ -300,8 +302,8 @@ int input_data(void)
 		}
 
 		if (infil) {
-		    if (!Rast_is_d_null_value(cell4a + j))
-			inf[row_rev][j] = (double)cell4a[j] * unitconv;	/*conv mm/hr to m/s */
+		    if (!Rast_is_d_null_value(infil_cell + j))
+			inf[row_rev][j] = (double)infil_cell[j] * unitconv;	/*conv mm/hr to m/s */
 		    /*printf("\nINPUT infilt,convert %f %f",inf[row_rev][j],unitconv); */
 		    else {
 			inf[row_rev][j] = UNDEF;
@@ -321,8 +323,8 @@ int input_data(void)
 		}
 
 		if (traps) {
-		    if (!Rast_is_f_null_value(cell4b + j))
-			trap[row_rev][j] = (float)cell4b[j];	/* no conv, unitless */
+		    if (!Rast_is_f_null_value(traps_cell + j))
+			trap[row_rev][j] = (float)traps_cell[j];	/* no conv, unitless */
 		    else {
 			trap[row_rev][j] = UNDEF;
 			zz[row_rev][j] = UNDEF;
@@ -330,8 +332,8 @@ int input_data(void)
 		}
 	    }			/* End of added by Yann 20080213 */
 	    if (manin) {
-		if (!Rast_is_f_null_value(cell5 + j)) {
-		    cchez[row_rev][j] = (float)cell5[j];	/* units in manual */
+		if (!Rast_is_f_null_value(manin_cell + j)) {
+		    cchez[row_rev][j] = (float)manin_cell[j];	/* units in manual */
 		}
 		else {
 		    cchez[row_rev][j] = UNDEF;
@@ -346,8 +348,8 @@ int input_data(void)
 			      manin);
 	    }
 	    if (detin) {
-		if (!Rast_is_f_null_value(cell9 + j))
-		    dc[row_rev][j] = (float)cell9[j];	/*units in manual */
+		if (!Rast_is_f_null_value(detin_cell + j))
+		    dc[row_rev][j] = (float)detin_cell[j];	/*units in manual */
 		else {
 		    dc[row_rev][j] = UNDEF;
 		    zz[row_rev][j] = UNDEF;
@@ -355,8 +357,8 @@ int input_data(void)
 	    }
 
 	    if (tranin) {
-		if (!Rast_is_f_null_value(cell10 + j))
-		    ct[row_rev][j] = (float)cell10[j];	/*units in manual */
+		if (!Rast_is_f_null_value(trainin_cell + j))
+		    ct[row_rev][j] = (float)trainin_cell[j];	/*units in manual */
 		else {
 		    ct[row_rev][j] = UNDEF;
 		    zz[row_rev][j] = UNDEF;
@@ -364,8 +366,8 @@ int input_data(void)
 	    }
 
 	    if (tauin) {
-		if (!Rast_is_f_null_value(cell11 + j))
-		    tau[row_rev][j] = (float)cell11[j];	/*units in manual */
+		if (!Rast_is_f_null_value(tauin_cell + j))
+		    tau[row_rev][j] = (float)tauin_cell[j];	/*units in manual */
 		else {
 		    tau[row_rev][j] = UNDEF;
 		    zz[row_rev][j] = UNDEF;
@@ -373,8 +375,8 @@ int input_data(void)
 	    }
 
 	    if (wdepth) {
-		if (!Rast_is_d_null_value(cell12 + j))
-		    gama[row_rev][j] = (double)cell12[j];	/*units in manual */
+		if (!Rast_is_d_null_value(wdepth_cell + j))
+		    gama[row_rev][j] = (double)wdepth_cell[j];	/*units in manual */
 		else {
 		    gama[row_rev][j] = UNDEF;
 		    zz[row_rev][j] = UNDEF;
@@ -382,34 +384,34 @@ int input_data(void)
 	    }
 	}
     }
-    Rast_close(fd1);
-    Rast_close(fd2);
-    Rast_close(fd3);
+    Rast_close(elevin_fd);
+    Rast_close(dxin_fd);
+    Rast_close(dyin_fd);
 
     if (rain)
-	Rast_close(fd4);
+	Rast_close(rain_fd);
 
     if (infil)
-	Rast_close(fd4a);
+	Rast_close(infil_fd);
 
     if (traps)
-	Rast_close(fd4b);
+	Rast_close(traps_fd);
     /* Maybe a conditional to manin!=NULL here ! */
-    Rast_close(fd5);
+    Rast_close(manin_fd);
 
 	/****************/
 
     if (detin)
-	Rast_close(fd9);
+	Rast_close(detin_fd);
 
     if (tranin)
-	Rast_close(fd10);
+	Rast_close(trainin_fd);
 
     if (tauin)
-	Rast_close(fd11);
+	Rast_close(tauin_fd);
 
     if (wdepth)
-	Rast_close(fd12);
+	Rast_close(wdepth_fd);
 
     return 1;
 }

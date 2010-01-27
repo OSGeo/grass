@@ -15,10 +15,10 @@
 int output_data(int tt, double ft)
 {
 
-    FCELL *cell6, *cell7, *cell8;
-    FCELL *cell14, *cell15, *cell16;
-    int fd6, fd7, fd8;
-    int fd14, fd15, fd16;
+    FCELL *depth_cell, *disch_cell, *err_cell;
+    FCELL *conc_cell, *flux_cell, *erdep_cell;
+    int depth_fd, disch_fd, err_fd;
+    int conc_fd, flux_fd, erdep_fd;
     int i, iarc, j;
     float gsmax = 0, dismax = 0., gmax = 0., ermax = -1.e+12, ermin = 1.e+12;
     struct Colors colors;
@@ -27,7 +27,7 @@ int output_data(int tt, double ft)
     char *conc0 = NULL, *flux0 = NULL;
 /*    char *erdep0 = NULL, *outwalk0 = NULL; */
     char *erdep0 = NULL;
-    char *mapst = NULL;
+    const char *mapst = NULL;
     char *type;
     char buf[256];
     int ndigit;
@@ -36,7 +36,6 @@ int output_data(int tt, double ft)
 /*    Site_head walkershead;
     Site *sd;
 */
-
 
     ndigit = 2;
     if (timesec >= 10)
@@ -90,72 +89,70 @@ int output_data(int tt, double ft)
     }
 */
     if (depth) {
-	cell6 = Rast_allocate_f_buf();
+	depth_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", depth, ndigit, tt);
 	    depth0 = G_store(buf);
-	    fd6 = Rast_open_fp_new(depth0);
+	    depth_fd = Rast_open_fp_new(depth0);
 	}
 	else
-	    fd6 = Rast_open_fp_new(depth);
+	    depth_fd = Rast_open_fp_new(depth);
     }
 
     if (disch) {
-	cell7 = Rast_allocate_f_buf();
+	disch_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", disch, ndigit, tt);
 	    disch0 = G_store(buf);
-	    fd7 = Rast_open_fp_new(disch0);
+	    disch_fd = Rast_open_fp_new(disch0);
 	}
 	else
-	    fd7 = Rast_open_fp_new(disch);
+	    disch_fd = Rast_open_fp_new(disch);
     }
 
     if (err) {
-	cell8 = Rast_allocate_f_buf();
+	err_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", err, ndigit, tt);
 	    err0 = G_store(buf);
-	    fd8 = Rast_open_fp_new(err0);
+	    err_fd = Rast_open_fp_new(err0);
 	}
 	else
-	    fd8 = Rast_open_fp_new(err);
+	    err_fd = Rast_open_fp_new(err);
     }
 
-
     if (conc) {
-	cell14 = Rast_allocate_f_buf();
+	conc_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", conc, ndigit, tt);
 	    conc0 = G_store(buf);
-	    fd14 = Rast_open_fp_new(conc0);
+	    conc_fd = Rast_open_fp_new(conc0);
 	}
 	else
-	    fd14 = Rast_open_fp_new(conc);
+	    conc_fd = Rast_open_fp_new(conc);
     }
 
     if (flux) {
-	cell15 = Rast_allocate_f_buf();
+	flux_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", flux, ndigit, tt);
 	    flux0 = G_store(buf);
-	    fd15 = Rast_open_fp_new(flux0);
+	    flux_fd = Rast_open_fp_new(flux0);
 	}
 	else
-	    fd15 = Rast_open_fp_new(flux);
+	    flux_fd = Rast_open_fp_new(flux);
     }
 
     if (erdep) {
-	cell16 = Rast_allocate_f_buf();
+	erdep_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
 	    sprintf(buf, "%s.%.*d", erdep, ndigit, tt);
 	    erdep0 = G_store(buf);
-	    fd16 = Rast_open_fp_new(erdep0);
+	    erdep_fd = Rast_open_fp_new(erdep0);
 	}
 	else
-	    fd16 = Rast_open_fp_new(erdep);
+	    erdep_fd = Rast_open_fp_new(erdep);
     }
-
 
     Rast_set_window(&cellhd);
 
@@ -171,98 +168,94 @@ int output_data(int tt, double ft)
 	if (depth) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell6 + j, 1);
+		    Rast_set_f_null_value(depth_cell + j, 1);
 		else {
 		    a1 = pow(gama[i][j], 3. / 5.);
-		    cell6[j] = (FCELL) a1;	/* add conv? */
+		    depth_cell[j] = (FCELL) a1;	/* add conv? */
 		    gmax = amax1(gmax, a1);
 		}
 	    }
-	    Rast_put_f_row(fd6, cell6);
+	    Rast_put_f_row(depth_fd, depth_cell);
 	}
 
 	if (disch) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
 		    cchez[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell7 + j, 1);
+		    Rast_set_f_null_value(disch_cell + j, 1);
 		else {
 		    a2 = step * gama[i][j] * cchez[i][j];	/* cchez incl. sqrt(sinsl) */
-		    cell7[j] = (FCELL) a2;	/* add conv? */
+		    disch_cell[j] = (FCELL) a2;	/* add conv? */
 		    dismax = amax1(dismax, a2);
 		}
 	    }
-	    Rast_put_f_row(fd7, cell7);
+	    Rast_put_f_row(disch_fd, disch_cell);
 	}
 
 	if (err) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gammas[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell8 + j, 1);
+		    Rast_set_f_null_value(err_cell + j, 1);
 		else {
-		    cell8[j] = (FCELL) gammas[i][j];
+		    err_cell[j] = (FCELL) gammas[i][j];
 		    gsmax = amax1(gsmax, gammas[i][j]);	/* add conv? */
 		}
 	    }
-	    Rast_put_f_row(fd8, cell8);
+	    Rast_put_f_row(err_fd, err_cell);
 	}
-
 
 	if (conc) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell14 + j, 1);
+		    Rast_set_f_null_value(conc_cell + j, 1);
 		else {
-		    cell14[j] = (FCELL) gama[i][j];
+		    conc_cell[j] = (FCELL) gama[i][j];
 		    /*      gsmax = amax1(gsmax, gama[i][j]); */
 		}
 	    }
-	    Rast_put_f_row(fd14, cell14);
+	    Rast_put_f_row(conc_fd, conc_cell);
 	}
-
 
 	if (flux) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
 		    slope[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell15 + j, 1);
+		    Rast_set_f_null_value(flux_cell + j, 1);
 		else {
 		    a2 = gama[i][j] * slope[i][j];
-		    cell15[j] = (FCELL) a2;
+		    flux_cell[j] = (FCELL) a2;
 		    dismax = amax1(dismax, a2);
 		}
 	    }
-	    Rast_put_f_row(fd15, cell15);
+	    Rast_put_f_row(flux_fd, flux_cell);
 	}
-
 
 	if (erdep) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell16 + j, 1);
+		    Rast_set_f_null_value(erdep_cell + j, 1);
 		else {
-		    cell16[j] = (FCELL) er[i][j];
+		    erdep_cell[j] = (FCELL) er[i][j];
 		    ermax = amax1(ermax, er[i][j]);
 		    ermin = amin1(ermin, er[i][j]);
 		}
 	    }
-	    Rast_put_f_row(fd16, cell16);
+	    Rast_put_f_row(erdep_fd, erdep_cell);
 	}
-
     }
 
     if (depth)
-	Rast_close(fd6);
+	Rast_close(depth_fd);
     if (disch)
-	Rast_close(fd7);
+	Rast_close(disch_fd);
     if (err)
-	Rast_close(fd8);
+	Rast_close(err_fd);
     if (conc)
-	Rast_close(fd14);
+	Rast_close(conc_fd);
     if (flux)
-	Rast_close(fd15);
+	Rast_close(flux_fd);
     if (erdep)
-	Rast_close(fd16);
+	Rast_close(erdep_fd);
 
     if (depth) {
 
@@ -305,7 +298,6 @@ int output_data(int tt, double ft)
 				    (CELL) gmax);
 	    Rast_free_colors(&colors);
 	}
-
     }
 
     if (disch) {
@@ -390,7 +382,6 @@ int output_data(int tt, double ft)
 	    Rast_free_colors(&colors);
 	}
     }
-
 
     if (erdep) {
 
@@ -587,8 +578,8 @@ int output_data(int tt, double ft)
 int output_et()
 {
 
-    FCELL *cell13, *cell17;
-    int fd13, fd17;
+    FCELL *tc_cell, *et_cell;
+    int tc_fd, et_fd;
     int i, iarc, j;
     float etmax = -1.e+12, etmin = 1.e+12;
     float trc;
@@ -600,30 +591,27 @@ int output_et()
 
     /*   float a1,a2; */
 
-
-
     if (et) {
-	cell17 = Rast_allocate_f_buf();
+	et_cell = Rast_allocate_f_buf();
 	/*      if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",et,ndigit,tt);
 	   et0 = G_store(buf);
-	   fd17 = Rast_open_fp_new (et0);
+	   et_fd = Rast_open_fp_new (et0);
 	   }
 	   else */
-	fd17 = Rast_open_fp_new(et);
+	et_fd = Rast_open_fp_new(et);
     }
 
     if (tc) {
-	cell13 = Rast_allocate_f_buf();
+	tc_cell = Rast_allocate_f_buf();
 	/*   if (ts == 1) {
 	   sprintf(buf,"%s.%.*d",tc,ndigit,tt);
 	   tc0 = G_store(buf);
-	   fd13 = Rast_open_fp_new (tc0);
+	   tc_fd = Rast_open_fp_new (tc0);
 	   }
 	   else */
-	fd13 = Rast_open_fp_new(tc);
+	tc_fd = Rast_open_fp_new(tc);
     }
-
 
     Rast_set_window(&cellhd);
 
@@ -639,40 +627,39 @@ int output_et()
 	if (et) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell17 + j, 1);
+		    Rast_set_f_null_value(et_cell + j, 1);
 		else {
-		    cell17[j] = (FCELL) er[i][j];	/* add conv? */
+		    et_cell[j] = (FCELL) er[i][j];	/* add conv? */
 		    etmax = amax1(etmax, er[i][j]);
 		    etmin = amin1(etmin, er[i][j]);
 		}
 	    }
-	    Rast_put_f_row(fd17, cell17);
+	    Rast_put_f_row(et_fd, et_cell);
 	}
 
 	if (tc) {
 	    for (j = 0; j < mx; j++) {
 		if (zz[i][j] == UNDEF || sigma[i][j] == UNDEF ||
 		    si[i][j] == UNDEF)
-		    Rast_set_f_null_value(cell13 + j, 1);
+		    Rast_set_f_null_value(tc_cell + j, 1);
 		else {
 		    if (sigma[i][j] == 0.)
 			trc = 0.;
 		    else
 			trc = si[i][j] / sigma[i][j];
-		    cell13[j] = (FCELL) trc;
+		    tc_cell[j] = (FCELL) trc;
 		    /*  gsmax = amax1(gsmax, trc); */
 		}
 	    }
-	    Rast_put_f_row(fd13, cell13);
+	    Rast_put_f_row(tc_fd, tc_cell);
 	}
     }
 
-
     if (tc)
-	Rast_close(fd13);
+	Rast_close(tc_fd);
 
     if (et)
-	Rast_close(fd17);
+	Rast_close(et_fd);
 
     if (et) {
 

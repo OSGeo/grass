@@ -75,6 +75,7 @@
 #include <grass/bitmap.h>
 /*#include <grass/site.h> */
 #include <grass/glocale.h>
+#include <grass/gmath.h>
 
 /********************************/
 /* Specific stuff               */
@@ -361,45 +362,14 @@ int main(int argc, char *argv[])
 
     /* mandatory for si,sigma */
 
-    si = (double **)G_malloc(sizeof(double *) * (my));
-    for (l = 0; l < my; l++) {
-	si[l] = (double *)G_malloc(sizeof(double) * (mx));
-    }
-    for (j = 0; j < my; j++) {
-	for (i = 0; i < mx; i++)
-	    si[j][i] = 0.;
-    }
-
-    sigma = (double **)G_malloc(sizeof(double *) * (my));
-    for (l = 0; l < my; l++) {
-	sigma[l] = (double *)G_malloc(sizeof(double) * (mx));
-    }
-    for (j = 0; j < my; j++) {
-	for (i = 0; i < mx; i++)
-	    sigma[j][i] = 0.;
-    }
+    si = G_alloc_matrix(my, mx);
+    sigma = G_alloc_matrix(my, mx);
 
     /* memory allocation for output grids */
 
-    dif = (float **)G_malloc(sizeof(float *) * (my));
-    for (l = 0; l < my; l++) {
-	dif[l] = (float *)G_malloc(sizeof(float) * (mx));
-    }
-    for (j = 0; j < my; j++) {
-	for (i = 0; i < mx; i++)
-	    dif[j][i] = 0.;
-    }
-
-    if (erdep != NULL || et != NULL) {
-	er = (float **)G_malloc(sizeof(float *) * (my));
-	for (l = 0; l < my; l++) {
-	    er[l] = (float *)G_malloc(sizeof(float) * (mx));
-	}
-	for (j = 0; j < my; j++) {
-	    for (i = 0; i < mx; i++)
-		er[j][i] = 0.;
-	}
-    }
+    dif = G_alloc_fmatrix(my, mx);
+    if (erdep != NULL || et != NULL)
+	er = G_alloc_fmatrix(my, mx);
 
     /*  if (maskmap != NULL)
        bitmask = BM_create (cols, rows);
