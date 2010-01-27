@@ -118,7 +118,8 @@ SUBDIRS = \
 	r.water.outlet \
 	r.watershed \
 	r.what \
-	r.what.color
+	r.what.color \
+	simwe
 
 #	r.le \
 
