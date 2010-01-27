@@ -21,8 +21,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-    
-#define PI 3.1415927
+
 
 int main(int argc, char *argv[]) 
 {
@@ -52,7 +51,7 @@ int main(int argc, char *argv[])
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
     input1->key = _("doy");
-    input1->description = _("Name of the doy input map");
+    input1->description = _("Name of the day of year input map");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = _("lat");
@@ -103,13 +102,13 @@ int main(int argc, char *argv[])
             d_doy = ((DCELL *) inrast_doy)[col];
             d_lat = ((DCELL *) inrast_lat)[col];
 
-	    d_da = 2 * PI * (d_doy - 1) / 365.0;
+	    d_da = 2 * M_PI * (d_doy - 1) / 365.0;
 	    d_delta = 
 		0.006918 - 0.399912 * cos(d_da) + 0.070257 * sin(d_da) -
 		0.006758 * cos(2 * d_da) + 0.000907 * sin(2 * d_da) -
 		0.002697 * cos(3 * d_da) + 0.00148 * sin(3 * d_da);
-	    d_Ws = acos(-tan(d_lat * PI / 180) * tan(d_delta));
-	    d_N = (360.0 / (15.0 * PI)) * d_Ws;
+	    d_Ws = acos(-tan(d_lat * M_PI / 180) * tan(d_delta));
+	    d_N = (360.0 / (15.0 * M_PI)) * d_Ws;
 	    ((DCELL *) outrast1)[col] = d_N;
         }
 	Rast_put_row(outfd1, outrast1, DCELL_TYPE);
@@ -127,5 +126,3 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
-
-
