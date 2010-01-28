@@ -331,11 +331,14 @@ static int reinvoke_script(const struct context *ctx, const char *filename)
 	/* execlp( "sh", "sh", filename, "@ARGS_PARSED@", NULL); */
 	/* _spawnlp ( _P_OVERLAY, filename, filename, "@ARGS_PARSED@", NULL ); */
 	int ret;
+	char *shell = getenv("GRASS_SH");
 
-	ret = _spawnlp(_P_WAIT, filename, filename, "@ARGS_PARSED@", NULL);
+	if (shell == NULL)
+	    shell = "sh";
+	ret = G_spawn(shell, shell, filename, "@ARGS_PARSED@", NULL);
 	G_debug(1, "ret = %d", ret);
 	if (ret == -1) {
-	    perror("_spawnlp() failed");
+	    perror("G_spawn() failed");
 	    return 1;
 	}
 	return ret;
