@@ -459,6 +459,4 @@ int main(int argc, char *argv[])
     return standard_output
 	? print_options(&ctx)
 	: reinvoke_script(&ctx, filename);
-
-    return 0;
 }
