@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     struct Option *snap_opt, *type_opt, *outloc_opt, *cnames_opt;
     struct Flag *list_flag, *no_clean_flag, *z_flag, *notab_flag,
 	*region_flag;
-    struct Flag *over_flag, *extend_flag, *formats_flag, *tolower_flag;
+    struct Flag *over_flag, *extend_flag, *formats_flag, *tolower_flag, *no_import_flag;
     char buf[2000], namebuf[2000], tempvect[2000];
     char *separator;
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
@@ -235,6 +235,12 @@ int main(int argc, char *argv[])
     tolower_flag->description =
 	_("Change column names to lowercase characters");
     tolower_flag->guisection = _("Attributes");
+
+    no_import_flag = G_define_flag();
+    no_import_flag->key = 'i';
+    no_import_flag->description =
+	_("Create the location specified by the \"location\" parameter and exit."
+          " Do not import the vector file.");
 
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
@@ -472,12 +478,21 @@ int main(int argc, char *argv[])
 	/* Convert projection information non-interactively as we can't
 	 * assume the user has a terminal open */
 	if (GPJ_osr_to_grass(&cellhd, &proj_info,
-			     &proj_units, Ogr_projection, 0) < 0)
+			     &proj_units, Ogr_projection, 0) < 0) {
 	    G_fatal_error(_("Unable to convert input map projection to GRASS "
-			    "format; cannot create new location"));
-	else
+			    "format; cannot create new location."));
+	}
+	else {
 	    G_make_location(outloc_opt->answer, &cellhd,
 			    proj_info, proj_units, NULL);
+	    G_message(_("Location <%s> created"), outloc_opt->answer);
+	}
+
+        /* If the i flag is set, clean up? and exit here */
+        if(no_import_flag->answer)
+        {
+            exit(EXIT_SUCCESS);
+        }
     }
     else {
 	int err = 0;
