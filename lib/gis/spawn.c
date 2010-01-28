@@ -472,6 +472,8 @@ static const char **do_bindings(const struct binding *bindings, int num_bindings
     for (i = 0; i < num_bindings; i++)
 	add_binding(newenv, &n, &bindings[i]);
 
+    newenv[num_bindings + n] = NULL;
+
     return newenv;
 }
 
