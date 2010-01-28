@@ -51,12 +51,24 @@ int translate_output = 0;
    If global variable to output strings for translation is set it spits them out */
 char *translate(const char *arg)
 {
+    static const char *domain;
+
     if (*arg && translate_output) {
 	fputs(arg, stdout);
 	fputs("\n", stdout);
     }
 
-    return _(arg);
+#if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
+    if (!domain) {
+	domain = getenv("GRASS_TRANSLATION_DOMAIN");
+	if (!domain)
+	    domain = PACKAGE;
+    }
+
+    return G_gettext(domain, arg);
+#else
+    return arg;
+#endif
 }
 
 static void parse_toplevel(struct context *ctx, const char *cmd)
