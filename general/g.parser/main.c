@@ -61,7 +61,9 @@ char *translate(const char *arg)
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
     if (!domain) {
 	domain = getenv("GRASS_TRANSLATION_DOMAIN");
-	if (!domain)
+	if (domain)
+	    G_putenv("GRASS_TRANSLATION_DOMAIN", "grassmods");
+	else
 	    domain = PACKAGE;
     }
 
