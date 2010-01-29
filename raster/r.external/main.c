@@ -441,6 +441,8 @@ static void write_fp_format(const char *output, const struct band_info *info)
     if (G_fwrite_key_value(fp, key_val) < 0)
 	G_fatal_error(_("Error writing cell_misc/%s/f_format file"), output);
 
+    fclose(fp);
+
     G_free_key_value(key_val);
 }
 
