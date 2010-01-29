@@ -332,14 +332,19 @@ int main(int argc, char **argv)
 	G_message(_("Input map <%s@%s> in location <%s>:"),
 	    inmap->answer, setname, inlocation->answer);
 
-	G_format_northing(onorth, north_str, curr_proj);
-	G_format_northing(osouth, south_str, curr_proj);
-	G_format_easting(oeast, east_str, curr_proj);
-	G_format_easting(owest, west_str, curr_proj);
+	if (pj_do_proj(&iwest, &isouth, &iproj, &oproj) < 0)
+	    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+	if (pj_do_proj(&ieast, &inorth, &iproj, &oproj) < 0)
+	    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+	G_format_northing(inorth, north_str, curr_proj);
+	G_format_northing(isouth, south_str, curr_proj);
+	G_format_easting(ieast, east_str, curr_proj);
+	G_format_easting(iwest, west_str, curr_proj);
 
 	if(gprint_bounds->answer) {
-	    fprintf(stdout, "n=%s s=%s w=%s e=%s\n",
-		north_str, south_str, west_str, east_str);
+	    fprintf(stdout, "n=%s s=%s w=%s e=%s rows=%d cols=%d\n",
+		north_str, south_str, west_str, east_str, irows, icols);
 	}
 	else {
 	    fprintf(stdout, "Source cols: %d\n", icols);
