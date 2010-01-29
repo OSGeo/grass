@@ -496,10 +496,10 @@ FCELL Rast_get_f_value(const void *, RASTER_MAP_TYPE);
 DCELL Rast_get_d_value(const void *, RASTER_MAP_TYPE);
 
 /* raster_metadata.c */
-int Rast_read_units(const char *, const char *, char *);
-int Rast_read_vdatum(const char *, const char *, char *);
-int Rast_write_units(const char *, const char *);
-int Rast_write_vdatum(const char *, const char *);
+char *Rast_read_units(const char *, const char *);
+char *Rast_read_vdatum(const char *, const char *);
+void Rast_write_units(const char *, const char *);
+void Rast_write_vdatum(const char *, const char *);
 
 /* reclass.c */
 int Rast_is_reclass(const char *, const char *, char *, char *);
