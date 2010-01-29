@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     const char *name, *mapset;
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
-    char units[GNAME_MAX], vdatum[GNAME_MAX];
+    char *units, *vdatum;
     int i;
     CELL mincat = 0, maxcat = 0, cat;
     double zmin, zmax;		/* min and max data values */
@@ -125,10 +125,9 @@ int main(int argc, char **argv)
     is_reclass = Rast_get_reclass(name, "", &reclass);
     data_type = Rast_map_type(name, "");
 
-    if (Rast_read_units(name, "", units) != 0)
-	units[0] = '\0';
-    if (Rast_read_vdatum(name, "", vdatum) != 0)
-	vdatum[0] = '\0';
+    units = Rast_read_units(name, "");
+
+    vdatum = Rast_read_vdatum(name, "");
 
     /*Check the Timestamp */
     time_ok = G_read_raster_timestamp(name, "", &ts) > 0;
@@ -188,10 +187,9 @@ int main(int argc, char **argv)
 	/* For now hide these unless they exist to keep the noise low. In
 	 *   future when the two are used more widely they can be printed
 	 *   along with the standard set. */
-	if (units[0] || vdatum[0]) {
+	if (units && vdatum)
 	    compose_line(out, "  Data Units:   %-20.20s Vertical datum: %s",
 			 units, vdatum);
-	}
 
 	{
 	    compose_line(out, "  Rows:         %d", cellhd.rows);
@@ -397,9 +395,9 @@ int main(int argc, char **argv)
 	}
 
 	if (uflag->answer)
-	    fprintf(out, "units=%s\n", units);
+	    fprintf(out, "units=%s\n", units ? units : "(none)");
 	if (dflag->answer)
-	    fprintf(out, "vertical_datum=%s\n", vdatum);
+	    fprintf(out, "vertical_datum=%s\n", vdatum ? vdatum : "(none)");
 
 	if (hflag->answer) {
 	    if (hist_ok) {
