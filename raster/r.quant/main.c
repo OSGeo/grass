@@ -179,10 +179,8 @@ int main(int argc, char *argv[])
     }				/* use rules */
 
     for (i = 0; i < noi; i++) {
-	if (Rast_write_quant(name[i], G_mapset(), &quant_struct) < 0)
-	    G_message(_("Quant table not changed for %s"), name[i]);
-	else
-	    G_message(_("New quant table created for %s"), name[i]);
+	Rast_write_quant(name[i], G_mapset(), &quant_struct);
+	G_message(_("New quant table created for %s"), name[i]);
     }
 
     exit(EXIT_SUCCESS);

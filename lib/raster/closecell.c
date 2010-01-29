@@ -223,8 +223,7 @@ static void write_support_files(int fd)
 	   }
 	 */
 	Rast_quant_round(&fcb->quant);
-	if (Rast_write_quant(fcb->name, fcb->mapset, &fcb->quant) < 0)
-	    G_warning(_("unable to write quant file!"));
+	Rast_write_quant(fcb->name, fcb->mapset, &fcb->quant);
     }
     else {
 	/* remove cell_misc/name/f_quant */
