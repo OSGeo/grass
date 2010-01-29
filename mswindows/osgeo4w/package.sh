@@ -104,53 +104,53 @@ sed -e "s#$P#@osgeo4w_msys@#" "$OSGEO4W_ROOT_MSYS/apps/grass/bin/grass70" \
     > $OSGEO4W_ROOT_MSYS/apps/grass/bin/grass70.tmpl
 rm "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap"
 
-echo $(date): STARTING building vc libraries
-sh mswindows/osgeo4w/mklibs.sh "$OSGEO4W_ROOT_MSYS"/bin/*.$VERSION.dll
-mv mswindows/osgeo4w/vc/grass*.lib \
-   "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib"
-
-set -x
-echo $(date): BUILDING GDAL GRASS plugins
-cmd /c 'mswindows\\osgeo4w\\gdalplugins.cmd $VERSION'
-
-echo $(date): CREATING packages in $(PDIR)
-mkdir -p package/grass-devel \
-         package/grass-devel-mingw \
-         package/grass-devel-vc \
-         package/grass
-
-PDIR="$PWD/package"
-cd "$OSGEO4W_ROOT_MSYS"
-tar -cjf "$PDIR/grass-devel/grass-devel-$VERSION-$PACKAGE.tar.bz2" \
-	"apps/grass/grass-$VERSION/include"
-
-tar -cjf "$PDIR/grass-devel-mingw/grass-devel-mingw-$VERSION-$PACKAGE.tar.bz2" \
-	"apps/grass/grass-$VERSION/lib/"libgrass*.a
-
-tar -cjf "$PDIR/grass-devel-vc/grass-devel-vc-$VERSION-$PACKAGE.tar.bz2" \
-	"apps/grass/grass-$VERSION/"lib/*.lib
-
-tar -cjf "$PDIR/grass/grass-$VERSION-$PACKAGE.tar.bz2" \
-	apps/grass/bin/grass70.tmpl \
-	apps/grass/grass-$VERSION/authors \
-	apps/grass/grass-$VERSION/bin/ \
-	apps/grass/grass-$VERSION/bwidget/ \
-	apps/grass/grass-$VERSION/changes \
-	apps/grass/grass-$VERSION/copying \
-	apps/grass/grass-$VERSION/docs \
-	apps/grass/grass-$VERSION/driver \
-	apps/grass/grass-$VERSION/etc \
-	apps/grass/grass-$VERSION/gpl.txt \
-	apps/grass/grass-$VERSION/requirements.html \
-	apps/grass/grass-$VERSION/scripts \
-	bin/libgnurx-0.dll \
-	bin/libiconv-2.dll \
-	bin/libintl-8.dll \
-	bin/grass70.bat.tmpl \
-	bin/libgrass_*.$VERSION.dll \
-	etc/ini/grass.bat \
-	etc/postinstall/grass.bat \
-	etc/preremove/grass.bat
+#echo $(date): STARTING building vc libraries
+#sh mswindows/osgeo4w/mklibs.sh "$OSGEO4W_ROOT_MSYS"/bin/*.$VERSION.dll
+#mv mswindows/osgeo4w/vc/grass*.lib \
+ #  "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib"
+#
+#set -x
+#echo $(date): BUILDING GDAL GRASS plugins
+#cmd /c 'mswindows\\osgeo4w\\gdalplugins.cmd $VERSION'
+#
+#echo $(date): CREATING packages in $(PDIR)
+#mkdir -p package/grass-devel \
+ #        package/grass-devel-mingw \
+ #        package/grass-devel-vc \
+ #        package/grass
+#
+#PDIR="$PWD/package"
+#cd "$OSGEO4W_ROOT_MSYS"
+#tar -cjf "$PDIR/grass-devel/grass-devel-$VERSION-$PACKAGE.tar.bz2" \
+#	"apps/grass/grass-$VERSION/include"
+#
+#tar -cjf "$PDIR/grass-devel-mingw/grass-devel-mingw-$VERSION-$PACKAGE.tar.bz2" \
+#	"apps/grass/grass-$VERSION/lib/"libgrass*.a
+#
+#tar -cjf "$PDIR/grass-devel-vc/grass-devel-vc-$VERSION-$PACKAGE.tar.bz2" \
+#	"apps/grass/grass-$VERSION/"lib/*.lib
+#
+#tar -cjf "$PDIR/grass/grass-$VERSION-$PACKAGE.tar.bz2" \
+#	apps/grass/bin/grass70.tmpl \
+#	apps/grass/grass-$VERSION/authors \
+#	apps/grass/grass-$VERSION/bin/ \
+#	apps/grass/grass-$VERSION/bwidget/ \
+#	apps/grass/grass-$VERSION/changes \
+#	apps/grass/grass-$VERSION/copying \
+#	apps/grass/grass-$VERSION/docs \
+#	apps/grass/grass-$VERSION/driver \
+#	apps/grass/grass-$VERSION/etc \
+#	apps/grass/grass-$VERSION/gpl.txt \
+#	apps/grass/grass-$VERSION/requirements.html \
+#	apps/grass/grass-$VERSION/scripts \
+#	bin/libgnurx-0.dll \
+#	bin/libiconv-2.dll \
+#	bin/libintl-8.dll \
+#	bin/grass70.bat.tmpl \
+#	bin/libgrass_*.$VERSION.dll \
+#	etc/ini/grass.bat \
+#	etc/postinstall/grass.bat \
+#	etc/preremove/grass.bat
 
 echo $(date): END
 
