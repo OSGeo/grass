@@ -22,7 +22,7 @@
 
 int PS_fcolortable(void)
 {
-    char buf[512], *ch, units[GNAME_MAX];
+    char buf[512], *ch, *units;
     int i, k;
     int R, G, B;
     DCELL dmin, dmax, val;
@@ -249,8 +249,9 @@ int PS_fcolortable(void)
 
 
     /* print units label, if present */
-    if (Rast_read_units(ct.name, ct.mapset, units) != 0)
-        units[0] = '\0';
+    units = Rast_read_units(ct.name, ct.mapset);
+    if (!units)
+        units = "";
 
     if(strlen(units)) {
 	margin = 0.2 * fontsize;
