@@ -79,7 +79,7 @@ char *Rast_get_cell_title(const char *, const char *);
 
 /* cellstats_eq.c */
 int Rast_cell_stats_histo_eq(struct Cell_stats *, CELL, CELL, CELL, CELL, int,
-			  void (*)(CELL, CELL, CELL));
+			     void (*)(CELL, CELL, CELL));
 
 /* closecell.c */
 void Rast_close(int);
@@ -314,7 +314,7 @@ void Rast_get_row_colors(int, int, struct Colors *,
 			 unsigned char *);
 /* histo_eq.c */
 void Rast_histogram_eq(const struct Histogram *, unsigned char **,
-		    CELL *, CELL *);
+		       CELL *, CELL *);
 
 /* histogram.c */
 void Rast_init_histogram(struct Histogram *);
@@ -459,12 +459,12 @@ int Rast__quant_import(const char *, const char *, struct Quant *);
 int Rast__quant_export(const char *, const char *, const struct Quant *);
 
 /* quant_rw.c */
-int Rast_truncate_fp_map(const char *, const char *);
-int Rast_round_fp_map(const char *, const char *);
-int Rast_quantize_fp_map(const char *, const char *, CELL, CELL);
-int Rast_quantize_fp_map_range(const char *, const char *, DCELL, DCELL, CELL,
-			    CELL);
-int Rast_write_quant(const char *, const char *, const struct Quant *);
+void Rast_truncate_fp_map(const char *, const char *);
+void Rast_round_fp_map(const char *, const char *);
+void Rast_quantize_fp_map(const char *, const char *, CELL, CELL);
+void Rast_quantize_fp_map_range(const char *, const char *, DCELL, DCELL, CELL,
+				CELL);
+void Rast_write_quant(const char *, const char *, const struct Quant *);
 int Rast_read_quant(const char *, const char *, struct Quant *);
 
 /* range.c */
@@ -472,8 +472,8 @@ void Rast__remove_fp_range(const char *);
 void Rast_construct_default_range(struct Range *);
 int Rast_read_fp_range(const char *, const char *, struct FPRange *);
 int Rast_read_range(const char *, const char *, struct Range *);
-int Rast_write_range(const char *, const struct Range *);
-int Rast_write_fp_range(const char *, const struct FPRange *);
+void Rast_write_range(const char *, const struct Range *);
+void Rast_write_fp_range(const char *, const struct FPRange *);
 void Rast_update_range(CELL, struct Range *);
 void Rast_update_fp_range(DCELL, struct FPRange *);
 void Rast_row_update_range(const CELL *, int, struct Range *);

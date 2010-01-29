@@ -27,22 +27,15 @@
 
    \param name map name
    \param mapset mapset name
-
-   \return -1 on error
-   \return 1 on success
  */
-int Rast_truncate_fp_map(const char *name, const char *mapset)
+void Rast_truncate_fp_map(const char *name, const char *mapset)
 {
     struct Quant quant;
 
     Rast_quant_init(&quant);
     Rast_quant_truncate(&quant);
     /* quantize the map */
-    if (Rast_write_quant(name, mapset, &quant) < 0) {
-	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
-	return -1;
-    }
-    return 1;
+    Rast_write_quant(name, mapset, &quant);
 }
 
 /*!
@@ -54,22 +47,15 @@ int Rast_truncate_fp_map(const char *name, const char *mapset)
 
    \param name map name
    \param mapset mapset name
-
-   \return -1 on error
-   \return 1 on success
  */
-int Rast_round_fp_map(const char *name, const char *mapset)
+void Rast_round_fp_map(const char *name, const char *mapset)
 {
     struct Quant quant;
 
     Rast_quant_init(&quant);
     Rast_quant_round(&quant);
     /* round the map */
-    if (Rast_write_quant(name, mapset, &quant) < 0) {
-	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
-	return -1;
-    }
-    return 1;
+    Rast_write_quant(name, mapset, &quant);
 }
 
 /*!
@@ -91,28 +77,21 @@ int Rast_round_fp_map(const char *name, const char *mapset)
  * \param mapset mapset name
  * \param cmin minimum value
  * \param cmax maximum value
- *
- * \return -1 on error
- * \return 1 on success
  */
-int Rast_quantize_fp_map(const char *name, const char *mapset,
-			 CELL min, CELL max)
+void Rast_quantize_fp_map(const char *name, const char *mapset,
+			  CELL min, CELL max)
 {
     DCELL d_min, d_max;
     struct FPRange fp_range;
 
-    if (Rast_read_fp_range(name, mapset, &fp_range) < 0) {
-	G_warning(_("Unable to read fp range for raster map <%s>"),
-		  G_fully_qualified_name(name, mapset));
-	return -1;
-    }
+    if (Rast_read_fp_range(name, mapset, &fp_range) < 0)
+	G_fatal_error(_("Unable to read fp range for raster map <%s>"),
+		      G_fully_qualified_name(name, mapset));
     Rast_get_fp_range_min_max(&fp_range, &d_min, &d_max);
-    if (Rast_is_d_null_value(&d_min) || Rast_is_d_null_value(&d_max)) {
-	G_warning(_("Raster map <%s> is empty"),
-		  G_fully_qualified_name(name, mapset));
-	return -1;
-    }
-    return Rast_quantize_fp_map_range(name, mapset, d_min, d_max, min, max);
+    if (Rast_is_d_null_value(&d_min) || Rast_is_d_null_value(&d_max))
+	G_fatal_error(_("Raster map <%s> is empty"),
+		      G_fully_qualified_name(name, mapset));
+    Rast_quantize_fp_map_range(name, mapset, d_min, d_max, min, max);
 }
 
 /*!
@@ -141,23 +120,16 @@ int Rast_quantize_fp_map(const char *name, const char *mapset,
  * \param d_max maximum fp value
  * \param min minimum value
  * \param max maximum value
- *
- * \return -1 on error
- * \return 1 on success
  */
-int Rast_quantize_fp_map_range(const char *name, const char *mapset,
-			       DCELL d_min, DCELL d_max, CELL min, CELL max)
+void Rast_quantize_fp_map_range(const char *name, const char *mapset,
+				DCELL d_min, DCELL d_max, CELL min, CELL max)
 {
     struct Quant quant;
 
     Rast_quant_init(&quant);
     Rast_quant_add_rule(&quant, d_min, d_max, min, max);
     /* quantize the map */
-    if (Rast_write_quant(name, mapset, &quant) < 0) {
-	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
-	return -1;
-    }
-    return 1;
+    Rast_write_quant(name, mapset, &quant);
 }
 
 /*!
@@ -174,12 +146,9 @@ int Rast_quantize_fp_map_range(const char *name, const char *mapset,
  * \param name map name
  * \param mapset mapset name
  * \param quant pointer to Quant structure which hold quant rules info
- * 
- * \return -1 on error
- * \return 1 on success
  */
-int Rast_write_quant(const char *name, const char *mapset,
-		     const struct Quant *quant)
+void Rast_write_quant(const char *name, const char *mapset,
+		      const struct Quant *quant)
 {
     CELL cell_min, cell_max;
     DCELL d_min, d_max;
@@ -187,18 +156,14 @@ int Rast_write_quant(const char *name, const char *mapset,
     if (Rast_map_type(name, mapset) == CELL_TYPE) {
 	G_warning(_("Unable to write quant rules: raster map <%s> is integer"),
 		  name);
-	return -1;
+	return;
     }
 
     Rast_quant_get_limits(quant, &d_min, &d_max, &cell_min, &cell_max);
 
     /* first actually write the rules */
-    if (Rast__quant_export(name, mapset, quant) < 0) {
-	G_warning(_("Unable to write quant rules for raster map <%s>"), name);
-	return -1;
-    }
-
-    return 1;
+    if (Rast__quant_export(name, mapset, quant) < 0)
+	G_fatal_error(_("Unable to write quant rules for raster map <%s>"), name);
 }
 
 /*!

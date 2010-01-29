@@ -453,8 +453,7 @@ static void write_fp_quant(const char *output)
     Rast_quant_init(&quant);
     Rast_quant_round(&quant);
 
-    if (Rast_write_quant(output, G_mapset(), &quant) < 0)
-	G_warning(_("Unable to write quant file"));
+    Rast_write_quant(output, G_mapset(), &quant);
 }
 
 static void create_map(const char *input, int band, const char *output,
