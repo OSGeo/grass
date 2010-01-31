@@ -128,7 +128,7 @@ Spearfish region:
 
 <div class="code"><pre>
 g.region rast=elevation.10m -p
-r.slope.aspect elevation=elevation.10m elev_dx=elev_dx elev_dy=elev_dy
+r.slope.aspect elevation=elevation.10m dx=elev_dx dy=elev_dy
 
 # synthetic maps
 r.mapcalc "rain    = if(elevation.10m, 5.0, null())"
