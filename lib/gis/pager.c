@@ -15,6 +15,8 @@ FILE *G_open_pager(struct Popen *pager)
     const char *program = getenv("GRASS_PAGER");
     FILE *fp;
 
+    G_popen_clear(pager);
+
     if (!program)
 	return stdout;
 
@@ -45,6 +47,8 @@ FILE *G_open_mail(struct Popen *mail)
     const char *user = G_whoami();
     const char *argv[3];
     FILE *fp;
+
+    G_popen_clear(mail);
 
     if (!user || !*user)
 	return NULL;
