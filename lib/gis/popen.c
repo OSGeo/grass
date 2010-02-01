@@ -50,6 +50,12 @@ static FILE *do_popen(struct Popen *state, int wr,
     return state->fp;
 }
 
+void G_popen_clear(struct Popen *state)
+{
+    state->fp = NULL;
+    state->pid = -1;
+}
+
 FILE *G_popen_write(struct Popen *state, const char *program, const char **args)
 {
     return do_popen(state, 1, program, args);

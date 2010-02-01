@@ -483,6 +483,7 @@ void G_set_percent_routine(int (*) (int));
 void G_unset_percent_routine(void);
 
 /* popen.c */
+void G_popen_clear(struct Popen *);
 FILE *G_popen_write(struct Popen *, const char *, const char **);
 FILE *G_popen_read(struct Popen *, const char *, const char **);
 void G_popen_close(struct Popen *);
