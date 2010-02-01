@@ -518,7 +518,10 @@ DCELL Rast_get_sample_cubic(int, const struct Cell_head *, struct Categories *, 
 DCELL Rast_get_sample(int, const struct Cell_head *, struct Categories *, double, double, int, INTERP_TYPE);
 
 /* set_window.c */
+void Rast__init_window(void);
 void Rast_set_window(struct Cell_head *);
+void Rast_set_output_window(struct Cell_head *);
+void Rast_set_input_window(struct Cell_head *);
 
 /* window.c */
 double Rast_northing_to_row(double, const struct Cell_head *);
@@ -527,6 +530,10 @@ double Rast_row_to_northing(double, const struct Cell_head *);
 double Rast_col_to_easting(double, const struct Cell_head *);
 int Rast_window_rows(void);
 int Rast_window_cols(void);
+int Rast_input_window_rows(void);
+int Rast_input_window_cols(void);
+int Rast_output_window_rows(void);
+int Rast_output_window_cols(void);
 
 /* window_map.c */
 void Rast__create_window_mapping(int);

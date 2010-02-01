@@ -15,29 +15,94 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+#include "../gis/G.h"
 #include "R.h"
+
+static void update_window_mappings(void);
+
+void Rast__init_window(void)
+{
+    Rast__init();
+
+    if (G_is_initialized(&R__.window_set))
+	return;
+
+    G__init_window();
+
+    R__.rd_window = G__.window;
+    R__.wr_window = G__.window;
+
+    G_initialize_done(&R__.window_set);
+}
 
 /*!
  * \brief Establishes 'window' as the current working window.
+ * 
+ * \param window window to become operative window
+ */
+void Rast_set_window(struct Cell_head *window)
+{
+    Rast__init_window();
+
+    if (R__.split_window)
+	G_warning(_("Rast_set_window() called while window split"));
+
+    G_adjust_Cell_head(window, 0, 0);
+
+    R__.wr_window = *window;
+    R__.rd_window = *window;
+    R__.split_window = 0;
+
+    update_window_mappings();
+}
+
+/*!
+ * \brief Establishes 'window' as the current working window for output.
+ * 
+ * \param window window to become operative window
+ */
+void Rast_set_output_window(struct Cell_head *window)
+{
+    Rast__init_window();
+
+    G_adjust_Cell_head(window, 0, 0);
+
+    R__.wr_window = *window;
+    R__.split_window = 1;
+
+    G_set_window(window);
+}
+
+/*!
+ * \brief Establishes 'window' as the current working window for input.
  * 
  * Any opened cell files has its file-to-window mapping reworked.
  *
  * \param window window to become operative window
  */
-void Rast_set_window(struct Cell_head *window)
+
+void Rast_set_input_window(struct Cell_head *window)
+{
+    Rast__init_window();
+
+    G_adjust_Cell_head(window, 0, 0);
+
+    R__.rd_window = *window;
+    R__.split_window = 1;
+
+    update_window_mappings();
+}
+
+static void update_window_mappings(void)
 {
     int i;
     int maskfd;
-
-    Rast__init();
 
     /* adjust window, check for valid window */
     /* adjust the real one, not a copy
        G_copy (&twindow, window, sizeof(struct Cell_head));
        window = &twindow;
      */
-
-    G_adjust_Cell_head(window, 0, 0);
 
     /* except for MASK, cell files open for read must have same projection
      * and zone as new window
@@ -47,11 +112,11 @@ void Rast_set_window(struct Cell_head *window)
 	struct fileinfo *fcb = &R__.fileinfo[i];
 
 	if (fcb->open_mode == OPEN_OLD) {
-	    if (fcb->cellhd.zone == window->zone &&
-		fcb->cellhd.proj == window->proj)
+	    if (fcb->cellhd.zone == R__.rd_window.zone &&
+		fcb->cellhd.proj == R__.rd_window.proj)
 		continue;
 	    if (i != maskfd)
-		G_fatal_error(_("Rast_set_window(): projection/zone differs from that of "
+		G_fatal_error(_("Rast_set_read_window(): projection/zone differs from that of "
 				"currently open raster maps"));
 	}
     }
@@ -63,9 +128,6 @@ void Rast_set_window(struct Cell_head *window)
 	R__.mask_fd = -1;
 	R__.auto_mask = -1;	/* turn off masking */
     }
-
-    /* copy the window to the current window */
-    G_set_window(window);
 
     /* now for each possible open cell file, recreate the window mapping */
     /*
@@ -82,35 +144,9 @@ void Rast_set_window(struct Cell_head *window)
 
 	if (fcb->open_mode == OPEN_OLD)
 	    Rast__create_window_mapping(i);
-	/* code commented 10/1999 due to problems */
-#if 0
-	else {
-	    /* opened for writing */
-	    G_free(fcb->data);
-	    fcb->data = G_calloc(G__.window.cols,
-				 Rast_cell_size(fcb-> map_type));
-	}
-
-	/* allocate null bitstream buffers for reading/writing null rows */
-	for (j = 0; j < NULL_ROWS_INMEM; j++) {
-	    G_free(fcb->NULL_ROWS[j]);
-	    fcb->NULL_ROWS[j] = (G__.window.cols);
-	}
-
-
-	/* initialize : no NULL rows in memory */
-	fcb->min_null_row = (-1) * NULL_ROWS_INMEM;
-	if (fcb->null_cur_row > 0) {
-	    G_warning(_("Calling Rast_set_window() in the middle of writing map %s"),
-		      fcb->name);
-	    fcb->null_cur_row = 0;
-	}
-#endif
     }
 
     /* turn masking (back) on if necessary */
     Rast__check_for_auto_masking();
-
-    /* we want the number of bytes per cell to be maximum
-       so that there is enough memory for reading and writing rows */
 }
+

@@ -78,6 +78,10 @@ struct R__			/*  Structure of library globals */
     int want_histogram;
     int nbytes;
     int compression_type;
+    int window_set;		/* Flag: window set?                    */
+    int split_window;           /* Separate windows for input and output */
+    struct Cell_head rd_window;	/* Window used for input        */
+    struct Cell_head wr_window;	/* Window used for ouput        */
 
     int fileinfo_count;
     struct fileinfo *fileinfo;
