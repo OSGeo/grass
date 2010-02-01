@@ -56,10 +56,10 @@ static double distance_manhattan(double dx, double dy)
 
 static double geodesic_distance(int x1, int y1, int x2, int y2)
 {
-    double lat1 = G_row_to_northing(y1 + 0.5, &window);
-    double lat2 = G_row_to_northing(y2 + 0.5, &window);
-    double lon1 = G_col_to_easting(x1 + 0.5, &window);
-    double lon2 = G_col_to_easting(x2 + 0.5, &window);
+    double lat1 = Rast_row_to_northing(y1 + 0.5, &window);
+    double lat2 = Rast_row_to_northing(y2 + 0.5, &window);
+    double lon1 = Rast_col_to_easting(x1 + 0.5, &window);
+    double lon2 = Rast_col_to_easting(x2 + 0.5, &window);
 
     return G_geodesic_distance(lon1, lat1, lon2, lat2);
 }

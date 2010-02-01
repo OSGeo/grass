@@ -65,8 +65,8 @@ void process(void)
     G_get_window(&region);	/* Fill out the region structure (the   */
     /* geographical limits etc.)            */
 
-    nrows = G_window_rows();	/* Find out the number of rows and      */
-    ncols = G_window_cols();	/* columns of the raster.               */
+    nrows = Rast_window_rows();	/* Find out the number of rows and      */
+    ncols = Rast_window_cols();	/* columns of the raster.               */
 
 
     if ((region.ew_res / region.ns_res >= 1.01) ||	/* If EW and NS resolns are    */

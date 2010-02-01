@@ -104,14 +104,14 @@ int main(int argc, char *argv[])
 
     /* enlarge source window */
     {
-	double north = G_row_to_northing(0.5, &dst_w);
-	double south = G_row_to_northing(dst_w.rows - 0.5, &dst_w);
-	int r0 = (int)floor(G_northing_to_row(north, &src_w) - 0.5) - 1;
-	int r1 = (int)floor(G_northing_to_row(south, &src_w) - 0.5) + 3;
-	double west = G_col_to_easting(0.5, &dst_w);
-	double east = G_col_to_easting(dst_w.cols - 0.5, &dst_w);
-	int c0 = (int)floor(G_easting_to_col(west, &src_w) - 0.5) - 1;
-	int c1 = (int)floor(G_easting_to_col(east, &src_w) - 0.5) + 3;
+	double north = Rast_row_to_northing(0.5, &dst_w);
+	double south = Rast_row_to_northing(dst_w.rows - 0.5, &dst_w);
+	int r0 = (int)floor(Rast_northing_to_row(north, &src_w) - 0.5) - 1;
+	int r1 = (int)floor(Rast_northing_to_row(south, &src_w) - 0.5) + 3;
+	double west = Rast_col_to_easting(0.5, &dst_w);
+	double east = Rast_col_to_easting(dst_w.cols - 0.5, &dst_w);
+	int c0 = (int)floor(Rast_easting_to_col(west, &src_w) - 0.5) - 1;
+	int c1 = (int)floor(Rast_easting_to_col(east, &src_w) - 0.5) + 3;
 
 	src_w.south -= src_w.ns_res * (r1 - src_w.rows);
 	src_w.north += src_w.ns_res * (-r0);
@@ -146,8 +146,8 @@ int main(int argc, char *argv[])
     switch (neighbors) {
     case 1:			/* nearest */
 	for (row = 0; row < dst_w.rows; row++) {
-	    double north = G_row_to_northing(row + 0.5, &dst_w);
-	    double maprow_f = G_northing_to_row(north, &src_w) - 0.5;
+	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
+	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
 	    int maprow0 = (int)floor(maprow_f + 0.5);
 
 	    G_percent(row, dst_w.rows, 2);
@@ -156,8 +156,8 @@ int main(int argc, char *argv[])
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
-		double east = G_col_to_easting(col + 0.5, &dst_w);
-		double mapcol_f = G_easting_to_col(east, &src_w) - 0.5;
+		double east = Rast_col_to_easting(col + 0.5, &dst_w);
+		double mapcol_f = Rast_easting_to_col(east, &src_w) - 0.5;
 		int mapcol0 = (int)floor(mapcol_f + 0.5);
 
 		double c = bufs[0][mapcol0];
@@ -177,8 +177,8 @@ int main(int argc, char *argv[])
 
     case 2:			/* bilinear */
 	for (row = 0; row < dst_w.rows; row++) {
-	    double north = G_row_to_northing(row + 0.5, &dst_w);
-	    double maprow_f = G_northing_to_row(north, &src_w) - 0.5;
+	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
+	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
 	    int maprow0 = (int)floor(maprow_f);
 	    double v = maprow_f - maprow0;
 
@@ -188,8 +188,8 @@ int main(int argc, char *argv[])
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
-		double east = G_col_to_easting(col + 0.5, &dst_w);
-		double mapcol_f = G_easting_to_col(east, &src_w) - 0.5;
+		double east = Rast_col_to_easting(col + 0.5, &dst_w);
+		double mapcol_f = Rast_easting_to_col(east, &src_w) - 0.5;
 		int mapcol0 = (int)floor(mapcol_f);
 		int mapcol1 = mapcol0 + 1;
 		double u = mapcol_f - mapcol0;
@@ -216,8 +216,8 @@ int main(int argc, char *argv[])
 
     case 4:			/* bicubic */
 	for (row = 0; row < dst_w.rows; row++) {
-	    double north = G_row_to_northing(row + 0.5, &dst_w);
-	    double maprow_f = G_northing_to_row(north, &src_w) - 0.5;
+	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
+	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
 	    int maprow1 = (int)floor(maprow_f);
 	    int maprow0 = maprow1 - 1;
 	    double v = maprow_f - maprow1;
@@ -228,8 +228,8 @@ int main(int argc, char *argv[])
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
-		double east = G_col_to_easting(col + 0.5, &dst_w);
-		double mapcol_f = G_easting_to_col(east, &src_w) - 0.5;
+		double east = Rast_col_to_easting(col + 0.5, &dst_w);
+		double mapcol_f = Rast_easting_to_col(east, &src_w) - 0.5;
 		int mapcol1 = (int)floor(mapcol_f);
 		int mapcol0 = mapcol1 - 1;
 		int mapcol2 = mapcol1 + 1;

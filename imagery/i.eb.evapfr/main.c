@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
     inrast_h0 = Rast_allocate_d_buf();
     
     /***************************************************/ 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     outrast1 = Rast_allocate_d_buf();
 
     if (makin) 

@@ -16,11 +16,11 @@ void ram2out(void)
     extern int nrows, ncols;
     extern struct Cell_head window;
     double north, west;
-    double G_row_to_northing(), G_col_to_easting();
+    double Rast_row_to_northing(), G_col_to_easting();
     int row, col;
 
-    north = G_row_to_northing(0.5, &window);
-    west = G_col_to_easting(0.5, &window);
+    north = Rast_row_to_northing(0.5, &window);
+    west = Rast_col_to_easting(0.5, &window);
     /*  Copy maps in ram to output maps, casting into integers */
     G_message("Writing output: %s, x_output: %s, y_output: %s ... ",
 	      out_layer, x_out_layer, y_out_layer);

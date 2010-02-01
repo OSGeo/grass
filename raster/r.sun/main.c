@@ -1159,10 +1159,10 @@ int OUTGR(void)
 
     Rast_set_window(&cellhd);
 
-    if (m != G_window_rows())
-	G_fatal_error("OOPS: rows changed from %d to %d", m, G_window_rows());
-    if (n != G_window_cols())
-	G_fatal_error("OOPS: cols changed from %d to %d", n, G_window_cols());
+    if (m != Rast_window_rows())
+	G_fatal_error("OOPS: rows changed from %d to %d", m, Rast_window_rows());
+    if (n != Rast_window_cols())
+	G_fatal_error("OOPS: cols changed from %d to %d", n, Rast_window_cols());
 
     for (iarc = 0; iarc < m; iarc++) {
 	i = m - iarc - 1;

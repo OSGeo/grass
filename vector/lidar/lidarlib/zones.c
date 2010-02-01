@@ -271,8 +271,8 @@ void P_Aux_to_Raster(double **matrix, int fd)
 
     G_get_window(&Original);
     Rast_set_window(&Original);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     raster = Rast_allocate_buf(DCELL_TYPE);
 
@@ -374,8 +374,8 @@ double **P_Null_Matrix(double **matrix)
 
     G_get_window(&Original);
     Rast_set_window(&Original);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     for (row = 0; row < nrows; row++) {
 	for (col = 0; col < ncols; col++) {

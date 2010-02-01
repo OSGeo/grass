@@ -235,8 +235,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("The min specified input map is two"));
 
     /* Allocate output buffer, use input map data_type */
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     outrast = Rast_allocate_buf(out_data_type);
 
    

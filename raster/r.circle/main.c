@@ -131,10 +131,10 @@ int main(int argc, char *argv[])
 
 	for (row = 0; row < w.rows; row++) {
 	    G_percent(row, w.rows, 2);
-	    cur[1] = G_row_to_northing(row + 0.5, &w);
+	    cur[1] = Rast_row_to_northing(row + 0.5, &w);
 	    for (col = 0; col < w.cols; col++) {
 		c = col;
-		cur[0] = G_col_to_easting(col + 0.5, &w);
+		cur[0] = Rast_col_to_easting(col + 0.5, &w);
 		int_buf[c] =
 		    (int)(distance(pt, cur, fmin, fmax, binary) * fmult);
 		if (int_buf[c] == 0)

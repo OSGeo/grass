@@ -122,8 +122,8 @@ int main(int argc, char *argv[])
     G_get_set_window(&window);
     dr_f = ba_f = N_f = E_f = errr = 0;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     total = nrows * ncols;
     nrows_less_one = nrows - 1;
     ncols_less_one = ncols - 1;

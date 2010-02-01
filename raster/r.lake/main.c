@@ -214,8 +214,8 @@ int main(int argc, char *argv[])
     if (lakemap)
 	lake_fd = Rast_open_new(lakemap, 1);
 
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
 
     /* If we use x,y as seed... */
     if (sdxy_opt->answer) {
@@ -225,8 +225,8 @@ int main(int argc, char *argv[])
 
 	G_scan_easting(sdxy_opt->answers[0], &east, G_projection());
 	G_scan_northing(sdxy_opt->answers[1], &north, G_projection());
-	start_col = (int)G_easting_to_col(east, &window);
-	start_row = (int)G_northing_to_row(north, &window);
+	start_col = (int)Rast_easting_to_col(east, &window);
+	start_row = (int)Rast_northing_to_row(north, &window);
 
 	if (start_row < 0 || start_row > rows ||
 	    start_col < 0 || start_col > cols)

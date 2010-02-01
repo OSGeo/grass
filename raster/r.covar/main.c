@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
 	fd[i] = Rast_open_old(name, "");
     }
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     G_message(_("%s: complete ... "), G_program_name());
     count = 0;

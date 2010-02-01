@@ -37,8 +37,8 @@ find_minimum_distance(const struct CatEdgeList *list1, const struct CatEdgeList 
     double dist;
     double e1, n1, e2, n2;
     extern double G_distance();
-    extern double G_row_to_northing();
-    extern double G_col_to_easting();
+    extern double Rast_row_to_northing();
+    extern double Rast_col_to_easting();
     int zerro_row, zerro_col;
 
     int nulldistance = 0;
@@ -48,18 +48,18 @@ find_minimum_distance(const struct CatEdgeList *list1, const struct CatEdgeList 
 	nulldistance = null_distance(name1, name2, &zerro_row, &zerro_col);
 
     for (i1 = 0; i1 < list1->ncells; i1++) {
-	e1 = G_col_to_easting(list1->col[i1] + 0.5, region);
-	n1 = G_row_to_northing(list1->row[i1] + 0.5, region);
+	e1 = Rast_col_to_easting(list1->col[i1] + 0.5, region);
+	n1 = Rast_row_to_northing(list1->row[i1] + 0.5, region);
 
 	for (i2 = 0; i2 < list2->ncells; i2++) {
 	    if (!nulldistance) {
-		e2 = G_col_to_easting(list2->col[i2] + 0.5, region);
-		n2 = G_row_to_northing(list2->row[i2] + 0.5, region);
+		e2 = Rast_col_to_easting(list2->col[i2] + 0.5, region);
+		n2 = Rast_row_to_northing(list2->row[i2] + 0.5, region);
 		dist = G_distance(e1, n1, e2, n2);
 	    }
 	    else {
-		e2 = e1 = G_col_to_easting(zerro_col + 0.5, region);
-		n2 = n1 = G_row_to_northing(zerro_row + 0.5, region);
+		e2 = e1 = Rast_col_to_easting(zerro_col + 0.5, region);
+		n2 = n1 = Rast_row_to_northing(zerro_row + 0.5, region);
 		dist = 0.;
 	    }
 
@@ -101,8 +101,8 @@ int null_distance(const char *name1, const char *name2, int *zerro_row, int *zer
     G_message(_("Reading maps  <%s,%s> while finding 0 distance ..."), name1,
 	      name2);
 
-    ncols = G_window_cols();
-    nrows = G_window_rows();
+    ncols = Rast_window_cols();
+    nrows = Rast_window_rows();
 
     for (row = 0; row < nrows; row++) {
 

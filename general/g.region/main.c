@@ -549,7 +549,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (flag.res_set->answer)
-		G_align_window(&window, &temp_window);
+		Rast_align_window(&window, &temp_window);
 
 	    Vect_close(&Map);
 	}
@@ -783,7 +783,7 @@ int main(int argc, char *argv[])
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
 	Rast_get_cellhd(name, mapset, &temp_window);
-	G_align_window(&window, &temp_window);
+	Rast_align_window(&window, &temp_window);
     }
 
     /* save= */

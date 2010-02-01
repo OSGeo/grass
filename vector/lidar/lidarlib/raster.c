@@ -214,8 +214,8 @@ double **P_Regular_Points(struct Cell_head *Elaboration, struct bound_box Genera
     G_get_window(&Original);
     for (row = 0; row < nrows; row++) {
 	for (col = 0; col < ncols; col++) {
-	    X = G_col_to_easting((double)(col) + 0.5, &Original);
-	    Y = G_row_to_northing((double)(row) + 0.5, &Original);
+	    X = Rast_col_to_easting((double)(col) + 0.5, &Original);
+	    Y = Rast_row_to_northing((double)(row) + 0.5, &Original);
 
 	    if (Vect_point_in_box(X, Y, mean, &General)) {	/* Here, mean is just for asking if obs point is in box */
 

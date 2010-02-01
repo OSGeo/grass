@@ -192,14 +192,14 @@ void bordwalk(struct Cell_head *from_hd, struct Cell_head *to_hd,
 
     /* adjust to edges */
 
-    idx = (int)floor(G_easting_to_col(xmin, to_hd));
-    xmin = G_col_to_easting(idx + 0.0, to_hd);
-    idx = (int)floor(G_easting_to_col(xmax, to_hd));
-    xmax = G_col_to_easting(idx + 1.0, to_hd);
-    idx = (int)floor(G_northing_to_row(ymin, to_hd));
-    ymin = G_row_to_northing(idx + 1.0, to_hd);
-    idx = (int)floor(G_northing_to_row(ymax, to_hd));
-    ymax = G_row_to_northing(idx + 0.0, to_hd);
+    idx = (int)floor(Rast_easting_to_col(xmin, to_hd));
+    xmin = Rast_col_to_easting(idx + 0.0, to_hd);
+    idx = (int)floor(Rast_easting_to_col(xmax, to_hd));
+    xmax = Rast_col_to_easting(idx + 1.0, to_hd);
+    idx = (int)floor(Rast_northing_to_row(ymin, to_hd));
+    ymin = Rast_row_to_northing(idx + 1.0, to_hd);
+    idx = (int)floor(Rast_northing_to_row(ymax, to_hd));
+    ymax = Rast_row_to_northing(idx + 0.0, to_hd);
 
     to_hd->west = (xmin < to_hd->west) ? to_hd->west : xmin;
     to_hd->east = (xmax > to_hd->east) ? to_hd->east : xmax;

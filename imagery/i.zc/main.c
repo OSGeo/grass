@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
     G_get_set_window(&window);
 
     /* get the rows and columns in the current window */
-    or = G_window_rows();
-    oc = G_window_cols();
+    or = Rast_window_rows();
+    oc = Rast_window_cols();
     rows = G_math_max_pow2((long)or);
     cols = G_math_max_pow2((long)oc);
     size = (rows > cols) ? rows : cols;

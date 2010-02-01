@@ -22,7 +22,7 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     }
     if (0 >
 	(errflag =
-	 segment_format(fd, G_window_rows(), G_window_cols(), srows, scols,
+	 segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows, scols,
 			sizeof(CELL)))) {
 	close(fd);
 	unlink(filename);

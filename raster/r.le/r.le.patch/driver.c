@@ -2807,8 +2807,8 @@ void whole_reg_driver()
     REGLIST *ptrfirst, *ptrthis, *ptrnew;
     CELL *row_buf;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     n_scale = 1;
 

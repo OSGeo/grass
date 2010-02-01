@@ -194,8 +194,8 @@ int main(int argc, char *argv[])
     fcell = Rast_allocate_buf(FCELL_TYPE);
 
     /*  find number of rows and columns in elevation map    */
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /*      open elevation overlay file for reading         */
     old = Rast_open_old(elev_layer, old_mapset);

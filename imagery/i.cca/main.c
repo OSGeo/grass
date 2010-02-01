@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     }
 
     /* do the transform */
-    transform(datafds, outfds, G_window_rows(), G_window_cols(), q, bands,
+    transform(datafds, outfds, Rast_window_rows(), Rast_window_cols(), q, bands,
 	      outbandmin, outbandmax);
 
     /* make grey scale color table */

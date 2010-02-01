@@ -358,8 +358,8 @@ G_add_keyword(_("interpolation"));
     G_debug(1, "Interpolation()");
 
     if (map) {
-	nrows = G_window_rows();
-	ncols = G_window_cols();
+	nrows = Rast_window_rows();
+	ncols = Rast_window_cols();
 
 	if (!G_alloc_matrix(nrows, ncols))
 	    G_fatal_error(_("Interpolation: The region resolution is too high: "

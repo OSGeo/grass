@@ -184,8 +184,8 @@ int main(int argc, char **argv)
 
     /* get the window information  */
     G_get_window(&window);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* buffers for internal use */
     bndC.ns = ncols;

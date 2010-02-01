@@ -383,8 +383,8 @@ void user_input(int argc, char **argv)
     if (edge->answer) {
 	choice->edge = atoi(edge->answer);
 	if (choice->edge < 0 ||
-	    choice->edge >= G_window_rows() ||
-	    choice->edge >= G_window_cols()) {
+	    choice->edge >= Rast_window_rows() ||
+	    choice->edge >= Rast_window_cols()) {
 	    fprintf(stderr, "\n");
 	    fprintf(stderr,
 		    "   ***********************************************\n");

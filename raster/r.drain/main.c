@@ -223,8 +223,8 @@ int main(int argc, char **argv)
 
     /* get the window information  */
     G_get_window(&window);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     if (opt4->answer) {
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
@@ -240,8 +240,8 @@ int main(int argc, char **argv)
 	for (i = 0; coordopt->answers[i] != NULL; i += 2) {
 	    G_scan_easting(coordopt->answers[i], &east, G_projection());
 	    G_scan_northing(coordopt->answers[i + 1], &north, G_projection());
-	    start_col = (int)G_easting_to_col(east, &window);
-	    start_row = (int)G_northing_to_row(north, &window);
+	    start_col = (int)Rast_easting_to_col(east, &window);
+	    start_row = (int)Rast_northing_to_row(north, &window);
 
 	    if (start_row < 0 || start_row > nrows ||
 		start_col < 0 || start_col > ncols) {
@@ -277,8 +277,8 @@ int main(int argc, char **argv)
 		if (!G_site_in_region(site, &window))
 		    continue;
 
-		start_col = (int)G_easting_to_col(site->east, &window);
-		start_row = (int)G_northing_to_row(site->north, &window);
+		start_col = (int)Rast_easting_to_col(site->east, &window);
+		start_row = (int)Rast_northing_to_row(site->north, &window);
 
 		/* effectively just a duplicate check to G_site_in_region() ??? */
 		if (start_row < 0 || start_row > nrows || start_col < 0 ||

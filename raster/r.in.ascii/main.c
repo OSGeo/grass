@@ -191,12 +191,12 @@ int main(int argc, char *argv[])
     ncols = cellhd.cols;
     Rast_set_window(&cellhd);
 
-    if (nrows != G_window_rows())
+    if (nrows != Rast_window_rows())
 	G_fatal_error(_("OOPS: rows changed from %d to %d"), nrows,
-		      G_window_rows());
-    if (ncols != G_window_cols())
+		      Rast_window_rows());
+    if (ncols != Rast_window_cols())
 	G_fatal_error(_("OOPS: cols changed from %d to %d"), ncols,
-		      G_window_cols());
+		      Rast_window_cols());
 
 
     rast_ptr = Rast_allocate_buf(data_type);

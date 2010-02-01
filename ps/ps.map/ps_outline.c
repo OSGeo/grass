@@ -116,14 +116,14 @@ int draw_outline(void)
     k = 0;
     raster_size = Rast_cell_size(map_type);
     while (read_next()) {	/* read rest of file, one row at *//*   a time */
-	n1 = G_row_to_northing((double)row - 1., &(PS.w));
-	n2 = G_row_to_northing((double)row, &(PS.w));
-	n3 = G_row_to_northing((double)row + 1., &(PS.w));
+	n1 = Rast_row_to_northing((double)row - 1., &(PS.w));
+	n2 = Rast_row_to_northing((double)row, &(PS.w));
+	n3 = Rast_row_to_northing((double)row + 1., &(PS.w));
 
 	for (col = 0; col < scan_length - 1; col++) {
-	    e1 = G_col_to_easting((double)col - 1., &(PS.w));
-	    e2 = G_col_to_easting((double)col, &(PS.w));
-	    e3 = G_col_to_easting((double)col + 1., &(PS.w));
+	    e1 = Rast_col_to_easting((double)col - 1., &(PS.w));
+	    e2 = Rast_col_to_easting((double)col, &(PS.w));
+	    e3 = Rast_col_to_easting((double)col + 1., &(PS.w));
 	    tl = G_incr_void_ptr(buffer[top], col * raster_size);
 	    /* top left in window */
 	    tr = G_incr_void_ptr(buffer[top], (col + 1) * raster_size);

@@ -46,8 +46,8 @@ int centroids(int fd,		/* File descriptor of map layer to process */
 
     /* do rows and columns through window and mask */
     /*  to do counting */
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
     for (row = 0; row < rows; row++) {
 	Rast_get_c_row(fd, cell_buf, row);	/* get a row */
 	for (col = 0; col < cols; col++) {

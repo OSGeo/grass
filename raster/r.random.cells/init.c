@@ -21,8 +21,8 @@ void Init()
 
     G_debug(2, "Init()");
 
-    Rs = G_window_rows();
-    Cs = G_window_cols();
+    Rs = Rast_window_rows();
+    Cs = Rast_window_cols();
     G_get_set_window(&Region);
     EW = Region.ew_res;
     NS = Region.ns_res;

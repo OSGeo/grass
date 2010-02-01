@@ -80,9 +80,9 @@ static void precompute_ew_dists(void)
 
     if (G_projection() == PROJECTION_LL) {
 	for (row = 0; row < region.rows; row++) {
-	    northing = G_row_to_northing(row + 0.5, &region);
-	    ew_dist[row] = G_distance(G_col_to_easting(0., &region), northing,
-				      G_col_to_easting(1., &region),
+	    northing = Rast_row_to_northing(row + 0.5, &region);
+	    ew_dist[row] = G_distance(Rast_col_to_easting(0., &region), northing,
+				      Rast_col_to_easting(1., &region),
 				      northing);
 	}
     }

@@ -23,8 +23,8 @@ int get_training_classes(struct parms *parms,
     fd = files->train_fd;
     cell = files->train_cell;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* determine the non-zero categories in the map */
     I_InitSigSet(S);

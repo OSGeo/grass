@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     dumpname = G_tempfile();
     statname = G_tempfile();
 
-    window_cells = G_window_rows() * G_window_cols();
+    window_cells = Rast_window_rows() * Rast_window_cols();
 
     map1name = parm.map1->answer;
     map2name = parm.map2->answer;

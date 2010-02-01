@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
     if (!flag.a->answer) {
 	G_get_window(&window);
 	Rast_get_cellhd(elev_name, "", &cellhd);
-	G_align_window(&window, &cellhd);
+	Rast_align_window(&window, &cellhd);
 	Rast_set_window(&window);
     }
 
@@ -391,8 +391,8 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&window);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     if (((window.west == (window.east - 360.))
 	 || (window.east == (window.west - 360.))) &&
@@ -414,11 +414,11 @@ int main(int argc, char *argv[])
 	G_warning(_("Converting units to meters, factor=%.6f"), factor);
 
     G_begin_distance_calculations();
-    north = G_row_to_northing(0.5, &window);
-    ns_med = G_row_to_northing(1.5, &window);
-    south = G_row_to_northing(2.5, &window);
-    east = G_col_to_easting(2.5, &window);
-    west = G_col_to_easting(0.5, &window);
+    north = Rast_row_to_northing(0.5, &window);
+    ns_med = Rast_row_to_northing(1.5, &window);
+    south = Rast_row_to_northing(2.5, &window);
+    east = Rast_col_to_easting(2.5, &window);
+    west = Rast_col_to_easting(0.5, &window);
     V = G_distance(east, north, east, south) * 4 / zfactor;
     H = G_distance(east, ns_med, west, ns_med) * 4 / zfactor;
     /*    ____________________________
@@ -451,7 +451,7 @@ int main(int argc, char *argv[])
     if (slope_name != NULL) {
 	slope_fd = opennew(slope_name, out_type);
 	slp_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
+	Rast_set_null_value(slp_raster, Rast_window_cols(), data_type);
 	Rast_put_row(slope_fd, slp_raster, data_type);
     }
     else {
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
     if (aspect_name != NULL) {
 	aspect_fd = opennew(aspect_name, out_type);
 	asp_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(asp_raster, G_window_cols(), data_type);
+	Rast_set_null_value(asp_raster, Rast_window_cols(), data_type);
 	Rast_put_row(aspect_fd, asp_raster, data_type);
     }
     else {
@@ -473,7 +473,7 @@ int main(int argc, char *argv[])
     if (pcurv_name != NULL) {
 	pcurv_fd = opennew(pcurv_name, out_type);
 	pcurv_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(pcurv_raster, G_window_cols(), data_type);
+	Rast_set_null_value(pcurv_raster, Rast_window_cols(), data_type);
 	Rast_put_row(pcurv_fd, pcurv_raster, data_type);
     }
     else {
@@ -484,7 +484,7 @@ int main(int argc, char *argv[])
     if (tcurv_name != NULL) {
 	tcurv_fd = opennew(tcurv_name, out_type);
 	tcurv_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(tcurv_raster, G_window_cols(), data_type);
+	Rast_set_null_value(tcurv_raster, Rast_window_cols(), data_type);
 	Rast_put_row(tcurv_fd, tcurv_raster, data_type);
     }
     else {
@@ -495,7 +495,7 @@ int main(int argc, char *argv[])
     if (dx_name != NULL) {
 	dx_fd = opennew(dx_name, out_type);
 	dx_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(dx_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dx_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dx_fd, dx_raster, data_type);
     }
     else {
@@ -506,7 +506,7 @@ int main(int argc, char *argv[])
     if (dy_name != NULL) {
 	dy_fd = opennew(dy_name, out_type);
 	dy_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(dy_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dy_fd, dy_raster, data_type);
     }
     else {
@@ -517,7 +517,7 @@ int main(int argc, char *argv[])
     if (dxx_name != NULL) {
 	dxx_fd = opennew(dxx_name, out_type);
 	dxx_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(dxx_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dxx_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dxx_fd, dxx_raster, data_type);
     }
     else {
@@ -528,7 +528,7 @@ int main(int argc, char *argv[])
     if (dyy_name != NULL) {
 	dyy_fd = opennew(dyy_name, out_type);
 	dyy_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(dyy_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dyy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dyy_fd, dyy_raster, data_type);
     }
     else {
@@ -539,7 +539,7 @@ int main(int argc, char *argv[])
     if (dxy_name != NULL) {
 	dxy_fd = opennew(dxy_name, out_type);
 	dxy_raster = Rast_allocate_buf(data_type);
-	Rast_set_null_value(dxy_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dxy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dxy_fd, dxy_raster, data_type);
     }
     else {
@@ -553,16 +553,16 @@ int main(int argc, char *argv[])
 
     if (Wrap) {
 	Rast_get_d_row_nomask(elevation_fd, elev_cell[1] + 1, 0);
-	elev_cell[1][0] = elev_cell[1][G_window_cols() - 1];
-	elev_cell[1][G_window_cols() + 1] = elev_cell[1][2];
+	elev_cell[1][0] = elev_cell[1][Rast_window_cols() - 1];
+	elev_cell[1][Rast_window_cols() + 1] = elev_cell[1][2];
     }
     else
 	Rast_get_d_row_nomask(elevation_fd, elev_cell[1], 0);
 
     if (Wrap) {
 	Rast_get_d_row_nomask(elevation_fd, elev_cell[2] + 1, 1);
-	elev_cell[2][0] = elev_cell[2][G_window_cols() - 1];
-	elev_cell[2][G_window_cols() + 1] = elev_cell[2][2];
+	elev_cell[2][0] = elev_cell[2][Rast_window_cols() - 1];
+	elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][2];
     }
     else
 	Rast_get_d_row_nomask(elevation_fd, elev_cell[2], 1);
@@ -572,11 +572,11 @@ int main(int argc, char *argv[])
     for (row = 2; row < nrows; row++) {
 	/*  if projection is Lat/Lon, recalculate  V and H   */
 	if (G_projection() == PROJECTION_LL) {
-	    north = G_row_to_northing((row - 2 + 0.5), &window);
-	    ns_med = G_row_to_northing((row - 1 + 0.5), &window);
-	    south = G_row_to_northing((row + 0.5), &window);
-	    east = G_col_to_easting(2.5, &window);
-	    west = G_col_to_easting(0.5, &window);
+	    north = Rast_row_to_northing((row - 2 + 0.5), &window);
+	    ns_med = Rast_row_to_northing((row - 1 + 0.5), &window);
+	    south = Rast_row_to_northing((row + 0.5), &window);
+	    east = Rast_col_to_easting(2.5, &window);
+	    west = Rast_col_to_easting(0.5, &window);
 	    V = G_distance(east, north, east, south) * 4 / zfactor;
 	    H = G_distance(east, ns_med, west, ns_med) * 4 / zfactor;
 	    /*        ____________________________
@@ -606,8 +606,8 @@ int main(int argc, char *argv[])
 
 	if (Wrap) {
 	    Rast_get_d_row_nomask(elevation_fd, elev_cell[2] + 1, row);
-	    elev_cell[2][0] = elev_cell[2][G_window_cols() - 1];
-	    elev_cell[2][G_window_cols() + 1] = elev_cell[2][2];
+	    elev_cell[2][0] = elev_cell[2][Rast_window_cols() - 1];
+	    elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][2];
 	}
 	else
 	    Rast_get_d_row_nomask(elevation_fd, elev_cell[2], row);
@@ -998,7 +998,7 @@ int main(int argc, char *argv[])
 	DCELL min, max;
 	struct FPRange range;
 
-	Rast_set_null_value(asp_raster, G_window_cols(), data_type);
+	Rast_set_null_value(asp_raster, Rast_window_cols(), data_type);
 	Rast_put_row(aspect_fd, asp_raster, data_type);
 	Rast_close(aspect_fd);
 
@@ -1103,7 +1103,7 @@ int main(int argc, char *argv[])
 	val2 = 90;
 	Rast_add_c_color_rule(&val1, 255, 0, 0, &val2, 0, 0, 0, &colors);
 	
-	Rast_set_null_value(slp_raster, G_window_cols(), data_type);
+	Rast_set_null_value(slp_raster, Rast_window_cols(), data_type);
 	Rast_put_row(slope_fd, slp_raster, data_type);
 	Rast_close(slope_fd);
 
@@ -1233,7 +1233,7 @@ int main(int argc, char *argv[])
     }
 
     if (pcurv_fd >= 0) {
-	Rast_set_null_value(pcurv_raster, G_window_cols(), data_type);
+	Rast_set_null_value(pcurv_raster, Rast_window_cols(), data_type);
 	Rast_put_row(pcurv_fd, pcurv_raster, data_type);
 	Rast_close(pcurv_fd);
 
@@ -1260,7 +1260,7 @@ int main(int argc, char *argv[])
     }
 
     if (tcurv_fd >= 0) {
-	Rast_set_null_value(tcurv_raster, G_window_cols(), data_type);
+	Rast_set_null_value(tcurv_raster, Rast_window_cols(), data_type);
 	Rast_put_row(tcurv_fd, tcurv_raster, data_type);
 	Rast_close(tcurv_fd);
 
@@ -1287,7 +1287,7 @@ int main(int argc, char *argv[])
     }
 
     if (dx_fd >= 0) {
-	Rast_set_null_value(dx_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dx_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dx_fd, dx_raster, data_type);
 	Rast_close(dx_fd);
 
@@ -1312,7 +1312,7 @@ int main(int argc, char *argv[])
     }
 
     if (dy_fd >= 0) {
-	Rast_set_null_value(dy_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dy_fd, dy_raster, data_type);
 	Rast_close(dy_fd);
 
@@ -1337,7 +1337,7 @@ int main(int argc, char *argv[])
     }
 
     if (dxx_fd >= 0) {
-	Rast_set_null_value(dxx_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dxx_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dxx_fd, dxx_raster, data_type);
 	Rast_close(dxx_fd);
 
@@ -1362,7 +1362,7 @@ int main(int argc, char *argv[])
     }
 
     if (dyy_fd >= 0) {
-	Rast_set_null_value(dyy_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dyy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dyy_fd, dyy_raster, data_type);
 	Rast_close(dyy_fd);
 
@@ -1387,7 +1387,7 @@ int main(int argc, char *argv[])
     }
 
     if (dxy_fd >= 0) {
-	Rast_set_null_value(dxy_raster, G_window_cols(), data_type);
+	Rast_set_null_value(dxy_raster, Rast_window_cols(), data_type);
 	Rast_put_row(dxy_fd, dxy_raster, data_type);
 	Rast_close(dxy_fd);
 

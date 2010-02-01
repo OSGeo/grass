@@ -40,8 +40,8 @@ static void get_region_range(int fd)
 {
     DCELL *buf = Rast_allocate_d_buf();
 
-    int nrows = G_window_rows();
-    int ncols = G_window_cols();
+    int nrows = Rast_window_rows();
+    int ncols = Rast_window_cols();
     int row, col;
 
     min = 1e300;
@@ -133,8 +133,8 @@ static int get_cell(DCELL *result, int fd, double x, double y)
     x -= col + 0.5;
     y -= row + 0.5;
 
-    if (row < 0 || row + 1 >= G_window_rows() ||
-	col < 0 || col + 1 >= G_window_cols()) {
+    if (row < 0 || row + 1 >= Rast_window_rows() ||
+	col < 0 || col + 1 >= Rast_window_cols()) {
 	Rast_set_d_null_value(result, 1);
 	return 0;
     }
@@ -237,8 +237,8 @@ int main(int argc, char **argv)
 	G_scan_easting( profile->answers[i+0], &x, G_projection());
 	G_scan_northing(profile->answers[i+1], &y, G_projection());
 
-	p->x = G_easting_to_col (x, &window);
-	p->y = G_northing_to_row(y, &window);
+	p->x = Rast_easting_to_col (x, &window);
+	p->y = Rast_northing_to_row(y, &window);
 
 	if (num_points > 0) {
 	    const struct point *prev = &points[num_points-1];

@@ -49,12 +49,12 @@ void vrml_put_grid(FILE * vout,
 		G_percent(row, rows - 1, 10);
 
 	    Rast_get_f_row(elevfd, tf, row);
-	    coordz = G_row_to_northing((double)row, w);
+	    coordz = Rast_row_to_northing((double)row, w);
 	    do_coordcnv(&coordz, 'z');
 
 	    /* write a row */
 	    for (col = 0; col < cols; col++) {
-		coordx = G_col_to_easting((double)col, w);
+		coordx = Rast_col_to_easting((double)col, w);
 		do_coordcnv(&coordx, 'x');
 
 		/* HACK: no nulls in vrml grid */

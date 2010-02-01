@@ -52,8 +52,8 @@ void get_stats(struct rr_state *theState)
 	theState->cmax.data.v =
 	    (void *)G_malloc(Rast_cell_size(theState->cmax.type));
     }
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     theState->nCells = nrows * ncols;
     theState->nNulls = 0;

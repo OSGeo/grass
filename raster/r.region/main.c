@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 	window.west = box.W;
 	window.east = box.E;
 
-	G_align_window(&window, &cellhd);
+	Rast_align_window(&window, &cellhd);
 
 	Vect_close(&Map);
     }
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
 
 	Rast_get_cellhd(name, "", &temp_window);
 
-	G_align_window(&window, &temp_window);
+	Rast_align_window(&window, &temp_window);
     }
 
     window.rows = cellhd.rows;

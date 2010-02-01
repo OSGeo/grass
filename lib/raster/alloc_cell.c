@@ -54,7 +54,7 @@ size_t Rast_cell_size(RASTER_MAP_TYPE data_type)
  */
 void *Rast_allocate_buf(RASTER_MAP_TYPE data_type)
 {
-    return (void *)G_calloc(G_window_cols() + 1, Rast_cell_size(data_type));
+    return (void *)G_calloc(Rast_window_cols() + 1, Rast_cell_size(data_type));
 }
 
 /*!
@@ -81,7 +81,7 @@ void *Rast_allocate_buf(RASTER_MAP_TYPE data_type)
  */
 CELL *Rast_allocate_c_buf(void)
 {
-    return (CELL *) G_calloc(G_window_cols() + 1, sizeof(CELL));
+    return (CELL *) G_calloc(Rast_window_cols() + 1, sizeof(CELL));
 }
 
 /*!
@@ -94,7 +94,7 @@ CELL *Rast_allocate_c_buf(void)
  */
 FCELL *Rast_allocate_f_buf(void)
 {
-    return (FCELL *) G_calloc(G_window_cols() + 1, sizeof(FCELL));
+    return (FCELL *) G_calloc(Rast_window_cols() + 1, sizeof(FCELL));
 }
 
 /*!
@@ -107,7 +107,7 @@ FCELL *Rast_allocate_f_buf(void)
  */
 DCELL *Rast_allocate_d_buf(void)
 {
-    return (DCELL *) G_calloc(G_window_cols() + 1, sizeof(DCELL));
+    return (DCELL *) G_calloc(Rast_window_cols() + 1, sizeof(DCELL));
 }
 
 /*!
@@ -120,7 +120,7 @@ DCELL *Rast_allocate_d_buf(void)
  */
 char *Rast_allocate_null_buf(void)
 {
-    return (char *)G_calloc(G_window_cols() + 1, sizeof(char));
+    return (char *)G_calloc(Rast_window_cols() + 1, sizeof(char));
 }
 
 /*!

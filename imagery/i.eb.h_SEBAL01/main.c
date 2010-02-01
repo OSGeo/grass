@@ -231,8 +231,8 @@ int main(int argc, char *argv[])
     ymin = cellhd.south;
     ymax = cellhd.north;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /***************************************************/
     /* Allocate output buffer */

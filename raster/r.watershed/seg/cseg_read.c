@@ -15,7 +15,7 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
     cseg->mapset = NULL;
 
     map_fd = Rast_open_old(map_name, mapset);
-    nrows = G_window_rows();
+    nrows = Rast_window_rows();
     buffer = Rast_allocate_c_buf();
     for (row = 0; row < nrows; row++) {
 	Rast_get_c_row(map_fd, buffer, row);

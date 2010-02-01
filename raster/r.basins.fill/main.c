@@ -94,8 +94,8 @@ int main(int argc, char *argv[])
     Rast_get_cellhd(drain_name, "", &window);
     Rast_set_window(&window);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     ridge_name = ridge_opt->answer;
 

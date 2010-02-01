@@ -16,8 +16,8 @@ int valid_basins(char *accum_name, OUTPUT * output)
 
     window = &(output->window);
     /*
-       nrows = G_window_rows ();
-       ncols = G_window_cols ();
+       nrows = Rast_window_rows ();
+       ncols = Rast_window_cols ();
      */
     if (NULL == (mapset = G_find_raster(accum_name, ""))) {
 	free_output(output);

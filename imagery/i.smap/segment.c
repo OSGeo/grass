@@ -47,8 +47,8 @@ int segment(struct SigSet *S,	/* class parameters */
     ml = parms->ml;		/* use maxl? */
     block_size = parms->blocksize;
 
-    wd = G_window_cols();	/* get width from GRASS */
-    ht = G_window_rows();	/* get height from GRASS */
+    wd = Rast_window_cols();	/* get width from GRASS */
+    ht = Rast_window_rows();	/* get height from GRASS */
 
     /* make blocksize a power of 2 */
     if (block_size < 8)

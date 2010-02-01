@@ -116,8 +116,8 @@ int init_vars(int argc, char *argv[])
        }
      */
     G_get_set_window(&window);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     total_cells = nrows * ncols;
     if (max_length <= d_zero)
 	max_length = 10 * nrows * window.ns_res + 10 * ncols * window.ew_res;

@@ -238,8 +238,8 @@ int main(int argc, char *argv[])
 	inrast_chan7chan = Rast_allocate_d_buf();
     }
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     outrast = Rast_allocate_d_buf();
 
     /* Create New raster files */ 

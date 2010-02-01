@@ -23,8 +23,8 @@ int compute_covariances(struct files *files, struct Signature *S)
 	    for (b2 = 0; b2 < S->nbands; b2++)
 		S->sig[n].var[b1][b2] = 0.0;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     class = (CELL *) G_calloc(ncols, sizeof(CELL));
 
     G_message(_("Calculating class covariance matrices..."));

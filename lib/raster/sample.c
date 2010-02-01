@@ -98,11 +98,11 @@ DCELL Rast_get_sample_nearest(int fd,
     DCELL *maprow = Rast_allocate_d_buf();
 
     /* convert northing and easting to row and col, resp */
-    row = (int)floor(G_northing_to_row(north, window));
-    col = (int)floor(G_easting_to_col(east, window));
+    row = (int)floor(Rast_northing_to_row(north, window));
+    col = (int)floor(Rast_easting_to_col(east, window));
 
-    if (row < 0 || row >= G_window_rows() ||
-	col < 0 || col >= G_window_cols()) {
+    if (row < 0 || row >= Rast_window_rows() ||
+	col < 0 || col >= Rast_window_cols()) {
 	Rast_set_d_null_value(&result, 1);
 	goto done;
     }
@@ -157,8 +157,8 @@ DCELL Rast_get_sample_bilinear(int fd,
     double frow, fcol, trow, tcol;
     DCELL result;
 
-    frow = G_northing_to_row(north, window);
-    fcol = G_easting_to_col(east, window);
+    frow = Rast_northing_to_row(north, window);
+    fcol = Rast_easting_to_col(east, window);
 
     /* convert northing and easting to row and col, resp */
     row = (int)floor(frow - 0.5);
@@ -167,8 +167,8 @@ DCELL Rast_get_sample_bilinear(int fd,
     trow = frow - row - 0.5;
     tcol = fcol - col - 0.5;
 
-    if (row < 0 || row + 1 >= G_window_rows() ||
-	col < 0 || col + 1 >= G_window_cols()) {
+    if (row < 0 || row + 1 >= Rast_window_rows() ||
+	col < 0 || col + 1 >= Rast_window_cols()) {
 	Rast_set_d_null_value(&result, 1);
 	goto done;
     }
@@ -249,8 +249,8 @@ DCELL Rast_get_sample_cubic(int fd,
     for (i = 0; i < 4; i++)
 	rows[i] = Rast_allocate_d_buf();
 
-    frow = G_northing_to_row(north, window);
-    fcol = G_easting_to_col(east, window);
+    frow = Rast_northing_to_row(north, window);
+    fcol = Rast_easting_to_col(east, window);
 
     /* convert northing and easting to row and col, resp */
     row = (int)floor(frow - 1.5);
@@ -259,8 +259,8 @@ DCELL Rast_get_sample_cubic(int fd,
     trow = frow - row - 1.5;
     tcol = fcol - col - 1.5;
 
-    if (row < 0 || row + 3 >= G_window_rows() ||
-	col < 0 || col + 3 >= G_window_cols()) {
+    if (row < 0 || row + 3 >= Rast_window_rows() ||
+	col < 0 || col + 3 >= Rast_window_cols()) {
 	Rast_set_d_null_value(&result, 1);
 	goto done;
     }

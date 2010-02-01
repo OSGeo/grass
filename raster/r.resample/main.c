@@ -99,8 +99,8 @@ int main(int argc, char *argv[])
 
     /* raster buffer is big enough to hold data */
     rast = Rast_allocate_buf(data_type);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     if (ncols <= 1)
 	rast = G_realloc(rast, 2 * Rast_cell_size(data_type));
     /* we need the buffer at least 2 cells large */

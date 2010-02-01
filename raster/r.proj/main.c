@@ -395,9 +395,9 @@ int main(int argc, char **argv)
     outcellhd.west = outcellhd.south = HUGE_VAL;
     outcellhd.east = outcellhd.north = -HUGE_VAL;
     for (row = 0; row < incellhd.rows; row++) {
-	ycoord1 = G_row_to_northing((double)(row + 0.5), &incellhd);
+	ycoord1 = Rast_row_to_northing((double)(row + 0.5), &incellhd);
 	for (col = 0; col < incellhd.cols; col++) {
-	    xcoord1 = G_col_to_easting((double)(col + 0.5), &incellhd);
+	    xcoord1 = Rast_col_to_easting((double)(col + 0.5), &incellhd);
 	    pj_do_proj(&xcoord1, &ycoord1, &iproj, &oproj);
 	    if (xcoord1 > outcellhd.east)
 		outcellhd.east = xcoord1;

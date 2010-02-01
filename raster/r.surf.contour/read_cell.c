@@ -4,8 +4,8 @@
 
 CELL **read_cell(const char *name, const char *mapset)
 {
-    int nrows = G_window_rows();
-    int ncols = G_window_cols();
+    int nrows = Rast_window_rows();
+    int ncols = Rast_window_cols();
     CELL *buf, **idx;
     int fd;
     int row;

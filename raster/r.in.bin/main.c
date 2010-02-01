@@ -473,13 +473,13 @@ int main(int argc, char *argv[])
 
     Rast_set_window(&cellhd);
 
-    if (grass_nrows != G_window_rows())
+    if (grass_nrows != Rast_window_rows())
 	G_fatal_error("rows changed from %d to %d",
-		      grass_nrows, G_window_rows());
+		      grass_nrows, Rast_window_rows());
 
-    if (grass_ncols != G_window_cols())
+    if (grass_ncols != Rast_window_cols())
 	G_fatal_error("cols changed from %d to %d",
-		      grass_ncols, G_window_cols());
+		      grass_ncols, Rast_window_cols());
 
     expected = (off_t) ncols * nrows * bytes;
     if (flag.gmt_hd->answer)

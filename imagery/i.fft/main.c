@@ -109,8 +109,8 @@ int main(int argc, char *argv[])
     G_get_set_window(&window);	/* get the current window for later */
 
     /* get the rows and columns in the current window */
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
     totsize = rows * cols;
 
     /* Allocate appropriate memory for the structure containing

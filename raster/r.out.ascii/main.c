@@ -158,8 +158,8 @@ int main(int argc, char *argv[])
 	    dp = 16;
     }
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* open ascii file for writing or use stdout */
     if (parm.output->answer && strcmp("-", parm.output->answer) != 0) {

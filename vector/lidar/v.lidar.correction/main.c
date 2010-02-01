@@ -190,8 +190,8 @@ int main(int argc, char *argv[])
      *  subregion will be overlaped by its neibourgh subregions. This overlapping
      *  is calculated as OVERLAP_PASS times the east-west resolution. */
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     ew_resol = original_reg.ew_res;
     ns_resol = original_reg.ns_res;

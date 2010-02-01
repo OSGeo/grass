@@ -334,8 +334,8 @@ int main(int argc, char *argv[])
 
     /*  find number of rows and columns in window    */
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /*transfor measurement unit from meters to centimeters due to ROS unit
      *if the input ROSs are in m/min units, cancell the following*/

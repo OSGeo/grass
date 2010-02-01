@@ -318,8 +318,8 @@ int main(int argc, char *argv[])
 
     slot_size = (max - min) / num_slots;
 
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
 
     get_slot_counts(infile);
 

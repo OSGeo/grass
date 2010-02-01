@@ -45,8 +45,8 @@ void find_edge_cells(struct Map *map)
 
     G_message(_("Reading map %s ..."), map->fullname);
 
-    ncols = G_window_cols();
-    nrows = G_window_rows();
+    ncols = Rast_window_cols();
+    nrows = Rast_window_rows();
 
     buf0 = (CELL *) G_calloc(ncols + 2, sizeof(CELL));
     buf1 = (CELL *) G_calloc(ncols + 2, sizeof(CELL));

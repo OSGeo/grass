@@ -593,7 +593,7 @@ int write_raster(int mv_fd, int random_access, g_areas g)
     lseek(random_access, 0, SEEK_SET);
 
     cell_buf = Rast_allocate_d_buf();
-    Rast_set_d_null_value(cell_buf, G_window_cols() + 1);
+    Rast_set_d_null_value(cell_buf, Rast_window_cols() + 1);
 
     for (i = 0; i < g->sf_y + ((int)g->rl / 2); i++) {
 	Rast_put_row(mv_fd, cell_buf, DCELL_TYPE);
@@ -613,9 +613,9 @@ int write_raster(int mv_fd, int random_access, g_areas g)
 
     }
 
-    Rast_set_d_null_value(cell_buf, G_window_cols() + 1);
+    Rast_set_d_null_value(cell_buf, Rast_window_cols() + 1);
 
-    for (i = 0; i < G_window_rows() - g->sf_y - g->rows; i++)
+    for (i = 0; i < Rast_window_rows() - g->sf_y - g->rows; i++)
 	Rast_put_row(mv_fd, cell_buf, DCELL_TYPE);
 
     return 1;

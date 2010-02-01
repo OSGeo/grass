@@ -279,8 +279,8 @@ int main(int argc, char *argv[])
     G3d_getWindow(&region);
 
     /*Check if the g3d-region is equal to the 2d rows and cols */
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
 
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {

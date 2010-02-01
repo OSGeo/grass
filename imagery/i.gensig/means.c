@@ -19,8 +19,8 @@ int compute_means(struct files *files, struct Signature *S)
 	for (b = 0; b < S->nbands; b++)	/* for each band file */
 	    S->sig[n].mean[b] = 0.0;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     class = (CELL *) G_calloc(ncols, sizeof(CELL));
 
     G_message(_("Calculating class means..."));

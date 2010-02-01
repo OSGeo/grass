@@ -50,8 +50,8 @@ static int cell_draw(const char *name,
     int cur_A_row;
     int ncols, nrows;
 
-    ncols = G_window_cols();
-    nrows = G_window_rows();
+    ncols = Rast_window_cols();
+    nrows = Rast_window_rows();
 
     /* Set up the screen, conversions, and graphics */
     D_setup(0);

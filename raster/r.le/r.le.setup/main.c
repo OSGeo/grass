@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     /* setup the current window for display & clear screen */
     D_setup(1);
 
-    Rw_l = (double)G_window_cols() / G_window_rows();
+    Rw_l = (double)Rast_window_cols() / Rast_window_rows();
     /*R_open_driver(); */
     /* R_font("romant"); */
     G_get_set_window(&window);

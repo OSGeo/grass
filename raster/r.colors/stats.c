@@ -33,8 +33,8 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf)
     fd = Rast_open_old(name, mapset);
 
     cell = Rast_allocate_c_buf();
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     Rast_init_cell_stats(statf);
     G_verbose_message(_("Reading raster map <%s>..."),
@@ -62,8 +62,8 @@ void get_fp_stats(const char *name, const char *mapset,
     fd = Rast_open_old(name, mapset);
 
     dcell = Rast_allocate_d_buf();
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     statf->geometric = geometric;
     statf->geom_abs = geom_abs;
