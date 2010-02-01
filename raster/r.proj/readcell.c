@@ -27,8 +27,8 @@ struct cache *readcell(int fdi, const char *size)
     int nblocks;
     int i;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     ny = (nrows + BDIM - 1) / BDIM;
     nx = (ncols + BDIM - 1) / BDIM;

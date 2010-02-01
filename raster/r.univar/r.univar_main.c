@@ -162,7 +162,7 @@ static univar_stat *univar_stat_with_percentiles(int map_type, int size)
 static void
 process_raster(univar_stat * stats, int fd, const struct Cell_head *region)
 {
-    /* use G_window_rows(), G_window_cols() here? */
+    /* use Rast_window_rows(), Rast_window_cols() here? */
     const int rows = region->rows;
     const int cols = region->cols;
     int first = (stats->n < 1);

@@ -126,8 +126,8 @@ int main(int argc, char *argv[])
      */
     raster = Rast_allocate_buf(out_type);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* open arc file for writing */
     if (do_stdout)

@@ -304,8 +304,8 @@ int main(int argc, char *argv[])
 			}
 
 			/* convert north, east to row and col */
-			drow = G_northing_to_row(north, &window);
-			dcol = G_easting_to_col(east, &window);
+			drow = Rast_northing_to_row(north, &window);
+			dcol = Rast_easting_to_col(east, &window);
 
 			/* a special case.
 			 *   if north falls at southern edge, or east falls on eastern edge,

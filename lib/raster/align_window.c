@@ -15,6 +15,7 @@
 #include <math.h>
 
 #include <grass/gis.h>
+#include <grass/raster.h>
 
 /*!
  * \brief Align two regions.
@@ -37,7 +38,7 @@
  * \return NULL on success
  */
 
-void G_align_window(struct Cell_head *window, const struct Cell_head *ref)
+void Rast_align_window(struct Cell_head *window, const struct Cell_head *ref)
 {
     int preserve;
 
@@ -49,13 +50,13 @@ void G_align_window(struct Cell_head *window, const struct Cell_head *ref)
     preserve = window->proj == PROJECTION_LL &&
 	window->east == (window->west + 360);
     window->south =
-	G_row_to_northing(ceil(G_northing_to_row(window->south, ref)), ref);
+	Rast_row_to_northing(ceil(Rast_northing_to_row(window->south, ref)), ref);
     window->north =
-	G_row_to_northing(floor(G_northing_to_row(window->north, ref)), ref);
+	Rast_row_to_northing(floor(Rast_northing_to_row(window->north, ref)), ref);
     window->east =
-	G_col_to_easting(ceil(G_easting_to_col(window->east, ref)), ref);
+	Rast_col_to_easting(ceil(Rast_easting_to_col(window->east, ref)), ref);
     window->west =
-	G_col_to_easting(floor(G_easting_to_col(window->west, ref)), ref);
+	Rast_col_to_easting(floor(Rast_easting_to_col(window->west, ref)), ref);
 
     if (window->proj == PROJECTION_LL) {
 	while (window->north > 90.0)

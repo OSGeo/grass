@@ -236,8 +236,8 @@ int main(int argc, char *argv[])
 
 	    /*Setting the active region */
 	    Rast_set_window(&elaboration_reg);
-	    nrows = G_window_rows();
-	    ncols = G_window_cols();
+	    nrows = Rast_window_rows();
+	    ncols = Rast_window_cols();
 
 	    G_debug(1, _("Rows = %d"), nrows);
 	    G_debug(1, _("Columns = %d"), ncols);
@@ -276,10 +276,10 @@ int main(int argc, char *argv[])
 		     (points->y[0] == original_reg.north))) {
 
 		    row =
-			(int)(G_northing_to_row
+			(int)(Rast_northing_to_row
 			      (points->y[0], &elaboration_reg));
 		    col =
-			(int)(G_easting_to_col
+			(int)(Rast_easting_to_col
 			      (points->x[0], &elaboration_reg));
 
 		    while (1) {
@@ -365,10 +365,10 @@ int main(int argc, char *argv[])
 							       north))) {
 
 		    row =
-			(int)(G_northing_to_row
+			(int)(Rast_northing_to_row
 			      (points_first->y[0], &elaboration_reg));
 		    col =
-			(int)(G_easting_to_col
+			(int)(Rast_easting_to_col
 			      (points_first->x[0], &elaboration_reg));
 
 		    if (fabs
@@ -473,10 +473,10 @@ int main(int argc, char *argv[])
 		     (points->y[0] == original_reg.north))) {
 
 		    row =
-			(int)(G_northing_to_row
+			(int)(Rast_northing_to_row
 			      (points->y[0], &elaboration_reg));
 		    col =
-			(int)(G_easting_to_col
+			(int)(Rast_easting_to_col
 			      (points->x[0], &elaboration_reg));
 
 		    if (raster_matrix[row][col].clas == PRE_TERRAIN) {

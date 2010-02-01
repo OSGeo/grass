@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 	for (j = 0; j < bands; j++) {
 	    covar[i][j] =
 		covar[i][j] /
-		((double)((G_window_rows() * G_window_cols()) - 1));
+		((double)((Rast_window_rows() * Rast_window_cols()) - 1));
 	    G_debug(3, "covar[%d][%d] = %f", i, j, covar[i][j]);
 	}
     }
@@ -226,8 +226,8 @@ set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
 static int calc_mu(int *fds, double *mu, int bands)
 {
     int i;
-    int rows = G_window_rows();
-    int cols = G_window_cols();
+    int rows = Rast_window_rows();
+    int cols = Rast_window_cols();
     void *rowbuf = NULL;
 
     for (i = 0; i < bands; i++) {
@@ -276,8 +276,8 @@ static int calc_mu(int *fds, double *mu, int bands)
 static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 {
     int j, k;
-    int rows = G_window_rows();
-    int cols = G_window_cols();
+    int rows = Rast_window_rows();
+    int cols = Rast_window_cols();
     int row, col;
 
     for (j = 0; j < bands; j++) {
@@ -351,8 +351,8 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
     double max = 0.;
     double old_range = 0.;
     double new_range = 0.;
-    int rows = G_window_rows();
-    int cols = G_window_cols();
+    int rows = Rast_window_rows();
+    int cols = Rast_window_cols();
     int cell_mapsiz = Rast_cell_size(CELL_TYPE);
     int dcell_mapsiz = Rast_cell_size(DCELL_TYPE);
     DCELL *d_buf;

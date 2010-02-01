@@ -425,8 +425,8 @@ int main(int argc, char *argv[])
     if (flag.gmt_hd->answer)
 	write_gmt_header(&header, swap_flag, fp);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     in_buf = Rast_allocate_d_buf();
     out_buf = G_malloc(ncols * bytes);

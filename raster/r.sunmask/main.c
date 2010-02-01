@@ -490,8 +490,8 @@ int main(int argc, char *argv[])
 	    /*              outbuf.c[col1]=1; */
 	    Rast_set_null_value(&outbuf.c[col1], 1, CELL_TYPE);
 	    OK = 1;
-	    east = G_col_to_easting(col1 + 0.5, &window);
-	    north = G_row_to_northing(row1 + 0.5, &window);
+	    east = Rast_col_to_easting(col1 + 0.5, &window);
+	    north = Rast_row_to_northing(row1 + 0.5, &window);
 	    east1 = east;
 	    north1 = north;
 	    if (dvalue == 0.0 && !zeros)
@@ -510,9 +510,9 @@ int main(int argc, char *argv[])
 		    if ((maxh) > (dmax - dvalue))
 			OK = 0;
 		    else {
-			dcol = G_easting_to_col(east, &window);
-			if (drow != G_northing_to_row(north, &window)) {
-			    drow = G_northing_to_row(north, &window);
+			dcol = Rast_easting_to_col(east, &window);
+			if (drow != Rast_northing_to_row(north, &window)) {
+			    drow = Rast_northing_to_row(north, &window);
 			    Rast_get_row(elev_fd, tmpbuf.v, (int)drow,
 					 data_type);
 			}

@@ -73,7 +73,7 @@ int enforce_downstream(int infd, int outfd,
 
     /* allocate and clear memory for entire raster */
     rbuf =
-	G_calloc(G_window_rows() * G_window_cols(),
+	G_calloc(Rast_window_rows() * Rast_window_cols(),
 		 Rast_cell_size(parm->raster_type));
 
     /* first read whole elevation file into buf */
@@ -122,7 +122,7 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
 	return 0;
 
     if (!bm)
-	bm = BM_create(G_window_cols(), G_window_rows());
+	bm = BM_create(Rast_window_cols(), Rast_window_rows());
     clear_bitmap(bm);
 
     pg_init(&pg);
@@ -133,12 +133,12 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
     for (i = 0; i < points->n_points; i++) {
 	Point2 pt, ptxy;
 	double elev;
-	int row = G_northing_to_row(points->y[i], &wind);
-	int col = G_easting_to_col(points->x[i], &wind);
+	int row = Rast_northing_to_row(points->y[i], &wind);
+	int col = Rast_easting_to_col(points->x[i], &wind);
 
 	/* rough clipping */
-	if (row < 0 || row > G_window_rows() - 1 ||
-	    col < 0 || col > G_window_cols() - 1) {
+	if (row < 0 || row > Rast_window_rows() - 1 ||
+	    col < 0 || col > Rast_window_cols() - 1) {
 	    if (first_in != -1)
 		in_out = 1;
 
@@ -210,8 +210,8 @@ static void clear_bitmap(struct BM *bm)
 {
     int i, j;
 
-    for (i = 0; i < G_window_rows(); i++)
-	for (j = 0; j < G_window_cols(); j++)
+    for (i = 0; i < Rast_window_rows(); i++)
+	for (j = 0; j < Rast_window_cols(); j++)
 	    BM_set(bm, i, j, 0);
 }
 
@@ -278,24 +278,24 @@ static void set_min_point(void *data, const int col, const int row,
 	{
 	    CELL *cbuf = data;
 
-	    cbuf[row * G_window_cols() + col] =
-		MIN(cbuf[row * G_window_cols() + col], elev) - (int)depth;
+	    cbuf[row * Rast_window_cols() + col] =
+		MIN(cbuf[row * Rast_window_cols() + col], elev) - (int)depth;
 	}
 	break;
     case FCELL_TYPE:
 	{
 	    FCELL *fbuf = data;
 
-	    fbuf[row * G_window_cols() + col] =
-		MIN(fbuf[row * G_window_cols() + col], elev) - depth;
+	    fbuf[row * Rast_window_cols() + col] =
+		MIN(fbuf[row * Rast_window_cols() + col], elev) - depth;
 	}
 	break;
     case DCELL_TYPE:
 	{
 	    DCELL *dbuf = data;
 
-	    dbuf[row * G_window_cols() + col] =
-		MIN(dbuf[row * G_window_cols() + col], elev) - depth;
+	    dbuf[row * Rast_window_cols() + col] =
+		MIN(dbuf[row * Rast_window_cols() + col], elev) - depth;
 	}
 	break;
     }
@@ -313,8 +313,8 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     struct Cell_head wind;
 
     G_get_window(&wind);
-    rastrows = G_window_rows();
-    rastcols = G_window_cols();
+    rastrows = Rast_window_rows();
+    rastcols = Rast_window_cols();
 
     Rast_set_d_null_value(&min, 1);
 
@@ -322,8 +322,8 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     rowoff = rad / wind.ns_res;
     coloff = rad / wind.ew_res;
 
-    row = G_northing_to_row(py, &wind);
-    col = G_easting_to_col(px, &wind);
+    row = Rast_northing_to_row(py, &wind);
+    col = Rast_easting_to_col(px, &wind);
 
     /* get bounding box of line segment */
     row1 = MAX(0, row - rowoff);
@@ -359,11 +359,11 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     }
 
     for (r = row1; r < row2; r++) {
-	double cy = G_row_to_northing(r + 0.5, &wind);
+	double cy = Rast_row_to_northing(r + 0.5, &wind);
 	int c;
 
 	for (c = col1; c < col2; c++) {
-	    double cx = G_col_to_easting(c + 0.5, &wind);
+	    double cx = Rast_col_to_easting(c + 0.5, &wind);
 
 	    if (G_distance(px, py, cx, cy) <= SQR(rad)) {
 		switch (rtype) {
@@ -450,26 +450,26 @@ static void process_line_segment(const int npts, void *rbuf,
     coloff = parm->swidth / wind.ew_res;
 
     /* get prevrow and prevcol for iteration 0 of following loop */
-    prevrow = G_northing_to_row(pgxypts[0][1], &wind);
-    prevcol = G_easting_to_col(pgxypts[0][0], &wind);
+    prevrow = Rast_northing_to_row(pgxypts[0][1], &wind);
+    prevcol = Rast_easting_to_col(pgxypts[0][0], &wind);
 
     for (i = 1; i < (npts - 1); i++) {
 	int c, r;
 
-	int row = G_northing_to_row(pgxypts[i][1], &wind);
-	int col = G_easting_to_col(pgxypts[i][0], &wind);
+	int row = Rast_northing_to_row(pgxypts[i][1], &wind);
+	int col = Rast_easting_to_col(pgxypts[i][0], &wind);
 
 	/* get bounding box of line segment */
 	row1 = MAX(0, MIN(row, prevrow) - rowoff);
-	row2 = MIN(G_window_rows() - 1, MAX(row, prevrow) + rowoff);
+	row2 = MIN(Rast_window_rows() - 1, MAX(row, prevrow) + rowoff);
 	col1 = MAX(0, MIN(col, prevcol) - coloff);
-	col2 = MIN(G_window_cols() - 1, MAX(col, prevcol) + coloff);
+	col2 = MIN(Rast_window_cols() - 1, MAX(col, prevcol) + coloff);
 
 	for (r = row1; r < row2; r++) {
-	    cy = G_row_to_northing(r + 0.5, &wind);
+	    cy = Rast_row_to_northing(r + 0.5, &wind);
 
 	    for (c = col1; c < col2; c++) {
-		cellx = G_col_to_easting(c + 0.5, &wind);
+		cellx = Rast_col_to_easting(c + 0.5, &wind);
 		celly = cy;	/* gets written over in distance2... */
 
 		/* Thought about not going past endpoints (use 

@@ -495,8 +495,8 @@ int main(int argc, char *argv[])
     for (i = 0; i < num_cats; i++)
 	basecats[i].slots = G_calloc(num_slots, sizeof(unsigned int));
 
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
 
     get_slot_counts(base_fd, cover_fd);
 

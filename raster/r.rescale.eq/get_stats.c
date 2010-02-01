@@ -11,8 +11,8 @@ int get_stats(const char *name, struct Cell_stats *statf)
     int row, nrows, ncols;
 
     fd = Rast_open_old(name, "");
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     cell = Rast_allocate_c_buf();
 
     Rast_init_cell_stats(statf);

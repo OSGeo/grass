@@ -117,8 +117,8 @@ int main(int argc, char *argv[])
     infd_wa = Rast_open_old(wa, "");
     inrast_wa = Rast_allocate_d_buf();
     
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     outrast1 = Rast_allocate_d_buf();
     
     /* Create New raster files */ 

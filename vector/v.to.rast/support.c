@@ -427,11 +427,11 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    Rast_init_cell_stats(&stats);
 	    Rast_set_cats_title("Categories", &rast_cats);
 
-	    rows = G_window_rows();
+	    rows = Rast_window_rows();
 
 	    for (row = 0; row < rows; row++) {
 		Rast_get_row(fd, rowbuf, row, map_type);
-		Rast_update_cell_stats(rowbuf, G_window_cols(), &stats);
+		Rast_update_cell_stats(rowbuf, Rast_window_cols(), &stats);
 	    }
 
 	    Rast_rewind_cell_stats(&stats);

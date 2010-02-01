@@ -38,8 +38,8 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
 
     fd_out = Rast_open_new(out, DCELL_TYPE);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     row_out = Rast_allocate_d_buf();
 

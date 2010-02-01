@@ -399,8 +399,8 @@ int main(int argc, char *argv[])
     G_get_window(&window);
 
     /*  find number of rows and columns in window    */
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     fuel = Rast_allocate_c_buf();
     mois_1h = Rast_allocate_c_buf();

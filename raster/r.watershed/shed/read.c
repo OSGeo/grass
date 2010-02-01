@@ -14,8 +14,8 @@ int read_basins(char *haf_name, OUTPUT * output)
     char *mapset;
     B_FACTS *facts;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     buf = Rast_allocate_c_buf();
     bas_buf = Rast_allocate_c_buf();
     mapset = G_find_raster(haf_name, "");

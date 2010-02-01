@@ -108,8 +108,8 @@ int main(int argc, char **argv)
 
     in_name = opt1->answer;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     buflen = ncols * sizeof(DCELL);
 
     /* get the filter */

@@ -27,7 +27,7 @@
 
 void Rast_zero_c_buf(CELL * buf)
 {
-    int i = G_window_cols();
+    int i = Rast_window_cols();
 
     while (i--)
 	*buf++ = 0;
@@ -45,5 +45,5 @@ void Rast_zero_c_buf(CELL * buf)
  */
 void Rast_zero_buf(void *rast, RASTER_MAP_TYPE data_type)
 {
-    memset(rast, 0, G_window_cols() * Rast_cell_size(data_type));
+    memset(rast, 0, Rast_window_cols() * Rast_cell_size(data_type));
 }

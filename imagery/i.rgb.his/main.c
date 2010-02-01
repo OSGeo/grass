@@ -81,8 +81,8 @@ int main(int argc, char **argv)
 
 
     /* get dimension of the image */
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
 
     openfiles(opt_red->answer, opt_green->answer, opt_blue->answer,
 	      opt_hue->answer, opt_inten->answer, opt_sat->answer,

@@ -1640,8 +1640,8 @@ void whole_reg_driver()
 
     data_type = Rast_map_type(choice->fn, G_mapset());
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     g_scale = 1;
 

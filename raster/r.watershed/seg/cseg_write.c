@@ -10,7 +10,7 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
     CELL *buffer;
 
     map_fd = Rast_open_c_new(map_name);
-    nrows = G_window_rows();
+    nrows = Rast_window_rows();
     buffer = Rast_allocate_c_buf();
     segment_flush(&(cseg->seg));
     for (row = 0; row < nrows; row++) {

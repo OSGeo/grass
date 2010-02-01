@@ -156,12 +156,12 @@ int output_data(int tt, double ft)
 
     Rast_set_window(&cellhd);
 
-    if (my != G_window_rows())
+    if (my != Rast_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
-		      G_window_rows());
-    if (mx != G_window_cols())
+		      Rast_window_rows());
+    if (mx != Rast_window_cols())
 	G_fatal_error("OOPS: cols changed from %d to %d\n", my,
-		      G_window_cols());
+		      Rast_window_cols());
 
     for (iarc = 0; iarc < my; iarc++) {
 	i = my - iarc - 1;
@@ -615,12 +615,12 @@ int output_et()
 
     Rast_set_window(&cellhd);
 
-    if (my != G_window_rows())
+    if (my != Rast_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
-		      G_window_rows());
-    if (mx != G_window_cols())
+		      Rast_window_rows());
+    if (mx != Rast_window_cols())
 	G_fatal_error("OOPS: cols changed from %d to %d\n", my,
-		      G_window_cols());
+		      Rast_window_cols());
 
     for (iarc = 0; iarc < my; iarc++) {
 	i = my - iarc - 1;

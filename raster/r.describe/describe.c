@@ -88,8 +88,8 @@ int describe(const char *name, int compact, char *no_data_str,
 	Rast_set_quant_rules(fd, &q);
     }
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     G_verbose_message(_("Reading <%s> ..."), name);
     for (row = 0; row < nrows; row++) {

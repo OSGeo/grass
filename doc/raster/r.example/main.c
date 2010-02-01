@@ -119,8 +119,8 @@ int main(int argc, char *argv[])
     inrast = Rast_allocate_buf(data_type);
 
     /* Allocate output buffer, use input map data_type */
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     outrast = Rast_allocate_buf(data_type);
 
     /* controlling, if we can write the raster */

@@ -44,8 +44,8 @@ CELL clump(int in_fd, int out_fd)
     int column;
 
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* allocate reclump index */
     nalloc = INCR;

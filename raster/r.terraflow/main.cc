@@ -467,8 +467,8 @@ main(int argc, char *argv[]) {
 
   check_args();
 
-  int nr = G_window_rows();
-  int nc = G_window_cols();
+  int nr = Rast_window_rows();
+  int nc = Rast_window_cols();
   if ((nr > dimension_type_max) || (nc > dimension_type_max)) {
     G_fatal_error(_("[nrows=%d, ncols=%d] dimension_type overflow -- "
 	"change dimension_type and recompile"), nr, nc);

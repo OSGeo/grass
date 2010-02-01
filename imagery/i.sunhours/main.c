@@ -77,8 +77,8 @@ int main(int argc, char *argv[])
     inrast_lat = Rast_allocate_d_buf();
 
     /***************************************************/ 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     outrast1 = Rast_allocate_d_buf();
     outfd1 = Rast_open_new(result1, DCELL_TYPE);

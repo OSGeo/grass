@@ -175,8 +175,8 @@ int main(int argc, char **argv)
 
     G_debug(1, "encoder = [%s]", encoder);
 
-    vrows = G_window_rows();
-    vcols = G_window_cols();
+    vrows = Rast_window_rows();
+    vcols = Rast_window_cols();
     nrows = vrows;
     ncols = vcols;
 
@@ -259,7 +259,7 @@ static int load_files(void)
     pg = G_malloc(size);
     pb = G_malloc(size);
 
-    tsiz = G_window_cols();
+    tsiz = Rast_window_cols();
 
     tr = (unsigned char *)G_malloc(tsiz);
     tg = (unsigned char *)G_malloc(tsiz);

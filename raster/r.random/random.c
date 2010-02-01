@@ -34,8 +34,8 @@ int execute_random(struct rr_state *theState)
 
     G_get_window(&window);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* open the data files, input raster should be set-up already */
     if ((infd = theState->fd_old) < 0)

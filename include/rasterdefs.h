@@ -5,6 +5,9 @@
 
 /* --- ANSI prototypes for the lib/raster functions --- */
 
+/* align_window.c */
+void Rast_align_window(struct Cell_head *, const struct Cell_head *);
+
 /* alloc_cell.c */
 size_t Rast_cell_size(RASTER_MAP_TYPE);
 void *Rast_allocate_buf(RASTER_MAP_TYPE);
@@ -516,6 +519,14 @@ DCELL Rast_get_sample(int, const struct Cell_head *, struct Categories *, double
 
 /* set_window.c */
 void Rast_set_window(struct Cell_head *);
+
+/* window.c */
+double Rast_northing_to_row(double, const struct Cell_head *);
+double Rast_easting_to_col(double, const struct Cell_head *);
+double Rast_row_to_northing(double, const struct Cell_head *);
+double Rast_col_to_easting(double, const struct Cell_head *);
+int Rast_window_rows(void);
+int Rast_window_cols(void);
 
 /* window_map.c */
 void Rast__create_window_mapping(int);

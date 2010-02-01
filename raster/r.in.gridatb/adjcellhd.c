@@ -12,11 +12,11 @@ int adjcellhd(struct Cell_head *cellhd)
 
     Rast_set_window(cellhd);
 
-    if (cellhd->rows != G_window_rows()) {
+    if (cellhd->rows != Rast_window_rows()) {
 	retval = 2;
     }
 
-    if (cellhd->cols != G_window_cols()) {
+    if (cellhd->cols != Rast_window_cols()) {
 	retval = 3;
     }
 

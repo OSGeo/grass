@@ -87,8 +87,8 @@ int main(int argc, char *argv[])
     if (!con_mapset)
 	G_fatal_error("Contour raster map [%s] not found", con_name);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     i_val_l_f = nrows + ncols;
     con = read_cell(con_name, con_mapset);
     alt_row = (CELL *) G_malloc(ncols * sizeof(CELL));

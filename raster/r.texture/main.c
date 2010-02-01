@@ -222,8 +222,8 @@ int main(int argc, char *argv[])
     /* Allocate output buffer, use FCELL data_type */
     outrast = Rast_allocate_buf(out_data_type);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* Load raster map. */
 

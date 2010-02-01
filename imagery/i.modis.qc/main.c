@@ -204,8 +204,8 @@ int main(int argc, char *argv[])
     inrast = Rast_allocate_c_buf();
 
     G_debug(3, "number of rows %d", cellhd.rows);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     outrast = Rast_allocate_c_buf();
 
     /* Create New raster files */ 

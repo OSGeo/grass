@@ -120,7 +120,7 @@ static void write_fp_to_cell (int ofd, FCELL* buf)
 
     cbuf = (CELL*)Rast_allocate_buf(CELL_TYPE);
 
-    for(col = 0; col < G_window_cols(); col++) cbuf[col] = round_c(buf[col]);
+    for(col = 0; col < Rast_window_cols(); col++) cbuf[col] = round_c(buf[col]);
     Rast_put_row(ofd, cbuf, CELL_TYPE);
 }
 
@@ -295,8 +295,8 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
     if(ivis_fd >= 0) vis = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
 
     G_verbose_message(_("Percent complete..."));
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     for(row = 0; row < nrows; row++)
     {

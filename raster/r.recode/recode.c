@@ -30,14 +30,14 @@ int do_recode(void)
     if (align_wind) {
 	G_get_window(&window);
 	Rast_get_cellhd(name, "", &cellhd);
-	G_align_window(&window, &cellhd);
+	Rast_align_window(&window, &cellhd);
 	Rast_set_window(&window);
     }
 
     G_get_set_window(&window);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* open the input file for reading */
     in_fd = Rast_open_old(name, "");

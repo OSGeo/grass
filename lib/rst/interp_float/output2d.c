@@ -95,15 +95,15 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 
     Rast_set_window(cellhd);
 
-    if (nrows != G_window_rows()) {
+    if (nrows != Rast_window_rows()) {
 	G_warning(_("Rows changed from %d to %d"), nrows,
-		  G_window_rows());
+		  Rast_window_rows());
 	return -1;
     }
 
-    if (ncols != G_window_cols()) {
+    if (ncols != Rast_window_cols()) {
 	G_warning(_("Cols changed from %d to %d"), ncols,
-		  G_window_cols());
+		  Rast_window_cols());
 	return -1;
     }
 

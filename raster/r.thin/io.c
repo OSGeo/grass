@@ -93,8 +93,8 @@ int open_file(char *name)
     strcpy(cell, name);
     cell_file = Rast_open_old(cell, "");
 
-    n_rows = G_window_rows();
-    n_cols = G_window_cols();
+    n_rows = Rast_window_rows();
+    n_cols = Rast_window_cols();
     G_message(_("File %s -- %d rows X %d columns"), name, n_rows, n_cols);
     n_cols += (PAD << 1);
 
@@ -157,8 +157,8 @@ int close_file(char *name)
     row_count = n_rows - (PAD << 1);
     col_count = n_cols - (PAD << 1);
     G_message(_("Output file %d rows X %d columns"), row_count, col_count);
-    G_message(_("Window %d rows X %d columns"), G_window_rows(),
-	      G_window_cols());
+    G_message(_("Window %d rows X %d columns"), Rast_window_rows(),
+	      Rast_window_cols());
 
     for (row = 0, k = PAD; row < row_count; row++, k++) {
 	buf = get_a_row(k);

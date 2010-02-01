@@ -112,8 +112,8 @@ int main(int argc, char *argv[])
     presult = Rast_allocate_buf(out_type);
     patch = Rast_allocate_buf(out_type);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     G_verbose_message(_("Percent complete..."));
     for (row = 0; row < nrows; row++) {

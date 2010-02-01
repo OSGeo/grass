@@ -220,8 +220,8 @@ int main(int argc, char *argv[])
     averaged = flag.A->answer;
     raw_output = flag.r->answer;
     as_int = flag.i->answer;
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     fd = NULL;
     nfiles = 0;

@@ -293,12 +293,12 @@ int main(int argc, char *argv[])
 
     /* data array, by increasing column */
     raster =
-	G_calloc((G_window_rows() + 1) * (G_window_cols() + 1),
+	G_calloc((Rast_window_rows() + 1) * (Rast_window_cols() + 1),
 		 Rast_cell_size(map_type));
 
     G_debug(1, "mem alloc is %d bytes\n",	/* I think _cols()+1 is unneeded? */
-	    Rast_cell_size(map_type) * (G_window_rows() +
-				       1) * (G_window_cols() + 1));
+	    Rast_cell_size(map_type) * (Rast_window_rows() +
+				       1) * (Rast_window_cols() + 1));
 
     G_verbose_message(_("Reading in map ... "));
 
@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
     for (row = 0, ptr = raster; row < mrows; row++,
 	 ptr =
 	 G_incr_void_ptr(ptr,
-			 (G_window_cols() + 1) * Rast_cell_size(map_type))) {
+			 (Rast_window_cols() + 1) * Rast_cell_size(map_type))) {
 	Rast_get_row(fd, ptr, row, map_type);
 	G_percent(row, mrows, 2);
     }

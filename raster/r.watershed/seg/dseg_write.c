@@ -10,8 +10,8 @@ int dseg_write_cellfile(DSEG * dseg, char *map_name)
     double *dbuffer;
 
     map_fd = Rast_open_new(map_name, DCELL_TYPE);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     dbuffer = Rast_allocate_d_buf();
     segment_flush(&(dseg->seg));
     for (row = 0; row < nrows; row++) {

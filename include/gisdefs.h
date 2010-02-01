@@ -50,9 +50,6 @@
 void G_adjust_Cell_head(struct Cell_head *, int, int);
 void G_adjust_Cell_head3(struct Cell_head *, int, int, int);
 
-/* align_window.c */
-void G_align_window(struct Cell_head *, const struct Cell_head *);
-
 /* alloc.c */
 #define G_incr_void_ptr(ptr, size) \
     ((void *)((const unsigned char *)(ptr) + (size)))
@@ -675,14 +672,8 @@ int G_scan_easting(const char *, double *, int);
 int G_scan_resolution(const char *, double *, int);
 
 /* window_map.c */
-double G_northing_to_row(double, const struct Cell_head *);
 double G_adjust_east_longitude(double, double);
 double G_adjust_easting(double, const struct Cell_head *);
-double G_easting_to_col(double, const struct Cell_head *);
-double G_row_to_northing(double, const struct Cell_head *);
-double G_col_to_easting(double, const struct Cell_head *);
-int G_window_rows(void);
-int G_window_cols(void);
 void G__init_window(void);
 
 /* worker.c */

@@ -15,8 +15,8 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
     dseg->mapset = NULL;
 
     map_fd = Rast_open_old(map_name, mapset);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     dbuffer = Rast_allocate_d_buf();
     for (row = 0; row < nrows; row++) {
 	Rast_get_d_row(map_fd, dbuffer, row);

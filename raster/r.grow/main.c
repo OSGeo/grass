@@ -170,8 +170,8 @@ int main(int argc, char **argv)
     if (opt.new->answer)
 	newval = atoi(opt.new->answer);
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     if (strcmp(opt.met->answer, "euclidean") == 0)
 	setup_neighbors_euclidean(radius);

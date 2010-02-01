@@ -85,8 +85,8 @@ int main(int argc, char *argv[])
     field = Vect_get_field_number(&In, field_opt->answer);
 
     G_get_set_window(&region);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     result = Rast_allocate_buf(CELL_TYPE);
     Points = Vect_new_line_struct();
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 
 	G_percent(row, nrows, 2);
 
-	y = G_row_to_northing(row + 0.5, &region);
+	y = Rast_row_to_northing(row + 0.5, &region);
 	box.N = y + radius;
 	box.S = y - radius;
 
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 	    int i, count;
 	    CELL value;
 
-	    x = G_col_to_easting(col + 0.5, &region);
+	    x = Rast_col_to_easting(col + 0.5, &region);
 
 	    box.E = x + radius;
 	    box.W = x - radius;

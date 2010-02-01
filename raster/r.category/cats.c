@@ -38,8 +38,8 @@ int get_cats(const char *name, const char *mapset)
 
     /* open the raster map */
     fd = Rast_open_old(name, mapset);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     cell = Rast_allocate_c_buf();
     Rast_init_cell_stats(&statf);
 

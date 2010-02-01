@@ -24,7 +24,7 @@ int f_x(int argc, const int *argt, void **args)
     if (argt[0] != DCELL_TYPE)
 	return E_RES_TYPE;
 
-    x = G_col_to_easting(0.5, &current_region2);
+    x = Rast_col_to_easting(0.5, &current_region2);
 
     for (i = 0; i < columns; i++) {
 	res[i] = x;
@@ -46,7 +46,7 @@ int f_y(int argc, const int *argt, void **args)
     if (argt[0] != DCELL_TYPE)
 	return E_RES_TYPE;
 
-    y = G_row_to_northing(current_row + 0.5, &current_region2);
+    y = Rast_row_to_northing(current_row + 0.5, &current_region2);
 
     for (i = 0; i < columns; i++)
 	res[i] = y;

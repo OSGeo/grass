@@ -193,8 +193,8 @@ int main(int argc, char *argv[])
 	G_debug(4, "    cat = %d", cat);
 
 	/* Add point to cache */
-	drow = G_northing_to_row(Points->y[0], &window);
-	dcol = G_easting_to_col(Points->x[0], &window);
+	drow = Rast_northing_to_row(Points->y[0], &window);
+	dcol = Rast_easting_to_col(Points->x[0], &window);
 
 	/* a special case.
 	 *   if north falls at southern edge, or east falls on eastern edge,

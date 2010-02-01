@@ -40,8 +40,8 @@ int write_rast(double *data[2],	/* Array holding complex data.          */
 
     /* of the input raster.                 */
 
-    nrows = G_window_rows();	/* Find out the number of rows and      */
-    ncols = G_window_cols();	/* columns of the raster view.          */
+    nrows = Rast_window_rows();	/* Find out the number of rows and      */
+    ncols = Rast_window_cols();	/* columns of the raster view.          */
 
     row_out = Rast_allocate_d_buf();
 

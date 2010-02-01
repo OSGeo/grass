@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     /* setup the current window for display */
     G_system(" d.colormode float");
     G_system(" d.frame -e");
-    Rw_l = (double)G_window_cols() / G_window_rows();
+    Rw_l = (double)Rast_window_cols() / Rast_window_rows();
     R_open_driver();
     R_font("romant");
     G_get_set_window(&window);

@@ -40,8 +40,8 @@ int outline(void)
 	temp.x = view_to_col(Region.view, A[cur].x);
 	tmp_n = row_to_northing(&(Region.view->cell.head), temp.y, 0.5);
 	tmp_e = col_to_easting(&(Region.view->cell.head), temp.x, 0.5);
-	tmp[cur].y = G_northing_to_row(tmp_n, &Band_cellhd);
-	tmp[cur].x = G_easting_to_col(tmp_e, &Band_cellhd);
+	tmp[cur].y = Rast_northing_to_row(tmp_n, &Band_cellhd);
+	tmp[cur].x = Rast_easting_to_col(tmp_e, &Band_cellhd);
     }
 
     /* find first edge which is not horizontal */

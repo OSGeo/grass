@@ -26,7 +26,7 @@ int openfiles(struct parms *parms, struct files *files)
     files->cellbuf = Rast_allocate_d_buf();
     files->outbuf = Rast_allocate_c_buf();
 
-    files->isdata = G_malloc(G_window_cols());
+    files->isdata = G_malloc(Rast_window_cols());
 
     files->nbands = Ref.nfiles;
     files->band_fd = (int *)G_calloc(Ref.nfiles, sizeof(int));

@@ -47,8 +47,8 @@ int drawcell(View * view, int initflag)
     }
 
     Rast_set_window(&view->cell.head);
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     left = view->cell.left;
     top = view->cell.top;

@@ -109,8 +109,8 @@ bool MyApp::OnInit()
     }
     fprintf(stderr, "\n");
 
-    vrows = G_window_rows();
-    vcols = G_window_cols();
+    vrows = Rast_window_rows();
+    vcols = Rast_window_cols();
     nrows = vrows;
     ncols = vcols;
 
@@ -190,7 +190,7 @@ int MyApp::load_files(void)
 
     dcell = Rast_allocate_d_buf();
 
-    tsiz = G_window_cols();
+    tsiz = Rast_window_cols();
 
     /* allocate memory */
     tr   = (unsigned char *) G_malloc(tsiz * sizeof(char));

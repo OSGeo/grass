@@ -85,8 +85,8 @@ int main(int argc, char *argv[])
     infd_tempk = Rast_open_old(tempk, "");
     inrast_tempk = Rast_allocate_d_buf();
     
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
     outrast1 = Rast_allocate_d_buf();
     
     outfd1 = Rast_open_new(result1, DCELL_TYPE);

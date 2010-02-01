@@ -211,12 +211,12 @@ int main(int argc, char *argv[])
     if (!flag.align->answer) {
 	Rast_get_cellhd(ncb.oldcell, "", &cellhd);
 	G_get_window(&window);
-	G_align_window(&window, &cellhd);
+	Rast_align_window(&window, &cellhd);
 	Rast_set_window(&window);
     }
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* open raster maps */
     in_fd = Rast_open_old(ncb.oldcell, "");

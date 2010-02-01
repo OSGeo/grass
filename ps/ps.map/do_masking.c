@@ -24,11 +24,11 @@ int do_masking(void)
 
 
     /* adjust columns to multiple of 8 */
-    rows = G_window_rows();
-    cols = G_window_cols();
+    rows = Rast_window_rows();
+    cols = Rast_window_cols();
     while (cols % 8)
 	cols++;
-    factor = (double)cols / (double)G_window_cols();
+    factor = (double)cols / (double)Rast_window_cols();
     width = factor * PS.map_pix_wide;
 
     /* write mask to PostScript file, using "no data" color */

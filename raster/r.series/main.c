@@ -224,8 +224,8 @@ int main(int argc, char *argv[])
     values = G_malloc(num_inputs * sizeof(DCELL));
     values_tmp = G_malloc(num_inputs * sizeof(DCELL));
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* process the data */
     G_verbose_message(_("Percent complete..."));

@@ -340,8 +340,8 @@ int main(int argc, char *argv[])
     move_dir_layer = opt11->answer;
 
     /* Find number of rows and columns in window */
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* Open cost cell layer for reading */
     cost_mapset = G_find_raster2(cost_layer, "");
@@ -540,8 +540,8 @@ int main(int argc, char *argv[])
 		continue;
 	    got_one = 1;
 
-	    col = (int)G_easting_to_col(site->east, &window);
-	    row = (int)G_northing_to_row(site->north, &window);
+	    col = (int)Rast_easting_to_col(site->east, &window);
+	    row = (int)Rast_northing_to_row(site->north, &window);
 
 	    new_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
@@ -589,8 +589,8 @@ int main(int argc, char *argv[])
 		continue;
 	    have_stop_points = 1;
 
-	    col = (int)G_easting_to_col(site->east, &window);
-	    row = (int)G_northing_to_row(site->north, &window);
+	    col = (int)Rast_easting_to_col(site->east, &window);
+	    row = (int)Rast_northing_to_row(site->north, &window);
 
 	    new_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));

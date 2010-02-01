@@ -162,8 +162,8 @@ int main(int argc, char **argv)
     path_mapset = G_find_raster(path_layer, search_mapset);
 
     /*  find number of rows and cols in window    */
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     cell = Rast_allocate_c_buf();
 

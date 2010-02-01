@@ -23,8 +23,8 @@ int get_training_classes(struct files *files, struct Signature *S)
     fd = files->train_fd;
     cell = files->train_cell;
 
-    nrows = G_window_rows();
-    ncols = G_window_cols();
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
 
     /* determine the categories in the map */
     I_init_signatures(S, files->nbands);

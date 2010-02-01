@@ -405,8 +405,8 @@ int main(int argc, char **argv)
 		    continue;
 		}
 
-		N = G_row_to_northing(row + 0.5, &window);
-		E = G_col_to_easting(col + 0.5, &window);
+		N = Rast_row_to_northing(row + 0.5, &window);
+		E = Rast_col_to_easting(col + 0.5, &window);
 
 		compute_distance(N, E, &In, sigma, term, &gaussian, dmax);
 		output_cell[col] = multip * gaussian;

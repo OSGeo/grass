@@ -39,7 +39,7 @@ static struct state *st = &state;
  * should not use this routine since its use implies that the active
  * module region will not be used. Programs that read or write raster
  * map data (or vector data) can query the active module region using
- * G_window_rows() and G_window_cols().
+ * Rast_window_rows() and Rast_window_cols().
  *
  * \param window pointer to Cell_head
  */

@@ -22,8 +22,8 @@ void Init(void)
 
     G_debug(2, "Init");
 
-    Rs = G_window_rows();
-    Cs = G_window_cols();
+    Rs = Rast_window_rows();
+    Cs = Rast_window_cols();
     Surface = (double **)G_malloc(Rs * sizeof(double *));
     for (row = 0; row < Rs; row++)
 	Surface[row] = (double *)G_malloc(Cs * sizeof(double));

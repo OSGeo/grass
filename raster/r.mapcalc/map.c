@@ -27,8 +27,8 @@ void setup_region(void)
 {
     G_get_window(&current_region2);
 
-    rows = G_window_rows();
-    columns = G_window_cols();
+    rows = Rast_window_rows();
+    columns = Rast_window_cols();
     depths = 1;
 }
 

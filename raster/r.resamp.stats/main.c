@@ -98,15 +98,15 @@ static void resamp_unweighted(void)
     row_map = G_malloc((dst_w.rows + 1) * sizeof(int));
 
     for (col = 0; col <= dst_w.cols; col++) {
-	double x = G_col_to_easting(col, &dst_w);
+	double x = Rast_col_to_easting(col, &dst_w);
 
-	col_map[col] = (int)floor(G_easting_to_col(x, &src_w) + 0.5);
+	col_map[col] = (int)floor(Rast_easting_to_col(x, &src_w) + 0.5);
     }
 
     for (row = 0; row <= dst_w.rows; row++) {
-	double y = G_row_to_northing(row, &dst_w);
+	double y = Rast_row_to_northing(row, &dst_w);
 
-	row_map[row] = (int)floor(G_northing_to_row(y, &src_w) + 0.5);
+	row_map[row] = (int)floor(Rast_northing_to_row(y, &src_w) + 0.5);
     }
 
     for (row = 0; row < dst_w.rows; row++) {
@@ -169,15 +169,15 @@ static void resamp_weighted(void)
     row_map = G_malloc((dst_w.rows + 1) * sizeof(double));
 
     for (col = 0; col <= dst_w.cols; col++) {
-	double x = G_col_to_easting(col, &dst_w);
+	double x = Rast_col_to_easting(col, &dst_w);
 
-	col_map[col] = G_easting_to_col(x, &src_w);
+	col_map[col] = Rast_easting_to_col(x, &src_w);
     }
 
     for (row = 0; row <= dst_w.rows; row++) {
-	double y = G_row_to_northing(row, &dst_w);
+	double y = Rast_row_to_northing(row, &dst_w);
 
-	row_map[row] = G_northing_to_row(y, &src_w);
+	row_map[row] = Rast_northing_to_row(y, &src_w);
     }
 
     for (row = 0; row < dst_w.rows; row++) {
@@ -313,10 +313,10 @@ int main(int argc, char *argv[])
 
     /* enlarge source window */
     {
-	int r0 = (int)floor(G_northing_to_row(dst_w.north, &src_w));
-	int r1 = (int)ceil(G_northing_to_row(dst_w.south, &src_w));
-	int c0 = (int)floor(G_easting_to_col(dst_w.west, &src_w));
-	int c1 = (int)ceil(G_easting_to_col(dst_w.east, &src_w));
+	int r0 = (int)floor(Rast_northing_to_row(dst_w.north, &src_w));
+	int r1 = (int)ceil(Rast_northing_to_row(dst_w.south, &src_w));
+	int c0 = (int)floor(Rast_easting_to_col(dst_w.west, &src_w));
+	int c1 = (int)ceil(Rast_easting_to_col(dst_w.east, &src_w));
 
 	src_w.south -= src_w.ns_res * (r1 - src_w.rows);
 	src_w.north += src_w.ns_res * (-r0);

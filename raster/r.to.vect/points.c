@@ -39,7 +39,7 @@ int extract_points(int z_flag)
     for (row = 0; row < cell_head.rows; row++) {
 	G_percent(row, n_rows, 2);
 
-	y = G_row_to_northing((double)(row + .5), &cell_head);
+	y = Rast_row_to_northing((double)(row + .5), &cell_head);
 
 	switch (data_type) {
 	case CELL_TYPE:
@@ -57,7 +57,7 @@ int extract_points(int z_flag)
 	    int cat, val;
 	    double dval;
 
-	    x = G_col_to_easting((double)(col + .5), &cell_head);
+	    x = Rast_col_to_easting((double)(col + .5), &cell_head);
 
 	    switch (data_type) {
 	    case CELL_TYPE:

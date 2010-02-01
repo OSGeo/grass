@@ -274,8 +274,8 @@ int display_signature(void)
 
 	fd = Rast_open_c_new(MASK);
 	buffer = Rast_allocate_c_buf();
-	nrows = G_window_rows();
-	ncols = G_window_cols();
+	nrows = Rast_window_rows();
+	ncols = Rast_window_cols();
 
 	for (row = 0; row < nrows; row++) {
 	    readbands(nbands, row);

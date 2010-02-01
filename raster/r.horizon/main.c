@@ -594,13 +594,13 @@ int OUTGR(int numrows, int numcols)
 	fd1 = Rast_open_fp_new(shad_filename);
     }
 
-    if (numrows != G_window_rows())
+    if (numrows != Rast_window_rows())
 	G_fatal_error(_("OOPS: rows changed from %d to %d"), numrows,
-		      G_window_rows());
+		      Rast_window_rows());
 
-    if (numcols != G_window_cols())
+    if (numcols != Rast_window_cols())
 	G_fatal_error(_("OOPS: cols changed from %d to %d"), numcols,
-		      G_window_cols());
+		      Rast_window_cols());
 
     for (iarc = 0; iarc < numrows; iarc++) {
 	i = numrows - iarc - 1;
