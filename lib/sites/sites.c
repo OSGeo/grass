@@ -930,7 +930,7 @@ int cleanse_string(char *buf)
 	/* but we must skip over escaped */
 	/* (BSLASHed) DQUOTEs */
 	if (*p == DQUOTE) {
-	    while (*p != (char)NULL) {	/* get rid of first DQUOTE */
+	    while (*p != '\0') {	/* get rid of first DQUOTE */
 		*p = *(p + 1);
 		p++;
 	    }
@@ -944,8 +944,8 @@ int cleanse_string(char *buf)
     p = buf;
     while ((p = G_index(p, BSLASH)) != (char *)NULL && p <= stop) {
 	p2 = p + 1;
-	if (*p2 != (char)NULL && (*p2 == DQUOTE || *p2 == BSLASH)) {
-	    while (*p != (char)NULL) {
+	if (*p2 != '\0' && (*p2 == DQUOTE || *p2 == BSLASH)) {
+	    while (*p != '\0') {
 		*p = *(p + 1);
 		p++;
 	    }
