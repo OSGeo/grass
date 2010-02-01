@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 
-#include "../gis/G.h"
 #include "R.h"
 
 /*!
@@ -28,9 +28,13 @@ for (row = 0; row < nrows; row++) {
  */
 int Rast_window_rows(void)
 {
-    G__init_window();
+    Rast__init_window();
 
-    return G__.window.rows;
+    if (R__.split_window)
+	G_fatal_error(_("Internal error: Rast_window_rows() called with split window."
+			"Use Rast_input_window_rows() or Rast_output_window_rows() instead."));
+
+    return R__.wr_window.rows;
 }
 
 /*!
@@ -59,9 +63,69 @@ for (row = 0; row < nrows; row++) {
  */
 int Rast_window_cols(void)
 {
-    G__init_window();
+    Rast__init_window();
 
-    return G__.window.cols;
+    if (R__.split_window)
+	G_fatal_error(_("Internal error: Rast_window_cols() called with split window."
+			"Use Rast_input_window_cols() or Rast_output_window_cols() instead."));
+
+    return R__.wr_window.cols;
+}
+
+/*!
+ * \brief Number of rows in active input window.
+ *
+ * This routine returns the number of rows in the active input window. 
+ *
+ * \return number of rows
+ */
+int Rast_input_window_rows(void)
+{
+    Rast__init_window();
+
+    return R__.rd_window.rows;
+}
+
+/*!
+ * \brief Number of columns in active input window.
+ *
+ * This routine returns the number of columns in the active input window.
+ *
+ * \return number of columns
+ */
+int Rast_input_window_cols(void)
+{
+    Rast__init_window();
+
+    return R__.rd_window.cols;
+}
+
+/*!
+ * \brief Number of rows in active output window.
+ *
+ * This routine returns the number of rows in the active output window. 
+ *
+ * \return number of rows
+ */
+int Rast_output_window_rows(void)
+{
+    Rast__init_window();
+
+    return R__.wr_window.rows;
+}
+
+/*!
+ * \brief Number of columns in active output window.
+ *
+ * This routine returns the number of columns in the active output window.
+ *
+ * \return number of columns
+ */
+int Rast_output_window_cols(void)
+{
+    Rast__init_window();
+
+    return R__.wr_window.cols;
 }
 
 /*!

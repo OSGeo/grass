@@ -15,7 +15,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#include "../gis/G.h"
 #include "R.h"
 
 
@@ -45,7 +44,7 @@ void Rast__create_window_mapping(int fd)
     if (fcb->open_mode == OPEN_OLD)	/* already open ? */
 	G_free(fcb->col_map);
 
-    col = fcb->col_map = alloc_index(G__.window.cols);
+    col = fcb->col_map = alloc_index(R__.rd_window.cols);
 
     /*
      * for each column in the window, go to center of the cell,
@@ -55,18 +54,18 @@ void Rast__create_window_mapping(int fd)
      * for lat/lon move window so that west is bigger than
      * cellhd west.
      */
-    west = G__.window.west;
-    if (G__.window.proj == PROJECTION_LL) {
+    west = R__.rd_window.west;
+    if (R__.rd_window.proj == PROJECTION_LL) {
 	while (west > fcb->cellhd.west + 360.0)
 	    west -= 360.0;
 	while (west < fcb->cellhd.west)
 	    west += 360.0;
     }
 
-    C1 = G__.window.ew_res / fcb->cellhd.ew_res;
+    C1 = R__.rd_window.ew_res / fcb->cellhd.ew_res;
     C2 = (west - fcb->cellhd.west +
-	  G__.window.ew_res / 2.0) / fcb->cellhd.ew_res;
-    for (i = 0; i < G__.window.cols; i++) {
+	  R__.rd_window.ew_res / 2.0) / fcb->cellhd.ew_res;
+    for (i = 0; i < R__.rd_window.cols; i++) {
 	x = C2;
 	if (C2 < x)		/* adjust for rounding of negatives */
 	    x--;
@@ -77,11 +76,11 @@ void Rast__create_window_mapping(int fd)
     }
 
     /* do wrap around for lat/lon */
-    if (G__.window.proj == PROJECTION_LL) {
+    if (R__.rd_window.proj == PROJECTION_LL) {
 	col = fcb->col_map;
 	C2 = (west - 360.0 - fcb->cellhd.west +
-	      G__.window.ew_res / 2.0) / fcb->cellhd.ew_res;
-	for (i = 0; i < G__.window.cols; i++) {
+	      R__.rd_window.ew_res / 2.0) / fcb->cellhd.ew_res;
+	for (i = 0; i < R__.rd_window.cols; i++) {
 	    x = C2;
 	    if (C2 < x)		/* adjust for rounding of negatives */
 		x--;
@@ -94,17 +93,17 @@ void Rast__create_window_mapping(int fd)
 	}
     }
 
-    G_debug(3, "create window mapping (%d columns)", G__.window.cols);
-    /*  for (i = 0; i < G__.window.cols; i++)
+    G_debug(3, "create window mapping (%d columns)", R__.rd_window.cols);
+    /*  for (i = 0; i < R__.rd_window.cols; i++)
        fprintf(stderr, "%s%ld", i % 15 ? " " : "\n", (long)fcb->col_map[i]);
        fprintf(stderr, "\n");
      */
 
     /* compute C1,C2 for row window mapping */
-    fcb->C1 = G__.window.ns_res / fcb->cellhd.ns_res;
+    fcb->C1 = R__.rd_window.ns_res / fcb->cellhd.ns_res;
     fcb->C2 =
-	(fcb->cellhd.north - G__.window.north +
-	 G__.window.ns_res / 2.0) / fcb->cellhd.ns_res;
+	(fcb->cellhd.north - R__.rd_window.north +
+	 R__.rd_window.ns_res / 2.0) / fcb->cellhd.ns_res;
 }
 
 
@@ -139,7 +138,7 @@ int Rast_row_repeat_nomask(int fd, int row)
     if (f < r1)
 	r1--;
 
-    while (++row < G__.window.rows) {
+    while (++row < R__.rd_window.rows) {
 	f = row * fcb->C1 + fcb->C2;
 	r2 = f;
 	if (f < r2)
