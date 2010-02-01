@@ -5,6 +5,49 @@
 #include "R.h"
 
 /*!
+ * \brief Read the current window
+ *
+ * \param window pointer to Cell_head
+ */
+
+void Rast_get_window(struct Cell_head *window)
+{
+    Rast__init_window();
+
+    if (R__.split_window)
+	G_fatal_error(_("Internal error: Rast_get_window() called with split window."
+			"Use Rast_get_input_window() or Rast_get_output_window() instead."));
+
+    *window = R__.wr_window;
+}
+
+/*!
+ * \brief Read the current input window
+ *
+ * \param window pointer to Cell_head
+ */
+
+void Rast_get_input_window(struct Cell_head *window)
+{
+    Rast__init_window();
+
+    *window = R__.rd_window;
+}
+
+/*!
+ * \brief Read the current output window
+ *
+ * \param window pointer to Cell_head
+ */
+
+void Rast_get_output_window(struct Cell_head *window)
+{
+    Rast__init_window();
+
+    *window = R__.wr_window;
+}
+
+/*!
  * \brief Number of rows in active window.
  *
  * This routine returns the number of rows in the active module window. 
