@@ -78,7 +78,7 @@ void Rast__error_handler(void *p)
 
 static int init(void)
 {
-    G__init_window();
+    Rast__init_window();
 
     /* no histograms */
     R__.want_histogram = 0;

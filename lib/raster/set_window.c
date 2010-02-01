@@ -22,8 +22,6 @@ static void update_window_mappings(void);
 
 void Rast__init_window(void)
 {
-    Rast__init();
-
     if (G_is_initialized(&R__.window_set))
 	return;
 
@@ -42,7 +40,7 @@ void Rast__init_window(void)
  */
 void Rast_set_window(struct Cell_head *window)
 {
-    Rast__init_window();
+    Rast__init();
 
     if (R__.split_window)
 	G_warning(_("Rast_set_window() called while window split"));
@@ -63,7 +61,7 @@ void Rast_set_window(struct Cell_head *window)
  */
 void Rast_set_output_window(struct Cell_head *window)
 {
-    Rast__init_window();
+    Rast__init();
 
     G_adjust_Cell_head(window, 0, 0);
 
@@ -83,7 +81,7 @@ void Rast_set_output_window(struct Cell_head *window)
 
 void Rast_set_input_window(struct Cell_head *window)
 {
-    Rast__init_window();
+    Rast__init();
 
     G_adjust_Cell_head(window, 0, 0);
 
