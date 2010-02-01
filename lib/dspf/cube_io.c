@@ -194,12 +194,12 @@ int read_cube(Cube_data * Cube, file_info * headfax)
     size |= inchar;
 
     if (0 >= (ret = my_fread(Buffer, 1, size, fp))) {
-	fprintf(stderr, "Error reading display file offset %ld\n", G_ftell(fp));
+	fprintf(stderr, "Error reading display file offset %"PRI_OFF_T"\n", G_ftell(fp));
 	return (-1);
     }
 
     if (ret != size) {
-	fprintf(stderr, "Error (size) reading display file offset %ld\n",
+	fprintf(stderr, "Error (size) reading display file offset %"PRI_OFF_T"\n",
 		G_ftell(fp));
 	return (-1);
     }
