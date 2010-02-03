@@ -21,7 +21,7 @@ grab .wait_ok.wait\n";
 int script_mode = 0;
 
 static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
-			 int argc, const char **argv)
+			 int argc, const char *argv0, const char **argv)
 {
     struct Option *elev, *colr, *vct, *pnt, *vol;
     struct Option *panel_path, *script, *state;
@@ -30,7 +30,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     char *arglist[3];
     const char *autoload;
     int i, aload = 1;
-    char *argv2[argc - 1];
+    char **argv2;
     int argc2, ii, jj;
 
     /*
@@ -135,14 +135,12 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
      * Routine to strip out script name passed to through argv
      * If left in it treats it as a elev arg and tries to open
      */
-    for (ii = 0; ii < argc; ii++) {
-	if (ii == 1)
-	    continue;
-	argv2[jj] = (char *)argv[ii];
-	jj++;
-    }
-    argc2 = argc - 1;
-
+    argv2 = G_malloc((argc + 2) * sizeof(char *));
+    argv2[0] = (char *)argv0;
+    for (ii = 0; ii < argc; ii++)
+	argv2[ii + 1] = (char *)argv[ii];
+    argv2[argc + 1] = NULL;
+    argc2 = argc + 1;
 
     /* BUG?: warning: passing arg 2 of `G_parser' from incompatible pointer type */
     if (G_parser(argc2, argv2))
@@ -369,54 +367,43 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
  * so that G_parser can deal with them without getting sick.
  */
 
-int Ngetargs(Tcl_Interp * interp,	/* Current interpreter. */
-	     const char ***args)
+static int Ngetargs(Tcl_Interp * interp,	/* Current interpreter. */
+		    const char **p_argv0,
+		    const char ***p_argv)
 {
-    const char *argv0, *tmp;
-    char *tmp2;
-    const char *cmd;
+    const char *argv0, *argv, *cmd;
+    char *tmp;
     int argc;
 
     G_debug(2, "nviz_init:Ngetargs()");
 
     argv0 = Tcl_GetVar(interp, "argv0", TCL_LEAVE_ERR_MSG);
-    tmp = Tcl_GetVar(interp, "argv", TCL_LEAVE_ERR_MSG);
+    argv = Tcl_GetVar(interp, "argv", TCL_LEAVE_ERR_MSG);
     cmd = Tcl_GetNameOfExecutable();
-#ifdef __MINGW32__
-    /* argv0: C:\path\to\nviz.exe
-     *   cmd: C:/path/to/nviz.exe
-     *
-     * modify argv0 to compare with cmd.
-     */
-    for (tmp2 = argv0; *tmp2; tmp2++)
-	if (*tmp2 == '\\')
-	    *tmp2 = '/';
-#endif
+
+    G_debug(2, "nviz_init:argv0=%s", argv0);
+    G_debug(2, "nviz_init:argv=%s", argv);
+    G_debug(2, "nviz_init:cmd=%s", cmd);
+
+    tmp = G_store(argv0);
+    G_convert_dirseps_from_host(tmp);
+    argv0 = tmp;
+
+    *p_argv0 = argv0;
 
     if (strstr(argv0, "script_tools") != NULL ||
 	strstr(argv0, "script_play") != NULL ||
 	strstr(argv0, "script_get_line") != NULL ||
 	strstr(argv0, "script_file_tools") != NULL) {
 	G_message(_("Entering script mode ..."));
-	tmp2 = (char *)G_malloc((strlen(cmd) + 2) * (sizeof(char)));
-	sprintf(tmp2, "%s", cmd);
 	script_mode = 1;
-    }
-    else if (strstr(cmd, argv0) == NULL) {
-	tmp2 =
-	    (char *)G_malloc((strlen(cmd) + strlen(argv0) + strlen(tmp) + 4) *
-			     (sizeof(char)));
-	sprintf(tmp2, "%s %s %s", cmd, argv0, tmp);
-    }
-    else {
-	tmp2 =
-	    (char *)G_malloc((strlen(argv0) + strlen(tmp) + 2) *
-			     (sizeof(char)));
-	sprintf(tmp2, "%s %s", argv0, tmp);
+	argv = "";
     }
 
-    if (TCL_ERROR == Tcl_SplitList(interp, tmp2, &argc, args))
+    if (TCL_ERROR == Tcl_SplitList(interp, argv, &argc, p_argv))
 	exit(EXIT_FAILURE);
+
+    G_debug(2, "nviz_init:argc=%d", argc);
 
     return (argc);
 }
@@ -537,12 +524,13 @@ void swap_togl();
 int Ninitdata(Tcl_Interp *interp,	/* Current interpreter. */
 	      Nv_data *data)
 {
+    const char *argv0;
     const char **argv;
     int argc;
 
-    argc = Ngetargs(interp, &argv);
+    argc = Ngetargs(interp, &argv0, &argv);
 
-    G_gisinit(argv[0]);
+    G_gisinit(argv0);
 
     GS_libinit();
 
@@ -552,7 +540,7 @@ int Ninitdata(Tcl_Interp *interp,	/* Current interpreter. */
     data->NumCplanes = 0;
     data->CurCplane = 0;
     if (!script_mode)
-	parse_command(data, interp, argc, argv);
+	parse_command(data, interp, argc, argv0, argv);
 
     return (TCL_OK);
 }
