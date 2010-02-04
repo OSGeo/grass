@@ -172,6 +172,8 @@ xcopy %OSGEO4W_DIR%\apps\msys\info %PACKAGE_DIR%\msys\info /S/V/F/I
 xcopy %OSGEO4W_DIR%\apps\msys\lib %PACKAGE_DIR%\msys\lib /S/V/F/I
 xcopy %OSGEO4W_DIR%\apps\msys\man %PACKAGE_DIR%\msys\man /S/V/F/I
 del %PACKAGE_DIR%\msys\etc\fstab
+rem delete msys.bat from osgeo4w because there is an adaption (for spaces in installation path) written by GRASS-Installer.nsi
+del %PACKAGE_DIR%\msys\msys.bat
 
 
 @echo.
