@@ -12,6 +12,10 @@
 
 !define DEMOLOCATION_PATH "c:\osgeo4w\usr\src\grass_trunk\demolocation"
 
+;Define the source of the patched msys.bat
+
+!define MSYS_BATCH "C:\OSGeo4W\usr\src\grass_trunk\mswindows\osgeo4w\msys.bat"
+
 ;Select if you are building a "Development Version" or a "Release Version" of the GRASS Installer
 
 !define INSTALLER_TYPE "Dev70"
@@ -413,6 +417,10 @@ Section "GRASS" SecGRASS
 	;Install demolocation into the GIS_DATABASE directory
 	SetOutPath "$GIS_DATABASE\demolocation"
 	File /r ${DEMOLOCATION_PATH}\*.*
+	
+	;add msys.bat into the INSTALL_DIR\msys directory
+	SetOutPath "$INSTALL_DIR\msys"
+	File /r ${MSYS_BATCH}	
 	
 	;Create the Uninstaller
 	WriteUninstaller "$INSTALL_DIR\Uninstall-GRASS.exe"
