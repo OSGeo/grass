@@ -38,8 +38,8 @@ int edge_detection(struct Cell_head, /**/
 		   double *, /**/
 		   double, /**/ double, /**/ double, /**/ double /**/);
 
-double *Get_Gradient(struct Cell_head, /**/
-		     double, /**/ double, /**/ double * /**/);
+int Get_Gradient(struct Cell_head, /**/
+		     double, /**/ double, /**/ double *, /**/ double *);
 
 void classification(struct Map_info *, /**/
 		    struct Cell_head, /**/
@@ -53,16 +53,14 @@ void classification(struct Map_info *, /**/
 		    double, /**/
 		    double, /**/
 		    double, /**/
-		    int *, /**/ int, /**/ dbDriver *, /**/ char * /**/);
+		    int *, /**/ int, /**/ dbDriver *, /**/ char *, /**/ char *);
 
-int Insert(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver * /**/);
+int Insert(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver *, /**/ char *);
 
-int UpDate(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver * /**/);
+int UpDate(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver *, /**/ char *);
 
-int Select(double *, /**/
-	   double *, /**/ double *, /**/ int, /**/ dbDriver * /**/);
+int Select(double *, /**/ double *, /**/ double *, /**/ int, /**/ dbDriver *, /**/ char *);
 
-int Create_AuxEdge_Table(dbDriver *);
-int Create_Interpolation_Table(char *, dbDriver *);
+int Create_AuxEdge_Table(dbDriver *, char *);
+int Create_Interpolation_Table(dbDriver *, char *);
 int Insert_Interpolation(double, int, dbDriver *, char *);
-int Drop_Aux_Table(dbDriver *);

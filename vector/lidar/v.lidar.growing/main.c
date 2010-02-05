@@ -25,8 +25,8 @@
 #include <math.h>
 #include <grass/config.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "growing.h"
@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 
     /* Variables' declarations */
     int row, nrows, col, ncols, MaxPoints;
+    int nsubregion_col, nsubregion_row;
+    int subzone = 0, nsubzones = 0;
     int last_row, last_column;
     int nlines, nlines_first, line_num;
     int more;
@@ -48,7 +50,7 @@ int main(int argc, char *argv[])
     double Thres_j, Thres_d, ew_resol, ns_resol;
     double minNS, minEW, maxNS, maxEW;
     const char *mapset;
-    char buf[1024];
+    char buf[1024], table_name[GNAME_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int colorBordo, ripieno, conta, lungPunti, lungHull, xi, c1, c2;
@@ -71,8 +73,6 @@ int main(int argc, char *argv[])
     dbString sql;
     dbTable *table;
     dbCursor cursor;
-    const char *p;
-    int found;
 
 /*------------------------------------------------------------------------------------------*/
     /* Options' declaration */ ;
@@ -124,27 +124,23 @@ int main(int argc, char *argv[])
     /* Open input vector */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
-    sprintf(xname, "%s", in_opt->answer);
-    found = 0;
-    for (p = in_opt->answer; *p; p++)
-	if (*p == '@') {
-	    found = 1;
-	    break;
-	}
 
-    if (found) {
-	if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset) < 0)	/* strip off mapset from input for SQL */
-	    G_fatal_error(_("Vector map <%s> not found"), xname);
-    }
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
 
-    /*Vect_set_open_level (2);          WITH TOPOLOGY */
+    /* Setting auxiliar table's name */
+    if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset)) {
+	sprintf(table_name, "%s_edge_Interpolation", xname);
+    }
+    else
+	sprintf(table_name, "%s_edge_Interpolation", in_opt->answer);
+
     Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
     if (Vect_open_old(&In, in_opt->answer, mapset) < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
+    Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
     if (Vect_open_old(&First, first_opt->answer, mapset) < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), first_opt->answer);
 
@@ -175,10 +171,20 @@ int main(int argc, char *argv[])
     G_get_set_window(&original_reg);
     G_get_set_window(&elaboration_reg);
 
-    /*  Fixxing parameters of the elaboration region */
+    /*  Fixing parameters of the elaboration region */
     /*! The original_region will be divided into several subregions */
     ew_resol = original_reg.ew_res;
     ns_resol = original_reg.ns_res;
+
+    nsubregion_col = ceil((original_reg.east - original_reg.west) / (LATO * ew_resol)) + 0.5;
+    nsubregion_row = ceil((original_reg.north - original_reg.south) / (LATO * ns_resol)) + 0.5;
+
+    if (nsubregion_col < 0)
+	nsubregion_col = 0;
+    if (nsubregion_row < 0)
+	nsubregion_row = 0;
+
+    nsubzones = nsubregion_row * nsubregion_col;
 
     /* Subdividing and working with tiles */
     elaboration_reg.south = original_reg.north;
@@ -187,22 +193,32 @@ int main(int argc, char *argv[])
     db_init_string(&sql);
     db_zero_string(&sql);
 
-    sprintf(buf, "SELECT Interp,ID FROM %s_edge_Interpolation", xname);
+    sprintf(buf, "SELECT Interp,ID FROM %s", table_name);
     G_debug(1, "buf: %s", buf);
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error(_("Unable to open table <%s_edge_Interpolation>"), xname);
+	G_fatal_error(_("Unable to open table <%s>"), table_name);
 
     count_obj = 1;
 
-    nlines = Vect_get_num_lines(&In);
+    nlines = 0;
     points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    Vect_rewind(&In);
+    while (Vect_read_next_line(&In, points, Cats) > 0) {
+	nlines++;
+    }
+    Vect_rewind(&In);
 
-    nlines_first = Vect_get_num_lines(&First);
+    nlines_first = 0;
     points_first = Vect_new_line_struct();
     Cats_first = Vect_new_cats_struct();
+    Vect_rewind(&First);
+    while (Vect_read_next_line(&First, points_first, Cats_first) > 0) {
+	nlines_first++;
+    }
+    Vect_rewind(&First);
 
     while (last_row == FALSE) {	/* For each strip of LATO rows */
 
@@ -223,6 +239,10 @@ int main(int argc, char *argv[])
 	while (last_column == FALSE) {	/* For each strip of LATO columns */
 	    struct bound_box elaboration_box;
 
+	    subzone++;
+	    if (nsubzones > 1)
+		G_message(_("subzone %d of %d"), subzone, nsubzones);
+
 	    elaboration_reg.west = elaboration_reg.east;
 	    if (elaboration_reg.west < original_reg.west)	/* First column */
 		elaboration_reg.west = original_reg.west;
@@ -234,10 +254,11 @@ int main(int argc, char *argv[])
 		last_column = TRUE;
 	    }
 
-	    /*Setting the active region */
-	    Rast_set_window(&elaboration_reg);
-	    nrows = Rast_window_rows();
-	    ncols = Rast_window_cols();
+	    /* Setting the active region */
+	    elaboration_reg.ns_res = ns_resol;
+	    elaboration_reg.ew_res = ew_resol;
+	    nrows = (elaboration_reg.north - elaboration_reg.south) / ns_resol + 0.1;
+	    ncols = (elaboration_reg.east - elaboration_reg.west) / ew_resol + 0.1;
 
 	    G_debug(1, _("Rows = %d"), nrows);
 	    G_debug(1, _("Columns = %d"), ncols);
@@ -282,6 +303,7 @@ int main(int argc, char *argv[])
 			(int)(Rast_easting_to_col
 			      (points->x[0], &elaboration_reg));
 
+		    Z_interp = 0;
 		    while (1) {
 			if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK ||
 			    !more)
@@ -356,13 +378,9 @@ int main(int argc, char *argv[])
 		     (points_first->x[0], points_first->y[0],
 		      points_first->z[0], &elaboration_box)) &&
 		    ((points->x[0] != elaboration_reg.west) ||
-		     (points->x[0] == original_reg.west)) && ((points->y[0]
-							       !=
-							       elaboration_reg.
-							       north) ||
-							      (points->y[0] ==
-							       original_reg.
-							       north))) {
+		     (points->x[0] == original_reg.west)) &&
+		    ((points->y[0] != elaboration_reg.north) ||
+		     (points->y[0] == original_reg.north))) {
 
 		    row =
 			(int)(Rast_northing_to_row

@@ -33,22 +33,25 @@
 #include <grass/config.h>
 #include <grass/PolimiFunct.h>
 #include "edgedetection.h"
+
 int nsply, nsplx, line_out_counter, first_it;
 double passoN, passoE;
-
 
 /**************************************************************************************
 **************************************************************************************/
 int main(int argc, char *argv[])
 {
     /* Variables' declarations */
+    int nsplx_adj, nsply_adj;
+    int nsubregion_col, nsubregion_row, subzone = 0, nsubzones = 0;
+    double N_extension, E_extension, orloE, orloN;
     int dim_vect, nparameters, BW, npoints;
-    double lambda_B, lambda_F, grad_H, grad_L, alpha, ew_resol, ns_resol,
-	mean;
+    double lambda_B, lambda_F, grad_H, grad_L, alpha, mean;
     const char *dvr, *db, *mapset;
-    char table_interpolation[1024], table_name[1024];
+    char table_interpolation[GNAME_MAX], table_name[GNAME_MAX];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-    int last_row, last_column, flag_auxiliar = FALSE, pass_num;
+    int last_row, last_column, flag_auxiliar = FALSE;
 
     int *lineVect;
     double *TN, *Q, *parVect_bilin, *parVect_bicub;	/* Interpolating and least-square vectors */
@@ -58,6 +61,7 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     struct Option *in_opt, *out_opt, *passoE_opt, *passoN_opt,
 	*lambdaF_opt, *lambdaB_opt, *gradH_opt, *gradL_opt, *alfa_opt;
+    struct Flag *spline_step_flag;
     struct GModule *module;
 
     struct Cell_head elaboration_reg, original_reg;
@@ -76,6 +80,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("edges"));
     module->description =
 	_("Detects the object's edges from a LIDAR data set.");
+
+    spline_step_flag = G_define_flag();
+    spline_step_flag->key = 'e';
+    spline_step_flag->label = _("Estimate spline step value");
+    spline_step_flag->description =
+	_("Estimate a good spline step value for the input vector points within the current region extends and quit");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -157,6 +167,10 @@ int main(int argc, char *argv[])
     grad_H = atof(gradH_opt->answer);
     grad_L = atof(gradL_opt->answer);
     alpha = atof(alfa_opt->answer);
+
+    grad_L = grad_L * grad_L;
+    grad_H = grad_H * grad_H;
+
     if (!(db = G__getenv2("DB_DATABASE", G_VAR_MAPSET)))
 	G_fatal_error(_("Unable to read name of database"));
 
@@ -164,7 +178,38 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to read name of driver"));
 
     /* Setting auxiliar table's name */
-    sprintf(table_name, "%s_aux", out_opt->answer);
+    if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
+	sprintf(table_name, "%s_aux", xname);
+	sprintf(table_interpolation, "%s_edge_Interpolation", xname);
+    }
+    else {
+	sprintf(table_name, "%s_aux", out_opt->answer);
+	sprintf(table_interpolation, "%s_edge_Interpolation", out_opt->answer);
+    }
+
+    /* Something went wrong in a previous v.lidar.edgedetection execution */
+    if (db_table_exists(dvr, db, table_name)) {
+	/* Start driver and open db */
+	driver = db_start_driver_open_database(dvr, db);
+	if (driver == NULL)
+	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
+			  dvr);
+	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
+	    G_fatal_error(_("Old auxiliar table could not be dropped"));
+	db_close_database_shutdown_driver(driver);
+    }
+
+    /* Something went wrong in a previous v.lidar.edgedetection execution */
+    if (db_table_exists(dvr, db, table_interpolation)) {
+	/* Start driver and open db */
+	driver = db_start_driver_open_database(dvr, db);
+	if (driver == NULL)
+	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
+			  dvr);
+	if (P_Drop_Aux_Table(driver, table_interpolation) != DB_OK)
+	    G_fatal_error(_("Old auxiliar table could not be dropped"));
+	db_close_database_shutdown_driver(driver);
+    }
 
     /* Checking vector names */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
@@ -174,14 +219,28 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
 
-    /* Open output vector */
-    if (0 > Vect_open_new(&Out, out_opt->answer, WITH_Z))
-	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
-
     Vect_set_open_level(1);
     /* Open input vector */
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+
+    /* Estimate point density and mean distance for current region */
+    if (spline_step_flag->answer) {
+	double dens, dist;
+	if (P_estimate_splinestep(&In, &dens, &dist) == 0) {
+	    G_message("Estimated point density: %.4g", dens);
+	    G_message("Estimated mean distance between points: %.4g", dist);
+	}
+	else
+	    G_warning(_("No points in current region!"));
+	
+	Vect_close(&In);
+	exit(EXIT_SUCCESS);
+    }
+
+    /* Open output vector */
+    if (0 > Vect_open_new(&Out, out_opt->answer, WITH_Z))
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
 
     /* Copy vector Head File */
     Vect_copy_head_data(&In, &Out);
@@ -194,7 +253,11 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 		      dvr);
 
-    if (Create_Interpolation_Table(out_opt->answer, driver) != DB_OK)
+    /* Create auxiliar and interpolation table */
+    if ((flag_auxiliar = Create_AuxEdge_Table(driver, table_name)) == FALSE)
+	G_fatal_error(_("It was impossible to create <%s>."), table_name);
+
+    if (Create_Interpolation_Table(driver, table_interpolation) != DB_OK)
 	G_fatal_error(_("It was impossible to create <%s> interpolation table in database."),
 		      out_opt->answer);
 
@@ -207,23 +270,39 @@ int main(int argc, char *argv[])
     /* Fixing parameters of the elaboration region */
     /*! Each original_region will be divided into several subregions. These
      *  subregion will be overlapped by its neighboring subregions. This overlapping
-     *  is calculated as OVERLAP_PASS times the east-west resolution. */
-
-    ew_resol = original_reg.ew_res;
-    ns_resol = original_reg.ns_res;
+     *  is calculated as OVERLAP_SIZE times the east-west spline step. */
 
     P_zero_dim(&dims);
 
-    dims.latoE = NSPLX_MAX * passoE;
-    dims.latoN = NSPLY_MAX * passoN;
-    dims.overlap = OVERLAP_SIZE * ew_resol;
-    P_get_orlo(P_BICUBIC, &dims, passoE, passoN);
+    N_extension = original_reg.north - original_reg.south;
+    E_extension = original_reg.east - original_reg.west;
+
+    nsplx_adj = NSPLX_MAX;
+    nsply_adj = NSPLY_MAX;
+    dims.overlap = OVERLAP_SIZE * passoE;
+    P_get_orlo(P_BICUBIC, &dims, passoE, passoN);	/* Set orlo_h|v */
+    P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
+
+    G_verbose_message("adjusted EW splines %d", nsplx_adj);
+    G_verbose_message("adjusted NS splines %d", nsply_adj);
+
+    orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
+    orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+
+    nsubregion_col = ceil(E_extension / orloE) + 0.5;
+    nsubregion_row = ceil(N_extension / orloN) + 0.5;
+
+    if (nsubregion_col < 0)
+	nsubregion_col = 0;
+    if (nsubregion_row < 0)
+	nsubregion_row = 0;
+
+    nsubzones = nsubregion_row * nsubregion_col;
 
     elaboration_reg.south = original_reg.north;
 
     last_row = FALSE;
     first_it = TRUE;
-    pass_num = 0;
 
     while (last_row == FALSE) {	/* For each row */
 
@@ -243,16 +322,22 @@ int main(int argc, char *argv[])
 
 	nsply =
 	    ceil((elaboration_reg.north - elaboration_reg.south) / passoN) +
-	    1;
+	    0.5;
+	/*
 	if (nsply > NSPLY_MAX) {
 	    nsply = NSPLY_MAX;
 	}
+	*/
 	G_debug(1, "nsply = %d", nsply);
 
 	elaboration_reg.east = original_reg.west;
 	last_column = FALSE;
 
 	while (last_column == FALSE) {	/* For each column */
+
+	    subzone++;
+	    if (nsubzones > 1)
+		G_message(_("subzone %d of %d"), subzone, nsubzones);
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
@@ -270,10 +355,12 @@ int main(int argc, char *argv[])
 
 	    nsplx =
 		ceil((elaboration_reg.east - elaboration_reg.west) / passoE) +
-		1;
+		0.5;
+	    /*
 	    if (nsplx > NSPLX_MAX) {
 		nsplx = NSPLX_MAX;
 	    }
+	    */
 	    G_debug(1, "nsplx = %d", nsplx);
 
 	    /*Setting the active region */
@@ -285,9 +372,6 @@ int main(int argc, char *argv[])
 
 	    if (npoints > 0) {	/* If there is any point falling into elaboration_reg... */
 		int i, tn;
-
-		pass_num++;
-		G_verbose_message(_("Pass %d:"), pass_num);
 
 		nparameters = nsplx * nsply;
 
@@ -345,20 +429,12 @@ int main(int argc, char *argv[])
 		G_free_vector(TN);
 		G_free_vector(Q);
 
-		if (flag_auxiliar == FALSE) {
-		    G_debug(1,
-			    _("Creating auxiliar table for archiving overlapping zones"));
-		    if ((flag_auxiliar =
-			 Create_AuxEdge_Table(driver)) == FALSE)
-			G_fatal_error(_("It was impossible to create <%s>."),
-				      table_name);
-		}
 		G_verbose_message(_("Point classification"));
 		classification(&Out, elaboration_reg, general_box,
 			       overlap_box, obsVect, parVect_bilin,
 			       parVect_bicub, mean, alpha, grad_H, grad_L,
 			       dims.overlap, lineVect, npoints, driver,
-			       out_opt->answer);
+			       table_interpolation, table_name);
 
 		G_free_vector(parVect_bilin);
 		G_free_vector(parVect_bicub);
@@ -374,7 +450,7 @@ int main(int argc, char *argv[])
     /* Dropping auxiliar table */
     if (npoints > 0) {
 	G_debug(1, _("Dropping <%s>"), table_name);
-	if (Drop_Aux_Table(driver) != DB_OK)
+	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
 	    G_warning(_("Auxiliar table could not be dropped"));
     }
 
@@ -382,7 +458,6 @@ int main(int argc, char *argv[])
 
     Vect_close(&In);
 
-    sprintf(table_interpolation, "%s_edge_Interpolation", out_opt->answer);
     Vect_map_add_dblink(&Out, F_INTERPOLATION, NULL, table_interpolation,
 			"id", db, dvr);
 

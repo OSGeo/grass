@@ -1,5 +1,5 @@
 
-/***********************************************************************
+/**********************************************************************
  *
  * MODULE:       v.surf.bspline
  *
@@ -15,9 +15,9 @@
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
- **************************************************************************/
+ **********************************************************************/
 
- /*INCLUDES*/
+/* INCLUDES */
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -29,23 +29,25 @@
 #include <grass/config.h>
 #include <grass/PolimiFunct.h>
 #include "bspline.h"
-    /*GLOBAL VARIABLES */
+
+/* GLOBAL VARIABLES */
 int bspline_field;
 char *bspline_column;
 
-/*-------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-
-    /* Variables' declarations */
-    int nsply, nsplx, nlines, nrows, ncols;
+    /* Variable declarations */
+    int nsply, nsplx, nlines, nrows, ncols, nsplx_adj, nsply_adj;
     int nsubregion_col, nsubregion_row, subregion_row, subregion_col;
+    int subzone = 0, nsubzones = 0;
     int last_row, last_column, grid, bilin, ext, flag_auxiliar, cross;	/* booleans */
     double passoN, passoE, lambda, mean;
     double N_extension, E_extension, orloE, orloN;
 
     const char *mapset, *dvr, *db, *vector, *map;
-    char table_name[1024], title[64];
+    char table_name[GNAME_MAX], title[64];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int dim_vect, nparameters, BW;
     int *lineVect;		/* Vector restoring primitive's ID */
@@ -53,15 +55,15 @@ int main(int argc, char *argv[])
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
     double **N, **obsVect;	/* Interpolation and least-square matrix */
 
-    /* Structs' declarations */
+    /* Structs declarations */
     int raster;
     struct Map_info In, In_ext, Out;
     struct History history;
 
     struct GModule *module;
     struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *passoE_opt,
-	*passoN_opt, *lambda_f_opt, *type, *dfield_opt, *col_opt;
-    struct Flag *cross_corr_flag;
+	*passoN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt;
+    struct Flag *cross_corr_flag, *spline_step_flag;
 
     struct Reg_dimens dims;
     struct Cell_head elaboration_reg, original_reg;
@@ -76,29 +78,32 @@ int main(int argc, char *argv[])
     struct field_info *Fi;
     dbDriver *driver, *driver_cats;
 
-    /*-------------------------------------------------------------------------------------------*/
-    /* Options' declaration */
-    module = G_define_module(); {
-G_add_keyword(_("vector"));
-G_add_keyword(_("interpolation"));
-	module->description =
-	    _("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
-    }
+    /*----------------------------------------------------------------*/
+    /* Options declarations */
+    module = G_define_module();
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("interpolation"));
+    module->description =
+	_("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
 
-    cross_corr_flag = G_define_flag(); {
-	cross_corr_flag->key = 'c';
-	cross_corr_flag->description =
-	    _("Find the best Tykhonov regularizing parameter using a \"leave-one-out\" cross validation method");
-    }
+    cross_corr_flag = G_define_flag();
+    cross_corr_flag->key = 'c';
+    cross_corr_flag->description =
+	_("Find the best Tykhonov regularizing parameter using a \"leave-one-out\" cross validation method");
+
+    spline_step_flag = G_define_flag();
+    spline_step_flag->key = 'e';
+    spline_step_flag->label = _("Estimate point density and distance");
+    spline_step_flag->description =
+	_("Estimate point density and distance for the input vector points within the current region extends and quit");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
-    in_ext_opt = G_define_standard_option(G_OPT_V_INPUT); {
-	in_ext_opt->key = "sparse";
-	in_ext_opt->required = NO;
-	in_ext_opt->description =
-	    _("Name of input vector map of sparse points");
-    }
+    in_ext_opt = G_define_standard_option(G_OPT_V_INPUT);
+    in_ext_opt->key = "sparse";
+    in_ext_opt->required = NO;
+    in_ext_opt->description =
+	_("Name of input vector map of sparse points");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_opt->required = NO;
@@ -107,68 +112,71 @@ G_add_keyword(_("interpolation"));
     out_map_opt->key = "raster";
     out_map_opt->required = NO;
 
-    passoE_opt = G_define_option(); {
-	passoE_opt->key = "sie";
-	passoE_opt->type = TYPE_DOUBLE;
-	passoE_opt->required = NO;
-	passoE_opt->answer = "4";
-	passoE_opt->description =
-	    _("Length of each spline step in the east-west direction");
-	passoE_opt->guisection = _("Settings");
-    }
+    passoE_opt = G_define_option();
+    passoE_opt->key = "sie";
+    passoE_opt->type = TYPE_DOUBLE;
+    passoE_opt->required = NO;
+    passoE_opt->answer = "4";
+    passoE_opt->description =
+	_("Length of each spline step in the east-west direction");
+    passoE_opt->guisection = _("Settings");
 
-    passoN_opt = G_define_option(); {
-	passoN_opt->key = "sin";
-	passoN_opt->type = TYPE_DOUBLE;
-	passoN_opt->required = NO;
-	passoN_opt->answer = "4";
-	passoN_opt->description =
-	    _("Length of each spline step in the north-south direction");
-	passoN_opt->guisection = _("Settings");
-    }
+    passoN_opt = G_define_option();
+    passoN_opt->key = "sin";
+    passoN_opt->type = TYPE_DOUBLE;
+    passoN_opt->required = NO;
+    passoN_opt->answer = "4";
+    passoN_opt->description =
+	_("Length of each spline step in the north-south direction");
+    passoN_opt->guisection = _("Settings");
 
-    type = G_define_option(); {
-	type->key = "type";
-	type->type = TYPE_STRING;
-	type->required = NO;
-	type->description = _("Spline interpolation algorithm");
-	type->options = "bilinear,bicubic";
-	type->answer = "bilinear";
-	type->guisection = _("Settings");
-    }
+    type_opt = G_define_option();
+    type_opt->key = "type";
+    type_opt->type = TYPE_STRING;
+    type_opt->required = NO;
+    type_opt->description = _("Spline interpolation algorithm");
+    type_opt->options = "bilinear,bicubic";
+    type_opt->answer = "bilinear";
+    type_opt->guisection = _("Settings");
 
-    lambda_f_opt = G_define_option(); {
-	lambda_f_opt->key = "lambda_i";
-	lambda_f_opt->type = TYPE_DOUBLE;
-	lambda_f_opt->required = NO;
-	lambda_f_opt->description = _("Tykhonov regularization parameter (affects smoothing)");
-	lambda_f_opt->answer = "1";
-	lambda_f_opt->guisection = _("Settings");
-    }
+    lambda_f_opt = G_define_option();
+    lambda_f_opt->key = "lambda_i";
+    lambda_f_opt->type = TYPE_DOUBLE;
+    lambda_f_opt->required = NO;
+    lambda_f_opt->description = _("Tykhonov regularization parameter (affects smoothing)");
+    lambda_f_opt->answer = "1";
+    lambda_f_opt->guisection = _("Settings");
 
-    dfield_opt = G_define_standard_option(G_OPT_V_FIELD); {
-	dfield_opt->description =
-	    _("If set to 0, z coordinates are used. (3D vector only)");
-	dfield_opt->answer = "0";
-	dfield_opt->guisection = _("Settings");
-    }
+    dfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    dfield_opt->description =
+	_("If set to 0, z coordinates are used. (3D vector only)");
+    dfield_opt->answer = "0";
+    dfield_opt->guisection = _("Settings");
 
-    col_opt = G_define_option(); {
-	col_opt->key = "column";
-	col_opt->type = TYPE_STRING;
-	col_opt->required = NO;
-	col_opt->description =
-	    _("Attribute table column with values to interpolate (if layer>0)");
-	col_opt->guisection = _("Settings");
-    }
+    col_opt = G_define_option();
+    col_opt->key = "column";
+    col_opt->type = TYPE_STRING;
+    col_opt->required = NO;
+    col_opt->description =
+	_("Attribute table column with values to interpolate (if layer>0)");
+    col_opt->guisection = _("Settings");
 
-/*-------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------*/
     /* Parsing */
     G_gisinit(argv[0]);
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (!strcmp(type->answer, "bilinear"))
+    vector = out_opt->answer;
+    map = out_map_opt->answer;
+
+    if (vector && map)
+	G_fatal_error(_("Choose either vector or raster output, not both"));
+
+    if (!vector && !map && !cross_corr_flag->answer)
+	G_fatal_error(_("No raster or vector or cross-validation output"));
+
+    if (!strcmp(type_opt->answer, "bilinear"))
 	bilin = P_BILINEAR;
     else
 	bilin = P_BICUBIC;
@@ -180,10 +188,6 @@ G_add_keyword(_("interpolation"));
     bspline_column = col_opt->answer;
 
     flag_auxiliar = FALSE;
-    if (cross_corr_flag->answer) {
-    }
-    vector = out_opt->answer;
-    map = out_map_opt->answer;
 
     if (!(db = G__getenv2("DB_DATABASE", G_VAR_MAPSET)))
 	G_fatal_error(_("Unable to read name of database"));
@@ -192,39 +196,26 @@ G_add_keyword(_("interpolation"));
 	G_fatal_error(_("Unable to read name of driver"));
 
     /* Setting auxiliar table's name */
-    if (vector)
-	sprintf(table_name, "%s_aux", out_opt->answer);
+    if (vector) {
+	if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
+	    sprintf(table_name, "%s_aux", xname);
+	}
+	else
+	    sprintf(table_name, "%s_aux", out_opt->answer);
+    }
 
-    /* Open driver and database */
-    if (db_table_exists(dvr, db, table_name)) {	/*Something went wrong in a 
-						   previous v.surf.bspline execution */
-	dbString sql;
-	char buf[1024];
-
-
+    /* Something went wrong in a previous v.surf.bspline execution */
+    if (db_table_exists(dvr, db, table_name)) {
+	/* Start driver and open db */
 	driver = db_start_driver_open_database(dvr, db);
 	if (driver == NULL)
-	    G_fatal_error(_("No database connection for driver <%s> is defined. "
-			   "Run db.connect."), dvr);
-
-	db_init_string(&sql);
-	db_zero_string(&sql);
-	sprintf(buf, "drop table %s", table_name);
-	db_append_string(&sql, buf);
-	if (db_execute_immediate(driver, &sql) != DB_OK)
-	    G_fatal_error(_("It was not possible to drop <%s> table. "
-			    "Nothing will be done. Try to drop it manually."),
-			  table_name);
-
+	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
+			  dvr);
+	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
+	    G_fatal_error(_("Old auxiliar table could not be dropped"));
 	db_close_database_shutdown_driver(driver);
     }
 
-    if (vector && map)
-	G_fatal_error(_("Choose either vector or raster output, not both"));
-#ifdef notdef
-    if (!vector && !map && !cross_corr_flag->answer)
-	G_fatal_error(_("No raster nor vector output"));
-#endif
     /* Open input vector */
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
@@ -233,6 +224,41 @@ G_add_keyword(_("interpolation"));
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
 	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
+
+    if (!Vect_is_3d(&In) && bspline_field <= 0 && bspline_column)
+	G_fatal_error(_("Need either 3D vector or layer and column with z values"));
+
+    /* Estimate point density and mean distance for current region */
+    if (spline_step_flag->answer) {
+	double dens, dist;
+	if (P_estimate_splinestep(&In, &dens, &dist) == 0) {
+	    G_message("Estimated point density: %.4g", dens);
+	    G_message("Estimated mean distance between points: %.4g", dist);
+	}
+	else
+	    G_warning(_("No points in current region!"));
+	
+	Vect_close(&In);
+	exit(EXIT_SUCCESS);
+    }
+
+    /*----------------------------------------------------------------*/
+    /* Cross-correlation begins */
+    if (cross_corr_flag->answer) {
+	G_debug(1, "CrossCorrelation()");
+	cross = cross_correlation(&In, passoE, passoN);
+
+	if (cross != TRUE)
+	    G_fatal_error(_("Cross validation didn't finish correctly"));
+	else {
+	    G_debug(1, "Cross validation finished correctly");
+
+	    Vect_close(&In);
+
+	    G_done_msg(_("Cross validation finished for sie = %f and sin = %f"), passoE, passoN);
+	    exit(EXIT_SUCCESS);
+	}
+    }
 
     /* Open input ext vector */
     if (!in_ext_opt->answer) {
@@ -287,11 +313,6 @@ G_add_keyword(_("interpolation"));
     Rast_set_fp_type(DCELL_TYPE);
     if (!vector && map) {
 	grid = TRUE;
-	/*
-	   if (G_find_raster (out_map_opt->answer, G_mapset()) != NULL) 
-	   G_fatal_error (_("Raster <%s> already exist."), out_map_opt->answer);
-	 */
-
 	raster = Rast_open_fp_new(out_map_opt->answer);
     }
 
@@ -325,53 +346,25 @@ G_add_keyword(_("interpolation"));
 	db_close_database_shutdown_driver(driver_cats);
     }
 
-/*-------------------------------------------------------------------------------------------*/
-    /*Cross-correlation begins */
-    if (cross_corr_flag->answer) {	/* CROSS-CORRELATION WILL BE DONE */
-	G_debug(1, "CrossCorrelation()");
-	/*cross = cross_correlation (&In, &passoE, &passoN, &lambda); */
-	cross = cross_correlation(&In, passoE, passoN);
-
-	if (cross != TRUE)
-	    G_fatal_error(_("Cross validation didn't finish correctly"));
-	else {
-	    G_debug(1, "Cross validation finished correctly");
-
-	    Vect_close(&In);
-	    if (ext != FALSE)
-		Vect_close(&In_ext);
-	    if (vector)
-		Vect_close(&Out);
-
-	    if (map)
-		Rast_close(raster);
-
-	    G_done_msg(_("Cross Validation was success!"));
-	    exit(EXIT_SUCCESS);
-	}
-
-	/*G_debug (0, _("passoE = %f, passoN=%f, lambda_i=%f"), passoE, passoN, lambda); */
-    }
-
-/*-------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------*/
     /* Interpolation begins */
     G_debug(1, "Interpolation()");
-
-    if (map) {
-	nrows = Rast_window_rows();
-	ncols = Rast_window_cols();
-
-	if (!G_alloc_matrix(nrows, ncols))
-	    G_fatal_error(_("Interpolation: The region resolution is too high: "
-			   "%d cells. Consider to change it."),
-			  nrows * ncols);
-    }
 
     /* Open driver and database */
     driver = db_start_driver_open_database(dvr, db);
     if (driver == NULL)
 	G_fatal_error(_("No database connection for driver <%s> is defined. "
 			"Run db.connect."), dvr);
+
+    /* Auxiliar table creation */
+    if (vector) {
+	if ((flag_auxiliar = P_Create_Aux_Table(driver, table_name)) == FALSE) {
+	    P_Drop_Aux_Table(driver, table_name);
+	    G_fatal_error(_("Interpolation: Creating table: "
+			    "It was impossible to create table <%s>."),
+			  table_name);
+	}
+    }
 
     /* Setting regions and boxes */
     G_debug(1, "Interpolation: Setting regions and boxes");
@@ -380,49 +373,64 @@ G_add_keyword(_("interpolation"));
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
 
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
+
     /* Alloc raster matrix */
-    if (map)
+    if (grid == TRUE) {
 	if (!(raster_matrix = G_alloc_matrix(nrows, ncols)))
 	    G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
 			    "Consider changing region resolution"));
+    }
 
-    /* Fixxing parameters of the elaboration region */
+    /* Fixing parameters of the elaboration region */
     P_zero_dim(&dims);		/* Set to zero the dim struct */
-    dims.latoE = NSPLX_MAX * passoE;
-    dims.latoN = NSPLY_MAX * passoN;
-    dims.overlap = OVERLAP_SIZE * passoE;
-    P_get_orlo(bilin, &dims, passoE, passoN);	/* Set the last two dim elements */
 
-    N_extension = original_reg.ns_res * original_reg.rows;
-    E_extension = original_reg.ew_res * original_reg.cols;
-    orloE = dims.latoE - dims.overlap - 2 * dims.orlo_h;
-    orloN = dims.latoN - dims.overlap - 2 * dims.orlo_v;
-    nsubregion_col = 2 + ((E_extension - dims.latoE) / orloE);
-    nsubregion_row = 2 + ((N_extension - dims.latoN) / orloN);
+    N_extension = original_reg.north - original_reg.south;
+    E_extension = original_reg.east - original_reg.west;
+
+    nsplx_adj = NSPLX_MAX;
+    nsply_adj = NSPLY_MAX;
+    dims.overlap = OVERLAP_SIZE * passoE;
+    P_get_orlo(bilin, &dims, passoE, passoN);	/* Set orlo_h|v */
+    P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
+
+    G_verbose_message("adjusted EW splines %d", nsplx_adj);
+    G_verbose_message("adjusted NS splines %d", nsply_adj);
+
+    orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
+    orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+
+    nsubregion_col = ceil(E_extension / orloE) + 0.5;
+    nsubregion_row = ceil(N_extension / orloN) + 0.5;
 
     if (nsubregion_col < 0)
 	nsubregion_col = 0;
     if (nsubregion_row < 0)
 	nsubregion_row = 0;
 
+    nsubzones = nsubregion_row * nsubregion_col;
+
     /* Creating line and categories structs */
     points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    Vect_cat_set(Cats, 1, 0);
     nlines = Vect_get_num_lines(&In);
 
-    /*------------------------------------------------------------------------------------------
+    /*------------------------------------------------------------------
       | Subdividing and working with tiles: 									
       | Each original_region will be divided into several subregions. 
       | Each one will be overlaped by its neibourgh subregions. 
-      | The overlapping was calculated as a fixed OVERLAP_SIZE times the east-west resolution
-      ------------------------------------------------------------------------------------------*/
+      | The overlapping was calculated as a fixed OVERLAP_SIZE times
+      | the east-west spline step
+      ----------------------------------------------------------------*/
 
     elaboration_reg.south = original_reg.north;
 
     G_percent(0, 1, 10);
     subregion_row = 0;
     last_row = FALSE;
-    while (last_row == FALSE) {	/* For each row */
+    while (last_row == FALSE) {	/* For each subregion row */
 	subregion_row++;
 	P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 		      GENERAL_ROW);
@@ -431,36 +439,35 @@ G_add_keyword(_("interpolation"));
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  FIRST_ROW);
-	    nsply =
-		ceil((elaboration_reg.north -
-		      elaboration_reg.south) / passoN);
-	    G_debug(1, "Interpolation: nsply = %d", nsply);
-	    if (nsply > NSPLY_MAX)
-		nsply = NSPLY_MAX;
 	}
 
 	if (elaboration_reg.south <= original_reg.south) {	/* Last row */
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  LAST_ROW);
-	    nsply =
-		ceil((elaboration_reg.north -
-		      elaboration_reg.south) / passoN);
 	    last_row = TRUE;
-	    G_debug(1, "Interpolation: nsply = %d", nsply);
-	    if (nsply > NSPLY_MAX)
-		nsply = NSPLY_MAX;
 	}
 
+	nsply =
+	    ceil((elaboration_reg.north -
+		  elaboration_reg.south) / passoN) + 0.5;
+	G_debug(1, "Interpolation: nsply = %d", nsply);
+	/*
+	if (nsply > NSPLY_MAX)
+	    nsply = NSPLY_MAX;
+	*/
 	elaboration_reg.east = original_reg.west;
 	last_column = FALSE;
-
 	subregion_col = 0;
-	while (last_column == FALSE) {	/* For each column */
+
+	while (last_column == FALSE) {	/* For each subregion column */
 	    int npoints = 0;
-	    int nsubzones = 0, subzone = 0;
 
 	    subregion_col++;
+	    subzone++;
+	    if (nsubzones > 1)
+		G_message(_("subzone %d of %d"), subzone, nsubzones);
+
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
 
@@ -468,12 +475,6 @@ G_add_keyword(_("interpolation"));
 
 		P_set_regions(&elaboration_reg, &general_box, &overlap_box,
 			      dims, FIRST_COLUMN);
-		nsplx =
-		    ceil((elaboration_reg.east -
-			  elaboration_reg.west) / passoE);
-		G_debug(1, "Interpolation: nsply = %d", nsply);
-		if (nsplx > NSPLX_MAX)
-		    nsplx = NSPLX_MAX;
 	    }
 
 	    if (elaboration_reg.east >= original_reg.east) {	/* Last column */
@@ -481,13 +482,15 @@ G_add_keyword(_("interpolation"));
 		P_set_regions(&elaboration_reg, &general_box, &overlap_box,
 			      dims, LAST_COLUMN);
 		last_column = TRUE;
-		nsplx =
-		    ceil((elaboration_reg.east -
-			  elaboration_reg.west) / passoE);
-		G_debug(1, "Interpolation: nsply = %d", nsply);
-		if (nsplx > NSPLX_MAX)
-		    nsplx = NSPLX_MAX;
 	    }
+	    nsplx =
+		ceil((elaboration_reg.east -
+		      elaboration_reg.west) / passoE) + 0.5;
+	    G_debug(1, "Interpolation: nsplx = %d", nsplx);
+	    /*
+	    if (nsplx > NSPLX_MAX)
+		nsplx = NSPLX_MAX;
+	    */
 	    G_debug(1, "Interpolation: (%d,%d): subregion bounds",
 		    subregion_row, subregion_col);
 	    G_debug(1, "Interpolation: \t\tNORTH:%.2f\t",
@@ -497,7 +500,7 @@ G_add_keyword(_("interpolation"));
 	    G_debug(1, "Interpolation: \t\tSOUTH:%.2f",
 		    elaboration_reg.south);
 
-	    /*Setting the active region */
+	    /* reading points in interpolation region */
 	    dim_vect = nsplx * nsply;
 	    observ =
 		P_Read_Vector_Region_Map(&In, &elaboration_reg, &npoints,
@@ -511,9 +514,9 @@ G_add_keyword(_("interpolation"));
 		double *obs_mean;
 
 		nparameters = nsplx * nsply;
-		BW = P_get_BandWidth(bilin, nsply);
+		BW = P_get_BandWidth(P_BILINEAR, nsply) + 2 * (bilin == P_BICUBIC);
 
-		/*Least Squares system */
+		/* Least Squares system */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		TN = G_alloc_vector(nparameters);	/* vector */
 		parVect = G_alloc_vector(nparameters);	/* Parameters vector */
@@ -521,9 +524,6 @@ G_add_keyword(_("interpolation"));
 		Q = G_alloc_vector(npoints);	/* "a priori" var-cov matrix */
 		lineVect = G_alloc_ivector(npoints);	/*  */
 		obs_mean = G_alloc_vector(npoints);
-
-		if (bspline_field <= 0)
-		    mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		for (i = 0; i < npoints; i++) {	/* Setting obsVect vector & Q matrix */
 		    double dval;
@@ -534,10 +534,8 @@ G_add_keyword(_("interpolation"));
 		    obsVect[i][1] = observ[i].coordY;
 
 		    if (bspline_field > 0) {
-			int cat, ival, ret, type;
+			int cat, ival, ret;
 
-			if (!(type & GV_POINTS))
-			    continue;
 			cat = observ[i].cat;
 			if (cat < 0)
 			    continue;
@@ -566,12 +564,15 @@ G_add_keyword(_("interpolation"));
 		    else {
 			obsVect[i][2] = observ[i].coordZ;
 			obs_mean[i] = observ[i].coordZ;
-		    }		/*obsVect[i][2] = observ[i].coordZ - mean; */
+		    }		/* obsVect[i][2] = observ[i].coordZ - mean; */
 		}
 
 		/* Mean calculation for every point */
 		if (bspline_field > 0)
 		    mean = calc_mean(obs_mean, npoints);
+		else
+		    mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
+
 
 		G_debug(1, "Interpolation: (%d,%d): mean=%lf",
 			subregion_row, subregion_col, mean);
@@ -608,22 +609,17 @@ G_add_keyword(_("interpolation"));
 		G_free_vector(TN);
 		G_free_vector(Q);
 
-		if (grid == FALSE) {	/*OBSERVATION POINTS INTERPOLATION */
-		    /* Auxiliar table creation */
-		    if (flag_auxiliar == FALSE) {
-			G_debug(1,
-				"Interpolation: Creating auxiliar table for archiving "
-				"overlapping zones");
-			if ((flag_auxiliar =
-			     P_Create_Aux_Table(driver,
-						table_name)) == FALSE) {
-			    P_Drop_Aux_Table(driver, table_name);
-			    G_fatal_error(_("Interpolation: Creating table: "
-					    "It was impossible to create table <%s>."),
-					  table_name);
-			}
-		    }
-
+		if (grid == TRUE) {	/* GRID INTERPOLATION ==> INTERPOLATION INTO A RASTER */
+		    flag_auxiliar = TRUE;
+		    G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
+			    subregion_row, subregion_col);
+		    raster_matrix =
+			P_Regular_Points(&elaboration_reg, general_box,
+					 overlap_box, raster_matrix, parVect,
+					 passoN, passoE, dims.overlap, mean,
+					 nsplx, nsply, nrows, ncols, bilin);
+		}
+		else {		/* OBSERVATION POINTS INTERPOLATION */
 		    if (ext == FALSE) {
 			G_debug(1, "Interpolation: (%d,%d): Sparse_Points...",
 				subregion_row, subregion_col);
@@ -633,11 +629,7 @@ G_add_keyword(_("interpolation"));
 					dims.overlap, nsplx, nsply, npoints,
 					bilin, Cats, driver, mean,
 					table_name);
-
-			G_free_matrix(obsVect);
-			G_free_vector(parVect);
 		    }
-
 		    else {	/* FLAG_EXT == TRUE */
 			int npoints_ext, *lineVect_ext = NULL;
 			double **obsVect_ext;	/*, mean_ext = .0; */
@@ -671,53 +663,37 @@ G_add_keyword(_("interpolation"));
 					mean, table_name);
 
 			G_free_matrix(obsVect_ext);
-			G_free_vector(parVect);
 			G_free_ivector(lineVect_ext);
 		    }		/* END FLAG_EXT == TRUE */
-		}		/* END IF GRID == FLASE */
-
-		else {		/*GRID INTERPOLATION ==> INTERPOLATION INTO A RASTER */
-		    G_free_matrix(obsVect);
-		    flag_auxiliar = TRUE;
-		    G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
-			    subregion_row, subregion_col);
-		    raster_matrix =
-			P_Regular_Points(&elaboration_reg, general_box,
-					 overlap_box, raster_matrix, parVect,
-					 passoN, passoE, dims.overlap, mean,
-					 nsplx, nsply, nrows, ncols, bilin);
-		    G_free_vector(parVect);
-		}
+		}		/* END GRID == FALSE */
+		G_free_vector(parVect);
+		G_free_matrix(obsVect);
 		G_free_ivector(lineVect);
+		G_free_vector(obs_mean);
 	    }
 	    else
 		G_warning(_("No data within this subzone. "
 			    "Consider changing the spline step."));
-
-	    subzone = (subregion_row - 1) * nsubregion_col + subregion_col;
-	    nsubzones = nsubregion_row * nsubregion_col;
-	    G_percent(subzone, nsubzones, 10);
-
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 
-    /* Writing into the output vector map the points from the overlapping zones */
-    if (flag_auxiliar == TRUE) {
-	if (grid == FALSE) {
-	    if (ext == FALSE)
-		P_Aux_to_Vector(&In, &Out, driver, table_name);
-	    else
-		P_Aux_to_Vector(&In_ext, &Out, driver, table_name);
+    G_verbose_message(_("Writing output..."));
+    /* Writing the output raster map */
+    if (grid == TRUE) {
+	P_Aux_to_Raster(raster_matrix, raster);
+	G_free_matrix(raster_matrix);
+    }
+    /* Writing to the output vector map the points from the overlapping zones */
+    else if (flag_auxiliar == TRUE) {
+	if (ext == FALSE)
+	    P_Aux_to_Vector(&In, &Out, driver, table_name);
+	else
+	    P_Aux_to_Vector(&In_ext, &Out, driver, table_name);
 
-	    /* Dropping auxiliar table */
-	    G_debug(1, "%s: Dropping <%s>", argv[0], table_name);
-	    if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
-		G_fatal_error(_("Auxiliar table could not be dropped"));
-	}
-	else {
-	    P_Aux_to_Raster(raster_matrix, raster);
-	    G_free_matrix(raster_matrix);
-	}
+	/* Dropping auxiliar table */
+	G_debug(1, "%s: Dropping <%s>", argv[0], table_name);
+	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
+	    G_fatal_error(_("Auxiliar table could not be dropped"));
     }
 
     db_close_database_shutdown_driver(driver);
@@ -733,7 +709,7 @@ G_add_keyword(_("interpolation"));
 
 	/* set map title */
 	sprintf(title, "%s interpolation with Tykhonov regularization",
-		type->answer);
+		type_opt->answer);
 	Rast_put_cell_title(out_map_opt->answer, title);
 	/* write map history */
 	Rast_short_history(out_map_opt->answer, "raster", &history);

@@ -28,36 +28,36 @@
 #include <grass/gmath.h>
 
 /*----------------------------------------------------------------------------------------------------------*/
-/*CONSTANS DECLARATION */
+/*CONSTANTS DECLARATION */
 
-#define NSPLX_MAX 		200	/* Maximum number of splines along East direction used in the subregions interpolation */
-#define NSPLY_MAX		200	/* Maximum number of splines along North direction used in the subregions interpolation */
-#define OVERLAP_SIZE 		20	/* Subregions overlapping size. */
-#define LATO 			2000	/* Side's size for v.to.qrast command. */
-#define CONTOUR		15 /**/
+#define NSPLX_MAX 	      150	/* Maximum number of splines along East direction used in the subregions interpolation */
+#define NSPLY_MAX	      150	/* Maximum number of splines along North direction used in the subregions interpolation */
+#define OVERLAP_SIZE 	       10	/* Subregions overlapping size. */
+#define LATO 		     2000	/* Side's size for v.to.qrast command. */
+#define CONTOUR		       15 	/**/
 #define GENERAL_ROW 		0
-#define GENERAL_COLUMN 	1
+#define GENERAL_COLUMN 	        1
 #define FIRST_ROW 		2
 #define LAST_ROW 		3
 #define FIRST_COLUMN	 	4
 #define LAST_COLUMN 		5
     /* FIELDS ID */
 #define F_EDGE_DETECTION_CLASS	1
-#define F_CLASSIFICATION		2
+#define F_CLASSIFICATION	2
 #define F_INTERPOLATION		3
-#define F_COUNTER_OBJ			4
+#define F_COUNTER_OBJ		4
     /* PRE-CLASSIFICATION */
 #define PRE_TERRAIN 		1
 #define PRE_EDGE		2
 #define PRE_UNKNOWN		3
     /* FINAL CLASSIFICATION */
-#define TERRAIN_SINGLE 	1
-#define TERRAIN_DOUBLE	2
+#define TERRAIN_SINGLE 	        1
+#define TERRAIN_DOUBLE	        2
 #define OBJECT_DOUBLE		3
 #define OBJECT_SINGLE		4
     /* SINGLE OR DOUBLE PULSE */
-#define SINGLE_PULSE	1
-#define DOUBLE_PULSE	2
+#define SINGLE_PULSE	        1
+#define DOUBLE_PULSE	        2
     /* INTERPOLATOR */
 #define P_BILINEAR 		1
 #define P_BICUBIC 		0
@@ -96,6 +96,7 @@ struct element
 /*FUNCTIONS DECLARATION */
 /*zones */
 void P_zero_dim(struct Reg_dimens * /**/);
+int P_set_dim(struct Reg_dimens *, double, double, int *, int *);
 
 int P_set_regions(struct Cell_head *, /**/
 		  struct bound_box *, /**/
@@ -104,6 +105,8 @@ int P_set_regions(struct Cell_head *, /**/
 int P_get_orlo(int, /**/ struct Reg_dimens *, /**/ double, /**/ double /**/);
 
 int P_get_BandWidth(int, /**/ int /**/);
+
+double P_estimate_splinestep(struct Map_info *, double *, double *);
 
 struct Point *P_Read_Vector_Region_Map(struct Map_info *, /**/
 				       struct Cell_head *, /**/

@@ -34,7 +34,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 		    double *param, int *line_num, double passoN,
 		    double passoE, double overlap, double HighThresh,
 		    double LowThresh, int nsplx, int nsply, int num_points,
-		    dbDriver * driver, double mean)
+		    dbDriver * driver, double mean, char *tab_name)
 {
     int i = 0, class;
     double interpolation, csi, eta, weight;
@@ -81,11 +81,11 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			interpolation *= weight;
 
 			if (Select_Correction
-			    (&interpolation, line_num[i], driver) != DB_OK)
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate_Correction
-			    (interpolation, line_num[i], driver) != DB_OK)
+			    (interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to update the database"));
 
 		    }
@@ -96,7 +96,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			if (Insert_Correction
 			    (interpolation * weight, line_num[i],
-			     driver) != DB_OK)
+			     driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to write in the database"));
 
 		    }
@@ -105,7 +105,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			if (Insert_Correction
 			    (interpolation * weight, line_num[i],
-			     driver) != DB_OK)
+			     driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to write in the database"));
 		    }
 		}
@@ -117,7 +117,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			interpolation *= weight;
 			if (Select_Correction
-			    (&interpolation, line_num[i], driver) != DB_OK)
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to read the database"));
 
 			Vect_cat_get(cats, F_CLASSIFICATION, &class);
@@ -139,11 +139,11 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			interpolation *= weight;
 
 			if (Select_Correction
-			    (&interpolation, line_num[i], driver) != DB_OK)
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate_Correction
-			    (interpolation, line_num[i], driver) != DB_OK)
+			    (interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to update the database"));
 		    }
 		    else {	/*(2) */
@@ -151,7 +151,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			interpolation *= weight;
 
 			if (Select_Correction
-			    (&interpolation, line_num[i], driver) != DB_OK)
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to read the database"));
 
 			Vect_cat_get(cats, F_CLASSIFICATION, &class);
@@ -174,7 +174,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			interpolation *= weight;
 
 			if (Select_Correction
-			    (&interpolation, line_num[i], driver) != DB_OK)
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to read the database"));
 
 			Vect_cat_get(cats, F_CLASSIFICATION, &class);
@@ -194,7 +194,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			if (Insert_Correction
 			    (interpolation * weight, line_num[i],
-			     driver) != DB_OK)
+			     driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to write in the database"));
 		    }
 		}
@@ -229,7 +229,7 @@ int correction(int class, double obsZ, double interpolation,
     return class;
 }
 
-int Select_Correction(double *Interp, int line_num, dbDriver * driver)
+int Select_Correction(double *Interp, int line_num, dbDriver * driver, char *tab_name)
 {
     int more;
     char buf[1024];
@@ -242,8 +242,7 @@ int Select_Correction(double *Interp, int line_num, dbDriver * driver)
     db_init_string(&sql);
     db_zero_string(&sql);
 
-    sprintf(buf, "SELECT Interp FROM Auxiliar_correction_table WHERE ID=%d",
-	    line_num);
+    sprintf(buf, "SELECT Interp FROM %s WHERE ID=%d", tab_name, line_num);
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
@@ -261,35 +260,41 @@ int Select_Correction(double *Interp, int line_num, dbDriver * driver)
 
 	*Interp += db_get_value_double(Interp_value);
     }
+    db_free_string(&sql);
     return DB_OK;
 }
 
-int Insert_Correction(double Interp, int line_num, dbDriver * driver)
+int Insert_Correction(double Interp, int line_num, dbDriver * driver, char *tab_name)
 {
     char buf[1024];
     dbString sql;
+    int ret;
 
     db_init_string(&sql);
-    sprintf(buf, "INSERT INTO Auxiliar_correction_table (ID, Interp)");
+    sprintf(buf, "INSERT INTO %s (ID, Interp)", tab_name);
     db_append_string(&sql, buf);
     sprintf(buf, " VALUES (%d, %lf)", line_num, Interp);
     db_append_string(&sql, buf);
 
-    return db_execute_immediate(driver, &sql);
+    ret = db_execute_immediate(driver, &sql);
+    db_free_string(&sql);
+    return ret;
 }
 
-int UpDate_Correction(double Interp, int line_num, dbDriver * driver)
+int UpDate_Correction(double Interp, int line_num, dbDriver * driver, char *tab_name)
 {
     char buf[1024];
     dbString sql;
+    int ret;
 
     db_init_string(&sql);
     sprintf(buf,
-	    "UPDATE Auxiliar_correction_table SET Interp=%lf WHERE ID=%d",
-	    Interp, line_num);
+	    "UPDATE %s SET Interp=%lf WHERE ID=%d", tab_name, Interp, line_num);
     db_append_string(&sql, buf);
 
-    return db_execute_immediate(driver, &sql);
+    ret = db_execute_immediate(driver, &sql);
+    db_free_string(&sql);
+    return ret;
 }
 
 struct Point *P_Read_Vector_Correction(struct Map_info *Map,
