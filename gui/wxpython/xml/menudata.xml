@@ -1829,17 +1829,17 @@
 	    <separator />
 	    <menuitem>
 	      <label>Create labels</label>
-	      <help>Creates optimally placed labels for vector map from associated attributes</help>
-	      <keywords>vector,paint labels</keywords>
-              <handler>self.OnMenuCmd</handler>
-	      <command>v.label.sa</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Create optimally placed labels</label>
 	      <help>Creates paint labels for a vector map from attached attributes.</help>
 	      <keywords>vector,paint labels</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.label</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Create optimally placed labels</label>
+	      <help>Create optimally placed labels for a vector map from attached attributes.</help>
+	      <keywords>vector,paint labels</keywords>
+              <handler>self.OnMenuCmd</handler>
+	      <command>v.label.sa</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
