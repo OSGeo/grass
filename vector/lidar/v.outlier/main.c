@@ -36,10 +36,15 @@ double passoN, passoE, Thres_Outlier;
 int main(int argc, char *argv[])
 {
     /* Variables' declarations */
+    int nsplx_adj, nsply_adj;
+    int nsubregion_col, nsubregion_row;
+    int subzone = 0, nsubzones = 0;
+    double N_extension, E_extension, orloE, orloN;
     int dim_vect, nparameters, BW, npoints;
     double ew_resol, ns_resol, mean, lambda;
     const char *dvr, *db, *mapset;
-    char table_name[1024];
+    char table_name[GNAME_MAX];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int last_row, last_column, flag_auxiliar = FALSE;
 
@@ -51,7 +56,7 @@ int main(int argc, char *argv[])
     struct Map_info In, Out, Outlier, Qgis;
     struct Option *in_opt, *out_opt, *outlier_opt, *qgis_opt, *passoE_opt,
 	*passoN_opt, *lambda_f_opt, *Thres_O_opt;
-    /*struct Flag *qgis_flag; */
+    struct Flag *spline_step_flag;
     struct GModule *module;
 
     struct Cell_head elaboration_reg, original_reg;
@@ -68,6 +73,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
     module->description = _("Removes outliers from vector point data.");
+
+    spline_step_flag = G_define_flag();
+    spline_step_flag->key = 'e';
+    spline_step_flag->label = _("Estimate spline step value");
+    spline_step_flag->description =
+	_("Estimate a good spline step value for the input vector points within the current region extends and quit");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -136,16 +147,51 @@ int main(int argc, char *argv[])
     lambda = atof(lambda_f_opt->answer);
     Thres_Outlier = atof(Thres_O_opt->answer);
 
-    /* Setting auxiliar table's name */
-    /* sprintf(table_name, "%s_aux", out_opt->answer); */
-    sprintf(table_name, "Auxiliar_outlier_table");
-
     /* Checking vector names */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
 
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
+    }
+
+    /* Setting auxiliar table's name */
+    if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
+	sprintf(table_name, "%s_aux", xname);
+    }
+    else
+	sprintf(table_name, "%s_aux", out_opt->answer);
+
+    /* Something went wrong in a previous v.outlier execution */
+    if (db_table_exists(dvr, db, table_name)) {
+	/* Start driver and open db */
+	driver = db_start_driver_open_database(dvr, db);
+	if (driver == NULL)
+	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
+			  dvr);
+	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
+	    G_fatal_error(_("Old auxiliar table could not be dropped"));
+	db_close_database_shutdown_driver(driver);
+    }
+
+    Vect_set_open_level(1);
+    /* Open input vector */
+    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
+	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
+		      in_opt->answer);
+
+    /* Estimate point density and mean distance for current region */
+    if (spline_step_flag->answer) {
+	double dens, dist;
+	if (P_estimate_splinestep(&In, &dens, &dist) == 0) {
+	    G_message("Estimated point density: %.4g", dens);
+	    G_message("Estimated mean distance between points: %.4g", dist);
+	}
+	else
+	    G_warning(_("No points in current region!"));
+	
+	Vect_close(&In);
+	exit(EXIT_SUCCESS);
     }
 
     /* Open output vector */
@@ -164,12 +210,6 @@ int main(int argc, char *argv[])
 	Vect_close(&Qgis);
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
     }
-
-    Vect_set_open_level(1);
-    /* Open input vector */
-    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
-	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
-		      in_opt->answer);
 
     /* Copy vector Head File */
     Vect_copy_head_data(&In, &Out);
@@ -192,12 +232,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 		      dvr);
 
-    /* Something went wrong in a previous v.outlier execution */
-    if (db_table_exists(dvr, db, table_name)) {
-	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
-	    G_fatal_error(_("Old auxiliar table could not be dropped"));
-    }
-
     /* Setting regions and boxes */
     G_get_set_window(&original_reg);
     G_get_set_window(&elaboration_reg);
@@ -207,17 +241,37 @@ int main(int argc, char *argv[])
     /* Fixing parameters of the elaboration region */
     /*! Each original_region will be divided into several subregions. These
      *  subregion will be overlapped by its neibourgh subregions. This overlapping
-     *  is calculated as OVERLAP_PASS times the east-west resolution. */
+     *  is calculated as OVERLAP_SIZE times the east-west spline step. */
 
     ew_resol = original_reg.ew_res;
     ns_resol = original_reg.ns_res;
 
     P_zero_dim(&dims);
 
-    dims.latoE = NSPLX_MAX * passoE;
-    dims.latoN = NSPLY_MAX * passoN;
-    dims.overlap = OVERLAP_SIZE * ew_resol;
-    P_get_orlo(P_BICUBIC, &dims, passoE, passoN);
+    N_extension = original_reg.north - original_reg.south;
+    E_extension = original_reg.east - original_reg.west;
+
+    nsplx_adj = NSPLX_MAX;
+    nsply_adj = NSPLY_MAX;
+    dims.overlap = OVERLAP_SIZE * passoE;
+    P_get_orlo(P_BILINEAR, &dims, passoE, passoN);
+    P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
+
+    G_verbose_message("adjusted EW splines %d", nsplx_adj);
+    G_verbose_message("adjusted NS splines %d", nsply_adj);
+
+    orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
+    orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+
+    nsubregion_col = ceil(E_extension / orloE) + 0.5;
+    nsubregion_row = ceil(N_extension / orloN) + 0.5;
+
+    if (nsubregion_col < 0)
+	nsubregion_col = 0;
+    if (nsubregion_row < 0)
+	nsubregion_row = 0;
+
+    nsubzones = nsubregion_row * nsubregion_col;
 
     elaboration_reg.south = original_reg.north;
 
@@ -242,16 +296,22 @@ int main(int argc, char *argv[])
 
 	nsply =
 	    ceil((elaboration_reg.north - elaboration_reg.south) / passoN) +
-	    1;
+	    0.5;
+	/*
 	if (nsply > NSPLY_MAX) {
 	    nsply = NSPLY_MAX;
 	}
+	*/
 	G_debug(1, "nsply = %d", nsply);
 
 	elaboration_reg.east = original_reg.west;
 	last_column = FALSE;
 
 	while (last_column == FALSE) {	/* For each column */
+
+	    subzone++;
+	    if (nsubzones > 1)
+		G_message(_("subzone %d of %d"), subzone, nsubzones);
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
@@ -269,10 +329,12 @@ int main(int argc, char *argv[])
 
 	    nsplx =
 		ceil((elaboration_reg.east - elaboration_reg.west) / passoE) +
-		1;
+		0.5;
+	    /*
 	    if (nsplx > NSPLX_MAX) {
 		nsplx = NSPLX_MAX;
 	    }
+	    */
 	    G_debug(1, "nsplx = %d", nsplx);
 
 	    /*Setting the active region */
@@ -308,7 +370,7 @@ int main(int argc, char *argv[])
 		    Q[i] = 1;	/* Q=I */
 		}
 
-		G_debug(1, "Bilinear interpolation");
+		G_verbose_message(_("Bilinear interpolation"));
 		normalDefBilin(N, TN, Q, obsVect, passoE, passoN, nsplx,
 			       nsply, elaboration_reg.west,
 			       elaboration_reg.south, npoints, nparameters,
@@ -328,14 +390,15 @@ int main(int argc, char *argv[])
 			G_fatal_error(_("It was impossible to create <Auxiliar_outlier_table>."));
 		}
 
+		G_verbose_message(_("Outlier detection"));
 		if (qgis_opt->answer)
 		    P_Outlier(&Out, &Outlier, &Qgis, elaboration_reg,
 			      general_box, overlap_box, obsVect, parVect,
-			      mean, dims.overlap, lineVect, npoints, driver);
+			      mean, dims.overlap, lineVect, npoints, driver, table_name);
 		else
 		    P_Outlier(&Out, &Outlier, NULL, elaboration_reg,
 			      general_box, overlap_box, obsVect, parVect,
-			      mean, dims.overlap, lineVect, npoints, driver);
+			      mean, dims.overlap, lineVect, npoints, driver, table_name);
 
 
 		G_free_vector(parVect);

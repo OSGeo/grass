@@ -23,19 +23,20 @@ P_Sparse_Correction(struct Map_info *, /**/
 		    double, /**/
 		    double, /**/
 		    int, /**/
-		    int, /**/ int, /**/ dbDriver *, /**/ double /**/);
+		    int, /**/
+		    int, /**/
+		    dbDriver *, /**/
+		    double, /**/
+		    char *);
 
-int Insert_Correction(double, /**/ int, /**/ dbDriver * /**/);
+int Insert_Correction(double, /**/ int, /**/ dbDriver *, /**/ char *);
 
-int UpDate_Correction(double, /**/ int, /**/ dbDriver * /**/);
+int UpDate_Correction(double, /**/ int, /**/ dbDriver *, /**/ char *);
 
-int Select_Correction(double *, /**/ int, /**/ dbDriver * /**/);
-
-int Create_AuxEdge_Table(dbDriver *);
+int Select_Correction(double *, /**/ int, /**/ dbDriver *, /**/ char *);
 
 struct Point *P_Read_Vector_Correction(struct Map_info *, /**/
 				       struct Cell_head *, /**/
 				       int *, /**/ int *, /**/ int /**/);
 
-void P_Aux_to_Raster(double **, int);
 int correction(int, double, double, double, double);

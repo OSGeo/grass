@@ -27,7 +27,7 @@ int
 P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 	      struct bound_box * Overlap, struct Reg_dimens dim, int type)
 {
-    /* Set the Elaborationoration region limits-> Also set the limits of the orlo and overlapping regions->
+    /* Set the Elaboration region limits-> Also set the limits of the orlo and overlapping regions->
      * Returns 0 on success; -1 on failure*/
     struct Cell_head orig;
 
@@ -55,37 +55,117 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 	return 0;
 
     case FIRST_ROW:		/* It is just started with first row */
-	Elaboration->north = orig.north;
+	Elaboration->north = orig.north + 2 * dim.orlo_h;
 	Elaboration->south = Elaboration->north - dim.latoN;
-	General->N = Elaboration->north;
+	General->N = Elaboration->north - 2 * dim.orlo_h;
 	General->S = Elaboration->south + dim.orlo_h;
-	Overlap->N = Elaboration->north;
+	Overlap->N = General->N;
 	Overlap->S = General->S + dim.overlap;
 	return 0;
 
     case LAST_ROW:		/* It is reached last row */
-	Elaboration->south = orig.south;
-	Overlap->S = Elaboration->south;
-	General->S = Elaboration->south;
+	Elaboration->south = orig.south - 2 * dim.orlo_h;
+	General->S = Elaboration->south + 2 * dim.orlo_h;
+	Overlap->S = General->S;
 	return 0;
 
     case FIRST_COLUMN:		/* It is just started with first column */
-	Elaboration->west = orig.west;
+	Elaboration->west = orig.west - 2 * dim.orlo_v;
 	Elaboration->east = Elaboration->west + dim.latoE;
-	General->W = Elaboration->west;
+	General->W = Elaboration->west + 2 * dim.orlo_v;
 	General->E = Elaboration->east - dim.orlo_v;
-	Overlap->W = Elaboration->west;
+	Overlap->W = General->W;
 	Overlap->E = General->E - dim.overlap;
 	return 0;
 
     case LAST_COLUMN:		/* It is reached last column */
-	Elaboration->east = orig.east;
-	Overlap->E = Elaboration->east;
-	General->E = Elaboration->east;
+	Elaboration->east = orig.east + 2 * dim.orlo_v;
+	General->E = Elaboration->east - 2 * dim.orlo_v;
+	Overlap->E = General->E;
 	return 0;
     }
 
     return -1;
+}
+
+/*----------------------------------------------------------------------------------------*/
+int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsply)
+{
+    int total_splines, orlo_splines, n_windows, minsplines;
+    double E_extension, N_extension, orloE, orloN;
+    struct Cell_head orig;
+    int ret = 0;
+
+    G_get_window(&orig);
+
+    E_extension = orig.east - orig.west;
+    N_extension = orig.north - orig.south;
+    dim->latoE = *nsplx * pe;
+    dim->latoN = *nsply * pn;
+    orloE = dim->latoE - dim->overlap - 2 * dim->orlo_v;
+    orloN = dim->latoN - dim->overlap - 2 * dim->orlo_h;
+
+    /* number of moving windows: E_extension / orloE */
+    /* remaining steps: total steps - (floor(E_extension / orloE) * E_extension) / passoE */
+    /* remaining steps must be larger than orlo_v + overlap + half of overlap window */
+    total_splines = ceil(E_extension / pe);
+    orlo_splines = orloE / pe;
+    n_windows = floor(E_extension / orloE); /* without last one */
+    if (n_windows > 0) {
+	minsplines = ceil((double)(dim->latoE / 2.0 - dim->orlo_v - dim->overlap) / pe);
+	while (total_splines - orlo_splines * n_windows < minsplines) {
+	    *nsplx -= 1;
+	    dim->latoE = *nsplx * pe;
+	    orloE = dim->latoE - dim->overlap - 2 * dim->orlo_v;
+
+	    orlo_splines = orloE / pe;
+	    n_windows = floor(E_extension / orloE); /* without last one */
+	    minsplines = ceil((double)(dim->latoE / 2.0 - dim->orlo_v - dim->overlap) / pe);
+	    if (ret == 0)
+		ret = 1;
+	}
+	while (total_splines - orlo_splines * n_windows < minsplines * 2 && minsplines > 30) {
+	    *nsplx -= 1;
+	    dim->latoE = *nsplx * pe;
+	    orloE = dim->latoE - dim->overlap - 2 * dim->orlo_v;
+
+	    orlo_splines = orloE / pe;
+	    n_windows = floor(E_extension / orloE); /* without last one */
+	    minsplines = ceil((double)(dim->latoE / 2.0 - dim->orlo_v - dim->overlap) / pe);
+	    if (ret == 0)
+		ret = 1;
+	}
+    }
+
+    total_splines = ceil(N_extension / pn);
+    orlo_splines = orloN / pn;
+    n_windows = floor(N_extension / orloN); /* without last one */
+    if (n_windows > 0) {
+	minsplines = ceil((double)(dim->latoN / 2.0 - dim->orlo_h - dim->overlap) / pn);
+	while (total_splines - orlo_splines * n_windows < minsplines) {
+	    *nsply -= 1;
+	    dim->latoN = *nsply * pn;
+	    orloN = dim->latoN - dim->overlap - 2 * dim->orlo_h;
+
+	    orlo_splines = orloN / pn;
+	    n_windows = floor(N_extension / orloN); /* without last one */
+	    minsplines = ceil((double)(dim->latoN / 2.0 - dim->orlo_h - dim->overlap) / pn);
+	    if (ret < 2)
+		ret += 2;
+	}
+	while (total_splines - orlo_splines * n_windows < minsplines * 2 && minsplines > 30) {
+	    *nsply -= 1;
+	    dim->latoN = *nsply * pn;
+	    orloN = dim->latoN - dim->overlap - 2 * dim->orlo_h;
+
+	    orlo_splines = orloN / pn;
+	    n_windows = floor(N_extension / orloN); /* without last one */
+	    minsplines = ceil((double)(dim->latoN / 2.0 - dim->orlo_h - dim->overlap) / pn);
+	    if (ret < 2)
+		ret += 2;
+	}
+    }
+    return 0;
 }
 
 /*----------------------------------------------------------------------------------------*/
@@ -94,13 +174,13 @@ int P_get_orlo(int interpolator, struct Reg_dimens *dim, double pe, double pn)
     /* Set the orlo regions dimension->
      * Returns 1 on success of bilinear; 2 on success of bicubic, 0 on failure-> */
     if (interpolator == 1) {	/* the interpolator's bilinear */
-	dim->orlo_v = 30 * pe;	/*4 */
-	dim->orlo_h = 30 * pn;
+	dim->orlo_v = 9 * pe;	/*4 */
+	dim->orlo_h = 9 * pn;
 	return 1;
     }
     else if (interpolator == 0) {	/* the interpolator's bicubic */
-	dim->orlo_v = 40 * pe;	/*3 */
-	dim->orlo_h = 40 * pn;
+	dim->orlo_v = 12 * pe;	/*3 */
+	dim->orlo_h = 12 * pn;
 	return 2;
     }
     else
@@ -148,12 +228,71 @@ P_Mean_Calc(struct Cell_head *Elaboration, struct Point *obs, int npoints)
 
     return mean;
 }
+
+double P_estimate_splinestep(struct Map_info *Map, double *dens, double *dist)
+{
+    int type, npoints = 0;
+    double xmin = 0, xmax = 0, ymin = 0, ymax = 0;
+    double x, y, z;
+    struct line_pnts *points;
+    struct line_cats *categories;
+    struct bound_box region_box;
+    struct Cell_head orig;
+
+    G_get_window(&orig);
+    Vect_region_box(&orig, &region_box);
+
+    points = Vect_new_line_struct();
+    categories = Vect_new_cats_struct();
+
+    Vect_rewind(Map);
+    while ((type = Vect_read_next_line(Map, points, categories)) > 0) {
+	if (!(type & GV_POINT))
+	    continue;
+
+	x = points->x[0];
+	y = points->y[0];
+	if (points->z != NULL)
+	    z = points->z[0];
+	else
+	    z = 0.0;
+
+	/* Reading and storing points only if it is in elaboration_reg */
+	if (Vect_point_in_box(x, y, z, &region_box)) {
+	    npoints++;
+
+	    if (npoints > 1) {
+		if (xmin > x)
+		    xmin = x;
+		else if (xmax < x)
+		    xmax = x;
+		if (ymin > y)
+		    ymin = y;
+		else if (ymax < y)
+		    ymax = y;
+	    }
+	    else {
+		xmin = xmax = x;
+		ymin = ymax = y;
+	    }
+	}
+    }
+    if (npoints > 0) {
+	*dist = sqrt(((xmax - xmin) * (ymax - ymin)) / npoints);
+	*dens = npoints / ((xmax - xmin) * (ymax - ymin));
+	return 0;
+    }
+    else {
+	return -1;
+    }
+}
+
 struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
 				       struct Cell_head *Elaboration,
 				       int *num_points, int dim_vect,
 				       int layer)
 {
-    int line_num, pippo, npoints, cat;
+    int line_num, pippo, npoints, cat, type;
     double x, y, z;
     struct Point *obs;
     struct line_pnts *points;
@@ -173,7 +312,10 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     line_num = 0;
 
     Vect_rewind(Map);
-    while (Vect_read_next_line(Map, points, categories) > 0) {
+    while ((type = Vect_read_next_line(Map, points, categories)) > 0) {
+
+	if (!(type & GV_POINT))
+	    continue;
 
 	line_num++;
 
@@ -287,6 +429,7 @@ void P_Aux_to_Raster(double **matrix, int fd)
 	}
 	Rast_put_d_row(fd, raster);
     }
+    G_percent(row, nrows, 2);
 }
 
 /*------------------------------------------------------------------------------------------------*/
@@ -295,7 +438,7 @@ P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
 		char *tab_name)
 {
 
-    int more, ltype, line_num, type, count = 0;
+    int more, line_num, type, count = 0;
     double coordX, coordY, coordZ;
 
     struct line_pnts *point;
