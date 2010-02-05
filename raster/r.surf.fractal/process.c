@@ -13,6 +13,7 @@
 
 /***************************************************************************/
 
+#include <grass/raster.h>
 #include <grass/glocale.h>
 #include "frac.h"
 /* gmath.h must go last, as it can interfere with ANSI headers */
