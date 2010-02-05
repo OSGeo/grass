@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-14 07:50+0100\n"
-"PO-Revision-Date: 2010-02-01 10:45+0900\n"
-"Last-Translator: Naoki Ueda <nao@locapoint.com>\n"
+"PO-Revision-Date: 2010-02-03 12:17+0900\n"
+"Last-Translator: yuka tohhana <yuka.tohhana@la.tezuka-gu.ac.jp>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,14 +36,12 @@ msgid "GRASS_WIDTH=%d, GRASS_HEIGHT=%d"
 msgstr ""
 
 #: ../lib/raster/sample.c:70
-#, fuzzy
 msgid "Unknown interpolation type"
-msgstr "Unknown 補間 型"
+msgstr "不明な補間タイプ"
 
 #: ../lib/raster/sample.c:327
-#, fuzzy
 msgid "\"no data\" label found; setting to zero"
-msgstr "\"no data\" ラベル found; setting to zero"
+msgstr "\"データがありません\" 見つかったラベル; ゼロに設定"
 
 #: ../lib/raster/quant_rw.c:42 ../lib/raster/quant_rw.c:69
 #: ../lib/raster/quant_rw.c:157 ../lib/raster/quant_rw.c:197
@@ -78,14 +76,14 @@ msgid "Calling Rast_set_window() in the middle of writing map %s"
 msgstr ""
 
 #: ../lib/raster/quant_io.c:91
-#, fuzzy, c-format
+#, c-format
 msgid "The floating data range for %s@%s is empty"
-msgstr "The floating データ range for %s@%s is empty"
+msgstr " %s@%s の小数データの範囲は空です"
 
 #: ../lib/raster/quant_io.c:100
-#, fuzzy, c-format
+#, c-format
 msgid "The integer data range for %s@%s is empty"
-msgstr "The 整数 データ range for %s@%s is empty"
+msgstr " %s@%sの整数データの範囲は空です"
 
 #: ../lib/raster/quant_io.c:125
 #, c-format
@@ -95,9 +93,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/raster/quant_io.c:167
-#, fuzzy, c-format
+#, c-format
 msgid "quantization file [%s] in mapset [%s] %s"
-msgstr "quantization ファイル [%s] in map集合 [%s] %s"
+msgstr "量子化ファイル [%s] マップセット内 [%s] %s"
 
 #: ../lib/raster/color_rand.c:33
 #, c-format
@@ -115,14 +113,14 @@ msgid "Error writing compressed FP data for row %d of <%s>"
 msgstr "���"
 
 #: ../lib/raster/put_row.c:159
-#, fuzzy, c-format
+#, c-format
 msgid "xdr_float failed for index %d of row %d"
-msgstr "xdr_浮子 failed for 索引, 指数 %d of 行 %d"
+msgstr "xdr_float 行%dのインデックス%d に失敗しました"
 
 #: ../lib/raster/put_row.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "xdr_double failed for index %d of row %d"
-msgstr "xdr_double failed for 索引, 指数 %d of 行 %d"
+msgstr "xdr_double 行%dのインデックス%dに失敗しました"
 
 #: ../lib/raster/put_row.c:398 ../lib/raster/put_row.c:404
 #, fuzzy, c-format
@@ -221,9 +219,9 @@ msgid "Color support for <%s@%s> %s"
 msgstr ""
 
 #: ../lib/raster/get_row.c:38 ../lib/raster/get_row.c:881
-#, fuzzy, c-format
+#, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
-msgstr "Reading ラスタ地図 <%s@%s> request for 行 %d is outside 地域"
+msgstr "読み取ったラスターマップ <%s@%s> の行 %d は範囲外です"
 
 #: ../lib/raster/get_row.c:97 ../lib/raster/get_row.c:102
 #: ../lib/raster/get_row.c:135 ../lib/raster/get_row.c:141
@@ -238,14 +236,14 @@ msgid "Error reading raster data via GDAL"
 msgstr "���"
 
 #: ../lib/raster/get_row.c:314
-#, fuzzy, c-format
+#, c-format
 msgid "cell_values_float: xdr_float failed for index %d"
-msgstr "cell_values_float: xdr_浮子 failed for 索引, 指数 %d"
+msgstr "cell_values_float: xdr_float インデックス%dに失敗しました"
 
 #: ../lib/raster/get_row.c:353
-#, fuzzy, c-format
+#, c-format
 msgid "cell_values_double: xdr_double failed for index %d"
-msgstr "cell_values_double: xdr_double failed for 索引, 指数 %d"
+msgstr "cell_values_double: xdr_double インデックス%dに失敗しました"
 
 #: ../lib/raster/get_row.c:867 ../lib/raster/get_row.c:870
 #, c-format
@@ -268,9 +266,9 @@ msgid "Unable to create %s metadata file for raster map <%s@%s>"
 msgstr "����� ���� ���\n"
 
 #: ../lib/raster/histogram.c:55
-#, fuzzy, c-format
+#, c-format
 msgid "Histogram for [%s in %s] missing (run r.support)"
-msgstr "ヒストグラム, 棒グラフ for [%s in %s] missing (run r.support)"
+msgstr "ヒストグラム [%s in %s] が見つかりません (r.supportを実行)"
 
 #: ../lib/raster/histogram.c:62
 #, c-format
@@ -308,14 +306,12 @@ msgid "Illegal reclass format in header file for <%s@%s>"
 msgstr "���"
 
 #: ../lib/raster/reclass.c:270
-#, fuzzy
 msgid "Illegal reclass request"
-msgstr "Illegal reクラス request"
+msgstr "無効な再分類したリクエスト"
 
 #: ../lib/raster/reclass.c:275
-#, fuzzy
 msgid "Illegal reclass type"
-msgstr "Illegal reクラス 型"
+msgstr "無効な再分類したタイプ"
 
 #: ../lib/raster/reclass.c:281
 #, fuzzy, c-format
@@ -328,9 +324,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr "���"
 
 #: ../lib/raster/gdal.c:77
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate symbol <%s>"
-msgstr "Unable to locate 記号 <%s>"
+msgstr "シンボルを検索できません <%s>"
 
 #: ../lib/raster/gdal.c:117
 msgid "Unable to load GDAL library"
@@ -413,14 +409,13 @@ msgid "Invalid descriptor: %d"
 msgstr "����� ���� ���\n"
 
 #: ../lib/raster/closecell.c:205
-#, fuzzy
 msgid "unable to write quant file!"
-msgstr "unable to write quant file!"
+msgstr "量子化ファイルに書き込みできません!"
 
 #: ../lib/raster/closecell.c:269
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing floating point format file for map %s"
-msgstr "エラー writing 浮点 形式, 書式, 初期化 ファイル for 地図 %s"
+msgstr " マップ%sに浮動小数点のフォーマットファイルを書き込みできません"
 
 #: ../lib/raster/closecell.c:359
 #, fuzzy, c-format
@@ -438,9 +433,8 @@ msgid "Unable to rename cell file '%s'"
 msgstr "���"
 
 #: ../lib/raster/closecell.c:465
-#, fuzzy
 msgid "unable to write f_format file for CELL maps"
-msgstr "unable to write f_形式, 書式, 初期化 ファイル for セル maps"
+msgstr "セルマップにf_formatを書き込めません"
 
 #: ../lib/raster/opencell.c:171 ../lib/raster/opencell.c:743
 #: ../lib/raster/opencell.c:780 ../lib/raster/opencell.c:833
@@ -470,13 +464,13 @@ msgid "Raster map <%s> not found"
 msgstr "ラスターマップ <%s> が見つかりません"
 
 #: ../lib/raster/opencell.c:186
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%"
 "s> which does not exist"
 msgstr ""
-"Unable to open ラスタ地図 <%s@%s> since it is a reクラス of ラスタ地図 <%s@%"
-"s> which does not exist"
+"ラスターマップが開けません <%s@%s> 存在しないラスターマップ<%s@%s> の再分類か"
+"ら"
 
 #: ../lib/raster/opencell.c:191
 #, fuzzy, c-format
@@ -489,11 +483,9 @@ msgid "Error reading map type for raster map <%s>"
 msgstr "���"
 
 #: ../lib/raster/opencell.c:210
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
-msgstr ""
-"ラスタ地図 <%s@%s>: 形式, 書式, 初期化 領域, フィールド in ヘッダーファイル "
-"invalid"
+msgstr "ラスターマップ <%s@%s>: 無効なヘッダーファイルのフォーマット領域"
 
 #: ../lib/raster/opencell.c:215
 #, c-format
@@ -539,9 +531,9 @@ msgid "Unable to create GDAL link"
 msgstr "���"
 
 #: ../lib/raster/opencell.c:576
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
-msgstr "ラスタ地図 <%s> is not in the current map集合 (%s)"
+msgstr "ラスターマップ <%s> は現在のマップセットにありません (%s)"
 
 #: ../lib/raster/opencell.c:583
 #, c-format
@@ -576,9 +568,9 @@ msgid "Unable to open '%s'"
 msgstr "開けません '%s'"
 
 #: ../lib/raster/opencell.c:852
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type: field '%s' in file '%s'"
-msgstr "Invalid type: 領域, フィールド '%s' in ファイル '%s'"
+msgstr "無効なタイプ: ファイル '%s'内の領域 '%s' "
 
 #: ../lib/raster/opencell.c:857
 #, c-format
@@ -586,9 +578,9 @@ msgid "Missing type: field in file '%s'"
 msgstr ""
 
 #: ../lib/raster/opencell.c:862
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
-msgstr "ラスタ地図 <%s> is not xdr: byte_order: %s"
+msgstr "ラスターマップ<%s>はxdrではありません: バイト順: %s"
 
 #: ../lib/raster/opencell.c:931
 msgid ""
@@ -605,34 +597,31 @@ msgid "none"
 msgstr "無し"
 
 #: ../lib/raster/mask_info.c:49
-#, fuzzy
 msgid "not known"
-msgstr "not known"
+msgstr "不明"
 
 #: ../lib/raster/put_title.c:28
-#, fuzzy, c-format
+#, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
-msgstr "category 情報 for [%s] in [%s] missing or invalid"
+msgstr " [%s] 内の[%s] カテゴリー情報が見つかりません、または無効です"
 
 #: ../lib/raster/put_title.c:37
-#, fuzzy
 msgid "G_put_title - can't create a temp file"
-msgstr "G_put_title - can't create a temp ファイル"
+msgstr "G_put_title - 一時ファイルが作成できません"
 
 #: ../lib/raster/put_title.c:53
-#, fuzzy, c-format
+#, c-format
 msgid "category information for [%s] in [%s] invalid"
-msgstr "category 情報 for [%s] in [%s] invalid"
+msgstr " [%s] 内の [%s]カテゴリー情報は無効です"
 
 #: ../lib/raster/put_title.c:60
-#, fuzzy
 msgid "G_put_title - can't reopen temp file"
-msgstr "G_put_title - can't reopen temp ファイル"
+msgstr "G_put_title - 一時ファイルを再開できません"
 
 #: ../lib/raster/put_title.c:67
-#, fuzzy, c-format
+#, c-format
 msgid "can't write category information for [%s] in [%s]"
-msgstr "can't write category 情報 for [%s] in [%s]"
+msgstr " [%s]内の [%s] カテゴリー情報に書き込めません"
 
 #: ../lib/raster/init.c:62
 #, fuzzy
@@ -640,9 +629,9 @@ msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
 msgstr "\a���: ����� �� ��������. ���G_gisinit()\n"
 
 #: ../lib/raster/format.c:154
-#, fuzzy, c-format
+#, c-format
 msgid "Fail of initial read of compressed file [%s in %s]"
-msgstr "Fail of initial read of compressed ファイル [%s in %s]"
+msgstr "圧縮ファイル[%s in %s]の最初の読み取りに失敗しました"
 
 #: ../lib/raster/range.c:103 ../lib/raster/range.c:118
 #, fuzzy, c-format
@@ -671,37 +660,34 @@ msgid "syntax error"
 msgstr "構文エラー"
 
 #: ../lib/raster/color_rules.c:114
-#, fuzzy
 msgid "R/G/B not in range 0-255"
-msgstr "R/G/B not in range 0-255"
+msgstr "R/G/B 範囲外です 0-255"
 
 #: ../lib/raster/color_rules.c:116
 msgid "invalid color name"
 msgstr "無効なカラー名"
 
 #: ../lib/raster/color_rules.c:118
-#, fuzzy
 msgid "percentage not in range 0-100"
-msgstr "percentage not in range 0-100"
+msgstr "パーセンテージが 0-100の範囲にありません"
 
 #: ../lib/raster/color_rules.c:120
 msgid "invalid value"
 msgstr "無効な値"
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "unknown error"
-msgstr "unknown エラー"
+msgstr "不明なエラー"
 
 #: ../lib/raster/color_rules.c:154
-#, fuzzy, c-format
+#, c-format
 msgid "bad rule (%s): [%s]"
-msgstr "bad rule (%s): [%s]"
+msgstr "不正の規則 (%s): [%s]"
 
 #: ../lib/raster/color_rules.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load color rules <%s>"
-msgstr "Unable to 荷重 color rules <%s>"
+msgstr "カラー規則がロードできません <%s>"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
@@ -711,19 +697,17 @@ msgid ""
 msgstr "����� ���� ���\n"
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy
 msgid "which is missing."
-msgstr "which is missing."
+msgstr "見つかりません"
 
 #: ../lib/raster/get_cellhd.c:71
-#, fuzzy
 msgid "whose header file can't be opened."
-msgstr "whose ヘッダーファイル can't be opened."
+msgstr "ヘッダーファイルが開けません"
 
 #: ../lib/raster/get_cellhd.c:76
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open header file for raster map <%s@%s>"
-msgstr "Unable to open ヘッダーファイル for ラスタ地図 <%s@%s>"
+msgstr "ラスターマップ <%s@%s>のヘッダーファイルが開きません"
 
 #: ../lib/raster/history.c:115
 #, fuzzy, c-format
@@ -839,24 +823,26 @@ msgstr ""
 #: ../lib/symbol/read.c:211
 #, fuzzy, c-format
 msgid "Cannot read symbol line coordinates: %s"
-msgstr "Cannot read 記号 線 coordinates: %s"
+msgstr "symbol line coordinatesを読み取れません: %s"
 
 #: ../lib/symbol/read.c:260
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr "Incorrect 記号 name: '%s' (should be: group/name or group/name@mapset)"
+msgstr ""
+"不適当なシンボル名です: '%s' (group/name または group/name@mapsetにしてくださ"
+"い)"
 
 #: ../lib/symbol/read.c:284
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "Cannot find/open symbol: '%s'"
+msgstr "シンボルを見つける/開くことができません '%s'"
 
 #: ../lib/symbol/read.c:389 ../lib/symbol/read.c:407 ../lib/symbol/read.c:417
 #: ../lib/symbol/read.c:435
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect symbol color: '%s', using default."
-msgstr "Incorrect 記号 color: '%s', using default."
+msgstr "不適当なシンボルカラーです: '%s', 既定のものを使用してください."
 
 #: ../lib/psdriver/Graph_set.c:199
 #, c-format
@@ -991,14 +977,13 @@ msgid ""
 msgstr ""
 
 #: ../lib/proj/get_proj.c:148
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid zone %s specified"
-msgstr "Invalid zone %s specified"
+msgstr "指定された無効な領域 %s "
 
 #: ../lib/proj/get_proj.c:228
-#, fuzzy
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
-msgstr "Unable to initialise PROJ.4 with the following 変数 list:"
+msgstr "次のパラメータリストでPROJ.4は初期化できません :"
 
 #: ../lib/proj/get_proj.c:236
 #, c-format
@@ -1006,42 +991,39 @@ msgid "The error message: %s"
 msgstr "エラーメッセージ: %s"
 
 #: ../lib/proj/get_proj.c:294
-#, fuzzy
 msgid "Option input overflowed option table"
-msgstr "Option input overflowed option 表"
+msgstr "オーバーフローしたオプションテーブルのオプション入力"
 
 #: ../lib/proj/get_proj.c:325
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr "Unable to initialize pj cause: %s"
+msgstr " pj 原因を初期化できません: %s"
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
 msgstr "入力する投影法パラメータ"
 
 #: ../lib/proj/get_proj.c:404
-#, fuzzy
 msgid "Input Unit Factor"
-msgstr "Input Unit 要因"
+msgstr "入力したユニットファクター"
 
 #: ../lib/proj/get_proj.c:414
 msgid "Output Projection Parameters"
 msgstr "出力する投影法パラメータ"
 
 #: ../lib/proj/get_proj.c:417
-#, fuzzy
 msgid "Output Unit Factor"
-msgstr "Output Unit 要因"
+msgstr "出力したユニットファクター"
 
 #: ../lib/proj/datum.c:270 ../lib/proj/datum.c:350
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr "Unable to open 原子, 測地基準 表 ファイル <%s>"
+msgstr "データムテーブルファイルが開けません <%s>"
 
 #: ../lib/proj/datum.c:283 ../lib/proj/datum.c:364
-#, fuzzy, c-format
+#, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr "エラー in 原子, 測地基準 表 ファイル <%s>, 線 %d"
+msgstr "データムテーブルファイルにエラーがあります <%s>, ライン %d"
 
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
@@ -1049,98 +1031,95 @@ msgid "pj_transform() failed: %s"
 msgstr "pj_変換() 失敗しました: %s"
 
 #: ../lib/proj/ellipse.c:76
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid ellipsoid <%s> in file"
-msgstr "Invalid 楕円体面 <%s> in ファイル"
+msgstr "<%s> ファイル内の無効な楕円体"
 
 #: ../lib/proj/ellipse.c:100
-#, fuzzy
 msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
-msgstr "No secondary 楕円体面 descriptor (rf, es or b) in ファイル"
+msgstr "ファイルに第2楕円体ディスクリプタ (rf, es or b) がありません"
 
 #: ../lib/proj/ellipse.c:104
-#, fuzzy
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
-msgstr "Invalid 楕円体面 descriptors (a, rf, es or b) in ファイル"
+msgstr "ファイル内の無効な楕円体ディスクリプタ (a, rf, es or b)"
 
 #: ../lib/proj/ellipse.c:117
-#, fuzzy
 msgid "No ellipsoid info given in file"
-msgstr "No 楕円体面 info given in ファイル"
+msgstr "ファイルに楕円体のデータがありません"
 
 #: ../lib/proj/ellipse.c:217 ../lib/gis/get_ellipse.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr "Unable to open 楕円体面 表 ファイル <%s>"
+msgstr "楕円体テーブルファイル<%s>が開けません"
 
 #: ../lib/proj/ellipse.c:270 ../lib/gis/get_ellipse.c:327
-#, fuzzy, c-format
+#, c-format
 msgid "Line%s of ellipsoid table file <%s> is invalid"
-msgstr "Line%s of 楕円体面 表 ファイル <%s> is invalid"
+msgstr "楕円体テーブルファイル <%s> のライン%s は無効です"
 
 #: ../lib/proj/ellipse.c:271 ../lib/gis/get_ellipse.c:326
-#, fuzzy, c-format
+#, c-format
 msgid "Lines%s of ellipsoid table file <%s> are invalid"
-msgstr "Lines%s of 楕円体面 表 ファイル <%s> are invalid"
+msgstr "楕円体テーブルファイル <%s>のライン%s  は無効です"
 
 #: ../lib/proj/convert.c:111
 msgid "Unable parse GRASS PROJ_INFO file"
 msgstr "GRASS PROJ_INFO ファイルが解析できません"
 
 #: ../lib/proj/convert.c:116
-#, fuzzy
 msgid "Unable get PROJ.4-style parameter string"
-msgstr "Unable get PROJ.4-style 変数 文字列"
+msgstr "PROJ.4-styleパラメータの文字列を導けません"
 
 #: ../lib/proj/convert.c:130
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
-"OGR can't parse PROJ.4-style 変数 string: %s (OGR エラー 符号, コード was %d)"
+"OGR はPROJ.4-styleパラメータの文字列を解析できません: %s (OGR エラーコード %"
+"d)"
 
 #: ../lib/proj/convert.c:137
-#, fuzzy, c-format
+#, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
-msgstr "OGR can't get WKT-style 変数 文字列 (OGR エラー 符号, コード was %d)"
+msgstr "OGR はWKT-styleパラメータの文字列を導けません (OGR エラーコード %d)"
 
 #: ../lib/proj/convert.c:397
-#, fuzzy
 msgid "No projection name! Projection parameters likely to be meaningless."
-msgstr "No 投影 name! 投影 parameters likely to be meaningless."
+msgstr "投影法名がありません! 投影法パラメータは不明です。"
 
 #: ../lib/proj/convert.c:433
-#, fuzzy, c-format
+#, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr "原子, 測地基準 <%s> not recognised by GRASS and no parameters found"
+msgstr ""
+"データム <%s> はGRASSに認識されていません そしてパラメータが見つかりません"
 
 #: ../lib/proj/convert.c:449
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Datum <%s> apparently recognised by GRASS but no parameters found. You may "
 "want to look into this."
 msgstr ""
-"原子, 測地基準 <%s> apparently recognised by GRASS but no parameters found. "
-"You may want to look into this."
+"データム <%s> はGRASSに認識されているようですが、 パラメータが見つかりませ"
+"ん。　調べてください。"
 
 #: ../lib/proj/convert.c:453
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
 "transform parameters unspecified."
 msgstr ""
-"Invalid 変換 number %d; valid range is 1 to %d. Leaving 原子, 測地基準 変形, "
-"変換 parameters unspecified."
+"無効な変換数です %d; 有効な範囲は1から %dです。データム変換パラメータを詳細不"
+"明のままにしておいてください。"
 
 #: ../lib/gis/find_file.c:80
-#, fuzzy, c-format
+#, c-format
 msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
-msgstr "%s/%s' was found in more mapsets (also found in <%s>)"
+msgstr "'%s/%s' はマップセットの中にあります (<%s>の中にもあります)"
 
 #: ../lib/gis/find_file.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Using <%s@%s>"
-msgstr "Using <%s@%s>"
+msgstr "使用 <%s@%s>"
 
 #: ../lib/gis/view.c:176
 #, c-format
@@ -1153,31 +1132,32 @@ msgid "Unable to open %s for reading"
 msgstr "開けません %s 読み取り用"
 
 #: ../lib/gis/view.c:465
-#, fuzzy, c-format
+#, c-format
 msgid "GRASS window when view was saved:\n"
-msgstr "GRASS window when 視界, 視野 was saved:\n"
+msgstr "表示が保存されたときのGRASSウィンドウ:\n"
 
 #: ../lib/gis/view.c:545
-#, fuzzy, c-format
+#, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
-msgstr " Window saved in \"%s\" is completely outside of current GRASS window."
+msgstr " 保存したウィンドウ \"%s\" は完全に現在のGRASSウィンドウの外にあります"
 
 #: ../lib/gis/view.c:549
-#, fuzzy, c-format
+#, c-format
 msgid ""
 " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr ""
-" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+" ウィンドウの %d%% のみ保存できます \"%s\" 現在のGRASSウィンドウと重複してい"
+"ます"
 
 #: ../lib/gis/mapset_msc.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to make mapset element %s (%s): %s"
-msgstr "Unable to make map集合 要素 %s (%s): %s"
+msgstr "マップセットの要素が作成できません %s (%s): %s"
 
 #: ../lib/gis/mapset_msc.c:64
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr "Unable to アクセス map集合 要素 %s (%s): %s"
+msgstr "マップセット要素にアクセスできません %s (%s): %s"
 
 #: ../lib/gis/adj_cellhd.c:45 ../lib/gis/adj_cellhd.c:196
 msgid "Illegal n-s resolution value"
@@ -1196,32 +1176,32 @@ msgid "Illegal col value"
 msgstr "無効な列値"
 
 #: ../lib/gis/adj_cellhd.c:77 ../lib/gis/adj_cellhd.c:244
-#, fuzzy, c-format
+#, c-format
 msgid "Fixing subtle input data rounding error of north boundary (%g>%g)"
-msgstr "Fixing subtle input データ rounding エラー of north 境界 (%g>%g)"
+msgstr "北境界の入力データの丸め誤差を調整する (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:82 ../lib/gis/adj_cellhd.c:249
 msgid "Illegal latitude for North"
 msgstr "無効な緯度（北）"
 
 #: ../lib/gis/adj_cellhd.c:88 ../lib/gis/adj_cellhd.c:255
-#, fuzzy, c-format
+#, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
-msgstr "Fixing subtle input データ rounding エラー of south 境界 (%g>%g)"
+msgstr "南境界の入力データの丸め誤差を調整する (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:260
 msgid "Illegal latitude for South"
 msgstr "無効な緯度（南）"
 
 #: ../lib/gis/adj_cellhd.c:105 ../lib/gis/adj_cellhd.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
-msgstr "Fixing subtle input データ rounding エラー of west 境界 (%g>%g)"
+msgstr "西境界の入力データの丸め誤差を調整する (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:116 ../lib/gis/adj_cellhd.c:283
-#, fuzzy, c-format
+#, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
-msgstr "Fixing subtle input データ rounding エラー of east 境界 (%g>%g)"
+msgstr "東境界の入力データの丸め誤差を調整する (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:129 ../lib/gis/adj_cellhd.c:296
 msgid "North must be north of South"
@@ -1268,19 +1248,19 @@ msgid "Top must be larger than Bottom"
 msgstr "降順"
 
 #: ../lib/gis/parser.c:371
-#, fuzzy, c-format
+#, c-format
 msgid "BUG in descriptions, option '%s' in <%s> does not exist"
-msgstr "バグ in descriptions, option '%s' in <%s> does not exist"
+msgstr "説明内のバグ, <%s>内のオプション '%s' は存在しません"
 
 #: ../lib/gis/parser.c:466
 #, fuzzy
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
-msgstr "Use either --quiet or --verbose flag, not both. Assuming --verbose."
+msgstr " --quiet または --詳細フラグを使用, 片方のみ. 仮定します --詳細."
 
 #: ../lib/gis/parser.c:480
 #, fuzzy
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
-msgstr "Use either --quiet or --verbose flag, not both. Assuming --quiet."
+msgstr " --quiet または --詳細フラグを使用, 片方のみ. 仮定します --quiet."
 
 #: ../lib/gis/parser.c:510
 #, c-format
@@ -1288,9 +1268,8 @@ msgid "Sorry <%s> is not a valid option\n"
 msgstr "<%s> オプションは無効です\n"
 
 #: ../lib/gis/parser.c:755
-#, fuzzy
 msgid "Unable to determine program name"
-msgstr "Unable to determine program name"
+msgstr "プログラム名を決定できません"
 
 #: ../lib/gis/parser.c:769 ../lib/gis/parser.c:784
 #, c-format
@@ -1298,9 +1277,9 @@ msgid "Sorry, <%c> is not a valid flag\n"
 msgstr "<%c> フラグは無効です\n"
 
 #: ../lib/gis/parser.c:881
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, <%s=> is ambiguous\n"
-msgstr "Sorry, <%s=> is ambiguous\n"
+msgstr "<%s=>は不明瞭です\n"
 
 #: ../lib/gis/parser.c:887
 #, c-format
@@ -1308,13 +1287,13 @@ msgid "Sorry, <%s> is not a valid parameter\n"
 msgstr "<%s> パラメータは無効です\n"
 
 #: ../lib/gis/parser.c:965
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "ERROR: illegal range syntax for parameter <%s>\n"
 msgstr ""
 "\n"
-"ERROR: illegal range 構文, 記法 for 変数 <%s>\n"
+"エラー: パラメータの無効な範囲の構文 <%s>\n"
 
 #: ../lib/gis/parser.c:966
 #, c-format
@@ -1322,13 +1301,13 @@ msgid "       Presented as: %s\n"
 msgstr "       存在します: %s\n"
 
 #: ../lib/gis/parser.c:970
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "ERROR: value <%s> out of range for parameter <%s>\n"
 msgstr ""
 "\n"
-"ERROR: value <%s> out of range for 変数 <%s>\n"
+"エラー: 値<%s>はパラメーターの範囲外です<%s>\n"
 
 #: ../lib/gis/parser.c:972
 #, c-format
@@ -1357,29 +1336,29 @@ msgid "       valid options: %s\n"
 msgstr "  %*s   オプション: "
 
 #: ../lib/gis/parser.c:1118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "ERROR: Required parameter <%s> not set:\n"
 "    (%s).\n"
 msgstr ""
 "\n"
-"ERROR: Required 変数 <%s> not set:\n"
+"エラー: 必要なパラメータ <%s> が設定されていません:\n"
 "    (%s).\n"
 
 #: ../lib/gis/parser.c:1211
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "ERROR: option <%s> must be provided in multiples of %d\n"
 msgstr ""
 "\n"
-"ERROR: option <%s> must be provided in multiples of %d\n"
+"エラー: オプション <%s> は%dの倍数でなければなりません\n"
 
 #: ../lib/gis/parser.c:1213
-#, fuzzy, c-format
+#, c-format
 msgid "       You provided %d items:\n"
-msgstr "       You provided %d items:\n"
+msgstr "        %d アイテムを提供しました:\n"
 
 #: ../lib/gis/parser.c:1271
 #, c-format
@@ -1426,53 +1405,51 @@ msgid "G_spawn: unable to redirect descriptor %d"
 msgstr ""
 
 #: ../lib/gis/spawn.c:428 ../lib/gis/spawn.c:666
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to open file %s"
-msgstr "G_spawn: unable to open ファイル %s"
+msgstr "G_spawn: ファイルが開けません %s"
 
 #: ../lib/gis/spawn.c:510 ../lib/gis/spawn.c:736 ../lib/gis/spawn.c:816
 msgid "Unable to execute command"
 msgstr "コマンドを実行できません"
 
 #: ../lib/gis/spawn.c:537 ../lib/gis/spawn.c:784
-#, fuzzy
 msgid "Too many arguments"
-msgstr "Too many arguments"
+msgstr "独立変数が多すぎます"
 
 #: ../lib/gis/spawn.c:575 ../lib/gis/spawn.c:583
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to restore signal %d"
-msgstr "G_spawn: unable to 修復 signal %d"
+msgstr "G_spawn: シグナルを修復できません %d"
 
 #: ../lib/gis/spawn.c:614
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to reset signal %d"
-msgstr "G_spawn: unable to re集合 signal %d"
+msgstr "G_spawn: シグナルをリセットできません %d"
 
 #: ../lib/gis/spawn.c:623
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to ignore signal %d"
-msgstr "G_spawn: unable to ignore signal %d"
+msgstr "G_spawn: シグナルを無視できません %d"
 
 #: ../lib/gis/spawn.c:634
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to block signal %d"
-msgstr "G_spawn: unable to 街区, 地塊 signal %d"
+msgstr "G_spawn: シグナルをブロックできません %d"
 
 #: ../lib/gis/spawn.c:642
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to unblock signal %d"
-msgstr "G_spawn: unable to un街区, 地塊 signal %d"
+msgstr "G_spawn: シグナルをブロックできません %d"
 
 #: ../lib/gis/spawn.c:671 ../lib/gis/spawn.c:680
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to duplicate descriptor %d to %d"
-msgstr "G_spawn: unable to duplicate descriptor %d to %d"
+msgstr "G_spawn: %dにディスクリプター%dをコピーできません "
 
 #: ../lib/gis/spawn.c:713 ../lib/gis/spawn.c:807
-#, fuzzy
 msgid "Unable to create a new process"
-msgstr "Unable to create a new 過程"
+msgstr "新しいプロセスを作成できません"
 
 #: ../lib/gis/spawn.c:728
 #, c-format
@@ -1488,24 +1465,25 @@ msgid "Other Projection"
 msgstr "他の投影"
 
 #: ../lib/gis/datum.c:160
-#, fuzzy, c-format
+#, c-format
 msgid "unable to open datum table file: %s"
-msgstr "unable to open 原子, 測地基準 表 file: %s"
+msgstr "データムテーブルファイルが開けません: %s"
 
 #: ../lib/gis/datum.c:182
-#, fuzzy, c-format
+#, c-format
 msgid "error in datum table file, line %d"
-msgstr "エラー in 原子, 測地基準 表 file, 線 %d"
+msgstr "データムテーブルファイルにエラーがあります, ライン %d"
 
 #: ../lib/gis/open_misc.c:45
-#, fuzzy, c-format
+#, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr "G__open_misc(read): map集合 <%s> doesn't match xmap集合 <%s>"
+msgstr ""
+"G__open_misc(読み取り): マップセット <%s>は xmapsetと一致していません <%s>"
 
 #: ../lib/gis/open_misc.c:67
-#, fuzzy, c-format
+#, c-format
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
-msgstr "G__open_misc(write): xmap集合 <%s> != G_mapset() <%s>"
+msgstr "G__open_misc(書き込み): xmapset <%s> != G_mapset() <%s>"
 
 #: ../lib/gis/home.c:35
 #, fuzzy
@@ -1544,12 +1522,12 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:87
 #, fuzzy
 msgid "WHERE conditions of SQL statement without 'where' keyword"
-msgstr "WHERE conditions of SQL statement without 'where' keyword"
+msgstr " 'where'キーワードなしの SQL命令のWHEREコンディション"
 
 #: ../lib/gis/parser_standard_options.c:88
 #, fuzzy
 msgid "Example: income < 1000 and inhab >= 10000"
-msgstr "Example: income < 1000 and inhab >= 10000"
+msgstr "例: income < 1000 and inhab >= 10000"
 
 #: ../lib/gis/parser_standard_options.c:96
 msgid "Table name"
@@ -1660,9 +1638,8 @@ msgstr "出力するベクトルマップ名"
 
 #: ../lib/gis/parser_standard_options.c:338
 #: ../lib/gis/parser_standard_options.c:347
-#, fuzzy
 msgid "Feature type"
-msgstr "地物型"
+msgstr "フィーチャータイプ"
 
 #: ../lib/gis/parser_standard_options.c:354
 msgid "Layer number or name"
@@ -1693,14 +1670,12 @@ msgid "Example: 1,3,7-9,13"
 msgstr "例: 1,3,7-9,13"
 
 #: ../lib/gis/parser_standard_options.c:391
-#, fuzzy
 msgid "Feature id"
-msgstr "地物 id"
+msgstr "フィーチャー id"
 
 #: ../lib/gis/parser_standard_options.c:398
-#, fuzzy
 msgid "Feature ids"
-msgstr "地物 ids"
+msgstr "フィーチャー ids"
 
 #: ../lib/gis/parser_standard_options.c:409
 msgid "Name of input file"
@@ -1719,38 +1694,35 @@ msgid "Color"
 msgstr "色"
 
 #: ../lib/gis/parser_standard_options.c:437
-#, fuzzy
 msgid "Either a standard color name or R:G:B triplet"
-msgstr "Either a 規準 color name or R:G:B triplet"
+msgstr "スタンダードなカラー名あるいは赤：緑：青"
 
 #: ../lib/gis/parser_standard_options.c:446
 msgid "Background color"
 msgstr "背景の色"
 
 #: ../lib/gis/parser_standard_options.c:448
-#, fuzzy
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
-msgstr "Either a 規準 GRASS color, R:G:B triplet, or \"none\""
+msgstr "スタンダードなGRASSカラー、赤：緑：青、あるいは \"none\""
 
 #: ../lib/gis/list.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "no %s files available in current mapset\n"
-msgstr "no %s files available in current mapset\n"
+msgstr "%sファイルは現在のマップセットに使用できません\n"
 
 #: ../lib/gis/list.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr "no %s files available in map集合 <%s>\n"
+msgstr "%sファイルはマップセットに使用できません <%s>\n"
 
 #: ../lib/gis/list.c:170
-#, fuzzy, c-format
+#, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr "%s files available in map集合 <%s>:\n"
+msgstr "マップセットで使用できるファイル%s  <%s>:\n"
 
 #: ../lib/gis/list.c:241
-#, fuzzy
 msgid "G_list: Unknown element type"
-msgstr "G_list: Unknown 要素 型"
+msgstr "G_list: 不明な要素タイプ"
 
 #: ../lib/gis/parser_html.c:35
 msgid "NAME"
@@ -1761,9 +1733,8 @@ msgid "KEYWORDS"
 msgstr "キーワード"
 
 #: ../lib/gis/parser_html.c:53
-#, fuzzy
 msgid "SYNOPSIS"
-msgstr "SYNOPSIS"
+msgstr "概要"
 
 #: ../lib/gis/parser_html.c:121
 msgid "Flags"
@@ -1778,9 +1749,8 @@ msgid "Verbose module output"
 msgstr "詳細モジュール出力"
 
 #: ../lib/gis/parser_html.c:151 ../lib/gis/parser_help.c:164
-#, fuzzy
 msgid "Quiet module output"
-msgstr "Quiet モジュール output"
+msgstr "モジュールを出力"
 
 #: ../lib/gis/parser_html.c:159
 msgid "Parameters"
@@ -1810,19 +1780,18 @@ msgid "Output raster map name <%s> is not valid map name"
 msgstr "出力するラスターマップ名 <%s> は無効なマップ名です"
 
 #: ../lib/gis/legal_name.c:115 ../lib/gis/legal_name.c:119
-#, fuzzy, c-format
+#, c-format
 msgid "Output raster map <%s> is used as input"
-msgstr "Output ラスタ地図 <%s> is used as input"
+msgstr "出力したラスターマップ <%s> は入力として使用されています"
 
 #: ../lib/gis/env.c:260
-#, fuzzy
 msgid "GISRC - variable not set"
-msgstr "GISRC - variable not 集合"
+msgstr "GISRC - 変数が設定されていません"
 
 #: ../lib/gis/env.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "G_getenv(): Variable %s not set"
-msgstr "G_getenv(): Variable %s not 集合"
+msgstr "G_getenv(): 変数 %s が設定されていません"
 
 #: ../lib/gis/env.c:318
 #, c-format
@@ -1852,12 +1821,12 @@ msgid "ERROR in reading <%s> file for location <%s>"
 msgstr "読み取りエラー <%s> ファイルの場所 <%s>"
 
 #: ../lib/gis/distance.c:156
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%"
 "f)(%f,%f)"
 msgstr ""
-"G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%"
+"G_distance_point_to_line_segment: 起こりえません: コード=%d P=(%f,%f) S=(%f,%"
 "f)(%f,%f)"
 
 #: ../lib/gis/seek.c:21 ../lib/gis/seek.c:27
@@ -1946,9 +1915,8 @@ msgid "LOCATION << %s >> not available"
 msgstr "場所 << %s >> は利用できません"
 
 #: ../lib/gis/myname.c:46
-#, fuzzy
 msgid "Unknown Location"
-msgstr "Unknown 場所, ロケーション"
+msgstr "不明な場所"
 
 #: ../lib/gis/debug.c:81
 #, c-format
@@ -1956,14 +1924,14 @@ msgid "Cannot open debug file '%s'"
 msgstr "デバッグファイルが開けません '%s'"
 
 #: ../lib/gis/open.c:62
-#, fuzzy, c-format
+#, c-format
 msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr "G__open(read): map集合 <%s> doesn't match xmap集合 <%s>"
+msgstr "G__open(読み取り): マップセット <%s> はxmapsetと一致していません <%s>"
 
 #: ../lib/gis/open.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
-msgstr "G__open(write): xmap集合 <%s> != G_mapset() <%s>"
+msgstr "G__open(書き込み): xmapset <%s> != G_mapset() <%s>"
 
 #: ../lib/gis/get_ellipse.c:86
 #, c-format
@@ -1971,29 +1939,28 @@ msgid "Unable to open file %s in <%s>"
 msgstr "ファイルを開けません %s in <%s>"
 
 #: ../lib/gis/get_ellipse.c:348 ../lib/gis/get_ellipse.c:371
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid a: field '%s' in file %s in <%s>"
-msgstr "Invalid a: 領域, フィールド '%s' in ファイル %s in <%s>"
+msgstr " ファイル %s 内の無効なa:フィールド '%s' in <%s>"
 
 #: ../lib/gis/get_ellipse.c:360
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid ellipsoid '%s' in file %s in <%s>"
-msgstr "Invalid 楕円体面 '%s' in ファイル %s in <%s>"
+msgstr "無効な楕円体 '%s' ファイル中 %s in <%s>"
 
 #: ../lib/gis/get_ellipse.c:374
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid es: field '%s' in file %s in <%s>"
-msgstr "Invalid es: 領域, フィールド '%s' in ファイル %s in <%s>"
+msgstr " ファイル %s内の無効な es:フィールド '%s' in <%s>"
 
 #: ../lib/gis/get_ellipse.c:387
-#, fuzzy, c-format
+#, c-format
 msgid "No ellipsoid info given in file %s in <%s>"
-msgstr "No 楕円体面 info given in ファイル %s in <%s>"
+msgstr "ファイル %sに楕円体のデータがありません in <%s>"
 
 #: ../lib/gis/proj3.c:93 ../lib/vector/Vlib/header.c:596
-#, fuzzy
 msgid "Unknown projection"
-msgstr "Unknown 投影"
+msgstr "不明な投影"
 
 #: ../lib/gis/rd_cellhd.c:133
 msgid "duplicate projection field"
@@ -2108,14 +2075,12 @@ msgid "rows field missing"
 msgstr "行フィールドが見つかりません"
 
 #: ../lib/gis/rd_cellhd.c:365
-#, fuzzy
 msgid "ewres3 field missing"
-msgstr "ewres3 領域, フィールド missing"
+msgstr "東西解像度3フィールドが見つかりません"
 
 #: ../lib/gis/rd_cellhd.c:367
-#, fuzzy
 msgid "nsres3 field missing"
-msgstr "nsres3 領域, フィールド missing"
+msgstr "北南解像度3フィールドが見つかりません"
 
 #: ../lib/gis/rd_cellhd.c:369
 msgid "cols3 field missing"
@@ -2141,18 +2106,17 @@ msgid "%s complete. %s"
 msgstr "%s 完了. %s"
 
 #: ../lib/gis/gisinit.c:55 ../lib/gis/gisinit.c:90
-#, fuzzy
 msgid ""
 "Incompatible library version for module. You need to rebuild GRASS or "
 "untangle multiple installations."
 msgstr ""
-"Incompatible 図書, ライブラリ version for module. You need to rebuild GRASS "
-"or untangle multiple installations."
+"互換性のないライブラリバージョンです。GRASSを復元するか、複合インストールを解"
+"決する必要があります。"
 
 #: ../lib/gis/gisinit.c:65
-#, fuzzy, c-format
+#, c-format
 msgid "MAPSET %s - permission denied"
-msgstr "MAP集合 %s - permission denied"
+msgstr "マップセット %s - 同意は拒否されました"
 
 #: ../lib/gis/gisinit.c:68
 #, c-format
@@ -2160,9 +2124,10 @@ msgid "MAPSET %s not found"
 msgstr "マップセット %s が見つかりません"
 
 #: ../lib/gis/gisinit.c:107
-#, fuzzy
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr "System not initialized. Programmer forgot to call G_gisinit()."
+msgstr ""
+"システムが初期化されません。 プログラマーが G_gisinit()を呼び出すのを忘れてい"
+"ます。"
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
 #: ../lib/vector/Vlib/ascii.c:186 ../lib/vector/Vlib/line.c:50
@@ -2176,28 +2141,29 @@ msgid "Out of memory"
 msgstr "メモリ不足"
 
 #: ../lib/driver/parse_ftcap.c:53
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr "%s: Unable to read フォント definition file; use the 既定値"
+msgstr ""
+"%s:フォントの定義ファイルが読み取れません;  既定のものを使用してください"
 
 #: ../lib/driver/parse_ftcap.c:59
-#, fuzzy, c-format
+#, c-format
 msgid "%s: No font definition file"
-msgstr "  地域 (地域定義ファイル)\n"
+msgstr " %s:フォント定義ファイルがありません"
 
 #: ../lib/display/tran_colr.c:107 ../lib/display/tran_colr.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "[%s]: No such color"
-msgstr "[%s]: No such color"
+msgstr "[%s]: そのような色はありません"
 
 #: ../lib/vector/diglib/plus_node.c:218
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Attempt to read line angle for the line which is not connected to the node: "
 "node %d, line %d"
 msgstr ""
-"Attempt to read 線 angle for the 線 which is not 連結 to the node: ノード, "
-"節 %d, 線 %d"
+"ノードに接続されていないラインの線角を読み取ろうとしています: ノード %d, ライ"
+"ン %d"
 
 #: ../lib/vector/diglib/plus.c:277
 msgid "Unable read topology for nodes"
@@ -2209,115 +2175,104 @@ msgid "Unable to read topology for node %d"
 msgstr "ノード用 %dトポロジーが読み取れません"
 
 #: ../lib/vector/diglib/plus.c:287
-#, fuzzy
 msgid "Unable read topology for lines"
-msgstr "Unable read 位相幾何, 位相, 位相数学 for lines"
+msgstr "ラインのトポロジーが読み取れません"
 
 #: ../lib/vector/diglib/plus.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read topology for line %d"
-msgstr "Unable to read 位相幾何, 位相, 位相数学 for 線 %d"
+msgstr "ライン%dのトポロジーが読み取れません"
 
 #: ../lib/vector/diglib/plus.c:297
-#, fuzzy
 msgid "Unable to read topo for areas"
-msgstr "Unable to read topo for areas"
+msgstr "領域のtopoが読み取れません"
 
 #: ../lib/vector/diglib/plus.c:302
-#, fuzzy, c-format
+#, c-format
 msgid "Unable read topology for area %d"
-msgstr "Unable read 位相幾何, 位相, 位相数学 for 地域 %d"
+msgstr "領域 %dのトポロジーが読み取れません"
 
 #: ../lib/vector/diglib/plus.c:307
-#, fuzzy
 msgid "Unable to read topology for isles"
-msgstr "Unable to read 位相幾何, 位相, 位相数学 for isles"
+msgstr "アイルのトポロジーが読み取れません"
 
 #: ../lib/vector/diglib/plus.c:312
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read topology for isle %d"
-msgstr "Unable to read 位相幾何, 位相, 位相数学 for isle %d"
+msgstr "アイル %dのトポロジーが読み取れません"
 
 #: ../lib/vector/diglib/plus.c:334 ../lib/vector/diglib/plus.c:360
-#, fuzzy
 msgid "Unable to write head to plus file"
-msgstr "Unable to write head to plus ファイル"
+msgstr "追加ファイルにヘッドを書き込めません"
 
 #: ../lib/vector/diglib/plus.c:339
-#, fuzzy
 msgid "Unable to write nodes to plus file"
-msgstr "Unable to write nodes to plus ファイル"
+msgstr "追加ファイルにノードを書き込めません"
 
 #: ../lib/vector/diglib/plus.c:344
-#, fuzzy
 msgid "Unable to write lines to plus file"
-msgstr "Unable to write lines to plus ファイル"
+msgstr "追加ファイルにラインを書き込めません"
 
 #: ../lib/vector/diglib/plus.c:349
-#, fuzzy
 msgid "Unable to write areas to plus file"
-msgstr "Unable to write areas to plus ファイル"
+msgstr "追加ファイルにエリアを書き込めません"
 
 #: ../lib/vector/diglib/plus.c:354
-#, fuzzy
 msgid "Unable to write isles to plus file"
-msgstr "Unable to write isles to plus ファイル"
+msgstr "追加ファイルにアイルを書き込めません"
 
 #: ../lib/vector/diglib/plus_area.c:208 ../lib/vector/diglib/plus_area.c:677
 #: ../lib/vector/diglib/plus_area.c:685
-#, fuzzy, c-format
+#, c-format
 msgid "Line %d already has area/isle %d to left"
-msgstr "線 %d already has area/isle %d to left"
+msgstr "ライン %d は既に左にエリア/アイルを持っています %d "
 
 #: ../lib/vector/diglib/plus_area.c:218
-#, fuzzy, c-format
+#, c-format
 msgid "Line %d already has area/isle %d to right"
-msgstr "線 %d already has area/isle %d to right"
+msgstr "ライン %d は既に右にエリア/アイルを持っています %d"
 
 #: ../lib/vector/diglib/plus_area.c:300
-#, fuzzy
 msgid "Attempt to delete isle from dead area"
-msgstr "Attempt to delete isle from dead 地域"
+msgstr "deadエリアからアイルを削除しようとしています"
 
 #: ../lib/vector/diglib/plus_area.c:317
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
-msgstr "Attempt to delete not registered isle %d from 地域 %d"
+msgstr " エリア %dから記録されていないアイル %dを削除しようとしています"
 
 #: ../lib/vector/diglib/plus_area.c:355
 #, fuzzy
 msgid "Attempt to delete dead area"
-msgstr "Attempt to delete dead 地域"
+msgstr "dead エリアを削除しようとしています"
 
 #: ../lib/vector/diglib/plus_area.c:395
 #, fuzzy, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr "Dead 図心, 重心 %d registered for 地域 (バグ in the ベクトル library)"
+msgstr "Dead 図心 %d 記録されたエリア (ベクトルライブラリ内のバグ)"
 
 #: ../lib/vector/diglib/plus_area.c:419
 #, fuzzy, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
-msgstr "Attempt to delete 地域 %d info from dead isle %d"
+msgstr "dead アイル %dからエリア %d 情報 を削除しようとしています "
 
 #: ../lib/vector/diglib/plus_area.c:775
 #, fuzzy, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
-msgstr "Attempt to delete isle %d info from dead 地域 %d"
+msgstr "dead エリア %dからアイル%d 情報を削除しようとしています "
 
 #: ../lib/vector/diglib/file.c:161
-#, fuzzy
 msgid "Writing to file loaded to memory not supported"
-msgstr "Writing to ファイル loaded to memory not supported"
+msgstr "メモリ用にロードされたファイルへの書き込みはサポートされません"
 
 #: ../lib/vector/diglib/file.c:204
-#, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "Unable to 荷重 ファイル to memory, ファイル not open"
+msgstr "メモリ用にファイルをロードできません, ファイルが開きません"
 
 #: ../lib/vector/diglib/file.c:219
-#, fuzzy
 msgid "Vector memory mode not supported, using 'AUTO'"
-msgstr "ベクトル memory モード not supported, using 'AUTO'"
+msgstr ""
+"ベクトルメモリーモードはサポートされていません。, 'AUTO'を使用してください"
 
 #: ../lib/vector/diglib/spindex_rw.c:294
 #, c-format
@@ -2351,34 +2306,34 @@ msgid "Unable to find '%x' in %s"
 msgstr "���"
 
 #: ../lib/vector/diglib/spindex.c:285
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete node %d from spatial index"
-msgstr "Unable to delete ノード, 節 %d from spatial 索引, 指数"
+msgstr "空間インデックスからノード %d を削除できません"
 
 #: ../lib/vector/diglib/spindex.c:325
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete line %d from spatial index"
-msgstr "Unable to delete 線 %d from spatial 索引, 指数"
+msgstr "空間インデックスからライン%d を削除できません"
 
 #: ../lib/vector/diglib/spindex.c:351
 #, fuzzy
 msgid "Attempt to delete sidx for dead area"
-msgstr "Attempt to delete sidx for dead 地域"
+msgstr "dead エリアの sidx を削除しようとしています"
 
 #: ../lib/vector/diglib/spindex.c:364
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete area %d from spatial index"
-msgstr "Unable to delete 地域 %d from spatial 索引, 指数"
+msgstr "空間インデックスから領域%d を削除できません"
 
 #: ../lib/vector/diglib/spindex.c:399
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete isle %d from spatial index"
-msgstr "Unable to delete isle %d from spatial 索引, 指数"
+msgstr "空間インデックスからアイル %d を削除できません"
 
 #: ../lib/vector/Vlib/write_nat.c:401
 #, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr "Attempt to 修復 alive 地物"
+msgstr "alive フィーチャーを修復しようとしています"
 
 #: ../lib/vector/Vlib/legal_vname.c:45
 #, c-format
@@ -2416,14 +2371,13 @@ msgstr "出力したベクトル地図 <%s> は入力として使われます"
 
 #: ../lib/vector/Vlib/read_ogr.c:117 ../lib/vector/Vlib/read_ogr.c:307
 #: ../lib/vector/Vlib/read_ogr.c:365 ../lib/vector/Vlib/build_ogr.c:309
-#, fuzzy, c-format
+#, c-format
 msgid "OGR feature type %d not supported"
-msgstr "OGR 地物型 %d not supported"
+msgstr "OGRフィーチャータイプ %d はサポートされません"
 
 #: ../lib/vector/Vlib/read_ogr.c:174
-#, fuzzy
 msgid "OGR feature without ID"
-msgstr "OGR 地物 without ID"
+msgstr "IDなしのOGRフィーチャー"
 
 #: ../lib/vector/Vlib/read_ogr.c:435 ../lib/vector/Vlib/read_ogr.c:443
 #, c-format
@@ -2789,15 +2743,15 @@ msgid "Layer number %d or name <%s> already exists"
 msgstr "レイヤー数 %d または名前 <%s> は既に存在します"
 
 #: ../lib/vector/Vlib/field.c:308
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Default driver / database set to:\n"
 "driver: %s\n"
 "database: %s"
 msgstr ""
 "既定のドライバー/データベースはセットされています to:\n"
-"driver: %s\n"
-"database: %s"
+"ドライバー: %s\n"
+"データベース: %s"
 
 #: ../lib/vector/Vlib/field.c:315
 msgid "Default driver is not set"
@@ -2912,14 +2866,12 @@ msgstr ""
 "アイルを追加できません (地図は閉じられています, topoは保存されています)"
 
 #: ../lib/vector/Vlib/build_nat.c:119
-#, fuzzy
 msgid "Area of size = 0.0 ignored"
-msgstr "サイズの領域 = 0.0 ignored"
+msgstr "サイズの領域 = 0.0 は無視されました"
 
 #: ../lib/vector/Vlib/build_nat.c:155
-#, fuzzy
 msgid "Request to find area outside nonexistent isle"
-msgstr "実在しないアイル外で領域を見つけてください"
+msgstr "実在しないアイル外でエリアを見つけてください"
 
 #: ../lib/vector/Vlib/build_nat.c:523
 msgid "Registering primitives..."
@@ -2973,9 +2925,8 @@ msgid "%d new boundaries"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:360
-#, fuzzy
 msgid "Line is not looped"
-msgstr "線はループされていません"
+msgstr "ラインはループされていません"
 
 #: ../lib/vector/Vlib/buffer2.c:442
 #, c-format
@@ -3101,19 +3052,19 @@ msgid "Unable to open coor file for vector map <%s>"
 msgstr "���"
 
 #: ../lib/vector/Vlib/open_nat.c:150
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
 "excess)"
-msgstr "ベクトル地図 <%s@%s> のCoorファイルが大きすぎます(%ld バイト超過)"
+msgstr "ベクトルマップ <%s@%s> の座標ファイルが大きすぎます(%ld バイト超過)"
 
 #: ../lib/vector/Vlib/open_nat.c:154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
 "missing)."
 msgstr ""
-"ベクトル <%s@%s> のCoorファイルが小さすぎます (%ld バイトが欠損しています)."
+"ベクトル <%s@%s> の座標ファイルが小さすぎます (%ld バイトが不足しています)."
 
 #: ../lib/vector/Vlib/net.c:118
 msgid "Building graph..."
@@ -3246,7 +3197,7 @@ msgstr "%s: 領域 %d は存在しません"
 #: ../lib/vector/Vlib/write.c:226
 #, fuzzy
 msgid "Attempt to delete dead feature"
-msgstr "Attempt to delete dead 地物"
+msgstr "dead フィーチャーを削除しようとしています"
 
 #: ../lib/vector/Vlib/write.c:675
 msgid "Unable to write feature, vector map is not opened"
@@ -3303,9 +3254,9 @@ msgstr ""
 "れていません"
 
 #: ../lib/vector/Vlib/write.c:826
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to restore feature %d from vector map <%s>"
-msgstr "Unable to restore feature %d from vector map <%s>"
+msgstr "ベクトルマップからフィーチャー%d を修復できません <%s>"
 
 #: ../lib/vector/Vlib/close.c:140
 #, c-format
@@ -3591,9 +3542,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:386
-#, fuzzy, c-format
+#, c-format
 msgid "Feature %d without geometry ignored"
-msgstr "ジオメトリなしのフィーチャー %d は無視されました"
+msgstr "配列されていないフィーチャー %d は無視されました"
 
 #: ../lib/vector/Vlib/build_ogr.c:393
 #, c-format
@@ -3874,35 +3825,30 @@ msgstr ""
 "-- gwflow インテグレーションテストは正常に終了しました --"
 
 #: ../lib/gpde/test/test_solute_transport.c:43
-#, fuzzy
 msgid ""
 "\n"
 "++ Running solute_transport integration tests ++"
 msgstr ""
 "\n"
-"++ solute_transport インテグレーションテストを実行しています ++"
+"++ solute_transportの インテグレーションテストを実行中++"
 
 #: ../lib/gpde/test/test_solute_transport.c:45
-#, fuzzy
 msgid "\t 1. testing 2d solute_transport"
-msgstr "\t 1. 2d solute_transportをテストしています"
+msgstr "\t 1. 2d solute_transportのテスト中"
 
 #: ../lib/gpde/test/test_solute_transport.c:48
-#, fuzzy
 msgid "\t 2. testing 3d solute_transport"
-msgstr "\t 2. 3d solute_transportをテストしています"
+msgstr "\t 2. 3d solute_transportをテスト中"
 
 #: ../lib/gpde/test/test_solute_transport.c:52
-#, fuzzy
 msgid ""
 "\n"
 "-- solute_transport integration tests failure --"
 msgstr ""
 "\n"
-"-- solute_transport インテグレーションテスト失敗 --"
+"-- solute_transport インテグレーションテストは失敗しました --"
 
 #: ../lib/gpde/test/test_solute_transport.c:55
-#, fuzzy
 msgid ""
 "\n"
 "-- solute_transport integration tests finished successfully --"
@@ -4281,9 +4227,9 @@ msgid "Window replacing the default"
 msgstr "ウインドウはデフォルトを置換しています"
 
 #: ../lib/g3d/g3dhistory.c:42
-#, fuzzy, c-format
+#, c-format
 msgid "can't get history information for [%s] in mapset [%s]"
-msgstr "can't get 歴史 情報 for [%s] in map集合 [%s]"
+msgstr "マップセット [%s]内から [%s] の履歴が導けません"
 
 #: ../lib/g3d/g3drange.c:75
 #, fuzzy, c-format
@@ -5365,13 +5311,11 @@ msgstr ""
 #~ msgid "Unable to find <%s@%s>"
 #~ msgstr "見つかりません <%s@%s>"
 
-#, fuzzy
 #~ msgid " It is a reclass of raster map <%s@%s> "
-#~ msgstr " It is a reクラス of ラスタ地図 <%s@%s>  "
+#~ msgstr "再分類したラスターマップです <%s@%s>  "
 
-#, fuzzy
 #~ msgid "Unable to realloc buffer"
-#~ msgstr "Unable to realloc バッファ"
+#~ msgstr "バッファーを再確保できません"
 
 #~ msgid "Feature: "
 #~ msgstr "フィーチャー:  "
@@ -5391,62 +5335,51 @@ msgstr ""
 #~ msgid "Unable to read head file"
 #~ msgstr "ヘッドファイルを読み込めません"
 
-#, fuzzy
 #~ msgid "Can not create a new process!"
-#~ msgstr "Can not create a new process!"
+#~ msgstr "新しいプロセスを作成できません"
 
 #~ msgid "Can't read %s for [%s in %s]"
 #~ msgstr "読み取れません %s  [%s in %s]"
 
 #, fuzzy
 #~ msgid "Unable to spawn the 'wish' program"
-#~ msgstr "Unable to spawn the 'wish' program"
+#~ msgstr " 'wish'プログラムを作成できません"
 
 #~ msgid "ERROR %s from graphics driver.\n"
 #~ msgstr "エラー %s グラフィックドライバー.\n"
 
-#, fuzzy
 #~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "エラー - eof from graphics monitor.\n"
+#~ msgstr "エラー - 画像モニターからファイルの終了\n"
 
 #~ msgid "Warning - no response from graphics monitor <%s>.\n"
 #~ msgstr "警告 - 画像モニターから応答がありません <%s>.\n"
 
-#, fuzzy
 #~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "Check to see if the マウス is still active.\n"
+#~ msgstr "マウスが動くならチェックしてください.\n"
 
-#, fuzzy
 #~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "エラー - no 応答 from graphics モニター <%s>.\n"
+#~ msgstr "エラー - no 画像モニターから応答がありません <%s>.\n"
 
-#, fuzzy
 #~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "No graphics モニター has been selected for output."
+#~ msgstr "出力に画像モニターが選択されていません"
 
-#, fuzzy
 #~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "Please run \"d.mon\" to select a graphics monitor."
+#~ msgstr "画像モニターの選択のために \"d.mon\" を実行してください"
 
-#, fuzzy
 #~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "Failed to get socket name for モニター <%s>."
+#~ msgstr "モニターのソケット名の入手に失敗しました <%s>."
 
-#, fuzzy
 #~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "No socket to connect to for モニター <%s>."
+#~ msgstr "モニターに接続するソケットがありません <%s>."
 
-#, fuzzy
 #~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr "Socket is already in use or not accepting connections."
+#~ msgstr "ソケットは既に使用中あるいは接続できません"
 
-#, fuzzy
 #~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Use d.mon to select a モニター"
+#~ msgstr "モニター選択にd.monを使用してください"
 
-#, fuzzy
 #~ msgid "Trying to connect to something not a socket."
-#~ msgstr "Trying to connect to something not a socket."
+#~ msgstr "ソケット以外のもので接続してください"
 
 #~ msgid "Probably an error with the server."
 #~ msgstr "サーバーにエラーがあります"
@@ -5454,9 +5387,8 @@ msgstr ""
 #~ msgid "Connection failed."
 #~ msgstr "接続に失敗しました"
 
-#, fuzzy
 #~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  Aspect\n"
+#~ msgstr "    5:  面\n"
 
 #~ msgid "Unable to open layer <%s>"
 #~ msgstr "レイヤー <%s> を開けません"
@@ -5483,24 +5415,20 @@ msgstr ""
 #~ msgid " The raster map %s@%s is empty"
 #~ msgstr "ラスターマップ %s@%s は空です"
 
-#, fuzzy
 #~ msgid "category support for vector map [%s] in mapset [%s] %s"
-#~ msgstr "category support for ベクトル地図 [%s] in map集合 [%s] %s"
+#~ msgstr "マップセット [%s] %s内のベクトルマップ [%s] のカテゴリーサポート"
 
-#, fuzzy
 #~ msgid "Run quietly"
-#~ msgstr "説明なし"
+#~ msgstr "実行"
 
-#, fuzzy
 #~ msgid "Unable to allocate memory\n"
-#~ msgstr "Unable to allocate memory\n"
+#~ msgstr "メモリを配分できません\n"
 
 #~ msgid "Problem reading raster map"
 #~ msgstr "ラスターマップの読み取りに問題があります"
 
-#, fuzzy
 #~ msgid "Unable to read header file for raster map <%s@%s>."
-#~ msgstr "Unable to read ヘッダーファイル for ラスタ地図 <%s@%s>."
+#~ msgstr "ラスターマップのためのヘッダーファイルが読み取れません <%s@%s>."
 
 #~ msgid "Unable to feature %d from vector map <%s>"
 #~ msgstr "Unable to feature %d from vector map <%s>"
@@ -5511,15 +5439,12 @@ msgstr ""
 #~ msgid "Probably program error."
 #~ msgstr "プログラムのエラー"
 
-#, fuzzy
 #~ msgid "Connect attempt timed out."
-#~ msgstr "Connect attempt timed out."
+#~ msgstr "接続のタイムアウト"
 
-#, fuzzy
 #~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "Hit RETURN to cancel request\n"
+#~ msgstr "要求をキャンセルするためにリターンを押す\n"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "\n"
@@ -5527,23 +5452,20 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "\n"
-#~ "Color 表 needed for ファイル [%s] in map集合 [%s].\n"
+#~ "ファイルにカラーテーブルが必要です [%s] マップセット [%s].\n"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "Please identify the type desired:\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Please identify the 型 desired:\n"
+#~ "要求されたタイプか確認してください:\n"
 
-#, fuzzy
 #~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  Random colors\n"
+#~ msgstr "    1:  ランダムカラー\n"
 
-#, fuzzy
 #~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2:  Red, green, and blue color ramps\n"
+#~ msgstr "    2:  赤、緑、青カラーランプ\n"
 
 #, fuzzy
 #~ msgid "    3:  Color wave\n"
@@ -5552,56 +5474,51 @@ msgstr ""
 #~ msgid "    4:  Gray scale\n"
 #~ msgstr "    4:  グレースケール\n"
 
-#, fuzzy
 #~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  Rainbow colors\n"
+#~ msgstr "    6:  レインボーカラー\n"
 
 #, fuzzy
 #~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7:  Red through yellow to green\n"
+#~ msgstr "    7: 赤 through 黄 to 緑\n"
 
 #, fuzzy
 #~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8:  Green through yellow to red\n"
+#~ msgstr "    8:  緑 through 黄 to 赤\n"
 
 #~ msgid "RETURN  quit\n"
 #~ msgstr "元に戻す  終了\n"
 
-#, fuzzy
 #~ msgid "Cannot write quant rules: map %s is integer"
-#~ msgstr "Cannot write quant rules: 地図 %s is 整数"
+#~ msgstr "量子化規則を書き込めません: マップ %s は整数です"
 
-#, fuzzy
 #~ msgid "Cannot write quant rules for map %s"
-#~ msgstr "Cannot write quant rules for 地図 %s"
+#~ msgstr "マップに量子化規則を書き込めません %s"
 
-#, fuzzy
 #~ msgid ""
 #~ "G_set_window(): projection/zone differs from that of currently open "
 #~ "raster maps"
 #~ msgstr ""
-#~ "G_set_window(): projection/zone differs from that of currently open ラス"
-#~ "タ maps"
+#~ "G_set_window(): 投影法/領域は現在開いているラスターマップと異なります"
 
-#, fuzzy
 #~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
-#~ msgstr "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
+#~ msgstr ""
+#~ "G_put_map_row: %s は整数ではありません!  G_put_[f/d]_raster_row()を使用し"
+#~ "てください!"
 
-#, fuzzy
 #~ msgid "%s: map [%s] not open for write - request ignored"
-#~ msgstr "%s: 地図 [%s] not open for write - request ignored"
+#~ msgstr "%s: 地図 [%s]は書き込み用に開けません - 無視してください"
 
-#, fuzzy
 #~ msgid "%s: map [%s] not open for random write - request ignored"
-#~ msgstr "%s: 地図 [%s] not open for random write - request ignored"
+#~ msgstr ""
+#~ "%s: マップ [%s] はランダムの書き込み用に開くことができません - 無視してく"
+#~ "ださい"
 
-#, fuzzy
 #~ msgid "%s: map [%s] not open for sequential write - request ignored"
-#~ msgstr "%s: 地図 [%s] not open for sequential write - request ignored"
+#~ msgstr ""
+#~ "%s:マップ [%s] は順次の書き込み用に開くことができません - 無視してください"
 
-#, fuzzy
 #~ msgid "%s: unopened file descriptor - request ignored"
-#~ msgstr "%s: unopened ファイル descriptor - request ignored"
+#~ msgstr "%s: ファイルディスクリプタが開けません - 無視してください"
 
 #~ msgid "map [%s] - unable to write row %d"
 #~ msgstr "地図 [%s] - 行に書き込めません %d"
@@ -5612,9 +5529,8 @@ msgstr ""
 #~ msgid "error writing null row %d"
 #~ msgstr "NULL行の書き込みエラー %d"
 
-#, fuzzy
 #~ msgid "category support for [%s] in mapset [%s] %s"
-#~ msgstr "category support for [%s] in map集合 [%s] %s"
+#~ msgstr "マップセット[%s] %s のカテゴリーサポート[%s]"
 
 #~ msgid "%s not found"
 #~ msgstr "%s 見つかりません"
@@ -5625,7 +5541,6 @@ msgstr ""
 #~ msgid "Cannot open temp file"
 #~ msgstr "一時ファイルが開けません"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "\n"
@@ -5633,11 +5548,10 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "\n"
-#~ "Please specify 投影 name\n"
+#~ "投影名を指定してください\n"
 
-#, fuzzy
 #~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "Enter 'list' for the リスト of available projections\n"
+#~ msgstr "利用できる投影法リストに'list'と入力\n"
 
 #~ msgid ""
 #~ "\n"
@@ -5646,35 +5560,30 @@ msgstr ""
 #~ "\n"
 #~ "無効な投影\n"
 
-#, fuzzy
 #~ msgid "EmbedGivenNulls: wrong data type!"
-#~ msgstr "EmbedGivenNulls: wrong データ type!"
+#~ msgstr "EmbedGivenNulls: 間違っているデータタイプです!"
 
 #~ msgid "Null values have not been initialized. "
 #~ msgstr "NULL値が初期化されていません"
 
-#, fuzzy
 #~ msgid "G_gisinit() must be called first. "
-#~ msgstr "G_gisinit() must be called first.  "
+#~ msgstr "G_gisinit() 最初に呼び出さなければなりません"
 
-#, fuzzy
 #~ msgid "Please advise GRASS developers of this error.\n"
-#~ msgstr "Please advise GRASS developers of this error.\n"
+#~ msgstr "このエラーをGRASS開発者に報告してください.\n"
 
-#, fuzzy
 #~ msgid "G_set_null_value: wrong data type!"
-#~ msgstr "G_set_null_value: wrong データ type!"
+#~ msgstr "G_set_null_value: 間違っているデータタイプです!"
 
 #~ msgid "Layer number"
 #~ msgstr "レイヤー数"
 
-#, fuzzy
 #~ msgid ""
 #~ "A single vector map can be connected to multiple database tables. This "
 #~ "number determines which table to use."
 #~ msgstr ""
-#~ "A single ベクトル地図 can be 連結 to multiple データベース tables. This "
-#~ "number determines which 表 to use."
+#~ "単独のベクトルマップは複数のデータベーステーブルと接続されます。この数は使"
+#~ "用するテーブルによって決定します。"
 
 #~ msgid ""
 #~ "\n"
@@ -5686,17 +5595,15 @@ msgstr ""
 #~ msgid "Allow overwrite"
 #~ msgstr "上書き"
 
-#, fuzzy
 #~ msgid "Run with minimal output messages"
-#~ msgstr "Run with minimal output messages"
+#~ msgstr "最小限の出力メッセージで実行"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "FLAG: Set the following flag?\n"
 #~ msgstr ""
 #~ "\n"
-#~ "FLAG: 集合 the following flag?\n"
+#~ "フラグ: 次のフラグに設定する?\n"
 
 #~ msgid ""
 #~ "\n"
@@ -5714,13 +5621,11 @@ msgstr ""
 #~ msgid " default: %s\n"
 #~ msgstr " デフォルト: %s\n"
 
-#, fuzzy
 #~ msgid "required: %s\n"
-#~ msgstr "required: %s\n"
+#~ msgstr "要求: %s\n"
 
-#, fuzzy
 #~ msgid "multiple: %s\n"
-#~ msgstr "multiple: %s\n"
+#~ msgstr "複数: %s\n"
 
 #~ msgid " options: %s\n"
 #~ msgstr " オプション: %s\n"
@@ -5731,9 +5636,8 @@ msgstr ""
 #~ msgid "   Try again? "
 #~ msgstr "   再試行?  "
 
-#, fuzzy
 #~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr "Sorry, %s is not accepted.\n"
+#~ msgstr " %s は承認できません.\n"
 
 #~ msgid ""
 #~ "\n"
@@ -5747,40 +5651,33 @@ msgstr ""
 #~ msgid "Is this correct? "
 #~ msgstr "これで間違いないですか?  "
 
-#, fuzzy
 #~ msgid "to accept the default"
-#~ msgstr "to accept the 既定値"
+#~ msgstr "既定値の許可"
 
-#, fuzzy
 #~ msgid "color support for [%s] in mapset [%s] %s"
-#~ msgstr "color support for [%s] in map集合 [%s] %s"
+#~ msgstr "マップセット [%s] %sのカラーサポート [%s] "
 
-#, fuzzy
 #~ msgid "Can't create timestamp file for %s map %s in mapset %s"
-#~ msgstr "Can't create timestamp ファイル for %s 地図 %s in map集合 %s"
+#~ msgstr ""
+#~ "タイムスタンプファイルが作成できません %s マップ %s マップセット内 %s"
 
-#, fuzzy
 #~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
-#~ msgstr "Invalid timestamp specified for %s 地図 %s in map集合 %s"
+#~ msgstr "指定された無効なタイムスタンプ %s マップ %s マップセット内 %s"
 
-#, fuzzy
 #~ msgid "Can't open timestamp file for %s map %s in mapset %s"
-#~ msgstr "Can't open timestamp ファイル for %s 地図 %s in map集合 %s"
+#~ msgstr "タイムスタンプファイルが開けません %s マップ %s マップセット内 %s"
 
-#, fuzzy
 #~ msgid "Invalid timestamp file for %s map %s in mapset %s"
-#~ msgstr "Invalid timestamp ファイル for %s 地図 %s in map集合 %s"
+#~ msgstr "無効なタイムスタンプファイル %s マップ %s マップセット内 %s"
 
-#, fuzzy
 #~ msgid "Error reading compressed map <%s@%s>, row %d"
-#~ msgstr "エラー reading compressed 地図 <%s@%s>, 行 %d"
+#~ msgstr "圧縮マップの読み取りエラー<%s@%s>, 行 %d"
 
 #~ msgid "Error reading map <%s@%s>, row %d"
 #~ msgstr "マップの読み取りエラー <%s@%s>, 行 %d"
 
-#, fuzzy
 #~ msgid "unable to determine user's home directory"
-#~ msgstr "unable to determine user's home ディレクトリ, 要覧"
+#~ msgstr "ユーザーのホームディレクトリを決定できません"
 
 #~ msgid "Unable to create header file for [%s]"
 #~ msgstr "ヘッダーファイルが作成できません [%s]"
@@ -5788,48 +5685,41 @@ msgstr ""
 #~ msgid "Can't create %s metadata file for [%s in %s]"
 #~ msgstr "作成できません %s メタデータ ファイル [%s in %s]"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "Please specify ellipsoid name\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Please specify 楕円体面 name\n"
+#~ "楕円体名を指定してください\n"
 
-#, fuzzy
 #~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "Enter 'list' for the リスト of available ellipsoids\n"
+#~ msgstr "利用できる楕円体のリストに'list' と入力\n"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "invalid ellipsoid\n"
 #~ msgstr ""
 #~ "\n"
-#~ "invalid ellipsoid\n"
+#~ "無効な楕円体\n"
 
-#, fuzzy
 #~ msgid ""
 #~ "region for current mapset %s\n"
 #~ "run \"g.region\""
 #~ msgstr ""
-#~ "地域 for current map集合 %s\n"
-#~ "run \"g.region\""
+#~ "現在のマップセットの範囲 %s\n"
+#~ "実行 \"g.region\""
 
-#, fuzzy
 #~ msgid "default region %s"
-#~ msgstr "既定値 地域 %s"
+#~ msgstr "既定の範囲%s"
 
-#, fuzzy
 #~ msgid "hit RETURN to continue -->"
-#~ msgstr "hit RETURN to continue -->"
+#~ msgstr "続行のためにリターンを押す -->"
 
 #~ msgid "can't create histogram for [%s in %s]"
 #~ msgstr "ヒストグラムを作成できません [%s in %s]"
 
-#, fuzzy
 #~ msgid "to cancel request"
-#~ msgstr "to cancel request"
+#~ msgstr "要求をキャンセル"
 
 #~ msgid "Enter a new %s file name"
 #~ msgstr "入力 新しい%s ファイル名"
@@ -5840,24 +5730,20 @@ msgstr ""
 #~ msgid "Enter %s file name"
 #~ msgstr "入力 %s ファイル名"
 
-#, fuzzy
 #~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "Enter 'list' for a リスト of existing %s files\n"
+#~ msgstr "存在するリスト %s ファイルに 'list'と入力 \n"
 
-#, fuzzy
 #~ msgid "Enter 'list -f' for "
-#~ msgstr "Enter 'リスト -f' for  "
+#~ msgstr "'list -f'を入力  "
 
 #~ msgid "a list %s"
 #~ msgstr "リスト %s"
 
-#, fuzzy
 #~ msgid "an extended list"
-#~ msgstr "an extended リスト"
+#~ msgstr "拡張リスト"
 
-#, fuzzy
 #~ msgid "Hit RETURN %s\n"
-#~ msgstr "Hit RETURN %s\n"
+#~ msgstr "リターンを押す %s\n"
 
 #~ msgid ""
 #~ "\n"
@@ -5880,206 +5766,173 @@ msgstr ""
 #~ "\n"
 #~ "**<%s> 無効な名前 **\n"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "** %s - illegal request **\n"
 #~ msgstr ""
 #~ "\n"
-#~ "** %s - illegal request **\n"
+#~ "** %s - 無効な要求 **\n"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "** %s - exists, select another name **\n"
 #~ msgstr ""
 #~ "\n"
-#~ "** %s - exists, select another name **\n"
+#~ "** %s - 存在します, 他の名前を選択 **\n"
 
-#, fuzzy
 #~ msgid "ask: can't happen"
-#~ msgstr "ask: can't happen"
+#~ msgstr "質問: 起こりえません"
 
 #~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
 #~ msgstr "無効なファイル名です。  '.' あるいは 'NULL'は使えません\n"
 
-#, fuzzy
 #~ msgid "Too many reclass categories for [%s in %s]"
-#~ msgstr "Too many reクラス categories for [%s in %s]"
+#~ msgstr "再分類したカテゴリーが多すぎます [%s in %s]"
 
-#, fuzzy
 #~ msgid "Illegal reclass format in header file for [%s in %s]"
-#~ msgstr ""
-#~ "Illegal reクラス 形式, 書式, 初期化 in ヘッダーファイル for [%s in %s]"
+#~ msgstr "ヘッダーファイル内の無効な再分類されたフォーマットです [%s in %s]"
 
-#, fuzzy
 #~ msgid "Unable to create header file for [%s in %s]"
-#~ msgstr "Unable to create ヘッダーファイル for [%s in %s]"
+#~ msgstr "[%s in %s]にヘッダーファイルが作成できません"
 
-#, fuzzy
 #~ msgid "Unable to create dependency file in [%s in %s]"
-#~ msgstr "Unable to create dependency ファイル in [%s in %s]"
+#~ msgstr "[%s in %s]に従属ファイルが作成できません"
 
-#, fuzzy
 #~ msgid ""
 #~ "closecell: can't move %s\n"
 #~ "to null file %s"
 #~ msgstr ""
-#~ "closecell: can't move %s\n"
-#~ "to null ファイル %s"
+#~ "closecell:  移動できません%s\n"
+#~ "null ファイル %s"
 
-#, fuzzy
 #~ msgid ""
 #~ "closecell: can't move %s\n"
 #~ "to cell file %s"
 #~ msgstr ""
-#~ "closecell: can't move %s\n"
-#~ "to セル ファイル %s"
+#~ "closecell: 移動できません%s\n"
+#~ "セルファイル %s"
 
-#, fuzzy
 #~ msgid "Unable to get GIS_LOCK enviroment variable value"
-#~ msgstr "Unable to get GIS_LOCK enviroment variable value"
+#~ msgstr "GIS_LOCK環境変数値を導けません"
 
 #, fuzzy
 #~ msgid "G_malloc: unable to allocate %lu bytes at %s:%d"
-#~ msgstr "G_malloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_malloc: 確保できません %lu バイト %s:%d"
 
 #, fuzzy
 #~ msgid "G_calloc: unable to allocate %lu * %lu bytes at %s:%d"
-#~ msgstr "G_calloc: unable to allocate %lu * %lu bytes at %s:%d"
+#~ msgstr "G_calloc: 確保できません %lu * %lu バイト %s:%d"
 
 #, fuzzy
 #~ msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
-#~ msgstr "G_realloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_realloc: 確保できません %lu バイト %s:%d"
 
-#, fuzzy
 #~ msgid ""
 #~ "Raster map <%s@%s> is in different projection than current region. Found "
 #~ "raster map <%s@%s>, should be <%s>."
 #~ msgstr ""
-#~ "ラスタ地図 <%s@%s> is in different 投影 than current region. Found ラスタ"
-#~ "地図 <%s@%s>, should be <%s>."
+#~ "ラスターマップ <%s@%s> は現在の範囲ではなく違う投影法にあります。 見つかっ"
+#~ "たラスターマップ<%s@%s>は <%s>です。"
 
-#, fuzzy
 #~ msgid ""
 #~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
-#~ msgstr "ラスタ地図 <%s@%s> is in different zone (%d) than current 地域 (%d)"
+#~ msgstr ""
+#~ "ラスターマップ <%s@%s> は現在の範囲(%d)ではなく、違う領域にあります (%"
+#~ "d) 。"
 
-#, fuzzy
 #~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
-#~ msgstr "ラスタ地図 <%s@%s>: bytes per セル (%d) too large"
+#~ msgstr "ラスターマップ <%s@%s>: 各セルのバイト (%d) が大きすぎます"
 
-#, fuzzy
 #~ msgid ""
 #~ "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 #~ msgstr ""
-#~ "地図 <%s@%s> is a GDAL リンク but GRASS is compiled without GDAL support"
+#~ "マップ <%s@%s> はGDAL リンク ですが、 GRASSはGDALのサポートなしでコンパイ"
+#~ "ルされました"
 
 #~ msgid "<%s>: bad mapset"
 #~ msgstr "<%s>: 不正のマップセット"
 
-#, fuzzy
 #~ msgid "G__open_raster_new(): no temp files available"
-#~ msgstr "G__open_raster_new(): no temp files available"
+#~ msgstr "G__open_raster_new():一時ファイルが利用できません"
 
-#, fuzzy
 #~ msgid ""
 #~ "Unable to write embedded null values for raster map open for random access"
 #~ msgstr ""
-#~ "Unable to write embedded null values for ラスタ地図 open for random アクセ"
-#~ "ス"
+#~ "ランダムアクセス用のラスターマップに、埋め込まれたNULL値を書き込めません"
 
-#, fuzzy
 #~ msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
-#~ msgstr "G_set_fp_type(): can only be called with FCELL_型 or DCELL_型"
+#~ msgstr "G_set_fp_type():  FCELL_型 あるいは DCELL_型のみ呼び出せます"
 
-#, fuzzy
 #~ msgid ""
 #~ "G_set_quant_rules() can be called only for raster maps opened for reading"
 #~ msgstr ""
-#~ "G_set_quant_rules() can be called only for ラスタ maps opened for reading"
+#~ "G_set_quant_rules() 読み取り用に開かれたラスターマップのみ呼び出せます"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "Please specify datum name\n"
 #~ msgstr ""
 #~ "\n"
-#~ "Please specify 原子, 測地基準 name\n"
+#~ "データム名を指定してください\n"
 
-#, fuzzy
 #~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "Enter 'list' for the リスト of available datums\n"
+#~ msgstr "利用できるデータムのリストに 'list' と入力\n"
 
-#, fuzzy
 #~ msgid "or 'custom' if you wish to enter custom parameters\n"
-#~ msgstr "or 'custom' if you wish to enter custom parameters\n"
+#~ msgstr "カスタムパラメータを入力する場合は 'custom' \n"
 
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "invalid datum\n"
 #~ msgstr ""
 #~ "\n"
-#~ "invalid datum\n"
+#~ "無効なデータム\n"
 
-#, fuzzy
 #~ msgid "one moment...\n"
-#~ msgstr "one moment...\n"
+#~ msgstr "しばらくお待ちください...\n"
 
-#, fuzzy
 #~ msgid "No help available for command [%s]\n"
-#~ msgstr "No help available for コマンド, 命令 [%s]\n"
+#~ msgstr "コマンドのヘルプが利用できません [%s]\n"
 
-#, fuzzy
 #~ msgid "can't read f_range file for [%s in %s]"
-#~ msgstr "can't read f_range ファイル for [%s in %s]"
+#~ msgstr " [%s in %s] にf_range ファイルを読み込めません"
 
-#, fuzzy
 #~ msgid "can't read range file for [%s in %s]"
-#~ msgstr "can't read range ファイル for [%s in %s]"
+#~ msgstr " [%s in %s] に領域ファイルを読み込めません"
 
-#, fuzzy
 #~ msgid "can't write range file for [%s in %s]"
-#~ msgstr "can't write range ファイル for [%s in %s]"
+#~ msgstr " [%s in %s]に領域ファイルを書き込めません"
 
-#, fuzzy
 #~ msgid "with titles"
-#~ msgstr "with titles"
+#~ msgstr "タイトル"
 
 #~ msgid "(no title)"
 #~ msgstr "(無題)"
 
-#, fuzzy
 #~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
-#~ msgstr ""
-#~ " It is a reクラス of ラスタ地図 <%s@%s> whose ヘッダーファイル is invalid."
+#~ msgstr "再分類したラスターマップです <%s@%s> ヘッダーファイルは無効です。"
 
 #~ msgid " Invalid format."
 #~ msgstr "無効なフォーマット."
 
-#, fuzzy
 #~ msgid "can't write history information for [%s]"
-#~ msgstr "can't write 歴史 情報 for [%s]"
+#~ msgstr "[%s]に履歴を書き込めません"
 
-#, fuzzy
 #~ msgid "Not enough room in history file to record command line."
-#~ msgstr "Not enough room in 歴史 ファイル to レコード コマンド, 命令 line."
+#~ msgstr "コマンドラインを記録する履歴ファイルに空きがありません"
 
-#, fuzzy
 #~ msgid "Not enough room in history file for command line (truncated)."
-#~ msgstr "Not enough room in 歴史 ファイル for コマンド, 命令 線 (truncated)."
+#~ msgstr "コマンドラインに履歴ファイルの空きがありません (切捨て)."
 
 #~ msgid "Graphics driver [%s] started"
 #~ msgstr "画像ドライバー [%s] のスタート"
 
 #, fuzzy
 #~ msgid "Unknown command: %d last: %d"
-#~ msgstr "Unknown command: %d last: %d"
+#~ msgstr "不明なコマンド: %d last: %d"
 
-#, fuzzy
 #~ msgid "Monitor: get_command: Premature EOF"
-#~ msgstr "Monitor: get_command: Premature EOF"
+#~ msgstr "モニター: get_command: すぐにファイルを終了"
 
 #~ msgid "not implemented"
 #~ msgstr "実行されていません"
@@ -6094,9 +5947,8 @@ msgstr ""
 #~ msgid "%d errors in category string."
 #~ msgstr "カテゴリーストリングにおけるエラー %d"
 
-#, fuzzy
 #~ msgid "Error in rule on row %d in %s"
-#~ msgstr "Error in rule on row %d in %s"
+#~ msgstr "行 %d 規則のエラー %s"
 
 #~ msgid "Intersections: %5d"
 #~ msgstr "交差: %5d"
@@ -6191,11 +6043,10 @@ msgstr ""
 #~ msgid "Column type of smooth column (datetime) is not supported"
 #~ msgstr "smooth 列 の列タイプ (datetime) はサポートされていません"
 
-#, fuzzy
 #~ msgid "Column type of s column is not supported (must be integer or double)"
 #~ msgstr ""
-#~ " s 列 の列タイプはサポートされていません (整数型または倍である必要がありま"
-#~ "す)"
+#~ " s列の列タイプはサポートされていません (整数または倍数でなければなりませ"
+#~ "ん)"
 
 #~ msgid "Reading lines from vector map ... "
 #~ msgstr "ベクトル地図から線を読み込んでいます ...  "
@@ -6203,7 +6054,6 @@ msgstr ""
 #~ msgid "Reading nodes from vector map ... "
 #~ msgstr "ベクトル地図からノードを読み込んでいます ...  "
 
-#, fuzzy
 #~ msgid "strip exists with insufficient data"
 #~ msgstr "stripは不十分なデータと存在します"
 
