@@ -21,7 +21,8 @@ grab .wait_ok.wait\n";
 int script_mode = 0;
 
 static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
-			 int argc, const char *argv0, const char **argv)
+			 int argc, const char *cmd, const char *argv0,
+			 const char **argv)
 {
     struct Option *elev, *colr, *vct, *pnt, *vol;
     struct Option *panel_path, *script, *state;
@@ -162,7 +163,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     }
 
     /* Put in the "please wait..." message unless we are in demo mode */
-    if ((strstr(argv[0], "nviz") != NULL) && (!demo->answer)) {
+    if ((strstr(cmd, "nviz") != NULL) && (!demo->answer)) {
 	if (Tcl_Eval(interp, startup_script) != TCL_OK)
 	    G_fatal_error("%s", Tcl_GetStringResult(interp));
 
@@ -368,6 +369,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
  */
 
 static int Ngetargs(Tcl_Interp * interp,	/* Current interpreter. */
+		    const char **p_cmd,
 		    const char **p_argv0,
 		    const char ***p_argv)
 {
@@ -384,6 +386,8 @@ static int Ngetargs(Tcl_Interp * interp,	/* Current interpreter. */
     G_debug(2, "nviz_init:argv0=%s", argv0);
     G_debug(2, "nviz_init:argv=%s", argv);
     G_debug(2, "nviz_init:cmd=%s", cmd);
+
+    *p_cmd = cmd;
 
     tmp = G_store(argv0);
     G_convert_dirseps_from_host(tmp);
@@ -524,11 +528,11 @@ void swap_togl();
 int Ninitdata(Tcl_Interp *interp,	/* Current interpreter. */
 	      Nv_data *data)
 {
-    const char *argv0;
+    const char *cmd, *argv0;
     const char **argv;
     int argc;
 
-    argc = Ngetargs(interp, &argv0, &argv);
+    argc = Ngetargs(interp, &cmd, &argv0, &argv);
 
     G_gisinit(argv0);
 
@@ -540,7 +544,7 @@ int Ninitdata(Tcl_Interp *interp,	/* Current interpreter. */
     data->NumCplanes = 0;
     data->CurCplane = 0;
     if (!script_mode)
-	parse_command(data, interp, argc, argv0, argv);
+	parse_command(data, interp, argc, cmd, argv0, argv);
 
     return (TCL_OK);
 }
