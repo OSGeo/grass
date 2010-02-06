@@ -199,8 +199,6 @@ void G3d_adjustRegionRes(G3D_Region * region)
  * \brief 
  *
  * Copies the values of <em>regionSrc</em> into <em>regionDst</em>.
- * (The unfortunate order of parameters was chosen in order to conform to the
- * order used in <em>G_copy ()</em>).
  *
  *  \param regionDest
  *  \param regionSrc
@@ -209,7 +207,7 @@ void G3d_adjustRegionRes(G3D_Region * region)
 
 void G3d_regionCopy(G3D_Region * regionDest, G3D_Region * regionSrc)
 {
-    G_copy(regionDest, regionSrc, sizeof(G3D_Region));
+    *regionDest = *regionSrc;
 }
 
 /*---------------------------------------------------------------------------*/

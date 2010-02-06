@@ -124,9 +124,6 @@ int G_num_standard_colors(void);
 int G_insert_commas(char *);
 void G_remove_commas(char *);
 
-/* copy.c */
-void G_copy(void *, const void *, int);
-
 /* copy_dir.c */
 int G_recursive_copy(const char *, const char *);
 

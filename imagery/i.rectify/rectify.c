@@ -45,7 +45,7 @@ int rectify(char *name, char *mapset, char *result, int order)
     rast = (void *)G_calloc(Rast_window_cols() + 1, Rast_cell_size(map_type));
     Rast_set_null_value(rast, Rast_window_cols() + 1, map_type);
 
-    G_copy(&win, &target_window, sizeof(win));
+    win = target_window;
 
     win.west += win.ew_res / 2;
     ncols = target_window.cols;

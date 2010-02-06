@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
 
-    G_copy(&window, &cellhd, sizeof(window));
+    window = cellhd;
 
     if (flag.dflt->answer)
 	G_get_default_window(&window);

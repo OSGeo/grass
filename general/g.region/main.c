@@ -414,7 +414,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open 3dview file <%s> in <%s>"), name,
 			  mapset);
 
-	G_copy(&temp_window, &window, sizeof(window));
+	temp_window = window;
 
 	if (0 > (ret = G_get_3dview(name, mapset, &v)))
 	    G_fatal_error(_("Unable to read 3dview file <%s> in <%s>"), name,
@@ -452,7 +452,7 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Raster map <%s> not found"), rast_name);
 	    Rast_get_cellhd(rast_name, mapset, &temp_window);
 	    if (!first) {
-		G_copy(&window, &temp_window, sizeof(window));
+		window = temp_window;
 		first = 1;
 	    }
 	    else {
@@ -500,7 +500,7 @@ int main(int argc, char *argv[])
 	    if (!mapset)
 		G_fatal_error(_("Vector map <%s> not found"), vect_name);
 
-	    G_copy(&temp_window, &window, sizeof(window));
+	    temp_window = window;
 
 	    Vect_set_open_level(2);
 	    if (2 != Vect_open_old(&Map, vect_name, mapset))
@@ -517,7 +517,7 @@ int main(int argc, char *argv[])
 	    map_window.bottom = box.B;
 
 	    if (!first) {
-		G_copy(&window, &map_window, sizeof(window));
+		window = map_window;
 		first = 1;
 	    }
 	    else {
@@ -788,7 +788,7 @@ int main(int argc, char *argv[])
 
     /* save= */
     if ((name = parm.save->answer)) {
-	G_copy(&temp_window, &window, sizeof(window));
+	temp_window = window;
 	G_adjust_Cell_head3(&temp_window, 0, 0, 0);
 	if (G__put_window(&temp_window, "windows", name) < 0)
 	    G_fatal_error(_("Unable to set region <%s>"), name);

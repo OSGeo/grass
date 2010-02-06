@@ -27,7 +27,7 @@
 void G_get_set_window(struct Cell_head *window)
 {
     G__init_window();
-    G_copy(window, &G__.window, sizeof(*window));
+    *window = G__.window;
 }
 
 /*!
@@ -41,15 +41,10 @@ void G_get_set_window(struct Cell_head *window)
 void G_set_window(struct Cell_head *window)
 {
     /* adjust window, check for valid window */
-    /* adjust the real one, not a copy
-       G_copy (&twindow, window, sizeof(struct Cell_head));
-       window = &twindow;
-     */
 
     G_adjust_Cell_head(window, 0, 0);
 
     /* copy the window to the current window */
-    G_copy((char *)&G__.window, (char *)window, sizeof(*window));
-
+    G__.window = *window;
     G__.window_set = 1;
 }
