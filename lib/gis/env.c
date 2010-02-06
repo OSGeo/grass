@@ -496,7 +496,7 @@ void G__create_alt_env(void)
     int i;
 
     /* copy env to env2 */
-    G_copy(&st->env2, &st->env, sizeof(st->env));
+    st->env2 = st->env;
     
     st->env.count = 0;
     st->env.size = 0;

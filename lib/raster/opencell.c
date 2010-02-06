@@ -266,7 +266,7 @@ int Rast__open_old(const char *name, const char *mapset)
     fcb->map_type = MAP_TYPE;
 
     /* Save cell header */
-    G_copy((char *)&fcb->cellhd, (char *)&cellhd, sizeof(cellhd));
+    fcb->cellhd = cellhd;
 
     /* allocate null bitstream buffers for reading null rows */
     fcb->null_fd = -1;
@@ -285,7 +285,7 @@ int Rast__open_old(const char *name, const char *mapset)
 
     /* if reclass, copy reclass structure */
     if ((fcb->reclass_flag = reclass_flag))
-	G_copy(&fcb->reclass, &reclass, sizeof(reclass));
+	fcb->reclass = reclass;
 
     fcb->gdal = gdal;
     if (!gdal)
@@ -619,7 +619,7 @@ static int open_raster_new(const char *name, int open_mode,
      * for compressed writing
      *   allocate space to hold the row address array
      */
-    G_copy(&fcb->cellhd, &R__.wr_window, sizeof(fcb->cellhd));
+    fcb->cellhd = R__.wr_window;
 
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type == CELL_TYPE) {
 	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));

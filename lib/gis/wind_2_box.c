@@ -35,7 +35,7 @@ void G_adjust_window_to_box(const struct Cell_head *src,
 {
     double ew, ns;
 
-    G_copy((char *)dst, (char *)src, sizeof(*dst));
+    *dst = *src;
 
     /* calculate the effective resolutions */
     ns = (src->ns_res * src->rows) / rows;

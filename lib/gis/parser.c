@@ -1155,7 +1155,7 @@ static void split_opts(void)
 
 		if (len > 0) {	/* skip ,, */
 		    opt->answers[ans_num] = (char *)G_malloc(len + 1);
-		    G_copy(opt->answers[ans_num], ptr1, len);
+		    memcpy(opt->answers[ans_num], ptr1, len);
 		    opt->answers[ans_num][len] = 0;
 
 		    ans_num++;
