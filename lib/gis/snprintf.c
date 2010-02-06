@@ -27,8 +27,6 @@
 #include <assert.h>
 #include <grass/gis.h>
 
-/* #ifdef HAVE_SNPRINTF */
-
 /**
  * \brief snprintf() clone.
  *
@@ -51,7 +49,9 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     count = vsnprintf(str, size, fmt, ap);
     va_end(ap);
 
+    /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
+    if (count == size)
+	str[--count] = '\0';
+
     return count;
 }
-
-/* #endif */
