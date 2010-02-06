@@ -41,7 +41,7 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
     if (G_getl2(buff, 2000, dascii)) {
 	G_chop(buff);
 
-	if (!(ptr = G_index(buff, ':'))) {
+	if (!(ptr = strchr(buff, ':'))) {
 	    G_warning("Vector format not recognized: %s", buff);
 	    return (-1);
 	}
@@ -73,7 +73,7 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
     while (G_getl2(buff, 2000, dascii)) {
 	G_chop(buff);
 
-	if (!(ptr = G_index(buff, ':'))) {
+	if (!(ptr = strchr(buff, ':'))) {
 	    G_warning("Format definition is not correct: %s", buff);
 	    continue;
 	}
