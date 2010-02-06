@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-14 07:50+0100\n"
+"POT-Creation-Date: 2010-02-06 20:42+0100\n"
 "PO-Revision-Date: 2010-02-04 16:07+0900\n"
 "Last-Translator: \n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
@@ -73,12 +73,13 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/mapdisp.py:338
 #: ../gui/wxpython/gui_modules/mapdisp.py:395
 #: ../gui/wxpython/gui_modules/location_wizard.py:227
-#: ../gui/wxpython/gui_modules/location_wizard.py:567
-#: ../gui/wxpython/gui_modules/location_wizard.py:1500
-#: ../gui/wxpython/gui_modules/location_wizard.py:1967
-#: ../gui/wxpython/gui_modules/location_wizard.py:2298
-#: ../gui/wxpython/gui_modules/location_wizard.py:2315
-#: ../gui/wxpython/gui_modules/location_wizard.py:2622
+#: ../gui/wxpython/gui_modules/location_wizard.py:566
+#: ../gui/wxpython/gui_modules/location_wizard.py:752
+#: ../gui/wxpython/gui_modules/location_wizard.py:1487
+#: ../gui/wxpython/gui_modules/location_wizard.py:1954
+#: ../gui/wxpython/gui_modules/location_wizard.py:2285
+#: ../gui/wxpython/gui_modules/location_wizard.py:2302
+#: ../gui/wxpython/gui_modules/location_wizard.py:2609
 #: ../gui/wxpython/gui_modules/gcmd.py:66
 #: ../gui/wxpython/gui_modules/gcmd.py:92
 #: ../gui/wxpython/gui_modules/vdigit.py:2137
@@ -180,7 +181,7 @@ msgstr ""
 msgid "Please wait, loading workspace..."
 msgstr "しばらくお待ちください．ワークスペースロード中．．． "
 
-#: ../gui/wxpython/wxgui.py:742 ../gui/wxpython/menustrings.py:15
+#: ../gui/wxpython/wxgui.py:742
 msgid "Load map layers into layer tree"
 msgstr "レイヤーツリーにマップレイヤーをロード "
 
@@ -203,7 +204,6 @@ msgstr ""
 "ワークスペースファイル <%s> は既に存在します．上書きしてよろしいですか?  "
 
 #: ../gui/wxpython/wxgui.py:826 ../gui/wxpython/wxgui.py:844
-#: ../gui/wxpython/menustrings.py:9
 msgid "Save workspace"
 msgstr "ワークスペース保存 "
 
@@ -438,7 +438,7 @@ msgstr "グリッドまたはベクターラベル追加 "
 msgid "Delete selected layer"
 msgstr "選択レイヤーの削除 "
 
-#: ../gui/wxpython/icons/icon.py:202 ../gui/wxpython/gis_set.py:125
+#: ../gui/wxpython/icons/icon.py:202
 msgid "Quit"
 msgstr "終了 "
 
@@ -655,7 +655,7 @@ msgstr "GCPのセット "
 msgid "Define GCP (Ground Control Points)"
 msgstr "GCP（地上基準点）の定義 "
 
-#: ../gui/wxpython/icons/icon.py:314 ../gui/wxpython/menustrings.py:174
+#: ../gui/wxpython/icons/icon.py:314
 #: ../gui/wxpython/gui_modules/georect.py:148
 #: ../gui/wxpython/gui_modules/georect.py:154
 msgid "Georectify"
@@ -705,3300 +705,6 @@ msgstr "Nviz設定ダイアログの表示 "
 #: ../gui/wxpython/scripts/p.vect.py:356
 msgid "GRASS_PYCMDFILE - File not found. Run p.mon."
 msgstr ""
-
-#: ../gui/wxpython/menustrings.py:2
-#, fuzzy
-msgid "&File"
-msgstr "ファイル"
-
-#: ../gui/wxpython/menustrings.py:3
-#: ../gui/wxpython/gui_modules/preferences.py:1562
-msgid "Workspace"
-msgstr "ワークスペース "
-
-#: ../gui/wxpython/menustrings.py:4
-msgid "New"
-msgstr "新規 "
-
-#: ../gui/wxpython/menustrings.py:5
-msgid "Create new workspace"
-msgstr "ワークスペース新規作成 "
-
-#: ../gui/wxpython/menustrings.py:6
-msgid "Open"
-msgstr "オープン "
-
-#: ../gui/wxpython/menustrings.py:7
-msgid "Load workspace from file"
-msgstr "ファイルからワークスペースのロード "
-
-#: ../gui/wxpython/menustrings.py:8
-msgid "Save"
-msgstr "保存 "
-
-#: ../gui/wxpython/menustrings.py:10
-msgid "Save as"
-msgstr "別名で保存 "
-
-#: ../gui/wxpython/menustrings.py:11
-msgid "Save workspace to file"
-msgstr "現在のワークスペースを保存 "
-
-#: ../gui/wxpython/menustrings.py:12
-msgid "Close"
-msgstr "閉じる "
-
-#: ../gui/wxpython/menustrings.py:13
-#, fuzzy
-msgid "Close workspace file"
-msgstr "保存"
-
-#: ../gui/wxpython/menustrings.py:14
-msgid "Load map layers"
-msgstr "マップレイヤーのロード "
-
-#: ../gui/wxpython/menustrings.py:16
-msgid "Load GRC file (Tcl/Tk GUI)"
-msgstr "GRCファイル のロード(Tcl/Tk GUI)  "
-
-#: ../gui/wxpython/menustrings.py:17
-msgid "Load map layers from GRC file to layer tree"
-msgstr "GRC ファイルからマップレイヤーをレイヤーツリーにロード "
-
-#: ../gui/wxpython/menustrings.py:18
-msgid "Import raster map"
-msgstr "ラスターマップのインポート "
-
-#: ../gui/wxpython/menustrings.py:19
-msgid "Import raster data using GDAL"
-msgstr "GDAL用ラスターデータのインポート "
-
-#: ../gui/wxpython/menustrings.py:20
-msgid "Import GDAL supported raster file into a binary raster map layer."
-msgstr "GDALファイルをラスターマップとしてインポート "
-
-#: ../gui/wxpython/menustrings.py:21
-msgid "Multiple raster data import using GDAL"
-msgstr "GDAL用ラスターデータのインポート "
-
-#: ../gui/wxpython/menustrings.py:22
-msgid "Converts selected GDAL layers to GRASS raster maps using r.in.gdal"
-msgstr " r.in.gdalで使用できる GDALレイヤーのコンバート "
-
-#: ../gui/wxpython/menustrings.py:23
-msgid "Link to GDAL"
-msgstr "GDALのリンク "
-
-#: ../gui/wxpython/menustrings.py:24
-msgid "Link GDAL supported raster file to a binary raster map layer."
-msgstr "GDALファイルをラスターマップとしてリンク "
-
-#: ../gui/wxpython/menustrings.py:25
-msgid "Multiple link to GDAL"
-msgstr "GDALへの複数リンク "
-
-#: ../gui/wxpython/menustrings.py:26
-msgid "Link GDAL supported raster files to a binary raster map layers"
-msgstr "GDALファイルをラスターマップとしてリンク "
-
-#: ../gui/wxpython/menustrings.py:27
-msgid "Aggregate ASCII xyz import"
-msgstr "ASCII xyz統計のインポート "
-
-#: ../gui/wxpython/menustrings.py:28
-msgid ""
-"Create a raster map from an assemblage of many coordinates using univariate "
-"statistics."
-msgstr "複数の単変量統計情報の座標系を集約しラスターマップを作成 "
-
-#: ../gui/wxpython/menustrings.py:29
-msgid "ASCII grid import"
-msgstr "ASCIIグリッドのインポート "
-
-#: ../gui/wxpython/menustrings.py:30
-msgid "Converts ASCII raster file to binary raster map layer."
-msgstr "ASCIIラスターをバイナリラスターへコンバート "
-
-#: ../gui/wxpython/menustrings.py:31
-msgid "ASCII polygons and lines import"
-msgstr "ASCII ポリゴンとラインをインポート "
-
-#: ../gui/wxpython/menustrings.py:32
-msgid "Creates raster maps from ASCII polygon/line/point data files."
-msgstr "ASCII ポリゴン/ライン/ポイントデータファイルからラスターマップを作成 "
-
-#: ../gui/wxpython/menustrings.py:33
-msgid "Binary file import"
-msgstr "バイナリーファイル インポート "
-
-#: ../gui/wxpython/menustrings.py:34
-msgid "Import a binary raster file into a GRASS raster map layer."
-msgstr "バイナリーファイルをラスターマップとしてインポート "
-
-#: ../gui/wxpython/menustrings.py:35
-msgid "ESRI ASCII grid import"
-msgstr "ESRI ASCII グリッド インポート "
-
-#: ../gui/wxpython/menustrings.py:36
-msgid ""
-"Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
-"map layer."
-msgstr "ESRI ARC/INFO ASCIIラスターファイルをラスターマップとしてインポート "
-
-#: ../gui/wxpython/menustrings.py:37
-msgid "GRIDATB.FOR import"
-msgstr "GRIDATB.FOR インポート "
-
-#: ../gui/wxpython/menustrings.py:38
-msgid "Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map"
-msgstr "バイナリーファイルをラスターマップとしてインポートします "
-
-#: ../gui/wxpython/menustrings.py:39
-msgid "Matlab 2D array import"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:40
-msgid "Imports a binary MAT-File(v4) to a GRASS raster."
-msgstr "MAT-File(v4) をラスタマップとしてインポート "
-
-#: ../gui/wxpython/menustrings.py:41
-msgid "SPOT NDVI import"
-msgstr "SPOT NDVI インポート "
-
-#: ../gui/wxpython/menustrings.py:42
-msgid "Import of SPOT VGT NDVI file into a raster map"
-msgstr "SPOT VGT NDVIファイル をラスタマップとしてインポート "
-
-#: ../gui/wxpython/menustrings.py:43
-msgid "SRTM HGT import"
-msgstr "SRTM HGT インポート "
-
-#: ../gui/wxpython/menustrings.py:44
-msgid "Import SRTM HGT files into GRASS"
-msgstr "輸入 SRTM HGTファイルをインポート "
-
-#: ../gui/wxpython/menustrings.py:45
-msgid "Terra ASTER HDF import"
-msgstr "Terra ASTER HDF インポート "
-
-#: ../gui/wxpython/menustrings.py:46
-msgid ""
-"Georeference, rectify, and import Terra-ASTER imagery and relative DEM's "
-"using gdalwarp."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:47
-msgid "WMS import"
-msgstr "WMS インポート "
-
-#: ../gui/wxpython/menustrings.py:48
-msgid "Downloads and imports data from WMS servers"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:49
-msgid "Import vector map"
-msgstr "ベクトルマップのインポート "
-
-#: ../gui/wxpython/menustrings.py:50
-msgid "Import vector data using OGR"
-msgstr "OGRを使用したベクトルデータのインポート "
-
-#: ../gui/wxpython/menustrings.py:51
-msgid "Convert OGR vector layers to GRASS vector map."
-msgstr "OGRベクトルレイヤーからGRASSベクトルマップへコンバート "
-
-#: ../gui/wxpython/menustrings.py:52
-msgid "Multiple vector data import using OGR"
-msgstr "OGRを使用したベクトルデータのインポート "
-
-#: ../gui/wxpython/menustrings.py:53
-msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
-msgstr "v.in.ogrを使用してOGRレイヤーからGRASSベクトルマップへコンバート "
-
-#: ../gui/wxpython/menustrings.py:54
-msgid "Link to OGR"
-msgstr "OGRのリンク "
-
-#: ../gui/wxpython/menustrings.py:55
-#, fuzzy
-msgid "Creates a new vector map as a link to OGR layer."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:56
-msgid "Multiple link to OGR"
-msgstr "OGRレイヤーへの複数リンク "
-
-#: ../gui/wxpython/menustrings.py:57
-msgid "Creates a new vectors as a read-only link to OGR layers"
-msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
-
-#: ../gui/wxpython/menustrings.py:58
-msgid "ASCII points/GRASS ASCII vector import"
-msgstr "ASCII ポイント/GRASS ASCII ベクトル インポート "
-
-#: ../gui/wxpython/menustrings.py:59
-msgid "Creates a vector map from ASCII points file or ASCII vector file."
-msgstr ""
-"ASCIIポイントファイルまたはASCIIベクトルファイルから新規ベクトルマップ作成 "
-
-#: ../gui/wxpython/menustrings.py:60
-#, fuzzy
-msgid "ASCII points as a vector lines"
-msgstr "ベクトル"
-
-#: ../gui/wxpython/menustrings.py:61
-#, fuzzy
-msgid "Creates a lines vector map from an ASCII x,y points file."
-msgstr "ベクトル ベクトル."
-
-#: ../gui/wxpython/menustrings.py:62
-msgid "Old GRASS vector import"
-msgstr "旧GRASSベクトルデータインポート "
-
-#: ../gui/wxpython/menustrings.py:63
-msgid "Imports older versions of GRASS vector maps."
-msgstr "旧GRASSフォーマットベクトルマップインポート "
-
-#: ../gui/wxpython/menustrings.py:64
-msgid "DXF import"
-msgstr "DXFインポート "
-
-#: ../gui/wxpython/menustrings.py:65
-msgid "Converts files in DXF format to GRASS vector map format."
-msgstr "DXFフォーマットからGRASSベクトルフォーマットへコンバート "
-
-#: ../gui/wxpython/menustrings.py:66
-msgid "Multiple DXF layers import"
-msgstr "複数のDXFレイヤーインポート "
-
-#: ../gui/wxpython/menustrings.py:67
-msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)"
-msgstr "v.in.dxfを利用してDXFレイヤーからGRASSベクトルマップへコンバート "
-
-#: ../gui/wxpython/menustrings.py:68
-msgid "ESRI e00 import"
-msgstr "ESRI e00 インポート "
-
-#: ../gui/wxpython/menustrings.py:69
-msgid "Import E00 file into a vector map."
-msgstr "E00ファイルをベクトルマップへインポート "
-
-#: ../gui/wxpython/menustrings.py:70
-msgid "Garmin GPS import"
-msgstr "ガーミンGPS インポート "
-
-#: ../gui/wxpython/menustrings.py:71
-#, fuzzy
-msgid ""
-"Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
-"vector map"
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:72
-msgid "GPSBabel GPS import"
-msgstr "GPSBabel GPS インポート "
-
-#: ../gui/wxpython/menustrings.py:73
-#, fuzzy
-msgid ""
-"Import waypoints, routes, and tracks from a GPS receiver or GPS download "
-"file into a vector map"
-msgstr "インポート ベクトル."
-
-#: ../gui/wxpython/menustrings.py:74
-msgid "Geonames import"
-msgstr "Geonames インポート "
-
-#: ../gui/wxpython/menustrings.py:75
-msgid "Imports geonames.org country files into a GRASS vector points map."
-msgstr " geonames.org からGRASSベクトルマップへインポート "
-
-#: ../gui/wxpython/menustrings.py:76
-msgid "GEOnet import"
-msgstr "GEOnet インポート "
-
-#: ../gui/wxpython/menustrings.py:77
-msgid ""
-"Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector "
-"points map."
-msgstr "US-NGA GEOnet Names Server (GNS)  からGRASSベクトルマップへインポート "
-
-#: ../gui/wxpython/menustrings.py:78
-msgid "Matlab array and MapGen import"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:79
-msgid "Import Mapgen or Matlab vector maps into GRASS."
-msgstr "Mapgen または Matlab のベクトルマップをGRASSへインポート "
-
-#: ../gui/wxpython/menustrings.py:80
-msgid "Import grid 3D volume"
-msgstr "３Dグリッド値のインポート "
-
-#: ../gui/wxpython/menustrings.py:81
-msgid "ASCII 3D import"
-msgstr "ASCII ３D インポート "
-
-#: ../gui/wxpython/menustrings.py:82
-msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
-msgstr ""
-"３D ASCII ラスターテキストファイルを 3Dラスターマップレイヤーへインポート "
-
-#: ../gui/wxpython/menustrings.py:83
-msgid "Vis5D import"
-msgstr "Vis5D インポート "
-
-#: ../gui/wxpython/menustrings.py:84
-msgid ""
-"import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 "
-"time step)"
-msgstr ""
-"3D Vis5Dファイルのインポート (i.e. the v5d ファイル with 1 variable and 1 "
-"time step) "
-
-#: ../gui/wxpython/menustrings.py:85
-msgid "Import database table"
-msgstr "データベーステーブルのインポート "
-
-#: ../gui/wxpython/menustrings.py:86
-msgid "Multiple import formats using OGR"
-msgstr "OGRを使用したベ複数インポートフォーマット "
-
-#: ../gui/wxpython/menustrings.py:87
-msgid "Imports attribute tables in various formats."
-msgstr "複数フォーマットからなる属性テーブルのインポート "
-
-#: ../gui/wxpython/menustrings.py:88
-msgid "Export raster map"
-msgstr "ラスターマップのエクスポート "
-
-#: ../gui/wxpython/menustrings.py:89
-msgid "Multiple export formats using GDAL"
-msgstr "GDAL用複数エクスポートフォーマット "
-
-#: ../gui/wxpython/menustrings.py:90
-msgid "Exports GRASS raster maps into GDAL supported formats."
-msgstr "GDAL用フォーマットへのラスターマップのエクスポート "
-
-#: ../gui/wxpython/menustrings.py:91
-msgid "ASCII grid export"
-msgstr "ASCIIグリッドのエクスポート "
-
-#: ../gui/wxpython/menustrings.py:92
-msgid "Converts a raster map layer into an ASCII text file."
-msgstr "ASCIIテキストのラスターマップにコンバート "
-
-#: ../gui/wxpython/menustrings.py:93
-msgid "ASCII x,y,z export"
-msgstr "ASCII XYZ エクスポート "
-
-#: ../gui/wxpython/menustrings.py:94
-msgid ""
-"Export a raster map to a text file as x,y,z values based on cell centers."
-msgstr "セルの中心をXYZ値としてラスターマップをエクスポート "
-
-#: ../gui/wxpython/menustrings.py:95
-msgid "ESRI ASCII grid export"
-msgstr "ESRI ASCII グリッド エクスポート "
-
-#: ../gui/wxpython/menustrings.py:96
-msgid "Converts a raster map layer into an ESRI ARCGRID file."
-msgstr "ラスターマップをESRI ARC/INFO ASCII-GRIDファイルとしてエクスポート "
-
-#: ../gui/wxpython/menustrings.py:97
-msgid "GRIDATB.FOR export"
-msgstr "GRIDATB.FOR エクスポート "
-
-#: ../gui/wxpython/menustrings.py:98
-msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
-msgstr "GRIDATB.FOR をラスタマップとしてエクスポート "
-
-#: ../gui/wxpython/menustrings.py:99
-msgid "Matlab 2D array export"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:100
-msgid "Exports a GRASS raster to a binary MAT-File."
-msgstr "MAT-Fileへエクスポート "
-
-#: ../gui/wxpython/menustrings.py:101
-msgid "Binary export"
-msgstr "バイナリーエクスポート "
-
-#: ../gui/wxpython/menustrings.py:102
-msgid "Exports a GRASS raster to a binary array."
-msgstr "バイナリアレイとしてエクスポート "
-
-#: ../gui/wxpython/menustrings.py:103
-msgid "MPEG-1 export"
-msgstr "MPEG-1エクスポート "
-
-#: ../gui/wxpython/menustrings.py:104
-msgid "Raster File Series to MPEG Conversion Program."
-msgstr "MPEG変換プログラム "
-
-#: ../gui/wxpython/menustrings.py:105
-msgid "PNG export"
-msgstr "PNGエクスポート "
-
-#: ../gui/wxpython/menustrings.py:106
-msgid "Export GRASS raster as non-georeferenced PNG image format."
-msgstr "PNGイメージフォーマットへエクスポート "
-
-#: ../gui/wxpython/menustrings.py:107
-msgid "PPM export"
-msgstr "PPMエクスポート "
-
-#: ../gui/wxpython/menustrings.py:108
-msgid ""
-"Converts a GRASS raster map to a PPM image file at the pixel resolution of "
-"the currently defined region."
-msgstr "指定されている領域のピクセル情報をPPMイメージファイルへコンバート "
-
-#: ../gui/wxpython/menustrings.py:109
-msgid "PPM from RGB export"
-msgstr "RGBからPPMへエクスポート "
-
-#: ../gui/wxpython/menustrings.py:110
-msgid ""
-"Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
-"resolution of the CURRENTLY DEFINED REGION."
-msgstr "指定されている領域のRGB情報をPPMイメージファイルへコンバート "
-
-#: ../gui/wxpython/menustrings.py:111 ../gui/wxpython/menustrings.py:128
-msgid "POV-Ray export"
-msgstr "POV-Ray エクスポート "
-
-#: ../gui/wxpython/menustrings.py:112
-msgid "Converts a raster map layer into a height-field file for POVRAY."
-msgstr "POV-Rayのハイト・フィールドにラスターマップをコンバート "
-
-#: ../gui/wxpython/menustrings.py:113
-msgid "TIFF export"
-msgstr "TIFF エクスポート "
-
-#: ../gui/wxpython/menustrings.py:114
-msgid ""
-"Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel "
-"resolution of the currently defined region."
-msgstr ""
-"指定されている領域のラスターマップを8/24ビット TIFFイメージファイルへコンバー"
-"ト "
-
-#: ../gui/wxpython/menustrings.py:115
-msgid "VRML export"
-msgstr "VRML エクスポート "
-
-#: ../gui/wxpython/menustrings.py:116
-msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
-msgstr "ラスターマップをVRMLへエクスポート "
-
-#: ../gui/wxpython/menustrings.py:117 ../gui/wxpython/menustrings.py:132
-#: ../gui/wxpython/menustrings.py:139
-msgid "VTK export"
-msgstr "VTK エクスポート "
-
-#: ../gui/wxpython/menustrings.py:118
-msgid "Converts raster maps into the VTK-Ascii format"
-msgstr "ラスターマップを VTK-Ascii フォーマットへコンバート "
-
-#: ../gui/wxpython/menustrings.py:119
-msgid "Export vector map"
-msgstr "ベクトルマップのエクスポート "
-
-#: ../gui/wxpython/menustrings.py:120 ../gui/wxpython/menustrings.py:142
-msgid "Multiple export formats using OGR"
-msgstr "OGRを使用したベクトルデータのエクスポート "
-
-#: ../gui/wxpython/menustrings.py:121
-#, fuzzy
-msgid "Converts vector map to one of the supported OGR vector formats."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:122
-msgid "ASCII points/GRASS ASCII vector export"
-msgstr "ASCII ポイント/GRASS ASCII ベクトル エクスポート "
-
-#: ../gui/wxpython/menustrings.py:123
-#, fuzzy
-msgid "Exports a vector map to a GRASS ASCII vector representation."
-msgstr "ベクトル ベクトル."
-
-#: ../gui/wxpython/menustrings.py:124
-msgid "DXF export"
-msgstr "DXF エクスポート "
-
-#: ../gui/wxpython/menustrings.py:125
-#, fuzzy
-msgid "Exports vector map to DXF file format."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:126
-msgid "Multiple GPS export formats using GPSBabel"
-msgstr "GPSBabel 形式にエクスポート "
-
-#: ../gui/wxpython/menustrings.py:127
-msgid ""
-"Exports a vector map to a GPS receiver or file format supported by GpsBabel."
-msgstr "ベクトルマップをGPSレシーバーまたはGPSBabel 形式にエクスポート "
-
-#: ../gui/wxpython/menustrings.py:129
-msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:130
-msgid "SVG export"
-msgstr "SVG エクスポート "
-
-#: ../gui/wxpython/menustrings.py:131
-#, fuzzy
-msgid "Exports a vector map to SVG file."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:133
-#, fuzzy
-msgid "Converts a vector map to VTK ASCII output."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:134
-msgid "Export grid 3D volume"
-msgstr "３Dグリッド値 エクスポート "
-
-#: ../gui/wxpython/menustrings.py:135
-msgid "ASCII 3D export"
-msgstr "ASCII 3D エクスポート "
-
-#: ../gui/wxpython/menustrings.py:136
-msgid "Converts a 3D raster map layer into an ASCII text file"
-msgstr "3D ラスターマップをASCIIテキストファイルにコンバート "
-
-#: ../gui/wxpython/menustrings.py:137
-msgid "Vis5D export"
-msgstr "Vis5D エキスポート "
-
-#: ../gui/wxpython/menustrings.py:138
-msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
-msgstr "GRASS 3D ラスターマップを3D Vis5D ファイルにエキスポート "
-
-#: ../gui/wxpython/menustrings.py:140
-msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
-msgstr "3D ラスターマップを VTK-ASCII形式でコンバート "
-
-#: ../gui/wxpython/menustrings.py:141
-msgid "Export database table"
-msgstr "データベーステーブルのエクスポート "
-
-#: ../gui/wxpython/menustrings.py:143
-msgid "Exports attribute tables into various formats."
-msgstr "属性テーブルを別のフォーマットにエクスポート "
-
-#: ../gui/wxpython/menustrings.py:144
-msgid "Manage maps and volumes"
-msgstr "マップと値の管理 "
-
-#: ../gui/wxpython/menustrings.py:145
-msgid "Copy"
-msgstr "コピー "
-
-#: ../gui/wxpython/menustrings.py:146
-msgid ""
-"Copies available data files in the user's current mapset search path and "
-"location to the appropriate element directories under the user's current "
-"mapset."
-msgstr "現在のマップセットにあるファイルを適切な場所にコピーします "
-
-#: ../gui/wxpython/menustrings.py:147
-msgid "List"
-msgstr "リスト "
-
-#: ../gui/wxpython/menustrings.py:148
-#, fuzzy
-msgid "Lists available GIS elements of the user-specified data type."
-msgstr "現在使用できるマップの一覧を表示します"
-
-#: ../gui/wxpython/menustrings.py:149
-msgid "List filtered"
-msgstr "フィルター "
-
-#: ../gui/wxpython/menustrings.py:150
-msgid ""
-"Lists available GRASS data base files of the user-specified data type to "
-"standard output."
-msgstr "現在使用できるマップが出力可能な形式の一覧を表示 "
-
-#: ../gui/wxpython/menustrings.py:151
-#: ../gui/wxpython/gui_modules/wxgui_utils.py:260
-msgid "Rename"
-msgstr "名前変更 "
-
-#: ../gui/wxpython/menustrings.py:152
-msgid "Renames data base element files in the user's current mapset."
-msgstr "現在使用できるマップセットのエレメントファイルの名前を変更 "
-
-#: ../gui/wxpython/menustrings.py:153
-msgid "Delete"
-msgstr "削除 "
-
-#: ../gui/wxpython/menustrings.py:154 ../gui/wxpython/menustrings.py:156
-msgid "Removes data base element files from the user's current mapset."
-msgstr "現在のマップセットからデータベースエレメントファイルを削除します "
-
-#: ../gui/wxpython/menustrings.py:155
-msgid "Delete filtered"
-msgstr "フィルターを削除 "
-
-#: ../gui/wxpython/menustrings.py:157
-msgid "Map type conversions"
-msgstr "マップタイプの変換 "
-
-#: ../gui/wxpython/menustrings.py:158
-msgid "Raster to vector"
-msgstr "ラスタ → ベクトル "
-
-#: ../gui/wxpython/menustrings.py:159
-msgid "Converts a raster map into a vector map layer."
-msgstr "ベクトルマップレイヤーにラスタマップをコンバート "
-
-#: ../gui/wxpython/menustrings.py:160
-msgid "Raster series to volume"
-msgstr "ラスターシリーズの値 "
-
-#: ../gui/wxpython/menustrings.py:161
-msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr "2Dラスターマップ断面を １つの 3Dラスターマップの値としてコンバート "
-
-#: ../gui/wxpython/menustrings.py:162
-msgid "Raster 2.5D to volume"
-msgstr "ラスター 2.5Dの値 "
-
-#: ../gui/wxpython/menustrings.py:163
-msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-msgstr "標高データとラスターマップから3Dマップを作成 "
-
-#: ../gui/wxpython/menustrings.py:164
-msgid "Vector to raster"
-msgstr "ベクトル → ラスター "
-
-#: ../gui/wxpython/menustrings.py:165
-msgid "Converts a binary GRASS vector map into a GRASS raster map ."
-msgstr "ラスターマップ内にベクトルマップをコンバート "
-
-#: ../gui/wxpython/menustrings.py:166
-msgid "Vector to volume"
-msgstr "ベクトル → ボリューム "
-
-#: ../gui/wxpython/menustrings.py:167
-msgid ""
-"Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
-"raster map layer."
-msgstr "3Dラスターマップ内にベクトルマップ（ポイントのみ）をコンバート "
-
-#: ../gui/wxpython/menustrings.py:168
-msgid "2D vector to 3D vector"
-msgstr "2Dベクトル → 3Dベクトル "
-
-#: ../gui/wxpython/menustrings.py:169
-msgid "Performs transformation of 2D vector features to 3D."
-msgstr "2Dベクトルデータを3Dに変換します "
-
-#: ../gui/wxpython/menustrings.py:170
-msgid "Sites to vector"
-msgstr "サイト → ベクトル "
-
-#: ../gui/wxpython/menustrings.py:171
-msgid "Converts a GRASS site_lists file into a vector map."
-msgstr "ベクトルマップ内にGRASSサイトリストファイルをコンバートする "
-
-#: ../gui/wxpython/menustrings.py:172
-msgid "Volume to raster series"
-msgstr "ボリューム → ラスターシリーズ "
-
-#: ../gui/wxpython/menustrings.py:173
-msgid "Converts 3D raster maps to 2D raster maps"
-msgstr "3Dラスターマップから2Dラスターマップへコンバート "
-
-#: ../gui/wxpython/menustrings.py:175
-msgid "Georectify raster and vector maps"
-msgstr "ラスタマップとベクトルマップの幾何補正 "
-
-#: ../gui/wxpython/menustrings.py:176
-msgid "NVIZ (requires Tcl/Tk)"
-msgstr "NVIZ(Tcl/Tkでの処理)  "
-
-#: ../gui/wxpython/menustrings.py:177
-msgid "nviz - Visualization and animation tool for GRASS data."
-msgstr "nviz - GRASSの視覚化＆アニメーションツール "
-
-#: ../gui/wxpython/menustrings.py:178
-msgid "Bearing/distance to coordinates"
-msgstr "座標の角度/距離 "
-
-#: ../gui/wxpython/menustrings.py:179
-msgid ""
-"A simple utility for converting bearing and distance measurements to "
-"coordinates and vice versa."
-msgstr "座標と方向＆距離間のコンバートユーティリティ "
-
-#: ../gui/wxpython/menustrings.py:180
-msgid "Postscript plot"
-msgstr "ポストスクリプトプロット "
-
-#: ../gui/wxpython/menustrings.py:181
-msgid "Hardcopy PostScript map output utility."
-msgstr "ポストスクリプト出力ユーティリティ "
-
-#: ../gui/wxpython/menustrings.py:182
-msgid "Launch script"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:183
-msgid "Launches script file."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:184
-msgid "Exit GUI"
-msgstr "GUI 終了 "
-
-#: ../gui/wxpython/menustrings.py:185
-msgid "Quit wxGUI session"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:186
-#, fuzzy
-msgid "Quit GRASS GIS"
-msgstr "終了"
-
-#: ../gui/wxpython/menustrings.py:187
-msgid "Quit GRASS session including wxGUI"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:188
-#, fuzzy
-msgid "C&onfig"
-msgstr "設定"
-
-#: ../gui/wxpython/menustrings.py:189
-msgid "Region"
-msgstr "領域"
-
-#: ../gui/wxpython/menustrings.py:190
-msgid "Display region"
-msgstr "表示領域"
-
-#: ../gui/wxpython/menustrings.py:191 ../gui/wxpython/menustrings.py:193
-msgid "Manages the boundary definitions for the geographic region."
-msgstr "表示領域の境界定義を管理 "
-
-#: ../gui/wxpython/menustrings.py:192
-msgid "Set region"
-msgstr "領域設定"
-
-#: ../gui/wxpython/menustrings.py:194
-msgid "GRASS working environment"
-msgstr "GRASS作業環境 "
-
-#: ../gui/wxpython/menustrings.py:195
-msgid "Mapset access"
-msgstr "マップセット作成 "
-
-#: ../gui/wxpython/menustrings.py:196
-msgid "Set/unset access to other mapsets in current location"
-msgstr "現在のロケーションに他のマップセットの追加をセットする/しない "
-
-#: ../gui/wxpython/menustrings.py:197
-msgid "User access"
-msgstr "ユーザーアクセス "
-
-#: ../gui/wxpython/menustrings.py:198
-msgid "Controls access to the current mapset for other users on the system."
-msgstr "現在のマップセットに対する他ユーザーからのアクセスコントロール "
-
-#: ../gui/wxpython/menustrings.py:199
-msgid "Change working environment"
-msgstr "作業環境を変更する "
-
-#: ../gui/wxpython/menustrings.py:200 ../gui/wxpython/menustrings.py:204
-msgid "Change current mapset."
-msgstr "マップセットを変更する "
-
-#: ../gui/wxpython/menustrings.py:201
-#, fuzzy
-msgid "Change location and mapset"
-msgstr "プロジェクトのロケーションとマップセットを選択"
-
-#: ../gui/wxpython/menustrings.py:202
-#, fuzzy
-msgid "Change current location and mapset."
-msgstr "プロジェクトのロケーションとマップセットを選択"
-
-#: ../gui/wxpython/menustrings.py:203
-#, fuzzy
-msgid "Change mapset"
-msgstr "マップセットの新規作成"
-
-#: ../gui/wxpython/menustrings.py:205
-msgid "Show settings"
-msgstr "設定情報 "
-
-#: ../gui/wxpython/menustrings.py:206 ../gui/wxpython/menustrings.py:208
-msgid "Outputs and modifies the user's current GRASS variable settings."
-msgstr "GRASSのユーザー設定係数の更新/出力 "
-
-#: ../gui/wxpython/menustrings.py:207
-msgid "Change settings"
-msgstr "設定変更 "
-
-#: ../gui/wxpython/menustrings.py:209
-msgid "Change default GUI"
-msgstr "デフォルトGUI変更 "
-
-#: ../gui/wxpython/menustrings.py:210
-msgid "Changes the default GRASS graphical user interface (GUI) setting."
-msgstr "GRASSのデフォルトGUI 設定の変更 "
-
-#: ../gui/wxpython/menustrings.py:211
-msgid "Version"
-msgstr "バージョン "
-
-#: ../gui/wxpython/menustrings.py:212
-msgid "Displays version and copyright information."
-msgstr "ディスプレイバージョン コピーライト情報 "
-
-#: ../gui/wxpython/menustrings.py:213 ../gui/wxpython/menustrings.py:214
-msgid "Manage projections"
-msgstr "投影法の管理 "
-
-#: ../gui/wxpython/menustrings.py:215
-msgid ""
-"Converts co-ordinate system descriptions (i.e. projection information) "
-"between various formats (including GRASS format)."
-msgstr "様々なフォーマット間での座標系（i.e. 投影情報）のコンバート "
-
-#: ../gui/wxpython/menustrings.py:216
-msgid "Convert coordinates"
-msgstr "座標変換 "
-
-#: ../gui/wxpython/menustrings.py:217
-msgid "Converts coordinates from one projection to another (cs2cs frontend)."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:218
-#, fuzzy
-msgid "Manage extensions"
-msgstr "ガンマ"
-
-#: ../gui/wxpython/menustrings.py:219
-msgid "Tool to maintain GRASS extensions in local GRASS installation."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:220
-msgid "Preferences"
-msgstr "設定 "
-
-#: ../gui/wxpython/menustrings.py:221
-msgid "User GUI preferences (display font, commands, digitizer, etc.)"
-msgstr "ユーザーGUI設定 (フォント, コマンド,デジタイザー, etc.)  "
-
-#: ../gui/wxpython/menustrings.py:222
-#, fuzzy
-msgid "&Raster"
-msgstr "ファイル"
-
-#: ../gui/wxpython/menustrings.py:223
-msgid "Develop raster map"
-msgstr "ラスターマップの展開 "
-
-#: ../gui/wxpython/menustrings.py:224
-msgid "Compress/decompress"
-msgstr "圧縮/解凍 "
-
-#: ../gui/wxpython/menustrings.py:225
-msgid "Compresses and decompresses raster maps."
-msgstr "ラスターマップの圧縮/解凍 "
-
-#: ../gui/wxpython/menustrings.py:226
-msgid "Region boundaries"
-msgstr "領域境界 "
-
-#: ../gui/wxpython/menustrings.py:227
-msgid "Sets the boundary definitions for a raster map."
-msgstr "ラスターマップの境界を定義 "
-
-#: ../gui/wxpython/menustrings.py:228
-msgid "Manage NULL values"
-msgstr "NULL値の管理 "
-
-#: ../gui/wxpython/menustrings.py:229
-msgid "Manages NULL-values of given raster map."
-msgstr "ラスターマップのNULL値の管理 "
-
-#: ../gui/wxpython/menustrings.py:230
-msgid "Quantization"
-msgstr "量子化 "
-
-#: ../gui/wxpython/menustrings.py:231
-msgid "Produces the quantization file for a floating-point map."
-msgstr "浮動小数点マップのための量子化ファイルを生成 "
-
-#: ../gui/wxpython/menustrings.py:232
-msgid "Timestamp"
-msgstr "タイムスタンプ "
-
-#: ../gui/wxpython/menustrings.py:233
-msgid "Print/add/remove a timestamp for a raster map."
-msgstr "タイムスタンプの印刷/追加/削除 "
-
-#: ../gui/wxpython/menustrings.py:234
-msgid "Resample using aggregate statistics"
-msgstr "総量統計を使用した再サンプリング "
-
-#: ../gui/wxpython/menustrings.py:235
-msgid "Resamples raster map layers to a coarser grid using aggregation."
-msgstr "疎グリッドの集成使用したラスターレイヤーの再サンプリング "
-
-#: ../gui/wxpython/menustrings.py:236
-msgid "Resample using multiple methods"
-msgstr "複数手法による再サンプリング "
-
-#: ../gui/wxpython/menustrings.py:237
-msgid "Resamples raster map layers to a finer grid using interpolation."
-msgstr "グリッド補間を使用したラスターレイヤーの再サンプリング "
-
-#: ../gui/wxpython/menustrings.py:238
-msgid "Resample using nearest neighbor"
-msgstr "近接情報を利用した再サンプリング "
-
-#: ../gui/wxpython/menustrings.py:239
-msgid "GRASS raster map layer data resampling capability."
-msgstr "ラスターマップレイヤーのリサンプリング機能 "
-
-#: ../gui/wxpython/menustrings.py:240
-msgid "Resample using spline tension"
-msgstr " スプラインテンションによる再サンプリング "
-
-#: ../gui/wxpython/menustrings.py:241
-msgid ""
-"Reinterpolates and optionally computes topographic analysis from input "
-"raster map to a new raster map (possibly with different resolution) using "
-"regularized spline with tension and smoothing."
-msgstr ""
-"再補間およびオプションで入力ラスターマップから新しいラスターマップに異なる解"
-"像度の（おそらく）張力と平滑化でスプライン正則化を使って地形解析します "
-
-#: ../gui/wxpython/menustrings.py:242 ../gui/wxpython/menustrings.py:507
-msgid "Support file maintenance"
-msgstr "サポートファイルの保守 "
-
-#: ../gui/wxpython/menustrings.py:243
-msgid "Allows creation and/or modification of raster map layer support files."
-msgstr "ラスターマップサポートファイルの作成・更新 "
-
-#: ../gui/wxpython/menustrings.py:244
-msgid "Update map statistics"
-msgstr "マップ統計の更新 "
-
-#: ../gui/wxpython/menustrings.py:245
-msgid "Update raster map statistics"
-msgstr "ラスターマップ統計の更新 "
-
-#: ../gui/wxpython/menustrings.py:246
-msgid "Reproject raster"
-msgstr "ラスターの投影変換 "
-
-#: ../gui/wxpython/menustrings.py:247
-msgid "Re-projects a raster map from one location to the current location."
-msgstr "ラスターマップの現在のロケーションに投影変換 "
-
-#: ../gui/wxpython/menustrings.py:248
-msgid "Tiling"
-msgstr "タイル "
-
-#: ../gui/wxpython/menustrings.py:249
-msgid ""
-"Produces tilings of the source projection for use in the destination region "
-"and projection."
-msgstr "使用中の領域と投影法でタイルを作成する "
-
-#: ../gui/wxpython/menustrings.py:250 ../gui/wxpython/menustrings.py:509
-msgid "Manage colors"
-msgstr "カラー調整 "
-
-#: ../gui/wxpython/menustrings.py:251 ../gui/wxpython/menustrings.py:510
-msgid "Color tables"
-msgstr "カラーテーブル "
-
-#: ../gui/wxpython/menustrings.py:252 ../gui/wxpython/menustrings.py:256
-msgid "Creates/modifies the color table associated with a raster map layer."
-msgstr "ラスターマップのカラーテーブルを作成/編集します "
-
-#: ../gui/wxpython/menustrings.py:253
-msgid "Color tables (stddev)"
-msgstr "カラーテーブル (標準出力) "
-
-#: ../gui/wxpython/menustrings.py:254
-msgid "Set color rules based on stddev from a map's mean value."
-msgstr "マップの平均値からstddevのカラーテーブルを設定 "
-
-#: ../gui/wxpython/menustrings.py:255 ../gui/wxpython/menustrings.py:512
-msgid "Color rules"
-msgstr "カラールール "
-
-#: ../gui/wxpython/menustrings.py:257
-msgid "Blend 2 color rasters"
-msgstr "2色のカラーラスターをブレンド "
-
-#: ../gui/wxpython/menustrings.py:258
-msgid "Blends color components of two raster maps by a given ratio."
-msgstr "指定された比率で 2 色のカラーラスターをブレンド "
-
-#: ../gui/wxpython/menustrings.py:259
-msgid "Create RGB"
-msgstr "RGB 作成 "
-
-#: ../gui/wxpython/menustrings.py:260
-msgid ""
-"Combines red, green and blue raster maps into a single composite raster map."
-msgstr "コンポジットラスターマップに R,G,Bラスターマップを合成する "
-
-#: ../gui/wxpython/menustrings.py:261 ../gui/wxpython/menustrings.py:630
-msgid "RGB to HIS"
-msgstr "RGB → HIS "
-
-#: ../gui/wxpython/menustrings.py:262
-msgid ""
-"Generates red, green and blue raster map layers combining hue, intensity and "
-"saturation (HIS) values from user-specified input raster map layers."
-msgstr "ラスターマップのR，G，Bレイヤーを色相/照度/彩度に対応させて合成する "
-
-#: ../gui/wxpython/menustrings.py:263
-msgid "Query raster maps"
-msgstr "ラスターマップの検索 "
-
-#: ../gui/wxpython/menustrings.py:264
-msgid "Query values by coordinates"
-msgstr "座標値からの検索 "
-
-#: ../gui/wxpython/menustrings.py:265
-msgid "Queries raster map layers on their category values and category labels."
-msgstr "カテゴリー情報からラスターマップレイヤーを検索 "
-
-#: ../gui/wxpython/menustrings.py:266
-msgid "Query colors by value"
-msgstr "カラーの値から検索 "
-
-#: ../gui/wxpython/menustrings.py:267
-msgid "Queries colors for a raster map layer."
-msgstr "ラスターマップレイヤーのカラーから検索 "
-
-#: ../gui/wxpython/menustrings.py:268
-msgid "Buffer rasters"
-msgstr "バッファラスター "
-
-#: ../gui/wxpython/menustrings.py:269
-msgid ""
-"Creates a raster map layer showing buffer zones surrounding cells that "
-"contain non-NULL category values."
-msgstr ""
-"NULL値を含まないセルのバッファーゾーンを示す新しいラスターマップを作成 "
-
-#: ../gui/wxpython/menustrings.py:270
-msgid "Closest points"
-msgstr "最寄のポイント "
-
-#: ../gui/wxpython/menustrings.py:271
-msgid "Locates the closest points between objects in two raster maps."
-msgstr "２つのラスターマップに最も近い点にオブジェクトを配置 "
-
-#: ../gui/wxpython/menustrings.py:272
-#: ../gui/wxpython/gui_modules/nviz_tools.py:258
-#: ../gui/wxpython/gui_modules/nviz_tools.py:438
-#: ../gui/wxpython/gui_modules/nviz_tools.py:856
-msgid "Mask"
-msgstr "マスク "
-
-#: ../gui/wxpython/menustrings.py:273
-#, fuzzy
-msgid "Creates a mask for limiting raster operation."
-msgstr ""
-"マップセットの新規作成\n"
-"(選択したロケーション内)"
-
-#: ../gui/wxpython/menustrings.py:274
-msgid "Map calculator"
-msgstr "マップカリキュレータ"
-
-#: ../gui/wxpython/menustrings.py:275
-msgid "Map calculator for raster map algebra"
-msgstr "ラスターマップのためのマップカリキュレータ"
-
-#: ../gui/wxpython/menustrings.py:276
-msgid "Neighborhood analysis"
-msgstr "近接性分析 "
-
-#: ../gui/wxpython/menustrings.py:277
-msgid "Moving window"
-msgstr "ウィンドウを移動 "
-
-#: ../gui/wxpython/menustrings.py:278
-msgid ""
-"Makes each cell category value a function of the category values assigned to "
-"the cells around it, and stores new cell values in an output raster map "
-"layer."
-msgstr ""
-"各セルのカテゴリーで近傍点解析を行い，ラスターマップに新しいセルを作成します "
-
-#: ../gui/wxpython/menustrings.py:279
-msgid "Neighborhood points"
-msgstr "近接点 "
-
-#: ../gui/wxpython/menustrings.py:280
-#, fuzzy
-msgid "Neighborhood analysis tool for vector point maps."
-msgstr "近接性分析"
-
-#: ../gui/wxpython/menustrings.py:281
-msgid "Overlay rasters"
-msgstr "ラスターマップの重ね合せ "
-
-#: ../gui/wxpython/menustrings.py:282
-msgid "Cross product"
-msgstr "カテゴリー値の掛け合わせ "
-
-#: ../gui/wxpython/menustrings.py:283
-msgid ""
-"Creates a cross product of the category values from multiple raster map "
-"layers."
-msgstr "カテゴリー値を掛け合わせて新たなラスターマップを作成します "
-
-#: ../gui/wxpython/menustrings.py:284
-msgid "Raster series"
-msgstr "ラスターシリーズ "
-
-#: ../gui/wxpython/menustrings.py:285
-msgid ""
-"Makes each output cell value a function of the values assigned to the "
-"corresponding cells in the input raster map layers."
-msgstr ""
-"各出力のセルの値の値を入力ラスターマップレイヤーに対応するセルに割り当てられ"
-"た関数を作成 "
-
-#: ../gui/wxpython/menustrings.py:286
-msgid "Patch raster maps"
-msgstr "ラスターマップの重ね合せ "
-
-#: ../gui/wxpython/menustrings.py:287
-msgid ""
-"Creates a composite raster map layer by using known category values from one "
-"(or more) map layer(s) to fill in areas of \"no data\" in another map layer."
-msgstr ""
-"別のレイヤーによってデータが存在しないエリアのカテゴリ情報を挿入し、合成ラス"
-"ターマップレイヤーを作成する "
-
-#: ../gui/wxpython/menustrings.py:288
-msgid "Statistical overlay"
-msgstr "統計オーバーレイ "
-
-#: ../gui/wxpython/menustrings.py:289
-msgid "Calculates category or object oriented statistics."
-msgstr "マップのカテゴリー値について統計解析を行います "
-
-#: ../gui/wxpython/menustrings.py:290
-msgid "Solar radiance and shadows"
-msgstr "太陽輝度と影 "
-
-#: ../gui/wxpython/menustrings.py:291
-msgid "Solar irradiance and irradiation"
-msgstr "太陽放射照度と照射 "
-
-#: ../gui/wxpython/menustrings.py:292
-msgid "Solar irradiance and irradiation model."
-msgstr "太陽放射照度と照射 "
-
-#: ../gui/wxpython/menustrings.py:293
-msgid "Shadows map"
-msgstr "陰影図 "
-
-#: ../gui/wxpython/menustrings.py:294
-msgid ""
-"Calculates cast shadow areas from sun position and DEM. Either A: exact sun "
-"position is specified, or B: date/time to calculate the sun position by r."
-"sunmask itself."
-msgstr ""
-"太陽の位置とDEMから陰影を付加する A:太陽の位置は既知 B：r.sunmaskを使用し日時"
-"から太陽の位置を算出 "
-
-#: ../gui/wxpython/menustrings.py:295
-msgid "Terrain analysis"
-msgstr "地形解析 "
-
-#: ../gui/wxpython/menustrings.py:296
-msgid "Cumulative movement costs"
-msgstr "移動コスト積算 "
-
-#: ../gui/wxpython/menustrings.py:297
-msgid ""
-"Outputs a raster map layer showing the anisotropic cumulative cost of moving "
-"between different geographic locations on an input elevation raster map "
-"layer whose cell category values represent elevation combined with an input "
-"raster map layer whose cell values represent friction cost."
-msgstr ""
-"出力ラスターマップレイヤーの異なる地理的な場所の間に、そのセルのカテゴリー値"
-"の高度を持つセルの値を摩擦コストを表す入力ラスターマップレイヤーと結合を表す"
-"入力高度ラスターマップレイヤー上を移動する異方性の累積的なコストを示していま"
-"す "
-
-#: ../gui/wxpython/menustrings.py:298
-msgid "Cost surface"
-msgstr "表層断面図 "
-
-#: ../gui/wxpython/menustrings.py:299
-msgid ""
-"Creates a raster map showing the cumulative cost of moving between different "
-"geographic locations on an input raster map whose cell category values "
-"represent cost."
-msgstr ""
-"異なるロケーションの移動コストを各セルの情報として表現したラスターマップを作"
-"成する "
-
-#: ../gui/wxpython/menustrings.py:300
-msgid "Least cost route or flow"
-msgstr "最小コストルートあるいはフロー "
-
-#: ../gui/wxpython/menustrings.py:301
-msgid "Traces a flow through an elevation model on a raster map."
-msgstr "ラスターマップ上の標高モデルによるフローをトレース "
-
-#: ../gui/wxpython/menustrings.py:302
-#: ../gui/wxpython/gui_modules/wxgui_utils.py:706
-msgid "Shaded relief"
-msgstr "陰影 "
-
-#: ../gui/wxpython/menustrings.py:303
-msgid "Creates shaded relief map from an elevation map (DEM)."
-msgstr "標高マップ（DEM）をより陰影マップを作成 "
-
-#: ../gui/wxpython/menustrings.py:304
-msgid "Slope and aspect"
-msgstr "斜面とアスペクト "
-
-#: ../gui/wxpython/menustrings.py:305
-msgid ""
-"Generates raster map layers of slope, aspect, curvatures and partial "
-"derivatives from a raster map layer of true elevation values. Aspect is "
-"calculated counterclockwise from east."
-msgstr ""
-"標高ラスターマップレイヤーから斜面、アスペクト、曲率と偏微分のラスターマップ"
-"レイヤーを生成（アスペクトは反時計回りに東から計算） "
-
-#: ../gui/wxpython/menustrings.py:306
-msgid "Terrain parameters"
-msgstr "地形パラメータ "
-
-#: ../gui/wxpython/menustrings.py:307
-msgid "Extracts terrain parameters from a DEM."
-msgstr "DEMから地形パラメータを抽出 "
-
-#: ../gui/wxpython/menustrings.py:308
-msgid "Textural features"
-msgstr "テキストフューチャ"
-
-#: ../gui/wxpython/menustrings.py:309
-msgid "Generate images with textural features from a raster map."
-msgstr "ラスターマップからテキストフューチャを生成 "
-
-#: ../gui/wxpython/menustrings.py:310
-msgid "Visibility"
-msgstr "可視  "
-
-#: ../gui/wxpython/menustrings.py:311
-msgid "Line-of-sight raster analysis program."
-msgstr "視線を変更したラスターマップ解析 "
-
-#: ../gui/wxpython/menustrings.py:312
-msgid "Distance to features"
-msgstr "フューチャの距離 "
-
-#: ../gui/wxpython/menustrings.py:313
-msgid "Generates a raster map layer of distance to features in input layer."
-msgstr "フューチャへの入力レイヤーからの距離をラスターマップに生成 "
-
-#: ../gui/wxpython/menustrings.py:314
-msgid "Horizon angle"
-msgstr "層準角度 "
-
-#: ../gui/wxpython/menustrings.py:315
-msgid "Horizon angle computation from a digital elevation model."
-msgstr "DEMから層準角度を計算 "
-
-#: ../gui/wxpython/menustrings.py:316
-msgid "Transform features"
-msgstr "フューチャの変形 "
-
-#: ../gui/wxpython/menustrings.py:317
-msgid "Clump"
-msgstr "クランプ "
-
-#: ../gui/wxpython/menustrings.py:318
-msgid ""
-"Recategorizes data in a raster map by grouping cells that form physically "
-"discrete areas into unique categories."
-msgstr ""
-"物理的離散領域をグルーピングすることによってデータを再カテゴライズする "
-
-#: ../gui/wxpython/menustrings.py:319
-msgid "Grow"
-msgstr "増加 "
-
-#: ../gui/wxpython/menustrings.py:320
-msgid "Generates a raster map layer with contiguous areas grown by one cell."
-msgstr "１つのセルを伸張させることによって新しいラスターマップを生成する "
-
-#: ../gui/wxpython/menustrings.py:321
-msgid "Thin"
-msgstr "間隔 "
-
-#: ../gui/wxpython/menustrings.py:322
-msgid "Thins non-zero cells that denote linear features in a raster map layer."
-msgstr "ラスターマップ内の線形特性を示す微少な値を持ったセル "
-
-#: ../gui/wxpython/menustrings.py:323
-msgid "Hydrologic modeling"
-msgstr "水文モデリング "
-
-#: ../gui/wxpython/menustrings.py:324
-msgid "Carve stream channels"
-msgstr "河川水路の作成 "
-
-#: ../gui/wxpython/menustrings.py:325
-msgid ""
-"Takes vector stream data, transforms it to raster and subtracts depth from "
-"the output DEM."
-msgstr "河川ベクトルデータをラスターデータの変換し、DEMデータから標高を減ずる "
-
-#: ../gui/wxpython/menustrings.py:326
-msgid "Fill lake"
-msgstr "湖沼塗潰し "
-
-#: ../gui/wxpython/menustrings.py:327
-msgid "Fills lake from seed at given level."
-msgstr "定義された面識別点で湖沼塗潰し "
-
-#: ../gui/wxpython/menustrings.py:328
-msgid "Depressionless map and flowlines"
-msgstr "凹地の無いマップとフローライン "
-
-#: ../gui/wxpython/menustrings.py:329
-msgid ""
-"Filters and generates a depressionless elevation map and a flow direction "
-"map from a given elevation layer."
-msgstr "標高レイヤーから 凹地のない標高マップと流方向マップを生成 "
-
-#: ../gui/wxpython/menustrings.py:330
-msgid "Flow accumulation"
-msgstr "フローアキュミュレーション "
-
-#: ../gui/wxpython/menustrings.py:331
-msgid "Flow computation for massive grids (Float version)."
-msgstr "大規模なグリッドの流量計算 "
-
-#: ../gui/wxpython/menustrings.py:332
-msgid "Flow lines"
-msgstr "流線 "
-
-#: ../gui/wxpython/menustrings.py:333
-msgid ""
-"Construction of slope curves (flowlines), flowpath lengths, and flowline "
-"densities (upslope areas) from a raster digital elevation model (DEM)"
-msgstr "ラスターDEMからの流曲線、流線長、流線密度（流域密度）の作図 "
-
-#: ../gui/wxpython/menustrings.py:334
-msgid "Topographic index map"
-msgstr "地形図インデックスマップ "
-
-#: ../gui/wxpython/menustrings.py:335
-msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
-msgstr "標高マップから地形的インデックス指標 [ln(a/tan(beta))]マップ作成"
-
-#: ../gui/wxpython/menustrings.py:336
-msgid "TOPMODEL simulation"
-msgstr "TOPMODELシミュレーション "
-
-#: ../gui/wxpython/menustrings.py:337
-msgid "Simulates TOPMODEL which is a physically based hydrologic model."
-msgstr "物理的流域水文モデルに基づくトポモデルをシュミレート"
-
-#: ../gui/wxpython/menustrings.py:338
-msgid "USLE K Factor"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:339
-msgid "USLE Soil Erodibility Factor (K)"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:340
-msgid "USLE R Factor"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:341
-msgid "Computes USLE R factor, Rainfall erosivity index."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:342
-msgid "Watershed subbasins"
-msgstr "集水域(流域)小盆地 "
-
-#: ../gui/wxpython/menustrings.py:343
-msgid "Generates a raster map layer showing watershed subbasins."
-msgstr "集水域を示すラスターマップを作成します "
-
-#: ../gui/wxpython/menustrings.py:344
-msgid "Watershed analysis"
-msgstr "集水域(流域)解析 "
-
-#: ../gui/wxpython/menustrings.py:345
-msgid "Watershed basin analysis program."
-msgstr "集水域(流域の解析を行います "
-
-#: ../gui/wxpython/menustrings.py:346
-msgid "Watershed basin creation"
-msgstr "集水域(流域)作成 "
-
-#: ../gui/wxpython/menustrings.py:347
-msgid "Watershed basin creation program."
-msgstr "集水域(流域)の解析を行います "
-
-#: ../gui/wxpython/menustrings.py:348 ../gui/wxpython/menustrings.py:714
-msgid "Groundwater modeling"
-msgstr "地下水 モデリング  "
-
-#: ../gui/wxpython/menustrings.py:349
-msgid ""
-"Numerical calculation program for transient, confined and unconfined "
-"groundwater flow in two dimensions."
-msgstr "２層による非定常流 被圧/負圧地下水流の数値計算"
-
-#: ../gui/wxpython/menustrings.py:350
-msgid "Landscape patch analysis"
-msgstr "景観パッチ分析"
-
-#: ../gui/wxpython/menustrings.py:351
-msgid "Set up sampling and analysis framework"
-msgstr "サンプリングと解析フレームワークのための設定 "
-
-#: ../gui/wxpython/menustrings.py:352
-msgid "Configuration editor for r.li.'index'"
-msgstr "r.li.'index'のための設定エディタ"
-
-#: ../gui/wxpython/menustrings.py:353
-msgid "Edge density"
-msgstr "周辺密度"
-
-#: ../gui/wxpython/menustrings.py:354
-msgid ""
-"Calculates edge density index on a raster map, using a 4 neighbour algorithm"
-msgstr "4近傍法を使用してラスターマップの周辺密度指標を計算"
-
-#: ../gui/wxpython/menustrings.py:355
-msgid "Contrast weighted edge density"
-msgstr "対照的加重周辺密度"
-
-#: ../gui/wxpython/menustrings.py:356
-msgid "Calculates contrast weighted edge density index on a raster map"
-msgstr "ラスターマップで対照的加重周辺密度指標を計算"
-
-#: ../gui/wxpython/menustrings.py:357
-msgid "Patch area mean"
-msgstr "平均パッチ領域"
-
-#: ../gui/wxpython/menustrings.py:358
-msgid ""
-"Calculates mean patch size index on a raster map, using a 4 neighbour "
-"algorithm"
-msgstr "4近傍法を使用して、ラスターマップ上で平均パッチサイズ指標を計算"
-
-#: ../gui/wxpython/menustrings.py:359
-msgid "Patch area range"
-msgstr "パッチ領域の範囲"
-
-#: ../gui/wxpython/menustrings.py:360
-msgid "Calculates range of patch area size on a raster map"
-msgstr "ラスターマップ上でパッチ領域サイズの領域を計算"
-
-#: ../gui/wxpython/menustrings.py:361
-msgid "Patch area Std Dev"
-msgstr "パッチ領域標準偏差"
-
-#: ../gui/wxpython/menustrings.py:362
-msgid "Calculates standard deviation of patch area a raster map"
-msgstr "ラスターマップのパッチ領域の標準偏差を計算"
-
-#: ../gui/wxpython/menustrings.py:363
-msgid "Patch area Coeff Var"
-msgstr "パッチ領域COEFF演算子"
-
-#: ../gui/wxpython/menustrings.py:364
-msgid "Calculates coefficient of variation of patch area on a raster map"
-msgstr " ラスタマップ上でパッチ領域の変動係数を計算"
-
-#: ../gui/wxpython/menustrings.py:365
-msgid "Patch density"
-msgstr "パッチ密度"
-
-#: ../gui/wxpython/menustrings.py:366
-msgid ""
-"Calculates patch density index on a raster map, using a 4 neighbour algorithm"
-msgstr "4近傍法を使用して、ラスターマップ上でパッチ密度指標を計算"
-
-#: ../gui/wxpython/menustrings.py:367
-msgid "Patch number"
-msgstr "パッチ番号"
-
-#: ../gui/wxpython/menustrings.py:368
-msgid ""
-"Calculates patch number index on a raster map, using a 4 neighbour algorithm."
-msgstr "4近傍法を使用して、ラスターマップ上でパッチ数指標を計算"
-
-#: ../gui/wxpython/menustrings.py:369
-msgid "Dominance's diversity"
-msgstr "順位多様性"
-
-#: ../gui/wxpython/menustrings.py:370 ../gui/wxpython/menustrings.py:376
-msgid "Calculates dominance's diversity index on a raster map"
-msgstr "ラスターマップで順位多様性指標を計算"
-
-#: ../gui/wxpython/menustrings.py:371
-msgid "Shannon's diversity"
-msgstr "シャノン 多様性  "
-
-#: ../gui/wxpython/menustrings.py:372
-msgid "Calculates Shannon's diversity index on a raster map"
-msgstr "ラスターマップでシャノン多様性指標を計算"
-
-#: ../gui/wxpython/menustrings.py:373
-msgid "Simpson's diversity"
-msgstr "シンプソン多様性"
-
-#: ../gui/wxpython/menustrings.py:374
-msgid "Calculates Simpson's diversity index on a raster map"
-msgstr "ラスターマップでシンプソン多様性指標を計算"
-
-#: ../gui/wxpython/menustrings.py:375
-msgid "Richness"
-msgstr "濃厚"
-
-#: ../gui/wxpython/menustrings.py:377
-msgid "Shape index"
-msgstr "形状係数"
-
-#: ../gui/wxpython/menustrings.py:378
-msgid "Calculates shape index on a raster map"
-msgstr "ラスターマップで形状係数を計算"
-
-#: ../gui/wxpython/menustrings.py:379
-msgid "Wildfire modeling"
-msgstr "森林火災モデリング "
-
-#: ../gui/wxpython/menustrings.py:380
-msgid "Rate of spread"
-msgstr "拡散比率"
-
-#: ../gui/wxpython/menustrings.py:381
-#, fuzzy
-msgid "Generates rate of spread raster map layers."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:382
-msgid "Least-cost spread paths"
-msgstr "最小コストの拡散経路"
-
-#: ../gui/wxpython/menustrings.py:383
-msgid ""
-"Recursively traces the least cost path backwards to cells from which the "
-"cumulative cost was determined."
-msgstr "累積コストで計算されたセルから最小コストのパスで再帰的にトレース"
-
-#: ../gui/wxpython/menustrings.py:384
-msgid "Anisotropic spread simulation"
-msgstr "非等方性拡散シミュレーション  "
-
-#: ../gui/wxpython/menustrings.py:385
-msgid ""
-"Simulates elliptically anisotropic spread on a graphics window and generates "
-"a raster map of the cumulative time of spread, given raster maps containing "
-"the rates of spread (ROS), the ROS directions and the spread origins."
-msgstr ""
-"楕円形非等方性拡散シミュレーション結果を拡散累積時間、拡散率、起点と拡散方向"
-"でラスターマップに出力"
-
-#: ../gui/wxpython/menustrings.py:386
-msgid "Change category values and labels"
-msgstr "カテゴリー値・ラベルの変更 "
-
-#: ../gui/wxpython/menustrings.py:387
-msgid "Interactively edit category values"
-msgstr "対話形式でカテゴリ値を編集"
-
-#: ../gui/wxpython/menustrings.py:388
-msgid "Interactively edit cell values in a raster map."
-msgstr "対話形式でラスターマップのセルの値を編集"
-
-#: ../gui/wxpython/menustrings.py:389
-msgid "Reclassify by size"
-msgstr "サイズで再分類"
-
-#: ../gui/wxpython/menustrings.py:390
-msgid ""
-"Reclasses a raster map greater or less than user specified area size (in "
-"hectares)."
-msgstr "定義されたサイズ（ヘクタール）をしきい値としてラスターマップを再分類"
-
-#: ../gui/wxpython/menustrings.py:391
-msgid "Reclassify interactively"
-msgstr "対話形式による再分類"
-
-#: ../gui/wxpython/menustrings.py:392 ../gui/wxpython/menustrings.py:394
-msgid ""
-"Creates a new map layer whose category values are based upon a "
-"reclassification of the categories in an existing raster map layer."
-msgstr ""
-"現在のラスターマップレイヤーをカテゴリーで再分類し、新しいカテゴリー値のマッ"
-"プレイヤーを生成する"
-
-#: ../gui/wxpython/menustrings.py:393
-msgid "Reclassify using rules file"
-msgstr "定義ファイルを利用した再分類"
-
-#: ../gui/wxpython/menustrings.py:395
-msgid "Recode interactively"
-msgstr "対話情報記録"
-
-#: ../gui/wxpython/menustrings.py:396
-msgid "Recodes categorical raster maps."
-msgstr "カテゴリーかされたラスターマップの記録"
-
-#: ../gui/wxpython/menustrings.py:397
-msgid "Rescale"
-msgstr "再スケール"
-
-#: ../gui/wxpython/menustrings.py:398
-msgid "Rescales the range of category values in a raster map layer."
-msgstr "ラスターマップのカテゴリー値の範囲を変更します "
-
-#: ../gui/wxpython/menustrings.py:399
-msgid "Rescale with histogram"
-msgstr "ヒストグラムの再スケール"
-
-#: ../gui/wxpython/menustrings.py:400
-msgid ""
-"Rescales histogram equalized the range of category values in a raster map "
-"layer."
-msgstr "ラスターマップのカテゴリー値の範囲によりヒストグラムの再スケール"
-
-#: ../gui/wxpython/menustrings.py:401
-msgid "Concentric circles"
-msgstr "同心円"
-
-#: ../gui/wxpython/menustrings.py:402
-msgid "Creates a raster map containing concentric rings around a given point."
-msgstr "指定された点を中心に同心円を含むマップをラスターを作成します"
-
-#: ../gui/wxpython/menustrings.py:403
-msgid "Generate random cells"
-msgstr "ランダムセルの作成"
-
-#: ../gui/wxpython/menustrings.py:404
-msgid "Random cells"
-msgstr "ランダムセル"
-
-#: ../gui/wxpython/menustrings.py:405
-msgid "Generates random cell values with spatial dependence."
-msgstr "空間に依存したランダムセル値を生成"
-
-#: ../gui/wxpython/menustrings.py:406
-msgid "Random cells and vector points"
-msgstr "ランダムセルとベクトルポイント"
-
-#: ../gui/wxpython/menustrings.py:407
-msgid ""
-"Creates a raster map layer and vector point map containing randomly located "
-"points."
-msgstr "ランダムに定義された地点を含むラスターマップレイヤーとベクトル点を作成"
-
-#: ../gui/wxpython/menustrings.py:408
-msgid "Generate surfaces"
-msgstr "面の生成"
-
-#: ../gui/wxpython/menustrings.py:409
-msgid "Fractal surface"
-msgstr "フラクタル面"
-
-#: ../gui/wxpython/menustrings.py:410
-msgid "Creates a fractal surface of a given fractal dimension."
-msgstr "指定されたフラクタル次元のフラクタル表面を作成"
-
-#: ../gui/wxpython/menustrings.py:411
-msgid "Gaussian kernel density surface"
-msgstr "ガウスカーネル密度面"
-
-#: ../gui/wxpython/menustrings.py:412
-msgid ""
-"Generates a raster density map from vector points data using a moving 2D "
-"isotropic Gaussian kernel or optionally generates a vector density map on "
-"vector network with a 1D kernel."
-msgstr ""
-"ベクトルのポイントデータからラスター密度マップを移動する2次元等方性ガウスカー"
-"ネルを使って生成する。オプションで、1次元のカーネルを持つベクトルネットワーク"
-"上のベクトル密度マップを生成"
-
-#: ../gui/wxpython/menustrings.py:413
-msgid "Gaussian deviates surface"
-msgstr "ガウス偏差面"
-
-#: ../gui/wxpython/menustrings.py:414
-msgid ""
-"GRASS module to produce a raster map layer of gaussian deviates whose mean "
-"and standard deviation can be expressed by the user. It uses a gaussian "
-"random number generator."
-msgstr ""
-"GRASSはユーザが定義した標準偏差やガウス偏差をラスターマップレイヤーとして作成"
-"することができます。 Gauss乱数発生機能を使用"
-
-#: ../gui/wxpython/menustrings.py:415
-msgid "Plane"
-msgstr "面 "
-
-#: ../gui/wxpython/menustrings.py:416
-msgid ""
-"Creates raster plane map given dip (inclination), aspect (azimuth) and one "
-"point."
-msgstr "１点と傾斜、アスペクト比でラスターマップの平面を作成"
-
-#: ../gui/wxpython/menustrings.py:417
-msgid "Random deviates surface"
-msgstr "ランダム逸脱曲面"
-
-#: ../gui/wxpython/menustrings.py:418
-msgid ""
-"Produces a raster map layer of uniform random deviates whose range can be "
-"expressed by the user."
-msgstr ""
-"ユーザーによって定義できる範囲で同質なランダム逸脱ラスターマップレイヤーを生"
-"成"
-
-#: ../gui/wxpython/menustrings.py:419
-msgid "Random surface with spatial dependence"
-msgstr "空間依存性ランダム曲面"
-
-#: ../gui/wxpython/menustrings.py:420
-msgid "Generates random surface(s) with spatial dependence."
-msgstr "空間依存性ランダム曲面を生成"
-
-#: ../gui/wxpython/menustrings.py:421
-msgid "Generate contour lines"
-msgstr "コンターラインの生成"
-
-#: ../gui/wxpython/menustrings.py:422
-msgid "Produces a vector map of specified contours from a raster map."
-msgstr "ラスターマップからコンターを生成しベクトルマップを作成"
-
-#: ../gui/wxpython/menustrings.py:423
-msgid "Interpolate surfaces"
-msgstr "曲面補間 "
-
-#: ../gui/wxpython/menustrings.py:424
-msgid "Bilinear and bicubic from vector points"
-msgstr "ベクトルポイントからの共一次と三次補間"
-
-#: ../gui/wxpython/menustrings.py:425
-msgid "Bicubic or bilinear spline interpolation with Tykhonov regularization."
-msgstr "チホノフ則化による三次補間や共一次スプライン補間"
-
-#: ../gui/wxpython/menustrings.py:426
-msgid "IDW from raster points"
-msgstr "ラスターポイントから加重平均補間"
-
-#: ../gui/wxpython/menustrings.py:427
-msgid "Surface interpolation utility for raster map."
-msgstr "ラスターマップの表面補間ユーティリティ"
-
-#: ../gui/wxpython/menustrings.py:428
-msgid "IDW from raster points (alternate method for sparse points)"
-msgstr "ラスターポイントの加重平均補間 (まばらなポイントの代替方法)  "
-
-#: ../gui/wxpython/menustrings.py:429
-msgid "Surface generation program."
-msgstr "表層生成プログラム"
-
-#: ../gui/wxpython/menustrings.py:430
-msgid "IDW from vector points"
-msgstr "ベクトルポイントでの加重平均補間"
-
-#: ../gui/wxpython/menustrings.py:431
-msgid ""
-"Surface interpolation from vector point data by Inverse Distance Squared "
-"Weighting."
-msgstr "逆距離方格加重によるベクトルポイントデータからの表面補間"
-
-#: ../gui/wxpython/menustrings.py:432
-msgid "Raster contours"
-msgstr "ラスターコンター"
-
-#: ../gui/wxpython/menustrings.py:433
-msgid "Surface generation program from rasterized contours."
-msgstr "ラスターのコンターから曲面を推定"
-
-#: ../gui/wxpython/menustrings.py:434
-msgid "Regularized spline tension"
-msgstr "正則化スプライン張力"
-
-#: ../gui/wxpython/menustrings.py:435
-msgid ""
-"Spatial approximation and topographic analysis from given point or isoline "
-"data in vector format to floating point raster format using regularized "
-"spline with tension."
-msgstr ""
-"指定された点またはスプライン関数を使用してラスターマップから変換したベクトル"
-"データの等値線データでの空間的な近似値と地形学的分析"
-
-#: ../gui/wxpython/menustrings.py:436
-msgid "Ordinary or block kriging"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:437
-msgid "Performs ordinary or block kriging."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:438
-msgid "Fill NULL cells"
-msgstr "nullセルの穴埋め "
-
-#: ../gui/wxpython/menustrings.py:439
-msgid ""
-"Fills no-data areas in raster maps using v.surf.rst splines interpolation"
-msgstr " v.surf.rstスプライン補間を利用し、ラスターマップに値を埋める"
-
-#: ../gui/wxpython/menustrings.py:440 ../gui/wxpython/menustrings.py:695
-msgid "Report and statistics"
-msgstr "レポートと統計"
-
-#: ../gui/wxpython/menustrings.py:441
-msgid "Basic raster metadata"
-msgstr "基本的なラスターメタデータ"
-
-#: ../gui/wxpython/menustrings.py:442
-msgid "Output basic information about a raster map layer."
-msgstr "ラスターマップの基礎情報を出力"
-
-#: ../gui/wxpython/menustrings.py:443
-msgid "Manage category information"
-msgstr "カテゴリ情報の管理"
-
-#: ../gui/wxpython/menustrings.py:444
-msgid ""
-"Manages category values and labels associated with user-specified raster map "
-"layers."
-msgstr ""
-"ユーザー定義ラスターマップレイヤーに関連付けられたカテゴリ情報とラベルの管理"
-
-#: ../gui/wxpython/menustrings.py:445
-msgid "General statistics"
-msgstr "一般設定 "
-
-#: ../gui/wxpython/menustrings.py:446
-msgid "Generates area statistics for raster map layers."
-msgstr "ラスターマップレイヤーの統計解析を行う"
-
-#: ../gui/wxpython/menustrings.py:447
-msgid "Quantiles for large data sets"
-msgstr "大規模データセットの分位数 "
-
-#: ../gui/wxpython/menustrings.py:448
-msgid "Compute quantiles using two passes."
-msgstr "２つのパスを使用した分位数の計算"
-
-#: ../gui/wxpython/menustrings.py:449
-msgid "Range of category values"
-msgstr "カテゴリ値の範囲"
-
-#: ../gui/wxpython/menustrings.py:450
-msgid "Prints terse list of category values found in a raster map layer."
-msgstr "ラスターマップのカテゴリー値一覧を表示"
-
-#: ../gui/wxpython/menustrings.py:451
-msgid "Sum area by raster map and category"
-msgstr "ラスターマップをカテゴリ別に集計"
-
-#: ../gui/wxpython/menustrings.py:452
-msgid "Reports statistics for raster map layers."
-msgstr "ラスターマップに関する一連のレポートを作成"
-
-#: ../gui/wxpython/menustrings.py:453
-msgid "Statistics for clumped cells"
-msgstr "塊状セルによる統計解析"
-
-#: ../gui/wxpython/menustrings.py:454
-msgid ""
-"Calculates the volume of data \"clumps\", and (optionally) produces a GRASS "
-"vector points map containing the calculated centroids of these clumps."
-msgstr ""
-"データの量を計算する \"clumps\"、（オプション）塊状セルの重心を計算しベクトル"
-"ポイントにプロットしたマップを生成する"
-
-#: ../gui/wxpython/menustrings.py:455
-msgid "Total corrected area"
-msgstr "合計修正地域  "
-
-#: ../gui/wxpython/menustrings.py:456
-msgid "Surface area estimation for rasters."
-msgstr "ラスターの表面面積評価"
-
-#: ../gui/wxpython/menustrings.py:457
-msgid "Univariate raster statistics"
-msgstr "単変量ラスタ統計"
-
-#: ../gui/wxpython/menustrings.py:458
-msgid ""
-"Calculates univariate statistics from the non-null cells of a raster map."
-msgstr "ラスターマップの非-NULLセルを元に単変量統計計算を行う"
-
-#: ../gui/wxpython/menustrings.py:459
-msgid "Sample transects"
-msgstr "サンプル横断面"
-
-#: ../gui/wxpython/menustrings.py:460
-msgid "Outputs the raster map layer values lying on user-defined line(s)."
-msgstr "指定した直線上でのラスターマップの値を出力"
-
-#: ../gui/wxpython/menustrings.py:461
-msgid "Sample transects (bearing/distance)"
-msgstr "単位（角度/距離） "
-
-#: ../gui/wxpython/menustrings.py:462
-msgid ""
-"Outputs raster map layer values lying along user defined transect line(s)."
-msgstr "指定した横断面でラスターマップの値を出力"
-
-#: ../gui/wxpython/menustrings.py:463
-msgid "Covariance/correlation"
-msgstr "共分散/相関 "
-
-#: ../gui/wxpython/menustrings.py:464
-msgid ""
-"Outputs a covariance/correlation matrix for user-specified raster map layer"
-"(s)."
-msgstr "ラスターマップの共分散と相関を求めます "
-
-#: ../gui/wxpython/menustrings.py:465
-msgid "Linear regression"
-msgstr "線形回帰"
-
-#: ../gui/wxpython/menustrings.py:466
-msgid "Calculates linear regression from two raster maps: y = a + b*x"
-msgstr "2つのラスターマップでの線形回帰計算: y = a + b*x  "
-
-#: ../gui/wxpython/menustrings.py:467
-msgid "Mutual category occurrences"
-msgstr "カテゴリー間の関係"
-
-#: ../gui/wxpython/menustrings.py:468
-msgid ""
-"Tabulates the mutual occurrence (coincidence) of categories for two raster "
-"map layers."
-msgstr "２つのラスターマップのカテゴリー関係（一致）表を作成します "
-
-#: ../gui/wxpython/menustrings.py:469
-#, fuzzy
-msgid "&Vector"
-msgstr "ファイル"
-
-#: ../gui/wxpython/menustrings.py:470
-msgid "Develop vector map"
-msgstr "ベクトルマップ作成 "
-
-#: ../gui/wxpython/menustrings.py:471
-#: ../gui/wxpython/gui_modules/gdialogs.py:236
-msgid "Create new vector map"
-msgstr "新しいベクタマップ "
-
-#: ../gui/wxpython/menustrings.py:472
-msgid "Create new empty vector map"
-msgstr "空のベクトルマップの作成 "
-
-#: ../gui/wxpython/menustrings.py:473
-msgid "Edit vector map (non-interactively)"
-msgstr "ベクトルマップ編集（非対話型）"
-
-#: ../gui/wxpython/menustrings.py:474
-msgid ""
-"Edits a vector map, allows adding, deleting and modifying selected vector "
-"features."
-msgstr "選択したベクトルフューチャの修正、追加、削除"
-
-#: ../gui/wxpython/menustrings.py:475
-msgid "Create or rebuild topology"
-msgstr "トポロジーの作成/再ビルド"
-
-#: ../gui/wxpython/menustrings.py:476
-msgid "Creates topology for GRASS vector map."
-msgstr "ベクトルマップにトポロジーを作成"
-
-#: ../gui/wxpython/menustrings.py:477
-msgid "Clean vector map"
-msgstr "ベクトルマップの消去"
-
-#: ../gui/wxpython/menustrings.py:478
-msgid "Toolset for cleaning topology of vector map."
-msgstr "ベクトルマップのトポロジーの編集ツールキット"
-
-#: ../gui/wxpython/menustrings.py:479
-msgid "Smooth or simplify"
-msgstr "円滑化または単純化"
-
-#: ../gui/wxpython/menustrings.py:480
-msgid "Tool for vector based generalization."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:481
-msgid "Convert object types"
-msgstr "オブジェクトタイプの変換"
-
-#: ../gui/wxpython/menustrings.py:482
-msgid "Change the type of geometry elements"
-msgstr "ジオメトリエレメントのタイプ変更"
-
-#: ../gui/wxpython/menustrings.py:483
-msgid "Add centroids"
-msgstr "重心追加"
-
-#: ../gui/wxpython/menustrings.py:484
-msgid "Adds missing centroids to closed boundaries."
-msgstr "閉領域の欠けている重心を追加"
-
-#: ../gui/wxpython/menustrings.py:485
-msgid "Build polylines"
-msgstr "ポリラインの生成"
-
-#: ../gui/wxpython/menustrings.py:486
-msgid "Builds polylines from lines or boundaries."
-msgstr "線分や境界線からポリラインを生成"
-
-#: ../gui/wxpython/menustrings.py:487
-msgid "Split lines"
-msgstr "線分の分割"
-
-#: ../gui/wxpython/menustrings.py:488
-msgid "Split lines to shorter segments."
-msgstr "短いセグメントに線分を分割"
-
-#: ../gui/wxpython/menustrings.py:489
-msgid "Split polylines"
-msgstr "ポリラインの分割"
-
-#: ../gui/wxpython/menustrings.py:490
-msgid "Creates points/segments from input vector lines and positions."
-msgstr "入力された線分と点からセグメントを生成"
-
-#: ../gui/wxpython/menustrings.py:491
-msgid "Parallel lines"
-msgstr "平行線"
-
-#: ../gui/wxpython/menustrings.py:492
-msgid "Creates parallel line to input vector lines."
-msgstr "入力された線分から平行線を生成"
-
-#: ../gui/wxpython/menustrings.py:493
-msgid "Dissolve boundaries"
-msgstr "境界の融合"
-
-#: ../gui/wxpython/menustrings.py:494
-msgid ""
-"Dissolves boundaries between adjacent areas sharing a common category number "
-"or attribute."
-msgstr "共通のカテゴリー番号や属性を共有するエリアを融合させる"
-
-#: ../gui/wxpython/menustrings.py:495
-msgid "Create 3D vector over raster"
-msgstr "３Dベクトルまたはラスターの作成"
-
-#: ../gui/wxpython/menustrings.py:496
-msgid "Converts vector map to 3D by sampling of elevation raster map."
-msgstr "高度ラスターマップを3Dベクトルマップに変換"
-
-#: ../gui/wxpython/menustrings.py:497
-msgid "Extrude 3D vector map"
-msgstr "３Dベクトルマップの立上げ"
-
-#: ../gui/wxpython/menustrings.py:498
-#, fuzzy
-msgid "Extrudes flat vector features to 3D with defined height."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:499
-msgid "Create labels"
-msgstr "ラベル作成"
-
-#: ../gui/wxpython/menustrings.py:500
-#, fuzzy
-msgid ""
-"Creates optimally placed labels for vector map from associated attributes"
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:501
-msgid "Create optimally placed labels"
-msgstr "最適な位置にラベルを作成"
-
-#: ../gui/wxpython/menustrings.py:502
-msgid "Creates paint labels for a vector map from attached attributes."
-msgstr "属性からベクトルマップのラベルを作成"
-
-#: ../gui/wxpython/menustrings.py:503
-msgid "Reposition vector map"
-msgstr "ベクトルマップの再配置"
-
-#: ../gui/wxpython/menustrings.py:504
-msgid ""
-"Performs an affine transformation (shift, scale and rotate, or GPCs) on "
-"vector map."
-msgstr "ベクトルマップのアフェイン変換"
-
-#: ../gui/wxpython/menustrings.py:505
-msgid "Reproject vector map"
-msgstr "ベクトルマップの投影変換"
-
-#: ../gui/wxpython/menustrings.py:506
-msgid "Allows projection conversion of vector maps."
-msgstr "ベクトルマップの投影変換を許可"
-
-#: ../gui/wxpython/menustrings.py:508
-msgid "Updates vector map metadata."
-msgstr "ベクトルマップメタデータ更新"
-
-#: ../gui/wxpython/menustrings.py:511
-msgid ""
-"Set color rules for features in a vector using a numeric attribute column."
-msgstr "数値属性のカラムを使用して、ベクトルの色定義を設定"
-
-#: ../gui/wxpython/menustrings.py:513
-msgid "Set colors interactively by entering color rules"
-msgstr "色定義を対話型入力で設定"
-
-#: ../gui/wxpython/menustrings.py:514
-msgid "Query with attributes"
-msgstr "属性で検索"
-
-#: ../gui/wxpython/menustrings.py:515
-msgid ""
-"Selects vector objects from an existing vector map and creates a new map "
-"containing only the selected objects."
-msgstr ""
-"既存のベクトルマップからのオブジェクトを選択し、選択したオブジェクトのみを含"
-"む新しいマップ作成"
-
-#: ../gui/wxpython/menustrings.py:516
-msgid "Query with coordinate(s)"
-msgstr "座標で検索"
-
-#: ../gui/wxpython/menustrings.py:517
-msgid "Queries a vector map layer at given locations."
-msgstr "指定された位置のベクトルマップレイヤーを検索"
-
-#: ../gui/wxpython/menustrings.py:518
-msgid "Query with another vector map"
-msgstr "別のベクトルマップと共に検索"
-
-#: ../gui/wxpython/menustrings.py:519
-msgid ""
-"Selects features from vector map (A) by features from other vector map (B)."
-msgstr ""
-"ベクトル地図（B）からのフューチャによって他のベクトルマップ（A）からフュー"
-"チャを選択"
-
-#: ../gui/wxpython/menustrings.py:520
-msgid "Buffer vectors"
-msgstr "バッファーベクトル"
-
-#: ../gui/wxpython/menustrings.py:521
-msgid "Creates a buffer around vector features of given type."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:522
-msgid "Lidar analysis"
-msgstr "ライダー分析"
-
-#: ../gui/wxpython/menustrings.py:523
-msgid "Detect edges"
-msgstr "エッジ検出"
-
-#: ../gui/wxpython/menustrings.py:524
-msgid "Detects the object's edges from a LIDAR data set."
-msgstr "ライダー データセットからエッジを検出する"
-
-#: ../gui/wxpython/menustrings.py:525
-msgid "Detect interiors"
-msgstr "内面検出"
-
-#: ../gui/wxpython/menustrings.py:526
-msgid ""
-"Building contour determination and Region Growing algorithm for determining "
-"the building inside"
-msgstr "コンター線定義と内部コンター線定義のための領域成長アルゴリズム"
-
-#: ../gui/wxpython/menustrings.py:527
-msgid "Correct and reclassify objects"
-msgstr "オブジェクトの修正と再分類"
-
-#: ../gui/wxpython/menustrings.py:528
-msgid ""
-"Correction of the v.lidar.growing output. It is the last of the three "
-"algorithms for LIDAR filtering."
-msgstr ""
-"v.lidar.growing出力の修正。これは、ライダーフィルタリングのための3つのアルゴ"
-"リズムの最後です"
-
-#: ../gui/wxpython/menustrings.py:529
-msgid "Linear referencing"
-msgstr "線形参照"
-
-#: ../gui/wxpython/menustrings.py:530
-msgid "Create LRS"
-msgstr "線形参照システム作成"
-
-#: ../gui/wxpython/menustrings.py:531
-msgid "Create Linear Reference System"
-msgstr "線型参照システム作成"
-
-#: ../gui/wxpython/menustrings.py:532
-msgid "Create stationing"
-msgstr "配置測点作成"
-
-#: ../gui/wxpython/menustrings.py:533
-msgid "Create stationing from input lines, and linear reference system"
-msgstr "入力された線分と線形参照システムから配置測線を作成"
-
-#: ../gui/wxpython/menustrings.py:534
-msgid "Create points/segments"
-msgstr "点/セグメントの作成 "
-
-#: ../gui/wxpython/menustrings.py:535
-msgid ""
-"Creates points/segments from input lines, linear reference system and "
-"positions read from stdin or a file."
-msgstr ""
-"入力された線分や線形参照システム、ファイルや標準入力の点から新しい点/セグメン"
-"トを作成 "
-
-#: ../gui/wxpython/menustrings.py:536
-msgid "Find line id and offset"
-msgstr "ラインIDとオフセットを表示"
-
-#: ../gui/wxpython/menustrings.py:537
-msgid ""
-"Finds line id and real km+offset for given points in vector map using linear "
-"reference system."
-msgstr ""
-"線形参照システムを利用し、ベクトルマップの点からラインIDと実距離（Km)オフセッ"
-"トを表示"
-
-#: ../gui/wxpython/menustrings.py:538
-msgid "Nearest features"
-msgstr "最寄のフューチャ"
-
-#: ../gui/wxpython/menustrings.py:539
-msgid ""
-"Finds the nearest element in vector map 'to' for elements in vector map "
-"'from'."
-msgstr "ベクトルマップの２点に一番近いエレメントを探す"
-
-#: ../gui/wxpython/menustrings.py:540
-msgid "Network analysis"
-msgstr "ネットワーク解析 "
-
-#: ../gui/wxpython/menustrings.py:541
-msgid "Allocate subnets"
-msgstr "サブネットの設定 "
-
-#: ../gui/wxpython/menustrings.py:542
-msgid "Allocate subnets for nearest centres (direction from centre)."
-msgstr "最寄の中心に割り当てるサブネット (中心からの方向).  "
-
-#: ../gui/wxpython/menustrings.py:543
-msgid "Network maintenance"
-msgstr "ネットワークメンテナンス "
-
-#: ../gui/wxpython/menustrings.py:544
-msgid "Performs network maintenance."
-msgstr "ネットワークメンテナンスを実行"
-
-#: ../gui/wxpython/menustrings.py:545
-msgid "Visibility network"
-msgstr "ネットワーク可視化"
-
-#: ../gui/wxpython/menustrings.py:546
-msgid "Visibility graph construction."
-msgstr "可視度グラフ構築"
-
-#: ../gui/wxpython/menustrings.py:547
-msgid "Shortest path"
-msgstr "最短経路"
-
-#: ../gui/wxpython/menustrings.py:548
-msgid "Finds shortest path on vector network."
-msgstr "ベクトルネットワークの最短経路探査"
-
-#: ../gui/wxpython/menustrings.py:549
-msgid "Split net"
-msgstr "ネットの分割"
-
-#: ../gui/wxpython/menustrings.py:550
-msgid "Splits net by cost isolines."
-msgstr "コスト等値線によるネットの分割"
-
-#: ../gui/wxpython/menustrings.py:551
-msgid "Steiner tree"
-msgstr "シュタイナーツリー"
-
-#: ../gui/wxpython/menustrings.py:552
-msgid "Create Steiner tree for the network and given terminals"
-msgstr "定義された点とネットワークからシュタイナーツリーを作成"
-
-#: ../gui/wxpython/menustrings.py:553
-msgid "Traveling salesman analysis"
-msgstr "巡回セールスマン問題 "
-
-#: ../gui/wxpython/menustrings.py:554
-msgid "Creates a cycle connecting given nodes (Traveling salesman problem)."
-msgstr "指定されたノードの巡回するルートを作成 巡回セールスマン問題 )"
-
-#: ../gui/wxpython/menustrings.py:555 ../gui/wxpython/menustrings.py:556
-msgid "Overlay vector maps"
-msgstr "ベクトルマップの重ね合せ "
-
-#: ../gui/wxpython/menustrings.py:557
-msgid "Overlays two vector maps."
-msgstr "２つのベクトルマップの重ね合せ"
-
-#: ../gui/wxpython/menustrings.py:558
-msgid "Patch vector maps"
-msgstr "ベクトルマップのパッチ"
-
-#: ../gui/wxpython/menustrings.py:559
-#, fuzzy
-msgid "Creates a new vector map by combining other vector maps."
-msgstr "ベクトル ベクトル."
-
-#: ../gui/wxpython/menustrings.py:560
-msgid "Change attributes"
-msgstr "属性の変更"
-
-#: ../gui/wxpython/menustrings.py:561
-msgid "Manage or report categories"
-msgstr "カテゴリーの管理と出力"
-
-#: ../gui/wxpython/menustrings.py:562
-#, fuzzy
-msgid "Attaches, deletes or reports vector categories to map geometry."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:563
-msgid "Reclassify objects interactively"
-msgstr "対話形式でオブジェクトを再分類"
-
-#: ../gui/wxpython/menustrings.py:564 ../gui/wxpython/menustrings.py:566
-msgid ""
-"Changes vector category values for an existing vector map according to "
-"results of SQL queries or a value in attribute table column."
-msgstr ""
-"既存のベクトルマップのカテゴリー値は、SQLクエリまたは属性テーブルの列の値に"
-"よって変更されます"
-
-#: ../gui/wxpython/menustrings.py:565
-msgid "Reclassify objects using rules file"
-msgstr "ルールファイルによってオブジェクトを再分類"
-
-#: ../gui/wxpython/menustrings.py:567
-msgid "Generate area for current region"
-msgstr "現在の領域からエリアを生成"
-
-#: ../gui/wxpython/menustrings.py:568
-msgid "Create a new vector from the current region."
-msgstr "現在の領域から新しいベクトルを作成"
-
-#: ../gui/wxpython/menustrings.py:569
-msgid "Generate areas from points"
-msgstr "複数の点からエリアを生成"
-
-#: ../gui/wxpython/menustrings.py:570
-msgid "Convex hull"
-msgstr "凸包 "
-
-#: ../gui/wxpython/menustrings.py:571
-#, fuzzy
-msgid "Creates convex hull for vector point map."
-msgstr "色 ベクトル"
-
-#: ../gui/wxpython/menustrings.py:572
-msgid "Delaunay triangles"
-msgstr "ドローネ三角形"
-
-#: ../gui/wxpython/menustrings.py:573
-msgid ""
-"Creates a Delaunay triangulation from an input vector map containing points "
-"or centroids."
-msgstr "点や重心を含むベクトルマップからするドローネ三角形を作成"
-
-#: ../gui/wxpython/menustrings.py:574
-msgid "Voronoi diagram/Thiessen polygons"
-msgstr "ボロノイ図/ティーセン多角形"
-
-#: ../gui/wxpython/menustrings.py:575
-msgid ""
-"Creates a Voronoi diagram from an input vector map containing points or "
-"centroids."
-msgstr "点や重心を含むベクトルマップからするボロノイ図を作成"
-
-#: ../gui/wxpython/menustrings.py:576
-msgid "Generate grid"
-msgstr "グリッドの生成"
-
-#: ../gui/wxpython/menustrings.py:577
-#, fuzzy
-msgid "Creates a vector map of a user-defined grid."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:578
-msgid "Generate points"
-msgstr "点生成"
-
-#: ../gui/wxpython/menustrings.py:579
-msgid "Generate from database"
-msgstr "データベースから生成"
-
-#: ../gui/wxpython/menustrings.py:580
-msgid ""
-"Creates new vector (points) map from database table containing coordinates."
-msgstr "座標を含むデータベースから新しいベクトルマップを作成"
-
-#: ../gui/wxpython/menustrings.py:581
-msgid "Generate points along lines"
-msgstr "線に沿った点を生成"
-
-#: ../gui/wxpython/menustrings.py:582
-msgid "Create points along input lines in new vector with 2 layers."
-msgstr "2層の新しいベクトルラインに沿って点を作成"
-
-#: ../gui/wxpython/menustrings.py:583
-msgid "Generate random points"
-msgstr "ランダムな点を生成"
-
-#: ../gui/wxpython/menustrings.py:584
-#, fuzzy
-msgid "Generates randomly 2D/3D vector points map."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:585
-msgid "Perturb points"
-msgstr "摂動点"
-
-#: ../gui/wxpython/menustrings.py:586
-#, fuzzy
-msgid "Random location perturbations of vector points."
-msgstr "ベクトル"
-
-#: ../gui/wxpython/menustrings.py:587
-msgid "Remove outliers in point sets"
-msgstr "点群から異常値を削除"
-
-#: ../gui/wxpython/menustrings.py:588
-msgid "Removes outliers from vector point data."
-msgstr "ベクトルポイントデータから異常値を削除"
-
-#: ../gui/wxpython/menustrings.py:589
-msgid "Test/training point sets"
-msgstr "テスト/トレーニング ポイントセット"
-
-#: ../gui/wxpython/menustrings.py:590
-msgid "Randomly partition points into test/train sets."
-msgstr "テスト/トレーニングセットにランダムな分割点を作る"
-
-#: ../gui/wxpython/menustrings.py:591
-msgid "Update area attributes from raster"
-msgstr "ラスターからエリア属性を更新"
-
-#: ../gui/wxpython/menustrings.py:592
-#, fuzzy
-msgid ""
-"Calculates univariate statistics from a raster map based on vector polygons "
-"and uploads statistics to new attribute columns."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:593
-msgid "Update point attributes from areas"
-msgstr "エリアから点の属性を更新"
-
-#: ../gui/wxpython/menustrings.py:594
-msgid "Uploads vector values at positions of vector points to the table."
-msgstr "ポイントの位置のベクトルの値をテーブルにアップロード"
-
-#: ../gui/wxpython/menustrings.py:595
-msgid "Update point attributes from raster"
-msgstr "ラスターから点の属性を更新"
-
-#: ../gui/wxpython/menustrings.py:596
-msgid "Sample raster maps at point locations"
-msgstr "ポイントの場所にあるラスターマップのサンプリング"
-
-#: ../gui/wxpython/menustrings.py:597
-msgid "Uploads raster values at positions of vector points to the table."
-msgstr "ポイントの位置のラスターの値をテーブルにアップロード"
-
-#: ../gui/wxpython/menustrings.py:598
-msgid "Sample raster neighborhood around points"
-msgstr "ポイント近傍でのラスターマップのサンプリング "
-
-#: ../gui/wxpython/menustrings.py:599
-msgid "Samples a raster map at vector point locations."
-msgstr "ポイントロケーションでのラスターマップのサンプリング"
-
-#: ../gui/wxpython/menustrings.py:600
-msgid "Reports and statistics"
-msgstr "レポートと統計"
-
-#: ../gui/wxpython/menustrings.py:601
-msgid "Basic vector metadata"
-msgstr "基本ベクトルメタデータ"
-
-#: ../gui/wxpython/menustrings.py:602
-#, fuzzy
-msgid "Outputs basic information about a vector map."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:603
-msgid "Classify attribute data"
-msgstr "属性データの分類"
-
-#: ../gui/wxpython/menustrings.py:604
-msgid "Classifies attribute data, e.g. for thematic mapping"
-msgstr "主題図作成等の属性データの分類"
-
-#: ../gui/wxpython/menustrings.py:605
-msgid "Report topology by category"
-msgstr "カテゴリ別トポロジーのレポート作成"
-
-#: ../gui/wxpython/menustrings.py:606
-#, fuzzy
-msgid "Reports geometry statistics for vector maps."
-msgstr "ラスターマップに関する一連のレポートを作成します"
-
-#: ../gui/wxpython/menustrings.py:607
-msgid "Upload or report topology"
-msgstr "トポロジーをアップロードまたはレポート作成"
-
-#: ../gui/wxpython/menustrings.py:608
-msgid "Populates database values from vector features."
-msgstr "ベクトルのフューチャからデータベースの値を設定"
-
-#: ../gui/wxpython/menustrings.py:609
-msgid "Univariate attribute statistics for points"
-msgstr "点の単変量属性統計"
-
-#: ../gui/wxpython/menustrings.py:610
-msgid ""
-"Calculates univariate statistics for attribute. Variance and standard "
-"deviation is calculated only for points if specified."
-msgstr ""
-"属性の単変量の統計を計算します。指定した場合はポイントの分散と標準偏差を計算"
-"します"
-
-#: ../gui/wxpython/menustrings.py:611
-msgid "Univariate statistics for attribute columns"
-msgstr "属性カラムによる単変量統計"
-
-#: ../gui/wxpython/menustrings.py:612
-msgid ""
-"Calculates univariate statistics on selected table column for a GRASS vector "
-"map."
-msgstr "ベクトルマップの選択されたテーブルのカラムで単変量統計計算を行う"
-
-#: ../gui/wxpython/menustrings.py:613
-msgid "Quadrat indices"
-msgstr "２次補間インデックス"
-
-#: ../gui/wxpython/menustrings.py:614
-msgid "Indices for quadrat counts of sites lists."
-msgstr "サイトの区画索引"
-
-#: ../gui/wxpython/menustrings.py:615
-msgid "Test normality"
-msgstr "正規性検定"
-
-#: ../gui/wxpython/menustrings.py:616
-#, fuzzy
-msgid "Tests for normality for vector points."
-msgstr "ファイル"
-
-#: ../gui/wxpython/menustrings.py:617
-#, fuzzy
-msgid "&Imagery"
-msgstr "映像"
-
-#: ../gui/wxpython/menustrings.py:618
-msgid "Develop images and groups"
-msgstr "画像とグループの作成 "
-
-#: ../gui/wxpython/menustrings.py:619
-msgid "Create/edit group"
-msgstr "グループの作成/修正"
-
-#: ../gui/wxpython/menustrings.py:620
-msgid "Creates, edits, and lists groups and subgroups of imagery files."
-msgstr "画像ファイルのグループとサブグループの作成、編集、一覧"
-
-#: ../gui/wxpython/menustrings.py:621
-msgid "Target group"
-msgstr "対象グループ"
-
-#: ../gui/wxpython/menustrings.py:622
-msgid "Targets an imagery group to a GRASS location and mapset."
-msgstr "画像グループをロケーションやマップセットの対象とする"
-
-#: ../gui/wxpython/menustrings.py:623
-msgid "Mosaic images"
-msgstr "モザイク画像"
-
-#: ../gui/wxpython/menustrings.py:624
-msgid "Mosaics several images and extends colormap"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:625
-msgid "Manage image colors"
-msgstr "カラーの管理 "
-
-#: ../gui/wxpython/menustrings.py:626
-msgid "Color balance for RGB"
-msgstr "RGBのカラーバランス"
-
-#: ../gui/wxpython/menustrings.py:627
-msgid "Performs auto-balancing of colors for LANDSAT images."
-msgstr "ランドサットデータのカラーバランス自動設定"
-
-#: ../gui/wxpython/menustrings.py:628
-msgid "HIS to RGB"
-msgstr "HIS → RGB"
-
-#: ../gui/wxpython/menustrings.py:629
-msgid ""
-"Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
-"RGB (Red-Green-Blue) color space."
-msgstr "色の定義をHIS（色相/照度/彩度）をRGB(赤/緑/青）に変換する"
-
-#: ../gui/wxpython/menustrings.py:631
-msgid ""
-"Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-"
-"Intensity-Saturation) color space."
-msgstr "色の定義をRGB(赤/緑/青）をHIS（色相/照度/彩度）に変換する"
-
-#: ../gui/wxpython/menustrings.py:632
-msgid "Rectify image or raster"
-msgstr "画像またはラスターを補正する"
-
-#: ../gui/wxpython/menustrings.py:633
-msgid ""
-"Rectifies an image by computing a coordinate transformation for each pixel "
-"in the image based on the control points."
-msgstr ""
-"コントロールポイントに基づいて、各ピクセルの座標変換を計算することによってイ"
-"メージを補正する"
-
-#: ../gui/wxpython/menustrings.py:634
-msgid "Basic RS processing"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:635
-msgid "MODIS Quality Flags"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:636
-msgid "Extract quality control parameters from Modis QC layers"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:637
-msgid "Latitude/longitude maps"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:638
-msgid "creates a latitude/longitude map"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:639
-msgid "Potential Sunshine Hours"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:640
-#, fuzzy
-msgid "creates a sunshine hours map"
-msgstr "ベクトル"
-
-#: ../gui/wxpython/menustrings.py:641
-msgid "Albedo"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:642
-msgid "Broad Band Albedo from Surface Reflectance."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:643
-#, fuzzy
-msgid "Vegetation Indices"
-msgstr "地域"
-
-#: ../gui/wxpython/menustrings.py:644
-msgid "Calculates different types of vegetation indices."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:645
-msgid "Biomass Growth"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:646
-msgid "Computes biomass growth, precursor of crop yield calculation"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:647
-msgid "Emissivity"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:648
-msgid "Emissivity from NDVI, generic method for spares land."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:649
-msgid "Energy Balance RS processing"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:650
-msgid "Soil Heat Flux"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:651
-msgid "Soil heat flux approximation (Bastiaanssen, 1995)"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:652
-msgid "Sensible Heat Flux (SEBAL01)"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:653
-msgid "Computes sensible Heat Flux iteration SEBAL 01"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:654
-msgid "Evaporative Fraction"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:655
-msgid ""
-"Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil "
-"moisture (Makin, Molden and Bastiaanssen, 2001)"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:656
-msgid "Actual Evapotranspiration"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:657
-msgid "actual evapotranspiration for diurnal period (Bastiaanssen, 1995)"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:658
-msgid "ET Temporal Integration"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:659
-msgid ""
-"Computes temporal integration of satellite ET actual (ETa) following the "
-"daily ET reference (ETo) from meteorological station(s)"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:660
-msgid "Brovey sharpening"
-msgstr "ブロービーシャープニング"
-
-#: ../gui/wxpython/menustrings.py:661
-msgid ""
-"Brovey transform to merge multispectral and high-res panchromatic channels"
-msgstr "マルチスペクトルで高解像度パンクロチャンネルをマージするブロビー変換"
-
-#: ../gui/wxpython/menustrings.py:662
-msgid "Classify image"
-msgstr "画像分類 "
-
-#: ../gui/wxpython/menustrings.py:663
-msgid "Clustering input for unsupervised classification"
-msgstr "非監視下分類用クラスタリング入力"
-
-#: ../gui/wxpython/menustrings.py:664
-msgid ""
-"Generates spectral signatures for land cover types in an image using a "
-"clustering algorithm."
-msgstr ""
-"クラスタリングアルゴリズムを使用してイメージによる土地被覆のスペクトル特性を"
-"生成"
-
-#: ../gui/wxpython/menustrings.py:665
-msgid "Maximum likelihood classification (MLC)"
-msgstr "最尤法による分類(MLC) "
-
-#: ../gui/wxpython/menustrings.py:666
-msgid "Classifies the cell spectral reflectances in imagery data."
-msgstr "セルの分光反射率で画像データを分類"
-
-#: ../gui/wxpython/menustrings.py:667
-msgid "Sequential maximum a posteriori classification (SMAP)"
-msgstr "逐次最大事後確率推定法 (SMAP)  "
-
-#: ../gui/wxpython/menustrings.py:668
-msgid ""
-"Performs contextual image classification using sequential maximum a "
-"posteriori (SMAP) estimation."
-msgstr "逐次最大事後確率推定法によりコンテキストイメージを分類します"
-
-#: ../gui/wxpython/menustrings.py:669
-msgid "Input for supervised MLC"
-msgstr "最尤法による分類法監視下の入力"
-
-#: ../gui/wxpython/menustrings.py:670
-msgid "Generates statistics for i.maxlik from raster map."
-msgstr "ラスターマップからi.maxlikの統計情報を生成"
-
-#: ../gui/wxpython/menustrings.py:671
-msgid "Input for supervised SMAP"
-msgstr "逐次最大事後確率推定法監視下の入力"
-
-#: ../gui/wxpython/menustrings.py:672
-msgid "Generates statistics for i.smap from raster map."
-msgstr "ラスターマップから i.smapの統計情報を生成"
-
-#: ../gui/wxpython/menustrings.py:673
-msgid "Filter image"
-msgstr "画像フィルター "
-
-#: ../gui/wxpython/menustrings.py:674
-msgid "Edge detection"
-msgstr "縁辺検出"
-
-#: ../gui/wxpython/menustrings.py:675
-msgid "Zero-crossing \"edge detection\" raster function for image processing."
-msgstr "ゼロ交差法を用いて画像のエッジを決定します "
-
-#: ../gui/wxpython/menustrings.py:676
-msgid "Matrix/convolving filter"
-msgstr "行列/畳み込みフィルタ"
-
-#: ../gui/wxpython/menustrings.py:677
-msgid "Raster map matrix filter."
-msgstr "ラスターマップ行列フィルター"
-
-#: ../gui/wxpython/menustrings.py:678
-#: ../gui/wxpython/gui_modules/wxgui_utils.py:358
-msgid "Histogram"
-msgstr "ヒストグラム"
-
-#: ../gui/wxpython/menustrings.py:679
-msgid "Generate histogram of image"
-msgstr "イメージのヒストグラムを生成"
-
-#: ../gui/wxpython/menustrings.py:680
-msgid "Spectral response"
-msgstr "スペクトル応答 "
-
-#: ../gui/wxpython/menustrings.py:681
-msgid ""
-"Displays spectral response at user specified locations in group or images."
-msgstr ""
-"イメージあるいはグループでユーザーが指定したロケーションのスペクトル応答を表"
-"示"
-
-#: ../gui/wxpython/menustrings.py:682
-msgid "Tasseled cap vegetation index"
-msgstr "タッセルドキャップ植生指数"
-
-#: ../gui/wxpython/menustrings.py:683
-msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
-msgstr "ランドサットデータのためのタッセルドキャップ（Kauth−Thomas）変換"
-
-#: ../gui/wxpython/menustrings.py:684
-msgid "Transform image"
-msgstr "画像変換 "
-
-#: ../gui/wxpython/menustrings.py:685
-msgid "Canonical correlation"
-msgstr "正準相関"
-
-#: ../gui/wxpython/menustrings.py:686
-msgid "Canonical components analysis (cca) program for image processing."
-msgstr "正準分析により画像処理を行います "
-
-#: ../gui/wxpython/menustrings.py:687
-msgid "Principal components"
-msgstr "主成分"
-
-#: ../gui/wxpython/menustrings.py:688
-msgid "Principal components analysis (pca) program for image processing."
-msgstr "主成分分析により画像処理を行います "
-
-#: ../gui/wxpython/menustrings.py:689
-msgid "Fast Fourier"
-msgstr "高速フーリエ変換"
-
-#: ../gui/wxpython/menustrings.py:690
-msgid "Fast Fourier Transform (FFT) for image processing."
-msgstr "高速フーリエ変換を行います "
-
-#: ../gui/wxpython/menustrings.py:691
-msgid "Inverse Fast Fourier"
-msgstr "高速フーリエ逆変換 "
-
-#: ../gui/wxpython/menustrings.py:692
-msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
-msgstr "高速フーリエ逆変換を行います "
-
-#: ../gui/wxpython/menustrings.py:693
-msgid "Atmospheric correction"
-msgstr "大気補正 "
-
-#: ../gui/wxpython/menustrings.py:694
-msgid "Performs atmospheric correction using the 6S algorithm."
-msgstr "6Sアルゴリズムを使用し大気補正を行います"
-
-#: ../gui/wxpython/menustrings.py:696
-msgid "Bit pattern comparison "
-msgstr "ビットパタ-ン比較"
-
-#: ../gui/wxpython/menustrings.py:697
-msgid "Compares bit patterns with a raster map."
-msgstr "ラスターマップのビットパターン比較"
-
-#: ../gui/wxpython/menustrings.py:698
-msgid "Kappa analysis"
-msgstr "カッパ分析"
-
-#: ../gui/wxpython/menustrings.py:699
-msgid ""
-"Calculate error matrix and kappa parameter for accuracy assessment of "
-"classification result."
-msgstr "分類結果の精度評価のための誤差行列とカッパのパラメータを計算します"
-
-#: ../gui/wxpython/menustrings.py:700
-msgid "OIF for LandSat TM"
-msgstr "ランドサットのバンド選定指標"
-
-#: ../gui/wxpython/menustrings.py:701
-msgid "Calculates Optimum-Index-Factor table for LANDSAT TM bands 1-5, & 7"
-msgstr "ランドサットの1-5,7バンドのバンド選定指標テーブルを計算する"
-
-#: ../gui/wxpython/menustrings.py:702
-#, fuzzy
-msgid "V&olumes"
-msgstr "値"
-
-#: ../gui/wxpython/menustrings.py:703
-msgid "Develop volumes"
-msgstr "立体の作成"
-
-#: ../gui/wxpython/menustrings.py:704
-msgid "Manage 3D NULL values"
-msgstr "3D NULL値の管理"
-
-#: ../gui/wxpython/menustrings.py:705
-msgid "Explicitly create the 3D NULL-value bitmap file."
-msgstr "3D NULL-値のビットマップファイルの作成 "
-
-#: ../gui/wxpython/menustrings.py:706
-msgid "Manage timestamp"
-msgstr "タイムスタンプ管理"
-
-#: ../gui/wxpython/menustrings.py:707
-msgid "Print/add/remove a timestamp for a 3D raster map"
-msgstr "3Dラスターマップのタイムスタンプ印刷/追加/削除 "
-
-#: ../gui/wxpython/menustrings.py:708
-msgid "3D Mask"
-msgstr "3D マスク"
-
-#: ../gui/wxpython/menustrings.py:709
-msgid "Establishes the current working 3D raster mask."
-msgstr "現在作業中の 3D ラスタマスクを確立します "
-
-#: ../gui/wxpython/menustrings.py:710
-msgid "3D raster map calculator"
-msgstr "３Dラスターマップカリキュレータ"
-
-#: ../gui/wxpython/menustrings.py:711
-msgid "Map calculator for volumetric map algebra"
-msgstr "体積地図代数のマップカリキュレータ"
-
-#: ../gui/wxpython/menustrings.py:712
-msgid "Cross section"
-msgstr "断面図"
-
-#: ../gui/wxpython/menustrings.py:713
-msgid ""
-"Creates cross section 2D raster map from 3d raster map based on 2D elevation "
-"map"
-msgstr "2D標高マップに基づいた3Dラスターから2Dのラスター断面地図を作成"
-
-#: ../gui/wxpython/menustrings.py:715
-msgid ""
-"Numerical calculation program for transient, confined groundwater flow in "
-"three dimensions"
-msgstr "3次元の地下水の流れに限定した一時的な数値解析プログラム "
-
-#: ../gui/wxpython/menustrings.py:716
-msgid "Interpolate volume from points"
-msgstr "点から立体を補間"
-
-#: ../gui/wxpython/menustrings.py:717
-msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
-"tension (RST) algorithm."
-msgstr ""
-"張力（ＲＳＴ）アルゴリズムによる正規化スプライン曲線を使用してG3Dグリッド立体"
-"の点を補間する"
-
-#: ../gui/wxpython/menustrings.py:718
-msgid "Report and Statistics"
-msgstr "レポートと統計"
-
-#: ../gui/wxpython/menustrings.py:719
-msgid "Basic volume metadata"
-msgstr "基本立体メタデータ"
-
-#: ../gui/wxpython/menustrings.py:720
-msgid "Outputs basic information about a user-specified 3D raster map layer."
-msgstr "ユーザー定義３Dラスターマップの基礎情報を出力します "
-
-#: ../gui/wxpython/menustrings.py:721
-msgid "Voxel statistics"
-msgstr "ボクセル統計"
-
-#: ../gui/wxpython/menustrings.py:722
-msgid "Generates volume statistics for raster3d maps."
-msgstr "3Dラスターマップにおいて統計解析値を生成"
-
-#: ../gui/wxpython/menustrings.py:723
-msgid "Univariate statistics for volumes"
-msgstr "立体の変量統計"
-
-#: ../gui/wxpython/menustrings.py:724
-msgid ""
-"Calculates univariate statistics from the non-null 3d cells of a raster3d "
-"map."
-msgstr "3Dラスターマップの非-NULLセルから単変量統計計算を行う"
-
-#: ../gui/wxpython/menustrings.py:725
-#, fuzzy
-msgid "&Database"
-msgstr "データベース"
-
-#: ../gui/wxpython/menustrings.py:726
-msgid "Database information"
-msgstr "データベース情報"
-
-#: ../gui/wxpython/menustrings.py:727
-msgid "Describe table"
-msgstr "テーブル定義"
-
-#: ../gui/wxpython/menustrings.py:728
-msgid "Describes a table in detail."
-msgstr "詳細なテーブル定義"
-
-#: ../gui/wxpython/menustrings.py:729
-msgid "List columns"
-msgstr "カラム一覧"
-
-#: ../gui/wxpython/menustrings.py:730
-msgid "List all columns for a given table."
-msgstr "テーブルのすべてのカラムを表示します "
-
-#: ../gui/wxpython/menustrings.py:731
-msgid "List drivers"
-msgstr "ドライバー一覧"
-
-#: ../gui/wxpython/menustrings.py:732
-msgid "List all database drivers."
-msgstr "全データベースドライバー一覧"
-
-#: ../gui/wxpython/menustrings.py:733
-msgid "List tables"
-msgstr "テーブル一覧"
-
-#: ../gui/wxpython/menustrings.py:734
-msgid "Lists all tables for a given database."
-msgstr "データベースの全てのテーブルを表示します"
-
-#: ../gui/wxpython/menustrings.py:735
-msgid "Manage databases"
-msgstr "データベース管理"
-
-#: ../gui/wxpython/menustrings.py:736
-msgid "Connect"
-msgstr "接続 "
-
-#: ../gui/wxpython/menustrings.py:737
-msgid "Prints/sets general DB connection for current mapset and exits."
-msgstr "現在のマップセットの汎用DB接続を印刷/設定し、終了する"
-
-#: ../gui/wxpython/menustrings.py:738
-msgid "Login"
-msgstr "ログイン "
-
-#: ../gui/wxpython/menustrings.py:739
-msgid "Sets user/password for driver/database."
-msgstr "ドライバー/データベースのユーザー名/パスワードを設定"
-
-#: ../gui/wxpython/menustrings.py:740
-msgid "Copy table"
-msgstr "テーブルコピー"
-
-#: ../gui/wxpython/menustrings.py:741
-msgid "Copy a table."
-msgstr "テーブルをコピー"
-
-#: ../gui/wxpython/menustrings.py:742
-msgid "New table"
-msgstr "新規テーブル"
-
-#: ../gui/wxpython/menustrings.py:743
-msgid ""
-"Creates and adds a new attribute table to a given layer of an existing "
-"vector map."
-msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
-
-#: ../gui/wxpython/menustrings.py:744
-msgid "Remove table"
-msgstr "テーブル削除"
-
-#: ../gui/wxpython/menustrings.py:745
-#, fuzzy
-msgid "Removes a table from database."
-msgstr "ベクトル."
-
-#: ../gui/wxpython/menustrings.py:746
-msgid "Add columns"
-msgstr "カラム追加"
-
-#: ../gui/wxpython/menustrings.py:747
-msgid ""
-"Adds one or more columns to the attribute table connected to a given vector "
-"map."
-msgstr "ベクトルマップに関連付けられている属性テーブルにカラムを追加する"
-
-#: ../gui/wxpython/menustrings.py:748
-msgid "Change values"
-msgstr "値の変更"
-
-#: ../gui/wxpython/menustrings.py:749
-msgid ""
-"Allows to update a column in the attribute table connected to a vector map."
-msgstr "ベクトルマップに接続された属性テーブルのカラムを更新することができます"
-
-#: ../gui/wxpython/menustrings.py:750 ../gui/wxpython/gui_modules/dbm.py:940
-msgid "Rename column"
-msgstr "カラム名称変更"
-
-#: ../gui/wxpython/menustrings.py:751
-msgid ""
-"Renames a column in the attribute table connected to a given vector map."
-msgstr "ベクトルマップに接続された属性テーブルのカラム名することができます"
-
-#: ../gui/wxpython/menustrings.py:752
-msgid "Test"
-msgstr "テストモード "
-
-#: ../gui/wxpython/menustrings.py:753
-msgid "Test database driver, database must exist and set by db.connect."
-msgstr ""
-"データベースドライバのテストr, データベースは実存しdb.connectで接続されている"
-"必要があります"
-
-#: ../gui/wxpython/menustrings.py:754
-#: ../gui/wxpython/gui_modules/sqlbuilder.py:194
-msgid "Query"
-msgstr "クエリ"
-
-#: ../gui/wxpython/menustrings.py:755
-msgid "Query any table"
-msgstr "テーブルの検索"
-
-#: ../gui/wxpython/menustrings.py:756
-msgid "Selects data from attribute table (performs SQL query statement(s))."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:757
-msgid "Query vector attribute data"
-msgstr "ベクトル属性データの検索"
-
-#: ../gui/wxpython/menustrings.py:758
-msgid "Prints vector map attributes."
-msgstr "ベクトルマップの属性を印刷"
-
-#: ../gui/wxpython/menustrings.py:759
-msgid "SQL statement"
-msgstr "SQL文"
-
-#: ../gui/wxpython/menustrings.py:760
-msgid "Executes any SQL statement."
-msgstr "SQL文の実行"
-
-#: ../gui/wxpython/menustrings.py:761
-msgid "Vector database connections"
-msgstr "ベクトル データベース接続"
-
-#: ../gui/wxpython/menustrings.py:762
-msgid "Reconnect vector to database"
-msgstr "ベクトルとデータベースの再接続"
-
-#: ../gui/wxpython/menustrings.py:763
-msgid "Reconnects vectors to a new database."
-msgstr "ベクトルと新規データベースの再接続"
-
-#: ../gui/wxpython/menustrings.py:764
-msgid "Set vector map - database connection"
-msgstr "ベクトルマップ - データベース 接続設定"
-
-#: ../gui/wxpython/menustrings.py:765
-msgid "Prints/sets DB connection for a vector map to attribute table."
-msgstr "ベクトルマップと属性テーブルのDB接続を出力/設定"
-
-#: ../gui/wxpython/menustrings.py:766
-#: ../gui/wxpython/gui_modules/menuform.py:741
-msgid "&Help"
-msgstr "ヘルプ(&H)"
-
-#: ../gui/wxpython/menustrings.py:767
-msgid "GRASS help"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:768 ../gui/wxpython/menustrings.py:770
-msgid "Display the HTML man pages of GRASS"
-msgstr "GRASSのHTMLマニュアルを表示"
-
-#: ../gui/wxpython/menustrings.py:769
-msgid "GUI help"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:771
-msgid "Show menu tree"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:772
-msgid "Show menu tree in new window"
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:773 ../gui/wxpython/menustrings.py:774
-#: ../gui/wxpython/gui_modules/help.py:367
-msgid "About GRASS GIS"
-msgstr "GRASS GIS について "
 
 #: ../gui/wxpython/gui_modules/colorrules.py:94
 msgid "Create new color table for raster map"
@@ -4073,6 +779,10 @@ msgstr "マップレイヤー"
 msgid "Remove"
 msgstr "削除 "
 
+#: ../gui/wxpython/gui_modules/wxgui_utils.py:260
+msgid "Rename"
+msgstr "名前変更 "
+
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:269
 msgid "Change opacity level"
 msgstr "不透明度レベルの変更 "
@@ -4122,6 +832,10 @@ msgstr "選択したマップから計算領域をセット (未選択は不可)
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:356
 msgid "Set color table"
 msgstr "色テーブルのセット"
+
+#: ../gui/wxpython/gui_modules/wxgui_utils.py:358
+msgid "Histogram"
+msgstr "ヒストグラム"
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:360
 #: ../gui/wxpython/gui_modules/profile.py:1154
@@ -4212,6 +926,10 @@ msgstr "RGB"
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:703
 msgid "HIS"
 msgstr "HIS "
+
+#: ../gui/wxpython/gui_modules/wxgui_utils.py:706
+msgid "Shaded relief"
+msgstr "陰影 "
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:709
 msgid "raster cell numbers"
@@ -4665,6 +1383,10 @@ msgstr ""
 msgid "Menu tree"
 msgstr ""
 
+#: ../gui/wxpython/gui_modules/help.py:367
+msgid "About GRASS GIS"
+msgstr "GRASS GIS について "
+
 #: ../gui/wxpython/gui_modules/help.py:390
 msgid "Official GRASS site: http://grass.osgeo.org"
 msgstr "公式 GRASS サイト: http://grass.osgeo.org  "
@@ -4733,18 +1455,18 @@ msgid "Define GRASS Database and Location Name"
 msgstr "GRASSデータベースとロケーション名の設定 "
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:147
-#: ../gui/wxpython/gui_modules/location_wizard.py:1158
-#: ../gui/wxpython/gui_modules/location_wizard.py:1236
-#: ../gui/wxpython/gui_modules/location_wizard.py:1322
+#: ../gui/wxpython/gui_modules/location_wizard.py:1145
+#: ../gui/wxpython/gui_modules/location_wizard.py:1223
+#: ../gui/wxpython/gui_modules/location_wizard.py:1309
 #: ../gui/wxpython/gui_modules/gdialogs.py:962
 #: ../gui/wxpython/gui_modules/gdialogs.py:971
-#: ../gui/wxpython/gui_modules/menuform.py:1360
-#: ../gui/wxpython/gui_modules/menuform.py:1502 ../gui/wxpython/gis_set.py:130
+#: ../gui/wxpython/gui_modules/menuform.py:1358
+#: ../gui/wxpython/gui_modules/menuform.py:1500 ../gui/wxpython/gis_set.py:130
 msgid "Browse"
 msgstr "参照 "
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:155
-#: ../gui/wxpython/gis_set.py:103
+#: ../gui/wxpython/gis_set.py:105
 msgid "GIS Data Directory:"
 msgstr "GISデータディレクトリ："
 
@@ -4757,7 +1479,7 @@ msgid "Choose GRASS data directory:"
 msgstr "GRASSデータディレクトリの選択："
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:220
-#: ../gui/wxpython/gui_modules/location_wizard.py:1966
+#: ../gui/wxpython/gui_modules/location_wizard.py:1953
 msgid "Location already exists in GRASS Database."
 msgstr "GRASSデータベースにロケーションはすでに存在しています "
 
@@ -4798,16 +1520,16 @@ msgid "Choose projection"
 msgstr "投影法の選択 "
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:375
-#: ../gui/wxpython/gui_modules/location_wizard.py:894
-#: ../gui/wxpython/gui_modules/location_wizard.py:1056
-#: ../gui/wxpython/gui_modules/location_wizard.py:1330
+#: ../gui/wxpython/gui_modules/location_wizard.py:881
+#: ../gui/wxpython/gui_modules/location_wizard.py:1043
+#: ../gui/wxpython/gui_modules/location_wizard.py:1317
 msgid "Code"
 msgstr "コード "
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:375
-#: ../gui/wxpython/gui_modules/location_wizard.py:894
-#: ../gui/wxpython/gui_modules/location_wizard.py:1056
-#: ../gui/wxpython/gui_modules/location_wizard.py:1330
+#: ../gui/wxpython/gui_modules/location_wizard.py:881
+#: ../gui/wxpython/gui_modules/location_wizard.py:1043
+#: ../gui/wxpython/gui_modules/location_wizard.py:1317
 msgid "Description"
 msgstr "説明 "
 
@@ -4816,152 +1538,166 @@ msgid "Projection code:"
 msgstr "投影コード： "
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:388
-#: ../gui/wxpython/gui_modules/location_wizard.py:908
-#: ../gui/wxpython/gui_modules/location_wizard.py:1069
+#: ../gui/wxpython/gui_modules/location_wizard.py:895
+#: ../gui/wxpython/gui_modules/location_wizard.py:1056
 msgid "Search in description:"
 msgstr "説明文を検索： "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:566
+#: ../gui/wxpython/gui_modules/location_wizard.py:565
 #, python-format
 msgid "Unable to read list: %s"
 msgstr "リストが読ません： %s "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:673
+#: ../gui/wxpython/gui_modules/location_wizard.py:672
 msgid "Choose projection parameters"
 msgstr "投影パラメータを選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:693
+#: ../gui/wxpython/gui_modules/location_wizard.py:685
 msgid "Select datum or ellipsoid (next page)"
 msgstr "データムまたは楕円体の選択 (次のページ) "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:699
+#: ../gui/wxpython/gui_modules/location_wizard.py:691
 msgid "Datum with associated ellipsoid"
 msgstr "楕円体に関連づけられたデータム "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:702
+#: ../gui/wxpython/gui_modules/location_wizard.py:694
 msgid "Ellipsoid only"
 msgstr "楕円体のみ "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:766
+#: ../gui/wxpython/gui_modules/location_wizard.py:751
+#, python-format
+msgid "You must enter a value for %s"
+msgstr ""
+
+#: ../gui/wxpython/gui_modules/location_wizard.py:763
 #, python-format
 msgid " Enter parameters for %s projection "
 msgstr "投影法 %s のパラメータを入力 "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:872
+#: ../gui/wxpython/gui_modules/location_wizard.py:804
+#, fuzzy
+msgid "No"
+msgstr "北"
+
+#: ../gui/wxpython/gui_modules/location_wizard.py:804
+msgid "Yes"
+msgstr ""
+
+#: ../gui/wxpython/gui_modules/location_wizard.py:859
 msgid "Specify geodetic datum"
 msgstr "測地系データムの定義 "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:894
+#: ../gui/wxpython/gui_modules/location_wizard.py:881
 msgid "Ellipsoid"
 msgstr "楕円体"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:899
+#: ../gui/wxpython/gui_modules/location_wizard.py:886
 msgid "Datum code:"
 msgstr "データムコード："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1033
+#: ../gui/wxpython/gui_modules/location_wizard.py:1020
 msgid "Specify ellipsoid"
 msgstr "楕円体定義"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1061
+#: ../gui/wxpython/gui_modules/location_wizard.py:1048
 msgid "Ellipsoid code:"
 msgstr "楕円体コード："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1151
-#: ../gui/wxpython/gui_modules/location_wizard.py:1210
+#: ../gui/wxpython/gui_modules/location_wizard.py:1138
+#: ../gui/wxpython/gui_modules/location_wizard.py:1197
 msgid "Select georeferenced file"
 msgstr "地理参照ファイルの選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1156
+#: ../gui/wxpython/gui_modules/location_wizard.py:1143
 msgid "Georeferenced file:"
 msgstr "地理参照ファイル："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1229
-#: ../gui/wxpython/gui_modules/location_wizard.py:1285
+#: ../gui/wxpython/gui_modules/location_wizard.py:1216
+#: ../gui/wxpython/gui_modules/location_wizard.py:1272
 msgid "Select WKT file"
 msgstr "WKTファイルの選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1234
+#: ../gui/wxpython/gui_modules/location_wizard.py:1221
 msgid "WKT file:"
 msgstr "WKTファイル："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1304
+#: ../gui/wxpython/gui_modules/location_wizard.py:1291
 msgid "Choose EPSG Code"
 msgstr "EPSGコードの選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1312
+#: ../gui/wxpython/gui_modules/location_wizard.py:1299
 msgid "Path to the EPSG-codes file:"
 msgstr "EPSGコードファイルのパス："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1314
+#: ../gui/wxpython/gui_modules/location_wizard.py:1301
 #: ../gui/wxpython/gui_modules/preferences.py:1443
 msgid "EPSG code:"
 msgstr "EPSGコード："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1330
+#: ../gui/wxpython/gui_modules/location_wizard.py:1317
 msgid "Parameters"
 msgstr "パラメータ"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1471
+#: ../gui/wxpython/gui_modules/location_wizard.py:1458
 msgid "Choose EPSG codes file"
 msgstr "EPSGコードファイルの選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1499
+#: ../gui/wxpython/gui_modules/location_wizard.py:1486
 #, python-format
 msgid "Unable to read EPGS codes: %s"
 msgstr " EPGSコードが読めません: %s"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1519
+#: ../gui/wxpython/gui_modules/location_wizard.py:1506
 msgid "Choose method of specifying georeferencing parameters"
 msgstr "地理参照パラメータの定義方法の選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1527
+#: ../gui/wxpython/gui_modules/location_wizard.py:1514
 msgid "Enter PROJ.4 parameters string:"
 msgstr "PROJ.4パラメータの入力："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1604
+#: ../gui/wxpython/gui_modules/location_wizard.py:1591
 msgid "Summary"
 msgstr "要約"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1626
+#: ../gui/wxpython/gui_modules/location_wizard.py:1613
 msgid "GRASS Database:"
 msgstr "GRASSデータベース："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1632
+#: ../gui/wxpython/gui_modules/location_wizard.py:1619
 msgid "Location Name:"
 msgstr "ロケーション名："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1638
+#: ../gui/wxpython/gui_modules/location_wizard.py:1625
 msgid "Projection:"
 msgstr "投影法："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1673
+#: ../gui/wxpython/gui_modules/location_wizard.py:1660
 msgid "PROJ.4 definition:"
 msgstr "PROJ.4 定義："
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1729
+#: ../gui/wxpython/gui_modules/location_wizard.py:1716
 #, python-format
 msgid "Do you want to create GRASS location <%s>?"
 msgstr "GRASS ロケーションを作成しますか <%s>?"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1730
+#: ../gui/wxpython/gui_modules/location_wizard.py:1717
 msgid "Create new location?"
 msgstr "新しいロケーションを作成しますか？"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1772
+#: ../gui/wxpython/gui_modules/location_wizard.py:1759
 msgid "Define new GRASS Location"
 msgstr "新しいロケーション定義"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1855
+#: ../gui/wxpython/gui_modules/location_wizard.py:1842
 msgid "Do you want to set the default region extents and resolution now?"
 msgstr "デフォルトの範囲設定と解像度をセットしますか？"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1857
+#: ../gui/wxpython/gui_modules/location_wizard.py:1844
 #, python-format
 msgid "Location <%s> created"
 msgstr "ロケーション <%s> が作成されました"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1870
+#: ../gui/wxpython/gui_modules/location_wizard.py:1857
 #, python-format
 msgid ""
 "Unable to create new location. Location <%(loc)s> not created.\n"
@@ -4972,22 +1708,22 @@ msgstr ""
 "\n"
 "詳細： %(err)s "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1875
-#: ../gui/wxpython/gui_modules/location_wizard.py:1881
+#: ../gui/wxpython/gui_modules/location_wizard.py:1862
+#: ../gui/wxpython/gui_modules/location_wizard.py:1868
 #: ../gui/wxpython/gis_set.py:134
 msgid "Location wizard"
 msgstr "ロケーションウィザード"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1879
+#: ../gui/wxpython/gui_modules/location_wizard.py:1866
 msgid "Location wizard canceled. Location not created."
 msgstr ""
 "ロケーションウイザードはキャンセルされました。ロケーションは作成されません"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1964
+#: ../gui/wxpython/gui_modules/location_wizard.py:1951
 msgid "Unable to create new location"
 msgstr "新しいロケーションは作成できません"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1987
+#: ../gui/wxpython/gui_modules/location_wizard.py:1974
 #, python-format
 msgid ""
 "Location <%(loc)s> will be created in GIS data directory <%(dir)s>.You will "
@@ -4996,119 +1732,119 @@ msgstr ""
 "ロケーション <%(loc)s> がディレクトリ<%(dir)s>に作成されます 必要ならばGRASS"
 "のスタートアップ画面でデフォルトディレクトリを変更してください"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:1992
+#: ../gui/wxpython/gui_modules/location_wizard.py:1979
 msgid "New GIS data directory"
 msgstr "新しいGISデータディレクトリ"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2153
+#: ../gui/wxpython/gui_modules/location_wizard.py:2140
 msgid "EPSG code missing."
 msgstr "EPSGコードがありません"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2177
-#: ../gui/wxpython/gui_modules/location_wizard.py:2201
+#: ../gui/wxpython/gui_modules/location_wizard.py:2164
+#: ../gui/wxpython/gui_modules/location_wizard.py:2188
 msgid "File not found."
 msgstr "ファイルが見つかりません"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2220
+#: ../gui/wxpython/gui_modules/location_wizard.py:2207
 msgid "Set default region extent and resolution"
 msgstr "デフォルトの領域と解像度をセット"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2267
+#: ../gui/wxpython/gui_modules/location_wizard.py:2254
 msgid "&Set region"
 msgstr "&領域の選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2297
+#: ../gui/wxpython/gui_modules/location_wizard.py:2284
 msgid "Invalid location selected."
 msgstr "ロケーションの選択が間違っています"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2314
+#: ../gui/wxpython/gui_modules/location_wizard.py:2301
 msgid "Invalid region"
 msgstr "間違った領域"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2344
+#: ../gui/wxpython/gui_modules/location_wizard.py:2331
 msgid "Click here to show 3D settings"
 msgstr "３D設定を表示"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2345
+#: ../gui/wxpython/gui_modules/location_wizard.py:2332
 msgid "Click here to hide 3D settings"
 msgstr "３D設定を非表示 "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2368
-#: ../gui/wxpython/gui_modules/location_wizard.py:2649
+#: ../gui/wxpython/gui_modules/location_wizard.py:2355
+#: ../gui/wxpython/gui_modules/location_wizard.py:2636
 #, python-format
 msgid "Rows: %d"
 msgstr "行： %d "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2369
-#: ../gui/wxpython/gui_modules/location_wizard.py:2650
+#: ../gui/wxpython/gui_modules/location_wizard.py:2356
+#: ../gui/wxpython/gui_modules/location_wizard.py:2637
 #, python-format
 msgid "Cols: %d"
 msgstr "カラム： %d"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2370
-#: ../gui/wxpython/gui_modules/location_wizard.py:2651
+#: ../gui/wxpython/gui_modules/location_wizard.py:2357
+#: ../gui/wxpython/gui_modules/location_wizard.py:2638
 #, python-format
 msgid "Cells: %d"
 msgstr "セル： %d "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2411
-#: ../gui/wxpython/gui_modules/location_wizard.py:2653
+#: ../gui/wxpython/gui_modules/location_wizard.py:2398
+#: ../gui/wxpython/gui_modules/location_wizard.py:2640
 #, python-format
 msgid "Depth: %d"
 msgstr "深さ： %d"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2412
-#: ../gui/wxpython/gui_modules/location_wizard.py:2654
+#: ../gui/wxpython/gui_modules/location_wizard.py:2399
+#: ../gui/wxpython/gui_modules/location_wizard.py:2641
 #, python-format
 msgid "3D Cells: %d"
 msgstr "3D セル： %d "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2415
+#: ../gui/wxpython/gui_modules/location_wizard.py:2402
 msgid "Top"
 msgstr "上部"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2423
+#: ../gui/wxpython/gui_modules/location_wizard.py:2410
 msgid "Bottom"
 msgstr "下部"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2431
+#: ../gui/wxpython/gui_modules/location_wizard.py:2418
 msgid "T-B resolution"
 msgstr "上-下 解像度 "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2494
+#: ../gui/wxpython/gui_modules/location_wizard.py:2481
 msgid "North"
 msgstr "北"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2502
+#: ../gui/wxpython/gui_modules/location_wizard.py:2489
 msgid "West"
 msgstr "西"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2522
+#: ../gui/wxpython/gui_modules/location_wizard.py:2509
 msgid "East"
 msgstr "東"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2531
+#: ../gui/wxpython/gui_modules/location_wizard.py:2518
 msgid "South"
 msgstr "南"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2535
+#: ../gui/wxpython/gui_modules/location_wizard.py:2522
 msgid "N-S resolution"
 msgstr "北-南 解像度"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2543
+#: ../gui/wxpython/gui_modules/location_wizard.py:2530
 msgid "E-W resolution"
 msgstr "東-西 解像度 "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2621
+#: ../gui/wxpython/gui_modules/location_wizard.py:2608
 #, python-format
 msgid "Invalid value: %s"
 msgstr "間違った値： %s "
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2705
+#: ../gui/wxpython/gui_modules/location_wizard.py:2692
 msgid "Select datum transformation"
 msgstr "データム変換方法の選択"
 
-#: ../gui/wxpython/gui_modules/location_wizard.py:2730
+#: ../gui/wxpython/gui_modules/location_wizard.py:2717
 msgid "Select from list of datum transformations"
 msgstr "データム変換方法を一覧表から選択"
 
@@ -5215,6 +1951,12 @@ msgstr "地形"
 #: ../gui/wxpython/gui_modules/profile.py:1214
 msgid "Color"
 msgstr "色"
+
+#: ../gui/wxpython/gui_modules/nviz_tools.py:258
+#: ../gui/wxpython/gui_modules/nviz_tools.py:438
+#: ../gui/wxpython/gui_modules/nviz_tools.py:856
+msgid "Mask"
+msgstr "マスク "
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:259
 #: ../gui/wxpython/gui_modules/nviz_tools.py:857
@@ -6184,6 +2926,10 @@ msgstr "実行してダイアログを閉じる"
 msgid "Database connection"
 msgstr "データベース接続"
 
+#: ../gui/wxpython/gui_modules/sqlbuilder.py:194
+msgid "Query"
+msgstr "クエリ"
+
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:240
 msgid "Columns"
 msgstr "カラム"
@@ -6248,34 +2994,36 @@ msgstr "コマンドの実行を中止します"
 msgid "Find module:"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/goutput.py:448
+#: ../gui/wxpython/gui_modules/goutput.py:451
 #, python-format
-msgid "Command '%s' not yet implemented."
-msgstr "コマンド '%s' はまだ実装されていません"
+msgid ""
+"Command '%s' not yet implemented in the GUI. Try adding it as a command "
+"layer instead."
+msgstr ""
 
-#: ../gui/wxpython/gui_modules/goutput.py:534
+#: ../gui/wxpython/gui_modules/goutput.py:537
 msgid "Save file as..."
 msgstr "名前を付けて保存する： %s "
 
-#: ../gui/wxpython/gui_modules/goutput.py:582
+#: ../gui/wxpython/gui_modules/goutput.py:585
 #, python-format
 msgid "%d modules found"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/goutput.py:664
+#: ../gui/wxpython/gui_modules/goutput.py:667
 msgid ""
 "Please note that the data are left in incosistent stage and can be corrupted"
 msgstr "データが矛盾した状態か破損して残っていますので注意してください"
 
-#: ../gui/wxpython/gui_modules/goutput.py:667
+#: ../gui/wxpython/gui_modules/goutput.py:670
 msgid "Command aborted"
 msgstr "コマンド中止"
 
-#: ../gui/wxpython/gui_modules/goutput.py:675
+#: ../gui/wxpython/gui_modules/goutput.py:678
 msgid "Command finished"
 msgstr "コマンド終了"
 
-#: ../gui/wxpython/gui_modules/goutput.py:975
+#: ../gui/wxpython/gui_modules/goutput.py:978
 msgid "Unable to encode text. Please set encoding in GUI preferences."
 msgstr ""
 "テキストをエンコードすることができません GUIの設定でエンコーディングを設定し"
@@ -6406,7 +3154,7 @@ msgid "Kriging"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/v_krige_wxGUI.py:113
-#: ../gui/wxpython/gui_modules/menuform.py:1057
+#: ../gui/wxpython/gui_modules/menuform.py:1055
 msgid "Command output"
 msgstr "コマンド出力 "
 
@@ -6431,7 +3179,7 @@ msgid "Allow output files to overwrite existing files"
 msgstr "既存のファイルに上書きする"
 
 #: ../gui/wxpython/gui_modules/v_krige_wxGUI.py:157
-#: ../gui/wxpython/gui_modules/menuform.py:762
+#: ../gui/wxpython/gui_modules/menuform.py:760
 msgid "&Run"
 msgstr "実行(&R)"
 
@@ -6743,6 +3491,10 @@ msgstr "データ長"
 #: ../gui/wxpython/gui_modules/dbm.py:930
 msgid "Add"
 msgstr "追加"
+
+#: ../gui/wxpython/gui_modules/dbm.py:940
+msgid "Rename column"
+msgstr "カラム名称変更"
 
 #: ../gui/wxpython/gui_modules/dbm.py:950
 msgid "To"
@@ -7083,10 +3835,14 @@ msgid "Create attribute table"
 msgstr "属性テーブル作成"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:200
-#: ../gui/wxpython/gui_modules/menuform.py:804
+#: ../gui/wxpython/gui_modules/menuform.py:802
 #: ../gui/wxpython/gui_modules/preferences.py:1193
 msgid "Add created map into layer tree"
 msgstr "レイヤーツリーに作成したマップを追加"
+
+#: ../gui/wxpython/gui_modules/gdialogs.py:236
+msgid "Create new vector map"
+msgstr "新しいベクタマップ "
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:251
 #, python-format
@@ -7451,7 +4207,7 @@ msgid "Show legend"
 msgstr "凡例表示"
 
 #: ../gui/wxpython/gui_modules/menuform.py:142
-#: ../gui/wxpython/gui_modules/menuform.py:1464
+#: ../gui/wxpython/gui_modules/menuform.py:1462
 msgid "Select Color"
 msgstr "色選択 "
 
@@ -7478,123 +4234,111 @@ msgstr "<必須>"
 msgid "Parameter %(name)s (%(desc)s) is missing.\n"
 msgstr "パラメータ %(name)s (%(desc)s) が有りません\n"
 
-#: ../gui/wxpython/gui_modules/menuform.py:726
+#: ../gui/wxpython/gui_modules/menuform.py:724
 msgid "Enter parameters for '"
 msgstr "パラメータを入力してください '"
 
-#: ../gui/wxpython/gui_modules/menuform.py:736
-msgid "&Close"
-msgstr "閉じる(&C)"
-
-#: ../gui/wxpython/gui_modules/menuform.py:737
+#: ../gui/wxpython/gui_modules/menuform.py:735
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/menuform.py:742
+#: ../gui/wxpython/gui_modules/menuform.py:740
 msgid "Show manual page of the command (Ctrl+H)"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/menuform.py:747
-msgid "&Apply"
-msgstr "適用(&A)"
-
-#: ../gui/wxpython/gui_modules/menuform.py:763
+#: ../gui/wxpython/gui_modules/menuform.py:761
 #, fuzzy
 msgid "Run the command (Ctrl+R)"
 msgstr "実行"
 
-#: ../gui/wxpython/gui_modules/menuform.py:770
-msgid "C&opy"
-msgstr "コピー(&o)"
-
-#: ../gui/wxpython/gui_modules/menuform.py:771
+#: ../gui/wxpython/gui_modules/menuform.py:769
 #, fuzzy
 msgid "Copy the current command string to the clipboard (Ctrl+C)"
 msgstr "コピー"
 
-#: ../gui/wxpython/gui_modules/menuform.py:813
+#: ../gui/wxpython/gui_modules/menuform.py:811
 #: ../gui/wxpython/gui_modules/preferences.py:1183
 msgid "Close dialog on finish"
 msgstr "終了のためダイアログを閉じる"
 
-#: ../gui/wxpython/gui_modules/menuform.py:956
+#: ../gui/wxpython/gui_modules/menuform.py:954
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/menuform.py:1016
-#: ../gui/wxpython/gui_modules/menuform.py:1029
-#: ../gui/wxpython/gui_modules/menuform.py:1627
+#: ../gui/wxpython/gui_modules/menuform.py:1014
+#: ../gui/wxpython/gui_modules/menuform.py:1027
+#: ../gui/wxpython/gui_modules/menuform.py:1625
 msgid "Required"
 msgstr "必須"
 
-#: ../gui/wxpython/gui_modules/menuform.py:1019
-#: ../gui/wxpython/gui_modules/menuform.py:1029
+#: ../gui/wxpython/gui_modules/menuform.py:1017
+#: ../gui/wxpython/gui_modules/menuform.py:1027
 msgid "Optional"
 msgstr "オプション"
 
-#: ../gui/wxpython/gui_modules/menuform.py:1067
+#: ../gui/wxpython/gui_modules/menuform.py:1065
 msgid "Manual"
 msgstr "マニュアル "
 
-#: ../gui/wxpython/gui_modules/menuform.py:1166
+#: ../gui/wxpython/gui_modules/menuform.py:1164
 msgid "[multiple]"
 msgstr "[複数] "
 
-#: ../gui/wxpython/gui_modules/menuform.py:1214
+#: ../gui/wxpython/gui_modules/menuform.py:1212
 msgid "Valid range"
 msgstr "有効範囲 "
 
-#: ../gui/wxpython/gui_modules/menuform.py:1343
+#: ../gui/wxpython/gui_modules/menuform.py:1341
 msgid "Format"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/menuform.py:1346
+#: ../gui/wxpython/gui_modules/menuform.py:1344
 #, fuzzy
 msgid "Native"
 msgstr "保存"
 
-#: ../gui/wxpython/gui_modules/menuform.py:1346
+#: ../gui/wxpython/gui_modules/menuform.py:1344
 msgid "OGR"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/menuform.py:1359
+#: ../gui/wxpython/gui_modules/menuform.py:1357
 msgid "Choose OGR data source"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/menuform.py:1369
+#: ../gui/wxpython/gui_modules/menuform.py:1367
 msgid "Name of OGR data source:"
 msgstr ""
 
-#: ../gui/wxpython/gui_modules/menuform.py:1483
+#: ../gui/wxpython/gui_modules/menuform.py:1481
 msgid "Transparent"
 msgstr "透過 "
 
-#: ../gui/wxpython/gui_modules/menuform.py:1500
+#: ../gui/wxpython/gui_modules/menuform.py:1498
 #, python-format
 msgid "Choose %s"
 msgstr "選択 %s "
 
-#: ../gui/wxpython/gui_modules/menuform.py:1501
+#: ../gui/wxpython/gui_modules/menuform.py:1499
 msgid "File"
 msgstr "ファイル "
 
-#: ../gui/wxpython/gui_modules/menuform.py:1826
+#: ../gui/wxpython/gui_modules/menuform.py:1824
 #, python-format
 msgid "Error in %s"
 msgstr "%s でエラー "
 
-#: ../gui/wxpython/gui_modules/menuform.py:1860
+#: ../gui/wxpython/gui_modules/menuform.py:1858
 #, python-format
 msgid "Unable to fetch interface description for command '%s'."
 msgstr "コマンドの変換情報を取得することができません '%s'"
 
-#: ../gui/wxpython/gui_modules/menuform.py:1963
+#: ../gui/wxpython/gui_modules/menuform.py:1961
 #, python-format
 msgid "Unable to parse command %s"
 msgstr "コマンドを解析することができません %s"
 
-#: ../gui/wxpython/gui_modules/menuform.py:2056
+#: ../gui/wxpython/gui_modules/menuform.py:2054
 #, python-format
 msgid "usage: %s <grass command>"
 msgstr "用法： %s <GRASS コマンド> "
@@ -7978,6 +4722,10 @@ msgstr "プロジェクトのロケーション"
 msgid "Precision:"
 msgstr ""
 
+#: ../gui/wxpython/gui_modules/preferences.py:1562
+msgid "Workspace"
+msgstr "ワークスペース "
+
 #: ../gui/wxpython/gui_modules/preferences.py:1565
 msgid "Loading workspace"
 msgstr "ワークスペースのロード"
@@ -8310,15 +5058,15 @@ msgstr "シンボルの設定 "
 msgid "Georectifier settings saved to file '%s'."
 msgstr "幾何補正設定をファイルに保存しました '%s'."
 
-#: ../gui/wxpython/gis_set.py:90
+#: ../gui/wxpython/gis_set.py:92
 msgid "Choose project location and mapset"
 msgstr "プロジェクトのロケーションとマップセットを選択"
 
-#: ../gui/wxpython/gis_set.py:93
+#: ../gui/wxpython/gis_set.py:95
 msgid "Manage"
 msgstr "管理"
 
-#: ../gui/wxpython/gis_set.py:95
+#: ../gui/wxpython/gis_set.py:97
 #, python-format
 msgid ""
 "Welcome to GRASS GIS %s\n"
@@ -8327,7 +5075,7 @@ msgstr ""
 "世界をリードするオープンソースGIS \n"
 "GRASS GIS %s へようこそ"
 
-#: ../gui/wxpython/gis_set.py:99
+#: ../gui/wxpython/gis_set.py:101
 msgid ""
 "Select an existing project location and mapset\n"
 "or define a new location"
@@ -8335,7 +5083,7 @@ msgstr ""
 "既存プロジェクトのロケーションとマップセットの選択\n"
 "またはロケーションの新規作成"
 
-#: ../gui/wxpython/gis_set.py:105
+#: ../gui/wxpython/gis_set.py:107
 msgid ""
 "Project location\n"
 "(projection/coordinate system)"
@@ -8343,7 +5091,7 @@ msgstr ""
 "プロジェクトのロケーション\n"
 "(投影法/座標系)"
 
-#: ../gui/wxpython/gis_set.py:108
+#: ../gui/wxpython/gis_set.py:110
 msgid ""
 "Accessible mapsets\n"
 "(directories of GIS files)"
@@ -8351,7 +5099,7 @@ msgstr ""
 "利用可能なマップセット\n"
 "(GISファイルのディレクトリ)"
 
-#: ../gui/wxpython/gis_set.py:111
+#: ../gui/wxpython/gis_set.py:113
 msgid ""
 "Create new mapset\n"
 "in selected location"
@@ -8359,11 +5107,11 @@ msgstr ""
 "マップセットの新規作成\n"
 "(選択したロケーション内)"
 
-#: ../gui/wxpython/gis_set.py:114
+#: ../gui/wxpython/gis_set.py:116
 msgid "Define new location"
 msgstr "ロケーションの新規作成"
 
-#: ../gui/wxpython/gis_set.py:117
+#: ../gui/wxpython/gis_set.py:119
 msgid ""
 "Rename/delete selected\n"
 "mapset or location"
@@ -8371,13 +5119,9 @@ msgstr ""
 "名前変更 または 削除\n"
 "(選択したマップセット・ロケーション)"
 
-#: ../gui/wxpython/gis_set.py:122
+#: ../gui/wxpython/gis_set.py:124
 msgid "Start GRASS"
 msgstr "GRASSの起動"
-
-#: ../gui/wxpython/gis_set.py:128
-msgid "Help"
-msgstr "ヘルプ "
 
 #: ../gui/wxpython/gis_set.py:132
 msgid "Create mapset"
@@ -8516,42 +5260,2441 @@ msgstr ""
 "ください。一般には \"grassdata\"が使用されます。"
 
 #, fuzzy
-msgid "Output vector map name"
-msgstr "ベクトル"
+#~ msgid "&File"
+#~ msgstr "ファイル"
+
+#~ msgid "New"
+#~ msgstr "新規 "
+
+#~ msgid "Create new workspace"
+#~ msgstr "ワークスペース新規作成 "
+
+#~ msgid "Open"
+#~ msgstr "オープン "
+
+#~ msgid "Load workspace from file"
+#~ msgstr "ファイルからワークスペースのロード "
+
+#~ msgid "Save"
+#~ msgstr "保存 "
+
+#~ msgid "Save as"
+#~ msgstr "別名で保存 "
+
+#~ msgid "Save workspace to file"
+#~ msgstr "現在のワークスペースを保存 "
+
+#~ msgid "Close"
+#~ msgstr "閉じる "
 
 #, fuzzy
-msgid "Create/edit projection information for current location"
-msgstr "の"
+#~ msgid "Close workspace file"
+#~ msgstr "保存"
+
+#~ msgid "Load map layers"
+#~ msgstr "マップレイヤーのロード "
+
+#~ msgid "Load GRC file (Tcl/Tk GUI)"
+#~ msgstr "GRCファイル のロード(Tcl/Tk GUI)  "
+
+#~ msgid "Load map layers from GRC file to layer tree"
+#~ msgstr "GRC ファイルからマップレイヤーをレイヤーツリーにロード "
+
+#~ msgid "Import raster map"
+#~ msgstr "ラスターマップのインポート "
+
+#~ msgid "Import raster data using GDAL"
+#~ msgstr "GDAL用ラスターデータのインポート "
+
+#~ msgid "Import GDAL supported raster file into a binary raster map layer."
+#~ msgstr "GDALファイルをラスターマップとしてインポート "
+
+#~ msgid "Multiple raster data import using GDAL"
+#~ msgstr "GDAL用ラスターデータのインポート "
+
+#~ msgid "Converts selected GDAL layers to GRASS raster maps using r.in.gdal"
+#~ msgstr " r.in.gdalで使用できる GDALレイヤーのコンバート "
+
+#~ msgid "Link to GDAL"
+#~ msgstr "GDALのリンク "
+
+#~ msgid "Link GDAL supported raster file to a binary raster map layer."
+#~ msgstr "GDALファイルをラスターマップとしてリンク "
+
+#~ msgid "Multiple link to GDAL"
+#~ msgstr "GDALへの複数リンク "
+
+#~ msgid "Link GDAL supported raster files to a binary raster map layers"
+#~ msgstr "GDALファイルをラスターマップとしてリンク "
+
+#~ msgid "Aggregate ASCII xyz import"
+#~ msgstr "ASCII xyz統計のインポート "
+
+#~ msgid ""
+#~ "Create a raster map from an assemblage of many coordinates using "
+#~ "univariate statistics."
+#~ msgstr "複数の単変量統計情報の座標系を集約しラスターマップを作成 "
+
+#~ msgid "ASCII grid import"
+#~ msgstr "ASCIIグリッドのインポート "
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr "ASCIIラスターをバイナリラスターへコンバート "
+
+#~ msgid "ASCII polygons and lines import"
+#~ msgstr "ASCII ポリゴンとラインをインポート "
+
+#~ msgid "Creates raster maps from ASCII polygon/line/point data files."
+#~ msgstr ""
+#~ "ASCII ポリゴン/ライン/ポイントデータファイルからラスターマップを作成 "
+
+#~ msgid "Binary file import"
+#~ msgstr "バイナリーファイル インポート "
+
+#~ msgid "Import a binary raster file into a GRASS raster map layer."
+#~ msgstr "バイナリーファイルをラスターマップとしてインポート "
+
+#~ msgid "ESRI ASCII grid import"
+#~ msgstr "ESRI ASCII グリッド インポート "
+
+#~ msgid ""
+#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "ESRI ARC/INFO ASCIIラスターファイルをラスターマップとしてインポート "
+
+#~ msgid "GRIDATB.FOR import"
+#~ msgstr "GRIDATB.FOR インポート "
+
+#~ msgid "Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map"
+#~ msgstr "バイナリーファイルをラスターマップとしてインポートします "
+
+#~ msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+#~ msgstr "MAT-File(v4) をラスタマップとしてインポート "
+
+#~ msgid "SPOT NDVI import"
+#~ msgstr "SPOT NDVI インポート "
+
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "SPOT VGT NDVIファイル をラスタマップとしてインポート "
+
+#~ msgid "SRTM HGT import"
+#~ msgstr "SRTM HGT インポート "
+
+#~ msgid "Import SRTM HGT files into GRASS"
+#~ msgstr "輸入 SRTM HGTファイルをインポート "
+
+#~ msgid "Terra ASTER HDF import"
+#~ msgstr "Terra ASTER HDF インポート "
+
+#~ msgid "WMS import"
+#~ msgstr "WMS インポート "
+
+#~ msgid "Import vector map"
+#~ msgstr "ベクトルマップのインポート "
+
+#~ msgid "Import vector data using OGR"
+#~ msgstr "OGRを使用したベクトルデータのインポート "
+
+#~ msgid "Convert OGR vector layers to GRASS vector map."
+#~ msgstr "OGRベクトルレイヤーからGRASSベクトルマップへコンバート "
+
+#~ msgid "Multiple vector data import using OGR"
+#~ msgstr "OGRを使用したベクトルデータのインポート "
+
+#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
+#~ msgstr "v.in.ogrを使用してOGRレイヤーからGRASSベクトルマップへコンバート "
+
+#~ msgid "Link to OGR"
+#~ msgstr "OGRのリンク "
 
 #, fuzzy
-msgid "Digitize raster map"
-msgstr "デジタイズ"
+#~ msgid "Creates a new vector map as a link to OGR layer."
+#~ msgstr "ベクトル."
+
+#~ msgid "Multiple link to OGR"
+#~ msgstr "OGRレイヤーへの複数リンク "
+
+#~ msgid "Creates a new vectors as a read-only link to OGR layers"
+#~ msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
+
+#~ msgid "ASCII points/GRASS ASCII vector import"
+#~ msgstr "ASCII ポイント/GRASS ASCII ベクトル インポート "
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr ""
+#~ "ASCIIポイントファイルまたはASCIIベクトルファイルから新規ベクトルマップ作"
+#~ "成 "
 
 #, fuzzy
-msgid "Reclassify vector objects interactively by entering SQL rules"
-msgstr "ベクトル"
+#~ msgid "ASCII points as a vector lines"
+#~ msgstr "ベクトル"
 
 #, fuzzy
-msgid ""
-"Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
-"transformation function."
-msgstr "色."
+#~ msgid "Creates a lines vector map from an ASCII x,y points file."
+#~ msgstr "ベクトル ベクトル."
+
+#~ msgid "Old GRASS vector import"
+#~ msgstr "旧GRASSベクトルデータインポート "
+
+#~ msgid "Imports older versions of GRASS vector maps."
+#~ msgstr "旧GRASSフォーマットベクトルマップインポート "
+
+#~ msgid "DXF import"
+#~ msgstr "DXFインポート "
+
+#~ msgid "Converts files in DXF format to GRASS vector map format."
+#~ msgstr "DXFフォーマットからGRASSベクトルフォーマットへコンバート "
+
+#~ msgid "Multiple DXF layers import"
+#~ msgstr "複数のDXFレイヤーインポート "
+
+#~ msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)"
+#~ msgstr "v.in.dxfを利用してDXFレイヤーからGRASSベクトルマップへコンバート "
+
+#~ msgid "ESRI e00 import"
+#~ msgstr "ESRI e00 インポート "
+
+#~ msgid "Import E00 file into a vector map."
+#~ msgstr "E00ファイルをベクトルマップへインポート "
+
+#~ msgid "Garmin GPS import"
+#~ msgstr "ガーミンGPS インポート "
 
 #, fuzzy
-msgid ""
-"Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
-"transformation function"
-msgstr "色"
+#~ msgid ""
+#~ "Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
+#~ "vector map"
+#~ msgstr "ベクトル."
+
+#~ msgid "GPSBabel GPS import"
+#~ msgstr "GPSBabel GPS インポート "
 
 #, fuzzy
-msgid "Interactive input for supervised classification"
-msgstr "入力 の"
+#~ msgid ""
+#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+#~ "file into a vector map"
+#~ msgstr "インポート ベクトル."
+
+#~ msgid "Geonames import"
+#~ msgstr "Geonames インポート "
+
+#~ msgid "Imports geonames.org country files into a GRASS vector points map."
+#~ msgstr " geonames.org からGRASSベクトルマップへインポート "
+
+#~ msgid "GEOnet import"
+#~ msgstr "GEOnet インポート "
+
+#~ msgid ""
+#~ "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS "
+#~ "vector points map."
+#~ msgstr ""
+#~ "US-NGA GEOnet Names Server (GNS)  からGRASSベクトルマップへインポート "
+
+#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
+#~ msgstr "Mapgen または Matlab のベクトルマップをGRASSへインポート "
+
+#~ msgid "Import grid 3D volume"
+#~ msgstr "３Dグリッド値のインポート "
+
+#~ msgid "ASCII 3D import"
+#~ msgstr "ASCII ３D インポート "
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "３D ASCII ラスターテキストファイルを 3Dラスターマップレイヤーへインポート "
+
+#~ msgid "Vis5D import"
+#~ msgstr "Vis5D インポート "
+
+#~ msgid ""
+#~ "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable "
+#~ "and 1 time step)"
+#~ msgstr ""
+#~ "3D Vis5Dファイルのインポート (i.e. the v5d ファイル with 1 variable and 1 "
+#~ "time step) "
+
+#~ msgid "Import database table"
+#~ msgstr "データベーステーブルのインポート "
+
+#~ msgid "Multiple import formats using OGR"
+#~ msgstr "OGRを使用したベ複数インポートフォーマット "
+
+#~ msgid "Imports attribute tables in various formats."
+#~ msgstr "複数フォーマットからなる属性テーブルのインポート "
+
+#~ msgid "Export raster map"
+#~ msgstr "ラスターマップのエクスポート "
+
+#~ msgid "Multiple export formats using GDAL"
+#~ msgstr "GDAL用複数エクスポートフォーマット "
+
+#~ msgid "Exports GRASS raster maps into GDAL supported formats."
+#~ msgstr "GDAL用フォーマットへのラスターマップのエクスポート "
+
+#~ msgid "ASCII grid export"
+#~ msgstr "ASCIIグリッドのエクスポート "
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "ASCIIテキストのラスターマップにコンバート "
+
+#~ msgid "ASCII x,y,z export"
+#~ msgstr "ASCII XYZ エクスポート "
+
+#~ msgid ""
+#~ "Export a raster map to a text file as x,y,z values based on cell centers."
+#~ msgstr "セルの中心をXYZ値としてラスターマップをエクスポート "
+
+#~ msgid "ESRI ASCII grid export"
+#~ msgstr "ESRI ASCII グリッド エクスポート "
+
+#~ msgid "Converts a raster map layer into an ESRI ARCGRID file."
+#~ msgstr "ラスターマップをESRI ARC/INFO ASCII-GRIDファイルとしてエクスポート "
+
+#~ msgid "GRIDATB.FOR export"
+#~ msgstr "GRIDATB.FOR エクスポート "
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "GRIDATB.FOR をラスタマップとしてエクスポート "
+
+#~ msgid "Exports a GRASS raster to a binary MAT-File."
+#~ msgstr "MAT-Fileへエクスポート "
+
+#~ msgid "Binary export"
+#~ msgstr "バイナリーエクスポート "
+
+#~ msgid "Exports a GRASS raster to a binary array."
+#~ msgstr "バイナリアレイとしてエクスポート "
+
+#~ msgid "MPEG-1 export"
+#~ msgstr "MPEG-1エクスポート "
+
+#~ msgid "Raster File Series to MPEG Conversion Program."
+#~ msgstr "MPEG変換プログラム "
+
+#~ msgid "PNG export"
+#~ msgstr "PNGエクスポート "
+
+#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
+#~ msgstr "PNGイメージフォーマットへエクスポート "
+
+#~ msgid "PPM export"
+#~ msgstr "PPMエクスポート "
+
+#~ msgid ""
+#~ "Converts a GRASS raster map to a PPM image file at the pixel resolution "
+#~ "of the currently defined region."
+#~ msgstr "指定されている領域のピクセル情報をPPMイメージファイルへコンバート "
+
+#~ msgid "PPM from RGB export"
+#~ msgstr "RGBからPPMへエクスポート "
+
+#~ msgid ""
+#~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
+#~ "resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr "指定されている領域のRGB情報をPPMイメージファイルへコンバート "
+
+#~ msgid "POV-Ray export"
+#~ msgstr "POV-Ray エクスポート "
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr "POV-Rayのハイト・フィールドにラスターマップをコンバート "
+
+#~ msgid "TIFF export"
+#~ msgstr "TIFF エクスポート "
+
+#~ msgid ""
+#~ "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel "
+#~ "resolution of the currently defined region."
+#~ msgstr ""
+#~ "指定されている領域のラスターマップを8/24ビット TIFFイメージファイルへコン"
+#~ "バート "
+
+#~ msgid "VRML export"
+#~ msgstr "VRML エクスポート "
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr "ラスターマップをVRMLへエクスポート "
+
+#~ msgid "VTK export"
+#~ msgstr "VTK エクスポート "
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "ラスターマップを VTK-Ascii フォーマットへコンバート "
+
+#~ msgid "Export vector map"
+#~ msgstr "ベクトルマップのエクスポート "
+
+#~ msgid "Multiple export formats using OGR"
+#~ msgstr "OGRを使用したベクトルデータのエクスポート "
 
 #, fuzzy
-msgid ""
-"Copy a table. Either 'from_table' (optionally with 'where') can be used or "
-"'select' option, but not 'from_table' and 'select' at the same time."
-msgstr "コピー."
+#~ msgid "Converts vector map to one of the supported OGR vector formats."
+#~ msgstr "ベクトル."
+
+#~ msgid "ASCII points/GRASS ASCII vector export"
+#~ msgstr "ASCII ポイント/GRASS ASCII ベクトル エクスポート "
+
+#, fuzzy
+#~ msgid "Exports a vector map to a GRASS ASCII vector representation."
+#~ msgstr "ベクトル ベクトル."
+
+#~ msgid "DXF export"
+#~ msgstr "DXF エクスポート "
+
+#, fuzzy
+#~ msgid "Exports vector map to DXF file format."
+#~ msgstr "ベクトル."
+
+#~ msgid "Multiple GPS export formats using GPSBabel"
+#~ msgstr "GPSBabel 形式にエクスポート "
+
+#~ msgid ""
+#~ "Exports a vector map to a GPS receiver or file format supported by "
+#~ "GpsBabel."
+#~ msgstr "ベクトルマップをGPSレシーバーまたはGPSBabel 形式にエクスポート "
+
+#~ msgid "SVG export"
+#~ msgstr "SVG エクスポート "
+
+#, fuzzy
+#~ msgid "Exports a vector map to SVG file."
+#~ msgstr "ベクトル."
+
+#, fuzzy
+#~ msgid "Converts a vector map to VTK ASCII output."
+#~ msgstr "ベクトル."
+
+#~ msgid "Export grid 3D volume"
+#~ msgstr "３Dグリッド値 エクスポート "
+
+#~ msgid "ASCII 3D export"
+#~ msgstr "ASCII 3D エクスポート "
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "3D ラスターマップをASCIIテキストファイルにコンバート "
+
+#~ msgid "Vis5D export"
+#~ msgstr "Vis5D エキスポート "
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr "GRASS 3D ラスターマップを3D Vis5D ファイルにエキスポート "
+
+#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
+#~ msgstr "3D ラスターマップを VTK-ASCII形式でコンバート "
+
+#~ msgid "Export database table"
+#~ msgstr "データベーステーブルのエクスポート "
+
+#~ msgid "Exports attribute tables into various formats."
+#~ msgstr "属性テーブルを別のフォーマットにエクスポート "
+
+#~ msgid "Manage maps and volumes"
+#~ msgstr "マップと値の管理 "
+
+#~ msgid "Copy"
+#~ msgstr "コピー "
+
+#~ msgid ""
+#~ "Copies available data files in the user's current mapset search path and "
+#~ "location to the appropriate element directories under the user's current "
+#~ "mapset."
+#~ msgstr "現在のマップセットにあるファイルを適切な場所にコピーします "
+
+#~ msgid "List"
+#~ msgstr "リスト "
+
+#, fuzzy
+#~ msgid "Lists available GIS elements of the user-specified data type."
+#~ msgstr "現在使用できるマップの一覧を表示します"
+
+#~ msgid "List filtered"
+#~ msgstr "フィルター "
+
+#~ msgid ""
+#~ "Lists available GRASS data base files of the user-specified data type to "
+#~ "standard output."
+#~ msgstr "現在使用できるマップが出力可能な形式の一覧を表示 "
+
+#~ msgid "Renames data base element files in the user's current mapset."
+#~ msgstr "現在使用できるマップセットのエレメントファイルの名前を変更 "
+
+#~ msgid "Delete"
+#~ msgstr "削除 "
+
+#~ msgid "Removes data base element files from the user's current mapset."
+#~ msgstr "現在のマップセットからデータベースエレメントファイルを削除します "
+
+#~ msgid "Delete filtered"
+#~ msgstr "フィルターを削除 "
+
+#~ msgid "Map type conversions"
+#~ msgstr "マップタイプの変換 "
+
+#~ msgid "Raster to vector"
+#~ msgstr "ラスタ → ベクトル "
+
+#~ msgid "Converts a raster map into a vector map layer."
+#~ msgstr "ベクトルマップレイヤーにラスタマップをコンバート "
+
+#~ msgid "Raster series to volume"
+#~ msgstr "ラスターシリーズの値 "
+
+#~ msgid "Converts 2D raster map slices to one 3D raster volume map."
+#~ msgstr "2Dラスターマップ断面を １つの 3Dラスターマップの値としてコンバート "
+
+#~ msgid "Raster 2.5D to volume"
+#~ msgstr "ラスター 2.5Dの値 "
+
+#~ msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+#~ msgstr "標高データとラスターマップから3Dマップを作成 "
+
+#~ msgid "Vector to raster"
+#~ msgstr "ベクトル → ラスター "
+
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr "ラスターマップ内にベクトルマップをコンバート "
+
+#~ msgid "Vector to volume"
+#~ msgstr "ベクトル → ボリューム "
+
+#~ msgid ""
+#~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
+#~ "raster map layer."
+#~ msgstr "3Dラスターマップ内にベクトルマップ（ポイントのみ）をコンバート "
+
+#~ msgid "2D vector to 3D vector"
+#~ msgstr "2Dベクトル → 3Dベクトル "
+
+#~ msgid "Performs transformation of 2D vector features to 3D."
+#~ msgstr "2Dベクトルデータを3Dに変換します "
+
+#~ msgid "Sites to vector"
+#~ msgstr "サイト → ベクトル "
+
+#~ msgid "Converts a GRASS site_lists file into a vector map."
+#~ msgstr "ベクトルマップ内にGRASSサイトリストファイルをコンバートする "
+
+#~ msgid "Volume to raster series"
+#~ msgstr "ボリューム → ラスターシリーズ "
+
+#~ msgid "Converts 3D raster maps to 2D raster maps"
+#~ msgstr "3Dラスターマップから2Dラスターマップへコンバート "
+
+#~ msgid "Georectify raster and vector maps"
+#~ msgstr "ラスタマップとベクトルマップの幾何補正 "
+
+#~ msgid "NVIZ (requires Tcl/Tk)"
+#~ msgstr "NVIZ(Tcl/Tkでの処理)  "
+
+#~ msgid "nviz - Visualization and animation tool for GRASS data."
+#~ msgstr "nviz - GRASSの視覚化＆アニメーションツール "
+
+#~ msgid "Bearing/distance to coordinates"
+#~ msgstr "座標の角度/距離 "
+
+#~ msgid ""
+#~ "A simple utility for converting bearing and distance measurements to "
+#~ "coordinates and vice versa."
+#~ msgstr "座標と方向＆距離間のコンバートユーティリティ "
+
+#~ msgid "Postscript plot"
+#~ msgstr "ポストスクリプトプロット "
+
+#~ msgid "Hardcopy PostScript map output utility."
+#~ msgstr "ポストスクリプト出力ユーティリティ "
+
+#~ msgid "Exit GUI"
+#~ msgstr "GUI 終了 "
+
+#, fuzzy
+#~ msgid "Quit GRASS GIS"
+#~ msgstr "終了"
+
+#, fuzzy
+#~ msgid "C&onfig"
+#~ msgstr "設定"
+
+#~ msgid "Region"
+#~ msgstr "領域"
+
+#~ msgid "Display region"
+#~ msgstr "表示領域"
+
+#~ msgid "Manages the boundary definitions for the geographic region."
+#~ msgstr "表示領域の境界定義を管理 "
+
+#~ msgid "Set region"
+#~ msgstr "領域設定"
+
+#~ msgid "GRASS working environment"
+#~ msgstr "GRASS作業環境 "
+
+#~ msgid "Mapset access"
+#~ msgstr "マップセット作成 "
+
+#~ msgid "Set/unset access to other mapsets in current location"
+#~ msgstr "現在のロケーションに他のマップセットの追加をセットする/しない "
+
+#~ msgid "User access"
+#~ msgstr "ユーザーアクセス "
+
+#~ msgid "Controls access to the current mapset for other users on the system."
+#~ msgstr "現在のマップセットに対する他ユーザーからのアクセスコントロール "
+
+#~ msgid "Change working environment"
+#~ msgstr "作業環境を変更する "
+
+#~ msgid "Change current mapset."
+#~ msgstr "マップセットを変更する "
+
+#, fuzzy
+#~ msgid "Change location and mapset"
+#~ msgstr "プロジェクトのロケーションとマップセットを選択"
+
+#, fuzzy
+#~ msgid "Change current location and mapset."
+#~ msgstr "プロジェクトのロケーションとマップセットを選択"
+
+#, fuzzy
+#~ msgid "Change mapset"
+#~ msgstr "マップセットの新規作成"
+
+#~ msgid "Show settings"
+#~ msgstr "設定情報 "
+
+#~ msgid "Outputs and modifies the user's current GRASS variable settings."
+#~ msgstr "GRASSのユーザー設定係数の更新/出力 "
+
+#~ msgid "Change settings"
+#~ msgstr "設定変更 "
+
+#~ msgid "Change default GUI"
+#~ msgstr "デフォルトGUI変更 "
+
+#~ msgid "Changes the default GRASS graphical user interface (GUI) setting."
+#~ msgstr "GRASSのデフォルトGUI 設定の変更 "
+
+#~ msgid "Version"
+#~ msgstr "バージョン "
+
+#~ msgid "Displays version and copyright information."
+#~ msgstr "ディスプレイバージョン コピーライト情報 "
+
+#~ msgid "Manage projections"
+#~ msgstr "投影法の管理 "
+
+#~ msgid ""
+#~ "Converts co-ordinate system descriptions (i.e. projection information) "
+#~ "between various formats (including GRASS format)."
+#~ msgstr "様々なフォーマット間での座標系（i.e. 投影情報）のコンバート "
+
+#~ msgid "Convert coordinates"
+#~ msgstr "座標変換 "
+
+#, fuzzy
+#~ msgid "Manage extensions"
+#~ msgstr "ガンマ"
+
+#~ msgid "Preferences"
+#~ msgstr "設定 "
+
+#~ msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+#~ msgstr "ユーザーGUI設定 (フォント, コマンド,デジタイザー, etc.)  "
+
+#, fuzzy
+#~ msgid "&Raster"
+#~ msgstr "ファイル"
+
+#~ msgid "Develop raster map"
+#~ msgstr "ラスターマップの展開 "
+
+#~ msgid "Compress/decompress"
+#~ msgstr "圧縮/解凍 "
+
+#~ msgid "Compresses and decompresses raster maps."
+#~ msgstr "ラスターマップの圧縮/解凍 "
+
+#~ msgid "Region boundaries"
+#~ msgstr "領域境界 "
+
+#~ msgid "Sets the boundary definitions for a raster map."
+#~ msgstr "ラスターマップの境界を定義 "
+
+#~ msgid "Manage NULL values"
+#~ msgstr "NULL値の管理 "
+
+#~ msgid "Manages NULL-values of given raster map."
+#~ msgstr "ラスターマップのNULL値の管理 "
+
+#~ msgid "Quantization"
+#~ msgstr "量子化 "
+
+#~ msgid "Produces the quantization file for a floating-point map."
+#~ msgstr "浮動小数点マップのための量子化ファイルを生成 "
+
+#~ msgid "Timestamp"
+#~ msgstr "タイムスタンプ "
+
+#~ msgid "Print/add/remove a timestamp for a raster map."
+#~ msgstr "タイムスタンプの印刷/追加/削除 "
+
+#~ msgid "Resample using aggregate statistics"
+#~ msgstr "総量統計を使用した再サンプリング "
+
+#~ msgid "Resamples raster map layers to a coarser grid using aggregation."
+#~ msgstr "疎グリッドの集成使用したラスターレイヤーの再サンプリング "
+
+#~ msgid "Resample using multiple methods"
+#~ msgstr "複数手法による再サンプリング "
+
+#~ msgid "Resamples raster map layers to a finer grid using interpolation."
+#~ msgstr "グリッド補間を使用したラスターレイヤーの再サンプリング "
+
+#~ msgid "Resample using nearest neighbor"
+#~ msgstr "近接情報を利用した再サンプリング "
+
+#~ msgid "GRASS raster map layer data resampling capability."
+#~ msgstr "ラスターマップレイヤーのリサンプリング機能 "
+
+#~ msgid "Resample using spline tension"
+#~ msgstr " スプラインテンションによる再サンプリング "
+
+#~ msgid ""
+#~ "Reinterpolates and optionally computes topographic analysis from input "
+#~ "raster map to a new raster map (possibly with different resolution) using "
+#~ "regularized spline with tension and smoothing."
+#~ msgstr ""
+#~ "再補間およびオプションで入力ラスターマップから新しいラスターマップに異なる"
+#~ "解像度の（おそらく）張力と平滑化でスプライン正則化を使って地形解析します "
+
+#~ msgid "Support file maintenance"
+#~ msgstr "サポートファイルの保守 "
+
+#~ msgid ""
+#~ "Allows creation and/or modification of raster map layer support files."
+#~ msgstr "ラスターマップサポートファイルの作成・更新 "
+
+#~ msgid "Update map statistics"
+#~ msgstr "マップ統計の更新 "
+
+#~ msgid "Update raster map statistics"
+#~ msgstr "ラスターマップ統計の更新 "
+
+#~ msgid "Reproject raster"
+#~ msgstr "ラスターの投影変換 "
+
+#~ msgid "Re-projects a raster map from one location to the current location."
+#~ msgstr "ラスターマップの現在のロケーションに投影変換 "
+
+#~ msgid "Tiling"
+#~ msgstr "タイル "
+
+#~ msgid ""
+#~ "Produces tilings of the source projection for use in the destination "
+#~ "region and projection."
+#~ msgstr "使用中の領域と投影法でタイルを作成する "
+
+#~ msgid "Manage colors"
+#~ msgstr "カラー調整 "
+
+#~ msgid "Color tables"
+#~ msgstr "カラーテーブル "
+
+#~ msgid "Creates/modifies the color table associated with a raster map layer."
+#~ msgstr "ラスターマップのカラーテーブルを作成/編集します "
+
+#~ msgid "Color tables (stddev)"
+#~ msgstr "カラーテーブル (標準出力) "
+
+#~ msgid "Set color rules based on stddev from a map's mean value."
+#~ msgstr "マップの平均値からstddevのカラーテーブルを設定 "
+
+#~ msgid "Color rules"
+#~ msgstr "カラールール "
+
+#~ msgid "Blend 2 color rasters"
+#~ msgstr "2色のカラーラスターをブレンド "
+
+#~ msgid "Blends color components of two raster maps by a given ratio."
+#~ msgstr "指定された比率で 2 色のカラーラスターをブレンド "
+
+#~ msgid "Create RGB"
+#~ msgstr "RGB 作成 "
+
+#~ msgid ""
+#~ "Combines red, green and blue raster maps into a single composite raster "
+#~ "map."
+#~ msgstr "コンポジットラスターマップに R,G,Bラスターマップを合成する "
+
+#~ msgid "RGB to HIS"
+#~ msgstr "RGB → HIS "
+
+#~ msgid ""
+#~ "Generates red, green and blue raster map layers combining hue, intensity "
+#~ "and saturation (HIS) values from user-specified input raster map layers."
+#~ msgstr ""
+#~ "ラスターマップのR，G，Bレイヤーを色相/照度/彩度に対応させて合成する "
+
+#~ msgid "Query raster maps"
+#~ msgstr "ラスターマップの検索 "
+
+#~ msgid "Query values by coordinates"
+#~ msgstr "座標値からの検索 "
+
+#~ msgid ""
+#~ "Queries raster map layers on their category values and category labels."
+#~ msgstr "カテゴリー情報からラスターマップレイヤーを検索 "
+
+#~ msgid "Query colors by value"
+#~ msgstr "カラーの値から検索 "
+
+#~ msgid "Queries colors for a raster map layer."
+#~ msgstr "ラスターマップレイヤーのカラーから検索 "
+
+#~ msgid "Buffer rasters"
+#~ msgstr "バッファラスター "
+
+#~ msgid ""
+#~ "Creates a raster map layer showing buffer zones surrounding cells that "
+#~ "contain non-NULL category values."
+#~ msgstr ""
+#~ "NULL値を含まないセルのバッファーゾーンを示す新しいラスターマップを作成 "
+
+#~ msgid "Closest points"
+#~ msgstr "最寄のポイント "
+
+#~ msgid "Locates the closest points between objects in two raster maps."
+#~ msgstr "２つのラスターマップに最も近い点にオブジェクトを配置 "
+
+#, fuzzy
+#~ msgid "Creates a mask for limiting raster operation."
+#~ msgstr ""
+#~ "マップセットの新規作成\n"
+#~ "(選択したロケーション内)"
+
+#~ msgid "Map calculator"
+#~ msgstr "マップカリキュレータ"
+
+#~ msgid "Map calculator for raster map algebra"
+#~ msgstr "ラスターマップのためのマップカリキュレータ"
+
+#~ msgid "Neighborhood analysis"
+#~ msgstr "近接性分析 "
+
+#~ msgid "Moving window"
+#~ msgstr "ウィンドウを移動 "
+
+#~ msgid ""
+#~ "Makes each cell category value a function of the category values assigned "
+#~ "to the cells around it, and stores new cell values in an output raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "各セルのカテゴリーで近傍点解析を行い，ラスターマップに新しいセルを作成しま"
+#~ "す "
+
+#~ msgid "Neighborhood points"
+#~ msgstr "近接点 "
+
+#, fuzzy
+#~ msgid "Neighborhood analysis tool for vector point maps."
+#~ msgstr "近接性分析"
+
+#~ msgid "Overlay rasters"
+#~ msgstr "ラスターマップの重ね合せ "
+
+#~ msgid "Cross product"
+#~ msgstr "カテゴリー値の掛け合わせ "
+
+#~ msgid ""
+#~ "Creates a cross product of the category values from multiple raster map "
+#~ "layers."
+#~ msgstr "カテゴリー値を掛け合わせて新たなラスターマップを作成します "
+
+#~ msgid "Raster series"
+#~ msgstr "ラスターシリーズ "
+
+#~ msgid ""
+#~ "Makes each output cell value a function of the values assigned to the "
+#~ "corresponding cells in the input raster map layers."
+#~ msgstr ""
+#~ "各出力のセルの値の値を入力ラスターマップレイヤーに対応するセルに割り当てら"
+#~ "れた関数を作成 "
+
+#~ msgid "Patch raster maps"
+#~ msgstr "ラスターマップの重ね合せ "
+
+#~ msgid ""
+#~ "Creates a composite raster map layer by using known category values from "
+#~ "one (or more) map layer(s) to fill in areas of \"no data\" in another map "
+#~ "layer."
+#~ msgstr ""
+#~ "別のレイヤーによってデータが存在しないエリアのカテゴリ情報を挿入し、合成ラ"
+#~ "スターマップレイヤーを作成する "
+
+#~ msgid "Statistical overlay"
+#~ msgstr "統計オーバーレイ "
+
+#~ msgid "Calculates category or object oriented statistics."
+#~ msgstr "マップのカテゴリー値について統計解析を行います "
+
+#~ msgid "Solar radiance and shadows"
+#~ msgstr "太陽輝度と影 "
+
+#~ msgid "Solar irradiance and irradiation"
+#~ msgstr "太陽放射照度と照射 "
+
+#~ msgid "Solar irradiance and irradiation model."
+#~ msgstr "太陽放射照度と照射 "
+
+#~ msgid "Shadows map"
+#~ msgstr "陰影図 "
+
+#~ msgid ""
+#~ "Calculates cast shadow areas from sun position and DEM. Either A: exact "
+#~ "sun position is specified, or B: date/time to calculate the sun position "
+#~ "by r.sunmask itself."
+#~ msgstr ""
+#~ "太陽の位置とDEMから陰影を付加する A:太陽の位置は既知 B：r.sunmaskを使用し"
+#~ "日時から太陽の位置を算出 "
+
+#~ msgid "Terrain analysis"
+#~ msgstr "地形解析 "
+
+#~ msgid "Cumulative movement costs"
+#~ msgstr "移動コスト積算 "
+
+#~ msgid ""
+#~ "Outputs a raster map layer showing the anisotropic cumulative cost of "
+#~ "moving between different geographic locations on an input elevation "
+#~ "raster map layer whose cell category values represent elevation combined "
+#~ "with an input raster map layer whose cell values represent friction cost."
+#~ msgstr ""
+#~ "出力ラスターマップレイヤーの異なる地理的な場所の間に、そのセルのカテゴリー"
+#~ "値の高度を持つセルの値を摩擦コストを表す入力ラスターマップレイヤーと結合を"
+#~ "表す入力高度ラスターマップレイヤー上を移動する異方性の累積的なコストを示し"
+#~ "ています "
+
+#~ msgid "Cost surface"
+#~ msgstr "表層断面図 "
+
+#~ msgid ""
+#~ "Creates a raster map showing the cumulative cost of moving between "
+#~ "different geographic locations on an input raster map whose cell category "
+#~ "values represent cost."
+#~ msgstr ""
+#~ "異なるロケーションの移動コストを各セルの情報として表現したラスターマップを"
+#~ "作成する "
+
+#~ msgid "Least cost route or flow"
+#~ msgstr "最小コストルートあるいはフロー "
+
+#~ msgid "Traces a flow through an elevation model on a raster map."
+#~ msgstr "ラスターマップ上の標高モデルによるフローをトレース "
+
+#~ msgid "Creates shaded relief map from an elevation map (DEM)."
+#~ msgstr "標高マップ（DEM）をより陰影マップを作成 "
+
+#~ msgid "Slope and aspect"
+#~ msgstr "斜面とアスペクト "
+
+#~ msgid ""
+#~ "Generates raster map layers of slope, aspect, curvatures and partial "
+#~ "derivatives from a raster map layer of true elevation values. Aspect is "
+#~ "calculated counterclockwise from east."
+#~ msgstr ""
+#~ "標高ラスターマップレイヤーから斜面、アスペクト、曲率と偏微分のラスターマッ"
+#~ "プレイヤーを生成（アスペクトは反時計回りに東から計算） "
+
+#~ msgid "Terrain parameters"
+#~ msgstr "地形パラメータ "
+
+#~ msgid "Extracts terrain parameters from a DEM."
+#~ msgstr "DEMから地形パラメータを抽出 "
+
+#~ msgid "Textural features"
+#~ msgstr "テキストフューチャ"
+
+#~ msgid "Generate images with textural features from a raster map."
+#~ msgstr "ラスターマップからテキストフューチャを生成 "
+
+#~ msgid "Visibility"
+#~ msgstr "可視  "
+
+#~ msgid "Line-of-sight raster analysis program."
+#~ msgstr "視線を変更したラスターマップ解析 "
+
+#~ msgid "Distance to features"
+#~ msgstr "フューチャの距離 "
+
+#~ msgid "Generates a raster map layer of distance to features in input layer."
+#~ msgstr "フューチャへの入力レイヤーからの距離をラスターマップに生成 "
+
+#~ msgid "Horizon angle"
+#~ msgstr "層準角度 "
+
+#~ msgid "Horizon angle computation from a digital elevation model."
+#~ msgstr "DEMから層準角度を計算 "
+
+#~ msgid "Transform features"
+#~ msgstr "フューチャの変形 "
+
+#~ msgid "Clump"
+#~ msgstr "クランプ "
+
+#~ msgid ""
+#~ "Recategorizes data in a raster map by grouping cells that form physically "
+#~ "discrete areas into unique categories."
+#~ msgstr ""
+#~ "物理的離散領域をグルーピングすることによってデータを再カテゴライズする "
+
+#~ msgid "Grow"
+#~ msgstr "増加 "
+
+#~ msgid ""
+#~ "Generates a raster map layer with contiguous areas grown by one cell."
+#~ msgstr "１つのセルを伸張させることによって新しいラスターマップを生成する "
+
+#~ msgid "Thin"
+#~ msgstr "間隔 "
+
+#~ msgid ""
+#~ "Thins non-zero cells that denote linear features in a raster map layer."
+#~ msgstr "ラスターマップ内の線形特性を示す微少な値を持ったセル "
+
+#~ msgid "Hydrologic modeling"
+#~ msgstr "水文モデリング "
+
+#~ msgid "Carve stream channels"
+#~ msgstr "河川水路の作成 "
+
+#~ msgid ""
+#~ "Takes vector stream data, transforms it to raster and subtracts depth "
+#~ "from the output DEM."
+#~ msgstr ""
+#~ "河川ベクトルデータをラスターデータの変換し、DEMデータから標高を減ずる "
+
+#~ msgid "Fill lake"
+#~ msgstr "湖沼塗潰し "
+
+#~ msgid "Fills lake from seed at given level."
+#~ msgstr "定義された面識別点で湖沼塗潰し "
+
+#~ msgid "Depressionless map and flowlines"
+#~ msgstr "凹地の無いマップとフローライン "
+
+#~ msgid ""
+#~ "Filters and generates a depressionless elevation map and a flow direction "
+#~ "map from a given elevation layer."
+#~ msgstr "標高レイヤーから 凹地のない標高マップと流方向マップを生成 "
+
+#~ msgid "Flow accumulation"
+#~ msgstr "フローアキュミュレーション "
+
+#~ msgid "Flow computation for massive grids (Float version)."
+#~ msgstr "大規模なグリッドの流量計算 "
+
+#~ msgid "Flow lines"
+#~ msgstr "流線 "
+
+#~ msgid ""
+#~ "Construction of slope curves (flowlines), flowpath lengths, and flowline "
+#~ "densities (upslope areas) from a raster digital elevation model (DEM)"
+#~ msgstr "ラスターDEMからの流曲線、流線長、流線密度（流域密度）の作図 "
+
+#~ msgid "Topographic index map"
+#~ msgstr "地形図インデックスマップ "
+
+#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+#~ msgstr "標高マップから地形的インデックス指標 [ln(a/tan(beta))]マップ作成"
+
+#~ msgid "TOPMODEL simulation"
+#~ msgstr "TOPMODELシミュレーション "
+
+#~ msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+#~ msgstr "物理的流域水文モデルに基づくトポモデルをシュミレート"
+
+#~ msgid "Watershed subbasins"
+#~ msgstr "集水域(流域)小盆地 "
+
+#~ msgid "Generates a raster map layer showing watershed subbasins."
+#~ msgstr "集水域を示すラスターマップを作成します "
+
+#~ msgid "Watershed analysis"
+#~ msgstr "集水域(流域)解析 "
+
+#~ msgid "Watershed basin analysis program."
+#~ msgstr "集水域(流域の解析を行います "
+
+#~ msgid "Watershed basin creation"
+#~ msgstr "集水域(流域)作成 "
+
+#~ msgid "Watershed basin creation program."
+#~ msgstr "集水域(流域)の解析を行います "
+
+#~ msgid "Groundwater modeling"
+#~ msgstr "地下水 モデリング  "
+
+#~ msgid ""
+#~ "Numerical calculation program for transient, confined and unconfined "
+#~ "groundwater flow in two dimensions."
+#~ msgstr "２層による非定常流 被圧/負圧地下水流の数値計算"
+
+#~ msgid "Landscape patch analysis"
+#~ msgstr "景観パッチ分析"
+
+#~ msgid "Set up sampling and analysis framework"
+#~ msgstr "サンプリングと解析フレームワークのための設定 "
+
+#~ msgid "Configuration editor for r.li.'index'"
+#~ msgstr "r.li.'index'のための設定エディタ"
+
+#~ msgid "Edge density"
+#~ msgstr "周辺密度"
+
+#~ msgid ""
+#~ "Calculates edge density index on a raster map, using a 4 neighbour "
+#~ "algorithm"
+#~ msgstr "4近傍法を使用してラスターマップの周辺密度指標を計算"
+
+#~ msgid "Contrast weighted edge density"
+#~ msgstr "対照的加重周辺密度"
+
+#~ msgid "Calculates contrast weighted edge density index on a raster map"
+#~ msgstr "ラスターマップで対照的加重周辺密度指標を計算"
+
+#~ msgid "Patch area mean"
+#~ msgstr "平均パッチ領域"
+
+#~ msgid ""
+#~ "Calculates mean patch size index on a raster map, using a 4 neighbour "
+#~ "algorithm"
+#~ msgstr "4近傍法を使用して、ラスターマップ上で平均パッチサイズ指標を計算"
+
+#~ msgid "Patch area range"
+#~ msgstr "パッチ領域の範囲"
+
+#~ msgid "Calculates range of patch area size on a raster map"
+#~ msgstr "ラスターマップ上でパッチ領域サイズの領域を計算"
+
+#~ msgid "Patch area Std Dev"
+#~ msgstr "パッチ領域標準偏差"
+
+#~ msgid "Calculates standard deviation of patch area a raster map"
+#~ msgstr "ラスターマップのパッチ領域の標準偏差を計算"
+
+#~ msgid "Patch area Coeff Var"
+#~ msgstr "パッチ領域COEFF演算子"
+
+#~ msgid "Calculates coefficient of variation of patch area on a raster map"
+#~ msgstr " ラスタマップ上でパッチ領域の変動係数を計算"
+
+#~ msgid "Patch density"
+#~ msgstr "パッチ密度"
+
+#~ msgid ""
+#~ "Calculates patch density index on a raster map, using a 4 neighbour "
+#~ "algorithm"
+#~ msgstr "4近傍法を使用して、ラスターマップ上でパッチ密度指標を計算"
+
+#~ msgid "Patch number"
+#~ msgstr "パッチ番号"
+
+#~ msgid ""
+#~ "Calculates patch number index on a raster map, using a 4 neighbour "
+#~ "algorithm."
+#~ msgstr "4近傍法を使用して、ラスターマップ上でパッチ数指標を計算"
+
+#~ msgid "Dominance's diversity"
+#~ msgstr "順位多様性"
+
+#~ msgid "Calculates dominance's diversity index on a raster map"
+#~ msgstr "ラスターマップで順位多様性指標を計算"
+
+#~ msgid "Shannon's diversity"
+#~ msgstr "シャノン 多様性  "
+
+#~ msgid "Calculates Shannon's diversity index on a raster map"
+#~ msgstr "ラスターマップでシャノン多様性指標を計算"
+
+#~ msgid "Simpson's diversity"
+#~ msgstr "シンプソン多様性"
+
+#~ msgid "Calculates Simpson's diversity index on a raster map"
+#~ msgstr "ラスターマップでシンプソン多様性指標を計算"
+
+#~ msgid "Richness"
+#~ msgstr "濃厚"
+
+#~ msgid "Shape index"
+#~ msgstr "形状係数"
+
+#~ msgid "Calculates shape index on a raster map"
+#~ msgstr "ラスターマップで形状係数を計算"
+
+#~ msgid "Wildfire modeling"
+#~ msgstr "森林火災モデリング "
+
+#~ msgid "Rate of spread"
+#~ msgstr "拡散比率"
+
+#, fuzzy
+#~ msgid "Generates rate of spread raster map layers."
+#~ msgstr "ベクトル."
+
+#~ msgid "Least-cost spread paths"
+#~ msgstr "最小コストの拡散経路"
+
+#~ msgid ""
+#~ "Recursively traces the least cost path backwards to cells from which the "
+#~ "cumulative cost was determined."
+#~ msgstr "累積コストで計算されたセルから最小コストのパスで再帰的にトレース"
+
+#~ msgid "Anisotropic spread simulation"
+#~ msgstr "非等方性拡散シミュレーション  "
+
+#~ msgid ""
+#~ "Simulates elliptically anisotropic spread on a graphics window and "
+#~ "generates a raster map of the cumulative time of spread, given raster "
+#~ "maps containing the rates of spread (ROS), the ROS directions and the "
+#~ "spread origins."
+#~ msgstr ""
+#~ "楕円形非等方性拡散シミュレーション結果を拡散累積時間、拡散率、起点と拡散方"
+#~ "向でラスターマップに出力"
+
+#~ msgid "Change category values and labels"
+#~ msgstr "カテゴリー値・ラベルの変更 "
+
+#~ msgid "Interactively edit category values"
+#~ msgstr "対話形式でカテゴリ値を編集"
+
+#~ msgid "Interactively edit cell values in a raster map."
+#~ msgstr "対話形式でラスターマップのセルの値を編集"
+
+#~ msgid "Reclassify by size"
+#~ msgstr "サイズで再分類"
+
+#~ msgid ""
+#~ "Reclasses a raster map greater or less than user specified area size (in "
+#~ "hectares)."
+#~ msgstr ""
+#~ "定義されたサイズ（ヘクタール）をしきい値としてラスターマップを再分類"
+
+#~ msgid "Reclassify interactively"
+#~ msgstr "対話形式による再分類"
+
+#~ msgid ""
+#~ "Creates a new map layer whose category values are based upon a "
+#~ "reclassification of the categories in an existing raster map layer."
+#~ msgstr ""
+#~ "現在のラスターマップレイヤーをカテゴリーで再分類し、新しいカテゴリー値の"
+#~ "マップレイヤーを生成する"
+
+#~ msgid "Reclassify using rules file"
+#~ msgstr "定義ファイルを利用した再分類"
+
+#~ msgid "Recode interactively"
+#~ msgstr "対話情報記録"
+
+#~ msgid "Recodes categorical raster maps."
+#~ msgstr "カテゴリーかされたラスターマップの記録"
+
+#~ msgid "Rescale"
+#~ msgstr "再スケール"
+
+#~ msgid "Rescales the range of category values in a raster map layer."
+#~ msgstr "ラスターマップのカテゴリー値の範囲を変更します "
+
+#~ msgid "Rescale with histogram"
+#~ msgstr "ヒストグラムの再スケール"
+
+#~ msgid ""
+#~ "Rescales histogram equalized the range of category values in a raster map "
+#~ "layer."
+#~ msgstr "ラスターマップのカテゴリー値の範囲によりヒストグラムの再スケール"
+
+#~ msgid "Concentric circles"
+#~ msgstr "同心円"
+
+#~ msgid ""
+#~ "Creates a raster map containing concentric rings around a given point."
+#~ msgstr "指定された点を中心に同心円を含むマップをラスターを作成します"
+
+#~ msgid "Generate random cells"
+#~ msgstr "ランダムセルの作成"
+
+#~ msgid "Random cells"
+#~ msgstr "ランダムセル"
+
+#~ msgid "Generates random cell values with spatial dependence."
+#~ msgstr "空間に依存したランダムセル値を生成"
+
+#~ msgid "Random cells and vector points"
+#~ msgstr "ランダムセルとベクトルポイント"
+
+#~ msgid ""
+#~ "Creates a raster map layer and vector point map containing randomly "
+#~ "located points."
+#~ msgstr ""
+#~ "ランダムに定義された地点を含むラスターマップレイヤーとベクトル点を作成"
+
+#~ msgid "Generate surfaces"
+#~ msgstr "面の生成"
+
+#~ msgid "Fractal surface"
+#~ msgstr "フラクタル面"
+
+#~ msgid "Creates a fractal surface of a given fractal dimension."
+#~ msgstr "指定されたフラクタル次元のフラクタル表面を作成"
+
+#~ msgid "Gaussian kernel density surface"
+#~ msgstr "ガウスカーネル密度面"
+
+#~ msgid ""
+#~ "Generates a raster density map from vector points data using a moving 2D "
+#~ "isotropic Gaussian kernel or optionally generates a vector density map on "
+#~ "vector network with a 1D kernel."
+#~ msgstr ""
+#~ "ベクトルのポイントデータからラスター密度マップを移動する2次元等方性ガウス"
+#~ "カーネルを使って生成する。オプションで、1次元のカーネルを持つベクトルネッ"
+#~ "トワーク上のベクトル密度マップを生成"
+
+#~ msgid "Gaussian deviates surface"
+#~ msgstr "ガウス偏差面"
+
+#~ msgid ""
+#~ "GRASS module to produce a raster map layer of gaussian deviates whose "
+#~ "mean and standard deviation can be expressed by the user. It uses a "
+#~ "gaussian random number generator."
+#~ msgstr ""
+#~ "GRASSはユーザが定義した標準偏差やガウス偏差をラスターマップレイヤーとして"
+#~ "作成することができます。 Gauss乱数発生機能を使用"
+
+#~ msgid "Plane"
+#~ msgstr "面 "
+
+#~ msgid ""
+#~ "Creates raster plane map given dip (inclination), aspect (azimuth) and "
+#~ "one point."
+#~ msgstr "１点と傾斜、アスペクト比でラスターマップの平面を作成"
+
+#~ msgid "Random deviates surface"
+#~ msgstr "ランダム逸脱曲面"
+
+#~ msgid ""
+#~ "Produces a raster map layer of uniform random deviates whose range can be "
+#~ "expressed by the user."
+#~ msgstr ""
+#~ "ユーザーによって定義できる範囲で同質なランダム逸脱ラスターマップレイヤーを"
+#~ "生成"
+
+#~ msgid "Random surface with spatial dependence"
+#~ msgstr "空間依存性ランダム曲面"
+
+#~ msgid "Generates random surface(s) with spatial dependence."
+#~ msgstr "空間依存性ランダム曲面を生成"
+
+#~ msgid "Generate contour lines"
+#~ msgstr "コンターラインの生成"
+
+#~ msgid "Produces a vector map of specified contours from a raster map."
+#~ msgstr "ラスターマップからコンターを生成しベクトルマップを作成"
+
+#~ msgid "Interpolate surfaces"
+#~ msgstr "曲面補間 "
+
+#~ msgid "Bilinear and bicubic from vector points"
+#~ msgstr "ベクトルポイントからの共一次と三次補間"
+
+#~ msgid ""
+#~ "Bicubic or bilinear spline interpolation with Tykhonov regularization."
+#~ msgstr "チホノフ則化による三次補間や共一次スプライン補間"
+
+#~ msgid "IDW from raster points"
+#~ msgstr "ラスターポイントから加重平均補間"
+
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "ラスターマップの表面補間ユーティリティ"
+
+#~ msgid "IDW from raster points (alternate method for sparse points)"
+#~ msgstr "ラスターポイントの加重平均補間 (まばらなポイントの代替方法)  "
+
+#~ msgid "Surface generation program."
+#~ msgstr "表層生成プログラム"
+
+#~ msgid "IDW from vector points"
+#~ msgstr "ベクトルポイントでの加重平均補間"
+
+#~ msgid ""
+#~ "Surface interpolation from vector point data by Inverse Distance Squared "
+#~ "Weighting."
+#~ msgstr "逆距離方格加重によるベクトルポイントデータからの表面補間"
+
+#~ msgid "Raster contours"
+#~ msgstr "ラスターコンター"
+
+#~ msgid "Surface generation program from rasterized contours."
+#~ msgstr "ラスターのコンターから曲面を推定"
+
+#~ msgid "Regularized spline tension"
+#~ msgstr "正則化スプライン張力"
+
+#~ msgid ""
+#~ "Spatial approximation and topographic analysis from given point or "
+#~ "isoline data in vector format to floating point raster format using "
+#~ "regularized spline with tension."
+#~ msgstr ""
+#~ "指定された点またはスプライン関数を使用してラスターマップから変換したベクト"
+#~ "ルデータの等値線データでの空間的な近似値と地形学的分析"
+
+#~ msgid "Fill NULL cells"
+#~ msgstr "nullセルの穴埋め "
+
+#~ msgid ""
+#~ "Fills no-data areas in raster maps using v.surf.rst splines interpolation"
+#~ msgstr " v.surf.rstスプライン補間を利用し、ラスターマップに値を埋める"
+
+#~ msgid "Report and statistics"
+#~ msgstr "レポートと統計"
+
+#~ msgid "Basic raster metadata"
+#~ msgstr "基本的なラスターメタデータ"
+
+#~ msgid "Output basic information about a raster map layer."
+#~ msgstr "ラスターマップの基礎情報を出力"
+
+#~ msgid "Manage category information"
+#~ msgstr "カテゴリ情報の管理"
+
+#~ msgid ""
+#~ "Manages category values and labels associated with user-specified raster "
+#~ "map layers."
+#~ msgstr ""
+#~ "ユーザー定義ラスターマップレイヤーに関連付けられたカテゴリ情報とラベルの管"
+#~ "理"
+
+#~ msgid "General statistics"
+#~ msgstr "一般設定 "
+
+#~ msgid "Generates area statistics for raster map layers."
+#~ msgstr "ラスターマップレイヤーの統計解析を行う"
+
+#~ msgid "Quantiles for large data sets"
+#~ msgstr "大規模データセットの分位数 "
+
+#~ msgid "Compute quantiles using two passes."
+#~ msgstr "２つのパスを使用した分位数の計算"
+
+#~ msgid "Range of category values"
+#~ msgstr "カテゴリ値の範囲"
+
+#~ msgid "Prints terse list of category values found in a raster map layer."
+#~ msgstr "ラスターマップのカテゴリー値一覧を表示"
+
+#~ msgid "Sum area by raster map and category"
+#~ msgstr "ラスターマップをカテゴリ別に集計"
+
+#~ msgid "Reports statistics for raster map layers."
+#~ msgstr "ラスターマップに関する一連のレポートを作成"
+
+#~ msgid "Statistics for clumped cells"
+#~ msgstr "塊状セルによる統計解析"
+
+#~ msgid ""
+#~ "Calculates the volume of data \"clumps\", and (optionally) produces a "
+#~ "GRASS vector points map containing the calculated centroids of these "
+#~ "clumps."
+#~ msgstr ""
+#~ "データの量を計算する \"clumps\"、（オプション）塊状セルの重心を計算しベク"
+#~ "トルポイントにプロットしたマップを生成する"
+
+#~ msgid "Total corrected area"
+#~ msgstr "合計修正地域  "
+
+#~ msgid "Surface area estimation for rasters."
+#~ msgstr "ラスターの表面面積評価"
+
+#~ msgid "Univariate raster statistics"
+#~ msgstr "単変量ラスタ統計"
+
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null cells of a raster map."
+#~ msgstr "ラスターマップの非-NULLセルを元に単変量統計計算を行う"
+
+#~ msgid "Sample transects"
+#~ msgstr "サンプル横断面"
+
+#~ msgid "Outputs the raster map layer values lying on user-defined line(s)."
+#~ msgstr "指定した直線上でのラスターマップの値を出力"
+
+#~ msgid "Sample transects (bearing/distance)"
+#~ msgstr "単位（角度/距離） "
+
+#~ msgid ""
+#~ "Outputs raster map layer values lying along user defined transect line(s)."
+#~ msgstr "指定した横断面でラスターマップの値を出力"
+
+#~ msgid "Covariance/correlation"
+#~ msgstr "共分散/相関 "
+
+#~ msgid ""
+#~ "Outputs a covariance/correlation matrix for user-specified raster map "
+#~ "layer(s)."
+#~ msgstr "ラスターマップの共分散と相関を求めます "
+
+#~ msgid "Linear regression"
+#~ msgstr "線形回帰"
+
+#~ msgid "Calculates linear regression from two raster maps: y = a + b*x"
+#~ msgstr "2つのラスターマップでの線形回帰計算: y = a + b*x  "
+
+#~ msgid "Mutual category occurrences"
+#~ msgstr "カテゴリー間の関係"
+
+#~ msgid ""
+#~ "Tabulates the mutual occurrence (coincidence) of categories for two "
+#~ "raster map layers."
+#~ msgstr "２つのラスターマップのカテゴリー関係（一致）表を作成します "
+
+#, fuzzy
+#~ msgid "&Vector"
+#~ msgstr "ファイル"
+
+#~ msgid "Develop vector map"
+#~ msgstr "ベクトルマップ作成 "
+
+#~ msgid "Create new empty vector map"
+#~ msgstr "空のベクトルマップの作成 "
+
+#~ msgid "Edit vector map (non-interactively)"
+#~ msgstr "ベクトルマップ編集（非対話型）"
+
+#~ msgid ""
+#~ "Edits a vector map, allows adding, deleting and modifying selected vector "
+#~ "features."
+#~ msgstr "選択したベクトルフューチャの修正、追加、削除"
+
+#~ msgid "Create or rebuild topology"
+#~ msgstr "トポロジーの作成/再ビルド"
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "ベクトルマップにトポロジーを作成"
+
+#~ msgid "Clean vector map"
+#~ msgstr "ベクトルマップの消去"
+
+#~ msgid "Toolset for cleaning topology of vector map."
+#~ msgstr "ベクトルマップのトポロジーの編集ツールキット"
+
+#~ msgid "Smooth or simplify"
+#~ msgstr "円滑化または単純化"
+
+#~ msgid "Convert object types"
+#~ msgstr "オブジェクトタイプの変換"
+
+#~ msgid "Change the type of geometry elements"
+#~ msgstr "ジオメトリエレメントのタイプ変更"
+
+#~ msgid "Add centroids"
+#~ msgstr "重心追加"
+
+#~ msgid "Adds missing centroids to closed boundaries."
+#~ msgstr "閉領域の欠けている重心を追加"
+
+#~ msgid "Build polylines"
+#~ msgstr "ポリラインの生成"
+
+#~ msgid "Builds polylines from lines or boundaries."
+#~ msgstr "線分や境界線からポリラインを生成"
+
+#~ msgid "Split lines"
+#~ msgstr "線分の分割"
+
+#~ msgid "Split lines to shorter segments."
+#~ msgstr "短いセグメントに線分を分割"
+
+#~ msgid "Split polylines"
+#~ msgstr "ポリラインの分割"
+
+#~ msgid "Creates points/segments from input vector lines and positions."
+#~ msgstr "入力された線分と点からセグメントを生成"
+
+#~ msgid "Parallel lines"
+#~ msgstr "平行線"
+
+#~ msgid "Creates parallel line to input vector lines."
+#~ msgstr "入力された線分から平行線を生成"
+
+#~ msgid "Dissolve boundaries"
+#~ msgstr "境界の融合"
+
+#~ msgid ""
+#~ "Dissolves boundaries between adjacent areas sharing a common category "
+#~ "number or attribute."
+#~ msgstr "共通のカテゴリー番号や属性を共有するエリアを融合させる"
+
+#~ msgid "Create 3D vector over raster"
+#~ msgstr "３Dベクトルまたはラスターの作成"
+
+#~ msgid "Converts vector map to 3D by sampling of elevation raster map."
+#~ msgstr "高度ラスターマップを3Dベクトルマップに変換"
+
+#~ msgid "Extrude 3D vector map"
+#~ msgstr "３Dベクトルマップの立上げ"
+
+#, fuzzy
+#~ msgid "Extrudes flat vector features to 3D with defined height."
+#~ msgstr "ベクトル."
+
+#~ msgid "Create labels"
+#~ msgstr "ラベル作成"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates optimally placed labels for vector map from associated attributes"
+#~ msgstr "ベクトル."
+
+#~ msgid "Create optimally placed labels"
+#~ msgstr "最適な位置にラベルを作成"
+
+#~ msgid "Creates paint labels for a vector map from attached attributes."
+#~ msgstr "属性からベクトルマップのラベルを作成"
+
+#~ msgid "Reposition vector map"
+#~ msgstr "ベクトルマップの再配置"
+
+#~ msgid ""
+#~ "Performs an affine transformation (shift, scale and rotate, or GPCs) on "
+#~ "vector map."
+#~ msgstr "ベクトルマップのアフェイン変換"
+
+#~ msgid "Reproject vector map"
+#~ msgstr "ベクトルマップの投影変換"
+
+#~ msgid "Allows projection conversion of vector maps."
+#~ msgstr "ベクトルマップの投影変換を許可"
+
+#~ msgid "Updates vector map metadata."
+#~ msgstr "ベクトルマップメタデータ更新"
+
+#~ msgid ""
+#~ "Set color rules for features in a vector using a numeric attribute column."
+#~ msgstr "数値属性のカラムを使用して、ベクトルの色定義を設定"
+
+#~ msgid "Set colors interactively by entering color rules"
+#~ msgstr "色定義を対話型入力で設定"
+
+#~ msgid "Query with attributes"
+#~ msgstr "属性で検索"
+
+#~ msgid ""
+#~ "Selects vector objects from an existing vector map and creates a new map "
+#~ "containing only the selected objects."
+#~ msgstr ""
+#~ "既存のベクトルマップからのオブジェクトを選択し、選択したオブジェクトのみを"
+#~ "含む新しいマップ作成"
+
+#~ msgid "Query with coordinate(s)"
+#~ msgstr "座標で検索"
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "指定された位置のベクトルマップレイヤーを検索"
+
+#~ msgid "Query with another vector map"
+#~ msgstr "別のベクトルマップと共に検索"
+
+#~ msgid ""
+#~ "Selects features from vector map (A) by features from other vector map "
+#~ "(B)."
+#~ msgstr ""
+#~ "ベクトル地図（B）からのフューチャによって他のベクトルマップ（A）からフュー"
+#~ "チャを選択"
+
+#~ msgid "Buffer vectors"
+#~ msgstr "バッファーベクトル"
+
+#~ msgid "Lidar analysis"
+#~ msgstr "ライダー分析"
+
+#~ msgid "Detect edges"
+#~ msgstr "エッジ検出"
+
+#~ msgid "Detects the object's edges from a LIDAR data set."
+#~ msgstr "ライダー データセットからエッジを検出する"
+
+#~ msgid "Detect interiors"
+#~ msgstr "内面検出"
+
+#~ msgid ""
+#~ "Building contour determination and Region Growing algorithm for "
+#~ "determining the building inside"
+#~ msgstr "コンター線定義と内部コンター線定義のための領域成長アルゴリズム"
+
+#~ msgid "Correct and reclassify objects"
+#~ msgstr "オブジェクトの修正と再分類"
+
+#~ msgid ""
+#~ "Correction of the v.lidar.growing output. It is the last of the three "
+#~ "algorithms for LIDAR filtering."
+#~ msgstr ""
+#~ "v.lidar.growing出力の修正。これは、ライダーフィルタリングのための3つのアル"
+#~ "ゴリズムの最後です"
+
+#~ msgid "Linear referencing"
+#~ msgstr "線形参照"
+
+#~ msgid "Create LRS"
+#~ msgstr "線形参照システム作成"
+
+#~ msgid "Create Linear Reference System"
+#~ msgstr "線型参照システム作成"
+
+#~ msgid "Create stationing"
+#~ msgstr "配置測点作成"
+
+#~ msgid "Create stationing from input lines, and linear reference system"
+#~ msgstr "入力された線分と線形参照システムから配置測線を作成"
+
+#~ msgid "Create points/segments"
+#~ msgstr "点/セグメントの作成 "
+
+#~ msgid ""
+#~ "Creates points/segments from input lines, linear reference system and "
+#~ "positions read from stdin or a file."
+#~ msgstr ""
+#~ "入力された線分や線形参照システム、ファイルや標準入力の点から新しい点/セグ"
+#~ "メントを作成 "
+
+#~ msgid "Find line id and offset"
+#~ msgstr "ラインIDとオフセットを表示"
+
+#~ msgid ""
+#~ "Finds line id and real km+offset for given points in vector map using "
+#~ "linear reference system."
+#~ msgstr ""
+#~ "線形参照システムを利用し、ベクトルマップの点からラインIDと実距離（Km)オフ"
+#~ "セットを表示"
+
+#~ msgid "Nearest features"
+#~ msgstr "最寄のフューチャ"
+
+#~ msgid ""
+#~ "Finds the nearest element in vector map 'to' for elements in vector map "
+#~ "'from'."
+#~ msgstr "ベクトルマップの２点に一番近いエレメントを探す"
+
+#~ msgid "Network analysis"
+#~ msgstr "ネットワーク解析 "
+
+#~ msgid "Allocate subnets"
+#~ msgstr "サブネットの設定 "
+
+#~ msgid "Allocate subnets for nearest centres (direction from centre)."
+#~ msgstr "最寄の中心に割り当てるサブネット (中心からの方向).  "
+
+#~ msgid "Network maintenance"
+#~ msgstr "ネットワークメンテナンス "
+
+#~ msgid "Performs network maintenance."
+#~ msgstr "ネットワークメンテナンスを実行"
+
+#~ msgid "Visibility network"
+#~ msgstr "ネットワーク可視化"
+
+#~ msgid "Visibility graph construction."
+#~ msgstr "可視度グラフ構築"
+
+#~ msgid "Shortest path"
+#~ msgstr "最短経路"
+
+#~ msgid "Finds shortest path on vector network."
+#~ msgstr "ベクトルネットワークの最短経路探査"
+
+#~ msgid "Split net"
+#~ msgstr "ネットの分割"
+
+#~ msgid "Splits net by cost isolines."
+#~ msgstr "コスト等値線によるネットの分割"
+
+#~ msgid "Steiner tree"
+#~ msgstr "シュタイナーツリー"
+
+#~ msgid "Create Steiner tree for the network and given terminals"
+#~ msgstr "定義された点とネットワークからシュタイナーツリーを作成"
+
+#~ msgid "Traveling salesman analysis"
+#~ msgstr "巡回セールスマン問題 "
+
+#~ msgid "Creates a cycle connecting given nodes (Traveling salesman problem)."
+#~ msgstr "指定されたノードの巡回するルートを作成 巡回セールスマン問題 )"
+
+#~ msgid "Overlay vector maps"
+#~ msgstr "ベクトルマップの重ね合せ "
+
+#~ msgid "Overlays two vector maps."
+#~ msgstr "２つのベクトルマップの重ね合せ"
+
+#~ msgid "Patch vector maps"
+#~ msgstr "ベクトルマップのパッチ"
+
+#, fuzzy
+#~ msgid "Creates a new vector map by combining other vector maps."
+#~ msgstr "ベクトル ベクトル."
+
+#~ msgid "Change attributes"
+#~ msgstr "属性の変更"
+
+#~ msgid "Manage or report categories"
+#~ msgstr "カテゴリーの管理と出力"
+
+#, fuzzy
+#~ msgid "Attaches, deletes or reports vector categories to map geometry."
+#~ msgstr "ベクトル."
+
+#~ msgid "Reclassify objects interactively"
+#~ msgstr "対話形式でオブジェクトを再分類"
+
+#~ msgid ""
+#~ "Changes vector category values for an existing vector map according to "
+#~ "results of SQL queries or a value in attribute table column."
+#~ msgstr ""
+#~ "既存のベクトルマップのカテゴリー値は、SQLクエリまたは属性テーブルの列の値"
+#~ "によって変更されます"
+
+#~ msgid "Reclassify objects using rules file"
+#~ msgstr "ルールファイルによってオブジェクトを再分類"
+
+#~ msgid "Generate area for current region"
+#~ msgstr "現在の領域からエリアを生成"
+
+#~ msgid "Create a new vector from the current region."
+#~ msgstr "現在の領域から新しいベクトルを作成"
+
+#~ msgid "Generate areas from points"
+#~ msgstr "複数の点からエリアを生成"
+
+#~ msgid "Convex hull"
+#~ msgstr "凸包 "
+
+#, fuzzy
+#~ msgid "Creates convex hull for vector point map."
+#~ msgstr "色 ベクトル"
+
+#~ msgid "Delaunay triangles"
+#~ msgstr "ドローネ三角形"
+
+#~ msgid ""
+#~ "Creates a Delaunay triangulation from an input vector map containing "
+#~ "points or centroids."
+#~ msgstr "点や重心を含むベクトルマップからするドローネ三角形を作成"
+
+#~ msgid "Voronoi diagram/Thiessen polygons"
+#~ msgstr "ボロノイ図/ティーセン多角形"
+
+#~ msgid ""
+#~ "Creates a Voronoi diagram from an input vector map containing points or "
+#~ "centroids."
+#~ msgstr "点や重心を含むベクトルマップからするボロノイ図を作成"
+
+#~ msgid "Generate grid"
+#~ msgstr "グリッドの生成"
+
+#, fuzzy
+#~ msgid "Creates a vector map of a user-defined grid."
+#~ msgstr "ベクトル."
+
+#~ msgid "Generate points"
+#~ msgstr "点生成"
+
+#~ msgid "Generate from database"
+#~ msgstr "データベースから生成"
+
+#~ msgid ""
+#~ "Creates new vector (points) map from database table containing "
+#~ "coordinates."
+#~ msgstr "座標を含むデータベースから新しいベクトルマップを作成"
+
+#~ msgid "Generate points along lines"
+#~ msgstr "線に沿った点を生成"
+
+#~ msgid "Create points along input lines in new vector with 2 layers."
+#~ msgstr "2層の新しいベクトルラインに沿って点を作成"
+
+#~ msgid "Generate random points"
+#~ msgstr "ランダムな点を生成"
+
+#, fuzzy
+#~ msgid "Generates randomly 2D/3D vector points map."
+#~ msgstr "ベクトル."
+
+#~ msgid "Perturb points"
+#~ msgstr "摂動点"
+
+#, fuzzy
+#~ msgid "Random location perturbations of vector points."
+#~ msgstr "ベクトル"
+
+#~ msgid "Remove outliers in point sets"
+#~ msgstr "点群から異常値を削除"
+
+#~ msgid "Removes outliers from vector point data."
+#~ msgstr "ベクトルポイントデータから異常値を削除"
+
+#~ msgid "Test/training point sets"
+#~ msgstr "テスト/トレーニング ポイントセット"
+
+#~ msgid "Randomly partition points into test/train sets."
+#~ msgstr "テスト/トレーニングセットにランダムな分割点を作る"
+
+#~ msgid "Update area attributes from raster"
+#~ msgstr "ラスターからエリア属性を更新"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from a raster map based on vector "
+#~ "polygons and uploads statistics to new attribute columns."
+#~ msgstr "ベクトル."
+
+#~ msgid "Update point attributes from areas"
+#~ msgstr "エリアから点の属性を更新"
+
+#~ msgid "Uploads vector values at positions of vector points to the table."
+#~ msgstr "ポイントの位置のベクトルの値をテーブルにアップロード"
+
+#~ msgid "Update point attributes from raster"
+#~ msgstr "ラスターから点の属性を更新"
+
+#~ msgid "Sample raster maps at point locations"
+#~ msgstr "ポイントの場所にあるラスターマップのサンプリング"
+
+#~ msgid "Uploads raster values at positions of vector points to the table."
+#~ msgstr "ポイントの位置のラスターの値をテーブルにアップロード"
+
+#~ msgid "Sample raster neighborhood around points"
+#~ msgstr "ポイント近傍でのラスターマップのサンプリング "
+
+#~ msgid "Samples a raster map at vector point locations."
+#~ msgstr "ポイントロケーションでのラスターマップのサンプリング"
+
+#~ msgid "Reports and statistics"
+#~ msgstr "レポートと統計"
+
+#~ msgid "Basic vector metadata"
+#~ msgstr "基本ベクトルメタデータ"
+
+#, fuzzy
+#~ msgid "Outputs basic information about a vector map."
+#~ msgstr "ベクトル."
+
+#~ msgid "Classify attribute data"
+#~ msgstr "属性データの分類"
+
+#~ msgid "Classifies attribute data, e.g. for thematic mapping"
+#~ msgstr "主題図作成等の属性データの分類"
+
+#~ msgid "Report topology by category"
+#~ msgstr "カテゴリ別トポロジーのレポート作成"
+
+#, fuzzy
+#~ msgid "Reports geometry statistics for vector maps."
+#~ msgstr "ラスターマップに関する一連のレポートを作成します"
+
+#~ msgid "Upload or report topology"
+#~ msgstr "トポロジーをアップロードまたはレポート作成"
+
+#~ msgid "Populates database values from vector features."
+#~ msgstr "ベクトルのフューチャからデータベースの値を設定"
+
+#~ msgid "Univariate attribute statistics for points"
+#~ msgstr "点の単変量属性統計"
+
+#~ msgid ""
+#~ "Calculates univariate statistics for attribute. Variance and standard "
+#~ "deviation is calculated only for points if specified."
+#~ msgstr ""
+#~ "属性の単変量の統計を計算します。指定した場合はポイントの分散と標準偏差を計"
+#~ "算します"
+
+#~ msgid "Univariate statistics for attribute columns"
+#~ msgstr "属性カラムによる単変量統計"
+
+#~ msgid ""
+#~ "Calculates univariate statistics on selected table column for a GRASS "
+#~ "vector map."
+#~ msgstr "ベクトルマップの選択されたテーブルのカラムで単変量統計計算を行う"
+
+#~ msgid "Quadrat indices"
+#~ msgstr "２次補間インデックス"
+
+#~ msgid "Indices for quadrat counts of sites lists."
+#~ msgstr "サイトの区画索引"
+
+#~ msgid "Test normality"
+#~ msgstr "正規性検定"
+
+#, fuzzy
+#~ msgid "Tests for normality for vector points."
+#~ msgstr "ファイル"
+
+#, fuzzy
+#~ msgid "&Imagery"
+#~ msgstr "映像"
+
+#~ msgid "Develop images and groups"
+#~ msgstr "画像とグループの作成 "
+
+#~ msgid "Create/edit group"
+#~ msgstr "グループの作成/修正"
+
+#~ msgid "Creates, edits, and lists groups and subgroups of imagery files."
+#~ msgstr "画像ファイルのグループとサブグループの作成、編集、一覧"
+
+#~ msgid "Target group"
+#~ msgstr "対象グループ"
+
+#~ msgid "Targets an imagery group to a GRASS location and mapset."
+#~ msgstr "画像グループをロケーションやマップセットの対象とする"
+
+#~ msgid "Mosaic images"
+#~ msgstr "モザイク画像"
+
+#~ msgid "Manage image colors"
+#~ msgstr "カラーの管理 "
+
+#~ msgid "Color balance for RGB"
+#~ msgstr "RGBのカラーバランス"
+
+#~ msgid "Performs auto-balancing of colors for LANDSAT images."
+#~ msgstr "ランドサットデータのカラーバランス自動設定"
+
+#~ msgid "HIS to RGB"
+#~ msgstr "HIS → RGB"
+
+#~ msgid ""
+#~ "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
+#~ "RGB (Red-Green-Blue) color space."
+#~ msgstr "色の定義をHIS（色相/照度/彩度）をRGB(赤/緑/青）に変換する"
+
+#~ msgid ""
+#~ "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-"
+#~ "Intensity-Saturation) color space."
+#~ msgstr "色の定義をRGB(赤/緑/青）をHIS（色相/照度/彩度）に変換する"
+
+#~ msgid "Rectify image or raster"
+#~ msgstr "画像またはラスターを補正する"
+
+#~ msgid ""
+#~ "Rectifies an image by computing a coordinate transformation for each "
+#~ "pixel in the image based on the control points."
+#~ msgstr ""
+#~ "コントロールポイントに基づいて、各ピクセルの座標変換を計算することによって"
+#~ "イメージを補正する"
+
+#, fuzzy
+#~ msgid "creates a sunshine hours map"
+#~ msgstr "ベクトル"
+
+#, fuzzy
+#~ msgid "Vegetation Indices"
+#~ msgstr "地域"
+
+#~ msgid "Brovey sharpening"
+#~ msgstr "ブロービーシャープニング"
+
+#~ msgid ""
+#~ "Brovey transform to merge multispectral and high-res panchromatic channels"
+#~ msgstr ""
+#~ "マルチスペクトルで高解像度パンクロチャンネルをマージするブロビー変換"
+
+#~ msgid "Classify image"
+#~ msgstr "画像分類 "
+
+#~ msgid "Clustering input for unsupervised classification"
+#~ msgstr "非監視下分類用クラスタリング入力"
+
+#~ msgid ""
+#~ "Generates spectral signatures for land cover types in an image using a "
+#~ "clustering algorithm."
+#~ msgstr ""
+#~ "クラスタリングアルゴリズムを使用してイメージによる土地被覆のスペクトル特性"
+#~ "を生成"
+
+#~ msgid "Maximum likelihood classification (MLC)"
+#~ msgstr "最尤法による分類(MLC) "
+
+#~ msgid "Classifies the cell spectral reflectances in imagery data."
+#~ msgstr "セルの分光反射率で画像データを分類"
+
+#~ msgid "Sequential maximum a posteriori classification (SMAP)"
+#~ msgstr "逐次最大事後確率推定法 (SMAP)  "
+
+#~ msgid ""
+#~ "Performs contextual image classification using sequential maximum a "
+#~ "posteriori (SMAP) estimation."
+#~ msgstr "逐次最大事後確率推定法によりコンテキストイメージを分類します"
+
+#~ msgid "Input for supervised MLC"
+#~ msgstr "最尤法による分類法監視下の入力"
+
+#~ msgid "Generates statistics for i.maxlik from raster map."
+#~ msgstr "ラスターマップからi.maxlikの統計情報を生成"
+
+#~ msgid "Input for supervised SMAP"
+#~ msgstr "逐次最大事後確率推定法監視下の入力"
+
+#~ msgid "Generates statistics for i.smap from raster map."
+#~ msgstr "ラスターマップから i.smapの統計情報を生成"
+
+#~ msgid "Filter image"
+#~ msgstr "画像フィルター "
+
+#~ msgid "Edge detection"
+#~ msgstr "縁辺検出"
+
+#~ msgid ""
+#~ "Zero-crossing \"edge detection\" raster function for image processing."
+#~ msgstr "ゼロ交差法を用いて画像のエッジを決定します "
+
+#~ msgid "Matrix/convolving filter"
+#~ msgstr "行列/畳み込みフィルタ"
+
+#~ msgid "Raster map matrix filter."
+#~ msgstr "ラスターマップ行列フィルター"
+
+#~ msgid "Generate histogram of image"
+#~ msgstr "イメージのヒストグラムを生成"
+
+#~ msgid "Spectral response"
+#~ msgstr "スペクトル応答 "
+
+#~ msgid ""
+#~ "Displays spectral response at user specified locations in group or images."
+#~ msgstr ""
+#~ "イメージあるいはグループでユーザーが指定したロケーションのスペクトル応答を"
+#~ "表示"
+
+#~ msgid "Tasseled cap vegetation index"
+#~ msgstr "タッセルドキャップ植生指数"
+
+#~ msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
+#~ msgstr "ランドサットデータのためのタッセルドキャップ（Kauth−Thomas）変換"
+
+#~ msgid "Transform image"
+#~ msgstr "画像変換 "
+
+#~ msgid "Canonical correlation"
+#~ msgstr "正準相関"
+
+#~ msgid "Canonical components analysis (cca) program for image processing."
+#~ msgstr "正準分析により画像処理を行います "
+
+#~ msgid "Principal components"
+#~ msgstr "主成分"
+
+#~ msgid "Principal components analysis (pca) program for image processing."
+#~ msgstr "主成分分析により画像処理を行います "
+
+#~ msgid "Fast Fourier"
+#~ msgstr "高速フーリエ変換"
+
+#~ msgid "Fast Fourier Transform (FFT) for image processing."
+#~ msgstr "高速フーリエ変換を行います "
+
+#~ msgid "Inverse Fast Fourier"
+#~ msgstr "高速フーリエ逆変換 "
+
+#~ msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+#~ msgstr "高速フーリエ逆変換を行います "
+
+#~ msgid "Atmospheric correction"
+#~ msgstr "大気補正 "
+
+#~ msgid "Performs atmospheric correction using the 6S algorithm."
+#~ msgstr "6Sアルゴリズムを使用し大気補正を行います"
+
+#~ msgid "Bit pattern comparison "
+#~ msgstr "ビットパタ-ン比較"
+
+#~ msgid "Compares bit patterns with a raster map."
+#~ msgstr "ラスターマップのビットパターン比較"
+
+#~ msgid "Kappa analysis"
+#~ msgstr "カッパ分析"
+
+#~ msgid ""
+#~ "Calculate error matrix and kappa parameter for accuracy assessment of "
+#~ "classification result."
+#~ msgstr "分類結果の精度評価のための誤差行列とカッパのパラメータを計算します"
+
+#~ msgid "OIF for LandSat TM"
+#~ msgstr "ランドサットのバンド選定指標"
+
+#~ msgid "Calculates Optimum-Index-Factor table for LANDSAT TM bands 1-5, & 7"
+#~ msgstr "ランドサットの1-5,7バンドのバンド選定指標テーブルを計算する"
+
+#, fuzzy
+#~ msgid "V&olumes"
+#~ msgstr "値"
+
+#~ msgid "Develop volumes"
+#~ msgstr "立体の作成"
+
+#~ msgid "Manage 3D NULL values"
+#~ msgstr "3D NULL値の管理"
+
+#~ msgid "Explicitly create the 3D NULL-value bitmap file."
+#~ msgstr "3D NULL-値のビットマップファイルの作成 "
+
+#~ msgid "Manage timestamp"
+#~ msgstr "タイムスタンプ管理"
+
+#~ msgid "Print/add/remove a timestamp for a 3D raster map"
+#~ msgstr "3Dラスターマップのタイムスタンプ印刷/追加/削除 "
+
+#~ msgid "3D Mask"
+#~ msgstr "3D マスク"
+
+#~ msgid "Establishes the current working 3D raster mask."
+#~ msgstr "現在作業中の 3D ラスタマスクを確立します "
+
+#~ msgid "3D raster map calculator"
+#~ msgstr "３Dラスターマップカリキュレータ"
+
+#~ msgid "Map calculator for volumetric map algebra"
+#~ msgstr "体積地図代数のマップカリキュレータ"
+
+#~ msgid "Cross section"
+#~ msgstr "断面図"
+
+#~ msgid ""
+#~ "Creates cross section 2D raster map from 3d raster map based on 2D "
+#~ "elevation map"
+#~ msgstr "2D標高マップに基づいた3Dラスターから2Dのラスター断面地図を作成"
+
+#~ msgid ""
+#~ "Numerical calculation program for transient, confined groundwater flow in "
+#~ "three dimensions"
+#~ msgstr "3次元の地下水の流れに限定した一時的な数値解析プログラム "
+
+#~ msgid "Interpolate volume from points"
+#~ msgstr "点から立体を補間"
+
+#~ msgid ""
+#~ "Interpolates point data to a G3D grid volume using regularized spline "
+#~ "with tension (RST) algorithm."
+#~ msgstr ""
+#~ "張力（ＲＳＴ）アルゴリズムによる正規化スプライン曲線を使用してG3Dグリッド"
+#~ "立体の点を補間する"
+
+#~ msgid "Report and Statistics"
+#~ msgstr "レポートと統計"
+
+#~ msgid "Basic volume metadata"
+#~ msgstr "基本立体メタデータ"
+
+#~ msgid ""
+#~ "Outputs basic information about a user-specified 3D raster map layer."
+#~ msgstr "ユーザー定義３Dラスターマップの基礎情報を出力します "
+
+#~ msgid "Voxel statistics"
+#~ msgstr "ボクセル統計"
+
+#~ msgid "Generates volume statistics for raster3d maps."
+#~ msgstr "3Dラスターマップにおいて統計解析値を生成"
+
+#~ msgid "Univariate statistics for volumes"
+#~ msgstr "立体の変量統計"
+
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null 3d cells of a raster3d "
+#~ "map."
+#~ msgstr "3Dラスターマップの非-NULLセルから単変量統計計算を行う"
+
+#, fuzzy
+#~ msgid "&Database"
+#~ msgstr "データベース"
+
+#~ msgid "Database information"
+#~ msgstr "データベース情報"
+
+#~ msgid "Describe table"
+#~ msgstr "テーブル定義"
+
+#~ msgid "Describes a table in detail."
+#~ msgstr "詳細なテーブル定義"
+
+#~ msgid "List columns"
+#~ msgstr "カラム一覧"
+
+#~ msgid "List all columns for a given table."
+#~ msgstr "テーブルのすべてのカラムを表示します "
+
+#~ msgid "List drivers"
+#~ msgstr "ドライバー一覧"
+
+#~ msgid "List all database drivers."
+#~ msgstr "全データベースドライバー一覧"
+
+#~ msgid "List tables"
+#~ msgstr "テーブル一覧"
+
+#~ msgid "Lists all tables for a given database."
+#~ msgstr "データベースの全てのテーブルを表示します"
+
+#~ msgid "Manage databases"
+#~ msgstr "データベース管理"
+
+#~ msgid "Connect"
+#~ msgstr "接続 "
+
+#~ msgid "Prints/sets general DB connection for current mapset and exits."
+#~ msgstr "現在のマップセットの汎用DB接続を印刷/設定し、終了する"
+
+#~ msgid "Login"
+#~ msgstr "ログイン "
+
+#~ msgid "Sets user/password for driver/database."
+#~ msgstr "ドライバー/データベースのユーザー名/パスワードを設定"
+
+#~ msgid "Copy table"
+#~ msgstr "テーブルコピー"
+
+#~ msgid "Copy a table."
+#~ msgstr "テーブルをコピー"
+
+#~ msgid "New table"
+#~ msgstr "新規テーブル"
+
+#~ msgid ""
+#~ "Creates and adds a new attribute table to a given layer of an existing "
+#~ "vector map."
+#~ msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
+
+#~ msgid "Remove table"
+#~ msgstr "テーブル削除"
+
+#, fuzzy
+#~ msgid "Removes a table from database."
+#~ msgstr "ベクトル."
+
+#~ msgid "Add columns"
+#~ msgstr "カラム追加"
+
+#~ msgid ""
+#~ "Adds one or more columns to the attribute table connected to a given "
+#~ "vector map."
+#~ msgstr "ベクトルマップに関連付けられている属性テーブルにカラムを追加する"
+
+#~ msgid "Change values"
+#~ msgstr "値の変更"
+
+#~ msgid ""
+#~ "Allows to update a column in the attribute table connected to a vector "
+#~ "map."
+#~ msgstr ""
+#~ "ベクトルマップに接続された属性テーブルのカラムを更新することができます"
+
+#~ msgid ""
+#~ "Renames a column in the attribute table connected to a given vector map."
+#~ msgstr "ベクトルマップに接続された属性テーブルのカラム名することができます"
+
+#~ msgid "Test"
+#~ msgstr "テストモード "
+
+#~ msgid "Test database driver, database must exist and set by db.connect."
+#~ msgstr ""
+#~ "データベースドライバのテストr, データベースは実存しdb.connectで接続されて"
+#~ "いる必要があります"
+
+#~ msgid "Query any table"
+#~ msgstr "テーブルの検索"
+
+#~ msgid "Query vector attribute data"
+#~ msgstr "ベクトル属性データの検索"
+
+#~ msgid "Prints vector map attributes."
+#~ msgstr "ベクトルマップの属性を印刷"
+
+#~ msgid "SQL statement"
+#~ msgstr "SQL文"
+
+#~ msgid "Executes any SQL statement."
+#~ msgstr "SQL文の実行"
+
+#~ msgid "Vector database connections"
+#~ msgstr "ベクトル データベース接続"
+
+#~ msgid "Reconnect vector to database"
+#~ msgstr "ベクトルとデータベースの再接続"
+
+#~ msgid "Reconnects vectors to a new database."
+#~ msgstr "ベクトルと新規データベースの再接続"
+
+#~ msgid "Set vector map - database connection"
+#~ msgstr "ベクトルマップ - データベース 接続設定"
+
+#~ msgid "Prints/sets DB connection for a vector map to attribute table."
+#~ msgstr "ベクトルマップと属性テーブルのDB接続を出力/設定"
+
+#~ msgid "&Help"
+#~ msgstr "ヘルプ(&H)"
+
+#~ msgid "Display the HTML man pages of GRASS"
+#~ msgstr "GRASSのHTMLマニュアルを表示"
+
+#~ msgid "Command '%s' not yet implemented."
+#~ msgstr "コマンド '%s' はまだ実装されていません"
+
+#~ msgid "&Close"
+#~ msgstr "閉じる(&C)"
+
+#~ msgid "&Apply"
+#~ msgstr "適用(&A)"
+
+#~ msgid "C&opy"
+#~ msgstr "コピー(&o)"
+
+#~ msgid "Help"
+#~ msgstr "ヘルプ "
+
+#, fuzzy
+#~ msgid "Output vector map name"
+#~ msgstr "ベクトル"
+
+#, fuzzy
+#~ msgid "Create/edit projection information for current location"
+#~ msgstr "の"
+
+#, fuzzy
+#~ msgid "Digitize raster map"
+#~ msgstr "デジタイズ"
+
+#, fuzzy
+#~ msgid "Reclassify vector objects interactively by entering SQL rules"
+#~ msgstr "ベクトル"
+
+#, fuzzy
+#~ msgid ""
+#~ "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
+#~ "transformation function."
+#~ msgstr "色."
+
+#, fuzzy
+#~ msgid ""
+#~ "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
+#~ "transformation function"
+#~ msgstr "色"
+
+#, fuzzy
+#~ msgid "Interactive input for supervised classification"
+#~ msgstr "入力 の"
+
+#, fuzzy
+#~ msgid ""
+#~ "Copy a table. Either 'from_table' (optionally with 'where') can be used "
+#~ "or 'select' option, but not 'from_table' and 'select' at the same time."
+#~ msgstr "コピー."
 
 #~ msgid ""
 #~ "Makes each cell value a function of the attribute values assigned to the "
