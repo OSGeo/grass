@@ -1,3 +1,20 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#include <grass/config.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
+
+#if defined(HAVE_LANGINFO_H)
+#include <langinfo.h>
+#endif
+#if defined(__MINGW32__) && defined(USE_NLS)
+#include <localcharset.h>
+#endif
+
 #include "parser_local_proto.h"
 
 /* Defines and prototypes for WPS process_description XML document generation

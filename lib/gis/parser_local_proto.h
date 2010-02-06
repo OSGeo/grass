@@ -1,25 +1,8 @@
 #ifndef __PARSER_LOCAL_PROTO_H__
 #define __PARSER_LOCAL_PROTO_H__
 
-#include <grass/config.h>
-
-#if defined(HAVE_LANGINFO_H)
-#include <langinfo.h>
-#endif
-#if defined(__MINGW32__) && defined(USE_NLS)
-#include <localcharset.h>
-#endif
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <unistd.h>
-#include <stdarg.h>
-#include <sys/types.h>
 #include <grass/gis.h>
-#include <grass/glocale.h>
-#include <grass/spawn.h>
 
 struct Item
 {
@@ -54,15 +37,7 @@ struct state {
     int n_items;
 };
 
-
 extern struct state *st;
-
-#define BAD_SYNTAX    1
-#define OUT_OF_RANGE  2
-#define MISSING_VALUE 3
-#define AMBIGUOUS     4
-#define REPLACED      5
-#define KEYLENGTH 64
 
 /* functions which are used by several parser functions in different files */
 
@@ -71,7 +46,7 @@ void G__usage_html(void);
 void G__script(void);
 void G__wps_print_process_description(void);
 int  G__uses_new_gisprompt(void);
-void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *));
+void G__print_keywords(FILE *, void (*)(FILE *, const char *));
 
 #endif
 

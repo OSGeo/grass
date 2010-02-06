@@ -12,6 +12,10 @@
  * \author Soeren Gebbert added Dec. 2009 WPS process_description document
  */
 
+#include <stdio.h>
+
+#include <grass/gis.h>
+
 #include "parser_local_proto.h"
 
 void G__script(void)
