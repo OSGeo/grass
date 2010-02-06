@@ -73,7 +73,26 @@
  * \author Soeren Gebbert added Dec. 2009 WPS process_description document
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <grass/gis.h>
+#include <grass/spawn.h>
+#include <grass/glocale.h>
+
 #include "parser_local_proto.h"
+
+enum opt_error {
+    BAD_SYNTAX    = 1,
+    OUT_OF_RANGE  = 2,
+    MISSING_VALUE = 3,
+    AMBIGUOUS     = 4,
+    REPLACED      = 5
+};
+
+#define KEYLENGTH 64
 
 /* initialize the global struct */
 struct state state;

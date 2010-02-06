@@ -1,3 +1,8 @@
+#include <stdio.h>
+
+#include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "parser_local_proto.h"
 
 static void print_escaped_for_html(FILE * f, const char *str);
