@@ -143,7 +143,7 @@ int Vect__read_head(struct Map_info *Map)
 
     while (G_getl2(buff, 2000, head_fp)) {
 
-	if (!(ptr = G_index(buff, ':'))) {
+	if (!(ptr = strchr(buff, ':'))) {
 	    G_warning(_("Corrupted row in head: %s"), buff);
 	    continue;
 	}

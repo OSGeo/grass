@@ -286,10 +286,6 @@ void G__call_error_handlers(void);
 const char *G_home(void);
 const char *G__home(void);
 
-/* index.c */
-char *G_index(const char *, int);
-char *G_rindex(const char *, int);
-
 /* intersect.c */
 int G_intersect_line_segments(double, double, double, double, double, double,
 			      double, double, double *, double *, double *,

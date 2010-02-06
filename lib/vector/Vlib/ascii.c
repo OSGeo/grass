@@ -14,6 +14,7 @@
   \author Updated for GRASS 7 (SF support) by Martin Landa <landa.martin gmail.com>
 */
 #include <stdio.h>
+#include <string.h>
 
 #include <grass/vector.h>
 #include <grass/dbmi.h>
@@ -217,7 +218,7 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 	if (strncmp(buff, "VERTI:", 6) == 0)
 	    return (0);
 
-	if (!(ptr = G_index(buff, ':')))
+	if (!(ptr = strchr(buff, ':')))
 	    G_fatal_error(_("Unexpected data in vector head:\n[%s]"), buff);
 
 	ptr++;			/* Search for the start of text */

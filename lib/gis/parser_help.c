@@ -218,7 +218,7 @@ static void show_options(int maxlen, const char *str)
     fprintf(stderr, _("  %*s   options: "), maxlen, " ");
     totlen = maxlen + 13;
     p1 = buff;
-    while ((p2 = G_index(p1, ','))) {
+    while ((p2 = strchr(p1, ','))) {
 	*p2 = '\0';
 	len = strlen(p1) + 1;
 	if ((len + totlen) > 76) {

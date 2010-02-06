@@ -15,6 +15,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <grass/gis.h>
 
 
@@ -49,7 +50,7 @@ char **G_tokenize(const char *buf, const char *delim)
     char *p;
 
     i = 0;
-    while (!G_index(delim, *buf) && (*buf == ' ' || *buf == '\t'))	/* needed for G_free () */
+    while (!strchr(delim, *buf) && (*buf == ' ' || *buf == '\t'))	/* needed for G_free () */
 	buf++;
 
     p = G_store(buf);
@@ -57,14 +58,14 @@ char **G_tokenize(const char *buf, const char *delim)
     tokens = (char **)G_malloc(sizeof(char *));
 
     while (1) {
-	while (!G_index(delim, *p) && (*p == ' ' || *p == '\t'))
+	while (!strchr(delim, *p) && (*p == ' ' || *p == '\t'))
 	    p++;
 	if (*p == 0)
 	    break;
 	tokens[i++] = p;
 	tokens = (char **)G_realloc((char *)tokens, (i + 1) * sizeof(char *));
 
-	while (*p && (G_index(delim, *p) == NULL))
+	while (*p && (strchr(delim, *p) == NULL))
 	    p++;
 	if (*p == 0)
 	    break;

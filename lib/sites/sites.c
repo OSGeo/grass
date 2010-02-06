@@ -632,9 +632,9 @@ int G__oldsite_get(FILE * ptr, Site * s, int fmt)
     }
 
     /* move pointer past easting and northing fields */
-    if (NULL == (buf = G_index(buf, PIPE)))
+    if (NULL == (buf = strchr(buf, PIPE)))
 	return -2;
-    if (NULL == (buf = G_index(buf + 1, PIPE)))
+    if (NULL == (buf = strchr(buf + 1, PIPE)))
 	return -2;
 
     /* check for remaining dimensional fields */
@@ -647,13 +647,13 @@ int G__oldsite_get(FILE * ptr, Site * s, int fmt)
 	    if (sscanf(buf, "%lf|", &(s->dim[dim++])) < 1)
 		return -2;	/* no more dims, though expected */
 	}
-	else if (NULL != (p1 = G_index(buf, PIPE))) {
-	    if (NULL == (p2 = G_index(buf, DQUOTE)))
+	else if (NULL != (p1 = strchr(buf, PIPE))) {
+	    if (NULL == (p2 = strchr(buf, DQUOTE)))
 		err = 1;	/* more dims, though none expected */
 	    else if (strlen(p1) > strlen(p2))
 		err = 1;	/* more dims, though none expected */
 	}
-    } while ((buf = G_index(buf, PIPE)) != NULL);
+    } while ((buf = strchr(buf, PIPE)) != NULL);
     buf = last;
 
     /* no more dimensions-now we parse attribute fields */
@@ -803,7 +803,7 @@ int G_oldsite_describe(FILE * ptr, int *dims, int *cat, int *strs, int *dbls)
     }
 
     /* check for remaining dimensional fields */
-    while (G_index(buf, PIPE) != (char *)NULL) {
+    while (strchr(buf, PIPE) != (char *)NULL) {
 	(*dims)++;
 	while (!ispipe(*buf) && !isnull(*buf))
 	    buf++;
@@ -920,7 +920,7 @@ int cleanse_string(char *buf)
 
     /* find where this string terminates */
     if (*buf != DQUOTE) {	/* if no DQUOTEs, */
-	stop = G_index(buf, SPACE);	/* then SPACE separates */
+	stop = strchr(buf, SPACE);	/* then SPACE separates */
 	if (stop == (char *)NULL)
 	    return strlen(buf);
 	else
@@ -935,14 +935,14 @@ int cleanse_string(char *buf)
 		p++;
 	    }
 	    p = buf;
-	    stop = G_index(p + 1, DQUOTE);
+	    stop = strchr(p + 1, DQUOTE);
 	    while (*(stop - 1) == BSLASH)
-		stop = G_index(++stop, DQUOTE);
+		stop = strchr(++stop, DQUOTE);
 	}
     }
     /* remove backslashes between buf and stop */
     p = buf;
-    while ((p = G_index(p, BSLASH)) != (char *)NULL && p <= stop) {
+    while ((p = strchr(p, BSLASH)) != (char *)NULL && p <= stop) {
 	p2 = p + 1;
 	if (*p2 != '\0' && (*p2 == DQUOTE || *p2 == BSLASH)) {
 	    while (*p != '\0') {
@@ -1102,7 +1102,7 @@ char *G_site_format(const Site * s, const char *fs, int id)
 	    /* do not uncomment this code because sites file was created
 	     * as we want. So it's enough to print them out as it is.
 	     *
-	     if (G_index (s->str_att[i], DQUOTE) != (char *) NULL)
+	     if (strchr (s->str_att[i], DQUOTE) != (char *) NULL)
 	     {
 	     while (!isnull(s->str_att[i][j]))
 	     {
@@ -1124,7 +1124,7 @@ char *G_site_format(const Site * s, const char *fs, int id)
 
 	    strcpy(s->str_att[i], xbuf);
 
-	    if (G_index(s->str_att[i], SPACE) != (char *)NULL)
+	    if (strchr(s->str_att[i], SPACE) != (char *)NULL)
 		sprintf(xbuf, "%s%s\"%s\"", nfs, ((id == 0) ? "" : "@"),
 			s->str_att[i]);
 	    else
