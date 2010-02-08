@@ -14,6 +14,8 @@
 # and will be presented to the user to select the most appropriate one for
 # his/her location. The "Where Used" and "Comment" fields should contain
 # information to aid in the user's decision.
+# If only the 7-parameter transformation is desired/known, add 99999 for
+# the 3 parameters in datum.table along with the correct ellipsoid.
 #
 # Any supplementary files needed by the PROJ.4 library (e.g. gridshift tables) 
 # should be placed in the directory $GISBASE/etc/nad/.
