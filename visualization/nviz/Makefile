@@ -36,11 +36,6 @@ endif
 
 # Install the scripts in the appropriate directory
 install:
-	$(MAKE) $(INSTALL_DIR)/$(PGM)$(EXE)
-	$(MAKE) $(BIN)/$(PGM)
-ifneq ($(strip $(MINGW)),)
-	$(MAKE) $(BIN)/nviz.bat
-endif
 	$(MAKE) $(SCRIPT_DST)
 	$(MAKE) $(BITMAP_DST)
 
@@ -59,14 +54,8 @@ $(INSTALL_DIR)/bitmaps/flythrough: | $(INSTALL_DIR)/bitmaps
 $(INSTALL_DIR)/$(PGM)$(EXE): src/nvwish$(EXE) | $(INSTALL_DIR)
 	$(INSTALL) $< $@
 
-$(BIN)/$(PGM): scripts/$(PGM)
-	$(INSTALL) $< $@
-
-$(BIN)/nviz.bat: scripts/nviz.bat
-	$(INSTALL) $< $@
-
 $(INSTALL_DIR)/scripts/%: scripts/% | $(INSTALL_DIR)/scripts
-	$(INSTALL) $< $@
+	$(INSTALL_DATA) $< $@
 
 $(INSTALL_DIR)/bitmaps/%: bitmaps/% | $(INSTALL_DIR)/bitmaps
 	$(INSTALL_DATA) $< $@

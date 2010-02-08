@@ -68,6 +68,12 @@ extern GLuint FontBase;
 -            this is the data type declaration section                   -
 ------------------------------------------------------------------------*/
 
+struct options {
+    struct Option *elev, *colr, *vct, *pnt, *vol;
+    struct Option *panel_path, *script, *state;
+    struct Flag *no_args, *script_kill, *demo;
+};
+
 typedef struct
 {
     int id;
