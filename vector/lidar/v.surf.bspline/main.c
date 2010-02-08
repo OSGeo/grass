@@ -38,7 +38,7 @@ char *bspline_column;
 int main(int argc, char *argv[])
 {
     /* Variable declarations */
-    int nsply, nsplx, nlines, nrows, ncols, nsplx_adj, nsply_adj;
+    int nsply, nsplx, nrows, ncols, nsplx_adj, nsply_adj;
     int nsubregion_col, nsubregion_row, subregion_row, subregion_col;
     int subzone = 0, nsubzones = 0;
     int last_row, last_column, grid, bilin, ext, flag_auxiliar, cross;	/* booleans */
@@ -225,8 +225,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
 
-    if (!Vect_is_3d(&In) && bspline_field <= 0 && bspline_column)
+    /* check availability of z values
+     * column option overrrides 3D z coordinates */
+    if (!Vect_is_3d(&In) && bspline_field <= 0 && bspline_column == NULL)
 	G_fatal_error(_("Need either 3D vector or layer and column with z values"));
+    if (bspline_field > 0 && bspline_column == NULL)
+	G_fatal_error(_("Layer but not column with z values given"));
 
     /* Estimate point density and mean distance for current region */
     if (spline_step_flag->answer) {
@@ -316,6 +320,7 @@ int main(int argc, char *argv[])
 	raster = Rast_open_fp_new(out_map_opt->answer);
     }
 
+    /* read z values from attribute table */
     if (bspline_field > 0) {
 	db_CatValArray_init(&cvarr);
 	Fi = Vect_get_field(&In, bspline_field);
@@ -356,14 +361,18 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No database connection for driver <%s> is defined. "
 			"Run db.connect."), dvr);
 
-    /* Auxiliar table creation */
+    /* Create auxiliar table */
     if (vector) {
-	if ((flag_auxiliar = P_Create_Aux_Table(driver, table_name)) == FALSE) {
+	if ((flag_auxiliar = P_Create_Aux4_Table(driver, table_name)) == FALSE) {
 	    P_Drop_Aux_Table(driver, table_name);
 	    G_fatal_error(_("Interpolation: Creating table: "
 			    "It was impossible to create table <%s>."),
 			  table_name);
 	}
+	db_create_index2(driver, table_name, "ID");
+	/* sqlite likes that */
+	db_close_database_shutdown_driver(driver);
+	driver = db_start_driver_open_database(dvr, db);
     }
 
     /* Setting regions and boxes */
@@ -383,23 +392,35 @@ int main(int argc, char *argv[])
 			    "Consider changing region resolution"));
     }
 
-    /* Fixing parameters of the elaboration region */
-    P_zero_dim(&dims);		/* Set to zero the dim struct */
+    /*------------------------------------------------------------------
+      | Subdividing and working with tiles: 									
+      | Each original region will be divided into several subregions. 
+      | Each one will be overlaped by its neighbouring subregions. 
+      | The overlapping is calculated as a fixed OVERLAP_SIZE times
+      | the largest spline step plus 2 * orlo
+      ----------------------------------------------------------------*/
 
-    N_extension = original_reg.north - original_reg.south;
-    E_extension = original_reg.east - original_reg.west;
+    /* Fixing parameters of the elaboration region */
+    P_zero_dim(&dims);		/* Set dim struct to zero */
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
-    dims.overlap = OVERLAP_SIZE * passoE;
-    P_get_orlo(bilin, &dims, passoE, passoN);	/* Set orlo_h|v */
+    if (passoN > passoE)
+	dims.overlap = OVERLAP_SIZE * passoN;
+    else
+	dims.overlap = OVERLAP_SIZE * passoE;
+    P_get_orlo(bilin, &dims, passoE, passoN);
     P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
 
     G_verbose_message("adjusted EW splines %d", nsplx_adj);
     G_verbose_message("adjusted NS splines %d", nsply_adj);
 
+    /* calculate number of subzones */
     orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
     orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+
+    N_extension = original_reg.north - original_reg.south;
+    E_extension = original_reg.east - original_reg.west;
 
     nsubregion_col = ceil(E_extension / orloE) + 0.5;
     nsubregion_row = ceil(N_extension / orloN) + 0.5;
@@ -415,21 +436,11 @@ int main(int argc, char *argv[])
     points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     Vect_cat_set(Cats, 1, 0);
-    nlines = Vect_get_num_lines(&In);
 
-    /*------------------------------------------------------------------
-      | Subdividing and working with tiles: 									
-      | Each original_region will be divided into several subregions. 
-      | Each one will be overlaped by its neibourgh subregions. 
-      | The overlapping was calculated as a fixed OVERLAP_SIZE times
-      | the east-west spline step
-      ----------------------------------------------------------------*/
-
-    elaboration_reg.south = original_reg.north;
-
-    G_percent(0, 1, 10);
     subregion_row = 0;
+    elaboration_reg.south = original_reg.north;
     last_row = FALSE;
+
     while (last_row == FALSE) {	/* For each subregion row */
 	subregion_row++;
 	P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
@@ -511,7 +522,6 @@ int main(int argc, char *argv[])
 
 	    if (npoints > 0) {	/*  */
 		int i;
-		double *obs_mean;
 
 		nparameters = nsplx * nsply;
 		BW = P_get_BandWidth(P_BILINEAR, nsply) + 2 * (bilin == P_BICUBIC);
@@ -523,7 +533,6 @@ int main(int argc, char *argv[])
 		obsVect = G_alloc_matrix(npoints, 3);	/* Observation vector */
 		Q = G_alloc_vector(npoints);	/* "a priori" var-cov matrix */
 		lineVect = G_alloc_ivector(npoints);	/*  */
-		obs_mean = G_alloc_vector(npoints);
 
 		for (i = 0; i < npoints; i++) {	/* Setting obsVect vector & Q matrix */
 		    double dval;
@@ -533,6 +542,7 @@ int main(int argc, char *argv[])
 		    obsVect[i][0] = observ[i].coordX;
 		    obsVect[i][1] = observ[i].coordY;
 
+		    /* read z coordinates from attribute table */
 		    if (bspline_field > 0) {
 			int cat, ival, ret;
 
@@ -545,14 +555,14 @@ int main(int argc, char *argv[])
 				db_CatValArray_get_value_int(&cvarr, cat,
 							     &ival);
 			    obsVect[i][2] = ival;
-			    obs_mean[i] = ival;
+			    observ[i].coordZ = ival;
 			}
 			else {	/* DB_C_TYPE_DOUBLE */
 			    ret =
 				db_CatValArray_get_value_double(&cvarr, cat,
 								&dval);
 			    obsVect[i][2] = dval;
-			    obs_mean[i] = dval;
+			    observ[i].coordZ = dval;
 			}
 			if (ret != DB_OK) {
 			    G_warning(_("Interpolation: (%d,%d): No record for point (cat = %d)"),
@@ -560,29 +570,25 @@ int main(int argc, char *argv[])
 			    continue;
 			}
 		    }
-
+		    /* use z coordinates of 3D vector */
 		    else {
 			obsVect[i][2] = observ[i].coordZ;
-			obs_mean[i] = observ[i].coordZ;
-		    }		/* obsVect[i][2] = observ[i].coordZ - mean; */
+		    }
 		}
 
 		/* Mean calculation for every point */
-		if (bspline_field > 0)
-		    mean = calc_mean(obs_mean, npoints);
-		else
-		    mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
-
+		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		G_debug(1, "Interpolation: (%d,%d): mean=%lf",
 			subregion_row, subregion_col, mean);
 
+		G_free(observ);
+
 		for (i = 0; i < npoints; i++)
 		    obsVect[i][2] -= mean;
 
-		G_free(observ);
-
-		if (bilin) {	/* Bilinear interpolation */
+		/* Bilinear interpolation */
+		if (bilin) {
 		    G_debug(1,
 			    "Interpolation: (%d,%d): Bilinear interpolation...",
 			    subregion_row, subregion_col);
@@ -592,6 +598,7 @@ int main(int argc, char *argv[])
 				   nparameters, BW);
 		    nCorrectGrad(N, lambda, nsplx, nsply, passoE, passoN);
 		}
+		/* Bicubic interpolation */
 		else {
 		    G_debug(1,
 			    "Interpolation: (%d,%d): Bicubic interpolation...",
@@ -610,7 +617,6 @@ int main(int argc, char *argv[])
 		G_free_vector(Q);
 
 		if (grid == TRUE) {	/* GRID INTERPOLATION ==> INTERPOLATION INTO A RASTER */
-		    flag_auxiliar = TRUE;
 		    G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
 			    subregion_row, subregion_col);
 		    raster_matrix =
@@ -669,11 +675,12 @@ int main(int argc, char *argv[])
 		G_free_vector(parVect);
 		G_free_matrix(obsVect);
 		G_free_ivector(lineVect);
-		G_free_vector(obs_mean);
 	    }
-	    else
+	    else {
+		G_free(observ);
 		G_warning(_("No data within this subzone. "
 			    "Consider changing the spline step."));
+	    }
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 

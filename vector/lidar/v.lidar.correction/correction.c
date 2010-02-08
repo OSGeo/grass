@@ -30,111 +30,64 @@
 void
 P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 		    struct Map_info *Terrain, struct Cell_head *Elaboration,
-		    struct bound_box General, struct bound_box Overlap, double **obs,
-		    double *param, int *line_num, double passoN,
-		    double passoE, double overlap, double HighThresh,
-		    double LowThresh, int nsplx, int nsply, int num_points,
+		    struct bound_box General, struct bound_box Overlap,
+		    double **obs, struct lidar_cat *lcat, double *param,
+		    int *line_num, double passoN, double passoE,
+		    double overlap, double HighThresh, double LowThresh,
+		    int nsplx, int nsply, int num_points,
 		    dbDriver * driver, double mean, char *tab_name)
 {
     int i = 0, class;
     double interpolation, csi, eta, weight;
 
-    struct line_pnts *points;
+    struct bound_box elaboration_box;
+    struct line_pnts *point;
     struct line_cats *cats;
 
-    points = Vect_new_line_struct();
+    point = Vect_new_line_struct();
     cats = Vect_new_cats_struct();
 
-    Vect_rewind(In);
-    while (Vect_read_next_line(In, points, cats) > 0) {
-	i++;
-	if (Vect_point_in_box(*points->x, *points->y, *points->z, &General)) {
+    Vect_region_box(Elaboration, &elaboration_box);
+
+    db_begin_transaction(driver);
+    
+    for (i = 0; i < num_points; i++) {	/* Sparse points */
+	G_percent(i, num_points, 2);
+	Vect_reset_line(point);
+	Vect_reset_cats(cats);
+	
+	if (Vect_point_in_box(obs[i][0], obs[i][1], mean, &General)) {
 	    interpolation =
-		dataInterpolateBilin(*points->x, *points->y, passoE, passoN,
+		dataInterpolateBilin(obs[i][0], obs[i][1], passoE, passoN,
 				     nsplx, nsply, Elaboration->west,
 				     Elaboration->south, param);
 	    interpolation += mean;
 
-	    if (Vect_point_in_box(*points->x, *points->y, *points->z, &Overlap)) {	/*(5) */
+	    Vect_copy_xyz_to_pnts(point, &obs[i][0], &obs[i][1], &obs[i][2],
+				  1);
+	    *point->z += mean;
 
-		Vect_cat_get(cats, F_CLASSIFICATION, &class);
+	    if (Vect_point_in_box(*point->x, *point->y, *point->z, &Overlap)) {	/*(5) */
+
+		Vect_cat_set(cats, F_EDGE_DETECTION_CLASS, lcat[i].cat_edge);
+		Vect_cat_set(cats, F_INTERPOLATION, lcat[i].cat_interp);
+		Vect_cat_set(cats, F_COUNTER_OBJ, lcat[i].cat_obj);
+		class = lcat[i].cat_class;
 		class =
-		    correction(class, *points->z, interpolation, HighThresh,
+		    correction(class, *point->z, interpolation, HighThresh,
 			       LowThresh);
-		Vect_cat_del(cats, F_CLASSIFICATION);
 		Vect_cat_set(cats, F_CLASSIFICATION, class);
 
 		if (class == TERRAIN_SINGLE || class == TERRAIN_DOUBLE)
-		    Vect_write_line(Terrain, GV_POINT, points, cats);
+		    Vect_write_line(Terrain, GV_POINT, point, cats);
 
-		Vect_write_line(Out, GV_POINT, points, cats);
-
+		Vect_write_line(Out, GV_POINT, point, cats);
 	    }
 	    else {
-
-		if ((*points->x > Overlap.E)) {
-
-		    if ((*points->y > Overlap.N)) {	/*(3) */
-			csi = (*points->x - Overlap.E) / overlap;
-			eta = (*points->y - Overlap.N) / overlap;
-			weight = (1 - csi) * (1 - eta);
-			interpolation *= weight;
-
-			if (Select_Correction
-			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
-			    G_fatal_error(_("Impossible to read the database"));
-
-			if (UpDate_Correction
-			    (interpolation, line_num[i], driver, tab_name) != DB_OK)
-			    G_fatal_error(_("Impossible to update the database"));
-
-		    }
-		    else if ((*points->y < Overlap.S)) {	/*(1) */
-			csi = (*points->x - Overlap.E) / overlap;
-			eta = (*points->y - General.S) / overlap;
-			weight = (1 - csi) * eta;
-
-			if (Insert_Correction
-			    (interpolation * weight, line_num[i],
-			     driver, tab_name) != DB_OK)
-			    G_fatal_error(_("Impossible to write in the database"));
-
-		    }
-		    else {	/*(1) */
-			weight = (*points->x - Overlap.E) / overlap;
-
-			if (Insert_Correction
-			    (interpolation * weight, line_num[i],
-			     driver, tab_name) != DB_OK)
-			    G_fatal_error(_("Impossible to write in the database"));
-		    }
-		}
-		else if ((*points->x < Overlap.W)) {
-		    if ((*points->y > Overlap.N)) {	/*(4) */
-			csi = (*points->x - General.W) / overlap;
-			eta = (*points->y - Overlap.N) / overlap;
-			weight = (1 - eta) * csi;
-
-			interpolation *= weight;
-			if (Select_Correction
-			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
-			    G_fatal_error(_("Impossible to read the database"));
-
-			Vect_cat_get(cats, F_CLASSIFICATION, &class);
-			class =
-			    correction(class, *points->z, interpolation,
-				       HighThresh, LowThresh);
-			Vect_cat_set(cats, F_CLASSIFICATION, class);
-
-			Vect_write_line(Out, GV_POINT, points, cats);
-			if (class == TERRAIN_SINGLE ||
-			    class == TERRAIN_DOUBLE)
-			    Vect_write_line(Terrain, GV_POINT, points, cats);
-
-		    }
-		    else if ((*points->y < Overlap.S)) {	/*(2) */
-			csi = (*points->x - General.W) / overlap;
-			eta = (*points->y - General.S) / overlap;
+		if ((*point->x > Overlap.E) && (*point->x < General.E)) {
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(3) */
+			csi = (General.E - *point->x) / overlap;
+			eta = (General.N - *point->y) / overlap;
 			weight = csi * eta;
 			interpolation *= weight;
 
@@ -146,51 +99,113 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			    (interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to update the database"));
 		    }
-		    else {	/*(2) */
-			weight = (Overlap.W - *points->x) / overlap;
-			interpolation *= weight;
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
+			csi = (General.E - *point->x) / overlap;
+			eta = (*point->y - General.S) / overlap;
+			weight = csi * eta;
 
-			if (Select_Correction
-			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
-			    G_fatal_error(_("Impossible to read the database"));
-
-			Vect_cat_get(cats, F_CLASSIFICATION, &class);
-			class =
-			    correction(class, *points->z, interpolation,
-				       HighThresh, LowThresh);
-			Vect_cat_set(cats, F_CLASSIFICATION, class);
-
-			Vect_write_line(Out, GV_POINT, points, cats);
-			if (class == TERRAIN_SINGLE ||
-			    class == TERRAIN_DOUBLE)
-			    Vect_write_line(Terrain, GV_POINT, points, cats);
-
+			if (Insert_Correction
+			    (interpolation * weight, line_num[i],
+			     driver, tab_name) != DB_OK)
+			    G_fatal_error(_("Impossible to write in the database"));
 		    }
+		    else if ((*point->y >= Overlap.S) && (*point->y <= Overlap.N)) {	/*(1) */
+			weight = (General.E - *point->x) / overlap;
 
+			if (Insert_Correction
+			    (interpolation * weight, line_num[i],
+			     driver, tab_name) != DB_OK)
+			    G_fatal_error(_("Impossible to write in the database"));
+		    }
 		}
-		else {
-		    if ((*points->y > Overlap.N)) {	/*(3) */
-			weight = (*points->y - Overlap.N) / overlap;
+		else if ((*point->x < Overlap.W) && (*point->x > General.W)) {
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(4) */
+			csi = (*point->x - General.W) / overlap;
+			eta = (General.N - *point->y) / overlap;
+			weight = eta * csi;
 			interpolation *= weight;
 
 			if (Select_Correction
 			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to read the database"));
 
-			Vect_cat_get(cats, F_CLASSIFICATION, &class);
+			Vect_cat_set(cats, F_EDGE_DETECTION_CLASS, lcat[i].cat_edge);
+			Vect_cat_set(cats, F_INTERPOLATION, lcat[i].cat_interp);
+			Vect_cat_set(cats, F_COUNTER_OBJ, lcat[i].cat_obj);
+			class = lcat[i].cat_class;
 			class =
-			    correction(class, *points->z, interpolation,
+			    correction(class, *point->z, interpolation,
 				       HighThresh, LowThresh);
 			Vect_cat_set(cats, F_CLASSIFICATION, class);
 
-			Vect_write_line(Out, GV_POINT, points, cats);
+			Vect_write_line(Out, GV_POINT, point, cats);
 			if (class == TERRAIN_SINGLE ||
 			    class == TERRAIN_DOUBLE)
-			    Vect_write_line(Terrain, GV_POINT, points, cats);
+			    Vect_write_line(Terrain, GV_POINT, point, cats);
+		    }
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(2) */
+			csi = (*point->x - General.W) / overlap;
+			eta = (*point->y - General.S) / overlap;
+			weight = csi * eta;
+			interpolation *= weight;
+
+			if (Select_Correction
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
+			    G_fatal_error(_("Impossible to read the database"));
+
+			if (UpDate_Correction
+			    (interpolation, line_num[i], driver, tab_name) != DB_OK)
+			    G_fatal_error(_("Impossible to update the database"));
+		    }
+		    else if ((*point->y >= Overlap.S) && (*point->y <= Overlap.N)) {	/*(2) */
+			weight = (*point->x - General.W) / overlap;
+			interpolation *= weight;
+
+			if (Select_Correction
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
+			    G_fatal_error(_("Impossible to read the database"));
+
+			Vect_cat_set(cats, F_EDGE_DETECTION_CLASS, lcat[i].cat_edge);
+			Vect_cat_set(cats, F_INTERPOLATION, lcat[i].cat_interp);
+			Vect_cat_set(cats, F_COUNTER_OBJ, lcat[i].cat_obj);
+			class = lcat[i].cat_class;
+			class =
+			    correction(class, *point->z, interpolation,
+				       HighThresh, LowThresh);
+			Vect_cat_set(cats, F_CLASSIFICATION, class);
+
+			Vect_write_line(Out, GV_POINT, point, cats);
+			if (class == TERRAIN_SINGLE ||
+			    class == TERRAIN_DOUBLE)
+			    Vect_write_line(Terrain, GV_POINT, point, cats);
+		    }
+		}
+		else if ((*point->x >= Overlap.W) && (*point->x <= Overlap.E)) {
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(3) */
+			weight = (General.N - *point->y) / overlap;
+			interpolation *= weight;
+
+			if (Select_Correction
+			    (&interpolation, line_num[i], driver, tab_name) != DB_OK)
+			    G_fatal_error(_("Impossible to read the database"));
+
+			Vect_cat_set(cats, F_EDGE_DETECTION_CLASS, lcat[i].cat_edge);
+			Vect_cat_set(cats, F_INTERPOLATION, lcat[i].cat_interp);
+			Vect_cat_set(cats, F_COUNTER_OBJ, lcat[i].cat_obj);
+			class = lcat[i].cat_class;
+			class =
+			    correction(class, *point->z, interpolation,
+				       HighThresh, LowThresh);
+			Vect_cat_set(cats, F_CLASSIFICATION, class);
+
+			Vect_write_line(Out, GV_POINT, point, cats);
+			if (class == TERRAIN_SINGLE ||
+			    class == TERRAIN_DOUBLE)
+			    Vect_write_line(Terrain, GV_POINT, point, cats);
 
 		    }
-		    else {	/*(1) */
-			weight = (Overlap.S - *points->y) / overlap;
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
+			weight = (*point->y - General.S) / overlap;
 
 			if (Insert_Correction
 			    (interpolation * weight, line_num[i],
@@ -199,13 +214,13 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 		    }
 		}
 	    }
-	}
-	/*IF*/ Vect_reset_line(points);
-	Vect_reset_cats(cats);
-
-    }
-    /*FOR*/ Vect_destroy_line_struct(points);
+	}  /* if in General box */
+    }  /* while */
+    G_percent(num_points, num_points, 2);
+    Vect_destroy_line_struct(point);
     Vect_destroy_cats_struct(cats);
+
+    db_commit_transaction(driver);
 
     return;
 }
@@ -240,9 +255,8 @@ int Select_Correction(double *Interp, int line_num, dbDriver * driver, char *tab
     dbValue *Interp_value;
 
     db_init_string(&sql);
-    db_zero_string(&sql);
 
-    sprintf(buf, "SELECT Interp FROM %s WHERE ID=%d", tab_name, line_num);
+    sprintf(buf, "SELECT ID, Interp FROM %s WHERE ID=%d", tab_name, line_num);
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
@@ -260,6 +274,7 @@ int Select_Correction(double *Interp, int line_num, dbDriver * driver, char *tab
 
 	*Interp += db_get_value_double(Interp_value);
     }
+    db_close_cursor(&cursor);
     db_free_string(&sql);
     return DB_OK;
 }
@@ -300,21 +315,20 @@ int UpDate_Correction(double Interp, int line_num, dbDriver * driver, char *tab_
 struct Point *P_Read_Vector_Correction(struct Map_info *Map,
 				       struct Cell_head *Elaboration,
 				       int *num_points, int *num_terrain,
-				       int dim_vect)
+				       int dim_vect, struct lidar_cat **lcat)
 {
-    int line_num, npoints, nterrain, pippo, cat_edge;
+    int line_num, npoints, nterrain, pippo, cat;
     double x, y, z;
     struct Point *obs;
+    struct lidar_cat *lc;
     struct line_pnts *points;
     struct line_cats *categories;
     struct bound_box elaboration_box;
 
     pippo = dim_vect;
 
-    /*if (first_it) */
     obs = (struct Point *)G_calloc(pippo, sizeof(struct Point));
-    /*else */
-    /*obs = (struct Point*) G_realloc ((void *) obs, pippo * sizeof(struct Point)); */
+    lc = (struct lidar_cat *)G_calloc(pippo, sizeof(struct lidar_cat));
 
     points = Vect_new_line_struct();
     categories = Vect_new_cats_struct();
@@ -344,12 +358,10 @@ struct Point *P_Read_Vector_Correction(struct Map_info *Map,
 	    npoints++;
 	    if (npoints >= pippo) {
 		pippo += dim_vect;
-		obs =
-		    (struct Point *)G_realloc((void *)obs,
-					      (signed int)(pippo *
-							   sizeof(struct
-								  Point)));
-		/*lineID = (int *) G_realloc ((void *) lineID, pippo * sizeof(int)); */
+		obs = (struct Point *)G_realloc((void *)obs,
+			    (signed int)(pippo * sizeof(struct Point)));
+		lc = (struct lidar_cat *)G_realloc((void *)lc,
+			    (signed int)(pippo * sizeof(struct lidar_cat)));
 	    }
 
 	    /* Storing observation vector */
@@ -357,27 +369,55 @@ struct Point *P_Read_Vector_Correction(struct Map_info *Map,
 	    obs[npoints - 1].coordY = y;
 	    obs[npoints - 1].coordZ = z;
 	    obs[npoints - 1].lineID = line_num;	/* Storing also the line's number */
-	    Vect_cat_get(categories, F_EDGE_DETECTION_CLASS, &cat_edge);
-	    obs[npoints - 1].cat = cat_edge;
-	}
+	    Vect_cat_get(categories, F_EDGE_DETECTION_CLASS, &cat);
+	    obs[npoints - 1].cat = cat;
+	    lc[npoints - 1].cat_edge = cat;
 
-	/* Only terrain points */
-	if (cat_edge == TERRAIN_SINGLE)
-	    nterrain++;
+	    /* Only terrain points */
+	    if (cat == TERRAIN_SINGLE)
+		nterrain++;
+
+	    Vect_cat_get(categories, F_CLASSIFICATION, &cat);
+	    lc[npoints - 1].cat_class = cat;
+	    Vect_cat_get(categories, F_INTERPOLATION, &cat);
+	    lc[npoints - 1].cat_interp = cat;
+	    Vect_cat_get(categories, F_COUNTER_OBJ, &cat);
+	    lc[npoints - 1].cat_obj = cat;
+	}
     }
     Vect_destroy_line_struct(points);
     Vect_destroy_cats_struct(categories);
 
     *num_points = npoints;
     *num_terrain = nterrain;
+    *lcat = lc;
     return obs;
 }
 
+/*! DEFINITION OF THE SUBZONES 
 
+  5: inside Overlap region
+  all others: inside General region but outside Overlap region
 
-#ifdef notdef
-/* SUBZONES DEFINITION */
------------------------|4 | 3 | 3 | ||-----------------------|||||||2 | 5 | 1
-    | ||||||||-----------------------|2 | 1 | 1 |
-    ||-----------------------||||||||||||||||||-----------------------||||||-----------------------
-#endif
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |4|   3   |3|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       |2|   5   |1|       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |2|   1   |1|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
+ */

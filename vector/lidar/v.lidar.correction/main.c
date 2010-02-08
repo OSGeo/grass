@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
     int *lineVect;
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
-    double **N, **obsVect;	/* Interpolation and least-square matrix */
+    double **N, **obsVect, **obsVect_all;	/* Interpolation and least-square matrix */
 
     struct Map_info In, Out, Terrain;
     struct Option *in_opt, *out_opt, *out_terrain_opt, *passoE_opt,
@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
     struct bound_box general_box, overlap_box;
 
     struct Point *observ;
+    struct lidar_cat *lcat;
 
     dbDriver *driver;
 
@@ -77,9 +78,9 @@ int main(int argc, char *argv[])
 
     spline_step_flag = G_define_flag();
     spline_step_flag->key = 'e';
-    spline_step_flag->label = _("Estimate spline step value");
+    spline_step_flag->label = _("Estimate point density and distance");
     spline_step_flag->description =
-	_("Estimate a good spline step value for the input vector points within the current region extends and quit");
+	_("Estimate point density and distance for the input vector points within the current region extends and quit");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->description =
@@ -182,9 +183,13 @@ int main(int argc, char *argv[])
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
 
-    Vect_set_open_level(1);	/*without topology */
+    Vect_set_open_level(1);	/* without topology */
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+
+    /* Input vector must be 3D */
+    if (!Vect_is_3d(&In))
+	G_fatal_error(_("Input vector map <%s> is not 3D!"), in_opt->answer);
 
     /* Estimate point density and mean distance for current region */
     if (spline_step_flag->answer) {
@@ -228,12 +233,17 @@ int main(int argc, char *argv[])
 
     /* Create auxiliar table */
     if ((flag_auxiliar =
-	 P_Create_Aux_Table(driver, table_name)) == FALSE) {
+	 P_Create_Aux2_Table(driver, table_name)) == FALSE) {
 	Vect_close(&In);
 	Vect_close(&Out);
 	Vect_close(&Terrain);
 	exit(EXIT_FAILURE);
     }
+
+    db_create_index2(driver, table_name, "ID");
+    /* sqlite likes that */
+    db_close_database_shutdown_driver(driver);
+    driver = db_start_driver_open_database(dvr, db);
 
     /* Setting regions and boxes */
     G_get_set_window(&original_reg);
@@ -247,26 +257,35 @@ int main(int argc, char *argv[])
     ew_resol = original_reg.ew_res;
     ns_resol = original_reg.ns_res;
 
-    /* Fixing parameters of the elaboration region */
-    /*! Each original_region will be divided into several subregions. These
-     *  subregions will overlap with their neibourghing subregions. This overlapping
-     *  is calculated as OVERLAP_SIZE times the east-west spline step. */
+    /*------------------------------------------------------------------
+      | Subdividing and working with tiles: 									
+      | Each original region will be divided into several subregions. 
+      | Each one will be overlaped by its neighbouring subregions. 
+      | The overlapping is calculated as a fixed OVERLAP_SIZE times
+      | the largest spline step plus 2 * orlo
+      ----------------------------------------------------------------*/
 
+    /* Fixing parameters of the elaboration region */
     P_zero_dim(&dims);
-    N_extension = original_reg.north - original_reg.south;
-    E_extension = original_reg.east - original_reg.west;
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
-    dims.overlap = OVERLAP_SIZE * passoE;
+    if (passoN > passoE)
+	dims.overlap = OVERLAP_SIZE * passoN;
+    else
+	dims.overlap = OVERLAP_SIZE * passoE;
     P_get_orlo(P_BILINEAR, &dims, passoE, passoN);
     P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
 
     G_verbose_message("adjusted EW splines %d", nsplx_adj);
     G_verbose_message("adjusted NS splines %d", nsply_adj);
 
+    /* calculate number of subzones */
     orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
     orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+
+    N_extension = original_reg.north - original_reg.south;
+    E_extension = original_reg.east - original_reg.west;
 
     nsubregion_col = ceil(E_extension / orloE) + 0.5;
     nsubregion_row = ceil(N_extension / orloN) + 0.5;
@@ -278,9 +297,9 @@ int main(int argc, char *argv[])
 
     nsubzones = nsubregion_row * nsubregion_col;
 
-    /* Subdividing and working with tiles */
     elaboration_reg.south = original_reg.north;
     last_row = FALSE;
+
     while (last_row == FALSE) {	/* For each row */
 
 	P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
@@ -344,23 +363,24 @@ int main(int argc, char *argv[])
 	    G_debug(1, _("read vector region map"));
 	    observ =
 		P_Read_Vector_Correction(&In, &elaboration_reg, &npoints,
-					 &nterrain, dim_vect);
+					 &nterrain, dim_vect, &lcat);
 
 	    G_debug(5, _("npoints = %d, nterrain = %d"), npoints, nterrain);
 	    if (npoints > 0) {	/* If there is any point falling into elaboration_reg. */
 		count_terrain = 0;
 		nparameters = nsplx * nsply;
 
-		/* Mean's calculation */
-		G_debug(3, _("Mean's calculation"));
+		/* Mean calculation */
+		G_debug(3, _("Mean calculation"));
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/*Least Squares system */
 		BW = P_get_BandWidth(P_BILINEAR, nsply);	/* Bilinear interpolation */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		TN = G_alloc_vector(nparameters);	/* vector */
-		parVect = G_alloc_vector(nparameters);	/* Bicubic parameters vector */
-		obsVect = G_alloc_matrix(nterrain + 1, 3);	/* Observation vector */
+		parVect = G_alloc_vector(nparameters);	/* Bilinear parameters vector */
+		obsVect = G_alloc_matrix(nterrain + 1, 3);	/* Observation vector with terrain points */
+		obsVect_all = G_alloc_matrix(npoints + 1, 3);	/* Observation vector with all points */
 		Q = G_alloc_vector(nterrain + 1);	/* "a priori" var-cov matrix */
 		lineVect = G_alloc_ivector(npoints + 1);
 
@@ -375,9 +395,14 @@ int main(int argc, char *argv[])
 			count_terrain++;
 		    }
 		    lineVect[i] = observ[i].lineID;
+		    obsVect_all[i][0] = observ[i].coordX;
+		    obsVect_all[i][1] = observ[i].coordY;
+		    obsVect_all[i][2] = observ[i].coordZ - mean;
 		}
 
-		G_debug(3, _("M.Q. solution"));
+		G_free(observ);
+
+		G_verbose_message(_("Bilinear interpolation"));
 		normalDefBilin(N, TN, Q, obsVect, passoE, passoN, nsplx,
 			       nsply, elaboration_reg.west,
 			       elaboration_reg.south, nterrain, nparameters,
@@ -388,19 +413,25 @@ int main(int argc, char *argv[])
 		G_free_matrix(N);
 		G_free_vector(TN);
 		G_free_vector(Q);
+		G_free_matrix(obsVect);
 
-		G_debug(3, _("Correction and creation of terrain vector"));
+		G_verbose_message( _("Correction and creation of terrain vector"));
 		P_Sparse_Correction(&In, &Out, &Terrain, &elaboration_reg,
-				    general_box, overlap_box, obsVect,
+				    general_box, overlap_box, obsVect_all, lcat,
 				    parVect, lineVect, passoN, passoE,
 				    dims.overlap, HighThresh, LowThresh,
 				    nsplx, nsply, npoints, driver, mean, table_name);
 
 		G_free_vector(parVect);
-		G_free_matrix(obsVect);
+		G_free_matrix(obsVect_all);
 		G_free_ivector(lineVect);
 	    }
-	    G_free(observ);
+	    else {
+		G_free(observ);
+		G_warning(_("No data within this subzone. "
+			    "Consider changing the spline step."));
+	    }
+	    G_free(lcat);
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 

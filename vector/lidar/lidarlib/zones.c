@@ -23,11 +23,44 @@ void P_zero_dim(struct Reg_dimens *dim)
 }
 
 /*----------------------------------------------------------------------------------------*/
+/*
+ --------------------------------------------
+ |            Elaboration region            |
+ |   ------------------------------------   |
+ |   |          General region          |   |
+ |   |   ----------------------------   |   |
+ |   |   |                          |   |   |
+ |   |   |                          |   |   |
+ |   |   |                          |   |   |
+ |   |   |      Overlap region      |   |   |
+ |   |   |                          |   |   |
+ |   |   |                          |   |   |
+ |   |   |                          |   |   |
+ |   |   ----------------------------   |   |
+ |   |                                  |   |
+ |   ------------------------------------   |
+ |                                          |
+ --------------------------------------------
+
+ The terminology is misleading:
+ The Overlap region does NOT overlap with neighbouring segments,
+ but the Elaboration and General region do overlap
+
+ Elaboration is used for interpolation
+ Interpolated points in Elaboration but outside General are discarded
+ Interpolated points in General but outside Overlap are weighed by
+ their distance to Overlap and summed up
+ Interpolated points in Overlap are taken as they are
+
+ The buffer zones Elaboration - General and General - Overlap must be
+ large enough to avoid artefacts 
+ */
+
 int
 P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 	      struct bound_box * Overlap, struct Reg_dimens dim, int type)
 {
-    /* Set the Elaboration region limits-> Also set the limits of the orlo and overlapping regions->
+    /* Set the Elaboration, General, and Overlap region limits
      * Returns 0 on success; -1 on failure*/
     struct Cell_head orig;
 
@@ -54,7 +87,7 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 	Overlap->E = General->E - dim.overlap;
 	return 0;
 
-    case FIRST_ROW:		/* It is just started with first row */
+    case FIRST_ROW:		/* Just started with first row */
 	Elaboration->north = orig.north + 2 * dim.orlo_h;
 	Elaboration->south = Elaboration->north - dim.latoN;
 	General->N = Elaboration->north - 2 * dim.orlo_h;
@@ -63,13 +96,13 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 	Overlap->S = General->S + dim.overlap;
 	return 0;
 
-    case LAST_ROW:		/* It is reached last row */
+    case LAST_ROW:		/* Reached last row */
 	Elaboration->south = orig.south - 2 * dim.orlo_h;
 	General->S = Elaboration->south + 2 * dim.orlo_h;
 	Overlap->S = General->S;
 	return 0;
 
-    case FIRST_COLUMN:		/* It is just started with first column */
+    case FIRST_COLUMN:		/* Just started with first column */
 	Elaboration->west = orig.west - 2 * dim.orlo_v;
 	Elaboration->east = Elaboration->west + dim.latoE;
 	General->W = Elaboration->west + 2 * dim.orlo_v;
@@ -78,7 +111,7 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 	Overlap->E = General->E - dim.overlap;
 	return 0;
 
-    case LAST_COLUMN:		/* It is reached last column */
+    case LAST_COLUMN:		/* Reached last column */
 	Elaboration->east = orig.east + 2 * dim.orlo_v;
 	General->E = Elaboration->east - 2 * dim.orlo_v;
 	Overlap->E = General->E;
@@ -171,20 +204,22 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsp
 /*----------------------------------------------------------------------------------------*/
 int P_get_orlo(int interpolator, struct Reg_dimens *dim, double pe, double pn)
 {
-    /* Set the orlo regions dimension->
-     * Returns 1 on success of bilinear; 2 on success of bicubic, 0 on failure-> */
-    if (interpolator == 1) {	/* the interpolator's bilinear */
-	dim->orlo_v = 9 * pe;	/*4 */
+    /* Set the orlo regions dimension
+     * Returns 1 on success of bilinear; 2 on success of bicubic, 0 on failure */
+    if (interpolator == P_BILINEAR) {
+       	/* in case of edge artefacts, increase as multiples of 3 */
+	dim->orlo_v = 9 * pe;
 	dim->orlo_h = 9 * pn;
 	return 1;
     }
-    else if (interpolator == 0) {	/* the interpolator's bicubic */
+    else if (interpolator == P_BICUBIC) {
+       	/* in case of edge artefacts, increase as multiples of 4 */
 	dim->orlo_v = 12 * pe;	/*3 */
 	dim->orlo_h = 12 * pn;
 	return 2;
     }
     else
-	return 0;		/* The interpolator it's not bilinear nor bicubic!! */
+	return 0;		/* The interpolator is neither bilinear nor bicubic!! */
 }
 
 /*----------------------------------------------------------------------------------------*/
@@ -239,7 +274,7 @@ double P_estimate_splinestep(struct Map_info *Map, double *dens, double *dist)
     struct bound_box region_box;
     struct Cell_head orig;
 
-    G_get_window(&orig);
+    G_get_set_window(&orig);
     Vect_region_box(&orig, &region_box);
 
     points = Vect_new_line_struct();
@@ -257,7 +292,7 @@ double P_estimate_splinestep(struct Map_info *Map, double *dens, double *dist)
 	else
 	    z = 0.0;
 
-	/* Reading and storing points only if it is in elaboration_reg */
+	/* only use points in current region */
 	if (Vect_point_in_box(x, y, z, &region_box)) {
 	    npoints++;
 
@@ -278,7 +313,9 @@ double P_estimate_splinestep(struct Map_info *Map, double *dens, double *dist)
 	}
     }
     if (npoints > 0) {
+	/* estimated average distance between points in map units */
 	*dist = sqrt(((xmax - xmin) * (ymax - ymin)) / npoints);
+	/* estimated point density as number of points per square map unit */
 	*dens = npoints / ((xmax - xmin) * (ymax - ymin));
 	return 0;
     }
@@ -305,7 +342,7 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     points = Vect_new_line_struct();
     categories = Vect_new_cats_struct();
 
-    /* Reading the elaboration zone points */
+    /* Reading points inside elaboration zone */
     Vect_region_box(Elaboration, &elaboration_box);
 
     npoints = 0;
@@ -326,7 +363,7 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
 	else
 	    z = 0.0;
 
-	/* Reading and storing points only if it is in elaboration_reg */
+	/* Reading and storing points only if in elaboration_reg */
 	if (Vect_point_in_box(x, y, z, &elaboration_box)) {
 	    npoints++;
 	    if (npoints >= pippo) {
@@ -355,42 +392,69 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
 }
 
 /*------------------------------------------------------------------------------------------------*/
-int P_Create_Aux_Table(dbDriver * driver, char *tab_name)
+int P_Create_Aux2_Table(dbDriver * driver, char *tab_name)
 {
     dbTable *auxiliar_tab;
     dbColumn *column;
-    int created = FALSE;
+
+    auxiliar_tab = db_alloc_table(2);
+    db_set_table_name(auxiliar_tab, tab_name);
+    db_set_table_description(auxiliar_tab,
+			     "Intermediate interpolated values");
+
+    column = db_get_table_column(auxiliar_tab, 0);
+    db_set_column_name(column, "ID");
+    db_set_column_sqltype(column, DB_SQL_TYPE_INTEGER);
+
+    column = db_get_table_column(auxiliar_tab, 1);
+    db_set_column_name(column, "Interp");
+    db_set_column_sqltype(column, DB_SQL_TYPE_REAL);
+
+    if (db_create_table(driver, auxiliar_tab) == DB_OK) {
+	G_debug(1, _("<%s> created in database."), tab_name);
+	return TRUE;
+    }
+    else
+	G_warning(_("<%s> has not been created in database."), tab_name);
+
+    return FALSE;
+}
+
+/*------------------------------------------------------------------------------------------------*/
+int P_Create_Aux4_Table(dbDriver * driver, char *tab_name)
+{
+    dbTable *auxiliar_tab;
+    dbColumn *column;
 
     auxiliar_tab = db_alloc_table(4);
     db_set_table_name(auxiliar_tab, tab_name);
     db_set_table_description(auxiliar_tab,
 			     "Intermediate interpolated values");
 
-    column = db_get_table_column(auxiliar_tab, 2);
-    db_set_column_name(column, "Y");
-    db_set_column_sqltype(column, DB_SQL_TYPE_DOUBLE_PRECISION);
-
-    column = db_get_table_column(auxiliar_tab, 1);
-    db_set_column_name(column, "X");
-    db_set_column_sqltype(column, DB_SQL_TYPE_DOUBLE_PRECISION);
-
     column = db_get_table_column(auxiliar_tab, 0);
     db_set_column_name(column, "ID");
     db_set_column_sqltype(column, DB_SQL_TYPE_INTEGER);
 
-    column = db_get_table_column(auxiliar_tab, 3);
+    column = db_get_table_column(auxiliar_tab, 1);
     db_set_column_name(column, "Interp");
     db_set_column_sqltype(column, DB_SQL_TYPE_REAL);
 
+    column = db_get_table_column(auxiliar_tab, 2);
+    db_set_column_name(column, "X");
+    db_set_column_sqltype(column, DB_SQL_TYPE_DOUBLE_PRECISION);
+
+    column = db_get_table_column(auxiliar_tab, 3);
+    db_set_column_name(column, "Y");
+    db_set_column_sqltype(column, DB_SQL_TYPE_DOUBLE_PRECISION);
+
     if (db_create_table(driver, auxiliar_tab) == DB_OK) {
 	G_debug(1, _("<%s> created in database."), tab_name);
-	created = TRUE;
-	return created;
+	return TRUE;
     }
     else
-	G_fatal_error(_("<%s> has not been created in database."), tab_name);
+	G_warning(_("<%s> has not been created in database."), tab_name);
 
-    return created;
+    return FALSE;
 }
 
 /*------------------------------------------------------------------------------------------------*/
@@ -481,7 +545,7 @@ P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
 	    value = db_get_column_value(column);
 	else
 	    continue;
-	coordX = db_get_value_double(value);
+	coordZ = db_get_value_double(value);
 
 	column = db_get_table_column(table, 2);
 	type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
@@ -489,7 +553,7 @@ P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
 	    value = db_get_column_value(column);
 	else
 	    continue;
-	coordY = db_get_value_double(value);
+	coordX = db_get_value_double(value);
 
 	column = db_get_table_column(table, 3);
 	type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
@@ -497,7 +561,7 @@ P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
 	    value = db_get_column_value(column);
 	else
 	    continue;
-	coordZ = db_get_value_double(value);
+	coordY = db_get_value_double(value);
 
 	Vect_copy_xyz_to_pnts(point, &coordX, &coordY, &coordZ, 1);
 	Vect_reset_cats(cat);
@@ -528,10 +592,30 @@ double **P_Null_Matrix(double **matrix)
 }
 #endif
 
-/*------------------------------------------------------------------------------------------------*/
-#ifdef notdef
-/* Subzones definition */
------------------------|4 | 3 | 3 | ||-----------------------|||||||2 | 5 | 1
-    | ||||||||-----------------------|2 | 1 | 1 |
-    ||-----------------------||||||||||||||||||-----------------------||||||-----------------------
-#endif
+/*! DEFINITION OF THE SUBZONES
+
+  5: inside Overlap region
+  all others: inside General region but outside Overlap region
+
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |4|   3   |3|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       |2|   5   |1|       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |2|   1   |1|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
+ */

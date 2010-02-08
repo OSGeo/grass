@@ -27,6 +27,8 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
     point = Vect_new_line_struct();
     categories = Vect_new_cats_struct();
 
+    db_begin_transaction(driver);
+    
     for (i = 0; i < num_points; i++) {	/* Sparse points */
 	G_percent(i, num_points, 2);
 	Vect_reset_line(point);
@@ -60,12 +62,11 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 	    }
 	    else {
-		if ((*point->x > Overlap.E) && (*point->x != General.E)) {
-
-		    if ((*point->y > Overlap.N) && (*point->y != General.N)) {	/*(3) */
-			csi = (*point->x - Overlap.E) / overlap;
-			eta = (*point->y - Overlap.N) / overlap;
-			weight = (1 - csi) * (1 - eta);
+		if ((*point->x > Overlap.E) && (*point->x < General.E)) {
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(3) */
+			csi = (General.E - *point->x) / overlap;
+			eta = (General.N - *point->y) / overlap;
+			weight = csi * eta;
 
 			interpolation *= weight;
 
@@ -76,22 +77,20 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			if (UpDate_Outlier(interpolation, line_num[i],
 			                   driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to update the database"));
-
 		    }
-		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(1) */
-			csi = (*point->x - Overlap.E) / overlap;
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
+			csi = (General.E - *point->x) / overlap;
 			eta = (*point->y - General.S) / overlap;
-			weight = (1 - csi) * eta;
+			weight = csi * eta;
 
 			interpolation *= weight;
 
 			if (Insert_Outlier(interpolation, line_num[i],
 					   driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to write in the database"));
-
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(1) */
-			weight = (*point->x - Overlap.E) / overlap;
+			weight = (General.E - *point->x) / overlap;
 
 			interpolation *= weight;
 
@@ -99,14 +98,12 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 					   driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to write in the database"));
 		    }
-
 		}
-		else if ((*point->x < Overlap.W) && (*point->x != General.W)) {
-
-		    if ((*point->y > Overlap.N) && (*point->y != General.N)) {	/*(4) */
+		else if ((*point->x < Overlap.W) && (*point->x > General.W)) {
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(4) */
 			csi = (*point->x - General.W) / overlap;
-			eta = (*point->y - Overlap.N) / overlap;
-			weight = (1 - eta) * csi;
+			eta = (General.N - *point->y) / overlap;
+			weight = eta * csi;
 
 			interpolation *= weight;
 
@@ -123,12 +120,13 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 				Vect_write_line(Qgis, GV_POINT, point,
 						categories);
 			}
-			else
+			else {
 			    Vect_write_line(Outlier, GV_POINT, point,
 					    categories);
-
+			    G_message("here we are");
+			}
 		    }
-		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(2) */
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(2) */
 			csi = (*point->x - General.W) / overlap;
 			eta = (*point->y - General.S) / overlap;
 			weight = csi * eta;
@@ -142,10 +140,9 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			if (UpDate_Outlier(interpolation, line_num[i],
 			                   driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to update the database"));
-
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(2) */
-			weight = (Overlap.W - *point->x) / overlap;
+			weight = (*point->x - General.W) / overlap;
 
 			interpolation *= weight;
 
@@ -166,11 +163,10 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			    Vect_write_line(Outlier, GV_POINT, point,
 					    categories);
 		    }
-
 		}
 		else if ((*point->x <= Overlap.E) && (*point->x >= Overlap.W)) {
-		    if ((*point->y > Overlap.N) && (*point->y != General.N)) {	/*(3) */
-			weight = (*point->y - Overlap.N) / overlap;
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(3) */
+			weight = (General.N - *point->y) / overlap;
 
 			interpolation *= weight;
 
@@ -190,10 +186,9 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			else
 			    Vect_write_line(Outlier, GV_POINT, point,
 					    categories);
-
 		    }
-		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(1) */
-			weight = (Overlap.S - *point->y) / overlap;
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
+			weight = (*point->y - General.S) / overlap;
 
 			interpolation *= weight;
 
@@ -209,6 +204,8 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
     G_percent(num_points, num_points, 2);
     G_debug(2, "P_outlier: done");
+
+    db_commit_transaction(driver);
 
     Vect_destroy_line_struct(point);
     Vect_destroy_cats_struct(categories);
@@ -295,23 +292,30 @@ int P_is_outlier(double pippo)
     return TRUE;
 }
 
-#ifdef notdef
 /*! DEFINITION OF THE SUBZONES 
 
-   -----------------------
-   |4|   3   |3|       | |
-   -----------------------
-   | |       | |       | |
-   |2|   5   |1|       | |
-   | |       | |       | |
-   -----------------------
-   |2|   1   |1|       | |
-   -----------------------
-   | |       | |       | |
-   | |       | |       | |
-   | |       | |       | |
-   -----------------------
-   | |       | |       | |
-   -----------------------
+  5: inside Overlap region
+  all others: inside General region but outside Overlap region
+
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |4|   3   |3|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       |2|   5   |1|       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |2|   1   |1|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
  */
-#endif
