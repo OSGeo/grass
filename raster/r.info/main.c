@@ -187,9 +187,9 @@ int main(int argc, char **argv)
 	/* For now hide these unless they exist to keep the noise low. In
 	 *   future when the two are used more widely they can be printed
 	 *   along with the standard set. */
-	if (units && vdatum)
+	if (units || vdatum)
 	    compose_line(out, "  Data Units:   %-20.20s Vertical datum: %s",
-			 units, vdatum);
+			 units ? units : "(none)", vdatum ? vdatum : "(none)");
 
 	{
 	    compose_line(out, "  Rows:         %d", cellhd.rows);
