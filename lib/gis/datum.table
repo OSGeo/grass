@@ -77,6 +77,7 @@ por73    "Datum_73"          international dx=99999    dy=99999    dz=99999
 hjors55  "Hjorsey_1955"         international dx=-73      dy=46       dz=-86
 lis37    "Lisbon_1937"    international dx=99999    dy=99999    dz=99999
 ngo48    "NGO_1948"	  modif_bessel  dx=99999    dy=99999    dz=99999
+rt90     "Rikets_koordinatsystem_1990"    bessel   dx=99999    dy=99999    dz=99999
 # http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/three-and-seven-parameter/
 nzgd49   "New_Zealand_Geodetic_Datum_1949"       international dx=54.4  dy=-20.1  dz=183.1
 nzgd2k   "New_Zealand_Geodetic_Datum_2000"       grs80    dx=0   dy=0    dz=0
