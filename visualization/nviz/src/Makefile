@@ -3,13 +3,11 @@
 
 MODULE_TOPDIR = ../../..
 
+PGM = nviz
+
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 MOD_OBJS := $(filter-out mkdspf_%.o,$(AUTO_OBJS))
-include $(MODULE_TOPDIR)/include/Make/Other.make
-include $(MODULE_TOPDIR)/include/Make/Compile.make
-
-# These should be set by the doconfigure script
-NVWISH_VER=NVWISH2.2
+include $(MODULE_TOPDIR)/include/Make/Module.make
 
 ifeq ($(OPENGL_X11),1)
 OGL_LIBS := $(OPENGLULIB) $(OPENGLLIB) $(XLIBPATH) $(XLIB) -lXmu -lXext $(XEXTRALIBS) $(MATHLIB)
@@ -50,7 +48,4 @@ DEPENDENCIES = $(VECTDEP) $(BITMAPDEP) $(LINKMDEP) $(FORMDEP) $(DBMIDEP) $(GISDE
 
 EXTRA_CLEAN_FILES = nvwish$(EXE)
 
-default: nvwish$(EXE)
-
-nvwish$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
-	$(call linker)
+default: $(BIN)/$(PGM)$(EXE)
