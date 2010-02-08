@@ -90,8 +90,6 @@ void G__no_gisinit(const char *version)
 	G_fatal_error(_("Incompatible library version for module. "
 			"You need to rebuild GRASS or untangle multiple installations."));
 
-    G_set_gisrc_mode(G_GISRC_MODE_MEMORY);
-
     gisinit();
 }
 
