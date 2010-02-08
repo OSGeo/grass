@@ -127,7 +127,7 @@ changequote([,])
 GRASS_VERSION_SVN=
 AC_PATH_PROG(SVN_VERSION, svnversion, no)
 if test "$SVN_VERSION" != "no" ; then
-   GRASS_VERSION_SVN=`$SVN_VERSION -c`
+   GRASS_VERSION_SVN=`$SVN_VERSION -c | cut -f2 -d:`
 fi
 
 AC_SUBST(GRASS_VERSION_FILE)
