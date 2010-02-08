@@ -33,7 +33,7 @@
 #define NSPLX_MAX 	      150	/* Maximum number of splines along East direction used in the subregions interpolation */
 #define NSPLY_MAX	      150	/* Maximum number of splines along North direction used in the subregions interpolation */
 #define OVERLAP_SIZE 	       10	/* Subregions overlapping size. */
-#define LATO 		     2000	/* Side's size for v.to.qrast command. */
+#define LATO 		     1000	/* Side's size for v.lidar.growing. */
 #define CONTOUR		       15 	/**/
 #define GENERAL_ROW 		0
 #define GENERAL_COLUMN 	        1
@@ -145,7 +145,9 @@ double **P_Regular_Points(struct Cell_head *, /**/
 			  int, /**/ int, /**/ int, /**/ int, /**/ int /**/);
 
 /*----------------------------------------------------------------------------------------------------------*/
-int P_Create_Aux_Table(dbDriver *, /**/ char * /**/);
+int P_Create_Aux2_Table(dbDriver *, /**/ char * /**/);
+
+int P_Create_Aux4_Table(dbDriver *, /**/ char * /**/);
 
 int P_Drop_Aux_Table(dbDriver *, /**/ char * /**/);
 

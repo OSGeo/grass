@@ -61,6 +61,4 @@ int UpDate(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver *, /**/ cha
 
 int Select(double *, /**/ double *, /**/ double *, /**/ int, /**/ dbDriver *, /**/ char *);
 
-int Create_AuxEdge_Table(dbDriver *, char *);
-int Create_Interpolation_Table(dbDriver *, char *);
 int Insert_Interpolation(double, int, dbDriver *, char *);

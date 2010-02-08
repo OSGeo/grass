@@ -7,6 +7,14 @@
 
 #include <grass/PolimiFunct.h>
 
+struct lidar_cat
+{
+    int cat_edge;     /* category in layer F_EDGE_DETECTION_CLASS */
+    int cat_class;    /* category in layer F_CLASSIFICATION */
+    int cat_interp;   /* category in layer F_INTERPOLATION */
+    int cat_obj;      /* category in layer F_COUNTER_OBJ */
+};
+
 void
 P_Sparse_Correction(struct Map_info *, /**/
 		    struct Map_info *, /**/
@@ -15,6 +23,7 @@ P_Sparse_Correction(struct Map_info *, /**/
 		    struct bound_box, /**/
 		    struct bound_box, /**/
 		    double **, /**/
+		    struct lidar_cat *,
 		    double *, /**/
 		    int *, /**/
 		    double, /**/
@@ -37,6 +46,7 @@ int Select_Correction(double *, /**/ int, /**/ dbDriver *, /**/ char *);
 
 struct Point *P_Read_Vector_Correction(struct Map_info *, /**/
 				       struct Cell_head *, /**/
-				       int *, /**/ int *, /**/ int /**/);
+				       int *, /**/ int *, /**/ int /**/,
+				       struct lidar_cat **);
 
 int correction(int, double, double, double, double);

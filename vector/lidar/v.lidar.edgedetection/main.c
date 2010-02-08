@@ -34,7 +34,7 @@
 #include <grass/PolimiFunct.h>
 #include "edgedetection.h"
 
-int nsply, nsplx, line_out_counter, first_it;
+int nsply, nsplx, line_out_counter;
 double passoN, passoE;
 
 /**************************************************************************************
@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
 
     spline_step_flag = G_define_flag();
     spline_step_flag->key = 'e';
-    spline_step_flag->label = _("Estimate spline step value");
+    spline_step_flag->label = _("Estimate point density and distance");
     spline_step_flag->description =
-	_("Estimate a good spline step value for the input vector points within the current region extends and quit");
+	_("Estimate point density and distance for the input vector points within the current region extends and quit");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -224,6 +224,10 @@ int main(int argc, char *argv[])
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
 	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
+    /* Input vector must be 3D */
+    if (!Vect_is_3d(&In))
+	G_fatal_error(_("Input vector map <%s> is not 3D!"), in_opt->answer);
+
     /* Estimate point density and mean distance for current region */
     if (spline_step_flag->answer) {
 	double dens, dist;
@@ -254,12 +258,18 @@ int main(int argc, char *argv[])
 		      dvr);
 
     /* Create auxiliar and interpolation table */
-    if ((flag_auxiliar = Create_AuxEdge_Table(driver, table_name)) == FALSE)
+    if ((flag_auxiliar = P_Create_Aux4_Table(driver, table_name)) == FALSE)
 	G_fatal_error(_("It was impossible to create <%s>."), table_name);
 
-    if (Create_Interpolation_Table(driver, table_interpolation) != DB_OK)
+    if (P_Create_Aux2_Table(driver, table_interpolation) == FALSE)
 	G_fatal_error(_("It was impossible to create <%s> interpolation table in database."),
 		      out_opt->answer);
+
+    db_create_index2(driver, table_name, "ID");
+    db_create_index2(driver, table_interpolation, "ID");
+    /* sqlite likes that */
+    db_close_database_shutdown_driver(driver);
+    driver = db_start_driver_open_database(dvr, db);
 
     /* Setting regions and boxes */
     G_get_set_window(&original_reg);
@@ -267,27 +277,35 @@ int main(int argc, char *argv[])
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
 
+    /*------------------------------------------------------------------
+      | Subdividing and working with tiles: 									
+      | Each original region will be divided into several subregions. 
+      | Each one will be overlaped by its neighbouring subregions. 
+      | The overlapping is calculated as a fixed OVERLAP_SIZE times
+      | the largest spline step plus 2 * orlo
+      ----------------------------------------------------------------*/
+
     /* Fixing parameters of the elaboration region */
-    /*! Each original_region will be divided into several subregions. These
-     *  subregion will be overlapped by its neighboring subregions. This overlapping
-     *  is calculated as OVERLAP_SIZE times the east-west spline step. */
-
     P_zero_dim(&dims);
-
-    N_extension = original_reg.north - original_reg.south;
-    E_extension = original_reg.east - original_reg.west;
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
-    dims.overlap = OVERLAP_SIZE * passoE;
-    P_get_orlo(P_BICUBIC, &dims, passoE, passoN);	/* Set orlo_h|v */
+    if (passoN > passoE)
+	dims.overlap = OVERLAP_SIZE * passoN;
+    else
+	dims.overlap = OVERLAP_SIZE * passoE;
+    P_get_orlo(P_BICUBIC, &dims, passoE, passoN);
     P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
 
     G_verbose_message("adjusted EW splines %d", nsplx_adj);
     G_verbose_message("adjusted NS splines %d", nsply_adj);
 
+    /* calculate number of subzones */
     orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
     orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+
+    N_extension = original_reg.north - original_reg.south;
+    E_extension = original_reg.east - original_reg.west;
 
     nsubregion_col = ceil(E_extension / orloE) + 0.5;
     nsubregion_row = ceil(N_extension / orloN) + 0.5;
@@ -300,9 +318,7 @@ int main(int argc, char *argv[])
     nsubzones = nsubregion_row * nsubregion_col;
 
     elaboration_reg.south = original_reg.north;
-
     last_row = FALSE;
-    first_it = TRUE;
 
     while (last_row == FALSE) {	/* For each row */
 
@@ -383,7 +399,7 @@ int main(int argc, char *argv[])
 		BW = P_get_BandWidth(P_BILINEAR, nsply);	/* Bilinear interpolation */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		TN = G_alloc_vector(nparameters);	/* vector */
-		parVect_bilin = G_alloc_vector(nparameters);	/* Bicubic parameters vector */
+		parVect_bilin = G_alloc_vector(nparameters);	/* Bilinear parameters vector */
 		obsVect = G_alloc_matrix(npoints + 1, 3);	/* Observation vector */
 		Q = G_alloc_vector(npoints + 1);	/* "a priori" var-cov matrix */
 
@@ -398,7 +414,7 @@ int main(int argc, char *argv[])
 		    Q[i] = 1;	/* Q=I */
 		}
 
-		/*G_free (observ); */
+		G_free(observ);
 
 		G_verbose_message(_("Bilinear interpolation"));
 		normalDefBilin(N, TN, Q, obsVect, passoE, passoN, nsplx,
@@ -441,9 +457,11 @@ int main(int argc, char *argv[])
 		G_free_matrix(obsVect);
 		G_free_ivector(lineVect);
 	    }			/* IF */
-
-	    G_free(observ);
-	    first_it = FALSE;
+	    else {
+		G_free(observ);
+		G_warning(_("No data within this subzone. "
+			    "Consider changing the spline step."));
+	    }
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 

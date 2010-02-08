@@ -180,6 +180,8 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
     point = Vect_new_line_struct();
     categories = Vect_new_cats_struct();
 
+    db_begin_transaction(driver);
+    
     for (i = 0; i < num_points; i++) {	/* Sparse points */
 	G_percent(i, num_points, 2);
 
@@ -201,7 +203,6 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 	    /*Vect_cat_set (categories, F_INTERPOLATION, line_out_counter); */
 
 	    if (Vect_point_in_box(obs[i][0], obs[i][1], interpolation, &Overlap)) {	/*(5) */
-
 		residual = *point->z - interpolation;
 		edge =
 		    edge_detection(Elaboration, Overlap, parBilin, *point->x,
@@ -214,15 +215,13 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 		Insert_Interpolation(interpolation, line_out_counter, driver,
 				     tabint_name);
 		line_out_counter++;
-
 	    }
 	    else {
-		if ((*point->x > Overlap.E) && (*point->x != General.E)) {
-
-		    if ((*point->y > Overlap.N) && (*point->y != General.N)) {	/*(3) */
-			csi = (*point->x - Overlap.E) / overlap;
-			eta = (*point->y - Overlap.N) / overlap;
-			weight = (1 - csi) * (1 - eta);
+		if ((*point->x > Overlap.E) && (*point->x < General.E)) {
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(3) */
+			csi = (General.E - *point->x) / overlap;
+			eta = (General.N - *point->y) / overlap;
+			weight = csi * eta;
 
 			gradient[0] *= weight;
 			gradient[1] *= weight;
@@ -237,12 +236,11 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			           interpolation, line_num[i], driver,
 			           tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to update aux table"));
-
 		    }
-		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(1) */
-			csi = (*point->x - Overlap.E) / overlap;
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
+			csi = (General.E - *point->x) / overlap;
 			eta = (*point->y - General.S) / overlap;
-			weight = (1 - csi) * eta;
+			weight = csi * eta;
 
 			gradient[0] *= weight;
 			gradient[1] *= weight;
@@ -254,7 +252,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(1) */
-			weight = (*point->x - Overlap.E) / overlap;
+			weight = (General.E - *point->x) / overlap;
 
 			gradient[0] *= weight;
 			gradient[1] *= weight;
@@ -264,14 +262,12 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			           line_num[i], driver, tab_name) != DB_OK)
 			    G_fatal_error(_("Impossible to write to aux table"));
 		    }
-
 		}
-		else if ((*point->x < Overlap.W) && (*point->x != General.W)) {
-
-		    if ((*point->y > Overlap.N) && (*point->y != General.N)) {	/*(4) */
+		else if ((*point->x < Overlap.W) && (*point->x > General.W)) {
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(4) */
 			csi = (*point->x - General.W) / overlap;
-			eta = (*point->y - Overlap.N) / overlap;
-			weight = (1 - eta) * csi;
+			eta = (General.N - *point->y) / overlap;
+			weight = eta * csi;
 
 			gradient[0] *= weight;
 			gradient[1] *= weight;
@@ -297,9 +293,8 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			Insert_Interpolation(interpolation, line_out_counter,
 					     driver, tabint_name);
 			line_out_counter++;
-
 		    }
-		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(2) */
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(2) */
 			csi = (*point->x - General.W) / overlap;
 			eta = (*point->y - General.S) / overlap;
 			weight = csi * eta;
@@ -320,7 +315,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(2) */
-			weight = (Overlap.W - *point->x) / overlap;
+			weight = (*point->x - General.W) / overlap;
 
 			gradient[0] *= weight;
 			gradient[1] *= weight;
@@ -347,11 +342,10 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 					     driver, tabint_name);
 			line_out_counter++;
 		    }
-
 		}
 		else if ((*point->x <= Overlap.E) && (*point->x >= Overlap.W)) {
-		    if ((*point->y > Overlap.N) && (*point->y != General.N)) {	/*(3) */
-			weight = (*point->y - Overlap.N) / overlap;
+		    if ((*point->y > Overlap.N) && (*point->y < General.N)) {	/*(3) */
+			weight = (General.N - *point->y) / overlap;
 
 			gradient[0] *= weight;
 			gradient[1] *= weight;
@@ -378,8 +372,8 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 					     driver, tabint_name);
 			line_out_counter++;
 		    }
-		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(1) */
-			weight = (Overlap.S - *point->y) / overlap;
+		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
+			weight = (*point->y - General.S) / overlap;
 
 			gradient[0] *= weight;
 			gradient[1] *= weight;
@@ -394,11 +388,13 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 	    }
 	}			/*end if obs */
     }				/*end for */
-    G_percent(i, num_points, 6); /* finish it */
+    G_percent(num_points, num_points, 2); /* finish it */
+
+    db_commit_transaction(driver);
 
     Vect_destroy_line_struct(point);
     Vect_destroy_cats_struct(categories);
-}				/*end puntisparsi_select */
+}
 
 int Insert(double partialX, double partialY, double Interp,
            int line_num, dbDriver * driver, char *tab_name)
@@ -409,7 +405,7 @@ int Insert(double partialX, double partialY, double Interp,
 
     db_init_string(&sql);
     sprintf(buf,
-	    "INSERT INTO %s (ID, Interp, partialX, partialY)", tab_name);
+	    "INSERT INTO %s (ID, Interp, X, Y)", tab_name);
     db_append_string(&sql, buf);
     sprintf(buf, " VALUES (%d, %lf, %lf, %lf)", line_num, Interp,
             partialX, partialY);
@@ -450,7 +446,7 @@ int UpDate(double partialX, double partialY, double Interp,
 
     db_init_string(&sql);
     sprintf(buf,
-	    "UPDATE %s SET Interp=%lf, PartialX=%lf, PartialY=%lf WHERE ID=%d",
+	    "UPDATE %s SET Interp=%lf, X=%lf, Y=%lf WHERE ID=%d",
 	    tab_name, Interp, partialX, partialY, line_num);
     db_append_string(&sql, buf);
 
@@ -473,7 +469,7 @@ int Select(double *PartialX, double *PartialY, double *Interp,
 
     db_init_string(&sql);
     sprintf(buf,
-	    "SELECT ID, Interp, partialX, partialY FROM %s WHERE ID=%d",
+	    "SELECT ID, Interp, X, Y FROM %s WHERE ID=%d",
 	    tab_name, line_num);
     db_append_string(&sql, buf);
 
@@ -515,89 +511,30 @@ int Select(double *PartialX, double *PartialY, double *Interp,
     return DB_OK;
 }
 
-int Create_AuxEdge_Table(dbDriver * driver, char *tab_name)
-{
-    dbTable *table;
-    dbColumn *ID_col, *Interp_col, *PartialX_col, *PartialY_col;
-    int created;
-
-    table = db_alloc_table(4);
-    db_set_table_name(table, tab_name);
-    db_set_table_description(table,
-			     "It is used for the intermediate interpolated and gradient values");
-
-    ID_col = db_get_table_column(table, 0);
-    db_set_column_name(ID_col, "ID");
-    db_set_column_sqltype(ID_col, DB_SQL_TYPE_INTEGER);
-
-    Interp_col = db_get_table_column(table, 1);
-    db_set_column_name(Interp_col, "Interp");
-    db_set_column_sqltype(Interp_col, DB_SQL_TYPE_REAL);
-
-    PartialX_col = db_get_table_column(table, 2);
-    db_set_column_name(PartialX_col, "PartialX");
-    db_set_column_sqltype(PartialX_col, DB_SQL_TYPE_REAL);
-
-    PartialY_col = db_get_table_column(table, 3);
-    db_set_column_name(PartialY_col, "PartialY");
-    db_set_column_sqltype(PartialY_col, DB_SQL_TYPE_REAL);
-
-    if (db_create_table(driver, table) == DB_OK) {
-	G_debug(1, "<%s> table created in database.", db_get_table_name(table));
-	created = TRUE;
-    }
-    else
-	return FALSE;
-
-    db_create_index2(driver, tab_name, "ID");
-
-    return created;
-}
-
-int Create_Interpolation_Table(dbDriver * driver, char *tab_name)
-{
-    dbTable *table;
-    dbColumn *ID_col, *Interp_col;
-
-    table = db_alloc_table(2);
-    db_set_table_name(table, tab_name);
-    db_set_table_description(table,
-			     "This table is the bicubic interpolation of the input vector");
-
-    ID_col = db_get_table_column(table, 0);
-    db_set_column_name(ID_col, "ID");
-    db_set_column_sqltype(ID_col, DB_SQL_TYPE_INTEGER);
-
-    Interp_col = db_get_table_column(table, 1);
-    db_set_column_name(Interp_col, "Interp");
-    db_set_column_sqltype(Interp_col, DB_SQL_TYPE_REAL);
-
-    if (db_create_table(driver, table) == DB_OK) {
-	G_debug(1, _("<%s> table created in database."), db_get_table_name(table));
-	return DB_OK;
-    }
-    else
-	return DB_FAILED;
-}
-
-
-#ifdef notdef
 /*! DEFINITION OF THE SUBZONES 
 
-   -----------------------
-   |4|   3   |3|       | |
-   -----------------------
-   | |       | |       | |
-   |2|   5   |1|       | |
-   | |       | |       | |
-   -----------------------
-   |2|   1   |1|       | |
-   -----------------------
-   | |       | |       | |
-   | |       | |       | |
-   | |       | |       | |
-   -----------------------
-   | |       | |       | |
-   -----------------------
+  5: inside Overlap region
+  all others: inside General region but outside Overlap region
+
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |4|   3   |3|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       |2|   5   |1|       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       |2|   1   |1|       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   | |       | |       | |       | |
+   ---------------------------------
+   | |       | |       | |       | |
+   ---------------------------------
  */
-#endif
