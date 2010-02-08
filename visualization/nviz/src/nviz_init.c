@@ -137,7 +137,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
      * If left in it treats it as a elev arg and tries to open
      */
     argv2 = G_malloc((argc + 2) * sizeof(char *));
-    argv2[0] = (char *)argv0;
+    argv2[0] = (char *) cmd;
     for (ii = 0; ii < argc; ii++)
 	argv2[ii + 1] = (char *)argv[ii];
     argv2[argc + 1] = NULL;
