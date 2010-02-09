@@ -80,13 +80,13 @@ install:
 
 real-install:
 	test -d $(INST_DIR) || $(MAKE_DIR_CMD) $(INST_DIR)
-	test -d $(BINDIR) || $(MAKE_DIR_CMD) $(BINDIR)
-	-sed -e "s#^GISBASE.*#GISBASE=$(INST_DIR)#" $(ARCH_BINDIR)/$(GRASS_NAME).sh > $(BINDIR)/$(GRASS_NAME).sh
-	-sed -e 's#^gisbase = ".*"#gisbase = "$(INST_DIR)"#' $(ARCH_BINDIR)/$(GRASS_NAME) > $(BINDIR)/$(GRASS_NAME)
-	-chmod a+x $(BINDIR)/$(GRASS_NAME)
+	test -d $(UNIX_BIN) || $(MAKE_DIR_CMD) $(UNIX_BIN)
+	-sed -e "s#^GISBASE.*#GISBASE=$(INST_DIR)#" $(ARCH_BINDIR)/$(GRASS_NAME).sh > $(UNIX_BIN)/$(GRASS_NAME).sh
+	-sed -e 's#^gisbase = ".*"#gisbase = "$(INST_DIR)"#' $(ARCH_BINDIR)/$(GRASS_NAME) > $(UNIX_BIN)/$(GRASS_NAME)
+	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
 ifneq ($(strip $(MINGW)),)
-	-sed -e "s#WINGISBASE=.*#WINGISBASE=$(INST_DIR)#" $(ARCH_BINDIR)/$(GRASS_NAME).bat > $(BINDIR)/$(GRASS_NAME).bat
-	-chmod a+x $(BINDIR)/$(GRASS_NAME).bat
+	-sed -e "s#WINGISBASE=.*#WINGISBASE=$(INST_DIR)#" $(ARCH_BINDIR)/$(GRASS_NAME).bat > $(UNIX_BIN)/$(GRASS_NAME).bat
+	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME).bat
 endif
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR) - 2>/dev/null
 	-sed 's#'$(GISBASE)'#'$(INST_DIR)'#g' $(GISBASE)/etc/fontcap > $(INST_DIR)/etc/fontcap
@@ -94,7 +94,7 @@ endif
 	-chmod -R a+rX $(INST_DIR) 2>/dev/null
 	@#GEM installation
 	-tar cBf - gem/skeleton | tar xBCf $(INST_DIR)/etc - 2>/dev/null
-	-$(INSTALL) gem/gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) $(BINDIR) 2>/dev/null
+	-$(INSTALL) gem/gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) $(UNIX_BIN) 2>/dev/null
 	@# enable OSX Help Viewer
 	@if [ "`grep -i '^ARCH.*darwin' < include/Make/Platform.make`" ] ; then /bin/ln -sfh "$(INST_DIR)/docs/html" /Library/Documentation/Help/GRASS-$(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR) ; fi
 
