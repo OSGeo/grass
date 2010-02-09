@@ -35,6 +35,10 @@
 #include <grass/glocale.h>
 #include "daemon.h"
 
+#ifdef __MINGW32__
+#define srandom srand
+#define random rand
+#endif
 
 int calculateIndex(char *file, int f(int, char **, area_des, double *),
 		   char **parameters, char *raster, char *output)
