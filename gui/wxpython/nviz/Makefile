@@ -46,6 +46,7 @@ $(SHLIB): $(LIB_NAME).i
 	WXWIDGETSLIB="$(WXWIDGETSLIB)" \
 	OPENGL_X11="$(OPENGL_X11)" \
 	XCFLAGS="$(XCFLAGS)" \
+	CXXFLAGS="$(COMPILE_FLAGS_CXX)" \
 	$(PYTHON) setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp

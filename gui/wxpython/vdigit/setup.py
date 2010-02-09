@@ -27,7 +27,8 @@ libs = ['grass_dbmibase',
         'grass_vedit']
 extras = []
 
-for flag in ['GDALCFLAGS',
+for flag in ['CXXFLAGS',
+	     'GDALCFLAGS',
              'GDALLIBS',
              'GEOSCFLAGS',
              'WXWIDGETSLIB',

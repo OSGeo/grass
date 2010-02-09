@@ -26,7 +26,8 @@ libs = ['grass_gis',
         'grass_g3d']
 extras = []
 
-for flag in ['GDALCFLAGS',
+for flag in ['CXXFLAGS',
+	     'GDALCFLAGS',
              'GDALLIBS',
              'WXWIDGETSCXXFLAGS',
              'OPENGLINC',
