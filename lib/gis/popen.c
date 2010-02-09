@@ -6,6 +6,12 @@
 #include <grass/gis.h>
 #include <grass/spawn.h>
 
+#ifdef __MINGW32__
+#include <io.h>
+#include <fcntl.h>
+#define pipe(fds) _pipe(fds, 4096, O_BINARY)
+#endif
+
 static FILE *do_popen(struct Popen *state, int wr,
 		      const char *program, const char **args)
 {

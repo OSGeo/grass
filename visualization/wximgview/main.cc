@@ -189,11 +189,13 @@ void MyApp::map_file()
 #ifdef __MINGW32__
     ptr = MapViewOfFile((HANDLE) _get_osfhandle(fd),
 			FILE_MAP_READ, 0, 0, size);
+    if (!ptr)
+	G_fatal_error(_("Unable to map image file"));
 #else
     ptr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, (off_t) 0);
-#endif
     if (ptr == MAP_FAILED)
 	G_fatal_error(_("Unable to map image file"));
+#endif
 
     imgbuf = (unsigned char *)ptr + HEADER_SIZE;
 
@@ -208,13 +210,14 @@ static void dummy_handler(int sig)
 
 static void set_handler(void)
 {
+#ifndef __MINGW32__
     struct sigaction act;
 
     act.sa_handler = &dummy_handler;
     sigemptyset(&act.sa_mask);
     act.sa_flags = 0;
     sigaction(SIGUSR1, &act, NULL);
-
+#endif
 }
 
 bool MyApp::OnInit()

@@ -41,6 +41,7 @@ $(SHLIB): $(LIB_NAME).i cats.cpp digit.cpp driver.cpp driver_draw.cpp \
 	GEOSCFLAGS="$(GEOSCFLAGS)" \
 	WXWIDGETSCXXFLAGS="$(WXWIDGETSCXXFLAGS)" \
 	WXWIDGETSLIB="$(WXWIDGETSLIB)" \
+	CXXFLAGS="$(COMPILE_FLAGS_CXX)" \
 	$(PYTHON) setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
