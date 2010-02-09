@@ -23,9 +23,7 @@ SUBDIRS = r.li.daemon $(SUBDIRS1)
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-ifndef MINGW
 default: parsubdirs htmldir
-endif
 
 $(SUBDIRS1): r.li.daemon
 
