@@ -40,12 +40,12 @@ rem Hopefully a temporary workaround for getting MSYS shell to run on x64
 rem (WoW64 cmd prompt sets PROCESSOR_ARCHITECTURE to x86)
 if not "x%PROCESSOR_ARCHITECTURE%" == "xAMD64" goto _NotX64
 set COMSPEC=%WINDIR%\SysWOW64\cmd.exe
-%COMSPEC% /c %0 %1 %2 %3 %4 %5 %6 %7 %8 %9
+"%COMSPEC%" /c %0 %1 %2 %3 %4 %5 %6 %7 %8 %9
 goto EOF
 :_NotX64
 
 if NOT EXIST "%WD%msys-1.0.dll" set WD=%~dps0bin\
-echo %WD%
+rem echo %WD%
 
 rem if installed in a directory containing spaces prepare for a world of pain
 for /F %%i IN ('echo %WD%') DO @set PART1=%%i
