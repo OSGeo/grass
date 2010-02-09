@@ -141,8 +141,8 @@ int main(int argc, char *argv[])
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
-    flag_f->label = _("Force raster export also if data loss may occur");
-    flag_f->description = _("Overrides nodata saftey check.");
+    flag_f->label = _("Force raster export despite any warnings of data loss");
+    flag_f->description = _("Overrides nodata safety check.");
 
     input = G_define_standard_option(G_OPT_R_INPUT);
     input->required = NO;
