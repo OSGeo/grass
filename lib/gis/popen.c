@@ -9,13 +9,13 @@
 #ifdef __MINGW32__
 #include <io.h>
 #include <fcntl.h>
-#define pipe(fds) _pipe(fds, 4096, O_BINARY)
+#define pipe(fds) _pipe(fds, 4096, O_BINARY|O_NOINHERIT)
 #endif
 
 static FILE *do_popen(struct Popen *state, int wr,
 		      const char *program, const char **args)
 {
-    const char *which = wr ? SF_STDIN : SF_STDOUT;
+    int which = wr ? 0 : 1;
     const char *dir = wr ? "w" : "r";
     int pfd, cfd;
     int pipe_fds[2];
