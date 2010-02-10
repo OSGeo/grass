@@ -80,21 +80,18 @@ int main(int argc, char *argv[])
     parm.region->multiple = NO;
     parm.region->type = TYPE_STRING;
     parm.region->description = _("Set region from named region");
+    parm.region->gisprompt = "old,windows,region";
 
-    parm.raster = G_define_option();
+    parm.raster = G_define_standard_option(G_OPT_R_MAP);
     parm.raster->key = "raster";
-    parm.raster->key_desc = "name";
     parm.raster->required = NO;
     parm.raster->multiple = NO;
-    parm.raster->type = TYPE_STRING;
     parm.raster->description = _("Set region to match this raster map");
 
-    parm.vect = G_define_option();
+    parm.vect = G_define_standard_option(G_OPT_V_MAP);
     parm.vect->key = "vector";
-    parm.vect->key_desc = "name";
     parm.vect->required = NO;
     parm.vect->multiple = NO;
-    parm.vect->type = TYPE_STRING;
     parm.vect->description = _("Set region to match this vector map");
 
     parm.view = G_define_option();
@@ -104,6 +101,7 @@ int main(int argc, char *argv[])
     parm.view->multiple = NO;
     parm.view->type = TYPE_STRING;
     parm.view->description = _("Set region to match this 3dview file");
+    parm.view->gisprompt = "old,3d.view,3d view";
 
     parm.north = G_define_option();
     parm.north->key = "n";
@@ -137,12 +135,10 @@ int main(int argc, char *argv[])
     parm.west->type = TYPE_STRING;
     parm.west->description = _("Value for the western edge");
 
-    parm.align = G_define_option();
+    parm.align = G_define_standard_option(G_OPT_R_MAP);
     parm.align->key = "align";
-    parm.align->key_desc = "name";
     parm.align->required = NO;
     parm.align->multiple = NO;
-    parm.align->type = TYPE_STRING;
     parm.align->description = _("Raster map to align to");
 
     if (G_parser(argc, argv))
