@@ -119,20 +119,7 @@ static int _segment_format(int fd,
 	return -3;
     }
 
-    /* no LFS, file size within 2GB limit ? */
-    if (sizeof(off_t) == 4) {
-	double file_size;
-
-	file_size = (double) nrows * ncols * len;
-
-	if (file_size > INT_MAX) {
-	    G_warning("segment file size would be %.2fGB, but file size limit is 2GB", file_size / (1 << 30));
-	    G_warning("please recompile with LFS");
-	    G_fatal_error("can not create temporary segment file");
-	}
-    }
-
-    if (lseek(fd, 0L, SEEK_SET) == (off_t) - 1) {
+    if (lseek(fd, 0L, SEEK_SET) == (off_t) -1) {
 	G_warning("Segment_format: %s", strerror(errno));
 	return -1;
     }
@@ -170,15 +157,12 @@ static int _segment_format(int fd,
 
 static int write_int(int fd, int n)
 {
-    int x;
-    int bytes_wrote;
-
-    x = n;
-
-    if ((bytes_wrote = write(fd, &x, sizeof(int)) == sizeof(int)) < 0)
+    if (write(fd, &n, sizeof(int)) != sizeof(int)) {
 	G_warning("%s", strerror(errno));
+	return 0;
+    }
 
-    return bytes_wrote;
+    return 1;
 }
 
 
