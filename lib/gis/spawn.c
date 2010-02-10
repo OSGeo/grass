@@ -412,7 +412,8 @@ static void do_redirects(struct redirect *redirects, int num_redirects, HANDLE h
 	struct redirect *r = &redirects[i];
 
 	if (r->dst_fd < 0 || r->dst_fd > 2) {
-	    G_warning(_("G_spawn: unable to redirect descriptor %d"), r->dst_fd);
+	    if (r->file || r->src_fd >= 0)
+		G_warning(_("G_spawn: unable to redirect descriptor %d"), r->dst_fd);
 	    continue;
 	}
 
