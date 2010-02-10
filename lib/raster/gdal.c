@@ -103,6 +103,7 @@ static void load_library(void)
 	"gdal15.dll",
 	"gdal11.dll",
 	"gdal.1.0.dll",
+	"libgdal-1.dll",
 	"gdal.dll",
 # endif
 	NULL
