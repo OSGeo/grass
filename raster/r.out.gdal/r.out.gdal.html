@@ -105,6 +105,13 @@ available for a given file format, and certain compression methods may
 only be supported for certain data types (depends on vendor and version).
 <!-- e.g. data destined for ESRI software should use COMPRESS=LZW/PACKBITS/DEFLATE ??? -->
 <p>
+If the export settings are set such that data loss would occur in the output
+file (i.e, due to the particular choice of data type and/or file type), the
+normal behaviour of <em>r.out.gdal</em> in this case would be to issue an error
+message describing the problem and exit without exporting. The <b>-f</b> flag
+allows raster export even if some of the data loss tests are not passed, and
+warnings are issued instead of errors.
+<p>
 <em>r.out.gdal</em> exports may appear all black or gray on initial
 display in other GIS software. This is not a bug of <em>r.out.gdal</em>,
 but often caused by the default color table assigned by that software.
