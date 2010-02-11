@@ -1430,7 +1430,6 @@ class NvizToolWindow(wx.Frame):
                                             except:
                                                 try:
                                                     outsetting = self.FindWindowById(otheritem).GetValue()
-                                                    if otherkey == 'show' and subvalue == 'show': 
                                                 except:
                                                     try:
                                                         outsetting = self.FindWindowById(enditem).GetString()
