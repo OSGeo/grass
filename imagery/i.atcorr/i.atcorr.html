@@ -41,6 +41,10 @@ An example 6s parameters <em>icnd</em> file for <b>i.atcorr</b>:
 64                           - 4th band of ETM+ Landsat 7
 </pre></div>
 
+If the position is not available in longitude-latitude (WGS84), the 
+<em><a href="m.proj.html">m.proj</a></em>
+conversion module can be used to reproject from a different projection.
+
 <h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
 1. It should be explained under what circumstances the use of categorized maps
 in conjuction with flag <em>-o</em> can slow down the calculations instead of
@@ -548,6 +552,15 @@ the raster elevation values are used from the map.
 Note that the process is computationally intensive.<br>
 Note also, that <em>i.atcorr</em> reports solar elevation angle above horizon rather than solar zenith angle.
 
+<h2>SEE ALSO</h2>
+
+The GRASS Wiki page about <a href="http://grass.osgeo.org/wiki/Atmospheric_correction">Atmospheric correction</a>
+
+<p>
+<em>
+<A HREF="m.proj.html">m.proj</a>
+</em>
+
 <H2>AUTHORS</H2>
 
 <p><em>Original version of the program for GRASS 5:</em>
@@ -572,8 +585,6 @@ overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
 <li> <a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6s manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6s homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
 
 <li>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6s version</a>
-
-<li> GRASS Wiki page about <a href="http://grass.osgeo.org/wiki/Atmospheric_correction">Atmospheric correction</a>
 </ul>
 
 <p><i>Last changed: $Date$</i>
