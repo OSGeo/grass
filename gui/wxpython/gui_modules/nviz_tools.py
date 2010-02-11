@@ -1966,7 +1966,7 @@ class NvizToolWindow(wx.Frame):
         marker = self.FindWindowById(self.win['vector']['points']['marker']).GetSelection()
         
         data = self.mapWindow.GetSelectedLayer(type='nviz')
-        for attrb in ('size', 'width', 'color', 'marker'):
+        for attrb in ('size', 'color', 'marker'):
             data['vector']['points'][attrb]['update'] = None
         data['vector']['points']['size']['value'] = size
 #        data['vector']['points']['width']['value'] = width
