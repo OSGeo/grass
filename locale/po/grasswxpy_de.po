@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-06 20:42+0100\n"
-"PO-Revision-Date: 2010-01-14 07:14+0100\n"
+"PO-Revision-Date: 2010-02-12 21:10+0100\n"
 "Last-Translator: Markus Neteler <neteler osgeo.org>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1584,7 +1584,7 @@ msgstr "Wählen Sie eine Projektion"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:685
 msgid "Select datum or ellipsoid (next page)"
-msgstr "Wählen Sie das Datum mit zugehörigen Ellipsoid (nächste Seite)"
+msgstr "Wählen Sie Datum oder Ellipsoid (nächste Seite)"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:691
 msgid "Datum with associated ellipsoid"
@@ -2945,9 +2945,8 @@ msgid "Get all values"
 msgstr "Alle Werte bekommen"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:106
-#, fuzzy
 msgid "Get sample"
-msgstr "Wert erhalten"
+msgstr "Beispiel abfragen"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:149
 msgid "Add on double-click"
@@ -5345,8 +5344,596 @@ msgstr ""
 "Wahl ist \"grassdata\" im eigenen Heimatverzeichnis."
 
 #, fuzzy
-#~ msgid "&File"
-#~ msgstr "Datei"
+msgid "&File"
+msgstr "Datei"
+
+#, fuzzy
+msgid "Close workspace file"
+msgstr "Wählen Sie eine Projektdatei"
+
+#, fuzzy
+msgid "Matlab 2D array import"
+msgstr "Matlab and MapGen Import"
+
+#, fuzzy
+msgid ""
+"Georeference, rectify, and import Terra-ASTER imagery and relative DEM's "
+"using gdalwarp."
+msgstr ""
+"Georeferenzieren, entzerren und Importieren von Terra-ASTER Bildern und "
+"entsprechende DHM mit gdalwarp."
+
+#, fuzzy
+msgid "Downloads and imports data from WMS servers"
+msgstr "Laden und importieren von Daten von einem WMS-Server."
+
+#, fuzzy
+msgid "Creates a new vector map as a link to OGR layer."
+msgstr ""
+"Erzeugt eine neue Vektorkarte als einen ausschließlich lesbaren Link zu "
+"einem OGR-Layer."
+
+#, fuzzy
+msgid "ASCII points as a vector lines"
+msgstr "ASCII Punkte/GRASS ASCII Vektorimport"
+
+#, fuzzy
+msgid "Creates a lines vector map from an ASCII x,y points file."
+msgstr "Erstelle eine Vektorkarte aus ASCII Punktdaten oder ASCII Vektordaten."
+
+#, fuzzy
+msgid ""
+"Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
+"vector map"
+msgstr ""
+"Lade Wegpunkte, Routen und Tracks von einem Garmin GPS Empfänger in eine "
+"Verktorkarte."
+
+#, fuzzy
+msgid ""
+"Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+"file into a vector map"
+msgstr ""
+"Lade Wegpunkte, Routen und Tracks von einem Garmin GPS Empfänger oder direkt "
+"GPS Daten in eine Verktorkarte."
+
+#, fuzzy
+msgid "Matlab array and MapGen import"
+msgstr "Matlab and MapGen Import"
+
+#, fuzzy
+msgid "Matlab 2D array export"
+msgstr "Matlab and MapGen Import"
+
+#, fuzzy
+msgid "Converts vector map to one of the supported OGR vector formats."
+msgstr "Konvertiert in eines von OGR unterstützten Formaten"
+
+#, fuzzy
+msgid "Exports a vector map to a GRASS ASCII vector representation."
+msgstr ""
+"Konvertiert eine binäre GRASS Vektor Karte in eine GRASS ASCII Vektor Karte"
+
+#, fuzzy
+msgid "Exports vector map to DXF file format."
+msgstr "Exportiert GRASS Vektorkartenkarten in das DXF Format."
+
+#, fuzzy
+msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y."
+msgstr "Convertiert in POV-Ray Format, (GRASS x,y,z -nach POV-Ray x,z,y)"
+
+#, fuzzy
+msgid "Exports a vector map to SVG file."
+msgstr "Exportiert eine GRASS Vektorkarte nach SVG"
+
+#, fuzzy
+msgid "Converts a vector map to VTK ASCII output."
+msgstr "Konvertiert eine binäre GRASS Vektorkarte nach VTK ASCII"
+
+#, fuzzy
+msgid "Lists available GIS elements of the user-specified data type."
+msgstr ""
+"Listet alle verfügbaren GRASS Datenbankdateien im spezifiezierten Typ im "
+"Standard Output auf"
+
+#, fuzzy
+msgid "Launch script"
+msgstr "Layerbeschreibung"
+
+#, fuzzy
+msgid "Quit GRASS GIS"
+msgstr "GRASS GUI schließen"
+
+#, fuzzy
+msgid "C&onfig"
+msgstr "Konfiguration"
+
+#, fuzzy
+msgid "Change location and mapset"
+msgstr "Wählen Sie Projekt-Location und Mapset"
+
+#, fuzzy
+msgid "Change current location and mapset."
+msgstr "Wählen Sie Projekt-Location und Mapset"
+
+#, fuzzy
+msgid "Change mapset"
+msgstr "Mapset erstellen"
+
+#, fuzzy
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+"Konvertiert Koordinaten zwischen versch. Projektionen (Frontend für cs2cs)."
+
+#, fuzzy
+msgid "Manage extensions"
+msgstr "Projektionen verwalten"
+
+#, fuzzy
+msgid "&Raster"
+msgstr "Raster"
+
+#, fuzzy
+msgid "Creates a mask for limiting raster operation."
+msgstr "Erzeugt eine MASK für räumlich eingeschränkte Rasteroperationen"
+
+#, fuzzy
+msgid "Neighborhood analysis tool for vector point maps."
+msgstr "Nachbarschaftsanalyse"
+
+#, fuzzy
+msgid "Generates rate of spread raster map layers."
+msgstr "Erzeugt Flächenstatistiken für Rasterkarten."
+
+#, fuzzy
+msgid "&Vector"
+msgstr "Vektor"
+
+#, fuzzy
+msgid "Tool for vector based generalization."
+msgstr "Vektor Datenbank Verbindungen"
+
+#, fuzzy
+msgid "Extrudes flat vector features to 3D with defined height."
+msgstr "Presst flache Vektorobjekte in eine 3D-Form mit definierter Höhe."
+
+#, fuzzy
+msgid ""
+"Creates optimally placed labels for vector map from associated attributes"
+msgstr "Erzeugt Paint-Label für Vektorkarten von zugehörigen Attributen."
+
+#, fuzzy
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+"Erzeugt einen Buffer um die Feature mit gegebenen Typ (Flächen müssen "
+"Zentroide enthalten)."
+
+#, fuzzy
+msgid "Creates a new vector map by combining other vector maps."
+msgstr "Erzeugt eine neue Vektorkarte durch Kombination anderer Vektorkarten."
+
+#, fuzzy
+msgid "Attaches, deletes or reports vector categories to map geometry."
+msgstr ""
+"Füge hinzu, Lösche oder Berichte Vektorkategorien einer Kartengeometrie."
+
+#, fuzzy
+msgid "Creates convex hull for vector point map."
+msgstr "Erstelle eine neue Farbtabelle für Vektorkarten"
+
+#, fuzzy
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+"Erzeugt eine GRASS Vektorkarte mit einem benutzerdefinierten Gitternetz."
+
+#, fuzzy
+msgid "Generates randomly 2D/3D vector points map."
+msgstr "Erzeugt zufällige 2D/3D GRASS Vektor-Punktkarten."
+
+#, fuzzy
+msgid "Random location perturbations of vector points."
+msgstr "Zufällige Mischung der Positionen von GRASS Vektorpunkten."
+
+#, fuzzy
+msgid ""
+"Calculates univariate statistics from a raster map based on vector polygons "
+"and uploads statistics to new attribute columns."
+msgstr ""
+"Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone "
+"und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
+
+#, fuzzy
+msgid "Outputs basic information about a vector map."
+msgstr "Gebe grundlegende Informationen über eine Rasterkarte aus."
+
+#, fuzzy
+msgid "Reports geometry statistics for vector maps."
+msgstr "Gibt statistische Werte für Geometrie der Vektorobjekte aus."
+
+#, fuzzy
+msgid "Tests for normality for vector points."
+msgstr "Test auf Normalverteilung für Punkte."
+
+#, fuzzy
+msgid "&Imagery"
+msgstr "Bildverarbeitung"
+
+#, fuzzy
+msgid "Mosaics several images and extends colormap"
+msgstr ""
+"Mosaikiert bis zu 4 Bilder und erweitert die Farbtabelle. Erzeugt *.mosaic-"
+"Karten."
+
+#, fuzzy
+msgid "creates a sunshine hours map"
+msgstr "Erzeuge neue Vektorkarte"
+
+#, fuzzy
+msgid "Vegetation Indices"
+msgstr "Grenzen der Region"
+
+#, fuzzy
+msgid "Emissivity"
+msgstr "Emission"
+
+#, fuzzy
+msgid "V&olumes"
+msgstr "Volumen"
+
+#, fuzzy
+msgid "&Database"
+msgstr "Datenbank"
+
+#, fuzzy
+msgid "Removes a table from database."
+msgstr "Erzeuge aus Datenbank"
+
+#, fuzzy
+msgid "GRASS help"
+msgstr "GRASS GIS Hilfe"
+
+#, fuzzy
+msgid "GUI help"
+msgstr "GRASS GIS Hilfe"
+
+#, fuzzy
+msgid "Show menu tree"
+msgstr "Steiner-Problematik"
+
+msgid "Zoom to selected map"
+msgstr "Auf die gewählte Karte zoomen"
+
+msgid "Set computational region from selected map"
+msgstr "Arbeitsbereich auf Grundlage selektierter Karte setzen"
+
+msgid "Zoom to selected map (ignore NULLs)"
+msgstr "Zoome auf die selektierten Karten (ignoriere NULLwerte)"
+
+msgid "Set computational region from selected map (ignore NULLs)"
+msgstr ""
+"Arbeitsbereich auf Grundlage selektierter Karte setzen (ignoriere NULLwerte)"
+
+#, fuzzy
+msgid "Use for all loaded surfaces"
+msgstr "Alle"
+
+msgid "Note: Requires GUI restart."
+msgstr "Beremrkung: Erfordert Neustart des GUIs."
+
+msgid "Group"
+msgstr "Gruppe"
+
+msgid ""
+"Insufficient points defined and active (checked) for selected rectification "
+"method.\n"
+"3+ points needed for 1st order,\n"
+"7+ points for 2nd order, and\n"
+"10+ points for 3rd order."
+msgstr ""
+"Nicht ausreichend Punkte gesetzt und aktiv (checked) für die gewählte "
+"Rektifizierungsmethode.\n"
+"3+ Punkte benötigt für 1. Ordnung,\n"
+"7+ Punkte für 2. Ordnung und\n"
+"10+ Punkte für 3. Ordnung."
+
+msgid "GRASS SQL Builder: %s"
+msgstr "GRASS SQL Editor: %s"
+
+#, fuzzy
+msgid "Create/rebuild topology"
+msgstr "Topologie erzeugen/wiederherstellen"
+
+#, fuzzy
+msgid "Generalization"
+msgstr "Allgemein"
+
+msgid "Outputs basic information about a user-specified vector map layer."
+msgstr ""
+"Gibt grundlegende Informationen über eine benutzerdefinierte Vektorkarte aus."
+
+#, fuzzy
+msgid "Extract Modis Quality flags as raster values."
+msgstr "Raster."
+
+msgid "GRASS GIS Layer Manager (Experimental Prototype)"
+msgstr "GRASS GIS Layer Manager (experimenteller Prototyp)"
+
+msgid ""
+"Workspace is not empty. Do you want to store current settings to workspace "
+"file?"
+msgstr ""
+"Projekt ist nicht leer. Wollen Sie die aktuellen Einstellungen in einer "
+"Projektdatei speichern?"
+
+#, fuzzy
+msgid "Save current settings?"
+msgstr "Speichern?"
+
+msgid "Create new workspace file (erase current workspace settings first)"
+msgstr ""
+"Erstelle neue Projektdatei (lösche zuerst aktuelle Projekteinstellungen)"
+
+msgid " (those in bold typeface are required)"
+msgstr " (fett gedruckte sind erforderlich)"
+
+msgid "Cmd >"
+msgstr "Cmd >"
+
+msgid "Click for erasing command prompt"
+msgstr "Klicke um die Eingabeaufforderung (prompt) zu löschen."
+
+msgid ""
+"Error loading attribute data. Record number: %(rec)d. Unable to cast value '%"
+"(val)s' in key column (%(key)s) to integer.\n"
+"\n"
+"Details: %(detail)s"
+msgstr ""
+"Fehler beim Laden der Attributdaten. Datensatz Nummer: %(rec)d. Kann den "
+"Wert '%(val)s' in der Schlüsselspalte (%(key)s) nicht nach integer "
+"umwandeln.\n"
+"\n"
+"Einzelheiten: %(detail)s"
+
+msgid "Click here to show database connection information"
+msgstr ""
+"Klicken Sie hier, um Informationen zu der Datenbankverbindung anzuzeigen."
+
+msgid "Click here to hide database connection information"
+msgstr ""
+"Klicken Sie hier, um Informationen zu der Datenbankverbindung zu verbergen."
+
+msgid "Casting value '%(value)s' to %(type)s failed."
+msgstr "Umwandeln des Wertes  '%(value)s' nach %(type)s ist fehlgeschlagen."
+
+msgid "Encoding"
+msgstr "Kodierung"
+
+msgid "Use coordinate system of selected georeferenced file"
+msgstr "Verwende das Koordinatensystem der gewählten georefenzierten Datei"
+
+msgid "Use coordinate system of selected WKT or PRJ file"
+msgstr "Verwende das Koordinatensystem der gewählten WKT- oder PRJ-Datei"
+
+msgid "Create custom PROJ.4 parameters string for coordinate system"
+msgstr ""
+"Erzeuge benutzerdefinierten PROJ.4-Zeichenkette für das Koordinatensystem"
+
+msgid "Select ellipsoid"
+msgstr "Wählen Sie den Ellipsoid"
+
+msgid "Set zone for UTM projection:"
+msgstr "Wählen Sie die Zone der UTM Projektion:"
+
+msgid "Zone:"
+msgstr "Zone:"
+
+msgid "Hemisphere for zone:"
+msgstr "Hemisphäre der Zone:"
+
+msgid "Datum"
+msgstr "Datum"
+
+msgid "Transformation parameters:"
+msgstr "Transformationsparameter:"
+
+msgid "Browse EPSG Codes"
+msgstr "Blättern in den EPSG Codes"
+
+msgid "Datum transform is required."
+msgstr "Datumstransformation ist notwendig."
+
+msgid "Datums:"
+msgstr "Datum:"
+
+msgid "Output vector map name"
+msgstr "Name der Ausgabe-Vektorkarte"
+
+msgid "Add overlay"
+msgstr "Überlagerungen hinzufügen"
+
+msgid "Add graphic overlays to map"
+msgstr "Überlagernde Grafik hinzufügen"
+
+msgid "Apply regular expressions and wildcards to g.list"
+msgstr "Reguläre Ausdrücke und Wildcards auf g.list anwenden"
+
+msgid "Apply regular expressions and wildcards to g.remove"
+msgstr "Reguläre Ausdrücke und Wildcards auf g.remove anwenden"
+
+msgid "It assumes a cartesian coordinate system"
+msgstr "Es scheint ein kartesisches Koordinatensystem zu sein"
+
+msgid "Creates explicitly the NULL-value bitmap file."
+msgstr "Erzeugt explizit eine NULL-Wert Bitmap-Datei."
+
+msgid ""
+"Computes direct (beam), diffuse and reflected solar irradiation raster maps "
+"for given day, latitude, surface and atmospheric conditions. Solar "
+"parameters (e.g. sunrise, sunset times, declination, extraterrestrial "
+"irradiance, daylight length) are saved in the map history file. "
+"Alternatively, a local time can be specified to compute solar incidence "
+"angle and/or irradiance raster maps. The shadowing effect of the topography "
+"is optionally incorporated."
+msgstr ""
+"Berechnet direkte (beam), diffuse und reflektierte Sonneneinstrahlung für  "
+"einen angegebenen Tag, geographische Breite, Oberfläche und atmosphärische "
+"Kondition. Parameter (z.B. Sonnenauf- und -untergangszeiten, Sonnenwinkel, "
+"extraterrestrische Strahlung und Tageslänge) werden in der History-Datei der "
+"Rasterkarte abgespeichert. Alternativ kann die lokale Zeit angegeben werden, "
+"daraus wird der Einfallswinkel der Strahlung und/oder die "
+"Strahlungsintensität berechnet. Ein Schatteneffekt der Topographie kann "
+"eingebunden werden."
+
+msgid ""
+"Uses a multi-scale approach by taking fitting quadratic parameters to any "
+"size window (via least squares)."
+msgstr ""
+"Extrahiert Reliefinformationen aus einem DEM. Dazu benutzt das Modul einen "
+"multi-skalaren Ansatz, in dem quadratische Parameter auf jede Fenstergröße "
+"angepasst werden (kleinste Quadrate)."
+
+msgid ""
+"It optionally produces raster maps to contain backlink UTM coordinates for "
+"tracing spread paths."
+msgstr ""
+"Dies erzeugt optional Rasterkarten mit 'backlink'-UTM-Koordinaten, um "
+"Ausbreitungspfade nachzuzeichnen."
+
+msgid "Reclassify raster categories interactively by entering reclass rules"
+msgstr "Reklassifiziert Rasterkategorien interaktiv"
+
+msgid ""
+"Recode raster categories interactively by entering recode rules (create new "
+"raster map)"
+msgstr ""
+"Neukodieren von Rasterwerten nach interaktiven Regeln, erzeugt eine neue "
+"Karte"
+
+msgid ""
+"Centre node must be opened (costs >= 0). Costs of centre node are used in "
+"calculation"
+msgstr ""
+"Zentraler Knoten muss geöffnet sein (Kosten >= 0). Kosten des zentralen "
+"Knoten gehen im die Berechnung mit ein."
+
+msgid ""
+"Splits net to bands between cost isolines (direction from centre). Centre "
+"node must be opened (costs >= 0). Costs of centre node are used in "
+"calculation."
+msgstr ""
+"Teilt das Netz in Bänder zwischen Isokostenlinien (Richtung vom Zentrum). "
+"Zentraler Knoten muss geöffnet sein (Kosten >= 0). Kosten des zentralen "
+"Knotens gehen in die Berechnung ein."
+
+msgid ""
+"Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm "
+"is used in this module so the result may be sub optimal"
+msgstr ""
+"Bedenken Sie das 'Minimum Steiner Tree'-Problem ist NP-hart und in diesem "
+"Modul wird ein heuristischer Algorithmus verwenden, so kann das Ergebnis "
+"suboptimal sein."
+
+msgid ""
+"Note that TSP is NP-hard, heuristic algorithm is used by this module and "
+"created cycle may be sub optimal"
+msgstr ""
+"Bedenken Sie das: Das Handelsreisenden-Problem ist NP-hart. Dies Modul setzt "
+"ein heuristischen Algorithmus ein und erzeugte Ringen können suboptimal sein."
+
+msgid "Reclassify vector objects interactively by entering SQL rules"
+msgstr ""
+"Reklassifiziere Vektorobjekte interaktive durch Eingabe von SQL Regeln."
+
+msgid ""
+"Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
+"transformation function."
+msgstr ""
+"Farbwert-Intensität-Sättigung (HIS) zu Rot-Grün-Blau (RGB) Rasterkarten "
+"Farbtransformationsfunktion."
+
+msgid ""
+"Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
+"transformation function"
+msgstr ""
+"Rot-Grün-Blau (RGB) zu Farbwert-Intensität-Sättigung (HIS) Rasterkarten "
+"Farbtransformationsfunktion."
+
+msgid ""
+"The resulting signature file is used as input for i.maxlik, to generate an "
+"unsupervised image classification."
+msgstr ""
+"Die resultierende Signaturdatei wird als Eingabe für i.maxlik verwendet, um "
+"eine unüberwachte Bildklassifikation zu erzeugen."
+
+msgid ""
+"Classification is based on the spectral signature information generated by "
+"either i.cluster, i.class, or i.gensig."
+msgstr ""
+"Die Klassifikation basiert auf der Information der spektralen Signatur "
+"erzeugt von .cluster, i.class, oder i.gensig."
+
+msgid ""
+"Copy a table. Either 'from_table' (optionally with 'where') can be used or "
+"'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+"Kopiere eine Tabelle. Entweder kann 'from_table' (gegebenenfalls mit "
+"'where') oder die 'select'Option verwendet werden. 'from_table' und 'select' "
+"können aber nicht zur gleichen Zeit verwendet werden."
+
+msgid ""
+"Unable to start Nviz. The OpenGL package was not found. You can get it at "
+"http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
+"\n"
+"Details: %s"
+msgstr ""
+"Kann Nviz nicht starten. Das OpenGL-Paket konnte nicht gefunden werden. Sie "
+"können es unter http://PyOpenGL.sourceforge.net bekommen. Schalte zurück auf "
+"2D Grafikausgabe.\n"
+"\n"
+"Einzelheiten: %s "
+
+msgid "Create/edit projection information for current location"
+msgstr "Erstelle/editiere Projektion der aktuellen Location."
+
+msgid "Digitize raster map"
+msgstr "Digitalisiere Rasterkarte"
+
+msgid ""
+"Display shortest route along network between 2 nodes (visualization only, "
+"requires XTerm))"
+msgstr ""
+"Zeige kürzeste Route in einem Netzwerk zwischen 2 Knoten (nur "
+"Visualisierung, erfordert XTerm)"
+
+msgid "Ortho Photo rectification"
+msgstr "Orthophoto Rektifizierung"
+
+msgid "Interactive input for supervised classification"
+msgstr "Interaktive Eingabe für eine überwachte Klassifikation"
+
+msgid ""
+"Do you want to close display %(display)d?\n"
+"\n"
+"%(message)s"
+msgstr ""
+"Wollen Sie das Fenster %(display)d schließen?\n"
+"\n"
+"%(message)s"
+
+msgid "Vector map <%s> georectified successfully"
+msgstr "Vektorkarte <%s> erfolgreich georektifiziert."
+
+msgid "Copying attributes..."
+msgstr "Kopiere Attribute..."
+
+msgid "Smooth or simplify lines/boundaries (remove vertices)."
+msgstr "Glättet oder Vereinfacht Linien/Grenzen (entfernt Vertices)."
+
+msgid "Datums (select to see description):"
+msgstr "Datum (auswählen um die Beschreibung zu sehen):"
+
+msgid "Reload EPSG Codes"
+msgstr "EPSG Codes erneut laden"
 
 #~ msgid "New"
 #~ msgstr "Neu"
@@ -5371,10 +5958,6 @@ msgstr ""
 
 #~ msgid "Close"
 #~ msgstr "Schließen"
-
-#, fuzzy
-#~ msgid "Close workspace file"
-#~ msgstr "Wählen Sie eine Projektdatei"
 
 #~ msgid "Load map layers"
 #~ msgstr "Lade Kartenebenen"
@@ -5458,10 +6041,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Importiert GRIDATB.FOR Kartendatei (TOPMODEL) in eine GRASS Rasterkarte."
 
-#, fuzzy
-#~ msgid "Matlab 2D array import"
-#~ msgstr "Matlab and MapGen Import"
-
 #~ msgid "Imports a binary MAT-File(v4) to a GRASS raster."
 #~ msgstr "Importiere eine Binäre MAT-Datei (v.4) in eine GRASS Rasterkarte."
 
@@ -5480,20 +6059,8 @@ msgstr ""
 #~ msgid "Terra ASTER HDF import"
 #~ msgstr "Terra ASTER HDF Import"
 
-#, fuzzy
-#~ msgid ""
-#~ "Georeference, rectify, and import Terra-ASTER imagery and relative DEM's "
-#~ "using gdalwarp."
-#~ msgstr ""
-#~ "Georeferenzieren, entzerren und Importieren von Terra-ASTER Bildern und "
-#~ "entsprechende DHM mit gdalwarp."
-
 #~ msgid "WMS import"
 #~ msgstr "WMS Import"
-
-#, fuzzy
-#~ msgid "Downloads and imports data from WMS servers"
-#~ msgstr "Laden und importieren von Daten von einem WMS-Server."
 
 #~ msgid "Import vector map"
 #~ msgstr "Importiere Vektorkarte"
@@ -5514,12 +6081,6 @@ msgstr ""
 #~ msgid "Link to OGR"
 #~ msgstr "Link zu OGR"
 
-#, fuzzy
-#~ msgid "Creates a new vector map as a link to OGR layer."
-#~ msgstr ""
-#~ "Erzeugt eine neue Vektorkarte als einen ausschließlich lesbaren Link zu "
-#~ "einem OGR-Layer."
-
 #~ msgid "Multiple link to OGR"
 #~ msgstr "Mehrfachverbindung zu OGR"
 
@@ -5532,15 +6093,6 @@ msgstr ""
 #~ msgstr "ASCII Punkte/GRASS ASCII Vektorimport"
 
 #~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
-#~ msgstr ""
-#~ "Erstelle eine Vektorkarte aus ASCII Punktdaten oder ASCII Vektordaten."
-
-#, fuzzy
-#~ msgid "ASCII points as a vector lines"
-#~ msgstr "ASCII Punkte/GRASS ASCII Vektorimport"
-
-#, fuzzy
-#~ msgid "Creates a lines vector map from an ASCII x,y points file."
 #~ msgstr ""
 #~ "Erstelle eine Vektorkarte aus ASCII Punktdaten oder ASCII Vektordaten."
 
@@ -5572,24 +6124,8 @@ msgstr ""
 #~ msgid "Garmin GPS import"
 #~ msgstr "Garmin GPS Import"
 
-#, fuzzy
-#~ msgid ""
-#~ "Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
-#~ "vector map"
-#~ msgstr ""
-#~ "Lade Wegpunkte, Routen und Tracks von einem Garmin GPS Empfänger in eine "
-#~ "Verktorkarte."
-
 #~ msgid "GPSBabel GPS import"
 #~ msgstr "GPSBabel GPS Import"
-
-#, fuzzy
-#~ msgid ""
-#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
-#~ "file into a vector map"
-#~ msgstr ""
-#~ "Lade Wegpunkte, Routen und Tracks von einem Garmin GPS Empfänger oder "
-#~ "direkt GPS Daten in eine Verktorkarte."
 
 #~ msgid "Geonames import"
 #~ msgstr "Importiere Geonames"
@@ -5606,10 +6142,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Importiere US-NGA GEOnet Names Server (GNS) Länderdaten in eine GRASS "
 #~ "Vektorpunkte Karte."
-
-#, fuzzy
-#~ msgid "Matlab array and MapGen import"
-#~ msgstr "Matlab and MapGen Import"
 
 #~ msgid "Import Mapgen or Matlab vector maps into GRASS."
 #~ msgstr "Importiere Mapgen oder Matlab Vektordaten in GRASS."
@@ -5680,10 +6212,6 @@ msgstr ""
 
 #~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
 #~ msgstr "Exportiert eine GRASS Rasterkarte als GRIDATB.FOR (TOPMODEL) Karte."
-
-#, fuzzy
-#~ msgid "Matlab 2D array export"
-#~ msgstr "Matlab and MapGen Import"
 
 #~ msgid "Exports a GRASS raster to a binary MAT-File."
 #~ msgstr "Exportiere eine GRASS Rasterkarte als binäre MAT-Datei."
@@ -5761,25 +6289,11 @@ msgstr ""
 #~ msgid "Multiple export formats using OGR"
 #~ msgstr "Vektorexport über OGR"
 
-#, fuzzy
-#~ msgid "Converts vector map to one of the supported OGR vector formats."
-#~ msgstr "Konvertiert in eines von OGR unterstützten Formaten"
-
 #~ msgid "ASCII points/GRASS ASCII vector export"
 #~ msgstr "ASCII Punkte/GRASS ASCII Vektor Export"
 
-#, fuzzy
-#~ msgid "Exports a vector map to a GRASS ASCII vector representation."
-#~ msgstr ""
-#~ "Konvertiert eine binäre GRASS Vektor Karte in eine GRASS ASCII Vektor "
-#~ "Karte"
-
 #~ msgid "DXF export"
 #~ msgstr "DXF Export"
-
-#, fuzzy
-#~ msgid "Exports vector map to DXF file format."
-#~ msgstr "Exportiert GRASS Vektorkartenkarten in das DXF Format."
 
 #~ msgid "Multiple GPS export formats using GPSBabel"
 #~ msgstr "Exportiere in verschiedene GPS-Formate mit GPSBabel"
@@ -5791,20 +6305,8 @@ msgstr ""
 #~ "Exportiert eine Vektorkarte in ein GPS-Gerät oder als von GPSBabel "
 #~ "unterstütztes Datenformat."
 
-#, fuzzy
-#~ msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y."
-#~ msgstr "Convertiert in POV-Ray Format, (GRASS x,y,z -nach POV-Ray x,z,y)"
-
 #~ msgid "SVG export"
 #~ msgstr "SVG Export"
-
-#, fuzzy
-#~ msgid "Exports a vector map to SVG file."
-#~ msgstr "Exportiert eine GRASS Vektorkarte nach SVG"
-
-#, fuzzy
-#~ msgid "Converts a vector map to VTK ASCII output."
-#~ msgstr "Konvertiert eine binäre GRASS Vektorkarte nach VTK ASCII"
 
 #~ msgid "Export grid 3D volume"
 #~ msgstr "Exportiere 3D Volumen"
@@ -5848,12 +6350,6 @@ msgstr ""
 
 #~ msgid "List"
 #~ msgstr "Auflisten"
-
-#, fuzzy
-#~ msgid "Lists available GIS elements of the user-specified data type."
-#~ msgstr ""
-#~ "Listet alle verfügbaren GRASS Datenbankdateien im spezifiezierten Typ im "
-#~ "Standard Output auf"
 
 #~ msgid "List filtered"
 #~ msgstr "Gefilterte Liste"
@@ -5953,20 +6449,8 @@ msgstr ""
 #~ msgid "Hardcopy PostScript map output utility."
 #~ msgstr "Werkzeug zur Erstellung von Ausgabekarten im PostScript-Format."
 
-#, fuzzy
-#~ msgid "Launch script"
-#~ msgstr "Layerbeschreibung"
-
 #~ msgid "Exit GUI"
 #~ msgstr "GUI schließen"
-
-#, fuzzy
-#~ msgid "Quit GRASS GIS"
-#~ msgstr "GRASS GUI schließen"
-
-#, fuzzy
-#~ msgid "C&onfig"
-#~ msgstr "Konfiguration"
 
 #~ msgid "Region"
 #~ msgstr "Region"
@@ -6001,18 +6485,6 @@ msgstr ""
 
 #~ msgid "Change current mapset."
 #~ msgstr "Aktuelles Mapset ändern"
-
-#, fuzzy
-#~ msgid "Change location and mapset"
-#~ msgstr "Wählen Sie Projekt-Location und Mapset"
-
-#, fuzzy
-#~ msgid "Change current location and mapset."
-#~ msgstr "Wählen Sie Projekt-Location und Mapset"
-
-#, fuzzy
-#~ msgid "Change mapset"
-#~ msgstr "Mapset erstellen"
 
 #~ msgid "Show settings"
 #~ msgstr "Einstellungen anzeigen"
@@ -6051,17 +6523,6 @@ msgstr ""
 #~ msgid "Convert coordinates"
 #~ msgstr "Konvertiert Koordinaten"
 
-#, fuzzy
-#~ msgid ""
-#~ "Converts coordinates from one projection to another (cs2cs frontend)."
-#~ msgstr ""
-#~ "Konvertiert Koordinaten zwischen versch. Projektionen (Frontend für "
-#~ "cs2cs)."
-
-#, fuzzy
-#~ msgid "Manage extensions"
-#~ msgstr "Projektionen verwalten"
-
 #~ msgid "Preferences"
 #~ msgstr "Einstellungen"
 
@@ -6069,10 +6530,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Einstellungen der Benutzeroberfläche (Schriftarten, Kommandos, "
 #~ "Digitalizieren, etc.)"
-
-#, fuzzy
-#~ msgid "&Raster"
-#~ msgstr "Raster"
 
 #~ msgid "Develop raster map"
 #~ msgstr "Rasterkarten pflegen"
@@ -6244,10 +6701,6 @@ msgstr ""
 #~ msgid "Locates the closest points between objects in two raster maps."
 #~ msgstr "Findet den nächsten Punkt zwischen Objekten in zwei Rasterkarten."
 
-#, fuzzy
-#~ msgid "Creates a mask for limiting raster operation."
-#~ msgstr "Erzeugt eine MASK für räumlich eingeschränkte Rasteroperationen"
-
 #~ msgid "Map calculator"
 #~ msgstr "Kartenrechner"
 
@@ -6271,10 +6724,6 @@ msgstr ""
 
 #~ msgid "Neighborhood points"
 #~ msgstr "Benachbarte Punkte"
-
-#, fuzzy
-#~ msgid "Neighborhood analysis tool for vector point maps."
-#~ msgstr "Nachbarschaftsanalyse"
 
 #~ msgid "Overlay rasters"
 #~ msgstr "Karten überlagern"
@@ -6641,10 +7090,6 @@ msgstr ""
 #~ msgid "Rate of spread"
 #~ msgstr "Ausbreitungsgeschwindigkeit"
 
-#, fuzzy
-#~ msgid "Generates rate of spread raster map layers."
-#~ msgstr "Erzeugt Flächenstatistiken für Rasterkarten."
-
 #~ msgid "Least-cost spread paths"
 #~ msgstr "Geringsten-Kosten-Ausbreitungspfade"
 
@@ -6978,10 +7423,6 @@ msgstr ""
 #~ "Tabelliert das gemeinsame Auftreten von Kategorien (Koinzidenz) von zwei "
 #~ "Rasterkarten."
 
-#, fuzzy
-#~ msgid "&Vector"
-#~ msgstr "Vektor"
-
 #~ msgid "Develop vector map"
 #~ msgstr "Vektorkarten pflegen"
 
@@ -7012,10 +7453,6 @@ msgstr ""
 
 #~ msgid "Smooth or simplify"
 #~ msgstr "Glätten oder Vereinfachen"
-
-#, fuzzy
-#~ msgid "Tool for vector based generalization."
-#~ msgstr "Vektor Datenbank Verbindungen"
 
 #~ msgid "Convert object types"
 #~ msgstr "Konvertiert Objekttypen"
@@ -7071,17 +7508,8 @@ msgstr ""
 #~ msgid "Extrude 3D vector map"
 #~ msgstr "3D Vektorkarte herauspressen"
 
-#, fuzzy
-#~ msgid "Extrudes flat vector features to 3D with defined height."
-#~ msgstr "Presst flache Vektorobjekte in eine 3D-Form mit definierter Höhe."
-
 #~ msgid "Create labels"
 #~ msgstr "Erzeuge Beschriftungen"
-
-#, fuzzy
-#~ msgid ""
-#~ "Creates optimally placed labels for vector map from associated attributes"
-#~ msgstr "Erzeugt Paint-Label für Vektorkarten von zugehörigen Attributen."
 
 #~ msgid "Create optimally placed labels"
 #~ msgstr "Erzeugt optimal plazierte Beschriftungen"
@@ -7145,12 +7573,6 @@ msgstr ""
 
 #~ msgid "Buffer vectors"
 #~ msgstr "Vektor buffern"
-
-#, fuzzy
-#~ msgid "Creates a buffer around vector features of given type."
-#~ msgstr ""
-#~ "Erzeugt einen Buffer um die Feature mit gegebenen Typ (Flächen müssen "
-#~ "Zentroide enthalten)."
 
 #~ msgid "Lidar analysis"
 #~ msgstr "Lidar Analyse"
@@ -7270,21 +7692,11 @@ msgstr ""
 #~ msgid "Patch vector maps"
 #~ msgstr "Patche Vektorkarten"
 
-#, fuzzy
-#~ msgid "Creates a new vector map by combining other vector maps."
-#~ msgstr ""
-#~ "Erzeugt eine neue Vektorkarte durch Kombination anderer Vektorkarten."
-
 #~ msgid "Change attributes"
 #~ msgstr "Attribute ändern"
 
 #~ msgid "Manage or report categories"
 #~ msgstr "Verwalten oder Berichten von Kategorien"
-
-#, fuzzy
-#~ msgid "Attaches, deletes or reports vector categories to map geometry."
-#~ msgstr ""
-#~ "Füge hinzu, Lösche oder Berichte Vektorkategorien einer Kartengeometrie."
 
 #~ msgid "Reclassify objects interactively"
 #~ msgstr "Reklassifiziere Objekte interaktiv"
@@ -7312,10 +7724,6 @@ msgstr ""
 #~ msgid "Convex hull"
 #~ msgstr "Konvexe Hülle"
 
-#, fuzzy
-#~ msgid "Creates convex hull for vector point map."
-#~ msgstr "Erstelle eine neue Farbtabelle für Vektorkarten"
-
 #~ msgid "Delaunay triangles"
 #~ msgstr "Delaunay-Dreiecke"
 
@@ -7338,11 +7746,6 @@ msgstr ""
 
 #~ msgid "Generate grid"
 #~ msgstr "Gitternetz erzeugen"
-
-#, fuzzy
-#~ msgid "Creates a vector map of a user-defined grid."
-#~ msgstr ""
-#~ "Erzeugt eine GRASS Vektorkarte mit einem benutzerdefinierten Gitternetz."
 
 #~ msgid "Generate points"
 #~ msgstr "Erzeuge Punkte"
@@ -7368,16 +7771,8 @@ msgstr ""
 #~ msgid "Generate random points"
 #~ msgstr "Erzeuge zufällige Punkte"
 
-#, fuzzy
-#~ msgid "Generates randomly 2D/3D vector points map."
-#~ msgstr "Erzeugt zufällige 2D/3D GRASS Vektor-Punktkarten."
-
 #~ msgid "Perturb points"
 #~ msgstr "Durchmische Punkte"
-
-#, fuzzy
-#~ msgid "Random location perturbations of vector points."
-#~ msgstr "Zufällige Mischung der Positionen von GRASS Vektorpunkten."
 
 #~ msgid "Remove outliers in point sets"
 #~ msgstr "Entferne Ausreißer aus Punktmenge"
@@ -7393,14 +7788,6 @@ msgstr ""
 
 #~ msgid "Update area attributes from raster"
 #~ msgstr "Aktualisiere Flächenattribute aus Raster"
-
-#, fuzzy
-#~ msgid ""
-#~ "Calculates univariate statistics from a raster map based on vector "
-#~ "polygons and uploads statistics to new attribute columns."
-#~ msgstr ""
-#~ "Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone "
-#~ "und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
 
 #~ msgid "Update point attributes from areas"
 #~ msgstr "Aktualisiere Punktattribute aus Flächen"
@@ -7432,19 +7819,11 @@ msgstr ""
 #~ msgid "Basic vector metadata"
 #~ msgstr "Grundlegende Vektor-Metadaten"
 
-#, fuzzy
-#~ msgid "Outputs basic information about a vector map."
-#~ msgstr "Gebe grundlegende Informationen über eine Rasterkarte aus."
-
 #~ msgid "Classify attribute data"
 #~ msgstr "Klassifiziert Attributdaten"
 
 #~ msgid "Report topology by category"
 #~ msgstr "Berichte Topologie nach Kategorien getrennt"
-
-#, fuzzy
-#~ msgid "Reports geometry statistics for vector maps."
-#~ msgstr "Gibt statistische Werte für Geometrie der Vektorobjekte aus."
 
 #~ msgid "Upload or report topology"
 #~ msgstr "Lade oder berichte Topologie"
@@ -7481,14 +7860,6 @@ msgstr ""
 #~ msgid "Test normality"
 #~ msgstr "Test auf Normalverteilung"
 
-#, fuzzy
-#~ msgid "Tests for normality for vector points."
-#~ msgstr "Test auf Normalverteilung für Punkte."
-
-#, fuzzy
-#~ msgid "&Imagery"
-#~ msgstr "Bildverarbeitung"
-
 #~ msgid "Develop images and groups"
 #~ msgstr "Bilder und Gruppen pflegen"
 
@@ -7508,12 +7879,6 @@ msgstr ""
 
 #~ msgid "Mosaic images"
 #~ msgstr "Mosaikiere Bilder"
-
-#, fuzzy
-#~ msgid "Mosaics several images and extends colormap"
-#~ msgstr ""
-#~ "Mosaikiert bis zu 4 Bilder und erweitert die Farbtabelle. Erzeugt *."
-#~ "mosaic-Karten."
 
 #~ msgid "Manage image colors"
 #~ msgstr "Verwalte Bildfarben"
@@ -7536,18 +7901,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Rektifiziert ein Bild durch Berechnung einer Koordinatentransformation "
 #~ "für jedes Pixel des Bildes basierend auf den Kontrollpunkten."
-
-#, fuzzy
-#~ msgid "creates a sunshine hours map"
-#~ msgstr "Erzeuge neue Vektorkarte"
-
-#, fuzzy
-#~ msgid "Vegetation Indices"
-#~ msgstr "Grenzen der Region"
-
-#, fuzzy
-#~ msgid "Emissivity"
-#~ msgstr "Emission"
 
 #~ msgid "Brovey sharpening"
 #~ msgstr "Brovey-Schärfen"
@@ -7683,10 +8036,6 @@ msgstr ""
 #~ "Berechne die Optimum-Index-Faktor Tabelle für die LANDSAT TM Kanäle 1-5, "
 #~ "& 7."
 
-#, fuzzy
-#~ msgid "V&olumes"
-#~ msgstr "Volumen"
-
 #~ msgid "Develop volumes"
 #~ msgstr "Volumen pflegen"
 
@@ -7762,10 +8111,6 @@ msgstr ""
 #~ "Berechnet univariate Statistiken der nicht-NULL Zellen einer 3D-"
 #~ "Rasterkarte."
 
-#, fuzzy
-#~ msgid "&Database"
-#~ msgstr "Datenbank"
-
 #~ msgid "Database information"
 #~ msgstr "Datenbankinformation"
 
@@ -7828,10 +8173,6 @@ msgstr ""
 
 #~ msgid "Remove table"
 #~ msgstr "Entferne Tabelle"
-
-#, fuzzy
-#~ msgid "Removes a table from database."
-#~ msgstr "Erzeuge aus Datenbank"
 
 #~ msgid "Add columns"
 #~ msgstr "Spalte hinzufügen"
@@ -7900,20 +8241,8 @@ msgstr ""
 #~ msgid "&Help"
 #~ msgstr "&Hilfe"
 
-#, fuzzy
-#~ msgid "GRASS help"
-#~ msgstr "GRASS GIS Hilfe"
-
 #~ msgid "Display the HTML man pages of GRASS"
 #~ msgstr "Zeige die HTML-Handbuchseite von GRASS."
-
-#, fuzzy
-#~ msgid "GUI help"
-#~ msgstr "GRASS GIS Hilfe"
-
-#, fuzzy
-#~ msgid "Show menu tree"
-#~ msgstr "Steiner-Problematik"
 
 #~ msgid "Command '%s' not yet implemented."
 #~ msgstr "Befehl '%s' ist noch nicht implementiert."
@@ -7927,95 +8256,11 @@ msgstr ""
 #~ msgid "Help"
 #~ msgstr "Hilfe"
 
-#~ msgid "Zoom to selected map"
-#~ msgstr "Auf die gewählte Karte zoomen"
-
-#~ msgid "Set computational region from selected map"
-#~ msgstr "Arbeitsbereich auf Grundlage selektierter Karte setzen"
-
-#~ msgid "Zoom to selected map (ignore NULLs)"
-#~ msgstr "Zoome auf die selektierten Karten (ignoriere NULLwerte)"
-
-#~ msgid "Set computational region from selected map (ignore NULLs)"
-#~ msgstr ""
-#~ "Arbeitsbereich auf Grundlage selektierter Karte setzen (ignoriere "
-#~ "NULLwerte)"
-
-#, fuzzy
-#~ msgid "Use for all loaded surfaces"
-#~ msgstr "Alle"
-
-#~ msgid "Note: Requires GUI restart."
-#~ msgstr "Beremrkung: Erfordert Neustart des GUIs."
-
-#~ msgid "Group"
-#~ msgstr "Gruppe"
-
-#~ msgid ""
-#~ "Insufficient points defined and active (checked) for selected "
-#~ "rectification method.\n"
-#~ "3+ points needed for 1st order,\n"
-#~ "7+ points for 2nd order, and\n"
-#~ "10+ points for 3rd order."
-#~ msgstr ""
-#~ "Nicht ausreichend Punkte gesetzt und aktiv (checked) für die gewählte "
-#~ "Rektifizierungsmethode.\n"
-#~ "3+ Punkte benötigt für 1. Ordnung,\n"
-#~ "7+ Punkte für 2. Ordnung und\n"
-#~ "10+ Punkte für 3. Ordnung."
-
-#~ msgid "GRASS SQL Builder: %s"
-#~ msgstr "GRASS SQL Editor: %s"
-
-#, fuzzy
-#~ msgid "Create/rebuild topology"
-#~ msgstr "Topologie erzeugen/wiederherstellen"
-
-#, fuzzy
-#~ msgid "Generalization"
-#~ msgstr "Allgemein"
-
-#~ msgid "Outputs basic information about a user-specified vector map layer."
-#~ msgstr ""
-#~ "Gibt grundlegende Informationen über eine benutzerdefinierte Vektorkarte "
-#~ "aus."
-
-#, fuzzy
-#~ msgid "Extract Modis Quality flags as raster values."
-#~ msgstr "Raster."
-
-#~ msgid "GRASS GIS Layer Manager (Experimental Prototype)"
-#~ msgstr "GRASS GIS Layer Manager (experimenteller Prototyp)"
-
-#~ msgid ""
-#~ "Workspace is not empty. Do you want to store current settings to "
-#~ "workspace file?"
-#~ msgstr ""
-#~ "Projekt ist nicht leer. Wollen Sie die aktuellen Einstellungen in einer "
-#~ "Projektdatei speichern?"
-
-#, fuzzy
-#~ msgid "Save current settings?"
-#~ msgstr "Speichern?"
-
-#~ msgid "Create new workspace file (erase current workspace settings first)"
-#~ msgstr ""
-#~ "Erstelle neue Projektdatei (lösche zuerst aktuelle Projekteinstellungen)"
-
-#~ msgid " (those in bold typeface are required)"
-#~ msgstr " (fett gedruckte sind erforderlich)"
-
 #~ msgid "Uknown settings file location."
 #~ msgstr "Unbekannter Ort der Datei mit den Einstellungen"
 
 #~ msgid "Place where to store settings:"
 #~ msgstr "Ort, an dem Einstellungen gespeichert werden:"
-
-#~ msgid "Cmd >"
-#~ msgstr "Cmd >"
-
-#~ msgid "Click for erasing command prompt"
-#~ msgstr "Klicke um die Eingabeaufforderung (prompt) zu löschen."
 
 #~ msgid ""
 #~ "Makes each cell value a function of the attribute values assigned to the "
@@ -8031,81 +8276,8 @@ msgstr ""
 #~ "Verwendet eine GRASS Vektor-Punktkarte, um eine Vektorkarte mit konvexer "
 #~ "Hülle zu erzeugen."
 
-#~ msgid ""
-#~ "Error loading attribute data. Record number: %(rec)d. Unable to cast "
-#~ "value '%(val)s' in key column (%(key)s) to integer.\n"
-#~ "\n"
-#~ "Details: %(detail)s"
-#~ msgstr ""
-#~ "Fehler beim Laden der Attributdaten. Datensatz Nummer: %(rec)d. Kann den "
-#~ "Wert '%(val)s' in der Schlüsselspalte (%(key)s) nicht nach integer "
-#~ "umwandeln.\n"
-#~ "\n"
-#~ "Einzelheiten: %(detail)s"
-
-#~ msgid "Click here to show database connection information"
-#~ msgstr ""
-#~ "Klicken Sie hier, um Informationen zu der Datenbankverbindung anzuzeigen."
-
-#~ msgid "Click here to hide database connection information"
-#~ msgstr ""
-#~ "Klicken Sie hier, um Informationen zu der Datenbankverbindung zu "
-#~ "verbergen."
-
-#~ msgid "Casting value '%(value)s' to %(type)s failed."
-#~ msgstr "Umwandeln des Wertes  '%(value)s' nach %(type)s ist fehlgeschlagen."
-
-#~ msgid "Encoding"
-#~ msgstr "Kodierung"
-
 #~ msgid "Parameter not found: %s"
 #~ msgstr "Parameter nicht gefunden: %s"
-
-#~ msgid "Use coordinate system of selected georeferenced file"
-#~ msgstr "Verwende das Koordinatensystem der gewählten georefenzierten Datei"
-
-#~ msgid "Use coordinate system of selected WKT or PRJ file"
-#~ msgstr "Verwende das Koordinatensystem der gewählten WKT- oder PRJ-Datei"
-
-#~ msgid "Create custom PROJ.4 parameters string for coordinate system"
-#~ msgstr ""
-#~ "Erzeuge benutzerdefinierten PROJ.4-Zeichenkette für das Koordinatensystem"
-
-#~ msgid "Select ellipsoid"
-#~ msgstr "Wählen Sie den Ellipsoid"
-
-#~ msgid "Set zone for UTM projection:"
-#~ msgstr "Wählen Sie die Zone der UTM Projektion:"
-
-#~ msgid "Zone:"
-#~ msgstr "Zone:"
-
-#~ msgid "Hemisphere for zone:"
-#~ msgstr "Hemisphäre der Zone:"
-
-#~ msgid "Datum"
-#~ msgstr "Datum"
-
-#~ msgid "Transformation parameters:"
-#~ msgstr "Transformationsparameter:"
-
-#~ msgid "Browse EPSG Codes"
-#~ msgstr "Blättern in den EPSG Codes"
-
-#~ msgid "Datum transform is required."
-#~ msgstr "Datumstransformation ist notwendig."
-
-#~ msgid "Datums:"
-#~ msgstr "Datum:"
-
-#~ msgid "Output vector map name"
-#~ msgstr "Name der Ausgabe-Vektorkarte"
-
-#~ msgid "Add overlay"
-#~ msgstr "Überlagerungen hinzufügen"
-
-#~ msgid "Add graphic overlays to map"
-#~ msgstr "Überlagernde Grafik hinzufügen"
 
 #~ msgid "Save workspace to open file"
 #~ msgstr "Speichere das Projekt in die offene Datei"
@@ -8119,46 +8291,8 @@ msgstr ""
 #~ msgid "MAT-File (v.4) export"
 #~ msgstr "MAT-File (v.4) Export"
 
-#~ msgid "Apply regular expressions and wildcards to g.list"
-#~ msgstr "Reguläre Ausdrücke und Wildcards auf g.list anwenden"
-
-#~ msgid "Apply regular expressions and wildcards to g.remove"
-#~ msgstr "Reguläre Ausdrücke und Wildcards auf g.remove anwenden"
-
-#~ msgid "It assumes a cartesian coordinate system"
-#~ msgstr "Es scheint ein kartesisches Koordinatensystem zu sein"
-
 #~ msgid "E&xit"
 #~ msgstr "B&eenden"
-
-#~ msgid "Creates explicitly the NULL-value bitmap file."
-#~ msgstr "Erzeugt explizit eine NULL-Wert Bitmap-Datei."
-
-#~ msgid ""
-#~ "Computes direct (beam), diffuse and reflected solar irradiation raster "
-#~ "maps for given day, latitude, surface and atmospheric conditions. Solar "
-#~ "parameters (e.g. sunrise, sunset times, declination, extraterrestrial "
-#~ "irradiance, daylight length) are saved in the map history file. "
-#~ "Alternatively, a local time can be specified to compute solar incidence "
-#~ "angle and/or irradiance raster maps. The shadowing effect of the "
-#~ "topography is optionally incorporated."
-#~ msgstr ""
-#~ "Berechnet direkte (beam), diffuse und reflektierte Sonneneinstrahlung "
-#~ "für  einen angegebenen Tag, geographische Breite, Oberfläche und "
-#~ "atmosphärische Kondition. Parameter (z.B. Sonnenauf- und -"
-#~ "untergangszeiten, Sonnenwinkel, extraterrestrische Strahlung und "
-#~ "Tageslänge) werden in der History-Datei der Rasterkarte abgespeichert. "
-#~ "Alternativ kann die lokale Zeit angegeben werden, daraus wird der "
-#~ "Einfallswinkel der Strahlung und/oder die Strahlungsintensität berechnet. "
-#~ "Ein Schatteneffekt der Topographie kann eingebunden werden."
-
-#~ msgid ""
-#~ "Uses a multi-scale approach by taking fitting quadratic parameters to any "
-#~ "size window (via least squares)."
-#~ msgstr ""
-#~ "Extrahiert Reliefinformationen aus einem DEM. Dazu benutzt das Modul "
-#~ "einen multi-skalaren Ansatz, in dem quadratische Parameter auf jede "
-#~ "Fenstergröße angepasst werden (kleinste Quadrate)."
 
 #~ msgid "SIMWE Overland flow modeling"
 #~ msgstr "SIMWE Fliessmodellierung"
@@ -8221,23 +8355,6 @@ msgstr ""
 #~ "3) die Richtung der größten Ausbreitung, und optional 4) die maximal zu "
 #~ "erkennende potentielle Ausbreitung, zeigen."
 
-#~ msgid ""
-#~ "It optionally produces raster maps to contain backlink UTM coordinates "
-#~ "for tracing spread paths."
-#~ msgstr ""
-#~ "Dies erzeugt optional Rasterkarten mit 'backlink'-UTM-Koordinaten, um "
-#~ "Ausbreitungspfade nachzuzeichnen."
-
-#~ msgid "Reclassify raster categories interactively by entering reclass rules"
-#~ msgstr "Reklassifiziert Rasterkategorien interaktiv"
-
-#~ msgid ""
-#~ "Recode raster categories interactively by entering recode rules (create "
-#~ "new raster map)"
-#~ msgstr ""
-#~ "Neukodieren von Rasterwerten nach interaktiven Regeln, erzeugt eine neue "
-#~ "Karte"
-
 #~ msgid "Recode using rules file"
 #~ msgstr "Neukodieren der Kategorien mit einer Regel-Datei"
 
@@ -8259,78 +8376,6 @@ msgstr ""
 #~ msgid "Sums up the raster cell values."
 #~ msgstr "Summiert die Rasterzellenwerte."
 
-#~ msgid ""
-#~ "Centre node must be opened (costs >= 0). Costs of centre node are used in "
-#~ "calculation"
-#~ msgstr ""
-#~ "Zentraler Knoten muss geöffnet sein (Kosten >= 0). Kosten des zentralen "
-#~ "Knoten gehen im die Berechnung mit ein."
-
-#~ msgid ""
-#~ "Splits net to bands between cost isolines (direction from centre). Centre "
-#~ "node must be opened (costs >= 0). Costs of centre node are used in "
-#~ "calculation."
-#~ msgstr ""
-#~ "Teilt das Netz in Bänder zwischen Isokostenlinien (Richtung vom Zentrum). "
-#~ "Zentraler Knoten muss geöffnet sein (Kosten >= 0). Kosten des zentralen "
-#~ "Knotens gehen in die Berechnung ein."
-
-#~ msgid ""
-#~ "Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic "
-#~ "algorithm is used in this module so the result may be sub optimal"
-#~ msgstr ""
-#~ "Bedenken Sie das 'Minimum Steiner Tree'-Problem ist NP-hart und in diesem "
-#~ "Modul wird ein heuristischer Algorithmus verwenden, so kann das Ergebnis "
-#~ "suboptimal sein."
-
-#~ msgid ""
-#~ "Note that TSP is NP-hard, heuristic algorithm is used by this module and "
-#~ "created cycle may be sub optimal"
-#~ msgstr ""
-#~ "Bedenken Sie das: Das Handelsreisenden-Problem ist NP-hart. Dies Modul "
-#~ "setzt ein heuristischen Algorithmus ein und erzeugte Ringen können "
-#~ "suboptimal sein."
-
-#~ msgid "Reclassify vector objects interactively by entering SQL rules"
-#~ msgstr ""
-#~ "Reklassifiziere Vektorobjekte interaktive durch Eingabe von SQL Regeln."
-
-#~ msgid ""
-#~ "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
-#~ "transformation function."
-#~ msgstr ""
-#~ "Farbwert-Intensität-Sättigung (HIS) zu Rot-Grün-Blau (RGB) Rasterkarten "
-#~ "Farbtransformationsfunktion."
-
-#~ msgid ""
-#~ "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
-#~ "transformation function"
-#~ msgstr ""
-#~ "Rot-Grün-Blau (RGB) zu Farbwert-Intensität-Sättigung (HIS) Rasterkarten "
-#~ "Farbtransformationsfunktion."
-
-#~ msgid ""
-#~ "The resulting signature file is used as input for i.maxlik, to generate "
-#~ "an unsupervised image classification."
-#~ msgstr ""
-#~ "Die resultierende Signaturdatei wird als Eingabe für i.maxlik verwendet, "
-#~ "um eine unüberwachte Bildklassifikation zu erzeugen."
-
-#~ msgid ""
-#~ "Classification is based on the spectral signature information generated "
-#~ "by either i.cluster, i.class, or i.gensig."
-#~ msgstr ""
-#~ "Die Klassifikation basiert auf der Information der spektralen Signatur "
-#~ "erzeugt von .cluster, i.class, oder i.gensig."
-
-#~ msgid ""
-#~ "Copy a table. Either 'from_table' (optionally with 'where') can be used "
-#~ "or 'select' option, but not 'from_table' and 'select' at the same time."
-#~ msgstr ""
-#~ "Kopiere eine Tabelle. Entweder kann 'from_table' (gegebenenfalls mit "
-#~ "'where') oder die 'select'Option verwendet werden. 'from_table' und "
-#~ "'select' können aber nicht zur gleichen Zeit verwendet werden."
-
 #~ msgid "Drops an attribute table."
 #~ msgstr "Löscht eine Attributtabelle."
 
@@ -8343,29 +8388,11 @@ msgstr ""
 #~ msgid "Unable to read workspace file"
 #~ msgstr "Kann die Projektdatei nicht lesen"
 
-#~ msgid ""
-#~ "Unable to start Nviz. The OpenGL package was not found. You can get it at "
-#~ "http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
-#~ "\n"
-#~ "Details: %s"
-#~ msgstr ""
-#~ "Kann Nviz nicht starten. Das OpenGL-Paket konnte nicht gefunden werden. "
-#~ "Sie können es unter http://PyOpenGL.sourceforge.net bekommen. Schalte "
-#~ "zurück auf 2D Grafikausgabe.\n"
-#~ "\n"
-#~ "Einzelheiten: %s "
-
 #~ msgid "Projection for current location"
 #~ msgstr "Projektion der aktuellen Location"
 
-#~ msgid "Create/edit projection information for current location"
-#~ msgstr "Erstelle/editiere Projektion der aktuellen Location."
-
 #~ msgid "Digitize raster (requires XTerm)"
 #~ msgstr "Raster digitalisieren (erfordert XTerm)"
-
-#~ msgid "Digitize raster map"
-#~ msgstr "Digitalisiere Rasterkarte"
 
 #~ msgid "Set up (requires XTerm)"
 #~ msgstr "Setup (erfordert XTerm)"
@@ -8373,46 +8400,12 @@ msgstr ""
 #~ msgid "Display shortest route (requires XTerm)"
 #~ msgstr "Zeige kürzeste Route (erfordert XTerm)"
 
-#~ msgid ""
-#~ "Display shortest route along network between 2 nodes (visualization only, "
-#~ "requires XTerm))"
-#~ msgstr ""
-#~ "Zeige kürzeste Route in einem Netzwerk zwischen 2 Knoten (nur "
-#~ "Visualisierung, erfordert XTerm)"
-
 #~ msgid "Ortho photo rectification (requires Xterm)"
 #~ msgstr "Orthophoto Rektifizierung (erfordert Xterm)"
-
-#~ msgid "Ortho Photo rectification"
-#~ msgstr "Orthophoto Rektifizierung"
 
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
 #~ msgstr ""
 #~ "Interaktive Eingabe für eine überwachte Klassifikation (benötigt Xterm)."
-
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "Interaktive Eingabe für eine überwachte Klassifikation"
-
-#~ msgid ""
-#~ "Do you want to close display %(display)d?\n"
-#~ "\n"
-#~ "%(message)s"
-#~ msgstr ""
-#~ "Wollen Sie das Fenster %(display)d schließen?\n"
-#~ "\n"
-#~ "%(message)s"
-
-#~ msgid "Vector map <%s> georectified successfully"
-#~ msgstr "Vektorkarte <%s> erfolgreich georektifiziert."
-
-#~ msgid "Copying attributes..."
-#~ msgstr "Kopiere Attribute..."
-
-#~ msgid "Smooth or simplify lines/boundaries (remove vertices)."
-#~ msgstr "Glättet oder Vereinfacht Linien/Grenzen (entfernt Vertices)."
-
-#~ msgid "Datums (select to see description):"
-#~ msgstr "Datum (auswählen um die Beschreibung zu sehen):"
 
 #~ msgid ""
 #~ "Reading workspace file <%s> failed. Invalid file, unable to parse XML "
@@ -8622,5 +8615,5 @@ msgstr ""
 #~ msgid "Overlay raster maps"
 #~ msgstr "Rasterkarten überlagern"
 
-#~ msgid "Reload EPSG Codes"
-#~ msgstr "EPSG Codes erneut laden"
+#~ msgid "&Apply"
+#~ msgstr "&Anwenden"
