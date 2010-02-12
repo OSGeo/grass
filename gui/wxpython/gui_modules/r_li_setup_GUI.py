@@ -21,6 +21,7 @@ import string
 import sys
 import locale
 import platform
+import globalvar
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -29,8 +30,10 @@ import wx.lib.scrolledpanel as scrolled
 import time
 
 import gcmd
-import globalvar
 import utils
 from grass.script import core as grass
 
 #@TODO create wizard instead of progressively increasing window
+
+print >> sys.stderr, "TODO: implement r.li.setup wizard..."
+
