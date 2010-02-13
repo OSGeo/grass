@@ -44,87 +44,53 @@ extern void swap_togl(void);
 
 static int init_ctx(void);
 
-static void pnmcat(const char *pref, int var_i)
+static char *asprintf(const char *fmt, ...)
+{
+    va_list ap;
+    char *out;
+
+    va_start(ap, fmt);
+    G_vasprintf(&out, fmt, ap);
+    va_end(ap);
+
+    return out;
+}
+
+static void pnmcat(const char *pref, int cols, int rows, int width, int height)
 {
     char filename[GPATH_MAX];
-    const char **args2 = G__alloca((var_i + 7) * sizeof(char *));
-    int n_args2 = 0;
-    const char **args1 = G__alloca((var_i + 7) * sizeof(char *));
-    int n_args1;
-    int i, j, k, m;
+    const char *args[8];
+    int i, j;
 
-    args2[n_args2++] = G_store("pmncat");
-    args2[n_args2++] = G_store("-tb");
-    k = var_i;
-    for (i = 1; i <= var_i; i++) {
-	n_args1 = 0;
-	args1[n_args1++] = G_store("pmncat");
-	args1[n_args1++] = G_store("-lr");
+    args[0] = G_store("g.pnmcat");
+    args[1] = asprintf("base=%s", pref);
+    args[2] = asprintf("output=%s.ppm", pref);
+    args[3] = asprintf("cols=%d", cols);
+    args[4] = asprintf("rows=%d", rows);
+    args[5] = asprintf("width=%d", width);
+    args[6] = asprintf("height=%d", height);
+    args[7] = NULL;
 
-	for (j = 1; j <= var_i; j++) {
-	    sprintf(filename, "%s_%d_%d.ppm", pref, i, j);
-	    args1[n_args1++] = G_store(filename);
-	}
-
-	sprintf(filename, "%stmp%d.ppm", pref, i);
-
-	args1[n_args1++] = SF_REDIRECT_FILE;
-	args1[n_args1++] = SF_STDOUT;
-	args1[n_args1++] = SF_MODE_OUT;
-	args1[n_args1++] = G_store(filename);
-
-	args1[n_args1++] = NULL;
-
-	sprintf(filename, "%stmp%d.ppm", pref, k);
-	args2[n_args2++] = G_store(filename);
-
-	if (G_vspawn_ex(args1[0], args1) != 0) {
-	    fprintf(stderr, "pnmcat failed to create assembled image\n");
-	    fprintf(stderr, "Check that pnmcat is installed and path is set\n");
-	}
-	else {
-	    for (m = 1; m <= var_i; m++) {
-		sprintf(filename, "%s_%d_%d.ppm", pref, i, m);
+    if (G_vspawn_ex(args[0], args) != 0) {
+	fprintf(stderr, "g.pnmcat failed to create assembled image\n");
+	fprintf(stderr, "Check that g.pnmcat is installed and path is set\n");
+    }
+    else {
+	for (i = 1; i <= rows; i++) {
+	    for (j = 1; j <= cols; j++) {
+		sprintf(filename, "%s_%d_%d.ppm", pref, i, j);
 		remove(filename);
 	    }
 	}
-	k--;
-
-	for (j = 0; args1[j]; j++)
-	    if (args1[j] != SF_REDIRECT_FILE &&
-		args1[j] != SF_STDOUT &&
-		args1[j] != SF_MODE_OUT)
-		G_free((char *) args1[j]);
     }
 
-    sprintf(filename, "%s.ppm", pref);
-
-    args2[n_args2++] = SF_REDIRECT_FILE;
-    args2[n_args2++] = SF_STDOUT;
-    args2[n_args2++] = SF_MODE_OUT;
-    args2[n_args2++] = G_store(filename);
-
-    args2[n_args2++] = NULL;
-
-    if (G_vspawn_ex(args2[0], args2) != 0) {
-	fprintf(stderr, "pnmcat failed to create assembled images\n");
-	fprintf(stderr, "Check that pnmcat is installed and path is set\n");
-    }
-    else {
-	for (m = 1; m <= var_i; m++) {
-	    sprintf(filename, "%stmp%d.ppm", pref, m);
-	    remove(filename);
-	}
-    }
-
-    for (i = 0; args1[i]; i++)
-	if (args1[i] != SF_REDIRECT_FILE &&
-	    args1[i] != SF_STDOUT &&
-	    args1[i] != SF_MODE_OUT)
-	    G_free((char *) args1[i]);
-
-    G__freea(args1);
-    G__freea(args2);
+    G_free((char *) args[0]);
+    G_free((char *) args[1]);
+    G_free((char *) args[2]);
+    G_free((char *) args[3]);
+    G_free((char *) args[4]);
+    G_free((char *) args[5]);
+    G_free((char *) args[6]);
 }
 
 /**********************************************/
@@ -246,7 +212,7 @@ int Nstart_zoom_cmd(Nv_data * data,	/* Local data */
     Tcl_Eval(interp, inform_text);
     fprintf(stderr, "Assembling Tiles\n");
 
-    pnmcat(pref, var_i);
+    pnmcat(pref, var_i, var_i, maxx, maxy);
 
     GS_set_viewport(a_orig, c_orig, b_orig, d_orig);
 
