@@ -44,7 +44,7 @@ extern void swap_togl(void);
 
 static int init_ctx(void);
 
-static char *asprintf(const char *fmt, ...)
+static char *xsprintf(const char *fmt, ...)
 {
     va_list ap;
     char *out;
@@ -63,12 +63,12 @@ static void pnmcat(const char *pref, int cols, int rows, int width, int height)
     int i, j;
 
     args[0] = G_store("g.pnmcat");
-    args[1] = asprintf("base=%s", pref);
-    args[2] = asprintf("output=%s.ppm", pref);
-    args[3] = asprintf("cols=%d", cols);
-    args[4] = asprintf("rows=%d", rows);
-    args[5] = asprintf("width=%d", width);
-    args[6] = asprintf("height=%d", height);
+    args[1] = xsprintf("base=%s", pref);
+    args[2] = xsprintf("output=%s.ppm", pref);
+    args[3] = xsprintf("cols=%d", cols);
+    args[4] = xsprintf("rows=%d", rows);
+    args[5] = xsprintf("width=%d", width);
+    args[6] = xsprintf("height=%d", height);
     args[7] = NULL;
 
     if (G_vspawn_ex(args[0], args) != 0) {
