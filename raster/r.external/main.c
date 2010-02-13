@@ -514,7 +514,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct Flag *flag_o, *flag_f, *flag_e, *flag_r, *flag_h, *flag_v;
-    int band;
+    int min_band, max_band, band;
     struct band_info info;
     int flip;
 
@@ -545,8 +545,7 @@ int main(int argc, char *argv[])
     parm.band->key = "band";
     parm.band->type = TYPE_INTEGER;
     parm.band->required = NO;
-    parm.band->description = _("Band to select");
-    parm.band->answer = "1";
+    parm.band->description = _("Band to select (default: all)");
 
     parm.title = G_define_option();
     parm.title->key = "title";
@@ -609,11 +608,6 @@ int main(int argc, char *argv[])
     else
 	title = NULL;
 
-    if (parm.band->answer)
-	band = atoi(parm.band->answer);
-    else
-	band = 1;
-
     if (!input && !source)
 	G_fatal_error(_("Name for input source not specified"));
 
@@ -642,17 +636,41 @@ int main(int argc, char *argv[])
 
     check_projection(&cellhd, hDS, flag_o->answer);
 
-    G_verbose_message(_("Proceeding with import..."));
-    G_message("Importing band %d of %d...", band, GDALGetRasterCount( hDS ));
-
-    hBand = GDALGetRasterBand(hDS, band);
-    if (!hBand)
-	G_fatal_error(_("Selected band (%d) does not exist"), band);
-
     Rast_set_window(&cellhd);
 
-    query_band(hBand, output, flag_r->answer, &cellhd, &info);
-    create_map(input, band, output, &cellhd, &info, title, flip);
+    if (parm.band->answer)
+	min_band = max_band = atoi(parm.band->answer);
+    else
+	min_band = 1, max_band = GDALGetRasterCount(hDS);
+
+    G_verbose_message(_("Proceeding with import..."));
+
+    for (band = min_band; band <= max_band; band++) {
+	char *output2, *title2 = NULL;
+
+	G_message("Importing band %d of %d...", band, GDALGetRasterCount( hDS ));
+
+	hBand = GDALGetRasterBand(hDS, band);
+	if (!hBand)
+	    G_fatal_error(_("Selected band (%d) does not exist"), band);
+
+	if (max_band > min_band) {
+	    G_asprintf(&output2, "%s.%d", output, band);
+	    if (title)
+		G_asprintf(&title2, "%s (band %d)", title, band);
+	}
+	else {
+	    output2 = G_store(output);
+	    if (title)
+		title2 = G_store(title);
+	}
+
+	query_band(hBand, output2, flag_r->answer, &cellhd, &info);
+	create_map(input, band, output2, &cellhd, &info, title, flip);
+
+	G_free(output2);
+	G_free(title2);
+    }
 
     if (flag_e->answer)
 	update_default_window(&cellhd);
