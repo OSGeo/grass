@@ -62,6 +62,7 @@ default:
 	-$(CHMOD) 755 install-sh
 	$(MAKE) subdirs
 	$(MAKE) $(FILES_DST)
+	$(MAKE) manifests
 	$(MAKE) $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
 	@if [ `wc -l < "$(ERRORLOG)"` -gt 5 ] ; then \
 		echo "--"     >> $(ERRORLOG) ; \
@@ -76,6 +77,15 @@ default:
 	@echo "Finished compilation: `date`" >> $(ERRORLOG)
 	@cat $(ERRORLOG)
 	@if [ `wc -l < "$(ERRORLOG)"` -gt 8 ] ; then false ; else true ; fi
+
+manifests:
+ifneq ($(strip $(MINGW)),)
+      find $(ARCH_DISTDIR) -type f -name '*.exe' | \
+      while read file ; do \
+          cmd=`basename "$$file" .exe` \
+          sed "s/@CMD@/$$cmd/" mswindows/generic.manifest > "$$file".manifest ; \
+      done
+endif
 
 $(ARCH_DISTDIR)/%: %
 	$(INSTALL_DATA) $< $@
