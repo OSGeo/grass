@@ -1539,35 +1539,39 @@ class CustomPage(TitledPage):
     def OnPageChanging(self, event):
         if event.GetDirection() and not self.customstring:
             event.Veto()
-        else:
-            # check for datum tranforms            
+        elif not event.GetDirection() and not self.customstring:
+            return
+        else: # check for datum tranforms            
             ret, out, err = gcmd.RunCommand('g.proj',
-                                  read = True, getErrorMsg = True,
-                                  proj4 = self.customstring, 
-                                  datumtrans = '-1')
+                                            read = True, getErrorMsg = True,
+                                            proj4 = self.customstring, 
+                                            datumtrans = '-1')
             if ret != 0:
-                wx.MessageBox(err, 'g.proj error: check PROJ4 parameter string')
+                wx.MessageBox(parent = self,
+                              message = err,
+                              caption = _("Error"),
+                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 event.Veto()
                 return
             
-            if out != '':
+            if out:
                 dtrans = ''
                 # open a dialog to select datum transform number
                 dlg = SelectTransformDialog(self.parent.parent, transforms=out)
                 
                 if dlg.ShowModal() == wx.ID_OK:
                     dtrans = dlg.GetTransform()
-                    if dtrans == '':
+                    if len(dtrans) == 0:
                         dlg.Destroy()
                         event.Veto()
-                        return 'Datum transform is required.'
+                        return _('Datum transform is required.')
                 else:
                     dlg.Destroy()
                     event.Veto()
-                    return 'Datum transform is required.'
+                    return _('Datum transform is required.')
                 
                 self.parent.datumtrans = dtrans
-                
+        
         self.GetNext().SetPrev(self)
             
     def GetProjstring(self, event):
