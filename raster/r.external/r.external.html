@@ -9,9 +9,8 @@ title. The file is not imported but just registered as GRASS raster map.
 <h3>RGB Orthophoto from GeoTIFF</h3>
 
 <div class="code"><pre>
-r.external  /home/user/data/maps/059100.tif out=ortho.1 band=1
-r.external  /home/user/data/maps/059100.tif out=ortho.2 band=2
-r.external  /home/user/data/maps/059100.tif out=ortho.3 band=3
+# import of all channels:
+r.external  /home/user/data/maps/059100.tif out=ortho
 g.region rast=ortho.3 -p
 d.rgb r=ortho.1 g=ortho.2 b=ortho.3
 r.composite r=ortho.1 g=ortho.2 b=ortho.3 output=ortho.rgb
