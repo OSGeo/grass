@@ -127,7 +127,8 @@ PGM = rasterintro
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-default: htmldir
+default:
+	$(MAKE) -C r.mapcalc
+	$(MAKE) htmldir 
 
-htmldir: parsubdirs 
-
+htmldir: parsubdirs
