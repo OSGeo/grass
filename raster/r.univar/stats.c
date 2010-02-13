@@ -28,7 +28,7 @@ univar_stat *create_univar_stat_struct(int map_type, int size, int n_perc)
     stats->max = 0.0 / 0.0;	/*set to nan as default */
     stats->n_perc = n_perc;
     if (n_perc > 0)
-	stats->perc = (int *)G_malloc(n_perc * sizeof(int));
+	stats->perc = (double *)G_malloc(n_perc * sizeof(double));
     else
 	stats->perc = NULL;
     stats->sum_abs = 0.0;
@@ -204,8 +204,10 @@ int print_stats(univar_stat * stats)
 	    fprintf(stdout, "median=%g\n", median);
 	    fprintf(stdout, "third_quartile=%g\n", quartile_75);
 	    for (i = 0; i < stats->n_perc; i++) {
-		fprintf(stdout, "percentile_%d=%g\n", stats->perc[i],
-			quartile_perc[i]);
+		char buf[24];
+		sprintf(buf, "%.15g", stats->perc[i]);
+		G_strchg(buf, '.', '_');
+		fprintf(stdout, "percentile_%s=%g\n", buf, quartile_perc[i]);
 	    }
 	}
 	else {
@@ -219,18 +221,38 @@ int print_stats(univar_stat * stats)
 
 
 	    for (i = 0; i < stats->n_perc; i++) {
-		if (stats->perc[i] % 10 == 1 && stats->perc[i] != 11)
-		    fprintf(stdout, "%dst percentile: %g\n", stats->perc[i],
+		if (stats->perc[i] == (int)stats->perc[i]) {
+		    /* percentile is an exact integer */
+		    if ((int)stats->perc[i] % 10 == 1 && (int)stats->perc[i] != 11)
+			fprintf(stdout, "%dst percentile: %g\n", (int)stats->perc[i],
+				quartile_perc[i]);
+		    else if ((int)stats->perc[i] % 10 == 2 && (int)stats->perc[i] != 12)
+			fprintf(stdout, "%dnd percentile: %g\n", (int)stats->perc[i],
+				quartile_perc[i]);
+		    else if ((int)stats->perc[i] % 10 == 3 && (int)stats->perc[i] != 13)
+			fprintf(stdout, "%drd percentile: %g\n", (int)stats->perc[i],
+				quartile_perc[i]);
+		    else
+			fprintf(stdout, "%dth percentile: %g\n", (int)stats->perc[i],
+				quartile_perc[i]);
+		}
+		else {
+		    /* percentile is not an exact integer */
+/*
+		    char buf[24], suffix[3];
+		    sprintf(buf, "%.15g", stats->perc[i]);
+		    if (buf[strlen(buf)-1] == '1')
+			strcpy(suffix, "st");
+		    else if (buf[strlen(buf)-1] == '2')
+			strcpy(suffix, "nd");
+		    else if (buf[strlen(buf)-1] == '3')
+			strcpy(suffix, "rd");
+		    else
+			strcpy(suffix, "th");
+*/
+		    fprintf(stdout, "%.15g percentile: %g\n", stats->perc[i],
 			    quartile_perc[i]);
-		else if (stats->perc[i] % 10 == 2 && stats->perc[i] != 12)
-		    fprintf(stdout, "%dnd percentile: %g\n", stats->perc[i],
-			    quartile_perc[i]);
-		else if (stats->perc[i] % 10 == 3 && stats->perc[i] != 13)
-		    fprintf(stdout, "%drd percentile: %g\n", stats->perc[i],
-			    quartile_perc[i]);
-		else
-		    fprintf(stdout, "%dth percentile: %g\n", stats->perc[i],
-			    quartile_perc[i]);
+		}
 	    }
 	}
 	G_free((void *)quartile_perc);
