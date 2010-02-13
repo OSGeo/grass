@@ -1397,8 +1397,7 @@ class NvizToolWindow(wx.Frame):
                                 nvsettings[subgroup][subkey][subvalue] = True
                         else:
                             for otherkey, otheritem in self.win[subgroup][subkey].iteritems():
-                                if otherkey == 'show' and subvalue == 'show':
-                                 if type(otheritem) == dict:
+                                if type(otheritem) == dict:
                                     for endkey, enditem in otheritem.iteritems():
                                         if endkey == subvalue:
                                             if self.FindWindowById(enditem).GetClassName() == 'wxChoice':
