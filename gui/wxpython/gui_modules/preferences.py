@@ -1721,7 +1721,8 @@ class PreferencesDialog(wx.Dialog):
         """'Set font' button pressed"""
         dlg = DefaultFontDialog(parent=self, id=wx.ID_ANY,
                                 title=_('Select default display font'),
-                                style=wx.DEFAULT_DIALOG_STYLE)
+                                style=wx.DEFAULT_DIALOG_STYLE,
+                                type='font')
         
         if dlg.ShowModal() == wx.ID_OK:
             # set default font and encoding environmental variables
@@ -1741,28 +1742,43 @@ class PreferencesDialog(wx.Dialog):
         event.Skip()
 
     def OnSetOutputFont(self, event):
-        """'Set font' button pressed"""
-
-        type = self.settings.Get(group='display', key='outputfont', subkey='type')   
-                           
-        size = self.settings.Get(group='display', key='outputfont', subkey='size')
-        if size == None or size == 0: size = 10
-        size = float(size)
+        """'Set output font' button pressed"""
         
-        data = wx.FontData()
-        data.EnableEffects(True)
-        data.SetInitialFont(wx.Font(pointSize=size, family=wx.FONTFAMILY_MODERN, faceName=type, style=wx.NORMAL, weight=0))
-
-        dlg = wx.FontDialog(self, data)
-
+        dlg = DefaultFontDialog(parent=self, id=wx.ID_ANY,
+                                title=_('Select output font'),
+                                style=wx.DEFAULT_DIALOG_STYLE,
+                                type='outputfont')
+        
         if dlg.ShowModal() == wx.ID_OK:
-            data = dlg.GetFontData()
-            font = data.GetChosenFont()
-
-            self.settings.Set(group='display', value=font.GetFaceName(),
+            # set output font and font size variables
+            if dlg.font:
+                self.settings.Set(group='display', value=dlg.font,
                                   key='outputfont', subkey='type')
-            self.settings.Set(group='display', value=font.GetPointSize(),
+
+                self.settings.Set(group='display', value=dlg.fontsize,
                                   key='outputfont', subkey='size')
+
+# Standard font dialog broken for Mac in OS X 10.6
+#        type = self.settings.Get(group='display', key='outputfont', subkey='type')   
+                           
+#        size = self.settings.Get(group='display', key='outputfont', subkey='size')
+#        if size == None or size == 0: size = 10
+#        size = float(size)
+        
+#        data = wx.FontData()
+#        data.EnableEffects(True)
+#        data.SetInitialFont(wx.Font(pointSize=size, family=wx.FONTFAMILY_MODERN, faceName=type, style=wx.NORMAL, weight=0))
+
+#        dlg = wx.FontDialog(self, data)
+
+#        if dlg.ShowModal() == wx.ID_OK:
+#            data = dlg.GetFontData()
+#            font = data.GetChosenFont()
+
+#            self.settings.Set(group='display', value=font.GetFaceName(),
+#                                  key='outputfont', subkey='type')
+#            self.settings.Set(group='display', value=font.GetPointSize(),
+#                                  key='outputfont', subkey='size')
                 
         dlg.Destroy()
 
@@ -1875,25 +1891,19 @@ class DefaultFontDialog(wx.Dialog):
     """
     def __init__(self, parent, id, title,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.DEFAULT_DIALOG_STYLE,
-                 settings=globalSettings):
+                 style=wx.DEFAULT_DIALOG_STYLE |
+                 wx.RESIZE_BORDER,
+                 settings=globalSettings,
+                 type='font'):
         
         self.settings = settings
+        self.type = type
         
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
         
-        if "GRASS_FONT" in os.environ:
-            self.font = os.environ["GRASS_FONT"]
-        else:
-            self.font = self.settings.Get(group='display',
-                                          key='font', subkey='type')
-
         self.fontlist = self.GetFonts()
-
-        self.encoding = self.settings.Get(group='display',
-                                          key='font', subkey='encoding')
         
         border = wx.BoxSizer(wx.VERTICAL)
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
@@ -1913,24 +1923,57 @@ class DefaultFontDialog(wx.Dialog):
                                  style=wx.LB_SINGLE|wx.LB_SORT)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.fontlb)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.fontlb)
-        if self.font:
-            self.fontlb.SetStringSelection(self.font, True)
 
         gridSizer.Add(item=self.fontlb,
-                flag=wx.EXPAND, pos=(0, 1))
+                flag=wx.EXPAND, pos=(1, 0))
 
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=("Character encoding:"))
-        gridSizer.Add(item=label,
+        if self.type == 'font':
+            if "GRASS_FONT" in os.environ:
+                self.font = os.environ["GRASS_FONT"]
+            else:
+                self.font = self.settings.Get(group='display',
+                                              key='font', subkey='type')
+            self.encoding = self.settings.Get(group='display',
+                                          key='font', subkey='encoding')
+
+            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                  label=("Character encoding:"))
+            gridSizer.Add(item=label,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(2, 0))
+
+            self.textentry = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
+                                         value=self.encoding)
+            gridSizer.Add(item=self.textentry,
+                    flag=wx.EXPAND, pos=(3, 0))
+
+            self.textentry.Bind(wx.EVT_TEXT, self.OnEncoding)
+
+        elif self.type == 'outputfont':
+            self.font = self.settings.Get(group='display',
+                                              key='outputfont', subkey='type')
+            self.fontsize = self.settings.Get(group='display',
+                                          key='outputfont', subkey='size')
+            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=("Font size:"))
+            gridSizer.Add(item=label,
                       flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(1, 0))
+                      pos=(2, 0))
+                      
+            self.spin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY)
+            if self.fontsize:
+                self.spin.SetValue(self.fontsize)
+            self.spin.Bind(wx.EVT_SPINCTRL, self.OnSizeSpin)
+            self.spin.Bind(wx.EVT_TEXT, self.OnSizeSpin)
+            gridSizer.Add(item=self.spin,
+                      flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(3, 0))
 
-        self.textentry = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                                     value=self.encoding)
-        gridSizer.Add(item=self.textentry,
-                flag=wx.EXPAND, pos=(1, 1))
+        else: 
+            return
 
-        self.textentry.Bind(wx.EVT_TEXT, self.OnEncoding)
+        if self.font:
+            self.fontlb.SetStringSelection(self.font, True)
 
         sizer.Add(item=gridSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL,
@@ -1977,7 +2020,11 @@ class DefaultFontDialog(wx.Dialog):
     def EvtListBoxDClick(self, event):
         self.font = event.GetString()
         event.Skip()
-
+        
+    def OnSizeSpin(self, event):
+        self.fontsize = self.spin.GetValue()
+        event.Skip()
+    
     def GetFonts(self):
         """
         parses fonts directory or fretypecap file to get a list of fonts for the listbox
