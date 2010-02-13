@@ -31,7 +31,7 @@ typedef struct
     double min;
     double max;
     unsigned int n_perc;
-    int *perc;
+    double *perc;
     double sum_abs;
     int n;
     int size;

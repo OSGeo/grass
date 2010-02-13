@@ -28,7 +28,7 @@ void set_params(void)
 
     param.percentile = G_define_option();
     param.percentile->key = "percentile";
-    param.percentile->type = TYPE_INTEGER;
+    param.percentile->type = TYPE_DOUBLE;
     param.percentile->required = NO;
     param.percentile->multiple = YES;
     param.percentile->options = "0-100";
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 	i++;
     stats = create_univar_stat_struct(map_type, cols * rows * depths, i);
     for (i = 0; i < stats->n_perc; i++) {
-	sscanf(param.percentile->answers[i], "%i", &stats->perc[i]);
+	sscanf(param.percentile->answers[i], "%lf", &stats->perc[i]);
     }
 
     stats->n = 0;
