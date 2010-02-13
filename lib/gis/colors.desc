@@ -25,7 +25,7 @@ precipitation: precipitation color table (0..2000mm)
 rainbow: rainbow color table
 ramp: color ramp
 random: random color table
-rstcurv: for terrain curvatures (from r.resamp.rst)
+rstcurv: terrain curvature (from r.resamp.rst)
 ryb: red through yellow to blue
 ryg: red through yellow to green
 sepia: yellowish-brown through to white
