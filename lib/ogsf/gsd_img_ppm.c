@@ -54,7 +54,7 @@ int GS_write_ppm(const char *name)
 	return (1);
     }
 
-    fprintf(fp, "P6 %d %d 255\n", xsize, ysize);
+    fprintf(fp, "P6\n%d %d\n255\n", xsize, ysize);
 
     for (y = ysize - 1; y >= 0; y--) {
 	for (x = 0; x < xsize; x++) {
@@ -97,7 +97,7 @@ int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
 	return (1);
     }
 
-    fprintf(fp, "P6 %d %d 255\n", xsize, ysize);
+    fprintf(fp, "P6\n%d %d\n255\n", xsize, ysize);
 
     for (y = ysize - 1; y >= 0; y--) {
 	for (x = 0; x < xsize; x++) {
