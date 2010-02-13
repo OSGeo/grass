@@ -80,11 +80,11 @@ default:
 
 manifests:
 ifneq ($(strip $(MINGW)),)
-      find $(ARCH_DISTDIR) -type f -name '*.exe' | \
-      while read file ; do \
-          cmd=`basename "$$file" .exe` \
-          sed "s/@CMD@/$$cmd/" mswindows/generic.manifest > "$$file".manifest ; \
-      done
+	find $(ARCH_DISTDIR) -type f -name '*.exe' | \
+	while read file ; do \
+	    cmd=`basename "$$file" .exe` ; \
+	    sed "s/@CMD@/$$cmd/" mswindows/generic.manifest > "$$file".manifest ; \
+	done
 endif
 
 $(ARCH_DISTDIR)/%: %
