@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     passoN_opt->guisection = _("Settings");
 
     type_opt = G_define_option();
-    type_opt->key = "type";
+    type_opt->key = "method";
     type_opt->type = TYPE_STRING;
     type_opt->required = NO;
     type_opt->description = _("Spline interpolation algorithm");
