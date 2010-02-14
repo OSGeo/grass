@@ -2356,9 +2356,9 @@ class RegionDef(BaseClass, wx.Frame):
         #         self.tnsres3.SetValue(str(self.nsres3))
         #         self.tewres3.SetValue(str(self.ewres3))
         self.ttbres.SetValue(str(self.tbres))
-        self.lrows.SetLabel(_("Rows: %d" % self.rows))
-        self.lcols.SetLabel(_("Cols: %d" % self.cols))
-        self.lcells.SetLabel(_("Cells: %d" % self.cells))
+        self.lrows.SetLabel(_("Rows: %d") % self.rows)
+        self.lcols.SetLabel(_("Cols: %d") % self.cols)
+        self.lcells.SetLabel(_("Cells: %d") % self.cells)
         
         #
         # bindings
