@@ -1615,13 +1615,6 @@
 	  <label>Interpolate surfaces</label>
 	  <items>
 	    <menuitem>
-	      <label>Bilinear from raster points</label>
-	      <help>Bilinear interpolation utility for raster map layers.</help>
-	      <keywords>raster</keywords>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>r.bilinear</command>
-	    </menuitem>
-	    <menuitem>
 	      <label>Bilinear and bicubic from vector points</label>
 	      <help>Bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
 	      <keywords>vector,interpolation</keywords>
