@@ -146,7 +146,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Terra ASTER HDF import</label>
-	      <help>Georeference, rectify and import Terra-ASTER imagery and relative DEM's using gdalwarp.</help>
+	      <help>Georeference, rectify, and import Terra-ASTER imagery and relative DEM's using gdalwarp.</help>
 	      <keywords>raster,imagery,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.aster</command>
@@ -177,8 +177,8 @@
 	    <separator />
 	    <menuitem>
 	      <label>Link to OGR</label>
-	      <help>Creates a new vector as a read-only link to OGR layer.</help>
-	      <keywords>vector</keywords>
+	      <help>Creates a new vector map as a link to OGR layer.</help>
+	      <keywords>vector,external,ogr</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.external</command>
 	    </menuitem>
@@ -197,7 +197,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>ASCII points as a vector lines</label>
-	      <help>Creates a lines vector map from an ASCII x,y points file.</help>
+	      <help>Import ASCII x,y[,z] coordinates as a series of lines.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.in.lines</command>
@@ -213,7 +213,7 @@
 	    <menuitem>
 	      <label>DXF import</label>
 	      <help>Converts files in DXF format to GRASS vector map format.</help>
-	      <keywords>vector,import</keywords>
+	      <keywords>vector,import,dxf</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.in.dxf</command>
 	    </menuitem>
@@ -418,22 +418,22 @@
 	  <items>
 	    <menuitem>
 	      <label>Multiple export formats using OGR</label>
-	      <help>Converts to one of the supported OGR vector formats.</help>
-	      <keywords>vector,export</keywords>
+	      <help>Converts vector map to one of the supported OGR vector formats.</help>
+	      <keywords>vector,export,ogr</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.ogr</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>ASCII points/GRASS ASCII vector export</label>
-	      <help>Converts a GRASS binary vector map to a GRASS ASCII vector map.</help>
-	      <keywords>vector,export</keywords>
+	      <help>Exports a vector map to a GRASS ASCII vector representation.</help>
+	      <keywords>vector,export,ascii</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.ascii</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>DXF export</label>
-	      <help>Exports GRASS vector map layers to DXF file format.</help>
+	      <help>Exports vector map to DXF file format.</help>
 	      <keywords>vector,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.dxf</command>
@@ -447,22 +447,22 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>POV-Ray export</label>
-	      <help>Converts to POV-Ray format, GRASS x,y,z -&gt; POV-Ray x,z,y</help>
+	      <help>Converts to POV-Ray format, GRASS x,y,z -&gt; POV-Ray x,z,y.</help>
 	      <keywords>vector,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.pov</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>SVG export</label>
-	      <help>Exports a GRASS vector map to SVG.</help>
+	      <help>Exports a vector map to SVG file.</help>
 	      <keywords>vector,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.svg</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>VTK export</label>
-	      <help>Converts a GRASS binary vector map to VTK ASCII output.</help>
-	      <keywords>vector</keywords>
+	      <help>Converts a vector map to VTK ASCII output.</help>
+	      <keywords>vector,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.vtk</command>
 	    </menuitem>
@@ -520,7 +520,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>List</label>
-	      <help>Lists available GRASS data base files of the user-specified data type to standard output.</help>
+	      <help>Lists available GIS elements of the user-specified data type.</help>
 	      <keywords>general,map management</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>g.list</command>
@@ -584,14 +584,14 @@
 	    <separator />
 	    <menuitem>
 	      <label>Vector to raster</label>
-	      <help>Converts a binary GRASS vector map into a GRASS raster map .</help>
-	      <keywords>vector,raster,conversion</keywords>
+	      <help>Converts a vector map into a raster map.</help>
+	      <keywords>vector,raster,conversion,rasterization</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.to.rast</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Vector to volume</label>
-	      <help>Converts a binary GRASS vector map (only points) layer into a 3D GRASS raster map layer.</help>
+	      <help>Converts a vector map (only points) into a 3D raster map.</help>
 	      <keywords>vector,volume,conversion</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.to.rast3</command>
@@ -599,7 +599,7 @@
 	    <menuitem>
 	      <label>2D vector to 3D vector</label>
 	      <help>Performs transformation of 2D vector features to 3D.</help>
-	      <keywords>vector,transformation,3D</keywords>
+	      <keywords>vector,geometry,3D</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.to.3d</command>
 	    </menuitem>
@@ -768,17 +768,10 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>g.proj</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Projection for current location</label>
-	      <help>Interactively reset the location's projection settings.</help>
-	      <keywords>general,projection</keywords>
-	      <handler>self.OnXTerm</handler>
-	      <command>g.setproj</command>
-	    </menuitem>
-	    <separator />
+
 	    <menuitem>
 	      <label>Convert coordinates</label>
-	      <help>Convert coordinates from one projection to another (cs2cs frontend).</help>
+	      <help>Converts coordinates from one projection to another (cs2cs frontend).</help>
 	      <keywords>miscellaneous,projection</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>m.proj</command>
@@ -799,14 +792,7 @@
 	<menu>
 	  <label>Develop raster map</label>
 	  <items>
-	    <menuitem>
-	      <label>Digitize raster (requires XTerm)</label>
-	      <help>Interactive tool used to draw and save vector features on a graphics monitor using a pointing device (mouse) and save to a raster map.</help>
-	      <keywords>raster</keywords>
-	      <handler>self.OnXTerm</handler>
-	      <command>r.digit</command>
-	    </menuitem>
-	    <separator />
+
 	    <menuitem>
 	      <label>Compress/decompress</label>
 	      <help>Compresses and decompresses raster maps.</help>
@@ -1017,7 +1003,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Neighborhood points</label>
-	      <help>Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map layer.</help>
+	      <help>Neighborhood analysis tool for vector point maps.</help>
 	      <keywords>vector,raster,aggregation</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.neighbors</command>
@@ -1058,7 +1044,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Quantiles overlay</label>
-	      <help>Computes category quantiles using two passes.</help>
+	      <help>Compute category quantiles using two passes.</help>
 	      <keywords>raster,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.statistics3</command>
@@ -1090,7 +1076,7 @@
 	    <menuitem>
 	      <label>Cumulative movement costs</label>
 	      <help>Outputs a raster map layer showing the anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map layer whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,cost surface,cumulative costs</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.walk</command>
 	    </menuitem>
@@ -1262,15 +1248,15 @@
 	    <separator />
 	    <menuitem>
 	      <label>USLE K-factor</label>
-	      <help>Computes USLE Soil Erodibility Factor (K).</help>
-	      <keywords>raster, soil, erosion, USLE</keywords>
+	      <help>USLE Soil Erodibility Factor (K)</help>
+	      <keywords>raster,soil,erosion,USLE</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.uslek</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>USLE R-factor</label>
 	      <help>Computes USLE R factor, Rainfall erosivity index.</help>
-	      <keywords>raster, rainfall, erosion, USLE</keywords>
+	      <keywords>raster,rainfall,erosion,USLE</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.usler</command>
 	    </menuitem>
@@ -1303,14 +1289,14 @@
         <menuitem>
           <label>Groundwater flow</label>
           <help>Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.</help>
-          <keywords>raster</keywords>
+          <keywords>raster,groundwater flow</keywords>
           <handler>self.OnMenuCmd</handler>
           <command>r.gwflow</command>
         </menuitem>
         <menuitem>
           <label>Groundwater solute transport</label>
-          <help>Numerical calculation program for transient, confined and unconfined solute transport in two dimensions.</help>
-          <keywords>raster</keywords>
+          <help>Numerical calculation program for transient, confined and unconfined solute transport in two dimensions</help>
+          <keywords>raster,solute transport</keywords>
           <handler>self.OnMenuCmd</handler>
           <command>r.solute.transport</command>
         </menuitem>
@@ -1319,14 +1305,7 @@
 	<menu>
 	  <label>Landscape structure modeling</label>
 	  <items>
-	    <menuitem>
-	      <label>Set up (requires XTerm)</label>
-	      <help>Interactive tool used to setup the sampling and analysis framework that will be used by the other r.le programs.</help>
-	      <keywords>raster</keywords>
-	      <handler>self.OnXTerm</handler>
-	      <command>r.le.setup</command>
-	    </menuitem>
-	    <separator />
+
 	    <menuitem>
 	      <label>Analyze landscape</label>
 	      <help>Contains a set of measures for attributes, diversity, texture, juxtaposition, and edge.</help>
@@ -1462,8 +1441,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Rate of spread</label>
-	      <help>Generates three, or four raster map layers showing 1) the base (perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, 3) the direction of the maximum ROS, and optionally 4) the maximum potential spotting distance.</help>
-	      <keywords>raster</keywords>
+	      <help>Generates rate of spread raster map layers.</help>
+	      <keywords>raster,rate of spread</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.ros</command>
 	    </menuitem>
@@ -1520,7 +1499,7 @@
 	    <menuitem>
 	      <label>Recode interactively</label>
 	      <help>Recodes categorical raster maps.</help>
-	      <keywords>raster,recode category</keywords>
+	      <keywords>raster</keywords>
 	      <handler>self.RulesCmd</handler>
 	      <command>r.recode</command>
 	    </menuitem>
@@ -1667,7 +1646,7 @@
 	    <menuitem>
 	      <label>IDW from vector points</label>
 	      <help>Surface interpolation from vector point data by Inverse Distance Squared Weighting.</help>
-	      <keywords>vector,interpolation</keywords>
+	      <keywords>vector,surface,interpolation</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.surf.idw</command>
 	    </menuitem>
@@ -1682,7 +1661,7 @@
 	    <menuitem>
 	      <label>Regularized spline tension</label>
 	      <help>Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension.</help>
-	      <keywords>vector</keywords>
+	      <keywords>vector,surface,interpolation</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.surf.rst</command>
 	    </menuitem>
@@ -1711,7 +1690,7 @@
 	    <menuitem>
 	      <label>Basic raster metadata</label>
 	      <help>Output basic information about a raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,metadata</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.info</command>
 	    </menuitem>
@@ -1848,7 +1827,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Create or rebuild topology</label>
-	      <help>Creates topology for GRASS vector map.</help>
+	      <help>Creates topology for vector map.</help>
 	      <keywords>vector,topology</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.build</command>
@@ -1862,7 +1841,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Smooth or simplify</label>
-	      <help>Vector based generalization.</help>
+	      <help>Tool for vector based generalization.</help>
 	      <keywords>vector,generalization,simplification,smoothing,displacement,network generalization</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.generalize</command>
@@ -1893,7 +1872,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Split lines</label>
-	      <help>Split lines to shorter segments.</help>
+	      <help>Splits vector lines to shorter segments.</help>
 	      <keywords>vector,geometry</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.split</command>
@@ -1924,13 +1903,13 @@
 	    <menuitem>
 	      <label>Create 3D vector over raster</label>
 	      <help>Converts vector map to 3D by sampling of elevation raster map.</help>
-	      <keywords>vector,geometry,sampling</keywords>
+	      <keywords>vector,geometry,sampling,3D</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.drape</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Extrude 3D vector map</label>
-	      <help>Extrudes flat vector object to 3D with defined height.</help>
+	      <help>Extrudes flat vector features to 3D with defined height.</help>
 	      <keywords>vector,geometry,3D</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.extrude</command>
@@ -2004,7 +1983,7 @@
 	</menuitem>
 	<menuitem>
 	  <label>Query with coordinate(s)</label>
-	  <help>Queries a vector map layer at given locations.</help>
+	  <help>Queries a vector map at given locations.</help>
 	  <keywords>vector,querying</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>v.what</command>
@@ -2019,8 +1998,8 @@
 	<separator />
 	<menuitem>
 	  <label>Buffer vectors</label>
-	  <help>Creates a buffer around features of given type (areas must contain centroid).</help>
-	  <keywords>vector,buffer</keywords>
+	  <help>Creates a buffer around vector features of given type.</help>
+	  <keywords>vector,geometry,buffer</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>v.buffer</command>
 	</menuitem>
@@ -2121,13 +2100,7 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.net.path</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Display shortest route (requires XTerm)</label>
-	      <help>Finds shortest path for selected starting and ending node.</help>
-	      <keywords>display,networking</keywords>
-	      <handler>self.OnXTerm</handler>
-	      <command>d.path</command>
-	    </menuitem>
+
 	    <menuitem>
 	      <label>Split net</label>
 	      <help>Splits net by cost isolines.</help>
@@ -2163,8 +2136,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Patch vector maps</label>
-	      <help>Create a new vector map layer by combining other vector map layers.</help>
-	      <keywords>vector</keywords>
+	      <help>Creates a new vector map by combining other vector maps.</help>
+	      <keywords>vector,geometry</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.patch</command>
 	    </menuitem>
@@ -2176,7 +2149,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Manage or report categories</label>
-	      <help>Attach, delete or report vector categories to map geometry.</help>
+	      <help>Attaches, deletes or reports vector categories to map geometry.</help>
 	      <keywords>vector,category</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.category</command>
@@ -2210,7 +2183,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Convex hull</label>
-	      <help>Uses a GRASS vector points map to produce a convex hull vector map.</help>
+	      <help>Creates convex hull for vector point map.</help>
 	      <keywords>vector,geometry</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.hull</command>
@@ -2218,7 +2191,7 @@
 	    <menuitem>
 	      <label>Delaunay triangles</label>
 	      <help>Creates a Delaunay triangulation from an input vector map containing points or centroids.</help>
-	      <keywords>vector</keywords>
+	      <keywords>vector,geometry,triangulation</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.delaunay</command>
 	    </menuitem>
@@ -2233,8 +2206,8 @@
 	</menu>
 	<menuitem>
 	  <label>Generate grid</label>
-	  <help>Creates a GRASS vector map of a user-defined grid.</help>
-	  <keywords>vector</keywords>
+	  <help>Creates a vector map of a user-defined grid.</help>
+	  <keywords>vector,geometry</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>v.mkgrid</command>
 	</menuitem>
@@ -2250,22 +2223,22 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Generate points along lines</label>
-	      <help>Create points along input lines in new vector with 2 layers.</help>
+	      <help>Creates points along input lines in new vector map with 2 layers.</help>
 	      <keywords>vector,geometry</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.to.points</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Generate random points</label>
-	      <help>Randomly generate a 2D/3D vector points map.</help>
+	      <help>Generates randomly 2D/3D vector points map.</help>
 	      <keywords>vector,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.random</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Perturb points</label>
-	      <help>Random location perturbations of GRASS vector points</help>
-	      <keywords>vector</keywords>
+	      <help>Random location perturbations of vector points.</help>
+	      <keywords>vector,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.perturb</command>
 	    </menuitem>
@@ -2282,14 +2255,14 @@
 	<menuitem>
 	  <label>Test/training point sets</label>
 	  <help>Randomly partition points into test/train sets.</help>
-	  <keywords>vector,statistics</keywords>
+	  <keywords>vector,statistics,points</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>v.kcv</command>
 	</menuitem>
 	<separator />
 	<menuitem>
 	  <label>Update area attributes from raster</label>
-	  <help>Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns.</help>
+	  <help>Calculates univariate statistics from a raster map based on vector polygons and uploads statistics to new attribute columns.</help>
 	  <keywords>vector,raster,statistics</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>v.rast.stats</command>
@@ -2314,7 +2287,7 @@
 	    <menuitem>
 	      <label>Sample raster neighborhood around points</label>
 	      <help>Samples a raster map at vector point locations.</help>
-	      <keywords>vector</keywords>
+	      <keywords>vector,raster,resample</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.sample</command>
 	    </menuitem>
@@ -2326,7 +2299,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Basic vector metadata</label>
-	      <help>Outputs basic information about a user-specified vector map.</help>
+	      <help>Outputs basic information about a vector map.</help>
 	      <keywords>vector,metadata,history</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.info</command>
@@ -2334,15 +2307,15 @@
 	    <menuitem>
 	      <label>Classify attribute data</label>
 	      <help>Classifies attribute data, e.g. for thematic mapping</help>
-	      <keywords>vector,statistics</keywords>
+	      <keywords>vector,attributes,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.class</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Report topology by category</label>
-	      <help>Reports geometry statistics for vectors.</help>
-	      <keywords>vector,report,statistics</keywords>
+	      <help>Reports geometry statistics for vector maps.</help>
+	      <keywords>vector,geometry,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.report</command>
 	    </menuitem>
@@ -2356,7 +2329,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Univariate attribute statistics for points</label>
-	      <help>Calculates univariate statistics for attribute. Variance and standard deviation is calculated only for points if specified.</help>
+	      <help>Calculates univariate statistics for attribute.</help>
 	      <keywords>vector,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.univar</command>
@@ -2378,8 +2351,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Test normality</label>
-	      <help>Tests for normality for points.</help>
-	      <keywords>vector,statistics</keywords>
+	      <help>Tests for normality for vector points.</help>
+	      <keywords>vector,statistics,points</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.normal</command>
 	    </menuitem>
@@ -2410,7 +2383,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Mosaic images</label>
-	      <help>Mosaics up to 4 images and extends colormap; creates map *.mosaic</help>
+	      <help>Mosaics several images and extends colormap</help>
 	      <keywords>raster,imagery,mosaicking</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.image.mosaic</command>
@@ -2450,14 +2423,7 @@
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.rectify</command>
 	</menuitem>
-	<menuitem>
-	  <label>Ortho photo rectification (requires Xterm)</label>
-	  <help>Menu driver for the photo imagery programs.</help>
-	  <keywords>imagery,orthorectify</keywords>
-	  <handler>self.OnXTerm</handler>
-	  <command>i.ortho.photo</command>
-	</menuitem>
-	<separator />
+
 	<menuitem>
 	  <label>Brovey sharpening</label>
 	  <help>Brovey transform to merge multispectral and high-res panchromatic channels</help>
@@ -2490,14 +2456,7 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.smap</command>
 	    </menuitem>
-	    <separator />
-	    <menuitem>
-	      <label>Interactive input for supervised classification (requires Xterm)</label>
-	      <help>Generates spectral signatures for an image by allowing the user to outline regions of interest.</help>
-	      <keywords>imagery</keywords>
-	      <handler>self.OnXTerm</handler>
-	      <command>i.class</command>
-	    </menuitem>
+
 	    <menuitem>
 	      <label>Input for supervised MLC</label>
 	      <help>Generates statistics for i.maxlik from raster map.</help>
@@ -2598,8 +2557,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>actual evapotranspiration for diurnal period (Bastiaanssen, 1995)</help>
+	      <keywords>imagery,actual evapotranspiration,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.eta</command>
 	    </menuitem>
@@ -2613,50 +2572,50 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)</help>
+	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.evapfr</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>Computes sensible Heat Flux iteration SEBAL 01</help>
+	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.h_SEBAL01</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
+	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.soilheatflux</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>Emissivity from NDVI, generic method for spares land.</help>
+	      <keywords>emissivity,land flux,energy balance</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.emissivity</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
+	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.evapo.time_integration</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>creates a latitude/longitude map</help>
+	      <keywords>imagery,latitude,longitude,projection</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.latlong</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>Calculates different types of vegetation indices.</help>
+	      <keywords>imagery,vegetation index,biophysical parameters</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.vi</command>
 	    </menuitem>
@@ -2664,22 +2623,22 @@
 	</menu>
 	<menuitem>
 	  <label>Atmospheric correction</label>
-	  <help>Performs atmospheric correction using the 6S algorithm.</help>
-	  <keywords>imagery,atmospheric correction</keywords>
+	  <help>Computes biomass growth, precursor of crop yield calculation</help>
+	  <keywords>imagery,biomass,fpar,yield</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.biomass</command>
 	</menuitem>
 	<menuitem>
 	  <label>Atmospheric correction</label>
-	  <help>Performs atmospheric correction using the 6S algorithm.</help>
-	  <keywords>imagery,atmospheric correction</keywords>
+	  <help>Extract quality control parameters from Modis QC layers</help>
+	  <keywords>QC,Quality Control,surface reflectance,Modis</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.modis.qc</command>
 	</menuitem>
 	<menuitem>
 	  <label>Atmospheric correction</label>
-	  <help>Performs atmospheric correction using the 6S algorithm.</help>
-	  <keywords>imagery,atmospheric correction</keywords>
+	  <help>creates a sunshine hours map</help>
+	  <keywords>sunshine,hours,daytime</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.sunhours</command>
 	</menuitem>
@@ -2757,7 +2716,7 @@
     <menuitem>
       <label>Groundwater modeling</label>
       <help>Numerical calculation program for transient, confined groundwater flow in three dimensions</help>
-      <keywords>raster3d,voxel</keywords>
+      <keywords>raster3d,voxel,groundwater,numeric,simulation</keywords>
       <handler>self.OnMenuCmd</handler>
       <command>r3.gwflow</command>
     </menuitem>
@@ -2840,14 +2799,14 @@
 	    <menuitem>
 	      <label>Connect</label>
 	      <help>Prints/sets general DB connection for current mapset and exits.</help>
-	      <keywords>database,attribute table</keywords>
+	      <keywords>database,attribute table,connection settings</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>db.connect</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Login</label>
 	      <help>Sets user/password for driver/database.</help>
-	      <keywords>database,SQL</keywords>
+	      <keywords>database,connection</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>db.login</command>
 	    </menuitem>
@@ -2861,15 +2820,15 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>New table</label>
-	      <help>Creates and adds a new attribute table to a given layer of an existing vector map.</help>
+	      <help>Creates and connects a new attribute table to a given layer of an existing vector map.</help>
 	      <keywords>vector,database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.db.addtable</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Remove table</label>
-	      <help>Drops an attribute table.</help>
-	      <keywords>database,attribute table</keywords>
+	      <help>Removes a table from database.</help>
+	      <keywords>database,SQL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>db.droptable</command>
 	    </menuitem>
