@@ -67,7 +67,6 @@ int main(int argc, char **argv)
 
     opt.map = G_define_standard_option(G_OPT_R_MAP);
     opt.map->required = YES;
-    opt.map->guisection = _("Required");
 
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
