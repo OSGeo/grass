@@ -66,13 +66,13 @@ int main(int argc, char **argv)
 	_("Exports the color table associated with a raster map layer.");
 
     opt.map = G_define_standard_option(G_OPT_R_MAP);
-    opt.map->required = NO;
+    opt.map->required = YES;
     opt.map->guisection = _("Required");
 
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
     opt.file->required = NO;
-    opt.file->description = _("Path to rules file (\"-\" to write rules to stdin)");
+    opt.file->description = _("Path to rules file (\"-\" to write rules to stdout)");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
