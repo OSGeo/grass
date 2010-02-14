@@ -2,11 +2,12 @@
 /****************************************************************************
  *
  * MODULE:       g.transform
- * AUTHOR(S):    Brian J. Buckley<br>
+ * AUTHOR(S):    Brian J. Buckley
  *               Glynn Clements
+ *               Hamish Bowman
  * PURPOSE:      Utility to compute transformation based upon GCPs and 
  *               output error measurements
- * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -44,11 +45,15 @@ struct Stats
 static char *name;
 static int order;
 static int summary;
+static int forward;
 static char **columns;
 static int need_fwd;
 static int need_rev;
 static int need_fd;
 static int need_rd;
+static char *coord_file;
+
+static double E12[10], N12[10], E21[10], N21[10];
 
 static struct Control_Points points;
 
@@ -83,7 +88,6 @@ static void diagonal(double *dg, double *d2, double dx, double dy)
 static void compute_transformation(void)
 {
     static const int order_pnts[3] = { 3, 6, 10 };
-    double E12[10], N12[10], E21[10], N21[10];
     int n, i;
 
     equation_stat =
@@ -94,7 +98,7 @@ static void compute_transformation(void)
 		      order_pnts[order - 1]);
 
     if (equation_stat <= 0)
-	return;
+	G_fatal_error(_("Error conducting transform (%d)"), equation_stat);
 
     count = 0;
 
@@ -134,7 +138,7 @@ static void compute_transformation(void)
 		update_stats(&rev, n, rx, ry, rd, rd2);
 	}
 
-	if (!columns)
+	if (!columns[0])
 	    continue;
 
 	for (i = 0;; i++) {
@@ -236,10 +240,74 @@ static void parse_format(void)
     }
 }
 
+static void dump_cooefs(void)
+{
+    int i;
+    static const int order_pnts[3] = { 3, 6, 10 };
+
+    for (i = 0; i < order_pnts[order - 1]; i++)
+    	fprintf(stdout, "E%d=%.15g\n", i, forward ? E12[i] : E21[i]);
+
+    for (i = 0; i < order_pnts[order - 1]; i++)
+    	fprintf(stdout, "N%d=%.15g\n", i, forward ? N12[i] : N21[i]);
+}
+
+static void xform_value(double east, double north)
+{
+    double xe, xn;
+
+    if(forward)
+	CRS_georef(east, north, &xe, &xn, E12, N12, order);
+    else
+	CRS_georef(east, north, &xe, &xn, E21, N21, order);
+
+    fprintf(stdout, "%.15g %.15g\n", xe, xn);
+}
+
+static void do_pt_xforms(void)
+{
+    double easting, northing;
+    int ret;
+    FILE *fp;
+
+    if (strcmp(coord_file, "-") == 0)
+    	fp = stdin;
+    else {
+    	fp = fopen(coord_file, "r");
+    	if (!fp)
+    	    G_fatal_error(_("Unable to open file <%s>"), coord_file);
+    }
+
+    for (;;) {
+    	char buf[64];
+
+    	if (!G_getl2(buf, sizeof(buf), fp))
+    	    break;
+
+    	if ((buf[0] == '#') || (buf[0] == '\0'))
+    	    continue;
+
+    	/* ? sscanf(buf, "%s %s", &east_str, &north_str)
+    	    ? G_scan_easting(,,-1)
+    	    ? G_scan_northing(,,-1) */
+    	/* ? muliple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
+
+    	ret = sscanf(buf, "%lf %lf", &easting, &northing);
+    	if (ret != 2)
+    	    G_fatal_error(_("Invalid coordinates: [%s]"), buf);
+
+    	xform_value(easting, northing);
+    }
+
+    if (fp != stdin)
+    	fclose(fp);
+}
+
+
 int main(int argc, char **argv)
 {
-    struct Option *grp, *val, *fmt;
-    struct Flag *sum;
+    struct Option *grp, *val, *fmt, *xfm_pts;
+    struct Flag *sum, *rev_flag, *dump_flag;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -283,13 +351,32 @@ int main(int argc, char **argv)
     sum->key = 's';
     sum->description = _("Display summary information");
 
+    xfm_pts = G_define_standard_option(G_OPT_F_INPUT);
+    xfm_pts->key = "coords";
+    xfm_pts->required = NO;
+    xfm_pts->label =
+	_("File containing coordinates to transform (\"-\" to read from stdin)");
+    xfm_pts->description = _("Local x,y coordinates to target east,north");
+
+    rev_flag = G_define_flag();
+    rev_flag->key = 'r';
+    rev_flag->label = _("Reverse transform of coords file or coeff. dump");
+    rev_flag->description = _("Target east,north coordinates to local x,y");
+
+    dump_flag = G_define_flag();
+    dump_flag->key = 'x';
+    dump_flag->description = _("Display transform matrix coefficients");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     name = grp->answer;
     order = atoi(val->answer);
     summary = !!sum->answer;
     columns = fmt->answers;
+    forward = !rev_flag->answer;
+    coord_file = xfm_pts->answer;
 
     I_get_control_points(name, &points);
 
@@ -300,6 +387,12 @@ int main(int argc, char **argv)
     I_put_control_points(name, &points);
 
     analyze();
+
+    if(dump_flag->answer)
+	dump_cooefs();
+
+    if(coord_file)
+	do_pt_xforms();
 
     return 0;
 }
