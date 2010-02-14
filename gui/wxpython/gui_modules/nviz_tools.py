@@ -709,7 +709,6 @@ class NvizToolWindow(wx.Frame):
                       pos=(2, 3), span=(1, 6),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
-
         self.CreateControl(panel, dict=self.win['vector']['lines'], name='height', size=300,
                            range=(0, 1000),
                            bind=(self.OnVectorHeight, self.OnVectorHeightFull, self.OnVectorHeightSpin))
@@ -726,7 +725,6 @@ class NvizToolWindow(wx.Frame):
         pageSizer.Add(item=boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=5)
-
 
         #
         # vector points
@@ -1837,7 +1835,8 @@ class NvizToolWindow(wx.Frame):
         rasters = self.mapWindow.GetLayerNames('raster')
         if event.GetSelection() == 0: # surface
             if len(rasters) < 1:
-                event.Veto()
+                self.FindWindowById(self.win['vector']['lines']['surface']).Enable(False)
+                self.FindWindowById(self.win['vector']['lines']['flat']).SetSelection(1)
                 return
 
             self.FindWindowById(self.win['vector']['lines']['surface']).Enable(True)
@@ -1855,10 +1854,9 @@ class NvizToolWindow(wx.Frame):
 
     def OnVectorLines(self, event):
         """!Set vector lines mode, apply changes if auto-rendering is enabled"""
-        width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
+        data = self.mapWindow.GetSelectedLayer(type='nviz')
 
-        color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
-        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+        width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
 
         mode = {}
         if self.FindWindowById(self.win['vector']['lines']['flat']).GetSelection() == 0:
@@ -1868,12 +1866,18 @@ class NvizToolWindow(wx.Frame):
         else:
             mode['type'] = 'flat'
         
-        data = self.mapWindow.GetSelectedLayer(type='nviz')
-        for attrb in ('width', 'color', 'mode'):
+        for attrb in ('width', 'mode'):
             data['vector']['lines'][attrb]['update'] = None
         data['vector']['lines']['width']['value'] = width
-        data['vector']['lines']['color']['value'] = color
         data['vector']['lines']['mode']['value'] = mode
+
+        color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
+        if type(color) != wx._gdi.Colour: 
+            pass #color picker not yet instantiated
+        else:
+            color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+            data['vector']['lines']['color']['update'] = None
+            data['vector']['lines']['color']['value'] = color
         
         # update properties
         event = wxUpdateProperties(data=data)
@@ -1955,22 +1959,25 @@ class NvizToolWindow(wx.Frame):
         
     def OnVectorPoints(self, event):
         """!Set vector points mode, apply changes if auto-rendering is enabled"""
+        data = self.mapWindow.GetSelectedLayer(type='nviz')
+
         size  = self.FindWindowById(self.win['vector']['points']['size']).GetValue()
+        marker = self.FindWindowById(self.win['vector']['points']['marker']).GetSelection()
 #        width = self.FindWindowById(self.win['vector']['points']['width']).GetValue()
 
-        color = self.FindWindowById(self.win['vector']['points']['color']).GetColour()
-        if type(color) != wx._gdi.Colour: return #color picker not yet instantiated
-        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
-
-        marker = self.FindWindowById(self.win['vector']['points']['marker']).GetSelection()
-        
-        data = self.mapWindow.GetSelectedLayer(type='nviz')
-        for attrb in ('size', 'color', 'marker'):
+        for attrb in ('size', 'marker'):
             data['vector']['points'][attrb]['update'] = None
         data['vector']['points']['size']['value'] = size
 #        data['vector']['points']['width']['value'] = width
-        data['vector']['points']['color']['value'] = color
         data['vector']['points']['marker']['value'] = marker
+
+        color = self.FindWindowById(self.win['vector']['points']['color']).GetColour()
+        if type(color) != wx._gdi.Colour: 
+            pass #color picker not yet instantiated
+        else:
+            color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+            data['vector']['points']['color']['update'] = None
+            data['vector']['points']['color']['value'] = color
 
         # update properties
         event = wxUpdateProperties(data=data)
@@ -2455,7 +2462,10 @@ class NvizToolWindow(wx.Frame):
                 surface = self.FindWindowById(self.win['vector'][vtype]['surface'])
                 surface.SetItems(rasters)
                 if len(rasters) > 0:
-                    surface.SetStringSelection(data[vtype]['mode']['surface'])
+                    try:
+                        surface.SetStringSelection(data[vtype]['mode']['surface'])
+                    except:
+                        pass
                 
         for type in ('slider', 'spin'):
             win = self.FindWindowById(self.win['vector']['lines']['height'][type])
@@ -2647,5 +2657,3 @@ class ViewPositionWindow(wx.Window):
                
         event = wxUpdateView(zExag=True)
         wx.PostEvent(self.mapWindow, event)
-         
-  
