@@ -653,7 +653,7 @@ class NvizToolWindow(wx.Frame):
 
         width = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                             initial=1,
-                            min=1,
+                            min=0,
                             max=100)
         width.SetValue(1)
         self.win['vector']['lines']['width'] = width.GetId()
