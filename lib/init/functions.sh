@@ -596,7 +596,7 @@ start_gui()
         
         # Check for gui interface
         wxpython)
-            "$GISBASE/etc/wxpython/scripts/wxgui"
+            "$GISBASE/etc/wxpython/wxgui.py"
             ;;
     
         # Ignore others
