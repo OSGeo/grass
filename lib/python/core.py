@@ -20,6 +20,7 @@ for details.
 
 @author Glynn Clements
 @author Martin Landa <landa.martin gmail.com>
+@author Michael Barton <michael.barton@asu.edu>
 """
 
 import os
@@ -754,3 +755,64 @@ def float_or_dms(s):
     @return float value
     """
     return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(':')))
+
+def command_info(cmd):
+    """!Returns 'help' information for any command as dictionary with entries
+    for description, keywords, usage, flags, and parameters"""
+    
+    cmdinfo = {}
+    s = start_command(cmd, 'help', stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    out, err = s.communicate()
+    
+    # Parameters
+    first, params = err.split('Parameters:')
+    paramlines = params.splitlines()
+    dict = {}
+    for line in paramlines:
+        line = line.strip()
+        if line == '': continue
+        param = line.split(' ',1)[0].strip()
+        pval = line.split(' ',1)[1].strip()
+        dict[param] = pval
+        
+    cmdinfo['parameters'] = dict
+    
+    # Flags
+    first, flags = first.split('Flags:')
+    flaglines = flags.splitlines()
+    dict = {}
+    for line in flaglines:
+        line = line.strip()
+        if line == '': continue
+        flag = line.split(' ',1)[0].strip()
+        fval = line.split(' ',1)[1].strip()
+        dict[flag] = fval
+        
+    cmdinfo['flags'] = dict
+    
+    # Usage
+    first, usage = first.split('Usage:')
+    usagelines = usage.splitlines()
+    list = []
+    for line in usagelines:
+        line = line.strip()+' '
+        if line == '': continue
+        list.append(line)
+        
+    cmdinfo['usage'] = ''.join(list).strip()
+    
+    # Keywords
+    first, keywords = first.split('Keywords:')
+    list = []
+    list = keywords.strip().split(',')
+    cmdinfo['keywords'] = list
+        
+    #Description
+    first, desc = first.split('Description:')
+    desclines = desc.splitlines()
+    for line in desclines:
+        line = line.strip()+' '
+        
+    cmdinfo['description'] = ''.join(desclines).strip()
+            
+    return cmdinfo
