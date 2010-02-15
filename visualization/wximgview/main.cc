@@ -40,7 +40,7 @@ extern "C" {
 
 #include "wximgview.h"
 
-#define HEADER_SIZE 54
+#define HEADER_SIZE 64
 
 IMPLEMENT_APP_NO_MAIN(MyApp)
 

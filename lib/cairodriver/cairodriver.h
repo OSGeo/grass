@@ -42,7 +42,7 @@
 
 #define DEFAULT_FILE_NAME "map.png"
 
-#define HEADER_SIZE 54
+#define HEADER_SIZE 64
 
 /* Scale for converting colors from [0..255] to cairo's [0.0..1.0] */
 #define COLORSCALE (1.0/255.0)

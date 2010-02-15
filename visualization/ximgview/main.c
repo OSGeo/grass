@@ -32,7 +32,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#define HEADER_SIZE 54
+#define HEADER_SIZE 64
 
 Display *dpy;
 int scrn;
