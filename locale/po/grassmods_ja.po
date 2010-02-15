@@ -2,12 +2,14 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005, 2010 GRASS Development Team
 #
-# Shinji Masumoto <masumoto@sci.osaka-cu.ac.jp>, 2004
-# Susumu Nonogaki <nonogaki@sci.osaka-cu.ac.jp>, 2008
+# Shinji Masumoto <masumoto@sci.osaka-cu.ac.jp>, 2004.
+# Susumu Nonogaki <nonogaki@sci.osaka-cu.ac.jp>, 2008.
 # Markus Neteler <neteler@itc.it>, 2004, 2005.
-# Naoki Ueda <nao@locapoint.com>, 2010
-# Akira Taniguchi <taniguti@apptec.co.jp>, 2010
-# Hirotoshi Toyoda <toyoda@ex.media.osaka-cu.ac.jp>, 2010
+# Naoki Ueda <nao@locapoint.com>, 2010.
+# Akira Taniguchi <taniguti@apptec.co.jp>, 2010.
+# Hirotoshi Toyoda <toyoda@ex.media.osaka-cu.ac.jp>, 2010.
+# Haruka Fujii <haruka.fujii@la.tezuka-gu.ac.jp>, 2010.
+# Yuka Tohhana <yuka.tohhana@la.tezuka-gu.ac.jp>, 2010.
 #
 msgid ""
 msgstr ""

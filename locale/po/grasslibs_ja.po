@@ -6,6 +6,7 @@
 # Markus Neteler <neteler@itc.it>, 2004, 2005.
 # Haruka Fujii <haruka.fujii@la.tezuka-gu.ac.jp>, 2010.
 # Yuka Tohhana <yuka.tohhana@la.tezuka-gu.ac.jp>, 2010.
+# Nao Ueda <nao@locapoint.com>, 2010.
 #
 msgid ""
 msgstr ""

@@ -6,6 +6,8 @@
 # Naoki Ueda <nao@locapoint.com>, 2010
 # Akira Taniguchi <taniguti@apptec.co.jp>, 2010
 # Hirotoshi Toyoda <toyoda@ex.media.osaka-cu.ac.jp>, 2010
+# Haruka Fujii <haruka.fujii@la.tezuka-gu.ac.jp>, 2010.
+# Yuka Tohhana <yuka.tohhana@la.tezuka-gu.ac.jp>, 2010.
 #
 msgid ""
 msgstr ""
