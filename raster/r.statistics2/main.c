@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
     module->description =
-	_("Calculates category or object oriented statistics.");
+	_("Calculates category or object oriented statistics (accumulator-based statistics).");
 
     opt.basemap = G_define_standard_option(G_OPT_R_BASE);
 
