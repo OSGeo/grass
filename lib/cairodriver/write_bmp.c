@@ -72,6 +72,7 @@ void cairo_write_bmp(void)
 	G_fatal_error(_("Cairo: unable to open output file <%s>"),
 		      ca.file_name);
 
+    memset(header, 0, sizeof(header));
     make_bmp_header(header);
     fwrite(header, sizeof(header), 1, output);
 

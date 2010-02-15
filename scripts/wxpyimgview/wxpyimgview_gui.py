@@ -107,11 +107,11 @@ class Application(wx.App):
     def __init__(self):
 	self.image = sys.argv[1]
 	self.fraction = int(sys.argv[2]) / 100.0
-	self.HEADER_SIZE = 54
+	self.HEADER_SIZE = 64
 	wx.App.__init__(self)
 
     def read_bmp_header(self, header):
-	magic, bmfh, bmih = struct.unpack("2s12s40s", header)
+	magic, bmfh, bmih = struct.unpack("2s12s40s10x", header)
 
 	if magic != 'BM':
 	    raise SyntaxError("Invalid magic number")

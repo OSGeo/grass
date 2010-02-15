@@ -9,7 +9,7 @@
 
 #define FILE_NAME  "map.png"
 
-#define HEADER_SIZE 54
+#define HEADER_SIZE 64
 
 struct png_state
 {

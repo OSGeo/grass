@@ -59,6 +59,7 @@ void write_bmp(void)
     if (!output)
 	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
 
+    memset(header, 0, sizeof(header));
     make_bmp_header(header);
     fwrite(header, sizeof(header), 1, output);
 
