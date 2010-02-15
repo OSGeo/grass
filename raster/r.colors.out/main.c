@@ -35,9 +35,9 @@ static void write_rule(DCELL *val, int r, int g, int b)
     v0 = *val, r0 = r, g0 = g, b0 = b;
 
     if (perc)
-	fprintf(fp, "%g%% %d %d %d\n", 100 * (*val - min) / (max - min), r, g, b);
+	fprintf(fp, "%g%% %d:%d:%d\n", 100 * (*val - min) / (max - min), r, g, b);
     else
-	fprintf(fp, "%g %d %d %d\n", *val, r, g, b);
+	fprintf(fp, "%g %d:%d:%d\n", *val, r, g, b);
 }
 
 int main(int argc, char **argv)
@@ -131,9 +131,9 @@ int main(int argc, char **argv)
     {
 	int r, g, b;
 	Rast_get_null_value_color(&r, &g, &b, &colors);
-	fprintf(fp, "nv %d %d %d\n", r, g, b);
+	fprintf(fp, "nv %d:%d:%d\n", r, g, b);
 	Rast_get_default_color(&r, &g, &b, &colors);
-	fprintf(fp, "default %d %d %d\n", r, g, b);
+	fprintf(fp, "default %d:%d:%d\n", r, g, b);
     }
 
 
