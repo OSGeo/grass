@@ -47,7 +47,7 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
 
     if (!I_find_group_elev_file(group)) {
 	G_warning(
-	    _("Unable to find elevation file for group [%s] in mapset [%s]"),
+	    _("Unable to find elevation file for group <%s> in mapset <%s>"),
 	      group, G_mapset());
 	return 0;
     }
@@ -58,7 +58,7 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
 
     if (!fd) {
 	G_warning(
-	    _("Unable to open elevation file for group [%s] in mapset [%s]"),
+	    _("Unable to open elevation file for group <%s> in mapset <%s>"),
 	      group, G_mapset());
 	G_sleep(3);
 
