@@ -5,6 +5,7 @@
 **********************************************************/
 #include "orthophoto.h"
 #include <grass/ortholib.h>
+#include <grass/glocale.h>
 
 /* Put the "camera" name into the group file "CAMERA" */
 int I_put_group_camera(char *group, char *camera)
@@ -33,12 +34,12 @@ int I_get_group_camera(char *group, char *camera)
     G_suppress_warnings(0);
     if (!fd) {
 	sprintf(buf,
-		"unable to open camera file for group [%s] in mapset [%s]",
+		_("Unable to open camera file for group [%s] in mapset [%s]"),
 		group, G_mapset());
 	G_warning(buf);
 	return 0;
     }
-    fgets(buf, sizeof buf, fd);
+    G_getl2(buf, sizeof(buf), fd);
     sscanf(buf, "%s", camera);
-    return (1);
+    return 1;
 }
