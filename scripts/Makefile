@@ -62,7 +62,8 @@ SUBDIRS = \
 	v.report \
 	v.out.gps \
 	v.what.vect \
-	v.krige
+	v.krige \
+	wxpyimgview
 
 #	d.vect.thematic \
 #	d.out.gpsdrive \
