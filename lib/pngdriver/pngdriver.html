@@ -33,7 +33,10 @@ of the PNG driver.
   <LI><B>GRASS_PNGFILE=filename</B><BR>
      the filename to put the resulting image in, default is <tt>map.png</tt>.
      If you set GRASS_PNGFILE to a filename which ends in ".ppm", a PPM 
-     file will be created.<br><br> 
+     file will be created. <!-- how about PGM? -->
+     If you set GRASS_PNGFILE to a filename which ends in ".bmp", a 32-bpp
+     BMP file will be created (these are not readable by some older viewers).
+     <br><br> 
   <LI><B>GRASS_BACKGROUNDCOLOR=RRGGBB</B><BR>
      specifies the background color to use in RGB
      notation (hex values). Default is <b>000000</b> (black).<br><br>
