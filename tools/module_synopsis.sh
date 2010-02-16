@@ -486,7 +486,7 @@ for PGM in pdflatex ; do
 done
 
 TMPDIR="`dirname "$TMP"`"
-cp "$OLDDIR/grasslogo_vector.pdf" "$TMPDIR"
+cp "$OLDDIR/../man/grasslogo_vector.pdf" "$TMPDIR"
 cd "$TMPDIR"
 
 #once working nicely make it quieter
