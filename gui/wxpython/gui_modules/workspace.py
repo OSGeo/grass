@@ -9,7 +9,7 @@ Classes:
  - WriteWorkspaceFile
  - ProcessGrcFile
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -177,7 +177,7 @@ class ProcessWorkspaceFile:
                 
             elif item.tag == 'layer':
                 cmd, selected, vdigit, nviz = self.__processLayer(item)
-
+                
                 self.layers.append( {
                         "type"     : item.get('type', None),
                         "name"     : item.get('name', None),
@@ -204,11 +204,12 @@ class ProcessWorkspaceFile:
         cmd.append(node_task.get('name', "unknown"))
         
         # flags
-        flags = ''
         for p in node_task.findall('flag'):
-            flags += p.get('name', '')
-        if flags:
-            cmd.append('-' + flags)
+            flag = p.get('name', '')
+            if len(flag) > 1:
+                cmd.append('--' + flag)
+            else:
+                cmd.append('-' + flag)
         
         # parameters
         for p in node_task.findall('parameter'):
@@ -659,7 +660,7 @@ class WriteWorkspaceFile(object):
         self.file =  file
         self.lmgr = lmgr
         self.indent = 0
-
+        
         # write header
         self.file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         self.file.write('<!DOCTYPE gxw SYSTEM "grass-gxw.dtd">\n')
@@ -725,7 +726,7 @@ class WriteWorkspaceFile(object):
             item = mapTree.GetFirstChild(mapTree.root)[0]
             self.__writeLayer(mapTree, item)
             file.write('%s</display>\n' % (' ' * self.indent))
-
+        
         self.indent =- 4
         file.write('%s</gxw>\n' % (' ' * self.indent))
 
@@ -784,12 +785,15 @@ class WriteWorkspaceFile(object):
                         for f in val:
                             self.file.write('%s<flag name="%s" />\n' %
                                             (' ' * self.indent, f))
+                    elif val in (True, False):
+                        self.file.write('%s<flag name="%s" />\n' %
+                                        (' ' * self.indent, key))
                     else: # parameter
                         self.file.write('%s<parameter name="%s">\n' %
-                                   (' ' * self.indent, key))
+                                        (' ' * self.indent, key))
                         self.indent += 4
                         self.file.write('%s<value>%s</value>\n' %
-                                   (' ' * self.indent, self.__filterValue(val)))
+                                        (' ' * self.indent, self.__filterValue(val)))
                         self.indent -= 4
                         self.file.write('%s</parameter>\n' % (' ' * self.indent));
                 self.indent -= 4
@@ -821,7 +825,7 @@ class WriteWorkspaceFile(object):
                 self.file.write('%s</layer>\n' % (' ' * self.indent))
             item = mapTree.GetNextSibling(item)
         self.indent -= 4
-
+        
     def __writeNvizSurface(self, data):
         """!Save Nviz raster layer properties to workspace
 
