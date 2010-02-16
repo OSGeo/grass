@@ -45,7 +45,13 @@ FILES = \
 	$(HTMLDIR)/variables.html \
 	$(HTMLDIR)/grass7.html \
 	$(HTMLDIR)/helptext.html \
-	$(HTMLDIR)/help_loc_struct.png
+	$(HTMLDIR)/help_loc_struct.png \
+	$(HTMLDIR)/circle_1.png \
+	$(HTMLDIR)/circle_2.png \
+	$(HTMLDIR)/circle_3.png \
+	$(HTMLDIR)/circle_4.png \
+	$(HTMLDIR)/circle_5.png \
+	$(HTMLDIR)/grass_start_small.jpg
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 	FILES += \
