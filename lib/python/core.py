@@ -764,55 +764,59 @@ def command_info(cmd):
     s = start_command(cmd, 'help', stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     out, err = s.communicate()
     
-    # Parameters
-    first, params = err.split('Parameters:')
-    paramlines = params.splitlines()
-    dict = {}
-    for line in paramlines:
+    sections = err.split('\n\n')
+
+    #Description
+    first, desc = sections[0].split(':\n', 1)
+    desclines = desc.splitlines()
+    for line in desclines:
+        line = line.strip()+' '
+    
+    # Keywords
+    first, keywords = sections[1].split(':\n', 1)
+    keylines = keywords.splitlines()
+    list = []
+    list = keywords.strip().split(',')
+    cmdinfo['keywords'] = list
+        
+    cmdinfo['description'] = ''.join(desclines).strip()
+
+    # Usage
+    first, usage = sections[2].split(':\n', 1)
+    usagelines = usage.splitlines()
+    list = []
+    for line in usagelines:        
         line = line.strip()
         if line == '': continue
-        param = line.split(' ',1)[0].strip()
-        pval = line.split(' ',1)[1].strip()
-        dict[param] = pval
+        line = line+' '
+        list.append(line)
         
-    cmdinfo['parameters'] = dict
-    
+    cmdinfo['usage'] = ''.join(list).strip()
+
     # Flags
-    first, flags = first.split('Flags:')
+    first, flags = sections[3].split(':\n', 1)
     flaglines = flags.splitlines()
     dict = {}
     for line in flaglines:
         line = line.strip()
         if line == '': continue
-        flag = line.split(' ',1)[0].strip()
-        fval = line.split(' ',1)[1].strip()
-        dict[flag] = fval
+        item = line.split(' ',1)[0].strip()
+        val = line.split(' ',1)[1].strip()
+        dict[item] = val
         
     cmdinfo['flags'] = dict
     
-    # Usage
-    first, usage = first.split('Usage:')
-    usagelines = usage.splitlines()
-    list = []
-    for line in usagelines:
-        line = line.strip()+' '
+    # Parameters
+    first, params = err.rsplit(':\n', 1)
+    paramlines = params.splitlines()
+    dict = {}
+    for line in paramlines:
+        line = line.strip()
         if line == '': continue
-        list.append(line)
-        
-    cmdinfo['usage'] = ''.join(list).strip()
-    
-    # Keywords
-    first, keywords = first.split('Keywords:')
-    list = []
-    list = keywords.strip().split(',')
-    cmdinfo['keywords'] = list
-        
-    #Description
-    first, desc = first.split('Description:')
-    desclines = desc.splitlines()
-    for line in desclines:
-        line = line.strip()+' '
-        
-    cmdinfo['description'] = ''.join(desclines).strip()
-            
+        item = line.split(' ',1)[0].strip()
+        val = line.split(' ',1)[1].strip()
+        dict[item] = val
+         
+    cmdinfo['parameters'] = dict
+                
     return cmdinfo
