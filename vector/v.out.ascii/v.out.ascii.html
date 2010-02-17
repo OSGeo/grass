@@ -27,6 +27,45 @@ contain a header listing any metadata for the input vector map, if
 such metadata exists. An example of the <b>standard</b> format is
 given below.
 
+<p>The header is similar as the head file of vector binary format but
+contains bounding box also. Key words are:
+
+<pre>
+ORGANIZATION
+DIGIT DATE
+DIGIT NAME
+MAP NAME
+MAP DATE
+MAP SCALE
+OTHER INFO
+ZONE
+WEST EDGE
+EAST EDGE
+SOUTH EDGE
+NORTH EDGE
+MAP THRESH
+</pre>
+
+<p>The body begins with the row:
+
+<pre>
+VERTI:
+</pre>
+
+followed by records of primitives:
+
+<pre>
+TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
+ X Y [Z]
+....
+ X Y [Z]
+[ LAYER CATEGORY]
+....
+[ LAYER CATEGORY]
+</pre>
+
+Everything above in <tt>[&nbsp;]</tt> is optional. 
+
 <p>
 The primitive codes are as follows:
 <ul>
@@ -40,22 +79,22 @@ The primitive codes are as follows:
 </ul>
 
 The coordinates are listed following the initial line containing the
-primitive code, the total number of vectors in the series, and the
-number of categories (1 for a single layer, higher for multiple
-layers). Below that 1 or several lines follow to indicate the layer
-number and the category number.
-
-<p> 
-The order of coordinates for new (standard) version of ASCII file is
+primitive code, the total number of vectors in the series, and (optionally)
+the number of categories (1 for a single layer, higher for multiple layers).
+Below that 1 or several lines follow to indicate the layer number and
+the category number (ID).
+<br>
+The order of coordinates is
 <div class="code"><pre>
-X Y [Z]
+  X Y [Z]
 </pre></div>
-the order of coordinates for old version of ASCII file is
+
+In pre-GRASS 6 versions of the ASCII file, the order of coordinates is:
 <div class="code"><pre>
 Y X
 </pre></div>
 
-If old version is requested, the <b>output</b> files from <em>v.out.ascii</em> will be placed 
+If old version is requested, the <b>output</b> files from <em>v.out.ascii</em> is placed 
 in the <tt>$LOCATION/$MAPSET/dig_ascii/</tt> and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
 
 <p>
@@ -136,11 +175,9 @@ v.out.ascii input=archsites format=point where="cat > 5 and cat <= 8" columns=st
 <em>
 <a href="v.category.html">v.category</a>,
 <a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="v.to.points.html">v.to.points</a></em>
-
-<br><br>
-<a HREF="http://freegis.org/cgi-bin/viewcvs.cgi/~checkout~/grass6/doc/vector/vector.html#ascii">Vector
-ASCII Format Specification</a>
+<a href="v.to.points.html">v.to.points</a><br>
+<a HREF="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHORS</h2>
 
