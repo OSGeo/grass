@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 {
     /* Variables' declarations */
     int nsplx_adj, nsply_adj;
-    int nsubregion_col, nsubregion_row, subzone = 0, nsubzones = 0;
+    int nsubregion_col, nsubregion_row, subregion = 0, nsubregions = 0;
     double N_extension, E_extension, orloE, orloN;
     int dim_vect, nparameters, BW, npoints;
     double lambda_B, lambda_F, grad_H, grad_L, alpha, mean;
@@ -297,10 +297,10 @@ int main(int argc, char *argv[])
     P_get_orlo(P_BICUBIC, &dims, passoE, passoN);
     P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
 
-    G_verbose_message("adjusted EW splines %d", nsplx_adj);
-    G_verbose_message("adjusted NS splines %d", nsply_adj);
+    G_verbose_message(_("adjusted EW splines %d"), nsplx_adj);
+    G_verbose_message(_("adjusted NS splines %d"), nsply_adj);
 
-    /* calculate number of subzones */
+    /* calculate number of subregions */
     orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
     orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
 
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
     if (nsubregion_row < 0)
 	nsubregion_row = 0;
 
-    nsubzones = nsubregion_row * nsubregion_col;
+    nsubregions = nsubregion_row * nsubregion_col;
 
     elaboration_reg.south = original_reg.north;
     last_row = FALSE;
@@ -351,9 +351,9 @@ int main(int argc, char *argv[])
 
 	while (last_column == FALSE) {	/* For each column */
 
-	    subzone++;
-	    if (nsubzones > 1)
-		G_message(_("subzone %d of %d"), subzone, nsubzones);
+	    subregion++;
+	    if (nsubregions > 1)
+		G_message(_("subregion %d of %d"), subregion, nsubregions);
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
@@ -459,7 +459,7 @@ int main(int argc, char *argv[])
 	    }			/* IF */
 	    else {
 		G_free(observ);
-		G_warning(_("No data within this subzone. "
+		G_warning(_("No data within this subregion. "
 			    "Consider changing the spline step."));
 	    }
 	}			/*! END WHILE; last_column = TRUE */

@@ -78,7 +78,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
@@ -93,7 +93,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(1) */
@@ -106,7 +106,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		}
@@ -123,7 +123,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(2) */
@@ -138,7 +138,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		    else if ((*point->y >= Overlap.S) && (*point->y <= Overlap.N)) {	/*(2) */
@@ -151,7 +151,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		}
@@ -166,7 +166,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
@@ -179,7 +179,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 			db_append_string(&sql, buf);
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
-			    G_fatal_error(_("Unable to write to table: %s"),
+			    G_fatal_error(_("Unable to access table <%s>"),
 					  buf);
 		    }
 		}
