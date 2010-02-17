@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     /* Variables' declarations */
     int row, nrows, col, ncols, MaxPoints;
     int nsubregion_col, nsubregion_row;
-    int subzone = 0, nsubzones = 0;
+    int subregion = 0, nsubregions = 0;
     int last_row, last_column;
     int nlines, nlines_first, line_num;
     int more;
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
     ew_resol = original_reg.ew_res;
     ns_resol = original_reg.ns_res;
 
-    /* calculate number of subzones */
+    /* calculate number of subregions */
     nsubregion_col = ceil((original_reg.east - original_reg.west) / (LATO * ew_resol)) + 0.5;
     nsubregion_row = ceil((original_reg.north - original_reg.south) / (LATO * ns_resol)) + 0.5;
 
@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     if (nsubregion_row < 0)
 	nsubregion_row = 0;
 
-    nsubzones = nsubregion_row * nsubregion_col;
+    nsubregions = nsubregion_row * nsubregion_col;
 
     /* Subdividing and working with tiles */
     elaboration_reg.south = original_reg.north;
@@ -246,9 +246,9 @@ int main(int argc, char *argv[])
 	while (last_column == FALSE) {	/* For each strip of LATO columns */
 	    struct bound_box elaboration_box;
 
-	    subzone++;
-	    if (nsubzones > 1)
-		G_message(_("subzone %d of %d"), subzone, nsubzones);
+	    subregion++;
+	    if (nsubregions > 1)
+		G_message(_("subregion %d of %d"), subregion, nsubregions);
 
 	    elaboration_reg.west = elaboration_reg.east;
 	    if (elaboration_reg.west < original_reg.west)	/* First column */
