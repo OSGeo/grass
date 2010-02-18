@@ -20,8 +20,9 @@
 
 #include "parser_local_proto.h"
 
-static void show_options(int, const char *);
-static int show(const char *, int );
+static void usage(FILE *fp, int markers);
+static void show_options(FILE *fp, int maxlen, const char *str);
+static int show(FILE *fp, const char *item, int len);
 
 /*!
  * \brief Command line help/usage message.
@@ -45,6 +46,16 @@ static int show(const char *, int );
  */
 void G_usage(void)
 {
+    usage(stderr, 0);
+}
+
+void G__usage_text(void)
+{
+    usage(stdout, 1);
+}
+
+static void usage(FILE *fp, int markers)
+{
     struct Option *opt;
     struct Flag *flag;
     char item[256];
@@ -61,21 +72,30 @@ void G_usage(void)
 	st->pgm_name = "??";
 
     if (st->module_info.label || st->module_info.description) {
-	fprintf(stderr, _("\nDescription:\n"));
+	fprintf(fp, "\n");
+	if (markers)
+	    fprintf(fp, "{{{DESCRIPTION}}}\n");
+	fprintf(fp, "%s\n", _("Description:"));
 	if (st->module_info.label)
-	    fprintf(stderr, " %s\n", st->module_info.label);
+	    fprintf(fp, " %s\n", st->module_info.label);
 	if (st->module_info.description)
-	    fprintf(stderr, " %s\n", st->module_info.description);
+	    fprintf(fp, " %s\n", st->module_info.description);
     }
     if (st->module_info.keywords) {
-	fprintf(stderr, _("\nKeywords:\n "));
-	G__print_keywords(stderr, NULL);
-	fprintf(stderr, "\n");
+	fprintf(fp, "\n");
+	if (markers)
+	    fprintf(fp, "{{{KEYWORDS}}}\n");
+	fprintf(fp, "%s\n ", _("Keywords:"));
+	G__print_keywords(fp, NULL);
+	fprintf(fp, "\n");
     }
 
-    fprintf(stderr, _("\nUsage:\n "));
+    fprintf(fp, "\n");
+    if (markers)
+	fprintf(fp, "{{{USAGE}}}\n");
+    fprintf(fp, "%s\n ", _("Usage:"));
 
-    len = show(st->pgm_name, 1);
+    len = show(fp, st->pgm_name, 1);
 
     /* Print flags */
 
@@ -88,7 +108,7 @@ void G_usage(void)
 	    item[n] = flag->key;
 	item[n++] = ']';
 	item[n] = 0;
-	len = show(item, len);
+	len = show(fp, item, len);
     }
 
     maxlen = 0;
@@ -120,42 +140,44 @@ void G_usage(void)
 	    if (!opt->required)
 		strcat(item, "]");
 
-	    len = show(item, len);
+	    len = show(fp, item, len);
 
 	    opt = opt->next_opt;
 	}
     }
     if (new_prompt) {
 	strcpy(item, " [--overwrite]");
-	len = show(item, len);
+	len = show(fp, item, len);
     }
 
     strcpy(item, " [--verbose]");
-    len = show(item, len);
+    len = show(fp, item, len);
 
     strcpy(item, " [--quiet]");
-    len = show(item, len);
+    len = show(fp, item, len);
 
-
-    fprintf(stderr, "\n");
+    fprintf(fp, "\n");
 
     /* Print help info for flags */
 
-    fprintf(stderr, _("\nFlags:\n"));
+    fprintf(fp, "\n");
+    if (markers)
+	fprintf(fp, "{{{FLAGS}}}\n");
+    fprintf(fp, "%s\n", _("Flags:"));
 
     if (st->n_flags) {
 	flag = &st->first_flag;
 	while (flag != NULL) {
-	    fprintf(stderr, "  -%c   ", flag->key);
+	    fprintf(fp, "  -%c   ", flag->key);
 
 	    if (flag->label) {
-		fprintf(stderr, "%s\n", flag->label);
+		fprintf(fp, "%s\n", flag->label);
 		if (flag->description)
-		    fprintf(stderr, "        %s\n", flag->description);
+		    fprintf(fp, "        %s\n", flag->description);
 
 	    }
 	    else if (flag->description) {
-		fprintf(stderr, "%s\n", flag->description);
+		fprintf(fp, "%s\n", flag->description);
 	    }
 
 	    flag = flag->next_flag;
@@ -163,39 +185,42 @@ void G_usage(void)
     }
 
     if (new_prompt)
-	fprintf(stderr, " --o   %s\n",
+	fprintf(fp, " --o   %s\n",
 		_("Allow output files to overwrite existing files"));
 
-    fprintf(stderr, " --v   %s\n", _("Verbose module output"));
-    fprintf(stderr, " --q   %s\n", _("Quiet module output"));
+    fprintf(fp, " --v   %s\n", _("Verbose module output"));
+    fprintf(fp, " --q   %s\n", _("Quiet module output"));
 
     /* Print help info for options */
 
     if (st->n_opts) {
-	fprintf(stderr, _("\nParameters:\n"));
+	fprintf(fp, "\n");
+	if (markers)
+	    fprintf(fp, "{{{PARAMETERS}}}\n");
+	fprintf(fp, "%s\n", _("Parameters:"));
 	opt = &st->first_option;
 	while (opt != NULL) {
-	    fprintf(stderr, "  %*s   ", maxlen, opt->key);
+	    fprintf(fp, "  %*s   ", maxlen, opt->key);
 
 	    if (opt->label) {
-		fprintf(stderr, "%s\n", opt->label);
+		fprintf(fp, "%s\n", opt->label);
 		if (opt->description) {
-		    fprintf(stderr, "  %*s    %s\n",
+		    fprintf(fp, "  %*s    %s\n",
 			    maxlen, " ", opt->description);
 		}
 	    }
 	    else if (opt->description) {
-		fprintf(stderr, "%s\n", opt->description);
+		fprintf(fp, "%s\n", opt->description);
 	    }
 
 	    if (opt->options)
-		show_options(maxlen, opt->options);
+		show_options(fp, maxlen, opt->options);
 	    /*
-	       fprintf (stderr, "  %*s   options: %s\n", maxlen, " ",
+	       fprintf (fp, "  %*s   options: %s\n", maxlen, " ",
 	       _(opt->options)) ;
 	     */
 	    if (opt->def)
-		fprintf(stderr, _("  %*s   default: %s\n"), maxlen, " ",
+		fprintf(fp, _("  %*s   default: %s\n"), maxlen, " ",
 			opt->def);
 
 	    if (opt->descs) {
@@ -203,7 +228,7 @@ void G_usage(void)
 
 		while (opt->opts[i]) {
 		    if (opt->descs[i])
-			fprintf(stderr, "  %*s    %s: %s\n",
+			fprintf(fp, "  %*s    %s: %s\n",
 				maxlen, " ", opt->opts[i], opt->descs[i]);
 
 		    i++;
@@ -215,13 +240,13 @@ void G_usage(void)
     }
 }
 
-static void show_options(int maxlen, const char *str)
+static void show_options(FILE *fp, int maxlen, const char *str)
 {
     char *buff = G_store(str);
     char *p1, *p2;
     int totlen, len;
 
-    fprintf(stderr, _("  %*s   options: "), maxlen, " ");
+    fprintf(fp, _("  %*s   options: "), maxlen, " ");
     totlen = maxlen + 13;
     p1 = buff;
     while ((p2 = strchr(p1, ','))) {
@@ -229,30 +254,30 @@ static void show_options(int maxlen, const char *str)
 	len = strlen(p1) + 1;
 	if ((len + totlen) > 76) {
 	    totlen = maxlen + 13;
-	    fprintf(stderr, "\n %*s", maxlen + 13, " ");
+	    fprintf(fp, "\n %*s", maxlen + 13, " ");
 	}
-	fprintf(stderr, "%s,", p1);
+	fprintf(fp, "%s,", p1);
 	totlen += len;
 	p1 = p2 + 1;
     }
     len = strlen(p1);
     if ((len + totlen) > 76)
-	fprintf(stderr, "\n %*s", maxlen + 13, " ");
-    fprintf(stderr, "%s\n", p1);
+	fprintf(fp, "\n %*s", maxlen + 13, " ");
+    fprintf(fp, "%s\n", p1);
 
     G_free(buff);
 }
 
-static int show(const char *item, int len)
+static int show(FILE *fp, const char *item, int len)
 {
     int n;
 
     n = strlen(item) + (len > 0);
     if (n + len > 76) {
 	if (len)
-	    fprintf(stderr, "\n  ");
+	    fprintf(fp, "\n  ");
 	len = 0;
     }
-    fprintf(stderr, "%s", item);
+    fprintf(fp, "%s", item);
     return n + len;
 }
