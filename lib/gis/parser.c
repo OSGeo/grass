@@ -435,6 +435,13 @@ int G_parser(int argc, char **argv)
 	    exit(EXIT_SUCCESS);
 	}
 
+	/* If first arg is "--help-text" give a usage/syntax message
+	 * with machine-readable sentinels */
+	if (strcmp(argv[1], "--help-text") == 0) {
+	    G__usage_text();
+	    exit(EXIT_SUCCESS);
+	}
+
 	/* If first arg is "--interface-description" then print out
 	 * a xml description of the task */
 	if (strcmp(argv[1], "--interface-description") == 0) {
