@@ -1328,6 +1328,9 @@ if __name__ == "__main__":
     Usage: display=Render()
     """
 
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+
     print "Initializing..."
     os.system("g.region -d")
 
