@@ -750,7 +750,7 @@ class GMFrame(wx.Frame):
             busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
                                parent=self)
             wx.Yield()
-
+            
             for layerName in dialog.GetMapLayers():
                 if dialog.GetLayerType() == 'raster':
                     cmd = ['d.rast', 'map=%s' % layerName]
@@ -758,7 +758,7 @@ class GMFrame(wx.Frame):
                     cmd = ['d.vect', 'map=%s' % layerName]
                 newItem = maptree.AddLayer(ltype=dialog.GetLayerType(),
                                            lname=layerName,
-                                           lchecked=True,
+                                           lchecked=False,
                                            lopacity=1.0,
                                            lcmd=cmd,
                                            lgroup=None)
