@@ -27302,7 +27302,7 @@ msgstr "Subset"
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:15
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:9
 msgid "WHERE conditions of SQL statement without 'where' keyword"
-msgstr "WHERE Bedingungen des SQL-Ausdrucksohne das Schlüsselwort 'where'."
+msgstr "WHERE Bedingungen des SQL-Ausdrucks ohne das Schlüsselwort 'where'."
 
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:16
 msgid "Example: income < 1000 and inhab >= 10000"
