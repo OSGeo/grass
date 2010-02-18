@@ -6,14 +6,13 @@
 # Markus Neteler <neteler@itc.it>, 2004, 2005.
 # Haruka Fujii <haruka.fujii@la.tezuka-gu.ac.jp>, 2010.
 # Yuka Tohhana <yuka.tohhana@la.tezuka-gu.ac.jp>, 2010.
-# Nao Ueda <nao@locapoint.com>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-06 20:42+0100\n"
-"PO-Revision-Date: 2010-02-15 17:54+0900\n"
+"PO-Revision-Date: 2010-02-15 14:06+0900\n"
 "Last-Translator: ueda <nao@locapoint.com>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -4201,19 +4200,19 @@ msgstr "���"
 
 #: ../lib/g3d/g3dparam.c:52
 msgid "Data type used in the output file"
-msgstr "出力ファイルで使用されたデータタイプ"
+msgstr "出力ファイルに使用されるデータタイプ"
 
 #: ../lib/g3d/g3dparam.c:61
 msgid "Precision used in the output file (default, max, or 0 to 52)"
-msgstr "出力ファイルで使用された精度 (デフォルト値, 最大値, または 0 から 52)"
+msgstr "出力ファイルに使用される精度 (デフォルト値, 最大値, または 0 から 52)"
 
 #: ../lib/g3d/g3dparam.c:71
 msgid "The compression method used in the output file"
-msgstr "出力ファイルで使用された圧縮法"
+msgstr "出力ファイルに使用される圧縮法"
 
 #: ../lib/g3d/g3dparam.c:81
 msgid "The dimensions of the tiles used in the output file"
-msgstr "出力ファイルで使用されたタイルのディメンション"
+msgstr "出力ファイルに使用されるタイルのディメンション"
 
 #: ../lib/g3d/g3dparam.c:116
 msgid "G3d_getStandard3dParams: precision value invalid"

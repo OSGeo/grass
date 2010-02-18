@@ -6,15 +6,13 @@
 # Naoki Ueda <nao@locapoint.com>, 2010
 # Akira Taniguchi <taniguti@apptec.co.jp>, 2010
 # Hirotoshi Toyoda <toyoda@ex.media.osaka-cu.ac.jp>, 2010
-# Haruka Fujii <haruka.fujii@la.tezuka-gu.ac.jp>, 2010.
-# Yuka Tohhana <yuka.tohhana@la.tezuka-gu.ac.jp>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-06 20:42+0100\n"
-"PO-Revision-Date: 2010-02-15 17:54+0900\n"
+"PO-Revision-Date: 2010-02-15 14:06+0900\n"
 "Last-Translator: ueda <nao@locapoint.com>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -4260,7 +4258,7 @@ msgstr "コピー"
 #: ../gui/wxpython/gui_modules/menuform.py:811
 #: ../gui/wxpython/gui_modules/preferences.py:1183
 msgid "Close dialog on finish"
-msgstr "終了のためダイアログを閉じる"
+msgstr "終了時にダイアログを閉じる"
 
 #: ../gui/wxpython/gui_modules/menuform.py:954
 #, python-format
@@ -4798,8 +4796,8 @@ msgid ""
 "Check mapset to make it accessible, uncheck it to hide it.%sNote: PERMANENT "
 "and current mapset are always accessible."
 msgstr ""
-"アクセスするマップセットをチャックアクセスしない場合はチェックをはずす%s 備"
-"考: PERMANENT と 現在のマップセットは常にアクセスできます "
+"アクセスするマップセットをチェック（アクセスしない場合はチェックをはずす）%s "
+"備考: PERMANENT と 現在のマップセットは常にアクセスできます "
 
 #: ../gui/wxpython/gui_modules/preferences.py:2091
 msgid "Mapset"
@@ -5575,7 +5573,7 @@ msgstr "コピー."
 #~ msgstr "GRIDATB.FOR インポート "
 
 #~ msgid "Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map"
-#~ msgstr "バイナリーファイルをラスターマップとしてインポートします "
+#~ msgstr "GRIDATB.FORファイル (TOPMODEL) をインポートします "
 
 #~ msgid "Imports a binary MAT-File(v4) to a GRASS raster."
 #~ msgstr "MAT-File(v4) をラスターマップとしてインポート "
@@ -5783,7 +5781,7 @@ msgstr "コピー."
 #~ msgstr "POV-Rayのエクスポート "
 
 #~ msgid "Converts a raster map layer into a height-field file for POVRAY."
-#~ msgstr "POV-Rayのハイト・フィールドにラスターマップを変換"
+#~ msgstr "POV-Rayの標高フィールドにラスターマップを変換"
 
 #~ msgid "TIFF export"
 #~ msgstr "TIFFのエクスポート "
@@ -7733,7 +7731,7 @@ msgstr "コピー."
 #~ msgstr "コマンド実行エラー %s"
 
 #~ msgid "E&xit"
-#~ msgstr "終了(E&) "
+#~ msgstr "終了(&x) "
 
 #~ msgid "Projection for current location"
 #~ msgstr "現在のロケーションの投影法 "
@@ -8051,7 +8049,7 @@ msgstr "コピー."
 #~ msgstr "コマンドを実行せずに画面を閉じる"
 
 #~ msgid "Show manual page of the command"
-#~ msgstr "コマンドのマニュアルを見てください "
+#~ msgstr "コマンドマニュアルを表示"
 
 #~ msgid "&Stop"
 #~ msgstr "ストップ(&S)"
