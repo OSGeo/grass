@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-06 20:42+0100\n"
-"PO-Revision-Date: 2010-02-12 08:45+0100\n"
+"PO-Revision-Date: 2010-02-18 14:33+0100\n"
 "Last-Translator: Markus Neteler <neteler osgeo.org>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -685,7 +685,7 @@ msgstr "Eingabe-Formatfehler"
 
 #: ../lib/raster/color_rules.c:114
 msgid "R/G/B not in range 0-255"
-msgstr ""
+msgstr "R/G/B nicht im Bereich 0-255"
 
 #: ../lib/raster/color_rules.c:116
 msgid "invalid color name"
@@ -693,7 +693,7 @@ msgstr "ungültiger Farbname"
 
 #: ../lib/raster/color_rules.c:118
 msgid "percentage not in range 0-100"
-msgstr ""
+msgstr "Prozent nicht im Bereich 0-100"
 
 #: ../lib/raster/color_rules.c:120
 msgid "invalid value"
@@ -721,9 +721,8 @@ msgid ""
 msgstr "Raster Karte Raster Karte"
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy
 msgid "which is missing."
-msgstr "welche fehlt"
+msgstr "welches fehlt."
 
 #: ../lib/raster/get_cellhd.c:71
 #, fuzzy
@@ -1008,9 +1007,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/proj/get_proj.c:148
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid zone %s specified"
-msgstr "ungültiger Ellipsoid %s in Datei."
+msgstr "Ungültige Zone %s angegeben"
 
 #: ../lib/proj/get_proj.c:228
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
@@ -1019,35 +1018,32 @@ msgstr ""
 #: ../lib/proj/get_proj.c:236
 #, c-format
 msgid "The error message: %s"
-msgstr ""
+msgstr "Die Fehlermeldung: %s"
 
 #: ../lib/proj/get_proj.c:294
 msgid "Option input overflowed option table"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:325
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr "Kann Datei %s in %s nicht öffnen"
+msgstr "Kann pj nicht initialisieren: %s"
 
 #: ../lib/proj/get_proj.c:401
-#, fuzzy
 msgid "Input Projection Parameters"
-msgstr "Parameter"
+msgstr "Eingabeparameter der Projektion"
 
 #: ../lib/proj/get_proj.c:404
 msgid "Input Unit Factor"
-msgstr ""
+msgstr "Einheitenfaktor der Eingabe"
 
 #: ../lib/proj/get_proj.c:414
-#, fuzzy
 msgid "Output Projection Parameters"
-msgstr "Ergebnis Parameter"
+msgstr "Ausgabeparameter der Projektion"
 
 #: ../lib/proj/get_proj.c:417
-#, fuzzy
 msgid "Output Unit Factor"
-msgstr "Ergebnis"
+msgstr "Einheitfaktor der Ausgabe"
 
 #: ../lib/proj/datum.c:270 ../lib/proj/datum.c:350
 #, fuzzy, c-format
@@ -1145,9 +1141,9 @@ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
 msgstr ""
 
 #: ../lib/gis/find_file.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Using <%s@%s>"
-msgstr "Kann [%s] nicht finden."
+msgstr "Benutze <%s@%s>"
 
 #: ../lib/gis/view.c:176
 #, c-format
@@ -1544,7 +1540,7 @@ msgstr "Kann die History-Datei für die Vektorkarte <%s> nicht öffnen."
 
 #: ../lib/gis/parser_standard_options.c:90
 msgid "WHERE conditions of SQL statement without 'where' keyword"
-msgstr "WHERE Bedingungen des SQL-Ausdrucksohne das Schlüsselwort 'where'."
+msgstr "WHERE Bedingungen des SQL-Ausdrucks ohne das Schlüsselwort 'where'."
 
 #: ../lib/gis/parser_standard_options.c:91
 msgid "Example: income < 1000 and inhab >= 10000"
@@ -1754,15 +1750,15 @@ msgstr "unbekannt"
 
 #: ../lib/gis/parser_html.c:40
 msgid "NAME"
-msgstr ""
+msgstr "NAME"
 
 #: ../lib/gis/parser_html.c:53
 msgid "KEYWORDS"
-msgstr ""
+msgstr "SCHLÜSSELWÖRTER"
 
 #: ../lib/gis/parser_html.c:58
 msgid "SYNOPSIS"
-msgstr ""
+msgstr "SYNOPSIS"
 
 #: ../lib/gis/parser_html.c:126
 msgid "Flags"
@@ -2544,9 +2540,8 @@ msgid "Unable to select record from table <%s> (key %s, where %s)"
 msgstr "Kann Header-Datei für [%s in %s] nicht erstellen."
 
 #: ../lib/vector/Vlib/geos.c:53 ../lib/vector/Vlib/read.c:105
-#, fuzzy
 msgid "vector map is not opened"
-msgstr "Vektor Karte"
+msgstr "Vektorkarte ist nicht geöffnet"
 
 #: ../lib/vector/Vlib/geos.c:56
 #, fuzzy, c-format
@@ -2644,9 +2639,8 @@ msgid "Building topology for vector map <%s>..."
 msgstr "Erstelle Topologie für die Vektorkarte <%s>..."
 
 #: ../lib/vector/Vlib/build.c:147
-#, fuzzy
 msgid "Topology was built"
-msgstr "Die Topologie wurde erstellt\n"
+msgstr "Die Topologie wurde erstellt"
 
 #: ../lib/vector/Vlib/build.c:159
 #, c-format
@@ -2930,9 +2924,8 @@ msgid "Request to find area outside nonexistent isle"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:523
-#, fuzzy
 msgid "Registering primitives..."
-msgstr "Registriere Linien..."
+msgstr "Registriere Primitive..."
 
 #: ../lib/vector/Vlib/build_nat.c:532
 msgid "Unable to read vector map"
@@ -3247,7 +3240,7 @@ msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
 #: ../lib/vector/Vlib/write.c:145 ../lib/vector/Vlib/write.c:179
 #, c-format
 msgid "%s: Area %d does not exist"
-msgstr ""
+msgstr "%s: Fläche %d existiert nicht"
 
 #: ../lib/vector/Vlib/write.c:226
 #, fuzzy
@@ -5791,9 +5784,8 @@ msgstr ""
 #~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
 #~ msgstr "Raster Karte."
 
-#, fuzzy
 #~ msgid " Invalid format."
-#~ msgstr "Ungültiges Format\n"
+#~ msgstr " Ungültiges Format."
 
 #, fuzzy
 #~ msgid "Unable to spawn the 'wish' program"
@@ -5839,7 +5831,7 @@ msgstr ""
 #~ msgstr "Socket wird bereits benutzt oder akzeptiert keine Verbindungen."
 
 #~ msgid "Use d.mon to select a monitor"
-#~ msgstr "Bitte verwenden Sie \"d.mon\", um ein Grafikfenster auszuwählen."
+#~ msgstr "Bitte verwenden Sie d.mon, um ein Grafikfenster auszuwählen"
 
 #~ msgid "Trying to connect to something not a socket."
 #~ msgstr ""
@@ -6117,7 +6109,7 @@ msgstr ""
 #~ msgstr "Kann Datei %s nicht öffnen."
 
 #~ msgid "Unable to allocate memory\n"
-#~ msgstr "Kann keinen Speicher belegen.\n"
+#~ msgstr "Kann keinen Speicher belegen\n"
 
 #~ msgid "Unable to open temporary file"
 #~ msgstr "Kann temporäre Datei nicht öffnen."
@@ -6351,3 +6343,15 @@ msgstr ""
 
 #~ msgid "Table has no columns"
 #~ msgstr "Tabelle hat keine Spalten"
+
+#~ msgid "Allow overwrite"
+#~ msgstr "Erlaube Überschreiben"
+
+#~ msgid "Run with minimal output messages"
+#~ msgstr "Lasse mit minimalen Ausgabemeldungen laufen"
+
+#~ msgid "not implemented"
+#~ msgstr "nicht implementiert"
+
+#~ msgid "OGR format cannot be updated"
+#~ msgstr "OGR Format kann nicht aktualisiert werden"
