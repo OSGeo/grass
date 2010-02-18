@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     angle_opt->required = NO;
     angle_opt->answer = "0";
     angle_opt->multiple = NO;
-    angle_opt->description = _("Angle of major axis in degrees");
+    angle_opt->description = _("Angle of major axis in degrees"); /* CW or CCW? does this even work?? */
 
     side_opt = G_define_option();
     side_opt->key = "side";
