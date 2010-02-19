@@ -13,6 +13,17 @@
 <h2>NAME</h2>
 <em><b>g.parser</b></em>
 
+<h2>SYNOPSIS</h2>
+<b>g.parser help</b><br>
+<b>g.parser</b> [-<b>s</b>] [-<b>t</b>] <em>filename</em> [<em>argument</em>,...]
+
+<h3>Flags:</h3>
+<DL>
+<DT><b>-t</b></DT>
+<DD>Print strings for translation</DD>
+<DT><b>-s</b></DT>
+<DD>Write option values to stdout instead of reinvoking script</DD>
+</DL>
 
 <h2>DESCRIPTION</h2>
 
@@ -24,16 +35,27 @@ script can very quickly be made into a full-fledged GRASS module.
 
 <h2>OPTIONS</h2>
 
-After parsing the arguments are stored in environment variables for
-use in your scripts. These variables are named "GIS_FLAG_&lt;NAME&gt;"
-for flags and "GIS_OPT_&lt;NAME&gt;" for options. The names of
-variables are converted to upper case. For example if an option with
-key <b>input</b> was defined in the script header, the value will be
-available in variable <b>GIS_OPT_INPUT</b> and the value of flag with
-key <b>f</b> will be available in variable <b>GIS_FLAG_F</b>.
+Unless the <b>-s</b> switch is used, the arguments are stored in
+environment variables for use in your scripts. These variables are
+named "GIS_FLAG_&lt;NAME&gt;" for flags and "GIS_OPT_&lt;NAME&gt;" for
+options. The names of variables are converted to upper case. For
+example if an option with key <b>input</b> was defined in the script
+header, the value will be available in variable <b>GIS_OPT_INPUT</b>
+and the value of flag with key <b>f</b> will be available in variable
+<b>GIS_FLAG_F</b>.
 
 <p>
 For flags, the value will be "1" if the flag was given, and "0" otherwise.
+
+<p>
+If the <b>-s</b> switch is used, the options and flags are written to
+stdout in the form <em>opt_&lt;name&gt;=&lt;value&gt;</em> and
+<em>flag_&lt;name&gt;=&lt;value&gt;</em>, preceded by the string
+<b>@ARGS_PARSED@</b>. If this string doesn't appear as the first line
+of stdout, it indicates that the script was invoked with a switch such
+as <b>--html-description</b>. In this case, the data written by
+<em>g.parser</em> to stdout should be copied to the script's stdout
+verbatim.
 
 <p>
 Typical header definitions are as follows:
@@ -254,19 +276,23 @@ import sys
 import grass.script as grass
 
 def main():
+    flag_f = flags['f']
+    option1 = options['option1']
+    raster = options['raster']
+    vector = options['vector']
     #### add your code here ####
 
-    if flags['f']:
+    if flag_f:
         print "Flag -f set"
     else:
         print "Flag -f not set"
 
     # test if parameter present:
-    if options['option1']:
-        print "Value of GIS_OPT_OPTION1: '%s'" % options['option1']
+    if option1:
+        print "Value of option1= option: '%s'" % option1
 
-    print "Value of GIS_OPT_RASTER: '%s'" % options['raster']
-    print "Value of GIS_OPT_VECTOR: '%s'" % options['vector']
+    print "Value of raster= option: '%s'" % raster
+    print "Value of vector= option: '%s'" % vector
 
     #### end of your code ####
 
@@ -274,7 +300,7 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    sys.exit(main())
+    main()
 </pre></div>
 
 The <tt>test.py</tt> script will provide following help text:
