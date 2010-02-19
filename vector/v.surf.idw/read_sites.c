@@ -24,6 +24,7 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
     struct line_pnts *Points;
     struct line_cats *Cats;
 
+    Vect_set_open_level(1);	/* without topology */
     Vect_open_old2(&Map, name, "", field_name);
     field = Vect_get_field_number(&Map, field_name);
     
