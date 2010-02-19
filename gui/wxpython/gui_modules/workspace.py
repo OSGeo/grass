@@ -155,12 +155,11 @@ class ProcessWorkspaceFile:
             # process all layers/groups in the display
             self.__processLayers(display)
 
-    def __processLayers(self, node):
+    def __processLayers(self, node, inGroup = False):
         """!Process layers/groups of selected display
-
-        @todo Fix group flag
         
         @param node display tree node
+        @param inGroup True when group is defined
         """
         for item in node.getchildren():
             if item.tag == 'group':
@@ -171,9 +170,12 @@ class ProcessWorkspaceFile:
                         "checked" : bool(int(item.get('checked', "0"))),
                         "opacity" : None,
                         "cmd"     : None,
-                        "group"   : False, #### self.inTag['group'], # ???
+                        "group"   : inGroup,
                         "display" : self.displayIndex,
+                        "vdigit"  : None,
                         "nviz"    : None})
+                
+                self.__processLayers(item, inGroup = True) # process items in group
                 
             elif item.tag == 'layer':
                 cmd, selected, vdigit, nviz = self.__processLayer(item)
@@ -184,7 +186,7 @@ class ProcessWorkspaceFile:
                         "checked"  : bool(int(item.get('checked', "0"))),
                         "opacity"  : float(item.get('opacity', '1.0')),
                         "cmd"      : cmd,
-                        "group"    : False, #### self.inTag['group'], # ???
+                        "group"    : inGroup,
                         "display"  : self.displayIndex,
                         "selected" : selected,
                         "vdigit"   : vdigit,
