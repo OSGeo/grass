@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *passoE_opt,
 	*passoN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt;
-    struct Flag *cross_corr_flag, *spline_step_flag, *z_flag;
+    struct Flag *cross_corr_flag, *spline_step_flag;
 
     struct Reg_dimens dims;
     struct Cell_head elaboration_reg, original_reg;
@@ -96,11 +96,6 @@ int main(int argc, char *argv[])
     spline_step_flag->label = _("Estimate point density and distance");
     spline_step_flag->description =
 	_("Estimate point density and distance for the input vector points within the current region extends and quit");
-
-    z_flag = G_define_flag();
-    z_flag->key = 'z';
-    z_flag->label = _("Use z coordinates of 3D vector");
-    z_flag->guisection = _("Settings");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -153,7 +148,10 @@ int main(int argc, char *argv[])
     lambda_f_opt->guisection = _("Settings");
 
     dfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    dfield_opt->answer = "-1";
+    dfield_opt->description =
+	_("If set to 0, z coordinates are used. (3D vector only)");
+    dfield_opt->answer = "0";
+    dfield_opt->gisprompt = "old_layer,layer,layer_zero";
     dfield_opt->guisection = _("Settings");
 
     col_opt = G_define_option();
@@ -161,7 +159,7 @@ int main(int argc, char *argv[])
     col_opt->type = TYPE_STRING;
     col_opt->required = NO;
     col_opt->description =
-	_("Attribute table column with numeric values to interpolate");
+	_("Attribute table column with values to interpolate (if layer>0)");
     col_opt->guisection = _("Settings");
 
     /*----------------------------------------------------------------*/
@@ -229,16 +227,12 @@ int main(int argc, char *argv[])
     bspline_field = Vect_get_field_number(&In, dfield_opt->answer);
     bspline_column = col_opt->answer;
 
-    /* check availability of z values */
-    if (z_flag->answer && !Vect_is_3d(&In)) {
-	G_fatal_error(_("Input vector is not 3D, please specify layer and column to be used as z values"));
-    }
-    else if (!z_flag->answer) {
-	if (bspline_field <= 0 || bspline_column == NULL)
-	    G_fatal_error(_("Need both vector layer and column for attributes as z values"));
-    }
-    if (z_flag->answer)
-	bspline_field = -1;
+    /* check availability of z values
+     * column option overrrides 3D z coordinates */
+    if (!Vect_is_3d(&In) && (bspline_field <= 0 || bspline_column == NULL))
+	G_fatal_error(_("Need either 3D vector or layer and column with z values"));
+    if (bspline_field > 0 && bspline_column == NULL)
+	G_fatal_error(_("Layer but not column with z values given"));
 
     /* Estimate point density and mean distance for current region */
     if (spline_step_flag->answer) {
