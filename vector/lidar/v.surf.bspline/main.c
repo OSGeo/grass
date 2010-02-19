@@ -4,6 +4,7 @@
  * MODULE:       v.surf.bspline
  *
  * AUTHOR(S):    Roberto Antolin & Gonzalo Moreno
+ *               update for grass7 by Markus Metz
  *
  * PURPOSE:      Spline Interpolation
  *
@@ -156,12 +157,11 @@ int main(int argc, char *argv[])
     dfield_opt->answer = "1";
     dfield_opt->guisection = _("Settings");
 
-    col_opt = G_define_option();
+    col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->key = "column";
-    col_opt->type = TYPE_STRING;
     col_opt->required = NO;
     col_opt->description =
-	_("Attribute table column with values to interpolate (if layer>0)");
+	_("Name of attribute column with values to approximate");
     col_opt->guisection = _("Settings");
 
     /*----------------------------------------------------------------*/
