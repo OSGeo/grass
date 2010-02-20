@@ -453,7 +453,7 @@ class ProfileFrame(wx.Frame):
                 return dataset
             
             for line in ret.splitlines():
-                dist, elev = line.split(' ')
+                dist, elev = line.strip().split(' ')
                 if elev != 'nan':
                     datalist.append((dist,elev))
 
