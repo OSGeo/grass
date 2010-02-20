@@ -208,7 +208,7 @@ int main(int argc, char **argv)
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
     gprint_bounds->description =
-	_("Print bounds and exit (shell style)");
+	_("Print input map's bounds in the current projection and exit (shell style)");
 
 
     /* The parser checks if the map already exists in current mapset,
