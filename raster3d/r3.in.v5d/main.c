@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("voxel"));
     module->description =
-	"  import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)";
+	_("Import 3-dimensional Vis5D files.");
 
     setParams();
     G3d_setStandard3dInputParams();

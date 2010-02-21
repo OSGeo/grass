@@ -21,7 +21,7 @@
 #   gdal compiled with HDF4 support
 
 #%Module
-#%  description: Georeference, rectify, and import Terra-ASTER imagery and relative DEM's using gdalwarp.
+#%  description: Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp.
 #%  keywords: raster
 #%  keywords: imagery
 #%  keywords: import

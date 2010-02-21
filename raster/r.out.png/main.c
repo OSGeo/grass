@@ -126,8 +126,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("export"));
     module->description =
-	"Export GRASS raster as non-georeferenced PNG image format.";
+	_("Export a GRASS raster map as non-georeferenced PNG image format.");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

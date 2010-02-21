@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("external"));
     G_add_keyword(_("ogr"));
     
-    module->description = _("Creates a new vector map as a link to OGR layer.");
+    module->description = _("Creates a new pseudo-vector map as a link to an OGR-supported layer.");
     
     parse_args(argc, argv,
 	       &options, &flags);

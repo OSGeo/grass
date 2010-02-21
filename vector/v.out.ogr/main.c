@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
     G_add_keyword(_("ogr"));
-
+    
     module->description =
-	_("Converts vector map to one of the supported OGR vector formats.");
+	_("Converts a vector map to any of the supported OGR vector formats.");
     
     /* parse & read options */
     parse_args(argc, argv,

@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
     module->description =
-	_("Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y.");
+	_("Converts GRASS x,y,z points to POV-Ray x,z,y format.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 

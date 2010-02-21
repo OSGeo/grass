@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
-    module->description = _("Convert OGR vector layers to GRASS vector map.");
+    module->description = _("Converts vector layers into a GRASS vector map using OGR.");
 
     dsn_opt = G_define_option();
     dsn_opt->key = "dsn";

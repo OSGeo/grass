@@ -52,9 +52,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("export"));
-    module->description =
-	_("Converts a GRASS raster map to a PPM image file "
-	  "at the pixel resolution of the currently defined region.");
+    module->description = _("Converts a GRASS raster map to a PPM image file.");
+
 
     rast = G_define_standard_option(G_OPT_R_INPUT);
 

@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
     module->description =
-	_("Creates a vector map from ASCII points file or ASCII vector file.");
+	_("Creates a vector map from an ASCII points file or ASCII vector file.");
 
     /************************** Command Parser ************************************/
     old = G_define_standard_option(G_OPT_F_INPUT);

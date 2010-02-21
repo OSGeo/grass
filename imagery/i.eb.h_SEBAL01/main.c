@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description = _("Computes sensible Heat Flux iteration SEBAL 01");
+    module->description = _("Computes sensible heat flux iteration SEBAL 01.");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evaporative fraction"));
     G_add_keyword(_("soil moisture"));

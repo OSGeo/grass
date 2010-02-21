@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     module->description =
-	_("Converts a raster map layer into a height-field file for POVRAY.");
+	_("Converts a raster map layer into a height-field file for POV-Ray.");
 
     /* Define the different options */
     parm.map = G_define_standard_option(G_OPT_R_INPUT);

@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword(_("conversion"));
     module->description =
-	_("Converts ASCII raster file to binary raster map layer.");
+	_("Converts a GRASS ASCII raster file to binary raster map.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
     parm.input->description =

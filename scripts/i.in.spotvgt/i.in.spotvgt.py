@@ -30,7 +30,7 @@
 #############################################################################
 
 #%Module
-#%  description: Import of SPOT VGT NDVI file into a raster map
+#%  description: Imports of SPOT VGT NDVI file into a raster map.
 #%  keywords: raster
 #%  keywords: imagery
 #%  keywords: import

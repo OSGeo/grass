@@ -9,7 +9,7 @@
  * PURPOSE:      Imports many GIS/image formats into GRASS utilizing the GDAL
  *               library.
  *
- * COPYRIGHT:    (C) 2001 by Frank Warmerdam
+ * COPYRIGHT:    (C) 2001-2010 by Frank Warmerdam
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     module->description =
-	_("Import GDAL supported raster file into a binary raster map layer.");
+	_("Import raster data into a GRASS map layer using GDAL.");
 
     /* -------------------------------------------------------------------- */
     /*      Setup and fetch parameters.                                     */
