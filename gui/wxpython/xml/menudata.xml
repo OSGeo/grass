@@ -55,33 +55,33 @@
 	  <label>Import raster map</label>
 	  <items>
 	    <menuitem>
-	      <label>Import raster data using GDAL</label>
-	      <help>Import GDAL supported raster file into a binary raster map layer.</help>
+	      <label>Import raster data</label>
+	      <help>Import raster data into a GRASS map layer using GDAL.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.gdal</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Multiple raster data import using GDAL</label>
-	      <help>Converts selected GDAL layers to GRASS raster maps using r.in.gdal</help>
+	      <label>Bulk raster map import</label>
+	      <help>Converts multiple GDAL supported layers to GRASS raster maps.</help>
 	      <handler>self.OnImportGdalLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Link to GDAL</label>
-	      <help>Link GDAL supported raster file to a binary raster map layer.</help>
+	      <label>Link to external raster map</label>
+	      <help>Link GDAL supported raster data as a pseudo GRASS raster map layer.</help>
 	      <keywords>raster,import</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>r.external</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Multiple link to GDAL</label>
-	      <help>Link GDAL supported raster files to a binary raster map layers</help>
+	      <label>Bulk link to external raster maps</label>
+	      <help>Link multiple GDAL supported raster maps as pseudo GRASS raster map layers.</help>
               <handler>self.OnLinkGdalLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Aggregate ASCII xyz import</label>
+	      <label>ASCII x,y,z point import and gridding</label>
 	      <help>Create a raster map from an assemblage of many coordinates using univariate statistics.</help>
 	      <keywords>raster,import,LIDAR</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -89,13 +89,13 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>ASCII grid import</label>
-	      <help>Converts ASCII raster file to binary raster map layer.</help>
+	      <help>Converts a GRASS ASCII raster file to binary raster map layer.</help>
 	      <keywords>raster,import,conversion</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.ascii</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>ASCII polygons and lines import</label>
+	      <label>ASCII polygons, lines, and point import</label>
 	      <help>Creates raster maps from ASCII polygon/line/point data files.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -103,7 +103,7 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Binary file import</label>
+	      <label>Raw binary array import</label>
 	      <help>Import a binary raster file into a GRASS raster map layer.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -111,7 +111,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>ESRI ASCII grid import</label>
-	      <help>Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster map layer.</help>
+	      <help>Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map layer.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.arc</command>
@@ -132,21 +132,21 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>SPOT NDVI import</label>
-	      <help>Import of SPOT VGT NDVI file into a raster map</help>
+	      <help>Import of SPOT VGT NDVI file into a raster map.</help>
 	      <keywords>raster,imagery,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.in.spotvgt</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>SRTM HGT import</label>
-	      <help>Import SRTM HGT files into GRASS</help>
+	      <help>Import SRTM HGT files into GRASS.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.srtm</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Terra ASTER HDF import</label>
-	      <help>Georeference, rectify, and import Terra-ASTER imagery and relative DEM's using gdalwarp.</help>
+	      <help>Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp.</help>
 	      <keywords>raster,imagery,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.aster</command>
@@ -154,7 +154,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>WMS import</label>
-	      <help>Downloads and imports data from WMS servers</help>
+	      <help>Download and import data from WMS servers.</help>
 	      <handler>self.OnImportWMS</handler>
 	    </menuitem>
 	  </items>
@@ -163,34 +163,34 @@
 	  <label>Import vector map</label>
 	  <items>
 	    <menuitem>
-	      <label>Import vector data using OGR</label>
-	      <help>Convert OGR vector layers to GRASS vector map.</help>
+	      <label>Import vector data</label>
+	      <help>Convert vector layers into a GRASS vector map using OGR.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.in.ogr</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Multiple vector data import using OGR</label>
-	      <help>Converts selected OGR layers to GRASS vector maps using v.in.ogr</help>
+	      <label>Bulk import of vector data</label>
+	      <help>Converts multiple OGR supported layers into GRASS vector maps.</help>
 	      <handler>self.OnImportOgrLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Link to OGR</label>
-	      <help>Creates a new vector map as a link to OGR layer.</help>
+	      <label>Link to external vector map</label>
+	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
 	      <keywords>vector,external,ogr</keywords>
               <handler>self.OnMenuCmd</handler>
 	      <command>v.external</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Multiple link to OGR</label>
-	      <help>Creates a new vectors as a read-only link to OGR layers</help>
+	      <label>Bulk external data link to new vector maps</label>
+	      <help>Creates multiple new pseduo-vector maps as a read-only links using OGR.</help>
               <handler>self.OnLinkOgrLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>ASCII points/GRASS ASCII vector import</label>
-	      <help>Creates a vector map from ASCII points file or ASCII vector file.</help>
+	      <label>ASCII points or GRASS ASCII format</label>
+	      <help>Creates a vector map from an ASCII points file or ASCII vector file.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.in.ascii</command>
@@ -203,7 +203,7 @@
 	      <command>v.in.lines</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Old GRASS vector import</label>
+	      <label>Historical GRASS vector import</label>
 	      <help>Imports older versions of GRASS vector maps.</help>
 	      <keywords>vector,import,conversion</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -218,8 +218,8 @@
 	      <command>v.in.dxf</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Multiple DXF layers import</label>
-	      <help>Converts selected DXF layers to GRASS vector maps (using v.in.dxf)</help>
+	      <label>Bulk DXF layer import</label>
+	      <help>Converts multiple DXF layers to GRASS vector maps.</help>
 	      <handler>self.OnImportDxfFile</handler>
 	    </menuitem>
 	    <separator />
@@ -231,18 +231,11 @@
 	      <command>v.in.e00</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Garmin GPS import</label>
-	      <help>Download waypoints, routes, and tracks from a Garmin GPS receiver into a vector map.</help>
+	      <label>GPS data import</label>
+	      <help>Import waypoints, routes, and tracks from a GPS receiver or many common GPS file formats.</help>
 	      <keywords>vector,import,GPS</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>v.in.garmin</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>GPSBabel GPS import</label>
-	      <help>Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map.</help>
-	      <keywords>vector,import,GPS</keywords>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>v.in.gpsbabel</command>
+	      <command>v.in.gps</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Geonames import</label>
@@ -259,7 +252,7 @@
 	      <command>v.in.gns</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Matlab array and MapGen import</label>
+	      <label>Matlab array or Mapgen format import</label>
 	      <help>Import Mapgen or Matlab vector maps into GRASS.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -272,14 +265,14 @@
 	  <items>
 	    <menuitem>
 	      <label>ASCII 3D import</label>
-	      <help>Convert a 3D ASCII raster text file into a (binary) 3D raster map layer</help>
+	      <help>Convert a 3D ASCII raster text file into a (binary) 3D raster map layer.</help>
 	      <keywords>raster3d,voxel,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.in.ascii</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Vis5D import</label>
-	      <help>import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)</help>
+	      <help>Import 3-dimensional Vis5D files.</help>
 	      <keywords>raster3d,voxel</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.in.v5d</command>
@@ -303,7 +296,7 @@
 	  <label>Export raster map</label>
 	  <items>
 	    <menuitem>
-	      <label>Multiple export formats using GDAL</label>
+	      <label>Common export formats</label>
 	      <help>Exports GRASS raster maps into GDAL supported formats.</help>
 	      <keywords>raster,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -312,13 +305,13 @@
 	    <separator />
 	    <menuitem>
 	      <label>ASCII grid export</label>
-	      <help>Converts a raster map layer into an ASCII text file.</help>
+	      <help>Converts a raster map layer into a GRASS ASCII text file.</help>
 	      <keywords>raster,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.ascii</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>ASCII x,y,z export</label>
+	      <label>ASCII x,y,z points export</label>
 	      <help>Export a raster map to a text file as x,y,z values based on cell centers.</help>
 	      <keywords>raster,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -334,7 +327,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>GRIDATB.FOR export</label>
-	      <help>Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)</help>
+	      <help>Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL).</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.gridatb</command>
@@ -348,7 +341,7 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Binary export</label>
+	      <label>Raw binary array export</label>
 	      <help>Exports a GRASS raster to a binary array.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -357,56 +350,56 @@
 	    <separator />
 	    <menuitem>
 	      <label>MPEG-1 export</label>
-	      <help>Raster File Series to MPEG Conversion Program.</help>
+	      <help>Raster file series to MPEG movie conversion program.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.mpeg</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>PNG export</label>
-	      <help>Export GRASS raster as non-georeferenced PNG image format.</help>
+	      <help>Export a GRASS raster map as non-georeferenced PNG image format.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.png</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>PPM export</label>
-	      <help>Converts a GRASS raster map to a PPM image file at the pixel resolution of the currently defined region.</help>
+	      <help>Converts a GRASS raster map to a PPM image file.</help>
 	      <keywords>raster,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.ppm</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>PPM from RGB export</label>
-	      <help>Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel resolution of the CURRENTLY DEFINED REGION.</help>
+	      <help>Converts 3 GRASS raster layers (R,G,B) to a PPM image file.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.ppm3</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>POV-Ray export</label>
-	      <help>Converts a raster map layer into a height-field file for POVRAY.</help>
+	      <help>Converts a raster map layer into a height-field file for POV-Ray.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.pov</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>TIFF export</label>
-	      <help>Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel resolution of the currently defined region.</help>
+	      <help>Exports a GRASS raster map to a 8/24bit TIFF image file.</help>
 	      <keywords>raster,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.tiff</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>VRML export</label>
-	      <help>Export a raster map to the Virtual Reality Modeling Language (VRML)</help>
+	      <help>Export a raster map to the Virtual Reality Modeling Language (VRML).</help>
 	      <keywords>raster,export,VRML</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.vrml</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>VTK export</label>
-	      <help>Converts raster maps into the VTK-Ascii format</help>
+	      <help>Converts raster maps into the VTK-ASCII format.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.vtk</command>
@@ -417,15 +410,15 @@
 	  <label>Export vector map</label>
 	  <items>
 	    <menuitem>
-	      <label>Multiple export formats using OGR</label>
-	      <help>Converts vector map to one of the supported OGR vector formats.</help>
+	      <label>Common export formats</label>
+	      <help>Converts a vector map to any of the supported OGR vector formats.</help>
 	      <keywords>vector,export,ogr</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.ogr</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>ASCII points/GRASS ASCII vector export</label>
+	      <label>ASCII points or GRASS ASCII vector export</label>
 	      <help>Exports a vector map to a GRASS ASCII vector representation.</help>
 	      <keywords>vector,export,ascii</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -443,11 +436,11 @@
 	      <help>Exports a vector map to a GPS receiver or file format supported by GpsBabel.</help>
 	      <keywords>vector,export,GPS</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>v.out.gpsbabel</command>
+	      <command>v.out.gps</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>POV-Ray export</label>
-	      <help>Converts to POV-Ray format, GRASS x,y,z -&gt; POV-Ray x,z,y.</help>
+	      <help>Converts GRASS x,y,z points to POV-Ray x,z,y format.</help>
 	      <keywords>vector,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.out.pov</command>
@@ -473,21 +466,21 @@
 	  <items>
 	    <menuitem>
 	      <label>ASCII 3D export</label>
-	      <help>Converts a 3D raster map layer into an ASCII text file</help>
+	      <help>Converts a 3D raster map layer into a ASCII text file.</help>
 	      <keywords>raster3d,voxel,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.out.ascii</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Vis5D export</label>
-	      <help>Export of GRASS 3D raster map to 3-dimensional Vis5D file.</help>
+	      <help>Converts a 3D raster map into a 3-dimensional Vis5D file.</help>
 	      <keywords>raster3d,voxel</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.out.v5d</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>VTK export</label>
-	      <help>Converts 3D raster maps (G3D) into the VTK-Ascii format</help>
+	      <help>Converts 3D raster maps into the VTK-ASCII format.</help>
 	      <keywords>raster3d,voxel</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.out.vtk</command>
@@ -498,7 +491,7 @@
 	  <label>Export database table</label>
 	  <items>
 	    <menuitem>
-	      <label>Multiple export formats using OGR</label>
+	      <label>Common export formats using OGR</label>
 	      <help>Exports attribute tables into various formats.</help>
 	      <keywords>database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
