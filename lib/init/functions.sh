@@ -428,7 +428,7 @@ set_data()
 gui_startup()
 {
     if [ "$GRASS_GUI" = "wxpython" ] ; then
-		# eval `foo` will return subshell return code and not app foo return code!!!
+	# eval `foo` will return subshell return code and not app foo return code!!!?
 	eval '"$GRASS_PYTHON" "$WXPYTHONGRASSBASE/gis_set.py"'
 	thetest=$?
     fi
@@ -587,19 +587,15 @@ check_batch_job()
 
 start_gui()
 {
-    # Start the chosen GUI but ignore text
+    # Start the chosen GUI, or if in text-mode, don't.
     if [ "$GRASS_DEBUG" -ne 0 ] ; then
-       echo "GRASS GUI should be $GRASS_GUI"
+       echo "GRASS GUI is <$GRASS_GUI>"
     fi
     
     case "$GRASS_GUI" in
-        
-        # Check for gui interface
         wxpython)
-            eval '"$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py" &'
-#            "$GISBASE/etc/wxpython/wxgui.py"
+            "$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py" &
             ;;
-    
         # Ignore others
         *)
             ;;
