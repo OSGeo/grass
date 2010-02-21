@@ -212,9 +212,8 @@ set_browser()
 		fi
 	    done
 	fi
-    fi
 
-    if [ "$MACOSX" -a "$GRASS_HTML_BROWSER" != "" ] ; then
+    elif [ "$MACOSX" ] ; then
 	# OSX doesn't execute browsers from the shell PATH - route thru a script
 	GRASS_HTML_BROWSER_MACOSX="-b $GRASS_HTML_BROWSER"
 	export GRASS_HTML_BROWSER_MACOSX
