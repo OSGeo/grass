@@ -568,7 +568,7 @@ class NvizToolWindow(wx.Frame):
 
         # position
         self.CreateControl(panel, dict=self.win['surface'], name='position',
-                           range=(-100, 100),
+                           range=(-10000, 10000),
                            bind=(self.OnSurfacePosition, self.OnSurfacePosition, self.OnSurfacePosition))
 
 
