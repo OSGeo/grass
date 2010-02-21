@@ -3,6 +3,7 @@
 <em>v.krige</em> allows to perform kriging operations in GRASS
 environment, using R software functions in background.
 
+
 <h2>NOTES</h2>
 
 <em>v.krige</em> is just a front-end to R. The options and parameters
@@ -17,6 +18,7 @@ result. Good knowledge of the dataset is more valuable than hundreds
 of parameters or powerful hardware. See Isaaks and Srivastava's book,
 exhaustive and clear even if a bit outdated.
 
+
 <h3>Dependencies</h3>
 
 <dl>
@@ -24,11 +26,12 @@ exhaustive and clear even if a bit outdated.
 <dd></dd>
 
 <dt><b>rpy2</b></dt>
-<dd>Python binding to R. Note! rpy is not supported.</dd>
+<dd>Python binding to R. Note! <tt>rpy</tt> version 1 is not supported.</dd>
 
 <dt><b>R packages automap and gstat. </b></dt>
 <dd>automap is optional (provides automatic variogram fit).</dd>
 </dl>
+
 
 <h4>Notes for Debian GNU/Linux</h4>
 
@@ -37,14 +40,14 @@ SUITABLE.</b>:
 
 <div class="code"><pre>
   aptitude install R python-rpy2
-<pre></div>
+</pre></div>
 
 To install R packages, use either R's function (as root):
 
 <div class="code"><pre>
   install.packages("gstat", dep=T)
   install.packages("spgrass6", dep=T)
-<pre></div>
+</pre></div>
 
 either the brand new Debian packages [5], add to repositories' list
 for 32bit or 64bit (pick up the suitable line):
@@ -52,13 +55,13 @@ for 32bit or 64bit (pick up the suitable line):
 <div class="code"><pre>
   deb <a href="http://debian.cran.r-project.org/cran2deb/debian-i386">http://debian.cran.r-project.org/cran2deb/debian-i386</a> testing/
   deb <a href="http://debian.cran.r-project.org/cran2deb/debian-amd64">http://debian.cran.r-project.org/cran2deb/debian-amd64</a> testing/
-<pre></div>
+</pre></div>
 
 and get the packages via aptitude:
 
 <div class="code"><pre>
   aptitude install r-cran-gstat r-cran-spgrass6
-<pre></div>
+</pre></div>
 
 <h4>Notes for Windows</h4>
 
@@ -88,7 +91,7 @@ elevation raster, as if it came from a point survey.
  v.random output=rand2k_elev n=2000
  v.db.addtable map=rand2k_elev column="elevation double precision"
  v.what.rast vect=rand2k_elev rast=elevation.10m column=elevation
-<pre></div>
+</pre></div>
 
 <b>Part 2: remove points lacking elevation attributes</b>. Points
 sampled at the border of the elevation map didn't receive any
@@ -100,14 +103,14 @@ removed from the map.
 
 <div class="code"><pre>
  v.extract rand2k_elev output=rand2k_elev_filt where="elevation not NULL"
-<pre></div>
+</pre></div>
 
 Check the result of previous line ("number of NULL attributes" must be
 0):
 
 <div class="code"><pre>
  v.univar rand2k_elev_filt type=point column=elevation
-<pre></div>
+</pre></div>
 
 <b>Part 3: reconstruct DEM through kriging</b>. Using automatic
 variogram fit is the simplest way to run v.krige from CLI (note:
@@ -129,7 +132,7 @@ v.krige command).
  v.krige input=rand2k_elev_filt column=elevation output=rand2k_elev_kriging \
          output_var=rand2k_elev_kriging_var model=Lin sill=2500 nugget=0 range=1000 \
          --overwrite
-<pre></div>
+</pre></div>
 
 Or run wxGUI, to interactively fit the variogram and explore options:
 
@@ -144,7 +147,7 @@ Or run wxGUI, to interactively fit the variogram and explore options:
  r.univar elevation.10m
  r.univar rand2k_elev_kriging
  r.univar rand2k_elev_kriging_pe
-<pre></div>
+</pre></div>
 
 The results show high errors, as the kriging techniques (ordinary and
 block kriging) are unable to handle a dataset with a trend, like the
@@ -152,6 +155,7 @@ one used in this example: elevation is higher in the southwest corner
 and lower on northeast corner. Universal kriging can give far better
 results in these cases as it can handle the trend. It is available in
 R package gstat and will be part of a future v.krige release.
+
 
 <h2>SEE ALSO</h2>
 
@@ -162,13 +166,22 @@ mantained by Edzer J. Pebesma and others
 R
 package <a href="http://cran.r-project.org/web/packages/spgrass6/index.html">spgrass6</a>,
 mantained by Roger Bivand
+<br>
+
+The <a href="http://grass.osgeo.org/statsgrass/grass6_r_install.html">Short
+Introduction to Geostatistical and Spatial Data Analysis with GRASS 6
+and R statistical data language</a> at the GRASS website. (includes
+installation tips)
+
 <br><br>
 
 v.krige's <a href="http://grass.osgeo.org/wiki/V.krige_GSoC_2009">wiki page</a>
 
 <h2>REFERENCES</h2>
 
-Isaaks and Srivastava, 1989: "An Introduction to Applied Geostatistics" (ISBN 0-19-505013-4) 
+Isaaks and Srivastava, 1989: "An Introduction to Applied Geostatistics"
+ (ISBN 0-19-505013-4) 
+
 
 <h2>AUTHOR</h2>
 
