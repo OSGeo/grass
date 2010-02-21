@@ -768,7 +768,6 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>g.proj</command>
 	    </menuitem>
-
 	    <menuitem>
 	      <label>Convert coordinates</label>
 	      <help>Converts coordinates from one projection to another (cs2cs frontend).</help>
@@ -792,7 +791,6 @@
 	<menu>
 	  <label>Develop raster map</label>
 	  <items>
-
 	    <menuitem>
 	      <label>Compress/decompress</label>
 	      <help>Compresses and decompresses raster maps.</help>
@@ -2093,7 +2091,6 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.net.path</command>
 	    </menuitem>
-
 	    <menuitem>
 	      <label>Split net</label>
 	      <help>Splits net by cost isolines.</help>
@@ -2416,7 +2413,6 @@
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.rectify</command>
 	</menuitem>
-
 	<menuitem>
 	  <label>Brovey sharpening</label>
 	  <help>Brovey transform to merge multispectral and high-res panchromatic channels</help>
@@ -2449,7 +2445,6 @@
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.smap</command>
 	    </menuitem>
-
 	    <menuitem>
 	      <label>Input for supervised MLC</label>
 	      <help>Generates statistics for i.maxlik from raster map.</help>
@@ -2549,7 +2544,7 @@
 	  <label>Evapotranspiration calculation</label>
 	  <items>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
+	      <label>Evapotranspiration</label>
 	      <help>actual evapotranspiration for diurnal period (Bastiaanssen, 1995)</help>
 	      <keywords>imagery,actual evapotranspiration,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -2557,56 +2552,56 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
-	      <help>Compares bit patterns with a raster map.</help>
+	      <label>Albedo</label>
+	      <help>Broad band albedo from surface reflectance.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.albedo:</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
+	      <label>Evaporative fraction</label>
 	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)</help>
 	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.evapfr</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
-	      <help>Computes sensible Heat Flux iteration SEBAL 01</help>
+	      <label>Sensible heat flux</label>
+	      <help>Computes sensible heat flux iteration SEBAL 01</help>
 	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.h_SEBAL01</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
+	      <label>Soil heat flux</label>
 	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
 	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.soilheatflux</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
-	      <help>Emissivity from NDVI, generic method for spares land.</help>
+	      <label>Emissivity</label>
+	      <help>Emissivity from NDVI, generic method for sparse land.</help>
 	      <keywords>emissivity,land flux,energy balance</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.emissivity</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
+	      <label>Temporal integration of ETa</label>
 	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
 	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.evapo.time_integration</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
+	      <label>LatLong map</label>
 	      <help>creates a latitude/longitude map</help>
 	      <keywords>imagery,latitude,longitude,projection</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.latlong</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bit pattern comparison </label>
+	      <label>Vegetation indices</label>
 	      <help>Calculates different types of vegetation indices.</help>
 	      <keywords>imagery,vegetation index,biophysical parameters</keywords>
 	      <handler>self.OnMenuCmd</handler>
@@ -2615,21 +2610,21 @@
 	  </items>
 	</menu>
 	<menuitem>
-	  <label>Atmospheric correction</label>
+	  <label>Biomass growth</label>
 	  <help>Computes biomass growth, precursor of crop yield calculation</help>
 	  <keywords>imagery,biomass,fpar,yield</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.biomass</command>
 	</menuitem>
 	<menuitem>
-	  <label>Atmospheric correction</label>
+	  <label>Modis quality control</label>
 	  <help>Extract quality control parameters from Modis QC layers</help>
 	  <keywords>QC,Quality Control,surface reflectance,Modis</keywords>
 	  <handler>self.OnMenuCmd</handler>
 	  <command>i.modis.qc</command>
 	</menuitem>
 	<menuitem>
-	  <label>Atmospheric correction</label>
+	  <label>Sunshine hours</label>
 	  <help>creates a sunshine hours map</help>
 	  <keywords>sunshine,hours,daytime</keywords>
 	  <handler>self.OnMenuCmd</handler>
