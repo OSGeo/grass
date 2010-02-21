@@ -596,7 +596,7 @@ start_gui()
         
         # Check for gui interface
         wxpython)
-            eval '"$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py"'
+            eval '"$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py" &'
 #            "$GISBASE/etc/wxpython/wxgui.py"
             ;;
     
