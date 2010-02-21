@@ -148,7 +148,8 @@ class Layer(object):
             if self.type == 'command':
                 read = False
                 for c in self.cmd:
-                    ret = gcmd.RunCommand(c[0],
+                    ret, msg = gcmd.RunCommand(c[0],
+                                          getErrorMsg = True,
                                           quiet = True,
                                           **c[1])
                     if ret != 0:
