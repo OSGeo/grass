@@ -44,7 +44,7 @@
 #########################
 
 #%Module
-#%  description: Import SRTM HGT files into GRASS
+#%  description: Imports SRTM HGT files into raster map.
 #%  keywords: raster
 #%  keywords: import
 #%End

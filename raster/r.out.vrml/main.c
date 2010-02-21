@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("export"));
     G_add_keyword(_("VRML"));
     module->description =
-	_("Export a raster map to the Virtual Reality Modeling Language (VRML)");
+	_("Exports a raster map to the Virtual Reality Modeling Language (VRML).");
 
     rast_el = G_define_option();
     rast_el->key = "elev";

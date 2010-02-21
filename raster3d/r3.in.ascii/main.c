@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("voxel"));
     G_add_keyword(_("import"));
     module->description =
-	_("Convert a 3D ASCII raster text file into a (binary) 3D raster map layer");
+	_("Converts a 3D ASCII raster text file into a (binary) 3D raster map.");
 
     setParams();
     G3d_setStandard3dInputParams();

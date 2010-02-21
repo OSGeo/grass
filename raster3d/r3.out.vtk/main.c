@@ -370,9 +370,10 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster3d"));
+    G_add_keyword(_("export"));
     G_add_keyword(_("voxel"));
     module->description =
-	_("Converts 3D raster maps (G3D) into the VTK-Ascii format");
+	_("Converts 3D raster maps into the VTK-ASCII format.");
 
     /* Get parameters from user */
     set_params();

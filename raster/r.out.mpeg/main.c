@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    module->description = _("Raster File Series to MPEG Conversion Program.");
+    module->description = _("Raster file series to MPEG movie conversion program.");
 
     for (i = 0; i < MAXVIEWS; i++) {
 	char buf[BUFSIZ];

@@ -89,7 +89,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>ASCII grid import</label>
-	      <help>Converts a GRASS ASCII raster file to binary raster map layer.</help>
+	      <help>Converts a GRASS ASCII raster file to binary raster map.</help>
 	      <keywords>raster,import,conversion</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.ascii</command>
@@ -111,7 +111,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>ESRI ASCII grid import</label>
-	      <help>Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map layer.</help>
+	      <help>Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.arc</command>
@@ -132,14 +132,14 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>SPOT NDVI import</label>
-	      <help>Import of SPOT VGT NDVI file into a raster map.</help>
+	      <help>Imports of SPOT VGT NDVI file into a raster map.</help>
 	      <keywords>raster,imagery,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.in.spotvgt</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>SRTM HGT import</label>
-	      <help>Import SRTM HGT files into GRASS.</help>
+	      <help>Imports SRTM HGT files into raster map.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.in.srtm</command>
@@ -164,7 +164,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Import vector data</label>
-	      <help>Convert vector layers into a GRASS vector map using OGR.</help>
+	      <help>Converts vector layers into a GRASS vector map using OGR.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.in.ogr</command>
@@ -265,7 +265,7 @@
 	  <items>
 	    <menuitem>
 	      <label>ASCII 3D import</label>
-	      <help>Convert a 3D ASCII raster text file into a (binary) 3D raster map layer.</help>
+	      <help>Converts a 3D ASCII raster text file into a (binary) 3D raster map.</help>
 	      <keywords>raster3d,voxel,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.in.ascii</command>
@@ -358,7 +358,7 @@
 	    <menuitem>
 	      <label>PNG export</label>
 	      <help>Export a GRASS raster map as non-georeferenced PNG image format.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.png</command>
 	    </menuitem>
@@ -392,7 +392,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>VRML export</label>
-	      <help>Export a raster map to the Virtual Reality Modeling Language (VRML).</help>
+	      <help>Exports a raster map to the Virtual Reality Modeling Language (VRML).</help>
 	      <keywords>raster,export,VRML</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.vrml</command>
@@ -400,7 +400,7 @@
 	    <menuitem>
 	      <label>VTK export</label>
 	      <help>Converts raster maps into the VTK-ASCII format.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,export</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.vtk</command>
 	    </menuitem>
@@ -474,14 +474,14 @@
 	    <menuitem>
 	      <label>Vis5D export</label>
 	      <help>Converts a 3D raster map into a 3-dimensional Vis5D file.</help>
-	      <keywords>raster3d,voxel</keywords>
+	      <keywords>raster3d,export,voxel</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.out.v5d</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>VTK export</label>
 	      <help>Converts 3D raster maps into the VTK-ASCII format.</help>
-	      <keywords>raster3d,voxel</keywords>
+	      <keywords>raster3d,export,voxel</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r3.out.vtk</command>
 	    </menuitem>
@@ -1028,7 +1028,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Statistical overlay</label>
-	      <help>Calculates category or object oriented statistics.</help>
+	      <help>Calculates category or object oriented statistics (accumulator-based statistics).</help>
 	      <keywords>raster,statistics</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.statistics2</command>
@@ -2546,8 +2546,8 @@
 	    <separator />
 	    <menuitem>
 	      <label>Albedo</label>
-	      <help>Broad band albedo from surface reflectance.</help>
-	      <keywords>raster</keywords>
+	      <help>Computes broad band albedo from surface reflectance.</help>
+	      <keywords>imagery,albedo,surface reflectance</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.albedo</command>
 	    </menuitem>
@@ -2560,7 +2560,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Sensible heat flux</label>
-	      <help>Computes sensible heat flux iteration SEBAL 01</help>
+	      <help>Computes sensible heat flux iteration SEBAL 01.</help>
 	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.eb.h_SEBAL01</command>
@@ -2574,7 +2574,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Emissivity</label>
-	      <help>Emissivity from NDVI, generic method for sparse land.</help>
+	      <help>Computes emissivity from NDVI, generic method for spares land.</help>
 	      <keywords>emissivity,land flux,energy balance</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.emissivity</command>

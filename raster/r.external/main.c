@@ -524,7 +524,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     module->description =
-	_("Link GDAL supported raster file to a binary raster map layer.");
+	_("Link GDAL supported raster data as a pseudo GRASS raster map layer.");
 
     parm.input = G_define_standard_option(G_OPT_F_INPUT);
     parm.input->description = _("Raster file to be linked");

@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("export"));
     module->description =
-	_("Converts a raster map layer into an ASCII text file.");
+	_("Converts a raster map layer into a GRASS ASCII text file.");
 
     /* Define the different options */
 

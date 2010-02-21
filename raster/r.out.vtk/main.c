@@ -57,7 +57,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    module->description = _("Converts raster maps into the VTK-Ascii format");
+    G_add_keyword(_("export"));
+    module->description = _("Converts raster maps into the VTK-ASCII format.");
 
     /* Get parameters from user */
     set_params();
