@@ -2556,7 +2556,7 @@
 	      <help>Broad band albedo from surface reflectance.</help>
 	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>i.albedo:</command>
+	      <command>i.albedo</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Evaporative fraction</label>
