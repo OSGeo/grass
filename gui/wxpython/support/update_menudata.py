@@ -7,7 +7,7 @@ updates: - description (i.e. help) - keywords
 
 Prints warning for missing modules.
 
-(C) 2008-2009 by the GRASS Development Team
+(C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -110,8 +110,17 @@ def writeData(data):
         data.tree.write(file)
     except IOError:
         print >> sys.stderr, "'%s' not found. Please run the script from 'gui/wxpython'." % file
-        
-
+        return
+    
+    try:
+        f = open(file, 'a')
+        try:
+            f.write('\n')
+        finally:
+            f.close()
+    except IOError:
+        print >> sys.stderr, "ERROR: Unable to write to menudata file."
+    
 def main(argv = None):
     if argv is None:
         argv = sys.argv
