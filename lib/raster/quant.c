@@ -3,17 +3,16 @@
  * 
  * \brief Raster Library - Quantization rules.
  *
- * The quantization table is stored as a linear array. rules are added
- * starting from index 0. redundant rules are not eliminated. rules
- * are tested from the highest index downto 0. there are two
- * "infinite" rules. support is provided to reverse the order of the
+ * The quantization table is stored as a linear array. Rules are added
+ * starting from index 0. Redundant rules are not eliminated. Rules
+ * are tested from the highest index downto 0. There are two
+ * "infinite" rules. Support is provided to reverse the order of the
  * rules.
  *
  * (C) 1999-2009 by the GRASS Development Team
  *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author USACERL and many others
  */
