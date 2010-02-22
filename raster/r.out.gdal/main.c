@@ -488,7 +488,7 @@ int main(int argc, char *argv[])
     }
 
     /* exact range and nodata checks for each band */
-    G_message(_("Checking GDAl data type and nodata value"));
+    G_message(_("Checking GDAL data type and nodata value"));
     for (band = 0; band < ref.nfiles; band++) {
 	if (ref.nfiles > 1) {
 	    G_verbose_message(_("Checking options for raster map <%s> (band %d)..."),
