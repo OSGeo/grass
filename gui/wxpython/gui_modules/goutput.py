@@ -441,7 +441,7 @@ class GMConsole(wx.SplitterWindow):
                                  'd.rast.arrow'   : 'rastarrow',
                                  'd.rast.num'     : 'rastnum',
                                  'd.vect'         : 'vector',
-                                 'd.vect.thematic': 'thememap',
+                                 'd.thematic.area': 'thememap',
                                  'd.vect.chart'   : 'themechart',
                                  'd.grid'         : 'grid',
                                  'd.geodesic'     : 'geodesic',

@@ -1011,7 +1011,7 @@ class GMFrame(wx.Frame):
                  ('addvect', Icons["addvect"].GetBitmap(),
                   Icons["addvect"].GetLabel(), self.OnAddVector),
                  ('addthematic', Icons["addthematic"].GetBitmap(),
-                  _("Add various vector-based map layer"), self.OnAddVectorMisc),
+                  _("Add various vector-based map layers"), self.OnAddVectorMisc),
                  ('addcmd',  Icons["addcmd"].GetBitmap(),
                   Icons["addcmd"].GetLabel(),  self.OnAddCommand),
                  ('addgrp',  Icons["addgrp"].GetBitmap(),

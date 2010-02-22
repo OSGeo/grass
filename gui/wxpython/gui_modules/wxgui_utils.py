@@ -715,7 +715,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetItemText(layer, '%s %s' % (_('vector'), _('(double click to set properties)')))
         elif ltype == 'thememap':
             self.SetItemImage(layer, self.theme_icon)
-            self.SetItemText(layer, '%s %s' % (_('thematic map'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('thematic area (choropleth) map'), _('(double click to set properties)')))
         elif ltype == 'themechart':
             self.SetItemImage(layer, self.chart_icon)
             self.SetItemText(layer, '%s %s' % (_('thematic charts'), _('(double click to set properties)')))
@@ -892,7 +892,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed
             # should be fixed by C-based d.thematic.* modules
-            menuform.GUI().ParseCommand(['d.vect.thematic', '-s'], 
+            menuform.GUI().ParseCommand(['d.thematic.area'], 
                                         completed=(self.GetOptData,layer,params),
                                         parentframe=self)
         elif ltype == 'themechart':
