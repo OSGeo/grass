@@ -1,62 +1,19 @@
+/*!
+ * \file raster/quant_io.c
+ * 
+ * \brief Raster Library - Quantization rules (input / output)
+ *
+ * (C) 1999-2010 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author USACERL and many others
+ */
 
 /**********************************************************************
  *
- *  int
- *  Rast__quant_import (name, mapset, quant)
- *
- *      char *name;
- *      char *mapset;
- *      struct Quant *quant;
- * 
- *  reads quantization rules for "name" in "mapset" and stores them
- *  in the quantization structure "quant". If the map is in another
- *  mapset, first checks for quant2 table for this map in current
- *  mapset.
- *  
- *  returns: -2 if raster map is of type integer.
- *           -1 if (! G_name_is_fully_qualified ()).
- *            0 if quantization file does not exist, or the file is empty, 
- *            1 if non-empty quantization file exists.
- *                 read.
- *           
- *  note: in the case of negative return value, the result of using the 
- *        quantization structure is not defined.
- *        in case of return value 0, calls to Rast_quant_perform_d () 
- *        and Rast_quant_perform_f () return NO_DATA (see description of 
- *        Rast_quant_perform_d () for more details). in case of
- *        return values 2 and 3, the explicit rule for quant is set:
- *        floating range is mapped to integer range.
- *
- *  note: use Rast_quant_init () to allocate and initialize the quantization
- *        staructure quant before the first usage of G_quant_import ().
- *
- *  note: this function uses Rast_quant_free () to clear all previously
- *        stored rules in quant.
- * 
- **********************************************************************
- *
- *  int
- *  Rast__quant_export (name, mapset, quant)
- *
- *     char *name, *mapset;
- *     struct Quant *quant;
- *
- *  writes the quantization rules stored in "quant" for "name" . if the
- *  mapset is the same as the current mapset, the quant file is created
- *  in cell_misc/name directory, otherwise it is created in quant2/mapset
- *  directory, much like writing colors for map in another mapset.
- *  The rules are written in decreasing order
- *  of priority (i.e. rules added earlier are written later).
- *
- *  returns: -1 if (! G_name_is_fully_qualified) or file could not be
- *                 opened.
- *            1 otherwise.
- *
- *  note: if no rules are defined an empty file is created. 
- *
  **********************************************************************/
-
-/*--------------------------------------------------------------------------*/
 
 #include <string.h>
 
@@ -64,19 +21,14 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-/*--------------------------------------------------------------------------*/
-
 #define QUANT_FILE_NAME "f_quant"
-
-/*--------------------------------------------------------------------------*/
 
 static int quant_parse_file(FILE *, struct Quant *);
 
 #if 0
-static int
 /* redundant: integer range doesn't exist now: it is defined by
    the quant rules */
-quant_load_range(struct Quant *quant, const char *name, const char *mapset)
+static int quant_load_range(struct Quant *quant, const char *name, const char *mapset)
 {
     struct FPRange fprange;
     struct Range range;
@@ -88,8 +40,8 @@ quant_load_range(struct Quant *quant, const char *name, const char *mapset)
 	return 0;
     Rast_get_fp_range_min_max(&fprange, &dMin, &dMax);
     if (Rast_is_d_null_value(&dMin) || Rast_is_d_null_value(&dMax)) {
-	G_warning(_("The floating data range for %s@%s is empty"),
-		  name, mapset);
+	G_warning(_("Floating data range for raster map <%s> is empty"),
+		  G_fully_qualified_name(name, mapset));
 	return -3;
     }
 
@@ -97,8 +49,8 @@ quant_load_range(struct Quant *quant, const char *name, const char *mapset)
 	return 0;
     Rast_get_range_min_max(&range, &min, &max);
     if (Rast_is_c_null_value(&min) && Rast_is_c_null_value(&max)) {
-	G_warning(_("The integer data range for %s@%s is empty"),
-		  name, mapset);
+	G_warning(_("Integer data range for raster map <%s> is empty"),
+		  G_fully_qualified_name(name, mapset));
 	return -3;
     }
 
@@ -108,13 +60,41 @@ quant_load_range(struct Quant *quant, const char *name, const char *mapset)
 }
 #endif
 
-/*--------------------------------------------------------------------------*/
+/*!
+  \brief Reads quantization rules (internal use only)
 
+  Reads quantization rules for raster map <i>name</i> in <i>mapset</i>
+  and stores them in the quantization structure "quant". If the map is
+  in another mapset, first checks for quant2 table for this map in
+  current mapset.
+ 
+  Note: in the case of negative return value, the result of using the 
+  quantization structure is not defined.
+  in case of return value 0, calls to Rast_quant_perform_d() 
+  and Rast_quant_perform_f() return NO_DATA (see description of 
+  Rast_quant_perform_d() for more details). in case of
+  return values 2 and 3, the explicit rule for quant is set:
+  floating range is mapped to integer range.
+  
+  Note: use Rast_quant_init() to allocate and initialize the quantization
+  staructure quant before the first usage of G_quant_import().
+
+  Note: this function uses Rast_quant_free () to clear all previously
+  stored rules in quant.
+
+  \param name map name
+  \param mapset mapset name
+  \param[out] quant pointer to Quant structure
+  
+  \return -2 if raster map is of type integer.
+  \return -1 if map name is fully qualified and mapset is not the current one
+  \return 0 if quantization file does not exist, or the file is empty, 
+  \return 1 if non-empty quantization file exists.
+*/
 int Rast__quant_import(const char *name, const char *mapset,
 		       struct Quant *quant)
 {
     char buf[1024];
-    char *err;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX], element[GNAME_MAX + 7];
     int parsStat;
     FILE *fd;
@@ -122,14 +102,16 @@ int Rast__quant_import(const char *name, const char *mapset,
     Rast_quant_free(quant);
 
     if (Rast_map_type(name, mapset) == CELL_TYPE) {
-	G_warning(_("Rast__quant_import: attempt to open quantization"
-		    " table for CELL_TYPE file [%s] in mapset {%s]"),
-		  name, mapset);
+	G_warning(_("Attempt to open quantization"
+		    " table for CELL raster map <%s>"),
+		  G_fully_qualified_name(name, mapset));
 	return -2;
     }
 
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, mapset) != 0)
+	if (strlen(mapset) == 0)
+	    mapset = xmapset;
+	else if (strcmp(xmapset, mapset) != 0)
 	    return -1;
 	name = xname;
     }
@@ -142,16 +124,16 @@ int Rast__quant_import(const char *name, const char *mapset,
 	if (parsStat)
 	    return 1;
 	sprintf(buf,
-		"quantization file in quant2 for [%s] in mapset [%s] is empty",
-		name, mapset);
+		"quantization file in quant2 for raster map <%s> is empty",
+		G_fully_qualified_name(name, mapset));
     }
 
     /* now try reading regular : cell_misc/name/quant file */
     if (!(fd = G_fopen_old_misc("cell_misc", QUANT_FILE_NAME, name, mapset))) {
 
 	/* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 3; */
-	err = "missing";
-
+	G_warning(_("Quantization file for raster map <%s> is missing"),
+		  G_fully_qualified_name(name, mapset));
     }
     else {
 	parsStat = quant_parse_file(fd, quant);
@@ -160,33 +142,27 @@ int Rast__quant_import(const char *name, const char *mapset,
 	if (parsStat)
 	    return 1;
 	/* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 2; */
-
-	err = "empty";
+	G_warning(_("Quantization file for raster map <%s> is empty"),
+		  G_fully_qualified_name(name, mapset));
     }
-
-    G_warning(_("quantization file [%s] in mapset [%s] %s"),
-	      name, mapset, err);
-
+    
     return 0;
 }
 
-/*--------------------------------------------------------------------------*/
-
-/* parse input lines with the following formats
- *
- *   d_high:d_low:c_high:c_low
- *   d_high:d_low:c_val          (i.e. c_high == c_low)
- *   *:d_val:c_val               (interval [inf, d_val])  (**)
- *   d_val:*:c_val               (interval [d_val, inf])  (**)
- *
- *   all other lines are ignored
- *
- *  (**) only the first appearances in the file are considered.
- *
- */
-
-/*--------------------------------------------------------------------------*/
-
+/*!
+  \brief Parse input lines with the following formats
+ 
+  \code
+  d_high:d_low:c_high:c_low
+  d_high:d_low:c_val          (i.e. c_high == c_low)
+  *:d_val:c_val               (interval [inf, d_val])  (**)
+  d_val:*:c_val               (interval [d_val, inf])  (**)
+  \endcode
+ 
+  All other lines are ignored
+  
+  (**) only the first appearances in the file are considered.
+*/
 static int quant_parse_file(FILE * fd, struct Quant *quant)
 {
     CELL cLow, cHigh;
@@ -241,10 +217,6 @@ static int quant_parse_file(FILE * fd, struct Quant *quant)
 	    (Rast_quant_get_pos_infinite_rule(quant, &dLow, &cLow) > 0));
 }
 
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
 static void quant_write(FILE * fd, const struct Quant *quant)
 {
     DCELL dLow, dHigh;
@@ -274,11 +246,27 @@ static void quant_write(FILE * fd, const struct Quant *quant)
     }
 }
 
-/*--------------------------------------------------------------------------*/
+/*!
+  \brief Writes the quantization rules (internal use only)
 
-int
-Rast__quant_export(const char *name, const char *mapset,
-		   const struct Quant *quant)
+  Writes the quantization rules stored in <i>quant</i> for <i>name</i>
+  . If the mapset is the same as the current mapset, the quant file is
+  created in 'cell_misc/name' directory, otherwise it is created in
+  'quant2/mapset' directory, much like writing colors for map in
+  another mapset.  The rules are written in decreasing order of
+  priority (i.e. rules added earlier are written later).
+
+  Note: if no rules are defined an empty file is created. 
+  
+  \param name map name
+  \param mapset mapset name
+  \param quant pointer to Quant structure
+
+  \return -1 if map name is not fully qualified or file could not be opened.
+  \return 1 otherwise.
+*/
+int Rast__quant_export(const char *name, const char *mapset,
+		       const struct Quant *quant)
 {
     char element[GNAME_MAX + 7];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -303,17 +291,9 @@ Rast__quant_export(const char *name, const char *mapset,
 	if (!(fd = G_fopen_new(element, name)))
 	    return -1;
     }
-
-
-
+    
     quant_write(fd, quant);
     fclose(fd);
 
     return 1;
 }
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/

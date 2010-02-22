@@ -100,8 +100,8 @@ int Rast_read_fp_range(const char *name, const char *mapset,
     if (G_find_file2_misc("cell_misc", "f_range", name, mapset)) {
 	fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
 	if (fd < 0) {
-	    G_warning(_("Unable to read fp range file for <%s@%s>"),
-		      name, mapset);
+	    G_warning(_("Unable to read fp range file for <%s>"),
+		      G_fully_qualified_name(name, mapset));
 	    return -1;
 	}
 
@@ -115,8 +115,8 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 	if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2)) {
 	    if (fd)
 		close(fd);
-	    G_warning(_("Unable to read fp range file for <%s@%s>"),
-		      name, mapset);
+	    G_warning(_("Unable to read fp range file for <%s>"),
+		      G_fully_qualified_name(name, mapset));
 	    return -1;
 	}
 
@@ -148,7 +148,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
  *
  * \param name map name
  * \param mapset mapset name
- * \param range pointer to Range structure which holds range info
+ * \param[out] range pointer to Range structure which holds range info
  *
  * \return -1 on error
  * \return 1 on success
@@ -163,7 +163,6 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     int n, count;
     struct Quant quant;
     struct FPRange drange;
-
     Rast_init_range(range);
     fd = NULL;
 
@@ -172,8 +171,8 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 	DCELL dmin, dmax;
 
 	if (Rast_read_quant(name, mapset, &quant) < 0) {
-	    G_warning(_("Unable to read quant rules for raster map <%s@%s>"),
-		      name, mapset);
+	    G_warning(_("Unable to read quant rules for raster map <%s>"),
+		      G_fully_qualified_name(name, mapset));
 	    return -1;
 	}
 	if (Rast_quant_is_truncate(&quant) || Rast_quant_is_round(&quant)) {
@@ -209,8 +208,8 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     if (G_find_file2_misc("cell_misc", "range", name, mapset)) {
 	fd = G_fopen_old_misc("cell_misc", "range", name, mapset);
 	if (!fd) {
-	    G_warning(_("Unable to read range file for <%s@%s>"),
-		      name, mapset);
+	    G_warning(_("Unable to read range file for <%s>"),
+		      G_fully_qualified_name(name, mapset));
 	    return -1;
 	}
 
@@ -226,8 +225,8 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 	    if (fd)
 		fclose(fd);
 
-	    G_warning(_("Unable to read range file for <%s@%s>"),
-		      name, mapset);
+	    G_warning(_("Unable to read range file for <%s>"),
+		      G_fully_qualified_name(name, mapset));
 	    return -1;
 	}
 
