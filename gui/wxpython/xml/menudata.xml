@@ -132,7 +132,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>SPOT NDVI import</label>
-	      <help>Imports of SPOT VGT NDVI file into a raster map.</help>
+	      <help>Imports SPOT VGT NDVI data into a raster map.</help>
 	      <keywords>raster,imagery,import</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>i.in.spotvgt</command>
@@ -2303,7 +2303,7 @@
 	      <command>v.report</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Upload or report topology</label>
+	      <label>Report or upload vector features to DB</label>
 	      <help>Populates database values from vector features.</help>
 	      <keywords>vector,database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
