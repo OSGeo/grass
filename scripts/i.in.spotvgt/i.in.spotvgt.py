@@ -30,19 +30,19 @@
 #############################################################################
 
 #%Module
-#%  description: Imports of SPOT VGT NDVI file into a raster map.
+#%  description: Imports SPOT VGT NDVI data into a raster map.
 #%  keywords: raster
 #%  keywords: imagery
 #%  keywords: import
 #%End
 #%flag
 #% key: a
-#% description: also import quality map (SM status map layer) and filter NDVI map
+#% description: Also import quality map (SM status map layer) and filter NDVI map
 #%end
 #%option
 #% key: file
 #% type: string
-#% description: existing SPOT VGT NDVI HDF file (0001_NDV.HDF)
+#% description: Existing SPOT VGT NDVI HDF file (0001_NDV.HDF)
 #% gisprompt: old_file,file,input
 #% required : yes
 #%end
