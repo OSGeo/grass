@@ -155,11 +155,11 @@ class ProcessWorkspaceFile:
             # process all layers/groups in the display
             self.__processLayers(display)
 
-    def __processLayers(self, node, inGroup = False):
+    def __processLayers(self, node, inGroup = -1):
         """!Process layers/groups of selected display
         
         @param node display tree node
-        @param inGroup True when group is defined
+        @param inGroup in group -> index of group item otherwise -1
         """
         for item in node.getchildren():
             if item.tag == 'group':
@@ -175,7 +175,7 @@ class ProcessWorkspaceFile:
                         "vdigit"  : None,
                         "nviz"    : None})
                 
-                self.__processLayers(item, inGroup = True) # process items in group
+                self.__processLayers(item, inGroup = len(self.layers) - 1) # process items in group
                 
             elif item.tag == 'layer':
                 cmd, selected, vdigit, nviz = self.__processLayer(item)

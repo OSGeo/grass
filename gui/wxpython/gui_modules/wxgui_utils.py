@@ -1,16 +1,14 @@
 """!
 @package wxgui_utils.py
 
-@brief Utility classes for GRASS wxPython GUI. Main functions include
-tree control for GIS map layer management, command console, and
-command parsing.
+@brief Utility classes for map layer management.
 
 Classes:
  - AbstractLayer
  - Layer
  - LayerTree
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -25,7 +23,7 @@ import sys
 import string
 
 import wx
-import wx.lib.customtreectrl as CT
+import wx.lib.agw.customtreectrl as CT
 import wx.combo
 import wx.lib.newevent
 import wx.lib.buttons  as  buttons
@@ -55,7 +53,6 @@ try:
 except ImportError:
     from wx.lib.mixins import treemixin
 
-
 TREE_ITEM_HEIGHT = 25
 
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
@@ -68,11 +65,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                  ctstyle=CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
                  CT.TR_MULTIPLE,**kargs):
-        self.items = []
-        self.itemCounter = 0
+        
         super(LayerTree, self).__init__(parent, id, pos, size, style=style, ctstyle=ctstyle)
         self.SetName("LayerTree")
-
+        
         ### SetAutoLayout() causes that no vertical scrollbar is displayed
         ### when some layers are not visible in layer tree
         # self.SetAutoLayout(True)
@@ -80,7 +76,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.EnableSelectionGradient(True)
         self.SetFirstGradientColour(wx.Colour(100, 100, 100))
         self.SetSecondGradientColour(wx.Colour(150, 150, 150))
-
+        
         self.Map = render.Map()    # instance of render.Map to be associated with display
         self.root = None           # ID of layer tree root node
         self.groupnode = 0         # index value for layers
@@ -92,11 +88,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.disp_idx = kargs['idx']
         self.lmgr = kargs['lmgr']
         self.notebook = kargs['notebook']   # GIS Manager notebook for layer tree
-        self.treepg = parent        # notebook page holding layer tree
+        self.treepg = parent                # notebook page holding layer tree
         self.auimgr = kargs['auimgr']       # aui manager
-        self.rerender = False       # layer change requires a rerendering if auto render
-        self.reorder = False        # layer change requires a reordering
-
+        self.rerender = False               # layer change requires a rerendering if auto render
+        self.reorder = False                # layer change requires a reordering
+        
         # init associated map display
         pos = wx.Point((self.disp_idx + 1) * 25, (self.disp_idx + 1) * 25)
         self.mapdisplay = mapdisp.MapFrame(self,
@@ -106,7 +102,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                            tree=self, notebook=self.notebook,
                                            lmgr=self.lmgr, page=self.treepg,
                                            Map=self.Map, auimgr=self.auimgr)
-
+        
         # title
         self.mapdisplay.SetTitle(_("GRASS GIS Map Display: %(id)d  - Location: %(loc)s") % \
                                      { 'id' : self.disp_idx + 1,
@@ -117,71 +113,70 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.Show()
             self.mapdisplay.Refresh()
             self.mapdisplay.Update()
-
+        
         self.root = self.AddRoot(_("Map Layers"))
-        self.SetPyData(self.root, (None,None))
-        self.items = []
-
+        self.SetPyData(self.root, (None, None))
+        
         #create image list to use with layer tree
         il = wx.ImageList(16, 16, mask=False)
-
+        
         trart = wx.ArtProvider.GetBitmap(wx.ART_FOLDER_OPEN, wx.ART_OTHER, (16, 16))
         self.folder_open = il.Add(trart)
         trart = wx.ArtProvider.GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
         self.folder = il.Add(trart)
-
+        
         bmpsize = (16, 16)
         trgif = Icons["addrast"].GetBitmap(bmpsize)
         self.rast_icon = il.Add(trgif)
-
+        
         trgif = Icons["addrast3d"].GetBitmap(bmpsize)
         self.rast3d_icon = il.Add(trgif)
-
+        
         trgif = Icons["addrgb"].GetBitmap(bmpsize)
         self.rgb_icon = il.Add(trgif)
         
         trgif = Icons["addhis"].GetBitmap(bmpsize)
         self.his_icon = il.Add(trgif)
-
+        
         trgif = Icons["addshaded"].GetBitmap(bmpsize)
         self.shaded_icon = il.Add(trgif)
-
+        
         trgif = Icons["addrarrow"].GetBitmap(bmpsize)
         self.rarrow_icon = il.Add(trgif)
-
+        
         trgif = Icons["addrnum"].GetBitmap(bmpsize)
         self.rnum_icon = il.Add(trgif)
-
+        
         trgif = Icons["addvect"].GetBitmap(bmpsize)
         self.vect_icon = il.Add(trgif)
-
+        
         trgif = Icons["addthematic"].GetBitmap(bmpsize)
         self.theme_icon = il.Add(trgif)
-
+        
         trgif = Icons["addchart"].GetBitmap(bmpsize)
         self.chart_icon = il.Add(trgif)
-
+        
         trgif = Icons["addgrid"].GetBitmap(bmpsize)
         self.grid_icon = il.Add(trgif)
-
+        
         trgif = Icons["addgeodesic"].GetBitmap(bmpsize)
         self.geodesic_icon = il.Add(trgif)
-
+        
         trgif = Icons["addrhumb"].GetBitmap(bmpsize)
         self.rhumb_icon = il.Add(trgif)
-
+        
         trgif = Icons["addlabels"].GetBitmap(bmpsize)
         self.labels_icon = il.Add(trgif)
-
+        
         trgif = Icons["addcmd"].GetBitmap(bmpsize)
         self.cmd_icon = il.Add(trgif)
-
+        
         self.AssignImageList(il)
-
+        
         # use when groups implemented
         ## self.tree.SetItemImage(self.root, fldridx, wx.TreeItemIcon_Normal)
         ## self.tree.SetItemImage(self.root, fldropenidx, wx.TreeItemIcon_Expanded)
-
+        
         self.Bind(wx.EVT_TREE_ITEM_EXPANDING,   self.OnExpandNode)
         self.Bind(wx.EVT_TREE_ITEM_COLLAPSED,   self.OnCollapseNode)
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED,   self.OnActivateLayer)
@@ -195,7 +190,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         # self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
-
+        
     def GetMap(self):
         """!Get map instace"""
         return self.Map
@@ -615,7 +610,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         @param lchecked if True layer is checked
         @param lopacity layer opacity level
         @param lcmd command (given as a list)
-        @param lgroup group name or None
+        @param lgroup index of group item (-1 for root) or None
         @param lvdigit vector digitizer settings (eg. geometry attributes)
         @param lnviz layer Nviz properties
         """
@@ -655,15 +650,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                          text='', ct_type=1, wnd=ctrl)
             else:
                 # prepend to individual layer or non-expanded group
-                if lgroup is False:
+                if lgroup == -1:
                     # -> last child of root (loading from workspace)
                     layer = self.AppendItem(parentId=self.root,
                                             text='', ct_type=1, wnd=ctrl)
-                elif lgroup is True:
+                elif lgroup > -1:
                     # -> last child of group (loading from workspace)
-                    parent = self.GetItemParent(self.layer_selected)
-                    if parent is self.root: # first item in group
-                        parent=self.layer_selected
+                    parent = self.FindItemByIndex(index = lgroup)
+                    if not parent:
+                        parent = self.root
                     layer = self.AppendItem(parentId=parent,
                                             text='', ct_type=1, wnd=ctrl)
                 elif lgroup is None:
@@ -1439,10 +1434,31 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # self.Map.Clean()
 
     def FindItemByData(self, key, value):
-        """!Find item based on key and value (see PyData[0])"""
+        """!Find item based on key and value (see PyData[0])
+        
+        @return item instance
+        @return None not found
+        """
         item = self.GetFirstChild(self.root)[0]
         return self.__FindSubItemByData(item, key, value)
 
+    def FindItemByIndex(self, index):
+        """!Find item by index (starting at 0)
+
+        @return item instance
+        @return None not found
+        """
+        item = self.GetFirstChild(self.root)[0]
+        i = 0
+        while item and item.IsOk():
+            if i == index:
+                return item
+            
+            item = self.GetNextVisible(item)
+            i += 1
+        
+        return None
+    
     def EnableItemType(self, type, enable=True):
         """!Enable/disable items in layer tree"""
         item = self.GetFirstChild(self.root)[0]
@@ -1456,7 +1472,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def __FindSubItemByData(self, item, key, value):
         """!Support method for FindItemByValue"""
         while item and item.IsOk():
-            itemValue = self.GetPyData(item)[0][key]
+            try:
+                itemValue = self.GetPyData(item)[0][key]
+            except KeyError:
+                return None
+            
             if value == itemValue:
                 return item
             if self.GetPyData(item)[0]['type'] == 'group':

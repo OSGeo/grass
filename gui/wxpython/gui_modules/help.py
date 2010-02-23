@@ -22,7 +22,7 @@ for details.
 import os
 
 import wx
-import wx.lib.customtreectrl as CT
+import wx.lib.agw.customtreectrl as CT
 import wx.lib.flatnotebook as FN
 import  wx.lib.scrolledpanel as scrolled
 from wx.lib.wordwrap import wordwrap
