@@ -6,6 +6,7 @@ SUBDIRS = \
 	d.rast.edit \
 	d.rast.leg \
 	d.shadedmap \
+	d.vect.thematic \
 	db.dropcolumn \
 	db.droptable \
 	db.in.ogr \
@@ -65,7 +66,6 @@ SUBDIRS = \
 	v.krige \
 	wxpyimgview
 
-#	d.vect.thematic \
 #	d.out.gpsdrive \
 #	r.mapcalculator \
 #	r3.mapcalculator \
