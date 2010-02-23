@@ -230,10 +230,16 @@ import shutil
 import atexit
 import grass.script as grass
 
+tmp_graph = None
+tmp_group = None
+tmp_psmap = None
+tmp_psleg = None
+tmp_gisleg = None
+
 def cleanup():
-    for i in xrange(1,6+1):
-	grass.try_remove(tmpfile[i])
-	grass.try_remove(tmpfile[i] + ".sort")
+    for file in [tmp_graph, tmp_group, tmp_psmap, tmp_psleg, tmp_gisleg]:
+	if file:
+	    grass.try_remove(file)
 
 # hard-coded parameter: the maximum number of legend items before
 # we strip them using a middle ellipsis
@@ -249,6 +255,8 @@ def out(fh, vars, tmpl):
     fh.write(subs(vars, tmpl))
 
 def main():
+    global tmp_graph, tmp_group, tmp_psmap, tmp_psleg, tmp_gisleg
+
     breakpoints = options['breakpoints']
     colorscheme = options['colorscheme']
     column = options['column']
