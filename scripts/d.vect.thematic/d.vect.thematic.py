@@ -276,6 +276,7 @@ def main():
     themetype = options['themetype']
     type = options['type']
     where = options['where']
+    icon = options['icon']
 
     flag_f = flags['f']
     flag_g = flags['g']
@@ -283,6 +284,11 @@ def main():
     flag_m = flags['m']
     flag_s = flags['s']
     flag_u = flags['u']
+
+    layer = int(layer)
+    nint = int(nint)
+    size = float(size)
+    maxsize = float(maxsize)
 
     # check column type
     inf = grass.vector_columns(map, layer)
@@ -319,7 +325,7 @@ def main():
         os.environ['GRASS_PNG_READ'] = 'TRUE'
         os.environ['GRASS_PNG_AUTO_WRITE'] = 'FALSE'
 
-    db = vector_db(map)[1]
+    db = grass.vector_db(map)[1]
     if not db or not db['table']:
         grass.fatal(_("No table connected or layer <%s> does not exist.") % layer)
     table = db['table']
@@ -395,7 +401,7 @@ def main():
     else:
         grass.fatal(_("Unknown themecalc type <%s>") % themecalc)
 
-    pointstep = float(maxsize - ptsize) / (numint - 1)
+    pointstep = (maxsize - ptsize) / (numint - 1)
 
     # Prepare legend cuts for too large numint
     if numint > max_leg_items:
@@ -419,11 +425,11 @@ text Value range: $min - $max
 
     f_gisleg = file(tmp_gisleg, 'w')
     out(f_gisleg, locals(), """\
-title - - - {Thematic map legend for column $colum of map $map}
+title - - - {Thematic map legend for column $column of map $map}
 """)
 
     f_psleg = file(tmp_psleg, 'w')
-    out(f.psleg, locals(), """\
+    out(f_psleg, locals(), """\
 text 1% 95% Thematic map legend for column $column of map $map
   ref bottom left
 end
@@ -460,8 +466,8 @@ end
         else:
             grass.fatal(_("This should not happen: parser error. Unknown color scheme %s") % colorscheme)
 
-        color = startc.split(":")
-        endcolor = endc.split(":")
+        color = __builtins__.map(int, startc.split(":"))
+        endcolor = __builtins__.map(int, endc.split(":"))
 
         #The number of color steps is one less then the number of classes
         nclrstep = numint - 1
@@ -480,7 +486,7 @@ text Mapped by $numint intervals of $step
 subtitle - - - {Mapped by $numint intervals of $step}
 """)
 
-            out(f.psleg, locals(), """\
+            out(f_psleg, locals(), """\
 text 4% 87% Mapped by $numint intervals of $step
   ref bottom left
 end
@@ -583,7 +589,7 @@ end
                 else:
                     mincomparison = ">"
 
-            themecolor = ":".join(color)
+            themecolor = ":".join(__builtins__.map(str,color))
             if flag_f:
                 linecolor = "none"
             else:
@@ -678,7 +684,7 @@ end
 
                 f_gisleg.write("text - - - {...}\n")
 
-            sys.stdout.write(subs(locals(), "$themecolor\t\t$openbracket$rangemin - $rangemax$closebracket $extranote"))
+            sys.stdout.write(subs(locals(), "$themecolor\t\t$openbracket$rangemin - $rangemax$closebracket $extranote\n"))
             if not where:
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax")
             else:
@@ -692,7 +698,7 @@ end
             # Create group for GIS Manager
             if flag_g:
                 # change rgb colors to hex
-                xthemecolor = "#%02X%02X%02X" % tuple(themecolor.split(":"))
+                xthemecolor = "#%02X%02X%02X" % tuple(__builtins__.map(int, themecolor.split(":")))
                 #xlinecolor=`echo $linecolor | awk -F: '{printf("#%02X%02X%02X\n",$1,$2,$3)}'`
 
                 if "$linecolor" == "black":
@@ -886,8 +892,8 @@ end
 """)
 
 
-        sys.stdout.write("Size/width\tValue")
-        sys.stdout.write("==========\t=====")
+        sys.stdout.write("Size/width\tValue\n")
+        sys.stdout.write("==========\t=====\n")
 
         themecolor = pointcolor
 
@@ -994,7 +1000,7 @@ text 25% $xline1% ...
 end
 """)
 
-            sys.stdout.write(subs(locals(), "$ptsize\t\t$openbracket$rangemin - $rangemax$closebracket $extranote"))
+            sys.stdout.write(subs(locals(), "$ptsize\t\t$openbracket$rangemin - $rangemax$closebracket $extranote\n"))
 
             if not where:
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax")
@@ -1009,7 +1015,7 @@ end
             # Create group for GIS Manager
             if flag_g:
                 # change rgb colors to hex
-                xthemecolor = "#%02X%02X%02X" % tuple(themecolor.split(":"))
+                xthemecolor = "#%02X%02X%02X" % tuple(__builtins__.map(int,themecolor.split(":")))
                 xlinecolor = "#000000"
 
                 # create group entry
