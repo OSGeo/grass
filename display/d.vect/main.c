@@ -187,7 +187,7 @@ int main(int argc, char **argv)
     width_opt = G_define_option();
     width_opt->key = "width";
     width_opt->type = TYPE_INTEGER;
-    width_opt->answer = "1";
+    width_opt->answer = "0";
     width_opt->guisection = _("Lines");
     width_opt->description = _("Line width");
 
