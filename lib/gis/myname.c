@@ -43,7 +43,7 @@ char *G_myname(void)
 	fclose(fd);
     }
     if (!ok)
-	strcpy(name, _("Unknown Location"));
+	strcpy(name, _("This location has no description."));
 
     return G_store(name);
 }
