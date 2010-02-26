@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     no_topol = G_define_flag();
     no_topol->key = 'b';
     no_topol->description =
-	_("Do not build vector topology (use with care for massive point export)");
+	_("Do not build vector topology (recommended for massive point conversion)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
