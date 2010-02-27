@@ -261,7 +261,7 @@ proc ap_get_topofile {} {
     global attPopup_Status attPopup_Type
     
     set new [create_map_browser .browse_topo_file surf 1]
-    if { $new == "" } then { return }
+    if { $new == "" || $new == -1 } then { return }
     
     puts "returned from create_map_browser"
     set attPopup_Type non_constant
