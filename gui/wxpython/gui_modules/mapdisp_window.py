@@ -1145,13 +1145,14 @@ class BufferedWindow(MapWindow, wx.Window):
         previous = self.mouse['begin']
         move = (current[0] - previous[0],
                 current[1] - previous[1])
-
+        
         digitToolbar = self.parent.toolbars['vdigit']
-
+        
         # dragging or drawing box with left button
-        if self.mouse['use'] == 'pan':
+        if self.mouse['use'] == 'pan' or \
+                event.MiddleIsDown():
             self.DragMap(move)
-
+        
         # dragging decoration overlay item
         elif (self.mouse['use'] == 'pointer' and 
                 not digitToolbar and 
