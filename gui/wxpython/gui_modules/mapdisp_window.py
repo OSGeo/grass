@@ -2561,7 +2561,10 @@ class BufferedWindow(MapWindow, wx.Window):
                       (self.zoomhistory))
         
         if len(self.zoomhistory) > 1:
-            self.parent.toolbars['map'].Enable('zoomback')
+            if self.parent.GetName() == 'MapWindow':
+                self.parent.toolbars['map'].Enable('zoomback')
+            else:
+                self.parent.toolbars['georect'].Enable('zoomback')
         
         return removed
 
