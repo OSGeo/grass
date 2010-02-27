@@ -360,13 +360,12 @@ class GRToolbar(AbstractToolbar):
             (self.zoomtomap, "zoomtomap", Icons["zoommenu"].GetBitmap(),
              wx.ITEM_NORMAL, _("Zoom to map"), _("Zoom to displayed map"),
              self.OnZoomMap),
-            ("", "", "", "", "", "", ""),
             )
     
     def OnZoomMap(self, event):
         """!Zoom to selected map"""
         self.parent.MapWindow.ZoomToMap(layers = self.mapcontent.GetListOfLayers())
-
+        
         event.Skip()
         
 class GCPToolbar(AbstractToolbar):
