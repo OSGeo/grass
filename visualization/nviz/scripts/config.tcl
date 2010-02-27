@@ -83,7 +83,7 @@ option add *activeBackground gray80 widgetDefault
 option add *font -*-helvetica-medium-r-normal-*-12-*-iso8859-1 widgetDefault
 option add *Label.font -*-helvetica-bold-r-normal-*-12-*-iso8859-1
 option add *label.font -*-helvetica-medium-r-normal-*-12-*-iso8859-1
-option add *Label.foreground "#226333"
+option add *Label.foreground "khaki4"
 option add *label.foreground "black"
 option add *Radiobutton.relief flat
 option add *Checkbutton.relief flat
