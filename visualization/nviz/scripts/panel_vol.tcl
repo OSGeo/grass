@@ -356,7 +356,7 @@ proc new_vol {} {
     # Let user know that we are busy
     appBusy
 
-    if {$new != "-1"} {
+    if { $new != "-1" && $new != "" } {
         set temp [Nnew_map_obj vol]
         $temp set_att map $new
 

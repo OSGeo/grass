@@ -263,7 +263,6 @@ proc ap_get_topofile {} {
     set new [create_map_browser .browse_topo_file surf 1]
     if { $new == "" || $new == -1 } then { return }
     
-    puts "returned from create_map_browser"
     set attPopup_Type non_constant
     set attPopup_Status $new
 }
@@ -283,7 +282,7 @@ proc ap_get_colorfile {} {
     global attPopup_Status attPopup_Type
 
     set new [create_map_browser .browse_color_file surf 1]
-    if { $new == "" } then { return }
+    if { $new == ""  || $new == -1 } then { return }
 
     set attPopup_Type non_constant
     set attPopup_Status $new
@@ -362,7 +361,7 @@ proc ap_get_rasterfile {att} {
     global attPopup_Status attPopup_Type
 
     set new [create_map_browser .browse_rast_file surf 1]
-    if { $new == "" } then { return }
+    if { $new == ""  || $new == -1 } then { return }
 
     set attPopup_Type non_constant    
     set attPopup_Status $new

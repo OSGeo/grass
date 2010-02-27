@@ -333,7 +333,7 @@ proc add_map {type} {
     # Let user know that we are busy
     appBusy
 
-    if {$new != "-1"} {
+    if { $new != "" && $new != "-1" } {
 	set temp [Nnew_map_obj $type]
 	$temp set_att map $new
 	set_new_curr $type [string range $temp 5 end]
