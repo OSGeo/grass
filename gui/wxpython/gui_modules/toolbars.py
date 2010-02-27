@@ -46,6 +46,8 @@ class AbstractToolbar(wx.ToolBar):
     def __init__(self, parent):
         self.parent = parent
         wx.ToolBar.__init__(self, parent = self.parent, id = wx.ID_ANY)
+    
+        self.action = dict()
         
         self.Bind(wx.EVT_TOOL, self.OnTool)
         
@@ -138,6 +140,19 @@ class AbstractToolbar(wx.ToolBar):
         if platform.system() == 'Windows':
             size = self.GetBestSize()
             self.SetSize((size[0] + width, size[1]))
+
+    def Enable(self, tool, enable = True):
+        """!Enable defined tool
+        
+        @param tool name
+        @param enable True to enable otherwise disable tool
+        """
+        try:
+            id = getattr(self, tool)
+        except AttributeError:
+            return
+        
+        self.EnableTool(id, enable)
         
 class MapToolbar(AbstractToolbar):
     """!Map Display toolbar
@@ -168,10 +183,10 @@ class MapToolbar(AbstractToolbar):
         self.combo.Hide()
         self.combo.Show()
         
-        # default action
         self.action = { 'id' : self.pointer }
         self.defaultAction = { 'id' : self.pointer,
                                'bind' : self.parent.OnPointer }
+        
         self.OnTool(None)
         
         self.EnableTool(self.zoomback, False)
@@ -286,19 +301,6 @@ class MapToolbar(AbstractToolbar):
                      self.printmap):
             self.EnableTool(tool, enabled)
         
-    def Enable(self, tool, enable = True):
-        """!Enable defined tool
-        
-        @param tool name
-        @param enable True to enable otherwise disable tool
-        """
-        try:
-            id = getattr(self, tool)
-        except AttributeError:
-            return
-        
-        self.EnableTool(self.zoomback, enable)
-
 class GRToolbar(AbstractToolbar):
     """
     Georectification toolbar
@@ -310,13 +312,21 @@ class GRToolbar(AbstractToolbar):
         @param parent reference to MapFrame
         @param mapcontent reference to render.Map (registred by MapFrame)
         """
-        self.mapcontent = map
+        self.mapcontent = mapcontent
         AbstractToolbar.__init__(self, parent)
         
         self.InitToolbar(self.ToolbarData())
         
         # realize the toolbar
         self.Realize()
+        
+        self.action = { 'id' : self.gcpset }
+        self.defaultAction = { 'id' : self.gcpset,
+                               'bind' : self.parent.OnPointer }
+        
+        self.OnTool(None)
+        
+        self.EnableTool(self.zoomback, False)
         
     def ToolbarData(self):
         """!Toolbar data"""
@@ -365,8 +375,8 @@ class GRToolbar(AbstractToolbar):
     def OnZoomMap(self, event):
         """!Zoom to selected map"""
         self.parent.MapWindow.ZoomToMap(layers = self.mapcontent.GetListOfLayers())
-        
-        event.Skip()
+        if event:
+            event.Skip()
         
 class GCPToolbar(AbstractToolbar):
     """!
