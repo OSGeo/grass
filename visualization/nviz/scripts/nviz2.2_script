@@ -720,7 +720,7 @@ proc save_3dview { dummy } {
 	# Ask the user for a file name to save in
 	set file_name [create_map_browser .browse_3dview_file "3d.view" 1]
 
-	if {$file_name == -1} then return
+	if {$file_name == -1 || $file_name == "" } then return
 
 	Nsave_3dview $file_name
 }
@@ -730,7 +730,7 @@ proc load_3dview { dummy } {
 	# Ask the user for a file name to load from
 	set file_name [create_map_browser .browse_3dview_file "3d.view" 1]
 
-	if {$file_name == -1} then return
+	if {$file_name == -1 || $file_name == "" } then return
 
         appBusy
         # Do not redraw automaticly display while loading state...

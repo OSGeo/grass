@@ -250,7 +250,7 @@ proc aip_get_rasterfile {att} {
     global attIsoPopup_Status attIsoPopup_Type
 
     set new [create_map_browser .browse_rast_file vol 1]
-    if { $new == "-1" } then { return }
+    if { $new == "-1"  || $new == "" } then { return }
 
     set attIsoPopup_Type non_constant
     set attIsoPopup_Status $new

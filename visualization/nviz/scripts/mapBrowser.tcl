@@ -141,6 +141,8 @@ proc create_map_browser {{w .map_browser} {type all} {mode 0}} {
     wm title $w "Map Browser"
     tkwait visibility $w
 
+    # Answer must be set to not use uninitialized variable by accident
+    set map_browser($w,Answer) -1
     #puts "BROWSER: $w TYPE: $type MODE: $mode"
 
     entry $w.filename -bd 2 -relief sunken
