@@ -661,17 +661,18 @@ class GMFrame(wx.Frame):
         # start map displays first (list of layers can be empty)
         #
         displayId = 0
-        mapdisplay = []
+        mapdisplay = list()
         for display in gxwXml.displays:
-            mapdisplay.append(self.NewDisplay(show=False))
+            mapdisp = self.NewDisplay(show=False)
+            mapdisplay.append(mapdisp)
             maptree = self.gm_cb.GetPage(displayId).maptree
             
             # set windows properties
-            mapdisplay[-1].SetProperties(render=display['render'],
-                                         mode=display['mode'],
-                                         showCompExtent=display['showCompExtent'],
-                                         constrainRes=display['constrainRes'],
-                                         projection=display['projection']['enabled'])
+            mapdisp.SetProperties(render=display['render'],
+                                  mode=display['mode'],
+                                  showCompExtent=display['showCompExtent'],
+                                  constrainRes=display['constrainRes'],
+                                  projection=display['projection']['enabled'])
 
             if display['projection']['enabled']:
                 if display['projection']['epsg']:
@@ -684,16 +685,21 @@ class GMFrame(wx.Frame):
             # set position and size of map display
             if UserSettings.Get(group='workspace', key='posDisplay', subkey='enabled') is False:
                 if display['pos']:
-                    mapdisplay[-1].SetPosition(display['pos'])
+                    mapdisp.SetPosition(display['pos'])
                 if display['size']:
-                    mapdisplay[-1].SetSize(display['size'])
+                    mapdisp.SetSize(display['size'])
                     
             # set extent if defined
             if display['extent']:
                 w, s, e, n = display['extent']
-                maptree.Map.region = maptree.Map.GetRegion(w=w, s=s, e=e, n=n)
+                region = maptree.Map.region = maptree.Map.GetRegion(w=w, s=s, e=e, n=n)
+                mapdisp.GetWindow().ResetZoomHistory()
+                mapdisp.GetWindow().ZoomHistory(region['n'],
+                                                region['s'],
+                                                region['e'],
+                                                region['w'])
                 
-            mapdisplay[-1].Show()
+            mapdisp.Show()
             
             displayId += 1
     
@@ -1143,12 +1149,12 @@ class GMFrame(wx.Frame):
         @return reference to mapdisplay intance
         """
         Debug.msg(1, "GMFrame.NewDisplay(): idx=%d" % self.disp_idx)
-
+        
         # make a new page in the bookcontrol for the layer tree (on page 0 of the notebook)
         self.pg_panel = wx.Panel(self.gm_cb, id=wx.ID_ANY, style= wx.EXPAND)
         self.gm_cb.AddPage(self.pg_panel, text="Display "+ str(self.disp_idx + 1), select = True)
         self.curr_page = self.gm_cb.GetCurrentPage()
-
+        
         # create layer tree (tree control for managing GIS layers)  and put on new notebook page
         self.curr_page.maptree = wxgui_utils.LayerTree(self.curr_page, id=wx.ID_ANY, pos=wx.DefaultPosition,
                                                        size=wx.DefaultSize, style=wx.TR_HAS_BUTTONS
@@ -1156,7 +1162,7 @@ class GMFrame(wx.Frame):
                                                        |wx.TR_DEFAULT_STYLE|wx.NO_BORDER|wx.FULL_REPAINT_ON_RESIZE,
                                                        idx=self.disp_idx, lmgr=self, notebook=self.gm_cb,
                                                        auimgr=self._auimgr, showMapDisplay=show)
-
+        
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
         cb_boxsizer.Add(self.curr_page.maptree, proportion=1, flag=wx.EXPAND, border=1)
@@ -1164,7 +1170,7 @@ class GMFrame(wx.Frame):
         cb_boxsizer.Fit(self.curr_page.maptree)
         self.curr_page.Layout()
         self.curr_page.maptree.Layout()
-
+        
         # use default window layout
         if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
             dim = UserSettings.Get(group='general', key='defWindowPos', subkey='dim')
@@ -1176,9 +1182,9 @@ class GMFrame(wx.Frame):
                 self.curr_page.maptree.mapdisplay.SetSize((w, h))
             except:
                 pass
- 
+        
         self.disp_idx += 1
-
+        
         return self.curr_page.maptree.mapdisplay
 
     # toolBar button handlers
