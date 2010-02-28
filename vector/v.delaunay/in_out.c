@@ -189,10 +189,8 @@ void remove_duplicates(unsigned int *size)
     if (n > 0) {
 	for (next = 1; next < n; next++) {
 	    if (sites[prev].x != sites[next].x ||
-		sites[prev].y != sites[next].y) {
-		sites[++prev].x = sites[next].x;
-		sites[prev].y = sites[next].y;
-	    }	
+		sites[prev].y != sites[next].y)
+		sites[++prev] = sites[next];
 	}
 	*size = prev + 1;
     }
