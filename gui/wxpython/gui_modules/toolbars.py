@@ -1277,6 +1277,7 @@ class ProfileToolbar(AbstractToolbar):
         self.unzoom = wx.NewId()
         self.erase = wx.NewId()
         self.save = wx.NewId()
+        self.datasave = wx.NewId()
         self.printer = wx.NewId()
         self.quit = wx.NewId()
                 
@@ -1307,9 +1308,12 @@ class ProfileToolbar(AbstractToolbar):
              wx.ITEM_NORMAL, Icons["erase"].GetLabel(), Icons["erase"].GetDesc(),
              self.parent.OnErase),
             ("", "", "", "", "", "", ""),
-            (self.save, 'save', Icons["savefile"].GetBitmap(),
+            (self.save, 'save image', Icons["savefile"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["savefile"].GetLabel(), Icons["savefile"].GetDesc(),
              self.parent.SaveToFile),
+            (self.datasave, 'save data', Icons["datasave"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["datasave"].GetLabel(), Icons["datasave"].GetDesc(),
+             self.parent.SaveProfileToFile),
             (self.printer, 'print', Icons["printmap"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["printmap"].GetLabel(), Icons["printmap"].GetDesc(),
              self.parent.PrintMenu),

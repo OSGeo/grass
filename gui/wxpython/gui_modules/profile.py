@@ -602,6 +602,41 @@ class ProfileFrame(wx.Frame):
         """
         self.client.SaveFile()
 
+    def SaveProfileToFile(self, event):
+        """
+        Save r.profile data to a csv file
+        """    
+        
+        wildcard = "Comma separated value (*.csv)|*.csv" 
+        
+        dlg = wx.FileDialog(
+            self, message="Path and prefix (for raster name) to save profile values...", defaultDir=os.getcwd(), 
+            defaultFile="",  wildcard=wildcard, style=wx.SAVE
+            )
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            
+            for r in self.raster.itervalues():
+                if r['name'] == '':
+                    continue
+
+                print 'path = '+str(path)
+                pfile = path+'_'+str(r['name'])+'.csv'
+                print 'pfile1 = '+str(pfile)
+                try:
+                    file = open(pfile, "w")
+                except IOError:
+                    wx.MessageBox(parent=self,
+                                  message=_("Unable to open file <%s> for writing.") % pfile,
+                                  caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                    return False
+                for datapair in r['datalist']:
+                    file.write('%d,%d\n' % (float(datapair[0]),float(datapair[1])))
+                                        
+                file.close()
+
+        dlg.Destroy()
+
     def DrawPointLabel(self, dc, mDataDict):
         """!This is the fuction that defines how the pointLabels are plotted
             dc - DC that will be passed
@@ -1030,7 +1065,7 @@ class TextDialog(wx.Dialog):
         btnCancel = wx.Button(self, wx.ID_CANCEL)
         btnSave.SetDefault()
 
-        # bindigs
+        # bindings
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
         btnApply.SetToolTipString(_("Apply changes for the current session"))
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)

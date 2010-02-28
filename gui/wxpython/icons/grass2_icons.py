@@ -89,6 +89,7 @@ IconsGrass2 = {
     "transect"     : 'layer-raster-profile.png',
     "profiledraw"  : 'show.png',
     "profileopt"   : 'settings.png',
+    "datasave"     : 'save.png',
     # georectify
     "grGcpSet"     : 'gcp-create.png',
     'grGcpClear'   : 'gcp-remove.png',
