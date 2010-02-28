@@ -60,7 +60,10 @@ import wx.aui
 import wx.combo
 import wx.html
 import wx.stc
-import wx.lib.agw.customtreectrl as CT
+try:
+    import wx.lib.agw.customtreectrl as CT
+except ImportError:
+    import wx.lib.customtreectrl as CT
 import wx.lib.flatnotebook as FN
 
 grassPath = os.path.join(globalvar.ETCDIR, "python")
