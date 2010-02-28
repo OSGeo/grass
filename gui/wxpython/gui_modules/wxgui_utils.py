@@ -23,7 +23,10 @@ import sys
 import string
 
 import wx
-import wx.lib.agw.customtreectrl as CT
+try:
+    import wx.lib.agw.customtreectrl as CT
+except ImportError:
+    import wx.lib.customtreectrl as CT
 import wx.combo
 import wx.lib.newevent
 import wx.lib.buttons  as  buttons
