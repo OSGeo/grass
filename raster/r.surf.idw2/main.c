@@ -59,6 +59,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("surface"));
+    G_add_keyword(_("interpolation"));
+    G_add_keyword(_("IDW"));
     module->description = _("Surface generation program.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);

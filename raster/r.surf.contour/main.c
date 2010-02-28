@@ -10,9 +10,9 @@
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      interpolates a raster elevation map from a rasterized
+ * PURPOSE:      Interpolates a raster elevation map from a rasterized
  *               contour map
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -40,7 +40,6 @@ CELL **con;
 FLAG *seen, *mask;
 NODE *zero;
 
-
 int main(int argc, char *argv[])
 {
     int r, c;
@@ -54,13 +53,14 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *opt1, *opt2;
 
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("surface"));
+    G_add_keyword(_("interpolation"));
     module->description =
-	_("Surface generation program from rasterized contours.");
+	_("Generates surface raster map from rasterized contours.");
 
     opt1 = G_define_option();
     opt1->key = "input";
