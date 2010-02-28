@@ -34,6 +34,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("surface"));
+    G_add_keyword(_("random"));
     module->description =
 	_("Produces a raster map layer of uniform random "
 	  "deviates whose range can be expressed by the user.");

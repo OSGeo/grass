@@ -83,7 +83,9 @@ int main(int argc, char *argv[])
     /* Options declarations */
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
+    G_add_keyword(_("LIDAR"));
     module->description =
 	_("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
 

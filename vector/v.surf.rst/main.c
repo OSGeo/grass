@@ -142,6 +142,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
+    G_add_keyword(_("RST"));
     module->description =
 	_("Spatial approximation and topographic analysis from given "
 	  "point or isoline data in vector format to floating point "
