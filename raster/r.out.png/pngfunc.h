@@ -24,7 +24,6 @@ static void pnmtopng_error_handler(png_structp png_ptr, png_const_charp msg);
 #if 0
 /* unused */
 static int filter = -1;
-static int compression = Z_DEFAULT_COMPRESSION;
 #endif
 static jmpbuf_wrapper pnmtopng_jmpbuf_struct;
 
