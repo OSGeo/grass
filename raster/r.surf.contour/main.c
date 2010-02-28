@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     CELL con1, con2;
     double d1, d2;
     CELL *alt_row;
-    const char *con_name, *alt_name, *con_mapset;
+    const char *con_name, *alt_name;
     int file_fd;
     CELL value;
     struct History history;
@@ -62,35 +62,21 @@ int main(int argc, char *argv[])
     module->description =
 	_("Generates surface raster map from rasterized contours.");
 
-    opt1 = G_define_option();
-    opt1->key = "input";
-    opt1->type = TYPE_STRING;
-    opt1->required = YES;
-    opt1->gisprompt = "old,cell,raster";
-    opt1->description = _("Name of existing raster map containing contours");
+    opt1 = G_define_standard_option(G_OPT_R_INPUT);
+    opt1->description = _("Name of input raster map containing contours");
 
-    opt2 = G_define_option();
-    opt2->key = "output";
-    opt2->type = TYPE_STRING;
-    opt2->required = YES;
-    opt2->gisprompt = "new,cell,raster";
-    opt2->description = _("Output elevation raster map");
+    opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-
+    
     con_name = opt1->answer;
     alt_name = opt2->answer;
-
-    con_mapset = G_find_raster2(con_name, "");
-    if (!con_mapset)
-	G_fatal_error("Contour raster map [%s] not found", con_name);
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
     i_val_l_f = nrows + ncols;
-    con = read_cell(con_name, con_mapset);
+    con = read_cell(con_name);
     alt_row = (CELL *) G_malloc(ncols * sizeof(CELL));
     seen = flag_create(nrows, ncols);
     mask = flag_create(nrows, ncols);
@@ -129,12 +115,13 @@ int main(int argc, char *argv[])
 	}
 	Rast_put_row(file_fd, alt_row, CELL_TYPE);
     }
-    G_percent(r, nrows, 1);
+    G_percent(1, 1, 1);
+    
     free_cell(con);
     flag_destroy(seen);
     flag_destroy(mask);
     Rast_close(file_fd);
-
+    
     Rast_short_history(alt_name, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(alt_name, &history);

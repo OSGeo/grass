@@ -38,5 +38,5 @@ NODE *addpts(NODE *, int, int, int, int, int *);
 int find_con(int, int, double *, double *, CELL *, CELL *);
 
 /* read_cell.c */
-CELL **read_cell(const char *, const char *);
+CELL **read_cell(const char *);
 void free_cell(CELL **);
