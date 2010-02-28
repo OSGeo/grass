@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-26 19:45+0100\n"
-"PO-Revision-Date: 2010-02-15 14:06+0900\n"
-"Last-Translator: ueda <nao@locapoint.com>\n"
+"PO-Revision-Date: 2010-02-18 17:52+0900\n"
+"Last-Translator: \n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8666,6 +8666,69 @@ msgstr "GRASS GUI 終了 "
 msgid "No map layer selected. Operation cancelled."
 msgstr "マップレイヤーが選択されていません 処理はキャンセルされました "
 
+#, fuzzy
+msgid "Creates a lines vector map from an ASCII x,y points file."
+msgstr "ベクトル ベクトル."
+
+#, fuzzy
+msgid ""
+"Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
+"vector map"
+msgstr "ベクトル."
+
+#, fuzzy
+msgid ""
+"Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+"file into a vector map"
+msgstr "インポート ベクトル."
+
+#, fuzzy
+msgid "Manage extensions"
+msgstr "ガンマ"
+
+#, fuzzy
+msgid ""
+"Creates optimally placed labels for vector map from associated attributes"
+msgstr "ベクトル."
+
+#, fuzzy
+msgid "Output vector map name"
+msgstr "ベクトル"
+
+#, fuzzy
+msgid "Create/edit projection information for current location"
+msgstr "の"
+
+#, fuzzy
+msgid "Digitize raster map"
+msgstr "デジタイズ"
+
+#, fuzzy
+msgid "Reclassify vector objects interactively by entering SQL rules"
+msgstr "ベクトル"
+
+#, fuzzy
+msgid ""
+"Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
+"transformation function."
+msgstr "色."
+
+#, fuzzy
+msgid ""
+"Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
+"transformation function"
+msgstr "色"
+
+#, fuzzy
+msgid "Interactive input for supervised classification"
+msgstr "入力 の"
+
+#, fuzzy
+msgid ""
+"Copy a table. Either 'from_table' (optionally with 'where') can be used or "
+"'select' option, but not 'from_table' and 'select' at the same time."
+msgstr "コピー."
+
 #~ msgid "Add thematic layer"
 #~ msgstr "主題レイヤー追加 "
 
@@ -8713,69 +8776,6 @@ msgstr "マップレイヤーが選択されていません 処理はキャン�
 
 #~ msgid "Marker:"
 #~ msgstr "マーカー："
-
-#, fuzzy
-#~ msgid "Creates a lines vector map from an ASCII x,y points file."
-#~ msgstr "ベクトル ベクトル."
-
-#, fuzzy
-#~ msgid ""
-#~ "Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
-#~ "vector map"
-#~ msgstr "ベクトル."
-
-#, fuzzy
-#~ msgid ""
-#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
-#~ "file into a vector map"
-#~ msgstr "インポート ベクトル."
-
-#, fuzzy
-#~ msgid "Manage extensions"
-#~ msgstr "ガンマ"
-
-#, fuzzy
-#~ msgid ""
-#~ "Creates optimally placed labels for vector map from associated attributes"
-#~ msgstr "ベクトル."
-
-#, fuzzy
-#~ msgid "Output vector map name"
-#~ msgstr "ベクトル"
-
-#, fuzzy
-#~ msgid "Create/edit projection information for current location"
-#~ msgstr "の"
-
-#, fuzzy
-#~ msgid "Digitize raster map"
-#~ msgstr "デジタイズ"
-
-#, fuzzy
-#~ msgid "Reclassify vector objects interactively by entering SQL rules"
-#~ msgstr "ベクトル"
-
-#, fuzzy
-#~ msgid ""
-#~ "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
-#~ "transformation function."
-#~ msgstr "色."
-
-#, fuzzy
-#~ msgid ""
-#~ "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
-#~ "transformation function"
-#~ msgstr "色"
-
-#, fuzzy
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "入力 の"
-
-#, fuzzy
-#~ msgid ""
-#~ "Copy a table. Either 'from_table' (optionally with 'where') can be used "
-#~ "or 'select' option, but not 'from_table' and 'select' at the same time."
-#~ msgstr "コピー."
 
 #~ msgid "Import GDAL supported raster file into a binary raster map layer."
 #~ msgstr "GDALファイルをラスターマップとしてインポート "
@@ -9120,3 +9120,208 @@ msgstr "マップレイヤーが選択されていません 処理はキャン�
 
 #~ msgid "%s' copied to clipboard"
 #~ msgstr "%s'クリップボードにコピー "
+
+#~ msgid "Add various vector-based map layer"
+#~ msgstr "ベクターマップレイヤーの追加 "
+
+#~ msgid "Import raster data using GDAL"
+#~ msgstr "GDALでのラスターデータのインポート "
+
+#~ msgid "Converts selected GDAL layers to GRASS raster maps using r.in.gdal"
+#~ msgstr " r.in.gdalで使用できる GDALレイヤーの変換"
+
+#~ msgid "Link GDAL supported raster file to a binary raster map layer."
+#~ msgstr "GDALファイルをラスターマップとしてリンク "
+
+#~ msgid "Link GDAL supported raster files to a binary raster map layers"
+#~ msgstr "GDALファイルをラスターマップとしてリンク "
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr "ASCIIラスターをバイナリラスターへ変換"
+
+#~ msgid "ASCII polygons and lines import"
+#~ msgstr "ASCII ポリゴンとラインをインポート "
+
+#~ msgid "Binary file import"
+#~ msgstr "バイナリーファイルのインポート "
+
+#~ msgid ""
+#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "ESRI ARC/INFO ASCIIラスターファイルをラスターマップとしてインポート "
+
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "SPOT VGT NDVIファイル をラスターマップとしてインポート "
+
+#~ msgid ""
+#~ "Georeference, rectify and import Terra-ASTER imagery and relative DEM's "
+#~ "using gdalwarp."
+#~ msgstr "地理参照 Terra-ASTER画像ファイルのインポート gdalwarpによるDEM校正 "
+
+#~ msgid "Downloads and imports data from WMS servers."
+#~ msgstr "WMSサーバーからダウンロード＆インポート "
+
+#~ msgid "Convert OGR vector layers to GRASS vector map."
+#~ msgstr "OGRベクトルレイヤーからGRASSベクトルマップへ変換"
+
+#~ msgid "Creates a new vector as a read-only link to OGR layer."
+#~ msgstr "OGRレイヤーを読み込み専用リンクとしてベクトル作成 "
+
+#~ msgid "ASCII points/GRASS ASCII vector import"
+#~ msgstr "ASCII ポイント/GRASS ASCII ベクトルのインポート "
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr ""
+#~ "ASCIIポイントファイルまたはASCIIベクトルファイルから新規ベクトルマップ作"
+#~ "成 "
+
+#~ msgid "Old GRASS vector import"
+#~ msgstr "旧ベクトルデータのインポート "
+
+#~ msgid "Multiple DXF layers import"
+#~ msgstr "複数DXFレイヤーのインポート "
+
+#~ msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)"
+#~ msgstr "v.in.dxfを利用してDXFレイヤーからGRASSベクトルマップへ変換"
+
+#~ msgid "GPSBabel GPS import"
+#~ msgstr "GPSBabelのインポート "
+
+#~ msgid ""
+#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+#~ "file into a vector map."
+#~ msgstr "GPSレシーバーからの情報をベクトルマップへインポート "
+
+#~ msgid "Matlab and MapGen import"
+#~ msgstr "Matlab とMapGenのインポート "
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "3D ASCII ラスターテキストファイルを 3Dラスターマップレイヤーへインポート "
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "ASCIIテキストのラスターマップに変換"
+
+#~ msgid "ASCII x,y,z export"
+#~ msgstr "ASCII XYZ形式のエクスポート "
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "GRIDATB.FOR をラスターマップとしてエクスポート "
+
+#~ msgid "Binary export"
+#~ msgstr "バイナリーのエクスポート "
+
+#~ msgid "Raster File Series to MPEG Conversion Program."
+#~ msgstr "MPEG変換によるラスターファイルシリーズ"
+
+#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
+#~ msgstr "PNG画像フォーマットへエクスポート "
+
+#~ msgid ""
+#~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
+#~ "resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr "指定されている領域のRGB情報をPPM画像ファイルへ変換"
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr "POV-Rayの標高フィールドにラスターマップを変換"
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr "ラスターマップをVRMLへエクスポート "
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "ラスターマップを VTK-Ascii フォーマットへ変換"
+
+#~ msgid "Multiple export formats using OGR"
+#~ msgstr "OGRを使用した複数フォーマットのエクスポート "
+
+#~ msgid "ASCII points/GRASS ASCII vector export"
+#~ msgstr "ASCII ポイント/GRASS ASCII ベクトルのエクスポート "
+
+#~ msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"
+#~ msgstr "POV-Rayフォーマットへ変換"
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "3D ラスターマップをASCIIテキストファイルに変換"
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr "GRASS 3D ラスターマップを3D Vis5D ファイルにエキスポート "
+
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr "ラスターマップ内にベクトルマップを変換"
+
+#~ msgid ""
+#~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
+#~ "raster map layer."
+#~ msgstr "3Dラスターマップ内にベクトルマップ（ポイントのみ）を変換"
+
+#~ msgid "Convert coordinates from one projection to another (cs2cs frontend)."
+#~ msgstr "座標を他の投影法に変換 (cs2cs使用) "
+
+#~ msgid "Calculates category or object oriented statistics."
+#~ msgstr "マップのカテゴリー値について統計解析を行います "
+
+#~ msgid ""
+#~ "r.recode.rules - Use ascii rules file to recode categories in raster map"
+#~ msgstr ""
+#~ "r.recode.rules - ラスターマップを分類するための記録をASCIIルールファイルを"
+#~ "使用"
+
+#~ msgid "Interactive editing and digitization of vector maps"
+#~ msgstr "ベクトルマップの対話型編集とデジタイズ"
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "ベクトルマップにトポロジーを作成"
+
+#~ msgid "Vector based generalization."
+#~ msgstr "ベクトルベースの一般化"
+
+#~ msgid "Split lines to shorter segments."
+#~ msgstr "短いセグメントに線分を分割"
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "指定された位置のベクトルマップレイヤーを検索"
+
+#~ msgid ""
+#~ "Creates a buffer around features of given type (areas must contain "
+#~ "centroid)."
+#~ msgstr ""
+#~ "指定されたタイプのフィーチャ（セントロイドが含まれる必要あり）の周りにバッ"
+#~ "ファーを作成"
+
+#~ msgid "Create points along input lines in new vector with 2 layers."
+#~ msgstr "2つのレイヤーの新しいベクトルラインに沿ってポイントを作成"
+
+#~ msgid "Mosaics up to 4 images and extends colormap; creates map *.mosaic"
+#~ msgstr ""
+#~ "最大４つの画像と拡張カラーマップからモザイクを作成; マップ作成 *.mosaic  "
+
+#~ msgid ""
+#~ "Creates and adds a new attribute table to a given layer of an existing "
+#~ "vector map."
+#~ msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
+
+#~ msgid "GRASS GIS help"
+#~ msgstr "GRASSのヘルプ "
+
+#~ msgid "coarse:"
+#~ msgstr "粗さ:"
+
+#~ msgid "fine:"
+#~ msgstr "細かさ:  "
+
+#~ msgid "Wire color:"
+#~ msgstr "ワイヤー色："
+
+#~ msgid "Icon size:"
+#~ msgstr "アイコンサイズ："
+
+#~ msgid "width:"
+#~ msgstr "幅："
+
+#~ msgid "symbol:"
+#~ msgstr "シンボル："
+
+#~ msgid "color:"
+#~ msgstr "カラー："

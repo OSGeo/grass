@@ -1,6 +1,7 @@
 # translation of grasslibs_ja.po to Japanese
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2005, GRASS Development Team
+# Copyright (C) 2005,2010 GRASS Development Team
+#
 # Shinji Masumoto <masumoto@sci.osaka-cu.ac.jp>, 2004
 # Susumu Nonogaki <nonogaki@sci.osaka-cu.ac.jp>, 2005
 # Markus Neteler <neteler@itc.it>, 2004, 2005.
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-26 19:45+0100\n"
-"PO-Revision-Date: 2010-02-15 14:06+0900\n"
-"Last-Translator: ueda <nao@locapoint.com>\n"
+"PO-Revision-Date: 2010-02-18 17:47+0900\n"
+"Last-Translator: \n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5175,6 +5176,130 @@ msgid ""
 "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "�������: ����� �����������n"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "���"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "���"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "����� ���� ���\n"
+
+#, fuzzy
+msgid "Cannot open database %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "���"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot read topo for line [%d]"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid rast name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot get field info"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open database"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid vector name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot open existing vector map <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot delete existing vector <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open new vector %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open history file for vector '%s'"
+msgstr "���"
+
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "���"
+
+#, fuzzy
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "����������<%s> � �����.\n"
+
+#, fuzzy
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "�����\"d.mon\" ����� �����������\n"
+
+#, fuzzy
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "��� - ����<%s> ���\n"
+
+#, fuzzy
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "��� - � �� ����������(lock) ������<%s>.\n"
+
+#, fuzzy
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "��� - ����� (pipe) ������� �����.\n"
+
+#, fuzzy
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "��� - ����������<%s> � ����\n"
+
+#, fuzzy
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "���� ����������<%s>.\n"
+
+#, fuzzy
+msgid "Not connected...\n"
+msgstr "�������...\n"
+
+#, fuzzy
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "����� ����� ���� ���� ����\n"
+
+#, fuzzy
+msgid "ERROR: GISBASE not set\n"
+msgstr "���: GISBASE � �����\n"
+
+#, fuzzy
+msgid "%s/%s' was found in more mapsets (also found in <%s>)"
+msgstr "%s/%s' was found in more mapsets (also found in <%s>) "
+
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr "量子化ファイル [%s] マップセット内 [%s] %s"
 
@@ -5191,130 +5316,6 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "パラメータ:\n"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "�������: ����� �����������n"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "����� ���� ���\n"
-
-#, fuzzy
-#~ msgid "Cannot open database %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "����������<%s> � �����.\n"
-
-#, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "�����\"d.mon\" ����� �����������\n"
-
-#, fuzzy
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "��� - ����<%s> ���\n"
-
-#, fuzzy
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "��� - � �� ����������(lock) ������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "��� - ����� (pipe) ������� �����.\n"
-
-#, fuzzy
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "��� - ����������<%s> � ����\n"
-
-#, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "���� ����������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Not connected...\n"
-#~ msgstr "�������...\n"
-
-#, fuzzy
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "����� ����� ���� ���� ����\n"
-
-#, fuzzy
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "���: GISBASE � �����\n"
-
-#, fuzzy
-#~ msgid "%s/%s' was found in more mapsets (also found in <%s>)"
-#~ msgstr "%s/%s' was found in more mapsets (also found in <%s>) "
 
 #~ msgid "unable to write quant file!"
 #~ msgstr "量子化ファイルに書き込みできません!"
@@ -6110,3 +6111,32 @@ msgstr ""
 #~ "raster maps"
 #~ msgstr ""
 #~ "G_set_window(): 投影法/ゾーンは現在開いているラスターマップと異なります"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr " %s@%s の小数データの範囲は空です"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr " %s@%sの整数データの範囲は空です"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "説明:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "キーワード:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "用例:\n"
+#~ " "
