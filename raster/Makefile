@@ -34,6 +34,7 @@ SUBDIRS = \
 	r.in.gdal \
 	r.in.gridatb \
 	r.in.mat \
+	r.in.png \
 	r.in.poly \
 	r.in.xyz \
 	r.info \
@@ -73,6 +74,7 @@ SUBDIRS = \
 	r.recode \
 	r.region \
 	r.report \
+	r.resamp.filter \
 	r.resamp.interp \
 	r.resamp.rst \
 	r.resamp.stats \
