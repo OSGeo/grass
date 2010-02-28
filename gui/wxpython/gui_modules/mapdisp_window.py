@@ -883,22 +883,21 @@ class BufferedWindow(MapWindow, wx.Window):
     def DragMap(self, moveto):
         """!
         Drag the entire map image for panning.
-        """
 
+        @param moveto dx,dy
+        """
         dc = wx.BufferedDC(wx.ClientDC(self))
         dc.SetBackground(wx.Brush("White"))
         dc.Clear()
-
+        
         self.dragimg = wx.DragImage(self.buffer)
         self.dragimg.BeginDrag((0, 0), self)
         self.dragimg.GetImageRect(moveto)
         self.dragimg.Move(moveto)
-
+        
         self.dragimg.DoDrawImage(dc, moveto)
         self.dragimg.EndDrag()
-
-        return True
-
+        
     def DragItem(self, id, event):
         """!
         Drag an overlay decoration item
@@ -1089,6 +1088,10 @@ class BufferedWindow(MapWindow, wx.Window):
         elif event.MiddleDown():
             self.OnMiddleDown(event)
 
+        # middle mouse button relesed
+        elif event.MiddleUp():
+            self.OnMiddleUp(event)
+        
         # right mouse button pressed
         elif event.RightDown():
             self.OnRightDown(event)
@@ -1099,8 +1102,8 @@ class BufferedWindow(MapWindow, wx.Window):
 
         elif event.Moving():
             self.OnMouseMoving(event)
-
-#        event.Skip()
+        
+        # event.Skip()
         
     def OnMouseWheel(self, event):
         """!
@@ -1115,7 +1118,7 @@ class BufferedWindow(MapWindow, wx.Window):
                  current[1] - self.Map.height / 4)
         end   = (current[0] + self.Map.width / 4,
                  current[1] + self.Map.height / 4)
-
+        
         if wheel > 0:
             zoomtype = 1
         else:
@@ -1158,7 +1161,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 not digitToolbar and 
                 self.dragid != None):
             self.DragItem(self.dragid, event)
-
+        
         # dragging anything else - rubber band box or line
         else:
             if (self.mouse['use'] == 'pointer' and 
@@ -1171,8 +1174,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     digitClass.driver.GetSelected() > 0)):
                 # draw box only when left mouse button is pressed
                 self.MouseDraw(pdc=self.pdcTmp)
-      
-#        event.Skip()
+        
+        # event.Skip()
 
     def OnLeftDownVDigitAddLine(self, event):
         """!
@@ -1500,7 +1503,7 @@ class BufferedWindow(MapWindow, wx.Window):
                    self.mouse["use"])
 
         self.mouse['begin'] = event.GetPositionTuple()[:]
-
+        
         if self.mouse["use"] in ["measure", "profile"]:
             # measure or profile
             if len(self.polycoords) == 0:
@@ -1847,14 +1850,15 @@ class BufferedWindow(MapWindow, wx.Window):
         Left mouse button released
         """
         Debug.msg (5, "BufferedWindow.OnLeftUp(): use=%s" % \
-                   self.mouse["use"])
-
+                       self.mouse["use"])
+        
         self.mouse['end'] = event.GetPositionTuple()[:]
-
+        
         if self.mouse['use'] in ["zoom", "pan"]:
             # set region in zoom or pan
             begin = self.mouse['begin']
             end = self.mouse['end']
+            
             if self.mouse['use'] == 'zoom':
                 # set region for click (zero-width box)
                 if begin[0] - end[0] == 0 or \
@@ -1864,7 +1868,7 @@ class BufferedWindow(MapWindow, wx.Window):
                              end[1] - self.Map.height / 4)
                     end   = (end[0] + self.Map.width / 4,
                              end[1] + self.Map.height / 4)
-
+            
             self.Zoom(begin, end, self.zoomtype)
 
             # redraw map
@@ -2232,6 +2236,8 @@ class BufferedWindow(MapWindow, wx.Window):
         """!
         Middle mouse button pressed
         """
+        self.mouse['begin'] = event.GetPositionTuple()[:]
+        
         digitToolbar = self.parent.toolbars['vdigit']
         # digitization tool
         if self.mouse["use"] == "pointer" and digitToolbar:
@@ -2292,7 +2298,25 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.UpdateMap(render=False)
             
             self.redrawAll = True
-            
+
+    def OnMiddleUp(self, event):
+        """!
+        Middle mouse button released
+        """
+        self.mouse['end'] = event.GetPositionTuple()[:]
+        
+        # set region in zoom or pan
+        begin = self.mouse['begin']
+        end = self.mouse['end']
+        
+        self.Zoom(begin, end, 0) # no zoom
+        
+        # redraw map
+        self.UpdateMap(render=True)
+        
+        # update statusbar
+        self.parent.StatusbarUpdate()
+        
     def OnMouseMoving(self, event):
         """!
         Motion event and no mouse buttons were pressed
@@ -2546,14 +2570,16 @@ class BufferedWindow(MapWindow, wx.Window):
         """!
         Manages a list of last 10 zoom extents
 
-        Return removed history item if exists
+        @param n,s,e,w north, south, east, west
+
+        @return removed history item if exists (or None)
         """
         removed = None
         self.zoomhistory.append((n,s,e,w))
-
+        
         if len(self.zoomhistory) > 10:
             removed = self.zoomhistory.pop(0)
-
+        
         if removed:
             Debug.msg(4, "BufferedWindow.ZoomHistory(): hist=%s, removed=%s" %
                       (self.zoomhistory, removed))
@@ -2561,14 +2587,24 @@ class BufferedWindow(MapWindow, wx.Window):
             Debug.msg(4, "BufferedWindow.ZoomHistory(): hist=%s" %
                       (self.zoomhistory))
         
+        # update toolbar
         if len(self.zoomhistory) > 1:
-            if self.parent.GetName() == 'MapWindow':
-                self.parent.toolbars['map'].Enable('zoomback')
-            else:
-                self.parent.toolbars['georect'].Enable('zoomback')
+            enable = True
+        else:
+            enable = False
+        if self.parent.GetName() == 'MapWindow':
+            toolbar = self.parent.toolbars['map']
+        elif self.parent.GetName() == 'GRMapWindow':
+            toolbar = self.parent.toolbars['georect']
+        
+        toolbar.Enable('zoomback', enable)
         
         return removed
 
+    def ResetZoomHistory(self):
+        """!Reset zoom history"""
+        self.zoomhistory = list()
+        
     def OnZoomToMap(self, event):
         """!
         Set display extents to match selected raster (including NULLs)

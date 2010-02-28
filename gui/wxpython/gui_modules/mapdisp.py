@@ -14,7 +14,7 @@ Classes:
 Usage:
 python mapdisp.py monitor-identifier /path/to/command/file
 
-(C) 2006-2009 by the GRASS Development Team
+(C) 2006-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -1281,11 +1281,15 @@ class MapFrame(wx.Frame):
                 self.layerbook.DeletePage(pgnum)
         
     def GetRender(self):
-        """
+        """!
         Returns the current instance of render.Map()
         """
         return self.Map
 
+    def GetWindow(self):
+        """!Get map window"""
+        return self.MapWindow
+    
     def OnQueryDisplay(self, event):
         """
         Query currrent raster/vector map layers (display mode)
