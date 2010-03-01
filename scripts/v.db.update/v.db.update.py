@@ -112,6 +112,8 @@ def main():
     if where:
 	cmd += " WHERE " + where
 
+    grass.verbose("SQL: \"%s\"" % cmd)
+
     grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = cmd)
 
     # write cmd history:
