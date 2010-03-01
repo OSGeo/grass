@@ -40,7 +40,7 @@ struct rgb_color palette[16] = {
 /* *************************************************************** */
 int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	  const struct color_rgb *color, const struct color_rgb *fcolor,
-	  int chcat, char *symbol_name, int size, char *size_column,
+	  int chcat, char *symbol_name, double size, char *size_column,
 	  char *rot_column, int id_flag, int table_colors_flag,
 	  int cats_color_flag, char *rgb_column, int default_width,
 	  char *width_column, double width_scale, int z_color_flag,
@@ -70,7 +70,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     SYMBOL *Symb = NULL;
     double var_size, rotation;
 
-    var_size = (double)size;
+    var_size = size;
     rotation = 0.0;
     nerror_rgb = 0;
 
@@ -247,7 +247,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	if (Symb == NULL)
 	    G_warning(_("Unable to read symbol, unable to display points"));
 	else
-	    S_stroke(Symb, (double)size, 0.0, 0);
+	    S_stroke(Symb, size, 0.0, 0);
     }
 
     if (open_db)
@@ -493,10 +493,10 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		    /* Read symbol size from db for current symbol # */
 		    if (db_CatValArray_get_value(&cvarr_size, cat, &cv_size) !=
 			DB_OK) {
-			var_size = (double)size;
+			var_size = size;
 		    }
 		    else {
-			var_size =
+			var_size = size *
 			    (cvarr_size.ctype == DB_C_TYPE_INT ?
 			     (double)cv_size->val.i : cv_size->val.d);
 
@@ -504,12 +504,12 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			    G_warning(_("Error in symbol size column (%s), element %d "
 					"with cat %d: symbol size [%f]"),
 				      size_column, line, cat, var_size);
-			    var_size = (double)size;
+			    var_size = size;
 			}
 		    }
 		}		/* end if cat */
 		else {
-		    var_size = (double)size;
+		    var_size = size;
 		}
 	    }		/* end if nrec_size */
 
@@ -566,7 +566,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		D_symbol(Symb, x0, y0, line_color, fill_color);
 
 	    /* reset to defaults */
-	    var_size = (double)size;
+	    var_size = size;
 	    rotation = 0.0;
 	}
 	else if (color || custom_rgb || (z_color_flag && Vect_is_3d(Map))) {
