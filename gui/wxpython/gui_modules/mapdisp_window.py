@@ -2592,6 +2592,7 @@ class BufferedWindow(MapWindow, wx.Window):
             enable = True
         else:
             enable = False
+        
         if self.parent.GetName() == 'MapWindow':
             toolbar = self.parent.toolbars['map']
         elif self.parent.GetName() == 'GRMapWindow':

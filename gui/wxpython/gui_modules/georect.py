@@ -187,15 +187,14 @@ class GeorectWizard(object):
             #
             # start map display
             #
-            self.xy_mapdisp = mapdisp.MapFrame(self.gcpmgr, title=_("Set ground control points (GCPs)"),
+            self.xy_mapdisp = mapdisp.MapFrame(self.gcpmgr, name = "GRMapWindow",
                                                size=globalvar.MAP_WINDOW_SIZE,
                                                toolbars=["georect"],
                                                Map=self.Map, lmgr=self.parent)
             self.xy_mapdisp.SetTitle(_("GRASS GIS Map Display: 1" +
                                        " - Location: " + self.newlocation +
                                        " (source location)"))
-            self.xy_mapdisp.SetName("GRMapWindow")
-
+            
             self.gcpmgr.SetMapDisplay(self.xy_mapdisp)
             
             self.mapwin = self.xy_mapdisp.MapWindow
@@ -657,16 +656,15 @@ class DispMapPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
 class GCP(wx.Frame):
-    """
+    """!
     Manages ground control points for georectifying. Calculates RMS statics.
     Calls i.rectify or v.transform to georectify map.
     """
+    def __init__(self, parent, grwiz, mapdisp = None, id = wx.ID_ANY,
+                 title = _("Define/manage ground control points"),
+                 size = (625, 300)):
 
-    def __init__(self, parent, grwiz, mapdisp=None, id=wx.ID_ANY,
-                 title=_("Define/manage ground control points"),
-                 size=wx.DefaultSize):
-
-        wx.Frame.__init__(self, parent, id, title, size=(625, 300))
+        wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
 
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
         
