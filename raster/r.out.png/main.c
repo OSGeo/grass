@@ -239,11 +239,13 @@ int main(int argc, char *argv[])
 
     png_set_compression_level(png_ptr, png_compr);
 
-/* FIXME: this should be set
+/* FIXME
     if(do_alpha) {
-	png_color_16p bgcolor *background_color;
-	png_set_background(png_ptr, png_color_16p background_color,
-	    PNG_BACKGROUND_GAMMA_FILE, int need_expand, double background_gamma);
+	png_color_16p background_color;
+	background_color->red = (png_uint_16)def_red;
+	background_color->green = (png_uint_16)def_grn;
+	background_color->blue = (png_uint_16)def_blu;
+	png_set_bKGD(png_ptr, info_ptr, background_color);
     }
 */
 
