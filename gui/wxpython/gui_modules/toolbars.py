@@ -101,6 +101,9 @@ class AbstractToolbar(wx.ToolBar):
         
     def OnTool(self, event):
         """!Tool selected"""
+        if self.parent.GetName() == "GCPFrame":
+            return
+        
         if self.parent.toolbars['vdigit']:
             # update vdigit toolbar (unselect currently selected tool)
             id = self.parent.toolbars['vdigit'].GetAction(type='id')

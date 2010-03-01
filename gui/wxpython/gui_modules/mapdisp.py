@@ -88,10 +88,9 @@ class MapFrame(wx.Frame):
     """
 
     def __init__(self, parent=None, id=wx.ID_ANY, title=_("GRASS GIS - Map display"),
-                 pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_FRAME_STYLE, toolbars=["map"],
                  tree=None, notebook=None, lmgr=None, page=None,
-                 Map=None, auimgr=None):
+                 Map=None, auimgr=None, **kwargs):
         """
         Main map display window with toolbars, statusbar and
         DrawWindow
@@ -99,9 +98,11 @@ class MapFrame(wx.Frame):
         @param toolbars array of activated toolbars, e.g. ['map', 'digit']
         @param tree reference to layer tree
         @param notebook control book ID in Layer Manager
-        @param mgr Layer Manager
+        @param lmgr Layer Manager
         @param page notebook page with layer tree
         @param Map instance of render.Map
+        @param auimgs AUI manager
+        @param kwargs wx.Frame attribures
         """
         self._layerManager = lmgr   # Layer Manager object
         self.Map        = Map       # instance of render.Map
@@ -122,14 +123,15 @@ class MapFrame(wx.Frame):
             "pencil"  : wx.StockCursor(wx.CURSOR_PENCIL),
             "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
             }
-
-        wx.Frame.__init__(self, parent, id, title, pos, size, style)
-        self.SetName("MapWindow")
-
+        
+        if not kwargs.has_key('name'):
+            kwargs['name'] = 'MapWindow'
+        wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
+        
         #
         # set the size & system icon
         #
-        self.SetClientSize(size)
+        self.SetClientSize(self.GetSize())
         self.iconsize = (16, 16)
 
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
