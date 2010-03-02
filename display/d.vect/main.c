@@ -223,7 +223,7 @@ int main(int argc, char **argv)
     size_opt->guisection = _("Symbols");
     size_opt->label = _("Symbol size");
     size_opt->description =
-	_("When used with the size_column option this is the scale factor");
+	_("When used with the size_column option this becomes the scale factor");
 
     sizecolumn_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     sizecolumn_opt->key = "size_column";
@@ -360,7 +360,9 @@ int main(int argc, char **argv)
     sqrt_flag = G_define_flag();
     sqrt_flag->key = 'r';
     sqrt_flag->label = _("Use square root of the value of size_column");
-    sqrt_flag->description = _("Use this if you want to make the surface instead of the height of circles proportionate to size_column");
+    sqrt_flag->description =
+	_("This makes circle areas proportionate to the size_column values "
+	  "instead of circle radius");
     sqrt_flag->guisection = _("Symbols");
 
     /* Check command line */
