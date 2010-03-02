@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     struct Option *attrcol_opt, *maxreg_opt, *minreg_opt;
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
     struct Flag *id_flag, *table_acolors_flag, *cats_acolors_flag,
-	*zcol_flag;
+	*zcol_flag, *sqrt_flag;
     struct cat_list *Clist;
     int *cats, ncat;
     LATTR lattr;
@@ -356,6 +356,12 @@ int main(int argc, char **argv)
     zcol_flag->key = 'z';
     zcol_flag->description = _("Colorize polygons according to z height");
     zcol_flag->guisection = _("Colors");
+
+    sqrt_flag = G_define_flag();
+    sqrt_flag->key = 'r';
+    sqrt_flag->label = _("Use square root of the value of size_column");
+    sqrt_flag->description = _("Use this if you want to make the surface instead of the height of circles proportionate to size_column");
+    sqrt_flag->guisection = _("Symbols");
 
     /* Check command line */
     if (G_parser(argc, argv))
@@ -637,7 +643,7 @@ int main(int argc, char **argv)
 		stat = plot1(&Map, type, area, Clist,
 			     has_color ? &color : NULL,
 			     has_fcolor ? &fcolor : NULL, chcat, icon_opt->answer,
-			     size, sizecolumn_opt->answer, rotcolumn_opt->answer,
+			     size, sizecolumn_opt->answer, (int)sqrt_flag->answer, rotcolumn_opt->answer,
 			     (int)id_flag->answer, table_acolors_flag->answer,
 			     cats_acolors_flag->answer, rgbcol_opt->answer,
 			     default_width, wcolumn_opt->answer, width_scale,
