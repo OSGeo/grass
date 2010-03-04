@@ -244,7 +244,7 @@ def main():
     else:
 	flip_flag = ''
 
-    grass.run_command('r.colors', map = tmp_colr, flags = flip_flag, **color_cmd, quiet = True)
+    grass.run_command('r.colors', map = tmp_colr, flags = flip_flag, quiet = True, **color_cmd)
 
     tmp = grass.tempfile()
 
