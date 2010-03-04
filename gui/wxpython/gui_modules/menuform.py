@@ -1493,7 +1493,7 @@ class cmdPanel(wx.Panel):
                         p['wxId'].append(None)
                 # file selector
                 elif p.get('prompt','') != 'color' and p.get('element', '') == 'file':
-                    fbb = filebrowse.FileBrowseButton(parent=which_panel, id=wx.ID_ANY, 
+                    fbb = filebrowse.FileBrowseButton(parent=which_panel, id=wx.ID_ANY, fileMask = '*',
                                                       size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
                                                       dialogTitle=_('Choose %s') % \
                                                           p.get('description',_('File')),
