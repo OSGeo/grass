@@ -135,8 +135,6 @@ def main():
     tmp_colr = None
     tmp_vcol = None
 
-    os.environ['GRASS_VERBOSE'] = '0'
-
     kv = grass.gisenv()
     mapset = kv['MAPSET']
     gisbase = os.getenv('GISBASE')
@@ -216,7 +214,7 @@ def main():
     minval = min(vals)
     maxval = max(vals)
 
-    grass.message(_(" min=[%s]  max=[$%s]") % (minval, maxval))
+    grass.verbose(_(" min=[%s]  max=[$%s]") % (minval, maxval))
     if not minval or not maxval:
 	grass.fatal(_("Scanning data range"))
 
@@ -246,7 +244,7 @@ def main():
     else:
 	flip_flag = ''
 
-    grass.run_command('r.colors', map = tmp_colr, flags = flip_flag, **color_cmd)
+    grass.run_command('r.colors', map = tmp_colr, flags = flip_flag, **color_cmd, quiet = True)
 
     tmp = grass.tempfile()
 
@@ -274,7 +272,7 @@ def main():
 	colr = colr.strip()
 	if len(colr.split(':')) != 3:
 	    continue
-	#g.message message="LINE=[$LINE]"
+	#grass.debug('LINE=[%s]' % line)
 	fo.write(t.substitute(table = table, rgb_column = rgb_column, colr = colr, value = value))
 	found += 1
     fi.close()
@@ -291,7 +289,7 @@ def main():
 
     if flags['s']:
 	vcolors = "vcolors_%d" % pid
-	grass.run_command('g.rename', rast = (tmp_colr, vcolors))
+	grass.run_command('g.rename', rast = (tmp_colr, vcolors), quiet = True)
 	grass.message(_("Raster map containing color rules saved to <%s>") % vcolors)
 	# TODO save full v.colors command line history
 	grass.run_command('r.support', map = vcolors,
@@ -303,7 +301,7 @@ def main():
 	grass.run_command('r.support', map = vcolors,
 			  history = "RGB saved into <%s> using <%s%s%s>" % (rgb_column, color, raster, rules))
     else:
-	grass.run_command('g.remove', rast = tmp_colr)
+	grass.run_command('g.remove', rast = tmp_colr, quiet = True)
 
     #v.db.dropcolumn map=vcol_test col=GRASSRGB
     #d.vect -a vcol_test icon=basic/circle color=none size=8
