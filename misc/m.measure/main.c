@@ -79,9 +79,14 @@ int main(int argc, char **argv)
     }
 
     /* determine units */
-    units_name    = G_get_units_name(G_units(units->answer), 1, 0);
-    sq_units_name = G_get_units_name(G_units(units->answer), 1, 1);
-    
+    if (G_projection() == PROJECTION_LL && !units->answer) {
+	units_name    = G_get_units_name(U_METERS, 1, 0);
+	sq_units_name = G_get_units_name(U_METERS, 1, 1);
+    }
+    else {
+	units_name    = G_get_units_name(G_units(units->answer), 1, 0);
+	sq_units_name = G_get_units_name(G_units(units->answer), 1, 1);
+    }
     f    = G_units_to_meters_factor(G_units(units->answer));
     sq_f = G_units_to_meters_factor_sq(G_units(units->answer));
     

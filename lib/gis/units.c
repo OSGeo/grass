@@ -237,6 +237,9 @@ int G_units(const char *units_name)
     else if (strcasecmp(units_name, "foot") == 0 ||
 	     strcasecmp(units_name, "feet") == 0)
 	return U_FEET;
+    else if (strcasecmp(units_name, "degree") == 0 ||
+	     strcasecmp(units_name, "degrees") == 0)
+	return U_DEGREES;
 
     return U_UNKNOWN;
 }
