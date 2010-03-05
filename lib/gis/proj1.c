@@ -1,9 +1,9 @@
 /*!
   \file gis/proj1.c
  *
- * \brief GIS Library - Projection support
+ * \brief GIS Library - Projection support (window related)
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2010 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -16,8 +16,9 @@
 /*!
   \brief Query cartographic projection
   
-  This routine returns a code indicating the projection for the active region.  The current
-  values are:
+  This routine returns a code indicating the projection for the active
+  region. The current values are:
+
    - PROJECTION_XY  0 - x,y (Raw imagery)
    - PROJECTION_UTM 1 - UTM   Universal Transverse Mercator
    - PROJECTION_SP  2 - State Plane (in feet)

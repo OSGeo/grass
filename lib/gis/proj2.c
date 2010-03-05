@@ -1,9 +1,9 @@
 /*!
   \file gis/proj2.c
 
-  \brief GIS Library - Projection support
+  \brief GIS Library - Projection support (internal subroutines)
   
-  (C) 2001-2009 by the GRASS Development Team
+  (C) 2001-2010 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -15,49 +15,26 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Get units code
+  \brief Get projection units code
 
-  \param n project code
+  \param n projection code
 
-  \retun units code
+  \return units code
+  \return -1 if not defined
 */
 int G__projection_units(int n)
 {
     switch (n) {
     case PROJECTION_XY:
-	return 0;
+	return U_UNKNOWN;
     case PROJECTION_UTM:
-	return METERS;
+	return U_METERS;
     case PROJECTION_SP:
-	return FEET;
+	return U_FEET;
     case PROJECTION_LL:
-	return DEGREES;
+	return U_DEGREES;
     default:
 	return -1;
-    }
-}
-
-/*!
-  \brief Get units name
-
-  \param unit units code
-  \param plural plural form
-
-  \return units name
-*/
-const char *G__unit_name(int unit, int plural)
-{
-    switch (unit) {
-    case 0:
-	return plural ? "units" : "unit";
-    case METERS:
-	return plural ? "meters" : "meter";
-    case FEET:
-	return plural ? "feet" : "foot";
-    case DEGREES:
-	return plural ? "degrees" : "degree";
-    default:
-	return NULL;
     }
 }
 
@@ -67,6 +44,7 @@ const char *G__unit_name(int unit, int plural)
   \param n projection code
 
   \return projection name
+  \return NULL on error
 */
 const char *G__projection_name(int n)
 {
@@ -76,7 +54,7 @@ const char *G__projection_name(int n)
     case PROJECTION_UTM:
 	return "UTM";
     case PROJECTION_SP:
-	return "State Plane";
+	return _("State Plane");
     case PROJECTION_LL:
 	return _("Latitude-Longitude");
     case PROJECTION_OTHER:

@@ -13,8 +13,9 @@
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      distance and area measurement
- * COPYRIGHT:    (C) 1999-2006,2010 by the GRASS Development Team
+ *               Martin Landa <landa.martin gmail.com>
+ * PURPOSE:      Distance and area measurement
+ * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -30,11 +31,13 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *coords;
+    struct Option *coords, *units;
+    struct Flag *shell;
+
     double *x, *y;
-    double length, area;
-    int npoints;
-    int i;
+    double length, area, f, sq_f;
+    int i, npoints;
+    const char *units_name, *sq_units_name;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -52,6 +55,14 @@ int main(int argc, char **argv)
     coords->multiple = YES;
     coords->key_desc = "x,y";
 
+    units = G_define_standard_option(G_OPT_M_UNITS);
+    units->label = _("Units");
+    units->description = _("Default: location map units");
+    
+    shell = G_define_flag();
+    shell->key = 'g';
+    shell->description = _("Shell script style");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -67,22 +78,40 @@ int main(int argc, char **argv)
 	y[i] = atof(coords->answers[2*i+1]);
     }
 
+    /* determine units */
+    units_name    = G_get_units_name(G_units(units->answer), 1, 0);
+    sq_units_name = G_get_units_name(G_units(units->answer), 1, 1);
+    
+    f    = G_units_to_meters_factor(G_units(units->answer));
+    sq_f = G_units_to_meters_factor_sq(G_units(units->answer));
+    
+    G_debug(1, "using '%s (%f) %s (%f)'",
+	    units_name, f, sq_units_name, sq_f);
+    
     G_begin_distance_calculations();
     length = 0;
     for (i = 1; i < npoints; i++)
 	length += G_distance(x[i-1], y[i-1], x[i], y[i]);
 
-    printf("LEN:   %10.2f meters\n", length);
-    printf("LEN:   %10.4f kilometers\n", length / 1e3);
-    printf("LEN:   %10.4f miles\n", length / 1609.344);
-
+    if (shell->answer) {
+	printf("units=%s,%s\n", units_name, sq_units_name);
+	/* length */
+	printf("length=%.6f\n", f * length);
+    }
+    else {
+	printf("%-8s %10.6f %s\n", _("Length:"), f * length, units_name);
+	       
+    }
+    
     if (npoints > 3) {
 	G_begin_polygon_area_calculations();
 	area = G_area_of_polygon(x, y, npoints);
-	printf("AREA:  %10.2f square meters\n", area);
-	printf("AREA:  %10.2f hectares\n", area / 1e4);
-	printf("AREA:  %10.4f square kilometers\n", area / 1e6);
-	printf("AREA:  %10.4f square miles\n", area / 2589988.11);
+	if (shell->answer) {
+	    printf("area=%.6f\n", sq_f * area);
+	}
+	else {
+	    printf("%-8s %10.6f %s\n", _("Area:"), sq_f * area, sq_units_name);
+	}
     }
 
     exit(EXIT_SUCCESS);
