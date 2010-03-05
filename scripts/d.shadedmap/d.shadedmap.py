@@ -46,7 +46,7 @@ def main():
     drape_map = options['drapemap']
     relief_map = options['reliefmap']
     brighten = options['brighten']
-    ret = grass.run_command("d.his", h_map = drapemap,  i_map = relief_map, brighten = brighten)
+    ret = grass.run_command("d.his", h_map = drape_map,  i_map = relief_map, brighten = brighten)
     sys.exit(ret)
 
 if __name__ == "__main__":
