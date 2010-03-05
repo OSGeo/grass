@@ -75,17 +75,10 @@ int parse_command_line(int argc, char *argv[])
 	"sinuous;line sinuousity, calculated as line length / distance between end points;"
 	"azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode";
 
-    parms.units = G_define_option();
-    parms.units->key = "units";
-    parms.units->type = TYPE_STRING;
-    parms.units->required = NO;
-    parms.units->multiple = NO;
+    parms.units = G_define_standard_option(G_OPT_M_UNITS);
     parms.units->options =
 	"miles,feet,meters,kilometers,acres,hectares,radians,degrees";
-    parms.units->label = _("Units");
-    parms.units->description =
-	_("miles,feet,meters,kilometers,acres,hectares,radians,degrees");
-
+    
     parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
 
     parms.qcol = G_define_standard_option(G_OPT_DB_COLUMN);
