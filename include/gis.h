@@ -61,9 +61,18 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
 #define NEWLINE     '\n'
 
-#define METERS    1
-#define FEET      2
-#define DEGREES   3
+/*!
+  \brief List of units
+*/
+#define U_UNKNOWN       0
+#define U_ACRES		1
+#define U_HECTARES	2
+#define U_KILOMETERS	3
+#define U_METERS	4
+#define U_MILES		5
+#define U_FEET		6
+#define U_RADIANS	7
+#define U_DEGREES	8
 
 #define PROJECTION_XY  0
 #define PROJECTION_UTM 1
@@ -199,7 +208,9 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_F_SEP,		/* data field separator */
 
     G_OPT_C_FG,			/* foreground color */
-    G_OPT_C_BG			/* background color */
+    G_OPT_C_BG,			/* background color */
+    
+    G_OPT_M_UNITS,              /* units */
 } STD_OPT;
 
 /* Message format */

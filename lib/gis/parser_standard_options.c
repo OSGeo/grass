@@ -3,7 +3,7 @@
  *
  * \brief GIS Library - Argument parsing functions (standard options)
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2010 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -28,7 +28,7 @@
  * If an invalid parameter was specified a empty Option structure will
  * be returned (not NULL).
  *
- *  - general:
+ *  - database:
  *   - G_OPT_DB_WHERE
  *   - G_OPT_DB_COLUMN
  *   - G_OPT_DB_COLUMNS
@@ -67,8 +67,24 @@
  *   - G_OPT_V_MAPS
  *   - G_OPT_V_TYPE
  *   - G_OPT_V_FIELD
+ *   - G_OPT_V_FIELD_ALL
  *   - G_OPT_V_CAT
  *   - G_OPT_V_CATS
+ *   - G_OPT_V_ID
+ *   - G_OPT_V_IDS
+ * 
+ *  - files
+ *   - G_OPT_F_INPUT
+ *   - G_OPT_F_OUTPUT
+ *   - G_OPT_F_SEP
+ *
+ *  - colors
+ *   - G_OPT_C_FG
+ *   - G_OPT_C_BG
+ *
+ *  - misc
+ *
+ *   - G_OPT_M_UNITS
  *
  * \param opt type of Option struct to create
  *
@@ -449,6 +465,17 @@ struct Option *G_define_standard_option(int opt)
 	Opt->label = _("Background color");
 	Opt->description =
 	    _("Either a standard GRASS color, R:G:B triplet, or \"none\"");
+	break;
+
+	/* misc */
+    case G_OPT_M_UNITS:
+	Opt->key = "units";
+	Opt->type = TYPE_STRING;
+	Opt->required = NO;
+	Opt->multiple = NO;
+	Opt->options =
+	    "miles,feet,meters,kilometers,acres,hectares";
+	Opt->description = _("Units");
 	break;
     }
 

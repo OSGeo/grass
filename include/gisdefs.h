@@ -506,7 +506,6 @@ int G_projection(void);
 
 /* proj2.c */
 int G__projection_units(int);
-const char *G__unit_name(int, int);
 const char *G__projection_name(int);
 
 /* proj3.c */
@@ -611,6 +610,12 @@ void G_free_tokens(char **);
 
 /* trim_dec.c */
 void G_trim_decimal(char *);
+
+/* units.c */
+double G_units_to_meters_factor(int);
+double G_units_to_meters_factor_sq(int);
+const char *G_get_units_name(int, int, int);
+int G_units(const char *);
 
 /* user_config.c */
 #ifndef __MINGW32__
