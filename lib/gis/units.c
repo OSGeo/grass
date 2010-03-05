@@ -184,6 +184,14 @@ const char *G_get_units_name(int units, int plural, int square)
 	else
 	    return plural ? _("feet") : _("foot");
 	break;
+
+    case U_DEGREES:
+	if (square)
+	    return plural ? _("square degrees") : _("square degree");
+	else
+	    return plural ? _("degrees") : _("degree");
+	break;
+
     }
     
     return NULL;
