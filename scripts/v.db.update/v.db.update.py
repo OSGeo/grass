@@ -105,7 +105,7 @@ def main():
 	if not value:
 	    grass.fatal(_('Either value= or qcolumn= must be given'))
 	# we insert a value
-	if coltype.upper() not in ["INTEGER", "DOUBLE PRECISION"]:
+	if coltype['type'].upper() not in ["INTEGER", "DOUBLE PRECISION"]:
 	    value = "'%s'" % value
 
     cmd = "UPDATE %s SET %s=%s" % (table, column, value)
