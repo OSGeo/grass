@@ -281,7 +281,8 @@ class GeorectWizard(object):
         self.SwitchEnv('original')
         self.parent.georectifying = None
 
-        if hasattr(self, "xy_mapdisp"):
+        if hasattr(self, "xy_mapdisp") and \
+                self.xy_mapdisp:
             self.xy_mapdisp.Close()
             self.xy_mapdisp = None
 
