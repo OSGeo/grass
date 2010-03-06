@@ -35,6 +35,7 @@ import sys
 import time
 import errno
 import signal
+import locale
 
 import wx
 
@@ -441,7 +442,7 @@ class Command:
 
         for type, msg in self.__ProcessStdErr():
             if type == 'ERROR':
-                return unicode(msg, "utf-8")
+                return unicode(msg, locale.getdefaultlocale()[1])
 
         return ''
     
