@@ -860,6 +860,7 @@ int Digit::CopyLines(std::vector<int> ids, const char* bgmap_name)
     if (bgMap) {
 	Vect_close(bgMap);
 	G_free ((void *) bgMap);
+	bgMap = NULL;
     }
 
     return ret;

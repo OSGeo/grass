@@ -150,6 +150,7 @@ void print_sentence (PyObject *pyFd, const int type, const char *msg)
 	
 	PyFile_WriteString(sentence, pyFd);
 	G_free((void *)sentence);
+	sentence = NULL;
 	
 	PyFile_WriteString("\n", pyFd);
 	start = next;
