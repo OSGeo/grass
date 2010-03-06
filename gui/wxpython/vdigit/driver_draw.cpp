@@ -150,6 +150,7 @@ int DisplayDriver::DrawMap(bool force)
 			isles[j] = NULL;
 		    }
 		    G_free((void *) isles);
+		    isles = NULL;
 		}
 	    }
 	}

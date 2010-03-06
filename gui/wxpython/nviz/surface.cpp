@@ -346,6 +346,7 @@ int Nviz::SetWireColor(int id, const char* color_str)
 	}
 
 	G_free(surf_list);
+	surf_list = NULL;
     }
 
     return 1;
