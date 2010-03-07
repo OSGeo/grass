@@ -349,6 +349,17 @@ FunctionEnd
 
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
+
+;These indented statements modify settings for MUI_PAGE_FINISH
+    !define MUI_FINISHPAGE_NOAUTOCLOSE
+    !define MUI_FINISHPAGE_RUN
+    !define MUI_FINISHPAGE_RUN_NOTCHECKED
+    !define MUI_FINISHPAGE_RUN_TEXT "Launch Grass"
+    !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchGrass"
+    !define MUI_FINISHPAGE_SHOWREADME
+    !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
+    !define MUI_FINISHPAGE_SHOWREADME_TEXT "Launch Reference Manual"
+	!define MUI_FINISHPAGE_SHOWREADME_FUNCTION "ViewReadme"
 !insertmacro MUI_PAGE_FINISH
 
 !insertmacro MUI_UNPAGE_WELCOME
@@ -361,6 +372,26 @@ FunctionEnd
 ;Language files
 
 !insertmacro MUI_LANGUAGE "English"
+
+;----------------------------------------------------------------------------------------------------------------------------
+
+;launch Grass Gis by exit the installation wizard
+
+Function LaunchGrass
+
+      Exec '"$INSTDIR\${GRASS_COMMAND}.bat" "-wxpython"'
+
+FunctionEnd
+
+;----------------------------------------------------------------------------------------------------------------------------
+
+;launch reference manual by exit the installation wizard
+
+Function ViewReadme
+
+      ExecShell "open" "$INSTDIR\docs\html\index.html"
+
+FunctionEnd
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
