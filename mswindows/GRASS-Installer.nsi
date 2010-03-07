@@ -337,6 +337,9 @@ FunctionEnd
 ;Installer Pages
 
 !insertmacro MUI_PAGE_WELCOME
+
+;These indented statements modify settings for MUI_PAGE_LICENSE
+    !define MUI_LICENSEPAGE_BUTTON "Next >"
 !insertmacro MUI_PAGE_LICENSE "${PACKAGE_FOLDER}\GPL.TXT"
 
 !define MUI_PAGE_CUSTOMFUNCTION_PRE CheckUpdate
