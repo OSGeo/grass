@@ -476,7 +476,11 @@ def ReadEpsgCodes(path):
     """
     epsgCodeDict = dict()
     try:
-        f = open(path, "r")
+        try:
+            f = open(path, "r")
+        except IOError:
+            return _("failed to open '%s'" % path)
+        
         i = 0
         code = None
         for line in f.readlines():
@@ -488,15 +492,19 @@ def ReadEpsgCodes(path):
                 descr = line[1:].strip()
             elif line[0] == '<':
                 code, params = line.split(" ", 1)
-                code = int(code.replace('<', '').replace('>', ''))
-
+                try:
+                    code = int(code.replace('<', '').replace('>', ''))
+                except ValueError:
+                    return e
+            
             if code is not None:
                 epsgCodeDict[code] = (descr, params)
                 code = None
             i += 1
+        
         f.close()
     except StandardError, e:
-        return str(e)
+        return e
     
     return epsgCodeDict
 
