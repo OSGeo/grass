@@ -79,7 +79,7 @@ OutFile "${INSTALLER_NAME}"
 InstallDir "$PROGRAMFILES\${GRASS_BASE}"
 
 ;Request application privileges for Windows Vista
-RequestExecutionLevel user
+RequestExecutionLevel admin
 
 ;Tell the installer to show Install and Uninstall details as default
 ShowInstDetails show
