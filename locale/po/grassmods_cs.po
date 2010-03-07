@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-26 19:45+0100\n"
-"PO-Revision-Date: 2009-10-09 12:58+0200\n"
+"PO-Revision-Date: 2010-03-07 15:38+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -255,18 +255,17 @@ msgid "List all database drivers."
 msgstr "Vypi¹ v¹echny databázové ovladaèe."
 
 #: ../db/db.select/main.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "Test %s."
-msgstr "Typ: %s"
+msgstr "Test %s."
 
 #: ../db/db.select/main.c:93 ../imagery/i.rectify/report.c:16
 msgid "failed"
 msgstr "Selhalo"
 
 #: ../db/db.select/main.c:93
-#, fuzzy
 msgid "succeeded"
-msgstr "...uspìl."
+msgstr "úspìch"
 
 #: ../db/db.select/main.c:130 ../raster/r.stats/main.c:208
 #: ../vector/v.db.select/main.c:110
@@ -1052,7 +1051,6 @@ msgid "The z-part of the hydraulic conductivity tensor in [m/s]"
 msgstr "souøadnice z hydraulického napøimovaèe vodivosti v [m/s]"
 
 #: ../raster3d/r3.gwflow/main.c:97
-#, fuzzy
 msgid "Sources and sinks in [m^3/s]"
 msgstr "Prameny a jezera v [m^3/s]"
 
@@ -4348,7 +4346,6 @@ msgid "Name of non-file GDAL data source"
 msgstr "Jméno datového zdroje GDAL, který není soubor"
 
 #: ../raster/r.external/main.c:548
-#, fuzzy
 msgid "Band to select (default: all)"
 msgstr "Kanál, který má být vybrán (výchozí: v¹echny kanály)"
 
@@ -6107,9 +6104,8 @@ msgid "Local (solar) time (to be set for mode 1 only) [decimal hours]"
 msgstr "Místní (sluneèní) èas (nastaveno pouze pro mód 1) [decimální hodiny]"
 
 #: ../raster/r.sun/main.c:490
-#, fuzzy
 msgid "Read the input files in this number of chunks"
-msgstr "Vyèíst vstupní soubor mezi "
+msgstr "Vyèíst vstupní soubor vtomto poètu kusù"
 
 #: ../raster/r.sun/main.c:497
 msgid "Civil time zone value, if none, the time will be local solar time"
@@ -7303,9 +7299,9 @@ msgid "Unable to write et file"
 msgstr "Nelze zapsat soubor eroze/transportu"
 
 #: ../raster/simwe/simlib/hydro.c:119
-#, fuzzy, c-format
+#, c-format
 msgid "nwalk (%d) > maxw (%d)!"
-msgstr "nwalk > maxw!"
+msgstr "nwalk (%d) > maxw (%d)!"
 
 #: ../raster/simwe/simlib/hydro.c:339
 msgid "Unable to write raster maps"
@@ -8391,6 +8387,8 @@ msgid ""
 "%.2f]! Needs to be at least identical or the current region resolution lower "
 "than the input map resolution"
 msgstr ""
+"Rozli¹ení aktuálního regionu [%.2fx%.2f] je ni¾¹í ne¾ má vstupní mapa  "
+"[%.2fx %.2f]!Je potøeba mít nejménì stejné rozli¹ení jako má vstupní mapa"
 
 #: ../raster/r.topidx/file_io.c:32
 msgid "Reading elevation map..."
@@ -10268,9 +10266,8 @@ msgid "Please specify a reasonable column number."
 msgstr "Prosím, zadejte pøijatelné èíslo sloupce."
 
 #: ../raster/r.in.xyz/main.c:307
-#, fuzzy
 msgid "Invalid zrange"
-msgstr "Chybný smìr východu"
+msgstr "Neplatné zrange"
 
 #: ../raster/r.in.xyz/main.c:394
 msgid "Unable to calculate percentile without the pth option specified!"
@@ -10301,7 +10298,6 @@ msgid "zrange will not be taken into account during scan"
 msgstr "na rozsah z nebude bìhem hledání brán zøetel"
 
 #: ../raster/r.in.xyz/main.c:524
-#, fuzzy
 msgid "Reading data ..."
 msgstr "Ètu data... "
 
@@ -12402,7 +12398,7 @@ msgstr "ÈÁST 2: A * Hledání."
 
 #: ../raster/r.watershed/ram/do_astar.c:157
 msgid "heapsize too large"
-msgstr ""
+msgstr "P5íli¹ velké heapsize"
 
 #: ../raster/r.watershed/shed/valid.c:24
 msgid "accum file missing in valid_basins()"
@@ -13990,7 +13986,7 @@ msgstr "stara_hodnota:*:nova:hodnota       (interval [stara_hodnota,inf])"
 
 #: ../raster/r.recode/read_rules.c:91
 msgid "When finished type \"end\"."
-msgstr ""
+msgstr "Pøi dokonèení napsat \"end\""
 
 #: ../raster/r.recode/main.c:49
 msgid "Recodes categorical raster maps."
@@ -14165,9 +14161,8 @@ msgid "Y-part of the hydraulic conductivity tensor in [m/s]"
 msgstr "Y-èást hydraulièkého napøimovaèe napìtí v [m/s]"
 
 #: ../raster/r.gwflow/main.c:90
-#, fuzzy
 msgid "Water sources and sinks in [m^3/s]"
-msgstr "Prameny a jezera v [m^3/s]"
+msgstr "Vodní zdroje a jezera v [m^3/s]"
 
 #: ../raster/r.gwflow/main.c:97
 msgid "Specific yield in [1/m]"
@@ -15494,9 +15489,9 @@ msgid "Transforming features..."
 msgstr "Pøevádím prvky..."
 
 #: ../vector/v.to.3d/main.c:124
-#, fuzzy, c-format
+#, c-format
 msgid "%s failed"
-msgstr "Selhalo"
+msgstr "%s selhalo"
 
 #: ../vector/v.to.3d/main.c:139
 #, c-format
@@ -15573,22 +15568,19 @@ msgstr "Stejná vý¹ka pro v¹echny 3D vektorové prvky"
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:309
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:327
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:357
-#, fuzzy
 msgid "Impossible to read from aux table"
-msgstr "Nelze èíst íºdaje z databáze"
+msgstr "Nelze èíst údaje z aux tabulky"
 
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:238
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:314
-#, fuzzy
 msgid "Impossible to update aux table"
-msgstr "Nelze aktualizovat íºdaje v databázi"
+msgstr "Nelze aktualizovat údaje v aux tabulce"
 
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:251
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:263
 #: ../vector/lidar/v.lidar.edgedetection/edgedetection.c:384
-#, fuzzy
 msgid "Impossible to write to aux table"
-msgstr "Nelze zapsat íºdaje do databáze"
+msgstr "Nelze zapsat údaje do aux tabulky"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:80
 msgid "edges"
@@ -15603,7 +15595,7 @@ msgstr "Detekovat hrany objektù z LIDAR dat."
 #: ../vector/lidar/v.outlier/main.c:79
 #: ../vector/lidar/v.surf.bspline/main.c:97
 msgid "Estimate point density and distance"
-msgstr ""
+msgstr "Odhad hustoty bodù a vzdálenosti"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:88
 #: ../vector/lidar/v.lidar.correction/main.c:83
@@ -15613,6 +15605,8 @@ msgid ""
 "Estimate point density and distance for the input vector points within the "
 "current region extends and quit"
 msgstr ""
+"Odhadne hustotu bodù a vzdálenosti pro vstupní vektorovou bodovou vrstvu "
+"uvnitø aktuálního regionu a ukonèí se"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:100
 #: ../vector/lidar/v.lidar.correction/main.c:107
@@ -15679,24 +15673,22 @@ msgstr ""
 #: ../vector/lidar/v.lidar.correction/main.c:174
 #: ../vector/lidar/v.outlier/main.c:175
 #: ../vector/lidar/v.surf.bspline/main.c:216
-#, fuzzy
 msgid "Old auxiliar table could not be dropped"
 msgstr "Nemohla být odstranìna pomocná tabulka"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:229
 #: ../vector/lidar/v.lidar.correction/main.c:192
 #: ../vector/lidar/v.outlier/main.c:187
-#, fuzzy, c-format
+#, c-format
 msgid "Input vector map <%s> is not 3D!"
-msgstr "Vektorová mapa <%s> není 3D"
+msgstr "Vektorová mapa <%s> není 3D!"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:239
 #: ../vector/lidar/v.lidar.correction/main.c:202
 #: ../vector/lidar/v.outlier/main.c:197
 #: ../vector/lidar/v.surf.bspline/main.c:250
-#, fuzzy
 msgid "No points in current region!"
-msgstr "Pou¾ít pouze body v souèasném regionu"
+msgstr "Nejsou ¾ádné body v aktuálním regionu!"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:262
 #, c-format
@@ -15714,7 +15706,7 @@ msgstr "Nelz vytvoøit interpolaèní tabulku <%s> v databázi."
 #: ../vector/lidar/v.surf.bspline/main.c:422
 #, c-format
 msgid "adjusted EW splines %d"
-msgstr ""
+msgstr "Upravené V-Z køivky %d"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:301
 #: ../vector/lidar/v.lidar.correction/main.c:281
@@ -15722,21 +15714,20 @@ msgstr ""
 #: ../vector/lidar/v.surf.bspline/main.c:423
 #, c-format
 msgid "adjusted NS splines %d"
-msgstr ""
+msgstr "Upravené S-J køivky %d"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:356
 #: ../vector/lidar/v.lidar.correction/main.c:336
 #: ../vector/lidar/v.outlier/main.c:333
 #: ../vector/lidar/v.lidar.growing/main.c:251
 #: ../vector/lidar/v.surf.bspline/main.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "subregion %d of %d"
-msgstr "Prùchod %d z %d:"
+msgstr "podregion %d z %d"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:398
-#, fuzzy
 msgid "Allocating memory for bilinear interpolation"
-msgstr "Alokace pamìti pro bilineární interpolace"
+msgstr "Pøidìlení pamìti pro bilineární interpolaci"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:419
 #: ../vector/lidar/v.lidar.correction/main.c:405
@@ -15745,9 +15736,8 @@ msgid "Bilinear interpolation"
 msgstr "Bilineární interpolace"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:431
-#, fuzzy
 msgid "Allocating memory for bicubic interpolation"
-msgstr "Alokace pamìti pro bikubickou interpolaci"
+msgstr "Pøidìlení pamìti pro bikubickou interpolaci"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:436
 msgid "Bicubic interpolation"
@@ -15762,7 +15752,7 @@ msgstr "Bodová klasifikace"
 #: ../vector/lidar/v.outlier/main.c:424
 #: ../vector/lidar/v.surf.bspline/main.c:688
 msgid "No data within this subregion. Consider changing the spline step."
-msgstr ""
+msgstr "Subregion neosahuje ¾ádná data. zva¾e zmìnu kroku køivosti"
 
 #: ../vector/lidar/v.lidar.edgedetection/main.c:470
 #: ../vector/lidar/v.lidar.correction/main.c:440
@@ -15795,9 +15785,9 @@ msgstr "<%s> nebyla v databázi vytvoøena."
 #: ../vector/lidar/lidarlib/raster.c:109 ../vector/lidar/lidarlib/raster.c:126
 #: ../vector/lidar/lidarlib/raster.c:141 ../vector/lidar/lidarlib/raster.c:154
 #: ../vector/lidar/lidarlib/raster.c:169 ../vector/lidar/lidarlib/raster.c:182
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access table <%s>"
-msgstr "Nelze vytvoøit tabulku <%s>"
+msgstr "Nelzepøistoupit k tabulce <%s>"
 
 #: ../vector/lidar/v.lidar.correction/correction.c:96
 #: ../vector/lidar/v.lidar.correction/correction.c:130
@@ -15880,7 +15870,6 @@ msgid "npoints = %d, nterrain = %d"
 msgstr "npoints = %d, nterrain = %d"
 
 #: ../vector/lidar/v.lidar.correction/main.c:374
-#, fuzzy
 msgid "Mean calculation"
 msgstr "Výpoèet støední hodnoty"
 
@@ -15920,14 +15909,13 @@ msgid "Unable to open vector map <%s> at the topological level"
 msgstr "Vektorová mapa <%s> nemohla být otevøena na úrovní topologie"
 
 #: ../vector/lidar/v.outlier/main.c:244
-#, fuzzy, c-format
+#, c-format
 msgid "It was impossible to create <%s> table."
-msgstr "Nelze vytvoøit <%s>."
+msgstr "Nebylo mo¾né vytvoøit tabulku <%s>"
 
 #: ../vector/lidar/v.outlier/main.c:406
-#, fuzzy
 msgid "Outlier detection"
-msgstr "Barva zvýraznìní"
+msgstr "Zji¹tìní bodù mimo region"
 
 #: ../vector/lidar/v.lidar.growing/main.c:83
 msgid ""
@@ -15938,9 +15926,8 @@ msgstr ""
 "vnitøkù budov"
 
 #: ../vector/lidar/v.lidar.growing/main.c:88
-#, fuzzy
 msgid "Input vector (v.lidar.edgedetection output"
-msgstr "Název vstupní vektorové vrstvy observace (výstup v.lidar.growing)"
+msgstr "Vstupní vektor (výstup z v.lidar. edgedetection"
 
 #: ../vector/lidar/v.lidar.growing/main.c:98
 msgid "Name of the first pulse vector map"
@@ -15955,9 +15942,9 @@ msgid "Threshold for double pulse in region growing"
 msgstr "Práh pro dvojitý impuls v rostoucím regionu"
 
 #: ../vector/lidar/v.lidar.growing/main.c:181
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open table <%s>"
-msgstr "Nelze kopírovat tabullku <%s>"
+msgstr "Nelze otevøít tabulku <%s>"
 
 #: ../vector/lidar/v.lidar.growing/main.c:206
 msgid "Setting regions and boxes"
@@ -15974,14 +15961,12 @@ msgid "Columns = %d"
 msgstr "Sloupce = %d"
 
 #: ../vector/lidar/v.lidar.growing/main.c:293
-#, fuzzy
 msgid "read points in input vector"
-msgstr "Naèítání vstupní vektorovou mapu"
+msgstr "naèítání bodù ve vstupní vektorové vrstvì "
 
 #: ../vector/lidar/v.lidar.growing/main.c:442
-#, fuzzy
 msgid "Region Growing"
-msgstr "Vykresluji"
+msgstr "Zvìt¹ení regionu"
 
 #: ../vector/lidar/v.lidar.growing/ConvexHull.c:269
 msgid "...now exiting to system..."
@@ -16078,11 +16063,12 @@ msgid "Bicubic or bilinear spline interpolation with Tykhonov regularization."
 msgstr "Bikubická nebo bilineární interpolace s Tykhonovou regularizací"
 
 #: ../vector/lidar/v.surf.bspline/main.c:93
-#, fuzzy
 msgid ""
 "Find the best Tykhonov regularizing parameter using a \"leave-one-out\" "
 "cross validation method"
-msgstr "Nalézt nejlep¹í parametry pomocí metody køí¾ové validace."
+msgstr ""
+"Nalézt nejlep¹í parametrytykhonova upravujícího parametru pomocí metody "
+"køí¾ové validace."
 
 #: ../vector/lidar/v.surf.bspline/main.c:103 ../vector/v.surf.idw/main.c:119
 #: ../vector/v.surf.rst/main.c:169
@@ -16095,24 +16081,20 @@ msgid "Name of input vector map of sparse points"
 msgstr "Název vstupní vektorové vrstvy øídkého bodového pole"
 
 #: ../vector/lidar/v.surf.bspline/main.c:127
-#, fuzzy
 msgid "Length of each spline step in the east-west direction"
-msgstr "Hodnota kroku spline interpolace v východním smìru"
+msgstr "Hodnota kroku spline ve v-z smìru"
 
 #: ../vector/lidar/v.surf.bspline/main.c:136
-#, fuzzy
 msgid "Length of each spline step in the north-south direction"
-msgstr "Hodnota kroku spline interpolace v severním smìru"
+msgstr "Hodnota kroku spline ve s-j severním smìru"
 
 #: ../vector/lidar/v.surf.bspline/main.c:143
-#, fuzzy
 msgid "Spline interpolation algorithm"
-msgstr "Algoritmus generalizace"
+msgstr "Algoritmus Spline interpolace"
 
 #: ../vector/lidar/v.surf.bspline/main.c:152
-#, fuzzy
 msgid "Tykhonov regularization parameter (affects smoothing)"
-msgstr "Váha Tychonovy regularizace"
+msgstr "Tykhonovùv upravující parametr (ovlivòuje vyhlazení)"
 
 #: ../vector/lidar/v.surf.bspline/main.c:164
 #, fuzzy
@@ -16124,9 +16106,8 @@ msgid "Choose either vector or raster output, not both"
 msgstr "Vektorový a souèasnì rastrový výstup není mo¾ný, vyberte jeden z nich"
 
 #: ../vector/lidar/v.surf.bspline/main.c:180
-#, fuzzy
 msgid "No raster or vector or cross-validation output"
-msgstr "Bez rastrového nebo vektorového výstupu"
+msgstr "®ádný výstup rastr nebo vektor nebo výstup z  køí¾ové validace"
 
 #: ../vector/lidar/v.surf.bspline/main.c:234
 #, fuzzy
@@ -16145,7 +16126,7 @@ msgstr "Køí¾ová validace nebyla správnì ukonèena"
 #: ../vector/lidar/v.surf.bspline/main.c:269
 #, c-format
 msgid "Cross validation finished for sie = %f and sin = %f"
-msgstr ""
+msgstr "Køí¾ová validace skonèila pro sie = %f a pro sin = %f"
 
 #: ../vector/lidar/v.surf.bspline/main.c:277
 #, c-format
@@ -16197,9 +16178,8 @@ msgid "Interpolation: (%d,%d): No record for point (cat = %d)"
 msgstr "Interpolation: (%d,%d): Pro bod (cat = %d) ¾ádný záznam nenalezen"
 
 #: ../vector/lidar/v.surf.bspline/main.c:694
-#, fuzzy
 msgid "Writing output..."
-msgstr "Zapisuji výstupní mapu..."
+msgstr "Zapisuji výstupní vrstvu..."
 
 #: ../vector/v.net.salesman/main.c:97 ../vector/v.net.iso/main.c:73
 #: ../vector/v.net.path/main.c:41 ../vector/v.net/main.c:46
@@ -16880,6 +16860,7 @@ msgid ""
 "Could not close attribute table. The DBMI driver did not accept all "
 "attributes"
 msgstr ""
+"Nelze uzavøít atributovou tabulku. Ovladaè DBMI nepøijal v¹echny atributy"
 
 #: ../vector/v.in.ascii/points.c:83
 msgid "Scanning input for column types..."
@@ -17896,7 +17877,7 @@ msgstr "Generalizace (%s)..."
 #: ../vector/v.generalize/main.c:464
 #, c-format
 msgid "%d boundaries were deleted, input areas are not preserved"
-msgstr ""
+msgstr "%d hranic bylo vymazáno, vstupní plochy nejsou zachovány"
 
 #: ../vector/v.generalize/main.c:487
 #, c-format
@@ -17905,17 +17886,17 @@ msgstr "Nelze spoèítat centroid pro plochu %d"
 
 #: ../vector/v.generalize/main.c:494
 msgid "New centroids were calculated, attribute attachment may be changed"
-msgstr ""
+msgstr "Nové centroidy byly vypoèteny, atributová pøíloha ml¾e být zmìnìna"
 
 #: ../vector/v.generalize/main.c:514
 msgid ""
 "Areas may have disappeared and/or area attribute attachment may have changed"
-msgstr ""
+msgstr "Plochy mohou zmizet a/nebo se mohou zmìnit jejich atributy"
 
 #: ../vector/v.generalize/main.c:515
 #, c-format
 msgid "Try v.clean tool=prune thresh=%f"
-msgstr ""
+msgstr "Zkuste v.clean tool=prune tresh=%f"
 
 #: ../vector/v.generalize/main.c:519
 #, fuzzy, c-format
@@ -18587,7 +18568,7 @@ msgstr ""
 #: ../vector/v.in.ogr/geom.c:193 ../vector/v.in.ogr/geom.c:206
 #: ../vector/v.in.ogr/geom.c:234 ../vector/v.in.ogr/geom.c:280
 msgid "Skipping empty geometry feature"
-msgstr ""
+msgstr "Pøeskakuji prvky bez geometrie"
 
 #: ../vector/v.in.ogr/geom.c:250
 #, c-format
@@ -18926,7 +18907,6 @@ msgid "Cannot create table: %s"
 msgstr "Nelze vytvoøit tabulku: %s"
 
 #: ../vector/v.qcount/main.c:62
-#, fuzzy
 msgid "Indices for quadrat counts of sites lists."
 msgstr "Indexy pro kvadratické poèty pro seznam bodù"
 
@@ -18950,9 +18930,8 @@ msgid "Print results in shell script style"
 msgstr "Vypi¹ výsledek ve stylu pro shell skript"
 
 #: ../vector/v.qcount/main.c:102
-#, fuzzy
 msgid "Finding quadrats..."
-msgstr "Hledám zkusné plochy ... "
+msgstr "Hledám kvadráty..."
 
 #: ../vector/v.qcount/main.c:107
 #, fuzzy
@@ -19109,9 +19088,9 @@ msgid "Unable to open file with coordinates <%s>"
 msgstr "Nemohl jsem otevøít soubor se souøadnicemi : <%s>"
 
 #: ../vector/v.transform/main.c:293
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to tokenize column string: [%s]"
-msgstr "Nelze oznaèit øetìzec ve sloupci: %s"
+msgstr "Nelze zacyklit øetìzec ve sloupci: [%s]"
 
 #: ../vector/v.transform/main.c:320
 #, c-format
@@ -20250,9 +20229,8 @@ msgid "Unable to alter table: %s"
 msgstr "Neschopen vytvoøit tabulku: %s"
 
 #: ../vector/v.net/main.c:47
-#, fuzzy
 msgid "Performs network maintenance."
-msgstr "Servisní sí»"
+msgstr "Provádí správu sí»ì"
 
 #: ../vector/v.net/main.c:118
 #, c-format
@@ -21510,9 +21488,8 @@ msgstr "Pou¾ij napìtí závislé na mìøítku"
 #: ../vector/v.surf.rst/main.c:222 ../vector/v.surf.rst/main.c:228
 #: ../vector/v.surf.rst/main.c:235 ../vector/v.surf.rst/main.c:242
 #: ../vector/v.surf.rst/main.c:249
-#, fuzzy
 msgid "Outputs"
-msgstr "Výstup:"
+msgstr "Výstupy"
 
 #: ../vector/v.surf.rst/main.c:182
 #, fuzzy
@@ -21956,9 +21933,8 @@ msgid "Sampling method"
 msgstr "Typ vzorkování"
 
 #: ../vector/v.drape/main.c:176
-#, fuzzy
 msgid "Scale sampled raster values"
-msgstr "Statistika pou¾itá pro rastrové hodnoty"
+msgstr "Mìøítko vzorových rastrových hodnot"
 
 #: ../vector/v.drape/main.c:184
 msgid "Vector Z value for unknown height"
@@ -22962,14 +22938,12 @@ msgid "Output triangulation as a graph (lines), not areas"
 msgstr "Výstup triangulace jako graf (linie), ne plochy"
 
 #: ../vector/v.delaunay/main.c:146
-#, fuzzy
 msgid "no points to triangulate"
-msgstr "Poèet bodù, které mají být rozmístìny"
+msgstr "®ádné body pro triangulaci"
 
 #: ../vector/v.delaunay/main.c:149
-#, fuzzy
 msgid "Delaunay triangulation..."
-msgstr "Pøedbì¾né kalkulace povrchu..."
+msgstr "Delaunay triangulace...."
 
 #: ../vector/v.delaunay/main.c:161
 #, fuzzy
@@ -22992,7 +22966,6 @@ msgid "All allocated edges have been used."
 msgstr "V¹echny pøiøazené hrany byly pou¾ity."
 
 #: ../vector/v.delaunay/in_out.c:93
-#, fuzzy
 msgid "Writing edges..."
 msgstr "Zapisuji body ..."
 
@@ -23217,7 +23190,7 @@ msgstr ""
 
 #: ../vector/v.extract/main.c:145
 msgid "Number must be smaller than unique cat count in layer"
-msgstr ""
+msgstr "Poèet musí být me¹í ne¾ souèet kategorií ve vrstvì"
 
 #: ../vector/v.extract/main.c:154
 msgid "Enter -1 to keep original categories or the desired NEW category value"
@@ -23257,9 +23230,9 @@ msgid "Ignored text entry: %s"
 msgstr "Ignoruji textový vstup: %s"
 
 #: ../vector/v.extract/main.c:280
-#, fuzzy, c-format
+#, c-format
 msgid "Unable select records from table <%s>"
-msgstr "Nelze vybrat data z LRS tabulky: %s"
+msgstr "Nelze vybrat data z tabulky <%s>"
 
 #: ../vector/v.extract/main.c:281
 #, c-format
@@ -23284,6 +23257,8 @@ msgid ""
 "Random category count must be smaller than feature count. There are only %d "
 "features of type(s): %s"
 msgstr ""
+"Souèet náhodných kategorií musí být men¹í ne¾ poèet prvkù. Je pouze %d prvkù "
+"typu: %s"
 
 #: ../vector/v.extract/main.c:329
 #, c-format
@@ -23291,11 +23266,12 @@ msgid ""
 "Random category count is larger or equal to uniq \"%s\" feature category "
 "count %d"
 msgstr ""
+"Souèet náhodných kategoií musí být stejný nebo vìt¹í  ne¾ unikátní \"%s\" "
+"souèet kategorí prvkù %d"
 
 #: ../vector/v.extract/main.c:366
-#, fuzzy
 msgid "Extracting features..."
-msgstr "Extrahuji plochy..."
+msgstr "Rozbaluji prvky..."
 
 #: ../vector/v.extract/main.c:481
 msgid "Removing duplicate centroids..."
@@ -23397,16 +23373,15 @@ msgid "Unable to read colors for colorbar"
 msgstr "Nelze èíst barvy pro barevný prou¾ek"
 
 #: ../ps/ps.map/ps_clrtbl.c:48
-#, fuzzy
 msgid ""
 "Your cats/ file is invalid. A cats/ file with categories and labels is "
 "required for 'colortable' when using categorical legends; see the r.category "
 "help page. Colortable creation has been skipped."
 msgstr ""
 "Vá¹ soubor cats/ není platný. Soubor cats/ s kategoriemi a ¹títky je "
-"vy¾adován pro 'tabulku barev' v pøípadì rastrových souborù CELL. K "
-"výstupnímu souboru ve formátu PostScript tak nebude pøiøazena ¾ádná tabulka "
-"berev."
+"vy¾adován pro 'tabulku barev' v pøípadì pou¾ití nespojité legendy; "
+"zkontrolujte manuálovou stránku pro r.category. vytváøení barevkné abulky "
+"bylo vynecháno."
 
 #: ../ps/ps.map/ps_clrtbl.c:63 ../ps/ps.map/ps_fclrtbl.c:93
 #: ../ps/ps.map/ps_fclrtbl.c:98
@@ -23686,9 +23661,8 @@ msgid "Name of input raster map (image fft, imaginary part"
 msgstr "Jméno vstupní rastrové mapy (obraz fft, imaginární èást)"
 
 #: ../imagery/i.ifft/main.c:119
-#, fuzzy
 msgid "The real and imaginary original windows did not match"
-msgstr "Reálná a imaginární originální okna nesouhlasily."
+msgstr "Reálná a imaginární originální okna nesouhlasí."
 
 #: ../imagery/i.ifft/main.c:141 ../imagery/i.cluster/main.c:276
 #: ../imagery/i.gensigset/read_data.c:22
@@ -25040,11 +25014,11 @@ msgstr "Kombinace podtøíd (%d,%d)...."
 #: ../imagery/i.gensigset/subcluster.c:313
 #, c-format
 msgid "Subsignature %d only contains %f pixels"
-msgstr "Podpøíznak %d obsahuje pouze %f pixelù"
+msgstr "subsignatura %d obsahuje pouze %f pixelù"
 
 #: ../imagery/i.gensigset/subcluster.c:548
 msgid "Unreliable clustering. Try a smaller initial number of clusters"
-msgstr ""
+msgstr "Nespolehlivé shlukování. Pou¾ijte men¹í poèáteèní poèet shlukù"
 
 #: ../imagery/i.gensigset/subcluster.c:557
 #, c-format
@@ -25338,24 +25312,20 @@ msgid "Principal components analysis (pca) program for image processing."
 msgstr "Program pro analýzu hlavních komponent (pca) snímkù."
 
 #: ../imagery/i.pca/main.c:72
-#, fuzzy
 msgid "Name of two or more input raster maps"
-msgstr "Název vstupní rastrové mapy"
+msgstr "Název dvou nebo více vstupních rsatrových vrstev"
 
 #: ../imagery/i.pca/main.c:75
-#, fuzzy
 msgid "Base name for output raster maps"
-msgstr "Název výstupní rastrové mapy"
+msgstr "Základ jména výstupních rastrovách vrstev"
 
 #: ../imagery/i.pca/main.c:77
-#, fuzzy
 msgid "A numerical suffix will be added for each component map"
-msgstr "Poèet úrovní, které budou pou¾ity pro ka¾dou souèást"
+msgstr "Èíselná pøípona bude pøidána pro ka¾dou komponentu mapy "
 
 #: ../imagery/i.pca/main.c:86
-#, fuzzy
 msgid "Rescaling range for output maps (for no rescaling use 0,0)"
-msgstr "Vytváøím nový rozsah výstupu (Pro ponechání pou¾ijte 0,0)"
+msgstr "pøevzorkovávám rozsah výstupní mapy (Pro ponechání pou¾ijte 0,0)"
 
 #: ../imagery/i.pca/main.c:96
 msgid "Sorry, at least 2 input bands must be provided"
@@ -25375,9 +25345,9 @@ msgid "Unable allocate memory for row buffer"
 msgstr "Nelze alokovat pamì» pro okolí øádku"
 
 #: ../imagery/i.pca/main.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Computing means for band %d..."
-msgstr "Poèítám prùmìr pro skupinu %d...."
+msgstr "Poèítám prùmìr pro vrstvu %d...."
 
 #: ../imagery/i.pca/main.c:294
 #, fuzzy, c-format
@@ -25393,18 +25363,18 @@ msgid "Unable to allocate memory for raster row"
 msgstr "Nelze alokovat pamì» pro øádek rastru"
 
 #: ../imagery/i.pca/main.c:380
-#, fuzzy, c-format
+#, c-format
 msgid "Transforming <%s>..."
-msgstr "Pøevádím prvky..."
+msgstr "Pøevádím prvky <%s>..."
 
 #: ../imagery/i.pca/main.c:395
-#, fuzzy, c-format
+#, c-format
 msgid "Rescaling <%s> to range %d,%d..."
-msgstr "Upravuji data <%s> do rozmezí %d,%d..."
+msgstr "Pøevzorkovávám <%s> do rozmezí %d,%d..."
 
 #: ../imagery/i.pca/support.c:44
 msgid "Eigen values, (vectors), and [percent importance]:"
-msgstr ""
+msgstr "Eigen hodonty, (vektory) a [procenta dùle¾itosti]:"
 
 #: ../imagery/i.emissivity/main.c:44
 msgid "emissivity"
@@ -25877,9 +25847,8 @@ msgid "Name for raster map holding classification results"
 msgstr "Jméno rastrové mapy obsahující výsledky klasifikace"
 
 #: ../imagery/i.maxlik/main.c:91
-#, fuzzy
 msgid "Name for raster map holding reject threshold results"
-msgstr "Rastrová mapa s výsledkem zamítnutí"
+msgstr "Název rastrové mapy obsahující prahové výsledky"
 
 #: ../imagery/i.maxlik/invert.c:28
 #, c-format
@@ -30126,6 +30095,1335 @@ msgstr ""
 "Mù¾ete zmìnit historii pøíkazy:\n"
 "history -S; history -L %s/.history; setenv histfile=%s/.history"
 
+#, fuzzy
+msgid "Print bounds and exit (shell style)"
+msgstr "Vypi¹ výsledek ve stylu pro shell skript"
+
+msgid "Band to select"
+msgstr "Výbìr vrstvy"
+
+#, fuzzy
+msgid "Estimate spline step value"
+msgstr "Statistika pou¾itá pro rastrové hodnoty"
+
+msgid "It was impossible to create <Auxiliar_outlier_table>."
+msgstr "Bylo mo¾no vytvoøit <Auxiliar_outlier_table>."
+
+#, fuzzy
+msgid "<%s> table created in database."
+msgstr "<%s> vytvoøeno v databázi."
+
+msgid "M.Q. solution"
+msgstr "Øe¹ení M.Q."
+
+msgid "3-d data in dxf file. Polyline_flag: %d"
+msgstr "3-d data v souboru dxf. Polyline_flag: %d"
+
+msgid "Import SRTM HGT files into GRASS"
+msgstr "Importuje SRTM HGT soubory do GRASSu"
+
+#, fuzzy
+msgid ""
+"Calculate the groundwater distance velocity vector field \n"
+"and write the x, y, and z components to maps named name_[xyz].\n"
+"Name is basename for the new raster3d maps"
+msgstr ""
+"Vypoèítat prùtokovou rychlost vektorového pole a zapi¹ x,y a z èásti do map "
+"pojmenovaných jmeno_[xyz]. Jméno mapy je základ pro r3d rastrovou mapu."
+
+#, fuzzy
+msgid "report"
+msgstr "Rozsáhlá zpráva"
+
+msgid "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),p(ercent)"
+msgstr ""
+"mi(míle),f(stopy),me(metry),k(kilometery),a(akry),h(hektary),p(procenta)"
+
+#, fuzzy
+msgid "Unable to get cell header for <%s>"
+msgstr "Nejsem schopen zapsat hlavièku pro %s"
+
+#, fuzzy
+msgid "Unable to open cellfile for <%s>"
+msgstr "Nelze otevøít soubor <%s>"
+
+#, fuzzy
+msgid "Error reading <%s>"
+msgstr "Chyba pøi ètení rastrové mapy <%s>"
+
+#, fuzzy
+msgid "%s: Error reading from raster map <%s>"
+msgstr "Chyba pøi ètení rastrové mapy <%s>"
+
+#, fuzzy
+msgid "r.li.worker (pid %i) exited with abnormal status: %i"
+msgstr "r.li.worker (pid %i) byl ukonèen s abnormálním statusem %i"
+
+#, fuzzy
+msgid "r.li.worker (pid %i) terminated successfully"
+msgstr "r.li.worker (pid %i) ukonèen"
+
+#, fuzzy
+msgid "unable to open map <%s> in <%s>"
+msgstr "Nelze otevøít rastrovou mapu <%s> v <%s>"
+
+#, fuzzy
+msgid "unable to read map <%s> in <%s>"
+msgstr "Nelze èíst region <%s> v <%s>"
+
+#, fuzzy
+msgid "Unable to open base map <%s>"
+msgstr "Nelze otevøít rastrovou mapu <%s>"
+
+#, fuzzy
+msgid "Unable to open cover map <%s>"
+msgstr "Nelze otevøít vektorovou mapu <%s>"
+
+#, fuzzy
+msgid "Unable to open output map <%s>"
+msgstr "Nelze otevøít výstupní soubor <%s>"
+
+#, fuzzy
+msgid "Unable to read header for <%s>"
+msgstr "Nejsem schopen zapsat hlavièku pro %s"
+
+#, fuzzy
+msgid "Error reading row %d (error = %d)"
+msgstr "Nelze naèíst øádek %d (chyba = %d)"
+
+#, fuzzy
+msgid "Cannot set region to output region"
+msgstr "Nelze nastavit region zpìt na poèáteèní rozli¹ení!!!"
+
+#, fuzzy
+msgid "Cannot set region to back to the initial region"
+msgstr "Nelze nastavit region zpìt na poèáteèní rozli¹ení!!!"
+
+#, fuzzy
+msgid "Unable to read row %d"
+msgstr "Nelze èíst øádek %i\n"
+
+#, fuzzy
+msgid "Unable to read region <%s>"
+msgstr "Nelze nastavit region <%s>"
+
+#, fuzzy
+msgid "unable to open new LS factor map layer."
+msgstr "Nelze otevøít novou mapu L (faktoru délky svahu)"
+
+#, fuzzy
+msgid "unable to open new S factor map layer."
+msgstr "nemohu otevøít novou mapu S (faktor sklonu svahu)"
+
+#, fuzzy
+msgid "unable to open accumulation map layer"
+msgstr "nemohu otevøít novou mapu akumulace "
+
+#, fuzzy
+msgid "SECTION 4: Extracting Streams."
+msgstr "Extrahuji plochy..."
+
+#, fuzzy
+msgid "Error reading row <%d>"
+msgstr "Chyba pøi zápisu øádky %d."
+
+#, fuzzy
+msgid "Name of input raster map containing starting points"
+msgstr "Název existující rastrové mapy obsahující frikèní hodnoty"
+
+#, fuzzy
+msgid "Unable to open input map <%s>"
+msgstr "Nelze otevøít vstupní soubor <%s>"
+
+#, fuzzy
+msgid "Error reading row %d"
+msgstr "Chyba pøi zápisu øádky %d."
+
+msgid "<Auxiliar_edge_table> created in database."
+msgstr "<pomocná_tabulka> vytvoøena v databázi."
+
+#, fuzzy
+msgid "Pass %d:"
+msgstr "Prùchod %d..."
+
+msgid "Creating auxiliar table for archiving overlapping zones"
+msgstr "Vytvoøení pomocné tabulky pro archivaci pøekrývajících se zón"
+
+#, fuzzy
+msgid "Unable to open table <%s_edge_Interpolation>"
+msgstr "Nelze otevøít databázi <%s>"
+
+msgid ""
+"It was not possible to drop <%s> table. Nothing will be done. Try to drop it "
+"manually."
+msgstr ""
+"Nelze vyjmout tabulku <%s>. Nic se nestalo. Zkuste vyjmout tabulku ruènì."
+
+msgid "Cross Validation was success!"
+msgstr "Køí¾ová validace byla íºspì¹ná!"
+
+msgid ""
+"Interpolation: The region resolution is too high: %d cells. Consider to "
+"change it."
+msgstr ""
+"Interpolace: Rozli¹ení regionu je pøíli¹ vysoké: %d bunìk. Prosím, zmìòte "
+"jej."
+
+#, fuzzy
+msgid "Unable to read raster map row %ld"
+msgstr "Nelze èíst rastrovou mapu, øádek %d"
+
+#, fuzzy
+msgid "Failed writing raster map row %ld"
+msgstr "Selhalo zapisování øádku %d rastrové mapy"
+
+#, fuzzy
+msgid "Unable to read from <%s> row %d"
+msgstr "Nelze èíst rastrovou mapu <%s> øádek %d"
+
+#, fuzzy
+msgid "Unable to read file header of raster map <%s>"
+msgstr "Nelze èíst hlavièku rastrové mapy <%s>"
+
+#, fuzzy
+msgid "Unable to write to raster map<%s>"
+msgstr "Nelze zapsat rastrové mapy"
+
+#, fuzzy
+msgid "Unable to open training map <%s>"
+msgstr "Nelze otevøít vektorovou mapu <%s>"
+
+#, fuzzy
+msgid "Unable to open training map <%s in %s>"
+msgstr "Nelze otevøít rastrovou mapu <%s> v <%s>"
+
+#, fuzzy
+msgid "Cannot open cell file [%s]"
+msgstr "Nelze otevøít soubor s pravidly <%s>"
+
+#, fuzzy
+msgid "Cannot read file header of [%s])"
+msgstr "Nelze èíst hlavièku souboru <%s>"
+
+#, fuzzy
+msgid "Could not open <%s>"
+msgstr "Nelze otevøít mapu %s"
+
+msgid "Could not read from <%s>"
+msgstr "Nelze èíst z <%s>"
+
+#, fuzzy
+msgid "Cannot write to output raster file"
+msgstr "Název výstupní rastrové mapy"
+
+#, fuzzy
+msgid "Unable to read header of raster map <%s> "
+msgstr "Nelze èíst hlavièku rastrové mapy <%s>"
+
+#, fuzzy
+msgid "Unable to read raster map <%s> row %d >"
+msgstr "Nelze èíst rastrovou mapu <%s> øádek %d"
+
+msgid "Error reading row of data"
+msgstr "Chyba pøi ètení øádku"
+
+msgid "Error reading intensity data"
+msgstr "Chyba pøi ètení mapy intenzity"
+
+msgid "Error reading saturation data"
+msgstr "Chyba pøi ètení mapy nasycení (saturation)"
+
+msgid "Error writing PROJ_INFO"
+msgstr "Chyba pøi zápisu PROJ_INFO"
+
+msgid "Error writing PROJ_UNITS"
+msgstr "Chyba pøi zápisu PROJ_UNITS"
+
+msgid "Unable to compile regular expression %s"
+msgstr "Nelze sestavit regulérní výraz %s"
+
+msgid "Raster map <%s@%s>: %s"
+msgstr "rastrová mapa <%s@%s>: %s"
+
+msgid "Unable to open raster map <%s> in <%s>"
+msgstr "Nelze otevøít rastrovou mapu <%s> v <%s>"
+
+msgid "display, setup"
+msgstr "zobrazení, nastavení"
+
+msgid "display, raster"
+msgstr "zobrazení, rastr"
+
+msgid "display, networking"
+msgstr "zobrazení, sítì"
+
+msgid "Size of grid to be drawn"
+msgstr "Velikost møí¾ky pro vykreslení"
+
+msgid "display, vector"
+msgstr "zobrazení, vekrotové mapa"
+
+#, fuzzy
+msgid "qcname"
+msgstr "jméno"
+
+#, fuzzy
+msgid "Name of QC"
+msgstr "Jméno mapsetu"
+
+#, fuzzy
+msgid "250m band number is out of allowed range [1,2]"
+msgstr "Poèet hran mimo rozsah"
+
+#, fuzzy
+msgid "Cannot read file header of [%s]"
+msgstr "Nelze èíst hlavièku souboru <%s>"
+
+#, fuzzy
+msgid "general, region"
+msgstr "obecné, projekce"
+
+msgid "general, transformation, GCP"
+msgstr "obecné transformace, GCP"
+
+msgid "general, settings"
+msgstr "obecné, nastavení"
+
+msgid "general, gui"
+msgstr "obecné, grafické prostøedí"
+
+msgid "general, projection"
+msgstr "obecné, projekce"
+
+msgid ""
+"Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+"file into a vector map."
+msgstr ""
+"Stáhne Waypoints, Routes a Tracks z pøístroje GPS nebo ze souboru a ulo¾í je "
+"do vektorové mapy."
+
+msgid "vector, import, GPS"
+msgstr "vektor, import, GPS"
+
+msgid "Import waypoints"
+msgstr "Importovat body"
+
+msgid "Import routes"
+msgstr "Importovat cesty"
+
+msgid "Import track"
+msgstr "Importovat tracky"
+
+msgid "Force vertices of track or route data as points"
+msgstr "Pøevézt lomové body tracku nebo cesty na body"
+
+msgid "Do not attempt projection transform from WGS84"
+msgstr "Neprovádìt pøevod projekce z WGS84"
+
+msgid "Device or file used to import data"
+msgstr "Zaøízení nebo soubor urèený k importu"
+
+msgid "Format of GPS input data (use gpsbabel supported formats)"
+msgstr "Formát vstupní dat z GPSky (pou¾ij formáty podporované gpsbabel)"
+
+msgid ""
+"Projection of input data (PROJ.4 style), if not set Lat/Lon WGS84 is assumed"
+msgstr ""
+"Projekce vstupních dat (pou¾ijte volby PROJ.4), pokud není nastaveno, "
+"pøedpokládáse, ¾e tato projekce je Lat/Long WGS84"
+
+msgid "raster, imagery, colors"
+msgstr "rastr, dpz, barvy"
+
+msgid "vector, centroid, area"
+msgstr "vektor, centroid, plocha"
+
+msgid "Configuration editor for r.li.'index'"
+msgstr "Konfiguraèní editor pro r.li.'index'"
+
+msgid "vector, import, gazetteer"
+msgstr "vektor, import gazetteer"
+
+msgid "vector, export, GPS"
+msgstr "vektor, export, GPS"
+
+msgid "raster, imagery, import"
+msgstr "rastr, obrazová data, import"
+
+msgid "raster, statistics, aggregation"
+msgstr "rastr, statistika, agregace"
+
+msgid "imagery, fusion, Brovey"
+msgstr "obrazová data, fùze, Browey"
+
+msgid "raster, imagery"
+msgstr "rastr, obrazová data"
+
+msgid "vector, area, dissolve"
+msgstr "vektor, plocha, spojení"
+
+msgid "raster, mask"
+msgstr "rastr, maska"
+
+msgid "vector, color table"
+msgstr "vektor, barevná tabulka"
+
+msgid "raster, elevation, interpolation"
+msgstr "rastr, elevace, interpolace"
+
+msgid "Additional options for wget"
+msgstr "Dal¹í volby pro wget"
+
+msgid "Additional options for curl"
+msgstr "Dal¹í volby pro curl"
+
+msgid "vector, report, statistics"
+msgstr "vektor, zpráva, statistika"
+
+msgid ""
+"Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
+"vector map."
+msgstr ""
+"Ulo¾ Waypoints, Routes a Tracks z pøístroje GPS Garmin jako vektorovou mapu."
+
+msgid "Download Waypoints from GPS"
+msgstr "Stáhni Waypoints z GPSky"
+
+msgid "Download Routes from GPS"
+msgstr "Stáhni Routes z GPSky"
+
+msgid "Download Track from GPS"
+msgstr "Stáhni Tracky z GPSky"
+
+msgid "Force import of track or route data as points"
+msgstr "Importuj tracky a routy jako body"
+
+msgid "Use gardump instead of gpstrans as the download program"
+msgstr "Pou¾ít gardump místo gpstrans  jako stahovací program"
+
+msgid "Import track in 3D (gardump only)"
+msgstr "Importovat stopu ve 3D ( pouze gardump)"
+
+msgid "Port Garmin receiver is connected to"
+msgstr "Port, na kterém je Garmina pøipojena"
+
+msgid "sites, vector, import"
+msgstr "body, vektor, import"
+
+msgid "raster, imagery, statistics"
+msgstr "rastr, dpz, statistika"
+
+msgid "vector, raster, statistics"
+msgstr "vektor, rastr, statistika"
+
+msgid "general, manual, help"
+msgstr "obecné, návod, pomoc"
+
+msgid "raster, imagery, mosaicking"
+msgstr "rastr, dpz, mozaikování"
+
+msgid "miscellaneous, projection"
+msgstr "rùzné, projekce"
+
+msgid "visualization, raster, vector, raster3d"
+msgstr "vizualizace rastr, vektor, 3D rastr"
+
+msgid "raster, vector, visualization"
+msgstr "rastrová mapa, vektorová mapa, zobrazení"
+
+msgid "Script kill option"
+msgstr "Volba skriptu kill"
+
+msgid "Start in Demo mode"
+msgstr "Spustit v módu Demo"
+
+msgid "Output more comments (default=quiet)"
+msgstr "Více komentáøù na výstup (výchozí=potichu)"
+
+#, fuzzy
+msgid "raster, soil, erosion, USLE"
+msgstr "rastr, objem, pøevod"
+
+#, fuzzy
+msgid "raster, rainfall, erosion, USLE"
+msgstr "rastr, tok erodovaných èástic, eroze, usazování"
+
+#, fuzzy
+msgid "raster, random, surface"
+msgstr "Rastrový soubor pro povrch"
+
+#, fuzzy
+msgid "raster, random, cell"
+msgstr "rastr, pøevzorkování"
+
+msgid "Spline type of interpolation"
+msgstr "Spline typ interpolace"
+
+msgid "It was impossible to open table"
+msgstr "Nebylo mo¾né otevøít tabulku"
+
+msgid " Middle: toggle flash color\n"
+msgstr " Prostøední: zmìnit barvu\n"
+
+msgid "Enable flashing (slower)"
+msgstr "Umo¾ni probliknutí (pomalej¹í)"
+
+msgid ""
+"Draws text in the graphics monitor's active display frame using TrueType "
+"fonts."
+msgstr ""
+"Vykreslí text v aktivním rámci grafického monitoru s vyu¾itím písma TrueType"
+
+msgid "Screen position (percentage, [0,0] is bottom left)"
+msgstr "Souøadnice v procentech rámce ([0,0] je vlevo dole)"
+
+msgid "Path to TrueType font (including file name)"
+msgstr "Cesta k TrueType fontùm (vèetnì jména souboru)"
+
+msgid "Height of letters (in percent of available frame height)"
+msgstr "Vý¹ka písmen (v procentech dostupné vý¹ky rámce)"
+
+msgid "Either text or -c should be given"
+msgstr "Mìl by být zadán buï text nebo -c"
+
+msgid "Choose only one coordinate system for placement"
+msgstr "Vyberte pro umístìní pouze jeden souøadnicový systém"
+
+msgid "No font selected"
+msgstr "Nebylo vybráno ¾ádné písmo"
+
+msgid "Invalid font: %s"
+msgstr "Chybné písmo: %s"
+
+msgid "No current window"
+msgstr "®ádné aktuální okno"
+
+msgid "Current window not available"
+msgstr "Aktuální okno není dostupné"
+
+msgid "Unable to create text conversion context"
+msgstr "Nelze vytvoøit textovou konverzi kontextu"
+
+msgid "Unable to write the temporary file"
+msgstr "Nelze zapisovat do doèasného souboru"
+
+msgid "No predefined font"
+msgstr "®ádné pøeddefinované písmo"
+
+msgid "%s: Unable to read font"
+msgstr "%s: Nelze èíst písmo"
+
+msgid "%s: Unable to read FreeType definition file; use the default"
+msgstr "%s: Nelze èíst definièní soubor FreeType; pou¾iji výchozí"
+
+msgid "%s: No FreeType definition file"
+msgstr "%s: Å½ádný definièní soubor FreeType"
+
+msgid "%s: Unable to read FreeType definition file"
+msgstr "%s: Nelze èíst definièní soubor FreeType"
+
+msgid "Display number of colors"
+msgstr "Zobraz poèet barev"
+
+msgid "Setting map window"
+msgstr "Nastavuji mapové okno"
+
+msgid "Getting screen window"
+msgstr "Získání obrazového okna"
+
+msgid "Error in calculating conversions"
+msgstr "Chyba pøi pøepoèítávání"
+
+msgid "Font name or pathname of TTF file"
+msgstr "Jméno  nebo cesta k TTF souboru."
+
+msgid "Setting release of FreeType"
+msgstr "Nastavuji verzi FreeType"
+
+msgid "No current graphics window"
+msgstr "®ádný vybraný monitor"
+
+msgid "Current graphics window not available"
+msgstr "Aktuální monitor není dostupný"
+
+msgid "No raster or vector map displayed"
+msgstr "Název rastrové nebo vektorové mapy, která bude zobrazena"
+
+msgid "Current window not settable"
+msgstr "Aktuální okno nelze nastavit"
+
+msgid "No raster map exists in the current window"
+msgstr "V aktuálním oknì neexistuje ¾ádná rastrová mapa"
+
+msgid "Don't add to list of rasters and commands in monitor"
+msgstr "Nepøidávat do seznamu rastrù a pøíkazù v monitoru"
+
+msgid "Cannot use current window"
+msgstr "Nelze pou¾ít aktuální okno"
+
+msgid "Error reading raster map"
+msgstr "chyba pøi ètení rastrové mapy"
+
+msgid "one moment ..."
+msgstr "momentíèek ..."
+
+msgid "Interactive profile plotting utility with optional output."
+msgstr "Nástroj pro interaktivní vytváøení profilù s volitelným výstupem."
+
+msgid "Optional display raster"
+msgstr "Volitelný rastr, který bude zobrazen"
+
+msgid "Output profile data to file(s) with prefix 'name'"
+msgstr "Výstupní data profilu ulo¾it do souboru(ù) s prefixem 'jméno'"
+
+msgid "Display raster [%s] not found. Using profile raster."
+msgstr "Rastr ke zobrazení [%s] nenalezen. Pou¾iji rastr profilu."
+
+msgid ""
+"\n"
+"\n"
+"Use mouse to choose action"
+msgstr ""
+"\n"
+"\n"
+"Pou¾ít my¹ pro vybraní akce"
+
+msgid "Use 'd.frame -e' to remove left over frames"
+msgstr "Pou¾ijte 'd.frame -e' pro smazání zbylých rámcù"
+
+msgid "Error opening cell-file"
+msgstr "Chyba pøi otevírání souboru cell"
+
+msgid "Error reading from cell-file"
+msgstr "Chyba pøi ètení souboru cell"
+
+msgid "Mysterious window inconsistancy error"
+msgstr "Záhadná chyba nekonzistence okna"
+
+msgid "%s: Couldn't open raster <%s@%s>"
+msgstr "%s: Nelze otevøít rastrový soubor <%s@%s>"
+
+msgid "%s: 'is_null_value()' got NULL pointer!"
+msgstr "%s: 'is_null_value()' dostala NULLový pointer!"
+
+msgid "%s: 'is_null_value()' got negative column index"
+msgstr "%s: 'is_null_value()' dostala negativní index sloupeèku"
+
+msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
+msgstr "%s: 'is_null_value()' Neznámý RASTER_MAP_TYPE '%d'"
+
+msgid "Use mouse to size & place legend"
+msgstr "Pou¾ít my¹ pro velikost a umístìní legendy"
+
+msgid "Interactively select route"
+msgstr "Interaktivní výbìr trasy"
+
+msgid "You must select more than one point"
+msgstr "Je potøeba vybrat více ne¾ jeden bod"
+
+msgid "You must select at least four points"
+msgstr "Musíte vybrat nejménì ètyøi body."
+
+msgid "Usage:  %s monitor_name"
+msgstr "Pou¾ití: %s jmeno_monitoru"
+
+msgid "%s: -%c unrecognized option"
+msgstr "%s: -%c nerozpoznaná volba"
+
+msgid "Usage: %s [-f] monitor_name"
+msgstr "Pou¾ití: %s [-f] jmeno_monitoru"
+
+msgid "Monitor '%s' terminated"
+msgstr "Monitor '%s' ukonèen"
+
+msgid "Error - Monitor '%s' was not running"
+msgstr "Chyba - Monitor '%s' nebì¾í"
+
+msgid "No such monitor as <%s>"
+msgstr "Monitor <%s> neexistuje"
+
+msgid "Error - Monitor '%s' in use by another user"
+msgstr "Chyba - Monitor '%s' je pou¾íván jiným u¾ivatelem"
+
+msgid "Error - Locking mechanism failed"
+msgstr "Chyba - selhal zamykací mechanismus"
+
+msgid "Monitor <%s> released"
+msgstr "monitor <%s> byl uvolnìn"
+
+msgid "Monitor <%s> in use by another user"
+msgstr "Monitor <%s> je pou¾íván jiným u¾ivatelem"
+
+msgid "Failed testing lock mechanism"
+msgstr "Testování uzamykacího mechanismu selhalo"
+
+msgid "Usage:  %s [-fv] [name]"
+msgstr "Pou¾ití: %s [-fv] [jmeno]"
+
+msgid "To establish and control use of a graphics display monitor."
+msgstr "Slou¾í k vytvoøení a kontrole grafického monitoru."
+
+msgid "Name of graphics monitor to start"
+msgstr "Jméno grafického monitoru, který bude spu¹tìn"
+
+msgid "Name of graphics monitor to stop"
+msgstr "Jméno grafického monitoru, který bude vypnut"
+
+msgid "Name of graphics monitor to select"
+msgstr "Jméno grafického monitoru, který bude vybrán"
+
+msgid "Name of graphics monitor to unlock"
+msgstr "Jméno monitoru k odemèení"
+
+msgid "List all monitors"
+msgstr "Seznam v¹ech monitorù"
+
+msgid "List all monitors (with current status)"
+msgstr "Seznam monitorù (s aktuálním stavem)"
+
+msgid "Print name of currently selected monitor"
+msgstr "Vypi¹ jméno aktuálnì vybraného monitoru"
+
+msgid "Release currently selected monitor"
+msgstr "Uvolni souèasný vybraný monitor"
+
+msgid "Do not automatically select when starting"
+msgstr "Nevybírej monitor automaticky pøi startu"
+
+msgid "Problem selecting %s. Will try once more"
+msgstr "Problém pøi výbìru monitoru %s. Zkusím to je¹tì jednou"
+
+msgid "Can't clear current graphics window"
+msgstr "Nelze vyèistit aktuální okno"
+
+msgid "One mouse click only"
+msgstr "Pouze jedno kliknutí my¹í"
+
+msgid "Rendering method for filled polygons"
+msgstr "Vykreslovací metoda pro plné polygony"
+
+#, fuzzy
+msgid ""
+"d;use the display library basic functions (features: polylines);c;use the "
+"display library clipping functions (features: clipping);l;use the display "
+"library culling functions (features: culling, polylines)"
+msgstr ""
+"g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
+"funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
+"základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
+"zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití knihovny "
+"zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená èára)"
+
+msgid "Invalid rendering method <%s>"
+msgstr "Neplatná zobrazovací metoda: <%s>"
+
+#, fuzzy
+msgid ""
+"Displays the rhumbline joining two user-specified points, in the active "
+"frame on the user's graphics monitor."
+msgstr ""
+"Zobrazí plochy tématické vektorové mapy v aktivním rámci grafického monitoru."
+
+msgid "Use mouse to interactively place text"
+msgstr "Pou¾ít my¹ pro umístìní textu"
+
+msgid "Click!\n"
+msgstr "Klik!\n"
+
+msgid " Left:    Place text here\n"
+msgstr " Levé:    Vlo¾it text sem\n"
+
+msgid " Right:   Quit\n"
+msgstr " Pravé :   ukonèit\n"
+
+msgid "Just redraw given maps using default colors"
+msgstr "Pouze pøekresli zobrazené mapy s výchozími barvami."
+
+msgid "ERROR: can not get \"list\" items"
+msgstr "CHYBA: nelze získat polo¾ky \"list\""
+
+msgid "-j flag forced"
+msgstr "volba -j byla nastavena nucenì"
+
+msgid "No map is displayed in GRASS monitor"
+msgstr "Nebyla zobrazena ¾ádná mapa v monitoru GRASSu"
+
+msgid "Don't add to list of commands in monitor"
+msgstr "Nepøidávat do seznamu v monitoru pøíkazy"
+
+msgid ""
+"Generates and displays simple graphics on map layers drawn in the active "
+"graphics monitor display frame."
+msgstr ""
+"Vytvoøí a zobrazí jednoduché grafické prvky na mapì vykreslené v aktivním "
+"grafickém monitoru."
+
+msgid ""
+"Unix file containg graphing instructions, if not given reads from standard "
+"input"
+msgstr ""
+"Soubor (Unix) obsahující grafické instrukce, pokud není zadáno, ète se "
+"standardní vstup"
+
+msgid ""
+"Color to draw with, either a standard GRASS color or R:G:B triplet "
+"(separated by colons)"
+msgstr ""
+"Barva kresby, buï standardní GRASS barva nebo trojice R:G:B (oddìleno "
+"dvojteèkou)"
+
+msgid ""
+"\n"
+"Mouse Buttons:"
+msgstr ""
+"\n"
+"Tlaèítka my¹i:"
+
+msgid "Left:   Select From\n"
+msgstr " Levé:    Vybrat z\n"
+
+msgid "Middle: Select To\n"
+msgstr "Prostøední tlaèítko: Vybrat do\n"
+
+msgid ""
+"Right:  Quit\n"
+"\n"
+msgstr ""
+" Pravé tlaèítko: ukonèit\n"
+"\n"
+
+#, fuzzy
+msgid "Short user prompt message"
+msgstr "Vytiskni také zprávu o autorských právech"
+
+msgid "Click here to CONTINUE\n"
+msgstr "ZDE kliknìte pro pokraèování\n"
+
+msgid "Monitor: XGetWMName failed"
+msgstr "Monitor: XgetWMName selhalo"
+
+msgid "Monitor: XGetWMName: bad result"
+msgstr "Monitor: XGetWMName: ¹patný výsledek"
+
+msgid "Monitor: interactive command in redraw"
+msgstr "Monitor: interaktivní pøíkaz v pøekreslení"
+
+msgid "found %d visuals of type TrueColor"
+msgstr "nalezeno %d zobrazení typu TrueColor"
+
+msgid "searching for highest bit depth"
+msgstr "hledám nejvìt¹í bitovou hloubku"
+
+msgid "selected %d bit depth"
+msgstr "vybrána hloubka %d bitù"
+
+msgid "using default visual which is %s"
+msgstr "pou¾ívám výchozí zobrazení, co¾ je %s"
+
+msgid "Error choosing frame [%s]\n"
+msgstr "Chyba pøi výbìru rámce [%s]\n"
+
+msgid ""
+"\n"
+"Buttons:\n"
+msgstr ""
+"\n"
+"Tlaèítka:\n"
+
+msgid "Left:   Select frame\n"
+msgstr " Levé:    Vybrat rámec\n"
+
+msgid "Middle: Keep original frame\n"
+msgstr "Prostøední: Ponechat pùvodní rám\n"
+
+msgid "Right:  Accept frame\n"
+msgstr "Pravé: Potvrï rámec\n"
+
+msgid "Manages display frames on the user's graphics monitor."
+msgstr "Správa rámcù v grafickém monitoru"
+
+msgid "Create a new frame"
+msgstr "Vytvoøit nový rámec"
+
+msgid "Select a frame"
+msgstr "Vybrat rámec"
+
+msgid "Print name of current frame"
+msgstr "Vypsat aktuální rámec"
+
+msgid "Print names of all frames"
+msgstr "Vytisknout jména v¹ech rámcù"
+
+msgid "List map names displayed in GRASS monitor"
+msgstr "Vypi¹ jména map zobrazených v grafickém monitoru"
+
+msgid "Debugging output"
+msgstr "Roz¹íøený výstup"
+
+msgid "Frame to be created/selected"
+msgstr "Rámec, který má být vytvoøen/vybrán"
+
+msgid "bottom,top,left,right"
+msgstr "spodní,svrchní,levý,pravý"
+
+msgid "Where to place the frame, values in percent (implies -c)"
+msgstr "Kam umístit rám, hodnoty v procentech (potøebuje volbu -c)"
+
+msgid "No raster map exists in current window"
+msgstr "V aktuálním oknì není ¾ádná rastrová mapa"
+
+msgid ""
+"Creates and displays a menu within the active frame on the graphics monitor."
+msgstr "Vytvoøit a zobrazit menu v aktivní rámci grafického monitoru."
+
+msgid "Sets the color of the menu background"
+msgstr "Nastaví barvu pozadí menu"
+
+msgid "Sets the color of the menu text"
+msgstr "Nastavit barvu textu v menu"
+
+msgid "Sets the color dividing lines of text"
+msgstr "Nastaví barvu linií oddìlujících øádky textu"
+
+msgid "Sets the menu text size (in percent)"
+msgstr "Nastaví velikost písma v menu (procenta)"
+
+msgid "Menu must contain a title and at least one option"
+msgstr "Menu musí obsahovat titulek a nejménì jednu volbu"
+
+msgid "No current frame"
+msgstr "®ádný aktuální rámec"
+
+msgid "Current frame not available"
+msgstr "Aktuální rámec není dostupný"
+
+msgid "value [%.0f,%.0f] out of range [0-100]"
+msgstr "hodnota [%.0f,%.0f] je mimo interval [0-100]"
+
+msgid ""
+"g;use the libgis render functions (features: clipping);r;use the raster "
+"graphics library functions (features: polylines);d;use the display library "
+"basic functions (features: polylines);c;use the display library clipping "
+"functions (features: clipping);l;use the display library culling functions "
+"(features: culling, polylines)"
+msgstr ""
+"g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
+"funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
+"základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
+"zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití knihovny "
+"zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená èára)"
+
+msgid ""
+"Don't add to list of vectors and commands in monitor (it won't be drawn if "
+"the monitor is refreshed)"
+msgstr ""
+"Nepøidávej do seznamu vektorù a pøíkazù v monitoru (nebude vykresleno, pokud "
+"monitoru bude pøekreslen)"
+
+msgid "Creates a list of commands for recreating screen graphics."
+msgstr "Vytvoøí seznam pøíkazù pro obnovení obsahu monitoru."
+
+msgid "Name of frame(s) to save"
+msgstr "Název rámu(ù) urèeného k ulo¾ení"
+
+msgid ""
+"List of object numbers to remove which are displayed after \"#\". -1 for the "
+"last object."
+msgstr ""
+"Seznam èísel objektù k vyjmutí, které jsou zobrazeny po \"#\" -1 pro "
+"poslední objekt."
+
+msgid ""
+"List of object numbers to move (\"from\" to \"to\"). remove= option will be "
+"done first, if any."
+msgstr ""
+"Seznam èísel objektù, které budou pøejmenovány (\"from\" na \"to\"). Nejprve "
+"bude provedena volba remove=."
+
+msgid "Save current frame"
+msgstr "Ulo¾ souèasný rám"
+
+msgid "Save all the frames"
+msgstr "Ulo¾ v¹echny rámy"
+
+msgid "Only map objects without extra header and tailer"
+msgstr "Pouze mapové objekty bez extra hlavièky a patièky"
+
+msgid "No monitor selected"
+msgstr "Nebyl vybrán ¾ádný monitor"
+
+msgid "Unknown item type in pad: %s"
+msgstr "Neznámý prvek v podlo¾ce: %s"
+
+msgid "Setting graphics window"
+msgstr "Nastavuji mapové okno"
+
+msgid "Can't set current graphics window"
+msgstr "Nelze pou¾ít aktuální okno"
+
+msgid "Getting graphics window coordinates"
+msgstr "Pou¾ívám souøadnice monitoru"
+
+msgid "Use mouse to interactively place scale"
+msgstr "Pou¾ít my¹ pro umístìní mìøítka"
+
+msgid ""
+"Format error: <%s>\n"
+"Line: %d\n"
+"%s"
+msgstr ""
+"Chyba formátu: <%s>\n"
+"Linie: %d\n"
+"%s"
+
+msgid "<%s> is an illegal region name"
+msgstr "<%s> je neplatný název regionu"
+
+msgid ""
+"\n"
+"\n"
+"WARNING!  A projection file already exists for this location\n"
+msgstr ""
+"\n"
+"\n"
+"VAROVÁNÍ!  V této location ji¾ existuje soubor s projekcí\n"
+
+msgid "Would you still like to overwrite the current projection information "
+msgstr "Stále si pøejete pøepsat aktuální informace o projekci"
+
+msgid "The projection information will not be updated."
+msgstr "Informace o projekci nebudou aktualizovány."
+
+msgid "Enable interactive prompting (for command-line use only)"
+msgstr "Povolit interaktivní vyzívání (pouze s pou¾itím pøíkazového øádku)"
+
+msgid "Erasing monitors..."
+msgstr "Ma¾u monitory ... "
+
+msgid ""
+"tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based GUI - "
+"Display Manager (d.m);wxpython;wxPython based next generation GUI"
+msgstr ""
+"tcltk;Tcl/Tk grafické prostøedí - GIS Manager (gis.m);oldtcltk;Strar¹í Tcl/"
+"Tk grafické prostøedí - Display Manager (d.m);wxpython; Grafické prostøedí "
+"budoucí generace zalo¾ené na WxPyton"
+
+msgid "Removing %s <%s>"
+msgstr "Odstraòuji %s <%s>"
+
+msgid "couldn't be removed"
+msgstr "nemohu odstranit"
+
+msgid "%s: couldn't be removed"
+msgstr "%s nelze odstranit"
+
+msgid "%s: missing"
+msgstr "%s: chybí"
+
+msgid "%s: removed"
+msgstr "%s odstranìn"
+
+msgid "<%s> nothing removed"
+msgstr "<%s> není odstranìno"
+
+msgid ""
+"Divides active display into two frames & displays maps/executes commands in "
+"each frame."
+msgstr ""
+"Rozdìlí aktivní monitor na dva rámy a v ka¾dém rámu zobrazí mapu a pøíkaz "
+"pro její vytvoøení."
+
+msgid "Enter raster map to display in 1st frame"
+msgstr "Rastrová mapa, která má být zobrazena v první rámu"
+
+msgid "Enter command to execute in 1st frame"
+msgstr "Vlo¾te pøíkaz pro vykonání v první rámu"
+
+msgid "Enter raster map to display in 2nd frame"
+msgstr "Rastrová mapa, která má být zobrazena v druhém rámu"
+
+msgid "Enter command to execute in 2nd frame"
+msgstr "Vlo¾te pøíkaz pro vykonání v druhém rámu"
+
+msgid "How to split display"
+msgstr "Jak rozdìlit monitor"
+
+msgid "Saves the contents of the active display monitor to a graphics file."
+msgstr "Ulo¾í obsah aktuálního monitoru jako soubor s obrázkem."
+
+msgid "display, export"
+msgstr "zobrazení, export"
+
+msgid "Name for output file (do NOT add extension)"
+msgstr "Jméno obrázku (NEpøidávejte koncovku)"
+
+msgid "Dimensions of output file versus current window size"
+msgstr "Rozmìry výstupu versus souèasná velikost okna"
+
+msgid "(same=1, double size=2, quadruple size=4)"
+msgstr "(stejná velikost=1, dvojitá=2, ètyønásobná=4)"
+
+msgid "Width and height of output image (overrides resolution setting)"
+msgstr "©íøka a vý¹ka výstupního obrazu (pøepí¹e nastavení rozli¹ení)"
+
+msgid "Compression for PNG files"
+msgstr "Komprese pro soubory PNG"
+
+msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
+msgstr "(0=nic, 1=nejrychleji, 9=bezeztrát; pouze èas vs velikost souboru)"
+
+msgid "File size/quality for JPEG files"
+msgstr "Velikost/kvalita souboru JPEG"
+
+msgid "(10=smallest/worst, 100=largest/best)"
+msgstr "(10=nejmen¹í/nejhor¹í, 100=nejvìt¹í/nejlep¹í)"
+
+msgid "Paper size for PostScript output"
+msgstr "Velikost papíru pro výstup v PostScript."
+
+msgid "PostScript level (only limits functionality!)"
+msgstr "Úroveò Postscriptu ( pouze omezuje funkènost!)"
+
+msgid "GeoTIFF"
+msgstr "GeoTIFF"
+
+msgid "GeoTIFF metadata key(s) and value(s) to add"
+msgstr "GeoTIFF klíèe metadat a hodnoty pro pøidání"
+
+msgid ""
+"In the form of \"META-TAG=VALUE\", separate multiple entries with a comma."
+msgstr "Ve formuláøi \"META-TAG=VALUE\", odìlujte násobný vstup teèkou."
+
+msgid "Set background color to black (white default)"
+msgstr "Nastav barvu pozadí na èernou (bílá je výchozí)"
+
+msgid "Set transparent background"
+msgstr "Nastavit prùhledné pozadí"
+
+msgid "Use the Cario driver to render images"
+msgstr "Pou¾ít ovladaè Cairo pro vykreslení obrazù"
+
+msgid "Set paper orientation to landscape (for PostScript output)"
+msgstr "Nastavit papír na orientaci krajina (pro výstup Postscript)"
+
+msgid "Do not crop away margins"
+msgstr "NEoøezávat okraje"
+
+msgid "Slide show of GRASS raster/vector maps."
+msgstr "Slide show rastrù/vektorù."
+
+msgid "display, slideshow"
+msgstr "zobrazení, prezentace"
+
+msgid "Show vector maps rather than raster maps"
+msgstr "Zobrazit vektory, místo rastrù"
+
+msgid "Map prefix. Specify character(s) to view selected maps only"
+msgstr "Pøedpona mapy. Zadejte písmeno(na) pro zobrazení pouze vybraných map"
+
+msgid "Map number show across the monitor"
+msgstr "Poèet map zobrazených na monitoru"
+
+msgid "Map number show down the monitor"
+msgstr "Poèet map zobrazených pod monitorem"
+
+msgid "Mapsets to use. Specify multiple mapsets comma separated"
+msgstr "Mapset který bude pou¾it. Více mapsetù lze oddìlit èárkou"
+
+msgid "Number of seconds to pause between slides"
+msgstr "Poèet vteøin pro pøestávku mezi slidy."
+
+msgid "Calculates new grid3D volume from r3.mapcalc expression."
+msgstr "Tvorba nové grid3d volume mapy na základì výrazu pro r3.mapcalc."
+
+msgid "A (grid3D file)"
+msgstr "A (soubor grid3D)"
+
+msgid "B (grid3D file)"
+msgstr "B (soubor grid3D)"
+
+msgid "C (grid3D file)"
+msgstr "C (soubor grid3D)"
+
+msgid "D (grid3D file)"
+msgstr "D (soubor grid3D)"
+
+msgid "E (grid3D file)"
+msgstr "E (soubor grid3D)"
+
+msgid "F (grid3D file)"
+msgstr "F (soubor grid3D)"
+
+msgid "Formula (e.g. A-B or A*C+B)"
+msgstr "Vzorec (napø. A-B nebo A*C+B)"
+
+msgid "Name for output grid3D volume"
+msgstr "Název výstupního souboru grid3D objem"
+
+msgid "Expert mode (enter a set of r3.mapcalc expressions)"
+msgstr "Expertní mód (zadejte soubor výrazù pro r3.mapcalc)"
+
+msgid "Do not overwrite existing map"
+msgstr "Nepøepisuj existující mapu"
+
+msgid "Display manager for GRASS"
+msgstr "GIS manager pro GRASS"
+
+msgid "Name of .dmrc settings file"
+msgstr "Jméno souboru s nastavením .dmrc"
+
+msgid "extended statistics (quartiles and percentile)"
+msgstr "roz¹íøená statistika (kvartily a percentily)"
+
+msgid "Percentile to calculate (requires -e flag)"
+msgstr "Percentil, který se má spoèítat (vy¾aduje pøepínaè -e)"
+
+msgid "Resizes active display monitor"
+msgstr "Mìní velikost aktivního monitoru"
+
+msgid "New width for window"
+msgstr "Nová ¹íøka okna"
+
+msgid "New height for window"
+msgstr "Nová vý¹ka okna"
+
+msgid ""
+"The database must be in form printed by v.db.connect -g, i.e. with "
+"substituted variables"
+msgstr ""
+"Databáze musí být ve formì vyti¹tìné v.db.connect -g, napø. s vymìnìnými "
+"hodnotami"
+
+msgid "Use image list and not group"
+msgstr "Pou¾ij seznam snímkù a ne skupinu"
+
+msgid "Select multiple points"
+msgstr "Vyber více bodù"
+
+msgid "Selects/starts specified monitor at specified size"
+msgstr "Vybere/nastartuje zadaný monitor o zadané velikosti"
+
+msgid "Width in pixels of new display monitor"
+msgstr "©íøka nového monitoru v pixelech "
+
+msgid "Height in pixels of new display monitor"
+msgstr "Vý¹ka nového monitoru v pixelech"
+
+msgid "Calculate new raster map from a r.mapcalc expression."
+msgstr "Poèítá novou mapu z výrazu pro r.mapcalc."
+
+msgid "A"
+msgstr "A"
+
+msgid "B"
+msgstr "B"
+
+msgid "E"
+msgstr "E"
+
+msgid "F"
+msgstr "F"
+
+msgid "Expert mode (enter a set of r.mapcalc expressions)"
+msgstr "Expertní mód (zadejte soubor výrazù pro r.mapcalc)"
+
+msgid "Exports GRASS raster into GDAL supported formats."
+msgstr ""
+"Exportuje GRASS rastry do jednoho z formátù podporovaných knihovnou GDAL."
+
+msgid ""
+"Creation option to the output format driver. Multiple options may be listed"
+msgstr "Volby pro ovladaè výstupního formátu. Volby je mo¾no kombinovat."
+
+msgid "Metadata key passed on the output dataset if possible"
+msgstr "Pokud je to mo¾né, pøedat na výstup klíè metadat"
+
+msgid "run non-interactively"
+msgstr "spustit neinteraktivnì"
+
+msgid "Export display monitor to a GpsDrive compatible backdrop image"
+msgstr "Exportuj monitor do souboru kompatibilním s GpsDrive"
+
+msgid "display, export, GPS"
+msgstr "zobrazení, export, GPS"
+
+msgid "name for new map image (lives in ~/.gpsdrive/maps/)"
+msgstr "jméno nového obrázku (bude ulo¾en do ~/.gpsdrive/maps)"
+
+msgid "Make JPEG instead of PNG image"
+msgstr "Vytvoø JPEG místo PNG"
+
+msgid "Run non-interactively"
+msgstr "Spustit neinteraktivnì"
+
+msgid "GIS manager for GRASS"
+msgstr "GIS manager pro GRASS"
+
+msgid "Name of GIS manager settings file (.grc)"
+msgstr "Jméno souboru s nastavením pro GIS manager (.grc)"
+
+msgid "1st map for mosaic (top of image stack)."
+msgstr "První mapa pro mozaiku (v seznamu mozaiky zcela nahoøe)"
+
+msgid "3rd map for mosaic."
+msgstr "tøetí mapa mozaiky"
+
+msgid "4th map for mosaic."
+msgstr "ètvrtá mapa mozaiky"
+
+msgid "Name of raster map to print in legend"
+msgstr "Název rastrové mapy která bude zobrazena v legendì"
+
+msgid "Position of vertical map-legend separator (in percent)"
+msgstr "Umístìní vertikálního oddìlovaèe mapové legendy (v procentech)"
+
+msgid "Saves active display monitor to PNG file in home directory"
+msgstr "Ulo¾í aktuální obsah monitoru do souboru PNG v domovském adresáøi"
+
+msgid "Name of PNG file"
+msgstr "Jméno souboru PNG"
+
+msgid "Resolution of output file (single=1, double=2, quad=4)"
+msgstr "Rozli¹ení výstupního souboru (1x, 2x, 4x)"
+
+msgid "Moves displayed maps to another monitor"
+msgstr "Pøesune aktuálnì zobrazené mapy do jiného monitoru"
+
+msgid "clear target monitor before moving"
+msgstr "Vyèisti cílový monitor pøed pøesunem"
+
+msgid "stay with source monitor"
+msgstr "zùstaò ve zdrojovém monitoru"
+
+msgid "kill source monitor after moving"
+msgstr "zab zdrojový monitor po pøesunu"
+
+msgid "Target monitor"
+msgstr "Cílový monitor"
+
+msgid "Source monitor"
+msgstr "Zdrojový monitor"
+
+msgid "Split the display into subframes."
+msgstr "Rozdìlit diplej do rámù"
+
+msgid "Number of subframes"
+msgstr "Poèet rámù"
+
+msgid "Redraws the current display frame in the GRASS monitor"
+msgstr "Pøekreslí aktuálnì zobrazené mapy v monitoru"
+
+msgid "Redraw all frames"
+msgstr "Pøekreslit v¹echny rámy"
+
+msgid "Do not preserve individual regions when redrawing all frames"
+msgstr "Nedor¾ovat individuální regiony pokud pøekraslují v¹echny rámy"
+
+msgid "Verbose mode (print projection parameters and filenames to stderr)"
+msgstr ""
+"Vypovídej se, chlapèe (vytiskni parametry projekce a jména souborù na "
+"standardní chybu)"
+
 #~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
 #~ msgstr "Pøevede 3D rastrové mapy (G3D) do formátu VTK-Ascii"
 
@@ -30138,10 +31436,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Pøevede GRASS rastr do formátu PPM v rozli¹ení daném aktuálním regionem."
 
-#, fuzzy
-#~ msgid "Print bounds and exit (shell style)"
-#~ msgstr "Vypi¹ výsledek ve stylu pro shell skript"
-
 #~ msgid ""
 #~ "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel "
 #~ "resolution of the currently defined region."
@@ -30149,35 +31443,13 @@ msgstr ""
 #~ "Exportuje GRASS rastr do formátu TIFF 8/24bit v rozli¹ení daném aktuálním "
 #~ "regionem."
 
-#~ msgid "Band to select"
-#~ msgstr "Výbìr vrstvy"
-
-#, fuzzy
-#~ msgid "Estimate spline step value"
-#~ msgstr "Statistika pou¾itá pro rastrové hodnoty"
-
-#~ msgid "It was impossible to create <Auxiliar_outlier_table>."
-#~ msgstr "Bylo mo¾no vytvoøit <Auxiliar_outlier_table>."
-
 #~ msgid "If set to 0, z coordinates are used. (3D vector only)"
 #~ msgstr ""
-#~ "Pokud nastaveno na 0, jsou pou¾ity souøadnice z (pouze u 3D vektorù)"
+#~ "Èíslo vrstvy. Pokud nastaveno na 0, jsou pou¾ity souøadnice z (pouze u 3D "
+#~ "vektorù)"
 
 #~ msgid "Attribute table column with values to interpolate (if layer>0)"
 #~ msgstr "Tabulka atributù s hodnotami pro interpolaci (pokud layer>0)"
-
-#, fuzzy
-#~ msgid "<%s> table created in database."
-#~ msgstr "<%s> vytvoøeno v databázi."
-
-#~ msgid "M.Q. solution"
-#~ msgstr "Øe¹ení M.Q."
-
-#~ msgid "3-d data in dxf file. Polyline_flag: %d"
-#~ msgstr "3-d data v souboru dxf. Polyline_flag: %d"
-
-#~ msgid "Import SRTM HGT files into GRASS"
-#~ msgstr "Importuje SRTM HGT soubory do GRASSu"
 
 #~ msgid ""
 #~ "\n"
@@ -30215,16 +31487,6 @@ msgstr ""
 #~ msgid "Unable to close elevation map"
 #~ msgstr "nelze zavøít mapu elevace"
 
-#, fuzzy
-#~ msgid ""
-#~ "Calculate the groundwater distance velocity vector field \n"
-#~ "and write the x, y, and z components to maps named name_[xyz].\n"
-#~ "Name is basename for the new raster3d maps"
-#~ msgstr ""
-#~ "Vypoèítat prùtokovou rychlost vektorového pole a zapi¹ x,y a z èásti do "
-#~ "map pojmenovaných jmeno_[xyz]. Jméno mapy je základ pro r3d rastrovou "
-#~ "mapu."
-
 #~ msgid ""
 #~ "Use a sparse linear equation system, only available with iterative solvers"
 #~ msgstr ""
@@ -30252,18 +31514,6 @@ msgstr ""
 #~ msgid "Unable to write raster row"
 #~ msgstr "Nelze ènyní zapsat rastrovou mapu."
 
-#, fuzzy
-#~ msgid "report"
-#~ msgstr "Rozsáhlá zpráva"
-
-#~ msgid "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),p(ercent)"
-#~ msgstr ""
-#~ "mi(míle),f(stopy),me(metry),k(kilometery),a(akry),h(hektary),p(procenta)"
-
-#, fuzzy
-#~ msgid "Unable to get cell header for <%s>"
-#~ msgstr "Nejsem schopen zapsat hlavièku pro %s"
-
 #~ msgid "Unable to write quant file"
 #~ msgstr "Nelze zapisovat do souboru quant"
 
@@ -30278,10 +31528,6 @@ msgstr ""
 
 #~ msgid "Cannot open raster map <%s>"
 #~ msgstr "Nelze otevøít rastrovou mapu <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open cellfile for <%s>"
-#~ msgstr "Nelze otevøít soubor <%s>"
 
 #~ msgid "Cannot create category file of <%s>"
 #~ msgstr "Nelze vytvoøit soubor s kategoriemi <%s>"
@@ -30303,10 +31549,6 @@ msgstr ""
 
 #~ msgid "Unable to read header of raster map <%s>"
 #~ msgstr "Nelze èíst hlavièku rastrové mapy <%s>"
-
-#, fuzzy
-#~ msgid "Error reading <%s>"
-#~ msgstr "Chyba pøi ètení rastrové mapy <%s>"
 
 #~ msgid "Reading row %d"
 #~ msgstr "Naèítám øádek %d"
@@ -30414,23 +31656,11 @@ msgstr ""
 #~ msgid "Cannot read row"
 #~ msgstr "Nelze naèíst øádek"
 
-#, fuzzy
-#~ msgid "%s: Error reading from raster map <%s>"
-#~ msgstr "Chyba pøi ètení rastrové mapy <%s>"
-
 #~ msgid "Error in pipe creation"
 #~ msgstr "Chyba pøi vytváøení roury"
 
 #~ msgid "Error opening channel %i"
 #~ msgstr "Chyba pøi otevírání kanálu %i"
-
-#, fuzzy
-#~ msgid "r.li.worker (pid %i) exited with abnormal status: %i"
-#~ msgstr "r.li.worker (pid %i) byl ukonèen s abnormálním statusem %i"
-
-#, fuzzy
-#~ msgid "r.li.worker (pid %i) terminated successfully"
-#~ msgstr "r.li.worker (pid %i) ukonèen"
 
 #~ msgid "Cannot close %s file (PIPE)"
 #~ msgstr "Nelze uzavøít %s soubor (ROURA)"
@@ -30528,31 +31758,11 @@ msgstr ""
 #~ " \t\t\t\tpid = %i \n"
 #~ " "
 
-#, fuzzy
-#~ msgid "unable to open map <%s> in <%s>"
-#~ msgstr "Nelze otevøít rastrovou mapu <%s> v <%s>"
-
-#, fuzzy
-#~ msgid "unable to read map <%s> in <%s>"
-#~ msgstr "Nelze èíst region <%s> v <%s>"
-
 #~ msgid "Unable to get header for %s"
 #~ msgstr "Nejsem schopen zapsat hlavièku pro %s"
 
 #~ msgid "Cannot reset current region"
 #~ msgstr "Nelze pøenastavit aktuální region"
-
-#, fuzzy
-#~ msgid "Unable to open base map <%s>"
-#~ msgstr "Nelze otevøít rastrovou mapu <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open cover map <%s>"
-#~ msgstr "Nelze otevøít vektorovou mapu <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open output map <%s>"
-#~ msgstr "Nelze otevøít výstupní soubor <%s>"
 
 #~ msgid "Cannot create category file for <%s>"
 #~ msgstr "Nelze vytvoøit soubor s kategoriemi pro <%s>"
@@ -30587,25 +31797,8 @@ msgstr ""
 #~ msgid "Error reading 'saturation' map"
 #~ msgstr "Chyba pøi ètení mapy nasycení (saturation))"
 
-#, fuzzy
-#~ msgid "Unable to read header for <%s>"
-#~ msgstr "Nejsem schopen zapsat hlavièku pro %s"
-
-#, fuzzy
-#~ msgid "Error reading row %d (error = %d)"
-#~ msgstr "Nelze naèíst øádek %d (chyba = %d)"
-
-#, fuzzy
-#~ msgid "Cannot set region to output region"
-#~ msgstr "Nelze nastavit region zpìt na poèáteèní rozli¹ení!!!"
-
-#, fuzzy
-#~ msgid "Cannot set region to back to the initial region"
-#~ msgstr "Nelze nastavit region zpìt na poèáteèní rozli¹ení!!!"
-
-#, fuzzy
 #~ msgid "Unable to read raster <map %d of %d> row %d"
-#~ msgstr "Nelze èíst rastrovou mapu <%s> øádek %d"
+#~ msgstr "Nelze èíst rastrovou mapu <map %d of %d> øádek %d"
 
 #~ msgid "Writing map, row %d"
 #~ msgstr "Zapisuji mapu, øádek %d"
@@ -30628,10 +31821,6 @@ msgstr ""
 #~ msgid "Error writing null row [%d]."
 #~ msgstr "Chyba pøi zápisu nulové øádky [%d]."
 
-#, fuzzy
-#~ msgid "Unable to read row %d"
-#~ msgstr "Nelze èíst øádek %i\n"
-
 #~ msgid "Swapping header data"
 #~ msgstr "Odkládám hlavièková data"
 
@@ -30646,10 +31835,6 @@ msgstr ""
 
 #~ msgid "Failed writing raster map row %d"
 #~ msgstr "Selhalo zapisování øádku %d rastrové mapy"
-
-#, fuzzy
-#~ msgid "Unable to read region <%s>"
-#~ msgstr "Nelze nastavit region <%s>"
 
 #~ msgid "Invalid region: %s"
 #~ msgstr "chybný region: %s"
@@ -30684,30 +31869,14 @@ msgstr ""
 #~ msgid "unable to open new aspect map layer."
 #~ msgstr "nemohu otevøít novou mapu expozice"
 
-#, fuzzy
-#~ msgid "unable to open new LS factor map layer."
-#~ msgstr "Nelze otevøít novou mapu L (faktoru délky svahu)"
-
 #~ msgid "unable to open new slope length map layer."
 #~ msgstr "nemohu otevøít novou mapu LS (faktor délky a sklonu svahu)"
-
-#, fuzzy
-#~ msgid "unable to open new S factor map layer."
-#~ msgstr "nemohu otevøít novou mapu S (faktor sklonu svahu)"
 
 #~ msgid "SECTION 2: A * Search."
 #~ msgstr "ÈÁST 2: A * Hledání."
 
 #~ msgid "unable to open accum file in valid_basins()"
 #~ msgstr "Nejsem schopen otevøít soubor s akumulací v valid_basins()"
-
-#, fuzzy
-#~ msgid "unable to open accumulation map layer"
-#~ msgstr "nemohu otevøít novou mapu akumulace "
-
-#, fuzzy
-#~ msgid "SECTION 4: Extracting Streams."
-#~ msgstr "Extrahuji plochy..."
 
 #~ msgid "Can't create raster map <%s>"
 #~ msgstr "Nelze vytvoøit rastrový soubor <%s>"
@@ -30723,14 +31892,6 @@ msgstr ""
 
 #~ msgid "Unable to close new basin map layer"
 #~ msgstr "Nelze uzavøít novou mapu povodí"
-
-#, fuzzy
-#~ msgid "Error reading row <%d>"
-#~ msgstr "Chyba pøi zápisu øádky %d."
-
-#, fuzzy
-#~ msgid "Name of input raster map containing starting points"
-#~ msgstr "Název existující rastrové mapy obsahující frikèní hodnoty"
 
 #~ msgid "Number of the segment to create (segment library)"
 #~ msgstr "Poèet segmentù, které mají být vytvoøeny (segment library)"
@@ -30843,14 +32004,6 @@ msgstr ""
 #~ msgid "Use a sparse matrix, only available with iterative solvers"
 #~ msgstr "Pou¾ití øídké matice, dostupné pouze pro iteraktivní solver"
 
-#, fuzzy
-#~ msgid "Unable to open input map <%s>"
-#~ msgstr "Nelze otevøít vstupní soubor <%s>"
-
-#, fuzzy
-#~ msgid "Error reading row %d"
-#~ msgstr "Chyba pøi zápisu øádky %d."
-
 #~ msgid "Error reading input"
 #~ msgstr "Chyba pøi ètení vstupu"
 
@@ -30865,36 +32018,6 @@ msgstr ""
 
 #~ msgid "Vector points to be spatially perturbed"
 #~ msgstr "Vektorové body, které budou prostorovì rozmístìny"
-
-#~ msgid "<Auxiliar_edge_table> created in database."
-#~ msgstr "<pomocná_tabulka> vytvoøena v databázi."
-
-#, fuzzy
-#~ msgid "Pass %d:"
-#~ msgstr "Prùchod %d..."
-
-#~ msgid "Creating auxiliar table for archiving overlapping zones"
-#~ msgstr "Vytvoøení pomocné tabulky pro archivaci pøekrývajících se zón"
-
-#, fuzzy
-#~ msgid "Unable to open table <%s_edge_Interpolation>"
-#~ msgstr "Nelze otevøít databázi <%s>"
-
-#~ msgid ""
-#~ "It was not possible to drop <%s> table. Nothing will be done. Try to drop "
-#~ "it manually."
-#~ msgstr ""
-#~ "Nelze vyjmout tabulku <%s>. Nic se nestalo. Zkuste vyjmout tabulku ruènì."
-
-#~ msgid "Cross Validation was success!"
-#~ msgstr "Køí¾ová validace byla íºspì¹ná!"
-
-#~ msgid ""
-#~ "Interpolation: The region resolution is too high: %d cells. Consider to "
-#~ "change it."
-#~ msgstr ""
-#~ "Interpolace: Rozli¹ení regionu je pøíli¹ vysoké: %d bunìk. Prosím, zmìòte "
-#~ "jej."
 
 #~ msgid "Finding nearest lines..."
 #~ msgstr "Hledám nejbli¾¹í linie..."
@@ -31067,20 +32190,8 @@ msgstr ""
 #~ msgid "Current region cannot be set."
 #~ msgstr "Nelze nastavit aktuální region."
 
-#, fuzzy
-#~ msgid "Unable to read raster map row %ld"
-#~ msgstr "Nelze èíst rastrovou mapu, øádek %d"
-
-#, fuzzy
-#~ msgid "Failed writing raster map row %ld"
-#~ msgstr "Selhalo zapisování øádku %d rastrové mapy"
-
 #~ msgid "Unable to allocate the input row buffer"
 #~ msgstr "Nelze alokovat pamì» pro øádek rastru"
-
-#, fuzzy
-#~ msgid "Unable to read from <%s> row %d"
-#~ msgstr "Nelze èíst rastrovou mapu <%s> øádek %d"
 
 #~ msgid "Unable to open the cell map MASK."
 #~ msgstr "Nelze otevøít rastrovou (cell) mapu MASK."
@@ -31100,14 +32211,6 @@ msgstr ""
 #~ msgid "Unable to open band files."
 #~ msgstr "Nelze otevøít soubory kanálù."
 
-#, fuzzy
-#~ msgid "Unable to read file header of raster map <%s>"
-#~ msgstr "Nelze èíst hlavièku rastrové mapy <%s>"
-
-#, fuzzy
-#~ msgid "Unable to write to raster map<%s>"
-#~ msgstr "Nelze zapsat rastrové mapy"
-
 #~ msgid "Error while reading input raster map."
 #~ msgstr "Chyba pøi ètení vstupní rastrové map."
 
@@ -31117,70 +32220,11 @@ msgstr ""
 #~ msgid "Error writing cell map during transform."
 #~ msgstr "Chyba pøi zápisu rastrové (cell) mapy bìhem transformace."
 
-#, fuzzy
-#~ msgid "Unable to open training map <%s>"
-#~ msgstr "Nelze otevøít vektorovou mapu <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open training map <%s in %s>"
-#~ msgstr "Nelze otevøít rastrovou mapu <%s> v <%s>"
-
-#, fuzzy
-#~ msgid "Cannot open cell file [%s]"
-#~ msgstr "Nelze otevøít soubor s pravidly <%s>"
-
-#, fuzzy
-#~ msgid "Cannot read file header of [%s])"
-#~ msgstr "Nelze èíst hlavièku souboru <%s>"
-
-#, fuzzy
-#~ msgid "Could not open <%s>"
-#~ msgstr "Nelze otevøít mapu %s"
-
-#~ msgid "Could not read from <%s>"
-#~ msgstr "Nelze èíst z <%s>"
-
-#, fuzzy
-#~ msgid "Cannot write to output raster file"
-#~ msgstr "Název výstupní rastrové mapy"
-
-#, fuzzy
-#~ msgid "Unable to read header of raster map <%s> "
-#~ msgstr "Nelze èíst hlavièku rastrové mapy <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read raster map <%s> row %d >"
-#~ msgstr "Nelze èíst rastrovou mapu <%s> øádek %d"
-
-#~ msgid "Error reading row of data"
-#~ msgstr "Chyba pøi ètení øádku"
-
-#~ msgid "Error reading intensity data"
-#~ msgstr "Chyba pøi ètení mapy intenzity"
-
-#~ msgid "Error reading saturation data"
-#~ msgstr "Chyba pøi ètení mapy nasycení (saturation)"
-
-#~ msgid "Error writing PROJ_INFO"
-#~ msgstr "Chyba pøi zápisu PROJ_INFO"
-
-#~ msgid "Error writing PROJ_UNITS"
-#~ msgstr "Chyba pøi zápisu PROJ_UNITS"
-
-#~ msgid "Unable to compile regular expression %s"
-#~ msgstr "Nelze sestavit regulérní výraz %s"
-
 #~ msgid "Unable to read region <%s> in <%s>"
 #~ msgstr "Nelze èíst region <%s> v <%s>"
 
 #~ msgid "Unable to read header of raster map <%s@%s>"
 #~ msgstr "Nelze èíst hlavièku rastrové mapy <%s@%s> "
-
-#~ msgid "Raster map <%s@%s>: %s"
-#~ msgstr "rastrová mapa <%s@%s>: %s"
-
-#~ msgid "Unable to open raster map <%s> in <%s>"
-#~ msgstr "Nelze otevøít rastrovou mapu <%s> v <%s>"
 
 #~ msgid "database, attribute table, SQL"
 #~ msgstr "databáze, atributová tabulka, SQL"
@@ -31198,21 +32242,6 @@ msgstr ""
 #~ "Tuto volbu nepou¾ívejte, pokud schémata nejsou podporována ovladaèem/"
 #~ "databázovým serverem."
 
-#~ msgid "display, setup"
-#~ msgstr "zobrazení, nastavení"
-
-#~ msgid "display, raster"
-#~ msgstr "zobrazení, rastr"
-
-#~ msgid "display, networking"
-#~ msgstr "zobrazení, sítì"
-
-#~ msgid "Size of grid to be drawn"
-#~ msgstr "Velikost møí¾ky pro vykreslení"
-
-#~ msgid "display, vector"
-#~ msgstr "zobrazení, vekrotové mapa"
-
 #~ msgid "imagery, color transformation, RGB, HIS"
 #~ msgstr "obrazová data, barevná transformace, RGB, HIS"
 
@@ -31229,22 +32258,6 @@ msgstr ""
 #~ msgid "imagery, classification, MLC"
 #~ msgstr "obrazová data, klasifikace, MLC"
 
-#, fuzzy
-#~ msgid "qcname"
-#~ msgstr "jméno"
-
-#, fuzzy
-#~ msgid "Name of QC"
-#~ msgstr "Jméno mapsetu"
-
-#, fuzzy
-#~ msgid "250m band number is out of allowed range [1,2]"
-#~ msgstr "Poèet hran mimo rozsah"
-
-#, fuzzy
-#~ msgid "Cannot read file header of [%s]"
-#~ msgstr "Nelze èíst hlavièku souboru <%s>"
-
 #~ msgid "imagery, classification, supervised, MLC"
 #~ msgstr "obrazová data, klasifikace, øízená, MLC"
 
@@ -31256,22 +32269,6 @@ msgstr ""
 
 #~ msgid "imagery, FFT"
 #~ msgstr "obrazová data, FFT"
-
-#, fuzzy
-#~ msgid "general, region"
-#~ msgstr "obecné, projekce"
-
-#~ msgid "general, transformation, GCP"
-#~ msgstr "obecné transformace, GCP"
-
-#~ msgid "general, settings"
-#~ msgstr "obecné, nastavení"
-
-#~ msgid "general, gui"
-#~ msgstr "obecné, grafické prostøedí"
-
-#~ msgid "general, projection"
-#~ msgstr "obecné, projekce"
 
 #~ msgid "raster3d, voxel"
 #~ msgstr "rastr3d, voxel"
@@ -31288,79 +32285,11 @@ msgstr ""
 #~ msgid "postscript, map, printing"
 #~ msgstr "postscript, mapa, tisk"
 
-#~ msgid ""
-#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
-#~ "file into a vector map."
-#~ msgstr ""
-#~ "Stáhne Waypoints, Routes a Tracks z pøístroje GPS nebo ze souboru a ulo¾í "
-#~ "je do vektorové mapy."
-
-#~ msgid "vector, import, GPS"
-#~ msgstr "vektor, import, GPS"
-
-#~ msgid "Import waypoints"
-#~ msgstr "Importovat body"
-
-#~ msgid "Import routes"
-#~ msgstr "Importovat cesty"
-
-#~ msgid "Import track"
-#~ msgstr "Importovat tracky"
-
-#~ msgid "Force vertices of track or route data as points"
-#~ msgstr "Pøevézt lomové body tracku nebo cesty na body"
-
-#~ msgid "Do not attempt projection transform from WGS84"
-#~ msgstr "Neprovádìt pøevod projekce z WGS84"
-
-#~ msgid "Device or file used to import data"
-#~ msgstr "Zaøízení nebo soubor urèený k importu"
-
-#~ msgid "Format of GPS input data (use gpsbabel supported formats)"
-#~ msgstr "Formát vstupní dat z GPSky (pou¾ij formáty podporované gpsbabel)"
-
-#~ msgid ""
-#~ "Projection of input data (PROJ.4 style), if not set Lat/Lon WGS84 is "
-#~ "assumed"
-#~ msgstr ""
-#~ "Projekce vstupních dat (pou¾ijte volby PROJ.4), pokud není nastaveno, "
-#~ "pøedpokládáse, ¾e tato projekce je Lat/Long WGS84"
-
-#~ msgid "raster, imagery, colors"
-#~ msgstr "rastr, dpz, barvy"
-
-#~ msgid "vector, centroid, area"
-#~ msgstr "vektor, centroid, plocha"
-
-#~ msgid "Configuration editor for r.li.'index'"
-#~ msgstr "Konfiguraèní editor pro r.li.'index'"
-
 #~ msgid "raster, import"
 #~ msgstr "rastr, import"
 
-#~ msgid "vector, import, gazetteer"
-#~ msgstr "vektor, import gazetteer"
-
-#~ msgid "vector, export, GPS"
-#~ msgstr "vektor, export, GPS"
-
-#~ msgid "raster, imagery, import"
-#~ msgstr "rastr, obrazová data, import"
-
-#~ msgid "raster, statistics, aggregation"
-#~ msgstr "rastr, statistika, agregace"
-
-#~ msgid "imagery, fusion, Brovey"
-#~ msgstr "obrazová data, fùze, Browey"
-
 #~ msgid "vector, database, attribute table"
 #~ msgstr "vektor, databáze, tabulka atributù"
-
-#~ msgid "raster, imagery"
-#~ msgstr "rastr, obrazová data"
-
-#~ msgid "vector, area, dissolve"
-#~ msgstr "vektor, plocha, spojení"
 
 #~ msgid "vector, statistics"
 #~ msgstr "vektor, statistika"
@@ -31368,87 +32297,8 @@ msgstr ""
 #~ msgid "raster, color table"
 #~ msgstr "rastr, tabulka barev"
 
-#~ msgid "raster, mask"
-#~ msgstr "rastr, maska"
-
-#~ msgid "vector, color table"
-#~ msgstr "vektor, barevná tabulka"
-
-#~ msgid "raster, elevation, interpolation"
-#~ msgstr "rastr, elevace, interpolace"
-
 #~ msgid "raster, statistics"
 #~ msgstr "rastr, statistika"
-
-#~ msgid "Additional options for wget"
-#~ msgstr "Dal¹í volby pro wget"
-
-#~ msgid "Additional options for curl"
-#~ msgstr "Dal¹í volby pro curl"
-
-#~ msgid "vector, report, statistics"
-#~ msgstr "vektor, zpráva, statistika"
-
-#~ msgid ""
-#~ "Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
-#~ "vector map."
-#~ msgstr ""
-#~ "Ulo¾ Waypoints, Routes a Tracks z pøístroje GPS Garmin jako vektorovou "
-#~ "mapu."
-
-#~ msgid "Download Waypoints from GPS"
-#~ msgstr "Stáhni Waypoints z GPSky"
-
-#~ msgid "Download Routes from GPS"
-#~ msgstr "Stáhni Routes z GPSky"
-
-#~ msgid "Download Track from GPS"
-#~ msgstr "Stáhni Tracky z GPSky"
-
-#~ msgid "Force import of track or route data as points"
-#~ msgstr "Importuj tracky a routy jako body"
-
-#~ msgid "Use gardump instead of gpstrans as the download program"
-#~ msgstr "Pou¾ít gardump místo gpstrans  jako stahovací program"
-
-#~ msgid "Import track in 3D (gardump only)"
-#~ msgstr "Importovat stopu ve 3D ( pouze gardump)"
-
-#~ msgid "Port Garmin receiver is connected to"
-#~ msgstr "Port, na kterém je Garmina pøipojena"
-
-#~ msgid "sites, vector, import"
-#~ msgstr "body, vektor, import"
-
-#~ msgid "raster, imagery, statistics"
-#~ msgstr "rastr, dpz, statistika"
-
-#~ msgid "vector, raster, statistics"
-#~ msgstr "vektor, rastr, statistika"
-
-#~ msgid "general, manual, help"
-#~ msgstr "obecné, návod, pomoc"
-
-#~ msgid "raster, imagery, mosaicking"
-#~ msgstr "rastr, dpz, mozaikování"
-
-#~ msgid "miscellaneous, projection"
-#~ msgstr "rùzné, projekce"
-
-#~ msgid "visualization, raster, vector, raster3d"
-#~ msgstr "vizualizace rastr, vektor, 3D rastr"
-
-#~ msgid "raster, vector, visualization"
-#~ msgstr "rastrová mapa, vektorová mapa, zobrazení"
-
-#~ msgid "Script kill option"
-#~ msgstr "Volba skriptu kill"
-
-#~ msgid "Start in Demo mode"
-#~ msgstr "Spustit v módu Demo"
-
-#~ msgid "Output more comments (default=quiet)"
-#~ msgstr "Více komentáøù na výstup (výchozí=potichu)"
 
 #~ msgid "raster, keyword2, keyword3"
 #~ msgstr "rastr, klíèové slovo2, klíèové slovo3"
@@ -31477,29 +32327,17 @@ msgstr ""
 #~ msgid "raster, import, LIDAR"
 #~ msgstr "rastr, import, LIDAR"
 
-#, fuzzy
-#~ msgid "raster, soil, erosion, USLE"
-#~ msgstr "rastr, objem, pøevod"
-
 #~ msgid "raster, composite"
 #~ msgstr "rastr,slo¾ení obrazu"
 
 #~ msgid "raster, DEM, contours, vector"
 #~ msgstr "rastr, DMT, vrstevnice, vektor"
 
-#, fuzzy
-#~ msgid "raster, rainfall, erosion, USLE"
-#~ msgstr "rastr, tok erodovaných èástic, eroze, usazování"
-
 #~ msgid "raster, import, conversion"
 #~ msgstr "rastr, import, pøevod"
 
 #~ msgid "raster, volume, conversion"
 #~ msgstr "rastr, objem, pøevod"
-
-#, fuzzy
-#~ msgid "raster, random, surface"
-#~ msgstr "Rastrový soubor pro povrch"
 
 #~ msgid "raster, statistics, reclass"
 #~ msgstr "rastr, statistika, reklasifikace"
@@ -31559,10 +32397,6 @@ msgstr ""
 
 #~ msgid "raster, series"
 #~ msgstr "rastr, série"
-
-#, fuzzy
-#~ msgid "raster, random, cell"
-#~ msgstr "rastr, pøevzorkování"
 
 #~ msgid "Name of real-sky beam radiation coefficient raster map [-]"
 #~ msgstr "Soubor s koeficientem pøímého sluneèního záøení [-]"
@@ -31844,12 +32678,6 @@ msgstr ""
 #~ msgid "vector, LIDAR"
 #~ msgstr "vektor, LIDAR"
 
-#~ msgid "Spline type of interpolation"
-#~ msgstr "Spline typ interpolace"
-
-#~ msgid "It was impossible to open table"
-#~ msgstr "Nebylo mo¾né otevøít tabulku"
-
 #~ msgid "Duplicate area centroids"
 #~ msgstr "Duplicitní centroidy plochy"
 
@@ -31886,516 +32714,6 @@ msgstr ""
 
 #~ msgid "Required if layer > 0"
 #~ msgstr "Po¾adováno pokud je vrstva >0"
-
-#~ msgid " Middle: toggle flash color\n"
-#~ msgstr " Prostøední: zmìnit barvu\n"
-
-#~ msgid "Enable flashing (slower)"
-#~ msgstr "Umo¾ni probliknutí (pomalej¹í)"
-
-#~ msgid ""
-#~ "Draws text in the graphics monitor's active display frame using TrueType "
-#~ "fonts."
-#~ msgstr ""
-#~ "Vykreslí text v aktivním rámci grafického monitoru s vyu¾itím písma "
-#~ "TrueType"
-
-#~ msgid "Screen position (percentage, [0,0] is bottom left)"
-#~ msgstr "Souøadnice v procentech rámce ([0,0] je vlevo dole)"
-
-#~ msgid "Path to TrueType font (including file name)"
-#~ msgstr "Cesta k TrueType fontùm (vèetnì jména souboru)"
-
-#~ msgid "Height of letters (in percent of available frame height)"
-#~ msgstr "Vý¹ka písmen (v procentech dostupné vý¹ky rámce)"
-
-#~ msgid "Either text or -c should be given"
-#~ msgstr "Mìl by být zadán buï text nebo -c"
-
-#~ msgid "Choose only one coordinate system for placement"
-#~ msgstr "Vyberte pro umístìní pouze jeden souøadnicový systém"
-
-#~ msgid "No font selected"
-#~ msgstr "Nebylo vybráno ¾ádné písmo"
-
-#~ msgid "Invalid font: %s"
-#~ msgstr "Chybné písmo: %s"
-
-#~ msgid "No current window"
-#~ msgstr "®ádné aktuální okno"
-
-#~ msgid "Current window not available"
-#~ msgstr "Aktuální okno není dostupné"
-
-#~ msgid "Unable to create text conversion context"
-#~ msgstr "Nelze vytvoøit textovou konverzi kontextu"
-
-#~ msgid "Unable to write the temporary file"
-#~ msgstr "Nelze zapisovat do doèasného souboru"
-
-#~ msgid "No predefined font"
-#~ msgstr "®ádné pøeddefinované písmo"
-
-#~ msgid "%s: Unable to read font"
-#~ msgstr "%s: Nelze èíst písmo"
-
-#~ msgid "%s: Unable to read FreeType definition file; use the default"
-#~ msgstr "%s: Nelze èíst definièní soubor FreeType; pou¾iji výchozí"
-
-#~ msgid "%s: No FreeType definition file"
-#~ msgstr "%s: Å½ádný definièní soubor FreeType"
-
-#~ msgid "%s: Unable to read FreeType definition file"
-#~ msgstr "%s: Nelze èíst definièní soubor FreeType"
-
-#~ msgid "Display number of colors"
-#~ msgstr "Zobraz poèet barev"
-
-#~ msgid "Setting map window"
-#~ msgstr "Nastavuji mapové okno"
-
-#~ msgid "Getting screen window"
-#~ msgstr "Získání obrazového okna"
-
-#~ msgid "Error in calculating conversions"
-#~ msgstr "Chyba pøi pøepoèítávání"
-
-#~ msgid "Font name or pathname of TTF file"
-#~ msgstr "Jméno  nebo cesta k TTF souboru."
-
-#~ msgid "Setting release of FreeType"
-#~ msgstr "Nastavuji verzi FreeType"
-
-#~ msgid "No current graphics window"
-#~ msgstr "®ádný vybraný monitor"
-
-#~ msgid "Current graphics window not available"
-#~ msgstr "Aktuální monitor není dostupný"
-
-#~ msgid "No raster or vector map displayed"
-#~ msgstr "Název rastrové nebo vektorové mapy, která bude zobrazena"
-
-#~ msgid "Current window not settable"
-#~ msgstr "Aktuální okno nelze nastavit"
-
-#~ msgid "No raster map exists in the current window"
-#~ msgstr "V aktuálním oknì neexistuje ¾ádná rastrová mapa"
-
-#~ msgid "Don't add to list of rasters and commands in monitor"
-#~ msgstr "Nepøidávat do seznamu rastrù a pøíkazù v monitoru"
-
-#~ msgid "Cannot use current window"
-#~ msgstr "Nelze pou¾ít aktuální okno"
-
-#~ msgid "Error reading raster map"
-#~ msgstr "chyba pøi ètení rastrové mapy"
-
-#~ msgid "one moment ..."
-#~ msgstr "momentíèek ..."
-
-#~ msgid "Interactive profile plotting utility with optional output."
-#~ msgstr "Nástroj pro interaktivní vytváøení profilù s volitelným výstupem."
-
-#~ msgid "Optional display raster"
-#~ msgstr "Volitelný rastr, který bude zobrazen"
-
-#~ msgid "Output profile data to file(s) with prefix 'name'"
-#~ msgstr "Výstupní data profilu ulo¾it do souboru(ù) s prefixem 'jméno'"
-
-#~ msgid "Display raster [%s] not found. Using profile raster."
-#~ msgstr "Rastr ke zobrazení [%s] nenalezen. Pou¾iji rastr profilu."
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Use mouse to choose action"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Pou¾ít my¹ pro vybraní akce"
-
-#~ msgid "Use 'd.frame -e' to remove left over frames"
-#~ msgstr "Pou¾ijte 'd.frame -e' pro smazání zbylých rámcù"
-
-#~ msgid "Error opening cell-file"
-#~ msgstr "Chyba pøi otevírání souboru cell"
-
-#~ msgid "Error reading from cell-file"
-#~ msgstr "Chyba pøi ètení souboru cell"
-
-#~ msgid "Mysterious window inconsistancy error"
-#~ msgstr "Záhadná chyba nekonzistence okna"
-
-#~ msgid "%s: Couldn't open raster <%s@%s>"
-#~ msgstr "%s: Nelze otevøít rastrový soubor <%s@%s>"
-
-#~ msgid "%s: 'is_null_value()' got NULL pointer!"
-#~ msgstr "%s: 'is_null_value()' dostala NULLový pointer!"
-
-#~ msgid "%s: 'is_null_value()' got negative column index"
-#~ msgstr "%s: 'is_null_value()' dostala negativní index sloupeèku"
-
-#~ msgid "%s: 'is_null_value()' Unknown RASTER_MAP_TYPE '%d'"
-#~ msgstr "%s: 'is_null_value()' Neznámý RASTER_MAP_TYPE '%d'"
-
-#~ msgid "Use mouse to size & place legend"
-#~ msgstr "Pou¾ít my¹ pro velikost a umístìní legendy"
-
-#~ msgid "Interactively select route"
-#~ msgstr "Interaktivní výbìr trasy"
-
-#~ msgid "You must select more than one point"
-#~ msgstr "Je potøeba vybrat více ne¾ jeden bod"
-
-#~ msgid "You must select at least four points"
-#~ msgstr "Musíte vybrat nejménì ètyøi body."
-
-#~ msgid "Usage:  %s monitor_name"
-#~ msgstr "Pou¾ití: %s jmeno_monitoru"
-
-#~ msgid "%s: -%c unrecognized option"
-#~ msgstr "%s: -%c nerozpoznaná volba"
-
-#~ msgid "Usage: %s [-f] monitor_name"
-#~ msgstr "Pou¾ití: %s [-f] jmeno_monitoru"
-
-#~ msgid "Monitor '%s' terminated"
-#~ msgstr "Monitor '%s' ukonèen"
-
-#~ msgid "Error - Monitor '%s' was not running"
-#~ msgstr "Chyba - Monitor '%s' nebì¾í"
-
-#~ msgid "No such monitor as <%s>"
-#~ msgstr "Monitor <%s> neexistuje"
-
-#~ msgid "Error - Monitor '%s' in use by another user"
-#~ msgstr "Chyba - Monitor '%s' je pou¾íván jiným u¾ivatelem"
-
-#~ msgid "Error - Locking mechanism failed"
-#~ msgstr "Chyba - selhal zamykací mechanismus"
-
-#~ msgid "Monitor <%s> released"
-#~ msgstr "monitor <%s> byl uvolnìn"
-
-#~ msgid "Monitor <%s> in use by another user"
-#~ msgstr "Monitor <%s> je pou¾íván jiným u¾ivatelem"
-
-#~ msgid "Failed testing lock mechanism"
-#~ msgstr "Testování uzamykacího mechanismu selhalo"
-
-#~ msgid "Usage:  %s [-fv] [name]"
-#~ msgstr "Pou¾ití: %s [-fv] [jmeno]"
-
-#~ msgid "To establish and control use of a graphics display monitor."
-#~ msgstr "Slou¾í k vytvoøení a kontrole grafického monitoru."
-
-#~ msgid "Name of graphics monitor to start"
-#~ msgstr "Jméno grafického monitoru, který bude spu¹tìn"
-
-#~ msgid "Name of graphics monitor to stop"
-#~ msgstr "Jméno grafického monitoru, který bude vypnut"
-
-#~ msgid "Name of graphics monitor to select"
-#~ msgstr "Jméno grafického monitoru, který bude vybrán"
-
-#~ msgid "Name of graphics monitor to unlock"
-#~ msgstr "Jméno monitoru k odemèení"
-
-#~ msgid "List all monitors"
-#~ msgstr "Seznam v¹ech monitorù"
-
-#~ msgid "List all monitors (with current status)"
-#~ msgstr "Seznam monitorù (s aktuálním stavem)"
-
-#~ msgid "Print name of currently selected monitor"
-#~ msgstr "Vypi¹ jméno aktuálnì vybraného monitoru"
-
-#~ msgid "Release currently selected monitor"
-#~ msgstr "Uvolni souèasný vybraný monitor"
-
-#~ msgid "Do not automatically select when starting"
-#~ msgstr "Nevybírej monitor automaticky pøi startu"
-
-#~ msgid "Problem selecting %s. Will try once more"
-#~ msgstr "Problém pøi výbìru monitoru %s. Zkusím to je¹tì jednou"
-
-#~ msgid "Can't clear current graphics window"
-#~ msgstr "Nelze vyèistit aktuální okno"
-
-#~ msgid "One mouse click only"
-#~ msgstr "Pouze jedno kliknutí my¹í"
-
-#~ msgid "Rendering method for filled polygons"
-#~ msgstr "Vykreslovací metoda pro plné polygony"
-
-#, fuzzy
-#~ msgid ""
-#~ "d;use the display library basic functions (features: polylines);c;use the "
-#~ "display library clipping functions (features: clipping);l;use the display "
-#~ "library culling functions (features: culling, polylines)"
-#~ msgstr ""
-#~ "g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
-#~ "funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
-#~ "základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
-#~ "zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití "
-#~ "knihovny zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená "
-#~ "èára)"
-
-#~ msgid "Invalid rendering method <%s>"
-#~ msgstr "Neplatná zobrazovací metoda: <%s>"
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays the rhumbline joining two user-specified points, in the active "
-#~ "frame on the user's graphics monitor."
-#~ msgstr ""
-#~ "Zobrazí plochy tématické vektorové mapy v aktivním rámci grafického "
-#~ "monitoru."
-
-#~ msgid "Use mouse to interactively place text"
-#~ msgstr "Pou¾ít my¹ pro umístìní textu"
-
-#~ msgid "Click!\n"
-#~ msgstr "Klik!\n"
-
-#~ msgid " Left:    Place text here\n"
-#~ msgstr " Levé:    Vlo¾it text sem\n"
-
-#~ msgid " Right:   Quit\n"
-#~ msgstr " Pravé :   ukonèit\n"
-
-#~ msgid "Just redraw given maps using default colors"
-#~ msgstr "Pouze pøekresli zobrazené mapy s výchozími barvami."
-
-#~ msgid "ERROR: can not get \"list\" items"
-#~ msgstr "CHYBA: nelze získat polo¾ky \"list\""
-
-#~ msgid "-j flag forced"
-#~ msgstr "volba -j byla nastavena nucenì"
-
-#~ msgid "No map is displayed in GRASS monitor"
-#~ msgstr "Nebyla zobrazena ¾ádná mapa v monitoru GRASSu"
-
-#~ msgid "Don't add to list of commands in monitor"
-#~ msgstr "Nepøidávat do seznamu v monitoru pøíkazy"
-
-#~ msgid ""
-#~ "Generates and displays simple graphics on map layers drawn in the active "
-#~ "graphics monitor display frame."
-#~ msgstr ""
-#~ "Vytvoøí a zobrazí jednoduché grafické prvky na mapì vykreslené v aktivním "
-#~ "grafickém monitoru."
-
-#~ msgid ""
-#~ "Unix file containg graphing instructions, if not given reads from "
-#~ "standard input"
-#~ msgstr ""
-#~ "Soubor (Unix) obsahující grafické instrukce, pokud není zadáno, ète se "
-#~ "standardní vstup"
-
-#~ msgid ""
-#~ "Color to draw with, either a standard GRASS color or R:G:B triplet "
-#~ "(separated by colons)"
-#~ msgstr ""
-#~ "Barva kresby, buï standardní GRASS barva nebo trojice R:G:B (oddìleno "
-#~ "dvojteèkou)"
-
-#~ msgid ""
-#~ "\n"
-#~ "Mouse Buttons:"
-#~ msgstr ""
-#~ "\n"
-#~ "Tlaèítka my¹i:"
-
-#~ msgid "Left:   Select From\n"
-#~ msgstr " Levé:    Vybrat z\n"
-
-#~ msgid "Middle: Select To\n"
-#~ msgstr "Prostøední tlaèítko: Vybrat do\n"
-
-#~ msgid ""
-#~ "Right:  Quit\n"
-#~ "\n"
-#~ msgstr ""
-#~ " Pravé tlaèítko: ukonèit\n"
-#~ "\n"
-
-#, fuzzy
-#~ msgid "Short user prompt message"
-#~ msgstr "Vytiskni také zprávu o autorských právech"
-
-#~ msgid "Click here to CONTINUE\n"
-#~ msgstr "ZDE kliknìte pro pokraèování\n"
-
-#~ msgid "Monitor: XGetWMName failed"
-#~ msgstr "Monitor: XgetWMName selhalo"
-
-#~ msgid "Monitor: XGetWMName: bad result"
-#~ msgstr "Monitor: XGetWMName: ¹patný výsledek"
-
-#~ msgid "Monitor: interactive command in redraw"
-#~ msgstr "Monitor: interaktivní pøíkaz v pøekreslení"
-
-#~ msgid "found %d visuals of type TrueColor"
-#~ msgstr "nalezeno %d zobrazení typu TrueColor"
-
-#~ msgid "searching for highest bit depth"
-#~ msgstr "hledám nejvìt¹í bitovou hloubku"
-
-#~ msgid "selected %d bit depth"
-#~ msgstr "vybrána hloubka %d bitù"
-
-#~ msgid "using default visual which is %s"
-#~ msgstr "pou¾ívám výchozí zobrazení, co¾ je %s"
-
-#~ msgid "Error choosing frame [%s]\n"
-#~ msgstr "Chyba pøi výbìru rámce [%s]\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Buttons:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Tlaèítka:\n"
-
-#~ msgid "Left:   Select frame\n"
-#~ msgstr " Levé:    Vybrat rámec\n"
-
-#~ msgid "Middle: Keep original frame\n"
-#~ msgstr "Prostøední: Ponechat pùvodní rám\n"
-
-#~ msgid "Right:  Accept frame\n"
-#~ msgstr "Pravé: Potvrï rámec\n"
-
-#~ msgid "Manages display frames on the user's graphics monitor."
-#~ msgstr "Správa rámcù v grafickém monitoru"
-
-#~ msgid "Create a new frame"
-#~ msgstr "Vytvoøit nový rámec"
-
-#~ msgid "Select a frame"
-#~ msgstr "Vybrat rámec"
-
-#~ msgid "Print name of current frame"
-#~ msgstr "Vypsat aktuální rámec"
-
-#~ msgid "Print names of all frames"
-#~ msgstr "Vytisknout jména v¹ech rámcù"
-
-#~ msgid "List map names displayed in GRASS monitor"
-#~ msgstr "Vypi¹ jména map zobrazených v grafickém monitoru"
-
-#~ msgid "Debugging output"
-#~ msgstr "Roz¹íøený výstup"
-
-#~ msgid "Frame to be created/selected"
-#~ msgstr "Rámec, který má být vytvoøen/vybrán"
-
-#~ msgid "bottom,top,left,right"
-#~ msgstr "spodní,svrchní,levý,pravý"
-
-#~ msgid "Where to place the frame, values in percent (implies -c)"
-#~ msgstr "Kam umístit rám, hodnoty v procentech (potøebuje volbu -c)"
-
-#~ msgid "No raster map exists in current window"
-#~ msgstr "V aktuálním oknì není ¾ádná rastrová mapa"
-
-#~ msgid ""
-#~ "Creates and displays a menu within the active frame on the graphics "
-#~ "monitor."
-#~ msgstr "Vytvoøit a zobrazit menu v aktivní rámci grafického monitoru."
-
-#~ msgid "Sets the color of the menu background"
-#~ msgstr "Nastaví barvu pozadí menu"
-
-#~ msgid "Sets the color of the menu text"
-#~ msgstr "Nastavit barvu textu v menu"
-
-#~ msgid "Sets the color dividing lines of text"
-#~ msgstr "Nastaví barvu linií oddìlujících øádky textu"
-
-#~ msgid "Sets the menu text size (in percent)"
-#~ msgstr "Nastaví velikost písma v menu (procenta)"
-
-#~ msgid "Menu must contain a title and at least one option"
-#~ msgstr "Menu musí obsahovat titulek a nejménì jednu volbu"
-
-#~ msgid "No current frame"
-#~ msgstr "®ádný aktuální rámec"
-
-#~ msgid "Current frame not available"
-#~ msgstr "Aktuální rámec není dostupný"
-
-#~ msgid "value [%.0f,%.0f] out of range [0-100]"
-#~ msgstr "hodnota [%.0f,%.0f] je mimo interval [0-100]"
-
-#~ msgid ""
-#~ "g;use the libgis render functions (features: clipping);r;use the raster "
-#~ "graphics library functions (features: polylines);d;use the display "
-#~ "library basic functions (features: polylines);c;use the display library "
-#~ "clipping functions (features: clipping);l;use the display library culling "
-#~ "functions (features: culling, polylines)"
-#~ msgstr ""
-#~ "g;pou¾ití vykreslovacích funkcí(prvky:vystøihování);r;pou¾ití knihovny "
-#~ "funkcí pro rastrovou grafiku (prvky: lomená èára);d;pou¾ití knihovny "
-#~ "základních zobrazovacích funkcí (prvky: lomená èára);c; pou¾ití knihovny "
-#~ "zobrazovacích vystøihovacích funkcí (prvky: vystøihování);l;pou¾ití "
-#~ "knihovny zobrazovacích odstraòovacích funkcí (prvky: odstranìní, lomená "
-#~ "èára)"
-
-#~ msgid ""
-#~ "Don't add to list of vectors and commands in monitor (it won't be drawn "
-#~ "if the monitor is refreshed)"
-#~ msgstr ""
-#~ "Nepøidávej do seznamu vektorù a pøíkazù v monitoru (nebude vykresleno, "
-#~ "pokud monitoru bude pøekreslen)"
-
-#~ msgid "Creates a list of commands for recreating screen graphics."
-#~ msgstr "Vytvoøí seznam pøíkazù pro obnovení obsahu monitoru."
-
-#~ msgid "Name of frame(s) to save"
-#~ msgstr "Název rámu(ù) urèeného k ulo¾ení"
-
-#~ msgid ""
-#~ "List of object numbers to remove which are displayed after \"#\". -1 for "
-#~ "the last object."
-#~ msgstr ""
-#~ "Seznam èísel objektù k vyjmutí, které jsou zobrazeny po \"#\" -1 pro "
-#~ "poslední objekt."
-
-#~ msgid ""
-#~ "List of object numbers to move (\"from\" to \"to\"). remove= option will "
-#~ "be done first, if any."
-#~ msgstr ""
-#~ "Seznam èísel objektù, které budou pøejmenovány (\"from\" na \"to\"). "
-#~ "Nejprve bude provedena volba remove=."
-
-#~ msgid "Save current frame"
-#~ msgstr "Ulo¾ souèasný rám"
-
-#~ msgid "Save all the frames"
-#~ msgstr "Ulo¾ v¹echny rámy"
-
-#~ msgid "Only map objects without extra header and tailer"
-#~ msgstr "Pouze mapové objekty bez extra hlavièky a patièky"
-
-#~ msgid "No monitor selected"
-#~ msgstr "Nebyl vybrán ¾ádný monitor"
-
-#~ msgid "Unknown item type in pad: %s"
-#~ msgstr "Neznámý prvek v podlo¾ce: %s"
-
-#~ msgid "Setting graphics window"
-#~ msgstr "Nastavuji mapové okno"
-
-#~ msgid "Can't set current graphics window"
-#~ msgstr "Nelze pou¾ít aktuální okno"
-
-#~ msgid "Getting graphics window coordinates"
-#~ msgstr "Pou¾ívám souøadnice monitoru"
-
-#~ msgid "Use mouse to interactively place scale"
-#~ msgstr "Pou¾ít my¹ pro umístìní mìøítka"
 
 #~ msgid "Illegal group name <%s>"
 #~ msgstr "Neplatné jméno skupiny <%s>"
@@ -32589,66 +32907,6 @@ msgstr ""
 #~ msgid "Writing viewable versions of transformed data..."
 #~ msgstr "Zapisuji zobrazitelnou verzi transformovaných dat..."
 
-#~ msgid ""
-#~ "Format error: <%s>\n"
-#~ "Line: %d\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Chyba formátu: <%s>\n"
-#~ "Linie: %d\n"
-#~ "%s"
-
-#~ msgid "<%s> is an illegal region name"
-#~ msgstr "<%s> je neplatný název regionu"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "WARNING!  A projection file already exists for this location\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "VAROVÁNÍ!  V této location ji¾ existuje soubor s projekcí\n"
-
-#~ msgid ""
-#~ "Would you still like to overwrite the current projection information "
-#~ msgstr "Stále si pøejete pøepsat aktuální informace o projekci"
-
-#~ msgid "The projection information will not be updated."
-#~ msgstr "Informace o projekci nebudou aktualizovány."
-
-#~ msgid "Enable interactive prompting (for command-line use only)"
-#~ msgstr "Povolit interaktivní vyzívání (pouze s pou¾itím pøíkazového øádku)"
-
-#~ msgid "Erasing monitors..."
-#~ msgstr "Ma¾u monitory ... "
-
-#~ msgid ""
-#~ "tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based "
-#~ "GUI - Display Manager (d.m);wxpython;wxPython based next generation GUI"
-#~ msgstr ""
-#~ "tcltk;Tcl/Tk grafické prostøedí - GIS Manager (gis.m);oldtcltk;Strar¹í "
-#~ "Tcl/Tk grafické prostøedí - Display Manager (d.m);wxpython; Grafické "
-#~ "prostøedí budoucí generace zalo¾ené na WxPyton"
-
-#~ msgid "Removing %s <%s>"
-#~ msgstr "Odstraòuji %s <%s>"
-
-#~ msgid "couldn't be removed"
-#~ msgstr "nemohu odstranit"
-
-#~ msgid "%s: couldn't be removed"
-#~ msgstr "%s nelze odstranit"
-
-#~ msgid "%s: missing"
-#~ msgstr "%s: chybí"
-
-#~ msgid "%s: removed"
-#~ msgstr "%s odstranìn"
-
-#~ msgid "<%s> nothing removed"
-#~ msgstr "<%s> není odstranìno"
-
 #~ msgid "Elevation map not found"
 #~ msgstr "Soubor s elevací nebyl nalezen"
 
@@ -32657,306 +32915,6 @@ msgstr ""
 
 #~ msgid "Unable to open raster map <%s> in mapset <%s>"
 #~ msgstr "Nelze otevøít rastrovou mapu <%s> v mapsetu <%s>"
-
-#~ msgid ""
-#~ "Divides active display into two frames & displays maps/executes commands "
-#~ "in each frame."
-#~ msgstr ""
-#~ "Rozdìlí aktivní monitor na dva rámy a v ka¾dém rámu zobrazí mapu a pøíkaz "
-#~ "pro její vytvoøení."
-
-#~ msgid "Enter raster map to display in 1st frame"
-#~ msgstr "Rastrová mapa, která má být zobrazena v první rámu"
-
-#~ msgid "Enter command to execute in 1st frame"
-#~ msgstr "Vlo¾te pøíkaz pro vykonání v první rámu"
-
-#~ msgid "Enter raster map to display in 2nd frame"
-#~ msgstr "Rastrová mapa, která má být zobrazena v druhém rámu"
-
-#~ msgid "Enter command to execute in 2nd frame"
-#~ msgstr "Vlo¾te pøíkaz pro vykonání v druhém rámu"
-
-#~ msgid "How to split display"
-#~ msgstr "Jak rozdìlit monitor"
-
-#~ msgid "Saves the contents of the active display monitor to a graphics file."
-#~ msgstr "Ulo¾í obsah aktuálního monitoru jako soubor s obrázkem."
-
-#~ msgid "display, export"
-#~ msgstr "zobrazení, export"
-
-#~ msgid "Name for output file (do NOT add extension)"
-#~ msgstr "Jméno obrázku (NEpøidávejte koncovku)"
-
-#~ msgid "Dimensions of output file versus current window size"
-#~ msgstr "Rozmìry výstupu versus souèasná velikost okna"
-
-#~ msgid "(same=1, double size=2, quadruple size=4)"
-#~ msgstr "(stejná velikost=1, dvojitá=2, ètyønásobná=4)"
-
-#~ msgid "Width and height of output image (overrides resolution setting)"
-#~ msgstr "©íøka a vý¹ka výstupního obrazu (pøepí¹e nastavení rozli¹ení)"
-
-#~ msgid "Compression for PNG files"
-#~ msgstr "Komprese pro soubory PNG"
-
-#~ msgid "(0=none, 1=fastest, 9=most; lossless, only time vs. filesize)"
-#~ msgstr "(0=nic, 1=nejrychleji, 9=bezeztrát; pouze èas vs velikost souboru)"
-
-#~ msgid "File size/quality for JPEG files"
-#~ msgstr "Velikost/kvalita souboru JPEG"
-
-#~ msgid "(10=smallest/worst, 100=largest/best)"
-#~ msgstr "(10=nejmen¹í/nejhor¹í, 100=nejvìt¹í/nejlep¹í)"
-
-#~ msgid "Paper size for PostScript output"
-#~ msgstr "Velikost papíru pro výstup v PostScript."
-
-#~ msgid "PostScript level (only limits functionality!)"
-#~ msgstr "Úroveò Postscriptu ( pouze omezuje funkènost!)"
-
-#~ msgid "GeoTIFF"
-#~ msgstr "GeoTIFF"
-
-#~ msgid "GeoTIFF metadata key(s) and value(s) to add"
-#~ msgstr "GeoTIFF klíèe metadat a hodnoty pro pøidání"
-
-#~ msgid ""
-#~ "In the form of \"META-TAG=VALUE\", separate multiple entries with a comma."
-#~ msgstr "Ve formuláøi \"META-TAG=VALUE\", odìlujte násobný vstup teèkou."
-
-#~ msgid "Set background color to black (white default)"
-#~ msgstr "Nastav barvu pozadí na èernou (bílá je výchozí)"
-
-#~ msgid "Set transparent background"
-#~ msgstr "Nastavit prùhledné pozadí"
-
-#~ msgid "Use the Cario driver to render images"
-#~ msgstr "Pou¾ít ovladaè Cairo pro vykreslení obrazù"
-
-#~ msgid "Set paper orientation to landscape (for PostScript output)"
-#~ msgstr "Nastavit papír na orientaci krajina (pro výstup Postscript)"
-
-#~ msgid "Do not crop away margins"
-#~ msgstr "NEoøezávat okraje"
-
-#~ msgid "Slide show of GRASS raster/vector maps."
-#~ msgstr "Slide show rastrù/vektorù."
-
-#~ msgid "display, slideshow"
-#~ msgstr "zobrazení, prezentace"
-
-#~ msgid "Show vector maps rather than raster maps"
-#~ msgstr "Zobrazit vektory, místo rastrù"
-
-#~ msgid "Map prefix. Specify character(s) to view selected maps only"
-#~ msgstr ""
-#~ "Pøedpona mapy. Zadejte písmeno(na) pro zobrazení pouze vybraných map"
-
-#~ msgid "Map number show across the monitor"
-#~ msgstr "Poèet map zobrazených na monitoru"
-
-#~ msgid "Map number show down the monitor"
-#~ msgstr "Poèet map zobrazených pod monitorem"
-
-#~ msgid "Mapsets to use. Specify multiple mapsets comma separated"
-#~ msgstr "Mapset který bude pou¾it. Více mapsetù lze oddìlit èárkou"
-
-#~ msgid "Number of seconds to pause between slides"
-#~ msgstr "Poèet vteøin pro pøestávku mezi slidy."
-
-#~ msgid "Calculates new grid3D volume from r3.mapcalc expression."
-#~ msgstr "Tvorba nové grid3d volume mapy na základì výrazu pro r3.mapcalc."
-
-#~ msgid "A (grid3D file)"
-#~ msgstr "A (soubor grid3D)"
-
-#~ msgid "B (grid3D file)"
-#~ msgstr "B (soubor grid3D)"
-
-#~ msgid "C (grid3D file)"
-#~ msgstr "C (soubor grid3D)"
-
-#~ msgid "D (grid3D file)"
-#~ msgstr "D (soubor grid3D)"
-
-#~ msgid "E (grid3D file)"
-#~ msgstr "E (soubor grid3D)"
-
-#~ msgid "F (grid3D file)"
-#~ msgstr "F (soubor grid3D)"
-
-#~ msgid "Formula (e.g. A-B or A*C+B)"
-#~ msgstr "Vzorec (napø. A-B nebo A*C+B)"
-
-#~ msgid "Name for output grid3D volume"
-#~ msgstr "Název výstupního souboru grid3D objem"
-
-#~ msgid "Expert mode (enter a set of r3.mapcalc expressions)"
-#~ msgstr "Expertní mód (zadejte soubor výrazù pro r3.mapcalc)"
-
-#~ msgid "Do not overwrite existing map"
-#~ msgstr "Nepøepisuj existující mapu"
-
-#~ msgid "Display manager for GRASS"
-#~ msgstr "GIS manager pro GRASS"
-
-#~ msgid "Name of .dmrc settings file"
-#~ msgstr "Jméno souboru s nastavením .dmrc"
-
-#~ msgid "extended statistics (quartiles and percentile)"
-#~ msgstr "roz¹íøená statistika (kvartily a percentily)"
-
-#~ msgid "Percentile to calculate (requires -e flag)"
-#~ msgstr "Percentil, který se má spoèítat (vy¾aduje pøepínaè -e)"
-
-#~ msgid "Resizes active display monitor"
-#~ msgstr "Mìní velikost aktivního monitoru"
-
-#~ msgid "New width for window"
-#~ msgstr "Nová ¹íøka okna"
-
-#~ msgid "New height for window"
-#~ msgstr "Nová vý¹ka okna"
-
-#~ msgid ""
-#~ "The database must be in form printed by v.db.connect -g, i.e. with "
-#~ "substituted variables"
-#~ msgstr ""
-#~ "Databáze musí být ve formì vyti¹tìné v.db.connect -g, napø. s vymìnìnými "
-#~ "hodnotami"
-
-#~ msgid "Use image list and not group"
-#~ msgstr "Pou¾ij seznam snímkù a ne skupinu"
-
-#~ msgid "Select multiple points"
-#~ msgstr "Vyber více bodù"
-
-#~ msgid "Selects/starts specified monitor at specified size"
-#~ msgstr "Vybere/nastartuje zadaný monitor o zadané velikosti"
-
-#~ msgid "Width in pixels of new display monitor"
-#~ msgstr "©íøka nového monitoru v pixelech "
-
-#~ msgid "Height in pixels of new display monitor"
-#~ msgstr "Vý¹ka nového monitoru v pixelech"
-
-#~ msgid "Calculate new raster map from a r.mapcalc expression."
-#~ msgstr "Poèítá novou mapu z výrazu pro r.mapcalc."
-
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "E"
-#~ msgstr "E"
-
-#~ msgid "F"
-#~ msgstr "F"
-
-#~ msgid "Expert mode (enter a set of r.mapcalc expressions)"
-#~ msgstr "Expertní mód (zadejte soubor výrazù pro r.mapcalc)"
-
-#~ msgid "Exports GRASS raster into GDAL supported formats."
-#~ msgstr ""
-#~ "Exportuje GRASS rastry do jednoho z formátù podporovaných knihovnou GDAL."
-
-#~ msgid ""
-#~ "Creation option to the output format driver. Multiple options may be "
-#~ "listed"
-#~ msgstr "Volby pro ovladaè výstupního formátu. Volby je mo¾no kombinovat."
-
-#~ msgid "Metadata key passed on the output dataset if possible"
-#~ msgstr "Pokud je to mo¾né, pøedat na výstup klíè metadat"
-
-#~ msgid "run non-interactively"
-#~ msgstr "spustit neinteraktivnì"
-
-#~ msgid "Export display monitor to a GpsDrive compatible backdrop image"
-#~ msgstr "Exportuj monitor do souboru kompatibilním s GpsDrive"
-
-#~ msgid "display, export, GPS"
-#~ msgstr "zobrazení, export, GPS"
-
-#~ msgid "name for new map image (lives in ~/.gpsdrive/maps/)"
-#~ msgstr "jméno nového obrázku (bude ulo¾en do ~/.gpsdrive/maps)"
-
-#~ msgid "Make JPEG instead of PNG image"
-#~ msgstr "Vytvoø JPEG místo PNG"
-
-#~ msgid "Run non-interactively"
-#~ msgstr "Spustit neinteraktivnì"
-
-#~ msgid "GIS manager for GRASS"
-#~ msgstr "GIS manager pro GRASS"
-
-#~ msgid "Name of GIS manager settings file (.grc)"
-#~ msgstr "Jméno souboru s nastavením pro GIS manager (.grc)"
-
-#~ msgid "1st map for mosaic (top of image stack)."
-#~ msgstr "První mapa pro mozaiku (v seznamu mozaiky zcela nahoøe)"
-
-#~ msgid "3rd map for mosaic."
-#~ msgstr "tøetí mapa mozaiky"
-
-#~ msgid "4th map for mosaic."
-#~ msgstr "ètvrtá mapa mozaiky"
-
-#~ msgid "Name of raster map to print in legend"
-#~ msgstr "Název rastrové mapy která bude zobrazena v legendì"
-
-#~ msgid "Position of vertical map-legend separator (in percent)"
-#~ msgstr "Umístìní vertikálního oddìlovaèe mapové legendy (v procentech)"
-
-#~ msgid "Saves active display monitor to PNG file in home directory"
-#~ msgstr "Ulo¾í aktuální obsah monitoru do souboru PNG v domovském adresáøi"
-
-#~ msgid "Name of PNG file"
-#~ msgstr "Jméno souboru PNG"
-
-#~ msgid "Resolution of output file (single=1, double=2, quad=4)"
-#~ msgstr "Rozli¹ení výstupního souboru (1x, 2x, 4x)"
-
-#~ msgid "Moves displayed maps to another monitor"
-#~ msgstr "Pøesune aktuálnì zobrazené mapy do jiného monitoru"
-
-#~ msgid "clear target monitor before moving"
-#~ msgstr "Vyèisti cílový monitor pøed pøesunem"
-
-#~ msgid "stay with source monitor"
-#~ msgstr "zùstaò ve zdrojovém monitoru"
-
-#~ msgid "kill source monitor after moving"
-#~ msgstr "zab zdrojový monitor po pøesunu"
-
-#~ msgid "Target monitor"
-#~ msgstr "Cílový monitor"
-
-#~ msgid "Source monitor"
-#~ msgstr "Zdrojový monitor"
-
-#~ msgid "Split the display into subframes."
-#~ msgstr "Rozdìlit diplej do rámù"
-
-#~ msgid "Number of subframes"
-#~ msgstr "Poèet rámù"
-
-#~ msgid "Redraws the current display frame in the GRASS monitor"
-#~ msgstr "Pøekreslí aktuálnì zobrazené mapy v monitoru"
-
-#~ msgid "Redraw all frames"
-#~ msgstr "Pøekreslit v¹echny rámy"
-
-#~ msgid "Do not preserve individual regions when redrawing all frames"
-#~ msgstr "Nedor¾ovat individuální regiony pokud pøekraslují v¹echny rámy"
-
-#~ msgid "Verbose mode (print projection parameters and filenames to stderr)"
-#~ msgstr ""
-#~ "Vypovídej se, chlapèe (vytiskni parametry projekce a jména souborù na "
-#~ "standardní chybu)"
 
 #~ msgid "Reading file [%s]..."
 #~ msgstr "Ètu soubor [%s] ..."
@@ -33624,3 +33582,795 @@ msgstr ""
 #~ msgid ""
 #~ "Power parameter; greater values assign greater influence to closer points"
 #~ msgstr "Násobný parametr; pøiøadí vy¹¹í vliv bli¾¹ím bodùm"
+
+#~ msgid "database, SQL"
+#~ msgstr "databáze, SQL"
+
+#~ msgid "Database schema"
+#~ msgstr "Schéma databáze."
+
+#~ msgid "The password was stored in file"
+#~ msgstr "Heslo bylo ulo¾eno v souboru."
+
+#~ msgid "OGR driver: column '%s', OGR type %d  is not supported"
+#~ msgstr "Ovladaè OGR: sloupec '%s', typu %d není podporován"
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "Pøevede 3D ASCII rastrový textový soubor na (binární) 3D rastrovou "
+#~ "mapovou vrstvu "
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "Pøevede 3D rastrovou mapovou vrstvu do ASCII textového souboru"
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr ""
+#~ "Exportuje 3D rastrový soubor GRASSu do 3-dimenzionálního Vis5D souboru."
+
+#~ msgid ""
+#~ "Calculate the groundwater distance velocity vector field and write the x, "
+#~ "y, and z components to maps named name_[xyz]. Name is basename for the "
+#~ "new raster3d maps"
+#~ msgstr ""
+#~ "Vypoèítat prùtokovou rychlost vektorového pole a zapi¹ x,y a z èásti do "
+#~ "map pojmenovaných jmeno_[xyz]. Jméno mapy je základ pro r3d rastrovou "
+#~ "mapu."
+
+#~ msgid "The direct cholesky solver do not work with sparse matrices"
+#~ msgstr "Pøímá choleskyho analýza nepracuje s øídkou maticí"
+
+#~ msgid ""
+#~ "Cannot create mask file: G3D_MASK already exists!\n"
+#~ " Use 'g.remove rast3d=G3D_MASK' to remove the existing mask."
+#~ msgstr ""
+#~ "Nelze vytvoøit soubor s maskou: G3D_MASK ji¾ existuje!\n"
+#~ " Pro odstranìní existující masky pou¾ijte 'g.remove rast3d=G3D_MASK'."
+
+#~ msgid "raster, resample"
+#~ msgstr "rastr, pøevzorkování"
+
+#~ msgid "raster, geomorphology"
+#~ msgstr "rastr, geomorfologie"
+
+#~ msgid "Lat/Long location is not supported"
+#~ msgstr "Location lat/long není podporována"
+
+#~ msgid "Calculating map %01d of %01d (angle %lf, raster map <%s>)"
+#~ msgstr "Výpoèet mapy %01d z %01d (úhel %lf, rastrová mapa <%s>)"
+
+#~ msgid "File containing reclass rules"
+#~ msgstr "Soubor obsahující pravidla reklasifikace"
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr "Pøevede ASCII rastrový soubor na binární rastrovou mapu."
+
+#~ msgid "raster, export"
+#~ msgstr "rastr, export"
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "Pøevede rastrovou mapu do ASCII souboru."
+
+#~ msgid "raster, null data"
+#~ msgstr "rastr, noullvé data"
+
+#~ msgid "Do not export long colortable"
+#~ msgstr "nelze exportovat dlouhou tabulku barev"
+
+#~ msgid ""
+#~ "Input raster map contains cells with NULL-value (no-data). The value %d "
+#~ "was used to represent no-data values in the input map. You can specify "
+#~ "nodata value by %s parameter."
+#~ msgstr ""
+#~ "Vstupní rastrová mapa obsahující NULLové hodnoty (¾ádná data). Pro "
+#~ "NULLové hodnoty byla pou¾ita hodnota %d. Mù¾ete urèit hodnotu "
+#~ "reprezentující NULLové hodnoty parametrem %s."
+
+#~ msgid "Import as Floating Point Data (default: Integer)"
+#~ msgstr ""
+#~ "Naimportuj jako hodnoty s plovoucí desetinnou èárkou (float) (výchozí: "
+#~ "celoèíselné)"
+
+#~ msgid "Import as Double Precision Data (default: Integer)"
+#~ msgstr ""
+#~ "Naimportuj jako hodnoty s plovoucí desetinnou èárkou (double) (výchozí: "
+#~ "celoèíselné)"
+
+#~ msgid "Bad number of bytes per cell"
+#~ msgstr "Chybný poèet bytù na buòku"
+
+#~ msgid "Bytes do not match File size"
+#~ msgstr "Byty neodpovídají velikosti souboru"
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "Exportuje rastrovou mapu GRASSu do GRIDATB.FOR souboru (TOPMODEL)"
+
+#~ msgid "Error writing color file for <%s>"
+#~ msgstr "Chyba pøi zápisu souboru color pro <%s>"
+
+#~ msgid "raster, interpolation"
+#~ msgstr "rastr, interpolace"
+
+#~ msgid "Interpolating raster map <%s> (%d rows)... "
+#~ msgstr "Interpoluji rastrovou mapu <%s> (%d øádkù)... "
+
+#~ msgid "Cannot create %s/.r.li/ directory"
+#~ msgstr "Nelze vytvoøit adresáø %s/r.li/"
+
+#~ msgid "Cannot create %s/.r.li/output/ directory"
+#~ msgstr "Nelze vytvoøit adresáø %s/r.li/output/"
+
+#~ msgid "r.li.worker (pid %i) exited with abnormal status %i"
+#~ msgstr "r.li.worker (pid %i) byl ukonèen s abnormálním statusem %i"
+
+#~ msgid "r.li.worker (pid %i) terminated"
+#~ msgstr "r.li.worker (pid %i) ukonèen"
+
+#~ msgid "Cannot make stat of %s configuration file"
+#~ msgstr "Nelze vytvoøit statistiku pro konfiguraèní soubor %s"
+
+#~ msgid "CHILD[pid = %i]: unable to open %s mask ... continue without!!!"
+#~ msgstr ""
+#~ "DCEØINÝ PROCES[pid = %i]: nelze otevøít soubor s maskou %s ... pokraèuji "
+#~ "bez ní!"
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr "Pøevede rastrovou mapu do souboru pro POVRAY."
+
+#~ msgid "Cannot read ew_res value"
+#~ msgstr "Nelze èíst hodnotu ew_res"
+
+#~ msgid "Cannot read ns_res value"
+#~ msgstr "Nelze èíst hodnotu ns_res"
+
+#~ msgid "[%s]: Map is the wrong resolution"
+#~ msgstr "[%s]: Mapa je ve ¹patném rozli¹ení"
+
+#~ msgid "Cannot get row %d (error = %d)"
+#~ msgstr "Nelze naèíst øádek %d (chyba = %d)"
+
+#~ msgid "Cannot set region to back to the initial region !!!"
+#~ msgstr "Nelze nastavit region zpìt na poèáteèní rozli¹ení!!!"
+
+#~ msgid "raster, terrain analysis"
+#~ msgstr "rastr, terénní analýza"
+
+#~ msgid ""
+#~ "One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must "
+#~ "be specified!"
+#~ msgstr ""
+#~ "Jeden z pøepínaèù \"-i\" nebo \"-r\" nebo voleb \"color\", \"rast\" nebo "
+#~ "\"rules\" MUSÍ být zadána!"
+
+#~ msgid "Show the category label in the grid cell(s)"
+#~ msgstr "Uka¾ ¹títek kategorie v buòce rastrového souboru"
+
+#~ msgid "%s: can only do up to %d raster maps, sorry\n"
+#~ msgstr "%s: mohu vytvoøit pouze %d rastrových map\n"
+
+#~ msgid "raster, map algebra"
+#~ msgstr "rastr, mapová algebra"
+
+#~ msgid "Seed [%d] larger than maximum [%d]"
+#~ msgstr "Poèátek [%d] je vìt¹í ne¾ maximum [%d]"
+
+#~ msgid "Seed [%d] smaller than minimum [%d]"
+#~ msgstr "Poèátek [%d] je men¹í, ne¾ minimum [%d]"
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "Pøevede rastrové mapy do formátu VTK-Ascii"
+
+#~ msgid "Update the statistics (histogram, range) for [%s]? "
+#~ msgstr "Aktualizovat statistiku (histogram, rozsah) pro [%s]?"
+
+#~ msgid "File containing weights"
+#~ msgstr "Soubor obsahující váhy"
+
+#~ msgid ""
+#~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
+#~ "resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr ""
+#~ "Pøevede 3 GRASSové rastrové mapy (R,G,B) do souboru PPM s rozli¹ením "
+#~ "pixelu podle aktuálnì definovaného regionu."
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr "Export rastrové mapy do Virtual Reality Modeling Language (VRML)"
+
+#~ msgid ""
+#~ "USAGE for basin delineation:\n"
+#~ "%s -4 el=elevation_map t=swale_threshold [ov=overland_flow_map] "
+#~ "[dr=drain_direction_map] [de=depression_map] [ac=accumulation_map] "
+#~ "[di=display_map] ba=watershed_basin_map [se=stream_segment_map]\n"
+#~ "\n"
+#~ "USAGE for ARMSED FILE creation:\n"
+#~ "%s [-4] el=elevation_map t=swale_threshold [ov=overland_flow_map] "
+#~ "[dr=drain_direction_map] [de=depression_map] [ac=accumulation_map] "
+#~ "[di=display_map] [ba=watershed_basin_map] [se=stream_segment_map] "
+#~ "ha=half_basin_map ar=ARMSED_file_name\n"
+#~ "\n"
+#~ "USAGE for slope length determination:\n"
+#~ "%s [-4] el=elevation_map t=swale_threshold [dr=drain_direction_map] "
+#~ "[de=depression_map] [ac=accumulation_map] [di=display_map] "
+#~ "[ms=max_slope_length] [ob=overland_blocking_map] [S=slope_steepness_map] "
+#~ "LS=length_slope_map [r=rill_erosion_map] [sd=slope_deposition value or "
+#~ "map]"
+#~ msgstr ""
+#~ "POU®ITÍ pro vytvoøení povodí:\n"
+#~ "%s -4 el=mapa_elevace t=prahová_hodnota_bezodtokových_oblastí "
+#~ "[ov=mapa_povrchového_odtoku] [dr=mapa_smìru_odtoku] [de=mapa_depresí] "
+#~ "[ac=mapa_akumulace] [di=mapa_zobrazení] ba=mapa_povodí "
+#~ "[se=mapa_segmentÅ¼_drah_povrchového_odtoku]\n"
+#~ "\n"
+#~ "POUÅ½ITÍ pro vytvoøení souboru ARMSED:\n"
+#~ "%s [-4] el=mapa_elevace t=prahová_hodnota_bezodtokových_oblastí "
+#~ "[ov=mapa_povrchového_odtoku] [dr=mapa_smìru_odtoku] [de=mapa_depresí] "
+#~ "[ac=mapa_akumulace] [di=mapa_zobrazení] [ba=mapa_povodí] "
+#~ "[se=mapa_segmentÅ¼_drah_povrchového_odtoku] ha=mapa_polopovodí(halfbasin) "
+#~ "ar=jméno_souboru_ARMSED\n"
+#~ "\n"
+#~ "POU®ITÍ urèení délky svahu:\n"
+#~ "%s [-4] el=mapa_elevace t=prahová_hodnota_bezodtokových_oblastí "
+#~ "[dr=mapa_smìru_odtoku] [de=mapa_depresí] [ac=mapa_akumulace] "
+#~ "[di=mapa_zobrazení] [ms=maximální_délka_svahu] [ob=mapa_bariér] "
+#~ "[S=mapa_faktoru_sklonu_svahu] LS=mapa_faktoru_sklonu_a_délky_svahu "
+#~ "[r=mapa_stru¾kové_eroze] [sd=hodnota_sklonu_svahu_pøi_depozici]"
+
+#~ msgid "SECTION 3: Accumulating Surface Flow."
+#~ msgstr "ÈÁST 3: Akumulace povrchového odtoku."
+
+#~ msgid "SECTION 4: Length Slope determination."
+#~ msgstr "ÈÁST 4: Urèuji délku svahu."
+
+#~ msgid "unable to open new L map layer."
+#~ msgstr "Nelze otevøít novou mapu L (faktoru délky svahu)"
+
+#~ msgid "unable to open new S map layer."
+#~ msgstr "nemohu otevøít novou mapu S (faktor sklonu svahu)"
+
+#~ msgid "Input value: maximum length of surface flow, for USLE"
+#~ msgstr "Vstupní hodnota: maximální délka povrchového odtoku, pro USLE"
+
+#~ msgid ""
+#~ "Sorry, if any of the following options are set:\n"
+#~ "    basin, stream, half.basin, slope, or lS\n"
+#~ "    you MUST provide a value for the basin threshold parameter."
+#~ msgstr ""
+#~ "Promiòte, pokud je zadána nìkterá z následujících voleb:\n"
+#~ "    basin, stream, half.basin, slope nebo LS\n"
+#~ "    MUSÍTE zadat prahovou hodnotu povodí (basin threshold)."
+
+#~ msgid "Setting quant rules for input map(s) to (%f %f) -> (%d,%d)"
+#~ msgstr "Nastavuji kvant. pravidla pro vstupní map[y] na (%f %f) -> (%d,%d)"
+
+#~ msgid ""
+#~ "Raster map <%s> in mapset <%s> is a floating point map. Decimal values "
+#~ "will be rounded to integer!"
+#~ msgstr ""
+#~ "Mapa <%s> v mapsetu <%s> obsahuje hodnoty s plovoucí desetinnou èárkou. "
+#~ "Tyto hodnoty budou zaokrouhleny na celé èíslo!"
+
+#~ msgid "Raster File Series to MPEG Conversion Program."
+#~ msgstr "Sada rastrových souborù pro program, vytváøející MPEG."
+
+#~ msgid "Unable to find stop vector <%s>"
+#~ msgstr "Nelze nalézt koncový vektor <%s> "
+
+#~ msgid "Data range of raster map <%s> is %s to %s (entire map)"
+#~ msgstr "Rozsah dat rastrové mapy <%s> je %s a¾ %s (celá mapa)"
+
+#~ msgid "Unable to read range of raster map <%s>"
+#~ msgstr "Nelze naèíst rozsah hodnot rastrové mapy <%s>"
+
+#~ msgid "Integer data range of raster map <%s> is empty"
+#~ msgstr "Celoèíselný rozsah dat rastrové mapy <%s> je prázdný"
+
+#~ msgid "Integer data range of raster mao <%s> is %d to %d"
+#~ msgstr "Rozsah celoèíselných hodnot rastrové mapy <%s> je %d a¾ %d"
+
+#~ msgid "'%s' is not a valid rule"
+#~ msgstr "'%s' není platné pravidlo"
+
+#~ msgid ""
+#~ "Calculate the groundwater filter velocity vector field [m/s]\n"
+#~ "and write the x, and y components to maps named name_[xy]"
+#~ msgstr ""
+#~ "Vypoèítat filt rrychlosti pozemního toku vektorového pole [m/s]\n"
+#~ "a zapsat x a y èásti do map s názvem jmeno_mapy_[xy]"
+
+#~ msgid "raster, buffer"
+#~ msgstr "rastr, buffer, pásma"
+
+#~ msgid ""
+#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "Pøevede ESRI ARC/INFO ascii rastr (GRID) na (binární) rastrovou mapu."
+
+#~ msgid ""
+#~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
+#~ "raster map layer."
+#~ msgstr ""
+#~ "Pøevede binární GRASS vektorovou mapovou vrstvu (pouze body) na 3D GRASS "
+#~ "rastrovou mapovou vrstvu."
+
+#~ msgid "When printing, limit to layer specified by the layer option"
+#~ msgstr "Pøi tisku je omezení urèeno nastavením vrstvy"
+
+#~ msgid "Creates a new vector as a read-only link to OGR layer."
+#~ msgstr ""
+#~ "Vytvoøí novou vektorovou mapu jako odkaz na OGR vrstvu (pouze pro ètení)."
+
+#~ msgid "Random location perturbations of GRASS vector points"
+#~ msgstr "Náhodná odchylka location vektorových bodù"
+
+#~ msgid ""
+#~ "Parameter(s) of distribution. If the distribution is uniform, only one "
+#~ "parameter, the maximum, is needed. For a normal distribution, two "
+#~ "parameters, the mean and standard deviation, are required."
+#~ msgstr ""
+#~ "Parametr(y) rozdìlení. Pokud je rozdìlení uniformní, je potøebazadat "
+#~ "pouze maximální parametr. Pro normální rozdìlení je potøeba zadatstøední "
+#~ "hodnotu a smìrodatnou odchylku."
+
+#~ msgid "Calculate area centroids..."
+#~ msgstr "Vypoèítat centroidy plochy"
+
+#~ msgid "Vector map <%s> not found in the current mapset"
+#~ msgstr "Vektorová mapa <%s> nebyla nalezena v souèasném mapsetu"
+
+#~ msgid "Difference in x,y direction for moving feature or vertex"
+#~ msgstr "Rozdíl ve smìrech x,y pro posun prvku nebo lomového bodu"
+
+#~ msgid "vector, interpolation"
+#~ msgstr "vektor, interpolace"
+
+#~ msgid "Need either 3D vector or layer and column with z values"
+#~ msgstr ""
+#~ "Je potøeba buï 3D vektorová vrstva nebo vrstva a sloupec se z souøadnicemi"
+
+#~ msgid "Layer but not column with z values given"
+#~ msgstr "Vrstva zadána, ale ne sloupec s z souøadnicemi"
+
+#~ msgid "vector, networking"
+#~ msgstr "vektor, sí»ování"
+
+#~ msgid "Layer number (from)"
+#~ msgstr "Èíslo vrstvy (from)"
+
+#~ msgid "Layer number (to)"
+#~ msgstr "Èíslo vrstvy (to)"
+
+#~ msgid "Either 'rules' or 'col' must be specified"
+#~ msgstr "Buï 'pravidlo' nebo 'sloupec' musí být zadán"
+
+#~ msgid "vector, geometry"
+#~ msgstr "vektor, geometry"
+
+#~ msgid "Create points along input lines in new vector with 2 layers."
+#~ msgstr ""
+#~ "Vytvoøí body podél vstupních linií a ulo¾í do nového souboru o dvou "
+#~ "vrstvách."
+
+#~ msgid "%d points written to output vector map"
+#~ msgstr "%d bodù zapsáno do výstupní vektorové mapy"
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr "Vytvoøí vektorovou mapu ze souboru ASCII bodù nebo ASCII vektoru"
+
+#~ msgid "point;simple x,y[,z] list;standard;GRASS's vector ASCII format"
+#~ msgstr "point;bodový formát (x,y[,z]);standard;GRASS vektorový ASCII formát"
+
+#~ msgid "Columns"
+#~ msgstr "sloupec(ce)"
+
+#~ msgid ""
+#~ "Number of column used as y coordinate (first column is 1) for points mode"
+#~ msgstr ""
+#~ "Èíslo sloupce pou¾itého jako souøadnice y (první sloupec je 1) pro bodový "
+#~ "re¾im"
+
+#~ msgid ""
+#~ "Number of column used as z coordinate (first column is 1) for points mode"
+#~ msgstr ""
+#~ "Èíslo sloupce pou¾itého jako souøadnice z (první sloupec je 1) pro bodový "
+#~ "re¾im"
+
+#~ msgid "If 0, z coordinate is not used"
+#~ msgstr "Jestli 0, z souøadnice nebude pou¾ita"
+
+#~ msgid ""
+#~ "Number of column used as category (first column is 1) for points mode"
+#~ msgstr ""
+#~ "Èíslo sloupce pou¾itého jako categorie (první sloupec je 1) pro bodový "
+#~ "re¾im"
+
+#~ msgid ""
+#~ "If 0, unique category is assigned to each row and written to new column "
+#~ "'cat'"
+#~ msgstr ""
+#~ "Pokud 0, bude pøiøazena ka¾dému øádku unikátní kategorie a zapsána do "
+#~ "nového sloupce 'cat'."
+
+#~ msgid "Create a new empty vector map and exit. Nothing is read from input"
+#~ msgstr ""
+#~ "Vytvoøit novou prázdnou vektorovou mapu a ukonèit se. Nic nebude èteno ze "
+#~ "vstupu."
+
+#~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
+#~ msgstr "Pøevede GRASS binární vektorovou mapu do formátu GRASS ASCII."
+
+#~ msgid "Path to resulting ASCII file or ASCII vector name if '-o' is defined"
+#~ msgstr ""
+#~ "Cesta k výslednému souboru ASCII nebo jmenéno ASCII vektoru, pokud je "
+#~ "zadána volba '-o'."
+
+#~ msgid "Parameter '%s' ignored in standard mode"
+#~ msgstr "Parametr '%s' je ignorován ve standartním módu"
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "Vytváøí topologii pro vektorovou mapu GRASSu."
+
+#~ msgid "Name of input vector map containing lines"
+#~ msgstr "Vstupní mapa obsahující linie"
+
+#~ msgid "Name for output vector map where segments will be written"
+#~ msgstr "Výstupní mapa, do které budou zapsány segmenty linií"
+
+#~ msgid ""
+#~ "Calculates univariate statistics for attribute. Variance and standard "
+#~ "deviation is calculated only for points if specified."
+#~ msgstr ""
+#~ "Poèítá základní statistiky pro atributy. Variance a standardní odchylka "
+#~ "jsou poèítány pouze pokud jsou zadány body."
+
+#~ msgid "Extrudes flat vector object to 3D with defined height."
+#~ msgstr "Vytvoøí z plo¹ného vektorového objektu 3D o zadané vý¹ce"
+
+#~ msgid "vector, kernel density"
+#~ msgstr "vektor, jádrová hustota"
+
+#~ msgid "Vector map attribute column to use for comparison"
+#~ msgstr "Název sloupce atributu, který má být pou¾it pro porovnání"
+
+#~ msgid "Vector map to store differences"
+#~ msgstr "Vektorová mapa, do které budou ulo¾eny rozdíly."
+
+#~ msgid ""
+#~ "Option scaling factor for values read from raster map. Sampled values "
+#~ "will be multiplied by this factor"
+#~ msgstr ""
+#~ "Faktor mìøítka pro hodnoty pøeètené z rastrové mapy. Hodnoty budou tímto "
+#~ "faktorem pøenásobeny."
+
+#~ msgid "Vector based generalization."
+#~ msgstr "Generalizace prvkù vektorové mapy"
+
+#~ msgid "Number of vertices was reduced from %d to %d [%d%%]"
+#~ msgstr "Poèet opìrných bodù byl sní¾en z %d na %d [%d%%]"
+
+#~ msgid "Outputs basic information about a user-specified vector map."
+#~ msgstr "Vypí¹e základní informace o u¾ivatelem vybrané vektorové mapì."
+
+#~ msgid "Displaying column types/names for database connection of layer %d:"
+#~ msgstr "Zobrazí typ/jméno sloupce z databáze pøipojené na vrstvu %d:"
+
+#~ msgid "Map scale:       1:%d"
+#~ msgstr "Mapové mìøítko:       1:%d"
+
+#~ msgid "Map format:      %s"
+#~ msgstr "Formát mapy:    %s"
+
+#~ msgid "Name of creator: %s"
+#~ msgstr "Tvùrce mapy: %s"
+
+#~ msgid "Organization:    %s"
+#~ msgstr "Organizace:    %s"
+
+#~ msgid "Source date:     %s"
+#~ msgstr "Zdrojová data:    %s"
+
+#~ msgid "  Digitization threshold: %s"
+#~ msgstr "Mezní hodnota digitalizace: %s"
+
+#~ msgid "  Comments:"
+#~ msgstr "Poznámky:"
+
+#~ msgid "Convert OGR vector layers to GRASS vector map."
+#~ msgstr "Konvertuje vektorové vrstvy OGR na GRASS vektorové mapy."
+
+#~ msgid "Total area: %e (%d areas)"
+#~ msgstr "Celkem ploch: %e (%d ploch)"
+
+#~ msgid "Overlapping area: %e (%d areas)"
+#~ msgstr "Pøekrytí plochy: %e (%d ploch)"
+
+#~ msgid "Area without category: %e (%d areas)"
+#~ msgstr "PPlochy bez kategorie:%e (%d ploch)"
+
+#~ msgid "Create a new vector map layer by combining other vector map layers."
+#~ msgstr ""
+#~ "Vytvoøí nový binární vektorovou mapu kombinací více vektorových vrstev."
+
+#~ msgid "Patching vector map <%s@%s>..."
+#~ msgstr "Opravuji vektorovou mapu <%s@%s>..."
+
+#~ msgid "Attribute table column with values to interpolate"
+#~ msgstr "Tabulka atributù s hodnotami pro interpolaci"
+
+#~ msgid "No data points found"
+#~ msgstr "®ádná bodová data nenalezena"
+
+#~ msgid "Output quadrant centres, number of points is written as category"
+#~ msgstr "Výsupní støedy kvadrantù, poèet bodù bude zapsáno jako kategorie"
+
+#~ msgid "Counting sites in quadrats..."
+#~ msgstr "Poèítám body v kvadrátech..."
+
+#~ msgid "%d features written"
+#~ msgstr "%d prvkù zapsáno"
+
+#~ msgid "vector, transformation"
+#~ msgstr "vektor, transformace"
+
+#~ msgid "vector, category"
+#~ msgstr "vektorová mapa, kategorie"
+
+#~ msgid "Attach, delete or report vector categories to map geometry."
+#~ msgstr "Pøilo¾, sma¾ nebo vypi¹ vektorové kategorie dp mapové geometrie."
+
+#~ msgid ""
+#~ "add;add a new category;del;delete all categories of given layer;chlayer;"
+#~ "change layer number (e.g. layer=3,1 changes layer 3 to layer 1);sum;add "
+#~ "the value specified by cat option to the current category value;report;"
+#~ "print report (statistics), in shell style: layer type count min max;print;"
+#~ "print category values, more cats in the same layer are separated by '/'"
+#~ msgstr ""
+#~ "add; pøidat novou kategorii;del; smazat v¹echny kategorie dané vrstvy;"
+#~ "chlayer;zmìnit èíslo vrstvy(napø. layer=3,1 zmìní vrstvu 3 na 1);sum;"
+#~ "Pøidá specifickou hodnotu podle volby cat pro souèasnou hodnotu kategorii;"
+#~ "report;vypí¹e zprávu(statistiku), ve stylu shellu: typ vrstvy count min "
+#~ "max;print;vytiskni hodnotu kategorie, více kategorií ve stejné vrstvì je "
+#~ "oddìleno '/'"
+
+#~ msgid "Creates a GRASS vector map of a user-defined grid."
+#~ msgstr "Vytvoøí GRASS vektorovou mapu podle u¾ivatelem definované møí¾ky"
+
+#~ msgid "Randomly generate a 2D/3D vector points map."
+#~ msgstr "Náhodnì vytvoøit 2D/3D bodovou vektorovou vrstvu."
+
+#~ msgid "Writes Z data to column instead of 3D vector"
+#~ msgstr "Zapí¹e y-souøadnice do sloupce místo vytvoøení 3D vektoru"
+
+#~ msgid "v.random can't create 3D vector and attribute table at same time"
+#~ msgstr ""
+#~ "v.random nemù¾e vytvoøit 3D vektorovou mapu a atributovou tabulku ve "
+#~ "stejný èas"
+
+#~ msgid "vector, paint labels"
+#~ msgstr "vektor, ¹títky"
+
+#~ msgid "Copying vector objects from vector map <%s>..."
+#~ msgstr "Kopírují objekty z vektorové mapy <%s> ..."
+
+#~ msgid ""
+#~ "Threshold in map units, one value for each tool (default: 0.0[,0.0,...])"
+#~ msgstr ""
+#~ "Hranièní hodnota v mapových jednotkách, jedna honota pro ka¾dý nástroj "
+#~ "(výchozí: 0.0[,0.0,...])"
+
+#~ msgid "Copying vector lines..."
+#~ msgstr "Kopíruji vektorové linie ..."
+
+#~ msgid "%d lines / boundaries removed"
+#~ msgstr "%d linií/hranic odstanìno"
+
+#~ msgid "Duplicate area centroids: %5d"
+#~ msgstr "Duplicitní centroidy: %5d"
+
+#~ msgid "Required for operation 'connect'"
+#~ msgstr "Po¾adováno pro operaci 'spojení'"
+
+#~ msgid ""
+#~ "nodes;new point is placed on each node (line end) if doesn't exist;"
+#~ "connect;connect still unconnected points to vector network by inserting "
+#~ "new line(s);report;print to standard output {line_category "
+#~ "start_point_category end_point_category};nreport;print to standard output "
+#~ "{point_category line_category[,line_category...]}"
+#~ msgstr ""
+#~ "nodes; nový bod je umístìn na ka¾dý uzel (konec linie) pokud neexistuje;"
+#~ "connect; spojuje je¹tì nespojené body do vektorové sí»ì vlo¾ením nových "
+#~ "linií ;report; Vypí¹e na standartní výstup {kategorie_linie "
+#~ "kategorie_poèáteèního_bodu kategorie_koncového_bodu};nreport; vypí¹e na "
+#~ "standartní výstup {kategorie_bodu kategorie:linie[,kategorie_linie...]}"
+
+#~ msgid "%d new points written to output"
+#~ msgstr "%d nových bodù zapsáno do výstupní mapy"
+
+#~ msgid "Exports GRASS vector map layers to DXF file format."
+#~ msgstr "Exportuje GRASS vektory jako soubor DXF."
+
+#~ msgid "Tests for normality for points."
+#~ msgstr "Test normality bodù"
+
+#~ msgid "vector, querying"
+#~ msgstr "vektor, dotazování"
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "DOtazovat vektorovou mapu v daných locations."
+
+#~ msgid "If not given reads from standard input"
+#~ msgstr "Pokud není zadán, ète se standardní vstup"
+
+#~ msgid "Name of input vector points map"
+#~ msgstr "Název vstupní bodové vektorové vrstvy"
+
+#~ msgid "Convex hull calculation requires at least three points"
+#~ msgstr "Výpoèet konvexního obalu po¾aduje nejménì 3 body"
+
+#~ msgid "Exports a GRASS vector map to SVG."
+#~ msgstr "Exportuje GRASS vektory jako soubor SVG."
+
+#~ msgid "Layer number (write to)"
+#~ msgstr "Èíslo vrstvy (pro zapsání)"
+
+#~ msgid "Query layer number (read from)"
+#~ msgstr "Èíslo dotazované vrstvy (pro naètení)"
+
+#~ msgid "No attribute table found"
+#~ msgstr "Nebyla nalezena ¾ádná atributová tabulka"
+
+#~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
+#~ msgstr "Pøeveï GRASS vektor na formát VTK ASCII."
+
+#~ msgid "overlap;features partially or completely overlap"
+#~ msgstr "overlap; èásteèné nebo úplné pøekrytí prvkù"
+
+#~ msgid "Output surface raster map (elevation)"
+#~ msgstr "Výstupní mapa povrchu (elevace)"
+
+#~ msgid "Output cross-validation errors vector point file"
+#~ msgstr "Výstupní bodový soubor obsahující výsledné chyby køí¾ové validace"
+
+#~ msgid "Output vector map showing quadtree segmentation"
+#~ msgstr ""
+#~ "Výstupní vektorový soubor ukazující segmentaci kvadratické stromové "
+#~ "struktury"
+
+#~ msgid "Output vector map showing overlapping windows"
+#~ msgstr "Výstupní vektorový soubor ukazující pøekryv oken"
+
+#~ msgid ""
+#~ "Name of the attribute column with values to be used for approximation (if "
+#~ "layer>0)"
+#~ msgstr ""
+#~ "Název sloupce atributu, jeho¾ hodnoty mají být pou¾ity pøi interpolaci "
+#~ "(pokud layer>0)"
+
+#~ msgid ""
+#~ "Processing all selected output files\n"
+#~ "will require %d bytes of disk space for temp files"
+#~ msgstr ""
+#~ "Zpracování v¹ech vybraných výstupních souborù\n"
+#~ "bude vy¾adovat %d bytù místa na disku pro doèasné soubory"
+
+#~ msgid "Cannot write raster maps -- try to increase resolution"
+#~ msgstr "Nelze zapsat rastrové soubory -- pokuste se zvý¹it rozli¹ení"
+
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr "Konvertuje binární GRASS vektorovu mapu na GRASS rastrovou mapu."
+
+#~ msgid ""
+#~ "No features drapped. Check Your computational region and input raster map."
+#~ msgstr ""
+#~ "Nejsou vyvì¹eny ¾ádné prvky. Zkontrolujte prosím vá¹ výpoèení region a "
+#~ "vstupní rastrovou mapu."
+
+#~ msgid ""
+#~ "Creates a buffer around features of given type (areas must contain "
+#~ "centroid)."
+#~ msgstr ""
+#~ "Vytvoøí buffer okolo prvkù zadaného typu (plochy musí obsahovat centroid)"
+
+#~ msgid "This does nothing. It is retained for backwards compatibility"
+#~ msgstr "Toto nedìlá nic. Je zde ponecháno pro zpìtnou kompatibilitu"
+
+#~ msgid ""
+#~ "This is an alias to the distance option. It is retained for backwards "
+#~ "compatibility"
+#~ msgstr ""
+#~ "Toto je náhrada pro volbu vzálenosti. Je zde ponecháno pro zpìtnou "
+#~ "kompatibilitu"
+
+#~ msgid "Buffer distance in map units"
+#~ msgstr "Vzdálenost bufferu v mapových jednotkách"
+
+#~ msgid ""
+#~ "The buffer option has been replaced by the distance option and will be "
+#~ "removed in future."
+#~ msgstr ""
+#~ "Volba Buferu byla nahrazena volbou vzdálenosti  a bude v budoucnu "
+#~ "odstranìna."
+
+#~ msgid "Use the distance option instead of the buffer option."
+#~ msgstr "Pou¾ít volbu vzdálenosti místo volby buferu"
+
+#~ msgid "Converts to one of the supported OGR vector formats."
+#~ msgstr "Konvertuje mapu do jednoho z podporovaných vektorových formátù OGR."
+
+#~ msgid ""
+#~ "Export features with category (labeled) only. Otherwise all features are "
+#~ "exported"
+#~ msgstr ""
+#~ "Exportovat pouze prvky s kategoriemi (o¹títkované). V opaèném pøípadì "
+#~ "budou exportovány v¹echny prvky"
+
+#~ msgid ""
+#~ "The map contains islands. To preserve them in the output map, use the -c "
+#~ "flag"
+#~ msgstr ""
+#~ "Mapa obsahuje ostrovy. Pro jejich zachování ve výstupní mapì pou¾ijte "
+#~ "pøepínaè -c"
+
+#~ msgid ""
+#~ "Vector map <%s> is 3D. Use format specific layer creation options "
+#~ "(parameter 'lco') to export in 3D rather than 2D (default)"
+#~ msgstr ""
+#~ "Vektorová mapa <%s> je 3D. Pou¾ijte volby vytvoøení specifické vrstvy "
+#~ "(parametr 'lco') pro export ve 3D radìji ne¾ 2D (pøednastaveno)"
+
+#~ msgid "Key column '%s' not found"
+#~ msgstr "Sloupec s klíèem '%s' nebyl nalezen"
+
+#~ msgid "Exporting %i points/lines..."
+#~ msgstr "Exportuji %i body/linie..."
+
+#~ msgid "Lines buffers... "
+#~ msgstr "Bufery linií... "
+
+#~ msgid "vector, extract"
+#~ msgstr "vektor, vyjmutí"
+
+#~ msgid "Computing row %d of covariance matrix..."
+#~ msgstr "Poèítám øádek %d matice kovariance..."
+
+#~ msgid "imagery, rectify"
+#~ msgstr "obrazová datsa, rektifikace"
+
+#~ msgid "No initial camera exposure station for group [%s]"
+#~ msgstr "Není poèáteèní expozice postavení kamery pro skupinu [%s]"
+
+#~ msgid "Bad format in initial camera exposure station for group [%s]"
+#~ msgstr ""
+#~ "©patný formát v poèáteèní expozici postavení kamery pro skupinu [%s]"
+
+#~ msgid ""
+#~ "Interactively creates or modifies entries in a camera initial exposure "
+#~ "station file for imagery group referenced by a sub-block."
+#~ msgstr ""
+#~ "Interaktivnì vytvoøí nebo upraví vstupy v souboru poèáteèní expozice "
+#~ "postavení kamery pro skupinu obrazových dat podle podle sub-blokù."
+
+#~ msgid "Interactively mark fiducial or reseau points on an image."
+#~ msgstr "Interaktivnì oznaèí vzta¾né nebo sí»ové body v obraze"
+
+#~ msgid ""
+#~ "Please select the file(s) you wish to rectify by naming an output file"
+#~ msgstr ""
+#~ "Prosím vyberte soubory, které si pøejete rektifikovat pojmenováním "
+#~ "výstupního souboru"
+
+#~ msgid "No target elevation model selected for group <%s>"
+#~ msgstr "Nebyl vybrán ¾ádný model terénu pro vybranou skupinu <%s>"
+
+#~ msgid "No camera reference file selected for group <%s>"
+#~ msgstr "Nebyl vybrán ¾ádný referenèní soubor kamery pro skupinu <%s>"
+
+#~ msgid "Bad format in camera file for group <%s>"
+#~ msgstr "©patný formát souboru kamery pro skupinu <%s>"
+
+#~ msgid "Bad format in initial exposusre station file for group <%s>"
+#~ msgstr ""
+#~ "©patný formát souboru poèáteèní expozice postavení kamery pro skupinu <%s>"
+
+#~ msgid "Unable to determine raster cell type"
+#~ msgstr "Nelze zjistit typ rastrové (cell) mapy."
