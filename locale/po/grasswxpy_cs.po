@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-26 19:45+0100\n"
-"PO-Revision-Date: 2009-02-24 10:46+0100\n"
+"PO-Revision-Date: 2010-03-07 14:25+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr "Pøekreslit mapu"
 
 #: ../gui/wxpython/icons/icon.py:144
 msgid "Force re-rendering of all layers"
-msgstr "Vynutit pøekreslení v¹ech vrstev"
+msgstr "Vynutit pøekreslení v¹ech mapových vrstev"
 
 #: ../gui/wxpython/icons/icon.py:146
 msgid "Erase display"
@@ -93,13 +93,12 @@ msgid "Display zoom management"
 msgstr "Správa zvìt¹ování displeje"
 
 #: ../gui/wxpython/icons/icon.py:167
-#, fuzzy
 msgid "Add map elements"
-msgstr "Pøidat legendu"
+msgstr "Pøidat mapové prvky"
 
 #: ../gui/wxpython/icons/icon.py:168
 msgid "Overlay elements like scale and legend onto map"
-msgstr ""
+msgstr "Pøilo¾it mapové prvky jako mìøítko a legendu do mapy"
 
 #: ../gui/wxpython/icons/icon.py:170
 msgid "Add scalebar and north arrow"
@@ -107,12 +106,11 @@ msgstr "Mìøítko a smìrová rù¾ice"
 
 #: ../gui/wxpython/icons/icon.py:172
 msgid "Add legend"
-msgstr "Pøidat legendu"
+msgstr "Legenda"
 
 #: ../gui/wxpython/icons/icon.py:174
-#, fuzzy
 msgid "Save display to graphic file"
-msgstr "Ulo¾it kompozici displeje do souboru PNG"
+msgstr "Ulo¾it kompozici displeje do souboru"
 
 #: ../gui/wxpython/icons/icon.py:176
 #: ../gui/wxpython/gui_modules/mapdisp.py:1249
@@ -163,11 +161,11 @@ msgstr "Pøidat vrstvu se skupinou"
 
 #: ../gui/wxpython/icons/icon.py:198
 msgid "Add grid or vector labels overlay"
-msgstr "Pøidat pøekrytí popisky vektoru nebo rastru"
+msgstr "Pøidat vrstvu s popisky nebo møí¾kou"
 
 #: ../gui/wxpython/icons/icon.py:200
 msgid "Delete selected layer"
-msgstr "Odstranit zvolenou vrstvu"
+msgstr "Odstranit vybranou vrstvu"
 
 #: ../gui/wxpython/icons/icon.py:202
 msgid "Quit"
@@ -208,7 +206,7 @@ msgstr "Pøidat tématickou vrstvu s grafem"
 
 #: ../gui/wxpython/icons/icon.py:220
 msgid "Add grid layer"
-msgstr "Pøidat vrstvu s møí¾kou"
+msgstr "Pøidat vrstvu s møí¾kou (grid)"
 
 #: ../gui/wxpython/icons/icon.py:222
 msgid "Add geodesic line layer"
@@ -233,7 +231,7 @@ msgstr "Pøidat 3D rastrovou mapu"
 
 #: ../gui/wxpython/icons/icon.py:233
 msgid "Digitize new point"
-msgstr "Digitalizovat nový bod"
+msgstr "Pøidat nový bod"
 
 #: ../gui/wxpython/icons/icon.py:234 ../gui/wxpython/icons/icon.py:243
 msgid "Left: new point"
@@ -241,7 +239,7 @@ msgstr "Levé: nový bod"
 
 #: ../gui/wxpython/icons/icon.py:236
 msgid "Digitize new line"
-msgstr "Digitalizovat novou linii"
+msgstr "Pøidat novou linii"
 
 #: ../gui/wxpython/icons/icon.py:237 ../gui/wxpython/icons/icon.py:240
 #: ../gui/wxpython/icons/icon.py:261
@@ -250,11 +248,11 @@ msgstr "Levé: nový bod; Støední: Zpìt poslední bod; Pravé: uzavøít linii"
 
 #: ../gui/wxpython/icons/icon.py:239
 msgid "Digitize new boundary"
-msgstr "Digitalizovat novou hranici"
+msgstr "Pøidat novou hranici"
 
 #: ../gui/wxpython/icons/icon.py:242
 msgid "Digitize new centroid"
-msgstr "Digitalizovat nový centroid"
+msgstr "Pøidat nový centroid"
 
 #: ../gui/wxpython/icons/icon.py:245
 msgid "Add new vertex"
@@ -290,7 +288,7 @@ msgstr "Zobrazit/aktualizovat kategorie"
 
 #: ../gui/wxpython/icons/icon.py:260
 msgid "Edit line/boundary"
-msgstr "Editovat linii/hranici"
+msgstr "Upravit linii/hranici"
 
 #: ../gui/wxpython/icons/icon.py:263
 msgid "Move feature(s)"
@@ -343,7 +341,7 @@ msgstr "Mìøení vzdálenosti"
 
 #: ../gui/wxpython/icons/icon.py:292
 msgid "Draw transect in map display window to profile"
-msgstr "vykreslit transekt profilu v displeji "
+msgstr "Vykreslit transekt profilu v displeji "
 
 #: ../gui/wxpython/icons/icon.py:294
 msgid "Profile surface map"
@@ -363,7 +361,7 @@ msgstr "Vytvoøit histogram obrazu nebo rastrového souboru"
 
 #: ../gui/wxpython/icons/icon.py:302
 msgid "Select font"
-msgstr "Vybrat font"
+msgstr "Zvolit font"
 
 #: ../gui/wxpython/icons/icon.py:304
 msgid "Select color"
@@ -395,7 +393,7 @@ msgstr "Georektifikace"
 
 #: ../gui/wxpython/icons/icon.py:316
 msgid "Recalculate RMS error"
-msgstr "pøepoèítat RMS (støední kvadratickou) chybu"
+msgstr "pøepoèítat RMS (støední kvadratickou chybu)"
 
 #: ../gui/wxpython/icons/icon.py:318
 msgid "Redraw GCP markers in map displays"
@@ -415,7 +413,7 @@ msgstr "Odstranit vybrané vlicovací body"
 
 #: ../gui/wxpython/icons/icon.py:326
 msgid "Clear selected GCP"
-msgstr "vyèistit vybraný vlicovací bod"
+msgstr "Vymazat vybrané vlicovací bod"
 
 #: ../gui/wxpython/icons/icon.py:328
 msgid "Reload GCPs from selected POINTS file"
@@ -461,7 +459,7 @@ msgstr "Vybrat vektorovou mapu:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:122
 msgid "replace existing color table"
-msgstr "Zmìnit barevnou tabulku"
+msgstr "nahradit stávající barevnou tabulku"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:128
 msgid "Layer:"
@@ -473,7 +471,7 @@ msgstr "Atributový sloupec:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:132
 msgid "RGB color column:"
-msgstr "Sloupec barev RGB:"
+msgstr "Sloupec s RGB hodnotami:"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:161
 msgid "Preview"
@@ -487,7 +485,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/colorrules.py:468
 msgid "Please select attribute column and RGB color column first"
-msgstr "Prosím vyberte sloupec a atributy sloupec s barvami RGB jako první"
+msgstr "Prosím nejdøíve vyberte atributový sloupec  a sloupec s RGB hodnotami"
 
 #: ../gui/wxpython/gui_modules/menuform.py:142
 #: ../gui/wxpython/gui_modules/menuform.py:1462
@@ -518,9 +516,8 @@ msgid "Parameter %(name)s (%(desc)s) is missing.\n"
 msgstr "Parametr %(name)s (%(desc)s) chybí.\n"
 
 #: ../gui/wxpython/gui_modules/menuform.py:724
-#, fuzzy
 msgid "Enter parameters for '"
-msgstr "Definujte parametry pro "
+msgstr "Definujte parametry pro '"
 
 #: ../gui/wxpython/gui_modules/menuform.py:735
 #, fuzzy
@@ -561,7 +558,7 @@ msgstr "Zavøít dialog pøi ukonèení"
 #: ../gui/wxpython/gui_modules/menuform.py:954
 #, python-format
 msgid "'%s' copied to clipboard"
-msgstr "'%s' kopírováno do schránky"
+msgstr "'%s' zkopírováno do schránky"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1014
 #: ../gui/wxpython/gui_modules/menuform.py:1027
@@ -581,7 +578,7 @@ msgstr "Výstup pøíkazù"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1065
 msgid "Manual"
-msgstr "Nápovìda"
+msgstr "Manuálová stránka"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1164
 msgid "[multiple]"
@@ -650,7 +647,7 @@ msgstr "Nelze získat popis rozhraní pro pøíkaz '%s'."
 #: ../gui/wxpython/gui_modules/menuform.py:1961
 #, python-format
 msgid "Unable to parse command %s"
-msgstr "Nelze parsovat pøíkaz %s"
+msgstr "Nelze spustit pøíkaz %s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:2054
 #, python-format
@@ -659,7 +656,7 @@ msgstr "pou¾ití: %s <grass pøíkaz>"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:141
 msgid "Define GRASS Database and Location Name"
-msgstr "Definovat Databanku GRASSu a Název Lokace"
+msgstr "Definovat Databanku GRASSu a Název Location"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:155
 #: ../gui/wxpython/gis_set.py:105
@@ -668,20 +665,20 @@ msgstr "Adresáø GIS dat:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:171
 msgid "Project Location"
-msgstr "Lokace projektu"
+msgstr "Location projektu"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:209
 msgid "Choose GRASS data directory:"
-msgstr "Vybrat adresáø GRASS dat:"
+msgstr "Vybrat adresáø s GRASS daty:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:220
 #: ../gui/wxpython/gui_modules/location_wizard.py:1957
 msgid "Location already exists in GRASS Database."
-msgstr "Lokace ji¾ existuje v databance GRASSu."
+msgstr "Location ji¾ existuje v databance GRASSu."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:223
 msgid "Unable to create location"
-msgstr "Nelze vytvoøit lokaci"
+msgstr "Nelze vytvoøit location"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:227
 #: ../gui/wxpython/gui_modules/location_wizard.py:566
@@ -740,34 +737,31 @@ msgstr "Chyba"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:249
 msgid "Choose method for creating a new location"
-msgstr "Zvolte zpùsob vytvoøení nové lokace"
+msgstr "Zvolte zpùsob vytvoøení nové location"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:256
-#, fuzzy
 msgid "Select coordinate system parameters from a list"
-msgstr "Zvolit souøadnicový systém"
+msgstr "Zvolit parametry souøadného systému ze seznamu"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:259
-#, fuzzy
 msgid "Select EPSG code of spatial reference system"
-msgstr "Zvolit EPSG kód souøadnicového systému"
+msgstr "Zvolit EPSG kód souøadného systému"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:261
 msgid "Read projection and datum terms from a georeferenced data file"
-msgstr ""
+msgstr "Naèíst projekci a datum z ji¾ georeferencovaného souboru"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:264
 msgid "Read projection and datum terms from a WKT or PRJ file"
-msgstr ""
+msgstr "Naèíst projekci a datum ze souboru typu WTK nebo PRJ"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:267
 msgid "Specify projection and datum terms using custom PROJ.4 parameters"
-msgstr ""
+msgstr "Urèit vlastní projekci a datum s pou¾itím PROJ.4 parametrù"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:270
-#, fuzzy
 msgid "Create an arbitrary non-earth coordinate system (XY)"
-msgstr "Pou¾ít matematický systém (XY)"
+msgstr "Pou¾ít matematický systém XY (kartézské souøadnice)"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:359
 msgid "Choose projection"
@@ -803,34 +797,30 @@ msgid "Unable to read list: %s"
 msgstr "Nelze naèíst seznam: %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:672
-#, fuzzy
 msgid "Choose projection parameters"
-msgstr "Vybrat projekci"
+msgstr "Vyberte parametry projekce"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:685
-#, fuzzy
 msgid "Select datum or ellipsoid (next page)"
-msgstr "Vybrat geodetické datum daného elipsoidu"
+msgstr "Vybrat geodetické datum nebo elipsoid (dal¹í strana)"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:691
-#, fuzzy
 msgid "Datum with associated ellipsoid"
-msgstr "Vybrat geodetické datum daného elipsoidu"
+msgstr "Datum související s daným vybraným elipsoidem"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:694
-#, fuzzy
 msgid "Ellipsoid only"
-msgstr "Elipsoid"
+msgstr "Pouze elipsoid"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:751
 #, python-format
 msgid "You must enter a value for %s"
-msgstr ""
+msgstr "Musíte vlo¾it hodnoty pro %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:763
-#, fuzzy, python-format
+#, python-format
 msgid " Enter parameters for %s projection "
-msgstr "Definujte parametry pro "
+msgstr "Definujte parametry pro %s projekci"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:804
 #, fuzzy
@@ -855,7 +845,7 @@ msgstr "Kód datumu:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1020
 msgid "Specify ellipsoid"
-msgstr "Definovat elipsoid"
+msgstr "Vyberte elipsoid"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1048
 msgid "Ellipsoid code:"
@@ -864,7 +854,7 @@ msgstr "Kód elipsoidu:"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1138
 #: ../gui/wxpython/gui_modules/location_wizard.py:1197
 msgid "Select georeferenced file"
-msgstr "Zvolit georeferencovaný soubor"
+msgstr "Zvolte georeferencovaný soubor"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1143
 msgid "Georeferenced file:"
@@ -873,15 +863,15 @@ msgstr "Georeferencovaný soubor:"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1216
 #: ../gui/wxpython/gui_modules/location_wizard.py:1272
 msgid "Select WKT file"
-msgstr "Vybrat WTK soubor"
+msgstr "Vyberte WTK soubor"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1221
 msgid "WKT file:"
-msgstr "soubor WTK:"
+msgstr "Soubor WTK:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1291
 msgid "Choose EPSG Code"
-msgstr "Zvolit EPSG kód"
+msgstr "Zvolte EPSG kód"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1299
 msgid "Path to the EPSG-codes file:"
@@ -898,20 +888,20 @@ msgstr "Parametry"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1458
 msgid "Choose EPSG codes file"
-msgstr "Vybrat soubor s EPSG kódy"
+msgstr "Vyberte soubor s EPSG kódy"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1486
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to read EPGS codes: %s"
-msgstr "Nelze naèíst seznam: %s"
+msgstr "Nelze naèíst seznam EPSG kódù: %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1506
 msgid "Choose method of specifying georeferencing parameters"
-msgstr "Zvolit metodu specifikace parametrù georeference"
+msgstr "Zvolte metodu nebo specifikujte parametry georeference"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1514
 msgid "Enter PROJ.4 parameters string:"
-msgstr "Zvolte PROJ.4 parametry:"
+msgstr "Vlo¾te PROJ.4 parametry:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1567
 #: ../gui/wxpython/gui_modules/location_wizard.py:1571
@@ -928,7 +918,7 @@ msgstr "GRASS databanka:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1623
 msgid "Location Name:"
-msgstr "Název lokace:"
+msgstr "Název location:"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1629
 msgid "Projection:"
@@ -941,15 +931,15 @@ msgstr "Definice PROJ.4:"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1720
 #, python-format
 msgid "Do you want to create GRASS location <%s>?"
-msgstr "Pøejete si zalo¾it GRASS lokace <%s>?"
+msgstr "Pøejete si zalo¾it GRASS location <%s>?"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1721
 msgid "Create new location?"
-msgstr "Vytvoøit novou lokaci?"
+msgstr "Vytvoøit novou location?"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1763
 msgid "Define new GRASS Location"
-msgstr "Definujte novou GRASS lokaci"
+msgstr "Definujte novou GRASS location"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1846
 msgid "Do you want to set the default region extents and resolution now?"
@@ -958,29 +948,32 @@ msgstr "Pøejete si nyní nastavit výchozí nastavení regionu a jeho rozli¹ení?"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1848
 #, python-format
 msgid "Location <%s> created"
-msgstr "Lokcation <%s> vytvoøena"
+msgstr "Location <%s> vytvoøena"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1861
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to create new location. Location <%(loc)s> not created.\n"
 "\n"
 "Details: %(err)s"
-msgstr "Nelze vytvoøit novou location. Location <%s> není vytvoøena"
+msgstr ""
+"Nelze vytvoøit novou location. Location <%(loc)s> nebyla vytvoøena.\n"
+"\n"
+"Detaily: %(err)s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1866
 #: ../gui/wxpython/gui_modules/location_wizard.py:1872
 #: ../gui/wxpython/gis_set.py:134
 msgid "Location wizard"
-msgstr "Prùvodce vytvoøení lokace"
+msgstr "Prùvodce vytvoøením location"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1870
 msgid "Location wizard canceled. Location not created."
-msgstr "Prùvodce vytvoøením lokace byl zavøen. Lokace nebyla vytvoøena."
+msgstr "Prùvodce vytvoøením location byl zavøen. Location nebyla vytvoøena."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1955
 msgid "Unable to create new location"
-msgstr "Nelze vytvoøit novou lokaci"
+msgstr "Nelze vytvoøit novou location"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1978
 #, python-format
@@ -988,11 +981,12 @@ msgid ""
 "Location <%(loc)s> will be created in GIS data directory <%(dir)s>.You will "
 "need to change the default GIS data directory in the GRASS startup screen."
 msgstr ""
+"Location <%(loc)s> bude vytvoøena v adresáøi s GIS daty <%(dir)s>. Je "
+"potøeba zmìnit výchozí adresáø s GIS daty na úvodní obrazovce."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1983
-#, fuzzy
 msgid "New GIS data directory"
-msgstr "Adresáø GIS dat:"
+msgstr "Nový adresáø GIS dat"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2144
 msgid "EPSG code missing."
@@ -1000,9 +994,8 @@ msgstr "Kód EPSG chybí."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2168
 #: ../gui/wxpython/gui_modules/location_wizard.py:2192
-#, fuzzy
 msgid "File not found."
-msgstr "soubor nebyl nalezen"
+msgstr "Soubor nebyl nalezen."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2211
 msgid "Set default region extent and resolution"
@@ -1010,11 +1003,11 @@ msgstr "Nastavit výchozí region a jeho rozli¹ení"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2258
 msgid "&Set region"
-msgstr "&Nastavit region"
+msgstr "Nastavit &region"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2288
 msgid "Invalid location selected."
-msgstr "Zvolena neplatná lokace."
+msgstr "Zvolena neplatná location."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2305
 msgid "Invalid region"
@@ -1060,15 +1053,15 @@ msgstr "3D buòky: %d"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2406
 msgid "Top"
-msgstr "Vr¹ek"
+msgstr "Horní"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2414
 msgid "Bottom"
-msgstr "Spodek"
+msgstr "Spodní"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2422
 msgid "T-B resolution"
-msgstr "Rozli¹ení V-S"
+msgstr "Rozli¹ení H-S"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2485
 msgid "North"
@@ -1097,16 +1090,15 @@ msgstr "Rozli¹ení V-Z"
 #: ../gui/wxpython/gui_modules/location_wizard.py:2612
 #, python-format
 msgid "Invalid value: %s"
-msgstr "Naplatná hodnota: %s"
+msgstr "Neplatná hodnota: %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2696
 msgid "Select datum transformation"
-msgstr "Vybrat geodetické datum"
+msgstr "Vyberte transofrmaci datumu"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2721
-#, fuzzy
 msgid "Select from list of datum transformations"
-msgstr "Seznam geodetických datumù"
+msgstr "Vyberte ze seznamu transofrmací datumu"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:105
 #, fuzzy
@@ -1131,7 +1123,7 @@ msgstr "Vybrat typ mapy a location/mapset"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:188
 msgid "Name for new vector map:"
-msgstr "Název vektorové mapy:"
+msgstr "Název nové vektorové mapy:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:194
 msgid "Create attribute table"
@@ -1214,8 +1206,8 @@ msgid ""
 "Drag text with mouse in pointer mode to position.\n"
 "Double-click to change options"
 msgstr ""
-"Pøesuòte my¹í (v módu ukazatele) na novou pozici. Dvojklik pro zmìnu "
-"nastavení."
+"Pøesuòte my¹í (v módu ukazatele) na novou pozici.\n"
+"Dvojklik pro zmìnu nastavení."
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:731
 #, fuzzy
@@ -1262,11 +1254,11 @@ msgstr "Zru¹it výbìr"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:932
 msgid "Multiple import"
-msgstr "Vícenásobný import"
+msgstr "Hromadný import"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:945
 msgid "Input DXF file"
-msgstr "Vlo¾it DXF soubor"
+msgstr "Vstupní DXF soubor"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:947
 msgid "Input directory"
@@ -1283,7 +1275,7 @@ msgstr "Vyberte soubor DXF:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:961
 msgid "Choose DXF file to import"
-msgstr "Vyberte soubor DXF k importu"
+msgstr "Vyberte soubor DXF pro import"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:967
 msgid "Choose directory:"
@@ -1298,14 +1290,13 @@ msgid "Select file extension:"
 msgstr "Vyberte pøíponu souboru:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:992
-#, fuzzy
 msgid "Add linked layers into layer tree"
-msgstr "Naèíst importované vrstvy do stromu vrstev"
+msgstr "Pøidat pøipojené vrstvy do stromu vrstev"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:994
 #: ../gui/wxpython/gui_modules/ogc_services.py:69
 msgid "Add imported layers into layer tree"
-msgstr "Naèíst importované vrstvy do stromu vrstev"
+msgstr "Pøidat importované vrstvy do stromu vrstev"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:998
 msgid "Override projection (use location's projection)"
@@ -1324,14 +1315,12 @@ msgid "Close dialog"
 msgstr "Zavøít dialog "
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1016
-#, fuzzy
 msgid "&Link"
-msgstr "Linie"
+msgstr "&Pøipojit"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1017
-#, fuzzy
 msgid "Link selected layers"
-msgstr "Importovat vybrané vrstvy"
+msgstr "Pøipojit vybrané vrstvy"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1019
 #: ../gui/wxpython/gui_modules/ogc_services.py:85
@@ -1360,9 +1349,8 @@ msgid "Layer name"
 msgstr "Název vrstvy"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1243
-#, fuzzy
 msgid "Name for GRASS map"
-msgstr "Název vektorové mapy:"
+msgstr "Název mapové vrstvy"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1325
 msgid "Set Map Layer Opacity"
@@ -1378,7 +1366,7 @@ msgstr "Neprùhledný"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:90
 msgid "GRASS GIS - Map display"
-msgstr "GRASS GIS Mapové okno: "
+msgstr "GRASS GIS - Mapové okno"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:167
 msgid "Render"
@@ -1386,11 +1374,11 @@ msgstr "Vykreslit"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:172
 msgid "Enable/disable auto-rendering"
-msgstr "Zapnout/vypnout automatické vykreslování"
+msgstr "Zapnout/vypnout automatické pøekreslování"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:175
 msgid "Show computational extent"
-msgstr "Zobrazit rozsah výpoèetního regionu "
+msgstr "Zobrazit meze výpoèetního regionu "
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:180
 msgid ""
@@ -1398,9 +1386,10 @@ msgid ""
 "drawn as a blue box inside the computational region, computational region "
 "inside a display region as a red box)."
 msgstr ""
-"Ukázat/skrýt výpoèetní region (nastaven pomocí g.region). Zobrazený region "
-"bude vykreslen jako modrý rámeèek uvnitø výpoèetního regionu, výpoèetní "
-"region bude zobrazen jako èervený rámeèek uvnitø zobrazeného regionu."
+"Ukázat/skrýt meze výpoèetního regionu (nastaven pomocí g.region). Zobrazený "
+"region bude vykreslen jako modrý rámeèek uvnitø výpoèetního regionu, "
+"výpoèetní region bude zobrazen jako èervený rámeèek uvnitø zobrazeného "
+"regionu."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:188
 #: ../gui/wxpython/gui_modules/preferences.py:1114
@@ -1434,7 +1423,7 @@ msgstr "Nástrojová li¹ta pro správu mapy"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:331
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:501
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to start vector digitizer.\n"
 "The VDigit python extension was not found or loaded properly.\n"
@@ -1442,8 +1431,9 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
-"Nelze spustit Nviz. Roz¹íøení Pythonu pro Nviz nebylo nalezeno nebo naèteno "
-"správnì. Pøepínám zpìt do 2D zobrazení.\n"
+"Nelze spustit vektorovou digitalizaci. \n"
+"Roz¹íøení Pythonu pro VDigit nebylo nalezeno nebo naèteno správnì.\n"
+"Pøepínám zpìt do 2D zobrazení.\n"
 "\n"
 "Detaily: %s"
 
@@ -1458,14 +1448,14 @@ msgstr "2D pohled"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:352
 msgid "Vector digitizer toolbar"
-msgstr "Nástrojová li¹ta pro vektorový digitizér"
+msgstr "Nástrojová li¹tavektorové digitalizace"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:370
 msgid "Georectification toolbar"
 msgstr "Nástrojová li¹ta pro georektifikaci"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:382
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to switch to 3D display mode.\n"
 "The GLCanvas class has not been included with this build of wxPython!\n"
@@ -1473,13 +1463,14 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
-"Nelze spustit Nviz. Tøída GlCanvas nebyla  vlo¾ena pøi sestavení WxPython! "
-"Pøepínám zpìt do 2D zobrazení.\n"
+"Nelze pøepnout do 3D pohled.\n"
+"Tøída GlCanvas nebyla  vlo¾ena pøi sestavení WxPython!\n"
+" Pøepínám zpìt do 2D zobrazení.\n"
 "\n"
 "Detaily: %s"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:387
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to switch to 3D display mode.\n"
 "The Nviz python extension was not found or loaded properly.\n"
@@ -1487,8 +1478,9 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
-"Nelze spustit Nviz. Roz¹íøení Pythonu pro Nviz nebylo nalezeno nebo naèteno "
-"správnì. Pøepínám zpìt do 2D zobrazení.\n"
+"Nelze spustit 3D pohled.\n"
+"Roz¹íøení Pythonu pro Nviz nebylo nalezeno nebo naèteno správnì.\n"
+"Pøepínám zpìt do 2D zobrazení.\n"
 "\n"
 "Detaily: %s"
 
@@ -1524,17 +1516,15 @@ msgstr "Nastavení stránky"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1245
 msgid "Print preview"
-msgstr "Náhled"
+msgstr "Náhled tisku"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1347
-#, fuzzy
 msgid "No raster or vector map layer selected for querying."
 msgstr "Nebyla vybrána ¾ádná vektorová mapa pro dotazování."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1348
-#, fuzzy
 msgid "No map layer selected"
-msgstr "Nebyla vybrána ¾ádná mapová vrstva pro dotazování."
+msgstr "Nebyla vybrána ¾ádná mapová vrstva"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1444
 msgid "No vector map selected for querying."
@@ -1542,13 +1532,12 @@ msgstr "Nebyla vybrána ¾ádná vektorová mapa pro dotazování."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1445
 #: ../gui/wxpython/gui_modules/mapdisp.py:1453
-#, fuzzy
 msgid "Vector querying"
-msgstr "Nastavení vektorù"
+msgstr "Dotazování vektorù"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1452
 msgid "Only vector map from the current mapset can be modified."
-msgstr ""
+msgstr "Upravována mù¾e být pouze vektorová mapa z aktuálního mapsetu"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1522
 msgid "Query raster/vector map(s) (display mode)"
@@ -1569,7 +1558,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1675
 msgid "Measuring distance"
-msgstr "Mìøená vzdálenost"
+msgstr "Mìøení vzdálenosti"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1679
 msgid "Measuring distance:"
@@ -1618,7 +1607,7 @@ msgstr "Nastavit výpoèetní region podle aktuálního zobrazení"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1971
 msgid "Save display geometry to named region"
-msgstr "Ulo¾it zobrazený region jako pojmenovaný region"
+msgstr "Ulo¾it aktuální zobrazení jako pojmenovaný region"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:2069
 msgid "GRASS GIS Map Display: "
@@ -1630,16 +1619,15 @@ msgstr "Zlom segmentu"
 
 #: ../gui/wxpython/gui_modules/preferences.py:535
 msgid "Collapse all except PERMANENT and current"
-msgstr "Zabalit v¹echny kromì PERMANENT a souèasný"
+msgstr "Zabalit v¹echny kromì PERMANENT a aktuální mapset"
 
 #: ../gui/wxpython/gui_modules/preferences.py:536
 msgid "Collapse all except PERMANENT"
-msgstr "Zabalit v¹ehcny kromì PERMANENT"
+msgstr "Zabalit v¹echny kromì PERMANENT mapset"
 
 #: ../gui/wxpython/gui_modules/preferences.py:537
-#, fuzzy
 msgid "Collapse all except current"
-msgstr "Zabalit v¹echny kromì PERMANENT a souèasný"
+msgstr "Zabalit v¹echny kromì aktuální mapset"
 
 #: ../gui/wxpython/gui_modules/preferences.py:538
 msgid "Collapse all"
@@ -1664,7 +1652,7 @@ msgstr "rám"
 
 #: ../gui/wxpython/gui_modules/preferences.py:564
 msgid "sphere"
-msgstr "zemìkoule"
+msgstr "koule"
 
 #: ../gui/wxpython/gui_modules/preferences.py:565
 msgid "cube"
@@ -1684,7 +1672,7 @@ msgstr "ctree"
 
 #: ../gui/wxpython/gui_modules/preferences.py:569
 msgid "aster"
-msgstr "astr"
+msgstr "astra"
 
 #: ../gui/wxpython/gui_modules/preferences.py:570
 msgid "gyro"
@@ -1734,18 +1722,18 @@ msgstr "U¾ivatelské nastavení grafického prostøedí"
 
 #: ../gui/wxpython/gui_modules/preferences.py:861
 msgid "Set to default"
-msgstr "Nastavit výchozí"
+msgstr "Nastavit na výchozí nastavení"
 
 #: ../gui/wxpython/gui_modules/preferences.py:869
 msgid "Revert settings to default and apply changes"
-msgstr "Znovu nastavit výchozí nastavení a aplikovat"
+msgstr "Znovu nastavit výchozí nastavení a ulo¾it"
 
 #: ../gui/wxpython/gui_modules/preferences.py:871
 #: ../gui/wxpython/gui_modules/georect.py:1736
 #: ../gui/wxpython/gui_modules/profile.py:1035
 #: ../gui/wxpython/gui_modules/profile.py:1380
 msgid "Apply changes for the current session"
-msgstr "Aplikovat zmìny jen pro tuto seanci"
+msgstr "Aplikovat zmìny jen pro toto spu¹tìní"
 
 #: ../gui/wxpython/gui_modules/preferences.py:873
 #: ../gui/wxpython/gui_modules/georect.py:1738
@@ -1755,8 +1743,8 @@ msgstr "Aplikovat zmìny jen pro tuto seanci"
 msgid ""
 "Apply and save changes to user settings file (default for next sessions)"
 msgstr ""
-"Aplikovat a ulo¾it zmìny do souboru s u¾ivatelským nastavením (jako výchozí "
-"pro dal¹í seance)"
+"Ulo¾it zmìny do souboru s u¾ivatelským nastavením (jako výchozí pro dal¹í "
+"seance)"
 
 #: ../gui/wxpython/gui_modules/preferences.py:876
 #: ../gui/wxpython/gui_modules/georect.py:1741
@@ -1781,7 +1769,7 @@ msgstr "Seznam prvkù"
 
 #: ../gui/wxpython/gui_modules/preferences.py:942
 msgid "Save current window layout as default"
-msgstr "Ulo¾it aktuální nastavení okna jako výchozí"
+msgstr "Ulo¾it aktuální nastavení oken jako výchozí"
 
 #: ../gui/wxpython/gui_modules/preferences.py:945
 msgid ""
@@ -1789,19 +1777,19 @@ msgid ""
 "Display window(s) and use as default for next sessions."
 msgstr ""
 "Ulo¾it aktuální pozici a velikost okna Správa vrstev a mapový displej a "
-"pou¾ít jako výchozí pøi pøí¹tí seanci."
+"pou¾ít jako výchozí pøi pøí¹tích spu¹tìní."
 
 #: ../gui/wxpython/gui_modules/preferences.py:958
 msgid "Layer Manager settings"
-msgstr "Obecné nastavení"
+msgstr "Nastavení okna Správy vrstev"
 
 #: ../gui/wxpython/gui_modules/preferences.py:970
 msgid "Ask when removing map layer from layer tree"
-msgstr "Zeptat se pøi odstraòování mapy ze seznamu vrstev"
+msgstr "Zeptat se pøi odstraòování mapy ze stromu vrstev"
 
 #: ../gui/wxpython/gui_modules/preferences.py:980
 msgid "Ask when quiting wxGUI or closing display"
-msgstr "Zeptat se pøi ukonèení wxGUI nebo pøi ukonèení displeje"
+msgstr "Zeptat se pøi ukonèení wxGUI nebo pøi zavírání displeje"
 
 #: ../gui/wxpython/gui_modules/preferences.py:999
 #: ../gui/wxpython/gui_modules/vdigit.py:1238
@@ -1833,7 +1821,7 @@ msgstr "Ovladaè displeje:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1075
 msgid "Statusbar mode:"
-msgstr "mód stavové li¹ty:"
+msgstr "Výchozí zobrazení na stavové li¹tì:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1095
 #: ../gui/wxpython/gui_modules/nviz_tools.py:262
@@ -1851,7 +1839,7 @@ msgstr "Nelze nastavit zoom podle rastrové mapy <%s>."
 
 #: ../gui/wxpython/gui_modules/preferences.py:1162
 msgid "Command"
-msgstr "Pøíkazù"
+msgstr "Pøíkazy"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1165
 msgid "Command dialog settings"
@@ -1859,11 +1847,11 @@ msgstr "Dialog nastavení pøíkazù"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1207
 msgid "Verbosity level:"
-msgstr "Úroveò verbalismu:"
+msgstr "Úroveò upovídanosti pøíkazù:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1226
 msgid "Raster settings"
-msgstr "Nastavení rastrù"
+msgstr "Nastavení rastru"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1237
 msgid "Make null cells opaque"
@@ -1897,22 +1885,20 @@ msgid "Color:"
 msgstr "Barva:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1326
-#, fuzzy
 msgid "Line width (in pixels):"
-msgstr "©íøka linie (v pixelech)"
+msgstr "©íøka linie (v pixelech):"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1349
 msgid "Data browser"
 msgstr "Datový prohlí¾eè"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1354
-#, fuzzy
 msgid "Left mouse double click:"
-msgstr "Dvojklik levých tlaèítkem my¹i"
+msgstr "Dvojklik levých tlaèítkem my¹i:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1366
 msgid "Encoding (e.g. utf-8, ascii, iso8859-1, koi8-r):"
-msgstr ""
+msgstr "Kódování atributù (napø. utf-8, ascii, iso8859-1, Windows-1250):"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1377
 msgid "Ask when deleting data record(s) from table"
@@ -1923,9 +1909,8 @@ msgid "Create table"
 msgstr "Vytvoøit tabulku"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1405
-#, fuzzy
 msgid "Key column:"
-msgstr "Sloupec s klíèem"
+msgstr "Sloupec s klíèem:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1431
 #: ../gui/wxpython/gui_modules/globalvar.py:109
@@ -1984,16 +1969,16 @@ msgstr "Naèítám pracovní oblast"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1581
 msgid "Suppress positioning Map Display Window(s)"
-msgstr "Potlaèit pozici okna Mapového displeje"
+msgstr "Zachovat pozici okna Mapového displeje"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1592
 msgid "Suppress positioning Layer Manager window"
-msgstr "Potlaèit pozici okna Správce vrstev"
+msgstr "Zachovat pozici okna Správce vrstev"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1610
 #: ../gui/wxpython/gui_modules/dbm.py:751
 msgid "Advanced"
-msgstr "Roz¹íøený"
+msgstr "Roz¹íøené"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1613
 msgid "Advanced settings"
@@ -2051,7 +2036,7 @@ msgstr "Vybrat font:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:2061
 msgid "Set/unset access to mapsets in current location"
-msgstr "Nastavit/zru¹it pøístup k mapsetùm v aktuální lokaci"
+msgstr "Nastavit/zru¹it pøístup k mapsetùm v aktuální location"
 
 #: ../gui/wxpython/gui_modules/preferences.py:2075
 #, python-format
@@ -2117,7 +2102,7 @@ msgstr "Zobrazit atributy"
 
 #: ../gui/wxpython/gui_modules/dbm_dialogs.py:118
 msgid "&Reload"
-msgstr "&Znovu nahrát"
+msgstr "Znovu &nahrát"
 
 #: ../gui/wxpython/gui_modules/dbm_dialogs.py:119
 msgid "&Submit"
@@ -2147,67 +2132,55 @@ msgstr "Potvrdit"
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:78
 #, python-format
 msgid "GRASS SQL Builder (%(type)s): vector map <%(map)s>"
-msgstr ""
+msgstr "GRASS SQL pomocník (%(type)s): vektorová mapa<%(map)s>"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:85
-#, fuzzy
 msgid "SQL statement not verified"
-msgstr "SQL pøíkaz"
+msgstr "SQL pøíkaz nebyl ovìøen"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:91
-#, fuzzy
 msgid "Set SQL statement to default"
-msgstr "Nastavit výchozí"
+msgstr "Nastavit SQL pøíkaz jako výchozí"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:93
-#, fuzzy
 msgid "Verify"
-msgstr "Georektifikace"
+msgstr "Ovìøit"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:94
-#, fuzzy
 msgid "Verify SQL statement"
-msgstr "SQL pøíkaz"
+msgstr "Ovìøit SQL pøíkaz"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:99
-#, fuzzy
 msgid "Apply SQL statement and close the dialog"
-msgstr "Ulo¾it zmìny a zavøít"
+msgstr "Uplatnit SQL dotaz a zavøít dialog"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:101
-#, fuzzy
 msgid "Close the dialog"
 msgstr "Zavøít dialog "
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:103
-#, fuzzy
 msgid "Get all values"
-msgstr "Hodnoty buòky"
+msgstr "Získat v¹echny hodnoty"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:106
-#, fuzzy
 msgid "Get sample"
-msgstr "Nastavit hodnotu"
+msgstr "Získat vzorek"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:149
-#, fuzzy
 msgid "Add on double-click"
-msgstr "Dvojklik levých tlaèítkem my¹i"
+msgstr "Pøidat dvojklikem my¹i"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:150
-#, fuzzy
 msgid "columns"
-msgstr "Pøidat nový sloupec"
+msgstr "Sloupce"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:150
-#, fuzzy
 msgid "values"
-msgstr "(hodnota)"
+msgstr "hodnoty"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:154
-#, fuzzy
 msgid "Close dialog on apply"
-msgstr "Zavøít dialog pøi zápis"
+msgstr "Zavøít dialog pøi souhlasu"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:185
 #: ../gui/wxpython/gui_modules/dbm.py:853
@@ -2220,19 +2193,16 @@ msgid "Query"
 msgstr "Dotaz"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:240
-#, fuzzy
 msgid "Columns"
-msgstr "3D rastr"
+msgstr "Sloupce"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:242
-#, fuzzy
 msgid "Values"
-msgstr "3D rastr"
+msgstr "Hodnoty"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:425
-#, fuzzy
 msgid "SQL statement is not valid"
-msgstr "SQL pøíkaz"
+msgstr "SQL pøíkaz není platný"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:427
 #, python-format
@@ -2241,6 +2211,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"SQL pøíkaz není platný.\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:428
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2731
@@ -2249,9 +2222,8 @@ msgid "Warning"
 msgstr "Upozornìní"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:430
-#, fuzzy
 msgid "SQL statement is valid"
-msgstr "SQL pøíkaz"
+msgstr "SQL pøíkaz je platný"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:453
 #: ../gui/wxpython/gui_modules/dbm.py:744
@@ -2266,11 +2238,11 @@ msgstr "Chyba pøi vykonání pøíkazu %s"
 
 #: ../gui/wxpython/gui_modules/gcmd.py:110
 msgid "Preferences error"
-msgstr "Chyba v nastavení"
+msgstr "Chyba pøedvolby"
 
 #: ../gui/wxpython/gui_modules/gcmd.py:117
 msgid "Vector digitizer error"
-msgstr "Chyba digitizéru"
+msgstr "Chyba vektorové digitalizace"
 
 #: ../gui/wxpython/gui_modules/gcmd.py:124
 msgid "Attribute table manager error"
@@ -2296,7 +2268,7 @@ msgstr "Chyba:"
 #: ../gui/wxpython/gui_modules/gcmd.py:440
 #, python-format
 msgid "Unable to exectute command: '%s'"
-msgstr "Nelze vykonatt pøíkaz: '%s'"
+msgstr "Nelze vykonat pøíkaz: '%s'"
 
 #: ../gui/wxpython/gui_modules/prompt.py:392
 #, python-format
@@ -2356,7 +2328,7 @@ msgstr "Ukonèit editaci"
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:302
 msgid "Use as background vector map"
-msgstr "Podkladová vektorová mapa"
+msgstr "Pou¾ít jako podklad vektorové mapy"
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:333
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:357
@@ -2391,12 +2363,10 @@ msgid "Nviz properties"
 msgstr "Vlastnosti Nviz"
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:437
-#, fuzzy
 msgid "Unable to create profile of raster map."
 msgstr "Nelze vytvoøit profil rastrové mapy."
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:469
-#, fuzzy
 msgid "Unable to display histogram of raster map."
 msgstr "Nelze zobrazit histogram rastrové mapy."
 
@@ -2472,11 +2442,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:716
 msgid "thematic charts"
-msgstr "graf tématické mapy"
+msgstr "tématická mapa s grafem"
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:719
 msgid "grid"
-msgstr "møí¾ka"
+msgstr "møí¾ka (grid)"
 
 #: ../gui/wxpython/gui_modules/wxgui_utils.py:722
 msgid "geodesic line"
@@ -2501,7 +2471,7 @@ msgstr "Mapa <%s> nebyla nalezena."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:816
 msgid "MASK"
-msgstr ""
+msgstr "MASKA"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:1431
 msgid "Update categories"
@@ -2519,7 +2489,7 @@ msgstr "Chyba digitizéru"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2205
 msgid "Z bulk-labeling dialog"
-msgstr "Dialog pøiøazení Z souøadnice"
+msgstr "Dialog pøiøazení Z souøadnice jako popisku"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2687
 msgid "Zoom to saved region extents"
@@ -2531,9 +2501,8 @@ msgid "Region <%s> not found. Operation canceled."
 msgstr "Je potøeba nejménì %d vlicovacích bodù. Operace zru¹ena."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2719
-#, fuzzy
 msgid "Save display extents to region file"
-msgstr "Ulo¾it zobrazený region jako pojmenovaný region"
+msgstr "Ulo¾it hranice displeje souboru regionu"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2729
 #, python-format
@@ -2563,11 +2532,11 @@ msgstr "Duplicitní atributy"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:801
 msgid "Digitization settings"
-msgstr "Nastavení"
+msgstr "Nastavení digitalizace"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:811
 msgid "Copy features from (background) vector map"
-msgstr "Kopírovat prvky z vektorové mapy"
+msgstr "Kopírovat prvky z podkladové vektorové mapy"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:819
 msgid "Flip selected lines/boundaries"
@@ -2575,11 +2544,11 @@ msgstr "Otoèit vybrané linie/hranice"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:827
 msgid "Merge selected lines/boundaries"
-msgstr "pøipojit vybrané linie/hranice"
+msgstr "Pøipojit vybrané linie/hranice"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:835
 msgid "Break selected lines/boundaries at intersection"
-msgstr "rozdìlit vybrané linie/hranice na prùseèíku"
+msgstr "Rozdìlit vybrané linie/hranice na prùseèíku"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:843
 msgid "Snap selected lines/boundaries (only to nodes)"
@@ -2591,20 +2560,19 @@ msgstr "Spojit vybrané linie/hranice"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:859
 msgid "Query features"
-msgstr "dotazovat prvky"
+msgstr "Dotazovat prvky"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:867
 msgid "Z bulk-labeling of 3D lines"
-msgstr "Dialog pøiøazení Z souøadnice pro popisky u 3D linií"
+msgstr "Pøiøazení Z souøadnice pro popisky u 3D linií"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:875
 msgid "Feature type conversion"
-msgstr "Konverze typù mapových prvkù"
+msgstr "Konverze typù vektorových prvkù"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:986
-#, fuzzy
 msgid "Vector map is not 3D. Operation canceled."
-msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
+msgstr "Vektorová mapa není 3D. Operace ukonèena."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1052
 #: ../gui/wxpython/gui_modules/toolbars.py:1151
@@ -2727,30 +2695,28 @@ msgstr "O GIS GRASS"
 
 #: ../gui/wxpython/gui_modules/help.py:390
 msgid "Official GRASS site: http://grass.osgeo.org"
-msgstr ""
+msgstr "Oficiální GRASS stránka: http://grass.osgeo.org"
 
 #: ../gui/wxpython/gui_modules/help.py:391
 msgid "GIS Library"
-msgstr ""
+msgstr "GIS knihovna"
 
 #: ../gui/wxpython/gui_modules/help.py:420 ../gui/wxpython/wxgui.py:499
 #: ../gui/wxpython/wxgui.py:515
 msgid "Info"
-msgstr ""
+msgstr "Informace"
 
 #: ../gui/wxpython/gui_modules/help.py:421
-#, fuzzy
 msgid "Copyright"
-msgstr "Kopírovat"
+msgstr "Autorská práva"
 
 #: ../gui/wxpython/gui_modules/help.py:422
-#, fuzzy
 msgid "License"
-msgstr "Linie"
+msgstr "Licence"
 
 #: ../gui/wxpython/gui_modules/help.py:423
 msgid "Authors"
-msgstr ""
+msgstr "Autoøi"
 
 #: ../gui/wxpython/gui_modules/help.py:424
 #, fuzzy
@@ -3373,20 +3339,19 @@ msgid "Number of loaded records: %d"
 msgstr "Poèet nahraných záznamù: %d"
 
 #: ../gui/wxpython/gui_modules/dbm.py:300
-#, fuzzy
 msgid "Unknown value"
-msgstr "Neznámý"
+msgstr "Neznámá hodnota"
 
 #: ../gui/wxpython/gui_modules/dbm.py:315
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error loading attribute data. Record number: %(rec)d. Unable to convert "
 "value '%(val)s' in key column (%(key)s) to integer.\n"
 "\n"
 "Details: %(detail)s"
 msgstr ""
-"Chyba pøi naèítání atributových dat. Záznam èíslo %(rec)d. Nelze rozpoznat "
-"hodnotu '%(val)s' v klíèovém sloupci(%(key)s) jako integer.\n"
+"Chyba pøi naèítání atributových dat. Záznam èíslo %(rec)d. Nelze pøevést "
+"hodnotu '%(val)s' v klíèovém sloupci(%(key)s) na integer.\n"
 "\n"
 "Detaily: %(detail)s"
 
@@ -3474,13 +3439,12 @@ msgid "Manage layers"
 msgstr "Správa vrstev"
 
 #: ../gui/wxpython/gui_modules/dbm.py:671
-#, fuzzy
 msgid "Close Attribute Table Manager"
-msgstr "Správce atributových dat"
+msgstr "Zavøít Správce atributových dat"
 
 #: ../gui/wxpython/gui_modules/dbm.py:673
 msgid "Reload attribute data (selected layer only)"
-msgstr ""
+msgstr "Znovu naèíst atributové data (pouze vybraná vrstva)"
 
 #: ../gui/wxpython/gui_modules/dbm.py:702
 msgid "Attribute data - right-click to edit/manage records"
@@ -3544,7 +3508,7 @@ msgstr "Na"
 
 #: ../gui/wxpython/gui_modules/dbm.py:960
 msgid "&Rename"
-msgstr "&Pøejmenovat"
+msgstr "Pøe&jmenovat"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1019
 msgid "Layers of vector map"
@@ -3625,9 +3589,9 @@ msgstr "Kategorie (sloupec %s) chybí."
 
 #: ../gui/wxpython/gui_modules/dbm.py:1405
 #: ../gui/wxpython/gui_modules/dbm.py:1512
-#, fuzzy, python-format
+#, python-format
 msgid "Value '%(value)s' needs to be entered as %(type)s."
-msgstr "Datová konverze hodnoty '%(value)s' na %(type)s selhala."
+msgstr "Hodnota '%(value)s' musí být vlo¾ena jako %(type)s."
 
 #: ../gui/wxpython/gui_modules/dbm.py:1416
 msgid "Unable to insert new record."
@@ -3769,15 +3733,15 @@ msgstr "Název tabulky"
 
 #: ../gui/wxpython/gui_modules/dbm.py:2435
 msgid "&Create table"
-msgstr "&Vytvoøit tabulku"
+msgstr "Vytvoøit &tabulku"
 
 #: ../gui/wxpython/gui_modules/dbm.py:2439
 msgid "&Add layer"
-msgstr "&Pøidat vrstvu"
+msgstr "Pøid&at vrstvu"
 
 #: ../gui/wxpython/gui_modules/dbm.py:2443
 msgid "&Set default"
-msgstr "&Nastavit výchozí"
+msgstr "Nastavit výc&hozí"
 
 #: ../gui/wxpython/gui_modules/dbm.py:2454
 msgid "Layer description"
@@ -3911,9 +3875,8 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:42
-#, fuzzy
 msgid "3d view tools"
-msgstr "Nástroje Nviz"
+msgstr "Nástroje 3D pohledu"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:130
 msgid "View"
@@ -4013,7 +3976,6 @@ msgid "Saved NVIZ Settings"
 msgstr "Obecné nastavení"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:285
-#, fuzzy
 msgid "Load"
 msgstr "Nahrát"
 
@@ -4280,9 +4242,9 @@ msgid "Vector map <%s> is 2D"
 msgstr "Vektorová mapa <%s> je 2D"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2420
-#, fuzzy, python-format
+#, python-format
 msgid "%(primitives)d primitives (%(points)d points)"
-msgstr "%d prvkù (%d bodù)"
+msgstr "%(primitives)d prvkù (%(points)d bodù)"
 
 #: ../gui/wxpython/gui_modules/goutput.py:187
 #, fuzzy
@@ -4323,6 +4285,8 @@ msgid ""
 "Command '%s' not yet implemented in the GUI. Try adding it as a command "
 "layer instead."
 msgstr ""
+"Pøíkaz '%s' je¹tì nebyl implementován do GUI. Zkuste jej pøidat jako vrstvu "
+"pøíkazù."
 
 #: ../gui/wxpython/gui_modules/goutput.py:537
 msgid "Save file as..."
@@ -4512,7 +4476,7 @@ msgstr "Vrstva"
 #: ../gui/wxpython/gui_modules/render.py:135
 #, python-format
 msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
-msgstr "<%(name)s>: typ vrstvy <%(type)s> není podporován."
+msgstr "<%(name)s>: typ vrstvy <%(type)s> není  je¹tì podporován."
 
 #: ../gui/wxpython/gui_modules/render.py:264
 #, python-format
@@ -4522,8 +4486,7 @@ msgstr "Nepodporovaný typ mapové vrstvy '%s'"
 #: ../gui/wxpython/gui_modules/render.py:434
 msgid "GISBASE not set. You must be in GRASS GIS to run this program."
 msgstr ""
-"GISBASE není nastavena. Spu¹tìní tohoto programu vy¾aduje bì¾ící instanci "
-"GRASSu,"
+"GIS databanka není nastavena. Spu¹tìní tohoto programu vy¾aduje bì¾ící GRASS"
 
 #: ../gui/wxpython/gui_modules/render.py:458
 msgid "Unable to open file"
@@ -4548,8 +4511,8 @@ msgid ""
 "Unable to get current geographic extent. Force quiting wxGUI. Please run "
 "manually g.region to fix the problem."
 msgstr ""
-"Nelze získta souèasný geografický gerion. Ukonèete wxGUI. Prosím "
-"spus»teruènì g.region  pro nápravu problému. "
+"Nelze získat souèasný geografický region. wxGUI se ukonèuje. Prosím spus»te "
+"ruènì g.region  pro nápravu problému. "
 
 #: ../gui/wxpython/gui_modules/render.py:959
 msgid "ERROR: Rendering failed"
@@ -4564,23 +4527,22 @@ msgstr "Nelze vykreslit mapovou vrstvu <%s>."
 #: ../gui/wxpython/gui_modules/render.py:1208
 #, python-format
 msgid "Unable render overlay <%s>."
-msgstr "Nelze vykreslit overlay <%s>."
+msgstr "Nelze vykreslit pøekrytí <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1248
 #, python-format
 msgid "Unable render overlay <%s>"
-msgstr "Nelze vykreslit overlay <%s>"
+msgstr "Nelze vykreslit pøekrytí <%s>"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:128
-#, fuzzy
 msgid ""
 "Unable to initialize display driver of vector digitizer. See 'Command "
 "output' for details.\n"
 "\n"
 "Details:"
 msgstr ""
-"Nelze inicializovat ovladaè displeje, prohlédnìte je soubor README pro více "
-"informaci.\n"
+"Nelze inicializovat ovladaè displeje pro vektorovou digitalizaci. Pro "
+"detaily pøejdìte na výstup pøíkazu.\n"
 "\n"
 "Detaily:"
 
@@ -4999,7 +4961,7 @@ msgstr "Naèíst mapové vrstvy ze souboru GRD do stromu vrstev"
 
 #: ../gui/wxpython/menustrings.py:18
 msgid "Import raster map"
-msgstr "import rastrové mapy"
+msgstr "Import rastrové mapy"
 
 #: ../gui/wxpython/menustrings.py:19
 #, fuzzy
@@ -5057,7 +5019,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:29
 msgid "ASCII grid import"
-msgstr "ASCII grid import"
+msgstr "Import ASCII møí¾ky (grid)"
 
 #: ../gui/wxpython/menustrings.py:30
 #, fuzzy
@@ -5071,7 +5033,9 @@ msgstr "Import ASCII polygony a linie"
 
 #: ../gui/wxpython/menustrings.py:32
 msgid "Creates raster maps from ASCII polygon/line/point data files."
-msgstr "Vytvoøí rastrové mapy z ASCII polygonových/liniových datových souborù."
+msgstr ""
+"Vytvoøí rastrové mapy z ASCII polygonových/liniových/bodových datových "
+"souborù."
 
 #: ../gui/wxpython/menustrings.py:33
 #, fuzzy
@@ -5084,7 +5048,7 @@ msgstr "Importuje binární rastrový soubor jako GRASS rastrovou mapu."
 
 #: ../gui/wxpython/menustrings.py:35
 msgid "ESRI ASCII grid import"
-msgstr "ESRI ASCII grid import"
+msgstr "Import ESRI ASCII møí¾ku (grid)"
 
 #: ../gui/wxpython/menustrings.py:36
 #, fuzzy
@@ -5223,7 +5187,7 @@ msgstr "Importuje star¹í verze GRASS vektorových map."
 
 #: ../gui/wxpython/menustrings.py:64
 msgid "DXF import"
-msgstr "DXF import"
+msgstr "Import DXF"
 
 #: ../gui/wxpython/menustrings.py:65
 msgid "Converts files in DXF format to GRASS vector map format."
@@ -5328,9 +5292,8 @@ msgid "Imports attribute tables in various formats."
 msgstr "Importuje atributové tabulky v rùzných formátech."
 
 #: ../gui/wxpython/menustrings.py:86
-#, fuzzy
 msgid "Export raster map"
-msgstr "import rastrové mapy"
+msgstr "Export rastrové mapy"
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:118
 #, fuzzy
@@ -5338,10 +5301,10 @@ msgid "Common export formats"
 msgstr "Souøadnice"
 
 #: ../gui/wxpython/menustrings.py:88
-#, fuzzy
 msgid "Exports GRASS raster maps into GDAL supported formats."
 msgstr ""
-"Exportuje GRASS rastry do jednoho z formátù podporovaných knihovnou GDAL."
+"Exportuje GRASS rastrové vrstvy do jednoho z formátù podporovaných knihovnou "
+"GDAL."
 
 #: ../gui/wxpython/menustrings.py:89
 msgid "ASCII grid export"
@@ -5507,11 +5470,10 @@ msgid "Multiple GPS export formats using GPSBabel"
 msgstr "Export rùzných formátù GPS pomocí GPSBabel"
 
 #: ../gui/wxpython/menustrings.py:125
-#, fuzzy
 msgid ""
 "Exports a vector map to a GPS receiver or file format supported by GpsBabel."
 msgstr ""
-"Exportuj vektorovou mapu do GPS pøijímaèe nebo do formátu, který podporuje "
+"Exportuje vektorovou mapu do GPS pøijímaèe nebo do formátu, který podporuje "
 "GPSBabel."
 
 #: ../gui/wxpython/menustrings.py:127
@@ -5571,7 +5533,6 @@ msgid "Common export formats using OGR"
 msgstr "Export rùzných formátù pomocí OGR"
 
 #: ../gui/wxpython/menustrings.py:141
-#, fuzzy
 msgid "Exports attribute tables into various formats."
 msgstr "Exportuje atributové tabulky v rùzných formátech."
 
@@ -5712,9 +5673,8 @@ msgid "NVIZ (requires Tcl/Tk)"
 msgstr "NVIZ (vy¾aduje Tcl/Tk)"
 
 #: ../gui/wxpython/menustrings.py:175
-#, fuzzy
 msgid "nviz - Visualization and animation tool for GRASS data."
-msgstr "nviz - nástroj pro vizualizaci a animaci GRASS dat"
+msgstr "nviz - Nástroj pro vizualizaci a animaci GRASS dat"
 
 #: ../gui/wxpython/menustrings.py:176
 msgid "Bearing/distance to coordinates"
@@ -5725,6 +5685,8 @@ msgid ""
 "A simple utility for converting bearing and distance measurements to "
 "coordinates and vice versa."
 msgstr ""
+"Jednoduchý nástroj pro pøevod zamìøení a mìøení vzdáleností do souøadnic a "
+"naopak."
 
 #: ../gui/wxpython/menustrings.py:178
 msgid "Postscript plot"
@@ -5745,7 +5707,6 @@ msgid "Launches script file."
 msgstr "Zvolit soubor workspace"
 
 #: ../gui/wxpython/menustrings.py:182
-#, fuzzy
 msgid "Exit GUI"
 msgstr "Konec grafického prostøedí"
 
@@ -5840,13 +5801,12 @@ msgid "Change settings"
 msgstr "Zmìnit nastavení"
 
 #: ../gui/wxpython/menustrings.py:207
-#, fuzzy
 msgid "Change default GUI"
-msgstr "&Nastavit výchozí"
+msgstr "Zmìnit výchozí GUI"
 
 #: ../gui/wxpython/menustrings.py:208
 msgid "Changes the default GRASS graphical user interface (GUI) setting."
-msgstr ""
+msgstr "Zmìní výchozí grafické prostøedí GRASS a jeho nastavení"
 
 #: ../gui/wxpython/menustrings.py:209
 msgid "Version"
@@ -5861,14 +5821,12 @@ msgid "Manage projections"
 msgstr "Správa kartografických zobrazení"
 
 #: ../gui/wxpython/menustrings.py:213
-#, fuzzy
 msgid ""
 "Converts co-ordinate system descriptions (i.e. projection information) "
 "between various formats (including GRASS format)."
 msgstr ""
-"Pøevede popisy souøadných systémù (napø. informace o projekci) mezi rùzné "
-"formáty (vèetnì formátù GRASSu). Lze pou¾ít také pro vytvoøení GRASS "
-"location."
+"Pøevede popisy souøadných systémù (napø. informace o projekci) mezi rùznými "
+"formáty (vèetnì formátu GRASSu)."
 
 #: ../gui/wxpython/menustrings.py:214
 msgid "Convert coordinates"
@@ -5916,15 +5874,15 @@ msgstr "Definuje hranice rastrové mapy."
 
 #: ../gui/wxpython/menustrings.py:224
 msgid "Manage NULL values"
-msgstr "Upravit NULL hodnoty"
+msgstr "Spravovat NULL hodnoty"
 
 #: ../gui/wxpython/menustrings.py:225
 msgid "Manages NULL-values of given raster map."
-msgstr ""
+msgstr "Správa NULL hodnot dané rastrové mapy."
 
 #: ../gui/wxpython/menustrings.py:226
 msgid "Quantization"
-msgstr "Dávkování"
+msgstr "Kvantizace"
 
 #: ../gui/wxpython/menustrings.py:227
 msgid "Produces the quantization file for a floating-point map."
@@ -5943,18 +5901,16 @@ msgid "Resample using aggregate statistics"
 msgstr "Pøevzorkování za pou¾ití agregaèních statik"
 
 #: ../gui/wxpython/menustrings.py:231
-#, fuzzy
 msgid "Resamples raster map layers to a coarser grid using aggregation."
-msgstr "Pøevzorkovat rastrovou vrstvu s vyu¾itím agregace."
+msgstr "Pøevzorkovat rastrovou vrstvu na hrub¹í s vyu¾itím agregace."
 
 #: ../gui/wxpython/menustrings.py:232
 msgid "Resample using multiple methods"
 msgstr "Pøevzorkování (zmìna rozli¹ení) za pou¾ití rùzných metod"
 
 #: ../gui/wxpython/menustrings.py:233
-#, fuzzy
 msgid "Resamples raster map layers to a finer grid using interpolation."
-msgstr "Pøevzorkovat rastrovou vrstvu s vyu¾itím interpolace."
+msgstr "Pøevzorkovat rastrovou vrstvu na jemnìj¹í s vyu¾itím interpolace."
 
 #: ../gui/wxpython/menustrings.py:234
 msgid "Resample using nearest neighbor"
@@ -6004,7 +5960,6 @@ msgid "Re-projects a raster map from one location to the current location."
 msgstr "Zmìna projekce rastrové mapy ze zvolené location do aktuální location."
 
 #: ../gui/wxpython/menustrings.py:244
-#, fuzzy
 msgid "Tiling"
 msgstr "Dla¾dice"
 
@@ -6063,11 +6018,10 @@ msgid "Create RGB"
 msgstr "Vytvoøit RGB"
 
 #: ../gui/wxpython/menustrings.py:258
-#, fuzzy
 msgid ""
 "Combines red, green and blue raster maps into a single composite raster map."
 msgstr ""
-"Kombinuje èervenou, zelenou a modrou mapovou vrstvu do jedné mapové "
+"Kombinuje èervenou, zelenou a modrou mapovou vrstvu do jedinné mapové "
 "kompozice."
 
 #: ../gui/wxpython/menustrings.py:259 ../gui/wxpython/menustrings.py:650
@@ -6083,30 +6037,25 @@ msgstr ""
 "intenzity a nasycení (his) z u¾ivatelem zadaných vstupních rastrových map."
 
 #: ../gui/wxpython/menustrings.py:261
-#, fuzzy
 msgid "Query raster maps"
-msgstr "Pøekrývat rastrové mapy"
+msgstr "Dotazování rastrové vrstvy"
 
 #: ../gui/wxpython/menustrings.py:262
-#, fuzzy
 msgid "Query values by coordinates"
-msgstr "Souøadnicový dotaz"
+msgstr "Dotaz na hodnoty podle souøadnic"
 
 #: ../gui/wxpython/menustrings.py:263
 msgid "Queries raster map layers on their category values and category labels."
 msgstr ""
-"Program slou¾ící k dotazování rastrových map podle jejich kategorií a "
-"oznaèení."
+"Program slou¾ící k dotazování rastrových map podle jejich kategorií a popisù."
 
 #: ../gui/wxpython/menustrings.py:264
-#, fuzzy
 msgid "Query colors by value"
-msgstr "Nastavit tabulku barev"
+msgstr "Dotaz na barvu podle hodnoty"
 
 #: ../gui/wxpython/menustrings.py:265
-#, fuzzy
 msgid "Queries colors for a raster map layer."
-msgstr "Vypí¹e statistiku pro rastrovou mapu."
+msgstr "Dotazuje se na barvu rastrové vrstvy"
 
 #: ../gui/wxpython/menustrings.py:266
 msgid "Buffer rasters"
@@ -6236,9 +6185,8 @@ msgid "Solar irradiance and irradiation"
 msgstr "Sluneèní záøení a ozáøení"
 
 #: ../gui/wxpython/menustrings.py:292
-#, fuzzy
 msgid "Solar irradiance and irradiation model."
-msgstr "Sluneèní záøení a ozáøení"
+msgstr "Sluneèní záøení a modelování ozáøení."
 
 #: ../gui/wxpython/menustrings.py:293
 msgid "Shadows map"
@@ -6279,23 +6227,22 @@ msgid "Cost surface"
 msgstr "Povrch nákladù"
 
 #: ../gui/wxpython/menustrings.py:299
-#, fuzzy
 msgid ""
 "Creates a raster map showing the cumulative cost of moving between different "
 "geographic locations on an input raster map whose cell category values "
 "represent cost."
 msgstr ""
-"Výstupní rastrová kumulativních nákladù pohybu mezi rùznými geografickými "
-"polohami na vstupní rastrové mapì s hodnotami nákladù."
+"Vytváøí rastrovou vrstvu ukazující kumulativní náklady pohybu mezi rùznými "
+"polohami na vstupní rastrové vrstvì kde ka¾dá hodnota buòky prezentuje "
+"náklad."
 
 #: ../gui/wxpython/menustrings.py:300
 msgid "Least cost route or flow"
 msgstr "Nejménì nákladná cesta nebo dráha odtoku"
 
 #: ../gui/wxpython/menustrings.py:301
-#, fuzzy
 msgid "Traces a flow through an elevation model on a raster map."
-msgstr "Urèí smìr povrchového odtoku na rastrovém modelu reliéfu."
+msgstr "Urèí smìr povrchového odtoku na rastrovém modelu terénu."
 
 #: ../gui/wxpython/menustrings.py:303
 msgid "Creates shaded relief map from an elevation map (DEM)."
@@ -6320,9 +6267,8 @@ msgid "Terrain parameters"
 msgstr "Parametry terénu"
 
 #: ../gui/wxpython/menustrings.py:307
-#, fuzzy
 msgid "Extracts terrain parameters from a DEM."
-msgstr "Definujte parametry pro "
+msgstr "Získává parametry terénu z digitálního modelu terénu"
 
 #: ../gui/wxpython/menustrings.py:308
 msgid "Textural features"
@@ -6365,7 +6311,6 @@ msgid "Clump"
 msgstr "Shromá¾dit"
 
 #: ../gui/wxpython/menustrings.py:318
-#, fuzzy
 msgid ""
 "Recategorizes data in a raster map by grouping cells that form physically "
 "discrete areas into unique categories."
@@ -6410,13 +6355,12 @@ msgid "Fill lake"
 msgstr "Vyplnit jezera"
 
 #: ../gui/wxpython/menustrings.py:327
-#, fuzzy
 msgid "Fills lake from seed at given level."
-msgstr "Vytvoøí jezero ze zadaného bodu dané úrovnì"
+msgstr "Vyplní jezero do zadané hloubky"
 
 #: ../gui/wxpython/menustrings.py:328
 msgid "Depressionless map and flowlines"
-msgstr "Mapa elevace zbavená depresí a mapa drah povrchového odtoku"
+msgstr "Model terénu bez depresí a mapa odtoku "
 
 #: ../gui/wxpython/menustrings.py:329
 msgid ""
@@ -6526,9 +6470,8 @@ msgid "Watershed basin creation program."
 msgstr "Program na vymezování povodí."
 
 #: ../gui/wxpython/menustrings.py:352 ../gui/wxpython/menustrings.py:733
-#, fuzzy
 msgid "Groundwater modeling"
-msgstr "Vlicovací bod"
+msgstr "Modelování povrchového odtku"
 
 #: ../gui/wxpython/menustrings.py:353
 msgid "Groundwater flow"
@@ -6539,6 +6482,8 @@ msgid ""
 "Numerical calculation program for transient, confined and unconfined "
 "groundwater flow in two dimensions."
 msgstr ""
+"Numerický výpoèetní program pro pøechodné, omezené a neohranièenéproudìní "
+"podzemních vod ve dvou rozmìrech."
 
 #: ../gui/wxpython/menustrings.py:355
 msgid "Groundwater solute transport"
@@ -6734,7 +6679,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:398
 msgid "Anisotropic spread simulation"
-msgstr "Simulovat anizotropický jev ¹íøení"
+msgstr "Simulace anisotropicého jevu ¹íøení"
 
 #: ../gui/wxpython/menustrings.py:399
 msgid ""
@@ -6742,6 +6687,9 @@ msgid ""
 "a raster map of the cumulative time of spread, given raster maps containing "
 "the rates of spread (ROS), the ROS directions and the spread origins."
 msgstr ""
+"Simuluje eliticky anisotropické ¹íøení ohnì v grafickém oknì a vytvoøí "
+"rastrovou mapu kumulativního èasu ¹íøení, Daná rastrová mapa obsahuje "
+"rychlost ¹íøení (ROS), smìr ¹íøení a zdroj ¹íøení."
 
 #: ../gui/wxpython/menustrings.py:400
 msgid "Change category values and labels"
@@ -6760,13 +6708,12 @@ msgid "Reclassify by size"
 msgstr "Reklasifikovat podle velikosti"
 
 #: ../gui/wxpython/menustrings.py:404
-#, fuzzy
 msgid ""
 "Reclasses a raster map greater or less than user specified area size (in "
 "hectares)."
 msgstr ""
-"Reklasifikuje rastrovou mapu vìt¹í nebo men¹í ne¾ u¾ivatelem zadané "
-"hraniènívelikosti ploch (v hektarech)"
+"Reklasifikuje rastrovou mapu na vìt¹í nebo men¹í ne¾ u¾ivatelem zadané "
+"hranièní velikosti ploch (v hektarech)."
 
 #: ../gui/wxpython/menustrings.py:405
 msgid "Reclassify interactively"
@@ -6789,13 +6736,12 @@ msgid "Recode interactively"
 msgstr "Pøekódovat interaktivnì"
 
 #: ../gui/wxpython/menustrings.py:410
-#, fuzzy
 msgid "Recodes categorical raster maps."
-msgstr "Pøekódována rastrová mapa"
+msgstr "Pøekódovává categorie rastrové mapy."
 
 #: ../gui/wxpython/menustrings.py:411
 msgid "Recode using rules file"
-msgstr "Reklasifikovat kategorie na základì souboru s pravidly"
+msgstr "Reklasifikovat kategorie s po¾itím souboru s pravidly"
 
 #: ../gui/wxpython/menustrings.py:412
 #, fuzzy
@@ -6848,12 +6794,11 @@ msgid "Random cells and vector points"
 msgstr "Vytvoøit rastrovou vrstvu a vektorové body s náhodnými hodnotami"
 
 #: ../gui/wxpython/menustrings.py:423
-#, fuzzy
 msgid ""
 "Creates a raster map layer and vector point map containing randomly located "
 "points."
 msgstr ""
-"Vytvoøí rastrovou mapu a bodovou vektorovou mapu obsahující náhodnì "
+"Vytvoøí rastrovou vrstvu a bodovou vektorovou vrstvu obsahující náhodnì "
 "rozmístìné body."
 
 #: ../gui/wxpython/menustrings.py:424
@@ -6933,9 +6878,8 @@ msgid "Generate contour lines"
 msgstr "Vytvoøit vrstevnice"
 
 #: ../gui/wxpython/menustrings.py:438
-#, fuzzy
 msgid "Produces a vector map of specified contours from a raster map."
-msgstr "Vytvoøí vektorovou vrstvu ze zadaných isolinií z rastrové mapy."
+msgstr "Vytvoøí vektorovou vrstvu obsahující vrstevnice z modelu terénu."
 
 #: ../gui/wxpython/menustrings.py:439
 msgid "Interpolate surfaces"
@@ -6954,18 +6898,17 @@ msgid "IDW from raster points"
 msgstr "Interpolace IDW z rastrových bodù"
 
 #: ../gui/wxpython/menustrings.py:443
-#, fuzzy
 msgid "Surface interpolation utility for raster map."
 msgstr "Nástroj pro interpolaci povrchù rastrových map."
 
 #: ../gui/wxpython/menustrings.py:444
 msgid "IDW from raster points (alternate method for sparse points)"
 msgstr ""
+"Interpolace IDW z rastrových bodù (alternativní metoda pro malý poèet bodù)"
 
 #: ../gui/wxpython/menustrings.py:445
-#, fuzzy
 msgid "Surface generation program."
-msgstr "Program pro tvorbu povrchù z vrstevnic ulo¾ených v rastrové podobì."
+msgstr "Tvorba povrchu"
 
 #: ../gui/wxpython/menustrings.py:446
 msgid "IDW from vector points"
@@ -6985,12 +6928,11 @@ msgstr "Rastrové vrstevnice"
 
 #: ../gui/wxpython/menustrings.py:449
 msgid "Surface generation program from rasterized contours."
-msgstr "Program pro tvorbu povrchù z vrstevnic ulo¾ených v rastrové podobì."
+msgstr "Program pro tvorbu povrchù z vrstevnic ulo¾ených v rastrové vrstvì."
 
 #: ../gui/wxpython/menustrings.py:450
 msgid "Regularized spline tension"
-msgstr ""
-"Pøevzorkování (zmìna rozli¹ení) pomocí RST (regularized spline tension)"
+msgstr "Interpolace pomocí RST (regularized spline tension)"
 
 #: ../gui/wxpython/menustrings.py:451
 msgid ""
@@ -6998,10 +6940,9 @@ msgid ""
 "data in vector format to floating point raster format using regularized "
 "spline with tension."
 msgstr ""
-"Prostorová aproximace a topografická analýza ze zadaného souboru "
-"obsahujícího buï bodová data nebo isolinie ve vektorovém formátu. Vzniklé "
-"mapy jsou rastrové s plovoucí desetinnou èárkou za pou¾ití  RST -"
-"regularizovaného spline s tenzí a vyhlazením."
+"Prostorová aproximace a topografická analýza ze zadaného bodu nebo isolinie "
+"ve vektorovém formátu pro vytvoøení rastrové vrtsvy s desetinnou èárkou za "
+"pou¾ití interpolace RST (regularized spline with tension)."
 
 #: ../gui/wxpython/menustrings.py:452
 msgid "Ordinary or block kriging"
@@ -7024,15 +6965,15 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:456 ../gui/wxpython/menustrings.py:714
 msgid "Report and statistics"
-msgstr "Výpis a statistiky"
+msgstr "Zprávy a statistiky"
 
 #: ../gui/wxpython/menustrings.py:457
 msgid "Basic raster metadata"
-msgstr "Základní metadata rastrové mapy"
+msgstr "Základní  výpis metadat rastrové mapy"
 
 #: ../gui/wxpython/menustrings.py:458
 msgid "Output basic information about a raster map layer."
-msgstr "Vypí¹e základní informace o u¾ivatelem vybrané rastrové mapì."
+msgstr "Vypí¹e základní informace o u¾ivatelem vybrané rastrové vrstvì."
 
 #: ../gui/wxpython/menustrings.py:459
 msgid "Manage category information"
@@ -7044,23 +6985,23 @@ msgid ""
 "layers."
 msgstr ""
 "Spravuje hodnoty kategorií a ¹títky spojené s u¾ivatelem zadanou rastrovou "
-"mapou."
+"vrstvou."
 
 #: ../gui/wxpython/menustrings.py:461
 msgid "General statistics"
-msgstr "Základní statistiky"
+msgstr "Obecné statistiky"
 
 #: ../gui/wxpython/menustrings.py:462
 msgid "Generates area statistics for raster map layers."
-msgstr "Vytvoøí statistiku ploch pro rastrové mapy."
+msgstr "Vytvoøí statistiku ploch pro rastrové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:463
 msgid "Quantiles for large data sets"
-msgstr "Quantily  pro velké sady dat"
+msgstr "Qvantilové statistiky pro velké mno¾ství dat"
 
 #: ../gui/wxpython/menustrings.py:464
 msgid "Compute quantiles using two passes."
-msgstr "Vypoèítat quantily pou¾itím dvou prùchodù"
+msgstr "Vypoèítá qvantily pou¾itím dvou prùchodù."
 
 #: ../gui/wxpython/menustrings.py:465
 msgid "Range of category values"
@@ -7081,11 +7022,11 @@ msgstr "Seète hodnoty bunìk rastrového souboru."
 
 #: ../gui/wxpython/menustrings.py:469
 msgid "Sum area by raster map and category"
-msgstr "Souèet ploch v rastrové mapì podle kategorií"
+msgstr "Výpis ploch v rastrové mapì podle kategorií"
 
 #: ../gui/wxpython/menustrings.py:470
 msgid "Reports statistics for raster map layers."
-msgstr "Vypí¹e statistiku pro rastrovou mapu."
+msgstr "Vypí¹e statistiky pro rastrové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:471
 msgid "Statistics for clumped cells"
@@ -7105,11 +7046,11 @@ msgstr "Celkem opravených ploch"
 
 #: ../gui/wxpython/menustrings.py:474
 msgid "Surface area estimation for rasters."
-msgstr "Odhad plochy povrchù rastrových map."
+msgstr "Odhad plochy povrchù pro rastrové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:475
 msgid "Univariate raster statistics"
-msgstr "Univariantní statistika rastrové mapy"
+msgstr "Univariantní statistika rastrové vrstvy"
 
 #: ../gui/wxpython/menustrings.py:476
 msgid ""
@@ -7182,14 +7123,12 @@ msgid "Create new empty vector map"
 msgstr "Vytvoøit novou prázdnou vektorovou mapu"
 
 #: ../gui/wxpython/menustrings.py:491
-#, fuzzy
 msgid "Digitize vector map (requires TclTk)"
-msgstr "Digitalizovat rastrovou mapu (vy¾aduje XTerm)"
+msgstr "Digitalizovat vektorovou vrstvu (vy¾aduje TclTk)"
 
 #: ../gui/wxpython/menustrings.py:492
-#, fuzzy
 msgid "Interactive editing and digitization of vector maps."
-msgstr "Interaktivní editace rastrových bunìk v zadané mapì."
+msgstr "Interaktivnì upravuje a digitalizuje vektorové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:493
 msgid "Edit vector map (non-interactively)"
@@ -7231,7 +7170,7 @@ msgstr "Databázové spojení"
 
 #: ../gui/wxpython/menustrings.py:501
 msgid "Convert object types"
-msgstr "Konvertovat typy vektorových prvkù"
+msgstr "Zmìnit typy vektorových prvkù"
 
 #: ../gui/wxpython/menustrings.py:502
 #, fuzzy
@@ -7255,7 +7194,6 @@ msgid "Builds polylines from lines or boundaries."
 msgstr "Vytvoøit mnohonásobné linie z linií a hranic."
 
 #: ../gui/wxpython/menustrings.py:507
-#, fuzzy
 msgid "Split lines"
 msgstr "Rozdìlit linie"
 
@@ -7276,9 +7214,8 @@ msgid "Parallel lines"
 msgstr "Rovnobì¾né linie"
 
 #: ../gui/wxpython/menustrings.py:512
-#, fuzzy
 msgid "Creates parallel line to input vector lines."
-msgstr "Vytvoøit rovnobì¾ky ke vstupním liniím"
+msgstr "Vytvoøí rovnobì¾né linie ke vstupní linii"
 
 #: ../gui/wxpython/menustrings.py:513
 msgid "Dissolve boundaries"
@@ -7315,29 +7252,27 @@ msgstr "Vytvoøit popisky"
 
 #: ../gui/wxpython/menustrings.py:520
 msgid "Creates paint labels for a vector map from attached attributes."
-msgstr "Vytvoøí ¹títky pro vektorovou mapu a pøipojí atributy."
+msgstr "Vytvoøí barevné popisky pro vektorovou mapu z pøilo¾ených atributù."
 
 #: ../gui/wxpython/menustrings.py:521
-#, fuzzy
 msgid "Create optimally placed labels"
-msgstr "Vytvoøit popisky"
+msgstr "Vytvoøit optimálnì umístìné popisky"
 
 #: ../gui/wxpython/menustrings.py:522
-#, fuzzy
 msgid "Create optimally placed labels for vector map(s)"
-msgstr "Vytvoøit novou tabulku barev pro vektorovou mapu"
+msgstr "Vytvoøí optimálnì umístìné popisky pro vektorové vrstvy"
 
 #: ../gui/wxpython/menustrings.py:523
 msgid "Reposition vector map"
-msgstr "Transformace vektorové mapy"
+msgstr "Tranformace vektorové vrstvy"
 
 #: ../gui/wxpython/menustrings.py:524
 msgid ""
 "Performs an affine transformation (shift, scale and rotate, or GPCs) on "
 "vector map."
 msgstr ""
-"Vykonat afinní transformaci ( posun, mìøítko a otoèení, nebo GPC) vektorové "
-"mapy."
+"Vykoná afinní transformaci ( posunutí, zmìna mìøítka a otoèení, nebo GPC) "
+"vektorové mapy."
 
 #: ../gui/wxpython/menustrings.py:525
 msgid "Reproject vector map"
@@ -7345,12 +7280,11 @@ msgstr "Zmìnit projekci vektorové mapy"
 
 #: ../gui/wxpython/menustrings.py:526
 msgid "Allows projection conversion of vector maps."
-msgstr "Umo¾òuje zmìnu projekce vektorových map."
+msgstr "Umo¾òuje zmìnu projekce vektorové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:528
-#, fuzzy
 msgid "Updates vector map metadata."
-msgstr "Základní metadata vektorové mapy"
+msgstr "Aktualizuje matadata vektorové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:531
 msgid ""
@@ -7389,10 +7323,10 @@ msgid "Query with another vector map"
 msgstr "Dotaz na jinou vektorovou mapu"
 
 #: ../gui/wxpython/menustrings.py:539
-#, fuzzy
 msgid ""
 "Selects features from vector map (A) by features from other vector map (B)."
-msgstr "Vybrat prvky z mapy ainput podle prvkù mapy binput"
+msgstr ""
+"Vybere prvky z vektorové vrstvy (A)  podle prvkù z druhé vektorové vrstvy (B)"
 
 #: ../gui/wxpython/menustrings.py:540
 msgid "Buffer vectors"
@@ -7493,7 +7427,7 @@ msgid ""
 "Finds the nearest element in vector map 'to' for elements in vector map "
 "'from'."
 msgstr ""
-"najít nejbli¾¹í prvek ve vektorové vrstvì 'do_mapy' pro prvky ve vektorové "
+"Hledá nejbli¾¹í prvek ve vektorové vrstvì 'do_mapy' pro prvky ve vektorové "
 "vrstvì 'z_mapy'"
 
 #: ../gui/wxpython/menustrings.py:560
@@ -7502,20 +7436,19 @@ msgstr "Sí»ová analýza"
 
 #: ../gui/wxpython/menustrings.py:561
 msgid "Allocate subnets"
-msgstr "Alokovat podsítì"
+msgstr "Pøidìlit podsítì"
 
 #: ../gui/wxpython/menustrings.py:562
 msgid "Allocate subnets for nearest centres (direction from centre)."
-msgstr ""
+msgstr "Pøidìlí podsítì nejbli¾¹ímu centru (ve smìru od støedu)."
 
 #: ../gui/wxpython/menustrings.py:563
 msgid "Network maintenance"
 msgstr "Správa sítì"
 
 #: ../gui/wxpython/menustrings.py:564
-#, fuzzy
 msgid "Performs network maintenance."
-msgstr "Správa sítì."
+msgstr "Provádí údr¾bu sí»ì."
 
 #: ../gui/wxpython/menustrings.py:565
 msgid "Visibility network"
@@ -7539,7 +7472,7 @@ msgstr "Rozdìlit sí»"
 
 #: ../gui/wxpython/menustrings.py:570
 msgid "Splits net by cost isolines."
-msgstr ""
+msgstr "Rozdìlit sí» podle isolinií."
 
 #: ../gui/wxpython/menustrings.py:571
 msgid "Steiner tree"
@@ -7547,7 +7480,7 @@ msgstr "Steinerùv strom"
 
 #: ../gui/wxpython/menustrings.py:572
 msgid "Create Steiner tree for the network and given terminals"
-msgstr ""
+msgstr "vytvoøí Steinerùv strom pro sí» a zadané terminály"
 
 #: ../gui/wxpython/menustrings.py:573
 msgid "Traveling salesman analysis"
@@ -7556,6 +7489,8 @@ msgstr "Problém obchodního cestujícího"
 #: ../gui/wxpython/menustrings.py:574
 msgid "Creates a cycle connecting given nodes (Traveling salesman problem)."
 msgstr ""
+"Vytvoøí zacyklený prùbìh sítí podle daných uzlù (problém obchodního "
+"cestujícího)."
 
 #: ../gui/wxpython/menustrings.py:575 ../gui/wxpython/menustrings.py:576
 msgid "Overlay vector maps"
@@ -7763,7 +7698,7 @@ msgstr "Získává vzorky z rastrové mapy místech vektorových bodù"
 
 #: ../gui/wxpython/menustrings.py:620
 msgid "Reports and statistics"
-msgstr "Zprávy a statistiky"
+msgstr "Zprávy, výpisy a statistiky"
 
 #: ../gui/wxpython/menustrings.py:621
 msgid "Basic vector metadata"
@@ -7775,13 +7710,12 @@ msgid "Outputs basic information about a vector map."
 msgstr "Vypí¹e základní informace o u¾ivatelem vybrané rastrové mapì."
 
 #: ../gui/wxpython/menustrings.py:623
-#, fuzzy
 msgid "Classify attribute data"
-msgstr "Zobrazit atributovou tabulku"
+msgstr "Klasifikovat atributové data"
 
 #: ../gui/wxpython/menustrings.py:624
 msgid "Classifies attribute data, e.g. for thematic mapping"
-msgstr ""
+msgstr "Klasifikuje atributové data, napøíklad pro tématické mapy"
 
 #: ../gui/wxpython/menustrings.py:625
 msgid "Report topology by category"
@@ -7798,14 +7732,12 @@ msgid "Report or upload vector features to DB"
 msgstr "Pøevede 2D vektorovou mapu na mapu 3D"
 
 #: ../gui/wxpython/menustrings.py:628
-#, fuzzy
 msgid "Populates database values from vector features."
 msgstr "Nahraje data do databáze na základì vektorových prvkù."
 
 #: ../gui/wxpython/menustrings.py:629
-#, fuzzy
 msgid "Univariate attribute statistics for points"
-msgstr "Univariantní statistika atributù"
+msgstr "Univariantní statistika vektorových bodù a jejich atributù"
 
 #: ../gui/wxpython/menustrings.py:630
 #, fuzzy
@@ -7813,16 +7745,15 @@ msgid "Calculates univariate statistics for attribute."
 msgstr "Spoèítá univariantní statistiku z ne-nullových bunìk rastrové mapy."
 
 #: ../gui/wxpython/menustrings.py:631
-#, fuzzy
 msgid "Univariate statistics for attribute columns"
-msgstr "Univariantní statistika atributù"
+msgstr "Univariantní statistika atributových sloupcù"
 
 #: ../gui/wxpython/menustrings.py:632
-#, fuzzy
 msgid ""
 "Calculates univariate statistics on selected table column for a GRASS vector "
 "map."
-msgstr "Spoèítá univariantní statistiku z ne-nullových bunìk rastrové mapy."
+msgstr ""
+"Spoèítá univariantní statistiku pro vybraný sloupec tabulky vektorové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:633
 msgid "Quadrat indices"
@@ -7886,9 +7817,8 @@ msgid "Color balance for RGB"
 msgstr "Vyvá¾ení barev pro RGB"
 
 #: ../gui/wxpython/menustrings.py:647
-#, fuzzy
 msgid "Performs auto-balancing of colors for LANDSAT images."
-msgstr "Automatické vyvá¾ení barev pro snímky z dru¾ice LANDSAT"
+msgstr "Provádí automatické vyvá¾ení barev pro snímky z dru¾ice LANDSAT."
 
 #: ../gui/wxpython/menustrings.py:648
 msgid "HIS to RGB"
@@ -7899,25 +7829,28 @@ msgid ""
 "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
 "RGB (Red-Green-Blue) color space."
 msgstr ""
+"Pøevede rastrové mapy z HIS (odstín-intenzita-sytost) do RGB (èervená-zelená-"
+"modrá)"
 
 #: ../gui/wxpython/menustrings.py:651
 msgid ""
 "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-"
 "Intensity-Saturation) color space."
 msgstr ""
+"Pøevede rastrové mapy z RGB (èervená-zelená-modrá) do HIS (odstín-intenzita-"
+"sytost)"
 
 #: ../gui/wxpython/menustrings.py:652
 msgid "Rectify image or raster"
 msgstr "Rektifikovat obraz nebo rastrovou mapu"
 
 #: ../gui/wxpython/menustrings.py:653
-#, fuzzy
 msgid ""
 "Rectifies an image by computing a coordinate transformation for each pixel "
 "in the image based on the control points."
 msgstr ""
-"Rektifikuje obrazová data na základì vlícovacích bodù pomocí souøadnicové "
-"transformace pro ka¾dý pixel obrazu"
+"Rektifikuje obrazová data výpoètem transformace ka¾dého pixelu obrazu pomocí "
+"vlicovacích bodù (GCP)"
 
 #: ../gui/wxpython/menustrings.py:654
 msgid "Brovey sharpening"
@@ -7943,14 +7876,16 @@ msgid ""
 "Generates spectral signatures for land cover types in an image using a "
 "clustering algorithm."
 msgstr ""
+"Vytvoøí spektrální signatury pro typy povrchu v obraze pou¾itím metody "
+"shlukování."
 
 #: ../gui/wxpython/menustrings.py:659
 msgid "Maximum likelihood classification (MLC)"
-msgstr "Gaussùv klasifikátor MLC (Maximum likelihood classification)"
+msgstr "Klasifikátor MLC (Maximum likelihood classification)"
 
 #: ../gui/wxpython/menustrings.py:660
 msgid "Classifies the cell spectral reflectances in imagery data."
-msgstr ""
+msgstr "Klasifikuje spektrální odrazivost pro ka¾dou buòku obrazových dat."
 
 #: ../gui/wxpython/menustrings.py:661
 msgid "Sequential maximum a posteriori classification (SMAP)"
@@ -7969,18 +7904,16 @@ msgid "Input for supervised MLC"
 msgstr "Vstup pro øízenou klasifikaci MLC"
 
 #: ../gui/wxpython/menustrings.py:664
-#, fuzzy
 msgid "Generates statistics for i.maxlik from raster map."
-msgstr "Vytvoøí statistiku rastrové mapy pro i.maxlik."
+msgstr "Vytvoøí statistiku pro výstupní rastrovou mapu z i.maxlik"
 
 #: ../gui/wxpython/menustrings.py:665
 msgid "Input for supervised SMAP"
 msgstr "Vstup pro øízenou klasifikaci SMAP"
 
 #: ../gui/wxpython/menustrings.py:666
-#, fuzzy
 msgid "Generates statistics for i.smap from raster map."
-msgstr "Vytvoøí statistiku pro i.smap z rastrové mapové vrstvy."
+msgstr "Vytvoøí statistiku pro výstupní rastrovou mapu z i.smap"
 
 #: ../gui/wxpython/menustrings.py:667
 msgid "Filter image"
@@ -8011,11 +7944,11 @@ msgid "Spectral response"
 msgstr "Spektrální odezva"
 
 #: ../gui/wxpython/menustrings.py:675
-#, fuzzy
 msgid ""
 "Displays spectral response at user specified locations in group or images."
 msgstr ""
-"zobrazí spektrální odrazivost na u¾ivatelem zadaných mapách ve skupinì snímkù"
+"Zobrazí spektrální odrazivost na u¾ivatelem zadaných místech ve skupinì "
+"obrazù."
 
 #: ../gui/wxpython/menustrings.py:676
 msgid "Tasseled cap vegetation index"
@@ -8267,52 +8200,51 @@ msgid ""
 "Numerical calculation program for transient, confined groundwater flow in "
 "three dimensions"
 msgstr ""
+"Numerický výpoèetní program pro pøechodné, omezené a neohranièenéproudìní "
+"podzemních vod ve tøech rozmìrech."
 
 #: ../gui/wxpython/menustrings.py:735
 msgid "Interpolate volume from points"
-msgstr "Interpolovat volume z vektorových bodù "
+msgstr "Interpolovat 3D rastrovou vrstvu z vektorových bodù "
 
 #: ../gui/wxpython/menustrings.py:736
 msgid ""
 "Interpolates point data to a G3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Interpoluje bodová data do G3D volume za pou¾ití regularized spline with "
-"tension (RST)"
+"Interpoluje bodová data do G3D 3D rastrové grid vrstvy za pou¾ití "
+"regularized spline with tension (RST)"
 
 #: ../gui/wxpython/menustrings.py:737
 msgid "Report and Statistics"
-msgstr "Výpis a statistiky"
+msgstr "Zprávy,výpisy a statistiky"
 
 #: ../gui/wxpython/menustrings.py:738
 msgid "Basic volume metadata"
-msgstr "Základní metadata 3D rastrové mapy (volume)"
+msgstr "Základní metadata 3D rastrové vrstvy"
 
 #: ../gui/wxpython/menustrings.py:739
 msgid "Outputs basic information about a user-specified 3D raster map layer."
-msgstr "Vypí¹e základní informace o u¾ivatelem vybrané 3D rastrové mapì."
+msgstr "Vypí¹e základní informace o u¾ivatelem vybrané 3D rastrové vrstvì."
 
 #: ../gui/wxpython/menustrings.py:740
-#, fuzzy
 msgid "Voxel statistics"
-msgstr "Základní statistiky"
+msgstr "Základní statistiky 3D pixelu (voxel)"
 
 #: ../gui/wxpython/menustrings.py:741
-#, fuzzy
 msgid "Generates volume statistics for raster3d maps."
-msgstr "Vytvoøí statistiku ploch pro rastrové mapy."
+msgstr "Vytvoøí objemové statistiky pro 3D rastrové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:742
-#, fuzzy
 msgid "Univariate statistics for volumes"
-msgstr "Univariantní statistika rastrové mapy"
+msgstr "Univariantní statistika 3D rastrové vrstvyy"
 
 #: ../gui/wxpython/menustrings.py:743
-#, fuzzy
 msgid ""
 "Calculates univariate statistics from the non-null 3d cells of a raster3d "
 "map."
-msgstr "Spoèítá univariantní statistiku z ne-nullových bunìk rastrové mapy."
+msgstr ""
+"Spoèítá univariantní statistiku z ne-nullových 3D bunìk 3D rastrové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:744
 #, fuzzy
@@ -8381,9 +8313,8 @@ msgid "Copy table"
 msgstr "Kopírovat tabulku"
 
 #: ../gui/wxpython/menustrings.py:760
-#, fuzzy
 msgid "Copy a table."
-msgstr "Kopírovat tabulku"
+msgstr "Kopíruje tabulku."
 
 #: ../gui/wxpython/menustrings.py:761
 msgid "New table"
@@ -8710,7 +8641,7 @@ msgstr "GRASS Rychlý start"
 
 #: ../gui/wxpython/gis_set.py:789
 msgid "Starting GRASS for the first time"
-msgstr ""
+msgstr "Spu¹tìní GIS GRASS poprvé"
 
 #: ../gui/wxpython/gis_set.py:790
 msgid ""
@@ -8718,6 +8649,9 @@ msgid ""
 "have not already done so. A popular choice is \"grassdata\", located in your "
 "home directory."
 msgstr ""
+"GIS GRASS potøebuje adresáø, ve kterém budou ulo¾eny jeho data (GRASS "
+"databanka). Vytvoøte takový adresáø, jestli¾e ji¾ takový nemáte vytvoøen. "
+"OBlíbený název je \"grassdata\", umístìn ve va¹m domovském adresáøi."
 
 #: ../gui/wxpython/wxgui.py:102
 msgid "GRASS GIS Layer Manager"
@@ -8741,9 +8675,9 @@ msgid "Do you want to store current settings to workspace file?"
 msgstr "Chcete ulo¾it souèasné nastavní do souboru pracovního prostøedí?"
 
 #: ../gui/wxpython/wxgui.py:382
-#, fuzzy, python-format
+#, python-format
 msgid "Close Map Display %d"
-msgstr "Zavøít displej"
+msgstr "Zavøít Mapový displej %d"
 
 #: ../gui/wxpython/wxgui.py:457
 #, fuzzy
@@ -8850,9 +8784,8 @@ msgid "Writing current settings to workspace file failed (%s)."
 msgstr "Zápis aktuálního nastavení do souboru pracovní oblasti selhalo (%s)."
 
 #: ../gui/wxpython/wxgui.py:1010
-#, fuzzy
 msgid "Add various raster-based map layers"
-msgstr "Pøidat rastrovou vrstvu"
+msgstr "Pøidat rùzné vrstvy zalo¾ené na rastru"
 
 #: ../gui/wxpython/wxgui.py:1014
 #, fuzzy
@@ -8868,18 +8801,16 @@ msgid "Import GDAL layers"
 msgstr "Import GDAL vrstev"
 
 #: ../gui/wxpython/wxgui.py:1043
-#, fuzzy
 msgid "Link GDAL layers"
-msgstr "Import GDAL vrstev"
+msgstr "Pøiipojení GDAL vrstev"
 
 #: ../gui/wxpython/wxgui.py:1050
 msgid "Import OGR layers"
 msgstr "Import OGR vrstev"
 
 #: ../gui/wxpython/wxgui.py:1056
-#, fuzzy
 msgid "Link OGR layers"
-msgstr "Seznam vrstev"
+msgstr "Pøipojení OGR vrstev"
 
 #: ../gui/wxpython/wxgui.py:1079
 msgid "Nothing to import. No WMS layer selected."
@@ -8923,6 +8854,251 @@ msgstr "Ukonèit GRASS GUI"
 #: ../gui/wxpython/wxgui.py:1544
 msgid "No map layer selected. Operation cancelled."
 msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
+
+msgid " (those in bold typeface are required)"
+msgstr " (tuèný písmem zvýraznìné jsou po¾adovány)"
+
+#, fuzzy
+msgid "C&opy"
+msgstr "Kopírovat"
+
+msgid "Command '%s' not yet implemented."
+msgstr "Pøíkaz '%s' není je¹tì implementován."
+
+msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr."
+msgstr ""
+"Konvertuje vybrané OGR vrstvy do GRASS vektorové mapy pou¾itím v.in.ogr."
+
+msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)."
+msgstr ""
+"Konvertuje vybrané DXF vrstvy do GRASS vektorové mapy (pou¾itím v.in.dxf)."
+
+#, fuzzy
+msgid "Manage extensions"
+msgstr "Správa kartografických zobrazení"
+
+msgid "Add overlay"
+msgstr "Pøekrýt dal¹í vrstvou"
+
+msgid "Add graphic overlays to map"
+msgstr "Pøidá grafické pøekrytí mapy jinou vrstvou"
+
+msgid "Click here to show database connection information"
+msgstr "Kliknìte zde pro zobrazení informace databázového nastavení"
+
+msgid "Click here to hide database connection information"
+msgstr "Kliknìte zde pro skrytí informace databázového nastavení"
+
+msgid "Output vector map name"
+msgstr "Jméno výstupní vektorové mapy"
+
+msgid "Vector map <%s> georectified successfully"
+msgstr "Vektorová mapa <%s> byla úspì¹nì georektifikována"
+
+msgid "Copying attributes..."
+msgstr "Kopíruji atributy..."
+
+msgid "GRASS SQL Builder: %s"
+msgstr "GRASS SQL pomocník: %s"
+
+msgid "Encoding"
+msgstr "Kódování"
+
+msgid "Use coordinate system of selected georeferenced file"
+msgstr "Pou¾ít souøadnicový systém zvoleného georeferencované souboru"
+
+msgid "Use coordinate system of selected WKT or PRJ file"
+msgstr "Pou¾ít souøadnicový systém podle vybraného WTK nebo PRJ souboru"
+
+msgid "Create custom PROJ.4 parameters string for coordinate system"
+msgstr "Definovat PROJ.4 parametry pro souøadnicový systém"
+
+msgid "Select ellipsoid"
+msgstr "Vybrat referenèní elipsoid"
+
+msgid "Set zone for UTM projection:"
+msgstr "Nastavit UTM zónu:"
+
+msgid "Zone:"
+msgstr "Zóna:"
+
+msgid "Hemisphere for zone:"
+msgstr "Polokoule:"
+
+msgid "Datum"
+msgstr "Datum"
+
+msgid "Transformation parameters:"
+msgstr "Parametry transformace:"
+
+msgid "Browse EPSG Codes"
+msgstr "Procházet EPSG kódy"
+
+msgid "Datums:"
+msgstr "Datumy:"
+
+msgid "Apply regular expressions and wildcards to g.list"
+msgstr "Pou¾ij regulární výrazy a zástupné znaky na g.list"
+
+msgid "Apply regular expressions and wildcards to g.remove"
+msgstr "Pou¾ij regulární výrazy a zástupné znaky pro g.remove "
+
+msgid "It assumes a cartesian coordinate system"
+msgstr "Pøepokladem je karteziánský souøadný systém"
+
+msgid "Creates explicitly the NULL-value bitmap file."
+msgstr "Vytvoøí mapu s hodnotami NULL."
+
+msgid ""
+"Computes direct (beam), diffuse and reflected solar irradiation raster maps "
+"for given day, latitude, surface and atmospheric conditions. Solar "
+"parameters (e.g. sunrise, sunset times, declination, extraterrestrial "
+"irradiance, daylight length) are saved in the map history file. "
+"Alternatively, a local time can be specified to compute solar incidence "
+"angle and/or irradiance raster maps. The shadowing effect of the topography "
+"is optionally incorporated."
+msgstr ""
+"Poèítá mapu pøímého (paprsek), difùzního a odra¾eného sluneèního záøení pro "
+"zadaný den, zem. ¹íøku, povrch a atmosférické podmínky. Sluneèní parametry "
+"(napø. východ a západ slunce) jsou ulo¾eny do do souboru s historií mapy. "
+"Alternativnì staèí specifikovat èas pro výpoèet sluneèního úhlu a/nebo mapy "
+"ozáøení. Také lze volitelnì zahrnout efekt stínu terénu."
+
+msgid ""
+"Uses a multi-scale approach by taking fitting quadratic parameters to any "
+"size window (via least squares)."
+msgstr ""
+"Pou¾ívá multisklalární pøístup, vypoèítává kvadratické koeficienty pro okno "
+"libovolné velikosti (pomocí metody nejmen¹ích ètvercù)."
+
+msgid ""
+"It optionally produces raster maps to contain backlink UTM coordinates for "
+"tracing spread paths."
+msgstr "Volitelnì produkuje rastrové mapy obsahující "
+
+msgid "Reclassify raster categories interactively by entering reclass rules"
+msgstr "Interaktivnì reklasifikovat kategorie rastru zadáváním pravidel"
+
+msgid ""
+"Recode raster categories interactively by entering recode rules (create new "
+"raster map)"
+msgstr ""
+"Pøekódovat kategorie rastrové mapy interaktivnì zadáváním kódovacích "
+"pravidel (vytvoøí novou rastrovou mapu)"
+
+msgid "Smooth or simplify lines/boundaries (remove vertices)."
+msgstr "Vyhladit nebo zjednodu¹it linie, hranice (odstraní opìrné body)"
+
+msgid ""
+"Centre node must be opened (costs >= 0). Costs of centre node are used in "
+"calculation"
+msgstr ""
+"Støední uzel musí být otevøen (cena >= 0). cena støedního uzlu je pou¾ita ve "
+"výpoètu"
+
+msgid ""
+"Splits net to bands between cost isolines (direction from centre). Centre "
+"node must be opened (costs >= 0). Costs of centre node are used in "
+"calculation."
+msgstr ""
+"Rozdìl sí» do skupin mezi hodnotami izolinií ( smìr ze støedu). Støedový "
+"uzel musí být otevøen ( hodnota >=0). Hodnota støedního bodu bude pou¾ita "
+"pøi výpoètu."
+
+msgid ""
+"Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm "
+"is used in this module so the result may be sub optimal"
+msgstr ""
+"'Minimální Steinerùv strom' je NP-tì¾ká úloha, v tomto module je pou¾it "
+"heuristický algoritmus, výsledek nemusí být optimální"
+
+msgid ""
+"Note that TSP is NP-hard, heuristic algorithm is used by this module and "
+"created cycle may be sub optimal"
+msgstr ""
+"TSP je NP-tì¾ká úloha, v tomto modulu je pou¾it heuristický algoritmus, "
+"vytvoøení smyèky nemusí být optimální øe¹ení"
+
+msgid "Reclassify vector objects interactively by entering SQL rules"
+msgstr "Reklasifikovat vektorovou mapu na základì SQL pøíkazu"
+
+msgid "Outputs basic information about a user-specified vector map layer."
+msgstr "Vypí¹e základní informace o u¾ivatelem vybrané vektorové mapì."
+
+msgid ""
+"Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
+"transformation function."
+msgstr ""
+"Funkce barevné transformace hue-intensity-saturation(his) do red.green-blue"
+"(rgb) mapy "
+
+msgid ""
+"Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
+"transformation function"
+msgstr ""
+"Funkce barevné transformace red.green-blue(rgb) do hue-intensity-saturation"
+"(his) mapy "
+
+msgid ""
+"The resulting signature file is used as input for i.maxlik, to generate an "
+"unsupervised image classification."
+msgstr ""
+"Výsledný soubor spektrálních signatur je pou¾íván jako vstup pro modul i."
+"maxlik,který na jeho základì provede neøízenou klasifikaci snímku."
+
+msgid ""
+"Classification is based on the spectral signature information generated by "
+"either i.cluster, i.class, or i.gensig."
+msgstr ""
+"Obrazová funkce pro klasifikaci spektrální odrazivosti v obrazových datech "
+"zalo¾ená na informaci o spektrálních pøíznacích vytvoøených pomocí i."
+"cluster, i.class nebo i.gensig."
+
+msgid ""
+"Copy a table. Either 'from_table' (optionally with 'where') can be used or "
+"'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+"Kopíruj tabulku. Pou¾ita mù¾e být buï volba 'from_table' (volitelnì s "
+"'where') nebo volba 'select', ale nikoliv 'from_table' a 'select' souèasnì."
+
+msgid ""
+"Do you want to close display %(display)d?\n"
+"\n"
+"%(message)s"
+msgstr ""
+"Pøejete si zavøít diplej %(display)d?\n"
+"\n"
+"%(message)s"
+
+msgid ""
+"Unable to start Nviz. The OpenGL package was not found. You can get it at "
+"http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
+"\n"
+"Details: %s"
+msgstr ""
+"Nelze spustit Nviz. Balíèek OpenGL nebyl nalezen. mù¾ete si ho stáhnout na "
+"http://PyOpenGL.sourceforge.net. Pøepínám zpìt do 2D zobrazení.\n"
+"\n"
+"Detaily: %s"
+
+msgid "Create/edit projection information for current location"
+msgstr ""
+"Vytvoøit/modifikovat informace o kartografickém zobrazení aktuální lokace"
+
+msgid "Digitize raster map"
+msgstr "Digitalizovat rastrovou mapu"
+
+msgid ""
+"Display shortest route along network between 2 nodes (visualization only, "
+"requires XTerm))"
+msgstr ""
+"Zobrazí nejkrat¹í cestu mezi dvìma uzly (pouze zobrazí, vy¾aduje XTerm)"
+
+msgid "Ortho Photo rectification"
+msgstr "Orto foto rektifikace"
+
+msgid "Interactive input for supervised classification"
+msgstr "Interaktivní vstup pro øízenou klasifikaci"
 
 #~ msgid "Add thematic layer"
 #~ msgstr "Pøidat tématickou vrstvu"
@@ -8972,37 +9148,26 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 #~ msgid "Marker:"
 #~ msgstr "Znaèka:"
 
-#~ msgid " (those in bold typeface are required)"
-#~ msgstr " (tuèný písmem zvýraznìné jsou po¾adovány)"
-
-#, fuzzy
-#~ msgid "C&opy"
-#~ msgstr "Kopírovat"
-
 #~ msgid "Uknown settings file location."
 #~ msgstr "Neznámé umístìní souboru s nastavením."
 
 #~ msgid "Place where to store settings:"
-#~ msgstr "Místo kde ulo¾it nastavení:"
-
-#~ msgid "Command '%s' not yet implemented."
-#~ msgstr "Pøíkaz '%s' není je¹tì implementován."
+#~ msgstr "Místo kde ukládat nastavení:"
 
 #~ msgid "Import GDAL supported raster file into a binary raster map layer."
 #~ msgstr "Import rastrových souborù podporovaných knihovnou GDAL."
 
 #~ msgid "Multiple raster data import using GDAL"
-#~ msgstr "Import rùzných formátù pomocí GDAL"
+#~ msgstr "Hromadný import pomocí GDAL"
 
 #~ msgid "Link to GDAL"
 #~ msgstr "Pøipojit k GDAL"
 
-#, fuzzy
 #~ msgid "Multiple link to GDAL"
-#~ msgstr "Pøipojit k GDAL"
+#~ msgstr "Hromadné pøipojení map k GDAL"
 
 #~ msgid "Aggregate ASCII xyz import"
-#~ msgstr "Seskupit ASCII xyz data do rastové møí¾ky"
+#~ msgstr "Seskupit ASCII xyz data do rastrové møí¾ky"
 
 #~ msgid "Binary file import"
 #~ msgstr "Import binárního souboru"
@@ -9014,22 +9179,13 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 #~ msgstr "Import vektorové mapy pomocí OGR"
 
 #~ msgid "Multiple vector data import using OGR"
-#~ msgstr "Import rùzných formátù pomocí OGR"
-
-#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr."
-#~ msgstr ""
-#~ "Konvertuje vybrané OGR vrstvy do GRASS vektorové mapy pou¾itím v.in.ogr."
+#~ msgstr "Hromadný import pomocí OGR"
 
 #~ msgid "Link to OGR"
 #~ msgstr "Pøipojit k OGR"
 
-#, fuzzy
 #~ msgid "Multiple link to OGR"
-#~ msgstr "Pøipojit k OGR"
-
-#~ msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)."
-#~ msgstr ""
-#~ "Konvertuje vybrané DXF vrstvy do GRASS vektorové mapy (pou¾itím v.in.dxf)."
+#~ msgstr "Hromadné pøipojení pomocí OGR"
 
 #~ msgid "Garmin GPS import"
 #~ msgstr "Garmin GPS import"
@@ -9069,10 +9225,6 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 #~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
 #~ msgstr "Pøevede 3D rastrové mapy (G3D) do formátu VTK-Ascii"
 
-#, fuzzy
-#~ msgid "Manage extensions"
-#~ msgstr "Správa kartografických zobrazení"
-
 #~ msgid ""
 #~ "Makes each cell value a function of the attribute values assigned to the "
 #~ "vector points or centroids around it, and stores new cell values in an "
@@ -9093,71 +9245,11 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 #~ "Calculates univariate statistics for attribute. Variance and standard "
 #~ "deviation is calculated only for points if specified."
 #~ msgstr ""
-#~ "Poèítá základní statistiky pro atributy. Variance a standardní odchylka "
+#~ "Spoèítá základní statistiky pro atributy. Variance a standardní odchylka "
 #~ "jsou poèítány pouze pokud jsou zadány body."
-
-#~ msgid "Add overlay"
-#~ msgstr "Pøekrýt dal¹í vrstvou"
-
-#~ msgid "Add graphic overlays to map"
-#~ msgstr "Pøidá grafické pøekrytí mapy jinou vrstvou"
-
-#~ msgid "Click here to show database connection information"
-#~ msgstr "Kliknìte zde pro zobrazení informace databázového nastavení"
-
-#~ msgid "Click here to hide database connection information"
-#~ msgstr "Kliknìte zde pro skrytí informace databázového nastavení"
 
 #~ msgid "Parameter not found: %s"
 #~ msgstr "Paramentr nebyl nalezen: %s"
-
-#~ msgid "Output vector map name"
-#~ msgstr "Jméno výstupní vektorové mapy"
-
-#~ msgid "Vector map <%s> georectified successfully"
-#~ msgstr "Vektorová mapa <%s> byla úspì¹nì georektifikována"
-
-#~ msgid "Copying attributes..."
-#~ msgstr "Kopíruji atributy..."
-
-#~ msgid "GRASS SQL Builder: %s"
-#~ msgstr "GRASS SQL pomocník: %s"
-
-#~ msgid "Encoding"
-#~ msgstr "Kódování"
-
-#~ msgid "Use coordinate system of selected georeferenced file"
-#~ msgstr "Pou¾ít souøadnicový systém zvoleného georeferencované souboru"
-
-#~ msgid "Use coordinate system of selected WKT or PRJ file"
-#~ msgstr "Pou¾ít souøadnicový systém podle vybraného WTK nebo PRJ souboru"
-
-#~ msgid "Create custom PROJ.4 parameters string for coordinate system"
-#~ msgstr "Definovat PROJ.4 parametry pro souøadnicový systém"
-
-#~ msgid "Select ellipsoid"
-#~ msgstr "Vybrat referenèní elipsoid"
-
-#~ msgid "Set zone for UTM projection:"
-#~ msgstr "Nastavit UTM zónu:"
-
-#~ msgid "Zone:"
-#~ msgstr "Zóna:"
-
-#~ msgid "Hemisphere for zone:"
-#~ msgstr "Polokoule:"
-
-#~ msgid "Datum"
-#~ msgstr "Datum"
-
-#~ msgid "Transformation parameters:"
-#~ msgstr "Parametry transformace:"
-
-#~ msgid "Browse EPSG Codes"
-#~ msgstr "Procházet EPSG kódy"
-
-#~ msgid "Datums:"
-#~ msgstr "Datumy:"
 
 #~ msgid "Save workspace to open file"
 #~ msgstr "Ulo¾it pracovní oblast do souboru"
@@ -9171,42 +9263,8 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 #~ msgid "MAT-File (v.4) export"
 #~ msgstr "MAT-File (v.4) export"
 
-#~ msgid "Apply regular expressions and wildcards to g.list"
-#~ msgstr "Pou¾ij regulární výrazy a zástupné znaky na g.list"
-
-#~ msgid "Apply regular expressions and wildcards to g.remove"
-#~ msgstr "Pou¾ij regulární výrazy a zástupné znaky pro g.remove "
-
-#~ msgid "It assumes a cartesian coordinate system"
-#~ msgstr "Pøepokladem je karteziánský souøadný systém"
-
 #~ msgid "E&xit"
 #~ msgstr "&Konec"
-
-#~ msgid "Creates explicitly the NULL-value bitmap file."
-#~ msgstr "Vytvoøí mapu s hodnotami NULL."
-
-#~ msgid ""
-#~ "Computes direct (beam), diffuse and reflected solar irradiation raster "
-#~ "maps for given day, latitude, surface and atmospheric conditions. Solar "
-#~ "parameters (e.g. sunrise, sunset times, declination, extraterrestrial "
-#~ "irradiance, daylight length) are saved in the map history file. "
-#~ "Alternatively, a local time can be specified to compute solar incidence "
-#~ "angle and/or irradiance raster maps. The shadowing effect of the "
-#~ "topography is optionally incorporated."
-#~ msgstr ""
-#~ "Poèítá mapu pøímého (paprsek), difùzního a odra¾eného sluneèního záøení "
-#~ "pro zadaný den, zem. ¹íøku, povrch a atmosférické podmínky. Sluneèní "
-#~ "parametry (napø. východ a západ slunce) jsou ulo¾eny do do souboru s "
-#~ "historií mapy. Alternativnì staèí specifikovat èas pro výpoèet sluneèního "
-#~ "úhlu a/nebo mapy ozáøení. Také lze volitelnì zahrnout efekt stínu terénu."
-
-#~ msgid ""
-#~ "Uses a multi-scale approach by taking fitting quadratic parameters to any "
-#~ "size window (via least squares)."
-#~ msgstr ""
-#~ "Pou¾ívá multisklalární pøístup, vypoèítává kvadratické koeficienty pro "
-#~ "okno libovolné velikosti (pomocí metody nejmen¹ích ètvercù)."
 
 #~ msgid ""
 #~ "Generates three, or four raster map layers showing 1) the base "
@@ -9219,102 +9277,11 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 #~ "volitelnì, 4. - maximální potenciální vzdálenost, na kterou se mù¾e "
 #~ "pøenést po¾ár jiskrami."
 
-#~ msgid ""
-#~ "It optionally produces raster maps to contain backlink UTM coordinates "
-#~ "for tracing spread paths."
-#~ msgstr "Volitelnì produkuje rastrové mapy obsahující "
-
-#~ msgid "Reclassify raster categories interactively by entering reclass rules"
-#~ msgstr "Interaktivnì reklasifikovat kategorie rastru zadáváním pravidel"
-
-#~ msgid ""
-#~ "Recode raster categories interactively by entering recode rules (create "
-#~ "new raster map)"
-#~ msgstr ""
-#~ "Pøekódovat kategorie rastrové mapy interaktivnì zadáváním kódovacích "
-#~ "pravidel (vytvoøí novou rastrovou mapu)"
-
 #~ msgid "Bilinear from raster points"
 #~ msgstr "Bilineární interpolace z rastrových bodù"
 
 #~ msgid "Bilinear interpolation utility for raster map layers."
 #~ msgstr "Nástroj pro bilineární interpolaci rastrových map."
-
-#~ msgid "Smooth or simplify lines/boundaries (remove vertices)."
-#~ msgstr "Vyhladit nebo zjednodu¹it linie, hranice (odstraní opìrné body)"
-
-#~ msgid ""
-#~ "Centre node must be opened (costs >= 0). Costs of centre node are used in "
-#~ "calculation"
-#~ msgstr ""
-#~ "Støední uzel musí být otevøen (cena >= 0). cena støedního uzlu je pou¾ita "
-#~ "ve výpoètu"
-
-#~ msgid ""
-#~ "Splits net to bands between cost isolines (direction from centre). Centre "
-#~ "node must be opened (costs >= 0). Costs of centre node are used in "
-#~ "calculation."
-#~ msgstr ""
-#~ "Rozdìl sí» do skupin mezi hodnotami izolinií ( smìr ze støedu). Støedový "
-#~ "uzel musí být otevøen ( hodnota >=0). Hodnota støedního bodu bude pou¾ita "
-#~ "pøi výpoètu."
-
-#~ msgid ""
-#~ "Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic "
-#~ "algorithm is used in this module so the result may be sub optimal"
-#~ msgstr ""
-#~ "'Minimální Steinerùv strom' je NP-tì¾ká úloha, v tomto module je pou¾it "
-#~ "heuristický algoritmus, výsledek nemusí být optimální"
-
-#~ msgid ""
-#~ "Note that TSP is NP-hard, heuristic algorithm is used by this module and "
-#~ "created cycle may be sub optimal"
-#~ msgstr ""
-#~ "TSP je NP-tì¾ká úloha, v tomto modulu je pou¾it heuristický algoritmus, "
-#~ "vytvoøení smyèky nemusí být optimální øe¹ení"
-
-#~ msgid "Reclassify vector objects interactively by entering SQL rules"
-#~ msgstr "Reklasifikovat vektorovou mapu na základì SQL pøíkazu"
-
-#~ msgid "Outputs basic information about a user-specified vector map layer."
-#~ msgstr "Vypí¹e základní informace o u¾ivatelem vybrané vektorové mapì."
-
-#~ msgid ""
-#~ "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
-#~ "transformation function."
-#~ msgstr ""
-#~ "Funkce barevné transformace hue-intensity-saturation(his) do red.green-"
-#~ "blue(rgb) mapy "
-
-#~ msgid ""
-#~ "Red-green-blue (rgb) to hue-intensity-saturation (his) raster map color "
-#~ "transformation function"
-#~ msgstr ""
-#~ "Funkce barevné transformace red.green-blue(rgb) do hue-intensity-"
-#~ "saturation(his) mapy "
-
-#~ msgid ""
-#~ "The resulting signature file is used as input for i.maxlik, to generate "
-#~ "an unsupervised image classification."
-#~ msgstr ""
-#~ "Výsledný soubor spektrálních signatur je pou¾íván jako vstup pro modul i."
-#~ "maxlik,který na jeho základì provede neøízenou klasifikaci snímku."
-
-#~ msgid ""
-#~ "Classification is based on the spectral signature information generated "
-#~ "by either i.cluster, i.class, or i.gensig."
-#~ msgstr ""
-#~ "Obrazová funkce pro klasifikaci spektrální odrazivosti v obrazových "
-#~ "datech zalo¾ená na informaci o spektrálních pøíznacích vytvoøených pomocí "
-#~ "i.cluster, i.class nebo i.gensig."
-
-#~ msgid ""
-#~ "Copy a table. Either 'from_table' (optionally with 'where') can be used "
-#~ "or 'select' option, but not 'from_table' and 'select' at the same time."
-#~ msgstr ""
-#~ "Kopíruj tabulku. Pou¾ita mù¾e být buï volba 'from_table' (volitelnì s "
-#~ "'where') nebo volba 'select', ale nikoliv 'from_table' a 'select' "
-#~ "souèasnì."
 
 #~ msgid "Drops an attribute table."
 #~ msgstr "Vyjmout atributovou tabulku."
@@ -9324,15 +9291,6 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 
 #~ msgid "GRASS GIS GUI help"
 #~ msgstr "Nápovìda GRASS GIS grafického prostøedí"
-
-#~ msgid ""
-#~ "Do you want to close display %(display)d?\n"
-#~ "\n"
-#~ "%(message)s"
-#~ msgstr ""
-#~ "Pøejete si zavøít diplej %(display)d?\n"
-#~ "\n"
-#~ "%(message)s"
 
 #~ msgid "Unable to read workspace file"
 #~ msgstr "Nelze èíst soubor workspace"
@@ -9346,47 +9304,411 @@ msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
 #~ "\n"
 #~ "%(details)s"
 
-#~ msgid ""
-#~ "Unable to start Nviz. The OpenGL package was not found. You can get it at "
-#~ "http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.\n"
-#~ "\n"
-#~ "Details: %s"
-#~ msgstr ""
-#~ "Nelze spustit Nviz. Balíèek OpenGL nebyl nalezen. mù¾ete si ho stáhnout "
-#~ "na http://PyOpenGL.sourceforge.net. Pøepínám zpìt do 2D zobrazení.\n"
-#~ "\n"
-#~ "Detaily: %s"
-
 #~ msgid "Projection for current location"
 #~ msgstr "Projekce aktuální location"
-
-#~ msgid "Create/edit projection information for current location"
-#~ msgstr ""
-#~ "Vytvoøit/modifikovat informace o kartografickém zobrazení aktuální lokace"
-
-#~ msgid "Digitize raster map"
-#~ msgstr "Digitalizovat rastrovou mapu"
 
 #~ msgid "Set up (requires XTerm)"
 #~ msgstr "Nastavení (vy¾aduje XTerm)"
 
 #~ msgid "Display shortest route (requires XTerm)"
-#~ msgstr "Zobrazit nejkrat¹í cestu"
-
-#~ msgid ""
-#~ "Display shortest route along network between 2 nodes (visualization only, "
-#~ "requires XTerm))"
-#~ msgstr ""
-#~ "Zobrazí nejkrat¹í cestu mezi dvìma uzly (pouze zobrazí, vy¾aduje XTerm)"
+#~ msgstr "Zobrazit nejkrat¹í cestu (vy¾aduje XTerm)"
 
 #~ msgid "Ortho photo rectification (requires Xterm)"
 #~ msgstr "Orto foto rektifikace (vy¾aduje XTerm)"
 
-#~ msgid "Ortho Photo rectification"
-#~ msgstr "Orto foto rektifikace"
-
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
 #~ msgstr "Interaktivní vstup pro øízenou klasifikaci"
 
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "Interaktivní vstup pro øízenou klasifikaci"
+#~ msgid "Create new workspace file"
+#~ msgstr "Vytvoøit nový soubor pracovní oblasti"
+
+#~ msgid "Load map layers into workspace"
+#~ msgstr "Naèíst mapové vrstvy do pracovní oblasti"
+
+#~ msgid "Open existing workspace file"
+#~ msgstr "Otevøít existující soubor s pracovní oblastí"
+
+#~ msgid "Save current workspace to file"
+#~ msgstr "Ulo¾it pracovní oblast do souboru"
+
+#~ msgid "Add raster map layer"
+#~ msgstr "Pøidat rastrovou vrstvu"
+
+#~ msgid "Add vector map layer"
+#~ msgstr "Pøidat vektorovou vrstvu"
+
+#~ msgid "Close this window without executing the command"
+#~ msgstr "Zavøi toto okno bez spu¹tìní pøíkazu"
+
+#~ msgid "Show manual page of the command"
+#~ msgstr "Ukázat manuálovou stránku pøíkazu"
+
+#~ msgid "Run the command"
+#~ msgstr "Spustit pøíkaz"
+
+#~ msgid "Copy the current command string to the clipboard"
+#~ msgstr "Kopírovat pøíkaz jako øetìzec do schránky"
+
+#~ msgid "Resolution cannot be 0"
+#~ msgstr "Rozli¹ení nemù¾e být 0"
+
+#~ msgid "Extents set incorrectly"
+#~ msgstr "Meze regionu byly zadány ¹patnì"
+
+#~ msgid "Overlay raster maps"
+#~ msgstr "Pøekrývat rastrové mapy"
+
+#~ msgid "Error in command execution %s"
+#~ msgstr "Chyba pøi vykonání pøíkazu %s"
+
+#~ msgid "GRASS GIS Map Display: 1"
+#~ msgstr "GRASS GIS Mapové okno: 1"
+
+#~ msgid "Define/manage ground control points"
+#~ msgstr "Vytvoøení a správa vlicovacích bodù (GCP)"
+
+#~ msgid "coarse:"
+#~ msgstr "hrubý:"
+
+#~ msgid "fine:"
+#~ msgstr "jemný:"
+
+#~ msgid "Wire color:"
+#~ msgstr "barva sítì"
+
+#~ msgid "Icon size:"
+#~ msgstr "Velikost ikon:"
+
+#~ msgid "width:"
+#~ msgstr "¹íøka:"
+
+#~ msgid "symbol:"
+#~ msgstr "symbol:"
+
+#~ msgid "color:"
+#~ msgstr "barva:"
+
+#~ msgid "Import raster data using GDAL"
+#~ msgstr "Import rastrových dat pomocí GDAL"
+
+#~ msgid "Converts selected GDAL layers to GRASS raster maps using r.in.gdal"
+#~ msgstr ""
+#~ "Pøevede vybrané GDAL vrstvy na GRASS rastrové mapy pou¾itím r.in.gdal."
+
+#~ msgid "Link GDAL supported raster file to a binary raster map layer."
+#~ msgstr "Pøipojí rastrový soubor podporovaný GDAL k binární rastrové mapì."
+
+#~ msgid "Link GDAL supported raster files to a binary raster map layers"
+#~ msgstr "Pøipojí rastrové soubory podporované GDAL k binární rastrové mapì"
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr "Pøevede ASCII rastrový soubor na binární rastrovou mapu."
+
+#~ msgid "ASCII polygons and lines import"
+#~ msgstr "Import ASCII polygonù a linií"
+
+#~ msgid ""
+#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "Pøevede ESRI ARC/INFO ascii rastr (GRID) na (binární) rastrovou mapu."
+
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "Import SPOT VGT NDVI souboru jako rastrové mapy"
+
+#~ msgid ""
+#~ "Georeference, rectify and import Terra-ASTER imagery and relative DEM's "
+#~ "using gdalwarp."
+#~ msgstr ""
+#~ "Georeferencuje, rektifikuje a importuje snímky ve formátu Terra-ASTER a "
+#~ "pøíbuzných DMT za pou¾ití gdalwarp."
+
+#~ msgid "Downloads and imports data from WMS servers."
+#~ msgstr "Stáhne a importuje data z WMS serverù."
+
+#~ msgid "Convert OGR vector layers to GRASS vector map."
+#~ msgstr "Konvertuje vektorové vrstvy OGR na GRASS vektorové mapy."
+
+#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
+#~ msgstr ""
+#~ "Pøevede vybrané OGR vrstvy do GRASS vektorové mapy pou¾itím v.in.ogr."
+
+#~ msgid "Creates a new vector as a read-only link to OGR layer."
+#~ msgstr ""
+#~ "Vytvoøí nový vektor jako vrstvu pouze ke ètení pøipojenou pomocí OGR."
+
+#~ msgid "Creates a new vectors as a read-only link to OGR layers"
+#~ msgstr ""
+#~ "Vytvoøí nové vektorovévrstvy  jako vrstvy pouze ke ètení pøipojené pomocí "
+#~ "OGR."
+
+#~ msgid "ASCII points/GRASS ASCII vector import"
+#~ msgstr "Import ASCII body/GRASS ASCII vektory"
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr "Vytvoøí vektorovou mapu ze souboru ASCII bodù nebo ASCII vektoru"
+
+#~ msgid "Old GRASS vector import"
+#~ msgstr "Import starého vektorového formátu GRASS"
+
+#~ msgid "Multiple DXF layers import"
+#~ msgstr "Hromadný import DXF vrstev"
+
+#~ msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)"
+#~ msgstr ""
+#~ "Pøevede vybrané DXF vrstvy do GRASS vektorové mapy (pou¾itím v.in.dxf)."
+
+#~ msgid "GPSBabel GPS import"
+#~ msgstr "GPSBabel GPS import"
+
+#~ msgid ""
+#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+#~ "file into a vector map."
+#~ msgstr ""
+#~ "Stáhne Waypoints, Routes a Tracks z pøístroje GPS nebo ze souboru a ulo¾í "
+#~ "je do vektorové mapy."
+
+#~ msgid "Matlab and MapGen import"
+#~ msgstr "Matlab and MapGen import"
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "Pøevede 3D ASCII rastrový textový soubor na (binární) 3D rastrovou "
+#~ "mapovou vrstvu "
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "Pøevede rastrovou mapu do ASCII souboru."
+
+#~ msgid "ASCII x,y,z export"
+#~ msgstr "ASCII x,y,z export"
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "Exportuje rastrovou mapu GRASSu do GRIDATB.FOR souboru (TOPMODEL)"
+
+#~ msgid "Raster File Series to MPEG Conversion Program."
+#~ msgstr "Program, vytváøející MPEG ze série rastrových map"
+
+#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
+#~ msgstr "Export GRASS rastrové mapy jako nepøipojený PNG obraz."
+
+#~ msgid ""
+#~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
+#~ "resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr ""
+#~ "Pøevede 3 GRASSové rastrové mapy (R,G,B) do souboru PPM s rozli¹ením "
+#~ "pixelu podle aktuálnì definovaného regionu."
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr "Pøevede rastrovou mapu do souboru pro POVRAY."
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr "Export rastrové mapy do Virtual Reality Modeling Language (VRML)"
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "Pøevede rastrové mapy do formátu VTK-Ascii"
+
+#~ msgid "Multiple export formats using OGR"
+#~ msgstr "Export rùzných formátù pomocí OGR"
+
+#~ msgid "Converts to one of the supported OGR vector formats."
+#~ msgstr "Konvertuje mapu do jednoho z podporovaných vektorových formátù OGR."
+
+#~ msgid "ASCII points/GRASS ASCII vector export"
+#~ msgstr "Export ASCII bodù/GRASS ASCII vektorù"
+
+#~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
+#~ msgstr "Pøevede GRASS binární vektorovou mapu do formátu GRASS ASCII."
+
+#~ msgid "Exports GRASS vector map layers to DXF file format."
+#~ msgstr "Exportuje GRASS vektory jako soubor DXF."
+
+#~ msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"
+#~ msgstr "Pøevede do POV-Ray formátu, GRASS x,y,z -> POV-Ray x,y,z"
+
+#~ msgid "Exports a GRASS vector map to SVG."
+#~ msgstr "Exportuje GRASS vektory jako soubor SVG."
+
+#~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
+#~ msgstr "Pøeveï GRASS vektor na formát VTK ASCII."
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "Pøevede 3D rastrovou mapovou vrstvu do ASCII textového souboru"
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr ""
+#~ "Exportuje 3D rastrový soubor GRASSu do 3-dimenzionálního Vis5D souboru."
+
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr "Pøevede binární GRASS vektorovou mapu do GRASS rastrové mapy."
+
+#~ msgid ""
+#~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
+#~ "raster map layer."
+#~ msgstr ""
+#~ "Pøevede binární GRASS vektorovou mapovou vrstvu (pouze body) na 3D GRASS "
+#~ "rastrovou mapovou vrstvu."
+
+#~ msgid "Config"
+#~ msgstr "Nastavení"
+
+#~ msgid "Interactively reset the location's projection settings."
+#~ msgstr "Interaktivnì vyma¾e nastavení projekce location"
+
+#~ msgid "Convert coordinates from one projection to another (cs2cs frontend)."
+#~ msgstr "Pøevede souøadnice z jedné projekce do druhé (rozhraní k cs2cs)"
+
+#~ msgid "Raster"
+#~ msgstr "Rastr"
+
+#~ msgid "Digitize raster (requires XTerm)"
+#~ msgstr "Digitalizovat rastrovou mapu (vy¾aduje XTerm)"
+
+#~ msgid ""
+#~ "Interactive tool used to draw and save vector features on a graphics "
+#~ "monitor using a pointing device (mouse) and save to a raster map."
+#~ msgstr ""
+#~ "Interaktivní nástroj  pou¾itý pro vykreslování a ulo¾ení vektorových "
+#~ "prvkù do grafického monitoru s pou¾itím ukazatele (my¹) a ulo¾ení do "
+#~ "rastrové mapy."
+
+#~ msgid "Create a MASK for limiting raster operation"
+#~ msgstr "Vytvoø MASKu pro limitní rastrové operace"
+
+#~ msgid "Calculates category or object oriented statistics."
+#~ msgstr ""
+#~ "Poèítá statistky podle kategorií nebo objektovì orientované statistiky."
+
+#~ msgid ""
+#~ "Interactive tool used to setup the sampling and analysis framework that "
+#~ "will be used by the other r.le programs."
+#~ msgstr ""
+#~ "Interaktivní nástroj pou¾itý pro nastavení vzorkù a analýzu pracovní "
+#~ "oblasti, která bude pou¾ita dal¹ími r.le moduly."
+
+#~ msgid ""
+#~ "r.recode.rules - Use ascii rules file to recode categories in raster map"
+#~ msgstr ""
+#~ "r.recode.rules -Pou¾ít soubor s ascii pravidly pro pøekódování kategorií "
+#~ "v rastrové mapì"
+
+#~ msgid "Vector"
+#~ msgstr "Vektor"
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "Vytváøí topologii pro vektorovou mapu GRASSu."
+
+#~ msgid "Vector based generalization."
+#~ msgstr "Zobecnìní vektorové vrstvy."
+
+#~ msgid "Change the type of geometry elements."
+#~ msgstr "Zmìní typ geometrických prvkù vektorové vrstvy."
+
+#~ msgid "Split lines to shorter segments."
+#~ msgstr "Rozdìlí linie na men¹í segmenty."
+
+#~ msgid "Extrudes flat vector object to 3D with defined height."
+#~ msgstr "Vytvoøí z plo¹ného vektorového objektu 3D o zadané vý¹ce"
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "Dotazovat vektorovou mapu v daných locations."
+
+#~ msgid ""
+#~ "Creates a buffer around features of given type (areas must contain "
+#~ "centroid)."
+#~ msgstr ""
+#~ "Vytvoøí buffer okolo prvkù zadaného typu (plochy musí obsahovat centroid)"
+
+#~ msgid "Finds shortest path for selected starting and ending node."
+#~ msgstr ""
+#~ "Hledá nejkrat¹í cestu ve vektorové síti pro zadaný zaèátek a konec trasy."
+
+#~ msgid "Create a new vector map layer by combining other vector map layers."
+#~ msgstr ""
+#~ "Vytvoøí nový binární vektorovou mapu kombinací více vektorových vrstev."
+
+#~ msgid "Attach, delete or report vector categories to map geometry."
+#~ msgstr "Pøilo¾, sma¾ nebo vypi¹ vektorové kategorie do mapové geometrie."
+
+#~ msgid "Creates a GRASS vector map of a user-defined grid."
+#~ msgstr "Vytvoøí GRASS vektorovou mapu podle u¾ivatelem definované møí¾ky"
+
+#~ msgid "Create points along input lines in new vector with 2 layers."
+#~ msgstr ""
+#~ "Vytvoøí body podél vstupních linií a ulo¾í do nového souboru o dvou "
+#~ "vrstvách."
+
+#~ msgid "Randomly generate a 2D/3D vector points map."
+#~ msgstr "Náhodnì vytvoøit 2D/3D bodovou vektorovou vrstvu."
+
+#~ msgid "Random location perturbations of GRASS vector points"
+#~ msgstr "Náhodná odchylka location vektorových bodù"
+
+#~ msgid ""
+#~ "Calculates univariate statistics from a GRASS raster map based on vector "
+#~ "polygons and uploads statistics to new attribute columns."
+#~ msgstr ""
+#~ "Spoèítá základní statistiku rastrového souboru na základì vektorových "
+#~ "polygonù a ulo¾í ji do nových sloupeèkù atributové tabulky."
+
+#~ msgid "Outputs basic information about a user-specified vector map."
+#~ msgstr "Vypí¹e základní informace o u¾ivatelem vybrané vektorové vrstvì."
+
+#~ msgid "Reports geometry statistics for vectors."
+#~ msgstr "Vypí¹e údaje o geometrii vektorové mapy."
+
+#~ msgid "Tests for normality for points."
+#~ msgstr "Test normality bodù"
+
+#~ msgid "Imagery"
+#~ msgstr "Obraz"
+
+#~ msgid "Mosaics up to 4 images and extends colormap; creates map *.mosaic"
+#~ msgstr ""
+#~ "Vytvoøí mozaiku ze 4 a více snímkù, roztáhne barevnou paletu a vytvoøí "
+#~ "mapu *.mosaic"
+
+#~ msgid "Menu driver for the photo imagery programs."
+#~ msgstr "Nabídka ovladaèù pro fotografické obrazové programy. "
+
+#~ msgid ""
+#~ "Generates spectral signatures for an image by allowing the user to "
+#~ "outline regions of interest."
+#~ msgstr ""
+#~ "Vytvoøí spektrální signatury pro obrazová data povolením u¾ivateli "
+#~ "naèrtnout oblasti zájmu."
+
+#~ msgid "Volumes"
+#~ msgstr "3D rastr"
+
+#~ msgid ""
+#~ "Creates and adds a new attribute table to a given layer of an existing "
+#~ "vector map."
+#~ msgstr ""
+#~ "Vytvoøí a pøidá novou atributovou tabulku k zadané vrstvì existující "
+#~ "vektorové mapy."
+
+#~ msgid "Help"
+#~ msgstr "Nápovìda"
+
+#~ msgid "GRASS GIS help"
+#~ msgstr "Nápovìda GRASS GIS"
+
+#~ msgid ""
+#~ "Reading workspace file <%s> failed. Invalid file, unable to parse XML "
+#~ "document."
+#~ msgstr ""
+#~ "Ètení souboru workspace <%s> selhalo. Neplatný soubor, nelze parsovat XML "
+#~ "dokument."
+
+#~ msgid "Add various vector-based map layer"
+#~ msgstr "Pèèidat rùzné vrstvy zalo¾ené na vektoru"
+
+#~ msgid "COPYING file missing"
+#~ msgstr "SOubor COPYING chybí"
+
+#~ msgid "GPL.TXT file missing"
+#~ msgstr "Soubor GPL.TXT chybí"
+
+#~ msgid "AUTHORS file missing"
+#~ msgstr "Soubor AUTHORS chybí"
