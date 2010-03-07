@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     Vect_open_old2(&In, in_opt->answer, "", layer_opt->answer);
     layer = Vect_get_field_number(&In, layer_opt->answer);
     
-    Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));
+    Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In) ? WITH_Z : WITHOUT_Z);
     
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
