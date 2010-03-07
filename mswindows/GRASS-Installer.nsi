@@ -416,6 +416,63 @@ Section "GRASS" SecGRASS
 	;add GRASS files
 	SetOutPath "$INSTALL_DIR"
 	File /r ${PACKAGE_FOLDER}\*.*
+
+	;create run_gmkfontcap.bat
+	ClearErrors
+	FileOpen $0 $INSTALL_DIR\etc\run_gmkfontcap.bat w
+	IfErrors done_create_run_gmkfontcap.bat
+	FileWrite $0 '@echo off$\r$\n'
+	FileWrite $0 'rem #########################################################################$\r$\n'
+	FileWrite $0 'rem #$\r$\n'
+	FileWrite $0 'rem # Run g.mkfontcap outside a grass session during installation$\r$\n'
+	FileWrite $0 'rem #$\r$\n'
+	FileWrite $0 'rem #########################################################################$\r$\n'
+	FileWrite $0 'echo Setup of WinGRASS-${VERSION_NUMBER}$\r$\n'
+	FileWrite $0 'echo Generating the font configuration file by scanning various directories for fonts.$\r$\n'
+	FileWrite $0 'echo Please wait. Console window will close automatically ....$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 'rem set gisbase$\r$\n'
+	FileWrite $0 'set GISBASE=$INSTALL_DIR$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 'rem set path to freetype dll$\r$\n'
+	FileWrite $0 'set FREETYPEBASE=$INSTALL_DIR\extralib$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 'rem set dependecies path$\r$\n'
+	FileWrite $0 'set PATH=%FREETYPEBASE%;%PATH%$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 'rem run g.mkfontcap outside a grass session$\r$\n'
+	FileWrite $0 '"%GISBASE%\bin\g.mkfontcap.exe"$\r$\n'
+	FileWrite $0 'exit$\r$\n'
+	FileClose $0
+	done_create_run_gmkfontcap.bat:
+
+	;create run_gmkfontcap.bat.manifest
+	ClearErrors
+	FileOpen $0 $INSTALL_DIR\etc\run_gmkfontcap.bat.manifest w
+	IfErrors done_create_run_gmkfontcap.bat.manifest
+	FileWrite $0 '	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>$\r$\n'
+	FileWrite $0 '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">$\r$\n' 
+	FileWrite $0 '  <assemblyIdentity version="1.0.0.0"$\r$\n'
+	FileWrite $0 '     processorArchitecture="X86"$\r$\n'
+	FileWrite $0 '     name="run_gmkfontcap"$\r$\n'
+	FileWrite $0 '     type="win32"/>$\r$\n' 
+	FileWrite $0 '  <description>GRASS help script:run_gmkfontcap<description>$\r$\n' 
+	FileWrite $0 '  <!-- Identify the application security requirements. -->$\r$\n'
+	FileWrite $0 '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">$\r$\n'
+	FileWrite $0 '    <security>$\r$\n'
+	FileWrite $0 '      <requestedPrivileges>$\r$\n'
+	FileWrite $0 '        <requestedExecutionLevel$\r$\n'
+	FileWrite $0 '          level="asInvoker"$\r$\n'
+	FileWrite $0 '          uiAccess="false"/>$\r$\n'
+	FileWrite $0 '        </requestedPrivileges>$\r$\n'
+	FileWrite $0 '       </security>$\r$\n'
+	FileWrite $0 '  </trustInfo>$\r$\n'
+	FileWrite $0 '</assembly>$\r$\n'
+	FileClose $0
+	done_create_run_gmkfontcap.bat.manifest:
+	
+	;Run g.mkfontcap outside a grass session during installation to catch all fonts
+	ExecWait '"$INSTALL_DIR\etc\run_gmkfontcap.bat"'
 	
 	;Install demolocation into the GIS_DATABASE directory
 	SetOutPath "$GIS_DATABASE\demolocation"
