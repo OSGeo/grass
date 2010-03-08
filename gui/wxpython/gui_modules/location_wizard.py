@@ -1429,8 +1429,7 @@ class EPSGPage(TitledPage):
             try:
                 self.epsgcode, self.epsgdesc, self.epsgparams = \
                         self.epsglist.Search(index=[0,1,2], pattern=value)
-
-            except IndexError: # -> no item found
+            except (IndexError, ValueError): # -> no item found
                 self.epsgcode = None
                 self.epsgdesc = self.epsgparams = ''
                 self.tcode.SetValue('')
