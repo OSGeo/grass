@@ -352,98 +352,85 @@ class Overlay(Layer):
         #self.mapfile = self.gtemp + ".png"
 
 class Map(object):
+    """!Map composition (stack of map layers and overlays)
     """
-    Map composition (stack of map layers and overlays)
-    """
-    def __init__(self, gisrc=None):
-        # 
+    def __init__(self, gisrc = None):
         # region/extent settigns
-        #
-        self.wind      = {}    # WIND settings (wind file)
-        self.region    = {}    # region settings (g.region)
-        self.width     = 640   # map width
-        self.height    = 480   # map height
-
-        #
+        self.wind      = dict() # WIND settings (wind file)
+        self.region    = dict() # region settings (g.region)
+        self.width     = 640    # map width
+        self.height    = 480    # map height
+        
         # list of layers
-        #
-        self.layers    = []  # stack of available GRASS layer
+        self.layers    = list()  # stack of available GRASS layer
 
-        self.overlays  = []  # stack of available overlays
-        self.ovlookup  = {}  # lookup dictionary for overlay items and overlays
-
-        #
+        self.overlays  = list()  # stack of available overlays
+        self.ovlookup  = dict()  # lookup dictionary for overlay items and overlays
+        
         # environment settings
-        #
         # environment variables, like MAPSET, LOCATION_NAME, etc.
-        self.env         = {}
+        self.env   = dict()
         # path to external gisrc
         self.gisrc = gisrc
         
-        # 
         # generated file for g.pnmcomp output for rendering the map
-        #
-        #self.mapfile   = utils.GetTempfile()
         self.mapfile = tempfile.mkstemp(suffix='.ppm')[1]
-
+        
         # setting some initial env. variables
-        self.InitGisEnv() # g.gisenv
-        self.InitRegion()
-
-        #
+        self._initGisEnv() # g.gisenv
+        self.GetWindow()
         # GRASS environment variable (for rendering)
-        #
         os.environ["GRASS_TRANSPARENT"] = "TRUE"
         os.environ["GRASS_BACKGROUNDCOLOR"] = "ffffff"
-
-        self.projinfo = self.ProjInfo()
         
-    def InitRegion(self):
-        """
-        Initialize current region settings.
+        # projection info
+        self.projinfo = self._projInfo()
 
-        Set up 'self.region' using g.region command and
-        self.wind according to the wind file.
-
-        Adjust self.region based on map window size.
-        """
-
-        #
-        # setting region ('g.region -upg')
-        #
-        ### not needed here (MapFrame.OnSize())
-        # self.region = self.GetRegion()
-
-        #
-        # read WIND file
-        #
-        self.GetWindow()
-
-        #
-        # setting resolution
-        #
-        # not needed here (MapFrame.OnSize())
-        # self.SetRegion()
-
-    def InitGisEnv(self):
-        """
-        Stores GRASS variables (g.gisenv) to self.env variable
-        """
-
-        if not os.getenv("GISBASE"):
-            print >> sys.stderr, _("GISBASE not set. You must be in GRASS GIS to run this program.")
-            sys.exit(1)
-            
+    def _runCommand(self, cmd, **kwargs):
+        """!Run command in environment defined by self.gisrc if
+        defined"""
         # use external gisrc if defined
         gisrc_orig = os.getenv("GISRC")
         if self.gisrc:
             os.environ["GISRC"] = self.gisrc
-
-        self.env = grass.gisenv()
+        
+        ret = cmd(**kwargs)
         
         # back to original gisrc
         if self.gisrc:
             os.environ["GISRC"] = gisrc_orig
+        
+        return ret
+    
+    def _initGisEnv(self):
+        """!Stores GRASS variables (g.gisenv) to self.env variable
+        """
+        if not os.getenv("GISBASE"):
+            sys.exit(_("GISBASE not set. You must be in GRASS GIS to run this program."))
+        
+        self.env = self._runCommand(grass.gisenv)
+                
+    def _projInfo(self):
+        """!Return region projection and map units information
+        """
+        projinfo = dict()
+                
+        ret = self._runCommand(gcmd.RunCommand, prog = 'g.proj',
+                               read = True, flags = 'p')
+        
+        if not ret:
+            return projinfo
+        
+        for line in ret.splitlines():
+            if ':' in line:
+                key, val = line.split(':')
+                projinfo[key.strip()] = val.strip()
+            elif "XY location (unprojected)" in line:
+                projinfo['proj'] = 'xy'
+                projinfo['units'] = ''
+                break
+        
+        return projinfo
 
     def GetWindow(self):
         """!Read WIND file and set up self.wind dictionary"""
@@ -455,20 +442,16 @@ class Map(object):
         try:
             windfile = open (filename, "r")
         except IOError, e:
-            sys.stderr.write("%s: %s <%s>: %s\n%s\n" % (_("Error"), _("Unable to open file"),
-                                                    filename, e,
-                                                    _("wxGUI closed.")))
-            sys.exit(1)
-
+            sys.exit(_("Error: Unable to open '%s'. Reason: %s. wxGUI exited.\n") % \
+                         filename, e)
+        
         for line in windfile.readlines():
             line = line.strip()
-            key, value = line.split(":",1)
-            key = key.strip()
-            value = value.strip()
-            self.wind[key] = value
-            
+            key, value = line.split(":", 1)
+            self.wind[key.strip()] = value.strip()
+        
         windfile.close()
-
+        
         return self.wind
         
     def AdjustRegion(self):
@@ -741,33 +724,6 @@ class Map(object):
         except:
             return None
 
-    def ProjInfo(self):
-        """
-        Return region projection and map units information
-        """
-
-        projinfo = {}
-
-        ret = gcmd.RunCommand('g.proj',
-                              read = True,
-                              flags = 'p')
-        
-        if not ret:
-            return projinfo
-
-        for line in ret.splitlines():
-            if ':' in line:
-                key,val = line.split(':')
-                key = key.strip()
-                val = val.strip()
-                projinfo[key] = val
-            elif "XY location (unprojected)" in line:
-                projinfo['proj'] = "xy"
-                projinfo['units'] = ''
-                break
-        
-        return projinfo
-    
     def GetListOfLayers(self, l_type=None, l_mapset=None, l_name=None,
                         l_active=None, l_hidden=None):
         """
