@@ -873,16 +873,22 @@ class GCP(wx.Frame):
         wxCol = wx.Colour(col[0], col[1], col[2], 255)
         wpx = UserSettings.Get(group='georect', key='symbol', subkey='width')
         font = self.GetFont()
-
+        
+        penOrig = polypenOrig = None
+        
         idx = 0
         for gcp in self.mapcoordlist:
             mapWin = gcp[coordtype][2]
             if not self.list.IsChecked(idx) or not mapWin:
                 idx += 1
                 continue
-
-            mapWin.pen = wx.Pen(colour=wxCol, width=wpx, style=wx.SOLID)
-            mapWin.polypen = wx.Pen(colour=wxCol, width=wpx, style=wx.SOLID) # ?
+            
+            if not penOrig:
+                penOrig = mapWin.pen
+                polypenOrig = mapWin.polypen
+                mapWin.pen = wx.Pen(colour=wxCol, width=wpx, style=wx.SOLID)
+                mapWin.polypen = wx.Pen(colour=wxCol, width=wpx, style=wx.SOLID) # ?
+            
             coord = mapWin.Cell2Pixel((gcp[coordtype][0], gcp[coordtype][1]))
             mapWin.DrawCross(pdc=mapWin.pdcTmp, coords=coord,
                              size=5, text={ 'text' : '%s' % str(idx + 1),
@@ -893,9 +899,12 @@ class GCP(wx.Frame):
                                                        coord[1] + 5,
                                                        5,
                                                        5]})
-            
             idx += 1
             
+        if penOrig:
+            mapWin.pen = penOrig
+            mapWin.polypen = polypenOrig
+        
     def SetGCPData(self, coordtype, coord, mapdisp=None, check=True):
         """
         Inserts coordinates from mouse click on map
