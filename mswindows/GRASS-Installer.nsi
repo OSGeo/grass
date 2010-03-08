@@ -339,6 +339,10 @@ FunctionEnd
 !insertmacro MUI_PAGE_WELCOME
 
 ;These indented statements modify settings for MUI_PAGE_LICENSE
+    !define MUI_LICENSEPAGE_TEXT_BOTTOM "GRASS is software libre. You are encouraged and legally \
+	entitled to copy, reinstall, modify, and redistribute this program \
+	for yourself and your friends under the terms of the GPL. Happy \
+	mapping!"
     !define MUI_LICENSEPAGE_BUTTON "Next >"
 !insertmacro MUI_PAGE_LICENSE "${PACKAGE_FOLDER}\GPL.TXT"
 
