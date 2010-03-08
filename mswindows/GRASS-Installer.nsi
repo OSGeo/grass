@@ -354,12 +354,12 @@ FunctionEnd
     !define MUI_FINISHPAGE_NOAUTOCLOSE
     !define MUI_FINISHPAGE_RUN
     !define MUI_FINISHPAGE_RUN_NOTCHECKED
-    !define MUI_FINISHPAGE_RUN_TEXT "Launch Grass"
+    !define MUI_FINISHPAGE_RUN_TEXT "Launch GRASS GIS"
     !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchGrass"
     !define MUI_FINISHPAGE_SHOWREADME
     !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-    !define MUI_FINISHPAGE_SHOWREADME_TEXT "Launch Reference Manual"
-	!define MUI_FINISHPAGE_SHOWREADME_FUNCTION "ViewReadme"
+    !define MUI_FINISHPAGE_SHOWREADME_TEXT "Launch Reference Manual in browser"
+    !define MUI_FINISHPAGE_SHOWREADME_FUNCTION "ViewReadme"
 !insertmacro MUI_PAGE_FINISH
 
 !insertmacro MUI_UNPAGE_WELCOME
