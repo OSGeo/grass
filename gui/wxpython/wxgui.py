@@ -167,7 +167,7 @@ class GMFrame(wx.Frame):
         self.Show()
 
         # load workspace file if requested
-        if (self.workspaceFile):
+        if self.workspaceFile:
             # load given workspace file
             if self.LoadWorkspaceFile(self.workspaceFile):
                 self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile))
