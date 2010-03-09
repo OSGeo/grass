@@ -2544,8 +2544,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = True
 
     def ZoomBack(self):
-        """!
-        Zoom to previous extents in zoomhistory list
+        """!Zoom to previous extents in zoomhistory list
         """
         zoom = list()
         
@@ -2553,8 +2552,14 @@ class BufferedWindow(MapWindow, wx.Window):
             self.zoomhistory.pop()
             zoom = self.zoomhistory[-1]
         
+        # disable tool if stack is empty
         if len(self.zoomhistory) < 2: # disable tool
-            self.parent.toolbars['map'].Enable('zoomback', enable = False)
+            if self.parent.GetName() == 'MapWindow':
+                toolbar = self.parent.toolbars['map']
+            elif self.parent.GetName() == 'GRMapWindow':
+                toolbar = self.parent.toolbars['georect']
+            
+            toolbar.Enable('zoomback', enable = False)
         
         # zoom to selected region
         self.Map.GetRegion(n = zoom[0], s = zoom[1],

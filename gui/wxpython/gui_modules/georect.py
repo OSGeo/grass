@@ -194,6 +194,7 @@ class GeorectWizard(object):
             self.xy_mapdisp.SetTitle(_("GRASS GIS Map Display: 1" +
                                        " - Location: " + self.newlocation +
                                        " (source location)"))
+            self.xy_mapdisp.GetWindow().ResetZoomHistory()
             
             self.gcpmgr.SetMapDisplay(self.xy_mapdisp)
             
