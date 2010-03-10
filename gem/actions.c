@@ -97,7 +97,7 @@ void unpack_extension(char *package)
     /* TODO: Do not hardcode temp paths */
     strcpy(TMPDIR, "/tmp/grass.extension.XXXXXX");	/* tmpdir is a global variable */
     mkstemp(TMPDIR);
-    fd = open(TMPDIR, O_CREAT);
+    fd = open(TMPDIR, O_CREAT, 0777);
     if (fd == -1) {
 	print_error(ERR_UNPACK_EXT,
 		    "could not create temp directory name: %s",
