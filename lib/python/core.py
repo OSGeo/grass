@@ -67,7 +67,8 @@ _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
 	       "universal_newlines", "startupinfo", "creationflags"]
 
 def _make_val(val):
-    if isinstance(val, types.StringType):
+    if isinstance(val, types.StringType) or \
+            isinstance(val, types.UnicodeType):
 	return val
     if isinstance(val, types.ListType):
 	return ",".join(map(_make_val, val))
