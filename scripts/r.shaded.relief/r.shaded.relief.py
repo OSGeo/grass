@@ -12,7 +12,7 @@
 #               updates: Markus Neteler, 2001, 1999
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Creates shaded relief map from raster elevation map (DEM)
-# COPYRIGHT:	(C) 1999 - 2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 1999 - 2008, 2010 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,21 +51,20 @@
 #% Module
 #%  description: Creates shaded relief map from an elevation map (DEM).
 #%  keywords: raster
-#%  keywords: elevation
 #% End
 #% option
 #%  key: input
 #%  type: string
 #%  gisprompt: old,cell,raster
-#%  description: Input elevation map
+#%  description: Name of input elevation map
 #%  required : yes
 #% end
 #% option
 #%  key: output
 #%  type: string
 #%  gisprompt: new,cell,raster
-#%  description: Output shaded relief map name
-#%  required : no
+#%  description: Name for output shaded relief map
+#%  required : yes
 #% end
 #% option
 #%  key: altitude
@@ -96,6 +95,7 @@
 #%  description: Scale factor for converting horizontal units to elevation units
 #%  required : no
 #%  answer: 1
+#%  guisection: Scaling
 #% end
 #% option
 #%  key: units
@@ -104,6 +104,7 @@
 #%  required : no
 #%  options: none,meters,feet
 #%  answer: none
+#%  guisection: Scaling
 #% end
 
 import sys
@@ -117,57 +118,46 @@ def main():
     altitude = options['altitude']
     azimuth = options['azimuth']
     zmult = options['zmult']
-    scale = options['scale']
+    scale = float(options['scale'])
     units = options['units']
-
+    verbose_level = os.getenv('GRASS_VERBOSE')
+    if verbose_level is None:
+        verbose_level = 2
+    
     if not grass.find_file(input)['file']:
-	grass.fatal(_("Map <%s> not found.") % input)
+	grass.fatal(_("Raster map <%s> not found") % input)
 
     if input == output:
 	grass.fatal(_("Input elevation map and output relief map must have different names"))
-
-    elev = input
-
-    if not output:
-	elevshade = elev.split('@')[0] + '.shade'
-    else:
-	elevshade = output
-
-    elev_out = "'%s'" % elevshade
-
-    alt = altitude
-    scale = float(scale)
-
+    
     # LatLong locations only:
     if units == 'meters':
-        #scale=111120
+        # scale=111120
 	scale *= 1852 * 60
 
     # LatLong locations only:
     if units == 'feet':
-        #scale=364567.2
+        # scale=364567.2
 	scale *= 6076.12 * 60
 
     #correct azimuth to East (GRASS convention):
     #  this seems to be backwards, but in fact it works so leave it.
     az = float(azimuth) - 90
 
-    grass.message(_("Calculating shading, please stand by."))
-
     t = string.Template(
 	r'''eval( \
-	x=($zmult*$elev[-1,-1] + 2*$zmult*$elev[0,-1] + $zmult*$elev[1,-1] - \
-	$zmult*$elev[-1,1] - 2*$zmult*$elev[0,1] - $zmult*$elev[1,1])/(8.*ewres()*$scale), \
-	y=($zmult*$elev[-1,-1] + 2*$zmult*$elev[-1,0] + $zmult*$elev[-1,1] - \
-	$zmult*$elev[1,-1] - 2*$zmult*$elev[1,0] - $zmult*$elev[1,1])/(8.*nsres()*$scale), \
+	x=($zmult*$input[-1,-1] + 2*$zmult*$input[0,-1] + $zmult*$input[1,-1] - \
+	$zmult*$input[-1,1] - 2*$zmult*$input[0,1] - $zmult*$input[1,1])/(8.*ewres()*$scale), \
+	y=($zmult*$input[-1,-1] + 2*$zmult*$input[-1,0] + $zmult*$input[-1,1] - \
+	$zmult*$input[1,-1] - 2*$zmult*$input[1,0] - $zmult*$input[1,1])/(8.*nsres()*$scale), \
 	slope=90.-atan(sqrt(x*x + y*y)), \
 	a=round(atan(x,y)), \
 	a=if(isnull(a),1,a), \
 	aspect=if(x!=0||y!=0,if(a,a,360.)), \
-	cang = sin($alt)*sin(slope) + cos($alt)*cos(slope) * cos($az-aspect) \
+	cang = sin($altitude)*sin(slope) + cos($altitude)*cos(slope) * cos($az-aspect) \
 	)
-	$elev_out = if(isnull(cang), null(), 100.*cang)''')
-    expr = t.substitute(alt = alt, az = az, elev = elev, elev_out = elev_out, scale = scale, zmult = zmult)
+	$output = if(isnull(cang), null(), 100.*cang)''')
+    expr = t.substitute(altitude = altitude, az = az, input = input, output = output, scale = scale, zmult = zmult)
     p = grass.feed_command('r.mapcalc')
     p.stdin.write(expr)
     p.stdin.close()
@@ -175,24 +165,22 @@ def main():
     if p.wait() != 0:
 	grass.fatal(_("In calculation, script aborted."))
 
-    grass.run_command('r.colors', map = elevshade, color = 'grey')
-
-    # record metadata
-    grass.run_command('r.support', map = elevshade, title = 'Shaded relief of "%s"' % input, history = '')
-    grass.run_command('r.support', map = elevshade, history = "r.shaded.relief settings:")
-    t = string.Template("altitude=$alt  azimuth=$azimuth zmult=$zmult  scale=$scale")
-    parms = dict(alt = alt, azimuth = azimuth, zmult = zmult, scale = options['scale'])
-    grass.run_command('r.support', map = elevshade, history = t.substitute(parms))
-    if units:
-	grass.run_command('r.support', map = elevshade, history = "  units=%s (adjusted scale=%s)" % (units, scale))
-
-    if output:
-	grass.message(_("Shaded relief map created and named <%s>.") % elevshade)
+    if verbose_level < 3:
+        grass.run_command('r.colors', map = output, color = 'grey', quiet = True)
     else:
-	grass.message(_("Shaded relief map created and named <%s>. Consider renaming.") % elevshade)
+        grass.run_command('r.colors', map = output, color = 'grey')
+    
+    # record metadata
+    grass.run_command('r.support', map = output, title = 'Shaded relief of "%s"' % input, history = '')
+    grass.run_command('r.support', map = output, history = "r.shaded.relief settings:")
+    t = string.Template("altitude=$altitude  azimuth=$azimuth zmult=$zmult  scale=$scale")
+    parms = dict(altitude = altitude, azimuth = azimuth, zmult = zmult, scale = options['scale'])
+    grass.run_command('r.support', map = output, history = t.substitute(parms))
+    if units:
+	grass.run_command('r.support', map = output, history = "  units=%s (adjusted scale=%s)" % (units, scale))
 
     # write cmd history:
-    grass.raster_history(elevshade)
+    grass.raster_history(output)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
