@@ -2340,8 +2340,11 @@ class LayerBook(wx.Notebook):
         
         if len(self.defaultConnect['driver']) == 0 or \
                len(self.defaultConnect['database']) == 0:
-            raise gcmd.DBMError(_('Unable to determine default DB connection settings. '
-                                  'Please define DB connection using db.connect module.'))
+            wx.MessageBox(parent=self.parent,
+                          message=_("Unknown default DB connection. "
+                                    "Please define DB connection using db.connect module."),
+                          caption=_("Warning"),
+                          style=wx.OK | wx.ICON_WARNING | wx.CENTRE)
         
         self.defaultTables = self.__getTables(self.defaultConnect['driver'],
                                               self.defaultConnect['database'])
