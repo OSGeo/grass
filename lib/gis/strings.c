@@ -71,8 +71,11 @@ int G_strcasecmp(const char *x, const char *y)
  * This routine allocates enough memory to hold the string <b>s</b>,
  * copies <b>s</b> to the allocated memory, and returns a pointer
  * to the allocated memory.
- * 
- *  \param[in] s string
+ *
+ * If <em>s</em> is NULL then empty string is returned.
+ *
+ *  \param s string
+ *
  *  \return pointer to newly allocated string
  */
 
@@ -80,9 +83,15 @@ char *G_store(const char *s)
 {
     char *buf;
 
-    buf = G_malloc(strlen(s) + 1);
-    strcpy(buf, s);
-
+    if (s == NULL) {
+	buf = G_malloc(sizeof(char));
+	buf[0] = '\0';
+    }
+    else {
+	buf = G_malloc(strlen(s) + 1);
+	strcpy(buf, s);
+    }
+    
     return buf;
 }
 
