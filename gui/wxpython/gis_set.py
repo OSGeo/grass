@@ -64,8 +64,7 @@ class GRASSStartup(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=id, style=style)
         
         self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
-
-        # self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        
         self.panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
         
         # i18N
