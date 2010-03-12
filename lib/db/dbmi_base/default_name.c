@@ -1,13 +1,29 @@
+/*!
+  \file db/dbmi_base/default_name.c
+  
+  \brief DBMI Library (base) - default settings
+  
+  (C) 1999-2010 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC)
+  \author Upgraded to GRASS 5.7 by Radim Blazek
+*/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 /*!
-   \fn const char * db_get_default_driver_name ( void )
-   \brief returns pointer to default driver name
-   \return returns pointer to default driver name or NULL if not set
- */
+  \brief Get default driver name
+
+  \return pointer to default driver name
+  \return NULL if not set
+*/
 const char *db_get_default_driver_name(void)
 {
     const char *drv;
@@ -19,10 +35,11 @@ const char *db_get_default_driver_name(void)
 }
 
 /*!
-   \fn const char * db_get_default_database_name ( void )
-   \brief returns pointer to default database name
-   \return returns pointer to default database name or NULL if not set
- */
+  \brief Get default database name
+
+  \return pointer to default database name
+  \return NULL if not set
+*/
 const char *db_get_default_database_name(void)
 {
     const char *drv;
@@ -34,10 +51,11 @@ const char *db_get_default_database_name(void)
 }
 
 /*!
-   \fn const char * db_get_default_schema_name ( void )
-   \brief returns pointer to default schema name
-   \return returns pointer to default schema name or NULL if not set
- */
+  \brief Get default schema name
+  
+  \return pointer to default schema name
+  \return NULL if not set
+*/
 const char *db_get_default_schema_name(void)
 {
     const char *sch;
@@ -49,10 +67,11 @@ const char *db_get_default_schema_name(void)
 }
 
 /*!
-   \fn const char * db_get_default_group_name ( void )
-   \brief returns pointer to default group name
-   \return returns pointer to default group name or NULL if not set
- */
+  \brief Get default group name
+  
+  \return pointer to default group name
+  \return NULL if not set
+*/
 const char *db_get_default_group_name(void)
 {
     const char *gr;
@@ -63,13 +82,13 @@ const char *db_get_default_group_name(void)
     return NULL;
 }
 
-
-
 /*!
-   \fn int db_set_default_connection(void)
-   \brief sets up database connection settings using GRASS default from dbmi.h
-   \return returns DB_OK (TODO: DB_OK on success, DB_* error code on fail)
- */
+  \brief Sets up database connection settings using GRASS default from dbmi.h
+
+  \todo DB_OK on success, DB_* error code on fail
+
+  \return returns DB_OK 
+*/
 int db_set_default_connection(void)
 {
     dbConnection connection;
@@ -105,7 +124,7 @@ int db_set_default_connection(void)
 	db_set_connection(&connection);
     }
     else
-	G_fatal_error("Programmer error");
+	G_fatal_error(_("Programmer error"));
 
     return DB_OK;
 }
