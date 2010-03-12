@@ -51,7 +51,7 @@ FILES = \
 	$(HTMLDIR)/circle_3.png \
 	$(HTMLDIR)/circle_4.png \
 	$(HTMLDIR)/circle_5.png \
-	$(HTMLDIR)/grass_start_small.jpg
+	$(HTMLDIR)/grass_start.png
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 	FILES += \
