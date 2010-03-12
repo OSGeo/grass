@@ -10,7 +10,7 @@ Classes:
  - GRASSStartup
  - StartUp
 
-(C) 2006-2009 by the GRASS Development Team
+(C) 2006-2010 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,6 +41,7 @@ import wx.html
 import wx.lib.rcsizer as rcs
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
+import wx.lib.scrolledpanel as scrolled
 
 class GRASSStartup(wx.Frame):
     """!GRASS start-up screen"""
@@ -64,8 +65,9 @@ class GRASSStartup(wx.Frame):
         
         self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
 
-        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
-
+        # self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        
         # i18N
         import gettext
         gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
