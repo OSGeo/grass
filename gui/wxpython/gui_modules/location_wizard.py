@@ -1681,8 +1681,8 @@ class SummaryPage(TitledPage):
         projdesc = self.parent.projpage.projdesc
         ellipsedesc = self.parent.ellipsepage.ellipsedesc
         datumdesc = self.parent.datumpage.datumdesc
-        self.ldatabase.SetLabel(str(database))
-        self.llocation.SetLabel(str(location))
+        self.ldatabase.SetLabel(database)
+        self.llocation.SetLabel(location)
         label = ''
         
         if coordsys == 'epsg':

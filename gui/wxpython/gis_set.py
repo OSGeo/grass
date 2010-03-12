@@ -198,8 +198,14 @@ class GRASSStartup(wx.Frame):
                 self.gisdbase = os.getenv("HOME")
             else:
                 self.gisdbase = os.getcwd()
-        self.tgisdbase.SetValue(self.gisdbase)
-
+        try:
+            self.tgisdbase.SetValue(self.gisdbase)
+        except UnicodeDecodeError:
+            wx.MessageBox(parent = self, caption = _("Error"),
+                          message = _("Unable to set GRASS database. "
+                                      "Check your locale settings."),
+                          style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+        
         self.OnSetDatabase(None)
         location = self.GetRCValue("LOCATION_NAME")
         if location == "<UNKNOWN>" or \
@@ -523,7 +529,13 @@ class GRASSStartup(wx.Frame):
 
     def UpdateLocations(self, dbase):
         """!Update list of locations"""
-        self.listOfLocations = utils.GetListOfLocations(dbase)
+        try:
+            self.listOfLocations = utils.GetListOfLocations(dbase)
+        except UnicodeEncodeError:
+            wx.MessageBox(parent = self, caption = _("Error"),
+                          message = _("Unable to set GRASS database. "
+                                      "Check your locale settings."),
+                          style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
         
         self.lblocations.Clear()
         self.lblocations.InsertItems(self.listOfLocations, 0)
