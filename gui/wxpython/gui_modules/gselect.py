@@ -666,9 +666,8 @@ class ColumnSelect(wx.ComboBox):
                  size=globalvar.DIALOG_COMBOBOX_SIZE, vector=None,
                  layer=1, choices=[]):
         
-        super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices,
-                                           style=wx.CB_READONLY)
-
+        super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices)
+        
         self.SetName("ColumnSelect")
 
         if vector:

@@ -1446,8 +1446,10 @@ class cmdPanel(wx.Panel):
                                                   size=globalvar.DIALOG_TEXTCTRL_SIZE)
                                 win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbcolumn':
-                            win = gselect.ColumnSelect(parent=which_panel)
+                            win = gselect.ColumnSelect(parent = which_panel,
+                                                       value = p.get('default', ''))
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                            win.Bind(wx.EVT_TEXT,     self.OnSetValue)
 
                     try:
                         p['wxId'] = [ win.GetId(), ]
@@ -1779,8 +1781,7 @@ class cmdPanel(wx.Panel):
                         break
                 
                 if found:
-                    if name in ('LayerSelect', 'DriverSelect', 'TableSelect',
-                                'ColumnSelect'):
+                    if name in ('LayerSelect', 'DriverSelect', 'TableSelect'):
                         porf['value'] = me.GetStringSelection()
                     else:
                         porf['value'] = me.GetValue()
