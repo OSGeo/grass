@@ -1245,16 +1245,17 @@ class cmdPanel(wx.Panel):
                     else:
                         # list of values (combo)
                         title_txt.SetLabel(title + ':')
-                        cb = wx.ComboBox(parent=which_panel, id=wx.ID_ANY, value=p.get('default',''),
-                                         size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                         choices=valuelist, style=wx.CB_DROPDOWN | wx.CB_READONLY)
-                        if p.get('value','') != '':
+                        cb = wx.ComboBox(parent = which_panel, id = wx.ID_ANY, value = p.get('default',''),
+                                         size = globalvar.DIALOG_COMBOBOX_SIZE,
+                                         choices = valuelist, style = wx.CB_DROPDOWN)
+                        if p.get('value', '') != '':
                             cb.SetValue(p['value']) # parameter previously set
-                        which_sizer.Add( item=cb, proportion=0,
-                                         flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
-                        p['wxId'] = [ cb.GetId(), ]
-                        cb.Bind( wx.EVT_COMBOBOX, self.OnSetValue)
-
+                        which_sizer.Add(item = cb, proportion = 0,
+                                        flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
+                        p['wxId'] = [cb.GetId(),]
+                        cb.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                        cb.Bind(wx.EVT_TEXT, self.OnSetValue)
+            
             # text entry
             if (p.get('type','string') in ('string','integer','float')
                 and len(p.get('values',[])) == 0
