@@ -1447,7 +1447,8 @@ class cmdPanel(wx.Panel):
                                 win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbcolumn':
                             win = gselect.ColumnSelect(parent = which_panel,
-                                                       value = p.get('default', ''))
+                                                       value = p.get('default', ''),
+                                                       param = p)
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             win.Bind(wx.EVT_TEXT,     self.OnSetValue)
 
@@ -1664,6 +1665,8 @@ class cmdPanel(wx.Panel):
     def OnUpdateDialog(self, event):
         for fn, kwargs in event.data.iteritems():
             fn(**kwargs)
+        
+        self.parent.updateValuesHook()
         
     def OnVerbosity(self, event):
         """!Verbosity level changed"""
