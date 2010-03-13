@@ -634,7 +634,7 @@ Section "GRASS" SecGRASS
 	; ${If} exist %PROGRAMFILES%/Mozilla Firefox/firefox.exe
 	;FileWrite $0 'set GRASS_HTML_BROWSER=%PROGRAMFILES%/Mozilla Firefox/firefox.exe$\r$\n'
 	; ${Else}
-	FileWrite $0 'set GRASS_HTML_BROWSER=%PROGRAMFILES%/Internet Explorer/iexplore.exe$\r$\n'
+	FileWrite $0 'set GRASS_HTML_BROWSER=explorer$\r$\n'
 	; ${EndIf}
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem Path to the proj files (notably the epsg projection list)$\r$\n'	
