@@ -85,7 +85,7 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
 		have_divisor = 1;
 		if (sscanf(buf, "DIVISOR %lf", &div) == 1) {
 		    f->divisor = div;
-		    if (n == 0)
+		    if (div == 0)
 			f->dmatrix = f->matrix;
 		    continue;
 		}
