@@ -88,6 +88,7 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
 			max = Points->z[j];
 		}
 		if (min != max) {
+		    G_debug(2,"no_contour: %d", no_contour);
 		    no_contour++;
 		    continue;
 		}
@@ -121,7 +122,7 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
     }
 
     if (no_contour > 0)
-	G_warning(_("%d lines with varying height were not written to raster"),
+	G_message(_("%d lines with varying height were not written to raster"),
 		  no_contour);
 
     Vect_destroy_cats_struct(Cats);
