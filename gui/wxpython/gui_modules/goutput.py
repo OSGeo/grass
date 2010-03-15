@@ -102,7 +102,7 @@ class CmdThread(threading.Thread):
                 aborted = False
             
             time.sleep(.1)
-            
+
             # set default color table for raster data
             if UserSettings.Get(group='cmd', key='rasterColorTable', subkey='enabled') and \
                     args[0][0][:2] == 'r.':
@@ -122,7 +122,7 @@ class CmdThread(threading.Thread):
                               time = requestTime,
                               pid = requestId,
                               onDone = onDone)
-
+            
             # send event
             wx.PostEvent(self.parent, event)
             
@@ -401,7 +401,7 @@ class GMConsole(wx.SplitterWindow):
             self.Map = curr_disp.GetRender()
         except:
             curr_disp = None
-
+        
         # command given as a string ?
         try:
             cmdlist = command.strip().split(' ')
@@ -417,7 +417,7 @@ class GMConsole(wx.SplitterWindow):
             fileHistory.write(cmdString + '\n')
         finally:
             fileHistory.close()
-
+        
         # update history items
         if self.parent.GetName() == 'LayerManager':
             try:
@@ -428,7 +428,7 @@ class GMConsole(wx.SplitterWindow):
         if cmdlist[0] in globalvar.grassCmd['all']:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
-            if cmdlist[0][0:2] == "d.":
+            if self.parent.GetName() == "LayerManager" and cmdlist[0][0:2] == "d.":
                 #
                 # display GRASS commands
                 #
@@ -448,7 +448,9 @@ class GMConsole(wx.SplitterWindow):
                                  'd.rhumbline'    : 'rhumb',
                                  'd.labels'       : 'labels'}[cmdlist[0]]
                 except KeyError:
-                    wx.MessageBox(message=_("Command '%s' not yet implemented in the GUI. Try adding it as a command layer instead.") % cmdlist[0])
+                    wx.MessageBox(caption = _("Message"),
+                                  message=_("Command '%s' not yet implemented in the GUI. "
+                                            "Try adding it as a command layer instead.") % cmdlist[0])
                     return None
 
                 # add layer into layer tree
@@ -460,11 +462,12 @@ class GMConsole(wx.SplitterWindow):
                                                       layerType = 'vector')
                 else:
                     lname = None
-                
-                self.parent.curr_page.maptree.AddLayer(ltype=layertype,
-                                                       lname=lname,
-                                                       lcmd=cmdlist)
 
+                if self.parent.GetName() == "LayerManager":                
+                    self.parent.curr_page.maptree.AddLayer(ltype=layertype,
+                                                           lname=lname,
+                                                           lcmd=cmdlist)
+            
             else:
                 #
                 # other GRASS commands (r|v|g|...)
