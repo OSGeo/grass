@@ -565,6 +565,10 @@ class processTask:
         
         return default
     
+    def GetTask(self):
+        """!Get grassTask instance"""
+        return self.task
+    
 class helpPanel(wx.html.HtmlWindow):
     """
     This panel holds the text from GRASS docs.
@@ -1879,11 +1883,7 @@ class GrassGUIApp(wx.App):
     def __init__(self, grass_task):
         self.grass_task = grass_task
         wx.App.__init__(self, False)
-
-    def GetTask(self):
-        """!Get grassTask instance"""
-        return self.grass_task
-    
+        
     def OnInit(self):
         self.mf = mainFrame(parent = None, ID = wx.ID_ANY, task_description = self.grass_task)
         self.mf.CentreOnScreen()
