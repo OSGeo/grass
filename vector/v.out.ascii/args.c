@@ -24,6 +24,7 @@ void parse_args(int argc, char **argv,
     output_opt->description =
 	_("Path to resulting ASCII file ('-' for standard output) "
 	  "or ASCII vector name if '-o' is defined");
+    output_opt->required = NO;
     output_opt->answer = "-";
 
     column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
