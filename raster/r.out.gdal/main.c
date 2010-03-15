@@ -2,7 +2,7 @@
 /****************************************************************************
 *
 * MODULE:       r.out.gdal
-* AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>
+* AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>, Markus Metz
 * PURPOSE:      Exports GRASS raster to GDAL suported formats;
 *               based on GDAL library.
 *               Replaces r.out.gdal.sh script which used the gdal_translate
