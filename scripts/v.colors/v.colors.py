@@ -8,7 +8,7 @@
 # PURPOSE:      Populate a GRASSRGB column with a color map and data column
 #		Helper script for thematic mapping tasks
 #
-# COPYRIGHT:    (c) 2008 Hamish Bowman, and the GRASS Development Team
+# COPYRIGHT:    (c) 2008, 2010 Hamish Bowman, and the GRASS Development Team
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
@@ -16,7 +16,7 @@
 #############################################################################
 
 #%Module
-#% description: Set color rules for features in a vector using a numeric attribute column.
+#% description: Sets color rules for features in a vector map using a numeric attribute column.
 #% keywords: vector
 #% keywords: color table
 #%End
@@ -25,8 +25,16 @@
 #% type: string
 #% gisprompt: old,vector,vector
 #% key_desc: name
-#% description: Name of input vector map 
+#% description: Name of vector map 
 #% required: yes
+#%end
+#%option
+#% key: layer
+#% type: integer
+#% description: Layer number
+#% gisprompt: old_layer,layer,layer
+#% answer: 1
+#% required: no
 #%end
 #%option
 #% key: column
@@ -35,20 +43,12 @@
 #% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #% required : yes
 #%end
-#%option
-#% key: layer
-#% type: integer
-#% description: Layer number of data column
-#% gisprompt: old_layer,layer,layer
-#% answer: 1
-#% required: no
-#%end
 #%Option
 #% key: rgb_column
 #% type: string
 #% required: no
-#% description: Name of color column to populate
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
+#% description: Name of color column to populate with RGB values
+#% gisprompt: new_dbcolumn,dbcolumn,dbcolumn
 #% answer: GRASSRGB
 #% guisection: Colors
 #%End
@@ -63,7 +63,7 @@
 #% option
 #% key: color
 #% type: string
-#% key_desc: style
+#% key_desc: string
 #% options: aspect,aspectcolr,bcyr,bgyr,byg,byr,celsius,corine,curvature,differences,elevation,etopo2,evi,gdd,grey,grey1.0,grey255,grey.eq,grey.log,gyr,ndvi,population,precipitation,rainbow,ramp,random,ryb,ryg,sepia,slope,srtm,terrain,wave
 #% description: Type of color table
 #% required: no
@@ -72,8 +72,9 @@
 #%Option
 #% key: raster
 #% type: string
+#% key_desc: name
 #% required: no
-#% description: Raster map name from which to copy color table
+#% description: Name of raster map from which to copy color table
 #% gisprompt: old,cell,raster
 #% guisection: Colors
 #%End
@@ -81,7 +82,7 @@
 #% key: rules
 #% type: string
 #% required: no
-#% description: Path to rules file
+#% description: Name of file containing rules
 #% gisprompt: old_file,file,input
 #% guisection: Colors
 #%End
