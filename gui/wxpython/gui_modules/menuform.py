@@ -56,6 +56,7 @@ import locale
 import types
 from threading import Thread
 import Queue
+import shlex
 
 ### i18N
 import gettext
@@ -331,25 +332,25 @@ class UpdateQThread(Thread):
             wx.PostEvent(self.parent, event)
 
 class grassTask:
-    """
-    This class holds the structures needed for both filling by the parser and
-    use by the interface constructor.
+    """!This class holds the structures needed for both filling by the
+    parser and use by the interface constructor.
 
-    Use as either grassTask() for empty definition or grassTask( 'grass.command' )
-    for parsed filling.
+    Use as either grassTask() for empty definition or
+    grassTask('grass.command' ) for parsed filling.
     """
     def __init__(self, grassModule = None):
         self.path = grassModule
         self.name = _('unknown')
-        self.params = []
+        self.params = list()
         self.description = ''
         self.label = ''
-        self.flags = []
-        self.keywords = []
+        self.flags = list()
+        self.keywords = list()
+        
         if grassModule is not None:
             processTask(tree = etree.fromstring(getInterfaceDescription(grassModule)),
                         task = self)
-
+        
     def get_name(self):
         """!Get task name"""
         return self.name
@@ -454,6 +455,17 @@ class grassTask:
 
         return cmd
 
+    def set_options(self, opts):
+        """!Set flags and parameters
+
+        @param opts list of flags and parameters"""
+        for opt in opts:
+            if opt[0] == '-': # flag
+                self.set_flag(opt.lstrip('-'), True)
+            else: # parameter
+                key, value = opt.split('=', 1)
+                self.set_param(key, value)
+        
 class processTask:
     """!A ElementTree handler for the --interface-description output,
     as defined in grass-interface.dtd. Extend or modify this and the
@@ -553,10 +565,6 @@ class processTask:
         
         return default
     
-    def GetTask(self):
-        """!Get grassTask intance"""
-        return self.task
-    
 class helpPanel(wx.html.HtmlWindow):
     """
     This panel holds the text from GRASS docs.
@@ -631,21 +639,20 @@ class helpPanel(wx.html.HtmlWindow):
             self.Ok = False
 
 class mainFrame(wx.Frame):
-    """
-    This is the Frame containing the dialog for options input.
+    """!This is the Frame containing the dialog for options input.
 
     The dialog is organized in a notebook according to the guisections
     defined by each GRASS command.
 
-    If run with a parent, it may Apply, Ok or Cancel; the latter two close the dialog.
-    The former two trigger a callback.
+    If run with a parent, it may Apply, Ok or Cancel; the latter two
+    close the dialog.  The former two trigger a callback.
 
     If run standalone, it will allow execution of the command.
 
-    The command is checked and sent to the clipboard when clicking 'Copy'.
+    The command is checked and sent to the clipboard when clicking
+    'Copy'.
     """
     def __init__(self, parent, ID, task_description, get_dcmd=None, layer=None):
-
         self.get_dcmd = get_dcmd
         self.layer = layer
         self.task = task_description
@@ -1849,33 +1856,36 @@ class cmdPanel(wx.Panel):
             
         event.Skip()
         
-def getInterfaceDescription( cmd ):
-    """
-    Returns the XML description for the GRASS cmd.
+def getInterfaceDescription(cmd):
+    """!Returns the XML description for the GRASS cmd.
 
     The DTD must be located in $GISBASE/etc/grass-interface.dtd,
     otherwise the parser will not succeed.
 
-    Note: 'cmd' is given as string
+    @param cmd command (name of GRASS module)
     """
     cmdout = os.popen(cmd + r' --interface-description', "r").read()
-    if not len(cmdout) > 0 :
+    if not len(cmdout) > 0:
         raise IOError, _("Unable to fetch interface description for command '%s'.") % cmd
-    p = re.compile( '(grass-interface.dtd)')
-    p.search( cmdout )
+    p = re.compile('(grass-interface.dtd)')
+    p.search(cmdout)
     cmdout = p.sub(globalvar.ETCDIR + r'/grass-interface.dtd', cmdout)
+    
     return cmdout
 
 class GrassGUIApp(wx.App):
-    """
-    Stand-alone GRASS command GUI
+    """!Stand-alone GRASS command GUI
     """
     def __init__(self, grass_task):
         self.grass_task = grass_task
         wx.App.__init__(self, False)
 
+    def GetTask(self):
+        """!Get grassTask instance"""
+        return self.grass_task
+    
     def OnInit(self):
-        self.mf = mainFrame(parent=None, ID=wx.ID_ANY, task_description=self.grass_task)
+        self.mf = mainFrame(parent = None, ID = wx.ID_ANY, task_description = self.grass_task)
         self.mf.CentreOnScreen()
         self.mf.Show(True)
         self.SetTopWindow(self.mf)
@@ -2056,11 +2066,14 @@ class StaticWrapText(wx.StaticText):
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
-        print _("usage: %s <grass command>") % sys.argv[0]
-        sys.exit()
+        sys.exit(_("usage: %s <grass command>") % sys.argv[0])
     if sys.argv[1] != 'test':
-        q=wx.LogNull()
-        GrassGUIApp(grassTask(sys.argv[1])).MainLoop()
+        q = wx.LogNull()
+        cmd = shlex.split(sys.argv[1])
+        task = grassTask(cmd[0])
+        task.set_options(cmd[1:])
+        app = GrassGUIApp(task)
+        app.MainLoop()
     else: #Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
