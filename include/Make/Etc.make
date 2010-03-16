@@ -12,7 +12,7 @@ include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 etc: $(ETC)/$(PGM)$(EXE) html
 
-$(ETC)/$(PGM)$(EXE): $(ARCH_OBJS) $(DEPENDENCIES) 
+$(ETC)/$(PGM)$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
 	$(call linker)
 
 .PHONY: etc

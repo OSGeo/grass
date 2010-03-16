@@ -20,6 +20,7 @@
 MODULE_TOPDIR = .
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
+include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 DATE := $(shell date '+%d_%m_%Y')
 
@@ -79,11 +80,10 @@ default:
 	@if [ `wc -l < "$(ERRORLOG)"` -gt 8 ] ; then false ; else true ; fi
 
 manifests:
-ifneq ($(strip $(MINGW)),)
+ifeq ($(MANIFEST),external)
 	find $(ARCH_DISTDIR) -type f -name '*.exe' | \
 	while read file ; do \
-	    cmd=`basename "$$file" .exe` ; \
-	    sed "s/@CMD@/$$cmd/" mswindows/generic.manifest > "$$file".manifest ; \
+	    $(MAKE) "$$file".manifest ; \
 	done
 endif
 

@@ -19,8 +19,6 @@ else
 	TESTFILE = test32.ok
 endif
 
-TEST = $(OBJDIR)/test$(EXE)
-
 default: lib
 	@echo "==============TEST============="
 	$(MAKE) test
@@ -28,11 +26,11 @@ default: lib
 test: $(OBJDIR)/test.tmp $(TESTFILE)
 	diff $(OBJDIR)/test.tmp $(TESTFILE)
 
-$(OBJDIR)/test.tmp: $(TEST)
+$(OBJDIR)/test.tmp: $(OBJDIR)/test$(EXE)
 	cd $(OBJDIR) && $(call run_grass,./test)
 
 #  Test portable read/write functions
-$(TEST):  $(OBJDIR)/test.o $(DIG2DEP)
+$(OBJDIR)/test$(EXE):  $(OBJDIR)/test.o $(DIG2DEP)
 	$(call linker)
 
-$(TEST): LIBES = $(DIG2LIB)
+$(OBJDIR)/test$(EXE): LIBES = $(DIG2LIB)

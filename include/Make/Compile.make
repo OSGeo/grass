@@ -4,7 +4,18 @@ NLS_CFLAGS = -DPACKAGE=\"$(PACKAGE)\"
 
 LINK = $(CC)
 
-linker_x = $(1) $(LDFLAGS) $(EXTRA_LDFLAGS) -o $@ $(filter %.o,$^) $(FMODE_OBJ) $(LIBES) $(EXTRA_LIBS) $(MATHLIB) $(XDRLIB)
+ifeq ($(MANIFEST),external)
+PRELINK=$(MAKE) $@.manifest
+else
+ifeq ($(MANIFEST),internal)
+PRELINK=$(MAKE) $(MANIFEST_OBJ)
+else
+PRELINK=:
+endif
+endif
+
+linker_base = $(PRELINK) && $(1) $(2) -o $@ $(filter %.o,$^) $(filter %.res,$^) $(3)
+linker_x = $(call linker_base,$(1),$(LDFLAGS) $(EXTRA_LDFLAGS),$(FMODE_OBJ) $(MANIFEST_OBJ) $(LIBES) $(EXTRA_LIBS) $(MATHLIB) $(XDRLIB))
 linker_c = $(call linker_x,$(CC))
 linker_cxx = $(call linker_x,$(CXX))
 linker = $(call linker_x,$(LINK))
@@ -35,5 +46,14 @@ $(OBJDIR)/%.o : %.cpp $(LOCAL_HEADERS) $(EXTRA_HEADERS) | $(OBJDIR)
 
 depend: $(C_SOURCES) $(CC_SOURCES) $(CPP_SOURCES)
 	-$(CC) -E -MM -MG $(ALL_CFLAGS) $^ | sed 's!^[0-9a-zA-Z_.-]*\.o:!$$(OBJDIR)/&!' > $(DEPFILE)
+
+%.manifest.res: %.manifest.rc %.exe.manifest
+	$(WINDRES) --input=$< --input-format=rc --output=$@ --output-format=coff
+
+%.manifest.rc:
+	sed 's/@CMD@/$(notdir $*)/' $(MODULE_TOPDIR)/mswindows/generic.manifest.rc > $@
+
+%.exe.manifest:
+	sed 's/@CMD@/$(notdir $*)/' $(MODULE_TOPDIR)/mswindows/generic.manifest > $@
 
 -include $(DEPFILE)

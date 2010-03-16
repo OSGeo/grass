@@ -126,13 +126,13 @@ $(ETC)/functions.sh: functions.sh
 	$(INSTALL_DATA) $< $@
 
 $(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
-	$(CC) $(LDFLAGS) $< -o $@
+	$(call linker_base,$(LINK),$(LDFLAGS),)
 
 $(ETC)/clean_temp$(EXE) $(ETC)/lock$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
 	$(call linker)
 
 $(ETC)/winlocale$(EXE): $(OBJDIR)/winlocale.o
-	$(CC) $(LDFLAGS) $(EXTRA_LDFLAGS) -o $@ $^ -lkernel32
+	$(call linker_base,$(LINK),$(LDFLAGS) $(EXTRA_LDFLAGS), -lkernel32)
 
 $(ETC)/VERSIONNUMBER:
 	rm -f $@
