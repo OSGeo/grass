@@ -11,4 +11,4 @@ $(TOOLSDIR)/mkhtml.py: mkhtml.py
 	$(INSTALL) $< $@
 
 $(TOOLSDIR)/g.echo$(EXE): $(OBJDIR)/g.echo.o
-	$(call linker_base,$(LINK),$(LDFLAGS) $(EXTRA_LDFLAGS),)
+	$(call linker_base,$(LINK),$(LDFLAGS) $(EXTRA_LDFLAGS),$(MANIFEST_OBJ))

@@ -22,7 +22,7 @@
 #    endif
 #  endif
 
-#  ifdef _WIN32
+#  ifdef _WIN32____THIS_IS_DISABLED
 #    define TOGL_EXTERN __declspec(dllexport) extern
 #  else
 #    define TOGL_EXTERN extern
