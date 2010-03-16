@@ -8,7 +8,7 @@ GEM = gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 default: $(ARCH_BINDIR)/$(GEM)$(EXE)
 
 $(ARCH_BINDIR)/$(GEM)$(EXE): $(ARCH_OBJS)
-	$(CC) $(LDFLAGS) $(EXTRA_LDFLAGS) -o $@ $(filter %.o,$^) $(FMODE_OBJ) $(LIBES) $(EXTRA_LIBS)
+	$(call linker_base,$(LINK),$(LDFLAGS) $(EXTRA_LDFLAGS),$(FMODE_OBJ) $(LIBES) $(EXTRA_LIBS))
 
 install: $(UNIX_BIN)/$(GEM)$(EXE)
 
