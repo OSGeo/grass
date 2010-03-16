@@ -12,7 +12,7 @@ EXTRA_CFLAGS = $(XCFLAGS) $(TCLINCDIR) $(TKINCDIR)
 
 FORMDIR=$(ARCH_DISTDIR)/etc/form
 FORM=$(FORMDIR)/form.tcl
-FORMPROG=$(FORMDIR)/form
+FORMPROG=$(FORMDIR)/form$(EXE)
 HTMLLIB=$(FORMDIR)/html_library.tcl
 
 ifneq ($(TCLTKLIBS),)
@@ -40,4 +40,4 @@ $(FORM): form.tcl | $(FORMDIR)
 	$(INSTALL_DATA) $< $@
 
 $(FORMPROG): $(OBJDIR)/form.o | $(FORMDIR)
-	$(CC) $(LDFLAGS) -o $@ $(OBJDIR)/form.o $(LIBES)
+	$(call linker_base,$(LINK),$(LDFLAGS),$(MANIFEST_OBJ) $(LIBES))
