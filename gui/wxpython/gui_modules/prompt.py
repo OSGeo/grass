@@ -842,13 +842,15 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # Run command on line when <return> is pressed    
             
             # find the command to run
-            line = str(self.GetCurLine()[0]).strip()
+            line = self.GetCurLine()[0].strip()
             if len(line) == 0:
                 return
             
             # parse command into list
-            # TODO: shell commands should probably be passed as string           
-            cmd = shlex.split(str(line))
+            try:
+                cmd = shlex.split(str(line))
+            except UnicodeError:
+                cmd = shlex.split(utils.EncodeString((line)))
             
             #send the command list to the processor 
             self.parent.RunCmd(cmd)

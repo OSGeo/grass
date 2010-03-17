@@ -212,6 +212,7 @@ class GRASSStartup(wx.Frame):
         if location == "<UNKNOWN>" or \
                 not os.path.isdir(os.path.join(self.gisdbase, location)):
             location = None
+
         if location:
             # list of locations
             self.UpdateLocations(self.gisdbase)
@@ -221,10 +222,10 @@ class GRASSStartup(wx.Frame):
                 self.lblocations.EnsureVisible(self.listOfLocations.index(location))
             except ValueError:
                 print >> sys.stderr, _("ERROR: Location <%s> not found") % \
-                    (location)
+                    (utils.UnicodeString(location))
                 
             # list of mapsets
-            self.UpdateMapsets(os.path.join(self.gisdbase,location))
+            self.UpdateMapsets(os.path.join(self.gisdbase, location))
             mapset = self.GetRCValue("MAPSET")
             if mapset:
                 try:
@@ -234,10 +235,8 @@ class GRASSStartup(wx.Frame):
                 except ValueError:
                     self.lbmapsets.Clear()
                     print >> sys.stderr, _("ERROR: Mapset <%s> not found") % \
-                        (mapset)
-
-                # self.bstart.Enable(True)
-
+                        (utils.UnicodeString(mapset))
+            
     def _do_layout(self):
         label_style = wx.ADJUST_MINSIZE | wx.ALIGN_CENTER_HORIZONTAL
 
@@ -585,6 +584,7 @@ class GRASSStartup(wx.Frame):
         disabled = []
         idx = 0
         for mapset in self.listOfMapsets:
+            mapset = utils.UnicodeString(mapset)
             if mapset not in self.listOfMapsetsSelectable or \
                     os.path.isfile(os.path.join(self.gisdbase,
                                                 locationName,
