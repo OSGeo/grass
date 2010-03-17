@@ -3,6 +3,8 @@
 
 1 RT_MANIFEST "@CMD@.exe.manifest"
 
+1 ICON "grass.ico"
+
 #define VER_FILEVERSION             @VER_MAJOR@,@VER_MINOR@,0,0
 #define VER_FILEVERSION_STR         "@VER_MAJOR@.@VER_MINOR@.@VER_RELEASE@\0"
 

@@ -48,7 +48,7 @@ depend: $(C_SOURCES) $(CC_SOURCES) $(CPP_SOURCES)
 	-$(CC) -E -MM -MG $(ALL_CFLAGS) $^ | sed 's!^[0-9a-zA-Z_.-]*\.o:!$$(OBJDIR)/&!' > $(DEPFILE)
 
 %.manifest.res: %.manifest.rc %.exe.manifest
-	$(WINDRES) --input=$< --input-format=rc --output=$@ --output-format=coff
+	$(WINDRES) --input=$< --input-format=rc --output=$@ --output-format=coff -I$(MODULE_TOPDIR)/mswindows
 
 %.manifest.rc: $(MODULE_TOPDIR)/mswindows/generic.manifest.rc
 	sed	-e 's/@CMD@/$(notdir $*)/' \
