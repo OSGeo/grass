@@ -62,6 +62,14 @@ def rotate_ppm(srcd):
 		dstd[(x * height + (height - 1 - y)) * 3 + c] = srcd[(y * width + x) * 3 + c]
     return dstd
 
+def flip_ppm(srcd):
+    dstd = array.array('B', len(srcd) * '\0')
+    stride = width * 3
+    for y in xrange(height):
+	dy = (height - 1 - y)
+	dstd[dy * stride:(dy + 1) * stride] = srcd[y * stride:(y + 1) * stride]
+    return dstd
+
 def ppmtopng(dst, src):
     if grass.find_program("g.ppmtopng", ["help"]):
 	grass.run_command('g.ppmtopng', input = src, output = dst)
@@ -74,11 +82,61 @@ def ppmtopng(dst, src):
     else:
 	grass.fatal(_("Cannot find g.ppmtopng, pnmtopng or convert"))
 
-def convert_and_rotate(src, dst):
-    srcd = read_ppm(src)
-    dstd = rotate_ppm(srcd)
-    write_ppm(tmp_img, dstd)
+def convert_and_rotate(src, dst, flip = False):
+    ppm = read_ppm(src)
+    if flip:
+	ppm = flip_ppm(ppm)
+    ppm = rotate_ppm(ppm)
+    write_ppm(tmp_img, ppm)
     ppmtopng(dst, tmp_img)
+
+def make_gradient(path):
+    fh = open(path)
+    text = fh.read()
+    fh.close()
+
+    lines = text.splitlines()
+    records = list()
+    for line in lines:
+	if line.startswith("#"):
+	    # skip comments
+	    continue
+	records.append(line.split())
+    records = [record for record in records if record[0] != 'nv']
+    relative = False
+    absolute = False
+    for record in records:
+	if record[0].endswith("%"):
+	    relative = True
+	    record[0] = record[0].rstrip("%")
+	else:
+	    absolute = True
+
+    if absolute:
+	if relative:
+	    minval = -0.04
+	    maxval = 0.04
+	else:
+	    minval = float(records[0][0])
+	    maxval = float(records[-1][0])
+	    maxval = min(maxval, 2500000)
+	grad = tmp_grad_abs
+	grass.mapcalc("$grad = if(row()==1, float($min), float($max))",
+		      grad = tmp_grad_abs, min = minval, max = maxval, quiet = True)
+    else:
+	grad = tmp_grad_rel
+
+    return grad
+
+def make_image(output_dir, table, grad, discrete = False):
+    if discrete:
+	lines, cols = height, 1
+    else:
+	lines, cols = None, None
+    grass.run_command("r.colors", map = grad, color = table, quiet = True)
+    grass.run_command("d.colortable", flags = 'n', map = grad, lines = lines, cols = cols, quiet = True)
+    outfile = os.path.join(output_dir, "Colortable_%s.png" % table)
+    convert_and_rotate(tmp_img, outfile, discrete)
 
 def main():
     global tmp_img, tmp_grad_abs, tmp_grad_rel
@@ -116,47 +174,14 @@ def main():
     grass.mapcalc("$grad = row()/1.0", grad = tmp_grad_rel)
 
     for table in os.listdir(color_dir):
-        path = os.path.join(color_dir, table)
-        fh = open(path)
-        text = fh.read()
-        fh.close()
-        lines = text.splitlines()
-        records = list()
-        for line in lines:
-            if line.startswith("#"):
-                # skip comments
-                continue
-            records.append(line.split())
-        records = [record for record in records if record[0] != 'nv']
-        relative = False
-        absolute = False
-        for record in records:
-            if record[0].endswith("%"):
-                relative = True
-                record[0] = record[0].rstrip("%")
-            else:
-                absolute = True
+	path = os.path.join(color_dir, table)
+	grad = make_gradient(path)
+	make_image(output_dir, table, grad)
 
-        if absolute:
-	    if relative:
-		minval = -0.04
-		maxval = 0.04
-	    else:
-		minval = float(records[0][0])
-		maxval = float(records[-1][0])
-		maxval = min(maxval, 2500000)
-	    grad = tmp_grad_abs
-	    grass.mapcalc("$grad = if(row()==1, float($min), float($max))",
-                          grad = tmp_grad_abs, min = minval, max = maxval, quiet = True)
-	else:
-            grad = tmp_grad_rel
-
-        grass.run_command("r.colors", map = grad, color = table, quiet = True)
-        grass.run_command("d.colortable", flags = 'n', map = grad, quiet = True)
-
-	outfile = os.path.join(output_dir, "Colortable_%s.png" % table)
-	convert_and_rotate(tmp_img, outfile)
-
+    grass.mapcalc("$grad = row()", grad = tmp_grad_abs, quiet = True)
+    for table in ['grey.eq', 'grey.log', 'random']:
+	make_image(output_dir, table, tmp_grad_abs, True)
+ 
 if __name__ == "__main__":
     atexit.register(cleanup)
     main()
