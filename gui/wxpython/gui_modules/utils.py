@@ -595,8 +595,7 @@ def GetListOfMapsets(dbase, location, selectable = False):
             if os.path.isdir(mapset) and \
                     os.path.isfile(os.path.join(dbase, location, mapset, "WIND")) and \
                     os.path.basename(mapset) != 'PERMANENT':
-                listOfMapsets.append(os.path.basename(mapset))
-    
+                listOfMapsets.append(EncodeString(os.path.basename(mapset)))
         ListSortLower(listOfMapsets)
         listOfMapsets.insert(0, 'PERMANENT')
     
@@ -622,5 +621,21 @@ def EncodeString(string):
     enc = locale.getdefaultlocale()[1]
     if enc:
         return string.encode(enc)
+    
+    return string
+
+def UnicodeString(string):
+    """!Return unicode string
+    
+    @param string string to be converted
+    
+    @return unicode string
+    """
+    if isinstance(string, unicode):
+        return string
+    
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        return unicode(string, enc)
     
     return string
