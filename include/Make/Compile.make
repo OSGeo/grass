@@ -50,10 +50,14 @@ depend: $(C_SOURCES) $(CC_SOURCES) $(CPP_SOURCES)
 %.manifest.res: %.manifest.rc %.exe.manifest
 	$(WINDRES) --input=$< --input-format=rc --output=$@ --output-format=coff
 
-%.manifest.rc:
-	sed 's/@CMD@/$(notdir $*)/' $(MODULE_TOPDIR)/mswindows/generic.manifest.rc > $@
+%.manifest.rc: $(MODULE_TOPDIR)/mswindows/generic.manifest.rc
+	sed	-e 's/@CMD@/$(notdir $*)/' \
+		-e 's/@VER_MAJOR@/$(GRASS_VERSION_MAJOR)/' \
+		-e 's/@VER_MINOR@/$(GRASS_VERSION_MINOR)/' \
+		-e 's/@VER_RELEASE@/$(GRASS_VERSION_RELEASE)/' \
+		$(MODULE_TOPDIR)/mswindows/generic.manifest.rc > $@
 
-%.exe.manifest:
+%.exe.manifest: $(MODULE_TOPDIR)/mswindows/generic.manifest
 	sed 's/@CMD@/$(notdir $*)/' $(MODULE_TOPDIR)/mswindows/generic.manifest > $@
 
 -include $(DEPFILE)
