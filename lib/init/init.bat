@@ -25,8 +25,11 @@ rem #########################################################################
 set SAVEPATH=%PATH%
 rem DON'T include scripts directory in PATH - .bat files in bin directory
 rem are used to run scripts on Windows
-if "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\bin;%WINGISBASE%\lib;%PATH%
+if "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\bin;%WINGISBASE%\scripts;%WINGISBASE%\lib;%PATH%
 if not "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\bin;%WINGISBASE%\lib;%GRASS_ADDON_PATH%;%PATH%
+
+set PYTHONPATH=%PYTHONPATH%;%WINGISBASE%\etc\python;%WINGISBASE%\etc\wxpython
+set PATHEXT=%PATHEXT%;.PY
 
 set GRASS_VERSION=GRASS_VERSION_NUMBER
 if "%HOME%"=="" set HOME=%USERPROFILE%
@@ -109,9 +112,6 @@ if %errorlevel% == 2 goto exitinit
 goto exitinit
 
 :wxpython
-
-set PYTHONPATH=%PYTHONPATH%;%WINGISBASE%\etc\python;%WINGISBASE%\etc\wxpython
-set PATHEXT=%PATHEXT%;.PY
 
 python "%GISBASE%/etc/wxpython/gis_set.py"
 if %errorlevel% == 2 goto exitinit
