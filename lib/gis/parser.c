@@ -334,7 +334,7 @@ int G_parser(int argc, char **argv)
     /* Stash default answers */
 
     opt = &st->first_option;
-    while (opt != NULL) {
+    while (opt) {
 	if (opt->required)
 	    st->has_required = 1;
 
@@ -608,7 +608,7 @@ char *G_recreate_command(void)
 
     if (st->n_flags) {
 	flag = &st->first_flag;
-	while (flag != '\0') {
+	while (flag) {
 	    if (flag->answer == 1) {
 		flg[0] = ' ';
 		flg[1] = '-';
@@ -630,8 +630,8 @@ char *G_recreate_command(void)
     }
 
     opt = &st->first_option;
-    while (opt != '\0') {
-	if (opt->answer != '\0' && opt->answers[0] != NULL) {
+    while (opt) {
+	if (opt->answer && opt->answers[0]) {
 	    slen = strlen(opt->key) + strlen(opt->answers[0]) + 4;	/* +4 for: ' ' = " " */
 	    if (len + slen >= nalloced) {
 		nalloced += (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
@@ -651,9 +651,8 @@ char *G_recreate_command(void)
 	    strcpy(cur, opt->answers[0]);
 	    cur = strchr(cur, '\0');
 	    len = cur - buff;
-	    for (n = 1; opt->answers[n] != NULL && opt->answers[n] != '\0';
-		 n++) {
-		if (opt->answers[n] == NULL)
+	    for (n = 1; opt->answers[n]; n++) {
+		if (!opt->answers[n])
 		    break;
 		slen = strlen(opt->answers[n]) + 2;	/* +2 for , " */
 		if (len + slen >= nalloced) {
@@ -722,7 +721,7 @@ int G__uses_new_gisprompt(void)
     /* This is to see if we should spit out the --o flag      */
     if (st->n_opts) {
 	opt = &st->first_option;
-	while (opt != NULL) {
+	while (opt) {
 	    if (opt->gisprompt) {
 		split_gisprompt(opt->gisprompt, age, element, desc);
 		if (strcmp(age, "new") == 0)
@@ -798,7 +797,7 @@ static int set_flag(int f)
     /* Find flag with corrrect keyword */
 
     flag = &st->first_flag;
-    while (flag != NULL) {
+    while (flag) {
 	if (flag->key == f) {
 	    flag->answer = 1;
 	    return (0);
@@ -879,7 +878,7 @@ static int set_option(const char *string)
     /* Find option with best keyword match */
     got_one = 0;
     key_len = strlen(the_key);
-    for (at_opt = &st->first_option; at_opt != NULL; at_opt = at_opt->next_opt) {
+    for (at_opt = &st->first_option; at_opt; at_opt = at_opt->next_opt) {
 	if (!at_opt->key)
 	    continue;
 #if 1
@@ -938,7 +937,7 @@ static int check_opts(void)
 	return (0);
 
     opt = &st->first_option;
-    while (opt != NULL) {
+    while (opt) {
 	/* Check answer against options if any */
 
 	if (opt->answer) {
@@ -1137,8 +1136,8 @@ static int check_required(void)
 	return (0);
 
     opt = &st->first_option;
-    while (opt != NULL) {
-	if (opt->required && opt->answer == NULL) {
+    while (opt) {
+	if (opt->required && !opt->answer) {
 	    fprintf(stderr,
 		    _("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
 		    opt->key, (opt->label ? opt->label : opt->description) );
@@ -1164,8 +1163,8 @@ static void split_opts(void)
 	return;
 
     opt = &st->first_option;
-    while (opt != NULL) {
-	if ( /*opt->multiple && */ (opt->answer != NULL)) {
+    while (opt) {
+	if ( /*opt->multiple && */ opt->answer) {
 	    /* Allocate some memory to store array of pointers */
 	    allocated = 10;
 	    opt->answers = (char **)G_malloc(allocated * sizeof(char *));
@@ -1221,8 +1220,8 @@ static int check_multiple_opts(void)
 
     error = 0;
     opt = &st->first_option;
-    while (opt != NULL) {
-	if ((opt->answer != NULL) && (opt->key_desc != NULL)) {
+    while (opt) {
+	if (opt->answer && opt->key_desc) {
 	    /* count commas */
 	    n_commas = 1;
 	    for (ptr = opt->key_desc; *ptr != '\0'; ptr++)
@@ -1282,8 +1281,8 @@ static int check_overwrite(void)
     }
 
     opt = &st->first_option;
-    while (opt != NULL) {
-	if ((opt->answer != NULL) && (opt->gisprompt != NULL)) {
+    while (opt) {
+	if (opt->answer && opt->gisprompt) {
 	    split_gisprompt(opt->gisprompt, age, element, desc);
 
 	    if (strcmp(age, "new") == 0) {
