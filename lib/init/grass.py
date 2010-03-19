@@ -36,7 +36,7 @@ cmd_name = "@START_UP@"
 grass_version = "@GRASS_VERSION_NUMBER@"
 ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
 config_projshare = "@CONFIG_PROJSHARE@"
-grass_config_dir = os.path.join(os.getenv('HOME'), "@GRASS_CONFIG_DIR@")
+grass_config_dirname = "@GRASS_CONFIG_DIR@"
 
 gisbase = os.path.normpath(gisbase)
 
@@ -817,6 +817,12 @@ os.environ['GISBASE'] = gisbase
 # set HOME
 if windows and not os.getenv('HOME'):
     os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'), os.getenv('HOMEPATH'))
+
+# set SHELL
+if windows and not os.getenv('SHELL'):
+    os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
+
+grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
 
 atexit.register(cleanup)
 
