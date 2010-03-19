@@ -46,9 +46,10 @@ int main(int argc, char *argv[])
 
     if (level1_flag) {
 	Vect_set_open_level(1); /* no topology */
-	if (topo_flag)
+	if (topo_flag && Vect_get_num_primitives(&Map, GV_POINT) == 0){
 	    G_warning(_("Vector map requested on level 1 (flag -t ignored)")); 
-	topo_flag = 0;
+	    topo_flag = 0;
+        }
     }
     
     if (!level1_flag) {
