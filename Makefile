@@ -46,7 +46,6 @@ DIRS = \
 	locale \
 	man \
 	swig \
-	gem \
 	macosx
 
 SUBDIRS = $(DIRS)

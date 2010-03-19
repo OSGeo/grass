@@ -1,7 +1,0 @@
-# This file should contain a very brief description of what your extension does.
-# Commented lines and parts of lines after a comment mark ('#') will be skipped.
-# This file will also be included in the HTML documentation page for your
-# extension.
-# You can use HTML tags in this file. All HTML tags will be ignored if this
-# file is output to the text console. The only exceptions are <br> and <p>
-# which produce one or two newlines where appropriate.
