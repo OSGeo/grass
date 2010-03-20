@@ -322,7 +322,7 @@ G_zlib_compress(const unsigned char *src, int src_sz, unsigned char *dst,
 
     /* Set-up the stream */
     c_stream.avail_in = src_sz;
-    c_stream.next_in = (char *)src;
+    c_stream.next_in = (unsigned char *) src;
     c_stream.avail_out = buf_sz;
     c_stream.next_out = buf;
 
@@ -390,7 +390,7 @@ G_zlib_expand(const unsigned char *src, int src_sz, unsigned char *dst,
 
     /* Set-up I/O streams */
     c_stream.avail_in = src_sz;
-    c_stream.next_in = (char *)src;
+    c_stream.next_in = (unsigned char *)src;
     c_stream.avail_out = dst_sz;
     c_stream.next_out = dst;
 
