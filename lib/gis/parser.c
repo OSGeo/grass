@@ -152,7 +152,7 @@ struct Flag *G_define_flag(void)
     /* Allocate memory if not the first flag */
 
     if (st->n_flags) {
-	flag = (struct Flag *)G_malloc(sizeof(struct Flag));
+	flag = G_malloc(sizeof(struct Flag));
 	st->current_flag->next_flag = flag;
     }
     else
@@ -160,19 +160,19 @@ struct Flag *G_define_flag(void)
 
     /* Zero structure */
 
-    G_zero((char *)flag, sizeof(struct Flag));
+    G_zero(flag, sizeof(struct Flag));
 
     st->current_flag = flag;
     st->n_flags++;
 
     if (st->n_items) {
-	item = (struct Item *)G_malloc(sizeof(struct Item));
+	item = G_malloc(sizeof(struct Item));
 	st->current_item->next_item = item;
     }
     else
 	item = &st->first_item;
 
-    G_zero((char *)item, sizeof(struct Item));
+    G_zero(item, sizeof(struct Item));
 
     item->flag = flag;
     item->option = NULL;
@@ -206,14 +206,14 @@ struct Option *G_define_option(void)
     /* Allocate memory if not the first option */
 
     if (st->n_opts) {
-	opt = (struct Option *)G_malloc(sizeof(struct Option));
+	opt = G_malloc(sizeof(struct Option));
 	st->current_option->next_opt = opt;
     }
     else
 	opt = &st->first_option;
 
     /* Zero structure */
-    G_zero((char *)opt, sizeof(struct Option));
+    G_zero(opt, sizeof(struct Option));
 
     opt->required = NO;
     opt->multiple = NO;
@@ -235,13 +235,13 @@ struct Option *G_define_option(void)
     st->n_opts++;
 
     if (st->n_items) {
-	item = (struct Item *)G_malloc(sizeof(struct Item));
+	item = G_malloc(sizeof(struct Item));
 	st->current_item->next_item = item;
     }
     else
 	item = &st->first_item;
 
-    G_zero((char *)item, sizeof(struct Item));
+    G_zero(item, sizeof(struct Item));
 
     item->option = opt;
     item->flag = NULL;
@@ -265,7 +265,7 @@ struct GModule *G_define_module(void)
     module = &st->module_info;
 
     /* Zero structure */
-    G_zero((char *)module, sizeof(struct GModule));
+    G_zero(module, sizeof(struct GModule));
 
     /* Allocate keywords array */
     define_keywords();
@@ -353,8 +353,7 @@ int G_parser(int argc, char **argv)
 		i++;
 	    }
 
-	    opt->opts =
-		(const char **)G_calloc(cnt + 1, sizeof(const char *));
+	    opt->opts = G_calloc(cnt + 1, sizeof(const char *));
 
 	    i = 0;
 	    while (tokens[i]) {
@@ -366,8 +365,7 @@ int G_parser(int argc, char **argv)
 	    if (opt->descriptions) {
 		delm[0] = ';';
 
-		opt->descs =
-		    (const char **)G_calloc(cnt + 1, sizeof(const char *));
+		opt->descs = G_calloc(cnt + 1, sizeof(const char *));
 		tokens = G_tokenize(opt->descriptions, delm);
 
 		i = 0;
@@ -402,12 +400,12 @@ int G_parser(int argc, char **argv)
 
 	/* Copy answer */
 	if (opt->multiple && opt->answers && opt->answers[0]) {
-	    opt->answer = (char *)G_malloc(strlen(opt->answers[0]) + 1);
+	    opt->answer = G_malloc(strlen(opt->answers[0]) + 1);
 	    strcpy(opt->answer, opt->answers[0]);
 	    for (i = 1; opt->answers[i]; i++) {
-		opt->answer = (char *)G_realloc(opt->answer,
-						strlen(opt->answer) +
-						strlen(opt->answers[i]) + 2);
+		opt->answer = G_realloc(opt->answer,
+					strlen(opt->answer) +
+					strlen(opt->answers[i]) + 2);
 		strcat(opt->answer, ",");
 		strcat(opt->answer, opt->answers[i]);
 	    }
@@ -688,8 +686,8 @@ void G_add_keyword(const char *keyword)
 {
     if (st->n_keys >= st->n_keys_alloc) {
 	st->n_keys_alloc += 10;
-	st->module_info.keywords = (const char **) G_realloc(st->module_info.keywords,
-							     st->n_keys_alloc * sizeof(char *));
+	st->module_info.keywords = G_realloc(st->module_info.keywords,
+					     st->n_keys_alloc * sizeof(char *));
     }
 
     st->module_info.keywords[st->n_keys++] = G_store(keyword);
@@ -702,8 +700,9 @@ void G_add_keyword(const char *keyword)
 */
 void G_set_keywords(const char *keywords)
 {
-    st->module_info.keywords = (const char**)G_tokenize(keywords, ",");
-    st->n_keys = st->n_keys_alloc = G_number_of_tokens((char **)st->module_info.keywords);
+    char **tokens = G_tokenize(keywords, ",");
+    st->module_info.keywords = (const char **)tokens;
+    st->n_keys = st->n_keys_alloc = G_number_of_tokens(tokens);
 }
 
 
@@ -914,9 +913,8 @@ static int set_option(const char *string)
 
     /* Allocate memory where answer is stored */
     if (opt->count++) {
-	opt->answer = (char *)G_realloc(opt->answer,
-					strlen(opt->answer) + strlen(string) +
-					2);
+	opt->answer = G_realloc(opt->answer,
+				strlen(opt->answer) + strlen(string) + 2);
 	strcat(opt->answer, ",");
 	strcat(opt->answer, string);
     }
@@ -1152,8 +1150,8 @@ static int check_required(void)
 static void split_opts(void)
 {
     struct Option *opt;
-    char *ptr1;
-    char *ptr2;
+    const char *ptr1;
+    const char *ptr2;
     int allocated;
     int ans_num;
     int len;
@@ -1167,7 +1165,7 @@ static void split_opts(void)
 	if ( /*opt->multiple && */ opt->answer) {
 	    /* Allocate some memory to store array of pointers */
 	    allocated = 10;
-	    opt->answers = (char **)G_malloc(allocated * sizeof(char *));
+	    opt->answers = G_malloc(allocated * sizeof(char *));
 
 	    ans_num = 0;
 	    ptr1 = opt->answer;
@@ -1178,7 +1176,7 @@ static void split_opts(void)
 		     ptr2++, len++) ;
 
 		if (len > 0) {	/* skip ,, */
-		    opt->answers[ans_num] = (char *)G_malloc(len + 1);
+		    opt->answers[ans_num] = G_malloc(len + 1);
 		    memcpy(opt->answers[ans_num], ptr1, len);
 		    opt->answers[ans_num][len] = 0;
 
@@ -1186,9 +1184,8 @@ static void split_opts(void)
 
 		    if (ans_num >= allocated) {
 			allocated += 10;
-			opt->answers =
-			    (char **)G_realloc((char *)opt->answers,
-					       allocated * sizeof(char *));
+			opt->answers = G_realloc(opt->answers,
+						 allocated * sizeof(char *));
 		    }
 
 		    opt->answers[ans_num] = NULL;
