@@ -31,8 +31,9 @@
 typedef struct
 {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *q, *s, *r, *top,
-	*bottom, *vector_x, *vector_y, *budget, *type, *dt, *maxit, *error, *solver, *sor,
-	*river_head, *river_bed, *river_leak, *drain_bed, *drain_leak;
+	*bottom, *vector_x, *vector_y, *budget, *type,
+	*river_head, *river_bed, *river_leak, *drain_bed, *drain_leak,
+        *dt, *maxit, *error, *solver;
     struct Flag *full_les;
 } paramType;
 
@@ -87,7 +88,7 @@ void set_params(void)
     param.q->type = TYPE_STRING;
     param.q->required = NO;
     param.q->gisprompt = "old,raster,raster";
-    param.q->description = _("Water sources and sinks in [m^3/s]");
+    param.q->description = _("Raster amp water sources and sinks in [m^3/s]");
 
     param.s = G_define_option();
     param.s->key = "s";
@@ -141,7 +142,6 @@ void set_params(void)
     param.vector_y->description =
 	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
 
-
     param.budget = G_define_option();
     param.budget->key = "budget";
     param.budget->type = TYPE_STRING;
@@ -153,9 +153,9 @@ void set_params(void)
     param.type = G_define_option();
     param.type->key = "type";
     param.type->type = TYPE_STRING;
-    param.type->required = NO;
-    param.type->answer = "confined";
-    param.type->options = "confined,unconfined";
+    param.type->required = YES;
+    param.type->answer = _("confined");
+    param.type->options = _("confined,unconfined");
     param.type->description = _("The type of groundwater flow");
 
     /*Variants of the cauchy boundary condition */
@@ -165,12 +165,14 @@ void set_params(void)
     param.river_bed->required = NO;
     param.river_bed->gisprompt = "old,raster,raster";
     param.river_bed->description = _("The height of the river bed in [m]");
+    param.river_bed->guisection = _("river");
 
     param.river_head = G_define_option();
     param.river_head->key = "river_head";
     param.river_head->type = TYPE_STRING;
     param.river_head->required = NO;
     param.river_head->gisprompt = "old,raster,raster";
+    param.river_head->guisection = _("river");
     param.river_head->description =
 	_("Water level (head) of the river with leakage connection in [m]");
 
@@ -179,6 +181,7 @@ void set_params(void)
     param.river_leak->type = TYPE_STRING;
     param.river_leak->required = NO;
     param.river_leak->gisprompt = "old,raster,raster";
+    param.river_leak->guisection = _("river");
     param.river_leak->description =
 	_("The leakage coefficient of the river bed in [1/s].");
 
@@ -187,6 +190,7 @@ void set_params(void)
     param.drain_bed->type = TYPE_STRING;
     param.drain_bed->required = NO;
     param.drain_bed->gisprompt = "old,raster,raster";
+    param.drain_bed->guisection = _("drainage");
     param.drain_bed->description = _("The height of the drainage bed in [m]");
 
     param.drain_leak = G_define_option();
@@ -194,18 +198,24 @@ void set_params(void)
     param.drain_leak->type = TYPE_STRING;
     param.drain_leak->required = NO;
     param.drain_leak->gisprompt = "old,raster,raster";
+    param.drain_leak->guisection = _("drainage");
     param.drain_leak->description =
 	_("The leakage coefficient of the drainage bed in [1/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
+    param.dt->guisection = _("solver");
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
+    param.maxit->guisection = _("solver");
     param.error = N_define_standard_option(N_OPT_ITERATION_ERROR);
+    param.error->guisection = _("solver");
     param.solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
+    param.solver->guisection = _("solver");
     param.solver->options = "cg,pcg,cholesky";
 
     param.full_les = G_define_flag();
     param.full_les->key = 'f';
-    param.full_les->description = _("Use a full filled quadratic linear equation system,"
+    param.full_les->guisection = _("solver");
+    param.full_les->description = _("Allocate a full quadratic linear equation system,"
             " default is a sparse linear equation system.");
 
 }
@@ -538,7 +548,6 @@ N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
                         N_les_callback_2d * call, const char *solver, int maxit,
                         double error)
 {
-
     N_les *les;
 
     /*assemble the linear equation system */
