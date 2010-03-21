@@ -92,9 +92,6 @@ endif
 	-sed 's#'$(GISBASE)'#'$(INST_DIR)'#g' $(GISBASE)/etc/fontcap > $(INST_DIR)/etc/fontcap
 	-$(INSTALL) config.status $(INST_DIR)/config.status
 	-chmod -R a+rX $(INST_DIR) 2>/dev/null
-	@#GEM installation
-	-tar cBf - gem/skeleton | tar xBCf $(INST_DIR)/etc - 2>/dev/null
-	-$(INSTALL) gem/gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) $(UNIX_BIN) 2>/dev/null
 	@# enable OSX Help Viewer
 	@if [ "`grep -i '^ARCH.*darwin' < include/Make/Platform.make`" ] ; then /bin/ln -sfh "$(INST_DIR)/docs/html" /Library/Documentation/Help/GRASS-$(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR) ; fi
 
