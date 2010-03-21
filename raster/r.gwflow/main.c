@@ -203,13 +203,9 @@ void set_params(void)
 	_("The leakage coefficient of the drainage bed in [1/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
-    param.dt->guisection = _("solver");
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
-    param.maxit->guisection = _("solver");
     param.error = N_define_standard_option(N_OPT_ITERATION_ERROR);
-    param.error->guisection = _("solver");
     param.solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
-    param.solver->guisection = _("solver");
     param.solver->options = "cg,pcg,cholesky";
 
     param.full_les = G_define_flag();
@@ -258,6 +254,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* Make sure that the current projection is not lat/long */
+    if ((G_projection() == PROJECTION_LL))
+	G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
+		      G_program_name());
 
     /*Check the river  parameters */
     if (param.river_leak->answer == NULL && param.river_bed->answer == NULL &&
