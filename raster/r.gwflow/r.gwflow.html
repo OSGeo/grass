@@ -119,12 +119,12 @@ r.mapcalc --o expression="drain_leak=if(col() == 5 , 0.01, null())"
 #confined groundwater flow with cg solver and sparse matrix, river and drain
 #do not work with this confined aquifer (top == 20m)
 r.gwflow --o solver=cg top=top_conf bottom=bottom phead=phead status=status \
-hc_x=hydcond hc_y=hydcond q=well s=syield r=recharge output=gwresult_conf \
+hc_x=hydcond hc_y=hydcond q=well s=syield recharge=recharge output=gwresult_conf \
 dt=8640000 type=confined vx=gwresult_conf_velocity_x vy=gwresult_conf_velocity_y budget=budget_conf
 
 #unconfined groundwater flow with cg solver and sparse matrix, river and drain are enabled
 r.gwflow --o solver=cg top=top_unconf bottom=bottom phead=phead \
-status=status hc_x=hydcond hc_y=hydcond q=well s=poros r=recharge \
+status=status hc_x=hydcond hc_y=hydcond q=well s=poros recharge=recharge \
 river_bed=river_bed river_head=river_head river_leak=river_leak \
 drain_bed=drain_bed drain_leak=drain_leak \
 output=gwresult_unconf dt=8640000 type=unconfined vx=gwresult_unconf_velocity_x \
