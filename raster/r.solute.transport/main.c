@@ -91,7 +91,7 @@ void set_params()
 
     param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
-    param.q->guisection = _("water flow");
+    param.q->guisection = _("Water flow");
     param.q->required = NO;
     param.q->description = _("Groundwater sources and sinks in [m^3/s]");
 
@@ -99,7 +99,7 @@ void set_params()
     param.cin->key = "cin";
     param.cin->required = NO;
     param.cin->gisprompt = "old,raster,raster";
-    param.cin->guisection = _("water flow");
+    param.cin->guisection = "Water flow";
     param.cin->description = _("Concentration sources and sinks bounded to a "
             "water source or sink in [kg/s]");
 
@@ -113,7 +113,7 @@ void set_params()
             "(i.e. a chemical reaction)");
 
     param.r = G_define_standard_option(G_OPT_R_INPUT);
-    param.r->key = "r";
+    param.r->key = "rd";
     param.r->description = _("Retardation factor [-]");
 
     param.nf = G_define_standard_option(G_OPT_R_INPUT);
@@ -137,7 +137,7 @@ void set_params()
     param.vector_x->type = TYPE_STRING;
     param.vector_x->required = NO;
     param.vector_x->gisprompt = "new,raster,raster";
-    param.vector_x->guisection = _("water flow");
+    param.vector_x->guisection = "Water flow";
     param.vector_x->description =
 	_("Calculate and store the groundwater filter velocity vector part in x direction [m/s]\n");
 
@@ -146,7 +146,7 @@ void set_params()
     param.vector_y->type = TYPE_STRING;
     param.vector_y->required = NO;
     param.vector_y->gisprompt = "new,raster,raster";
-    param.vector_y->guisection = _("water flow");
+    param.vector_y->guisection = "Water flow";
     param.vector_y->description =
 	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
 
@@ -186,19 +186,19 @@ void set_params()
     param.stab->required = NO;
     param.stab->answer = "full";
     param.stab->options = "full,exp";
-    param.stab->guisection = _("stabelization");
+    param.stab->guisection = "Stabelization";
     param.stab->description =
 	_("Set the flow stabilizing scheme (full or exponential upwinding).");
 
     param.full_les = G_define_flag();
     param.full_les->key = 'f';
-    param.full_les->guisection = _("solver");
+    param.full_les->guisection = "Solver";
     param.full_les->description = _("Use a full filled quadratic linear equation system,"
             " default is a sparse linear equation system.");
 
     param.cfl = G_define_flag();
     param.cfl->key = 'c';
-    param.cfl->guisection = _("stabelization");
+    param.cfl->guisection = "Stabelization";
     param.cfl->description =
 	_("Use the Courant-Friedrichs-Lewy criteria for time step calculation");
 }
