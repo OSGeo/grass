@@ -1,12 +1,33 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.external.out</em> instructs GRASS to write raster maps as data
-files using GDAL.
+files (e.g. GeoTIFF) using GDAL.
+
+
+<h2>EXAMPLE</h2>
+
+The module <em>r.external.out</em> can be used along with
+<em>r.external</em> to process external geodata in GRASS
+while writing out the results directly in GeoTIFF:
+
+<div class="code"><pre>
+# register GeoTIFF file in GRASS database:
+r.external terra_lst1km20030314.LST_Day.tif out=modis_celsius
+
+# define output directory for GRASS calculation results:
+r.external.out $HOME/gisoutput/
+
+# do something (here: extract pixels &gt; 20°C), write output directly as GeoTIFF:
+r.mapcalc "warm.tif = if(modis_celsius &gt; 20, modis_celsius, null() )"
+
+# use the result elsewhere
+qgis $HOME/gisoutput/warm.tif
+</pre></div>
 
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.out.gdal.html">r.in.gdal</a>,
+<a href="r.out.gdal.html">r.out.gdal</a>,
 <a href="r.external.html">r.external</a>
 </em>
 
