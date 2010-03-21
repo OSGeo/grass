@@ -4,10 +4,6 @@ include $(MODULE_TOPDIR)/include/Make/Other.make
 
 MANPAGES = $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTMLDIR)/*.html))
 
-GEM_PNG := $(wildcard ../gem/docs/GEM-Manual/*.png)
-GEM_HTML := $(wildcard ../gem/docs/GEM-Manual/*.html)
-GEM_DST := $(patsubst ../gem/docs/GEM-Manual/%,$(HTMLDIR)/gem/%,$(GEM_PNG) $(GEM_HTML))
-
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
 	$(HTMLDIR)/grass_logo.png \
@@ -79,14 +75,6 @@ $(HTMLDIR)/nviz/grass_logo.png: grass_logo.png | $(HTMLDIR)/nviz
 $(HTMLDIR)/nviz/grass_icon.png: grass_icon.png | $(HTMLDIR)/nviz
 	$(INSTALL_DATA) $< $@
 
-$(HTMLDIR)/gem/%.png: ../gem/docs/GEM-Manual/%.png | $(HTMLDIR)/gem
-	$(INSTALL_DATA) $< $@
-
-$(HTMLDIR)/gem/%.html: ../gem/docs/GEM-Manual/%.html | $(HTMLDIR)/gem
-	$(INSTALL_DATA) $< $@
-
 $(HTMLDIR)/nviz:
 	$(MKDIR) $@
 
-$(HTMLDIR)/gem:
-	$(MKDIR) $@

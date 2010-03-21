@@ -16,9 +16,6 @@ f = open(filename + ".tmp", 'wb')
 
 write_html_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
 write_html_cmd_overview(f)
-
-f.write(gem_ext_marker)
-
 write_html_footer(f, "index.html")
 
 f.close()
