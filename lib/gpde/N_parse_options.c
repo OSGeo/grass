@@ -33,7 +33,7 @@
  * be returned (not NULL).
  *
  * This function is related to the gpde library, general standard options can be 
- * found in gis.h. These options are set with G_define_standard_option ();
+ * found in lib/gis/parser.c. These options are set with G_define_standard_option ();
  *
  * \param[in] opt Type of Option struct to create
  * \return Option * Pointer to an Option struct
@@ -54,6 +54,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->answer = "cg";
 	Opt->options = "gauss,lu,cholesky,jacobi,sor,cg,bicgstab,pcg";
+        Opt->guisection = _("solver");
 	Opt->description =
 	    ("The type of solver which should solve the symmetric linear equation system");
 	break;
@@ -65,6 +66,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->answer = "bicgstab";
 	Opt->options = "gauss,lu,jacobi,sor,bicgstab";
+        Opt->guisection = _("solver");
 	Opt->description =
 	    ("The type of solver which should solve the linear equation system");
 	break;
@@ -73,6 +75,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->type = TYPE_INTEGER;
 	Opt->required = NO;
 	Opt->answer = "100000";
+        Opt->guisection = _("solver");
 	Opt->description =
 	    ("Maximum number of iteration used to solver the linear equation system");
 	break;
@@ -81,6 +84,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->type = TYPE_DOUBLE;
 	Opt->required = NO;
 	Opt->answer = "0.0000000001";
+        Opt->guisection = _("solver");
 	Opt->description =
 	    ("Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)");
 	break;
@@ -89,6 +93,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->type = TYPE_DOUBLE;
 	Opt->required = NO;
 	Opt->answer = "1";
+        Opt->guisection = _("solver");
 	Opt->description =
 	    ("The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing");
 	break;
@@ -97,6 +102,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->type = TYPE_DOUBLE;
 	Opt->required = YES;
 	Opt->answer = "86400";
+        Opt->guisection = _("solver");
 	Opt->description = _("The calculation time in seconds");
 	break;
     }
