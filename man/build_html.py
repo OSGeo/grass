@@ -137,7 +137,6 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous</h3>
        <ul>
         <li><a href="misc.html">Misc. commands manual</a></li>
-        <li><a href="gem/index.html">The GRASS Extensions Manager (GEM)</a></li>
        </ul></td>
     </tr>
     <tr>
@@ -223,11 +222,6 @@ r"""Go <a href="index.html">back to help overview</a><BR>
 """
 #"
 
-gem_ext_marker = r"""
-<!-- GEM Extensions StartHTML. Do not delete or change this comment! -->
-
-"""
-#"
 
 message_tmpl = string.Template(\
 r"""Generated HTML docs in ${html_dir}/index.html
@@ -322,7 +316,6 @@ def get_desc(cmd):
 
 ############################################################################
 
-gem_dir = os.path.join("..", "gem")
 arch_dist_dir = os.environ['ARCH_DISTDIR']
 html_dir = os.path.join(arch_dist_dir, "docs", "html")
 gisbase = os.environ['GISBASE']
