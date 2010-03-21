@@ -152,10 +152,6 @@ echo %{grasslib} >> %{buildroot}/etc/ld.so.conf.d/grass-%{version}.conf
 pushd %{buildroot}%{grassdir}/man
   gzip */*
 popd
-pushd %{buildroot}%{grassdir}/etc/gem/skeleton/
-chmod +x uninstall
-chmod +x post
-popd
 
 # this is possibly dangerous
 # make sure that no changeable files are linked
