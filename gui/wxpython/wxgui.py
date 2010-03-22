@@ -1496,7 +1496,7 @@ class GMFrame(wx.Frame):
             pid = int(os.environ['GIS_LOCK'])
         except (KeyError, ValueError):
             sys.stderr.write('\n')
-            sys.stderr.write(_("WARNING: Unable to quit GRASS, uknown GIS_LOCK"))
+            sys.stderr.write(_("WARNING: Unable to quit GRASS, unknown GIS_LOCK"))
             return
         
         os.kill(pid, signal.SIGQUIT)
