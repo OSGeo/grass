@@ -95,6 +95,38 @@ static char *format_list(void)
     return buf;
 }
 
+static void print_status(void)
+{
+    FILE *fp;
+    struct Key_Value *key_val;
+    const char *p;
+
+    if (!G_find_file2("", "GDAL", G_mapset())) {
+	fprintf(stdout, "Not using GDAL\n");
+	return;
+    }
+
+    fp = G_fopen_old("", "GDAL", G_mapset());
+    if (!fp)
+	G_fatal_error(_("Unable to open GDAL file"));
+    key_val = G_fread_key_value(fp);
+    fclose(fp);
+
+    p = G_find_key_value("directory", key_val);
+    fprintf(stdout, "directory: %s\n", p ? p : "not set (default 'gdal')");
+
+    p = G_find_key_value("extension", key_val);
+    fprintf(stdout, "extension: %s\n", p ? p : "<none>");
+
+    p = G_find_key_value("format", key_val);
+    fprintf(stdout, "format: %s\n", p ? p : "not set (default GTiff)");
+
+    p = G_find_key_value("options", key_val);
+    fprintf(stdout, "options: %s\n", p ? p : "<none>");
+
+    G_free_key_value(key_val);
+}
+
 static void check_format(const char *format)
 {
     GDALDriverH driver = GDALGetDriverByName(format);
@@ -172,7 +204,7 @@ int main(int argc, char *argv[])
     struct {
 	struct Option *dir, *ext, *format, *opts;
     } parm;
-    struct Flag *flag_f, *flag_r;
+    struct Flag *flag_f, *flag_r, *flag_p;
 
     G_gisinit(argv[0]);
 
@@ -219,8 +251,18 @@ int main(int argc, char *argv[])
     flag_r->key = 'r';
     flag_r->description = _("Cease using GDAL and revert to native output");
 
+    flag_p = G_define_flag();
+    flag_p->key = 'p';
+    flag_p->description = _("Print current status");
+    flag_p->guisection = _("Print");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (flag_p->answer) {
+	print_status();
+	exit(EXIT_SUCCESS);
+    }
 
     if (flag_f->answer) {
 	list_formats();
