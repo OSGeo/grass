@@ -357,8 +357,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>PNG export</label>
-	      <help>Export a GRASS raster map as non-georeferenced PNG image format.</help>
-	      <keywords>raster,export</keywords>
+	      <help>Export a GRASS raster map as a non-georeferenced PNG image.</help>
+	      <keywords>raster,export,PNG</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.out.png</command>
 	    </menuitem>
@@ -1089,7 +1089,7 @@
 	    <menuitem>
 	      <label>Shaded relief</label>
 	      <help>Creates shaded relief map from an elevation map (DEM).</help>
-	      <keywords>raster,elevation</keywords>
+	      <keywords>raster</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.shaded.relief</command>
 	    </menuitem>
@@ -1551,7 +1551,7 @@
 	    <menuitem>
 	      <label>Fractal surface</label>
 	      <help>Creates a fractal surface of a given fractal dimension.</help>
-	      <keywords>raster,DEM,fractal</keywords>
+	      <keywords>raster,surface,fractal</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.surf.fractal</command>
 	    </menuitem>
@@ -1566,7 +1566,7 @@
 	    <menuitem>
 	      <label>Gaussian deviates surface</label>
 	      <help>GRASS module to produce a raster map layer of gaussian deviates whose mean and standard deviation can be expressed by the user. It uses a gaussian random number generator.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,surface,random</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.surf.gauss</command>
 	    </menuitem>
@@ -1582,7 +1582,7 @@
 	    <menuitem>
 	      <label>Random deviates surface</label>
 	      <help>Produces a raster map layer of uniform random deviates whose range can be expressed by the user.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,surface,random</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.surf.random</command>
 	    </menuitem>
@@ -1608,7 +1608,7 @@
 	    <menuitem>
 	      <label>Bilinear and bicubic from vector points</label>
 	      <help>Bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
-	      <keywords>vector,interpolation</keywords>
+	      <keywords>vector,surface,interpolation,LIDAR</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.surf.bspline</command>
 	    </menuitem>
@@ -1616,36 +1616,36 @@
 	    <menuitem>
 	      <label>IDW from raster points</label>
 	      <help>Surface interpolation utility for raster map.</help>
-	      <keywords>raster,interpolation</keywords>
+	      <keywords>raster,surface,interpolation,IDW</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.surf.idw</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>IDW from raster points (alternate method for sparse points)</label>
 	      <help>Surface generation program.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,surface,interpolation,IDW</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.surf.idw2</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>IDW from vector points</label>
 	      <help>Surface interpolation from vector point data by Inverse Distance Squared Weighting.</help>
-	      <keywords>vector,surface,interpolation</keywords>
+	      <keywords>vector,surface,interpolation,IDW</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.surf.idw</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Raster contours</label>
-	      <help>Surface generation program from rasterized contours.</help>
-	      <keywords>raster</keywords>
+	      <help>Generates surface raster map from rasterized contours.</help>
+	      <keywords>raster,surface,interpolation</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.surf.contour</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Regularized spline tension</label>
 	      <help>Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension.</help>
-	      <keywords>vector,surface,interpolation</keywords>
+	      <keywords>vector,surface,interpolation,RST</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.surf.rst</command>
 	    </menuitem>
@@ -1731,7 +1731,7 @@
 	    <menuitem>
 	      <label>Total corrected area</label>
 	      <help>Surface area estimation for rasters.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,surface,interpolation</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>r.surf.area</command>
 	    </menuitem>
@@ -1943,7 +1943,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Color tables</label>
-	      <help>Set color rules for features in a vector using a numeric attribute column.</help>
+	      <help>Sets color rules for features in a vector map using a numeric attribute column.</help>
 	      <keywords>vector,color table</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>v.colors</command>
@@ -2808,10 +2808,10 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Remove table</label>
-	      <help>Removes a table from database.</help>
-	      <keywords>database,SQL</keywords>
+	      <help>Removes existing attribute table of a vector map.</help>
+	      <keywords>vector,database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>db.droptable</command>
+	      <command>v.db.droptable</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -2819,7 +2819,7 @@
 	      <help>Adds one or more columns to the attribute table connected to a given vector map.</help>
 	      <keywords>vector,database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>v.db.addcol</command>
+	      <command>v.db.addcolumn</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Change values</label>
@@ -2833,7 +2833,7 @@
 	      <help>Renames a column in the attribute table connected to a given vector map.</help>
 	      <keywords>vector,database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>v.db.renamecol</command>
+	      <command>v.db.renamecolumn</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
