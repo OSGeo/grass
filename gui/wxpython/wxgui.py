@@ -72,7 +72,7 @@ from grass.script import core as grass
 
 import gui_modules.utils as utils
 import gui_modules.preferences as preferences
-import gui_modules.wxgui_utils as wxgui_utils
+import gui_modules.layertree as layertree
 import gui_modules.mapdisp as mapdisp
 import gui_modules.menudata as menudata
 import gui_modules.menuform as menuform
@@ -1159,12 +1159,12 @@ class GMFrame(wx.Frame):
         self.curr_page = self.gm_cb.GetCurrentPage()
         
         # create layer tree (tree control for managing GIS layers)  and put on new notebook page
-        self.curr_page.maptree = wxgui_utils.LayerTree(self.curr_page, id=wx.ID_ANY, pos=wx.DefaultPosition,
-                                                       size=wx.DefaultSize, style=wx.TR_HAS_BUTTONS
-                                                       |wx.TR_LINES_AT_ROOT|wx.TR_HIDE_ROOT
-                                                       |wx.TR_DEFAULT_STYLE|wx.NO_BORDER|wx.FULL_REPAINT_ON_RESIZE,
-                                                       idx=self.disp_idx, lmgr=self, notebook=self.gm_cb,
-                                                       auimgr=self._auimgr, showMapDisplay=show)
+        self.curr_page.maptree = layertree.LayerTree(self.curr_page, id=wx.ID_ANY, pos=wx.DefaultPosition,
+                                                     size=wx.DefaultSize, style=wx.TR_HAS_BUTTONS |
+                                                     wx.TR_LINES_AT_ROOT| wx.TR_HIDE_ROOT |
+                                                     wx.TR_DEFAULT_STYLE| wx.NO_BORDER | wx.FULL_REPAINT_ON_RESIZE,
+                                                     idx=self.disp_idx, lmgr=self, notebook=self.gm_cb,
+                                                     auimgr=self._auimgr, showMapDisplay=show)
         
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
