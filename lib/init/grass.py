@@ -15,7 +15,7 @@
 #   	    	command line options for setting the GISDBASE, LOCATION, and/or
 #   	    	MAPSET. Finally it starts GRASS with the appropriate user
 #   	    	interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2010 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -364,7 +364,7 @@ def check_gui():
 	    p.wait()
 	    if p.returncode == 0:
 		# Set the wxpython base directory
-		wxpython_base = gfile("etc","wxpython")
+		wxpython_base = gfile("etc", "gui", "wxpython")
 	    else:
 		# Python was not found - switch to text interface mode
 		message(
@@ -469,8 +469,6 @@ def set_data():
 
 def gui_startup():
     if grass_gui == 'wxpython':
-	# eval `foo` will return subshell return code and not app foo return code!!!
-	#	eval '"$GRASS_PYTHON" "$WXPYTHONGRASSBASE/gis_set.py"'
 	thetest = call([os.getenv('GRASS_PYTHON'), os.path.join(wxpython_base, "gis_set.py")])
 
     if thetest == 0:
@@ -595,7 +593,7 @@ def start_gui():
     # Check for gui interface
     if grass_gui == "wxpython":
         subprocess.Popen([os.getenv('GRASS_PYTHON'),
-                          gfile("etc", "wxpython", "wxgui.py")])
+                          gfile(wxpython_base, "wxgui.py")])
     
 def clear_screen():
     if windows:

@@ -715,7 +715,7 @@ class GRASSStartup(wx.Frame):
     def OnExit(self, event):
         """'Exit' button clicked"""
         self.Destroy()
-        sys.exit (2)
+        sys.exit(2)
 
     def OnHelp(self, event):
         """'Help' button clicked"""

@@ -13,7 +13,7 @@ LIB_NAME = grass7_wxnviz
 
 SHLIB = $(OBJDIR)/_$(LIB_NAME).so
 
-ETCDIR = $(ETC)/wxpython
+ETCDIR = $(ETC)/gui/wxpython
 
 EXTRA_CLEAN_FILES = $(LIB_NAME).i $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
 
