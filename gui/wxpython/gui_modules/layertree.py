@@ -1,5 +1,5 @@
 """!
-@package wxgui_utils.py
+@package layertree.py
 
 @brief Utility classes for map layer management.
 

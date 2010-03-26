@@ -12,6 +12,7 @@ all = [
     "goutput.py",
     "gselect.py",
     "histogram.py",
+    "layertree.py",
     "location_wizard.py",
     "mapdisp_command.py",
     "mapdisp_window.py",
@@ -33,5 +34,4 @@ all = [
     "utils.py",
     "vdigit.py",
     "workspace.py",
-    "wxgui_utils.py",
 ]
