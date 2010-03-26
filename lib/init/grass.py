@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 #############################################################################
 #
-# MODULE:   	GRASS Initialization
+# MODULE:   	GRASS initialization
 # AUTHOR(S):	Original author unknown - probably CERL
 #               Andreas Lange - Germany - andreas.lange@rhein-main.de
 #   	    	Huidae Cho - Korea - grass4u@gmail.com
 #   	    	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
 #   	    	Markus Neteler - Germany/Italy - neteler@itc.it
 #		Hamish Bowman - New Zealand - hamish_b at yahoo,com
-#		Converted to Python by Glynn Clements
-# PURPOSE:  	The source file for this shell script is in
-#   	    	src/general/init/init.sh. It sets up some environment
-#   	    	variables and the lock file. It also parses any remaining
-#   	    	command line options for setting the GISDBASE, LOCATION, and/or
-#   	    	MAPSET. Finally it starts GRASS with the appropriate user
+#		Converted to Python (based on init.sh) by Glynn Clements
+# PURPOSE:  	Sets up some environment variables.
+#               It also parses any remaining command line options for
+#               setting the GISDBASE, LOCATION, and/or MAPSET.
+#               Finally it starts GRASS with the appropriate user
 #   	    	interface and cleans up after it is finished.
 # COPYRIGHT:    (C) 2000-2010 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#   	    	License (>=v2). Read the file COPYING that comes with GRASS
-#   	    	for details.
+#               This program is free software under the GNU General
+#   	    	Public License (>=v2). Read the file COPYING that
+#   	    	comes with GRASS for details.
 #
 #############################################################################
 
