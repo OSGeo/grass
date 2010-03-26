@@ -55,16 +55,16 @@ def parseModules():
         modules[interface.name] = { 'label'   : interface.label,
                                     'desc'    : interface.description,
                                     'keywords': interface.keywords }
-    
+        
     return modules
 
 def updateData(data, modules):
     """!Update menu data tree"""
     # list of modules to be ignored
-    ignore =  [ 'v.type_wrapper.py',
-                'vcolors' ]
+    ignore = ['v.type_wrapper.py',
+              'vcolors']
     
-    menu_modules = []
+    menu_modules = list()
     for node in data.tree.getiterator():
         if node.tag != 'menuitem':
             continue
@@ -75,7 +75,7 @@ def updateData(data, modules):
         
         if not item.has_key('command'):
             continue
-
+        
         if item['command'] in ignore:
             continue
         
@@ -89,7 +89,7 @@ def updateData(data, modules):
         else:
             desc = modules[module]['desc']
         node.find('help').text = desc
-
+        
         if not modules[module].has_key('keywords'):
             grass.warning('%s: keywords missing' % module)
         else:
@@ -137,33 +137,34 @@ def main(argv = None):
         print >> sys.stderr, __doc__
         return 1
     
-    grass.info("Step 1: parsing modules...")
+    nuldev = file(os.devnull, 'w+')
+    grass.info("Step 1: running make...")
+    grass.call(['make'], stderr = nuldev)
+    grass.info("Step 2: parsing modules...")
     modules = dict()
     modules = parseModules()
-    grass.info("Step 2: reading menu data...")
+    grass.info("Step 3: reading menu data...")
     data = menudata.Data()
-    grass.info("Step 3: updating menu data...")
+    grass.info("Step 4: updating menu data...")
     updateData(data, modules)
-
+    
     if printDiff:
         tempFile = tempfile.NamedTemporaryFile()
-        grass.info("Step 4: writing menu data...")
+        grass.info("Step 5: diff menu data...")
         writeData(data, tempFile.name)
         
-        nuldev = file(os.devnull, 'w+')
         grass.call(['diff', '-u',
                     os.path.join('xml', 'menudata.xml'),
                     tempFile.name], stderr = nuldev)
     else:
-        grass.info("Step 4: writing menu data (menudata.xml)...")
+        grass.info("Step 5: writing menu data (menudata.xml)...")
         writeData(data)
         
     return 0
 
 if __name__ == '__main__':
     if os.getenv("GISBASE") is None:
-        print >> sys.stderr, "You must be in GRASS GIS to run this program."
-        sys.exit(1)
+        sys.exit("You must be in GRASS GIS to run this program.")
     
     sys.path.append(os.path.join(os.getenv("GISBASE"), 'etc', 'wxpython', 'gui_modules'))
     import menudata
