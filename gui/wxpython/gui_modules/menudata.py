@@ -36,12 +36,14 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
+import globalvar
+
 class Data:
     '''!Data object that returns menu descriptions to be used in wxgui.py.'''
     def __init__(self, filename=None):
         if not filename:
             gisbase = os.getenv('GISBASE')
-	    filename = os.path.join(gisbase, 'etc', 'wxpython', 'xml', 'menudata.xml')
+	    filename = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata.xml')
 	self.tree = etree.parse(filename)
 
     def getMenuItem(self, mi):

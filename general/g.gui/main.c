@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     G_debug(1, "Attempting to start '%s' GUI ...", type->answer);
 
     if (strcmp(type->answer, "wxpython") == 0) {
-	sprintf(progname, "%s/etc/wxpython/wxgui.py", G_gisbase());
+	sprintf(progname, "%s/etc/gui/wxpython/wxgui.py", G_gisbase());
 	if (rc_file->answer) {
 	    G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
 		    "--workspace", rc_file->answer, SF_BACKGROUND, NULL);

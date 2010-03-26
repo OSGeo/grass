@@ -8,7 +8,7 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
-ETCDIR = $(ETC)/wxpython
+ETCDIR = $(ETC)/gui/wxpython
 
 SRCFILES := $(wildcard scripts/p.* compat/* gui_modules/* icons/*.* icons/silk/* images/* xml/*) gis_set.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
