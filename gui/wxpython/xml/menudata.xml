@@ -2744,18 +2744,11 @@
 	  <label>Database information</label>
 	  <items>
 	    <menuitem>
-	      <label>Describe table</label>
-	      <help>Describes a table in detail.</help>
-	      <keywords>database,attribute table</keywords>
+	      <label>List databases</label>
+	      <help>List all databases for a given driver and location.</help>
+	      <keywords>database,SQL</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>db.describe</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>List columns</label>
-	      <help>List all columns for a given table.</help>
-	      <keywords>database,attribute table</keywords>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>db.columns</command>
+	      <command>db.databases</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>List drivers</label>
@@ -2770,6 +2763,20 @@
 	      <keywords>database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>db.tables</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Describe table</label>
+	      <help>Describes a table in detail.</help>
+	      <keywords>database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>db.describe</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>List columns</label>
+	      <help>List all columns for a given table.</help>
+	      <keywords>database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>db.columns</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -2793,47 +2800,41 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
+	      <label>Create database</label>
+	      <help>Creates an empty database.</help>
+	      <keywords>database,SQL</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>db.createdb</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Drop database</label>
+	      <help>Removes a database.</help>
+	      <keywords>database,SQL</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>db.dropdb</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Drop table</label>
+	      <help>Removes a table from database.</help>
+	      <keywords>database,SQL</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>db.droptable</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Copy table</label>
 	      <help>Copy a table.</help>
 	      <keywords>database,attribute table,SQL</keywords>
 	      <handler>self.OnMenuCmd</handler>
 	      <command>db.copy</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>New table</label>
-	      <help>Creates and connects a new attribute table to a given layer of an existing vector map.</help>
-	      <keywords>vector,database,attribute table</keywords>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>v.db.addtable</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Remove table</label>
-	      <help>Removes existing attribute table of a vector map.</help>
-	      <keywords>vector,database,attribute table</keywords>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>v.db.droptable</command>
-	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Add columns</label>
-	      <help>Adds one or more columns to the attribute table connected to a given vector map.</help>
-	      <keywords>vector,database,attribute table</keywords>
+	      <label>Drop column</label>
+	      <help>Drops a column from selected attribute table</help>
+	      <keywords>database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
-	      <command>v.db.addcolumn</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Change values</label>
-	      <help>Allows to update a column in the attribute table connected to a vector map.</help>
-	      <keywords>vector,database,attribute table</keywords>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>v.db.update</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Rename column</label>
-	      <help>Renames a column in the attribute table connected to a given vector map.</help>
-	      <keywords>vector,database,attribute table</keywords>
-	      <handler>self.OnMenuCmd</handler>
-	      <command>v.db.renamecolumn</command>
+	      <command>db.dropcolumn</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -2876,7 +2877,66 @@
 	  <label>Vector database connections</label>
 	  <items>
 	    <menuitem>
-	      <label>Reconnect vector to database</label>
+	      <label>New table</label>
+	      <help>Creates and connects a new attribute table to a given layer of an existing vector map.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.addtable</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Remove table</label>
+	      <help>Removes existing attribute table of a vector map.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.droptable</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Join table</label>
+	      <help>Allows to join a table to a vector map table.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.join</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Add columns</label>
+	      <help>Adds one or more columns to the attribute table connected to a given vector map.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.addcolumn</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Drop column</label>
+	      <help>Drops a column from the attribute table connected to a given vector map.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.dropcolumn</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Rename column</label>
+	      <help>Renames a column in the attribute table connected to a given vector map.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.renamecolumn</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Change values</label>
+	      <help>Allows to update a column in the attribute table connected to a vector map.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.update</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Drop row</label>
+	      <help>Removes a vector object (point, line, area, face etc.) from a vector map through attribute selection.</help>
+	      <keywords>vector,database,attribute table</keywords>
+	      <handler>self.OnMenuCmd</handler>
+	      <command>v.db.droprow</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Reconnect vectors to database</label>
 	      <help>Reconnects vectors to a new database.</help>
 	      <keywords>vector,database,attribute table</keywords>
 	      <handler>self.OnMenuCmd</handler>
