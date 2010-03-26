@@ -89,6 +89,7 @@ import gui_modules.gdialogs as gdialogs
 import gui_modules.colorrules as colorrules
 import gui_modules.ogc_services as ogc_services
 import gui_modules.prompt as prompt
+import gui_modules.menu as menu
 from   gui_modules.debug import Debug
 from   gui_modules.help import MenuTreeWindow
 from   gui_modules.help import AboutWindow
@@ -123,7 +124,6 @@ class GMFrame(wx.Frame):
         self.curr_page     = ''           # currently selected page for layer tree notebook
         self.curr_pagenum  = ''           # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
-        self.menucmd       = dict()       # menuId / cmd
         self.georectifying = None         # reference to GCP class or None
         # list of open dialogs
         self.dialogs        = dict()
@@ -132,7 +132,9 @@ class GMFrame(wx.Frame):
         
         # creating widgets
         # -> self.notebook, self.goutput, self.outpage
-        self.menubar, self.menudata = self.__createMenuBar()
+        self.menubar = menu.Menu(parent = self, data = menudata.ManagerData())
+        self.SetMenuBar(self.menubar)
+        self.menucmd = self.menubar.GetCmd()
         self.statusbar = self.CreateStatusBar(number=1)
         self.notebook  = self.__createNoteBook()
         self.toolbar   = self.__createToolBar()
@@ -191,61 +193,6 @@ class GMFrame(wx.Frame):
         self.curr_page.maptree.mapdisplay.Raise()
         self.Raise()
             
-    def __createMenuBar(self):
-        """!Creates menubar"""
-
-        self.menubar = wx.MenuBar()
-        self.menudata = menudata.Data()
-        for eachMenuData in self.menudata.GetMenu():
-            for eachHeading in eachMenuData:
-                menuLabel = eachHeading[0]
-                menuItems = eachHeading[1]
-                self.menubar.Append(self.__createMenu(menuItems), menuLabel)
-        self.SetMenuBar(self.menubar)
-
-        return (self.menubar, self.menudata)
-
-    def __createMenu(self, menuData):
-        """!Creates menu"""
-
-        menu = wx.Menu()
-        for eachItem in menuData:
-            if len(eachItem) == 2:
-                label = eachItem[0]
-                subMenu = self.__createMenu(eachItem[1])
-                menu.AppendMenu(wx.ID_ANY, label, subMenu)
-            else:
-                self.__createMenuItem(menu, *eachItem)
-        self.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
-        return menu
-
-    def __createMenuItem(self, menu, label, help, handler, gcmd, keywords, shortcut = '', kind = wx.ITEM_NORMAL):
-        """!Creates menu items"""
-
-        if not label:
-            menu.AppendSeparator()
-            return
-
-        if len(gcmd) > 0:
-            helpString = gcmd + ' -- ' + help
-        else:
-            helpString = help
-        
-        if shortcut:
-            label += '\t' + shortcut
-        
-        menuItem = menu.Append(wx.ID_ANY, label, helpString, kind)
-
-        self.menucmd[menuItem.GetId()] = gcmd
-
-        if len(gcmd) > 0 and \
-                gcmd.split()[0] not in globalvar.grassCmd['all']:
-            menuItem.Enable (False)
-
-        rhandler = eval(handler)
-
-        self.Bind(wx.EVT_MENU, rhandler, menuItem)
-
     def __createNoteBook(self):
         """!Creates notebook widgets"""
 

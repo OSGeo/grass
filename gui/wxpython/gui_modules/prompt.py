@@ -140,7 +140,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         self.popupsize = wx.Size(charwidth*longest, charheight*itemcount)
         self.dropdownlistbox.SetSize(self.popupsize)
         self.dropdown.SetClientSize(self.popupsize)
-
+        
     def _showDropDown(self, show = True):
         """!Either display the drop down list (show = True) or hide it
         (show = False).
@@ -480,7 +480,7 @@ class GPrompt(object):
         
         # dictionary of modules (description, keywords, ...)
         if not self.standAlone:
-            self.moduleDesc = parent.parent.menudata.GetModules()
+            self.moduleDesc = parent.parent.menubar.GetData().GetModules()
             self.moduleList = self._getListOfModules()
             self.mapList = self._getListOfMaps()
         else:
