@@ -12,13 +12,16 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-Usage: python support/update_menudata.py
+Usage: python support/update_menudata.py [-d]
+
+ -d - dry run (prints diff, file is not updated)
 
 @author Martin Landa <landa.martin gmail.com>
 """
 
 import os
 import sys
+import tempfile
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -101,9 +104,11 @@ def updateData(data, modules):
         if module not in menu_modules:
             grass.warning("'%s' not available from the menu" % module)
     
-def writeData(data):
+def writeData(data, file = None):
     """!Write updated menudata.xml"""
-    file = os.path.join('xml', 'menudata.xml')
+    if file is None:
+        file = os.path.join('xml', 'menudata.xml')
+    
     try:
         if not os.path.exists(file):
             raise IOError
@@ -125,7 +130,12 @@ def main(argv = None):
     if argv is None:
         argv = sys.argv
 
-    if len(argv) != 1:
+    if len(argv) > 1 and argv[1] == '-d':
+        printDiff = True
+    else:
+        printDiff = False
+
+    if len(argv) > 1 and argv[1] == '-h':
         print >> sys.stderr, __doc__
         return 1
     
@@ -136,9 +146,20 @@ def main(argv = None):
     data = menudata.Data()
     grass.info("Step 3: updating menu data...")
     updateData(data, modules)
-    grass.info("Step 4: writing menu data (menudata.xml)...")
-    writeData(data)
-    
+
+    if printDiff:
+        tempFile = tempfile.NamedTemporaryFile()
+        grass.info("Step 4: writing menu data...")
+        writeData(data, tempFile.name)
+        
+        nuldev = file(os.devnull, 'w+')
+        grass.call(['svn', 'diff',
+                    os.path.join('xml', 'menudata.xml'),
+                    tempFile.name], stderr = nuldev)
+    else:
+        grass.info("Step 4: writing menu data (menudata.xml)...")
+        writeData(data)
+        
     return 0
 
 if __name__ == '__main__':
