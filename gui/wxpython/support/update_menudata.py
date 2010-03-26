@@ -110,8 +110,6 @@ def writeData(data, file = None):
         file = os.path.join('xml', 'menudata.xml')
     
     try:
-        if not os.path.exists(file):
-            raise IOError
         data.tree.write(file)
     except IOError:
         print >> sys.stderr, "'%s' not found. Please run the script from 'gui/wxpython'." % file
@@ -153,7 +151,7 @@ def main(argv = None):
         writeData(data, tempFile.name)
         
         nuldev = file(os.devnull, 'w+')
-        grass.call(['svn', 'diff',
+        grass.call(['diff', '-u',
                     os.path.join('xml', 'menudata.xml'),
                     tempFile.name], stderr = nuldev)
     else:
