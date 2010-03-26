@@ -256,6 +256,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
 		g->sf_y = sf_y;
 		g->x = sf_x;
 		g->y = sf_y;
+		g->maskname = NULL;
 
 		return disposeAreas(l, g, strtok(NULL, "\n"));
 	    }
