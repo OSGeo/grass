@@ -72,7 +72,7 @@ class MenuTreeWindow(wx.Frame):
         self.dataBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("Menu tree (double-click to run command)"))        
         # tree
-        self.tree = MenuTree(parent = self.panel, data = menudata.Data())
+        self.tree = MenuTree(parent = self.panel, data = menudata.ManagerData())
         self.tree.Load()
         
         self.searchDict = { _('label')    : 'label', # i18n workaround

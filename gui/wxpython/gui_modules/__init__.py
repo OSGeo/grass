@@ -18,6 +18,7 @@ all = [
     "mapdisp_window.py",
     "mapdisp.py",
     "mcalc_builder.py",
+    "menu.py",
     "menudata.py",
     "menuform.py",
     "nviz_mapdisp.py",
