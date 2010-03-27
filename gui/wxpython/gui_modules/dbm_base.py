@@ -21,6 +21,22 @@ import wx
 
 import gselect
 import gcmd
+from preferences import globalSettings as UserSettings
+
+def unicodeValue(value):
+    """!Encode value"""
+    enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+    if enc:
+        value = unicode(value, enc)
+    elif os.environ.has_key('GRASS_DB_ENCODING'):
+        value = unicode(value, os.environ['GRASS_DB_ENCODING'])
+    else:
+        try:
+            value = unicode(value, 'ascii')
+        except UnicodeDecodeError:
+            value = _("Unable to decode value. Set encoding in GUI preferences ('Attributes').")
+    
+    return value
 
 def createDbInfoDesc(panel, mapDBInfo, layer):
     """!Create database connection information content"""
