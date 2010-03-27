@@ -91,7 +91,7 @@ void set_params()
 
     param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
-    param.q->guisection = _("Water flow");
+    param.q->guisection = "Water flow";
     param.q->required = NO;
     param.q->description = _("Groundwater sources and sinks in [m^3/s]");
 
