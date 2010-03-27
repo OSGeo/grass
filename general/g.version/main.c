@@ -59,15 +59,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_verbose() >= G_verbose_std()) {
-	fprintf(stdout, "GRASS %s%s (%s)\n",
-		GRASS_VERSION_NUMBER, GRASS_VERSION_SVN,
-		GRASS_VERSION_DATE);
-    }
-    else {
-	fprintf(stdout, "GRASS %s\n",
-		GRASS_VERSION_NUMBER);
-    }
+    fprintf(stdout, "GRASS %s%s (%s)\n",
+	    GRASS_VERSION_NUMBER, GRASS_VERSION_SVN,
+	    GRASS_VERSION_DATE);
     
     if (copyright->answer) {
 	fprintf(stdout, "\n");
