@@ -91,7 +91,7 @@ void set_params()
 
     param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
-    param.q->guisection = "Water flow";
+    param.q->guisection = _("Water flow");
     param.q->required = NO;
     param.q->description = _("Groundwater sources and sinks in [m^3/s]");
 
@@ -99,7 +99,7 @@ void set_params()
     param.cin->key = "cin";
     param.cin->required = NO;
     param.cin->gisprompt = "old,raster,raster";
-    param.cin->guisection = "Water flow";
+    param.cin->guisection = _("Water flow");
     param.cin->description = _("Concentration sources and sinks bounded to a "
             "water source or sink in [kg/s]");
 
@@ -132,21 +132,17 @@ void set_params()
     param.output->description =	_("The resulting concentration of the numerical solute "
             "transport calculation will be written to this map. [kg/m^3]");
 
-    param.vector_x = G_define_option();
+    param.vector_x = G_define_standard_option(G_OPT_R_OUTPUT);
     param.vector_x->key = "vx";
-    param.vector_x->type = TYPE_STRING;
     param.vector_x->required = NO;
-    param.vector_x->gisprompt = "new,raster,raster";
-    param.vector_x->guisection = "Water flow";
+    param.vector_x->guisection = _("Water flow");
     param.vector_x->description =
 	_("Calculate and store the groundwater filter velocity vector part in x direction [m/s]\n");
 
-    param.vector_y = G_define_option();
+    param.vector_y = G_define_standard_option(G_OPT_R_OUTPUT);
     param.vector_y->key = "vy";
-    param.vector_y->type = TYPE_STRING;
     param.vector_y->required = NO;
-    param.vector_y->gisprompt = "new,raster,raster";
-    param.vector_y->guisection = "Water flow";
+    param.vector_y->guisection = _("Water flow");
     param.vector_y->description =
 	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
 
