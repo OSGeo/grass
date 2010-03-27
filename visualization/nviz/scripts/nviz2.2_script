@@ -265,22 +265,34 @@ if {$DEBUG} {puts "toplevel made"}
 	set cheight [exec $src_boot/bin/g.gisenv X3D_HEIGHT]
 	
 	if {$cwidth > 0 && $cheight > 0} {
-		togl $Nv_(TOP).canvas -rgba true -double true -depth true \
-				-width $cwidth -height $cheight
+		if { [catch {togl $Nv_(TOP).canvas -rgba true -double true -depth true \
+				-width $cwidth -height $cheight} ] } {
+			tk_messageBox -type ok -message { Togl canvas initialization failed. Is Your OpenGL working fine? }
+			return 1
+		}
 		pack $Nv_(TOP).canvas -side top -expand no
 	} elseif {$cwidth == "" && $cheight > 0} {
-		togl $Nv_(TOP).canvas -rgba true -double true -depth true \
-				-height $cheight
+		if { [catch {togl $Nv_(TOP).canvas -rgba true -double true -depth true \
+				-height $cheight} ] } {
+			tk_messageBox -type ok -message { Togl canvas initialization failed. Is Your OpenGL working fine? }
+			return 1
+		}
 		pack $Nv_(TOP).canvas -side top -fill x -expand yes
 	} elseif {$cheight == "" && $cwidth > 0} {
-		togl $Nv_(TOP).canvas -rgba true -double true -depth true \
-				-width $cwidth
+		if { [catch {togl $Nv_(TOP).canvas -rgba true -double true -depth true \
+				-width $cwidth} ] } {
+			tk_messageBox -type ok -message { Togl canvas initialization failed. Is Your OpenGL working fine? }
+			return 1
+		}
 		pack $Nv_(TOP).canvas -side top -fill y -expand yes
 	} else {
 	#nothing set
 	set constrained 1
-		togl $Nv_(TOP).canvas -rgba true -double true -depth true
-		pack $Nv_(TOP).canvas -side top -fill both -expand yes
+		if { [catch {togl $Nv_(TOP).canvas -rgba true -double true -depth true
+		pack $Nv_(TOP).canvas -side top -fill both -expand yes} ] } {
+			tk_messageBox -type ok -message { Togl canvas initialization failed. Is Your OpenGL working fine? }
+			return 1
+		}
 	}
 
 	bind $Nv_(TOP).canvas <Expose> {Nv_expose %W}
@@ -1049,7 +1061,9 @@ proc display_error { err_string } {
 Nset_cancel_func update
 
 # and start the ball rolling...
-Nv_makeGUI $Nv_(AREA)
+if { [Nv_makeGUI $Nv_(AREA)] == 1 } {
+  exit
+}
 
 # Center the view on initialization
 look_center
