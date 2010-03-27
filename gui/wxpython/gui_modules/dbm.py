@@ -58,21 +58,6 @@ from debug import Debug
 from dbm_dialogs import ModifyTableRecord
 from preferences import globalSettings as UserSettings
 
-def unicodeValue(value):
-    """!Encode value"""
-    enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
-    if enc:
-        value = unicode(value, enc)
-    elif os.environ.has_key('GRASS_DB_ENCODING'):
-        value = unicode(value, os.environ['GRASS_DB_ENCODING'])
-    else:
-        try:
-            value = unicode(value, 'ascii')
-        except UnicodeDecodeError:
-            value = _("Unable to decode value. Set encoding in GUI preferences ('Attributes').")
-    
-    return value
-
 class Log:
     """
     The log output is redirected to the status bar of the containing frame.
@@ -301,7 +286,7 @@ class VirtualAttributeList(wx.ListCtrl,
             else:
                 # encode string values
                 try:
-                    self.itemDataMap[i].append(unicodeValue(value))
+                    self.itemDataMap[i].append(dbm_base.unicodeValue(value))
                 except UnicodeDecodeError:
                     self.itemDataMap[i].append(_("Unable to decode value. "
                                                  "Set encoding in GUI preferences ('Attributes')."))
