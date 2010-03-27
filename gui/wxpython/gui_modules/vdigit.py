@@ -3,7 +3,7 @@
 
 @brief Vector digitizer extension
 
-Import:
+Usage:
 
 @code
   from vdigit import VDigit as VDigit
@@ -20,11 +20,9 @@ Classes:
  - VDigitDuplicatesDialog
  - VDigitVBuildDialog
 
-(C) 2007-2009 by the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+(C) 2007-2010 by the GRASS Development Team
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -705,7 +703,10 @@ class VDigit(AbstractDigit):
             self.toolbar.EnableUndo(False)
 
     def GetUndoLevel(self):
-        """!Get undo level (number of active changesets)"""
+        """!Get undo level (number of active changesets)
+        
+        Note: Changesets starts wiht 0
+        """
         if not self.digit:
             return -1
         

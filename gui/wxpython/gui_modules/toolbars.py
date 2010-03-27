@@ -1166,7 +1166,7 @@ class VDigitToolbar(AbstractToolbar):
         if self.mapLayer:
             Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % self.mapLayer.GetName())
             if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
-                if self.parent.digit.GetUndoLevel() > 0:
+                if self.parent.digit.GetUndoLevel() > -1:
                     dlg = wx.MessageDialog(parent=self.parent,
                                            message=_("Do you want to save changes "
                                                      "in vector map <%s>?") % self.mapLayer.GetName(),
@@ -1176,7 +1176,7 @@ class VDigitToolbar(AbstractToolbar):
                         # revert changes
                         self.parent.digit.Undo(0)
                     dlg.Destroy()
-        
+            
             self.parent.statusbar.SetStatusText(_("Please wait, "
                                                   "closing and rebuilding topology of "
                                                   "vector map <%s>...") % self.mapLayer.GetName(),

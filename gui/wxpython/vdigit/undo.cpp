@@ -7,7 +7,7 @@
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
 
-   (C) 2008-2009 by Martin Landa, and the GRASS development team
+   (C) 2008-2010 by Martin Landa, and the GRASS development team
 
    \author Martin Landa <landa.martin gmail.com>
 */
@@ -44,7 +44,7 @@ int Digit::Undo(int level)
 
     if (level == 0) {
 	/* 0 -> undo all */
-	level = -changesetLast;
+	level = -(changesetLast + 1);
     }
 
     G_debug(2, "Digit.Undo(): changeset_last=%d, changeset_current=%d, level=%d",
