@@ -3,18 +3,14 @@
 
 @brief Help window
 
-@todo Needs improvements...
-
 Classes:
  - HelpWindow
  - MenuTreeWindow
  - AboutWindow
 
-(C) 2008-2009 by the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+(C) 2008-2010 by the GRASS Development Team
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -24,8 +20,10 @@ import os
 import wx
 try:
     import wx.lib.agw.customtreectrl as CT
+#    import wx.lib.agw.hyperlink as hl
 except ImportError:
     import wx.lib.customtreectrl as CT
+#    import wx.lib.hyperlink as hl
 import wx.lib.flatnotebook as FN
 import  wx.lib.scrolledpanel as scrolled
 from wx.lib.wordwrap import wordwrap
@@ -378,28 +376,56 @@ class AboutWindow(wx.Frame):
         version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
                                                                  flags = 'r',
                                                                  read = True).splitlines()
-
+        
         infoTxt = wx.Panel(parent = panel, id = wx.ID_ANY)
         infoSizer = wx.BoxSizer(wx.VERTICAL)
+        infoGridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+        infoGridSizer.AddGrowableCol(0)
+        infoGridSizer.AddGrowableCol(1)
         logo = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass.ico")
         logoBitmap = wx.StaticBitmap(parent = infoTxt, id = wx.ID_ANY,
                                      bitmap = wx.Bitmap(name = logo,
                                                         type = wx.BITMAP_TYPE_ICO))
         infoSizer.Add(item = logoBitmap, proportion = 0,
-                      flag = wx.ALL | wx.ALIGN_CENTER, border = 10)
+                      flag = wx.ALL | wx.ALIGN_CENTER, border = 25)
         
-        i = 0
-        for label in [version.replace('GRASS', 'GRASS GIS').strip() + '\n\n',
-                      _('Official GRASS site: http://grass.osgeo.org') + '\n\n',
-                      _('GIS Library') + ' ' + svn_gis_h_rev + '(' + svn_gis_h_date.split(' ')[1] + ')']:
-            info = wx.StaticText(parent = infoTxt,
-                                 id = wx.ID_ANY,
-                                 label = label)
-            if i == 0:
-                info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
-            infoSizer.Add(item = info, proportion = 0,
-                          flag = wx.TOP | wx.ALIGN_CENTER, border = 5)
-            i += 1
+        info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                             label = version.replace('GRASS', 'GRASS GIS').strip() + '\n\n')
+        info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        infoSizer.Add(item = info, proportion = 0,
+                          flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 15)
+
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = _('Official GRASS site:')),
+                          pos = (0, 0),
+                          flag = wx.ALIGN_RIGHT)
+
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = 'http://grass.osgeo.org'),
+                          pos = (0, 1),
+                          flag = wx.ALIGN_LEFT)
+
+        # infoGridSizer.Add(item = hl.HyperLinkCtrl(parent = self, id = wx.ID_ANY,
+        #                                           label = 'http://grass.osgeo.org',
+        #                                           URL = 'http://grass.osgeo.org'),
+        #                   pos = (0, 1),
+        #                   flag = wx.LEFT)
+        
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = _('GIS Library Revision:')),
+                          pos = (2, 0),
+                          flag = wx.ALIGN_RIGHT)
+        
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = svn_gis_h_rev.split(' ')[1] + ' (' +
+                                               svn_gis_h_date.split(' ')[1] + ')'),
+                          pos = (2, 1),
+                          flag = wx.ALIGN_LEFT)
+
+        infoSizer.Add(item = infoGridSizer,
+                      proportion = 1,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL,
+                      border = 25)
         
         #
         # create pages
