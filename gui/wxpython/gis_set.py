@@ -425,54 +425,75 @@ class GRASSStartup(wx.Frame):
             self.DeleteLocation()
 
     def RenameMapset(self):
+        """!Rename selected mapset
         """
-        Rename selected mapset
-        """
-
-        location = self.listOfLocations[self.lblocations.GetSelection()]
-        mapset   = self.listOfMapsets[self.lbmapsets.GetSelection()]
-
+        location = utils.UnicodeString(self.listOfLocations[self.lblocations.GetSelection()])
+        mapset   = utils.UnicodeString(self.listOfMapsets[self.lbmapsets.GetSelection()])
+        
         dlg = wx.TextEntryDialog(parent=self,
-                                 message=_('Current name: %s\nEnter new name:') % mapset,
+                                 message=_('Current name: %s\n\nEnter new name:') % mapset,
                                  caption=_('Rename selected mapset'))
-
+        
         if dlg.ShowModal() == wx.ID_OK:
             newmapset = dlg.GetValue()
-            if newmapset != mapset:
+            if newmapset == mapset:
+                dlg.Destroy()
+                return
+            
+            if newmapset in self.listOfMapsets:
+                wx.MessageBox(parent = self,
+                              caption = _('Message'),
+                              message=_('Unable to rename mapset.\n\n'
+                                        'Mapset <%s> already exists in location.') % newmapset,
+                              style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            else:
                 try:
                     os.rename(os.path.join(self.gisdbase, location, mapset),
                               os.path.join(self.gisdbase, location, newmapset))
                     self.OnSelectLocation(None)
                     self.lbmapsets.SetSelection(self.listOfMapsets.index(newmapset))
-                except:
-                    wx.MessageBox(message=_('Unable to rename mapset'))
-
+                except StandardError, e:
+                    wx.MessageBox(parent = self,
+                                  caption = _('Error'),
+                                  message=_('Unable to rename mapset.\n\n%s') % e,
+                                  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            
         dlg.Destroy()
 
     def RenameLocation(self):
+        """!Rename selected location
         """
-        Rename selected location
-        """
-
-        location = self.listOfLocations[self.lblocations.GetSelection()]
+        location = utils.UnicodeString(self.listOfLocations[self.lblocations.GetSelection()])
 
         dlg = wx.TextEntryDialog(parent=self,
-                                 message=_('Current name: %s\nEnter new name:') % location,
+                                 message=_('Current name: %s\n\nEnter new name:') % location,
                                  caption=_('Rename selected location'))
 
         if dlg.ShowModal() == wx.ID_OK:
             newlocation = dlg.GetValue()
-            if newlocation != location:
-                mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
+            if newlocation == location:
+                dlg.Destroy()
+                return
+
+            if newlocation in self.listOfLocations:
+                wx.MessageBox(parent = self,
+                              caption = _('Message'),
+                              message=_('Unable to rename location.\n\n'
+                                        'Location <%s> already exists in GRASS database.') % newlocation,
+                              style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            else:
                 try:
                     os.rename(os.path.join(self.gisdbase, location),
                               os.path.join(self.gisdbase, newlocation))
                     self.UpdateLocations(self.gisdbase)
                     self.lblocations.SetSelection(self.listOfLocations.index(newlocation))
                     self.UpdateMapsets(newlocation)
-                except:
-                    wx.MessageBox(message=_('Unable to rename location'))
-
+                except StandardError, e:
+                    wx.MessageBox(parent = self,
+                                  caption = _('Error'),
+                                  message=_('Unable to rename location.\n\n%s') % e,
+                                  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+        
         dlg.Destroy()
 
     def DeleteMapset(self):
