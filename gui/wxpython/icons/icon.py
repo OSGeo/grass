@@ -345,6 +345,8 @@ Icons = {
                                 label=_("Save current model to file (Ctrl+S)")),
     "modelActionAdd" : MetaIcon (img=Icons["modelActionAdd"],
                                  label=_("Add action (GRASS module) to model")),
+    "modelDataAdd" : MetaIcon (img=Icons["modelDataAdd"],
+                                 label=_("Add data item to model")),
     }
 
 # testing ...

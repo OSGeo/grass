@@ -420,8 +420,7 @@ class grassTask:
         param['value'] = aValue
                 
     def getCmd(self, ignoreErrors = False):
-        """
-        Produce an array of command name and arguments for feeding
+        """!Produce an array of command name and arguments for feeding
         into some execve-like command processor.
 
         If ignoreErrors==True then it will return whatever has been
@@ -442,7 +441,7 @@ class grassTask:
             if p.get('value','') == '' and p.get('required','no') != 'no':
                 if p.get('default', '') != '':
                     cmd += [ '%s=%s' % ( p['name'], p['default'] ) ]
-                else:
+                elif ignoreErrors is False:
                     cmd += [ '%s=%s' % ( p['name'], _('<required>') ) ]
                     errStr += _("Parameter %(name)s (%(desc)s) is missing.\n") % \
                         {'name' : p['name'], 'desc' : p['description']}
@@ -450,6 +449,7 @@ class grassTask:
             elif p.get('value','') != '' and p['value'] != p.get('default','') :
                 # Output only values that have been set, and different from defaults
                 cmd += [ '%s=%s' % ( p['name'], p['value'] ) ]
+        
         if errors and not ignoreErrors:
             raise ValueError, errStr
 
@@ -801,7 +801,7 @@ class mainFrame(wx.Frame):
         guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
                      border = 30)
 
-        if self.parent is not None:
+        if self.parent and self.parent.GetName() != 'Modeler':
             self.outputType = None
             for p in self.task.params:
                 if p.get('name', '') == 'output':
@@ -902,8 +902,11 @@ class mainFrame(wx.Frame):
 
     def OnApply(self, event):
         """!Apply the command"""
-        cmd = self.createCmd()
-
+        if self.parent.GetName() == 'Modeler':
+            cmd = self.createCmd(ignoreErrors = True)
+        else:
+            cmd = self.createCmd()
+            
         if cmd is not None and self.get_dcmd is not None:
             # return d.* command to layer tree for rendering
             self.get_dcmd(cmd, self.layer, {"params": self.task.params, 
@@ -1824,25 +1827,24 @@ class cmdPanel(wx.Panel):
                                             None,
                                             self.task)
             
-    def createCmd( self, ignoreErrors = False ):
-        """
-        Produce a command line string (list) or feeding into GRASS.
+    def createCmd(self, ignoreErrors = False):
+        """!Produce a command line string (list) or feeding into GRASS.
 
         If ignoreErrors==True then it will return whatever has been
         built so far, even though it would not be a correct command
         for GRASS.
         """
         try:
-            cmd = self.task.getCmd( ignoreErrors=ignoreErrors )
+            cmd = self.task.getCmd(ignoreErrors=ignoreErrors)
         except ValueError, err:
             dlg = wx.MessageDialog(parent=self,
-                                   message=unicode(err),
+                                   message=utils.UnicodeString(err),
                                    caption=_("Error in %s") % self.task.name,
                                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             dlg.ShowModal()
             dlg.Destroy()
             cmd = None
-
+        
         return cmd
     
     def OnSize(self, event):
