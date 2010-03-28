@@ -55,6 +55,7 @@ class ModelFrame(wx.Frame):
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self.menubar = menu.Menu(parent = self, data = menudata.ModelerData())
+        
         self.SetMenuBar(self.menubar)
         
         self.toolbar = toolbars.ModelToolbar(parent = self)
@@ -109,6 +110,19 @@ class ModelFrame(wx.Frame):
 
     def OnModelSaveAs(self, event):
         """!Create model to file as"""
+        pass
+
+    def OnRunModel(self, event):
+        """!Run entire model"""
+        pass
+
+    def OnValidateModel(self, event):
+        """!Validate entire model"""
+        for s in self.actions:
+            print s
+        
+    def OnRemoveItem(self, event):
+        """!Remove item from model"""
         pass
 
     def OnAddAction(self, event):

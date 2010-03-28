@@ -107,4 +107,7 @@ IconsGrass2 = {
     # modeler
     "modelActionAdd" : 'layer-add.png',
     "modelDataAdd"   : 'map-add.png',
+    "modelRun"       : 'redo.png',
+    "modelValidate"  : 'tools.png',
+    
     }

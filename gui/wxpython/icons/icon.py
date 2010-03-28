@@ -347,6 +347,10 @@ Icons = {
                                  label=_("Add action (GRASS module) to model")),
     "modelDataAdd" : MetaIcon (img=Icons["modelDataAdd"],
                                  label=_("Add data item to model")),
+    "modelRun" : MetaIcon (img=Icons["modelRun"],
+                           label=_("Run entire model")),
+    "modelValidate" : MetaIcon (img=Icons["modelValidate"],
+                                label=_("Validate entire model")),
     }
 
 # testing ...

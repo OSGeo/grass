@@ -110,4 +110,6 @@ IconsSilk = {
     # modeler
     "modelActionAdd" : wx.ART_ERROR,
     "modelDataAdd"   : wx.ART_ERROR,
+    "modelRun"       : wx.ART_ERROR,
+    "modelValidate"  : wx.ART_ERROR,
     }
