@@ -1,6 +1,7 @@
 """
 New GRASS icon set
 http://robert.szczepanek.pl/icons.php
+https://svn.osgeo.org/osgeo/graphics/toolbar-icons/24x24/
 """
 __author__ = "Robert Szczepanek"
 
@@ -103,4 +104,6 @@ IconsGrass2 = {
     "grSettings"   : 'settings.png',
     # nviz
     "nvizSettings"   : 'settings.png',
+    # modeler
+    "modelActionAdd" : 'layer-add.png',
     }
