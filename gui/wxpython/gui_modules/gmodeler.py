@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 
 import os
 import shlex
+import time
 
 import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
@@ -44,8 +45,8 @@ class ModelFrame(wx.Frame):
         @param kwargs wx.Frames' arguments
         """
         self.parent = parent
-        
-        self.actions = list() # list of recoreded actions
+        self.searchDialog = None # module search dialog
+        self.actions = list()    # list of recoreded actions
 
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
@@ -102,17 +103,26 @@ class ModelFrame(wx.Frame):
 
     def OnAddAction(self, event):
         """!Add action to model"""
-        dlg = ModelSearchDialog(self)
-        dlg.CentreOnParent()
+        debug = False
+        if debug == False:
+            if self.searchDialog is None:
+                self.searchDialog = ModelSearchDialog(self)
+                self.searchDialog.CentreOnParent()
+            else:
+                self.searchDialog.Reset()
+            
+            if self.searchDialog.ShowModal() == wx.ID_CANCEL:
+                self.searchDialog.Hide()
+                return
+            
+            cmd = self.searchDialog.GetCmd()
+            self.searchDialog.Hide()
+        else:
+            cmd = ['r.buffer']
         
-        if dlg.ShowModal() == wx.CANCEL:
-            dlg.Destroy()
-            return
-        
-        cmd = dlg.GetCmd()
-        dlg.Destroy()
-        
-        action = ModelAction(self, cmd = cmd, x = 100, y = 100)
+        # add action to canvas
+        width, height = self.canvas.GetSize()
+        action = ModelAction(self, cmd = cmd, x = width/2, y = height/2)
         self.canvas.diagram.AddShape(action)
         action.Show(True)
         
@@ -125,11 +135,31 @@ class ModelFrame(wx.Frame):
         self.actions.append(action)
         
         self.canvas.Refresh()
+        time.sleep(.1)
+        
+        # show properties dialog
+        win = action.GetPropDialog()
+        if not win:
+            module = menuform.GUI().ParseCommand(action.GetCmd(string = False),
+                                                 completed = (self.GetOptData, action, None),
+                                                 parentframe = self, show = True)
+        elif not win.IsShown():
+            win.Show()
+        if win:
+            win.Raise()
+
+    def OnAddData(self, event):
+        """!Add data item to model"""
         
     def OnHelp(self, event):
         """!Display manual page"""
         grass.run_command('g.manual',
                           entry = 'wxGUI.Modeler')
+
+    def GetOptData(self, dcmd, layer, params, propwin):
+        """!Process action data"""
+        layer.SetProperties(dcmd, params, propwin)
+        self.SetStatusText(layer.GetCmd(), 0)
         
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
@@ -146,8 +176,11 @@ class ModelCanvas(ogl.ShapeCanvas):
 class ModelAction(ogl.RectangleShape):
     """!Action class (GRASS module)"""
     def __init__(self, parent, x, y, cmd = None, width = 100, height = 50):
-        self.parent = parent
-        
+        self.parent  = parent
+        self.cmd     = cmd
+        self.params  = None
+        self.propWin = None
+
         ogl.RectangleShape.__init__(self, width, height)
         
         # self.Draggable(True)
@@ -156,11 +189,31 @@ class ModelAction(ogl.RectangleShape):
         self.SetY(y)
         self.SetPen(wx.BLACK_PEN)
         self.SetBrush(wx.LIGHT_GREY_BRUSH)
-        if cmd and len(cmd) > 0:
-            self.AddText(cmd[0])
+        if self.cmd and len(self.cmd) > 0:
+            self.AddText(self.cmd[0])
         else:
             self.AddText('<<module>>')
-       
+
+    def SetProperties(self, dcmd, params, propwin):
+        """!Record properties dialog"""
+        self.cmd     = dcmd
+        self.params  = params
+        self.propWin = propwin
+
+    def GetPropDialog(self):
+        """!Get properties dialog"""
+        return self.propWin
+
+    def GetCmd(self, string = True):
+        """!Get command"""
+        if string:
+            if self.cmd is None:
+                return ''
+            else:
+                return ' '.join(self.cmd)
+        
+        return self.cmd
+    
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
     def __init__(self, log, frame):
@@ -171,15 +224,23 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
     def OnLeftClick(self, x, y, keys = 0, attachment = 0):
         """!Left mouse button pressed -> update statusbar"""
         shape = self.GetShape()
+        self.log.SetStatusText(shape.GetCmd(), 0)
         
     def OnLeftDoubleClick(self, x, y, keys = 0, attachment = 0):
         """!Left mouse button pressed (double-click) -> show properties"""
         shape = self.GetShape()
-        module = menuform.GUI()
-        # module.ParseCommand(['r.buffer'],
-        # completed = (None , None, None),
-        # parentframe = self.frame, show = True)
-
+        win = shape.GetPropDialog()
+        if not win:
+            module = menuform.GUI().ParseCommand(shape.cmd,
+                                                 completed = (self.frame.GetOptData, shape, None),
+                                                 parentframe = self.frame, show = True)
+        
+        elif not win.IsShown():
+            win.Show()
+        
+        if win:
+            win.Raise()
+            
 class ModelSearchDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Find GRASS module"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
@@ -260,8 +321,14 @@ class ModelSearchDialog(wx.Dialog):
         return cmd
 
     def OnOk(self, event):
-        self.Close()
-    
+        self.btnOk.SetFocus()
+        
+    def Reset(self):
+        """!Reset dialog"""
+        self.searchBy.SetSelection(0)
+        self.search.SetValue('')
+        self.cmd_prompt.OnCmdErase(None)
+        
 def main():
     app = wx.PySimpleApp()
     frame = ModelFrame(parent = None)

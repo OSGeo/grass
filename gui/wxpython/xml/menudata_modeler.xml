@@ -39,6 +39,11 @@
       <label>&amp;Model</label>
       <items>
 	<menuitem>
+	  <label>Add data</label>
+	  <help>Add data item to model</help>
+	  <handler>OnAddData</handler>
+	</menuitem>
+	<menuitem>
 	  <label>Add action</label>
 	  <help>Add action (GRASS module) to model</help>
 	  <handler>OnAddAction</handler>
