@@ -52,10 +52,10 @@ IconsGrass = {
     "digAdditionalTools" : wx.ART_ERROR, # FIXME
     # layer manager
     "newdisplay" : 'gui-startmon.gif',
-    "workspaceNew" : 'file-new.gif',
-    "workspaceLoad" : 'file-new.gif', # change the icon if possible
-    "workspaceOpen" : 'file-open.gif',
-    "workspaceSave" : 'file-save.gif',
+    "fileNew"    : 'file-new.gif',
+    "fileLoad"   : 'file-new.gif', # change the icon if possible
+    "fileOpen"   : 'file-open.gif',
+    "fileSave"   : 'file-save.gif',
     "addrast"    : 'element-cell.gif',
     "addrast3d"  : 'element-grid3.gif',
     "addvect"    : 'element-vector.gif',

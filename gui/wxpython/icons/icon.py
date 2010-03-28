@@ -1,4 +1,4 @@
-"""
+"""!
 @package icon
 
 @brief Icon themes
@@ -10,7 +10,7 @@ from icons import Icons as Icons
 Classes:
  - MetaIcon
 
-(C) 2007-2008 by the GRASS Development Team
+(C) 2007-2008, 2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -174,18 +174,17 @@ Icons = {
                              label=_("Save display to graphic file")),
     "printmap"   : MetaIcon (img=Icons["printmap"],
                              label=_("Print display")),
-    # gis manager
+    # layer manager
     "newdisplay" : MetaIcon (img=Icons["newdisplay"],
                              label=_("Start new display")),
-    "workspaceNew" : MetaIcon (img=Icons["workspaceNew"],
+    "workspaceNew" : MetaIcon (img=Icons["fileNew"],
                                label=_("Create new workspace file (Ctrl+N)")),
-    "workspaceLoad" : MetaIcon (img=Icons["workspaceLoad"],
+    "workspaceLoad" : MetaIcon (img=Icons["fileLoad"],
                                 label=_("Load map layers into workspace (Ctrl+L)")),
-    "workspaceOpen" : MetaIcon (img=Icons["workspaceOpen"],
+    "workspaceOpen" : MetaIcon (img=Icons["fileOpen"],
                                 label=_("Open existing workspace file (Ctrl+O)")),
-    "workspaceSave" : MetaIcon (img=Icons["workspaceSave"],
+    "workspaceSave" : MetaIcon (img=Icons["fileSave"],
                                 label=_("Save current workspace to file (Ctrl+S)")),
-    # TODO: "layer" is not conformant with GRASS vocabulary (vector layer: 1..x) ! 
     "addrast"    : MetaIcon (img=Icons["addrast"],
                              label=_("Add raster map layer (Ctrl+R)")),
     "addvect"    : MetaIcon (img=Icons["addvect"],
@@ -337,10 +336,16 @@ Icons = {
     "nvizSettings": MetaIcon (img=Icons["nvizSettings"],
                               label=_("Settings"),
                               desc=_("Show Nviz settings dialog")),
+    # modeler
+    "modelNew" : MetaIcon (img=Icons["fileNew"],
+                           label=_("Create new model (Ctrl+N)")),
+    "modelOpen" : MetaIcon (img=Icons["fileOpen"],
+                                label=_("Load model from file (Ctrl+O)")),
+    "modelSave" : MetaIcon (img=Icons["fileSave"],
+                                label=_("Save current model to file (Ctrl+S)")),
     }
 
 # testing ...
 if __name__ == "__main__":
     for k, v in Icons.iteritems():
         print v.GetImageName()
-

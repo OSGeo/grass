@@ -27,7 +27,7 @@ class Menu(wx.MenuBar):
             else:
                 self._createMenuItem(menu, *eachItem)
         
-        self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.parent.OnMenuHighlight)
+        self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
         
         return menu
 
@@ -69,3 +69,16 @@ class Menu(wx.MenuBar):
         """
         return self.menucmd
         
+    def OnMenuHighlight(self, event):
+        """
+        Default menu help handler
+        """
+         # Show how to get menu item info from this event handler
+        id = event.GetMenuId()
+        item = self.FindItemById(id)
+        if item:
+            text = item.GetText()
+            help = item.GetHelp()
+
+        # but in this case just call Skip so the default is done
+        event.Skip()

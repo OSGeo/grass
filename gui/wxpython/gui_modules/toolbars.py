@@ -11,6 +11,7 @@ Classes:
  - VDigitToolbar
  - ProfileToolbar
  - NvizToolbar
+ - ModelToolbar
 
 (C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -35,11 +36,11 @@ import gdialogs
 import vdigit
 from vdigit import VDigitSettingsDialog as VDigitSettingsDialog
 from debug import Debug as Debug
-from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
 
 gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
 sys.path.append(gmpath)
+from icon import Icons as Icons
 
 class AbstractToolbar(wx.ToolBar):
     """!Abstract toolbar class"""
@@ -1373,5 +1374,40 @@ class NvizToolbar(AbstractToolbar):
         
         # disable the toolbar
         self.parent.RemoveToolbar("nviz")
-        
 
+class ModelToolbar(AbstractToolbar):
+    """!Graphical modeler toolbar (see gmodeler.py)
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self.ToolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+        
+    def ToolbarData(self):
+        """!Toolbar data"""
+        self.new = wx.NewId()
+        self.open = wx.NewId()
+        self.save = wx.NewId()
+        self.quit = wx.NewId()
+        
+        # tool, label, bitmap, kind, shortHelp, longHelp, handler
+        return (
+            (self.new, 'new', Icons['modelNew'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelNew'].GetLabel(), Icons['modelNew'].GetDesc(),
+             self.parent.OnModelNew),
+            (self.open, 'open', Icons['modelOpen'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelOpen'].GetLabel(), Icons['modelOpen'].GetDesc(),
+             self.parent.OnModelOpen),
+            (self.save, 'save', Icons['modelSave'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelSave'].GetLabel(), Icons['modelSave'].GetDesc(),
+             self.parent.OnModelSave),
+            ('', '', '', '', '', '', ''),
+            (self.quit, 'quit', Icons['quit'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['quit'].GetLabel(), Icons['quit'].GetDesc(),
+             self.parent.OnCloseWindow),
+            )
+    
+    
