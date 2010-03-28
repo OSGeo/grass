@@ -82,6 +82,14 @@ class ModelFrame(wx.Frame):
         sizer.Fit(self)
         
         self.Layout()
+
+    def _addEvent(self, item):
+        """!Add event to item"""
+        evthandler = ModelEvtHandler(self.statusbar,
+                                     self)
+        evthandler.SetShape(item)
+        evthandler.SetPreviousHandler(item.GetEventHandler())
+        item.SetEventHandler(evthandler)
         
     def OnCloseWindow(self, event):
         """!Close window"""
@@ -127,13 +135,8 @@ class ModelFrame(wx.Frame):
         action = ModelAction(self, cmd = cmd, x = width/2, y = height/2)
         self.canvas.diagram.AddShape(action)
         action.Show(True)
-        
-        evthandler = ModelEvtHandler(self.statusbar,
-                                     self)
-        evthandler.SetShape(action)
-        evthandler.SetPreviousHandler(action.GetEventHandler())
-        action.SetEventHandler(evthandler)
-        
+
+        self._addEvent(action)
         self.actions.append(action)
         
         self.canvas.Refresh()
@@ -142,7 +145,7 @@ class ModelFrame(wx.Frame):
         # show properties dialog
         win = action.GetPropDialog()
         if not win:
-            module = menuform.GUI().ParseCommand(action.GetCmd(string = False),
+            module = menuform.GUI().ParseCommand(action.GetLog(string = False),
                                                  completed = (self.GetOptData, action, None),
                                                  parentframe = self, show = True)
         elif not win.IsShown():
@@ -158,6 +161,7 @@ class ModelFrame(wx.Frame):
         self.canvas.diagram.AddShape(data)
         data.Show(True)
         
+        self._addEvent(data)
         self.data.append(data)
         
         self.canvas.Refresh()
@@ -185,6 +189,7 @@ class ModelFrame(wx.Frame):
                     self.canvas.diagram.AddShape(data)
                     data.Show(True)
                     
+                    self._addEvent(data)                    
                     self.data.append(data)
                     
                     # connect with action
@@ -203,7 +208,7 @@ class ModelFrame(wx.Frame):
             
             self.canvas.Refresh()
         
-        self.SetStatusText(layer.GetCmd(), 0)
+        self.SetStatusText(layer.GetLog(), 0)
         
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
@@ -248,8 +253,8 @@ class ModelAction(ogl.RectangleShape):
         """!Get properties dialog"""
         return self.propWin
 
-    def GetCmd(self, string = True):
-        """!Get command"""
+    def GetLog(self, string = True):
+        """!Get logging info"""
         if string:
             if self.cmd is None:
                 return ''
@@ -285,7 +290,14 @@ class ModelData(ogl.EllipseShape):
             self.AddText(value)
         else:
             self.AddText(_('unknown'))
-    
+
+    def GetLog(self, string = True):
+        """!Get logging info"""
+        if self.name:
+            return self.name + '=' + self.value + ' (' + self.prompt + ')'
+        else:
+            return _('unknown')
+        
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
     def __init__(self, log, frame):
@@ -294,9 +306,31 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame = frame
         
     def OnLeftClick(self, x, y, keys = 0, attachment = 0):
-        """!Left mouse button pressed -> update statusbar"""
+        """!Left mouse button pressed -> select item & update statusbar"""
         shape = self.GetShape()
-        self.log.SetStatusText(shape.GetCmd(), 0)
+        canvas = shape.GetCanvas()
+        dc = wx.ClientDC(canvas)
+        canvas.PrepareDC(dc)
+        
+        if shape.Selected():
+            shape.Select(False, dc)
+        else:
+            redraw = False
+            shapeList = canvas.GetDiagram().GetShapeList()
+            toUnselect = list()
+            
+            for s in shapeList:
+                if s.Selected():
+                    toUnselect.append(s)
+            
+            shape.Select(True, dc)
+            
+            for s in toUnselect:
+                s.Select(False, dc)
+                
+        canvas.Refresh(False)
+        
+        self.log.SetStatusText(shape.GetLog(), 0)
         
     def OnLeftDoubleClick(self, x, y, keys = 0, attachment = 0):
         """!Left mouse button pressed (double-click) -> show properties"""
