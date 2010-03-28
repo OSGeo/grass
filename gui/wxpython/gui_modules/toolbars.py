@@ -1391,6 +1391,7 @@ class ModelToolbar(AbstractToolbar):
         self.new = wx.NewId()
         self.open = wx.NewId()
         self.save = wx.NewId()
+        self.action = wx.NewId()
         self.quit = wx.NewId()
         
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
@@ -1404,6 +1405,10 @@ class ModelToolbar(AbstractToolbar):
             (self.save, 'save', Icons['modelSave'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelSave'].GetLabel(), Icons['modelSave'].GetDesc(),
              self.parent.OnModelSave),
+            ('', '', '', '', '', '', ''),
+            (self.action, 'action', Icons['modelActionAdd'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelActionAdd'].GetLabel(), Icons['modelActionAdd'].GetDesc(),
+             self.parent.OnAddAction),
             ('', '', '', '', '', '', ''),
             (self.quit, 'quit', Icons['quit'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['quit'].GetLabel(), Icons['quit'].GetDesc(),

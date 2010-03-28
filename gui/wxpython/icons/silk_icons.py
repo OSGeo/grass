@@ -105,4 +105,6 @@ IconsSilk = {
     "grSettings"   : 'color_swatch.png',
     # nviz
     "nvizSettings"   : 'color_swatch.png',
+    # modeler
+    "modelActionAdd" : wx.ART_ERROR,
     }

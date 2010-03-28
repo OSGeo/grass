@@ -105,5 +105,7 @@ IconsGrass = {
     "grGcpReload"  : 'gui-redraw.gif',
     "grSettings"   : 'edit-color.gif', 
     # nviz 
-    "nvizSettings" : 'edit-color.gif',   
+    "nvizSettings" : 'edit-color.gif',  
+    # modeler
+    "modelActionAdd" : wx.ART_ERROR,
     }

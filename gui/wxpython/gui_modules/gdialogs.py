@@ -947,9 +947,9 @@ class MultiImportDialog(wx.Dialog):
             self.inputTitle = _("Input directory")
         
         self.inputBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                label=" %s " % self.inputTitle)
+                                     label=" %s " % self.inputTitle)
         self.layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                label=_(" List of %s layers ") % self.inputType.upper())
+                                     label=_(" List of %s layers ") % self.inputType.upper())
 
         #
         # input

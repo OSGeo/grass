@@ -473,14 +473,17 @@ class GPrompt(object):
         self.parent = parent                 # GMConsole
         self.panel  = self.parent.GetPanel()
         
-        if self.parent.parent.GetName() != "LayerManager":
+        if self.parent.parent.GetName() == "LayerManager":
             self.standAlone = True
         else:
             self.standAlone = False
         
         # dictionary of modules (description, keywords, ...)
         if not self.standAlone:
-            self.moduleDesc = parent.parent.menubar.GetData().GetModules()
+            if self.parent.parent.GetName() == 'Modeler':
+                self.moduleDesc = menudata.ManagerData().GetModules()
+            else:
+                self.moduleDesc = parent.parent.menubar.GetData().GetModules()
             self.moduleList = self._getListOfModules()
             self.mapList = self._getListOfMaps()
         else:
@@ -748,7 +751,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             
             usage, description = self.GetCommandUsage(cmd)
                                         
-            self.CallTipSetBackground("PALE GREEN")
+            self.CallTipSetBackground("#f4f4d1")
             self.CallTipSetForeground("BLACK")
             self.CallTipShow(pos, usage + '\n\n' + description)
             
@@ -838,7 +841,12 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.InsertText(pos,txt)
             self.LineEnd()
             
-        elif event.GetKeyCode() == wx.WXK_RETURN and self.AutoCompActive() == False:
+        elif event.GetKeyCode() == wx.WXK_RETURN and \
+                self.AutoCompActive() == False:
+            if self.parent.GetName() != "ModelDialog":
+                self.parent.OnOk(None)
+                return
+            
             # Run command on line when <return> is pressed    
             
             # find the command to run
@@ -852,7 +860,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             except UnicodeError:
                 cmd = shlex.split(utils.EncodeString((line)))
             
-            #send the command list to the processor 
+            # send the command list to the processor 
             self.parent.RunCmd(cmd)
             
             # add command to history    
