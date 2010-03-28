@@ -4,7 +4,7 @@
 @brief Complex list for menu entries for wxGUI.
 
 Classes:
- - Data
+ - MenuData
  - ManagerData
  - ModelerData
 
@@ -43,6 +43,38 @@ class MenuData:
     """!Abstract menu data class"""
     def __init__(self, filename):
 	self.tree = etree.parse(filename)
+
+    def _getMenuItem(self, mi):
+        """!Get menu item
+
+        @param mi menu item instance
+        """
+	if mi.tag == 'separator':
+	    return ('', '', '', '', '')
+	elif mi.tag == 'menuitem':
+	    label    = _(mi.find('label').text)
+	    help     = _(mi.find('help').text)
+	    handler  = mi.find('handler').text
+	    gcmd     = mi.find('command')  # optional
+            keywords = mi.find('keywords') # optional
+            shortcut = mi.find('shortcut') # optional
+	    if gcmd != None:
+		gcmd = gcmd.text
+	    else:
+		gcmd = ""
+            if keywords != None:
+                keywords = keywords.text
+            else:
+                keywords = ""
+            if shortcut != None:
+                shortcut = shortcut.text
+            else:
+                shortcut = ""
+	    return (label, help, handler, gcmd, keywords, shortcut)
+	elif mi.tag == 'menu':
+	    return self._getMenu(mi)
+	else:
+	    raise Exception()
 
     def _getMenu(self, m):
         """!Get menu
@@ -162,38 +194,6 @@ class ManagerData(MenuData):
 	    filename = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata.xml')
         
         MenuData.__init__(self, filename)
-    
-    def _getMenuItem(self, mi):
-        """!Get menu item
-
-        @param mi menu item instance
-        """
-	if mi.tag == 'separator':
-	    return ('', '', '', '', '')
-	elif mi.tag == 'menuitem':
-	    label    = _(mi.find('label').text)
-	    help     = _(mi.find('help').text)
-	    handler  = mi.find('handler').text
-	    gcmd     = mi.find('command')  # optional
-            keywords = mi.find('keywords') # optional
-            shortcut = mi.find('shortcut') # optional
-	    if gcmd != None:
-		gcmd = gcmd.text
-	    else:
-		gcmd = ""
-            if keywords != None:
-                keywords = keywords.text
-            else:
-                keywords = ""
-            if shortcut != None:
-                shortcut = shortcut.text
-            else:
-                shortcut = ""
-	    return (label, help, handler, gcmd, keywords, shortcut)
-	elif mi.tag == 'menu':
-	    return self._getMenu(mi)
-	else:
-	    raise Exception()
         
     def GetModules(self):
         """!Create dictionary of modules used to search module by
@@ -220,6 +220,14 @@ class ManagerData(MenuData):
                         print >> sys.stderr, "WARNING: Module <%s> has no keywords" % module
                 
         return modules
+
+class ModelerData(MenuData):
+    def __init__(self, filename = None):
+        if not filename:
+            gisbase = os.getenv('GISBASE')
+	    filename = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata_modeler.xml')
+        
+        MenuData.__init__(self, filename)
 
 if __name__ == "__main__":
     import sys

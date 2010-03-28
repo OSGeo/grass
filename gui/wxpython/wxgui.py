@@ -244,20 +244,6 @@ class GMFrame(wx.Frame):
 
         return self.toolbar
 
-    def OnMenuHighlight(self, event):
-        """
-        Default menu help handler
-        """
-         # Show how to get menu item info from this event handler
-        id = event.GetMenuId()
-        item = self.GetMenuBar().FindItemById(id)
-        if item:
-            text = item.GetText()
-            help = item.GetHelp()
-
-        # but in this case just call Skip so the default is done
-        event.Skip()
-
     def OnGeorectify(self, event):
         """
         Launch georectifier module

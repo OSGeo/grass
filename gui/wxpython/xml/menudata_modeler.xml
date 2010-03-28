@@ -1,0 +1,59 @@
+<menudata>
+  <menubar>
+    <menu>
+      <label>&amp;File</label>
+      <items>
+	<menuitem>
+	  <label>New</label>
+	  <help>Create new model</help>
+	  <handler>OnModelNew</handler>
+	  <shortcut>Ctrl+N</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Open</label>
+	  <help>Load model from file</help>
+	  <handler>OnModelOpen</handler>
+	  <shortcut>Ctrl+O</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Save</label>
+	  <help>Save model</help>
+	  <handler>OnModelSave</handler>
+	  <shortcut>Ctrl+S</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Save as</label>
+	  <help>Save model to file</help>
+	  <handler>OnModelSaveAs</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Close</label>
+	  <help>Close modeler</help>
+	  <handler>OnCloseWindow</handler>
+	  <shortcut>Ctrl+E</shortcut>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Model</label>
+      <items>
+	<menuitem>
+	  <label>Add action</label>
+	  <help>Add action (GRASS module) to model</help>
+	  <handler>OnAddAction</handler>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Help</label>
+      <items>
+	<menuitem>
+	  <label>Help</label>
+	  <help>Display the HTML man pages of Graphical modeler</help>
+	  <handler>OnHelp</handler>
+	</menuitem>
+      </items>
+    </menu>
+  </menubar>
+</menudata>
