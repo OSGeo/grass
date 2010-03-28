@@ -473,7 +473,7 @@ class GPrompt(object):
         self.parent = parent                 # GMConsole
         self.panel  = self.parent.GetPanel()
         
-        if self.parent.parent.GetName() == "LayerManager":
+        if self.parent.parent.GetName() not in ("LayerManager", "Modeler"):
             self.standAlone = True
         else:
             self.standAlone = False
@@ -843,7 +843,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             
         elif event.GetKeyCode() == wx.WXK_RETURN and \
                 self.AutoCompActive() == False:
-            if self.parent.GetName() != "ModelDialog":
+            if self.parent.GetName() == "ModelerDialog":
                 self.parent.OnOk(None)
                 return
             
