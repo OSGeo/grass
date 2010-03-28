@@ -8,6 +8,7 @@ Classes:
  - ModelCanvas
  - ModelAction
  - ModelSearchDialog
+ - ModelData
 
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -46,8 +47,9 @@ class ModelFrame(wx.Frame):
         """
         self.parent = parent
         self.searchDialog = None # module search dialog
-        self.actions = list()    # list of recoreded actions
-
+        self.actions = list()    # list of recorded actions
+        self.data    = list()    # list of recorded data items
+        
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
@@ -150,6 +152,15 @@ class ModelFrame(wx.Frame):
 
     def OnAddData(self, event):
         """!Add data item to model"""
+        # add action to canvas
+        width, height = self.canvas.GetSize()
+        data = ModelData(self, x = width/2, y = height/2)
+        self.canvas.diagram.AddShape(data)
+        data.Show(True)
+        
+        self.data.append(data)
+        
+        self.canvas.Refresh()
         
     def OnHelp(self, event):
         """!Display manual page"""
@@ -159,6 +170,39 @@ class ModelFrame(wx.Frame):
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
         layer.SetProperties(dcmd, params, propwin)
+        
+        if params: # add data items
+            width, height = self.canvas.GetSize()
+            x = [width/2 + 200, width/2 - 200]
+            for p in params['params']:
+                if p.get('value', None) and \
+                        p.get('prompt', '') in ('raster', 'vector', 'raster3d'):
+                    # create data item
+                    data = ModelData(self, name = p.get('name', ''),
+                                     value = p.get('value', ''),
+                                     prompt = p.get('prompt', ''),
+                                     x = x.pop(), y = height/2)
+                    self.canvas.diagram.AddShape(data)
+                    data.Show(True)
+                    
+                    self.data.append(data)
+                    
+                    # connect with action
+                    line = ogl.LineShape()
+                    line.SetCanvas(self)
+                    line.SetPen(wx.BLACK_PEN)
+                    line.SetBrush(wx.BLACK_BRUSH)
+                    line.AddArrow(ogl.ARROW_ARROW)
+                    line.MakeLineControlPoints(2)
+                    if p.get('age', 'old') == 'old':
+                        data.AddLine(line, layer)
+                    else:
+                        layer.AddLine(line, data)
+                    self.canvas.diagram.AddShape(line)
+                    line.Show(True)
+            
+            self.canvas.Refresh()
+        
         self.SetStatusText(layer.GetCmd(), 0)
         
 class ModelCanvas(ogl.ShapeCanvas):
@@ -213,6 +257,34 @@ class ModelAction(ogl.RectangleShape):
                 return ' '.join(self.cmd)
         
         return self.cmd
+
+class ModelData(ogl.EllipseShape):
+    """!Data item class"""
+    def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = 175, height = 50):
+        self.parent  = parent
+        self.name    = name
+        self.value   = value
+        self.prompt  = prompt
+        
+        ogl.EllipseShape.__init__(self, width, height)
+        
+        # self.Draggable(True)
+        self.SetCanvas(self.parent)
+        self.SetX(x)
+        self.SetY(y)
+        self.SetPen(wx.BLACK_PEN)
+        if self.prompt == 'raster':
+            self.SetBrush(wx.Brush(wx.Colour(215, 215, 248)))
+        elif self.prompt == 'vector':
+            self.SetBrush(wx.Brush(wx.Colour(248, 215, 215)))
+        else:
+            self.SetBrush(wx.LIGHT_GREY_BRUSH)
+        
+        if name:
+            self.AddText(name)
+            self.AddText(value)
+        else:
+            self.AddText(_('unknown'))
     
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
