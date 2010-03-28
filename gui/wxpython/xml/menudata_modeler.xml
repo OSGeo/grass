@@ -48,6 +48,22 @@
 	  <help>Add action (GRASS module) to model</help>
 	  <handler>OnAddAction</handler>
 	</menuitem>
+	<menuitem>
+	  <label>Remove item</label>
+	  <help>Remove action/data from model</help>
+	  <handler>OnRemoveItem</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Run model</label>
+	  <help>Run entire model</help>
+	  <handler>OnRunModel</handler>
+	</menuitem>
+	<menuitem>
+	  <label>Validate model</label>
+	  <help>Validate entire model</help>
+	  <handler>OnValidateModel</handler>
+	</menuitem>
       </items>
     </menu>
     <menu>
