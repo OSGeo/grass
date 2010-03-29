@@ -113,8 +113,8 @@ projection read from the PROJ_INFO file of the location name
 
 <h2>NOTES</h2>
 
-Planned improvements to <em>r.in.gdal</em> in the future include support for
-reporting everything known about a dataset if the <b>output</b> parameter is not set.
+Import of large files can be significantly faster when setting <b>memory</b> to
+the size of the input file.
 
 <p>
 The <em>r.in.gdal</em> command does support the following features, as long as 
@@ -129,8 +129,7 @@ the underlying format driver supports it:
 Note that if the source has no colormap, r.in.gdal in GRASS 5.0 will emit
 no colormap.  Use r.colors map=... color=grey to assign a greyscale colormap.
 In a future version of GRASS r.in.gdal will likely be upgraded to automatically
-emit greyscale colormaps.
-<br>
+emit greyscale colormaps.<br>
 
 <dt> Data Types
 <dd> Most GDAL data types are supported.  Float32 and Float64 type bands
@@ -169,6 +168,10 @@ established with i.target has a compatible coordinate system before using
 the points with i.rectify.<br>
 
 </dl>
+
+<p>
+Planned improvements to <em>r.in.gdal</em> in the future include support for
+reporting everything known about a dataset if the <b>output</b> parameter is not set.
 
 <h3>Error Messages</h3>
 

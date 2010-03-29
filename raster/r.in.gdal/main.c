@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *input, *output, *target, *title, *outloc, *band;
+	struct Option *input, *output, *target, *title, *outloc, *band, *memory;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c;
 
@@ -100,6 +100,12 @@ int main(int argc, char *argv[])
     parm.band->type = TYPE_INTEGER;
     parm.band->required = NO;
     parm.band->description = _("Band to select (default is all bands)");
+
+    parm.memory = G_define_option();
+    parm.memory->key = "memory";
+    parm.memory->type = TYPE_INTEGER;
+    parm.memory->required = NO;
+    parm.memory->description = _("Cache size (MiB)");
 
     parm.target = G_define_option();
     parm.target->key = "target";
@@ -185,6 +191,8 @@ int main(int argc, char *argv[])
     /*      Fire up the engines.                                            */
     /* -------------------------------------------------------------------- */
     GDALAllRegister();
+    if (parm.memory->answer && *parm.memory->answer)
+           GDALSetCacheMax(atol(parm.memory->answer) * 1024 * 1024);
 
 
     /* -------------------------------------------------------------------- */
