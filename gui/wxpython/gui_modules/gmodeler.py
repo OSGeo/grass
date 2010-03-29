@@ -9,6 +9,8 @@ Classes:
  - ModelAction
  - ModelSearchDialog
  - ModelData
+ - ProcessModelFile
+ - WriteModelFile
 
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -21,6 +23,11 @@ import os
 import shlex
 import time
 
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree # Python <= 2.4
+
 import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
     globalvar.CheckForWx()
@@ -32,6 +39,9 @@ import menudata
 import toolbars
 import menuform
 import prompt
+import gcmd
+import utils
+from   debug import Debug
 
 from grass.script import core as grass
 
@@ -49,6 +59,8 @@ class ModelFrame(wx.Frame):
         self.searchDialog = None # module search dialog
         self.actions = list()    # list of recorded actions
         self.data    = list()    # list of recorded data items
+        self.baseTitle = title
+        self.modelFile = None    # loaded model
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
@@ -102,8 +114,31 @@ class ModelFrame(wx.Frame):
 
     def OnModelOpen(self, event):
         """!Load model from file"""
-        pass
-
+        debug = True
+        if debug is False:
+            dlg = wx.FileDialog(parent = self, message=_("Choose model file"),
+                                defaultDir = os.getcwd(),
+                                wildcard=_("GRASS Model File (*.gxm)|*.gxm"))
+            if dlg.ShowModal() == wx.ID_OK:
+                filename = dlg.GetPath()
+        
+        else:
+            filename = '/home/martin/model.gxm'
+            
+        if not filename:
+            return
+        
+        Debug.msg(4, "ModelFrame.OnModelOpen(): filename=%s" % filename)
+        
+        # close current model
+        ### self.OnModelClose()
+        
+        self.LoadModelFile(filename)
+        
+        self.modelFile = filename
+        self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
+        self.SetStatusText(_('%d actions loaded into model') % len(self.actions), 0)
+        
     def OnModelSave(self, event):
         """!Save model to file"""
         pass
@@ -223,6 +258,43 @@ class ModelFrame(wx.Frame):
             self.canvas.Refresh()
         
         self.SetStatusText(layer.GetLog(), 0)
+
+    def LoadModelFile(self, filename):
+        """!Load model definition stored in GRASS Model XML file (gxm)
+
+        @todo Validate against DTD
+
+        Raise exception on error.
+        """
+        ### dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxm.dtd")
+        
+        # parse workspace file
+        try:
+            gxmXml = ProcessModelFile(etree.parse(filename))
+        except Exception, err:
+            raise gcmd.GStdError(_("Reading model file <%(file)s> failed.\n"
+                                   "Invalid file, unable to parse XML document."
+                                   "\n\n%(err)s") % { 'file' : filename, 'err': err},
+                                 parent = self)
+        
+        busy = wx.BusyInfo(message=_("Please wait, loading model..."),
+                           parent=self)
+        wx.Yield()
+        # load model
+        for action in gxmXml.actions:
+            actionShape = ModelAction(parent = self, 
+                                      x = action['pos'][0],
+                                      y = action['pos'][1],
+                                      width = action['size'][0],
+                                      height = action['size'][1],
+                                      cmd = action['cmd'])
+            self.canvas.diagram.AddShape(actionShape)
+            actionShape.Show(True)
+            
+            self._addEvent(actionShape)
+            self.actions.append(actionShape)
+        
+        self.canvas.Refresh(True)
         
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
@@ -448,7 +520,94 @@ class ModelSearchDialog(wx.Dialog):
         self.searchBy.SetSelection(0)
         self.search.SetValue('')
         self.cmd_prompt.OnCmdErase(None)
+
+class ProcessModelFile:
+    """!Process GRASS model file (gxm)"""
+    def __init__(self, tree):
+        """!A ElementTree handler for the GXM XML file, as defined in
+        grass-gxm.dtd.
+        """
+        self.tree = tree
+        self.root = self.tree.getroot()
+
+        # list of actions, data
+        self.actions = list()
         
+        self._processFile()
+
+    def _filterValue(self, value):
+        """!Filter value
+        
+        @param value
+        """
+        value = value.replace('&lt;', '<')
+        value = value.replace('&gt;', '>')
+        
+        return value
+        
+    def _getNodeText(self, node, tag, default = ''):
+        """!Get node text"""
+        p = node.find(tag)
+        if p is not None:
+            return utils.normalize_whitespace(p.text)
+        
+        return default
+    
+    def _processFile(self):
+        """!Process model file"""
+        for action in self.root.findall('action'):
+            pos = size = None
+            posAttr = action.get('position', None)
+            if posAttr:
+                posVal = map(int, posAttr.split(','))
+                try:
+                    pos = (posVal[0], posVal[1])
+                except:
+                    pos = None
+
+            sizeAttr = action.get('size', None)
+            if sizeAttr:
+                sizeVal = map(int, sizeAttr.split(','))
+                try:
+                    size = (sizeVal[0], sizeVal[1])
+                except:
+                    size = None
+                    
+            task = action.find('task')
+            if task:
+                cmd = self._processTask(task)
+            else:
+                cmd = None
+            
+            self.actions.append({ 'pos' : pos,
+                                  'size': size,
+                                  'cmd' : cmd })
+            
+    def _processTask(self, node):
+        """!Process task"""
+        cmd = list()
+        name = node.get('name', None)
+        if not name:
+            return cmd
+        cmd.append(name)
+        
+        # flags
+        for p in node.findall('flag'):
+            flag = p.get('name', '')
+            if len(flag) > 1:
+                cmd.append('--' + flag)
+            else:
+                cmd.append('-' + flag)
+        # parameters
+        for p in node.findall('parameter'):
+            cmd.append('%s=%s' % (p.get('name', ''),
+                                  self._filterValue(self._getNodeText(p, 'value'))))
+        return cmd
+    
+class WriteModelFile:
+    """!Write GRASS model file (gxm)"""
+    pass
+
 def main():
     app = wx.PySimpleApp()
     frame = ModelFrame(parent = None)
