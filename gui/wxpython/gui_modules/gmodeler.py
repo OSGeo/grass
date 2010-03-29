@@ -114,7 +114,7 @@ class ModelFrame(wx.Frame):
 
     def OnModelOpen(self, event):
         """!Load model from file"""
-        debug = True
+        debug = False
         if debug is False:
             dlg = wx.FileDialog(parent = self, message=_("Choose model file"),
                                 defaultDir = os.getcwd(),
@@ -241,24 +241,33 @@ class ModelFrame(wx.Frame):
                     self._addEvent(data)                    
                     self.data.append(data)
                     
-                    # connect with action
-                    line = ogl.LineShape()
-                    line.SetCanvas(self)
-                    line.SetPen(wx.BLACK_PEN)
-                    line.SetBrush(wx.BLACK_BRUSH)
-                    line.AddArrow(ogl.ARROW_ARROW)
-                    line.MakeLineControlPoints(2)
                     if p.get('age', 'old') == 'old':
-                        data.AddLine(line, layer)
+                        self._addLine(data, layer)
                     else:
-                        layer.AddLine(line, data)
-                    self.canvas.diagram.AddShape(line)
-                    line.Show(True)
+                        self._addLine(layer, data)
             
             self.canvas.Refresh()
         
         self.SetStatusText(layer.GetLog(), 0)
 
+    def _addLine(self, fromShape, toShape):
+        """!Add connection
+
+        @param fromShape from
+        @param toShape to
+        """
+        line = ogl.LineShape()
+        line.SetCanvas(self)
+        line.SetPen(wx.BLACK_PEN)
+        line.SetBrush(wx.BLACK_BRUSH)
+        line.AddArrow(ogl.ARROW_ARROW)
+        line.MakeLineControlPoints(2)
+        
+        fromShape.AddLine(line, toShape)
+        
+        self.canvas.diagram.AddShape(line)
+        line.Show(True)
+        
     def LoadModelFile(self, filename):
         """!Load model definition stored in GRASS Model XML file (gxm)
 
@@ -280,7 +289,8 @@ class ModelFrame(wx.Frame):
         busy = wx.BusyInfo(message=_("Please wait, loading model..."),
                            parent=self)
         wx.Yield()
-        # load model
+        
+        # load actions
         for action in gxmXml.actions:
             actionShape = ModelAction(parent = self, 
                                       x = action['pos'][0],
@@ -294,6 +304,27 @@ class ModelFrame(wx.Frame):
             self._addEvent(actionShape)
             self.actions.append(actionShape)
         
+        # load data & connections
+        for data in gxmXml.data:
+            dataShape = ModelData(parent = self, 
+                                  x = data['pos'][0],
+                                  y = data['pos'][1],
+                                  width = data['size'][0],
+                                  height = data['size'][1],
+                                  name = data['name'],
+                                  prompt = data['prompt'],
+                                  value = data['value'])
+            self.canvas.diagram.AddShape(dataShape)
+            dataShape.Show(True)
+            
+            self._addEvent(dataShape)
+            self.data.append(dataShape)
+            
+            actionShape = self.actions[0]
+            if data['from'] is False:
+                self._addLine(dataShape, actionShape)
+            else:
+                self._addLine(actionShape, dataShape)
         self.canvas.Refresh(True)
         
 class ModelCanvas(ogl.ShapeCanvas):
@@ -532,9 +563,11 @@ class ProcessModelFile:
 
         # list of actions, data
         self.actions = list()
+        self.data    = list()
         
-        self._processFile()
-
+        self._processActions()
+        self._processData()
+        
     def _filterValue(self, value):
         """!Filter value
         
@@ -553,26 +586,11 @@ class ProcessModelFile:
         
         return default
     
-    def _processFile(self):
+    def _processActions(self):
         """!Process model file"""
         for action in self.root.findall('action'):
-            pos = size = None
-            posAttr = action.get('position', None)
-            if posAttr:
-                posVal = map(int, posAttr.split(','))
-                try:
-                    pos = (posVal[0], posVal[1])
-                except:
-                    pos = None
-
-            sizeAttr = action.get('size', None)
-            if sizeAttr:
-                sizeVal = map(int, sizeAttr.split(','))
-                try:
-                    size = (sizeVal[0], sizeVal[1])
-                except:
-                    size = None
-                    
+            pos, size = self._getDim(action)
+            
             task = action.find('task')
             if task:
                 cmd = self._processTask(task)
@@ -583,6 +601,55 @@ class ProcessModelFile:
                                   'size': size,
                                   'cmd' : cmd })
             
+    def _getDim(self, node):
+        """!Get position and size of shape"""
+        pos = size = None
+        posAttr = node.get('position', None)
+        if posAttr:
+            posVal = map(int, posAttr.split(','))
+            try:
+                pos = (posVal[0], posVal[1])
+            except:
+                pos = None
+        
+        sizeAttr = node.get('size', None)
+        if sizeAttr:
+            sizeVal = map(int, sizeAttr.split(','))
+            try:
+                size = (sizeVal[0], sizeVal[1])
+            except:
+                size = None
+        
+        return pos, size        
+    
+    def _processData(self):
+        """!Process model file"""
+        for data in self.root.findall('data'):
+            pos, size = self._getDim(data)
+            param = data.find('parameter')
+            name = prompt = value = None
+            if param is not None:
+                name = param.get('name', None)
+                prompt = param.get('prompt', None)
+                value = self._filterValue(self._getNodeText(param, 'value'))
+                
+            action = data.find('action')
+            aId = direction = None
+            if action is not None:
+                aId = int(action.get('id', None))
+                if action.get('dir', 'to') == 'to':
+                    fromDir = False
+                else:
+                    fromDir = True
+            
+            self.data.append({ 'pos' : pos,
+                               'size': size,
+                               'name' : name,
+                               'prompt' : prompt,
+                               'value' : value,
+                               'id' : aId,
+                               'from' : fromDir })
+        
     def _processTask(self, node):
         """!Process task"""
         cmd = list()
