@@ -49,7 +49,7 @@
 #%end
 #%option
 #% key: strength
-#% type: integer
+#% type: double
 #% description: Cropping intensity (upper brightness level)
 #% options: 0-100
 #% answer : 98
