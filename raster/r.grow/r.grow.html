@@ -9,6 +9,7 @@ parameter), or like <em>r.buffer</em>, but with the
 option of preserving the original cells (similar to combining
 <em>r.buffer</em> and <em>r.patch</em>).
 
+
 <h2>NOTES</h2>
 The user has the option of specifying three different metrics which
 control the geometry in which grown cells are created, (controlled by
@@ -28,7 +29,6 @@ Cells grown using this metric would form isolines of distance that are
 circular from a given point, with the distance given by the <b>radius</b>.
 
 <p>
-
 The <i>Manhattan metric</i>, or <i>Taxicab geometry</i>, is a form of geometry in 
 which the usual metric of Euclidean geometry is replaced by a new 
 metric in which the distance between two points is the sum of the (absolute) 
@@ -44,7 +44,6 @@ where cells grown using this metric would form isolines of distance that are
 rhombus-shaped from a given point. 
 
 <p>
-
 The <i>Maximum metric</i> is given by the formula
 
 <div class="code"><pre>d(dx,dy) = max(abs(dx),abs(dy))</pre></div>
@@ -52,13 +51,29 @@ The <i>Maximum metric</i> is given by the formula
 where the isolines of distance from a point are squares.
 
 <p>
-
 If there are two cells which are equal candidates to grow into an empty space, 
 <em>r.grow</em> will choose the northernmost candidate; if there are multiple 
 candidates with the same northing, the westernmost is chosen. 
 
-<h2>SEE ALSO</h2>
 
+<h2>EXAMPLE</h2>
+
+You can shrink inwards by preparing an inverse map first, and then
+inverting the resulting grown map. For example:
+<div class="code"><pre>
+# Spearfish sample dataset
+
+MAP=fields
+g.region rast=$MAP
+r.mapcalc "inverse = if(isnull($MAP), 1, null())"
+r.grow in=inverse out=inverse.grown
+r.mapcalc "$MAP.shrunken = if(isnull(inverse.grown), $MAP, null())"
+r.colors $MAP.shrunken rast=$MAP
+g.remove inverse,inverse.grown
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
 <em>
 <a href="r.buffer.html">r.buffer</a>,<br>
 <a href="r.grow.distance.html">r.grow.distance</a>,<br>
@@ -66,9 +81,9 @@ candidates with the same northing, the westernmost is chosen.
 </em>
 
 <p>
-
 <em><a href="http://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry: Euclidean Metric</a></em><br>
 <em><a href="http://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry: Manhattan Metric</a></em>
+
 
 <h2>AUTHORS</h2>
 
@@ -77,4 +92,5 @@ U.S. Army Construction Engineering Research Laboratory
 <p>
 Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
