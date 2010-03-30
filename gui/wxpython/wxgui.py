@@ -247,7 +247,7 @@ class GMFrame(wx.Frame):
 
     def WorkspaceChanged(self):
         """!Update window title"""
-        if self.workspaceFile and not self.workspaceChanged:
+        if not self.workspaceChanged:
             self.workspaceChanged = True
         
         if self.workspaceFile:
