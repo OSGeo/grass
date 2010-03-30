@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 import shlex
 import time
 import traceback
@@ -433,10 +434,8 @@ class ModelAction(ogl.RectangleShape):
 
     def SetProperties(self, dcmd, params, propwin):
         """!Record properties dialog"""
-        if dcmd:
-            self.cmd = dcmd
-        if self.params:
-            self.params = params
+        self.cmd = dcmd
+        self.params = params
         self.propWin = propwin
 
     def GetPropDialog(self):
@@ -887,6 +886,8 @@ class WriteModelFile:
 def main():
     app = wx.PySimpleApp()
     frame = ModelFrame(parent = None)
+    if len(sys.argv) > 1:
+        frame.LoadModelFile(sys.argv[1])
     # frame.CentreOnScreen()
     frame.Show()
     
