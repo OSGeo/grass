@@ -994,7 +994,6 @@ class mainFrame(wx.Frame):
                 self.parent.Delete(self.layer)
                 self.Destroy()
         elif self.parent and self.parent.GetName() == 'Modeler':
-            self.get_dcmd(None, self.layer, None, None)
             self.Destroy()
         else:
             # cancel for non-display commands
