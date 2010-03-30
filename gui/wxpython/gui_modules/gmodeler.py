@@ -117,6 +117,7 @@ class ModelFrame(wx.Frame):
 
     def OnModelOpen(self, event):
         """!Load model from file"""
+        filename = ''
         global debug
         if debug is False:
             dlg = wx.FileDialog(parent = self, message=_("Choose model file"),
