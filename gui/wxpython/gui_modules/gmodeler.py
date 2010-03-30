@@ -46,8 +46,6 @@ from   gcmd import GMessage
 
 from grass.script import core as grass
 
-debug = True
-
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Graphical modeler (under development)"), **kwargs):
         """!Graphical modeler main window
@@ -118,17 +116,12 @@ class ModelFrame(wx.Frame):
     def OnModelOpen(self, event):
         """!Load model from file"""
         filename = ''
-        global debug
-        if debug is False:
-            dlg = wx.FileDialog(parent = self, message=_("Choose model file"),
-                                defaultDir = os.getcwd(),
-                                wildcard=_("GRASS Model File (*.gxm)|*.gxm"))
-            if dlg.ShowModal() == wx.ID_OK:
-                filename = dlg.GetPath()
-        
-        else:
-            filename = '/home/martin/model1.gxm'
-            
+        dlg = wx.FileDialog(parent = self, message=_("Choose model file"),
+                            defaultDir = os.getcwd(),
+                            wildcard=_("GRASS Model File (*.gxm)|*.gxm"))
+        if dlg.ShowModal() == wx.ID_OK:
+            filename = dlg.GetPath()
+                    
         if not filename:
             return
         
@@ -162,19 +155,16 @@ class ModelFrame(wx.Frame):
         
     def OnModelSaveAs(self, event):
         """!Create model to file as"""
-        global debug
-        if debug is False:
-            dlg = wx.FileDialog(parent = self,
-                                message = _("Choose file to save current model"),
-                                defaultDir = os.getcwd(),
-                                wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
-                                style=wx.FD_SAVE)
-            
-            filename = ''
-            if dlg.ShowModal() == wx.ID_OK:
-                filename = dlg.GetPath()
-        else:
-            filename = '/home/martin/model1.gxm'
+        filename = ''
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Choose file to save current model"),
+                            defaultDir = os.getcwd(),
+                            wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
+                            style=wx.FD_SAVE)
+        
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            filename = dlg.GetPath()
         
         if not filename:
             return
@@ -215,22 +205,18 @@ class ModelFrame(wx.Frame):
 
     def OnAddAction(self, event):
         """!Add action to model"""
-        global debug
-        if debug == False:
-            if self.searchDialog is None:
-                self.searchDialog = ModelSearchDialog(self)
-                self.searchDialog.CentreOnParent()
-            else:
-                self.searchDialog.Reset()
-            
-            if self.searchDialog.ShowModal() == wx.ID_CANCEL:
-                self.searchDialog.Hide()
-                return
-            
-            cmd = self.searchDialog.GetCmd()
-            self.searchDialog.Hide()
+        if self.searchDialog is None:
+            self.searchDialog = ModelSearchDialog(self)
+            self.searchDialog.CentreOnParent()
         else:
-            cmd = ['r.buffer']
+            self.searchDialog.Reset()
+            
+        if self.searchDialog.ShowModal() == wx.ID_CANCEL:
+            self.searchDialog.Hide()
+            return
+            
+        cmd = self.searchDialog.GetCmd()
+        self.searchDialog.Hide()
         
         # add action to canvas
         width, height = self.canvas.GetSize()
