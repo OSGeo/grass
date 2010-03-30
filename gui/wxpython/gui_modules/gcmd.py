@@ -1,7 +1,7 @@
-"""
+"""!
 @package gcmd
 
-@brief GRASS command interface
+@brief wxGUI command interface
 
 Classes:
  - GException
@@ -19,15 +19,13 @@ Functions:
  
  - RunCommand
 
-(C) 2007-2008 by the GRASS Development Team
+(C) 2007-2008, 2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Jachym Cepicky
-Martin Landa <landa.martin gmail.com>
-
-@date 2007-2008
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -36,6 +34,7 @@ import time
 import errno
 import signal
 import locale
+import traceback
 
 import wx
 
@@ -62,6 +61,25 @@ from grass.script import core as grass
 import utils
 from debug import Debug as Debug
 
+class GMessage:
+    def __init__(self, parent, message, msgType = 'error'):
+        if msgType == 'error':
+            caption = _('Error')
+            style = wx.OK | wx.ICON_ERROR | wx.CENTRE
+        
+        exception = traceback.format_exc()
+        reason = exception.split('\n')[-2].split(':', 1)[-1].strip()
+        
+        if Debug.get_level() > 0:
+            sys.stderr.write(exception)
+        
+        wx.MessageBox(parent = parent,
+                      message = message + '\n\n%s: %s\n\n%s' % \
+                          (_('Reason'),
+                           reason, exception),
+                      caption = caption,
+                      style = style)
+        
 class GException(Exception):
     """!Generic exception"""
     def __init__(self, message, title=_("Error"), parent=None):
