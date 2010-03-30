@@ -985,6 +985,8 @@ class mainFrame(wx.Frame):
             elif len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
                 self.parent.Delete(self.layer)
                 self.Destroy()
+        elif self.parent and self.parent.GetName() == 'Modeler':
+            self.Hide()
         else:
             # cancel for non-display commands
             self.Destroy()
