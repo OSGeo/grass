@@ -539,7 +539,11 @@ class ModelData(ogl.EllipseShape):
         @param direction direction of relation
         """
         self.actions[direction].append(action)
-        
+
+    def GetPropDialog(self):
+        """!Get properties dialog"""
+        return None
+    
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
     def __init__(self, log, frame):
@@ -578,12 +582,12 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         """!Left mouse button pressed (double-click) -> show properties"""
         shape = self.GetShape()
         win = shape.GetPropDialog()
-        if not win:
+        if isinstance(shape, ModelAction) and not win:
             module = menuform.GUI().ParseCommand(shape.cmd,
                                                  completed = (self.frame.GetOptData, shape, None),
                                                  parentframe = self.frame, show = True)
         
-        elif not win.IsShown():
+        elif win and not win.IsShown():
             win.Show()
         
         if win:
