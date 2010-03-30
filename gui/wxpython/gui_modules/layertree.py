@@ -176,10 +176,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         self.AssignImageList(il)
         
-        # use when groups implemented
-        ## self.tree.SetItemImage(self.root, fldridx, wx.TreeItemIcon_Normal)
-        ## self.tree.SetItemImage(self.root, fldropenidx, wx.TreeItemIcon_Expanded)
-        
         self.Bind(wx.EVT_TREE_ITEM_EXPANDING,   self.OnExpandNode)
         self.Bind(wx.EVT_TREE_ITEM_COLLAPSED,   self.OnCollapseNode)
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED,   self.OnActivateLayer)
@@ -187,11 +183,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(CT.EVT_TREE_ITEM_CHECKED,     self.OnLayerChecked)
         self.Bind(wx.EVT_TREE_DELETE_ITEM,      self.OnDeleteLayer)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
-        #self.Bind(wx.EVT_TREE_BEGIN_DRAG,       self.OnDrag)
         self.Bind(wx.EVT_TREE_END_DRAG,         self.OnEndDrag)
-        #self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnChangeLayerName)
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
-        # self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
         
     def GetMap(self):
@@ -916,24 +909,25 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
     def OnActivateLayer(self, event):
         """!Double click on the layer item.
-        Launch property dialog, or expand/collapse group of items, etc."""
-        
+        Launch property dialog, or expand/collapse group of items, etc.
+        """
+        self.lmgr.WorkspaceChanged()
         layer = event.GetItem()
         self.layer_selected = layer
-
+        
         self.PropertiesDialog (layer)
-
+        
         if self.GetPyData(layer)[0]['type'] == 'group':
             if self.IsExpanded(layer):
                 self.Collapse(layer)
             else:
                 self.Expand(layer)
-
+        
     def OnDeleteLayer(self, event):
         """!Remove selected layer item from the layer tree"""
-
+        self.lmgr.WorkspaceChanged()
         item = event.GetItem()
-
+        
         try:
             item.properties.Close(True)
         except:
@@ -972,6 +966,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnLayerChecked(self, event):
         """!Enable/disable data layer"""
+        self.lmgr.WorkspaceChanged()
+        
         item    = event.GetItem()
         checked = item.IsChecked()
 
@@ -1137,15 +1133,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         self.mapdisplay.nvizToolWin.page['settings']['id'] = 1 
 
     def OnCollapseNode(self, event):
-        """
-        Collapse node
+        """!Collapse node
         """
         if self.GetPyData(self.layer_selected)[0]['type'] == 'group':
             self.SetItemImage(self.layer_selected, self.folder)
 
     def OnExpandNode(self, event):
-        """
-        Expand node
+        """!Expand node
         """
         self.layer_selected = event.GetItem()
         if self.GetPyData(self.layer_selected)[0]['type'] == 'group':

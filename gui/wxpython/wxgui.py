@@ -22,7 +22,6 @@ for details.
 import sys
 import os
 import time
-import traceback
 import re
 import string
 import getopt
@@ -98,10 +97,9 @@ from   icons.icon import Icons
 UserSettings = preferences.globalSettings
 
 class GMFrame(wx.Frame):
-    """!
-    GIS Manager frame with notebook widget for controlling
-    GRASS GIS. Includes command console page for typing GRASS
-    (and other) commands, tree widget page for managing map layers.
+    """!Layer Manager frame with notebook widget for controlling GRASS
+    GIS. Includes command console page for typing GRASS (and other)
+    commands, tree widget page for managing map layers.
     """
     def __init__(self, parent, id=wx.ID_ANY, title=_("GRASS GIS Layer Manager"),
                  workspace=None):
@@ -124,6 +122,7 @@ class GMFrame(wx.Frame):
         self.curr_page     = ''           # currently selected page for layer tree notebook
         self.curr_pagenum  = ''           # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
+        self.workspaceChanged = False     # track changes in workspace
         self.georectifying = None         # reference to GCP class or None
         # list of open dialogs
         self.dialogs        = dict()
@@ -188,11 +187,13 @@ class GMFrame(wx.Frame):
         self.goutput.Redirect()
         # fix goutput's pane size
         self.goutput.SetSashPosition(int(self.GetSize()[1] * .45))
+
+        self.workspaceChanged = False
         
         # start with layer manager on top
         self.curr_page.maptree.mapdisplay.Raise()
         self.Raise()
-            
+
     def __createNoteBook(self):
         """!Creates notebook widgets"""
 
@@ -244,6 +245,14 @@ class GMFrame(wx.Frame):
 
         return self.toolbar
 
+    def WorkspaceChanged(self):
+        """!Update window title"""
+        if self.workspaceFile and not self.workspaceChanged:
+            self.workspaceChanged = True
+        
+        if self.workspaceFile:
+            self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile) + '*')
+        
     def OnGeorectify(self, event):
         """
         Launch georectifier module
@@ -673,7 +682,7 @@ class GMFrame(wx.Frame):
         if maptree:
             # reverse list of map layers
             maptree.Map.ReverseListOfLayers()
-
+            
         for mdisp in mapdisplay:
             mdisp.MapWindow2D.UpdateMap()
 
@@ -747,7 +756,6 @@ class GMFrame(wx.Frame):
 
     def OnWorkspaceSaveAs(self, event=None):
         """!Save workspace definition to selected file"""
-
         dlg = wx.FileDialog(parent=self, message=_("Choose file to save current workspace"),
                             defaultDir=os.getcwd(), wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"), style=wx.FD_SAVE)
 
@@ -1442,7 +1450,8 @@ class GMFrame(wx.Frame):
             return
         
         maptree = self.curr_page.maptree
-        if UserSettings.Get(group='manager', key='askOnQuit', subkey='enabled'):
+        if self.workspaceChanged and \
+                UserSettings.Get(group='manager', key='askOnQuit', subkey='enabled'):
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
