@@ -654,7 +654,7 @@
 	  <label>Exit GUI</label>
 	  <help>Quit wxGUI session</help>
 	  <handler>OnCloseWindow</handler>
-	  <shortcut>Ctrl+E</shortcut>
+	  <shortcut>Ctrl+W</shortcut>
 	</menuitem>
 	<menuitem>
 	  <label>Quit GRASS GIS</label>

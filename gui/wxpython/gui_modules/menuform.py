@@ -400,7 +400,11 @@ class grassTask:
         """
         Set param value/values.
         """
-        param = self.get_param(aParam)
+        try:
+            param = self.get_param(aParam)
+        except ValueError:
+            return
+        
         param['value'] = aValue
             
     def get_flag(self, aFlag):
@@ -416,7 +420,11 @@ class grassTask:
         """
         Enable / disable flag.
         """
-        param = self.get_flag(aFlag)
+        try:
+            param = self.get_flag(aFlag)
+        except ValueError:
+            return
+        
         param['value'] = aValue
                 
     def getCmd(self, ignoreErrors = False):
