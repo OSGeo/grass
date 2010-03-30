@@ -46,7 +46,7 @@ from   gcmd import GMessage
 
 from grass.script import core as grass
 
-debug = False
+debug = True
 
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Graphical modeler (under development)"), **kwargs):
@@ -276,7 +276,7 @@ class ModelFrame(wx.Frame):
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
         layer.SetProperties(dcmd, params, propwin)
-        
+            
         if params: # add data items
             width, height = self.canvas.GetSize()
             x = [width/2 + 200, width/2 - 200]
@@ -447,8 +447,10 @@ class ModelAction(ogl.RectangleShape):
 
     def SetProperties(self, dcmd, params, propwin):
         """!Record properties dialog"""
-        self.cmd     = dcmd
-        self.params  = params
+        if dcmd:
+            self.cmd = dcmd
+        if self.params:
+            self.params = params
         self.propWin = propwin
 
     def GetPropDialog(self):
