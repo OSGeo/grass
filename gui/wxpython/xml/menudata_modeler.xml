@@ -28,10 +28,10 @@
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>Close</label>
-	  <help>Close modeler</help>
+	  <label>Close modeler</label>
+	  <help>Close modeler window</help>
 	  <handler>OnCloseWindow</handler>
-	  <shortcut>Ctrl+E</shortcut>
+	  <shortcut>Ctrl+W</shortcut>
 	</menuitem>
       </items>
     </menu>
@@ -42,11 +42,13 @@
 	  <label>Add data</label>
 	  <help>Add data item to model</help>
 	  <handler>OnAddData</handler>
+	  <shortcut>Ctrl+D</shortcut>
 	</menuitem>
 	<menuitem>
 	  <label>Add action</label>
 	  <help>Add action (GRASS module) to model</help>
 	  <handler>OnAddAction</handler>
+	  <shortcut>Ctrl+A</shortcut>
 	</menuitem>
 	<menuitem>
 	  <label>Remove item</label>
@@ -58,11 +60,13 @@
 	  <label>Run model</label>
 	  <help>Run entire model</help>
 	  <handler>OnRunModel</handler>
+	  <shortcut>Ctrl+R</shortcut>
 	</menuitem>
 	<menuitem>
 	  <label>Validate model</label>
 	  <help>Validate entire model</help>
 	  <handler>OnValidateModel</handler>
+	  <shortcut>Ctrl+V</shortcut>
 	</menuitem>
       </items>
     </menu>

@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 import os
 import shlex
 import time
+import traceback
 
 try:
     import xml.etree.ElementTree as etree
@@ -39,11 +40,13 @@ import menudata
 import toolbars
 import menuform
 import prompt
-import gcmd
 import utils
 from   debug import Debug
+from   gcmd import GMessage
 
 from grass.script import core as grass
+
+debug = False
 
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Graphical modeler (under development)"), **kwargs):
@@ -114,7 +117,7 @@ class ModelFrame(wx.Frame):
 
     def OnModelOpen(self, event):
         """!Load model from file"""
-        debug = False
+        global debug
         if debug is False:
             dlg = wx.FileDialog(parent = self, message=_("Choose model file"),
                                 defaultDir = os.getcwd(),
@@ -123,7 +126,7 @@ class ModelFrame(wx.Frame):
                 filename = dlg.GetPath()
         
         else:
-            filename = '/home/martin/model.gxm'
+            filename = '/home/martin/model1.gxm'
             
         if not filename:
             return
@@ -141,12 +144,61 @@ class ModelFrame(wx.Frame):
         
     def OnModelSave(self, event):
         """!Save model to file"""
-        pass
-
+        if self.modelFile:
+            dlg = wx.MessageDialog(self, message=_("Model file <%s> already exists. "
+                                                   "Do you want to overwrite this file?") % \
+                                       self.modelFile,
+                                   caption=_("Save model"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_NO:
+                dlg.Destroy()
+            else:
+                Debug.msg(4, "ModelFrame.OnModelSave(): filename=%s" % self.modelFile)
+                self.WriteModelFile(self.modelFile)
+                self.SetStatusText(_('File <%s> saved') % self.modelFile, 0)
+        else:
+            self.OnModelSaveAs(None)
+        
     def OnModelSaveAs(self, event):
         """!Create model to file as"""
-        pass
-
+        global debug
+        if debug is False:
+            dlg = wx.FileDialog(parent = self,
+                                message = _("Choose file to save current model"),
+                                defaultDir = os.getcwd(),
+                                wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
+                                style=wx.FD_SAVE)
+            
+            filename = ''
+            if dlg.ShowModal() == wx.ID_OK:
+                filename = dlg.GetPath()
+        else:
+            filename = '/home/martin/model1.gxm'
+        
+        if not filename:
+            return
+        
+        # check for extension
+        if filename[-4:] != ".gxm":
+            filename += ".gxm"
+        
+        if os.path.exists(filename):
+            dlg = wx.MessageDialog(parent = self,
+                                   message=_("Model file <%s> already exists. "
+                                             "Do you want to overwrite this file?") % filename,
+                                   caption=_("File already exists"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlg.ShowModal() != wx.ID_YES:
+                dlg.Destroy()
+                return
+        
+        Debug.msg(4, "GMFrame.OnModelSaveAs(): filename=%s" % filename)
+        
+        self.WriteModelFile(filename)
+        self.modelFile = filename
+        self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+        self.SetStatusText(_('File <%s> saved') % self.modelFile, 0)
+        
     def OnRunModel(self, event):
         """!Run entire model"""
         pass
@@ -162,7 +214,7 @@ class ModelFrame(wx.Frame):
 
     def OnAddAction(self, event):
         """!Add action to model"""
-        debug = False
+        global debug
         if debug == False:
             if self.searchDialog is None:
                 self.searchDialog = ModelSearchDialog(self)
@@ -243,8 +295,10 @@ class ModelFrame(wx.Frame):
                     
                     if p.get('age', 'old') == 'old':
                         self._addLine(data, layer)
+                        data.AddAction(layer, direction = 'from')
                     else:
                         self._addLine(layer, data)
+                        data.AddAction(layer, direction = 'to')
             
             self.canvas.Refresh()
         
@@ -280,11 +334,11 @@ class ModelFrame(wx.Frame):
         # parse workspace file
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
-        except Exception, err:
-            raise gcmd.GStdError(_("Reading model file <%(file)s> failed.\n"
-                                   "Invalid file, unable to parse XML document."
-                                   "\n\n%(err)s") % { 'file' : filename, 'err': err},
-                                 parent = self)
+        except:
+            GMessage(parent = self,
+                     message = _("Reading model file <%s> failed.\n"
+                                 "Invalid file, unable to parse XML document.") % filename)
+            return
         
         busy = wx.BusyInfo(message=_("Please wait, loading model..."),
                            parent=self)
@@ -321,12 +375,42 @@ class ModelFrame(wx.Frame):
             self.data.append(dataShape)
             
             actionShape = self.actions[0]
-            if data['from'] is False:
+            if data['from'] is True:
                 self._addLine(dataShape, actionShape)
-            else:
+            elif data['from'] is False:
                 self._addLine(actionShape, dataShape)
+            
         self.canvas.Refresh(True)
         
+    def WriteModelFile(self, filename):
+        """!Save model to model file
+        
+        @return True on success
+        @return False on failure
+        """
+        try:
+            file = open(filename, "w")
+        except IOError:
+            wx.MessageBox(parent = self,
+                          message = _("Unable to open file <%s> for writing.") % filename,
+                          caption = _("Error"),
+                          style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            return False
+        
+        try:
+            WriteModelFile(fd = file, actions = self.actions, data = self.data)
+        except StandardError:
+            file.close()
+            
+            GMessage(parent = self,
+                     message = _("Writing current settings to model file failed."))
+            
+            return False
+        
+        file.close()
+        
+        return True
+
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
     def __init__(self, parent):
@@ -379,7 +463,18 @@ class ModelAction(ogl.RectangleShape):
                 return ' '.join(self.cmd)
         
         return self.cmd
+    
+    def GetName(self):
+        """!Get name"""
+        if self.cmd and len(self.cmd) > 0:
+            return self.cmd[0]
+        
+        return _('unknown')
 
+    def GetParams(self):
+        """!Get dictionary of parameters"""
+        return self.params
+    
 class ModelData(ogl.EllipseShape):
     """!Data item class"""
     def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = 175, height = 50):
@@ -387,6 +482,8 @@ class ModelData(ogl.EllipseShape):
         self.name    = name
         self.value   = value
         self.prompt  = prompt
+        
+        self.actions = { 'from' : list(), 'to' : list() }
         
         ogl.EllipseShape.__init__(self, width, height)
         
@@ -414,6 +511,33 @@ class ModelData(ogl.EllipseShape):
             return self.name + '=' + self.value + ' (' + self.prompt + ')'
         else:
             return _('unknown')
+
+    def GetName(self):
+        """!Get name"""
+        return self.name
+
+    def GetPrompt(self):
+        """!Get prompt"""
+        return self.prompt
+
+    def GetValue(self):
+        """!Get value"""
+        return self.value
+    
+    def GetActions(self, direction):
+        """!Get related actions
+
+        @param direction direction - 'from' or 'to'
+        """
+        return self.actions[direction]
+
+    def AddAction(self, action, direction):
+        """!Record related actions
+
+        @param action action to be recoreded
+        @param direction direction of relation
+        """
+        self.actions[direction].append(action)
         
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
@@ -604,7 +728,7 @@ class ProcessModelFile:
     def _getDim(self, node):
         """!Get position and size of shape"""
         pos = size = None
-        posAttr = node.get('position', None)
+        posAttr = node.get('pos', None)
         if posAttr:
             posVal = map(int, posAttr.split(','))
             try:
@@ -634,7 +758,7 @@ class ProcessModelFile:
                 value = self._filterValue(self._getNodeText(param, 'value'))
                 
             action = data.find('action')
-            aId = direction = None
+            aId = fromDir = None
             if action is not None:
                 aId = int(action.get('id', None))
                 if action.get('dir', 'to') == 'to':
@@ -672,9 +796,101 @@ class ProcessModelFile:
         return cmd
     
 class WriteModelFile:
-    """!Write GRASS model file (gxm)"""
-    pass
+    """!Generic class for writing model file"""
+    def __init__(self, fd, actions, data):
+        self.fd      = fd
+        self.actions = actions
+        self.data    = data
+        
+        self.indent = 0
+        
+        self._header()
+        
+        self._actions()
+        self._data()
+        
+        self._footer()
 
+    def _filterValue(self, value):
+        """!Make value XML-valid"""
+        value = value.replace('<', '&lt;')
+        value = value.replace('>', '&gt;')
+        
+        return value
+        
+    def _header(self):
+        """!Write header"""
+        self.fd.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+        self.fd.write('<!DOCTYPE gxm SYSTEM "grass-gxm.dtd">\n')
+        self.fd.write('%s<gxm>\n' % (' ' * self.indent))
+                
+    def _footer(self):
+        """!Write footer"""
+        self.fd.write('%s</gxm>\n' % (' ' * self.indent))
+        
+    def _actions(self):
+        """!Write actions"""
+        id = 1
+        self.indent += 4
+        for action in self.actions:
+            self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
+                              (' ' * self.indent, id, action.GetName(), action.GetX(), action.GetY(),
+                               action.GetWidth(), action.GetHeight()))
+            self.indent += 4
+            self.fd.write('%s<task name="%s">\n' % (' ' * self.indent, action.GetLog(string = False)[0]))
+            self.indent += 4
+            for key, val in action.GetParams().iteritems():
+                if key == 'flags':
+                    for f in val:
+                        if f.get('value', False):
+                            self.fd.write('%s<flag name="%s" />\n' %
+                                          (' ' * self.indent, f.get('name', '')))
+                else: # parameter
+                    for p in val:
+                        if not p.get('value', ''):
+                            continue
+                        self.fd.write('%s<parameter name="%s">\n' %
+                                      (' ' * self.indent, p.get('name', '')))
+                        self.indent += 4
+                        self.fd.write('%s<value>%s</value>\n' %
+                                      (' ' * self.indent, self._filterValue(p.get('value', ''))))
+                        self.indent -= 4
+                        self.fd.write('%s</parameter>\n' % (' ' * self.indent))
+            self.indent -= 4
+            self.fd.write('%s</task>\n' % (' ' * self.indent))
+            self.indent -= 4
+            self.fd.write('%s</action>\n' % (' ' * self.indent))
+            id += 1
+        
+        self.indent -= 4
+        
+    def _data(self):
+        """!Write data"""
+        self.indent += 4
+        for data in self.data:
+            self.fd.write('%s<data pos="%d,%d" size="%d,%d">\n' % \
+                              (' ' * self.indent, data.GetX(), data.GetY(),
+                               data.GetWidth(), data.GetHeight()))
+            self.indent += 4
+            self.fd.write('%s<parameter name="%s" prompt="%s">\n' % \
+                              (' ' * self.indent, data.GetName(), data.GetPrompt()))
+            self.indent += 4
+            self.fd.write('%s<value>%s</value>\n' %
+                          (' ' * self.indent, self._filterValue(data.GetValue())))
+            self.indent -= 4
+            self.fd.write('%s</parameter>\n' % (' ' * self.indent))
+            self.indent -= 4
+            for action in data.GetActions('from'):
+                self.fd.write('%s<action id="1" dir="from" />\n' % \
+                                  (' ' * self.indent))
+            for action in data.GetActions('to'):
+                self.fd.write('%s<action id="1" dir="to" />\n' % \
+                                  (' ' * self.indent))
+            
+            self.fd.write('%s</data>\n' % (' ' * self.indent))
+            
+        self.indent -= 4
+        
 def main():
     app = wx.PySimpleApp()
     frame = ModelFrame(parent = None)
