@@ -35,6 +35,7 @@ if not os.getenv("GRASS_WXBUNDLED"):
     globalvar.CheckForWx()
 import wx
 import wx.lib.ogl as ogl
+import wx.lib.flatnotebook as FN
 
 import menu
 import menudata
@@ -42,6 +43,7 @@ import toolbars
 import menuform
 import prompt
 import utils
+import goutput
 from   debug import Debug
 from   gcmd import GMessage
 
@@ -76,9 +78,18 @@ class ModelFrame(wx.Frame):
         self.SetToolBar(self.toolbar)
 
         self.statusbar = self.CreateStatusBar(number = 1)
+
+        self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
+                                        style = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
+                                        FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
         
         self.canvas = ModelCanvas(self)
         self.canvas.SetBackgroundColour(wx.WHITE)
+
+        self.goutput = goutput.GMConsole(parent = self, pageid = 1)
+                
+        self.modelPage   = self.notebook.AddPage(self.canvas, text=_('Model'))
+        self.commandPage = self.notebook.AddPage(self.goutput, text=_('Command output'))
         
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         
@@ -89,7 +100,7 @@ class ModelFrame(wx.Frame):
         """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(item = self.canvas, proportion = 1,
+        sizer.Add(item = self.notebook, proportion = 1,
                   flag = wx.EXPAND)
         
         self.SetAutoLayout(True)
@@ -193,8 +204,15 @@ class ModelFrame(wx.Frame):
         
     def OnRunModel(self, event):
         """!Run entire model"""
-        pass
-
+        for action in self.actions:
+            self.SetStatusText(_('Running model...'), 0)
+            self.goutput.RunCmd(command = action.GetLog(string = False),
+                                onDone = self.OnDone)
+        
+    def OnDone(self, event):
+        """!Computation finished"""
+        self.SetStatusText('', 0)
+        
     def OnValidateModel(self, event):
         """!Validate entire model"""
         for s in self.actions:
@@ -260,6 +278,19 @@ class ModelFrame(wx.Frame):
         grass.run_command('g.manual',
                           entry = 'wxGUI.Modeler')
 
+    def OnAbout(self, event):
+        """!Display About window"""
+        info = wx.AboutDialogInfo()
+
+        info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        info.SetName(_('wxGUI Graphical Modeler'))
+        info.SetWebSite('http://grass.osgeo.org')
+        info.SetDescription(_('(C) 2010 by the GRASS Development Team\n\n'
+                              'This program is free software under the GNU General Public License'
+                              '(>=v2). Read the file COPYING that comes with GRASS for details.'))
+        
+        wx.AboutBox(info)
+        
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
         layer.SetProperties(dcmd, params, propwin)
@@ -398,7 +429,7 @@ class ModelFrame(wx.Frame):
         file.close()
         
         return True
-
+    
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
     def __init__(self, parent):

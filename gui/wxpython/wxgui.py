@@ -89,6 +89,7 @@ import gui_modules.colorrules as colorrules
 import gui_modules.ogc_services as ogc_services
 import gui_modules.prompt as prompt
 import gui_modules.menu as menu
+import gui_modules.gmodeler as gmodeler
 from   gui_modules.debug import Debug
 from   gui_modules.help import MenuTreeWindow
 from   gui_modules.help import AboutWindow
@@ -254,10 +255,16 @@ class GMFrame(wx.Frame):
             self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile) + '*')
         
     def OnGeorectify(self, event):
-        """
-        Launch georectifier module
+        """!Launch georectifier module
         """
         georect.GeorectWizard(self)
+
+    def OnGModeler(self, event):
+        """!Launch Graphical Modeler"""
+        win = gmodeler.ModelFrame(parent = self)
+        win.CentreOnScreen()
+        
+        win.Show()
         
     def OnMapsets(self, event):
         """

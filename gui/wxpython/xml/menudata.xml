@@ -621,6 +621,12 @@
 	</menuitem>
 	<separator />
 	<menuitem>
+	  <label>Graphical modeler</label>
+	  <help>Launch Graphical modeler</help>
+	  <handler>OnGModeler</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
 	  <label>NVIZ (requires Tcl/Tk)</label>
 	  <help>nviz - Visualization and animation tool for GRASS data.</help>
 	  <keywords>raster,vector,visualization</keywords>

@@ -78,6 +78,13 @@
 	  <help>Display the HTML man pages of Graphical modeler</help>
 	  <handler>OnHelp</handler>
 	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>About Graphical Modeler</label>
+	  <help>Display information about Graphical Modeler</help>
+	  <handler>OnAbout</handler>
+	</menuitem>
+
       </items>
     </menu>
   </menubar>
