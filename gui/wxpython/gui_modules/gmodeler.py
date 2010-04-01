@@ -209,7 +209,7 @@ class ModelFrame(wx.Frame):
             self.goutput.RunCmd(command = action.GetLog(string = False),
                                 onDone = self.OnDone)
         
-    def OnDone(self, event):
+    def OnDone(self, returncode):
         """!Computation finished"""
         self.SetStatusText('', 0)
         
