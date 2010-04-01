@@ -27,6 +27,7 @@ import os
 import atexit
 import string
 import subprocess
+import re
 
 # Variables substituted during build process
 # Set the GISBASE variable
