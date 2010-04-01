@@ -154,7 +154,7 @@ N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river,
 
     data->phead = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
     data->phead_start = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
-    data->status = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
+    data->status = N_alloc_array_2d(cols, rows, 1, CELL_TYPE);
     data->hc_x = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
     data->hc_y = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
     data->q = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
@@ -672,7 +672,7 @@ N_gwflow_2d_calc_water_budget(N_gwflow_data2d * data, N_geom_data * geom, N_arra
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 	for (x = 0; x < cols; x++) {
-	    stat = (int)N_get_array_2d_d_value(data->status, x, y);
+	    stat = N_get_array_2d_c_value(data->status, x, y);
 
             val = 0.0;
 

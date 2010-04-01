@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
     /* Set the inactive values to zero, to assure a no flow boundary */
     for (y = 0; y < geom->rows; y++) {
 	for (x = 0; x < geom->cols; x++) {
-	    stat = (int)N_get_array_2d_d_value(data->status, x, y);
+	    stat = N_get_array_2d_c_value(data->status, x, y);
 	    if (stat == N_CELL_INACTIVE) {	/*only inactive cells */
 		N_put_array_2d_d_value(data->hc_x, x, y, 0);
 		N_put_array_2d_d_value(data->hc_y, x, y, 0);
@@ -478,7 +478,7 @@ copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 	for (x = 0; x < cols; x++) {
-	    stat = (int)N_get_array_2d_d_value(status, x, y);
+	    stat = N_get_array_2d_c_value(status, x, y);
 	    if (stat == N_CELL_ACTIVE) {	/*only active cells */
 		d1 = result[count];
 		val = (DCELL) d1;
