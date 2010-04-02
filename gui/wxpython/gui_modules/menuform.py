@@ -468,8 +468,9 @@ class grassTask:
                 # Output only values that have been set, and different from defaults
                 cmd += [ '%s=%s' % ( p['name'], p['value'] ) ]
         
-        if ignoreErrors is False:
-            raise ValueError, '\n'.join(self.getCmdError())
+        errList = self.getCmdError()
+        if ignoreErrors is False and errList:
+            raise ValueError, '\n'.join(errList)
         
         return cmd
 
