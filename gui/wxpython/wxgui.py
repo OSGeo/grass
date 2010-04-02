@@ -513,11 +513,11 @@ class GMFrame(wx.Frame):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def OnWorkspaceNew(self, event=None):
+    def OnWorkspaceNew(self, event = None):
         """!Create new workspace file
 
-        Erase current workspace settings first"""
-
+        Erase current workspace settings first
+        """
         Debug.msg(4, "GMFrame.OnWorkspaceNew():")
         
         # start new map display if no display is available
@@ -527,7 +527,9 @@ class GMFrame(wx.Frame):
         maptree = self.curr_page.maptree
         
         # ask user to save current settings
-        if maptree.GetCount() > 0:
+        if self.workspaceFile and self.workspaceChanged:
+            self.OnWorkspaceSave()
+        elif self.workspaceFile is None and maptree.GetCount() > 0:
              dlg = wx.MessageDialog(self, message=_("Current workspace is not empty. "
                                                     "Do you want to store current settings "
                                                     "to workspace file?"),
@@ -552,6 +554,7 @@ class GMFrame(wx.Frame):
         
         # no workspace file loaded
         self.workspaceFile = None
+        self.workspaceChanged = False
         self.SetTitle(self.baseTitle)
         
     def OnWorkspaceOpen(self, event=None):
