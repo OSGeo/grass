@@ -66,20 +66,32 @@ class GMessage:
         if msgType == 'error':
             caption = _('Error')
             style = wx.OK | wx.ICON_ERROR | wx.CENTRE
+        elif msgType == 'info':
+            caption = _('Message')
+            style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE
+        elif msgType == 'warning':
+            caption = _('Warning')
+            style = wx.OK | wx.ICON_WARNING | wx.CENTRE
         
-        exception = traceback.format_exc()
-        reason = exception.split('\n')[-2].split(':', 1)[-1].strip()
+        if msgType != 'error':
+            wx.MessageBox(parent = parent,
+                          message = message,
+                          caption = caption,
+                          style = style)
+        else:
+            exception = traceback.format_exc()
+            reason = exception.split('\n')[-2].split(':', 1)[-1].strip()
         
-        if Debug.get_level() > 0:
-            sys.stderr.write(exception)
+            if Debug.get_level() > 0:
+                sys.stderr.write(exception)
         
-        wx.MessageBox(parent = parent,
-                      message = message + '\n\n%s: %s\n\n%s' % \
-                          (_('Reason'),
-                           reason, exception),
-                      caption = caption,
-                      style = style)
-        
+            wx.MessageBox(parent = parent,
+                          message = message + '\n\n%s: %s\n\n%s' % \
+                              (_('Reason'),
+                               reason, exception),
+                          caption = caption,
+                          style = style)
+            
 class GException(Exception):
     """!Generic exception"""
     def __init__(self, message, title=_("Error"), parent=None):
