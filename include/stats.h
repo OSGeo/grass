@@ -20,6 +20,7 @@ extern stat_func c_minx;
 extern stat_func c_mode;
 extern stat_func c_stddev;
 extern stat_func c_sum;
+extern stat_func c_thresh;
 extern stat_func c_var;
 extern stat_func c_range;
 extern stat_func c_reg_m;
