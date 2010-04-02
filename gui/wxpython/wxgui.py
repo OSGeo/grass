@@ -314,8 +314,7 @@ class GMFrame(wx.Frame):
         event.Skip()
 
     def OnCBPageClosed(self, event):
-        """
-        Page of notebook closed
+        """!Page of notebook closed
         Also close associated map display
         """
         if UserSettings.Get(group='manager', key='askOnQuit', subkey='enabled'):
@@ -838,27 +837,26 @@ class GMFrame(wx.Frame):
         
         return True
     
-    def OnWorkspaceClose(self, event=None):
+    def OnWorkspaceClose(self, event = None):
         """!Close file with workspace definition
-
+        
         If workspace has been modified ask user to save the changes.
         """
-
         Debug.msg(4, "GMFrame.OnWorkspaceClose(): file=%s" % self.workspaceFile)
-        self.workspaceFile = None
-        self.SetTitle(self.baseTitle)
-
-        displays = []
+        
+        displays = list()
         for page in range(0, self.gm_cb.GetPageCount()):
             displays.append(self.gm_cb.GetPage(page).maptree.mapdisplay)
         
         for display in displays:
             display.OnCloseWindow(event)
         
+        self.workspaceFile = None
+        self.workspaceChanged = False
+        self.SetTitle(self.baseTitle)
         self.disp_idx = 0
         self.curr_page = None
         
-
     def RulesCmd(self, event, cmd = ''):
         """
         Launches dialog for commands that need rules

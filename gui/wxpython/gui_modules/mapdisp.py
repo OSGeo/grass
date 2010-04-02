@@ -1258,8 +1258,7 @@ class MapFrame(wx.Frame):
         printmenu.Destroy()
 
     def OnCloseWindow(self, event):
-        """
-        Window closed.
+        """!Window closed.
         Also close associated layer tree page
         """
         pgnum = None
@@ -1274,7 +1273,7 @@ class MapFrame(wx.Frame):
 
         if self.toolbars['nviz']:
             self.toolbars['nviz'].OnExit()
-
+        
         if not self._layerManager:
             self.Destroy()
         elif self.page:
@@ -1283,8 +1282,7 @@ class MapFrame(wx.Frame):
                 self.layerbook.DeletePage(pgnum)
         
     def GetRender(self):
-        """!
-        Returns the current instance of render.Map()
+        """!Returns current instance of render.Map()
         """
         return self.Map
 

@@ -485,6 +485,11 @@ class grassTask:
                 key, value = opt.split('=', 1)
                 self.set_param(key, value)
         
+    def get_options(self):
+        """!Get options"""
+        return { 'flags'  : self.flags,
+                 'params' : self.params }
+    
 class processTask:
     """!A ElementTree handler for the --interface-description output,
     as defined in grass-interface.dtd. Extend or modify this and the
