@@ -9,6 +9,7 @@ Classes:
  - ModelAction
  - ModelSearchDialog
  - ModelData
+ - ModelDataDialog
  - ProcessModelFile
  - WriteModelFile
 
@@ -44,9 +45,10 @@ import menuform
 import prompt
 import utils
 import goutput
+import gselect
 from   debug import Debug
 from   gcmd import GMessage
-
+from   gdialogs import ElementDialog
 from grass.script import core as grass
 
 class ModelFrame(wx.Frame):
@@ -469,9 +471,11 @@ class ModelFrame(wx.Frame):
             actionShape = self.actions[0]
             if data['from'] is True:
                 self._addLine(dataShape, actionShape)
+                dataShape.AddAction(actionShape, direction = 'from')
             elif data['from'] is False:
                 self._addLine(actionShape, dataShape)
-            
+                dataShape.AddAction(actionShape, direction = 'to')
+        
         self.canvas.Refresh(True)
         
     def WriteModelFile(self, filename):
@@ -566,6 +570,11 @@ class ModelAction(ogl.RectangleShape):
     def GetParams(self):
         """!Get dictionary of parameters"""
         return self.params
+
+    def SetParams(self, params, cmd):
+        """!Set dictionary of parameters"""
+        self.params = params
+        self.cmd    = cmd
     
 class ModelData(ogl.EllipseShape):
     """!Data item class"""
@@ -574,6 +583,7 @@ class ModelData(ogl.EllipseShape):
         self.name    = name
         self.value   = value
         self.prompt  = prompt
+        self.propWin = None
         
         self.actions = { 'from' : list(), 'to' : list() }
         
@@ -615,7 +625,21 @@ class ModelData(ogl.EllipseShape):
     def GetValue(self):
         """!Get value"""
         return self.value
-    
+
+    def SetValue(self, value):
+        """!Set value"""
+        self.value = value
+        self.ClearText()
+        self.AddText(self.name)
+        self.AddText(self.value)
+        for direction in ('from', 'to'):
+            for action in self.actions[direction]:
+                task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
+                                                   show = None)
+                task.set_param(self.name, self.value)
+                action.SetParams(params = task.get_options(),
+                                 cmd = task.getCmd(ignoreErrors = True))
+            
     def GetActions(self, direction):
         """!Get related actions
 
@@ -633,8 +657,61 @@ class ModelData(ogl.EllipseShape):
 
     def GetPropDialog(self):
         """!Get properties dialog"""
-        return None
-    
+        return self.propWin
+
+    def SetPropDialog(self, win):
+        """!Get properties dialog"""
+        self.propWin = win
+
+class ModelDataDialog(ElementDialog):
+    """!Data item properties dialog"""
+    def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Data properties"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+        self.parent = parent
+        self.shape = shape
+        prompt = shape.GetPrompt()
+        
+        if prompt == 'raster':
+            label = _('Name of raster map:')
+        elif prompt == 'vector':
+            label = _('Name of vector map:')
+        else:
+            label = _('Name of element:')
+        
+        ElementDialog.__init__(self, parent, title, label = label)
+        
+        self.element = gselect.Select(parent = self.panel, id = wx.ID_ANY,
+                                      size = globalvar.DIALOG_GSELECT_SIZE,
+                                      type = prompt)
+        
+        self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
+        
+        self.PostInit()
+        
+        self._layout()
+        self.SetMinSize(self.GetSize())
+        
+    def _layout(self):
+        """!Do layout"""
+        self.dataSizer.Add(self.element, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+        
+        self.panel.SetSizer(self.sizer)
+        self.sizer.Fit(self)
+
+    def OnOK(self, event):
+        """!Ok pressed"""
+        self.shape.SetValue(self.GetElement())
+        self.parent.canvas.Refresh()
+        self.parent.SetStatusText('', 0)
+        self.OnCancel(event)
+        
+    def OnCancel(self, event):
+        """!Cancel pressed"""
+        self.shape.SetPropDialog(None)
+        self.Destroy()
+        
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
     def __init__(self, log, frame):
@@ -671,24 +748,60 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         
     def OnLeftDoubleClick(self, x, y, keys = 0, attachment = 0):
         """!Left mouse button pressed (double-click) -> show properties"""
+        self.OnProperties()
+        
+    def OnProperties(self, event = None):
+        """!Show properties dialog"""
         self.frame.ModelChanged()
         shape = self.GetShape()
         win = shape.GetPropDialog()
-        if isinstance(shape, ModelAction) and not win:
-            module = menuform.GUI().ParseCommand(shape.cmd,
-                                                 completed = (self.frame.GetOptData, shape, None),
-                                                 parentframe = self.frame, show = True)
-        
+        if not win:
+            if isinstance(shape, ModelAction):
+                module = menuform.GUI().ParseCommand(shape.cmd,
+                                                     completed = (self.frame.GetOptData, shape, None),
+                                                     parentframe = self.frame, show = True)
+            elif isinstance(shape, ModelData):
+                dlg = ModelDataDialog(parent = self.frame, shape = shape)
+                shape.SetPropDialog(dlg)
+                dlg.CentreOnParent()
+                dlg.Show()
+            
         elif win and not win.IsShown():
             win.Show()
         
         if win:
             win.Raise()
-    
+        
     def OnBeginDragLeft(self, x, y, keys = 0, attachment = 0):
+        """!Drag shape"""
         self.frame.ModelChanged()
         if self._previousHandler:
             self._previousHandler.OnBeginDragLeft(x, y, keys, attachment)
+        
+    def OnRightClick(self, x, y, keys = 0, attachment = 0):
+        """!Right click -> pop-up menu"""
+        if not hasattr (self, "popupID1"):
+            self.popupID1 = wx.NewId()
+            self.popupID2 = wx.NewId()
+        
+        popupMenu = wx.Menu()
+        
+        popupMenu.Append(self.popupID1, text=_('Remove'))
+        self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID1)
+        
+        popupMenu.AppendSeparator()
+        
+        popupMenu.Append(self.popupID2, text=_('Properties'))
+        self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID2)
+
+        self.frame.PopupMenu(popupMenu)
+        popupMenu.Destroy()
+        
+    def OnRemove(self, event):
+        """!Remove shape"""
+        shape = self.GetShape()
+        self.frame.canvas.GetDiagram().RemoveShape(shape)
+        self.frame.canvas.Refresh()
         
 class ModelSearchDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Find GRASS module"),
