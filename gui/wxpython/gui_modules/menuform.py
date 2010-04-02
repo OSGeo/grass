@@ -426,7 +426,22 @@ class grassTask:
             return
         
         param['value'] = aValue
-                
+        
+    def getCmdError(self):
+        """!Get error string produced by getCmd(ignoreErrors = False)
+
+        @return list of errors
+        """
+        errorList = list()
+        
+        for p in self.params:
+            if p.get('value', '') == '' and p.get('required', 'no') != 'no':
+                if p.get('default', '') == '':
+                    errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
+                                         {'name' : p['name'], 'desc' : p['description']})
+        
+        return errorList
+    
     def getCmd(self, ignoreErrors = False):
         """!Produce an array of command name and arguments for feeding
         into some execve-like command processor.
@@ -436,9 +451,7 @@ class grassTask:
         for GRASS.
         """
         cmd = [self.name]
-        errors = 0
-        errStr = ""
-
+        
         for flag in self.flags:
             if 'value' in flag and flag['value']:
                 if len(flag['name']) > 1: # e.g. overwrite
@@ -451,16 +464,13 @@ class grassTask:
                     cmd += [ '%s=%s' % ( p['name'], p['default'] ) ]
                 elif ignoreErrors is False:
                     cmd += [ '%s=%s' % ( p['name'], _('<required>') ) ]
-                    errStr += _("Parameter %(name)s (%(desc)s) is missing.\n") % \
-                        {'name' : p['name'], 'desc' : p['description']}
-                    errors += 1
             elif p.get('value','') != '' and p['value'] != p.get('default','') :
                 # Output only values that have been set, and different from defaults
                 cmd += [ '%s=%s' % ( p['name'], p['value'] ) ]
         
-        if errors and not ignoreErrors:
-            raise ValueError, errStr
-
+        if ignoreErrors is False:
+            raise ValueError, '\n'.join(self.getCmdError())
+        
         return cmd
 
     def set_options(self, opts):
@@ -910,7 +920,7 @@ class mainFrame(wx.Frame):
 
     def OnApply(self, event):
         """!Apply the command"""
-        if self.parent.GetName() == 'Modeler':
+        if self.parent and self.parent.GetName() == 'Modeler':
             cmd = self.createCmd(ignoreErrors = True)
         else:
             cmd = self.createCmd()
@@ -1848,7 +1858,7 @@ class cmdPanel(wx.Panel):
             cmd = self.task.getCmd(ignoreErrors=ignoreErrors)
         except ValueError, err:
             dlg = wx.MessageDialog(parent=self,
-                                   message=utils.UnicodeString(err),
+                                   message=unicode(err),
                                    caption=_("Error in %s") % self.task.name,
                                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             dlg.ShowModal()
@@ -1933,14 +1943,13 @@ class GUI:
     
     def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=None,
                      show=True, modal=False):
-        """
-        Parse command
+        """!Parse command
 
         Note: cmd is given as list
 
         If command is given with options, return validated cmd list:
-        * add key name for first parameter if not given
-        * change mapname to mapname@mapset
+         - add key name for first parameter if not given
+         - change mapname to mapname@mapset
         """
         start = time.time()
         dcmd_params = {}

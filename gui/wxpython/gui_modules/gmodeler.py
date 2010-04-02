@@ -204,6 +204,24 @@ class ModelFrame(wx.Frame):
         
     def OnRunModel(self, event):
         """!Run entire model"""
+        if len(self.actions) < 1:
+            GMessage(parent = self, 
+                     message = _('Model is empty. Nothing to run.'),
+                     msgType = 'info')
+            return
+    
+        errList = self._validateModel()
+        if errList:
+            dlg = wx.MessageDialog(parent = self,
+                                   message = _('Model is not valid. Do you want to '
+                                               'run the model anyway?\n\n%s') % '\n'.join(errList),
+                                   caption=_("Run model?"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_QUESTION | wx.CENTRE)
+            ret = dlg.ShowModal()
+            if ret != wx.ID_YES:
+                return
+        
         for action in self.actions:
             self.SetStatusText(_('Running model...'), 0)
             self.goutput.RunCmd(command = action.GetLog(string = False),
@@ -213,11 +231,38 @@ class ModelFrame(wx.Frame):
         """!Computation finished"""
         self.SetStatusText('', 0)
         
-    def OnValidateModel(self, event):
+    def OnValidateModel(self, event, showMsg = True):
         """!Validate entire model"""
-        for s in self.actions:
-            print s
+        if len(self.actions) < 1:
+            GMessage(parent = self, 
+                     message = _('Model is empty. Nothing to validate.'),
+                     msgType = 'info')
+            return
         
+        errList = self._validateModel()
+        
+        if errList:
+            GMessage(parent = self,
+                     message = _('Model is not valid.\n\n%s') % '\n'.join(errList),
+                     msgType = 'warning')
+        else:
+            GMessage(parent = self,
+                     message = _('Model is valid.'),
+                     msgType = 'info')
+
+    def _validateModel(self):
+        """!Validate model"""
+        self.SetStatusText(_('Validating model...'), 0)
+        errList = list()
+        for action in self.actions:
+            task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
+                                               show = None)
+            errList += task.getCmdError()
+        
+        self.SetStatusText('', 0)
+        
+        return errList
+    
     def OnRemoveItem(self, event):
         """!Remove item from model"""
         pass
