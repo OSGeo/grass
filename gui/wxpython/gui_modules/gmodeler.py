@@ -65,6 +65,7 @@ class ModelFrame(wx.Frame):
         self.data    = list()    # list of recorded data items
         self.baseTitle = title
         self.modelFile = None    # loaded model
+        self.modelChanged = False
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
@@ -94,7 +95,8 @@ class ModelFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         
         self._layout()
-        self.SetMinSize((640, 480))
+        self.SetMinSize((350, 200))
+        self.SetSize((640, 480))
         
     def _layout(self):
         """!Do layout"""
@@ -116,6 +118,14 @@ class ModelFrame(wx.Frame):
         evthandler.SetShape(item)
         evthandler.SetPreviousHandler(item.GetEventHandler())
         item.SetEventHandler(evthandler)
+
+    def ModelChanged(self):
+        """!Update window title"""
+        if not self.modelChanged:
+            self.modelChanged = True
+        
+        if self.modelFile:
+            self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile) + '*')
         
     def OnCloseWindow(self, event):
         """!Close window"""
@@ -201,6 +211,19 @@ class ModelFrame(wx.Frame):
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
         self.SetStatusText(_('File <%s> saved') % self.modelFile, 0)
+
+    def OnModelClose(self, event):
+        """!Close model file"""
+        Debug.msg(4, "ModelFrame.OnModelClose(): file=%s" % self.modelFile)
+        self.modelFile = None
+        self.SetTitle(self.baseTitle)
+        
+        self.canvas.GetDiagram().DeleteAllShapes()
+        
+        self.actions = list()
+        self.data    = list()
+        
+        self.canvas.Refresh()
         
     def OnRunModel(self, event):
         """!Run entire model"""
@@ -281,6 +304,8 @@ class ModelFrame(wx.Frame):
             
         cmd = self.searchDialog.GetCmd()
         self.searchDialog.Hide()
+        
+        self.ModelChanged()
         
         # add action to canvas
         width, height = self.canvas.GetSize()
@@ -403,6 +428,9 @@ class ModelFrame(wx.Frame):
                      message = _("Reading model file <%s> failed.\n"
                                  "Invalid file, unable to parse XML document.") % filename)
             return
+        
+        self.modelFile = filename
+        self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
         
         busy = wx.BusyInfo(message=_("Please wait, loading model..."),
                            parent=self)
@@ -643,6 +671,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         
     def OnLeftDoubleClick(self, x, y, keys = 0, attachment = 0):
         """!Left mouse button pressed (double-click) -> show properties"""
+        self.frame.ModelChanged()
         shape = self.GetShape()
         win = shape.GetPropDialog()
         if isinstance(shape, ModelAction) and not win:
@@ -655,7 +684,12 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         
         if win:
             win.Raise()
-            
+    
+    def OnBeginDragLeft(self, x, y, keys = 0, attachment = 0):
+        self.frame.ModelChanged()
+        if self._previousHandler:
+            self._previousHandler.OnBeginDragLeft(x, y, keys, attachment)
+        
 class ModelSearchDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Find GRASS module"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):

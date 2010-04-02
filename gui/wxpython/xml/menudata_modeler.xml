@@ -26,6 +26,11 @@
 	  <help>Save model to file</help>
 	  <handler>OnModelSaveAs</handler>
 	</menuitem>
+	<menuitem>
+	  <label>Close</label>
+	  <help>Close model file</help>
+	  <handler>OnModelClose</handler>
+	</menuitem>
 	<separator />
 	<menuitem>
 	  <label>Close modeler</label>
