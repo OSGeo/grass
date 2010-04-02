@@ -260,7 +260,7 @@ check_gui()
 	# ok
 	if [ "$?" = 0 ] ; then
 	    # Set the wxpython base directory
-	    WXPYTHONGRASSBASE="$ETC/wxpython"
+	    WXPYTHONGRASSBASE="$ETC/gui/wxpython"
 	else
 	    # Python was not found - switch to text interface mode
 	    cat <<-EOF
@@ -593,7 +593,7 @@ start_gui()
     
     case "$GRASS_GUI" in
         wxpython)
-            "$GRASS_PYTHON" "$GISBASE/etc/wxpython/wxgui.py" &
+            "$GRASS_PYTHON" "WXPYTHONGRASSBASE/wxgui.py" &
             ;;
         # Ignore others
         *)
