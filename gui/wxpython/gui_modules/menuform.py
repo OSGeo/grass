@@ -1349,7 +1349,7 @@ class cmdPanel(wx.Panel):
                         if p.get('value', '') != '':
                             txt3.SetValue(str(p['value'])) # parameter previously set
                     
-                #    txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
+                txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
                 
                 which_sizer.Add(item=txt3, proportion=0,
                                 flag=style, border=5)
@@ -1828,8 +1828,7 @@ class cmdPanel(wx.Panel):
         self.OnUpdateValues()
 
     def OnSetValue(self, event):
-        """!
-        Retrieve the widget value and set the task value field
+        """!Retrieve the widget value and set the task value field
         accordingly.
 
         Use for widgets that have a proper GetValue() method, i.e. not
