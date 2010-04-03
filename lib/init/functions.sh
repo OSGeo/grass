@@ -593,7 +593,7 @@ start_gui()
     
     case "$GRASS_GUI" in
         wxpython)
-            "$GRASS_PYTHON" "WXPYTHONGRASSBASE/wxgui.py" &
+            "$GRASS_PYTHON" "$WXPYTHONGRASSBASE/wxgui.py" &
             ;;
         # Ignore others
         *)
