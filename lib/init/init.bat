@@ -3,7 +3,7 @@ rem #########################################################################
 rem
 rem  MODULE:   	GRASS Initialization
 rem  AUTHOR(S):	Paul Kelly
-rem
+rem             Some updates by Martin Landa <landa.martin gmail.com>
 rem  PURPOSE:  	The source file for this batch script is lib/init/init.bat.
 rem             It sets up some environment variables, default GISRC file
 rem             if necessary, etc. prior to starting GRASS proper.
@@ -14,7 +14,7 @@ rem             In particular also, GUI mode prints nothing to the terminal
 rem             and does not expect or provide an interactive terminal
 rem             running in addition to the GUI display.
 rem 
-rem  COPYRIGHT: (C) 2006, 2008 by the GRASS Development Team
+rem  COPYRIGHT: (C) 2006, 2008, 2010 by the GRASS Development Team
 rem
 rem             This program is free software under the GNU General Public
 rem   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -28,7 +28,7 @@ rem are used to run scripts on Windows
 if "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\bin;%WINGISBASE%\scripts;%WINGISBASE%\lib;%PATH%
 if not "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\bin;%WINGISBASE%\lib;%GRASS_ADDON_PATH%;%PATH%
 
-set PYTHONPATH=%PYTHONPATH%;%WINGISBASE%\etc\python;%WINGISBASE%\etc\wxpython
+set PYTHONPATH=%PYTHONPATH%;%WINGISBASE%\etc\python;%WINGISBASE%\etc\gui\wxpython
 set PATHEXT=%PATHEXT%;.PY
 
 set GRASS_VERSION=GRASS_VERSION_NUMBER
@@ -77,7 +77,10 @@ if exist "%WINGISRC%" (
 
 set HAVE_GISRC=false
 rem Create an initial GISRC file based on current directory
-"%WINGISBASE%\etc\echo" "GISDBASE: %CD%" | g.dirseps -g > "%WINGISRC%"
+if not exist "%HOME%\.grass7" (
+   mkdir "%HOME%\.grass7"
+)
+"%WINGISBASE%\etc\echo" "GISDBASE: %HOME%" | g.dirseps -g > "%WINGISRC%"
 "%WINGISBASE%\etc\echo" "LOCATION_NAME: <UNKNOWN>" >> "%WINGISRC%"
 "%WINGISBASE%\etc\echo" "MAPSET: <UNKNOWN>" >> "%WINGISRC%"
 
@@ -108,14 +111,13 @@ rem if return ok, wxpython start:
 if %errorlevel% == 2 goto exitinit
 
 "%WINGISBASE%\etc\clean_temp" > NUL:
-
-goto exitinit
+rem goto exitinit
 
 :wxpython
 
-python "%GISBASE%/etc/wxpython/gis_set.py"
+%GRASS_PYTHON% "%GISBASE%/etc/gui/wxpython/gis_set.py"
 if %errorlevel% == 2 goto exitinit
-python "%GISBASE%/etc/wxpython/wxgui.py"
+%GRASS_PYTHON% "%GISBASE%/etc/gui/wxpython/wxgui.py"
 
 goto exitinit
 
