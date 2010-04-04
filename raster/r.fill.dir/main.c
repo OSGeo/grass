@@ -26,7 +26,7 @@
  *               program can be run repeatedly, using the output elevations from
  *               one run as input to the next run until all problems are 
  *               resolved.
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -84,60 +84,45 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
     module->description =
 	_("Filters and generates a depressionless elevation map and a flow "
-	  "direction map from a given elevation layer.");
+	  "direction map from a given elevation raster map.");
 
     opt1 = G_define_standard_option(G_OPT_R_INPUT);
-    opt1->description =
-	_("Name of existing raster map containing elevation surface");
+    opt1->description = _("Name of input elevation raster map");
 
-    opt2 = G_define_option();
-    opt2->key = "elevation";
-    opt2->type = TYPE_STRING;
-    opt2->required = YES;
-    opt2->gisprompt = "new,cell,raster";
-    opt2->description = _("Output elevation raster map after filling");
-
-    opt4 = G_define_option();
+    opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt2->description = _("Name for output elevation raster map after filling");
+    
+    opt4 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt4->key = "direction";
-    opt4->type = TYPE_STRING;
-    opt4->required = YES;
-    opt4->gisprompt = "new,cell,raster";
-    opt4->description = _("Output direction raster map");
+    opt4->description = _("Name for output direction raster map");
 
-    opt5 = G_define_option();
+    opt5 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt5->key = "areas";
-    opt5->type = TYPE_STRING;
     opt5->required = NO;
-    opt5->gisprompt = "new,cell,raster";
-    opt5->description = _("Output raster map of problem areas");
+    opt5->description = _("Name for output raster map of problem areas");
 
     opt3 = G_define_option();
     opt3->key = "type";
     opt3->type = TYPE_STRING;
     opt3->required = NO;
     opt3->description =
-	_("Output aspect direction format (agnps, answers, or grass)");
+	_("Aspect direction format");
+    opt3->options = "agnps,answers,grass";
     opt3->answer = "grass";
-    /* TODO after feature freeze
-       opt3->options    = "agnps,answers,grass";
-     */
-
+    
     flag1 = G_define_flag();
     flag1->key = 'f';
     flag1->description = _("Find unresolved areas only");
-    flag1->answer = '0';
-
-
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (flag1->answer != '0' && opt5->answer == NULL) {
-	fprintf(stdout,
-		"\nThe \"f\" flag requires that you name a file for the output area map\n");
-	fprintf(stdout, "\tEnter the file name, or <Enter> to quit:  ");
-	scanf("%s", opt5->answer);
+    if (flag1->answer && opt5->answer == NULL) {
+	G_fatal_error(_("The '%c' flag requires '%s'to be specified"),
+		      flag1->key, opt5->key);
     }
 
     type = 0;
@@ -149,30 +134,16 @@ int main(int argc, char **argv)
 
     if (strcmp(opt3->answer, "agnps") == 0)
 	type = 1;
-    else if (strcmp(opt3->answer, "AGNPS") == 0)
-	type = 1;
     else if (strcmp(opt3->answer, "answers") == 0)
-	type = 2;
-    else if (strcmp(opt3->answer, "ANSWERS") == 0)
 	type = 2;
     else if (strcmp(opt3->answer, "grass") == 0)
 	type = 3;
-    else if (strcmp(opt3->answer, "GRASS") == 0)
-	type = 3;
-
+    
     G_debug(1, "output type (1=AGNPS, 2=ANSWERS, 3=GRASS): %d", type);
 
-    if (type == 0)
-	G_fatal_error
-	    ("direction format must be either agnps, answers, or grass.");
     if (type == 3)
-	G_warning("Direction map is D8 resolution, i.e. 45 degrees.");
-
-    /* get the name of the elevation map layer for filling */
-    map_mapset = G_find_raster(map_name, "");
-    if (!map_mapset)
-	G_fatal_error(_("Raster map <%s> not found"), map_name);
-
+	G_verbose_message(_("Direction map is D8 resolution, i.e. 45 degrees"));
+    
     /* open the maps and get their file id  */
     map_id = Rast_open_old(map_name, map_mapset);
 
@@ -211,11 +182,13 @@ int main(int argc, char **argv)
     fd = open(tempfile2, O_RDWR | O_CREAT, 0666);	/* dirn */
     fm = open(tempfile3, O_RDWR | O_CREAT, 0666);	/* problems */
 
-    G_message(_("Reading map..."));
+    G_message(_("Reading elevation map..."));
     for (i = 0; i < nrows; i++) {
+	G_percent(i, nrows, 2);
 	get_row(map_id, in_buf, i);
 	write(fe, in_buf, bnd.sz);
     }
+    G_percent(1, 1, 1);
     Rast_close(map_id);
 
     /* fill single-cell holes and take a first stab at flow directions */

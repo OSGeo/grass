@@ -10,7 +10,7 @@
  *               As seed You can use already existing map or
  *               X,Y coordinates.
  *
- * COPYRIGHT:    (C) 2005-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2008, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -148,6 +148,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
     module->description = _("Fills lake from seed at given level.");
 
     tmap_opt = G_define_standard_option(G_OPT_R_ELEV);
@@ -160,7 +161,6 @@ int main(int argc, char *argv[])
 
     lake_opt = G_define_standard_option(G_OPT_R_OUTPUT);
     lake_opt->key = "lake";
-    lake_opt->description = _("Name for output raster map with lake");
     lake_opt->required = NO;
 
     sdxy_opt = G_define_option();

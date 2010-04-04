@@ -4,7 +4,7 @@
  * TMOD9502.FOR Author: Keith Beven <k.beven@lancaster.ac.uk>
  *                      http://www.es.lancs.ac.uk/hfdg/topmodel.html
  *
- *      Copyright (C) 2000 by the GRASS Development Team
+ *      Copyright (C) 2000, 2010 by the GRASS Development Team
  *      Author: Huidae Cho <grass4u@gmail.com>
  *              Hydro Laboratory, Kyungpook National University
  *              South Korea
@@ -60,109 +60,97 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
     module->description =
 	_("Simulates TOPMODEL which is a physically based hydrologic model.");
 
     /* Parameter definitions */
-    param.basin = G_define_option();
-    param.basin->key = "basin";
-    param.basin->description =
-	_("(i)   Basin map created by r.water.outlet (MASK)");
-    param.basin->type = TYPE_STRING;
+    param.basin = G_define_standard_option(G_OPT_R_INPUT);
+    param.basin->key = "basin_input";
+    param.basin->label =
+	_("Name of input basin raster map");
+    param.basin->description = _("Created by r.water.outlet (MASK)");
     param.basin->required = NO;
-    param.basin->gisprompt = "old,cell,raster";
+    param.basin->guisection = _("Input");
 
-    param.elev = G_define_option();
-    param.elev->key = "elevation";
-    param.elev->description = _("(i)   Elevation map");
-    param.elev->type = TYPE_STRING;
+    param.elev = G_define_standard_option(G_OPT_R_ELEV);
     param.elev->required = NO;
-    param.elev->gisprompt = "old,cell,raster";
+    param.elev->guisection = _("Input");
 
-    param.fill = G_define_option();
-    param.fill->key = "depressionless";
-    param.fill->description = _("(o)   Depressionless elevation map");
-    param.fill->type = TYPE_STRING;
+    param.fill = G_define_standard_option(G_OPT_R_OUTPUT);
+    param.fill->key = "dep_output";
+    param.fill->description = _("Name for output depressionless elevation raster map");
     param.fill->required = NO;
-    param.fill->gisprompt = "new,cell,raster";
+    param.fill->guisection = _("Output");
 
-    param.dir = G_define_option();
-    param.dir->key = "direction";
+    param.dir = G_define_standard_option(G_OPT_R_OUTPUT);
+    param.dir->key = "direction_output";
     param.dir->description =
-	_("(o)   Direction map for depressionless elevation map");
-    param.dir->type = TYPE_STRING;
+	_("Name for output direction map for depressionless elevation raster map");
     param.dir->required = NO;
-    param.dir->gisprompt = "new,cell,raster";
+    param.dir->guisection = _("Output");
 
-    param.belev = G_define_option();
-    param.belev->key = "belevation";
-    param.belev->description = _("(o/i) Basin elevation map (MASK applied)");
-    param.belev->type = TYPE_STRING;
+    param.belev = G_define_standard_option(G_OPT_R_OUTPUT);
+    param.belev->key = "belevation_output";
+    param.belev->label = _("Name for output basin elevation raster map (o/i)");
+    param.belev->description = _("MASK applied");
     param.belev->required = NO;
-    param.belev->gisprompt = "new,cell,raster";
+    param.belev->guisection = _("Output");
 
-    param.topidx = G_define_option();
-    param.topidx->key = "topidx";
-    param.topidx->description =
-	_("(o)   Topographic index ln(a/tanB) map (MASK applied)");
-    param.topidx->type = TYPE_STRING;
+    param.topidx = G_define_standard_option(G_OPT_R_OUTPUT);
+    param.topidx->key = "topidx_output";
+    param.topidx->label =
+	_("Name for output opographic index ln(a/tanB) raster map");
+    param.topidx->description = _("MASK applied");
     param.topidx->required = NO;
-    param.topidx->gisprompt = "new,cell,raster";
+    param.topidx->guisection = _("Output");
 
     param.nidxclass = G_define_option();
     param.nidxclass->key = "nidxclass";
     param.nidxclass->description =
-	_("(i)   Number of topographic index classes");
+	_("Number of topographic index classes");
     param.nidxclass->type = TYPE_INTEGER;
     param.nidxclass->required = NO;
     param.nidxclass->answer = "30";
-
-    param.idxstats = G_define_option();
+    param.nidxclass->guisection = _("Parameters");
+    
+    param.idxstats = G_define_standard_option(G_OPT_F_INPUT);
     param.idxstats->key = "idxstats";
     param.idxstats->description =
-	_("(o/i) Topographic index statistics file");
-    param.idxstats->type = TYPE_STRING;
-    param.idxstats->required = YES;
-
-    param.params = G_define_option();
+	_("Name of topographic index statistics file (o/i)");
+    
+    param.params = G_define_standard_option(G_OPT_F_INPUT);
     param.params->key = "parameters";
-    param.params->description = _("(i)   TOPMODEL Parameters file");
-    param.params->type = TYPE_STRING;
-    param.params->required = YES;
-
-    param.input = G_define_option();
-    param.input->key = "input";
+    param.params->description = _("Name of TOPMODEL parameters file");
+    
+    param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->description =
-	_("(i)   Rainfall and potential evapotranspiration data file");
-    param.input->type = TYPE_STRING;
-    param.input->required = YES;
+	_("Name of rainfall and potential evapotranspiration data file");
 
-    param.output = G_define_option();
-    param.output->key = "output";
-    param.output->description = _("(o)   Output file");
-    param.output->type = TYPE_STRING;
-    param.output->required = YES;
+    param.output = G_define_standard_option(G_OPT_F_OUTPUT);
+    param.output->description = _("Name for output file");
 
-    param.Qobs = G_define_option();
+    param.Qobs = G_define_standard_option(G_OPT_F_OUTPUT);
     param.Qobs->key = "qobs";
-    param.Qobs->description = _("(i)   OPTIONAL Observed flow file");
-    param.Qobs->type = TYPE_STRING;
+    param.Qobs->description = _("Name for observed flow file");
     param.Qobs->required = NO;
-
+    param.Qobs->guisection = _("Output");
+    
     param.timestep = G_define_option();
     param.timestep->key = "timestep";
     param.timestep->description =
-	_("(i)   OPTIONAL Output for given time step");
+	_("Time step");
     param.timestep->type = TYPE_INTEGER;
     param.timestep->required = NO;
-
+    param.timestep->guisection = _("Parameters");
+    
     param.idxclass = G_define_option();
     param.idxclass->key = "idxclass";
     param.idxclass->description =
-	_("(i)   OPTIONAL Output for given topographic index class");
+	_("Topographic index class");
     param.idxclass->type = TYPE_INTEGER;
     param.idxclass->required = NO;
-
+    param.idxclass->guisection = _("Parameters");
 
     /* Flag definitions */
     flag.input = G_define_flag();

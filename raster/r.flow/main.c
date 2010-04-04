@@ -419,31 +419,24 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
+    module->label = _("Constructs flow lines.");
     module->description =
 	_("Construction of slope curves (flowlines), flowpath lengths, "
-	  "and flowline densities (upslope areas) from a raster "
-	  "digital elevation model (DEM)");
+	  "and flowline densities (upslope areas) from a elevation raster "
+	  "map.");
 
-    pelevin = G_define_option();
-    pelevin->key = "elevin";
-    pelevin->type = TYPE_STRING;
-    pelevin->required = YES;
-    pelevin->gisprompt = "old,cell,raster";
-    pelevin->description = _("Input elevation raster map");
-
-    paspin = G_define_option();
-    paspin->key = "aspin";
-    paspin->type = TYPE_STRING;
+    pelevin = G_define_standard_option(G_OPT_R_ELEV);
+    
+    paspin = G_define_standard_option(G_OPT_R_INPUT);
+    paspin->key = "aspect_input";
     paspin->required = NO;
-    paspin->gisprompt = "old,cell,raster";
-    paspin->description = _("Input aspect raster map");
+    paspin->description = _("Name of input aspect raster map");
 
-    pbarin = G_define_option();
-    pbarin->key = "barin";
-    pbarin->type = TYPE_STRING;
+    pbarin = G_define_standard_option(G_OPT_R_INPUT);
+    pbarin->key = "barrier_input";
     pbarin->required = NO;
-    pbarin->gisprompt = "old,cell,raster";
-    pbarin->description = _("Input barrier raster map");
+    pbarin->description = _("Name of input barrier raster map");
 
     pskip = G_define_option();
     pskip->key = "skip";
@@ -457,26 +450,20 @@ int main(int argc, char *argv[])
     pbound->required = NO;
     pbound->description = _("Maximum number of segments per flowline");
 
-    pflout = G_define_option();
-    pflout->key = "flout";
-    pflout->type = TYPE_STRING;
+    pflout = G_define_standard_option(G_OPT_V_OUTPUT);
+    pflout->key = "flowline_output";
     pflout->required = NO;
-    pflout->gisprompt = "any,dig,vector";
-    pflout->description = _("Output flowline vector map");
+    pflout->description = _("Name for output flowline vector map");
 
-    plgout = G_define_option();
-    plgout->key = "lgout";
-    plgout->type = TYPE_STRING;
+    plgout = G_define_standard_option(G_OPT_R_OUTPUT);
+    plgout->key = "flowpath_output";
     plgout->required = NO;
-    plgout->gisprompt = "any,cell,raster";
-    plgout->description = _("Output flowpath length raster map");
+    plgout->description = _("Name for output flowpath length raster map");
 
-    pdsout = G_define_option();
-    pdsout->key = "dsout";
-    pdsout->type = TYPE_STRING;
+    pdsout = G_define_standard_option(G_OPT_R_OUTPUT);
+    pdsout->key = "density_output";
     pdsout->required = NO;
-    pdsout->gisprompt = "any,cell,raster";
-    pdsout->description = _("Output flowline density raster map");
+    pdsout->description = _("Name for output flowline density raster map");
 
     fup = G_define_flag();
     fup->key = 'u';
@@ -485,7 +472,7 @@ int main(int argc, char *argv[])
 
     flg = G_define_flag();
     flg->key = '3';
-    flg->description = _("3-D lengths instead of 2-D");
+    flg->description = _("3D lengths instead of 2D");
 
     fmem = G_define_flag();
     fmem->key = 'm';
