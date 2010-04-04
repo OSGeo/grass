@@ -17,6 +17,7 @@ set PACKAGE_DIR=.\GRASS-70-Dev-Package
 set OSGEO4W_DIR=c:\osgeo4w
 
 set GRASS_PREFIX=%OSGEO4W_DIR%\apps\grass\grass-7.0.svn
+set GRASS_BIN_PREFIX=%OSGEO4W_DIR%\apps\grass\bin
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
@@ -29,10 +30,11 @@ mkdir %PACKAGE_DIR%
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Copy %GRASS_PREFIX% content to PACKAGE_DIR
+@echo Copy %GRASS_PREFIX% & %GRASS_BIN_PREFIX% content to PACKAGE_DIR
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
+xcopy %GRASS_BIN_PREFIX%\grass70* %PACKAGE_DIR% /S/V/F
 xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F
 
 @echo.
