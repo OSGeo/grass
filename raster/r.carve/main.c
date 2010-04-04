@@ -9,7 +9,7 @@
  * PURPOSE:      Takes vector stream data, converts it to 3D raster and
  *               subtracts a specified depth
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -72,6 +72,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
+    module->label = _("Generates stream channels");
     module->description = _("Takes vector stream data, transforms it "
 			    "to raster and subtracts depth from the output DEM.");
 
@@ -81,8 +83,8 @@ int main(int argc, char **argv)
 
     parm.invect = G_define_standard_option(G_OPT_V_INPUT);
     parm.invect->key = "vect";
-    parm.invect->description =
-	_("Name of vector input map containing stream(s)");
+    parm.invect->label =
+	_("Name of input vector map containing stream(s)");
 
     parm.outrast = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -95,8 +97,8 @@ int main(int argc, char **argv)
     width = G_define_option();
     width->key = "width";
     width->type = TYPE_DOUBLE;
-    width->description = _("Stream width (in meters). "
-			   "Default is raster cell width");
+    width->label = _("Stream width (in meters)");
+    width->description = _("Default is raster cell width");
 
     depth = G_define_option();
     depth->key = "depth";

@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Generates a raster map layer showing watershed subbasins.
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -52,36 +52,25 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
     module->description =
-	_("Generates a raster map layer showing " "watershed subbasins.");
+	_("Generates watershed subbasins raster map.");
 
+    drain_opt = G_define_standard_option(G_OPT_R_INPUT);
+    drain_opt->key = "cmap_input";
+    drain_opt->description = _("Name of input coded stream network raster map");
+
+    ridge_opt = G_define_standard_option(G_OPT_R_INPUT);
+    ridge_opt->key = "tmap_input";
+    ridge_opt->description = _("Name of input thinned ridge network raster map");
+
+    part_opt = G_define_standard_option(G_OPT_R_OUTPUT);
+    
     num_opt = G_define_option();
     num_opt->key = "number";
     num_opt->type = TYPE_INTEGER;
     num_opt->required = YES;
     num_opt->description = _("Number of passes through the dataset");
-    num_opt->gisprompt = "old,cell,raster";
-
-    drain_opt = G_define_option();
-    drain_opt->key = "c_map";
-    drain_opt->type = TYPE_STRING;
-    drain_opt->required = YES;
-    drain_opt->description = _("Coded stream network file name");
-    drain_opt->gisprompt = "old,cell,raster";
-
-    ridge_opt = G_define_option();
-    ridge_opt->key = "t_map";
-    ridge_opt->type = TYPE_STRING;
-    ridge_opt->required = YES;
-    ridge_opt->description = _("Thinned ridge network file name");
-    ridge_opt->gisprompt = "old,cell,raster";
-
-    part_opt = G_define_option();
-    part_opt->key = "result";
-    part_opt->type = TYPE_STRING;
-    part_opt->required = YES;
-    part_opt->description = _("Name for the resultant watershed partition file");
-    part_opt->gisprompt = "new,cell,raster";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

@@ -7,7 +7,7 @@
  * AUTHOR(S):    L. Mitas,  H. Mitasova, J. Hofierka
  * PURPOSE:      Hydrologic and sediment transport simulation (SIMWE)
  *
- * COPYRIGHT:    (C) 2002 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -107,7 +107,7 @@ char msg[1024];
 /****************************************/
 int main(int argc, char *argv[])
 {
-    int i, ii, j, l;
+    int ii;
     int ret_val;
     double x_orig, y_orig;
     static int rand1 = 12345;
@@ -117,34 +117,28 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("flow"));
     G_add_keyword(_("hydrology"));
     module->description =
 	_("Overland flow hydrologic simulation using "
-	  "path sampling method (SIMWE)");
+	  "path sampling method (SIMWE).");
 
-    parm.elevin = G_define_standard_option(G_OPT_R_INPUT);
-    parm.elevin->key = "elevin";
-    parm.elevin->description = _("Name of the elevation raster map [m]");
-    parm.elevin->guisection = _("Input_options");
+    parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
 
     parm.dxin = G_define_standard_option(G_OPT_R_INPUT);
-    parm.dxin->key = "dxin";
-    parm.dxin->description = _("Name of the x-derivatives raster map [m/m]");
-    parm.dxin->guisection = _("Input_options");
+    parm.dxin->key = "dx_input";
+    parm.dxin->description = _("Name of x-derivatives raster map [m/m]");
 
     parm.dyin = G_define_standard_option(G_OPT_R_INPUT);
-    parm.dyin->key = "dyin";
-    parm.dyin->description = _("Name of the y-derivatives raster map [m/m]");
-    parm.dyin->guisection = _("Input_options");
+    parm.dyin->key = "dy_input";
+    parm.dyin->description = _("Name of y-derivatives raster map [m/m]");
 
     parm.rain = G_define_standard_option(G_OPT_R_INPUT);
-    parm.rain->key = "rain";
+    parm.rain->key = "rain_input";
     parm.rain->required = NO;
     parm.rain->description =
-	_("Name of the rainfall excess rate (rain-infilt) raster map [mm/hr]");
-    parm.rain->guisection = _("Input_options");
-
+	_("Name of rainfall excess rate (rain-infilt) raster map [mm/hr]");
+    parm.rain->guisection = _("Input");
+    
     parm.rainval = G_define_option();
     parm.rainval->key = "rain_val";
     parm.rainval->type = TYPE_DOUBLE;
@@ -152,14 +146,14 @@ int main(int argc, char *argv[])
     parm.rainval->required = NO;
     parm.rainval->description =
 	_("Rainfall excess rate unique value [mm/hr]");
-    parm.rainval->guisection = _("Input_options");
+    parm.rainval->guisection = _("Input");
 
     parm.infil = G_define_standard_option(G_OPT_R_INPUT);
-    parm.infil->key = "infil";
+    parm.infil->key = "infil_input";
     parm.infil->required = NO;
     parm.infil->description =
-	_("Name of the runoff infiltration rate raster map [mm/hr]");
-    parm.infil->guisection = _("Input_options");
+	_("Name of runoff infiltration rate raster map [mm/hr]");
+    parm.infil->guisection = _("Input");
 
     parm.infilval = G_define_option();
     parm.infilval->key = "infil_val";
@@ -168,28 +162,28 @@ int main(int argc, char *argv[])
     parm.infilval->required = NO;
     parm.infilval->description =
 	_("Runoff infiltration rate unique value [mm/hr]");
-    parm.infilval->guisection = _("Input_options");
+    parm.infilval->guisection = _("Input");
 
     parm.manin = G_define_standard_option(G_OPT_R_INPUT);
-    parm.manin->key = "manin";
+    parm.manin->key = "man_input";
     parm.manin->required = NO;
-    parm.manin->description = _("Name of the Mannings n raster map");
-    parm.manin->guisection = _("Input_options");
+    parm.manin->description = _("Name of mannings n raster map");
+    parm.manin->guisection = _("Input");
 
     parm.maninval = G_define_option();
-    parm.maninval->key = "manin_val";
+    parm.maninval->key = "man_val";
     parm.maninval->type = TYPE_DOUBLE;
     parm.maninval->answer = MANINVAL;
     parm.maninval->required = NO;
     parm.maninval->description = _("Mannings n unique value");
-    parm.maninval->guisection = _("Input_options");
+    parm.maninval->guisection = _("Input");
 
     parm.traps = G_define_standard_option(G_OPT_R_INPUT);
-    parm.traps->key = "traps";
+    parm.traps->key = "traps_input";
     parm.traps->required = NO;
     parm.traps->description =
-	_("Name of the flow controls raster map (permeability ratio 0-1)");
-    parm.traps->guisection = _("Input_options");
+	_("Name of flow controls raster map (permeability ratio 0-1)");
+    parm.traps->guisection = _("Input");
 
 /*
     parm.sfile = G_define_standard_option(G_OPT_V_INPUT);
@@ -201,22 +195,22 @@ int main(int argc, char *argv[])
 */
 
     parm.depth = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.depth->key = "depth";
+    parm.depth->key = "depth_output";
     parm.depth->required = NO;
-    parm.depth->description = _("Output water depth raster map [m]");
-    parm.depth->guisection = _("Output_options");
+    parm.depth->description = _("Name for output water depth raster map [m]");
+    parm.depth->guisection = _("Output");
 
     parm.disch = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.disch->key = "disch";
+    parm.disch->key = "disch_output";
     parm.disch->required = NO;
-    parm.disch->description = _("Output water discharge raster map [m3/s]");
-    parm.disch->guisection = _("Output_options");
+    parm.disch->description = _("Name for output water discharge raster map [m3/s]");
+    parm.disch->guisection = _("Output");
 
     parm.err = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.err->key = "err";
+    parm.err->key = "err_output";
     parm.err->required = NO;
-    parm.err->description = _("Output simulation error raster map [m]");
-    parm.err->guisection = _("Output_options");
+    parm.err->description = _("Name for output simulation error raster map [m]");
+    parm.err->guisection = _("Output");
 
 /*
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -275,8 +269,9 @@ int main(int argc, char *argv[])
     parm.hmax->type = TYPE_DOUBLE;
     parm.hmax->answer = HMAX;
     parm.hmax->required = NO;
-    parm.hmax->description =
-	_("Threshold water depth [m] (diffusion increases after this water depth is reached)");
+    parm.hmax->label =
+	_("Threshold water depth [m]");
+    parm.hmax->description = _("Diffusion increases after this water depth is reached");
     parm.hmax->guisection = _("Parameters");
 
     parm.halpha = G_define_option();
@@ -299,7 +294,6 @@ int main(int argc, char *argv[])
     flag.tserie = G_define_flag();
     flag.tserie->key = 't';
     flag.tserie->description = _("Time-series output");
-
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

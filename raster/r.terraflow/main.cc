@@ -2,7 +2,7 @@
  * 
  *  MODULE:	r.terraflow
  *
- *  COPYRIGHT (C) 2007 Laura Toma
+ *  COPYRIGHT (C) 2007, 2010 Laura Toma
  *   
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,32 +70,32 @@ parse_args(int argc, char *argv[]) {
   struct Option *output_elev;
   output_elev = G_define_standard_option(G_OPT_R_OUTPUT);
   output_elev->key        = "filled";
-  output_elev->description= _("Output filled (flooded) elevation raster map");
+  output_elev->description= _("Name for output filled (flooded) elevation raster map");
   
  /* output direction  grid */
   struct Option *output_dir;
   output_dir = G_define_standard_option(G_OPT_R_OUTPUT);
   output_dir->key        = "direction";
-  output_dir->description= _("Output flow direction raster map");
+  output_dir->description= _("Name for output flow direction raster map");
 
   /* output sinkwatershed  grid */
   struct Option *output_watershed;
   output_watershed = G_define_standard_option(G_OPT_R_OUTPUT);
   output_watershed->key        = "swatershed";
-  output_watershed->description= _("Output sink-watershed raster map");
+  output_watershed->description= _("Name for output sink-watershed raster map");
 
   /* output flow accumulation grid */
   struct Option *output_accu;
   output_accu = G_define_standard_option(G_OPT_R_OUTPUT);
   output_accu->key        = "accumulation";
-  output_accu->description= _("Output flow accumulation raster map");
+  output_accu->description= _("Name for output flow accumulation raster map");
 
 #ifdef OUTPUT_TCI
   struct Option *output_tci;
   output_tci = G_define_standard_option(G_OPT_R_OUTPUT);
   output_tci->key        = "tci";
   output_tci->description=
-    _("Output topographic convergence index (tci) raster map");
+    _("Name for output topographic convergence index (tci) raster map");
 #endif
 
   /* MFD/SFD flag */
@@ -103,7 +103,6 @@ parse_args(int argc, char *argv[]) {
   sfd_flag = G_define_flag() ;
   sfd_flag->key        = 's';
   sfd_flag->description= _("SFD (D8) flow (default is MFD)");
-  /* sfd_flag->answer     = 'n'; */
 
   /* D8CUT value*/
   struct Option *d8cut;
@@ -112,9 +111,10 @@ parse_args(int argc, char *argv[]) {
   d8cut->type = TYPE_DOUBLE;
   d8cut->required = NO;
   d8cut->answer = G_store("infinity"); /* default value */
-  d8cut->description =
+  d8cut->label = _("Routing using SFD (D8) direction");
+  d8cut->description = 
     _("If flow accumulation is larger than this value it is routed using "
-      "SFD (D8) direction \n \t\t (meaningfull only  for MFD flow)");
+      "SFD (D8) direction (meaningfull only  for MFD flow)");
   
   /* main memory */
   struct Option *mem;
@@ -446,12 +446,13 @@ main(int argc, char *argv[]) {
  
   module = G_define_module();
 #ifdef ELEV_SHORT
-  module->description = _("Flow computation for massive grids (Integer version).");
+  module->description = _("Flow computation for massive grids (integer version).");
 #endif
 #ifdef ELEV_FLOAT
-  module->description = _("Flow computation for massive grids (Float version).");
+  module->description = _("Flow computation for massive grids (float version).");
 #endif
   G_add_keyword(_("raster"));
+  G_add_keyword(_("hydrology"));
 
   /* read user options; fill in global <opt> */  
   opt = (userOptions*)malloc(sizeof(userOptions));

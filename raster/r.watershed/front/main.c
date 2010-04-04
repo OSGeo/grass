@@ -7,7 +7,7 @@
  *               Hamish Bowman <hamish_b yahoo.com>
  *               Markus Metz <markus.metz.giswork gmail.com>
  * PURPOSE:      Hydrological analysis
- * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -68,126 +68,108 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("raster"));
-    module->description = _("Watershed basin analysis program.");
+    G_add_keyword(_("hydrology"));
+    module->description = _("Computes watershed basins.");
 
-    opt1 = G_define_standard_option(G_OPT_R_INPUT);
-    opt1->key = "elevation";
-    opt1->description =
-	_("Input map: elevation on which entire analysis is based");
-    opt1->guisection = _("Input_options");
+    opt1 = G_define_standard_option(G_OPT_R_ELEV);
 
-    opt2 = G_define_option();
-    opt2->key = "depression";
-    opt2->label = _("Input map: locations of real depressions");
+    opt2 = G_define_standard_option(G_OPT_R_INPUT);
+    opt2->key = "depression_input";
+    opt2->label = _("Name of input depressions raster map");
     opt2->description = _("All non-NULL and non-zero cells are considered as real depressions");
     opt2->required = NO;
-    opt2->type = TYPE_STRING;
-    opt2->gisprompt = "old,cell,raster";
-    opt2->guisection = _("Input_options");
+    opt2->guisection = _("Input");
 
-    opt3 = G_define_option();
-    opt3->key = "flow";
-    opt3->description = _("Input map: amount of overland flow per cell");
+    opt3 = G_define_standard_option(G_OPT_R_INPUT);
+    opt3->key = "flow_input";
+    opt3->description = _("Name of input raster representing amount of overland flow per cell");
     opt3->required = NO;
-    opt3->type = TYPE_STRING;
-    opt3->gisprompt = "old,cell,raster";
-    opt3->guisection = _("Input_options");
+    opt3->guisection = _("Input");
 
-    opt4 = G_define_option();
-    opt4->key = "disturbed_land";
-    opt4->description =
-	_("Input map or value: percent of disturbed land, for USLE");
+    opt4 = G_define_standard_option(G_OPT_R_INPUT);
+    opt4->key = "land_input";
+    opt4->label =
+	_("Name of input raster map percent of disturbed land");
+    opt4->description = _("For USLE");
     opt4->required = NO;
-    opt4->type = TYPE_STRING;
-    opt4->gisprompt = "old,cell,raster";
-    opt4->guisection = _("Input_options");
+    opt4->guisection = _("Input");
 
-    opt5 = G_define_option();
-    opt5->key = "blocking";
+    opt5 = G_define_standard_option(G_OPT_R_INPUT);
+    opt5->key = "block_input";
     opt5->label =
-	_("Input map: terrain blocking overland surface flow, for USLE");
+	_("Name of input raster map blocking overland surface flow");
     opt5->description =
-	_("All non-NULL and non-zero cells are considered as blocking terrain");
+	_("For USLE. All non-NULL and non-zero cells are considered as blocking terrain.");
     opt5->required = NO;
-    opt5->type = TYPE_STRING;
-    opt5->gisprompt = "old,cell,raster";
-    opt5->guisection = _("Input_options");
+    opt5->guisection = _("Input");
+
+    opt8 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt8->key = "accumulation_output";
+    opt8->label =
+	_("Name for output accumulation raster map");
+    opt8->description = _("Number of cells that drain through each cell");
+    opt8->required = NO;
+    opt8->guisection = _("Output");
+
+    opt9 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt9->key = "drainage_output";
+    opt9->description = _("Name for output drainage direction raster map");
+    opt9->required = NO;
+    opt9->guisection = _("Output");
+
+    opt10 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt10->key = "basin_output";
+    opt10->label =
+	_("Name for basins raster map");
+    opt10->description = _("Unique label for each watershed basin");
+    opt10->required = NO;
+    opt10->guisection = _("Output");
+
+    opt11 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt11->key = "stream_output";
+    opt11->description = _("Name for output stream segments raster map");
+    opt11->required = NO;
+    opt11->guisection = _("Output");
+
+    opt12 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt12->key = "half_basin_output";
+    opt12->label = _("Name for output half basins raster map");
+    opt12->description =
+	_("Each half-basin is given a unique value");
+    opt12->required = NO;
+    opt12->guisection = _("Output");
+
+    opt13 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt13->key = "slope_length_output";
+    opt13->label = _("Name for output slope length raster map");
+    opt13->description =
+	_("Slope length and steepness (LS) factor for USLE");
+    opt13->required = NO;
+    opt13->guisection = _("Output");
+
+    opt14 = G_define_option();
+    opt14->key = "slope_steep_output";
+    opt14->label = _("Name for output slope steepness raster map");
+    opt14->description = _("Slope steepness (S) factor for USLE");
+    opt14->required = NO;
+    opt14->guisection = _("Output");
 
     opt6 = G_define_option();
     opt6->key = "threshold";
     opt6->description =
-	_("Input value: minimum size of exterior watershed basin");
+	_("Minimum size of exterior watershed basin");
     opt6->required = NO;
     opt6->type = TYPE_INTEGER;
-    opt6->guisection = _("Input_options");
+    opt6->guisection = _("Parameters");
 
     opt7 = G_define_option();
-    opt7->key = "max_slope_length";
-    opt7->description =
-	_("Input value: maximum length of surface flow in map units, for USLE");
+    opt7->key = "max_length";
+    opt7->label =
+	_("Maximum length of surface flow in map units");
+    opt7->description = _("For USLE");
     opt7->required = NO;
     opt7->type = TYPE_DOUBLE;
-    opt7->guisection = _("Input_options");
-
-    opt8 = G_define_option();
-    opt8->key = "accumulation";
-    opt8->description =
-	_("Output map: number of cells that drain through each cell");
-    opt8->required = NO;
-    opt8->type = TYPE_STRING;
-    opt8->gisprompt = "new,cell,raster";
-    opt8->guisection = _("Output_options");
-
-    opt9 = G_define_option();
-    opt9->key = "drainage";
-    opt9->description = _("Output map: drainage direction");
-    opt9->required = NO;
-    opt9->type = TYPE_STRING;
-    opt9->gisprompt = "new,cell,raster";
-    opt9->guisection = _("Output_options");
-
-    opt10 = G_define_option();
-    opt10->key = "basin";
-    opt10->description =
-	_("Output map: unique label for each watershed basin");
-    opt10->required = NO;
-    opt10->type = TYPE_STRING;
-    opt10->gisprompt = "new,cell,raster";
-    opt10->guisection = _("Output_options");
-
-    opt11 = G_define_option();
-    opt11->key = "stream";
-    opt11->description = _("Output map: stream segments");
-    opt11->required = NO;
-    opt11->type = TYPE_STRING;
-    opt11->gisprompt = "new,cell,raster";
-    opt11->guisection = _("Output_options");
-
-    opt12 = G_define_option();
-    opt12->key = "half_basin";
-    opt12->description =
-	_("Output map: each half-basin is given a unique value");
-    opt12->required = NO;
-    opt12->type = TYPE_STRING;
-    opt12->gisprompt = "new,cell,raster";
-    opt12->guisection = _("Output_options");
-
-    opt13 = G_define_option();
-    opt13->key = "length_slope";
-    opt13->description =
-	_("Output map: slope length and steepness (LS) factor for USLE");
-    opt13->required = NO;
-    opt13->type = TYPE_STRING;
-    opt13->gisprompt = "new,cell,raster";
-    opt13->guisection = _("Output_options");
-
-    opt14 = G_define_option();
-    opt14->key = "slope_steepness";
-    opt14->description = _("Output map: slope steepness (S) factor for USLE");
-    opt14->required = NO;
-    opt14->type = TYPE_STRING;
-    opt14->gisprompt = "new,cell,raster";
-    opt14->guisection = _("Output_options");
+    opt7->guisection = _("Parameters");
 
     opt15 = G_define_option();
     opt15->key = "convergence";
@@ -197,6 +179,7 @@ int main(int argc, char *argv[])
     opt15->label = _("Convergence factor for MFD (1-10)");
     opt15->description =
 	_("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
+    opt15->guisection = _("Parameters");
 
     opt16 = G_define_option();
     opt16->key = "memory";
@@ -204,6 +187,7 @@ int main(int argc, char *argv[])
     opt16->required = NO;
     opt16->answer = "300";	/* 300MB default value, please keep r.terraflow in sync */
     opt16->description = _("Maximum memory to be used with -m flag (in MB)");
+    opt16->guisection = _("Parameters");
 
     flag_sfd = G_define_flag();
     flag_sfd->key = 's';
@@ -219,7 +203,7 @@ int main(int argc, char *argv[])
     flag_seg = G_define_flag();
     flag_seg->key = 'm';
     flag_seg->label =
-	_("Enable disk swap memory option: Operation is slow");
+	_("Enable disk swap memory option (operation is slow)");
     flag_seg->description =
 	_("Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements");
 

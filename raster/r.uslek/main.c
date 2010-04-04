@@ -7,7 +7,7 @@
  *               into USDA 1951 (p209) soil texture classes and then
  *               into USLE soil erodibility factor (K) as an output
  *
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2008, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,31 +51,30 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
     G_add_keyword(_("soil"));
     G_add_keyword(_("erosion"));
-    G_add_keyword(_("USLE"));
-    module->description = _("USLE Soil Erodibility Factor (K)");
+    module->description = _("Computes USLE Soil Erodibility Factor (K).");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->key = "psand";
-    input1->description = _("Name of the Soil sand fraction map [0.0-1.0]");
+    input1->key = "psand_input";
+    input1->description = _("Name of soil sand fraction raster map [0.0-1.0]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = "pclay";
-    input2->description = _("Name of the Soil clay fraction map [0.0-1.0]");
+    input2->key = "pclay_input";
+    input2->description = _("Name of soil clay fraction raster map [0.0-1.0]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = "psilt";
-    input3->description = _("Name of the Soil silt fraction map [0.0-1.0]");
+    input3->key = "psilt_input";
+    input3->description = _("Name of soil silt fraction raster map [0.0-1.0]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = "pomat";
-    input4->description = _("Name of the Soil Organic Matter map [0.0-1.0]");
+    input4->key = "pomat_input";
+    input4->description = _("Name of soil organic matter raster map [0.0-1.0]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output1->key = "usle_k";
-    output1->description = _("Name of the output USLE K factor map [t.ha.hr/ha.MJ.mm]");
+    output1->description = _("Name for output USLE K factor raster map [t.ha.hr/ha.MJ.mm]");
 
     /********************/ 
     if (G_parser(argc, argv))
