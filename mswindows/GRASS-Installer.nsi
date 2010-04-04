@@ -598,8 +598,8 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '@echo off$\r$\n'
 	FileWrite $0 'rem #########################################################################$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
-	FileWrite $0 'rem # File dynamically created by NSIS installer script;$\r$\n'
-	FileWrite $0 'rem # Written by Marco Pasetti;$\r$\n'
+	FileWrite $0 'rem # File dynamically created by NSIS installer script$\r$\n'
+	FileWrite $0 'rem # Written by Marco Pasetti$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
 	FileWrite $0 'rem #########################################################################$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
@@ -637,7 +637,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'if "x%GRASS_PYTHON%" == "x" set GRASS_PYTHON=python$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'set WINGISBASE=%GRASSDIR%$\r$\n'
-	FileWrite $0 '"%WINGISBASE%\etc\Init.bat" %*'
+	FileWrite $0 '%GRASS_PYTHON% "%WINGISBASE%\grass70.py" %*'
 	FileClose $0
 	done_create_grass_command.bat:
 	
@@ -686,34 +686,17 @@ Section "GRASS" SecGRASS
   
 	;create the $INSTALL_DIR\bin grass_command
 	ClearErrors
-	FileOpen $0 $INSTALL_DIR\bin\${GRASS_COMMAND} w
+	FileOpen $0 $INSTALL_DIR\${GRASS_COMMAND}.sh w
 	IfErrors done_create_grass_command
 	FileWrite $0 '#! /bin/sh$\r$\n'
 	FileWrite $0 '#########################################################################$\r$\n'
 	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# File dynamically created by NSIS installer script;$\r$\n'
-	FileWrite $0 '# Written by Marco Pasetti;$\r$\n'
+	FileWrite $0 '# File dynamically created by NSIS installer script$\r$\n'
+	FileWrite $0 '# Written by Marco Pasetti$\r$\n'
 	FileWrite $0 '#$\r$\n'
 	FileWrite $0 '#########################################################################$\r$\n'
 	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# MODULE:   	GRASS Initialization$\r$\n'
-	FileWrite $0 '# AUTHOR(S):	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th$\r$\n'
-	FileWrite $0 '# PURPOSE:  	The source file for this shell script is in$\r$\n'
-	FileWrite $0 '#   	    	lib/init/grass.src and is the grass startup script. It$\r$\n'
-	FileWrite $0 '#   	    	requires a source file because the definition of GISBASE$\r$\n'
-	FileWrite $0 '#   	    	is not known until compile time and is substituted from the$\r$\n'
-	FileWrite $0 '#   	    	Makefile. Any command line options are passed to Init.sh.$\r$\n'
-	FileWrite $0 '# COPYRIGHT:  	(C) 2000-2009 by the GRASS Development Team$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '#             	This program is free software under the GNU General Public$\r$\n'
-	FileWrite $0 '#   	    	License (>=v2). Read the file COPYING that comes with GRASS$\r$\n'
-	FileWrite $0 '#   	    	for details.$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '#########################################################################$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# Modified by Marco Pasetti$\r$\n'
-	FileWrite $0 '# added the export PATH instruction to let GRASS work from$\r$\n'
-	FileWrite $0 '# the MSYS environment in the dynamic NSIS installation$\r$\n'
+	FileWrite $0 '# GRASS Initialization$\r$\n'
 	FileWrite $0 '#$\r$\n'
 	FileWrite $0 '#########################################################################$\r$\n'
 	FileWrite $0 '$\r$\n'
@@ -743,7 +726,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'GRASS_PROJSHARE="$INSTALL_DIR\proj"$\r$\n'
 	FileWrite $0 'export GRASS_PROJSHARE$\r$\n'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 'exec "$$GISBASE/etc/Init.sh" "$$@"'
+	FileWrite $0 '"$$GRASS_PYTHON $$GISBASE/grass70.py" "$$@"'
 	FileClose $0
 	done_create_grass_command:
 

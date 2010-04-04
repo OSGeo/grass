@@ -35,7 +35,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	./configure \
 		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-16/lib $OSGEO4W_ROOT_MSYS/lib" \
 		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-16/include $OSGEO4W_ROOT_MSYS/include" \
-		--exec-prefix=$OSGEO4W_ROOT_MSYS/bin \
+		--exec-prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
 		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
 		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
 		--includedir=$OSGEO4W_ROOT_MSYS/include \

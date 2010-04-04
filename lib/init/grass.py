@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #############################################################################
 #
-# MODULE:   	GRASS initialization
+# MODULE:   	GRASS initialization (Python)
 # AUTHOR(S):	Original author unknown - probably CERL
 #               Andreas Lange - Germany - andreas.lange@rhein-main.de
 #   	    	Huidae Cho - Korea - grass4u@gmail.com

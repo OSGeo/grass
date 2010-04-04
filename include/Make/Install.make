@@ -81,12 +81,11 @@ install:
 real-install:
 	test -d $(INST_DIR) || $(MAKE_DIR_CMD) $(INST_DIR)
 	test -d $(UNIX_BIN) || $(MAKE_DIR_CMD) $(UNIX_BIN)
-	-sed -e "s#^GISBASE.*#GISBASE=$(INST_DIR)#" $(ARCH_BINDIR)/$(GRASS_NAME).sh > $(UNIX_BIN)/$(GRASS_NAME).sh
-	-sed -e 's#^gisbase = ".*"#gisbase = "$(INST_DIR)"#' $(ARCH_BINDIR)/$(GRASS_NAME) > $(UNIX_BIN)/$(GRASS_NAME)
+	-$(INSTALL) $(ARCH_BINDIR)/$(GRASS_NAME) $(UNIX_BIN)/$(GRASS_NAME)
 	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
 ifneq ($(strip $(MINGW)),)
-	-sed -e "s#WINGISBASE=.*#WINGISBASE=$(INST_DIR)#" $(ARCH_BINDIR)/$(GRASS_NAME).bat > $(UNIX_BIN)/$(GRASS_NAME).bat
-	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME).bat
+	-$(INSTALL) $(ARCH_BINDIR)/$(GRASS_NAME).py $(UNIX_BIN)/$(GRASS_NAME).py
+	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME).py
 endif
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR) - 2>/dev/null
 	-sed 's#'$(GISBASE)'#'$(INST_DIR)'#g' $(GISBASE)/etc/fontcap > $(INST_DIR)/etc/fontcap

@@ -9,7 +9,7 @@
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #		clean, and uninstall GRASS
 #		See INSTALL file for explanations.
-# COPYRIGHT:    (C) 2002,2004 by the GRASS Development Team
+# COPYRIGHT:    (C) 2002,2004,2010 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -63,7 +63,6 @@ default:
 	$(MAKE) subdirs
 	$(MAKE) $(FILES_DST)
 	$(MAKE) manifests
-	$(MAKE) $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
 	@if [ `wc -l < "$(ERRORLOG)"` -gt 5 ] ; then \
 		echo "--"     >> $(ERRORLOG) ; \
 		echo "In case of errors please change into the directory with error and run 'make'." >> $(ERRORLOG) ; \
@@ -88,9 +87,6 @@ endif
 
 $(ARCH_DISTDIR)/%: %
 	$(INSTALL_DATA) $< $@
-
-$(ARCH_DISTDIR)/$(GRASS_NAME).tmp: $(ARCH_BINDIR)/$(GRASS_NAME)
-	$(INSTALL) $< $@
 
 LIBDIRS = \
 	lib/external/shapelib \
