@@ -53,6 +53,21 @@ negative values, or <em>range=-inf,-200.4</em> to ignore values above -200.4).
 Linear regression (slope, offset, coefficient of determination) assumes equal time intervals.
 If the data have irregular time intervals, NULL raster maps can be inserted into time series
 to make time intervals equal (see example).
+<p>
+Number of raster maps to be processed is given by the limit of the
+operating system. For example, both the hard and soft limits are
+typically 1024. The soft limit can be changed with e.g. <tt>ulimit -n
+1500</tt> (UNIX-based operating systems) but not higher than the hard
+limit. If it is too low, you can as superuser add an entry in
+
+<div class="code"><pre>
+/etc/security/limits.conf
+% #<domain>      <type>  <item>         <value>
+% your_username  hard    nofile          1500
+</pre></div>
+
+This would raise the hard limit to 1500 file. Be warned that more
+files open need more RAM.
 
 <h2>EXAMPLES</h2>
 
