@@ -27,7 +27,7 @@
 !define DEV70_VERSION_NUMBER "7.0.SVN"
 !define DEV70_SVN_REVISION "36599"
 !define DEV70_BINARY_REVISION "1"
-!define DEV70_GRASS_COMMAND "grass70svn"
+!define DEV70_GRASS_COMMAND "grass70"
 !define DEV70_GRASS_BASE "GRASS-70-SVN"
 
 ;----------------------------------------------------------------------------------------------------------------------------
