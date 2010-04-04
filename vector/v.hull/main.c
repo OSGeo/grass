@@ -10,7 +10,7 @@
  *
  * PURPOSE:    Creates the convex hull surrounding a vector points.
  *
- * COPYRIGHT:  (C) 2001-2009 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2001-2010 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2).  Read the file COPYING that
@@ -50,14 +50,14 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     module->description =
-	_("Creates convex hull for vector point map.");
-
+	_("Produces a convex hull for a given vector map.");
+    
     input = G_define_standard_option(G_OPT_V_INPUT);
-
+    
     field = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     output = G_define_standard_option(G_OPT_V_OUTPUT);
-
+    
     all = G_define_flag();
     all->key = 'a';
     all->description =
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     flat->key = 'f';
     flat->description =
 	_("Create a 'flat' 2D hull even if the input is 3D points");
-
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -75,22 +75,23 @@ int main(int argc, char **argv)
 
     Vect_check_input_output_name(input->answer, output->answer,
 				 GV_FATAL_EXIT);
-
+    
     Vect_set_open_level(1);
     if (Vect_open_old2(&Map, sitefile, "", field->answer) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), sitefile);
-
+    
     /* load site coordinates */
     G_get_window(&window);
     numSitePoints = loadSiteCoordinates(&Map, &points, all->answer, &window,
 					Vect_get_field_number(&Map, field->answer));
     if (numSitePoints < 0)
-	G_fatal_error(_("Error loading vector points map <%s>"), sitefile);
-
+	G_fatal_error(_("Error loading vector points from <%s>"), sitefile);
+    
     if (numSitePoints < 3)
 	G_fatal_error(_("Convex hull calculation requires at least three points (%d found)"), numSitePoints);
-
-
+    
+    G_verbose_message(_("%d points read from vector map <%s>"), sitefile);
+    
     /* create a 2D or a 3D hull? */
     MODE2D = 1;
     if (Vect_is_3d(&Map)) {
@@ -100,23 +101,14 @@ int main(int argc, char **argv)
 	MODE2D = 1;
     }
 
-
     /* create vector map */
-    if (MODE2D) {
-	if (0 > Vect_open_new(&Map, output->answer, 0)) {
-	    G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
-	}
+    if (0 > Vect_open_new(&Map, output->answer, MODE2D ? WITHOUT_Z : WITH_Z)) {
+	G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
     }
-    else {
-	if (0 > Vect_open_new(&Map, output->answer, 1)) {
-	    G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
-	}
-    }
-
+    
     Vect_hist_command(&Map);
 
     if (MODE2D) {
-
 	/* compute convex hull */
 	numHullPoints = convexHull(points, numSitePoints, &hull);
 
