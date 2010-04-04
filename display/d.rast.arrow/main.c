@@ -4,7 +4,7 @@
  * MODULE:       d.rast.arrow
  * AUTHOR(S):    Chris Rewerts, Agricultural Engineering, Purdue University
  * PURPOSE:      Draw arrows on slope/aspect maps. 
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000, 2010 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -97,12 +97,7 @@ int main(int argc, char **argv)
 	_("Draws arrows representing cell aspect direction "
 	  "for a raster map containing aspect data.");
 
-    opt1 = G_define_option();
-    opt1->key = "map";
-    opt1->type = TYPE_STRING;
-    opt1->required = YES;
-    opt1->multiple = NO;
-    opt1->gisprompt = "old,cell,raster";
+    opt1 = G_define_standard_option(G_OPT_R_MAP);
     opt1->description = _("Name of raster aspect map to be displayed");
 
     opt2 = G_define_option();
@@ -112,6 +107,7 @@ int main(int argc, char **argv)
     opt2->answer = "grass";
     opt2->options = "grass,compass,agnps,answers";
     opt2->description = _("Type of existing raster aspect map");
+    opt2->guisection = _("Shape");
 
     opt3 = G_define_option();
     opt3->key = "arrow_color";
@@ -120,14 +116,16 @@ int main(int argc, char **argv)
     opt3->answer = "green";
     opt3->gisprompt = "old_color,color,color";
     opt3->description = _("Color for drawing arrows");
-
+    opt3->guisection = _("Colors");
+    
     opt4 = G_define_option();
     opt4->key = "grid_color";
     opt4->type = TYPE_STRING;
     opt4->required = NO;
     opt4->answer = "gray";
     opt4->gisprompt = "old_color,color,color_none";
-    opt4->description = _("Color for drawing grid or \"none\"");
+    opt4->description = _("Color for drawing grid");
+    opt4->guisection = _("Colors");
 
     opt5 = G_define_option();
     opt5->key = "x_color";
@@ -135,7 +133,8 @@ int main(int argc, char **argv)
     opt5->required = NO;
     opt5->answer = DEFAULT_FG_COLOR;
     opt5->gisprompt = "old_color,color,color_none";
-    opt5->description = _("Color for drawing X's (Null values)");
+    opt5->description = _("Color for drawing X's (null values)");
+    opt5->guisection = _("Colors");
 
     opt6 = G_define_option();
     opt6->key = "unknown_color";
@@ -144,6 +143,7 @@ int main(int argc, char **argv)
     opt6->answer = "red";
     opt6->gisprompt = "old_color,color,color_none";
     opt6->description = _("Color for showing unknown information");
+    opt6->guisection = _("Colors");
 
     opt9 = G_define_option();
     opt9->key = "skip";
@@ -160,6 +160,7 @@ int main(int argc, char **argv)
     opt7->gisprompt = "old,cell,raster";
     opt7->description =
 	_("Raster map containing values used for arrow length");
+    opt7->guisection = _("Shape");
 
     opt8 = G_define_option();
     opt8->key = "scale";
@@ -167,6 +168,7 @@ int main(int argc, char **argv)
     opt8->required = NO;
     opt8->answer = "1.0";
     opt8->description = _("Scale factor for arrows (magnitude map)");
+    opt8->guisection = _("Shape");
 
     align = G_define_flag();
     align->key = 'a';
