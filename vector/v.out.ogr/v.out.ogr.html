@@ -31,22 +31,30 @@ holes appear as filled areas, the flag <em>-c</em> has to be used.
 
 <h3>Export to Shapefile</h3>
 
-Export lines from GRASS vector map to Shapefile format
- (generates /tmp/testogr.shp and related files):
+Export lines from GRASS vector map to Shapefile format:
 <div class="code"><pre>
-v.out.ogr input=multi type=line dsn=/tmp olayer=testogr 
+v.out.ogr input=lines type=line dsn=lines.shp
 </pre></div>
-
+<p>
 Export areas from GRASS vector map to Shapefile format, converting
 islands (holes) to filled areas (generates /tmp/testogr.shp and related files):
 <div class="code"><pre>
-v.out.ogr -c input=multi type=area dsn=/tmp olayer=testogr 
+v.out.ogr -c input=areas_islands type=area dsn=areas_islands.shp
 </pre></div>
-
-Export 3D lines from GRASS vector map to Shapefile format
- (use <tt>SHPT=POLYGONZ</tt> for 3D faces):
+<p>
+Export 3D lines from GRASS vector map to Shapefile format:
 <div class="code"><pre>
-v.out.ogr input=lines_3d type=line dsn=/tmp olayer=testogr lco="SHPT=ARCZ"
+v.out.ogr input=lines_3d type=line dsn=lines_3d.shp lco="SHPT=ARCZ"
+</pre></div>
+<p>
+Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile format
+<div class="code"><pre>
+v.out.ogr points_3d type=point dsn=points_3d.shp lco="SHPT=POINTZ"
+</pre></div>
+<p>
+Export 3D faces from GRASS vector map to Shapefile format:
+<div class="code"><pre>
+v.out.ogr input=objects_3d type=face dsn=faces_3d.shp lco="SHPT=POLYGONZ"
 </pre></div>
 
 <h3>Export to GML</h3>
