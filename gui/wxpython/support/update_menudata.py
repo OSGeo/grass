@@ -29,6 +29,9 @@ except ImportError:
 
 from grass.script import core as grass
 
+sys.path.append('gui_modules')
+import menudata
+
 def parseModules():
     """!Parse modules' interface"""
     modules = dict()
@@ -144,7 +147,7 @@ def main(argv = None):
     modules = dict()
     modules = parseModules()
     grass.info("Step 3: reading menu data...")
-    data = menudata.Data()
+    data = menudata.ManagerData()
     grass.info("Step 4: updating menu data...")
     updateData(data, modules)
     
