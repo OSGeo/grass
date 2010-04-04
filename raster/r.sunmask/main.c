@@ -125,8 +125,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     module->label = _("Calculates cast shadow areas from sun position and elevation raster map.");
-    module->description = _("Either exact sun position is specified, or date/time to calculate "
-	  "the sun position by r.sunmask itself.");
+    module->description = _("Either exact sun position (A) is specified, or date/time to calculate "
+	  "the sun position (B) by r.sunmask itself.");
     
     parm.opt1 = G_define_standard_option(G_OPT_R_ELEV);
 
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     parm.opt3->required = NO;
     parm.opt3->options = "0-89.999";
     parm.opt3->description =
-	_("Altitude of the sun above horizon, degrees");
+	_("Altitude of the sun above horizon, degrees (A)");
     parm.opt3->guisection = _("Position");
 
     parm.opt4 = G_define_option();
@@ -147,14 +147,14 @@ int main(int argc, char *argv[])
     parm.opt4->required = NO;
     parm.opt4->options = "0-360";
     parm.opt4->description =
-	_("Azimuth of the sun from the north, degrees");
+	_("Azimuth of the sun from the north, degrees (A)");
     parm.opt4->guisection = _("Position");
 
     parm.year = G_define_option();
     parm.year->key = "year";
     parm.year->type = TYPE_INTEGER;
     parm.year->required = NO;
-    parm.year->description = _("Year");
+    parm.year->description = _("Year (B)");
     parm.year->options = "1950-2050";
     parm.year->guisection = _("Time");
 
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
     parm.month->key = "month";
     parm.month->type = TYPE_INTEGER;
     parm.month->required = NO;
-    parm.month->description = _("Month");
+    parm.month->description = _("Month (B)");
     parm.month->options = "0-12";
     parm.month->guisection = _("Time");
 
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
     parm.day->key = "day";
     parm.day->type = TYPE_INTEGER;
     parm.day->required = NO;
-    parm.day->description = _("Day");
+    parm.day->description = _("Day (B)");
     parm.day->options = "0-31";
     parm.day->guisection = _("Time");
 
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     parm.hour->key = "hour";
     parm.hour->type = TYPE_INTEGER;
     parm.hour->required = NO;
-    parm.hour->description = _("Hour");
+    parm.hour->description = _("Hour (B)");
     parm.hour->options = "0-24";
     parm.hour->guisection = _("Time");
 
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     parm.minutes->key = "minute";
     parm.minutes->type = TYPE_INTEGER;
     parm.minutes->required = NO;
-    parm.minutes->description = _("Minutes");
+    parm.minutes->description = _("Minutes (B)");
     parm.minutes->options = "0-60";
     parm.minutes->guisection = _("Time");
 
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
     parm.seconds->key = "second";
     parm.seconds->type = TYPE_INTEGER;
     parm.seconds->required = NO;
-    parm.seconds->description = _("Seconds");
+    parm.seconds->description = _("Seconds (B)");
     parm.seconds->options = "0-60";
     parm.seconds->guisection = _("Time");
 
