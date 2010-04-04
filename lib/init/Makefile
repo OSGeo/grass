@@ -1,19 +1,3 @@
-#############################################################################
-#
-# MODULE:   	GRASS Initialization
-# AUTHOR(S):	Original author unknown - probably CERL
-#   	    	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
-#               Markus Neteler, Andrea Antonello
-# PURPOSE:  	To create the various scripts and programs which are required
-#   	    	to start GRASS.
-# COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#   	    	License (>=v2). Read the file COPYING that comes with GRASS
-#   	    	for details.
-#
-#############################################################################
-
 MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
@@ -30,10 +14,7 @@ EXTRA_CFLAGS = \
 LIBES = $(GISLIB) $(DATETIMELIB)
 
 FILES = \
-	$(ARCH_BINDIR)/$(START_UP).sh \
-	$(ETC)/Init.sh \
-	$(ETC)/functions.sh \
-	$(ETC)/prompt.sh \
+	$(ARCH_BINDIR)/$(START_UP) \
 	$(ETC)/clean_temp$(EXE) \
 	$(ETC)/lock$(EXE) \
 	$(ETC)/run$(EXE) \
@@ -61,30 +42,21 @@ endif
 ifneq ($(strip $(MINGW)),)
 	FILES += \
 		$(ARCH_BINDIR)/$(START_UP).py \
-		$(ARCH_BINDIR)/$(START_UP).bat \
-		$(ETC)/winlocale$(EXE) \
-		$(ETC)/Init.bat
-else
-	FILES += \
-		$(ARCH_BINDIR)/$(START_UP)
-
+		$(ETC)/winlocale$(EXE)
 endif
 
 default: $(FILES)
 
-$(ARCH_BINDIR)/$(START_UP).sh: grass.src
+ifneq ($(strip $(MINGW)),)
+$(ARCH_BINDIR)/$(START_UP): grass.sh
 	@test -d $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not found; exit 1)
 	@test -w $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not writeable; exit 1)
 	rm -f $@ ; true
-	sed -e 's#GISBASE_VALUE#$(GISBASE)#' $< > $@
+	sed \
+	-e 's#@BINDIR@#$(ARCH_BINDIR)#' \
+	$< > $@
 	chmod a+x $@
-
-$(ARCH_BINDIR)/$(START_UP).bat: grass.bat
-	@test -d $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not found; exit 1)
-	@test -w $(ARCH_BINDIR) || (echo 'ARCH_BINDIR($(ARCH_BINDIR))' not writeable; exit 1)
-	rm -f $@
-	sed -e 's#GISBASE_VALUE#$(RUN_GISBASE)#' $< | tr '/' '\\' > $@
-	chmod a+x $@
+endif
 
 ifneq ($(strip $(MINGW)),)
 $(ARCH_BINDIR)/$(START_UP).py: grass.py
@@ -101,29 +73,6 @@ endif
 	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
 	$< > $@
 	chmod +x $@
-
-$(ETC)/Init.sh: init.sh
-	rm -f $@
-	sed \
-	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
-	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#g' \
-	-e 's#@START_UP@#$(START_UP)#' \
-	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
-	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
-	$< > $@
-	chmod +x $@
-
-$(ETC)/Init.bat: init.bat
-	rm -f $@
-	sed \
-	-e 's#GRASS_VERSION_NUMBER#$(GRASS_VERSION_NUMBER)#' \
-	-e 's#CONFIG_PROJSHARE#$(PROJSHARE)#' \
-	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
-	$< > $@
-	chmod +x $@
-
-$(ETC)/functions.sh: functions.sh
-	$(INSTALL_DATA) $< $@
 
 $(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
 	$(call linker_base,$(LINK),$(LDFLAGS),$(MANIFEST_OBJ))
@@ -153,4 +102,3 @@ $(HTMLDIR)/%: %
 
 $(ETC)/%: %
 	$(INSTALL) $< $@
-
