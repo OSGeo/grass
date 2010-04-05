@@ -81,10 +81,10 @@ install:
 real-install:
 	test -d $(INST_DIR) || $(MAKE_DIR_CMD) $(INST_DIR)
 	test -d $(UNIX_BIN) || $(MAKE_DIR_CMD) $(UNIX_BIN)
-	-$(INSTALL) $(ARCH_BINDIR)/$(GRASS_NAME) $(UNIX_BIN)/$(GRASS_NAME)
+	-sed 's#'$(RUN_GISBASE)'#'$(INST_DIR)'#g' $(ARCH_BINDIR)/$(GRASS_NAME) > $(UNIX_BIN)/$(GRASS_NAME)
 	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
 ifneq ($(strip $(MINGW)),)
-	-$(INSTALL) $(ARCH_BINDIR)/$(GRASS_NAME).py $(UNIX_BIN)/$(GRASS_NAME).py
+	-sed 's#'$(RUN_GISBASE)'#'$(INST_DIR)'#g' $(ARCH_BINDIR)/$(GRASS_NAME).py > $(UNIX_BIN)/$(GRASS_NAME).py
 	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME).py
 endif
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR) - 2>/dev/null
