@@ -636,8 +636,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'set PYTHONHOME=%GISBASE%\Python25$\r$\n'
 	FileWrite $0 'if "x%GRASS_PYTHON%" == "x" set GRASS_PYTHON=python$\r$\n'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 'set WINGISBASE=%GISBASE%$\r$\n'
-	FileWrite $0 '%GRASS_PYTHON% "%WINGISBASE%\grass70.py" %*'
+	FileWrite $0 '%GRASS_PYTHON% "%GISBASE%\grass70.py" %*'
 	FileClose $0
 	done_create_grass_command.bat:
 	
