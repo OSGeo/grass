@@ -171,6 +171,7 @@ class Controller:
         return Rpointmap
     
     def CreateGrid(self, inputdata):
+        Region = grass.region()
         Grid = robjects.r.gmeta2grd()
 
         # addition of coordinates columns into dataframe.
@@ -247,7 +248,8 @@ class Controller:
     def Run(self, input, column, output, package, sill, nugget, range, logger, \
             overwrite, model, block, output_var, command, **kwargs):
         """ Wrapper for all functions above. """
-        logger.message(_("Processing %d cells. Computing time raises exponentially with resolution." % Region['cells']))
+        logger.message(_("Processing %d cells. Computing time raises "
+                         "exponentially with resolution." % grass.region()['cells']))
         logger.message(_("Importing data..."))
         if globals()["InputData"] is None:
             globals()["InputData"] = self.ImportMap(input, column)
@@ -410,5 +412,4 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         sys.exit(main(argv = grass.parser()))
     else:
-        Region = grass.region()
         main()
