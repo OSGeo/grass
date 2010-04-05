@@ -31,7 +31,10 @@ import re
 
 # Variables substituted during build process
 # Set the GISBASE variable
-gisbase = "@GISBASE@"
+if os.getenv("GISBASE"):
+    gisbase = os.getenv("GISBASE")
+else:
+    gisbase = "@GISBASE@"
 cmd_name = "@START_UP@"
 grass_version = "@GRASS_VERSION_NUMBER@"
 ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
