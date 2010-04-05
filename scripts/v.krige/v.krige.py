@@ -104,23 +104,11 @@ from tempfile import gettempdir
 import time
 import thread
 
-GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "wxpython", "gui_modules")
+GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "gui_modules")
 sys.path.append(GUIModulesPath)
-#GUIPath = os.path.join(os.getenv("GISBASE"), "etc", "wxpython")
-#sys.path.append(GUIPath)
-#
-#import globalvar
-#if not os.getenv("GRASS_WXBUNDLED"):
-#    globalvar.CheckForWx()
-#import gselect
-#import goutput
-#import menuform
-#from preferences import globalSettings as UserSettings
-##import help
-#
-#import wx
-#import wx.lib.flatnotebook as FN
-##import wx.lib.plot as plot # for plotting the variogram.
+
+GUIPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "scripts")
+sys.path.append(GUIPath)
 
 ### i18N
 import gettext
@@ -131,7 +119,7 @@ gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 try:
     import grass.script as grass
 except ImportError:
-    sys.exit(_("No GRASS-python library found."))
+    sys.exit(_("No GRASS-python library found"))
     
 # move other checks in functions, as R?
 
@@ -307,15 +295,19 @@ def main(argv = None):
     
     if argv is None:
         importR()
-        argv = sys.argv[1:] #stripping first item, the full name of this script
-        # wxGUI call.
-        import v_krige_wxGUI
+        argv = sys.argv[1:] # stripping first item, the full name of this script
+        # wxGUI call
+        import globalvar
+        if not os.getenv("GRASS_WXBUNDLED"):
+            globalvar.CheckForWx()
+        import vkrige as GUI
+        
         import wx
         
         app = wx.App()
-        KrigingFrame = v_krige_wxGUI.KrigingModule(parent = None,
-                                                   Rinstance = robjects,
-                                                   controller = controller)
+        KrigingFrame = GUI.KrigingModule(parent = None,
+                                         Rinstance = robjects,
+                                         controller = controller)
         KrigingFrame.Centre()
         KrigingFrame.Show()
         app.MainLoop()
