@@ -23,6 +23,3 @@ $(DSTDIR)/PERMANENT/%: PERMANENT/% | $(DSTDIRS)
 
 $(DSTDIRS): %:
 	$(MKDIR) $@
-
-$(RCFILE): grassrc.tmpl | $(DSTDIRS)
-	sed 's!@GISDBASE@!$(RUN_GISBASE)!' < $< > $@
