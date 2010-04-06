@@ -51,7 +51,7 @@
 	</menu>
 	<separator />
 	<menu>
-	  <label>Import raster map</label>
+	  <label>Import raster data</label>
 	  <items>
 	    <menuitem>
 	      <label>Import raster data</label>
@@ -61,20 +61,20 @@
 	      <command>r.in.gdal</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bulk raster map import</label>
+	      <label>Bulk import of raster data</label>
 	      <help>Converts multiple GDAL supported layers to GRASS raster maps.</help>
 	      <handler>OnImportGdalLayers</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Link to external raster map</label>
+	      <label>Link raster data</label>
 	      <help>Link GDAL supported raster data as a pseudo GRASS raster map layer.</help>
 	      <keywords>raster,import</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>r.external</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bulk link to external raster maps</label>
+	      <label>Bulk link of raster data</label>
 	      <help>Link multiple GDAL supported raster maps as pseudo GRASS raster map layers.</help>
               <handler>OnLinkGdalLayers</handler>
 	    </menuitem>
@@ -159,7 +159,7 @@
 	  </items>
 	</menu>
 	<menu>
-	  <label>Import vector map</label>
+	  <label>Import vector data</label>
 	  <items>
 	    <menuitem>
 	      <label>Import vector data</label>
@@ -175,14 +175,14 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Link to external vector map</label>
+	      <label>Link vector data</label>
 	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
 	      <keywords>vector,external,ogr</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>v.external</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bulk external data link to new vector maps</label>
+	      <label>Bulk link of vector data</label>
 	      <help>Creates multiple new pseduo-vector maps as a read-only links using OGR.</help>
               <handler>OnLinkOgrLayers</handler>
 	    </menuitem>
@@ -217,7 +217,7 @@
 	      <command>v.in.dxf</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Bulk DXF layer import</label>
+	      <label>Bulk import of DXF</label>
 	      <help>Converts multiple DXF layers to GRASS vector maps.</help>
 	      <handler>OnImportDxfFile</handler>
 	    </menuitem>
@@ -260,7 +260,7 @@
 	  </items>
 	</menu>
 	<menu>
-	  <label>Import grid 3D volume</label>
+	  <label>Import 3D raster data</label>
 	  <items>
 	    <menuitem>
 	      <label>ASCII 3D import</label>
@@ -461,7 +461,7 @@
 	  </items>
 	</menu>
 	<menu>
-	  <label>Export grid 3D volume</label>
+	  <label>Export 3D raster maps</label>
 	  <items>
 	    <menuitem>
 	      <label>ASCII 3D export</label>
