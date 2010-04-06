@@ -25,7 +25,6 @@ grass.run_command("r.mapcalc", expression="status=if((col() == 1 && row() == 13)
 		     (col() == 2 && row() == 14) ||\
 		     (row() == 19), 2, 1)")
 
-grass.run_command("r.mapcalc", expression="well=0.0")
 grass.run_command("r.mapcalc", expression="hydcond=0.001")
 grass.run_command("r.mapcalc", expression="recharge=0.000000006")
 grass.run_command("r.mapcalc", expression="top=20")
@@ -35,5 +34,5 @@ grass.run_command("r.mapcalc", expression="null=0.0")
 
 #compute a steady state groundwater flow
 grass.run_command("r.gwflow", "f", solver="cholesky", top="top", bottom="bottom", phead="phead", \
- status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield", \
+ status="status", hc_x="hydcond", hc_y="hydcond", s="syield", \
  recharge="recharge", output="gwresult", dt=864000000000, type="unconfined", budget="water_budget")
