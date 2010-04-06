@@ -1,0 +1,39 @@
+"""!
+@package gis_set_error.py
+
+GRASS start-up screen error message.
+
+(C) 2010 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Martin Landa <landa.martin gmail.com>
+"""
+
+import os
+import sys
+
+import gui_modules.globalvar as globalvar
+if not os.getenv("GRASS_WXBUNDLED"):
+    globalvar.CheckForWx()
+import wx
+
+def main():
+    app = wx.PySimpleApp()
+    
+    if len(sys.argv) == 1:
+        msg = "Unknown reason"
+    else:
+        msg = ''
+        for m in sys.argv[1:]:
+            msg += m
+    
+    wx.MessageBox(caption = "Error",
+                  message = msg,
+                  style = wx.OK | wx.ICON_ERROR)
+    
+    app.MainLoop()
+    
+if __name__ == "__main__":
+    main()

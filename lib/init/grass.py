@@ -3,12 +3,13 @@
 #
 # MODULE:   	GRASS initialization (Python)
 # AUTHOR(S):	Original author unknown - probably CERL
-#               Andreas Lange - Germany - andreas.lange@rhein-main.de
-#   	    	Huidae Cho - Korea - grass4u@gmail.com
-#   	    	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
-#   	    	Markus Neteler - Germany/Italy - neteler@itc.it
+#               Andreas Lange - Germany - andreas.lange at rhein-main.de
+#   	    	Huidae Cho - Korea - grass4u at gmail.com
+#   	    	Justin Hickey - Thailand - jhickey at hpcc.nectec.or.th
+#   	    	Markus Neteler - Germany/Italy - neteler at itc.it
 #		Hamish Bowman - New Zealand - hamish_b at yahoo,com
 #		Converted to Python (based on init.sh) by Glynn Clements
+#               Martin Landa - Czech Republic - landa.martin at gmail.com
 # PURPOSE:  	Sets up some environment variables.
 #               It also parses any remaining command line options for
 #               setting the GISDBASE, LOCATION, and/or MAPSET.
@@ -523,15 +524,23 @@ def check_lock():
     ret = call([gfile("etc", "lock"),
 		lockfile,
 		"%d" % os.getpid()])
+    
     if ret == 0:
-	pass
+	msg = None
     elif ret == 2:
-	fatal("%s is currently running GRASS in selected mapset (file %s found). Concurrent use not allowed."
-	      % (user, lockfile))
+	msg = "%s is currently running GRASS in selected mapset (file %s found). " \
+            "Concurrent use not allowed." % \
+            (user, lockfile)
     else:
-	fatal("Unable to properly access \"%s\"\n" % lockfile +
-	      "Please notify system personel.")
-
+	msg = "Unable to properly access \"%s\"\n" % \
+            lockfile + "Please notify system personel."
+        
+    if msg:
+        if grass_gui == "wxpython":
+            thetest = call([os.getenv('GRASS_PYTHON'), os.path.join(wxpython_base, "gis_set_error.py"), msg])
+        else:
+            fatal(msg)
+    
 def make_fontcap():
     fc = os.getenv('GRASS_FONT_CAP')
     if fc and not os.access(fc, os.R_OK):
