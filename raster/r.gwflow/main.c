@@ -73,6 +73,7 @@ void set_params(void)
 
     param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
+    param.q->required = NO;
     param.q->description = _("Raster map water sources and sinks in [m^3/s]");
 
     param.s = G_define_standard_option(G_OPT_R_INPUT);
@@ -289,16 +290,13 @@ int main(int argc, char *argv[])
      * null values.*/
     N_read_rast_to_array_2d(param.phead->answer, data->phead);
     N_convert_array_2d_null_to_zero(data->phead);
-    N_read_rast_to_array_2d(param.phead->answer, data->phead_start);
-    N_convert_array_2d_null_to_zero(data->phead_start);
+    N_copy_array_2d(data->phead, data->phead_start);
     N_read_rast_to_array_2d(param.status->answer, data->status);
     N_convert_array_2d_null_to_zero(data->status);
     N_read_rast_to_array_2d(param.hc_x->answer, data->hc_x);
     N_convert_array_2d_null_to_zero(data->hc_x);
     N_read_rast_to_array_2d(param.hc_y->answer, data->hc_y);
     N_convert_array_2d_null_to_zero(data->hc_y);
-    N_read_rast_to_array_2d(param.q->answer, data->q);
-    N_convert_array_2d_null_to_zero(data->q);
     N_read_rast_to_array_2d(param.s->answer, data->s);
     N_convert_array_2d_null_to_zero(data->s);
     N_read_rast_to_array_2d(param.top->answer, data->top);
@@ -330,17 +328,23 @@ int main(int argc, char *argv[])
 	N_convert_array_2d_null_to_zero(data->r);
     }
 
+    /*Sources or sinks areoptional */
+    if (param.q->answer) {
+        N_read_rast_to_array_2d(param.q->answer, data->q);
+        N_convert_array_2d_null_to_zero(data->q);
+    }
+
     /* Set the inactive values to zero, to assure a no flow boundary */
     for (y = 0; y < geom->rows; y++) {
-	for (x = 0; x < geom->cols; x++) {
-	    stat = N_get_array_2d_c_value(data->status, x, y);
-	    if (stat == N_CELL_INACTIVE) {	/*only inactive cells */
-		N_put_array_2d_d_value(data->hc_x, x, y, 0);
-		N_put_array_2d_d_value(data->hc_y, x, y, 0);
-		N_put_array_2d_d_value(data->s, x, y, 0);
-		N_put_array_2d_d_value(data->q, x, y, 0);
-	    }
-	}
+        for (x = 0; x < geom->cols; x++) {
+            stat = N_get_array_2d_c_value(data->status, x, y);
+            if (stat == N_CELL_INACTIVE) {	/*only inactive cells */
+            N_put_array_2d_d_value(data->hc_x, x, y, 0);
+            N_put_array_2d_d_value(data->hc_y, x, y, 0);
+            N_put_array_2d_d_value(data->s, x, y, 0);
+            N_put_array_2d_d_value(data->q, x, y, 0);
+            }
+        }
     }
 
 
