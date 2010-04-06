@@ -856,45 +856,8 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
-
-	;remove files
-	Delete "$INSTDIR\Uninstall-GRASS.exe"
-	Delete "$INSTDIR\GPL.TXT"
-	Delete "$INSTDIR\AUTHORS"
-	Delete "$INSTDIR\CHANGES"
-	Delete "$INSTDIR\COPYING"	
-	Delete "$INSTDIR\${GRASS_COMMAND}.bat"
-	Delete "$INSTDIR\GRASS-WebSite.url"	
-	Delete "$INSTDIR\WinGRASS-README.url"
-	Delete "$INSTDIR\REQUIREMENTS.html"
-	Delete "$INSTDIR\README.html"
-	Delete "$INSTDIR\contributors.csv"
-	Delete "$INSTDIR\translators.csv"	
-	
-	;remove folders
-	RMDir /r "$INSTDIR\bin"
-	RMDir /r "$INSTDIR\bwidget"
-	RMDir /r "$INSTDIR\docs"
-	RMDir /r "$INSTDIR\driver"
-	RMDir /r "$INSTDIR\etc"
-	RMDir /r "$INSTDIR\extrabin"
-	RMDir /r "$INSTDIR\extralib"
-	RMDir /r "$INSTDIR\fonts"
-	RMDir /r "$INSTDIR\gpsbabel"
-	RMDir /r "$INSTDIR\icons"
-	RMDir /r "$INSTDIR\include"
-	RMDir /r "$INSTDIR\lib"
-	RMDir /r "$INSTDIR\locale"
-	RMDir /r "$INSTDIR\msys"
-	RMDir /r "$INSTDIR\proj"
-	RMDir /r "$INSTDIR\Python25"
-	RMDir /r "$INSTDIR\scripts"
-	RMDir /r "$INSTDIR\sqlite"
-	RMDir /r "$INSTDIR\tcl-tk"
-	RMDir /r "$INSTDIR\tools"	
-	
-	;if empty, remove the install folder
-	RMDir "$INSTDIR"
+	;remove files & folders
+	RMDir /r "$INSTDIR"
 	
 	;remove the Desktop ShortCut
 	SetShellVarContext current
