@@ -728,10 +728,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '"$$GRASS_PYTHON $$GISBASE/grass70.py" "$$@"'
 	FileClose $0
 	done_create_grass_command:
-
-	;Create the $INSTALL_DIR\msys\grass link directory
-	CreateDirectory $INSTALL_DIR\msys\grass
-	
+		
 	;Get the short form of the install path (to allow for paths with spaces)
 	VAR /GLOBAL INST_DIR_SHORT
 	GetFullPathName /SHORT $INST_DIR_SHORT $INSTALL_DIR
@@ -753,6 +750,7 @@ Section "GRASS" SecGRASS
 	;create $PROFILE\.grass7\rc
 	SetShellVarContext current
 	ClearErrors
+	CreateDirectory	$PROFILE\.grass7
 	FileOpen $0 $PROFILE\.grass7\rc w
 	IfErrors done_create_.grass7\rc
 	FileWrite $0 'GISDBASE: $UNIX_LIKE_GIS_DATABASE_PATH$\r$\n'
@@ -761,7 +759,8 @@ Section "GRASS" SecGRASS
 	FileClose $0	
 	done_create_.grass7\rc:
 	
-	CopyFiles $PROFILE\.grass7\rc $INSTALL_DIR\msys\home\$USERNAME
+	CreateDirectory	$INSTALL_DIR\msys\home\$USERNAME\.grass7
+	CopyFiles $PROFILE\.grass7\rc $INSTALL_DIR\msys\home\$USERNAME\.grass7
                  
 SectionEnd
 
@@ -908,7 +907,7 @@ Section "Uninstall"
 	
 	;remove the .grass7\rc file
 	SetShellVarContext current
-	Delete "$PROFILE\.grass7\rc"	
+	RMDir /r "$PROFILE\.grass7"
 
 	;remove the Registry Entries
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"

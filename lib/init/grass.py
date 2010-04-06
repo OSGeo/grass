@@ -39,7 +39,10 @@ else:
 cmd_name = "@START_UP@"
 grass_version = "@GRASS_VERSION_NUMBER@"
 ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
-config_projshare = "@CONFIG_PROJSHARE@"
+if os.getenv("GRASS_PROJSHARE"):
+    config_projshare = os.getenv("GRASS_PROJSHARE")
+else:
+    config_projshare = "@CONFIG_PROJSHARE@"
 grass_config_dirname = "@GRASS_CONFIG_DIR@"
 
 gisbase = os.path.normpath(gisbase)
