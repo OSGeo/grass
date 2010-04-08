@@ -72,9 +72,10 @@ int main(int argc, char *argv[])
     module->description = _("Computes watershed basins.");
 
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
+    opt1->key = "elevation_input";
 
     opt2 = G_define_standard_option(G_OPT_R_INPUT);
-    opt2->key = "depression_input";
+    opt2->key = "delevation_input";
     opt2->label = _("Name of input depressions raster map");
     opt2->description = _("All non-NULL and non-zero cells are considered as real depressions");
     opt2->required = NO;
