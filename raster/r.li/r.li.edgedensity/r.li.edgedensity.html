@@ -26,12 +26,16 @@ Gen. Tech. Rep. PNW-351.
 To calculate edge density index on map my_map, using
 my_conf configuration file and saving results in
 my_out file run:<br>
-<B>r.li.edgedensity map=</B>my_map <B>conf=</B>my_conf <B>output=</B>my_out <br><br>
+<div class="code"><pre>
+r.li.edgedensity input=my_map conf=my_conf output=my_out
+</pre></div>
+
 To calculate edge density index of patch_type 34, using
 my_conf configuration file and on map my_map, saving results in my_out
 file run:<br>
-<B>r.li.edgedensity map=</B>my_map <B>conf=</B>my_conf <B>output=</B>my_out <B>patch_type=</B>34
-<br>
+<div class="code"><pre>
+r.li.edgedensity input=my_map conf=my_conf output=my_out patch_type=34
+</pre></div>
 
 <h2>NOTES</h2>
 Do not use absolute path names for output files. They are raster if
@@ -43,7 +47,9 @@ patch.<br>
 If area is 0 r.li.edgedensity returns -1; this is possible only if input
 raster is masked.
 If you want to have null values instead run <br>
-<B>r.null setnull=-1 map=</B>my_map <br>
+<div class="code"><pre>
+r.null setnull=-1 map=my_map
+</pre></div>
 after index calculation.
 
 <h2>SEE ALSO</h2>
