@@ -13,14 +13,14 @@ To calculate mean pixel attribute index on map my_map, using
 my_conf configuration file and saving results in
 my_out file run:<br>
 <div class="code"><pre>
-r.li.padsd map=my_map conf=my_conf output=my_out
+r.li.padsd input=my_map conf=my_conf output=my_out
 </pre></div>
 
 <h2>NOTES</h2>
 Do not use absolute path names for output files. They are raster if
 moving window disposition was selected, otherwise they are in
 ~/.r.li/output folder.<br>
-If input raster is not full of null values r.li.padsd returns a value >=0 that is PADsd. <br>
+If input raster is not full of null values r.li.padsd returns a value &gt;=0 that is PADsd. <br>
 If input raster is full of null values r.li.padsd returns -1. <br>
 If you want to have null values instead run <br>
 <div class="code"><pre>

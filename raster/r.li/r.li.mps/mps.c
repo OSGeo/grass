@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("patch index"));
     /* define options */
 
-    raster = G_define_standard_option(G_OPT_R_MAP);
+    raster = G_define_standard_option(G_OPT_R_INPUT);
 
     conf = G_define_option();
     conf->key = "conf";
