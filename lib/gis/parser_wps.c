@@ -174,12 +174,15 @@ void G__wps_print_process_description(void)
     wps_print_data_inputs_begin();
 
     /* We have two default options, which define the resolution of the created mapset */
-    wps_print_literal_input_output(WPS_INPUT, 0, 1, "resolution_ns", "Resolution of the mapset in north-south direction in [m] or [°]",
+    wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ns", "Resolution of the mapset in north-south direction in [m] or [°]",
         "This parameter defines the north-south resolution of the mapset in meter or degrees, which should be used ot process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
         "float", 0, NULL, 0, "25", TYPE_OTHER);
-    wps_print_literal_input_output(WPS_INPUT, 0, 1, "resolution_ew", "Resolution of the mapset in east-west direction in [m] or [°]",
+    wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ew", "Resolution of the mapset in east-west direction in [m] or [°]",
         "This parameter defines the east-west resolution of the mapset in meters or degrees, which should be used ot process the input and output raster data.  To enable this setting, you need to specify north-south and east-west resolution.",
         "float", 0, NULL, 0, "25", TYPE_OTHER);
+    wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_band_number", "Band to select for processing (default is all bands)",
+        "This parameter defines band number of the input raster files which should be processed. As default all bands are processed and used as single and multiple inputs for raster modules.",
+        "integer", 0, NULL, 0, NULL, TYPE_OTHER);
 
     /* Print the bounding box element with all the coordinate reference systems, which are supported by grass*/
     /* Currently Disabled! A list of all proj4 supported EPSG coordinate reference systems must be implemented*/
