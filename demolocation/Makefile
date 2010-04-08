@@ -13,7 +13,6 @@ DIRS := PERMANENT PERMANENT/vector PERMANENT/dbf $(patsubst %,PERMANENT/vector/%
 DSTDIR = $(ARCH_DISTDIR)/demolocation
 DST := $(patsubst %,$(DSTDIR)/PERMANENT/%,$(SRC))
 DSTDIRS := $(patsubst %,$(DSTDIR)/%,$(DIRS))
-
 RCFILE = $(DSTDIR)/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
 default: $(DST) $(RCFILE)
@@ -23,3 +22,6 @@ $(DSTDIR)/PERMANENT/%: PERMANENT/% | $(DSTDIRS)
 
 $(DSTDIRS): %:
 	$(MKDIR) $@
+
+$(RCFILE): grassrc.tmpl | $(DSTDIRS)
+	sed 's!@GISDBASE@!$(RUN_GISBASE)!' < $< > $@
