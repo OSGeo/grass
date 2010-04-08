@@ -278,28 +278,36 @@ def message(msg, flag = None):
 
     @param msg message to be displayed
     @param flag flags (given as string)
+
+    @return g.message's exit code
     """
     run_command("g.message", flags = flag, message = msg)
 
 def debug(msg, debug = 1):
     """!Display a debugging message using g.message -d
 
-    @param msg message to be displayed
+    @param msg debugging message to be displayed
     @param debug debug level (0-5)
+
+    @return g.message's exit code
     """
     run_command("g.message", flags = 'd', message = msg, debug = debug)
     
 def verbose(msg):
     """!Display a verbose message using g.message -v
     
-    @param msg message to be displayed
+    @param msg verbose message to be displayed
+
+    @return g.message's exit code
     """
     message(msg, flag = 'v')
 
 def info(msg):
     """!Display an informational message using g.message -i
 
-    @param msg message to be displayed
+    @param msg informational message to be displayed
+
+    @return g.message's exit code
     """
     message(msg, flag = 'i')
 
@@ -307,6 +315,8 @@ def warning(msg):
     """!Display a warning message using g.message -w
 
     @param msg warning message to be displayed
+
+    @return g.message's exit code
     """
     message(msg, flag = 'w')
 
@@ -314,6 +324,8 @@ def error(msg):
     """!Display an error message using g.message -e
 
     @param msg error message to be displayed
+
+    @return g.message's exit code
     """
     message(msg, flag = 'e')
 
