@@ -123,7 +123,8 @@ int main(int argc, char *argv[])
 	  "path sampling method (SIMWE).");
 
     parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
-
+    parm.elevin->key = "elevation_input";
+    
     parm.dxin = G_define_standard_option(G_OPT_R_INPUT);
     parm.dxin->key = "dx_input";
     parm.dxin->description = _("Name of x-derivatives raster map [m/m]");
@@ -140,7 +141,7 @@ int main(int argc, char *argv[])
     parm.rain->guisection = _("Input");
     
     parm.rainval = G_define_option();
-    parm.rainval->key = "rain_val";
+    parm.rainval->key = "rain_value";
     parm.rainval->type = TYPE_DOUBLE;
     parm.rainval->answer = RAINVAL;
     parm.rainval->required = NO;
@@ -156,7 +157,7 @@ int main(int argc, char *argv[])
     parm.infil->guisection = _("Input");
 
     parm.infilval = G_define_option();
-    parm.infilval->key = "infil_val";
+    parm.infilval->key = "infil_value";
     parm.infilval->type = TYPE_DOUBLE;
     parm.infilval->answer = INFILVAL;
     parm.infilval->required = NO;
@@ -171,7 +172,7 @@ int main(int argc, char *argv[])
     parm.manin->guisection = _("Input");
 
     parm.maninval = G_define_option();
-    parm.maninval->key = "man_val";
+    parm.maninval->key = "man_value";
     parm.maninval->type = TYPE_DOUBLE;
     parm.maninval->answer = MANINVAL;
     parm.maninval->required = NO;

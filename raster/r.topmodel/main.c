@@ -65,6 +65,11 @@ int main(int argc, char **argv)
 	_("Simulates TOPMODEL which is a physically based hydrologic model.");
 
     /* Parameter definitions */
+    param.elev = G_define_standard_option(G_OPT_R_ELEV);
+    param.elev->key = "elevation_input";
+    param.elev->required = NO;
+    param.elev->guisection = _("Input");
+
     param.basin = G_define_standard_option(G_OPT_R_INPUT);
     param.basin->key = "basin_input";
     param.basin->label =
@@ -73,12 +78,8 @@ int main(int argc, char **argv)
     param.basin->required = NO;
     param.basin->guisection = _("Input");
 
-    param.elev = G_define_standard_option(G_OPT_R_ELEV);
-    param.elev->required = NO;
-    param.elev->guisection = _("Input");
-
     param.fill = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.fill->key = "dep_output";
+    param.fill->key = "delevation_output";
     param.fill->description = _("Name for output depressionless elevation raster map");
     param.fill->required = NO;
     param.fill->guisection = _("Output");
