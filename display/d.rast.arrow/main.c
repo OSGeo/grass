@@ -107,7 +107,6 @@ int main(int argc, char **argv)
     opt2->answer = "grass";
     opt2->options = "grass,compass,agnps,answers";
     opt2->description = _("Type of existing raster aspect map");
-    opt2->guisection = _("Shape");
 
     opt3 = G_define_option();
     opt3->key = "arrow_color";
@@ -124,7 +123,7 @@ int main(int argc, char **argv)
     opt4->required = NO;
     opt4->answer = "gray";
     opt4->gisprompt = "old_color,color,color_none";
-    opt4->description = _("Color for drawing grid");
+    opt4->description = _("Color for drawing grid or \"none\"");
     opt4->guisection = _("Colors");
 
     opt5 = G_define_option();
@@ -160,7 +159,6 @@ int main(int argc, char **argv)
     opt7->gisprompt = "old,cell,raster";
     opt7->description =
 	_("Raster map containing values used for arrow length");
-    opt7->guisection = _("Shape");
 
     opt8 = G_define_option();
     opt8->key = "scale";
@@ -168,7 +166,6 @@ int main(int argc, char **argv)
     opt8->required = NO;
     opt8->answer = "1.0";
     opt8->description = _("Scale factor for arrows (magnitude map)");
-    opt8->guisection = _("Shape");
 
     align = G_define_flag();
     align->key = 'a';
