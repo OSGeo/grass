@@ -6,7 +6,7 @@
 # AUTHOR(S):	Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Display the HTML/MAN pages
-# COPYRIGHT:	(C) 2003,2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 2003,2008,2010 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%Module
-#%  description: Display the HTML man pages of GRASS
+#%  description: Display the HTML man pages of GRASS GIS
 #%  keywords: general
 #%  keywords: manual
 #%  keywords: help
@@ -40,12 +40,16 @@ import os
 from grass.script import core as grass
 
 def start_browser(entry):
+    if not grass.find_program(browser):
+        grass.fatal(_("Browser <%s> not found") % browser)
+    
     path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
     if not os.path.exists(path):
 	grass.fatal(_("No HTML manual page entry for <%s>.") % entry)
     verbose = os.getenv("GRASS_VERBOSE")
     if not verbose or int(verbose) > 1:
 	grass.message(_("Starting browser <%s> for module %s...") % (browser_name, entry))
+    
     os.execlp(browser, browser_name, "file://%s/docs/html/%s.html" % (gisbase, entry))
     grass.fatal(_("Error starting browser <%s> for HTML file <%s>") % (browser, entry))
 
@@ -65,7 +69,7 @@ def main():
     entry = options['entry']
 
     gisbase = os.environ['GISBASE']
-
+    
     browser = os.getenv('GRASS_HTML_BROWSER')
 
     if "html_browser_mac.sh" in browser:
