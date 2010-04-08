@@ -427,6 +427,7 @@ int main(int argc, char *argv[])
 	  "map.");
 
     pelevin = G_define_standard_option(G_OPT_R_ELEV);
+    pelevin->key = "elevation_input";
     
     paspin = G_define_standard_option(G_OPT_R_INPUT);
     paspin->key = "aspect_input";

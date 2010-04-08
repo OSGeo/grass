@@ -119,7 +119,8 @@ int main(int argc, char *argv[])
 	  "using path sampling method (SIMWE).");
 
     parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
-
+    parm.elevin->key = "elevation_input";
+    
     parm.wdepth = G_define_standard_option(G_OPT_R_INPUT);
     parm.wdepth->key = "wdepth_input";
     parm.wdepth->description = _("Name of water depth raster map [m]");
@@ -154,7 +155,7 @@ int main(int argc, char *argv[])
     parm.manin->guisection = _("Input");
 
     parm.maninval = G_define_option();
-    parm.maninval->key = "maninval";
+    parm.maninval->key = "man_value";
     parm.maninval->type = TYPE_DOUBLE;
     parm.maninval->answer = MANINVAL;
     parm.maninval->required = NO;

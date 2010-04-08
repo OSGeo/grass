@@ -212,7 +212,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of input raster map");
+	Opt->description = _("Name of raster map");
 	break;
     case G_OPT_R_MAPS:
 	Opt->key = "map";
@@ -221,7 +221,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of input raster map(s)");
+	Opt->description = _("Name of raster map(s)");
 	break;
     case G_OPT_R_BASE:
 	Opt->key = "base";
@@ -245,7 +245,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of elevation raster map");
+	Opt->description = _("Name of input elevation raster map");
 	break;
     case G_OPT_R_ELEVS:
 	Opt->key = "elevation";
@@ -254,7 +254,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,cell,raster";
-	Opt->description = _("Name of elevation raster map(s)");
+	Opt->description = _("Name of input elevation raster map(s)");
 	break;
 
 	/*g3d maps */
