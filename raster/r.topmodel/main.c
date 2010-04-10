@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     param.basin->guisection = _("Input");
 
     param.fill = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.fill->key = "delevation_output";
+    param.fill->key = "depression_output";
     param.fill->description = _("Name for output depressionless elevation raster map");
     param.fill->required = NO;
     param.fill->guisection = _("Output");
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
     param.dir->guisection = _("Output");
 
     param.belev = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.belev->key = "belevation_output";
+    param.belev->key = "basin_output";
     param.belev->label = _("Name for output basin elevation raster map (o/i)");
     param.belev->description = _("MASK applied");
     param.belev->required = NO;
