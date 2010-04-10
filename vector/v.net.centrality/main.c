@@ -5,7 +5,7 @@
  *
  * AUTHOR(S):  Daniel Bundala
  *
- * PURPOSE:    This module computes various cetrality measures
+ * PURPOSE:    This module computes various centrality measures
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("centrality measures"));
     module->description =
 	_("Computes degree, centrality, betweeness, closeness and eigenvector "
-	 "cetrality measures in the network.");
+	 "centrality measures in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);

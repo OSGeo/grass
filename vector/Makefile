@@ -36,10 +36,19 @@ SUBDIRS = \
 	v.neighbors \
 	v.net \
 	v.net.alloc \
+	v.net.allpairs \
+	v.net.bridge \
+	v.net.centrality \
+	v.net.components \
+	v.net.connectivity \
+	v.net.distance \
+	v.net.flow \
 	v.net.iso \
 	v.net.path \
 	v.net.salesman \
+	v.net.spanningtree \
 	v.net.steiner \
+	v.net.timetable \
 	v.net.visibility \
 	v.normal \
 	v.out.ascii \
