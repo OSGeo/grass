@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("spanning tree"));
-    module->description = _("Computes minimum spanning tree for the network.");
+    module->description =
+	_("Computes minimum spanning tree for the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -79,8 +80,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -112,7 +112,8 @@ int main(int argc, char *argv[])
     edges = NetA_spanning_tree(graph, tree_list);
     G_debug(3, "Edges: %d", edges);
     for (i = 0; i < edges; i++) {
-	int type = Vect_read_line(&In, Points, Cats, abs(tree_list->value[i]));
+	int type =
+	    Vect_read_line(&In, Points, Cats, abs(tree_list->value[i]));
 	Vect_write_line(&Out, type, Points, Cats);
     }
     Vect_destroy_list(tree_list);

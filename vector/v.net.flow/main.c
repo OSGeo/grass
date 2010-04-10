@@ -69,12 +69,14 @@ int main(int argc, char *argv[])
 
     cut_out = G_define_standard_option(G_OPT_V_OUTPUT);
     cut_out->key = "cut";
-    cut_out->description = _("Name for output vector map containing a minimum cut");
+    cut_out->description =
+	_("Name for output vector map containing a minimum cut");
 
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "afcolumn";
     afcol->required = NO;
-    afcol->description = _("Name of arc forward/both direction(s) capacity column");
+    afcol->description =
+	_("Name of arc forward/both direction(s) capacity column");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "abcolumn";
@@ -129,8 +131,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -182,8 +183,8 @@ int main(int argc, char *argv[])
     sink_list = Vect_new_list();
 
     if (NetA_initialise_varray
-	(&In, atoi(fieldsource_opt->answer), GV_POINT, wheresource_opt->answer,
-	 catsource_opt->answer, &varray_source) == 2)
+	(&In, atoi(fieldsource_opt->answer), GV_POINT,
+	 wheresource_opt->answer, catsource_opt->answer, &varray_source) == 2)
 	G_fatal_error(_("Neither %s nor %s was given"), catsource_opt->key,
 		      wheresource_opt->key);
     if (NetA_initialise_varray
@@ -227,9 +228,11 @@ int main(int argc, char *argv[])
     for (i = 1; i <= nlines; i++) {
 	G_percent(i, nlines, 1);
 	int type = Vect_read_line(&In, Points, Cats, i);
+
 	Vect_write_line(&Out, type, Points, Cats);
 	if (type == GV_LINE) {
 	    int cat;
+
 	    Vect_cat_get(Cats, layer, &cat);
 	    if (cat == -1)
 		continue;	/*TODO: warning? */
@@ -249,6 +252,7 @@ int main(int argc, char *argv[])
     if (find_cut) {
 	for (i = 0; i < cut->n_values; i++) {
 	    int type = Vect_read_line(&In, Points, Cats, cut->value[i]);
+
 	    Vect_write_line(&cut_map, type, Points, Cats);
 	}
 	Vect_destroy_list(cut);

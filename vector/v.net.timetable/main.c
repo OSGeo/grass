@@ -45,8 +45,10 @@ void init_route(int connection, int stop)
 {
     if (result.prev_stop[connection][stop] == -1)
 	return;
-    struct segment *seg = (struct segment *)G_calloc(1, sizeof(struct segment));
+    struct segment *seg =
+	(struct segment *)G_calloc(1, sizeof(struct segment));
     int prev_conn = result.prev_conn[connection][stop];
+
     seg->next = head.next;
     head.next = seg;
     seg->route = result.prev_route[connection][stop];
@@ -80,10 +82,11 @@ void init_database(struct Map_info *Out, dbDriver ** driver,
 {
     dbString sql;
     char buf[2000];
+
     /* Create table */
     *Fi = Vect_default_field_info(Out, layer, NULL, GV_MTABLE);
-    Vect_map_add_dblink(Out, layer, NULL, (*Fi)->table, "cat", (*Fi)->database,
-			(*Fi)->driver);
+    Vect_map_add_dblink(Out, layer, NULL, (*Fi)->table, "cat",
+			(*Fi)->database, (*Fi)->driver);
     db_init_string(&sql);
     *driver = db_start_driver_open_database((*Fi)->driver, (*Fi)->database);
     if (*driver == NULL)
@@ -104,18 +107,22 @@ void init_database(struct Map_info *Out, dbDriver ** driver,
 	G_warning(_("Cannot create index"));
 
     if (db_grant_on_table
-	(*driver, (*Fi)->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-	G_fatal_error(_("Cannot grant privileges on table <%s>"), (*Fi)->table);
+	(*driver, (*Fi)->table, DB_PRIV_SELECT,
+	 DB_GROUP | DB_PUBLIC) != DB_OK)
+	G_fatal_error(_("Cannot grant privileges on table <%s>"),
+		      (*Fi)->table);
 
     db_free_string(&sql);
     db_begin_transaction(*driver);
 }
 
 void insert_point(dbDriver * driver, char *table, int cat, int path,
-		  int stop_id, int index, int arrival_time, int departure_time)
+		  int stop_id, int index, int arrival_time,
+		  int departure_time)
 {
     char buf[2000];
     dbString sql;
+
     db_init_string(&sql);
 
     sprintf(buf, "insert into %s values (%d, %d, %d, %d, %d, %d)", table, cat,
@@ -130,11 +137,13 @@ void insert_point(dbDriver * driver, char *table, int cat, int path,
     db_free_string(&sql);
 }
 
-void insert_line(dbDriver * driver, char *table, int cat, int path, int from_id,
-		 int to_id, int route_id, int index, int from_time, int to_time)
+void insert_line(dbDriver * driver, char *table, int cat, int path,
+		 int from_id, int to_id, int route_id, int index,
+		 int from_time, int to_time)
 {
     char buf[2000];
     dbString sql;
+
     db_init_string(&sql);
 
     sprintf(buf, "insert into %s values (%d, %d, %d, %d, %d, %d, %d, %d)",
@@ -154,6 +163,7 @@ int get_nearest_stop(double x, double y, double z, int with_z)
 {
     int i, mini = -1;
     double mind, d;
+
     for (i = 0; i < timetable.stops; i++) {
 	if (!found[i])
 	    continue;
@@ -173,6 +183,7 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
     struct line_pnts *Points;
     struct line_cats *Cats;
     struct ilist *list;
+
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     list = Vect_new_list();
@@ -199,6 +210,7 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
 	     stop_node[timetable.route_stops[r][i + 1]], edges, list) != -1) {
 	    for (j = 0; j < list->n_values; j++) {
 		int type = Vect_read_line(&In, Points, NULL, list->value[j]);
+
 		Vect_write_line(&Out, type, Points, Cats);
 	    }
 	}
@@ -223,8 +235,8 @@ int main(int argc, char *argv[])
 	*stop_time_opt, *to_stop_opt, *walk_length_opt;
     int with_z;
     int layer, mask_type, path_layer;
-    int from_stop, to_stop, start_time, min_change, max_changes, walking_change,
-	ret;
+    int from_stop, to_stop, start_time, min_change, max_changes,
+	walking_change, ret;
     int *stop_pnt, i, nlines, point_counter, *route_pnt;
     int line_counter, index, j;
     struct segment *cur;
@@ -253,7 +265,8 @@ int main(int argc, char *argv[])
     walk_layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     walk_layer_opt->key = "walk_layer";
     walk_layer_opt->answer = "-1";
-    walk_layer_opt->label = _("Layer number or name with walking connections or -1");
+    walk_layer_opt->label =
+	_("Layer number or name with walking connections or -1");
 
     path_layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     path_layer_opt->key = "path_layer";
@@ -270,7 +283,8 @@ int main(int argc, char *argv[])
     stop_time_opt->key = "stop_time";
     stop_time_opt->required = YES;
     stop_time_opt->answer = "stop_time";
-    stop_time_opt->description = _("Name of column name with stop timestamps");
+    stop_time_opt->description =
+	_("Name of column name with stop timestamps");
 
     to_stop_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     to_stop_opt->key = "to_stop";
@@ -283,7 +297,7 @@ int main(int argc, char *argv[])
     walk_length_opt->required = YES;
     walk_length_opt->answer = "length";
     walk_length_opt->description = _("Name of column name with walk lengths");
-    
+
     /* options and flags parser */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -302,8 +316,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -345,15 +358,16 @@ int main(int argc, char *argv[])
 	nnodes = Vect_get_num_nodes(&In);
 	stop_node = (int *)G_calloc(timetable.stops, sizeof(int));
 	lines =
-	    (struct ilist **)G_calloc(timetable.routes, sizeof(struct ilist *));
+	    (struct ilist **)G_calloc(timetable.routes,
+				      sizeof(struct ilist *));
 	edges = (int *)G_calloc(nnodes + 1, sizeof(int));
 	if (!edges || !stop_node || !lines)
 	    G_fatal_error(_("Out of memory"));
 	for (i = 0; i < timetable.routes; i++)
 	    lines[i] = Vect_new_list();
 
-	Vect_net_build_graph(&In, mask_type, path_layer, 0, NULL, NULL, NULL, 0,
-			     0);
+	Vect_net_build_graph(&In, mask_type, path_layer, 0, NULL, NULL, NULL,
+			     0, 0);
 	graph = &(In.graph);
     }
 
@@ -361,15 +375,17 @@ int main(int argc, char *argv[])
     nlines = Vect_get_num_lines(&In);
     for (i = 1; i <= nlines; i++) {
 	int type = Vect_read_line(&In, Points, Cats, i);
+
 	if (type == GV_POINT) {
 	    int cat, stop, node;
+
 	    for (j = 0; j < Cats->n_cats; j++) {
 		if (Cats->field[j] != layer)
 		    continue;
 		cat = Cats->cat[j];
 		stop_pnt =
-		    (int *)bsearch(&cat, stop_ids, timetable.stops, sizeof(int),
-				   int_cmp);
+		    (int *)bsearch(&cat, stop_ids, timetable.stops,
+				   sizeof(int), int_cmp);
 		if (!stop_pnt)
 		    continue;
 
@@ -387,6 +403,7 @@ int main(int argc, char *argv[])
 	}
 	else if (type == GV_LINE && path_layer > 0) {
 	    int cat;
+
 	    for (j = 0; j < Cats->n_cats; j++) {
 		if (Cats->field[j] != path_layer)
 		    continue;
@@ -409,6 +426,7 @@ int main(int argc, char *argv[])
     while (1) {
 	double fx, fy, tx, ty;
 	int path_id;
+
 	if (fgets(buf, sizeof(buf), stdin) == NULL)
 	    break;
 	ret =
@@ -438,8 +456,8 @@ int main(int argc, char *argv[])
 	    }
 	    from_stop = stop_pnt - stop_ids;
 	    stop_pnt =
-		(int *)bsearch(&to_stop, stop_ids, timetable.stops, sizeof(int),
-			       int_cmp);
+		(int *)bsearch(&to_stop, stop_ids, timetable.stops,
+			       sizeof(int), int_cmp);
 	    if (!stop_pnt) {
 		G_warning(_("No stop with category: %d"), to_stop);
 		continue;
@@ -474,12 +492,14 @@ int main(int argc, char *argv[])
 	Vect_cat_set(Cats, 1, point_counter);
 	Vect_write_line(&Out, GV_POINT, Cur, Cats);
 	insert_point(point_driver, point_Fi->table, point_counter, path_id,
-		     stop_ids[from_stop], 1, start_time, head.next->from_time);
+		     stop_ids[from_stop], 1, start_time,
+		     head.next->from_time);
 	point_counter++;
 	Vect_append_points(Prev, Cur, GV_FORWARD);
 	index = 1;
 	for (cur = head.next; cur; cur = cur->next) {
 	    int dept_time, route_id;
+
 	    if (cur->route == -2) {
 		printf("Walk ");
 		route_id = -1;

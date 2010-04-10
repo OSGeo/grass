@@ -27,6 +27,7 @@
 /*Global variables */
 struct Option *deg_opt, *close_opt, *betw_opt, *eigen_opt;
 double *deg, *close, *betw, *eigen;
+
 /* Attribute table */
 dbString sql, tmp;
 dbDriver *driver;
@@ -42,6 +43,7 @@ void append_string(dbString * string, char *s)
 void append_double(dbString * string, double d)
 {
     char buf[50];
+
     sprintf(buf, ",%f", d);
     db_append_string(string, buf);
 }
@@ -49,6 +51,7 @@ void append_double(dbString * string, double d)
 void process_node(int node, int cat)
 {
     char buf[2000];
+
     sprintf(buf, "INSERT INTO %s VALUES(%d", Fi->table, cat);
     db_set_string(&sql, buf);
     if (deg_opt->answer)
@@ -92,8 +95,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("centrality measures"));
-    module->description = _("Computes degree, centrality, betweeness, closeness and eigenvector "
-			    "cetrality measures in the network.");
+    module->description =
+	_("Computes degree, centrality, betweeness, closeness and eigenvector "
+	 "cetrality measures in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -109,7 +113,8 @@ int main(int argc, char *argv[])
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "afcolumn";
     afcol->required = NO;
-    afcol->description = _("Name of arc forward/both direction(s) cost column");
+    afcol->description =
+	_("Name of arc forward/both direction(s) cost column");
     afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -117,7 +122,7 @@ int main(int argc, char *argv[])
     abcol->required = NO;
     abcol->description = _("Name of arc backward direction cost column");
     abcol->guisection = _("Cost");
-    
+
     deg_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     deg_opt->key = "degree";
     deg_opt->required = NO;
@@ -182,8 +187,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -292,8 +296,7 @@ int main(int argc, char *argv[])
 	NetA_degree_centrality(graph, deg);
     }
     if (betw_opt->answer || close_opt->answer) {
-	G_message(_
-		  ("Computing betweenness and/or closeness centrality measure"));
+	G_message(_("Computing betweenness and/or closeness centrality measure"));
 	NetA_betweenness_closeness(graph, betw, close);
 	if (close)
 	    for (i = 1; i <= nnodes; i++)
@@ -312,8 +315,10 @@ int main(int argc, char *argv[])
     for (i = 1; i <= nlines; i++) {
 	G_percent(i, nlines, 1);
 	int type = Vect_read_line(&In, Points, Cats, i);
+
 	if (type == GV_POINT && (!chcat || varray->c[i])) {
 	    int cat, node;
+
 	    if (!Vect_cat_get(Cats, layer, &cat))
 		continue;
 	    Vect_write_line(&Out, type, Points, Cats);
