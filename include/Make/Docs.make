@@ -5,10 +5,15 @@
 HTML2PDF=		htmldoc --footer d.1
 GRASS_PDFDIR=		$(DOCSDIR)/pdf
 
-# generate docs as single HTML document:
+# generate programmer's manual as single HTML document:
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 htmldocs-single:
+	(cd lib/ ; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
+	(cd rfc/ ; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
+	(cd gui/wxpython/ ; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
+	(cd swig/; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
 
-# generate docs as multiple HTML documents:
+# generate programmer's manual as multiple HTML documents:
 htmldocs:
 
 docs_dirs = \
