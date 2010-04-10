@@ -1,0 +1,33 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.net.distance</em> finds the nearast element from set <em>to</em> for every element in set <em>from</em>. 
+
+<h2>NOTES</h2>
+
+These two sets are given by the respective <b>layer</b>, <b>where</b> and <b>cats</b> parameters. The type of <em>to</em> features is specified by <b>to_type</b> parameter and all <em>from</em> features are <em>points</em>. A table is linked to <b>output</b> map containing various information about the relation. More specifically, the table has three columns: <em>cat</em>, <em>tcat</em> and <em>dist</em> storing category of each <em>from</em> feature, category of the nearest <em>to</em> feature and the distance between them respectively. Furthemore, <b>output</b> map contains the shorest path between each <em>cat</em>, <em>tcat</em> pair. Each path consist of several lines. If a line is on the shorest path from a point then the category of this point is assigned to the line. Note that every line may contain more than one category value since single line may be on the shortest path for more than one <em>from</em> feature. And so the shortest paths can be easily obtained by querying lines with corresponding category number.<br>
+The costs of arcs in forward and backward direction are specified by <b>afcolumn</b> and <b>abcolumn</b> columns respectively. If <b>abcolumn</b> is not given, the same cost is used in both directions.  
+
+<h2>EXAMPLES</h2>
+Find shortest path and distance from every school to the nearest hospital and show path from school number one.
+<div class="code"><pre>
+v.net.distance input=city output=nearest from_where="type=school" to_where="type=hospital" afcolumn=SHAPE_LEN
+d.vect nearest cats=1
+</pre></div>
+<P>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="v.net.path.html">v.net.path</a>,
+<a HREF="v.net.allpairs.html">v.net.allpairs</a>,
+<a HREF="v.distance.html">v.net.distance</a>,
+<a HREF="v.net.alloc.html">v.net.alloc</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Daniel Bundala, Google Summer of Code 2009, Student<br>
+Wolf Bergenheim, Mentor
+
+<p>
+<i>Last changed: $Date$</i>
