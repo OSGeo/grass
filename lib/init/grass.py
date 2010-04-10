@@ -307,19 +307,20 @@ def set_browser():
 
 	if windows or cygwin:
 	    # MinGW startup moved to into init.bat
-	    iexplore = os.path.join(os.getenv('ProgramFiles'),"Internet Explorer","iexplore.exe")
+	    iexplore = os.path.join(os.getenv('ProgramFiles'), "Internet Explorer", "iexplore.exe")
 	    if os.access(iexplore, os.F_OK):
 		browser = iexplore
 	    else:
 		browser = "iexplore"
 	else:
 	    # the usual suspects
-	    browsers = ["htmlview", "konqueror", "mozilla", "mozilla-firefox", "firefox", "opera", "netscape", "dillo"]
+	    browsers = [ "htmlview", "konqueror", "mozilla", "mozilla-firefox",
+                         "firefox", "iceweasel", "opera", "netscape", "dillo" ]
 	    for b in browsers:
 		if find_exe(b):
 		    browser = b
 		    break
-
+    
     if macosx and browser:
 	# OSX doesn't execute browsers from the shell PATH - route thru a script
 	browser = gfile('etc', "html_browser_mac.sh")
@@ -329,7 +330,7 @@ def set_browser():
 	message("WARNING: Searched for a web browser, but none found.")
 	# even so we set konqueror to make lib/gis/parser.c happy:
 	browser = "konqueror"
-
+    
     os.environ['GRASS_HTML_BROWSER'] = browser
 
 def grass_intro():
@@ -732,7 +733,12 @@ def bash_startup():
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
-
+    
+    for env, value in os.environ.iteritems():
+        if env.find('GRASS_') < 0:
+            continue
+        f.write("export %s=\"%s\"\n" % (env, value))
+    
     f.close()
 
     exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
