@@ -1,17 +1,17 @@
 /*!
-  \file vector/neta/articulation_point.c
-  
-  \brief Network Analysis library - connected components
+   \file vector/neta/articulation_point.c
 
-  Computes strongly and weakly connected components.
-  
-  (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Daniel Bundala (Google Summer of Code 2009)
-*/
+   \brief Network Analysis library - connected components
+
+   Computes strongly and weakly connected components.
+
+   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Daniel Bundala (Google Summer of Code 2009)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,13 +21,13 @@
 #include <grass/dgl/graph.h>
 
 /*!
-  \brief Get number of articulation points in the graph
+   \brief Get number of articulation points in the graph
 
-  \param graph input graph
-  \param[out] articulation_list list of articulation points
-  
-  \return number of points
-  \return -1 on error
+   \param graph input graph
+   \param[out] articulation_list list of articulation points
+
+   \return number of points
+   \return -1 on error
  */
 int NetA_articulation_points(dglGraph_s * graph,
 			     struct ilist *articulation_list)
@@ -45,6 +45,7 @@ int NetA_articulation_points(dglGraph_s * graph,
     dglInt32_t *current_node;
     int stack_size;
     int i, time;
+
     nnodes = dglGet_NodeCount(graph);
     current =
 	(dglEdgesetTraverser_s *) G_calloc(nnodes + 1,
@@ -74,14 +75,17 @@ int NetA_articulation_points(dglGraph_s * graph,
     for (current_node = dglNode_T_First(&nt); current_node;
 	 current_node = dglNode_T_Next(&nt)) {
 	dglInt32_t current_id = dglNodeGet_Id(graph, current_node);
+
 	if (tin[current_id] == 0) {
 	    int children = 0;	/*number of subtrees rooted at the root/current_node */
+
 	    stack[0] = current_node;
 	    stack_size = 1;
 	    parent[current_id] = NULL;
 	    while (stack_size) {
 		dglInt32_t *node = stack[stack_size - 1];
 		dglInt32_t node_id = dglNodeGet_Id(graph, node);
+
 		if (tin[node_id] == 0)	/*vertex visited for the first time */
 		    min_tin[node_id] = tin[node_id] = ++time;
 		else {		/*return from the recursion */
@@ -102,6 +106,7 @@ int NetA_articulation_points(dglGraph_s * graph,
 		    if (to == parent[node_id])
 			continue;	/*skip parrent */
 		    int to_id = dglNodeGet_Id(graph, to);
+
 		    if (tin[to_id]) {	/*back edge, cannot be a bridge/articualtion point */
 			if (tin[to_id] < min_tin[node_id])
 			    min_tin[node_id] = tin[to_id];

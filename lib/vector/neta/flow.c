@@ -1,18 +1,18 @@
 /*!
-  \file vector/neta/flow.c
-  
-  \brief Network Analysis library - flow in graph
+   \file vector/neta/flow.c
 
-  Computes the length of the shortest path between all pairs of nodes
-  in the network.
-  
-  (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Daniel Bundala (Google Summer of Code 2009)
-*/
+   \brief Network Analysis library - flow in graph
+
+   Computes the length of the shortest path between all pairs of nodes
+   in the network.
+
+   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Daniel Bundala (Google Summer of Code 2009)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,20 +30,20 @@ dglInt32_t sign(dglInt32_t x)
 }
 
 /*!
-  \brief Get max flow from source to sink.
+   \brief Get max flow from source to sink.
 
-  Array flow stores flow for each edge. Negative flow corresponds to a
-  flow in opposite direction The function assumes that the edge costs
-  correspond to edge capacities.
+   Array flow stores flow for each edge. Negative flow corresponds to a
+   flow in opposite direction The function assumes that the edge costs
+   correspond to edge capacities.
 
-  \param graph input graph
-  \param source_list list of sources
-  \param sink_list list of sinks
-  \param[out] flow max flows
+   \param graph input graph
+   \param source_list list of sources
+   \param sink_list list of sinks
+   \param[out] flow max flows
 
-  \return number of flows
-  \return -1 on failure
-*/
+   \return number of flows
+   \return -1 on failure
+ */
 int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 	      struct ilist *sink_list, int *flow)
 {
@@ -77,6 +77,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
     while (1) {
 	dglInt32_t node, edge_id, min_residue;
 	int found = -1;
+
 	begin = end = 0;
 	for (i = 0; i < source_list->n_values; i++)
 	    queue[end++] = source_list->value[i];
@@ -87,6 +88,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 	while (begin != end && found == -1) {
 	    dglInt32_t vertex = queue[begin++];
 	    dglInt32_t *edge, *node = dglGetNode(graph, vertex);
+
 	    dglEdgeset_T_Initialize(&et, graph,
 				    dglNodeGet_OutEdgeset(graph, node));
 	    for (edge = dglEdgeset_T_First(&et); edge;
@@ -117,6 +119,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 			    prev[node]) - sign(edge_id) * flow[abs(edge_id)];
 	while (!is_source[node]) {
 	    dglInt32_t residue;
+
 	    edge_id = dglEdgeGet_Id(graph, prev[node]);
 	    residue =
 		dglEdgeGet_Cost(graph,
@@ -145,20 +148,20 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 }
 
 /*!
-  \brief Calculates minimum cut between source(s) and sink(s).
+   \brief Calculates minimum cut between source(s) and sink(s).
 
-  Flow is the array produced by NetA_flow() method when called with
-  source_list and sink_list as the input. The output of this and
-  NetA_flow() method should be the same.
+   Flow is the array produced by NetA_flow() method when called with
+   source_list and sink_list as the input. The output of this and
+   NetA_flow() method should be the same.
 
-  \param graph input graph
-  \param source_list list of sources
-  \param sink_list list of sinks
-  \param[out] cut list of edges (cut)
+   \param graph input graph
+   \param source_list list of sources
+   \param sink_list list of sinks
+   \param[out] cut list of edges (cut)
 
-  \return number of edges
-  \return -1 on failure
-*/
+   \return number of edges
+   \return -1 on failure
+ */
 int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
 		 struct ilist *sink_list, int *flow, struct ilist *cut)
 {
@@ -190,12 +193,15 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
     while (begin != end) {
 	dglInt32_t vertex = queue[begin++];
 	dglInt32_t *edge, *node = dglGetNode(graph, vertex);
-	dglEdgeset_T_Initialize(&et, graph, dglNodeGet_OutEdgeset(graph, node));
+
+	dglEdgeset_T_Initialize(&et, graph,
+				dglNodeGet_OutEdgeset(graph, node));
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
 	    dglInt32_t cap = dglEdgeGet_Cost(graph, edge);
 	    dglInt32_t id = dglEdgeGet_Id(graph, edge);
-	    dglInt32_t to = dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
+	    dglInt32_t to =
+		dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
 	    if (!visited[to] && cap > sign(id) * flow[abs(id)]) {
 		visited[to] = 1;
 		queue[end++] = to;
@@ -209,12 +215,14 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
 	if (!visited[i])
 	    continue;
 	dglInt32_t *node, *edgeset, *edge;
+
 	node = dglGetNode(graph, i);
 	edgeset = dglNodeGet_OutEdgeset(graph, node);
 	dglEdgeset_T_Initialize(&et, graph, edgeset);
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
 	    dglInt32_t to, edge_id;
+
 	    to = dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
 	    edge_id = abs(dglEdgeGet_Id(graph, edge));
 	    if (!visited[to] && flow[edge_id] != 0) {
@@ -231,22 +239,22 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
 }
 
 /*!
-  \brief Splits each vertex of in graph into two vertices
+   \brief Splits each vertex of in graph into two vertices
 
-  The method splits each vertex of in graph into two vertices: in
-  vertex and out vertex. Also, it adds an edge from an in vertex to
-  the corresponding out vertex (capacity=2) and it adds an edge from
-  out vertex to in vertex for each edge present in the in graph
-  (forward capacity=1, backward capacity=0). If the id of a vertex is
-  v then id of in vertex is 2*v-1 and of out vertex 2*v.
-  
-  \param in from graph
-  \param out to graph
-  \param node_cost list of node costs
+   The method splits each vertex of in graph into two vertices: in
+   vertex and out vertex. Also, it adds an edge from an in vertex to
+   the corresponding out vertex (capacity=2) and it adds an edge from
+   out vertex to in vertex for each edge present in the in graph
+   (forward capacity=1, backward capacity=0). If the id of a vertex is
+   v then id of in vertex is 2*v-1 and of out vertex 2*v.
 
-  \return number of undirected edges in the graph
-  \return -1 on failure
-*/
+   \param in from graph
+   \param out to graph
+   \param node_cost list of node costs
+
+   \return number of undirected edges in the graph
+   \return -1 on failure
+ */
 int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
 {
     dglInt32_t opaqueset[16] =
@@ -254,17 +262,21 @@ int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
     dglNodeTraverser_s nt;
     dglInt32_t nnodes, edge_cnt;
     dglInt32_t *cur_node;
+
     nnodes = dglGet_NodeCount(in);
     dglInitialize(out, (dglByte_t) 1, (dglInt32_t) 0, (dglInt32_t) 0,
 		  opaqueset);
     dglNode_T_Initialize(&nt, in);
     edge_cnt = 0;
     dglInt32_t max_node_cost = 0;
+
     for (cur_node = dglNode_T_First(&nt); cur_node;
 	 cur_node = dglNode_T_Next(&nt)) {
 	dglInt32_t v = dglNodeGet_Id(in, cur_node);
+
 	edge_cnt++;
 	dglInt32_t cost = 1;
+
 	if (node_costs)
 	    cost = node_costs[v];
 	if (cost > max_node_cost)
@@ -279,10 +291,12 @@ int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
 	dglEdgesetTraverser_s et;
 	dglInt32_t *edge;
 	dglInt32_t v = dglNodeGet_Id(in, cur_node);
+
 	dglEdgeset_T_Initialize(&et, in, dglNodeGet_OutEdgeset(in, cur_node));
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
 	    dglInt32_t to;
+
 	    to = dglNodeGet_Id(in, dglEdgeGet_Tail(in, edge));
 	    edge_cnt++;
 	    dglAddEdge(out, 2 * v, 2 * to - 1, max_node_cost + 1, edge_cnt);
