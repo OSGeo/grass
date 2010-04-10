@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     catset1_opt->key = "set1_cats";
     catset1_opt->label = _("Set1 category values");
     catset1_opt->guisection = _("Set1");
-    
+
     whereset1_opt = G_define_standard_option(G_OPT_DB_WHERE);
     whereset1_opt->key = "set1_where";
     whereset1_opt->label =
@@ -87,12 +87,12 @@ int main(int argc, char *argv[])
     fieldset2_opt->key = "set2_layer";
     fieldset2_opt->description = _("Set2 layer number or name");
     fieldset2_opt->guisection = _("Set2");
-	
+
     catset2_opt = G_define_standard_option(G_OPT_V_CATS);
     catset2_opt->key = "set2_cats";
     catset2_opt->description = _("Set2 category values");
     catset2_opt->guisection = _("Set2");
-	
+
     whereset2_opt = G_define_standard_option(G_OPT_DB_WHERE);
     whereset2_opt->key = "set2_where";
     whereset2_opt->label =
@@ -114,8 +114,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 

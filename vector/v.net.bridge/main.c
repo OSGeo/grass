@@ -45,7 +45,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("articulation points"));
-    module->description = _("Computes bridges and articulation points in the network.");
+    module->description =
+	_("Computes bridges and articulation points in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -78,8 +79,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -119,6 +119,7 @@ int main(int argc, char *argv[])
 
 	for (i = 0; i < articulations; i++) {
 	    double x, y, z;
+
 	    Vect_get_node_coor(&In, articulation_list->value[i], &x, &y, &z);
 	    Vect_reset_line(Points);
 	    Vect_append_point(Points, x, y, z);

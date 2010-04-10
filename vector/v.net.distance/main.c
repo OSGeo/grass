@@ -62,9 +62,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("shortest path"));
     module->label = _("Computes shortest distance via the network between "
 		      "the given sets of features.");
-    module->description = _("Finds the shortest paths from a feature 'to' to every feature 'from' "
-			    "and various information about this realtion are uploaded to the attribute table.");
-    
+    module->description =
+	_("Finds the shortest paths from a feature 'to' to every feature 'from' "
+	 "and various information about this realtion are uploaded to the attribute table.");
+
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
     fieldf_opt->key = "from_layer";
     fieldf_opt->label = _("From layer number or name");
     fieldf_opt->guisection = _("From");
-    
+
     catf_opt = G_define_standard_option(G_OPT_V_CATS);
     catf_opt->key = "from_cats";
     catf_opt->label = _("From category values");
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
     to_type_opt->answer = "point";
     to_type_opt->description = _("To feature type");
     to_type_opt->guisection = _("To");
-    
+
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "afcolumn";
     afcol->required = YES;
@@ -134,12 +135,11 @@ int main(int argc, char *argv[])
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
 				 GV_FATAL_EXIT);
-    
+
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -230,6 +230,7 @@ int main(int argc, char *argv[])
 	    int node, tcat, cat;
 	    double cost;
 	    dglInt32_t *vertex, vertex_id;
+
 	    if (!Vect_cat_get(Cats, flayer, &cat))
 		continue;
 	    Vect_get_line_nodes(&In, i, &node, NULL);
@@ -262,6 +263,7 @@ int main(int argc, char *argv[])
     for (i = 1; i <= nlines; i++)
 	if (on_path[i]->n_cats > 0) {
 	    int type = Vect_read_line(&In, Points, NULL, i);
+
 	    Vect_write_line(&Out, type, Points, on_path[i]);
 	}
 

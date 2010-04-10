@@ -71,9 +71,10 @@ int main(int argc, char *argv[])
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "afcolumn";
     afcol->required = NO;
-    afcol->description = _("Name of arc forward/both direction(s) cost column");
+    afcol->description =
+	_("Name of arc forward/both direction(s) cost column");
     afcol->guisection = _("Cost");
-	
+
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "abcolumn";
     abcol->required = NO;
@@ -104,8 +105,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -187,11 +187,13 @@ int main(int argc, char *argv[])
     max_cat = 0;
     for (i = 1; i <= nlines; i++) {
 	int type = Vect_read_line(&In, Points, Cats, i);
+
 	for (j = 0; j < Cats->n_cats; j++)
 	    if (Cats->cat[j] > max_cat)
 		max_cat = Cats->cat[j];
 	if (type == GV_POINT) {
 	    int node;
+
 	    Vect_get_line_nodes(&In, i, &node, NULL);
 	    Vect_cat_get(Cats, layer, &cats[node]);
 	    if (cats[node] != -1) {

@@ -24,10 +24,11 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-int insert_new_record(dbDriver * driver, struct field_info *Fi, dbString * sql,
-		      int cat, int comp)
+int insert_new_record(dbDriver * driver, struct field_info *Fi,
+		      dbString * sql, int cat, int comp)
 {
     char buf[2000];
+
     sprintf(buf, "insert into %s values (%d, %d)", Fi->table, cat, comp);
     db_set_string(sql, buf);
     G_debug(3, db_get_string(sql));
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("components"));
     module->description =
 	_("Computes strongly and weakly connected components in the network.");
-    
+
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -106,8 +107,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      map_in->answer);
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
@@ -172,11 +172,13 @@ int main(int argc, char *argv[])
     nlines = Vect_get_num_lines(&In);
     for (i = 1; i <= nlines; i++) {
 	int comp, cat;
+
 	type = Vect_read_line(&In, Points, Cats, i);
 	if (!Vect_cat_get(Cats, layer, &cat))
 	    continue;
 	if (type == GV_LINE || type == GV_BOUNDARY) {
 	    int node1, node2;
+
 	    Vect_get_line_nodes(&In, i, &node1, &node2);
 	    if (component[node1] == component[node2]) {
 		comp = component[node1];
@@ -187,6 +189,7 @@ int main(int argc, char *argv[])
 	}
 	else if (type == GV_POINT) {
 	    int node;
+
 	    Vect_get_line_nodes(&In, i, &node, NULL);
 	    comp = component[node];
 	    covered[node] = 1;
