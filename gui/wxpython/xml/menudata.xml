@@ -1059,7 +1059,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Shadows map</label>
-	      <help>Calculates cast shadow areas from sun position and DEM. Either A: exact sun position is specified, or B: date/time to calculate the sun position by r.sunmask it</help>
+	      <help>Calculates cast shadow areas from sun position and elevation raster map.</help>
 	      <keywords>raster</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sunmask</command>
@@ -1177,103 +1177,103 @@
 	  <items>
 	    <menuitem>
 	      <label>Carve stream channels</label>
-	      <help>Takes vector stream data, transforms it to raster and subtracts depth from the output DEM.</help>
-	      <keywords>raster</keywords>
+	      <help>Generates stream channels</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.carve</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Fill lake</label>
 	      <help>Fills lake from seed at given level.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.lake</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Depressionless map and flowlines</label>
-	      <help>Filters and generates a depressionless elevation map and a flow direction map from a given elevation layer.</help>
-	      <keywords>raster</keywords>
+	      <help>Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map.</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.fill.dir</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Flow accumulation</label>
-	      <help>Flow computation for massive grids (Float version).</help>
-	      <keywords>raster</keywords>
+	      <help>Flow computation for massive grids (float version).</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.terraflow</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Flow lines</label>
-	      <help>Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)</help>
-	      <keywords>raster</keywords>
+	      <help>Constructs flow lines.</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.flow</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>SIMWE Overland flow modeling</label>
-	      <help>Overland flow hydrologic simulation using path sampling method (SIMWE)</help>
-	      <keywords>raster,flow,hydrology</keywords>
+	      <help>Overland flow hydrologic simulation using path sampling method (SIMWE).</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sim.water</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>SIMWE Sediment flux modeling</label>
-	      <help>Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)</help>
-	      <keywords>raster,sediment flow,erosion,deposition</keywords>
+	      <help>Sediment transport and erosion/deposition simulation using path sampling method (SIMWE).</help>
+	      <keywords>raster,hydrology,sediment flow,erosion,deposition</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sim.sediment</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Topographic index map</label>
-	      <help>Creates topographic index [ln(a/tan(beta))] map from elevation map.</help>
-	      <keywords>raster</keywords>
+	      <help>Creates topographic index map from elevation raster map.</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.topidx</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>TOPMODEL simulation</label>
 	      <help>Simulates TOPMODEL which is a physically based hydrologic model.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.topmodel</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>USLE K-factor</label>
-	      <help>USLE Soil Erodibility Factor (K)</help>
-	      <keywords>raster,soil,erosion,USLE</keywords>
+	      <help>Computes USLE Soil Erodibility Factor (K).</help>
+	      <keywords>raster,hydrology,soil,erosion</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.uslek</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>USLE R-factor</label>
 	      <help>Computes USLE R factor, Rainfall erosivity index.</help>
-	      <keywords>raster,rainfall,erosion,USLE</keywords>
+	      <keywords>raster,hydrology,rainfall,erosion</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.usler</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Watershed subbasins</label>
-	      <help>Generates a raster map layer showing watershed subbasins.</help>
-	      <keywords>raster</keywords>
+	      <help>Generates watershed subbasins raster map.</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.basins.fill</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Watershed analysis</label>
-	      <help>Watershed basin analysis program.</help>
-	      <keywords>raster</keywords>
+	      <help>Computes watershed basins.</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.watershed</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Watershed basin creation</label>
-	      <help>Watershed basin creation program.</help>
-	      <keywords>raster</keywords>
+	      <help>Creates watershed basins.</help>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.water.outlet</command>
 	    </menuitem>
@@ -2060,7 +2060,15 @@
 	</menuitem>
 	<menu>
 	  <label>Network analysis</label>
-	  <items>
+	  <items>`
+	    <menuitem>
+	      <label>Network maintenance</label>
+	      <help>Performs network maintenance.</help>
+	      <keywords>vector,networking</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net</command>
+	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Allocate subnets</label>
 	      <help>Allocate subnets for nearest centres (direction from centre).</help>
@@ -2069,19 +2077,13 @@
 	      <command>v.net.alloc</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Network maintenance</label>
-	      <help>Performs network maintenance.</help>
+	      <label>Split net</label>
+	      <help>Splits net by cost isolines.</help>
 	      <keywords>vector,networking</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>v.net</command>
+	      <command>v.net.iso</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Visibility network</label>
-	      <help>Visibility graph construction.</help>
-	      <keywords>vector,path,visibility</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>v.net.visibility</command>
-	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Shortest path</label>
 	      <help>Finds shortest path on vector network.</help>
@@ -2090,18 +2092,83 @@
 	      <command>v.net.path</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Split net</label>
-	      <help>Splits net by cost isolines.</help>
-	      <keywords>vector,networking</keywords>
+	      <label>Shortest path for sets of features</label>
+	      <help>Computes shortest distance via the network between the given sets of features.</help>
+	      <keywords>vector,network,shortest path</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>v.net.iso</command>
+	      <command>v.net.distance</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>Shortest path using timetables</label>
+	      <help>Finds shortest path using timetables.</help>
+	      <keywords>vector,network,shortest path</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.timetable</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Shortest path for all pairs</label>
+	      <help>Computes the shortest path between all pairs of nodes in the network.</help>
+	      <keywords>vector,network,shortest path</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.allpairs</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Visibility network</label>
+	      <help>Visibility graph construction.</help>
+	      <keywords>vector,path,visibility</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.visibility</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Bridges and articulation points</label>
+	      <help>Computes bridges and articulation points in the network.</help>
+	      <keywords>vector,network,articulation points</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.bridge</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Maximum flow</label>
+	      <help>Computes the maximum flow between two sets of nodes in the network.</help>
+	      <keywords>vector,network,flow</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.flow</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Vertex connectivity</label>
+	      <help>Computes vertex connectivity between two sets of nodes in the network.</help>
+	      <keywords>vector,network,connectivity</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.connectivity</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Components</label>
+	      <help>Computes strongly and weakly connected components in the network.</help>
+	      <keywords>vector,network,components</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.components</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Centrality</label>
+	      <help>Computes degree, centrality, betweeness, closeness and eigenvector cetrality measures in the network.</help>
+	      <keywords>vector,network,centrality measures</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.centrality</command>
+	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Steiner tree</label>
 	      <help>Create Steiner tree for the network and given terminals</help>
 	      <keywords>vector,networking</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.steiner</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Minimum spanning tree</label>
+	      <help>Computes minimum spanning tree for the network.</help>
+	      <keywords>vector,network,spanning tree</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.net.spanningtree</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Traveling salesman analysis</label>
@@ -2171,7 +2238,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Convex hull</label>
-	      <help>Creates convex hull for vector point map.</help>
+	      <help>Produces a convex hull for a given vector map.</help>
 	      <keywords>vector,geometry</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.hull</command>
@@ -2963,14 +3030,14 @@
       <items>
 	<menuitem>
 	  <label>GRASS help</label>
-	  <help>Display the HTML man pages of GRASS</help>
+	  <help>Display the HTML man pages of GRASS GIS</help>
 	  <keywords>general,manual,help</keywords>
 	  <handler>RunMenuCmd</handler>
 	  <command>g.manual -i</command>
 	</menuitem>
 	<menuitem>
 	  <label>GUI help</label>
-	  <help>Display the HTML man pages of GRASS</help>
+	  <help>Display the HTML man pages of GRASS GIS</help>
 	  <keywords>general,manual,help</keywords>
 	  <handler>RunMenuCmd</handler>
 	  <command>g.manual wxGUI</command>

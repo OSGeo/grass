@@ -74,7 +74,7 @@ class MenuData:
 	elif mi.tag == 'menu':
 	    return self._getMenu(mi)
 	else:
-	    raise Exception()
+	    raise Exception(_("Unknow tag"))
 
     def _getMenu(self, m):
         """!Get menu
