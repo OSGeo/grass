@@ -108,6 +108,7 @@ undocumented.</i>
  - vask:	Cursor management library - \ref vask
  - %vector:	\ref vectorlib (GRASS Vector and Direct Graph Library)
   - vedit:      \ref veditlib - %vector editing
+  - neta:       \ref netalib
  - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
 <!--<li>image3:	extra imagery library (mainly still unused) - \ref image3lib-->
 <!--<li>D:		display library - \ref d_displaylib-->
