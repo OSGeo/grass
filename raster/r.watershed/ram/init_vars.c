@@ -42,7 +42,7 @@ int init_vars(int argc, char *argv[])
 	    wat_flag++;
 	else if (sscanf(argv[r], "drainage_output=%s", asp_name) == 1)
 	    asp_flag++;
-	else if (sscanf(argv[r], "delevation_input=%s", pit_name) == 1)
+	else if (sscanf(argv[r], "depression_input=%s", pit_name) == 1)
 	    pit_flag++;
 	else if (sscanf(argv[r], "threshold=%d", &bas_thres) == 1) ;
 	else if (sscanf(argv[r], "slope_length_output=%lf", &max_length) == 1) ;
