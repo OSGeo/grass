@@ -1,17 +1,17 @@
 /*!
-  \file vector/neta/spanningtree.c
-  
-  \brief Network Analysis library - spanning tree
+   \file vector/neta/spanningtree.c
 
-  Computes minimum spanning tree in the network.
-  
-  (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Daniel Bundala (Google Summer of Code 2009)
-*/
+   \brief Network Analysis library - spanning tree
+
+   Computes minimum spanning tree in the network.
+
+   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Daniel Bundala (Google Summer of Code 2009)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,6 +44,7 @@ static void uf_release(struct union_find *uf)
 static int uf_find(struct union_find *uf, int v)
 {
     int cur = v, tmp;
+
     while (uf->parent[cur] != cur)
 	cur = uf->parent[cur];
     while (uf->parent[v] != v) {
@@ -59,6 +60,7 @@ static void uf_union(struct union_find *uf, int u, int v)
 {
     int parent_u = uf_find(uf, u);
     int parent_v = uf_find(uf, v);
+
     if (parent_u != parent_v)
 	uf->parent[parent_u] = parent_v;
 }
@@ -75,20 +77,21 @@ static int cmp_edge(const void *pa, const void *pb)
 }
 
 /*!
-  \brief Get number of edges in the spanning forest
+   \brief Get number of edges in the spanning forest
 
-  \param graph input graph
-  \param[out] list of edges
+   \param graph input graph
+   \param[out] list of edges
 
-  \return number of edges
-  \return -1 on failure
-*/
+   \return number of edges
+   \return -1 on failure
+ */
 int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
 {
     int nnodes, edges, nedges, i, index;
     edge_cost_pair *perm;	/*permutaion of edges in ascending order */
     struct union_find uf;
     dglEdgesetTraverser_s et;
+
     nnodes = dglGet_NodeCount(graph);
     nedges = dglGet_EdgeCount(graph);
     perm = (edge_cost_pair *) G_calloc(nedges, sizeof(edge_cost_pair));
@@ -103,6 +106,7 @@ int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
     for (i = 1; i <= nnodes; i++) {
 	G_percent(i, nnodes + nedges, 1);
 	dglInt32_t *edge;
+
 	dglEdgeset_T_Initialize(&et, graph,
 				dglNodeGet_OutEdgeset(graph,
 						      dglGetNode(graph,

@@ -1,17 +1,17 @@
 /*!
-  \file vector/neta/timetables.c
-  
-  \brief Network Analysis library - timetables
+   \file vector/neta/timetables.c
 
-  Shortest path using timetables.
-  
-  (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Daniel Bundala (Google Summer of Code 2009)
-*/
+   \brief Network Analysis library - timetables
+
+   Shortest path using timetables.
+
+   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Daniel Bundala (Google Summer of Code 2009)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,16 +23,16 @@
 #include <grass/neta.h>
 
 /*!
-  \brief Get number of distinct elements
+   \brief Get number of distinct elements
 
-  \param driver DB driver
-  \param sql SQl string
-  \param[out] list of lengths
-  \param[out] list of ids
-  
-  \return number of distinct elements 
-  \return -1 on failure
-*/
+   \param driver DB driver
+   \param sql SQl string
+   \param[out] list of lengths
+   \param[out] list of ids
+
+   \return number of distinct elements 
+   \return -1 on failure
+ */
 int NetA_init_distinct(dbDriver * driver, dbString * sql, int **lengths,
 		       int **ids)
 {
@@ -94,22 +94,22 @@ static int cmp_int(const void *a, const void *b)
 }
 
 /*!
-  \brief Initialises timetable from a database
+   \brief Initialises timetable from a database
 
-  \param In pointer to Map_info structure
-  \param route_layer layer number of routes
-  \param walk_layer layer number of walkers
-  \param route_id id of route
-  \param times list of timestamps
-  \param to_stop ?
-  \param walk_length walk length as string
-  \param timetable pointer to neta_timetable
-  \param route_ids list of route ids
-  \param stop_ids lits of stop ids
+   \param In pointer to Map_info structure
+   \param route_layer layer number of routes
+   \param walk_layer layer number of walkers
+   \param route_id id of route
+   \param times list of timestamps
+   \param to_stop ?
+   \param walk_length walk length as string
+   \param timetable pointer to neta_timetable
+   \param route_ids list of route ids
+   \param stop_ids lits of stop ids
 
-  \return 0 on success
-  \return non-zero value on failure
-*/
+   \return 0 on success
+   \return non-zero value on failure
+ */
 int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
 				int walk_layer, char *route_id, char *times,
 				char *to_stop, char *walk_length,
@@ -126,6 +126,7 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
 
     dbDriver *driver;
     struct field_info *Fi;
+
     Fi = Vect_get_field(In, route_layer);
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL)
@@ -138,20 +139,25 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
 	    route_id);
     db_set_string(&sql, buf);
     timetable->routes =
-	NetA_init_distinct(driver, &sql, &(timetable->route_length), route_ids);
+	NetA_init_distinct(driver, &sql, &(timetable->route_length),
+			   route_ids);
     if (timetable->routes < 0)
 	return 1;
 
-    sprintf(buf, "select %s from %s order by %s", Fi->key, Fi->table, Fi->key);
+    sprintf(buf, "select %s from %s order by %s", Fi->key, Fi->table,
+	    Fi->key);
     db_set_string(&sql, buf);
     timetable->stops =
 	NetA_init_distinct(driver, &sql, &(timetable->stop_length), stop_ids);
     if (timetable->stops < 0)
 	return 1;
 
-    timetable->route_stops = (int **)G_calloc(timetable->routes, sizeof(int *));
-    timetable->route_times = (int **)G_calloc(timetable->routes, sizeof(int *));
-    timetable->stop_routes = (int **)G_calloc(timetable->stops, sizeof(int *));
+    timetable->route_stops =
+	(int **)G_calloc(timetable->routes, sizeof(int *));
+    timetable->route_times =
+	(int **)G_calloc(timetable->routes, sizeof(int *));
+    timetable->stop_routes =
+	(int **)G_calloc(timetable->stops, sizeof(int *));
     timetable->stop_times = (int **)G_calloc(timetable->stops, sizeof(int *));
     timetable->walk_length = (int *)G_calloc(timetable->stops, sizeof(int));
     timetable->walk_stops = (int **)G_calloc(timetable->stops, sizeof(int *));
@@ -221,15 +227,16 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
 	timetable->stop_times[stop][timetable->stop_length[stop]++] = time;
 
 	timetable->route_stops[route][timetable->route_length[route]] = stop;
-	timetable->route_times[route][timetable->route_length[route]++] = time;
+	timetable->route_times[route][timetable->route_length[route]++] =
+	    time;
     }
     db_close_cursor(&cursor);
 
     if (walk_layer != -1) {
 
 	Fi = Vect_get_field(In, walk_layer);
-	sprintf(buf, "select %s, %s, %s from %s", Fi->key, to_stop, walk_length,
-		Fi->table);
+	sprintf(buf, "select %s, %s, %s from %s", Fi->key, to_stop,
+		walk_length, Fi->table);
 	db_set_string(&sql, buf);
 
 	if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
@@ -246,8 +253,8 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
 	    value = db_get_column_value(column2);
 	    stop = db_get_value_int(value);
 	    stop_pnt =
-		(int *)bsearch(&stop, *stop_ids, timetable->stops, sizeof(int),
-			       cmp_int);
+		(int *)bsearch(&stop, *stop_ids, timetable->stops,
+			       sizeof(int), cmp_int);
 	    if (stop_pnt) {
 		value = db_get_column_value(column1);
 		stop = db_get_value_int(value);
@@ -289,8 +296,8 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
 	    value = db_get_column_value(column2);
 	    stop = db_get_value_int(value);
 	    stop_pnt =
-		(int *)bsearch(&stop, *stop_ids, timetable->stops, sizeof(int),
-			       cmp_int);
+		(int *)bsearch(&stop, *stop_ids, timetable->stops,
+			       sizeof(int), cmp_int);
 	    if (stop_pnt) {
 		stop2 = stop_pnt - (*stop_ids);
 		value = db_get_column_value(column1);
@@ -324,26 +331,27 @@ typedef struct
 
 static neta_heap_data *new_heap_data(int conns, int v)
 {
-    neta_heap_data *d = (neta_heap_data *) G_calloc(1, sizeof(neta_heap_data));
+    neta_heap_data *d =
+	(neta_heap_data *) G_calloc(1, sizeof(neta_heap_data));
     d->v = v;
     d->conns = conns;
     return d;
 }
 
 /*!
-  \brief Update Dijkstra structures
+   \brief Update Dijkstra structures
 
-  \param olc_conns old connection
-  \param new_conns new connection
-  \param to old 'to' node
-  \param new_dst new 'to' node
-  \param v ?
-  \param route id of route
-  \param rows ?
-  \param update ?
-  \param[out] result pointer to neta_timetable_result structure
-  \param heap ?
-*/
+   \param olc_conns old connection
+   \param new_conns new connection
+   \param to old 'to' node
+   \param new_dst new 'to' node
+   \param v ?
+   \param route id of route
+   \param rows ?
+   \param update ?
+   \param[out] result pointer to neta_timetable_result structure
+   \param heap ?
+ */
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
 			  int v, int route, int rows, int update,
 			  neta_timetable_result * result, dglHeap_s * heap)
@@ -356,6 +364,7 @@ void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
 	result->prev_conn[new_conns][to] = old_conns;
 	if (update) {
 	    dglHeapData_u heap_data;
+
 	    heap_data.pv = (void *)new_heap_data(new_conns, to);
 	    dglHeapInsertMin(heap, new_dst, ' ', heap_data);
 	}
@@ -363,23 +372,23 @@ void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
 }
 
 /*!
-  \brief Computes the earliest arrival time.
+   \brief Computes the earliest arrival time.
 
-  Computes the earliest arrival time to to_stop from from_stop
-  starting at start_time, or -1 if no path exists
+   Computes the earliest arrival time to to_stop from from_stop
+   starting at start_time, or -1 if no path exists
 
-  \param timetable pointer to neta_timetable structure
-  \param from_stop 'from' node
-  \param to_stop 'to' stop
-  \param start_time start timestamp
-  \param min_change ?
-  \param max_changes ?
-  \param walking_change ?
-  \param[out] result pointer to neta_timetable_result
+   \param timetable pointer to neta_timetable structure
+   \param from_stop 'from' node
+   \param to_stop 'to' stop
+   \param start_time start timestamp
+   \param min_change ?
+   \param max_changes ?
+   \param walking_change ?
+   \param[out] result pointer to neta_timetable_result
 
-  \return ?
-  \return -1 on error
-*/
+   \return ?
+   \return -1 on error
+ */
 int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 				 int to_stop, int start_time, int min_change,
 				 int max_changes, int walking_change,
@@ -389,6 +398,7 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
     dglHeap_s heap;
 
     int opt_conns, rows = 1;
+
     if (max_changes != -1)
 	rows = max_changes + 2;
 
@@ -407,7 +417,8 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
     for (i = 0; i < rows; i++) {
 	result->dst[i] = (int *)G_calloc(timetable->stops, sizeof(int));
 	result->prev_stop[i] = (int *)G_calloc(timetable->stops, sizeof(int));
-	result->prev_route[i] = (int *)G_calloc(timetable->stops, sizeof(int));
+	result->prev_route[i] =
+	    (int *)G_calloc(timetable->stops, sizeof(int));
 	result->prev_conn[i] = (int *)G_calloc(timetable->stops, sizeof(int));
 	if (!result->dst[i] || !result->prev_stop[i] || !result->prev_route[i]
 	    || !result->prev_conn[i]) {
@@ -438,6 +449,7 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
     result->dst[0][from_stop] = start_time - min_change;
     result->prev_stop[0][from_stop] = result->prev_route[0][from_stop] = -1;
     dglHeapData_u heap_data;
+
     heap_data.pv = (void *)new_heap_data(0, from_stop);
     dglHeapInsertMin(&heap, start_time - min_change, ' ', heap_data);
 
@@ -445,6 +457,7 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 	dglInt32_t v, dist, conns;
 	dglHeapNode_s heap_node;
 	int new_conns, walk_conns, update;
+
 	if (!dglHeapExtractMin(&heap, &heap_node))
 	    break;
 	v = ((neta_heap_data *) (heap_node.value.pv))->v;
@@ -465,6 +478,7 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 	    for (i = 0; i < timetable->walk_length[v]; i++) {
 		int to = timetable->walk_stops[v][i];
 		int new_dst = dist + timetable->walk_times[v][i];
+
 		NetA_update_dijkstra(conns, walk_conns, to, new_dst, v, -2,
 				     rows, update, result, &heap);
 	    }
@@ -476,6 +490,7 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 	for (i = 0; i < timetable->stop_length[v]; i++)
 	    if (timetable->stop_times[v][i] >= dist + min_change) {
 		int route = timetable->stop_routes[v][i];
+
 		/*find the index of v on the route */
 		for (j = 0; j < timetable->route_length[route]; j++)
 		    if (timetable->route_stops[route][j] == v)
@@ -483,6 +498,7 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 		j++;
 		for (; j < timetable->route_length[route]; j++) {
 		    int to = timetable->route_stops[route][j];
+
 		    NetA_update_dijkstra(conns, new_conns, to,
 					 timetable->route_times[route][j], v,
 					 route, rows, 1, result, &heap);
@@ -504,21 +520,22 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 }
 
 /*!
-  \brief Get time
+   \brief Get time
 
-  Get time when route "route" arrives at stop "stop" or -1.
+   Get time when route "route" arrives at stop "stop" or -1.
 
-  \param timetable pointer to neta_timetable structure
-  \param stop 'stop' node id
-  \param route route id
+   \param timetable pointer to neta_timetable structure
+   \param stop 'stop' node id
+   \param route route id
 
-  \return time
-  \return -1 if not found
-*/
+   \return time
+   \return -1 if not found
+ */
 int NetA_timetable_get_route_time(neta_timetable * timetable, int stop,
 				  int route)
 {
     int i;
+
     for (i = 0; i < timetable->route_length[route]; i++)
 	if (timetable->route_stops[route][i] == stop)
 	    return timetable->route_times[route][i];
@@ -526,13 +543,14 @@ int NetA_timetable_get_route_time(neta_timetable * timetable, int stop,
 }
 
 /*!
-  \brief Free neta_timetable_result structure
-  
-  \param result pointer to neta_timetable_result structure
-*/
+   \brief Free neta_timetable_result structure
+
+   \param result pointer to neta_timetable_result structure
+ */
 void NetA_timetable_result_release(neta_timetable_result * result)
 {
     int i;
+
     for (i = 0; i < result->rows; i++) {
 	G_free(result->dst[i]);
 	G_free(result->prev_stop[i]);

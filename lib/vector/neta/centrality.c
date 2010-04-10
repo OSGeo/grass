@@ -1,17 +1,17 @@
 /*!
-  \file vector/neta/centality.c
-  
-  \brief Network Analysis library - centrality
+   \file vector/neta/centality.c
 
-  Centrality measures
-  
-  (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Daniel Bundala (Google Summer of Code 2009)
-*/
+   \brief Network Analysis library - centrality
+
+   Centrality measures
+
+   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Daniel Bundala (Google Summer of Code 2009)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,17 +22,18 @@
 #include <grass/neta.h>
 
 /*!
-  \brief Computes degree centrality measure.
+   \brief Computes degree centrality measure.
 
-  Array degree has to be properly initialised to nnodes+1 elements
+   Array degree has to be properly initialised to nnodes+1 elements
 
-  \param graph input graph
-  \param[out] array of degrees
-*/
+   \param graph input graph
+   \param[out] array of degrees
+ */
 void NetA_degree_centrality(dglGraph_s * graph, double *degree)
 {
     int i;
     double nnodes = dglGet_NodeCount(graph);
+
     for (i = 1; i <= nnodes; i++)
 	degree[i] =
 	    dglNodeGet_OutDegree(graph,
@@ -40,21 +41,22 @@ void NetA_degree_centrality(dglGraph_s * graph, double *degree)
 }
 
 /*!
-  \brief Computes eigenvector centrality using edge costs as weights.
+   \brief Computes eigenvector centrality using edge costs as weights.
 
-  \param graph input graph
-  \param iterations number of iterations
-  \param error ?
-  \param[out] eigenvector eigen vector value
-  
-  \return 0 on success
-  \return -1 on failure
-*/
+   \param graph input graph
+   \param iterations number of iterations
+   \param error ?
+   \param[out] eigenvector eigen vector value
+
+   \return 0 on success
+   \return -1 on failure
+ */
 int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
 				double error, double *eigenvector)
 {
     int i, iter, nnodes;
     double *tmp;
+
     nnodes = dglGet_NodeCount(graph);
     tmp = (double *)G_calloc(nnodes + 1, sizeof(double));
     if (!tmp) {
@@ -71,11 +73,13 @@ int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
 	dglInt32_t *node;
 	dglNodeTraverser_s nt;
 	dglEdgesetTraverser_s et;
+
 	dglNode_T_Initialize(&nt, graph);
 	for (node = dglNode_T_First(&nt); node; node = dglNode_T_Next(&nt)) {
 	    dglInt32_t node_id = dglNodeGet_Id(graph, node);
 	    double cur_value = eigenvector[node_id];
 	    dglInt32_t *edge;
+
 	    dglEdgeset_T_Initialize(&et, graph,
 				    dglNodeGet_OutEdgeset(graph, node));
 	    for (edge = dglEdgeset_T_First(&et); edge;
@@ -87,12 +91,14 @@ int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
 	}
 	dglNode_T_Release(&nt);
 	double cum_error = 0, max_value = tmp[1];
+
 	for (i = 2; i <= nnodes; i++)
 	    if (tmp[i] > max_value)
 		max_value = tmp[i];
 	for (i = 1; i <= nnodes; i++) {
 	    tmp[i] /= max_value;
-	    cum_error += (tmp[i] - eigenvector[i]) * (tmp[i] - eigenvector[i]);
+	    cum_error +=
+		(tmp[i] - eigenvector[i]) * (tmp[i] - eigenvector[i]);
 	    eigenvector[i] = tmp[i];
 	}
 	if (cum_error < error)
@@ -105,18 +111,18 @@ int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
 }
 
 /*!
-  \brief Computes betweenness and closeness centrality measure using Brandes algorithm. 
+   \brief Computes betweenness and closeness centrality measure using Brandes algorithm. 
 
-  Edge costs must be nonnegative. If some edge costs are negative then
-  the behaviour of this method is undefined.
-  
-  \param graph input graph
-  \param[out] betweenness betweeness values
-  \param[out] closeness cloneness values
-  
-  \return 0 on success
-  \return -1 on failure
-*/  
+   Edge costs must be nonnegative. If some edge costs are negative then
+   the behaviour of this method is undefined.
+
+   \param graph input graph
+   \param[out] betweenness betweeness values
+   \param[out] closeness cloneness values
+
+   \return 0 on success
+   \return -1 on failure
+ */
 int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 			       double *closeness)
 {
@@ -172,6 +178,7 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 	dglHeapInsertMin(&heap, 0, ' ', heap_data);
 	while (1) {
 	    dglInt32_t v, dist;
+
 	    if (!dglHeapExtractMin(&heap, &heap_node))
 		break;
 	    v = heap_node.value.ul;
@@ -181,6 +188,7 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 	    stack[stack_size++] = v;
 
 	    dglInt32_t *edge;
+
 	    dglEdgeset_T_Initialize(&et, graph,
 				    dglNodeGet_OutEdgeset(graph,
 							  dglGetNode(graph,
@@ -190,6 +198,7 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 		dglInt32_t *to = dglEdgeGet_Tail(graph, edge);
 		dglInt32_t to_id = dglNodeGet_Id(graph, to);
 		dglInt32_t d = dglEdgeGet_Cost(graph, edge);
+
 		if (dst[to_id] == -1 || dst[to_id] > dist + d) {
 		    dst[to_id] = dist + d;
 		    Vect_reset_list(prev[to_id]);
@@ -209,11 +218,13 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 	    delta[i] = 0;
 	for (i = stack_size - 1; i >= 0; i--) {
 	    dglInt32_t w = stack[i];
+
 	    if (closeness)
 		closeness[s] += dst[w];
 
 	    for (j = 0; j < prev[w]->n_values; j++) {
 		dglInt32_t v = prev[w]->value[j];
+
 		delta[v] += (cnt[v] / (double)cnt[w]) * (1.0 + delta[w]);
 	    }
 	    if (w != s && betweenness)
