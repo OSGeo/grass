@@ -93,7 +93,6 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
         <li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
-        <li><a href="gis.m.html">gis.m</a> and <a href=d.m.html>d.m</a> TCL/TK-based GUI frontend</li>
        </ul>
 
        <ul>
