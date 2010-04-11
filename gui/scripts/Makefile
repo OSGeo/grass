@@ -1,14 +1,17 @@
 MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
+include $(MODULE_TOPDIR)/include/Make/Python.make
 
-SRCFILES := $(wildcard *.*)
-DSTFILES := $(patsubst %,$(ETC)/gui/scripts/%,$(SRCFILES))
+ETCDIR = $(ETC)/gui/scripts
+
+SRCFILES := $(wildcard *.py)
+DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
 default: $(DSTFILES)
 
-$(ETC)/gui/scripts/%: % | $(ETC)/gui/scripts
+$(ETCDIR)/%: % | $(ETCDIR)
 	$(INSTALL) $< $@
 
-$(ETC)/gui/scripts:
+$(ETCDIR):
 	$(MKDIR) $@
