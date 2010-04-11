@@ -158,8 +158,39 @@ class ModelFrame(wx.Frame):
 
     def OnModelNew(self, event):
         """!Create new model"""
-        pass
-
+        Debug.msg(4, "ModelFrame.OnModelNew():")
+        
+        # ask user to save current model
+        if self.modelFile and self.modelChanged:
+            self.OnModelSave()
+        elif self.modelFile is None and \
+                (len(self.actions) > 0 or len(self.data) > 0):
+            dlg = wx.MessageDialog(self, message=_("Current model is not empty. "
+                                                   "Do you want to store current settings "
+                                                   "to model file?"),
+                                   caption=_("Create new model?"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT |
+                                   wx.CANCEL | wx.ICON_QUESTION)
+            ret = dlg.ShowModal()
+            if ret == wx.ID_YES:
+                self.OnModelSaveAs()
+            elif ret == wx.ID_CANCEL:
+                dlg.Destroy()
+                return
+            
+            dlg.Destroy()
+        
+        # delete all items
+        self.canvas.GetDiagram().DeleteAllShapes()
+        self.actions = list()
+        self.data = list()
+        self.canvas.Refresh()
+        
+        # no model file loaded
+        self.modelFile = None
+        self.modelChanged = False
+        self.SetTitle(self.baseTitle)
+        
     def OnModelOpen(self, event):
         """!Load model from file"""
         filename = ''
@@ -183,7 +214,7 @@ class ModelFrame(wx.Frame):
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
         self.SetStatusText(_('%d actions loaded into model') % len(self.actions), 0)
         
-    def OnModelSave(self, event):
+    def OnModelSave(self, event = None):
         """!Save model to file"""
         if self.modelFile:
             dlg = wx.MessageDialog(self, message=_("Model file <%s> already exists. "
