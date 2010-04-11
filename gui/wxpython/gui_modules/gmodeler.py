@@ -206,7 +206,7 @@ class ModelFrame(wx.Frame):
         Debug.msg(4, "ModelFrame.OnModelOpen(): filename=%s" % filename)
         
         # close current model
-        ### self.OnModelClose()
+        self.OnModelClose()
         
         self.LoadModelFile(filename)
         
@@ -268,14 +268,33 @@ class ModelFrame(wx.Frame):
         self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
         self.SetStatusText(_('File <%s> saved') % self.modelFile, 0)
 
-    def OnModelClose(self, event):
+    def OnModelClose(self, event = None):
         """!Close model file"""
         Debug.msg(4, "ModelFrame.OnModelClose(): file=%s" % self.modelFile)
+        # ask user to save current model
+        if self.modelFile and self.modelChanged:
+            self.OnModelSave()
+        elif self.modelFile is None and \
+                (len(self.actions) > 0 or len(self.data) > 0):
+            dlg = wx.MessageDialog(self, message=_("Current model is not empty. "
+                                                   "Do you want to store current settings "
+                                                   "to model file?"),
+                                   caption=_("Create new model?"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT |
+                                   wx.CANCEL | wx.ICON_QUESTION)
+            ret = dlg.ShowModal()
+            if ret == wx.ID_YES:
+                self.OnModelSaveAs()
+            elif ret == wx.ID_CANCEL:
+                dlg.Destroy()
+                return
+            
+            dlg.Destroy()
+        
         self.modelFile = None
         self.SetTitle(self.baseTitle)
         
         self.canvas.GetDiagram().DeleteAllShapes()
-        
         self.actions = list()
         self.data    = list()
         
