@@ -77,9 +77,10 @@ class AbstractToolbar(wx.ToolBar):
         if label:
             Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" % \
                   (tool, label, bitmap))
+            
             toolWin = self.AddLabelTool(tool, label, bitmap,
-                                           bmpDisabled, kind,
-                                           shortHelp, longHelp)
+                                        bmpDisabled, kind,
+                                        shortHelp, longHelp)
             self.Bind(wx.EVT_TOOL, handler, toolWin)
         else: # separator
             self.AddSeparator()
@@ -1393,6 +1394,7 @@ class ModelToolbar(AbstractToolbar):
         self.save = wx.NewId()
         self.action = wx.NewId()
         self.data = wx.NewId()
+        self.relation = wx.NewId()
         self.run = wx.NewId()
         self.validate = wx.NewId()
         self.quit = wx.NewId()
@@ -1415,6 +1417,9 @@ class ModelToolbar(AbstractToolbar):
             (self.action, 'action', Icons['modelActionAdd'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelActionAdd'].GetLabel(), Icons['modelActionAdd'].GetDesc(),
              self.parent.OnAddAction),
+            (self.relation, 'relation', Icons['modelRelation'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelRelation'].GetLabel(), Icons['modelRelation'].GetDesc(),
+             self.parent.OnDefineRelation),
             ('', '', '', '', '', '', ''),
             (self.run, 'run', Icons['modelRun'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRun'].GetLabel(), Icons['modelRun'].GetDesc(),

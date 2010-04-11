@@ -69,6 +69,11 @@ class ModelFrame(wx.Frame):
         self.modelFile = None    # loaded model
         self.modelChanged = False
         
+        self.cursors = {
+            "default" : wx.StockCursor(wx.CURSOR_ARROW),
+            "cross"   : wx.StockCursor(wx.CURSOR_CROSS),
+            }
+        
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
@@ -88,7 +93,8 @@ class ModelFrame(wx.Frame):
         
         self.canvas = ModelCanvas(self)
         self.canvas.SetBackgroundColour(wx.WHITE)
-
+        self.canvas.SetCursor(self.cursors["default"])
+        
         self.goutput = goutput.GMConsole(parent = self, pageid = 1)
                 
         self.modelPage   = self.notebook.AddPage(self.canvas, text=_('Model'))
@@ -121,6 +127,23 @@ class ModelFrame(wx.Frame):
         evthandler.SetPreviousHandler(item.GetEventHandler())
         item.SetEventHandler(evthandler)
 
+    def FindAction(self, id):
+        """!Find action by id"""
+        for action in self.actions:
+            if action.GetId() == id:
+                return action
+        
+        return None
+
+    def FindData(self, value, prompt):
+        """!Find data by value, and prompt"""
+        for data in self.data:
+            if data.GetValue() == value and \
+                    data.GetPrompt() == prompt:
+                return data
+        
+        return None
+            
     def ModelChanged(self):
         """!Update window title"""
         if not self.modelChanged:
@@ -292,6 +315,10 @@ class ModelFrame(wx.Frame):
         """!Remove item from model"""
         pass
 
+    def OnDefineRelation(self, event):
+        """!Define relation between data and action items"""
+        self.canvas.SetCursor(self.cursors["cross"])
+    
     def OnAddAction(self, event):
         """!Add action to model"""
         if self.searchDialog is None:
@@ -366,18 +393,36 @@ class ModelFrame(wx.Frame):
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
         layer.SetProperties(dcmd, params, propwin)
-            
+        
         if params: # add data items
             width, height = self.canvas.GetSize()
             x = [width/2 + 200, width/2 - 200]
             for p in params['params']:
-                if p.get('value', None) and \
-                        p.get('prompt', '') in ('raster', 'vector', 'raster3d'):
+                if p.get('prompt', '') in ('raster', 'vector', 'raster3d') and \
+                        (p.get('value', None) or \
+                             p.get('age', 'old') != 'old'):
                     # create data item
+                    data = layer.FindData(p.get('name', ''))
+                    if data:
+                        data.SetValue(p.get('value', ''))
+                        continue
+                    
+                    data = self.FindData(p.get('value', ''),
+                                         p.get('prompt', ''))
+                    if data:
+                        if p.get('age', 'old') == 'old':
+                            self._addLine(data, layer)
+                            data.AddAction(layer, direction = 'from')
+                        else:
+                            self._addLine(layer, data)
+                            data.AddAction(layer, direction = 'to')
+                        continue
+                    
                     data = ModelData(self, name = p.get('name', ''),
                                      value = p.get('value', ''),
                                      prompt = p.get('prompt', ''),
                                      x = x.pop(), y = height/2)
+                    layer.AddData(data)
                     self.canvas.diagram.AddShape(data)
                     data.Show(True)
                     
@@ -391,10 +436,20 @@ class ModelFrame(wx.Frame):
                         self._addLine(layer, data)
                         data.AddAction(layer, direction = 'to')
             
+            # valid ?
+            valid = True
+            for p in params['params']:
+                if p.get('value', '') == '' and \
+                        p.get('default', '') == '':
+                    valid = False
+                    break
+            
+            layer.SetValid(valid)
+            
             self.canvas.Refresh()
         
         self.SetStatusText(layer.GetLog(), 0)
-
+        
     def _addLine(self, fromShape, toShape):
         """!Add connection
 
@@ -446,11 +501,22 @@ class ModelFrame(wx.Frame):
                                       width = action['size'][0],
                                       height = action['size'][1],
                                       cmd = action['cmd'])
+            actionShape.SetId(action['id'])
             self.canvas.diagram.AddShape(actionShape)
             actionShape.Show(True)
             
             self._addEvent(actionShape)
             self.actions.append(actionShape)
+            
+            task = menuform.GUI().ParseCommand(cmd = actionShape.GetLog(string = False),
+                                               show = None)
+            valid = True
+            for p in task.get_options()['params']:
+                if p.get('value', '') == '' and \
+                        p.get('default', '') == '':
+                    valid = False
+                    break
+            actionShape.SetValid(valid)
         
         # load data & connections
         for data in gxmXml.data:
@@ -467,14 +533,17 @@ class ModelFrame(wx.Frame):
             
             self._addEvent(dataShape)
             self.data.append(dataShape)
+
+            for idx in range(len(data['id'])):
+                actionShape = self.FindAction(data['id'][idx])
+                if data['from'][idx] is True:
+                    self._addLine(dataShape, actionShape)
+                    dataShape.AddAction(actionShape, direction = 'from')
+                elif data['from'][idx] is False:
+                    self._addLine(actionShape, dataShape)
+                    dataShape.AddAction(actionShape, direction = 'to')
             
-            actionShape = self.actions[0]
-            if data['from'] is True:
-                self._addLine(dataShape, actionShape)
-                dataShape.AddAction(actionShape, direction = 'from')
-            elif data['from'] is False:
-                self._addLine(actionShape, dataShape)
-                dataShape.AddAction(actionShape, direction = 'to')
+            actionShape.AddData(dataShape)
         
         self.canvas.Refresh(True)
         
@@ -526,7 +595,15 @@ class ModelAction(ogl.RectangleShape):
         self.cmd     = cmd
         self.params  = None
         self.propWin = None
+        self.id      = -1    # used for gxm file
+        
+        self.data = list()   # list of connected data items
 
+        # colors
+        self.colors = dict()
+        self.colors['valid'] = wx.LIGHT_GREY_BRUSH
+        self.colors['invalid'] = wx.WHITE_BRUSH
+        
         ogl.RectangleShape.__init__(self, width, height)
         
         # self.Draggable(True)
@@ -534,12 +611,20 @@ class ModelAction(ogl.RectangleShape):
         self.SetX(x)
         self.SetY(y)
         self.SetPen(wx.BLACK_PEN)
-        self.SetBrush(wx.LIGHT_GREY_BRUSH)
+        self.SetBrush(self.colors['invalid'])
         if self.cmd and len(self.cmd) > 0:
             self.AddText(self.cmd[0])
         else:
             self.AddText('<<module>>')
 
+    def GetId(self):
+        """!Get id"""
+        return self.id
+
+    def SetId(self, id):
+        """!Set id"""
+        self.id = id
+    
     def SetProperties(self, dcmd, params, propwin):
         """!Record properties dialog"""
         self.cmd = dcmd
@@ -575,7 +660,27 @@ class ModelAction(ogl.RectangleShape):
         """!Set dictionary of parameters"""
         self.params = params
         self.cmd    = cmd
-    
+
+    def SetValid(self, isvalid):
+        """!Set instance to be valid/invalid"""
+        if isvalid:
+            self.SetBrush(self.colors['valid'])
+        else:
+            self.SetBrush(self.colors['invalid'])
+
+    def AddData(self, item):
+        """!Register new data item"""
+        if item not in self.data:
+            self.data.append(item)
+        
+    def FindData(self, name):
+        """!Find data item by name"""
+        for d in self.data:
+            if d.GetName() == name:
+                return d
+        
+        return None
+
 class ModelData(ogl.EllipseShape):
     """!Data item class"""
     def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = 175, height = 50):
@@ -603,9 +708,13 @@ class ModelData(ogl.EllipseShape):
         
         if name:
             self.AddText(name)
-            self.AddText(value)
         else:
             self.AddText(_('unknown'))
+        
+        if value:
+            self.AddText(value)
+        else:
+            self.AddText('\n')
 
     def GetLog(self, string = True):
         """!Get logging info"""
@@ -631,7 +740,10 @@ class ModelData(ogl.EllipseShape):
         self.value = value
         self.ClearText()
         self.AddText(self.name)
-        self.AddText(self.value)
+        if value:
+            self.AddText(self.value)
+        else:
+            self.AddText('\n')
         for direction in ('from', 'to'):
             for action in self.actions[direction]:
                 task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
@@ -921,7 +1033,10 @@ class ProcessModelFile:
         """!Get node text"""
         p = node.find(tag)
         if p is not None:
-            return utils.normalize_whitespace(p.text)
+            if p.text:
+                return utils.normalize_whitespace(p.text)
+            else:
+                return ''
         
         return default
     
@@ -935,10 +1050,13 @@ class ProcessModelFile:
                 cmd = self._processTask(task)
             else:
                 cmd = None
+
+            aId = int(action.get('id', -1))
             
             self.actions.append({ 'pos' : pos,
                                   'size': size,
-                                  'cmd' : cmd })
+                                  'cmd' : cmd,
+                                  'id'  : aId })
             
     def _getDim(self, node):
         """!Get position and size of shape"""
@@ -972,14 +1090,14 @@ class ProcessModelFile:
                 prompt = param.get('prompt', None)
                 value = self._filterValue(self._getNodeText(param, 'value'))
                 
-            action = data.find('action')
-            aId = fromDir = None
-            if action is not None:
-                aId = int(action.get('id', None))
+            aId = list()
+            fromDir = list()
+            for action in data.findall('action'):
+                aId.append(int(action.get('id', None)))
                 if action.get('dir', 'to') == 'to':
-                    fromDir = False
+                    fromDir.append(False)
                 else:
-                    fromDir = True
+                    fromDir.append(True)
             
             self.data.append({ 'pos' : pos,
                                'size': size,
@@ -1048,6 +1166,7 @@ class WriteModelFile:
         id = 1
         self.indent += 4
         for action in self.actions:
+            action.SetId(id)
             self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
                               (' ' * self.indent, id, action.GetName(), action.GetX(), action.GetY(),
                                action.GetWidth(), action.GetHeight()))
@@ -1096,11 +1215,13 @@ class WriteModelFile:
             self.fd.write('%s</parameter>\n' % (' ' * self.indent))
             self.indent -= 4
             for action in data.GetActions('from'):
-                self.fd.write('%s<action id="1" dir="from" />\n' % \
-                                  (' ' * self.indent))
+                id = action.GetId()
+                self.fd.write('%s<action id="%d" dir="from" />\n' % \
+                                  (' ' * self.indent, id))
             for action in data.GetActions('to'):
-                self.fd.write('%s<action id="1" dir="to" />\n' % \
-                                  (' ' * self.indent))
+                id = action.GetId()
+                self.fd.write('%s<action id="%d" dir="to" />\n' % \
+                                  (' ' * self.indent, id))
             
             self.fd.write('%s</data>\n' % (' ' * self.indent))
             
