@@ -520,9 +520,7 @@ class ModelFrame(wx.Frame):
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
         
-        busy = wx.BusyInfo(message=_("Please wait, loading model..."),
-                           parent=self)
-        wx.Yield()
+        self.SetStatusText(_("Please wait, loading model..."), 0)
         
         # load actions
         for action in gxmXml.actions:
@@ -575,6 +573,8 @@ class ModelFrame(wx.Frame):
                     dataShape.AddAction(actionShape, direction = 'to')
             
             actionShape.AddData(dataShape)
+        
+        self.SetStatusText('', 0)
         
         self.canvas.Refresh(True)
         
