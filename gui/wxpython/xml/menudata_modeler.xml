@@ -56,6 +56,11 @@
 	  <shortcut>Ctrl+A</shortcut>
 	</menuitem>
 	<menuitem>
+	  <label>Define relation</label>
+	  <help>Define relation between data and action items</help>
+	  <handler>OnDefineRelation</handler>
+	</menuitem>
+	<menuitem>
 	  <label>Remove item</label>
 	  <help>Remove action/data from model</help>
 	  <handler>OnRemoveItem</handler>
