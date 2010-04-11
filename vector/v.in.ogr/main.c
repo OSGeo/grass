@@ -262,15 +262,17 @@ int main(int argc, char *argv[])
 
 	for (iDriver = 0; iDriver < OGRGetDriverCount(); iDriver++) {
 	    OGRSFDriverH poDriver = OGRGetDriver(iDriver);
-
+	    const char *pszRWFlag;
+	    
 	    if (OGR_Dr_TestCapability(poDriver, ODrCCreateDataSource))
-		fprintf(stdout, "  %s (read/write)\n",
-			OGR_Dr_GetName(poDriver));
+		pszRWFlag = "rw";
 	    else
-		fprintf(stdout, "  %s (readonly)\n",
-			OGR_Dr_GetName(poDriver));
-	}
+		pszRWFlag = "ro";
 
+	    fprintf(stdout, " %s (%s): %s\n",
+		    OGR_Dr_GetName(poDriver),
+		    pszRWFlag, OGR_Dr_GetName(poDriver));
+	}
 	exit(EXIT_SUCCESS);
     }
 

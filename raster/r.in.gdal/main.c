@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
     if (flag_f->answer) {
 	int iDr;
 
-	fprintf(stdout, _("Supported Formats:\n"));
+	G_message(_("Available GDAL Drivers:"));
 	for (iDr = 0; iDr < GDALGetDriverCount(); iDr++) {
 	    GDALDriverH hDriver = GDALGetDriver(iDr);
 	    const char *pszRWFlag;
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 	    else
 		pszRWFlag = "ro";
 
-	    fprintf(stdout, "  %s (%s): %s\n",
+	    fprintf(stdout, " %s (%s): %s\n",
 		    GDALGetDriverShortName(hDriver),
 		    pszRWFlag, GDALGetDriverLongName(hDriver));
 	}
