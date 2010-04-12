@@ -28,7 +28,7 @@ MODDOMAIN = grassmods
 WXPYDOMAIN = grasswxpy
 DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(WXPYDOMAIN)
 
-LIB_POTFILES = find ../lib -name '*.c' | xargs grep -l "_(\""
+LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(\""
 MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\""
 WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\""
 
