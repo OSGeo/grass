@@ -26,7 +26,7 @@
 
 /*Global variables */
 struct Option *deg_opt, *close_opt, *betw_opt, *eigen_opt;
-double *deg, *close, *betw, *eigen;
+double *deg, *closeness, *betw, *eigen;
 
 /* Attribute table */
 dbString sql, tmp;
@@ -57,7 +57,7 @@ void process_node(int node, int cat)
     if (deg_opt->answer)
 	append_double(&sql, deg[node]);
     if (close_opt->answer)
-	append_double(&sql, close[node]);
+	append_double(&sql, closeness[node]);
     if (betw_opt->answer)
 	append_double(&sql, betw[node]);
     if (eigen_opt->answer)
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
     graph = &(In.graph);
     nnodes = dglGet_NodeCount(graph);
 
-    deg = close = betw = eigen = NULL;
+    deg = closeness = betw = eigen = NULL;
 
     covered = (char *)G_calloc(nnodes + 1, sizeof(char));
     if (!covered)
@@ -273,8 +273,8 @@ int main(int argc, char *argv[])
     }
 
     if (close_opt->answer) {
-	close = (double *)G_calloc(nnodes + 1, sizeof(double));
-	if (!close)
+	closeness = (double *)G_calloc(nnodes + 1, sizeof(double));
+	if (!closeness)
 	    G_fatal_error(_("Out of memory"));
     }
 
@@ -297,10 +297,10 @@ int main(int argc, char *argv[])
     }
     if (betw_opt->answer || close_opt->answer) {
 	G_message(_("Computing betweenness and/or closeness centrality measure"));
-	NetA_betweenness_closeness(graph, betw, close);
-	if (close)
+	NetA_betweenness_closeness(graph, betw, closeness);
+	if (closeness)
 	    for (i = 1; i <= nnodes; i++)
-		close[i] /= (double)In.cost_multip;
+		closeness[i] /= (double)In.cost_multip;
     }
     if (eigen_opt->answer) {
 	G_message(_("Computing eigenvector centrality measure"));
@@ -354,8 +354,8 @@ int main(int argc, char *argv[])
     G_free(covered);
     if (deg)
 	G_free(deg);
-    if (close)
-	G_free(close);
+    if (closeness)
+	G_free(closeness);
     if (betw)
 	G_free(betw);
     if (eigen)
