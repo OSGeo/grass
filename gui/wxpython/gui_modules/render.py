@@ -442,8 +442,8 @@ class Map(object):
         try:
             windfile = open (filename, "r")
         except IOError, e:
-            sys.exit(_("Error: Unable to open '%s'. Reason: %s. wxGUI exited.\n") % \
-                         filename, e)
+            sys.exit(_("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n") % \
+                         { 'file' : filename, 'ret' : e})
         
         for line in windfile.readlines():
             line = line.strip()
