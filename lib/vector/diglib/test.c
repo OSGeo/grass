@@ -56,7 +56,7 @@ int main()
     port_off_t = sizeof(off_t);
 
     if (NULL == (fp.file = fopen("test.tmp", "wb+"))) {
-	G_fatal_error(_("Unable tp open test.tmp file"));
+	G_fatal_error(_("Unable to open test.tmp file"));
     }
     fp.loaded = 0;
 
