@@ -60,15 +60,23 @@ import os
 import atexit
 import grass.script as grass
 
+vecttmp = None
+tmp1 = None
+usermask = None
+mapset = None
+
 # what to do in case of user break:
 def cleanup():
     #delete internal mask and any TMP files:
-    rasts = [tmp1 + ext for ext in ['', '.buf', '_filled']]
-    grass.run_command('g.remove', flags = 'f', rast = rasts)
-    grass.run_command('g.remove', flags = 'f', vect = vecttmp)
+    if tmp1:
+	rasts = [tmp1 + ext for ext in ['', '.buf', '_filled']]
+	grass.run_command('g.remove', flags = 'f', rast = rasts)
+    if vecttmp:
+	grass.run_command('g.remove', flags = 'f', vect = vecttmp)
     grass.run_command('g.remove', rast = 'MASK')
-    if grass.find_file(usermask, mapset = mapset)['file']:
-	grass.run_command('g.rename', rast = (usermask, 'MASK'))
+    if usermask and mapset:
+	if grass.find_file(usermask, mapset = mapset)['file']:
+	    grass.run_command('g.rename', rast = (usermask, 'MASK'))
 
 def main():
     global vecttmp, tmp1, usermask, mapset
@@ -78,12 +86,12 @@ def main():
     tension = options['tension']
     smooth = options['smooth']
 
+    mapset = grass.gisenv()['MAPSET']
+    unique = str(os.getpid())
+
     #check if input file exists
     if not grass.find_file(input)['file']:
 	grass.fatal(_("<%s> does not exist.") % input)
-
-    mapset = grass.gisenv()['MAPSET']
-    unique = str(os.getpid())
 
     # check if a MASK is already present:
     usermask = "usermask_mask." + unique
