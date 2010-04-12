@@ -1,0 +1,63 @@
+<!--	grass-gxm.dtd
+
+	Copyright (C) 2010 by the GRASS Development Team
+	Author: Martin Landa <landa.martin gmail.com>
+	
+	This program is free software under the GPL (>=v2)
+	Read the file COPYING coming with GRASS for details.
+-->
+
+
+<!--
+        grass-gxm defines model file content
+-->
+
+<!ELEMENT grass-gxm (gxm)>
+
+<!ELEMENT gxm (action*, data*)>
+
+<!--    an action defines action properties (usually GRASS modules)
+-->
+<!ELEMENT action (task)>
+<!ATTLIST action id	CDATA #REQUIRED>
+<!ATTLIST action name	CDATA #REQUIRED>
+<!ATTLIST action pos	CDATA #REQUIRED>
+<!ATTLIST action size	CDATA #REQUIRED>
+
+<!--	a task describes the interface of a single
+	GRASS command
+-->
+<!ELEMENT task	        (flag*, parameter*)>
+<!ATTLIST task	name	CDATA #REQUIRED>
+
+<!--	a parameter must have a name and a value
+-->
+<!ELEMENT parameter     (value)>
+<!ATTLIST parameter	name	CDATA #REQUIRED>
+
+<!--    value of parameter
+-->
+<!ELEMENT value         (#PCDATA)>
+
+<!--    enabled flag
+-->
+<!ELEMENT flag          EMPTY>
+<!ATTLIST flag          name    CDATA #REQUIRED>
+
+<!--    a data defines data properties (usually data layers)
+-->
+<!ELEMENT data (data-parameter, data-action*)>
+<!ATTLIST data pos	CDATA #REQUIRED>
+<!ATTLIST data size	CDATA #REQUIRED>
+
+<!--	a data-parameter defines data items properties
+-->
+<!ELEMENT data-parameter  (value)>
+<!ATTLIST data-parameter  name  	CDATA #REQUIRED>
+<!ATTLIST data-parameter  prompt	CDATA #REQUIRED>
+
+<!--	a data-action defines relation between data and actions
+-->
+<!ELEMENT data-action  EMPTY>
+<!ATTLIST data-action  id  	CDATA       #REQUIRED>
+<!ATTLIST data-action  dir	(from | to) #REQUIRED>

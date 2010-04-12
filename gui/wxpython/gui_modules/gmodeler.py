@@ -1133,7 +1133,7 @@ class ProcessModelFile:
         """!Process model file"""
         for data in self.root.findall('data'):
             pos, size = self._getDim(data)
-            param = data.find('parameter')
+            param = data.find('data-parameter')
             name = prompt = value = None
             if param is not None:
                 name = param.get('name', None)
@@ -1142,7 +1142,7 @@ class ProcessModelFile:
                 
             aId = list()
             fromDir = list()
-            for action in data.findall('action'):
+            for action in data.findall('data-action'):
                 aId.append(int(action.get('id', None)))
                 if action.get('dir', 'to') == 'to':
                     fromDir.append(False)
@@ -1256,23 +1256,22 @@ class WriteModelFile:
                               (' ' * self.indent, data.GetX(), data.GetY(),
                                data.GetWidth(), data.GetHeight()))
             self.indent += 4
-            self.fd.write('%s<parameter name="%s" prompt="%s">\n' % \
+            self.fd.write('%s<data-parameter name="%s" prompt="%s">\n' % \
                               (' ' * self.indent, data.GetName(), data.GetPrompt()))
             self.indent += 4
             self.fd.write('%s<value>%s</value>\n' %
                           (' ' * self.indent, self._filterValue(data.GetValue())))
             self.indent -= 4
-            self.fd.write('%s</parameter>\n' % (' ' * self.indent))
-            self.indent -= 4
+            self.fd.write('%s</data-parameter>\n' % (' ' * self.indent))
             for action in data.GetActions('from'):
                 id = action.GetId()
-                self.fd.write('%s<action id="%d" dir="from" />\n' % \
+                self.fd.write('%s<data-action id="%d" dir="from" />\n' % \
                                   (' ' * self.indent, id))
             for action in data.GetActions('to'):
                 id = action.GetId()
-                self.fd.write('%s<action id="%d" dir="to" />\n' % \
+                self.fd.write('%s<data-action id="%d" dir="to" />\n' % \
                                   (' ' * self.indent, id))
-            
+            self.indent -= 4
             self.fd.write('%s</data>\n' % (' ' * self.indent))
             
         self.indent -= 4
