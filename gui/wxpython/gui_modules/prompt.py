@@ -389,11 +389,11 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
                 if self._module and '=' not in cmd[-1]:
                     message = ''
                     if cmd[-1][0] == '-': # flag
-                        message = _("Warning: flag <%s> not found in '%s'") % \
-                            (cmd[-1][1:], self._module.name)
+                        message = _("Warning: flag <%(flag)s> not found in '%(module)s'") % \
+                            { 'flag' : cmd[-1][1:], 'module' : self._module.name }
                     else: # option
-                        message = _("Warning: option <%s> not found in '%s'") % \
-                            (cmd[-1], self._module.name)
+                        message = _("Warning: option <%(param)s> not found in '%(module)s'") % \
+                            { 'param' : cmd[-1], 'module' : self._module.name }
                     self.statusbar.SetStatusText(message)
         
         if self._module and len(cmd[-1]) == 2 and cmd[-1][-2] == '=':
