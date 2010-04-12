@@ -33,6 +33,12 @@
 	</menuitem>
 	<separator />
 	<menuitem>
+	  <label>Export to Python</label>
+	  <help>Export model to Python script</help>
+	  <handler>OnExportPython</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
 	  <label>Close modeler</label>
 	  <help>Close modeler window</help>
 	  <handler>OnCloseWindow</handler>
