@@ -544,7 +544,33 @@ class GPrompt(object):
             fileHistory.close()
         
         return hist
+
+    def GetCommandDesc(self, cmd):
+        """!Get description for given command"""
+        if self.moduleDesc.has_key(cmd):
+            return self.moduleDesc[cmd]['desc']
         
+        return ''
+            
+    def GetCommandItems(self):
+        """!Get list of available commands"""
+        items = list()
+        
+        if self.autoCompFilter:
+            mList = self.autoCompFilter
+        else:
+            mList = self.moduleList
+        
+        prefixes = mList.keys()
+        prefixes.sort()
+        
+        for prefix in prefixes:
+            for command in mList[prefix]:
+                name = prefix + '.' + command
+                items.append(name)
+        
+        return items
+    
     def _getListOfModules(self):
         """!Get list of modules"""
         result = dict()
