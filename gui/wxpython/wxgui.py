@@ -193,7 +193,7 @@ class GMFrame(wx.Frame):
         
         # start with layer manager on top
         self.curr_page.maptree.mapdisplay.Raise()
-        self.Raise()
+        wx.CallAfter(self.Raise)
 
     def __createNoteBook(self):
         """!Creates notebook widgets"""
