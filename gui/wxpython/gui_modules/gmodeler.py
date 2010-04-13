@@ -224,7 +224,7 @@ class ModelFrame(wx.Frame):
         
     def OnModelSave(self, event = None):
         """!Save model to file"""
-        if self.modelFile:
+        if self.modelFile and self.modelChanged:
             dlg = wx.MessageDialog(self, message=_("Model file <%s> already exists. "
                                                    "Do you want to overwrite this file?") % \
                                        self.modelFile,
@@ -236,7 +236,7 @@ class ModelFrame(wx.Frame):
                 Debug.msg(4, "ModelFrame.OnModelSave(): filename=%s" % self.modelFile)
                 self.WriteModelFile(self.modelFile)
                 self.SetStatusText(_('File <%s> saved') % self.modelFile, 0)
-        else:
+        elif not self.modelFile:
             self.OnModelSaveAs(None)
         
     def OnModelSaveAs(self, event):
@@ -526,7 +526,7 @@ if __name__ == "__main__":
         win = action.GetPropDialog()
         if not win:
             module = menuform.GUI().ParseCommand(action.GetLog(string = False),
-                                                 completed = (self.GetOptData, action, None),
+                                                 completed = (self.GetOptData, action, action.GetParams()),
                                                  parentframe = self, show = True)
         elif not win.IsShown():
             win.Show()
@@ -784,7 +784,12 @@ class ModelAction(ogl.RectangleShape):
     def __init__(self, parent, x, y, cmd = None, width = 100, height = 50):
         self.parent  = parent
         self.cmd     = cmd
-        self.params  = None
+        if self.cmd:
+            task = menuform.GUI().ParseCommand(cmd = self.cmd,
+                                               show = None)
+            self.params = task.get_options()
+        else:
+            self.params  = None
         self.propWin = None
         self.id      = -1    # used for gxm file
         
