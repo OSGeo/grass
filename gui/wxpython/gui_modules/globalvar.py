@@ -111,7 +111,7 @@ MAP_DISPLAY_STATUSBAR_MODE = [_("Coordinates"),
 """!File name extension binaries/scripts"""
 if subprocess.mswindows:
     EXT_BIN = '.exe'
-    EXT_SCT = '.bat'
+    EXT_SCT = '.py'
 else:
     EXT_BIN = ''
     EXT_SCT = ''
