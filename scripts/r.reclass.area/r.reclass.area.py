@@ -116,7 +116,7 @@ def main():
     p2.stdin.close()
     p2.wait()
 
-    grass.message(_("Generating output raster map <$outfile>...") % outfile)
+    grass.message(_("Generating output raster map <%s>...") % outfile)
 
     grass.mapcalc("$outfile = $recfile", outfile = outfile, recfile = recfile)
     grass.run_command('g.remove', rast = [recfile, clumpfile], quiet = True)
