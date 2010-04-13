@@ -561,17 +561,30 @@ if __name__ == "__main__":
         
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
-        if dcmd:
-            layer.SetProperties(dcmd, params, propwin)
-        
         if params: # add data items
+            for p in params['params']:
+                if p.get('prompt', '') in ('raster', 'vector', 'raster3d'):
+                    try:
+                        name, mapset = p.get('value', '').split('@', 1)
+                    except IndexError:
+                        continue
+                    
+                    if mapset != grass.gisenv()['MAPSET']:
+                        continue
+                    
+                    # don't use fully qualified names
+                    p['value'] = p.get('value', '').split('@')[0]
+                    for idx in range(1, len(dcmd)):
+                        if p.get('name', '') in dcmd[idx]:
+                            dcmd[idx] = p.get('name', '') + '=' + p.get('value', '')
+                            break
+            
             width, height = self.canvas.GetSize()
             x = [width/2 + 200, width/2 - 200]
             for p in params['params']:
                 if p.get('prompt', '') in ('raster', 'vector', 'raster3d') and \
                         (p.get('value', None) or \
                              p.get('age', 'old') != 'old'):
-                    # create data item
                     data = layer.FindData(p.get('name', ''))
                     if data:
                         data.SetValue(p.get('value', ''))
@@ -618,6 +631,9 @@ if __name__ == "__main__":
             
             self.canvas.Refresh()
         
+        if dcmd:
+            layer.SetProperties(dcmd, params, propwin)
+            
         self.SetStatusText(layer.GetLog(), 0)
         
     def _addLine(self, fromShape, toShape):
