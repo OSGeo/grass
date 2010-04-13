@@ -473,6 +473,15 @@ void print_window(struct Cell_head *window, int print_flag)
     if (print_flag & PRINT_GMT)
 	fprintf(stdout, "%s/%s/%s/%s\n", west, east, south, north);
 
+    /* flag.wms_style */
+    if (print_flag & PRINT_WMS) {
+	G_format_northing(window->north, north, -1);
+	G_format_northing(window->south, south, -1);
+	G_format_easting(window->east, east, -1);
+	G_format_easting(window->west, west, -1);
+	fprintf(stdout, "bbox=%s,%s,%s,%s\n", west, south, east, north);
+    }
+
 
     /* flag.nangle */
     if (print_flag & PRINT_NANGLE) {
