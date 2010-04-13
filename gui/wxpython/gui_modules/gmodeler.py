@@ -389,6 +389,8 @@ class ModelFrame(wx.Frame):
         # executable file
         os.chmod(filename, stat.S_IRWXU | stat.S_IWUSR)
         
+        self.SetStatusText(_("Model exported to <%s>") % filename)
+
     def _writePython(self, fd):
         """!Write model to file"""
         fd.write(
@@ -558,7 +560,8 @@ if __name__ == "__main__":
         
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
-        layer.SetProperties(dcmd, params, propwin)
+        if dcmd:
+            layer.SetProperties(dcmd, params, propwin)
         
         if params: # add data items
             width, height = self.canvas.GetSize()
@@ -1032,23 +1035,16 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         """!Show properties dialog"""
         self.frame.ModelChanged()
         shape = self.GetShape()
-        win = shape.GetPropDialog()
-        if not win:
-            if isinstance(shape, ModelAction):
-                module = menuform.GUI().ParseCommand(shape.cmd,
-                                                     completed = (self.frame.GetOptData, shape, None),
-                                                     parentframe = self.frame, show = True)
-            elif isinstance(shape, ModelData):
-                dlg = ModelDataDialog(parent = self.frame, shape = shape)
-                shape.SetPropDialog(dlg)
-                dlg.CentreOnParent()
-                dlg.Show()
-            
-        elif win and not win.IsShown():
-            win.Show()
-        
-        if win:
-            win.Raise()
+        # win = shape.GetPropDialog()
+        if isinstance(shape, ModelAction):
+            module = menuform.GUI().ParseCommand(shape.GetLog(string = False),
+                                                 completed = (self.frame.GetOptData, shape, shape.GetParams()),
+                                                 parentframe = self.frame, show = True)
+        elif isinstance(shape, ModelData):
+            dlg = ModelDataDialog(parent = self.frame, shape = shape)
+            shape.SetPropDialog(dlg)
+            dlg.CentreOnParent()
+            dlg.Show()
         
     def OnBeginDragLeft(self, x, y, keys = 0, attachment = 0):
         """!Drag shape"""
