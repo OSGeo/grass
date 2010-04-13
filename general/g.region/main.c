@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	struct Flag
 	    *update, *print, *gprint, *lprint, *eprint, *nangle,
 	    *center, *res_set, *dist_res, *dflt, *z, *savedefault,
-	    *bbox, *gmt_style;
+	    *bbox, *gmt_style, *wms_style;
     } flag;
     struct
     {
@@ -102,6 +102,12 @@ int main(int argc, char *argv[])
     flag.gmt_style->description =
 	_("Print the current region in GMT style");
     flag.gmt_style->guisection = _("Print");
+
+    flag.wms_style = G_define_flag();
+    flag.wms_style->key = 'w';
+    flag.wms_style->description =
+	_("Print the current region in WMS style");
+    flag.wms_style->guisection = _("Print");
 
     flag.dist_res = G_define_flag();
     flag.dist_res->key = 'm';
@@ -366,6 +372,9 @@ int main(int argc, char *argv[])
 
     if (flag.gmt_style->answer)
 	print_flag |= PRINT_GMT;
+
+    if (flag.wms_style->answer)
+	print_flag |= PRINT_WMS;
 
     if (flag.nangle->answer)
 	print_flag |= PRINT_NANGLE;
