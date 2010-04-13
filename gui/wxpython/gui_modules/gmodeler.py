@@ -110,6 +110,10 @@ class ModelFrame(wx.Frame):
         self.SetMinSize((350, 200))
         self.SetSize((640, 480))
         
+        # fix goutput's pane size
+        if self.goutput:
+            self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
+        
     def _layout(self):
         """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -556,7 +560,7 @@ if __name__ == "__main__":
         info.SetWebSite('http://grass.osgeo.org')
         info.SetDescription(_('(C) 2010 by the GRASS Development Team\n\n') + 
                             '\n'.join(textwrap.wrap(_('This program is free software under the GNU General Public License'
-                                                      '(>=v2). Read the file COPYING that comes with GRASS for details.'), 100)))
+                                                      '(>=v2). Read the file COPYING that comes with GRASS for details.'), 75)))
         
         wx.AboutBox(info)
         
@@ -1122,6 +1126,7 @@ class ModelSearchDialog(wx.Dialog):
         self.searchBy = wx.Choice(parent = self.panel, id = wx.ID_ANY,
                                   choices = [_("description"),
                                              _("keywords")])
+        self.searchBy.SetSelection(0)
         self.search = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                   value = "", size = (-1, 25))
         self.searchTip  = menuform.StaticWrapText(parent = self.panel, id = wx.ID_ANY,
@@ -1145,7 +1150,7 @@ class ModelSearchDialog(wx.Dialog):
         
         self._layout()
         
-        self.SetSize((500, 250))
+        self.SetSize((500, 275))
         
     def _layout(self):
         btnSizer = wx.StdDialogButtonSizer()

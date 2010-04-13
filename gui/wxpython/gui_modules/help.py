@@ -82,6 +82,8 @@ class MenuTreeWindow(wx.Frame):
                                              _('help'),
                                              _('command'),
                                              _('keywords')])
+        self.searchBy.SetSelection(3)
+        
         self.search = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                   value = "", size = (-1, 25),
                                   style = wx.TE_PROCESS_ENTER)
