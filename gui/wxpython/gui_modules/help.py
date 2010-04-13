@@ -26,7 +26,6 @@ except ImportError:
 #    import wx.lib.hyperlink as hl
 import wx.lib.flatnotebook as FN
 import  wx.lib.scrolledpanel as scrolled
-from wx.lib.wordwrap import wordwrap
 
 import menudata
 import gcmd
