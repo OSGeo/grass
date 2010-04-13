@@ -117,28 +117,30 @@ else:
     EXT_SCT = ''
 
 def GetGRASSCmds(bin=True, scripts=True, gui_scripts=True):
-    """
-    Create list of all available GRASS commands to use when
+    """!Create list of all available GRASS commands to use when
     parsing string from the command line
     """
     gisbase = os.environ['GISBASE']
-    list = []
+    cmd = list()
     if bin is True:
-        list = os.listdir(os.path.join(gisbase, 'bin'))
+        for file in os.listdir(os.path.join(gisbase, 'bin')):
+            if not EXT_BIN or file[-4:] == EXT_BIN:
+                cmd.append(file)
+        
         # add special call for setting vector colors
-        list.append('vcolors')
+        cmd.append('vcolors')
     if scripts is True:
-        list = list + os.listdir(os.path.join(gisbase, 'scripts')) 
+        cmd = cmd + os.listdir(os.path.join(gisbase, 'scripts')) 
     if gui_scripts is True:
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
-        list = list + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
+        cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
        
     if subprocess.mswindows:
-        for idx in range(len(list)):
-            list[idx] = list[idx].replace(EXT_BIN, '')
-            list[idx] = list[idx].replace(EXT_SCT, '')
-
-    return list
+        for idx in range(len(cmd)):
+            cmd[idx] = cmd[idx].replace(EXT_BIN, '')
+            cmd[idx] = cmd[idx].replace(EXT_SCT, '')
+    
+    return cmd
 
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd = {}
