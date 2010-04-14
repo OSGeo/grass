@@ -95,6 +95,7 @@ else
 	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
 endif
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR) - 2>/dev/null
+	-rm $(INST_DIR)/$(GRASS_NAME).tmp
 	-sed 's#'$(GISBASE)'#'$(INST_DIR)'#g' $(GISBASE)/etc/fontcap > $(INST_DIR)/etc/fontcap
 	-$(INSTALL) config.status $(INST_DIR)/config.status
 	-chmod -R a+rX $(INST_DIR) 2>/dev/null
