@@ -52,6 +52,7 @@ import gselect
 from   debug import Debug
 from   gcmd import GMessage
 from   gdialogs import ElementDialog
+from   gdialogs import GetImageHandlers
 from grass.script import core as grass
 
 class ModelFrame(wx.Frame):
@@ -164,6 +165,9 @@ class ModelFrame(wx.Frame):
         """!Close window"""
         self.Destroy()
 
+    def OnDeleteData(self, event):
+        """!Delete intermediate data"""
+        
     def OnModelNew(self, event):
         """!Create new model"""
         Debug.msg(4, "ModelFrame.OnModelNew():")
@@ -355,7 +359,47 @@ class ModelFrame(wx.Frame):
             GMessage(parent = self,
                      message = _('Model is valid.'),
                      msgType = 'info')
-
+    
+    def OnExportImage(self, event):
+        """!Export model to image (default image)"""
+        size = self.canvas.GetSize()
+        bitmap = wx.EmptyBitmap(width = size.width, height = size.height)
+        
+        filetype, ltype = GetImageHandlers(wx.ImageFromBitmap(bitmap))
+        
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Choose a file name to save the image (no need to add extension)"),
+                            defaultDir = "",
+                            defaultFile = "",
+                            wildcard = filetype,
+                            style=wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if not path:
+                dlg.Destroy()
+                return
+            
+            base, ext = os.path.splitext(path)
+            fileType = ltype[dlg.GetFilterIndex()]['type']
+            extType  = ltype[dlg.GetFilterIndex()]['ext']
+            if ext != extType:
+                path = base + '.' + extType
+                
+            dc = wx.MemoryDC(bitmap)
+            dc.SetBackground(wx.WHITE_BRUSH)
+            dc.SetBackgroundMode(wx.SOLID)
+            
+            dc.BeginDrawing()
+            self.canvas.GetDiagram().Clear(dc)
+            self.canvas.GetDiagram().Redraw(dc)
+            dc.EndDrawing()
+            
+            bitmap.SaveFile(path, fileType)
+            self.SetStatusText(_("Model exported to <%s>") % path)
+            
+        dlg.Destroy()
+        
     def OnExportPython(self, event):
         """!Export model to Python script"""
         filename = ''
@@ -1492,6 +1536,7 @@ class WriteModelFile:
         
 def main():
     app = wx.PySimpleApp()
+    wx.InitAllImageHandlers()
     frame = ModelFrame(parent = None)
     if len(sys.argv) > 1:
         frame.LoadModelFile(sys.argv[1])

@@ -33,6 +33,11 @@
 	</menuitem>
 	<separator />
 	<menuitem>
+	  <label>Export to image</label>
+	  <help>Export model to image</help>
+	  <handler>OnExportImage</handler>
+	</menuitem>
+	<menuitem>
 	  <label>Export to Python</label>
 	  <help>Export model to Python script</help>
 	  <handler>OnExportPython</handler>
@@ -70,6 +75,12 @@
 	  <label>Remove item</label>
 	  <help>Remove action/data from model</help>
 	  <handler>OnRemoveItem</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Delete intermediate data</label>
+	  <help>Delete intermediate data defined in the model</help>
+	  <handler>OnDeleteData</handler>
 	</menuitem>
 	<separator />
 	<menuitem>

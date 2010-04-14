@@ -1392,6 +1392,8 @@ class ModelToolbar(AbstractToolbar):
         self.new = wx.NewId()
         self.open = wx.NewId()
         self.save = wx.NewId()
+        self.image = wx.NewId()
+        self.python = wx.NewId()
         self.action = wx.NewId()
         self.data = wx.NewId()
         self.relation = wx.NewId()
@@ -1410,6 +1412,12 @@ class ModelToolbar(AbstractToolbar):
             (self.save, 'save', Icons['modelSave'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelSave'].GetLabel(), Icons['modelSave'].GetDesc(),
              self.parent.OnModelSave),
+            (self.image, 'image', Icons['modelToImage'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelToImage'].GetLabel(), Icons['modelToImage'].GetDesc(),
+             self.parent.OnExportImage),
+            (self.python, 'python', Icons['modelToPython'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelToPython'].GetLabel(), Icons['modelToPython'].GetDesc(),
+             self.parent.OnExportPython),
             ('', '', '', '', '', '', ''),
             (self.data, 'data', Icons['modelDataAdd'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelDataAdd'].GetLabel(), Icons['modelDataAdd'].GetDesc(),
