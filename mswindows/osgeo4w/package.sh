@@ -66,7 +66,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 fi
 
 echo $(date): STARTING make
-make || make
+make
 
 echo $(date): STARTING make install
 make install
