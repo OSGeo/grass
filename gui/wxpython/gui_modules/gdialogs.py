@@ -1502,4 +1502,49 @@ class SetOpacityDialog(wx.Dialog):
         opacity = float(self.value.GetValue()) / 100
         return opacity
 
+def GetImageHandlers(image):
+    """!Get list of supported image handlers"""
+    lext = list()
+    ltype = list()
+    for h in image.GetHandlers():
+        lext.append(h.GetExtension())
+        
+    filetype = ''
+    if 'png' in lext:
+        filetype += "PNG file (*.png)|*.png|"
+        ltype.append({ 'type' : wx.BITMAP_TYPE_PNG,
+                       'ext'  : 'png' })
+    filetype +=  "BMP file (*.bmp)|*.bmp|"
+    ltype.append({ 'type' : wx.BITMAP_TYPE_BMP,
+                   'ext'  : 'bmp' })
+    if 'gif' in lext:
+        filetype += "GIF file (*.gif)|*.gif|"
+        ltype.append({ 'type' : wx.BITMAP_TYPE_GIF,
+                       'ext'  : 'gif' })
+        
+    if 'jpg' in lext:
+        filetype += "JPG file (*.jpg)|*.jpg|"
+        ltype.append({ 'type' : wx.BITMAP_TYPE_JPEG,
+                       'ext'  : 'jpg' })
 
+    if 'pcx' in lext:
+        filetype += "PCX file (*.pcx)|*.pcx|"
+        ltype.append({ 'type' : wx.BITMAP_TYPE_PCX,
+                       'ext'  : 'pcx' })
+        
+    if 'pnm' in lext:
+        filetype += "PNM file (*.pnm)|*.pnm|"
+        ltype.append({ 'type' : wx.BITMAP_TYPE_PNM,
+                       'ext'  : 'pnm' })
+
+    if 'tif' in lext:
+        filetype += "TIF file (*.tif)|*.tif|"
+        ltype.append({ 'type' : wx.BITMAP_TYPE_TIF,
+                       'ext'  : 'tif' })
+
+    if 'xpm' in lext:
+        filetype += "XPM file (*.xpm)|*.xpm"
+        ltype.append({ 'type' : wx.BITMAP_TYPE_XPM,
+                       'ext'  : 'xpm' })
+    
+    return filetype, ltype

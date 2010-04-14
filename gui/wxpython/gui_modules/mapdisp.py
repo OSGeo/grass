@@ -1172,63 +1172,29 @@ class MapFrame(wx.Frame):
             win.SetSize((w, h))
 
     def SaveToFile(self, event):
+        """!Save map to image
         """
-        Save image to file
-        """
-        lext = []
-        for h in self.MapWindow.img.GetHandlers():
-            lext.append(h.GetExtension())
+        filetype, ltype = gdialogs.GetImageHandlers(self.MapWindow.img)
         
-        filetype =  "BMP file (*.bmp)|*.bmp|"
-        if 'gif' in lext:
-            filetype += "GIF file (*.gif)|*.gif|"
-        if 'jpg' in lext:
-            filetype += "JPG file (*.jpg)|*.jpg|"
-        if 'pcx' in lext:
-            filetype += "PCX file (*.pcx)|*.pcx|"
-        if 'png' in lext:
-            filetype += "PNG file (*.png)|*.png|"
-        if 'pnm' in lext:
-            filetype += "PNM file (*.pnm)|*.pnm|"
-        if 'tif' in lext:
-            filetype += "TIF file (*.tif)|*.tif|"
-        if 'xpm' in lext:
-            filetype += "XPM file (*.xpm)|*.xpm"
-
-        dlg = wx.FileDialog(self, _("Choose a file name to save the image (no need to add extension)"),
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Choose a file name to save the image (no need to add extension)"),
                             defaultDir = "",
                             defaultFile = "",
                             wildcard = filetype,
-                            style=wx.SAVE|wx.FD_OVERWRITE_PROMPT)
+                            style=wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+        
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            if path == None: return
-            base = os.path.splitext(dlg.GetPath())[0]
-            ext = os.path.splitext(dlg.GetPath())[1]
-            if dlg.GetFilterIndex() == 0:
-                type = wx.BITMAP_TYPE_BMP
-                if ext != '.bmp': path = base+'.bmp'
-            if dlg.GetFilterIndex() == 1:
-                type = wx.BITMAP_TYPE_GIF
-                if ext != '.gif': path = base+'.gif'
-            elif dlg.GetFilterIndex() == 2:
-                type = wx.BITMAP_TYPE_JPEG
-                if ext != '.jpg': path = base+'.jpg'
-            elif dlg.GetFilterIndex() == 3:
-                type = wx.BITMAP_TYPE_GIF
-                if ext != '.pcx': path = base+'.pcx'
-            elif dlg.GetFilterIndex() == 4:
-                type = wx.BITMAP_TYPE_PNG
-                if ext != '.png': path = base+'.png'
-            elif dlg.GetFilterIndex() == 5:
-                type = wx.BITMAP_TYPE_PNM
-                if ext != '.pnm': path = base+'.pnm'
-            elif dlg.GetFilterIndex() == 6:
-                type = wx.BITMAP_TYPE_TIF
-                if ext != '.tif': path = base+'.tif'
-            elif dlg.GetFilterIndex() == 7:
-                type = wx.BITMAP_TYPE_XPM
-                if ext != '.xpm': path = base+'.xpm'
+            if not path:
+                dlg.Destroy()
+                return
+            
+            base, ext = os.path.splitext(path)
+            fileType = ltype[dlg.GetFilterIndex()]['type']
+            extType  = ltype[dlg.GetFilterIndex()]['ext']
+            if ext != extType:
+                path = base + '.' + extType
+            
             self.MapWindow.SaveToFile(path, type)
             
         dlg.Destroy()
