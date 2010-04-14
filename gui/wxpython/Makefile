@@ -21,9 +21,11 @@ default: $(DSTFILES) menustrings.py
 $(ETCDIR)/%: % | $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
 
-menustrings.py: gui_modules/menudata.py $(ETCDIR)/xml/menudata.xml
+menustrings.py: gui_modules/menudata.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml 
 	GISBASE="$(GISBASE)" \
 	$(PYTHON) $< > $@
+	GISBASE="$(GISBASE)" \
+	$(PYTHON) $< "modeler" >> $@
 
 $(DSTDIRS): %: | $(ETCDIR)
 	$(MKDIR) $@

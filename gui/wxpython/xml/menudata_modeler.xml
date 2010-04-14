@@ -39,7 +39,7 @@
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>Close modeler</label>
+	  <label>Quit modeler</label>
 	  <help>Close modeler window</help>
 	  <handler>OnCloseWindow</handler>
 	  <shortcut>Ctrl+W</shortcut>
