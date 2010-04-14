@@ -361,8 +361,31 @@ class ModelFrame(wx.Frame):
                      msgType = 'info')
     
     def OnExportImage(self, event):
-        """!Export model to image (default image)"""
-        size = self.canvas.GetSize()
+        """!Export model to image (default image)
+        """
+        xminImg = 0
+        xmaxImg = 0
+        yminImg = 0
+        ymaxImg = 0
+        for shape in self.canvas.GetDiagram().GetShapeList():
+            w, h = shape.GetBoundingBoxMax()
+            x    = shape.GetX()
+            y    = shape.GetY()
+            xmin = x - w / 2
+            xmax = x + w / 2
+            ymin = y - h / 2
+            ymax = y + h / 2
+            if xmin < xminImg:
+                xminImg = xmin
+            if xmax > xmaxImg:
+                xmaxImg = xmax
+            if ymin < yminImg:
+                xminImg = xmin
+            if ymax < ymaxImg:
+                xminImg = xmin
+            
+        size = wx.Size(int(xmaxImg - xminImg),
+                       int(ymaxImg - ymaxImg))
         bitmap = wx.EmptyBitmap(width = size.width, height = size.height)
         
         filetype, ltype = GetImageHandlers(wx.ImageFromBitmap(bitmap))
