@@ -427,15 +427,14 @@ int main(int argc, char *argv[])
 	  "map.");
 
     pelevin = G_define_standard_option(G_OPT_R_ELEV);
-    pelevin->key = "elevation_input";
     
     paspin = G_define_standard_option(G_OPT_R_INPUT);
-    paspin->key = "aspect_input";
+    paspin->key = "aspect";
     paspin->required = NO;
     paspin->description = _("Name of input aspect raster map");
 
     pbarin = G_define_standard_option(G_OPT_R_INPUT);
-    pbarin->key = "barrier_input";
+    pbarin->key = "barrier";
     pbarin->required = NO;
     pbarin->description = _("Name of input barrier raster map");
 
@@ -452,17 +451,17 @@ int main(int argc, char *argv[])
     pbound->description = _("Maximum number of segments per flowline");
 
     pflout = G_define_standard_option(G_OPT_V_OUTPUT);
-    pflout->key = "flowline_output";
+    pflout->key = "flowline";
     pflout->required = NO;
     pflout->description = _("Name for output flowline vector map");
 
     plgout = G_define_standard_option(G_OPT_R_OUTPUT);
-    plgout->key = "flowpath_output";
+    plgout->key = "flowpath";
     plgout->required = NO;
     plgout->description = _("Name for output flowpath length raster map");
 
     pdsout = G_define_standard_option(G_OPT_R_OUTPUT);
-    pdsout->key = "density_output";
+    pdsout->key = "density";
     pdsout->required = NO;
     pdsout->description = _("Name for output flowline density raster map");
 

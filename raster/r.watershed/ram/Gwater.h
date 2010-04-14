@@ -135,7 +135,7 @@ int slope_length(int, int, int, int);
 CELL split_stream(int, int, int[], int[], int, CELL, double, CELL);
 
 /* usage.c */
-void usage();
+void usage(char *);
 
 
 #endif /* __G_WATER_H__ */
