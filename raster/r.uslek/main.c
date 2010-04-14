@@ -58,19 +58,19 @@ int main(int argc, char *argv[])
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->key = "psand_input";
+    input1->key = "psand";
     input1->description = _("Name of soil sand fraction raster map [0.0-1.0]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = "pclay_input";
+    input2->key = "pclay";
     input2->description = _("Name of soil clay fraction raster map [0.0-1.0]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = "psilt_input";
+    input3->key = "psilt";
     input3->description = _("Name of soil silt fraction raster map [0.0-1.0]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = "pomat_input";
+    input4->key = "pomat";
     input4->description = _("Name of soil organic matter raster map [0.0-1.0]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);

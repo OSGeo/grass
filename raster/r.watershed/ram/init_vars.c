@@ -36,36 +36,36 @@ int init_vars(int argc, char *argv[])
     ele_scale = 1;
 
     for (r = 1; r < argc; r++) {
-	if (sscanf(argv[r], "elevation_input=%s", ele_name) == 1)
+	if (sscanf(argv[r], "elevation=%s", ele_name) == 1)
 	    ele_flag++;
-	else if (sscanf(argv[r], "accumulation_output=%s", wat_name) == 1)
+	else if (sscanf(argv[r], "accumulation=%s", wat_name) == 1)
 	    wat_flag++;
-	else if (sscanf(argv[r], "drainage_output=%s", asp_name) == 1)
+	else if (sscanf(argv[r], "drainage=%s", asp_name) == 1)
 	    asp_flag++;
-	else if (sscanf(argv[r], "depression_input=%s", pit_name) == 1)
+	else if (sscanf(argv[r], "depression=%s", pit_name) == 1)
 	    pit_flag++;
 	else if (sscanf(argv[r], "threshold=%d", &bas_thres) == 1) ;
-	else if (sscanf(argv[r], "slope_length_output=%lf", &max_length) == 1) ;
-	else if (sscanf(argv[r], "basin_output=%s", bas_name) == 1)
+	else if (sscanf(argv[r], "max_slope_length=%lf", &max_length) == 1) ;
+	else if (sscanf(argv[r], "basin=%s", bas_name) == 1)
 	    bas_flag++;
-	else if (sscanf(argv[r], "stream_output=%s", seg_name) == 1)
+	else if (sscanf(argv[r], "stream=%s", seg_name) == 1)
 	    seg_flag++;
-	else if (sscanf(argv[r], "half_basin_output=%s", haf_name) == 1)
+	else if (sscanf(argv[r], "half_basin=%s", haf_name) == 1)
 	    haf_flag++;
-	else if (sscanf(argv[r], "flow_input=%s", run_name) == 1)
+	else if (sscanf(argv[r], "flow=%s", run_name) == 1)
 	    run_flag++;
 	else if (sscanf(argv[r], "ar=%s", arm_name) == 1)
 	    arm_flag++;
 	/* slope length
 	else if (sscanf(argv[r], "sl=%[^\n]", sl_name) == 1)
 	    sl_flag++; */
-	else if (sscanf(argv[r], "slope_length_output=%s", ls_name) == 1)
+	else if (sscanf(argv[r], "length_slope=%s", ls_name) == 1)
 	    ls_flag++;
-	else if (sscanf(argv[r], "slope_steep_output=%s", sg_name) == 1)
+	else if (sscanf(argv[r], "slope_steepness=%s", sg_name) == 1)
 	    sg_flag++;
-	else if (sscanf(argv[r], "block_input=%s", ob_name) == 1)
+	else if (sscanf(argv[r], "blocking=%s", ob_name) == 1)
 	    ob_flag++;
-	else if (sscanf(argv[r], "land_input=%s", ril_name) == 1) {
+	else if (sscanf(argv[r], "disturbed_land=%s", ril_name) == 1) {
 	    if (sscanf(ril_name, "%lf", &ril_value) == 0) {
 		ril_value = -1.0;
 		ril_flag++;
@@ -75,7 +75,7 @@ int init_vars(int argc, char *argv[])
 	else if (sscanf (argv[r], "sd=%[^\n]", dep_name) == 1) dep_flag++; */
 	else if (sscanf(argv[r], "-%d", &sides) == 1) {
 	    if (sides != 4)
-		usage();
+		usage(argv[0]);
 	}
 	else if (sscanf(argv[r], "convergence=%d", &c_fac) == 1) ;
 	else if (strcmp(argv[r], "-s") == 0)
@@ -83,7 +83,7 @@ int init_vars(int argc, char *argv[])
 	else if (strcmp(argv[r], "-a") == 0)
 	    abs_acc = 1;
 	else
-	    usage();
+	    usage(argv[0]);
     }
     if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
 	G_fatal_error("Convergence factor must be between 1 and 10.");
@@ -97,7 +97,7 @@ int init_vars(int argc, char *argv[])
 	 ((bas_flag == 1) || (seg_flag == 1) || (haf_flag == 1) ||
 	  (sl_flag == 1) || (sg_flag == 1) || (ls_flag == 1)))
 	)
-	usage();
+	usage(argv[0]);
     tot_parts = 4;
     if (ls_flag || sg_flag)
 	tot_parts++;

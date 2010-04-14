@@ -66,12 +66,11 @@ int main(int argc, char **argv)
 
     /* Parameter definitions */
     param.elev = G_define_standard_option(G_OPT_R_ELEV);
-    param.elev->key = "elevation_input";
     param.elev->required = NO;
     param.elev->guisection = _("Input");
 
     param.basin = G_define_standard_option(G_OPT_R_INPUT);
-    param.basin->key = "basin_input";
+    param.basin->key = "basin";
     param.basin->label =
 	_("Name of input basin raster map");
     param.basin->description = _("Created by r.water.outlet (MASK)");
@@ -79,27 +78,27 @@ int main(int argc, char **argv)
     param.basin->guisection = _("Input");
 
     param.fill = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.fill->key = "depression_output";
+    param.fill->key = "depressionless";
     param.fill->description = _("Name for output depressionless elevation raster map");
     param.fill->required = NO;
     param.fill->guisection = _("Output");
 
     param.dir = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.dir->key = "direction_output";
+    param.dir->key = "direction";
     param.dir->description =
-	_("Name for output direction map for depressionless elevation raster map");
+	_("Name for output flow direction map for depressionless elevation raster map");
     param.dir->required = NO;
     param.dir->guisection = _("Output");
 
     param.belev = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.belev->key = "basin_output";
+    param.belev->key = "basin_elevation";
     param.belev->label = _("Name for output basin elevation raster map (o/i)");
     param.belev->description = _("MASK applied");
     param.belev->required = NO;
     param.belev->guisection = _("Output");
 
     param.topidx = G_define_standard_option(G_OPT_R_OUTPUT);
-    param.topidx->key = "topidx_output";
+    param.topidx->key = "topidx";
     param.topidx->label =
 	_("Name for output opographic index ln(a/tanB) raster map");
     param.topidx->description = _("MASK applied");

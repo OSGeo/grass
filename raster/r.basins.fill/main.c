@@ -57,11 +57,11 @@ int main(int argc, char *argv[])
 	_("Generates watershed subbasins raster map.");
 
     drain_opt = G_define_standard_option(G_OPT_R_INPUT);
-    drain_opt->key = "cmap_input";
+    drain_opt->key = "cnetwork";
     drain_opt->description = _("Name of input coded stream network raster map");
 
     ridge_opt = G_define_standard_option(G_OPT_R_INPUT);
-    ridge_opt->key = "tmap_input";
+    ridge_opt->key = "tnetwork";
     ridge_opt->description = _("Name of input thinned ridge network raster map");
 
     part_opt = G_define_standard_option(G_OPT_R_OUTPUT);

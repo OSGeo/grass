@@ -65,7 +65,6 @@ int main(int argc, char **argv)
     int nrows, ncols, nbasins;
     int map_id, dir_id, bas_id;
     char map_name[GNAME_MAX], new_map_name[GNAME_MAX];
-    const char *map_mapset;
     const char *tempfile1, *tempfile2, *tempfile3;
     char dir_name[GNAME_MAX];
     char bas_name[GNAME_MAX];
@@ -89,15 +88,15 @@ int main(int argc, char **argv)
 	_("Filters and generates a depressionless elevation map and a flow "
 	  "direction map from a given elevation raster map.");
 
-    opt1 = G_define_standard_option(G_OPT_R_INPUT);
-    opt1->description = _("Name of input elevation raster map");
-
+    opt1 = G_define_standard_option(G_OPT_R_ELEV);
+    
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt2->description = _("Name for output elevation raster map after filling");
+    opt2->key = "depressionless";
+    opt2->description = _("Name for output depressionless elevation raster map");
     
     opt4 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt4->key = "direction";
-    opt4->description = _("Name for output direction raster map");
+    opt4->description = _("Name for output flow direction map for depressionless elevation raster map");
 
     opt5 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt5->key = "areas";
@@ -145,7 +144,7 @@ int main(int argc, char **argv)
 	G_verbose_message(_("Direction map is D8 resolution, i.e. 45 degrees"));
     
     /* open the maps and get their file id  */
-    map_id = Rast_open_old(map_name, map_mapset);
+    map_id = Rast_open_old(map_name, "");
 
     /* allocate cell buf for the map layer */
     in_type = Rast_get_map_type(map_id);
