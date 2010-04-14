@@ -2,7 +2,7 @@
 # This should be "include"d from the top-level Makefile, and nowhere else
 
 BIN_DIST_FILES = $(FILES) \
-	grass$(GRASS_NAME).tmp \
+	$(GRASS_NAME).tmp \
 	bin \
 	docs \
 	driver \
@@ -81,11 +81,18 @@ install:
 real-install:
 	test -d $(INST_DIR) || $(MAKE_DIR_CMD) $(INST_DIR)
 	test -d $(UNIX_BIN) || $(MAKE_DIR_CMD) $(UNIX_BIN)
-	-sed 's#'$(RUN_GISBASE)'#'$(INST_DIR)'#g' $(ARCH_BINDIR)/$(GRASS_NAME) > $(UNIX_BIN)/$(GRASS_NAME)
-	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
 ifneq ($(strip $(MINGW)),)
-	-sed 's#'$(RUN_GISBASE)'#'$(INST_DIR)'#g' $(ARCH_BINDIR)/$(GRASS_NAME).py > $(UNIX_BIN)/$(GRASS_NAME).py
+	-sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
+	     -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
+	     -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
+	     $(ARCH_DISTDIR)/$(GRASS_NAME).tmp > $(UNIX_BIN)/$(GRASS_NAME).py
 	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME).py
+else
+	-sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
+	     -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
+	     -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
+	     $(ARCH_DISTDIR)/$(GRASS_NAME).tmp > $(UNIX_BIN)/$(GRASS_NAME)
+	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
 endif
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR) - 2>/dev/null
 	-sed 's#'$(GISBASE)'#'$(INST_DIR)'#g' $(GISBASE)/etc/fontcap > $(INST_DIR)/etc/fontcap

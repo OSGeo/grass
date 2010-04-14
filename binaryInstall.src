@@ -9,7 +9,7 @@
 # GRASS binary package installation tool
 # platform independent
 #
-# 1999-2000 by Markus Neteler
+# 1999-2000, 2010 by Markus Neteler, and the GRASS development team
 #
 ##########################################################################
 
@@ -161,8 +161,8 @@ fi
 
 echo "Using $UNPACK decompressor..."
 
-echo "The package $PACKAGE_NAME seems to be o.k."
-echo " Proceeding..."
+echo "The package $PACKAGE_NAME seems to be OK"
+echo "Proceeding..."
 echo ""
 
 # Check if the paths for the binary and the destination are the same
@@ -285,9 +285,8 @@ cd $CURR_DIR
 echo "Creating start script:"
 echo "$BINDIR/$GRASSPRG -> $BINDIR/grass-$NAME_VER"
 
-STRING="s|^GISBASE.*|GISBASE\=\'$DESTDIR\'|g"
-
-sed -e $STRING $DESTDIR/$GRASSPRG.tmp > $BINDIR/grass-$NAME_VER
+sed -e "s#@GISBASE@#$DESTDIR#g" \
+    $DESTDIR/$GRASSPRG.tmp > $BINDIR/grass-$NAME_VER
 if [ $? -eq 1 ] ; then
   echo "An error occured trying to create the grass start script! Exiting."
   echo "You probably do not have permission to install into $BINDIR."
