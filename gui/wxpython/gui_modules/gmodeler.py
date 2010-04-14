@@ -10,6 +10,7 @@ Classes:
  - ModelSearchDialog
  - ModelData
  - ModelDataDialog
+ - ModelRelation
  - ProcessModelFile
  - WriteModelFile
 
@@ -734,7 +735,7 @@ if __name__ == "__main__":
                     self.canvas.diagram.AddShape(data)
                     data.Show(True)
                     
-                    self._addEvent(data)                    
+                    self._addEvent(data)
                     self.data.append(data)
                     
                     if p.get('age', 'old') == 'old':
@@ -767,12 +768,13 @@ if __name__ == "__main__":
         @param fromShape from
         @param toShape to
         """
-        line = ogl.LineShape()
+        line = ModelRelation()
         line.SetCanvas(self)
         line.SetPen(wx.BLACK_PEN)
         line.SetBrush(wx.BLACK_BRUSH)
         line.AddArrow(ogl.ARROW_ARROW)
         line.MakeLineControlPoints(2)
+        self._addEvent(line)
         
         fromShape.AddLine(line, toShape)
         
@@ -1193,8 +1195,9 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 s.Select(False, dc)
                 
         canvas.Refresh(False)
-        
-        self.log.SetStatusText(shape.GetLog(), 0)
+
+        if hasattr(shape, "GetLog"):
+            self.log.SetStatusText(shape.GetLog(), 0)
         
     def OnLeftDoubleClick(self, x, y, keys = 0, attachment = 0):
         """!Left mouse button pressed (double-click) -> show properties"""
@@ -1228,15 +1231,14 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             self.popupID2 = wx.NewId()
             self.popupID3 = wx.NewId()
 
+        shape = self.GetShape()
         popupMenu = wx.Menu()
         
         popupMenu.Append(self.popupID1, text=_('Remove'))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID1)
         
-        popupMenu.AppendSeparator()
-
-        shape = self.GetShape()
         if isinstance(shape, ModelData) and '@' not in shape.GetValue():
+            popupMenu.AppendSeparator()
             popupMenu.Append(self.popupID3, text=_('Intermediate'),
                              kind = wx.ITEM_CHECK)
             if self.GetShape().IsIntermediate():
@@ -1244,10 +1246,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             
             self.frame.Bind(wx.EVT_MENU, self.OnIntermediate, id = self.popupID3)
             
+        if isinstance(shape, ModelData) or \
+                isinstance(shape, ModelAction):
             popupMenu.AppendSeparator()
-        
-        popupMenu.Append(self.popupID2, text=_('Properties'))
-        self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID2)
+            popupMenu.Append(self.popupID2, text=_('Properties'))
+            self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID2)
 
         self.frame.PopupMenu(popupMenu)
         popupMenu.Destroy()
@@ -1262,8 +1265,13 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
     def OnRemove(self, event):
         """!Remove shape"""
         self.frame.ModelChanged()
-        shape = self.GetShape()
-        self.frame.canvas.GetDiagram().RemoveShape(shape)
+        shapes = [self.GetShape()]
+        if isinstance(shape, ModelAction):
+            pass
+        if isinstance(shape, ModelData):
+            pass
+        for shape in shapes:
+            self.frame.canvas.GetDiagram().RemoveShape(shape)
         self.frame.canvas.Refresh()
         
 class ModelSearchDialog(wx.Dialog):
@@ -1429,6 +1437,11 @@ class ModelSearchDialog(wx.Dialog):
         self.search.SetValue('')
         self.cmd_prompt.OnCmdErase(None)
 
+class ModelRelation(ogl.LineShape):
+    """!Data - action relation"""
+    def __init__(self):
+        ogl.LineShape.__init__(self)
+    
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
     def __init__(self, tree):
