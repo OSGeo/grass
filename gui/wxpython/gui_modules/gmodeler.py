@@ -1132,6 +1132,7 @@ class ModelDataDialog(ElementDialog):
         self.element = gselect.Select(parent = self.panel, id = wx.ID_ANY,
                                       size = globalvar.DIALOG_GSELECT_SIZE,
                                       type = prompt)
+        self.element.SetValue(shape.GetValue())
         
         self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
