@@ -167,7 +167,60 @@ class ModelFrame(wx.Frame):
 
     def OnDeleteData(self, event):
         """!Delete intermediate data"""
+        rast = list()
+        rast3d = list()
+        vect = list()
+        for data in self.data:
+            if not data.IsIntermediate():
+                continue
+            name = data.GetValue()
+            prompt = data.GetPrompt()
+            if prompt == 'raster':
+                rast.append(name)
+            elif prompt == 'vector':
+                vect.append(name)
+            elif prompt == 'rast3d':
+                rast3d.append(name)
+            
+        if not rast and not vect and not rast3d:
+            GMessage(parent = self,
+                     message = _('Nothing to delete.'),
+                     msgType = 'info')
+            return
+            
+        msg = ''
+        if rast:
+            msg += '\n\n%s: ' % _('Raster maps')
+            msg += ', '.join(rast)
+        if rast3d:
+            msg += '\n\n%s: ' % _('3D raster maps')
+            msg += ', '.join(rast3d)
+        if vect:
+            msg += '\n\n%s: ' % _('Vector maps')
+            msg += ', '.join(vect)
         
+        dlg = wx.MessageDialog(parent = self,
+                               message= _("Do you want to permanently delete data?%s" % msg),
+                               caption=_("Delete intermediate data?"),
+                               style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+
+        ret = dlg.ShowModal()
+        if ret == wx.ID_YES:
+            dlg.Destroy()
+            
+            if rast:
+                self.goutput.RunCmd(['g.remove', 'rast=%s' %','.join(rast)])
+            if rast3d:
+                self.goutput.RunCmd(['g.remove', 'rast3d=%s' %','.join(rast3d)])
+            if vect:
+                self.goutput.RunCmd(['g.remove', 'vect=%s' %','.join(vect)])
+            
+            self.SetStatusText(_("%d maps deleted from current mapset") % \
+                                 int(len(rast) + len(rast3d) + len(vect)))
+            return
+        
+        dlg.Destroy()
+                
     def OnModelNew(self, event):
         """!Create new model"""
         Debug.msg(4, "ModelFrame.OnModelNew():")
@@ -784,6 +837,8 @@ if __name__ == "__main__":
                                   name = data['name'],
                                   prompt = data['prompt'],
                                   value = data['value'])
+            dataShape.SetIntermediate(data['intermediate'])
+            
             self.canvas.diagram.AddShape(dataShape)
             dataShape.Show(True)
             
@@ -951,6 +1006,7 @@ class ModelData(ogl.EllipseShape):
         self.name    = name
         self.value   = value
         self.prompt  = prompt
+        self.intermediate = False
         self.propWin = None
         
         self.actions = { 'from' : list(), 'to' : list() }
@@ -979,6 +1035,24 @@ class ModelData(ogl.EllipseShape):
         else:
             self.AddText('\n')
 
+    def IsIntermediate(self):
+        """!Checks if data item is intermediate"""
+        return self.intermediate
+    
+    def SetIntermediate(self, im):
+        """!Set intermediate flag"""
+        self.intermediate = im
+  
+    def OnDraw(self, dc):
+        pen = self.GetPen()
+        if self.intermediate:
+            pen.SetStyle(wx.SHORT_DASH)
+        else:
+            pen.SetStyle(wx.SOLID)
+        self.SetPen(pen)
+        
+        ogl.EllipseShape.OnDraw(self, dc)
+        
     def GetLog(self, string = True):
         """!Get logging info"""
         if self.name:
@@ -1151,13 +1225,25 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         if not hasattr (self, "popupID1"):
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
-        
+            self.popupID3 = wx.NewId()
+
         popupMenu = wx.Menu()
         
         popupMenu.Append(self.popupID1, text=_('Remove'))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID1)
         
         popupMenu.AppendSeparator()
+
+        shape = self.GetShape()
+        if isinstance(shape, ModelData) and '@' not in shape.GetValue():
+            popupMenu.Append(self.popupID3, text=_('Intermediate'),
+                             kind = wx.ITEM_CHECK)
+            if self.GetShape().IsIntermediate():
+                popupMenu.Check(self.popupID3, True)
+            
+            self.frame.Bind(wx.EVT_MENU, self.OnIntermediate, id = self.popupID3)
+            
+            popupMenu.AppendSeparator()
         
         popupMenu.Append(self.popupID2, text=_('Properties'))
         self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID2)
@@ -1165,8 +1251,16 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.PopupMenu(popupMenu)
         popupMenu.Destroy()
         
+    def OnIntermediate(self, event):
+        """!Mark data as intermediate"""
+        self.frame.ModelChanged()
+        shape = self.GetShape()
+        shape.SetIntermediate(event.IsChecked())
+        self.frame.canvas.Refresh()
+
     def OnRemove(self, event):
         """!Remove shape"""
+        self.frame.ModelChanged()
         shape = self.GetShape()
         self.frame.canvas.GetDiagram().RemoveShape(shape)
         self.frame.canvas.Refresh()
@@ -1420,7 +1514,12 @@ class ProcessModelFile:
                 name = param.get('name', None)
                 prompt = param.get('prompt', None)
                 value = self._filterValue(self._getNodeText(param, 'value'))
-                
+            
+            if data.find('intermediate') is None:
+                intermediate = False
+            else:
+                intermediate = True
+            
             aId = list()
             fromDir = list()
             for action in data.findall('data-action'):
@@ -1435,6 +1534,7 @@ class ProcessModelFile:
                                'name' : name,
                                'prompt' : prompt,
                                'value' : value,
+                               'intermediate' : intermediate,
                                'id' : aId,
                                'from' : fromDir })
         
@@ -1544,6 +1644,10 @@ class WriteModelFile:
                           (' ' * self.indent, self._filterValue(data.GetValue())))
             self.indent -= 4
             self.fd.write('%s</data-parameter>\n' % (' ' * self.indent))
+            
+            if data.IsIntermediate():
+                self.fd.write('%s<intermediate />\n' % (' ' * self.indent))
+            
             for action in data.GetActions('from'):
                 id = action.GetId()
                 self.fd.write('%s<data-action id="%d" dir="from" />\n' % \
