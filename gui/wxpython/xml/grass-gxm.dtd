@@ -46,7 +46,7 @@
 
 <!--    a data defines data properties (usually data layers)
 -->
-<!ELEMENT data (data-parameter, data-action*)>
+<!ELEMENT data (data-parameter, intermediate?, data-action*)>
 <!ATTLIST data pos	CDATA #REQUIRED>
 <!ATTLIST data size	CDATA #REQUIRED>
 
@@ -55,6 +55,10 @@
 <!ELEMENT data-parameter  (value)>
 <!ATTLIST data-parameter  name  	CDATA #REQUIRED>
 <!ATTLIST data-parameter  prompt	CDATA #REQUIRED>
+
+<!--	a data intermediate?
+-->
+<!ELEMENT intermediate    EMPTY>
 
 <!--	a data-action defines relation between data and actions
 -->
