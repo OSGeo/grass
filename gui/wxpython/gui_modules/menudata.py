@@ -10,7 +10,7 @@ Classes:
 
 Usage:
 @code
-python menudata.py action [file]
+python menudata.py [action] [manager|modeler]
 @endcode
 
 where <i>action</i>:
@@ -116,7 +116,8 @@ class MenuData:
         """!Print menu strings to file (used for localization)
 
         @param fh file descriptor"""
-	fh.write('menustrings = [\n')
+        className = str(self.__class__).split('.', 1)[1]
+	fh.write('menustrings_%s = [\n' % className)
 	for node in self.tree.getiterator():
 	    if node.tag in ['label', 'help']:
 		fh.write('     _(%r),\n' % node.text)
@@ -236,18 +237,19 @@ if __name__ == "__main__":
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
-    file = None
-    if len(sys.argv) == 1:
-        action = 'strings'
-    elif len(sys.argv) > 1:
-        action = sys.argv[1]
-    if len(sys.argv) > 2:
-        file = sys.argv[2]
-
-    if file:
-        data = ManagerData(file)
-    else:
+    action = 'strings'
+    menu   = 'manager'
+    
+    for arg in sys.argv:
+        if arg in ('strings', 'tree', 'commands', 'dump'):
+            action =  arg
+        elif arg in ('manager', 'modeler'):
+            menu = arg
+    
+    if menu == 'manager':
         data = ManagerData()
+    else:
+        data = ModelerData()
     
     if action == 'strings':
         data.PrintStrings(sys.stdout)
