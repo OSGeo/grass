@@ -6,7 +6,7 @@
 # AUTHOR(S):	Glynn Clements
 # PURPOSE:	Replacement for r.buffer using r.grow.distance
 #
-# COPYRIGHT:	(C) 2008 by Glynn Clements
+# COPYRIGHT:	(C) 2008, 2010 by Glynn Clements
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%Module
-#% description: Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values.
+#% description: Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.
 #% keywords: raster
 #% keywords: buffer
 #%End
@@ -115,6 +115,7 @@ def main():
     else:
 	exp = "$temp_src = if(isnull($input),null(),1)"
 
+    grass.message(_("Extracting buffers (1/2)..."))
     grass.mapcalc(exp, temp_src = temp_src, input = input)
 
     exp = "$output = if(!isnull($input),$input,%s)"
@@ -122,6 +123,7 @@ def main():
 	exp %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
     exp %= "null()"
 
+    grass.message(_("Extracting buffers (2/2)..."))
     grass.mapcalc(exp, output = output, input = temp_src, dist = temp_dist)
 
     p = grass.feed_command('r.category', map = output, rules = '-')
@@ -137,7 +139,7 @@ def main():
 
     # write cmd history:
     grass.raster_history(output)
-
+    
 if __name__ == "__main__":
     options, flags = grass.parser()
     atexit.register(cleanup)

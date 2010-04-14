@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       r.grow2
+ * MODULE:       r.grow.distance
  *
  * AUTHOR(S):    Marjorie Larson - CERL
  *               Glynn Clements
@@ -9,7 +9,7 @@
  * PURPOSE:      Generates a raster map layer with contiguous areas 
  *               grown by one cell.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -147,8 +147,9 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("distance"));
     module->description =
-	_("Generates a raster map layer of distance to features in input layer.");
+	_("Generates a raster map of distance to features in input raster map.");
 
     opt.in = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -203,7 +204,7 @@ int main(int argc, char **argv)
 	G_begin_geodesic_distance(a, e2);
     }
     else
-	G_fatal_error(_("Unknown metric: [%s]."), opt.met->answer);
+	G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
 
     if (flag.m->answer)
 	scale = G_database_units_to_meters_factor();
@@ -246,6 +247,7 @@ int main(int argc, char **argv)
     Rast_set_c_null_value(old_x_row, ncols);
     Rast_set_c_null_value(old_y_row, ncols);
 
+    G_message(_("Reading raster map <%s>..."), opt.in->answer);
     for (row = 0; row < nrows; row++) {
 	int irow = nrows - 1 - row;
 
@@ -293,6 +295,7 @@ int main(int argc, char **argv)
     Rast_set_c_null_value(old_x_row, ncols);
     Rast_set_c_null_value(old_y_row, ncols);
 
+    G_message(_("Writing output raster maps..."), opt.in->answer);
     for (row = 0; row < nrows; row++) {
 	int irow = nrows - 1 - row;
 	off_t offset =
