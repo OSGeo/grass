@@ -47,6 +47,10 @@ grass_config_dirname = "@GRASS_CONFIG_DIR@"
 
 gisbase = os.path.normpath(gisbase)
 
+### i18N
+import gettext
+gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
+
 tmpdir = None
 lockfile = None
 location = None
@@ -108,37 +112,60 @@ def gfile(*args):
     return os.path.join(gisbase, *args)
 
 help_text = r"""
-Usage:
+%s:
   $CMD_NAME [-h | -help | --help] [-v | --version] [-c]
 	  [-text | -gui | -wxpython | -wx]
 	  [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 
-Flags:
-  -h or -help or --help          print this help message
-  -v or --version                show version information and exit
-  -c                             create given mapset if it doesn\'t exist
-  -text                          use text based interface
-                                   and set as default
-  -gui                           use graphical user interface ($DEFAULT_GUI by default)
-                                   and set as default
-  -wxpython or -wx               use wxPython based graphical user interface
-                                   and set as default
+%s:
+  -h or -help or --help          %s
+  -v or --version                %s
+  -c                             %s
+  -text                          %s
+                                   %s
+  -gui                           %s
+                                   %s
+  -wxpython or -wx               %s
+                                   %s
 
-Parameters:
-  GISDBASE                       initial database (path to GIS data)
-  LOCATION_NAME                  initial location
-  MAPSET                         initial mapset
+%s:
+  GISDBASE                       %s
+  LOCATION_NAME                  %s
+  MAPSET                         %s
 
-  GISDBASE/LOCATION_NAME/MAPSET  fully qualified initial mapset directory
+  GISDBASE/LOCATION_NAME/MAPSET  %s
 
-Environment variables relevant for startup:
-  GRASS_GUI                      select GUI (text, gui, wxpython)
-  GRASS_WISH                     set wish shell name to override 'wish'
-  GRASS_HTML_BROWSER             set html web browser for help pages
-  GRASS_ADDON_PATH               set additional path(s) to local GRASS modules
-  GRASS_BATCH_JOB                shell script to be processed as batch job
-  GRASS_PYTHON                   set python shell name to override 'python'
-"""
+%s:
+  GRASS_GUI                      %s
+  GRASS_WISH                     %s
+  GRASS_HTML_BROWSER             %s
+  GRASS_ADDON_PATH               %s
+  GRASS_BATCH_JOB                %s
+  GRASS_PYTHON                   %s
+""" % (_("Usage"),
+       _("Flags"),
+       _("print this help message"),
+       _("show version information and exit"),
+       _("create given mapset if it doesn't exist"),
+       _("use text based interface"),
+       _("and set as default"),
+       _("use graphical user interface ($DEFAULT_GUI by default)"),
+       _("and set as default"),
+       _("use wxPython based graphical user interface"),
+       _("and set as default"),
+       _("Parameters"),
+       _("initial database (path to GIS data)"),
+       _("initial location"),
+       _("initial mapset"),
+       _("fully qualified initial mapset directory"),
+       _("Environment variables relevant for startup"),
+       _("select GUI (text, gui, wxpython)"),
+       _("set wish shell name to override 'wish'"),
+       _("set html web browser for help pages"),
+       _("set additional path(s) to local GRASS modules"),
+       _("shell script to be processed as batch job"),
+       _("set python shell name to override 'python'"))
+
 
 def help_message():
     t = string.Template(help_text)
@@ -157,7 +184,7 @@ def create_tmp():
     try:
 	os.mkdir(tmpdir, 0700)
     except:
-	fatal("Cannot create temporary directory! Exiting.")
+	fatal(_("Unable to create temporary directory! Exiting."))
 
 def create_gisrc():
     global gisrc, gisrcrc
@@ -327,7 +354,7 @@ def set_browser():
 	os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b com.apple.helpviewer"
 
     if not browser:
-	message("WARNING: Searched for a web browser, but none found.")
+	warning(_("Searched for a web browser, but none found"))
 	# even so we set konqueror to make lib/gis/parser.c happy:
 	browser = "konqueror"
     
@@ -346,7 +373,7 @@ def grass_intro():
     f.close()
 
     sys.stderr.write("\n")
-    sys.stderr.write("Hit RETURN to continue")
+    sys.stderr.write(_("Hit RETURN to continue"))
     sys.stdin.readline()
 
     #for convenience, define pwd as GISDBASE:
@@ -375,13 +402,11 @@ def check_gui():
 		wxpython_base = gfile("etc", "gui", "wxpython")
 	    else:
 		# Python was not found - switch to text interface mode
-		message(
-r"""WARNING: The python command does not work as expected!
-Please check your GRASS_PYTHON environment variable.
-Use the -help option for details.
-Switching to text based interface mode.
-
-Hit RETURN to continue.""")
+		warning(_("The python command does not work as expected!\n"
+                          "Please check your GRASS_PYTHON environment variable.\n"
+                          "Use the -help option for details.\n"
+                          "Switching to text based interface mode.\n\n"
+                          "Hit RETURN to continue.\n"))
 		sys.stdin.readline()
 		grass_gui = 'text'
 
@@ -389,12 +414,10 @@ Hit RETURN to continue.""")
 	# Display a message if a graphical interface was expected
 	if grass_gui != 'text':
 	    # Set the interface mode to text
-	    message(
-r"""WARNING: It appears that the X Windows system is not active.
-A graphical based user interface is not supported.
-Switching to text based interface mode.
-
-Hit RETURN to continue""")
+	    warning(_("It appears that the X Windows system is not active.\n"
+                      "A graphical based user interface is not supported.\n"
+                      "Switching to text based interface mode.\n\n"
+                      "Hit RETURN to continue"""))
 	    sys.stdin.readline()
 	    grass_gui = 'text'
 
@@ -433,20 +456,20 @@ def non_interactive(arg):
 
 	if not os.access(os.path.join(location, "WIND"), os.R_OK):
 	    if location_name == "PERMANENT":
-		fatal("%s: Not a valid GRASS location" % location)
+		fatal(_("<%s> is not a valid GRASS location") % location)
 	    else:
 		# the user wants to create mapset on the fly
 		if create_new:
 		    if not os.access(os.path.join(os.path.join(gisdbase, location_name, "PERMANENT", "DEFAULT_WIND")), os.F_OK):
-			fatal("The LOCATION \"%s\" does not exist. Please create it first" % location_name)
+			fatal(_("The location <%s> does not exist. Please create it first.") % location_name)
 		    else:
 			os.mkdirs(location)
 			# copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
 			s = readfile(os.path.join(gisdbase, location_name, "PERMANENT", "DEFAULT_WIND"))
 			writefile(os.path.join(location, "WIND"), s)
-			message("Missing WIND file fixed")
+			message(_("Missing WIND file fixed"))
 		else:
-		    fatal("%s: Not a valid GRASS location" % location)
+		    fatal(_("<%s> is not a valid GRASS location") % location)
 
 	if os.access(gisrc, os.R_OK):
 	    kv = read_gisrc()
@@ -458,8 +481,8 @@ def non_interactive(arg):
 	kv['MAPSET'] = mapset
 	write_gisrc(kv)
     else:
-	fatal("GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n" +
-	      "Interactive startup needed.")
+	fatal(_("GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
+                "Interactive startup needed."))
 
 def set_data():
     # User selects LOCATION and MAPSET if not set
@@ -472,8 +495,8 @@ def set_data():
 	    gui_startup()
 	else:
 	    # Shouldn't need this but you never know
-	    fatal("ERROR: Invalid user interface specified - <%s>.\n" % grass_gui +
-		  "Use the --help option to see valid interface names.")
+	    fatal(_("Invalid user interface specified - <%s>.\n" 
+                    "Use the --help option to see valid interface names.") % grass_gui)
 
 def gui_startup():
     if grass_gui == 'wxpython':
@@ -484,24 +507,21 @@ def gui_startup():
     elif thetest == 1:
 	# The startup script printed an error message so wait
 	# for user to read it
-	message(
-r"""
-Error in GUI startup. If necessary, please
-report this error to the GRASS developers.
-Switching to text mode now.
-
-Hit RETURN to continue...""")
+	message(_("Error in GUI startup. If necessary, please "
+                  "report this error to the GRASS developers.\n"
+                  "Switching to text mode now.\n\n"
+                  "Hit RETURN to continue..."))
 	sys.stdin.readline()
 
 	os.execlp(cmd_name, "-text")
 	sys.exit(1)
     elif thetest == 2:
 	# User wants to exit from GRASS
-	message("Received EXIT message from GUI.\n" + "GRASS is not started. Bye.")
+	message(_("Received EXIT message from GUI.\nGRASS is not started. Bye."))
 	sys.exit(0)
     else:
-	fatal("ERROR: Invalid return code from GUI startup script.\n" +
-	      "Please advise GRASS developers of this error.")
+	fatal(_("Invalid return code from GUI startup script.\n"
+                "Please advise GRASS developers of this error."))
 
 def load_gisrc():
     global gisdbase, location_name, mapset, location
@@ -510,15 +530,14 @@ def load_gisrc():
     location_name = kv.get('LOCATION_NAME')
     mapset = kv.get('MAPSET')
     if not gisdbase or not location_name or not mapset:
-	message(
-r"""ERROR: Reading data path information from g.gisenv.
-GISDBASE=[%s]
-LOCATION_NAME=[%s]
-MAPSET=[%s]
-
-Check the <%s> file.""" % (gisdbase, location_name, mapset, gisrcrc))
-	sys.exit(1)
-
+	fatal(_("Error reading data path information from g.gisenv.\n"
+                "GISDBASE=%(gisbase)s\n"
+                "LOCATION_NAME=%(location)s\n"
+                "MAPSET=%(mapset)s\n\n"
+                "Check the <%s(file)> file." % \
+                    { 'gisbase' : gisdbase, 'location' : location_name,
+                      'mapset' : mapset, 'file' : gisrcrc }))
+    
     location = os.path.join(gisdbase, location_name, mapset)
 
 def check_lock():
@@ -532,12 +551,11 @@ def check_lock():
     if ret == 0:
 	msg = None
     elif ret == 2:
-	msg = "%s is currently running GRASS in selected mapset (file %s found). " \
-            "Concurrent use not allowed." % \
-            (user, lockfile)
+	msg = _("%(user)s is currently running GRASS in selected mapset (file %(file)s found). "
+                "Concurrent use not allowed." % \
+                    { 'user' : user, 'file' : lockfile })
     else:
-	msg = "Unable to properly access \"%s\"\n" % \
-            lockfile + "Please notify system personel."
+	msg = _("Unable to properly access \"%s\"\nPlease notify system personel.") % lockfile
         
     if msg:
         if grass_gui == "wxpython":
@@ -548,7 +566,7 @@ def check_lock():
 def make_fontcap():
     fc = os.getenv('GRASS_FONT_CAP')
     if fc and not os.access(fc, os.R_OK):
-	message("Building user fontcap ...")
+	message(_("Building user fontcap..."))
 	call(["g.mkfontcap"])
 
 def check_shell():
@@ -577,7 +595,7 @@ def check_shell():
 
     # check for SHELL
     if not os.getenv('SHELL'):
-        fatal("ERROR: The SHELL variable is not set")
+        fatal(_("The SHELL variable is not set"))
 
 def check_batch_job():
     global batch_job
@@ -587,24 +605,21 @@ def check_batch_job():
 	# defined, but ...
 	if not os.access(batch_job, os.F_OK):
           # wrong file
-          fatal(
-r"""Job file '%s' has been defined in
-the 'GRASS_BATCH_JOB' variable but not found. Exiting.
-
-Use 'unset GRASS_BATCH_JOB' to disable batch job processing.
-""" % batch_job)
+          fatal(_("Job file '%s' has been defined in "
+                  "the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n\n"
+                  "Use 'unset GRASS_BATCH_JOB' to disable batch job processing.") % batch_job)
         elif not os.access(batch_job, os.X_OK):
 	    # right file, but ...
-	    fatal("ERROR: change file permission to 'executable' for '%s'" % batch_job)
+	    fatal(_("Change file permission to 'executable' for '%s'") % batch_job)
 	else:
-	    message("Executing '$GRASS_BATCH_JOB' ...")
+	    message(_("Executing '%s' ...") % batch_job)
 	    grass_gui = "text"
 	    shell = batch_job
 
 def start_gui():
     # Start the chosen GUI but ignore text
     if grass_debug:
-	message("GRASS GUI should be %s" % grass_gui)
+	message(_("GRASS GUI should be '%s'") % grass_gui)
     
     # Check for gui interface
     if grass_gui == "wxpython":
@@ -644,18 +659,22 @@ def say_hello():
 def show_info():
     sys.stderr.write(
 r"""
-GRASS homepage:                          http://grass.osgeo.org/
-This version running through:            %s (%s)
-Help is available with the command:      g.manual -i
-See the licence terms with:              g.version -c
-""" % (shellname, os.getenv('SHELL')))
+%-41shttp://grass.osgeo.org
+%-41s%s (%s)
+%-41sg.manual -i
+%-41sg.version -c
+""" % (_("GRASS homepage:"),
+       _("This version running through:"),
+       shellname, os.getenv('SHELL'),
+       _("Help is available with the command:"),
+       _("See the licence terms with:")))
 
     if grass_gui == 'wxpython':
-        message("If required, restart the GUI with:       g.gui wxpython")
+        message("%-41sg.gui wxpython" % _("If required, restart the GUI with:"))
     else:
-        message("Start the GUI with:                      g.gui %s" % default_gui)
+        message("%-41sg.gui %s" % (_("Start the GUI with:"), default_gui))
 
-    message("When ready to quit enter:                exit")
+    message("%-41sexit" % _("When ready to quit enter:"))
     message("")
 
 def csh_startup():
@@ -759,17 +778,17 @@ def default_startup():
 
 def done_message():
     if batch_job and os.access(batch_job, os.X_OK):
-	message("Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed." % batch_job)
-        message("Goodbye from GRASS GIS")
+	message(_("Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed.") % batch_job)
+        message(_("Goodbye from GRASS GIS"))
 	sys.exit(exit_val)
     else:
-        message("Done.")
+        message(_("Done."))
         message("")
-        message("Goodbye from GRASS GIS")
+        message(_("Goodbye from GRASS GIS"))
         message("")
 
 def clean_temp():
-    message("Cleaning up temporary files ...")
+    message(_("Cleaning up temporary files..."))
     nul = open(os.devnull, 'w')
     call([gfile("etc", "clean_temp")], stdout = nul, stderr = nul)
     nul.close()
@@ -913,7 +932,7 @@ if not os.access(gisrc, os.F_OK):
 else:
     clean_temp()
 
-message("Starting GRASS ...")
+message(_("Starting GRASS GIS..."))
 
 # Check that the GUI works
 check_gui()
