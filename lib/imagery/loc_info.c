@@ -18,5 +18,5 @@ char *I_location_info(const char *middle)
     G_snprintf(buf, buf_len, "%s%*s%s%*s%s",
 	    left, len / 2, "", middle, len / 2, "", right);
 
-    return 0;
+    return buf;
 }
