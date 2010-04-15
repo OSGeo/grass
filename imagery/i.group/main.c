@@ -39,7 +39,6 @@ static int remove_subgroup_files(char group[INAME_LEN],
 
 int main(int argc, char *argv[])
 {
-    char title[80];
     char group[GNAME_MAX], mapset[GMAPSET_MAX];
     int m, k = 0;
 
@@ -101,9 +100,6 @@ int main(int argc, char *argv[])
 
     if (k < 1 && !l->answer)	/* remove if input is requirement */
 	G_fatal_error(_("No input raster map(s) specified"));
-
-
-    I_location_info(title, argv[0]);	/* unused? */
 
     /* check if current mapset:  (imagery libs are very lacking in this dept)
        - abort if not,
