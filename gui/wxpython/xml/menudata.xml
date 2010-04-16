@@ -624,6 +624,11 @@
 	  <help>Launch Graphical modeler</help>
 	  <handler>OnGModeler</handler>
 	</menuitem>
+	<menuitem>
+	  <label>Run model</label>
+	  <help>Run model prepared by Graphical modeler</help>
+	  <handler>OnRunModel</handler>
+	</menuitem>
 	<separator />
 	<menuitem>
 	  <label>NVIZ (requires Tcl/Tk)</label>

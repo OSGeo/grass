@@ -266,6 +266,44 @@ class GMFrame(wx.Frame):
         
         win.Show()
         
+    def OnDone(self, returncode):
+        """Command execution finised"""
+        if hasattr(self, "model"):
+            self.model.DeleteIntermediateData(log = self.goutput)
+            del self.model
+        self.SetStatusText('')
+        
+    def OnRunModel(self, event):
+        """!Run model"""
+        filename = ''
+        dlg = wx.FileDialog(parent = self, message=_("Choose model to run"),
+                            defaultDir = os.getcwd(),
+                            wildcard=_("GRASS Model File (*.gxm)|*.gxm"))
+        if dlg.ShowModal() == wx.ID_OK:
+            filename = dlg.GetPath()
+        
+        if not filename:
+            return
+        
+        self.model = gmodeler.Model()
+        self.model.LoadModel(filename)
+        self.SetStatusText(_('Validating model...'), 0)
+        result =  self.model.Validate()
+        if result:
+            dlg = wx.MessageDialog(parent = self,
+                                   message = _('Model is not valid. Do you want to '
+                                               'run the model anyway?\n\n%s') % '\n'.join(errList),
+                                   caption=_("Run model?"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_QUESTION | wx.CENTRE)
+            ret = dlg.ShowModal()
+            if ret != wx.ID_YES:
+                return
+        
+        self.SetStatusText(_('Running model...'), 0)
+        self.model.Run(log = self.goutput,
+                       onDone = self.OnDone)
+        
     def OnMapsets(self, event):
         """
         Launch mapset access dialog

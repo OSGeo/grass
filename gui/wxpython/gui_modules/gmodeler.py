@@ -4,6 +4,7 @@
 @brief Graphical modeler to create edit, and manage models
 
 Classes:
+ - Model
  - ModelFrame
  - ModelCanvas
  - ModelAction
@@ -52,10 +53,185 @@ import goutput
 import gselect
 from   debug import Debug
 from   gcmd import GMessage
+from   gcmd import GError
 from   gdialogs import ElementDialog
 from   gdialogs import GetImageHandlers
 from grass.script import core as grass
 
+class Model(object):
+    """!Class representing the model"""
+    def __init__(self, canvas = None):
+        self.actions = list()    # list of recorded actions
+        self.data    = list()    # list of recorded data items
+        self.canvas  = canvas
+        
+    def GetCanvas(self):
+        """!Get canvas or None"""
+        return self.canvas
+    
+    def GetActions(self):
+        """!Return list of actions"""
+        return self.actions
+
+    def GetData(self):
+        """!Return list of data"""
+        return self.data
+
+    def Reset(self):
+        """!Reset model"""
+        self.actions = list()
+        self.data    = list()
+        
+    def AddAction(self, item):
+        """!Add action to the model"""
+        self.actions.append(item)
+        
+    def AddData(self, item):
+        """!Add data to the model"""
+        self.data.append(item)
+
+    def FindAction(self, id):
+        """!Find action by id"""
+        for action in self.actions:
+            if action.GetId() == id:
+                return action
+        
+        return None
+
+    def FindData(self, value, prompt):
+        """!Find data by value, and prompt"""
+        for data in self.data:
+            if data.GetValue() == value and \
+                    data.GetPrompt() == prompt:
+                return data
+        
+        return None
+    
+    def LoadModel(self, filename):
+        """!Load model definition stored in GRASS Model XML file (gxm)
+        
+        @todo Validate against DTD
+        
+        Raise exception on error.
+        """
+        dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxm.dtd")
+        
+        # parse workspace file
+        try:
+            gxmXml = ProcessModelFile(etree.parse(filename))
+        except StandardError, e:
+            raise GError(e)
+        
+        # load model.GetActions()
+        for action in gxmXml.actions:
+            actionItem = ModelAction(parent = self, 
+                                     x = action['pos'][0],
+                                     y = action['pos'][1],
+                                     width = action['size'][0],
+                                     height = action['size'][1],
+                                     cmd = action['cmd'])
+            actionItem.SetId(action['id'])
+
+            self.actions.append(actionItem)
+            
+            task = menuform.GUI().ParseCommand(cmd = actionItem.GetLog(string = False),
+                                               show = None)
+            valid = True
+            for p in task.get_options()['params']:
+                if p.get('value', '') == '' and \
+                        p.get('default', '') == '':
+                    valid = False
+                    break
+            actionItem.SetValid(valid)
+        
+        # load data & connections
+        for data in gxmXml.data:
+            dataItem = ModelData(parent = self, 
+                                 x = data['pos'][0],
+                                 y = data['pos'][1],
+                                 width = data['size'][0],
+                                 height = data['size'][1],
+                                 name = data['name'],
+                                 prompt = data['prompt'],
+                                 value = data['value'])
+            dataItem.SetIntermediate(data['intermediate'])
+            
+            for idx in range(len(data['id'])):
+                actionItem = self.FindAction(data['id'][idx])
+                if data['from'][idx] is True:
+                    dataItem.AddAction(actionItem, direction = 'from')
+                elif data['from'][idx] is False:
+                    dataItem.AddAction(actionItem, direction = 'to')
+            
+            self.data.append(dataItem)
+            
+            actionItem.AddData(dataItem)
+        
+    def IsValid(self):
+        """Return True if model is valid"""
+        if self.Validate():
+            return False
+        
+        return True
+    
+    def Validate(self):
+        """!Validate model, return None if model is valid otherwise
+        error string"""
+        errList = list()
+        for action in self.actions:
+            task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
+                                               show = None)
+            errList += task.getCmdError()
+
+        return errList
+
+    def Run(self, log, onDone):
+        """!Run model"""
+        for action in self.actions:
+            log.RunCmd(command = action.GetLog(string = False),
+                       onDone = onDone)
+    
+    def DeleteIntermediateData(self, log):
+        """!Detele intermediate data"""
+        rast, vect, rast3d, msg = self.GetIntermediateData()
+        
+        if rast:
+            log.RunCmd(['g.remove', 'rast=%s' %','.join(rast)])
+        if rast3d:
+            log.RunCmd(['g.remove', 'rast3d=%s' %','.join(rast3d)])
+        if vect:
+            log.RunCmd(['g.remove', 'vect=%s' %','.join(vect)])
+        
+    def GetIntermediateData(self):
+        """!Get info about intermediate data"""
+        rast = list()
+        rast3d = list()
+        vect = list()
+        for data in self.data:
+            if not data.IsIntermediate():
+                continue
+            name = data.GetValue()
+            prompt = data.GetPrompt()
+            if prompt == 'raster':
+                rast.append(name)
+            elif prompt == 'vector':
+                vect.append(name)
+            elif prompt == 'rast3d':
+                rast3d.append(name)
+        
+        msg = ''
+        if rast:
+            msg += '\n\n%s: ' % _('Raster maps')
+            msg += ', '.join(rast)
+        if rast3d:
+            msg += '\n\n%s: ' % _('3D raster maps')
+            msg += ', '.join(rast3d)
+        if vect:
+            msg += '\n\n%s: ' % _('Vector maps')
+            msg += ', '.join(vect)
+        
+        return rast, vect, rast3d, msg
+    
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Graphical modeler (under development)"), **kwargs):
         """!Graphical modeler main window
@@ -68,8 +244,6 @@ class ModelFrame(wx.Frame):
         """
         self.parent = parent
         self.searchDialog = None # module search dialog
-        self.actions = list()    # list of recorded actions
-        self.data    = list()    # list of recorded data items
         self.baseTitle = title
         self.modelFile = None    # loaded model
         self.modelChanged = False
@@ -89,9 +263,9 @@ class ModelFrame(wx.Frame):
         
         self.toolbar = toolbars.ModelToolbar(parent = self)
         self.SetToolBar(self.toolbar)
-
+        
         self.statusbar = self.CreateStatusBar(number = 1)
-
+        
         self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
                                         style = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
                                         FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
@@ -99,6 +273,8 @@ class ModelFrame(wx.Frame):
         self.canvas = ModelCanvas(self)
         self.canvas.SetBackgroundColour(wx.WHITE)
         self.canvas.SetCursor(self.cursors["default"])
+        
+        self.model = Model(self.canvas)
         
         self.goutput = goutput.GMConsole(parent = self, pageid = 1)
                 
@@ -136,24 +312,7 @@ class ModelFrame(wx.Frame):
         evthandler.SetShape(item)
         evthandler.SetPreviousHandler(item.GetEventHandler())
         item.SetEventHandler(evthandler)
-
-    def FindAction(self, id):
-        """!Find action by id"""
-        for action in self.actions:
-            if action.GetId() == id:
-                return action
         
-        return None
-
-    def FindData(self, value, prompt):
-        """!Find data by value, and prompt"""
-        for data in self.data:
-            if data.GetValue() == value and \
-                    data.GetPrompt() == prompt:
-                return data
-        
-        return None
-            
     def ModelChanged(self):
         """!Update window title"""
         if not self.modelChanged:
@@ -168,43 +327,19 @@ class ModelFrame(wx.Frame):
 
     def OnDeleteData(self, event):
         """!Delete intermediate data"""
-        rast = list()
-        rast3d = list()
-        vect = list()
-        for data in self.data:
-            if not data.IsIntermediate():
-                continue
-            name = data.GetValue()
-            prompt = data.GetPrompt()
-            if prompt == 'raster':
-                rast.append(name)
-            elif prompt == 'vector':
-                vect.append(name)
-            elif prompt == 'rast3d':
-                rast3d.append(name)
-            
+        rast, vect, rast3d, msg = self.model.GetIntermediateData()
+        
         if not rast and not vect and not rast3d:
             GMessage(parent = self,
                      message = _('Nothing to delete.'),
                      msgType = 'info')
             return
-            
-        msg = ''
-        if rast:
-            msg += '\n\n%s: ' % _('Raster maps')
-            msg += ', '.join(rast)
-        if rast3d:
-            msg += '\n\n%s: ' % _('3D raster maps')
-            msg += ', '.join(rast3d)
-        if vect:
-            msg += '\n\n%s: ' % _('Vector maps')
-            msg += ', '.join(vect)
         
         dlg = wx.MessageDialog(parent = self,
                                message= _("Do you want to permanently delete data?%s" % msg),
                                caption=_("Delete intermediate data?"),
                                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-
+        
         ret = dlg.ShowModal()
         if ret == wx.ID_YES:
             dlg.Destroy()
@@ -230,7 +365,7 @@ class ModelFrame(wx.Frame):
         if self.modelFile and self.modelChanged:
             self.OnModelSave()
         elif self.modelFile is None and \
-                (len(self.actions) > 0 or len(self.data) > 0):
+                (len(self.model.GetActions()) > 0 or len(self.model.GetData()) > 0):
             dlg = wx.MessageDialog(self, message=_("Current model is not empty. "
                                                    "Do you want to store current settings "
                                                    "to model file?"),
@@ -248,8 +383,7 @@ class ModelFrame(wx.Frame):
         
         # delete all items
         self.canvas.GetDiagram().DeleteAllShapes()
-        self.actions = list()
-        self.data = list()
+        self.model.Reset()
         self.canvas.Refresh()
         
         # no model file loaded
@@ -278,7 +412,7 @@ class ModelFrame(wx.Frame):
         
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
-        self.SetStatusText(_('%d actions loaded into model') % len(self.actions), 0)
+        self.SetStatusText(_('%d actions loaded into model') % len(self.model.GetActions()), 0)
         
     def OnModelSave(self, event = None):
         """!Save model to file"""
@@ -341,7 +475,7 @@ class ModelFrame(wx.Frame):
         if self.modelFile and self.modelChanged:
             self.OnModelSave()
         elif self.modelFile is None and \
-                (len(self.actions) > 0 or len(self.data) > 0):
+                (len(self.model.GetActions()) > 0 or len(self.model.GetData()) > 0):
             dlg = wx.MessageDialog(self, message=_("Current model is not empty. "
                                                    "Do you want to store current settings "
                                                    "to model file?"),
@@ -361,14 +495,13 @@ class ModelFrame(wx.Frame):
         self.SetTitle(self.baseTitle)
         
         self.canvas.GetDiagram().DeleteAllShapes()
-        self.actions = list()
-        self.data    = list()
+        self.model.Reset()
         
         self.canvas.Refresh()
         
     def OnRunModel(self, event):
         """!Run entire model"""
-        if len(self.actions) < 1:
+        if len(self.model.GetActions()) < 1:
             GMessage(parent = self, 
                      message = _('Model is empty. Nothing to run.'),
                      msgType = 'info')
@@ -386,8 +519,8 @@ class ModelFrame(wx.Frame):
             if ret != wx.ID_YES:
                 return
         
-        for action in self.actions:
-            self.SetStatusText(_('Running model...'), 0)
+        for action in self.model.GetActions():
+            self.SetStatusText(_('Running model...'), 0)        
             self.goutput.RunCmd(command = action.GetLog(string = False),
                                 onDone = self.OnDone)
         
@@ -397,7 +530,7 @@ class ModelFrame(wx.Frame):
         
     def OnValidateModel(self, event, showMsg = True):
         """!Validate entire model"""
-        if len(self.actions) < 1:
+        if len(self.model.GetActions()) < 1:
             GMessage(parent = self, 
                      message = _('Model is empty. Nothing to validate.'),
                      msgType = 'info')
@@ -552,7 +685,7 @@ def cleanup():
 """)
 
         fd.write("\ndef main():\n")
-        for action in self.actions:
+        for action in self.model.GetActions():
             task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
                                                show = None)
             opts = task.get_options()
@@ -596,11 +729,8 @@ if __name__ == "__main__":
     def _validateModel(self):
         """!Validate model"""
         self.SetStatusText(_('Validating model...'), 0)
-        errList = list()
-        for action in self.actions:
-            task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
-                                               show = None)
-            errList += task.getCmdError()
+        
+        errList = self.model.Validate()
         
         self.SetStatusText('', 0)
         
@@ -638,7 +768,7 @@ if __name__ == "__main__":
         action.Show(True)
 
         self._addEvent(action)
-        self.actions.append(action)
+        self.model.AddAction(action)
         
         self.canvas.Refresh()
         time.sleep(.1)
@@ -663,7 +793,7 @@ if __name__ == "__main__":
         data.Show(True)
         
         self._addEvent(data)
-        self.data.append(data)
+        self.model.AddData(data)
         
         self.canvas.Refresh()
         
@@ -736,7 +866,7 @@ if __name__ == "__main__":
                     data.Show(True)
                     
                     self._addEvent(data)
-                    self.data.append(data)
+                    self.model.AddData(data)
                     
                     if p.get('age', 'old') == 'old':
                         self._addLine(data, layer)
@@ -783,21 +913,13 @@ if __name__ == "__main__":
         
     def LoadModelFile(self, filename):
         """!Load model definition stored in GRASS Model XML file (gxm)
-
-        @todo Validate against DTD
-
-        Raise exception on error.
         """
-        ### dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxm.dtd")
-        
-        # parse workspace file
         try:
-            gxmXml = ProcessModelFile(etree.parse(filename))
-        except:
+            self.model.LoadModel(filename)
+        except GError, e:
             GMessage(parent = self,
                      message = _("Reading model file <%s> failed.\n"
                                  "Invalid file, unable to parse XML document.") % filename)
-            return
         
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
@@ -805,58 +927,21 @@ if __name__ == "__main__":
         self.SetStatusText(_("Please wait, loading model..."), 0)
         
         # load actions
-        for action in gxmXml.actions:
-            actionShape = ModelAction(parent = self, 
-                                      x = action['pos'][0],
-                                      y = action['pos'][1],
-                                      width = action['size'][0],
-                                      height = action['size'][1],
-                                      cmd = action['cmd'])
-            actionShape.SetId(action['id'])
-            self.canvas.diagram.AddShape(actionShape)
-            actionShape.Show(True)
-            
-            self._addEvent(actionShape)
-            self.actions.append(actionShape)
-            
-            task = menuform.GUI().ParseCommand(cmd = actionShape.GetLog(string = False),
-                                               show = None)
-            valid = True
-            for p in task.get_options()['params']:
-                if p.get('value', '') == '' and \
-                        p.get('default', '') == '':
-                    valid = False
-                    break
-            actionShape.SetValid(valid)
+        for action in self.model.GetActions():
+            self._addEvent(action)
+            self.canvas.diagram.AddShape(action)
+            action.Show(True)
         
-        # load data & connections
-        for data in gxmXml.data:
-            dataShape = ModelData(parent = self, 
-                                  x = data['pos'][0],
-                                  y = data['pos'][1],
-                                  width = data['size'][0],
-                                  height = data['size'][1],
-                                  name = data['name'],
-                                  prompt = data['prompt'],
-                                  value = data['value'])
-            dataShape.SetIntermediate(data['intermediate'])
-            
-            self.canvas.diagram.AddShape(dataShape)
-            dataShape.Show(True)
-            
-            self._addEvent(dataShape)
-            self.data.append(dataShape)
+        # load data & relations
+        for data in self.model.GetData():
+            self._addEvent(data)
+            self.canvas.diagram.AddShape(data)
+            data.Show(True)
 
-            for idx in range(len(data['id'])):
-                actionShape = self.FindAction(data['id'][idx])
-                if data['from'][idx] is True:
-                    self._addLine(dataShape, actionShape)
-                    dataShape.AddAction(actionShape, direction = 'from')
-                elif data['from'][idx] is False:
-                    self._addLine(actionShape, dataShape)
-                    dataShape.AddAction(actionShape, direction = 'to')
-            
-            actionShape.AddData(dataShape)
+            for action in data.GetActions('from'):
+                self._addLine(data, action)
+            for action in data.GetActions('to'):
+                self._addLine(action, data)
         
         self.SetStatusText('', 0)
         
@@ -878,7 +963,7 @@ if __name__ == "__main__":
             return False
         
         try:
-            WriteModelFile(fd = file, actions = self.actions, data = self.data)
+            WriteModelFile(fd = file, actions = self.model.GetActions(), data = self.model.GetData())
         except StandardError:
             file.close()
             
@@ -924,19 +1009,19 @@ class ModelAction(ogl.RectangleShape):
         self.colors['valid'] = wx.LIGHT_GREY_BRUSH
         self.colors['invalid'] = wx.WHITE_BRUSH
         
-        ogl.RectangleShape.__init__(self, width, height)
+        if self.parent.GetCanvas():
+            ogl.RectangleShape.__init__(self, width, height)
+            
+            self.SetCanvas(self.parent)
+            self.SetX(x)
+            self.SetY(y)
+            self.SetPen(wx.BLACK_PEN)
+            self.SetBrush(self.colors['invalid'])
+            if self.cmd and len(self.cmd) > 0:
+                self.AddText(self.cmd[0])
+            else:
+                self.AddText('<<module>>')
         
-        # self.Draggable(True)
-        self.SetCanvas(self.parent)
-        self.SetX(x)
-        self.SetY(y)
-        self.SetPen(wx.BLACK_PEN)
-        self.SetBrush(self.colors['invalid'])
-        if self.cmd and len(self.cmd) > 0:
-            self.AddText(self.cmd[0])
-        else:
-            self.AddText('<<module>>')
-
     def GetId(self):
         """!Get id"""
         return self.id
@@ -1012,31 +1097,31 @@ class ModelData(ogl.EllipseShape):
         self.propWin = None
         
         self.actions = { 'from' : list(), 'to' : list() }
-        
-        ogl.EllipseShape.__init__(self, width, height)
-        
-        # self.Draggable(True)
-        self.SetCanvas(self.parent)
-        self.SetX(x)
-        self.SetY(y)
-        self.SetPen(wx.BLACK_PEN)
-        if self.prompt == 'raster':
-            self.SetBrush(wx.Brush(wx.Colour(215, 215, 248)))
-        elif self.prompt == 'vector':
-            self.SetBrush(wx.Brush(wx.Colour(248, 215, 215)))
-        else:
-            self.SetBrush(wx.LIGHT_GREY_BRUSH)
-        
-        if name:
-            self.AddText(name)
-        else:
-            self.AddText(_('unknown'))
-        
-        if value:
-            self.AddText(value)
-        else:
-            self.AddText('\n')
 
+        if self.parent.GetCanvas():
+            ogl.EllipseShape.__init__(self, width, height)
+            
+            self.SetCanvas(self.parent)
+            self.SetX(x)
+            self.SetY(y)
+            self.SetPen(wx.BLACK_PEN)
+            if self.prompt == 'raster':
+                self.SetBrush(wx.Brush(wx.Colour(215, 215, 248)))
+            elif self.prompt == 'vector':
+                self.SetBrush(wx.Brush(wx.Colour(248, 215, 215)))
+            else:
+                self.SetBrush(wx.LIGHT_GREY_BRUSH)
+        
+            if name:
+                self.AddText(name)
+            else:
+                self.AddText(_('unknown'))
+        
+            if value:
+                self.AddText(value)
+            else:
+                self.AddText('\n')
+        
     def IsIntermediate(self):
         """!Checks if data item is intermediate"""
         return self.intermediate
@@ -1263,15 +1348,21 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.canvas.Refresh()
 
     def OnRemove(self, event):
-        """!Remove shape"""
+        """!Remove shape
+
+        @todo complex remove
+        """
         self.frame.ModelChanged()
         shapes = [self.GetShape()]
-        if isinstance(shape, ModelAction):
-            pass
-        if isinstance(shape, ModelData):
-            pass
         for shape in shapes:
+            if isinstance(shape, ModelAction):
+                pass
+            if isinstance(shape, ModelData):
+                pass
+
+            shape.Select(False)            
             self.frame.canvas.GetDiagram().RemoveShape(shape)
+        
         self.frame.canvas.Refresh()
         
 class ModelSearchDialog(wx.Dialog):
