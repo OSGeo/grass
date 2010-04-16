@@ -7,6 +7,7 @@ Sets default display font, etc.
 
 Classes:
  - Settings
+ - PreferencesBaseDialog
  - PreferencesDialog
  - DefaultFontDialog
  - MapsetAccess
@@ -510,6 +511,14 @@ class Settings:
                         },
                     },
                 },
+            'modeler' : {
+                'action' : {
+                    'color' : {
+                        'valid' : (211, 211, 211, 255), # light grey
+                        'invalid' : (255, 255, 255, 255), # white
+                        },
+                    },
+                },
             }
         
         #
@@ -831,76 +840,111 @@ class Settings:
 
 globalSettings = Settings()
 
-class PreferencesDialog(wx.Dialog):
-    """!User preferences dialog"""
-    def __init__(self, parent, title=_("User GUI settings"),
-                 settings=globalSettings,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-        self.parent = parent # GMFrame
-        self.title = title
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title,
-                           style=style, size=(-1, -1))
-
+class PreferencesBaseDialog(wx.Dialog):
+    """!Base preferences dialog"""
+    def __init__(self, parent, settings, title = _("User settings"),
+                 size = (500, 375),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+        self.parent = parent # ModelerFrame
+        self.title  = title
+        self.size   = size
         self.settings = settings
+        
+        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
+                           style = style)
+        
         # notebook
-        notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
-
+        self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+        
         # dict for window ids
         self.winId = {}
         
         # create notebook pages
-        self.__CreateGeneralPage(notebook)
-        self.__CreateDisplayPage(notebook)
-        self.__CreateCmdPage(notebook)
-        self.__CreateAttributeManagerPage(notebook)
-        self.__CreateProjectionPage(notebook)
-        self.__CreateWorkspacePage(notebook)
-        self.__CreateAdvancedPage(notebook)
-
+        
         # buttons
-        btnDefault = wx.Button(self, wx.ID_ANY, _("Set to default"))
-        btnSave = wx.Button(self, wx.ID_SAVE)
-        btnApply = wx.Button(self, wx.ID_APPLY)
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnSave.SetDefault()
-
+        self.btnDefault = wx.Button(self, wx.ID_ANY, _("Set to default"))
+        self.btnSave = wx.Button(self, wx.ID_SAVE)
+        self.btnApply = wx.Button(self, wx.ID_APPLY)
+        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnSave.SetDefault()
+        
         # bindigs
-        btnDefault.Bind(wx.EVT_BUTTON, self.OnDefault)
-        btnDefault.SetToolTipString(_("Revert settings to default and apply changes"))
-        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        btnApply.SetToolTipString(_("Apply changes for the current session"))
-        btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
-        btnSave.SetDefault()
-        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-        btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
+        self.btnDefault.Bind(wx.EVT_BUTTON, self.OnDefault)
+        self.btnDefault.SetToolTipString(_("Revert settings to default and apply changes"))
+        self.btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
+        self.btnApply.SetToolTipString(_("Apply changes for the current session"))
+        self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
+        self.btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
+        self.btnSave.SetDefault()
+        self.btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
 
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
+        self._layout()
+        
+    def _layout(self):
+        """!Layout window"""
         # sizers
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=btnDefault, proportion=1,
+        btnSizer.Add(item=self.btnDefault, proportion=1,
                      flag=wx.ALL, border=5)
         btnStdSizer = wx.StdDialogButtonSizer()
-        btnStdSizer.AddButton(btnCancel)
-        btnStdSizer.AddButton(btnSave)
-        btnStdSizer.AddButton(btnApply)
+        btnStdSizer.AddButton(self.btnCancel)
+        btnStdSizer.AddButton(self.btnSave)
+        btnStdSizer.AddButton(self.btnApply)
         btnStdSizer.Realize()
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(item=btnSizer, proportion=0,
                       flag=wx.EXPAND, border=0)
         mainSizer.Add(item=btnStdSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
-
+        
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
+        
+    def OnDefault(self, event):
+        """!Button 'Set to default' pressed"""
+        pass
+    
+    def OnApply(self, event):
+        """!Button 'Apply' pressed"""
+        pass
 
+    def OnSave(self, event):
+        """!Button 'Save' pressed"""
+        pass
+
+    def OnCancel(self, event):
+        """!Button 'Cancel' pressed"""
+        self.Close()
+        
+    def OnCloseWindow(self, event):
+        self.Hide()
+
+class PreferencesDialog(PreferencesBaseDialog):
+    """!User preferences dialog"""
+    def __init__(self, parent, title = _("GUI settings"),
+                 settings = globalSettings):
+        
+        PreferencesBaseDialog.__init__(self, parent = parent, title = title,
+                                       settings = settings)
+        
+        # create notebook pages
+        self._CreateGeneralPage(self.notebook)
+        self._CreateDisplayPage(self.notebook)
+        self._CreateCmdPage(self.notebook)
+        self._CreateAttributeManagerPage(self.notebook)
+        self._CreateProjectionPage(self.notebook)
+        self._CreateWorkspacePage(self.notebook)
+        self._CreateAdvancedPage(self.notebook)
+        
         self.SetMinSize(self.GetBestSize())
-        self.SetSize((500, 375))
-
-    def __CreateGeneralPage(self, notebook):
+        self.SetSize(self.size)
+        
+    def _CreateGeneralPage(self, notebook):
         """!Create notebook page for general settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("General"))
@@ -992,7 +1036,7 @@ class PreferencesDialog(wx.Dialog):
         
         return panel
 
-    def __CreateDisplayPage(self, notebook):
+    def _CreateDisplayPage(self, notebook):
         """!Create notebook page for display settings"""
    
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
@@ -1098,7 +1142,7 @@ class PreferencesDialog(wx.Dialog):
                       pos=(row, 0))
         bgColor = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=self.settings.Get(group='display', key='bgcolor', subkey='color'),
-                                    size=(35, 35))
+                                    size=globalvar.DIALOG_COLOR_SIZE)
         bgColor.SetName('GetColour')
         self.winId['display:bgcolor:color'] = bgColor.GetId()
         
@@ -1156,7 +1200,7 @@ class PreferencesDialog(wx.Dialog):
         
         return panel
 
-    def __CreateCmdPage(self, notebook):
+    def _CreateCmdPage(self, notebook):
         """!Create notebook page for commad dialog settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Command"))
@@ -1296,7 +1340,7 @@ class PreferencesDialog(wx.Dialog):
         
         return panel
 
-    def __CreateAttributeManagerPage(self, notebook):
+    def _CreateAttributeManagerPage(self, notebook):
         """!Create notebook page for 'Attribute Table Manager' settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Attributes"))
@@ -1316,7 +1360,7 @@ class PreferencesDialog(wx.Dialog):
         label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
         hlColor = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=self.settings.Get(group='atm', key='highlight', subkey='color'),
-                                    size=(35, 35))
+                                    size=globalvar.DIALOG_COLOR_SIZE)
         hlColor.SetName('GetColour')
         self.winId['atm:highlight:color'] = hlColor.GetId()
 
@@ -1425,7 +1469,7 @@ class PreferencesDialog(wx.Dialog):
 
         return panel
 
-    def __CreateProjectionPage(self, notebook):
+    def _CreateProjectionPage(self, notebook):
         """!Create notebook page for workspace settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Projection"))
@@ -1560,7 +1604,7 @@ class PreferencesDialog(wx.Dialog):
         
         return panel
 
-    def __CreateWorkspacePage(self, notebook):
+    def _CreateWorkspacePage(self, notebook):
         """!Create notebook page for workspace settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Workspace"))
@@ -1604,7 +1648,7 @@ class PreferencesDialog(wx.Dialog):
         
         return panel
 
-    def __CreateAdvancedPage(self, notebook):
+    def _CreateAdvancedPage(self, notebook):
         """!Create notebook page for advanced settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Advanced"))
@@ -1790,14 +1834,14 @@ class PreferencesDialog(wx.Dialog):
         
     def OnSave(self, event):
         """!Button 'Save' pressed"""
-        if self.__UpdateSettings():
+        if self._UpdateSettings():
             file = self.settings.SaveToFile()
             self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % file)
             self.Close()
 
     def OnApply(self, event):
         """!Button 'Apply' pressed"""
-        if self.__UpdateSettings():
+        if self._UpdateSettings():
             self.parent.goutput.WriteLog(_('Settings applied to current session but not saved'))
             self.Close()
 
@@ -1830,7 +1874,7 @@ class PreferencesDialog(wx.Dialog):
             else:
                 value = win.SetValue(value)
 
-    def __UpdateSettings(self):
+    def _UpdateSettings(self):
         """!Update user settings"""
         for item in self.winId.keys():
             try:

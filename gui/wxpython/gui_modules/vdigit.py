@@ -1203,7 +1203,7 @@ class VDigitSettingsDialog(wx.Dialog):
             textLabel = wx.StaticText(panel, wx.ID_ANY, label)
             color = csel.ColourSelect(panel, id=wx.ID_ANY,
                                       colour=UserSettings.Get(group='vdigit', key='symbol',
-                                                              subkey=[key, 'color']), size=(25, 25))
+                                                              subkey=[key, 'color']), size=globalvar.DIALOG_COLOR_SIZE)
             isEnabled = UserSettings.Get(group='vdigit', key='symbol',
                                          subkey=[key, 'enabled'])
             if isEnabled is not None:
@@ -1284,7 +1284,7 @@ class VDigitSettingsDialog(wx.Dialog):
                                       label=_("Snap also to vertex"))
         self.snapVertex.SetValue(UserSettings.Get(group='vdigit', key="snapToVertex", subkey='enabled'))
         vertexSizer.Add(item=self.snapVertex, proportion=0, flag=wx.EXPAND)
-        self.mapUnits = self.parent.MapWindow.Map.ProjInfo()['units']
+        self.mapUnits = self.parent.MapWindow.Map.GetProjInfo()['units']
         self.snappingInfo = wx.StaticText(parent=panel, id=wx.ID_ANY,
                                           label=_("Snapping threshold is %(value).1f %(units)s") % \
                                               {'value' : self.parent.digit.driver.GetThreshold(),
@@ -1385,7 +1385,7 @@ class VDigitSettingsDialog(wx.Dialog):
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Choose query tool"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        LocUnits = self.parent.MapWindow.Map.ProjInfo()['units']
+        LocUnits = self.parent.MapWindow.Map.GetProjInfo()['units']
 
         self.queryBox = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_("Select by box"))
         self.queryBox.SetValue(UserSettings.Get(group='vdigit', key="query", subkey='box'))
