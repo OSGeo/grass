@@ -114,4 +114,5 @@ IconsSilk = {
     "modelRun"       : wx.ART_ERROR,
     "modelValidate"  : wx.ART_ERROR,
     "imageSave"      : wx.ART_ERROR,
+    "pythonSave"     : wx.ART_ERROR,
     }
