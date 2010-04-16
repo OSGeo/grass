@@ -517,6 +517,10 @@ class Settings:
                         'valid' : (211, 211, 211, 255), # light grey
                         'invalid' : (255, 255, 255, 255), # white
                         },
+                    'size' : {
+                        'width' : 100,
+                        'height' : 50,
+                        },
                     },
                 },
             }
