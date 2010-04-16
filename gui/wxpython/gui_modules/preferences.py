@@ -907,22 +907,83 @@ class PreferencesBaseDialog(wx.Dialog):
         
     def OnDefault(self, event):
         """!Button 'Set to default' pressed"""
-        pass
-    
+        self.settings.userSettings = copy.deepcopy(self.settings.defaultSettings)
+        
+        # update widgets
+        for gks in self.winId.keys():
+            try:
+                group, key, subkey = gks.split(':')
+                value = self.settings.Get(group, key, subkey)
+            except ValueError:
+                group, key, subkey, subkey1 = gks.split(':')
+                value = self.settings.Get(group, key, [subkey, subkey1])
+            win = self.FindWindowById(self.winId[gks])
+            if win.GetName() in ('GetValue', 'IsChecked'):
+                value = win.SetValue(value)
+            elif win.GetName() == 'GetSelection':
+                value = win.SetSelection(value)
+            elif win.GetName() == 'GetStringSelection':
+                value = win.SetStringSelection(value)
+            else:
+                value = win.SetValue(value)
+        
     def OnApply(self, event):
         """!Button 'Apply' pressed"""
-        pass
+        if self._updateSettings():
+            self.parent.goutput.WriteLog(_('Settings applied to current session but not saved'))
+            self.Close()
 
-    def OnSave(self, event):
-        """!Button 'Save' pressed"""
-        pass
-
+    def OnCloseWindow(self, event):
+        self.Hide()
+        
     def OnCancel(self, event):
         """!Button 'Cancel' pressed"""
         self.Close()
         
-    def OnCloseWindow(self, event):
-        self.Hide()
+    def OnSave(self, event):
+        """!Button 'Save' pressed"""
+        if self._updateSettings():
+            file = self.settings.SaveToFile()
+            self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % file)
+            self.Close()
+
+    def _updateSettings(self):
+        """!Update user settings"""
+        for item in self.winId.keys():
+            try:
+                group, key, subkey = item.split(':')
+                subkey1 = None
+            except ValueError:
+                group, key, subkey, subkey1 = item.split(':')
+            
+            id = self.winId[item]
+            win = self.FindWindowById(id)
+            if win.GetName() == 'GetValue':
+                value = win.GetValue()
+            elif win.GetName() == 'GetSelection':
+                value = win.GetSelection()
+            elif win.GetName() == 'IsChecked':
+                value = win.IsChecked()
+            elif win.GetName() == 'GetStringSelection':
+                value = win.GetStringSelection()
+            elif win.GetName() == 'GetColour':
+                value = tuple(win.GetValue())
+            else:
+                value = win.GetValue()
+
+            if key == 'keycolumn' and value == '':
+                wx.MessageBox(parent=self,
+                              message=_("Key column cannot be empty string."),
+                              caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
+                win.SetValue(self.settings.Get(group='atm', key='keycolumn', subkey='value'))
+                return False
+
+            if subkey1:
+                self.settings.Set(group, value, key, [subkey, subkey1])
+            else:
+                self.settings.Set(group, value, key, subkey)
+        
+        return True
 
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""
@@ -1832,84 +1893,10 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         event.Skip()
         
-    def OnSave(self, event):
-        """!Button 'Save' pressed"""
-        if self._UpdateSettings():
-            file = self.settings.SaveToFile()
-            self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % file)
-            self.Close()
-
-    def OnApply(self, event):
-        """!Button 'Apply' pressed"""
-        if self._UpdateSettings():
-            self.parent.goutput.WriteLog(_('Settings applied to current session but not saved'))
-            self.Close()
-
-    def OnCloseWindow(self, event):
-        self.Hide()
-        
-    def OnCancel(self, event):
-        """!Button 'Cancel' pressed"""
-        self.Close()
-
-    def OnDefault(self, event):
-        """!Button 'Set to default' pressed"""
-        self.settings.userSettings = copy.deepcopy(self.settings.defaultSettings)
-        
-        # update widgets
-        for gks in self.winId.keys():
-            try:
-                group, key, subkey = gks.split(':')
-                value = self.settings.Get(group, key, subkey)
-            except ValueError:
-                group, key, subkey, subkey1 = gks.split(':')
-                value = self.settings.Get(group, key, [subkey, subkey1])
-            win = self.FindWindowById(self.winId[gks])
-            if win.GetName() in ('GetValue', 'IsChecked'):
-                value = win.SetValue(value)
-            elif win.GetName() == 'GetSelection':
-                value = win.SetSelection(value)
-            elif win.GetName() == 'GetStringSelection':
-                value = win.SetStringSelection(value)
-            else:
-                value = win.SetValue(value)
-
-    def _UpdateSettings(self):
+    def _updateSettings(self):
         """!Update user settings"""
-        for item in self.winId.keys():
-            try:
-                group, key, subkey = item.split(':')
-                subkey1 = None
-            except ValueError:
-                group, key, subkey, subkey1 = item.split(':')
-            
-            id = self.winId[item]
-            win = self.FindWindowById(id)
-            if win.GetName() == 'GetValue':
-                value = win.GetValue()
-            elif win.GetName() == 'GetSelection':
-                value = win.GetSelection()
-            elif win.GetName() == 'IsChecked':
-                value = win.IsChecked()
-            elif win.GetName() == 'GetStringSelection':
-                value = win.GetStringSelection()
-            elif win.GetName() == 'GetColour':
-                value = tuple(win.GetValue())
-            else:
-                value = win.GetValue()
-
-            if key == 'keycolumn' and value == '':
-                wx.MessageBox(parent=self,
-                              message=_("Key column cannot be empty string."),
-                              caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
-                win.SetValue(self.settings.Get(group='atm', key='keycolumn', subkey='value'))
-                return False
-
-            if subkey1:
-                self.settings.Set(group, value, key, [subkey, subkey1])
-            else:
-                self.settings.Set(group, value, key, subkey)
-            
+        PreferencesBaseDialog._updateSettings(self)
+        
         #
         # update default window dimension
         #
