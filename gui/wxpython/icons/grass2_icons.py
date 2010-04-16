@@ -107,8 +107,9 @@ IconsGrass2 = {
     # modeler
     "modelActionAdd" : 'layer-add.png',
     "modelDataAdd"   : 'map-add.png',
-    "modelRelation"  : 'move.png',
+    "modelRelation"  : 'relation-create.png',
     "modelRun"       : 'execute.png',
     "modelValidate"  : 'check.png',
     "imageSave"      : 'image-export.png',
+    "pythonSave"     : 'python-export.png',
     }
