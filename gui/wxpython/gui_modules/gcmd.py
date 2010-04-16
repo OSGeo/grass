@@ -91,27 +91,29 @@ class GMessage:
                                reason, exception),
                           caption = caption,
                           style = style)
-            
+
+class GError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
 class GException(Exception):
     """!Generic exception"""
-    def __init__(self, message, title=_("Error"), parent=None):
+    def __init__(self, message, title = _("Error"), parent = None):
         self.msg = message
         self.parent = parent
         self.title = title
         
     def Show(self):
-        dlg = wx.MessageDialog(parent=self.parent,
-                               caption=self.title,
-                               message=self.msg,
-                               style=wx.ICON_ERROR | wx.CENTRE)
-        dlg.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_error.ico'), wx.BITMAP_TYPE_ICO))
-        if self.parent:
-            dlg.CentreOnParent()
-        else:
-            dlg.CentreOnScreen()
+        GMessage(parent  = self.parent,
+                 message = self.msg,
+                 msgType = 'error')
 
-        dlg.ShowModal()
-        
+    def GetMessage(self):
+        return self.msg
+    
     def __str__(self):
         self.Show()
         
@@ -120,9 +122,9 @@ class GException(Exception):
 class GStdError(GException):
     """!Generic exception"""
 
-    def __init__(self, message, title=_("Error"), parent=None):
+    def __init__(self, message, title = _("Error"), parent = None):
         GException.__init__(self, message, title=title, parent=parent)
-
+    
 class CmdError(GException):
     """!Exception used for GRASS commands.
 
