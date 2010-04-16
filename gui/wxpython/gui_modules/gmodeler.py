@@ -232,6 +232,11 @@ class Model(object):
             msg += ', '.join(vect)
         
         return rast, vect, rast3d, msg
+
+    def Update(self):
+        """!Update model"""
+        for action in self.actions:
+            action.Update()
     
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Graphical modeler (under development)"), **kwargs):
@@ -253,7 +258,6 @@ class ModelFrame(wx.Frame):
             "default" : wx.StockCursor(wx.CURSOR_ARROW),
             "cross"   : wx.StockCursor(wx.CURSOR_CROSS),
             }
-        self.dialogs = { 'preferences' : None }
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
@@ -314,7 +318,15 @@ class ModelFrame(wx.Frame):
         evthandler.SetShape(item)
         evthandler.SetPreviousHandler(item.GetEventHandler())
         item.SetEventHandler(evthandler)
-        
+
+    def GetCanvas(self):
+        """!Get canvas"""
+        return self.canvas
+    
+    def GetModel(self):
+        """!Get model"""
+        return self.model
+    
     def ModelChanged(self):
         """!Update window title"""
         if not self.modelChanged:
@@ -329,12 +341,11 @@ class ModelFrame(wx.Frame):
 
     def OnPreferences(self, event):
         """!Open preferences dialog"""
-        if not self.dialogs['preferences']:
-            dlg = PreferencesDialog(parent = self)
-            self.dialogs['preferences'] = dlg
-            self.dialogs['preferences'].CenterOnParent()
+        dlg = PreferencesDialog(parent = self)
+        dlg.CenterOnParent()
         
-        self.dialogs['preferences'].ShowModal()
+        dlg.ShowModal()
+        self.canvas.Refresh()
         
     def OnModelProperties(self, event):
         """!Model properties dialog"""
@@ -1017,11 +1028,8 @@ class ModelAction(ogl.RectangleShape):
         self.id      = -1    # used for gxm file
         
         self.data = list()   # list of connected data items
-
-        # colors
-        self.colors = dict()
-        self.colors['valid'] = wx.LIGHT_GREY_BRUSH
-        self.colors['invalid'] = wx.WHITE_BRUSH
+        
+        self.isValid = False
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -1030,11 +1038,22 @@ class ModelAction(ogl.RectangleShape):
             self.SetX(x)
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
-            self.SetBrush(self.colors['invalid'])
+            self._setBrush(False)
             if self.cmd and len(self.cmd) > 0:
                 self.AddText(self.cmd[0])
             else:
                 self.AddText('<<module>>')
+        
+    def _setBrush(self, isvalid):
+        """!Set brush"""
+        if isvalid:
+            color = UserSettings.Get(group='modeler', key='action',
+                                     subkey=('color', 'valid'))
+        else:
+            color = UserSettings.Get(group='modeler', key='action',
+                                     subkey=('color', 'invalid'))
+        wxColor = wx.Color(color[0], color[1], color[2])
+        self.SetBrush(wx.Brush(wxColor))
         
     def GetId(self):
         """!Get id"""
@@ -1082,11 +1101,9 @@ class ModelAction(ogl.RectangleShape):
 
     def SetValid(self, isvalid):
         """!Set instance to be valid/invalid"""
-        if isvalid:
-            self.SetBrush(self.colors['valid'])
-        else:
-            self.SetBrush(self.colors['invalid'])
-
+        self.isValid = isvalid
+        self._setBrush(isvalid)
+        
     def AddData(self, item):
         """!Register new data item"""
         if item not in self.data:
@@ -1100,6 +1117,10 @@ class ModelAction(ogl.RectangleShape):
         
         return None
 
+    def Update(self):
+        """!Update action"""
+        self._setBrush(self.isValid)
+        
 class ModelData(ogl.EllipseShape):
     """!Data item class"""
     def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = 175, height = 50):
@@ -1821,7 +1842,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                                    colour = self.settings.Get(group='modeler', key='action', subkey=('color', 'valid')),
                                    size = globalvar.DIALOG_COLOR_SIZE)
         vColor.SetName('GetColour')
-        self.winId['modeler:action:validColor'] = vColor.GetId()
+        self.winId['modeler:action:color:valid'] = vColor.GetId()
         
         gridSizer.Add(item=vColor,
                       flag=wx.ALIGN_RIGHT |
@@ -1838,7 +1859,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                                    colour = self.settings.Get(group='modeler', key='action', subkey=('color', 'invalid')),
                                    size = globalvar.DIALOG_COLOR_SIZE)
         iColor.SetName('GetColour')
-        self.winId['modeler:action:invalidColor'] = iColor.GetId()
+        self.winId['modeler:action:color:invalid'] = iColor.GetId()
         
         gridSizer.Add(item=iColor,
                       flag=wx.ALIGN_RIGHT |
@@ -1865,6 +1886,13 @@ class PreferencesDialog(PreferencesBaseDialog):
         
         return panel
 
+    def OnApply(self, event):
+        """!Button 'Apply' pressed"""
+        PreferencesBaseDialog.OnApply(self, event)
+        
+        self.parent.GetModel().Update()
+        self.parent.GetCanvas().Refresh()
+        
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
