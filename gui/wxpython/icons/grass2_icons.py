@@ -108,6 +108,7 @@ IconsGrass2 = {
     "modelActionAdd" : 'layer-add.png',
     "modelDataAdd"   : 'map-add.png',
     "modelRelation"  : 'move.png',
-    "modelRun"       : 'redo.png',
-    "modelValidate"  : 'tools.png',
+    "modelRun"       : 'execute.png',
+    "modelValidate"  : 'check.png',
+    "imageSave"      : 'image-export.png',
     }
