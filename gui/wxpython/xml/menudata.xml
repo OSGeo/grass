@@ -675,7 +675,7 @@
       </items>
     </menu>
     <menu>
-      <label>C&amp;onfig</label>
+      <label>&amp;Settings</label>
       <items>
 	<menu>
 	  <label>Region</label>

@@ -14,7 +14,8 @@ Classes:
  - ModelRelation
  - ProcessModelFile
  - WriteModelFile
-
+ - PreferencesDialog
+ 
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -42,6 +43,7 @@ if not os.getenv("GRASS_WXBUNDLED"):
 import wx
 import wx.lib.ogl as ogl
 import wx.lib.flatnotebook as FN
+import wx.lib.colourselect as csel
 
 import menu
 import menudata
@@ -51,11 +53,10 @@ import prompt
 import utils
 import goutput
 import gselect
-from   debug import Debug
-from   gcmd import GMessage
-from   gcmd import GError
-from   gdialogs import ElementDialog
-from   gdialogs import GetImageHandlers
+from debug import Debug
+from gcmd import GMessage, GError
+from gdialogs import ElementDialog, GetImageHandlers
+from preferences import PreferencesBaseDialog, globalSettings as UserSettings
 from grass.script import core as grass
 
 class Model(object):
@@ -252,6 +253,7 @@ class ModelFrame(wx.Frame):
             "default" : wx.StockCursor(wx.CURSOR_ARROW),
             "cross"   : wx.StockCursor(wx.CURSOR_CROSS),
             }
+        self.dialogs = { 'preferences' : None }
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
@@ -325,6 +327,18 @@ class ModelFrame(wx.Frame):
         """!Close window"""
         self.Destroy()
 
+    def OnPreferences(self, event):
+        """!Open preferences dialog"""
+        if not self.dialogs['preferences']:
+            dlg = PreferencesDialog(parent = self)
+            self.dialogs['preferences'] = dlg
+            self.dialogs['preferences'].CenterOnParent()
+        
+        self.dialogs['preferences'].ShowModal()
+        
+    def OnModelProperties(self, event):
+        """!Model properties dialog"""
+        
     def OnDeleteData(self, event):
         """!Delete intermediate data"""
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -1766,6 +1780,91 @@ class WriteModelFile:
             
         self.indent -= 4
         
+class PreferencesDialog(PreferencesBaseDialog):
+    """!User preferences dialog"""
+    def __init__(self, parent, settings = UserSettings,
+                 title = _("Modeler settings")):
+        
+        PreferencesBaseDialog.__init__(self, parent = parent, title = title,
+                                       settings = settings)
+        
+        # create notebook pages
+        self._createDiagramPage(self.notebook)
+        
+        self.SetMinSize(self.GetBestSize())
+        self.SetSize(self.size)
+
+    def _createDiagramPage(self, notebook):
+        """!Create notebook page for diagram settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        notebook.AddPage(page = panel, text = _("Diagram"))
+
+        #
+        # action
+        #
+        border = wx.BoxSizer(wx.VERTICAL)
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Action settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
+        gridSizer.AddGrowableCol(0)
+        
+        # colors
+        row = 0
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Valid:")),
+                      flag=wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        vColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='action', subkey=('color', 'valid')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        vColor.SetName('GetColour')
+        self.winId['modeler:action:validColor'] = vColor.GetId()
+        
+        gridSizer.Add(item=vColor,
+                      flag=wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 1))
+
+        row = 1
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Invalid:")),
+                      flag=wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        iColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='action', subkey=('color', 'invalid')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        iColor.SetName('GetColour')
+        self.winId['modeler:action:invalidColor'] = iColor.GetId()
+        
+        gridSizer.Add(item=iColor,
+                      flag=wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 1))
+
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+        
+        #
+        # data
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Data settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
+        gridSizer.AddGrowableCol(0)
+        
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+        
+        panel.SetSizer(border)
+        
+        return panel
+
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()

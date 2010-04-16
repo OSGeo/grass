@@ -409,7 +409,11 @@ class Map(object):
             sys.exit(_("GISBASE not set. You must be in GRASS GIS to run this program."))
         
         self.env = self._runCommand(grass.gisenv)
-                
+            
+    def GetProjInfo(self):
+        """!Get projection info"""
+        return self.projinfo
+    
     def _projInfo(self):
         """!Return region projection and map units information
         """

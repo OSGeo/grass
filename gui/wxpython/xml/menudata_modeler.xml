@@ -52,6 +52,16 @@
       </items>
     </menu>
     <menu>
+      <label>&amp;Settings</label>
+      <items>
+	<menuitem>
+	  <label>Preferences</label>
+	  <help>Modeler settings</help>
+	  <handler>OnPreferences</handler>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
       <label>&amp;Model</label>
       <items>
 	<menuitem>
@@ -75,6 +85,12 @@
 	  <label>Remove item</label>
 	  <help>Remove action/data from model</help>
 	  <handler>OnRemoveItem</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Model properties</label>
+	  <help>Model properties (name, purpose, etc.)</help>
+	  <handler>OnModelProperties</handler>
 	</menuitem>
 	<separator />
 	<menuitem>
