@@ -1128,13 +1128,17 @@ class ModelAction(ogl.RectangleShape):
         
 class ModelData(ogl.EllipseShape):
     """!Data item class"""
-    def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = 175, height = 50):
+    def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = None, height = None):
         self.parent  = parent
         self.name    = name
         self.value   = value
         self.prompt  = prompt
         self.intermediate = False
         self.propWin = None
+        if not width:
+            width = UserSettings.Get(group='modeler', key='data', subkey=('size', 'width'))
+        if not height:
+            height = UserSettings.Get(group='modeler', key='data', subkey=('size', 'height'))
         
         self.actions = { 'from' : list(), 'to' : list() }
 
@@ -1928,13 +1932,50 @@ class PreferencesDialog(PreferencesBaseDialog):
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Data"))
         
+        # size
         border = wx.BoxSizer(wx.VERTICAL)
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                              label = " %s " % _("Data settings"))
+                              label = " %s " % _("Size settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
         gridSizer.AddGrowableCol(0)
+        
+        row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Width:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        
+        width = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                            min = 0, max = 500,
+                            initial = self.settings.Get(group='modeler', key='data', subkey=('size', 'width')))
+        width.SetName('GetValue')
+        self.winId['modeler:data:size:width'] = width.GetId()
+        
+        gridSizer.Add(item = width,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Height:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        
+        height = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                             min = 0, max = 500,
+                             initial = self.settings.Get(group='modeler', key='data', subkey=('size', 'height')))
+        height.SetName('GetValue')
+        self.winId['modeler:data:size:height'] = height.GetId()
+        
+        gridSizer.Add(item = height,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
         
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
