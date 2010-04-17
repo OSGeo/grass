@@ -517,6 +517,9 @@ int calculate(int fd, area_des ad, double *result)
 	G_free(mask_buf);
     G_free(mask_patch_sup);
     *result = indice;
+
+    G_free(buf_sup);
+    G_free(buf);
     return RLI_OK;
 }
 
