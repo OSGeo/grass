@@ -123,7 +123,7 @@ proc setupSamplingFrame {widget} {
 	#wm minsize .samplingFrame 350 200
 	pack $widget.samplingFrame
 	#insert top label 
-	label $widget.samplingFrame.topLabel -text "Define a sampling frame"
+	label $widget.samplingFrame.topLabel -text "Define a sampling frame (region for analysis)"
 	pack $widget.samplingFrame.topLabel -side top -pady 10
 
 	frame $widget.samplingFrame.choice -relief flat
