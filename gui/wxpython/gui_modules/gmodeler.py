@@ -237,6 +237,9 @@ class Model(object):
         """!Update model"""
         for action in self.actions:
             action.Update()
+        
+        for data in self.data:
+            data.Update()
     
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Graphical modeler (under development)"), **kwargs):
@@ -1149,13 +1152,8 @@ class ModelData(ogl.EllipseShape):
             self.SetX(x)
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
-            if self.prompt == 'raster':
-                self.SetBrush(wx.Brush(wx.Colour(215, 215, 248)))
-            elif self.prompt == 'vector':
-                self.SetBrush(wx.Brush(wx.Colour(248, 215, 215)))
-            else:
-                self.SetBrush(wx.LIGHT_GREY_BRUSH)
-        
+            self._setBrush()
+            
             if name:
                 self.AddText(name)
             else:
@@ -1243,6 +1241,27 @@ class ModelData(ogl.EllipseShape):
         """!Get properties dialog"""
         self.propWin = win
 
+    def _setBrush(self):
+        """!Set brush"""
+        if self.prompt == 'raster':
+            color = UserSettings.Get(group='modeler', key='data',
+                                     subkey=('color', 'raster'))
+        elif self.prompt == 'raster3d':
+            color = UserSettings.Get(group='modeler', key='data',
+                                     subkey=('color', 'raster3d'))
+        elif self.prompt == 'vector':
+            color = UserSettings.Get(group='modeler', key='data',
+                                     subkey=('color', 'vector'))
+        else:
+            color = UserSettings.Get(group='modeler', key='action',
+                                     subkey=('color', 'invalid'))
+        wxColor = wx.Color(color[0], color[1], color[2])
+        self.SetBrush(wx.Brush(wxColor))
+        
+    def Update(self):
+        """!Update action"""
+        self._setBrush()
+        
 class ModelDataDialog(ElementDialog):
     """!Data item properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Data properties"),
@@ -1932,8 +1951,70 @@ class PreferencesDialog(PreferencesBaseDialog):
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Data"))
         
-        # size
+        # colors
         border = wx.BoxSizer(wx.VERTICAL)
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Color settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
+        gridSizer.AddGrowableCol(0)
+        
+        row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Raster:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        rColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='data', subkey=('color', 'raster')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        rColor.SetName('GetColour')
+        self.winId['modeler:data:color:raster'] = rColor.GetId()
+        
+        gridSizer.Add(item = rColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("3D raster:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        r3Color = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                    colour = self.settings.Get(group='modeler', key='data', subkey=('color', 'raster3d')),
+                                    size = globalvar.DIALOG_COLOR_SIZE)
+        r3Color.SetName('GetColour')
+        self.winId['modeler:data:color:raster3d'] = r3Color.GetId()
+        
+        gridSizer.Add(item = r3Color,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+        
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Vector:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        vColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='data', subkey=('color', 'vector')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        vColor.SetName('GetColour')
+        self.winId['modeler:data:color:vector'] = vColor.GetId()
+        
+        gridSizer.Add(item = vColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+        
+        sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
+
+        # size
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                               label = " %s " % _("Size settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -1987,6 +2068,13 @@ class PreferencesDialog(PreferencesBaseDialog):
     def OnApply(self, event):
         """!Button 'Apply' pressed"""
         PreferencesBaseDialog.OnApply(self, event)
+        
+        self.parent.GetModel().Update()
+        self.parent.GetCanvas().Refresh()
+
+    def OnSave(self, event):
+        """!Button 'Save' pressed"""
+        PreferencesBaseDialog.OnSave(self, event)
         
         self.parent.GetModel().Update()
         self.parent.GetCanvas().Refresh()

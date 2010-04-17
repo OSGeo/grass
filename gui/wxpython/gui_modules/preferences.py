@@ -523,6 +523,11 @@ class Settings:
                         },
                     },
                 'data' : { 
+                    'color': {
+                        'raster'   : (215, 215, 248), # light blue
+                        'raster3d' : (215, 248, 215), # light green
+                        'vector'   : (248, 215, 215), # light red
+                        },
                     'size' : {
                         'width' : 175,
                         'height' : 50,
