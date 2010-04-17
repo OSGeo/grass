@@ -473,6 +473,7 @@ int calculate(int fd, area_des ad, struct Cell_head hd, double *result)
 
     G_free(mask_patch_corr);
 
+    G_free(buf_sup);
     return RLI_OK;
 }
 
