@@ -522,6 +522,12 @@ class Settings:
                         'height' : 50,
                         },
                     },
+                'data' : { 
+                    'size' : {
+                        'width' : 175,
+                        'height' : 50,
+                        },
+                    },
                 },
             }
         
