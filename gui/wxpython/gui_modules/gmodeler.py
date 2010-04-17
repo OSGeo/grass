@@ -1875,7 +1875,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
 
-        row = 1
+        row += 1
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Invalid:")),
                       flag = wx.ALIGN_LEFT |
@@ -1888,6 +1888,23 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId['modeler:action:color:invalid'] = iColor.GetId()
         
         gridSizer.Add(item = iColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Running:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        rColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='action', subkey=('color', 'running')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        rColor.SetName('GetColour')
+        self.winId['modeler:action:color:running'] = rColor.GetId()
+        
+        gridSizer.Add(item = rColor,
                       flag = wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
