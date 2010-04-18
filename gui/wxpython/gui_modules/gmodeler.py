@@ -53,10 +53,10 @@ import prompt
 import utils
 import goutput
 import gselect
-from debug import Debug
-from gcmd import GMessage, GError
-from gdialogs import ElementDialog, GetImageHandlers
-from preferences import PreferencesBaseDialog, globalSettings as UserSettings
+from debug        import Debug
+from gcmd         import GMessage, GError
+from gdialogs     import ElementDialog, GetImageHandlers
+from preferences  import PreferencesBaseDialog, globalSettings as UserSettings
 from grass.script import core as grass
 
 class Model(object):
@@ -285,8 +285,9 @@ class ModelFrame(wx.Frame):
         
         self.model = Model(self.canvas)
         
-        self.goutput = goutput.GMConsole(parent = self, pageid = 1)
-                
+        self.goutput = goutput.GMConsole(parent = self, pageid = 1,
+                                         notebook = self.notebook)
+        
         self.modelPage   = self.notebook.AddPage(self.canvas, text=_('Model'))
         self.commandPage = self.notebook.AddPage(self.goutput, text=_('Command output'))
         wx.CallAfter(self.notebook.SetSelection, 0)
@@ -547,8 +548,9 @@ class ModelFrame(wx.Frame):
             if ret != wx.ID_YES:
                 return
         
+        self.goutput.cmdThread.SetId(-1)
         for action in self.model.GetActions():
-            self.SetStatusText(_('Running model...'), 0)        
+            self.SetStatusText(_('Running model...'), 0) 
             self.goutput.RunCmd(command = action.GetLog(string = False),
                                 onDone = self.OnDone)
         
@@ -1054,7 +1056,10 @@ class ModelAction(ogl.RectangleShape):
         
     def _setBrush(self, isvalid):
         """!Set brush"""
-        if isvalid:
+        if isvalid is None:
+            color = UserSettings.Get(group='modeler', key='action',
+                                     subkey=('color', 'running'))
+        elif isvalid:
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'valid'))
         else:
@@ -1125,10 +1130,13 @@ class ModelAction(ogl.RectangleShape):
         
         return None
 
-    def Update(self):
+    def Update(self, running = False):
         """!Update action"""
-        self._setBrush(self.isValid)
-        
+        if running:
+            self._setBrush(None)
+        else:
+            self._setBrush(self.isValid)
+            
 class ModelData(ogl.EllipseShape):
     """!Data item class"""
     def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = None, height = None):
