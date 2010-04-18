@@ -333,6 +333,8 @@ def fatal(msg):
     """!Display an error message using g.message -e, then abort
 
     @param msg error message to be displayed
+
+    @return g.message's exit code
     """
     error(msg)
     
