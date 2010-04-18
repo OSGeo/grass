@@ -38,7 +38,7 @@ import preferences
 import menuform
 import prompt
 
-from debug import Debug as Debug
+from debug       import Debug
 from preferences import globalSettings as UserSettings
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
@@ -75,6 +75,10 @@ class CmdThread(threading.Thread):
         
         return CmdThread.requestId
 
+    def SetId(self, id):
+        """!Set starting id"""
+        CmdThread.requestId = id
+        
     def run(self):
         while True:
             requestId, callable, onDone, args, kwds = self.requestQ.get()
@@ -113,7 +117,7 @@ class CmdThread(threading.Thread):
                     argsColor = list(args)
                     argsColor[0] = [ 'r.colors',
                                      'map=%s' % outputParam['value'],
-                                     'color=%s' % colorTable]
+                                     'color=%s' % colorTable ]
                     self.requestCmdColor = callable(*argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
             
@@ -376,26 +380,24 @@ class GMConsole(wx.SplitterWindow):
         """!Write message in error style"""
         self.WriteLog(line, style=self.cmd_output.StyleError, switchPage = True)
 
-    def RunCmd(self, command, compReg=True, switchPage=False,
+    def RunCmd(self, command, compReg = True, switchPage = False,
                onDone = None):
-        """
-        Run in GUI GRASS (or other) commands typed into
-        console command text widget, and send stdout output to output
-        text widget.
+        """!Run in GUI GRASS (or other) commands typed into console
+        command text widget, and send stdout output to output text
+        widget.
 
         Command is transformed into a list for processing.
 
-        TODO: Display commands (*.d) are captured and
-        processed separately by mapdisp.py. Display commands are
-        rendered in map display widget that currently has
-        the focus (as indicted by mdidx).
+        @todo Display commands (*.d) are captured and processed
+        separately by mapdisp.py. Display commands are rendered in map
+        display widget that currently has the focus (as indicted by
+        mdidx).
 
         @param command command (list)
         @param compReg if true use computation region
         @param switchPage switch to output page
         @param onDone function to be called when command is finished
         """
-        
         # map display window available ?
         try:
             curr_disp = self.parent.curr_page.maptree.mapdisplay
@@ -463,7 +465,7 @@ class GMConsole(wx.SplitterWindow):
                                                       layerType = 'vector')
                 else:
                     lname = None
-
+                
                 if self.parent.GetName() == "LayerManager":                
                     self.parent.curr_page.maptree.AddLayer(ltype=layertype,
                                                            lname=lname,
@@ -488,7 +490,7 @@ class GMConsole(wx.SplitterWindow):
                     tmpreg = os.getenv("GRASS_REGION")
                     if os.environ.has_key("GRASS_REGION"):
                         del os.environ["GRASS_REGION"]
-                    
+                
                 if len(cmdlist) == 1 and cmdlist[0] not in ('v.krige'):
                     import menuform
                     # process GRASS command without argument
@@ -501,7 +503,7 @@ class GMConsole(wx.SplitterWindow):
                                           self.cmd_stdout, self.cmd_stderr)                                          
                     self.btn_abort.Enable()
                     self.cmd_output_timer.Start(50)
-
+                    
                     return None
                 
                 # deactivate computational region and return to display settings
@@ -659,13 +661,18 @@ class GMConsole(wx.SplitterWindow):
     def OnCmdAbort(self, event):
         """!Abort running command"""
         self.cmdThread.abort()
-                
+        
     def OnCmdRun(self, event):
         """!Run command"""
+        if self.parent.GetName() == 'Modeler':
+            self.parent.GetModel().GetActions()[event.pid].Update(running = True)
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
         
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
+        if self.parent.GetName() == 'Modeler':
+            self.parent.GetModel().GetActions()[event.pid].Update(running = False)
+        
         if event.aborted:
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '

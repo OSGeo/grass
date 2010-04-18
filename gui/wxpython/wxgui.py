@@ -9,7 +9,7 @@ Classes:
  - GMFrame
  - GMApp
 
-(C) 2006-2009 by the GRASS Development Team
+(C) 2006-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -107,7 +107,7 @@ class GMFrame(wx.Frame):
         self.parent    = parent
         self.baseTitle = title
         self.iconsize  = (16, 16)
-
+        
         wx.Frame.__init__(self, parent=parent, id=id, size=(550, 450),
                           style=wx.DEFAULT_FRAME_STYLE)
                           
