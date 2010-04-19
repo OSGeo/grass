@@ -1433,6 +1433,15 @@ TINs are simply created as 2D/3D vector polygons consisting of
 
 \section vlibOgrIface OGR interface
 
+\subsection vLibPseudoTopo Pseudo-topology
+
+Reduced topology: each boundary is attached to one area only,
+i.e. smoothing, simplification, removing small areas etc. will not
+work properly for adjacent areas or areas within areas.
+
+Full topology is only available for native GRASS vectors or can only
+be built after all polygons are cleaned as done by <tt>v.in.ogr</tt>.
+
 \subsection vlibFrmtFileFormat Frmt file format specification
 
 Frmt is a plain text file which contains basic information about
