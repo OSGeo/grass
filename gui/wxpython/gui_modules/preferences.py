@@ -2102,8 +2102,8 @@ class DefaultFontDialog(wx.Dialog):
         return fontlist
 
 class MapsetAccess(wx.Dialog):
-    """
-    Controls setting options and displaying/hiding map overlay decorations
+    """!Controls setting options and displaying/hiding map overlay
+    decorations
     """
     def __init__(self, parent, id, title=_('Set/unset access to mapsets in current location'),
                  pos=wx.DefaultPosition, size=(350, 400),
