@@ -70,7 +70,7 @@
 #include <fcntl.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/site.h>
+#include <grass/vector.h>
 #include <grass/segment.h>
 #include <grass/glocale.h>
 #include "cost.h"
@@ -85,10 +85,10 @@ struct start_pt *head_end_pt = NULL;
 
 int main(int argc, char *argv[])
 {
-    const char *cum_cost_layer, *move_dir_layer;
+    const char *cum_cost_layer, *move_dir_layer, *nearest_layer;
     const char *cost_layer;
     const char *cost_mapset, *search_mapset;
-    void *cell, *cell2, *dir_cell;
+    void *cell, *cell2, *dir_cell, *nearest_cell;
     SEGMENT cost_seg, dir_seg;
     const char *in_file, *dir_out_file;
     double *value;
@@ -104,10 +104,10 @@ int main(int argc, char *argv[])
     int nseg;
     int maxmem;
     int segments_in_memory;
-    int cost_fd, cum_fd, dir_fd;
+    int cost_fd, cum_fd, dir_fd, nearest_fd;
     int have_stop_points = 0, dir = 0;
     int in_fd, dir_out_fd;
-    double my_cost;
+    double my_cost, nearest;
     double null_cost, dnullval;
     int srows, scols;
     int total_reviewed;
@@ -119,19 +119,19 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *flag2, *flag3, *flag4, *flag5;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
-    struct Option *opt9, *opt10, *opt11;
+    struct Option *opt9, *opt10, *opt11, *opt12;
     struct cost *pres_cell, *new_cell;
     struct start_pt *pres_start_pt = NULL;
     struct start_pt *pres_stop_pt = NULL;
     struct cc {
-	double cost_in, cost_out;
+	double cost_in, cost_out, nearest;
     } costs;
 
     void *ptr2;
-    RASTER_MAP_TYPE data_type, dir_data_type = DCELL_TYPE;
+    RASTER_MAP_TYPE data_type, dir_data_type = DCELL_TYPE, nearest_data_type = CELL_TYPE;
     struct History history;
     double peak = 0.0;
-    int dsize;
+    int dsize, nearest_size;
 
     G_gisinit(argv[0]);
 
@@ -150,6 +150,12 @@ int main(int argc, char *argv[])
 	_("Name of raster map containing grid cell cost information");
 
     opt1 = G_define_standard_option(G_OPT_R_OUTPUT);
+
+    opt12 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt12->key = "nearest";
+    opt12->required = NO;
+    opt12->description =
+	_("Name of output raster map with nearest start point");
 
     opt11 = G_define_option();
     opt11->key = "outdir";
@@ -338,6 +344,7 @@ int main(int argc, char *argv[])
     cum_cost_layer = opt1->answer;
     cost_layer = opt2->answer;
     move_dir_layer = opt11->answer;
+    nearest_layer = opt12->answer;
 
     /* Find number of rows and columns in window */
     nrows = Rast_window_rows();
@@ -396,8 +403,8 @@ int main(int argc, char *argv[])
     if (dir == 1) {
 	double disk_mb, mem_mb;
 
-	disk_mb = (double) nrows * ncols * 24. / 1048576.;
-	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
+	disk_mb = (double) nrows * ncols * 32. / 1048576.;
+	mem_mb  = (double) srows * scols * 32. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
 	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
 	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
@@ -406,8 +413,8 @@ int main(int argc, char *argv[])
     else {
 	double disk_mb, mem_mb;
 
-	disk_mb = (double) nrows * ncols * 16. / 1048576.;
-	mem_mb  = (double) srows * scols * 16. / 1048576. * segments_in_memory;
+	disk_mb = (double) nrows * ncols * 24. / 1048576.;
+	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
 	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
 	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
@@ -456,6 +463,7 @@ int main(int argc, char *argv[])
 
 	Rast_set_d_null_value(&dnullval, 1);
 	costs.cost_out = dnullval;
+	costs.nearest = 0;
 
 	total_cells = nrows * ncols;
 
@@ -520,34 +528,53 @@ int main(int argc, char *argv[])
     
     /* read vector with start points */
     if (opt7->answer) {
-	struct Map_info *fp;
+	struct Map_info In;
+	struct line_pnts *Points;
+	struct line_cats *Cats;
+	struct bound_box box;
 	struct start_pt *new_start_pt;
-	Site *site = NULL;	/* pointer to Site */
-	int got_one = 0;
-	int dims, strs, dbls;
-	RASTER_MAP_TYPE cat;
+	int cat, type, got_one = 0;
 
-	search_mapset = G_find_sites(opt7->answer, "");
+	G_message(_("Reading vector map <%s> with start points..."), opt7->answer);
 
-	fp = G_fopen_sites_old(opt7->answer, search_mapset);
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
 
-	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error(_("Failed to guess site file format"));
-	site = G_site_new_struct(cat, dims, strs, dbls);
+	Vect_set_open_level(1); /* topology not required */
 
-	for (; (G_site_get(fp, site) != EOF);) {
-	    if (!G_site_in_region(site, &window))
+	if (1 > Vect_open_old(&In, opt7->answer, ""))
+	    G_fatal_error(_("Unable to open vector map <%s>"), opt7->answer);
+
+	Vect_rewind(&In);
+
+	Vect_region_box(&window, &box);
+
+	while (1) {
+	    /* register line */
+	    type = Vect_read_next_line(&In, Points, Cats);
+
+	    /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	    if (type == -1) {
+		G_warning(_("Unable to read vector map"));
+		continue;
+	    }
+	    else if (type == -2) {
+		break;
+	    }
+	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
 	    got_one = 1;
 
-	    col = (int)Rast_easting_to_col(site->east, &window);
-	    row = (int)Rast_northing_to_row(site->north, &window);
+	    col = (int)Rast_easting_to_col(Points->x[0], &window);
+	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
 	    new_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
 
 	    new_start_pt->row = row;
 	    new_start_pt->col = col;
+	    Vect_cat_get(Cats, 1, &cat);
+	    new_start_pt->value = cat;
 	    new_start_pt->next = NULL;
 
 	    if (head_start_pt == NULL) {
@@ -561,8 +588,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	G_site_free_struct(site);
-	G_sites_close(fp);
+	Vect_close(&In);
 
 	if (!got_one)
 	    G_fatal_error(_("No start points found in vector <%s>"), opt7->answer);
@@ -570,27 +596,45 @@ int main(int argc, char *argv[])
 
     /* read vector with stop points */
     if (opt8->answer) {
-	struct Map_info *fp;
+	struct Map_info In;
+	struct line_pnts *Points;
+	struct line_cats *Cats;
+	struct bound_box box;
 	struct start_pt *new_start_pt;
-	Site *site = NULL;	/* pointer to Site */
-	int dims, strs, dbls;
-	RASTER_MAP_TYPE cat;
+	int type;
 
-	search_mapset = G_find_sites(opt8->answer, "");
+	G_message(_("Reading vector map <%s> with stop points..."), opt8->answer);
 
-	fp = G_fopen_sites_old(opt8->answer, search_mapset);
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
 
-	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error(_("Failed to guess site file format\n"));
-	site = G_site_new_struct(cat, dims, strs, dbls);
+	Vect_set_open_level(1); /* topology not required */
 
-	for (; (G_site_get(fp, site) != EOF);) {
-	    if (!G_site_in_region(site, &window))
+	if (1 > Vect_open_old(&In, opt8->answer, ""))
+	    G_fatal_error(_("Unable to open vector map <%s>"), opt8->answer);
+
+	Vect_rewind(&In);
+
+	Vect_region_box(&window, &box);
+
+	while (1) {
+	    /* register line */
+	    type = Vect_read_next_line(&In, Points, Cats);
+
+	    /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	    if (type == -1) {
+		G_warning(_("Unable to read vector map"));
+		continue;
+	    }
+	    else if (type == -2) {
+		break;
+	    }
+	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
 	    have_stop_points = 1;
 
-	    col = (int)Rast_easting_to_col(site->east, &window);
-	    row = (int)Rast_northing_to_row(site->north, &window);
+	    col = (int)Rast_easting_to_col(Points->x[0], &window);
+	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
 	    new_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
@@ -610,8 +654,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	G_site_free_struct(site);
-	G_sites_close(fp);
+	Vect_close(&In);
 
 	if (!have_stop_points)
 	    G_warning(_("No stop points found in vector <%s>"), opt7->answer);
@@ -631,12 +674,13 @@ int main(int argc, char *argv[])
 	    
 	fd = Rast_open_old(opt9->answer, search_mapset);
 	data_type2 = Rast_get_map_type(fd);
+	nearest_data_type = data_type2;
 	dsize2 = Rast_cell_size(data_type2);
 	cell2 = Rast_allocate_buf(data_type2);
 	if (!cell2)
 	    G_fatal_error(_("Unable to allocate memory"));
 
-	G_message(_("Reading raster map <%s>..."), opt9->answer);
+	G_message(_("Reading raster map <%s> with start points..."), opt9->answer);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    Rast_get_row(fd, cell2, row, data_type2);
@@ -648,16 +692,18 @@ int main(int argc, char *argv[])
 
 		    segment_get(&cost_seg, &costs, row, col);
 
+		    cellval = Rast_get_d_value(ptr2, data_type2);
 		    if (start_with_raster_vals == 1) {
-			cellval = Rast_get_d_value(ptr2, data_type2);
 			new_cell = insert(cellval, row, col);
 			costs.cost_out = cellval;
+			costs.nearest = cellval;
 			segment_put(&cost_seg, &costs, row, col);
 		    }
 		    else {
 			value = &zero;
 			new_cell = insert(zero, row, col);
 			costs.cost_out = *value;
+			costs.nearest = cellval;
 			segment_put(&cost_seg, &costs, row, col);
 		    }
 		    got_one = 1;
@@ -691,6 +737,7 @@ int main(int argc, char *argv[])
 			top_start_pt->col);
 
 	    costs.cost_out = *value;
+	    costs.nearest = top_start_pt->value;
 
 	    segment_put(&cost_seg, &costs, top_start_pt->row,
 			top_start_pt->col);
@@ -737,6 +784,7 @@ int main(int argc, char *argv[])
 	col = pres_cell->col;
 
 	my_cost = costs.cost_in;
+	nearest = costs.nearest;
 
 	G_percent(n_processed++, total_cells, 1);
 
@@ -931,6 +979,7 @@ int main(int argc, char *argv[])
 	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
+		costs.nearest = nearest;
 		segment_put(&cost_seg, &costs, row, col);
 		new_cell = insert(min_cost, row, col);
 		if (dir == 1) {
@@ -940,6 +989,7 @@ int main(int argc, char *argv[])
 	    /* update with lower costs */
 	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
+		costs.nearest = nearest;
 		segment_put(&cost_seg, &costs, row, col);
 		new_cell = insert(min_cost, row, col);
 		if (dir == 1) {
@@ -968,13 +1018,28 @@ int main(int argc, char *argv[])
     cum_fd = Rast_open_new(cum_cost_layer, data_type);
     cell = Rast_allocate_buf(data_type);
 
+    /* Open nearest start point layer */
+    if (nearest_layer) {
+	nearest_fd = Rast_open_new(nearest_layer, nearest_data_type);
+	nearest_cell = Rast_allocate_buf(nearest_data_type);
+    }
+    else {
+	nearest_fd = -1;
+	nearest_cell = NULL;
+    }
+    nearest_size = Rast_cell_size(nearest_data_type);
+
     /* Copy segmented map to output map */
     G_message(_("Writing raster map <%s>..."), cum_cost_layer);
+    if (nearest_layer) {
+	G_message(_("Writing raster map with nearest start point <%s>..."), nearest_layer);
+    }
 
     cell2 = Rast_allocate_buf(data_type);
     {
 	void *p;
 	void *p2;
+	void *p3;
 
 	Rast_set_null_value(cell2, ncols, data_type);
 
@@ -985,19 +1050,28 @@ int main(int argc, char *argv[])
 
 	    p = cell;
 	    p2 = cell2;
+	    p3 = nearest_cell;
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
 		    if (Rast_is_null_value(p2, data_type)) {
 			Rast_set_null_value(p, 1, data_type);
 			p = G_incr_void_ptr(p, dsize);
 			p2 = G_incr_void_ptr(p2, dsize);
+			if (nearest_layer) {
+			    Rast_set_null_value(p3, 1, nearest_data_type);
+			    p3 = G_incr_void_ptr(p3, nearest_size);
+			}
+
 			continue;
 		    }
 		}
 		segment_get(&cost_seg, &costs, row, col);
 		min_cost = costs.cost_out;
+		nearest = costs.nearest;
 		if (Rast_is_d_null_value(&min_cost)) {
 		    Rast_set_null_value(p, 1, data_type);
+		    if (nearest_layer)
+			Rast_set_null_value(p3, 1, nearest_data_type);
 		}
 		else {
 		    if (min_cost > peak)
@@ -1014,15 +1088,35 @@ int main(int argc, char *argv[])
 			*(DCELL *)p = (DCELL)(min_cost);
 			break;
 		    }
+
+		    if (nearest_layer) {
+			switch (nearest_data_type) {
+			case CELL_TYPE:
+			    *(CELL *)p3 = (CELL)(nearest);
+			    break;
+			case FCELL_TYPE:
+			    *(FCELL *)p3 = (FCELL)(nearest);
+			    break;
+			case DCELL_TYPE:
+			    *(DCELL *)p3 = (DCELL)(nearest);
+			    break;
+			}
+		    }
 		}
 		p = G_incr_void_ptr(p, dsize);
 		p2 = G_incr_void_ptr(p2, dsize);
+		if (nearest_layer)
+		    p3 = G_incr_void_ptr(p3, nearest_size);
 	    }
 	    Rast_put_row(cum_fd, cell, data_type);
+	    if (nearest_layer)
+		Rast_put_row(nearest_fd, nearest_cell, nearest_data_type);
 	}
 	G_percent(1, 1, 1);
 	G_free(cell);
 	G_free(cell2);
+	if (nearest_layer)
+	    G_free(nearest_cell);
     }
 
     if (dir == 1) {
@@ -1054,6 +1148,9 @@ int main(int argc, char *argv[])
     if (dir == 1) {
 	Rast_close(dir_fd);
     }
+    if (nearest_layer) {
+	Rast_close(nearest_fd);
+    }
     close(in_fd);		/* close all files */
     if (dir == 1) {
 	close(dir_out_fd);
@@ -1072,6 +1169,27 @@ int main(int argc, char *argv[])
 	Rast_short_history(move_dir_layer, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(move_dir_layer, &history);
+    }
+
+    if (nearest_layer) {
+	Rast_short_history(nearest_layer, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(nearest_layer, &history);
+	if (opt9->answer) {
+	    struct Colors colors;
+	    Rast_read_colors(opt9->answer, "", &colors);
+	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	}
+	else {
+	    struct Colors colors;
+	    struct Range range;
+	    CELL min, max;
+	    
+	    Rast_read_range(nearest_layer, G_mapset(), &range);
+	    Rast_get_range_min_max(&range, &min, &max);
+	    Rast_make_random_colors(&colors, min, max);
+	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	}
     }
 
     /*  Create colours for output map    */
@@ -1094,9 +1212,9 @@ process_answers(char **answers, struct start_pt **points,
 {
     int col, row, n;
     double east, north;
-
     struct start_pt *new_start_pt;
     int got_one = 0;
+    int point_no = 0;
 
     *points = NULL;
 
@@ -1125,6 +1243,7 @@ process_answers(char **answers, struct start_pt **points,
 
 	new_start_pt->row = row;
 	new_start_pt->col = col;
+	new_start_pt->value = ++point_no;
 	new_start_pt->next = NULL;
 
 	if (*points == NULL) {

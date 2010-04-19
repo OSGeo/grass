@@ -35,6 +35,7 @@ struct start_pt
 {
     int row;
     int col;
+    int value;
     struct start_pt *next;
 };
 
