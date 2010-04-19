@@ -665,13 +665,20 @@ class GMConsole(wx.SplitterWindow):
     def OnCmdRun(self, event):
         """!Run command"""
         if self.parent.GetName() == 'Modeler':
-            self.parent.GetModel().GetActions()[event.pid].Update(running = True)
+            try:
+                self.parent.GetModel().GetActions()[event.pid].Update(running = True)
+            except IndexError:
+                pass
+        
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
         
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
         if self.parent.GetName() == 'Modeler':
-            self.parent.GetModel().GetActions()[event.pid].Update(running = False)
+            try:
+                self.parent.GetModel().GetActions()[event.pid].Update(running = False)
+            except IndexError:
+                pass
         
         if event.aborted:
             # Thread aborted (using our convention of None return)
