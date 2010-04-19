@@ -2162,6 +2162,7 @@ class PropertiesDialog(wx.Dialog):
     def _layout(self):
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
         gridSizer.AddGrowableCol(0)
+        gridSizer.AddGrowableRow(1)
         gridSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                          label = _("Name:")),
                       flag = wx.ALIGN_LEFT |
@@ -2169,7 +2170,7 @@ class PropertiesDialog(wx.Dialog):
                       pos = (0, 0))
         gridSizer.Add(item = self.name,
                       flag = wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
+                      wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (0, 1))
         gridSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                          label = _("Description:")),
@@ -2178,7 +2179,7 @@ class PropertiesDialog(wx.Dialog):
                       pos = (1, 0))
         gridSizer.Add(item = self.desc,
                       flag = wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
+                      wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (1, 1))
         gridSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                          label = _("Author(s):")),
@@ -2187,7 +2188,7 @@ class PropertiesDialog(wx.Dialog):
                       pos = (2, 0))
         gridSizer.Add(item = self.author,
                       flag = wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
+                      wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (2, 1))
 
         btnStdSizer = wx.StdDialogButtonSizer()
@@ -2196,7 +2197,7 @@ class PropertiesDialog(wx.Dialog):
         btnStdSizer.Realize()
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=gridSizer, proportion=0,
+        mainSizer.Add(item=gridSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(item=btnStdSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
