@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
+    Vect_copy_tables(&In, &Out, layer);
     
     Points = Vect_new_line_struct();
     Points2 = Vect_new_line_struct();
