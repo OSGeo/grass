@@ -162,7 +162,7 @@ xtract_line(int num_index, int *num_array, struct Map_info *In,
 	    struct Map_info *Out, int new, int select_type, int dissolve,
 	    int field, int type_only, int reverse)
 {
-    int line;
+    int line, nlines;
     struct line_pnts *Points;
     struct line_cats *Line_Cats_Old, *CCats;
 
@@ -188,7 +188,8 @@ xtract_line(int num_index, int *num_array, struct Map_info *In,
     qsort(cats_array, ncats_array, sizeof(int), cmp);
 
     /* Cycle through all lines */
-    for (line = 1; line <= Vect_get_num_lines(In); line++) {
+    nlines = Vect_get_num_lines(In);
+    for (line = 1; line <= nlines; line++) {
 	/* default values */
 	left_area = right_area = 0;
 	left_field_match = right_field_match = 0;
@@ -197,6 +198,7 @@ xtract_line(int num_index, int *num_array, struct Map_info *In,
 	centroid_in_area = 0;
 	write = 0;
 
+	G_percent(line, nlines, 2);
 	G_debug(3, "Line = %d", line);
 
 	/* Get data */
@@ -206,7 +208,8 @@ xtract_line(int num_index, int *num_array, struct Map_info *In,
 	if (type & select_type)
 	    type_match = 1;
 
-	field_match = Vect_cat_get(Line_Cats_Old, field, &tmp);
+	if (field > 0)
+	    field_match = Vect_cat_get(Line_Cats_Old, field, &tmp);
 
 	for (i = 0; i < Line_Cats_Old->n_cats; i++) {
 	    G_debug(3, "field = %d cat = %d", Line_Cats_Old->field[i],
@@ -289,7 +292,7 @@ xtract_line(int num_index, int *num_array, struct Map_info *In,
 
 	    /* centroid */
 	    if ((type == GV_CENTROID && (select_type & GV_AREA)) &&
-		!(centroid_in_area && field_match))
+		!centroid_in_area)
 		write = 0;
 
 	    /* areas */
