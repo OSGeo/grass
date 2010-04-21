@@ -22,3 +22,5 @@ diglib: rtree
 Vlib: rtree dglib diglib
 
 vedit: Vlib
+
+neta: Vlib
