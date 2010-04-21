@@ -399,25 +399,6 @@ int V1_read_line_ogr(struct Map_info *Map,
     if (line_c != NULL)
 	Vect_reset_cats(line_c);
 
-    /*
-    if (Line->type == GV_CENTROID) {
-	G_debug(4, "Centroid");
-	node = Line->N1;
-	Node = Map->plus.Node[node];
-
-	if (line_p != NULL) {
-	    Vect_append_point(line_p, Node->x, Node->y, 0.0);
-	}
-
-	if (line_c != NULL) {
-	cat = FID and offset = FID for centroid
-	    Vect_cat_set(line_c, 1, (int)offset);
-	}
-
-	return (GV_CENTROID);
-    }
-    */
-
     FID = Map->fInfo.ogr.offset[offset];
     G_debug(4, "  FID = %ld", FID);
     
@@ -474,7 +455,6 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		     struct line_cats *line_c, int line)
 {
     struct P_line *Line;
-    
     G_debug(4, "V2_read_line_ogr() line = %d", line);
     
     Line = Map->plus.Line[line];
@@ -483,6 +463,26 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	G_fatal_error("V2_read_line_ogr(): %s %d",
 		      _("Attempt to read dead line"), line);
 
+    if (Line->type == GV_CENTROID) {
+	plus_t         node;
+	struct P_node *Node;
+	
+	G_debug(4, "Centroid");
+	node = Line->N1;
+	Node = Map->plus.Node[node];
+
+	if (line_p != NULL) {
+	    Vect_append_point(line_p, Node->x, Node->y, 0.0);
+	}
+
+	if (line_c != NULL) {
+	  /* cat = FID and offset = FID for centroid */
+	  Vect_cat_set(line_c, 1, (int) Line->offset);
+	}
+	
+	return GV_CENTROID;
+    }
+    
     return V1_read_line_ogr(Map, line_p, line_c, Line->offset);
 }
 
