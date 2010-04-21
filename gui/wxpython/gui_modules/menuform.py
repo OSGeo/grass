@@ -1402,6 +1402,8 @@ class cmdPanel(wx.Panel):
                                                label = " %s " % _("Format"),
                                                style = wx.RA_SPECIFY_ROWS,
                                                choices = [_("Native / Linked OGR"), _("Direct OGR")])
+                            if p.get('value', '').lower().rfind('@ogr') > -1:
+                                rbox.SetSelection(1)
                             rbox.SetName('VectorFormat')
                             rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
                             
@@ -1465,6 +1467,10 @@ class cmdPanel(wx.Panel):
                                                   min=1, max=100, initial=int(p['default']))
                                 win1.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
                             win2 = gselect.LayerNameSelect(parent = which_panel)
+                            if p.get('value','') != '':
+                                win2.SetItems([p['value']])
+                                win2.SetSelection(0)
+                            
                             win2.Bind(wx.EVT_TEXT, self.OnSetValue)
                             p['wxId'] = [ win1.GetId(), win2.GetId() ]
                             win.Add(item = win1, proportion = 0)
@@ -1993,7 +1999,7 @@ class GUI:
             layer = completed[1]
             if completed[2]:
                 dcmd_params.update(completed[2])
-
+        
         self.parent = parentframe
 
         # parse the interface decription
@@ -2029,8 +2035,11 @@ class GUI:
 
                     if self.grass_task.get_param(key)['element'] in ['cell', 'vector']:
                         # mapname -> mapname@mapset
-                        if '@' not in value:
+                        try:
+                            name, mapset = value.split('@')
+                        except ValueError:
                             value = value + '@' + grass.gisenv()['MAPSET']
+                    
                     self.grass_task.set_param(key, value)
                     cmd_validated.append(key + '=' + value)
                     i = i + 1
