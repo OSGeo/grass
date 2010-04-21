@@ -120,6 +120,11 @@ int main(int argc, char **argv)
     
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->label =
+	_("Layer number (if -1, all layers are displayed)");
+    field_opt->gisprompt = "old_layer,layer,layer_all";
+
     display_opt = G_define_option();
     display_opt->key = "display";
     display_opt->type = TYPE_STRING;
@@ -134,18 +139,13 @@ int main(int argc, char **argv)
     type_opt->answer = "point,line,boundary,centroid,area,face";
     type_opt->options = "point,line,boundary,centroid,area,face";
     type_opt->guisection = _("Selection");
-
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->label =
-	_("Layer number (if -1, all layers are displayed)");
-    field_opt->gisprompt = "old_layer,layer,layer_all";
-    field_opt->guisection = _("Selection");
-
+    
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
     cat_opt->guisection = _("Selection");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Selection");
+
 
     /* Colors */
     color_opt = G_define_option();
@@ -242,6 +242,7 @@ int main(int argc, char **argv)
     /* Labels */
     lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     lfield_opt->key = "llayer";
+    lfield_opt->required = NO;
     lfield_opt->guisection = _("Labels");
     lfield_opt->description =
 	_("Layer number for labels (default: the given layer number)");
