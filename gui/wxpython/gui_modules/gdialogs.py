@@ -994,11 +994,23 @@ class MultiImportDialog(wx.Dialog):
                                                   startDirectory=os.getcwd(),
                                                   changeCallback=self.OnSetInput)
             inputDir.Hide()
-            
-            inputDb = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
-            inputDb.Hide()
-            inputDb.Bind(wx.EVT_TEXT, self.OnSetInput)
 
+            inputDbFile = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
+                                                      size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                                      dialogTitle=_('Choose file'),
+                                                      buttonText=_('Browse'),
+                                                      startDirectory=os.getcwd(),
+                                                      changeCallback=self.OnSetInput)
+            inputDbFile.Hide()
+            
+            inputDbText = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
+            inputDbText.Hide()
+            inputDbText.Bind(wx.EVT_TEXT, self.OnSetInput)
+
+            inputDbChoice = wx.Choice(parent = self.panel, id = wx.ID_ANY)
+            inputDbChoice.Hide()
+            inputDbChoice.Bind(wx.EVT_CHOICE, self.OnSetInput)
+            
             inputPro = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
             inputPro.Hide()
             inputPro.Bind(wx.EVT_TEXT, self.OnSetInput)
@@ -1024,11 +1036,16 @@ class MultiImportDialog(wx.Dialog):
                                      inputDir,
                                      list()],
                            'db'   : [_("Database:"),
-                                     inputDb,
+                                     inputDbFile,
                                      list()],
                            'pro'  : [_("Protocol:"),
                                      inputPro,
-                                     list()] }
+                                     list()],
+                           'db-win' : { 'file'   : inputDbFile,
+                                        'text'   : inputDbText,
+                                        'choice' : inputDbChoice },
+                           }
+            
             self.formatToExt = {
                 # raster
                 'GeoTIFF' : 'tif',
@@ -1245,7 +1262,9 @@ class MultiImportDialog(wx.Dialog):
         
         self.Layout()
         # auto-layout seems not work here - FIXME
-        self.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0] + 175, 400))
+        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 175, 400)
+        self.SetMinSize(size)
+        self.SetSize((size.width, size.height + 100))
         width = self.GetSize()[0]
         self.list.SetColumnWidth(col=1, width=width/2 - 50)
         
@@ -1281,7 +1300,7 @@ class MultiImportDialog(wx.Dialog):
             self.inputType = 'db'
         elif sel == 3: # protocol
             self.inputType = 'pro'
-            
+        
         win = self.input[self.inputType][1]
         self.inputTypeSizer.Add(item = win, proportion = 1,
                                 flag = wx.ALIGN_CENTER_VERTICAL)
@@ -1313,7 +1332,10 @@ class MultiImportDialog(wx.Dialog):
                 dsn = os.path.dirname(self.input[self.inputType][1].GetValue())
             else:
                 dsn = self.input[self.inputType][1].GetValue()
-            ext = self.formatToExt[self.format.GetStringSelection()]
+            try:
+                ext = '.' + self.formatToExt[self.format.GetStringSelection()]
+            except KeyError:
+                ext = ''
         
         for layer, output in data:
             if self.importType == 'dxf':
@@ -1326,10 +1348,11 @@ class MultiImportDialog(wx.Dialog):
                     cmd = ['v.external',
                            'dsn=%s' % dsn,
                            'output=%s' % output,
-                           'layer=%s' % layer.rstrip('.' + ext)]
+                           'layer=%s' % layer.rstrip(ext)]
                 else:
                     cmd = ['v.in.ogr',
-                           'dsn=%s' % (os.path.join(dsn, layer)),
+                           'dsn=%s' % dsn,
+                           'layer=%s' % layer.rstrip(ext),
                            'output=%s' % output]
             else: # gdal
                 if self.link:
@@ -1389,31 +1412,46 @@ class MultiImportDialog(wx.Dialog):
         
     def OnSetFormat(self, event):
         """!Format changed"""
-        if self.inputType != 'file':
+        if self.inputType not in ['file', 'db']:
             return
         
         win = self.input[self.inputType][1]
         self.inputTypeSizer.Remove(win)
-        win.Destroy()
+        
+        if self.inputType == 'file':
+            win.Destroy()
+        else: # database
+            win.Hide()
         
         format = event.GetString()
-        try:
-            ext = self.formatToExt[format]
-            if not ext:
-                raise KeyError
-            format += ' (*.%s)|*.%s' % (ext, ext)
-        except KeyError:
-            format += ' (*.*)|*.*'
+        
+        if self.inputType == 'file':
+            try:
+                ext = self.formatToExt[format]
+                if not ext:
+                    raise KeyError
+                format += ' (*.%s)|*.%s' % (ext, ext)
+            except KeyError:
+                format += ' (*.*)|*.*'
             
-        win = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
-                                          size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                          dialogTitle=_('Choose file'),
-                                          buttonText=_('Browse'),
-                                          startDirectory=os.getcwd(),
-                                          changeCallback=self.OnSetInput,
-                                          fileMask = format)
+            win = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
+                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                              dialogTitle=_('Choose file'),
+                                              buttonText=_('Browse'),
+                                              startDirectory=os.getcwd(),
+                                              changeCallback=self.OnSetInput,
+                                              fileMask = format)
+        else: # database
+            if format == 'SQLite':
+                win = self.input['db-win']['file']
+            elif format == 'PostgreSQL':
+                win = self.input['db-win']['choice']
+            else:
+                win = self.input['db-win']['text']
         
         self.input[self.inputType][1] = win
+        if not win.IsShown():
+            win.Show()
         self.inputTypeSizer.Add(item = win, proportion = 1,
                                 flag = wx.ALIGN_CENTER_VERTICAL)
         self.inputTypeSizer.Layout()
@@ -1423,7 +1461,8 @@ class MultiImportDialog(wx.Dialog):
         path = event.GetString()
         if not path:
             return 
-        
+
+        data = list()        
         if self.importType == 'dxf':
             ret = gcmd.RunCommand('v.in.dxf',
                                   quiet = True,
@@ -1435,15 +1474,13 @@ class MultiImportDialog(wx.Dialog):
                 self.list.LoadData()
                 self.btn_run.Enable(False)
                 return
-
-        data = list()
-        if self.importType == 'dxf':
+            
             for line in ret.splitlines():
                 layerId = line.split(':')[0].split(' ')[1]
                 layerName = line.split(':')[1].strip()
                 grassName = utils.GetValidLayerName(layerName)
                 data.append((layerId, layerName.strip(), grassName.strip()))
-                
+        
         else: # gdal/ogr (for ogr maybe to use v.in.ogr -l)
             layerId = 1
             dsn = self.input[self.inputType][1].GetValue()
@@ -1461,6 +1498,25 @@ class MultiImportDialog(wx.Dialog):
                     grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
                     data.append((layerId, baseName, grassName))
                     layerId += 1
+            elif self.inputType == 'db':
+                format = self.format.GetStringSelection()
+                if format == 'SQLite':
+                    ret = gcmd.RunCommand('v.in.ogr',
+                                          quiet = True,
+                                          parent = self,
+                                          read = True,
+                                          flags = 'l',
+                                          dsn = dsn)
+                    if not ret:
+                        self.list.LoadData()
+                        self.btn_run.Enable(False)
+                        return
+                    layerId = 1
+                    for line in ret.splitlines():
+                        layerName = line.strip()
+                        grassName = utils.GetValidLayerName(layerName)
+                        data.append((layerId, layerName.strip(), grassName.strip()))
+                        layerId += 1
         
         self.list.LoadData(data)
         if len(data) > 0:
