@@ -1331,7 +1331,10 @@ class MultiImportDialog(wx.Dialog):
             if self.inputType == 'file':
                 dsn = os.path.dirname(self.input[self.inputType][1].GetValue())
             else:
-                dsn = self.input[self.inputType][1].GetValue()
+                if self.format.GetStringSelection() == 'PostgreSQL':
+                    dsn = 'PG:dbname=%s' % self.input[self.inputType][1].GetStringSelection()
+                else:
+                    dsn = self.input[self.inputType][1].GetValue()
             try:
                 ext = '.' + self.formatToExt[self.format.GetStringSelection()]
             except KeyError:
@@ -1445,7 +1448,23 @@ class MultiImportDialog(wx.Dialog):
             if format == 'SQLite':
                 win = self.input['db-win']['file']
             elif format == 'PostgreSQL':
-                win = self.input['db-win']['choice']
+                if grass.find_program('psql'):
+                    win = self.input['db-win']['choice']
+                    if not win.GetItems():
+                        p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
+                        ret = p.communicate()[0]
+                        if ret:
+                            db = list()
+                            for line in ret.splitlines():
+                                sline = line.split('|')
+                                if len(sline) < 2:
+                                    continue
+                                dbname = sline[0]
+                                if dbname:
+                                    db.append(dbname)
+                            win.SetItems(db)
+                else:
+                    win = self.input['db-win']['text']
             else:
                 win = self.input['db-win']['text']
         
@@ -1483,7 +1502,10 @@ class MultiImportDialog(wx.Dialog):
         
         else: # gdal/ogr (for ogr maybe to use v.in.ogr -l)
             layerId = 1
-            dsn = self.input[self.inputType][1].GetValue()
+            if self.format.GetStringSelection() == 'PostgreSQL':
+                dsn = 'PG:dbname=%s' % self.input[self.inputType][1].GetStringSelection()
+            else:
+                dsn = self.input[self.inputType][1].GetValue()
             if self.inputType == 'file':
                 baseName = os.path.basename(dsn)
                 grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
@@ -1499,24 +1521,22 @@ class MultiImportDialog(wx.Dialog):
                     data.append((layerId, baseName, grassName))
                     layerId += 1
             elif self.inputType == 'db':
-                format = self.format.GetStringSelection()
-                if format == 'SQLite':
-                    ret = gcmd.RunCommand('v.in.ogr',
-                                          quiet = True,
-                                          parent = self,
-                                          read = True,
-                                          flags = 'l',
-                                          dsn = dsn)
-                    if not ret:
-                        self.list.LoadData()
-                        self.btn_run.Enable(False)
-                        return
-                    layerId = 1
-                    for line in ret.splitlines():
-                        layerName = line.strip()
-                        grassName = utils.GetValidLayerName(layerName)
-                        data.append((layerId, layerName.strip(), grassName.strip()))
-                        layerId += 1
+                ret = gcmd.RunCommand('v.in.ogr',
+                                      quiet = True,
+                                      parent = self,
+                                      read = True,
+                                      flags = 'l',
+                                      dsn = dsn)
+                if not ret:
+                    self.list.LoadData()
+                    self.btn_run.Enable(False)
+                    return
+                layerId = 1
+                for line in ret.splitlines():
+                    layerName = line.strip()
+                    grassName = utils.GetValidLayerName(layerName)
+                    data.append((layerId, layerName.strip(), grassName.strip()))
+                    layerId += 1
         
         self.list.LoadData(data)
         if len(data) > 0:
