@@ -82,7 +82,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
     @return '' if no map name found in command
     """
     mapname = ''
-
+    
     if len(dcmd) < 1:
         return mapname
     
@@ -106,7 +106,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                 params = [(idx, p, v)]
                 break
             
-            if p in ('map', 'input',
+            if p in ('map', 'input', 'layer',
                      'red', 'blue', 'green',
                      'h_map', 's_map', 'i_map',
                      'reliefmap'):
@@ -136,10 +136,17 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
             
             # update dcmd
             for i, p, v in params:
+                if p == 'layer':
+                    continue
                 dcmd[i] = p + '=' + v + '@' + mapset
     
         maps = list()
+        ogr = False
         for i, p, v in params:
+            if v.lower().rfind('@ogr') > -1:
+                ogr = True
+            if p == 'layer' and not ogr:
+                continue
             maps.append(dcmd[i].split('=')[1])
         mapname = '\n'.join(maps)
     

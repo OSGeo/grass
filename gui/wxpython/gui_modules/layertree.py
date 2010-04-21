@@ -836,7 +836,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 
         Debug.msg (3, "LayerTree.PropertiesDialog(): ltype=%s" % \
                    ltype)
-
+        
         if self.GetPyData(layer)[0]['cmd']:
             module = menuform.GUI()
             module.ParseCommand(self.GetPyData(layer)[0]['cmd'],
