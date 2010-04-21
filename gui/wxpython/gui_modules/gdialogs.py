@@ -975,12 +975,17 @@ class MultiImportDialog(wx.Dialog):
             self.Bind(wx.EVT_RADIOBOX, self.OnChangeType)
             
             # input widgets
+            if self.importType == 'gdal':
+                filemask = 'GeoTIFF (*.tif)|*.tif'
+            else:
+                filemask = 'ESRI Shapefile (*.shp)|*.shp'
             inputFile = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
                                                     size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                                    dialogTitle=_('Choose input directory'),
+                                                    dialogTitle=_('Choose input file'),
                                                     buttonText=_('Browse'),
                                                     startDirectory=os.getcwd(),
-                                                    changeCallback=self.OnSetInput)
+                                                    changeCallback=self.OnSetInput,
+                                                    fileMask=filemask)
             
             inputDir = filebrowse.DirBrowseButton(parent=self.panel, id=wx.ID_ANY, 
                                                   size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
@@ -992,15 +997,17 @@ class MultiImportDialog(wx.Dialog):
             
             inputDb = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
             inputDb.Hide()
-            
+            inputDb.Bind(wx.EVT_TEXT, self.OnSetInput)
+
             inputPro = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
             inputPro.Hide()
-            
+            inputPro.Bind(wx.EVT_TEXT, self.OnSetInput)
+
             # format widget
             self.formatText = wx.StaticText(self.panel, id=wx.ID_ANY, label=_("Format:"))
             self.format = wx.Choice(parent = self.panel, id = wx.ID_ANY, size=(300, -1))
-            self.format.Bind(wx.EVT_TEXT, self.OnSetInput)
-            
+            self.format.Bind(wx.EVT_CHOICE, self.OnSetFormat)
+
             if self.importType == 'gdal': 
                 ret = gcmd.RunCommand('r.in.gdal',
                                       quiet = True, read = True,
@@ -1022,14 +1029,83 @@ class MultiImportDialog(wx.Dialog):
                            'pro'  : [_("Protocol:"),
                                      inputPro,
                                      list()] }
+            self.formatToExt = {
+                # raster
+                'GeoTIFF' : 'tif',
+                'Erdas Imagine Images (.img)' : '.img',
+                'Ground-based SAR Applications Testbed File Format (.gff)' : '.gff',
+                'Arc/Info Binary Grid' : 'adf',
+                'Portable Network Graphics' : 'png',
+                'JPEG JFIF' : 'jpg',
+                'Japanese DEM (.mem)' : 'mem',
+                'Graphics Interchange Format (.gif)' : 'gif',
+                'X11 PixMap Format' : 'xpm',
+                'MS Windows Device Independent Bitmap' : 'bmp',
+                'SPOT DIMAP' : '.dim',
+                'RadarSat 2 XML Product' : 'xml',
+                'EarthWatch .TIL' : '.til',
+                'ERMapper .ers Labelled' : '.ers',
+                'ERMapper Compressed Wavelets' : 'ecw',
+                'GRIdded Binary (.grb)' : 'grb',
+                'EUMETSAT Archive native (.nat)' : '.nat',
+                'Idrisi Raster A.1' : 'rst',
+                'Golden Software ASCII Grid (.grd)' : '.grd',
+                'Golden Software Binary Grid (.grd)' : 'grd',
+                'Golden Software 7 Binary Grid (.grd)' : 'grd',
+                'R Object Data Store' : 'r',
+                'USGS DOQ (Old Style)' : 'doq',
+                'USGS DOQ (New Style)' : 'doq',
+                'ENVI .hdr Labelled' : 'hdr',
+                'ESRI .hdr Labelled' : 'hdr',
+                'Generic Binary (.hdr Labelled)' : 'hdr',
+                'PCI .aux Labelled' : 'aux',
+                'EOSAT FAST Format' : 'fst',
+                'VTP .bt (Binary Terrain) 1.3 Format' : 'bt',
+                'FARSITE v.4 Landscape File (.lcp)' : 'lcp',
+                'Swedish Grid RIK (.rik)' : 'rik',
+                'USGS Optional ASCII DEM (and CDED)' : '.dem',
+                'Northwood Numeric Grid Format .grd/.tab' : '',
+                'Northwood Classified Grid Format .grc/.tab' : '',
+                'ARC Digitized Raster Graphics' : 'arc',
+                'Magellan topo (.blx)' : 'blx',
+                'SAGA GIS Binary Grid (.sdat)' : 'sdat',
+                # vector
+                'ESRI Shapefile' : 'shp',
+                'UK .NTF'        : 'ntf',
+                'SDTS'           : 'ddf',
+                'DGN'            : 'dgn',
+                'VRT'            : 'vrt',
+                'REC'            : 'rec',
+                'BNA'            : 'bna',
+                'CSV'            : 'csv',
+                'GML'            : 'gml',
+                'GPX'            : 'gpx',
+                'KML'            : 'kml',
+                'GMT'            : 'gmt',
+                'PGeo'           : 'mdb',
+                'XPlane'         : 'dat',
+                'AVCBin'         : 'adf',
+                'AVCE00'         : 'e00',
+                'DXF'            : 'dxf',
+                'Geoconcept'     : 'gxt',
+                'GeoRSS'         : 'xml',
+                'GPSTrackMaker'  : 'gtm',
+                'VFK'            : 'vfk' }
             
             if ret:
                 for line in ret.splitlines():
                     format = line.strip().rsplit(':', -1)[1].strip()
+                    if format in ('Memory', 'Virtual Raster', 'In Memory Raster'):
+                        continue
                     if format in ('PostgreSQL', 'SQLite',
-                                  'ODBC', 'ESRI Personal GeoDatabase'):
+                                  'ODBC', 'ESRI Personal GeoDatabase',
+                                  'Rasterlite',
+                                  'PostGIS WKT Raster driver'):
                         self.input['db'][2].append(format)
-                    elif format in ('GeoJSON'):
+                    elif format in ('GeoJSON',
+                                    'OGC Web Coverage Service',
+                                    'OGC Web Map Service',
+                                    'HTTP Fetching Wrapper'):
                         self.input['pro'][2].append(format)
                     else:
                         self.input['file'][2].append(format)
@@ -1183,13 +1259,17 @@ class MultiImportDialog(wx.Dialog):
         if sel == 0:   # file
             self.inputType = 'file'
             format = self.input[self.inputType][2][0]
-            if format == 'ESRI Shapefile':
-                format += ' (*.shp)|*.shp'
-            else:
+            try:
+                ext = self.formatToExt[format]
+                if not ext:
+                    raise KeyError
+                format += ' (*.%s)|*.%s' % (ext, ext)
+            except KeyError:
                 format += ' (*.*)|*.*'
+            
             win = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                              dialogTitle=_('Choose file'),
+                                              dialogTitle=_('Choose input file'),
                                               buttonText=_('Browse'),
                                               startDirectory=os.getcwd(),
                                               changeCallback=self.OnSetInput,
@@ -1205,6 +1285,8 @@ class MultiImportDialog(wx.Dialog):
         win = self.input[self.inputType][1]
         self.inputTypeSizer.Add(item = win, proportion = 1,
                                 flag = wx.ALIGN_CENTER_VERTICAL)
+        win.SetValue('')
+        self.list.DeleteAllItems()
         win.Show()
         
         self.inputText.SetLabel(self.input[self.inputType][0])
@@ -1224,33 +1306,41 @@ class MultiImportDialog(wx.Dialog):
         # hide dialog
         self.Hide()
         
+        if self.importType == 'dxf':
+            inputDxf = self.input[self.inputType][1].GetValue()
+        else:
+            if self.inputType == 'file':
+                dsn = os.path.dirname(self.input[self.inputType][1].GetValue())
+            else:
+                dsn = self.input[self.inputType][1].GetValue()
+            ext = self.formatToExt[self.format.GetStringSelection()]
+        
         for layer, output in data:
             if self.importType == 'dxf':
                 cmd = ['v.in.dxf',
-                       'input=%s' % self.input.GetValue(),
+                       'input=%s' % inputDxf,
                        'layers=%s' % layer,
                        'output=%s' % output]
             elif self.importType == 'ogr':
                 if self.link:
                     cmd = ['v.external',
-                           'dsn=%s' % os.path.join(self.input.GetValue()),
+                           'dsn=%s' % dsn,
                            'output=%s' % output,
-                           'layer=%s' % layer.rstrip('.' + self.format.GetValue())
-                           ]
+                           'layer=%s' % layer.rstrip('.' + ext)]
                 else:
                     cmd = ['v.in.ogr',
-                           'dsn=%s' % (os.path.join(self.input.GetValue(), layer)),
+                           'dsn=%s' % (os.path.join(dsn, layer)),
                            'output=%s' % output]
             else: # gdal
                 if self.link:
                     cmd = ['r.external',
-                           'input=%s' % (os.path.join(self.input.GetValue(), layer)),
+                           'input=%s' % (os.path.join(dsn, layer)),
                            'output=%s' % output]
                 else:
                     cmd = ['r.in.gdal',
-                           'input=%s' % (os.path.join(self.input.GetValue(), layer)),
+                           'input=%s' % (os.path.join(dsn, layer)),
                            'output=%s' % output]
-
+            
             if self.overwrite.IsChecked():
                 cmd.append('--overwrite')
             
@@ -1297,10 +1387,43 @@ class MultiImportDialog(wx.Dialog):
         """
         pass
         
+    def OnSetFormat(self, event):
+        """!Format changed"""
+        if self.inputType != 'file':
+            return
+        
+        win = self.input[self.inputType][1]
+        self.inputTypeSizer.Remove(win)
+        win.Destroy()
+        
+        format = event.GetString()
+        try:
+            ext = self.formatToExt[format]
+            if not ext:
+                raise KeyError
+            format += ' (*.%s)|*.%s' % (ext, ext)
+        except KeyError:
+            format += ' (*.*)|*.*'
+            
+        win = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
+                                          size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                          dialogTitle=_('Choose file'),
+                                          buttonText=_('Browse'),
+                                          startDirectory=os.getcwd(),
+                                          changeCallback=self.OnSetInput,
+                                          fileMask = format)
+        
+        self.input[self.inputType][1] = win
+        self.inputTypeSizer.Add(item = win, proportion = 1,
+                                flag = wx.ALIGN_CENTER_VERTICAL)
+        self.inputTypeSizer.Layout()
+        
     def OnSetInput(self, event):
         """!Input DXF file/OGR dsn defined, update list of layer widget"""
         path = event.GetString()
-
+        if not path:
+            return 
+        
         if self.importType == 'dxf':
             ret = gcmd.RunCommand('v.in.dxf',
                                   quiet = True,
@@ -1313,7 +1436,7 @@ class MultiImportDialog(wx.Dialog):
                 self.btn_run.Enable(False)
                 return
 
-        data = []
+        data = list()
         if self.importType == 'dxf':
             for line in ret.splitlines():
                 layerId = line.split(':')[0].split(' ')[1]
@@ -1323,12 +1446,22 @@ class MultiImportDialog(wx.Dialog):
                 
         else: # gdal/ogr (for ogr maybe to use v.in.ogr -l)
             layerId = 1
-            for file in glob.glob(os.path.join(self.input.GetValue(), "*.%s") % self.format.GetValue()):
-                baseName = os.path.basename(file)
+            dsn = self.input[self.inputType][1].GetValue()
+            if self.inputType == 'file':
+                baseName = os.path.basename(dsn)
                 grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
                 data.append((layerId, baseName, grassName))
-                layerId += 1
-            
+            elif self.inputType == 'dir':
+                try:
+                    ext = self.formatToExt[self.format.GetStringSelection()]
+                except KeyError:
+                    ext = ''
+                for file in glob.glob(os.path.join(dsn, "*.%s") % ext):
+                    baseName = os.path.basename(file)
+                    grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
+                    data.append((layerId, baseName, grassName))
+                    layerId += 1
+        
         self.list.LoadData(data)
         if len(data) > 0:
             self.btn_run.Enable(True)

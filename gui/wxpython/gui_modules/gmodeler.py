@@ -1417,6 +1417,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         popupMenu.Append(self.popupID1, text=_('Remove'))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID1)
         
+        if isinstance(shape, ModelRelation):
+            popupMenu.AppendSeparator()
+            popupMenu.Append(self.popupID2, text=_('Add control point'))
+            self.frame.Bind(wx.EVT_MENU, self.OnAddPoint, id = self.popupID2)
+
         if isinstance(shape, ModelData) and '@' not in shape.GetValue():
             popupMenu.AppendSeparator()
             popupMenu.Append(self.popupID3, text=_('Intermediate'),
@@ -1434,6 +1439,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
         self.frame.PopupMenu(popupMenu)
         popupMenu.Destroy()
+        
+    def OnAddPoint(self, event):
+        """!Add control point"""
+        print event.GetPos()
         
     def OnIntermediate(self, event):
         """!Mark data as intermediate"""
