@@ -103,8 +103,9 @@ int main(int argc, char *argv[])
     opt.input->description = _("Name of input DXF file");
 
     opt.output = G_define_standard_option(G_OPT_V_OUTPUT);
-    opt.output->required = YES;
-
+    opt.output->required = NO;
+    opt.output->guisection = _("Required");
+    
     opt.layers = G_define_option();
     opt.layers->key = "layers";
     opt.layers->type = TYPE_STRING;
