@@ -273,7 +273,14 @@ class VirtualAttributeList(wx.ListCtrl,
     def AddDataRow(self, i, record, columns, keyId):
         """!Add row to the data list"""
         self.itemDataMap[i] = []
+        keyColumn = self.mapDBInfo.layers[self.layer]['key']
         j = 0
+        cat = None
+        
+        if keyColumn == 'OGC_FID':
+            self.itemDataMap[i].append(i+1)
+            j += 1
+            cat = i + 1
         
         for value in record.split('|'):
             if self.columns[columns[j]]['ctype'] != types.StringType:
@@ -291,29 +298,20 @@ class VirtualAttributeList(wx.ListCtrl,
                     self.itemDataMap[i].append(_("Unable to decode value. "
                                                  "Set encoding in GUI preferences ('Attributes')."))
                 
-            if keyId > -1 and keyId == j:
+            if not cat and keyId > -1 and keyId == j:
                 try:
                     cat = self.columns[columns[j]]['ctype'] (value)
                 except ValueError, e:
                     cat = -1
-                    wx.MessageBox(parent=self,
+                    gcmd.GMessage(parent = self,
                                   message=_("Error loading attribute data. "
                                             "Record number: %(rec)d. Unable to convert value '%(val)s' in "
                                             "key column (%(key)s) to integer.\n\n"
                                             "Details: %(detail)s") % \
                                       { 'rec' : i + 1, 'val' : value,
-                                        'key' : keyColumn, 'detail' : e},
-                                  caption=_("Error"),
-                                  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                                        'key' : keyColumn, 'detail' : e})
             j += 1
-
-        # insert to table
-        # index = self.InsertStringItem(index=sys.maxint, label=str(self.itemDataMap[i][0]))
-        # for j in range(len(self.itemDataMap[i][1:])):
-        # self.SetStringItem(index=index, col=j+1, label=str(self.itemDataMap[i][j+1]))
-            
-        # self.SetItemData(item=index, data=i)
-            
+        
         self.itemIndexMap.append(i)
         if keyId > -1: # load cats only when LoadData() is called first time
             self.itemCatsMap[i] = cat
