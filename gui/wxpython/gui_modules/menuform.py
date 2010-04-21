@@ -1,6 +1,6 @@
 #! /usr/bin/python
 """
-@brief Construct simple wx.Python GUI from a GRASS command interface
+@brief Construct simple wxPython GUI from a GRASS command interface
 description.
 
 Classes:
@@ -12,36 +12,35 @@ Classes:
  - GrassGUIApp
  - GUI
 
- Copyright (C) 2000-2009 by the GRASS Development Team
+This program is just a coarse approach to automatically build a GUI
+from a xml-based GRASS user interface description.
 
- This program is free software under the GPL (>=v2) Read the file
- COPYING coming with GRASS for details.
+You need to have Python 2.4, wxPython 2.8 and python-xml.
 
- This program is just a coarse approach to automatically build a GUI
- from a xml-based GRASS user interface description.
+The XML stream is read from executing the command given in the
+command line, thus you may call it for instance this way:
 
- You need to have Python 2.4, wxPython 2.8 and python-xml.
+python menuform.py r.basins.fill
 
- The XML stream is read from executing the command given in the
- command line, thus you may call it for instance this way:
+Or you set an alias or wrap the call up in a nice shell script, GUI
+environment ... please contribute your idea.
 
- python menuform.py r.basins.fill
+Updated to wxPython 2.8 syntax and contrib widgets.  Methods added to
+make it callable by gui.  Method added to automatically re-run with
+pythonw on a Mac.
 
- Or you set an alias or wrap the call up in a nice shell script, GUI
- environment ... please contribute your idea.
+@todo
+ - verify option value types
 
- Updated to wxPython 2.8 syntax and contrib widgets.  Methods added to
- make it callable by gui.  Method added to automatically re-run with
- pythonw on a Mac.
+Copyright (C) 2000-2019 by the GRASS Development Team
+This program is free software under the GPL (>=v2) Read the file
+COPYING coming with GRASS for details.
 
 @author Jan-Oliver Wagner <jan@intevation.de>
 @author Bernhard Reiter <bernhard@intevation.de>
 @author Michael Barton, Arizona State University
 @author Daniel Calvelo <dca.gis@gmail.com>
 @author Martin Landa <landa.martin@gmail.com>
-
-@todo
- - verify option value types
 """
 
 import sys
@@ -136,22 +135,21 @@ for (s,r) in str2rgb.items():
 
 def color_resolve(color):
     if len(color)>0 and color[0] in "0123456789":
-        rgb = tuple(map(int,color.split( ':' )))
+        rgb = tuple(map(int, color.split( ':' )))
         label = color
     else:
         # Convert color names to RGB
         try:
-            rgb = str2rgb[ color ]
+            rgb = str2rgb[color]
             label = color
         except KeyError:
-            rgb = (200,200,200)
+            rgb = (200, 200, 200)
             label = _('Select Color')
     return (rgb, label)
 
 def text_beautify( someString , width=70):
-    """
-    Make really long texts shorter, clean up whitespace and
-    remove trailing punctuation.
+    """!Make really long texts shorter, clean up whitespace and remove
+    trailing punctuation.
     """
     if width > 0:
         return escape_ampersand( string.strip(
@@ -234,18 +232,18 @@ class UpdateThread(Thread):
                         if p.get('element', '') == 'layer':
                             layer = p.get('value', '')
                             if layer != '':
-                                layer = int(p.get('value', 1))
+                                layer = p.get('value', 1)
                             else:
-                                layer = int(p.get('default', 1))
+                                layer = p.get('default', 1)
                             break
                         
                 elif p.get('element', '') == 'layer': # -> layer
                     # get layer
                     layer = p.get('value', '')
                     if layer != '':
-                        layer = int(p.get('value', 1))
+                        layer = p.get('value', 1)
                     else:
-                        layer = int(p.get('default', 1))
+                        layer = p.get('default', 1)
                     
                     # get map name
                     pMap = self.task.get_param(p['wxId'][0], element = 'wxId-bind', raiseError = False)
@@ -1393,27 +1391,24 @@ class cmdPanel(wx.Panel):
                         
                         if p.get('age', '') == 'old':
                             # OGR supported (read-only)
-                            hsizer = wx.GridBagSizer(vgap=5, hgap=5)
+                            self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
                             
-                            hsizer.Add(item=selection,
-                                       flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
-                                       border=5,
-                                       pos = (0, 0))
+                            self.hsizer.Add(item=selection,
+                                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
+                                            border=5)
                             
                             # format (native / ogr)
                             rbox = wx.RadioBox(parent = which_panel, id = wx.ID_ANY,
                                                label = " %s " % _("Format"),
                                                style = wx.RA_SPECIFY_ROWS,
-                                               size = (100, -1),
-                                               choices = [_("Native"), _("OGR")])
+                                               choices = [_("Native / Linked OGR"), _("Direct OGR")])
                             rbox.SetName('VectorFormat')
                             rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
                             
-                            hsizer.Add(item=rbox,
-                                       flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.ALIGN_TOP,
-                                       pos = (0, 1),
-                                       span = (3, 1),
-                                       border=5)
+                            self.hsizer.Add(item=rbox,
+                                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT |
+                                            wx.RIGHT | wx.ALIGN_TOP,
+                                            border=5)
                             
                             ogrSelection = filebrowse.DirBrowseButton(parent = which_panel, id = wx.ID_ANY, 
                                                                       size = globalvar.DIALOG_GSELECT_SIZE,
@@ -1423,22 +1418,11 @@ class cmdPanel(wx.Panel):
                                                                       startDirectory = os.getcwd())
                             for win in ogrSelection.GetChildren():
                                 win.SetName('OgrSelect')
-                            ogrSelection.Enable(False)
+                            ogrSelection.Hide()
                             ogrSelection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             ogrSelection.Bind(wx.EVT_TEXT, self.OnSetValue)
-                                                        
-                            hsizer.Add(item=wx.StaticText(parent = which_panel, id = wx.ID_ANY,
-                                                          label = _("Name of OGR data source:")),
-                                       flag=wx.ALIGN_BOTTOM | wx.LEFT,
-                                       pos = (1, 0),
-                                       border=5)
                             
-                            hsizer.Add(item=ogrSelection,
-                                       flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.ALIGN_TOP,
-                                       pos = (2, 0),
-                                       border=5)
-                            
-                            which_sizer.Add(item = hsizer, proportion = 0)
+                            which_sizer.Add(item = self.hsizer, proportion = 0)
                             
                             p['wxId'].append(rbox.GetId())
                             p['wxId'].append(ogrSelection.GetChildren()[1].GetId())
@@ -1713,15 +1697,34 @@ class cmdPanel(wx.Panel):
                 winOgr = self.FindWindowById(id + 2)
         
         # enable / disable widgets & update values
+        rbox = self.FindWindowByName('VectorFormat')
+        self.hsizer.Remove(rbox)
         if sel == 0:   # -> native
-            winOgr.Enable(False)
-            winNative.Enable(True)
+            winOgr.Hide()
+            self.hsizer.Remove(winOgr)
+
+            self.hsizer.Add(item=winNative,
+                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
+                            border=5)
+            winNative.Show()
             p['value'] = winNative.GetValue()
-        elif sel == 1: # -> OGR
-            winNative.Enable(False)
-            winOgr.Enable(True)
-            p['value'] = winOgr.GetValue()
         
+        elif sel == 1: # -> OGR
+            winNative.Hide()
+            self.hsizer.Remove(winNative)
+
+            self.hsizer.Add(item=winOgr,
+                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
+                            border=5)
+            winOgr.Show()
+            p['value'] = winOgr.GetValue()
+
+        self.hsizer.Add(item=rbox,
+                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT |
+                        wx.RIGHT | wx.ALIGN_TOP,
+                        border=5)
+        
+        self.hsizer.Layout()
         self.OnUpdateValues()
         self.OnUpdateSelection(event)
         
@@ -1853,7 +1856,7 @@ class cmdPanel(wx.Panel):
                     
                     if name == 'OgrSelect':
                         porf['value'] += '@OGR'
-                    
+                  
         self.OnUpdateValues()
         
         event.Skip()

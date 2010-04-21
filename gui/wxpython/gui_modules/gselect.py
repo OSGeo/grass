@@ -578,6 +578,7 @@ class LayerNameSelect(wx.ComboBox):
         @param dsn    OGR data source name
         """
         layers = list()
+        self.SetValue('')
         if vector:
             # TODO
             pass
@@ -591,7 +592,7 @@ class LayerNameSelect(wx.ComboBox):
                 layers = ret.splitlines()
         
         self.SetItems(layers)
-    
+        
 class DriverSelect(wx.ComboBox):
     """!Creates combo box for selecting database driver.
     """
