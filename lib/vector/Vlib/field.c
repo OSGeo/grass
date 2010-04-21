@@ -505,7 +505,7 @@ int Vect_get_field_number(const struct Map_info *Map, const char *field)
     if (fi)
 	return fi->number;
 
-    return 0;
+    return atoi(field);
 }
 
 /*!
