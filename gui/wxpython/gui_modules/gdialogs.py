@@ -1347,15 +1347,17 @@ class MultiImportDialog(wx.Dialog):
                        'layers=%s' % layer,
                        'output=%s' % output]
             elif self.importType == 'ogr':
+                if layer.rfind(ext) > -1:
+                    layer = layer.replace(ext, '')
                 if self.link:
                     cmd = ['v.external',
                            'dsn=%s' % dsn,
                            'output=%s' % output,
-                           'layer=%s' % layer.rstrip(ext)]
+                           'layer=%s' % layer]
                 else:
                     cmd = ['v.in.ogr',
                            'dsn=%s' % dsn,
-                           'layer=%s' % layer.rstrip(ext),
+                           'layer=%s' % layer,
                            'output=%s' % output]
             else: # gdal
                 if self.link:
