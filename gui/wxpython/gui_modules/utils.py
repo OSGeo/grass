@@ -164,15 +164,17 @@ def GetValidLayerName(name):
         retName, mapset = retName.split('@')
     else:
         mapset = None
-        
-    for c in retName:
-        # c = toascii(c)
-        
+    
+    cIdx = 0
+    retNameList = list(retName)
+    for c in retNameList:
         if not (c >= 'A' and c <= 'Z') and \
                not (c >= 'a' and c <= 'z') and \
                not (c >= '0' and c <= '9'):
-            c = '_'
-        
+            retNameList[cIdx] = '_'
+        cIdx += 1
+    retName = ''.join(retNameList)
+    
     if not (retName[0] >= 'A' and retName[0] <= 'Z') and \
            not (retName[0] >= 'a' and retName[0] <= 'z'):
         retName = 'x' + retName[1:]
