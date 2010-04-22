@@ -1379,35 +1379,39 @@ class MultiImportDialog(wx.Dialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self.parent.goutput.RunCmd(cmd, switchPage=True)
-
-        if self.add.IsChecked():
-            maptree = self.parent.curr_page.maptree
-            for layer, output in data:
-                if '@' not in output:
-                    name = output + '@' + grass.gisenv()['MAPSET']
-                else:
-                    name = output
-                # add imported layers into layer tree
-                if self.importType == 'gdal':
-                    cmd = ['d.rast',
-                           'map=%s' % name]
-                    if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
-                        cmd.append('-n')
-
-                    maptree.AddLayer(ltype='raster',
-                                     lname=name,
-                                     lcmd=cmd)
-                else:
-                    maptree.AddLayer(ltype='vector',
-                                     lname=name,
-                                     lcmd=['d.vect',
-                                           'map=%s' % name])
-        
-        ### wx.CallAfter(self.parent.notebook.SetSelection, 0)
+            self.parent.goutput.RunCmd(cmd, switchPage=True,
+                                       onDone = self._addLayers)
         
         self.OnCancel()
         
+    def _addLayers(self, returncode):
+        """!Add imported/linked layers into layer tree"""
+        if not self.add.IsChecked():
+            return
+        
+        data = self.list.GetLayers()
+        maptree = self.parent.curr_page.maptree
+        for layer, output in data:
+            if '@' not in output:
+                name = output + '@' + grass.gisenv()['MAPSET']
+            else:
+                name = output
+            # add imported layers into layer tree
+            if self.importType == 'gdal':
+                cmd = ['d.rast',
+                       'map=%s' % name]
+                if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
+                    cmd.append('-n')
+
+                maptree.AddLayer(ltype='raster',
+                                 lname=name,
+                                 lcmd=cmd)
+            else:
+                maptree.AddLayer(ltype='vector',
+                                 lname=name,
+                                 lcmd=['d.vect',
+                                       'map=%s' % name])
+                
     def OnAbort(self, event):
         """!Abort running import
 
