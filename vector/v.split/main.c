@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
 
     int line, nlines, layer;
-    double length;
-    int vertices;
+    double length = -1;
+    int vertices = 0;
 
     G_gisinit(argv[0]);
 
@@ -70,8 +70,11 @@ int main(int argc, char *argv[])
 	!(length_opt->answer || vertices_opt->answer))
 	G_fatal_error(_("Use either length or vertices"));
 
-    if (length_opt->answer)
+    if (length_opt->answer) {
 	length = atof(length_opt->answer);
+	if (length <= 0)
+	    G_fatal_error(_("Length must be positive but is %g"), length);
+    }
 
     if (vertices_opt->answer) {
 	vertices = atoi(vertices_opt->answer);
@@ -83,7 +86,7 @@ int main(int argc, char *argv[])
     Vect_open_old2(&In, in_opt->answer, "", layer_opt->answer);
     layer = Vect_get_field_number(&In, layer_opt->answer);
     
-    Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In) ? WITH_Z : WITHOUT_Z);
+    Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));
     
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
@@ -107,7 +110,7 @@ int main(int argc, char *argv[])
 	  continue;
 
 	if (ltype & GV_LINES) {
-	    if (length_opt->answer) {
+	    if (length > 0) {
 		double l, from, to, step;
 
 		l = Vect_line_length(Points);
@@ -124,7 +127,7 @@ int main(int argc, char *argv[])
 
 		    for (i = 0; i < n; i++) {
 			int ret;
-			double x, y;
+			double x, y, z;
 
 			if (i == n - 1) {
 			    to = l;	/* to be sure that it goes to end */
@@ -144,12 +147,15 @@ int main(int argc, char *argv[])
 			if (i > 0) {
 			    Points2->x[0] = x;
 			    Points2->y[0] = y;
+			    Points2->z[0] = z;
 			}
 			if (i == n - 1) {
 			    Points2->x[Points2->n_points - 1] =
 				Points->x[Points->n_points - 1];
 			    Points2->y[Points2->n_points - 1] =
 				Points->y[Points->n_points - 1];
+			    Points2->z[Points2->n_points - 1] =
+				Points->z[Points->n_points - 1];
 			}
 
 			Vect_write_line(&Out, ltype, Points2, Cats);
@@ -157,6 +163,7 @@ int main(int argc, char *argv[])
 			/* last point */
 			x = Points2->x[Points2->n_points - 1];
 			y = Points2->y[Points2->n_points - 1];
+			z = Points2->z[Points2->n_points - 1];
 
 			from += step;
 		    }
