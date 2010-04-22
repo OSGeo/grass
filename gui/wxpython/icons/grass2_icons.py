@@ -105,8 +105,8 @@ IconsGrass2 = {
     # nviz
     "nvizSettings"   : 'settings.png',
     # modeler
-    "modelActionAdd" : 'layer-add.png',
-    "modelDataAdd"   : 'map-add.png',
+    "modelActionAdd" : 'module-add.png',
+    "modelDataAdd"   : 'data-add.png',
     "modelRelation"  : 'relation-create.png',
     "modelRun"       : 'execute.png',
     "modelValidate"  : 'check.png',
