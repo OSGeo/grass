@@ -715,7 +715,7 @@ class LoadMapLayersDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
 
         self.parent = parent # GMFrame
-
+        
         #
         # dialog body
         #
@@ -935,8 +935,10 @@ class MultiImportDialog(wx.Dialog):
 
         self.parent = parent # GMFrame 
         self.importType = type
-        self.link = link     # Link or import data (only for GDAL/OGR)
+        self.link = link     # Link or import data (only for GDAL/OGR) 
         
+        self.commandId = -1  # id of running command
+       
         wx.Dialog.__init__(self, parent, id, title, style=style)
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
@@ -1386,32 +1388,35 @@ class MultiImportDialog(wx.Dialog):
         
     def _addLayers(self, returncode):
         """!Add imported/linked layers into layer tree"""
+        self.commandId += 1
+        
         if not self.add.IsChecked():
             return
         
-        data = self.list.GetLayers()
         maptree = self.parent.curr_page.maptree
-        for layer, output in data:
-            if '@' not in output:
-                name = output + '@' + grass.gisenv()['MAPSET']
-            else:
-                name = output
-            # add imported layers into layer tree
-            if self.importType == 'gdal':
-                cmd = ['d.rast',
-                       'map=%s' % name]
-                if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
-                    cmd.append('-n')
-
-                maptree.AddLayer(ltype='raster',
-                                 lname=name,
-                                 lcmd=cmd)
-            else:
-                maptree.AddLayer(ltype='vector',
-                                 lname=name,
-                                 lcmd=['d.vect',
-                                       'map=%s' % name])
+        
+        layer, output = self.list.GetLayers()[self.commandId]
+        
+        if '@' not in output:
+            name = output + '@' + grass.gisenv()['MAPSET']
+        else:
+            name = output
+        # add imported layers into layer tree
+        if self.importType == 'gdal':
+            cmd = ['d.rast',
+                   'map=%s' % name]
+            if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
+                cmd.append('-n')
                 
+            maptree.AddLayer(ltype='raster',
+                             lname=name,
+                             lcmd=cmd)
+        else:
+            maptree.AddLayer(ltype='vector',
+                             lname=name,
+                             lcmd=['d.vect',
+                                   'map=%s' % name])
+        
     def OnAbort(self, event):
         """!Abort running import
 
