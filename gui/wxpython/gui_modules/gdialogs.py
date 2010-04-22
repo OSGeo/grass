@@ -1408,14 +1408,15 @@ class MultiImportDialog(wx.Dialog):
             if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
                 cmd.append('-n')
                 
-            maptree.AddLayer(ltype='raster',
-                             lname=name,
-                             lcmd=cmd)
+            item = maptree.AddLayer(ltype='raster',
+                                    lname=name,
+                                    lcmd=cmd)
         else:
-            maptree.AddLayer(ltype='vector',
-                             lname=name,
-                             lcmd=['d.vect',
-                                   'map=%s' % name])
+            item = maptree.AddLayer(ltype='vector',
+                                    lname=name,
+                                    lcmd=['d.vect',
+                                          'map=%s' % name])
+        maptree.mapdisplay.MapWindow.ZoomToMap()
         
     def OnAbort(self, event):
         """!Abort running import
