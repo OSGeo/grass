@@ -199,7 +199,7 @@ class UpdateThread(Thread):
         pType = p.get('prompt', '')
         if not pType:
             return
-
+        
         # check for map/input parameter
         pMap = self.task.get_param('map', raiseError=False)
         if not pMap:
@@ -295,7 +295,12 @@ class UpdateThread(Thread):
                                                               'database' : db }
                     elif pTable:
                         self.data[win.InsertTableColumns] = { 'table'  : pTable.get('value') }
-        
+            
+            elif name == 'SubGroupSelect':
+                pGroup = self.task.get_param('group', element='element', raiseError=False)
+                if pGroup:
+                    self.data[win.Insert] = { 'group' : pGroup.get('value', '')}
+            
 def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
 
@@ -1359,6 +1364,7 @@ class cmdPanel(wx.Panel):
                 # GIS element entry
                 if p.get('prompt','') not in ('color',
                                               'color_none',
+                                              'subgroup',
                                               'dbdriver',
                                               'dbname',
                                               'dbtable',
@@ -1374,7 +1380,6 @@ class cmdPanel(wx.Panel):
                         mapsets = [grass.gisenv()['MAPSET'],]
                     else:
                         mapsets = None
-                        
                     selection = gselect.Select(parent=which_panel, id=wx.ID_ANY,
                                                size=globalvar.DIALOG_GSELECT_SIZE,
                                                type=p.get('element', ''),
@@ -1432,11 +1437,24 @@ class cmdPanel(wx.Panel):
                             which_sizer.Add(item=selection, proportion=0,
                                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                             border=5)
+                    elif p.get('prompt', '') == 'group':
+                        selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        which_sizer.Add(item=selection, proportion=0,
+                                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                        border=5)
                     else:
                         which_sizer.Add(item=selection, proportion=0,
                                         flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                         border=5)
-                        
+                # subgroup
+                elif p.get('prompt', '') == 'subgroup':
+                    selection = gselect.SubGroupSelect(parent = which_panel)
+                    p['wxId'] = [ selection.GetId() ]
+                    selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    which_sizer.Add(item = selection, proportion = 0,
+                                    flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                    border = 5)
+
                 # layer, dbdriver, dbname, dbcolumn, dbtable entry
                 elif p.get('prompt', '') in ('dbdriver',
                                              'dbname',
@@ -1593,6 +1611,8 @@ class cmdPanel(wx.Panel):
         pDatabase = None
         pTable = None
         pColumn = []
+        pGroup = None
+        pSubGroup = None
         for p in self.task.params:
             if p.get('gisprompt', False) == False:
                 continue
@@ -1625,6 +1645,10 @@ class cmdPanel(wx.Panel):
                 pDatabase = p
             elif prompt == 'dbtable':
                 pTable = p
+            elif prompt == 'group':
+                pGroup = p
+            elif prompt == 'subgroup':
+                pSubGroup = p
         
         # collect ids
         pColumnIds = []
@@ -1651,6 +1675,9 @@ class cmdPanel(wx.Panel):
 
         if pTable and pColumnIds:
             pTable['wxId-bind'] = pColumnIds
+        
+        if pGroup and pSubGroup:
+            pGroup['wxId-bind'] = pSubGroup['wxId']
         
 	#
 	# determine panel size
@@ -1868,8 +1895,7 @@ class cmdPanel(wx.Panel):
         event.Skip()
         
     def OnUpdateSelection(self, event):
-        """
-        Update dialog (layers, tables, columns, etc.)
+        """!Update dialog (layers, tables, columns, etc.)
         """
         if event:
             self.parent.updateThread.Update(UpdateDialog,
