@@ -149,15 +149,17 @@ class Controller:
         if "x" not in robjects.r.names(Rpointmap): 
             # extract coordinates with S4 method
             coordinatesPreDF = robjects.r['as.data.frame'](robjects.r.coordinates(Rpointmap))
-            coordinatesDF = robjects.r['data.frame'](x = coordinatesPreDF.r['coords.x1'][0],
-                                                     y = coordinatesPreDF.r['coords.x2'][0])
+            coordinatesDF = robjects.r['data.frame'](x = coordinatesPreDF.rx('coords.x1')[0],
+                                                     y = coordinatesPreDF.rx('coords.x2')[0])
             # match coordinates with data slot of SpatialPointsDataFrame - maptools function
             # match is done on row.names
             Rpointmap = robjects.r.spCbind(Rpointmap, coordinatesDF)
             
         # GRASS checks for null values in the chosen column. R can hardly handle column as a variable,
         # looks for a hardcoded string.
+        logger.message("Got here")
         cols = grass.vector_columns(map=map, layer=1)
+        logger.message("Not here:")
         nulls = int(grass.parse_command('v.univar',
                                         map=map,
                                         column=column,
@@ -176,8 +178,8 @@ class Controller:
 
         # addition of coordinates columns into dataframe.
         coordinatesDF = robjects.r['as.data.frame'](robjects.r.coordinates(Grid))
-        data = robjects.r['data.frame'](x = coordinatesDF.r['s1'][0],
-                                        y = coordinatesDF.r['s2'][0],
+        data = robjects.r['data.frame'](x = coordinatesDF.rx('s1')[0],
+                                        y = coordinatesDF.rx('s2')[0],
                                         k = robjects.r.rep(1, Region['cols']*Region['rows']))
         GridPredicted = robjects.r.SpatialGridDataFrame(Grid,
                                                         data,
@@ -189,7 +191,7 @@ class Controller:
             predictor = 'x+y'
         else:
             predictor = 1
-        Formula = robjects.r['as.formula'](robjects.r.paste(column, "~", predictor))
+        Formula = robjects.Formula(column + "~" + predictor)
         #print Formula
         return Formula
     
@@ -207,12 +209,12 @@ class Controller:
             
             VariogramModel = robjects.r.autofitVariogram(formula, inputdata, **DottedParams)
             #print robjects.r.warnings()
-            Variograms['datavariogram'] = VariogramModel.r['exp_var'][0]
-            Variograms['variogrammodel'] = VariogramModel.r['var_model'][0]
+            Variograms['datavariogram'] = VariogramModel.rx('exp_var')[0]
+            Variograms['variogrammodel'] = VariogramModel.rx('var_model')[0]
             # obtain the model name. *Too* complicated to get the string instead of level, unlike R does.
-            VariogramAsDF = robjects.r['as.data.frame'](VariogramModel.r['var_model'][0]) # force conversion
-            ModelDF = VariogramAsDF.r['model'][0]
-            Variograms['model'] = robjects.r.levels(ModelDF).subset(ModelDF[1])[0]
+            VariogramAsDF = robjects.r['as.data.frame'](VariogramModel.rx('var_model')[0]) # force conversion
+            ModelDF = VariogramAsDF.rx('model')[0]
+            Variograms['model'] = ModelDF.levels[ModelDF[1] - 1]
         else:
             DataVariogram = robjects.r['variogram'](formula, inputdata)
             VariogramModel = robjects.r['fit.variogram'](DataVariogram,
@@ -317,6 +319,7 @@ def main(argv = None):
     else:
         #CLI
         options, flags = argv
+        
         #@TODO: Work on verbosity. Sometimes it's too verbose (R), sometimes not enough.
         if grass.find_file(options['input'], element = 'vector')['fullname'] is '':
             grass.fatal(_("option: <input>: Vector map not found.")) #TODO cosmetics, insert real map name
@@ -355,7 +358,6 @@ def main(argv = None):
             if v is not '':
                 notnulloptions[k] = v
         command = command.join("%s=%s " % (k, v) for k, v in notnulloptions.items())
-        #print command
         
         # re-cast integers from strings, as parser() cast everything to string.
         for each in ("sill","nugget","range"):

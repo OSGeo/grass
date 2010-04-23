@@ -398,7 +398,7 @@ class RBookgstatPanel(RBookPanel):
             self.VariogramCheckBox.Bind(wx.EVT_CHECKBOX, self.HideOptions)
             self.VariogramCheckBox.SetValue(state = True) # check it by default
         
-        ModelFactor = robjects.r.vgm().r['long']
+        ModelFactor = robjects.r.vgm().rx('long')
         ModelList = robjects.r.levels(ModelFactor[0])
         #@FIXME: no other way to let the Python pick it up..
         # and this is te wrong place where to load this list. should be at the very beginning.
