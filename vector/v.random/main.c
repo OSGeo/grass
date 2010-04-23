@@ -21,7 +21,7 @@
  * <25 Jun 1995> - new site API (jdm)
  * <13 Sep 2000> - released under GPL
  *
- * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *output, *nsites, *zmin, *zmax, *zcol;
+	struct Option *output, *nsites, *zmin, *zmax, *zcol, *ztype;
     } parm;
     struct
     {
@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("random"));
     module->description = _("Generates randomly 2D/3D vector points map.");
 
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -112,11 +113,20 @@ int main(int argc, char *argv[])
     parm.zmax->guisection = _("3D output");
 
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    parm.zcol->label =
-	_("Name of column for z values (only numeric type)");
+    parm.zcol->label = _("Name of column for z values");
     parm.zcol->description =
 	_("Writes z values to column instead of 3D vector");
     parm.zcol->guisection = _("3D output");
+
+    parm.ztype = G_define_option();
+    parm.ztype->key = "column_type";
+    parm.ztype->type = TYPE_STRING;
+    parm.ztype->required = NO;
+    parm.ztype->multiple = NO;
+    parm.ztype->description = _("Type of column for z values");
+    parm.ztype->options = "integer,double precision";
+    parm.ztype->answer = "double precision";
+    parm.ztype->guisection = _("3D output");
 
     flag.z = G_define_flag();
     flag.z->key = 'z';
@@ -165,8 +175,8 @@ int main(int argc, char *argv[])
 	db_begin_transaction(driver);
 
 	db_init_string(&sql);
-	sprintf(buf, "create table %s (cat integer, %s double precision)", Fi->table,
-		parm.zcol->answer);
+	sprintf(buf, "create table %s (cat integer, %s %s)", Fi->table,
+		parm.zcol->answer, parm.ztype->answer);
 	db_set_string(&sql, buf);
 	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, "cat", Fi->database,
 			    Fi->driver);
