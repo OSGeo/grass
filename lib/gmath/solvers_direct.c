@@ -45,7 +45,7 @@ int G_math_solver_gauss(double **A, double *x, double *b, int rows)
     G_message(_("Starting direct gauss elimination solver"));
 
     G_math_gauss_elimination(A, b, rows);
-    G_math_backward_solving(A, x, b, rows);
+    G_math_backward_substitution(A, x, b, rows);
 
     return 1;
 }
@@ -88,7 +88,7 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
 
 #pragma omp single
 	{
-	    G_math_forward_solving(A, b, b, rows);
+	    G_math_forward_substitution(A, b, b, rows);
 	}
 
 #pragma omp for  schedule (static) private(i)
@@ -98,7 +98,7 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
 
 #pragma omp single
 	{
-	    G_math_backward_solving(A, x, b, rows);
+	    G_math_backward_substitution(A, x, b, rows);
 	}
     }
 
@@ -134,8 +134,8 @@ int G_math_solver_cholesky(double **A, double *x, double *b, int bandwith,
 	return -2;
     }
 
-    G_math_forward_solving(A, b, b, rows);
-    G_math_backward_solving(A, x, b, rows);
+    G_math_forward_substitution(A, b, b, rows);
+    G_math_backward_substitution(A, x, b, rows);
 
     return 1;
 }
@@ -157,10 +157,6 @@ void G_math_gauss_elimination(double **A, double *b, int rows)
     int i, j, k;
 
     double tmpval = 0.0;
-
-    /*compute the pivot -- commented out, because its meaningless
-       to compute it only nth times. */
-    /*G_math_pivot_create(A, b, rows, 0); */
 
     for (k = 0; k < rows - 1; k++) {
 #pragma omp parallel for schedule (static) private(i, j, tmpval) shared(k, A, b, rows)
@@ -193,10 +189,6 @@ void G_math_lu_decomposition(double **A, double *b, int rows)
 {
 
     int i, j, k;
-
-    /*compute the pivot -- commented out, because its meaningless
-       to compute it only nth times. */
-    /*G_math_pivot_create(A, b, rows, 0); */
 
     for (k = 0; k < rows - 1; k++) {
 #pragma omp parallel for schedule (static) private(i, j) shared(k, A, rows)
@@ -284,7 +276,7 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwith)
 }
 
 /*!
- * \brief backward solving
+ * \brief backward substitution
  *
  * \param A double **
  * \param x double *
@@ -293,7 +285,7 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwith)
  * \return void
  *
  * */
-void G_math_backward_solving(double **A, double *x, double *b, int rows)
+void G_math_backward_substitution(double **A, double *x, double *b, int rows)
 {
     int i, j;
 
@@ -308,7 +300,7 @@ void G_math_backward_solving(double **A, double *x, double *b, int rows)
 }
 
 /*!
- * \brief forward solving
+ * \brief forward substitution
  *
  * \param A double **
  * \param x double *
@@ -317,7 +309,7 @@ void G_math_backward_solving(double **A, double *x, double *b, int rows)
  * \return void
  *
  * */
-void G_math_forward_solving(double **A, double *x, double *b, int rows)
+void G_math_forward_substitution(double **A, double *x, double *b, int rows)
 {
     int i, j;
 
@@ -332,85 +324,4 @@ void G_math_forward_solving(double **A, double *x, double *b, int rows)
     }
 
     return;
-}
-
-
-/*!
- * \brief Optimize the structure of the linear equation system with a common pivoting strategy
- *
- * Create a optimized linear equation system for
- * direct solvers: gauss and lu decomposition.
- *
- * The rows are permuted based on the pivot elements.
- *
- * This algorithm will modify the provided linear equation system
- * and should only be used with the gauss elimination and lu decomposition solver.
- *
- * \param A double ** - a quadratic matrix
- * \param b double *  - the right hand  vector, if not available set it to NULL
- * \param rows int 
- * \param start int -- the row
- * \return int - the number of swapped rows
- *
- *
- * */
-int G_math_pivot_create(double **A, double *b, int rows, int start)
-{
-    int num = 0;		/*number of changed rows */
-
-    int i, j, k;
-
-    double max;
-
-    int number = 0;
-
-    double tmpval = 0.0, s = 0.0;
-
-    double *link = NULL;
-
-    link = G_alloc_vector(rows);
-
-    G_debug(2, "G_math_pivot_create: swap rows if needed");
-    for (i = start; i < rows; i++) {
-	s = 0.0;
-	for (k = i + 1; k < rows; k++) {
-	    s += fabs(A[i][k]);
-	}
-	max = fabs(A[i][i]) / s;
-	number = i;
-	for (j = i + 1; j < rows; j++) {
-	    s = 0.0;
-	    for (k = j; k < rows; k++) {
-		s += fabs(A[j][k]);
-	    }
-	    /*search for the pivot element */
-	    if (max < fabs(A[j][i]) / s) {
-		max = fabs(A[j][i] / s);
-		number = j;
-	    }
-	}
-	if (max == 0) {
-	    max = TINY;
-	    G_warning("Matrix is singular");
-	}
-	/*if an pivot element was found, swap the les entries */
-	if (number != i) {
-
-	    G_debug(4, "swap row %i with row %i", i, number);
-
-	    if (b != NULL) {
-		tmpval = b[number];
-		b[number] = b[i];
-		b[i] = tmpval;
-	    }
-	    G_math_d_copy(A[number], link, rows);
-	    G_math_d_copy(A[i], A[number], rows);
-	    G_math_d_copy(link, A[i], rows);
-	    num++;
-	}
-    }
-
-    G_free_vector(link);
-
-    return num;
 }

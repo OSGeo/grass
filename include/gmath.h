@@ -145,6 +145,7 @@ extern int G_math_solver_cholesky(double **, double *, double *, int , int );
 extern int G_math_solver_jacobi(double **, double *, double *, int , int , double , double );
 extern int G_math_solver_gs(double **, double *, double *, int , int , double , double );
 extern int G_math_solver_pcg(double **, double *, double *, int , int , double , int );
+
 extern int G_math_solver_cg(double **, double *, double *, int , int , double );
 extern int G_math_solver_bicgstab(double **, double *, double *, int , int , double );
 extern int G_math_solver_sparse_jacobi(G_math_spvector **, double *, double *, int , int , double , double );
@@ -156,10 +157,8 @@ extern int G_math_solver_sparse_bicgstab(G_math_spvector **, double *, double *,
 extern void G_math_gauss_elimination(double **, double *, int );
 extern void G_math_lu_decomposition(double **, double *, int );
 extern int G_math_cholesky_decomposition(double **, int , int );
-extern void G_math_backward_solving(double **, double *, double *, int );
-extern void G_math_forward_solving(double **, double *, double *, int );
-extern int G_math_pivot_create(double **, double *, int , int );
-
+extern void G_math_backward_substitution(double **, double *, double *, int );
+extern void G_math_forward_substitution(double **, double *, double *, int );
 
 /*BLAS like level 1,2 and 3 functions*/
 
