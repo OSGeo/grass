@@ -1019,119 +1019,28 @@ class MultiImportDialog(wx.Dialog):
 
             # format widget
             self.formatText = wx.StaticText(self.panel, id=wx.ID_ANY, label=_("Format:"))
-            self.format = wx.Choice(parent = self.panel, id = wx.ID_ANY, size=(300, -1))
+            self.format = gselect.FormatSelect(parent = self.panel,
+                                               ftype = self.importType)
             self.format.Bind(wx.EVT_CHOICE, self.OnSetFormat)
-
-            if self.importType == 'gdal': 
-                ret = gcmd.RunCommand('r.in.gdal',
-                                      quiet = True, read = True,
-                                      flags = 'f')
-            else: # ogr
-                ret = gcmd.RunCommand('v.in.ogr',
-                                      quiet = True, read = True,
-                                      flags = 'f')
             
             self.input = { 'file' : [_("File:"),
                                      inputFile,
-                                     list()],
+                                     globalvar.formats[self.importType]['file']],
                            'dir'  : [_("Directory:"),
                                      inputDir,
-                                     list()],
+                                     globalvar.formats[self.importType]['file']],
                            'db'   : [_("Database:"),
                                      inputDbFile,
-                                     list()],
+                                     globalvar.formats[self.importType]['database']],
                            'pro'  : [_("Protocol:"),
                                      inputPro,
-                                     list()],
+                                     globalvar.formats[self.importType]['protocol']],
                            'db-win' : { 'file'   : inputDbFile,
                                         'text'   : inputDbText,
                                         'choice' : inputDbChoice },
                            }
             
-            self.formatToExt = {
-                # raster
-                'GeoTIFF' : 'tif',
-                'Erdas Imagine Images (.img)' : '.img',
-                'Ground-based SAR Applications Testbed File Format (.gff)' : '.gff',
-                'Arc/Info Binary Grid' : 'adf',
-                'Portable Network Graphics' : 'png',
-                'JPEG JFIF' : 'jpg',
-                'Japanese DEM (.mem)' : 'mem',
-                'Graphics Interchange Format (.gif)' : 'gif',
-                'X11 PixMap Format' : 'xpm',
-                'MS Windows Device Independent Bitmap' : 'bmp',
-                'SPOT DIMAP' : '.dim',
-                'RadarSat 2 XML Product' : 'xml',
-                'EarthWatch .TIL' : '.til',
-                'ERMapper .ers Labelled' : '.ers',
-                'ERMapper Compressed Wavelets' : 'ecw',
-                'GRIdded Binary (.grb)' : 'grb',
-                'EUMETSAT Archive native (.nat)' : '.nat',
-                'Idrisi Raster A.1' : 'rst',
-                'Golden Software ASCII Grid (.grd)' : '.grd',
-                'Golden Software Binary Grid (.grd)' : 'grd',
-                'Golden Software 7 Binary Grid (.grd)' : 'grd',
-                'R Object Data Store' : 'r',
-                'USGS DOQ (Old Style)' : 'doq',
-                'USGS DOQ (New Style)' : 'doq',
-                'ENVI .hdr Labelled' : 'hdr',
-                'ESRI .hdr Labelled' : 'hdr',
-                'Generic Binary (.hdr Labelled)' : 'hdr',
-                'PCI .aux Labelled' : 'aux',
-                'EOSAT FAST Format' : 'fst',
-                'VTP .bt (Binary Terrain) 1.3 Format' : 'bt',
-                'FARSITE v.4 Landscape File (.lcp)' : 'lcp',
-                'Swedish Grid RIK (.rik)' : 'rik',
-                'USGS Optional ASCII DEM (and CDED)' : '.dem',
-                'Northwood Numeric Grid Format .grd/.tab' : '',
-                'Northwood Classified Grid Format .grc/.tab' : '',
-                'ARC Digitized Raster Graphics' : 'arc',
-                'Magellan topo (.blx)' : 'blx',
-                'SAGA GIS Binary Grid (.sdat)' : 'sdat',
-                # vector
-                'ESRI Shapefile' : 'shp',
-                'UK .NTF'        : 'ntf',
-                'SDTS'           : 'ddf',
-                'DGN'            : 'dgn',
-                'VRT'            : 'vrt',
-                'REC'            : 'rec',
-                'BNA'            : 'bna',
-                'CSV'            : 'csv',
-                'GML'            : 'gml',
-                'GPX'            : 'gpx',
-                'KML'            : 'kml',
-                'GMT'            : 'gmt',
-                'PGeo'           : 'mdb',
-                'XPlane'         : 'dat',
-                'AVCBin'         : 'adf',
-                'AVCE00'         : 'e00',
-                'DXF'            : 'dxf',
-                'Geoconcept'     : 'gxt',
-                'GeoRSS'         : 'xml',
-                'GPSTrackMaker'  : 'gtm',
-                'VFK'            : 'vfk' }
-            
-            if ret:
-                for line in ret.splitlines():
-                    format = line.strip().rsplit(':', -1)[1].strip()
-                    if format in ('Memory', 'Virtual Raster', 'In Memory Raster'):
-                        continue
-                    if format in ('PostgreSQL', 'SQLite',
-                                  'ODBC', 'ESRI Personal GeoDatabase',
-                                  'Rasterlite',
-                                  'PostGIS WKT Raster driver'):
-                        self.input['db'][2].append(format)
-                    elif format in ('GeoJSON',
-                                    'OGC Web Coverage Service',
-                                    'OGC Web Map Service',
-                                    'HTTP Fetching Wrapper'):
-                        self.input['pro'][2].append(format)
-                    else:
-                        self.input['file'][2].append(format)
-                        self.input['dir'][2].append(format)
-            
             self.inputType = 'file'
-            
             self.format.SetItems(self.input[self.inputType][2])
             
             if self.importType == 'gdal':
@@ -1281,7 +1190,7 @@ class MultiImportDialog(wx.Dialog):
             self.inputType = 'file'
             format = self.input[self.inputType][2][0]
             try:
-                ext = self.formatToExt[format]
+                ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
                 format += ' (*.%s)|*.%s' % (ext, ext)
@@ -1338,7 +1247,7 @@ class MultiImportDialog(wx.Dialog):
                 else:
                     dsn = self.input[self.inputType][1].GetValue()
             try:
-                ext = '.' + self.formatToExt[self.format.GetStringSelection()]
+                ext = '.' + self.format.GetExtension(self.format.GetStringSelection())
             except KeyError:
                 ext = ''
         
@@ -1442,7 +1351,7 @@ class MultiImportDialog(wx.Dialog):
         
         if self.inputType == 'file':
             try:
-                ext = self.formatToExt[format]
+                ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
                 format += ' (*.%s)|*.%s' % (ext, ext)
@@ -1524,7 +1433,7 @@ class MultiImportDialog(wx.Dialog):
                 data.append((layerId, baseName, grassName))
             elif self.inputType == 'dir':
                 try:
-                    ext = self.formatToExt[self.format.GetStringSelection()]
+                    ext = self.format.GetExtension(self.format.GetStringSelection())
                 except KeyError:
                     ext = ''
                 for file in glob.glob(os.path.join(dsn, "*.%s") % ext):

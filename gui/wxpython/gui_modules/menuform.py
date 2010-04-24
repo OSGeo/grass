@@ -1429,10 +1429,16 @@ class cmdPanel(wx.Panel):
                             ogrSelection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             ogrSelection.Bind(wx.EVT_TEXT, self.OnSetValue)
                             
+                            ogrFormat = gselect.FormatSelect(parent = which_panel,
+                                                             ftype = 'ogr')
+                            ogrFormat.Hide()
+                            ### ogrFormat.Bind(wx.EVT_CHOICE, self.OnSetFormat)
+                            
                             which_sizer.Add(item = self.hsizer, proportion = 0)
                             
                             p['wxId'].append(rbox.GetId())
                             p['wxId'].append(ogrSelection.GetChildren()[1].GetId())
+                            p['wxId'].append(ogrFormat.GetId())
                         else:
                             which_sizer.Add(item=selection, proportion=0,
                                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
@@ -1718,8 +1724,9 @@ class cmdPanel(wx.Panel):
         if not p:
             return # should not happen
         
+        # detect windows
         winNative = None
-        winOGR    = None
+        winOgrDsn = winOgrFrmt = None
         for id in p['wxId']:
             if id == idEvent:
                 continue
@@ -1727,14 +1734,18 @@ class cmdPanel(wx.Panel):
             if name == 'Select':
                 winNative = self.FindWindowById(id + 1)  # fix the mystery (also in nviz_tools.py)
             elif name == 'OgrSelect':
-                winOgr = self.FindWindowById(id + 2)
+                winOgrDsn = self.FindWindowById(id + 2)
+            elif name == 'FormatSelect':
+                winOgrFrmt = self.FindWindowById(id)
         
         # enable / disable widgets & update values
         rbox = self.FindWindowByName('VectorFormat')
         self.hsizer.Remove(rbox)
         if sel == 0:   # -> native
-            winOgr.Hide()
-            self.hsizer.Remove(winOgr)
+            winOgrDsn.Hide()
+            self.hsizer.Remove(winOgrDsn)
+            winOgrFrmt.Hide()
+            self.hsizer.Remove(winOgrFrmt)
 
             self.hsizer.Add(item=winNative,
                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
@@ -1743,15 +1754,23 @@ class cmdPanel(wx.Panel):
             p['value'] = winNative.GetValue()
         
         elif sel == 1: # -> OGR
+            sizer = wx.BoxSizer(wx.VERTICAL)
+            
             winNative.Hide()
             self.hsizer.Remove(winNative)
 
-            self.hsizer.Add(item=winOgr,
+            sizer.Add(item=winOgrDsn)
+            winOgrDsn.Show()
+            p['value'] = winOgrDsn.GetValue()
+            
+            sizer.Add(item=winOgrFrmt,
+                      flag = wx.LEFT | wx.EXPAND, border= 5)
+            winOgrFrmt.Show()
+            
+            self.hsizer.Add(item=sizer,
                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
                             border=5)
-            winOgr.Show()
-            p['value'] = winOgr.GetValue()
-
+        
         self.hsizer.Add(item=rbox,
                         flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT |
                         wx.RIGHT | wx.ALIGN_TOP,

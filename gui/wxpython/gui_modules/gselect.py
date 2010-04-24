@@ -16,6 +16,7 @@ Classes:
  - LocationSelect
  - MapsetSelect
  - SubGroupSelect
+ - FormatSelect
 
 (C) 2007-2010 by the GRASS Development Team This program is free
 software under the GNU General Public License (>=v2). Read the file
@@ -803,3 +804,93 @@ class SubGroupSelect(wx.ComboBox):
         except OSError:
             self.SetItems([])
         self.SetValue('')
+
+class FormatSelect(wx.Choice):
+    def __init__(self, parent, ftype, sourceType = None, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
+                 **kwargs):
+        """!Widget for selecting external (GDAL/OGR) format
+
+        @param parent parent window
+        @param sourceType source type ('file', 'directory', 'database', 'protocol') or None
+        @param dataType data type ('gdal' or 'ogr')
+        """
+        super(FormatSelect, self).__init__(parent, id, size = size, 
+                                           style = wx.CB_READONLY, **kwargs)
+        self.SetName("FormatSelect")
+
+        formats = list()
+        for f in globalvar.formats[ftype].values():
+            formats += f
+        self.SetItems(formats)
+        
+    def GetExtension(self, name):
+        """!Get file extension by format name"""
+        formatToExt = {
+            # raster
+            'GeoTIFF' : 'tif',
+            'Erdas Imagine Images (.img)' : '.img',
+            'Ground-based SAR Applications Testbed File Format (.gff)' : '.gff',
+            'Arc/Info Binary Grid' : 'adf',
+            'Portable Network Graphics' : 'png',
+            'JPEG JFIF' : 'jpg',
+            'Japanese DEM (.mem)' : 'mem',
+            'Graphics Interchange Format (.gif)' : 'gif',
+            'X11 PixMap Format' : 'xpm',
+            'MS Windows Device Independent Bitmap' : 'bmp',
+            'SPOT DIMAP' : '.dim',
+            'RadarSat 2 XML Product' : 'xml',
+            'EarthWatch .TIL' : '.til',
+            'ERMapper .ers Labelled' : '.ers',
+            'ERMapper Compressed Wavelets' : 'ecw',
+            'GRIdded Binary (.grb)' : 'grb',
+            'EUMETSAT Archive native (.nat)' : '.nat',
+            'Idrisi Raster A.1' : 'rst',
+            'Golden Software ASCII Grid (.grd)' : '.grd',
+            'Golden Software Binary Grid (.grd)' : 'grd',
+            'Golden Software 7 Binary Grid (.grd)' : 'grd',
+            'R Object Data Store' : 'r',
+            'USGS DOQ (Old Style)' : 'doq',
+            'USGS DOQ (New Style)' : 'doq',
+            'ENVI .hdr Labelled' : 'hdr',
+            'ESRI .hdr Labelled' : 'hdr',
+            'Generic Binary (.hdr Labelled)' : 'hdr',
+            'PCI .aux Labelled' : 'aux',
+            'EOSAT FAST Format' : 'fst',
+            'VTP .bt (Binary Terrain) 1.3 Format' : 'bt',
+            'FARSITE v.4 Landscape File (.lcp)' : 'lcp',
+            'Swedish Grid RIK (.rik)' : 'rik',
+            'USGS Optional ASCII DEM (and CDED)' : '.dem',
+            'Northwood Numeric Grid Format .grd/.tab' : '',
+            'Northwood Classified Grid Format .grc/.tab' : '',
+            'ARC Digitized Raster Graphics' : 'arc',
+            'Magellan topo (.blx)' : 'blx',
+            'SAGA GIS Binary Grid (.sdat)' : 'sdat',
+            # vector
+            'ESRI Shapefile' : 'shp',
+            'UK .NTF'        : 'ntf',
+            'SDTS'           : 'ddf',
+            'DGN'            : 'dgn',
+            'VRT'            : 'vrt',
+            'REC'            : 'rec',
+            'BNA'            : 'bna',
+            'CSV'            : 'csv',
+            'GML'            : 'gml',
+            'GPX'            : 'gpx',
+            'KML'            : 'kml',
+            'GMT'            : 'gmt',
+            'PGeo'           : 'mdb',
+            'XPlane'         : 'dat',
+            'AVCBin'         : 'adf',
+            'AVCE00'         : 'e00',
+            'DXF'            : 'dxf',
+            'Geoconcept'     : 'gxt',
+            'GeoRSS'         : 'xml',
+            'GPSTrackMaker'  : 'gtm',
+            'VFK'            : 'vfk'
+            }
+        
+        try:
+            return formatToExt[name]
+        except KeyError:
+            return ''
+        

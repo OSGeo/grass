@@ -6,11 +6,10 @@
 This module provide the space for global variables
 used in the code.
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2010 by the GRASS Development Team
 
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -22,6 +21,8 @@ import locale
 ### i18N
 import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+
+import grass.script as grass
 
 # wxversion.select() called once at the beginning
 check = True
@@ -156,3 +157,53 @@ if 'g.mlist' in grassCmd['all']:
     have_mlist = True
 else:
     have_mlist = False
+
+def _getGDALFormats():
+    """!Get dictionary of avaialble GDAL drivers"""
+    ret = grass.read_command('r.in.gdal',
+                             quiet = True,
+                             flags = 'f')
+    
+    return _parseFormats(ret)
+
+def _getOGRFormats():
+    """!Get dictionary of avaialble OGR drivers"""
+    ret = grass.read_command('v.in.ogr',
+                             quiet = True,
+                             flags = 'f')
+    
+    return _parseFormats(ret)
+
+def _parseFormats(output):
+    """!Parse r.in.gdal/v.in.ogr -f output"""
+    formats = { 'file'     : list(),
+                'database' : list(),
+                'protocol' : list()
+                }
+    
+    if not output:
+        return formats
+    
+    for line in output.splitlines():
+        format = line.strip().rsplit(':', -1)[1].strip()
+        if format in ('Memory', 'Virtual Raster', 'In Memory Raster'):
+            continue
+        if format in ('PostgreSQL', 'SQLite',
+                      'ODBC', 'ESRI Personal GeoDatabase',
+                      'Rasterlite',
+                      'PostGIS WKT Raster driver'):
+            formats['database'].append(format)
+        elif format in ('GeoJSON',
+                        'OGC Web Coverage Service',
+                        'OGC Web Map Service',
+                        'HTTP Fetching Wrapper'):
+            formats['protocol'].append(format)
+        else:
+            formats['file'].append(format)
+
+    return formats
+
+formats = {
+    'gdal' : _getGDALFormats(),
+    'ogr' : _getOGRFormats()
+    }
