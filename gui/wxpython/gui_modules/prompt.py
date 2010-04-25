@@ -838,8 +838,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.autoCompList = self.mapList[self.promptType]
                 self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))
             
-        elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and event.ControlDown():
-            # Command history using ctrl-up and ctrl-down   
+        elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN]:
+            # Command history using up and down   
             if len(self.cmdbuffer) < 1:
                 return
             
@@ -896,7 +896,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             if len(self.cmdbuffer) > 200:
                 del self.cmdbuffer[0]
             self.cmdindex = len(self.cmdbuffer)
-
+            
+            # reset command-line
+            self.OnCmdErase(None)
+            
         elif event.GetKeyCode() == wx.WXK_SPACE:
             items = self.GetTextLeft().split()
             if len(items) == 1:
