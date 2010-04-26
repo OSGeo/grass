@@ -1417,28 +1417,17 @@ class cmdPanel(wx.Panel):
                                             wx.RIGHT | wx.ALIGN_TOP,
                                             border=5)
                             
-                            ogrSelection = filebrowse.DirBrowseButton(parent = which_panel, id = wx.ID_ANY, 
-                                                                      size = globalvar.DIALOG_GSELECT_SIZE,
-                                                                      labelText = '',
-                                                                      dialogTitle = _('Choose OGR data source'),
-                                                                      buttonText = _('Browse'),
-                                                                      startDirectory = os.getcwd())
-                            for win in ogrSelection.GetChildren():
-                                win.SetName('OgrSelect')
+                            ogrSelection = gselect.GdalSelect(parent = self, panel = which_panel, ogr = True,
+                                                              defSource = 'dir',
+                                                              sources = [_("Directory"),
+                                                                         _("Database"), _("Protocol")])
+                            ogrSelection.SetName('OgrSelect')
                             ogrSelection.Hide()
-                            ogrSelection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
-                            ogrSelection.Bind(wx.EVT_TEXT, self.OnSetValue)
-                            
-                            ogrFormat = gselect.FormatSelect(parent = which_panel,
-                                                             ftype = 'ogr')
-                            ogrFormat.Hide()
-                            ### ogrFormat.Bind(wx.EVT_CHOICE, self.OnSetFormat)
                             
                             which_sizer.Add(item = self.hsizer, proportion = 0)
                             
                             p['wxId'].append(rbox.GetId())
-                            p['wxId'].append(ogrSelection.GetChildren()[1].GetId())
-                            p['wxId'].append(ogrFormat.GetId())
+                            p['wxId'].append(ogrSelection.GetId())
                         else:
                             which_sizer.Add(item=selection, proportion=0,
                                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
@@ -1726,7 +1715,7 @@ class cmdPanel(wx.Panel):
         
         # detect windows
         winNative = None
-        winOgrDsn = winOgrFrmt = None
+        winOgr = None
         for id in p['wxId']:
             if id == idEvent:
                 continue
@@ -1734,19 +1723,15 @@ class cmdPanel(wx.Panel):
             if name == 'Select':
                 winNative = self.FindWindowById(id + 1)  # fix the mystery (also in nviz_tools.py)
             elif name == 'OgrSelect':
-                winOgrDsn = self.FindWindowById(id + 2)
-            elif name == 'FormatSelect':
-                winOgrFrmt = self.FindWindowById(id)
+                winOgr = self.FindWindowById(id)
         
         # enable / disable widgets & update values
         rbox = self.FindWindowByName('VectorFormat')
         self.hsizer.Remove(rbox)
         if sel == 0:   # -> native
-            winOgrDsn.Hide()
-            self.hsizer.Remove(winOgrDsn)
-            winOgrFrmt.Hide()
-            self.hsizer.Remove(winOgrFrmt)
-
+            winOgr.Hide()
+            self.hsizer.Remove(winOgr)
+            
             self.hsizer.Add(item=winNative,
                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
                             border=5)
@@ -1759,13 +1744,9 @@ class cmdPanel(wx.Panel):
             winNative.Hide()
             self.hsizer.Remove(winNative)
 
-            sizer.Add(item=winOgrDsn)
-            winOgrDsn.Show()
-            p['value'] = winOgrDsn.GetValue()
-            
-            sizer.Add(item=winOgrFrmt,
-                      flag = wx.LEFT | wx.EXPAND, border= 5)
-            winOgrFrmt.Show()
+            sizer.Add(item=winOgr)
+            winOgr.Show()
+            p['value'] = winOgr.GetDsn()
             
             self.hsizer.Add(item=sizer,
                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
@@ -1777,6 +1758,7 @@ class cmdPanel(wx.Panel):
                         border=5)
         
         self.hsizer.Layout()
+        self.Layout()
         self.OnUpdateValues()
         self.OnUpdateSelection(event)
         

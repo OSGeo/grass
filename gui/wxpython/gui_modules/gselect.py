@@ -17,7 +17,8 @@ Classes:
  - MapsetSelect
  - SubGroupSelect
  - FormatSelect
-
+ - GdalSelect
+ 
 (C) 2007-2010 by the GRASS Development Team This program is free
 software under the GNU General Public License (>=v2). Read the file
 COPYING that comes with GRASS for details.
@@ -28,9 +29,11 @@ COPYING that comes with GRASS for details.
 
 import os
 import sys
+import glob
 
 import wx
 import wx.combo
+import wx.lib.filebrowsebutton as filebrowse
 
 import globalvar
 
@@ -806,18 +809,24 @@ class SubGroupSelect(wx.ComboBox):
         self.SetValue('')
 
 class FormatSelect(wx.Choice):
-    def __init__(self, parent, ftype, sourceType = None, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
+    def __init__(self, parent, ogr = False,
+                 sourceType = None, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
                  **kwargs):
         """!Widget for selecting external (GDAL/OGR) format
 
         @param parent parent window
         @param sourceType source type ('file', 'directory', 'database', 'protocol') or None
-        @param dataType data type ('gdal' or 'ogr')
+        @param ogr True for OGR otherwise GDAL
         """
         super(FormatSelect, self).__init__(parent, id, size = size, 
                                            style = wx.CB_READONLY, **kwargs)
         self.SetName("FormatSelect")
-
+        
+        if ogr:
+            ftype = 'ogr'
+        else:
+            ftype = 'gdal'
+        
         formats = list()
         for f in globalvar.formats[ftype].values():
             formats += f
@@ -894,3 +903,347 @@ class FormatSelect(wx.Choice):
         except KeyError:
             return ''
         
+class GdalSelect(wx.Panel):
+    def __init__(self, parent, panel, ogr = False,
+                 defSource = 'file',
+                 sources = [_("File"), _("Directory"),
+                            _("Database"), _("Protocol")],
+                 envHandler = None):
+        """!Widget for selecting GDAL/OGR datasource, format
+        
+        @param parent parent window
+        @param ogr    use OGR selector instead of GDAL
+        """
+        self.parent = parent
+        wx.Panel.__init__(self, parent = panel, id = wx.ID_ANY)
+        
+        self.inputBox = wx.StaticBox(parent = self, id=wx.ID_ANY,
+                                     label=" %s " % _("Source name"))
+        
+        # source type
+        self.source = wx.RadioBox(parent = self, id = wx.ID_ANY,
+                                  label = _('Source type'),
+                                  style = wx.RA_SPECIFY_COLS,
+                                  choices = sources)
+        self.source.SetSelection(0)
+        self.source.Bind(wx.EVT_RADIOBOX, self.OnSetType)
+        
+        # dsn widgets
+        if not ogr:
+            filemask = 'GeoTIFF (*.tif)|*.tif'
+        else:
+            filemask = 'ESRI Shapefile (*.shp)|*.shp'
+        
+        dsnFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
+                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                              dialogTitle=_('Choose input file'),
+                                              buttonText=_('Browse'),
+                                              startDirectory=os.getcwd(),
+                                              changeCallback=self.OnSetDsn,
+                                              fileMask=filemask)
+        dsnFile.Hide()
+        
+        dsnDir = filebrowse.DirBrowseButton(parent=self, id=wx.ID_ANY, 
+                                            size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                            dialogTitle=_('Choose input directory'),
+                                            buttonText=_('Browse'),
+                                            startDirectory=os.getcwd(),
+                                            changeCallback=self.OnSetDsn)
+        dsnDir.Hide()
+        
+        dsnDbFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
+                                                size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                                  dialogTitle=_('Choose file'),
+                                                buttonText=_('Browse'),
+                                                startDirectory=os.getcwd(),
+                                                changeCallback=self.OnSetDsn)
+        dsnDbFile.Hide()
+        
+        dsnDbText = wx.TextCtrl(parent = self, id = wx.ID_ANY)
+        dsnDbText.Hide()
+        dsnDbText.Bind(wx.EVT_TEXT, self.OnSetDsn)
+        
+        dsnDbChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+        dsnDbChoice.Hide()
+        dsnDbChoice.Bind(wx.EVT_CHOICE, self.OnSetDsn)
+        
+        dsnPro = wx.TextCtrl(parent = self, id = wx.ID_ANY)
+        dsnPro.Hide()
+        dsnPro.Bind(wx.EVT_TEXT, self.OnSetDsn)
+
+        # format
+        self.format = FormatSelect(parent = self,
+                                   ogr = ogr)
+        self.format.Bind(wx.EVT_CHOICE, self.OnSetFormat)
+        
+        if ogr:
+            fType = 'ogr'
+        else:
+            fType = 'gdal'
+        self.input = { 'file' : [_("File:"),
+                                 dsnFile,
+                                 globalvar.formats[fType]['file']],
+                       'dir'  : [_("Directory:"),
+                                 dsnDir,
+                                 globalvar.formats[fType]['file']],
+                       'db'   : [_("Database:"),
+                                 dsnDbFile,
+                                 globalvar.formats[fType]['database']],
+                       'pro'  : [_("Protocol:"),
+                                 dsnPro,
+                                 globalvar.formats[fType]['protocol']],
+                       'db-win' : { 'file'   : dsnDbFile,
+                                    'text'   : dsnDbText,
+                                    'choice' : dsnDbChoice },
+                       }
+        
+        self.dsnType = defSource
+        self.input[self.dsnType][1].Show()
+        self.format.SetItems(self.input[self.dsnType][2])
+        
+        if not ogr:
+            self.format.SetStringSelection('GeoTIFF')
+        else:
+            self.format.SetStringSelection('ESRI Shapefile')
+        
+        self.dsnText = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                     label = self.input[self.dsnType][0],
+                                     size = (75, -1))
+        self.formatText = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                        label = _("Format:"))
+        self._layout()
+        
+    def _layout(self):
+        """!Layout"""
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
+        
+        self.dsnSizer = wx.GridBagSizer(vgap=3, hgap=3)
+        self.dsnSizer.AddGrowableCol(1)
+        
+        self.dsnSizer.Add(item=self.dsnText,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos = (0, 0))
+        self.dsnSizer.Add(item=self.input[self.dsnType][1],
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                          pos = (0, 1))
+        
+        self.dsnSizer.Add(item=self.formatText,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos = (1, 0))
+        self.dsnSizer.Add(item=self.format,
+                          pos = (1, 1))
+        
+        inputSizer.Add(item=self.dsnSizer, proportion=1,
+                       flag=wx.EXPAND | wx.ALL)
+        
+        mainSizer.Add(item=self.source, proportion=0,
+                      flag=wx.ALL | wx.EXPAND, border=5)
+        mainSizer.Add(item=inputSizer, proportion=0,
+                      flag=wx.ALL | wx.EXPAND, border=5)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        
+    def OnSetType(self, event):
+        """!Datasource type changed"""
+        sel = event.GetSelection()
+        win = self.input[self.dsnType][1]
+        self.dsnSizer.Remove(win)
+        win.Hide()
+        
+        if sel == 0:   # file
+            self.dsnType = 'file'
+            format = self.input[self.dsnType][2][0]
+            try:
+                ext = self.format.GetExtension(format)
+                if not ext:
+                    raise KeyError
+                format += ' (*.%s)|*.%s' % (ext, ext)
+            except KeyError:
+                format += ' (*.*)|*.*'
+            
+            win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
+                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                              dialogTitle=_('Choose input file'),
+                                              buttonText=_('Browse'),
+                                              startDirectory=os.getcwd(),
+                                              changeCallback=self.OnSetDsn,
+                                              fileMask = format)
+            self.input[self.dsnType][1] = win
+        elif sel == 1: # directory
+            self.dsnType = 'dir'
+        elif sel == 2: # database
+            self.dsnType = 'db'
+        elif sel == 3: # protocol
+            self.dsnType = 'pro'
+            
+        # if self.importType != 'dxf':
+        #     self.dsnSizer.Add(item=self.formatText,
+        #                   flag=wx.ALIGN_CENTER_VERTICAL)
+
+        win = self.input[self.dsnType][1]
+        self.dsnSizer.Add(item=self.input[self.dsnType][1],
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                          pos = (0, 1))
+        win.SetValue('')
+        if self.parent.GetName() == 'MultiImportDialog':
+            self.parent.list.DeleteAllItems()
+        win.Show()
+        
+        self.dsnText.SetLabel(self.input[self.dsnType][0])
+        self.format.SetItems(self.input[self.dsnType][2])
+        self.format.SetSelection(0)
+        
+        self.dsnSizer.Layout()
+        
+    def OnSetDsn(self, event):
+        """!Input DXF file/OGR dsn defined, update list of layer widget"""
+        path = event.GetString()
+        if not path:
+            return 
+
+        data = list()        
+        # if self.importType == 'dxf':
+        #     ret = gcmd.RunCommand('v.in.dxf',
+        #                           quiet = True,
+        #                           parent = self,
+        #                           read = True,
+        #                           flags = 'l',
+        #                           input = path)
+        #     if not ret:
+        #         self.list.LoadData()
+        #         self.btn_run.Enable(False)
+        #         return
+            
+        #     for line in ret.splitlines():
+        #         layerId = line.split(':')[0].split(' ')[1]
+        #         layerName = line.split(':')[1].strip()
+        #         grassName = utils.GetValidLayerName(layerName)
+        #         data.append((layerId, layerName.strip(), grassName.strip()))
+        
+        layerId = 1
+        if self.format.GetStringSelection() == 'PostgreSQL':
+            dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+        else:
+            dsn = self.input[self.dsnType][1].GetValue()
+        if self.dsnType == 'file':
+            baseName = os.path.basename(dsn)
+            grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
+            data.append((layerId, baseName, grassName))
+        elif self.dsnType == 'dir':
+            try:
+                ext = self.format.GetExtension(self.format.GetStringSelection())
+            except KeyError:
+                ext = ''
+            for file in glob.glob(os.path.join(dsn, "*.%s") % ext):
+                baseName = os.path.basename(file)
+                grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
+                data.append((layerId, baseName, grassName))
+                layerId += 1
+        elif self.dsnType == 'db':
+            ret = gcmd.RunCommand('v.in.ogr',
+                                  quiet = True,
+                                  parent = self,
+                                  read = True,
+                                  flags = 'l',
+                                  dsn = dsn)
+            if not ret:
+                self.list.LoadData()
+                self.btn_run.Enable(False)
+                return
+            layerId = 1
+            for line in ret.splitlines():
+                layerName = line.strip()
+                grassName = utils.GetValidLayerName(layerName)
+                data.append((layerId, layerName.strip(), grassName.strip()))
+                layerId += 1
+        
+        if self.parent.GetName() == 'MultiImportDialog':
+            self.parent.list.LoadData(data)
+            if len(data) > 0:
+                self.parent.btn_run.Enable(True)
+            else:
+                self.parent.btn_run.Enable(False)
+        
+    def OnSetFormat(self, event):
+        """!Format changed"""
+        if self.dsnType not in ['file', 'db']:
+            return
+        
+        win = self.input[self.dsnType][1]
+        self.dsnSizer.Remove(win)
+        
+        if self.dsnType == 'file':
+            win.Destroy()
+        else: # database
+            win.Hide()
+        
+        format = event.GetString()
+        
+        if self.dsnType == 'file':
+            try:
+                ext = self.format.GetExtension(format)
+                if not ext:
+                    raise KeyError
+                format += ' (*.%s)|*.%s' % (ext, ext)
+            except KeyError:
+                format += ' (*.*)|*.*'
+            
+            win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
+                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                              dialogTitle=_('Choose file'),
+                                              buttonText=_('Browse'),
+                                              startDirectory=os.getcwd(),
+                                              changeCallback=self.OnSetDsn,
+                                              fileMask = format)
+        else: # database
+            if format == 'SQLite':
+                win = self.input['db-win']['file']
+            elif format == 'PostgreSQL':
+                if grass.find_program('psql'):
+                    win = self.input['db-win']['choice']
+                    if not win.GetItems():
+                        p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
+                        ret = p.communicate()[0]
+                        if ret:
+                            db = list()
+                            for line in ret.splitlines():
+                                sline = line.split('|')
+                                if len(sline) < 2:
+                                    continue
+                                dbname = sline[0]
+                                if dbname:
+                                    db.append(dbname)
+                            win.SetItems(db)
+                else:
+                    win = self.input['db-win']['text']
+            else:
+                win = self.input['db-win']['text']
+        
+        self.input[self.dsnType][1] = win
+        if not win.IsShown():
+            win.Show()
+        self.dsnSizer.Add(item=self.input[self.dsnType][1],
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                          pos = (0, 1))
+        self.dsnSizer.Layout()
+
+    def GetType(self):
+        """!Get source type"""
+        return self.dsnType
+
+    def GetDsn(self):
+        """!Get DSN"""
+        if self.format.GetStringSelection() == 'PostgreSQL':
+            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+        
+        return self.input[self.dsnType][1].GetValue()
+
+    def SetDsnHandler(self):
+        """!Get DSN"""
+        
+    def GetFormatExt(self):
+        """!Get format extension"""
+        return self.format.GetExtension(self.format.GetStringSelection())
+    
