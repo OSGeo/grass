@@ -12,7 +12,9 @@ List of classes:
  - DecorationDialog
  - TextLayerDialog 
  - LoadMapLayersDialog
- - MultiImportDialog
+ - ImportDialog
+ - GdalImportDialog
+ - DxfImportDialog
  - LayersList (used by MultiImport) 
  - SetOpacityDialog
 
@@ -28,7 +30,6 @@ for details.
 import os
 import sys
 import re
-import glob
 
 import wx
 import wx.lib.filebrowsebutton as filebrowse
@@ -926,154 +927,35 @@ class LoadMapLayersDialog(wx.Dialog):
         """!Get selected layer type"""
         return self.layerType.GetStringSelection()
     
-class MultiImportDialog(wx.Dialog):
-    """!Import dxf layers"""
+class ImportDialog(wx.Dialog):
+    """!Dialog for bulk import of various data (base class)"""
     def __init__(self, parent, type,
-                 id=wx.ID_ANY, title=_("Multiple import"),
-                 link = False,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-
+                 id = wx.ID_ANY, title = _("Multiple import"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         self.parent = parent # GMFrame 
         self.importType = type
-        self.link = link     # Link or import data (only for GDAL/OGR) 
         
         self.commandId = -1  # id of running command
-       
-        wx.Dialog.__init__(self, parent, id, title, style=style)
-
+        
+        wx.Dialog.__init__(self, parent, id, title, style=style,
+                           name = "MultiImportDialog")
+        
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
         
-        self.inputTitle = _("Source name")
-        
-        self.inputBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                     label=" %s " % self.inputTitle)
         self.layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
                                      label=_(" List of %s layers ") % self.importType.upper())
-
-        #
-        # input
-        #
-        if self.importType == 'dxf':
-            inputFile = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
-                                                     size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                                     dialogTitle=_('Choose DXF file to import'),
-                                                     buttonText=_('Browse'),
-                                                     startDirectory=os.getcwd(), fileMode=0,
-                                                     changeCallback=self.OnSetInput,
-                                                     fileMask="DXF File (*.dxf)|*.dxf")
-            self.input = { 'file' : [_("DXF file:"),
-                                     inputFile,
-                                     list()] }
-            self.inputType = 'file'
-        else:
-            self.typeRadio = wx.RadioBox(parent = self.panel, id = wx.ID_ANY,
-                                         label = _('Source type'),
-                                         style = wx.RA_SPECIFY_COLS,
-                                         choices = [_("File"),
-                                                    _("Directory"),
-                                                    _("Database"),
-                                                    _("Protocol")])
-            self.typeRadio.SetSelection(0)
-            self.Bind(wx.EVT_RADIOBOX, self.OnChangeType)
-            
-            # input widgets
-            if self.importType == 'gdal':
-                filemask = 'GeoTIFF (*.tif)|*.tif'
-            else:
-                filemask = 'ESRI Shapefile (*.shp)|*.shp'
-            inputFile = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
-                                                    size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                                    dialogTitle=_('Choose input file'),
-                                                    buttonText=_('Browse'),
-                                                    startDirectory=os.getcwd(),
-                                                    changeCallback=self.OnSetInput,
-                                                    fileMask=filemask)
-            
-            inputDir = filebrowse.DirBrowseButton(parent=self.panel, id=wx.ID_ANY, 
-                                                  size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                                  dialogTitle=_('Choose input directory'),
-                                                  buttonText=_('Browse'),
-                                                  startDirectory=os.getcwd(),
-                                                  changeCallback=self.OnSetInput)
-            inputDir.Hide()
-
-            inputDbFile = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
-                                                      size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                                      dialogTitle=_('Choose file'),
-                                                      buttonText=_('Browse'),
-                                                      startDirectory=os.getcwd(),
-                                                      changeCallback=self.OnSetInput)
-            inputDbFile.Hide()
-            
-            inputDbText = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
-            inputDbText.Hide()
-            inputDbText.Bind(wx.EVT_TEXT, self.OnSetInput)
-
-            inputDbChoice = wx.Choice(parent = self.panel, id = wx.ID_ANY)
-            inputDbChoice.Hide()
-            inputDbChoice.Bind(wx.EVT_CHOICE, self.OnSetInput)
-            
-            inputPro = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
-            inputPro.Hide()
-            inputPro.Bind(wx.EVT_TEXT, self.OnSetInput)
-
-            # format widget
-            self.formatText = wx.StaticText(self.panel, id=wx.ID_ANY, label=_("Format:"))
-            self.format = gselect.FormatSelect(parent = self.panel,
-                                               ftype = self.importType)
-            self.format.Bind(wx.EVT_CHOICE, self.OnSetFormat)
-            
-            self.input = { 'file' : [_("File:"),
-                                     inputFile,
-                                     globalvar.formats[self.importType]['file']],
-                           'dir'  : [_("Directory:"),
-                                     inputDir,
-                                     globalvar.formats[self.importType]['file']],
-                           'db'   : [_("Database:"),
-                                     inputDbFile,
-                                     globalvar.formats[self.importType]['database']],
-                           'pro'  : [_("Protocol:"),
-                                     inputPro,
-                                     globalvar.formats[self.importType]['protocol']],
-                           'db-win' : { 'file'   : inputDbFile,
-                                        'text'   : inputDbText,
-                                        'choice' : inputDbChoice },
-                           }
-            
-            self.inputType = 'file'
-            self.format.SetItems(self.input[self.inputType][2])
-            
-            if self.importType == 'gdal':
-                self.format.SetStringSelection('GeoTIFF')
-            elif self.importType == 'ogr':
-                self.format.SetStringSelection('ESRI Shapefile')
-        
-        self.inputText = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                       label = self.input[self.inputType][0],
-                                       size = (75, -1))
         
         #
         # list of layers
         #
         self.list = LayersList(self.panel)
         self.list.LoadData()
-
-        self.add = wx.CheckBox(parent=self.panel, id=wx.ID_ANY)
-        if link:
-            self.add.SetLabel(_("Add linked layers into layer tree"))
-        else:
-            self.add.SetLabel(_("Add imported layers into layer tree"))
-
-        if not link and self.importType in ('gdal', 'ogr'):
-            self.overrideCheck = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
-                                             label=_("Override projection (use location's projection)"))
-            self.overrideCheck.SetValue(True)
-                                             
-        self.add.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
-
+        
         self.overwrite = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                      label=_("Allow output files to overwrite existing files"))
         self.overwrite.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
+        
+        self.add = wx.CheckBox(parent=self.panel, id=wx.ID_ANY)
         
         #
         # buttons
@@ -1083,52 +965,19 @@ class MultiImportDialog(wx.Dialog):
         self.btn_cancel.SetToolTipString(_("Close dialog"))
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # run
-        if link:
-            self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label= _("&Link"))
-            self.btn_run.SetToolTipString(_("Link selected layers"))
-        else:
-            self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label= _("&Import"))
-            self.btn_run.SetToolTipString(_("Import selected layers"))
+        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK)
         self.btn_run.SetDefault()
         self.btn_run.Enable(False)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-        
-        self.__doLayout()
-        self.Layout()
 
-    def __doLayout(self):
+    def doLayout(self):
+        """!Do layout"""
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
-        #
-        # input
-        #
-        inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
         
-        gridSizer = wx.FlexGridSizer(cols=2, vgap=5, hgap=5)
-       
-        gridSizer.Add(item=self.inputText,
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.AddGrowableCol(1)
-        self.inputTypeSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.inputTypeSizer.Add(item=self.input[self.inputType][1], proportion = 1,
-                                flag = wx.ALIGN_CENTER_VERTICAL)
+        # dsn input
+        dialogSizer.Add(item = self.dsnInput, proportion = 0,
+                        flag = wx.EXPAND)
         
-        gridSizer.Add(item=self.inputTypeSizer,
-                      flag=wx.EXPAND | wx.ALL)
-        
-        if self.importType != 'dxf':
-            gridSizer.Add(item=self.formatText,
-                          flag=wx.ALIGN_CENTER_VERTICAL)
-            gridSizer.Add(item=self.format)
-        
-        inputSizer.Add(item=gridSizer, proportion=1,
-                       flag=wx.EXPAND | wx.ALL)
-
-        if self.importType != 'dxf':
-            dialogSizer.Add(item=self.typeRadio, proportion=0,
-                            flag=wx.ALL | wx.EXPAND, border=5)
-        dialogSizer.Add(item=inputSizer, proportion=0,
-                        flag=wx.ALL | wx.EXPAND, border=5)
-
         #
         # list of DXF layers
         #
@@ -1139,17 +988,17 @@ class MultiImportDialog(wx.Dialog):
         
         dialogSizer.Add(item=layerSizer, proportion=1,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
-
+        
         if hasattr(self, "overrideCheck"):
             dialogSizer.Add(item=self.overrideCheck, proportion=0,
                             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
-
+        
         dialogSizer.Add(item=self.overwrite, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
         
         dialogSizer.Add(item=self.add, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
-
+        
         #
         # buttons
         #
@@ -1171,59 +1020,13 @@ class MultiImportDialog(wx.Dialog):
         self.panel.SetSizer(dialogSizer)
         dialogSizer.Fit(self.panel)
         
-        self.Layout()
         # auto-layout seems not work here - FIXME
         size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 175, 400)
         self.SetMinSize(size)
         self.SetSize((size.width, size.height + 100))
         width = self.GetSize()[0]
         self.list.SetColumnWidth(col=1, width=width/2 - 50)
-        
-    def OnChangeType(self, event):
-        """!Datasource type changed"""
-        sel = event.GetSelection()
-        win = self.input[self.inputType][1]
-        self.inputTypeSizer.Remove(win)
-        win.Hide()
-        
-        if sel == 0:   # file
-            self.inputType = 'file'
-            format = self.input[self.inputType][2][0]
-            try:
-                ext = self.format.GetExtension(format)
-                if not ext:
-                    raise KeyError
-                format += ' (*.%s)|*.%s' % (ext, ext)
-            except KeyError:
-                format += ' (*.*)|*.*'
-            
-            win = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
-                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                              dialogTitle=_('Choose input file'),
-                                              buttonText=_('Browse'),
-                                              startDirectory=os.getcwd(),
-                                              changeCallback=self.OnSetInput,
-                                              fileMask = format)
-            self.input[self.inputType][1] = win
-        elif sel == 1: # directory
-            self.inputType = 'dir'
-        elif sel == 2: # database
-            self.inputType = 'db'
-        elif sel == 3: # protocol
-            self.inputType = 'pro'
-        
-        win = self.input[self.inputType][1]
-        self.inputTypeSizer.Add(item = win, proportion = 1,
-                                flag = wx.ALIGN_CENTER_VERTICAL)
-        win.SetValue('')
-        self.list.DeleteAllItems()
-        win.Show()
-        
-        self.inputText.SetLabel(self.input[self.inputType][0])
-        self.format.SetItems(self.input[self.inputType][2])
-        self.format.SetSelection(0)
-        
-        self.inputTypeSizer.Layout()
+        self.Layout()
         
     def OnCancel(self, event=None):
         """!Close dialog"""
@@ -1231,71 +1034,9 @@ class MultiImportDialog(wx.Dialog):
 
     def OnRun(self, event):
         """!Import/Link data (each layes as separate vector map)"""
-        data = self.list.GetLayers()
-        
-        # hide dialog
-        self.Hide()
-        
-        if self.importType == 'dxf':
-            inputDxf = self.input[self.inputType][1].GetValue()
-        else:
-            if self.inputType == 'file':
-                dsn = os.path.dirname(self.input[self.inputType][1].GetValue())
-            else:
-                if self.format.GetStringSelection() == 'PostgreSQL':
-                    dsn = 'PG:dbname=%s' % self.input[self.inputType][1].GetStringSelection()
-                else:
-                    dsn = self.input[self.inputType][1].GetValue()
-            try:
-                ext = '.' + self.format.GetExtension(self.format.GetStringSelection())
-            except KeyError:
-                ext = ''
-        
-        for layer, output in data:
-            if self.importType == 'dxf':
-                cmd = ['v.in.dxf',
-                       'input=%s' % inputDxf,
-                       'layers=%s' % layer,
-                       'output=%s' % output]
-            elif self.importType == 'ogr':
-                if layer.rfind(ext) > -1:
-                    layer = layer.replace(ext, '')
-                if self.link:
-                    cmd = ['v.external',
-                           'dsn=%s' % dsn,
-                           'output=%s' % output,
-                           'layer=%s' % layer]
-                else:
-                    cmd = ['v.in.ogr',
-                           'dsn=%s' % dsn,
-                           'layer=%s' % layer,
-                           'output=%s' % output]
-            else: # gdal
-                if self.link:
-                    cmd = ['r.external',
-                           'input=%s' % (os.path.join(dsn, layer)),
-                           'output=%s' % output]
-                else:
-                    cmd = ['r.in.gdal',
-                           'input=%s' % (os.path.join(dsn, layer)),
-                           'output=%s' % output]
-            
-            if self.overwrite.IsChecked():
-                cmd.append('--overwrite')
-            
-            if hasattr(self, "overrideCheck") and self.overrideCheck.IsChecked():
-                cmd.append('-o')
-            
-            if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
-                cmd.append('--overwrite')
-            
-            # run in Layer Manager
-            self.parent.goutput.RunCmd(cmd, switchPage=True,
-                                       onDone = self._addLayers)
-        
-        self.OnCancel()
-        
-    def _addLayers(self, returncode):
+        pass
+    
+    def AddLayers(self, returncode):
         """!Add imported/linked layers into layer tree"""
         self.commandId += 1
         
@@ -1333,131 +1074,167 @@ class MultiImportDialog(wx.Dialog):
         @todo not yet implemented
         """
         pass
-        
-    def OnSetFormat(self, event):
-        """!Format changed"""
-        if self.inputType not in ['file', 'db']:
-            return
-        
-        win = self.input[self.inputType][1]
-        self.inputTypeSizer.Remove(win)
-        
-        if self.inputType == 'file':
-            win.Destroy()
-        else: # database
-            win.Hide()
-        
-        format = event.GetString()
-        
-        if self.inputType == 'file':
-            try:
-                ext = self.format.GetExtension(format)
-                if not ext:
-                    raise KeyError
-                format += ' (*.%s)|*.%s' % (ext, ext)
-            except KeyError:
-                format += ' (*.*)|*.*'
-            
-            win = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
-                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                              dialogTitle=_('Choose file'),
-                                              buttonText=_('Browse'),
-                                              startDirectory=os.getcwd(),
-                                              changeCallback=self.OnSetInput,
-                                              fileMask = format)
-        else: # database
-            if format == 'SQLite':
-                win = self.input['db-win']['file']
-            elif format == 'PostgreSQL':
-                if grass.find_program('psql'):
-                    win = self.input['db-win']['choice']
-                    if not win.GetItems():
-                        p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
-                        ret = p.communicate()[0]
-                        if ret:
-                            db = list()
-                            for line in ret.splitlines():
-                                sline = line.split('|')
-                                if len(sline) < 2:
-                                    continue
-                                dbname = sline[0]
-                                if dbname:
-                                    db.append(dbname)
-                            win.SetItems(db)
-                else:
-                    win = self.input['db-win']['text']
+
+class GdalImportDialog(ImportDialog):
+    """!Dialog for bulk import of various raster/vector data"""
+    def __init__(self, parent, ogr = False, link = False):
+        self.link = link
+        if ogr:
+            ImportDialog.__init__(self, parent, type = 'ogr')
+            if link:
+                self.SetTitle(_("Link vector data"))
             else:
-                win = self.input['db-win']['text']
+                self.SetTitle(_("Import vector data"))
+        else:
+            ImportDialog.__init__(self, parent, type = 'gdal') 
+            if link:
+                self.SetTitle(_("Link raster data"))
+            else:
+                self.SetTitle(_("Import raster data"))
+       
+        self.dsnInput = gselect.GdalSelect(parent = self, panel = self.panel, ogr = ogr)
+
+        if not link:
+            self.overrideCheck = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
+                                             label=_("Override projection (use location's projection)"))
+            self.overrideCheck.SetValue(True)
         
-        self.input[self.inputType][1] = win
-        if not win.IsShown():
-            win.Show()
-        self.inputTypeSizer.Add(item = win, proportion = 1,
-                                flag = wx.ALIGN_CENTER_VERTICAL)
-        self.inputTypeSizer.Layout()
+        if link:
+            self.add.SetLabel(_("Add linked layers into layer tree"))
+        else:
+            self.add.SetLabel(_("Add imported layers into layer tree"))
         
-    def OnSetInput(self, event):
-        """!Input DXF file/OGR dsn defined, update list of layer widget"""
+        self.add.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
+
+        if link:
+            self.btn_run.SetLabel(_("&Link"))
+            self.btn_run.SetToolTipString(_("Link selected layers"))
+        else:
+            self.btn_run.SetLabel(_("&Import"))
+            self.btn_run.SetToolTipString(_("Import selected layers"))
+        
+        self.doLayout()
+
+    def OnRun(self, event):
+        """!Import/Link data (each layes as separate vector map)"""
+        data = self.list.GetLayers()
+        
+        # hide dialog
+        self.Hide()
+        
+        dsn = self.dsnInput.GetDsn()
+        ext = self.dsnInput.GetFormatExt()
+            
+        for layer, output in data:
+            if self.importType == 'ogr':
+                if ext and layer.rfind(ext) > -1:
+                    layer = layer.replace('.' + ext, '')
+                if self.link:
+                    cmd = ['v.external',
+                           'dsn=%s' % dsn,
+                           'output=%s' % output,
+                           'layer=%s' % layer]
+                else:
+                    cmd = ['v.in.ogr',
+                           'dsn=%s' % dsn,
+                           'layer=%s' % layer,
+                           'output=%s' % output]
+            else: # gdal
+                if self.dsnInput.GetType() == 'dir':
+                    dsn = os.path.join(dsn, layer)
+                
+                if self.link:
+                    cmd = ['r.external',
+                           'input=%s' % dsn,
+                           'output=%s' % output]
+                else:
+                    cmd = ['r.in.gdal',
+                           'input=%s' % dsn,
+                           'output=%s' % output]
+            
+            if self.overwrite.IsChecked():
+                cmd.append('--overwrite')
+            
+            if not self.link and self.overrideCheck.IsChecked():
+                cmd.append('-o')
+            
+            if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
+                cmd.append('--overwrite')
+            
+            # run in Layer Manager
+            self.parent.goutput.RunCmd(cmd, switchPage=True,
+                                       onDone = self.AddLayers)
+        
+        self.OnCancel()
+        
+class DxfImportDialog(ImportDialog):
+    """!Dialog for bulk import of DXF layers""" 
+    def __init__(self, parent):
+        ImportDialog.__init__(self, parent, type = 'dxf',
+                              title = _("Import DXF layers"))
+        
+        self.dsnInput = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
+                                                    size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                                    dialogTitle=_('Choose DXF file to import'),
+                                                    buttonText=_('Browse'),
+                                                    startDirectory=os.getcwd(), fileMode=0,
+                                                    changeCallback=self.OnSetDsn,
+                                                    fileMask="DXF File (*.dxf)|*.dxf")
+        
+        self.add.SetLabel(_("Add imported layers into layer tree"))
+        
+        self.add.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
+        
+        self.doLayout()
+        
+    def OnRun(self, event):
+        """!Import/Link data (each layes as separate vector map)"""
+        data = self.list.GetLayers()
+        
+        # hide dialog
+        self.Hide()
+        
+        inputDxf = self.dsnInput.GetValue()
+        
+        for layer, output in data:
+            cmd = ['v.in.dxf',
+                   'input=%s' % inputDxf,
+                   'layers=%s' % layer,
+                   'output=%s' % output]
+            
+            if self.overwrite.IsChecked() or \
+                    UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
+                cmd.append('--overwrite')
+            
+            # run in Layer Manager
+            self.parent.goutput.RunCmd(cmd, switchPage=True,
+                                       onDone = self.AddLayers)
+        
+        self.OnCancel()
+
+    def OnSetDsn(self, event):
+        """!Input DXF file defined, update list of layer widget"""
         path = event.GetString()
         if not path:
             return 
-
-        data = list()        
-        if self.importType == 'dxf':
-            ret = gcmd.RunCommand('v.in.dxf',
-                                  quiet = True,
-                                  parent = self,
-                                  read = True,
-                                  flags = 'l',
-                                  input = path)
-            if not ret:
-                self.list.LoadData()
-                self.btn_run.Enable(False)
-                return
-            
-            for line in ret.splitlines():
-                layerId = line.split(':')[0].split(' ')[1]
-                layerName = line.split(':')[1].strip()
-                grassName = utils.GetValidLayerName(layerName)
-                data.append((layerId, layerName.strip(), grassName.strip()))
         
-        else: # gdal/ogr (for ogr maybe to use v.in.ogr -l)
-            layerId = 1
-            if self.format.GetStringSelection() == 'PostgreSQL':
-                dsn = 'PG:dbname=%s' % self.input[self.inputType][1].GetStringSelection()
-            else:
-                dsn = self.input[self.inputType][1].GetValue()
-            if self.inputType == 'file':
-                baseName = os.path.basename(dsn)
-                grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
-                data.append((layerId, baseName, grassName))
-            elif self.inputType == 'dir':
-                try:
-                    ext = self.format.GetExtension(self.format.GetStringSelection())
-                except KeyError:
-                    ext = ''
-                for file in glob.glob(os.path.join(dsn, "*.%s") % ext):
-                    baseName = os.path.basename(file)
-                    grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
-                    data.append((layerId, baseName, grassName))
-                    layerId += 1
-            elif self.inputType == 'db':
-                ret = gcmd.RunCommand('v.in.ogr',
-                                      quiet = True,
-                                      parent = self,
-                                      read = True,
-                                      flags = 'l',
-                                      dsn = dsn)
-                if not ret:
-                    self.list.LoadData()
-                    self.btn_run.Enable(False)
-                    return
-                layerId = 1
-                for line in ret.splitlines():
-                    layerName = line.strip()
-                    grassName = utils.GetValidLayerName(layerName)
-                    data.append((layerId, layerName.strip(), grassName.strip()))
-                    layerId += 1
+        data = list()        
+        ret = gcmd.RunCommand('v.in.dxf',
+                              quiet = True,
+                              parent = self,
+                              read = True,
+                              flags = 'l',
+                              input = path)
+        if not ret:
+            self.list.LoadData()
+            self.btn_run.Enable(False)
+            return
+            
+        for line in ret.splitlines():
+            layerId = line.split(':')[0].split(' ')[1]
+            layerName = line.split(':')[1].strip()
+            grassName = utils.GetValidLayerName(layerName)
+            data.append((layerId, layerName.strip(), grassName.strip()))
         
         self.list.LoadData(data)
         if len(data) > 0:
