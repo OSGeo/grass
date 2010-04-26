@@ -706,7 +706,8 @@ class mainFrame(wx.Frame):
             pass
         
         wx.Frame.__init__(self, parent=parent, id=ID, title=title,
-                          pos=wx.DefaultPosition, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+                          pos=wx.DefaultPosition, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
+                          name = "MainFrame")
 
         self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
 
@@ -1035,8 +1036,8 @@ class mainFrame(wx.Frame):
         return self.notebookpanel.createCmd(ignoreErrors=ignoreErrors)
 
 class cmdPanel(wx.Panel):
-    """
-    A panel containing a notebook dividing in tabs the different guisections of the GRASS cmd.
+    """!A panel containing a notebook dividing in tabs the different
+    guisections of the GRASS cmd.
     """
     def __init__( self, parent, task, standalone, mainFrame, *args, **kwargs ):
         wx.Panel.__init__( self, parent, *args, **kwargs )
@@ -1421,6 +1422,9 @@ class cmdPanel(wx.Panel):
                                                               defSource = 'dir',
                                                               sources = [_("Directory"),
                                                                          _("Database"), _("Protocol")])
+                            self.Bind(gselect.EVT_GDALSELECT, self.OnUpdateSelection)
+                            self.Bind(gselect.EVT_GDALSELECT, self.OnSetValue)
+                            
                             ogrSelection.SetName('OgrSelect')
                             ogrSelection.Hide()
                             
@@ -1428,6 +1432,7 @@ class cmdPanel(wx.Panel):
                             
                             p['wxId'].append(rbox.GetId())
                             p['wxId'].append(ogrSelection.GetId())
+                            p['wxId'].append(ogrSelection.GetDsnWin().GetId())
                         else:
                             which_sizer.Add(item=selection, proportion=0,
                                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
@@ -1872,7 +1877,6 @@ class cmdPanel(wx.Panel):
         myId = event.GetId()
         me  = wx.FindWindowById(myId)
         name = me.GetName()
-        
         for porf in self.task.params + self.task.flags:
             if 'wxId' in porf:
                 found = False

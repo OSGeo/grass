@@ -34,6 +34,7 @@ import glob
 import wx
 import wx.combo
 import wx.lib.filebrowsebutton as filebrowse
+from wx.lib.newevent import NewEvent
 
 import globalvar
 
@@ -44,6 +45,8 @@ import grass.script as grass
 import gcmd
 import utils
 from preferences import globalSettings as UserSettings
+
+wxGdalSelect, EVT_GDALSELECT = NewEvent()
 
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id, size = globalvar.DIALOG_GSELECT_SIZE,
@@ -1102,25 +1105,8 @@ class GdalSelect(wx.Panel):
         path = event.GetString()
         if not path:
             return 
-
+        
         data = list()        
-        # if self.importType == 'dxf':
-        #     ret = gcmd.RunCommand('v.in.dxf',
-        #                           quiet = True,
-        #                           parent = self,
-        #                           read = True,
-        #                           flags = 'l',
-        #                           input = path)
-        #     if not ret:
-        #         self.list.LoadData()
-        #         self.btn_run.Enable(False)
-        #         return
-            
-        #     for line in ret.splitlines():
-        #         layerId = line.split(':')[0].split(' ')[1]
-        #         layerName = line.split(':')[1].strip()
-        #         grassName = utils.GetValidLayerName(layerName)
-        #         data.append((layerId, layerName.strip(), grassName.strip()))
         
         layerId = 1
         if self.format.GetStringSelection() == 'PostgreSQL':
@@ -1159,12 +1145,18 @@ class GdalSelect(wx.Panel):
                 data.append((layerId, layerName.strip(), grassName.strip()))
                 layerId += 1
         
+        evt = wxGdalSelect(dsn = dsn)
+        evt.SetId(self.input[self.dsnType][1].GetId())
+        wx.PostEvent(self.parent, evt)
+        
         if self.parent.GetName() == 'MultiImportDialog':
             self.parent.list.LoadData(data)
             if len(data) > 0:
                 self.parent.btn_run.Enable(True)
             else:
                 self.parent.btn_run.Enable(False)
+        
+        event.Skip()
         
     def OnSetFormat(self, event):
         """!Format changed"""
@@ -1240,9 +1232,10 @@ class GdalSelect(wx.Panel):
         
         return self.input[self.dsnType][1].GetValue()
 
-    def SetDsnHandler(self):
-        """!Get DSN"""
-        
+    def GetDsnWin(self):
+        """!Get DSN windows"""
+        return self.input[self.dsnType][1]
+    
     def GetFormatExt(self):
         """!Get format extension"""
         return self.format.GetExtension(self.format.GetStringSelection())
