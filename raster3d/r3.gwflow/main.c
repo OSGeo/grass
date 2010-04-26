@@ -49,105 +49,72 @@ static void write_result(N_array_3d * status, N_array_3d * phead_start,
 /* ************************************************************************* */
 void set_params(void)
 {
-    param.phead = G_define_option();
+    param.phead = G_define_standard_option(G_OPT_R3_INPUT);
     param.phead->key = "phead";
-    param.phead->type = TYPE_STRING;
-    param.phead->required = YES;
-    param.phead->gisprompt = "old,grid3,3d-raster";
-    param.phead->description = _("The initial piezometric head in [m]");
+    param.phead->description = _("Input 3d-raster map with initial piezometric heads in [m]");
 
-    param.status = G_define_option();
+    param.status = G_define_standard_option(G_OPT_R3_INPUT);
     param.status->key = "status";
-    param.status->type = TYPE_STRING;
-    param.status->required = YES;
-    param.status->gisprompt = "old,grid3,3d-raster";
     param.status->description =
 	_
-	("The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
+	("Input 3d-raster map providing the status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
 
-    param.hc_x = G_define_option();
+    param.hc_x = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_x->key = "hc_x";
-    param.hc_x->type = TYPE_STRING;
-    param.hc_x->required = YES;
-    param.hc_x->gisprompt = "old,grid3,3d-raster";
     param.hc_x->description =
-	_("The x-part of the hydraulic conductivity tensor in [m/s]");
+	_("Input 3d-raster map with the x-part of the hydraulic conductivity tensor in [m/s]");
 
-    param.hc_y = G_define_option();
+    param.hc_y = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_y->key = "hc_y";
-    param.hc_y->type = TYPE_STRING;
-    param.hc_y->required = YES;
-    param.hc_y->gisprompt = "old,grid3,3d-raster";
     param.hc_y->description =
-	_("The y-part of the hydraulic conductivity tensor in [m/s]");
+	_("Input 3d-raster map with the y-part of the hydraulic conductivity tensor in [m/s]");
 
-    param.hc_z = G_define_option();
+    param.hc_z = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_z->key = "hc_z";
-    param.hc_z->type = TYPE_STRING;
-    param.hc_z->required = YES;
-    param.hc_z->gisprompt = "old,grid3,3d-raster";
     param.hc_z->description =
-	_("The z-part of the hydraulic conductivity tensor in [m/s]");
+	_("Input 3d-raster map with the z-part of the hydraulic conductivity tensor in [m/s]");
 
-    param.q = G_define_option();
+    param.q = G_define_standard_option(G_OPT_R3_INPUT);
     param.q->key = "q";
-    param.q->type = TYPE_STRING;
     param.q->required = NO;
-    param.q->gisprompt = "old,grid3,3d-raster";
-    param.q->description = _("Sources and sinks in [m^3/s]");
+    param.q->description = _("Input 3d-raster map with sources and sinks in [m^3/s]");
 
-    param.s = G_define_option();
+    param.s = G_define_standard_option(G_OPT_R3_INPUT);
     param.s->key = "s";
-    param.s->type = TYPE_STRING;
-    param.s->required = YES;
-    param.s->gisprompt = "old,grid3,3d-raster";
-    param.s->description = _("Specific yield in 1/m");
+    param.s->description = _("Specific yield [1/m] input 3d-raster map");
 
-    param.r = G_define_option();
+    param.r = G_define_standard_option(G_OPT_R3_INPUT);
     param.r->key = "r";
-    param.r->type = TYPE_STRING;
     param.r->required = NO;
-    param.r->gisprompt = "old,raster,raster";
-    param.r->description = _("Recharge raster map in m^3/s");
+    param.r->description = _("Recharge input 3d-raster map in m^3/s");
 
-    param.output = G_define_option();
+    param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.output->key = "output";
-    param.output->type = TYPE_STRING;
-    param.output->required = YES;
-    param.output->gisprompt = "new,grid3,3d-raster";
-    param.output->description = _("The piezometric head result of the numerical calculation will be written to this map");
+    param.output->description = _("Output 3d-raster map storing the piezometric head result of the numerical calculation");
 
-    param.vector_x = G_define_option();
+    param.vector_x = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_x->key = "vx";
-    param.vector_x->type = TYPE_STRING;
     param.vector_x->required = NO;
-    param.vector_x->gisprompt = "new,grid3,3d-raster";
     param.vector_x->description =
-	_("Calculate and store the groundwater filter velocity vector part in x direction [m/s]\n");
+	_("Output 3d-raster map storing the groundwater filter velocity vector part in x direction [m/s]");
 
-    param.vector_y = G_define_option();
+    param.vector_y = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_y->key = "vy";
-    param.vector_y->type = TYPE_STRING;
     param.vector_y->required = NO;
-    param.vector_y->gisprompt = "new,grid3,3d-raster";
     param.vector_y->description =
-	_("Calculate and store the groundwater filter velocity vector part in y direction [m/s]\n");
+	_("Output 3d-raster map storing the groundwater filter velocity vector part in y direction [m/s]");
 
-    param.vector_z = G_define_option();
+    param.vector_z = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_z->key = "vz";
-    param.vector_z->type = TYPE_STRING;
     param.vector_z->required = NO;
-    param.vector_z->gisprompt = "new,grid3,3d-raster";
     param.vector_z->description =
-	_("Calculate and store the groundwater filter velocity vector part in z direction [m/s]\n");
+	_("Output 3d-raster map storing the groundwater filter velocity vector part in z direction [m/s]");
 
-    param.budget = G_define_option();
+    param.budget = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.budget->key = "budget";
-    param.budget->type = TYPE_STRING;
     param.budget->required = NO;
-    param.budget->gisprompt = "new,grid3,3d-raster";
     param.budget->description =
-	_("Store the groundwater budget for each cell [m^3/s]\n");
+	_("Output 3d-raster map Storing the groundwater budget for each cell [m^3/s]\n");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
