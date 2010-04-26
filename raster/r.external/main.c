@@ -496,8 +496,6 @@ static void create_map(const char *input, int band, const char *output,
 	Rast_put_cell_title(output, title);
 
     G_message(_("<%s> created"), output);
-
-    return;
 }
 
 int main(int argc, char *argv[])
@@ -517,6 +515,7 @@ int main(int argc, char *argv[])
     int min_band, max_band, band;
     struct band_info info;
     int flip;
+    struct Ref reference;
 
     G_gisinit(argv[0]);
 
@@ -645,6 +644,12 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("Proceeding with import..."));
 
+    if (max_band > min_band) {
+	if (I_find_group(output) == 1)
+	    G_warning(_("Imagery group <%s> already exists and will be overwritten."), output);
+	I_init_group_ref(&reference);
+    }
+
     for (band = min_band; band <= max_band; band++) {
 	char *output2, *title2 = NULL;
 
@@ -658,6 +663,8 @@ int main(int argc, char *argv[])
 	    G_asprintf(&output2, "%s.%d", output, band);
 	    if (title)
 		G_asprintf(&title2, "%s (band %d)", title, band);
+	    G_debug(1, "Adding raster map <%s> to group <%s>", output2, output);
+	    I_add_file_to_group_ref(output2, G_mapset(), &reference);
 	}
 	else {
 	    output2 = G_store(output);
@@ -674,6 +681,13 @@ int main(int argc, char *argv[])
 
     if (flag_e->answer)
 	update_default_window(&cellhd);
+
+    /* Create the imagery group if multiple bands are imported */
+    if (max_band > min_band) {
+    	I_put_group_ref(output, &reference);
+	I_put_group(output);
+	G_message(_("Imagery group <%s> created"), output);
+    }
 
     G_done_msg(" ");
 
