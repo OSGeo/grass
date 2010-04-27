@@ -137,11 +137,21 @@ extern G_math_spvector **G_math_alloc_spmatrix(int );
 extern void G_math_free_spmatrix(G_math_spvector ** , int );
 extern void G_math_free_spvector(G_math_spvector * );
 extern int G_math_add_spvector(G_math_spvector **, G_math_spvector * , int );
+extern G_math_spvector **G_math_A_to_Asp(double **, int, double);
+extern double **G_math_Asp_to_A(G_math_spvector **, int);
+extern double **G_math_Asp_to_band_matrix(G_math_spvector **, int, int);
+extern G_math_spvector **G_math_band_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon);
+extern void G_math_print_spmatrix(G_math_spvector ** Asp, int rows);
+
+/*Symmetric band matrix handling */
+extern double **G_math_matrix_to_band_matrix(double **, int, int);
+extern double **G_math_band_matrix_to_matrix(double **A, int rows, int bandwidth);
 
 /*linear equation solver, most of them are multithreaded wih OpenMP*/
 extern int G_math_solver_gauss(double **, double *, double *, int );
 extern int G_math_solver_lu(double **, double *, double *, int );
 extern int G_math_solver_cholesky(double **, double *, double *, int , int );
+extern void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int bandwidth);
 extern int G_math_solver_jacobi(double **, double *, double *, int , int , double , double );
 extern int G_math_solver_gs(double **, double *, double *, int , int , double , double );
 extern int G_math_solver_pcg(double **, double *, double *, int , int , double , int );
@@ -157,8 +167,10 @@ extern int G_math_solver_sparse_bicgstab(G_math_spvector **, double *, double *,
 extern void G_math_gauss_elimination(double **, double *, int );
 extern void G_math_lu_decomposition(double **, double *, int );
 extern int G_math_cholesky_decomposition(double **, int , int );
+extern void G_math_cholesky_band_decomposition(double **, double **, int, int);
 extern void G_math_backward_substitution(double **, double *, double *, int );
 extern void G_math_forward_substitution(double **, double *, double *, int );
+extern void G_math_cholesky_band_substitution(double **, double *, double *, int, int);
 
 /*BLAS like level 1,2 and 3 functions*/
 

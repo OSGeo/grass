@@ -431,7 +431,7 @@ int test_solvers(void)
 	G_math_d_asum_norm(les->x, &val, les->rows);
 	if ((val - (double)les->rows) > EPSILON_DIRECT)
 	{
-		G_warning("Error in G_math_solver_gauss abs %2.20f != %i", val,
+		G_warning("Error in G_math_solver_lu abs %2.20f != %i", val,
 				les->rows);
 		sum++;
 	}
@@ -445,7 +445,26 @@ int test_solvers(void)
 	G_math_d_asum_norm(les->x, &val, les->rows);
 	if ((val - (double)les->rows) > EPSILON_DIRECT)
 	{
-		G_warning("Error in G_math_solver_gauss abs %2.20f != %i", val,
+		G_warning("Error in G_math_solver_solver_cholesky abs %2.20f != %i", val,
+				les->rows);
+		sum++;
+	}
+	G_math_print_les(les);
+	G_math_free_les(les);
+
+	G_message("\t * testing cholesky band decomposition solver with symmetric matrix\n");
+	les = create_normal_symmetric_les(TEST_NUM_ROWS);
+	G_math_print_les(les);
+	/* Create a band matrix*/
+	G_message("\t * Creating symmetric band matrix\n");
+	les->A = G_math_matrix_to_band_matrix(les->A, les->rows, les->rows);
+	G_math_print_les(les);
+
+	/*cholesky*/G_math_solver_cholesky_band(les->A, les->x, les->b, les->rows,les->rows);
+	G_math_d_asum_norm(les->x, &val, les->rows);
+	if ((val - (double)les->rows) > EPSILON_DIRECT)
+	{
+		G_warning("Error in G_math_solver_solver_cholesky_band abs %2.20f != %i", val,
 				les->rows);
 		sum++;
 	}

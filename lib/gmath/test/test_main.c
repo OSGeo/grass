@@ -43,7 +43,7 @@ void set_params(void) {
     param.unit->key = "unit";
     param.unit->type = TYPE_STRING;
     param.unit->required = NO;
-    param.unit->options = "blas1,blas2,blas3,solver,ccmath";
+    param.unit->options = "blas1,blas2,blas3,solver,ccmath,matconv";
     param.unit->description = _("Choose the unit tests to run");
 
     param.integration = G_define_option();
@@ -122,6 +122,7 @@ int main(int argc, char *argv[]) {
         returnstat += unit_test_blas_level_2();
         returnstat += unit_test_blas_level_3();
         returnstat += unit_test_solvers();
+        returnstat += unit_test_matrix_conversion();
         returnstat += unit_test_ccmath_wrapper();
 
     }
@@ -152,6 +153,9 @@ int main(int argc, char *argv[]) {
 
                     if (strcmp(param.unit->answers[i], "ccmath") == 0)
                         returnstat += unit_test_ccmath_wrapper();
+
+                    if (strcmp(param.unit->answers[i], "matconv") == 0)
+                        returnstat += unit_test_matrix_conversion();
 
                     i++;
                 }

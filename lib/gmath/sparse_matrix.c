@@ -1,20 +1,20 @@
 
 /*****************************************************************************
- *
- * MODULE:       Grass Gmath Library
- * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
- * PURPOSE:      functions to manage linear equation systems
- * 		part of the gmath library
- *               
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
- *****************************************************************************/
+*
+* MODULE:       Grass numerical math interface
+* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+* 		soerengebbert <at> googlemail <dot> com
+*               
+* PURPOSE:      linear equation system solvers
+* 		part of the gmath library
+*               
+* COPYRIGHT:    (C) 2010 by the GRASS Development Team
+*
+*               This program is free software under the GNU General Public
+*               License (>=v2). Read the file COPYING that comes with GRASS
+*               for details.
+*
+*****************************************************************************/
 
 #include <stdlib.h>
 #include <math.h>
@@ -194,6 +194,52 @@ double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
 }
 
 /*!
+ * \brief Convert a symmetric sparse matrix into a band matrix
+ *
+ \verbatim
+ Symmetric matrix with bandwidth of 3
+
+ 5 2 1 0
+ 2 5 2 1
+ 1 2 5 2
+ 0 1 2 5
+
+ will be converted into the band matrix
+ 
+ 5 2 1
+ 5 2 1
+ 5 2 0
+ 5 0 0
+
+ \endverbatim
+ * \param Asp (G_math_spvector **) 
+ * \param rows (int)
+ * \param bandwidth (int)
+ * \return (double **) the resulting band matrix [rows][bandwidth]
+ *
+ * */
+double **G_math_Asp_to_band_matrix(G_math_spvector ** Asp, int rows, int bandwidth)
+{
+    int i, j;
+
+    double **A = NULL;
+
+    A = G_alloc_matrix(rows, bandwidth);
+
+    for (i = 0; i < rows; i++) {
+	for (j = 0; j < Asp[i]->cols; j++) {
+	   if(Asp[i]->index[j] == i) {
+	      A[i][0] = Asp[i]->values[j];
+	   } else if (Asp[i]->index[j] > i) {
+	      A[i][Asp[i]->index[j] - i] = Asp[i]->values[j];
+	   }
+	}
+    }
+    return A;
+}
+
+
+/*!
  * \brief Convert a quadratic matrix into a sparse matrix
  *
  * This function is multi-threaded with OpenMP. It creates its own parallel OpenMP region.
@@ -229,6 +275,64 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
 	for (j = 0; j < rows; j++) {
 	    if (A[i][j] > epsilon) {
 		v->index[count] = j;
+		v->values[count] = A[i][j];
+		count++;
+	    }
+	}
+	/*Add vector to sparse matrix */
+	G_math_add_spvector(Asp, v, i);
+    }
+    return Asp;
+}
+
+
+
+/*!
+ * \brief Convert a band matrix into a sparse matrix
+ *
+ * WARNING:
+ * This function is experimental, do not use.
+ * Only the upper triangle matrix of the band strcuture is copied.
+ *
+ * \param A (double **) the band matrix
+ * \param rows (int)
+ * \param bandwidth (int)
+ * \param epsilon (double) -- non-zero values are greater then epsilon
+ * \return (G_math_spvector **)
+ *
+ * */
+G_math_spvector **G_math_band_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)
+{
+    int i, j;
+
+    int nonull, count = 0;
+
+    G_math_spvector **Asp = NULL;
+
+    Asp = G_math_alloc_spmatrix(rows);
+
+    for (i = 0; i < rows; i++) {
+	nonull = 0;
+	/*Count the number of non zero entries */
+	for (j = 0; j < bandwidth; j++) {
+	    if (A[i][j] > epsilon)
+		nonull++;
+	}
+
+	/*Allocate the sparse vector and insert values */
+
+	G_math_spvector *v = G_math_alloc_spvector(nonull);
+
+	count = 0;
+	if (A[i][0] > epsilon) {
+	    v->index[count] = i;
+	    v->values[count] = A[i][0];
+	    count++;
+	}
+
+	for (j = 1; j < bandwidth; j++) {
+	    if (A[i][j] > epsilon && i + j < rows) {
+		v->index[count] = i + j;
 		v->values[count] = A[i][j];
 		count++;
 	    }

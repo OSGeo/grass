@@ -1,20 +1,20 @@
 
 /*****************************************************************************
- *
- * MODULE:       Grass PDE Numerical Library
- * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2007
- * 		soerengebbert <at> gmx <dot> de
- *               
- * PURPOSE:      linear equation system solvers
- * 		part of the gpde library
- *               
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
- *****************************************************************************/
+*
+* MODULE:       Grass numerical math interface
+* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+* 		soerengebbert <at> googlemail <dot> com
+*               
+* PURPOSE:      gras blas implementation
+* 		part of the gmath library
+*               
+* COPYRIGHT:    (C) 2010 by the GRASS Development Team
+*
+*               This program is free software under the GNU General Public
+*               License (>=v2). Read the file COPYING that comes with GRASS
+*               for details.
+*
+*****************************************************************************/
 
 #include <math.h>
 #include <unistd.h>
