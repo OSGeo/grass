@@ -396,6 +396,17 @@ G_math_spvector **G_math_alloc_spmatrix(int )<br>
 void G_math_free_spmatrix(G_math_spvector ** , int )<br>
 void G_math_free_spvector(G_math_spvector * )<br>
 int G_math_add_spvector(G_math_spvector **, G_math_spvector * , int )<br>
+G_math_spvector **G_math_A_to_Asp(double **, int, double)<br>
+double **G_math_Asp_to_A(G_math_spvector **, int)<br>
+double **G_math_Asp_to_band_matrix(G_math_spvector **, int, int)<br>
+G_math_spvector **G_math_band_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)<br>
+void G_math_print_spmatrix(G_math_spvector ** Asp, int rows)<br>
+
+<P>
+Conversion of band matrices
+<P>
+double **G_math_matrix_to_band_matrix(double **, int, int)<br>
+double **G_math_band_matrix_to_matrix(double **A, int rows, int bandwidth)<br>
 
 <P>
 Direct linear equation solver
@@ -403,6 +414,8 @@ Direct linear equation solver
 int G_math_solver_gauss(double **, double *, double *, int )<br>
 int G_math_solver_lu(double **, double *, double *, int )<br>
 int G_math_solver_cholesky(double **, double *, double *, int , int )<br>
+void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int bandwidth)<br>
+void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int bandwidth)<br>
 
 <P>
 Classic iterative linear equation solver for dense and sparse matrices
@@ -428,8 +441,10 @@ LU, Gauss and Cholesky decomposition and substitution functions
 void G_math_gauss_elimination(double **, double *, int )<br>
 void G_math_lu_decomposition(double **, double *, int )<br>
 int G_math_cholesky_decomposition(double **, int , int )<br>
+void G_math_cholesky_band_decomposition(double **A, double **T, int rows, int bandwidth)<br>
 void G_math_backward_substitution(double **, double *, double *, int )<br>
 void G_math_forward_substitution(double **, double *, double *, int )<br>
+void G_math_cholesky_band_substitution(double **T, double *x, double *b, int rows, int bandwidth)<br>
 
 \subsection gmathlapack Optional support of LAPACK/BLAS
 
