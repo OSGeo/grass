@@ -1,14 +1,14 @@
 
 /*****************************************************************************
 *
-* MODULE:       Grass PDE Numerical Library
+* MODULE:       Grass numerical math interface
 * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
+* 		soerengebbert <at> googlemail <dot> com
 *               
-* PURPOSE:      blas level 1 like functions   
-* 		part of the gpde library
+* PURPOSE:      gras blas implementation
+* 		part of the gmath library
 *               
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
+* COPYRIGHT:    (C) 2010 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *               License (>=v2). Read the file COPYING that comes with GRASS

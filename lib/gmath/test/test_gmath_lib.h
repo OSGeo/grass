@@ -103,6 +103,9 @@ extern G_math_f_les *create_normal_unsymmetric_f_nquad_les_A(int rows, int cols)
 /* direct and iterative solvers */
 extern int unit_test_solvers(void);
 
+/* Test the matrix conversion dense -> band ->sparse and vis versa */
+extern int unit_test_matrix_conversion(void);
+
 /* ccmath wrapper tests*/
 int unit_test_ccmath_wrapper(void);
 
