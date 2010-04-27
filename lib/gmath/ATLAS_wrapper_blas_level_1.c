@@ -165,6 +165,7 @@ double G_math_idamax(double *x, int rows)
  * grass implementatiom
  *
  * \param x       (double *)
+ * \param a       (double)
  * \param rows (int)
  * \return (void)
  *
@@ -348,6 +349,7 @@ float G_math_isamax(float *x, int rows)
  * grass implementatiom
  *
  * \param x       (float *)
+ * \param a       (float)
  * \param rows (int)
  * \return (float)
  *

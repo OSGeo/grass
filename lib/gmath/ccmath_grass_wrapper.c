@@ -4,6 +4,8 @@
 #include <grass/ccmath_grass.h>
 #endif
 /**
+ * Documentation and ccmath library version 2.2.1 by Daniel A. Atkinson
+ *
                                 Chapter 1
 
                               LINEAR ALGEBRA
@@ -228,7 +230,7 @@ int G_math_minv(double **a,int n)
      \brief Invert (in place) a symmetric real matrix, V -> Inv(V).
 
      The input matrix V is symmetric (V[i,j] = V[j,i]).
-     \param  v = array containing a symmetric input matrix. This is converted to the inverse matrix.
+     \param  a = array containing a symmetric input matrix. This is converted to the inverse matrix.
      \param  n = dimension of the system (dim(v)=n*n)
      \return: 0 -> normal exit 1 -> input matrix not positive definite
 */

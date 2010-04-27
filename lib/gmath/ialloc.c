@@ -69,7 +69,7 @@ int **G_alloc_imatrix(int rows, int cols)
 }
 
 /**
- * \fn int G_free_vector (int *v)
+ * \fn void G_free_ivector(int *v)
  *
  * \brief Vector memory deallocation.
  *

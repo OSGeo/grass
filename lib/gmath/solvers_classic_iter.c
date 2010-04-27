@@ -177,7 +177,7 @@ int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
  * solver will abort the calculation and writes the current result into the vector x.
  * The parameter <i>err</i> defines the error break criteria for the solver.
  *
- * \param Asp G_math_spvector ** -- the sparse matrix
+ * \param A double ** -- the dense matrix
  * \param x double * -- the vector of unknowns
  * \param b double * -- the right side vector
  * \param rows int -- number of rows
@@ -234,7 +234,7 @@ int G_math_solver_jacobi(double **A, double *x, double *b, int rows,
  * solver will abort the calculation and writes the current result into the vector x.
  * The parameter <i>err</i> defines the error break criteria for the solver.
  *
- * \param Asp G_math_spvector ** -- the sparse matrix
+ * \param A double ** -- the dense matrix
  * \param x double * -- the vector of unknowns
  * \param b double * -- the right side vector
  * \param rows int -- number of rows

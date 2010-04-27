@@ -3,7 +3,7 @@
 
 
 /*!
- * \fn double G_math_rand_gauss (int seed)
+ * \fn double G_math_rand_gauss(const int seed, const double sigma)
  *
  * \brief Gaussian random number generator
  *
