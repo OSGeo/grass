@@ -37,7 +37,7 @@
  * \param A double **
  * \param x double *
  * \param b double *
- * \int rows int
+ * \param rows int
  * \return int -- 1 success
  * */
 int G_math_solver_gauss(double **A, double *x, double *b, int rows)
@@ -61,7 +61,7 @@ int G_math_solver_gauss(double **A, double *x, double *b, int rows)
  * \param A double **
  * \param x double *
  * \param b double *
- * \int rows int
+ * \param rows int
  * \return int -- 1 success
  * */
 int G_math_solver_lu(double **A, double *x, double *b, int rows)
@@ -120,7 +120,8 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
  * \param A double **
  * \param x double *
  * \param b double *
- * \int rows int
+ * \param bandwith int -- the bandwith of the band matrix, if unsure set to rows
+ * \param rows int
  * \return int -- 1 success
  * */
 int G_math_solver_cholesky(double **A, double *x, double *b, int bandwith,

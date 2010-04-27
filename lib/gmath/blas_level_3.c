@@ -205,7 +205,7 @@ void G_math_d_AB(double **A, double **B, double **C, int rows_A,
  *
  * \param A (float **)
  * \param B (float **) 
- * \param D (float **) 
+ * \param C (float **)
  * \param rows_A (int)
  * \param cols_A (int)
  * \param rows_B (int)

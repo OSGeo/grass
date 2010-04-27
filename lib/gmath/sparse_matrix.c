@@ -26,7 +26,7 @@
  *
  * Return 1 for success and -1 for failure
  *
- * \param spmatrix G_math_spvector ** 
+ * \param Asp G_math_spvector **
  * \param spvector G_math_spvector * 
  * \param row int
  * \return int 1 success, -1 failure
@@ -113,21 +113,21 @@ void G_math_free_spvector(G_math_spvector * spvector)
 /*!
  * \brief Release the memory of the sparse matrix
  *
- * \param spvector G_math_spvector **
+ * \param Asp G_math_spvector **
  * \param rows int
  * \return void
  *
  * */
-void G_math_free_spmatrix(G_math_spvector ** spmatrix, int rows)
+void G_math_free_spmatrix(G_math_spvector ** Asp, int rows)
 {
     int i;
 
-    if (spmatrix) {
+    if (Asp) {
 	for (i = 0; i < rows; i++)
-	    G_math_free_spvector(spmatrix[i]);
+	    G_math_free_spvector(Asp[i]);
 
-	G_free(spmatrix);
-	spmatrix = NULL;
+	G_free(Asp);
+	Asp = NULL;
     }
 
     return;

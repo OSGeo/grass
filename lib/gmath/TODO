@@ -5,6 +5,9 @@ Date_ 2009-10-03
 * Replace the lu-solver in lu.c with the one from the ccmath library
   and patch alll modules using lu.c
 * Implement a robust parallelizable LU solver with pivoting
+* Move the band matrix cholesky decomposition solver from the lidar library
+  (TcholBand.c) into the gmath library and make it available for other numerical
+  programs (Integration in the common solver structure)
 
 
 TODO

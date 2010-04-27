@@ -39,6 +39,7 @@
  * \param Asp (G_math_spvector **) 
  * \param x (double) *)
  * \param y (double * )
+ * \param rows (int)
  * \return (void)
  *
  * */
@@ -387,7 +388,7 @@ int G_math_d_A_T(double **A, int rows)
 }
 
 /*!
- * \fn int G_math_d_A_T(float **A, int rows)
+ * \fn int G_math_f_A_T(float **A, int rows)
  *
  * \brief Compute the transposition of matrix A.
  * Matrix A will be overwritten.
