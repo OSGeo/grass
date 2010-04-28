@@ -1431,7 +1431,8 @@ class cmdPanel(wx.Panel):
                             
                             p['wxId'].append(rbox.GetId())
                             p['wxId'].append(ogrSelection.GetId())
-                            p['wxId'].append(ogrSelection.GetDsnWin().GetId())
+                            for win in ogrSelection.GetDsnWin():
+                                p['wxId'].append(win.GetId())
                         else:
                             which_sizer.Add(item=selection, proportion=0,
                                             flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
@@ -1889,11 +1890,11 @@ class cmdPanel(wx.Panel):
                 if found:
                     if name in ('LayerSelect', 'DriverSelect', 'TableSelect'):
                         porf['value'] = me.GetStringSelection()
+                    elif name == 'GdalSelect':
+                        porf['value'] = event.dsn
                     else:
                         porf['value'] = me.GetValue()
                     
-                    if name == 'GdalSelect':
-                        porf['value'] += '@OGR'
                   
         self.OnUpdateValues()
         

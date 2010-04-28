@@ -79,19 +79,27 @@ class GMessage:
                           caption = caption,
                           style = style)
         else:
-            exception = traceback.format_exc()
-            reason = exception.split('\n')[-2].split(':', 1)[-1].strip()
-        
-            if Debug.get_level() > 0:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            if exc_traceback:
+                exception = traceback.format_exc()
+                reason = exception.splitlines()[-2].split(':', 1)[-1].strip()
+            
+            if Debug.get_level() > 0 and exc_traceback:
                 sys.stderr.write(exception)
-        
-            wx.MessageBox(parent = parent,
-                          message = message + '\n\n%s: %s\n\n%s' % \
-                              (_('Reason'),
-                               reason, exception),
-                          caption = caption,
-                          style = style)
-
+            
+            if exc_traceback:
+                wx.MessageBox(parent = parent,
+                              message = message + '\n\n%s: %s\n\n%s' % \
+                                  (_('Reason'),
+                                   reason, exception),
+                              caption = caption,
+                              style = style)
+            else:
+                wx.MessageBox(parent = parent,
+                              message = message,
+                              caption = caption,
+                              style = style)
+    
 class GError(Exception):
     def __init__(self, value):
         self.value = value

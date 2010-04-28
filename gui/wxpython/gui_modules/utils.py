@@ -98,7 +98,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
         params = list()
         for idx in range(len(dcmd)):
             try:
-                p, v = dcmd[idx].split('=')
+                p, v = dcmd[idx].split('=', 1)
             except ValueError:
                 continue
             
@@ -111,7 +111,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                      'h_map', 's_map', 'i_map',
                      'reliefmap'):
                 params.append((idx, p, v))
-            
+        
         if len(params) < 1:
             return mapname
             
@@ -147,7 +147,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                 ogr = True
             if p == 'layer' and not ogr:
                 continue
-            maps.append(dcmd[i].split('=')[1])
+            maps.append(dcmd[i].split('=', 1)[1])
         mapname = '\n'.join(maps)
     
     return mapname
