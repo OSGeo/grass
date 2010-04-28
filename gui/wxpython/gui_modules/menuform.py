@@ -1419,9 +1419,8 @@ class cmdPanel(wx.Panel):
                                             border=5)
                             
                             ogrSelection = gselect.GdalSelect(parent = self, panel = which_panel, ogr = True,
-                                                              defSource = 'dir',
-                                                              sources = [_("Directory"),
-                                                                         _("Database"), _("Protocol")])
+                                                              default = 'dir',
+                                                              exclude = ['file'])
                             self.Bind(gselect.EVT_GDALSELECT, self.OnUpdateSelection)
                             self.Bind(gselect.EVT_GDALSELECT, self.OnSetValue)
                             
@@ -1489,7 +1488,7 @@ class cmdPanel(wx.Panel):
                                 win2.SetItems([p['value']])
                                 win2.SetSelection(0)
                             
-                            win2.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            win2.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             p['wxId'] = [ win1.GetId(), win2.GetId() ]
                             win.Add(item = win1, proportion = 0)
                             win.Add(item = win2, proportion = 0,
@@ -1877,6 +1876,7 @@ class cmdPanel(wx.Panel):
         myId = event.GetId()
         me  = wx.FindWindowById(myId)
         name = me.GetName()
+        
         for porf in self.task.params + self.task.flags:
             if 'wxId' in porf:
                 found = False
@@ -1892,7 +1892,7 @@ class cmdPanel(wx.Panel):
                     else:
                         porf['value'] = me.GetValue()
                     
-                    if name == 'OgrSelect':
+                    if name == 'GdalSelect':
                         porf['value'] += '@OGR'
                   
         self.OnUpdateValues()
