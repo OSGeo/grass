@@ -51,6 +51,8 @@ void bench_blas_level_2_double(int rows)
 
     G_math_les *les;
     les = create_normal_unsymmetric_les(rows);
+    G_math_les *bles;
+    bles = create_symmetric_band_les(rows);
     G_math_les *sples;
     sples = create_sparse_unsymmetric_les(rows);
 
@@ -63,12 +65,20 @@ void bench_blas_level_2_double(int rows)
     fill_d_vector_range_1(x, 1, rows);
 
     gettimeofday(&tstart, NULL);
+
 #pragma omp parallel default(shared)
 {
     G_math_Ax_sparse(sples->Asp, x, z, rows);
 }
     gettimeofday(&tend, NULL);
     G_important_message("Computation time G_math_Ax_sparse: %g\n", compute_time_difference(tstart, tend));
+    gettimeofday(&tstart, NULL);
+#pragma omp parallel default(shared)
+{
+    G_math_Ax_sband(bles->A, x, z, rows, rows);
+}
+    gettimeofday(&tend, NULL);
+    G_important_message("Computation time G_math_Ax_sband: %g\n", compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
 {
@@ -101,6 +111,7 @@ void bench_blas_level_2_double(int rows)
     G_free_vector(z);
 
     G_math_free_les(les);
+    G_math_free_les(bles);
     G_math_free_les(sples);
 
     if(A)

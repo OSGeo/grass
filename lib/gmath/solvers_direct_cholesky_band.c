@@ -166,7 +166,7 @@ void G_math_solver_cholesky_sband_invert(double **A, double *x, double *b, doubl
 
     double **T = NULL;
     double *vect = NULL;
-    int i, j, k, start, end;
+    int i, j, k, start;
     double sum;
 
     T = G_alloc_matrix(rows, bandwidth);

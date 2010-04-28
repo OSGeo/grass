@@ -2,13 +2,6 @@ MODULE_TOPDIR = ../..
 
 EXTRA_LIBS=$(GISLIB) $(RASTERLIB) $(G3DLIB) $(GMATHLIB) $(MATHLIB)
 
-
-# GCC >4.2: openMP support
-#EXTRA_CFLAGS=-fopenmp
-#EXTRA_LIBS=$(GISLIB) $(RASTERLIB) $(G3DLIB) -lgomp $(GMATHLIB) $(MATHLIB)
-# ?? EXTRA_LIBS += -lgomp
-
-
 LIB_NAME = $(GPDE_LIBNAME)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
