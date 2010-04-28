@@ -123,8 +123,8 @@ double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)
 void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth)
 {
     int i, j;
-
     double tmp;
+
 
 #pragma omp for schedule (static) private(i, j, tmp)
     for (i = 0; i < rows; i++) {
@@ -135,7 +135,9 @@ void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth)
 	}
 	y[i] = tmp;
     }
-#pragma omp for schedule (static) private(i, j, tmp)
+
+#pragma omp single
+    {
     for (i = 0; i < rows; i++) {
 	tmp = 0;
 	for (j = 1; j < bandwidth; j++) {
@@ -143,6 +145,6 @@ void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth)
 			y[i + j] += A[i][j]*x[i];
 	}
     }
-
+    }
     return;
 }
