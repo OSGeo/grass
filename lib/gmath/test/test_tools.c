@@ -54,13 +54,49 @@ G_math_les *create_normal_symmetric_les(int rows)
 		for (j = 0; j < size; j++)
 		{
 			if (j == i)
-				les->A[i][j] = (double)(1.0/(((double)i + 1.0) + ((double)j
-						+ 1.0)));
+				les->A[i][j] = (double)(1.0/(((double)i + 1.0) + ((double)j + 1.0)));
 			else
-				les->A[i][j] = (double)(1.0/((((double)i + 1.0) + ((double)j
-						+ 1.0) + 100.0)));
+				les->A[i][j] = (double)(1.0/((((double)i + 1.0) + ((double)j + 1.0) + 100.0)));
 
 			val += les->A[i][j];
+		}
+		les->b[i] = val;
+		les->x[i] = 0.5;
+	}
+
+	return les;
+}
+
+
+/* *************************************************************** */
+/* create a symmetric band matrix with values ** Hilbert matrix ** */
+/* *************************************************************** */
+G_math_les *create_symmetric_band_les(int rows)
+{
+	G_math_les *les;
+	int i, j;
+	int size =rows;
+	double val;
+
+        les = G_math_alloc_les(rows, G_MATH_NORMAL_LES);
+	for (i = 0; i < size; i++)
+	{
+		val = 0.0;
+		for (j = 0; j < size; j++)
+		{
+			if(i + j < size) {
+				les->A[i][j] = (double)(1.0/((((double)i + 1.0) + ((double)(i + j) + 1.0) + 100.0)));
+			} else if (j != i){
+			   	les->A[i][j] = 0.0;
+			}
+			if (j == i) {
+				les->A[i][0] = (double)(1.0/(((double)i + 1.0) + ((double)j + 1.0)));
+			} 
+
+			if (j == i) 
+				val += (double)(1.0/(((double)i + 1.0) + ((double)j + 1.0)));
+			else
+				val += (double)(1.0/((((double)i + 1.0) + ((double)j + 1.0) + 100.0)));
 		}
 		les->b[i] = val;
 		les->x[i] = 0.5;

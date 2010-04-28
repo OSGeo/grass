@@ -84,6 +84,7 @@ extern void fill_f_vector_scalar(float *x, float a, int rows);
 extern void fill_i_vector_scalar(int *x, int a, int rows);
 
 extern G_math_les *create_normal_symmetric_les(int rows);
+extern G_math_les *create_symmetric_band_les(int rows);
 extern G_math_les *create_normal_symmetric_pivot_les(int rows);
 extern G_math_les *create_normal_unsymmetric_les(int rows);
 extern G_math_les *create_sparse_symmetric_les(int rows);

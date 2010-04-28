@@ -194,7 +194,7 @@ double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
 }
 
 /*!
- * \brief Convert a symmetric sparse matrix into a band matrix
+ * \brief Convert a symmetric sparse matrix into a symmetric band matrix
  *
  \verbatim
  Symmetric matrix with bandwidth of 3
@@ -215,10 +215,10 @@ double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
  * \param Asp (G_math_spvector **) 
  * \param rows (int)
  * \param bandwidth (int)
- * \return (double **) the resulting band matrix [rows][bandwidth]
+ * \return (double **) the resulting ymmetric band matrix [rows][bandwidth]
  *
  * */
-double **G_math_Asp_to_band_matrix(G_math_spvector ** Asp, int rows, int bandwidth)
+double **G_math_Asp_to_sband_matrix(G_math_spvector ** Asp, int rows, int bandwidth)
 {
     int i, j;
 
@@ -288,20 +288,20 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
 
 
 /*!
- * \brief Convert a band matrix into a sparse matrix
+ * \brief Convert a symmetric band matrix into a sparse matrix
  *
  * WARNING:
  * This function is experimental, do not use.
  * Only the upper triangle matrix of the band strcuture is copied.
  *
- * \param A (double **) the band matrix
+ * \param A (double **) the symmetric band matrix
  * \param rows (int)
  * \param bandwidth (int)
  * \param epsilon (double) -- non-zero values are greater then epsilon
  * \return (G_math_spvector **)
  *
  * */
-G_math_spvector **G_math_band_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)
+G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)
 {
     int i, j;
 
@@ -341,4 +341,38 @@ G_math_spvector **G_math_band_matrix_to_Asp(double **A, int rows, int bandwidth,
 	G_math_add_spvector(Asp, v, i);
     }
     return Asp;
+}
+
+
+/*!
+ * \brief Compute the matrix - vector product  
+ * of sparse matrix **Asp and vector x.
+ *
+ * This function is multi-threaded with OpenMP and can be called within a parallel OpenMP region.
+ *
+ * y = A * x
+ *
+ *
+ * \param Asp (G_math_spvector **) 
+ * \param x (double) *)
+ * \param y (double * )
+ * \param rows (int)
+ * \return (void)
+ *
+ * */
+void G_math_Ax_sparse(G_math_spvector ** Asp, double *x, double *y, int rows)
+{
+    int i, j;
+
+    double tmp;
+
+#pragma omp for schedule (static) private(i, j, tmp)
+    for (i = 0; i < rows; i++) {
+	tmp = 0;
+	for (j = 0; j < Asp[i]->cols; j++) {
+	    tmp += Asp[i]->values[j] * x[Asp[i]->index[j]];
+	}
+	y[i] = tmp;
+    }
+    return;
 }

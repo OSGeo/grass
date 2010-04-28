@@ -180,7 +180,7 @@ int test_ccmath_wrapper(void)
 	G_math_d_asum_norm(les->x, &val2, les->rows);
 	if ((val  - val2) > EPSILON_ITER)
 	{
-		G_warning("Error in G_math_eigv abs %2.20f != %i", val,
+		G_warning("Error in G_math_eigv abs %2.20f != %f", val,
 				val2);
 		sum++;
 	}
@@ -209,7 +209,7 @@ int test_ccmath_wrapper(void)
 	G_math_d_asum_norm(les->x, &val2, les->rows);
 	if ((val  - val2) > EPSILON_ITER)
 	{
-		G_warning("Error in G_math_eigen abs %2.20f != %i", val,
+		G_warning("Error in G_math_eigen abs %2.20f != %f", val,
 				val2);
 		sum++;
 	}

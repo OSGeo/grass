@@ -87,6 +87,17 @@ int bench_solvers(int rows) {
     G_math_free_les(les);
     G_math_free_les(sples);
 
+    G_message("\t * benchmark cg solver with symmetric band matrix\n");
+
+    les = create_symmetric_band_les(rows);
+    
+    gettimeofday(&tstart, NULL);
+    G_math_solver_cg_sband(les->A, les->x, les->b, les->rows, les->rows, 250, 0.1e-9);
+    gettimeofday(&tend, NULL);
+    G_important_message("Computation time cg symmetric band matrix: %g\n", compute_time_difference(tstart, tend));
+    
+    G_math_free_les(les);
+
     G_message("\t * benchmark bicgstab solver with unsymmetric matrix\n");
 
     les = create_normal_unsymmetric_les(rows);

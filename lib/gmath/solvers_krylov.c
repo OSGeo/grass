@@ -28,9 +28,9 @@ static G_math_spvector **create_diag_precond_matrix(double **A,
 						    G_math_spvector ** Asp,
 						    int rows, int prec);
 static int solver_pcg(double **A, G_math_spvector ** Asp, double *x,
-		      double *b, int rows, int maxit, double err, int prec);
+		      double *b, int rows, int maxit, double err, int prec, int has_band, int bandwidth);
 static int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
-		     int rows, int maxit, double err);
+		     int rows, int maxit, double err, int has_band, int bandwidth);
 static int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x,
 			   double *b, int rows, int maxit, double err);
 
@@ -61,8 +61,41 @@ int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
 		      double err, int prec)
 {
 
-    return solver_pcg(A, NULL, x, b, rows, maxit, err, prec);
+    return solver_pcg(A, NULL, x, b, rows, maxit, err, prec, 0, 0);
 }
+
+/*!
+ * \brief The iterative preconditioned conjugate gradients solver for symmetric positive definite band matrices
+ *
+ * WARNING: The preconditioning of symmetric band matrices is not implemented yet
+ *
+ * This iterative solver works with symmetric positive definite band matrices.
+ *
+ * This solver solves the linear equation system:
+ *  A x = b
+ *
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
+ * solver will abort the calculation and writes the current result into the vector x.
+ * The parameter <i>err</i> defines the error break criteria for the solver.
+ *
+ * \param A (double **) -- the positive definite band matrix
+ * \param x (double *) -- the value vector
+ * \param b (double *) -- the right hand side
+ * \param rows (int)
+ * \param bandwidth (int) -- bandwidth of matrix A
+ * \param maxit (int) -- the maximum number of iterations
+ * \param err (double) -- defines the error break criteria
+ * \param prec (int) -- the preconditioner which shoudl be used 1,2 or 3
+ * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * 
+ * */
+int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows, int bandwidth, int maxit,
+		      double err, int prec)
+{
+    G_fatal_error("Preconditioning of band matrics is not implemented yet");
+    return solver_pcg(A, NULL, x, b, rows, maxit, err, prec, 1, bandwidth);
+}
+
 
 /*!
  * \brief The iterative preconditioned conjugate gradients solver for sparse symmetric positive definite matrices
@@ -90,11 +123,11 @@ int G_math_solver_sparse_pcg(G_math_spvector ** Asp, double *x, double *b,
 			     int rows, int maxit, double err, int prec)
 {
 
-    return solver_pcg(NULL, Asp, x, b, rows, maxit, err, prec);
+    return solver_pcg(NULL, Asp, x, b, rows, maxit, err, prec, 0, 0);
 }
 
 int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
-	       int rows, int maxit, double err, int prec)
+	       int rows, int maxit, double err, int prec, int has_band, int bandwidth)
 {
     double *r, *z;
 
@@ -131,6 +164,8 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
     {
 	if (Asp)
 	    G_math_Ax_sparse(Asp, x, v, rows);
+	else if(has_band)
+	    G_math_Ax_sband(A, x, v, rows, bandwidth);
 	else
 	    G_math_d_Ax(A, x, v, rows, rows);
 
@@ -156,6 +191,8 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
 	{
 	    if (Asp)
 		G_math_Ax_sparse(Asp, p, v, rows);
+	    else if(has_band)
+		G_math_Ax_sband(A, p, v, rows, bandwidth);
 	    else
 		G_math_d_Ax(A, p, v, rows, rows);
 
@@ -180,6 +217,8 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
 	    if (m % 50 == 1) {
 		if (Asp)
 		    G_math_Ax_sparse(Asp, x, v, rows);
+		else if(has_band)
+		    G_math_Ax_sband(A, x, v, rows, bandwidth);
 		else
 		    G_math_d_Ax(A, x, v, rows, rows);
 
@@ -270,8 +309,36 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
 int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
 		     double err)
 {
-    return solver_cg(A, NULL, x, b, rows, maxit, err);
+    return solver_cg(A, NULL, x, b, rows, maxit, err, 0, 0);
 }
+
+/*!
+ * \brief The iterative conjugate gradients solver for symmetric positive definite band matrices
+ *
+ * This iterative solver works with symmetric positive definite band matrices.
+ *
+ * This solver solves the linear equation system:
+ *  A x = b
+ *
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
+ * solver will abort the calculation and writes the current result into the vector x.
+ * The parameter <i>err</i> defines the error break criteria for the solver.
+ *
+ * \param A (double **) -- the symmetric positive definit band matrix
+ * \param x (double *) -- the value vector
+ * \param b (double *) -- the right hand side
+ * \param rows (int)
+ * \param bandwidth (int) -- the bandwidth of matrix A
+ * \param maxit (int) -- the maximum number of iterations
+ * \param err (double) -- defines the error break criteria
+ * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * 
+ * */
+int G_math_solver_cg_sband(double **A, double *x, double *b, int rows, int bandwidth, int maxit, double err)
+{
+    return solver_cg(A, NULL, x, b, rows, maxit, err, 1, bandwidth);
+}
+
 
 /*!
  * \brief The iterative conjugate gradients solver for sparse symmetric positive definite matrices
@@ -297,12 +364,12 @@ int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
 int G_math_solver_sparse_cg(G_math_spvector ** Asp, double *x, double *b,
 			    int rows, int maxit, double err)
 {
-    return solver_cg(NULL, Asp, x, b, rows, maxit, err);
+    return solver_cg(NULL, Asp, x, b, rows, maxit, err, 0, 0);
 }
 
 
 int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
-	      int rows, int maxit, double err)
+	      int rows, int maxit, double err, int has_band, int bandwidth)
 {
     double *r;
 
@@ -332,6 +399,8 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
     {
 	if (Asp)
 	    G_math_Ax_sparse(Asp, x, v, rows);
+	else if(has_band)
+	    G_math_Ax_sband(A, x, v, rows, bandwidth);
 	else
 	    G_math_d_Ax(A, x, v, rows, rows);
 
@@ -356,6 +425,8 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
 	{
 	    if (Asp)
 		G_math_Ax_sparse(Asp, p, v, rows);
+	    else if(has_band)
+		G_math_Ax_sband(A, p, v, rows, bandwidth);
 	    else
 		G_math_d_Ax(A, p, v, rows, rows);
 
@@ -378,6 +449,8 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
 	    if (m % 50 == 1) {
 		if (Asp)
 		    G_math_Ax_sparse(Asp, x, v, rows);
+		else if(has_band)
+		    G_math_Ax_sband(A, x, v, rows, bandwidth);
 		else
 		    G_math_d_Ax(A, x, v, rows, rows);
 

@@ -158,7 +158,6 @@ void G_math_saxpy(float *, float *, float , int )<br>
 
 \subsubsection blas_level_2 Level 2 matrix - vector GRASS implementation with OpenMP thread support
 
-void G_math_Ax_sparse(G_math_spvector **, double *, double *, int )<br>
 void G_math_d_Ax(double **, double *, double *, int , int )<br>
 void G_math_f_Ax(float **, float *, float *, int , int )<br>
 void G_math_d_x_dyad_y(double *, double *, double **, int, int )<br>
@@ -398,27 +397,28 @@ void G_math_free_spvector(G_math_spvector * )<br>
 int G_math_add_spvector(G_math_spvector **, G_math_spvector * , int )<br>
 G_math_spvector **G_math_A_to_Asp(double **, int, double)<br>
 double **G_math_Asp_to_A(G_math_spvector **, int)<br>
-double **G_math_Asp_to_band_matrix(G_math_spvector **, int, int)<br>
-G_math_spvector **G_math_band_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)<br>
+double **G_math_Asp_to_sband_matrix(G_math_spvector **, int, int)<br>
+G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)<br>
 void G_math_print_spmatrix(G_math_spvector ** Asp, int rows)<br>
+void G_math_Ax_sparse(G_math_spvector **, double *, double *, int )<br>
 
 <P>
 Conversion of band matrices
 <P>
-double **G_math_matrix_to_band_matrix(double **, int, int)<br>
-double **G_math_band_matrix_to_matrix(double **A, int rows, int bandwidth)<br>
-
+double **G_math_matrix_to_sband_matrix(double **, int, int)<br>
+double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)<br>
+void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth)<br>
 <P>
 Direct linear equation solver
 <P>
 int G_math_solver_gauss(double **, double *, double *, int )<br>
 int G_math_solver_lu(double **, double *, double *, int )<br>
 int G_math_solver_cholesky(double **, double *, double *, int , int )<br>
-void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int bandwidth)<br>
-void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int bandwidth)<br>
+void G_math_solver_cholesky_sband(double **A, double *x, double *b, int rows, int bandwidth)<br>
+void G_math_solver_cholesky_sband(double **A, double *x, double *b, int rows, int bandwidth)<br>
 
 <P>
-Classic iterative linear equation solver for dense and sparse matrices
+Classic iterative linear equation solver for dense- and sparse-matrices
 <P>
 int G_math_solver_jacobi(double **, double *, double *, int , int , double , double )<br>
 int G_math_solver_gs(double **, double *, double *, int , int , double , double )<br>
@@ -426,10 +426,11 @@ int G_math_solver_sparse_jacobi(G_math_spvector **, double *, double *, int , in
 int G_math_solver_sparse_gs(G_math_spvector **, double *, double *, int , int , double , double )<br>
 
 <P>
-Krylov-Subspace iterative linear equation solver for dense and sparse matrices
+Krylov-Subspace iterative linear equation solver for dense-, band- and sparse-matrices
 <P>
 int G_math_solver_pcg(double **, double *, double *, int , int , double , int )<br>
 int G_math_solver_cg(double **, double *, double *, int , int , double )<br>
+int G_math_solver_cg_sband(double **, double *, double *, int, int, int, double)<br>
 int G_math_solver_bicgstab(double **, double *, double *, int , int , double )<br>
 int G_math_solver_sparse_pcg(G_math_spvector **, double *, double *, int , int , double , int )<br>
 int G_math_solver_sparse_cg(G_math_spvector **, double *, double *, int , int , double )<br>
