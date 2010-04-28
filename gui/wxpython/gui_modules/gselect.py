@@ -983,18 +983,22 @@ class GdalSelect(wx.Panel):
                                                 startDirectory=os.getcwd(),
                                                 changeCallback=self.OnSetDsn)
         dsnDbFile.Hide()
-        
+        dsnDbFile.SetName('GdalSelect')
+
         dsnDbText = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         dsnDbText.Hide()
         dsnDbText.Bind(wx.EVT_TEXT, self.OnSetDsn)
-        
+        dsnDbText.SetName('GdalSelect')
+
         dsnDbChoice = wx.Choice(parent = self, id = wx.ID_ANY)
         dsnDbChoice.Hide()
         dsnDbChoice.Bind(wx.EVT_CHOICE, self.OnSetDsn)
-        
+        dsnDbChoice.SetName('GdalSelect')
+
         dsnPro = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         dsnPro.Hide()
         dsnPro.Bind(wx.EVT_TEXT, self.OnSetDsn)
+        dsnPro.SetName('GdalSelect')
 
         # format
         self.format = FormatSelect(parent = self,
@@ -1163,7 +1167,7 @@ class GdalSelect(wx.Panel):
                 data.append((layerId, layerName.strip(), grassName.strip()))
                 layerId += 1
         
-        evt = wxGdalSelect(dsn = dsn)
+        evt = wxGdalSelect(dsn = dsn + '@OGR')
         evt.SetId(self.input[self.dsnType][1].GetId())
         wx.PostEvent(self.parent, evt)
         
@@ -1251,8 +1255,14 @@ class GdalSelect(wx.Panel):
         return self.input[self.dsnType][1].GetValue()
 
     def GetDsnWin(self):
-        """!Get DSN windows"""
-        return self.input[self.dsnType][1]
+        """!Get list of DSN windows"""
+        win = list()
+        for stype in ('file', 'dir', 'pro'):
+            win.append(self.input[stype][1])
+        for stype in ('file', 'text', 'choice'):
+            win.append(self.input['db-win'][stype])
+        
+        return win
     
     def GetFormatExt(self):
         """!Get format extension"""
