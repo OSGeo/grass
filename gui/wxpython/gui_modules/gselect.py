@@ -908,9 +908,8 @@ class FormatSelect(wx.Choice):
         
 class GdalSelect(wx.Panel):
     def __init__(self, parent, panel, ogr = False,
-                 defSource = 'file',
-                 sources = [_("File"), _("Directory"),
-                            _("Database"), _("Protocol")],
+                 default = 'file',
+                 exclude = [],
                  envHandler = None):
         """!Widget for selecting GDAL/OGR datasource, format
         
@@ -924,6 +923,28 @@ class GdalSelect(wx.Panel):
                                      label=" %s " % _("Source name"))
         
         # source type
+        sources = list()
+        self.sourceMap = { 'file' : -1,
+                           'dir'  : -1,
+                           'db'   : -1,
+                           'pro'  : -1 }
+        idx = 0
+        if 'file' not in exclude:
+            sources.append(_("File"))
+            self.sourceMap['file'] = idx
+            idx += 1
+        if 'directory' not in exclude:
+            sources.append(_("Directory"))
+            self.sourceMap['dir'] = idx
+            idx += 1
+        if 'database' not in exclude:
+            sources.append(_("Database"))
+            self.sourceMap['db'] = idx
+            idx += 1
+        if 'protocol' not in exclude:
+            sources.append(_("Protocol"))
+            self.sourceMap['pro'] = idx
+        
         self.source = wx.RadioBox(parent = self, id = wx.ID_ANY,
                                   label = _('Source type'),
                                   style = wx.RA_SPECIFY_COLS,
@@ -952,6 +973,7 @@ class GdalSelect(wx.Panel):
                                             buttonText=_('Browse'),
                                             startDirectory=os.getcwd(),
                                             changeCallback=self.OnSetDsn)
+        dsnDir.SetName('GdalSelect')
         dsnDir.Hide()
         
         dsnDbFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
@@ -1000,7 +1022,7 @@ class GdalSelect(wx.Panel):
                                     'choice' : dsnDbChoice },
                        }
         
-        self.dsnType = defSource
+        self.dsnType = default
         self.input[self.dsnType][1].Show()
         self.format.SetItems(self.input[self.dsnType][2])
         
@@ -1055,7 +1077,7 @@ class GdalSelect(wx.Panel):
         self.dsnSizer.Remove(win)
         win.Hide()
         
-        if sel == 0:   # file
+        if sel == self.sourceMap['file']:   # file
             self.dsnType = 'file'
             format = self.input[self.dsnType][2][0]
             try:
@@ -1074,17 +1096,13 @@ class GdalSelect(wx.Panel):
                                               changeCallback=self.OnSetDsn,
                                               fileMask = format)
             self.input[self.dsnType][1] = win
-        elif sel == 1: # directory
+        elif sel == self.sourceMap['dir']: # directory
             self.dsnType = 'dir'
-        elif sel == 2: # database
+        elif sel == self.sourceMap['db']: # database
             self.dsnType = 'db'
-        elif sel == 3: # protocol
+        elif sel == self.sourceMap['pro']: # protocol
             self.dsnType = 'pro'
-            
-        # if self.importType != 'dxf':
-        #     self.dsnSizer.Add(item=self.formatText,
-        #                   flag=wx.ALIGN_CENTER_VERTICAL)
-
+        
         win = self.input[self.dsnType][1]
         self.dsnSizer.Add(item=self.input[self.dsnType][1],
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
