@@ -94,6 +94,16 @@ int bench_solvers(int rows) {
     G_important_message("Computation time ccmath cholesky decomposition: %g\n", compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
+    G_message("\t * benchmarking gmath cholesky band matrix decomposition solver with symmetric band matrix\n");
+
+    les = create_symmetric_band_les(rows);
+    gettimeofday(&tstart, NULL);
+    G_math_solver_cholesky_sband(les->A, les->x, les->b, les->rows, les->rows);
+    gettimeofday(&tend, NULL);
+    G_important_message("Computation time cholesky band matrix decomposition: %g\n", compute_time_difference(tstart, tend));
+    G_math_free_les(les);
+
+
     return 1;
 }
 

@@ -139,38 +139,42 @@ extern void G_math_free_spvector(G_math_spvector * );
 extern int G_math_add_spvector(G_math_spvector **, G_math_spvector * , int );
 extern G_math_spvector **G_math_A_to_Asp(double **, int, double);
 extern double **G_math_Asp_to_A(G_math_spvector **, int);
-extern double **G_math_Asp_to_band_matrix(G_math_spvector **, int, int);
-extern G_math_spvector **G_math_band_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon);
-extern void G_math_print_spmatrix(G_math_spvector ** Asp, int rows);
+extern double **G_math_Asp_to_sband_matrix(G_math_spvector **, int, int);
+extern G_math_spvector **G_math_sband_matrix_to_Asp(double **, int, int, double);
+extern void G_math_print_spmatrix(G_math_spvector **, int);
+extern void G_math_Ax_sparse(G_math_spvector **, double *, double *, int );
 
 /*Symmetric band matrix handling */
-extern double **G_math_matrix_to_band_matrix(double **, int, int);
-extern double **G_math_band_matrix_to_matrix(double **A, int rows, int bandwidth);
+extern double **G_math_matrix_to_sband_matrix(double **, int, int);
+extern double **G_math_sband_matrix_to_matrix(double **, int, int);
+extern void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth);
 
 /*linear equation solver, most of them are multithreaded wih OpenMP*/
 extern int G_math_solver_gauss(double **, double *, double *, int );
 extern int G_math_solver_lu(double **, double *, double *, int );
 extern int G_math_solver_cholesky(double **, double *, double *, int , int );
-extern void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int bandwidth);
+extern void G_math_solver_cholesky_sband(double **, double *, double *, int, int);
 extern int G_math_solver_jacobi(double **, double *, double *, int , int , double , double );
 extern int G_math_solver_gs(double **, double *, double *, int , int , double , double );
-extern int G_math_solver_pcg(double **, double *, double *, int , int , double , int );
 
+extern int G_math_solver_pcg(double **, double *, double *, int , int , double , int );
 extern int G_math_solver_cg(double **, double *, double *, int , int , double );
+extern int G_math_solver_cg_sband(double **, double *, double *, int, int, int, double);
 extern int G_math_solver_bicgstab(double **, double *, double *, int , int , double );
 extern int G_math_solver_sparse_jacobi(G_math_spvector **, double *, double *, int , int , double , double );
 extern int G_math_solver_sparse_gs(G_math_spvector **, double *, double *, int , int , double , double );
 extern int G_math_solver_sparse_pcg(G_math_spvector **, double *, double *, int , int , double , int );
 extern int G_math_solver_sparse_cg(G_math_spvector **, double *, double *, int , int , double );
 extern int G_math_solver_sparse_bicgstab(G_math_spvector **, double *, double *, int , int , double );
+
 /* solver algoithms and helper functions*/
 extern void G_math_gauss_elimination(double **, double *, int );
 extern void G_math_lu_decomposition(double **, double *, int );
 extern int G_math_cholesky_decomposition(double **, int , int );
-extern void G_math_cholesky_band_decomposition(double **, double **, int, int);
+extern void G_math_cholesky_sband_decomposition(double **, double **, int, int);
 extern void G_math_backward_substitution(double **, double *, double *, int );
 extern void G_math_forward_substitution(double **, double *, double *, int );
-extern void G_math_cholesky_band_substitution(double **, double *, double *, int, int);
+extern void G_math_cholesky_sband_substitution(double **, double *, double *, int, int);
 
 /*BLAS like level 1,2 and 3 functions*/
 
@@ -214,7 +218,6 @@ extern void G_math_daxpy(double *, double *, double , int );
 extern void G_math_saxpy(float *, float *, float , int );
 
 /*level 2 matrix - vector grass implementation with OpenMP thread support*/
-extern void G_math_Ax_sparse(G_math_spvector **, double *, double *, int );
 extern void G_math_d_Ax(double **, double *, double *, int , int );
 extern void G_math_f_Ax(float **, float *, float *, int , int );
 extern void G_math_d_x_dyad_y(double *, double *, double **, int, int );

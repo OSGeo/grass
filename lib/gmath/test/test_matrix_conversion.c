@@ -109,7 +109,7 @@ int test_matrix_conversion(void)
 
 	G_message("\t * Test matrix to band matrix conversion\n");
 
-        B = G_math_matrix_to_band_matrix(A, 5, 4);
+        B = G_math_matrix_to_sband_matrix(A, 5, 4);
 
 	print_matrix(B, 5, 4);
 
@@ -127,7 +127,7 @@ int test_matrix_conversion(void)
 
 	G_message("\t * Test sparse matrix to band matrix conversion\n");
 
-        D = G_math_Asp_to_band_matrix(Asp, 5, 4);
+        D = G_math_Asp_to_sband_matrix(Asp, 5, 4);
 
 	print_matrix(D, 5, 4);
 
@@ -143,7 +143,7 @@ int test_matrix_conversion(void)
 
 	G_message("\t * Test band matrix to matrix conversion\n");
 
-        E = G_math_band_matrix_to_matrix(D, 5, 4);
+        E = G_math_sband_matrix_to_matrix(D, 5, 4);
 
 	print_matrix(E, 5, 5);
 
@@ -159,7 +159,7 @@ int test_matrix_conversion(void)
 
 	G_message("\t * Test band matrix to sparse matrix conversion\n");
 
-        Asp2 = G_math_band_matrix_to_Asp(D, 5, 4, 0.0);
+        Asp2 = G_math_sband_matrix_to_Asp(D, 5, 4, 0.0);
 	G_math_print_spmatrix(Asp2, 5);
 
 	return sum;

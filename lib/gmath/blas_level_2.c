@@ -27,38 +27,6 @@
 
 #define EPSILON 0.00000000000000001
 
-/*!
- * \brief Compute the matrix - vector product  
- * of sparse matrix **Asp and vector x.
- *
- * This function is multi-threaded with OpenMP and can be called within a parallel OpenMP region.
- *
- * y = A * x
- *
- *
- * \param Asp (G_math_spvector **) 
- * \param x (double) *)
- * \param y (double * )
- * \param rows (int)
- * \return (void)
- *
- * */
-void G_math_Ax_sparse(G_math_spvector ** Asp, double *x, double *y, int rows)
-{
-    int i, j;
-
-    double tmp;
-
-#pragma omp for schedule (static) private(i, j, tmp)
-    for (i = 0; i < rows; i++) {
-	tmp = 0;
-	for (j = 0; j < Asp[i]->cols; j++) {
-	    tmp += Asp[i]->values[j] * x[Asp[i]->index[j]];
-	}
-	y[i] = tmp;
-    }
-    return;
-}
 
 /*!
  * \brief Compute the matrix - vector product  

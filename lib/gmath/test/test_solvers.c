@@ -287,6 +287,7 @@ int test_solvers(void)
 	G_math_free_les(les);
 	G_math_free_les(sples);
 
+
 	G_message("\t * testing cg solver with symmetric bad conditioned matrix\n");
 
 	les = create_normal_symmetric_pivot_les(TEST_NUM_ROWS);
@@ -452,20 +453,49 @@ int test_solvers(void)
 	G_math_print_les(les);
 	G_math_free_les(les);
 
-	G_message("\t * testing cholesky band decomposition solver with symmetric matrix\n");
+	G_message("\t * testing cholesky band decomposition solver with symmetric band matrix 1\n");
 	les = create_normal_symmetric_les(TEST_NUM_ROWS);
 	G_math_print_les(les);
 	/* Create a band matrix*/
 	G_message("\t * Creating symmetric band matrix\n");
-	les->A = G_math_matrix_to_band_matrix(les->A, les->rows, les->rows);
+	les->A = G_math_matrix_to_sband_matrix(les->A, les->rows, les->rows);
 	G_math_print_les(les);
 
-	/*cholesky*/G_math_solver_cholesky_band(les->A, les->x, les->b, les->rows,les->rows);
+	/*cholesky*/G_math_solver_cholesky_sband(les->A, les->x, les->b, les->rows,les->rows);
 	G_math_d_asum_norm(les->x, &val, les->rows);
 	if ((val - (double)les->rows) > EPSILON_DIRECT)
 	{
 		G_warning("Error in G_math_solver_solver_cholesky_band abs %2.20f != %i", val,
 				les->rows);
+		sum++;
+	}
+	G_math_print_les(les);
+	G_math_free_les(les);
+
+	G_message("\t * testing cholesky band decomposition solver with symmetric band matrix 2\n");
+        les = create_symmetric_band_les(TEST_NUM_ROWS);
+	G_math_print_les(les);
+
+	/*cholesky*/G_math_solver_cholesky_sband(les->A, les->x, les->b, les->rows,les->rows);
+	G_math_d_asum_norm(les->x, &val, les->rows);
+	if ((val - (double)les->rows) > EPSILON_DIRECT)
+	{
+		G_warning("Error in G_math_solver_solver_cholesky_band abs %2.20f != %i", val,
+				les->rows);
+		sum++;
+	}
+	G_math_print_les(les);
+	G_math_free_les(les);
+
+	G_message("\t * testing cg solver with symmetric band matrix\n");
+
+	les = create_symmetric_band_les(TEST_NUM_ROWS);
+
+	G_math_solver_cg_sband(les->A, les->x, les->b, les->rows, les->rows, 250, 0.1e-9);
+	G_math_d_asum_norm(les->x, &val, les->rows);
+	if ((val - (double)les->rows) > EPSILON_ITER)
+	{
+		G_warning("Error in G_math_solver_cg_sband abs %2.20f != %i", val, les->rows);
 		sum++;
 	}
 	G_math_print_les(les);

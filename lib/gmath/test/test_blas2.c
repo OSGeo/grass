@@ -65,12 +65,14 @@ int test_blas_level_2_double(void)
 
     int sum = 0;
     int rows = TEST_NUM_ROWS;
-    double **A, **B, **C, *x, *y, *z, a = 0.0, b = 0.0, c = 0.0, d = 0.0, e = 0.0, f = 0.0, g = 0.0, h = 0.0, i = 0.0;
+    double **A, **B, **C, *x, *y, *z, a = 0.0, b = 0.0, c = 0.0, d = 0.0, e = 0.0, f = 0.0, g = 0.0, h = 0.0, i = 0.0, j =0.0;
 
     G_math_les *les;
     les = create_normal_unsymmetric_les(rows);
     G_math_les *sples;
-    sples = create_sparse_unsymmetric_les(rows);
+    sples = create_sparse_symmetric_les(rows);
+    G_math_les *bles;
+    bles = create_symmetric_band_les(rows);
 
     x = G_alloc_vector(rows);
     y = G_alloc_vector(rows);
@@ -86,28 +88,42 @@ int test_blas_level_2_double(void)
 
 #pragma omp parallel default(shared)
 {
-    G_math_Ax_sparse(sples->Asp, x, z, rows);
-    G_math_d_asum_norm(z, &a, rows);
+    G_message("Testing G_math_Ax_sparse");
+    G_math_Ax_sparse(sples->Asp, x, sples->b, rows);
+    G_math_print_les(sples);
+    G_math_d_asum_norm(sples->b, &a, rows);
 
+    G_message("Testing G_math_Ax_band");
+    G_math_Ax_sband(bles->A, x, bles->b, rows, rows);
+    G_math_print_les(bles);
+    G_math_d_asum_norm(bles->b, &j, rows);
+
+    G_message("Testing G_math_d_Ax");
     G_math_d_Ax(les->A, x, z, rows, rows);
     G_math_d_asum_norm(z, &b, rows);
 
+    G_message("Testing G_math_d_aAx_by");
     G_math_d_aAx_by(les->A, x, y, 1.0, 1.0, z, rows, rows);
     G_math_d_asum_norm(z, &c, rows);
 
+    G_message("Testing G_math_d_aAx_by");
     G_math_d_aAx_by(les->A, x, y, -1.0, 1.0, z, rows, rows);
     G_math_d_asum_norm(z, &d, rows);
 
+    G_message("Testing G_math_d_aAx_by");
     G_math_d_aAx_by(les->A, x, y, 1.0, 0.0, z, rows, rows);
     G_math_d_asum_norm(z, &e, rows);
 
+    G_message("Testing G_math_d_aAx_by");
     G_math_d_aAx_by(les->A, x, y, -1.0, -1.0, z, rows, rows);
     G_math_d_asum_norm(z, &f, rows);
 
+    G_message("Testing G_math_d_x_dyad_y");
     G_math_d_x_dyad_y(x, x, A, rows, rows);
     G_math_d_Ax(A, x, z, rows, rows);
     G_math_d_asum_norm(z, &g, rows);
 
+    G_message("Testing G_math_d_x_dyad_y");
     G_math_d_x_dyad_y(x, x, C, rows, rows);
     G_math_d_Ax(A, x, z, rows, rows);
     G_math_d_asum_norm(z, &h, rows);
@@ -117,6 +133,11 @@ int test_blas_level_2_double(void)
 
     if(a - i > EPSILON) {
     	G_message("Error in G_math_Ax_sparse: %f != %f", i, a);
+	sum++;
+    }
+
+    if(j - i > EPSILON) {
+    	G_message("Error in G_math_Ax_sband: %f != %f", i, j);
 	sum++;
     }
 
@@ -163,6 +184,7 @@ int test_blas_level_2_double(void)
     G_free_vector(z);
 
     G_math_free_les(les);
+    G_math_free_les(bles);
     G_math_free_les(sples);
 
     if(A)
@@ -203,27 +225,34 @@ int test_blas_level_2_float(void)
 
 #pragma omp parallel default(shared)
 {
+    G_message("Testing G_math_f_Ax");
     G_math_f_Ax(les->A, x, z, rows, rows);
     G_math_f_asum_norm(z, &b, rows);
 
+    G_message("Testing G_math_f_aAx_by");
     G_math_f_aAx_by(les->A, x, y, 1.0, 1.0, z, rows, rows);
     G_math_f_asum_norm(z, &c, rows);
 
+    G_message("Testing G_math_f_aAx_by");
     G_math_f_aAx_by(les->A, x, y, -1.0, 1.0, z, rows, rows);
     G_math_f_asum_norm(z, &d, rows);
 
+    G_message("Testing G_math_f_aAx_by");
     G_math_f_aAx_by(les->A, x, y, 1.0, 0.0, z, rows, rows);
     G_math_f_asum_norm(z, &e, rows);
 
+    G_message("Testing G_math_f_aAx_by");
     G_math_f_aAx_by(les->A, x, y, -1.0, -1.0, z, rows, rows);
     G_math_f_asum_norm(z, &f, rows);
 
+    G_message("Testing G_math_f_x_dyad_y");
     G_math_f_x_dyad_y(x, x, A, rows, rows);
     G_math_f_Ax(A, x, z, rows, rows);
     G_math_f_asum_norm(z, &g, rows);
 
+    G_message("Testing G_math_f_x_dyad_y");
     G_math_f_x_dyad_y(x, x, C, rows, rows);
-     G_math_f_Ax(A, x, z, rows, rows);
+    G_math_f_Ax(A, x, z, rows, rows);
     G_math_f_asum_norm(z, &h, rows);
 }
 

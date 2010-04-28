@@ -6,21 +6,21 @@
 #include <grass/glocale.h>
 
 /**
- * \brief Cholesky decomposition of a band matrix
+ * \brief Cholesky decomposition of a symmetric band matrix
  *
- * \param A (double**) the input band matrix
- * \param T (double**) the resulting lower tringular band matrix
+ * \param A (double**) the input symmetric band matrix
+ * \param T (double**) the resulting lower tringular sband matrix
  * \param rows (int) number of rows
- * \param bandwidth (int) the bandwidth of the band matrix
+ * \param bandwidth (int) the bandwidth of the symmetric band matrix
  *
  * */
 
-void G_math_cholesky_band_decomposition(double **A, double **T, int rows, int bandwidth)
+void G_math_cholesky_sband_decomposition(double **A, double **T, int rows, int bandwidth)
 {
     int i, j, k, end;
     double sum;
 
-    G_debug(2, "G_math_cholesky_band_decomposition(): n=%d  bandwidth=%d", rows, bandwidth);
+    G_debug(2, "G_math_cholesky_sband_decomposition(): n=%d  bandwidth=%d", rows, bandwidth);
 
     for (i = 0; i < rows; i++) {
 	G_percent(i, rows, 2);
@@ -46,25 +46,25 @@ void G_math_cholesky_band_decomposition(double **A, double **T, int rows, int ba
 }
 
 /**
- * \brief Cholesky band matrix solver for linear equation systems of type Ax = b 
+ * \brief Cholesky symmetric band matrix solver for linear equation systems of type Ax = b 
  *
- * \param A (double**) the input band matrix
+ * \param A (double**) the input symmetric band matrix
  * \param x (double*) the resulting vector, result is written in here
  * \param b (double*) the right hand side of Ax = b
  * \param rows (int) number of rows
- * \param bandwidth (int) the bandwidth of the band matrix
+ * \param bandwidth (int) the bandwidth of the symmetric band matrix
  *
  * */
 
-void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int bandwidth)
+void G_math_solver_cholesky_sband(double **A, double *x, double *b, int rows, int bandwidth)
 {
 
     double **T;
 
     T = G_alloc_matrix(rows, bandwidth);
 
-    G_math_cholesky_band_decomposition(A, T, rows, bandwidth);	/* T computation                */
-    G_math_cholesky_band_substitution(T, x, b, rows, bandwidth);
+    G_math_cholesky_sband_decomposition(A, T, rows, bandwidth);	/* T computation                */
+    G_math_cholesky_sband_substitution(T, x, b, rows, bandwidth);
 
     G_free_matrix(T);
 
@@ -72,17 +72,17 @@ void G_math_solver_cholesky_band(double **A, double *x, double *b, int rows, int
 }
 
 /**
- * \brief Forward and backward substitution of a lower tringular band matrix of A from system Ax = b
+ * \brief Forward and backward substitution of a lower tringular symmetric band matrix of A from system Ax = b
  *
- * \param T (double**) the lower band triangle band matrix
+ * \param T (double**) the lower triangle symmetric band matrix
  * \param x (double*) the resulting vector
  * \param b (double*) the right hand side of Ax = b
  * \param rows (int) number of rows
- * \param bandwidth (int) the bandwidth of the band matrix
+ * \param bandwidth (int) the bandwidth of the symmetric band matrix
  *
  * */
 
-void G_math_cholesky_band_substitution(double **T, double *x, double *b, int rows, int bandwidth)
+void G_math_cholesky_sband_substitution(double **T, double *x, double *b, int rows, int bandwidth)
 {
 
     int i, j, start, end;
@@ -116,7 +116,7 @@ void G_math_cholesky_band_substitution(double **T, double *x, double *b, int row
 /*--------------------------------------------------------------------------------------*/
 /* Tcholetsky matrix invertion */
 
-void G_math_cholesky_band_invert(double **A, double *invAdiag, int rows, int bandwidth)
+void G_math_cholesky_sband_invert(double **A, double *invAdiag, int rows, int bandwidth)
 {
     double **T = NULL;
     double *vect = NULL;
@@ -127,7 +127,7 @@ void G_math_cholesky_band_invert(double **A, double *invAdiag, int rows, int ban
     vect = G_alloc_vector(rows);
 
     /* T computation                */
-    G_math_cholesky_band_decomposition(A, T, rows, bandwidth);
+    G_math_cholesky_sband_decomposition(A, T, rows, bandwidth);
 
     /* T Diagonal invertion */
     for (i = 0; i < rows; i++) {
@@ -160,7 +160,7 @@ void G_math_cholesky_band_invert(double **A, double *invAdiag, int rows, int ban
 /*--------------------------------------------------------------------------------------*/
 /* Tcholetsky matrix solution and invertion */
 
-void G_math_solver_cholesky_band_invert(double **A, double *x, double *b, double *invAdiag,
+void G_math_solver_cholesky_sband_invert(double **A, double *x, double *b, double *invAdiag,
 		   int rows, int bandwidth)
 {
 
@@ -173,8 +173,8 @@ void G_math_solver_cholesky_band_invert(double **A, double *x, double *b, double
     vect = G_alloc_vector(rows);
 
     /* T computation                */
-    G_math_cholesky_band_decomposition(A, T, rows, bandwidth);
-    G_math_cholesky_band_substitution(T, x, b, rows, bandwidth);
+    G_math_cholesky_sband_decomposition(A, T, rows, bandwidth);
+    G_math_cholesky_sband_substitution(T, x, b, rows, bandwidth);
 
     /* T Diagonal invertion */
     for (i = 0; i < rows; i++) {
@@ -203,102 +203,4 @@ void G_math_solver_cholesky_band_invert(double **A, double *x, double *b, double
 
     return;
 }
-
-/**
- * \brief Convert a symmetrix matrix into a band matrix
- *
- * \verbatim
- Symmetric matrix with bandwidth of 3
-
- 5 2 1 0
- 2 5 2 1
- 1 2 5 2
- 0 1 2 5
-
- will be converted into the band matrix
- 
- 5 2 1
- 5 2 1
- 5 2 0
- 5 0 0
-
-  \endverbatim
-
- * \param A (double**) the symmetric matrix
- * \param rows (int)
- * \param bandwidth (int)
- * \return B (double**) new created band matrix 
- * */
-
-double **G_math_matrix_to_band_matrix(double **A, int rows, int bandwidth)
-{
-    int i, j;
-    double **B = G_alloc_matrix(rows, bandwidth);
-    double tmp;
-
-    for(i = 0; i < rows; i++) {
-       for(j = 0; j < bandwidth; j++) {
-          if(i + j < rows) {
-            tmp = A[i][i + j]; 
-            B[i][j] = tmp;
-          } else {
-            B[i][j] = 0.0;
-          }
-       }
-    }
-
-    return B;
-}
-
-
-/**
- * \brief Convert a band matrix into a symmetric matrix
- *
- * \verbatim
- Such a band matrix with banwidth 3
- 
- 5 2 1
- 5 2 1
- 5 2 0
- 5 0 0
-
- Will be converted into this symmetric matrix
-
- 5 2 1 0
- 2 5 2 1
- 1 2 5 2
- 0 1 2 5
-
-  \endverbatim
- * \param A (double**) the band matrix
- * \param rows (int)
- * \param bandwidth (int)
- * \return B (double**) new created symmetric matrix 
- * */
-
-double **G_math_band_matrix_to_matrix(double **A, int rows, int bandwidth)
-{
-    int i, j;
-    double **B = G_alloc_matrix(rows, rows);
-    double tmp;
-
-    for(i = 0; i < rows; i++) {
-       for(j = 0; j < bandwidth; j++) {
-          tmp = A[i][j];
-          if(i + j < rows) {
-            B[i][i + j] = tmp; 
-          } 
-       }
-    }
-
-    /*Symmetry*/
-    for(i = 0; i < rows; i++) {
-       for(j = i; j < rows; j++) {
-          B[j][i] = B[i][j]; 
-       }
-    }
-
-    return B;
-}
-
 
