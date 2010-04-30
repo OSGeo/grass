@@ -22,6 +22,8 @@ import locale
 import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
+grassPath = os.path.join(globalvar.ETCDIR, "python")
+sys.path.append(grassPath)
 import grass.script as grass
 
 # wxversion.select() called once at the beginning
