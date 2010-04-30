@@ -32,7 +32,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 		    struct Map_info *Terrain, struct Cell_head *Elaboration,
 		    struct bound_box General, struct bound_box Overlap,
 		    double **obs, struct lidar_cat *lcat, double *param,
-		    int *line_num, double passoN, double passoE,
+		    int *line_num, double stepN, double stepE,
 		    double overlap, double HighThresh, double LowThresh,
 		    int nsplx, int nsply, int num_points,
 		    dbDriver * driver, double mean, char *tab_name)
@@ -58,7 +58,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 	
 	if (Vect_point_in_box(obs[i][0], obs[i][1], mean, &General)) {
 	    interpolation =
-		dataInterpolateBilin(obs[i][0], obs[i][1], passoE, passoN,
+		dataInterpolateBilin(obs[i][0], obs[i][1], stepE, stepN,
 				     nsplx, nsply, Elaboration->west,
 				     Elaboration->south, param);
 	    interpolation += mean;

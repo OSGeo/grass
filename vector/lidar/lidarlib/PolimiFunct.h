@@ -69,11 +69,11 @@
     /*STRUCTS DECLARATION */
     struct Reg_dimens
 {
-    double orlo_h;		/*Horizontal tile edge */
-    double orlo_v;		/*Vertical tile edge */
+    double edge_h;		/*Horizontal tile edge */
+    double edge_v;		/*Vertical tile edge */
     double overlap;		/*Tile's overlapping size */
-    double latoN;		/*South-North side size */
-    double latoE;		/*East-West side size */
+    double sn_size;		/*South-North side size */
+    double ew_size;		/*East-West side size */
 };
 
 struct Point
@@ -102,7 +102,7 @@ int P_set_regions(struct Cell_head *, /**/
 		  struct bound_box *, /**/
 		  struct bound_box *, /**/ struct Reg_dimens, /**/ int /**/);
 
-int P_get_orlo(int, /**/ struct Reg_dimens *, /**/ double, /**/ double /**/);
+int P_get_edge(int, /**/ struct Reg_dimens *, /**/ double, /**/ double /**/);
 
 int P_get_BandWidth(int, /**/ int /**/);
 
@@ -158,16 +158,6 @@ void P_Aux_to_Vector(struct Map_info *, /**/
 		     struct Map_info *, /**/ dbDriver *, /**/ char * /**/);
 
 double **P_Null_Matrix(double ** /**/);
-
-/*----------------------------------------------------------------------------------------------------------*/
-/*tcholBand */
-void tcholDec(double **N, double **T, int n, int BW);
-void tcholSolve(double **N, double *TN, double *parVect, int n, int BW);
-void tcholSolve2(double **N, double *TN, double **T, double *parVect, int n,
-		 int BW);
-void tcholInv(double **N, double *invNdiag, int n, int BW);
-void tcholSolveInv(double **N, double *TN, double *invNdiag, double *parVect,
-		   int n, int BW);
 
 /*---------------------------------------------------------------------------------------*/
 /*interpSpline */

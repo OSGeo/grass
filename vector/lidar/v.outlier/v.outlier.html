@@ -32,6 +32,13 @@ Now, the outlier removal uses the default threshold and there is also
 an output vector available for visualizaton in QGIS
  (<a href="http://www.qgis.org">http://www.qgis.org</a>).
 
+<h4>North carolina location example</h4>
+
+<div class="code"><pre>
+v.outlier --o --v input=elev_lid792_bepts@PERMANENT output=elev_lid792_bepts_nooutliers outlier=elev_lid792_bepts_outliers soe=5 son=5 thres_o=0.1
+</pre></div>
+
+
 <h2>NOTES</h2>
 
 This module is designed to work with LIDAR data, so not topology is

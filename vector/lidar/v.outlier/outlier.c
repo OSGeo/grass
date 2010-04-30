@@ -20,7 +20,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
     int i;
     double interpolation, weight, residual, eta, csi;
     extern int nsplx, nsply;
-    extern double passoN, passoE;
+    extern double stepN, stepE;
     struct line_pnts *point;
     struct line_cats *categories;
 
@@ -36,7 +36,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 	if (Vect_point_in_box(obs[i][0], obs[i][1], mean, &General)) {
 	    interpolation =
-		dataInterpolateBicubic(obs[i][0], obs[i][1], passoE, passoN,
+		dataInterpolateBicubic(obs[i][0], obs[i][1], stepE, stepN,
 				       nsplx, nsply, Elaboration.west,
 				       Elaboration.south, parBilin);
 
@@ -123,7 +123,6 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			else {
 			    Vect_write_line(Outlier, GV_POINT, point,
 					    categories);
-			    G_message("here we are");
 			}
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(2) */

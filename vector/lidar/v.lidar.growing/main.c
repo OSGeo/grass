@@ -32,7 +32,7 @@
 #include "growing.h"
     /* GLOBAL DEFINITIONS */
 int nsply, nsplx, count_obj;
-double passoN, passoE;
+double stepN, stepE;
 
 /*--------------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
