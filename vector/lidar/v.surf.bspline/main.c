@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
     int nsubregion_col, nsubregion_row, subregion_row, subregion_col;
     int subregion = 0, nsubregions = 0;
     int last_row, last_column, grid, bilin, ext, flag_auxiliar, cross;	/* booleans */
-    double passoN, passoE, lambda, mean;
-    double N_extension, E_extension, orloE, orloN;
+    double stepN, stepE, lambda, mean;
+    double N_extension, E_extension, edgeE, edgeN;
 
     const char *mapset, *dvr, *db, *vector, *map;
     char table_name[GNAME_MAX], title[64];
@@ -62,8 +62,8 @@ int main(int argc, char *argv[])
     struct History history;
 
     struct GModule *module;
-    struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *passoE_opt,
-	*passoN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt;
+    struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *stepE_opt,
+	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt;
     struct Flag *cross_corr_flag, *spline_step_flag, *withz_flag;
 
     struct Reg_dimens dims;
@@ -120,23 +120,23 @@ int main(int argc, char *argv[])
     out_map_opt->key = "raster";
     out_map_opt->required = NO;
 
-    passoE_opt = G_define_option();
-    passoE_opt->key = "sie";
-    passoE_opt->type = TYPE_DOUBLE;
-    passoE_opt->required = NO;
-    passoE_opt->answer = "4";
-    passoE_opt->description =
+    stepE_opt = G_define_option();
+    stepE_opt->key = "sie";
+    stepE_opt->type = TYPE_DOUBLE;
+    stepE_opt->required = NO;
+    stepE_opt->answer = "4";
+    stepE_opt->description =
 	_("Length of each spline step in the east-west direction");
-    passoE_opt->guisection = _("Settings");
+    stepE_opt->guisection = _("Settings");
 
-    passoN_opt = G_define_option();
-    passoN_opt->key = "sin";
-    passoN_opt->type = TYPE_DOUBLE;
-    passoN_opt->required = NO;
-    passoN_opt->answer = "4";
-    passoN_opt->description =
+    stepN_opt = G_define_option();
+    stepN_opt->key = "sin";
+    stepN_opt->type = TYPE_DOUBLE;
+    stepN_opt->required = NO;
+    stepN_opt->answer = "4";
+    stepN_opt->description =
 	_("Length of each spline step in the north-south direction");
-    passoN_opt->guisection = _("Settings");
+    stepN_opt->guisection = _("Settings");
 
     type_opt = G_define_option();
     type_opt->key = "method";
@@ -186,8 +186,8 @@ int main(int argc, char *argv[])
     else
 	bilin = P_BICUBIC;
 
-    passoN = atof(passoN_opt->answer);
-    passoE = atof(passoE_opt->answer);
+    stepN = atof(stepN_opt->answer);
+    stepE = atof(stepE_opt->answer);
     lambda = atof(lambda_f_opt->answer);
 
     flag_auxiliar = FALSE;
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
     /* Cross-correlation begins */
     if (cross_corr_flag->answer) {
 	G_debug(1, "CrossCorrelation()");
-	cross = cross_correlation(&In, passoE, passoN);
+	cross = cross_correlation(&In, stepE, stepN);
 
 	if (cross != TRUE)
 	    G_fatal_error(_("Cross validation didn't finish correctly"));
@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
 
 	    Vect_close(&In);
 
-	    G_done_msg(_("Cross validation finished for sie = %f and sin = %f"), passoE, passoN);
+	    G_done_msg(_("Cross validation finished for sie = %f and sin = %f"), stepE, stepN);
 	    exit(EXIT_SUCCESS);
 	}
     }
@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
       | Each original region will be divided into several subregions. 
       | Each one will be overlaped by its neighbouring subregions. 
       | The overlapping is calculated as a fixed OVERLAP_SIZE times
-      | the largest spline step plus 2 * orlo
+      | the largest spline step plus 2 * edge
       ----------------------------------------------------------------*/
 
     /* Fixing parameters of the elaboration region */
@@ -414,25 +414,25 @@ int main(int argc, char *argv[])
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
-    if (passoN > passoE)
-	dims.overlap = OVERLAP_SIZE * passoN;
+    if (stepN > stepE)
+	dims.overlap = OVERLAP_SIZE * stepN;
     else
-	dims.overlap = OVERLAP_SIZE * passoE;
-    P_get_orlo(bilin, &dims, passoE, passoN);
-    P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
+	dims.overlap = OVERLAP_SIZE * stepE;
+    P_get_edge(bilin, &dims, stepE, stepN);
+    P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
     G_verbose_message(_("adjusted EW splines %d"), nsplx_adj);
     G_verbose_message(_("adjusted NS splines %d"), nsply_adj);
 
     /* calculate number of subregions */
-    orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
-    orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+    edgeE = dims.ew_size - dims.overlap - 2 * dims.edge_v;
+    edgeN = dims.sn_size - dims.overlap - 2 * dims.edge_h;
 
     N_extension = original_reg.north - original_reg.south;
     E_extension = original_reg.east - original_reg.west;
 
-    nsubregion_col = ceil(E_extension / orloE) + 0.5;
-    nsubregion_row = ceil(N_extension / orloN) + 0.5;
+    nsubregion_col = ceil(E_extension / edgeE) + 0.5;
+    nsubregion_row = ceil(N_extension / edgeN) + 0.5;
 
     if (nsubregion_col < 0)
 	nsubregion_col = 0;
@@ -470,7 +470,7 @@ int main(int argc, char *argv[])
 
 	nsply =
 	    ceil((elaboration_reg.north -
-		  elaboration_reg.south) / passoN) + 0.5;
+		  elaboration_reg.south) / stepN) + 0.5;
 	G_debug(1, "Interpolation: nsply = %d", nsply);
 	/*
 	if (nsply > NSPLY_MAX)
@@ -505,7 +505,7 @@ int main(int argc, char *argv[])
 	    }
 	    nsplx =
 		ceil((elaboration_reg.east -
-		      elaboration_reg.west) / passoE) + 0.5;
+		      elaboration_reg.west) / stepE) + 0.5;
 	    G_debug(1, "Interpolation: nsplx = %d", nsplx);
 	    /*
 	    if (nsplx > NSPLX_MAX)
@@ -601,25 +601,25 @@ int main(int argc, char *argv[])
 		    G_debug(1,
 			    "Interpolation: (%d,%d): Bilinear interpolation...",
 			    subregion_row, subregion_col);
-		    normalDefBilin(N, TN, Q, obsVect, passoE, passoN, nsplx,
+		    normalDefBilin(N, TN, Q, obsVect, stepE, stepN, nsplx,
 				   nsply, elaboration_reg.west,
 				   elaboration_reg.south, npoints,
 				   nparameters, BW);
-		    nCorrectGrad(N, lambda, nsplx, nsply, passoE, passoN);
+		    nCorrectGrad(N, lambda, nsplx, nsply, stepE, stepN);
 		}
 		/* Bicubic interpolation */
 		else {
 		    G_debug(1,
 			    "Interpolation: (%d,%d): Bicubic interpolation...",
 			    subregion_row, subregion_col);
-		    normalDefBicubic(N, TN, Q, obsVect, passoE, passoN, nsplx,
+		    normalDefBicubic(N, TN, Q, obsVect, stepE, stepN, nsplx,
 				     nsply, elaboration_reg.west,
 				     elaboration_reg.south, npoints,
 				     nparameters, BW);
-		    nCorrectGrad(N, lambda, nsplx, nsply, passoE, passoN);
+		    nCorrectGrad(N, lambda, nsplx, nsply, stepE, stepN);
 		}
 
-		tcholSolve(N, TN, parVect, nparameters, BW);
+		G_math_solver_cholesky_sband(N, parVect, TN, nparameters, BW);
 
 		G_free_matrix(N);
 		G_free_vector(TN);
@@ -631,7 +631,7 @@ int main(int argc, char *argv[])
 		    raster_matrix =
 			P_Regular_Points(&elaboration_reg, general_box,
 					 overlap_box, raster_matrix, parVect,
-					 passoN, passoE, dims.overlap, mean,
+					 stepN, stepE, dims.overlap, mean,
 					 nsplx, nsply, nrows, ncols, bilin);
 		}
 		else {		/* OBSERVATION POINTS INTERPOLATION */
@@ -640,7 +640,7 @@ int main(int argc, char *argv[])
 				subregion_row, subregion_col);
 			P_Sparse_Points(&Out, &elaboration_reg, general_box,
 					overlap_box, obsVect, parVect,
-					lineVect, passoE, passoN,
+					lineVect, stepE, stepN,
 					dims.overlap, nsplx, nsply, npoints,
 					bilin, Cats, driver, mean,
 					table_name);
@@ -672,7 +672,7 @@ int main(int argc, char *argv[])
 				subregion_row, subregion_col);
 			P_Sparse_Points(&Out, &elaboration_reg, general_box,
 					overlap_box, obsVect_ext, parVect,
-					lineVect_ext, passoE, passoN,
+					lineVect_ext, stepE, stepN,
 					dims.overlap, nsplx, nsply,
 					npoints_ext, bilin, Cats, driver,
 					mean, table_name);

@@ -128,6 +128,12 @@ v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attr
 The interpolation will be done using the values in attrib_column, in the
 table associated with layer 1.
 
+<h4>North carolina location example using Z-coordinates for interpolation</h4>
+<div class="code"><pre>
+v.surf.bspline --o --v input=elev_lid792_bepts@PERMANENT raster=elev_lid792_rast sie=5 sin=5 method=bicubic lambda_i=0.1 -z
+</pre></div>
+
+
 <h2>BUGS</h2>
 Known issues:
 <p>

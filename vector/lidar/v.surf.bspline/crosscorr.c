@@ -47,7 +47,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 {
     int bilin = TRUE;		/*booleans */
     int nsplx, nsply, nparam_spl, ndata;
-    double *mean, *rms, *stdev, rms_min, stdev_min;
+    double *mean, *rms, *stdev;
 
     /* double lambda[PARAM_LAMBDA] = { 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0 }; */	/* Fixed values (by the moment) */
     double lambda[PARAM_LAMBDA] = { 0.01, 0.05, 0.1, 0.2, 0.3, 0.4 };	/* Fixed values (by the moment) */
@@ -94,7 +94,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
     if (ndata > 0) {		/* If at least one point is in the region */
 	int i, j, lbd;		/* lbd: lambda index */
-	int BW, lbd_min;	/* lbd_min: index where minimun is found */
+	int BW;	
 	double mean_reg, *obs_mean;
 
 	int nrec, ctype = 0;
@@ -172,7 +172,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 	    /*
 	       How cross correlation algorithm is done:
 	       For each cicle, only the first ndata-1 "observ" elements are considered for the 
-	       interpolation. Within every interpolation mean is calculated to lowering border 
+	       interpolation. Within every interpolation mean is calculated to lowering edge 
 	       errors. The point let out will be used for an estimation. The error between the 
 	       estimation and the observation is recorded for further statistics.
 	       At the end of the cicle, the last point, that is, the ndata-1 index, and the point 
@@ -257,7 +257,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 		   if (bilin) interpolation (&interp, P_BILINEAR);
 		   else interpolation (&interp, P_BICUBIC);
 		 */
-		tcholSolve(N, TN, parVect, nparam_spl, BW);
+		G_math_solver_cholesky_sband(N, parVect, TN, nparam_spl, BW);
 
 		/* Estimation of j-point */
 		if (bilin)
@@ -335,23 +335,23 @@ void interpolation(struct ParamInterp *interp, boolean bilin)
 {
     if (bilin == P_BILINEAR) {	/* Bilinear interpolation */
 	normalDefBilin(interp->N, interp->TN, interp->Q, interp->obsVect,
-		       interp->passoE, interp->passoN, interp->nsplx,
+		       interp->stepE, interp->stepN, interp->nsplx,
 		       interp->nsply, interp->region.west,
 		       interp->region.south, interp->ndata,
 		       interp->nparam_spl, interp->BW);
 
 	nCorrectGrad(interp->N, interp->lambda[lbd], interp->nsplx,
-		     interp->nsply, interp->passoE, interp->passoN);
+		     interp->nsply, interp->stepE, interp->stepN);
     }
     else {			/* Bicubic interpolation */
 	normalDefBicubic(interp->N, interp->TN, interp->Q, interp->obsVect,
-			 interp->passoE, interp->passoN, interp->nsplx,
+			 interp->stepE, interp->stepN, interp->nsplx,
 			 interp->nsply, interp->region.west,
 			 interp->region.south, interp->ndata,
 			 interp->nparam_spl, interp->BW);
 
 	nCorrectGrad(interp->N, interp->lambda[lbd], interp->nsplx,
-		     interp->nsply, interp->passoE, interp->passoN);
+		     interp->nsply, interp->stepE, interp->stepN);
     }
     return TRUE;
 }

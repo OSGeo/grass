@@ -14,11 +14,11 @@
 /*----------------------------------------------------------------------------------------*/
 void P_zero_dim(struct Reg_dimens *dim)
 {
-    dim->orlo_h = 0.0;
-    dim->orlo_v = 0.0;
+    dim->edge_h = 0.0;
+    dim->edge_v = 0.0;
     dim->overlap = 0.0;
-    dim->latoN = 0.0;
-    dim->latoE = 0.0;
+    dim->sn_size = 0.0;
+    dim->ew_size = 0.0;
     return;
 }
 
@@ -69,51 +69,51 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
     switch (type) {
     case GENERAL_ROW:		/* General case N-S direction */
 	Elaboration->north =
-	    Elaboration->south + dim.overlap + (2 * dim.orlo_h);
-	Elaboration->south = Elaboration->north - dim.latoN;
-	General->N = Elaboration->north - dim.orlo_h;
-	General->S = Elaboration->south + dim.orlo_h;
+	    Elaboration->south + dim.overlap + (2 * dim.edge_h);
+	Elaboration->south = Elaboration->north - dim.sn_size;
+	General->N = Elaboration->north - dim.edge_h;
+	General->S = Elaboration->south + dim.edge_h;
 	Overlap->N = General->N - dim.overlap;
 	Overlap->S = General->S + dim.overlap;
 	return 0;
 
     case GENERAL_COLUMN:	/* General case E-W direction */
 	Elaboration->west =
-	    Elaboration->east - dim.overlap - (2 * dim.orlo_v);
-	Elaboration->east = Elaboration->west + dim.latoE;
-	General->W = Elaboration->west + dim.orlo_v;
-	General->E = Elaboration->east - dim.orlo_v;
+	    Elaboration->east - dim.overlap - (2 * dim.edge_v);
+	Elaboration->east = Elaboration->west + dim.ew_size;
+	General->W = Elaboration->west + dim.edge_v;
+	General->E = Elaboration->east - dim.edge_v;
 	Overlap->W = General->W + dim.overlap;
 	Overlap->E = General->E - dim.overlap;
 	return 0;
 
     case FIRST_ROW:		/* Just started with first row */
-	Elaboration->north = orig.north + 2 * dim.orlo_h;
-	Elaboration->south = Elaboration->north - dim.latoN;
-	General->N = Elaboration->north - 2 * dim.orlo_h;
-	General->S = Elaboration->south + dim.orlo_h;
+	Elaboration->north = orig.north + 2 * dim.edge_h;
+	Elaboration->south = Elaboration->north - dim.sn_size;
+	General->N = Elaboration->north - 2 * dim.edge_h;
+	General->S = Elaboration->south + dim.edge_h;
 	Overlap->N = General->N;
 	Overlap->S = General->S + dim.overlap;
 	return 0;
 
     case LAST_ROW:		/* Reached last row */
-	Elaboration->south = orig.south - 2 * dim.orlo_h;
-	General->S = Elaboration->south + 2 * dim.orlo_h;
+	Elaboration->south = orig.south - 2 * dim.edge_h;
+	General->S = Elaboration->south + 2 * dim.edge_h;
 	Overlap->S = General->S;
 	return 0;
 
     case FIRST_COLUMN:		/* Just started with first column */
-	Elaboration->west = orig.west - 2 * dim.orlo_v;
-	Elaboration->east = Elaboration->west + dim.latoE;
-	General->W = Elaboration->west + 2 * dim.orlo_v;
-	General->E = Elaboration->east - dim.orlo_v;
+	Elaboration->west = orig.west - 2 * dim.edge_v;
+	Elaboration->east = Elaboration->west + dim.ew_size;
+	General->W = Elaboration->west + 2 * dim.edge_v;
+	General->E = Elaboration->east - dim.edge_v;
 	Overlap->W = General->W;
 	Overlap->E = General->E - dim.overlap;
 	return 0;
 
     case LAST_COLUMN:		/* Reached last column */
-	Elaboration->east = orig.east + 2 * dim.orlo_v;
-	General->E = Elaboration->east - 2 * dim.orlo_v;
+	Elaboration->east = orig.east + 2 * dim.edge_v;
+	General->E = Elaboration->east - 2 * dim.edge_v;
 	Overlap->E = General->E;
 	return 0;
     }
@@ -124,8 +124,8 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 /*----------------------------------------------------------------------------------------*/
 int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsply)
 {
-    int total_splines, orlo_splines, n_windows, minsplines;
-    double E_extension, N_extension, orloE, orloN;
+    int total_splines, edge_splines, n_windows, minsplines;
+    double E_extension, N_extension, edgeE, edgeN;
     struct Cell_head orig;
     int ret = 0;
 
@@ -133,67 +133,67 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsp
 
     E_extension = orig.east - orig.west;
     N_extension = orig.north - orig.south;
-    dim->latoE = *nsplx * pe;
-    dim->latoN = *nsply * pn;
-    orloE = dim->latoE - dim->overlap - 2 * dim->orlo_v;
-    orloN = dim->latoN - dim->overlap - 2 * dim->orlo_h;
+    dim->ew_size = *nsplx * pe;
+    dim->sn_size = *nsply * pn;
+    edgeE = dim->ew_size - dim->overlap - 2 * dim->edge_v;
+    edgeN = dim->sn_size - dim->overlap - 2 * dim->edge_h;
 
-    /* number of moving windows: E_extension / orloE */
-    /* remaining steps: total steps - (floor(E_extension / orloE) * E_extension) / passoE */
-    /* remaining steps must be larger than orlo_v + overlap + half of overlap window */
+    /* number of moving windows: E_extension / edgeE */
+    /* remaining steps: total steps - (floor(E_extension / edgeE) * E_extension) / passoE */
+    /* remaining steps must be larger than edge_v + overlap + half of overlap window */
     total_splines = ceil(E_extension / pe);
-    orlo_splines = orloE / pe;
-    n_windows = floor(E_extension / orloE); /* without last one */
+    edge_splines = edgeE / pe;
+    n_windows = floor(E_extension / edgeE); /* without last one */
     if (n_windows > 0) {
-	minsplines = ceil((double)(dim->latoE / 2.0 - dim->orlo_v - dim->overlap) / pe);
-	while (total_splines - orlo_splines * n_windows < minsplines) {
+	minsplines = ceil((double)(dim->ew_size / 2.0 - dim->edge_v - dim->overlap) / pe);
+	while (total_splines - edge_splines * n_windows < minsplines) {
 	    *nsplx -= 1;
-	    dim->latoE = *nsplx * pe;
-	    orloE = dim->latoE - dim->overlap - 2 * dim->orlo_v;
+	    dim->ew_size = *nsplx * pe;
+	    edgeE = dim->ew_size - dim->overlap - 2 * dim->edge_v;
 
-	    orlo_splines = orloE / pe;
-	    n_windows = floor(E_extension / orloE); /* without last one */
-	    minsplines = ceil((double)(dim->latoE / 2.0 - dim->orlo_v - dim->overlap) / pe);
+	    edge_splines = edgeE / pe;
+	    n_windows = floor(E_extension / edgeE); /* without last one */
+	    minsplines = ceil((double)(dim->ew_size / 2.0 - dim->edge_v - dim->overlap) / pe);
 	    if (ret == 0)
 		ret = 1;
 	}
-	while (total_splines - orlo_splines * n_windows < minsplines * 2 && minsplines > 30) {
+	while (total_splines - edge_splines * n_windows < minsplines * 2 && minsplines > 30) {
 	    *nsplx -= 1;
-	    dim->latoE = *nsplx * pe;
-	    orloE = dim->latoE - dim->overlap - 2 * dim->orlo_v;
+	    dim->ew_size = *nsplx * pe;
+	    edgeE = dim->ew_size - dim->overlap - 2 * dim->edge_v;
 
-	    orlo_splines = orloE / pe;
-	    n_windows = floor(E_extension / orloE); /* without last one */
-	    minsplines = ceil((double)(dim->latoE / 2.0 - dim->orlo_v - dim->overlap) / pe);
+	    edge_splines = edgeE / pe;
+	    n_windows = floor(E_extension / edgeE); /* without last one */
+	    minsplines = ceil((double)(dim->ew_size / 2.0 - dim->edge_v - dim->overlap) / pe);
 	    if (ret == 0)
 		ret = 1;
 	}
     }
 
     total_splines = ceil(N_extension / pn);
-    orlo_splines = orloN / pn;
-    n_windows = floor(N_extension / orloN); /* without last one */
+    edge_splines = edgeN / pn;
+    n_windows = floor(N_extension / edgeN); /* without last one */
     if (n_windows > 0) {
-	minsplines = ceil((double)(dim->latoN / 2.0 - dim->orlo_h - dim->overlap) / pn);
-	while (total_splines - orlo_splines * n_windows < minsplines) {
+	minsplines = ceil((double)(dim->sn_size / 2.0 - dim->edge_h - dim->overlap) / pn);
+	while (total_splines - edge_splines * n_windows < minsplines) {
 	    *nsply -= 1;
-	    dim->latoN = *nsply * pn;
-	    orloN = dim->latoN - dim->overlap - 2 * dim->orlo_h;
+	    dim->sn_size = *nsply * pn;
+	    edgeN = dim->sn_size - dim->overlap - 2 * dim->edge_h;
 
-	    orlo_splines = orloN / pn;
-	    n_windows = floor(N_extension / orloN); /* without last one */
-	    minsplines = ceil((double)(dim->latoN / 2.0 - dim->orlo_h - dim->overlap) / pn);
+	    edge_splines = edgeN / pn;
+	    n_windows = floor(N_extension / edgeN); /* without last one */
+	    minsplines = ceil((double)(dim->sn_size / 2.0 - dim->edge_h - dim->overlap) / pn);
 	    if (ret < 2)
 		ret += 2;
 	}
-	while (total_splines - orlo_splines * n_windows < minsplines * 2 && minsplines > 30) {
+	while (total_splines - edge_splines * n_windows < minsplines * 2 && minsplines > 30) {
 	    *nsply -= 1;
-	    dim->latoN = *nsply * pn;
-	    orloN = dim->latoN - dim->overlap - 2 * dim->orlo_h;
+	    dim->sn_size = *nsply * pn;
+	    edgeN = dim->sn_size - dim->overlap - 2 * dim->edge_h;
 
-	    orlo_splines = orloN / pn;
-	    n_windows = floor(N_extension / orloN); /* without last one */
-	    minsplines = ceil((double)(dim->latoN / 2.0 - dim->orlo_h - dim->overlap) / pn);
+	    edge_splines = edgeN / pn;
+	    n_windows = floor(N_extension / edgeN); /* without last one */
+	    minsplines = ceil((double)(dim->sn_size / 2.0 - dim->edge_h - dim->overlap) / pn);
 	    if (ret < 2)
 		ret += 2;
 	}
@@ -202,20 +202,20 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsp
 }
 
 /*----------------------------------------------------------------------------------------*/
-int P_get_orlo(int interpolator, struct Reg_dimens *dim, double pe, double pn)
+int P_get_edge(int interpolator, struct Reg_dimens *dim, double pe, double pn)
 {
-    /* Set the orlo regions dimension
+    /* Set the edge regions dimension
      * Returns 1 on success of bilinear; 2 on success of bicubic, 0 on failure */
     if (interpolator == P_BILINEAR) {
        	/* in case of edge artefacts, increase as multiples of 3 */
-	dim->orlo_v = 9 * pe;
-	dim->orlo_h = 9 * pn;
+	dim->edge_v = 9 * pe;
+	dim->edge_h = 9 * pn;
 	return 1;
     }
     else if (interpolator == P_BICUBIC) {
        	/* in case of edge artefacts, increase as multiples of 4 */
-	dim->orlo_v = 12 * pe;	/*3 */
-	dim->orlo_h = 12 * pn;
+	dim->edge_v = 12 * pe;	/*3 */
+	dim->edge_h = 12 * pn;
 	return 2;
     }
     else
@@ -570,27 +570,6 @@ P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
     }
     return;
 }
-
-/*------------------------------------------------------------------------------------------------*/
-#ifdef notdef
-double **P_Null_Matrix(double **matrix)
-{
-    int nrows, row, ncols, col;
-    struct Cell_head Original;
-
-
-    G_get_window(&Original);
-    Rast_set_window(&Original);
-    nrows = Rast_window_rows();
-    ncols = Rast_window_cols();
-
-    for (row = 0; row < nrows; row++) {
-	for (col = 0; col < ncols; col++) {
-	    matrix[row][col] = NULL;
-	}
-    }
-}
-#endif
 
 /*! DEFINITION OF THE SUBZONES
 

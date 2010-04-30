@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
     const char *dvr, *db, *mapset;
     char table_name[GNAME_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    double lambda, ew_resol, ns_resol, mean, passoN, passoE, HighThresh,
+    double lambda, ew_resol, ns_resol, mean, stepN, stepE, HighThresh,
 	LowThresh;
-    double N_extension, E_extension, orloE, orloN;
+    double N_extension, E_extension, edgeE, edgeN;
 
     int i, nterrain, count_terrain;
 
@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
     double **N, **obsVect, **obsVect_all;	/* Interpolation and least-square matrix */
 
     struct Map_info In, Out, Terrain;
-    struct Option *in_opt, *out_opt, *out_terrain_opt, *passoE_opt,
-	*passoN_opt, *lambda_f_opt, *Thresh_A_opt, *Thresh_B_opt;
+    struct Option *in_opt, *out_opt, *out_terrain_opt, *stepE_opt,
+	*stepN_opt, *lambda_f_opt, *Thresh_A_opt, *Thresh_B_opt;
     struct Flag *spline_step_flag;
     struct GModule *module;
 
@@ -98,20 +98,20 @@ int main(int argc, char *argv[])
     out_terrain_opt->description =
 	_("Only 'terrain' points output vector map");
 
-    passoE_opt = G_define_option();
-    passoE_opt->key = "sce";
-    passoE_opt->type = TYPE_DOUBLE;
-    passoE_opt->required = NO;
-    passoE_opt->answer = "25";
-    passoE_opt->description =
+    stepE_opt = G_define_option();
+    stepE_opt->key = "sce";
+    stepE_opt->type = TYPE_DOUBLE;
+    stepE_opt->required = NO;
+    stepE_opt->answer = "25";
+    stepE_opt->description =
 	_("Interpolation spline step value in east direction");
 
-    passoN_opt = G_define_option();
-    passoN_opt->key = "scn";
-    passoN_opt->type = TYPE_DOUBLE;
-    passoN_opt->required = NO;
-    passoN_opt->answer = "25";
-    passoN_opt->description =
+    stepN_opt = G_define_option();
+    stepN_opt->key = "scn";
+    stepN_opt->type = TYPE_DOUBLE;
+    stepN_opt->required = NO;
+    stepN_opt->answer = "25";
+    stepN_opt->description =
 	_("Interpolation spline step value in north direction");
 
     lambda_f_opt = G_define_option();
@@ -144,8 +144,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    passoN = atof(passoN_opt->answer);
-    passoE = atof(passoE_opt->answer);
+    stepN = atof(stepN_opt->answer);
+    stepE = atof(stepE_opt->answer);
     lambda = atof(lambda_f_opt->answer);
     HighThresh = atof(Thresh_A_opt->answer);
     LowThresh = atof(Thresh_B_opt->answer);
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
       | Each original region will be divided into several subregions. 
       | Each one will be overlaped by its neighbouring subregions. 
       | The overlapping is calculated as a fixed OVERLAP_SIZE times
-      | the largest spline step plus 2 * orlo
+      | the largest spline step plus 2 * edge
       ----------------------------------------------------------------*/
 
     /* Fixing parameters of the elaboration region */
@@ -270,25 +270,25 @@ int main(int argc, char *argv[])
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
-    if (passoN > passoE)
-	dims.overlap = OVERLAP_SIZE * passoN;
+    if (stepN > stepE)
+	dims.overlap = OVERLAP_SIZE * stepN;
     else
-	dims.overlap = OVERLAP_SIZE * passoE;
-    P_get_orlo(P_BILINEAR, &dims, passoE, passoN);
-    P_set_dim(&dims, passoE, passoN, &nsplx_adj, &nsply_adj);
+	dims.overlap = OVERLAP_SIZE * stepE;
+    P_get_edge(P_BILINEAR, &dims, stepE, stepN);
+    P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
     G_verbose_message(_("adjusted EW splines %d"), nsplx_adj);
     G_verbose_message(_("adjusted NS splines %d"), nsply_adj);
 
     /* calculate number of subregions */
-    orloE = dims.latoE - dims.overlap - 2 * dims.orlo_v;
-    orloN = dims.latoN - dims.overlap - 2 * dims.orlo_h;
+    edgeE = dims.ew_size - dims.overlap - 2 * dims.edge_v;
+    edgeN = dims.sn_size - dims.overlap - 2 * dims.edge_h;
 
     N_extension = original_reg.north - original_reg.south;
     E_extension = original_reg.east - original_reg.west;
 
-    nsubregion_col = ceil(E_extension / orloE) + 0.5;
-    nsubregion_row = ceil(N_extension / orloN) + 0.5;
+    nsubregion_col = ceil(E_extension / edgeE) + 0.5;
+    nsubregion_row = ceil(N_extension / edgeN) + 0.5;
 
     if (nsubregion_col < 0)
 	nsubregion_col = 0;
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
 
 	nsply =
 	    ceil((elaboration_reg.north -
-		  elaboration_reg.south) / passoN) + 0.5;
+		  elaboration_reg.south) / stepN) + 0.5;
 	/*
 	if (nsply > NSPLY_MAX) {
 	    nsply = NSPLY_MAX;
@@ -350,7 +350,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    nsplx =
-		ceil((elaboration_reg.east - elaboration_reg.west) / passoE) +
+		ceil((elaboration_reg.east - elaboration_reg.west) / stepE) +
 		0.5;
 	    /*
 	    if (nsplx > NSPLX_MAX) {
@@ -403,12 +403,12 @@ int main(int argc, char *argv[])
 		G_free(observ);
 
 		G_verbose_message(_("Bilinear interpolation"));
-		normalDefBilin(N, TN, Q, obsVect, passoE, passoN, nsplx,
+		normalDefBilin(N, TN, Q, obsVect, stepE, stepN, nsplx,
 			       nsply, elaboration_reg.west,
 			       elaboration_reg.south, nterrain, nparameters,
 			       BW);
-		nCorrectGrad(N, lambda, nsplx, nsply, passoE, passoN);
-		tcholSolve(N, TN, parVect, nparameters, BW);
+		nCorrectGrad(N, lambda, nsplx, nsply, stepE, stepN);
+		G_math_solver_cholesky_sband(N, parVect, TN, nparameters, BW);
 
 		G_free_matrix(N);
 		G_free_vector(TN);
@@ -418,7 +418,7 @@ int main(int argc, char *argv[])
 		G_verbose_message( _("Correction and creation of terrain vector"));
 		P_Sparse_Correction(&In, &Out, &Terrain, &elaboration_reg,
 				    general_box, overlap_box, obsVect_all, lcat,
-				    parVect, lineVect, passoN, passoE,
+				    parVect, lineVect, stepN, stepE,
 				    dims.overlap, HighThresh, LowThresh,
 				    nsplx, nsply, npoints, driver, mean, table_name);
 

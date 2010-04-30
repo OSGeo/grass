@@ -45,7 +45,7 @@ int edge_detection(struct Cell_head elaboration_reg, struct bound_box Overlap_Bo
 
     int c1, c2;
     double g[9][2], gradient[2], gradPto, dirPto;
-    extern double passoE, passoN;
+    extern double stepE, stepN;
     static struct Cell_head Elaboration;
 
     g[0][0] = partial[0];
@@ -62,13 +62,13 @@ int edge_detection(struct Cell_head elaboration_reg, struct bound_box Overlap_Bo
     else if ((gradPto > gradLow) && (residual > 0)) {	/* Soft condition for 'edge' points */
 
 	if (Vect_point_in_box(obsX, obsY, 0.0, &Overlap_Box)) {
-	    Get_Gradient(Elaboration, obsX + passoE * cos(dirPto),
-			     obsY + passoN * sin(dirPto), parBilin, gradient);
+	    Get_Gradient(Elaboration, obsX + stepE * cos(dirPto),
+			     obsY + stepN * sin(dirPto), parBilin, gradient);
 	    g[2][0] = gradient[0];
 	    g[2][1] = gradient[1];
 
-	    Get_Gradient(Elaboration, obsX + passoE * cos(dirPto + M_PI),
-			     obsY + passoN * sin(dirPto + M_PI), parBilin, gradient);
+	    Get_Gradient(Elaboration, obsX + stepE * cos(dirPto + M_PI),
+			     obsY + stepN * sin(dirPto + M_PI), parBilin, gradient);
 	    g[7][0] = gradient[0];
 	    g[7][1] = gradient[1];
 
@@ -76,43 +76,43 @@ int edge_detection(struct Cell_head elaboration_reg, struct bound_box Overlap_Bo
 		(fabs(atan(g[7][1] / g[7][0]) + M_PI / 2 - dirPto) < alpha)) {
 
 		Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto + M_PI / 4),
-				 obsY + passoN * sin(dirPto + M_PI / 4),
+				 obsX + stepE * cos(dirPto + M_PI / 4),
+				 obsY + stepN * sin(dirPto + M_PI / 4),
 				 parBilin, gradient);
 		g[1][0] = gradient[0];
 		g[1][1] = gradient[1];
 
 		Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto - M_PI / 4),
-				 obsY + passoN * sin(dirPto - M_PI / 4),
+				 obsX + stepE * cos(dirPto - M_PI / 4),
+				 obsY + stepN * sin(dirPto - M_PI / 4),
 				 parBilin, gradient);
 		g[3][0] = gradient[0];
 		g[3][1] = gradient[1];
 
 		Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto + M_PI / 2),
-				 obsY + passoN * sin(dirPto + M_PI / 2),
+				 obsX + stepE * cos(dirPto + M_PI / 2),
+				 obsY + stepN * sin(dirPto + M_PI / 2),
 				 parBilin, gradient);
 		g[4][0] = gradient[0];
 		g[4][1] = gradient[1];
 
 		Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto - M_PI / 2),
-				 obsY + passoN * sin(dirPto - M_PI / 2),
+				 obsX + stepE * cos(dirPto - M_PI / 2),
+				 obsY + stepN * sin(dirPto - M_PI / 2),
 				 parBilin, gradient);
 		g[5][0] = gradient[0];
 		g[5][1] = gradient[1];
 
 		Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto + M_PI * 3 / 4),
-				 obsY + passoN * sin(dirPto + M_PI * 3 / 4),
+				 obsX + stepE * cos(dirPto + M_PI * 3 / 4),
+				 obsY + stepN * sin(dirPto + M_PI * 3 / 4),
 				 parBilin, gradient);
 		g[6][0] = gradient[0];
 		g[6][1] = gradient[1];
 
 		Get_Gradient(Elaboration,
-				 obsX + passoE * cos(dirPto - M_PI * 3 / 4),
-				 obsY + passoN * sin(dirPto - M_PI * 3 / 4),
+				 obsX + stepE * cos(dirPto - M_PI * 3 / 4),
+				 obsY + stepN * sin(dirPto - M_PI * 3 / 4),
 				 parBilin, gradient);
 		g[8][0] = gradient[0];
 		g[8][1] = gradient[1];
@@ -145,13 +145,13 @@ int Get_Gradient(struct Cell_head Elaboration, double X, double Y,
     double csi, eta, d, b, a, c;
 
     extern int nsply;
-    extern double passoN, passoE;
+    extern double stepN, stepE;
 
-    row = (int)((Y - Elaboration.south) / passoN);
-    col = (int)((X - Elaboration.west) / passoE);
+    row = (int)((Y - Elaboration.south) / stepN);
+    col = (int)((X - Elaboration.west) / stepE);
     N = nsply * col + row;
-    eta = X - (Elaboration.west + (col * passoE));
-    csi = Y - (Elaboration.south + (row * passoN));
+    eta = X - (Elaboration.west + (col * stepE));
+    csi = Y - (Elaboration.south + (row * stepN));
     d = parVect[N];
     b = parVect[N + 1] - d;
     a = parVect[N + nsply] - d;
@@ -172,7 +172,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
     double interpolation, weight, residual, eta, csi, gradient[2];
 
     extern int nsplx, nsply, line_out_counter;
-    extern double passoN, passoE;
+    extern double stepN, stepE;
 
     struct line_pnts *point;
     struct line_cats *categories;
@@ -190,7 +190,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 
 	if (Vect_point_in_box(obs[i][0], obs[i][1], mean, &General)) {
 	    interpolation =
-		dataInterpolateBicubic(obs[i][0], obs[i][1], passoE, passoN,
+		dataInterpolateBicubic(obs[i][0], obs[i][1], stepE, stepN,
 				       nsplx, nsply, Elaboration.west,
 				       Elaboration.south, parBicub);
 	    interpolation += mean;
