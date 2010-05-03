@@ -192,7 +192,7 @@ if [ $RTE -eq 1 ] && [ $TRK -eq 1 ] ; then
 fi
 
 if [ $WPT -eq 0 ] && [ $RTE -eq 0 ] && [ $TRK -eq 0 ] ; then
-    g.message -e "No features requested for export."
+    g.message -e "No features requested for export. (wpt/trk/rte)"
     cleanup
     exit 1
 fi
