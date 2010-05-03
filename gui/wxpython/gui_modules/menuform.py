@@ -835,15 +835,16 @@ class mainFrame(wx.Frame):
                      border = 30)
 
         if self.parent and self.parent.GetName() != 'Modeler':
-            self.outputType = None
+            addLayer = False
             for p in self.task.params:
-                if p.get('name', '') == 'output':
-                    self.outputType = p.get('prompt', None)
-                    break
-            if self.outputType in ('raster', 'vector', '3d-raster'):
+                if p.get('age', 'old') == 'new' and \
+                   p.get('prompt', '') in ('raster', 'vector', '3d-raster'):
+                    addLayer = True
+            
+            if addLayer:
                 # add newly created map into layer tree
                 self.addbox = wx.CheckBox(parent=self.panel,
-                                          label=_('Add created map into layer tree'), style = wx.NO_BORDER)
+                                          label=_('Add created map(s) into layer tree'), style = wx.NO_BORDER)
                 self.addbox.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
                 guisizer.Add(item=self.addbox, proportion=0,
                              flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
