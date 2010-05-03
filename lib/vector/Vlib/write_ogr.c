@@ -26,6 +26,22 @@
 static int write_attributes(int, const struct field_info *,
 			    OGRLayerH, OGRFeatureH);
 
+/* TODO:
+ * OGR version of V2__delete_area_cats_from_cidx_nat()
+ * function to delete corresponding entry in fidx
+ * OGR version of V2__add_area_cats_to_cidx_nat
+ * OGR version of V2__add_line_to_topo_nat
+ */
+
+void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
+			    const struct line_pnts *points, const struct line_cats *cats)
+{
+   /* recycle code from build_ogr */
+    G_warning("feature not yet implemented, coming soon...");
+
+    return;
+}
+
 /*!
   \brief Writes feature on level 1
 
@@ -53,11 +69,16 @@ off_t V1_write_line_ogr(struct Map_info *Map,
 	return -1;
     }
 
-    /* determine feature's geometry */
-    if (type & (GV_POINTS | GV_KERNEL)) {
+    /* determine matching OGR feature geometry type */
+    /* NOTE: centroids are not supported in OGR,
+     *       pseudotopo holds virtual centroids */
+    /* NOTE: boundaries are not supported in OGR,
+     *       pseudotopo treats polygons as boundaries */
+    
+    if (type & (GV_POINT | GV_KERNEL)) {
 	Ogr_geometry = OGR_G_CreateGeometry(wkbPoint);
     }
-    else if (type & GV_LINES) {
+    else if (type & GV_LINE) {
 	Ogr_geometry = OGR_G_CreateGeometry(wkbLineString);
     }
     else if (type & GV_FACE) {
@@ -116,21 +137,94 @@ off_t V1_write_line_ogr(struct Map_info *Map,
     return Map->fInfo.ogr.offset_num++;
 }
 
+off_t V2_write_line_ogr(struct Map_info *Map, int type,
+             const struct line_pnts *points, const struct line_cats *cats)
+{
+    int line;
+    off_t offset;
+    struct Plus_head *plus;
+    struct bound_box box;
+
+    line = 0;
+    
+    G_debug(3, "V2_write_line_nat()");
+    offset = V1_write_line_ogr(Map, type, points, cats);
+    if (offset < 0)
+	return -1;
+    /* Update topology */
+    plus = &(Map->plus);
+    /* Add line */
+    if (plus->built >= GV_BUILD_BASE) {
+	line = dig_add_line(plus, type, points, offset);
+	G_debug(3, "  line added to topo with id = %d", line);
+	dig_line_box(points, &box);
+	dig_line_set_box(plus, line, &box);
+	if (line == 1)
+	    Vect_box_copy(&(plus->box), &box);
+	else
+	    Vect_box_extend(&(plus->box), &box);
+
+	V2__add_line_to_topo_ogr(Map, line, points, cats);
+    }
+
+
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
+	    plus->n_upnodes);
+
+    /* returns int line, but is defined as off_t for compatibility with
+     * Write_line_array in write.c */
+    
+    return line;
+
+}
+
 /*!
-  \brief Writes feature (topology level)
+  \brief Rewrites feature at the given offset (level 1)
   
   \param Map pointer to Map_info structure
+  \param offset feature offset
   \param type feature type
   \param points feature geometry
   \param cats feature categories
   
-  \return new feature id
+  \return feature offset (rewriten feature)
   \return -1 on error
 */
-off_t V2_write_line_ogr(struct Map_info *Map,
-			int type, const struct line_pnts *points, const struct line_cats *cats)
+off_t V1_rewrite_line_ogr(struct Map_info *Map,
+			  int line,
+			  int type,
+			  off_t offset,
+			  const struct line_pnts *points, const struct line_cats *cats)
 {
-    return V2__write_line(Map, type, points, cats, V1_write_line_ogr);
+    if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
+	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
+	return -1;
+    }
+
+    /* delete old */
+    V1_delete_line_ogr(Map, offset);
+
+    return V1_write_line_ogr(Map, type, points, cats);
+}
+
+/*!
+  \brief Rewrites feature to 'coor' file (topology level) - internal use only
+  
+  \param Map pointer to Map_info structure
+  \param type feature type
+  \param line feature id
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return offset where line was rewritten
+  \return -1 on error
+*/
+off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset,
+			  const struct line_pnts *points, const struct line_cats *cats)
+{
+    V2_delete_line_ogr(Map, line);
+
+    return (V2_write_line_ogr(Map, type, points, cats));
 }
 
 /*!
@@ -161,68 +255,77 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 }
 
 /*!
-  \brief Deletes feature (topology level).
+  \brief Deletes feature (topology level) -- internal use only
   
-  \param Map pointer to Map_info structure
+  \param pointer to Map_info structure
   \param line feature id
   
   \return 0 on success
   \return -1 on error
 */
-int V2_delete_line_ogr(struct Map_info *Map, int line)
+int V2_delete_line_ogr(struct Map_info *Map, off_t line)
 {
-    return V2__delete_line(Map, line, V1_delete_line_ogr);
-}
+    int ret, i, side, type, first, next_line, area;
+    struct P_line *Line;
+    struct P_area *Area;
+    struct Plus_head *plus;
+    struct bound_box box, abox;
+    int adjacent[4], n_adjacent;
+    static struct line_cats *Cats = NULL;
 
-/*!
-  \brief Rewrites feature at the given offset (level 1)
-  
-  \param Map pointer to Map_info structure
-  \param offset feature offset
-  \param type feature type
-  \param points feature geometry
-  \param cats feature categories
-  
-  \return feature offset (rewriten feature)
-  \return -1 on error
-*/
-off_t V1_rewrite_line_ogr(struct Map_info *Map,
-			  off_t offset,
-			  int type,
-			  const struct line_pnts *points, const struct line_cats *cats)
-{
-    if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
-	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
-	return -1;
+    G_debug(3, "V2_delete_line_nat(), line = %d", (int) line);
+
+    type = first = n_adjacent = 0;
+    Line = NULL;
+    plus = &(Map->plus);
+
+    if (plus->built >= GV_BUILD_BASE) {
+	Line = Map->plus.Line[line];
+
+	if (Line == NULL)
+	    G_fatal_error(_("Attempt to delete dead feature"));
+	type = Line->type;
     }
 
-    /* delete old */
-    V1_delete_line_ogr(Map, offset);
+    if (!Cats) {
+	Cats = Vect_new_cats_struct();
+    }
 
-    return V1_write_line_ogr(Map, type, points, cats);
-}
+    /* Update category index */
+    if (plus->update_cidx) {
+	type = V2_read_line_ogr(Map, NULL, Cats, line);
 
-/*!
-  \brief Rewrites feature (topology level)
-  
-  \param Map pointer to Map_info structure
-  \param line feature id
-  \param type feature type
-  \param points feature geometry
-  \param cats feature categories
-  
-  \return feature offset (rewriten feature)
-  \return -1 on error
-*/
-int V2_rewrite_line_ogr(struct Map_info *Map,
-			int line,
-			int type,
-			const struct line_pnts *points, const struct line_cats *cats)
-{
-    /* delete old */
-    V2_delete_line_ogr(Map, line);
+	for (i = 0; i < Cats->n_cats; i++) {
+	    dig_cidx_del_cat(plus, Cats->field[i], Cats->cat[i], line, type);
+	}
+    }
+    /* Update fidx */
 
-    return V2_write_line_ogr(Map, type, points, cats);
+    /* delete the line from coor */
+    ret = V1_delete_line_ogr(Map, Line->offset);
+
+    if (ret == -1) {
+	return ret;
+    }
+
+    /* Update topology */
+    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
+	/* TODO */
+	/* remove centroid together with boundary (is really an OGR polygon) */
+    }
+    /* Delete reference from area */
+    if (plus->built >= GV_BUILD_CENTROIDS && type == GV_CENTROID) {
+	/* for OGR mapsets, virtual centroid will be removed when polygon is removed */
+    }
+
+    /* delete the line from topo */
+    dig_del_line(plus, line);
+
+    /* Rebuild areas/isles and attach centroids and isles */
+    if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
+	/* maybe not needed VERIFY */
+    }
+    return ret;
 }
 
 int write_attributes(int cat, const struct field_info *Fi,

@@ -247,7 +247,7 @@ int Vect_get_num_dblinks(const struct Map_info *);
 /* Level 2 only */
 int Vect_read_line(const struct Map_info *, struct line_pnts *, struct line_cats *,
 		   int);
-int Vect_rewrite_line(struct Map_info *, int, int, const struct line_pnts *,
+off_t Vect_rewrite_line(struct Map_info *, int, int, const struct line_pnts *,
 		      const struct line_cats *);
 int Vect_delete_line(struct Map_info *, int);
 int Vect_restore_line(struct Map_info *, int, off_t);
@@ -436,15 +436,6 @@ int Vect_sfa_is_line_closed(const struct line_pnts *, int, int);
  */
 int Vect_print_header(const struct Map_info *);
 void Vect__init_head(struct Map_info *);
-void Vect__delete_area_cats_from_cidx(struct Map_info *, int);
-void Vect__add_area_cats_to_cidx(struct Map_info *, int);
-int V2__delete_line(struct Map_info *, int, int (*delete_fn) (struct Map_info *, off_t));
-void Vect__add_line_to_topo(struct Map_info *, int, const struct line_pnts *,
-			    const struct line_cats *);
-off_t V2__write_line(struct Map_info *, int, const struct line_pnts *,
-		     const struct line_cats *,
-		     off_t (*write_fn) (struct Map_info *, int, const struct line_pnts *,
-					const struct line_cats *));
 
 /* Open/close/rewind map */
 int Vect_coor_info(const struct Map_info *, struct Coor_info *);
@@ -490,27 +481,27 @@ int V2_read_next_line_nat(struct Map_info *, struct line_pnts *,
 int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V1_delete_line_nat(struct Map_info *, off_t);
+int V2_delete_line_nat(struct Map_info *, off_t);
 int V1_delete_line_ogr(struct Map_info *, off_t);
-int V2_delete_line_nat(struct Map_info *, int);
-int V2_delete_line_ogr(struct Map_info *, int);
+int V2_delete_line_ogr(struct Map_info *, off_t);
 int V1_restore_line_nat(struct Map_info *, off_t);
 int V2_restore_line_nat(struct Map_info *, int, off_t);
 off_t V1_write_line_nat(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
-off_t V1_write_line_ogr(struct Map_info *, int, const struct line_pnts *,
-			const struct line_cats *);
 off_t V2_write_line_nat(struct Map_info *, int, const struct line_pnts *,
+			const struct line_cats *);
+off_t V1_write_line_ogr(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
 off_t V2_write_line_ogr(struct Map_info *, int, const struct line_pnts *,
 			const struct line_cats *);
-off_t V1_rewrite_line_nat(struct Map_info *, off_t, int,
+off_t V1_rewrite_line_nat(struct Map_info *, int, int, off_t,
 			  const struct line_pnts *, const struct line_cats *);
-off_t V1_rewrite_line_ogr(struct Map_info *, off_t, int,
+off_t V2_rewrite_line_nat(struct Map_info *, int, int, off_t,
 			  const struct line_pnts *, const struct line_cats *);
-int V2_rewrite_line_nat(struct Map_info *, int, int,
-			const struct line_pnts *, const struct line_cats *);
-int V2_rewrite_line_ogr(struct Map_info *, int, int,
-			const struct line_pnts *, const struct line_cats *);
+off_t V1_rewrite_line_ogr(struct Map_info *, int, int, off_t,
+			  const struct line_pnts *, const struct line_cats *);
+off_t V2_rewrite_line_ogr(struct Map_info *, int, int, off_t,
+			  const struct line_pnts *, const struct line_cats *);
 
     /* Build topology */
 int Vect_build_nat(struct Map_info *, int);
