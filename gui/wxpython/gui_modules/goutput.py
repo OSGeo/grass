@@ -734,27 +734,34 @@ class GMConsole(wx.SplitterWindow):
             if event.returncode == 0 and \
                     not event.aborted and hasattr(dialog, "addbox") and \
                     dialog.addbox.IsChecked():
-                # add new map into layer tree
-                if dialog.outputType in ('raster', 'vector'):
-                    # add layer into layer tree
-                    cmd = dialog.notebookpanel.createCmd(ignoreErrors = True)
-                    name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True, param='output')
-                    winName = self.parent.parent.parent.GetName()
-                    if winName == 'LayerManager':
-                        mapTree = self.parent.parent.parent.curr_page.maptree
-                    else: # GMConsole
-                        mapTree = self.parent.parent.parent.parent.curr_page.maptree
-                    if not mapTree.GetMap().GetListOfLayers(l_name = name):
-                        if dialog.outputType == 'raster':
+                # add created maps into layer tree
+                winName = self.parent.parent.parent.GetName()
+                if winName == 'LayerManager':
+                    mapTree = self.parent.parent.parent.curr_page.maptree
+                else: # GMConsole
+                    mapTree = self.parent.parent.parent.parent.curr_page.maptree
+                
+                cmd = dialog.notebookpanel.createCmd(ignoreErrors = True)
+                for p in dialog.task.get_options()['params']:
+                    prompt = p.get('prompt', '')
+                    if prompt in ('raster', 'vector', '3d-raster') and \
+                       p.get('age', 'old') == 'new' and \
+                       p.get('value', None):
+                        name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True, param = p.get('name', ''))
+                        
+                        if mapTree.GetMap().GetListOfLayers(l_name = name):
+                            continue
+                        
+                        if prompt == 'raster':
                             lcmd = ['d.rast',
                                     'map=%s' % name]
                         else:
                             lcmd = ['d.vect',
                                     'map=%s' % name]
-                        mapTree.AddLayer(ltype=dialog.outputType,
-                                         lcmd=lcmd,
-                                         lname=name)
-                    
+                        mapTree.AddLayer(ltype = prompt,
+                                         lcmd = lcmd,
+                                         lname = name)
+                
             if hasattr(dialog, "get_dcmd") and \
                     dialog.get_dcmd is None and \
                     dialog.closebox.IsChecked():
