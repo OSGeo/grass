@@ -15,7 +15,7 @@
  * PURPOSE:      generates raster maps of slope, aspect, curvatures and
  *               first and second order partial derivatives from a raster map
  *               of true elevation values
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -150,29 +150,24 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("terrain analysis"));
-    module->description =
-	_("Generates raster map layers of slope, aspect, curvatures and "
-	  "partial derivatives from a raster map layer of true elevation "
-	  "values. Aspect is calculated counterclockwise from east.");
-
+    G_add_keyword(_("terrain"));
+    module->label = _("Generates raster maps of slope, aspect, curvatures and "
+		      "partial derivatives from a elevation raster map.");
+    module->description = _("Aspect is calculated counterclockwise from east.");
+    
     parm.elevation = G_define_standard_option(G_OPT_R_ELEV);
 
-    parm.slope = G_define_option();
+    parm.slope = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.slope->key = "slope";
-    parm.slope->type = TYPE_STRING;
     parm.slope->required = NO;
-    parm.slope->answer = NULL;
-    parm.slope->gisprompt = "new,cell,raster";
     parm.slope->description = _("Name for output slope raster map");
+    parm.slope->guisection = _("Outputs");
 
-    parm.aspect = G_define_option();
+    parm.aspect = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.aspect->key = "aspect";
-    parm.aspect->type = TYPE_STRING;
     parm.aspect->required = NO;
-    parm.aspect->answer = NULL;
-    parm.aspect->gisprompt = "new,cell,raster";
     parm.aspect->description = _("Name for output aspect raster map");
+    parm.aspect->guisection = _("Outputs");
 
     parm.slope_fmt = G_define_option();
     parm.slope_fmt->key = "format";
@@ -193,75 +188,54 @@ int main(int argc, char *argv[])
 	_("Type of output aspect and slope maps");
     parm.out_precision->guisection = _("Settings");
 
-    parm.pcurv = G_define_option();
+    parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.pcurv->key = "pcurv";
-    parm.pcurv->type = TYPE_STRING;
     parm.pcurv->required = NO;
-    parm.pcurv->answer = NULL;
-    parm.pcurv->gisprompt = "new,cell,raster";
     parm.pcurv->description =
 	_("Name for output profile curvature raster map");
-    parm.pcurv->guisection = _("Advanced");
+    parm.pcurv->guisection = _("Outputs");
 
-    parm.tcurv = G_define_option();
+    parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.tcurv->key = "tcurv";
-    parm.tcurv->type = TYPE_STRING;
     parm.tcurv->required = NO;
-    parm.tcurv->answer = NULL;
-    parm.tcurv->gisprompt = "new,cell,raster";
     parm.tcurv->description =
 	_("Name for output tangential curvature raster map");
-    parm.tcurv->guisection = _("Advanced");
+    parm.tcurv->guisection = _("Outputs");
 
-    parm.dx = G_define_option();
+    parm.dx = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.dx->key = "dx";
-    parm.dx->type = TYPE_STRING;
     parm.dx->required = NO;
-    parm.dx->answer = NULL;
-    parm.dx->gisprompt = "new,cell,raster";
     parm.dx->description =
 	_("Name for output first order partial derivative dx (E-W slope) raster map");
-    parm.dx->guisection = _("Advanced");
+    parm.dx->guisection = _("Outputs");
 
-    parm.dy = G_define_option();
+    parm.dy = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.dy->key = "dy";
-    parm.dy->type = TYPE_STRING;
     parm.dy->required = NO;
-    parm.dy->answer = NULL;
-    parm.dy->gisprompt = "new,cell,raster";
     parm.dy->description =
 	_("Name for output first order partial derivative dy (N-S slope) raster map");
-    parm.dy->guisection = _("Advanced");
+    parm.dy->guisection = _("Outputs");
 
-    parm.dxx = G_define_option();
+    parm.dxx = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.dxx->key = "dxx";
-    parm.dxx->type = TYPE_STRING;
     parm.dxx->required = NO;
-    parm.dxx->answer = NULL;
-    parm.dxx->gisprompt = "new,cell,raster";
     parm.dxx->description =
 	_("Name for output second order partial derivative dxx raster map");
-    parm.dxx->guisection = _("Advanced");
+    parm.dxx->guisection = _("Outputs");
 
-    parm.dyy = G_define_option();
+    parm.dyy = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.dyy->key = "dyy";
-    parm.dyy->type = TYPE_STRING;
     parm.dyy->required = NO;
-    parm.dyy->answer = NULL;
-    parm.dyy->gisprompt = "new,cell,raster";
     parm.dyy->description =
 	_("Name for output second order partial derivative dyy raster map");
-    parm.dyy->guisection = _("Advanced");
+    parm.dyy->guisection = _("Outputs");
 
-    parm.dxy = G_define_option();
+    parm.dxy = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.dxy->key = "dxy";
-    parm.dxy->type = TYPE_STRING;
     parm.dxy->required = NO;
-    parm.dxy->answer = NULL;
-    parm.dxy->gisprompt = "new,cell,raster";
     parm.dxy->description =
 	_("Name for output second order partial derivative dxy raster map");
-    parm.dxy->guisection = _("Advanced");
+    parm.dxy->guisection = _("Outputs");
 
     parm.zfactor = G_define_option();
     parm.zfactor->key = "zfactor";
