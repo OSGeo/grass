@@ -208,7 +208,7 @@ Vect_rewrite_line(struct Map_info *Map,
 
     offset = Map->plus.Line[line]->offset;
     ret =
-	(*Vect_rewrite_line_array[Map->format][Map->level]) (Map, offset, line, type,
+	(*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type, offset,
 							     points, cats);
 
     if (ret == -1)
