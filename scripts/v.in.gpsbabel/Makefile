@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = v.in.gpsbabel
+PGM = v.in.gps
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
