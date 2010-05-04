@@ -56,20 +56,17 @@ class HelpWindow(wx.Frame):
         #        sizer.SetSizeHints(self)
         self.Layout()
 
-class MenuTreeWindow(wx.Frame):
+class MenuTreeWindow(wx.Panel):
     """!Show menu tree"""
-    def __init__(self, parent, id = wx.ID_ANY, title = _("Menu tree window"), **kwargs):
+    def __init__(self, parent, id = wx.ID_ANY, **kwargs):
         self.parent = parent # LayerManager
         
-        wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
-
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
-        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
-        self.dataBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+        self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                     label=" %s " % _("Menu tree (double-click to run command)"))        
         # tree
-        self.tree = MenuTree(parent = self.panel, data = menudata.ManagerData())
+        self.tree = MenuTree(parent = self, data = menudata.ManagerData())
         self.tree.Load()
         
         self.searchDict = { _('label')    : 'label', # i18n workaround
@@ -77,45 +74,34 @@ class MenuTreeWindow(wx.Frame):
                             _('command')  : 'command',
                             _('keywords') : 'keywords' }
         # search
-        self.searchBy = wx.Choice(parent = self.panel, id = wx.ID_ANY,
+        self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY,
                                   choices = [_('label'),
                                              _('help'),
                                              _('command'),
                                              _('keywords')])
         self.searchBy.SetSelection(3)
         
-        self.search = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
+        self.search = wx.TextCtrl(parent = self, id = wx.ID_ANY,
                                   value = "", size = (-1, 25),
                                   style = wx.TE_PROCESS_ENTER)
         
-        # statusbar
-        self.statusbar = self.CreateStatusBar(number=1)
-
-        # close on run
-        self.closeOnRun = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
-                                      label = _("Close dialog on run"))
-        self.closeOnRun.SetValue(True)
-        
         # buttons
-        self.btnRun   = wx.Button(self.panel, id = wx.ID_OK, label = _("Run"))
+        self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("Run"))
         self.btnRun.SetToolTipString(_("Run selected command"))
         self.btnRun.Enable(False)
-        self.btnClose = wx.Button(self.panel, id = wx.ID_CLOSE)
-        self.btnClose.SetToolTipString(_("Close dialog"))
-
+        
         # bindings
-        self.btnClose.Bind(wx.EVT_BUTTON,          self.OnCloseWindow)
         self.btnRun.Bind(wx.EVT_BUTTON,            self.OnRun)
         self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
         self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
         self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
-
-        self.__Layout()
-
+        
+        self._layout()
+        
         self.search.SetFocus()
         
-    def __Layout(self):
+    def _layout(self):
         """!Do dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -126,7 +112,7 @@ class MenuTreeWindow(wx.Frame):
         
         # search
         searchSizer = wx.BoxSizer(wx.HORIZONTAL)
-        searchSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+        searchSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                              label = _("Search:")),
                         proportion = 0,
                         flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
@@ -142,8 +128,6 @@ class MenuTreeWindow(wx.Frame):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item = self.btnRun, proportion = 0,
                      flag = wx.LEFT | wx.RIGHT, border = 5)
-        btnSizer.Add(item = self.btnClose, proportion = 0,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
         
         sizer.Add(item = dataSizer, proportion = 1,
                   flag = wx.EXPAND | wx.ALL, border = 5)
@@ -154,15 +138,14 @@ class MenuTreeWindow(wx.Frame):
         sizer.Add(item = btnSizer, proportion=0,
                   flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         
-        sizer.Add(item = self.closeOnRun, proportion=0,
-                  flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+        sizer.Fit(self)
+        sizer.SetSizeHints(self)
         
-        self.panel.SetAutoLayout(True)
-        self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        self.SetSizer(sizer)
         
+        self.Fit()
+        self.SetAutoLayout(True)        
         self.Layout()
-        self.SetSize((530, 370))
         
     def OnCloseWindow(self, event):
         """!Close window"""
@@ -187,9 +170,6 @@ class MenuTreeWindow(wx.Frame):
             eval(handler)(event = None, cmd = data['command'].split())
         else:
             eval(handler)(None)
-        
-        if self.closeOnRun.IsChecked():
-            self.OnCloseWindow(None)
         
     def OnItemActivated(self, event):
         """!Item activated (double-click)"""
@@ -220,7 +200,7 @@ class MenuTreeWindow(wx.Frame):
         else:
             label = data['help']
         
-        self.statusbar.SetStatusText(label, 0)
+        self.parent.SetStatusText(label, 0)
         
     def OnShowItem(self, event):
         """!Highlight first found item in menu tree"""
@@ -260,9 +240,9 @@ class MenuTreeWindow(wx.Frame):
         
         nItems = len(self.tree.itemsMarked)
         if event.GetString():
-            self.statusbar.SetStatusText(_("%d items match") % nItems, 0)
+            self.parent.SetStatusText(_("%d items match") % nItems, 0)
         else:
-            self.statusbar.SetStatusText("", 0)
+            self.parent.SetStatusText("", 0)
         
         event.Skip()
         

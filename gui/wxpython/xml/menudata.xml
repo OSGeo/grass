@@ -3049,12 +3049,6 @@
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>Show menu tree</label>
-	  <help>Show menu tree in new window</help>
-          <handler>OnMenuTree</handler>
-	</menuitem>
-	<separator />
-	<menuitem>
 	  <label>About GRASS GIS</label>
 	  <help>About GRASS GIS</help>
 	  <handler>OnAboutGRASS</handler>

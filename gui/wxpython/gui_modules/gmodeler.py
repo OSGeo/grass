@@ -900,8 +900,8 @@ if __name__ == "__main__":
                         data.SetValue(p.get('value', ''))
                         continue
                     
-                    data = self.FindData(p.get('value', ''),
-                                         p.get('prompt', ''))
+                    data = self.model.FindData(p.get('value', ''),
+                                              p.get('prompt', ''))
                     if data:
                         if p.get('age', 'old') == 'old':
                             self._addLine(data, layer)
