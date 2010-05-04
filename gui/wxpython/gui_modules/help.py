@@ -5,6 +5,7 @@
 
 Classes:
  - HelpWindow
+ - FindModuleWindow
  - MenuTreeWindow
  - AboutWindow
 
@@ -56,24 +57,16 @@ class HelpWindow(wx.Frame):
         #        sizer.SetSizeHints(self)
         self.Layout()
 
-class MenuTreeWindow(wx.Panel):
-    """!Show menu tree"""
+class SearchModuleWindow(wx.Panel):
+    """!Search module window (used in MenuTreeWindow)"""
     def __init__(self, parent, id = wx.ID_ANY, **kwargs):
-        self.parent = parent # LayerManager
-        
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
-        self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                    label=" %s " % _("Menu tree (double-click to run command)"))        
-        # tree
-        self.tree = MenuTree(parent = self, data = menudata.ManagerData())
-        self.tree.Load()
+        self._searchDict = { _('label')    : 'label', # i18n workaround
+                             _('help')     : 'help',
+                             _('command')  : 'command',
+                             _('keywords') : 'keywords' }
         
-        self.searchDict = { _('label')    : 'label', # i18n workaround
-                            _('help')     : 'help',
-                            _('command')  : 'command',
-                            _('keywords') : 'keywords' }
-        # search
         self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY,
                                   choices = [_('label'),
                                              _('help'),
@@ -85,6 +78,49 @@ class MenuTreeWindow(wx.Panel):
                                   value = "", size = (-1, 25),
                                   style = wx.TE_PROCESS_ENTER)
         
+        self._layout()
+
+    def _layout(self):
+        """!Do layout"""
+                # search
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                       label = _("Find module by:")),
+                  proportion = 0,
+                  flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                  border = 3)
+        sizer.Add(item = self.searchBy, proportion = 0,
+                  flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT | wx.RIGHT,
+                  border = 5)
+        sizer.Add(item = self.search, proportion = 1,
+                  flag = wx.EXPAND | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL,
+                  border = 5)
+        
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
+    def GetSelection(self):
+        """!Get selected element"""
+        selection = self.searchBy.GetStringSelection()
+        
+        return self._searchDict[selection]
+    
+class MenuTreeWindow(wx.Panel):
+    """!Show menu tree"""
+    def __init__(self, parent, id = wx.ID_ANY, **kwargs):
+        self.parent = parent # LayerManager
+        
+        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
+        
+        self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                    label=" %s " % _("Menu tree (double-click to run command)"))
+        # tree
+        self.tree = MenuTree(parent = self, data = menudata.ManagerData())
+        self.tree.Load()
+
+        # search widget
+        self.search = SearchModuleWindow(parent = self)
+        
         # buttons
         self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("Run"))
         self.btnRun.SetToolTipString(_("Run selected command"))
@@ -92,10 +128,10 @@ class MenuTreeWindow(wx.Panel):
         
         # bindings
         self.btnRun.Bind(wx.EVT_BUTTON,            self.OnRun)
-        self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
-        self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
         self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
+        self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
+        self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
         
         self._layout()
         
@@ -110,20 +146,6 @@ class MenuTreeWindow(wx.Panel):
         dataSizer.Add(item = self.tree, proportion =1,
                       flag = wx.EXPAND)
         
-        # search
-        searchSizer = wx.BoxSizer(wx.HORIZONTAL)
-        searchSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                             label = _("Search:")),
-                        proportion = 0,
-                        flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                        border = 3)
-        searchSizer.Add(item = self.searchBy, proportion = 0,
-                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT | wx.RIGHT,
-                        border = 5)
-        searchSizer.Add(item = self.search, proportion = 1,
-                        flag = wx.EXPAND | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL,
-                        border = 5)
-        
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item = self.btnRun, proportion = 0,
@@ -132,7 +154,7 @@ class MenuTreeWindow(wx.Panel):
         sizer.Add(item = dataSizer, proportion = 1,
                   flag = wx.EXPAND | wx.ALL, border = 5)
 
-        sizer.Add(item = searchSizer, proportion=0,
+        sizer.Add(item = self.search, proportion=0,
                   flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
         
         sizer.Add(item = btnSizer, proportion=0,
@@ -233,7 +255,7 @@ class MenuTreeWindow(wx.Panel):
 
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
-        element = self.searchDict[self.searchBy.GetStringSelection()]
+        element = self.search.GetSelection()
         self.tree.itemsMarked = self.SearchItems(element = element,
                                                  value = event.GetString())
         self.tree.itemSelected = None
