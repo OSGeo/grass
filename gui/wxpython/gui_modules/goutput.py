@@ -40,6 +40,7 @@ import prompt
 
 from debug       import Debug
 from preferences import globalSettings as UserSettings
+from help        import SearchModuleWindow
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
@@ -164,7 +165,7 @@ class GMConsole(wx.SplitterWindow):
         #
         self.requestQ = Queue.Queue()
         self.resultQ = Queue.Queue()
-
+        
         #
         # progress bar
         #
@@ -184,19 +185,11 @@ class GMConsole(wx.SplitterWindow):
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         
-        #
         # search & command prompt
-        #
-        self.searchBy = wx.Choice(parent = self.panelPrompt, id = wx.ID_ANY,
-                                  choices = [_("description"),
-                                             _("keywords")])
-        
-        self.search = wx.TextCtrl(parent = self.panelPrompt, id = wx.ID_ANY,
-                                  value = "", size = (-1, 25))
+        self.search = SearchModuleWindow(parent = self.panelPrompt)
         
         self.cmd_prompt = prompt.GPromptSTC(parent = self)
         if self.parent.GetName() != 'LayerManager':
-            self.searchBy.Hide()
             self.search.Hide()
             self.cmd_prompt.Hide()
         
@@ -227,7 +220,7 @@ class GMConsole(wx.SplitterWindow):
                                    size=(125,-1))
         self.btn_abort.SetToolTipString(_("Abort the running command"))
         self.btn_abort.Enable(False)
-
+        
         self.btn_cmd_clear.Bind(wx.EVT_BUTTON,     self.cmd_prompt.OnCmdErase)
         self.btn_console_clear.Bind(wx.EVT_BUTTON, self.ClearHistory)
         self.btn_console_save.Bind(wx.EVT_BUTTON,  self.SaveHistory)
@@ -242,25 +235,16 @@ class GMConsole(wx.SplitterWindow):
         """!Do layout"""
         OutputSizer = wx.BoxSizer(wx.VERTICAL)
         PromptSizer = wx.BoxSizer(wx.VERTICAL)
-        SearchSizer = wx.BoxSizer(wx.HORIZONTAL)
         ButtonSizer = wx.BoxSizer(wx.HORIZONTAL)
-
+        
         OutputSizer.Add(item=self.cmd_output, proportion=1,
                         flag=wx.EXPAND | wx.ALL, border=3)
         OutputSizer.Add(item=self.console_progressbar, proportion=0,
                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
         
-        if self.searchBy.IsShown():
-            SearchSizer.Add(item = wx.StaticText(parent = self.panelPrompt, id = wx.ID_ANY,
-                                                 label = _("Find module:")),
-                            proportion = 0, flag = wx.LEFT | wx.ALIGN_CENTER_VERTICAL, border = 3)
-        SearchSizer.Add(item = self.searchBy,
-                        proportion = 0, flag = wx.LEFT, border = 3)
-        SearchSizer.Add(item = self.search,
-                        proportion = 1, flag = wx.LEFT | wx.EXPAND, border = 3)
-        
-        PromptSizer.Add(item=SearchSizer, proportion=0,
-                        flag=wx.EXPAND | wx.ALL, border=1)
+        if self.search.IsShown():
+            PromptSizer.Add(item=self.search, proportion=0,
+                            flag=wx.EXPAND | wx.ALL, border=1)
         PromptSizer.Add(item=self.cmd_prompt, proportion=1,
                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
         
@@ -570,7 +554,7 @@ class GMConsole(wx.SplitterWindow):
         iFound = 0
         for module, data in self.cmd_prompt.moduleDesc.iteritems():
             found = False
-            if self.searchBy.GetSelection() == 0: # -> description
+            if self.search.GetSelection() == 'description': # -> description
                 if text in data['desc']:
                     found = True
             else: # -> keywords
