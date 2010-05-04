@@ -838,7 +838,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.autoCompList = self.mapList[self.promptType]
                 self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))
             
-        elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN]:
+        elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and \
+                 not self.AutoCompActive():
             # Command history using up and down   
             if len(self.cmdbuffer) < 1:
                 return
