@@ -22,6 +22,11 @@ import locale
 import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
+# path to python scripts
+ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
+ETCICONDIR = os.path.join(os.getenv("GISBASE"), "etc", "gui", "icons")
+ETCWXDIR = os.path.join(ETCDIR, "wxpython")
+
 sys.path.append(os.path.join(ETCDIR, "python"))
 import grass.script as grass
 
@@ -77,11 +82,6 @@ Deleted automatically on re-render action
 """
 # temporal query layer (removed on re-render action)
 QUERYLAYER = 'qlayer'
-
-# path to python scripts
-ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
-ETCICONDIR = os.path.join(os.getenv("GISBASE"), "etc", "gui", "icons")
-ETCWXDIR = os.path.join(ETCDIR, "gui", "wxpython")
 
 """!Style definition for FlatNotebook pages"""
 FNPageStyle = FN.FNB_VC8 | \
@@ -161,6 +161,9 @@ else:
 
 def _getGDALFormats():
     """!Get dictionary of avaialble GDAL drivers"""
+    if not grass.find_program('r.in.gdal'):
+        return _parseFormats(None)
+    
     ret = grass.read_command('r.in.gdal',
                              quiet = True,
                              flags = 'f')
@@ -169,6 +172,9 @@ def _getGDALFormats():
 
 def _getOGRFormats():
     """!Get dictionary of avaialble OGR drivers"""
+    if not grass.find_program('v.in.ogr'):
+        return _parseFormats(None)
+    
     ret = grass.read_command('v.in.ogr',
                              quiet = True,
                              flags = 'f')
