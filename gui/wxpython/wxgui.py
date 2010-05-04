@@ -131,7 +131,6 @@ class GMFrame(wx.Frame):
         self.dialogs['atm'] = list()
         
         # creating widgets
-        # -> self.notebook, self.goutput, self.outpage
         self.menubar = menu.Menu(parent = self, data = menudata.ManagerData())
         self.SetMenuBar(self.menubar)
         self.menucmd = self.menubar.GetCmd()
@@ -165,9 +164,11 @@ class GMFrame(wx.Frame):
                self.SetSize((w, h))
             except:
                 pass
-
+        
+        self.Layout()
+        self.Centre()
         self.Show()
-
+        
         # load workspace file if requested
         if self.workspaceFile:
             # load given workspace file
@@ -197,41 +198,32 @@ class GMFrame(wx.Frame):
 
     def __createNoteBook(self):
         """!Creates notebook widgets"""
-
-        #create main notebook widget
         nbStyle = FN.FNB_FANCY_TABS | \
             FN.FNB_BOTTOM | \
             FN.FNB_NO_NAV_BUTTONS | \
             FN.FNB_NO_X_BUTTON
         
         self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, style=nbStyle)
-
-        #self.notebook = wx.aui.AuiNotebook(parent=self, id=wx.ID_ANY, style=wx.aui.AUI_NB_BOTTOM)
-        #self.notebook.SetFont(wx.Font(pointSize=11, family=wx.FONTFAMILY_DEFAULT, style=wx.NORMAL, weight=0))
-
+        
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle
         self.gm_cb = FN.FlatNotebook(self, id=wx.ID_ANY, style=cbStyle)
         self.gm_cb.SetTabAreaColour(globalvar.FNPageColor)
         self.notebook.AddPage(self.gm_cb, text=_("Map layers for each display"))
-
+        
         # create command output text area and add it to main notebook page
         self.goutput = goutput.GMConsole(self, pageid=1)
         self.outpage = self.notebook.AddPage(self.goutput, text=_("Command console"))
-
+        
+        # create 'search module' notebook page
+        self.search = MenuTreeWindow(parent = self)
+        self.notebook.AddPage(self.search, text = _("Search module"))
+        
         # bindings
         self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosed)
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(item=self.goutput, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=1)
-        self.SetSizer(sizer)
-#        self.out_sizer.Fit(self.outpage)
-        self.Layout()
-
-        self.Centre()
+        
         return self.notebook
 
     def __createToolBar(self):
@@ -348,7 +340,8 @@ class GMFrame(wx.Frame):
             # remove '(...)'
             self.notebook.SetPageText(page, _("Command console"))
             self.goutput.cmd_prompt.SetSTCFocus(True)
-            
+        self.SetStatusText('', 0)
+        
         event.Skip()
 
     def OnCBPageClosed(self, event):
@@ -517,13 +510,7 @@ class GMFrame(wx.Frame):
                                             lchecked=True,
                                             lopacity=1.0,
                                             lcmd=['d.vect', 'map=%s' % name])
-           
-    def OnMenuTree(self, event):
-        """!Show dialog with menu tree"""
-        dlg = MenuTreeWindow(self)
-        dlg.CentreOnScreen()
-        dlg.Show()
-    
+        
     def OnAboutGRASS(self, event):
         """!Display 'About GRASS' dialog"""
         win = AboutWindow(self)
