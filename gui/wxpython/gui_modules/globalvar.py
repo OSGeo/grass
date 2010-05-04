@@ -25,7 +25,7 @@ gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 # path to python scripts
 ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
 ETCICONDIR = os.path.join(os.getenv("GISBASE"), "etc", "gui", "icons")
-ETCWXDIR = os.path.join(ETCDIR, "wxpython")
+ETCWXDIR = os.path.join(ETCDIR, "gui", "wxpython")
 
 sys.path.append(os.path.join(ETCDIR, "python"))
 import grass.script as grass
