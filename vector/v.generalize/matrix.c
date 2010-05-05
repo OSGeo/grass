@@ -18,6 +18,8 @@
  ****************************************************************/
 
 #include <string.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include "matrix.h"
 
 int matrix_init(int rows, int cols, MATRIX * res)
@@ -139,8 +141,10 @@ int matrix_inverse(MATRIX a, MATRIX * res, int percents)
     int i, j;
 
     /* initialize output matrix to the identity matrix */
-    if (!matrix_init(a.rows, a.rows, res))
+    if (!matrix_init(a.rows, a.rows, res)) {
+	G_fatal_error(_("Out of memory"));
 	return 0;
+    }
     for (i = 0; i < a.rows; i++) {
 	memset(res->a[i], 0, sizeof(double) * a.cols);
 	res->a[i][i] = 1;
