@@ -6,7 +6,7 @@
 # AUTHOR(S):	Markus Neteler, converted to Python by Glynn Clements
 # PURPOSE:	Calculates univariate statistics from a GRASS raster map
 #		only for areas covered by vector objects on a per-category base
-# COPYRIGHT:	(C) 2005-2009 by the GRASS Development Team
+# COPYRIGHT:	(C) 2005-2010 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%Module
-#%  description: Calculates univariate statistics from a raster map based on vector polygons and uploads statistics to new attribute columns.
+#%  description: Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns.
 #%  keywords: vector
 #%  keywords: raster
 #%  keywords: statistics
@@ -208,12 +208,12 @@ def main():
 	    addcols.append(currcolumn + ' ' + coltype)
 
     if addcols:
-	grass.verbose("Adding columns <%s>" % addcols)
+	grass.verbose(_("Adding columns '%s'") % addcols)
 	if grass.run_command('v.db.addcolumn', map = vector, columns = addcols) != 0:
-	    grass.fatal(_("Cannot continue (problem adding columns)."))
+	    grass.fatal(_("Adding columns failed. Exiting."))
 
     #loop over cats and calculate statistics:
-    grass.verbose("Processing data ...")
+    grass.message(_("Processing data (%d categories)...") % number)
 
     # get rid of any earlier attempts
     grass.try_remove(sqltmp)
