@@ -164,10 +164,11 @@ int exact_checks(GDALDataType export_datatype,
 	    G_percent(row + 1, rows, 2);
 	}
     }
+    G_debug(1, "min %g max %g", dfCellMin, dfCellMax);
 
     /* can the GDAL datatype hold the data range to be exported ? */
     /* f-flag does not override */
-    if (exact_range_check(export_datatype, dfCellMin, dfCellMax, name)) {
+    if (exact_range_check(dfCellMin, dfCellMax, export_datatype, name)) {
 	G_warning("Raster export results in data loss.");
 	ret = -2;
     }
@@ -181,7 +182,7 @@ int exact_checks(GDALDataType export_datatype,
 				(int)nodataval, nodatakey);
 	else
 	    G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
-				 "The value %f will be used to represent no-data values in the input map. "
+				 "The value %g will be used to represent no-data values in the input map. "
 				 "You can specify a nodata value with the %s option."),
 				nodataval, nodatakey);
     }
@@ -479,7 +480,7 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_BYTE_MIN,
 		      TYPE_BYTE_MAX);
-	    G_warning(_("Raster map <%s> range: %f - %f"), name, min, max);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
 	    return 1;
 	}
 	else
@@ -491,7 +492,7 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_UINT16_MIN,
 		      TYPE_UINT16_MAX);
-	    G_warning(_("Raster map <%s> range: %f - %f"), name, min, max);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
 	    return 1;
 	}
 	else
@@ -504,7 +505,7 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_INT16_MIN,
 		      TYPE_INT16_MAX);
-	    G_warning(_("Raster map <%s> range: %f - %f"), name, min, max);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
 	    return 1;
 	}
 	else
@@ -517,7 +518,7 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 	    G_warning(_("GDAL datatype: %s, range: %d - %d"),
 		      GDALGetDataTypeName(datatype), TYPE_INT32_MIN,
 		      TYPE_INT32_MAX);
-	    G_warning(_("Raster map <%s> range: %f - %f"), name, min, max);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
 	    return 1;
 	}
 	else
@@ -529,7 +530,7 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 	    G_warning(_("GDAL datatype: %s, range: %u - %u"),
 		      GDALGetDataTypeName(datatype), TYPE_UINT32_MIN,
 		      TYPE_UINT32_MAX);
-	    G_warning(_("Raster map <%s> range: %f - %f"), name, min, max);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
 	    return 1;
 	}
 	else
@@ -539,10 +540,10 @@ int exact_range_check(double min, double max, GDALDataType datatype,
     case GDT_CFloat32:
 	if (min < TYPE_FLOAT32_MIN || max > TYPE_FLOAT32_MAX) {
 	    G_warning(_("Selected GDAL datatype does not cover data range."));
-	    G_warning(_("GDAL datatype: %s, range: %f - %f"),
+	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
 		      GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
 		      TYPE_FLOAT32_MAX);
-	    G_warning(_("Raster map <%s> range: %f - %f"), name, min, max);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
 	    return 1;
 	}
 	else
@@ -553,10 +554,10 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 	/* not possible because DCELL is FLOAT64, not 128bit floating point, but anyway... */
 	if (min < TYPE_FLOAT64_MIN || max > TYPE_FLOAT64_MAX) {
 	    G_warning(_("Selected GDAL datatype does not cover data range."));
-	    G_warning(_("GDAL datatype: %s, range: %f - %f"),
+	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
 		      GDALGetDataTypeName(datatype), TYPE_FLOAT64_MIN,
 		      TYPE_FLOAT64_MAX);
-	    G_warning(_("Raster map <%s> range: %f - %f"), name, min, max);
+	    G_warning(_("Raster map <%s> range: %g - %g"), name, min, max);
 	    return 1;
 	}
 	else
