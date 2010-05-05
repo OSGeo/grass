@@ -405,12 +405,30 @@ int snakes(struct line_pnts *Points, double alpha, double beta, int with_z)
 	G_fatal_error(_("Out of memory"));
 	return n;
     }
-    matrix_init(n + 2 * plus, 1, &xcoord);
-    matrix_init(n + 2 * plus, 1, &ycoord);
-    matrix_init(n + 2 * plus, 1, &zcoord);
-    matrix_init(n + 2 * plus, 1, &xout);
-    matrix_init(n + 2 * plus, 1, &yout);
-    matrix_init(n + 2 * plus, 1, &zout);
+    if (!matrix_init(n + 2 * plus, 1, &xcoord)) {
+	G_fatal_error(_("Out of memory"));
+	return n;
+    }
+    if (!matrix_init(n + 2 * plus, 1, &ycoord)) {
+	G_fatal_error(_("Out of memory"));
+	return n;
+    }
+    if (!matrix_init(n + 2 * plus, 1, &zcoord)) {
+	G_fatal_error(_("Out of memory"));
+	return n;
+    }
+    if (!matrix_init(n + 2 * plus, 1, &xout)) {
+	G_fatal_error(_("Out of memory"));
+	return n;
+    }
+    if (!matrix_init(n + 2 * plus, 1, &yout)) {
+	G_fatal_error(_("Out of memory"));
+	return n;
+    }
+    if (!matrix_init(n + 2 * plus, 1, &zout)) {
+	G_fatal_error(_("Out of memory"));
+	return n;
+    }
 
     double x0 = Points->x[0];
     double y0 = Points->y[0];
