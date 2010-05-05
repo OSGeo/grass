@@ -212,8 +212,9 @@ int chaiken(struct line_pnts *Points, double thresh, int with_z)
 
     head.next = NULL;
     cur = &head;
-    point_assign(Points, 0, with_z, &head.p);
     point_assign(Points, 0, with_z, &p0);
+    point_list_add(cur, p0); /* always keep first point */
+    cur = cur->next;
 
     for (i = 2; i <= n; i++) {
 	if (i == n)
@@ -235,7 +236,7 @@ int chaiken(struct line_pnts *Points, double thresh, int with_z)
 		point_scalar(tmp, 0.5, &p1);
 	    }
 	    else {
-		break;		/* good approximatin */
+		break;		/* good approximation */
 	    }
 	}
 
@@ -246,7 +247,7 @@ int chaiken(struct line_pnts *Points, double thresh, int with_z)
     }
 
     point_assign(Points, n - 1, with_z, &p0);
-    point_list_add(cur, p0);
+    point_list_add(cur, p0); /* always keep last point */
 
     if (point_list_copy_to_line_pnts(head, Points) == -1) {
 	G_fatal_error(_("Out of memory"));
