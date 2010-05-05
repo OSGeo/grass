@@ -411,19 +411,20 @@ class GRASSStartup(wx.Frame):
             self.lbmapsets.SetSelection(0)
 
     def OnManageLoc(self, event):
+        """!Location management choice control handler
         """
-        Location management choice control handler
-        """
-
-        if event.GetString() == 'Rename mapset':
+        sel = event.GetSelection()
+        if sel == 0:
             self.RenameMapset()
-        elif event.GetString() == 'Rename location':
+        elif sel == 1:
             self.RenameLocation()
-        elif event.GetString() == 'Delete mapset':
+        elif sel == 2:
             self.DeleteMapset()
-        elif event.GetString() == 'Delete location':
+        elif sel == 3:
             self.DeleteLocation()
-
+        
+        event.Skip()
+        
     def RenameMapset(self):
         """!Rename selected mapset
         """
