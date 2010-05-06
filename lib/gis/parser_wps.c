@@ -106,7 +106,7 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
  *
  * Multiple vector or raster map outputs marked as one option are not supported (wps 1.0.0 specification
  * does not allow multiple outputs with only one identifier).
- * Multiple outputs must be wrapped via a python script.
+ * Multiple outputs must be wrapped via a python script or created as group.
  *
  * There is not support for optional outputs.
  *
@@ -129,6 +129,7 @@ void G__wps_print_process_description(void)
     const char *abstract = NULL;
     const char **keywords = NULL;
     int data_type, is_input, is_output;
+    int num_raster_inputs = 0, num_raster_outputs = 0;
     int min = 0, max = 0;
     int num_keywords = 0;
     int found_output = 0;
@@ -173,17 +174,6 @@ void G__wps_print_process_description(void)
     wps_print_process_description_begin(store, status, identifier, title, abstract, keywords, num_keywords);
     wps_print_data_inputs_begin();
 
-    /* We have two default options, which define the resolution of the created mapset */
-    wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ns", "Resolution of the mapset in north-south direction in [m] or [degrees]",
-        "This parameter defines the north-south resolution of the mapset in meter or degrees, which should be used to process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
-        "float", 0, NULL, 0, "25", TYPE_OTHER);
-    wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ew", "Resolution of the mapset in east-west direction in [m] or [degrees]",
-        "This parameter defines the east-west resolution of the mapset in meters or degrees, which should be used to process the input and output raster data.  To enable this setting, you need to specify north-south and east-west resolution.",
-        "float", 0, NULL, 0, "25", TYPE_OTHER);
-    wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_band_number", "Band to select for processing (default is all bands)",
-        "This parameter defines band number of the input raster files which should be processed. As default all bands are processed and used as single and multiple inputs for raster modules.",
-        "integer", 0, NULL, 0, NULL, TYPE_OTHER);
-
     /* Print the bounding box element with all the coordinate reference systems, which are supported by grass*/
     /* Currently Disabled! A list of all proj4 supported EPSG coordinate reference systems must be implemented*/
     if(1 == 0)
@@ -201,6 +191,7 @@ void G__wps_print_process_description(void)
             num_keywords = 0;
             value = NULL;
             is_input = 1;
+            is_output = 0;
             data_type = TYPE_OTHER;
 
 	    if (opt->gisprompt) {
@@ -213,11 +204,18 @@ void G__wps_print_process_description(void)
                     char *token = G_store(s);
 
                     /* we print only input parameter, sort out the output parameter */
-                    if(strcmp(token, "new") == 0)
+                    if(strcmp(token, "new") == 0) {
                         is_input = 0;
+                        is_output = 1;
+                    }
                     if(strcmp(token, "raster") == 0)
                     {
                         data_type = TYPE_RASTER;
+                        /* Count the raster inputs and outputs for default option creation */
+                        if(is_input == 1)
+                            num_raster_inputs++;
+                        if(is_output == 1)
+                            num_raster_outputs++;
                     }
                     if(strcmp(token, "vector") == 0)
                     {
@@ -318,6 +316,21 @@ void G__wps_print_process_description(void)
 	    flag = flag->next_flag;
 	}
     }
+
+    /* We have two default options, which define the resolution of the created mapset */
+    if(num_raster_inputs > 0 || num_raster_outputs > 0) {
+        wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ns", "Resolution of the mapset in north-south direction in meters or degrees",
+            "This parameter defines the north-south resolution of the mapset in meter or degrees, which should be used to process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
+            "float", 1, NULL, 0, "25", TYPE_OTHER);
+        wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ew", "Resolution of the mapset in east-west direction in meters or degrees",
+            "This parameter defines the east-west resolution of the mapset in meters or degrees, which should be used to process the input and output raster data.  To enable this setting, you need to specify north-south and east-west resolution.",
+            "float", 1, NULL, 0, "25", TYPE_OTHER);
+    }
+    /* In case multi band raster maps should be imported, the band number must be provided */
+    if(num_raster_inputs > 0)
+        wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_band_number", "Band to select for processing (default is all bands)",
+            "This parameter defines band number of the input raster files which should be processed. As default all bands are processed and used as single and multiple inputs for raster modules.",
+            "integer", 0, NULL, 0, NULL, TYPE_OTHER);
 
     /* End of inputs */
     wps_print_data_inputs_end();
@@ -445,10 +458,10 @@ static void wps_print_process_description_begin(int store, int status, const cha
 
     if(abstract)
     {
-        fprintf(stdout,"\t\t<ows:Abstract>\n");
-        fprintf(stdout, "\t\t\tThe manual page of this module is available here:\n");
-        fprintf(stdout, "\t\t\thttp://grass.osgeo.org/grass70/manuals/html70_user/%s.html\n", identifier);
-        fprintf(stdout, "\t\t</ows:Abstract>\n");
+        fprintf(stdout,"\t\t<ows:Abstract>");
+        fprintf(stdout, "The manual page of this module is available here: ");
+        fprintf(stdout, "http://grass.osgeo.org/grass70/manuals/html70_user/%s.html", identifier);
+        fprintf(stdout, "</ows:Abstract>\n");
     }
 
     for(i = 0; i < num_keywords; i++)
@@ -624,12 +637,13 @@ static void wps_print_literal_input_output(int inout_type, int min, int max, con
     if(unitofmesure)
     {
         fprintf(stdout,"\t\t\t\t\t<UOMs>\n");
-        fprintf(stdout,"\t\t\t\t\t<Default>\n");
-        fprintf(stdout,"\t\t\t\t\t\t<ows:UOM>meters</ows:UOM>\n");
-        fprintf(stdout,"\t\t\t\t\t</Default>\n");
-        fprintf(stdout,"\t\t\t\t\t<Supported>\n");
-        fprintf(stdout,"\t\t\t\t\t\t<ows:UOM>meters</ows:UOM>\n");
-        fprintf(stdout,"\t\t\t\t\t</Supported>\n");
+        fprintf(stdout,"\t\t\t\t\t\t<Default>\n");
+        fprintf(stdout,"\t\t\t\t\t\t\t<ows:UOM>meters</ows:UOM>\n");
+        fprintf(stdout,"\t\t\t\t\t\t</Default>\n");
+        fprintf(stdout,"\t\t\t\t\t\t<Supported>\n");
+        fprintf(stdout,"\t\t\t\t\t\t\t<ows:UOM>meters</ows:UOM>\n");
+        fprintf(stdout,"\t\t\t\t\t\t\t<ows:UOM>degrees</ows:UOM>\n");
+        fprintf(stdout,"\t\t\t\t\t\t</Supported>\n");
         fprintf(stdout,"\t\t\t\t\t</UOMs>\n");
     }
     if(num_choices == 0 || choices == NULL)
