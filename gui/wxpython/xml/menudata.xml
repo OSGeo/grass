@@ -859,6 +859,13 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>r.resamp.rst</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>Resample using bspline</label>
+	      <help>Reinterpolates a raster map using spline interpolation with Tykhonov regularization. Optionally only interpolates NULL cells.</help>
+	      <keywords>raster</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>r.resamp.bspline</command>
+	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Support file maintenance</label>
