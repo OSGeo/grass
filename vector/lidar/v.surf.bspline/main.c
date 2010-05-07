@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
 			    "It was impossible to create table <%s>."),
 			  table_name);
 	}
-	db_create_index2(driver, table_name, "ID");
+	/* db_create_index2(driver, table_name, "ID"); */
 	/* sqlite likes that */
 	db_close_database_shutdown_driver(driver);
 	driver = db_start_driver_open_database(dvr, db);
@@ -482,6 +482,10 @@ int main(int argc, char *argv[])
 
 	while (last_column == FALSE) {	/* For each subregion column */
 	    int npoints = 0;
+	    /* needed for sparse points interpolation */
+	    int npoints_ext, *lineVect_ext = NULL;
+	    double **obsVect_ext;	/*, mean_ext = .0; */
+	    struct Point *observ_ext;
 
 	    subregion_col++;
 	    subregion++;
@@ -522,14 +526,30 @@ int main(int argc, char *argv[])
 
 	    /* reading points in interpolation region */
 	    dim_vect = nsplx * nsply;
-	    observ =
-		P_Read_Vector_Region_Map(&In, &elaboration_reg, &npoints,
-					 dim_vect, bspline_field);
+	    if (grid == FALSE && ext == TRUE) {
+		observ_ext =
+		    P_Read_Vector_Region_Map(&In_ext,
+					     &elaboration_reg,
+					     &npoints_ext, dim_vect,
+					     1);
+	    }
+	    else
+		npoints_ext = 1;
+
+	    observ = NULL;
+	    if (npoints_ext > 0) {
+		observ =
+		    P_Read_Vector_Region_Map(&In, &elaboration_reg, &npoints,
+					     dim_vect, bspline_field);
+	    }
+	    else
+		npoints = 0;
+
 	    G_debug(1,
 		    "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d",
 		    subregion_row, subregion_col, npoints);
 
-	    if (npoints > 0) {	/*  */
+	    if (npoints > 0 && npoints_ext > 0) {	/*  */
 		int i;
 
 		nparameters = nsplx * nsply;
@@ -629,7 +649,7 @@ int main(int argc, char *argv[])
 		    G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
 			    subregion_row, subregion_col);
 		    raster_matrix =
-			P_Regular_Points(&elaboration_reg, general_box,
+			P_Regular_Points(&elaboration_reg, &original_reg, general_box,
 					 overlap_box, raster_matrix, parVect,
 					 stepN, stepE, dims.overlap, mean,
 					 nsplx, nsply, nrows, ncols, bilin);
@@ -646,8 +666,11 @@ int main(int argc, char *argv[])
 					table_name);
 		    }
 		    else {	/* FLAG_EXT == TRUE */
+
+			/* done that earlier */
+			/*
 			int npoints_ext, *lineVect_ext = NULL;
-			double **obsVect_ext;	/*, mean_ext = .0; */
+			double **obsVect_ext;
 			struct Point *observ_ext;
 
 			observ_ext =
@@ -655,6 +678,7 @@ int main(int argc, char *argv[])
 						     &elaboration_reg,
 						     &npoints_ext, dim_vect,
 						     1);
+			*/
 
 			obsVect_ext = G_alloc_matrix(npoints_ext, 3);	/* Observation vector_ext */
 			lineVect_ext = G_alloc_ivector(npoints_ext);
@@ -686,9 +710,11 @@ int main(int argc, char *argv[])
 		G_free_ivector(lineVect);
 	    }
 	    else {
-		G_free(observ);
-		G_warning(_("No data within this subregion. "
-			    "Consider changing the spline step."));
+		if (observ)
+		    G_free(observ);
+		if (npoints == 0)
+		    G_warning(_("No data within this subregion. "
+				"Consider changing the spline step."));
 	    }
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */

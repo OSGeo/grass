@@ -50,7 +50,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
     double *mean, *rms, *stdev;
 
     /* double lambda[PARAM_LAMBDA] = { 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0 }; */	/* Fixed values (by the moment) */
-    double lambda[PARAM_LAMBDA] = { 0.01, 0.05, 0.1, 0.2, 0.3, 0.4 };	/* Fixed values (by the moment) */
+    double lambda[PARAM_LAMBDA] = { 0.0001, 0.001, 0.005, 0.01, 0.02, 0.05 };	/* Fixed values (by the moment) */
 
     double *TN, *Q, *parVect;	/* Interpolation and least-square vectors */
     double **N, **obsVect;	/* Interpolation and least-square matrix */
