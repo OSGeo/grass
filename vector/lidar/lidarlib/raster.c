@@ -79,7 +79,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
 			csi = (General.E - *point->x) / overlap;
@@ -94,7 +94,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(1) */
 			weight = (General.E - *point->x) / overlap;
@@ -107,7 +107,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		}
 		else if ((*point->x < Overlap.W) && (*point->x > General.W)) {
@@ -124,7 +124,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(2) */
 			csi = (*point->x - General.W) / overlap;
@@ -139,7 +139,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		    else if ((*point->y >= Overlap.S) && (*point->y <= Overlap.N)) {	/*(2) */
 			weight = (*point->x - General.W) / overlap;
@@ -152,7 +152,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		}
 		else if ((*point->x >= Overlap.W) && (*point->x <= Overlap.E)){
@@ -167,7 +167,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {	/*(1) */
 			weight = (*point->y - General.S) / overlap;
@@ -180,7 +180,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 			if (db_execute_immediate(driver, &sql) != DB_OK)
 			    G_fatal_error(_("Unable to access table <%s>"),
-					  buf);
+					  tab_name);
 		    }
 		}
 	    }
@@ -194,35 +194,35 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 
 /*------------------------------------------------------------------------------------------------*/
-double **P_Regular_Points(struct Cell_head *Elaboration, struct bound_box General,
-			  struct bound_box Overlap, double **matrix, double *param,
+double **P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
+                          struct bound_box General, struct bound_box Overlap,
+			  double **matrix, double *param,
 			  double passoN, double passoE, double overlap,
-			  double mean, int nsplx, int nsply, int nrows,
-			  int ncols, int bilin)
+			  double mean, int nsplx, int nsply,
+			  int nrows, int ncols, int bilin)
 {
 
     int col, row, startcol, endcol, startrow, endrow;
     double X, Y, interpolation, weight, csi, eta;
-    struct Cell_head Original;
 
-    G_get_window(&Original);
-    if (Original.north > General.N)
-	startrow = (Original.north - General.N) / Original.ns_res -1;
+    /* G_get_window(&Original); */
+    if (Original->north > General.N)
+	startrow = (Original->north - General.N) / Original->ns_res - 1;
     else
 	startrow = 0;
-    if (Original.north > General.S) {
-	endrow = (Original.north - General.S) / Original.ns_res + 1;
+    if (Original->north > General.S) {
+	endrow = (Original->north - General.S) / Original->ns_res + 1;
 	if (endrow > nrows)
 	    endrow = nrows;
     }
     else
 	endrow = nrows;
-    if (General.W > Original.west)
-	startcol = (General.W - Original.west) / Original.ew_res - 1;
+    if (General.W > Original->west)
+	startcol = (General.W - Original->west) / Original->ew_res - 1;
     else
 	startcol = 0;
-    if (General.E > Original.west) {
-	endcol = (General.E - Original.west) / Original.ew_res + 1;
+    if (General.E > Original->west) {
+	endcol = (General.E - Original->west) / Original->ew_res + 1;
 	if (endcol > ncols)
 	    endcol = ncols;
     }
@@ -231,8 +231,8 @@ double **P_Regular_Points(struct Cell_head *Elaboration, struct bound_box Genera
 
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
-	    X = Rast_col_to_easting((double)(col) + 0.5, &Original);
-	    Y = Rast_row_to_northing((double)(row) + 0.5, &Original);
+	    X = Rast_col_to_easting((double)(col) + 0.5, Original);
+	    Y = Rast_row_to_northing((double)(row) + 0.5, Original);
 
 	    if (Vect_point_in_box(X, Y, mean, &General)) {	/* Here, mean is just for asking if obs point is in box */
 

@@ -5,7 +5,8 @@ SUBDIRS1 = \
 	v.outlier \
 	v.lidar.correction \
 	v.lidar.edgedetection \
-	v.lidar.growing
+	v.lidar.growing \
+        r.resamp.bspline
 
 SUBDIRS = lidarlib $(SUBDIRS1)
 

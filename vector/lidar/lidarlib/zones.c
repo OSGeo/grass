@@ -90,7 +90,7 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
     case FIRST_ROW:		/* Just started with first row */
 	Elaboration->north = orig.north + 2 * dim.edge_h;
 	Elaboration->south = Elaboration->north - dim.sn_size;
-	General->N = Elaboration->north - 2 * dim.edge_h;
+	General->N = orig.north;
 	General->S = Elaboration->south + dim.edge_h;
 	Overlap->N = General->N;
 	Overlap->S = General->S + dim.overlap;
@@ -98,14 +98,14 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 
     case LAST_ROW:		/* Reached last row */
 	Elaboration->south = orig.south - 2 * dim.edge_h;
-	General->S = Elaboration->south + 2 * dim.edge_h;
+	General->S = orig.south;
 	Overlap->S = General->S;
 	return 0;
 
     case FIRST_COLUMN:		/* Just started with first column */
 	Elaboration->west = orig.west - 2 * dim.edge_v;
 	Elaboration->east = Elaboration->west + dim.ew_size;
-	General->W = Elaboration->west + 2 * dim.edge_v;
+	General->W = orig.west;
 	General->E = Elaboration->east - dim.edge_v;
 	Overlap->W = General->W;
 	Overlap->E = General->E - dim.overlap;
@@ -113,7 +113,7 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 
     case LAST_COLUMN:		/* Reached last column */
 	Elaboration->east = orig.east + 2 * dim.edge_v;
-	General->E = Elaboration->east - 2 * dim.edge_v;
+	General->E = orig.east;
 	Overlap->E = General->E;
 	return 0;
     }
@@ -388,6 +388,87 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     Vect_destroy_cats_struct(categories);
 
     *num_points = npoints;
+    return obs;
+}
+
+struct Point *P_Read_Raster_Region_Map(double **matrix,
+				       struct Cell_head *Elaboration,
+				       struct Cell_head *Original,
+				       int *num_points, int *num_nulls, int dim_vect)
+{
+    int col, row, startcol, endcol, startrow, endrow, nrows, ncols;
+    int pippo, npoints, nnulls;
+    double x, y, z;
+    struct Point *obs;
+    struct bound_box elaboration_box;
+
+    pippo = dim_vect;
+    obs = (struct Point *)G_calloc(pippo, sizeof(struct Point));
+
+    /* Reading points inside elaboration zone */
+    Vect_region_box(Elaboration, &elaboration_box);
+
+    npoints = nnulls = 0;
+    nrows = Original->rows;
+    ncols = Original->cols;
+
+    if (Original->north > Elaboration->north)
+	startrow = (Original->north - Elaboration->north) / Original->ns_res - 1;
+    else
+	startrow = 0;
+    if (Original->north > Elaboration->south) {
+	endrow = (Original->north - Elaboration->south) / Original->ns_res + 1;
+	if (endrow > nrows)
+	    endrow = nrows;
+    }
+    else
+	endrow = nrows;
+    if (Elaboration->west > Original->west)
+	startcol = (Elaboration->west - Original->west) / Original->ew_res - 1;
+    else
+	startcol = 0;
+    if (Elaboration->east > Original->west) {
+	endcol = (Elaboration->east - Original->west) / Original->ew_res + 1;
+	if (endcol > ncols)
+	    endcol = ncols;
+    }
+    else
+	endcol = ncols;
+
+    for (row = startrow; row < endrow; row++) {
+	for (col = startcol; col < endcol; col++) {
+
+	    z = matrix[row][col];
+
+	    if (!Rast_is_d_null_value(&z)) {
+		x = Rast_col_to_easting((double)(col) + 0.5, Original);
+		y = Rast_row_to_northing((double)(row) + 0.5, Original);
+
+		if (Vect_point_in_box(x, y, 0, &elaboration_box)) {
+		    npoints++;
+		    if (npoints >= pippo) {
+			pippo += dim_vect;
+			obs =
+			    (struct Point *)G_realloc((void *)obs,
+						      (signed int)pippo *
+						      sizeof(struct Point));
+		    }
+
+		    /* Storing observation vector */
+		    obs[npoints - 1].coordX = x;
+		    obs[npoints - 1].coordY = y;
+		    obs[npoints - 1].coordZ = z;
+		}
+	    }
+	    else {
+		/* if point in output region */
+	        nnulls++;
+	    }
+	}
+    }
+
+    *num_points = npoints;
+    *num_nulls = nnulls;
     return obs;
 }
 
