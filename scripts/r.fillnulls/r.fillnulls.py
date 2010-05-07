@@ -117,10 +117,15 @@ def main():
     # With just a single row of cells around the hole you often get gaps
     # around the edges when distance > mean (.5 of the time? diagonals? worse 
     # when ewres!=nsres).
-    reg = grass.region()
-    res = (float(reg['nsres']) + float(reg['ewres'])) * 3 / 2
+    # r.buffer broken in trunk for latlon, disabled
 
-    if grass.run_command('r.buffer', input = tmp1, distances = res, out = tmp1 + '.buf') != 0:
+    #reg = grass.region()
+    #res = (float(reg['nsres']) + float(reg['ewres'])) * 3 / 2
+
+    #if grass.run_command('r.buffer', input = tmp1, distances = res, out = tmp1 + '.buf') != 0:
+
+    # much easier way: use r.grow with radius=3.01
+    if grass.run_command('r.grow', input = tmp1, radius = 3.01, old = 1, new = 2, out = tmp1 + '.buf') != 0:
 	grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
 
     grass.mapcalc("MASK=if($tmp1.buf==2,1,null())", tmp1 = tmp1)
