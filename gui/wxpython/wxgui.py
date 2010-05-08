@@ -93,6 +93,7 @@ import gui_modules.gmodeler as gmodeler
 from   gui_modules.debug import Debug
 from   gui_modules.help import MenuTreeWindow
 from   gui_modules.help import AboutWindow
+from   gui_modules.help import InstallExtensionWindow
 from   icons.icon import Icons
 
 UserSettings = preferences.globalSettings
@@ -916,6 +917,12 @@ class GMFrame(wx.Frame):
     
                 self.goutput.RunCmd(cmdlist)
 
+    def OnInstallExtension(self, event):
+        """!Install extension from GRASS Addons SVN repository"""
+        win = InstallExtensionWindow(self, size = (500, 300))
+        win.CentreOnScreen()
+        win.Show()
+        
     def OnPreferences(self, event):
         """!General GUI preferences/settings"""
         if not self.dialogs['preferences']:

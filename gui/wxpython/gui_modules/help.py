@@ -5,9 +5,13 @@
 
 Classes:
  - HelpWindow
- - FindModuleWindow
+ - SearchModuleWindow
+ - ItemTree
  - MenuTreeWindow
+ - MenuTree
  - AboutWindow
+ - InstallExtensionWindow
+ - ExtensionTree
 
 (C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -59,20 +63,20 @@ class HelpWindow(wx.Frame):
 
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
-    def __init__(self, parent, id = wx.ID_ANY, **kwargs):
+    def __init__(self, parent, id = wx.ID_ANY, showLabel = True, **kwargs):
+        self.showLabel = showLabel
+        
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
-        self._searchDict = { _('label')    : 'label', # i18n workaround
-                             _('help')     : 'help',
-                             _('command')  : 'command',
-                             _('keywords') : 'keywords' }
+        self._searchDict = { _('description') : 'description',
+                             _('command')     : 'command',
+                             _('keywords')    : 'keywords' }
         
         self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY,
-                                  choices = [_('label'),
-                                             _('help'),
-                                             _('command'),
-                                             _('keywords')])
-        self.searchBy.SetSelection(3)
+                                  choices = [_('description'),
+                                             _('keywords'),
+                                             _('command')])
+        self.searchBy.SetSelection(0)
         
         self.search = wx.TextCtrl(parent = self, id = wx.ID_ANY,
                                   value = "", size = (-1, 25),
@@ -84,11 +88,12 @@ class SearchModuleWindow(wx.Panel):
         """!Do layout"""
                 # search
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                       label = _("Find module by:")),
-                  proportion = 0,
-                  flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                  border = 3)
+        if self.showLabel:
+            sizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                           label = _("Find module by:")),
+                      proportion = 0,
+                      flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                      border = 3)
         sizer.Add(item = self.searchBy, proportion = 0,
                   flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT | wx.RIGHT,
                   border = 5)
@@ -192,6 +197,14 @@ class MenuTreeWindow(wx.Panel):
             eval(handler)(event = None, cmd = data['command'].split())
         else:
             eval(handler)(None)
+
+    def OnShowItem(self, event):
+        """!Show selected item"""
+        self.tree.OnShowItem(event)
+        if self.tree.GetSelected():
+            self.btnRun.Enable()
+        else:
+            self.btnRun.Enable(False)
         
     def OnItemActivated(self, event):
         """!Item activated (double-click)"""
@@ -218,47 +231,17 @@ class MenuTreeWindow(wx.Panel):
             return
         
         if data['command']:
-            label = data['command'] + ' -- ' + data['help']
+            label = data['command'] + ' -- ' + data['description']
         else:
-            label = data['help']
+            label = data['description']
         
         self.parent.SetStatusText(label, 0)
         
-    def OnShowItem(self, event):
-        """!Highlight first found item in menu tree"""
-        if len(self.tree.itemsMarked) > 0:
-            if self.tree.GetSelected():
-                self.tree.ToggleItemSelection(self.tree.GetSelected())
-                idx = self.tree.itemsMarked.index(self.tree.GetSelected()) + 1
-            else:
-                idx = 0
-            try:
-                self.tree.ToggleItemSelection(self.tree.itemsMarked[idx])
-                self.tree.itemSelected = self.tree.itemsMarked[idx]
-                self.tree.EnsureVisible(self.tree.itemsMarked[idx])
-            except IndexError:
-                self.tree.ToggleItemSelection(self.tree.itemsMarked[0]) # reselect first item
-                self.tree.EnsureVisible(self.tree.itemsMarked[0])
-                self.tree.itemSelected = self.tree.itemsMarked[0]
-        else:
-            for item in self.tree.root.GetChildren():
-                self.tree.Collapse(item)
-            itemSelected = self.tree.GetSelection()
-            if itemSelected:
-                self.tree.ToggleItemSelection(itemSelected)
-            self.tree.itemSelected = None
-
-        if self.tree.itemSelected:
-            self.btnRun.Enable()
-        else:
-            self.btnRun.Enable(False)
-
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         element = self.search.GetSelection()
-        self.tree.itemsMarked = self.SearchItems(element = element,
-                                                 value = event.GetString())
-        self.tree.itemSelected = None
+        self.tree.SearchItems(element = element,
+                              value = event.GetString())
         
         nItems = len(self.tree.itemsMarked)
         if event.GetString():
@@ -268,6 +251,16 @@ class MenuTreeWindow(wx.Panel):
         
         event.Skip()
         
+class ItemTree(CT.CustomTreeCtrl):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |
+                 CT.TR_LINES_AT_ROOT | CT.TR_SINGLE, **kwargs):
+        super(ItemTree, self).__init__(parent, id, ctstyle = ctstyle, **kwargs)
+        
+        self.root = self.AddRoot(_("Menu tree"))
+        self.itemsMarked = [] # list of marked items
+        self.itemSelected = None
+
     def SearchItems(self, element, value):
         """!Search item 
 
@@ -280,43 +273,67 @@ class MenuTreeWindow(wx.Panel):
         if not value:
             return items
         
-        item = self.tree.GetFirstChild(self.tree.root)[0]
-        self.__ProcessItem(item, element, value, items)
+        item = self.GetFirstChild(self.root)[0]
+        self._processItem(item, element, value, items)
+        
+        self.itemsMarked  = items
+        self.itemSelected = None
         
         return items
     
-    def __ProcessItem(self, item, element, value, listOfItems):
+    def _processItem(self, item, element, value, listOfItems):
         """!Search items (used by SearchItems)
-
+        
         @param item reference item
         @param listOfItems list of found items
         """
         while item and item.IsOk():
-            subItem = self.tree.GetFirstChild(item)[0]
+            subItem = self.GetFirstChild(item)[0]
             if subItem:
-                self.__ProcessItem(subItem, element, value, listOfItems)
-            data = self.tree.GetPyData(item)
+                self._processItem(subItem, element, value, listOfItems)
+            data = self.GetPyData(item)
             
             if data and data.has_key(element) and \
                     value.lower() in data[element].lower():
                 listOfItems.append(item)
             
-            item = self.tree.GetNextSibling(item)
-        
-class MenuTree(CT.CustomTreeCtrl):
+            item = self.GetNextSibling(item)
+            
+    def GetSelected(self):
+        """!Get selected item"""
+        return self.itemSelected
+
+    def OnShowItem(self, event):
+        """!Highlight first found item in menu tree"""
+        if len(self.itemsMarked) > 0:
+            if self.GetSelected():
+                self.ToggleItemSelection(self.GetSelected())
+                idx = self.itemsMarked.index(self.GetSelected()) + 1
+            else:
+                idx = 0
+            try:
+                self.ToggleItemSelection(self.itemsMarked[idx])
+                self.itemSelected = self.itemsMarked[idx]
+                self.EnsureVisible(self.itemsMarked[idx])
+            except IndexError:
+                self.ToggleItemSelection(self.itemsMarked[0]) # reselect first item
+                self.EnsureVisible(self.itemsMarked[0])
+                self.itemSelected = self.itemsMarked[0]
+        else:
+            for item in self.root.GetChildren():
+                self.Collapse(item)
+            itemSelected = self.GetSelection()
+            if itemSelected:
+                self.ToggleItemSelection(itemSelected)
+            self.itemSelected = None
+    
+class MenuTree(ItemTree):
     """!Menu tree class"""
-    def __init__(self, parent, data, id = wx.ID_ANY,
-                 ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS | \
-                     CT.TR_LINES_AT_ROOT | CT.TR_SINGLE,
-                 **kwargs):
+    def __init__(self, parent, data, **kwargs):
         self.parent   = parent
         self.menudata = data
 
-        super(MenuTree, self).__init__(parent, id, ctstyle = ctstyle, **kwargs)
-
-        self.root = self.AddRoot(_("Menu tree"))
-        self.itemsMarked = [] # list of marked items
-        self.itemSelected = None
+        super(MenuTree, self).__init__(parent, **kwargs)
         
     def Load(self, data = None):
         """!Load menu data tree
@@ -349,18 +366,14 @@ class MenuTree(CT.CustomTreeCtrl):
                     itemNew = self.AppendItem(parentId = item,
                                               text = eachItem[0])
                     
-                    data = { 'label'    : eachItem[0],
-                             'help'     : eachItem[1],
+                    data = { 'item'        : eachItem[0],
+                             'description' : eachItem[1],
                              'handler'  : eachItem[2],
                              'command'  : eachItem[3],
                              'keywords' : eachItem[4] }
                     
                     self.SetPyData(itemNew, data)
         
-    def GetSelected(self):
-        """!Get selected item"""
-        return self.itemSelected
-
 class AboutWindow(wx.Frame):
     def __init__(self, parent):
         """!Create custom About Window
@@ -647,3 +660,224 @@ class AboutWindow(wx.Frame):
     def OnCloseWindow(self, event):
         """!Close window"""
         self.Close()
+
+class InstallExtensionWindow(wx.Frame):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 title = _("Fetch & install new extension from GRASS Addons"), **kwargs):
+        self.parent = parent
+        
+        wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+
+        self.findBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                    label=" %s " % _("Find extension by"))
+        self.treeBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                    label=" %s " % _("List of extensions"))
+        
+        self.search = SearchModuleWindow(parent = self.panel, showLabel = False)
+        
+        self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
+        
+        self.statusbar = self.CreateStatusBar(0)
+        
+        self.btnFetch = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                  label = _("&Fetch"))
+        self.btnFetch.SetToolTipString(_("Fetch list of available modules from GRASS Addons SVN repository"))
+        self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
+        self.btnInstall = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                    label = _("&Install"))
+        self.btnInstall.SetToolTipString(_("Install selected add-ons GRASS module"))
+        self.btnInstall.Enable(False)
+        
+        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
+        self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
+        self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
+        self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
+        self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
+        self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
+        self.search.Bind(wx.EVT_TEXT,              self.OnUpdateStatusBar)
+
+        self._layout()
+
+    def _layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        findSizer = wx.StaticBoxSizer(self.findBox, wx.HORIZONTAL)
+        findSizer.Add(item = self.search, proportion = 1,
+                      flag = wx.ALL, border = 1)
+        findSizer.Add(item = self.btnFetch, proportion = 0,
+                      flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
+        
+        treeSizer = wx.StaticBoxSizer(self.treeBox, wx.HORIZONTAL)
+        treeSizer.Add(item = self.tree, proportion = 1,
+                      flag = wx.ALL | wx.EXPAND, border = 1)
+        
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnClose, proportion = 0,
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        btnSizer.Add(item = self.btnInstall, proportion = 0,
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        
+        sizer.Add(item = findSizer, proportion = 0,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        sizer.Add(item = treeSizer, proportion = 1,
+                  flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
+        sizer.Add(item = btnSizer, proportion=0,
+                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+        
+        self.Layout()
+
+    def _install(self, name):
+        if not name:
+            return
+        log = self.parent.GetLogWindow()
+        log.RunCmd(['g.extension', 'extension=' + name])
+        self.OnCloseWindow(None)
+        
+    def OnUpdateStatusBar(self, event):
+        """!Update statusbar text"""
+        element = self.search.GetSelection()
+        self.tree.SearchItems(element = element,
+                              value = event.GetString())
+        
+        nItems = len(self.tree.itemsMarked)
+        if event.GetString():
+            self.SetStatusText(_("%d items match") % nItems, 0)
+        else:
+            self.SetStatusText("", 0)
+        
+        event.Skip()
+    
+    def OnCloseWindow(self, event):
+        """!Close window"""
+        self.Destroy()
+
+    def OnFetch(self, event):
+        """!Fetch list of available extensions"""
+        self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
+        self.tree.Load()
+        self.SetStatusText("", 0)
+
+    def OnItemActivated(self, event):
+        item = event.GetItem()
+        data = self.tree.GetPyData(item)
+        if data and data.has_key('command'):
+            self._install(data['command'])
+            
+    def OnInstall(self, event):
+        """!Install selected extension"""
+        item = self.tree.GetSelected()
+        if not item.IsOk():
+            return
+        self._install(self.tree.GetItemText(item))
+        
+    def OnItemSelected(self, event):
+        """!Item selected"""
+        item = event.GetItem()
+        self.tree.itemSelected = item
+        data = self.tree.GetPyData(item)
+        if not data:
+            self.SetStatusText('', 0)
+            self.btnInstall.Enable(False)
+        else:
+            self.SetStatusText(data.get('description', ''), 0)
+            self.btnInstall.Enable(True)
+
+    def OnShowItem(self, event):
+        """!Show selected item"""
+        self.tree.OnShowItem(event)
+        if self.tree.GetSelected():
+            self.btnInstall.Enable()
+        else:
+            self.btnInstall.Enable(False)
+        
+class ExtensionTree(ItemTree):
+    """!List of available extensions"""
+    def __init__(self, parent, log, id = wx.ID_ANY,
+                 ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |
+                 CT.TR_LINES_AT_ROOT | CT.TR_SINGLE,
+                 **kwargs):
+        self.parent = parent # GMFrame
+        self.log    = log
+        
+        super(ExtensionTree, self).__init__(parent, id, ctstyle = ctstyle, **kwargs)
+        
+        self._initTree()
+        
+    def _initTree(self):
+        for prefix in ('display', 'database',
+                       'general', 'imagery',
+                       'misc', 'postscript', 'paint',
+                       'raster', 'raster3D', 'sites', 'vector'):
+            self.AppendItem(parentId = self.root,
+                            text = prefix)
+        
+    def _expandPrefix(self, c):
+        name = { 'd'  : 'display',
+                 'db' : 'database',
+                 'g'  : 'general',
+                 'i'  : 'imagery',
+                 'm'  : 'misc',
+                 'ps' : 'postscript',
+                 'p'  : 'paint',
+                 'r'  : 'raster',
+                 'r3' : 'raster3D',
+                 's'  : 'sites',
+                 'v'  : 'vector' }
+        
+        if name.has_key(c):
+            return name[c]
+        
+        return c
+    
+    def _findItem(self, text):
+        """!Find item"""
+        item = self.GetFirstChild(self.root)[0]
+        while item and item.IsOk():
+            if text == self.GetItemText(item):
+                return item
+            
+            item = self.GetNextSibling(item)
+        
+        return None
+    
+    def Load(self):
+        """!Load list of extensions"""
+        self.DeleteAllItems()
+        self.root = self.AddRoot(_("Menu tree"))
+        self._initTree()
+        
+        ret = gcmd.RunCommand('g.extension', read = True,
+                                 flags = 'g', quiet = True)
+        if not ret:
+            return
+        
+        mdict = dict()
+        for line in ret.splitlines():
+            key, value = line.split('=', 1)
+            if key == 'name':
+                prefix, name = value.split('.', 1)
+                if not mdict.has_key(prefix):
+                    mdict[prefix] = dict()
+                mdict[prefix][name] = dict()
+            else:
+                mdict[prefix][name][key] = value
+                
+        for prefix in mdict.keys():
+            prefixName = self._expandPrefix(prefix)
+            item = self._findItem(prefixName)
+            names = mdict[prefix].keys()
+            names.sort()
+            for name in names:
+                new = self.AppendItem(parentId = item,
+                                      text = prefix + '.' + name)
+                data = dict()
+                for key in mdict[prefix][name].keys():
+                    data[key] = mdict[prefix][name][key]
+                
+                self.SetPyData(new, data)
+        
