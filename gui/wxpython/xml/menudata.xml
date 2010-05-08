@@ -782,6 +782,11 @@
 	</menu>
 	<separator />
 	    <menuitem>
+	      <label>Install new extension from add-ons</label>
+	      <help>Install new extension from GRASS AddOns SVN repository.</help>
+	      <handler>OnInstallExtension</handler>
+	    </menuitem>
+	    <menuitem>
 	      <label>Manage add-ons extensions</label>
 	      <help>Tool to maintain the extensions in local GRASS installation.</help>
 	      <keywords>general,installation,extensions</keywords>
