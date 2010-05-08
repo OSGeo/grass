@@ -217,4 +217,4 @@ if [ "$GRASS_GUI" = "text" ] && [ "$x11" = "tig" ] ; then
 	osascript -e "tell application \"$USERTERM\" to activate"
 fi
 
-exec "$GISBASE/etc/Init.sh" "$@"
+exec $GRASS_PYTHON "@BINDIR@/grass70.py" "$@" &
