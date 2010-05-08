@@ -679,6 +679,9 @@ class InstallExtensionWindow(wx.Frame):
         
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                 value = 'https://svn.osgeo.org/grass/grass-addons')
+        self.fullDesc = wx.CheckBox(parent = self.panel, id=wx.ID_ANY,
+                                    label = _("Fetch full description (takes time)"))
+        self.fullDesc.SetValue(False)
         
         self.search = SearchModuleWindow(parent = self.panel, showLabel = False)
         
@@ -708,11 +711,15 @@ class InstallExtensionWindow(wx.Frame):
     def _layout(self):
         """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-        repoSizer = wx.StaticBoxSizer(self.repoBox, wx.HORIZONTAL)
-        repoSizer.Add(item = self.repo, proportion = 1,
+        repoSizer = wx.StaticBoxSizer(self.repoBox, wx.VERTICAL)
+        repo1Sizer = wx.BoxSizer(wx.HORIZONTAL)
+        repo1Sizer.Add(item = self.repo, proportion = 1,
                       flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
-        repoSizer.Add(item = self.btnFetch, proportion = 0,
+        repo1Sizer.Add(item = self.btnFetch, proportion = 0,
                       flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
+        repoSizer.Add(item = repo1Sizer,
+                      flag = wx.EXPAND)
+        repoSizer.Add(item = self.fullDesc)
         
         findSizer = wx.StaticBoxSizer(self.findBox, wx.HORIZONTAL)
         findSizer.Add(item = self.search, proportion = 1)
@@ -770,7 +777,7 @@ class InstallExtensionWindow(wx.Frame):
     def OnFetch(self, event):
         """!Fetch list of available extensions"""
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
-        self.tree.Load(url = self.repo.GetValue().strip())
+        self.tree.Load(url = self.repo.GetValue().strip(), full = self.fullDesc.IsChecked())
         self.SetStatusText("", 0)
 
     def OnItemActivated(self, event):
@@ -856,29 +863,37 @@ class ExtensionTree(ItemTree):
         
         return None
     
-    def Load(self, url):
+    def Load(self, url, full = False):
         """!Load list of extensions"""
         self.DeleteAllItems()
         self.root = self.AddRoot(_("Menu tree"))
         self._initTree()
         
+        if full:
+            flags = 'g'
+        else:
+            flags = 'l'
         ret = gcmd.RunCommand('g.extension', read = True,
                               svnurl = url,
-                              flags = 'g', quiet = True)
+                              flags = flags, quiet = True)
         if not ret:
             return
         
         mdict = dict()
         for line in ret.splitlines():
-            key, value = line.split('=', 1)
-            if key == 'name':
-                prefix, name = value.split('.', 1)
-                if not mdict.has_key(prefix):
-                    mdict[prefix] = dict()
-                mdict[prefix][name] = dict()
+            if full:
+                key, value = line.split('=', 1)
+                if key == 'name':
+                    prefix, name = value.split('.', 1)
+                    if not mdict.has_key(prefix):
+                        mdict[prefix] = dict()
+                    mdict[prefix][name] = dict()
+                else:
+                    mdict[prefix][name][key] = value
             else:
-                mdict[prefix][name][key] = value
-                
+                prefix, name = line.strip().split('.', 1)
+                mdict[prefix] = { name : dict() }
+        
         for prefix in mdict.keys():
             prefixName = self._expandPrefix(prefix)
             item = self._findItem(prefixName)
