@@ -892,7 +892,10 @@ class ExtensionTree(ItemTree):
                     mdict[prefix][name][key] = value
             else:
                 prefix, name = line.strip().split('.', 1)
-                mdict[prefix] = { name : dict() }
+                if not mdict.has_key(prefix):
+                    mdict[prefix] = dict()
+                
+                mdict[prefix][name] = { 'command' : prefix + '.' + name }
         
         for prefix in mdict.keys():
             prefixName = self._expandPrefix(prefix)

@@ -919,7 +919,7 @@ class GMFrame(wx.Frame):
 
     def OnInstallExtension(self, event):
         """!Install extension from GRASS Addons SVN repository"""
-        win = InstallExtensionWindow(self, size = (500, 300))
+        win = InstallExtensionWindow(self, size = (550, 400))
         win.CentreOnScreen()
         win.Show()
         
