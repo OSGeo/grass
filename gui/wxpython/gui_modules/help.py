@@ -670,10 +670,15 @@ class InstallExtensionWindow(wx.Frame):
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
+        self.repoBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                    label=" %s " % _("Repository"))
         self.findBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("Find extension by"))
         self.treeBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("List of extensions"))
+        
+        self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
+                                value = 'https://svn.osgeo.org/grass/grass-addons')
         
         self.search = SearchModuleWindow(parent = self.panel, showLabel = False)
         
@@ -703,11 +708,14 @@ class InstallExtensionWindow(wx.Frame):
     def _layout(self):
         """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-        findSizer = wx.StaticBoxSizer(self.findBox, wx.HORIZONTAL)
-        findSizer.Add(item = self.search, proportion = 1,
-                      flag = wx.ALL, border = 1)
-        findSizer.Add(item = self.btnFetch, proportion = 0,
+        repoSizer = wx.StaticBoxSizer(self.repoBox, wx.HORIZONTAL)
+        repoSizer.Add(item = self.repo, proportion = 1,
                       flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
+        repoSizer.Add(item = self.btnFetch, proportion = 0,
+                      flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
+        
+        findSizer = wx.StaticBoxSizer(self.findBox, wx.HORIZONTAL)
+        findSizer.Add(item = self.search, proportion = 1)
         
         treeSizer = wx.StaticBoxSizer(self.treeBox, wx.HORIZONTAL)
         treeSizer.Add(item = self.tree, proportion = 1,
@@ -719,8 +727,10 @@ class InstallExtensionWindow(wx.Frame):
         btnSizer.Add(item = self.btnInstall, proportion = 0,
                      flag = wx.LEFT | wx.RIGHT, border = 5)
         
-        sizer.Add(item = findSizer, proportion = 0,
+        sizer.Add(item = repoSizer, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 3)
+        sizer.Add(item = findSizer, proportion = 0,
+                  flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         sizer.Add(item = treeSizer, proportion = 1,
                   flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         sizer.Add(item = btnSizer, proportion=0,
@@ -735,7 +745,8 @@ class InstallExtensionWindow(wx.Frame):
         if not name:
             return
         log = self.parent.GetLogWindow()
-        log.RunCmd(['g.extension', 'extension=' + name])
+        log.RunCmd(['g.extension', 'extension=' + name,
+                    'svnurl=' + self.repo.GetValue().strip()])
         self.OnCloseWindow(None)
         
     def OnUpdateStatusBar(self, event):
@@ -759,7 +770,7 @@ class InstallExtensionWindow(wx.Frame):
     def OnFetch(self, event):
         """!Fetch list of available extensions"""
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
-        self.tree.Load()
+        self.tree.Load(url = self.repo.GetValue().strip())
         self.SetStatusText("", 0)
 
     def OnItemActivated(self, event):
@@ -845,14 +856,15 @@ class ExtensionTree(ItemTree):
         
         return None
     
-    def Load(self):
+    def Load(self, url):
         """!Load list of extensions"""
         self.DeleteAllItems()
         self.root = self.AddRoot(_("Menu tree"))
         self._initTree()
         
         ret = gcmd.RunCommand('g.extension', read = True,
-                                 flags = 'g', quiet = True)
+                              svnurl = url,
+                              flags = 'g', quiet = True)
         if not ret:
             return
         
