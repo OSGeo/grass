@@ -781,6 +781,14 @@
 	  </items>
 	</menu>
 	<separator />
+	    <menuitem>
+	      <label>Manage add-ons extensions</label>
+	      <help>Tool to maintain the extensions in local GRASS installation.</help>
+	      <keywords>general,installation,extensions</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>g.extension</command>
+	    </menuitem>
+	<separator />
 	<menuitem>
 	  <label>Preferences</label>
 	  <help>User GUI preferences (display font, commands, digitizer, etc.)</help>
@@ -861,8 +869,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Resample using bspline</label>
-	      <help>Reinterpolates a raster map using spline interpolation with Tykhonov regularization. Optionally only interpolates NULL cells.</help>
-	      <keywords>raster</keywords>
+	      <help>Bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
+	      <keywords>raster,surface,resampling</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.resamp.bspline</command>
 	    </menuitem>
@@ -975,7 +983,7 @@
 	<separator />
 	<menuitem>
 	  <label>Buffer rasters</label>
-	  <help>Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values.</help>
+	  <help>Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.</help>
 	  <keywords>raster,buffer</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r.buffer</command>
@@ -1113,8 +1121,8 @@
 	    <separator />
 	    <menuitem>
 	      <label>Slope and aspect</label>
-	      <help>Generates raster map layers of slope, aspect, curvatures and partial derivatives from a raster map layer of true elevation values. Aspect is calculated counterclockwise from east.</help>
-	      <keywords>raster,terrain analysis</keywords>
+	      <help>Generates raster maps of slope, aspect, curvatures and partial derivatives from a elevation raster map.</help>
+	      <keywords>raster,terrain</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.slope.aspect</command>
 	    </menuitem>
@@ -1142,8 +1150,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Distance to features</label>
-	      <help>Generates a raster map layer of distance to features in input layer.</help>
-	      <keywords>raster</keywords>
+	      <help>Generates a raster map of distance to features in input raster map.</help>
+	      <keywords>raster,distance</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.grow.distance</command>
 	    </menuitem>
@@ -1277,7 +1285,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Watershed analysis</label>
-	      <help>Computes watershed basins.</help>
+	      <help>Calculates hydrological parameters and RUSLE factors.</help>
 	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.watershed</command>
@@ -2162,7 +2170,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Centrality</label>
-	      <help>Computes degree, centrality, betweeness, closeness and eigenvector cetrality measures in the network.</help>
+	      <help>Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network.</help>
 	      <keywords>vector,network,centrality measures</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.centrality</command>
@@ -2298,7 +2306,7 @@
 	    <menuitem>
 	      <label>Generate random points</label>
 	      <help>Generates randomly 2D/3D vector points map.</help>
-	      <keywords>vector,statistics</keywords>
+	      <keywords>vector,statistics,random</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.random</command>
 	    </menuitem>
@@ -2329,7 +2337,7 @@
 	<separator />
 	<menuitem>
 	  <label>Update area attributes from raster</label>
-	  <help>Calculates univariate statistics from a raster map based on vector polygons and uploads statistics to new attribute columns.</help>
+	  <help>Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns.</help>
 	  <keywords>vector,raster,statistics</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.rast.stats</command>
