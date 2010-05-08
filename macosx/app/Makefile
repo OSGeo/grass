@@ -107,6 +107,7 @@ $(OBJDIR)/grass.sh: grass.sh.in
 	-e "s,@X11@,$(USE_X11),g" \
 	-e "s,@PYVER@,$(PYVER),g" \
 	-e "s,@WX64BIT@,$(WX64BIT),g" \
+	-e "s,@GRASS_NAME@,$(GRASS_NAME),g" \
 	grass.sh.in > $(OBJDIR)/grass.sh
 
 clean:

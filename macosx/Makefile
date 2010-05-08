@@ -78,23 +78,31 @@ ifeq ($(XCODE_VER),xcode3)
 else
 	${PACKAGEMAKER} -build -ds -p "GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.pkg" -f dist/${MACOSX_APP_NAME} -r dist/resources -i dist/Info.plist -d dist/Description.plist
 endif
-	@# remove intermediate files
-	@# -rm -rf dist 2>/dev/null
 
 install-basic-macosx:
 	${MAKE_DIR_CMD} ${INST_DIR_TARGET}
 	-cd ${GISBASE} ; tar cBf - ${MACOSX_APP_NAME} | (cd ${PREFIX_TARGET} ; tar xBf - ) 2>/dev/null
+	@# ***TODO*** don't build app shell into dist, assemble app bundle here
+	@# install dist all at once
 	-cd ${GISBASE} ; tar cBf - $(FILES) | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - bin | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
+	-cd ${GISBASE} ; tar cBf - bwidget | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
+	-cd ${GISBASE} ; tar cBf - demolocation | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - docs | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - driver | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - etc | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - fonts | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - man | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - scripts | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
+	-cd ${GISBASE} ; tar cBf - tools | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	if [ ${LOCALE} -eq 1 ] ; then cd ${GISBASE} ; tar cBf - locale | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null ; fi
 	-cd ${GISBASE} ; tar cBf - include | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - lib | (cd ${INST_DIR_TARGET} ; tar xBf - ) 2>/dev/null
+	-sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
+	     -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
+	     -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
+	     $(ARCH_DISTDIR)/$(GRASS_NAME).tmp > $(INST_DIR_TARGET)/$(GRASS_NAME)
+	-chmod a+x $(UNIX_BIN)/$(GRASS_NAME)
 	-chmod -R a+rX ${PREFIX_TARGET}/${MACOSX_APP_NAME} 2>/dev/null
 	-touch ${PREFIX_TARGET}/${MACOSX_APP_NAME}
 
