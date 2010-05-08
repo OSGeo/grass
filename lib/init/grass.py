@@ -342,10 +342,10 @@ def set_browser():
 		    browser = b
 		    break
     
-    if macosx and browser:
+    elif macosx:
 	# OSX doesn't execute browsers from the shell PATH - route thru a script
+	os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b %s" % browser
 	browser = gfile('etc', "html_browser_mac.sh")
-	os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b com.apple.helpviewer"
 
     if not browser:
 	warning(_("Searched for a web browser, but none found"))
