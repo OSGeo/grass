@@ -831,7 +831,7 @@ class FormatSelect(wx.Choice):
             ftype = 'gdal'
         
         formats = list()
-        for f in globalvar.formats[ftype].values():
+        for f in utils.GetFormats()[ftype].values():
             formats += f
         self.SetItems(formats)
         
@@ -1011,16 +1011,16 @@ class GdalSelect(wx.Panel):
             fType = 'gdal'
         self.input = { 'file' : [_("File:"),
                                  dsnFile,
-                                 globalvar.formats[fType]['file']],
+                                 utils.GetFormats()[fType]['file']],
                        'dir'  : [_("Directory:"),
                                  dsnDir,
-                                 globalvar.formats[fType]['file']],
+                                 utils.GetFormats()[fType]['file']],
                        'db'   : [_("Database:"),
                                  dsnDbFile,
-                                 globalvar.formats[fType]['database']],
+                                 utils.GetFormats()[fType]['database']],
                        'pro'  : [_("Protocol:"),
                                  dsnPro,
-                                 globalvar.formats[fType]['protocol']],
+                                 utils.GetFormats()[fType]['protocol']],
                        'db-win' : { 'file'   : dsnDbFile,
                                     'text'   : dsnDbText,
                                     'choice' : dsnDbChoice },
