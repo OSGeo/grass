@@ -311,6 +311,25 @@ def info(msg):
     """
     message(msg, flag = 'i')
 
+def percent(i, n, s):
+    """!Display a progress info message using g.message -p
+    
+    @code
+    message(_("Percent complete..."))
+    n = 100
+    for i in range(n):
+        percent(i, n, 1)
+    percent(1, 1, 1)
+    @endcode
+    
+    @param i current item
+    @param n total number of items
+    @param s increment size
+    
+    @return g.message's exit code
+    """
+    message("%d %d %d" % (i, n, s), flag = 'p')
+
 def warning(msg):
     """!Display a warning message using g.message -w
 
