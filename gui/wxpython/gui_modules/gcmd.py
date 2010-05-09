@@ -513,7 +513,6 @@ class CommandThread(Thread):
         @param stdout redirect standard output or None
         @param stderr redirect standard error output or None
         """
-
         Thread.__init__(self)
 
         self.cmd    = cmd
@@ -545,7 +544,6 @@ class CommandThread(Thread):
             return
 
         self.startTime = time.time()
-        
         try:
             self.module = Popen(self.cmd,
                                 stdin=subprocess.PIPE,

@@ -959,17 +959,20 @@ class GMFrame(wx.Frame):
     def OnMapCalculator(self, event):
         """!Init map calculator for interactive creation of mapcalc statements
         """
-        self.mapcalculator = mapcalculator.MapCalcFrame(self, wx.ID_ANY, title='',
-                                                        dimension=2)
+        win = mapcalculator.MapCalcFrame(parent = self, title = _('2D raster calculator'))
+        win.CentreOnScreen()
+        win.Show()
         
     def Disp3DMapCalculator(self, event):
         """
         Init map calculator for interactive creation of mapcalc statements
         """
         
-        self.mapcalculator = mapcalculator.MapCalcFrame(self, wx.ID_ANY, title='',
-                                                        dimension=3)
-
+        mapcalculator.MapCalcFrame(parent = self, title = _('3D raster calculator'),
+                                   rast3d = True)
+        win.CentreOnScreen()
+        win.Show()
+        
     def AddToolbarButton(self, toolbar, label, icon, help, handler):
         """!Adds button to the given toolbar"""
 

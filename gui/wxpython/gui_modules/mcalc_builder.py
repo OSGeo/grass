@@ -1,357 +1,354 @@
 """
-MODULE:    mcalc_builder.py
+@package mcalc_builder.py
 
-CLASSES:
-    * MapCalcFrame
+@brief Map calculator, wrapper for r.mapcalc
 
-PURPOSE:   GRASS builds r.mapcalc statements
+Classes:
+ - MapCalcFrame
 
-           Usage:
-           mcalc_builder
+(C) 2008, 2010 by the GRASS Development Team
 
-AUTHOR(S): GRASS Development Team
-           Original author: Michael Barton, Arizona State University
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
-COPYRIGHT: (C) 2008 by the GRASS Development Team
-
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+@author Michael Barton, Arizona State University
+@author Martin Landa <landa.martin gmail.com>
 """
 
-import wx
-import os,sys
+import os
+import sys
 import time
+
+import globalvar
+if not os.getenv("GRASS_WXBUNDLED"):
+    globalvar.CheckForWx()
+import wx
 
 import gcmd
 import gselect
-import subprocess
-
-imagePath = os.path.join( os.getenv("GISBASE"), "etc", "wxpython")
-sys.path.append(imagePath)
-import images
-imagepath = images.__path__[0]
-sys.path.append(imagepath)
+try:
+    import subprocess
+except:
+    sys.path.append(os.path.join(globalvar.ETCWXDIR, "compat"))
+    import subprocess
+from preferences import globalSettings as UserSettings
 
 class MapCalcFrame(wx.Frame):
+    """!Mapcalc Frame class. Calculator-style window to create and run
+    r(3).mapcalc statements
     """
-    Mapcalc Frame class. Calculator-style window to create
-    and run r.mapcalc statements
-    """
-    def __init__(self, parent, id, title, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.TAB_TRAVERSAL|wx.DEFAULT_FRAME_STYLE,
-                 dimension=2):
-
-        wx.Frame.__init__(self, parent, id, title, pos, size,
-                          style)
-        
-        self.Centre(wx.BOTH)
-
-        if dimension == 3:
-            self.SetTitle(_("GRASS %s Map Calculator") % "3D" )
+    def __init__(self, parent, id = wx.ID_ANY, title = _('Map calculator'), 
+                 rast3d = False, **kwargs):
+        self.parent = parent
+        if self.parent:
+            self.log = self.parent.GetLogWindow()
         else:
-            self.SetTitle(_("GRASS %s Map Calculator") % "2D" )
+            self.log = None
+        
+        self.rast3d = rast3d
+        wx.Frame.__init__(self, parent, id = id, title = title, **kwargs)
 
         #
         # variables
         #
-        self.parent = parent
-        self.heading = 'mapcalc statement'
-        self.newmap = ''
-        self.dimension = dimension
+        self.heading = _('mapcalc statement')
         self.funct_list = [
-                        'abs(x)',
-                        'acos(x)',
-                        'asin(x)',
-                        'atan(x)',
-                        'atan(x,y)',
-                        'cos(x)',
-                        'double(x)',
-                        'eval([x,y,...,]z)',
-                        'exp(x)',
-                        'exp(x,y)',
-                        'float(x)',
-                        'graph(x,x1,y1[x2,y2..])',
-                        'if(x)',
-                        'if(x,a)',
-                        'if(x,a,b)',
-                        'if(x,a,b,c)',
-                        'int(x)',
-                        'isnull(x)',
-                        'log(x)',
-                        'log(x,b)',
-                        'max(x,y[,z...])',
-                        'median(x,y[,z...])',
-                        'min(x,y[,z...])',
-                        'mode(x,y[,z...])',
-                        'not(x)',
-                        'pow(x,y)',
-                        'rand(a,b)',
-                        'round(x)',
-                        'sin(x)',
-                        'sqrt(x)',
-                        'tan(x)',
-                        'xor(x,y)',
-                        'row()',
-                        'col()',
-                        'x()',
-                        'y()',
-                        'ewres()',
-                        'nsres()',
-                        'null()'
-                        ]
+            'abs(x)',
+            'acos(x)',
+            'asin(x)',
+            'atan(x)',
+            'atan(x,y)',
+            'cos(x)',
+            'double(x)',
+            'eval([x,y,...,]z)',
+            'exp(x)',
+            'exp(x,y)',
+            'float(x)',
+            'graph(x,x1,y1[x2,y2..])',
+            'if(x)',
+            'if(x,a)',
+            'if(x,a,b)',
+            'if(x,a,b,c)',
+            'int(x)',
+            'isnull(x)',
+            'log(x)',
+            'log(x,b)',
+            'max(x,y[,z...])',
+            'median(x,y[,z...])',
+            'min(x,y[,z...])',
+            'mode(x,y[,z...])',
+            'not(x)',
+            'pow(x,y)',
+            'rand(a,b)',
+            'round(x)',
+            'sin(x)',
+            'sqrt(x)',
+            'tan(x)',
+            'xor(x,y)',
+            'row()',
+            'col()',
+            'x()',
+            'y()',
+            'ewres()',
+            'nsres()',
+            'null()'
+            ]
         
-        if self.dimension == 3:
+        if self.rast3d:
             indx = self.funct_list.index('y()') +1
             self.funct_list.insert(indx, 'z()')
             indx = self.funct_list.index('nsres()') +1
             self.funct_list.insert(indx, 'tbres()')
-            maplabel = 'volume'
+            maplabel = _('3D raster map')
             element = 'rast3d'
         else:
-            maplabel = 'map'
+            maplabel = _('raster map')
             element = 'cell'
 
+        self.operatorBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                        label=" %s " % _('Operators'))
+        self.operandBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                       label=" %s " % _('Operands'))
+        self.expressBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                       label=" %s " % _('Expression'))
+        
         #
         # Buttons
         #
-        self.btn_clear = wx.Button(self, -1, "Clear")
-        self.btn_help = wx.Button(self, -1, "Help")
-        self.btn_run = wx.Button(self, -1, "Run")
+        self.btn_clear = wx.Button(parent = self, id = wx.ID_CLEAR)
+        self.btn_help = wx.Button(parent = self, id = wx.ID_HELP)
+        self.btn_run = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Run"))
         self.btn_run.SetDefault()
-        self.btn_close = wx.Button(self, -1, "Close")
+        self.btn_close = wx.Button(parent = self, id = wx.ID_CLOSE)
 
-        self.btn_pow = wx.Button(self, -1, "^")
-        self.btn_pow.SetToolTipString('exponent')
-        self.btn_div = wx.Button(self, -1, "/")
-        self.btn_div.SetToolTipString('divide')
-        self.btn_add = wx.Button(self, -1, "+")
-        self.btn_add.SetToolTipString('add')
-        self.btn_minus = wx.Button(self, -1, "-")
-        self.btn_minus.SetToolTipString('subtract')
-        self.btn_mod = wx.Button(self, -1, "%")
-        self.btn_mod.SetToolTipString('modulus')
-        self.btn_mult = wx.Button(self, -1, "*")
-        self.btn_mult.SetToolTipString('multiply')
+        self.btn = dict()        
+        self.btn['pow'] = wx.Button(parent = self, id = wx.ID_ANY, label = "^")
+        self.btn['pow'].SetToolTipString(_('exponent'))
+        self.btn['div'] = wx.Button(parent = self, id = wx.ID_ANY, label = "/")
+        self.btn['div'].SetToolTipString(_('divide'))
+        self.btn['add'] = wx.Button(parent = self, id = wx.ID_ANY, label = "+")
+        self.btn['add'].SetToolTipString(_('add'))
+        self.btn['minus'] = wx.Button(parent = self, id = wx.ID_ANY, label = "-")
+        self.btn['minus'].SetToolTipString(_('subtract'))
+        self.btn['mod'] = wx.Button(parent = self, id = wx.ID_ANY, label = "%")
+        self.btn['mod'].SetToolTipString(_('modulus'))
+        self.btn['mult'] = wx.Button(parent = self, id = wx.ID_ANY, label = "*")
+        self.btn['mult'].SetToolTipString(_('multiply'))
 
-        self.btn_paren = wx.Button(self, -1, "( )") 
+        self.btn['paren'] = wx.Button(parent = self, id = wx.ID_ANY, label = "( )") 
 
-        self.btn_lshift = wx.Button(self, -1, "<<")
-        self.btn_lshift.SetToolTipString('left shift')
-        self.btn_rshift = wx.Button(self, -1, ">>")
-        self.btn_rshift.SetToolTipString('right shift')
-        self.btn_rshiftu = wx.Button(self, -1, ">>>")
-        self.btn_rshiftu.SetToolTipString('right shift (unsigned)')
-        self.btn_gt = wx.Button(self, -1, ">")
-        self.btn_gt.SetToolTipString('greater than')
-        self.btn_gteq = wx.Button(self, -1, ">=")
-        self.btn_gteq.SetToolTipString('greater than or equal to')
-        self.btn_lt = wx.Button(self, -1, "<")
-        self.btn_lt.SetToolTipString('less than or equal to')
-        self.btn_lteq = wx.Button(self, -1, "<=")
-        self.btn_lteq.SetToolTipString('less than')
-        self.btn_eq = wx.Button(self, -1, "==")
-        self.btn_eq.SetToolTipString('equal to')
-        self.btn_noteq = wx.Button(self, -1, "!=")
-        self.btn_noteq.SetToolTipString('not equal to')
+        self.btn['lshift'] = wx.Button(parent = self, id = wx.ID_ANY, label = "<<")
+        self.btn['lshift'].SetToolTipString(_('left shift'))
+        self.btn['rshift'] = wx.Button(parent = self, id = wx.ID_ANY, label = ">>")
+        self.btn['rshift'].SetToolTipString(_('right shift'))
+        self.btn['rshiftu'] = wx.Button(parent = self, id = wx.ID_ANY, label = ">>>")
+        self.btn['rshiftu'].SetToolTipString(_('right shift (unsigned)'))
+        self.btn['gt'] = wx.Button(parent = self, id = wx.ID_ANY, label = ">")
+        self.btn['gt'].SetToolTipString(_('greater than'))
+        self.btn['gteq'] = wx.Button(parent = self, id = wx.ID_ANY, label = ">=")
+        self.btn['gteq'].SetToolTipString(_('greater than or equal to'))
+        self.btn['lt'] = wx.Button(parent = self, id = wx.ID_ANY, label = "<")
+        self.btn['lt'].SetToolTipString(_('less than or equal to'))
+        self.btn['lteq'] = wx.Button(parent = self, id = wx.ID_ANY, label = "<=")
+        self.btn['lteq'].SetToolTipString(_('less than'))
+        self.btn['eq'] = wx.Button(parent = self, id = wx.ID_ANY, label = "==")
+        self.btn['eq'].SetToolTipString(_('equal to'))
+        self.btn['noteq'] = wx.Button(parent = self, id = wx.ID_ANY, label = "!=")
+        self.btn['noteq'].SetToolTipString(_('not equal to'))
 
-        self.btn_compl = wx.Button(self, -1, "~")
-        self.btn_compl.SetToolTipString("one's complement")
-        self.btn_not = wx.Button(self, -1, "!")
-        self.btn_not.SetToolTipString("NOT")
-        self.btn_andbit = wx.Button(self, -1, '&')
-        self.btn_andbit.SetToolTipString("bitwise AND")
-        self.btn_orbit = wx.Button(self, -1, "|")
-        self.btn_orbit.SetToolTipString("bitwise OR")
-        self.btn_and = wx.Button(self, -1, "&&&")
-        self.btn_and.SetToolTipString('logical AND')
-        self.btn_andnull = wx.Button(self, -1, "&&&&&")
-        self.btn_andnull.SetToolTipString('logical AND (ignores NULLs')
-        self.btn_or = wx.Button(self, -1, "||")
-        self.btn_or.SetToolTipString('logical OR')
-        self.btn_ornull = wx.Button(self, -1, "|||")
-        self.btn_ornull.SetToolTipString('logical OR (ignores NULLs')
-        self.btn_cond = wx.Button(self, -1, "?:") 
-        self.btn_cond.SetToolTipString('conditional')
+        self.btn['compl'] = wx.Button(parent = self, id = wx.ID_ANY, label = "~")
+        self.btn['compl'].SetToolTipString(_('one\'s complement'))
+        self.btn['not'] = wx.Button(parent = self, id = wx.ID_ANY, label = "!")
+        self.btn['not'].SetToolTipString(_('NOT'))
+        self.btn['andbit'] = wx.Button(parent = self, id = wx.ID_ANY, label = '&')
+        self.btn['andbit'].SetToolTipString(_('bitwise AND'))
+        self.btn['orbit'] = wx.Button(parent = self, id = wx.ID_ANY, label = "|")
+        self.btn['orbit'].SetToolTipString(_('bitwise OR'))
+        self.btn['and'] = wx.Button(parent = self, id = wx.ID_ANY, label = "&&&")
+        self.btn['and'].SetToolTipString(_('logical AND'))
+        self.btn['andnull'] = wx.Button(parent = self, id = wx.ID_ANY, label = "&&&&&")
+        self.btn['andnull'].SetToolTipString(_('logical AND (ignores NULLs'))
+        self.btn['or'] = wx.Button(parent = self, id = wx.ID_ANY, label = "||")
+        self.btn['or'].SetToolTipString(_('logical OR'))
+        self.btn['ornull'] = wx.Button(parent = self, id = wx.ID_ANY, label = "|||")
+        self.btn['ornull'].SetToolTipString(_('logical OR (ignores NULLs'))
+        self.btn['cond'] = wx.Button(parent = self, id = wx.ID_ANY, label = "?:") 
+        self.btn['cond'].SetToolTipString(_('conditional'))
         
         #
         # Text area
         #
-        self.text_mcalc = wx.TextCtrl(self, -1, '', size=(-1,75),style=wx.TE_MULTILINE)
+        self.text_mcalc = wx.TextCtrl(parent = self, id = wx.ID_ANY, size = (-1, 75),
+                                      style = wx.TE_MULTILINE)
         
         #
         # Map and function insertion text and ComboBoxes
-        self.newmaplabel = wx.StaticText(self, -1, 'Name of new %s to create' % maplabel)
-        self.newmaptxt = wx.TextCtrl(self, wx.ID_ANY, size=(250,-1))
-        self.mapsellabel = wx.StaticText(self, -1, 'Insert existing %s' % maplabel)
-        self.mapselect = gselect.Select(self, wx.ID_ANY, size=(250,-1),
-                                        type=element, multiple=False)
-        self.functlabel = wx.StaticText(self, -1, 'Insert mapcalc function')
-        self.function = wx.ComboBox(self, wx.ID_ANY, "", (-1,-1), 
-                         (250, -1), self.funct_list, wx.CB_DROPDOWN
-                         | wx.CB_READONLY
-                         | wx.TE_PROCESS_ENTER
-                         #| wx.CB_SORT
-                         )
+        self.newmaplabel = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                         label= _('Name for new %s to create') % maplabel)
+        self.newmaptxt = wx.TextCtrl(parent = self, id = wx.ID_ANY, size=(250, -1))
+        self.mapsellabel = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                         label = _('Insert existing %s') % maplabel)
+        self.mapselect = gselect.Select(self, wx.ID_ANY, size = (250, -1),
+                                        type = element, multiple = False)
+        self.functlabel = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                        label = _('Insert mapcalc function'))
+        self.function = wx.ComboBox(parent = self, id = wx.ID_ANY, 
+                                    size = (250, -1), choices = self.funct_list,
+                                    style = wx.CB_DROPDOWN |
+                                    wx.CB_READONLY | wx.TE_PROCESS_ENTER)
+        
+        self.overwrite = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                     label=_("Allow output files to overwrite existing files"))
+        self.overwrite.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
+        
         #
         # Bindings
         #
-        self.btn_compl.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_not.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_pow.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_div.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_add.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_minus.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_mod.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_mult.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_lshift.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_rshift.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_rshiftu.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_gt.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_gteq.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_lt.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_lteq.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_eq.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_noteq.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_andbit.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_orbit.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_and.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_andnull.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_or.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_ornull.Bind(wx.EVT_BUTTON, self.AddMark)        
-        self.btn_cond.Bind(wx.EVT_BUTTON, self.AddMark)
-        self.btn_paren.Bind(wx.EVT_BUTTON, self.AddMark)
+        for btn in self.btn.keys():
+            self.btn[btn].Bind(wx.EVT_BUTTON, self.AddMark)
         
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_clear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnMCalcRun)
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         
-        self.newmaptxt.Bind(wx.EVT_TEXT, self.OnNewmap)
-        
-        #self.mapselect.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
-        #self.mapselect.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
         self.function.Bind(wx.EVT_COMBOBOX, self.OnSelect)
-        #self.function.Bind(wx.EVT_TEXT, self.OnSelect)
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
-
-        self.__doLayout()
-
-    def __doLayout(self):
-        pagesizer = wx.BoxSizer(wx.VERTICAL)
         
-        controlsizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnpanelsizer = wx.GridBagSizer(1,1)
+        self._layout()
 
-        buttonsizer1 = wx.GridBagSizer(5,1)
-        buttonsizer1.Add(self.btn_add, (0,0))
-        buttonsizer1.Add(self.btn_minus, (0,1))
-        buttonsizer1.Add(self.btn_mod, (5,0))
-        buttonsizer1.Add(self.btn_mult, (1,0))
-        buttonsizer1.Add(self.btn_div, (1,1))
-        buttonsizer1.Add(self.btn_pow, (5,1))
-        buttonsizer1.Add(self.btn_gt, (2,0))
-        buttonsizer1.Add(self.btn_gteq, (2,1))
-        buttonsizer1.Add(self.btn_eq, (4,0))
-        buttonsizer1.Add(self.btn_lt, (3,0))
-        buttonsizer1.Add(self.btn_lteq, (3,1))
-        buttonsizer1.Add(self.btn_noteq, (4,1))
-
-        buttonsizer2 = wx.GridBagSizer(5,1)
-        buttonsizer2.Add(self.btn_and, (0,0))
-        buttonsizer2.Add(self.btn_andbit, (1,0))
-        buttonsizer2.Add(self.btn_andnull, (2,0))
-        buttonsizer2.Add(self.btn_or, (0,1))
-        buttonsizer2.Add(self.btn_orbit, (1,1))
-        buttonsizer2.Add(self.btn_ornull, (2,1))
-        buttonsizer2.Add(self.btn_lshift, (3,0))
-        buttonsizer2.Add(self.btn_rshift, (3,1))
-        buttonsizer2.Add(self.btn_rshiftu, (4,0))
-        buttonsizer2.Add(self.btn_cond, (5,0))
-        buttonsizer2.Add(self.btn_compl, (5,1))
-        buttonsizer2.Add(self.btn_not, (4,1))
-
-        buttonsizer3 = wx.GridBagSizer(7, 1)
-        buttonsizer3.Add(self.newmaplabel, (0,0), (1,2), wx.ALIGN_CENTER)
-        buttonsizer3.Add(self.newmaptxt, (1,0), (1,2), wx.TOP, 4)
-        buttonsizer3.Add(self.mapsellabel, (2,0), (1,2), wx.ALIGN_CENTER)
-        buttonsizer3.Add(self.mapselect, (3,0), (1,2))
-        buttonsizer3.Add(self.functlabel, (4,0), (1,2), wx.ALIGN_CENTER)
-        buttonsizer3.Add(self.function, (5,0), (1,2))
-        buttonsizer3.Add(self.btn_paren, (6,0), (1,1), wx.ALIGN_CENTER)
-        buttonsizer3.Add(self.btn_clear, (6,1), (1,1), wx.ALIGN_CENTER)
+    def _layout(self):
+        sizer = wx.BoxSizer(wx.VERTICAL)
         
-        buttonsizer4 = wx.GridSizer(4, 3, 3, 3)
-        buttonsizer4.Add(self.btn_run,0,wx.RIGHT,5)
-        buttonsizer4.Add(self.btn_close,0,wx.RIGHT,5)
-        buttonsizer4.Add(self.btn_help,0,wx.RIGHT,5)
-        
-        label = wx.StaticText(self, -1, 'Mapcalc operators')
+        controlSizer = wx.BoxSizer(wx.HORIZONTAL)
+        operatorSizer = wx.StaticBoxSizer(self.operatorBox, wx.HORIZONTAL)
 
-        btnpanelsizer.Add(label, (0,0), (1,2), wx.ALIGN_CENTER)
-        btnpanelsizer.Add(buttonsizer1, (1,0), (1,1), wx.RIGHT|wx.TOP, 5)
-        btnpanelsizer.Add(buttonsizer2, (1,1), (1,1), wx.LEFT|wx.TOP, 5)
+        buttonSizer1 = wx.GridBagSizer(5, 1)
+        buttonSizer1.Add(item = self.btn['add'], pos = (0,0))
+        buttonSizer1.Add(item = self.btn['minus'], pos = (0,1))
+        buttonSizer1.Add(item = self.btn['mod'], pos = (5,0))
+        buttonSizer1.Add(item = self.btn['mult'], pos = (1,0))
+        buttonSizer1.Add(item = self.btn['div'], pos = (1,1))
+        buttonSizer1.Add(item = self.btn['pow'], pos = (5,1))
+        buttonSizer1.Add(item = self.btn['gt'], pos = (2,0))
+        buttonSizer1.Add(item = self.btn['gteq'], pos = (2,1))
+        buttonSizer1.Add(item = self.btn['eq'], pos = (4,0))
+        buttonSizer1.Add(item = self.btn['lt'], pos = (3,0))
+        buttonSizer1.Add(item = self.btn['lteq'], pos = (3,1))
+        buttonSizer1.Add(item = self.btn['noteq'], pos = (4,1))
 
-        controlsizer.Add(btnpanelsizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT, border=20)
-        controlsizer.Add(buttonsizer3, proportion=0)
+        buttonSizer2 = wx.GridBagSizer(5, 1)
+        buttonSizer2.Add(item = self.btn['and'], pos = (0,0))
+        buttonSizer2.Add(item = self.btn['andbit'], pos = (1,0))
+        buttonSizer2.Add(item = self.btn['andnull'], pos = (2,0))
+        buttonSizer2.Add(item = self.btn['or'], pos = (0,1))
+        buttonSizer2.Add(item = self.btn['orbit'], pos = (1,1))
+        buttonSizer2.Add(item = self.btn['ornull'], pos = (2,1))
+        buttonSizer2.Add(item = self.btn['lshift'], pos = (3,0))
+        buttonSizer2.Add(item = self.btn['rshift'], pos = (3,1))
+        buttonSizer2.Add(item = self.btn['rshiftu'], pos = (4,0))
+        buttonSizer2.Add(item = self.btn['cond'], pos = (5,0))
+        buttonSizer2.Add(item = self.btn['compl'], pos = (5,1))
+        buttonSizer2.Add(item = self.btn['not'], pos = (4,1))
+
+        operandSizer = wx.StaticBoxSizer(self.operandBox, wx.HORIZONTAL)
+        buttonSizer3 = wx.GridBagSizer(7, 1)
+        buttonSizer3.Add(item = self.newmaplabel, pos = (0, 0),
+                         span = (1, 2), flag = wx.ALIGN_CENTER)
+        buttonSizer3.Add(item = self.newmaptxt, pos = (1,0),
+                         span = (1, 2))
+        buttonSizer3.Add(item = self.mapsellabel, pos = (2,0),
+                         span = (1,2), flag = wx.ALIGN_CENTER)
+        buttonSizer3.Add(item = self.mapselect, pos = (3,0),
+                         span = (1,2))
+        buttonSizer3.Add(item = self.functlabel, pos = (4,0),
+                         span = (1,2), flag = wx.ALIGN_CENTER)
+        buttonSizer3.Add(item = self.function, pos = (5,0),
+                         span = (1,2))
+        buttonSizer3.Add(item = self.btn['paren'], pos = (6, 0),
+                         span = (1,1), flag = wx.ALIGN_LEFT)
+        buttonSizer3.Add(item = self.btn_clear, pos = (6,1),
+                         span = (1,1), flag = wx.ALIGN_RIGHT)
         
-        pagesizer.Add(controlsizer, flag=wx.EXPAND|wx.ALL,border=10)        
-        pagesizer.Add(self.text_mcalc, flag=wx.EXPAND|wx.ALL,border=5)
-        pagesizer.Add(buttonsizer4, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, border=5)
+        buttonSizer4 = wx.BoxSizer(wx.HORIZONTAL)
+        buttonSizer4.Add(item = self.btn_close,
+                         flag = wx.ALL, border = 5)
+        buttonSizer4.Add(item = self.btn_run,
+                         flag = wx.ALL, border = 5)
+        buttonSizer4.Add(item = self.btn_help,
+                         flag = wx.ALL, border = 5)
+        
+        operatorSizer.Add(item = buttonSizer1, proportion = 0,
+                          flag = wx.ALL, border = 5)
+        operatorSizer.Add(item = buttonSizer2, proportion = 0,
+                          flag = wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
+        
+        operandSizer.Add(item = buttonSizer3, proportion = 0,
+                         flag = wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
+        
+        controlSizer.Add(item = operatorSizer, proportion = 0,
+                         flag = wx.RIGHT, border = 5)
+        controlSizer.Add(item = operandSizer, proportion = 0)
+
+        expressSizer = wx.StaticBoxSizer(self.expressBox, wx.HORIZONTAL)
+        expressSizer.Add(item = self.text_mcalc, proportion = 1)
+
+        sizer.Add(item = controlSizer, flag = wx.EXPAND | wx.ALL,
+                      border = 5)        
+        sizer.Add(item = expressSizer, flag = wx.EXPAND | wx.LEFT | wx.RIGHT,
+                      border = 5)
+        sizer.Add(item = self.overwrite, flag = wx.EXPAND | wx.LEFT | wx.RIGHT,
+                      border = 5)
+        sizer.Add(item = buttonSizer4, proportion = 0,
+                      flag = wx.ALIGN_RIGHT | wx.ALL, border = 1)
+        
         self.SetAutoLayout(True)
-        self.SetSizer(pagesizer)
-        pagesizer.Fit(self)
-        #pagesizer.SetSizeHints(self)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        
         self.Layout()
-        self.Show(True)
-
+        
     def AddMark(self,event):
+        """!Sends operators to insertion method
         """
-        Sends operators to insertion method
-        """
+        if event.GetId() == self.btn['compl'].GetId(): mark = "~"
+        elif event.GetId() == self.btn['not'].GetId(): mark = "!"
+        elif event.GetId() == self.btn['pow'].GetId(): mark = "^"
+        elif event.GetId() == self.btn['div'].GetId(): mark = "/"
+        elif event.GetId() == self.btn['add'].GetId(): mark = "+"
+        elif event.GetId() == self.btn['minus'].GetId(): mark = "-"
+        elif event.GetId() == self.btn['mod'].GetId(): mark = "%"
+        elif event.GetId() == self.btn['mult'].GetId(): mark = "*"
+        elif event.GetId() == self.btn['lshift'].GetId(): mark = "<<"
+        elif event.GetId() == self.btn['rshift'].GetId(): mark = ">>"
+        elif event.GetId() == self.btn['rshiftu'].GetId(): mark = ">>>"
+        elif event.GetId() == self.btn['gt'].GetId(): mark = ">"
+        elif event.GetId() == self.btn['gteq'].GetId(): mark = ">="
+        elif event.GetId() == self.btn['lt'].GetId(): mark = "<"
+        elif event.GetId() == self.btn['lteq'].GetId(): mark = "<="
+        elif event.GetId() == self.btn['eq'].GetId(): mark = "=="
+        elif event.GetId() == self.btn['noteq'].GetId(): mark = "!="
+        elif event.GetId() == self.btn['andbit'].GetId(): mark = "&"
+        elif event.GetId() == self.btn['orbit'].GetId(): mark = "|"
+        elif event.GetId() == self.btn['or'].GetId(): mark =  "||"
+        elif event.GetId() == self.btn['ornull'].GetId(): mark = "|||"
+        elif event.GetId() == self.btn['and'].GetId(): mark = "&&"
+        elif event.GetId() == self.btn['andnull'].GetId(): mark = "&&&"
+        elif event.GetId() == self.btn['cond'].GetId(): mark = "?:"
+        elif event.GetId() == self.btn['paren'].GetId(): mark = "()"        
+        self._addSomething(mark)
         
-        if event.GetId() == self.btn_compl.GetId(): mark = "~"
-        elif event.GetId() == self.btn_not.GetId(): mark = "!"
-        elif event.GetId() == self.btn_pow.GetId(): mark = "^"
-        elif event.GetId() == self.btn_div.GetId(): mark = "/"
-        elif event.GetId() == self.btn_add.GetId(): mark = "+"
-        elif event.GetId() == self.btn_minus.GetId(): mark = "-"
-        elif event.GetId() == self.btn_mod.GetId(): mark = "%"
-        elif event.GetId() == self.btn_mult.GetId(): mark = "*"
-        elif event.GetId() == self.btn_lshift.GetId(): mark = "<<"
-        elif event.GetId() == self.btn_rshift.GetId(): mark = ">>"
-        elif event.GetId() == self.btn_rshiftu.GetId(): mark = ">>>"
-        elif event.GetId() == self.btn_gt.GetId(): mark = ">"
-        elif event.GetId() == self.btn_gteq.GetId(): mark = ">="
-        elif event.GetId() == self.btn_lt.GetId(): mark = "<"
-        elif event.GetId() == self.btn_lteq.GetId(): mark = "<="
-        elif event.GetId() == self.btn_eq.GetId(): mark = "=="
-        elif event.GetId() == self.btn_noteq.GetId(): mark = "!="
-        elif event.GetId() == self.btn_andbit.GetId(): mark = "&"
-        elif event.GetId() == self.btn_orbit.GetId(): mark = "|"
-        elif event.GetId() == self.btn_or.GetId(): mark =  "||"
-        elif event.GetId() == self.btn_ornull.GetId(): mark = "|||"
-        elif event.GetId() == self.btn_and.GetId(): mark = "&&"
-        elif event.GetId() == self.btn_andnull.GetId(): mark = "&&&"
-        elif event.GetId() == self.btn_cond.GetId(): mark = "?:"
-        elif event.GetId() == self.btn_paren.GetId(): mark = "()"        
-        self.__addSomething(mark)
-        
-    def OnNewmap(self, event):
-        self.newmap = event.GetString()
-
     def OnSelect(self, event):
-        """
-        Gets raster map or function selection and send it to insertion method
+        """!Gets raster map or function selection and send it to
+        insertion method
         """
         item = event.GetString()
-        self.__addSomething(item)
+        self._addSomething(item)
         self.text_mcalc.SetFocus()
-
-    def __addSomething(self,what):
-        """
-        Inserts operators, map names, and functions into text area
+        
+    def _addSomething(self,what):
+        """!Inserts operators, map names, and functions into text area
         """
         self.text_mcalc.SetFocus()
         mcalcstr = self.text_mcalc.GetValue()
@@ -363,63 +360,73 @@ class MapCalcFrame(wx.Frame):
         newmcalcstr = mcalcstr[:position]
         
         try:
-            if newmcalcstr[-1] != " ":
+            if newmcalcstr[-1] != ' ':
                 newmcalcstr += " "
         except:
             pass
         newmcalcstr += what
         position_offset = len(what)
-        newmcalcstr += " "+mcalcstr[position:]
-
+        newmcalcstr += " " + mcalcstr[position:]
+        
         self.text_mcalc.SetValue(newmcalcstr)
         self.text_mcalc.SetInsertionPoint(position+position_offset)
         self.text_mcalc.Update()
-
+        
     def OnMCalcRun(self,event):
+        """!Builds and runs r.mapcalc statement
         """
-        Builds and runs r.mapcalc statement
-        """
-        if self.newmap == '':
-            wx.MessageBox("You must enter the name of a new map to create")
+        name = self.newmaptxt.GetValue().strip()
+        if not name:
+            gcmd.GMessage(parent = self,
+                          message = _("You must enter the name of a new map to create"),
+                          msgType = 'info')
             return
         
-        if self.text_mcalc.GetValue() == '':
-            wx.MessageBox("You must enter a mapcalc statement to create a new map")
+        if not self.text_mcalc.GetValue().strip():
+            gcmd.GMessage(parent = self,
+                          message = _("You must enter a mapcalc statement to create a new map"),
+                          msgType = 'info')
             return
-
+        
         mctxt = self.text_mcalc.GetValue().strip().replace("\n"," ")
-        mctxt = mctxt.replace(" ","")
-        if self.dimension == 3:
-            gcmd.RunCommand('r3.mapcalc',
-                            expression = "%s=%s" % (self.newmap,mctxt))
+        mctxt = mctxt.replace(" " , "")
+        if self.rast3d:
+            prg = 'r3.mapcalc'
         else:
-            gcmd.RunCommand('r.mapcalc',
-                            expression = "%s=%s" % (self.newmap,mctxt))
+            prg = 'r.mapcalc'
+
+        if self.log:
+            cmd = [prg, str('expression=%s = %s' % (name, mctxt))]
+            if self.overwrite.IsChecked():
+                cmd.append('--overwrite')
+            self.log.RunCmd(cmd)
+            self.parent.Raise()
+        else:
+            if self.overwrite.IsChecked():
+                overwrite = True
+            else:
+                overwrite = False
+            gcmd.RunCommand(prg,
+                            expression = "%s=%s" % (name, mctxt),
+                            overwrite = overwrite)
         
     def OnClear(self, event):
+        """!Clears text area
         """
-        Clears text area
-        """
-        self.text_mcalc.SetValue("")
+        self.text_mcalc.SetValue('')
         
     def OnHelp(self, event):
+        """!Launches r.mapcalc help
         """
-        Launches r.mapcalc help
-        """
-        gcmd.RunCommand('g.manual',
-                        entry = 'r.mapcalc')
+        gcmd.RunCommand('g.manual', entry = 'r.mapcalc')
         
     def OnClose(self,event):
+        """!Close window"""
         self.Destroy()
 
 if __name__ == "__main__":
-
-    if len(sys.argv) != 2:
-        print >>sys.stderr, __doc__
-        sys.exit()
-
     app = wx.App(0)
-    sqlb = SQLFrame(None, -1, 'SQL Builder',sys.argv[1])
+    frame = MapCalcFrame(None)
+    frame.Show()
     app.MainLoop()
-
 
