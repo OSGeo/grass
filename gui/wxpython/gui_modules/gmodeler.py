@@ -797,7 +797,9 @@ if __name__ == "__main__":
     def OnDefineRelation(self, event):
         """!Define relation between data and action items"""
         self.canvas.SetCursor(self.cursors["cross"])
-    
+        self.defineRelation = { 'from' : None,
+                                'to'   : None }
+        
     def OnAddAction(self, event):
         """!Add action to model"""
         if self.searchDialog is None:
@@ -904,10 +906,10 @@ if __name__ == "__main__":
                                               p.get('prompt', ''))
                     if data:
                         if p.get('age', 'old') == 'old':
-                            self._addLine(data, layer)
+                            self.AddLine(data, layer)
                             data.AddAction(layer, direction = 'from')
                         else:
-                            self._addLine(layer, data)
+                            self.AddLine(layer, data)
                             data.AddAction(layer, direction = 'to')
                         continue
                     
@@ -923,10 +925,10 @@ if __name__ == "__main__":
                     self.model.AddData(data)
                     
                     if p.get('age', 'old') == 'old':
-                        self._addLine(data, layer)
+                        self.AddLine(data, layer)
                         data.AddAction(layer, direction = 'from')
                     else:
-                        self._addLine(layer, data)
+                        self.AddLine(layer, data)
                         data.AddAction(layer, direction = 'to')
             
             # valid ?
@@ -946,13 +948,13 @@ if __name__ == "__main__":
             
         self.SetStatusText(layer.GetLog(), 0)
         
-    def _addLine(self, fromShape, toShape):
+    def AddLine(self, fromShape, toShape):
         """!Add connection
 
         @param fromShape from
         @param toShape to
         """
-        line = ModelRelation()
+        line = ModelRelation(fromShape, toShape)
         line.SetCanvas(self)
         line.SetPen(wx.BLACK_PEN)
         line.SetBrush(wx.BLACK_BRUSH)
@@ -993,9 +995,9 @@ if __name__ == "__main__":
             data.Show(True)
 
             for action in data.GetActions('from'):
-                self._addLine(data, action)
+                self.AddLine(data, action)
             for action in data.GetActions('to'):
-                self._addLine(action, data)
+                self.AddLine(action, data)
         
         self.SetStatusText('', 0)
         
@@ -1350,6 +1352,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         ogl.ShapeEvtHandler.__init__(self)
         self.log = log
         self.frame = frame
+        self.x = self.y = None
         
     def OnLeftClick(self, x, y, keys = 0, attachment = 0):
         """!Left mouse button pressed -> select item & update statusbar"""
@@ -1357,6 +1360,15 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         canvas = shape.GetCanvas()
         dc = wx.ClientDC(canvas)
         canvas.PrepareDC(dc)
+        
+        if hasattr(self.frame, 'defineRelation'):
+            rel = self.frame.defineRelation
+            if rel['from'] is None:
+                rel['from'] = shape
+            elif rel['to'] is None:
+                rel['to'] = shape
+                self.frame.AddLine(rel['from'], rel['to'])
+                del self.frame.defineRelation
         
         if shape.Selected():
             shape.Select(False, dc)
@@ -1411,9 +1423,12 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             self.popupID2 = wx.NewId()
             self.popupID3 = wx.NewId()
 
+        # record coordinates
+        self.x = x
+        self.y = y
+        
         shape = self.GetShape()
         popupMenu = wx.Menu()
-        
         popupMenu.Append(self.popupID1, text=_('Remove'))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID1)
         
@@ -1421,7 +1436,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             popupMenu.AppendSeparator()
             popupMenu.Append(self.popupID2, text=_('Add control point'))
             self.frame.Bind(wx.EVT_MENU, self.OnAddPoint, id = self.popupID2)
-
+            popupMenu.Append(self.popupID3, text=_('Remove control point'))
+            self.frame.Bind(wx.EVT_MENU, self.OnRemovePoint, id = self.popupID3)
+            if len(shape.GetLineControlPoints()) == 2:
+                popupMenu.Enable(self.popupID3, False)
+        
         if isinstance(shape, ModelData) and '@' not in shape.GetValue():
             popupMenu.AppendSeparator()
             popupMenu.Append(self.popupID3, text=_('Intermediate'),
@@ -1442,7 +1461,19 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         
     def OnAddPoint(self, event):
         """!Add control point"""
-        print event.GetPos()
+        shape = self.GetShape()
+        shape.InsertLineControlPoint(point = wx.RealPoint(self.x, self.y))
+        shape.ResetShapes()
+        shape.Select(True)
+        self.frame.canvas.Refresh()
+        
+    def OnRemovePoint(self, event):
+        """!Remove control point"""
+        shape = self.GetShape()
+        shape.DeleteLineControlPoint()
+        shape.Select(False)
+        shape.Select(True)
+        self.frame.canvas.Refresh()
         
     def OnIntermediate(self, event):
         """!Mark data as intermediate"""
@@ -1634,9 +1665,17 @@ class ModelSearchDialog(wx.Dialog):
 
 class ModelRelation(ogl.LineShape):
     """!Data - action relation"""
-    def __init__(self):
+    def __init__(self, fromShape, toShape):
+        self.fromShape = fromShape
+        self.toShape   = toShape
+        
         ogl.LineShape.__init__(self)
     
+    def ResetShapes(self):
+        """!Reset related objects"""
+        self.fromShape.ResetControlPoints()
+        self.toShape.ResetControlPoints()
+        
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
     def __init__(self, tree):
