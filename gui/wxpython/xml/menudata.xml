@@ -1013,7 +1013,7 @@
 	    <menuitem>
 	      <label>Interactive map calculator</label>
 	      <help>Map calculator for raster map algebra.</help>
-	      <handler>MapCalculator</handler>
+	      <handler>OnMapCalculator</handler>
 	    </menuitem>
 	    <menuitem>
 	      <label>Map calculator</label>
