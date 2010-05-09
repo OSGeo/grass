@@ -956,14 +956,12 @@ class GMFrame(wx.Frame):
         self.profile.Refresh()
         self.profile.Update()
         
-    def DispMapCalculator(self, event):
+    def OnMapCalculator(self, event):
+        """!Init map calculator for interactive creation of mapcalc statements
         """
-        Init map calculator for interactive creation of mapcalc statements
-        """
-        
         self.mapcalculator = mapcalculator.MapCalcFrame(self, wx.ID_ANY, title='',
                                                         dimension=2)
-
+        
     def Disp3DMapCalculator(self, event):
         """
         Init map calculator for interactive creation of mapcalc statements
