@@ -744,13 +744,6 @@
               <handler>OnMenuCmd</handler>
 	      <command>g.gisenv</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Change default GUI</label>
-	      <help>Changes the default GRASS graphical user interface (GUI) setting.</help>
-	      <keywords>general,gui</keywords>
-              <handler>OnMenuCmd</handler>
-	      <command>g.change.gui.sh</command>
-	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Version</label>
