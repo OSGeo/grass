@@ -243,7 +243,8 @@ class Model(object):
             data.Update()
     
 class ModelFrame(wx.Frame):
-    def __init__(self, parent, id = wx.ID_ANY, title = _("Graphical modeler (under development)"), **kwargs):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 title = _("GRASS GIS Graphical Modeler"), **kwargs):
         """!Graphical modeler main window
         
         @param parent parent window
