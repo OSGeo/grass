@@ -345,31 +345,30 @@ class MapCalcFrame(wx.Frame):
         """
         item = event.GetString()
         self._addSomething(item)
-        self.text_mcalc.SetFocus()
         
     def _addSomething(self,what):
         """!Inserts operators, map names, and functions into text area
         """
         self.text_mcalc.SetFocus()
-        mcalcstr = self.text_mcalc.GetValue()
-        newmcalcstr = ''
-        position = self.text_mcalc.GetInsertionPoint()
+        mcalcstr  = self.text_mcalc.GetValue()
+        position  = self.text_mcalc.GetInsertionPoint()
         
-        selection = self.text_mcalc.GetSelection()
-
         newmcalcstr = mcalcstr[:position]
         
+        position_offset = 0
         try:
             if newmcalcstr[-1] != ' ':
-                newmcalcstr += " "
+                newmcalcstr += ' '
+                position_offset += 1
         except:
             pass
+        
         newmcalcstr += what
-        position_offset = len(what)
-        newmcalcstr += " " + mcalcstr[position:]
+        position_offset += len(what)
+        newmcalcstr += ' ' + mcalcstr[position:]
         
         self.text_mcalc.SetValue(newmcalcstr)
-        self.text_mcalc.SetInsertionPoint(position+position_offset)
+        self.text_mcalc.SetInsertionPoint(position + position_offset)
         self.text_mcalc.Update()
         
     def OnMCalcRun(self,event):
