@@ -1007,11 +1007,23 @@
 	  <handler>OnMenuCmd</handler>
 	  <command>r.mask</command>
 	</menuitem>
-	<menuitem>
-	  <label>Map calculator</label>
-	  <help>Map calculator for raster map algebra</help>
-	  <handler>DispMapCalculator</handler>
-	</menuitem>
+	<menu>
+	  <label>Map algebra</label>
+	  <items>
+	    <menuitem>
+	      <label>Interactive map calculator</label>
+	      <help>Map calculator for raster map algebra.</help>
+	      <handler>MapCalculator</handler>
+	    </menuitem>
+	    <menuitem>
+	      <label>Map calculator</label>
+	      <help>Raster map calculator.</help>
+	      <keywords>raster,algebra</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>r.mapcalc</command>
+	    </menuitem>
+	  </items>
+	</menu>
 	<menu>
 	  <label>Neighborhood analysis</label>
 	  <items>

@@ -109,6 +109,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("algebra"));
     module->description = _("Raster map calculator.");
     module->overwrite = 1;
 
@@ -117,10 +118,13 @@ int main(int argc, char **argv)
     expr->type = TYPE_STRING;
     expr->required = NO;
     expr->description = _("Expression to evaluate");
-
+    expr->guisection = _("Expression");
+    
     file = G_define_standard_option(G_OPT_F_INPUT);
+    file->key = "file";
     file->required = NO;
-    file->description = _("File containing expression to evaluate");
+    file->description = _("File containing expression(s) to evaluate");
+    file->guisection = _("Expression");
 
     if (argc == 1)
     {
