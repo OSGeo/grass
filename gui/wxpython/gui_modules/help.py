@@ -109,7 +109,11 @@ class SearchModuleWindow(wx.Panel):
         selection = self.searchBy.GetStringSelection()
         
         return self._searchDict[selection]
-    
+
+    def SetSelection(self, i):
+        """!Set selection element"""
+        self.searchBy.SetSelection(i)
+        
 class MenuTreeWindow(wx.Panel):
     """!Show menu tree"""
     def __init__(self, parent, id = wx.ID_ANY, **kwargs):
@@ -680,10 +684,11 @@ class InstallExtensionWindow(wx.Frame):
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                 value = 'https://svn.osgeo.org/grass/grass-addons')
         self.fullDesc = wx.CheckBox(parent = self.panel, id=wx.ID_ANY,
-                                    label = _("Fetch full description (takes time)"))
+                                    label = _("Fetch full info including description and keywords (takes time)"))
         self.fullDesc.SetValue(False)
         
         self.search = SearchModuleWindow(parent = self.panel, showLabel = False)
+        self.search.SetSelection(2) 
         
         self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
         
@@ -759,6 +764,10 @@ class InstallExtensionWindow(wx.Frame):
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         element = self.search.GetSelection()
+        if not self.tree.IsLoaded():
+            self.SetStatusText(_("Fetch list of available extensions by clicking on 'Fetch' button"), 0)
+            return
+        
         self.tree.SearchItems(element = element,
                               value = event.GetString())
         
@@ -833,6 +842,7 @@ class ExtensionTree(ItemTree):
                        'raster', 'raster3D', 'sites', 'vector'):
             self.AppendItem(parentId = self.root,
                             text = prefix)
+        self._loaded = False
         
     def _expandPrefix(self, c):
         name = { 'd'  : 'display',
@@ -911,3 +921,8 @@ class ExtensionTree(ItemTree):
                 
                 self.SetPyData(new, data)
         
+        self._loaded = True
+
+    def IsLoaded(self):
+        """Check if items are loaded"""
+        return self._loaded
