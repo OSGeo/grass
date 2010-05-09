@@ -340,6 +340,11 @@ class ModelFrame(wx.Frame):
         
         if self.modelFile:
             self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile) + '*')
+
+    def OnRemoveItem(self, event):
+        """!Remove shape
+        """
+        self.GetCanvas().RemoveSelected()
         
     def OnCloseWindow(self, event):
         """!Close window"""
@@ -790,10 +795,6 @@ if __name__ == "__main__":
         
         return errList
     
-    def OnRemoveItem(self, event):
-        """!Remove item from model"""
-        pass
-
     def OnDefineRelation(self, event):
         """!Define relation between data and action items"""
         self.canvas.SetCursor(self.cursors["cross"])
@@ -1035,6 +1036,7 @@ if __name__ == "__main__":
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
     def __init__(self, parent):
+        self.parent = parent
         ogl.OGLInitialize()
         ogl.ShapeCanvas.__init__(self, parent)
         
@@ -1043,6 +1045,28 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.diagram.SetCanvas(self)
         
         self.SetScrollbars(20, 20, 1000/20, 1000/20)
+        
+        self.Bind(wx.EVT_CHAR,  self.OnChar)
+        
+    def OnChar(self, event):
+        """!Key pressed"""
+        kc = event.GetKeyCode()
+        diagram = self.GetDiagram()
+        if kc == wx.WXK_DELETE:
+            self.RemoveSelected()
+
+    def RemoveSelected(self):
+        """!Remove selected shapes"""
+        self.parent.ModelChanged()
+        
+        diagram = self.GetDiagram()
+        for shape in diagram.GetShapeList():
+            if not shape.Selected():
+                continue
+            shape.Select(False)
+            diagram.RemoveShape(shape)
+        
+        self.Refresh()
         
 class ModelAction(ogl.RectangleShape):
     """!Action class (GRASS module)"""
@@ -1484,21 +1508,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
     def OnRemove(self, event):
         """!Remove shape
-
-        @todo complex remove
         """
-        self.frame.ModelChanged()
-        shapes = [self.GetShape()]
-        for shape in shapes:
-            if isinstance(shape, ModelAction):
-                pass
-            if isinstance(shape, ModelData):
-                pass
-
-            shape.Select(False)            
-            self.frame.canvas.GetDiagram().RemoveShape(shape)
-        
-        self.frame.canvas.Refresh()
+        self.frame.GetCanvas().RemoveSelected()
         
 class ModelSearchDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Select GRASS module"),
