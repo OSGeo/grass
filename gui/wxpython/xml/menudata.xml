@@ -2791,11 +2791,23 @@
 	  <handler>OnMenuCmd</handler>
 	  <command>r3.mask</command>
 	</menuitem>
-	<menuitem>
-	  <label>3D raster map calculator</label>
-	  <help>Map calculator for volumetric map algebra</help>
-	  <handler>Disp3DMapCalculator</handler>
-	</menuitem>
+	<menu>
+	  <label>Map algebra</label>
+	  <items>
+	    <menuitem>
+	      <label>Interactive map calculator</label>
+	      <help>Map calculator for raster map algebra.</help>
+	      <handler>OnMapCalculator3D</handler>
+	    </menuitem>
+	    <menuitem>
+	      <label>Map calculator</label>
+	      <help>Raster map calculator.</help>
+	      <keywords>raster,algebra</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>r3.mapcalc</command>
+	    </menuitem>
+	  </items>
+	</menu>
 	<menuitem>
 	  <label>Cross section</label>
 	  <help>Creates cross section 2D raster map from 3d raster map based on 2D elevation map</help>
