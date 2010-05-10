@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     {
 	char **p = G_malloc(3 * sizeof(char *));
 	p[0] = argv[0];
-	p[1] = G_store("input=-");
+	p[1] = G_store("file=-");
 	p[2] = NULL;
 	argv = p;
 	argc = 2;
