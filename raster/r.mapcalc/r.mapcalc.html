@@ -41,7 +41,7 @@ r.mapcalc 'foo=1'
 Sorry, &lt;foo&gt; is not a valid parameter
 </pre></div>
 
-If no options are given, it manufactures "input=-" (which reads from
+If no options are given, it manufactures "file=-" (which reads from
 stdin), so you can continue to use e.g.:
 
 <div class="code"><pre>
@@ -53,15 +53,15 @@ r.mapcalc &lt;&lt;EOF
 foo = 1
 EOF
 </pre></div>
-But unless you need compatibility with previous versions, use input=
+But unless you need compatibility with previous versions, use file=
 explicitly, e.g.:
 
 <div class="code"><pre>
-r.mapcalc input=file
+r.mapcalc file=file
 </pre></div>
 or:
 <div class="code"><pre>
-r.mapcalc input=- &lt;&lt;EOF
+r.mapcalc file=- &lt;&lt;EOF
 foo = 1
 EOF
 </pre></div>
