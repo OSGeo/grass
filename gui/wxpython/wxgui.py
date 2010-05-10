@@ -91,9 +91,9 @@ import gui_modules.prompt as prompt
 import gui_modules.menu as menu
 import gui_modules.gmodeler as gmodeler
 from   gui_modules.debug import Debug
-from   gui_modules.help import MenuTreeWindow
-from   gui_modules.help import AboutWindow
-from   gui_modules.help import InstallExtensionWindow
+from   gui_modules.ghelp import MenuTreeWindow
+from   gui_modules.ghelp import AboutWindow
+from   gui_modules.ghelp import InstallExtensionWindow
 from   icons.icon import Icons
 
 UserSettings = preferences.globalSettings
