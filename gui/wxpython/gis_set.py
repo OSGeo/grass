@@ -34,7 +34,8 @@ from gui_modules import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
     globalvar.CheckForWx()
 
-from gui_modules import help
+import gui_modules.goutput
+from gui_modules.ghelp import HelpWindow
 
 import wx
 import wx.html
@@ -744,10 +745,10 @@ class GRASSStartup(wx.Frame):
         # help text in lib/init/helptext.html
         file=os.path.join(self.gisbase, "docs", "html", "helptext.html")
 
-        helpFrame = help.HelpWindow(parent=self, id=wx.ID_ANY,
-                                    title=_("GRASS Quickstart"),
-                                    size=(640, 480),
-                                    file=file)
+        helpFrame = HelpWindow(parent=self, id=wx.ID_ANY,
+                               title=_("GRASS Quickstart"),
+                               size=(640, 480),
+                               file=file)
         helpFrame.Show(True)
 
         event.Skip()
