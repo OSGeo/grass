@@ -561,6 +561,9 @@ class GPrompt(object):
         else:
             mList = self.moduleList
         
+        if not mList:
+            return items
+        
         prefixes = mList.keys()
         prefixes.sort()
         
@@ -568,6 +571,8 @@ class GPrompt(object):
             for command in mList[prefix]:
                 name = prefix + '.' + command
                 items.append(name)
+        
+        items.sort()
         
         return items
     

@@ -1538,7 +1538,7 @@ class ModelSearchDialog(wx.Dialog):
                                    label=" %s " % _("Command"))
         
         self.cmd_prompt = prompt.GPromptSTC(parent = self)
-        self.search = SearchModuleWindow(parent = self.panel, cmdPrompt = self.cmd_prompt)
+        self.search = SearchModuleWindow(parent = self.panel, cmdPrompt = self.cmd_prompt, showTip = True)
         
         # get commands
         items = self.cmd_prompt.GetCommandItems()

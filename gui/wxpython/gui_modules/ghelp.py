@@ -64,7 +64,9 @@ class HelpWindow(wx.Frame):
 
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
-    def __init__(self, parent, id = wx.ID_ANY, cmdPrompt = None, showChoice = True, **kwargs):
+    def __init__(self, parent, id = wx.ID_ANY, cmdPrompt = None,
+                 showChoice = True, showTip = False, **kwargs):
+        self.showTip    = showTip
         self.showChoice = showChoice
         self.cmdPrompt  = cmdPrompt
         
@@ -88,11 +90,14 @@ class SearchModuleWindow(wx.Panel):
                                   style = wx.TE_PROCESS_ENTER)
         self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
         
-        if self.showChoice:
+        if self.showTip:
             self.searchTip  = menuform.StaticWrapText(parent = self, id = wx.ID_ANY,
                                                       size = (-1, 35))
-            
+        
+        if self.showChoice:
             self.searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+            if self.cmdPrompt:
+                self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
             self.searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
         
         self._layout()
@@ -107,11 +112,15 @@ class SearchModuleWindow(wx.Panel):
                       flag=wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
         gridSizer.Add(item = self.search,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
-        if self.showChoice:
+        row = 1
+        if self.showTip:
             gridSizer.Add(item = self.searchTip,
-                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (1, 0), span = (1, 2))
+                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
+            row += 1
+        
+        if self.showChoice:
             gridSizer.Add(item = self.searchChoice,
-                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (2, 0), span = (1, 2))
+                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
         
         sizer.Add(item = gridSizer, proportion = 1)
         
@@ -137,6 +146,11 @@ class SearchModuleWindow(wx.Panel):
         text = event.GetString()
         if not text:
             self.cmdPrompt.SetFilter(None)
+            mList = self.cmdPrompt.GetCommandItems()
+            self.searchChoice.SetItems(mList)
+            if self.showTip:
+                self.searchTip.SetLabel(_("%d modules found") % len(mList))
+            event.Skip()
             return
         
         modules = dict()
@@ -162,8 +176,11 @@ class SearchModuleWindow(wx.Panel):
                 modules[group].append(name)
         
         self.cmdPrompt.SetFilter(modules)
-        self.searchTip.SetLabel(_("%d modules found") % iFound)
+        if self.showTip:
+            self.searchTip.SetLabel(_("%d modules found") % iFound)
         self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
+        
+        event.Skip()
         
     def OnSelectModule(self, event):
         """!Module selected from choice, update command prompt"""
@@ -178,7 +195,8 @@ class SearchModuleWindow(wx.Panel):
             self.cmdPrompt.SetFocus()
         
         desc = self.cmdPrompt.GetCommandDesc(cmd)
-        self.searchTip.SetLabel(desc)
+        if self.showTip:
+            self.searchTip.SetLabel(desc)
         
 class MenuTreeWindow(wx.Panel):
     """!Show menu tree"""
@@ -315,7 +333,7 @@ class MenuTreeWindow(wx.Panel):
         
         nItems = len(self.tree.itemsMarked)
         if event.GetString():
-            self.parent.SetStatusText(_("%d items match") % nItems, 0)
+            self.parent.SetStatusText(_("%d modules match") % nItems, 0)
         else:
             self.parent.SetStatusText("", 0)
         
