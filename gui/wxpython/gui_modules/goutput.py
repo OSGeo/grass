@@ -188,11 +188,20 @@ class GMConsole(wx.SplitterWindow):
         # search & command prompt
         self.cmd_prompt = prompt.GPromptSTC(parent = self)
                 
-        self.search = SearchModuleWindow(parent = self.panelPrompt, cmdPrompt = self.cmd_prompt)
-        
         if self.parent.GetName() != 'LayerManager':
-            self.search.Hide()
+            self.search = None
             self.cmd_prompt.Hide()
+        else:
+            self.infoCollapseLabelExp = _("Click here to show search module engine")
+            self.infoCollapseLabelCol = _("Click here to hide search module engine")
+            self.searchPane = wx.CollapsiblePane(parent = self.panelOutput,
+                                                 label = self.infoCollapseLabelExp,
+                                                 style = wx.CP_DEFAULT_STYLE |
+                                                 wx.CP_NO_TLW_RESIZE | wx.EXPAND)
+            self.MakeSearchPaneContent(self.searchPane.GetPane())
+            self.searchPane.Collapse(True)
+            self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
+            self.search.Bind(wx.EVT_TEXT,             self.OnUpdateStatusBar)
         
         #
         # stream redirection
@@ -235,15 +244,15 @@ class GMConsole(wx.SplitterWindow):
         OutputSizer = wx.BoxSizer(wx.VERTICAL)
         PromptSizer = wx.BoxSizer(wx.VERTICAL)
         ButtonSizer = wx.BoxSizer(wx.HORIZONTAL)
-        
+
+        if self.search and self.search.IsShown():
+            OutputSizer.Add(item=self.searchPane, proportion=0,
+                            flag=wx.EXPAND | wx.ALL, border=3)
         OutputSizer.Add(item=self.cmd_output, proportion=1,
                         flag=wx.EXPAND | wx.ALL, border=3)
         OutputSizer.Add(item=self.console_progressbar, proportion=0,
                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
         
-        if self.search.IsShown():
-            PromptSizer.Add(item=self.search, proportion=0,
-                            flag=wx.EXPAND | wx.ALL, border=3)
         PromptSizer.Add(item=self.cmd_prompt, proportion=1,
                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
         
@@ -269,20 +278,40 @@ class GMConsole(wx.SplitterWindow):
         
         # split window
         if self.parent.GetName() == 'LayerManager':
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -75)
-            self.SetMinimumPaneSize(self.btn_cmd_clear.GetSize()[1] + 75)
+            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
+            self.SetMinimumPaneSize(self.btn_cmd_clear.GetSize()[1] + 50)
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
             self.SetMinimumPaneSize(self.btn_cmd_clear.GetSize()[1] + 10)
         
         self.SetSashGravity(1.0)
         
-        self.Fit()
-        
         # layout
         self.SetAutoLayout(True)
         self.Layout()
 
+    def MakeSearchPaneContent(self, pane):
+        """!Create search pane"""
+        border = wx.BoxSizer(wx.VERTICAL)
+        
+        self.search = SearchModuleWindow(parent = pane, cmdPrompt = self.cmd_prompt)
+        
+        border.Add(item = self.search, proportion = 1,
+                   flag = wx.EXPAND | wx.ALL, border = 1)
+        
+        pane.SetSizer(border)
+        border.Fit(pane)
+        
+    def OnSearchPaneChanged(self, event):
+        """!Collapse search module box"""
+        if self.searchPane.IsExpanded():
+            self.searchPane.SetLabel(self.infoCollapseLabelCol)
+        else:
+            self.searchPane.SetLabel(self.infoCollapseLabelExp)
+        
+        self.Layout()
+        self.SendSizeEvent()
+        
     def GetPanel(self, prompt = True):
         """!Get panel
 
@@ -542,6 +571,16 @@ class GMConsole(wx.SplitterWindow):
         """!Get running command or None"""
         return self.requestQ.get()
     
+    def OnUpdateStatusBar(self, event):
+        """!Update statusbar text"""
+        if event.GetString():
+            nItems = len(self.cmd_prompt.GetCommandItems())
+            self.parent.SetStatusText(_('%d modules match') % nItems, 0)
+        else:
+            self.parent.SetStatusText('', 0)
+        
+        event.Skip()
+
     def OnCmdOutput(self, event):
         """!Print command output"""
         message = event.text
