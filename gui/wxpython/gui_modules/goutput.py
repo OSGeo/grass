@@ -40,7 +40,7 @@ import prompt
 
 from debug       import Debug
 from preferences import globalSettings as UserSettings
-from help        import SearchModuleWindow
+from ghelp       import SearchModuleWindow
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
@@ -186,9 +186,10 @@ class GMConsole(wx.SplitterWindow):
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         
         # search & command prompt
-        self.search = SearchModuleWindow(parent = self.panelPrompt)
-        
         self.cmd_prompt = prompt.GPromptSTC(parent = self)
+                
+        self.search = SearchModuleWindow(parent = self.panelPrompt, cmdPrompt = self.cmd_prompt)
+        
         if self.parent.GetName() != 'LayerManager':
             self.search.Hide()
             self.cmd_prompt.Hide()
@@ -227,8 +228,6 @@ class GMConsole(wx.SplitterWindow):
         self.btn_abort.Bind(wx.EVT_BUTTON,         self.OnCmdAbort)
         self.btn_abort.Bind(EVT_CMD_ABORT,         self.OnCmdAbort)
         
-        self.search.Bind(wx.EVT_TEXT,              self.OnSearchModule)
-        
         self.__layout()
         
     def __layout(self):
@@ -244,7 +243,7 @@ class GMConsole(wx.SplitterWindow):
         
         if self.search.IsShown():
             PromptSizer.Add(item=self.search, proportion=0,
-                            flag=wx.EXPAND | wx.ALL, border=1)
+                            flag=wx.EXPAND | wx.ALL, border=3)
         PromptSizer.Add(item=self.cmd_prompt, proportion=1,
                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
         
@@ -542,39 +541,7 @@ class GMConsole(wx.SplitterWindow):
     def GetCmd(self):
         """!Get running command or None"""
         return self.requestQ.get()
-
-    def OnSearchModule(self, event):
-        """!Search module by keywords or description"""
-        text = event.GetString()
-        if not text:
-            self.cmd_prompt.SetFilter(None)
-            return
-        
-        modules = dict()
-        iFound = 0
-        for module, data in self.cmd_prompt.moduleDesc.iteritems():
-            found = False
-            if self.search.GetSelection() == 'description': # -> description
-                if text in data['desc']:
-                    found = True
-            else: # -> keywords
-                if self.cmd_prompt.CheckKey(text, data['keywords']):
-                    found = True
-
-            if found:
-                iFound += 1
-                try:
-                    group, name = module.split('.')
-                except ValueError:
-                    continue # TODO
-                
-                if not modules.has_key(group):
-                    modules[group] = list()
-                modules[group].append(name)
-        
-        self.parent.statusbar.SetStatusText(_("%d modules found") % iFound)
-        self.cmd_prompt.SetFilter(modules)
-        
+    
     def OnCmdOutput(self, event):
         """!Print command output"""
         message = event.text
