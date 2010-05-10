@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     int cat = 1;
 
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *grid_opt, *ogrid_opt, *stepE_opt, *stepN_opt,
+    struct Option *in_opt, *out_opt, *grid_opt, *stepE_opt, *stepN_opt,
 		  *lambda_f_opt, *method_opt;
     struct Flag *null_flag, *cross_corr_flag;
 
@@ -88,10 +88,6 @@ int main(int argc, char *argv[])
     grid_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     grid_opt->key = "grid";
     grid_opt->required = NO;
-
-    ogrid_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    ogrid_opt->key = "ogrid";
-    ogrid_opt->required = NO;
 
     stepE_opt = G_define_option();
     stepE_opt->key = "se";
@@ -123,7 +119,7 @@ int main(int argc, char *argv[])
     lambda_f_opt->type = TYPE_DOUBLE;
     lambda_f_opt->required = NO;
     lambda_f_opt->description = _("Tykhonov regularization parameter (affects smoothing)");
-    lambda_f_opt->answer = "0.001";
+    lambda_f_opt->answer = "0.005";
     lambda_f_opt->guisection = _("Settings");
 
     null_flag = G_define_flag();
