@@ -8,6 +8,7 @@ all = [
     "gcmd.py",
     "gdialogs.py",
     "georect.py",
+    "ghelp.py"
     "globalvar.py",
     "goutput.py",
     "gselect.py",

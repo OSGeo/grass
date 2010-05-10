@@ -35,6 +35,7 @@ import  wx.lib.scrolledpanel as scrolled
 import menudata
 import gcmd
 import globalvar
+import menuform
 
 class HelpWindow(wx.Frame):
     """!GRASS Quickstart help window"""
@@ -63,14 +64,18 @@ class HelpWindow(wx.Frame):
 
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
-    def __init__(self, parent, id = wx.ID_ANY, showLabel = True, **kwargs):
-        self.showLabel = showLabel
+    def __init__(self, parent, id = wx.ID_ANY, cmdPrompt = None, showChoice = True, **kwargs):
+        self.showChoice = showChoice
+        self.cmdPrompt  = cmdPrompt
         
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
         self._searchDict = { _('description') : 'description',
                              _('command')     : 'command',
                              _('keywords')    : 'keywords' }
+
+        self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                label=" %s " % _("Find module(s)"))
         
         self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY,
                                   choices = [_('description'),
@@ -81,25 +86,34 @@ class SearchModuleWindow(wx.Panel):
         self.search = wx.TextCtrl(parent = self, id = wx.ID_ANY,
                                   value = "", size = (-1, 25),
                                   style = wx.TE_PROCESS_ENTER)
+        self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
+        
+        if self.showChoice:
+            self.searchTip  = menuform.StaticWrapText(parent = self, id = wx.ID_ANY,
+                                                      size = (-1, 35))
+            
+            self.searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+            self.searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
         
         self._layout()
 
     def _layout(self):
         """!Do layout"""
-                # search
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
-        if self.showLabel:
-            sizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                           label = _("Find module by:")),
-                      proportion = 0,
-                      flag = wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                      border = 3)
-        sizer.Add(item = self.searchBy, proportion = 0,
-                  flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT | wx.RIGHT,
-                  border = 5)
-        sizer.Add(item = self.search, proportion = 1,
-                  flag = wx.EXPAND | wx.RIGHT | wx.ALIGN_CENTER_VERTICAL,
-                  border = 5)
+        sizer = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
+        gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
+        gridSizer.AddGrowableCol(1)
+        
+        gridSizer.Add(item = self.searchBy,
+                      flag=wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
+        gridSizer.Add(item = self.search,
+                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
+        if self.showChoice:
+            gridSizer.Add(item = self.searchTip,
+                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (1, 0), span = (1, 2))
+            gridSizer.Add(item = self.searchChoice,
+                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (2, 0), span = (1, 2))
+        
+        sizer.Add(item = gridSizer, proportion = 1)
         
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -113,6 +127,58 @@ class SearchModuleWindow(wx.Panel):
     def SetSelection(self, i):
         """!Set selection element"""
         self.searchBy.SetSelection(i)
+
+    def OnSearchModule(self, event):
+        """!Search module by keywords or description"""
+        if not self.cmdPrompt:
+            event.Skip()
+            return
+        
+        text = event.GetString()
+        if not text:
+            self.cmdPrompt.SetFilter(None)
+            return
+        
+        modules = dict()
+        iFound = 0
+        for module, data in self.cmdPrompt.moduleDesc.iteritems():
+            found = False
+            if self.searchBy.GetSelection() == 0: # -> description
+                if text in data['desc']:
+                    found = True
+            else: # -> keywords
+                if self.cmdPrompt.CheckKey(text, data['keywords']):
+                    found = True
+            
+            if found:
+                iFound += 1
+                try:
+                    group, name = module.split('.')
+                except ValueError:
+                    continue # TODO
+                
+                if not modules.has_key(group):
+                    modules[group] = list()
+                modules[group].append(name)
+        
+        self.cmdPrompt.SetFilter(modules)
+        self.searchTip.SetLabel(_("%d modules found") % iFound)
+        self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
+        
+    def OnSelectModule(self, event):
+        """!Module selected from choice, update command prompt"""
+        cmd  = event.GetString().split(' ', 1)[0]
+        text = cmd + ' '
+        pos = len(text)
+
+        if self.cmdPrompt:
+            self.cmdPrompt.SetText(text)
+            self.cmdPrompt.SetSelectionStart(pos)
+            self.cmdPrompt.SetCurrentPos(pos)
+            self.cmdPrompt.SetFocus()
+        
+        desc = self.cmdPrompt.GetCommandDesc(cmd)
+        self.searchTip.SetLabel(desc)
         
 class MenuTreeWindow(wx.Panel):
     """!Show menu tree"""
@@ -128,7 +194,7 @@ class MenuTreeWindow(wx.Panel):
         self.tree.Load()
 
         # search widget
-        self.search = SearchModuleWindow(parent = self)
+        self.search = SearchModuleWindow(parent = self, showChoice = False)
         
         # buttons
         self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("Run"))
