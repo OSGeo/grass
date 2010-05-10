@@ -672,9 +672,15 @@ int main(int argc, char **argv)
 	if (display & DISP_CAT)
 	    stat = label(&Map, type, area, Clist, &lattr, chcat);
 
-	if (display & DISP_ATTR)
+	if (display & DISP_ATTR) {
+	    int attr_type = type;
+
+	    if (area && !(attr_type & GV_CENTROID))
+		attr_type |= GV_CENTROID;
+		
 	    stat =
-		attr(&Map, type, attrcol_opt->answer, Clist, &lattr, chcat);
+		attr(&Map, attr_type, attrcol_opt->answer, Clist, &lattr, chcat);
+	    }
 
 	if (display & DISP_ZCOOR)
 	    stat = zcoor(&Map, type, &lattr);
