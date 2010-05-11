@@ -296,7 +296,7 @@ class GMConsole(wx.SplitterWindow):
         
         self.search = SearchModuleWindow(parent = pane, cmdPrompt = self.cmd_prompt)
         
-        border.Add(item = self.search, proportion = 1,
+        border.Add(item = self.search, proportion = 0,
                    flag = wx.EXPAND | wx.ALL, border = 1)
         
         pane.SetSizer(border)
@@ -309,8 +309,8 @@ class GMConsole(wx.SplitterWindow):
         else:
             self.searchPane.SetLabel(self.infoCollapseLabelExp)
         
-        self.Layout()
-        self.SendSizeEvent()
+        self.panelOutput.Layout()
+        self.panelOutput.SendSizeEvent()
         
     def GetPanel(self, prompt = True):
         """!Get panel
