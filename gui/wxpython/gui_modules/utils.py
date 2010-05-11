@@ -651,9 +651,6 @@ def UnicodeString(string):
 
 def _getGDALFormats():
     """!Get dictionary of avaialble GDAL drivers"""
-    if not grass.find_program('r.in.gdal'):
-        return _parseFormats(None)
-    
     ret = grass.read_command('r.in.gdal',
                              quiet = True,
                              flags = 'f')
@@ -662,9 +659,6 @@ def _getGDALFormats():
 
 def _getOGRFormats():
     """!Get dictionary of avaialble OGR drivers"""
-    if not grass.find_program('v.in.ogr'):
-        return _parseFormats(None)
-    
     ret = grass.read_command('v.in.ogr',
                              quiet = True,
                              flags = 'f')
