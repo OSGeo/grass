@@ -42,7 +42,6 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--disable-x --without-x \
 		--with-cxx \
 		--enable-shared \
-		--enable-largefile \
 		--with-opengl=windows \
 		--with-fftw \
 		--with-freetype \
@@ -58,7 +57,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 		--with-odbc \
 	        --without-cairo
-
+#		--enable-largefile \
 	echo $(date): STARTING make clean
 	make clean
 
