@@ -774,7 +774,7 @@ class InstallExtensionWindow(wx.Frame):
                                     label = _("Fetch full info including description and keywords (takes time)"))
         self.fullDesc.SetValue(False)
         
-        self.search = SearchModuleWindow(parent = self.panel, showLabel = False)
+        self.search = SearchModuleWindow(parent = self.panel)
         self.search.SetSelection(2) 
         
         self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
@@ -822,9 +822,8 @@ class InstallExtensionWindow(wx.Frame):
         
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item = self.btnClose, proportion = 0,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
-        btnSizer.Add(item = self.btnInstall, proportion = 0,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
+                     flag = wx.RIGHT, border = 5)
+        btnSizer.Add(item = self.btnInstall, proportion = 0)
         
         sizer.Add(item = repoSizer, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 3)
