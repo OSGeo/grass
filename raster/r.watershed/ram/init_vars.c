@@ -159,6 +159,8 @@ int init_vars(int argc, char *argv[])
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 10000; 	/* should be enough to do the trick */
+    if (flat_flag)
+	ele_scale = 10000;
 
     /* read elevation input and mark NULL/masked cells */
     /* intialize accumulation and drainage direction */
@@ -186,6 +188,7 @@ int init_vars(int argc, char *argv[])
 	    else {
 		if (ele_map_type == CELL_TYPE) {
 		    alt_value = *((CELL *)ptr);
+		    alt_value *= ele_scale;
 		}
 		else if (ele_map_type == FCELL_TYPE) {
 		    dvalue = *((FCELL *)ptr);

@@ -156,8 +156,6 @@ int do_flatarea(int index, CELL ele)
 
 	seg_index_rc(alt_seg, index_doer, &r, &c);
 
-	FLAG_SET(flat_done, r, c);
-
 	/* check all neighbours, breadth first search */
 	for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 	    /* get r, c (upr, upc) for this neighbour */
@@ -354,7 +352,6 @@ int do_flatarea(int index, CELL ele)
 			    pq_add(index_up, up_pq);
 			    /* unset flag */
 			    nbr_order_found->flag = 0;
-			    //nbr_order_found->downhill = 0;
 			}
 		    }
 		}
@@ -375,6 +372,8 @@ int do_flatarea(int index, CELL ele)
 	seg_index_rc(alt_seg, index_doer, &r, &c);
 	this_in_list = FLAG_GET(in_list, r, c);
 
+	FLAG_SET(flat_done, r, c);
+
 	/* get uphill and downhill order for this point */
 	inc_order.index = index_doer;
 	if ((order_found = rbtree_find(order_tree, &inc_order)) == NULL)
@@ -394,7 +393,7 @@ int do_flatarea(int index, CELL ele)
 	    downhill_order = max_downhill_order;
 	    uphill_order = 0;
 	}
-	alt[index_doer] += uphill_order + max_downhill_order - downhill_order;
+	alt[index_doer] += uphill_order + (double)(max_downhill_order - downhill_order) / 2.0 + 0.5;
 
 	/* check all neighbours, breadth first search */
 	for (ct_dir = 0; ct_dir < sides; ct_dir++) {
