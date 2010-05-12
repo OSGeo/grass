@@ -219,7 +219,7 @@ class MenuTreeWindow(wx.Panel):
         self.search = SearchModuleWindow(parent = self, showChoice = False)
         
         # buttons
-        self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("Run"))
+        self.btnRun   = wx.Button(self, id = wx.ID_OK, label = _("&Run"))
         self.btnRun.SetToolTipString(_("Run selected command"))
         self.btnRun.Enable(False)
         
@@ -245,8 +245,7 @@ class MenuTreeWindow(wx.Panel):
         
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = self.btnRun, proportion = 0,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        btnSizer.Add(item = self.btnRun, proportion = 0)
         
         sizer.Add(item = dataSizer, proportion = 1,
                   flag = wx.EXPAND | wx.ALL, border = 5)
@@ -255,7 +254,7 @@ class MenuTreeWindow(wx.Panel):
                   flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
         
         sizer.Add(item = btnSizer, proportion=0,
-                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+                  flag = wx.ALIGN_RIGHT | wx.BOTTOM | wx.RIGHT, border = 5)
         
         sizer.Fit(self)
         sizer.SetSizeHints(self)
