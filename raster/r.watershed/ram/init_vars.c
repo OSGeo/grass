@@ -33,6 +33,7 @@ int init_vars(int argc, char *argv[])
     mfd = 1;
     c_fac = 5;
     abs_acc = 0;
+    flat_flag = 0;
     ele_scale = 1;
 
     for (r = 1; r < argc; r++) {
@@ -82,6 +83,8 @@ int init_vars(int argc, char *argv[])
 	    mfd = 0;
 	else if (strcmp(argv[r], "-a") == 0)
 	    abs_acc = 1;
+	else if (strcmp(argv[r], "-b") == 0)
+	    flat_flag = 1;
 	else
 	    usage(argv[0]);
     }
@@ -155,7 +158,7 @@ int init_vars(int argc, char *argv[])
     elebuf = Rast_allocate_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
-	ele_scale = 1000; 	/* should be enough to do the trick */
+	ele_scale = 10000; 	/* should be enough to do the trick */
 
     /* read elevation input and mark NULL/masked cells */
     /* intialize accumulation and drainage direction */
