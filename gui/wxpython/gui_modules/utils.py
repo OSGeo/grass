@@ -691,7 +691,10 @@ def _parseFormats(output):
             formats['protocol'].append(format)
         else:
             formats['file'].append(format)
-
+    
+    for items in formats.itervalues():
+        items.sort()
+    
     return formats
 
 formats = None
