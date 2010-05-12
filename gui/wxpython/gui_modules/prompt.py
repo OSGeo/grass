@@ -556,7 +556,7 @@ class GPrompt(object):
         """!Get list of available commands"""
         items = list()
         
-        if self.autoCompFilter:
+        if self.autoCompFilter is not None:
             mList = self.autoCompFilter
         else:
             mList = self.moduleList
