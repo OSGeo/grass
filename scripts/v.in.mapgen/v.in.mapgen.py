@@ -122,10 +122,14 @@ def main():
 		if len(f) == 2:
 		    f.append('0')
 		points.append(f)
+        
 	if points != []:
 	    outf.write("L %d\n" % len(points))
 	    for point in points:
-		outf.write(" %.8f %.8f %.8f\n" % tuple(map(float,point)))
+                try:
+                    outf.write(" %.8f %.8f %.8f\n" % tuple(map(float, point)))
+                except ValueError:
+                    grass.fatal(_("An error occured on line '%s', exiting.") % line.strip())
     else:
         ## mapgen format.
 	points = []
