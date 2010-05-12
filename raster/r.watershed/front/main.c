@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     struct Flag *flag_flow;
     struct Flag *flag_seg;
     struct Flag *flag_abs;
+    struct Flag *flag_flat;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -213,6 +214,13 @@ int main(int argc, char *argv[])
     flag_abs->description =
 	_("See manual for a detailed description of flow accumulation output");
 
+    flag_flat = G_define_flag();
+    flag_flat->key = 'b';
+    flag_flat->label =
+	_("Beautify flat areas");
+    flag_flat->description =
+	_("Flow direction in flat areas is modified to look prettier");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -265,6 +273,12 @@ int main(int argc, char *argv[])
 
     if (flag_abs->answer)
 	new_argv[new_argc++] = "-a";
+
+    if (flag_flat->answer && !flag_seg->answer)
+	new_argv[new_argc++] = "-b";
+
+    if (flag_flat->answer && flag_seg->answer)
+	G_message(_("Beautify flat areas is not yet supported for disk swap mode"));
 
     do_opt(opt1);
     do_opt(opt2);
