@@ -10,7 +10,7 @@ int do_astar(void)
     int count;
     int upr, upc, r, c, ct_dir;
     CELL alt_val, alt_nbr[8];
-    CELL is_in_list, is_worked;
+    CELL is_in_list, is_worked, flat_is_done, nbr_flat_is_done;
     int index_doer, index_up;
     /* sides
      * |7|1|4|
@@ -22,6 +22,7 @@ int do_astar(void)
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
     int skip_diag;
+    CELL *alt_bak;
 
     G_message(_("SECTION 2: A* Search."));
 
@@ -44,6 +45,27 @@ int do_astar(void)
     first_astar = heap_index[1];
     first_cum = do_points;
 
+    if (flat_flag) {
+	alt_bak =
+	    (CELL *) G_malloc(sizeof(CELL) * size_array(&alt_seg, nrows, ncols));
+	flat_done = flag_create(nrows, ncols);
+	flat_is_done = 0;
+
+	for (r = 0; r < nrows; r++) {
+	    for (c = 0; c < ncols; c++) {
+		index_doer = SEG_INDEX(alt_seg, r, c);
+		alt_bak[index_doer] = alt[index_doer];
+
+		flag_unset(flat_done, r, c);
+	    }
+	}
+    }
+    else {
+	alt_bak = NULL;
+	flat_done = NULL;
+	flat_is_done = 1;
+    }
+
     /* A* Search: search uphill, get downhill paths */
     while (heap_size > 0) {
 	G_percent(count++, do_points, 1);
@@ -64,7 +86,9 @@ int do_astar(void)
 
 	alt_val = alt[index_doer];
 
-	FLAG_SET(worked, r, c);
+	if (flat_flag) {
+	    flat_is_done = FLAG_GET(flat_done, r, c);
+	}
 
 	/* check all neighbours, breadth first search */
 	for (ct_dir = 0; ct_dir < sides; ct_dir++) {
@@ -78,9 +102,31 @@ int do_astar(void)
 		is_in_list = FLAG_GET(in_list, upr, upc);
 		is_worked = FLAG_GET(worked, upr, upc);
 		skip_diag = 0;
+		
+		alt_nbr[ct_dir] = alt[index_up];
+		if (flat_flag && !is_worked) {
+		    alt_val = alt[index_doer];
+		    if (!flat_is_done && alt_nbr[ct_dir] == alt_val) {
+			do_flatarea(index_doer, alt_val);
+			alt_nbr[ct_dir] = alt[index_up];
+			flat_is_done = 1;
+			nbr_flat_is_done = 1;
+		    }
+		    nbr_flat_is_done = FLAG_GET(flat_done, upr, upc);
+		    if (!nbr_flat_is_done) {
+			/* use original ele values */
+			alt_val = alt_bak[index_doer];
+			alt_nbr[ct_dir] = alt_bak[index_up];
+		    }
+		    else {
+			/* use modified ele values */
+			alt_val = alt[index_doer];
+			alt_nbr[ct_dir] = alt[index_up];
+		    }
+		}
+		
 		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
-		    alt_nbr[ct_dir] = alt[index_up];
 		    slope[ct_dir] =
 			get_slope2(alt_val, alt_nbr[ct_dir],
 				   dist_to_nbr[ct_dir]);
@@ -121,6 +167,7 @@ int do_astar(void)
 		}
 	    }    /* end if in region */
 	}    /* end sides */
+	FLAG_SET(worked, r, c);
     }
     G_percent(count, do_points, 1);	/* finish it */
     if (mfd == 0)
@@ -128,6 +175,17 @@ int do_astar(void)
 
     flag_destroy(in_list);
     G_free(heap_index);
+
+    if (flat_flag) {
+	for (r = 0; r < nrows; r++) {
+	    for (c = 0; c < ncols; c++) {
+		index_doer = SEG_INDEX(alt_seg, r, c);
+		alt[index_doer] = alt_bak[index_doer];
+	    }
+	}
+	G_free(alt_bak);
+	flag_destroy(flat_done);
+    }
 
     return 0;
 }

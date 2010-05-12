@@ -33,7 +33,7 @@ int bas_thres, tot_parts;
 CELL n_basins;
 OC_STACK *ocs;
 int ocs_alloced;
-FLAG *worked, *in_list, *s_b, *swale;
+FLAG *worked, *in_list, *s_b, *swale, *flat_done;
 RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
 RAMSEG r_h_seg, dep_seg;
 RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
@@ -59,7 +59,7 @@ char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
     sg_name[GNAME_MAX];
 char wat_name[GNAME_MAX], asp_name[GNAME_MAX], arm_name[GNAME_MAX],
     dis_name[GNAME_MAX];
-char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
+char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag;
 char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag;
 char bas_flag, seg_flag, haf_flag, er_flag;
 char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
