@@ -157,11 +157,15 @@ class SearchModuleWindow(wx.Panel):
         iFound = 0
         for module, data in self.cmdPrompt.moduleDesc.iteritems():
             found = False
-            if self.searchBy.GetSelection() == 0: # -> description
+            sel = self.searchBy.GetSelection()
+            if sel == 0: # -> description
                 if text in data['desc']:
                     found = True
-            else: # -> keywords
+            elif sel == 1: # keywords
                 if self.cmdPrompt.CheckKey(text, data['keywords']):
+                    found = True
+            else: # command
+                if text in module:
                     found = True
             
             if found:
@@ -176,9 +180,9 @@ class SearchModuleWindow(wx.Panel):
                 modules[group].append(name)
         
         self.cmdPrompt.SetFilter(modules)
+        self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
         if self.showTip:
             self.searchTip.SetLabel(_("%d modules found") % iFound)
-        self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
         
         event.Skip()
         
