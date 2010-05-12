@@ -12,21 +12,19 @@
 #
 # COPYRIGHT:    Original version (c) Andreas Lange
 #               Updates by Hamish Bowman
-#               (C) 2008 the GRASS Development Team
+#               (C) 2008, 2010 the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
 #############################################################################
 #
-# REQUIREMENTS:  awk
-#
 # DATA AVAILABILITY: e.g., NOAA's Online Coastline Extractor
 #                    http://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html
 #
 
 #%Module
-#%  description: Import Mapgen or Matlab vector maps into GRASS.
+#%  description: Imports Mapgen or Matlab vector maps into GRASS.
 #%  keywords: vector
 #%  keywords: import
 #%End
@@ -78,7 +76,7 @@ def main():
     opts = ""
 
     if not os.path.isfile(infile):
-	grass.fatal(_("Input file <%s> not found.") % infile)
+	grass.fatal(_("Input file <%s> not found") % infile)
 
     if output:
 	name = output
@@ -99,6 +97,7 @@ def main():
     inf = file(infile)
     outf = file(tmp, 'w')
 
+    grass.message(_("Importing data..."))
     if matlab:
 	## HB:  OLD v.in.mapgen.sh Matlab import command follows.
 	##    I have no idea what it's all about, so "new" matlab format will be
@@ -139,6 +138,7 @@ def main():
 		points = []
 	    else:
 		points.append(line.rstrip('\r\n').split('\t'))
+        
 	if points != []:
 	    outf.write("L %d\n" % len(points))
 	    for point in points:
@@ -157,7 +157,7 @@ DIGIT NAME:   $user@$host
 MAP NAME:     $name
 MAP DATE:     $year
 MAP SCALE:    1
-OTHER INFO:   Imported with $proj
+OTHER INFO:   Imported with $prog
 ZONE:         0
 MAP THRESH:   0
 VERTI:
@@ -166,10 +166,11 @@ VERTI:
     year = time.strftime("%Y")
     user = os.getenv('USERNAME') or os.getenv('LOGNAME')
     host = os.getenv('COMPUTERNAME') or os.uname()[1]
+    
     s = t.substitute(prog = prog, name = name, date = date, year = year,
 		     user = user, host = host)
     outf.write(s)
-
+    
     #### process points list to ascii vector file (merge in vertices)
     inf = file(tmp)
     shutil.copyfileobj(inf, outf)
@@ -179,17 +180,14 @@ VERTI:
 
     if not name:
         #### if no name for vector file given, cat to stdout
-	grass.message(_("Output to stdout")) 
 	inf = file(digfile)
 	shutil.copyfileobj(inf, sys.stdout)
 	inf.close()
     else:
         #### import to binary vector file
-	grass.message(_("Importing with v.in.ascii ...")) 
+	grass.message(_("Importing with v.in.ascii...")) 
 	if grass.run_command('v.in.ascii', flags = do3D, input = digfile,
-			     output = name, format = 'standard') == 0:
-	    grass.message(_('"%s" successfully created') % name) 
-	else:
+			     output = name, format = 'standard') != 0:
 	    grass.fatal(_('An error occured on creating "%s", please check') % name)
 
 if __name__ == "__main__":
