@@ -1006,7 +1006,9 @@
 	    <menuitem>
 	      <label>Interactive map calculator</label>
 	      <help>Map calculator for raster map algebra.</help>
+	      <keywords>raster,algebra</keywords>
 	      <handler>OnMapCalculator</handler>
+	      <command>r.mapcalc</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Map calculator</label>
@@ -2783,7 +2785,9 @@
 	    <menuitem>
 	      <label>Interactive map calculator</label>
 	      <help>Map calculator for raster map algebra.</help>
+	      <keywords>raster,algebra</keywords>
 	      <handler>OnMapCalculator3D</handler>
+	      <command>r3.mapcalc</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Map calculator</label>
