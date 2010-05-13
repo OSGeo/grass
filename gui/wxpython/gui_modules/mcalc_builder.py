@@ -26,6 +26,7 @@ import wx
 
 import gcmd
 import gselect
+import menuform
 try:
     import subprocess
 except:
@@ -130,7 +131,10 @@ class MapCalcFrame(wx.Frame):
         self.btn_run = wx.Button(parent = self.panel, id = wx.ID_ANY, label = _("&Run"))
         self.btn_run.SetDefault()
         self.btn_close = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
-
+        self.btn_cmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                 label = _("Command dialog"))
+        self.btn_cmd.SetToolTipString(_('Open %s dialog') % self.cmd)
+        
         self.btn = dict()        
         self.btn['pow'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "^")
         self.btn['pow'].SetToolTipString(_('exponent'))
@@ -222,7 +226,8 @@ class MapCalcFrame(wx.Frame):
         self.btn_clear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnMCalcRun)
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
-        
+        self.btn_cmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
+
         self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
         self.function.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
@@ -266,25 +271,29 @@ class MapCalcFrame(wx.Frame):
         buttonSizer2.Add(item = self.btn['not'], pos = (4,1))
 
         operandSizer = wx.StaticBoxSizer(self.operandBox, wx.HORIZONTAL)
+        
         buttonSizer3 = wx.GridBagSizer(7, 1)
+        
         buttonSizer3.Add(item = self.newmaplabel, pos = (0, 0),
                          span = (1, 2), flag = wx.ALIGN_CENTER)
-        buttonSizer3.Add(item = self.newmaptxt, pos = (1,0),
+        buttonSizer3.Add(item = self.newmaptxt, pos = (1, 0),
                          span = (1, 2))
-        buttonSizer3.Add(item = self.mapsellabel, pos = (2,0),
-                         span = (1,2), flag = wx.ALIGN_CENTER)
-        buttonSizer3.Add(item = self.mapselect, pos = (3,0),
-                         span = (1,2))
-        buttonSizer3.Add(item = self.functlabel, pos = (4,0),
-                         span = (1,2), flag = wx.ALIGN_CENTER)
-        buttonSizer3.Add(item = self.function, pos = (5,0),
-                         span = (1,2))
+        buttonSizer3.Add(item = self.mapsellabel, pos = (2, 0),
+                         span = (1, 2), flag = wx.ALIGN_CENTER)
+        buttonSizer3.Add(item = self.mapselect, pos = (3, 0),
+                         span = (1, 2))
+        buttonSizer3.Add(item = self.functlabel, pos = (4, 0),
+                         span = (1, 2), flag = wx.ALIGN_CENTER)
+        buttonSizer3.Add(item = self.function, pos = (5, 0),
+                         span = (1, 2))
         buttonSizer3.Add(item = self.btn['paren'], pos = (6, 0),
-                         span = (1,1), flag = wx.ALIGN_LEFT)
-        buttonSizer3.Add(item = self.btn_clear, pos = (6,1),
-                         span = (1,1), flag = wx.ALIGN_RIGHT)
+                         flag = wx.ALIGN_LEFT)
+        buttonSizer3.Add(item = self.btn_clear, pos = (6, 1),
+                         flag = wx.ALIGN_RIGHT)
         
         buttonSizer4 = wx.BoxSizer(wx.HORIZONTAL)
+        buttonSizer4.Add(item = self.btn_cmd,
+                         flag = wx.ALL, border = 5)
         buttonSizer4.Add(item = self.btn_close,
                          flag = wx.ALL, border = 5)
         buttonSizer4.Add(item = self.btn_run,
@@ -319,7 +328,7 @@ class MapCalcFrame(wx.Frame):
                   flag = wx.EXPAND | wx.LEFT | wx.RIGHT,
                       border = 5)
         sizer.Add(item = buttonSizer4, proportion = 0,
-                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 1)
+                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 1)
         
         self.panel.SetAutoLayout(True)        
         self.panel.SetSizer(sizer)
@@ -438,9 +447,22 @@ class MapCalcFrame(wx.Frame):
         """!Close window"""
         self.Destroy()
 
+    def OnCmdDialog(self, event):
+        """!Shows command dialog"""
+        name = self.newmaptxt.GetValue().strip()
+        mctxt = self.text_mcalc.GetValue().strip().replace("\n"," ")
+        mctxt = mctxt.replace(" " , "")
+        expr = name
+        if expr:
+            expr += '='
+        expr += mctxt
+        
+        menuform.GUI().ParseCommand(cmd = [self.cmd, 'expression=' + expr],
+                                    parentframe = self)
+        
 if __name__ == "__main__":
     app = wx.App(0)
-    frame = MapCalcFrame(None)
+    frame = MapCalcFrame(None, cmd = 'r.mapcalc')
     frame.Show()
     app.MainLoop()
 

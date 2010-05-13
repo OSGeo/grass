@@ -1000,25 +1000,13 @@
 	  <handler>OnMenuCmd</handler>
 	  <command>r.mask</command>
 	</menuitem>
-	<menu>
-	  <label>Map algebra</label>
-	  <items>
-	    <menuitem>
-	      <label>Interactive map calculator</label>
-	      <help>Map calculator for raster map algebra.</help>
-	      <keywords>raster,algebra</keywords>
-	      <handler>OnMapCalculator</handler>
-	      <command>r.mapcalc</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Map calculator</label>
-	      <help>Raster map calculator.</help>
-	      <keywords>raster,algebra</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>r.mapcalc</command>
-	    </menuitem>
-	  </items>
-	</menu>
+	<menuitem>
+	  <label>Raster calculator</label>
+	  <help>Raster map calculator.</help>
+	  <keywords>raster,algebra</keywords>
+	  <handler>OnMapCalculator</handler>
+	  <command>r.mapcalc</command>
+	</menuitem>
 	<menu>
 	  <label>Neighborhood analysis</label>
 	  <items>
@@ -2779,25 +2767,13 @@
 	  <handler>OnMenuCmd</handler>
 	  <command>r3.mask</command>
 	</menuitem>
-	<menu>
-	  <label>Map algebra</label>
-	  <items>
-	    <menuitem>
-	      <label>Interactive map calculator</label>
-	      <help>Map calculator for raster map algebra.</help>
-	      <keywords>raster,algebra</keywords>
-	      <handler>OnMapCalculator3D</handler>
-	      <command>r3.mapcalc</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Map calculator</label>
-	      <help>Raster map calculator.</help>
-	      <keywords>raster,algebra</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>r3.mapcalc</command>
-	    </menuitem>
-	  </items>
-	</menu>
+	<menuitem>
+	  <label>Volume calculator</label>
+	  <help>Raster map calculator.</help>
+	  <keywords>raster,algebra</keywords>
+	  <handler>OnMapCalculator</handler>
+	  <command>r3.mapcalc</command>
+	</menuitem>
 	<menuitem>
 	  <label>Cross section</label>
 	  <help>Creates cross section 2D raster map from 3d raster map based on 2D elevation map</help>
