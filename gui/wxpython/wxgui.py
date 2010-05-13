@@ -165,9 +165,10 @@ class GMFrame(wx.Frame):
                self.SetSize((w, h))
             except:
                 pass
+        else:
+            self.Centre()
         
         self.Layout()
-        self.Centre()
         self.Show()
         
         # load workspace file if requested
