@@ -374,7 +374,7 @@ class MapCalcFrame(wx.Frame):
         item = event.GetString()
         self._addSomething(item)
         
-    def _addSomething(self,what):
+    def _addSomething(self, what):
         """!Inserts operators, map names, and functions into text area
         """
         self.text_mcalc.SetFocus()
@@ -396,6 +396,8 @@ class MapCalcFrame(wx.Frame):
         newmcalcstr += ' ' + mcalcstr[position:]
         
         self.text_mcalc.SetValue(newmcalcstr)
+        if what == '()':
+            position_offset -= 1
         self.text_mcalc.SetInsertionPoint(position + position_offset)
         self.text_mcalc.Update()
         
