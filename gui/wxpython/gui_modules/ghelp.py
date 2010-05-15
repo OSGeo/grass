@@ -4,7 +4,6 @@
 @brief Help window
 
 Classes:
- - HelpWindow
  - SearchModuleWindow
  - ItemTree
  - MenuTreeWindow
@@ -12,8 +11,9 @@ Classes:
  - AboutWindow
  - InstallExtensionWindow
  - ExtensionTree
- - ManualWindow
- - ManualPanel
+ - HelpFrame
+ - HelpWindow
+ - HelpPanel
 
 (C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -39,7 +39,7 @@ import gcmd
 import globalvar
 import gdialogs
 
-class HelpWindow(wx.Frame):
+class HelpFrame(wx.Frame):
     """!GRASS Quickstart help window"""
     def __init__(self, parent, id, title, size, file):
         wx.Frame.__init__(self, parent=parent, id=id, title=title, size=size)
@@ -47,7 +47,7 @@ class HelpWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         # text
-        content = ManualPanel(parent = self)
+        content = HelpPanel(parent = self)
         content.LoadPage(file)
         
         sizer.Add(item = content, proportion=1, flag=wx.EXPAND)
@@ -1007,7 +1007,7 @@ class ExtensionTree(ItemTree):
         """Check if items are loaded"""
         return self._loaded
 
-class ManualWindow(wx.html.HtmlWindow):
+class HelpWindow(wx.html.HtmlWindow):
     """!This panel holds the text from GRASS docs.
     
     GISBASE must be set in the environment to find the html docs dir.
@@ -1063,7 +1063,7 @@ class ManualWindow(wx.html.HtmlWindow):
         self.historyIdx += 1
         self.parent.OnHistory()
         
-        super(ManualWindow, self).OnLinkClicked(linkinfo)
+        super(HelpWindow, self).OnLinkClicked(linkinfo)
         
     def fillContentsFromFile(self, htmlFile, skip_description=True):
         """!Load content from file"""
@@ -1097,14 +1097,14 @@ class ManualWindow(wx.html.HtmlWindow):
         except: # The Manual file was not found
             self.loaded = False
         
-class ManualPanel(wx.Panel):
+class HelpPanel(wx.Panel):
     def __init__(self, parent, grass_command = "index", text = None,
                  skip_description = False, **kwargs):
         self.grass_command = grass_command
         wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
         
-        self.content = ManualWindow(self, grass_command, text,
-                                    skip_description)
+        self.content = HelpWindow(self, grass_command, text,
+                                  skip_description)
         
         self.btnNext = wx.Button(parent = self, id = wx.ID_ANY,
                                  label = _("&Next"))
