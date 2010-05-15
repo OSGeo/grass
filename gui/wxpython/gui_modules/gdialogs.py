@@ -1455,3 +1455,35 @@ def GetImageHandlers(image):
                        'ext'  : 'xpm' })
     
     return filetype, ltype
+
+class StaticWrapText(wx.StaticText):
+    """! A Static Text field that wraps its text to fit its width,
+    enlarging its height if necessary.
+    """
+    def __init__(self, parent, id = wx.ID_ANY, label = '', *args, **kwds):
+        self.parent        = parent
+        self.originalLabel = label
+        
+        wx.StaticText.__init__(self, parent, id, label = '', *args, **kwds)
+        
+        self.SetLabel(label)
+        self.Bind(wx.EVT_SIZE, self.OnResize)
+    
+    def SetLabel(self, label):
+        self.originalLabel = label
+        self.wrappedSize = None
+        self.OnResize(None)
+
+    def OnResize(self, event):
+        if not getattr(self, "resizing", False):
+            self.resizing = True
+            newSize = wx.Size(self.parent.GetSize().width,
+                              self.GetSize().height)
+            if self.wrappedSize != newSize:
+                wx.StaticText.SetLabel(self, self.originalLabel)
+                self.Wrap(newSize.width)
+                self.wrappedSize = newSize
+                
+                self.SetSize(self.wrappedSize)
+            del self.resizing
+

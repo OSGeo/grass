@@ -12,6 +12,8 @@ Classes:
  - AboutWindow
  - InstallExtensionWindow
  - ExtensionTree
+ - ManualWindow
+ - ManualPanel
 
 (C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -35,31 +37,23 @@ import  wx.lib.scrolledpanel as scrolled
 import menudata
 import gcmd
 import globalvar
-import menuform
+import gdialogs
 
 class HelpWindow(wx.Frame):
     """!GRASS Quickstart help window"""
     def __init__(self, parent, id, title, size, file):
-
         wx.Frame.__init__(self, parent=parent, id=id, title=title, size=size)
-
+        
         sizer = wx.BoxSizer(wx.VERTICAL)
-
+        
         # text
-        helpFrame = wx.html.HtmlWindow(parent=self, id=wx.ID_ANY)
-        helpFrame.SetStandardFonts (size = 10)
-        helpFrame.SetBorders(10)
-        wx.InitAllImageHandlers()
-
-        helpFrame.LoadFile(file)
-        self.Ok = True
-
-        sizer.Add(item=helpFrame, proportion=1, flag=wx.EXPAND)
-
+        content = ManualPanel(parent = self)
+        content.LoadPage(file)
+        
+        sizer.Add(item = content, proportion=1, flag=wx.EXPAND)
+        
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
-        #        sizer.Fit(self)
-        #        sizer.SetSizeHints(self)
         self.Layout()
 
 class SearchModuleWindow(wx.Panel):
@@ -91,8 +85,8 @@ class SearchModuleWindow(wx.Panel):
         self.search.Bind(wx.EVT_TEXT, self.OnSearchModule)
         
         if self.showTip:
-            self.searchTip  = menuform.StaticWrapText(parent = self, id = wx.ID_ANY,
-                                                      size = (-1, 35))
+            self.searchTip = gdialogs.StaticWrapText(parent = self, id = wx.ID_ANY,
+                                                     size = (-1, 35))
         
         if self.showChoice:
             self.searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
@@ -1012,3 +1006,180 @@ class ExtensionTree(ItemTree):
     def IsLoaded(self):
         """Check if items are loaded"""
         return self._loaded
+
+class ManualWindow(wx.html.HtmlWindow):
+    """!This panel holds the text from GRASS docs.
+    
+    GISBASE must be set in the environment to find the html docs dir.
+    The SYNOPSIS section is skipped, since this Panel is supposed to
+    be integrated into the cmdPanel and options are obvious there.
+    """
+    def __init__(self, parent, grass_command, text, skip_description,
+                 **kwargs):
+        """!If grass_command is given, the corresponding HTML help
+        file will be presented, with all links pointing to absolute
+        paths of local files.
+
+        If 'skip_description' is True, the HTML corresponding to
+        SYNOPSIS will be skipped, thus only presenting the help file
+        from the DESCRIPTION section onwards.
+
+        If 'text' is given, it must be the HTML text to be presented
+        in the Panel.
+        """
+        self.parent = parent
+        wx.InitAllImageHandlers()
+        wx.html.HtmlWindow.__init__(self, parent = parent, **kwargs)
+        
+        gisbase = os.getenv("GISBASE")
+        self.loaded = False
+        self.history = list()
+        self.historyIdx = 0
+        self.fspath = os.path.join(gisbase, "docs", "html")
+        
+        self.SetStandardFonts (size = 10)
+        self.SetBorders(10)
+        
+        if text is None:
+            if skip_description:
+                url = os.path.join(self.fspath, grass_command + ".html")
+                self.fillContentsFromFile(url,
+                                          skip_description = skip_description)
+                self.history.append(url)
+                self.loaded = True
+            else:
+                ### FIXME: calling LoadPage() is strangely time-consuming (only first call)
+                # self.LoadPage(self.fspath + grass_command + ".html")
+                self.loaded = False
+        else:
+            self.SetPage(text)
+            self.loaded = True
+        
+    def OnLinkClicked(self, linkinfo):
+        url = linkinfo.GetHref()
+        if url[:4] != 'http':
+            url = os.path.join(self.fspath, url)
+        self.history.append(url)
+        self.historyIdx += 1
+        self.parent.OnHistory()
+        
+        super(ManualWindow, self).OnLinkClicked(linkinfo)
+        
+    def fillContentsFromFile(self, htmlFile, skip_description=True):
+        """!Load content from file"""
+        aLink = re.compile(r'(<a href="?)(.+\.html?["\s]*>)', re.IGNORECASE)
+        imgLink = re.compile(r'(<img src="?)(.+\.[png|gif])', re.IGNORECASE)
+        try:
+            contents = []
+            skip = False
+            for l in file(htmlFile, "rb").readlines():
+                if "DESCRIPTION" in l:
+                    skip = False
+                if not skip:
+                    # do skip the options description if requested
+                    if "SYNOPSIS" in l:
+                        skip = skip_description
+                    else:
+                        # FIXME: find only first item
+                        findALink = aLink.search(l)
+                        if findALink is not None: 
+                            contents.append(aLink.sub(findALink.group(1)+
+                                                      self.fspath+findALink.group(2),l))
+                        findImgLink = imgLink.search(l)
+                        if findImgLink is not None: 
+                            contents.append(imgLink.sub(findImgLink.group(1)+
+                                                        self.fspath+findImgLink.group(2),l))
+                        
+                        if findALink is None and findImgLink is None:
+                            contents.append(l)
+            self.SetPage("".join(contents))
+            self.loaded = True
+        except: # The Manual file was not found
+            self.loaded = False
+        
+class ManualPanel(wx.Panel):
+    def __init__(self, parent, grass_command = "index", text = None,
+                 skip_description = False, **kwargs):
+        self.grass_command = grass_command
+        wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
+        
+        self.content = ManualWindow(self, grass_command, text,
+                                    skip_description)
+        
+        self.btnNext = wx.Button(parent = self, id = wx.ID_ANY,
+                                 label = _("&Next"))
+        self.btnNext.Enable(False)
+        self.btnPrev = wx.Button(parent = self, id = wx.ID_ANY,
+                                 label = _("&Previous"))
+        self.btnPrev.Enable(False)
+        
+        self.btnNext.Bind(wx.EVT_BUTTON, self.OnNext)
+        self.btnPrev.Bind(wx.EVT_BUTTON, self.OnPrev)
+        
+        self._layout()
+
+    def _layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        btnSizer.Add(item = self.btnPrev, proportion = 0,
+                     flag = wx.ALL, border = 5)
+        btnSizer.Add(item = wx.Size(1, 1), proportion = 1)
+        btnSizer.Add(item = self.btnNext, proportion = 0,
+                     flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        
+        sizer.Add(item = self.content, proportion = 1,
+                  flag = wx.EXPAND)
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.EXPAND)
+        
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
+    def LoadPage(self, path = None):
+        """!Load page"""
+        if not path:
+            path = os.path.join(self.content.fspath, self.grass_command + ".html")
+        self.content.history.append(path)
+        self.content.LoadPage(path)
+        
+    def IsFile(self):
+        """!Check if file exists"""
+        return os.path.isfile(os.path.join(self.content.fspath, self.grass_command + ".html"))
+
+    def IsLoaded(self):
+        return self.content.loaded
+
+    def OnHistory(self):
+        """!Update buttons"""
+        nH = len(self.content.history)
+        iH = self.content.historyIdx
+        if iH == nH - 1:
+            self.btnNext.Enable(False)
+        elif iH > -1:
+            self.btnNext.Enable(True)
+        if iH < 1:
+            self.btnPrev.Enable(False)
+        else:
+            self.btnPrev.Enable(True)
+
+    def OnNext(self, event):
+        """Load next page"""
+        self.content.historyIdx += 1
+        idx = self.content.historyIdx
+        path = self.content.history[idx]
+        self.content.LoadPage(path)
+        self.OnHistory()
+        
+        event.Skip()
+        
+    def OnPrev(self, event):
+        """Load previous page"""
+        self.content.historyIdx -= 1
+        idx = self.content.historyIdx
+        path = self.content.history[idx]
+        self.content.LoadPage(path)
+        self.OnHistory()
+        
+        event.Skip()
