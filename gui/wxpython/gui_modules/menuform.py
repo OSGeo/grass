@@ -84,7 +84,7 @@ except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
 import gdialogs
-from ghelp import ManualPanel
+from ghelp import HelpPanel
 
 gisbase = os.getenv("GISBASE")
 if gisbase is None:
@@ -1034,7 +1034,7 @@ class cmdPanel(wx.Panel):
             self.goutput = None
             self.goutputId = -1
         
-        self.manual_tab = ManualPanel(parent = self, grass_command = self.task.name)
+        self.manual_tab = HelpPanel(parent = self, grass_command = self.task.name)
         if not self.manual_tab.IsFile():
             self.manual_tab.Hide()
         else:
