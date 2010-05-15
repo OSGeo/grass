@@ -32,7 +32,7 @@ pythonw on a Mac.
 @todo
  - verify option value types
 
-Copyright (C) 2000-2019 by the GRASS Development Team
+Copyright (C) 2000-2010 by the GRASS Development Team
 This program is free software under the GPL (>=v2) Read the file
 COPYING coming with GRASS for details.
 
@@ -83,7 +83,8 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
-import utils
+import gdialogs
+from ghelp import ManualPanel
 
 gisbase = os.getenv("GISBASE")
 if gisbase is None:
@@ -601,79 +602,7 @@ class processTask:
         """!Get grassTask instance"""
         return self.task
     
-class helpPanel(wx.html.HtmlWindow):
-    """
-    This panel holds the text from GRASS docs.
-
-    GISBASE must be set in the environment to find the html docs dir.
-    The SYNOPSIS section is skipped, since this Panel is supposed to
-    be integrated into the cmdPanel and options are obvious there.
-    """
-    def __init__(self, grass_command = "index", text = None,
-                 skip_description=False, *args, **kwargs):
-        """ If grass_command is given, the corresponding HTML help file will
-        be presented, with all links pointing to absolute paths of
-        local files.
-
-        If 'skip_description' is True, the HTML corresponding to
-        SYNOPSIS will be skipped, thus only presenting the help file
-        from the DESCRIPTION section onwards.
-
-        If 'text' is given, it must be the HTML text to be presented in the Panel.
-        """
-
-        wx.html.HtmlWindow.__init__(self, *args, **kwargs)
-        self.fspath = gisbase + "/docs/html/"
-
-        self.SetStandardFonts ( size = 10 )
-        self.SetBorders(10)
-        wx.InitAllImageHandlers()
-
-        if text is None:
-            if skip_description:
-                self.fillContentsFromFile ( self.fspath + grass_command + ".html",
-                                            skip_description=skip_description )
-                self.Ok = True
-            else:
-                ### FIXME: calling LoadPage() is strangely time-consuming (only first call)
-                # self.LoadPage(self.fspath + grass_command + ".html")
-                self.Ok = False
-        else:
-            self.SetPage( text )
-            self.Ok = True
-
-    def fillContentsFromFile( self, htmlFile, skip_description=True ):
-        aLink = re.compile( r'(<a href="?)(.+\.html?["\s]*>)', re.IGNORECASE )
-        imgLink = re.compile( r'(<img src="?)(.+\.[png|gif])', re.IGNORECASE )
-        try:
-            # contents = [ '<head><base href="%s"></head>' % self.fspath ]
-            contents = []
-            skip = False
-            for l in file( htmlFile, "rb" ).readlines():
-                if "DESCRIPTION" in l:
-                    skip = False
-                if not skip:
-                    # do skip the options description if requested
-                    if "SYNOPSIS" in l:
-                        skip = skip_description
-                    else:
-                        # FIXME: find only first item
-                        findALink = aLink.search( l )
-                        if findALink is not None: 
-                            contents.append( aLink.sub(findALink.group(1)+
-                                                           self.fspath+findALink.group(2),l) )
-                        findImgLink = imgLink.search( l )
-                        if findImgLink is not None: 
-                            contents.append( imgLink.sub(findImgLink.group(1)+
-                                                         self.fspath+findImgLink.group(2),l) )
-        
-                        if findALink is None and findImgLink is None:
-                            contents.append( l )
-            self.SetPage( "".join( contents ) )
-            self.Ok = True
-        except: # The Manual file was not found
-            self.Ok = False
-
+    
 class mainFrame(wx.Frame):
     """!This is the Frame containing the dialog for options input.
 
@@ -745,8 +674,8 @@ class mainFrame(wx.Frame):
             module_desc = self.task.label + ' ' + self.task.description
         else:
             module_desc = self.task.description
-        self.description = StaticWrapText (parent=self.panel,
-                                           label=module_desc)
+        self.description = gdialogs.StaticWrapText(parent=self.panel,
+                                                   label=module_desc)
         topsizer.Add (item=self.description, proportion=1, border=5,
                       flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
                       
@@ -1105,9 +1034,8 @@ class cmdPanel(wx.Panel):
             self.goutput = None
             self.goutputId = -1
         
-        self.manual_tab = helpPanel(parent = self.notebook, grass_command = self.task.name)
-        self.manual_tabsizer = wx.BoxSizer(wx.VERTICAL)
-        if not os.path.isfile(self.manual_tab.fspath + self.task.name + ".html"):
+        self.manual_tab = ManualPanel(parent = self, grass_command = self.task.name)
+        if not self.manual_tab.IsFile():
             self.manual_tab.Hide()
         else:
             self.notebook.AddPage(self.manual_tab, text=_("Manual"))
@@ -1700,10 +1628,9 @@ class cmdPanel(wx.Panel):
             tab[section].SetMinSize( (self.constrained_size[0], self.panelMinHeight) )
             # tab[section].SetMinSize( constrained_size )
 
-        if self.manual_tab.Ok:
+        if self.manual_tab.IsLoaded():
             self.manual_tab.SetMinSize( (self.constrained_size[0], self.panelMinHeight) )
-            # manual_tab.SetMinSize( constrained_size )
-
+        
         self.SetSizer( panelsizer )
         panelsizer.Fit(self.notebook)
 
@@ -1800,10 +1727,9 @@ class cmdPanel(wx.Panel):
                 sel == self.manual_tab_id:
             # calling LoadPage() is strangely time-consuming (only first call)
             # FIXME: move to helpPage.__init__()
-            if not self.manual_tab.Ok:
+            if not self.manual_tab.IsLoaded():
                 wx.Yield()
-                self.manual_tab.LoadPage(self.manual_tab.fspath + self.task.name + ".html")
-                self.manual_tab.Ok = True
+                self.manual_tab.LoadPage()
 
         self.Layout()
 
@@ -2129,37 +2055,6 @@ class GUI:
                             prompt in ('raster', '3d-raster', 'vector'):
                         return p.get('name', None)
         return None
-
-class StaticWrapText(wx.StaticText):
-    """! A Static Text field that wraps its text to fit its width,
-    enlarging its height if necessary.
-    """
-    def __init__(self, parent, id = wx.ID_ANY, label = '', *args, **kwds):
-        self.parent        = parent
-        self.originalLabel = label
-        
-        wx.StaticText.__init__(self, parent, id, label = '', *args, **kwds)
-        
-        self.SetLabel(label)
-        self.Bind(wx.EVT_SIZE, self.OnResize)
-    
-    def SetLabel(self, label):
-        self.originalLabel = label
-        self.wrappedSize = None
-        self.OnResize(None)
-
-    def OnResize(self, event):
-        if not getattr(self, "resizing", False):
-            self.resizing = True
-            newSize = wx.Size(self.parent.GetSize().width,
-                              self.GetSize().height)
-            if self.wrappedSize != newSize:
-                wx.StaticText.SetLabel(self, self.originalLabel)
-                self.Wrap(newSize.width)
-                self.wrappedSize = newSize
-                
-                self.SetSize(self.wrappedSize)
-            del self.resizing
 
 if __name__ == "__main__":
 
