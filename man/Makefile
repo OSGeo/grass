@@ -43,7 +43,7 @@ manpages:
 .PHONY: manpages
 
 define build
-GISBASE="$(GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	$(PYTHON) ./build_$(1).py $(2)
 endef
 
