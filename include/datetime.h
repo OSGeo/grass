@@ -12,7 +12,7 @@
 #define DATETIME_MINUTE 5
 #define DATETIME_SECOND 6
 
-typedef struct
+typedef struct DateTime
 {
     int mode;			/* absolute or relative */
     int from, to;

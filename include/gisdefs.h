@@ -44,6 +44,8 @@
 # define G__freea(p) G_free(p)
 #endif
 
+#include <stdarg.h>
+#include <stdio.h>
 #include <sys/types.h>
 
 /* adj_cellhd.c */
@@ -585,12 +587,12 @@ void G__temp_element(char *);
 
 /* timestamp.c */
 void G_init_timestamp(struct TimeStamp *);
-void G_set_timestamp(struct TimeStamp *, const DateTime *);
-void G_set_timestamp_range(struct TimeStamp *, const DateTime *,
-			   const DateTime *);
+void G_set_timestamp(struct TimeStamp *, const struct DateTime *);
+void G_set_timestamp_range(struct TimeStamp *, const struct DateTime *,
+			   const struct DateTime *);
 int G__read_timestamp(FILE *, struct TimeStamp *);
 int G__write_timestamp(FILE *, const struct TimeStamp *);
-void G_get_timestamps(const struct TimeStamp *, DateTime *, DateTime *, int *);
+void G_get_timestamps(const struct TimeStamp *, struct DateTime *, struct DateTime *, int *);
 int G_read_raster_timestamp(const char *, const char *, struct TimeStamp *);
 int G_read_vector_timestamp(const char *, const char *, struct TimeStamp *);
 int G_write_raster_timestamp(const char *, const struct TimeStamp *);
