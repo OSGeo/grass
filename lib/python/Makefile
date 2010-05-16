@@ -13,7 +13,10 @@ MODULES = core db raster vector array
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
+CLEAN_SUBDIRS = ctypes
+
 default: $(PYFILES) $(PYCFILES) $(GDIR)/__init__.py $(GDIR)/__init__.pyc
+	$(MAKE) -C ctypes
 
 $(PYDIR):
 	$(MKDIR) $@
