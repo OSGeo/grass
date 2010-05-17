@@ -10,7 +10,7 @@ DOXNAME=
 DOXINPUT=grasspython.dox
 
 MODULES = date grass raster gmath proj imagery vector display stats \
-	dbmi g3d arraystats cluster trans vedit
+	dbmi g3d arraystats cluster trans vedit ogsf nviz
 
 date_LIBS       = $(DATETIMELIB)
 grass_LIBS      = $(GISLIB)
@@ -27,6 +27,8 @@ arraystats_LIBS = $(ARRAYSTATSLIB)
 cluster_LIBS    = $(CLUSTERLIB)
 trans_LIBS      = $(TRANSLIB)
 vedit_LIBS      = $(VEDITLIB)
+ogsf_LIBS       = $(OGSFLIB)
+nviz_LIBS       = $(NVIZLIB)
 
 date_INC        = datetime.h P_datetime.h
 grass_INC       = gis.h gisdefs.h
@@ -43,9 +45,13 @@ arraystats_INC  = arraystats.h
 cluster_INC     = cluster.h
 trans_INC       = transform.h
 vedit_INC       = vedit.h
+ogsf_INC	= ogsf_proto.h gstypes.h gsurf.h kftypes.h keyframe.h
+nviz_INC        = nviz.h
 
-CTYPESFLAGS = $(INC) $(LIBPATH)
-EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).pyc $(M).py)
+SED = sed
+
+CTYPESFLAGS = $(INC)
+EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).py) ctypesheader.py
 
 ifneq ($(MINGW),)
 EXTRA_LIBS = $(INTLLIB)
@@ -57,8 +63,8 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/lib
 
-PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
-PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
+PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypesheader)
+PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypesheader)
 LPYFILES := $(patsubst %,%.py,$(MODULES))
 
 ifneq ($(strip $(CTYPESGEN)),)
@@ -68,10 +74,26 @@ default:
 endif
 
 $(DSTDIR)/%.py: %.py | $(DSTDIR)
-	$(INSTALL_DATA) $< $@
+	$(SED) \
+	-e '/^# End loader$$/a\
+	from ctypesheader import *\
+	from ctypesheader import _variadic_function' \
+	-e '/^# Begin preamble$$/,/^# End preamble$$/d' \
+	-e '/^# Begin loader$$/,/^# End loader$$/d' \
+	$< > $@
+#	$(INSTALL_DATA) $< $@
 
 %.py: $(%_INC) $(%_LIBS)
 	$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_INC)) -o $@
+
+$(DSTDIR)/ctypesheader.py: ctypesheader.py | $(DSTDIR)
+	$(INSTALL_DATA) $< $@
+
+ctypesheader.py: grass.py
+	$(SED) -n \
+	-e '/^# Begin preamble$$/,/^# End preamble$$/p' \
+	-e '/^# Begin loader$$/,/^# End loader$$/p' \
+	$< > $@
 
 $(PYDIR):
 	$(MKDIR) $@
