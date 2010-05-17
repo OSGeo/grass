@@ -36,11 +36,12 @@ import utils
 import globalvar
 from preferences import globalSettings as UserSettings
 
-sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
-try:
-    import grass7_wxnviz as wxnviz
-except ImportError:
-    wxnviz = None
+#sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
+#try:
+#    import grass7_wxnviz as wxnviz
+#except ImportError:
+#    wxnviz = None
+import wxnviz
 
 class ProcessWorkspaceFile:
     def __init__(self, tree):
