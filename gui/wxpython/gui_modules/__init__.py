@@ -34,6 +34,7 @@ all = [
     "toolbars.py",
     "units.py",
     "utils.py",
+    "vclean.py",
     "vdigit.py",
     "workspace.py",
 ]
