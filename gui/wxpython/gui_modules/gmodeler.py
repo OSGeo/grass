@@ -16,7 +16,8 @@ Classes:
  - WriteModelFile
  - PreferencesDialog
  - PropertiesDialog
- 
+ - ModelParamDialog
+
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -32,6 +33,8 @@ import traceback
 import getpass
 import stat
 import textwrap
+import tempfile
+import copy
 
 try:
     import xml.etree.ElementTree as etree
@@ -133,7 +136,7 @@ class Model(object):
                                      y = action['pos'][1],
                                      width = action['size'][0],
                                      height = action['size'][1],
-                                     cmd = action['cmd'])
+                                     task = action['task'])
             actionItem.SetId(action['id'])
 
             self.actions.append(actionItem)
@@ -243,6 +246,34 @@ class Model(object):
         
         for data in self.data:
             data.Update()
+
+    def IsParametrized(self):
+        """!Return True if model is parametrized"""
+        if self.Parametrize():
+            return True
+        
+        return False
+    
+    def Parametrize(self):
+        """!Return parametrized options"""
+        result = dict()
+        for action in self.actions:
+            name   = action.GetName()
+            params = action.GetParams()
+            for f in params['flags']:
+                if f.get('parametrized', False):
+                    if not result.has_key(name):
+                        result[name] = { 'flags' : list(),
+                                         'params': list() }
+                    result[name]['flags'].append(f)
+            for p in params['params']:
+                if p.get('parametrized', False):
+                    if not result.has_key(name):
+                        result[name] = { 'flags' : list(),
+                                         'params': list() }
+                    result[name]['params'].append(p)
+        
+        return result
     
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
@@ -571,11 +602,33 @@ class ModelFrame(wx.Frame):
             if ret != wx.ID_YES:
                 return
         
+        params = self.model.Parametrize()
+        if params:
+            dlg = ModelParamDialog(parent = self,
+                                   params = params)
+            dlg.CenterOnParent()
+            
+            ret = dlg.ShowModal()
+            if ret != wx.ID_OK:
+                dlg.Destroy()
+                return
+        
         self.goutput.cmdThread.SetId(-1)
         for action in self.model.GetActions():
+            name = action.GetName()
+            if params.has_key(name):
+                paramsOrig = action.GetParams(dcopy = True)
+                action.MergeParams(params[name])
+            
             self.SetStatusText(_('Running model...'), 0) 
             self.goutput.RunCmd(command = action.GetLog(string = False),
                                 onDone = self.OnDone)
+            
+            if params.has_key(name):
+                action.SetParams(paramsOrig)
+        
+        if params:
+            dlg.Destroy()
         
     def OnDone(self, returncode):
         """!Computation finished"""
@@ -836,12 +889,13 @@ if __name__ == "__main__":
         
         # show properties dialog
         win = action.GetPropDialog()
-        if not win:
+        if not win and action.GetLog(string = False):
             module = menuform.GUI().ParseCommand(action.GetLog(string = False),
                                                  completed = (self.GetOptData, action, action.GetParams()),
                                                  parentframe = self, show = True)
-        elif not win.IsShown():
+        elif win and not win.IsShown():
             win.Show()
+        
         if win:
             win.Raise()
 
@@ -949,7 +1003,7 @@ if __name__ == "__main__":
             self.canvas.Refresh()
         
         if dcmd:
-            layer.SetProperties(dcmd, params, propwin)
+            layer.SetProperties(params, propwin)
             
         self.SetStatusText(layer.GetLog(), 0)
         
@@ -1009,13 +1063,24 @@ if __name__ == "__main__":
         self.canvas.Refresh(True)
         
     def WriteModelFile(self, filename):
-        """!Save model to model file
+        """!Save model to model file, recover original file on error.
         
         @return True on success
         @return False on failure
         """
+        tmpfile = tempfile.TemporaryFile(mode='w+b')
         try:
-            file = open(filename, "w")
+            WriteModelFile(fd = tmpfile, actions = self.model.GetActions(), data = self.model.GetData())
+        except StandardError:
+            GMessage(parent = self,
+                     message = _("Writing current settings to model file failed."))
+            return False
+        
+        try:
+            mfile = open(filename, "w")
+            tmpfile.seek(0)
+            for line in tmpfile.readlines():
+                mfile.write(line)
         except IOError:
             wx.MessageBox(parent = self,
                           message = _("Unable to open file <%s> for writing.") % filename,
@@ -1023,17 +1088,7 @@ if __name__ == "__main__":
                           style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
             return False
         
-        try:
-            WriteModelFile(fd = file, actions = self.model.GetActions(), data = self.model.GetData())
-        except StandardError:
-            file.close()
-            
-            GMessage(parent = self,
-                     message = _("Writing current settings to model file failed."))
-            
-            return False
-        
-        file.close()
+        mfile.close()
         
         return True
     
@@ -1074,20 +1129,23 @@ class ModelCanvas(ogl.ShapeCanvas):
         
 class ModelAction(ogl.RectangleShape):
     """!Action class (GRASS module)"""
-    def __init__(self, parent, x, y, cmd = None, width = None, height = None):
+    def __init__(self, parent, x, y, cmd = None, task = None, width = None, height = None):
         self.parent  = parent
-        self.cmd     = cmd
+        self.task    = task
         if not width:
             width = UserSettings.Get(group='modeler', key='action', subkey=('size', 'width'))
         if not height:
             height = UserSettings.Get(group='modeler', key='action', subkey=('size', 'height'))
         
-        if self.cmd:
-            task = menuform.GUI().ParseCommand(cmd = self.cmd,
-                                               show = None)
-            self.params = task.get_options()
+        if cmd:
+            self.task = menuform.GUI().ParseCommand(cmd = self.cmd,
+                                                    show = None)
         else:
-            self.params  = None
+            if task:
+                self.task = task
+            else:
+                self.task = None
+        
         self.propWin = None
         self.id      = -1    # used for gxm file
         
@@ -1103,10 +1161,11 @@ class ModelAction(ogl.RectangleShape):
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             self._setBrush(False)
-            if self.cmd and len(self.cmd) > 0:
-                self.AddText(self.cmd[0])
+            cmd = self.task.getCmd(ignoreErrors = False)
+            if cmd and len(cmd) > 0:
+                self.AddText(cmd[0])
             else:
-                self.AddText('<<module>>')
+                self.AddText('<<%s>>' % _("module"))
         
     def _setBrush(self, isvalid):
         """!Set brush"""
@@ -1130,10 +1189,10 @@ class ModelAction(ogl.RectangleShape):
         """!Set id"""
         self.id = id
     
-    def SetProperties(self, dcmd, params, propwin):
+    def SetProperties(self, params, propwin):
         """!Record properties dialog"""
-        self.cmd = dcmd
-        self.params = params
+        self.task.params = params['params']
+        self.task.flags  = params['flags']
         self.propWin = propwin
 
     def GetPropDialog(self):
@@ -1142,30 +1201,44 @@ class ModelAction(ogl.RectangleShape):
 
     def GetLog(self, string = True):
         """!Get logging info"""
+        cmd = self.task.getCmd(ignoreErrors = True)
         if string:
-            if self.cmd is None:
+            if cmd is None:
                 return ''
             else:
-                return ' '.join(self.cmd)
+                return ' '.join(cmd)
         
-        return self.cmd
+        return cmd
     
     def GetName(self):
         """!Get name"""
-        if self.cmd and len(self.cmd) > 0:
-            return self.cmd[0]
+        cmd = self.task.getCmd(ignoreErrors = True)
+        if cmd and len(cmd) > 0:
+            return cmd[0]
         
         return _('unknown')
 
-    def GetParams(self):
+    def GetParams(self, dcopy = False):
         """!Get dictionary of parameters"""
-        return self.params
+        if dcopy:
+            return copy.deepcopy(self.task.get_options())
+        
+        return self.task.get_options()
 
-    def SetParams(self, params, cmd):
+    def SetParams(self, params):
         """!Set dictionary of parameters"""
-        self.params = params
-        self.cmd    = cmd
-
+        self.task.params = params['params']
+        self.task.flags  = params['flags']
+        
+    def MergeParams(self, params):
+        """!Merge dictionary of parameters"""
+        for f in params['flags']:
+            self.task.set_flag(f['name'],
+                               f.get('value', False))
+        for p in params['params']:
+            self.task.set_param(p['name'],
+                                p.get('value', ''))
+        
     def SetValid(self, isvalid):
         """!Set instance to be valid/invalid"""
         self.isValid = isvalid
@@ -1277,9 +1350,8 @@ class ModelData(ogl.EllipseShape):
                 task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
                                                    show = None)
                 task.set_param(self.name, self.value)
-                action.SetParams(params = task.get_options(),
-                                 cmd = task.getCmd(ignoreErrors = True))
-            
+                action.SetParams(params = task.get_options())
+        
     def GetActions(self, direction):
         """!Get related actions
 
@@ -1546,6 +1618,10 @@ class ModelSearchDialog(wx.Dialog):
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
         self.btnOk     = wx.Button(self.panel, wx.ID_OK)
         self.btnOk.SetDefault()
+        self.btnOk.Enable(False)
+
+        self.cmd_prompt.Bind(wx.EVT_KEY_UP, self.OnText)
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.btnOk)
         
         self._layout()
         
@@ -1589,11 +1665,37 @@ class ModelSearchDialog(wx.Dialog):
     
     def OnOk(self, event):
         self.btnOk.SetFocus()
+        cmd = self.GetCmd()
+        
+        if len(cmd) < 1:
+            GMessage(parent = self,
+                     message = _("Command not defined.\n\n"
+                                 "Unable to add new action to the model."))
+            return
+        
+        if cmd[0] not in globalvar.grassCmd['all']:
+            GMessage(parent = self,
+                     message = _("'%s' is not a GRASS module.\n\n"
+                                 "Unable to add new action to the model.") % cmd[0])
+            return
+        
+        self.EndModal(wx.ID_OK)
+        
+    def OnText(self, event):
+        if self.cmd_prompt.AutoCompActive():
+            return
+        
+        entry = self.cmd_prompt.GetTextLeft()
+        if len(entry) > 0:
+            self.btnOk.Enable()
+        else:
+            self.btnOk.Enable(False)
+            
+        event.Skip()
         
     def Reset(self):
         """!Reset dialog"""
-        self.searchBy.SetSelection(0)
-        self.search.SetValue('')
+        self.search.Reset()
         self.cmd_prompt.OnCmdErase(None)
 
 class ModelRelation(ogl.LineShape):
@@ -1653,16 +1755,16 @@ class ProcessModelFile:
             
             task = action.find('task')
             if task:
-                cmd = self._processTask(task)
+                task = self._processTask(task)
             else:
-                cmd = None
-
+                task = None
+            
             aId = int(action.get('id', -1))
             
-            self.actions.append({ 'pos' : pos,
-                                  'size': size,
-                                  'cmd' : cmd,
-                                  'id'  : aId })
+            self.actions.append({ 'pos'  : pos,
+                                  'size' : size,
+                                  'task' : task,
+                                  'id'   : aId })
             
     def _getDim(self, node):
         """!Get position and size of shape"""
@@ -1720,25 +1822,49 @@ class ProcessModelFile:
                                'from' : fromDir })
         
     def _processTask(self, node):
-        """!Process task"""
+        """!Process task
+
+        @return grassTask instance
+        @return None on error
+        """
         cmd = list()
+        parametrized = list()
+        
         name = node.get('name', None)
         if not name:
-            return cmd
+            return None
+        
         cmd.append(name)
         
         # flags
-        for p in node.findall('flag'):
-            flag = p.get('name', '')
+        for f in node.findall('flag'):
+            flag = f.get('name', '')
+            if f.get('parametrized', '0') == '1':
+                parametrized.append(('flag', flag))
+                if f.get('value', '1') == '0':
+                    continue
             if len(flag) > 1:
                 cmd.append('--' + flag)
             else:
                 cmd.append('-' + flag)
         # parameters
         for p in node.findall('parameter'):
-            cmd.append('%s=%s' % (p.get('name', ''),
+            name = p.get('name', '')
+            if p.find('parametrized') is not None:
+                parametrized.append(('param', name))
+            cmd.append('%s=%s' % (name,
                                   self._filterValue(self._getNodeText(p, 'value'))))
-        return cmd
+            
+        task = menuform.GUI().ParseCommand(cmd = cmd,
+                                           show = None)
+        
+        for opt, name in parametrized:
+            if opt == 'flag':
+                task.set_flag(name, True, element = 'parametrized')
+            else:
+                task.set_param(name, True, element = 'parametrized')
+        
+        return task
     
 class WriteModelFile:
     """!Generic class for writing model file"""
@@ -1788,9 +1914,17 @@ class WriteModelFile:
             for key, val in action.GetParams().iteritems():
                 if key == 'flags':
                     for f in val:
-                        if f.get('value', False):
-                            self.fd.write('%s<flag name="%s" />\n' %
-                                          (' ' * self.indent, f.get('name', '')))
+                        if f.get('value', False) or f.get('parametrized', False):
+                            if f.get('parametrized', False):
+                                if f.get('value', False) == False:
+                                    self.fd.write('%s<flag name="%s" value="0" parametrized="1" />\n' %
+                                                  (' ' * self.indent, f.get('name', '')))
+                                else:
+                                    self.fd.write('%s<flag name="%s" parametrized="1" />\n' %
+                                                  (' ' * self.indent, f.get('name', '')))
+                            else:
+                                self.fd.write('%s<flag name="%s" />\n' %
+                                              (' ' * self.indent, f.get('name', '')))
                 else: # parameter
                     for p in val:
                         if not p.get('value', ''):
@@ -1798,6 +1932,8 @@ class WriteModelFile:
                         self.fd.write('%s<parameter name="%s">\n' %
                                       (' ' * self.indent, p.get('name', '')))
                         self.indent += 4
+                        if p.get('parametrized', False):
+                            self.fd.write('%s<parametrized />\n' % (' ' * self.indent))
                         self.fd.write('%s<value>%s</value>\n' %
                                       (' ' * self.indent, self._filterValue(p.get('value', ''))))
                         self.indent -= 4
@@ -2200,7 +2336,71 @@ class PropertiesDialog(wx.Dialog):
         self.name.SetValue(prop['name'])
         self.desc.SetValue(prop['desc'])
         self.author.SetValue(prop['author'])
+
+class ModelParamDialog(wx.Dialog):
+    def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+        """!Model parameters dialog
+        """
+        self.parent = parent
+        self.params = params
         
+        wx.Dialog.__init__(self, parent = parent, id = id, title = title, style = style, **kwargs)
+        
+        self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY,
+                                        style = FN.FNB_FANCY_TABS |
+                                        FN.FNB_BOTTOM |
+                                        FN.FNB_NO_NAV_BUTTONS |
+                                        FN.FNB_NO_X_BUTTON)
+        panel = self._createPages()
+        wx.CallAfter(self.notebook.SetSelection, 0)
+        
+        self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
+        self.btnRun     = wx.Button(parent = self, id = wx.ID_OK,
+                                    label = _("&Run"))
+        self.btnRun.SetDefault()
+        
+        self._layout()
+        
+        size = self.GetBestSize()
+        self.SetMinSize(size)
+        self.SetSize((size.width, size.height +
+                      panel.constrained_size[1] -
+                      panel.panelMinHeight))
+                
+    def _layout(self):
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnRun)
+        btnSizer.Realize()
+        
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(item = self.notebook, proportion = 1,
+                      flag = wx.EXPAND)
+        mainSizer.Add(item=btnSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        
+    def _createPages(self):
+        """!Create for each parametrized module its own page"""
+        for name, params in self.params.iteritems():
+            panel = self._createPage(name, params)
+            self.notebook.AddPage(panel, text = name)
+    
+        return panel
+    
+    def _createPage(self, name, params):
+        """!Define notebook page"""
+        task = menuform.grassTask(name)
+        task.flags  = params['flags']
+        task.params = params['params']
+        
+        panel = menuform.cmdPanel(parent = self, id = wx.ID_ANY, task = task)
+        
+        return panel
+    
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
