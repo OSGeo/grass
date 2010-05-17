@@ -1195,7 +1195,7 @@ class MapFrame(wx.Frame):
             if ext != extType:
                 path = base + '.' + extType
             
-            self.MapWindow.SaveToFile(path, type)
+            self.MapWindow.SaveToFile(path, fileType)
             
         dlg.Destroy()
 
