@@ -104,10 +104,11 @@ int do_astar(void)
 		skip_diag = 0;
 		
 		alt_nbr[ct_dir] = alt[index_up];
-		if (flat_flag && !is_worked) {
-		    alt_val = alt[index_doer];
+		if (flat_flag && !is_in_list && !is_worked) {
+		    alt_val = alt_bak[index_doer];
+		    alt_nbr[ct_dir] = alt_bak[index_up];
 		    if (!flat_is_done && alt_nbr[ct_dir] == alt_val) {
-			do_flatarea(index_doer, alt_val);
+			do_flatarea(index_doer, alt_val, alt_bak, alt);
 			alt_nbr[ct_dir] = alt[index_up];
 			flat_is_done = 1;
 			nbr_flat_is_done = 1;

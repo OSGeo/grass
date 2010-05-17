@@ -101,7 +101,7 @@ double get_slope(int, int, int, int, CELL, CELL);
 int replace(int, int, int, int);
 
 /* do_flatarea.c */
-int do_flatarea(int, CELL);
+int do_flatarea(int, CELL, CELL *, CELL *);
 
 /* do_cum.c */
 int do_cum(void);
