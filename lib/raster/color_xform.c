@@ -32,6 +32,7 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 {
     DCELL min, max;
     int red, grn, blu;
+    int red2, grn2, blu2;
     long count, total, sum;
     CELL cat, prev;
     int first;
@@ -62,7 +63,6 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 
     Rast_rewind_cell_stats(statf);
     while (Rast_next_cell_stat(&cat, &count, statf)) {
-	int red2, grn2, blu2;
 	DCELL x;
 
 	if (count <= 0)
@@ -71,11 +71,16 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 	x = min + (max - min) * (sum + count / 2.0) / total;
 	Rast_get_d_color(&x, &red2, &grn2, &blu2, src);
 
-	if (!first)
-	    Rast_add_c_color_rule(&prev, red, grn, blu, &cat, red2, grn2,
-				  blu2, dst);
-
 	sum += count;
+
+	if (!first && red2 == red && blu2 == blu && grn2 == grn)
+	    continue;
+
+	if (!first)
+	    Rast_add_c_color_rule(&prev, red, grn, blu,
+				  &cat, red2, grn2, blu2,
+				  dst);
+
 	first = 0;
 
 	prev = cat;
@@ -83,6 +88,11 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 	grn = grn2;
 	blu = blu2;
     }
+
+    if (!first && cat > prev)
+	Rast_add_c_color_rule(&prev, red, grn, blu,
+			      &cat, red2, grn2, blu2,
+			      dst);
 }
 
 /*!
@@ -101,8 +111,9 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 {
     DCELL min, max;
     int red, grn, blu;
+    int red2, grn2, blu2;
     unsigned long sum;
-    DCELL val;
+    DCELL val, val2;
     int first;
     int i;
 
@@ -123,8 +134,7 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
     first = 1;
 
     for (i = 0; i <= statf->count; i++) {
-	int red2, grn2, blu2;
-	DCELL val2, x;
+	DCELL x;
 
 	val2 = statf->min + (statf->max - statf->min) * i / statf->count;
 	if (statf->geometric)
@@ -136,21 +146,32 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 	x = min + (max - min) * sum / statf->total;
 	Rast_get_d_color(&x, &red2, &grn2, &blu2, src);
 
+	if (i < statf->count)
+	    sum += statf->stats[i];
+
+	if (!first && red2 == red && blu2 == blu && grn2 == grn)
+	    continue;
+
 	if (!first)
-	    Rast_add_d_color_rule(&val, red, grn, blu, &val2, red2, grn2,
-				  blu2, dst);
+	    Rast_add_d_color_rule(&val, red, grn, blu,
+				  &val2, red2, grn2, blu2,
+				  dst);
+
 	first = 0;
 
 	if (i == statf->count)
 	    break;
-
-	sum += statf->stats[i];
 
 	val = val2;
 	red = red2;
 	grn = grn2;
 	blu = blu2;
     }
+
+    if (!first && val2 > val)
+	Rast_add_d_color_rule(&val, red, grn, blu,
+			      &val2, red2, grn2, blu2,
+			      dst);
 }
 
 /*!
