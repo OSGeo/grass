@@ -195,6 +195,11 @@ class SearchModuleWindow(wx.Panel):
         desc = self.cmdPrompt.GetCommandDesc(cmd)
         if self.showTip:
             self.searchTip.SetLabel(desc)
+    
+    def Reset(self):
+        """!Reset widget"""
+        self.searchBy.SetSelection(0)
+        self.search.SetValue('')
         
 class MenuTreeWindow(wx.Panel):
     """!Show menu tree"""
