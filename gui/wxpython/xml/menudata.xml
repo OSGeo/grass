@@ -1838,7 +1838,7 @@
 	      <label>Clean vector map</label>
 	      <help>Toolset for cleaning topology of vector map.</help>
 	      <keywords>vector,topology</keywords>
-	      <handler>OnMenuCmd</handler>
+	      <handler>OnVectorCleaning</handler>
 	      <command>v.clean</command>
 	    </menuitem>
 	    <menuitem>
