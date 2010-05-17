@@ -37,20 +37,12 @@ default: subdirs
 
 include bundle.make
 
-install-macosx:
-	echo ${ARCH_DISTDIR}/${MACOSX_APP_NAME}
-	@ if [ ! -d ${ARCH_DISTDIR}/${MACOSX_APP_NAME} ] ; then \
-		echo "ERROR: GRASS.app has not been compiled. Try \"make\" in the top level source dir first."; \
-		echo "  Installation aborted, exiting Make."; \
-		exit; \
-	fi; \
-	${MAKE} real-install-macosx
-
 # Duplicated, mostly, from the top-level makefile.
 
-real-install-macosx: INST_DIR_TARGET = ${INST_DIR}
-real-install-macosx: PREFIX_TARGET = ${prefix}
-real-install-macosx: install-macosxapp install-basic-macosx macosx-support-dir bundle-macosx
+install-macosx: INST_DIR_TARGET = ${INST_DIR}
+install-macosx: PREFIX_TARGET = ${prefix}
+install-macosx: install-macosxapp install-basic-macosx macosx-support-dir bundle-macosx
+	echo ${ARCH_DISTDIR}/${MACOSX_APP_NAME}
 	@# help file package
 	${LN_DIR} "${INST_DIR_TARGET}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}
 
