@@ -44,7 +44,6 @@ cluster_INC     = cluster.h
 trans_INC       = transform.h
 vedit_INC       = vedit.h
 
-CTYPESGEN = ctypesgen.py
 CTYPESFLAGS = $(INC) $(LIBPATH)
 EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).pyc $(M).py)
 
@@ -62,9 +61,11 @@ PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 LPYFILES := $(patsubst %,%.py,$(MODULES))
 
+ifneq ($(strip $(CTYPESGEN)),)
 default:
 	$(MAKE) $(DSTDIR)
 	$(MAKE) $(LPYFILES) $(PYFILES) $(PYCFILES)
+endif
 
 $(DSTDIR)/%.py: %.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@

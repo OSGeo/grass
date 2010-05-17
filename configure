@@ -14201,8 +14201,48 @@ else
 fi
 
 
-  if test "$SWIG" = "no" ; then
-    { echo "configure: error: *** couldn't find swig" 1>&2; exit 1; }
+  # if test "$SWIG" = "no" ; then
+  #   AC_MSG_ERROR([*** couldn't find swig])
+  # fi
+
+  # look for the ctypesgen.py script
+  # Extract the first word of "ctypesgen.py", so it can be a program name with args.
+set dummy ctypesgen.py; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:14213: checking for $ac_word" >&5
+
+case "$CTYPESGEN" in
+  /*)
+  ac_cv_path_CTYPESGEN="$CTYPESGEN" # Let the user override the test with a path.
+  ;;
+  ?:/*)			 
+  ac_cv_path_CTYPESGEN="$CTYPESGEN" # Let the user override the test with a dos path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do 
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_CTYPESGEN="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_path_CTYPESGEN" && ac_cv_path_CTYPESGEN="no"
+  ;;
+esac
+CTYPESGEN="$ac_cv_path_CTYPESGEN"
+if test -n "$CTYPESGEN"; then
+  echo "$ac_t""$CTYPESGEN" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+  if test "$CTYPESGEN" = "no" ; then
+    echo "configure: warning: *** couldn't find ctypesgen" 1>&2
+    CTYPESGEN=
   fi
 
   # check for available OSX archs in Python, assume framework
@@ -14229,10 +14269,11 @@ fi # Done checking Python
 
 
 
+
 # Enable wxWidgets support (for wxGUI)
 
 echo $ac_n "checking whether to use wxWidgets""... $ac_c" 1>&6
-echo "configure:14236: checking whether to use wxWidgets" >&5
+echo "configure:14277: checking whether to use wxWidgets" >&5
 
 WXVERSION=
 WXWIDGETSCXXFLAGS= 
@@ -14253,7 +14294,7 @@ else
   # Extract the first word of "wx-config", so it can be a program name with args.
 set dummy wx-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:14257: checking for $ac_word" >&5
+echo "configure:14298: checking for $ac_word" >&5
 
 case "$WX_CONFIG" in
   /*)
@@ -14301,7 +14342,7 @@ fi
  REQWX="2.8.1"
 
  echo $ac_n "checking wxWidgets version""... $ac_c" 1>&6
-echo "configure:14305: checking wxWidgets version" >&5
+echo "configure:14346: checking wxWidgets version" >&5
  if WXVERSION=`"$WX_CONFIG" --version`; then
    echo "$ac_t""$WXVERSION" 1>&6
  else
@@ -14324,15 +14365,15 @@ for ac_hdr in wx/wxprec.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:14328: checking for $ac_hdr" >&5
+echo "configure:14369: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 14331 "configure"
+#line 14372 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:14336: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:14377: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -14663,6 +14704,7 @@ s%@USE_PTHREAD@%$USE_PTHREAD%g
 s%@USE_LARGEFILES@%$USE_LARGEFILES%g
 s%@PY_CONFIG@%$PY_CONFIG%g
 s%@SWIG@%$SWIG%g
+s%@CTYPESGEN@%$CTYPESGEN%g
 s%@PYTHONINC@%$PYTHONINC%g
 s%@PYTHONCFLAGS@%$PYTHONCFLAGS%g
 s%@PYTHONLDFLAGS@%$PYTHONLDFLAGS%g
