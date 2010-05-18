@@ -7,9 +7,9 @@ MANPAGES = $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTML
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
 	$(HTMLDIR)/grass_logo.png \
+	$(HTMLDIR)/grass_icon.png \
 	$(HTMLDIR)/nviz/grassdocs.css \
 	$(HTMLDIR)/nviz/grass_logo.png \
-	$(HTMLDIR)/nviz/grass_icon.png \
 	$(GEM_DST)
 
 categories = \
@@ -72,7 +72,7 @@ $(HTMLDIR)/grass_logo.png: grass_logo.png
 $(HTMLDIR)/nviz/grass_logo.png: grass_logo.png | $(HTMLDIR)/nviz
 	$(INSTALL_DATA) $< $@
 
-$(HTMLDIR)/nviz/grass_icon.png: grass_icon.png | $(HTMLDIR)/nviz
+$(HTMLDIR)/grass_icon.png: grass_icon.png
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/nviz:
