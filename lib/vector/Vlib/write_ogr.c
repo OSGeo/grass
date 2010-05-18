@@ -137,8 +137,19 @@ off_t V1_write_line_ogr(struct Map_info *Map,
     return Map->fInfo.ogr.offset_num++;
 }
 
+/*!
+  \brief Writes feature on level 2
+
+  \param Map pointer to Map_info structure
+  \param type feature type
+  \param points pointer to line_pnts structure (feature geometry) 
+  \param cats pointer to line_cats structure (feature categories)
+  
+  \return feature offset into file
+  \return -1 on error
+*/
 off_t V2_write_line_ogr(struct Map_info *Map, int type,
-             const struct line_pnts *points, const struct line_cats *cats)
+			const struct line_pnts *points, const struct line_cats *cats)
 {
     int line;
     off_t offset;
@@ -147,10 +158,11 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
 
     line = 0;
     
-    G_debug(3, "V2_write_line_nat()");
+    G_debug(3, "V2_write_line_ogr()");
     offset = V1_write_line_ogr(Map, type, points, cats);
     if (offset < 0)
 	return -1;
+    
     /* Update topology */
     plus = &(Map->plus);
     /* Add line */
