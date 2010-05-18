@@ -32,21 +32,26 @@
 
 <!--	a parameter must have a name and a value
 -->
-<!ELEMENT parameter     (value)>
+<!ELEMENT parameter     (value, parameterized?)>
 <!ATTLIST parameter	name	CDATA #REQUIRED>
 
 <!--    value of parameter
 -->
 <!ELEMENT value         (#PCDATA)>
 
+<!--	parameterized
+-->
+<!ELEMENT parameterized EMPTY>
+
 <!--    enabled flag
 -->
 <!ELEMENT flag          EMPTY>
 <!ATTLIST flag          name    CDATA #REQUIRED>
+<!ATTLIST parameterized         (0|1) #IMPLIED>
 
 <!--    a data defines data properties (usually data layers)
 -->
-<!ELEMENT data (data-parameter, intermediate?, data-action*)>
+<!ELEMENT data (data-parameter, intermediate?, relation*)>
 <!ATTLIST data pos	CDATA #REQUIRED>
 <!ATTLIST data size	CDATA #REQUIRED>
 
@@ -60,8 +65,14 @@
 -->
 <!ELEMENT intermediate    EMPTY>
 
-<!--	a data-action defines relation between data and actions
+<!--	a relation defines relation between data and actions
 -->
-<!ELEMENT data-action  EMPTY>
-<!ATTLIST data-action  id  	CDATA       #REQUIRED>
-<!ATTLIST data-action  dir	(from | to) #REQUIRED>
+<!ELEMENT relation  (point*)>
+<!ATTLIST relation  id  	CDATA       #REQUIRED>
+<!ATTLIST relation  dir	        (from | to) #REQUIRED>
+
+<!--	a point defines control point of linear shape
+-->
+<!ELEMENT point  (x, y)>
+<!ELEMENT x      (#PCDATA)>
+<!ELEMENT y      (#PCDATA)>
