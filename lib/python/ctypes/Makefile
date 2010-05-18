@@ -84,7 +84,7 @@ $(DSTDIR)/%.py: %.py | $(DSTDIR)
 #	$(INSTALL_DATA) $< $@
 
 %.py: $(%_INC) $(%_LIBS)
-	$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_INC)) -o $@
+	$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_INC)) -o $@)
 
 $(DSTDIR)/ctypesheader.py: ctypesheader.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
