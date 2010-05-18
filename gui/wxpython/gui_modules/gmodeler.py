@@ -70,6 +70,7 @@ class Model(object):
     def __init__(self, canvas = None):
         self.actions = list()    # list of recorded actions
         self.data    = list()    # list of recorded data items
+        
         self.canvas  = canvas
         
     def GetCanvas(self):
@@ -96,7 +97,7 @@ class Model(object):
     def AddData(self, item):
         """!Add data to the model"""
         self.data.append(item)
-
+        
     def RemoveItem(self, item):
         """!Remove item from model"""
         if isinstance(item, ModelAction):
@@ -170,12 +171,16 @@ class Model(object):
                                  value = data['value'])
             dataItem.SetIntermediate(data['intermediate'])
             
-            for idx in range(len(data['id'])):
-                actionItem = self.FindAction(data['id'][idx])
-                if data['from'][idx] is True:
-                    dataItem.AddAction(actionItem, direction = 'from')
-                elif data['from'][idx] is False:
-                    dataItem.AddAction(actionItem, direction = 'to')
+            for rel in data['rels']:
+                actionItem = self.FindAction(rel['id'])
+                if rel['dir'] == 'from':
+                    relation = ModelRelation(dataItem, actionItem)
+                    relation.SetControlPoints(rel['points'])
+                    dataItem.AddRelation(relation, direction = 'from')
+                else:
+                    relation = ModelRelation(actionItem, dataItem)
+                    relation.SetControlPoints(rel['points'])
+                    dataItem.AddRelation(relation, direction = 'to')
             
             self.data.append(dataItem)
             
@@ -254,29 +259,29 @@ class Model(object):
         for data in self.data:
             data.Update()
 
-    def IsParametrized(self):
-        """!Return True if model is parametrized"""
+    def IsParameterized(self):
+        """!Return True if model is parameterized"""
         if self.Parametrize():
             return True
         
         return False
     
     def Parametrize(self):
-        """!Return parametrized options"""
+        """!Return parameterized options"""
         result = dict()
         idx = 0
         for action in self.actions:
             name   = action.GetName()
             params = action.GetParams()
             for f in params['flags']:
-                if f.get('parametrized', False):
+                if f.get('parameterized', False):
                     if not result.has_key(name):
                         result[name] = { 'flags' : list(),
                                          'params': list(),
                                          'idx'   : idx }
                     result[name]['flags'].append(f)
             for p in params['params']:
-                if p.get('parametrized', False):
+                if p.get('parameterized', False):
                     if not result.has_key(name):
                         result[name] = { 'flags' : list(),
                                          'params': list(),
@@ -978,11 +983,13 @@ if __name__ == "__main__":
                                               p.get('prompt', ''))
                     if data:
                         if p.get('age', 'old') == 'old':
-                            self.AddLine(data, layer)
-                            data.AddAction(layer, direction = 'from')
+                            rel = ModelRelation(data, layer)
+                            data.AddRelation(rel, direction = 'from')
+                            self.AddLine(rel)
                         else:
-                            self.AddLine(layer, data)
-                            data.AddAction(layer, direction = 'to')
+                            rel = ModelRelation(layer, data)
+                            data.AddRelation(rel, direction = 'to')
+                            self.AddLine(rel)
                         continue
                     
                     data = ModelData(self, name = p.get('name', ''),
@@ -997,12 +1004,13 @@ if __name__ == "__main__":
                     self.model.AddData(data)
                     
                     if p.get('age', 'old') == 'old':
-                        self.AddLine(data, layer)
-                        data.AddAction(layer, direction = 'from')
+                        rel = ModelRelation(data, layer)
+                        data.AddRelation(rel, direction = 'from')
+                        self.AddLine(rel)
                     else:
-                        self.AddLine(layer, data)
-                        data.AddAction(layer, direction = 'to')
-            
+                        rel = ModelRelation(layer, data)
+                        data.AddRelation(rel, direction = 'to')
+                        self.AddLine(rel)
             # valid ?
             valid = True
             for p in params['params']:
@@ -1020,24 +1028,30 @@ if __name__ == "__main__":
             
         self.SetStatusText(layer.GetLog(), 0)
         
-    def AddLine(self, fromShape, toShape):
+    def AddLine(self, rel):
         """!Add connection
 
-        @param fromShape from
-        @param toShape to
+        @param rel relation
         """
-        line = ModelRelation(fromShape, toShape)
-        line.SetCanvas(self)
-        line.SetPen(wx.BLACK_PEN)
-        line.SetBrush(wx.BLACK_BRUSH)
-        line.AddArrow(ogl.ARROW_ARROW)
-        line.MakeLineControlPoints(2)
-        self._addEvent(line)
+        fromShape = rel.GetFrom()
+        toShape   = rel.GetTo()
         
-        fromShape.AddLine(line, toShape)
+        rel.SetCanvas(self)
+        rel.SetPen(wx.BLACK_PEN)
+        rel.SetBrush(wx.BLACK_BRUSH)
+        rel.AddArrow(ogl.ARROW_ARROW)
+        points = rel.GetControlPoints()
+        rel.MakeLineControlPoints(2)
+        if points:
+            for x, y in points:
+                rel.InsertLineControlPoint(point = wx.RealPoint(x, y))
+            
+        self._addEvent(rel)
         
-        self.canvas.diagram.AddShape(line)
-        line.Show(True)
+        fromShape.AddLine(rel, toShape)
+        
+        self.canvas.diagram.AddShape(rel)
+        rel.Show(True)
         
     def LoadModelFile(self, filename):
         """!Load model definition stored in GRASS Model XML file (gxm)
@@ -1066,10 +1080,8 @@ if __name__ == "__main__":
             self.canvas.diagram.AddShape(data)
             data.Show(True)
 
-            for action in data.GetActions('from'):
-                self.AddLine(data, action)
-            for action in data.GetActions('to'):
-                self.AddLine(action, data)
+            for rel in data.GetRelations():
+                self.AddLine(rel)
         
         self.SetStatusText('', 0)
         
@@ -1083,7 +1095,9 @@ if __name__ == "__main__":
         """
         tmpfile = tempfile.TemporaryFile(mode='w+b')
         try:
-            WriteModelFile(fd = tmpfile, actions = self.model.GetActions(), data = self.model.GetData())
+            WriteModelFile(fd = tmpfile,
+                           actions = self.model.GetActions(),
+                           data = self.model.GetData())
         except StandardError:
             GMessage(parent = self,
                      message = _("Writing current settings to model file failed."))
@@ -1293,7 +1307,7 @@ class ModelData(ogl.EllipseShape):
         if not height:
             height = UserSettings.Get(group='modeler', key='data', subkey=('size', 'height'))
         
-        self.actions = { 'from' : list(), 'to' : list() }
+        self.rels = { 'from' : list(), 'to' : list() } # list of recorded relations
 
         if self.parent.GetCanvas():
             ogl.EllipseShape.__init__(self, width, height)
@@ -1361,27 +1375,31 @@ class ModelData(ogl.EllipseShape):
         else:
             self.AddText('\n')
         for direction in ('from', 'to'):
-            for action in self.actions[direction]:
+            for rel in self.rels[direction]:
+                if direction == 'from':
+                    action = rel.GetTo()
+                else:
+                    action = rel.GetFrom()
+                
                 task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
                                                    show = None)
                 task.set_param(self.name, self.value)
                 action.SetParams(params = task.get_options())
         
-    def GetActions(self, direction):
-        """!Get related actions
+    def GetRelations(self, direction = None):
+        """!Get relations from/to"""
+        if not direction:
+            return self.rels['from'] + self.rels['to']
+        
+        return self.rels[direction]
+        
+    def AddRelation(self, rel, direction):
+        """!Record new relation
 
         @param direction direction - 'from' or 'to'
         """
-        return self.actions[direction]
-
-    def AddAction(self, action, direction):
-        """!Record related actions
-
-        @param action action to be recoreded
-        @param direction direction of relation
-        """
-        self.actions[direction].append(action)
-
+        self.rels[direction].append(rel)
+        
     def GetPropDialog(self):
         """!Get properties dialog"""
         return self.propWin
@@ -1477,12 +1495,13 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         canvas.PrepareDC(dc)
         
         if hasattr(self.frame, 'defineRelation'):
-            rel = self.frame.defineRelation
-            if rel['from'] is None:
-                rel['from'] = shape
-            elif rel['to'] is None:
-                rel['to'] = shape
-                self.frame.AddLine(rel['from'], rel['to'])
+            drel = self.frame.defineRelation
+            if drel['from'] is None:
+                drel['from'] = shape
+            elif drel['to'] is None:
+                drel['to'] = shape
+                rel = ModelRelation(drel['from'], drel['to'])
+                self.frame.AddLine(rel)
                 del self.frame.defineRelation
         
         if shape.Selected():
@@ -1718,13 +1737,32 @@ class ModelRelation(ogl.LineShape):
         self.fromShape = fromShape
         self.toShape   = toShape
         
+        self._points    = None
+        
         ogl.LineShape.__init__(self)
+    
+    def GetFrom(self):
+        """!Get id of 'from' shape"""
+        return self.fromShape
+    
+    def GetTo(self):
+        """!Get id of 'to' shape"""
+        return self.toShape
     
     def ResetShapes(self):
         """!Reset related objects"""
         self.fromShape.ResetControlPoints()
         self.toShape.ResetControlPoints()
+        self.ResetControlPoints()
         
+    def SetControlPoints(self, points):
+        """!Set control points"""
+        self._points = points
+        
+    def GetControlPoints(self):
+        """!Get list of control points"""
+        return self._points
+    
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
     def __init__(self, tree):
@@ -1817,14 +1855,17 @@ class ProcessModelFile:
             else:
                 intermediate = True
             
-            aId = list()
-            fromDir = list()
-            for action in data.findall('data-action'):
-                aId.append(int(action.get('id', None)))
-                if action.get('dir', 'to') == 'to':
-                    fromDir.append(False)
-                else:
-                    fromDir.append(True)
+            rels = list()
+            for rel in data.findall('relation'):
+                defrel = { 'id'  : int(rel.get('id', -1)),
+                           'dir' : rel.get('dir', 'to') }
+                points = list()
+                for point in rel.findall('point'):
+                    x = self._filterValue(self._getNodeText(point, 'x'))
+                    y = self._filterValue(self._getNodeText(point, 'y'))
+                    points.append((float(x), float(y)))
+                defrel['points'] = points
+                rels.append(defrel)
             
             self.data.append({ 'pos' : pos,
                                'size': size,
@@ -1832,8 +1873,7 @@ class ProcessModelFile:
                                'prompt' : prompt,
                                'value' : value,
                                'intermediate' : intermediate,
-                               'id' : aId,
-                               'from' : fromDir })
+                               'rels' : rels })
         
     def _processTask(self, node):
         """!Process task
@@ -1842,7 +1882,7 @@ class ProcessModelFile:
         @return None on error
         """
         cmd = list()
-        parametrized = list()
+        parameterized = list()
         
         name = node.get('name', None)
         if not name:
@@ -1853,8 +1893,8 @@ class ProcessModelFile:
         # flags
         for f in node.findall('flag'):
             flag = f.get('name', '')
-            if f.get('parametrized', '0') == '1':
-                parametrized.append(('flag', flag))
+            if f.get('parameterized', '0') == '1':
+                parameterized.append(('flag', flag))
                 if f.get('value', '1') == '0':
                     continue
             if len(flag) > 1:
@@ -1864,19 +1904,19 @@ class ProcessModelFile:
         # parameters
         for p in node.findall('parameter'):
             name = p.get('name', '')
-            if p.find('parametrized') is not None:
-                parametrized.append(('param', name))
+            if p.find('parameterized') is not None:
+                parameterized.append(('param', name))
             cmd.append('%s=%s' % (name,
                                   self._filterValue(self._getNodeText(p, 'value'))))
         
         task = menuform.GUI().ParseCommand(cmd = cmd,
                                            show = None)
         
-        for opt, name in parametrized:
+        for opt, name in parameterized:
             if opt == 'flag':
-                task.set_flag(name, True, element = 'parametrized')
+                task.set_flag(name, True, element = 'parameterized')
             else:
-                task.set_param(name, True, element = 'parametrized')
+                task.set_param(name, True, element = 'parameterized')
         
         return task
     
@@ -1928,13 +1968,13 @@ class WriteModelFile:
             for key, val in action.GetParams().iteritems():
                 if key == 'flags':
                     for f in val:
-                        if f.get('value', False) or f.get('parametrized', False):
-                            if f.get('parametrized', False):
+                        if f.get('value', False) or f.get('parameterized', False):
+                            if f.get('parameterized', False):
                                 if f.get('value', False) == False:
-                                    self.fd.write('%s<flag name="%s" value="0" parametrized="1" />\n' %
+                                    self.fd.write('%s<flag name="%s" value="0" parameterized="1" />\n' %
                                                   (' ' * self.indent, f.get('name', '')))
                                 else:
-                                    self.fd.write('%s<flag name="%s" parametrized="1" />\n' %
+                                    self.fd.write('%s<flag name="%s" parameterized="1" />\n' %
                                                   (' ' * self.indent, f.get('name', '')))
                             else:
                                 self.fd.write('%s<flag name="%s" />\n' %
@@ -1946,8 +1986,8 @@ class WriteModelFile:
                         self.fd.write('%s<parameter name="%s">\n' %
                                       (' ' * self.indent, p.get('name', '')))
                         self.indent += 4
-                        if p.get('parametrized', False):
-                            self.fd.write('%s<parametrized />\n' % (' ' * self.indent))
+                        if p.get('parameterized', False):
+                            self.fd.write('%s<parameterized />\n' % (' ' * self.indent))
                         self.fd.write('%s<value>%s</value>\n' %
                                       (' ' * self.indent, self._filterValue(p.get('value', ''))))
                         self.indent -= 4
@@ -1978,20 +2018,31 @@ class WriteModelFile:
             
             if data.IsIntermediate():
                 self.fd.write('%s<intermediate />\n' % (' ' * self.indent))
-            
-            for action in data.GetActions('from'):
-                id = action.GetId()
-                self.fd.write('%s<data-action id="%d" dir="from" />\n' % \
-                                  (' ' * self.indent, id))
-            for action in data.GetActions('to'):
-                id = action.GetId()
-                self.fd.write('%s<data-action id="%d" dir="to" />\n' % \
-                                  (' ' * self.indent, id))
+
+            # relations
+            for ft in ('from', 'to'):
+                for rel in data.GetRelations(direction = ft):
+                    if ft == 'from':
+                        aid = rel.GetTo().GetId()
+                    else:
+                        aid  = rel.GetFrom().GetId()
+                    self.fd.write('%s<relation dir="%s" id="%d">\n' % \
+                                      (' ' * self.indent, ft, aid))
+                    self.indent += 4
+                    for point in rel.GetLineControlPoints()[1:-1]:
+                        self.fd.write('%s<point>\n' % (' ' * self.indent))
+                        self.indent += 4
+                        x, y = point.Get()
+                        self.fd.write('%s<x>%f</x>\n' % (' ' * self.indent, x))
+                        self.fd.write('%s<y>%f</y>\n' % (' ' * self.indent, y))
+                        self.indent -= 4
+                        self.fd.write('%s</point>\n' % (' ' * self.indent))
+                    self.indent -= 4
+                    self.fd.write('%s</relation>\n' % (' ' * self.indent))
+                
             self.indent -= 4
             self.fd.write('%s</data>\n' % (' ' * self.indent))
             
-        self.indent -= 4
-        
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""
     def __init__(self, parent, settings = UserSettings,
@@ -2398,7 +2449,7 @@ class ModelParamDialog(wx.Dialog):
         mainSizer.Fit(self)
         
     def _createPages(self):
-        """!Create for each parametrized module its own page"""
+        """!Create for each parameterized module its own page"""
         nameOrdered = [''] * len(self.params.keys())
         for name, params in self.params.iteritems():
             nameOrdered[params['idx']] =  name
