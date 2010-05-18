@@ -74,8 +74,10 @@ scales = {
 
 # what to do in case of user break:
 def cleanup():
-    grass.run_command('g.remove', quiet = True, flags = 'f', rast = temp_src)
-    grass.run_command('g.remove', quiet = True, flags = 'f', rast = temp_dist)
+    if grass.find_file(temp_src)['file']:
+        grass.run_command('g.remove', quiet = True, flags = 'f', rast = temp_src)
+    if grass.find_file(temp_dist)['file']:
+        grass.run_command('g.remove', quiet = True, flags = 'f', rast = temp_dist)
 
 def main():
     global temp_dist, temp_src
