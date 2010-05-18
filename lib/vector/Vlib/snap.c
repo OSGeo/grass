@@ -20,7 +20,6 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-#include <grass/vect/rbtree.h>
 
 /* function prototypes */
 static int sort_new(const void *pa, const void *pb);

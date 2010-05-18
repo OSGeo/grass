@@ -17,7 +17,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/segment.h>
-#include "rbtree.h"
+#include <grass/rbtree.h>
 
 
 /**

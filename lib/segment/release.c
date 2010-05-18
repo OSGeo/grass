@@ -14,7 +14,7 @@
 
 #include <stdlib.h>
 #include <grass/segment.h>
-#include "rbtree.h"
+#include <grass/rbtree.h>
 
 
 /**

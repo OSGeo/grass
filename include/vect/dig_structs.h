@@ -20,7 +20,7 @@
 
 #include <grass/dgl.h>
 #include <grass/shapefil.h>
-#include <grass/btree.h>
+#include <grass/rbtree.h>
 #include <grass/rtree.h>
 
 #ifdef HAVE_OGR
@@ -31,7 +31,7 @@
 
   3.10 changes plus_t to  ints.
   This assumes that any reasonable machine will use 4 bytes to
-  store an int. The mapdev code is not guaranteed to work if
+  store an int. The diglib code is not guaranteed to work if
   plus_t is changed to a type that is larger than an int.
 */
 typedef int plus_t;

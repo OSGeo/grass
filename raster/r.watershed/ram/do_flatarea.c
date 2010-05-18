@@ -16,9 +16,9 @@
 #include <assert.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/rbtree.h>
 #include "Gwater.h"
 #include "do_astar.h"
-#include "rbtree.h"
 
 struct pq_node
 {
