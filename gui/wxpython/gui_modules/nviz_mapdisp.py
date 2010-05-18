@@ -1,20 +1,21 @@
-"""
+"""!
 @package nviz_mapdisp.py
 
-@brief Nviz extension for wxGUI
+@brief wxGUI 3D view mode (map canvas)
 
-This module implements 3D visualization mode of map display.
+This module implements 3D visualization mode for map display.
 
 List of classes:
+ - NvizThread
  - GLWindow
 
-(C) 2008-2009 by the GRASS Development Team
+(C) 2008-2010 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+@author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 """
 
 import os
