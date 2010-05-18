@@ -12,13 +12,15 @@ int level_one_info(struct Map_info *Map)
     struct line_cats *Cats;
     struct bound_box box;
 
-    int n_primitives, n_points, n_lines, n_boundaries, n_centroids, n_kernels;
+    int n_primitives, n_points, n_lines, n_boundaries, n_centroids;
+    int n_faces, n_kernels;
 
     G_debug(1, "Count vector objects for level 1");
 
     plus = &(Map->plus);
 
-    n_primitives = n_points = n_lines = n_boundaries = n_centroids = n_kernels = 0;
+    n_primitives = n_points = n_lines = n_boundaries = n_centroids = 0;
+    n_faces = n_kernels = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -52,6 +54,8 @@ int level_one_info(struct Map_info *Map)
 	    n_centroids++;
 	else if (type & GV_KERNEL)
 	    n_kernels++;
+	else if (type & GV_FACE)
+	    n_faces++;
 
 	offset = Map->head.last_offset;
 
@@ -83,6 +87,7 @@ int level_one_info(struct Map_info *Map)
     plus->n_blines = n_boundaries;
     plus->n_clines = n_centroids;
     plus->n_klines = n_kernels;
+    plus->n_flines = n_faces;
 
     return 1;
 }
