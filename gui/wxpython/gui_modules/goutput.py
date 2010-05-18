@@ -62,6 +62,7 @@ class CmdThread(threading.Thread):
         self.setDaemon(True)
 
         self.parent = parent # GMConsole
+        self._want_abort_all = False
         
         self.requestQ = requestQ
         self.resultQ = resultQ
@@ -90,11 +91,15 @@ class CmdThread(threading.Thread):
                              pid=requestId)
             
             wx.PostEvent(self.parent, event)
-
+            
             time.sleep(.1)
             
             self.requestCmd = callable(*args, **kwds)
-
+            if self._want_abort_all:
+                self.requestCmd.abort()
+                if self.requestQ.empty():
+                    self._want_abort_all = False
+            
             self.resultQ.put((requestId, self.requestCmd.run()))
 
             try:
@@ -131,10 +136,15 @@ class CmdThread(threading.Thread):
             
             # send event
             wx.PostEvent(self.parent, event)
-            
-    def abort(self):
+                
+    def abort(self, abortall = True):
+        """!Abort command(s)"""
+        if abortall:
+            self._want_abort_all = True
         self.requestCmd.abort()
-    
+        if self.requestQ.empty():
+            self._want_abort_all = False
+        
 class GMConsole(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
@@ -514,7 +524,6 @@ class GMConsole(wx.SplitterWindow):
                                           onDone,
                                           cmdlist,
                                           self.cmd_stdout, self.cmd_stderr)                                          
-                    self.btn_abort.Enable()
                     self.cmd_output_timer.Start(50)
                     
                     return None
@@ -529,7 +538,6 @@ class GMConsole(wx.SplitterWindow):
                                   onDone,
                                   cmdlist,
                                   self.cmd_stdout, self.cmd_stderr)                                         
-            self.btn_abort.Enable()
             self.cmd_output_timer.Start(50)
                 
         return None
@@ -662,7 +670,8 @@ class GMConsole(wx.SplitterWindow):
                 pass
         
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
-        
+        self.btn_abort.Enable()
+
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
         if self.parent.GetName() == 'Modeler':
