@@ -97,6 +97,13 @@ class Model(object):
         """!Add data to the model"""
         self.data.append(item)
 
+    def RemoveItem(self, item):
+        """!Remove item from model"""
+        if isinstance(item, ModelAction):
+            self.actions.remove(item)
+        elif isinstance(item, ModelData):
+            self.data.remove(item)
+        
     def FindAction(self, id):
         """!Find action by id"""
         for action in self.actions:
@@ -257,6 +264,7 @@ class Model(object):
     def Parametrize(self):
         """!Return parametrized options"""
         result = dict()
+        idx = 0
         for action in self.actions:
             name   = action.GetName()
             params = action.GetParams()
@@ -264,14 +272,17 @@ class Model(object):
                 if f.get('parametrized', False):
                     if not result.has_key(name):
                         result[name] = { 'flags' : list(),
-                                         'params': list() }
+                                         'params': list(),
+                                         'idx'   : idx }
                     result[name]['flags'].append(f)
             for p in params['params']:
                 if p.get('parametrized', False):
                     if not result.has_key(name):
                         result[name] = { 'flags' : list(),
-                                         'params': list() }
+                                         'params': list(),
+                                         'idx'   : idx }
                     result[name]['params'].append(p)
+            idx += 1
         
         return result
     
@@ -589,7 +600,8 @@ class ModelFrame(wx.Frame):
                      message = _('Model is empty. Nothing to run.'),
                      msgType = 'info')
             return
-    
+        
+        # validation
         errList = self._validateModel()
         if errList:
             dlg = wx.MessageDialog(parent = self,
@@ -602,6 +614,7 @@ class ModelFrame(wx.Frame):
             if ret != wx.ID_YES:
                 return
         
+        # parametrization
         params = self.model.Parametrize()
         if params:
             dlg = ModelParamDialog(parent = self,
@@ -1122,9 +1135,11 @@ class ModelCanvas(ogl.ShapeCanvas):
         for shape in diagram.GetShapeList():
             if not shape.Selected():
                 continue
+            self.parent.GetModel().RemoveItem(shape)
             shape.Select(False)
             diagram.RemoveShape(shape)
-        
+            
+            
         self.Refresh()
         
 class ModelAction(ogl.RectangleShape):
@@ -1138,7 +1153,7 @@ class ModelAction(ogl.RectangleShape):
             height = UserSettings.Get(group='modeler', key='action', subkey=('size', 'height'))
         
         if cmd:
-            self.task = menuform.GUI().ParseCommand(cmd = self.cmd,
+            self.task = menuform.GUI().ParseCommand(cmd = cmd,
                                                     show = None)
         else:
             if task:
@@ -1161,7 +1176,7 @@ class ModelAction(ogl.RectangleShape):
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             self._setBrush(False)
-            cmd = self.task.getCmd(ignoreErrors = False)
+            cmd = self.task.getCmd(ignoreErrors = True)
             if cmd and len(cmd) > 0:
                 self.AddText(cmd[0])
             else:
@@ -2385,10 +2400,14 @@ class ModelParamDialog(wx.Dialog):
         
     def _createPages(self):
         """!Create for each parametrized module its own page"""
+        nameOrdered = [''] * len(self.params.keys())
         for name, params in self.params.iteritems():
+            nameOrdered[params['idx']] =  name
+        for name in nameOrdered:
+            params = self.params[name]
             panel = self._createPage(name, params)
             self.notebook.AddPage(panel, text = name)
-    
+        
         return panel
     
     def _createPage(self, name, params):
