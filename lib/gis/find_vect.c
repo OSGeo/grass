@@ -40,6 +40,7 @@
 */
 const char *G_find_vector(char *name, const char *mapset)
 {
+    G_debug(1, "G_find_vector(): name=%s mapset=%s", name, mapset);
     return G_find_file(GV_DIRECTORY, name, mapset);
 }
 
@@ -60,6 +61,7 @@ const char *G_find_vector(char *name, const char *mapset)
  */
 const char *G_find_vector2(const char *name, const char *mapset)
 {
+    G_debug(1, "G_find_vector2(): name=%s mapset=%s", name, mapset);
     return G_find_file2(GV_DIRECTORY, name, mapset);
 }
 

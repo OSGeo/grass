@@ -54,6 +54,7 @@
  */
 const char *G_find_raster(char *name, const char *mapset)
 {
+    G_debug(1, "G_find_raster(): name=%s mapset=%s", name, mapset);
     return G_find_file("cell", name, mapset);
 }
 
@@ -74,5 +75,6 @@ const char *G_find_raster(char *name, const char *mapset)
  */
 const char *G_find_raster2(const char *name, const char *mapset)
 {
+    G_debug(1, "G_find_raster2(): name=%s mapset=%s", name, mapset);
     return G_find_file2("cell", name, mapset);
 }
