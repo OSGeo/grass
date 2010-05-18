@@ -44,23 +44,21 @@ int main(int argc, char *argv[])
 	       &input_opt, &field_opt,
 	       &hist_flag, &col_flag, &reg_flag, &topo_flag, &title_flag, &level1_flag);
 
-    /* force level 1
-     * NOTE: number of points, lines, boundaries, centroids, faces, kernels is still available */
-    if (level1_flag) {
-	Vect_set_open_level(1); /* no topology */
-	Vect_open_old2(&Map, input_opt, "", field_opt);
-    }
-    
     if (!level1_flag) {
-	 /* try to open on level 2 */
-	if (Vect_open_old2(&Map, input_opt, "", field_opt) == 1) {
+	 /* try to open head-only on level 2 */
+	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) == 1) {
 	    G_warning(_("Unable to open vector map <%s> on level 2, using level 1"),
 		      Vect_get_full_name(&Map));
+	    Vect_close(&Map);
 	    level1_flag = 1;
 	}
     }
 
+    /* force level 1, open fully
+     * NOTE: number of points, lines, boundaries, centroids, faces, kernels is still available */
     if (level1_flag) {
+	Vect_set_open_level(1); /* no topology */
+	Vect_open_old2(&Map, input_opt, "", field_opt);
 	level_one_info(&Map);
     }
 
