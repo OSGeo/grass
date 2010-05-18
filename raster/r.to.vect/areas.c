@@ -136,9 +136,7 @@ int extract_areas(void)
 
 	row++;
     }
-
-    G_percent(row, n_rows, 2);
-
+    
     write_area(a_list, e_list, area_num, n_equiv);
 
     G_free(a_list);
