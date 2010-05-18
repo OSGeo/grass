@@ -1514,7 +1514,6 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         """!Show properties dialog"""
         self.frame.ModelChanged()
         shape = self.GetShape()
-        # win = shape.GetPropDialog()
         if isinstance(shape, ModelAction):
             module = menuform.GUI().ParseCommand(shape.GetLog(string = False),
                                                  completed = (self.frame.GetOptData, shape, shape.GetParams()),
@@ -1869,7 +1868,7 @@ class ProcessModelFile:
                 parametrized.append(('param', name))
             cmd.append('%s=%s' % (name,
                                   self._filterValue(self._getNodeText(p, 'value'))))
-            
+        
         task = menuform.GUI().ParseCommand(cmd = cmd,
                                            show = None)
         
