@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
     if (!level1_flag) {
 	 /* try to open head-only on level 2 */
-	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) == 1) {
+	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2) {
 	    G_warning(_("Unable to open vector map <%s> on level 2, using level 1"),
 		      Vect_get_full_name(&Map));
 	    Vect_close(&Map);
@@ -58,7 +58,8 @@ int main(int argc, char *argv[])
      * NOTE: number of points, lines, boundaries, centroids, faces, kernels is still available */
     if (level1_flag) {
 	Vect_set_open_level(1); /* no topology */
-	Vect_open_old2(&Map, input_opt, "", field_opt);
+	if (Vect_open_old2(&Map, input_opt, "", field_opt) < 1)
+	    G_fatal_error(_("Unable to open vector map <%s>"), Vect_get_full_name(&Map));
 	level_one_info(&Map);
     }
 
