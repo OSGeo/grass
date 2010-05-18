@@ -21,7 +21,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
-#include <grass/vect/rbtree.h>
 #include <grass/glocale.h>
 
 /* TODO: 3D support

@@ -1,0 +1,75 @@
+
+#include <grass/rbtree.h>
+
+and link to BTREE2LIB
+
+to make use of this binary balanced (Red-Black) search tree
+
+NOTE: duplicates are not supported
+
+
+USAGE
+=====
+
+see also grass/rbtree.h for instructions on how to use it
+  
+/* custom compare function */
+extern int my_compare_fn(const void *, const void *);
+int my_compare_fn(const void *a, const void *b)
+{
+    if ((mydatastruct *) a < (mydatastruct *) b)
+        return -1;
+    else if ((mydatastruct *) a > (mydatastruct *) b)
+        return 1;
+    else if ((mydatastruct *) a == (mydatastruct *) b)
+        return 0;
+}
+
+/* create and initialize tree: */
+struct RB_TREE *mytree = rbtree_create(my_compare_fn, item_size);
+
+/* insert items to tree: */
+    struct mydatastruct data = <some data>;
+    
+    if (rbtree_insert(mytree, &data) == 0)
+        G_warning("could not insert data");
+
+/* find item in tree: */
+    struct mydatastruct data = <some data>;
+    
+    if (rbtree_find(mytree, &data) == 0)
+        G_message("data not found");
+
+/* delete item from tree: */
+    struct mydatastruct data = <some data>;
+    
+    if (rbtree_remove(mytree, &data) == 0)
+        G_warning("could not find data in tree");
+
+/* traverse tree (get all items in tree in ascending order): */
+    struct RB_TRAV trav;
+    
+    rbtree_init_trav(&trav, tree);
+    while ((data = rbtree_traverse(&trav)) != NULL) {
+        if (my_compare_fn(data, threshold_data) == 0) break;
+  	    /* do something with data */
+    }
+
+/* get a selection of items: all data > data1 and < data2
+ * start in tree where data is last smaller or first larger compared to data1 */
+    struct RB_TRAV trav;
+    
+    rbtree_init_trav(&trav, tree);
+    data = rbtree_traverse_start(&trav, &data1);
+  	    /* do something with data */
+    while ((data = rbtree_traverse(&trav)) != NULL) {
+       if (data > data2) break;
+  	    /* do something with data */
+    }
+ 
+/* destroy tree: */
+    rbtree_destroy(mytree);
+ 
+/* debug the whole tree with */
+    rbtree_debug(mytree, mytree->root);
+    

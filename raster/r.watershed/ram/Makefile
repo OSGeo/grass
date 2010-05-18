@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../../..
 
 PGM = r.watershed.ram
 
-LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
+LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB) $(BTREE2LIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Etc.make

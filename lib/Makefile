@@ -17,6 +17,7 @@ SUBDIRS = \
 	cairodriver \
 	bitmap \
 	btree \
+	btree2 \
 	display \
 	db \
 	fonts \
