@@ -81,6 +81,7 @@ class CmdThread(threading.Thread):
         CmdThread.requestId = id
         
     def run(self):
+        os.environ['GRASS_MESSAGE_FORMAT'] = 'gui'
         while True:
             requestId, callable, onDone, args, kwds = self.requestQ.get()
             
@@ -817,7 +818,7 @@ class GMStderr:
         for line in s.splitlines():
             if len(line) == 0:
                 continue
-
+            
             if 'GRASS_INFO_PERCENT' in line:
                 value = int(line.rsplit(':', 1)[1].strip())
                 if value >= 0 and value < 100:
