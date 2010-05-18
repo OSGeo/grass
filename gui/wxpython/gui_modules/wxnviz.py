@@ -23,8 +23,7 @@ from grass.lib.grass import *
 from grass.lib.ogsf  import *
 from grass.lib.nviz  import *
 
-def G_debug(level, str, *args):
-    print str, args
+from debug import Debug
 
 class Nviz(object):
     def __init__(self, log):
@@ -46,7 +45,7 @@ class Nviz(object):
         self.data_obj = nv_data()
         self.data = pointer(self.data_obj)
         
-        G_debug(1, "Nviz::Nviz()")
+        Debug.msg(1, "Nviz::Nviz()")
         
     def __del__(self):
         """!Destroy Nviz class instance"""
@@ -66,8 +65,8 @@ class Nviz(object):
         @return 0 on failure (window resized by default to 20x20 px)
         """
         
-        G_debug(1, "Nviz::ResizeWindow(): width=%d height=%d",
-                width, height)
+        Debug.msg(1, "Nviz::ResizeWindow(): width=%d height=%d",
+                  width, height)
         return Nviz_resize_window(width, height)
     
     def SetViewDefault(self):
@@ -85,8 +84,8 @@ class Nviz(object):
         hmax = c_float()
         Nviz_get_exag_height(byref(hdef), byref(hmin), byref(hmax))
         
-        G_debug(1, "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
-                hdef, hmin, hmax)
+        Debug.msg(1, "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
+                  hdef.value, hmin.value, hmax.value)
         
         return (z_exag, hdef.value, hmin.value, hmax.value)
     
@@ -104,8 +103,8 @@ class Nviz(object):
         Nviz_set_viewpoint_twist(self.data, twist)
         Nviz_set_viewpoint_persp(self.data, persp)
         
-        G_debug(1, "Nviz::SetView(): x=%f, y=%f, height=%f, persp=%f, twist=%f",
-                x, y, height, persp, twist)
+        Debug.msg(1, "Nviz::SetView(): x=%f, y=%f, height=%f, persp=%f, twist=%f",
+                  x, y, height, persp, twist)
         
         return 1
     
@@ -116,7 +115,7 @@ class Nviz(object):
         
         @return 1
         """
-        G_debug(1, "Nviz::SetZExag(): z_exag=%f", z_exag)
+        Debug.msg(1, "Nviz::SetZExag(): z_exag=%f", z_exag)
         return Nviz_change_exag(self.data, z_exag)
     
     def Draw(self, quick, quick_mode):
@@ -138,13 +137,13 @@ class Nviz(object):
         else:
             Nviz_draw_all(self.data)
         
-        G_debug(1, "Nviz::Draw(): quick=%d", quick)
+        Debug.msg(1, "Nviz::Draw(): quick=%d", quick)
         
     def EraseMap(self):
         """!Erase map display (with background color)
         """
         GS_clear(self.data.bgcolor)
-        G_debug(1, "Nviz::EraseMap()")
+        Debug.msg(1, "Nviz::EraseMap()")
         
     def InitView(self):
         """!Initialize view"""
@@ -165,7 +164,7 @@ class Nviz(object):
         # clear window
         GS_clear(self.data.bgcolor)
         
-        G_debug(1, "Nviz::InitView()")
+        Debug.msg(1, "Nviz::InitView()")
         
     def SetBgColor(self, color_str):
         """!Set background color
@@ -189,7 +188,7 @@ class Nviz(object):
         Nviz_set_light_color(self.data, 1, 1.0, 1.0, 1.0)
         Nviz_set_light_ambient(self.data, 1, 0.3, 0.3, 0.3)
         
-        G_debug(1, "Nviz::SetLightsDefault()")
+        Debug.msg(1, "Nviz::SetLightsDefault()")
         
     def LoadSurface(self, name, color_name, color_value):
         """!Load raster map (surface)
@@ -238,7 +237,7 @@ class Nviz(object):
         # focus on loaded self.data
         Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1)
         
-        G_debug(1, "Nviz::LoadRaster(): name=%s -> id=%d", name, id)
+        Debug.msg(1, "Nviz::LoadRaster(): name=%s -> id=%d", name, id)
         
         return id
 
@@ -253,7 +252,7 @@ class Nviz(object):
         if not GS_surf_exists(id):
             return 0
         
-        G_debug(1, "Nviz::UnloadSurface(): id=%d", id)
+        Debug.msg(1, "Nviz::UnloadSurface(): id=%d", id)
         
         if GS_delete_surface(id) < 0:
             return 0
@@ -290,7 +289,7 @@ class Nviz(object):
                                   G_fully_qualified_name(name, mapset), 0.0,
                                   self.data)
         
-        G_debug(1, "Nviz::LoadVector(): name=%s -> id=%d", name, id)
+        Debug.msg(1, "Nviz::LoadVector(): name=%s -> id=%d", name, id)
         
         return id
     
@@ -303,7 +302,7 @@ class Nviz(object):
         @return 1 on success
         @return 0 on failure
         """
-        G_debug(1, "Nviz::UnloadVector(): id=%d", id)
+        Debug.msg(1, "Nviz::UnloadVector(): id=%d", id)
         
         if points:
             if not GP_site_exists(id):
@@ -359,7 +358,7 @@ class Nviz(object):
                           G_fully_qualified_name(name, mapset), -1.0,
                           self.data)
         
-        G_debug(1, "Nviz::LoadVolume(): name=%s -> id=%d", name, id)
+        Debug.msg(1, "Nviz::LoadVolume(): name=%s -> id=%d", name, id)
         
         return id
 
@@ -374,7 +373,7 @@ class Nviz(object):
         if not GVL_vol_exists(id):
             return 0
         
-        G_debug(1, "Nviz::UnloadVolume(): id=%d", id)
+        Debug.msg(1, "Nviz::UnloadVolume(): id=%d", id)
         
         if GVL_delete_vol(id) < 0:
           return 0
@@ -490,8 +489,8 @@ class Nviz(object):
             ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, CONST_ATT,
                                 NULL, val, self.data)
         
-        G_debug(1, "Nviz::SetSurfaceAttr(): id=%d, attr=%d, map=%d, value=%s",
-                id, attr, map, value)
+        Debug.msg(1, "Nviz::SetSurfaceAttr(): id=%d, attr=%d, map=%d, value=%s",
+                  id, attr, map, value)
         
         return 1 if ret else -2
 
@@ -542,8 +541,8 @@ class Nviz(object):
         if not GS_surf_exists(id):
             return -1
         
-        G_debug(1, "Nviz::UnsetSurfaceAttr(): id=%d, attr=%d",
-                id, attr)
+        Debug.msg(1, "Nviz::UnsetSurfaceAttr(): id=%d, attr=%d",
+                  id, attr)
         
         ret = Nviz_unset_attr(id, MAP_OBJ_SURF, attr)
         
@@ -560,7 +559,7 @@ class Nviz(object):
         @return -1 surface not found
         @return -2 setting attributes failed
         """
-        G_debug(1, "Nviz::SetSurfaceRes(): id=%d, fine=%d, coarse=%d",
+        Debug.msg(1, "Nviz::SetSurfaceRes(): id=%d, fine=%d, coarse=%d",
                 id, fine, coarse)
         
         if id > 0:
@@ -595,8 +594,8 @@ class Nviz(object):
         @return -1 surface not found
         @return -2 setting attributes failed
         """
-        G_debug(1, "Nviz::SetSurfaceStyle(): id=%d, style=%d",
-                id, style)
+        Debug.msg(1, "Nviz::SetSurfaceStyle(): id=%d, style=%d",
+                  id, style)
         
         if id > 0:
             if not GS_surf_exists(id):
@@ -626,8 +625,8 @@ class Nviz(object):
         @return 1 on success
         @return 0 on failure
         """
-        G_debug(1, "Nviz::SetWireColor(): id=%d, color=%s",
-                id, color_str)
+        Debug.msg(1, "Nviz::SetWireColor(): id=%d, color=%s",
+                  id, color_str)
         
         color = Nviz_color_from_str(color_str)
         
@@ -662,8 +661,8 @@ class Nviz(object):
         x, y, z = c_float(), c_float(), c_float()
         GS_get_trans(id, byref(x), byref(y), byref(z))
         
-        G_debug(1, "Nviz::GetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
-                id, x, y, z)
+        Debug.msg(1, "Nviz::GetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
+                  id, x, y, z)
         
         return [x.value, y.value, z.value]
 
@@ -680,8 +679,8 @@ class Nviz(object):
         if not GS_surf_exists(id):
             return -1
         
-        G_debug(1, "Nviz::SetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
-                id, x, y, z)
+        Debug.msg(1, "Nviz::SetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
+                  id, x, y, z)
         
         GS_set_trans(id, x, y, z)
         
@@ -702,8 +701,8 @@ class Nviz(object):
         if not GV_vect_exists(id):
             return -1
         
-        G_debug(1, "Nviz::SetVectorMode(): id=%d, color=%s, width=%d, flat=%d",
-                id, color_str, width, flat)
+        Debug.msg(1, "Nviz::SetVectorMode(): id=%d, color=%s, width=%d, flat=%d",
+                  id, color_str, width, flat)
         
         color = Nviz_color_from_str(color_str)
         
@@ -725,8 +724,8 @@ class Nviz(object):
         if not GV_vect_exists(id):
             return -1
         
-        G_debug(1, "Nviz::SetVectorLineHeight(): id=%d, height=%f",
-                id, height)
+        Debug.msg(1, "Nviz::SetVectorLineHeight(): id=%d, height=%f",
+                  id, height)
         
         GV_set_trans(id, 0.0, 0.0, height)
         
@@ -767,9 +766,9 @@ class Nviz(object):
         if not GP_site_exists(id):
             return -1
         
-        G_debug(1, "Nviz::SetVectorPointMode(): id=%d, color=%s, "
-                "width=%d, size=%f, marker=%d",
-                id, color_str, width, size, marker)
+        Debug.msg(1, "Nviz::SetVectorPointMode(): id=%d, color=%s, "
+                  "width=%d, size=%f, marker=%d",
+                  id, color_str, width, size, marker)
         
         color = Nviz_color_from_str(color_str)
         
@@ -790,8 +789,8 @@ class Nviz(object):
         if not GP_site_exists(id):
             return -1
         
-        G_debug(1, "Nviz::SetVectorPointHeight(): id=%d, height=%f",
-                id, height)
+        Debug.msg(1, "Nviz::SetVectorPointHeight(): id=%d, height=%f",
+                  id, height)
         
         GP_set_trans(id, 0.0, 0.0, height)
         
@@ -992,9 +991,9 @@ class Nviz(object):
             
             ret = GVL_isosurf_set_att_const(id, isosurf_id, attr, val)
         
-        G_debug(1, "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, "
-                "attr=%d, map=%d, value=%s",
-                id, isosurf_id, attr, map, value)
+        Debug.msg(1, "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, "
+                  "attr=%d, map=%d, value=%s",
+                  id, isosurf_id, attr, map, value)
         
         return 1 if ret > 0 else -2
     
@@ -1055,8 +1054,8 @@ class Nviz(object):
         if isosurf_id > GVL_isosurf_num_isosurfs(id) - 1:
             return -2
         
-        G_debug(1, "Nviz::UnsetSurfaceAttr(): id=%d, isosurf_id=%d, attr=%d",
-                id, isosurf_id, attr)
+        Debug.msg(1, "Nviz::UnsetSurfaceAttr(): id=%d, isosurf_id=%d, attr=%d",
+                  id, isosurf_id, attr)
         
         ret = GVL_isosurf_unset_att(id, isosurf_id, attr)
         
