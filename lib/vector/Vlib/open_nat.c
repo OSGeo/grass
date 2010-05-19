@@ -59,10 +59,6 @@ int V1_open_old_nat(struct Map_info *Map, int update)
         return -1;
     }
 
-    /* needed to determine file size, Map->head.size will be updated by dig__read_head(Map) */
-    Vect_coor_info(Map, &CInfo);
-    Map->head.size = CInfo.size;
-
     if (!(dig__read_head(Map)))
 	return (-1);
 
@@ -103,7 +99,7 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     Map->head.Back_Major = GV_COOR_EARLIEST_MAJOR;
     Map->head.Back_Minor = GV_COOR_EARLIEST_MINOR;
 
-    /* TODO open better */
+    /* TODO: open better */
     dig_file_init(&(Map->dig_fp));
     Map->dig_fp.file = G_fopen_new(buf, GV_COOR_ELEMENT);
     if (Map->dig_fp.file == NULL)
