@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
 
     char *input_opt, *field_opt;
-    int hist_flag, col_flag, reg_flag, topo_flag, title_flag, level1_flag;
+    int hist_flag, col_flag, reg_flag, topo_flag, title_flag;
     
     struct Map_info Map;
     
@@ -42,25 +42,20 @@ int main(int argc, char *argv[])
 
     parse_args(argc, argv,
 	       &input_opt, &field_opt,
-	       &hist_flag, &col_flag, &reg_flag, &topo_flag, &title_flag, &level1_flag);
+	       &hist_flag, &col_flag, &reg_flag, &topo_flag, &title_flag);
 
-    if (!level1_flag) {
-	 /* try to open head-only on level 2 */
-	if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2) {
-	    G_warning(_("Unable to open vector map <%s> on level 2, using level 1"),
-		      Vect_get_full_name(&Map));
-	    Vect_close(&Map);
-	    level1_flag = 1;
-	}
-    }
-
-    /* force level 1, open fully
-     * NOTE: number of points, lines, boundaries, centroids, faces, kernels is still available */
-    if (level1_flag) {
+     /* try to open head-only on level 2 */
+    if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2) {
+	/* force level 1, open fully
+	 * NOTE: number of points, lines, boundaries, centroids, faces, kernels is still available */
+	Vect_close(&Map);
 	Vect_set_open_level(1); /* no topology */
 	if (Vect_open_old2(&Map, input_opt, "", field_opt) < 1)
 	    G_fatal_error(_("Unable to open vector map <%s>"), Vect_get_full_name(&Map));
-	level_one_info(&Map);
+
+	/* level one info not needed for history, title, columns */
+	if (!hist_flag && !title_flag && !col_flag)
+	    level_one_info(&Map);
     }
 
     if (hist_flag) {
