@@ -31,6 +31,7 @@ SUBDIRS = \
 	vector \
 	sites \
 	rst \
+	lidar \
 	g3d \
 	gpde \
 	dspf \
