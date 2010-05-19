@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
 
     grid_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     grid_opt->key = "grid";
+    grid_opt->description = _("Output vector with interpolation grid");
     grid_opt->required = NO;
 
     stepE_opt = G_define_option();
@@ -634,6 +635,7 @@ int main(int argc, char *argv[])
 
     if (grid_opt->answer) {
 	Vect_build(&Grid);
+	Vect_hist_command(&Grid);
 	Vect_close(&Grid);
     }
     
