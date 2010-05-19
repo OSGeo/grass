@@ -74,6 +74,7 @@ SUBDIRS = \
 	r.recode \
 	r.region \
 	r.report \
+	r.resamp.bspline \
 	r.resamp.filter \
 	r.resamp.interp \
 	r.resamp.rst \
