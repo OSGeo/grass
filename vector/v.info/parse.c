@@ -5,10 +5,10 @@
 
 void parse_args(int argc, char** argv,
 		char** input, char** field,
-		int* history, int* columns, int* region, int* topo, int* title, int* level1)
+		int* history, int* columns, int* region, int* topo, int* title)
 {
     struct Option *input_opt, *field_opt;
-    struct Flag *hist_flag, *col_flag, *region_flag, *topo_flag, *title_flag, *level1_flag;
+    struct Flag *hist_flag, *col_flag, *region_flag, *topo_flag, *title_flag;
 
     input_opt = G_define_standard_option(G_OPT_V_MAP);
 
@@ -40,10 +40,6 @@ void parse_args(int argc, char** argv,
     topo_flag->description = _("Print topology information only");
     topo_flag->guisection = _("Print");
 
-    level1_flag = G_define_flag();
-    level1_flag->key = 'l';
-    level1_flag->description = _("Open vector map without topology (level 1)");
-    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -55,5 +51,4 @@ void parse_args(int argc, char** argv,
     *region  = region_flag-> answer ? 1 : 0;
     *title   = title_flag-> answer ? 1 : 0;
     *topo    = topo_flag-> answer ? 1 : 0;
-    *level1  = level1_flag-> answer ? 1 : 0;
 }

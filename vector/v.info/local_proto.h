@@ -6,7 +6,7 @@ int level_one_info(struct Map_info *);
 /* parse.c */
 void parse_args(int, char**,
 		char **, char**,
-		int *, int *, int *, int *, int *, int *);
+		int *, int *, int *, int *, int *);
 
 /* print.c */
 void format_double(double, char *);
