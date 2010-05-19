@@ -1,9 +1,10 @@
 
 /***********************************************************************
  *
- * MODULE:       v.surf.bspline
+ * MODULE:       r.resamp.bspline
  *
- * AUTHOR(S):    Roberto Antolin
+ * AUTHOR(S):    Roberto Antolin (v.surf.bspline)
+ *               Markus Metz (adapted for r.resamp.bspline)
  *
  * PURPOSE:      Spline Interpolation and cross correlation
  *
@@ -18,16 +19,12 @@
  **************************************************************************/
 
  /*INCLUDES*/
+#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <grass/gis.h>
-#include <grass/vector.h>
-#include <grass/dbmi.h>
-#include <grass/glocale.h>
-#include <grass/config.h>
-#include <grass/PolimiFunct.h>
 #include "bspline.h"
+
 #define NDATA_MAX 100
 #define PARAM_LAMBDA 6
 #define PARAM_SPLINE 0

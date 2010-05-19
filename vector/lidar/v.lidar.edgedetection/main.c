@@ -23,15 +23,10 @@
  **************************************************************/
 
  /*INCLUDES*/
+#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <grass/gis.h>
-#include <grass/vector.h>
-#include <grass/dbmi.h>
-#include <grass/glocale.h>
-#include <grass/config.h>
-#include <grass/PolimiFunct.h>
 #include "edgedetection.h"
 
 int nsply, nsplx, line_out_counter;

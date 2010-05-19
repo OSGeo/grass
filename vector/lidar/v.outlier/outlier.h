@@ -2,8 +2,7 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-
-#include <grass/PolimiFunct.h>
+#include <grass/lidar.h>
 
 /*--------------------------------------------------------------------------*/
 /*FUNCTIONS DECLARATION */

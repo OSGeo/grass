@@ -22,8 +22,7 @@
 #include <float.h>
 #include <math.h>
 #include <string.h>
-
-#include "PolimiFunct.h"
+#include <grass/lidar.h>
 
 /*----------------------------------------------------------------------------*/
 /* Abscissa node index computation */
