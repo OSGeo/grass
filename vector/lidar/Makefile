@@ -5,8 +5,7 @@ SUBDIRS = \
 	v.outlier \
 	v.lidar.correction \
 	v.lidar.edgedetection \
-	v.lidar.growing \
-        r.resamp.bspline
+	v.lidar.growing
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
