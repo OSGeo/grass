@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-SUBDIRS1 = \
+SUBDIRS = \
 	v.surf.bspline \
 	v.outlier \
 	v.lidar.correction \
@@ -8,12 +8,7 @@ SUBDIRS1 = \
 	v.lidar.growing \
         r.resamp.bspline
 
-SUBDIRS = lidarlib $(SUBDIRS1)
-
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
-
-
-$(SUBDIRS1): lidarlib
 
