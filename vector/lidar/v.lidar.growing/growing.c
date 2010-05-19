@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <grass/vector.h>
-#include <grass/dbmi.h>
-
 #include "growing.h"
 
 void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out,

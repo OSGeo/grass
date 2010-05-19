@@ -1,10 +1,9 @@
-#include <assert.h>
-
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/PolimiFunct.h>
+#include <grass/lidar.h>
 
 /*--------------------------------------------------------------------------*/
 /* Definitions for Convex-Hull algorithm */

@@ -1,30 +1,27 @@
 
-/**************************************************************
- *									*
- * MODULE:       v.lidar.correction					*
- * 									*
- * AUTHOR(S):    Roberto Antolin & Gonzalo Moreno			*
- *               							*
- * PURPOSE:      Correction of the v.growing output			*
- *               							*
- * COPYRIGHT:    (C) 2006 by Politecnico di Milano - 			*
- *			     Polo Regionale di Como			*
- *									*
- *               This program is free software under the 		*
- *               GNU General Public License (>=v2). 			*
- *               Read the file COPYING that comes with GRASS		*
- *               for details.						*
- *									*
- **************************************************************/
+/********************************************************************
+ *								    *
+ * MODULE:       v.lidar.correction				    *
+ * 								    *
+ * AUTHOR(S):    Roberto Antolin & Gonzalo Moreno                   *
+ *               general update Markus Metz      		    *
+ *               						    *
+ * PURPOSE:      Correction of the v.growing output		    *
+ *               						    *
+ * COPYRIGHT:    (C) 2006 by Politecnico di Milano - 		    *
+ *			     Polo Regionale di Como		    *
+ *								    *
+ *               This program is free software under the 	    *
+ *               GNU General Public License (>=v2). 		    *
+ *               Read the file COPYING that comes with GRASS	    *
+ *               for details.					    *
+ *								    *
+ ********************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <grass/gis.h>
-#include <grass/vector.h>
-#include <grass/dbmi.h>
-
 #include "correction.h"
 
 void

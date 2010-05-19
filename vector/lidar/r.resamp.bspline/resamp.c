@@ -16,6 +16,10 @@
  *
  **************************************************************************/
 
+#include <grass/config.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include "bspline.h"
 
 struct Point *P_Read_Raster_Region_Nulls(double **matrix,

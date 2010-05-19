@@ -8,7 +8,8 @@ LIB = LIDAR
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: $(ARCH_INCDIR)/PolimiFunct.h lib
+default: $(ARCH_INCDIR)/lidar.h
+	$(MAKE) lib
 
-$(ARCH_INCDIR)/PolimiFunct.h: PolimiFunct.h
-	cp PolimiFunct.h $(ARCH_INCDIR)/PolimiFunct.h
+$(ARCH_INCDIR)/lidar.h: lidar.h
+	$(INSTALL_DATA) lidar.h $(ARCH_INCDIR)/lidar.h

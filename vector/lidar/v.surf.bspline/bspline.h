@@ -18,15 +18,15 @@
  **************************************************************************/
 
  /*INCLUDES*/
-#include <stdlib.h>
-#include <string.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/config.h>
-#include <grass/PolimiFunct.h>
-     /*STRUCTURES*/ struct Stats
+#include <grass/lidar.h>
+
+/*STRUCTURES*/
+struct Stats
 {
     double *estima;
     double *error;
