@@ -1,0 +1,13 @@
+part of the LiDAR tools
+
+LiDAR point cloud filtering
+v.lidar.edgedetection
+v.lidar.growing
+v.lidar.correction
+
+more general purpose
+v.outlier
+v.surf.bspline
+r.resamp.bspline
+
+developers: please keep all LiDAR tools in sync

@@ -1,0 +1,19 @@
+modules currently using the lidar library are
+
+for LiDAR point cloud filtering
+v.lidar.edgedetection
+v.lidar.growing
+v.lidar.correction
+
+for more general purpose
+v.outlier
+v.surf.bspline
+r.resamp.bspline
+
+when modifying the lidar library, the above modules might need adjustment
+
+All the above modules use similar routines and are currently in sync. 
+If a bug is detected in one of the modules, the bug might be
+present in the other modules as well, please check these as well
+
+MM 2010/05

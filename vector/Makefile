@@ -30,6 +30,9 @@ SUBDIRS = \
 	v.kcv \
 	v.kernel \
 	v.label \
+	v.lidar.correction \
+	v.lidar.edgedetection \
+	v.lidar.growing \
 	v.lrs \
 	v.proj \
 	v.mkgrid \
@@ -56,6 +59,7 @@ SUBDIRS = \
 	v.out.pov \
 	v.out.svg \
 	v.out.vtk \
+	v.outlier \
 	v.overlay \
 	v.parallel \
 	v.patch \
@@ -68,6 +72,7 @@ SUBDIRS = \
 	v.segment \
 	v.select \
 	v.support \
+	v.surf.bspline \
 	v.surf.idw \
 	v.surf.rst \
 	v.transform \
@@ -82,7 +87,6 @@ SUBDIRS = \
 	v.what \
 	v.what.rast\
 	v.vol.rst \
-	lidar \
 	v.out.ogr \
 	v.in.ogr \
 	v.external \
