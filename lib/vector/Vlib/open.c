@@ -773,13 +773,31 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 {
     char buf[2000], path[2000];
     struct stat stat_buf;
-
+    
     switch (Map->format) {
     case GV_FORMAT_NATIVE:
-	dig_fseek(&(Map->dig_fp), 0L, SEEK_END);
-	G_debug(2, "dig_ftell = %d", dig_ftell(&(Map->dig_fp)));
-	Info->size = dig_ftell(&(Map->dig_fp));
-	Info->mtime = 0L;
+	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+	G__file_name(path, buf, GV_COOR_ELEMENT, Map->mapset);
+	G_debug(1, "get coor info: %s", path);
+	if (0 != stat(path, &stat_buf)) {
+	    G_warning(_("Unable to stat file <%s>"), path);
+	    Info->size = -1L;
+	    Info->mtime = -1L;
+	}
+	else {
+	    Info->size = (off_t)stat_buf.st_size;      /* file size */
+	    Info->mtime = (long)stat_buf.st_mtime;      /* last modified time */
+	}
+	
+        /* stat does not give correct size on MINGW
+         * if the file is opened */
+#ifdef __MINGW32__
+	if (Map->open == VECT_OPEN_CODE) {
+	    dig_fseek(&(Map->dig_fp), 0L, SEEK_END);
+	    G_debug(2, "dig_ftell = %d", dig_ftell(&(Map->dig_fp)));
+	    Info->size = dig_ftell(&(Map->dig_fp));
+	}
+#endif
 	break;
     case GV_FORMAT_OGR:
     case GV_FORMAT_OGR_DIRECT:
@@ -884,6 +902,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     }
 
     /* get coor info */
+    /* NOTE: coor file not yet opened */
     Vect_coor_info(Map, &CInfo);
 
     /* load head */
@@ -973,6 +992,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 	}
 
 	/* get coor info */
+	/* NOTE: coor file not yet opened */
 	Vect_coor_info(Map, &CInfo);
 
 	/* initialize spatial index */
