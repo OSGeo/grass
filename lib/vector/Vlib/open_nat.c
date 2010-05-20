@@ -59,9 +59,15 @@ int V1_open_old_nat(struct Map_info *Map, int update)
         return -1;
     }
 
+    /* needed to determine file size, Map->head.size will be updated by dig__read_head(Map) */
+    Vect_coor_info(Map, &CInfo); 
+    Map->head.size = CInfo.size;
+    
     if (!(dig__read_head(Map)))
 	return (-1);
 
+    /* compare coor size stored in head with real size */
+    /* check should catch if LFS is required but not available */
     check_coor(Map);
 
     /* set conversion matrices */
@@ -111,6 +117,8 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     if (Map->dig_fp.file == NULL)
 	return (-1);
 
+    /* if overwrite OK, any existing files have already been deleted by
+     * Vect_open_new(): remove this check ? */
     /* check to see if dig_plus file exists and if so, remove it */
     G__file_name(name_buf, buf, GV_TOPO_ELEMENT, G_mapset());
     if (stat(name_buf, &info) == 0)	/* file exists? */
@@ -137,17 +145,18 @@ int check_coor(struct Map_info *Map)
     struct Coor_info CInfo;
     off_t dif;
 
+    /* NOTE: coor file is open */
     Vect_coor_info(Map, &CInfo);
     dif = CInfo.size - Map->head.size;
     G_debug(1, "coor size in head = %lu, real coor file size= %lu",
 	    (unsigned long) Map->head.size, (unsigned long) CInfo.size);
 
     if (dif > 0) {
-	G_warning(_("Coor files of vector map <%s@%s> is larger than it should be "
+	G_warning(_("Coor file of vector map <%s@%s> is larger than it should be "
 		   "(%ld bytes excess)"), Map->name, Map->mapset, dif);
     }
     else if (dif < 0) {
-	G_warning(_("Coor files of vector <%s@%s> is shorter than it should be "
+	G_warning(_("Coor file of vector <%s@%s> is shorter than it should be "
 		   "(%ld bytes missing)."), Map->name, Map->mapset, -dif);
     }
     return 1;
