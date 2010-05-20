@@ -137,6 +137,11 @@ int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
     if (Out->hist_fp == NULL)
 	return -1;
 
+    /* skip empty old hist */
+    G_fseek(In->hist_fp, (long)0, SEEK_END);
+    if (G_ftell(In->hist_fp) == 0)
+	return 0;
+
     G_fseek(Out->hist_fp, (long)0, SEEK_END);
     rewind(In->hist_fp);
 
