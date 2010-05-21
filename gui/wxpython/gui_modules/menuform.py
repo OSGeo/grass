@@ -11,6 +11,7 @@ Classes:
  - cmdPanel
  - GrassGUIApp
  - GUI
+ - FloatValidator
 
 This program is just a coarse approach to automatically build a GUI
 from a xml-based GRASS user interface description.
@@ -72,11 +73,6 @@ import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
 from wx.lib.newevent import NewEvent
-
-try:
-    import wx.lib.agw.floatspin as FS
-except ImportError:
-    FS = None
 
 try:
     import xml.etree.ElementTree as etree
@@ -831,10 +827,12 @@ class mainFrame(wx.Frame):
         if self.goutput:
             self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
 
-    def updateValuesHook(self):
+    def updateValuesHook(self, event = None):
         """!Update status bar data"""
-        self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)) )
-
+        self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)))
+        if event:
+            event.Skip()
+        
     def OnKeyUp(self, event):
         """!Key released (check hot-keys)"""
         try:
@@ -1280,19 +1278,9 @@ class cmdPanel(wx.Panel):
                             txt3.SetValue(int(p['value'])) # parameter previously set
                         
                         txt3.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
-                    elif FS:
-                        txt3 = FS.FloatSpin(parent = which_panel, id = wx.ID_ANY,
-                                            size = globalvar.DIALOG_SPIN_SIZE,
-                                            min_val = minValue, max_val = maxValue)
-                        txt3.SetDigits(3)
-                        style = wx.BOTTOM | wx.LEFT | wx.RIGHT
-                        
-                        if p.get('value', '') != '':
-                            txt3.SetValue(float(p['value'])) # parameter previously set
-                        
-                        txt3.Bind(FS.EVT_FLOATSPIN, self.OnSetValue)
                     else:
-                        txt3 = wx.TextCtrl(parent=which_panel, value = p.get('default',''))
+                        txt3 = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
+                                           validator = FloatValidator())
                         style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
                         
                         if p.get('value', '') != '':
@@ -1782,12 +1770,13 @@ class cmdPanel(wx.Panel):
                     p[ 'value' ] = colorchooser.GetLabel()
         self.OnUpdateValues()
 
-    def OnUpdateValues(self):
-        """
-        If we were part of a richer interface, report back the current command being built.
+    def OnUpdateValues(self, event = None):
+        """!If we were part of a richer interface, report back the
+        current command being built.
 
-        This method should be set by the parent of this panel if needed. It's a hook, actually.
-        Beware of what is 'self' in the method def, though. It will be called with no arguments.
+        This method should be set by the parent of this panel if
+        needed. It's a hook, actually.  Beware of what is 'self' in
+        the method def, though. It will be called with no arguments.
         """
         pass
 
@@ -1853,8 +1842,8 @@ class cmdPanel(wx.Panel):
                     porf['parameterized'] = me.IsChecked()
                 else:
                     porf['value'] = me.GetValue()
-                
-        self.OnUpdateValues()
+        
+        self.OnUpdateValues(event)
         
         event.Skip()
         
@@ -2091,6 +2080,47 @@ class GUI:
                         return p.get('name', None)
         return None
 
+class FloatValidator(wx.PyValidator):
+    """!Validator for floating-point input"""
+    def __init__(self):
+        wx.PyValidator.__init__(self)
+        
+        self.Bind(wx.EVT_TEXT, self.OnText) 
+        
+    def Clone(self):
+        """!Clone validator"""
+        return FloatValidator()
+
+    def Validate(self):
+        """Validate input"""
+        textCtrl = self.GetWindow()
+        text = textCtrl.GetValue()
+        try:
+            float(text)
+        except ValueError:
+            textCtrl.SetBackgroundColour("grey")
+            textCtrl.SetFocus()
+            textCtrl.Refresh()
+            return False
+        
+        textCtrl.SetBackgroundColour(
+            wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+        textCtrl.Refresh()
+        
+        return True
+
+    def OnText(self, event):
+        """!Do validation"""
+        self.Validate()
+        
+        event.Skip()
+        
+    def TransferToWindow(self):
+        return True # Prevent wxDialog from complaining.
+    
+    def TransferFromWindow(self):
+        return True # Prevent wxDialog from complaining.
+     
 if __name__ == "__main__":
 
     if len(sys.argv) == 1:
