@@ -51,7 +51,7 @@ nviz_INC        = nviz.h
 SED = sed
 
 CTYPESFLAGS = $(INC)
-EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).py) ctypesheader.py
+EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).py)
 
 ifneq ($(MINGW),)
 EXTRA_LIBS = $(INTLLIB)
@@ -63,8 +63,8 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/lib
 
-PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypesheader)
-PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypesheader)
+PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypes_preamble ctypes_loader)
+PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypes_preamble ctypes_loader)
 LPYFILES := $(patsubst %,%.py,$(MODULES))
 
 ifneq ($(strip $(CTYPESGEN)),)
@@ -76,24 +76,18 @@ endif
 $(DSTDIR)/%.py: %.py | $(DSTDIR)
 	$(SED) \
 	-e '/^# End loader$$/a\
-	from ctypesheader import *\
-	from ctypesheader import _variadic_function' \
+	from ctypes_preamble import *\
+	from ctypes_preamble import _variadic_function\
+	from ctypes_loader import *' \
 	-e '/^# Begin preamble$$/,/^# End preamble$$/d' \
 	-e '/^# Begin loader$$/,/^# End loader$$/d' \
 	$< > $@
-#	$(INSTALL_DATA) $< $@
+
+$(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
+	$(INSTALL_DATA) $< $@
 
 %.py: $(%_INC) $(%_LIBS)
 	$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_INC)) -o $@)
-
-$(DSTDIR)/ctypesheader.py: ctypesheader.py | $(DSTDIR)
-	$(INSTALL_DATA) $< $@
-
-ctypesheader.py: grass.py
-	$(SED) -n \
-	-e '/^# Begin preamble$$/,/^# End preamble$$/p' \
-	-e '/^# Begin loader$$/,/^# End loader$$/p' \
-	$< > $@
 
 $(PYDIR):
 	$(MKDIR) $@
