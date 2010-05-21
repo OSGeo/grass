@@ -69,7 +69,8 @@ class ProcessCapFile(HandlerBase):
     def getLayers(self):
         """Print list of layers"""
         for ly in self.layers:
-            if ly.has_key('name'):
+            print "\n\n-=-=-=-=-=-\n"
+	    if ly.has_key('name'):
                 print "LAYER: " + ly['name']
             else:
                 print "LAYER: unknown"
