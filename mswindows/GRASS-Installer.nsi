@@ -320,10 +320,9 @@ FunctionEnd
 ;	
 ;FunctionEnd
 
+;----------------------------------------------------------------------------------------------------------------------------
 ;ReplaceLineString Function
 ;Replace String in an existing file
-
-;----------------------------------------------------------------------------------------------------------------------------
 ; code taken from http://nsis.sourceforge.net/Replace_line_that_starts_with_specified_string
 
 Function ReplaceLineStr
