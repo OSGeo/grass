@@ -835,7 +835,7 @@ Section "GRASS" SecGRASS
 	;replace config_projshare = "/c/OSGeo4W/share/proj" i n grass70.py with $INSTDIR\proj
 	Push "$INSTDIR\grass70.py" ; file to modify
 	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
-	Push 'gisbase = "$INSTDIR\proj"' ; string to replace whole line with
+	Push 'config_projshare = "$INSTDIR\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
                  
 SectionEnd
