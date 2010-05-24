@@ -2424,7 +2424,7 @@ class PropertiesDialog(wx.Dialog):
         mainSizer.Add(item=metaSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(item=cmdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=3)
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
         mainSizer.Add(item=btnStdSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
         
