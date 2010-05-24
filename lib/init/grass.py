@@ -608,7 +608,7 @@ def check_batch_job():
 	else:
 	    message(_("Executing '%s' ...") % batch_job)
 	    grass_gui = "text"
-	    shell = batch_job
+	    os.system(batch_job)
 
 def start_gui():
     # Start the chosen GUI but ignore text
