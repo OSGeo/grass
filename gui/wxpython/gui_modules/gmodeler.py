@@ -810,14 +810,32 @@ import os
 import grass.script as grass
 import atexit
 """)
- 
+        
+        # cleanup()
+        rast, vect, rast3d, msg = self.model.GetIntermediateData()
         fd.write(
 r"""
 
 def cleanup():
-    pass
 """)
-
+        if rast:
+            fd.write(
+r"""    grass.run_command('g.remove',
+                      rast=%s)
+""" % ','.join(map(lambda x: "'" + x + "'", rast)))
+        if vect:
+            fd.write(
+r"""    grass.run_command('g.remove',
+                      vect = %s)
+""" % ','.join(map(lambda x: "'" + x + "'", vect)))
+        if rast3d:
+            fd.write(
+r"""    grass.run_command('g.remove',
+                      rast3d = %s)
+""" % ','.join(map(lambda x: "'" + x + "'", rast3d)))
+        if not rast and not vect and not rast3d:
+            fd.write('    pass\n')
+        
         fd.write("\ndef main():\n")
         for action in self.model.GetActions():
             task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
