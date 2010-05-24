@@ -2095,16 +2095,19 @@ class FloatValidator(wx.PyValidator):
         """Validate input"""
         textCtrl = self.GetWindow()
         text = textCtrl.GetValue()
-        try:
-            float(text)
-        except ValueError:
-            textCtrl.SetBackgroundColour("grey")
-            textCtrl.SetFocus()
-            textCtrl.Refresh()
-            return False
+
+        if text:
+            try:
+                float(text)
+            except ValueError:
+                textCtrl.SetBackgroundColour("grey")
+                textCtrl.SetFocus()
+                textCtrl.Refresh()
+                return False
         
-        textCtrl.SetBackgroundColour(
-            wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
+        sysColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW)
+        textCtrl.SetBackgroundColour(sysColor)
+        
         textCtrl.Refresh()
         
         return True
