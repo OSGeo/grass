@@ -420,6 +420,8 @@ class ModelFrame(wx.Frame):
                        'author' : getpass.getuser() })
         if dlg.ShowModal() == wx.ID_OK:
             self.properties = dlg.GetValues()
+            for action in self.model.GetActions():
+                action.GetTask().set_flag('overwrite', self.properties['overwrite'])
         
         dlg.Destroy()
         
@@ -1272,6 +1274,10 @@ class ModelAction(ogl.RectangleShape):
         
         return self.task.get_options()
 
+    def GetTask(self):
+        """!Get grassTask instance"""
+        return self.task
+    
     def SetParams(self, params):
         """!Set dictionary of parameters"""
         self.task.params = params['params']
@@ -1279,12 +1285,14 @@ class ModelAction(ogl.RectangleShape):
         
     def MergeParams(self, params):
         """!Merge dictionary of parameters"""
-        for f in params['flags']:
-            self.task.set_flag(f['name'],
-                               f.get('value', False))
-        for p in params['params']:
-            self.task.set_param(p['name'],
-                                p.get('value', ''))
+        if params.has_key('flags'):
+            for f in params['flags']:
+                self.task.set_flag(f['name'],
+                                   f.get('value', False))
+        if params.has_key('params'):
+            for p in params['params']:
+                self.task.set_param(p['name'],
+                                    p.get('value', ''))
         
     def SetValid(self, isvalid):
         """!Set instance to be valid/invalid"""
@@ -2337,7 +2345,12 @@ class PropertiesDialog(wx.Dialog):
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         wx.Dialog.__init__(self, parent, id, title, size = size,
                            style = style)
-
+        
+        self.metaBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                    label=" %s " % _("Metadata"))
+        self.cmdBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                   label=" %s " % _("Commands"))
+        
         self.name = wx.TextCtrl(parent = self, id = wx.ID_ANY,
                                 size = (300, 25))
         self.desc = wx.TextCtrl(parent = self, id = wx.ID_ANY,
@@ -2345,6 +2358,11 @@ class PropertiesDialog(wx.Dialog):
                                 size = (300, 50))
         self.author = wx.TextCtrl(parent = self, id = wx.ID_ANY,
                                 size = (300, 25))
+        
+        # commands
+        self.overwrite = wx.CheckBox(parent = self, id=wx.ID_ANY,
+                                     label=_("Allow output files to overwrite existing files"))
+        self.overwrite.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
         
         # buttons
         self.btnOk     = wx.Button(self, wx.ID_OK)
@@ -2360,6 +2378,7 @@ class PropertiesDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
+        metaSizer = wx.StaticBoxSizer(self.metaBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
         gridSizer.AddGrowableCol(0)
         gridSizer.AddGrowableRow(1)
@@ -2390,15 +2409,22 @@ class PropertiesDialog(wx.Dialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (2, 1))
-
+        metaSizer.Add(item = gridSizer)
+        
+        cmdSizer = wx.StaticBoxSizer(self.cmdBox, wx.VERTICAL)
+        cmdSizer.Add(item = self.overwrite,
+                     flag = wx.EXPAND | wx.ALL, border = 3)
+        
         btnStdSizer = wx.StdDialogButtonSizer()
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.AddButton(self.btnOk)
         btnStdSizer.Realize()
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=gridSizer, proportion=1,
+        mainSizer.Add(item=metaSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(item=cmdSizer, proportion=0,
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=3)
         mainSizer.Add(item=btnStdSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
         
@@ -2412,13 +2438,16 @@ class PropertiesDialog(wx.Dialog):
         """!Get values"""
         return { 'name'   : self.name.GetValue(),
                  'desc'   : self.desc.GetValue(),
-                 'author' : self.author.GetValue() }
+                 'author' : self.author.GetValue(),
+                 'overwrite' : self.overwrite.IsChecked() }
 
     def Init(self, prop):
         """!Initialize dialog"""
         self.name.SetValue(prop['name'])
         self.desc.SetValue(prop['desc'])
         self.author.SetValue(prop['author'])
+        if prop.has_key('overwrite'):
+            self.overwrite.SetValue(prop['overwrite'])
 
 class ModelParamDialog(wx.Dialog):
     def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),
