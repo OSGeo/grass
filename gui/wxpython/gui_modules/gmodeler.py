@@ -1126,7 +1126,7 @@ if __name__ == "__main__":
             WriteModelFile(fd = tmpfile,
                            actions = self.model.GetActions(),
                            data = self.model.GetData(),
-                           properties = self.properties)
+                           properties = self.model.GetProperties())
         except StandardError:
             GMessage(parent = self,
                      message = _("Writing current settings to model file failed."))
