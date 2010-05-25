@@ -357,6 +357,10 @@ Icons = {
                            label=_("Run entire model")),
     "modelValidate" : MetaIcon (img=Icons["modelValidate"],
                                 label=_("Validate entire model")),
+    "modelSettings" : MetaIcon (img=Icons["modelSettings"],
+                                label=_("Show modeler settings")),
+    "modelProperties" : MetaIcon (img=Icons["modelProperties"],
+                                  label=_("Show model properties")),
     }
 
 # testing ...

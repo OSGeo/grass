@@ -1399,6 +1399,8 @@ class ModelToolbar(AbstractToolbar):
         self.relation = wx.NewId()
         self.run = wx.NewId()
         self.validate = wx.NewId()
+        self.settings = wx.NewId()
+        self.properties = wx.NewId()
         self.quit = wx.NewId()
         
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
@@ -1428,6 +1430,9 @@ class ModelToolbar(AbstractToolbar):
             (self.relation, 'relation', Icons['modelRelation'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRelation'].GetLabel(), Icons['modelRelation'].GetDesc(),
              self.parent.OnDefineRelation),
+            (self.properties, "properties", Icons["modelProperties"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["modelProperties"].GetLabel(), Icons["modelProperties"].GetDesc(),
+             self.parent.OnModelProperties),
             ('', '', '', '', '', '', ''),
             (self.run, 'run', Icons['modelRun'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRun'].GetLabel(), Icons['modelRun'].GetDesc(),
@@ -1436,6 +1441,9 @@ class ModelToolbar(AbstractToolbar):
              wx.ITEM_NORMAL, Icons['modelValidate'].GetLabel(), Icons['modelValidate'].GetDesc(),
              self.parent.OnValidateModel),
             ('', '', '', '', '', '', ''),
+            (self.settings, "settings", Icons["modelSettings"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["modelSettings"].GetLabel(), Icons["modelSettings"].GetDesc(),
+             self.parent.OnPreferences),
             (self.quit, 'quit', Icons['quit'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['quit'].GetLabel(), Icons['quit'].GetDesc(),
              self.parent.OnCloseWindow),
