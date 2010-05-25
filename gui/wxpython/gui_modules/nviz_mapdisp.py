@@ -185,7 +185,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 win.SetItems(self.GetLayerNames('raster'))
 
             self.init = True
-                        
+        
         self.UpdateMap()
 
     def OnMouseAction(self, event):
@@ -547,9 +547,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     toolWin.win['vector']['lines']['surface'])
                 win.SetItems(self.GetLayerNames(layer.type))
 
-            toolWin.UpdatePage(nvizType)
-            toolWin.SetPage(nvizType)
-            
+            #toolWin.UpdatePage(nvizType)
+            #toolWin.SetPage(nvizType)
+        
         return id
 
     def UnloadRaster(self, item):
