@@ -49,7 +49,7 @@ ogsf_INC	= ogsf_proto.h gstypes.h gsurf.h kftypes.h keyframe.h
 nviz_INC        = nviz.h
 
 SED = sed
-
+CTYPESGEN = ./ctypesgen.py
 CTYPESFLAGS = $(INC)
 EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).py)
 

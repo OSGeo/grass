@@ -1789,14 +1789,6 @@ else
   #   AC_MSG_ERROR([*** couldn't find swig])
   # fi
 
-  # look for the ctypesgen.py script
-  AC_PATH_PROG(CTYPESGEN, ctypesgen.py, no)
-
-  if test "$CTYPESGEN" = "no" ; then
-    AC_MSG_WARN([*** couldn't find ctypesgen])
-    CTYPESGEN=
-  fi
-
   # check for available OSX archs in Python, assume framework
   if test -n "$MACOSX_ARCHS" ; then
     pylib=`"$PY_CONFIG" --prefix`/Python
@@ -1818,7 +1810,6 @@ AC_SUBST(PYTHONINC)
 AC_SUBST(PYTHONCFLAGS)
 AC_SUBST(PYTHONLDFLAGS)
 AC_SUBST(SWIG)
-AC_SUBST(CTYPESGEN)
 AC_SUBST(USE_PYTHON)
 AC_SUBST(MACOSX_ARCHS_PYTHON)
 

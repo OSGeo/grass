@@ -40,9 +40,9 @@ SUBDIRS = \
 	cdhc \
 	stats \
 	arraystats \
-	python \
 	ogsf \
 	nviz \
+	python \
 	iostream \
 	manage
 
