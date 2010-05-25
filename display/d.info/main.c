@@ -21,7 +21,7 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Flag *rflag, *dflag, *cflag, *fflag, *bflag, *gflag;
+    struct Flag *rflag, *dflag, *fflag, *bflag, *gflag;
     double t, b, l, r;
     double n, s, e, w;
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (!rflag->answer && !dflag->answer && !cflag->answer &&
+    if (!rflag->answer && !dflag->answer &&
 	!fflag->answer && !bflag->answer && !gflag->answer) {
 	G_usage();
 	exit(EXIT_FAILURE);
