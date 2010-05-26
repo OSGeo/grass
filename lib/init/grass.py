@@ -85,7 +85,8 @@ def fatal(msg):
 
 def message(msg):
     sys.stderr.write(msg + "\n")
-
+    sys.stderr.flush()
+    
 def readfile(path):
     f = open(path, 'r')
     s = f.read()
@@ -101,6 +102,11 @@ def call(cmd, **kwargs):
     if windows:
 	kwargs['shell'] = True
     return subprocess.call(cmd, **kwargs)
+
+def Popen(cmd, **kwargs):
+    if windows:
+	kwargs['shell'] = True
+    return subprocess.Popen(cmd, **kwargs)
 
 def gfile(*args):
     return os.path.join(gisbase, *args)
@@ -384,9 +390,9 @@ def check_gui():
 	# Check if python is working properly
 	if grass_gui == 'wxpython':
 	    nul = open(os.devnull, 'w')
-	    p = subprocess.Popen([os.environ['GRASS_PYTHON']],
-				 stdin = subprocess.PIPE,
-				 stdout = nul, stderr = nul)
+	    p = Popen([os.environ['GRASS_PYTHON']],
+                      stdin = subprocess.PIPE,
+                      stdout = nul, stderr = nul)
 	    nul.close()
 	    p.stdin.write("variable=True")
 	    p.stdin.close()
@@ -494,8 +500,9 @@ def set_data():
 
 def gui_startup():
     if grass_gui == 'wxpython':
-	thetest = call([os.getenv('GRASS_PYTHON'), os.path.join(wxpython_base, "gis_set.py")])
-
+	thetest = call([os.getenv('GRASS_PYTHON'),
+                        gfile(wxpython_base, "gis_set.py")])
+    
     if thetest == 0:
 	pass
     elif thetest == 1:
@@ -617,8 +624,8 @@ def start_gui():
     
     # Check for gui interface
     if grass_gui == "wxpython":
-        subprocess.Popen([os.getenv('GRASS_PYTHON'),
-                          gfile(wxpython_base, "wxgui.py")])
+        Popen([os.getenv('GRASS_PYTHON'),
+               gfile(wxpython_base, "wxgui.py")])
     
 def clear_screen():
     if windows:
@@ -725,17 +732,17 @@ def bash_startup():
     os.environ['HISTFILE'] = os.path.join(location, ".bash_history")
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
 	os.environ['HISTSIZE'] = "3000"
-
+    
     # instead of changing $HOME, start bash with: --rcfile "$LOCATION/.bashrc" ?
     #   if so, must care be taken to explicity call .grass.bashrc et al for
     #   non-interactive bash batch jobs?
     userhome = os.getenv('HOME')      # save original home
     home = location		      # save .bashrc in $LOCATION
     os.environ['HOME'] = home
-
+    
     bashrc = os.path.join(home, ".bashrc")
     try_remove(bashrc)
-
+    
     f = open(bashrc, 'w')
     f.write("test -r ~/.alias && . ~/.alias\n")
     f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
@@ -743,7 +750,7 @@ def bash_startup():
     path = os.path.join(userhome, ".grass.bashrc")
     if os.access(path, os.R_OK):
 	f.write(readfile(path) + '\n')
-
+    
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
     
@@ -753,23 +760,26 @@ def bash_startup():
         f.write("export %s=\"%s\"\n" % (env, value))
     
     f.close()
-
+    
     exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
-
+    
     os.environ['HOME'] = userhome
 
 def default_startup():
     global exit_val
-
+    
     if windows:
 	os.environ['PS1'] = "GRASS %s> " % (grass_version)
 	# "$ETC/run" doesn't work at all???
-	exit_val = call([os.getenv('SHELL')])
+        exit_val = subprocess.call([os.getenv('SHELL')])
 	cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
 	os.environ['PS1'] = "GRASS %s (%s):\w > " % (grass_version, location_name)
 	exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
 
+    if exit_val != 0:
+        fatal(_("Failed to start shell '%s'") % os.getenv('SHELL'))
+    
 def done_message():
     if batch_job and os.access(batch_job, os.X_OK):
 	message(_("Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed.") % batch_job)
@@ -799,7 +809,7 @@ def get_username():
 	    user = os.getenv('LOGNAME')
 	if not user:
 	    try:
-		p = subprocess.Popen(['whoami'], stdout = subprocess.PIPE)
+		p = Popen(['whoami'], stdout = subprocess.PIPE)
 		s = p.stdout.read()
 		p.wait()
 		user = s.strip()
@@ -850,8 +860,11 @@ if windows and not os.getenv('HOME'):
     os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'), os.getenv('HOMEPATH'))
 
 # set SHELL
-if windows and not os.getenv('SHELL'):
-    os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
+if windows:
+    if os.getenv('GRASS_SH'):
+        os.environ['SHELL'] = os.getenv('GRASS_SH')
+    if not os.getenv('SHELL'):
+        os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
 
 grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
 
@@ -863,10 +876,6 @@ default_gui = "wxpython"
 # the following is only meant to be an internal variable for debugging this script.
 #  use 'g.gisenv set="DEBUG=[0-5]"' to turn GRASS debug mode on properly.
 grass_debug = os.getenv('GRASS_DEBUG')
-
-# GRASS_SH is normally just for Windows when not started from a bourne 
-# shell. But when starting from Init.sh is still needed for GRASS_GUI (still true for GRASS 7?)
-os.environ['GRASS_SH'] = "/bin/sh"
 
 # Set GRASS version number for R interface etc (must be an env_var for MS-Windows)
 os.environ['GRASS_VERSION'] = grass_version
