@@ -308,9 +308,10 @@ class MapFrame(wx.Frame):
         Add defined toolbar to the window
 
         Currently known toolbars are:
-        - map basic map toolbar
-        - digit vector digitizer
-        - georect georectifier
+         - 'map'     - basic map toolbar
+         - 'vdigit'  - vector digitizer
+         - 'georect' - georectifier
+         - 'nviz'    - 3D view mode
         """
         # default toolbar
         if name == "map":
@@ -377,7 +378,7 @@ class MapFrame(wx.Frame):
         # nviz
         elif name == "nviz":
             import nviz
-
+            
             # check for GLCanvas and OpenGL
             msg = None
             if not nviz.haveGLCanvas:
@@ -389,7 +390,7 @@ class MapFrame(wx.Frame):
                 msg = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
                         "was not found or loaded properly.\n"
                         "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg)
-
+            
             if msg:
                 self.toolbars['map'].combo.SetValue (_("2D view"))
                 wx.MessageBox(parent=self,
@@ -397,13 +398,13 @@ class MapFrame(wx.Frame):
                               caption=_("Error"),
                               style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 return
-
+            
             #
             # add Nviz toolbar and disable 2D display mode tools
             #
             self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
             self.toolbars['map'].Enable2D(False)
-
+            
             #
             # update layer tree (-> enable 3d-rasters)
             #

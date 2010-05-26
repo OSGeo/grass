@@ -1350,8 +1350,8 @@ class NvizToolbar(AbstractToolbar):
             (self.settings, "settings", Icons["nvizSettings"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["nvizSettings"].GetLabel(), Icons["nvizSettings"].GetDesc(),
              self.OnSettings),
-            (self.quit, 'quit', Icons["quit"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["quit"].GetLabel(), Icons["quit"].GetDesc(),
+            (self.quit, 'quit', Icons["nvizQuit"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizQuit"].GetLabel(), Icons["nvizQuit"].GetDesc(),
              self.OnExit),
             )
     
