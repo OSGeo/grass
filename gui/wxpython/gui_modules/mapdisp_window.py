@@ -483,20 +483,20 @@ class BufferedWindow(MapWindow, wx.Window):
         If self.redrawAll is False on self.pdcTmp content is re-drawn
         """
         Debug.msg(4, "BufferedWindow.OnPaint(): redrawAll=%s" % self.redrawAll)
-
+        
         dc = wx.BufferedPaintDC(self, self.buffer)
         
         ### dc.SetBackground(wx.Brush("White"))
         dc.Clear()
-
+        
         # use PrepareDC to set position correctly
         self.PrepareDC(dc)
-
+        
         # create a clipping rect from our position and size
         # and update region
         rgn = self.GetUpdateRegion().GetBox()
         dc.SetClippingRect(rgn)
-
+        
         switchDraw = False
         if self.redrawAll is None:
             self.redrawAll = True
@@ -505,7 +505,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if self.redrawAll: # redraw pdc and pdcVector
             # draw to the dc using the calculated clipping rect
             self.pdc.DrawToDCClipped(dc, rgn)
-
+            
             # draw vector map layer
             if self.pdcVector:
                 # decorate with GDDC (transparency)
@@ -515,13 +515,13 @@ class BufferedWindow(MapWindow, wx.Window):
                 except NotImplementedError, e:
                     print >> sys.stderr, e
                     self.pdcVector.DrawToDCClipped(dc, rgn)
-
+            
             self.bufferLast = None
         else: # do not redraw pdc and pdcVector
             if self.bufferLast is None:
                 # draw to the dc
                 self.pdc.DrawToDC(dc)
-
+                
                 if self.pdcVector:
                     # decorate with GDDC (transparency)
                     try:
@@ -534,11 +534,11 @@ class BufferedWindow(MapWindow, wx.Window):
                 # store buffered image
                 # self.bufferLast = wx.BitmapFromImage(self.buffer.ConvertToImage())
                 self.bufferLast = dc.GetAsBitmap(wx.Rect(0, 0, self.Map.width, self.Map.height))
-
+            
             pdcLast = self.PseudoDC(vdigit = False)
             pdcLast.DrawBitmap(self.bufferLast, 0, 0, False)
             pdcLast.DrawToDC(dc)
-
+        
         # draw decorations (e.g. region box)
         try:
             gcdc = wx.GCDC(dc)
@@ -546,14 +546,14 @@ class BufferedWindow(MapWindow, wx.Window):
         except NotImplementedError, e:
             print >> sys.stderr, e
             self.pdcDec.DrawToDC(dc)
-
+        
         # draw temporary object on the foreground
         ### self.pdcTmp.DrawToDCClipped(dc, rgn)
         self.pdcTmp.DrawToDC(dc)
-
+        
         if switchDraw:
             self.redrawAll = False
-                
+        
     def OnSize(self, event):
         """!
         Scale map image so that it is

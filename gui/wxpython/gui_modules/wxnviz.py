@@ -119,7 +119,7 @@ class Nviz(object):
         return Nviz_change_exag(self.data, z_exag)
     
     def Draw(self, quick, quick_mode):
-        """!Draw map
+        """!Draw canvas
         
         Draw quick mode:
          - DRAW_QUICK_SURFACE
@@ -130,14 +130,14 @@ class Nviz(object):
         @param quick if true draw in wiremode
         @param quick_mode quick mode
         """
+        Debug.msg(3, "Nviz::Draw(): quick=%d", quick)
+        
         Nviz_draw_cplane(self.data, -1, -1) # ?
         
         if quick:
             Nviz_draw_quick(self.data, quick_mode)
         else:
             Nviz_draw_all(self.data)
-        
-        Debug.msg(3, "Nviz::Draw(): quick=%d", quick)
         
     def EraseMap(self):
         """!Erase map display (with background color)
@@ -1092,3 +1092,4 @@ class Nviz(object):
         ret = GVL_isosurf_set_drawres(id, res, res, res)
         
         return -2 if ret < 0 else 1
+    

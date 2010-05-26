@@ -138,10 +138,11 @@ class MetaIcon:
 Icons = {
     # map display
     "displaymap" : MetaIcon (img=Icons["displaymap"],
-                             label=_("Display map")),
+                             label=_("Display map"),
+                             desc = _("Re-render modified map layers")),
     "rendermap"  : MetaIcon (img=Icons["rendermap"],
                              label=_("Re-render map"),
-                             desc=_("Force re-rendering of all layers")),
+                             desc=_("Force re-rendering all map layers")),
     "erase"      : MetaIcon (img=Icons["erase"],
                              label=_("Erase display")),
     "pointer"    : MetaIcon (img=Icons["pointer"],
@@ -334,8 +335,11 @@ Icons = {
                             desc=_("Settings dialog for georectification tool")),
     # nviz
     "nvizSettings": MetaIcon (img=Icons["nvizSettings"],
-                              label=_("Settings"),
-                              desc=_("Show Nviz settings dialog")),
+                              label=_("3D view mode tools"),
+                              desc=_("Show/hide 3D view mode tools dialog")),
+    "nvizQuit": MetaIcon (img=Icons["quit"],
+                          label=_("Quit 3D view mode"),
+                          desc=_("Switch back to 2D view mode")),
     # modeler
     "modelNew" : MetaIcon (img=Icons["fileNew"],
                            label=_("Create new model (Ctrl+N)")),
