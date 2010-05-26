@@ -5,6 +5,7 @@
  * 
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
+ *               update for GRASS 7 Markus Metz
  *
  * PURPOSE:      Split lines to segments
  *               
@@ -23,10 +24,16 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#define FROM_KILOMETERS  1000.0
+#define FROM_FEET           0.3048
+#define FROM_MILES       1609.344
+#define FROM_NAUTMILES   1852.0
+
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *in_opt, *layer_opt, *out_opt, *length_opt, *vertices_opt;
+    struct Option *in_opt, *layer_opt, *out_opt, *length_opt, *units_opt, *vertices_opt;
     
     struct Map_info In, Out;
     struct line_pnts *Points, *Points2;
@@ -35,6 +42,8 @@ int main(int argc, char *argv[])
     int line, nlines, layer;
     double length = -1;
     int vertices = 0;
+    double (*line_length) ();
+    int latlon = 0;
 
     G_gisinit(argv[0]);
 
@@ -55,6 +64,15 @@ int main(int argc, char *argv[])
     length_opt->required = NO;
     length_opt->multiple = NO;
     length_opt->description = _("Maximum segment length");
+
+    units_opt = G_define_option();
+    units_opt->key = "units";
+    units_opt->type = TYPE_STRING;
+    units_opt->required = NO;
+    units_opt->multiple = NO;
+    units_opt->options = "meters,kilometers,feet,miles,nautmiles";
+    units_opt->answer = "meters";
+    units_opt->description = _("Length units");
     
     vertices_opt = G_define_option();
     vertices_opt->key = "vertices";
@@ -70,10 +88,44 @@ int main(int argc, char *argv[])
 	!(length_opt->answer || vertices_opt->answer))
 	G_fatal_error(_("Use either length or vertices"));
 
+    line_length = NULL;
+
     if (length_opt->answer) {
 	length = atof(length_opt->answer);
 	if (length <= 0)
 	    G_fatal_error(_("Length must be positive but is %g"), length);
+
+	/* convert length to meters */
+	if (strcmp(units_opt->answer, "meters") == 0)
+	    /* do nothing */ ;
+	else if (strcmp(units_opt->answer, "kilometers") == 0)
+	    length *= FROM_KILOMETERS;
+	else if (strcmp(units_opt->answer, "feet") == 0)
+	    length *= FROM_FEET;
+	else if (strcmp(units_opt->answer, "miles") == 0)
+	    length *= FROM_MILES;
+	else if (strcmp(units_opt->answer, "nautmiles") == 0)
+	    length *= FROM_NAUTMILES;
+	else
+	    G_fatal_error(_("Unknown unit %s"), units_opt->answer); 
+
+	/* set line length function */
+	if ((latlon = (G_projection() == PROJECTION_LL)) == 1)
+	    line_length = Vect_line_geodesic_length;
+	else {
+	    double factor;
+	    
+	    line_length = Vect_line_length;
+	    
+	    /* convert length to map units */
+	    if ((factor = G_database_units_to_meters_factor()) == 0)
+		G_fatal_error(_("Can not get projection units"));
+	    else {
+		/* meters to units */
+		length = length / factor;
+	    }
+	}
+	G_verbose_message(_("length in %s: %g"), (latlon ? "meters" : "map units"), length);
     }
 
     if (vertices_opt->answer) {
@@ -104,6 +156,9 @@ int main(int argc, char *argv[])
 
 	G_percent(line, nlines, 1);
 
+	if (!Vect_line_alive(&In, line))
+	    continue;
+
 	ltype = Vect_read_line(&In, Points, Cats, line);
 
 	if (layer != -1 && !Vect_cat_get(Cats, layer, NULL))
@@ -113,7 +168,7 @@ int main(int argc, char *argv[])
 	    if (length > 0) {
 		double l, from, to, step;
 
-		l = Vect_line_length(Points);
+		l = line_length(Points);
 
 		if (l <= length) {
 		    Vect_write_line(&Out, ltype, Points, Cats);
@@ -122,6 +177,9 @@ int main(int argc, char *argv[])
 		    int n, i;
 
 		    n = ceil(l / length);
+		    if (latlon)
+			l = Vect_line_length(Points);
+
 		    step = l / n;
 		    from = 0.;
 
