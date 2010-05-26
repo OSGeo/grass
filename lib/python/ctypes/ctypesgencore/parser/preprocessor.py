@@ -109,7 +109,7 @@ class PreprocessorParser(object):
 
         # On OSX, explicitly add these defines to keep from getting syntax
         # errors in the OSX standard headers.
-        if os.uname()[0] == 'Darwin':
+        if hasattr(os, 'uname') and os.uname()[0] == 'Darwin':
             self.defines += ["__uint16_t=uint16_t",
                              "__uint32_t=uint32_t",
                              "__uint64_t=uint64_t"]
