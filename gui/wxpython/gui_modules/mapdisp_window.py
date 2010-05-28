@@ -555,23 +555,21 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = False
         
     def OnSize(self, event):
-        """!
-        Scale map image so that it is
-        the same size as the Window
+        """!Scale map image so that it is the same size as the Window
         """
         Debug.msg(3, "BufferedWindow.OnSize():")
-
+        
         # set size of the input image
         self.Map.ChangeMapSize(self.GetClientSize())
         # align extent based on center point and display resolution
         # this causes that image is not resized when display windows is resized
-        # self.Map.AlignExtentFromDisplay()
-
+        ### self.Map.AlignExtentFromDisplay()
+        
         # Make new off screen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
         self.buffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
-
+        
         # get the image to be rendered
         self.img = self.GetImage()
         
@@ -591,8 +589,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
 
     def OnIdle(self, event):
-        """!
-        Only re-render a composite map image from GRASS during
+        """!Only re-render a composite map image from GRASS during
         idle time instead of multiple times during resizing.
         """
         if self.resize:
@@ -600,17 +597,37 @@ class BufferedWindow(MapWindow, wx.Window):
 
         event.Skip()
 
-    def SaveToFile(self, FileName, FileType):
-        """!
-        This draws the psuedo DC to a buffer that
-        can be saved to a file.
+    def SaveToFile(self, FileName, FileType, width, height):
+        """!This draws the pseudo DC to a buffer that can be saved to
+        a file.
+        
+        @param FileName file name
+        @param FileType type of bitmap
+        @param width image width
+        @param height image height
         """
-        dc = wx.BufferedPaintDC(self, self.buffer)
+        busy = wx.BusyInfo(message=_("Please wait, exporting image..."),
+                           parent=self)
+        wx.Yield()
+        
+        self.Map.ChangeMapSize((width, height))
+        ibuffer = wx.EmptyBitmap(max(1, width), max(1, height))
+        self.Map.Render(force=True, windres = True)
+        img = self.GetImage()
+        self.Draw(self.pdc, img, drawid = 99)
+        dc = wx.BufferedPaintDC(self, ibuffer)
+        dc.Clear()
+        self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
         if self.pdcVector:
             self.pdcVector.DrawToDC(dc)
-        self.buffer.SaveFile(FileName, FileType)
-
+        ibuffer.SaveFile(FileName, FileType)
+        
+        busy.Destroy()
+        
+        self.UpdateMap(render = True)
+        self.Refresh()
+        
     def GetOverlay(self):
         """!
         Converts rendered overlay files to wx.Image
@@ -630,8 +647,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return imgs
 
     def GetImage(self):
-        """!
-        Converts redered map files to wx.Image
+        """!Converts redered map files to wx.Image
 
         Updates self.imagedict (id=99)
 
@@ -643,29 +659,29 @@ class BufferedWindow(MapWindow, wx.Window):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:
             img = None
-
+        
         self.imagedict[img] = { 'id': imgId }
-
+        
         return img
 
     def UpdateMap(self, render=True, renderVector=True):
         """!
         Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
-
+        
         @param render re-render map composition
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
         """
         start = time.clock()
         
         self.resize = False
-
+        
         # if len(self.Map.GetListOfLayers()) == 0:
         #    return False
         
         if self.img is None:
             render = True
-
+        
         #
         # initialize process bar (only on 'render')
         #

@@ -44,6 +44,7 @@ class Nviz(object):
         
         self.data_obj = nv_data()
         self.data = pointer(self.data_obj)
+        self.width = self.height = -1
         
         Debug.msg(1, "Nviz::Nviz()")
         
@@ -64,7 +65,8 @@ class Nviz(object):
         @return 1 on success
         @return 0 on failure (window resized by default to 20x20 px)
         """
-        
+        self.width  = width
+        self.height = height
         Debug.msg(3, "Nviz::ResizeWindow(): width=%d height=%d",
                   width, height)
         return Nviz_resize_window(width, height)
@@ -1093,14 +1095,23 @@ class Nviz(object):
         
         return -2 if ret < 0 else 1
 
-    def SaveToFile(self, filename, itype = 'ppm'):
+    def SaveToFile(self, filename, width = 20, height = 20, itype = 'ppm'):
         """!Save current GL screen to ppm/tif file
 
         @param filename file name
+        @param width image width
+        @param height image height
         @param itype image type ('ppm' or 'tif')
         """
+        widthOrig  = self.width
+        heightOrig = self.height
+        
+        self.ResizeWindow(width, height)
+        GS_clear(self.data.bgcolor)
         self.Draw(False, -1)
         if itype == 'ppm':
             GS_write_ppm(filename)
         else:
             GS_write_tif(filename)
+        
+        self.ResizeWindow(widthOrig, heightOrig)

@@ -17,6 +17,8 @@ List of classes:
  - DxfImportDialog
  - LayersList (used by MultiImport) 
  - SetOpacityDialog
+ - StaticWrapText
+ - ImageSizeDialog
 
 (C) 2008-2010 by the GRASS Development Team
 
@@ -1487,3 +1489,72 @@ class StaticWrapText(wx.StaticText):
                 self.SetSize(self.wrappedSize)
             del self.resizing
 
+class ImageSizeDialog(wx.Dialog):
+    """!Set size for saved graphic file"""
+    def __init__(self, parent, id = wx.ID_ANY, title=_("Set image size"),
+                 style = wx.DEFAULT_DIALOG_STYLE, **kwargs):
+        self.parent = parent
+        
+        wx.Dialog.__init__(self, parent, id = id, style=style, title=title, **kwargs)
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.box = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                label = ' % s' % _("Image size"))
+        
+        size = self.parent.GetWindow().GetClientSize()
+        self.width = wx.SpinCtrl(parent = self, id = wx.ID_ANY,
+                                 style = wx.SP_ARROW_KEYS)
+        self.width.SetRange(20, 1e6)
+        self.width.SetValue(size.width)
+        wx.CallAfter(self.width.SetFocus)
+        self.height = wx.SpinCtrl(parent = self, id = wx.ID_ANY,
+                                  style = wx.SP_ARROW_KEYS)
+        self.height.SetRange(20, 1e6)
+        self.height.SetValue(size.height)
+        
+        self.btnOK = wx.Button(parent = self.panel, id = wx.ID_OK)
+        self.btnOK.SetDefault()
+        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        
+        self._layout()
+        self.SetSize(self.GetBestSize())
+        
+    def _layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        # body
+        box = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
+        fbox = wx.FlexGridSizer(cols = 2, vgap = 5, hgap = 5)
+        fbox.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                      label = _("Width:")),
+                 flag = wx.ALIGN_CENTER_VERTICAL)
+        fbox.Add(item = self.width)
+        fbox.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                      label = _("Height:")),
+                 flag = wx.ALIGN_CENTER_VERTICAL)
+        fbox.Add(item = self.height)
+
+        box.Add(item = fbox, proportion = 1,
+                flag = wx.EXPAND | wx.ALL, border = 5)
+        sizer.Add(item = box, proportion = 1,
+                  flag=wx.EXPAND | wx.ALL, border = 3)
+        
+        # buttons
+        btnsizer = wx.StdDialogButtonSizer()
+        btnsizer.AddButton(self.btnOK)
+        btnsizer.AddButton(self.btnCancel)
+        btnsizer.Realize()
+
+        sizer.Add(item = btnsizer, proportion = 0,
+                  flag = wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+        
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+        self.Layout()
+    
+    def GetValues(self):
+        """!Get width/height values"""
+        return self.width.GetValue(), self.height.GetValue()
+    
