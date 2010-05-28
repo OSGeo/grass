@@ -1182,10 +1182,19 @@ class MapFrame(wx.Frame):
         else:
             filetype, ltype = gdialogs.GetImageHandlers(self.MapWindow.img)
         
+        # get size
+        dlg = gdialogs.ImageSizeDialog(self)
+        dlg.CentreOnParent()
+        if dlg.ShowModal() != wx.ID_OK:
+            dlg.Destroy()
+            return
+        width, height = dlg.GetValues()
+        dlg.Destroy()
+        
+        # get filename
         dlg = wx.FileDialog(parent = self,
-                            message = _("Choose a file name to save the image (no need to add extension)"),
-                            defaultDir = "",
-                            defaultFile = "",
+                            message = _("Choose a file name to save the image "
+                                        "(no need to add extension)"),
                             wildcard = filetype,
                             style=wx.SAVE | wx.FD_OVERWRITE_PROMPT)
         
@@ -1201,7 +1210,8 @@ class MapFrame(wx.Frame):
             if ext != extType:
                 path = base + '.' + extType
             
-            self.MapWindow.SaveToFile(path, fileType)
+            self.MapWindow.SaveToFile(path, fileType,
+                                      width, height)
             
         dlg.Destroy()
 
