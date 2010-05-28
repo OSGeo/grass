@@ -53,13 +53,17 @@ class NvizThread(Thread):
         self.progressbar = progressbar
         self.window = window
         
-        self.nvizClass = None
+        self._display = None
         
         self.setDaemon(True)
         
     def run(self):
-        self.nvizClass = wxnviz.Nviz(self.log)
+        self._display = wxnviz.Nviz(self.log)
         
+    def GetDisplay(self):
+        """!Get display instance"""
+        return self._display
+    
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """!OpenGL canvas for Map Display Window"""
     def __init__(self, parent, id,
@@ -108,7 +112,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                      logmsg)
         self.nvizThread.start()
         time.sleep(.1)
-        self.nvizClass = self.nvizThread.nvizClass
+        self._display = self.nvizThread.GetDisplay()
         
         # GRASS_REGION needed only for initialization
         del os.environ['GRASS_REGION']
@@ -144,13 +148,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         pass # do nothing, to avoid flashing on MSW
     
     def OnSize(self, event):
-        self.size = self.parent.GetClientSize()
+        self.size = self.GetClientSize()
         if self.GetContext():
             Debug.msg(3, "GLCanvas.OnSize(): w = %d, h = %d" % \
                       (self.size.width, self.size.height))
             self.SetCurrent()
-            self.nvizClass.ResizeWindow(self.size.width,
-                                        self.size.height)
+            self._display.ResizeWindow(self.size.width,
+                                       self.size.height)
         
         event.Skip()
 
@@ -161,7 +165,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.SetCurrent()
         
         if not self.initView:
-            self.nvizClass.InitView()
+            self._display.InitView()
             self.initView = True
         
         self.LoadDataLayers()
@@ -219,10 +223,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if hasattr(self.parent, "nvizToolWin"):
                     self.parent.nvizToolWin.UpdateSettings()
 
-                    self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
-                                           self.iview['height']['value'],
-                                           self.view['persp']['value'],
-                                           self.view['twist']['value'])
+                    self._display.SetView(self.view['pos']['x'], self.view['pos']['y'],
+                                          self.iview['height']['value'],
+                                          self.view['persp']['value'],
+                                          self.view['twist']['value'])
                 
                 # redraw map
                 self.OnPaint(None)
@@ -238,13 +242,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
     def UpdateView(self, event):
         """!Change view settings"""
-        self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
-                               self.iview['height']['value'],
-                               self.view['persp']['value'],
-                               self.view['twist']['value'])
+        self._display.SetView(self.view['pos']['x'], self.view['pos']['y'],
+                              self.iview['height']['value'],
+                              self.view['persp']['value'],
+                              self.view['twist']['value'])
         
         if event and event.zExag:
-            self.nvizClass.SetZExag(self.view['z-exag']['value'])
+            self._display.SetZExag(self.view['z-exag']['value'])
         
         if event: event.Skip()
         
@@ -265,7 +269,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         if self.render['quick'] is False:
             self.parent.statusbarWin['progress'].SetValue(1)
-            self.nvizClass.Draw(False, -1)
+            self._display.Draw(False, -1)
         elif self.render['quick'] is True:
             # quick
             mode = wxnviz.DRAW_QUICK_SURFACE | wxnviz.DRAW_QUICK_VOLUME
@@ -273,7 +277,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 mode |=  wxnviz.DRAW_QUICK_VLINES
             if self.render['vpoints']:
                 mode |=  wxnviz.DRAW_QUICK_VPOINTS
-            self.nvizClass.Draw(True, mode)
+            self._display.Draw(True, mode)
         else: # None -> reuse last rendered image
             pass # TODO
         
@@ -297,7 +301,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def EraseMap(self):
         """!Erase the canvas
         """
-        self.nvizClass.EraseMap()
+        self._display.EraseMap()
         self.SwapBuffers()
         
     def IsLoaded(self, item):
@@ -508,11 +512,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             return
         
         if layer.type ==  'raster':
-            id = self.nvizClass.LoadSurface(str(layer.name), None, None)
+            id = self._display.LoadSurface(str(layer.name), None, None)
             nvizType = 'surface'
             errorMsg = _("Loading raster map")
         elif layer.type ==  '3d-raster':
-            id = self.nvizClass.LoadVolume(str(layer.name), None, None)
+            id = self._display.LoadVolume(str(layer.name), None, None)
             nvizType = 'volume'
             errorMsg = _("Loading 3d raster map")
         else:
@@ -575,12 +579,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         if layer.type ==  'raster':
             nvizType = 'surface'
-            unloadFn = self.nvizClass.UnloadSurface
+            unloadFn = self._display.UnloadSurface
             errorMsg = _("Unable to unload raster map")
             successMsg = _("Raster map")
         else:
             nvizType = 'volume'
-            unloadFn = self.nvizClass.UnloadVolume
+            unloadFn = self._display.UnloadVolume
             errorMsg = _("Unable to unload 3d raster map")
             successMsg = _("3d raster map")
         
@@ -635,9 +639,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         id = -1
         for type in vecType:
             if type ==  'lines':
-                id = self.nvizClass.LoadVector(str(layer.name), False)
+                id = self._display.LoadVector(str(layer.name), False)
             else:
-                id = self.nvizClass.LoadVector(str(layer.name), True)
+                id = self._display.LoadVector(str(layer.name), True)
 
             if id < 0:
                 print >> sys.stderr, "Nviz:" + _("Loading vector map <%(name)s> (%(type)s) failed") % \
@@ -687,9 +691,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             id = data[vtype]['object']['id']
             
             if vtype ==  'lines':
-                ret = self.nvizClass.UnloadVector(id, False)
+                ret = self._display.UnloadVector(id, False)
             else:
-                ret = self.nvizClass.UnloadVector(id, True)
+                ret = self._display.UnloadVector(id, True)
             if ret ==  0:
                 print >> sys.stderr, "Nviz:" + _("Unable to unload vector map <%(name)s> (%(type)s)") % \
                     { 'name': layer.name, 'type' : vtype }
@@ -738,14 +742,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         Debug.msg (3, "GLWindow.OnZoomToMap(): layer = %s, type = %s" % \
                        (layer.name, layer.type))
         
-        self.nvizClass.SetViewportDefault()
+        self._display.SetViewportDefault()
 
     def ResetView(self):
         """!Reset to default view"""
         self.view['z-exag']['value'], \
             self.iview['height']['value'], \
             self.iview['height']['min'], \
-            self.iview['height']['max'] = self.nvizClass.SetViewDefault()
+            self.iview['height']['max'] = self._display.SetViewDefault()
         
         self.view['pos']['x'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                  subkey = ('pos', 'x'))
@@ -801,29 +805,29 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if attrb ==  'mask':
                     # TODO: invert mask
                     # TODO: broken in NVIZ
-                    self.nvizClass.UnsetSurfaceMask(id)
+                    self._display.UnsetSurfaceMask(id)
                 elif attrb ==  'transp':
-                    self.nvizClass.UnsetSurfaceTransp(id)
+                    self._display.UnsetSurfaceTransp(id)
                 elif attrb ==  'emit':
-                    self.nvizClass.UnsetSurfaceEmit(id) 
+                    self._display.UnsetSurfaceEmit(id) 
             else:
                 if type(value) ==  type('') and \
                         len(value) <=  0: # ignore empty values (TODO: warning)
                     continue
                 if attrb ==  'topo':
-                    self.nvizClass.SetSurfaceTopo(id, map, str(value)) 
+                    self._display.SetSurfaceTopo(id, map, str(value)) 
                 elif attrb ==  'color':
-                    self.nvizClass.SetSurfaceColor(id, map, str(value))
+                    self._display.SetSurfaceColor(id, map, str(value))
                 elif attrb ==  'mask':
                     # TODO: invert mask
                     # TODO: broken in NVIZ
-                    self.nvizClass.SetSurfaceMask(id, False, str(value))
+                    self._display.SetSurfaceMask(id, False, str(value))
                 elif attrb ==  'transp':
-                    self.nvizClass.SetSurfaceTransp(id, map, str(value)) 
+                    self._display.SetSurfaceTransp(id, map, str(value)) 
                 elif attrb ==  'shine':
-                    self.nvizClass.SetSurfaceShine(id, map, str(value)) 
+                    self._display.SetSurfaceShine(id, map, str(value)) 
                 elif attrb ==  'emit':
-                    self.nvizClass.SetSurfaceEmit(id, map, str(value)) 
+                    self._display.SetSurfaceEmit(id, map, str(value)) 
             data['attribute'][attrb].pop('update')
         
         # draw res
@@ -832,9 +836,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             fine   = data['draw']['resolution']['fine']
             
             if data['draw']['all']:
-                self.nvizClass.SetSurfaceRes(-1, fine, coarse)
+                self._display.SetSurfaceRes(-1, fine, coarse)
             else:
-                self.nvizClass.SetSurfaceRes(id, fine, coarse)
+                self._display.SetSurfaceRes(id, fine, coarse)
             data['draw']['resolution'].pop('update')
         
         # draw style
@@ -847,18 +851,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                                  string = True)
             style = data['draw']['mode']['value']
             if data['draw']['all']:
-                self.nvizClass.SetSurfaceStyle(-1, style)
+                self._display.SetSurfaceStyle(-1, style)
             else:
-                self.nvizClass.SetSurfaceStyle(id, style)
+                self._display.SetSurfaceStyle(id, style)
             data['draw']['mode'].pop('update')
         
         # wire color
         if data['draw']['wire-color'].has_key('update'):
             color = data['draw']['wire-color']['value']
             if data['draw']['all']:
-                self.nvizClass.SetWireColor(-1, str(color))
+                self._display.SetWireColor(-1, str(color))
             else:
-                self.nvizClass.SetWireColor(id, str(color))
+                self._display.SetWireColor(id, str(color))
             data['draw']['wire-color'].pop('update')
         
         # position
@@ -866,13 +870,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             x = data['position']['x']
             y = data['position']['y']
             z = data['position']['z']
-            self.nvizClass.SetSurfacePosition(id, x, y, z)
+            self._display.SetSurfacePosition(id, x, y, z)
             data['position'].pop('update')
         
     def UpdateVolumeProperties(self, id, data, isosurfId = None):
         """!Update volume (isosurface/slice) map object properties"""
         if data['draw']['resolution'].has_key('update'):
-            self.nvizClass.SetIsosurfaceRes(id, data['draw']['resolution']['value'])
+            self._display.SetIsosurfaceRes(id, data['draw']['resolution']['value'])
             data['draw']['resolution'].pop('update')
         
         if data['draw']['shading'].has_key('update'):
@@ -900,27 +904,27 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     if attrb ==  'mask':
                         # TODO: invert mask
                         # TODO: broken in NVIZ
-                        self.nvizClass.UnsetIsosurfaceMask(id, isosurfId)
+                        self._display.UnsetIsosurfaceMask(id, isosurfId)
                     elif attrb ==  'transp':
-                        self.nvizClass.UnsetIsosurfaceTransp(id, isosurfId)
+                        self._display.UnsetIsosurfaceTransp(id, isosurfId)
                     elif attrb ==  'emit':
-                        self.nvizClass.UnsetIsosurfaceEmit(id, isosurfId) 
+                        self._display.UnsetIsosurfaceEmit(id, isosurfId) 
                 else:
                     if type(value) ==  type('') and \
                             len(value) <=  0: # ignore empty values (TODO: warning)
                         continue
                     elif attrb ==  'color':
-                        self.nvizClass.SetIsosurfaceColor(id, isosurfId, map, str(value))
+                        self._display.SetIsosurfaceColor(id, isosurfId, map, str(value))
                     elif attrb ==  'mask':
                         # TODO: invert mask
                         # TODO: broken in NVIZ
-                        self.nvizClass.SetIsosurfaceMask(id, isosurfId, False, str(value))
+                        self._display.SetIsosurfaceMask(id, isosurfId, False, str(value))
                     elif attrb ==  'transp':
-                        self.nvizClass.SetIsosurfaceTransp(id, isosurfId, map, str(value)) 
+                        self._display.SetIsosurfaceTransp(id, isosurfId, map, str(value)) 
                     elif attrb ==  'shine':
-                        self.nvizClass.SetIsosurfaceShine(id, isosurfId, map, str(value)) 
+                        self._display.SetIsosurfaceShine(id, isosurfId, map, str(value)) 
                     elif attrb ==  'emit':
-                        self.nvizClass.SetIsosurfaceEmit(id, isosurfId, map, str(value)) 
+                        self._display.SetIsosurfaceEmit(id, isosurfId, map, str(value)) 
                 isosurf[attrb].pop('update')
             isosurfId +=  1
         
@@ -951,8 +955,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 flat = False
             
-            self.nvizClass.SetVectorLineMode(id, color,
-                                             width, flat)
+            self._display.SetVectorLineMode(id, color,
+                                            width, flat)
             
             if data['color'].has_key('update'):
                 data['color'].pop('update')
@@ -963,15 +967,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # height
         if data['height'].has_key('update'):
-            self.nvizClass.SetVectorLineHeight(id,
-                                               data['height']['value'])
+            self._display.SetVectorLineHeight(id,
+                                              data['height']['value'])
             data['height'].pop('update')
         
         # surface
         if data['mode'].has_key('update'):
             sid = self.GetLayerId(type = 'raster', name = data['mode']['surface'])
             if sid > -1:
-                self.nvizClass.SetVectorLineSurface(id, sid)
+                self._display.SetVectorLineSurface(id, sid)
             
             data['mode'].pop('update')
         
@@ -981,9 +985,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data['width'].has_key('update') or \
                 data['marker'].has_key('update') or \
                 data['color'].has_key('update'):
-            ret = self.nvizClass.SetVectorPointMode(id, data['color']['value'],
-                                                    data['width']['value'], float(data['size']['value']),
-                                                    data['marker']['value'] + 1)
+            ret = self._display.SetVectorPointMode(id, data['color']['value'],
+                                                   data['width']['value'], float(data['size']['value']),
+                                                   data['marker']['value'] + 1)
             
             error = None
             if ret ==  -1:
@@ -1001,15 +1005,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # height
         if data['height'].has_key('update'):
-            self.nvizClass.SetVectorPointHeight(id,
-                                                data['height']['value'])
+            self._display.SetVectorPointHeight(id,
+                                               data['height']['value'])
             data['height'].pop('update')
         
         # surface
         if data['mode'].has_key('update'):
             sid = self.GetLayerId(type = 'raster', name = data['mode']['surface'])
             if sid > -1:
-                self.nvizClass.SetVectorPointSurface(id, sid)
+                self._display.SetVectorPointSurface(id, sid)
             
             data['mode'].pop('update')
             
@@ -1062,4 +1066,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         return -1
     
+    def SaveToFile(self, FileName, FileType):
+        """!This draws the DC to a buffer that can be saved to a file.
+
+        @todo fix BufferedPaintDC
+        """
+        self._display.SaveToFile(FileName)
+        # pbuffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
+        # dc = wx.BufferedPaintDC(self, pbuffer)
+        # dc.Clear()
+        # self.SetCurrent()
+        # self._display.Draw(False, -1)
+        # pbuffer.SaveFile(FileName, FileType)
+        # self.SwapBuffers()
+
+    def GetDisplay(self):
+        """!Get display instance"""
+        return self._display
         

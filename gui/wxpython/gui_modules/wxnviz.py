@@ -1092,4 +1092,15 @@ class Nviz(object):
         ret = GVL_isosurf_set_drawres(id, res, res, res)
         
         return -2 if ret < 0 else 1
-    
+
+    def SaveToFile(self, filename, itype = 'ppm'):
+        """!Save current GL screen to ppm/tif file
+
+        @param filename file name
+        @param itype image type ('ppm' or 'tif')
+        """
+        self.Draw(False, -1)
+        if itype == 'ppm':
+            GS_write_ppm(filename)
+        else:
+            GS_write_tif(filename)
