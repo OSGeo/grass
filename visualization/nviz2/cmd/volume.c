@@ -1,18 +1,16 @@
 /*!
-   \file volume.c
+  \file volume.c
+  
+  \brief Volume subroutines
+  
+  (C) 2008, 2010 by the GRASS Development Team
 
-   \brief Volume subroutines
-
-   (C) 2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
-
-   \author Martin Landa <landa.martin gmail.com> (Google SoC 2008)
-
-   \date 2008
- */
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+*/
 
 #include <stdlib.h>
 
@@ -22,13 +20,13 @@
 #include "local_proto.h"
 
 /*!
-   \brief Load 3d raster map layers -> volume
+  \brief Load 3d raster map layers -> volume
+  
+  \param params module parameters
+  \param data nviz data
 
-   \param params module parameters
-   \param data nviz data
-
-   \return number of loaded volumes
- */
+  \return number of loaded volumes
+*/
 int load_rasters3d(const struct GParams *params, nv_data *data)
 {
   int i, nvol, id;
@@ -54,7 +52,7 @@ int load_rasters3d(const struct GParams *params, nv_data *data)
 
 /*!
   \brief Add isosurfaces and set their attributes
-
+  
   \param params module parameters
   \param data nviz data
   

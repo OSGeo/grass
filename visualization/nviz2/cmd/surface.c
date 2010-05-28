@@ -1,18 +1,16 @@
 /*!
-   \file surface.c
-
-   \brief Surface subroutines
-
-   (C) 2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
-
-   \author Martin Landa <landa.martin gmail.com> (Google SoC 2008)
-
-   \date 2008
- */
+  \file surface.c
+  
+  \brief Surface subroutines
+  
+  (C) 2008, 2010 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+*/
 
 #include <stdlib.h>
 #include <string.h>
@@ -22,11 +20,11 @@
 #include "local_proto.h"
 
 /*!
-   \brief Load raster maps/constants and set surface attributes
-
-   \param params module parameters
-   \param data nviz data
- */
+  \brief Load raster maps/constants and set surface attributes
+  
+  \param params module parameters
+  \param data nviz data
+*/
 int load_rasters(const struct GParams *params, nv_data * data)
 {
     const char *mapset;
@@ -182,10 +180,10 @@ int load_rasters(const struct GParams *params, nv_data * data)
 }
 
 /*!
-   \brief Set draw mode for loaded surfaces
-
-   \param params module parameters
- */
+  \brief Set draw mode for loaded surfaces
+  
+  \param params module parameters
+*/
 void surface_set_draw_mode(const struct GParams *params)
 {
     int *surf_list, nsurfs;

@@ -1,18 +1,16 @@
 /*!
-   \file vector.c
+  \file vector.c
+  
+  \brief Vector subroutines
+  
+  (C) 2008, 2010 by the GRASS Development Team
 
-   \brief Vector subroutines
-
-   (C) 2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
-
-   \author Martin Landa <landa.martin gmail.com> (Google SoC 2008)
-
-   \date 2008
- */
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+*/
 
 #include <stdlib.h>
 #include <string.h>
@@ -25,13 +23,13 @@ static int load_vectors(const struct Option *, const struct Option *,
 			const struct Option *, const struct Option *, int, nv_data *);
 
 /*!
-   \brief Load vector maps (lines)
-
-   \param params module parameters
-   \param data nviz data
-
-   \return number of loaded vectors
- */
+  \brief Load vector maps (lines)
+  
+  \param params module parameters
+  \param data nviz data
+  
+  \return number of loaded vectors
+*/
 int load_vlines(const struct GParams *params, nv_data * data)
 {
     return load_vectors(params->elev_map, params->elev_const,
@@ -40,13 +38,13 @@ int load_vlines(const struct GParams *params, nv_data * data)
 }
 
 /*!
-   \brief Load vector maps (points)
-
-   \param params module parameters
-   \param data nviz data
-
-   \return number of loaded vectors
- */
+  \brief Load vector maps (points)
+  
+  \param params module parameters
+  \param data nviz data
+  
+  \return number of loaded vectors
+*/
 int load_vpoints(const struct GParams *params, nv_data * data)
 {
     return load_vectors(params->elev_map, params->elev_const,
@@ -103,13 +101,13 @@ int load_vectors(const struct Option *elev_map,
 }
 
 /*!
-   \brief Set vector lines mode
-
-   \param params parameters
-
-   \return 1 on success
-   \return 0 on failure
- */
+  \brief Set vector lines mode
+  
+  \param params parameters
+  
+  \return 1 on success
+  \return 0 on failure
+*/
 int vlines_set_attrb(const struct GParams *params)
 {
     int i, color, width, flat, height;
@@ -138,13 +136,13 @@ int vlines_set_attrb(const struct GParams *params)
 }
 
 /*!
-   \brief Set vector points mode
-
-   \param params parameters
-
-   \return 1 on success
-   \return 0 on failure
- */
+  \brief Set vector points mode
+  
+  \param params parameters
+  
+  \return 1 on success
+  \return 0 on failure
+*/
 int vpoints_set_attrb(const struct GParams *params)
 {
     int i;
