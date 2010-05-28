@@ -3,15 +3,15 @@
  *
  * MODULE:       nviz_cmd
  *               
- * AUTHOR(S):    Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+ * AUTHOR(S):    Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
  *               
  * PURPOSE:      Experimental NVIZ CLI prototype
  *               
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008,2010 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
