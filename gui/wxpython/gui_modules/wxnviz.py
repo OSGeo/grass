@@ -51,7 +51,7 @@ class Nviz(object):
     def __del__(self):
         """!Destroy Nviz class instance"""
         # G_unset_error_routine()
-        G_unset_percent_routine()
+        # G_unset_percent_routine()
         del self.data
         del self.data_obj
         self.log = None

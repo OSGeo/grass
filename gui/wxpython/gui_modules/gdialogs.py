@@ -1503,19 +1503,30 @@ class ImageSizeDialog(wx.Dialog):
                                 label = ' % s' % _("Image size"))
         
         size = self.parent.GetWindow().GetClientSize()
-        self.width = wx.SpinCtrl(parent = self, id = wx.ID_ANY,
+        self.width = wx.SpinCtrl(parent = self.panel, id = wx.ID_ANY,
                                  style = wx.SP_ARROW_KEYS)
         self.width.SetRange(20, 1e6)
         self.width.SetValue(size.width)
         wx.CallAfter(self.width.SetFocus)
-        self.height = wx.SpinCtrl(parent = self, id = wx.ID_ANY,
+        self.height = wx.SpinCtrl(parent = self.panel, id = wx.ID_ANY,
                                   style = wx.SP_ARROW_KEYS)
         self.height.SetRange(20, 1e6)
         self.height.SetValue(size.height)
+        self.template = wx.Choice(parent = self.panel, id = wx.ID_ANY,
+                                  size = (125, -1),
+                                  choices = [ "",
+                                              "640x480",
+                                              "800x600",
+                                              "1024x768",
+                                              "1280x960",
+                                              "1600x1200",
+                                              "1920x1440" ])
         
         self.btnOK = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOK.SetDefault()
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        
+        self.template.Bind(wx.EVT_CHOICE, self.OnTemplate)
         
         self._layout()
         self.SetSize(self.GetBestSize())
@@ -1535,7 +1546,11 @@ class ImageSizeDialog(wx.Dialog):
                                       label = _("Height:")),
                  flag = wx.ALIGN_CENTER_VERTICAL)
         fbox.Add(item = self.height)
-
+        fbox.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                      label = _("Template:")),
+                 flag = wx.ALIGN_CENTER_VERTICAL)
+        fbox.Add(item = self.template)
+        
         box.Add(item = fbox, proportion = 1,
                 flag = wx.EXPAND | wx.ALL, border = 5)
         sizer.Add(item = box, proportion = 1,
@@ -1558,3 +1573,13 @@ class ImageSizeDialog(wx.Dialog):
         """!Get width/height values"""
         return self.width.GetValue(), self.height.GetValue()
     
+    def OnTemplate(self, event):
+        """!Template selected"""
+        sel = event.GetString()
+        if not sel:
+            width, height = self.parent.GetWindow().GetClientSize()
+        else:
+            width, height = map(int, sel.split('x'))
+        self.width.SetValue(width)
+        self.height.SetValue(height)
+        
