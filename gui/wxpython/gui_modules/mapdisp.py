@@ -1175,7 +1175,12 @@ class MapFrame(wx.Frame):
     def SaveToFile(self, event):
         """!Save map to image
         """
-        filetype, ltype = gdialogs.GetImageHandlers(self.MapWindow.img)
+        if self.toolbars['nviz']:
+            filetype = "PPM file (*.ppm)|*.ppm|TIF file (*.tif)|*.tif"
+            ltype = [{ 'ext' : 'ppm', 'type' : -1 },
+                     { 'ext' : 'tif', 'type' : wx.BITMAP_TYPE_TIF }]
+        else:
+            filetype, ltype = gdialogs.GetImageHandlers(self.MapWindow.img)
         
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose a file name to save the image (no need to add extension)"),

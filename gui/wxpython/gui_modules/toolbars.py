@@ -302,7 +302,6 @@ class MapToolbar(AbstractToolbar):
                      self.zoommenu,
                      self.analyze,
                      self.dec,
-                     self.savefile,
                      self.printmap):
             self.EnableTool(tool, enabled)
         

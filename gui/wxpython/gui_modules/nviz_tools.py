@@ -48,6 +48,7 @@ class NvizToolWindow(wx.Frame):
         self.parent = parent # MapFrame
         self.lmgr = self.parent.GetLayerManager() # GMFrame
         self.mapWindow = mapWindow
+        self._display = mapWindow.GetDisplay()
         
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
         
@@ -1720,7 +1721,7 @@ class NvizToolWindow(wx.Frame):
         if type(color) != wx._gdi.Colour: return
         color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
         
-        self.mapWindow.nvizClass.SetBgColor(str(color))
+        self._display.SetBgColor(str(color))
         
         if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
@@ -1984,7 +1985,7 @@ class NvizToolWindow(wx.Frame):
         slider = self.FindWindowById(self.win['surface']['position']['slider'])
         spin = self.FindWindowById(self.win['surface']['position']['spin'])
         
-        x, y, z = self.mapWindow.nvizClass.GetSurfacePosition(id)
+        x, y, z = self._display.GetSurfacePosition(id)
         
         if axis == 0: # x
             slider.SetValue(x)
@@ -2013,7 +2014,7 @@ class NvizToolWindow(wx.Frame):
         mapLayer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type = 'nviz')
         id = data['surface']['object']['id']
-        x, y, z = self.mapWindow.nvizClass.GetSurfacePosition(id)
+        x, y, z = self._display.GetSurfacePosition(id)
         
         if axis == 0: # x
             x = value
@@ -2301,7 +2302,7 @@ class NvizToolWindow(wx.Frame):
         else:
             mode |= wxnviz.DM_GOURAUD
         
-        self.mapWindow.nvizClass.SetIsosurfaceMode(id, mode)
+        self._display.SetIsosurfaceMode(id, mode)
         
         if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
@@ -2320,7 +2321,7 @@ class NvizToolWindow(wx.Frame):
             return
         
         id = data['object']['id']
-        self.mapWindow.nvizClass.SetIsosurfaceRes(id, res)
+        self._display.SetIsosurfaceRes(id, res)
         
         if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
@@ -2339,10 +2340,10 @@ class NvizToolWindow(wx.Frame):
         isosurfId = event.GetSelection()
         
         if list.IsChecked(index):
-            self.mapWindow.nvizClass.SetIsosurfaceTransp(id, isosurfId, False, "0")
+            self._display.SetIsosurfaceTransp(id, isosurfId, False, "0")
         else:
             # disable -> make transparent
-            self.mapWindow.nvizClass.SetIsosurfaceTransp(id, isosurfId, False, "255")
+            self._display.SetIsosurfaceTransp(id, isosurfId, False, "255")
         
         if self.parent.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
@@ -2425,9 +2426,9 @@ class NvizToolWindow(wx.Frame):
         data['isosurface'].insert(item, isosurfData)
         
         # add isosurface        
-        self.mapWindow.nvizClass.AddIsosurface(id, level)
+        self._display.AddIsosurface(id, level)
         # use by default 3d raster map for color
-        self.mapWindow.nvizClass.SetIsosurfaceColor(id, item, True, str(layer.name))
+        self._display.SetIsosurfaceColor(id, item, True, str(layer.name))
         
         # update buttons
         self.UpdateIsosurfButtons(list)
@@ -2455,7 +2456,7 @@ class NvizToolWindow(wx.Frame):
         # delete isosurface
         del data['isosurface'][isosurfId]
         
-        self.mapWindow.nvizClass.DeleteIsosurface(id, isosurfId)
+        self._display.DeleteIsosurface(id, isosurfId)
         
         # update buttons
         self.UpdateIsosurfButtons(list)
@@ -2485,7 +2486,7 @@ class NvizToolWindow(wx.Frame):
         list.Delete(sel+1)
         data['isosurface'].insert(sel-1, data['isosurface'][sel])
         del data['isosurface'][sel+1]
-        self.mapWindow.nvizClass.MoveIsosurface(id, sel, True)
+        self._display.MoveIsosurface(id, sel, True)
         
         # update buttons
         self.UpdateIsosurfButtons(list)
@@ -2515,7 +2516,7 @@ class NvizToolWindow(wx.Frame):
         list.Delete(sel)
         data['isosurface'].insert(sel+2, data['isosurface'][sel])
         del data['isosurface'][sel]
-        self.mapWindow.nvizClass.MoveIsosurface(id, sel, False)
+        self._display.MoveIsosurface(id, sel, False)
         
         # update buttons
         self.UpdateIsosurfButtons(list)
