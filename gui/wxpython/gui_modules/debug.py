@@ -58,6 +58,8 @@ class DebugMsg:
             else:
                 print >> sys.stderr, "GUI D%d/%d: " % (level, self.debuglevel) + \
                     message
+            sys.stderr.flush() # force flush (required for MS Windows)
+        
     def get_level(self):
         """!Return current GUI debug level"""
         return self.debuglevel
