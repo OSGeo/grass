@@ -118,7 +118,7 @@ class VectorCleaningFrame(wx.Frame):
 	self.ftype_string = ''
 
 	self.SetTitle(_('Set up vector cleaning tools'))
-	self.SetStatusText( _("Set up vector cleaning tools"))
+	self.SetStatusText(_("Set up vector cleaning tools"))
 	self.elem = 'vector'
 	self.ctlabel = _('Choose cleaning tools and set thresholds')
 
@@ -359,9 +359,9 @@ class VectorCleaningFrame(wx.Frame):
 	    self.FindWindowById(id+1000).SetValue('')
 	    self.toolslines[id]['tool_desc'] = ''
 	    self.toolslines[id]['tool'] = ''
-	    self.SetStatusText( _("%s. cleaning tool removed, will be ignored") % id)
+	    self.SetStatusText(_("%s. cleaning tool removed, will be ignored") % id)
 	else:
-	    self.SetStatusText( _("Please select a cleaning tool to remove"))
+	    self.SetStatusText(_("Please select a cleaning tool to remove"))
 
     def OnMoveToolUp(self, event):
         """!Move up tool button pressed"""
@@ -382,11 +382,11 @@ class VectorCleaningFrame(wx.Frame):
 	    self.FindWindowById(id+2000).SetValue(up_toolline['thresh'])
 	    self.toolslines[id] = up_toolline
 	    self.selected = id_up
-	    self.SetStatusText( _("%s. cleaning tool moved up") % id)
+	    self.SetStatusText(_("%s. cleaning tool moved up") % id)
 	elif id == 1:
-	    self.SetStatusText( _("1. cleaning tool can not be moved up "))
+	    self.SetStatusText(_("1. cleaning tool can not be moved up "))
 	elif id == -1:
-	    self.SetStatusText( _("Please select a cleaning tool to move up"))
+	    self.SetStatusText(_("Please select a cleaning tool to move up"))
 
 
     def OnMoveToolDown(self, event):
@@ -409,11 +409,11 @@ class VectorCleaningFrame(wx.Frame):
 	    self.FindWindowById(id+2000).SetValue(down_toolline['thresh'])
 	    self.toolslines[id] = down_toolline
 	    self.selected = id_down
-	    self.SetStatusText( _("%s. cleaning tool moved down") % id)
+	    self.SetStatusText(_("%s. cleaning tool moved down") % id)
 	elif id == snum:
-	    self.SetStatusText( _("Last cleaning tool can not be moved down "))
+	    self.SetStatusText(_("Last cleaning tool can not be moved down "))
 	elif id == -1:
-	    self.SetStatusText( _("Please select a cleaning tool to move down"))
+	    self.SetStatusText(_("Please select a cleaning tool to move down"))
 
     def OnSetTool(self, event):
         """!Tool was defined"""
@@ -424,7 +424,7 @@ class VectorCleaningFrame(wx.Frame):
 	self.toolslines[tool_no]['tool_desc'] = self.tool_desc_list[num]
 	self.toolslines[tool_no]['tool'] = self.tool_list[num]
 
-	self.SetStatusText( _("%s. cleaning tool: '%s'") % (tool_no, self.tool_list[num]))
+	self.SetStatusText( str(tool_no) + '. ' + _("cleaning tool: '%s'") % (self.tool_list[num]))
 
     def OnThreshValue(self, event):
         """!Threshold value was entered"""
@@ -432,8 +432,10 @@ class VectorCleaningFrame(wx.Frame):
 	num = id-2000
 	self.toolslines[num]['thresh'] = self.FindWindowById(id).GetValue()
 
-	self.SetStatusText( _("Threshold for %s. tool '%s': %s") % \
-	                   (num, self.toolslines[num]['tool'], self.toolslines[num]['thresh']))
+	self.SetStatusText(_("Threshold for %(num)s. tool '%(tool)s': %(thresh)s") % \
+                               { 'num' : num,
+                                 'tool' : self.toolslines[num]['tool'],
+                                 'thresh' : self.toolslines[num]['thresh'] })
 
     def OnSelect(self, event):
         """!Tool was selected"""
@@ -451,7 +453,7 @@ class VectorCleaningFrame(wx.Frame):
     def OnCleaningRun(self, event):
         """!Builds options and runs v.clean
         """
-	self.SetStatusText( _("Executing selected cleaning operations..."))
+	self.SetStatusText(_("Executing selected cleaning operations..."))
         snum = len(self.toolslines.keys())
 	self.GetCmdStrings()
 
@@ -505,7 +507,7 @@ class VectorCleaningFrame(wx.Frame):
         if wx.TheClipboard.Open():
             wx.TheClipboard.SetData(cmddata)
             wx.TheClipboard.Close()
-            self.SetStatusText( _("Vector cleaning command copied to clipboard"))
+            self.SetStatusText(_("Vector cleaning command copied to clipboard"))
 
     def GetCmdStrings(self):
 	self.tools_string = ''
