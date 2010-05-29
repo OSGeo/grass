@@ -60,7 +60,6 @@ IconsGrass2 = {
     "digDispAttr" : 'attributes-display.png',
     ## general
     "digUndo" : 'undo.png',
-    "digSettings" : 'settings.png',
     "digAdditionalTools" : 'tools.png',
     # layer manager
     "newdisplay" : 'monitor-create.png',
@@ -89,7 +88,6 @@ IconsGrass2 = {
     # profile analysis
     "transect"     : 'layer-raster-profile.png',
     "profiledraw"  : 'show.png',
-    "profileopt"   : 'settings.png',
     "datasave"     : 'save.png',
     # georectify
     "grGcpSet"     : 'gcp-create.png',
@@ -101,9 +99,6 @@ IconsGrass2 = {
     "grGcpAdd"     : 'gcp-add.png',
     "grGcpDelete"  : 'gcp-delete.png',
     "grGcpReload"  : 'reload.png',
-    "grSettings"   : 'settings.png',
-    # nviz
-    "nvizSettings"   : 'settings.png',
     # modeler
     "modelActionAdd" : 'module-add.png',
     "modelDataAdd"   : 'data-add.png',
@@ -112,6 +107,7 @@ IconsGrass2 = {
     "modelValidate"  : 'check.png',
     "imageSave"      : 'image-export.png',
     "pythonSave"     : 'python-export.png',
-    "modelSettings"  : 'settings.png',
     "modelProperties" : 'options.png',
+    # various
+    "settings"       : 'settings.png',
     }
