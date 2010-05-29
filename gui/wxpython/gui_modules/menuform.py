@@ -1958,7 +1958,7 @@ class GUI:
         return processTask(tree).GetTask()
     
     def ParseCommand(self, cmd, gmpath = None, completed = None, parentframe = None,
-                     show = True, modal = False):
+                     show = True, modal = False, centreOnParent = True):
         """!Parse command
         
         Note: cmd is given as list
@@ -2045,8 +2045,10 @@ class GUI:
         if show is not None:
             self.mf.notebookpanel.OnUpdateSelection(None)
             if show is True:
-                if self.parent:
+                if self.parent and centreOnParent:
                     self.mf.CentreOnParent()
+                else:
+                    self.mf.CenterOnScreen()
                 self.mf.Show(show)
                 self.mf.MakeModal(modal)
             else:
