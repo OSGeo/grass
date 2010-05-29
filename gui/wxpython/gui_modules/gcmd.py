@@ -363,6 +363,7 @@ class Command:
         @param stdout  redirect standard output or None
         @param stderr  redirect standard error output or None
         """
+        Debug.msg(1, "gcmd.Command(): %s" % ' '.join(cmd))
         self.cmd = cmd
         self.stderr = stderr
 	
@@ -610,6 +611,9 @@ class CommandThread(Thread):
 def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = False,
                parent = None, read = False, stdin = None, getErrorMsg = False, **kwargs):
     """!Run GRASS command"""
+    Debug.msg(1, "gcmd.RunCommand(): %s" % ' '.join(grass.make_command(prog, flags, overwrite,
+                                                                       quiet, verbose, **kwargs)))
+    
     kwargs['stderr'] = subprocess.PIPE
     
     if read:
