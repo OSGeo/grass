@@ -160,15 +160,22 @@ class Model(object):
 
             self.actions.append(actionItem)
             
-            task = menuform.GUI().ParseCommand(cmd = actionItem.GetLog(string = False),
-                                               show = None)
+            task = actionItem.GetTask()
+            parameterized = False
             valid = True
+            for f in task.get_options()['flags']:
+                if f.get('parameterized', False):
+                    parameterized = True
+                    break
             for p in task.get_options()['params']:
                 if p.get('value', '') == '' and \
                         p.get('default', '') == '':
                     valid = False
-                    break
+                if p.get('parameterized', False):
+                    parameterized = True
+            
             actionItem.SetValid(valid)
+            actionItem.SetParameterized(parameterized)
         
         # load data & relations
         for data in gxmXml.data:
@@ -1046,8 +1053,20 @@ if __name__ == "__main__":
                         p.get('default', '') == '':
                     valid = False
                     break
-            
             layer.SetValid(valid)
+
+            # parameterized ?
+            parameterized = False
+            for f in params['flags']:
+                if f.get('parameterized', False):
+                    parameterized = True
+                    break
+            if not parameterized:
+                for p in params['params']:
+                    if p.get('parameterized', False):
+                        parameterized = True
+                        break
+            layer.SetParameterized(parameterized)
             
             self.canvas.Refresh()
         
@@ -1169,7 +1188,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         diagram = self.GetDiagram()
         if kc == wx.WXK_DELETE:
             self.RemoveSelected()
-
+        
     def RemoveSelected(self):
         """!Remove selected shapes"""
         self.parent.ModelChanged()
@@ -1181,8 +1200,7 @@ class ModelCanvas(ogl.ShapeCanvas):
             self.parent.GetModel().RemoveItem(shape)
             shape.Select(False)
             diagram.RemoveShape(shape)
-            
-            
+                    
         self.Refresh()
         
 class ModelAction(ogl.RectangleShape):
@@ -1210,6 +1228,7 @@ class ModelAction(ogl.RectangleShape):
         self.data = list()   # list of connected data items
         
         self.isValid = False
+        self.isParameterized = False
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -1218,6 +1237,7 @@ class ModelAction(ogl.RectangleShape):
             self.SetX(x)
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
+            self._setPen(False)
             self._setBrush(False)
             cmd = self.task.getCmd(ignoreErrors = True)
             if cmd and len(cmd) > 0:
@@ -1238,6 +1258,19 @@ class ModelAction(ogl.RectangleShape):
                                      subkey=('color', 'invalid'))
         wxColor = wx.Color(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
+        
+    def _setPen(self, isparameterized):
+        """!Set pen"""
+        self.isParameterized = isparameterized
+        if isparameterized:
+            width = int(UserSettings.Get(group='modeler', key='action',
+                                         subkey=('width', 'parameterized')))
+        else:
+            width = int(UserSettings.Get(group='modeler', key='action',
+                                         subkey=('width', 'default')))
+        pen = self.GetPen()
+        pen.SetWidth(width)
+        self.SetPen(pen)
         
     def GetId(self):
         """!Get id"""
@@ -1308,6 +1341,10 @@ class ModelAction(ogl.RectangleShape):
         self.isValid = isvalid
         self._setBrush(isvalid)
         
+    def SetParameterized(self, isparameterized):
+        """!Set action parameterized"""
+        self._setPen(isparameterized)
+    
     def AddData(self, item):
         """!Register new data item"""
         if item not in self.data:
@@ -1327,7 +1364,14 @@ class ModelAction(ogl.RectangleShape):
             self._setBrush(None)
         else:
             self._setBrush(self.isValid)
-            
+        self._setPen(self.isParameterized)
+
+    def OnDraw(self, dc):
+        """!Draw action in canvas"""
+        self._setBrush(self.isValid)
+        self._setPen(self.isParameterized)
+        ogl.RectangleShape.OnDraw(self, dc)
+    
 class ModelData(ogl.EllipseShape):
     """!Data item class"""
     def __init__(self, parent, x, y, name = '', value = '', prompt = '', width = None, height = None):
@@ -1373,6 +1417,7 @@ class ModelData(ogl.EllipseShape):
   
     def OnDraw(self, dc):
         pen = self.GetPen()
+        pen.SetWidth(1)
         if self.intermediate:
             pen.SetStyle(wx.SHORT_DASH)
         else:
@@ -1460,10 +1505,17 @@ class ModelData(ogl.EllipseShape):
         wxColor = wx.Color(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
         
+    def _setPen(self):
+        """!Set pen"""
+        pen = wx.Pen("black")
+        pen.SetWidth(1)
+        self.SetPen(pen)
+        
     def Update(self):
         """!Update action"""
         self._setBrush()
-        
+        self._setPen()
+
 class ModelDataDialog(ElementDialog):
     """!Data item properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Data properties"),
@@ -1798,6 +1850,18 @@ class ModelRelation(ogl.LineShape):
         """!Get list of control points"""
         return self._points
     
+    def _setPen(self):
+        """!Set pen"""
+        pen = self.GetPen()
+        pen.SetWidth(1)
+        pen.SetStyle(wx.SOLID)
+        self.SetPen(pen)
+        
+    def OnDraw(self, dc):
+        """!Draw relation"""
+        self._setPen()
+        ogl.LineShape.OnDraw(self, dc)
+        
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
     def __init__(self, tree):
@@ -2140,7 +2204,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                              label = " %s " % _("Color settings"))
+                              label = " %s " % _("Validity"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
@@ -2202,7 +2266,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         
         # size
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                              label = " %s " % _("Size settings"))
+                              label = " %s " % _("Shape size"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
@@ -2259,7 +2323,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                              label = " %s " % _("Color settings"))
+                              label = " %s " % _("Type"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
@@ -2321,7 +2385,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         # size
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                              label = " %s " % _("Size settings"))
+                              label = " %s " % _("Shape size"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
