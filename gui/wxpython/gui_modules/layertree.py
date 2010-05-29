@@ -454,7 +454,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         name = self.GetPyData(self.layer_selected)[0]['maplayer'].name
         menuform.GUI().ParseCommand(['r.colors',
                                      'map=%s' % name],
-                                    parentframe=self)
+                                    parentframe = self,
+                                    centreOnParent = False)
         
     def OnHistogram(self, event):
         """
@@ -479,6 +480,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                       id=wx.ID_ANY,
                                                       pos=wx.DefaultPosition, size=globalvar.HIST_WINDOW_SIZE,
                                                       style=wx.DEFAULT_FRAME_STYLE)
+            self.histogramFrame.CentreOnScreen()
             # show new display
             self.histogramFrame.Show()
 
@@ -842,7 +844,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             module = menuform.GUI()
             module.ParseCommand(self.GetPyData(layer)[0]['cmd'],
                                 completed=(self.GetOptData,layer,params),
-                                parentframe=self, show=show)
+                                parentframe=self, show=show, centreOnParent = False)
             
             self.GetPyData(layer)[0]['cmd'] = module.GetCmd()
         elif ltype == 'raster':
@@ -851,26 +853,26 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
                 cmd.append('-n')
             menuform.GUI().ParseCommand(cmd, completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == '3d-raster':
             cmd = ['d.rast3d']
             menuform.GUI().ParseCommand(cmd, completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'rgb':
             menuform.GUI().ParseCommand(['d.rgb'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'his':
             menuform.GUI().ParseCommand(['d.his'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'shaded':
             menuform.GUI().ParseCommand(['d.shadedmap'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'rastarrow':
             menuform.GUI().ParseCommand(['d.rast.arrow'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'rastnum':
             menuform.GUI().ParseCommand(['d.rast.num'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'vector':
             types = ''
             for type in UserSettings.Get(group='cmd', key='showType').keys():
@@ -880,29 +882,29 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             menuform.GUI().ParseCommand(['d.vect', 'type=%s' % types],
                                          completed=(self.GetOptData,layer,params),
-                                         parentframe=self)
+                                         parentframe=self, centreOnParent = False)
         elif ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed
             # should be fixed by C-based d.thematic.* modules
             menuform.GUI().ParseCommand(['d.thematic.area'], 
                                         completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'themechart':
             menuform.GUI().ParseCommand(['d.vect.chart'],
                                         completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'grid':
             menuform.GUI().ParseCommand(['d.grid'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'geodesic':
             menuform.GUI().ParseCommand(['d.geodesic'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'rhumb':
             menuform.GUI().ParseCommand(['d.rhumbline'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'labels':
             menuform.GUI().ParseCommand(['d.labels'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+                                        parentframe=self, centreOnParent = False)
         elif ltype == 'cmdlayer':
             pass
         elif ltype == 'group':
