@@ -12,7 +12,7 @@ Classes:
  - DefaultFontDialog
  - MapsetAccess
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -514,13 +514,17 @@ class Settings:
             'modeler' : {
                 'action' : {
                     'color' : {
-                        'valid' :   (211, 211, 211, 255), # light grey
-                        'invalid' : (255, 255, 255, 255), # white
-                        'running' : (255, 0, 0),          # running
+                        'valid'   :   (211, 211, 211, 255), # light grey
+                        'invalid' : (255, 255, 255, 255),   # white
+                        'running' : (255, 0, 0),            # running
                         },
                     'size' : {
-                        'width' : 100,
+                        'width'  : 100,
                         'height' : 50,
+                        },
+                    'width': {
+                        'parameterized' : 2,
+                        'default'       : 1,
                         },
                     },
                 'data' : { 
