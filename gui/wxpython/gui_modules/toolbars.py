@@ -12,7 +12,8 @@ Classes:
  - ProfileToolbar
  - NvizToolbar
  - ModelToolbar
-
+ - HistogramToolbar
+ 
 (C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1447,5 +1448,52 @@ class ModelToolbar(AbstractToolbar):
              wx.ITEM_NORMAL, Icons['quit'].GetLabel(), Icons['quit'].GetDesc(),
              self.parent.OnCloseWindow),
             )
-    
+
+class HistogramToolbar(AbstractToolbar):
+    """!Histogram modeler toolbar (see histogram.py)
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self.ToolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+        
+    def ToolbarData(self):
+        """!Toolbar data"""
+        self.histogram = wx.NewId()
+        self.rendermap = wx.NewId()
+        self.erase = wx.NewId()
+        self.font = wx.NewId()
+        self.save = wx.NewId()
+        self.hprint = wx.NewId()
+        self.quit = wx.NewId()
+        
+        # tool, label, bitmap, kind, shortHelp, longHelp, handler
+        return (
+            (self.histogram, 'histogram', Icons["histogram"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["histogram"].GetLabel(), Icons["histogram"].GetDesc(),
+             self.parent.OnOptions),
+            (self.rendermap, 'rendermap', Icons["displaymap"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["displaymap"].GetLabel(), Icons["displaymap"].GetDesc(),
+             self.parent.OnRender),
+            (self.erase, 'erase', Icons["erase"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["erase"].GetLabel(), Icons["erase"].GetDesc(),
+             self.parent.OnErase),
+            (self.font, 'font', Icons["font"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["font"].GetLabel(), Icons["font"].GetDesc(),
+             self.parent.SetHistFont),
+            ('', '', '', '', '', '', ''),
+            (self.save, 'save', Icons["savefile"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["savefile"].GetLabel(), Icons["savefile"].GetDesc(),
+             self.parent.SaveToFile),
+            (self.hprint, 'print', Icons["printmap"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["printmap"].GetLabel(), Icons["printmap"].GetDesc(),
+             self.parent.PrintMenu),
+            ('', '', '', '', '', '', ''),
+            (self.quit, 'quit', Icons["quit"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["quit"].GetLabel(), Icons["quit"].GetDesc(),
+             self.parent.OnQuit)
+            )
     
