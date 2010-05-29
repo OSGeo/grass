@@ -13,7 +13,8 @@ Classes:
  - NvizToolbar
  - ModelToolbar
  - HistogramToolbar
- 
+ - LayerManagerToolbar
+
 (C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1450,7 +1451,7 @@ class ModelToolbar(AbstractToolbar):
             )
 
 class HistogramToolbar(AbstractToolbar):
-    """!Histogram modeler toolbar (see histogram.py)
+    """!Histogram toolbar (see histogram.py)
     """
     def __init__(self, parent):
         AbstractToolbar.__init__(self, parent)
@@ -1495,5 +1496,83 @@ class HistogramToolbar(AbstractToolbar):
             (self.quit, 'quit', Icons["quit"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["quit"].GetLabel(), Icons["quit"].GetDesc(),
              self.parent.OnQuit)
+            )
+
+class LayerManagerToolbar(AbstractToolbar):
+    """!Layer Manager toolbar (see wxgui.py)
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self.ToolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+        
+    def ToolbarData(self):
+        """!Toolbar data"""
+        self.newdisplay = wx.NewId()
+        self.workspaceLoad = wx.NewId()
+        self.workspaceOpen = wx.NewId()
+        self.workspaceSave = wx.NewId()
+        self.addrast = wx.NewId()
+        self.addshaded = wx.NewId()
+        self.addvect = wx.NewId()
+        self.addthematic = wx.NewId()
+        self.addcmd = wx.NewId()
+        self.addgrp = wx.NewId()
+        self.addovl = wx.NewId()
+        self.delcmd = wx.NewId()
+        self.attribute = wx.NewId()
+        self.preferences = wx.NewId()
+        
+        # tool, label, bitmap, kind, shortHelp, longHelp, handler
+        return (
+            (self.newdisplay, 'newdisplay', Icons["newdisplay"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["newdisplay"].GetLabel(), Icons["newdisplay"].GetDesc(),
+             self.parent.OnNewDisplay),
+            ('', '', '', '', '', '', ''),
+            (self.workspaceLoad, 'workspaceLoad', Icons["workspaceLoad"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["workspaceLoad"].GetLabel(), Icons["workspaceLoad"].GetDesc(),
+             self.parent.OnWorkspace),
+            (self.workspaceOpen, 'workspaceOpen', Icons["workspaceOpen"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["workspaceOpen"].GetLabel(), Icons["workspaceOpen"].GetDesc(),
+             self.parent.OnWorkspaceOpen),
+            (self.workspaceSave, 'workspaceSave', Icons["workspaceSave"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["workspaceSave"].GetLabel(), Icons["workspaceSave"].GetDesc(),
+             self.parent.OnWorkspaceSave),
+            ('', '', '', '', '', '', ''),
+            (self.addrast, 'addrast', Icons["addrast"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["addrast"].GetLabel(), Icons["addrast"].GetDesc(),
+             self.parent.OnAddRaster),
+            (self.addshaded, 'addshaded', Icons["addshaded"].GetBitmap(),
+             wx.ITEM_NORMAL, _("Add various raster-based map layers"), "",
+             self.parent.OnAddRasterMisc),
+            (self.addvect, 'addvect', Icons["addvect"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["addvect"].GetLabel(), Icons["addvect"].GetDesc(),
+             self.parent.OnAddVector),
+            (self.addthematic, 'addthematic', Icons["addthematic"].GetBitmap(),
+             wx.ITEM_NORMAL, _("Add various vector-based map layers"), "",
+             self.parent.OnAddVectorMisc),
+            (self.addcmd, 'addcmd',  Icons["addcmd"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["addcmd"].GetLabel(), Icons["addcmd"].GetDesc(),
+             self.parent.OnAddCommand),
+            (self.addgrp, 'addgrp',  Icons["addgrp"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["addgrp"].GetLabel(), Icons["addgrp"].GetDesc(),
+             self.parent.OnAddGroup),
+            (self.addovl, 'addovl',  Icons["addovl"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["addovl"].GetLabel(), Icons["addovl"].GetDesc(),
+             self.parent.OnAddOverlay),
+            (self.delcmd, 'delcmd',  Icons["delcmd"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["delcmd"].GetLabel(), Icons["delcmd"].GetDesc(),
+             self.parent.OnDeleteLayer),
+            ('', '', '', '', '', '', ''),
+            (self.attribute, 'attrtable', Icons["attrtable"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["attrtable"].GetLabel(), Icons["attrtable"].GetDesc(),
+             self.parent.OnShowAttributeTable),
+            ('', '', '', '', '', '', ''),
+            (self.preferences, 'preferences', Icons["settings"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["settings"].GetLabel(), Icons["settings"].GetDesc(),
+             self.parent.OnPreferences)
             )
     

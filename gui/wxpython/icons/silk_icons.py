@@ -63,7 +63,6 @@ IconsSilk = {
     "digDispAttr" : 'table.png',
     ## general
     "digUndo" : 'arrow_undo.png',
-    "digSettings" : 'color_swatch.png',
     "digAdditionalTools" : 'plugin.png',
     # layer manager
     "newdisplay" : 'application_add.png',
@@ -104,9 +103,6 @@ IconsSilk = {
     "grGcpAdd"     : 'bullet_add.png', 
     "grGcpDelete"  : 'bullet_delete.png',
     "grGcpReload"  : 'arrow_refresh.png',
-    "grSettings"   : 'color_swatch.png',
-    # nviz
-    "nvizSettings"   : 'color_swatch.png',
     # modeler
     "modelActionAdd" : wx.ART_ERROR,
     "modelDataAdd"   : wx.ART_ERROR,
@@ -115,6 +111,7 @@ IconsSilk = {
     "modelValidate"  : wx.ART_ERROR,
     "imageSave"      : wx.ART_ERROR,
     "pythonSave"     : wx.ART_ERROR,
-    "modelSettings"  : wx.ART_ERROR,
     "modelProperties" : wx.ART_ERROR,
+    # various
+    "settings"     : 'color_swatch.png',
     }

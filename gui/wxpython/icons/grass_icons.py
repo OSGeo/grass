@@ -48,7 +48,6 @@ IconsGrass = {
     "digDispAttr" : 'display.attributes.gif',
     ## general
     "digUndo" : wx.ART_ERROR, # FIXME
-    "digSettings" : 'settings.gif',
     "digAdditionalTools" : wx.ART_ERROR, # FIXME
     # layer manager
     "newdisplay" : 'gui-startmon.gif',
@@ -90,7 +89,6 @@ IconsGrass = {
     "profile"    : 'gui-profile.gif',
     "transect"   : 'gui-profiledefine.gif',
     "datasave"   : 'file-save.gif',
-    # "profiledraw": 'gui-profiledraw.gif',
     "profiledraw" : 'gui-display.gif',
     "profileopt" : 'gui-profileopt.gif',
     # georectify
@@ -103,9 +101,6 @@ IconsGrass = {
     "grGcpAdd"     : wx.ART_NEW, # FIXME
     "grGcpDelete"  : wx.ART_DELETE, # FIXME
     "grGcpReload"  : 'gui-redraw.gif',
-    "grSettings"   : 'edit-color.gif', 
-    # nviz 
-    "nvizSettings" : 'edit-color.gif',
     # modeler
     "modelActionAdd" : wx.ART_ERROR,
     "modelDataAdd"   : wx.ART_ERROR,
@@ -114,6 +109,7 @@ IconsGrass = {
     "modelValidate"  : wx.ART_ERROR,
     "imageSave"      : wx.ART_ERROR,
     "pythonSave"     : wx.ART_ERROR,
-    "modelSettings"  : wx.ART_ERROR,
     "modelProperties" : wx.ART_ERROR,
+    # various
+    "settings"       : 'edit-color.gif',
     }

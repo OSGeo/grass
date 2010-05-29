@@ -39,16 +39,7 @@ import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
 import gui_modules
-gmpath = gui_modules.__path__[0]
-sys.path.append(gmpath)
-
-import images
-imagepath = images.__path__[0]
-sys.path.append(imagepath)
-
-import icons
-gmpath = icons.__path__[0]
-sys.path.append(gmpath)
+sys.path.append(gui_modules.__path__[0])
 
 import gui_modules.globalvar as globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
@@ -65,8 +56,7 @@ except ImportError:
     import wx.lib.customtreectrl as CT
 import wx.lib.flatnotebook as FN
 
-grassPath = os.path.join(globalvar.ETCDIR, "python")
-sys.path.append(grassPath)
+sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script import core as grass
 
 import gui_modules.utils as utils
@@ -95,6 +85,7 @@ from   gui_modules.debug import Debug
 from   gui_modules.ghelp import MenuTreeWindow
 from   gui_modules.ghelp import AboutWindow
 from   gui_modules.ghelp import InstallExtensionWindow
+from   gui_modules.toolbars import LayerManagerToolbar
 from   icons.icon import Icons
 
 UserSettings = preferences.globalSettings
@@ -138,7 +129,8 @@ class GMFrame(wx.Frame):
         self.menucmd = self.menubar.GetCmd()
         self.statusbar = self.CreateStatusBar(number=1)
         self.notebook  = self.__createNoteBook()
-        self.toolbar   = self.__createToolBar()
+        self.toolbar = LayerManagerToolbar(parent = self)
+        self.SetToolBar(self.toolbar)
         
         # bindings
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
@@ -228,19 +220,7 @@ class GMFrame(wx.Frame):
         self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosed)
         
         return self.notebook
-
-    def __createToolBar(self):
-        """!Creates toolbar"""
-
-        self.toolbar = self.CreateToolBar()
-        self.toolbar.SetToolBitmapSize(globalvar.toolbarSize)
-
-        for each in self.ToolbarData():
-            self.AddToolbarButton(self.toolbar, *each)
-        self.toolbar.Realize()
-
-        return self.toolbar
-
+    
     def WorkspaceChanged(self):
         """!Update window title"""
         if not self.workspaceChanged:
@@ -992,50 +972,7 @@ class GMFrame(wx.Frame):
         win = vclean.VectorCleaningFrame(parent = self, cmd = cmd[0])
         win.CentreOnScreen()
         win.Show()
-
-    def AddToolbarButton(self, toolbar, label, icon, help, handler):
-        """!Adds button to the given toolbar"""
-
-        if not label:
-            toolbar.AddSeparator()
-            return
-        tool = toolbar.AddLabelTool(id=wx.ID_ANY, label=label, bitmap=icon, shortHelp=help)
-        self.Bind(wx.EVT_TOOL, handler, tool)
-
-    def ToolbarData(self):
-
-        return   (
-                 ('newdisplay', Icons["newdisplay"].GetBitmap(),
-                  Icons["newdisplay"].GetLabel(), self.OnNewDisplay),
-                 ('', '', '', ''),
-                 ('workspaceLoad', Icons["workspaceLoad"].GetBitmap(),
-                  Icons["workspaceLoad"].GetLabel(), self.OnWorkspace),
-                 ('workspaceOpen', Icons["workspaceOpen"].GetBitmap(),
-                  Icons["workspaceOpen"].GetLabel(), self.OnWorkspaceOpen),
-                 ('workspaceSave', Icons["workspaceSave"].GetBitmap(),
-                  Icons["workspaceSave"].GetLabel(), self.OnWorkspaceSave),
-                 ('', '', '', ''),
-                 ('addrast', Icons["addrast"].GetBitmap(),
-                  Icons["addrast"].GetLabel(), self.OnAddRaster),
-                 ('addshaded', Icons["addshaded"].GetBitmap(),
-                  _("Add various raster-based map layers"), self.OnAddRasterMisc),
-                 ('addvect', Icons["addvect"].GetBitmap(),
-                  Icons["addvect"].GetLabel(), self.OnAddVector),
-                 ('addthematic', Icons["addthematic"].GetBitmap(),
-                  _("Add various vector-based map layers"), self.OnAddVectorMisc),
-                 ('addcmd',  Icons["addcmd"].GetBitmap(),
-                  Icons["addcmd"].GetLabel(),  self.OnAddCommand),
-                 ('addgrp',  Icons["addgrp"].GetBitmap(),
-                  Icons["addgrp"].GetLabel(), self.OnAddGroup),
-                 ('addovl',  Icons["addovl"].GetBitmap(),
-                  Icons["addovl"].GetLabel(), self.OnAddOverlay),
-                 ('delcmd',  Icons["delcmd"].GetBitmap(),
-                  Icons["delcmd"].GetLabel(), self.OnDeleteLayer),
-                 ('', '', '', ''),
-                 ('attrtable', Icons["attrtable"].GetBitmap(),
-                  Icons["attrtable"].GetLabel(), self.OnShowAttributeTable)
-                  )
-
+        
     def OnImportDxfFile(self, event):
         """!Convert multiple DXF layers to GRASS vector map layers"""
         dlg = gdialogs.DxfImportDialog(parent=self)
