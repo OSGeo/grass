@@ -83,5 +83,11 @@ def mapcalc(exp, **kwargs):
     """
     t = string.Template(exp)
     e = t.substitute(**kwargs)
-    if run_command('r.mapcalc', expression = e) != 0:
+    for key in kwargs.keys():
+        if key in ['overwrite', 'quiet', 'verbose']:
+            continue
+        del kwargs[key]
+    
+    if run_command('r.mapcalc', expression = e, **kwargs) != 0:
 	fatal("An error occurred while running r.mapcalc")
+    
