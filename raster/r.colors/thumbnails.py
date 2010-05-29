@@ -72,7 +72,7 @@ def flip_ppm(srcd):
 
 def ppmtopng(dst, src):
     if grass.find_program("g.ppmtopng", ["help"]):
-	grass.run_command('g.ppmtopng', input = src, output = dst)
+	grass.run_command('g.ppmtopng', input = src, output = dst, quiet = True)
     elif grass.find_program("pnmtopng"):
 	fh = open(dst, 'wb')
 	grass.call(["pnmtopng", src], stdout = fh)
@@ -171,13 +171,13 @@ def main():
     grass.use_temp_region()
     grass.run_command('g.region', rows = 100, cols = 100)
 
-    grass.mapcalc("$grad = row()/1.0", grad = tmp_grad_rel)
-
+    grass.mapcalc("$grad = row()/1.0", grad = tmp_grad_rel, quiet = True)
+    
     for table in os.listdir(color_dir):
 	path = os.path.join(color_dir, table)
 	grad = make_gradient(path)
 	make_image(output_dir, table, grad)
-
+    
     grass.mapcalc("$grad = row()", grad = tmp_grad_abs, quiet = True)
     for table in ['grey.eq', 'grey.log', 'random']:
 	make_image(output_dir, table, tmp_grad_abs, True)
