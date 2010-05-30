@@ -893,25 +893,29 @@ class Map(object):
         else:
             del os.environ["GRASS_REGION"]
         
-        # run g.pngcomp to get composite image
-        ret = gcmd.RunCommand('g.pnmcomp',
-                              input = '%s' % ",".join(maps),
-                              mask = '%s' % ",".join(masks),
-                              opacity = '%s' % ",".join(opacities),
-                              background = bgcolor,
-                              width = self.width,
-                              height = self.height,
-                              output = self.mapfile)
+        if maps:
+            # run g.pngcomp to get composite image
+            ret = gcmd.RunCommand('g.pnmcomp',
+                                  input = '%s' % ",".join(maps),
+                                  mask = '%s' % ",".join(masks),
+                                  opacity = '%s' % ",".join(opacities),
+                                  background = bgcolor,
+                                  width = self.width,
+                                  height = self.height,
+                                  output = self.mapfile)
+            
+            if ret != 0:
+                print >> sys.stderr, _("ERROR: Rendering failed")
+                return None
+            
+            Debug.msg (3, "Map.Render() force=%s file=%s" % (force, self.mapfile))
         
-        if ret != 0:
-            print >> sys.stderr, _("ERROR: Rendering failed")
-            return None
-    
         # back to original gisrc
         if self.gisrc:
             os.environ["GISRC"] = gisrc_orig
         
-        Debug.msg (3, "Map.Render() force=%s file=%s" % (force, self.mapfile))
+        if not maps:
+            return None
         
         return self.mapfile
 

@@ -20,22 +20,16 @@ import glob
 import locale
 
 import globalvar
-grassPath = os.path.join(globalvar.ETCDIR, "python")
-sys.path.append(grassPath)
+sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from grass.script import core as grass
 
 import gcmd
-try:
-    import subprocess
-except:
-    compatPath = os.path.join(globalvar.ETCWXDIR, "compat")
-    sys.path.append(compatPath)
-    import subprocess
+from debug import Debug
 
 def normalize_whitespace(text):
     """!Remove redundant whitespace from a string"""
-    return string.join( string.split(text), ' ')
+    return string.join(string.split(text), ' ')
 
 def GetTempfile(pref=None):
     """
@@ -302,8 +296,11 @@ def ListSortLower(list):
 def GetVectorNumberOfLayers(vector):
     """!Get list of vector layers"""
     layers = list()
+    if not vector:
+        return layers
     
     ret = gcmd.RunCommand('v.category',
+                          flags = 'g',
                           read = True,
                           input = vector,
                           option = 'report')
@@ -312,14 +309,14 @@ def GetVectorNumberOfLayers(vector):
         return layers
     
     for line in ret.splitlines():
-        if not 'Layer' in line:
-            continue
-        
-        value = line.split(':')[1].strip()
-        if '/' in value: # value/name
-            layers.append(value.split('/')[0])
-        else:
-            layers.append(value)
+        try:
+            layer = line.split(' ')[0]
+            if layer not in layers:
+                layers.append(layer)
+        except ValueError:
+            pass
+    Debug.msg(3, "utils.GetVectorNumberOfLayers(): vector=%s -> %s" % \
+                  (vector, ','.join(layers)))
     
     return layers
 
