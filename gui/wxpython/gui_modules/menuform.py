@@ -191,7 +191,7 @@ class UpdateThread(Thread):
         if not p or \
                 not p.has_key('wxId-bind'):
             return
-
+        
         # get widget prompt
         pType = p.get('prompt', '')
         if not pType:
@@ -199,6 +199,7 @@ class UpdateThread(Thread):
         
         # check for map/input parameter
         pMap = self.task.get_param('map', raiseError=False)
+        
         if not pMap:
             pMap = self.task.get_param('input', raiseError=False)
 
@@ -1620,10 +1621,10 @@ class cmdPanel(wx.Panel):
             pMap['wxId-bind'] = copy.copy(pColumnIds)
             if pLayer:
                 pMap['wxId-bind'] += pLayerIds
-        if len(pLayer) == 1:
-            # TODO: fix modules with more 'layer' options
-            pLayer[0]['wxId-bind'] = copy.copy(pColumnIds)
-
+        if pLayer:
+            for p in pLayer:
+                p['wxId-bind'] = copy.copy(pColumnIds)
+        
         if pDriver and pTable:
             pDriver['wxId-bind'] = pTable['wxId']
 

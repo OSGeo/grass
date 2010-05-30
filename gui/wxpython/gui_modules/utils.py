@@ -299,22 +299,24 @@ def GetVectorNumberOfLayers(vector):
     if not vector:
         return layers
     
-    ret = gcmd.RunCommand('v.category',
+    ret = gcmd.RunCommand('v.db.connect',
                           flags = 'g',
                           read = True,
-                          input = vector,
-                          option = 'report')
-    
+                          map = vector,
+                          fs = ';')
+        
     if not ret:
         return layers
     
     for line in ret.splitlines():
         try:
-            layer = line.split(' ')[0]
-            if layer not in layers:
-                layers.append(layer)
-        except ValueError:
+            layer = line.split(';')[0]
+            if '/' in layer:
+                layer = layer.split('/')[0]
+            layers.append(layer)
+        except IndexError:
             pass
+    
     Debug.msg(3, "utils.GetVectorNumberOfLayers(): vector=%s -> %s" % \
                   (vector, ','.join(layers)))
     
