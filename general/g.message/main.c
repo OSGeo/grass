@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     important = G_define_flag();
     important->key = 'i';
     important->guisection = _("Level");
-    important->description = _("Don't print message in quiet mode");
+    important->description = _("Print message in all but full quiet mode");
 
     verbose = G_define_flag();
     verbose->key = 'v';
@@ -93,12 +93,10 @@ int main(int argc, char *argv[])
 
     debug_level = atoi(debug_opt->answer);
     
-    if (fatal->answer) {
+    if (fatal->answer)
 	G_fatal_error(message->answer);
-    }
-    else if (warning->answer) {
+    else if (warning->answer)
 	G_warning(message->answer);
-    }
     else if (percent->answer) {
 	int i, n, s;
 	i = n = s = -1;
@@ -108,18 +106,14 @@ int main(int argc, char *argv[])
 	G_percent(i, n, s);
 	fprintf(stderr, "\n");
     }
-    else if (debug_flag->answer) {
+    else if (debug_flag->answer)
 	G_debug(debug_level, message->answer);
-    }
-    else if (verbose->answer) {
-	G_verbose_message(message->answer);
-    }
-    else if (important->answer) {
+    else if (important->answer)
 	G_important_message(message->answer);
-    }
-    else {
+    else if (verbose->answer)
+	G_verbose_message(message->answer);
+    else
 	G_message(message->answer);
-    }
 
     exit(EXIT_SUCCESS);
 }
