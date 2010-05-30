@@ -38,13 +38,13 @@ from wx.lib.newevent import NewEvent
 
 import globalvar
 
-grassPath = os.path.join(globalvar.ETCDIR, "python")
-sys.path.append(grassPath)
+sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 import grass.script as grass
 
 import gcmd
 import utils
 from preferences import globalSettings as UserSettings
+from debug import Debug
 
 wxGdalSelect, EVT_GDALSELECT = NewEvent()
 
@@ -97,9 +97,9 @@ class VectorSelect(Select):
         self.ftype = ftype
         
         # remove vector maps which do not contain given feature type
-        self.tcp.SetFilter(self.__isElement)
+        self.tcp.SetFilter(self._isElement)
         
-    def __isElement(self, vectorName):
+    def _isElement(self, vectorName):
         """!Check if element should be filtered out"""
         try:
             if int(grass.vector_info_topo(vectorName)[self.ftype]) < 1:
@@ -411,12 +411,12 @@ class VectorDBInfo:
          # dictionary of table and associated columns (type, length, values, ids)
         self.tables = {}
         
-        if not self.__CheckDBConnection(): # -> self.layers
+        if not self._CheckDBConnection(): # -> self.layers
             return
 
-        self.__DescribeTables() # -> self.tables
+        self._DescribeTables() # -> self.tables
 
-    def __CheckDBConnection(self):
+    def _CheckDBConnection(self):
         """!Check DB connection"""
         nuldev = file(os.devnull, 'w+')
         self.layers = grass.vector_db(map=self.map, stderr=nuldev)
@@ -427,13 +427,16 @@ class VectorDBInfo:
 
         return True
 
-    def __DescribeTables(self):
+    def _DescribeTables(self):
         """!Describe linked tables"""
         for layer in self.layers.keys():
             # determine column names and types
             table = self.layers[layer]["table"]
             columns = {} # {name: {type, length, [values], [ids]}}
             i = 0
+            Debug.msg(1, "gselect.VectorDBInfo._DescribeTables(): table=%s driver=%s database=%s" % \
+                          (self.layers[layer]["table"], self.layers[layer]["driver"],
+                           self.layers[layer]["database"]))
             for item in grass.db_describe(table = self.layers[layer]["table"],
                                           driver = self.layers[layer]["driver"],
                                           database = self.layers[layer]["database"])['cols']:
