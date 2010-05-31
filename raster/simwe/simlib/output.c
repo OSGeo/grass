@@ -584,7 +584,7 @@ int output_et()
     float etmax = -1.e+12, etmin = 1.e+12;
     float trc;
     struct Colors colors;
-    char *mapst = NULL;
+    const char *mapst = NULL;
 
     /*   char buf[256]; */
     FCELL dat1, dat2;

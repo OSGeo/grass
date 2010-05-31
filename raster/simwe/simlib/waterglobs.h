@@ -5,77 +5,75 @@
 #define MAXW    7000000
 #define UNDEF	-9999
 
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
 #include <grass/raster.h>
 
 /*
-GLOBAL FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
+extern FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
     *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers;
 */
-GLOBAL FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
+extern FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
     *fdmanin, *fddepth, *fddisch, *fderr;
-GLOBAL FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
+extern FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
     *fdflux, *fderdep;
-GLOBAL FILE *fdsfile, *fw;
+extern FILE *fdsfile, *fw;
 
-GLOBAL char *elevin;
-GLOBAL char *dxin;
-GLOBAL char *dyin;
-GLOBAL char *rain;
-GLOBAL char *infil;
-GLOBAL char *traps;
-GLOBAL char *manin;
-/* GLOBAL char *sfile; */
-GLOBAL char *depth;
-GLOBAL char *disch;
-GLOBAL char *err;
-/* GLOBAL char *outwalk; */
-GLOBAL char *mapset;
-GLOBAL char *mscale;
-GLOBAL char *tserie;
+extern char *elevin;
+extern char *dxin;
+extern char *dyin;
+extern char *rain;
+extern char *infil;
+extern char *traps;
+extern char *manin;
+/* extern char *sfile; */
+extern char *depth;
+extern char *disch;
+extern char *err;
+/* extern char *outwalk; */
+extern char *mapset;
+extern char *mscale;
+extern char *tserie;
 
-GLOBAL char *wdepth;
-GLOBAL char *detin;
-GLOBAL char *tranin;
-GLOBAL char *tauin;
-GLOBAL char *tc;
-GLOBAL char *et;
-GLOBAL char *conc;
-GLOBAL char *flux;
-GLOBAL char *erdep;
+extern char *wdepth;
+extern char *detin;
+extern char *tranin;
+extern char *tauin;
+extern char *tc;
+extern char *et;
+extern char *conc;
+extern char *flux;
+extern char *erdep;
 
-GLOBAL char *rainval;
-GLOBAL char *maninval;
-GLOBAL char *infilval;
+extern char *rainval;
+extern char *maninval;
+extern char *infilval;
 
-GLOBAL struct
+struct options
 {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
 	*sfile, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
 	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
 	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
 	*infilval;
-} parm;
+};
 
+extern struct options parm;
 
-GLOBAL struct
+struct flags
 {
     struct Flag *mscale, *tserie;
-} flag;
+};
 
+extern struct flags flag;
 
-GLOBAL struct
+struct seed
 {
     long int is1, is2;
-} seed;
+};
+
+extern struct seed seed;
 
 
-GLOBAL struct Cell_head cellhd;
+extern struct Cell_head cellhd;
 
 struct Point
 {
@@ -84,68 +82,68 @@ struct Point
 };
 
 /*
-GLOBAL struct Point *points;
-GLOBAL int npoints;
-GLOBAL int npoints_alloc;
+extern struct Point *points;
+extern int npoints;
+extern int npoints_alloc;
 */
 
-GLOBAL int input_data(void);
-GLOBAL int seeds(long int, long int);
-GLOBAL int seedg(long int, long int);
-GLOBAL int grad_check(void);
-GLOBAL void erod(double **);
-GLOBAL void main_loop(void);
-GLOBAL int output_data(int, double);
-GLOBAL int output_et(void);
-GLOBAL double ulec(void);
-GLOBAL double gasdev(void);
-GLOBAL double amax1(double, double);
-GLOBAL double amin1(double, double);
-GLOBAL int min(int, int);
-GLOBAL int max(int, int);
+extern int input_data(void);
+extern int seeds(long int, long int);
+extern int seedg(long int, long int);
+extern int grad_check(void);
+extern void erod(double **);
+extern void main_loop(void);
+extern int output_data(int, double);
+extern int output_et(void);
+extern double ulec(void);
+extern double gasdev(void);
+extern double amax1(double, double);
+extern double amin1(double, double);
+extern int min(int, int);
+extern int max(int, int);
 
-GLOBAL double xmin, ymin, xmax, ymax;
-GLOBAL double mayy, miyy, maxx, mixx;
-GLOBAL int mx, my;
-GLOBAL int mx2, my2;
+extern double xmin, ymin, xmax, ymax;
+extern double mayy, miyy, maxx, mixx;
+extern int mx, my;
+extern int mx2, my2;
 
-GLOBAL double bxmi, bymi, bxma, byma, bresx, bresy;
-GLOBAL int maxwab;
-GLOBAL double step, conv;
+extern double bxmi, bymi, bxma, byma, bresx, bresy;
+extern int maxwab;
+extern double step, conv;
 
-GLOBAL double frac;
-GLOBAL double bxmi, bymi;
+extern double frac;
+extern double bxmi, bymi;
 
-GLOBAL float **zz, **cchez;
-GLOBAL double **v1, **v2, **slope;
-GLOBAL double **gama, **gammas, **si, **inf, **sigma;
-GLOBAL float **dc, **tau, **er, **ct, **trap;
-GLOBAL float **dif;
+extern float **zz, **cchez;
+extern double **v1, **v2, **slope;
+extern double **gama, **gammas, **si, **inf, **sigma;
+extern float **dc, **tau, **er, **ct, **trap;
+extern float **dif;
 
-/* GLOBAL double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; */
-GLOBAL double vavg[MAXW][2], w[MAXW][3];
-GLOBAL int iflag[MAXW];
+/* extern double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; */
+extern double vavg[MAXW][2], w[MAXW][3];
+extern int iflag[MAXW];
 
-GLOBAL double hbeta;
-/* GLOBAL int ldemo; */
-GLOBAL double hhmax, sisum, vmean;
-GLOBAL double infsum, infmean;
-GLOBAL int maxw, maxwa, nwalk;
-GLOBAL double rwalk, bresx, bresy, xrand, yrand;
-GLOBAL double stepx, stepy, xp0, yp0;
-GLOBAL double chmean, si0, deltap, deldif, cch, hhc, halpha;
-GLOBAL double eps;
-/* GLOBAL int maxwab, nstack; */
-GLOBAL int maxwab;
-GLOBAL int iterout, mx2o, my2o;
-GLOBAL int miter, nwalka, lwwfin;
-GLOBAL double timec;
-GLOBAL int ts, timesec;
+extern double hbeta;
+/* extern int ldemo; */
+extern double hhmax, sisum, vmean;
+extern double infsum, infmean;
+extern int maxw, maxwa, nwalk;
+extern double rwalk, bresx, bresy, xrand, yrand;
+extern double stepx, stepy, xp0, yp0;
+extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
+extern double eps;
+/* extern int maxwab, nstack; */
+extern int maxwab;
+extern int iterout, mx2o, my2o;
+extern int miter, nwalka, lwwfin;
+extern double timec;
+extern int ts, timesec;
 
-GLOBAL double rain_val;
-GLOBAL double manin_val;
-GLOBAL double infil_val;
+extern double rain_val;
+extern double manin_val;
+extern double infil_val;
 
-GLOBAL struct History history;	/* holds meta-data (title, comments,..) */
+extern struct History history;	/* holds meta-data (title, comments,..) */
 
 #endif /* __WATERGLOBS_H__ */
