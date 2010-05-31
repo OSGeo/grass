@@ -192,6 +192,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """!Get map instace"""
         return self.Map
     
+    def GetMapDisplay(self):
+        """!Get associated MapFrame"""
+        return self.mapdisplay
+    
     def OnIdle(self, event):
         """
         Only re-order and re-render a composite map image from GRASS during

@@ -54,7 +54,10 @@ try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
     import wx.lib.customtreectrl as CT
-import wx.lib.flatnotebook as FN
+try:
+    import wx.lib.agw.flatnotebook as FN
+except ImportError:
+    import wx.lib.flatnotebook as FN
 
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script import core as grass
@@ -81,6 +84,7 @@ import gui_modules.prompt as prompt
 import gui_modules.menu as menu
 import gui_modules.gmodeler as gmodeler
 import gui_modules.vclean as vclean
+import gui_modules.nviz_tools as nviz_tools
 from   gui_modules.debug import Debug
 from   gui_modules.ghelp import MenuTreeWindow
 from   gui_modules.ghelp import AboutWindow
@@ -204,11 +208,11 @@ class GMFrame(wx.Frame):
         cbStyle = globalvar.FNPageStyle
         self.gm_cb = FN.FlatNotebook(self, id=wx.ID_ANY, style=cbStyle)
         self.gm_cb.SetTabAreaColour(globalvar.FNPageColor)
-        self.notebook.AddPage(self.gm_cb, text=_("Map layers for each display"))
+        self.notebook.AddPage(self.gm_cb, text=_("Map layers"))
         
         # create command output text area and add it to main notebook page
         self.goutput = goutput.GMConsole(self, pageid=1)
-        self.outpage = self.notebook.AddPage(self.goutput, text=_("Command console"))
+        self.notebook.AddPage(self.goutput, text=_("Command console"))
         
         # create 'search module' notebook page
         self.search = MenuTreeWindow(parent = self)
@@ -220,7 +224,21 @@ class GMFrame(wx.Frame):
         self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosed)
         
         return self.notebook
-    
+
+    def AddNviz(self):
+        """!Add nviz notebook page"""
+        self.nviz = nviz_tools.NvizToolWindow(parent = self,
+                                              display = self.curr_page.maptree.GetMapDisplay()) 
+        self.notebook.AddPage(self.nviz, text = _("3D view"))
+        self.notebook.SetSelection(self.notebook.GetPageCount() - 1)
+        
+    def RemoveNviz(self):
+        """!Remove nviz notebook page"""
+        # print self.notebook.GetPage(1)
+        self.notebook.RemovePage(3)
+        del self.nviz
+        self.notebook.SetSelection(0)
+        
     def WorkspaceChanged(self):
         """!Update window title"""
         if not self.workspaceChanged:
