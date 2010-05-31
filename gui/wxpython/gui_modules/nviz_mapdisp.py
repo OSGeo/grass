@@ -220,8 +220,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.view['persp']['value'] = 100
             
             if prev_value !=  self.view['persp']['value']:
-                if hasattr(self.parent, "nvizToolWin"):
-                    self.parent.nvizToolWin.UpdateSettings()
+                if hasattr(self._layermanager, "nviz"):
+                    self._layermanager.nviz.UpdateSettings()
 
                     self._display.SetView(self.view['pos']['x'], self.view['pos']['y'],
                                           self.iview['height']['value'],
@@ -419,7 +419,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 except gcmd.NvizError, e:
                     print >> sys.stderr, "Nviz:" + e.message
                 
-                self.parent.nvizToolWin.UpdateSettings()        
+                self._layermanager.nviz.UpdateSettings()        
         
         stop = time.time()
         
@@ -538,9 +538,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         wx.PostEvent(self, event)
         
         # update tools window
-        if hasattr(self.parent, "nvizToolWin") and \
+        if hasattr(self._layermanager, "nviz") and \
                 item ==  self.GetSelectedLayer(type = 'item'):
-            toolWin = self.parent.nvizToolWin
+            toolWin = self._layermanager.nviz
             if layer.type ==  'raster':
                 win = toolWin.FindWindowById( \
                     toolWin.win['vector']['lines']['surface'])
@@ -600,9 +600,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.layers.remove(item)
         
         # update tools window
-        if hasattr(self.parent, "nvizToolWin") and \
+        if hasattr(self._layermanager, "nviz") and \
                 layer.type ==  'raster':
-            toolWin = self.parent.nvizToolWin
+            toolWin = self._layermanager.nviz
             win = toolWin.FindWindowById( \
                 toolWin.win['vector']['lines']['surface'])
             win.SetItems(self.GetLayerNames(layer.type))
@@ -659,9 +659,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         wx.PostEvent(self, event)
         
         # update tools window
-        if hasattr(self.parent, "nvizToolWin") and \
+        if hasattr(self._layermanager, "nviz") and \
                 item ==  self.GetSelectedLayer(type = 'item'):
-            toolWin = self.parent.nvizToolWin
+            toolWin = self._layermanager.nviz
             
             toolWin.UpdatePage('vector')
             toolWin.SetPage('vector')
@@ -706,9 +706,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.layers.remove(id)
         
         # update tools window
-        if hasattr(self.parent, "nvizToolWin") and \
+        if hasattr(self._layermanager, "nviz") and \
                 vecType is None:
-            toolWin = self.parent.nvizToolWin
+            toolWin = self._layermanager.nviz
             # remove surface page
             if toolWin.notebook.GetSelection() ==  toolWin.page['surface']['id']:
                 toolWin.notebook.RemovePage(toolWin.page['surface']['id'])

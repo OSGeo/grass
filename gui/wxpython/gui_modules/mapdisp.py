@@ -546,7 +546,10 @@ class MapFrame(wx.Frame):
                                              subkey = 'precision'))
             format = UserSettings.Get(group = 'projection', key = 'format',
                                       subkey = 'll')
-            e, n = self.MapWindow.Pixel2Cell(event.GetPositionTuple())
+            try:
+                e, n = self.MapWindow.Pixel2Cell(event.GetPositionTuple())
+            except AttributeError:
+                return
             if self.toolbars['vdigit'] and \
                     self.toolbars['vdigit'].GetAction() == 'addLine' and \
                     self.toolbars['vdigit'].GetAction('type') in ('line', 'boundary') and \
