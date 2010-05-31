@@ -174,20 +174,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if not self.init:
             self.ResetView()
             
-            if hasattr(self.parent, "nvizToolWin"):
-                self.parent.nvizToolWin.UpdatePage('view')
+            if hasattr(self._layermanager, "nviz"):
+                self._layermanager.nviz.UpdatePage('view')
                 layer = self.GetSelectedLayer()
                 if layer:
                     if layer.type ==  'raster':
-                        self.parent.nvizToolWin.UpdatePage('surface')
+                        self._layermanager.nviz.UpdatePage('surface')
                     elif layer.type ==  'vector':
-                        self.parent.nvizToolWin.UpdatePage('vector')
+                        self._layermanager.nviz.UpdatePage('vector')
                 
-                self.parent.nvizToolWin.UpdateSettings()
+                self._layermanager.nviz.UpdateSettings()
                 
                 # update widgets
-                win = self.parent.nvizToolWin.FindWindowById( \
-                    self.parent.nvizToolWin.win['vector']['lines']['surface'])
+                win = self._layermanager.nviz.FindWindowById( \
+                    self._layermanager.nviz.win['vector']['lines']['surface'])
                 win.SetItems(self.GetLayerNames('raster'))
             
             self.init = True

@@ -292,7 +292,7 @@ class MapToolbar(AbstractToolbar):
             self.parent.toolbars['vdigit'].OnExit()
         if self.parent.toolbars['nviz']:       
             self.parent.toolbars['nviz'].OnExit()
-    
+        
     def Enable2D(self, enabled):
         """!Enable/Disable 2D display mode specific tools"""
         for tool in (self.pointer,
@@ -1357,18 +1357,11 @@ class NvizToolbar(AbstractToolbar):
             )
     
     def OnSettings(self, event):
-        win = self.parent.nvizToolWin
-        if not win.IsShown():
-            self.parent.nvizToolWin.Show()
-        else:
-            self.parent.nvizToolWin.Hide()
-
+        """!Show nviz notebook page"""
+        self.parent.parent.lmgr.notebook.SetSelection(3)
+    
     def OnExit (self, event=None):
         """!Quit nviz tool (swith to 2D mode)"""
-        # hide dialogs if still open
-        if self.parent.nvizToolWin:
-            self.parent.nvizToolWin.Hide()
-        
         # set default mouse settings
         self.parent.MapWindow.mouse['use'] = "pointer"
         self.parent.MapWindow.mouse['box'] = "point"
@@ -1376,7 +1369,7 @@ class NvizToolbar(AbstractToolbar):
         
         # disable the toolbar
         self.parent.RemoveToolbar("nviz")
-
+        
 class ModelToolbar(AbstractToolbar):
     """!Graphical modeler toolbar (see gmodeler.py)
     """

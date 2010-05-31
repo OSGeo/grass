@@ -23,6 +23,11 @@ import copy
 
 import wx
 import wx.lib.colourselect as csel
+import wx.lib.scrolledpanel as SP
+try:
+    import wx.lib.agw.flatnotebook as FN
+except ImportError:
+    import wx.lib.flatnotebook as FN
 
 import globalvar
 import gselect
@@ -35,39 +40,20 @@ import wxnviz
 # sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
 # import grass7_wxnviz as wxnviz
 
-class NvizToolWindow(wx.Frame):
-    """!Experimental window for Nviz tools
-
-    @todo integrate with Map display
+class NvizToolWindow(FN.FlatNotebook):
+    """!Nviz (3D view) tools panel
     """
-    def __init__(self, parent = None, id = wx.ID_ANY, title = _("GRASS GIS 3D View Tools"),
-                 pos = wx.DefaultPosition, size = wx.DefaultSize,
-                 mapWindow = None, 
-                 style = wx.CAPTION|wx.MINIMIZE_BOX|wx.RESIZE_BORDER):
+    def __init__(self, parent, display, id = wx.ID_ANY,
+                 style = globalvar.FNPageStyle, **kwargs):
+        self.parent     = parent # GMFrame
+        self.mapDisplay = display
+        self.mapWindow  = display.GetWindow()
+        self._display   = self.mapWindow.GetDisplay()
         
-        self.parent = parent # MapFrame
-        self.lmgr = self.parent.GetLayerManager() # GMFrame
-        self.mapWindow = mapWindow
-        self._display = mapWindow.GetDisplay()
-        
-        wx.Frame.__init__(self, parent, id, title, pos, size, style)
-        
-        #
-        # icon
-        #
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_nviz.ico'), wx.BITMAP_TYPE_ICO))
-        
-        #
-        # dialog body
-        #
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        FN.FlatNotebook.__init__(self, parent, id, style = style, **kwargs)
+        self.SetTabAreaColour(globalvar.FNPageColor)
         
         self.win = {} # window ids
-        
-        #
-        # notebook
-        #
-        self.notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
         
         self.page = {}
         self.win['settings'] = {}
@@ -93,31 +79,16 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
         
-        mainSizer.Add(item = self.notebook, proportion = 1,
-                      flag = wx.EXPAND | wx.ALL, border = 5)
-        
-        #
         # bindings
-        #
         self.Bind(wx.EVT_CLOSE, self.OnClose)
-        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         
-        #
-        # layout
-        #
-        self.SetSizer(mainSizer)
-        mainSizer.Fit(self)
-
-        #        self.SetSize(size) #this produces a size that is consistently too small for the controls
-        self.Layout()
-        self.notebook.Update()
         self.Update()
-        self.SetPage('view')
-        self.CentreOnScreen()
+        # wx.CallAfter(self.SetPage, 'view')
         
     def OnPageChanged(self, event):
         new = event.GetSelection()
-        self.notebook.ChangeSelection(new)
+        # self.ChangeSelection(new)
     
     def PostViewEvent(self, zExag = False):
         """!Change view settings"""
@@ -126,10 +97,11 @@ class NvizToolWindow(wx.Frame):
 
     def _createViewPage(self):
         """!Create view settings page"""
-        panel = wx.Panel(parent = self.notebook, id = wx.ID_ANY)
-        self.notebook.InsertPage(0, page = panel,
-                              text = " %s " % _("View"),
-                              select = True)
+        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False)
+        self.InsertPage(0, page = panel,
+                        text = " %s " % _("View"),
+                        select = True)
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
@@ -254,12 +226,13 @@ class NvizToolWindow(wx.Frame):
 
     def _createSurfacePage(self):
         """!Create view settings page"""
-        panel = wx.Panel(parent = self.notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False)
         self.page['surface'] = {}
         self.page['surface']['id'] = -1
         self.page['surface']['panel'] = panel.GetId()
         
-        # panel = scrolled.ScrolledPanel(parent = self.notebook, id = wx.ID_ANY)
+        # panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
         # panel.SetupScrolling(scroll_x = True, scroll_y = True)
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -542,7 +515,8 @@ class NvizToolWindow(wx.Frame):
 
     def _createVectorPage(self):
         """!Create view settings page"""
-        panel = wx.Panel(parent = self.notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False)
         self.page['vector'] = {}
         self.page['vector']['id'] = -1
         self.page['vector']['panel'] = panel.GetId()
@@ -786,7 +760,8 @@ class NvizToolWindow(wx.Frame):
 
     def _createVolumePage(self):
         """!Create view settings page"""
-        panel = wx.Panel(parent = self.notebook, id = wx.ID_ANY)
+        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False)
         self.page['volume'] = {}
         self.page['volume']['id'] = -1
         self.page['volume']['panel'] = panel.GetId()
@@ -1005,9 +980,11 @@ class NvizToolWindow(wx.Frame):
 
     def _createSettingsPage(self):
         """Create settings page"""
-        panel = wx.Panel(parent = self.notebook, id = wx.ID_ANY)
-        self.notebook.AddPage(page = panel,
-                              text = " %s " % _("Settings"))
+        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False)
+        
+        self.AddPage(page = panel,
+                     text = " %s " % _("Settings"))
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -1534,7 +1511,7 @@ class NvizToolWindow(wx.Frame):
         
     def OnApply(self, event):
         """Apply button pressed"""
-        if self.notebook.GetSelection() == self.page['settings']['id']:
+        if self.GetSelection() == self.page['settings']['id']:
             self.ApplySettings()
         
         if event:
@@ -1573,12 +1550,12 @@ class NvizToolWindow(wx.Frame):
         #
         self.OnApply(None)
         
-        if self.notebook.GetSelection() == self.page['settings']['id']:
+        if self.GetSelection() == self.page['settings']['id']:
             fileSettings = {}
             UserSettings.ReadSettingsFile(settings = fileSettings)
             fileSettings['nviz'] = UserSettings.Get(group = 'nviz')
             file = UserSettings.SaveToFile(fileSettings)
-            self.lmgr.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
+            self.parent.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
         
     def OnLoad(self, event):
         """!Apply button pressed"""
@@ -1709,7 +1686,7 @@ class NvizToolWindow(wx.Frame):
                                
         UserSettings.Set(group = 'nviz', value = nvsettings)
         file = UserSettings.SaveToFile()
-        self.lmgr.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
+        self.parent.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
         
     def OnBgColor(self, event):
         """!Background color changed"""
@@ -1723,7 +1700,7 @@ class NvizToolWindow(wx.Frame):
         
         self._display.SetBgColor(str(color))
         
-        if self.parent.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def OnClose(self, event):
@@ -1784,7 +1761,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.parent.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def SetMapObjUseMap(self, nvizType, attrb, map = None):
@@ -1864,14 +1841,14 @@ class NvizToolWindow(wx.Frame):
             event = wxUpdateProperties(data = data)
             wx.PostEvent(self.mapWindow, event)
             
-            if self.parent.statusbarWin['render'].IsChecked():
+            if self.mapDisplay.statusbarWin['render'].IsChecked():
                 self.mapWindow.Refresh(False)
         
     def OnSurfaceResolution(self, event):
         """!Draw resolution changed"""
         self.SetSurfaceResolution()
         
-        if apply and self.parent.statusbarWin['render'].IsChecked():
+        if apply and self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def SetSurfaceResolution(self):
@@ -1925,7 +1902,7 @@ class NvizToolWindow(wx.Frame):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if apply and self.parent.statusbarWin['render'].IsChecked():
+        if apply and self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
@@ -1954,7 +1931,7 @@ class NvizToolWindow(wx.Frame):
             event = wxUpdateProperties(data = data)
             wx.PostEvent(self.mapWindow, event)
             
-        if apply and self.parent.statusbarWin['render'].IsChecked():
+        if apply and self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def _getColorString(self, color):
@@ -2547,11 +2524,11 @@ class NvizToolWindow(wx.Frame):
                 self.FindWindowById(self.win['view']['height'][control]).SetValue(hval)                                      
         
         elif pageId in ('surface', 'vector', 'volume'):
-            current_page = self.notebook.GetSelection()
-            if self.notebook.GetSelection() != self.page[pageId]['id']:
+            current_page = self.GetSelection()
+            if self.GetSelection() != self.page[pageId]['id']:
                 for page in ('surface', 'vector', 'volume'):
                     if self.page[page]['id'] > -1:
-                        self.notebook.RemovePage(self.page[page]['id'])
+                        self.RemovePage(self.page[page]['id'])
                         self.page[page]['id'] = -1
                         oldpanel = wx.FindWindowById(self.page[page]['panel'])
                         oldpanel.Hide()
@@ -2560,12 +2537,12 @@ class NvizToolWindow(wx.Frame):
                 self.page['settings']['id'] = 2
                 
                 panel = wx.FindWindowById(self.page[pageId]['panel'])
-                self.notebook.InsertPage(n = self.page[pageId]['id'],
-                                         page = panel,
-                                         text = " %s " % _("Layer properties"),
-                                         select = True)
+                self.InsertPage(indx = self.page[pageId]['id'],
+                                page = panel,
+                                text = " %s " % _("Layer properties"),
+                                select = True)
             
-            self.notebook.ChangeSelection(current_page) 
+            # self.ChangeSelection(current_page) 
             if pageId == 'surface':
                 self.UpdateSurfacePage(layer, data['surface'])
             elif pageId == 'vector':
@@ -2573,7 +2550,7 @@ class NvizToolWindow(wx.Frame):
             elif pageId == 'volume':
                 self.UpdateVectorPage(layer, data['vector'])
             
-        self.notebook.Update()
+        self.Update()
         self.pageChanging = False
         
     def UpdateSurfacePage(self, layer, data):
@@ -2845,7 +2822,7 @@ class NvizToolWindow(wx.Frame):
         
     def SetPage(self, name):
         """!Get named page"""
-        self.notebook.SetSelection(self.page[name]['id'])
+        self.SetSelection(self.page[name]['id'])
 
 class ViewPositionWindow(wx.Window):
     """!Position control window (for NvizToolWindow)"""

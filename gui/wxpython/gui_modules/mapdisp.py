@@ -304,9 +304,8 @@ class MapFrame(wx.Frame):
         self.decorationDialog = None # decoration/overlays
 
     def AddToolbar(self, name):
-        """
-        Add defined toolbar to the window
-
+        """!Add defined toolbar to the window
+        
         Currently known toolbars are:
          - 'map'     - basic map toolbar
          - 'vdigit'  - vector digitizer
@@ -399,49 +398,41 @@ class MapFrame(wx.Frame):
                               style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 return
             
-            #
             # add Nviz toolbar and disable 2D display mode tools
-            #
             self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
             self.toolbars['map'].Enable2D(False)
             
-            #
             # update layer tree (-> enable 3d-rasters)
-            #
             if self.tree:
                 self.tree.EnableItemType(type='3d-raster', enable=True)
             
-            #
             # update status bar
-            #
             self.statusbarWin['toggle'].Enable(False)
 
-            #
             # erase map window
-            #
             self.MapWindow.EraseMap()
 
             self.statusbar.SetStatusText(_("Please wait, loading data..."), 0)
             
-            #
             # create GL window & NVIZ toolbar
-            #
             if not self.MapWindow3D:
                 self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
                                                  Map=self.Map, tree=self.tree, lmgr=self._layerManager)
-                # -> show after paint
-                self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
-                                                       mapWindow=self.MapWindow3D)
+                self.MapWindow = self.MapWindow3D
+                
+                # add Nviz notebookpage
+                self._layerManager.AddNviz()
+                
                 self.MapWindow3D.OnPaint(None) # -> LoadData
                 self.MapWindow3D.Show()
                 self.MapWindow3D.UpdateView(None)
+            else:
+                self.MapWindow = self.MapWindow3D
+                # add Nviz notebookpage
+                self._layerManager.AddNviz()
             
-            self.nvizToolWin.Show()
-
-            #
             # switch from MapWindow to MapWindowGL
             # add nviz toolbar
-            #
             self._mgr.DetachPane(self.MapWindow2D)
             self.MapWindow2D.Hide()
             self._mgr.AddPane(self.MapWindow3D, wx.aui.AuiPaneInfo().CentrePane().
@@ -456,18 +447,15 @@ class MapFrame(wx.Frame):
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
             
-            self.MapWindow = self.MapWindow3D
             self.SetStatusText("", 0)
             
         self._mgr.Update()
 
     def RemoveToolbar (self, name):
-        """
-        Removes toolbar from the window
+        """!Removes toolbar from the window
 
-        TODO: Only hide, activate by calling AddToolbar()
+        @todo Only hide, activate by calling AddToolbar()
         """
-
         # cannot hide main toolbar
         if name == "map":
             return
@@ -482,8 +470,6 @@ class MapFrame(wx.Frame):
         self.toolbars[name] = None
 
         if name == 'nviz':
-            # hide nviz tools
-            self.nvizToolWin.Hide()
             # unload data
             #            self.MapWindow3D.Reset()
             # switch from MapWindowGL to MapWindow
@@ -495,12 +481,14 @@ class MapFrame(wx.Frame):
                               CloseButton(False).DestroyOnClose(True).
                               Layer(0))
             self.MapWindow = self.MapWindow2D
+            # remove nviz notebook page
+            self._layerManager.RemoveNviz()
             
-            #
             # update layer tree (-> disable 3d-rasters)
-            #
             if self.tree:
                 self.tree.EnableItemType(type='3d-raster', enable=False)
+            
+           
             self.MapWindow.UpdateMap()
             
         self.toolbars['map'].combo.SetValue (_("2D view"))
