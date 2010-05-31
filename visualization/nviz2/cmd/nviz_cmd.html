@@ -1,19 +1,29 @@
 <h2>DESCRIPTION</h2>
 
-Experimental CLI prototype of NVIZ.
+<em>nviz_cmd</em> allows users to realistically render multiple
+<em>surfaces</em> (raster data) in a 3D space, optionally using
+thematic coloring, draping 2D <em>vector</em> data over the surfaces,
+displaying 3D vector data in the space, and visualization
+of <em>volume</em> data (3D raster data) from the command line.
 
-<p>
-TODO
+<h2>EXAMPLE</h2>
+
+Render elevation map in a 3D space.
+
+<div class="code"><pre>
+g.region rast=elevation
+nviz_cmd elevation_map=elevation output=elev perspective=15
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="nviz.html">TCL/TK-based NVIZ</a>
+<a HREF="wxGUI.Nviz.html">wxGUI 3D Viewer</a>
 </em>
 
 <h2>AUTHOR</h2>
 
-Martin Landa (Google Summer of Code 2008)
+Martin Landa (Google Summer of Code 2008/2010)
 
 <p>
 <i>Last changed: $Date$</i>

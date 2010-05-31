@@ -252,7 +252,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Matlab array or Mapgen format import</label>
-	      <help>Import Mapgen or Matlab vector maps into GRASS.</help>
+	      <help>Imports Mapgen or Matlab vector maps into GRASS.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.in.mapgen</command>
@@ -554,8 +554,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Raster to vector</label>
-	      <help>Converts a raster map into a vector map layer.</help>
-	      <keywords>raster</keywords>
+	      <help>Converts a raster map into a vector map.</help>
+	      <keywords>raster,conversion,vectorization</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.to.vect</command>
 	    </menuitem>
@@ -636,6 +636,13 @@
 	  <keywords>raster,vector,visualization</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>nviz</command>
+	</menuitem>
+	<menuitem>
+	  <label>NVIZ (non-interactive)</label>
+	  <help>Allows rendering GIS data is a 3D space.</help>
+	  <keywords>visualization,raster,vector,raster3d</keywords>
+	  <handler>OnMenuCmd</handler>
+	  <command>nviz_cmd</command>
 	</menuitem>
 	<separator />
 	<menuitem>
@@ -909,7 +916,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Color tables</label>
-	      <help>Creates/modifies the color table associated with a raster map layer.</help>
+	      <help>Creates/modifies the color table associated with a raster map.</help>
 	      <keywords>raster,color table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.colors</command>
@@ -923,7 +930,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Color rules</label>
-	      <help>Creates/modifies the color table associated with a raster map layer.</help>
+	      <help>Creates/modifies the color table associated with a raster map.</help>
 	      <keywords>raster,color table</keywords>
 	      <handler>RulesCmd</handler>
 	      <command>r.colors</command>
