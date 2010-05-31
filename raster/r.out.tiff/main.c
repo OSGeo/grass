@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     int in;
     struct rasterfile h;
     struct Option *inopt, *outopt, *compopt;
-    struct Flag *pflag, *lflag, *tflag;
+    struct Flag *pflag, *lflag, *tflag, *wflag;
     CELL *cell, *cellptr, *cells[MAX_TILE_LENGTH];
     struct Cell_head cellhd;
     struct GModule *module;
@@ -115,9 +115,14 @@ int main(int argc, char *argv[])
     pflag->key = 'p';
     pflag->description = _("TIFF Palette output (8bit instead of 24bit).");
 
+/* TODO (copy method from r.out.png)
     tflag = G_define_flag();
     tflag->key = 't';
-    tflag->description = _("Output TIFF world file");
+    tflag->description = _("Make NULL cells transparent");
+*/
+    wflag = G_define_flag();
+    wflag->key = 'w';
+    wflag->description = _("Output TIFF world file");
 
     lflag = G_define_flag();
     lflag->key = 'l';
@@ -137,7 +142,7 @@ int main(int argc, char *argv[])
 
     tiled = lflag->answer;
     palette = pflag->answer;
-    tfw = tflag->answer;
+    tfw = wflag->answer;
 
     Rast_get_cellhd(inopt->answer, "", &cellhd);
 
