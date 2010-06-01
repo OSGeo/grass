@@ -49,13 +49,20 @@ from debug import Debug
 wxGdalSelect, EVT_GDALSELECT = NewEvent()
 
 class Select(wx.combo.ComboCtrl):
-    def __init__(self, parent, id, size = globalvar.DIALOG_GSELECT_SIZE,
-                 type = None, multiple = False, mapsets = None, exclude = [],
-                 updateOnPopup = True):
-        """!Custom control to create a ComboBox with a tree control
-        to display and select GIS elements within acessible mapsets.
-        Elements can be selected with mouse. Can allow multiple selections, when
-        argument multiple=True. Multiple selections are separated by commas.
+    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
+                 type = None, multiple = False, mapsets = None,
+                 updateOnPopup = True, onPopup = None):
+        """!Custom control to create a ComboBox with a tree control to
+        display and select GIS elements within acessible mapsets.
+        Elements can be selected with mouse. Can allow multiple
+        selections, when argument multiple=True. Multiple selections
+        are separated by commas.
+
+        @param type type of GIS elements ('raster, 'vector', ...)
+        @param multiple multiple input allowed?
+        @param mapsets force list of mapsets (otherwise search path)
+        @param updateOnPopup True for updating list of elements on popup
+        @param onPopup function to be called on Popup
         """
         wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size)
         self.GetChildren()[0].SetName("Select")
@@ -66,19 +73,17 @@ class Select(wx.combo.ComboCtrl):
         self.SetPopupExtents(0,100)
         if type:
             self.tcp.SetData(type = type, mapsets = mapsets,
-                             exclude = exclude, multiple = multiple,
-                             updateOnPopup = updateOnPopup)
+                             multiple = multiple,
+                             updateOnPopup = updateOnPopup, onPopup = onPopup)
         
-    def SetElementList(self, type, mapsets = None, exclude = []):
+    def SetElementList(self, type, mapsets = None):
         """!Set element list
 
         @param type GIS element type
         @param mapsets list of acceptable mapsets (None for all in search path)
-        @param exclude list of GIS elements to be excluded
         """
-        self.tcp.SetData(type = type, mapsets = mapsets,
-                         exclude = exclude)
-
+        self.tcp.SetData(type = type, mapsets = mapsets)
+        
     def GetElementList(self):
         """!Load elements"""
         self.tcp.GetElementList()
@@ -119,9 +124,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.curitem = None
         self.multiple = False
         self.type = None
-        self.mapsets = []
-        self.exclude = []
-
+        self.mapsets = None
+        self.updateOnPopup = True
+        self.onPopup = None
+        
         self.SetFilter(None)
         
     def Create(self, parent):
@@ -173,17 +179,22 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         """!Limited only for first selected"""
         if not force and not self.updateOnPopup:
             return
+        if self.onPopup:
+            selected, exclude = self.onPopup()
+        else:
+            selected = None
+            exclude  = False
+            
+        self.GetElementList(selected, exclude)
     
-        self.GetElementList()
-    
-    def GetElementList(self):
+    def GetElementList(self, elements = None, exclude = False):
         """!Get filtered list of GIS elements in accessible mapsets
         and display as tree with all relevant elements displayed
         beneath each mapset branch
         """
         # update list
         self.seltree.DeleteAllItems()
-        self._getElementList(self.type, self.mapsets, self.exclude)
+        self._getElementList(self.type, self.mapsets, elements, exclude)
         
         if len(self.value) > 0:
             root = self.seltree.GetRootItem()
@@ -209,13 +220,14 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
         return wx.Size(minWidth, min(200, maxHeight))
 
-    def _getElementList(self, element, mapsets=None, exclude=[]):
+    def _getElementList(self, element, mapsets = None, elements = None, exclude = False):
         """!Get list of GIS elements in accessible mapsets and display as tree
         with all relevant elements displayed beneath each mapset branch
 
         @param element GIS element
         @param mapsets list of acceptable mapsets (None for all mapsets in search path)
-        @param exclude list of GIS elements to be excluded
+        @param elements list of forced GIS elements
+        @param exclude True to exclude, False for forcing the list (elements)
         """
         # get current mapset
         curr_mapset = grass.gisenv()['MAPSET']
@@ -223,7 +235,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         # list of mapsets in current location
         if mapsets is None:
             mapsets = utils.ListOfMapsets()
-
+        
         # map element types to g.mlist types
         elementdict = {'cell':'rast',
                        'raster':'rast',
@@ -269,11 +281,11 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                        '3dview':'3dview',
                        '3D viewing parameters':'3dview',
                        '3D view parameters':'3dview'}
-
+        
         if element not in elementdict:
             self.AddItem(_('Not selectable element'))
             return
-
+        
         # get directory tree nodes
         # reorder mapsets based on search path (TODO)
         for i in range(len(mapsets)):
@@ -299,9 +311,11 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 for elem in elem_list:
                     if elem != '':
                         fullqElem = elem + '@' + dir
-                        if len(exclude) > 0 and fullqElem in exclude:
-                            continue
-
+                        if elements:
+                            if (exclude and fullqElem in elements) or \
+                                    (not exclude and fullqElem not in elements):
+                                continue
+                        
                         if self.filterElements:
                             if self.filterElements(fullqElem):
                                 self.AddItem(fullqElem, parent=dir_node)
@@ -393,12 +407,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.type = kargs['type']
         if kargs.has_key('mapsets'):
             self.mapsets = kargs['mapsets']
-        if kargs.has_key('exclude'):
-            self.exclude = kargs['exclude']
         if kargs.has_key('multiple'):
             self.multiple = kargs['multiple']
         if kargs.has_key('updateOnPopup'):
             self.updateOnPopup = kargs['updateOnPopup']
+        if kargs.has_key('onPopup'):
+            self.onPopup = kargs['onPopup']
         
 class VectorDBInfo:
     """!Class providing information about attribute tables
