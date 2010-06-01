@@ -101,11 +101,11 @@ int main(int argc, char *argv[])
     myState.use_nulls = flag.zero->answer;
     myState.inraster = parm.input->answer;
     if (parm.cover->answer) {
-	myState.docover = 1;
+	myState.docover = TRUE;
 	myState.inrcover = parm.cover->answer;
     }
     else {
-	myState.docover = 0;
+	myState.docover = FALSE;
 	myState.inrcover = NULL;
     }
     myState.outraster = parm.raster->answer;

@@ -41,14 +41,14 @@ int execute_random(struct rr_state *theState)
     if ((infd = theState->fd_old) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      theState->inraster);
-    if (theState->docover == 1) {
+    if (theState->docover == TRUE) {
 	if ((cinfd = theState->fd_cold) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  theState->inrcover);
     }
 
     if (theState->outraster != NULL) {
-	if (theState->docover == 1)
+	if (theState->docover == TRUE)
 	    type = theState->cover.type;
 	else
 	    type = theState->buf.type;
@@ -76,7 +76,7 @@ int execute_random(struct rr_state *theState)
 	Vect_map_add_dblink(&Out, 1, NULL, fi->table, "cat", fi->database,
 			    fi->driver);
 
-	if (theState->docover == 1)
+	if (theState->docover == TRUE)
 	    table = db_alloc_table(3);
 	else
 	    table = db_alloc_table(2);
@@ -90,7 +90,7 @@ int execute_random(struct rr_state *theState)
 	db_set_column_name(column, "value");
 	db_set_column_sqltype(column, DB_SQL_TYPE_DOUBLE_PRECISION);
 
-	if (theState->docover == 1) {
+	if (theState->docover == TRUE) {
 	    column = db_get_table_column(table, 2);
 	    db_set_column_name(column, "covervalue");
 	    db_set_column_sqltype(column, DB_SQL_TYPE_DOUBLE_PRECISION);
@@ -120,10 +120,11 @@ int execute_random(struct rr_state *theState)
 	theState->nCells - theState->nNulls;
     nt = theState->nRand;	/* Number of points to generate */
     cat = 1;
+
     /* Execute for loop for every row if nt>1 */
     for (row = 0; row < nrows && nt; row++) {
 	Rast_get_row(infd, theState->buf.data.v, row, theState->buf.type);
-	if (theState->docover == 1) {
+	if (theState->docover == TRUE) {
 	    Rast_get_row(cinfd, theState->cover.data.v, row,
 			 theState->cover.type);
 	}
@@ -131,7 +132,7 @@ int execute_random(struct rr_state *theState)
 	for (col = 0; col < ncols && nt; col++) {
 	    if (!theState->use_nulls && is_null_value(theState->buf, col))
 		continue;
-	    if (theState->docover == 1) {	/* skip no data cover points */
+	    if (theState->docover == TRUE) {	/* skip no data cover points */
 		if (!theState->use_nulls &&
 		    is_null_value(theState->cover, col))
 		    continue;
@@ -141,7 +142,7 @@ int execute_random(struct rr_state *theState)
 		nt--;
 		if (is_null_value(theState->buf, col))
 		    cpvalue(&theState->nulls, 0, &theState->buf, col);
-		if (theState->docover == 1) {
+		if (theState->docover == TRUE) {
 		    if (is_null_value(theState->cover, col))
 			cpvalue(&theState->cnulls, 0, &theState->cover, col);
 		}
@@ -240,7 +241,7 @@ int execute_random(struct rr_state *theState)
 
     /* close files */
     Rast_close(infd);
-    if (theState->docover == 1)
+    if (theState->docover == TRUE)
 	Rast_close(cinfd);
     if (theState->outvector) {
 	db_commit_transaction(driver);
