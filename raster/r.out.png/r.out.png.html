@@ -3,19 +3,27 @@
 <em>r.out.png</em> exports a GRASS raster map in non-georeferenced PNG image
 format, respecting the current region resolution and bounds.
 
+<p>
+Optionally the user can choose to export a World File to provide basic
+georeferencing support. When used with the transparency flag this can
+create images useful for KML, TMS, or WMS overlays. (e.g. for use in
+Google Earth or as OpenLayers tiles)
+
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="r.out.gdal.html">r.out.gdal</a>,
+<a href="r.out.ppm.html">r.out.ppm</a>,
 <a href="r.out.tiff.html">r.out.tiff</a>,
 <a href="r.out.ascii.html">r.out.ascii</a>
 </em>
 
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Alex Shevlakov
+Alex Shevlakov<BR>
+Hamish Bowman
 
 <p>
 <i>Last changed: $Date$</i>
