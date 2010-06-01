@@ -57,6 +57,7 @@ import types
 from threading import Thread
 import Queue
 import shlex
+import tempfile
 
 ### i18N
 import gettext
@@ -456,7 +457,9 @@ class grassTask:
         for p in self.params:
             if p.get('value', '') == '' and p.get('required', 'no') != 'no':
                 if p.get('default', '') == '':
-                    desc = p.get('label', p['description'])
+                    desc = p.get('label', '')
+                    if not desc:
+                        desc = p['description']
                     errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
                                          {'name' : p['name'], 'desc' : desc })
         
@@ -1528,10 +1531,23 @@ class cmdPanel(wx.Panel):
                         fbb.SetValue(p['value']) # parameter previously set
                     which_sizer.Add(item=fbb, proportion=0,
                                     flag=wx.EXPAND | wx.RIGHT, border=5)
+                    
+                    # widget for interactive input
+                    ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
+                                       style = wx.TE_MULTILINE,
+                                       size = (-1, 75))
+                    ifbb.Bind(wx.EVT_TEXT, self.OnFileText)
+                    which_sizer.Add(item = wx.StaticText(parent = which_panel, id = wx.ID_ANY,
+                                                         label = _('or enter values interactively')),
+                                    proportion=0,
+                                    flag=wx.EXPAND | wx.RIGHT | wx.LEFT | wx.BOTTOM, border=5)
+                    which_sizer.Add(item=ifbb, proportion=0,
+                                    flag=wx.EXPAND | wx.RIGHT | wx.LEFT, border=5)
+                    
                     # A file browse button is a combobox with two children:
                     # a textctl and a button;
                     # we have to target the button here
-                    p['wxId'] = [ fbb.GetChildren()[1].GetId(), ]
+                    p['wxId'] = [ fbb.GetChildren()[1].GetId(), ifbb.GetId() ]
             
             if self.parent.GetName() == 'MainFrame' and self.parent.modeler:
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
@@ -1670,6 +1686,28 @@ class cmdPanel(wx.Panel):
         self.hasMain = tab.has_key( _('Required') ) # publish, to enclosing Frame for instance
 
         self.Bind(EVT_DIALOG_UPDATE, self.OnUpdateDialog)
+        
+    def OnFileText(self, event):
+        """File input interactively entered"""
+        text = event.GetString()
+        p = self.task.get_param(value = event.GetId(), element = 'wxId', raiseError = False)
+        if not p:
+            return # should not happen
+        win = self.FindWindowById(p['wxId'][0])
+        if text:
+            filename = win.GetValue()
+            if not filename:
+                # outFile = tempfile.NamedTemporaryFile(mode='w+b')
+                filename = grass.tempfile()
+                win.SetValue(filename)
+                
+            f = open(filename, "w")
+            try:
+                f.write(text)
+            finally:
+                f.close()
+        else:
+            win.SetValue('')
         
     def OnVectorFormat(self, event):
         """!Change vector format (native / ogr)"""
