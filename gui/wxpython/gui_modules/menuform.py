@@ -456,8 +456,9 @@ class grassTask:
         for p in self.params:
             if p.get('value', '') == '' and p.get('required', 'no') != 'no':
                 if p.get('default', '') == '':
+                    desc = p.get('label', p['description'])
                     errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
-                                         {'name' : p['name'], 'desc' : p['description']})
+                                         {'name' : p['name'], 'desc' : desc })
         
         return errorList
     
