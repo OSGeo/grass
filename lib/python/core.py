@@ -507,9 +507,9 @@ def region():
     \code
     >>> region = grass.region()
     >>> [region[key] for key in "nsew"]
-    ['4928000', '4914020', '609000', '590010']
+    [228500.0, 215000.0, 645000.0, 630000.0]
     >>> (region['nsres'], region['ewres'])
-    ('30', '30')
+    (10.0, 10.0)
     \endcode
 
     @return dictionary of region values
