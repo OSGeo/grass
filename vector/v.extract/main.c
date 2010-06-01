@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 
     inopt = G_define_standard_option(G_OPT_V_INPUT);
 
-    fieldopt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    fieldopt = G_define_standard_option(G_OPT_V_FIELD);
     fieldopt->guisection = _("Selection");
     
     typopt = G_define_standard_option(G_OPT_V_TYPE);
