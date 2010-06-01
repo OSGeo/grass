@@ -18,12 +18,17 @@ for details.
 @author Pythonized by Glynn Clements
 """
 
+import sys
 from threading import Thread
 
 from ctypes import *
-from grass.lib.grass import *
-from grass.lib.ogsf  import *
-from grass.lib.nviz  import *
+try:
+    from grass.lib.grass import *
+    from grass.lib.ogsf  import *
+    from grass.lib.nviz  import *
+except ImportError, e:
+    print >> sys.stderr, "\nWARNING: Nviz extension (3D view mode) disabled. Reason: %s" % e
+    sys.stderr.flush()
 
 from debug import Debug
 
