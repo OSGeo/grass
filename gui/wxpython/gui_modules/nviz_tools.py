@@ -526,14 +526,25 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector'] = {}
         
         #
-        # desc
+        # selection
         #
-        desc = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                             label = "")
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Vector map")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        vmaps = gselect.Select(parent = panel, type = 'vector',
+                               onPopup = self.GselectOnPopup)
+        self.win['vector']['map'] = vmaps.GetId()
+        desc = wx.StaticText(parent = panel, id = wx.ID_ANY)
         self.win['vector']['desc'] = desc.GetId()
-        pageSizer.Add(item = desc, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL,
-                      border = 10)
+        boxSizer.Add(item = vmaps, proportion = 0,
+                     flag = wx.ALL,
+                     border = 3)
+        boxSizer.Add(item = desc, proportion = 0,
+                     flag = wx.ALL,
+                     border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
         
         #
         # vector lines
@@ -758,6 +769,13 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.Layout()
         return panel.GetBestSize()
 
+    def GselectOnPopup(self, exclude = False):
+        """Update gselect.Select() items"""
+        maps = list()
+        for layer in self.mapWindow.Map.GetListOfLayers(l_type='vector'):
+            maps.append(layer.GetName())
+        return maps, exclude
+    
     def _createVolumePage(self):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
@@ -2657,10 +2675,10 @@ class NvizToolWindow(FN.FlatNotebook):
                 nprimitives += int(value)
         
         if mapIs3D:
-            desc = _("Vector map <%s> is 3D") % layer.name
+            desc = _("Vector map is 3D")
             enable = False
         else:
-            desc = _("Vector map <%s> is 2D") % layer.name
+            desc = _("Vector map is 2D")
             enable = True
         desc += " - " + _("%(primitives)d primitives (%(points)d points)") % \
             { 'primitives' : nprimitives, 'points' : npoints }
@@ -2671,6 +2689,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['vector'][v]['height']['slider']).Enable(enable)
             self.FindWindowById(self.win['vector'][v]['height']['spin']).Enable(enable)
             
+        self.FindWindowById(self.win['vector']['map']).SetValue(layer.name)
         self.FindWindowById(self.win['vector']['desc']).SetLabel(desc)
         #
         # lines
