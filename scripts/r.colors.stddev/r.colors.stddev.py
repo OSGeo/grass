@@ -52,12 +52,12 @@ def main():
     global tmpmap
     tmpmap = None
 
-    input = options['input']
+    map = options['map']
     zero = flags['z']
     bands = flags['b']
 
     if not zero:
-	s = grass.read_command('r.univar', flags = 'g', map = input)
+	s = grass.read_command('r.univar', flags = 'g', map = map)
 	kv = grass.parse_key_val(s)
 	global mean, stddev
 	mean = float(kv['mean'])
@@ -75,7 +75,7 @@ def main():
 	    # banded free floating  black/red/yellow/green/yellow/red/black
 
 	    # reclass with labels only works for category (integer) based maps
-            #r.reclass input="$GIS_OPT_INPUT" output="${GIS_OPT_INPUT}.stdevs" << EOF
+            #r.reclass map="$GIS_OPT_MAP" output="${GIS_OPT_MAP}.stdevs" << EOF
 
 	    # >3 S.D. outliers colored black so they show up in d.histogram w/ white background
 	    rules = '\n'.join([
@@ -95,14 +95,14 @@ def main():
 		"100% black"])
     else:
 	tmpmap = "r_col_stdev_abs_%d" % os.getpid()
-	grass.mapcalc("$tmp = abs($input)", tmp = tmpmap, input = input)
+	grass.mapcalc("$tmp = abs($map)", tmp = tmpmap, map = map)
 
 	# data centered on 0  (e.g. map of deviations)
 	info = grass.raster_info(tmpmap)
 	maxv = info['max']
 
 	# current r.univar truncates percentage to the base integer
-	s = grass.read_command('r.univar', flags = 'eg', map = input, percentile = [95.45,68.2689,99.7300])
+	s = grass.read_command('r.univar', flags = 'eg', map = map, percentile = [95.45,68.2689,99.7300])
 	kv = grass.parse_key_val(s)
 
 	stddev1 = float(kv['percentile_68'])
@@ -138,7 +138,7 @@ def main():
 		"%f black" % maxv,
 		])
 
-    grass.write_command('r.colors', map = input, rules = '-', stdin = rules)
+    grass.write_command('r.colors', map = map, rules = '-', stdin = rules)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
