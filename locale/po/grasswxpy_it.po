@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gui/wxpython/scripts/p.vect.py:356 ../gui/wxpython/scripts/p.rast.py:99
 #: ../gui/wxpython/scripts/p.cmd.py:53
@@ -6498,7 +6498,7 @@ msgstr "Riclassifica usando un file di regole"
 
 #: ../gui/wxpython/menustrings.py:409
 msgid "Recode interactively"
-msgstr ""
+msgstr "Ricodifica interattivamente"
 
 #: ../gui/wxpython/menustrings.py:410
 msgid "Recodes categorical raster maps."
@@ -7093,7 +7093,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:547
 msgid "Correct and reclassify objects"
-msgstr ""
+msgstr "Corregge e riclassifica oggetti"
 
 #: ../gui/wxpython/menustrings.py:548
 msgid ""
@@ -7537,12 +7537,16 @@ msgid ""
 "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
 "RGB (Red-Green-Blue) color space."
 msgstr ""
+"Trasforma mappe raster dallo spazio di colore HIS (Hue-Intensity-Saturation) "
+"allo spazio di colore RGB (Red-Green-Blue)"
 
 #: ../gui/wxpython/menustrings.py:651
 msgid ""
 "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-"
 "Intensity-Saturation) color space."
 msgstr ""
+"Trasforma mappe raster dallo spazio di colore RGB (Red-Green-Blue) allo "
+"spazio di colore HIS (Hue-Intensity-Saturation)"
 
 #: ../gui/wxpython/menustrings.py:652
 msgid "Rectify image or raster"
@@ -8673,9 +8677,8 @@ msgstr "Rettificazione ortofoto"
 #~ msgid "Size:"
 #~ msgstr "Dimensione:"
 
-#, fuzzy
 #~ msgid "Change the type of geometry elements."
-#~ msgstr "Cambia la tipologia della geometri degli elementi."
+#~ msgstr "Cambia la tipologia della geometria degli elementi."
 
 #~ msgid "C&opy"
 #~ msgstr "C&opia"
@@ -8806,9 +8809,8 @@ msgstr "Rettificazione ortofoto"
 #~ msgid "Copy the current command string to the clipboard"
 #~ msgstr "Copia la seguente stringa di comando negli appunti"
 
-#, fuzzy
 #~ msgid "Error in command execution %s"
-#~ msgstr "Errore nell'esecuzione del comando '%s'"
+#~ msgstr "Errore nell'esecuzione del comando %s"
 
 #~ msgid "Drops an attribute table."
 #~ msgstr "Elimina una tabella degli attributi"
@@ -8862,9 +8864,8 @@ msgstr "Rettificazione ortofoto"
 #~ msgid "E&xit"
 #~ msgstr "E&sci"
 
-#, fuzzy
 #~ msgid "Bilinear from raster points"
-#~ msgstr "Interpolazione da isolinee raster"
+#~ msgstr "Interpolazione bilineare da punti raster"
 
 #~ msgid "Resolution cannot be 0"
 #~ msgstr "La risoluzione non può essere 0"
@@ -9100,3 +9101,16 @@ msgstr "Rettificazione ortofoto"
 
 #~ msgid "Add various vector-based map layer"
 #~ msgstr "Aggiungi diversi layer vettoriali"
+
+#~ msgid "Bilinear interpolation utility for raster map layers."
+#~ msgstr "Interpolazione bilineare da layer raster"
+
+#~ msgid "Display shortest route (requires XTerm)"
+#~ msgstr "Visualizza il percorso più breve (richiede XTerm)"
+
+#~ msgid "Finds shortest path for selected starting and ending node."
+#~ msgstr ""
+#~ "Trova il percorso più breve per i nodi di partenza ed arrivo selezionati"
+
+#~ msgid "Ortho photo rectification (requires Xterm)"
+#~ msgstr "Ortorettificazione (richiede Xterm)"
