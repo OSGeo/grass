@@ -13,7 +13,7 @@ grass.parser()
 ...
 @endcode
 
-(C) 2008-2009 by the GRASS Development Team
+(C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -56,6 +56,7 @@ PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
 fatal_exit = True # abort on fatal()
+debug_level = 0   # DEBUG level
 
 def call(*args, **kwargs):
     return Popen(*args, **kwargs).wait()
@@ -145,6 +146,12 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
 	else:
 	    options[opt] = val
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
+
+    global debug_level
+    if debug_level > 0:
+        sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level, __name__, ' '.join(args)))
+        sys.stderr.flush()
+    
     return Popen(args, **popts)
 
 def run_command(*args, **kwargs):
@@ -497,6 +504,8 @@ def gisenv():
     """
     s = read_command("g.gisenv", flags='n')
     return parse_key_val(s)
+
+debug_level = int(gisenv().get('DEBUG', 0))
 
 # interface to g.region
 
