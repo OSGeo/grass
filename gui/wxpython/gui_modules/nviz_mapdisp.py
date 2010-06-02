@@ -183,7 +183,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     elif layer.type ==  'vector':
                         self._layermanager.nviz.UpdatePage('vector')
                 
-                self._layermanager.nviz.UpdateSettings()
+                ### self._layermanager.nviz.UpdateSettings()
                 
                 # update widgets
                 win = self._layermanager.nviz.FindWindowById( \
@@ -608,8 +608,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             win.SetItems(self.GetLayerNames(layer.type))
 
             # remove surface page
-            if toolWin.notebook.GetSelection() ==  toolWin.page[nvizType]['id']:
-                toolWin.notebook.RemovePage(toolWin.page[nvizType]['id'])
+            if toolWin.GetSelection() ==  toolWin.page[nvizType]['id']:
+                toolWin.RemovePage(toolWin.page[nvizType]['id'])
                 toolWin.page[nvizType]['id'] = -1
                 toolWin.page['settings']['id'] = 1
         
@@ -702,16 +702,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     { 'name' : layer.name, 'type' : vtype }
             
             data[vtype].pop('object')
-            
-            self.layers.remove(id)
+
+            ### self.layers.remove(id)
         
         # update tools window
         if hasattr(self._layermanager, "nviz") and \
                 vecType is None:
             toolWin = self._layermanager.nviz
             # remove surface page
-            if toolWin.notebook.GetSelection() ==  toolWin.page['surface']['id']:
-                toolWin.notebook.RemovePage(toolWin.page['surface']['id'])
+            if toolWin.GetSelection() ==  toolWin.page['surface']['id']:
+                toolWin.RemovePage(toolWin.page['surface']['id'])
                 toolWin.page['surface']['id'] = -1
                 toolWin.page['settings']['id'] = 1
         
