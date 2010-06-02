@@ -11,6 +11,7 @@ Classes:
  - PreferencesDialog
  - DefaultFontDialog
  - MapsetAccess
+ - NvizPreferencesDialog
 
 (C) 2007-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -2218,3 +2219,4 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         mapset = self.parent.all_mapsets_ordered[index]
         if mapset == self.parent.curr_mapset:
             self.CheckItem(index, True)
+    

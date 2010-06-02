@@ -6,6 +6,7 @@
 Classes:
  - NvizToolWindow
  - ViewPositionWindow
+ - NvizPreferencesDialog
 
 (C) 2008-2010 by the GRASS Development Team
 
@@ -33,6 +34,7 @@ import globalvar
 import gselect
 import gcmd
 from preferences import globalSettings as UserSettings
+from preferences import PreferencesBaseDialog
 from nviz_mapdisp import wxUpdateView as wxUpdateView
 from nviz_mapdisp import wxUpdateProperties as wxUpdateProperties
 
@@ -53,28 +55,24 @@ class NvizToolWindow(FN.FlatNotebook):
         FN.FlatNotebook.__init__(self, parent, id, style = style, **kwargs)
         self.SetTabAreaColour(globalvar.FNPageColor)
         
-        self.win = {} # window ids
-        
-        self.page = {}
-        self.win['settings'] = {}
-        self.win['settings']['general'] = {}
+        self.win  = {} # window ids
+        self.page = {} # page ids
         
         # view page
         self.viewPos = ""
-        self._createViewPage()
-        self.page['view'] = { 'id' : 0 }
+        self.AddPage(page = self._createViewPage(),
+                     text = " %s " % _("View"))
         # surface page
-        size = self._createSurfacePage()
-        size = (size[0] + 25, size[0] + 20)
-        # vector page
-        self._createVectorPage()
-        # volume page
-        self._createVolumePage()
-        # settings page
-        self._createSettingsPage()
-        self.page['settings'] = { 'id' : 1 }
+        self.AddPage(page = self._createSurfacePage(),
+                     text = " %s " % _("Surface"))
+        # # vector page
+        self.AddPage(page = self._createVectorPage(),
+                     text = " %s " % _("Vector"))
+        # # volume page
+        self.AddPage(page = self._createVolumePage(),
+                     text = " %s " % _("Volume"))
         
-        self.UpdateSettings()
+        ### self.UpdateSettings()
         self.pageChanging = False
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
@@ -84,7 +82,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         
         self.Update()
-        # wx.CallAfter(self.SetPage, 'view')
+        wx.CallAfter(self.SetPage, 'view')
         
     def OnPageChanged(self, event):
         new = event.GetSelection()
@@ -99,9 +97,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
-        self.InsertPage(0, page = panel,
-                        text = " %s " % _("View"),
-                        select = True)
+        self.page['view'] = { 'id' : 0 }
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
@@ -221,23 +217,67 @@ class NvizToolWindow(FN.FlatNotebook):
                       flag = wx.EXPAND | wx.ALL,
                       border = 3)
         
+        box = wx.StaticBox(parent = panel, id = wx.ID_ANY,
+                           label = " %s " % (_("Image Appearance")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        gridSizer.AddGrowableCol(0)
+        
+        # background color
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Background color:")),
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        color = csel.ColourSelect(panel, id = wx.ID_ANY,
+                                  colour = UserSettings.Get(group = 'nviz', key = 'settings',
+                                                            subkey = ['general', 'bgcolor']),
+                                  size = globalvar.DIALOG_COLOR_SIZE)
+        self.win['view']['bgcolor'] = color.GetId()
+        color.Bind(csel.EVT_COLOURSELECT, self.OnBgColor)
+        gridSizer.Add(item = color, pos = (0, 1))
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT,
+                      border = 3)
+        
         panel.SetSizer(pageSizer)
-        return panel.GetBestSize()
+        
+        return panel
 
     def _createSurfacePage(self):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         self.page['surface'] = {}
-        self.page['surface']['id'] = -1
+        self.page['surface']['id'] = 1
         self.page['surface']['panel'] = panel.GetId()
-        
-        # panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
-        # panel.SetupScrolling(scroll_x = True, scroll_y = True)
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.win['surface'] = {}
+        
+        # selection
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Raster map")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        rmaps = gselect.Select(parent = panel, type = 'raster',
+                               onPopup = self.GselectOnPopup)
+        rmaps.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetRaster)
+        self.win['surface']['map'] = rmaps.GetId()
+        desc = wx.StaticText(parent = panel, id = wx.ID_ANY)
+        self.win['surface']['desc'] = desc.GetId()
+        boxSizer.Add(item = rmaps, proportion = 0,
+                     flag = wx.ALL,
+                     border = 3)
+        boxSizer.Add(item = desc, proportion = 0,
+                     flag = wx.ALL,
+                     border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+        
         #
         # surface attributes
         #
@@ -287,7 +327,8 @@ class NvizToolWindow(FN.FlatNotebook):
             
             if code == 'color':
                 value = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                          colour = (0,0,0))
+                                          colour = (0,0,0),
+                                          size = globalvar.DIALOG_COLOR_SIZE)
                 value.Bind(csel.EVT_COLOURSELECT, self.OnSurfaceMap)
             elif code == 'mask':
                 value = None
@@ -406,7 +447,8 @@ class NvizToolWindow(FN.FlatNotebook):
                                          label = _("wire color")),
                       pos = (1, 4), flag = wx.ALIGN_CENTER_VERTICAL | 
                       wx.ALIGN_RIGHT | wx.LEFT, border = 3)
-        color = csel.ColourSelect(panel, id = wx.ID_ANY)
+        color = csel.ColourSelect(panel, id = wx.ID_ANY,
+                                  size = globalvar.DIALOG_COLOR_SIZE)
         color.SetColour((136,136,136))
         color.SetName("colour")
         color.Bind(csel.EVT_COLOURSELECT, self.OnSurfaceWireColor)
@@ -510,29 +552,28 @@ class NvizToolWindow(FN.FlatNotebook):
                       border = 3)
         
         panel.SetSizer(pageSizer)
-        panel.Layout()
-        return panel.GetBestSize()
+        
+        return panel
 
     def _createVectorPage(self):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         self.page['vector'] = {}
-        self.page['vector']['id'] = -1
+        self.page['vector']['id'] = 2
         self.page['vector']['panel'] = panel.GetId()
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.win['vector'] = {}
         
-        #
         # selection
-        #
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                             label = " %s " % (_("Vector map")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         vmaps = gselect.Select(parent = panel, type = 'vector',
                                onPopup = self.GselectOnPopup)
+        vmaps.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetVector)
         self.win['vector']['map'] = vmaps.GetId()
         desc = wx.StaticText(parent = panel, id = wx.ID_ANY)
         self.win['vector']['desc'] = desc.GetId()
@@ -592,7 +633,8 @@ class NvizToolWindow(FN.FlatNotebook):
                       wx.ALIGN_RIGHT)
         
         color = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                  colour = (0,0,0))
+                                  colour = (0,0,0),
+                                  size = globalvar.DIALOG_COLOR_SIZE)
         self.win['vector']['lines']['color'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnVectorLines)
 
@@ -691,7 +733,8 @@ class NvizToolWindow(FN.FlatNotebook):
                                          label = _("color")),
                       pos = (0, 3), flag = wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_RIGHT)
-        icolor = csel.ColourSelect(panel, id = wx.ID_ANY)
+        icolor = csel.ColourSelect(panel, id = wx.ID_ANY,
+                                   size = globalvar.DIALOG_COLOR_SIZE)
         icolor.SetName("color")
         icolor.SetColour((0,0,255))
         self.win['vector']['points']['color'] = icolor.GetId()
@@ -766,13 +809,13 @@ class NvizToolWindow(FN.FlatNotebook):
                       border = 3)
         
         panel.SetSizer(pageSizer)
-        panel.Layout()
-        return panel.GetBestSize()
 
-    def GselectOnPopup(self, exclude = False):
+        return panel
+
+    def GselectOnPopup(self, ltype, exclude = False):
         """Update gselect.Select() items"""
         maps = list()
-        for layer in self.mapWindow.Map.GetListOfLayers(l_type='vector'):
+        for layer in self.mapWindow.Map.GetListOfLayers(l_type = ltype):
             maps.append(layer.GetName())
         return maps, exclude
     
@@ -781,13 +824,33 @@ class NvizToolWindow(FN.FlatNotebook):
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         self.page['volume'] = {}
-        self.page['volume']['id'] = -1
+        self.page['volume']['id'] = 3
         self.page['volume']['panel'] = panel.GetId()
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.win['volume'] = {}
         
+        # selection
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("3D Raster map")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        rmaps = gselect.Select(parent = panel, type = 'raster3d',
+                               onPopup = self.GselectOnPopup)
+        rmaps.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetRaster3D)
+        self.win['volume']['map'] = rmaps.GetId()
+        desc = wx.StaticText(parent = panel, id = wx.ID_ANY)
+        self.win['volume']['desc'] = desc.GetId()
+        boxSizer.Add(item = rmaps, proportion = 0,
+                     flag = wx.ALL,
+                     border = 3)
+        boxSizer.Add(item = desc, proportion = 0,
+                     flag = wx.ALL,
+                     border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+                
         #
         # draw
         #
@@ -947,8 +1010,8 @@ class NvizToolWindow(FN.FlatNotebook):
             
             if code == 'color':
                 value = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                          colour = (0,0,0))
-                value.SetColour((0,0,0))
+                                          colour = (0,0,0),
+                                          size = globalvar.DIALOG_COLOR_SIZE)
                 value.Bind(csel.EVT_COLOURSELECT, self.OnVolumeIsosurfMap)
             elif code == 'mask':
                 value = None
@@ -993,339 +1056,9 @@ class NvizToolWindow(FN.FlatNotebook):
                       border = 3)
         
         panel.SetSizer(pageSizer)
-        panel.Layout()
-        return panel.GetBestSize()
-
-    def _createSettingsPage(self):
-        """Create settings page"""
-        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
-        panel.SetupScrolling(scroll_x = False)
         
-        self.AddPage(page = panel,
-                     text = " %s " % _("Settings"))
-        
-        pageSizer = wx.BoxSizer(wx.VERTICAL)
-        
-        self.win['settings'] = {}
-        
-        #
-        # general
-        #
-        self.win['settings']['general'] = {}
-        box = wx.StaticBox(parent = panel, id = wx.ID_ANY,
-                           label = " %s " % (_("Image Appearance")))
-        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        gridSizer.AddGrowableCol(0)
-        
-        # background color
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Background color:")),
-                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        color = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                  colour = UserSettings.Get(group = 'nviz', key = 'settings',
-                                                          subkey = ['general', 'bgcolor']))
-        self.win['settings']['general']['bgcolor'] = color.GetId()
-        color.Bind(csel.EVT_COLOURSELECT, self.OnBgColor)
-        gridSizer.Add(item = color, pos = (0, 1))
-        
-        boxSizer.Add(item = gridSizer, proportion = 1,
-                  flag = wx.ALL | wx.EXPAND, border = 3)
-        pageSizer.Add(item = boxSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL,
-                      border = 3)
-        
-        #
-        # view
-        #
-        self.win['settings']['view'] = {}
-        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                            label = " %s " % (_("View")))
-        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        
-        # perspective
-        self.win['settings']['view']['persp'] = {}
-        pvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'persp')
-        ipvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'persp', internal = True)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Perspective:")),
-                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(value)")),
-                      pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        pval = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = pvals['value'],
-                           min = ipvals['min'],
-                           max = ipvals['max'])
-        self.win['settings']['view']['persp']['value'] = pval.GetId()
-        gridSizer.Add(item = pval, pos = (0, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(step)")),
-                      pos = (0, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        pstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = pvals['step'],
-                           min = ipvals['min'],
-                           max = ipvals['max']-1)
-        self.win['settings']['view']['persp']['step'] = pstep.GetId()
-        gridSizer.Add(item = pstep, pos = (0, 4),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        # position
-        self.win['settings']['view']['pos'] = {}
-        posvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'pos')
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Position:")),
-                      pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(x)")),
-                      pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        px = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = posvals['x'] * 100,
-                           min = 0,
-                           max = 100)
-        self.win['settings']['view']['pos']['x'] = px.GetId()
-        gridSizer.Add(item = px, pos = (1, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = "(y)"),
-                      pos = (1, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        py = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = posvals['y'] * 100,
-                           min = 0,
-                           max = 100)
-        self.win['settings']['view']['pos']['y'] = py.GetId()
-        gridSizer.Add(item = py, pos = (1, 4),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        # height
-        self.win['settings']['view']['height'] = {}
-        hvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'height')
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Height:")),
-                      pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(step)")),
-                      pos = (2, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        hstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = hvals['step'],
-                           min = 1,
-                           max = 1e6)
-        self.win['settings']['view']['height']['step'] = hstep.GetId()
-        gridSizer.Add(item = hstep, pos = (2, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        # twist
-        self.win['settings']['view']['twist'] = {}
-        tvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'twist')
-        itvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'twist', internal = True)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Twist:")),
-                      pos = (3, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(value)")),
-                      pos = (3, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        tval = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = tvals['value'],
-                           min = itvals['min'],
-                           max = itvals['max'])
-        self.win['settings']['view']['twist']['value'] = tval.GetId()
-        gridSizer.Add(item = tval, pos = (3, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(step)")),
-                      pos = (3, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        tstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = tvals['step'],
-                           min = itvals['min'],
-                           max = itvals['max']-1)
-        self.win['settings']['view']['twist']['step'] = tstep.GetId()
-        gridSizer.Add(item = tstep, pos = (3, 4),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        # z-exag
-        self.win['settings']['view']['z-exag'] = {}
-        zvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'z-exag')
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Z-exag:")),
-                      pos = (4, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(value)")),
-                      pos = (4, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        zval = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = zvals['value'],
-                           min = -1e6,
-                           max = 1e6)
-        self.win['settings']['view']['z-exag']['value'] = zval.GetId()
-        gridSizer.Add(item = zval, pos = (4, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("(step)")),
-                      pos = (4, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
-        
-        zstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                           initial = zvals['step'],
-                           min = -1e6,
-                           max = 1e6)
-        self.win['settings']['view']['z-exag']['step'] = zstep.GetId()
-        gridSizer.Add(item = zstep, pos = (4, 4),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        boxSizer.Add(item = gridSizer, proportion = 1,
-                  flag = wx.ALL | wx.EXPAND, border = 3)
-        pageSizer.Add(item = boxSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-                      border = 3)
-        
-        #
-        # vector lines
-        #
-        self.win['settings']['vector'] = {}
-        self.win['settings']['vector']['lines'] = {}
-        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                            label = " %s " % (_("Vector lines")))
-        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        
-        # show
-        row = 0
-        showLines = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                label = _("Show lines"))
-        self.win['settings']['vector']['lines']['show'] = showLines.GetId()
-        showLines.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
-                                            subkey = ['lines', 'show']))
-        gridSizer.Add(item = showLines, pos = (row, 0))
-        
-        boxSizer.Add(item = gridSizer, proportion = 1,
-                  flag = wx.ALL | wx.EXPAND, border = 3)
-        pageSizer.Add(item = boxSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-                      border = 3)
-        
-        #
-        # vector points
-        #
-        self.win['settings']['vector']['points'] = {}
-        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                            label = " %s " % (_("Vector points")))
-        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 5)
-        
-        # show
-        row = 0
-        showPoints = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                 label = _("Show points"))
-        showPoints.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
-                                             subkey = ['points', 'show']))
-        self.win['settings']['vector']['points']['show'] = showPoints.GetId()
-        gridSizer.Add(item = showPoints, pos = (row, 0), span = (1, 8))
-        
-        # icon size
-        row += 1 
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Size:")),
-                      pos = (row, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        isize = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                            initial = 100,
-                            min = 1,
-                            max = 1e6)
-        self.win['settings']['vector']['points']['size'] = isize.GetId()
-        isize.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
-                                        subkey = ['points', 'size']))
-        gridSizer.Add(item = isize, pos = (row, 1),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        # icon width
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Width:")),
-                      pos = (row, 2), flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        iwidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                            initial = 2,
-                            min = 1,
-                            max = 1e6)
-        self.win['settings']['vector']['points']['width'] = isize.GetId()
-        iwidth.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
-                                         subkey = ['points', 'width']))
-        gridSizer.Add(item = iwidth, pos = (row, 3),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        # icon symbol
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Marker:")),
-                      pos = (row, 4), flag = wx.ALIGN_CENTER_VERTICAL)
-        isym = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
-                          choices = UserSettings.Get(group = 'nviz', key = 'vector',
-                                                   subkey = ['points', 'marker'], internal = True))
-        isym.SetName("selection")
-        self.win['settings']['vector']['points']['marker'] = isym.GetId()
-        isym.SetSelection(UserSettings.Get(group = 'nviz', key = 'vector',
-                                           subkey = ['points', 'marker']))
-        gridSizer.Add(item = isym, flag = wx.ALIGN_CENTER_VERTICAL,
-                      pos = (row, 5))
-        
-        # icon color
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Color:")),
-                      pos = (row, 6), flag = wx.ALIGN_CENTER_VERTICAL)
-        icolor = csel.ColourSelect(panel, id = wx.ID_ANY)
-        icolor.SetName("color")
-        self.win['settings']['vector']['points']['color'] = icolor.GetId()
-        icolor.SetColour(UserSettings.Get(group = 'nviz', key = 'vector',
-                                          subkey = ['points', 'color']))
-        gridSizer.Add(item = icolor, flag = wx.ALIGN_CENTER_VERTICAL,
-                      pos = (row, 7))
-        
-        boxSizer.Add(item = gridSizer, proportion = 1,
-                  flag = wx.ALL | wx.EXPAND, border = 3)
-        pageSizer.Add(item = boxSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-                      border = 3)
-        
-        #
-        # buttons
-        #
-        btnDefault = wx.Button(panel, wx.ID_CANCEL, label = _("Default"))
-        btnSave = wx.Button(panel, wx.ID_SAVE)
-        btnApply = wx.Button(panel, wx.ID_APPLY)
-        
-        btnDefault.Bind(wx.EVT_BUTTON, self.OnDefault)
-        btnDefault.SetToolTipString(_("Restore default settings"))
-        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        btnApply.SetToolTipString(_("Apply changes for the current session"))
-        btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
-        btnSave.SetDefault()
-        
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(btnDefault)
-        btnSizer.AddButton(btnApply)
-        btnSizer.AddButton(btnSave)
-        btnSizer.Realize()
-        
-        pageSizer.Add(item = btnSizer, proportion = 1,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_BOTTOM,
-                      border = 5)
-        
-        panel.SetSizer(pageSizer)
-        
-        return panel.GetBestSize()
-
+        return panel
+    
     def _createControl(self, parent, dict, name, range, bind, sliderHor = True, size = 200):
         """!Add control (Slider + SpinCtrl)"""
         dict[name] = {}
@@ -1377,6 +1110,18 @@ class NvizToolWindow(FN.FlatNotebook):
         
         dict[name]['spin'] = spin.GetId()
         
+    def __GetWindowName(self, dict, id):
+        for name in dict.iterkeys():
+            if type(dict[name]) is type({}):
+                for win in dict[name].itervalues():
+                    if win == id:
+                        return name
+            else:
+                if dict[name] == id:
+                    return name
+        
+        return None
+
     def UpdateSettings(self):
         """!Update view from settings values 
         stored in self.mapWindow.view dictionary"""
@@ -1398,26 +1143,57 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['view']['pos']).Draw()
         self.FindWindowById(self.win['view']['pos']).Refresh(False)
         
-        bgcolor = self.FindWindowById(self.win['settings']['general']['bgcolor']).GetColour()
-        self.OnBgColor(event = bgcolor)
+        # bgcolor = self.FindWindowById(self.win['settings']['general']['bgcolor']).GetColour()
+        # self.OnBgColor(event = bgcolor)
         self.Update()
         
         self.mapWindow.Refresh(eraseBackground = False)
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
-
-    def __GetWindowName(self, dict, id):
-        for name in dict.iterkeys():
-            if type(dict[name]) is type({}):
-                for win in dict[name].itervalues():
-                    if win == id:
-                        return name
-            else:
-                if dict[name] == id:
-                    return name
         
-        return None
+    def OnBgColor(self, event):
+        """!Background color changed"""
+        color = event.GetValue()
+        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+        
+        self._display.SetBgColor(str(color))
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+        
+    def OnSetRaster(self, event):
+        """!Raster map selected, update surface page"""
+        name = event.GetString()
+        try:
+            layer = self.mapWindow.Map.GetListOfLayers(l_type = 'raster', l_name = name)[0]
+        except IndexError:
+            return
+        
+        data = self.mapWindow.GetLayerData(type = 'raster', name = name)
+        self.UpdateSurfacePage(layer, data, updateName = False)
 
+    def OnSetVector(self, event):
+        """!Vector map selected, update surface page"""
+        name = event.GetString()
+        try:
+            layer = self.mapWindow.Map.GetListOfLayers(l_type = 'vector', l_name = name)[0]
+        except IndexError:
+            return
+        
+        data = self.mapWindow.GetLayerData(type = 'vector', name = name)['vector']
+        self.UpdateVectorPage(layer, data, updateName = False)
+
+    def OnSetRaster3D(self, event):
+        """!3D Raster map selected, update surface page"""
+        name = event.GetString()
+        try:
+            layer = self.mapWindow.Map.GetListOfLayers(l_type = 'raster3d', l_name = name)[0]
+        except IndexError:
+            return
+        
+        data = self.mapWindow.GetLayerData(type = 'raster3d', name = name)
+        self.UpdateVolumePage(layer, data, updateName = False)
+        
     def OnViewChange(self, event):
         """!Change view, render in quick mode"""
         # find control
@@ -1450,7 +1226,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
         
-        self.UpdateSettings()
+        ### self.UpdateSettings()
         
         event.Skip()
         
@@ -1467,7 +1243,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnResetView(self, event):
         """!Reset to default view (view page)"""
         self.mapWindow.ResetView()
-        self.UpdateSettings()
+        ### self.UpdateSettings()
         self.mapWindow.Refresh(False)
         
     def OnLookAt(self, event):
@@ -1503,224 +1279,10 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.PostViewEvent(zExag = True)
         
-        self.UpdateSettings()
+        ### self.UpdateSettings()
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
 
-    def OnDefault(self, event):
-        """Restore default settings"""
-        settings = copy.deepcopy(UserSettings.GetDefaultSettings()['nviz'])
-        UserSettings.Set(group = 'nviz',
-                         value = settings)
-        
-        for subgroup, key in settings.iteritems(): # view, surface, vector...
-            if subgroup != 'view':
-                continue
-            for subkey, value in key.iteritems():
-                for subvalue in value.keys():
-                    win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
-                    val = settings[subgroup][subkey][subvalue]
-                    if subkey == 'pos':
-                        val = int(val * 100)
-                    
-                    win.SetValue(val)
-        
-        event.Skip()
-        
-    def OnApply(self, event):
-        """Apply button pressed"""
-        if self.GetSelection() == self.page['settings']['id']:
-            self.ApplySettings()
-        
-        if event:
-            event.Skip()
-
-    def ApplySettings(self):
-        """Apply Nviz settings for current session"""
-        settings = UserSettings.Get(group = 'nviz')
-        for subgroup, key in settings.iteritems(): # view, surface, vector...
-            for subkey, value in key.iteritems():
-                for subvalue in value.keys():
-                    try: # TODO
-                        win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
-                    except:
-                        # print 'e', subgroup, subkey, subvalue
-                        continue
-                    
-                    if win.GetName() == "selection":
-                        value = win.GetSelection()
-                    elif win.GetName() == "color":
-                        value = tuple(win.GetColour())
-                    else:
-                        value = win.GetValue()
-                    if subkey == 'pos':
-                        value = float(value) / 100
-                    
-                    settings[subgroup][subkey][subvalue] = value
-                    
-    def OnSave(self, event):
-        """OK button pressed
-        
-        Apply changes, update map and save settings of selected layer
-        """
-        #
-        # apply changes
-        #
-        self.OnApply(None)
-        
-        if self.GetSelection() == self.page['settings']['id']:
-            fileSettings = {}
-            UserSettings.ReadSettingsFile(settings = fileSettings)
-            fileSettings['nviz'] = UserSettings.Get(group = 'nviz')
-            file = UserSettings.SaveToFile(fileSettings)
-            self.parent.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
-        
-    def OnLoad(self, event):
-        """!Apply button pressed"""
-        self.LoadSettings()
-        
-        if event:
-            event.Skip()
-
-    def LoadSettings(self):
-        """!Load saved Nviz settings and apply to current session"""
-        UserSettings.ReadSettingsFile()
-        settings = copy.deepcopy(UserSettings.Get(group = 'nviz'))
-        
-        for subgroup, key in settings.iteritems(): # view, surface, vector...
-            for subkey, value in key.iteritems():
-                for subvalue in value.keys():
-                    if subvalue == 'step':
-                        continue
-                    else:
-                        insetting = value[subvalue]                                                    
-                    if subgroup == 'view':
-                        for viewkey, viewitem in self.mapWindow.view[subkey].iteritems(): 
-                            if viewkey == subvalue:
-                                self.mapWindow.view[subkey][viewkey] = insetting 
-                            else:
-                                continue
-                    else:
-                        for otherkey, otheritem in self.win[subgroup][subkey].iteritems():
-                            if type(otheritem) == dict:
-                                for endkey, enditem in otheritem.iteritems():
-                                    if endkey == subvalue:
-                                        paramwin = self.FindWindowById(enditem)
-                                    else:
-                                        continue
-                            else:
-                                if otherkey == subvalue:
-                                    paramwin = self.FindWindowById(otheritem)
-                                else:
-                                    continue
-                            if type(insetting) in [tuple, list] and len(insetting) > 2:
-                                insetting = tuple(insetting)
-                                paramwin.SetColour(insetting)
-                            else:
-                                try:
-                                    paramwin.SetValue(insetting)
-                                except:
-                                    try:
-                                        paramwin.SetStringSelection(insetting)
-                                    except:
-                                        continue
-                                
-        self.UpdateSettings()
-        self.FindWindowById(self.win['view']['pos']).Draw()
-        self.FindWindowById(self.win['view']['pos']).Refresh(False)
-        
-        self.mapWindow.render['quick'] = False
-        self.mapWindow.Refresh(False)
-        
-    def OnSave(self, event):
-        """!Save button pressed
-        
-        Save settings to configuration file
-        """
-        fileSettings = {}
-        UserSettings.ReadSettingsFile(settings = fileSettings)
-        
-        self.UpdateSettings()
-        
-        nvsettings = UserSettings.Get(group = 'nviz')
-        for subgroup, key in nvsettings.iteritems(): # view, surface, vector...
-            for subkey, value in key.iteritems():
-                if subkey == 'height': continue
-                for subvalue in value.keys():
-                    if subvalue == 'step':
-                        #no way to change steps for sliders or spinctrls on non-MSW systems
-                        nvsettings[subgroup][subkey][subvalue] = 1 
-                    else:
-                        if subgroup == 'view':
-                            nvsettings[subgroup][subkey][subvalue] = self.mapWindow.view[subkey][subvalue]                            
-                        elif subvalue == 'map':
-                            if subkey == 'shine': 
-                                nvsettings[subgroup][subkey][subvalue] = False
-                            if subkey == 'color': 
-                                nvsettings[subgroup][subkey][subvalue] = True
-                        else:
-                            for otherkey, otheritem in self.win[subgroup][subkey].iteritems():
-                                if type(otheritem) == dict:
-                                    for endkey, enditem in otheritem.iteritems():
-                                        if endkey == subvalue:
-                                            if self.FindWindowById(enditem).GetClassName() == 'wxChoice':
-                                                outsetting = self.FindWindowById(enditem).GetSelection()
-                                            else:
-                                                try:
-                                                    outsetting = self.FindWindowById(enditem).GetColour()
-                                                    outsetting = str(outsetting.Red())+':'+str(outsetting.Green())+':'+str(outsetting.Blue())
-                                                except:
-                                                    try:
-                                                        outsetting = self.FindWindowById(enditem).GetValue()
-                                                    except:
-                                                        try:
-                                                            outsetting = self.FindWindowById(enditem).GetString()
-                                                        except:
-                                                            outsetting = ''
-                                            if (type(outsetting) == list or type(outsetting) == tuple) and len(outsetting) > 2:
-                                                outsetting = str(outsetting[0])+':'+str(outsetting[1])+':'+str(outsetting[2])
-                                                
-                                            nvsettings[subgroup][subkey][subvalue][endkey] = outsetting
-                                else:
-                                    if otherkey == subvalue:
-                                        if self.FindWindowById(otheritem).GetClassName() == 'wxChoice':
-                                            outsetting = self.FindWindowById(otheritem).GetSelection()
-                                        else:
-                                            try:
-                                                outsetting = self.FindWindowById(otheritem).GetColour()
-                                                outsetting = str(outsetting.Red())+':'+str(outsetting.Green())+':'+str(outsetting.Blue())
-                                            except:
-                                                try:
-                                                    outsetting = self.FindWindowById(otheritem).GetValue()
-                                                except:
-                                                    try:
-                                                        outsetting = self.FindWindowById(enditem).GetString()
-                                                    except:
-                                                        outsetting = ''
-                                        if (type(outsetting) == list or type(outsetting) == tuple) and len(outsetting) > 2:
-                                            outsetting = str(outsetting[0])+':'+str(outsetting[1])+':'+str(outsetting[2])
-
-                                        nvsettings[subgroup][subkey][subvalue] = outsetting
-                               
-        UserSettings.Set(group = 'nviz', value = nvsettings)
-        file = UserSettings.SaveToFile()
-        self.parent.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
-        
-    def OnBgColor(self, event):
-        """!Background color changed"""
-        try:
-            color = event.GetValue()
-        except:
-            color = event
-        
-        if type(color) != wx._gdi.Colour: return
-        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
-        
-        self._display.SetBgColor(str(color))
-        
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
-            self.mapWindow.Refresh(False)
-        
     def OnClose(self, event):
         """!Close button pressed
         
@@ -2135,7 +1697,8 @@ class NvizToolWindow(FN.FlatNotebook):
         data['vector']['lines']['mode']['value'] = mode
         
         color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
-        if type(color) != wx._gdi.Colour: 
+        
+        if isinstance(color, csel.ColourSelect):
             pass #color picker not yet instantiated
         else:
             color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
@@ -2235,7 +1798,7 @@ class NvizToolWindow(FN.FlatNotebook):
         data['vector']['points']['marker']['value'] = marker
         
         color = self.FindWindowById(self.win['vector']['points']['color']).GetColour()
-        if type(color) != wx._gdi.Colour: 
+        if isinstance(color, csel.ColourSelect):
             pass #color picker not yet instantiated
         else:
             color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
@@ -2544,21 +2107,7 @@ class NvizToolWindow(FN.FlatNotebook):
         elif pageId in ('surface', 'vector', 'volume'):
             current_page = self.GetSelection()
             if self.GetSelection() != self.page[pageId]['id']:
-                for page in ('surface', 'vector', 'volume'):
-                    if self.page[page]['id'] > -1:
-                        self.RemovePage(self.page[page]['id'])
-                        self.page[page]['id'] = -1
-                        oldpanel = wx.FindWindowById(self.page[page]['panel'])
-                        oldpanel.Hide()
-                
-                self.page[pageId]['id'] = 1
-                self.page['settings']['id'] = 2
-                
-                panel = wx.FindWindowById(self.page[pageId]['panel'])
-                self.InsertPage(indx = self.page[pageId]['id'],
-                                page = panel,
-                                text = " %s " % _("Layer properties"),
-                                select = True)
+                self.SetSelection(self.page[pageId]['id'])
             
             # self.ChangeSelection(current_page) 
             if pageId == 'surface':
@@ -2571,10 +2120,22 @@ class NvizToolWindow(FN.FlatNotebook):
         self.Update()
         self.pageChanging = False
         
-    def UpdateSurfacePage(self, layer, data):
-        #
+    def UpdateSurfacePage(self, layer, data, updateName = True):
+        """!Update surface page"""
+        print layer, data
+        ret = gcmd.RunCommand('r.info',
+                              read = True,
+                              flags = 'm',
+                              map = layer.name)
+        if ret:
+            desc = ret.split('=')[1].rstrip('\n')
+        else:
+            desc = None
+        if updateName:
+            self.FindWindowById(self.win['surface']['map']).SetValue(layer.name)
+        self.FindWindowById(self.win['surface']['desc']).SetLabel(desc)
+        
         # attributes
-        #
         for attr in ('topo', 'color'): # required
             if layer and layer.type == 'raster':
                 self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
@@ -2648,7 +2209,8 @@ class NvizToolWindow(FN.FlatNotebook):
         self.SetSurfaceMode()
         color = self.FindWindowById(self.win['surface']['draw']['wire-color'])
         
-    def UpdateVectorPage(self, layer, data):
+    def UpdateVectorPage(self, layer, data, updateName = True):
+        """!Update vector page"""
         vInfo = gcmd.RunCommand('v.info',
                                 parent = self,
                                 read = True,
@@ -2683,14 +2245,16 @@ class NvizToolWindow(FN.FlatNotebook):
         desc += " - " + _("%(primitives)d primitives (%(points)d points)") % \
             { 'primitives' : nprimitives, 'points' : npoints }
         
+        if updateName:
+            self.FindWindowById(self.win['vector']['map']).SetValue(layer.name)
+        self.FindWindowById(self.win['vector']['desc']).SetLabel(desc)
+        
         self.FindWindowById(self.win['vector']['lines']['flat']).Enable(enable)
         for v in ('lines', 'points'):
             self.FindWindowById(self.win['vector'][v]['surface']).Enable(enable)
             self.FindWindowById(self.win['vector'][v]['height']['slider']).Enable(enable)
             self.FindWindowById(self.win['vector'][v]['height']['spin']).Enable(enable)
             
-        self.FindWindowById(self.win['vector']['map']).SetValue(layer.name)
-        self.FindWindowById(self.win['vector']['desc']).SetLabel(desc)
         #
         # lines
         #
@@ -2767,8 +2331,12 @@ class NvizToolWindow(FN.FlatNotebook):
             win = self.FindWindowById(self.win['vector']['points']['height'][type])
             win.SetValue(data['points']['height']['value'])
         
-    def UpdateVolumePage(self, layer, data):
-        """!Update volume layer properties page"""
+    def UpdateVolumePage(self, layer, data, updateName = True):
+        """!Update volume page"""
+        if updateName:
+            self.FindWindowById(self.win['volume']['map']).SetValue(layer.name)
+        # self.FindWindowById(self.win['volume']['desc']).SetLabel(desc)
+        
         list = self.FindWindowById(self.win['volume']['isosurfs'])
         
         #
@@ -2920,3 +2488,513 @@ class ViewPositionWindow(wx.Window):
                
         event = wxUpdateView(zExag = True)
         wx.PostEvent(self.mapWindow, event)
+    
+class NvizPreferencesDialog(PreferencesBaseDialog):
+    """!Nviz preferences dialog"""
+    def __init__(self, parent, title = _("3D view settings"),
+                 settings = UserSettings):
+        
+        PreferencesBaseDialog.__init__(self, parent = parent, title = title,
+                                       settings = settings)
+        
+        self.win = dict()
+        
+        # create notebook pages
+        self._createViewPage(self.notebook)
+        self._createVectorPage(self.notebook)
+        
+        self.SetMinSize(self.GetBestSize())
+        self.SetSize(self.size)
+        
+    def _createViewPage(self, notebook):
+        """!Create notebook page for general settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        
+        notebook.AddPage(page = panel,
+                         text = " %s " % _("View"))
+        
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        self.win['general'] = {}
+        self.win['view'] = {}
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("View")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        
+        # perspective
+        self.win['view']['persp'] = {}
+        pvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'persp')
+        ipvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'persp', internal = True)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Perspective:")),
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(value)")),
+                      pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        pval = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = pvals['value'],
+                           min = ipvals['min'],
+                           max = ipvals['max'])
+        self.win['view']['persp']['value'] = pval.GetId()
+        gridSizer.Add(item = pval, pos = (0, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(step)")),
+                      pos = (0, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        pstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = pvals['step'],
+                           min = ipvals['min'],
+                           max = ipvals['max']-1)
+        self.win['view']['persp']['step'] = pstep.GetId()
+        gridSizer.Add(item = pstep, pos = (0, 4),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # position
+        self.win['view']['pos'] = {}
+        posvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'pos')
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Position:")),
+                      pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(x)")),
+                      pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        px = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = posvals['x'] * 100,
+                           min = 0,
+                           max = 100)
+        self.win['view']['pos']['x'] = px.GetId()
+        gridSizer.Add(item = px, pos = (1, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = "(y)"),
+                      pos = (1, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        py = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = posvals['y'] * 100,
+                           min = 0,
+                           max = 100)
+        self.win['view']['pos']['y'] = py.GetId()
+        gridSizer.Add(item = py, pos = (1, 4),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # height
+        self.win['view']['height'] = {}
+        hvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'height')
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Height:")),
+                      pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(step)")),
+                      pos = (2, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        hstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = hvals['step'],
+                           min = 1,
+                           max = 1e6)
+        self.win['view']['height']['step'] = hstep.GetId()
+        gridSizer.Add(item = hstep, pos = (2, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # twist
+        self.win['view']['twist'] = {}
+        tvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'twist')
+        itvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'twist', internal = True)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Twist:")),
+                      pos = (3, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(value)")),
+                      pos = (3, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        tval = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = tvals['value'],
+                           min = itvals['min'],
+                           max = itvals['max'])
+        self.win['view']['twist']['value'] = tval.GetId()
+        gridSizer.Add(item = tval, pos = (3, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(step)")),
+                      pos = (3, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        tstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = tvals['step'],
+                           min = itvals['min'],
+                           max = itvals['max']-1)
+        self.win['view']['twist']['step'] = tstep.GetId()
+        gridSizer.Add(item = tstep, pos = (3, 4),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # z-exag
+        self.win['view']['z-exag'] = {}
+        zvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'z-exag')
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Z-exag:")),
+                      pos = (4, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(value)")),
+                      pos = (4, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        zval = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = zvals['value'],
+                           min = -1e6,
+                           max = 1e6)
+        self.win['view']['z-exag']['value'] = zval.GetId()
+        gridSizer.Add(item = zval, pos = (4, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("(step)")),
+                      pos = (4, 3), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+        
+        zstep = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = zvals['step'],
+                           min = -1e6,
+                           max = 1e6)
+        self.win['view']['z-exag']['step'] = zstep.GetId()
+        gridSizer.Add(item = zstep, pos = (4, 4),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+
+        box = wx.StaticBox(parent = panel, id = wx.ID_ANY,
+                           label = " %s " % (_("Image Appearance")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        gridSizer.AddGrowableCol(0)
+        
+        # background color
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Background color:")),
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        color = csel.ColourSelect(panel, id = wx.ID_ANY,
+                                  colour = UserSettings.Get(group = 'nviz', key = 'settings',
+                                                            subkey = ['general', 'bgcolor']),
+                                  size = globalvar.DIALOG_COLOR_SIZE)
+        self.win['general']['bgcolor'] = color.GetId()
+        gridSizer.Add(item = color, pos = (0, 1))
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL,
+                      border = 3)
+        
+        panel.SetSizer(pageSizer)
+        
+        return panel
+    
+    def _createVectorPage(self, notebook):
+        """!Create notebook page for general settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        
+        notebook.AddPage(page = panel,
+                         text = " %s " % _("Vector"))
+        
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        # vector lines
+        self.win['vector'] = {}
+        self.win['vector']['lines'] = {}
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Vector lines")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        
+        # show
+        row = 0
+        showLines = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                label = _("Show lines"))
+        self.win['vector']['lines']['show'] = showLines.GetId()
+        showLines.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
+                                            subkey = ['lines', 'show']))
+        gridSizer.Add(item = showLines, pos = (row, 0))
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+        
+        # vector points
+        self.win['vector']['points'] = {}
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Vector points")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 5)
+        
+        # show
+        row = 0
+        showPoints = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                 label = _("Show points"))
+        showPoints.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
+                                             subkey = ['points', 'show']))
+        self.win['vector']['points']['show'] = showPoints.GetId()
+        gridSizer.Add(item = showPoints, pos = (row, 0), span = (1, 8))
+        
+        # icon size
+        row += 1 
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Size:")),
+                      pos = (row, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        isize = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                            initial = 100,
+                            min = 1,
+                            max = 1e6)
+        self.win['vector']['points']['size'] = isize.GetId()
+        isize.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
+                                        subkey = ['points', 'size']))
+        gridSizer.Add(item = isize, pos = (row, 1),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # icon width
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Width:")),
+                      pos = (row, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        iwidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                            initial = 2,
+                            min = 1,
+                            max = 1e6)
+        self.win['vector']['points']['width'] = isize.GetId()
+        iwidth.SetValue(UserSettings.Get(group = 'nviz', key = 'vector',
+                                         subkey = ['points', 'width']))
+        gridSizer.Add(item = iwidth, pos = (row, 3),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        # icon symbol
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Marker:")),
+                      pos = (row, 4), flag = wx.ALIGN_CENTER_VERTICAL)
+        isym = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
+                          choices = UserSettings.Get(group = 'nviz', key = 'vector',
+                                                   subkey = ['points', 'marker'], internal = True))
+        isym.SetName("selection")
+        self.win['vector']['points']['marker'] = isym.GetId()
+        isym.SetSelection(UserSettings.Get(group = 'nviz', key = 'vector',
+                                           subkey = ['points', 'marker']))
+        gridSizer.Add(item = isym, flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 5))
+        
+        # icon color
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Color:")),
+                      pos = (row, 6), flag = wx.ALIGN_CENTER_VERTICAL)
+        icolor = csel.ColourSelect(panel, id = wx.ID_ANY)
+        icolor.SetName("color")
+        self.win['vector']['points']['color'] = icolor.GetId()
+        icolor.SetColour(UserSettings.Get(group = 'nviz', key = 'vector',
+                                          subkey = ['points', 'color']))
+        gridSizer.Add(item = icolor, flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 7))
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+        
+        panel.SetSizer(pageSizer)
+        
+        return panel
+    
+    def OnDefault(self, event):
+        """Restore default settings"""
+        settings = copy.deepcopy(UserSettings.GetDefaultSettings()['nviz'])
+        UserSettings.Set(group = 'nviz',
+                         value = settings)
+        
+        for subgroup, key in settings.iteritems(): # view, surface, vector...
+            if subgroup != 'view':
+                continue
+            for subkey, value in key.iteritems():
+                for subvalue in value.keys():
+                    win = self.FindWindowById(self.win[subgroup][subkey][subvalue])
+                    val = settings[subgroup][subkey][subvalue]
+                    if subkey == 'pos':
+                        val = int(val * 100)
+                    
+                    win.SetValue(val)
+        
+        event.Skip()
+        
+    def OnApply(self, event):
+        """Apply Nviz settings for current session"""
+        settings = UserSettings.Get(group = 'nviz')
+        for subgroup, key in settings.iteritems(): # view, surface, vector...
+            for subkey, value in key.iteritems():
+                for subvalue in value.keys():
+                    try: # TODO
+                        win = self.FindWindowById(self.win[subgroup][subkey][subvalue])
+                    except:
+                        # print 'e', subgroup, subkey, subvalue
+                        continue
+                    
+                    if win.GetName() == "selection":
+                        value = win.GetSelection()
+                    elif win.GetName() == "color":
+                        value = tuple(win.GetColour())
+                    else:
+                        value = win.GetValue()
+                    if subkey == 'pos':
+                        value = float(value) / 100
+                    
+                    settings[subgroup][subkey][subvalue] = value
+                    
+    def OnSave(self, event):
+        """!Apply changes, update map and save settings of selected
+        layer
+        """
+        # apply changes
+        self.OnApply(None)
+        
+        if self.GetSelection() == self.page['id']:
+            fileSettings = {}
+            UserSettings.ReadSettingsFile(settings = fileSettings)
+            fileSettings['nviz'] = UserSettings.Get(group = 'nviz')
+            file = UserSettings.SaveToFile(fileSettings)
+            self.parent.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
+        
+    def OnLoad(self, event):
+        """!Apply button pressed"""
+        self.LoadSettings()
+        
+        if event:
+            event.Skip()
+
+    def LoadSettings(self):
+        """!Load saved Nviz settings and apply to current session"""
+        UserSettings.ReadSettingsFile()
+        settings = copy.deepcopy(UserSettings.Get(group = 'nviz'))
+        
+        for subgroup, key in settings.iteritems(): # view, surface, vector...
+            for subkey, value in key.iteritems():
+                for subvalue in value.keys():
+                    if subvalue == 'step':
+                        continue
+                    else:
+                        insetting = value[subvalue]                                                    
+                    if subgroup == 'view':
+                        for viewkey, viewitem in self.mapWindow.view[subkey].iteritems(): 
+                            if viewkey == subvalue:
+                                self.mapWindow.view[subkey][viewkey] = insetting 
+                            else:
+                                continue
+                    else:
+                        for otherkey, otheritem in self.win[subgroup][subkey].iteritems():
+                            if type(otheritem) == dict:
+                                for endkey, enditem in otheritem.iteritems():
+                                    if endkey == subvalue:
+                                        paramwin = self.FindWindowById(enditem)
+                                    else:
+                                        continue
+                            else:
+                                if otherkey == subvalue:
+                                    paramwin = self.FindWindowById(otheritem)
+                                else:
+                                    continue
+                            if type(insetting) in [tuple, list] and len(insetting) > 2:
+                                insetting = tuple(insetting)
+                                paramwin.SetColour(insetting)
+                            else:
+                                try:
+                                    paramwin.SetValue(insetting)
+                                except:
+                                    try:
+                                        paramwin.SetStringSelection(insetting)
+                                    except:
+                                        continue
+                                
+        self.UpdateSettings()
+        self.FindWindowById(self.win['view']['pos']).Draw()
+        self.FindWindowById(self.win['view']['pos']).Refresh(False)
+        
+        self.mapWindow.render['quick'] = False
+        self.mapWindow.Refresh(False)
+        
+    def OnSave(self, event):
+        """!Save button pressed
+        
+        Save settings to configuration file
+        """
+        fileSettings = {}
+        UserSettings.ReadSettingsFile(settings = fileSettings)
+        
+        self.UpdateSettings()
+        
+        nvsettings = UserSettings.Get(group = 'nviz')
+        for subgroup, key in nvsettings.iteritems(): # view, surface, vector...
+            for subkey, value in key.iteritems():
+                if subkey == 'height': continue
+                for subvalue in value.keys():
+                    if subvalue == 'step':
+                        #no way to change steps for sliders or spinctrls on non-MSW systems
+                        nvsettings[subgroup][subkey][subvalue] = 1 
+                    else:
+                        if subgroup == 'view':
+                            nvsettings[subgroup][subkey][subvalue] = self.mapWindow.view[subkey][subvalue]                            
+                        elif subvalue == 'map':
+                            if subkey == 'shine': 
+                                nvsettings[subgroup][subkey][subvalue] = False
+                            if subkey == 'color': 
+                                nvsettings[subgroup][subkey][subvalue] = True
+                        else:
+                            for otherkey, otheritem in self.win[subgroup][subkey].iteritems():
+                                if type(otheritem) == dict:
+                                    for endkey, enditem in otheritem.iteritems():
+                                        if endkey == subvalue:
+                                            if self.FindWindowById(enditem).GetClassName() == 'wxChoice':
+                                                outsetting = self.FindWindowById(enditem).GetSelection()
+                                            else:
+                                                try:
+                                                    outsetting = self.FindWindowById(enditem).GetColour()
+                                                    outsetting = str(outsetting.Red())+':'+str(outsetting.Green())+':'+str(outsetting.Blue())
+                                                except:
+                                                    try:
+                                                        outsetting = self.FindWindowById(enditem).GetValue()
+                                                    except:
+                                                        try:
+                                                            outsetting = self.FindWindowById(enditem).GetString()
+                                                        except:
+                                                            outsetting = ''
+                                            if (type(outsetting) == list or type(outsetting) == tuple) and len(outsetting) > 2:
+                                                outsetting = str(outsetting[0])+':'+str(outsetting[1])+':'+str(outsetting[2])
+                                                
+                                            nvsettings[subgroup][subkey][subvalue][endkey] = outsetting
+                                else:
+                                    if otherkey == subvalue:
+                                        if self.FindWindowById(otheritem).GetClassName() == 'wxChoice':
+                                            outsetting = self.FindWindowById(otheritem).GetSelection()
+                                        else:
+                                            try:
+                                                outsetting = self.FindWindowById(otheritem).GetColour()
+                                                outsetting = str(outsetting.Red())+':'+str(outsetting.Green())+':'+str(outsetting.Blue())
+                                            except:
+                                                try:
+                                                    outsetting = self.FindWindowById(otheritem).GetValue()
+                                                except:
+                                                    try:
+                                                        outsetting = self.FindWindowById(enditem).GetString()
+                                                    except:
+                                                        outsetting = ''
+                                        if (type(outsetting) == list or type(outsetting) == tuple) and len(outsetting) > 2:
+                                            outsetting = str(outsetting[0])+':'+str(outsetting[1])+':'+str(outsetting[2])
+
+                                        nvsettings[subgroup][subkey][subvalue] = outsetting
+                               
+        UserSettings.Set(group = 'nviz', value = nvsettings)
+        file = UserSettings.SaveToFile()
+        self.parent.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)

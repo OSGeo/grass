@@ -161,6 +161,7 @@ class Nviz(object):
         Nviz_set_surface_attr_default()
         # set background color
         Nviz_set_bgcolor(self.data, Nviz_color_from_str("white")) # TODO
+        self.SetBgColor("white")
         
         # initialize view
         Nviz_init_view()

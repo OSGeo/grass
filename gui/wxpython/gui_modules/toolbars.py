@@ -39,6 +39,7 @@ import vdigit
 from vdigit import VDigitSettingsDialog as VDigitSettingsDialog
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
+from nviz_tools import NvizPreferencesDialog
 
 gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
 sys.path.append(gmpath)
@@ -1329,12 +1330,14 @@ class ProfileToolbar(AbstractToolbar):
             )
     
 class NvizToolbar(AbstractToolbar):
-    """!
-    Nviz toolbar
+    """!Nviz toolbar
     """
     def __init__(self, parent, mapcontent):
         self.mapcontent = mapcontent
         AbstractToolbar.__init__(self, parent)
+        
+        # only one dialog can be open
+        self.settingsDialog   = None
         
         self.InitToolbar(self.ToolbarData())
         
@@ -1358,8 +1361,10 @@ class NvizToolbar(AbstractToolbar):
     
     def OnSettings(self, event):
         """!Show nviz notebook page"""
-        self.parent.parent.lmgr.notebook.SetSelection(3)
-    
+        if not self.settingsDialog:
+            self.settingsDialog = NvizPreferencesDialog(parent = self.parent)
+        self.settingsDialog.Show()
+            
     def OnExit (self, event=None):
         """!Quit nviz tool (swith to 2D mode)"""
         # set default mouse settings

@@ -362,10 +362,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.OnProfile, id=self.popupID5)
             self.popupMenu.Append(self.popupID6, _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id=self.popupID6)
-            if self.mapdisplay.toolbars['nviz']:
-                self.popupMenu.Append(self.popupID11, _("3D view properties"))
-                self.Bind (wx.EVT_MENU, self.OnNvizProperties, id=self.popupID11)
-
+            
             if numSelected > 1:
                 self.popupMenu.Enable(self.popupID12, False)
                 self.popupMenu.Enable(self.popupID13, False)
