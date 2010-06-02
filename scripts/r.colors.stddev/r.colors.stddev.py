@@ -7,7 +7,7 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Set color rules based on stddev from a map's mean value.
 #
-# COPYRIGHT:    (c) 2007,2009 Hamish Bowman, and the GRASS Development Team
+# COPYRIGHT:    (c) 2007,2009-2010 Hamish Bowman, and the GRASS Development Team
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
@@ -15,16 +15,16 @@
 #############################################################################
 
 #%Module
-#% description: Set color rules based on stddev from a map's mean value.
+#% description: Set color rules based on stddev from a raster map's mean value.
 #% keywords: raster
 #% keywords: color table
 #%End
 #% option
-#% key: input
+#% key: map
 #% type: string
 #% gisprompt: old,cell,raster
 #% key_desc: name
-#% description: Name of input raster map 
+#% description: Name of raster map 
 #% required: yes
 #%end
 #%flag
