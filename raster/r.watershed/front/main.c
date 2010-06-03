@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     opt14->required = NO;
     opt14->guisection = _("Outputs");
 
-    opt15 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt15 = G_define_option();
     opt15->key = "convergence";
     opt15->type = TYPE_INTEGER;
     opt15->required = NO;
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     opt15->description =
 	_("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
 
-    opt16 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt16 = G_define_option();
     opt16->key = "memory";
     opt16->type = TYPE_INTEGER;
     opt16->required = NO;
