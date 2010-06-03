@@ -511,6 +511,9 @@ class Settings:
                         'bgcolor' : (255, 255, 255, 255), # white
                         },
                     },
+                    'lighting' : {
+                        'color' : (255, 255, 255, 255), # white
+                    },
                 },
             'modeler' : {
                 'action' : {
