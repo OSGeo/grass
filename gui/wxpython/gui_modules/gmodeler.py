@@ -155,8 +155,8 @@ class Model(object):
                                      y = action['pos'][1],
                                      width = action['size'][0],
                                      height = action['size'][1],
-                                     task = action['task'])
-            actionItem.SetId(action['id'])
+                                     task = action['task'],
+                                     id = action['id'])
             if action['disabled']:
                 actionItem.Enable(False)
             
@@ -965,7 +965,8 @@ if __name__ == "__main__":
         
         # add action to canvas
         width, height = self.canvas.GetSize()
-        action = ModelAction(self, cmd = cmd, x = width/2, y = height/2)
+        action = ModelAction(self, cmd = cmd, x = width/2, y = height/2,
+                             id = len(self.model.GetActions()) + 1)
         overwrite = self.model.GetProperties().get('overwrite', None)
         if overwrite is not None:
             action.GetTask().set_flag('overwrite', overwrite)
@@ -1245,7 +1246,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         
 class ModelAction(ogl.RectangleShape):
     """!Action class (GRASS module)"""
-    def __init__(self, parent, x, y, cmd = None, task = None, width = None, height = None):
+    def __init__(self, parent, x, y, id = -1, cmd = None, task = None, width = None, height = None):
         self.parent  = parent
         self.task    = task
         if not width:
@@ -1263,7 +1264,7 @@ class ModelAction(ogl.RectangleShape):
                 self.task = None
         
         self.propWin = None
-        self.id      = -1    # used for gxm file
+        self.id      = id
         
         self.data = list()   # list of connected data items
         
@@ -1280,12 +1281,8 @@ class ModelAction(ogl.RectangleShape):
             self.SetPen(wx.BLACK_PEN)
             self._setPen()
             self._setBrush()
-            cmd = self.task.getCmd(ignoreErrors = True)
-            if cmd and len(cmd) > 0:
-                self.AddText(cmd[0])
-            else:
-                self.AddText('<<%s>>' % _("module"))
-        
+            self.SetId(id)
+            
     def _setBrush(self, running = False):
         """!Set brush"""
         if running:
@@ -1332,7 +1329,13 @@ class ModelAction(ogl.RectangleShape):
     def SetId(self, id):
         """!Set id"""
         self.id = id
-    
+        cmd = self.task.getCmd(ignoreErrors = True)
+        if cmd and len(cmd) > 0:
+            self.ClearText()
+            self.AddText('(%d) %s' % (self.id, cmd[0]))
+        else:
+            self.AddText('(%d) <<%s>>' % (self.id, _("unknown")))
+
     def SetProperties(self, params, propwin):
         """!Record properties dialog"""
         self.task.params = params['params']
