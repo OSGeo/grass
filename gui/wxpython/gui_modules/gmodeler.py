@@ -157,7 +157,9 @@ class Model(object):
                                      height = action['size'][1],
                                      task = action['task'])
             actionItem.SetId(action['id'])
-
+            if action['disabled']:
+                actionItem.Enable(False)
+            
             self.actions.append(actionItem)
             
             task = actionItem.GetTask()
@@ -225,9 +227,11 @@ class Model(object):
     def Run(self, log, onDone):
         """!Run model"""
         for action in self.actions:
+            if not action.IsEnabled():
+                continue
             log.RunCmd(command = action.GetLog(string = False),
                        onDone = onDone)
-    
+        
     def DeleteIntermediateData(self, log):
         """!Detele intermediate data"""
         rast, vect, rast3d, msg = self.GetIntermediateData()
@@ -289,6 +293,8 @@ class Model(object):
         result = dict()
         idx = 0
         for action in self.actions:
+            if not action.IsEnabled():
+                continue
             name   = action.GetName()
             params = action.GetParams()
             for f in params['flags']:
@@ -400,14 +406,18 @@ class ModelFrame(wx.Frame):
         """!Get model"""
         return self.model
     
-    def ModelChanged(self):
+    def ModelChanged(self, changed = True):
         """!Update window title"""
-        if not self.modelChanged:
-            self.modelChanged = True
+        self.modelChanged = changed
         
         if self.modelFile:
-            self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile) + '*')
-
+            if self.modelChanged:
+                self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile) + '*')
+            else:
+                self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
+        else:
+            self.SetTitle(self.baseTitle)
+        
     def OnRemoveItem(self, event):
         """!Remove shape
         """
@@ -415,6 +425,31 @@ class ModelFrame(wx.Frame):
         
     def OnCloseWindow(self, event):
         """!Close window"""
+        if self.modelChanged and \
+                UserSettings.Get(group='manager', key='askOnQuit', subkey='enabled'):
+            if self.modelFile:
+                message = _("Do you want to save changes in the model?")
+            else:
+                message = _("Do you want to store current model settings "
+                            "to model file?")
+            
+            # ask user to save current settings
+            dlg = wx.MessageDialog(self,
+                                   message = message,
+                                   caption=_("Quit Graphical Modeler"),
+                                   style = wx.YES_NO | wx.YES_DEFAULT |
+                                   wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+            ret = dlg.ShowModal()
+            if ret == wx.ID_YES:
+                if not self.modelFile:
+                        self.OnWorkspaceSaveAs()
+                else:
+                    self.WriteModelFile(self.modelFile)
+            elif ret == wx.ID_CANCEL:
+                dlg.Destroy()
+                return
+            dlg.Destroy()
+        
         self.Destroy()
 
     def OnPreferences(self, event):
@@ -648,6 +683,8 @@ class ModelFrame(wx.Frame):
         
         self.goutput.cmdThread.SetId(-1)
         for action in self.model.GetActions():
+            if not action.IsEnabled():
+                continue
             name = action.GetName()
             if params.has_key(name):
                 paramsOrig = action.GetParams(dcopy = True)
@@ -929,7 +966,9 @@ if __name__ == "__main__":
         # add action to canvas
         width, height = self.canvas.GetSize()
         action = ModelAction(self, cmd = cmd, x = width/2, y = height/2)
-        action.GetTask().set_flag('overwrite', self.properties['overwrite'])
+        overwrite = self.model.GetProperties().get('overwrite', None)
+        if overwrite is not None:
+            action.GetTask().set_flag('overwrite', overwrite)
         
         self.canvas.diagram.AddShape(action)
         action.Show(True)
@@ -1140,6 +1179,7 @@ if __name__ == "__main__":
         @return True on success
         @return False on failure
         """
+        self.ModelChanged(False)
         tmpfile = tempfile.TemporaryFile(mode='w+b')
         try:
             WriteModelFile(fd = tmpfile,
@@ -1229,6 +1269,7 @@ class ModelAction(ogl.RectangleShape):
         
         self.isValid = False
         self.isParameterized = False
+        self.isEnabled = True
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -1237,32 +1278,35 @@ class ModelAction(ogl.RectangleShape):
             self.SetX(x)
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
-            self._setPen(False)
-            self._setBrush(False)
+            self._setPen()
+            self._setBrush()
             cmd = self.task.getCmd(ignoreErrors = True)
             if cmd and len(cmd) > 0:
                 self.AddText(cmd[0])
             else:
                 self.AddText('<<%s>>' % _("module"))
         
-    def _setBrush(self, isvalid):
+    def _setBrush(self, running = False):
         """!Set brush"""
-        if isvalid is None:
+        if running:
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'running'))
-        elif isvalid:
+        elif not self.isEnabled:
+            color = UserSettings.Get(group='modeler', key='action',
+                                     subkey=('color', 'disabled'))
+        elif self.isValid:
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'valid'))
         else:
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'invalid'))
+        
         wxColor = wx.Color(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
         
-    def _setPen(self, isparameterized):
+    def _setPen(self):
         """!Set pen"""
-        self.isParameterized = isparameterized
-        if isparameterized:
+        if self.isParameterized:
             width = int(UserSettings.Get(group='modeler', key='action',
                                          subkey=('width', 'parameterized')))
         else:
@@ -1271,7 +1315,16 @@ class ModelAction(ogl.RectangleShape):
         pen = self.GetPen()
         pen.SetWidth(width)
         self.SetPen(pen)
-        
+
+    def Enable(self, enabled = True):
+        """!Enable/disable action"""
+        self.isEnabled = enabled
+        self.Update()
+
+    def IsEnabled(self):
+        """!Get True if action is enabled, otherwise False"""
+        return self.isEnabled
+    
     def GetId(self):
         """!Get id"""
         return self.id
@@ -1339,11 +1392,12 @@ class ModelAction(ogl.RectangleShape):
     def SetValid(self, isvalid):
         """!Set instance to be valid/invalid"""
         self.isValid = isvalid
-        self._setBrush(isvalid)
+        self._setBrush()
         
     def SetParameterized(self, isparameterized):
         """!Set action parameterized"""
-        self._setPen(isparameterized)
+        self.isParameterized = isparameterized
+        self._setPen()
     
     def AddData(self, item):
         """!Register new data item"""
@@ -1361,15 +1415,15 @@ class ModelAction(ogl.RectangleShape):
     def Update(self, running = False):
         """!Update action"""
         if running:
-            self._setBrush(None)
+            self._setBrush(running = True)
         else:
-            self._setBrush(self.isValid)
-        self._setPen(self.isParameterized)
+            self._setBrush()
+        self._setPen()
 
     def OnDraw(self, dc):
         """!Draw action in canvas"""
-        self._setBrush(self.isValid)
-        self._setPen(self.isParameterized)
+        self._setBrush()
+        self._setPen()
         ogl.RectangleShape.OnDraw(self, dc)
     
 class ModelData(ogl.EllipseShape):
@@ -1651,6 +1705,13 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         popupMenu = wx.Menu()
         popupMenu.Append(self.popupID1, text=_('Remove'))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID1)
+        if isinstance(shape, ModelAction):
+            if shape.IsEnabled():
+                popupMenu.Append(self.popupID3, text=_('Disable'))
+                self.frame.Bind(wx.EVT_MENU, self.OnDisable, id = self.popupID3)
+            else:
+                popupMenu.Append(self.popupID3, text=_('Enable'))
+                self.frame.Bind(wx.EVT_MENU, self.OnEnable, id = self.popupID3)
         
         if isinstance(shape, ModelRelation):
             popupMenu.AppendSeparator()
@@ -1678,6 +1739,20 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
         self.frame.PopupMenu(popupMenu)
         popupMenu.Destroy()
+
+    def OnDisable(self, event):
+        """!Disable action"""
+        action = self.GetShape()
+        action.Enable(False)
+        self.frame.ModelChanged()
+        self.frame.canvas.Refresh()
+
+    def OnEnable(self, event):
+        """!Disable action"""
+        action = self.GetShape()
+        action.Enable(True)
+        self.frame.ModelChanged()
+        self.frame.canvas.Refresh()
         
     def OnAddPoint(self, event):
         """!Add control point"""
@@ -1708,7 +1783,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.GetCanvas().RemoveSelected()
         
 class ModelSearchDialog(wx.Dialog):
-    def __init__(self, parent, id = wx.ID_ANY, title = _("Select GRASS module"),
+    def __init__(self, parent, id = wx.ID_ANY, title = _("Add new GRASS module to the model"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """!Graphical modeler module search window
         
@@ -1740,7 +1815,8 @@ class ModelSearchDialog(wx.Dialog):
         self.btnOk.SetDefault()
         self.btnOk.Enable(False)
 
-        self.cmd_prompt.Bind(wx.EVT_KEY_UP, self.OnText)
+        self.cmd_prompt.Bind(wx.EVT_CHAR, self.OnText)
+        self.search.searchChoice.Bind(wx.EVT_CHOICE, self.OnText)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btnOk)
         
         self._layout()
@@ -1802,11 +1878,17 @@ class ModelSearchDialog(wx.Dialog):
         self.EndModal(wx.ID_OK)
         
     def OnText(self, event):
+        """!Text entered"""
         if self.cmd_prompt.AutoCompActive():
+            event.Skip()
             return
         
-        entry = self.cmd_prompt.GetTextLeft()
-        if len(entry) > 0:
+        if isinstance(event, wx.KeyEvent):
+            entry = self.cmd_prompt.GetTextLeft() # FIXME
+        else:
+            entry = event.GetString()
+        
+        if entry:
             self.btnOk.Enable()
         else:
             self.btnOk.Enable(False)
@@ -1927,19 +2009,23 @@ class ProcessModelFile:
         """!Process model file"""
         for action in self.root.findall('action'):
             pos, size = self._getDim(action)
+            disabled  = False
             
             task = action.find('task')
-            if task:
+            if task is not None:
+                if task.find('disabled') is not None:
+                    disabled = True
                 task = self._processTask(task)
             else:
                 task = None
             
             aId = int(action.get('id', -1))
             
-            self.actions.append({ 'pos'  : pos,
-                                  'size' : size,
-                                  'task' : task,
-                                  'id'   : aId })
+            self.actions.append({ 'pos'      : pos,
+                                  'size'     : size,
+                                  'task'     : task,
+                                  'id'       : aId,
+                                  'disabled' : disabled })
             
     def _getDim(self, node):
         """!Get position and size of shape"""
@@ -2103,6 +2189,8 @@ class WriteModelFile:
             self.indent += 4
             self.fd.write('%s<task name="%s">\n' % (' ' * self.indent, action.GetLog(string = False)[0]))
             self.indent += 4
+            if not action.IsEnabled():
+                self.fd.write('%s<disabled />\n' % (' ' * self.indent))
             for key, val in action.GetParams().iteritems():
                 if key == 'flags':
                     for f in val:
@@ -2255,6 +2343,23 @@ class PreferencesDialog(PreferencesBaseDialog):
                                    size = globalvar.DIALOG_COLOR_SIZE)
         rColor.SetName('GetColour')
         self.winId['modeler:action:color:running'] = rColor.GetId()
+        
+        gridSizer.Add(item = rColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Disabled:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        rColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='action', subkey=('color', 'disabled')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        rColor.SetName('GetColour')
+        self.winId['modeler:action:color:disabled'] = rColor.GetId()
         
         gridSizer.Add(item = rColor,
                       flag = wx.ALIGN_RIGHT |
@@ -2580,8 +2685,8 @@ class ModelParamDialog(wx.Dialog):
         wx.CallAfter(self.notebook.SetSelection, 0)
         
         self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
-        self.btnRun     = wx.Button(parent = self, id = wx.ID_OK,
-                                    label = _("&Run"))
+        self.btnRun    = wx.Button(parent = self, id = wx.ID_OK,
+                                   label = _("&Run"))
         self.btnRun.SetDefault()
         
         self._layout()

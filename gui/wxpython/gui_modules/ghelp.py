@@ -69,7 +69,7 @@ class SearchModuleWindow(wx.Panel):
         self._searchDict = { _('description') : 'description',
                              _('command')     : 'command',
                              _('keywords')    : 'keywords' }
-
+        
         self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                 label=" %s " % _("Find module(s)"))
         
@@ -159,7 +159,7 @@ class SearchModuleWindow(wx.Panel):
                 if self.cmdPrompt.CheckKey(text, data['keywords']):
                     found = True
             else: # command
-                if text in module:
+                if module[:len(text)] == text:
                     found = True
             
             if found:
@@ -172,7 +172,7 @@ class SearchModuleWindow(wx.Panel):
                 if not modules.has_key(group):
                     modules[group] = list()
                 modules[group].append(name)
-        
+                
         self.cmdPrompt.SetFilter(modules)
         self.searchChoice.SetItems(self.cmdPrompt.GetCommandItems())
         if self.showTip:

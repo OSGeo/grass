@@ -518,9 +518,10 @@ class Settings:
             'modeler' : {
                 'action' : {
                     'color' : {
-                        'valid'   :   (211, 211, 211, 255), # light grey
-                        'invalid' : (255, 255, 255, 255),   # white
-                        'running' : (255, 0, 0),            # running
+                        'valid'   :  (180, 234, 154, 255), # light green
+                        'invalid' :  (255, 255, 255, 255), # white
+                        'running' :  (255, 0, 0),          # red
+                        'disabled' : (211, 211, 211, 255), # light grey
                         },
                     'size' : {
                         'width'  : 100,

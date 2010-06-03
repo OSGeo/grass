@@ -27,8 +27,12 @@
 <!--	a task describes the interface of a single
 	GRASS command
 -->
-<!ELEMENT task	        (flag*, parameter*)>
+<!ELEMENT task	        (flag*, parameter*, disabled?)>
 <!ATTLIST task	name	CDATA #REQUIRED>
+
+<!--	defines task to be enabled/disabled
+-->
+<!ELEMENT disabled    EMPTY>
 
 <!--	a parameter must have a name and a value
 -->
