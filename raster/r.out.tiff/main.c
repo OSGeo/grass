@@ -24,8 +24,6 @@
  * Added flag to write a TIFF World file like r.out.arctiff
  * Eric G. Miller 4-Nov-2000
  *
- * removed LZW support 5/5000
- *
  * Corrected Rast_set_window to G_get_window to make r.out.tiff sensitive
  * to region settings.   - Markus Neteler  (neteler geog.uni-hannover.de
  * 8/98        
@@ -84,6 +82,7 @@ int main(int argc, char *argv[])
     char *basename, *filename;
     struct Colors colors;
     int red, grn, blu, mapsize, isfp;
+/*    int do_alpha; */
 
     G_gisinit(argv[0]);
 
@@ -128,6 +127,14 @@ int main(int argc, char *argv[])
     lflag->key = 'l';
     lflag->description = _("Output Tiled TIFF");
 
+/*todo?   bgcolor = G_define_standard_option(G_OPT_C_BG); */
+
+    /*todo:
+     * gscale = G_define_flag ();
+     * gscale->key = 'g';
+     * gscale->description = "Output greyscale instead of color";
+     */
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -143,6 +150,22 @@ int main(int argc, char *argv[])
     tiled = lflag->answer;
     palette = pflag->answer;
     tfw = wflag->answer;
+
+/*
+    if(alpha->answer && pflag->answer)
+	G_fatal_error(_("Palletted images do not support transparency."));
+    do_alpha = alpha->answer ? TRUE : FALSE;
+*/
+#ifdef MAYBE_LATER
+    /* ... if at all */
+    ret = G_str_to_color(bgcolor->answer, &def_red, &def_grn, &def_blu);
+    if (ret == 0)
+	G_fatal_error(_("[%s]: No such color"), bgcolor->answer);
+    else if (ret == 2) {  /* (ret==2) is "none" */
+	if(!do_alpha)
+	    do_alpha = TRUE;
+    }
+#endif
 
     Rast_get_cellhd(inopt->answer, "", &cellhd);
 
@@ -178,10 +201,20 @@ int main(int argc, char *argv[])
     if (pflag->answer)
 	h.ras_depth = 8;
 
+    TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, h.ras_depth > 8 ? 3 : 1);
+/*
+    if(do_alpha) {
+	h.ras_depth = 32;
+	uint16 extras[] = { EXTRASAMPLE_ASSOCALPHA };
+	TIFFSetField(out, TIFFTAG_EXTRASAMPLES, 1, extras);
+	// ? -or- ?
+	TIFFSetField(out, TIFFTAG_EXTRASAMPLES, EXTRASAMPLE_ASSOCALPHA);
+	TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, 4);
+    }
+*/
     TIFFSetField(out, TIFFTAG_IMAGEWIDTH, h.ras_width);
     TIFFSetField(out, TIFFTAG_IMAGELENGTH, h.ras_height);
     TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-    TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, h.ras_depth > 8 ? 3 : 1);
     TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, h.ras_depth > 1 ? 8 : 1);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
     mapsize = 1 << h.ras_depth;
