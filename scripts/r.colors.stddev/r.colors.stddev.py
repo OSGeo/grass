@@ -75,7 +75,7 @@ def main():
 	    # banded free floating  black/red/yellow/green/yellow/red/black
 
 	    # reclass with labels only works for category (integer) based maps
-            #r.reclass map="$GIS_OPT_MAP" output="${GIS_OPT_MAP}.stdevs" << EOF
+            #r.reclass input="$GIS_OPT_MAP" output="${GIS_OPT_MAP}.stdevs" << EOF
 
 	    # >3 S.D. outliers colored black so they show up in d.histogram w/ white background
 	    rules = '\n'.join([
