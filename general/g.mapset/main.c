@@ -9,7 +9,7 @@
  * PURPOSE:      Change current mapset, optionally adding it
  *               if the mapset does not exist.
  *               
- * COPYRIGHT:    (C) 2004 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004, 2010 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -44,39 +44,48 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
-    module->description = _("Change current mapset.");
-
+    module->label = _("Change current mapset.");
+    module->description = _("Optionally create new mapset or list available mapsets.");
+    
     mapset_opt = G_define_option();
     mapset_opt->key = "mapset";
     mapset_opt->type = TYPE_STRING;
     mapset_opt->required = NO;
     mapset_opt->multiple = NO;
-    mapset_opt->description = _("New MAPSET name");
+    mapset_opt->description = _("Name of mapset where to switch");
+    mapset_opt->guisection = _("Settings");
 
     location_opt = G_define_option();
     location_opt->key = "location";
     location_opt->type = TYPE_STRING;
     location_opt->required = NO;
     location_opt->multiple = NO;
-    location_opt->description = _("New LOCATION name (not location path)");
+    location_opt->description = _("Location name (not location path)");
+    location_opt->guisection = _("Settings");
+    location_opt->answer = (char *) G__getenv("LOCATION_NAME");
 
     gisdbase_opt = G_define_option();
     gisdbase_opt->key = "gisdbase";
     gisdbase_opt->type = TYPE_STRING;
     gisdbase_opt->required = NO;
     gisdbase_opt->multiple = NO;
+    gisdbase_opt->key_desc = "path";
     gisdbase_opt->description =
-	_("New GISDBASE (full path to the directory where the new location is)");
+	_("GIS data directory (full path to the directory where the new location is)");
+    gisdbase_opt->guisection = _("Settings");
+    gisdbase_opt->answer = (char *) G__getenv("GISDBASE");
 
     f_add = G_define_flag();
     f_add->key = 'c';
     f_add->description = _("Create mapset if it doesn't exist");
     f_add->answer = FALSE;
+    f_add->guisection = _("Create");
 
     f_list = G_define_flag();
     f_list->key = 'l';
     f_list->description = _("List available mapsets");
-
+    f_list->guisection = _("Print");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
