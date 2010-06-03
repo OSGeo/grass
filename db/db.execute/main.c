@@ -5,7 +5,7 @@
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>, Markus Neteler <neteler itc.it>, Stephan Holl
  * PURPOSE:      process one non-select sql statement
- * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -117,14 +117,17 @@ static void parse_command_line(int argc, char **argv)
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
+    driver->guisection = _("Connection");
     if ((drv = db_get_default_driver_name()))
 	driver->answer = (char *) drv;
-
+    
     database = G_define_standard_option(G_OPT_DB_DATABASE);
+    database->guisection = _("Connection");
     if ((db = db_get_default_database_name()))
 	database->answer = (char *) db;
 
     schema = G_define_standard_option(G_OPT_DB_SCHEMA);
+    schema->guisection = _("Connection");
     if ((schema_name = db_get_default_schema_name()))
 	schema->answer = (char *) schema_name;
 
