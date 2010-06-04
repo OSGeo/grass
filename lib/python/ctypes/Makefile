@@ -30,23 +30,27 @@ vedit_LIBS      = $(VEDITLIB)
 ogsf_LIBS       = $(OGSFLIB)
 nviz_LIBS       = $(NVIZLIB)
 
-date_INC        = datetime.h P_datetime.h
-grass_INC       = gis.h gisdefs.h
-raster_INC      = raster.h rasterdefs.h
-gmath_INC       = gmath.h
-proj_INC        = gprojects.h
-imagery_INC     = imagery.h imagedefs.h
-vector_INC      = vector.h vect/dig_structs.h vect/dig_defines.h
-display_INC     = display.h
-stats_INC       = stats.h
-dbmi_INC        = dbmi.h
-g3d_INC         = G3d.h
-arraystats_INC  = arraystats.h
-cluster_INC     = cluster.h
-trans_INC       = transform.h
-vedit_INC       = vedit.h
-ogsf_INC	= ogsf_proto.h gstypes.h gsurf.h kftypes.h keyframe.h
-nviz_INC        = nviz.h
+date_HDRS       = datetime.h P_datetime.h
+grass_HDRS      = gis.h gisdefs.h
+raster_HDRS     = raster.h rasterdefs.h
+gmath_HDRS      = gmath.h
+proj_HDRS       = gprojects.h
+imagery_HDRS    = imagery.h imagedefs.h
+vector_HDRS     = vector.h vect/dig_structs.h vect/dig_defines.h
+display_HDRS    = display.h
+stats_HDRS      = stats.h
+dbmi_HDRS       = dbmi.h
+g3d_HDRS        = G3d.h
+arraystats_HDRS = arraystats.h
+cluster_HDRS    = cluster.h
+trans_HDRS      = transform.h
+vedit_HDRS      = vedit.h
+ogsf_HDRS       = ogsf_proto.h gstypes.h gsurf.h kftypes.h keyframe.h
+nviz_HDRS       = nviz.h
+
+proj_INC        = $(PROJINC)
+vector_INC      = $(VECT_INC)
+vedit_INC       = $(VECT_INC)
 
 SED = sed
 CTYPESGEN = ./ctypesgen.py
@@ -86,8 +90,8 @@ $(DSTDIR)/%.py: %.py | $(DSTDIR)
 $(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-%.py: $(%_INC) $(%_LIBS)
-	$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_INC)) -o $@)
+%.py: $(%_HDRS) $(%_LIBS)
+	$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $($*_FLAGS) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_HDRS)) -o $@)
 
 $(PYDIR):
 	$(MKDIR) $@
