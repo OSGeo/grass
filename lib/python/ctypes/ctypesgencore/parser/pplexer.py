@@ -57,7 +57,10 @@ class StringLiteral(str):
     def __new__(cls, value):
         assert value[0] == '"' and value[-1] == '"'
         # Unescaping probably not perfect but close enough.
-        value = value[1:-1].decode('string_escape')
+        try:
+            value = value[1:-1].decode('string_escape')
+        except ValueError, e:
+            raise ValueError("invalid \\x escape in %s" % value)
         return str.__new__(cls, value)
 
 # --------------------------------------------------------------------------
