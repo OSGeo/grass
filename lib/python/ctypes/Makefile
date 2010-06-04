@@ -91,7 +91,7 @@ $(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
 %.py: $(%_HDRS) $(%_LIBS)
-	$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $($*_FLAGS) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_HDRS)) -o $@)
+	$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $($*_INC) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_HDRS)) -o $@)
 
 $(PYDIR):
 	$(MKDIR) $@
