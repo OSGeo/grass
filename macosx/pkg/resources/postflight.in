@@ -22,7 +22,7 @@ mkdir -p "$MACOSX_SUPPDIR/Modules/docs/html"
 
 #cp -Rf "$PACKAGE_PATH/Contents/Resources/modbuild" "$MACOSX_SUPPDIR"
 
-# cache python - use python version GRASS was compiled for
+# compile python - use python version GRASS was compiled for
 
 pyver_want="@PYVER@"
 py=`type -p python`
@@ -55,6 +55,9 @@ if [ ! "$py" ] ; then
 fi
 if [ "$py" ] ; then
 	pycompile=`$pyconf --prefix`/lib/python$pyver_want/compileall.py
+	if [ ! -e "$pycompile" ] ; then
+		pycompile=`$pyconf --prefix`/lib/python$pyver_want/compileall.pyc
+	fi
 	$py $pycompile "$INST_DIR"
 fi
 
