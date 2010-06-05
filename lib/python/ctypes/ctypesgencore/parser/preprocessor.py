@@ -131,8 +131,7 @@ class PreprocessorParser(object):
         cmd = self.options.cpp
         if sys.platform == 'darwin':
             cmd += " -U __BLOCKS__"
-        else:
-            cmd += " -U __GNUC__"
+        cmd += " -U __GNUC__"
         cmd += " -dD"
         for path in self.options.include_search_paths:
             cmd += " -I%s" % path 
