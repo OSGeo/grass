@@ -60,7 +60,12 @@ class StringLiteral(str):
         try:
             value = value[1:-1].decode('string_escape')
         except ValueError, e:
-            raise ValueError("invalid \\x escape in %s" % value)
+            try:
+                value = re.sub(r'\\x([0-9a-fA-F])(?![0-9a-fA-F])',
+                               r'\x0\1',
+                               value[1:-1]).decode('string_escape')
+            except ValueError, e:
+                raise ValueError("invalid \\x escape in %s" % value)
         return str.__new__(cls, value)
 
 # --------------------------------------------------------------------------
