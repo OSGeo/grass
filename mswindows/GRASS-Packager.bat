@@ -53,18 +53,6 @@ rem copy %OSGEO4W_DIR%\pgsql\lib\libpq.dll %PACKAGE_DIR%\extralib
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Move grasslibs from %PACKAGE_DIR%\extralib to %PACKAGE_DIR%\lib and remove GRASS-version from filename
-@echo -----------------------------------------------------------------------------------------------------------------------
-@echo.
-
-move %PACKAGE_DIR%\extralib\libgrass*.dll %PACKAGE_DIR%\lib\
-rename %PACKAGE_DIR%\lib\libgrass_*.dll libgrass_*.
-rename %PACKAGE_DIR%\lib\libgrass_*.svn libgrass_*.
-rename %PACKAGE_DIR%\lib\libgrass_*.0 libgrass_*.
-rename %PACKAGE_DIR%\lib\libgrass_*.7 libgrass_*.dll
-
-@echo.
-@echo -----------------------------------------------------------------------------------------------------------------------
 @echo Copy Extrabins to PACKAGE_DIR\extrabin
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
