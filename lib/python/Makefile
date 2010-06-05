@@ -16,7 +16,7 @@ PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 CLEAN_SUBDIRS = ctypes
 
 default: $(PYFILES) $(PYCFILES) $(GDIR)/__init__.py $(GDIR)/__init__.pyc
-	-$(MAKE) -C ctypes || echo $(CURDIR)/$@ >> $(ERRORLOG)
+	-$(MAKE) -C ctypes || echo $(CURDIR)/ctypes >> $(ERRORLOG)
 
 $(PYDIR):
 	$(MKDIR) $@
