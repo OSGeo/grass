@@ -78,14 +78,7 @@ default:
 endif
 
 $(DSTDIR)/%.py: %.py | $(DSTDIR)
-	$(SED) \
-	-e '/^# End loader$$/a\
-	from ctypes_preamble import *\
-	from ctypes_preamble import _variadic_function\
-	from ctypes_loader import *' \
-	-e '/^# Begin preamble$$/,/^# End preamble$$/d' \
-	-e '/^# Begin loader$$/,/^# End loader$$/d' \
-	$< > $@
+	$(SED) -f fix.sed $< > $@
 
 $(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
