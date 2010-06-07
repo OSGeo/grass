@@ -170,7 +170,8 @@ class Model(object):
                     parameterized = True
                     break
             for p in task.get_options()['params']:
-                if p.get('value', '') == '' and \
+                if p.get('required', 'no') != 'no' and \
+                        p.get('value', '') == '' and \
                         p.get('default', '') == '':
                     valid = False
                 if p.get('parameterized', False):
@@ -473,6 +474,10 @@ class ModelFrame(wx.Frame):
         
         dlg.Destroy()
         
+    def OnModelVariables(self, event):
+        """!Manage (define) model variables"""
+        pass
+    
     def OnDeleteData(self, event):
         """!Delete intermediate data"""
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -1087,7 +1092,8 @@ if __name__ == "__main__":
             # valid ?
             valid = True
             for p in params['params']:
-                if p.get('value', '') == '' and \
+                if p.get('required', 'no') != 'no' and \
+                        p.get('value', '') == '' and \
                         p.get('default', '') == '':
                     valid = False
                     break
@@ -1399,6 +1405,10 @@ class ModelAction(ogl.RectangleShape):
         """!Set action parameterized"""
         self.isParameterized = isparameterized
         self._setPen()
+
+    def IsParameterized(self):
+        """!Check if action is parameterized"""
+        return self.isParameterized
     
     def AddData(self, item):
         """!Register new data item"""
@@ -1482,9 +1492,11 @@ class ModelData(ogl.EllipseShape):
         
     def GetLog(self, string = True):
         """!Get logging info"""
-        if self.rels['from']:
-            name = self.rels['from'].GetName()
-            return name + '=' + self.value + ' (' + self.prompt + ')'
+        name = list()
+        for rel in self.rels['from'] + self.rels['to']:
+            name.append(rel.GetName())
+        if name:
+            return '/'.join(name) + '=' + self.value + ' (' + self.prompt + ')'
         else:
             return _('unknown')
 
@@ -1569,8 +1581,25 @@ class ModelData(ogl.EllipseShape):
         
     def _setPen(self):
         """!Set pen"""
-        pen = wx.Pen("black")
-        pen.SetWidth(1)
+        isParameterized = False
+        for rel in self.rels['from']:
+            if rel.GetTo().IsParameterized():
+                isParameterized = True
+                break
+        if not isParameterized:
+            for rel in self.rels['to']:
+                if rel.GetFrom().IsParameterized():
+                    isParameterized = True
+                    break
+
+        if isParameterized:
+            width = int(UserSettings.Get(group='modeler', key='action',
+                                         subkey=('width', 'parameterized')))
+        else:
+            width = int(UserSettings.Get(group='modeler', key='action',
+                                         subkey=('width', 'default')))
+        pen = self.GetPen()
+        pen.SetWidth(width)
         self.SetPen(pen)
         
     def _setText(self):

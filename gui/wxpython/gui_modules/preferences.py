@@ -514,6 +514,13 @@ class Settings:
                     'lighting' : {
                         'color' : (255, 255, 255, 255), # white
                     },
+                'lighting' : {
+                    'pos' : {
+                        'x' : 0.68,
+                        'y' : 0.68,
+                        'z' : 0.80,
+                        },
+                    },
                 },
             'modeler' : {
                 'action' : {

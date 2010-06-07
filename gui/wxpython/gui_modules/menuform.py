@@ -1545,6 +1545,11 @@ class cmdPanel(wx.Panel):
                     ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
                                        style = wx.TE_MULTILINE,
                                        size = (-1, 75))
+                    if p.get('value', '') and os.path.isfile(p['value']):
+                        f = open(p['value'])
+                        ifbb.SetValue(''.join(f.readlines()))
+                        f.close()
+                    
                     ifbb.Bind(wx.EVT_TEXT, self.OnFileText)
                     which_sizer.Add(item = wx.StaticText(parent = which_panel, id = wx.ID_ANY,
                                                          label = _('or enter values interactively')),
