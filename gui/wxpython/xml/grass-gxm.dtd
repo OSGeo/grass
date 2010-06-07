@@ -62,7 +62,6 @@
 <!--	a data-parameter defines data items properties
 -->
 <!ELEMENT data-parameter  (value)>
-<!ATTLIST data-parameter  name  	CDATA #REQUIRED>
 <!ATTLIST data-parameter  prompt	CDATA #REQUIRED>
 
 <!--	a data intermediate?
@@ -74,6 +73,7 @@
 <!ELEMENT relation  (point*)>
 <!ATTLIST relation  id  	CDATA       #REQUIRED>
 <!ATTLIST relation  dir	        (from | to) #REQUIRED>
+<!ATTLIST relation  name  	CDATA       #REQUIRED>
 
 <!--	a point defines control point of linear shape
 -->
