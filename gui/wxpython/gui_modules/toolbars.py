@@ -307,6 +307,7 @@ class MapToolbar(AbstractToolbar):
                      self.zoomout,
                      self.zoomback,
                      self.zoommenu,
+                     self.zoomextent,
                      self.analyze,
                      self.dec,
                      self.printmap):
@@ -1403,7 +1404,8 @@ class ModelToolbar(AbstractToolbar):
         self.run = wx.NewId()
         self.validate = wx.NewId()
         self.settings = wx.NewId()
-        self.properties = wx.NewId()
+        # self.properties = wx.NewId()
+        self.variables = wx.NewId()
         self.quit = wx.NewId()
         
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
@@ -1433,9 +1435,12 @@ class ModelToolbar(AbstractToolbar):
             (self.relation, 'relation', Icons['modelRelation'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRelation'].GetLabel(), Icons['modelRelation'].GetDesc(),
              self.parent.OnDefineRelation),
-            (self.properties, "properties", Icons["modelProperties"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["modelProperties"].GetLabel(), Icons["modelProperties"].GetDesc(),
-             self.parent.OnModelProperties),
+            # (self.properties, "properties", Icons["modelProperties"].GetBitmap(),
+            #  wx.ITEM_NORMAL, Icons["modelProperties"].GetLabel(), Icons["modelProperties"].GetDesc(),
+            #  self.parent.OnModelProperties),
+            (self.variables, "variables", Icons["modelVariables"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["modelVariables"].GetLabel(), Icons["modelVariables"].GetDesc(),
+             self.parent.OnModelVariables),
             ('', '', '', '', '', '', ''),
             (self.run, 'run', Icons['modelRun'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRun'].GetLabel(), Icons['modelRun'].GetDesc(),
