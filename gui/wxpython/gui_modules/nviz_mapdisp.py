@@ -44,6 +44,7 @@ import wxnviz
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW = NewEvent()
+wxUpdateLight,      EVT_UPDATE_LIGHT = NewEvent()
 
 class NvizThread(Thread):
     def __init__(self, log, progressbar, window):
@@ -125,7 +126,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
         self.iview = UserSettings.Get(group = 'nviz', key = 'view', internal = True)
         self.nvizDefault = NvizDefault()
-        
+        self.lighting = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'lighting')) # copy
+
         self.size = None
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE, self.OnSize)
@@ -135,8 +137,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_MOTION, self.OnMouseAction)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouseAction)
         
-        self.Bind(EVT_UPDATE_PROP, self.UpdateMapObjProperties)
-        self.Bind(EVT_UPDATE_VIEW, self.UpdateView)
+        self.Bind(EVT_UPDATE_PROP,  self.UpdateMapObjProperties)
+        self.Bind(EVT_UPDATE_VIEW,  self.UpdateView)
+        self.Bind(EVT_UPDATE_LIGHT, self.UpdateLight)
         
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
@@ -242,15 +245,26 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
     def UpdateView(self, event):
         """!Change view settings"""
-        self._display.SetView(self.view['pos']['x'], self.view['pos']['y'],
+        data = self.view
+        self._display.SetView(data['pos']['x'], data['pos']['y'],
                               self.iview['height']['value'],
-                              self.view['persp']['value'],
-                              self.view['twist']['value'])
+                              data['persp']['value'],
+                              data['twist']['value'])
         
         if event and event.zExag:
-            self._display.SetZExag(self.view['z-exag']['value'])
+            self._display.SetZExag(data['z-exag']['value'])
         
-        if event: event.Skip()
+        if event:
+            event.Skip()
+
+    def UpdateLight(self, event):
+        """!Change lighting settings"""
+        data = self.lighting
+        self._display.SetLight(x = data['pos']['x'], y = data['pos']['y'],
+                               z = data['pos']['z'])
+        
+        if event:
+            event.Skip()
         
     def UpdateMap(self, render = True):
         """!Updates the canvas anytime there is a change to the
