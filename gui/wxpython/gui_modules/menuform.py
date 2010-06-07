@@ -1450,14 +1450,20 @@ class cmdPanel(wx.Panel):
                                     border = 5)
 
                         elif p.get('prompt', '') == 'dbdriver':
-                            win = gselect.DriverSelect(parent=which_panel,
-                                                       choices=p['values'],
-                                                       value=p['default'])
+                            value = p.get('value', '')
+                            if not value:
+                                value = p.get('default', '')
+                            win = gselect.DriverSelect(parent = which_panel,
+                                                       choices = p.get('values', []),
+                                                       value = value)
                             win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbname':
-                            win = gselect.DatabaseSelect(parent=which_panel,
-                                                         value=p['default'])
+                            value = p.get('value', '')
+                            if not value:
+                                value = p.get('default', '')
+                            win = gselect.DatabaseSelect(parent = which_panel,
+                                                         value = value)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbtable':
@@ -1470,8 +1476,11 @@ class cmdPanel(wx.Panel):
                                                   size=globalvar.DIALOG_TEXTCTRL_SIZE)
                                 win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbcolumn':
+                            value = p.get('value', '')
+                            if not value:
+                                value = p.get('default', '')
                             win = gselect.ColumnSelect(parent = which_panel,
-                                                       value = p.get('default', ''),
+                                                       value = value,
                                                        param = p)
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             win.Bind(wx.EVT_TEXT,     self.OnSetValue)
