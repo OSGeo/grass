@@ -213,6 +213,7 @@ class MapToolbar(AbstractToolbar):
         self.zoomout = wx.NewId()
         self.zoomback = wx.NewId()
         self.zoommenu = wx.NewId()
+        self.zoomextent = wx.NewId()
         self.analyze = wx.NewId()
         self.dec = wx.NewId()
         self.savefile = wx.NewId()
@@ -245,6 +246,9 @@ class MapToolbar(AbstractToolbar):
             (self.zoomout, "zoom_out", Icons["zoom_out"].GetBitmap(),
              wx.ITEM_CHECK, Icons["zoom_out"].GetLabel(), Icons["zoom_out"].GetDesc(),
              self.parent.OnZoomOut),
+            (self.zoomextent, "zoom_extent", Icons["zoom_extent"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["zoom_extent"].GetLabel(), Icons["zoom_extent"].GetDesc(),
+             self.parent.OnZoomToMap),
             (self.zoomback, "zoom_back", Icons["zoom_back"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["zoom_back"].GetLabel(), Icons["zoom_back"].GetDesc(),
              self.parent.OnZoomBack),

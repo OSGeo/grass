@@ -22,10 +22,11 @@ IconsGrass2 = {
     "printmap"   : 'print.png',
     "pan"        : 'pan.png', 
     # zoom (mapdisplay)
-    "zoom_in"    : 'zoom-in.png',
-    "zoom_out"   : 'zoom-out.png',
-    "zoom_back"  : 'zoom-last.png',
-    "zoommenu"   : 'zoom-more.png',
+    "zoom_in"     : 'zoom-in.png',
+    "zoom_out"    : 'zoom-out.png',
+    "zoom_back"   : 'zoom-last.png',
+    "zoommenu"    : 'zoom-more.png',
+    "zoom_extent" : 'zoom-extent.png',
     # analyze raster (mapdisplay)
     "analyze"    : 'layer-raster-analyze.png',
     "measure"    : 'measure-length.png',

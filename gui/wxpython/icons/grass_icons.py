@@ -23,6 +23,7 @@ IconsGrass = {
     "query"      : 'gui-query.gif',
     "zoom_back"  : 'gui-zoom_back.gif',
     "zoommenu"   : 'gui-mapzoom.gif',
+    "zoom_extent" : wx.ART_ERROR, # FIXME
     "savefile"   : 'file-save.gif',
     "printmap"   : 'file-print.gif',
     "overlay"    : 'gui-overlay.gif',

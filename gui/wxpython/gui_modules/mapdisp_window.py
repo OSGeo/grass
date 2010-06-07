@@ -2627,18 +2627,6 @@ class BufferedWindow(MapWindow, wx.Window):
         """!Reset zoom history"""
         self.zoomhistory = list()
         
-    def OnZoomToMap(self, event):
-        """!
-        Set display extents to match selected raster (including NULLs)
-        or vector map.
-        """
-        self.ZoomToMap()
-
-    def OnZoomToRaster(self, event):
-        """!
-        Set display extents to match selected raster map (ignore NULLs)
-        """
-        self.ZoomToMap(ignoreNulls = True)
         
     def ZoomToMap(self, layers = None, ignoreNulls = False, render = True):
         """!
@@ -2687,10 +2675,9 @@ class BufferedWindow(MapWindow, wx.Window):
 
         self.parent.StatusbarUpdate()
         
-    def ZoomToWind(self, event):
-        """!
-        Set display geometry to match computational
-        region settings (set with g.region)
+    def ZoomToWind(self):
+        """!Set display geometry to match computational region
+        settings (set with g.region)
         """
         self.Map.region = self.Map.GetRegion()
         ### self.Map.SetRegion(windres=True)
@@ -2702,9 +2689,8 @@ class BufferedWindow(MapWindow, wx.Window):
 
         self.parent.StatusbarUpdate()
 
-    def ZoomToDefault(self, event):
-        """!
-        Set display geometry to match default region settings
+    def ZoomToDefault(self):
+        """!Set display geometry to match default region settings
         """
         self.Map.region = self.Map.GetRegion(default=True)
         self.Map.AdjustRegion() # aling region extent to the display
@@ -2716,10 +2702,9 @@ class BufferedWindow(MapWindow, wx.Window):
 
         self.parent.StatusbarUpdate()
         
-    def DisplayToWind(self, event):
-        """!
-        Set computational region (WIND file) to
-        match display extents
+    def DisplayToWind(self):
+        """!Set computational region (WIND file) to match display
+        extents
         """
         tmpreg = os.getenv("GRASS_REGION")
         if tmpreg:
@@ -2741,7 +2726,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
 
-    def ZoomToSaved(self, event):
+    def ZoomToSaved(self):
         """!Set display geometry to match extents in
         saved region file
         """
@@ -2772,11 +2757,9 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.UpdateMap()
                 
-    def SaveDisplayRegion(self, event):
-        """!
-        Save display extents to named region file.
+    def SaveDisplayRegion(self):
+        """!Save display extents to named region file.
         """
-
         dlg = gdialogs.SavedRegion(parent = self,
                                    title = _("Save display extents to region file"),
                                    loadsave='save')
