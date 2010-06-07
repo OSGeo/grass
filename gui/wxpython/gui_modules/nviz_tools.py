@@ -5,7 +5,9 @@
 
 Classes:
  - NvizToolWindow
+ - PositionWindow
  - ViewPositionWindow
+ - LightPositionWindow
  - NvizPreferencesDialog
 
 (C) 2008-2010 by the GRASS Development Team
@@ -35,8 +37,7 @@ import gselect
 import gcmd
 from preferences import globalSettings as UserSettings
 from preferences import PreferencesBaseDialog
-from nviz_mapdisp import wxUpdateView as wxUpdateView
-from nviz_mapdisp import wxUpdateProperties as wxUpdateProperties
+from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties
 
 import wxnviz
 # sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
@@ -116,8 +117,8 @@ class NvizToolWindow(FN.FlatNotebook):
                      pos = (1, 0), flag = wx.ALIGN_CENTER)
         posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("N")),
                      pos = (0, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
-        self.viewPos = ViewPositionWindow(panel, id = wx.ID_ANY, size = (175, 175),
-                                     mapwindow = self.mapWindow, win = self.win)
+        self.viewPos = ViewPositionWindow(panel, size = (175, 175),
+                                          mapwindow = self.mapWindow)
         self.win['view']['pos'] = self.viewPos.GetId()
         posSizer.Add(item=self.viewPos,
                      pos = (1, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
@@ -1078,6 +1079,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         show = wx.CheckBox(parent = panel, id = wx.ID_ANY,
                            label = _("Show lighting model"))
+        show.Bind(wx.EVT_CHECKBOX, self.OnShowLightingModel)
         pageSizer.Add(item = show, proportion = 0,
                       flag = wx.ALL, border = 3)
         surface = wx.CheckBox(parent = panel, id = wx.ID_ANY,
@@ -1096,8 +1098,8 @@ class NvizToolWindow(FN.FlatNotebook):
                      pos = (1, 0), flag = wx.ALIGN_CENTER)
         posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("N")),
                      pos = (0, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
-        pos = ViewPositionWindow(panel, id = wx.ID_ANY, size = (175, 175),
-                                 mapwindow = self.mapWindow, win = self.win)
+        pos = LightPositionWindow(panel, id = wx.ID_ANY, size = (175, 175),
+                                  mapwindow = self.mapWindow)
         self.win['lighting']['pos'] = pos.GetId()
         posSizer.Add(item = pos,
                      pos = (1, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
@@ -1268,7 +1270,7 @@ class NvizToolWindow(FN.FlatNotebook):
         x = self.mapWindow.view['pos']['x']
         y = self.mapWindow.view['pos']['y']
         self.viewPos.UpdatePos(x, y)        
-        self.FindWindowById(self.win['view']['pos']).Draw()
+        self.FindWindowById(self.win['view']['pos']).Draw(pos = (x, y), scale = True)
         self.FindWindowById(self.win['view']['pos']).Refresh(False)
         
         # bgcolor = self.FindWindowById(self.win['settings']['general']['bgcolor']).GetColour()
@@ -1277,6 +1279,11 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.mapWindow.Refresh(eraseBackground = False)
         self.mapWindow.render['quick'] = False
+        self.mapWindow.Refresh(False)
+        
+    def OnShowLightingModel(self, event):
+        """!Show lighting model"""
+        self._display.showLight = event.IsChecked()
         self.mapWindow.Refresh(False)
         
     def OnBgColor(self, event):
@@ -2220,14 +2227,13 @@ class NvizToolWindow(FN.FlatNotebook):
         
         if pageId == 'view':
             self.SetPage('view')
-            
-            #            max = self.mapWindow.view['z-exag']['value'] * 10 #this value is essentially null
+            # max = self.mapWindow.view['z-exag']['value'] * 10 #this value is essentially null
             hmin = self.mapWindow.iview['height']['min']
             hmax = self.mapWindow.iview['height']['max']
             hval = int(0.4 * (hmax - hmin)) + hmin
             for control in ('spin', 'slider'):
-                #                self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
-                #                                                                                  max)
+                # self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
+                # max)
                 self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin,
                                                                                   hmax)
                 self.FindWindowById(self.win['view']['height'][control]).SetValue(hval)                                      
@@ -2237,14 +2243,15 @@ class NvizToolWindow(FN.FlatNotebook):
             if self.GetSelection() != self.page[pageId]['id']:
                 self.SetSelection(self.page[pageId]['id'])
             
-            # self.ChangeSelection(current_page) 
             if pageId == 'surface':
                 self.UpdateSurfacePage(layer, data['surface'])
             elif pageId == 'vector':
                 self.UpdateVectorPage(layer, data['vector'])
             elif pageId == 'volume':
                 self.UpdateVectorPage(layer, data['vector'])
-            
+        elif pageId == 'lighting':
+            print 'x'
+        
         self.Update()
         self.pageChanging = False
         
@@ -2539,15 +2546,15 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Get named page"""
         self.SetSelection(self.page[name]['id'])
 
-class ViewPositionWindow(wx.Window):
-    """!Position control window (for NvizToolWindow)"""
-    def __init__(self, parent, id, mapwindow, win,
-                 pos = wx.DefaultPosition,
-                 size = wx.DefaultSize):
+class PositionWindow(wx.Window):
+    """!Abstract position control window, see subclasses
+    ViewPostionWindow and LightPositionWindow"""
+    def __init__(self, parent, mapwindow, id = wx.ID_ANY,
+                 **kwargs):
         self.mapWindow = mapwindow
-        self.toolwin = parent.GetGrandParent()
+        self.quick = True
         
-        wx.Window.__init__(self, parent, id, pos, size)
+        wx.Window.__init__(self, parent, id, **kwargs)
         
         self.SetBackgroundColour("WHITE")
         
@@ -2555,25 +2562,18 @@ class ViewPositionWindow(wx.Window):
         
         self.pdc.SetBrush(wx.Brush(colour = 'dark green', style = wx.SOLID))
         self.pdc.SetPen(wx.Pen(colour = 'dark green', width = 2, style = wx.SOLID))
-        
-        self.Draw()
-        
+
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x: None)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         # self.Bind(wx.EVT_MOTION,       self.OnMouse)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
         
-    def Draw(self, pos = None):
+    def Draw(self, pos, scale = False):
         w, h = self.GetClientSize()
-        
-        if pos is None:
-            x = self.mapWindow.view['pos']['x']
-            y = self.mapWindow.view['pos']['y']
+        x, y = pos
+        if scale:
             x = x * w
             y = y * h
-        else:
-            x, y = pos
-        
         self.pdc.Clear()
         self.pdc.BeginDrawing()
         self.pdc.DrawLine(w / 2, h / 2, x, y)
@@ -2588,18 +2588,24 @@ class ViewPositionWindow(wx.Window):
         self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
         
+    def UpdatePos(self, xcoord, ycoord):
+        if xcoord >= 0 and xcoord <= 1.0:
+            self.data['pos']['x'] = xcoord
+        if ycoord >= 0 and ycoord <= 1.0:
+            self.data['pos']['y'] = ycoord
+        
     def OnMouse(self, event):
         if event.LeftIsDown():
             x, y = event.GetPosition()
-            self.mapWindow.view['x'] = x
-            self.mapWindow.view['y'] = y
+            self.data['pos']['x'] = x
+            self.data['pos']['y'] = y
             self.Draw(pos = (x, y))
             self.Refresh(False)
             w, h = self.GetClientSize()
             x = float(x) / w
             y = float(y) / h
             self.UpdatePos(x, y)
-            self.mapWindow.render['quick'] = True
+            self.mapWindow.render['quick'] = self.quick
             
             self.mapWindow.Refresh(eraseBackground = False)
         elif event.LeftUp():
@@ -2608,15 +2614,41 @@ class ViewPositionWindow(wx.Window):
         
         event.Skip()
         
+    def PostDraw(self):
+        self.Draw(pos = (self.data['pos']['x'],
+                         self.data['pos']['y']), scale = True)
+
+class ViewPositionWindow(PositionWindow):
+    """!View position control widget"""
+    def __init__(self, parent, mapwindow, id = wx.ID_ANY,
+                 **kwargs):
+        PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)
+
+        self.data = self.mapWindow.view
+        self.PostDraw()
+        
     def UpdatePos(self, xcoord, ycoord):
-        if xcoord >= 0 and xcoord <= 1.0:
-            self.mapWindow.view['pos']['x'] = xcoord
-        if ycoord >= 0 and ycoord <= 1.0:
-            self.mapWindow.view['pos']['y'] = ycoord
-               
+        PositionWindow.UpdatePos(self, xcoord, ycoord)
+        
         event = wxUpdateView(zExag = True)
         wx.PostEvent(self.mapWindow, event)
-    
+
+class LightPositionWindow(PositionWindow):
+    """!Light position control widget"""
+    def __init__(self, parent, mapwindow, id = wx.ID_ANY,
+                 **kwargs):
+        PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)
+
+        self.data = self.mapWindow.lighting
+        self.quick = False
+        self.PostDraw()
+
+    def UpdatePos(self, xcoord, ycoord):
+        PositionWindow.UpdatePos(self, xcoord, ycoord)
+        
+        event = wxUpdateLight()
+        wx.PostEvent(self.mapWindow, event)
+        
 class NvizPreferencesDialog(PreferencesBaseDialog):
     """!Nviz preferences dialog"""
     def __init__(self, parent, title = _("3D view settings"),
