@@ -273,7 +273,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             if ltype in ('raster', 'vector', 'rgb'):
                 self.popupMenu.Append(self.popupID9, text=_("Zoom to selected map(s)"))
-                self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToMap, id=self.popupID9)
+                self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToMap, id=self.popupID9)
                 self.popupMenu.Append(self.popupID10, text=_("Set computational region from selected map(s)"))
                 self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id=self.popupID10)
             if numSelected > 1:
@@ -350,7 +350,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         #
         elif mltype and mltype == "raster":
             self.popupMenu.Append(self.popupID12, text=_("Zoom to selected map(s) (ignore NULLs)"))
-            self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToRaster, id=self.popupID12)
+            self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id=self.popupID12)
             self.popupMenu.Append(self.popupID13, text=_("Set computational region from selected map(s) (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id=self.popupID13)
             self.popupMenu.AppendSeparator()

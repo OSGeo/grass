@@ -1918,42 +1918,79 @@ class MapFrame(wx.Frame):
         self.params[type] = params
         self.propwin[type] = propwin
 
-    def OnZoomMenu(self, event):
+    def OnZoomToMap(self, event):
+        """!
+        Set display extents to match selected raster (including NULLs)
+        or vector map.
         """
-        Zoom menu
+        self.MapWindow.ZoomToMap()
+
+    def OnZoomToRaster(self, event):
+        """!
+        Set display extents to match selected raster map (ignore NULLs)
+        """
+        self.MapWindow.ZoomToMap(ignoreNulls = True)
+
+    def OnZoomToWind(self, event):
+        """!Set display geometry to match computational region
+        settings (set with g.region)
+        """
+        self.MapWindow.ZoomToWind()
+        
+    def OnZoomToDefault(self, event):
+        """!Set display geometry to match default region settings
+        """
+        self.MapWindow.ZoomToDefault()
+        
+    def OnZoomToSaved(self, event):
+        """!Set display geometry to match extents in
+        saved region file
+        """
+        self.MapWindow.ZoomToSaved()
+        
+    def OnDisplayToWind(self, event):
+        """!Set computational region (WIND file) to match display
+        extents
+        """
+        self.MapWindow.DisplayToWind()
+ 
+    def SaveDisplayRegion(self, event):
+        """!Save display extents to named region file.
+        """
+        self.MapWindow.SaveDisplayRegion()
+        
+    def OnZoomMenu(self, event):
+        """!Popup Zoom menu
         """
         point = wx.GetMousePosition()
         zoommenu = wx.Menu()
         # Add items to the menu
-        zoommap = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to selected map(s)'))
-        zoommenu.AppendItem(zoommap)
-        self.Bind(wx.EVT_MENU, self.MapWindow.OnZoomToMap, zoommap)
 
         zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to computational region (set with g.region)'))
         zoommenu.AppendItem(zoomwind)
-        self.Bind(wx.EVT_MENU, self.MapWindow.ZoomToWind, zoomwind)
+        self.Bind(wx.EVT_MENU, self.OnZoomToWind, zoomwind)
 
         zoomdefault = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to default region'))
         zoommenu.AppendItem(zoomdefault)
-        self.Bind(wx.EVT_MENU, self.MapWindow.ZoomToDefault, zoomdefault)
+        self.Bind(wx.EVT_MENU, self.OnZoomToDefault, zoomdefault)
 
         zoomsaved = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to saved region'))
         zoommenu.AppendItem(zoomsaved)
-        self.Bind(wx.EVT_MENU, self.MapWindow.ZoomToSaved, zoomsaved)
+        self.Bind(wx.EVT_MENU, self.OnZoomToSaved, zoomsaved)
 
         savewind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Set computational region from display'))
         zoommenu.AppendItem(savewind)
-        self.Bind(wx.EVT_MENU, self.MapWindow.DisplayToWind, savewind)
+        self.Bind(wx.EVT_MENU, self.OnDisplayToWind, savewind)
 
         savezoom = wx.MenuItem(zoommenu, wx.ID_ANY, _('Save display geometry to named region'))
         zoommenu.AppendItem(savezoom)
-        self.Bind(wx.EVT_MENU, self.MapWindow.SaveDisplayRegion, savezoom)
+        self.Bind(wx.EVT_MENU, self.SaveDisplayRegion, savezoom)
 
-        # Popup the menu.  If an item is selected then its handler
+        # Popup the menu. If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
-
+        
     def SetProperties(self, render=False, mode=0, showCompExtent=False,
                       constrainRes=False, projection=False):
         """!Set properies of map display window"""
