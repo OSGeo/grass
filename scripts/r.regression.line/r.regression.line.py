@@ -27,7 +27,7 @@
 #%End
 #%flag
 #%  key: s
-#%  description: Slower but accurate (applies to FP maps only)
+#%  description: Slower but more accurate (applies to FP maps only)
 #%End
 #%option
 #% key: map1
@@ -78,7 +78,9 @@ def main():
 	statsflags = 'cnA'
 
     p = grass.pipe_command('r.stats', flags = statsflags, input = (map1, map2))
+
     tot = sumX = sumsqX = sumY = sumsqY = sumXY = 0.0
+
     for line in p.stdout:
 	line = line.rstrip('\r\n')
 	if slow:
@@ -102,17 +104,17 @@ def main():
     B = (sumXY - sumX*sumY/tot)/(sumsqX - sumX*sumX/tot)
     R = (sumXY - sumX*sumY/tot)/math.sqrt((sumsqX - sumX*sumX/tot)*(sumsqY - sumY*sumY/tot))
 
-    mediaX = sumX/tot
+    meanX = sumX/tot
     sumsqX = sumsqX/tot
-    varX = sumsqX-(mediaX*mediaX)
+    varX = sumsqX-(meanX*meanX)
     sdX = math.sqrt(varX)
 
-    mediaY = sumY/tot
+    meanY = sumY/tot
     sumsqY = sumsqY/tot
-    varY = sumsqY-(mediaY*mediaY)
+    varY = sumsqY-(meanY*meanY)
     sdY = math.sqrt(varY)
 
-    A = mediaY - B*mediaX
+    A = meanY - B*meanX
     F =  R*R/(1-R*R/tot-2)
 
     vars = dict(
@@ -121,11 +123,11 @@ def main():
 	R = R,
 	N = tot,
 	F = F,
-	medX = mediaX,
+	meanX = meanX,
 	sdX = sdX,
-	medY = mediaY,
+	meanY = meanY,
 	sdY = sdY)
-    keys = ['a', 'b', 'R', 'N', 'F', 'medX', 'sdX', 'medY', 'sdY']
+    keys = ['a', 'b', 'R', 'N', 'F', 'meanX', 'sdX', 'meanY', 'sdY']
 
     #send output to screen or text file
     if output:
@@ -143,7 +145,8 @@ def main():
             "   b: gain",
             "   R: sumXY - sumX*sumY/tot",
             "   N: number of elements",
-            "   medX, medY: Means",
+            "   F: F-test significance",
+            "   meanX, meanY: Means",
             "   sdX, sdY: Standard deviations",
 	    '  '.join(keys),
 	    ]
