@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 
     vallist = G_define_option();
     vallist->key = "values";
-    vallist->key_desc = "value[,value[-value]]";
+    vallist->key_desc = "value[-value]";
     vallist->type = TYPE_STRING;
     vallist->required = NO;
     vallist->multiple = YES;
