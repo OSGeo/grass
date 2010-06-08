@@ -342,7 +342,7 @@ def set_browser():
 	else:
 	    # the usual suspects
 	    browsers = [ "htmlview", "konqueror", "mozilla", "mozilla-firefox",
-                         "firefox", "iceweasel", "opera", "netscape", "dillo" ]
+                         "firefox", "iceweasel", "opera", "netscape", "dillo", "lynx", "links", "w3c" ]
 	    for b in browsers:
 		if find_exe(b):
 		    browser = b
