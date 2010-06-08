@@ -108,7 +108,6 @@ int main(int argc, char *argv[])
     dsn_opt->key = "dsn";
     dsn_opt->type = TYPE_STRING;
     dsn_opt->required = NO;
-    dsn_opt->gisprompt = "old_file,file,dsn";
     dsn_opt->label = _("OGR datasource name");
     dsn_opt->description = _("Examples:\n"
 			     "\t\tESRI Shapefile: directory containing shapefiles\n"
