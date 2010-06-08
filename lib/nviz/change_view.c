@@ -1,19 +1,15 @@
 /*!
-   \file change_view.c
+   \file lib/nviz/change_view.c
 
-   \brief Change view settings
-
-   COPYRIGHT: (C) 2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   \brief Nviz library -- Change view settings
 
    Based on visualization/nviz/src/change_view.c
+   
+   (C) 2008, 2010 by the GRASS Development Team
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
-
-   \date 2008
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
  */
 
 #include <grass/glocale.h>
@@ -105,10 +101,11 @@ int Nviz_set_viewpoint_position(nv_data * data, float x_pos, float y_pos)
     ypos = (ypos < 0) ? 0 : (ypos > 1.0) ? 1.0 : ypos;
 
     if (x_pos < 0.0 || x_pos > 1.0 || y_pos < 0.0 || y_pos > 1.0) {
-	G_warning(_("Invalid view position coordinates, using %f,%f"),
+	G_debug(3, "Invalid view position coordinates, using %f,%f",
 		  xpos, 1.0 - ypos);
     }
 
+    G_debug(3, "Nviz_set_viewpoint_position(): x = %f y = %f", x_pos, y_pos);
     GS_get_from(from);
 
     tempx = xpos * RANGE - RANGE_OFFSET;

@@ -1,22 +1,18 @@
 /*!
-   \file map_obj.c
+   \file lib/nviz/map_obj.c
 
    \brief Nviz library -- Define creation and interface functions for map objects.
 
-   Map objects are considered to be surfaces, vector plots,
-   or site files.
-
-   COPYRIGHT: (C) 2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   Map objects are considered to be surfaces, vector plots, or site
+   files.
 
    Based on visualization/nviz/src/map_obj.c
+   
+   (C) 2008, 2010 by the GRASS Development Team
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
-
-   \date 2008
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
  */
 
 #include <stdlib.h>

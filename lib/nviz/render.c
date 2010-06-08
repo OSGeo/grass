@@ -1,19 +1,15 @@
 /*!
-   \file render.c
+   \file lib/nviz/render.c
 
    \brief Nviz library -- GLX context manipulation
 
-   COPYRIGHT: (C) 2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
-
    Based on visualization/nviz/src/togl.c
+   
+   (C) 2008, 2010 by the GRASS Development Team
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
-
-   \date 2008
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
  */
 
 #include <grass/glocale.h>

@@ -432,12 +432,12 @@ class Settings:
             'nviz' : {
                 'view' : {
                     'persp' : {
-                        'value' : 40,
+                        'value' : 20,
                         'step' : 5,
                         },
                     'pos' : {
-                        'x' : 0.85,
-                        'y' : 0.85,
+                        'x' : 0.84,
+                        'y' : 0.16,
                         },
                     'height' : {
                         'step' : 100,
@@ -447,7 +447,6 @@ class Settings:
                         'step' : 5,
                         },
                     'z-exag' : {
-                        'value': 1,
                         'step' : 1,
                         },
                     },
@@ -511,10 +510,10 @@ class Settings:
                         'bgcolor' : (255, 255, 255, 255), # white
                         },
                     },
-                    'lighting' : {
+                    'light' : {
                         'color' : (255, 255, 255, 255), # white
                     },
-                'lighting' : {
+                'light' : {
                     'pos' : {
                         'x' : 0.68,
                         'y' : 0.68,

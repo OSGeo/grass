@@ -143,9 +143,6 @@ class Nviz(object):
         else:
             Nviz_draw_all(self.data)
         
-        if self.showLight:
-            GS_draw_lighting_model()
-        
     def EraseMap(self):
         """!Erase map display (with background color)
         """
@@ -185,29 +182,25 @@ class Nviz(object):
         """!Set default lighting model
         """
         # first
-        Nviz_set_light_position(self.data, 0, 0.68, 0.68, 0.80, 0.0)
-        Nviz_set_light_bright(self.data,   0, 0.8)
-        Nviz_set_light_color(self.data,    0, 1.0, 1.0, 1.0)
-        Nviz_set_light_ambient(self.data,  0, 0.2, 0.2, 0.2)
+        Nviz_set_light_position(self.data, 1, 0.68, -0.68, 0.80, 0.0)
+        Nviz_set_light_bright(self.data,   1, 0.8)
+        Nviz_set_light_color(self.data,    1, 1.0, 1.0, 1.0)
+        Nviz_set_light_ambient(self.data,  1, 0.2, 0.2, 0.2)
         
         # second
-        Nviz_set_light_position(self.data, 1, 0.0, 0.0, 1.0, 0.0)
-        Nviz_set_light_bright(self.data,   1, 0.5)
-        Nviz_set_light_color(self.data,    1, 1.0, 1.0, 1.0)
-        Nviz_set_light_ambient(self.data,  1, 0.3, 0.3, 0.3)
+        Nviz_set_light_position(self.data, 2, 0.0, 0.0, 1.0, 0.0)
+        Nviz_set_light_bright(self.data,   2, 0.5)
+        Nviz_set_light_color(self.data,    2, 1.0, 1.0, 1.0)
+        Nviz_set_light_ambient(self.data,  2, 0.3, 0.3, 0.3)
         
         Debug.msg(3, "Nviz::SetLightsDefault()")
         
-    def SetLight(self, x, y, z, lid = 1):
+    def SetLight(self, x, y, z, w = 0, lid = 1):
         """!Change lighting settings
-        @param x,y position
-        @param height
+        @param x,y,z position
+        @param w local coordinate (default to 0)
         """
-        # Nviz_set_viewpoint_height(self.data, height)
-        Nviz_set_light_position(self.data, lid, x, y, z, 0)
-        
-        Debug.msg(3, "Nviz::SetLight(): x=%f, y=%f, z=%f" %
-                  (x, y, z))
+        Nviz_set_light_position(self.data, lid, x, y, z, w)
         
     def LoadSurface(self, name, color_name, color_value):
         """!Load raster map (surface)
@@ -1133,3 +1126,7 @@ class Nviz(object):
         
         self.ResizeWindow(widthOrig, heightOrig)
 
+    def DrawLightingModel(self):
+        """!Draw lighting model"""
+        if self.showLight:
+            GS_draw_lighting_model()
