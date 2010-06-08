@@ -64,13 +64,37 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     Creates layer tree structure
     """
     def __init__(self, parent,
-                 id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.SUNKEN_BORDER,
+                 id = wx.ID_ANY, style=wx.SUNKEN_BORDER,
                  ctstyle=CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
-                 CT.TR_MULTIPLE,**kargs):
+                 CT.TR_MULTIPLE, **kwargs):
         
-        super(LayerTree, self).__init__(parent, id, pos, size, style=style, ctstyle=ctstyle)
+        if 'style' in kwargs:
+            ctstyle |= kwargs['style']
+            del kwargs['style']
+        self.disp_idx = kwargs['idx']
+        del kwargs['idx']
+        self.lmgr = kwargs['lmgr']
+        del kwargs['lmgr']
+        self.notebook = kwargs['notebook']   # GIS Manager notebook for layer tree
+        del kwargs['notebook']
+        self.auimgr = kwargs['auimgr']       # aui manager
+        del kwargs['auimgr']
+        showMapDisplay = kwargs['showMapDisplay']
+        del kwargs['showMapDisplay']
+        self.treepg = parent                 # notebook page holding layer tree
+        self.Map = render.Map()              # instance of render.Map to be associated with display
+        self.root = None                     # ID of layer tree root node
+        self.groupnode = 0                   # index value for layers
+        self.optpage = {}                    # dictionary of notebook option pages for each map layer
+        self.layer_selected = None           # ID of currently selected layer
+        self.saveitem = {}                   # dictionary to preserve layer attributes for drag and drop
+        self.first = True                    # indicates if a layer is just added or not
+        self.flag = ''                       # flag for drag and drop hittest
+        self.rerender = False                # layer change requires a rerendering if auto render
+        self.reorder = False                 # layer change requires a reordering
+        
+        super(LayerTree, self).__init__(parent, id, style = ctstyle, **kwargs)
         self.SetName("LayerTree")
         
         ### SetAutoLayout() causes that no vertical scrollbar is displayed
@@ -80,22 +104,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.EnableSelectionGradient(True)
         self.SetFirstGradientColour(wx.Colour(100, 100, 100))
         self.SetSecondGradientColour(wx.Colour(150, 150, 150))
-        
-        self.Map = render.Map()    # instance of render.Map to be associated with display
-        self.root = None           # ID of layer tree root node
-        self.groupnode = 0         # index value for layers
-        self.optpage = {}          # dictionary of notebook option pages for each map layer
-        self.layer_selected = None # ID of currently selected layer
-        self.saveitem = {}         # dictionary to preserve layer attributes for drag and drop
-        self.first = True          # indicates if a layer is just added or not
-        self.flag = ''             # flag for drag and drop hittest
-        self.disp_idx = kargs['idx']
-        self.lmgr = kargs['lmgr']
-        self.notebook = kargs['notebook']   # GIS Manager notebook for layer tree
-        self.treepg = parent                # notebook page holding layer tree
-        self.auimgr = kargs['auimgr']       # aui manager
-        self.rerender = False               # layer change requires a rerendering if auto render
-        self.reorder = False                # layer change requires a reordering
         
         # init associated map display
         pos = wx.Point((self.disp_idx + 1) * 25, (self.disp_idx + 1) * 25)
@@ -113,7 +121,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                        'loc' : grass.gisenv()["LOCATION_NAME"] })
         
         # show new display
-        if kargs['showMapDisplay'] is True:
+        if showMapDisplay is True:
             self.mapdisplay.Show()
             self.mapdisplay.Refresh()
             self.mapdisplay.Update()

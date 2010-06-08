@@ -345,7 +345,10 @@ class ItemTree(CT.CustomTreeCtrl):
     def __init__(self, parent, id = wx.ID_ANY,
                  ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |
                  CT.TR_LINES_AT_ROOT | CT.TR_SINGLE, **kwargs):
-        super(ItemTree, self).__init__(parent, id, ctstyle = ctstyle, **kwargs)
+        if 'style' in kwargs:
+            ctstyle |= kwargs['style']
+            del kwargs['style']
+        super(ItemTree, self).__init__(parent, id, style = ctstyle, **kwargs)
         
         self.root = self.AddRoot(_("Menu tree"))
         self.itemsMarked = [] # list of marked items
