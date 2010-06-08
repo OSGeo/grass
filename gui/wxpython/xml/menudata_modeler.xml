@@ -87,10 +87,15 @@
 	  <handler>OnRemoveItem</handler>
 	</menuitem>
 	<separator />
-	<menuitem>
+ 	<menuitem>
 	  <label>Model properties</label>
 	  <help>Model properties (name, purpose, etc.)</help>
 	  <handler>OnModelProperties</handler>
+	</menuitem>
+ 	<menuitem>
+	  <label>Manage variables</label>
+	  <help>Manage model variables</help>
+	  <handler>OnModelVariables</handler>
 	</menuitem>
 	<separator />
 	<menuitem>
