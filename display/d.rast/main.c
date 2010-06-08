@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 	if (fp)
 	    parse_vallist(vallist->answers, &d_mask);
 	else
-	    parse_catlist(catlist->answers, &mask);
+	    parse_catlist(vallist->answers, &mask);
     }
 
     /* use DCELL even if the map is FCELL */
