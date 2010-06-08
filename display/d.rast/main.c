@@ -69,7 +69,8 @@ int main(int argc, char **argv)
     bg = G_define_standard_option(G_OPT_C_BG);
     bg->key_desc = "color";
     bg->gisprompt = "old_color,color,color";
-    bg->description = _("Background color (for null)");
+    bg->label = _("Background color (for null)");
+    bg->description = _("Either a standard color name or R:G:B triplet");
 
     flag_n = G_define_flag();
     flag_n->key = 'n';
