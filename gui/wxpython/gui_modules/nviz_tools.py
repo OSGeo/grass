@@ -60,7 +60,6 @@ class NvizToolWindow(FN.FlatNotebook):
         self.page = {} # page ids
         
         # view page
-        self.viewPos = ""
         self.AddPage(page = self._createViewPage(),
                      text = " %s " % _("View"))
         # surface page
@@ -72,9 +71,9 @@ class NvizToolWindow(FN.FlatNotebook):
         # volume page
         self.AddPage(page = self._createVolumePage(),
                      text = " %s " % _("Volume"))
-        # lighting page
-        self.AddPage(page = self._createLightingPage(),
-                     text = " %s " % _("Lighting"))
+        # light page
+        self.AddPage(page = self._createLightPage(),
+                     text = " %s " % _("Light"))
         
         self.UpdateSettings()
         self.pageChanging = False
@@ -117,10 +116,10 @@ class NvizToolWindow(FN.FlatNotebook):
                      pos = (1, 0), flag = wx.ALIGN_CENTER)
         posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("N")),
                      pos = (0, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
-        self.viewPos = ViewPositionWindow(panel, size = (175, 175),
-                                          mapwindow = self.mapWindow)
-        self.win['view']['pos'] = self.viewPos.GetId()
-        posSizer.Add(item=self.viewPos,
+        view = ViewPositionWindow(panel, size = (175, 175),
+                                  mapwindow = self.mapWindow)
+        self.win['view']['pos'] = view.GetId()
+        posSizer.Add(item = view,
                      pos = (1, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
         posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("S")),
                      pos = (2, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_TOP)
@@ -1067,19 +1066,19 @@ class NvizToolWindow(FN.FlatNotebook):
         
         return panel
     
-    def _createLightingPage(self):
-        """!Create lighting page"""
+    def _createLightPage(self):
+        """!Create light page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         
-        self.page['lighting'] = { 'id' : 4 } 
-        self.win['lighting'] = {}
+        self.page['light'] = { 'id' : 4 } 
+        self.win['light'] = {}
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         show = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                           label = _("Show lighting model"))
-        show.Bind(wx.EVT_CHECKBOX, self.OnShowLightingModel)
+                           label = _("Show light model"))
+        show.Bind(wx.EVT_CHECKBOX, self.OnShowLightModel)
         pageSizer.Add(item = show, proportion = 0,
                       flag = wx.ALL, border = 3)
         surface = wx.CheckBox(parent = panel, id = wx.ID_ANY,
@@ -1100,7 +1099,7 @@ class NvizToolWindow(FN.FlatNotebook):
                      pos = (0, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
         pos = LightPositionWindow(panel, id = wx.ID_ANY, size = (175, 175),
                                   mapwindow = self.mapWindow)
-        self.win['lighting']['pos'] = pos.GetId()
+        self.win['light']['pos'] = pos.GetId()
         posSizer.Add(item = pos,
                      pos = (1, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
         posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("S")),
@@ -1110,16 +1109,16 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item = posSizer, pos = (0, 0))
         
         # height
-        self._createControl(panel, dict = self.win['lighting'], name = 'height', sliderHor = False,
-                            range = (0, 1),
-                            bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
+        self._createControl(panel, dict = self.win['light'], name = 'z', sliderHor = False,
+                            range = (0, 100),
+                            bind = (self.OnLightChange, None, self.OnLightChange))
         
         heightSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         heightSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Height:")),
                       pos = (0, 0), flag = wx.ALIGN_LEFT, span = (1, 2))
-        heightSizer.Add(item = self.FindWindowById(self.win['lighting']['height']['slider']),
+        heightSizer.Add(item = self.FindWindowById(self.win['light']['z']['slider']),
                         flag = wx.ALIGN_RIGHT, pos = (1, 0))
-        heightSizer.Add(item = self.FindWindowById(self.win['lighting']['height']['spin']),
+        heightSizer.Add(item = self.FindWindowById(self.win['light']['z']['spin']),
                         flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.TOP |
                         wx.BOTTOM | wx.RIGHT, pos = (1, 1))
         
@@ -1141,28 +1140,28 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(panel, id = wx.ID_ANY,
                                   colour = UserSettings.Get(group = 'nviz', key = 'settings',
-                                                            subkey = ['lighting', 'color']),
+                                                            subkey = ['light', 'color']),
                                   size = globalvar.DIALOG_COLOR_SIZE)
         gridSizer.Add(item = color, pos = (0, 2))
 
         gridSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Brightness:")),
                       pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        self._createControl(panel, dict = self.win['lighting'], name = 'brightness', size = 300,
+        self._createControl(panel, dict = self.win['light'], name = 'bright', size = 300,
                             range = (0, 1000),
                             bind = (self.OnVectorHeight, self.OnVectorHeightFull, self.OnVectorHeightSpin))
-        gridSizer.Add(item = self.FindWindowById(self.win['lighting']['brightness']['slider']),
+        gridSizer.Add(item = self.FindWindowById(self.win['light']['bright']['slider']),
                       pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = self.FindWindowById(self.win['lighting']['brightness']['spin']),
+        gridSizer.Add(item = self.FindWindowById(self.win['light']['bright']['spin']),
                       pos = (1, 2),
                       flag = wx.ALIGN_CENTER)
         gridSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Ambient:")),
                       pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        self._createControl(panel, dict = self.win['lighting'], name = 'ambient', size = 300,
+        self._createControl(panel, dict = self.win['light'], name = 'ambient', size = 300,
                             range = (0, 1000),
                             bind = (self.OnVectorHeight, self.OnVectorHeightFull, self.OnVectorHeightSpin))
-        gridSizer.Add(item = self.FindWindowById(self.win['lighting']['ambient']['slider']),
+        gridSizer.Add(item = self.FindWindowById(self.win['light']['ambient']['slider']),
                       pos = (2, 1), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = self.FindWindowById(self.win['lighting']['ambient']['spin']),
+        gridSizer.Add(item = self.FindWindowById(self.win['light']['ambient']['spin']),
                       pos = (2, 2),
                       flag = wx.ALIGN_CENTER)
 
@@ -1204,9 +1203,6 @@ class NvizToolWindow(FN.FlatNotebook):
             val = self.mapWindow.view[name]['value']
         except KeyError:
             val = -1
-            
-        if name == 'z-exag':
-            val = 1
         
         slider = wx.Slider(parent = parent, id = wx.ID_ANY,
                            value = val,
@@ -1216,8 +1212,9 @@ class NvizToolWindow(FN.FlatNotebook):
                            size = sizeW)
         slider.SetName('slider')
         slider.Bind(wx.EVT_SCROLL, bind[0])
-        slider.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, bind[1])
-        #        slider.Bind(wx.EVT_SCROLL_CHANGED, bind[1]) # this only works in MSW
+        # slider.Bind(wx.EVT_SCROLL_THUMBRELEASE, bind[1])
+        if bind[1]:
+            slider.Bind(wx.EVT_SCROLL_CHANGED, bind[1]) # this only works in MSW
         dict[name]['slider'] = slider.GetId()
         
         slider.SetValue(val)
@@ -1228,11 +1225,6 @@ class NvizToolWindow(FN.FlatNotebook):
                            max = range[1])
                            
         spin.SetValue(val)
-        
-        #         spin = wx.SpinButton(parent = parent, id = wx.ID_ANY)
-        #         spin.SetValue (self.mapWindow.view[name]['value'])
-        #         spin.SetRange(self.mapWindow.view[name]['min'],
-        #                      self.mapWindow.view[name]['max'])
         
         # no 'changed' event ... (FIXME)
         spin.SetName('spin')
@@ -1267,11 +1259,11 @@ class NvizToolWindow(FN.FlatNotebook):
                     value = self.mapWindow.view[control]['value']
                 self.FindWindowById(win).SetValue(value)
         
-        x = self.mapWindow.view['pos']['x']
-        y = self.mapWindow.view['pos']['y']
-        self.viewPos.UpdatePos(x, y)        
-        self.FindWindowById(self.win['view']['pos']).Draw(pos = (x, y), scale = True)
-        self.FindWindowById(self.win['view']['pos']).Refresh(False)
+        viewWin = self.FindWindowById(self.win['view']['pos'])
+        x, y = viewWin.UpdatePos(self.mapWindow.view['pos']['x'],
+                                 self.mapWindow.view['pos']['y'])
+        viewWin.Draw(pos = (x, y), scale = True)
+        viewWin.Refresh(False)
         
         # bgcolor = self.FindWindowById(self.win['settings']['general']['bgcolor']).GetColour()
         # self.OnBgColor(event = bgcolor)
@@ -1281,11 +1273,27 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
         
-    def OnShowLightingModel(self, event):
-        """!Show lighting model"""
+    def OnShowLightModel(self, event):
+        """!Show light model"""
         self._display.showLight = event.IsChecked()
-        self.mapWindow.Refresh(False)
+        self._display.DrawLightingModel()
         
+    def OnLightChange(self, event):
+        """!Position of the light changed"""
+        winName = self.__GetWindowName(self.win['light'], event.GetId())
+        if not winName:
+            return
+        
+        val = event.GetInt()
+        self.mapWindow.light['pos']['z'] = val / 100.
+        for win in self.win['light'][winName].itervalues():
+            self.FindWindowById(win).SetValue(val)
+        
+        event = wxUpdateLight()
+        wx.PostEvent(self.mapWindow, event)
+        
+        event.Skip()
+
     def OnBgColor(self, event):
         """!Background color changed"""
         color = event.GetValue()
@@ -1363,11 +1371,8 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.UpdateSettings()
         
-        event.Skip()
-        
     def OnViewChangedSpin(self, event):
         """!View changed, render in full resolution"""
-        # TODO: use step value instead
         self.mapWindow.render['quick'] = False
         self.OnViewChange(event)
         self.OnViewChanged(None)
@@ -2227,16 +2232,19 @@ class NvizToolWindow(FN.FlatNotebook):
         
         if pageId == 'view':
             self.SetPage('view')
-            # max = self.mapWindow.view['z-exag']['value'] * 10 #this value is essentially null
             hmin = self.mapWindow.iview['height']['min']
             hmax = self.mapWindow.iview['height']['max']
-            hval = int(0.4 * (hmax - hmin)) + hmin
+            hval = self.mapWindow.iview['height']['value']
+            zmin = self.mapWindow.view['z-exag']['min']
+            zmax = self.mapWindow.view['z-exag']['max']
+            zval = self.mapWindow.view['z-exag']['value']
             for control in ('spin', 'slider'):
-                # self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
-                # max)
                 self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin,
                                                                                   hmax)
                 self.FindWindowById(self.win['view']['height'][control]).SetValue(hval)                                      
+                self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(zmin,
+                                                                                  zmax)
+                self.FindWindowById(self.win['view']['z-exag'][control]).SetValue(zval)                                      
         
         elif pageId in ('surface', 'vector', 'volume'):
             current_page = self.GetSelection()
@@ -2249,15 +2257,18 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.UpdateVectorPage(layer, data['vector'])
             elif pageId == 'volume':
                 self.UpdateVectorPage(layer, data['vector'])
-        elif pageId == 'lighting':
-            print 'x'
+        elif pageId == 'light':
+            val = self.mapWindow.light['pos']['z'] * 100 # range 0.0 - 1.0
+            for control in ('spin', 'slider'):
+                self.FindWindowById(self.win['light']['z'][control]).SetRange(0,
+                                                                              100)
+                self.FindWindowById(self.win['light']['z'][control]).SetValue(val)
         
         self.Update()
         self.pageChanging = False
         
     def UpdateSurfacePage(self, layer, data, updateName = True):
         """!Update surface page"""
-        print layer, data
         ret = gcmd.RunCommand('r.info',
                               read = True,
                               flags = 'm',
@@ -2589,34 +2600,37 @@ class PositionWindow(wx.Window):
         self.pdc.DrawToDC(dc)
         
     def UpdatePos(self, xcoord, ycoord):
-        if xcoord >= 0 and xcoord <= 1.0:
-            self.data['pos']['x'] = xcoord
-        if ycoord >= 0 and ycoord <= 1.0:
-            self.data['pos']['y'] = ycoord
+        """!Update position coordinates (origin: UL)"""
+        if xcoord < 0.0:
+            xcoord = 0.0
+        elif xcoord > 1.0:
+            xcoord = 1.0
+        if ycoord < 0.0:
+            ycoord = 0.0
+        elif ycoord > 1.0:
+            ycoord = 1.0
+
+        self.data['pos']['x'] = xcoord        
+        self.data['pos']['y'] = ycoord
         
+        return xcoord, ycoord
+    
     def OnMouse(self, event):
         if event.LeftIsDown():
             x, y = event.GetPosition()
-            self.data['pos']['x'] = x
-            self.data['pos']['y'] = y
             self.Draw(pos = (x, y))
-            self.Refresh(False)
             w, h = self.GetClientSize()
             x = float(x) / w
             y = float(y) / h
             self.UpdatePos(x, y)
-            self.mapWindow.render['quick'] = self.quick
-            
-            self.mapWindow.Refresh(eraseBackground = False)
-        elif event.LeftUp():
-            self.mapWindow.render['quick'] = False
-            self.mapWindow.Refresh(eraseBackground = False)
+            self.Refresh(False)
         
         event.Skip()
         
     def PostDraw(self):
-        self.Draw(pos = (self.data['pos']['x'],
-                         self.data['pos']['y']), scale = True)
+        x, y = self.UpdatePos(self.data['pos']['x'],
+                              self.data['pos']['y'])
+        self.Draw(pos = (x, y), scale = True)
 
 class ViewPositionWindow(PositionWindow):
     """!View position control widget"""
@@ -2628,35 +2642,55 @@ class ViewPositionWindow(PositionWindow):
         self.PostDraw()
         
     def UpdatePos(self, xcoord, ycoord):
-        PositionWindow.UpdatePos(self, xcoord, ycoord)
+        x, y = PositionWindow.UpdatePos(self, xcoord, ycoord)
         
         event = wxUpdateView(zExag = True)
         wx.PostEvent(self.mapWindow, event)
 
+        return x, y
+
+    def OnMouse(self, event):
+        PositionWindow.OnMouse(self, event)
+        if event.LeftIsDown():
+            self.mapWindow.render['quick'] = self.quick
+            self.mapWindow.Refresh(eraseBackground = False)
+        elif event.LeftUp():
+            self.mapWindow.render['quick'] = False
+            self.mapWindow.Refresh(eraseBackground = False)
+        
+        event.Skip()
+    
 class LightPositionWindow(PositionWindow):
     """!Light position control widget"""
     def __init__(self, parent, mapwindow, id = wx.ID_ANY,
                  **kwargs):
         PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)
 
-        self.data = self.mapWindow.lighting
+        self.data = self.mapWindow.light
         self.quick = False
         self.PostDraw()
 
     def UpdatePos(self, xcoord, ycoord):
-        PositionWindow.UpdatePos(self, xcoord, ycoord)
+        x, y = PositionWindow.UpdatePos(self, xcoord, ycoord)
         
         event = wxUpdateLight()
         wx.PostEvent(self.mapWindow, event)
+    
+        return x, y
+
+    def OnMouse(self, event):
+        PositionWindow.OnMouse(self, event)
+        if event.LeftUp():
+            self.mapWindow.render['quick'] = False
+            self.mapWindow.Refresh(eraseBackground = False)
         
 class NvizPreferencesDialog(PreferencesBaseDialog):
     """!Nviz preferences dialog"""
     def __init__(self, parent, title = _("3D view settings"),
                  settings = UserSettings):
-        
         PreferencesBaseDialog.__init__(self, parent = parent, title = title,
                                        settings = settings)
-        
+        self.toolWin = self.parent.GetLayerManager().nviz
         self.win = dict()
         
         # create notebook pages
@@ -3078,7 +3112,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                                     except:
                                         continue
                                 
-        self.UpdateSettings()
+        self.toolWin.UpdateSettings()
         self.FindWindowById(self.win['view']['pos']).Draw()
         self.FindWindowById(self.win['view']['pos']).Refresh(False)
         
@@ -3093,11 +3127,13 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings = fileSettings)
         
-        self.UpdateSettings()
+        self.toolWin.UpdateSettings()
         
         nvsettings = UserSettings.Get(group = 'nviz')
         for subgroup, key in nvsettings.iteritems(): # view, surface, vector...
+            print subgroup, key
             for subkey, value in key.iteritems():
+                print subkey, value
                 if subkey == 'height': continue
                 for subvalue in value.keys():
                     if subvalue == 'step':

@@ -315,7 +315,7 @@ void GS_setlight_position(int num, float xpos, float ypos, float zpos,
 /*!
    \brief Get light position
 
-   \param num light id (starts with 1?)
+   \param num light id (starts at 1)
    \param[out] xpos,ypos,zpos coordinates
    \param[out] local ?
  */
@@ -339,7 +339,7 @@ void GS_getlight_position(int num, float *xpos, float *ypos, float *zpos,
 /*!
    \brief Set light color
 
-   \param num light id (starts with 1?)
+   \param num light id (starts at 1)
    \param red,green,blue color values (from 0.0 to 1.0)
  */
 void GS_setlight_color(int num, float red, float green, float blue)
@@ -361,7 +361,7 @@ void GS_setlight_color(int num, float red, float green, float blue)
 /*!
    \brief Get light color
 
-   \param num light id (starts with 1?)
+   \param num light id (starts at 1)
    \param[out] red,green,blue color values
  */
 void GS_getlight_color(int num, float *red, float *green, float *blue)
@@ -383,7 +383,7 @@ void GS_getlight_color(int num, float *red, float *green, float *blue)
 
    Red, green, blue from 0.0 to 1.0
 
-   \param num light id (starts with 1?)
+   \param num light id (starts at 1)
    \param red,green,blue color values
  */
 void GS_setlight_ambient(int num, float red, float green, float blue)
@@ -405,7 +405,7 @@ void GS_setlight_ambient(int num, float red, float green, float blue)
 /*!
    \brief Get light ambient
 
-   \param num light id (starts with 1?)
+   \param num light id (starts at 1)
    \param[out] red,green,blue color values
  */
 void GS_getlight_ambient(int num, float *red, float *green, float *blue)
@@ -454,7 +454,7 @@ void GS_lights_on(void)
 /*!
    \brief Switch on/off light
 
-   \param num light id (starts with 1?)
+   \param num light id (starts at 1)
    \param on non-zero for 'on' otherwise 'off'
  */
 void GS_switchlight(int num, int on)

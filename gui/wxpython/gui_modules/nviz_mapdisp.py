@@ -126,7 +126,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
         self.iview = UserSettings.Get(group = 'nviz', key = 'view', internal = True)
         self.nvizDefault = NvizDefault()
-        self.lighting = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'lighting')) # copy
+        self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
 
         self.size = None
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
@@ -179,6 +179,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             if hasattr(self._layermanager, "nviz"):
                 self._layermanager.nviz.UpdatePage('view')
+                self._layermanager.nviz.UpdatePage('light')
                 layer = self.GetSelectedLayer()
                 if layer:
                     if layer.type ==  'raster':
@@ -225,7 +226,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if prev_value !=  self.view['persp']['value']:
                 if hasattr(self._layermanager, "nviz"):
                     self._layermanager.nviz.UpdateSettings()
-
+                    
                     self._display.SetView(self.view['pos']['x'], self.view['pos']['y'],
                                           self.iview['height']['value'],
                                           self.view['persp']['value'],
@@ -258,13 +259,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             event.Skip()
 
     def UpdateLight(self, event):
-        """!Change lighting settings"""
-        data = self.lighting
+        """!Change light settings"""
+        data = self.light
         self._display.SetLight(x = data['pos']['x'], y = data['pos']['y'],
                                z = data['pos']['z'])
-        
-        if event:
-            event.Skip()
+        self._display.DrawLightingModel()
         
     def UpdateMap(self, render = True):
         """!Updates the canvas anytime there is a change to the
@@ -275,6 +274,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         start = time.clock()
         
         self.resize = False
+        self.SwapBuffers()
         
         if self.render['quick'] is False:
             self.parent.statusbarWin['progress'].Show()
@@ -294,8 +294,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self._display.Draw(True, mode)
         else: # None -> reuse last rendered image
             pass # TODO
-        
-        self.SwapBuffers()
         
         stop = time.clock()
         
@@ -764,11 +762,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.iview['height']['value'], \
             self.iview['height']['min'], \
             self.iview['height']['max'] = self._display.SetViewDefault()
+        self.view['z-exag']['min'] = 0
+        self.view['z-exag']['max'] = self.view['z-exag']['value'] * 10
         
         self.view['pos']['x'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                  subkey = ('pos', 'x'))
         self.view['pos']['y'] = UserSettings.Get(group = 'nviz', key = 'view',
-                                                 subkey = ('pos', 'x'))
+                                                 subkey = ('pos', 'y'))
         self.view['persp']['value'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                        subkey = ('persp', 'value'))
         
