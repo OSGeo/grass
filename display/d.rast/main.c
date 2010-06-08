@@ -40,7 +40,6 @@ int main(int argc, char **argv)
     int invert, fp;
     struct GModule *module;
     struct Option *map;
-    struct Option *catlist;
     struct Option *vallist;
     struct Option *bg;
     struct Flag *flag_n;
@@ -52,36 +51,24 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("raster"));
-    module->description = _("Displays raster map layer in the active map display window.");
+    module->description = _("Displays raster map layer.");
     
     /* set up command line */
     map = G_define_standard_option(G_OPT_R_MAP);
     map->description = _("Raster map to be displayed");
 
-    catlist = G_define_option();
-    catlist->key = "catlist";
-    catlist->key_desc = "cat[-cat]";
-    catlist->type = TYPE_STRING;
-    catlist->required = NO;
-    catlist->multiple = YES;
-    catlist->description = _("List of categories to be displayed (INT maps)");
-    catlist->guisection = _("Selection");
-
     vallist = G_define_option();
-    vallist->key = "vallist";
-    vallist->key_desc = "val[-val]";
+    vallist->key = "values";
+    vallist->key_desc = "value[,value[-value]]";
     vallist->type = TYPE_STRING;
     vallist->required = NO;
     vallist->multiple = YES;
-    vallist->description = _("List of values to be displayed (FP maps)");
+    vallist->description = _("List of categories or values to be displayed");
     vallist->guisection = _("Selection");
 
-    bg = G_define_option();
-    bg->key = "bg";
+    bg = G_define_standard_option(G_OPT_C_BG);
     bg->key_desc = "color";
-    bg->type = TYPE_STRING;
     bg->gisprompt = "old_color,color,color";
-    bg->required = NO;
     bg->description = _("Background color (for null)");
 
     flag_n = G_define_flag();
@@ -90,7 +77,7 @@ int main(int argc, char **argv)
 
     flag_i = G_define_flag();
     flag_i->key = 'i';
-    flag_i->description = _("Invert catlist");
+    flag_i->description = _("Invert value list");
     flag_i->guisection = _("Selection");
 
     if (G_parser(argc, argv))
@@ -104,17 +91,11 @@ int main(int argc, char **argv)
 	G_fatal_error(_("No graphics device selected"));
 
     fp = Rast_map_is_fp(name, "");
-    if (catlist->answer) {
+    if (vallist->answer) {
 	if (fp)
-	    G_warning(_("Ignoring catlist: map is floating point (please use 'val=')"));
+	    parse_vallist(vallist->answers, &d_mask);
 	else
 	    parse_catlist(catlist->answers, &mask);
-    }
-    if (vallist->answer) {
-	if (!fp)
-	    G_warning(_("Ignoring vallist: map is integer (please use 'cat=')"));
-	else
-	    parse_vallist(vallist->answers, &d_mask);
     }
 
     /* use DCELL even if the map is FCELL */
@@ -218,7 +199,7 @@ int parse_mask_rule(char *catlist, Mask * mask, char *where)
 	if (where)
 	    fprintf(stderr, "%s: ", where);
 	G_usage();
-	G_fatal_error("%s: illegal category spec", catlist);
+	G_fatal_error(_("[%s]: illegal category specified"), catlist);
     }
 
     return 0;
@@ -249,7 +230,7 @@ int parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
 	if (where)
 	    fprintf(stderr, "%s: ", where);
 	G_usage();
-	G_fatal_error("%s: illegal value spec", vallist);
+	G_fatal_error(_("[%s]: illegal value specified"), vallist);
     }
 
     return 0;
