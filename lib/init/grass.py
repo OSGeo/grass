@@ -613,10 +613,10 @@ def check_batch_job():
 	    # right file, but ...
 	    fatal(_("Change file permission to 'executable' for '%s'") % batch_job)
 	else:
-	    message(_("Executing '%s' ...") % batch_job)
+	    message(_("Executing '%s'...") % batch_job)
 	    grass_gui = "text"
-	    shell = batch_job
-
+	    Popen(batch_job, shell = True)
+    
 def start_gui():
     # Start the chosen GUI but ignore text
     if grass_debug:
