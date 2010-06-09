@@ -28,14 +28,16 @@
 #% type: string
 #% gisprompt: old,vector,vector
 #% key_desc : name
-#% description: Vector map for which to edit attribute table
+#% description: Name of vector map for which to edit attribute table
 #% required : yes
 #%end
 
 #%option
 #% key: layer
 #% type: integer
-#% description: Layer where to add column
+#% gisprompt: old_layer,layer,layer
+#% label: Layer number where to add column(s)
+#% description: A single vector map can be connected to multiple database tables. This number determines which table to use.
 #% answer: 1
 #% required : no
 #%end
@@ -43,7 +45,8 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Name and type of the new column(s) ('name type [,name type, ...]' - types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE)
+#% label: Name and type of the new column(s) ('name type [,name type, ...]')
+#% description: Data types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE
 #% required : yes
 #%end
 
