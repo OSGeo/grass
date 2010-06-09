@@ -16,6 +16,7 @@ Classes:
  - CDisplayDriver
  - VDigitSettingsDialog
  - VDigitCategoryDialog
+ - CategoryListCtrl
  - VDigitZBulkDialog
  - VDigitDuplicatesDialog
  - VDigitVBuildDialog

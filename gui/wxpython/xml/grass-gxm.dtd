@@ -14,7 +14,7 @@
 
 <!ELEMENT grass-gxm (gxm)>
 
-<!ELEMENT gxm (action*, data*)>
+<!ELEMENT gxm (action*, data*, properties?, variable*)>
 
 <!--    an action defines action properties (usually GRASS modules)
 -->
@@ -80,3 +80,15 @@
 <!ELEMENT point  (x, y)>
 <!ELEMENT x      (#PCDATA)>
 <!ELEMENT y      (#PCDATA)>
+
+<!--	a properties describes model properties
+-->
+<!ELEMENT properties    (name?, description?, author?, flag*)>
+<!ELEMENT name          (#PCDATA)>
+<!ELEMENT description   (#PCDATA)>
+<!ELEMENT author        (#PCDATA)>
+
+<!--	a variable describes model variable
+-->
+<!ELEMENT variable        (name, description?, value?)>
+<!ATTLIST variable  type  (integer | float | string) #REQUIRED>
