@@ -160,6 +160,7 @@ class Model(object):
         
         # load properties
         self.properties = gxmXml.properties
+        self.variables  = gxmXml.variables
         
         # load model.GetActions()
         for action in gxmXml.actions:
@@ -491,7 +492,11 @@ class ModelFrame(wx.Frame):
         """!Manage (define) model variables"""
         dlg = VariablesDialog(parent = self, data = self.model.GetVariables())
         dlg.CentreOnParent()
-        dlg.Show()
+        if dlg.ShowModal() == wx.ID_OK:
+            self.ModelChanged()
+            variables = dlg.GetValues()
+            self.GetModel().SetVariables(variables)
+        dlg.Destroy()
         
     def OnDeleteData(self, event):
         """!Delete intermediate data"""
@@ -1205,7 +1210,8 @@ if __name__ == "__main__":
             WriteModelFile(fd = tmpfile,
                            actions = self.model.GetActions(),
                            data = self.model.GetData(),
-                           properties = self.model.GetProperties())
+                           properties = self.model.GetProperties(),
+                           variables = self.model.GetVariables())
         except StandardError:
             GMessage(parent = self,
                      message = _("Writing current settings to model file failed."))
@@ -1566,7 +1572,6 @@ class ModelData(ogl.EllipseShape):
 
         @param direction direction - 'from' or 'to'
         """
-        print direction, name
         self.name[direction].append(name)
         
     def GetPropDialog(self):
@@ -2026,6 +2031,7 @@ class ProcessModelFile:
         
         # list of actions, data
         self.properties = dict()
+        self.variables  = dict() 
         self.actions = list()
         self.data    = list()
         
@@ -2060,9 +2066,8 @@ class ProcessModelFile:
         node = self.root.find('properties')
         if node is None:
             return
-        self._processProperty(node, 'name')
-        self._processProperty(node, 'description')
-        self._processProperty(node, 'author')
+        for key in ('name', 'description', 'author'):
+            self._processProperty(node, key)
         
         for f in node.findall('flag'):
             name = f.get('name', '')
@@ -2078,8 +2083,21 @@ class ProcessModelFile:
             self.properties[name] = ''
 
     def _processVariables(self):
+        """!Process model variables"""
         for node in self.root.findall('variable'):
-            pass
+            name = node.get('name', '')
+            if not name:
+                continue # should not happen
+            self.variables[name] = { 'type' : node.get('type', 'string') }
+            for key in ('description', 'value'):
+                self._processVariable(node, name, key)
+        
+    def _processVariable(self, pnode, name, key):
+        """!Process given variable"""
+        node = pnode.find(key)
+        if node is not None:
+            if node.text:
+                self.variables[name][key] = node.text
         
     def _processActions(self):
         """!Process model file"""
@@ -2206,16 +2224,19 @@ class ProcessModelFile:
     
 class WriteModelFile:
     """!Generic class for writing model file"""
-    def __init__(self, fd, actions, data, properties):
-        self.fd      = fd
-        self.actions = actions
-        self.data    = data
+    def __init__(self, fd, actions, data, properties, variables):
+        self.fd         = fd
+        self.actions    = actions
+        self.data       = data
         self.properties = properties
+        self.variables  = variables
         
         self.indent = 0
         
         self._header()
-        
+
+        self._properties()
+        self._variables()
         self._actions()
         self._data()
         
@@ -2237,10 +2258,9 @@ class WriteModelFile:
     def _footer(self):
         """!Write footer"""
         self.fd.write('%s</gxm>\n' % (' ' * self.indent))
-        
-    def _actions(self):
-        """!Write actions"""
-        id = 1
+
+    def _properties(self):
+        """!Write model properties"""
         self.indent += 4
         self.fd.write('%s<properties>\n' % (' ' * self.indent))
         self.indent += 4
@@ -2256,6 +2276,25 @@ class WriteModelFile:
             self.fd.write('%s<flag name="overwrite" />\n' % (' ' * self.indent))
         self.indent -= 4
         self.fd.write('%s</properties>\n' % (' ' * self.indent))
+
+    def _variables(self):
+        """!Write model variables"""
+        for name, values in self.variables.iteritems():
+            self.fd.write('%s<variable name="%s" type="%s">\n' % \
+                              (' ' * self.indent, name, values['type']))
+            self.indent += 4
+            if values.has_key('value'):
+                self.fd.write('%s<value>%s</value>\n' % \
+                                  (' ' * self.indent, values['value']))
+            if values.has_key('description'):
+                self.fd.write('%s<description>%s</description>\n' % \
+                                  (' ' * self.indent, values['description']))
+            self.indent -= 4
+            self.fd.write('%s</variable>\n' % (' ' * self.indent))
+        
+    def _actions(self):
+        """!Write actions"""
+        id = 1
         for action in self.actions:
             action.SetId(id)
             self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
@@ -2850,17 +2889,16 @@ class VariablesDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.desc = wx.TextCtrl(parent = self, id = wx.ID_ANY, size = (350, -1))
         
         # buttons
+        self.btnAdd = wx.Button(parent = self, id = wx.ID_ADD)
+        self.btnAdd.SetToolTipString(_("Add new variable to the model"))
+        self.btnAdd.Enable(False)
         self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
         self.btnCancel.SetToolTipString(_("Ignore changes and close dialog"))
         self.btnOk = wx.Button(parent = self, id = wx.ID_OK)
         self.btnOk.SetToolTipString(_("Apply changes and close dialog"))
         self.btnOk.SetDefault()
-        self.btnAdd = wx.Button(parent = self, id = wx.ID_ADD)
-        self.btnAdd.SetToolTipString(_("Add new variable to the model"))
-        self.btnAdd.Enable(False)
         
         # bindings
-        self.btnOk.Bind(wx.EVT_BUTTON, self.OnOK)
         self.name.Bind(wx.EVT_TEXT, self.OnText)
         self.value.Bind(wx.EVT_TEXT, self.OnText)
         self.desc.Bind(wx.EVT_TEXT, self.OnText)
@@ -2869,9 +2907,6 @@ class VariablesDialog(wx.Dialog, listmix.ColumnSorterMixin):
         # list
         self.list.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp) #wxMSW
         self.list.Bind(wx.EVT_RIGHT_UP, self.OnRightUp) #wxGTK
-        # self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit, self.list)
-        # self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit, self.list)
-        # self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick, self.list)
         
         self._layout()
 
@@ -2943,7 +2978,7 @@ class VariablesDialog(wx.Dialog, listmix.ColumnSorterMixin):
             self.btnAdd.Enable()
         else:
             self.btnAdd.Enable(False)
-        
+    
     def OnAdd(self, event):
         """!Add new variable to the list"""
         msg = self.list.Append(self.name.GetValue(),
@@ -2989,10 +3024,18 @@ class VariablesDialog(wx.Dialog, listmix.ColumnSorterMixin):
         """!Reload list of variables"""
         self.list.Populate(self.parent.GetModel().GetVariables())
         
-    def OnOK(self, event):
-        """!Store variables to the model"""
-        self.parent.GetModel().SetVariables(self.list.GetData())
-        self.Destroy()
+    def GetValues(self):
+        """!Get dictionary of variables"""
+        variables = dict()
+        for values in self.list.GetData().itervalues():
+            name = values[0]
+            variables[name] = { 'type' : str(values[1]) }
+            if values[2]:
+                variables[name]['value'] = values[2]
+            if values[3]:
+                variables[name]['description'] = values[3]
+        
+        return variables
         
 class VariablesListCtrl(wx.ListCtrl,
                         listmix.ListCtrlAutoWidthMixin,
@@ -3015,13 +3058,24 @@ class VariablesListCtrl(wx.ListCtrl,
         self.itemData  = {} # requested by sorter
         self.itemCount = 0
 
+        self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
+        self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
+        self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick)
+
     def GetData(self):
         """!Get list data"""
         return self.itemData
     
     def Populate(self, data):
         """!Populate the list"""
-        self.itemData = copy.deepcopy(data)
+        self.itemData = dict()
+        i = 0
+        for name, values in data.iteritems():
+            self.itemData[i] = [name, values['type'],
+                                values.get('value', ''),
+                                values.get('description', '')]
+            i += 1
+        
         self.itemCount = len(self.itemData.keys())
         self.DeleteAllItems()
         i = 0
@@ -3052,7 +3106,7 @@ class VariablesListCtrl(wx.ListCtrl,
         self.SetStringItem(index, 3, desc)
         self.SetItemData(index, self.itemCount)
         
-        self.itemData[self.itemCount] = (name, vtype, value, desc)
+        self.itemData[self.itemCount] = [name, vtype, value, desc]
         self.itemCount += 1
         
         return None
@@ -3070,7 +3124,26 @@ class VariablesListCtrl(wx.ListCtrl,
         """!Remove all variable(s) from the model"""
         self.DeleteAllItems()
         self.itemData = dict()
-    
+        
+    def OnBeginEdit(self, event):
+        """!Editing of item started"""
+        event.Allow()
+
+    def OnEndEdit(self, event):
+        """!Finish editing of item"""
+        itemIndex = event.GetIndex()
+        columnIndex = event.GetColumn()
+        nameOld = self.GetItem(itemIndex, 0).GetText()
+
+        if columnIndex == 0: # TODO
+            event.Veto()
+        
+        self.itemData[itemIndex][columnIndex] = event.GetText()
+        
+    def OnColClick(self, event):
+        """!Click on column header (order by)"""
+        event.Skip()
+        
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
