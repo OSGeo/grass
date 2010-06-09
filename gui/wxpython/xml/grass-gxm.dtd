@@ -90,5 +90,6 @@
 
 <!--	a variable describes model variable
 -->
-<!ELEMENT variable        (name, description?, value?)>
+<!ELEMENT variable        (description?, value?)>
+<!ATTLIST variable  name  CDATA                      #REQUIRED>
 <!ATTLIST variable  type  (integer | float | string) #REQUIRED>
