@@ -334,14 +334,10 @@ def set_browser():
 
 	if windows or cygwin:
 	    # MinGW startup moved to into init.bat
-	    iexplore = os.path.join(os.getenv('ProgramFiles'), "Internet Explorer", "iexplore.exe")
-	    if os.access(iexplore, os.F_OK):
-		browser = iexplore
-	    else:
-		browser = "iexplore"
+	    browser = "explorer"
 	else:
 	    # the usual suspects
-	    browsers = [ "htmlview", "konqueror", "mozilla", "mozilla-firefox",
+	    browsers = [ "xdg-open", "htmlview", "konqueror", "mozilla", "mozilla-firefox",
                          "firefox", "iceweasel", "opera", "netscape", "dillo", "lynx", "links", "w3c" ]
 	    for b in browsers:
 		if find_exe(b):
