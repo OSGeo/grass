@@ -82,6 +82,12 @@
 	  <handler>OnDefineRelation</handler>
 	</menuitem>
 	<menuitem>
+	  <label>Define loop</label>
+	  <help>Defines loop in the model</help>
+	  <handler>OnDefineLoop</handler>
+	  <shortcut>Ctrl+L</shortcut>
+	</menuitem>
+	<menuitem>
 	  <label>Remove item</label>
 	  <help>Remove action/data from model</help>
 	  <handler>OnRemoveItem</handler>
