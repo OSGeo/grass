@@ -127,7 +127,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.iview = UserSettings.Get(group = 'nviz', key = 'view', internal = True)
         self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
-
+        
         self.size = None
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE, self.OnSize)
@@ -262,7 +262,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Change light settings"""
         data = self.light
         self._display.SetLight(x = data['pos']['x'], y = data['pos']['y'],
-                               z = data['pos']['z'])
+                               z = data['pos']['z'], color = data['color'],
+                               bright = data['bright'] / 100.,
+                               ambient = data['ambient'] / 100.)
         self._display.DrawLightingModel()
         
     def UpdateMap(self, render = True):
