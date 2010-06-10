@@ -517,8 +517,11 @@ class Settings:
                     'pos' : {
                         'x' : 0.68,
                         'y' : 0.68,
-                        'z' : 0.80,
+                        'z' : 80,
                         },
+                    'color' : (255, 255, 255, 255), # white
+                    'bright' : 80,
+                    'ambient' : 20,
                     },
                 },
             'modeler' : {
