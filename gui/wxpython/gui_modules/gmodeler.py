@@ -37,6 +37,7 @@ import stat
 import textwrap
 import tempfile
 import copy
+import re
 
 try:
     import xml.etree.ElementTree as etree
@@ -171,6 +172,7 @@ class Model(object):
                                      height = action['size'][1],
                                      task = action['task'],
                                      id = action['id'])
+            
             if action['disabled']:
                 actionItem.Enable(False)
             
@@ -193,6 +195,7 @@ class Model(object):
             
             actionItem.SetValid(valid)
             actionItem.SetParameterized(parameterized)
+            actionItem.GetLog() # substitute variables (-> valid/invalid)
         
         # load data & relations
         for data in gxmXml.data:
@@ -305,6 +308,33 @@ class Model(object):
         """!Return parameterized options"""
         result = dict()
         idx = 0
+        if self.variables:
+            params = list()
+            result[_("Variables")] = { 'flags'  : list(),
+                                       'params' : params,
+                                       'idx' : idx }
+            for name, values in self.variables.iteritems():
+                params.append({ 'gisprompt' : False,
+                                'multiple'  : 'no',
+                                'description' : values.get('description', ''),
+                                'guidependency' : '',
+                                'default' : values.get('value', ''),
+                                'age' : None,
+                                'required' : 'yes',
+                                'value' : '',
+                                'label' : '',
+                                'guisection' : '',
+                                'key_desc' : '',
+                                'values' : list(),
+                                'parameterized' : False,
+                                'values_desc' : list(),
+                                'prompt' : None,
+                                'element' : None,
+                                'type' : values.get('type', 'string'),
+                                'name' : name })
+            
+            idx += 1
+        
         for action in self.actions:
             if not action.IsEnabled():
                 continue
@@ -1374,6 +1404,19 @@ class ModelAction(ogl.RectangleShape):
     def GetLog(self, string = True):
         """!Get logging info"""
         cmd = self.task.getCmd(ignoreErrors = True)
+        # substitute variables
+        variables = self.parent.GetVariables()
+        for variable in variables:
+            pattern= re.compile('%' + variable)
+            value = variables[variable].get('value', '')
+            for idx in range(len(cmd)):
+                if pattern.search(cmd[idx]):
+                    if value:
+                        cmd[idx] = pattern.sub(value, cmd[idx])
+                    else:
+                        self.isValid = False
+                        break
+                idx += 1
         if string:
             if cmd is None:
                 return ''
@@ -2840,7 +2883,10 @@ class ModelParamDialog(wx.Dialog):
     
     def _createPage(self, name, params):
         """!Define notebook page"""
-        task = menuform.grassTask(name)
+        if name in globalvar.grassCmd['all']:
+            task = menuform.grassTask(name)
+        else:
+            task = menuform.grassTask()
         task.flags  = params['flags']
         task.params = params['params']
         
