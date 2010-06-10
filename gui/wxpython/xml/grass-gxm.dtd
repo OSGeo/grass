@@ -14,7 +14,7 @@
 
 <!ELEMENT grass-gxm (gxm)>
 
-<!ELEMENT gxm (action*, data*, properties?, variable*)>
+<!ELEMENT gxm (action*, data*, properties?, variables?)>
 
 <!--    an action defines action properties (usually GRASS modules)
 -->
@@ -90,6 +90,7 @@
 
 <!--	a variable describes model variable
 -->
+<!ELEMENT variables       (variable*)>
 <!ELEMENT variable        (description?, value?)>
 <!ATTLIST variable  name  CDATA                      #REQUIRED>
 <!ATTLIST variable  type  (integer | float | string) #REQUIRED>
