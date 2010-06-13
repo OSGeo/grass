@@ -53,6 +53,14 @@ rem copy %OSGEO4W_DIR%\pgsql\lib\libpq.dll %PACKAGE_DIR%\extralib
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
+@echo Move GRASS libs from extralib to lib
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+move %PACKAGE_DIR%\extralib\libgrass_*.dll %PACKAGE_DIR%\lib
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
 @echo Copy Extrabins to PACKAGE_DIR\extrabin
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
@@ -61,6 +69,7 @@ mkdir %PACKAGE_DIR%\extrabin
 
 copy %OSGEO4W_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
 del %PACKAGE_DIR%\extrabin\svn*.exe
+del %PACKAGE_DIR%\extrabin\osgeo4w-*.exe
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------

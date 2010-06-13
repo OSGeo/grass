@@ -535,7 +535,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'set GISBASE=$INSTALL_DIR$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem set path to freetype dll$\r$\n'
-	FileWrite $0 'set FREETYPEBASE=$INSTALL_DIR\extralib$\r$\n'
+	FileWrite $0 'set FREETYPEBASE=$INSTALL_DIR\extralib;$INSTALL_DIR\lib$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem set dependecies path$\r$\n'
 	FileWrite $0 'set PATH=%FREETYPEBASE%;%PATH%$\r$\n'
