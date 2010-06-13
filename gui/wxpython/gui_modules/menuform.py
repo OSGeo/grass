@@ -71,10 +71,9 @@ import wx
 import wx.html
 try:
     import wx.lib.agw.flatnotebook as FN
-    hasAgw = True
 except ImportError:
     import wx.lib.flatnotebook as FN
-    hasAgw = False
+hasAgw = globalvar.CheckWxVersion()
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED

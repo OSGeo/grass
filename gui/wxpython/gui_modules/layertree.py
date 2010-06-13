@@ -25,18 +25,18 @@ import string
 import wx
 try:
     import wx.lib.agw.customtreectrl as CT
-    hasAgw = True
 except ImportError:
     import wx.lib.customtreectrl as CT
-    hasAgw = False
 import wx.combo
 import wx.lib.newevent
 import wx.lib.buttons  as  buttons
 
+import globalvar
+hasAgw = globalvar.CheckWxVersion()
+
 from grass.script import core as grass
 
 import gdialogs
-import globalvar
 import menuform
 import toolbars
 import mapdisp
