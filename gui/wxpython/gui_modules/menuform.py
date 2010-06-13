@@ -71,8 +71,10 @@ import wx
 import wx.html
 try:
     import wx.lib.agw.flatnotebook as FN
+    hasAgw = True
 except ImportError:
     import wx.lib.flatnotebook as FN
+    hasAgw = False
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
@@ -1032,7 +1034,10 @@ class cmdPanel(wx.Panel):
 
         # Build notebook
         nbStyle = globalvar.FNPageStyle
-        self.notebook = FN.FlatNotebook( self, id=wx.ID_ANY, style=nbStyle)
+        if hasAgw:
+            self.notebook = FN.FlatNotebook( self, id = wx.ID_ANY, agwStyle = nbStyle)
+        else:
+            self.notebook = FN.FlatNotebook( self, id = wx.ID_ANY, style = nbStyle)
         self.notebook.SetTabAreaColour(globalvar.FNPageColor)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
 

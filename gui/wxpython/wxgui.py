@@ -52,12 +52,12 @@ import wx.html
 import wx.stc
 try:
     import wx.lib.agw.customtreectrl as CT
+    import wx.lib.agw.flatnotebook   as FN
+    hasAgw = True
 except ImportError:
     import wx.lib.customtreectrl as CT
-try:
-    import wx.lib.agw.flatnotebook as FN
-except ImportError:
-    import wx.lib.flatnotebook as FN
+    import wx.lib.flatnotebook   as FN
+    hasAgw = False
 
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script import core as grass
@@ -202,11 +202,17 @@ class GMFrame(wx.Frame):
             FN.FNB_NO_NAV_BUTTONS | \
             FN.FNB_NO_X_BUTTON
         
-        self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, style=nbStyle)
-        
+        if hasAgw:
+            self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, agwStyle = nbStyle)
+        else:
+            self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, style = nbStyle)
+
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle
-        self.gm_cb = FN.FlatNotebook(self, id=wx.ID_ANY, style=cbStyle)
+        if hasAgw:
+            self.gm_cb = FN.FlatNotebook(self, id=wx.ID_ANY, agwStyle = cbStyle)
+        else:
+            self.gm_cb = FN.FlatNotebook(self, id=wx.ID_ANY, style = cbStyle)
         self.gm_cb.SetTabAreaColour(globalvar.FNPageColor)
         self.notebook.AddPage(self.gm_cb, text=_("Map layers"))
         
