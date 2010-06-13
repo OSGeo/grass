@@ -53,11 +53,10 @@ import wx.stc
 try:
     import wx.lib.agw.customtreectrl as CT
     import wx.lib.agw.flatnotebook   as FN
-    hasAgw = True
 except ImportError:
     import wx.lib.customtreectrl as CT
     import wx.lib.flatnotebook   as FN
-    hasAgw = False
+hasAgw = globalvar.CheckWxVersion()
 
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script import core as grass
