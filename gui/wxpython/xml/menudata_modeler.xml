@@ -82,8 +82,8 @@
 	  <handler>OnDefineRelation</handler>
 	</menuitem>
 	<menuitem>
-	  <label>Define loop</label>
-	  <help>Defines loop in the model</help>
+	  <label>Add loop</label>
+	  <help>Adds loop to model</help>
 	  <handler>OnDefineLoop</handler>
 	  <shortcut>Ctrl+L</shortcut>
 	</menuitem>
