@@ -1047,7 +1047,7 @@ if __name__ == "__main__":
         
         # add action to canvas
         width, height = self.canvas.GetSize()
-        action = ModelAction(self, cmd = cmd, x = width/2, y = height/2,
+        action = ModelAction(self.model, cmd = cmd, x = width/2, y = height/2,
                              id = len(self.model.GetActions()) + 1)
         overwrite = self.model.GetProperties().get('overwrite', None)
         if overwrite is not None:
@@ -1914,6 +1914,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.InsertLineControlPoint(point = wx.RealPoint(self.x, self.y))
         shape.ResetShapes()
         shape.Select(True)
+        self.frame.ModelChanged()
         self.frame.canvas.Refresh()
         
     def OnRemovePoint(self, event):
@@ -1922,6 +1923,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.DeleteLineControlPoint()
         shape.Select(False)
         shape.Select(True)
+        self.frame.ModelChanged()
         self.frame.canvas.Refresh()
         
     def OnIntermediate(self, event):
