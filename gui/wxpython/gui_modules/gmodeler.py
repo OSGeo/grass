@@ -1763,7 +1763,6 @@ class ModelDataDialog(ElementDialog):
     def OnOK(self, event):
         """!Ok pressed"""
         self.shape.SetValue(self.GetElement())
-        self.shape.SetName()
         self.parent.canvas.Refresh()
         self.parent.SetStatusText('', 0)
         self.OnCancel(event)
