@@ -411,9 +411,14 @@ class ModelFrame(wx.Frame):
         
         self.statusbar = self.CreateStatusBar(number = 1)
         
-        self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
-                                        style = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
-                                        FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
+        if globalvar.hasAgw:
+            self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
+                                            agwStyle = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
+                                            FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
+        else:
+            self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
+                                            style = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
+                                            FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
         
         self.canvas = ModelCanvas(self)
         self.canvas.SetBackgroundColour(wx.WHITE)
@@ -2911,11 +2916,19 @@ class ModelParamDialog(wx.Dialog):
         
         wx.Dialog.__init__(self, parent = parent, id = id, title = title, style = style, **kwargs)
         
-        self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY,
-                                        style = FN.FNB_FANCY_TABS |
-                                        FN.FNB_BOTTOM |
-                                        FN.FNB_NO_NAV_BUTTONS |
-                                        FN.FNB_NO_X_BUTTON)
+        if globalvar.hasAgw:
+            self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY,
+                                            agwStyle = FN.FNB_FANCY_TABS |
+                                            FN.FNB_BOTTOM |
+                                            FN.FNB_NO_NAV_BUTTONS |
+                                            FN.FNB_NO_X_BUTTON)
+        else:
+            self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY,
+                                            agwStyle = FN.FNB_FANCY_TABS |
+                                            FN.FNB_BOTTOM |
+                                            FN.FNB_NO_NAV_BUTTONS |
+                                            FN.FNB_NO_X_BUTTON)
+        
         panel = self._createPages()
         wx.CallAfter(self.notebook.SetSelection, 0)
         

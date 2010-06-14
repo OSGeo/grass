@@ -32,7 +32,6 @@ import wx.lib.newevent
 import wx.lib.buttons  as  buttons
 
 import globalvar
-hasAgw = globalvar.CheckWxVersion()
 
 from grass.script import core as grass
 
@@ -96,7 +95,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.rerender = False                # layer change requires a rerendering if auto render
         self.reorder = False                 # layer change requires a reordering
         
-        if hasAgw:
+        if globalvar.hasAgw:
             super(LayerTree, self).__init__(parent, id, agwStyle = ctstyle, **kwargs)
         else:
             super(LayerTree, self).__init__(parent, id, style = ctstyle, **kwargs)

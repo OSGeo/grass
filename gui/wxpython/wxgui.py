@@ -56,7 +56,6 @@ try:
 except ImportError:
     import wx.lib.customtreectrl as CT
     import wx.lib.flatnotebook   as FN
-hasAgw = globalvar.CheckWxVersion()
 
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script import core as grass
@@ -201,14 +200,14 @@ class GMFrame(wx.Frame):
             FN.FNB_NO_NAV_BUTTONS | \
             FN.FNB_NO_X_BUTTON
         
-        if hasAgw:
+        if globalvar.hasAgw:
             self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, agwStyle = nbStyle)
         else:
             self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, style = nbStyle)
 
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle
-        if hasAgw:
+        if globalvar.hasAgw:
             self.gm_cb = FN.FlatNotebook(self, id=wx.ID_ANY, agwStyle = cbStyle)
         else:
             self.gm_cb = FN.FlatNotebook(self, id=wx.ID_ANY, style = cbStyle)

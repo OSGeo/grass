@@ -612,29 +612,38 @@ class AttributeManager(wx.Frame):
         # really needed (ML)
         # self.notebook.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
 
-        self.notebook = FN.FlatNotebook(parent=self.panel, id=wx.ID_ANY,
-                                        style=FN.FNB_BOTTOM |
-                                        FN.FNB_NO_NAV_BUTTONS |
-                                        FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
-
-        dbmStyle = globalvar.FNPageStyle
-
-        self.browsePage = FN.FlatNotebook(self.panel, id=wx.ID_ANY,
-                                          style=dbmStyle)
+        if globalvar.hasAgw:
+            self.notebook = FN.FlatNotebook(parent = self.panel, id = wx.ID_ANY,
+                                            agwStyle = FN.FNB_BOTTOM |
+                                            FN.FNB_NO_NAV_BUTTONS |
+                                            FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
+        else:
+            self.notebook = FN.FlatNotebook(parent = self.panel, id = wx.ID_ANY,
+                                            style = FN.FNB_BOTTOM |
+                                            FN.FNB_NO_NAV_BUTTONS |
+                                            FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
+        
+        if globalvar.hasAgw:
+            dbmStyle = { 'agwStyle' : globalvar.FNPageStyle }
+        else:
+            dbmStyle = { 'style' : globalvar.FNPageStyle }
+        
+        self.browsePage = FN.FlatNotebook(self.panel, id = wx.ID_ANY,
+                                          **dbmStyle)
         # self.notebook.AddPage(self.browsePage, caption=_("Browse data"))
         self.notebook.AddPage(self.browsePage, text=_("Browse data")) # FN
         self.browsePage.SetTabAreaColour(globalvar.FNPageColor)
 
-        self.manageTablePage = FN.FlatNotebook(self.panel, id=wx.ID_ANY,
-                                               style=dbmStyle)
+        self.manageTablePage = FN.FlatNotebook(self.panel, id = wx.ID_ANY,
+                                               **dbmStyle)
         #self.notebook.AddPage(self.manageTablePage, caption=_("Manage tables"))
         self.notebook.AddPage(self.manageTablePage, text=_("Manage tables")) # FN
         if not self.editable:
             self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
         self.manageTablePage.SetTabAreaColour(globalvar.FNPageColor)
 
-        self.manageLayerPage = FN.FlatNotebook(self.panel, id=wx.ID_ANY,
-                                               style=dbmStyle)
+        self.manageLayerPage = FN.FlatNotebook(self.panel, id = wx.ID_ANY,
+                                               **dbmStyle)
         #self.notebook.AddPage(self.manageLayerPage, caption=_("Manage layers"))
         self.notebook.AddPage(self.manageLayerPage, text=_("Manage layers")) # FN
         self.manageLayerPage.SetTabAreaColour(globalvar.FNPageColor)
