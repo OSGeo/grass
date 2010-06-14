@@ -20,11 +20,15 @@ inc_dirs = [os.path.join(os.path.normpath(os.getenv('ARCH_DISTDIR')), 'include')
 	    os.path.join(os.path.normpath(os.getenv('GISBASE')), 'include')]
 lib_dirs = [os.path.join(os.path.normpath(os.getenv('ARCH_DISTDIR')), 'lib'),
 	    os.path.join(os.path.normpath(os.getenv('GISBASE')), 'lib')]
-libs = ['grass_dbmibase',
-        'grass_dbmiclient',
-        'grass_vector',
-        'grass_gis',
-        'grass_vedit']
+
+gversion = os.getenv('GRASS_VERSION_NUMBER')
+libs = ['grass_%s.%s' % (name, gversion)
+        for name in ['dbmibase',
+                     'dbmiclient',
+                     'vector',
+                     'gis',
+                     'vedit']]
+
 extras = []
 
 for flag in ['CXXFLAGS',
