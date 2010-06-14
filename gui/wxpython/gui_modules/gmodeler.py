@@ -84,6 +84,7 @@ class Model(object):
                             'author'      : getpass.getuser() }
         # model variables
         self.variables = dict()
+        self.variablesParams = dict()
         
         self.canvas  = canvas
         
@@ -103,8 +104,11 @@ class Model(object):
         """!Get model properties"""
         return self.properties
 
-    def GetVariables(self):
+    def GetVariables(self, params = False):
         """!Get model variables"""
+        if params:
+            return self.variablesParams
+        
         return self.variables
     
     def SetVariables(self, data):
@@ -317,12 +321,12 @@ class Model(object):
 
     def IsParameterized(self):
         """!Return True if model is parameterized"""
-        if self.Parametrize():
+        if self.Parameterize():
             return True
         
         return False
     
-    def Parametrize(self):
+    def Parameterize(self):
         """!Return parameterized options"""
         result = dict()
         idx = 0
@@ -332,23 +336,37 @@ class Model(object):
                                        'params' : params,
                                        'idx' : idx }
             for name, values in self.variables.iteritems():
-                params.append({ 'gisprompt' : False,
+                gtype = values.get('type', 'string')
+                if gtype in ('raster', 'vector'):
+                    gisprompt = True
+                    prompt = gtype
+                    if gtype == 'raster':
+                        element = 'cell'
+                    else:
+                        element = 'vector'
+                    ptype = 'string'
+                else:
+                    gisprompt = False
+                    prompt = None
+                    element = None
+                    ptype = gtype
+                params.append({ 'gisprompt' : gisprompt,
                                 'multiple'  : 'no',
                                 'description' : values.get('description', ''),
                                 'guidependency' : '',
-                                'default' : values.get('value', ''),
+                                'default' : '',
                                 'age' : None,
                                 'required' : 'yes',
-                                'value' : '',
+                                'value' : values.get('value', ''),
                                 'label' : '',
                                 'guisection' : '',
                                 'key_desc' : '',
                                 'values' : list(),
                                 'parameterized' : False,
                                 'values_desc' : list(),
-                                'prompt' : None,
-                                'element' : None,
-                                'type' : values.get('type', 'string'),
+                                'prompt' : prompt,
+                                'element' : element,
+                                'type' : ptype,
                                 'name' : name })
             
             idx += 1
@@ -373,6 +391,8 @@ class Model(object):
                                          'idx'   : idx }
                     result[name]['params'].append(p)
             idx += 1
+
+        self.variablesParams = result # record parameters
         
         return result
     
@@ -748,7 +768,7 @@ class ModelFrame(wx.Frame):
                 return
         
         # parametrization
-        params = self.model.Parametrize()
+        params = self.model.Parameterize()
         if params:
             dlg = ModelParamDialog(parent = self,
                                    params = params)
@@ -758,6 +778,12 @@ class ModelFrame(wx.Frame):
             if ret != wx.ID_OK:
                 dlg.Destroy()
                 return
+        
+        err = dlg.GetErrors()
+        if err:
+            GMessage(parent = self,
+                     message = unicode('\n'.join(err)))
+            return
         
         self.goutput.cmdThread.SetId(-1)
         for action in self.model.GetActions():
@@ -1445,17 +1471,32 @@ class ModelAction(ogl.RectangleShape):
         cmd = self.task.getCmd(ignoreErrors = True)
         # substitute variables
         variables = self.parent.GetVariables()
+        fparams = self.parent.GetVariables(params = True)
+        params = None
+        for values in fparams.itervalues():
+            params = values['params']
+            break
+        
         for variable in variables:
             pattern= re.compile('%' + variable)
-            value = variables[variable].get('value', '')
+            value = None
+            if params:
+                for p in params:
+                    if variable == p.get('name', ''):
+                        value = p.get('value', '')
+                        break
+            if not value:
+                value = variables[variable].get('value', '')
+            
             for idx in range(len(cmd)):
                 if pattern.search(cmd[idx]):
                     if value:
                         cmd[idx] = pattern.sub(value, cmd[idx])
                     else:
                         self.isValid = False
-                        break
+                    break
                 idx += 1
+        
         if string:
             if cmd is None:
                 return ''
@@ -2912,6 +2953,7 @@ class ModelParamDialog(wx.Dialog):
         """
         self.parent = parent
         self.params = params
+        self.tasks  = list() # list of tasks/pages
         
         wx.Dialog.__init__(self, parent = parent, id = id, title = title, style = style, **kwargs)
         
@@ -2981,9 +3023,18 @@ class ModelParamDialog(wx.Dialog):
         task.params = params['params']
         
         panel = menuform.cmdPanel(parent = self, id = wx.ID_ANY, task = task)
+        self.tasks.append(task)
         
         return panel
 
+    def GetErrors(self):
+        """!Check for errors, get list of messages"""
+        errList = list()
+        for task in self.tasks:
+            errList += task.getCmdError()
+        
+        return errList
+    
 class VariablesDialog(wx.Dialog, listmix.ColumnSorterMixin):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Manage model variables"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
@@ -3020,7 +3071,9 @@ class VariablesDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.type = wx.Choice(parent = self, id = wx.ID_ANY,
                               choices = [_("integer"),
                                          _("float"),
-                                         _("string")])
+                                         _("string"),
+                                         _("raster"),
+                                         _("vector")])
         self.value = wx.TextCtrl(parent = self, id = wx.ID_ANY, size = (150, -1))
         self.desc = wx.TextCtrl(parent = self, id = wx.ID_ANY, size = (350, -1))
         
