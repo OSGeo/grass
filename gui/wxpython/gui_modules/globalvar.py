@@ -168,3 +168,6 @@ if 'g.mlist' in grassCmd['all']:
     have_mlist = True
 else:
     have_mlist = False
+
+"""@Check version of wxPython, use agwStyle for 2.8.11+"""
+hasAgw = CheckWxVersion()

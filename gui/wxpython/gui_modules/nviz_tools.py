@@ -53,7 +53,11 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow  = display.GetWindow()
         self._display   = self.mapWindow.GetDisplay()
         
-        FN.FlatNotebook.__init__(self, parent, id, style = style, **kwargs)
+        if globalvar.hasAgw:
+            kwargs['agwStyle'] = style
+        else:
+            kwargs['style'] = style
+        FN.FlatNotebook.__init__(self, parent, id, **kwargs)
         self.SetTabAreaColour(globalvar.FNPageColor)
         
         self.win  = {} # window ids

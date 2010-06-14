@@ -551,7 +551,10 @@ class AboutWindow(wx.Frame):
                 FN.FNB_TABS_BORDER_SIMPLE | \
                 FN.FNB_NO_X_BUTTON
         
-        aboutNotebook = FN.FlatNotebook(panel, id=wx.ID_ANY, style=nbstyle)
+        if globalvar.hasAgw:
+            aboutNotebook = FN.FlatNotebook(panel, id = wx.ID_ANY, agwStyle = nbstyle)
+        else:
+            aboutNotebook = FN.FlatNotebook(panel, id = wx.ID_ANY, style = nbstyle)
         aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
         
         # make pages for About GRASS notebook
