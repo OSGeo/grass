@@ -257,7 +257,7 @@ NEED_DEPS = 1
 endif
 
 define lib_rules
-$(1)_LIBNAME = grass_$(2)
+$(1)_LIBNAME = grass_$(2).$(GRASS_VERSION_NUMBER)
 ifneq ($(NEED_DEPS),)
 $(1)LIB = -l$$($(1)_LIBNAME) $$($(1)DEPS)
 else

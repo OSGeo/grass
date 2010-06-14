@@ -42,6 +42,7 @@ $(SHLIB): $(LIB_NAME).i cats.cpp digit.cpp driver.cpp driver_draw.cpp \
 	WXWIDGETSCXXFLAGS="$(WXWIDGETSCXXFLAGS)" \
 	WXWIDGETSLIB="$(WXWIDGETSLIB)" \
 	CXXFLAGS="$(COMPILE_FLAGS_CXX)" \
+	GRASS_VERSION_NUMBER="$(GRASS_VERSION_NUMBER)" \
 	$(PYTHON) setup.py build_ext --swig=$(SWIG) --swig-opts=-c++ --build-lib=$(OBJDIR) --build-temp=$(OBJDIR)
 
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
