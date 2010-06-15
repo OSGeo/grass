@@ -54,7 +54,7 @@ vedit_INC       = $(VECT_INC)
 
 SED = sed
 CTYPESGEN = ./ctypesgen.py
-CTYPESFLAGS = $(INC)
+CTYPESFLAGS = --cpp "$(CC) -E $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC)"
 EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).py)
 
 ifneq ($(MINGW),)
