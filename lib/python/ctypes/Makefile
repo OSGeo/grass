@@ -49,8 +49,8 @@ ogsf_HDRS       = ogsf_proto.h gstypes.h gsurf.h kftypes.h keyframe.h
 nviz_HDRS       = nviz.h
 
 proj_INC        = $(PROJINC)
-vector_INC      = $(VECT_INC)
-vedit_INC       = $(VECT_INC)
+vector_INC      = $(VECT_INC) $(VECT_CFLAGS)
+vedit_INC       = $(VECT_INC) $(VECT_CFLAGS)
 
 SED = sed
 CTYPESGEN = ./ctypesgen.py
