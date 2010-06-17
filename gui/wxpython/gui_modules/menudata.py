@@ -40,7 +40,7 @@ except ImportError:
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
 
-etcwxdir = os.path.join(os.getenv("GISBASE"), "etc", "wxpython")
+etcwxdir = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
 
 class MenuData:
     """!Abstract menu data class"""
