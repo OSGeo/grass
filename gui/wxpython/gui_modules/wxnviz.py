@@ -184,13 +184,13 @@ class Nviz(object):
         # first
         Nviz_set_light_position(self.data, 1, 0.68, -0.68, 0.80, 0.0)
         Nviz_set_light_bright(self.data,   1, 0.8)
-        Nviz_set_light_color(self.data,    1, 255, 255, 255)
+        Nviz_set_light_color(self.data,    1, 1.0, 1.0, 1.0)
         Nviz_set_light_ambient(self.data,  1, 0.2, 0.2, 0.2)
         
         # second
         Nviz_set_light_position(self.data, 2, 0.0, 0.0, 1.0, 0.0)
         Nviz_set_light_bright(self.data,   2, 0.5)
-        Nviz_set_light_color(self.data,    2, 255, 255, 255)
+        Nviz_set_light_color(self.data,    2, 1.0, 1.0, 1.0)
         Nviz_set_light_ambient(self.data,  2, 0.3, 0.3, 0.3)
         
         Debug.msg(3, "Nviz::SetLightsDefault()")
@@ -204,7 +204,7 @@ class Nviz(object):
         @param w local coordinate (default to 0)
         """
         Nviz_set_light_position(self.data, lid, x, y, z, w)
-        Nviz_set_light_color(self.data, lid, color[0], color[1], color[2])
+        Nviz_set_light_color(self.data, lid, color[0] / 255., color[1] / 255., color[2] / 255.)
         Nviz_set_light_bright(self.data, lid, bright)
         Nviz_set_light_ambient(self.data, lid, ambient, ambient, ambient)
         

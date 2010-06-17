@@ -1266,7 +1266,11 @@ class NvizToolWindow(FN.FlatNotebook):
                     value = UserSettings.Get(group = 'nviz', key = 'view',
                                              subkey = ['height', 'value'], internal = True)
                 else:
-                    value = self.mapWindow.view[control]['value']
+                    try:
+                        value = self.mapWindow.view[control]['value']
+                    except KeyError:
+                        value = -1
+                
                 self.FindWindowById(win).SetValue(value)
         
         viewWin = self.FindWindowById(self.win['view']['pos'])
