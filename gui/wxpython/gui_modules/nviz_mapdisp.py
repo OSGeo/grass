@@ -252,7 +252,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                               data['persp']['value'],
                               data['twist']['value'])
         
-        if event and event.zExag:
+        if event and event.zExag and data['z-exag'].has_key('value'):
             self._display.SetZExag(data['z-exag']['value'])
         
         if event:
