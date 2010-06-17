@@ -505,8 +505,6 @@ def gisenv():
     s = read_command("g.gisenv", flags='n')
     return parse_key_val(s)
 
-debug_level = int(gisenv().get('DEBUG', 0))
-
 # interface to g.region
 
 def region():
@@ -863,3 +861,7 @@ def command_info(cmd):
     cmdinfo['parameters'] = dict
                 
     return cmdinfo
+
+# get debug_level
+if find_program('g.gisenv', ['--help']):
+    debug_level = int(gisenv().get('DEBUG', 0))
