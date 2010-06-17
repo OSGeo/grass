@@ -21,6 +21,7 @@ FILE *run_stats(struct Popen *child,
     argv[3] = "fs=space";
     argv[4] = NULL;
 
+    /* maybe use r.stats's output= option instead of reading from stdout here, whatever's easier. */
     fp = G_popen_read(child, argv[0], argv);
     if (!fp)
 	G_fatal_error("error running r.stats");
