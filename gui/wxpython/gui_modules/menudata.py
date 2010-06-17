@@ -37,7 +37,10 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
-import globalvar
+if not os.getenv("GISBASE"):
+    sys.exit("GRASS is not running. Exiting...")
+
+etcwxdir = os.path.join(os.getenv("GISBASE"), "etc", "wxpython")
 
 class MenuData:
     """!Abstract menu data class"""
@@ -192,7 +195,8 @@ class ManagerData(MenuData):
     def __init__(self, filename = None):
         if not filename:
             gisbase = os.getenv('GISBASE')
-	    filename = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata.xml')
+            global etcwxdir
+	    filename = os.path.join(etcwxdir, 'xml', 'menudata.xml')
         
         MenuData.__init__(self, filename)
         
@@ -226,7 +230,8 @@ class ModelerData(MenuData):
     def __init__(self, filename = None):
         if not filename:
             gisbase = os.getenv('GISBASE')
-	    filename = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata_modeler.xml')
+            global etcwxdir
+	    filename = os.path.join(etcwxdir, 'xml', 'menudata_modeler.xml')
         
         MenuData.__init__(self, filename)
 
