@@ -1544,27 +1544,29 @@ class cmdPanel(wx.Panel):
                     which_sizer.Add(item=fbb, proportion=0,
                                     flag=wx.EXPAND | wx.RIGHT, border=5)
                     
-                    # widget for interactive input
-                    ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
-                                       style = wx.TE_MULTILINE,
-                                       size = (-1, 75))
-                    if p.get('value', '') and os.path.isfile(p['value']):
-                        f = open(p['value'])
-                        ifbb.SetValue(''.join(f.readlines()))
-                        f.close()
-                    
-                    ifbb.Bind(wx.EVT_TEXT, self.OnFileText)
-                    which_sizer.Add(item = wx.StaticText(parent = which_panel, id = wx.ID_ANY,
-                                                         label = _('or enter values interactively')),
-                                    proportion=0,
-                                    flag=wx.EXPAND | wx.RIGHT | wx.LEFT | wx.BOTTOM, border=5)
-                    which_sizer.Add(item=ifbb, proportion=0,
-                                    flag=wx.EXPAND | wx.RIGHT | wx.LEFT, border=5)
-                    
                     # A file browse button is a combobox with two children:
                     # a textctl and a button;
                     # we have to target the button here
-                    p['wxId'] = [ fbb.GetChildren()[1].GetId(), ifbb.GetId() ]
+                    p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
+
+                    if p.get('age', 'new_file') == 'old_file':
+                        # widget for interactive input
+                        ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
+                                           style = wx.TE_MULTILINE,
+                                           size = (-1, 75))
+                        if p.get('value', '') and os.path.isfile(p['value']):
+                            f = open(p['value'])
+                            ifbb.SetValue(''.join(f.readlines()))
+                            f.close()
+                    
+                        ifbb.Bind(wx.EVT_TEXT, self.OnFileText)
+                        which_sizer.Add(item = wx.StaticText(parent = which_panel, id = wx.ID_ANY,
+                                                             label = _('or enter values interactively')),
+                                        proportion=0,
+                                        flag=wx.EXPAND | wx.RIGHT | wx.LEFT | wx.BOTTOM, border=5)
+                        which_sizer.Add(item=ifbb, proportion=0,
+                                        flag=wx.EXPAND | wx.RIGHT | wx.LEFT, border=5)
+                        p['wxId'].append(ifbb.GetId())
             
             if self.parent.GetName() == 'MainFrame' and self.parent.modeler:
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
