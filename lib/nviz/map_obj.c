@@ -328,12 +328,16 @@ void Nviz_set_surface_attr_default()
  */
 int Nviz_set_vpoint_attr_default(int id)
 {
+    int i;
     geosite *gp;
 
     gp = gp_get_site(id);
 
     if (!gp)
 	return 0;
+
+    for (i = 0; i < GPT_MAX_ATTR; i++)
+	gp->use_attr[i] = ST_ATT_NONE;
 
     return 1;
 }
