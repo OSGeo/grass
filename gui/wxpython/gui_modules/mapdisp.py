@@ -1171,7 +1171,13 @@ class MapFrame(wx.Frame):
             ltype = [{ 'ext' : 'ppm', 'type' : -1 },
                      { 'ext' : 'tif', 'type' : wx.BITMAP_TYPE_TIF }]
         else:
-            filetype, ltype = gdialogs.GetImageHandlers(self.MapWindow.img)
+            img = self.MapWindow.img
+            if not img:
+                gcmd.GMessage(parent = self,
+                              message = _("Nothing to render (empty map). Operation canceled."),
+                              msgType = 'info')
+                return
+            filetype, ltype = gdialogs.GetImageHandlers(img)
         
         # get size
         dlg = gdialogs.ImageSizeDialog(self)
