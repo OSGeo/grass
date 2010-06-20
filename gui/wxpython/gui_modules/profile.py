@@ -1,4 +1,4 @@
-"""
+"""!
 @package profile
 
 Profile analysis of GRASS raster maps and images.
@@ -11,13 +11,13 @@ Classes:
  - TextDialog
  - OptDialog
 
-COPYRIGHT: (C) 2007-2008 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+(C) 2007-2008 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
-Various updates: Martin Landa <landa.martin gmail.com>
+@author Various updates by Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -31,22 +31,14 @@ try:
     import numpy
     import wx.lib.plot as plot
 except ImportError:
-    msg= """
-    This module requires the NumPy module, which could not be
-    imported. It probably is not installed (it's not part of the
-    standard Python distribution). See the Numeric Python site
-    (http://numpy.scipy.org) for information on downloading source or
-    binaries."""
+    msg= _("This module requires the NumPy module, which could not be "
+           "imported. It probably is not installed (it's not part of the "
+           "standard Python distribution). See the Numeric Python site "
+           "(http://numpy.scipy.org) for information on downloading source or "
+           "binaries.")
     print >> sys.stderr, "profile.py: " + msg
 
 import globalvar
-try:
-    import subprocess
-except:
-    CompatPath = os.path.join(globalvar.ETCWXDIR)
-    sys.path.append(CompatPath)
-    from compat import subprocess as subprocess
-
 import render
 import menuform
 import disp_print
@@ -59,10 +51,8 @@ from preferences import globalSettings as UserSettings
 from grass.script import core as grass
 
 class ProfileFrame(wx.Frame):
+    """!Mainframe for displaying profile of raster map. Uses wx.lib.plot.
     """
-    Mainframe for displaying profile of raster map. Uses wx.lib.plot.
-    """
-
     def __init__(self, parent=None, id=wx.ID_ANY, title=_("Profile Analysis"),
                  rasterList=[],
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
@@ -86,7 +76,7 @@ class ProfileFrame(wx.Frame):
         #
         # Icon
         #
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         #
         # Add toolbar
@@ -221,8 +211,7 @@ class ProfileFrame(wx.Frame):
         self.CentreOnScreen()
 
     def OnDrawTransect(self, event):
-        """
-        Draws transect to profile in map display
+        """!Draws transect to profile in map display
         """
         self.mapwin.polycoords = []
         self.seglist = []
@@ -239,10 +228,8 @@ class ProfileFrame(wx.Frame):
         self.mapwin.SetCursor(self.Parent.cursors["cross"])
 
     def OnSelectRaster(self, event):
+        """!Select raster map(s) to profile
         """
-        Select raster map(s) to profile
-        """
-        
         dlg = SetRasterDialog(parent=self)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -256,11 +243,9 @@ class ProfileFrame(wx.Frame):
         dlg.Destroy()
 
     def SetRaster(self):
-        """
-        Create coordinate string for profiling. Create segment list for
+        """!Create coordinate string for profiling. Create segment list for
         transect segment markers.
         """
-
         #
         # create list of coordinate points for r.profile
         #
@@ -362,8 +347,7 @@ class ProfileFrame(wx.Frame):
             self.ylabel = self.ylabel.rstrip(',')
 
     def SetGraphStyle(self):
-        """
-        Set plot and text options
+        """!Set plot and text options
         """
         self.client.SetFont(self.properties['font']['wxfont'])
         self.client.SetFontSizeTitle(self.properties['font']['prop']['titleSize'])
@@ -422,24 +406,19 @@ class ProfileFrame(wx.Frame):
         # self.client.SetPointLabelFunc(self.DrawPointLabel())
 
     def CreateDatalist(self, raster, coords):
-        """
-        Build a list of distance, value pairs for points along transect
+        """!Build a list of distance, value pairs for points along transect
         """
         datalist = []
-        import subprocess
-                
+        
         # keep total number of transect points to 500 or less to avoid 
         # freezing with large, high resolution maps
         region = grass.region()
         curr_res = min(float(region['nsres']),float(region['ewres']))
         transect_rec = 0
-        print "transect length = "+str(self.transect_length)
-        print "current resolution = "+str(curr_res)
         if self.transect_length / curr_res > 500:
             transect_res = self.transect_length / 500
         else: transect_res = curr_res
-        print "transect resolution = "+str(transect_res)
-                
+        
         try:
             ret = gcmd.RunCommand("r.profile",
                              input=raster,
@@ -463,12 +442,11 @@ class ProfileFrame(wx.Frame):
             return None
 
     def OnCreateProfile(self, event):
-        """
-        Main routine for creating a profile. Uses r.profile to create a list
-        of distance,cell value pairs. This is passed to plot to create a
-        line graph of the profile. If the profile transect is in multiple
-        segments, these are drawn as points. Profile transect is drawn, using
-        methods in mapdisp.py
+        """!Main routine for creating a profile. Uses r.profile to
+        create a list of distance,cell value pairs. This is passed to
+        plot to create a line graph of the profile. If the profile
+        transect is in multiple segments, these are drawn as
+        points. Profile transect is drawn, using methods in mapdisp.py
         """
     
         if len(self.mapwin.polycoords) == 0 or self.raster[0]['name'] == '':
@@ -494,11 +472,9 @@ class ProfileFrame(wx.Frame):
         self.mapwin.mouse['box'] = 'point'
 
     def DrawPlot(self):
-        """
-        Draw line and point plot from transect datalist and
+        """!Draw line and point plot from transect datalist and
         transect segment endpoint coordinates.
         """
-
         # graph the distance, value pairs for the transect
         self.plotlist = []
         if len(self.seglist) > 0 :
@@ -546,43 +522,35 @@ class ProfileFrame(wx.Frame):
                          self.properties['y-axis']['axis'])
 
     def OnZoom(self, event):
+        """!Enable zooming and disable dragging
         """
-        Enable zooming and disable dragging
-        """
-
         self.zoom = True
         self.drag = False
         self.client.SetEnableZoom(self.zoom)
         self.client.SetEnableDrag(self.drag)
 
     def OnDrag(self, event):
+        """!Enable dragging and disable zooming
         """
-        Enable dragging and disable zooming
-        """
-
         self.zoom = False
         self.drag = True
         self.client.SetEnableDrag(self.drag)
         self.client.SetEnableZoom(self.zoom)
 
     def OnRedraw(self, event):
-        """
-        Redraw the profile window. Unzoom to original size
+        """!Redraw the profile window. Unzoom to original size
         """
         self.client.Reset()
         self.client.Redraw()
 
     def Update(self):
+        """!Update profile after changing options
         """
-        Update profile after changing options
-        """
-
         self.SetGraphStyle()
         self.DrawPlot()
 
     def OnErase(self, event):
-        """
-        Erase the profile window
+        """!Erase the profile window
         """
         self.client.Clear()
         self.mapwin.ClearLines(self.mapwin.pdc)
@@ -597,20 +565,18 @@ class ProfileFrame(wx.Frame):
         #            pass
 
     def SaveToFile(self, event):
-        """
-        Save profile to graphics file
+        """!Save profile to graphics file
         """
         self.client.SaveFile()
 
     def SaveProfileToFile(self, event):
-        """
-        Save r.profile data to a csv file
+        """!Save r.profile data to a csv file
         """    
-        
-        wildcard = "Comma separated value (*.csv)|*.csv" 
+        wildcard = _("Comma separated value (*.csv)|*.csv")
         
         dlg = wx.FileDialog(
-            self, message="Path and prefix (for raster name) to save profile values...", defaultDir=os.getcwd(), 
+            self, message=_("Path and prefix (for raster name) to save profile values..."),
+            defaultDir=os.getcwd(), 
             defaultFile="",  wildcard=wildcard, style=wx.SAVE
             )
         if dlg.ShowModal() == wx.ID_OK:
@@ -638,15 +604,14 @@ class ProfileFrame(wx.Frame):
         dlg.Destroy()
 
     def DrawPointLabel(self, dc, mDataDict):
-        """!This is the fuction that defines how the pointLabels are plotted
-            dc - DC that will be passed
-            mDataDict - Dictionary of data that you want to use for the pointLabel
+        """!This is the fuction that defines how the pointLabels are
+            plotted dc - DC that will be passed mDataDict - Dictionary
+            of data that you want to use for the pointLabel
 
-            As an example I have decided I want a box at the curve point
-            with some text information about the curve plotted below.
-            Any wxDC method can be used.
+            As an example I have decided I want a box at the curve
+            point with some text information about the curve plotted
+            below.  Any wxDC method can be used.
         """
-        # ----------
         dc.SetPen(wx.Pen(wx.BLACK))
         dc.SetBrush(wx.Brush( wx.BLACK, wx.SOLID ) )
 
@@ -659,7 +624,6 @@ class ProfileFrame(wx.Frame):
         #make a string to display
         s = "Crv# %i, '%s', Pt. (%.2f,%.2f), PtInd %i" %(cNum, legend, px, py, pntIn)
         dc.DrawText(s, sx , sy+1)
-        # -----------
 
     def OnMouseLeftDown(self,event):
         s= "Left Mouse Down at Point: (%.4f, %.4f)" % self.client._getXY(event)
@@ -684,10 +648,8 @@ class ProfileFrame(wx.Frame):
         event.Skip()           #go to next handler
 
     def ProfileOptionsMenu(self, event):
+        """!Popup menu for profile and text options
         """
-        Popup menu for profile and text options
-        """
-
         point = wx.GetMousePosition()
         popt = wx.Menu()
         # Add items to the menu
@@ -705,18 +667,17 @@ class ProfileFrame(wx.Frame):
         popt.Destroy()
 
     def NotFunctional(self):
+        """!Creates a 'not functional' message dialog
         """
-        Creates a 'not functional' message dialog
-        """
-
-        dlg = wx.MessageDialog(self, 'This feature is not yet functional',
-                           'Under Construction', wx.OK | wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(parent = self,
+                               message = _('This feature is not yet functional'),
+                               caption = _('Under Construction'),
+                               style = wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 
     def OnPText(self, dlg):
-        """
-        Use user's provided profile text settings.
+        """!Use user's provided profile text settings.
         """
         self.ptitle = dlg.ptitle
         self.xlabel = dlg.xlabel
@@ -735,9 +696,7 @@ class ProfileFrame(wx.Frame):
         self.OnRedraw(event=None)
     
     def PText(self, event):
-        """
-        Set custom text values for profile
-        title and axis labels.
+        """!Set custom text values for profile title and axis labels.
         """
         dlg = TextDialog(parent=self, id=wx.ID_ANY, title=_('Profile text settings'))
 
@@ -747,10 +706,9 @@ class ProfileFrame(wx.Frame):
         dlg.Destroy()
 
     def POptions(self, event):
-        """
-        Set various profile options, including: line width, color, style;
-        marker size, color, fill, and style; grid and legend options.
-        Calls OptDialog class.
+        """!Set various profile options, including: line width, color,
+        style; marker size, color, fill, and style; grid and legend
+        options.  Calls OptDialog class.
         """
         dlg = OptDialog(parent=self, id=wx.ID_ANY, title=_('Profile settings'))
         btnval = dlg.ShowModal()
@@ -763,8 +721,7 @@ class ProfileFrame(wx.Frame):
             dlg.Destroy()
 
     def PrintMenu(self, event):
-        """
-        Print options and output menu
+        """!Print options and output menu
         """
         point = wx.GetMousePosition()
         printmenu = wx.Menu()
@@ -817,8 +774,7 @@ class SetRasterDialog(wx.Dialog):
     def __init__(self, parent, id=wx.ID_ANY, title=_("Select raster map to profile"),
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_DIALOG_STYLE):
-        """
-        Dialog to select raster maps to profile.
+        """!Dialog to select raster maps to profile.
         """
 
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
@@ -899,11 +855,10 @@ class SetRasterDialog(wx.Dialog):
 class TextDialog(wx.Dialog):
     def __init__(self, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_DIALOG_STYLE):
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
-        """
-        Dialog to set profile text options: font, title
+        """!Dialog to set profile text options: font, title
         and font size, axis labels and font size
         """
+        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         #
         # initialize variables
         #
@@ -1151,12 +1106,12 @@ class TextDialog(wx.Dialog):
         
 class OptDialog(wx.Dialog):
     def __init__(self, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize,
-            style=wx.DEFAULT_DIALOG_STYLE):
+                 style=wx.DEFAULT_DIALOG_STYLE): 
+        """!Dialog to set various profile options, including: line
+        width, color, style; marker size, color, fill, and style; grid
+        and legend options.
+        """
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
-        """
-        Dialog to set various profile options, including: line width, color, style;
-        marker size, color, fill, and style; grid and legend options.
-        """
         # init variables
         self.pstyledict = parent.pstyledict
         self.ptfilldict = parent.ptfilldict

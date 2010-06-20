@@ -1267,8 +1267,7 @@ class VDigitToolbar(AbstractToolbar):
         return self.mapLayer
     
 class ProfileToolbar(AbstractToolbar):
-    """!
-    Toolbar for profiling raster map
+    """!Toolbar for profiling raster map
     """ 
     def __init__(self, parent):
         AbstractToolbar.__init__(self, parent)
@@ -1301,12 +1300,13 @@ class ProfileToolbar(AbstractToolbar):
             (self.transect, 'transect', Icons["transect"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["transect"].GetLabel(), Icons["transect"].GetDesc(),
              self.parent.OnDrawTransect),
+            ("", "", "", "", "", "", ""),
             (self.draw, 'profiledraw', Icons["profiledraw"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["profiledraw"].GetLabel(), Icons["profiledraw"].GetDesc(),
              self.parent.OnCreateProfile),
-            (self.options, 'options', Icons["profileopt"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["profileopt"].GetLabel(), Icons["profileopt"].GetDesc(),
-             self.parent.ProfileOptionsMenu),
+            (self.erase, 'erase', Icons["erase"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["erase"].GetLabel(), Icons["erase"].GetDesc(),
+             self.parent.OnErase),
             (self.drag, 'drag', Icons['pan'].GetBitmap(),
              wx.ITEM_NORMAL, Icons["pan"].GetLabel(), Icons["pan"].GetDesc(),
              self.parent.OnDrag),
@@ -1316,19 +1316,20 @@ class ProfileToolbar(AbstractToolbar):
             (self.unzoom, 'unzoom', Icons['zoom_back'].GetBitmap(),
              wx.ITEM_NORMAL, Icons["zoom_back"].GetLabel(), Icons["zoom_back"].GetDesc(),
              self.parent.OnRedraw),
-            (self.erase, 'erase', Icons["erase"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["erase"].GetLabel(), Icons["erase"].GetDesc(),
-             self.parent.OnErase),
             ("", "", "", "", "", "", ""),
-            (self.save, 'save image', Icons["savefile"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["savefile"].GetLabel(), Icons["savefile"].GetDesc(),
-             self.parent.SaveToFile),
             (self.datasave, 'save data', Icons["datasave"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["datasave"].GetLabel(), Icons["datasave"].GetDesc(),
              self.parent.SaveProfileToFile),
+            (self.save, 'save image', Icons["savefile"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["savefile"].GetLabel(), Icons["savefile"].GetDesc(),
+             self.parent.SaveToFile),
             (self.printer, 'print', Icons["printmap"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["printmap"].GetLabel(), Icons["printmap"].GetDesc(),
              self.parent.PrintMenu),
+            ("", "", "", "", "", "", ""),
+            (self.options, 'options', Icons["profileopt"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["profileopt"].GetLabel(), Icons["profileopt"].GetDesc(),
+             self.parent.ProfileOptionsMenu),
             (self.quit, 'quit', Icons["quit"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["quit"].GetLabel(), Icons["quit"].GetDesc(),
              self.parent.OnQuit),
