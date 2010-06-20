@@ -89,7 +89,6 @@ IconsGrass = {
     # profile 
     "profile"    : 'gui-profile.gif',
     "transect"   : 'gui-profiledefine.gif',
-    "datasave"   : 'file-save.gif',
     "profiledraw" : 'gui-display.gif',
     "profileopt" : 'gui-profileopt.gif',
     # georectify

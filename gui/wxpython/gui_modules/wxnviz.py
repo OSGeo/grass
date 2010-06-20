@@ -160,12 +160,9 @@ class Nviz(object):
         Nviz_set_bgcolor(self.data, Nviz_color_from_str("white")) # TODO
         self.SetBgColor("white")
         
-        # initialize view
-        Nviz_init_view()
-        
-        # set default lighting model
-        self.SetLightsDefault()
-        
+        # initialize view, lights
+        Nviz_init_view(self.data)
+                
         # clear window
         GS_clear(self.data.bgcolor)
         
@@ -177,23 +174,6 @@ class Nviz(object):
         @param color_str color string
         """
         self.data.bgcolor = Nviz_color_from_str(color_str)
-        
-    def SetLightsDefault(self):
-        """!Set default lighting model
-        """
-        # first
-        Nviz_set_light_position(self.data, 1, 0.68, -0.68, 0.80, 0.0)
-        Nviz_set_light_bright(self.data,   1, 0.8)
-        Nviz_set_light_color(self.data,    1, 1.0, 1.0, 1.0)
-        Nviz_set_light_ambient(self.data,  1, 0.2, 0.2, 0.2)
-        
-        # second
-        Nviz_set_light_position(self.data, 2, 0.0, 0.0, 1.0, 0.0)
-        Nviz_set_light_bright(self.data,   2, 0.5)
-        Nviz_set_light_color(self.data,    2, 1.0, 1.0, 1.0)
-        Nviz_set_light_ambient(self.data,  2, 0.3, 0.3, 0.3)
-        
-        Debug.msg(3, "Nviz::SetLightsDefault()")
         
     def SetLight(self, x, y, z, color, bright, ambient, w = 0, lid = 1):
         """!Change lighting settings
