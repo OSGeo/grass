@@ -779,11 +779,11 @@ class ModelFrame(wx.Frame):
                 dlg.Destroy()
                 return
         
-        err = dlg.GetErrors()
-        if err:
-            GMessage(parent = self,
-                     message = unicode('\n'.join(err)))
-            return
+            err = dlg.GetErrors()
+            if err:
+                GMessage(parent = self,
+                         message = unicode('\n'.join(err)))
+                return
         
         self.goutput.cmdThread.SetId(-1)
         for action in self.model.GetActions():
