@@ -12,7 +12,7 @@ from ctypesgencore.descriptions import *
 from ctypesgencore.ctypedescs import *
 from ctypesgencore.expressions import *
 from ctypesgencore.messages import *
-from tempfile import NamedTemporaryFile
+from tempfile import mkstemp
 import os
 
 class DataCollectingParser(ctypesparser.CtypesParser,
@@ -58,15 +58,17 @@ class DataCollectingParser(ctypesparser.CtypesParser,
         self.already_seen_opaque_enums={}
             
     def parse(self):
-        f = NamedTemporaryFile(suffix=".h")
+        fd, fname = mkstemp(suffix=".h")
+        f = os.fdopen(fd, 'w+b')
         for header in self.options.other_headers:
             print >>f, '#include <%s>' % header
         for header in self.headers:
             print >>f, '#include "%s"' % os.path.abspath(header)
         f.flush()
-        ctypesparser.CtypesParser.parse(self,f.name,None)
         f.close()
-        
+        ctypesparser.CtypesParser.parse(self,fname,None)
+        os.remove(fname)
+
         for name, params, expr, (filename,lineno) in self.saved_macros:
             self.handle_macro(name, params, expr, filename, lineno)
             
