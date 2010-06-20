@@ -29,6 +29,7 @@ static void args_vline(struct GParams *);
 static void args_vpoint(struct GParams *);
 static void args_viewpoint(struct GParams *);
 static void args_volume(struct GParams *);
+static void args_lighting(struct GParams *);
 
 /*!
   \brief Parse command
@@ -66,11 +67,14 @@ void parse_command(int argc, char *argv[], struct GParams *params)
     /*** viewpoint ***/
     args_viewpoint(params);
 
+    /*** lighting ***/
+    args_lighting(params);
+    
     /*** output image ***/
     /* output */
     params->output = G_define_standard_option(G_OPT_F_OUTPUT);
     params->output->description =
-	_("Name for output file (without extension)");
+	_("Name for output image file (without extension)");
     params->output->guisection = _("Image");
 
     /* format */
@@ -93,7 +97,7 @@ void parse_command(int argc, char *argv[], struct GParams *params)
     params->size->type = TYPE_INTEGER;
     params->size->key_desc = "width,height";
     params->size->answer = "640,480";
-    params->size->description = _("Width and height of output image");
+    params->size->description = _("Size (width, height) of output image");
     params->size->required = YES;
     params->size->guisection = _("Image");
 
@@ -134,8 +138,6 @@ void args_surface(struct GParams *params)
     params->color_const->multiple = YES;
     params->color_const->label = _("Color value(s)");
     params->color_const->guisection = _("Surfaces");
-    params->color_const->key = "color_value";
-    params->color_const->answer = NULL;
 
     /* mask */
     params->mask_map = G_define_standard_option(G_OPT_R_MAP);
@@ -284,7 +286,7 @@ void args_surface(struct GParams *params)
 
     /* position */
     params->surface_pos = G_define_option();
-    params->surface_pos->key = "position";
+    params->surface_pos->key = "surface_position";
     params->surface_pos->key_desc = "x,y,z";
     params->surface_pos->type = TYPE_INTEGER;
     params->surface_pos->required = NO;
@@ -445,7 +447,7 @@ void args_viewpoint(struct GParams *params)
     params->pos->description =
 	_("Viewpoint position (x,y model coordinates)");
     params->pos->guisection = _("Viewpoint");
-    params->pos->answer = "0.85,0.85";
+    params->pos->answer = "0.84,0.16";
 
     /* height */
     params->height = G_define_option();
@@ -557,6 +559,46 @@ void args_volume(struct GParams *params)
     params->isosurf_level->guisection = _("Volumes");
 
     return;
+}
+
+void args_lighting(struct GParams *params)
+{
+    params->light_pos = G_define_option();
+    params->light_pos->key = "light_position";
+    params->light_pos->key_desc = "x,y,z";
+    params->light_pos->type = TYPE_DOUBLE;
+    params->light_pos->required = NO;
+    params->light_pos->multiple = NO;
+    params->light_pos->description =
+	_("Light position (x,y,z model coordinates)");
+    params->light_pos->guisection = _("Lighting");
+    params->light_pos->answer = "0.68,0.68,0.80";
+
+    params->light_color = G_define_standard_option(G_OPT_C_FG);
+    params->light_color->key = "light_color";
+    params->light_color->label = _("Light color");
+    params->light_color->guisection = _("Lighting");
+    params->light_color->answer = "white";
+    
+    params->light_bright = G_define_option();
+    params->light_bright->key = "light_brightness";
+    params->light_bright->type = TYPE_INTEGER;
+    params->light_bright->required = NO;
+    params->light_bright->multiple = NO;
+    params->light_bright->description =	_("Light brightness");
+    params->light_bright->guisection = _("Lighting");
+    params->light_bright->answer = "80";
+    params->light_bright->options="0-100";
+
+    params->light_ambient = G_define_option();
+    params->light_ambient->key = "light_ambient";
+    params->light_ambient->type = TYPE_INTEGER;
+    params->light_ambient->required = NO;
+    params->light_ambient->multiple = NO;
+    params->light_ambient->description = _("Light ambient");
+    params->light_ambient->guisection = _("Lighting");
+    params->light_ambient->answer = "20";
+    params->light_ambient->options="0-100";
 }
 
 /*!

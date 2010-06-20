@@ -25,17 +25,17 @@
    \return 1
  */
 int Nviz_set_light_position(nv_data * data, int num,
-			    float x, float y, float z, float w)
+			    double x, double y, double z, double w)
 {
-    float xpos, ypos;
+    double xpos, ypos;
     xpos = x;
     xpos = (xpos < 0) ? 0 : (xpos > 1.0) ? 1.0 : xpos;
     ypos = 1.0 - y;
     ypos = (ypos < 0) ? 0 : (ypos > 1.0) ? 1.0 : ypos;
     
     if (x < 0.0 || x > 1.0 || y < 0.0 || y > 1.0) {
-	G_debug(3, "Invalid view position coordinates, using %f,%f",
-		  xpos, 1.0 - ypos);
+	G_debug(0, "Invalid light position coordinates (%f,%f), using %f,%f",
+		x, y, xpos, 1.0 - ypos);
     }
 
     num--;
@@ -45,7 +45,7 @@ int Nviz_set_light_position(nv_data * data, int num,
     data->light[num].z = z;
     data->light[num].w = w;
 
-    G_debug(3, "Nviz_set_light_position(): num = %d x = %f y = %f z = %f w = %f",
+    G_debug(0, "Nviz_set_light_position(): num = %d x = %f y = %f z = %f w = %f",
 	    num + 1, x, y, z, w);
     GS_setlight_position(num + 1, x, y, z, w);
 
@@ -59,9 +59,9 @@ int Nviz_set_light_position(nv_data * data, int num,
    \param num light num (starts at 1)
    \param value brightness value
  */
-int Nviz_set_light_bright(nv_data * data, int num, float value)
+int Nviz_set_light_bright(nv_data * data, int num, double value)
 {
-    float r, g, b;
+    double r, g, b;
 
     num--;
     data->light[num].brt = value;
@@ -70,8 +70,8 @@ int Nviz_set_light_bright(nv_data * data, int num, float value)
     g = data->light[num].g * data->light[num].brt;
     b = data->light[num].b * data->light[num].brt;
 
-    G_debug(3, "Nviz_set_light_bright(): num = %d r = %f g = %f b = %f",
-	    num + 1, r, g, b);
+    G_debug(0, "Nviz_set_light_bright(): num = %d value = %f r = %f g = %f b = %f",
+	    num + 1, value, r, g, b);
     GS_setlight_color(num + 1, r, g, b);
 
     return 1;
@@ -82,23 +82,23 @@ int Nviz_set_light_bright(nv_data * data, int num, float value)
 
    \param data nviz data
    \param num light num (starts at 1)
-   \param red,green,blue rGB values (0-1)
+   \param red,green,blue RGB values (0-255)
  */
 int Nviz_set_light_color(nv_data * data, int num,
-			 float red, float green, float blue)
+			 int red, int green, int blue)
 {
-    float r, g, b;
+    double r, g, b;
 
     num--;
-    data->light[num].r = red;
-    data->light[num].g = green;
-    data->light[num].b = blue;
+    data->light[num].r = red / 255.;
+    data->light[num].g = green / 255.;
+    data->light[num].b = blue / 255.;
 
     r = data->light[num].r * data->light[num].brt;
     g = data->light[num].g * data->light[num].brt;
     b = data->light[num].b * data->light[num].brt;
 
-    G_debug(3, "Nviz_set_light_color(): num = %d r = %f g = %f b = %f",
+    G_debug(0, "Nviz_set_light_color(): num = %d r = %f g = %f b = %f",
 	    num + 1, r, g, b);
     GS_setlight_color(num + 1, r, g, b);
 
@@ -113,14 +113,14 @@ int Nviz_set_light_color(nv_data * data, int num,
    \param red,green,blue rGB values (0-1)
  */
 int Nviz_set_light_ambient(nv_data * data, int num,
-			   float red, float green, float blue)
+			   double red, double green, double blue)
 {
     num--;
     data->light[num].ar = red;
     data->light[num].ag = green;
     data->light[num].ab = blue;
 
-    G_debug(3, "Nviz_set_light_ambient(): num = %d r = %f g = %f b = %f",
+    G_debug(0, "Nviz_set_light_ambient(): num = %d r = %f g = %f b = %f",
 	    num + 1, red, green, blue);
     GS_setlight_ambient(num + 1, red, green, blue);
 
@@ -179,3 +179,4 @@ int Nviz_new_light(nv_data * data)
 
     return 1;
 }
+

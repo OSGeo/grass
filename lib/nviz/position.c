@@ -16,15 +16,25 @@
 #include <grass/nviz.h>
 
 /*!
-   Initialize view and position settings (focus)
+   Initialize view, position, lighting settings (focus)
 
    Set position to center of view
  */
-void Nviz_init_view()
+void Nviz_init_view(nv_data *data)
 {
     GS_init_view();
     Nviz_set_focus_state(1);	/* center of view */
-
+    
+    /* set default lights (1 & 2) */
+    Nviz_set_light_position(data, 1, 0.68, 0.68, 0.80, 0.0);
+    Nviz_set_light_bright(data,   1, 0.8);
+    Nviz_set_light_color(data,    1, 1.0, 1.0, 1.0);
+    Nviz_set_light_ambient(data,  1, 0.2, 0.2, 0.2);
+    Nviz_set_light_position(data, 2, 0.0, 0.0, 1.0, 0.0);
+    Nviz_set_light_bright(data,   2, 0.5);
+    Nviz_set_light_color(data,    2, 1.0, 1.0, 1.0);
+    Nviz_set_light_ambient(data,  2, 0.3, 0.3, 0.3);
+    
     return;
 }
 

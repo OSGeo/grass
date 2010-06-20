@@ -90,7 +90,7 @@ int Nviz_update_ranges(nv_data * dc)
 
    \return 1
  */
-int Nviz_set_viewpoint_position(nv_data * data, float x_pos, float y_pos)
+int Nviz_set_viewpoint_position(double x_pos, double y_pos)
 {
     float xpos, ypos, from[3];
     float tempx, tempy;
@@ -132,7 +132,7 @@ int Nviz_set_viewpoint_position(nv_data * data, float x_pos, float y_pos)
 
    \return 1
  */
-int Nviz_set_viewpoint_height(nv_data * data, float height)
+int Nviz_set_viewpoint_height(double height)
 {
     float from[3];
 
@@ -162,7 +162,7 @@ int Nviz_set_viewpoint_height(nv_data * data, float height)
 
    \return 1
  */
-int Nviz_set_viewpoint_persp(nv_data * data, int persp)
+int Nviz_set_viewpoint_persp(int persp)
 {
     int fov;
 
@@ -182,7 +182,7 @@ int Nviz_set_viewpoint_persp(nv_data * data, int persp)
 
    \return 1
  */
-int Nviz_set_viewpoint_twist(nv_data * data, int twist)
+int Nviz_set_viewpoint_twist(int twist)
 {
     GS_set_twist(10 * twist);
 
@@ -199,9 +199,9 @@ int Nviz_set_viewpoint_twist(nv_data * data, int twist)
 
    \return 1
  */
-int Nviz_change_exag(nv_data * data, float exag)
+int Nviz_change_exag(nv_data * data, double exag)
 {
-    float temp;
+    double temp;
 
     temp = GS_global_exag();
 

@@ -111,11 +111,9 @@ int sort_surfs_max(int *surf, int *id_sort, int *indices, int num)
 /*!
    \brief Draw all loaded vector sets (lines)
 
-   \param dc nviz data
-
    \return 1
  */
-int Nviz_draw_all_vect(nv_data * dc)
+int Nviz_draw_all_vect()
 {
     // GS_set_cancel(0);
 
@@ -138,11 +136,9 @@ int Nviz_draw_all_vect(nv_data * dc)
 /*!
    \brief Draw all loaded vector point sets
 
-   \param dc nviz data
-
    \return 1
  */
-int Nviz_draw_all_site(nv_data * dc)
+int Nviz_draw_all_site()
 {
     int i;
     int *site_list, nsites;
@@ -168,12 +164,10 @@ int Nviz_draw_all_site(nv_data * dc)
 
 /*!
    \brief Draw all loaded volume sets
-   
-   \param dc nviz data
 
    \return 1
  */
-int Nviz_draw_all_vol(nv_data * dc)
+int Nviz_draw_all_vol()
 {
     int *vol_list, nvols, i;
 
@@ -205,8 +199,6 @@ int Nviz_draw_all_vol(nv_data * dc)
 int Nviz_draw_all(nv_data * data)
 {
     int draw_surf, draw_vect, draw_site, draw_vol;
-    int draw_north_arrow, arrow_x, draw_label, draw_legend;
-    int draw_fringe, draw_scalebar, draw_bar_x;
 
     draw_surf = 1;
     draw_vect = 1;

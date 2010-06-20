@@ -25,7 +25,7 @@
 
    \return 1
  */
-int Nviz_get_exag_height(float *val, float *min, float *max)
+int Nviz_get_exag_height(double *val, double *min, double *max)
 {
     float longdim, exag, texag, hmin, hmax, fmin, fmax;
     int nsurfs, i, *surf_list;
@@ -70,7 +70,7 @@ int Nviz_get_exag_height(float *val, float *min, float *max)
 
    \return value
  */
-float Nviz_get_exag()
+double Nviz_get_exag()
 {
     float exag, texag;
     int nsurfs, i, *surf_list;

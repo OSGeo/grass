@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/glocale.h>
 #include <grass/nviz.h>
 
@@ -32,7 +33,9 @@ int main(int argc, char *argv[])
     struct GParams *params;
 
     int ret;
-    float vp_height, z_exag;	/* calculated viewpoint height, z-exag */
+    int red, grn, blu;
+    double vp_height, z_exag;	/* calculated viewpoint height, z-exag */
+    double light_ambient;
     int width, height;		/* output image size */
     char *output_name;
 
@@ -85,19 +88,25 @@ int main(int argc, char *argv[])
     /* set background color */
     Nviz_set_bgcolor(&data, Nviz_color_from_str(params->bgcolor->answer));
 
-    /* init view */
-    Nviz_init_view();
-    /* set lights */
-    /* TODO: add options */
-    Nviz_set_light_position(&data, 0, 0.68, -0.68, 0.80, 0.0);
-    Nviz_set_light_bright(&data, 0, 0.8);
-    Nviz_set_light_color(&data, 0, 1.0, 1.0, 1.0);
-    Nviz_set_light_ambient(&data, 0, 0.2, 0.2, 0.2);
-    Nviz_set_light_position(&data, 1, 0.0, 0.0, 1.0, 0.0);
-    Nviz_set_light_bright(&data, 1, 0.5);
-    Nviz_set_light_color(&data, 1, 1.0, 1.0, 1.0);
-    Nviz_set_light_ambient(&data, 1, 0.3, 0.3, 0.3);
+    /* init view, lights */
+    Nviz_init_view(&data);
 
+    /* set lights */
+    Nviz_set_light_position(&data, 1,
+			    atof(params->light_pos->answers[0]),
+			    atof(params->light_pos->answers[1]),
+			    atof(params->light_pos->answers[2]),
+			    0.0);
+    Nviz_set_light_bright(&data, 1,
+			  atoi(params->light_bright->answer) / 100.0);
+    if(G_str_to_color(params->light_color->answer, &red, &grn, &blu) != 1) {
+	red = grn = blu = 255;
+    }
+    Nviz_set_light_color(&data, 1, red, grn, blu);
+    light_ambient = atof(params->light_ambient->answer) / 100.0;
+    Nviz_set_light_ambient(&data, 1,
+			   light_ambient, light_ambient, light_ambient);
+    
     /* load raster maps (surface topography) & set attributes (map/constant) */
     load_rasters(params, &data);
     /* set draw mode of loaded surfaces */
@@ -149,13 +158,12 @@ int main(int argc, char *argv[])
 	G_message(_("Viewpoint height not given, using calculated value %.0f"),
 		  vp_height);
     }
-    Nviz_set_viewpoint_height(&data, vp_height);
+    Nviz_set_viewpoint_height(vp_height);
 
-    Nviz_set_viewpoint_position(&data,
-				atof(params->pos->answers[0]),
+    Nviz_set_viewpoint_position(atof(params->pos->answers[0]),
 				atof(params->pos->answers[1]));
-    Nviz_set_viewpoint_twist(&data, atoi(params->twist->answer));
-    Nviz_set_viewpoint_persp(&data, atoi(params->persp->answer));
+    Nviz_set_viewpoint_twist(atoi(params->twist->answer));
+    Nviz_set_viewpoint_persp(atoi(params->persp->answer));
 
     GS_clear(data.bgcolor);
 
