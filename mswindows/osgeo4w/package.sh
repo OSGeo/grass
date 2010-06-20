@@ -73,7 +73,6 @@ make install
 echo $(date): STARTING cleanup
 mv "$OSGEO4W_ROOT_MSYS"/apps/grass/grass-$VERSION/lib/*.$VERSION.dll \
    "$OSGEO4W_ROOT_MSYS/bin"
-rm "$OSGEO4W_ROOT_MSYS"/apps/grass/grass-$VERSION/lib/*.dll
 
 mv "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h" \
    "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h.mingw"
@@ -81,17 +80,12 @@ cp mswindows/osgeo4w/config.h.switch \
    "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h"
 cp mswindows/osgeo4w/config.h.vc \
    "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass"
-cp mswindows/osgeo4w/grass70.bat.tmpl \
-   "$OSGEO4W_ROOT_MSYS/bin/grass70.bat.tmpl"
 cp mswindows/osgeo4w/ini.bat.tmpl \
    "$OSGEO4W_ROOT_MSYS/etc/ini/grass.bat.tmpl"
 cp mswindows/osgeo4w/postinstall.bat \
    "$OSGEO4W_ROOT_MSYS/etc/postinstall/grass.bat"
 cp mswindows/osgeo4w/preremove.bat \
    "$OSGEO4W_ROOT_MSYS/etc/preremove/grass.bat"
-#cp /c/mingw/bin/libgnurx-0.dll "$OSGEO_ROOT_MSYS/bin"
-#cp /c/mingw/bin/libiconv-2.dll "$OSGEO_ROOT_MSYS/bin"
-#cp /c/mingw/bin/libintl-8.dll "$OSGEO_ROOT_MSYS/bin"
 
 P="$(pwd -W)"
 #portable? how about dist.amd64-pc-mingw32?
@@ -114,9 +108,9 @@ rm "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap"
 #
 #echo $(date): CREATING packages in $(PDIR)
 #mkdir -p package/grass-devel \
- #        package/grass-devel-mingw \
- #        package/grass-devel-vc \
- #        package/grass
+#        package/grass-devel-mingw \
+#        package/grass-devel-vc \
+#        package/grass
 #
 #PDIR="$PWD/package"
 #cd "$OSGEO4W_ROOT_MSYS"
