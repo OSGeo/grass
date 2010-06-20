@@ -621,8 +621,13 @@ Section "GRASS" SecGRASS
 	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
 	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI"
 
-	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	; not working after changing to start Grass7 by grass70.py
+	;CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
+	;"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	
+	; new attempt to get Grass70-wx-gui and a working msys-shell in a windows command line
+	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\set_shell_start_${GRASS_COMMAND}.bat" ""\
+	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS-Windows-commandline"
  
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
@@ -641,8 +646,11 @@ Section "GRASS" SecGRASS
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Web Site.lnk" "$INSTALL_DIR\GRASS-WebSite.url" ""\
 	"$INSTALL_DIR\icons\GRASS_Web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS website"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	;CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
+	;"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\set_shell_start_${GRASS_COMMAND}.bat" ""\
+	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS-Windows-commandline"
 	
 ; FIXME: ship the WinGrass release notes .html file instead of URL
 ; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass70/binary/mswindows/native/README.html?format=raw
@@ -703,6 +711,29 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '%GRASS_PYTHON% "%GISBASE%\grass70.py" %*'
 	FileClose $0
 	done_create_grass_command.bat:
+	
+	;Create the set_shell_start_grass.bat to start Grass7-wxgui and a msys-windows-commandline
+	ClearErrors
+	FileOpen $0 $INSTALL_DIR\set_shell_start_${GRASS_COMMAND}.bat w
+	IfErrors done_create_set_shell_start_grass.bat
+	FileWrite $0 '@echo off$\r$\n'
+	FileWrite $0 'rem #########################################################################$\r$\n'
+	FileWrite $0 'rem #$\r$\n'
+	FileWrite $0 'rem # File dynamically created by NSIS installer script$\r$\n'
+	FileWrite $0 'rem #$\r$\n'
+	FileWrite $0 'rem #########################################################################$\r$\n'
+	FileWrite $0 'rem #$\r$\n'
+	FileWrite $0 'rem # Set SHELL and start GRASS$\r$\n'
+	FileWrite $0 'rem #$\r$\n'
+	FileWrite $0 'rem #########################################################################$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 'rem *******Set SHELL***********$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 'set SHELL="$INSTALL_DIR\msys\bin\sh.exe"$\r$\n'
+	FileWrite $0 '$\r$\n'
+	FileWrite $0 '"$INSTALL_DIR\${GRASS_COMMAND}.bat"$\r$\n'
+	FileClose $0
+	done_create_set_shell_start_grass.bat:
 	
 	;Set the UNIX_LIKE GRASS Path
 	Var /GLOBAL UNIX_LIKE_DRIVE
