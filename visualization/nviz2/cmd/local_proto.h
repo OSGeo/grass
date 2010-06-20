@@ -11,22 +11,24 @@ struct GParams
     struct Option 
     /* surface */
     *elev_map, *elev_const, *color_map, *color_const,
-      *mask_map, *transp_map, *transp_const, *shine_map, *shine_const,
-      *emit_map, *emit_const,
+	*mask_map, *transp_map, *transp_const, *shine_map, *shine_const,
+	*emit_map, *emit_const,
     /* surface draw mode */
-      *mode, *res_fine, *res_coarse, *style, *shade, *wire_color, *surface_pos,
+	*mode, *res_fine, *res_coarse, *style, *shade, *wire_color, *surface_pos,
     /* vector lines */
-      *vlines, *vline_width, *vline_color, *vline_mode, *vline_height, *vline_pos,
+	*vlines, *vline_width, *vline_color, *vline_mode, *vline_height, *vline_pos,
     /* vector points */
-      *vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width, *vpoint_pos,
+	*vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width, *vpoint_pos,
     /* volumes */
-      *volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
+	*volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
     /* misc */
-      *exag, *bgcolor,
+	*exag, *bgcolor,
     /* viewpoint */
-      *pos, *height, *persp, *twist,
+	*pos, *height, *persp, *twist,
     /* output */
-      *output, *format, *size;
+	*output, *format, *size,
+    /* lighting */
+	*light_pos, *light_color, *light_bright, *light_ambient;
 };
 
 /* args.c */

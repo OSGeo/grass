@@ -41,7 +41,7 @@
    \return map object id
    \return -1 on error
  */
-int Nviz_new_map_obj(int type, const char *name, float value, nv_data * data)
+int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
 {
     int new_id, i;
     int num_surfs, *surf_list;
@@ -203,16 +203,16 @@ int Nviz_new_map_obj(int type, const char *name, float value, nv_data * data)
    \param desc attribute descriptor
    \param src attribute source
    \param str_value attribute value as string (if NULL, check for <i>num_value</i>)
-   \param num_value attribute value as float 
+   \param num_value attribute value as double 
 
    \return 1 on success
    \return 0 on failure
  */
 int Nviz_set_attr(int id, int type, int desc, int src,
-		  const char *str_value, float num_value, nv_data * data)
+		  const char *str_value, double num_value, nv_data * data)
 {
     int ret;
-    float value;
+    double value;
 
     switch (type) {
     case (MAP_OBJ_SURF):{
@@ -225,7 +225,7 @@ int Nviz_set_attr(int id, int type, int desc, int src,
 		 * Note that we require the constant to be an integer
 		 */
 		if (str_value)
-		    value = (float)atof(str_value);
+		    value = (double)atof(str_value);
 		else
 		    value = num_value;
 
@@ -328,7 +328,6 @@ void Nviz_set_surface_attr_default()
  */
 int Nviz_set_vpoint_attr_default(int id)
 {
-    int i;
     geosite *gp;
 
     gp = gp_get_site(id);

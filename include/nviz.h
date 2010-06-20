@@ -141,11 +141,11 @@ struct render_window
 /* change_view.c */
 int Nviz_resize_window(int, int);
 int Nviz_update_ranges(nv_data *);
-int Nviz_set_viewpoint_position(nv_data *, float, float);
-int Nviz_set_viewpoint_height(nv_data *, float);
-int Nviz_set_viewpoint_persp(nv_data *, int);
-int Nviz_set_viewpoint_twist(nv_data *, int);
-int Nviz_change_exag(nv_data *, float);
+int Nviz_set_viewpoint_position(double, double);
+int Nviz_set_viewpoint_height(double);
+int Nviz_set_viewpoint_persp(int);
+int Nviz_set_viewpoint_twist(int);
+int Nviz_change_exag(nv_data *, double);
 
 /* cplanes_obj.c */
 int Nviz_new_cplane(nv_data *, int);
@@ -154,27 +154,27 @@ int Nviz_draw_cplane(nv_data *, int, int);
 
 /* draw.c */
 int Nviz_draw_all_surf(nv_data *);
-int Nviz_draw_all_vect(nv_data *);
-int Nviz_draw_all_site(nv_data *);
-int Nviz_draw_all_vol(nv_data *);
+int Nviz_draw_all_vect();
+int Nviz_draw_all_site();
+int Nviz_draw_all_vol();
 int Nviz_draw_all(nv_data *);
 int Nviz_draw_quick(nv_data *, int);
 
 /* exag.c */
-int Nviz_get_exag_height(float *, float *, float *);
-float Nviz_get_exag();
+int Nviz_get_exag_height(double *, double *, double *);
+double Nviz_get_exag();
 
 /* lights.c */
-int Nviz_set_light_position(nv_data *, int, float, float, float, float);
-int Nviz_set_light_bright(nv_data *, int, float);
-int Nviz_set_light_color(nv_data *, int, float, float, float);
-int Nviz_set_light_ambient(nv_data *, int, float, float, float);
+int Nviz_set_light_position(nv_data *, int, double, double, double, double);
+int Nviz_set_light_bright(nv_data *, int, double);
+int Nviz_set_light_color(nv_data *, int, int, int, int);
+int Nviz_set_light_ambient(nv_data *, int, double, double, double);
 int Nviz_init_light(nv_data *, int);
 int Nviz_new_light(nv_data *);
 
 /* map_obj.c */
-int Nviz_new_map_obj(int, const char *, float, nv_data *);
-int Nviz_set_attr(int, int, int, int, const char *, float, nv_data *);
+int Nviz_new_map_obj(int, const char *, double, nv_data *);
+int Nviz_set_attr(int, int, int, int, const char *, double, nv_data *);
 void Nviz_set_surface_attr_default();
 int Nviz_set_vpoint_attr_default();
 int Nviz_set_volume_attr_default();
@@ -186,7 +186,7 @@ void Nviz_set_bgcolor(nv_data *, int);
 int Nviz_color_from_str(const char *);
 
 /* position.c */
-void Nviz_init_view();
+void Nviz_init_view(nv_data *);
 int Nviz_set_focus_state(int);
 int Nviz_set_focus_map(int, int);
 
