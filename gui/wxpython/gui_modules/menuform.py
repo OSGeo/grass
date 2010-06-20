@@ -1222,8 +1222,8 @@ class cmdPanel(wx.Panel):
                                      flag=wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border=5 )
                 elif p.get('gisprompt', False) == False:
                     if len(valuelist) == 1: # -> textctrl
-                        title_txt.SetLabel("%s. %s %s" % (title, _('Valid range'),
-                                                          str(valuelist[0]) + ':'))
+                        title_txt.SetLabel("%s (%s %s):" % (title, _('valid range'),
+                                                          str(valuelist[0])))
                         
                         if p.get('type', '') == 'integer' and \
                                 p.get('multiple','no') == 'no':
@@ -1249,6 +1249,11 @@ class cmdPanel(wx.Panel):
                                 txt2.SetValue(int(p['value']))
                             else:
                                 txt2.SetValue(p['value'])
+                        elif p.get('default', '') != '':
+                            if txt2.GetName() == "SpinCtrl":
+                                txt2.SetValue(int(p['default']))
+                            else:
+                                txt2.SetValue(p['default'])
                         
                         which_sizer.Add(item=txt2, proportion=0,
                                         flag=style, border=5)
@@ -1297,6 +1302,8 @@ class cmdPanel(wx.Panel):
                         
                         if p.get('value', '') != '':
                             txt3.SetValue(int(p['value'])) # parameter previously set
+                        elif p.get('default', '') != '':
+                            txt3.SetValue(int(p['default']))
                         
                         txt3.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
                     else:
