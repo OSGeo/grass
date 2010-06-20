@@ -714,6 +714,26 @@ class ProfileFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
 
+    def OnPText(self, dlg):
+        """
+        Use user's provided profile text settings.
+        """
+        self.ptitle = dlg.ptitle
+        self.xlabel = dlg.xlabel
+        self.ylabel = dlg.ylabel
+        dlg.UpdateSettings()
+
+        self.client.SetFont(self.properties['font']['wxfont'])
+        self.client.SetFontSizeTitle(self.properties['font']['prop']['titleSize'])
+        self.client.SetFontSizeAxis(self.properties['font']['prop']['axisSize'])
+
+        if self.profile:
+            self.profile.setTitle(dlg.ptitle)
+            self.profile.setXLabel(dlg.xlabel)
+            self.profile.setYLabel(dlg.ylabel)
+        
+        self.OnRedraw(event=None)
+    
     def PText(self, event):
         """
         Set custom text values for profile
@@ -722,23 +742,9 @@ class ProfileFrame(wx.Frame):
         dlg = TextDialog(parent=self, id=wx.ID_ANY, title=_('Profile text settings'))
 
         if dlg.ShowModal() == wx.ID_OK:
-            self.ptitle = dlg.ptitle
-            self.xlabel = dlg.xlabel
-            self.ylabel = dlg.ylabel
-            dlg.UpdateSettings()
-
-            self.client.SetFont(self.properties['font']['wxfont'])
-            self.client.SetFontSizeTitle(self.properties['font']['prop']['titleSize'])
-            self.client.SetFontSizeAxis(self.properties['font']['prop']['axisSize'])
-
-            if self.profile:
-                self.profile.setTitle(dlg.ptitle)
-                self.profile.setXLabel(dlg.xlabel)
-                self.profile.setYLabel(dlg.ylabel)
+            self.OnPText(dlg)
 
         dlg.Destroy()
-
-        self.OnRedraw(event=None)
 
     def POptions(self, event):
         """
@@ -750,8 +756,8 @@ class ProfileFrame(wx.Frame):
         btnval = dlg.ShowModal()
 
         if btnval == wx.ID_SAVE:
-            dlg.UpdateSettings()			
-            self.SetGraphStyle()			
+            dlg.UpdateSettings()            
+            self.SetGraphStyle()            
             dlg.Destroy()            
         elif btnval == wx.ID_CANCEL:
             dlg.Destroy()
@@ -948,7 +954,7 @@ class TextDialog(wx.Dialog):
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Profile title:"))
         gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
-        self.ptitleentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(200,-1))
+        self.ptitleentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(250,-1))
         # self.ptitleentry.SetFont(self.font)
         self.ptitleentry.SetValue(self.ptitle)
         gridSizer.Add(item=self.ptitleentry, pos=(0, 1))
@@ -969,7 +975,7 @@ class TextDialog(wx.Dialog):
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=("X-axis label:"))
         gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
-        self.xlabelentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(200,-1))
+        self.xlabelentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(250,-1))
         # self.xlabelentry.SetFont(self.font)
         self.xlabelentry.SetValue(self.xlabel)
         gridSizer.Add(item=self.xlabelentry, pos=(2, 1))
@@ -979,7 +985,7 @@ class TextDialog(wx.Dialog):
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Y-axis label:"))
         gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
-        self.ylabelentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(200,-1))
+        self.ylabelentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(250,-1))
         # self.ylabelentry.SetFont(self.font)
         self.ylabelentry.SetValue(self.ylabel)
         gridSizer.Add(item=self.ylabelentry, pos=(3, 1))
@@ -1012,7 +1018,7 @@ class TextDialog(wx.Dialog):
         #
         label1 = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Font family:"))
         gridSizer.Add(item=label1, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
-        self.ffamilycb = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(200, -1),
+        self.ffamilycb = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(250, -1),
                                 choices=self.ffamilydict.keys(), style=wx.CB_DROPDOWN)
         self.ffamilycb.SetStringSelection('swiss')
         for item in self.ffamilydict.items():
@@ -1026,7 +1032,7 @@ class TextDialog(wx.Dialog):
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Style:"))
         gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
-        self.fstylecb = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(200, -1),
+        self.fstylecb = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(250, -1),
                                     choices=self.fstyledict.keys(), style=wx.CB_DROPDOWN)
         self.fstylecb.SetStringSelection('normal')
         for item in self.fstyledict.items():
@@ -1040,7 +1046,7 @@ class TextDialog(wx.Dialog):
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Weight:"))
         gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
-        self.fwtcb = wx.ComboBox(parent=self, size=(200, -1),
+        self.fwtcb = wx.ComboBox(parent=self, size=(250, -1),
                                  choices=self.fwtdict.keys(), style=wx.CB_DROPDOWN)
         self.fwtcb.SetStringSelection('normal')
         for item in self.fwtdict.items():
@@ -1062,26 +1068,32 @@ class TextDialog(wx.Dialog):
         #
         btnSave = wx.Button(self, wx.ID_SAVE)
         btnApply = wx.Button(self, wx.ID_APPLY)
+        btnOk = wx.Button(self, wx.ID_OK)
         btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnSave.SetDefault()
+        btnOk.SetDefault()
 
         # bindings
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
         btnApply.SetToolTipString(_("Apply changes for the current session"))
+        btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
+        btnOk.SetToolTipString(_("Apply changes for the current session and close dialog"))
+        btnOk.SetDefault()
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
-        btnSave.SetDefault()
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
 
         # sizers
         btnStdSizer = wx.StdDialogButtonSizer()
-        btnStdSizer.AddButton(btnCancel)
-        btnStdSizer.AddButton(btnSave)
+        btnStdSizer.AddButton(btnOk)
         btnStdSizer.AddButton(btnApply)
+        btnStdSizer.AddButton(btnCancel)
         btnStdSizer.Realize()
         
-        sizer.Add(item=btnStdSizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item=btnSave, proportion=0, flag=wx.ALIGN_LEFT | wx.ALL, border=5)
+        btnSizer.Add(item=btnStdSizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+        sizer.Add(item=btnSizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         #
         # bindings
@@ -1121,16 +1133,21 @@ class TextDialog(wx.Dialog):
         fileSettings['profile'] = UserSettings.Get(group='profile')
         file = UserSettings.SaveToFile(fileSettings)
         self.parent.parent.GetLayerManager().goutput.WriteLog(_('Profile settings saved to file \'%s\'.') % file)
-        self.Close()
+        self.EndModal(wx.ID_OK)
 
     def OnApply(self, event):
         """!Button 'Apply' pressed"""
         self.UpdateSettings()
-        self.Close()
+        self.parent.OnPText(self)
+        
+    def OnOk(self, event):
+        """!Button 'OK' pressed"""
+        self.UpdateSettings()
+        self.EndModal(wx.ID_OK)
 
     def OnCancel(self, event):
         """!Button 'Cancel' pressed"""
-        self.Close()
+        self.EndModal(wx.ID_CANCEL)
         
 class OptDialog(wx.Dialog):
     def __init__(self, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize,
