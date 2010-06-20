@@ -316,7 +316,7 @@ double this_time(void)
     struct timeval tv;
 
     gettimeofday(&tv, NULL);
-    return ((float)tv.tv_sec + ((float)tv.tv_usec / 1000000.0));
+    return ((double)tv.tv_sec + ((double)tv.tv_usec / 1000000.0));
 #endif
 }
 
