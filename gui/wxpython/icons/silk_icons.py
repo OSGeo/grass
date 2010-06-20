@@ -93,7 +93,6 @@ IconsSilk = {
     "transect"   : 'image_edit.png',
     "profiledraw"  : 'arrow_refresh.png',
     "profileopt"   : 'color_swatch.png',
-    "datasave"     : 'page_save.png',
     # georectify
     "grGcpSet"     : 'bullet_add.png',
     'grGcpClear'   : 'cross.png',
