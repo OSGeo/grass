@@ -234,7 +234,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         
         # list of mapsets in current location
         if mapsets is None:
-            mapsets = utils.ListOfMapsets()
+            mapsets = utils.ListOfMapsets(get = 'accessible')
         
         # map element types to g.mlist types
         elementdict = {'cell':'rast',
