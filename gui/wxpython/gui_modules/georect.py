@@ -1025,7 +1025,12 @@ class GCP(wx.Frame):
 
     def ReloadGCPs(self, event):
         """!Reload data from file"""
-        self.list.LoadData()
+
+ 	# delete all items in mapcoordlist
+ 	del self.mapcoordlist
+ 	self.mapcoordlist = []
+ 
+	self.list.LoadData()
     
     def OnFocus(self, event):
         # self.grwiz.SwitchEnv('new')
@@ -1767,7 +1772,7 @@ class GrSettingsDialog(wx.Dialog):
 
     def UpdateSettings(self):
         UserSettings.Set(group='georect', key='symbol', subkey='color',
-                         value=wx.FindWindowById(self.symbol['color']).GetColour())
+                         value=tuple(wx.FindWindowById(self.symbol['color']).GetColour()))
         UserSettings.Set(group='georect', key='symbol', subkey='width',
                          value=wx.FindWindowById(self.symbol['width']).GetValue())
 
