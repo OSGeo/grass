@@ -216,76 +216,45 @@ def ListOfCatsToRange(cats):
         
     return catstr.strip(',')
 
-def ListOfMapsets(all=False, accessible=False, ordered=False):
+def ListOfMapsets(get = 'ordered'):
     """!Get list of available/accessible mapsets
 
-    @param all if True get list of all mapsets
-
+    @param get method ('all', 'accessible', 'ordered')
+    
     @return list of mapsets
+    @return None on error
     """
     mapsets = []
     
-    if all:
+    if get == 'all' or get == 'ordered':
         ret = gcmd.RunCommand('g.mapsets',
                               read = True,
+                              quiet = True,
                               flags = 'l',
-                              fs = ';')
-    
+                              fs = 'newline')
+        
         if ret:
-            mapsets = ret.rstrip('\n').split(';')
+            mapsets = ret.splitlines()
+            ListSortLower(mapsets)
         else:
-            raise gcmd.CmdError(cmd = 'g.mapsets',
-                                message = _('Unable to get list of available mapsets.'))
-
-    elif accessible:
+            return None
+        
+    if get == 'accessible' or get == 'ordered':
         ret = gcmd.RunCommand('g.mapsets',
                               read = True,
+                              quiet = True,
                               flags = 'p',
-                              fs = ';')
+                              fs = 'newline')
         if ret:
-            mapsets = ret.rstrip('\n').split(';')
+            if get == 'accessible':
+                mapsets = ret.splitlines()
+            else:
+                mapsets_accessible = ret.splitlines()
+                for mapset in mapsets_accessible:
+                    mapsets.remove(mapset)
+                mapsets = mapsets_accessible + mapsets
         else:
-            raise gcmd.CmdError(cmd = 'g.mapsets',
-                                message = _('Unable to get list of accessible mapsets.'))
-
-    elif ordered:
-        ret = gcmd.RunCommand('g.mapsets',
-                              read = True,
-                              flags = 'l',
-                              fs = ';')
-        if ret:
-            mapsets_available = ret.rstrip('\n').split(';')
-        else:
-            raise gcmd.CmdError(cmd = 'g.mapsets',
-                                message = _('Unable to get list of available mapsets.'))
- 
-        ret = gcmd.RunCommand('g.mapsets',
-                              read = True,
-                              flags = 'p',
-                              fs = ';')
-        if ret:
-            mapsets_accessible = ret.rstrip('\n').split(';')
-        else:
-            raise gcmd.CmdError(cmd = 'g.mapsets',
-                                message = _('Unable to get list of accessible mapsets.'))
-
-        for mapset in mapsets_accessible:
-            mapsets_available.remove(mapset)
-        mapsets = mapsets_accessible + mapsets_available
-
-    else:
-        ret = gcmd.RunCommand('g.mapsets',
-                              read = True,
-                              flags = 'p',
-                              fs = ';')
-        if ret:
-            mapsets = ret.rstrip('\n').split(';')
-        else:
-            raise gcmd.CmdError(cmd = 'g.mapsets',
-                                message = _('Unable to get list of accessible mapsets.'))
-        # This one sorts mapset names, thus prevents the user from modifying their
-        # order in the SEARH_PATH from GUI, unlike the `ordered' above.
-        ListSortLower(mapsets)
+            return None
     
     return mapsets
 
