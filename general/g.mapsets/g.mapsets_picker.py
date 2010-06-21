@@ -104,19 +104,21 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         self.curr_mapset = gisenv['MAPSET']
         
         ret = grass.read_command('g.mapsets',
+                                 quiet = True,
                                  flags = 'l',
-                                 fs = '|')
+                                 fs = 'newline')
         self.mapsets = []
         if ret:
-            self.mapsets = ret.rstrip('\n').split('|')
+            self.mapsets = ret.splitlines()
             
 
         ret = grass.read_command('g.mapsets',
+                                 quiet = True,
                                  flags = 'p',
-                                 fs = '|')
+                                 fs = 'newline')
         mapsets_access = []
         if ret:
-            mapsets_access = ret.rstrip('\n').split('|')
+            mapsets_access = ret.splitlines()
             
         for mapset in self.mapsets:
             index = self.InsertStringItem(sys.maxint, mapset)
