@@ -29,6 +29,7 @@ import atexit
 import string
 import subprocess
 import re
+import platform
 
 # Variables substituted during build process
 # Set the GISBASE variable
@@ -886,7 +887,7 @@ os.environ['GIS_LOCK'] = gis_lock
 # Set the global grassrc file
 batch_job = os.getenv('GRASS_BATCH_JOB')
 if batch_job:
-    gisrcrc = os.path.join(grass_config_dir, "rc.%s" % os.uname()[1])
+    gisrcrc = os.path.join(grass_config_dir, "rc.%s" % platform.node())
     if not os.access(gisrcrc, os.R_OK):
 	gisrcrc = os.path.join(grass_config_dir, "rc")
 else:
