@@ -16,7 +16,6 @@ Classes:
  - CommandThread
 
 Functions:
- 
  - RunCommand
 
 (C) 2007-2008, 2010 by the GRASS Development Team

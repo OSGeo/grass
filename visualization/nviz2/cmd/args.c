@@ -572,7 +572,7 @@ void args_lighting(struct GParams *params)
     params->light_pos->description =
 	_("Light position (x,y,z model coordinates)");
     params->light_pos->guisection = _("Lighting");
-    params->light_pos->answer = "0.68,0.68,0.80";
+    params->light_pos->answer = "0.68,-0.68,0.80";
 
     params->light_color = G_define_standard_option(G_OPT_C_FG);
     params->light_color->key = "light_color";

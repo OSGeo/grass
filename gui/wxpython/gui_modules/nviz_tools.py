@@ -2271,6 +2271,7 @@ class NvizToolWindow(FN.FlatNotebook):
             zmin = self.mapWindow.view['z-exag']['min']
             zmax = self.mapWindow.view['z-exag']['max']
             zval = self.mapWindow.view['z-exag']['value']
+            print hmin, hmax, hval
             for control in ('spin', 'slider'):
                 self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin,
                                                                                   hmax)
