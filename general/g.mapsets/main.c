@@ -114,7 +114,6 @@ int main(int argc, char *argv[])
     }
 
     if (opt.dialog->answer) {
-	putenv("GRASS_VERBOSE=0");
 	sprintf(path, "%s/etc/gui/scripts/g.mapsets_picker.py", G_gisbase());
 	G_spawn(getenv("GRASS_PYTHON"), "g.mapsets_picker.py", path, NULL);
     }
