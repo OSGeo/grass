@@ -441,7 +441,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "character";
 	Opt->required = NO;
 	Opt->answer = "|";
-	Opt->description = _("Field separator");
+	Opt->label = _("Field separator");
+	Opt->description = _("Special characters: newline, space, comma, tab");
 	break;
 
 	/* colors */
