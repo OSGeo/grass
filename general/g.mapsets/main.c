@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	_("Name(s) of existing mapset(s) to remove from search list");
     
     opt.fs = G_define_standard_option(G_OPT_F_SEP);
-    opt.fs->answer = " ";
+    opt.fs->answer = "space";
     
     opt.list = G_define_flag();
     opt.list->key = 'l';
@@ -110,10 +110,11 @@ int main(int argc, char *argv[])
 
     if (opt.list->answer) {
 	get_available_mapsets();
-	display_available_mapsets(opt.fs->answer);
+	list_available_mapsets(opt.fs->answer);
     }
 
     if (opt.dialog->answer) {
+	putenv("GRASS_VERBOSE=0");
 	sprintf(path, "%s/etc/gui/scripts/g.mapsets_picker.py", G_gisbase());
 	G_spawn(getenv("GRASS_PYTHON"), "g.mapsets_picker.py", path, NULL);
     }
@@ -195,7 +196,7 @@ int main(int argc, char *argv[])
 
     if (nchoices == 0) {
 	if (opt.print->answer)
-	    display_mapset_path(opt.fs->answer);
+	    list_accessible_mapsets(opt.fs->answer);
 
 	if (Path)
 	    G_free(Path);
