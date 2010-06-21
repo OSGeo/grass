@@ -184,10 +184,10 @@ class Nviz(object):
         @param w local coordinate (default to 0)
         """
         Nviz_set_light_position(self.data, lid, x, y, z, w)
-        Nviz_set_light_color(self.data, lid, color[0] / 255., color[1] / 255., color[2] / 255.)
         Nviz_set_light_bright(self.data, lid, bright)
-        Nviz_set_light_ambient(self.data, lid, ambient, ambient, ambient)
-        
+        Nviz_set_light_color(self.data, lid, int(color[0]), int(color[1]), int(color[2]))
+        Nviz_set_light_ambient(self.data, lid, ambient)
+                             
     def LoadSurface(self, name, color_name, color_value):
         """!Load raster map (surface)
         

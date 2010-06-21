@@ -51,13 +51,13 @@ class MapWindow(object):
     Parent for BufferedWindow class (2D display mode) and
     GLWindow (3D display mode)
     """
-    def __init__(self, parent, id=wx.ID_ANY,
-                 pos=wx.DefaultPosition,
-                 size=wx.DefaultSize,
-                 style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map=None, tree=None, lmgr=None):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 Map = None, tree = None, lmgr = None):
         self.parent = parent # MapFrame
- 
+        self.Map    = Map
+        self.tree   = tree
+        self.lmgr   = lmgr
+        
         #
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing
@@ -156,30 +156,17 @@ class BufferedWindow(MapWindow, wx.Window):
     can also save the drawing to file by calling the
     SaveToFile(self,file_name,file_type) method.
     """
-
-    def __init__(self, parent, id,
-                 pos = wx.DefaultPosition,
-                 size = wx.DefaultSize,
-                 style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map=None, tree=None, lmgr=None):
-
-        MapWindow.__init__(self, parent, id, pos, size, style,
-                           Map, tree, lmgr)
-        wx.Window.__init__(self, parent, id, pos, size, style)
-
-        self.Map = Map
-        self.tree = tree
-        self.lmgr = lmgr    # Layer Manager
+    def __init__(self, parent, id = wx.ID_ANY,
+                 style = wx.NO_FULL_REPAINT_ON_RESIZE,
+                 Map = None, tree = None, lmgr = None, **kwargs):
+        MapWindow.__init__(self, parent, id, Map, tree, lmgr)
+        wx.Window.__init__(self, parent, id, style = style, **kwargs)
         
-        #
-        # Flags
-        #
+        # flags
         self.resize = False # indicates whether or not a resize event has taken place
         self.dragimg = None # initialize variable for map panning
 
-        #
-        # Variable for drawing on DC
-        #
+        # variables for drawing on DC
         self.pen = None      # pen for drawing zoom boxes, etc.
         self.polypen = None  # pen for drawing polylines (measurements, profiles, etc)
         # List of wx.Point tuples defining a polyline (geographical coordinates)
@@ -189,9 +176,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # ID of poly line resulting from cumulative rubber band lines (e.g. measurement)
         self.plineid = None
         
-        #
-        # Event bindings
-        #
+        # event bindings
         self.Bind(wx.EVT_PAINT,        self.OnPaint)
         self.Bind(wx.EVT_SIZE,         self.OnSize)
         self.Bind(wx.EVT_IDLE,         self.OnIdle)
@@ -199,11 +184,9 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
         self.processMouse = True
         
-        #
-        # Render output objects
-        #
+        # render output objects
         self.mapfile = None   # image file to be rendered
-        self.img = ""         # wx.Image object (self.mapfile)
+        self.img     = None   # wx.Image object (self.mapfile)
         # used in digitization tool (do not redraw vector map)
         self.imgVectorMap = None
         # decoration overlays
@@ -214,14 +197,11 @@ class BufferedWindow(MapWindow, wx.Window):
         self.textdict = {}    # text, font, and color indexed by id
         self.currtxtid = None # PseudoDC id for currently selected text
 
-        #
-        # Zoom objects
-        #
-        self.zoomhistory = [] # list of past zoom extents
-        self.currzoom = 0 # current set of extents in zoom history being used
-
-        self.zoomtype = 1   # 1 zoom in, 0 no zoom, -1 zoom out
-        self.hitradius = 10 # distance for selecting map decorations
+        # zoom objects
+        self.zoomhistory  = [] # list of past zoom extents
+        self.currzoom     = 0 # current set of extents in zoom history being used
+        self.zoomtype     = 1   # 1 zoom in, 0 no zoom, -1 zoom out
+        self.hitradius    = 10 # distance for selecting map decorations
         self.dialogOffset = 5 # offset for dialog (e.g. DisplayAttributesDialog)
 
         # OnSize called to make sure the buffer is initialized.

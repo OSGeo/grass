@@ -168,7 +168,7 @@ double Nviz_get_exag();
 int Nviz_set_light_position(nv_data *, int, double, double, double, double);
 int Nviz_set_light_bright(nv_data *, int, double);
 int Nviz_set_light_color(nv_data *, int, int, int, int);
-int Nviz_set_light_ambient(nv_data *, int, double, double, double);
+int Nviz_set_light_ambient(nv_data *, int, double);
 int Nviz_init_light(nv_data *, int);
 int Nviz_new_light(nv_data *);
 
