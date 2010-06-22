@@ -60,6 +60,9 @@ int Nviz_get_exag_height(double *val, double *min, double *max)
     if (max)
 	*max = fmax;
 
+    G_debug(1, "Nviz_get_exag_height(): value = %f min = %f max = %f",
+	    *val, min ? *min : 0.0 , max ? *max : 0.0);
+    
     return 1;
 }
 
@@ -91,5 +94,6 @@ double Nviz_get_exag()
     if (nsurfs > 0)
 	G_free(surf_list);
 
+    G_debug(1, "Nviz_get_exag(): value = %f", exag);
     return exag;
 }

@@ -36,6 +36,7 @@ int Nviz_resize_window(int width, int height)
 	ret = 0;
     }
 
+    G_debug(1, "Nviz_resize_window(): width = %d height = %d", width, height);
     GS_set_viewport(0, width, 0, height);
 
     /*   GS_clear(0x0000FF); causes red flash - debug only */
@@ -105,7 +106,7 @@ int Nviz_set_viewpoint_position(double x_pos, double y_pos)
 		  xpos, 1.0 - ypos);
     }
 
-    G_debug(3, "Nviz_set_viewpoint_position(): x = %f y = %f", x_pos, y_pos);
+    G_debug(1, "Nviz_set_viewpoint_position(): x = %f y = %f", x_pos, y_pos);
     GS_get_from(from);
 
     tempx = xpos * RANGE - RANGE_OFFSET;
@@ -135,6 +136,8 @@ int Nviz_set_viewpoint_position(double x_pos, double y_pos)
 int Nviz_set_viewpoint_height(double height)
 {
     float from[3];
+
+    G_debug(1, "Nviz_set_viewpoint_height(): value = %f", height);
 
     GS_get_from_real(from);
 
@@ -166,6 +169,8 @@ int Nviz_set_viewpoint_persp(int persp)
 {
     int fov;
 
+    G_debug(1, "Nviz_set_viewpoint_persp(): value = %d", persp);
+
     fov = (int)(10 * persp);
     GS_set_fov(fov);
 
@@ -184,6 +189,7 @@ int Nviz_set_viewpoint_persp(int persp)
  */
 int Nviz_set_viewpoint_twist(int twist)
 {
+    G_debug(1, "Nviz_set_viewpoint_twist(): value = %d", twist);
     GS_set_twist(10 * twist);
 
     /* Nviz_draw_quick(data); */
@@ -203,6 +209,7 @@ int Nviz_change_exag(nv_data * data, double exag)
 {
     double temp;
 
+    G_debug(1, "Nviz_change_exag(): value = %f", exag);
     temp = GS_global_exag();
 
     if (exag != temp) {

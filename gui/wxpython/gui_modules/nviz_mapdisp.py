@@ -119,6 +119,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         self.view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
         self.iview = UserSettings.Get(group = 'nviz', key = 'view', internal = True)
+        
         self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
         
@@ -758,6 +759,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.iview['height']['value'], \
             self.iview['height']['min'], \
             self.iview['height']['max'] = self._display.SetViewDefault()
+        
         self.view['z-exag']['min'] = 0
         self.view['z-exag']['max'] = self.view['z-exag']['value'] * 10
         
