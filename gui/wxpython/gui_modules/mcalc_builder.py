@@ -38,7 +38,7 @@ class MapCalcFrame(wx.Frame):
     """!Mapcalc Frame class. Calculator-style window to create and run
     r(3).mapcalc statements
     """
-    def __init__(self, parent, cmd, id = wx.ID_ANY, title = _('Map calculator'), 
+    def __init__(self, parent, cmd, id = wx.ID_ANY,
                  style = wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
         self.parent = parent
         if self.parent:
@@ -51,9 +51,11 @@ class MapCalcFrame(wx.Frame):
 
         if self.cmd == 'r.mapcalc':
             self.rast3d = False
+            title = _('GRASS GIS Raster Calculator')
         if self.cmd == 'r3.mapcalc':
             self.rast3d = True
-
+            title = _('GRASS GIS 3D Raster Calculator')
+            
         wx.Frame.__init__(self, parent, id = id, title = title, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
