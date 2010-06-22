@@ -124,8 +124,11 @@ distclean: clean
 	-rm -f include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex 2>/dev/null
 	-rm -f swig/perl/Makefile.PL swig/perl2/make.pl 2>/dev/null
 
+DOXNAME=grass
+
 include $(MODULE_TOPDIR)/include/Make/Install.make
 include $(MODULE_TOPDIR)/include/Make/Docs.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 .PHONY: default libs
 .PHONY: cleandistdirs cleanscriptstrings clean libsclean distclean

@@ -110,18 +110,15 @@ undocumented.</i>
   - vedit:      \ref veditlib - %vector editing
   - neta:       \ref netalib
  - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
-<!--<li>image3:	extra imagery library (mainly still unused) - \ref image3lib-->
-<!--<li>D:		display library - \ref d_displaylib-->
-<!--<li>front.end:	interface for interactive modules library - \ref frontend-->
 
 \section interfaces Interfaces
 
- - GRASS <a href="http://download.osgeo.org/grass/grass7_progman/swig/">SWIG interface</a>
+ - \ref swiglib
  - \ref pythonlib
 
 \section gui GUI
 
- - <a href="http://download.osgeo.org/grass/grass7_progman/gui/wxpython/">wxGUI</a></li>
+ - \ref wxpythonlib
 
 \section location File structure of GRASS Location
 
