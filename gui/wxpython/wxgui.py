@@ -400,10 +400,10 @@ class GMFrame(wx.Frame):
             cmdlist = cmd.split(' ')
         except: # already list?
             cmdlist = cmd
-            
+        
         # check list of dummy commands for GUI modules that do not have GRASS
         # bin modules or scripts. 
-        if cmd in ['vcolors']:
+        if cmd in ['vcolors', 'r.mapcalc', 'r3.mapcalc']:
             return cmdlist
 
         try:
@@ -412,13 +412,14 @@ class GMFrame(wx.Frame):
             type = self.curr_page.maptree.GetPyData(layer)[0]['type']
         except:
             layer = None
+
         if layer and len(cmdlist) == 1: # only if no paramaters given
             if (type == 'raster' and cmdlist[0][0] == 'r' and cmdlist[0][1] != '3') or \
                     (type == 'vector' and cmdlist[0][0] == 'v'):
                 input = menuform.GUI().GetCommandInputMapParamKey(cmdlist[0])
                 if input:
                     cmdlist.append("%s=%s" % (input, name))
-
+        
         return cmdlist
 
     def RunMenuCmd(self, event, cmd = ''):
@@ -963,22 +964,11 @@ class GMFrame(wx.Frame):
         if event:
             cmd = self.GetMenuCmd(event)
 
-        win = mapcalculator.MapCalcFrame(parent = self, title = _('GRASS GIS Map Calculator'),
+        win = mapcalculator.MapCalcFrame(parent = self,
                                          cmd=cmd[0])
         win.CentreOnScreen()
         win.Show()
-        
-    def OnMapCalculator3D(self, event, cmd =''):
-        """!Init map calculator for interactive creation of mapcalc statements
-        """
-        if event:
-            cmd = self.GetMenuCmd(event)
-
-        win = mapcalculator.MapCalcFrame(parent = self, title = _('GRASS GIS Map Calculator (3D raster)'),
-                                         cmd=cmd[0])
-        win.CentreOnScreen()
-        win.Show()
-
+    
     def OnVectorCleaning(self, event, cmd = ''):
         """!Init interactive vector cleaning
         """
