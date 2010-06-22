@@ -523,6 +523,10 @@ class Settings:
                     'bright' : 80,
                     'ambient' : 20,
                     },
+                'fringe' : {
+                    'elev'   : 55,
+                    'color'  : (128, 128, 128, 255), # grey
+                    },
                 },
             'modeler' : {
                 'action' : {

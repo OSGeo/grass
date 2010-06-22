@@ -28,7 +28,9 @@ struct GParams
     /* output */
 	*output, *format, *size,
     /* lighting */
-	*light_pos, *light_color, *light_bright, *light_ambient;
+	*light_pos, *light_color, *light_bright, *light_ambient,
+    /* fringe */
+	*fringe, *fringe_color, *fringe_elev;
 };
 
 /* args.c */

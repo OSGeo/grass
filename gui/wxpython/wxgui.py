@@ -195,15 +195,10 @@ class GMFrame(wx.Frame):
 
     def __createNoteBook(self):
         """!Creates notebook widgets"""
-        nbStyle = FN.FNB_FANCY_TABS | \
-            FN.FNB_BOTTOM | \
-            FN.FNB_NO_NAV_BUTTONS | \
-            FN.FNB_NO_X_BUTTON
-        
         if globalvar.hasAgw:
-            self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, agwStyle = nbStyle)
+            self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, agwStyle = globalvar.FNPageDStyle)
         else:
-            self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, style = nbStyle)
+            self.notebook = FN.FlatNotebook(parent=self, id=wx.ID_ANY, style = globalvar.FNPageDStyle)
 
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle

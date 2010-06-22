@@ -30,6 +30,7 @@ static void args_vpoint(struct GParams *);
 static void args_viewpoint(struct GParams *);
 static void args_volume(struct GParams *);
 static void args_lighting(struct GParams *);
+static void args_fringe(struct GParams *);
 
 /*!
   \brief Parse command
@@ -69,6 +70,9 @@ void parse_command(int argc, char *argv[], struct GParams *params)
 
     /*** lighting ***/
     args_lighting(params);
+
+    /*** fringe ***/
+    args_fringe(params);
     
     /*** output image ***/
     /* output */
@@ -138,7 +142,8 @@ void args_surface(struct GParams *params)
     params->color_const->multiple = YES;
     params->color_const->label = _("Color value(s)");
     params->color_const->guisection = _("Surfaces");
-
+    params->color_const->answer = NULL;
+    
     /* mask */
     params->mask_map = G_define_standard_option(G_OPT_R_MAP);
     params->mask_map->multiple = YES;
@@ -599,6 +604,36 @@ void args_lighting(struct GParams *params)
     params->light_ambient->guisection = _("Lighting");
     params->light_ambient->answer = "20";
     params->light_ambient->options="0-100";
+}
+
+void args_fringe(struct GParams *params)
+{
+    params->fringe = G_define_option();
+    params->fringe->key = "fringe";
+    params->fringe->type = TYPE_STRING;
+    params->fringe->options = "nw,ne,sw,se";
+    params->fringe->descriptions = _("nw;North-West edge;"
+				     "ne;North-East edge;"
+				     "sw;South-West edge;"
+				     "se;South-East edge");
+    params->fringe->description = _("Fringe edges");
+    params->fringe->guisection = _("Fringe");
+    params->fringe->multiple = YES;
+    
+    params->fringe_color = G_define_standard_option(G_OPT_C_FG);
+    params->fringe_color->key = "fringe_color";
+    params->fringe_color->label = _("Fringe color");
+    params->fringe_color->guisection = _("Fringe");
+    params->fringe_color->answer = "grey";
+    
+    params->fringe_elev = G_define_option();
+    params->fringe_elev->key = "fringe_elevation";
+    params->fringe_elev->type = TYPE_INTEGER;
+    params->fringe_elev->required = NO;
+    params->fringe_elev->multiple = NO;
+    params->fringe_elev->description = _("Fringe elevation");
+    params->fringe_elev->guisection = _("Fringe");
+    params->fringe_elev->answer = "55";
 }
 
 /*!

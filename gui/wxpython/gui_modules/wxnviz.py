@@ -663,7 +663,7 @@ class Nviz(object):
         GS_get_trans(id, byref(x), byref(y), byref(z))
         
         Debug.msg(3, "Nviz::GetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
-                  id, x, y, z)
+                  id, x.value, y.value, z.value)
         
         return [x.value, y.value, z.value]
 
@@ -1119,3 +1119,17 @@ class Nviz(object):
         """!Draw lighting model"""
         if self.showLight:
             GS_draw_lighting_model()
+
+    def SetFringe(self, sid, color, elev, nw = False, ne = False, sw = False, se = False):
+        """!Set fringe
+
+        @param sid surface id
+        @param color color
+        @param elev elevation (height)
+        @param nw,ne,sw,se fringe edges (turn on/off)
+        """
+        scolor = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+        Nviz_new_fringe(self.data,
+                        sid, Nviz_color_from_str(scolor),
+                        elev, int(nw), int(ne), int(sw), int(se))
+

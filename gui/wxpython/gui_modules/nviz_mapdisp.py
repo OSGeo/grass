@@ -179,6 +179,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if layer:
                     if layer.type ==  'raster':
                         self.lmgr.nviz.UpdatePage('surface')
+                        self.lmgr.nviz.UpdatePage('fringe')
                     elif layer.type ==  'vector':
                         self.lmgr.nviz.UpdatePage('vector')
                 
