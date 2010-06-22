@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct GParams *params;
 
-    int ret;
+    int i, ret;
     int red, grn, blu;
     double vp_height, z_exag;	/* calculated viewpoint height, z-exag */
     int width, height;		/* output image size */
     char *output_name;
-
+    
     nv_data data;
     struct render_window *offscreen;
 
@@ -165,6 +165,27 @@ int main(int argc, char *argv[])
     Nviz_set_light_color(&data, 1, red, grn, blu);
     Nviz_set_light_ambient(&data, 1,
 			   atof(params->light_ambient->answer) / 100.0);
+
+    /* define fringes */
+    if (params->fringe->answer) {
+	int nw, ne, sw, se;
+	
+	i = 0;
+	nw = ne = sw = se = 0;
+	while(params->fringe->answers[i]) {
+	    const char *edge = params->fringe->answers[i++];
+	    if (strcmp(edge, "nw") == 0)
+		nw = 1;
+	    else if (strcmp(edge, "ne") == 0)
+		ne = 1;
+	    else if (strcmp(edge, "sw") == 0)
+		sw = 1;
+	    else if (strcmp(edge, "se") == 0)
+		se = 1;
+	}
+	Nviz_new_fringe(&data, -1, Nviz_color_from_str(params->fringe_color->answer),
+			atof(params->fringe_elev->answer), nw, ne, sw, se);
+    }
     
     GS_clear(data.bgcolor);
 

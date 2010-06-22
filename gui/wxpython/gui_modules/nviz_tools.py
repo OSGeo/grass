@@ -38,6 +38,7 @@ import gcmd
 from preferences import globalSettings as UserSettings
 from preferences import PreferencesBaseDialog
 from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties
+from debug import Debug
 
 import wxnviz
 # sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
@@ -62,22 +63,18 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.win  = {} # window ids
         self.page = {} # page ids
-        
+
         # view page
         self.AddPage(page = self._createViewPage(),
                      text = " %s " % _("View"))
-        # surface page
-        self.AddPage(page = self._createSurfacePage(),
-                     text = " %s " % _("Surface"))
-        # vector page
-        self.AddPage(page = self._createVectorPage(),
-                     text = " %s " % _("Vector"))
-        # volume page
-        self.AddPage(page = self._createVolumePage(),
-                     text = " %s " % _("Volume"))
-        # light page
-        self.AddPage(page = self._createLightPage(),
-                     text = " %s " % _("Light"))
+
+        # data page
+        self.AddPage(page = self._createDataPage(),
+                     text = " %s " % _("Data"))
+
+        # appearance page
+        self.AddPage(page = self._createAppearancePage(),
+                     text = " %s " % _("Appearance"))
         
         self.UpdateSettings()
         self.pageChanging = False
@@ -257,6 +254,36 @@ class NvizToolWindow(FN.FlatNotebook):
         
         return panel
 
+    def _createDataPage(self):
+        """!Create data (surface, vector, volume) settings page"""
+        self.notebookData = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
+                                            style = globalvar.FNPageDStyle)         
+        # surface page
+        self.notebookData.AddPage(page = self._createSurfacePage(),
+                                  text = " %s " % _("Surface"))
+        # vector page
+        self.notebookData.AddPage(page = self._createVectorPage(),
+                                  text = " %s " % _("Vector"))
+        # volume page
+        self.notebookData.AddPage(page = self._createVolumePage(),
+                                  text = " %s " % _("Volume"))
+
+        return self.notebookData
+    
+    def _createAppearancePage(self):
+        """!Create data (surface, vector, volume) settings page"""
+        self.notebookAppearance = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
+                                                  style = globalvar.FNPageDStyle)         
+        # light page
+        self.notebookAppearance.AddPage(page = self._createLightPage(),
+                                        text = " %s " % _("Lighting"))
+    
+        # fringe page
+        self.notebookAppearance.AddPage(page = self._createFringePage(),
+                                        text = " %s " % _("Fringe"))
+        
+        return self.notebookAppearance
+    
     def _createSurfacePage(self):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
@@ -1192,7 +1219,100 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.SetSizer(pageSizer)
         
         return panel
+
+    def _createFringePage(self):
+        """!Create fringe page"""
+        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False)
+        
+        self.page['fringe'] = { 'id' : 2 } 
+        self.win['fringe'] = {}
+
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        # selection
+        rbox = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                             label = " %s " % (_("Surface")))
+        rboxSizer = wx.StaticBoxSizer(rbox, wx.VERTICAL)
+        rmaps = gselect.Select(parent = panel, type = 'raster',
+                               onPopup = self.GselectOnPopup)
+        self.win['fringe']['surface'] = rmaps.GetId()
+        rboxSizer.Add(item = rmaps, proportion = 0,
+                      flag = wx.ALL,
+                      border = 3)
+        pageSizer.Add(item = rboxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+        
+        ebox = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                             label = " %s " % (_("Edges with fringe")))
+        eboxSizer = wx.StaticBoxSizer(ebox, wx.HORIZONTAL)
+        for edge in [(_("N && W"), "nw"),
+                     (_("N && E"), "ne"),
+                     (_("S && W"), "sw"),
+                     (_("S && E"), "se")]:
+            chkbox = wx.CheckBox(parent = panel,
+                                 label = edge[0],
+                                 name = edge[1])
+            eboxSizer.Add(item = chkbox, proportion = 0,
+                         flag = wx.ADJUST_MINSIZE | wx.LEFT | wx.RIGHT, border = 5)
+            chkbox.Bind(wx.EVT_CHECKBOX, self.OnFringe)
+        
+        pageSizer.Add(item = eboxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+
+        sbox = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                             label = " %s " % (_("Settings")))
+        sboxSizer = wx.StaticBoxSizer(sbox, wx.HORIZONTAL)
+        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
+        
+        # elevation
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Elevation of fringe from bottom:")),
+                      pos = (0, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        spin = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                           size = (65, -1), min = -1e6, max = 1e6)
+        spin.SetValue(UserSettings.Get(group = 'nviz', key = 'fringe', subkey = 'elev'))
+        self.win['fringe']['elev'] = spin.GetId()
+        gridSizer.Add(item = spin, pos = (0, 1))
+        
+        # color
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Color:")),
+                      pos = (1, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        color = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                  size = globalvar.DIALOG_COLOR_SIZE)
+        color.SetColour(UserSettings.Get(group = 'nviz', key = 'fringe',
+                                         subkey = 'color'))
+        self.win['fringe']['color'] = color.GetId()
+        gridSizer.Add(item = color, pos = (1, 1))
+        
+        sboxSizer.Add(item = gridSizer, proportion = 1,
+                      flag = wx.ALL | wx.EXPAND, border = 3)
+        pageSizer.Add(item = sboxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+        
+        panel.SetSizer(pageSizer)
+
+        return panel
     
+    def OnFringe(self, event):
+        """!Show/hide fringe"""
+        enabled = event.IsChecked()
+        win = self.FindWindowById(event.GetId())
+        print win.GetName()
+        data = self.mapWindow.GetSelectedLayer(type = 'nviz')['surface']
+        sid = data['object']['id']
+        elev = self.FindWindowById(self.win['fringe']['elev']).GetValue()
+        color = self.FindWindowById(self.win['fringe']['color']).GetValue()
+        
+        self._display.SetFringe(sid, color, elev, True, True, True, True)
+        self.mapWindow.Refresh(False)
+        
     def OnScroll(self, event, win, data):
         """!Generic scrolling handler"""
         winName = self.__GetWindowName(win, event.GetId())
@@ -2262,6 +2382,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.pageChanging = True
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type = 'nviz')
+        Debug.msg(1, "NvizToolWindow.UpdatePage(): %s", pageId)
         
         if pageId == 'view':
             self.SetPage('view')
@@ -2299,7 +2420,11 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['light']['z'][control]).SetValue(zval)
                 self.FindWindowById(self.win['light']['bright'][control]).SetValue(bval)
                 self.FindWindowById(self.win['light']['ambient'][control]).SetValue(aval)
-
+        elif pageId == 'fringe':
+            mapLayer = self.mapWindow.GetSelectedLayer()
+            win = self.FindWindowById(self.win['fringe']['surface'])
+            win.SetValue(mapLayer.GetName())
+        
         self.Update()
         self.pageChanging = False
         

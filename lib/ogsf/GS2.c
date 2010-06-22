@@ -801,17 +801,19 @@ void GS_draw_flowline_at_xy(int id, float x, float y)
 }
 
 /*!
-   \brief Draw fringe around data at selected corners
+   \brief Draw fringe around data (surface) at selected corners
 
    \param id surface id
-   \param clr ?
+   \param clr color
    \param elev elevation value
-   \param where ?
+   \param where nw/ne/sw/se edges - 0 (turn off) 1 (turn on)
  */
 void GS_draw_fringe(int id, unsigned long clr, float elev, int *where)
 {
     geosurf *gs;
 
+    G_debug(3, "GS_draw_fringe(): id: %d clr: %ld elev %f edges: %d %d %d %d",
+	    id, clr, elev, where[0], where[1], where[2], where[3]);
     if ((gs = gs_get_surf(id)))
 	gsd_display_fringe(gs, clr, elev, where);
 

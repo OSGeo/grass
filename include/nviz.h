@@ -76,6 +76,14 @@ typedef struct
     float x, y, z, w;		/* position */
 } light_data;
 
+struct fringe_data
+{
+    int           id;
+    unsigned long color;
+    float         elev;
+    int           where[4];
+};
+
 typedef struct
 {
     /* ranges */
@@ -89,36 +97,15 @@ typedef struct
 
     /* light */
     light_data light[MAX_LIGHTS];
-
+    
+    /* fringe */
+    int num_fringes;
+    struct fringe_data **fringe;
+    
     /* background color */
     int bgcolor;
 
 } nv_data;
-
-/* The following structure is used to associate client data with surfaces.
- * We do this so that we don't have to rely on the surface ID (which is libal to change
- * between subsequent executions of nviz) when saving set-up info to files.
- */
-
-typedef struct
-{
-    /* We use logical names to assign textual names to map objects.
-       When Nviz needs to refer to a map object it uses the logical name
-       rather than the map ID.  By setting appropriate logical names, we
-       can reuse names inbetween executions of Nviz.  The Nviz library
-       also provides a mechanism for aliasing between logical names.
-       Thus several logical names may refer to the same map object.
-       Aliases are meant to support the case in which two logical names
-       happen to be the same.  The Nviz library automatically assigns
-       logical names uniquely if they are not specified in the creation
-       of a map object.  When loading a saved file containing several map
-       objects, it is expected that the map 0bjects will be aliased to
-       their previous names.  This ensures that old scripts will work.
-     */
-
-    char *logical_name;
-
-} nv_clientdata;
 
 struct render_window
 {
@@ -182,8 +169,11 @@ int Nviz_unset_attr(int, int, int);
 
 /* nviz.c */
 void Nviz_init_data(nv_data *);
+void Nviz_destroy_data(nv_data *);
 void Nviz_set_bgcolor(nv_data *, int);
 int Nviz_color_from_str(const char *);
+struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
+				    double, int, int, int, int);
 
 /* position.c */
 void Nviz_init_view(nv_data *);

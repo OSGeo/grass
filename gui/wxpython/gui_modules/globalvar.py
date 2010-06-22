@@ -98,6 +98,12 @@ FNPageStyle = FN.FNB_VC8 | \
     FN.FNB_BACKGROUND_GRADIENT | \
     FN.FNB_NODRAG | \
     FN.FNB_TABS_BORDER_SIMPLE 
+
+FNPageDStyle = FN.FNB_FANCY_TABS | \
+    FN.FNB_BOTTOM | \
+    FN.FNB_NO_NAV_BUTTONS | \
+    FN.FNB_NO_X_BUTTON
+
 FNPageColor = wx.Colour(125,200,175)
 
 """!Dialog widget dimension"""

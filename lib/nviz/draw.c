@@ -198,8 +198,9 @@ int Nviz_draw_all_vol()
  */
 int Nviz_draw_all(nv_data * data)
 {
+    int i;
     int draw_surf, draw_vect, draw_site, draw_vol;
-
+    
     draw_surf = 1;
     draw_vect = 1;
     draw_site = 1;
@@ -232,6 +233,11 @@ int Nviz_draw_all(nv_data * data)
     if (draw_vol)
 	Nviz_draw_all_vol(data);
 
+    for(i = 0; i < data->num_fringes; i++) {
+	struct fringe_data * f = data->fringe[i];
+	GS_draw_fringe(f->id, f->color, f->elev, f->where);
+    }
+    
     GS_done_draw();
     GS_set_draw(GSD_BACK);
 

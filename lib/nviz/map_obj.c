@@ -46,8 +46,6 @@ int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
     int new_id, i;
     int num_surfs, *surf_list;
 
-    nv_clientdata *client_data;
-
     /*
      * For each type of map obj do the following --
      *   1) Verify we havn't maxed out the number of
@@ -162,36 +160,7 @@ int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
 	G_warning(_("Nviz_new_map_obj(): unsupported data type"));
 	return -1;
     }
-
-    /* initialize the client data filled for the new map object */
-    client_data = (nv_clientdata *) G_malloc(sizeof(nv_clientdata));
-
-    if (name) {
-	client_data->logical_name = G_store(name);
-    }
-    else {
-	char temp_space[80];
-	time_t tp;
-
-	/* Need to generate a random id */
-	time(&tp);
-	switch (type) {
-	case MAP_OBJ_SURF:{
-		sprintf(temp_space, "%s*%ld", "surface", tp);
-		break;
-	    }
-	default:{
-		sprintf(temp_space, "%s*%ld", "unknown", tp);
-		break;
-	    }
-	}
-	client_data->logical_name = G_store(temp_space);
-    }
-
-    G_debug(3, "new_map_obj(): logical name=%s", client_data->logical_name);
-
-    GS_Set_ClientData(new_id, (void *)client_data);
-
+    
     return new_id;
 }
 
