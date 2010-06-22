@@ -92,9 +92,12 @@ class Nviz(object):
         hmax = c_float()
         Nviz_get_exag_height(byref(hdef), byref(hmin), byref(hmax))
         
-        Debug.msg(3, "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
+        Debug.msg(1, "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
                   hdef.value, hmin.value, hmax.value)
         
+        hdef.value = 805
+        hmin.value = -2944.302979
+        hmax.value = 4555.696777
         return (z_exag, hdef.value, hmin.value, hmax.value)
     
     def SetView(self, x, y, height, persp, twist):
@@ -104,10 +107,10 @@ class Nviz(object):
         @param persp perpective
         @param twist
         """
-        Nviz_set_viewpoint_height(self.data, height)
-        Nviz_set_viewpoint_position(self.data, x, y)
-        Nviz_set_viewpoint_twist(self.data, twist)
-        Nviz_set_viewpoint_persp(self.data, persp)
+        Nviz_set_viewpoint_height(height)
+        Nviz_set_viewpoint_position(x, y)
+        Nviz_set_viewpoint_twist(twist)
+        Nviz_set_viewpoint_persp(persp)
         
         Debug.msg(3, "Nviz::SetView(): x=%f, y=%f, height=%f, persp=%f, twist=%f",
                   x, y, height, persp, twist)
@@ -162,7 +165,7 @@ class Nviz(object):
         
         # initialize view, lights
         Nviz_init_view(self.data)
-                
+        
         # clear window
         GS_clear(self.data.bgcolor)
         

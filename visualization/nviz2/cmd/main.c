@@ -90,21 +90,6 @@ int main(int argc, char *argv[])
     /* init view, lights */
     Nviz_init_view(&data);
 
-    /* set lights */
-    Nviz_set_light_position(&data, 1,
-			    atof(params->light_pos->answers[0]),
-			    atof(params->light_pos->answers[1]),
-			    atof(params->light_pos->answers[2]),
-			    0.0);
-    Nviz_set_light_bright(&data, 1,
-			  atoi(params->light_bright->answer) / 100.0);
-    if(G_str_to_color(params->light_color->answer, &red, &grn, &blu) != 1) {
-	red = grn = blu = 255;
-    }
-    Nviz_set_light_color(&data, 1, red, grn, blu);
-    Nviz_set_light_ambient(&data, 1,
-			   atof(params->light_ambient->answer) / 100.0);
-    
     /* load raster maps (surface topography) & set attributes (map/constant) */
     load_rasters(params, &data);
     /* set draw mode of loaded surfaces */
@@ -153,7 +138,8 @@ int main(int argc, char *argv[])
 	vp_height = atof(params->height->answer);
     }
     else {
-	Nviz_get_exag_height(&vp_height, NULL, NULL);
+	double min, max;
+	Nviz_get_exag_height(&vp_height, &min, &max);
 	G_verbose_message(_("Viewpoint height not given, using calculated "
 			    "value %.0f"),
 			  vp_height);
@@ -165,6 +151,21 @@ int main(int argc, char *argv[])
     Nviz_set_viewpoint_twist(atoi(params->twist->answer));
     Nviz_set_viewpoint_persp(atoi(params->persp->answer));
 
+    /* set lights */
+    Nviz_set_light_position(&data, 1,
+			    atof(params->light_pos->answers[0]),
+			    atof(params->light_pos->answers[1]),
+			    atof(params->light_pos->answers[2]),
+			    0.0);
+    Nviz_set_light_bright(&data, 1,
+			  atoi(params->light_bright->answer) / 100.0);
+    if(G_str_to_color(params->light_color->answer, &red, &grn, &blu) != 1) {
+	red = grn = blu = 255;
+    }
+    Nviz_set_light_color(&data, 1, red, grn, blu);
+    Nviz_set_light_ambient(&data, 1,
+			   atof(params->light_ambient->answer) / 100.0);
+    
     GS_clear(data.bgcolor);
 
     /* draw */

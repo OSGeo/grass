@@ -1143,8 +1143,8 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Color:")),
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                  colour = UserSettings.Get(group = 'nviz', key = 'settings',
-                                                            subkey = ['light', 'color']),
+                                  colour = UserSettings.Get(group = 'nviz', key = 'light',
+                                                            subkey = 'color'),
                                   size = globalvar.DIALOG_COLOR_SIZE)
         color.Bind(csel.EVT_COLOURSELECT, self.OnLightColor)
         gridSizer.Add(item = color, pos = (0, 2))
@@ -2271,7 +2271,7 @@ class NvizToolWindow(FN.FlatNotebook):
             zmin = self.mapWindow.view['z-exag']['min']
             zmax = self.mapWindow.view['z-exag']['max']
             zval = self.mapWindow.view['z-exag']['value']
-            print hmin, hmax, hval
+            
             for control in ('spin', 'slider'):
                 self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin,
                                                                                   hmax)
