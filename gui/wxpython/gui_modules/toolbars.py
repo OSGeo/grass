@@ -307,7 +307,6 @@ class MapToolbar(AbstractToolbar):
                      self.zoomout,
                      self.zoomback,
                      self.zoommenu,
-                     self.zoomextent,
                      self.analyze,
                      self.dec,
                      self.printmap):
