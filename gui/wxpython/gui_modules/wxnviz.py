@@ -87,17 +87,14 @@ class Nviz(object):
         Nviz_change_exag(self.data, z_exag)
         
         # determine height
-        hdef = c_float()
-        hmin = c_float()
-        hmax = c_float()
+        hdef = c_double()
+        hmin = c_double()
+        hmax = c_double()
         Nviz_get_exag_height(byref(hdef), byref(hmin), byref(hmax))
         
         Debug.msg(1, "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
                   hdef.value, hmin.value, hmax.value)
         
-        hdef.value = 805
-        hmin.value = -2944.302979
-        hmax.value = 4555.696777
         return (z_exag, hdef.value, hmin.value, hmax.value)
     
     def SetView(self, x, y, height, persp, twist):
