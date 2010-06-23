@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
     stepE_opt->description =
-	_("Length of each spline step in the east-west direction. Default: ewres.");
+	_("Length of each spline step in the east-west direction. Default: 1.5 * ewres.");
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
     stepN_opt->description =
-	_("Length of each spline step in the north-south direction. Default: nsres.");
+	_("Length of each spline step in the north-south direction. Default: 1.5 * nsres.");
     stepN_opt->guisection = _("Settings");
 
     method_opt = G_define_option();
