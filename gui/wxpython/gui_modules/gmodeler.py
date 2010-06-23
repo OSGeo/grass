@@ -171,6 +171,13 @@ class Model(object):
         except StandardError, e:
             raise GError(e)
         
+        if self.canvas:
+            win = self.canvas.parent
+            if gxmXml.pos:
+                win.SetPosition(gxmXml.pos)
+            if gxmXml.size:
+                win.SetSize(gxmXml.size)
+        
         # load properties
         self.properties = gxmXml.properties
         self.variables  = gxmXml.variables
@@ -452,8 +459,10 @@ class ModelFrame(wx.Frame):
         self.modelPage   = self.notebook.AddPage(self.canvas, text=_('Model'))
         self.commandPage = self.notebook.AddPage(self.goutput, text=_('Command output'))
         wx.CallAfter(self.notebook.SetSelection, 0)
-        
+        wx.CallAfter(self.ModelChanged, False)
+
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
         
         self._layout()
         self.SetMinSize((350, 200))
@@ -538,6 +547,11 @@ class ModelFrame(wx.Frame):
         
         self.Destroy()
 
+    def OnSize(self, event):
+        """Window resized, save to the model"""
+        self.ModelChanged()
+        event.Skip()
+        
     def OnPreferences(self, event):
         """!Open preferences dialog"""
         dlg = PreferencesDialog(parent = self)
@@ -2166,6 +2180,7 @@ class ProcessModelFile:
         self.data    = list()
         self.loops   = list()
         
+        self._processWindow()
         self._processProperties()
         self._processVariables()
         self._processActions()
@@ -2193,6 +2208,15 @@ class ProcessModelFile:
         
         return default
     
+    def _processWindow(self):
+        """!Process window properties"""
+        node = self.root.find('window')
+        if node is None:
+            self.pos = self.size = None
+            return
+        
+        self.pos, self.size = self._getDim(node)
+        
     def _processProperties(self):
         """!Process model properties"""
         node = self.root.find('properties')
@@ -2371,6 +2395,7 @@ class WriteModelFile:
     """!Generic class for writing model file"""
     def __init__(self, fd, model):
         self.fd         = fd
+        self.model      = model
         self.actions    = model.GetActions()
         self.data       = model.GetData()
         self.properties = model.GetProperties()
@@ -2380,7 +2405,8 @@ class WriteModelFile:
         self.indent = 0
         
         self._header()
-
+        
+        self._window()
         self._properties()
         self._variables()
         self._actions()
@@ -2401,14 +2427,26 @@ class WriteModelFile:
         self.fd.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         self.fd.write('<!DOCTYPE gxm SYSTEM "grass-gxm.dtd">\n')
         self.fd.write('%s<gxm>\n' % (' ' * self.indent))
+        self.indent += 4
                 
     def _footer(self):
         """!Write footer"""
+        self.indent -= 4
         self.fd.write('%s</gxm>\n' % (' ' * self.indent))
 
+    def _window(self):
+        """!Write window properties"""
+        canvas = self.model.GetCanvas()
+        if canvas is None:
+            return
+        win  = canvas.parent
+        pos  = win.GetPosition()
+        size = win.GetSize()
+        self.fd.write('%s<window pos="%d,%d" size="%d,%d" />\n' % \
+                          (' ' * self.indent, pos[0], pos[1], size[0], size[1]))
+        
     def _properties(self):
         """!Write model properties"""
-        self.indent += 4
         self.fd.write('%s<properties>\n' % (' ' * self.indent))
         self.indent += 4
         if self.properties['name']:
