@@ -13,27 +13,29 @@ values will be treated as NULL cells in both the input and the output map.
 <p>
 Spline step values <b><i>se</i></b> for the east-west direction and
 <b><i>sn</i></b> for the north-south direction should not be smaller than
-the east-west and north-south resolutions of the input map. For very large
-areas with missing values (NULL cells), larger spline step values may be
-required, but most of the time the defaults (1.5 x resolution) should be fine.
+the east-west and north-south resolutions of the input map. For a raster
+map without NULL cells, 1 * resolution can be used, but check for
+undershoots and overshoots. For very large areas with missing values
+(NULL cells), larger spline step values may be required, but most of the
+time the defaults (1.5 x resolution) should be fine.
 <p>
 The Tykhonov regularization parameter ("<b><i>lambda</i></b>") acts to
 smooth the interpolation. With a small <b><i>lambda</i></b>, the
 interpolated surface closely follows observation points; a larger value
 will produce a smoother interpolation. Reasonable values are 0.0001,
-0.001, 0.005, 0.01, 0.02, 0.05, 0.1. For seamless NULL cell interpolation,
-a small value is required and default is set to 0.001.
+0.001, 0.005, 0.01, 0.02, 0.05, 0.1 (needs more testing). For seamless
+NULL cell interpolation, a small value is required and default is set to 0.005.
 <p>
 From a theoretical perspective, the interpolating procedure takes place in two
-parts: the first is an estimate of the linear coefficients of a spline function
-is derived from the observation points using a least squares regression; the
+parts: the first is an estimate of the linear coefficients of a spline function;
+these are derived from the observation points using a least squares regression; the
 second is the computation of the interpolated surface (or interpolated vector
 points). As used here, the splines are 2D piece-wise non-zero polynomial
-functions calculated within a limited, 2D area. The length of each spline step
+functions calculated within a limited 2D area. The length of each spline step
 is defined by <b><i>se</i></b> for the east-west direction and
-<b><i>sn</i></b> for the north-south direction. For optimum performance, the
+<b><i>sn</i></b> for the north-south direction. For optimal performance, the
 spline step values should be no less than the east-west and north-south
-resolutions of the input map. Each non NULL cell observation is modeled as a
+resolutions of the input map. Each non-NULL cell observation is modeled as a
 linear function of the non-zero splines in the area around the observation.
 The least squares regression predicts the the coefficients of these linear functions.
 Regularization avoids the need to have one one observation and one coefficient
