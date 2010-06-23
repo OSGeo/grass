@@ -1254,6 +1254,7 @@ class NvizToolWindow(FN.FlatNotebook):
             chkbox = wx.CheckBox(parent = panel,
                                  label = edge[0],
                                  name = edge[1])
+            self.win['fringe'][edge[1]] = chkbox.GetId()
             eboxSizer.Add(item = chkbox, proportion = 0,
                          flag = wx.ADJUST_MINSIZE | wx.LEFT | wx.RIGHT, border = 5)
             chkbox.Bind(wx.EVT_CHECKBOX, self.OnFringe)
@@ -1275,6 +1276,7 @@ class NvizToolWindow(FN.FlatNotebook):
         spin = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
                            size = (65, -1), min = -1e6, max = 1e6)
         spin.SetValue(UserSettings.Get(group = 'nviz', key = 'fringe', subkey = 'elev'))
+        spin.Bind(wx.EVT_SPINCTRL, self.OnFringe)
         self.win['fringe']['elev'] = spin.GetId()
         gridSizer.Add(item = spin, pos = (0, 1))
         
@@ -1287,6 +1289,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                   size = globalvar.DIALOG_COLOR_SIZE)
         color.SetColour(UserSettings.Get(group = 'nviz', key = 'fringe',
                                          subkey = 'color'))
+        color.Bind(csel.EVT_COLOURSELECT, self.OnFringe)
         self.win['fringe']['color'] = color.GetId()
         gridSizer.Add(item = color, pos = (1, 1))
         
@@ -1304,13 +1307,17 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Show/hide fringe"""
         enabled = event.IsChecked()
         win = self.FindWindowById(event.GetId())
-        print win.GetName()
+        
         data = self.mapWindow.GetSelectedLayer(type = 'nviz')['surface']
         sid = data['object']['id']
         elev = self.FindWindowById(self.win['fringe']['elev']).GetValue()
         color = self.FindWindowById(self.win['fringe']['color']).GetValue()
         
-        self._display.SetFringe(sid, color, elev, True, True, True, True)
+        self._display.SetFringe(sid, color, elev,
+                                self.FindWindowById(self.win['fringe']['nw']).IsChecked(),
+                                self.FindWindowById(self.win['fringe']['ne']).IsChecked(),
+                                self.FindWindowById(self.win['fringe']['sw']).IsChecked(),
+                                self.FindWindowById(self.win['fringe']['se']).IsChecked())
         self.mapWindow.Refresh(False)
         
     def OnScroll(self, event, win, data):

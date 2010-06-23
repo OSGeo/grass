@@ -1129,7 +1129,7 @@ class Nviz(object):
         @param nw,ne,sw,se fringe edges (turn on/off)
         """
         scolor = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
-        Nviz_new_fringe(self.data,
+
+        Nviz_set_fringe(self.data,
                         sid, Nviz_color_from_str(scolor),
                         elev, int(nw), int(ne), int(sw), int(se))
-
