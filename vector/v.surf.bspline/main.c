@@ -268,13 +268,8 @@ int main(int argc, char *argv[])
     }
 
     /* Open input ext vector */
-    if (!in_ext_opt->answer) {
-	ext = FALSE;
-	G_message(_("No vector map of sparse points to interpolate was specified. "
-		    "Interpolation will be done with <%s> vector map"),
-		  in_opt->answer);
-    }
-    else {
+    ext = FALSE;
+    if (in_ext_opt->answer) {
 	ext = TRUE;
 	G_message(_("Vector map <%s> of sparse points will be interpolated"),
 		  in_ext_opt->answer);
@@ -313,6 +308,9 @@ int main(int argc, char *argv[])
 	    Vect_hist_copy(&In_ext, &Out);
 	}
 	Vect_hist_command(&Out);
+
+	G_message(_("Points in input vector map <%s> will be interpolated"),
+		  vector);
     }
 
     /* raster output */
@@ -321,6 +319,9 @@ int main(int argc, char *argv[])
     if (!vector && map) {
 	grid = TRUE;
 	raster = Rast_open_fp_new(out_map_opt->answer);
+
+	G_message(_("Cells for raster map <%s> will be interpolated"),
+		  map);
     }
 
     /* read z values from attribute table */
@@ -543,7 +544,8 @@ int main(int argc, char *argv[])
 		    "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d",
 		    subregion_row, subregion_col, npoints);
 
-	    if (npoints > 0 && npoints_ext > 0) {	/*  */
+	    /* only interpolate if there are any points in current subregion */
+	    if (npoints > 0 && npoints_ext > 0) {
 		int i;
 
 		nparameters = nsplx * nsply;
@@ -708,7 +710,7 @@ int main(int argc, char *argv[])
 		    G_free(observ);
 		if (npoints == 0)
 		    G_warning(_("No data within this subregion. "
-				"Consider changing the spline step."));
+				"Consider increasing spline step values."));
 	    }
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
