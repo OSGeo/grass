@@ -174,6 +174,8 @@ void Nviz_set_bgcolor(nv_data *, int);
 int Nviz_color_from_str(const char *);
 struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
 				    double, int, int, int, int);
+struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
+				    double, int, int, int, int);
 
 /* position.c */
 void Nviz_init_view(nv_data *);

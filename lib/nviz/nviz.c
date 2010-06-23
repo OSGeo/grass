@@ -141,3 +141,51 @@ struct fringe_data *Nviz_new_fringe(nv_data *data,
     
     return f;
 }
+
+/*! Set fringe
+
+  \param data nviz data
+  \param id surface id
+  \param color color
+  \param elev fringe elevation
+  \param nw,ne,sw,se 1 (turn on) 0 (turn off)
+
+  \return pointer to allocated fringe_data structure
+  \return NULL on error
+*/
+struct fringe_data *Nviz_set_fringe(nv_data *data,
+				    int id, unsigned long color,
+				    double elev, int nw, int ne, int sw, int se)
+{
+    int i, num;
+    int *surf;
+    struct fringe_data *f;
+
+    if (!GS_surf_exists(id)) {
+	/* select first surface from the list */
+	surf = GS_get_surf_list(&num);
+	if (num < 1)
+	    return NULL;
+	id = surf[0];
+    }
+    
+    for (i = 0; i < data->num_fringes; i++) {
+	f = data->fringe[i];
+	if (f->id == id) {
+	    f->color = color;
+	    f->elev  = elev;
+	    f->where[0] = nw;
+	    f->where[1] = ne;
+	    f->where[2] = sw;
+	    f->where[3] = se;
+	    
+	    return f;
+	}
+    }
+
+    f = Nviz_new_fringe(data,
+			id, color,
+			elev, nw, ne, sw, se);
+    
+    return f;
+}
