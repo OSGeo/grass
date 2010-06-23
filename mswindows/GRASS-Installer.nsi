@@ -764,7 +764,7 @@ Section "GRASS" SecGRASS
 	;If equal to "drive:\Users\UserName", the OS is Vista, and the $USERNAME variable set to $PROFILE -  "drive:\Users\"
 	;If not, the OS is XP or previous, and the $USERNAME variable set to $PROFILE -  "drive:\Documents and Settings\"
 	
-	${If} $USERNAME = ""
+	${If} $USERNAME == ""
 		StrCpy $PROFILE_DRIVE "$PROFILE" 2
 		StrCpy $PROFILE_ROOT "$PROFILE" 5 -3
 		${If} $USERNAME = "Users"		
