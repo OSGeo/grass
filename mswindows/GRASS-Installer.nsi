@@ -62,7 +62,7 @@
 ;Publisher variables
 
 !define PUBLISHER "GRASS Development Team"
-!define WEB_SITE "http://grass.osgeo.org/"
+!define WEB_SITE "http://grass.osgeo.org"
 !define WIKI_PAGE "http://grass.osgeo.org/wiki/Main_Page"
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -684,8 +684,8 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'rem Set GRASS Installation Directory Variable$\r$\n'
 	FileWrite $0 'set GISBASE=$INSTALL_DIR$\r$\n'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 'rem Directory where your .grass7/rc file will be stored$\r$\n'
-	FileWrite $0 'set HOME=%USERPROFILE%$\r$\n'
+	FileWrite $0 'rem Directory where your GRASS7/rc file will be stored$\r$\n'
+	FileWrite $0 'set HOME=%APPDATA%$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem Name of the wish (Tk) executable$\r$\n'	
 	FileWrite $0 'set GRASS_WISH=wish.exe$\r$\n'
@@ -842,31 +842,34 @@ Section "GRASS" SecGRASS
 	;replace \ with / in $GIS_DATABASE
 	${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
   
-	;create $PROFILE\.grass7\rc
+	;create $APPDATA\GRASS7\rc
 	SetShellVarContext current
 	ClearErrors
-	CreateDirectory	$PROFILE\.grass7
-	FileOpen $0 $PROFILE\.grass7\rc w
-	IfErrors done_create_.grass7\rc
+	CreateDirectory	$APPDATA\GRASS7
+	FileOpen $0 $APPDATA\GRASS7\rc w
+	IfErrors done_create_GRASS7\rc
 	FileWrite $0 'GISDBASE: $UNIX_LIKE_GIS_DATABASE_PATH$\r$\n'
 	FileWrite $0 'LOCATION_NAME: demolocation$\r$\n'
 	FileWrite $0 'MAPSET: PERMANENT$\r$\n'
 	FileClose $0	
-	done_create_.grass7\rc:
+	done_create_GRASS7\rc:
 	
-	CreateDirectory	$INSTALL_DIR\msys\home\$USERNAME\.grass7
-	CopyFiles $PROFILE\.grass7\rc $INSTALL_DIR\msys\home\$USERNAME\.grass7
-	
-		;replace gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn" in grass70.py with $INSTDIR
-	 Push "$INSTDIR\grass70.py" ; file to modify
-	 Push 'gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn"' ; string that a line must begin with *WS Sensitive*
-	 Push 'gisbase = "$INSTDIR"' ; string to replace whole line with
+	;replace gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn" in grass70.py with $INSTDIR
+	Push "$INSTDIR\grass70.py" ; file to modify
+	Push 'gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn"' ; string that a line must begin with *WS Sensitive*
+	Push 'gisbase = "$INSTDIR"' ; string to replace whole line with
 	Call ReplaceLineStr
 	
 	;replace config_projshare = "/c/OSGeo4W/share/proj" i n grass70.py with $INSTDIR\proj
 	Push "$INSTDIR\grass70.py" ; file to modify
 	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
 	Push 'config_projshare = "$INSTDIR\proj"' ; string to replace whole line with
+	Call ReplaceLineStr
+
+	;replace grass_config_dirname = ".grass7" i n grass70.py with GRASS7
+	Push "$INSTDIR\grass70.py" ; file to modify
+	Push 'grass_config_dirname = ".grass7"' ; string that a line must begin with *WS Sensitive*
+	Push 'grass_config_dirname = "GRASS7"' ; string to replace whole line with
 	Call ReplaceLineStr
                  
 SectionEnd
@@ -975,9 +978,9 @@ Section "Uninstall"
 	SetShellVarContext all
 	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
 	
-	;remove the .grass7\rc file
+	;remove the $APPDATA\GRASS7\rc file
 	SetShellVarContext current
-	RMDir /r "$PROFILE\.grass7"
+	RMDir /r "$APPDATA\GRASS7"
 
 	;remove the Registry Entries
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"
