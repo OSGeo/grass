@@ -141,6 +141,9 @@ int main(int argc, char **argv)
 
     overwrite_flag = module->overwrite;
 
+    if (expr->answer && file->answer)
+	G_fatal_error(_("file= and expression= are mutually exclusive"));
+
     if (expr->answer)
 	result = parse_string(expr->answer);
     else if (file->answer)
