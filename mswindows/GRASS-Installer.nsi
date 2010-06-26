@@ -773,11 +773,7 @@ Section "GRASS" SecGRASS
 			${StrReplace} "$USERNAME" "$PROFILE_DRIVE\Documents and Settings\" "" "$PROFILE"
 		${EndIf}
 	${EndIf}
-	
-	;Create the $INSTALL_DIR\msys\home and the $INSTALL_DIR\msys\home\$USERNAME directories
-	CreateDirectory $INSTALL_DIR\msys\home
-	CreateDirectory $INSTALL_DIR\msys\home\$USERNAME
-  
+		
 	;create the $INSTALL_DIR\bin grass_command
 	ClearErrors
 	FileOpen $0 $INSTALL_DIR\${GRASS_COMMAND}.sh w
