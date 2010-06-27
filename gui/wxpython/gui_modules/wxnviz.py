@@ -157,14 +157,10 @@ class Nviz(object):
         # define default attributes for map objects
         Nviz_set_surface_attr_default()
         # set background color
-        Nviz_set_bgcolor(self.data, Nviz_color_from_str("white")) # TODO
-        self.SetBgColor("white")
+        Nviz_set_bgcolor(self.data, Nviz_color_from_str("white"))
         
         # initialize view, lights
         Nviz_init_view(self.data)
-        
-        # clear window
-        GS_clear(self.data.bgcolor)
         
         Debug.msg(1, "Nviz::InitView()")
         
@@ -173,7 +169,7 @@ class Nviz(object):
         
         @param color_str color string
         """
-        self.data.bgcolor = Nviz_color_from_str(color_str)
+        Nviz_set_bgcolor(self.data, Nviz_color_from_str(color_str))
         
     def SetLight(self, x, y, z, color, bright, ambient, w = 0, lid = 1):
         """!Change lighting settings
