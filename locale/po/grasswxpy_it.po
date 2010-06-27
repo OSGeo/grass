@@ -4721,7 +4721,7 @@ msgstr "Chiudi dialogo"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:140
 msgid "exponent"
-msgstr ""
+msgstr "esponente"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:142
 msgid "divide"
@@ -4737,7 +4737,7 @@ msgstr "sottrai"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:148
 msgid "modulus"
-msgstr ""
+msgstr "modulo"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:150
 msgid "multiply"
@@ -4797,7 +4797,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:182
 msgid "logical AND"
-msgstr ""
+msgstr "AND logico"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:184
 msgid "logical AND (ignores NULLs"
@@ -4805,26 +4805,25 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:186
 msgid "logical OR"
-msgstr ""
+msgstr "OR logico"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:188
 msgid "logical OR (ignores NULLs"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:190
-#, fuzzy
 msgid "conditional"
-msgstr "Opzionale"
+msgstr "opzionale"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:202
 #, fuzzy, python-format
 msgid "Name for new %s to create"
-msgstr "Nome per il nuovo vettore:"
+msgstr "Nome per il nuovo %s:"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:205
 #, fuzzy, python-format
 msgid "Insert existing %s"
-msgstr "sovrascrivi il file esistente"
+msgstr "Inserisci %s esistente"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:209
 #, fuzzy
@@ -6134,7 +6133,7 @@ msgstr "deseleziona"
 #: ../gui/wxpython/gui_modules/nviz_tools.py:310
 #: ../gui/wxpython/gui_modules/nviz_tools.py:992
 msgid "constant"
-msgstr ""
+msgstr "costante"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:370
 #: ../gui/wxpython/gui_modules/nviz_tools.py:859
@@ -6161,7 +6160,7 @@ msgstr "entrambi"
 #: ../gui/wxpython/gui_modules/nviz_tools.py:392
 #: ../gui/wxpython/gui_modules/nviz_tools.py:880
 msgid "Shading:"
-msgstr ""
+msgstr "Ombreggiatura:"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:395
 #: ../gui/wxpython/gui_modules/nviz_tools.py:652
@@ -6179,8 +6178,9 @@ msgid "Set to all"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:405
+#, fuzzy
 msgid "Use draw settings for all loaded surfaces"
-msgstr ""
+msgstr "Usa impostazioni di disegno per tutte le superfici caricate"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:412
 msgid "Coarse:"
@@ -6552,9 +6552,8 @@ msgid "File"
 msgstr "File"
 
 #: ../gui/wxpython/gui_modules/gselect.py:956
-#, fuzzy
 msgid "Directory"
-msgstr "Direzione"
+msgstr "Cartella"
 
 #: ../gui/wxpython/gui_modules/gselect.py:960
 #: ../gui/wxpython/gui_modules/dbm.py:2276
@@ -6583,24 +6582,20 @@ msgstr "Scegli cartella di input"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1000
 #: ../gui/wxpython/gui_modules/gselect.py:1243
-#, fuzzy
 msgid "Choose file"
-msgstr "Scegli file DXF:"
+msgstr "Scegli file:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1031
-#, fuzzy
 msgid "File:"
-msgstr "File"
+msgstr "File:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1034
-#, fuzzy
 msgid "Directory:"
-msgstr "Direzione"
+msgstr "Cartella:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1037
-#, fuzzy
 msgid "Database:"
-msgstr "Database"
+msgstr "Database:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1040
 #, fuzzy
@@ -6835,8 +6830,9 @@ msgid "Add new record into table"
 msgstr "Aggiungi record nella tabella"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1478
+#, fuzzy
 msgid "Mode"
-msgstr ""
+msgstr "Modalità"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1478
 #: ../gui/wxpython/gui_modules/vdigit.py:1500
@@ -8159,14 +8155,15 @@ msgid "Drop column(s)"
 msgstr "Cancella tutte le colonne"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1703
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Selected columns\n"
 "%s\n"
 "will PERMANENTLY removed from table. Do you want to drop the columns?"
 msgstr ""
-"I record (%d) selezionati saranno permanentemente eliminati della tabella. "
-"Vuoi eliminarli?"
+"Le colonne selezionate\n"
+"%s\n"
+"saranno PERMANENTEMENTE eliminate della tabella. Vuoi eliminarle?"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1741
 msgid "Unable to add column to the table. No column name defined."
@@ -8226,13 +8223,12 @@ msgid "Key"
 msgstr "Chiave"
 
 #: ../gui/wxpython/gui_modules/dbm.py:2352
-#, fuzzy
 msgid ""
 "Unknown default DB connection. Please define DB connection using db.connect "
 "module."
 msgstr ""
 "Impossibile determinare le impostazioni della connessione del DB. Per favore "
-"definire la connessione al DB usando il modulo db.connect"
+"definire la connessione al DB usando il modulo db.connect."
 
 #: ../gui/wxpython/gui_modules/dbm.py:2373
 msgid "Add layer"
@@ -9822,6 +9818,8 @@ msgstr "Entra nella sessione di GRASS"
 #: ../gui/wxpython/gis_set.py:208 ../gui/wxpython/gis_set.py:570
 msgid "Unable to set GRASS database. Check your locale settings."
 msgstr ""
+"Impossibile impostare il database di GRASS. Controlla le tue impostazioni "
+"locali."
 
 #: ../gui/wxpython/gis_set.py:226
 #, python-format
@@ -9839,6 +9837,9 @@ msgid ""
 "\n"
 "This mapset cannot be renamed."
 msgstr ""
+"È richiesto il mapset <PERMANENT> per una location di GRASS valida.\n"
+"\n"
+"Questo mapset non può essere rinominato."
 
 #: ../gui/wxpython/gis_set.py:443 ../gui/wxpython/gis_set.py:478
 #, fuzzy, python-format
@@ -9898,6 +9899,9 @@ msgid ""
 "\n"
 "This mapset cannot be deleted."
 msgstr ""
+"È richiesto il mapset <PERMANENT> per una location di GRASS valida.\n"
+"\n"
+"Questo mapset non può essere cancellato."
 
 #: ../gui/wxpython/gis_set.py:520
 #, python-format
@@ -10635,9 +10639,8 @@ msgstr ""
 #~ msgid "Unable to open file"
 #~ msgstr "Impossibile aprire il file"
 
-#, fuzzy
 #~ msgid "DXF file:"
-#~ msgstr "Scegli file DXF:"
+#~ msgstr "File DXF:"
 
 #~ msgid "Parameter not found: %s"
 #~ msgstr "Paramentro non trovato:%s"
