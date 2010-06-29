@@ -39,7 +39,7 @@ imagery_HDRS    = imagery.h imagedefs.h
 vector_HDRS     = vector.h vect/dig_structs.h vect/dig_defines.h
 display_HDRS    = display.h
 stats_HDRS      = stats.h
-dbmi_HDRS       = dbmi.h
+dbmi_HDRS       = dbmi.h proto_dbmi.h
 g3d_HDRS        = G3d.h
 arraystats_HDRS = arraystats.h
 cluster_HDRS    = cluster.h
@@ -83,8 +83,12 @@ $(DSTDIR)/%.py: %.py | $(DSTDIR)
 $(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-%.py: $(%_HDRS) $(%_LIBS)
-	$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $($*_LIBS) $($*_INC) $(EXTRA_LIBS) $(patsubst %.h,$(ARCH_INCDIR)/%.h,$($*_HDRS)) -o $@)
+define module_rule
+$(1)_DEPS = $$(patsubst %.h,$(ARCH_INCDIR)/%.h,$$($(1)_HDRS))
+$(1).py: $$($(1)_DEPS)
+	$$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $$($(1)_LIBS) $$($(1)_INC) $(EXTRA_LIBS) $$($(1)_DEPS) -o $$@)
+endef
+$(foreach module,$(MODULES),$(eval $(call module_rule,$(module))))
 
 $(PYDIR):
 	$(MKDIR) $@
