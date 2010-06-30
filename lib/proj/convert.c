@@ -750,6 +750,8 @@ static const char *papszDatumEquiv[] = {
     "Militar_Geographische_Institut",
     "Potsdam_Datum_83",
     "Deutsches_Hauptdreiecksnetz",
+    "South_American_1969",
+    "South_American_Datum_1969",
     NULL
 };
 
