@@ -26,6 +26,9 @@ int read_signatures(struct parms *parms, struct SigSet *S)
     if (I_ReadSigSet(fd, S) < 0 || Ref.nfiles != S->nbands)
 	G_fatal_error(_("Signature file <%s> is invalid"), parms->sigfile);
 
+    if (S->ClassSig == NULL || S->title == NULL)
+	G_fatal_error(_("Signature file <%s> is empty"), parms->sigfile);
+
     fclose(fd);
 
     return 0;
