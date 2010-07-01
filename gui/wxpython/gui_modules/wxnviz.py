@@ -1153,16 +1153,16 @@ class Nviz(object):
         if not sid:
             return None
         
-        catstr = c_char * 256
-        valstr = c_char * 256
-        #GS_get_cat_at_xy(sid, MAP_ATT, pointer(catstr), x, y)
-        #GS_get_val_at_xy(sid, MAP_ATT, pointer(valstr), x, y)
+        catstr = create_string_buffer(256)
+        valstr = create_string_buffer(256)
+        GS_get_cat_at_xy(sid, ATT_TOPO, catstr, x, y)
+        GS_get_val_at_xy(sid, ATT_COLOR, valstr, x, y)
         
         return { 'id' : sid,
                  'x'  : x,
                  'y'  : y,
                  'z'  : z,
-                 'elevation' : catstr.value,
+                 'elevation' : catstr.value.replace('(', '').replace(')', ''),
                  'color'     : valstr.value }
     
     def GetDistanceAlongSurface(self, sid, p1, p2, useExag = True):
