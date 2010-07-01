@@ -171,6 +171,7 @@ int Nviz_unset_attr(int, int, int);
 void Nviz_init_data(nv_data *);
 void Nviz_destroy_data(nv_data *);
 void Nviz_set_bgcolor(nv_data *, int);
+int Nviz_get_bgcolor(nv_data *);
 int Nviz_color_from_str(const char *);
 struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
 				    double, int, int, int, int);

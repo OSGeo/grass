@@ -45,23 +45,20 @@ from vdigit import VDigitDuplicatesDialog
 from vdigit import PseudoDC as VDigitPseudoDC
 
 class MapWindow(object):
-    """!
-    Abstract map window class
+    """!Abstract map window class
 
     Parent for BufferedWindow class (2D display mode) and
     GLWindow (3D display mode)
     """
     def __init__(self, parent, id = wx.ID_ANY,
-                 Map = None, tree = None, lmgr = None):
+                 Map = None, tree = None, lmgr = None, **kwargs):
         self.parent = parent # MapFrame
         self.Map    = Map
         self.tree   = tree
         self.lmgr   = lmgr
         
-        #
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing
-        #
         self.mouse = {
             'begin': [0, 0], # screen coordinates
             'end'  : [0, 0],
@@ -70,14 +67,12 @@ class MapWindow(object):
             }
         
     def EraseMap(self):
-        """!
-        Erase the canvas (virtual method)
+        """!Erase the canvas (virtual method)
         """
         pass
 
     def UpdateMap(self):
-        """!
-        Updates the canvas anytime there is a change to the
+        """!Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
         """
         pass
@@ -91,8 +86,66 @@ class MapWindow(object):
     def OnKeyDown(self, event):
         pass
     
-    def OnMouseMotion(self, event):
-        pass
+    def OnMotion(self, event):
+        """!Mouse moved
+        Track mouse motion and update status bar
+        """
+        if self.parent.statusbarWin['toggle'].GetSelection() == 0: # Coordinates
+            precision = int(UserSettings.Get(group = 'projection', key = 'format',
+                                             subkey = 'precision'))
+            format = UserSettings.Get(group = 'projection', key = 'format',
+                                      subkey = 'll')
+            try:
+                e, n = self.Pixel2Cell(event.GetPositionTuple())
+            except (TypeError, ValueError):
+                self.parent.statusbar.SetStatusText("", 0)
+                return
+            
+            if self.parent.toolbars['vdigit'] and \
+                    self.parent.toolbars['vdigit'].GetAction() == 'addLine' and \
+                    self.parent.toolbars['vdigit'].GetAction('type') in ('line', 'boundary') and \
+                    len(self.polycoords) > 0:
+                # for linear feature show segment and total length
+                distance_seg = self.Distance(self.polycoords[-1],
+                                             (e, n), screen=False)[0]
+                distance_tot = distance_seg
+                for idx in range(1, len(self.polycoords)):
+                    distance_tot += self.Distance(self.polycoords[idx-1],
+                                                  self.polycoords[idx],
+                                                  screen=False )[0]
+                self.parent.statusbar.SetStatusText("%.*f, %.*f (seg: %.*f; tot: %.*f)" % \
+                                                 (precision, e, precision, n,
+                                                  precision, distance_seg,
+                                                  precision, distance_tot), 0)
+            else:
+                if self.parent.statusbarWin['projection'].IsChecked():
+                    if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
+                        self.parent.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
+                    else:
+                        proj, coord  = utils.ReprojectCoordinates(coord = (e, n),
+                                                                  projOut = UserSettings.Get(group='projection',
+                                                                                             key='statusbar',
+                                                                                             subkey='proj4'),
+                                                                  flags = 'd')
+                    
+                        if coord:
+                            e, n = coord
+                            if proj in ('ll', 'latlong', 'longlat') and format == 'DMS':
+                                self.parent.statusbar.SetStatusText(utils.Deg2DMS(e, n, precision = precision),
+                                                                    0)
+                            else:
+                                self.parent.statusbar.SetStatusText("%.*f; %.*f" % \
+                                                                        (precision, e, precision, n), 0)
+                        else:
+                            self.parent.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
+                else:
+                    if self.parent.Map.projinfo['proj'] == 'll' and format == 'DMS':
+                        self.parent.statusbar.SetStatusText(utils.Deg2DMS(e, n, precision = precision),
+                                                            0)
+                    else:
+                        self.parent.statusbar.SetStatusText("%.*f; %.*f" % \
+                                                                (precision, e, precision, n), 0)
+        event.Skip()
 
     def OnZoomToMap(self, event):
         pass
@@ -101,8 +154,7 @@ class MapWindow(object):
         pass
     
     def GetSelectedLayer(self, type = 'layer', multi = False):
-        """!
-        Get selected layer from layer tree
+        """!Get selected layer from layer tree
 
         @param type 'item' / 'layer' / 'nviz'
         @param multi return first selected layer or all
@@ -148,8 +200,7 @@ class MapWindow(object):
         return ret
     
 class BufferedWindow(MapWindow, wx.Window):
-    """!
-    A Buffered window class.
+    """!A Buffered window class.
 
     When the drawing needs to change, you app needs to call the
     UpdateMap() method. Since the drawing is stored in a bitmap, you
@@ -157,9 +208,9 @@ class BufferedWindow(MapWindow, wx.Window):
     SaveToFile(self,file_name,file_type) method.
     """
     def __init__(self, parent, id = wx.ID_ANY,
-                 style = wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map = None, tree = None, lmgr = None, **kwargs):
-        MapWindow.__init__(self, parent, id, Map, tree, lmgr)
+                 Map = None, tree = None, lmgr = None,
+                 style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
+        MapWindow.__init__(self, parent, id, Map, tree, lmgr, **kwargs)
         wx.Window.__init__(self, parent, id, style = style, **kwargs)
         
         # flags
@@ -180,8 +231,10 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Bind(wx.EVT_PAINT,        self.OnPaint)
         self.Bind(wx.EVT_SIZE,         self.OnSize)
         self.Bind(wx.EVT_IDLE,         self.OnIdle)
-        self.Bind(wx.EVT_MOTION,       self.MouseActions)
+        ### self.Bind(wx.EVT_MOTION,       self.MouseActions)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
+        self.Bind(wx.EVT_MOTION,       self.OnMotion)
+        
         self.processMouse = True
         
         # render output objects
@@ -1842,8 +1895,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.UpdateMap(render=False)
         
     def OnLeftUp(self, event):
-        """!
-        Left mouse button released
+        """!Left mouse button released
         """
         Debug.msg (5, "BufferedWindow.OnLeftUp(): use=%s" % \
                        self.mouse["use"])
@@ -2406,61 +2458,52 @@ class BufferedWindow(MapWindow, wx.Window):
         return True
 
     def Pixel2Cell(self, (x, y)):
-        """!
-        Convert image coordinates to real word coordinates
+        """!Convert image coordinates to real word coordinates
 
-        Input : int x, int y
-        Output: float x, float y
+        @param x, y image coordinates
+        
+        @return easting, northing
+        @return None on error
         """
-
         try:
             x = int(x)
             y = int(y)
         except:
             return None
-
+        
         if self.Map.region["ewres"] > self.Map.region["nsres"]:
             res = self.Map.region["ewres"]
         else:
             res = self.Map.region["nsres"]
-
+        
         w = self.Map.region["center_easting"] - (self.Map.width / 2) * res
         n = self.Map.region["center_northing"] + (self.Map.height / 2) * res
-
+        
         east  = w + x * res
         north = n - y * res
-
-        # extent does not correspond with whole map canvas area...
-        # east  = self.Map.region['w'] + x * self.Map.region["ewres"]
-        # north = self.Map.region['n'] - y * self.Map.region["nsres"]
-
+        
         return (east, north)
 
     def Cell2Pixel(self, (east, north)):
-        """!
-        Convert real word coordinates to image coordinates
+        """!Convert real word coordinates to image coordinates
         """
-
         try:
             east  = float(east)
             north = float(north)
         except:
             return None
-
+        
         if self.Map.region["ewres"] > self.Map.region["nsres"]:
             res = self.Map.region["ewres"]
         else:
             res = self.Map.region["nsres"]
-
+        
         w = self.Map.region["center_easting"] - (self.Map.width / 2) * res
         n = self.Map.region["center_northing"] + (self.Map.height / 2) * res
-
-        # x = int((east  - w) / res)
-        # y = int((n - north) / res)
-
+        
         x = (east  - w) / res
         y = (n - north) / res
-
+        
         return (x, y)
 
     def Zoom(self, begin, end, zoomtype):

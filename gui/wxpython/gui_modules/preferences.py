@@ -26,6 +26,7 @@ import os
 import sys
 import copy
 import stat
+import types
 try:
     import pwd
     havePwd = True
@@ -449,6 +450,9 @@ class Settings:
                     'z-exag' : {
                         'step' : 1,
                         },
+                    'background' : {
+                        'color' : (255, 255, 255, 255), # white
+                        },
                     },
                 'surface' : {
                     'shine': {
@@ -505,22 +509,14 @@ class Settings:
                         'value' : 60.0,
                         },
                     },
-                'settings': {
-                    'general' : {
-                        'bgcolor' : (255, 255, 255, 255), # white
-                        },
-                    },
-                    'light' : {
-                        'color' : (255, 255, 255, 255), # white
-                    },
                 'light' : {
                     'pos' : {
                         'x' : 0.68,
                         'y' : 0.68,
                         'z' : 80,
                         },
-                    'color' : (255, 255, 255, 255), # white
-                    'bright' : 80,
+                    'color'   : (255, 255, 255, 255), # white
+                    'bright'  : 80,
                     'ambient' : 20,
                     },
                 'fringe' : {
@@ -864,16 +860,21 @@ class Settings:
         @param subkey subkey (value or list)
         @param value value
         """
+        print dict
+        print group, key, subkey, value
+        print 'x'
         if not dict.has_key(group):
             dict[group] = {}
 
         if not dict[group].has_key(key):
             dict[group][key] = {}
 
-        if type(subkey) == type([]):
+        if type(subkey) == types.ListType:
             # TODO: len(subkey) > 2
             if not dict[group][key].has_key(subkey[0]):
                 dict[group][key][subkey[0]] = {}
+            print group, key, subkey, value
+            print dict[group][key]
             dict[group][key][subkey[0]][subkey[1]] = value
         else:
             dict[group][key][subkey] = value
