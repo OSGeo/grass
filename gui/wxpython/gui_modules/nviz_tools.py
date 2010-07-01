@@ -1,4 +1,4 @@
-"""
+"""!
 @package nviz_tools.py
 
 @brief Nviz (3D view) tools window
