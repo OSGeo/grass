@@ -39,7 +39,7 @@ import vdigit
 from vdigit import VDigitSettingsDialog as VDigitSettingsDialog
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
-from nviz_tools import NvizPreferencesDialog
+from nviz_preferences import NvizPreferencesDialog
 
 gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
 sys.path.append(gmpath)
@@ -301,7 +301,6 @@ class MapToolbar(AbstractToolbar):
     def Enable2D(self, enabled):
         """!Enable/Disable 2D display mode specific tools"""
         for tool in (self.pointer,
-                     self.query,
                      self.pan,
                      self.zoomin,
                      self.zoomout,
@@ -1435,12 +1434,6 @@ class ModelToolbar(AbstractToolbar):
             (self.relation, 'relation', Icons['modelRelation'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRelation'].GetLabel(), Icons['modelRelation'].GetDesc(),
              self.parent.OnDefineRelation),
-            # (self.properties, "properties", Icons["modelProperties"].GetBitmap(),
-            #  wx.ITEM_NORMAL, Icons["modelProperties"].GetLabel(), Icons["modelProperties"].GetDesc(),
-            #  self.parent.OnModelProperties),
-            (self.variables, "variables", Icons["modelVariables"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["modelVariables"].GetLabel(), Icons["modelVariables"].GetDesc(),
-             self.parent.OnModelVariables),
             ('', '', '', '', '', '', ''),
             (self.run, 'run', Icons['modelRun'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRun'].GetLabel(), Icons['modelRun'].GetDesc(),

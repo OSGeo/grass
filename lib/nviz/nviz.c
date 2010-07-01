@@ -79,6 +79,18 @@ void Nviz_set_bgcolor(nv_data * data, int color)
 }
 
 /*!
+   \brief Get background color
+
+   \param data nviz data
+
+   \return color color value
+ */
+int Nviz_get_bgcolor(nv_data * data)
+{
+    return data->bgcolor;
+}
+
+/*!
    \brief Get color value from color string (name or RGB triplet)
 
    \param color_str color string

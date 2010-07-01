@@ -22,6 +22,7 @@ import os
 import sys
 import time
 import copy
+import math
 
 from threading import Thread
 
@@ -69,7 +70,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     """!OpenGL canvas for Map Display Window"""
     def __init__(self, parent, id = wx.ID_ANY,
                  Map = None, tree = None, lmgr = None):
-        
         self.parent = parent # MapFrame
         
         glcanvas.GLCanvas.__init__(self, parent, id)
@@ -87,7 +87,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         'vpoints' : False }
         
         # list of loaded map layers (layer tree items)
-        self.layers = []
+        self.layers  = list()
+        # list of query points
+        self.qpoints = list()
         
         #
         # use display region instead of computational
@@ -123,14 +125,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
         
-        self.size = None
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
-        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
-        self.Bind(wx.EVT_MOTION, self.OnMouseAction)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouseAction)
+        self.Bind(wx.EVT_SIZE,             self.OnSize)
+        self.Bind(wx.EVT_PAINT,            self.OnPaint)
+        self.Bind(wx.EVT_LEFT_UP,          self.OnLeftUp)
+        self.Bind(wx.EVT_MOUSE_EVENTS,     self.OnMouseAction)
+        self.Bind(wx.EVT_MOTION,           self.OnMotion)
         
         self.Bind(EVT_UPDATE_PROP,  self.UpdateMapObjProperties)
         self.Bind(EVT_UPDATE_VIEW,  self.UpdateView)
@@ -146,13 +146,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         pass # do nothing, to avoid flashing on MSW
     
     def OnSize(self, event):
-        self.size = self.GetClientSize()
+        size = self.GetClientSize()
         if self.GetContext():
             Debug.msg(3, "GLCanvas.OnSize(): w = %d, h = %d" % \
-                      (self.size.width, self.size.height))
+                      (size.width, size.height))
             self.SetCurrent()
-            self._display.ResizeWindow(self.size.width,
-                                       self.size.height)
+            self._display.ResizeWindow(size.width,
+                                       size.height)
         
         event.Skip()
 
@@ -195,13 +195,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.UpdateMap()
         
     def OnMouseAction(self, event):
-        # change position
-        if event.Dragging() and event.LeftIsDown():
-            ### self.lastX = self.lastY = self.x = self.y
-            ### self.x, self.y = event.GetPosition()
-            ### self.Refresh(False)
-            pass
-        
         # change perspective with mouse wheel
         wheel = event.GetWheelRotation()
         
@@ -233,12 +226,62 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 
                 # update statusbar
                 ### self.parent.StatusbarUpdate()
-            
-    def OnLeftDown(self, event):
-        self.CaptureMouse()
-                
+        
+        event.Skip()
+
+    def Pixel2Cell(self, (x, y)):
+        """!Convert image coordinates to real word coordinates
+
+        @param x, y image coordinates
+        
+        @return easting, northing
+        @return None on error
+        """
+        size = self.GetClientSize()
+        # UL -> LL
+        sid, x, y, z = self._display.GetPointOnSurface(x, y)
+        
+        if not sid:
+            return None
+        
+        return (x, y)
+    
     def OnLeftUp(self, event):
         self.ReleaseMouse()
+        if self.mouse["use"] == "query":
+            result = self._display.QueryMap(event.GetX(), event.GetY())
+            log = self.lmgr.goutput
+            if result:
+                self.qpoints.append((result['x'], result['y'], result['z']))
+                log.WriteLog("%-30s: %.3f" % (_("Easting"),   result['x']))
+                log.WriteLog("%-30s: %.3f" % (_("Northing"),  result['y']))
+                log.WriteLog("%-30s: %.3f" % (_("Elevation"), result['z']))
+                log.WriteLog("%-30s: %s" % (_("Surface map elevation"), result['elevation']))
+                log.WriteLog("%-30s: %s" % (_("Surface map color"), result['color']))
+                if len(self.qpoints) > 1:
+                    prev = self.qpoints[-2]
+                    curr = self.qpoints[-1]
+                    dxy = math.sqrt(pow(prev[0]-curr[0], 2) +
+                                    pow(prev[1]-curr[1], 2))
+                    dxyz = math.sqrt(pow(prev[0]-curr[0], 2) +
+                                     pow(prev[1]-curr[1], 2) +
+                                     pow(prev[2]-curr[2], 2))
+                    log.WriteLog("%-30s: %.3f" % (_("XY distance from previous"), dxy))
+                    log.WriteLog("%-30s: %.3f" % (_("XYZ distance from previous"), dxyz))
+                    log.WriteLog("%-30s: %.3f" % (_("Distance along surface"),
+                                                self._display.GetDistanceAlongSurface(result['id'],
+                                                                                      (curr[0], curr[1]),
+                                                                                      (prev[0], prev[1]),
+                                                                                      useExag = False)))
+                    log.WriteLog("%-30s: %.3f" % (_("Distance along exag. surface"),
+                                                self._display.GetDistanceAlongSurface(result['id'],
+                                                                                      (curr[0], curr[1]),
+                                                                                      (prev[0], prev[1]),
+                                                                                      useExag = True)))
+                log.WriteLog('-' * 80)
+            else:
+                log.WriteLog(_("No point on surface"))
+                log.WriteLog('-' * 80)
         
     def UpdateView(self, event):
         """!Change view settings"""

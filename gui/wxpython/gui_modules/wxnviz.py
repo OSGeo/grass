@@ -146,8 +146,8 @@ class Nviz(object):
     def EraseMap(self):
         """!Erase map display (with background color)
         """
-        GS_clear(self.data.bgcolor)
         Debug.msg(1, "Nviz::EraseMap()")
+        GS_clear(Nviz_get_bgcolor(self.data))
         
     def InitView(self):
         """!Initialize view"""
@@ -159,6 +159,7 @@ class Nviz(object):
         # set background color
         Nviz_set_bgcolor(self.data, Nviz_color_from_str("white"))
         
+        GS_clear(Nviz_get_bgcolor(self.data))
         # initialize view, lights
         Nviz_init_view(self.data)
         
@@ -554,12 +555,12 @@ class Nviz(object):
         @return -2 setting attributes failed
         """
         Debug.msg(3, "Nviz::SetSurfaceRes(): id=%d, fine=%d, coarse=%d",
-                id, fine, coarse)
+                  id, fine, coarse)
         
         if id > 0:
             if not GS_surf_exists(id):
                 return -1
-        
+            
             if GS_set_drawres(id, fine, fine, coarse, coarse) < 0:
                 return -2
         else:
@@ -1126,3 +1127,49 @@ class Nviz(object):
         Nviz_set_fringe(self.data,
                         sid, Nviz_color_from_str(scolor),
                         elev, int(nw), int(ne), int(sw), int(se))
+        
+    def GetPointOnSurface(self, sx, sy):
+        """!Get point on surface
+
+        @param sx,sy canvas coordinates (LL)
+        """
+        sid = c_int()
+        x   = c_float()
+        y   = c_float()
+        z   = c_float()
+        Debug.msg(5, "GLWindow.GetPointOnSurface(): sx=%d sy=%d" % (sx, sy))
+        num = GS_get_selected_point_on_surface(sx, sy, byref(sid), byref(x), byref(y), byref(z))
+        if num == 0:
+            return (None, None, None, None)
+        
+        return (sid.value, x.value, y.value, z.value)
+
+    def QueryMap(self, sx, sy):
+        """!Query surface map
+
+        @param sx,sy canvas coordinates (LL)
+        """
+        sid, x, y, z = self.GetPointOnSurface(sx, sy)
+        if not sid:
+            return None
+        
+        catstr = c_char * 256
+        valstr = c_char * 256
+        #GS_get_cat_at_xy(sid, MAP_ATT, pointer(catstr), x, y)
+        #GS_get_val_at_xy(sid, MAP_ATT, pointer(valstr), x, y)
+        
+        return { 'id' : sid,
+                 'x'  : x,
+                 'y'  : y,
+                 'z'  : z,
+                 'elevation' : catstr.value,
+                 'color'     : valstr.value }
+    
+    def GetDistanceAlongSurface(self, sid, p1, p2, useExag = True):
+        """!Get distance measured along surface"""
+        d = c_float()
+        
+        GS_get_distance_alongsurf(sid, p1[0], p1[1], p2[0], p2[1],
+                                  byref(d), int(useExag))
+        
+        return d.value

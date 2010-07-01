@@ -82,17 +82,14 @@ sys.path.append(imagepath)
 cmdfilename = None
 
 class MapFrame(wx.Frame):
+    """!Main frame for map display window. Drawing takes place in
+    child double buffered drawing window.
     """
-    Main frame for map display window. Drawing takes place in child double buffered
-    drawing window.
-    """
-
     def __init__(self, parent=None, id=wx.ID_ANY, title=_("GRASS GIS - Map display"),
                  style=wx.DEFAULT_FRAME_STYLE, toolbars=["map"],
                  tree=None, notebook=None, lmgr=None, page=None,
                  Map=None, auimgr=None, **kwargs):
-        """
-        Main map display window with toolbars, statusbar and
+        """!Main map display window with toolbars, statusbar and
         DrawWindow
 
         @param toolbars array of activated toolbars, e.g. ['map', 'digit']
@@ -111,9 +108,11 @@ class MapFrame(wx.Frame):
         self.layerbook  = notebook  # Layer Manager layer tree notebook
         self.parent     = parent
         
-        #
+        if not kwargs.has_key('name'):
+            kwargs['name'] = 'MapWindow'
+        wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
+        
         # available cursors
-        #
         self.cursors = {
             # default: cross
             # "default" : wx.StockCursor(wx.CURSOR_DEFAULT),
@@ -123,10 +122,6 @@ class MapFrame(wx.Frame):
             "pencil"  : wx.StockCursor(wx.CURSOR_PENCIL),
             "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
             }
-        
-        if not kwargs.has_key('name'):
-            kwargs['name'] = 'MapWindow'
-        wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         
         #
         # set the size & system icon
@@ -248,7 +243,6 @@ class MapFrame(wx.Frame):
                                           Map=self.Map, tree=self.tree, lmgr=self._layerManager)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
-        self.MapWindow.Bind(wx.EVT_MOTION, self.OnMotion)
         self.MapWindow.SetCursor(self.cursors["default"])
         # used by Nviz (3D display mode)
         self.MapWindow3D = None 
@@ -419,6 +413,7 @@ class MapFrame(wx.Frame):
                 self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
                                                  Map=self.Map, tree=self.tree, lmgr=self._layerManager)
                 self.MapWindow = self.MapWindow3D
+                self.MapWindow.SetCursor(self.cursors["default"])
                 
                 # add Nviz notebookpage
                 self._layerManager.AddNviz()
@@ -534,86 +529,20 @@ class MapFrame(wx.Frame):
                     self.layerbook.SetSelection(pgnum)
         
         event.Skip()
-
-    def OnMotion(self, event):
-        """
-        Mouse moved
-        Track mouse motion and update status bar
-        """
-        # update statusbar if required
-        if self.statusbarWin['toggle'].GetSelection() == 0: # Coordinates
-            precision = int(UserSettings.Get(group = 'projection', key = 'format',
-                                             subkey = 'precision'))
-            format = UserSettings.Get(group = 'projection', key = 'format',
-                                      subkey = 'll')
-            try:
-                e, n = self.MapWindow.Pixel2Cell(event.GetPositionTuple())
-            except AttributeError:
-                return
-            if self.toolbars['vdigit'] and \
-                    self.toolbars['vdigit'].GetAction() == 'addLine' and \
-                    self.toolbars['vdigit'].GetAction('type') in ('line', 'boundary') and \
-                    len(self.MapWindow.polycoords) > 0:
-                # for linear feature show segment and total length
-                distance_seg = self.MapWindow.Distance(self.MapWindow.polycoords[-1],
-                                                       (e, n), screen=False)[0]
-                distance_tot = distance_seg
-                for idx in range(1, len(self.MapWindow.polycoords)):
-                    distance_tot += self.MapWindow.Distance(self.MapWindow.polycoords[idx-1],
-                                                            self.MapWindow.polycoords[idx],
-                                                            screen=False )[0]
-                self.statusbar.SetStatusText("%.*f, %.*f (seg: %.*f; tot: %.*f)" % \
-                                                 (precision, e, precision, n,
-                                                  precision, distance_seg,
-                                                  precision, distance_tot), 0)
-            else:
-                if self.statusbarWin['projection'].IsChecked():
-                    if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
-                        self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
-                    else:
-                        proj, coord  = utils.ReprojectCoordinates(coord = (e, n),
-                                                                  projOut = UserSettings.Get(group='projection',
-                                                                                             key='statusbar',
-                                                                                             subkey='proj4'),
-                                                                  flags = 'd')
-                    
-                        if coord:
-                            e, n = coord
-                            if proj in ('ll', 'latlong', 'longlat') and format == 'DMS':
-                                self.statusbar.SetStatusText("%s" % \
-                                                                 utils.Deg2DMS(e, n, precision = precision),
-                                                             0)
-                            else:
-                                self.statusbar.SetStatusText("%.*f; %.*f" % \
-                                                                 (precision, e, precision, n), 0)
-                        else:
-                            self.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
-                else:
-                    if self.Map.projinfo['proj'] == 'll' and format == 'DMS':
-                        self.statusbar.SetStatusText("%s" % \
-                                                         utils.Deg2DMS(e, n, precision = precision),
-                                                     0)
-                    else:
-                        self.statusbar.SetStatusText("%.*f; %.*f" % \
-                                                         (precision, e, precision, n), 0)
-                
-        event.Skip()
-
+        
     def OnDraw(self, event):
+        """!Re-display current map composition
         """
-        Re-display current map composition
-        """
-        self.MapWindow.UpdateMap(render=False)
+        self.MapWindow.UpdateMap(render = False)
         
     def OnRender(self, event):
-        """
-        Re-render map composition (each map layer)
+        """!Re-render map composition (each map layer)
         """
         # delete tmp map layers (queries)
         qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.Map.DeleteLayer(layer)
-
+        
         # delete tmp lines
         if self.MapWindow.mouse["use"] in ("measure",
                                            "profile"):
@@ -631,8 +560,7 @@ class MapFrame(wx.Frame):
         self.StatusbarUpdate()
 
     def OnPointer(self, event):
-        """
-        Pointer button clicked
+        """!Pointer button clicked
         """
         if self.toolbars['map']:
             if event:
@@ -1270,8 +1198,7 @@ class MapFrame(wx.Frame):
         return self.MapWindow
     
     def OnQueryDisplay(self, event):
-        """
-        Query currrent raster/vector map layers (display mode)
+        """!Query currrent raster/vector map layers (display mode)
         """
         if self.toolbars['map'].GetAction() == 'displayAttrb': # select previous action
             self.toolbars['map'].SelectDefault(event)
@@ -1309,7 +1236,7 @@ class MapFrame(wx.Frame):
         
     def QueryMap(self, x, y):
         """!Query map layer features
-
+        
         Currently only raster and vector map layers are supported.
         
         @param x,y coordinates
@@ -1317,7 +1244,7 @@ class MapFrame(wx.Frame):
         #set query snap distance for v.what at mapunit equivalent of 10 pixels
         qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
         east, north = self.MapWindow.Pixel2Cell((x, y))
-
+        
         num = 0
         for layer in self.tree.GetSelections():
             type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
@@ -1326,10 +1253,10 @@ class MapFrame(wx.Frame):
                 num += 1
         
         if num < 1:
-            dlg = wx.MessageDialog(parent=self,
-                                   message=_('No raster or vector map layer selected for querying.'),
-                                   caption=_('No map layer selected'),
-                                   style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            dlg = wx.MessageDialog(parent = self,
+                                   message = _('No raster or vector map layer selected for querying.'),
+                                   caption = _('No map layer selected'),
+                                   style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             dlg.ShowModal()
             dlg.Destroy()
             return
@@ -1349,7 +1276,7 @@ class MapFrame(wx.Frame):
                 raststr += "%s," % name
             elif type in ('vector', 'thememap', 'themechart'):
                 vectstr += "%s," % name
-
+        
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
         os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
@@ -1373,7 +1300,7 @@ class MapFrame(wx.Frame):
                         continue
                     vect.append(vector)
                 vectstr = ','.join(vect)
-                
+            
             if len(vectstr) <= 1:
                 self._layerManager.goutput.WriteCmdLog("Nothing to query.")
                 return
@@ -1663,11 +1590,9 @@ class MapFrame(wx.Frame):
                                                 style)
 
     def MeasureDist(self, beginpt, endpt):
-        """
-        Calculate map distance from screen distance
+        """!Calculate map distance from screen distance
         and print to output window
         """
-
         if self._layerManager.notebook.GetSelection() != 1:
             self._layerManager.notebook.SetSelection(1)
 

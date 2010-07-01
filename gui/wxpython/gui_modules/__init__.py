@@ -23,7 +23,7 @@ all = [
     "menudata.py",
     "menuform.py",
     "nviz_mapdisp.py",
-    "nviz.py",
+    "nviz_preferences.py",
     "nviz_tools.py",
     "ogc_services.py",
     "preferences.py",
@@ -37,4 +37,5 @@ all = [
     "vclean.py",
     "vdigit.py",
     "workspace.py",
+    "wxnviz.py",
 ]
