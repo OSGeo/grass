@@ -98,11 +98,6 @@
 	  <help>Model properties (name, purpose, etc.)</help>
 	  <handler>OnModelProperties</handler>
 	</menuitem>
- 	<menuitem>
-	  <label>Manage variables</label>
-	  <help>Manage model variables</help>
-	  <handler>OnModelVariables</handler>
-	</menuitem>
 	<separator />
 	<menuitem>
 	  <label>Delete intermediate data</label>
