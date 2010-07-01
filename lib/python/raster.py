@@ -75,7 +75,7 @@ def raster_info(map):
 
 # interface to r.mapcalc
 
-def mapcalc(exp, **kwargs):
+def mapcalc(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
     """!Interface to r.mapcalc.
 
     @param exp expression
@@ -83,11 +83,10 @@ def mapcalc(exp, **kwargs):
     """
     t = string.Template(exp)
     e = t.substitute(**kwargs)
-    for key in kwargs.keys():
-        if key in ['overwrite', 'quiet', 'verbose']:
-            continue
-        del kwargs[key]
-    
-    if run_command('r.mapcalc', expression = e, **kwargs) != 0:
+
+    if run_command('r.mapcalc', expression = e,
+                   quiet = quiet,
+                   verbose = verbose,
+                   overwrite = overwrite) != 0:
 	fatal("An error occurred while running r.mapcalc")
     
