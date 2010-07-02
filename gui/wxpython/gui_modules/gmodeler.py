@@ -1353,9 +1353,20 @@ if __name__ == "__main__":
         
         # close loop
         rel = ModelRelation(action, loop)
-        print action.GetPosition()
         self.AddLine(rel)
-        
+        dx = loop.GetWidth() / 2 + 50
+        dy = action.GetHeight() / 2 + 50
+        rel.MakeLineControlPoints(0)
+        rel.InsertLineControlPoint(point = wx.RealPoint(loop.GetX() - loop.GetWidth() / 2,
+                                                        loop.GetY()))
+        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX(),
+                                                        action.GetY() + action.GetHeight() / 2))
+        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX(),
+                                                        action.GetY() + dy))
+        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX() - dx,
+                                                        action.GetY() + dy))
+        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX() - dx,
+                                                        loop.GetY()))
         self.canvas.Refresh()
         
 class ModelCanvas(ogl.ShapeCanvas):
