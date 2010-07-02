@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     struct Flag *stats_flag, *null_flag, *del_flag;
     int is_reclass;		/* Is raster reclass? */
     const char *infile;
-    char title[MAX_TITLE_LEN + 1], datasrc[RECORD_LEN + 1];
+    char title[MAX_TITLE_LEN + 1];
     struct History hist;
 
     /* Initialize GIS engine */
@@ -167,33 +167,30 @@ int main(int argc, char *argv[])
 
 	Rast_read_history(raster->answer, "", &hist);
 
-	for (i = 0; i < hist.edlinecnt; i++)
-	    fprintf(fp, "%s\n", hist.edhist[i]);
+	for (i = 0; i < Rast_history_length(&hist); i++)
+	    fprintf(fp, "%s\n", Rast_history_line(&hist, i));
 
 	fclose(fp);
     }
 
     if (load_opt->answer) {
 	FILE *fp = fopen(load_opt->answer, "r");
-	int i;
 
 	if (!fp)
 	    G_fatal_error(_("Unable to open input file <%s>"), load_opt->answer);
 
 	Rast_read_history(raster->answer, "", &hist);
 
-	for (i = 0; ; i++) {
-	    if (i >= MAXEDLINES) {
-		G_warning(_("Not enough room in history file"));
+	Rast_clear_history(&hist);
+
+	for (;;) {
+	    char buf[80];
+	    if (!G_getl2(buf, sizeof(buf), fp))
 		break;
-	    }
-	    if (!G_getl2(hist.edhist[i], RECORD_LEN - 2, fp))
-		break;
+	    Rast_append_history(&hist, buf);
 	}
 
 	fclose(fp);
-
-	hist.edlinecnt = i;
 
 	Rast_write_history(raster->answer, &hist);
     }
@@ -201,40 +198,22 @@ int main(int argc, char *argv[])
     if (history_opt->answer) {
 	Rast_read_history(raster->answer, "", &hist);
 
-	if (hist.edlinecnt >= MAXEDLINES)
-	    G_fatal_error(_("Not enough room in history file"));
-
 	/* two less than defined as if only one less a newline gets appended in the hist file. bug? */
 	/* Should be RECORD_LEN, but r.info truncates at > 71 chars */
 	if (strlen(history_opt->answer) > 71) {
 	    int i;
 
 	    for (i = 0; i < strlen(history_opt->answer); i += 71) {
-		char *tmp = &history_opt->answer[i];
+		char buf[72];
 
-		strncpy(hist.edhist[hist.edlinecnt], tmp, 71);
+		strncpy(buf, &history_opt->answer[i], sizeof(buf)-1);
+		buf[sizeof(buf)-1] = '\0';
 
-		/* strncpy doesn't null terminate oversized input */
-		hist.edhist[hist.edlinecnt][RECORD_LEN - 2] = '\0';
-		hist.edlinecnt++;
-
-		G_debug(3, "new history line= [%s] (%d chars)",
-			hist.edhist[hist.edlinecnt],
-			strlen(hist.edhist[hist.edlinecnt]));
+		Rast_append_history(&hist, buf);
 	    }
 	}
-	else {
-	    strncpy(hist.edhist[hist.edlinecnt], history_opt->answer,
-		    RECORD_LEN - 2);
-
-	    /* strncpy doesn't null terminate oversized input */
-	    hist.edhist[hist.edlinecnt][RECORD_LEN - 2] = '\0';
-	    hist.edlinecnt++;
-
-	    G_debug(3, "new history line= [%s] (%d chars)",
-		    hist.edhist[hist.edlinecnt],
-		    strlen(hist.edhist[hist.edlinecnt]));
-	}
+	else
+	    Rast_append_history(&hist, history_opt->answer);
 
 	Rast_write_history(raster->answer, &hist);
     }
@@ -248,31 +227,14 @@ int main(int argc, char *argv[])
     if (datasrc1_opt->answer || datasrc2_opt->answer || datadesc_opt->answer) {
 	Rast_read_history(raster->answer, "", &hist);
 
-	if (datasrc1_opt->answer) {
-	    strncpy(datasrc, datasrc1_opt->answer, RECORD_LEN);
-	    datasrc[RECORD_LEN] = '\0';	/* strncpy doesn't null terminate oversized input */
-	    G_strip(datasrc);
-	    G_debug(3, "map datasrc1= [%s]  (%d chars)", datasrc,
-		    strlen(datasrc));
-	    strncpy(hist.datsrc_1, datasrc, RECORD_LEN);
-	}
-	if (datasrc2_opt->answer) {
-	    strncpy(datasrc, datasrc2_opt->answer, RECORD_LEN);
-	    datasrc[RECORD_LEN] = '\0';	/* strncpy doesn't null terminate oversized input */
-	    G_strip(datasrc);
-	    G_debug(3, "map datasrc2= [%s]  (%d chars)", datasrc,
-		    strlen(datasrc));
-	    strncpy(hist.datsrc_2, datasrc, RECORD_LEN);
-	}
+	if (datasrc1_opt->answer)
+	    Rast_set_history(&hist, HIST_DATSRC_1, datasrc1_opt->answer);
 
-	if (datadesc_opt->answer) {
-	    strncpy(datasrc, datadesc_opt->answer, RECORD_LEN);
-	    datasrc[RECORD_LEN] = '\0';	/* strncpy doesn't null terminate oversized input */
-	    G_strip(datasrc);
-	    G_debug(3, "map datadesc= [%s]  (%d chars)", datasrc,
-		    strlen(datasrc));
-	    strncpy(hist.keywrd, datasrc, RECORD_LEN);
-	}
+	if (datasrc2_opt->answer)
+	    Rast_set_history(&hist, HIST_DATSRC_2, datasrc2_opt->answer);
+
+	if (datadesc_opt->answer)
+	    Rast_set_history(&hist, HIST_KEYWRD, datadesc_opt->answer);
 
 	Rast_write_history(raster->answer, &hist);
     }

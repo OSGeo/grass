@@ -430,8 +430,8 @@ int output_data(int tt, double ft)
 
 	    type = "raster";
 	    Rast_short_history(erdep0, type, &hist1);
-	    sprintf(hist1.edhist[0], "The sediment flux file is %s", flux0);
-	    hist1.edlinecnt = 1;
+	    Rast_append_format_history(
+		&hist1, "The sediment flux file is %s", flux0);
 	    Rast_write_history(erdep0, &hist1);
 	}
 	else {
@@ -446,8 +446,8 @@ int output_data(int tt, double ft)
 
 	    type = "raster";
 	    Rast_short_history(erdep, type, &hist1);
-	    sprintf(hist1.edhist[0], "The sediment flux file is %s", flux);
-	    hist1.edlinecnt = 1;
+	    Rast_append_format_history(
+		&hist1, "The sediment flux file is %s", flux);
 	    Rast_write_history(erdep, &hist1);
 	}
     }
@@ -470,21 +470,23 @@ int output_data(int tt, double ft)
 	/*    fprintf (stdout, "\n history initiated\n");
 	   fflush(stdout); */
 
-	sprintf(hist.edhist[0],
-		"init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
-		maxwa, nwalka);
-	sprintf(hist.edhist[1], "duration (sec.)=%d, time-serie iteration=%d",
-		timesec, tt);
+	Rast_append_format_history(
+	    &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d",
+	    nwalk, maxwa, nwalka);
+	Rast_append_format_history(
+	    &hist, "duration (sec.)=%d, time-serie iteration=%d",
+	    timesec, tt);
+	Rast_append_format_history(
+	    &hist, "written walkers=%d, deltap=%f, mean vel.=%f",
+	    lwwfin, deltap, vmean);
+	Rast_append_format_history(
+	    &hist, "mean source (si)=%e, mean infil=%e",
+	    si0, infmean);
 
-	sprintf(hist.edhist[2], "written walkers=%d, deltap=%f, mean vel.=%f",
-		lwwfin, deltap, vmean);
-
-	sprintf(hist.edhist[3], "mean source (si)=%e, mean infil=%e", si0,
-		infmean);
-
-	sprintf(hist.datsrc_1, "input files: %s %s %s", elevin, dxin, dyin);
-	sprintf(hist.datsrc_2, "input files: %s %s %s", rain, infil, manin);
-	hist.edlinecnt = 4;
+	Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
+			    elevin, dxin, dyin);
+	Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
+			    rain, infil, manin);
 
 	Rast_command_history(&hist);
 
@@ -508,21 +510,23 @@ int output_data(int tt, double ft)
 	/*    fprintf (stdout, "\n history initiated\n");
 	   fflush(stdout); */
 
-	sprintf(hist.edhist[0],
-		"init.walkers=%d, maxwalk=%d, rem. walkers=%d", nwalk, maxwa,
-		nwalka);
-	sprintf(hist.edhist[1], "duration (sec.)=%d, time-serie iteration=%d",
-		timesec, tt);
+	Rast_append_format_history(
+	    &hist,"init.walkers=%d, maxwalk=%d, rem. walkers=%d",
+	    nwalk, maxwa, nwalka);
+	Rast_append_format_history(
+	    &hist, "duration (sec.)=%d, time-serie iteration=%d",
+	    timesec, tt);
+	Rast_append_format_history(
+	    &hist, "written walkers=%d, deltap=%f, mean vel.=%f",
+	    lwwfin, deltap, vmean);
+	Rast_append_format_history(
+	    &hist, "mean source (si)=%e, mean infil=%e",
+	    si0, infmean);
 
-	sprintf(hist.edhist[2], "written walkers=%d, deltap=%f, mean vel.=%f",
-		lwwfin, deltap, vmean);
-
-	sprintf(hist.edhist[3], "mean source (si)=%e, mean infil=%e", si0,
-		infmean);
-
-	sprintf(hist.datsrc_1, "input files: %s %s %s", elevin, dxin, dyin);
-	sprintf(hist.datsrc_2, "input files: %s %s %s", rain, infil, manin);
-	hist.edlinecnt = 4;
+	Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
+			    elevin, dxin, dyin);
+	Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
+			    rain, infil, manin);
 
 	Rast_command_history(&hist);
 
@@ -546,22 +550,22 @@ int output_data(int tt, double ft)
 	/*    fprintf (stdout, "\n history initiated\n");
 	   fflush(stdout); */
 
-	sprintf(hist.edhist[0],
-		"init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
-		maxwa, nwalka);
-	sprintf(hist.edhist[1], "duration (sec.)=%d, time-serie iteration=%d",
-		timesec, tt);
+	Rast_append_format_history(
+	    &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d",
+	    nwalk, maxwa, nwalka);
+	Rast_append_format_history(
+	    &hist, "duration (sec.)=%d, time-serie iteration=%d",
+	    timesec, tt);
+	Rast_append_format_history(
+	    &hist, "written walkers=%d, deltap=%f, mean vel.=%f",
+	    lwwfin, deltap, vmean);
+	Rast_append_format_history(
+	    &hist, "mean source (si)=%f", si0);
 
-	sprintf(hist.edhist[2], "written walkers=%d, deltap=%f, mean vel.=%f",
-		lwwfin, deltap, vmean);
-
-	sprintf(hist.edhist[3], "mean source (si)=%f", si0);
-
-	sprintf(hist.datsrc_1, "input files: %s %s %s", wdepth, dxin, dyin);
-	sprintf(hist.datsrc_2, "input files: %s %s %s %s", manin, detin,
-		tranin, tauin);
-
-	hist.edlinecnt = 4;
+	Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
+			    wdepth, dxin, dyin);
+	Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s %s",
+			    manin, detin, tranin, tauin);
 
 	Rast_command_history(&hist);
 

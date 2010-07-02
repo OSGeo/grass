@@ -299,12 +299,12 @@ int main(int argc, char *argv[])
     Rast_put_cell_title(rastout->answer, title);
 
     Rast_short_history(rastout->answer, "raster", &history);
-    strncpy(history.datsrc_1, rastin->answer, RECORD_LEN);
-    history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
+    Rast_set_history(&history, HIST_DATSRC_1, rastin->answer);
     G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
     G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
-    sprintf(history.datsrc_2, "Source map NS res: %s   EW res: %s", buf_nsres,
-	    buf_ewres);
+    Rast_format_history(&history, HIST_DATSRC_2,
+			"Source map NS res: %s   EW res: %s",
+			buf_nsres, buf_ewres);
     Rast_command_history(&history);
     Rast_write_history(rastout->answer, &history);
 

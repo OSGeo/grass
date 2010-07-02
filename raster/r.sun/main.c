@@ -1938,88 +1938,99 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	G_fatal_error
 	    ("Failed to init map history: no output maps requested!");
 
-    sprintf(hist.edhist[0],
-	    " ----------------------------------------------------------------");
-    sprintf(hist.edhist[1], " Day [1-365]:                              %d",
-	    day);
-    hist.edlinecnt = 2;
+    Rast_append_format_history(
+	&hist,
+	" ----------------------------------------------------------------");
+    Rast_append_format_history(
+	&hist,
+	" Day [1-365]:                              %d",
+	day);
+
+    if (ttime != NULL)
+	Rast_append_format_history(
+	    &hist,
+	    " Local (solar) time (decimal hr.):         %.4f", timo);
+
+    Rast_append_format_history(
+	&hist,
+	" Solar constant (W/m^2):                   1367");
+    Rast_append_format_history(
+	&hist,
+	" Extraterrestrial irradiance (W/m^2):      %f",
+	sunRadVar.G_norm_extra);
+    Rast_append_format_history(
+	&hist,
+	" Declination (rad):                        %f", -declination);
+
+    Rast_append_format_history(
+	&hist,
+	" Latitude min-max(deg):                    %.4f - %.4f",
+	lat_min, lat_max);
 
     if (ttime != NULL) {
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Local (solar) time (decimal hr.):         %.4f", timo);
-	hist.edlinecnt++;
-    }
-
-    sprintf(hist.edhist[hist.edlinecnt],
-	    " Solar constant (W/m^2):                   1367");
-    sprintf(hist.edhist[hist.edlinecnt + 1],
-	    " Extraterrestrial irradiance (W/m^2):      %f",
-	    sunRadVar.G_norm_extra);
-    sprintf(hist.edhist[hist.edlinecnt + 2],
-	    " Declination (rad):                        %f", -declination);
-    hist.edlinecnt += 3;
-
-    sprintf(hist.edhist[hist.edlinecnt],
-	    " Latitude min-max(deg):                    %.4f - %.4f",
-	    lat_min, lat_max);
-    hist.edlinecnt++;
-
-    if (ttime != NULL) {
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Sunrise time (hr.):                       %.2f",
-		sunGeom.sunrise_time);
-	sprintf(hist.edhist[hist.edlinecnt + 1],
-		" Sunset time (hr.):                        %.2f",
-		sunGeom.sunset_time);
-	sprintf(hist.edhist[hist.edlinecnt + 2],
-		" Daylight time (hr.):                      %.2f",
-		sunGeom.sunset_time - sunGeom.sunrise_time);
+	Rast_append_format_history(
+	    &hist,
+	    " Sunrise time (hr.):                       %.2f",
+	    sunGeom.sunrise_time);
+	Rast_append_format_history(
+	    &hist,
+	    " Sunset time (hr.):                        %.2f",
+	    sunGeom.sunset_time);
+	Rast_append_format_history(
+	    &hist,
+	    " Daylight time (hr.):                      %.2f",
+	    sunGeom.sunset_time - sunGeom.sunrise_time);
     }
     else {
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Sunrise time min-max (hr.):               %.2f - %.2f",
-		sunrise_min, sunrise_max);
-	sprintf(hist.edhist[hist.edlinecnt + 1],
-		" Sunset time min-max (hr.):                %.2f - %.2f",
-		sunset_min, sunset_max);
-	sprintf(hist.edhist[hist.edlinecnt + 2],
-		" Time step (hr.):                          %.4f", step);
+	Rast_append_format_history(
+	    &hist,
+	    " Sunrise time min-max (hr.):               %.2f - %.2f",
+	    sunrise_min, sunrise_max);
+	Rast_append_format_history(
+	    &hist,
+	    " Sunset time min-max (hr.):                %.2f - %.2f",
+	    sunset_min, sunset_max);
+	Rast_append_format_history(
+	    &hist,
+	    " Time step (hr.):                          %.4f", step);
     }
-    hist.edlinecnt += 3;
 
     if (incidout != NULL || ttime != NULL) {
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Solar altitude (deg):                     %.4f",
-		sunVarGeom.solarAltitude * rad2deg);
-	sprintf(hist.edhist[hist.edlinecnt + 1],
-		" Solar azimuth (deg):                      %.4f",
-		sunVarGeom.solarAzimuth * rad2deg);
-	hist.edlinecnt += 2;
+	Rast_append_format_history(
+	    &hist,
+	    " Solar altitude (deg):                     %.4f",
+	    sunVarGeom.solarAltitude * rad2deg);
+	Rast_append_format_history(
+	    &hist,
+	    " Solar azimuth (deg):                      %.4f",
+	    sunVarGeom.solarAzimuth * rad2deg);
     }
 
     if (linkein == NULL)
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Linke turbidity factor:                   %.1f",
-		sunRadVar.linke);
+	Rast_append_format_history(
+	    &hist,
+	    " Linke turbidity factor:                   %.1f",
+	    sunRadVar.linke);
     else
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Linke turbidity factor min-max:           %.1f-%.1f",
-		linke_min, linke_max);
-    hist.edlinecnt++;
+	Rast_append_format_history(
+	    &hist,
+	    " Linke turbidity factor min-max:           %.1f-%.1f",
+	    linke_min, linke_max);
 
     if (albedo == NULL)
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Ground albedo:                            %.3f",
-		sunRadVar.alb);
+	Rast_append_format_history(
+	    &hist,
+	    " Ground albedo:                            %.3f",
+	    sunRadVar.alb);
     else
-	sprintf(hist.edhist[hist.edlinecnt],
-		" Ground albedo min-max:                    %.3f-%.3f",
-		albedo_min, albedo_max);
-    hist.edlinecnt++;
+	Rast_append_format_history(
+	    &hist,
+	    " Ground albedo min-max:                    %.3f-%.3f",
+	    albedo_min, albedo_max);
 
-    sprintf(hist.edhist[hist.edlinecnt],
-	    " -----------------------------------------------------------------");
-    hist.edlinecnt++;
+    Rast_append_format_history(
+	&hist,
+	" -----------------------------------------------------------------");
 
     Rast_command_history(&hist);
     /* don't call Rast_write_history() until after Rast_close() or it just gets overwritten */

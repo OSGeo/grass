@@ -163,12 +163,9 @@ int main(int argc, char *argv[])
 
     /* write map history (meta data) */
     Rast_short_history(output, "raster", &hist);
-    sprintf(hist.datsrc_1, "%s", input);
-    if (strlen(opt3->answer) < (RECORD_LEN - 14)) {
-	sprintf(hist.edhist[0], "Buffer distance%s:", ndist > 1 ? "s" : "");
-	sprintf(hist.edhist[1], " %s %s", opt3->answer, units);
-	hist.edlinecnt = 2;
-    }
+    Rast_set_history(&hist, HIST_DATSRC_1, input);
+    Rast_append_format_history(&hist, "Buffer distance%s:", ndist > 1 ? "s" : "");
+    Rast_append_format_history(&hist, " %s %s", opt3->answer, units);
     Rast_command_history(&hist);
     Rast_write_history(output, &hist);
 

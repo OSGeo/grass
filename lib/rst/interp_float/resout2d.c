@@ -25,6 +25,23 @@
 
 /* output cell maps for elevation, aspect, slope and curvatures */
 
+static void do_history(const char *name, const char *input,
+		       const struct interp_params *params)
+{
+    struct History hist;
+
+    Rast_short_history(name, "raster", &hist);
+    if (params->elev)
+	Rast_append_format_history(&hist, "The elevation map is %s",
+				   params->elev);
+
+    Rast_format_history(&hist, HIST_DATSRC_1, "raster map %s", input);
+
+    Rast_write_history(name, &hist);
+
+    Rast_free_history(&hist);
+}
+
 int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax,	/* min,max input z-values */
 			  double zminac, double zmaxac,	/* min,max interpolated values */
 			  double c1min, double c1max, double c2min, double c2max, double gmin, double gmax, double ertot,	/* total interplating func. error */
@@ -46,9 +63,9 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     float dat1, dat2;
     struct Colors colors, colors2;
     double value1, value2;
-    struct History hist, hist1, hist2, hist3, hist4, hist5;
+    struct History hist;
     struct _Color_Rule_ *rule;
-    const char *maps, *type;
+    const char *maps;
     int cond1, cond2;
     CELL val1, val2;
     
@@ -282,16 +299,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	    Rast_write_colors(params->slope, maps, &colors);
 	    Rast_quantize_fp_map_range(params->slope, mapset, 0., 90., 0, 90);
 
-	    type = "raster";
-	    Rast_short_history(params->slope, type, &hist1);
-	    if (params->elev != NULL)
-		sprintf(hist1.edhist[0], "The elevation map is %s",
-			params->elev);
-
-	    sprintf(hist1.datsrc_1, "raster map %s", input);
-	    hist1.edlinecnt = 1;
-
-	    Rast_write_history(params->slope, &hist1);
+	    do_history(params->slope, input, params);
 	}
 
 	/* colortable for aspect */
@@ -322,16 +330,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 	    Rast_write_colors(params->aspect, maps, &colors);
 	    Rast_quantize_fp_map_range(params->aspect, mapset, 0., 360., 0, 360);
 
-	    type = "raster";
-	    Rast_short_history(params->aspect, type, &hist2);
-	    if (params->elev != NULL)
-		sprintf(hist2.edhist[0], "The elevation map is %s",
-			params->elev);
-
-	    sprintf(hist2.datsrc_1, "raster map %s", input);
-	    hist2.edlinecnt = 1;
-
-	    Rast_write_history(params->aspect, &hist2);
+	    do_history(params->aspect, input, params);
 	}
 
 	/* colortable for curvatures */
@@ -386,16 +385,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 					dat1, dat2,
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
-		type = "raster";
-		Rast_short_history(params->pcurv, type, &hist3);
-		if (params->elev != NULL)
-		    sprintf(hist3.edhist[0], "The elevation map is %s",
-			    params->elev);
-
-		sprintf(hist3.datsrc_1, "raster map %s", input);
-		hist3.edlinecnt = 1;
-
-		Rast_write_history(params->pcurv, &hist3);
+		do_history(params->pcurv, input, params);
 	    }
 
 	    if (params->tcurv != NULL) {
@@ -410,16 +400,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 					dat1, dat2, (CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
-		type = "raster";
-		Rast_short_history(params->tcurv, type, &hist4);
-		if (params->elev != NULL)
-		    sprintf(hist4.edhist[0], "The elevation map is %s",
-			    params->elev);
-
-		sprintf(hist4.datsrc_1, "raster map %s", input);
-		hist4.edlinecnt = 1;
-
-		Rast_write_history(params->tcurv, &hist4);
+		do_history(params->tcurv, input, params);
 	    }
 
 	    if (params->mcurv != NULL) {
@@ -435,45 +416,42 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 					(CELL) (dat1 * MULT),
 					(CELL) (dat2 * MULT));
 
-		type = "raster";
-		Rast_short_history(params->mcurv, type, &hist5);
-		if (params->elev != NULL)
-		    sprintf(hist5.edhist[0], "The elevation map is %s",
-			    params->elev);
-
-		sprintf(hist5.datsrc_1, "raster map %s", input);
-		hist5.edlinecnt = 1;
-
-		Rast_write_history(params->mcurv, &hist5);
+		do_history(params->mcurv, input, params);
 	    }
 	}
     }
 
     if (params->elev != NULL) {
-	maps = G_find_file("cell", params->elev, "");
-	if (maps == NULL) {
+	if (!G_find_file2("cell", params->elev, "")) {
 	    G_warning(_("Raster map <%s> not found"), params->elev);
 	    return -1;
 	}
+
 	Rast_short_history(params->elev, "raster", &hist);
 
 	if (smooth != NULL)
-	    sprintf(hist.edhist[0], "tension=%f, smoothing=%s",
-		    params->fi * 1000. / (*dnorm), smooth);
+	    Rast_append_format_history(
+		&hist, "tension=%f, smoothing=%s",
+		params->fi * 1000. / (*dnorm), smooth);
 	else
-	    sprintf(hist.edhist[0], "tension=%f",
-		    params->fi * 1000. / (*dnorm));
-	sprintf(hist.edhist[1], "dnorm=%f, zmult=%f", *dnorm, params->zmult);
-	sprintf(hist.edhist[2], "KMAX=%d, KMIN=%d, errtotal=%f", params->kmax,
-		params->kmin, sqrt(ertot / n_points));
-	sprintf(hist.edhist[3], "zmin_data=%f, zmax_data=%f", zmin, zmax);
-	sprintf(hist.edhist[4], "zmin_int=%f, zmax_int=%f", zminac, zmaxac);
+	    Rast_append_format_history(
+		&hist, "tension=%f", params->fi * 1000. / (*dnorm));
 
-	sprintf(hist.datsrc_1, "raster map %s", input);
+	Rast_append_format_history(
+	    &hist, "dnorm=%f, zmult=%f", *dnorm, params->zmult);
+	Rast_append_format_history(
+	    &hist, "KMAX=%d, KMIN=%d, errtotal=%f", params->kmax,
+	    params->kmin, sqrt(ertot / n_points));
+	Rast_append_format_history(
+	    &hist, "zmin_data=%f, zmax_data=%f", zmin, zmax);
+	Rast_append_format_history(
+	    &hist, "zmin_int=%f, zmax_int=%f", zminac, zmaxac);
 
-	hist.edlinecnt = 5;
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster map %s", input);
 
 	Rast_write_history(params->elev, &hist);
+
+	Rast_free_history(&hist);
     }
 
 /* change region to initial region */

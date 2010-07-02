@@ -26,11 +26,11 @@ int update_hist(const char *raster_name, const char *vector_name, long scale)
     if (Rast_read_history(raster_name, G_mapset(), &hist) < 0)
 	return -1;
 
-    strcpy(hist.title, raster_name);
+    Rast_set_history(&hist, HIST_TITLE, raster_name);
 
     /* store information from digit file into history */
-    sprintf(hist.datsrc_1, "Vector Map: %s", vector_name);
-    sprintf(hist.datsrc_2, "Original scale from vector map: 1:%ld", scale);	/* 4.0 */
+    Rast_format_history(&hist, HIST_DATSRC_1, "Vector Map: %s", vector_name);
+    Rast_format_history(&hist, HIST_DATSRC_2, "Original scale from vector map: 1:%ld", scale);	/* 4.0 */
 
     /* store command line options */
     Rast_command_history(&hist);

@@ -338,10 +338,23 @@ void Rast_extend_histogram(CELL, long, struct Histogram *);
 void Rast_zero_histogram(struct Histogram *);
 
 /* history.c */
+int Rast__read_history(struct History *, FILE *);
 int Rast_read_history(const char *, const char *, struct History *);
+void Rast__write_history(struct History *, FILE *);
 void Rast_write_history(const char *, struct History *);
 void Rast_short_history(const char *, const char *, struct History *);
 int Rast_command_history(struct History *);
+void Rast_append_history(struct History *, const char *);
+void Rast_append_format_history(struct History *, const char *, ...)
+    __attribute__ ((format(printf, 2, 3)));
+const char *Rast_get_history(struct History *, int);
+void Rast_set_history(struct History *, int, const char *);
+void Rast_format_history(struct History *, int, const char *, ...)
+    __attribute__ ((format(printf, 3, 4)));
+void Rast_clear_history(struct History *);
+void Rast_free_history(struct History *);
+int Rast_history_length(struct History *);
+const char *Rast_history_line(struct History *, int);
 
 /* init.c */
 void Rast_init(void);

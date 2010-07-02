@@ -57,18 +57,14 @@ int do_recode(void)
 
     /* writing history file */
     Rast_short_history(result, "raster", &hist);
-    sprintf(hist.edhist[0], "recode of raster map %s", name);
+    Rast_append_format_history(&hist, "recode of raster map %s", name);
     /* if there are more rules than history lines allocated, write only 
        MAXEDLINES-1 rules , and "...." as a last rule */
-    for (i = 0; (i < nrules) && (i < MAXEDLINES - 2); i++)
-	sprintf(hist.edhist[i + 1], "%s", rules[i]);
-    if (nrules > MAXEDLINES - 1) {
-	sprintf(hist.edhist[MAXEDLINES - 1], "...");
-	hist.edlinecnt = MAXEDLINES;
-    }
-    else
-	hist.edlinecnt = nrules + 1;
-    sprintf(hist.datsrc_1, "raster map %s", name);
+    for (i = 0; i < nrules && i < 50; i++)
+	Rast_append_history(&hist, rules[i]);
+    if (nrules > 50)
+	Rast_append_history(&hist, "...");
+    Rast_format_history(&hist, HIST_DATSRC_1, "raster map %s", name);
     Rast_write_history(result, &hist);
 
     return 0;

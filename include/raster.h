@@ -10,10 +10,6 @@
 #define FCELL_TYPE 1
 #define DCELL_TYPE 2
 
-/* History */
-#define RECORD_LEN  80
-#define MAXEDLINES  50
-
 /* for G_get_raster_sample(), INTERP_TYPE */
 #define UNKNOWN	  0
 #define NEAREST   1		/* nearest neighbor interpolation  */
@@ -153,18 +149,25 @@ struct Categories
     /* label, and quant rules are never reordered. Olga apr,95 */
 };
 
+enum History_field
+{
+    HIST_MAPID,
+    HIST_TITLE,
+    HIST_MAPSET,
+    HIST_CREATOR,
+    HIST_MAPTYPE,
+    HIST_DATSRC_1,
+    HIST_DATSRC_2,
+    HIST_KEYWRD,
+
+    HIST_NUM_FIELDS,
+};
+
 struct History
 {
-    char mapid[RECORD_LEN];
-    char title[RECORD_LEN];
-    char mapset[RECORD_LEN];
-    char creator[RECORD_LEN];
-    char maptype[RECORD_LEN];
-    char datsrc_1[RECORD_LEN];
-    char datsrc_2[RECORD_LEN];
-    char keywrd[RECORD_LEN];
-    int edlinecnt;
-    char edhist[MAXEDLINES][RECORD_LEN];
+    char *fields[HIST_NUM_FIELDS];
+    int nlines;
+    char **lines;
 };
 
 struct Cell_stats

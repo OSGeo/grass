@@ -277,8 +277,7 @@ int main(int argc, char *argv[])
 
     /* write input name to map history */
     G3d_readHistory(output, G_mapset(), &history);
-    strncpy(history.datsrc_1, input, RECORD_LEN);
-    history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
+    Rast_set_history(&history, HIST_DATSRC_1, input);
     G3d_writeHistory(output, &history);
 
     map = NULL;

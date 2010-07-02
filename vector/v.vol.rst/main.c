@@ -843,17 +843,17 @@ int main(int argc, char *argv[])
 		if ((cellout != NULL)) {
 		    Rast_short_history(cellout, "raster", &hist);
 		    /* TODO: next lines need to be verified! */
-		    sprintf(hist.edhist[0], "tension=%f, smoothing=%f", fi,
-			    rsm);
-		    sprintf(hist.edhist[1],
-			    "dnorm=%f, dmin=%f, wmult=%f, zmult=%f", dnorm,
-			    atof(parm.dmin1->answer), wmult, zmult);
-		    sprintf(hist.edhist[2], "segmax=%d, npmin=%d, npmax=%d, rmsdevi=%f",
-			    KMAX, npmin, KMAXPOINTS, sqrt(ertot / KMAX2));
-		    sprintf(hist.edhist[3], "wmin_data=%f, wmax_data=%f",
-			    wmin, wmax);
+		    Rast_append_format_history(
+			&hist, "tension=%f, smoothing=%f", fi, rsm);
+		    Rast_append_format_history(
+			&hist, "dnorm=%f, dmin=%f, wmult=%f, zmult=%f", dnorm,
+			atof(parm.dmin1->answer), wmult, zmult);
+		    Rast_append_format_history(
+			&hist, "segmax=%d, npmin=%d, npmax=%d, rmsdevi=%f",
+			KMAX, npmin, KMAXPOINTS, sqrt(ertot / KMAX2));
+		    Rast_append_format_history(
+			&hist, "wmin_data=%f, wmax_data=%f", wmin, wmax);
 		    /* ? sprintf (hist.edhist[4], "wmin_int=%f, wmax_int=%f", wminac, wmaxac); */
-		    hist.edlinecnt = 5;
 
 		    Rast_command_history(&hist);
 		    Rast_write_history(cellout, &hist);
