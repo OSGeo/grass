@@ -87,11 +87,10 @@ int exec_rectify(int order, char *extension)
 		}
 
 		/* Write out History Structure History */
-		sprintf(hist.title, "%s", result);
-		sprintf(hist.datsrc_1, "%s", name);
-		sprintf(hist.edhist[0], "Created from: i.rectify");
-		sprintf(hist.edhist[1], "Transformation order = %d", order);
-		hist.edlinecnt = 2;
+		Rast_set_history(&hist, HIST_TITLE, result);
+		Rast_set_history(&hist, HIST_DATSRC_1, name);
+		Rast_append_history(&hist, "Created from: i.rectify");
+		Rast_append_format_history(&hist, "Transformation order = %d", order);
 		Rast_write_history(result, &hist);
 
 		select_current_env();

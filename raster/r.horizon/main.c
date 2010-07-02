@@ -1243,14 +1243,12 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	    Rast_command_history(&history);
 
 	    /* insert a blank line */
-	    history.edhist[history.edlinecnt][0] = '\0';
-	    history.edlinecnt++;
+	    Rast_append_history(&history, "");
 
-	    sprintf(msg_buff,
-		    "Horizon view from azimuth angle %.2f degrees CCW from East",
-		    angle * rad2deg);
-	    strcpy(history.edhist[history.edlinecnt], msg_buff);
-	    history.edlinecnt++;
+	    Rast_append_format_history(
+		&history,
+		"Horizon view from azimuth angle %.2f degrees CCW from East",
+		angle * rad2deg);
 
 	    Rast_write_history(shad_filename, &history);
 	}

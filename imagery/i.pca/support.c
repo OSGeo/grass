@@ -38,7 +38,7 @@ static void write_history(int bands, char *outname, double **eigmat, double *eig
     double eigval_total = 0.0;
 
     Rast_short_history(outname, "raster", &hist);
-    sprintf(hist.edhist[0], "Eigen values, (vectors), and [percent importance]:");
+    Rast_append_history(&hist, "Eigen values, (vectors), and [percent importance]:");
 
     if(first_map)
 	G_message(_("Eigen values, (vectors), and [percent importance]:"));
@@ -63,14 +63,13 @@ static void write_history(int bands, char *outname, double **eigmat, double *eig
 	sprintf(tmpa, "[%5.2f%%]", eigval[i] * 100/eigval_total);
 	strcat(tmpeigen, tmpa);
 
-	sprintf(hist.edhist[i + 1], tmpeigen);
+	Rast_append_history(&hist, tmpeigen);
 
 	/* write eigen values to screen */
 	if(first_map)
 	    G_message("%s", tmpeigen);
     }
 
-    hist.edlinecnt = i + 1;
     Rast_command_history(&hist);
 
     /* only write to stderr the first time (this fn runs for every output map) */

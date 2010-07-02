@@ -1052,8 +1052,7 @@ int main(int argc, char *argv[])
 
     Rast_short_history(outmap, "raster", &history);
     Rast_command_history(&history);
-    strncpy(history.datsrc_1, infile, RECORD_LEN);
-    history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
+    Rast_set_history(&history, HIST_DATSRC_1, infile);
     Rast_write_history(outmap, &history);
 
 

@@ -347,13 +347,11 @@ static void write_hist(char *map_name, char *title, char *source_name, int mode,
     Rast_put_cell_title(map_name, title);
 
     Rast_short_history(map_name, "raster", &history);
-    strncpy(history.datsrc_1, source_name, RECORD_LEN);
-    history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
-    sprintf(history.edhist[0],
-	    "Processing mode: %s", sfd ? "SFD (D8)" : "MFD");
-    sprintf(history.edhist[1],
-	    "Memory mode: %s", mode ? "Segmented" : "All in RAM");
-    history.edlinecnt = 2;
+    Rast_set_history(&history, HIST_DATSRC_1, source_name);
+    Rast_append_format_history(
+	&history, "Processing mode: %s", sfd ? "SFD (D8)" : "MFD");
+    Rast_append_format_history(
+	&history, "Memory mode: %s", mode ? "Segmented" : "All in RAM");
     Rast_command_history(&history);
 
     Rast_write_history(map_name, &history);

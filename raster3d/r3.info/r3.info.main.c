@@ -151,17 +151,15 @@ int main(int argc, char *argv[])
 	&& !timestampflag->answer && !hflag->answer) {
 	divider('+');
 
-	if (G_asprintf
-	    (&line, "Layer:    %-29.29s  Date: %s", name,
-	     hist_ok ? hist.mapid : "??") > 0)
+	if (G_asprintf(&line, "Layer:    %-29.29s  Date: %s", name,
+		       hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??") > 0)
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
 
 
-	if (G_asprintf
-	    (&line, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
-	     hist_ok ? hist.creator : "??") > 0)
+	if (G_asprintf(&line, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
+	     hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??") > 0)
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
@@ -177,9 +175,8 @@ int main(int argc, char *argv[])
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
 
-	if (G_asprintf
-	    (&line, "Title:    %s ( %s )", cats_ok ? cats.title : "??",
-	     hist_ok ? hist.title : "??") > 0)
+	if (G_asprintf(&line, "Title:    %s ( %s )", cats_ok ? cats.title : "??",
+	     hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??") > 0)
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
@@ -210,8 +207,7 @@ int main(int argc, char *argv[])
 	    format_double((double)cats.num, tmp1);
 	}
 
-	if (G_asprintf
-	    (&line, "  Type of Map:  %-20.20s Number of Categories: %-9s",
+	if (G_asprintf(&line, "  Type of Map:  %-20.20s Number of Categories: %-9s",
 	     "3d cell", cats_ok ? tmp1 : "??") > 0)
 	    printline(line);
 	else
@@ -303,12 +299,12 @@ int main(int argc, char *argv[])
 
 	if (hist_ok) {
 	    printline("  Data Source:");
-	    if (G_asprintf(&line, "   %s", hist.datsrc_1) > 0)
+	    if (G_asprintf(&line, "   %s", Rast_get_history(&hist, HIST_DATSRC_1)) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 
-	    if (G_asprintf(&line, "   %s", hist.datsrc_2) > 0)
+	    if (G_asprintf(&line, "   %s", Rast_get_history(&hist, HIST_DATSRC_2)) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -316,20 +312,20 @@ int main(int argc, char *argv[])
 	    printline("");
 
 	    printline("  Data Description:");
-	    if (G_asprintf(&line, "   %s", hist.keywrd) > 0)
+	    if (G_asprintf(&line, "   %s", Rast_get_history(&hist, HIST_KEYWRD)) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    printline("");
-	    if (hist.edlinecnt) {
+	    if (Rast_history_length(&hist)) {
 		printline("  Comments:  ");
 
-		for (i = 0; i < hist.edlinecnt; i++)
+		for (i = 0; i < Rast_history_length(&hist); i++)
 
 	    /**************************************/
 		{
-		    if (G_asprintf(&line, "   %s", hist.edhist[i]) > 0)
+		    if (G_asprintf(&line, "   %s", Rast_history_line(&hist, i)) > 0)
 			printline(line);
 		    else
 			G_fatal_error(_("Cannot allocate memory for string"));
@@ -383,22 +379,22 @@ int main(int argc, char *argv[])
 	}			/*Datatype */
 	else if (tflag->answer) {
 	    fprintf(out, "datatype=\"%s\"\n",
-		    (data_type ==
-		     FCELL_TYPE ? "float" : (data_type ==
-					     DCELL_TYPE ? "double" : "??")));
+		    data_type == FCELL_TYPE ? "float" :
+		    data_type == DCELL_TYPE ? "double" :
+		    "??");
 
 	}			/*History output */
 	else if (hflag->answer) {
 	    if (hist_ok) {
 		fprintf(out, "Data Source:\n");
-		fprintf(out, "   %s\n", hist.datsrc_1);
-		fprintf(out, "   %s\n", hist.datsrc_2);
+		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
+		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
 		fprintf(out, "Data Description:\n");
-		fprintf(out, "   %s\n", hist.keywrd);
-		if (hist.edlinecnt) {
+		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_KEYWRD));
+		if (Rast_history_length(&hist)) {
 		    fprintf(out, "Comments:\n");
-		    for (i = 0; i < hist.edlinecnt; i++)
-			fprintf(out, "   %s\n", hist.edhist[i]);
+		    for (i = 0; i < Rast_history_length(&hist); i++)
+			fprintf(out, "   %s\n", Rast_history_line(&hist, i));
 		}
 	    }
 	    else {

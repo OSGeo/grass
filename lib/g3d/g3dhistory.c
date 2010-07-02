@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <grass/glocale.h>
 #include "G3d_intern.h"
+#include <grass/raster.h>
 
 /*simple error message */
 void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
@@ -61,74 +62,20 @@ void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
  */
 
 int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
-/* This function is adapted from Rast_read_history */
 {
-    FILE *fd;
+    FILE *fp;
 
-    G_zero(hist, sizeof(struct History));
+    G_zero(&hist, sizeof(struct History));
 
-    fd = G_fopen_old_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name, mapset);
-    if (!fd)
+    fp = G_fopen_old_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name, mapset);
+    if (!fp)
 	return -2;
 
-    if (!G_getl(hist->mapid, sizeof(hist->mapid), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->mapid);
+    if (Rast__read_history(hist, fp) == 0)
+	return 0;
 
-    if (!G_getl(hist->title, sizeof(hist->title), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->title);
-
-    if (!G_getl(hist->mapset, sizeof(hist->mapset), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->mapset);
-
-    if (!G_getl(hist->creator, sizeof(hist->creator), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->creator);
-
-    if (!G_getl(hist->maptype, sizeof(hist->maptype), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->maptype);
-
-    if (!G_getl(hist->datsrc_1, sizeof(hist->datsrc_1), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->datsrc_1);
-
-    if (!G_getl(hist->datsrc_2, sizeof(hist->datsrc_2), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->datsrc_2);
-
-    if (!G_getl(hist->keywrd, sizeof(hist->keywrd), fd)) {
-	SimpleErrorMessage(fd, name, mapset);
-	return -1;
-    }
-    G_ascii_check(hist->keywrd);
-
-    hist->edlinecnt = 0;
-    while ((hist->edlinecnt < MAXEDLINES) &&
-	   (G_getl
-	    (hist->edhist[hist->edlinecnt], sizeof(hist->edhist[0]), fd))) {
-	G_ascii_check(hist->edhist[hist->edlinecnt]);
-	hist->edlinecnt++;
-    }
-
-    fclose(fd);
-    return 0;
+    SimpleErrorMessage(fp, name, mapset);
+    return -1;
 }
 
 
@@ -150,25 +97,10 @@ int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
 int G3d_writeHistory(const char *name, struct History *hist)
 /* This function is adapted from Rast_write_history */
 {
-    FILE *fd;
-    int i;
-
-    fd = G_fopen_new_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name);
-    if (!fd)
+    FILE *fp = G_fopen_new_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name);
+    if (!fp)
 	return -1;
 
-    fprintf(fd, "%s\n", hist->mapid);
-    fprintf(fd, "%s\n", hist->title);
-    fprintf(fd, "%s\n", hist->mapset);
-    fprintf(fd, "%s\n", hist->creator);
-    fprintf(fd, "%s\n", hist->maptype);
-    fprintf(fd, "%s\n", hist->datsrc_1);
-    fprintf(fd, "%s\n", hist->datsrc_2);
-    fprintf(fd, "%s\n", hist->keywrd);
-
-    for (i = 0; i < hist->edlinecnt; i++)
-	fprintf(fd, "%s\n", hist->edhist[i]);
-
-    fclose(fd);
+    Rast__write_history(hist, fp);
     return 0;
 }

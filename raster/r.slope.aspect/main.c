@@ -1041,11 +1041,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(aspect_name, "raster", &hist);
-	sprintf(hist.edhist[0], "aspect map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "aspect map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(aspect_name, &hist);
 
 	G_message(_("Aspect raster map <%s> complete"), aspect_name);
@@ -1150,12 +1149,11 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(slope_name, "raster", &hist);
-	sprintf(hist.edhist[0], "slope map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f format = %s", zfactor,
+	Rast_append_format_history(&hist, "slope map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f format = %s", zfactor,
 		parm.slope_fmt->answer);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(slope_name, &hist);
 
 	G_message(_("Slope raster map <%s> complete"), slope_name);
@@ -1223,11 +1221,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(pcurv_name, "raster", &hist);
-	sprintf(hist.edhist[0], "profile curve map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "profile curve map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(pcurv_name, &hist);
 
 	G_message(_("Profile curve raster map <%s> complete"), pcurv_name);
@@ -1250,11 +1247,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(tcurv_name, "raster", &hist);
-	sprintf(hist.edhist[0], "tangential curve map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "tangential curve map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(tcurv_name, &hist);
 
 	G_message(_("Tangential curve raster map <%s> complete"), tcurv_name);
@@ -1275,11 +1271,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(dx_name, "raster", &hist);
-	sprintf(hist.edhist[0], "E-W slope map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "E-W slope map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(dx_name, &hist);
 
 	G_message(_("E-W slope raster map <%s> complete"), dx_name);
@@ -1300,11 +1295,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(dy_name, "raster", &hist);
-	sprintf(hist.edhist[0], "N-S slope map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "N-S slope map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(dy_name, &hist);
 
 	G_message(_("N-S slope raster map <%s> complete"), dy_name);
@@ -1325,11 +1319,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(dxx_name, "raster", &hist);
-	sprintf(hist.edhist[0], "DXX map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "DXX map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(dxx_name, &hist);
 
 	G_message(_("Dxx raster map <%s> complete"), dxx_name);
@@ -1350,11 +1343,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(dyy_name, "raster", &hist);
-	sprintf(hist.edhist[0], "DYY map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "DYY map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(dyy_name, &hist);
 
 	G_message(_("Dyy raster map <%s> complete"), dyy_name);
@@ -1375,11 +1367,10 @@ int main(int argc, char *argv[])
 
 	/* writing history file */
 	Rast_short_history(dxy_name, "raster", &hist);
-	sprintf(hist.edhist[0], "DXY map elev = %s", elev_name);
-	sprintf(hist.edhist[1], "zfactor = %.2f", zfactor);
-	sprintf(hist.edhist[2], "min_slp_allowed = %f", min_slp_allowed);
-	sprintf(hist.datsrc_1, "raster elevation file %s", elev_name);
-	hist.edlinecnt = 3;
+	Rast_append_format_history(&hist, "DXY map elev = %s", elev_name);
+	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
+	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_write_history(dxy_name, &hist);
 
 	G_message(_("Dxy raster map <%s> complete"), dxy_name);

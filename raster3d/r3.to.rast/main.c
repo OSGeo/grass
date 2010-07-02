@@ -328,26 +328,24 @@ int main(int argc, char *argv[])
 	G_debug(4, "Raster map %d Filename: %s", i + 1, RasterFileName);
 	Rast_short_history(RasterFileName, "raster", &history);
 
-	sprintf(history.datsrc_1, "3D Raster map:");
-	strncpy(history.datsrc_2, param.input->answer, RECORD_LEN);
-	history.datsrc_2[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
+	Rast_set_history(&history, HIST_DATSRC_1, "3D Raster map:");
+	Rast_set_history(&history, HIST_DATSRC_2, param.input->answer);
 
-	sprintf(history.edhist[0], "Level %d of %d", i + 1, region.depths);
-	sprintf(history.edhist[1], "Level z-range: %f to %f",
+	Rast_append_format_history(&history, "Level %d of %d", i + 1, region.depths);
+	Rast_append_format_history(&history, "Level z-range: %f to %f",
 		region.bottom + (i * region.tb_res),
 		region.bottom + (i + 1 * region.tb_res));
 
-	sprintf(history.edhist[3], "Input map full z-range: %f to %f",
+	Rast_append_format_history(&history, "Input map full z-range: %f to %f",
 		inputmap_bounds.bottom, inputmap_bounds.top);
-	sprintf(history.edhist[4], "Input map z-resolution: %f",
+	Rast_append_format_history(&history, "Input map z-resolution: %f",
 		inputmap_bounds.tb_res);
-	history.edlinecnt = 5;
+
 	if (!param.res->answer) {
-	    sprintf(history.edhist[6], "GIS region full z-range: %f to %f",
+	    Rast_append_format_history(&history, "GIS region full z-range: %f to %f",
 		    region.bottom, region.top);
-	    sprintf(history.edhist[7], "GIS region z-resolution: %f",
+	    Rast_append_format_history(&history, "GIS region z-resolution: %f",
 		    region.tb_res);
-	    history.edlinecnt = 8;
 	}
 
 	Rast_command_history(&history);

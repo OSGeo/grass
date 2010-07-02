@@ -11,12 +11,62 @@
  * \author Original author CERL
  */
 
+#include <stdarg.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static void print_history_error(const char *, const char *, FILE *);
+void Rast_append_history(struct History *hist, const char *str)
+{
+    hist->lines = G_realloc(hist->lines, (hist->nlines + 1) * sizeof(char *));
+    hist->lines[hist->nlines++] = G_store(str);
+}
+
+void Rast_append_format_history(struct History *hist, const char *fmt, ...)
+{
+    va_list ap;
+    char *str;
+
+    hist->lines = G_realloc(hist->lines, (hist->nlines + 1) * sizeof(char *));
+
+    va_start(ap, fmt);
+    G_vasprintf(&str, fmt, ap);
+    va_end(ap);
+
+    hist->lines[hist->nlines++] = str;
+}
+
+int Rast__read_history(struct History *hist, FILE *fp)
+{
+    int i;
+
+    for (i = 0; i < HIST_NUM_FIELDS; i++) {
+	char buf[4096];
+
+	if (!G_getl(buf, sizeof(buf), fp)) {
+	    fclose(fp);
+	    return -1;
+	}
+
+	G_ascii_check(buf);
+
+	hist->fields[i] = G_store(buf);
+    }
+
+    hist->nlines = 0;
+
+    for (;;) {
+	char buf[4096];
+	if (!G_getl(buf, sizeof(buf), fp))
+	    break;
+	Rast_append_history(hist, buf);
+    }
+
+    fclose(fp);
+
+    return 0;
+}
 
 /*!
  * \brief Read raster history file
@@ -37,83 +87,36 @@ static void print_history_error(const char *, const char *, FILE *);
 int Rast_read_history(const char *name, const char *mapset,
 		      struct History *hist)
 {
-    FILE *fd;
+    FILE *fp;
 
     G_zero(hist, sizeof(struct History));
-    fd = G_fopen_old("hist", name, mapset);
-    if (!fd) {
-	print_history_error(name, mapset, fd);
+
+    fp = G_fopen_old("hist", name, mapset);
+    if (!fp) {
+	G_warning(_("Unable to get history information for <%s@%s>"),
+		  name, mapset);
 	return -1;
     }
 
-    if (!G_getl(hist->mapid, sizeof(hist->mapid), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->mapid);
-
-    if (!G_getl(hist->title, sizeof(hist->title), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->title);
-
-    if (!G_getl(hist->mapset, sizeof(hist->mapset), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->mapset);
-
-    if (!G_getl(hist->creator, sizeof(hist->creator), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->creator);
-
-    if (!G_getl(hist->maptype, sizeof(hist->maptype), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->maptype);
-
-    if (!G_getl(hist->datsrc_1, sizeof(hist->datsrc_1), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->datsrc_1);
-
-    if (!G_getl(hist->datsrc_2, sizeof(hist->datsrc_2), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->datsrc_2);
-
-    if (!G_getl(hist->keywrd, sizeof(hist->keywrd), fd)) {
-	print_history_error(name, mapset, fd);
-	return -1;
-    }
-    G_ascii_check(hist->keywrd);
-
-    hist->edlinecnt = 0;
-    while ((hist->edlinecnt < MAXEDLINES) &&
-	   (G_getl
-	    (hist->edhist[hist->edlinecnt], sizeof(hist->edhist[0]), fd))) {
-	G_ascii_check(hist->edhist[hist->edlinecnt]);
-	hist->edlinecnt++;
-    }
-
-    fclose(fd);
-
-    return 0;
-}
-
-static void print_history_error(const char *name, const char *mapset, FILE *fp)
-{
-    if (fp)
-	fclose(fp);
+    if (Rast__read_history(hist, fp) == 0)
+	return 0;
 
     G_warning(_("Unable to get history information for <%s@%s>"),
 	      name, mapset);
+    return -1;
+}
+
+void Rast__write_history(struct History *hist, FILE *fp)
+{
+    int i;
+
+    for (i = 0; i < HIST_NUM_FIELDS; i++)
+	fprintf(fp, "%s\n", hist->fields[i] ? hist->fields[i] : "");
+
+    for (i = 0; i < hist->nlines; i++)
+	fprintf(fp, "%s\n", hist->lines[i]);
+
+    fclose(fp);
 }
 
 /*!
@@ -135,26 +138,35 @@ static void print_history_error(const char *name, const char *mapset, FILE *fp)
  */
 void Rast_write_history(const char *name, struct History *hist)
 {
-    FILE *fp;
-    int i;
-
-    fp = G_fopen_new("hist", name);
+    FILE *fp = G_fopen_new("hist", name);
     if (!fp)
 	G_fatal_error(_("Unable to write history information for <%s>"), name);
 
-    fprintf(fp, "%s\n", hist->mapid);
-    fprintf(fp, "%s\n", hist->title);
-    fprintf(fp, "%s\n", hist->mapset);
-    fprintf(fp, "%s\n", hist->creator);
-    fprintf(fp, "%s\n", hist->maptype);
-    fprintf(fp, "%s\n", hist->datsrc_1);
-    fprintf(fp, "%s\n", hist->datsrc_2);
-    fprintf(fp, "%s\n", hist->keywrd);
+    Rast__write_history(hist, fp);
+}
 
-    for (i = 0; i < hist->edlinecnt; i++)
-	fprintf(fp, "%s\n", hist->edhist[i]);
+const char *Rast_get_history(struct History *hist, int field)
+{
+    return hist->fields[field];
+}
 
-    fclose(fp);
+void Rast_set_history(struct History *hist, int field, const char *str)
+{
+    if (hist->fields[field])
+	G_free(hist->fields[field]);
+    hist->fields[field] = str ? G_store(str) : NULL;
+}
+
+void Rast_format_history(struct History *hist, int field, const char *fmt, ...)
+{
+    va_list ap;
+
+    if (hist->fields[field])
+	G_free(hist->fields[field]);
+
+    va_start(ap, fmt);
+    G_vasprintf(&hist->fields[field], fmt, ap);
+    va_end(ap);
 }
 
 /*!
@@ -175,16 +187,16 @@ void Rast_write_history(const char *name, struct History *hist)
 void Rast_short_history(const char *name, const char *type,
 			struct History *hist)
 {
-    strncpy(hist->mapid, G_date(), RECORD_LEN);
-    strncpy(hist->title, name, RECORD_LEN);
-    strncpy(hist->mapset, G_mapset(), RECORD_LEN);
-    strncpy(hist->creator, G_whoami(), RECORD_LEN);
-    strncpy(hist->maptype, type, RECORD_LEN);
-
-    sprintf(hist->keywrd, _("generated by %s"), G_program_name());
-    strcpy(hist->datsrc_1, "");
-    strcpy(hist->datsrc_2, "");
-    hist->edlinecnt = 0;
+    G_zero(hist, sizeof(struct History));
+    Rast_set_history(hist, HIST_MAPID, G_date());
+    Rast_set_history(hist, HIST_TITLE, name);
+    Rast_set_history(hist, HIST_MAPSET, G_mapset());
+    Rast_set_history(hist, HIST_CREATOR, G_whoami());
+    Rast_set_history(hist, HIST_MAPTYPE, type);
+    Rast_format_history(hist, HIST_KEYWRD, _("generated by %s"), G_program_name());
+    Rast_set_history(hist, HIST_DATSRC_1, "");
+    Rast_set_history(hist, HIST_DATSRC_2, "");
+    hist->nlines = 0;
 }
 
 /*!
@@ -222,43 +234,68 @@ void Rast_short_history(const char *name, const char *type,
  */
 int Rast_command_history(struct History *hist)
 {
-    int j, cmdlen;
     char *cmdlin;
+    int cmdlen;
 
     cmdlin = G_recreate_command();
     cmdlen = strlen(cmdlin);
 
-    if (hist->edlinecnt > MAXEDLINES - 2) {
-	G_warning(_("Not enough room in history file to record command line"));
-	return 1;
-    }
+    if (hist->nlines > 0)	/* add a blank line if preceding history exists */
+	Rast_append_history(hist, "");
 
-    if (hist->edlinecnt > 0) {	/* add a blank line if preceding history exists */
-	strcpy(hist->edhist[hist->edlinecnt], "");
-	hist->edlinecnt++;
-    }
-
-    if (cmdlen < 70) {		/* ie if it will fit on a single line */
-	sprintf(hist->edhist[hist->edlinecnt], G_recreate_command());
-	hist->edlinecnt++;
-    }
+    if (cmdlen < 70)		/* ie if it will fit on a single line */
+	Rast_append_history(hist, cmdlin);
     else {			/* multi-line required */
-	j = 0;			/* j is the current position in the command line string */
-	while ((cmdlen - j) > 70) {
-	    strncpy(hist->edhist[hist->edlinecnt], &cmdlin[j], 68);
-	    hist->edhist[hist->edlinecnt][68] = '\0';
-	    strcat(hist->edhist[hist->edlinecnt], "\\");
-	    j += 68;
-	    hist->edlinecnt++;
-	    if (hist->edlinecnt > MAXEDLINES - 2) {
-		G_warning(_("Not enough room in history file for command line (truncated)"));
-		return 2;
-	    }
+	int j;			/* j is the current position in the command line string */
+	for (j = 0; cmdlen - j > 70; j += 68) {
+	    char buf[80];
+	    memcpy(buf, &cmdlin[j], 68);
+	    buf[68] = '\\';
+	    buf[69] = '\0';
+	    Rast_append_history(hist, buf);
 	}
-	if ((cmdlen - j) > 0) {	/* ie anything left */
-	    strcpy(hist->edhist[hist->edlinecnt], &cmdlin[j]);
-	    hist->edlinecnt++;
-	}
+	if (cmdlen - j > 0)	/* ie anything left */
+	    Rast_append_history(hist, &cmdlin[j]);
     }
+
     return 0;
 }
+
+void Rast_clear_history(struct History *hist)
+{
+    int i;
+
+    for (i = 0; i < hist->nlines; i++)
+	G_free(hist->lines[i]);
+
+    if (hist->lines)
+	G_free(hist->lines);
+
+    hist->nlines = 0;
+}
+
+void Rast_free_history(struct History *hist)
+{
+    int i;
+
+    for (i = 0; i < HIST_NUM_FIELDS; i++)
+	if (hist->fields[i]) {
+	    G_free(hist->fields[i]);
+	    hist->fields[i] = NULL;
+	}
+
+    Rast_clear_history(hist);
+}
+
+int Rast_history_length(struct History *hist)
+{
+    return hist->nlines;
+}
+
+const char *Rast_history_line(struct History *hist, int line)
+{
+    if (line < 0 || line >= hist->nlines)
+	return "";
+    return hist->lines[line];
+}
+

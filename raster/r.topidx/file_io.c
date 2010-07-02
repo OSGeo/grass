@@ -85,7 +85,6 @@ void putcells(void)
     Rast_close(fd);
 
     Rast_short_history(oname, "raster", &history);
-    strncpy(history.datsrc_1, iname, RECORD_LEN);
-    history.datsrc_1[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
+    Rast_set_history(&history, HIST_DATSRC_1, iname);
     Rast_write_history(oname, &history);
 }

@@ -707,16 +707,18 @@ void copy_history(const char *dst, int idx)
 
 void create_history(const char *dst, expression * e)
 {
-    static int WIDTH = RECORD_LEN - 12;
+    int RECORD_LEN = 80;
+    int WIDTH = RECORD_LEN - 12;
     struct History hist;
     char *expr = format_expression(e);
     char *p = expr;
     int len = strlen(expr);
     int i;
 
-    Rast_short_history((char *)dst, "raster", &hist);
+    Rast_short_history(dst, "raster", &hist);
 
-    for (i = 0; i < MAXEDLINES; i++) {
+    for (i = 0; ; i++) {
+	char buf[RECORD_LEN];
 	int n;
 
 	if (!len)
@@ -733,16 +735,15 @@ void create_history(const char *dst, expression * e)
 	else
 	    n = len;
 
-	memcpy(hist.edhist[i], p, n);
-	hist.edhist[i][n] = '\0';
+	memcpy(buf, p, n);
+	buf[n] = '\0';
+	Rast_append_history(&hist, buf);
 
 	p += n;
 	len -= n;
     }
 
-    hist.edlinecnt = i;
-
-    Rast_write_history((char *)dst, &hist);
+    Rast_write_history(dst, &hist);
 
     G_free(expr);
 }

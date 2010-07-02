@@ -151,14 +151,14 @@ int main(int argc, char **argv)
 	divider('+');
 
 	compose_line(out, "Layer:    %-29.29s  Date: %s", name,
-		     hist_ok ? hist.mapid : "??");
+		     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
 	compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s",
-		     mapset, hist_ok ? hist.creator : "??");
+		     mapset, hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
 	compose_line(out, "Location: %s", G_location());
 	compose_line(out, "DataBase: %s", G_gisdbase());
 	compose_line(out, "Title:    %s ( %s )",
 		     cats_ok ? cats.title : "??",
-		     hist_ok ? hist.title : "??");
+		     hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
 
 	/*This shows the TimeStamp */
 	if (time_ok && (first_time_ok || second_time_ok)) {
@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 
 	compose_line(out,
 		     "  Type of Map:  %-20.20s Number of Categories: %-9s",
-		     hist_ok ? hist.maptype : "??", cats_ok ? tmp1 : "??");
+		     hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??", cats_ok ? tmp1 : "??");
 
 	compose_line(out, "  Data Type:    %s",
 		     (data_type == CELL_TYPE ? "CELL" :
@@ -249,23 +249,23 @@ int main(int argc, char **argv)
 	printline("");
 
 	if (hist_ok) {
-	    if (hist.datsrc_1[0] != '\0' || hist.datsrc_2[0] != '\0') {
+	    if (Rast_get_history(&hist, HIST_DATSRC_1)[0] != '\0' ||
+		Rast_get_history(&hist, HIST_DATSRC_2)[0] != '\0') {
 		printline("  Data Source:");
-		compose_line(out, "   %s", hist.datsrc_1);
-		compose_line(out, "   %s", hist.datsrc_2);
+		compose_line(out, "   %s", Rast_get_history(&hist, HIST_DATSRC_1));
+		compose_line(out, "   %s", Rast_get_history(&hist, HIST_DATSRC_2));
 		printline("");
 	    }
 
 	    printline("  Data Description:");
-	    compose_line(out, "   %s", hist.keywrd);
+	    compose_line(out, "   %s", Rast_get_history(&hist, HIST_KEYWRD));
 
 	    printline("");
-	    if (hist.edlinecnt) {
+	    if (Rast_history_length(&hist)) {
 		printline("  Comments:  ");
 
-		for (i = 0; i < hist.edlinecnt; i++) {
-		    compose_line(out, "   %s", hist.edhist[i]);
-		}
+		for (i = 0; i < Rast_history_length(&hist); i++)
+		    compose_line(out, "   %s", Rast_history_line(&hist, i));
 	    }
 
 	    printline("");
@@ -373,7 +373,7 @@ int main(int argc, char **argv)
 
 	if (mflag->answer) {
 	    fprintf(out, "title=%s (%s)\n", cats_ok ? cats.title :
-		    "??", hist_ok ? hist.title : "??");
+		    "??", hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
 	}
 
 	if (timestampflag->answer) {
@@ -398,14 +398,14 @@ int main(int argc, char **argv)
 	if (hflag->answer) {
 	    if (hist_ok) {
 		fprintf(out, "Data Source:\n");
-		fprintf(out, "   %s\n", hist.datsrc_1);
-		fprintf(out, "   %s\n", hist.datsrc_2);
+		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
+		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
 		fprintf(out, "Data Description:\n");
-		fprintf(out, "   %s\n", hist.keywrd);
-		if (hist.edlinecnt) {
+		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_KEYWRD));
+		if (Rast_history_length(&hist)) {
 		    fprintf(out, "Comments:\n");
-		    for (i = 0; i < hist.edlinecnt; i++)
-			fprintf(out, "   %s\n", hist.edhist[i]);
+		    for (i = 0; i < Rast_history_length(&hist); i++)
+			fprintf(out, "   %s\n", Rast_history_line(&hist, i));
 		}
 	    }
 	}

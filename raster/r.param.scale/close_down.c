@@ -15,7 +15,7 @@
 void close_down(void)
 {
     struct History history;
-    char map_title[RECORD_LEN], map_type[32];
+    char map_title[80], map_type[32];
 
     /* Close connection with existing input raster. */
     Rast_unopen(fd_in);
@@ -26,8 +26,7 @@ void close_down(void)
     /* write out map metadata */
     Rast_short_history(rast_out_name, "raster", &history);
 
-    strncpy(history.datsrc_1, rast_in_name, RECORD_LEN-1);
-    history.datsrc_1[RECORD_LEN-1] = '\0';
+    Rast_set_history(&history, HIST_DATSRC_1, rast_in_name);
 
     switch (mparam) {
 
@@ -39,78 +38,85 @@ void close_down(void)
 	strcpy(map_type, "Magnitude of maximum gradient");
 	Rast_write_units(rast_out_name, "degrees");
 
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Slope is given for steepest slope angle and measured in degrees.");
-	history.edlinecnt = 1;
 	break;
 
     case ASPECT:
 	strcpy(map_type, "Direction of maximum gradient");
 	Rast_write_units(rast_out_name, "degrees");
 
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Flow direction (aspect): W=0, E=180, N=+90, S=-90 degrees");
-	history.edlinecnt = 1;
 	break;
 
     case PROFC:
 	strcpy(map_type, "Profile curvature");
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Curvature intersecting with the plane defined by the Z axis and");
-	strcpy(history.edhist[1],
+	Rast_append_history(
+	    &history,
 	    "maximum gradient direction. Positive values describe convex profile");
-	strcpy(history.edhist[2], "curvature, negative values concave profile.");
-	history.edlinecnt = 3;
+	Rast_append_history(
+	    &history,
+	    "curvature, negative values concave profile.");
 	break;
 
     case PLANC:
 	strcpy(map_type, "Plan curvature");
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Plan curvature is the horizontal curvature, intersecting with");
-	strcpy(history.edhist[1],
+	Rast_append_history(
+	    &history,
 	    "the XY plane.");
-	history.edlinecnt = 2;
 	break;
 
     case LONGC:
 	strcpy(map_type, "Longitudinal curvature");
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Longitudinal curvature is the profile curvature intersecting with the");
-	strcpy(history.edhist[1],
+	Rast_append_history(
+	    &history,
 	    "plane defined by the surfacenormal and maximum gradient direction.");
-	history.edlinecnt = 2;
 	break;
 
     case CROSC:
 	strcpy(map_type, "Cross-sectional curvature");
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Cross-sectional curvature is the tangential curvature intersecting");
-	strcpy(history.edhist[1],
+	Rast_append_history(
+	    &history,
 	    "with the plane defined by the surface normal and a tangent to the");
-	strcpy(history.edhist[2],
+	Rast_append_history(
+	    &history,
 	    "contour - perpendicular to maximum gradient direction.");
-	history.edlinecnt = 3;
 	break;
 
     case MINIC:
 	strcpy(map_type, "Minimum curvature");
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Measured in direction perpendicular to the direction of of maximum curvature.");
-	history.edlinecnt = 1;
 	break;
 
     case MAXIC:
 	strcpy(map_type, "Maximum curvature");
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "The maximum curvature is measured in any direction");
-	history.edlinecnt = 1;
 	break;
 
     case FEATURE:
 	strcpy(map_type, "Morphometric features");
-	strcpy(history.edhist[0],
+	Rast_append_history(
+	    &history,
 	    "Morphometric features: peaks, ridges, passes, channels, pits and planes");
-	history.edlinecnt = 1;
 	break;
 
     default:
