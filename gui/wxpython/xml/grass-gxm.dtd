@@ -14,7 +14,7 @@
 
 <!ELEMENT grass-gxm (gxm)>
 
-<!ELEMENT gxm (action*, data*, properties?, variables?)>
+<!ELEMENT gxm (action*, data*, loop*, properties?, variables?)>
 
 <!--    an action defines action properties (usually GRASS modules)
 -->
@@ -94,3 +94,8 @@
 <!ELEMENT variable        (description?, value?)>
 <!ATTLIST variable  name  CDATA                      #REQUIRED>
 <!ATTLIST variable  type  (integer | float | string) #REQUIRED>
+
+<!--	a loop describes model loops
+-->
+<!ELEMENT loop       (condition)>
+<!ELEMENT condition  (#PCDATA)>
