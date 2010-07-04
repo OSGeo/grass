@@ -18,12 +18,14 @@ Classes:
  - PreferencesDialog
  - PropertiesDialog
  - ModelParamDialog
+ - ModelListCtrl
  - VariablePanel
  - ValiableListCtrl
  - ModelLoop
  - ModelLoopDialog
- - ModelActionList
- 
+ - ActionPanel
+ - ActionListCtrl
+
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -250,7 +252,10 @@ class Model(object):
                                  y = loop['pos'][1],
                                  width = loop['size'][0],
                                  height = loop['size'][1],
-                                 text = loop['text'])
+                                 text = loop['text'],
+                                 actions = loop['actions'],
+                                 id = loop['id'])
+            
             self.loops.append(loopItem)
             
     def IsValid(self):
@@ -457,10 +462,13 @@ class ModelFrame(wx.Frame):
         
         self.variablePanel = VariablePanel(parent = self)
         
+        self.actionPanel = ActionPanel(parent = self)
+        
         self.goutput = goutput.GMConsole(parent = self, pageid = 2,
                                          notebook = self.notebook)
         
         self.notebook.AddPage(self.canvas, text=_('Model'))
+        self.notebook.AddPage(self.actionPanel, text=_('Actions'))
         self.notebook.AddPage(self.variablePanel, text=_('Variables'))
         self.notebook.AddPage(self.goutput, text=_('Command output'))
         wx.CallAfter(self.notebook.SetSelection, 0)
@@ -1303,8 +1311,12 @@ if __name__ == "__main__":
             self.canvas.diagram.AddShape(loop)
             loop.Show(True)
         
+            # connect action in the loop
+            self.DefineLoop(loop)
+        
         # load variables
         self.variablePanel.OnReload()
+        self.actionPanel.OnReload()
         self.SetStatusText('', 0)
         
         self.canvas.Refresh(True)
@@ -1340,16 +1352,34 @@ if __name__ == "__main__":
         
         return True
     
-    def DefineLoop(self, loop, actions):
+    def DefineLoop(self, loop):
         """!Define loop with given list of actions"""
         parent = loop
+        actions = loop.GetActions()
+        if not actions:
+            return
+        
+        minId = None
         for action in self.model.GetActions():
-            if action.GetId() not in actions:
+            aId = action.GetId()
+            if aId not in actions:
                 continue
+            if aId < minId or minId is None:
+                minId = aId
             rel = ModelRelation(parent, action)
             self.AddLine(rel)
-            
             parent = action
+        
+        loop.SetId(minId)
+        for action in self.model.GetActions():
+            aId = action.GetId()
+            if aId >= minId:
+                action.SetId(aId + 1)
+                try:
+                    idx = actions.index(aId)
+                    actions[idx] = aId + 1
+                except ValueError:
+                    pass
         
         # close loop
         rel = ModelRelation(action, loop)
@@ -1926,9 +1956,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             ### shape.SetPropDialog(dlg)
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
-                actions = dlg.GetActions()
-                if actions:
-                    self.frame.DefineLoop(shape, actions)
+                shape.SetActions(dlg.GetActions())
+                self.frame.DefineLoop(shape)
             
             dlg.Destroy()
         
@@ -1950,6 +1979,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
             self.popupID3 = wx.NewId()
+            self.popupID4 = wx.NewId()
 
         # record coordinates
         self.x = x
@@ -1991,10 +2021,18 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             popupMenu.AppendSeparator()
             popupMenu.Append(self.popupID2, text=_('Properties'))
             self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID2)
-
+        
+        if isinstance(shape, ModelAction):
+            popupMenu.Append(self.popupID4, text=_('Change ID'))
+            self.frame.Bind(wx.EVT_MENU, self.OnChangeId, id = self.popupID3)
+        
         self.frame.PopupMenu(popupMenu)
         popupMenu.Destroy()
 
+    def OnChangeId(self, event):
+        """!Change action id"""
+        pass
+    
     def OnDisable(self, event):
         """!Disable action"""
         action = self.GetShape()
@@ -2427,11 +2465,19 @@ class ProcessModelFile:
         """!Process model loops"""
         for node in self.root.findall('loop'):
             pos, size = self._getDim(node)
-            text = self._filterValue(self._getNodeText(node, 'value')).strip()
+            text = self._filterValue(self._getNodeText(node, 'condition')).strip()
+            aid = list()
+            for anode in node.findall('loop-action'):
+                try:
+                    aid.append(int(anode.text))
+                except ValueError:
+                    pass
             
-            self.loops.append({ 'pos' : pos,
-                                'size': size,
-                                'text' : text })
+            self.loops.append({ 'pos'     : pos,
+                                'size'    : size,
+                                'text'    : text,
+                                'id'      : int(node.get('id', -1)),
+                                'actions' : aid })
         
 class WriteModelFile:
     """!Generic class for writing model file"""
@@ -2617,16 +2663,19 @@ class WriteModelFile:
     def _loops(self):
         """!Write loops"""
         for loop in self.loops:
-            self.fd.write('%s<loop pos="%d,%d" size="%d,%d">\n' % \
-                              (' ' * self.indent, loop.GetX(), loop.GetY(),
+            self.fd.write('%s<loop id="%d" pos="%d,%d" size="%d,%d">\n' % \
+                              (' ' * self.indent, loop.GetId(), loop.GetX(), loop.GetY(),
                                loop.GetWidth(), loop.GetHeight()))
             text = loop.GetText()
+            self.indent += 4
             if text:
-                self.indent += 4
-                self.fd.write('%s<value>%s</value>\n' %
+                self.fd.write('%s<condition>%s</condition>\n' %
                               (' ' * self.indent, self._filterValue(text)))
-                self.indent -= 4
-
+            for action in loop.GetActions():
+                self.fd.write('%s<loop-action>%d</loop-action>\n' %
+                              (' ' * self.indent, action))
+            self.indent -= 4
+            
             self.fd.write('%s</loop>\n' % (' ' * self.indent))
             
 class PreferencesDialog(PreferencesBaseDialog):
@@ -3115,10 +3164,51 @@ class ModelParamDialog(wx.Dialog):
         
         return errList
     
+class ModelListCtrl(wx.ListCtrl,
+                    listmix.ListCtrlAutoWidthMixin,
+                    listmix.TextEditMixin,
+                    listmix.ColumnSorterMixin):
+    def __init__(self, parent, columns, id = wx.ID_ANY,
+                 style = wx.LC_REPORT | wx.BORDER_NONE |
+                 wx.LC_SORT_ASCENDING |wx.LC_HRULES |
+                 wx.LC_VRULES, **kwargs):
+        """!List of model variables"""
+        self.parent = parent
+        
+        wx.ListCtrl.__init__(self, parent, id = id, style = style, **kwargs)
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
+        listmix.TextEditMixin.__init__(self)
+        listmix.ColumnSorterMixin.__init__(self, 4)
+        
+        i = 0
+        for col in columns:
+            self.InsertColumn(i, col)
+            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
+            i += 1
+        
+        self.itemDataMap = {} # requested by sorter
+        self.itemCount   = 0
+        
+        self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
+        self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
+        self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick)
+        
+    def OnBeginEdit(self, event):
+        """!Editing of item started"""
+        event.Allow()
+
+    def OnEndEdit(self, event):
+        """!Finish editing of item"""
+        pass
+    
+    def OnColClick(self, event):
+        """!Click on column header (order by)"""
+        event.Skip()
+        
 class VariablePanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
-                 data = dict(), **kwargs):
-        """!Manage model variables dialog
+                 **kwargs):
+        """!Manage model variables panel
         """
         self.parent = parent
         
@@ -3126,13 +3216,10 @@ class VariablePanel(wx.Panel):
         
         self.listBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                     label=" %s " % _("List of variables - right-click to delete"))
-
-        self.list = VariableListCtrl(parent = self, id = wx.ID_ANY,
-                                     style = wx.LC_REPORT | wx.BORDER_NONE |
-                                     wx.LC_SORT_ASCENDING |wx.LC_HRULES |
-                                     wx.LC_VRULES)
-        if data:
-            self.list.Populate(data)
+        
+        self.list = VariableListCtrl(parent = self,
+                                     columns = [_("Name"), _("Data type"),
+                                                _("Default value"), _("Description")])
         
         # add new category
         self.addBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
@@ -3215,10 +3302,6 @@ class VariablePanel(wx.Panel):
         
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
-        self.SetAutoLayout(True)
-        
-        # set min size for dialog
-        self.SetMinSize(self.GetBestSize())
         
     def OnText(self, event):
         """!Text entered"""
@@ -3287,33 +3370,11 @@ class VariablePanel(wx.Panel):
         self.parent.GetModel().SetVariables(variables)
         self.parent.ModelChanged()
         
-class VariableListCtrl(wx.ListCtrl,
-                       listmix.ListCtrlAutoWidthMixin,
-                       listmix.TextEditMixin,
-                       listmix.ColumnSorterMixin):
-    def __init__(self, parent, id = wx.ID_ANY, **kwargs):
+class VariableListCtrl(ModelListCtrl):
+    def __init__(self, parent, columns, **kwargs):
         """!List of model variables"""
-        self.parent = parent
+        ModelListCtrl.__init__(self, parent, columns, **kwargs)
         
-        wx.ListCtrl.__init__(self, parent, id = id, **kwargs)
-        listmix.ListCtrlAutoWidthMixin.__init__(self)
-        listmix.TextEditMixin.__init__(self)
-        listmix.ColumnSorterMixin.__init__(self, 4)
-        
-        self.InsertColumn(0, _("Name"))
-        self.InsertColumn(1, _("Data type"))
-        self.InsertColumn(2, _("Default value"))
-        self.InsertColumn(3, _("Description"))
-        for i in range(0, self.GetColumnCount()):
-            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
-        
-        self.itemDataMap = {} # requested by sorter
-        self.itemCount   = 0
-
-        self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
-        self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
-        self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick)
-
     def GetListCtrl(self):
         """!Used by ColumnSorterMixin"""
         return self
@@ -3377,18 +3438,14 @@ class VariableListCtrl(wx.ListCtrl,
         self.parent.UpdateModelVariables()
         
         event.Skip()
-    
+        
     def OnRemoveAll(self, event):
         """!Remove all variable(s) from the model"""
         self.DeleteAllItems()
         self.itemDataMap = dict()
-
+        
         self.parent.UpdateModelVariables()
         
-    def OnBeginEdit(self, event):
-        """!Editing of item started"""
-        event.Allow()
-
     def OnEndEdit(self, event):
         """!Finish editing of item"""
         itemIndex = event.GetIndex()
@@ -3401,13 +3458,9 @@ class VariableListCtrl(wx.ListCtrl,
         self.itemDataMap[itemIndex][columnIndex] = event.GetText()
         
         self.parent.UpdateModelVariables()
-        
-    def OnColClick(self, event):
-        """!Click on column header (order by)"""
-        event.Skip()
 
 class ModelLoop(ogl.RectangleShape):
-    def __init__(self, parent, x, y, width = None, height = None, text = None):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, actions = []):
         """!Defines a loop"""
         self.parent  = parent
         self.text    = text
@@ -3415,6 +3468,8 @@ class ModelLoop(ogl.RectangleShape):
             width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
         if not height:
             height = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'height'))
+        self.actions = actions
+        self.id      = id
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -3424,14 +3479,28 @@ class ModelLoop(ogl.RectangleShape):
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             self.SetCornerRadius(100)
-            
-            if text:
-                self.AddText(text)
-
+            self.AddText('(' + str(self.id) + ') ' + text)
+        
+    def GetId(self):
+        """!Get loop id"""
+        return self.id
+    
     def GetText(self):
         """!Get loop text"""
         return self.text
 
+    def GetActions(self):
+        """!Get actions (id)"""
+        return self.actions
+
+    def SetId(self, id):
+        """!Set loop id"""
+        self.id = id
+
+    def SetActions(self, actions):
+        """!Set actions (id)"""
+        self.actions = actions
+        
 class ModelLoopDialog(wx.Dialog):
     """!Loop properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Loop properties"),
@@ -3449,8 +3518,11 @@ class ModelLoopDialog(wx.Dialog):
                                     value = shape.GetText())
         self.listBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("List of actions in loop"))
-        self.actionList = ModelActionList(parent = self.panel)
-        self.actionList.LoadData(self.parent.GetModel())
+        self.actionList = ActionListCtrl(parent = self.panel,
+                                         columns = [_("ID"), _("Name"),
+                                                    _("Command")])
+        
+        self.actionList.Populate(self.parent.GetModel().GetActions())
         
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnOk     = wx.Button(parent = self.panel, id = wx.ID_OK)
@@ -3500,31 +3572,125 @@ class ModelLoopDialog(wx.Dialog):
         
         return ids
         
-class ModelActionList(wx.ListCtrl,
-                      listmix.ListCtrlAutoWidthMixin,
-                      listmix.CheckListCtrlMixin):
-    def __init__(self, parent):
-        """!List control of model actions
+class ActionPanel(wx.Panel):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 **kwargs):
+        """!Manage model actions
         """
         self.parent = parent
         
-        wx.ListCtrl.__init__(self, parent, id = wx.ID_ANY,
-                             style = wx.LC_REPORT)
-        listmix.CheckListCtrlMixin.__init__(self)
-        listmix.ListCtrlAutoWidthMixin.__init__(self)
+        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
-    def LoadData(self, data):
-        """!Load data into list"""
-        self.InsertColumn(0, _('Id'))
-        self.InsertColumn(1, _('Action'))
-        self.InsertColumn(2, _('Command'))
+        self.listBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                    label=" %s " % _("List of actions - right-click to delete"))
         
-        for action in data.GetActions():
-            index = self.InsertStringItem(sys.maxint, action.GetName())
-            self.SetStringItem(index, 0, str(action.GetId()))
-            self.SetStringItem(index, 1, action.GetName())
-            self.SetStringItem(index, 2, action.GetLog())
+        self.list = ActionListCtrl(parent = self,
+                                   columns = [_("ID"), _("Name"),
+                                              _("Type"), _("Command")])
         
+        self._layout()
+
+    def _layout(self):
+        """!Layout dialog"""
+        listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
+        listSizer.Add(item = self.list, proportion = 1,
+                      flag = wx.EXPAND)
+        
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(item = listSizer, proportion = 1,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        
+    def OnReload(self, event = None):
+        """!Reload list of actions"""
+        self.list.Populate(self.parent.GetModel().GetActions())
+        
+class ActionListCtrl(ModelListCtrl):
+    def __init__(self, parent, columns, **kwargs):
+        """!List of model actions"""
+        ModelListCtrl.__init__(self, parent, columns, **kwargs)
+        self.SetColumnWidth(1, 100)
+        self.SetColumnWidth(2, 65)
+        
+    def GetListCtrl(self):
+        """!Used by ColumnSorterMixin"""
+        return self
+    
+    def GetData(self):
+        """!Get list data"""
+        return self.itemDataMap
+    
+    def Populate(self, data):
+        """!Populate the list"""
+        self.itemDataMap = dict()
+        i = 0
+        for action in data:
+            if self.GetColumnCount() == 4:
+                self.itemDataMap[i] = [str(action.GetId()),
+                                       action.GetName(),
+                                       "module",
+                                       action.GetLog()]
+            else:
+                self.itemDataMap[i] = [str(action.GetId()),
+                                       action.GetName(),
+                                       action.GetLog()]
+                
+            i += 1
+        
+        self.itemCount = len(self.itemDataMap.keys())
+        self.DeleteAllItems()
+        i = 0
+        if self.GetColumnCount() == 4:
+            for aid, name, atype, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, aid)
+                self.SetStringItem(index, 0, aid)
+                self.SetStringItem(index, 1, name)
+                self.SetStringItem(index, 2, atype)
+                self.SetStringItem(index, 3, desc)
+                self.SetItemData(index, i)
+                i += 1
+        else:
+            for aid, name, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, aid)
+                self.SetStringItem(index, 0, aid)
+                self.SetStringItem(index, 1, name)
+                self.SetStringItem(index, 2, desc)
+                self.SetItemData(index, i)
+                i += 1
+        
+    def OnRemove(self, event):
+        """!Remove selected variable(s) from the model"""
+        item = self.GetFirstSelected()
+        while item != -1:
+            self.DeleteItem(item)
+            del self.itemDataMap[item]
+            item = self.GetFirstSelected()
+        self.parent.UpdateModelVariables()
+        
+        event.Skip()
+    
+    def OnRemoveAll(self, event):
+        """!Remove all variable(s) from the model"""
+        self.DeleteAllItems()
+        self.itemDataMap = dict()
+
+        self.parent.UpdateModelVariables()
+
+    def OnEndEdit(self, event):
+        """!Finish editing of item"""
+        itemIndex = event.GetIndex()
+        columnIndex = event.GetColumn()
+        nameOld = self.GetItem(itemIndex, 0).GetText()
+
+        if columnIndex == 0: # TODO
+            event.Veto()
+        
+        self.itemDataMap[itemIndex][columnIndex] = event.GetText()
+        
+        self.parent.UpdateModelVariables()
+    
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
