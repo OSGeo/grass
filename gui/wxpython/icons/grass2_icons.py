@@ -94,7 +94,6 @@ IconsGrass2 = {
     'grGcpClear'   : 'gcp-remove.png',
     'grGeorect'    : 'georectify.png',
     'grGcpRms'     : 'gcp-rms.png',
-    'grGcpRefresh' : 'redraw.png',
     "grGcpSave"    : 'gcp-save.png',
     "grGcpAdd"     : 'gcp-add.png',
     "grGcpDelete"  : 'gcp-delete.png',
@@ -110,4 +109,5 @@ IconsGrass2 = {
     "modelProperties" : 'options.png',
     # various
     "settings"       : 'settings.png',
+    'redraw'         : 'redraw.png',
     }

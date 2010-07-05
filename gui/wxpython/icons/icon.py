@@ -21,8 +21,7 @@ for details.
 import os
 import sys
 
-gmPath = os.path.join(os.getenv("GISBASE"), "etc", "wxpython", "gui_modules")
-sys.path.append(gmPath)
+sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "wxpython", "gui_modules"))
 
 import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
@@ -320,8 +319,6 @@ Icons = {
                              label=_("Georectify")),
     'grGcpRms'        : MetaIcon (img=Icons["grGcpRms"],
                                   label=_("Recalculate RMS error")),
-    'grGcpRefresh' : MetaIcon (img=Icons["grGcpRefresh"],
-                               label=_("Redraw GCP markers in map displays")),
     'grGcpSave' : MetaIcon (img=Icons["grGcpSave"],
                             label=_("Save GCPs to POINTS file")),
     'grGcpAdd' : MetaIcon (img=Icons["grGcpAdd"],
@@ -371,6 +368,8 @@ Icons = {
                                   label=_("Show model properties")),
     "modelVariables" : MetaIcon (img=Icons["modelProperties"],
                                  label=_("Manage model variables")),
+    "modelRedraw" : MetaIcon (img=Icons["redraw"],
+                              label=_("Redraw model canvas")),
     }
 
 # testing ...

@@ -1406,6 +1406,7 @@ class ModelToolbar(AbstractToolbar):
         # self.properties = wx.NewId()
         self.variables = wx.NewId()
         self.quit = wx.NewId()
+        self.redraw = wx.NewId()
         
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return (
@@ -1435,6 +1436,9 @@ class ModelToolbar(AbstractToolbar):
              wx.ITEM_NORMAL, Icons['modelRelation'].GetLabel(), Icons['modelRelation'].GetDesc(),
              self.parent.OnDefineRelation),
             ('', '', '', '', '', '', ''),
+            (self.redraw, 'redraw', Icons['modelRedraw'].GetBitmap(),
+             wx.ITEM_NORMAL, Icons['modelRedraw'].GetLabel(), Icons['modelRedraw'].GetDesc(),
+             self.parent.OnCanvasRefresh),
             (self.run, 'run', Icons['modelRun'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['modelRun'].GetLabel(), Icons['modelRun'].GetDesc(),
              self.parent.OnRunModel),
