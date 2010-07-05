@@ -98,7 +98,6 @@ IconsSilk = {
     'grGcpClear'   : 'cross.png',
     'grGeorect'    : 'application_lightning.png',
     'grGcpRms'     : 'error.png',
-    'grGcpRefresh' : 'arrow_refresh.png',
     "grGcpSave"    : 'picture_save.png',
     "grGcpAdd"     : 'bullet_add.png', 
     "grGcpDelete"  : 'bullet_delete.png',
@@ -114,4 +113,5 @@ IconsSilk = {
     "modelProperties" : wx.ART_ERROR,
     # various
     "settings"     : 'color_swatch.png',
+    "redraw"       : 'arrow_refresh.png',
     }

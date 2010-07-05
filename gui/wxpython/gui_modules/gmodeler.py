@@ -100,6 +100,20 @@ class Model(object):
         """!Return list of actions"""
         return self.actions
     
+    def GetAction(self, aId):
+        """!Get action of given id
+
+        @param aId action id
+        
+        @return ModelAction instance
+        @return None if no action found
+        """
+        for action in self.actions:
+            if action.GetId() == aId:
+                return action
+        
+        return None
+    
     def GetLoops(self):
         """!Return list of loops"""
         return self.loops
@@ -531,6 +545,10 @@ class ModelFrame(wx.Frame):
         """
         self.GetCanvas().RemoveSelected()
         
+    def OnCanvasRefresh(self, event):
+        """!Refresh canvas"""
+        self.GetCanvas().Refresh()
+
     def OnCloseWindow(self, event):
         """!Close window"""
         if self.modelChanged and \
@@ -3682,14 +3700,15 @@ class ActionListCtrl(ModelListCtrl):
         """!Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
-        nameOld = self.GetItem(itemIndex, 0).GetText()
-
-        if columnIndex == 0: # TODO
-            event.Veto()
         
         self.itemDataMap[itemIndex][columnIndex] = event.GetText()
         
-        self.parent.UpdateModelVariables()
+        aId = int(self.GetItem(itemIndex, 0).GetText())
+        action = self.parent.parent.GetModel().GetAction(aId)
+        if not action:
+            event.Veto()
+        if columnIndex == 0:
+            action.SetId(aId)
     
 def main():
     app = wx.PySimpleApp()

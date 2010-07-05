@@ -96,7 +96,6 @@ IconsGrass = {
     'grGcpSet'     : 'gui-gcpset.gif',
     'grGeorect'    : 'gui-georect.gif',
     'grGcpRms'     : 'gui-rms.gif',
-    'grGcpRefresh' : 'gui-display.gif',
     "grGcpSave"    : 'file-save.gif', 
     "grGcpAdd"     : wx.ART_NEW, # FIXME
     "grGcpDelete"  : wx.ART_DELETE, # FIXME
@@ -112,4 +111,5 @@ IconsGrass = {
     "modelProperties" : wx.ART_ERROR,
     # various
     "settings"       : 'edit-color.gif',
+    "redraw"         : 'gui-display.gif',
     }
