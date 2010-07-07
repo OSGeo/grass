@@ -78,9 +78,7 @@ from grass.script import core as grass
 class Model(object):
     """!Class representing the model"""
     def __init__(self, canvas = None):
-        self.actions    = list()    # list of recorded actions
-        self.data       = list()    # list of recorded data items
-        self.loops      = list()    # list of recorded loops
+        self.items      = list() # list of actions/loops/...
         
         # model properties
         self.properties = { 'name'        : _("model"),
@@ -96,10 +94,28 @@ class Model(object):
         """!Get canvas or None"""
         return self.canvas
     
-    def GetActions(self):
-        """!Return list of actions"""
-        return self.actions
+    def GetItems(self):
+        """!Get list of model items"""
+        return self.items
     
+    def GetActions(self):
+        """!Get list of model actions"""
+        result = list()
+        for item in self.items:
+            if isinstance(item, ModelAction):
+                result.append(item)
+        
+        return result
+
+    def GetLoops(self):
+        """!Get list of model loops"""
+        result = list()
+        for item in self.items:
+            if isinstance(item, ModelLoop):
+                result.append(item)
+        
+        return result
+
     def GetAction(self, aId):
         """!Get action of given id
 
@@ -108,15 +124,12 @@ class Model(object):
         @return ModelAction instance
         @return None if no action found
         """
-        for action in self.actions:
+        alist = self.GetActions()
+        for action in alist:
             if action.GetId() == aId:
                 return action
         
         return None
-    
-    def GetLoops(self):
-        """!Return list of loops"""
-        return self.loops
     
     def GetProperties(self):
         """!Get model properties"""
@@ -133,22 +146,9 @@ class Model(object):
         """!Set model variables"""
         self.variables = data
     
-    def GetData(self):
-        """!Return list of data"""
-        return self.data
-
     def Reset(self):
         """!Reset model"""
-        self.actions = list()
-        self.data    = list()
-        
-    def AddAction(self, item):
-        """!Add action to the model"""
-        self.actions.append(item)
-        
-    def AddData(self, item):
-        """!Add data to the model"""
-        self.data.append(item)
+        self.items = list()
         
     def RemoveItem(self, item):
         """!Remove item from model
@@ -169,23 +169,15 @@ class Model(object):
         
         return relList
     
-    def FindAction(self, id):
+    def FindAction(self, aId):
         """!Find action by id"""
-        for action in self.actions:
-            if action.GetId() == id:
+        alist = self.GetActions()
+        for action in alist:
+            if action.GetId() == aId:
                 return action
         
         return None
 
-    def FindData(self, value, prompt):
-        """!Find data by value, and prompt"""
-        for data in self.data:
-            if data.GetValue() == value and \
-                    data.GetPrompt() == prompt:
-                return data
-        
-        return None
-    
     def LoadModel(self, filename):
         """!Load model definition stored in GRASS Model XML file (gxm)
         
@@ -225,7 +217,7 @@ class Model(object):
             if action['disabled']:
                 actionItem.Enable(False)
             
-            self.actions.append(actionItem)
+            self.AddItem(actionItem)
             
             task = actionItem.GetTask()
             parameterized = False
@@ -264,26 +256,41 @@ class Model(object):
                 else:
                     relation = ModelRelation(actionItem, dataItem, rel['name'])
                 relation.SetControlPoints(rel['points'])
-                dataItem.AddRelation(relation, direction = rel['dir'])
+                dataItem.AddRelation(relation)
+                actionItem.AddRelation(relation)
             
             dataItem.Update()
-            self.data.append(dataItem)
-            
-            actionItem.AddData(dataItem)
-        
+                   
         # load loops
         for loop in gxmXml.loops:
+            alist = list()
+            for aId in loop['actions']:
+                alist.append(self.GetAction(aId))
+            
             loopItem = ModelLoop(parent = self, 
                                  x = loop['pos'][0],
                                  y = loop['pos'][1],
                                  width = loop['size'][0],
                                  height = loop['size'][1],
                                  text = loop['text'],
-                                 actions = loop['actions'],
+                                 actions = alist,
                                  id = loop['id'])
             
-            self.loops.append(loopItem)
-            
+            self.AddItem(loopItem)
+        
+    def AddItem(self, newItem):
+        """!Add item to the list"""
+        iId = newItem.GetId()
+        
+        i   = 0
+        for item in self.items:
+            if item.GetId() > iId:
+                self.items.insert(i, newItem)
+                return
+            i += 1
+        
+        self.items.append(newItem)
+        
     def IsValid(self):
         """Return True if model is valid"""
         if self.Validate():
@@ -295,7 +302,7 @@ class Model(object):
         """!Validate model, return None if model is valid otherwise
         error string"""
         errList = list()
-        for action in self.actions:
+        for action in self.GetActions():
             task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
                                                show = None)
             errList += task.getCmdError()
@@ -411,7 +418,7 @@ class Model(object):
             
             idx += 1
         
-        for action in self.actions:
+        for action in self.GetActions():
             if not action.IsEnabled():
                 continue
             name   = action.GetName()
@@ -490,7 +497,7 @@ class ModelFrame(wx.Frame):
         
         self.actionPanel = ActionPanel(parent = self)
         
-        self.goutput = goutput.GMConsole(parent = self, pageid = 2,
+        self.goutput = goutput.GMConsole(parent = self, pageid = 3,
                                          notebook = self.notebook)
         
         self.notebook.AddPage(self.canvas, text=_('Model'))
@@ -833,23 +840,33 @@ class ModelFrame(wx.Frame):
                 return
         
         self.goutput.cmdThread.SetId(-1)
-        for action in self.model.GetActions():
-            if not action.IsEnabled():
+        for item in self.model.GetItems():
+            print item
+            if not item.IsEnabled():
                 continue
-            name = action.GetName()
-            if params.has_key(name):
-                paramsOrig = action.GetParams(dcopy = True)
-                action.MergeParams(params[name])
-            
-            self.SetStatusText(_('Running model...'), 0) 
-            self.goutput.RunCmd(command = action.GetLog(string = False),
-                                onDone = self.OnDone)
-            
-            if params.has_key(name):
-                action.SetParams(paramsOrig)
+            if isinstance(item, ModelAction):
+                self._runAction(item, params)
+            elif isinstance(item, ModelLoop):
+                print item.GetText()
+                for action in item.GetActions():
+                    self._runAction(action, params)
         
         if params:
             dlg.Destroy()
+        
+    def _runAction(self, item, params):
+        """!Run given action"""
+        name = item.GetName()
+        if params.has_key(name):
+            paramsOrig = item.GetParams(dcopy = True)
+            item.MergeParams(params[name])
+            
+        self.SetStatusText(_('Running model...'), 0) 
+        self.goutput.RunCmd(command = item.GetLog(string = False),
+                            onDone = self.OnDone)
+            
+        if params.has_key(name):
+            item.SetParams(paramsOrig)
         
     def OnDone(self, returncode):
         """!Computation finished"""
@@ -1096,14 +1113,13 @@ if __name__ == "__main__":
     def OnDefineLoop(self, event):
         """!Define new loop in the model"""
         self.ModelChanged()
-
+        
         width, height = self.canvas.GetSize()
         loop = ModelLoop(self, x = width/2, y = height/2)
         self.canvas.diagram.AddShape(loop)
         loop.Show(True)
-
+        
         self._addEvent(loop)
-        # self.model.AddAction(action)
         
         self.canvas.Refresh()
 
@@ -1136,7 +1152,7 @@ if __name__ == "__main__":
         action.Show(True)
 
         self._addEvent(action)
-        self.model.AddAction(action)
+        self.model.AddItem(action)
         
         self.canvas.Refresh()
         time.sleep(.1)
@@ -1321,28 +1337,29 @@ if __name__ == "__main__":
         self.SetStatusText(_("Please wait, loading model..."), 0)
         
         # load actions
-        for action in self.model.GetActions():
-            self._addEvent(action)
-            self.canvas.diagram.AddShape(action)
-            action.Show(True)
-        
-        # load data & relations
-        for data in self.model.GetData():
-            self._addEvent(data)
-            self.canvas.diagram.AddShape(data)
-            data.Show(True)
-
-            for rel in data.GetRelations():
+        for item in self.model.GetActions():
+            self._addEvent(item)
+            self.canvas.diagram.AddShape(item)
+            item.Show(True)
+            # relations/data
+            for rel in item.GetRelations():
+                if rel.GetFrom() == item:
+                    dataItem = rel.GetTo()
+                else:
+                    dataItem = rel.GetFrom()
+                self._addEvent(dataItem)
+                self.canvas.diagram.AddShape(dataItem)
                 self.AddLine(rel)
+                dataItem.Show(True)
         
         # load loops
-        for loop in self.model.GetLoops():
-            self._addEvent(loop)
-            self.canvas.diagram.AddShape(loop)
-            loop.Show(True)
-        
-            # connect action in the loop
-            self.DefineLoop(loop)
+        for item in self.model.GetLoops():
+            self._addEvent(item)
+            self.canvas.diagram.AddShape(item)
+            item.Show(True)
+            
+            # connect actions in the loop
+            self.DefineLoop(item)
         
         # load variables
         self.variablePanel.Update()
@@ -1389,29 +1406,13 @@ if __name__ == "__main__":
         if not actions:
             return
         
-        minId = None
-        for action in self.model.GetActions():
-            aId = action.GetId()
-            if aId not in actions:
-                continue
-            if aId < minId or minId is None:
-                minId = aId
+        for action in loop.GetActions():
             rel = ModelRelation(parent, action)
             self.AddLine(rel)
             parent = action
         
-        loop.SetId(minId)
-        for action in self.model.GetActions():
-            aId = action.GetId()
-            if aId >= minId:
-                action.SetId(aId + 1)
-                try:
-                    idx = actions.index(aId)
-                    actions[idx] = aId + 1
-                except ValueError:
-                    pass
-        
         # close loop
+        action = loop.GetActions()[-1]
         rel = ModelRelation(action, loop)
         self.AddLine(rel)
         dx = loop.GetWidth() / 2 + 50
@@ -1467,11 +1468,61 @@ class ModelCanvas(ogl.ShapeCanvas):
         
         self.Refresh()
         
-class ModelAction(ogl.RectangleShape):
+class ModelObject:
+    def __init__(self, id = -1):
+        self.id   = id
+        self.rels = list() # list of ModelRelations
+        
+        self.isEnabled = True
+                
+    def GetId(self):
+        """!Get id"""
+        return self.id
+    
+    def AddRelation(self, rel):
+        """!Record new relation
+        """
+        self.rels.append(rel)
+
+    def GetRelations(self, fdir = None):
+        """!Get list of relations
+
+        @param fdir True for 'from'
+        """
+        if fdir is None:
+            return self.rels
+        
+        result = list()
+        for rel in self.rels:
+            if fdir == 'from':
+                if rel.GetFrom() == self:
+                    result.append(rel)
+            else:
+                if rel.GetTo() == self:
+                    result.append(rel)
+        
+        return result
+    
+    def IsEnabled(self):
+        """!Get True if action is enabled, otherwise False"""
+        return self.isEnabled
+    
+    def Enable(self, enabled = True):
+        """!Enable/disable action"""
+        self.isEnabled = enabled
+        self.Update()
+
+    def Update(self):
+        pass
+    
+class ModelAction(ModelObject, ogl.RectangleShape):
     """!Action class (GRASS module)"""
     def __init__(self, parent, x, y, id = -1, cmd = None, task = None, width = None, height = None):
+        ModelObject.__init__(self, id)
+        
         self.parent  = parent
         self.task    = task
+        
         if not width:
             width = UserSettings.Get(group='modeler', key='action', subkey=('size', 'width'))
         if not height:
@@ -1487,13 +1538,11 @@ class ModelAction(ogl.RectangleShape):
                 self.task = None
         
         self.propWin = None
-        self.id      = id
         
         self.data = list()   # list of connected data items
         
         self.isValid = False
         self.isParameterized = False
-        self.isEnabled = True
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -1535,19 +1584,6 @@ class ModelAction(ogl.RectangleShape):
         pen = self.GetPen()
         pen.SetWidth(width)
         self.SetPen(pen)
-
-    def Enable(self, enabled = True):
-        """!Enable/disable action"""
-        self.isEnabled = enabled
-        self.Update()
-
-    def IsEnabled(self):
-        """!Get True if action is enabled, otherwise False"""
-        return self.isEnabled
-    
-    def GetId(self):
-        """!Get id"""
-        return self.id
 
     def SetId(self, id):
         """!Set id"""
@@ -1657,11 +1693,6 @@ class ModelAction(ogl.RectangleShape):
         """!Check if action is parameterized"""
         return self.isParameterized
     
-    def AddData(self, item):
-        """!Register new data item"""
-        if item not in self.data:
-            self.data.append(item)
-        
     def FindData(self, name):
         """!Find data item by name"""
         for d in self.data:
@@ -1684,7 +1715,7 @@ class ModelAction(ogl.RectangleShape):
         self._setPen()
         ogl.RectangleShape.OnDraw(self, dc)
     
-class ModelData(ogl.EllipseShape):
+class ModelData(ModelObject, ogl.EllipseShape):
     def __init__(self, parent, x, y, value = '', prompt = '', width = None, height = None):
         """Data item class
 
@@ -1695,6 +1726,8 @@ class ModelData(ogl.EllipseShape):
         @param prompt type of GIS element
         @param width, height dimension of the shape
         """
+        ModelObject.__init__(self)
+        
         self.parent  = parent
         self.value   = value
         self.prompt  = prompt
@@ -1705,8 +1738,6 @@ class ModelData(ogl.EllipseShape):
         if not height:
             height = UserSettings.Get(group='modeler', key='data', subkey=('size', 'height'))
         
-        self.rels = { 'from' : list(), 'to' : list() } # list of recorded relations
-
         if self.parent.GetCanvas():
             ogl.EllipseShape.__init__(self, width, height)
             
@@ -1740,7 +1771,7 @@ class ModelData(ogl.EllipseShape):
     def GetLog(self, string = True):
         """!Get logging info"""
         name = list()
-        for rel in self.rels['from'] + self.rels['to']:
+        for rel in self.GetRelations():
             name.append(rel.GetName())
         if name:
             return '/'.join(name) + '=' + self.value + ' (' + self.prompt + ')'
@@ -1750,7 +1781,7 @@ class ModelData(ogl.EllipseShape):
     def GetName(self):
         """!Get list of names"""
         name = list()
-        for rel in self.rels['from'] + self.rels['to']:
+        for rel in self.GetRelations():
             name.append(rel.GetName())
         
         return name
@@ -1768,7 +1799,7 @@ class ModelData(ogl.EllipseShape):
         self.value = value
         self._setText()
         for direction in ('from', 'to'):
-            for rel in self.rels[direction]:
+            for rel in self.GetRelations(direction):
                 if direction == 'from':
                     action = rel.GetTo()
                 else:
@@ -1778,20 +1809,6 @@ class ModelData(ogl.EllipseShape):
                                                    show = None)
                 task.set_param(rel.GetName(), self.value)
                 action.SetParams(params = task.get_options())
-        
-    def GetRelations(self, direction = None):
-        """!Get relations from/to"""
-        if not direction:
-            return self.rels['from'] + self.rels['to']
-        
-        return self.rels[direction]
-        
-    def AddRelation(self, rel, direction):
-        """!Record new relation
-
-        @param direction direction - 'from' or 'to'
-        """
-        self.rels[direction].append(rel)
         
     def AddName(self, name, direction):
         """!Record new name (parameter)
@@ -1828,12 +1845,12 @@ class ModelData(ogl.EllipseShape):
     def _setPen(self):
         """!Set pen"""
         isParameterized = False
-        for rel in self.rels['from']:
+        for rel in self.GetRelations('from'):
             if rel.GetTo().IsParameterized():
                 isParameterized = True
                 break
         if not isParameterized:
-            for rel in self.rels['to']:
+            for rel in self.GetRelations('to'):
                 if rel.GetFrom().IsParameterized():
                     isParameterized = True
                     break
@@ -1852,7 +1869,7 @@ class ModelData(ogl.EllipseShape):
         """!Update text"""
         self.ClearText()
         name = []
-        for rel in self.rels['to'] + self.rels['from']:
+        for rel in self.GetRelations():
             name.append(rel.GetName())
         self.AddText('/'.join(name))
         self.AddText(self.value)
@@ -2517,11 +2534,9 @@ class WriteModelFile:
     def __init__(self, fd, model):
         self.fd         = fd
         self.model      = model
-        self.actions    = model.GetActions()
-        self.data       = model.GetData()
         self.properties = model.GetProperties()
         self.variables  = model.GetVariables()
-        self.loops      = model.GetLoops()
+        self.items      = model.GetItems()
         
         self.indent = 0
         
@@ -2530,10 +2545,19 @@ class WriteModelFile:
         self._window()
         self._properties()
         self._variables()
-        self._actions()
-        self._data()
-        self._loops()
+        self._items()
         
+        dataList = list()
+        for action in model.GetActions():
+            for rel in action.GetRelations():
+                if rel.GetFrom() == action:
+                    dataItem = rel.GetTo()
+                else:
+                    dataItem = rel.GetFrom()
+                if dataItem not in dataList:
+                    dataList.append(dataItem)
+        self._data(dataList)
+                
         self._footer()
 
     def _filterValue(self, value):
@@ -2602,58 +2626,62 @@ class WriteModelFile:
         self.indent -= 4
         self.fd.write('%s</variables>\n' % (' ' * self.indent))
         
-    def _actions(self):
-        """!Write actions"""
-        id = 1
-        for action in self.actions:
-            action.SetId(id)
-            self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
-                              (' ' * self.indent, id, action.GetName(), action.GetX(), action.GetY(),
-                               action.GetWidth(), action.GetHeight()))
-            self.indent += 4
-            self.fd.write('%s<task name="%s">\n' % (' ' * self.indent, action.GetLog(string = False)[0]))
-            self.indent += 4
-            if not action.IsEnabled():
-                self.fd.write('%s<disabled />\n' % (' ' * self.indent))
-            for key, val in action.GetParams().iteritems():
-                if key == 'flags':
-                    for f in val:
-                        if f.get('value', False) or f.get('parameterized', False):
-                            if f.get('parameterized', False):
-                                if f.get('value', False) == False:
-                                    self.fd.write('%s<flag name="%s" value="0" parameterized="1" />\n' %
-                                                  (' ' * self.indent, f.get('name', '')))
-                                else:
-                                    self.fd.write('%s<flag name="%s" parameterized="1" />\n' %
-                                                  (' ' * self.indent, f.get('name', '')))
-                            else:
-                                self.fd.write('%s<flag name="%s" />\n' %
-                                              (' ' * self.indent, f.get('name', '')))
-                else: # parameter
-                    for p in val:
-                        if not p.get('value', ''):
-                            continue
-                        self.fd.write('%s<parameter name="%s">\n' %
-                                      (' ' * self.indent, p.get('name', '')))
-                        self.indent += 4
-                        if p.get('parameterized', False):
-                            self.fd.write('%s<parameterized />\n' % (' ' * self.indent))
-                        self.fd.write('%s<value>%s</value>\n' %
-                                      (' ' * self.indent, self._filterValue(p.get('value', ''))))
-                        self.indent -= 4
-                        self.fd.write('%s</parameter>\n' % (' ' * self.indent))
-            self.indent -= 4
-            self.fd.write('%s</task>\n' % (' ' * self.indent))
-            self.indent -= 4
-            self.fd.write('%s</action>\n' % (' ' * self.indent))
-            id += 1
-        
+    def _items(self):
+        """!Write actions/loops"""
+        self.indent += 4
+        for item in self.items:
+            if isinstance(item, ModelAction):
+                self._action(item)
+            elif isinstance(item, ModelLoop):
+                self._loop(item)
         self.indent -= 4
-        
-    def _data(self):
+
+    def _action(self, action):
+        """!Write actions"""
+        self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
+                          (' ' * self.indent, action.GetId(), action.GetName(), action.GetX(), action.GetY(),
+                           action.GetWidth(), action.GetHeight()))
+        self.indent += 4
+        self.fd.write('%s<task name="%s">\n' % (' ' * self.indent, action.GetLog(string = False)[0]))
+        self.indent += 4
+        if not action.IsEnabled():
+            self.fd.write('%s<disabled />\n' % (' ' * self.indent))
+        for key, val in action.GetParams().iteritems():
+            if key == 'flags':
+                for f in val:
+                    if f.get('value', False) or f.get('parameterized', False):
+                        if f.get('parameterized', False):
+                            if f.get('value', False) == False:
+                                self.fd.write('%s<flag name="%s" value="0" parameterized="1" />\n' %
+                                              (' ' * self.indent, f.get('name', '')))
+                            else:
+                                self.fd.write('%s<flag name="%s" parameterized="1" />\n' %
+                                              (' ' * self.indent, f.get('name', '')))
+                        else:
+                            self.fd.write('%s<flag name="%s" />\n' %
+                                          (' ' * self.indent, f.get('name', '')))
+            else: # parameter
+                for p in val:
+                    if not p.get('value', ''):
+                        continue
+                    self.fd.write('%s<parameter name="%s">\n' %
+                                  (' ' * self.indent, p.get('name', '')))
+                    self.indent += 4
+                    if p.get('parameterized', False):
+                        self.fd.write('%s<parameterized />\n' % (' ' * self.indent))
+                    self.fd.write('%s<value>%s</value>\n' %
+                                  (' ' * self.indent, self._filterValue(p.get('value', ''))))
+                    self.indent -= 4
+                    self.fd.write('%s</parameter>\n' % (' ' * self.indent))
+        self.indent -= 4
+        self.fd.write('%s</task>\n' % (' ' * self.indent))
+        self.indent -= 4
+        self.fd.write('%s</action>\n' % (' ' * self.indent))
+                
+    def _data(self, dataList):
         """!Write data"""
         self.indent += 4
-        for data in self.data:
+        for data in dataList:
             self.fd.write('%s<data pos="%d,%d" size="%d,%d">\n' % \
                               (' ' * self.indent, data.GetX(), data.GetY(),
                                data.GetWidth(), data.GetHeight()))
@@ -2671,7 +2699,7 @@ class WriteModelFile:
 
             # relations
             for ft in ('from', 'to'):
-                for rel in data.GetRelations(direction = ft):
+                for rel in data.GetRelations(ft):
                     if ft == 'from':
                         aid = rel.GetTo().GetId()
                     else:
@@ -2693,23 +2721,22 @@ class WriteModelFile:
             self.indent -= 4
             self.fd.write('%s</data>\n' % (' ' * self.indent))
 
-    def _loops(self):
+    def _loop(self, loop):
         """!Write loops"""
-        for loop in self.loops:
-            self.fd.write('%s<loop id="%d" pos="%d,%d" size="%d,%d">\n' % \
-                              (' ' * self.indent, loop.GetId(), loop.GetX(), loop.GetY(),
-                               loop.GetWidth(), loop.GetHeight()))
-            text = loop.GetText()
-            self.indent += 4
-            if text:
-                self.fd.write('%s<condition>%s</condition>\n' %
-                              (' ' * self.indent, self._filterValue(text)))
-            for action in loop.GetActions():
-                self.fd.write('%s<loop-action>%d</loop-action>\n' %
-                              (' ' * self.indent, action))
-            self.indent -= 4
-            
-            self.fd.write('%s</loop>\n' % (' ' * self.indent))
+        self.fd.write('%s<loop id="%d" pos="%d,%d" size="%d,%d">\n' % \
+                          (' ' * self.indent, loop.GetId(), loop.GetX(), loop.GetY(),
+                           loop.GetWidth(), loop.GetHeight()))
+        text = loop.GetText()
+        self.indent += 4
+        if text:
+            self.fd.write('%s<condition>%s</condition>\n' %
+                          (' ' * self.indent, self._filterValue(text)))
+        for action in loop.GetActions():
+            self.fd.write('%s<loop-action>%d</loop-action>\n' %
+                          (' ' * self.indent, action))
+        self.indent -= 4
+        
+        self.fd.write('%s</loop>\n' % (' ' * self.indent))
             
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""
@@ -3127,7 +3154,7 @@ class ModelParamDialog(wx.Dialog):
                                             FN.FNB_NO_X_BUTTON)
         else:
             self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY,
-                                            agwStyle = FN.FNB_FANCY_TABS |
+                                            style = FN.FNB_FANCY_TABS |
                                             FN.FNB_BOTTOM |
                                             FN.FNB_NO_NAV_BUTTONS |
                                             FN.FNB_NO_X_BUTTON)
@@ -3207,8 +3234,11 @@ class ModelListCtrl(wx.ListCtrl,
                  wx.LC_VRULES, **kwargs):
         """!List of model variables"""
         self.parent = parent
-        self.frame  = parent.parent
-                
+        try:
+            self.frame  = parent.parent
+        except AttributeError:
+            self.frame = None
+        
         wx.ListCtrl.__init__(self, parent, id = id, style = style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
@@ -3503,17 +3533,18 @@ class VariableListCtrl(ModelListCtrl):
         self.PopupMenu(menu)
         menu.Destroy()
         
-class ModelLoop(ogl.RectangleShape):
+class ModelLoop(ModelObject, ogl.RectangleShape):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, actions = []):
         """!Defines a loop"""
+        ModelObject.__init__(self, id)
+        
         self.parent  = parent
         self.text    = text
         if not width:
             width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
         if not height:
             height = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'height'))
-        self.actions = actions
-        self.id      = id
+        self.actions = actions # list of actions in the loop
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -3525,10 +3556,6 @@ class ModelLoop(ogl.RectangleShape):
             self.SetCornerRadius(100)
             self.AddText('(' + str(self.id) + ') ' + text)
         
-    def GetId(self):
-        """!Get loop id"""
-        return self.id
-    
     def GetText(self):
         """!Get loop text"""
         return self.text
@@ -3630,7 +3657,7 @@ class ActionPanel(wx.Panel):
         
         self.list = ActionListCtrl(parent = self,
                                    columns = [_("ID"), _("Name"),
-                                              _("Type"), _("Command")])
+                                              _("Command")])
         
         self._layout()
 
@@ -3671,38 +3698,22 @@ class ActionListCtrl(ModelListCtrl):
         self.itemDataMap = dict()
         i = 0
         for action in data:
-            if self.GetColumnCount() == 4:
-                self.itemDataMap[i] = [str(action.GetId()),
-                                       action.GetName(),
-                                       "module",
-                                       action.GetLog()]
-            else:
-                self.itemDataMap[i] = [str(action.GetId()),
-                                       action.GetName(),
-                                       action.GetLog()]
-                
+            self.itemDataMap[i] = [str(action.GetId()),
+                                   action.GetName(),
+                                   action.GetLog()]
+            
             i += 1
         
         self.itemCount = len(self.itemDataMap.keys())
         self.DeleteAllItems()
         i = 0
-        if self.GetColumnCount() == 4:
-            for aid, name, atype, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(sys.maxint, aid)
-                self.SetStringItem(index, 0, aid)
-                self.SetStringItem(index, 1, name)
-                self.SetStringItem(index, 2, atype)
-                self.SetStringItem(index, 3, desc)
-                self.SetItemData(index, i)
-                i += 1
-        else:
-            for aid, name, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(sys.maxint, aid)
-                self.SetStringItem(index, 0, aid)
-                self.SetStringItem(index, 1, name)
-                self.SetStringItem(index, 2, desc)
-                self.SetItemData(index, i)
-                i += 1
+        for aid, name, desc in self.itemDataMap.itervalues():
+            index = self.InsertStringItem(sys.maxint, aid)
+            self.SetStringItem(index, 0, aid)
+            self.SetStringItem(index, 1, name)
+            self.SetStringItem(index, 2, desc)
+            self.SetItemData(index, i)
+            i += 1
         
     def OnRemove(self, event):
         """!Remove selected action(s) from the model"""
@@ -3719,7 +3730,7 @@ class ActionListCtrl(ModelListCtrl):
             if not action:
                 item = self.GetFirstSelected()
                 continue
-            print aId, action
+            
             model.RemoveItem(action)
             canvas.GetDiagram().RemoveShape(action)
             self.frame.ModelChanged()
@@ -3798,8 +3809,9 @@ class ActionListCtrl(ModelListCtrl):
         model = self.frame.GetModel()
         
         aId = 1
-        for action in model.GetActions():
-            action.SetId(aId)
+        for item in model.GetItems():
+            print item
+            item.SetId(aId)
             aId += 1
         
         self.OnReload(None)
