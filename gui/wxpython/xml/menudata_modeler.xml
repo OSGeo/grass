@@ -65,16 +65,16 @@
       <label>&amp;Model</label>
       <items>
 	<menuitem>
-	  <label>Add data</label>
-	  <help>Add data item to model</help>
-	  <handler>OnAddData</handler>
-	  <shortcut>Ctrl+D</shortcut>
-	</menuitem>
-	<menuitem>
 	  <label>Add action</label>
 	  <help>Add action (GRASS module) to model</help>
 	  <handler>OnAddAction</handler>
 	  <shortcut>Ctrl+A</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Add data</label>
+	  <help>Add data item to model</help>
+	  <handler>OnAddData</handler>
+	  <shortcut>Ctrl+D</shortcut>
 	</menuitem>
 	<menuitem>
 	  <label>Define relation</label>

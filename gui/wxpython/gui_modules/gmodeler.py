@@ -178,6 +178,24 @@ class Model(object):
         
         return None
 
+    def FindData(self, value, prompt):
+        """!Find data item in the model
+
+        @param value value
+        @param prompt prompt
+
+        @return ModelData instance
+        @return None if not found
+        """
+        for action in self.GetActions():
+            for rel in action.GetRelations():
+                dataItem = rel.GetData()
+                if dataItem.GetValue() == value and \
+                        dataItem.GetPrompt() == prompt:
+                    return dataItem
+        
+        return None
+                
     def LoadModel(self, filename):
         """!Load model definition stored in GRASS Model XML file (gxm)
         
@@ -256,8 +274,8 @@ class Model(object):
                 else:
                     relation = ModelRelation(actionItem, dataItem, rel['name'])
                 relation.SetControlPoints(rel['points'])
-                dataItem.AddRelation(relation)
                 actionItem.AddRelation(relation)
+                dataItem.AddRelation(relation)
             
             dataItem.Update()
                    
@@ -566,7 +584,9 @@ class ModelFrame(wx.Frame):
         
     def OnCanvasRefresh(self, event):
         """!Refresh canvas"""
+        self.SetStatusText(_("Redrawing model..."), 0)
         self.GetCanvas().Refresh()
+        self.SetStatusText("", 0)
 
     def OnCloseWindow(self, event):
         """!Close window"""
@@ -841,15 +861,28 @@ class ModelFrame(wx.Frame):
         
         self.goutput.cmdThread.SetId(-1)
         for item in self.model.GetItems():
-            print item
             if not item.IsEnabled():
                 continue
             if isinstance(item, ModelAction):
                 self._runAction(item, params)
             elif isinstance(item, ModelLoop):
-                print item.GetText()
+                cond = item.GetText()
+                # substitute variables in condition
+                variables = self.model.GetVariables()
+                for variable in variables:
+                    pattern = re.compile('%' + variable)
+                    if pattern.search(cond):
+                        value = variables[variable].get('value', '')
+                        vtype = variables[variable].get('type', 'string')
+                        if vtype == 'string':
+                            value = '"' + value + '"'
+                        cond = pattern.sub(value, cond)
+                # split condition
+                condVar, condText = re.split('\s*in\s*', cond)
+                
                 for action in item.GetActions():
-                    self._runAction(action, params)
+                    for vars()[condVar] in eval(condText):
+                        self._runAction(action, params)
         
         if params:
             dlg.Destroy()
@@ -1154,6 +1187,7 @@ if __name__ == "__main__":
         self._addEvent(action)
         self.model.AddItem(action)
         
+        self.actionPanel.Update()
         self.canvas.Refresh()
         time.sleep(.1)
         
@@ -1168,7 +1202,7 @@ if __name__ == "__main__":
         
         if win:
             win.Raise()
-
+        
     def OnAddData(self, event):
         """!Add data item to model"""
         # add action to canvas
@@ -1233,37 +1267,32 @@ if __name__ == "__main__":
                         continue
                     
                     data = self.model.FindData(p.get('value', ''),
-                                              p.get('prompt', ''))
+                                               p.get('prompt', ''))
                     if data:
                         if p.get('age', 'old') == 'old':
                             rel = ModelRelation(data, layer, p.get('name', ''))
-                            data.AddRelation(rel, direction = 'from')
-                            self.AddLine(rel)
                         else:
                             rel = ModelRelation(layer, data, p.get('name', ''))
-                            data.AddRelation(rel, direction = 'to')
-                            self.AddLine(rel)
+                        layer.AddRelation(rel)
+                        data.AddRelation(rel)
+                        self.AddLine(rel)
                         data.Update()
                         continue
                     
                     data = ModelData(self, value = p.get('value', ''),
                                      prompt = p.get('prompt', ''),
                                      x = x.pop(), y = height/2)
-                    layer.AddData(data)
+                    self._addEvent(data)
                     self.canvas.diagram.AddShape(data)
                     data.Show(True)
-                    
-                    self._addEvent(data)
-                    self.model.AddData(data)
-                    
+                                                            
                     if p.get('age', 'old') == 'old':
                         rel = ModelRelation(data, layer, p.get('name', ''))
-                        data.AddRelation(rel, direction = 'from')
-                        self.AddLine(rel)
                     else:
                         rel = ModelRelation(layer, data, p.get('name', ''))
-                        data.AddRelation(rel, direction = 'to')
-                        self.AddLine(rel)
+                    layer.AddRelation(rel)
+                    data.AddRelation(rel)
+                    self.AddLine(rel)
                     data.Update()
             
             # valid ?
@@ -2005,8 +2034,13 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             ### shape.SetPropDialog(dlg)
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
-                shape.SetActions(dlg.GetActions())
+                shape.SetText(dlg.GetCondition())
+                alist = list()
+                for aId in dlg.GetActions():
+                    alist.append(self.frame.GetModel().GetAction(aId))
+                shape.SetActions(alist)
                 self.frame.DefineLoop(shape)
+            self.frame.GetCanvas().Refresh()
             
             dlg.Destroy()
         
@@ -2169,18 +2203,22 @@ class ModelSearchDialog(wx.Dialog):
         self.SetSize((500, 275))
         
     def _layout(self):
+        cmdSizer = wx.StaticBoxSizer(self.cmdBox, wx.VERTICAL)
+        cmdSizer.Add(item = self.cmd_prompt, proportion = 1,
+                     flag = wx.EXPAND)
+        
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=self.search, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=3)
-        mainSizer.Add(item=self.cmd_prompt, proportion=1,
-                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
-        mainSizer.Add(item=btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        mainSizer.Add(item = self.search, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL, border = 3)
+        mainSizer.Add(item = cmdSizer, proportion = 1,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
+        mainSizer.Add(item = btnSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
         
         self.panel.SetSizer(mainSizer)
         mainSizer.Fit(self.panel)
@@ -2263,6 +2301,19 @@ class ModelRelation(ogl.LineShape):
     def GetTo(self):
         """!Get id of 'to' shape"""
         return self.toShape
+
+    def GetData(self):
+        """!Get related ModelData instance
+
+        @return ModelData instance
+        @return None if not found
+        """
+        if isinstance(self.fromShape, ModelData):
+            return self.fromShape
+        elif isinstance(self.toShape, ModelData):
+            return self.toShape
+        
+        return None
     
     def GetName(self):
         """!Get parameter name"""
@@ -2550,14 +2601,11 @@ class WriteModelFile:
         dataList = list()
         for action in model.GetActions():
             for rel in action.GetRelations():
-                if rel.GetFrom() == action:
-                    dataItem = rel.GetTo()
-                else:
-                    dataItem = rel.GetFrom()
+                dataItem = rel.GetData()
                 if dataItem not in dataList:
                     dataList.append(dataItem)
         self._data(dataList)
-                
+        
         self._footer()
 
     def _filterValue(self, value):
@@ -2609,6 +2657,8 @@ class WriteModelFile:
 
     def _variables(self):
         """!Write model variables"""
+        if not self.variables:
+            return
         self.fd.write('%s<variables>\n' % (' ' * self.indent))
         self.indent += 4
         for name, values in self.variables.iteritems():
@@ -2628,14 +2678,12 @@ class WriteModelFile:
         
     def _items(self):
         """!Write actions/loops"""
-        self.indent += 4
         for item in self.items:
             if isinstance(item, ModelAction):
                 self._action(item)
             elif isinstance(item, ModelLoop):
                 self._loop(item)
-        self.indent -= 4
-
+        
     def _action(self, action):
         """!Write actions"""
         self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
@@ -2680,7 +2728,6 @@ class WriteModelFile:
                 
     def _data(self, dataList):
         """!Write data"""
-        self.indent += 4
         for data in dataList:
             self.fd.write('%s<data pos="%d,%d" size="%d,%d">\n' % \
                               (' ' * self.indent, data.GetX(), data.GetY(),
@@ -2733,9 +2780,8 @@ class WriteModelFile:
                           (' ' * self.indent, self._filterValue(text)))
         for action in loop.GetActions():
             self.fd.write('%s<loop-action>%d</loop-action>\n' %
-                          (' ' * self.indent, action))
+                          (' ' * self.indent, action.GetId()))
         self.indent -= 4
-        
         self.fd.write('%s</loop>\n' % (' ' * self.indent))
             
 class PreferencesDialog(PreferencesBaseDialog):
@@ -3571,7 +3617,13 @@ class ModelLoop(ModelObject, ogl.RectangleShape):
     def SetActions(self, actions):
         """!Set actions (id)"""
         self.actions = actions
-        
+
+    def SetText(self, cond):
+        """!Set loop text (condition)"""
+        self.text = cond
+        self.ClearText()
+        self.AddText('(' + str(self.id) + ') ' + self.text)
+    
 class ModelLoopDialog(wx.Dialog):
     """!Loop properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Loop properties"),
@@ -3589,9 +3641,9 @@ class ModelLoopDialog(wx.Dialog):
                                     value = shape.GetText())
         self.listBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("List of actions in loop"))
-        self.actionList = ActionListCtrl(parent = self.panel,
-                                         columns = [_("ID"), _("Name"),
-                                                    _("Command")])
+        self.actionList = ActionCheckListCtrl(parent = self.panel,
+                                              columns = [_("ID"), _("Name"),
+                                                         _("Command")])
         
         self.actionList.Populate(self.parent.GetModel().GetActions())
         
@@ -3643,6 +3695,10 @@ class ModelLoopDialog(wx.Dialog):
         
         return ids
         
+    def GetCondition(self):
+        """!Get loop condition"""
+        return self.condText.GetValue()
+    
 class ActionPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
                  **kwargs):
@@ -3679,8 +3735,10 @@ class ActionPanel(wx.Panel):
         self.list.OnReload(None)
         
 class ActionListCtrl(ModelListCtrl):
-    def __init__(self, parent, columns, **kwargs):
+    def __init__(self, parent, columns, disablePopup = False, **kwargs):
         """!List of model actions"""
+        self.disablePopup = disablePopup
+        
         ModelListCtrl.__init__(self, parent, columns, **kwargs)
         self.SetColumnWidth(1, 100)
         self.SetColumnWidth(2, 65)
@@ -3779,6 +3837,9 @@ class ActionListCtrl(ModelListCtrl):
 
     def OnRightUp(self, event):
         """!Mouse right button up"""
+        if self.disablePopup:
+            return
+        
         if not hasattr(self, "popupID1"):
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
@@ -3810,14 +3871,23 @@ class ActionListCtrl(ModelListCtrl):
         
         aId = 1
         for item in model.GetItems():
-            print item
             item.SetId(aId)
             aId += 1
         
         self.OnReload(None)
         self.frame.GetCanvas().Refresh()
         self.frame.ModelChanged()
-    
+
+class ActionCheckListCtrl(ActionListCtrl, listmix.CheckListCtrlMixin):
+    def __init__(self, parent, columns, **kwargs):
+        ActionListCtrl.__init__(self, parent, columns, disablePopup = True, **kwargs)
+        listmix.CheckListCtrlMixin.__init__(self)
+        self.SetColumnWidth(0, 50)
+        
+    def OnBeginEdit(self, event):
+        """!Disable editing"""
+        event.Veto()
+        
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
