@@ -2031,13 +2031,13 @@ void IWave::avnir(int iwa)
 
     switch(iwa)
     {
-    case 1: for(i = 0; i < 64; i++)  ffu.s[56+i] = sr1[i];
+    case 1: for(i = 0; i < 64; i++)  ffu.s[56+i]  = sr1[i];
         break;
-    case 2: for(i = 0; i < 84; i++)  ffu.s[94+i] = sr1[i];
+    case 2: for(i = 0; i < 84; i++)  ffu.s[94+i]  = sr2[i];
         break;
-    case 3: for(i = 0; i < 80; i++)  ffu.s[118+i] = sr1[i];
+    case 3: for(i = 0; i < 80; i++)  ffu.s[118+i] = sr3[i];
         break;
-    case 4: for(i = 0; i < 90; i++)  ffu.s[180+i] = sr1[i];
+    case 4: for(i = 0; i < 90; i++)  ffu.s[180+i] = sr4[i];
         break;
     }
 }
