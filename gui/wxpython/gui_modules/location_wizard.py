@@ -33,7 +33,6 @@ This program is free software under the GNU General Public License
 """
 import os
 import shutil
-import re
 import string
 import sys
 import locale

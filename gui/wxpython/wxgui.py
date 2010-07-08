@@ -22,7 +22,6 @@ for details.
 import sys
 import os
 import time
-import re
 import string
 import getopt
 import platform
