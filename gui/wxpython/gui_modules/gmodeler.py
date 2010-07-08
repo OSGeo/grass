@@ -178,6 +178,17 @@ class Model(object):
         
         return None
 
+    def GetData(self):
+        """!Get list of data items"""
+        result = list()
+        for action in self.GetActions():
+            for rel in action.GetRelations():
+                dataItem = rel.GetData()
+                if dataItem not in result:
+                    result.append(dataItem)
+        
+        return result
+
     def FindData(self, value, prompt):
         """!Find data item in the model
 
@@ -187,12 +198,10 @@ class Model(object):
         @return ModelData instance
         @return None if not found
         """
-        for action in self.GetActions():
-            for rel in action.GetRelations():
-                dataItem = rel.GetData()
-                if dataItem.GetValue() == value and \
-                        dataItem.GetPrompt() == prompt:
-                    return dataItem
+        for data in self.GetData():
+            if data.GetValue() == value and \
+                    data.GetPrompt() == prompt:
+                return dataItem
         
         return None
                 
@@ -283,7 +292,8 @@ class Model(object):
         for loop in gxmXml.loops:
             alist = list()
             for aId in loop['actions']:
-                alist.append(self.GetAction(aId))
+                action = self.GetAction(aId)
+                alist.append(action)
             
             loopItem = ModelLoop(parent = self, 
                                  x = loop['pos'][0],
@@ -293,6 +303,9 @@ class Model(object):
                                  text = loop['text'],
                                  actions = alist,
                                  id = loop['id'])
+            
+            for action in loopItem.GetActions():
+                action.SetLoop(loopItem)
             
             self.AddItem(loopItem)
         
@@ -351,7 +364,7 @@ class Model(object):
         rast = list()
         rast3d = list()
         vect = list()
-        for data in self.data:
+        for data in self.GetData():
             if not data.IsIntermediate():
                 continue
             name = data.GetValue()
@@ -864,6 +877,8 @@ class ModelFrame(wx.Frame):
             if not item.IsEnabled():
                 continue
             if isinstance(item, ModelAction):
+                if item.GetLoopId():
+                    continue
                 self._runAction(item, params)
             elif isinstance(item, ModelLoop):
                 cond = item.GetText()
@@ -1086,37 +1101,15 @@ r"""    grass.run_command('g.remove',
             fd.write('    pass\n')
         
         fd.write("\ndef main():\n")
-        for action in self.model.GetActions():
-            task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
-                                               show = None)
-            opts = task.get_options()
-            flags = ''
-            params = list()
-            strcmd = "    grass.run_command("
-            indent = len(strcmd)
-            fd.write(strcmd + "'%s',\n" % task.get_name())
-            for f in opts['flags']:
-                if f.get('value', False) == True:
-                    name = f.get('name', '')
-                    if len(name) > 1:
-                        params.append('%s=True' % name)
-                    else:
-                        flags += name
-            
-            for p in opts['params']:
-                name = p.get('name', None)
-                value = p.get('value', None)
-                if name and value:
-                    ptype = p.get('type', 'string')
-                    if ptype == 'string':
-                        params.append("%s='%s'" % (name, value))
-                    else:
-                        params.append("%s=%s" % (name, value))
-
-            for opt in params[:-1]:
-                fd.write("%s%s,\n" % (' ' * indent, opt))
-            fd.write("%s%s)\n" % (' ' * indent, params[-1]))
-    
+        for item in self.model.GetItems():
+            if isinstance(item, ModelAction):
+                self._writePythonAction(fd, item)
+            elif isinstance(item, ModelLoop):
+                # for action in item.GetActions():
+                #     fd.write('for %s:\n' % item.GetText())
+                #     self._writePythonAction(fd, action)
+                pass
+        
         fd.write("\n    return 0\n")
         
         fd.write(
@@ -1126,7 +1119,44 @@ if __name__ == "__main__":
     atexit.register(cleanup)
     sys.exit(main())
 """)
-
+        
+    def _writePythonAction(self, fd, item):
+        task = menuform.GUI().ParseCommand(cmd = item.GetLog(string = False),
+                                           show = None)
+        opts = task.get_options()
+        flags = ''
+        params = list()
+        strcmd = "    grass.run_command("
+        indent = len(strcmd)
+        for f in opts['flags']:
+            if f.get('value', False) == True:
+                name = f.get('name', '')
+                if len(name) > 1:
+                    params.append('%s = True' % name)
+                else:
+                    flags += name
+            
+        for p in opts['params']:
+            name = p.get('name', None)
+            value = p.get('value', None)
+            if name and value:
+                ptype = p.get('type', 'string')
+                if ptype == 'string':
+                    params.append('%s = "%s"' % (name, value))
+                else:
+                    params.append("%s = %s" % (name, value))
+        
+        fd.write(strcmd + '"%s"' % task.get_name())
+        if flags:
+            fd.write(",\n%sflags = '%s'" % (' ' * indent, flags))
+        if len(params) > 0:
+            fd.write(",\n")
+            for opt in params[:-1]:
+                fd.write("%s%s,\n" % (' ' * indent, opt))
+            fd.write("%s%s)\n" % (' ' * indent, params[-1]))
+        else:
+            fd.write(")\n")
+        
     def _validateModel(self):
         """!Validate model"""
         self.SetStatusText(_('Validating model...'), 0)
@@ -1572,6 +1602,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         
         self.isValid = False
         self.isParameterized = False
+        self.inLoop = None
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -1624,6 +1655,20 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         else:
             self.AddText('(%d) <<%s>>' % (self.id, _("unknown")))
 
+    def SetLoop(self, loop):
+        """!Register loop"""
+        self.inLoop = loop
+
+    def GetLoopId(self):
+        """!Get id of the loop
+
+        @return loop id 
+        @return '' if action is not in the loop
+        """
+        if self.inLoop:
+            return self.inLoop.GetId()
+        return ''
+    
     def SetProperties(self, params, propwin):
         """!Record properties dialog"""
         self.task.params = params['params']
@@ -3712,7 +3757,7 @@ class ActionPanel(wx.Panel):
                                     label=" %s " % _("List of actions - right-click to delete"))
         
         self.list = ActionListCtrl(parent = self,
-                                   columns = [_("ID"), _("Name"),
+                                   columns = [_("ID"), _("Name"), _("In loop"),
                                               _("Command")])
         
         self._layout()
@@ -3756,23 +3801,39 @@ class ActionListCtrl(ModelListCtrl):
         self.itemDataMap = dict()
         i = 0
         for action in data:
-            self.itemDataMap[i] = [str(action.GetId()),
-                                   action.GetName(),
-                                   action.GetLog()]
+            if self.GetItemCount() == 3:
+                self.itemDataMap[i] = [str(action.GetId()),
+                                       action.GetName(),
+                                       action.GetLog()]
+            else:
+                self.itemDataMap[i] = [str(action.GetId()),
+                                       action.GetName(),
+                                       str(action.GetLoopId()),
+                                       action.GetLog()]
             
             i += 1
         
         self.itemCount = len(self.itemDataMap.keys())
         self.DeleteAllItems()
         i = 0
-        for aid, name, desc in self.itemDataMap.itervalues():
-            index = self.InsertStringItem(sys.maxint, aid)
-            self.SetStringItem(index, 0, aid)
-            self.SetStringItem(index, 1, name)
-            self.SetStringItem(index, 2, desc)
-            self.SetItemData(index, i)
-            i += 1
-        
+        if self.GetItemCount() == 3:
+            for aid, name, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, aid)
+                self.SetStringItem(index, 0, aid)
+                self.SetStringItem(index, 1, name)
+                self.SetStringItem(index, 2, desc)
+                self.SetItemData(index, i)
+                i += 1
+        else:
+            for aid, name, inloop, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, aid)
+                self.SetStringItem(index, 0, aid)
+                self.SetStringItem(index, 1, name)
+                self.SetStringItem(index, 2, inloop)
+                self.SetStringItem(index, 3, desc)
+                self.SetItemData(index, i)
+                i += 1
+                
     def OnRemove(self, event):
         """!Remove selected action(s) from the model"""
         model = self.frame.GetModel()
