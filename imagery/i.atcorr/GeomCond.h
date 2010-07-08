@@ -49,6 +49,8 @@
 /*                                                                      c */
 /*         10      aster             * enter month,day,hh.ddd,long.,lat.c */
 /*                                                                      c */
+/*         11      avnir             * enter month,day,hh.ddd,long.,lat.c */
+/*                                                                      c */
 /*                                                                      c */
 /*     note:       for hrv and tm experiments long. and lat. are the    c */
 /*                 coordinates of the scene center.                     c */

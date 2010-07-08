@@ -102,6 +102,10 @@ c        77  6th      "               ( 2.105-2.298 )                  c
 c        78  7th      "               ( 2.200-2.393 )                  c
 c        79  8th      "               ( 2.248-2.475 )                  c
 c        80  9th      "               ( 2.295-2.538 )                  c
+c        81  1st band of avnir        ( 0.390-0.550 )                  c
+c        82  2nd      "               ( 0.485-0.695 )                  c
+c        83  3rd      "               ( 0.545-0.745 )                  c
+c        84  4th      "               ( 0.700-0.925 )                  c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
 
@@ -138,6 +142,7 @@ private:
 	void etmplus(int iwa);
 	void irs_1c_liss(int iwa);
 	void aster(int iwa);
+	void avnir(int iwa);
 
 
 public:
