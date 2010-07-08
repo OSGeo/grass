@@ -352,7 +352,7 @@ CREATE TABLE libs (
 CREATE TABLE ldd (
 	program VARCHAR(80) NOT NULL,
 	library VARCHAR(80) NOT NULL,
-	path VARCHAR(80)
+	path VARCHAR(256)
 	) ;
 
 \copy ldd FROM '$tmpdir/ldd.lst'
