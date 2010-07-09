@@ -2149,7 +2149,12 @@ class MapsetAccess(wx.Dialog):
 
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
                               label=_("Check a mapset to make it accessible, uncheck it to hide it.%s"
-                                      "Note: The current mapset is always accessible.") % os.linesep)
+                                      "  Notes:%s"
+                                      "    - The current mapset is always accessible.%s"
+                                      "    - You may only write to the current mapset.%s"
+                                      "    - You may only write to mapsets which you own.") %
+                                       (os.linesep, os.linesep, os.linesep, os.linesep))
+
         sizer.Add(item=label, proportion=0,
                   flag=wx.ALL, border=5)
 
@@ -2162,6 +2167,9 @@ class MapsetAccess(wx.Dialog):
         # check all accessible mapsets
         for mset in self.accessible_mapsets:
             self.mapsetlb.CheckItem(self.all_mapsets_ordered.index(mset), True)
+
+        # FIXME (howto?): grey-out current mapset
+        #self.mapsetlb.Enable(0, False)
 
         # dialog buttons
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
@@ -2243,4 +2251,3 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
         mapset = self.parent.all_mapsets_ordered[index]
         if mapset == self.parent.curr_mapset:
             self.CheckItem(index, True)
-    
