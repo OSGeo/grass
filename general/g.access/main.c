@@ -24,7 +24,7 @@
 
 int main(int argc, char *argv[])
 {
-    char path[1024];
+    char path[GPATH_MAX];
     int perms;			/* full mapset permissions */
     int group, other;		/* bool. want group/other permission */
     struct Option *group_opt, *other_opt;
@@ -54,6 +54,10 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+#ifdef __MINGW32__
+    G_fatal_error(_("UNIX filesystem access controls are not supported by MS-Windows"));
+#endif
 
     /* get the unix file name for the mapset directory */
     G__file_name(path, "", "", G_mapset());
