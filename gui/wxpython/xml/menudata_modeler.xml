@@ -41,6 +41,7 @@
 	  <label>Export to Python</label>
 	  <help>Export model to Python script</help>
 	  <handler>OnExportPython</handler>
+	  <shortcut>Ctrl+E</shortcut>
 	</menuitem>
 	<separator />
 	<menuitem>
@@ -83,9 +84,15 @@
 	</menuitem>
 	<menuitem>
 	  <label>Add loop</label>
-	  <help>Adds loop to model</help>
+	  <help>Adds loop (for) to model</help>
 	  <handler>OnDefineLoop</handler>
 	  <shortcut>Ctrl+L</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Add condition</label>
+	  <help>Adds condition (if/else) to model</help>
+	  <handler>OnDefineCondition</handler>
+	  <shortcut>Ctrl+I</shortcut>
 	</menuitem>
 	<menuitem>
 	  <label>Remove item</label>

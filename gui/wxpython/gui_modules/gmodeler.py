@@ -25,6 +25,7 @@ Classes:
  - ModelLoopDialog
  - ActionPanel
  - ActionListCtrl
+ - ModelCondition
 
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -304,7 +305,7 @@ class Model(object):
                                  actions = alist,
                                  id = loop['id'])
             
-            for action in loopItem.GetActions():
+            for action in loopItem.GetItems():
                 action.SetLoop(loopItem)
             
             self.AddItem(loopItem)
@@ -895,7 +896,7 @@ class ModelFrame(wx.Frame):
                 # split condition
                 condVar, condText = re.split('\s*in\s*', cond)
                 
-                for action in item.GetActions():
+                for action in item.GetItems():
                     for vars()[condVar] in eval(condText):
                         self._runAction(action, params)
         
@@ -1101,14 +1102,28 @@ r"""    grass.run_command('g.remove',
             fd.write('    pass\n')
         
         fd.write("\ndef main():\n")
+        indent = 4
         for item in self.model.GetItems():
             if isinstance(item, ModelAction):
-                self._writePythonAction(fd, item)
+                if item.GetLoopId():
+                    continue
+                self._writePythonAction(fd, item, indent)
             elif isinstance(item, ModelLoop):
-                # for action in item.GetActions():
-                #     fd.write('for %s:\n' % item.GetText())
-                #     self._writePythonAction(fd, action)
-                pass
+                # substitute conditiond
+                variables = self.model.GetVariables()
+                cond = item.GetText()
+                for variable in variables:
+                    pattern= re.compile('%' + variable)
+                    if pattern.search(cond):
+                        value = variables[variable].get('value', '')
+                        if variables[variable].get('type', 'string') == 'string':
+                            value = '"' + value + '"'
+                        cond = pattern.sub(value, cond)
+                fd.write('%sfor %s:\n' % (' ' * indent, cond))
+                indent += 4
+                for action in item.GetItems():
+                    self._writePythonAction(fd, action, indent)
+                indent -= 4
         
         fd.write("\n    return 0\n")
         
@@ -1120,14 +1135,14 @@ if __name__ == "__main__":
     sys.exit(main())
 """)
         
-    def _writePythonAction(self, fd, item):
+    def _writePythonAction(self, fd, item, indent):
         task = menuform.GUI().ParseCommand(cmd = item.GetLog(string = False),
                                            show = None)
         opts = task.get_options()
         flags = ''
         params = list()
-        strcmd = "    grass.run_command("
-        indent = len(strcmd)
+        strcmd = "%sgrass.run_command(" % (' ' * indent)
+        cmdIndent = len(strcmd)
         for f in opts['flags']:
             if f.get('value', False) == True:
                 name = f.get('name', '')
@@ -1148,12 +1163,12 @@ if __name__ == "__main__":
         
         fd.write(strcmd + '"%s"' % task.get_name())
         if flags:
-            fd.write(",\n%sflags = '%s'" % (' ' * indent, flags))
+            fd.write(",\n%sflags = '%s'" % (' ' * cmdIndent, flags))
         if len(params) > 0:
             fd.write(",\n")
             for opt in params[:-1]:
-                fd.write("%s%s,\n" % (' ' * indent, opt))
-            fd.write("%s%s)\n" % (' ' * indent, params[-1]))
+                fd.write("%s%s,\n" % (' ' * cmdIndent, opt))
+            fd.write("%s%s)\n" % (' ' * cmdIndent, params[-1]))
         else:
             fd.write(")\n")
         
@@ -1178,14 +1193,29 @@ if __name__ == "__main__":
         self.ModelChanged()
         
         width, height = self.canvas.GetSize()
-        loop = ModelLoop(self, x = width/2, y = height/2)
+        loop = ModelLoop(self, x = width/2, y = height/2,
+                         id = len(self.model.GetActions()) + 1)
         self.canvas.diagram.AddShape(loop)
         loop.Show(True)
         
         self._addEvent(loop)
         
         self.canvas.Refresh()
-
+        
+    def OnDefineCondition(self, event):
+        """!Define new condition in the model"""
+        self.ModelChanged()
+        
+        width, height = self.canvas.GetSize()
+        cond = ModelCondition(self, x = width/2, y = height/2,
+                              id = len(self.model.GetActions()) + 1)
+        self.canvas.diagram.AddShape(cond)
+        loop.Show(True)
+        
+        self._addEvent(cond)
+        
+        self.canvas.Refresh()
+    
     def OnAddAction(self, event):
         """!Add action to model"""
         if self.searchDialog is None:
@@ -1461,17 +1491,17 @@ if __name__ == "__main__":
     def DefineLoop(self, loop):
         """!Define loop with given list of actions"""
         parent = loop
-        actions = loop.GetActions()
+        actions = loop.GetItems()
         if not actions:
             return
         
-        for action in loop.GetActions():
+        for action in loop.GetItems():
             rel = ModelRelation(parent, action)
             self.AddLine(rel)
             parent = action
         
         # close loop
-        action = loop.GetActions()[-1]
+        action = loop.GetItems()[-1]
         rel = ModelRelation(action, loop)
         self.AddLine(rel)
         dx = loop.GetWidth() / 2 + 50
@@ -2083,7 +2113,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 alist = list()
                 for aId in dlg.GetActions():
                     alist.append(self.frame.GetModel().GetAction(aId))
-                shape.SetActions(alist)
+                shape.SetItems(alist)
                 self.frame.DefineLoop(shape)
             self.frame.GetCanvas().Refresh()
             
@@ -2823,7 +2853,7 @@ class WriteModelFile:
         if text:
             self.fd.write('%s<condition>%s</condition>\n' %
                           (' ' * self.indent, self._filterValue(text)))
-        for action in loop.GetActions():
+        for action in loop.GetItems():
             self.fd.write('%s<loop-action>%d</loop-action>\n' %
                           (' ' * self.indent, action.GetId()))
         self.indent -= 4
@@ -3625,7 +3655,7 @@ class VariableListCtrl(ModelListCtrl):
         menu.Destroy()
         
 class ModelLoop(ModelObject, ogl.RectangleShape):
-    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, actions = []):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, items = []):
         """!Defines a loop"""
         ModelObject.__init__(self, id)
         
@@ -3635,7 +3665,7 @@ class ModelLoop(ModelObject, ogl.RectangleShape):
             width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
         if not height:
             height = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'height'))
-        self.actions = actions # list of actions in the loop
+        self.items = items # list of items in the loop
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -3645,23 +3675,26 @@ class ModelLoop(ModelObject, ogl.RectangleShape):
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             self.SetCornerRadius(100)
-            self.AddText('(' + str(self.id) + ') ' + text)
+            if text:
+                self.AddText('(' + str(self.id) + ') ' + text)
+            else:
+                self.AddText('(' + str(self.id) + ')')
         
     def GetText(self):
         """!Get loop text"""
         return self.text
 
-    def GetActions(self):
-        """!Get actions (id)"""
-        return self.actions
+    def GetItems(self):
+        """!Get items (id)"""
+        return self.items
 
     def SetId(self, id):
         """!Set loop id"""
         self.id = id
 
-    def SetActions(self, actions):
-        """!Set actions (id)"""
-        self.actions = actions
+    def SetItems(self, items):
+        """!Set items (id)"""
+        self.items = items
 
     def SetText(self, cond):
         """!Set loop text (condition)"""
@@ -3685,7 +3718,7 @@ class ModelLoopDialog(wx.Dialog):
         self.condText = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                     value = shape.GetText())
         self.listBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                    label=" %s " % _("List of actions in loop"))
+                                    label=" %s " % _("List of items in loop"))
         self.actionList = ActionCheckListCtrl(parent = self.panel,
                                               columns = [_("ID"), _("Name"),
                                                          _("Command")])
@@ -3948,6 +3981,34 @@ class ActionCheckListCtrl(ActionListCtrl, listmix.CheckListCtrlMixin):
     def OnBeginEdit(self, event):
         """!Disable editing"""
         event.Veto()
+
+class ModelCondition(ModelObject, ogl.PolygonShape):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, items = []):
+        """!Defines a condition"""
+        ModelObject.__init__(self, id)
+        
+        self.parent  = parent
+        self.text    = text
+        if not width:
+            width = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'width'))
+        if not height:
+            height = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'height'))
+        self.items = items # list of items in the loop
+        
+        if self.parent.GetCanvas():
+            ogl.PolygonShape.__init__(self)
+            points = [(x, y - height / 2),
+                      (x + width / 2, y),
+                      (x, y + height / 2),
+                      (x - width / 2, y)]
+            self.Create(points)
+            
+            self.SetCanvas(self.parent)
+            self.SetPen(wx.BLACK_PEN)
+            if text:
+                self.AddText('(' + str(self.id) + ') ' + text)
+            else:
+                self.AddText('(' + str(self.id) + ')')
         
 def main():
     app = wx.PySimpleApp()
