@@ -186,10 +186,16 @@ Function .onInit
 	Var /GLOBAL MESSAGE_2_
 	Var /GLOBAL MESSAGE_3_
 	
+	Var /GLOBAL R_HKLM_INSTALL_PATH 
+	Var /GLOBAL R_HKCU_INSTALL_PATH 
+	
 	ReadRegStr $UNINSTALL_STRING HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString"
 	ReadRegStr $INSTALL_PATH HKLM "Software\${GRASS_BASE}" "InstallPath"
 	ReadRegStr $INSTALLED_VERSION_NUMBER HKLM "Software\${GRASS_BASE}" "VersionNumber"
 	ReadRegStr $INSTALLED_SVN_REVISION HKLM "Software\${GRASS_BASE}" "SvnRevision"
+	
+	ReadRegStr $R_HKLM_INSTALL_PATH HKLM "Software\R-core\R" "InstallPath" 
+	ReadRegStr $R_HKCU_INSTALL_PATH HKCU "Software\R-core\R" "InstallPath"
 	
 	${If} $INSTALLED_SVN_REVISION == ""
 		ReadRegStr $INSTALLED_SVN_REVISION HKLM "Software\${GRASS_BASE}" "Revision"
@@ -697,6 +703,12 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'set PATH=%GISBASE%\msys\bin;%PATH%$\r$\n'
 	FileWrite $0 'set PATH=%GISBASE%\extrabin;%GISBASE%\extralib;%PATH%$\r$\n'
 	FileWrite $0 'set PATH=%GISBASE%\tcl-tk\bin;%GISBASE%\sqlite\bin;%GISBASE%\gpsbabel;%PATH%$\r$\n'
+	${If} $R_HKLM_INSTALL_PATH != ""
+	FileWrite $0 'set PATH=$R_HKLM_INSTALL_PATH\bin;%PATH%$\r$\n'
+	${EndIf}
+	${If} $R_HKCU_INSTALL_PATH != ""
+	FileWrite $0 'set PATH=$R_HKCU_INSTALL_PATH\bin;%PATH%$\r$\n'
+	${EndIf}
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem Set Path to default web browser$\r$\n'	
 	FileWrite $0 'set GRASS_HTML_BROWSER=explorer$\r$\n'
