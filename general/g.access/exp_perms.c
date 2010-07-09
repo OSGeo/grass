@@ -1,32 +1,34 @@
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 char *explain_perms(int group, int other, int will)
 {
-    static char buf[128];
+    static char buf[256];
     char *who;
     char *verb;
     char *read;
 
-    verb = "have";
-    read = "read ";
+    verb = _("have");
+    read = _("read ");
     read = "";			/* remove this to have "read" appear */
     if (group && other) {
-	who = "Everyone";
-	verb = "has";
+	who = _("Everyone");
+	verb = _("has");
     }
     else if (group) {
-	who = "Only users in your group";
+	who = _("Only users in your group");
     }
     else if (other) {
-	who = "Only users outside your group";
+	who = _("Only users outside your group");
     }
     else {
-	who = "Only you";
+	who = _("Only you");
 	read = "";
     }
     if (will)
-	verb = "have";
+	verb = _("have");
 
-    sprintf(buf, "%s %s %s %saccess to mapset %s",
-	    who, will ? "will" : "now", verb, read, G_mapset());
+    sprintf(buf, _("%s %s %s %saccess to mapset %s"),
+	    who, will ? _("will") : _("now"), verb, read, G_mapset());
     return buf;
 }
