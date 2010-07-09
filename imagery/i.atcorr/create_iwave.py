@@ -43,7 +43,7 @@ def usage():
 
 def read_input(csvfile):
     """
-    Func to read input file
+    Function to read input file
     return number of bands and array of values for each band
     should be a .csv file with the values
     of the filter function for each band in the sensor
@@ -52,7 +52,7 @@ def read_input(csvfile):
     first column is wavelength
     """
     infile = open(csvfile, 'r')
-    
+        
     # get number of bands and band names
     bands = infile.readline().split(',')
     bands.remove(bands[0])
@@ -66,10 +66,9 @@ def read_input(csvfile):
     for b in range(len(bands)):
         conv[b+1] = lambda s: float(s or -99)
     
-    
     values = np.loadtxt(csvfile, delimiter=',', skiprows=1, converters = conv)
     
-    return(bands, values)
+    return (bands, values)
 
 def interpolate_band(values):
     """
@@ -79,7 +78,7 @@ def interpolate_band(values):
     and min, max wl values
     values must be numpy array with 2 columns
     """
-    
+    # These 2 lines select the subarray 
     # remove nodata (-99) lines in values array
     # where response is nodata?
     w = values[:,1] >= 0
@@ -90,7 +89,11 @@ def interpolate_band(values):
     
     filter_f = f(np.arange(response[0,0], response[-1,0], 2.5))
     
-    return(filter_f, (response[0,0], response[-1,0]))
+    # converts limits from nanometers to micrometers
+    lowerlimit = response[0,0]/1000
+    upperlimit = response[-1,0]/1000
+    
+    return(filter_f, (lowerlimit, upperlimit))
 
 def plot_filter(values):
     """Plot wl response values and interpolated
@@ -122,25 +125,27 @@ def pretty_print(filter_f):
         for l in range(nlines):
             for i in range(8):
                 if l == nlines-1 and i == 7: # last value
-                    pstring = pstring+' %.2f };\n' % (filter_f[l*8+i])
+                    pstring = pstring+' %.4f \n' % (filter_f[l*8+i])
+                    pstring = pstring+'    };'
                 else:
-                    pstring = pstring+' %.2f,' % (filter_f[l*8+i])
+                    pstring = pstring+' %.4f,' % (filter_f[l*8+i])
             pstring = pstring+'\n    '
     else:
         for l in range(nlines):
             for i in range(8):
-                pstring = pstring+'    %.2f,' % (filter_f[l*8+i])
+                pstring = pstring+' %.4f,' % (filter_f[l*8+i])
             pstring = pstring+'\n    '
         # adding rest of values in filter_f
         for i in range(rest):
             if i == rest-1: # last value
-                pstring = pstring+'    %.2f };\n' % (filter_f[nlines*7+i])
+                pstring = pstring+' %.4f \n' % (filter_f[nlines*8+i])
+                pstring = pstring+'    };'
             else:
-                pstring = pstring+'    %.2f,' % (filter_f[nlines*7+i])
+                pstring = pstring+' %.4f,' % (filter_f[nlines*8+i])
     
     return pstring
 
-def write_cpp(bands, values, sensor):
+def write_cpp(bands, values, sensor, folder):
     """
     from bands, values and sensor name
     create output file in cpp style
@@ -160,7 +165,7 @@ def write_cpp(bands, values, sensor):
             limits.append(li)
     
     # writing...
-    outfile = open(sensor+"_cpp_template.txt", 'w')
+    outfile = open(os.path.join(folder, sensor+"_cpp_template.txt"), 'w')
     outfile.write('/* Following filter function created using create_iwave.py */\n\n')
     
     if len(bands) == 1:
@@ -239,8 +244,8 @@ def main():
     # getting data from file
     bands, values = read_input(inputfile)
     
-    # writing file
-    write_cpp(bands, values, sensor)
+    # writing file in same folder of input file
+    write_cpp(bands, values, sensor, os.path.dirname(inputfile))
     
     print "Filter function written to %s" % (sensor+"_cpp_template.txt")
     print "Please check file for possible errors before inserting into IWave.cpp"
