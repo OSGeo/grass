@@ -233,8 +233,8 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         
         color = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                  colour = UserSettings.Get(group = 'nviz', key = 'settings',
-                                                            subkey = ['general', 'bgcolor']),
+                                  colour = UserSettings.Get(group = 'nviz', key = 'view',
+                                                            subkey = ['background', 'color']),
                                   size = globalvar.DIALOG_COLOR_SIZE)
         self.win['view']['bgcolor'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnBgColor)
@@ -257,7 +257,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                                 agwStyle = globalvar.FNPageDStyle)
         else:
             self.notebookData = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
-                                                agwStyle = globalvar.FNPageDStyle)
+                                                style = globalvar.FNPageDStyle)
         
         # surface page
         self.notebookData.AddPage(page = self._createSurfacePage(),

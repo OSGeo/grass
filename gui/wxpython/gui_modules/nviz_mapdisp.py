@@ -40,8 +40,6 @@ from preferences import globalSettings as UserSettings
 from workspace import Nviz as NvizDefault
 
 import wxnviz
-# sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
-# import grass7_wxnviz as wxnviz
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW = NewEvent()
@@ -193,7 +191,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.init = True
         
         self.UpdateMap()
-        
+                
     def OnMouseAction(self, event):
         # change perspective with mouse wheel
         wheel = event.GetWheelRotation()
@@ -315,7 +313,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         start = time.clock()
         
         self.resize = False
-        self.SwapBuffers()
         
         if self.render['quick'] is False:
             self.parent.statusbarWin['progress'].Show()
@@ -336,17 +333,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         else: # None -> reuse last rendered image
             pass # TODO
         
+        self.SwapBuffers()
+        
         stop = time.clock()
         
         if self.render['quick'] is False:
             self.parent.statusbarWin['progress'].SetValue(2)
             # hide process bar
             self.parent.statusbarWin['progress'].Hide()
-        
-        #
-        # update statusbar
-        #
-        # self.parent.StatusbarUpdate()
         
         Debug.msg(3, "GLWindow.UpdateMap(): quick = %d, -> time = %g" % \
                       (self.render['quick'], (stop-start)))
@@ -1132,9 +1126,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param width image width
         @param height image height
         """
-        self.SetCurrent()
         self._display.SaveToFile(FileName, width, height)
-        
+                
         # pbuffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
         # dc = wx.BufferedPaintDC(self, pbuffer)
         # dc.Clear()

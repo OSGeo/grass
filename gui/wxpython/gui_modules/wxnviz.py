@@ -1100,7 +1100,7 @@ class Nviz(object):
         heightOrig = self.height
         
         self.ResizeWindow(width, height)
-        GS_clear(self.data.bgcolor)
+        GS_clear(Nviz_get_bgcolor(self.data))
         self.Draw(False, -1)
         if itype == 'ppm':
             GS_write_ppm(filename)
