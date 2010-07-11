@@ -117,32 +117,18 @@ def pretty_print(filter_f):
     Create pretty string out of filter function
     8 values per line, with spaces, commas and all the rest
     """
-    nlines = int(len(filter_f)/8)
-    rest = len(filter_f) - nlines*8
-    pstring = '    '
-    
-    if rest == 0: # multiple of 8; special case
-        for l in range(nlines):
-            for i in range(8):
-                if l == nlines-1 and i == 7: # last value
-                    pstring = pstring+' %.4f \n' % (filter_f[l*8+i])
-                    pstring = pstring+'    };'
-                else:
-                    pstring = pstring+' %.4f,' % (filter_f[l*8+i])
-            pstring = pstring+'\n    '
-    else:
-        for l in range(nlines):
-            for i in range(8):
-                pstring = pstring+' %.4f,' % (filter_f[l*8+i])
-            pstring = pstring+'\n    '
-        # adding rest of values in filter_f
-        for i in range(rest):
-            if i == rest-1: # last value
-                pstring = pstring+' %.4f \n' % (filter_f[nlines*8+i])
-                pstring = pstring+'    };'
-            else:
-                pstring = pstring+' %.4f,' % (filter_f[nlines*8+i])
-    
+    pstring = ''
+    for i in range(len(filter_f)):
+        if i%8 is 0:
+            if i is not 1: 
+                # trim the trailing whitespace at the end of line
+                pstring = pstring.rstrip()
+            pstring += "\n\t\t"
+        else:
+            value_wo_leading_zero = ('%.4f' % (filter_f[i-1])).lstrip('0')
+            pstring += value_wo_leading_zero+', '
+    # trim starting \n and trailing , 
+    pstring = pstring.lstrip("\n").rstrip(", ")
     return pstring
 
 def write_cpp(bands, values, sensor, folder):
@@ -176,7 +162,7 @@ def write_cpp(bands, values, sensor, folder):
     # single band case
     if len(bands) == 1:
         outfile.write('    /* %s of %s */\n' % (bands[0], sensor))
-        outfile.write('    static const float sr[%i] = {\n' % (len(filter_f)))
+        outfile.write('    static const float sr[%i] = {' % (len(filter_f)))
         filter_text = pretty_print(filter_f)
         outfile.write(filter_text)
         
@@ -199,7 +185,7 @@ def write_cpp(bands, values, sensor, folder):
             outfile.write('    /* %s of %s */\n' % (bands[b], sensor))
             outfile.write('    static const float sr%i[%i] = {\n' % (b+1,len(filter_f[b])))
             filter_text = pretty_print(filter_f[b])
-            outfile.write(filter_text+'\n')
+            outfile.write(filter_text+'\n    };\n\t\n')
         
         # writing band limits
         for b in range(len(bands)):
