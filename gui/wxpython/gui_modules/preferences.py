@@ -555,12 +555,12 @@ class Settings:
                 'loop' : {
                     'size' : {
                         'width' : 175,
-                        'height' : 50,
+                        'height' : 40,
                         },
                     },
                 'condition' : {
                     'size' : {
-                        'width' : 100,
+                        'width' : 150,
                         'height' : 40,
                         },
                     },
