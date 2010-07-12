@@ -302,7 +302,7 @@ class Model(object):
                                  width = loop['size'][0],
                                  height = loop['size'][1],
                                  text = loop['text'],
-                                 actions = alist,
+                                 items = alist,
                                  id = loop['id'])
             
             for action in loopItem.GetItems():
@@ -1210,7 +1210,7 @@ if __name__ == "__main__":
         cond = ModelCondition(self, x = width/2, y = height/2,
                               id = len(self.model.GetActions()) + 1)
         self.canvas.diagram.AddShape(cond)
-        loop.Show(True)
+        cond.Show(True)
         
         self._addEvent(cond)
         
@@ -1264,7 +1264,10 @@ if __name__ == "__main__":
             win.Raise()
         
     def OnAddData(self, event):
-        """!Add data item to model"""
+        """!Add data item to model
+
+        @todo
+        """
         # add action to canvas
         width, height = self.canvas.GetSize()
         data = ModelData(self, x = width/2, y = height/2)
@@ -1272,7 +1275,7 @@ if __name__ == "__main__":
         data.Show(True)
         
         self._addEvent(data)
-        self.model.AddData(data)
+        # self.model.AddData(data)
         
         self.canvas.Refresh()
         
@@ -3355,6 +3358,7 @@ class ModelListCtrl(wx.ListCtrl,
                  wx.LC_VRULES, **kwargs):
         """!List of model variables"""
         self.parent = parent
+        self.columns = columns
         try:
             self.frame  = parent.parent
         except AttributeError:
@@ -3655,7 +3659,7 @@ class VariableListCtrl(ModelListCtrl):
         menu.Destroy()
         
 class ModelLoop(ModelObject, ogl.RectangleShape):
-    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, items = []):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
         """!Defines a loop"""
         ModelObject.__init__(self, id)
         
@@ -3701,6 +3705,13 @@ class ModelLoop(ModelObject, ogl.RectangleShape):
         self.text = cond
         self.ClearText()
         self.AddText('(' + str(self.id) + ') ' + self.text)
+
+    def GetLog(self):
+        """!Get log info"""
+        if self.text:
+            return _("Condition: ") + self.text
+        else:
+            return _("Condition: not defined")
     
 class ModelLoopDialog(wx.Dialog):
     """!Loop properties dialog"""
@@ -3722,13 +3733,12 @@ class ModelLoopDialog(wx.Dialog):
         self.actionList = ActionCheckListCtrl(parent = self.panel,
                                               columns = [_("ID"), _("Name"),
                                                          _("Command")])
-        
         self.actionList.Populate(self.parent.GetModel().GetActions())
         
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnOk     = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOk.SetDefault()
-        
+
         #self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
         #self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
                 
@@ -3833,11 +3843,14 @@ class ActionListCtrl(ModelListCtrl):
         """!Populate the list"""
         self.itemDataMap = dict()
         i = 0
+        if len(self.columns) == 3:
+            checked = list()
         for action in data:
-            if self.GetItemCount() == 3:
+            if len(self.columns) == 3:
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),
                                        action.GetLog()]
+                checked.append(action.GetLoopId())
             else:
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),
@@ -3849,13 +3862,15 @@ class ActionListCtrl(ModelListCtrl):
         self.itemCount = len(self.itemDataMap.keys())
         self.DeleteAllItems()
         i = 0
-        if self.GetItemCount() == 3:
+        if len(self.columns) == 3:
             for aid, name, desc in self.itemDataMap.itervalues():
                 index = self.InsertStringItem(sys.maxint, aid)
                 self.SetStringItem(index, 0, aid)
                 self.SetStringItem(index, 1, name)
                 self.SetStringItem(index, 2, desc)
                 self.SetItemData(index, i)
+                if checked[i]:
+                    self.CheckItem(index, True)
                 i += 1
         else:
             for aid, name, inloop, desc in self.itemDataMap.itervalues():
@@ -3997,14 +4012,17 @@ class ModelCondition(ModelObject, ogl.PolygonShape):
         
         if self.parent.GetCanvas():
             ogl.PolygonShape.__init__(self)
-            points = [(x, y - height / 2),
-                      (x + width / 2, y),
-                      (x, y + height / 2),
-                      (x - width / 2, y)]
-            self.Create(points)
-            
             self.SetCanvas(self.parent)
+            self.SetX(x)
+            self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
+            
+            points = [(0, - height / 2),
+                      (width / 2, 0),
+                      (0, height / 2),
+                      (- width / 2, 0)]
+            self.Create(points)
+                        
             if text:
                 self.AddText('(' + str(self.id) + ') ' + text)
             else:
