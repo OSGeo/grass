@@ -155,9 +155,9 @@ def write_cpp(bands, values, sensor, folder):
     outfile.write('/* Following filter function created using create_iwave.py */\n\n')
     
     if len(bands) == 1:
-        outfile.write('void IWave::%s()\n{\n\n' % (sensor))
+        outfile.write('void IWave::%s()\n{\n\n' % (sensor.lower()))
     else:
-        outfile.write('void IWave::%s(int iwa)\n{\n\n' % (sensor))
+        outfile.write('void IWave::%s(int iwa)\n{\n\n' % (sensor.lower()))
         
     # single band case
     if len(bands) == 1:
@@ -168,7 +168,7 @@ def write_cpp(bands, values, sensor, folder):
         
         # calculate wl slot for band start
         # slots range from 250 to 4000 at 2.5 increments (total 1500)
-        s_start = int((limits[0] - 0.250)/2.5)
+        s_start = int((limits[0]*1000 - 250)/2.5)
         
         outfile.write('\n')
         outfile.write('    ffu.wlinf = %.4ff;\n' % (limits[0]))
@@ -191,10 +191,6 @@ def write_cpp(bands, values, sensor, folder):
         for b in range(len(bands)):
             inf = ", ".join(["%.3f" % i[0] for i in limits])
             sup = ", ".join(["%.3f" % i[1] for i in limits])
-            
-#            for j in zip(['[',']'],['{','}']):
-#                inf = inf.replace(j[0],j[1])
-#                sup = sup.replace(j[0],j[1])
         
         outfile.write('    static const float wli[%i] = {%s};\n' % (len(bands), inf))
         outfile.write('    static const float wls[%i] = {%s};\n' % (len(bands), sup))
