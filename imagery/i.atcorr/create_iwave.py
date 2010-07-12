@@ -89,7 +89,7 @@ def interpolate_band(values):
     
     filter_f = f(np.arange(response[0,0], response[-1,0], 2.5))
     
-    # converts limits from nanometers to micrometers
+    # convert limits from nanometers to micrometers
     lowerlimit = response[0,0]/1000
     upperlimit = response[-1,0]/1000
     
@@ -168,11 +168,11 @@ def write_cpp(bands, values, sensor, folder):
         
         # calculate wl slot for band start
         # slots range from 250 to 4000 at 2.5 increments (total 1500)
-        s_start = int((limits[0] - 250)/2.5)
+        s_start = int((limits[0] - 0.250)/2.5)
         
         outfile.write('\n')
-        outfile.write('    ffu.wlinf = %.4ff;\n' % (limits[0]/1000.0))
-        outfile.write('    ffu.wlsup = %.4ff;\n' % (limits[1]/1000.0))
+        outfile.write('    ffu.wlinf = %.4ff;\n' % (limits[0]))
+        outfile.write('    ffu.wlsup = %.4ff;\n' % (limits[1]))
         outfile.write('    int i = 0;\n')
         outfile.write('    for(i = 0; i < %i; i++)\tffu.s[i] = 0;\n' % (s_start))
         outfile.write('    for(i = 0; i < %i; i++)\tffu.s[%i+i] = sr[i];\n' % (len(filter_f), s_start))
@@ -189,15 +189,15 @@ def write_cpp(bands, values, sensor, folder):
         
         # writing band limits
         for b in range(len(bands)):
-            inf = str([i[0] for i in limits])
-            sup = str([i[1] for i in limits])
+            inf = ", ".join(["%.3f" % i[0] for i in limits])
+            sup = ", ".join(["%.3f" % i[1] for i in limits])
             
-            for j in zip(['[',']'],['{','}']):
-                inf = inf.replace(j[0],j[1])
-                sup = sup.replace(j[0],j[1])
+#            for j in zip(['[',']'],['{','}']):
+#                inf = inf.replace(j[0],j[1])
+#                sup = sup.replace(j[0],j[1])
         
-        outfile.write('    static const float wli[%i] = %s;\n' % (len(bands), inf))
-        outfile.write('    static const float wls[%i] = %s;\n' % (len(bands), sup))
+        outfile.write('    static const float wli[%i] = {%s};\n' % (len(bands), inf))
+        outfile.write('    static const float wls[%i] = {%s};\n' % (len(bands), sup))
         
         outfile.write('\n')
         outfile.write('    ffu.wlinf = (float)wli[iwa-1];\n')
@@ -210,7 +210,7 @@ def write_cpp(bands, values, sensor, folder):
         
         # now start of case part...
         for b in range(len(bands)):
-            s_start = int((limits[b][0] - 250)/2.5)
+            s_start = int((limits[b][0]*1000 - 250)/2.5)
             outfile.write('    case %i: for(i = 0; i < %i; i++)  ffu.s[%i+i] = sr%i[i];\n' % ((b+1), len(filter_f[b]), s_start, (b+1)))
             outfile.write('        break;\n')
         outfile.write('    }\n}\n')
