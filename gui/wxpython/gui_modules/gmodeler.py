@@ -21,10 +21,12 @@ Classes:
  - ModelListCtrl
  - VariablePanel
  - ValiableListCtrl
+ - ModelItem
  - ModelLoop
  - ModelLoopDialog
- - ActionPanel
- - ActionListCtrl
+ - ItemPanel
+ - ItemListCtrl
+ - ItemCheckListCtrl
  - ModelCondition
 
 (C) 2010 by the GRASS Development Team
@@ -95,42 +97,42 @@ class Model(object):
         """!Get canvas or None"""
         return self.canvas
     
-    def GetItems(self):
-        """!Get list of model items"""
-        return self.items
-    
-    def GetActions(self):
-        """!Get list of model actions"""
-        result = list()
-        for item in self.items:
-            if isinstance(item, ModelAction):
-                result.append(item)
-        
-        return result
+    def GetItems(self, objType = None):
+        """!Get list of model items
 
-    def GetLoops(self):
-        """!Get list of model loops"""
-        result = list()
-        for item in self.items:
-            if isinstance(item, ModelLoop):
-                result.append(item)
-        
-        return result
-
-    def GetAction(self, aId):
-        """!Get action of given id
-
-        @param aId action id
-        
-        @return ModelAction instance
-        @return None if no action found
+        @param objType Object type to filter model objects
         """
-        alist = self.GetActions()
-        for action in alist:
-            if action.GetId() == aId:
-                return action
+        if not objType:
+            return self.items
+        
+        result = list()
+        for item in self.items:
+            if isinstance(item, objType):
+                result.append(item)
+        
+        return result
+
+    def GetItem(self, aId):
+        """!Get item of given id
+
+        @param aId item id
+        
+        @return Model* instance
+        @return None if no item found
+        """
+        ilist = self.GetItems()
+        for item in ilist:
+            if item.GetId() == aId:
+                return item
         
         return None
+
+    def GetNumItems(self, actionOnly = False):
+        """!Get number of items"""
+        if actionOnly:
+            return len(self.GetItems(objType = ModelAction))
+        
+        return len(self.GetItems())
     
     def GetProperties(self):
         """!Get model properties"""
@@ -157,22 +159,28 @@ class Model(object):
         @return list of related items
         """
         relList = list()
+        if not isinstance(item, ModelData):
+            self.items.remove(item)
+        
         if isinstance(item, ModelAction):
-            self.actions.remove(item)
-            for data in self.data:
-                for rel in data.GetRelations(direction = 'to'):
-                    relList.append(rel)
-                    relList.append(data)
-                    self.data.remove(data)
+            for rel in item.GetRelations():
+                relList.append(rel)
+                data = rel.GetData()
+                relList.append(data)
         
         elif isinstance(item, ModelData):
-            self.data.remove(item)
+            for rel in item.GetRelations():
+                relList.append(rel)
+                if rel.GetFrom() == self:
+                    relList.append(rel.GetTo())
+                else:
+                    relList.append(rel.GetFrom())
         
         return relList
     
     def FindAction(self, aId):
         """!Find action by id"""
-        alist = self.GetActions()
+        alist = self.GetItems(objType = ModelAction)
         for action in alist:
             if action.GetId() == aId:
                 return action
@@ -182,7 +190,7 @@ class Model(object):
     def GetData(self):
         """!Get list of data items"""
         result = list()
-        for action in self.GetActions():
+        for action in self.GetItems(objType = ModelAction):
             for rel in action.GetRelations():
                 dataItem = rel.GetData()
                 if dataItem not in result:
@@ -291,24 +299,41 @@ class Model(object):
                    
         # load loops
         for loop in gxmXml.loops:
-            alist = list()
-            for aId in loop['actions']:
-                action = self.GetAction(aId)
-                alist.append(action)
-            
             loopItem = ModelLoop(parent = self, 
                                  x = loop['pos'][0],
                                  y = loop['pos'][1],
                                  width = loop['size'][0],
                                  height = loop['size'][1],
                                  text = loop['text'],
-                                 items = alist,
                                  id = loop['id'])
+            self.AddItem(loopItem)
+
+        # load conditions
+        for condition in gxmXml.conditions:
+            conditionItem = ModelCondition(parent = self, 
+                                           x = condition['pos'][0],
+                                           y = condition['pos'][1],
+                                           width = condition['size'][0],
+                                           height = condition['size'][1],
+                                           text = condition['text'],
+                                           id = condition['id'])
+            # for action in conditionItem.GetItems():
+            #    action.SetCondition(conditionItem)
+            self.AddItem(conditionItem)
+
+        # define loops & if/else items
+        for loop in gxmXml.loops:
+            alist = list()
+            for aId in loop['items']:
+                action = self.GetItem(aId)
+                alist.append(action)
+            
+            loopItem = self.GetItem(loop['id'])
+            print alist
+            loopItem.SetItems(alist)
             
             for action in loopItem.GetItems():
                 action.SetLoop(loopItem)
-            
-            self.AddItem(loopItem)
         
     def AddItem(self, newItem):
         """!Add item to the list"""
@@ -334,7 +359,7 @@ class Model(object):
         """!Validate model, return None if model is valid otherwise
         error string"""
         errList = list()
-        for action in self.GetActions():
+        for action in self.GetItems(objType = ModelAction):
             task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
                                                show = None)
             errList += task.getCmdError()
@@ -450,7 +475,7 @@ class Model(object):
             
             idx += 1
         
-        for action in self.GetActions():
+        for action in self.GetItems(objType = ModelAction):
             if not action.IsEnabled():
                 continue
             name   = action.GetName()
@@ -527,13 +552,13 @@ class ModelFrame(wx.Frame):
         
         self.variablePanel = VariablePanel(parent = self)
         
-        self.actionPanel = ActionPanel(parent = self)
+        self.itemPanel = ItemPanel(parent = self)
         
         self.goutput = goutput.GMConsole(parent = self, pageid = 3,
                                          notebook = self.notebook)
         
         self.notebook.AddPage(self.canvas, text=_('Model'))
-        self.notebook.AddPage(self.actionPanel, text=_('Actions'))
+        self.notebook.AddPage(self.itemPanel, text=_('Items'))
         self.notebook.AddPage(self.variablePanel, text=_('Variables'))
         self.notebook.AddPage(self.goutput, text=_('Command output'))
         wx.CallAfter(self.notebook.SetSelection, 0)
@@ -654,7 +679,7 @@ class ModelFrame(wx.Frame):
             self.ModelChanged()
             for key, value in dlg.GetValues().iteritems():
                 properties[key] = value
-            for action in self.model.GetActions():
+            for action in self.model.GetItems(objType = ModelAction):
                 action.GetTask().set_flag('overwrite', properties['overwrite'])
         
         dlg.Destroy()
@@ -699,7 +724,7 @@ class ModelFrame(wx.Frame):
         if self.modelFile and self.modelChanged:
             self.OnModelSave()
         elif self.modelFile is None and \
-                (len(self.model.GetActions()) > 0 or len(self.model.GetData()) > 0):
+                (self.model.GetNumItems() > 0 or len(self.model.GetData()) > 0):
             dlg = wx.MessageDialog(self, message=_("Current model is not empty. "
                                                    "Do you want to store current settings "
                                                    "to model file?"),
@@ -746,7 +771,8 @@ class ModelFrame(wx.Frame):
         
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
-        self.SetStatusText(_('%d actions loaded into model') % len(self.model.GetActions()), 0)
+        self.SetStatusText(_('%d items (%d actions) loaded into model') % \
+                               (self.model.GetNumItems(), self.model.GetNumItems(actionOnly = True)), 0)
         
     def OnModelSave(self, event = None):
         """!Save model to file"""
@@ -810,7 +836,7 @@ class ModelFrame(wx.Frame):
         if self.modelFile and self.modelChanged:
             self.OnModelSave()
         elif self.modelFile is None and \
-                (len(self.model.GetActions()) > 0 or len(self.model.GetData()) > 0):
+                (self.model.GetNumItems() > 0 or len(self.model.GetData()) > 0):
             dlg = wx.MessageDialog(self, message=_("Current model is not empty. "
                                                    "Do you want to store current settings "
                                                    "to model file?"),
@@ -836,7 +862,7 @@ class ModelFrame(wx.Frame):
         
     def OnRunModel(self, event):
         """!Run entire model"""
-        if len(self.model.GetActions()) < 1:
+        if self.model.GetNumItems() < 1:
             GMessage(parent = self, 
                      message = _('Model is empty. Nothing to run.'),
                      msgType = 'info')
@@ -923,7 +949,7 @@ class ModelFrame(wx.Frame):
         
     def OnValidateModel(self, event, showMsg = True):
         """!Validate entire model"""
-        if len(self.model.GetActions()) < 1:
+        if self.model.GetNumItems() < 1:
             GMessage(parent = self, 
                      message = _('Model is empty. Nothing to validate.'),
                      msgType = 'info')
@@ -1194,11 +1220,12 @@ if __name__ == "__main__":
         
         width, height = self.canvas.GetSize()
         loop = ModelLoop(self, x = width/2, y = height/2,
-                         id = len(self.model.GetActions()) + 1)
+                         id = self.model.GetNumItems() + 1)
         self.canvas.diagram.AddShape(loop)
         loop.Show(True)
         
         self._addEvent(loop)
+        self.model.AddItem(loop)
         
         self.canvas.Refresh()
         
@@ -1208,11 +1235,12 @@ if __name__ == "__main__":
         
         width, height = self.canvas.GetSize()
         cond = ModelCondition(self, x = width/2, y = height/2,
-                              id = len(self.model.GetActions()) + 1)
+                              id = self.model.GetNumItems() + 1)
         self.canvas.diagram.AddShape(cond)
         cond.Show(True)
         
         self._addEvent(cond)
+        self.model.AddItem(cond)
         
         self.canvas.Refresh()
     
@@ -1236,7 +1264,7 @@ if __name__ == "__main__":
         # add action to canvas
         width, height = self.canvas.GetSize()
         action = ModelAction(self.model, cmd = cmd, x = width/2, y = height/2,
-                             id = len(self.model.GetActions()) + 1)
+                             id = self.model.GetNumItems() + 1)
         overwrite = self.model.GetProperties().get('overwrite', None)
         if overwrite is not None:
             action.GetTask().set_flag('overwrite', overwrite)
@@ -1247,7 +1275,7 @@ if __name__ == "__main__":
         self._addEvent(action)
         self.model.AddItem(action)
         
-        self.actionPanel.Update()
+        self.itemPanel.Update()
         self.canvas.Refresh()
         time.sleep(.1)
         
@@ -1407,7 +1435,7 @@ if __name__ == "__main__":
                 rel.InsertLineControlPoint(point = wx.RealPoint(x, y))
             
         self._addEvent(rel)
-        
+        print fromShape, toShape, rel
         fromShape.AddLine(rel, toShape)
         
         self.canvas.diagram.AddShape(rel)
@@ -1429,7 +1457,7 @@ if __name__ == "__main__":
         self.SetStatusText(_("Please wait, loading model..."), 0)
         
         # load actions
-        for item in self.model.GetActions():
+        for item in self.model.GetItems(objType = ModelAction):
             self._addEvent(item)
             self.canvas.diagram.AddShape(item)
             item.Show(True)
@@ -1445,17 +1473,26 @@ if __name__ == "__main__":
                 dataItem.Show(True)
         
         # load loops
-        for item in self.model.GetLoops():
+        for item in self.model.GetItems(objType = ModelLoop):
             self._addEvent(item)
             self.canvas.diagram.AddShape(item)
             item.Show(True)
             
-            # connect actions in the loop
+            # connect items in the loop
             self.DefineLoop(item)
+
+        # load conditions
+        for item in self.model.GetItems(objType = ModelCondition):
+            self._addEvent(item)
+            self.canvas.diagram.AddShape(item)
+            item.Show(True)
+            
+            # connect items in the condition
+            # self.DefineCondition(item)
         
         # load variables
         self.variablePanel.Update()
-        self.actionPanel.Update()
+        self.itemPanel.Update()
         self.SetStatusText('', 0)
         
         self.canvas.Refresh(True)
@@ -1492,25 +1529,45 @@ if __name__ == "__main__":
         return True
     
     def DefineLoop(self, loop):
-        """!Define loop with given list of actions"""
+        """!Define loop with given list of items"""
         parent = loop
-        actions = loop.GetItems()
-        if not actions:
+        items = loop.GetItems()
+        if not items:
             return
+        
+        # remove defined relations first
+        for rel in loop.GetRelations():
+            self.canvas.GetDiagram().RemoveShape(rel)
+        loop.Clear()
         
         for action in loop.GetItems():
             rel = ModelRelation(parent, action)
+            dx = action.GetX() - parent.GetX()
+            dy = action.GetY() - parent.GetY()
+            loop.AddRelation(rel)
             self.AddLine(rel)
+            if dx != 0:
+                rel.MakeLineControlPoints(0)
+                rel.InsertLineControlPoint(point = wx.RealPoint(parent.GetX(),
+                                                                parent.GetY() + parent.GetHeight() / 2))
+                rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX(),
+                                                                action.GetY() - action.GetHeight() / 2))
+                rel.InsertLineControlPoint(point = wx.RealPoint(parent.GetX(),
+                                                                parent.GetY() + dy / 2))
+                rel.InsertLineControlPoint(point = wx.RealPoint(parent.GetX() + dx,
+                                                                parent.GetY() + dy / 2))
+
             parent = action
         
         # close loop
         action = loop.GetItems()[-1]
         rel = ModelRelation(action, loop)
+        loop.AddRelation(rel)
         self.AddLine(rel)
-        dx = loop.GetWidth() / 2 + 50
+        dx = (action.GetX() - loop.GetX()) + loop.GetWidth() / 2 + 50
         dy = action.GetHeight() / 2 + 50
         rel.MakeLineControlPoints(0)
-        rel.InsertLineControlPoint(point = wx.RealPoint(loop.GetX() - loop.GetWidth() / 2,
+        rel.InsertLineControlPoint(point = wx.RealPoint(loop.GetX() - loop.GetWidth() / 2 ,
                                                         loop.GetY()))
         rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX(),
                                                         action.GetY() + action.GetHeight() / 2))
@@ -1566,7 +1623,8 @@ class ModelObject:
         self.rels = list() # list of ModelRelations
         
         self.isEnabled = True
-                
+        self.inLoop = None
+        
     def GetId(self):
         """!Get id"""
         return self.id
@@ -1606,6 +1664,28 @@ class ModelObject:
 
     def Update(self):
         pass
+
+    def SetLoop(self, loop):
+        """!Register loop"""
+        self.inLoop = loop
+
+    def GetLoop(self):
+        """!Get related loop
+
+        @return ModelLoop instance
+        @return None if no loop defined
+        """
+        return self.inLoop
+    
+    def GetLoopId(self):
+        """!Get id of the loop
+
+        @return loop id 
+        @return '' if action is not in the loop
+        """
+        if self.inLoop:
+            return self.inLoop.GetId()
+        return ''
     
 class ModelAction(ModelObject, ogl.RectangleShape):
     """!Action class (GRASS module)"""
@@ -1635,7 +1715,6 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         
         self.isValid = False
         self.isParameterized = False
-        self.inLoop = None
         
         if self.parent.GetCanvas():
             ogl.RectangleShape.__init__(self, width, height)
@@ -1687,21 +1766,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             self.AddText('(%d) %s' % (self.id, cmd[0]))
         else:
             self.AddText('(%d) <<%s>>' % (self.id, _("unknown")))
-
-    def SetLoop(self, loop):
-        """!Register loop"""
-        self.inLoop = loop
-
-    def GetLoopId(self):
-        """!Get id of the loop
-
-        @return loop id 
-        @return '' if action is not in the loop
-        """
-        if self.inLoop:
-            return self.inLoop.GetId()
-        return ''
-    
+        
     def SetProperties(self, params, propwin):
         """!Record properties dialog"""
         self.task.params = params['params']
@@ -2114,8 +2179,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             if dlg.ShowModal() == wx.ID_OK:
                 shape.SetText(dlg.GetCondition())
                 alist = list()
-                for aId in dlg.GetActions():
-                    alist.append(self.frame.GetModel().GetAction(aId))
+                for aId in dlg.GetItems():
+                    action = self.frame.GetModel().GetItem(aId)
+                    if action:
+                        alist.append(action)
                 shape.SetItems(alist)
                 self.frame.DefineLoop(shape)
             self.frame.GetCanvas().Refresh()
@@ -2123,10 +2190,21 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg.Destroy()
         
     def OnBeginDragLeft(self, x, y, keys = 0, attachment = 0):
-        """!Drag shape"""
+        """!Drag shape (begining)"""
         self.frame.ModelChanged()
         if self._previousHandler:
             self._previousHandler.OnBeginDragLeft(x, y, keys, attachment)
+        
+    def OnEndDragLeft(self, x, y, keys = 0, attachment = 0):
+        """!Drag shape (end)"""
+        if self._previousHandler:
+            self._previousHandler.OnEndDragLeft(x, y, keys, attachment)
+        
+        shape = self.GetShape()
+        if isinstance(shape, ModelAction):
+            loop = shape.GetLoop()
+            if loop:
+                self.frame.DefineLoop(loop)
 
     def OnEndSize(self, x, y):
         """!Resize shape"""
@@ -2237,7 +2315,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         """!Remove shape
         """
         self.frame.GetCanvas().RemoveSelected()
-        self.frame.actionPanel.Update()
+        self.frame.itemPanel.Update()
         
 class ModelSearchDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, title = _("Add new GRASS module to the model"),
@@ -2438,13 +2516,13 @@ class ProcessModelFile:
         self.actions = list()
         self.data    = list()
         self.loops   = list()
+        self.conditions = list()
         
         self._processWindow()
         self._processProperties()
         self._processVariables()
-        self._processActions()
+        self._processItems()
         self._processData()
-        self._processLoops()
         
     def _filterValue(self, value):
         """!Filter value
@@ -2516,6 +2594,12 @@ class ProcessModelFile:
         if node is not None:
             if node.text:
                 self.variables[name][key] = node.text
+
+    def _processItems(self):
+        """!Process model items (actions, loops, conditions)"""
+        self._processActions()
+        self._processLoops()
+        self._processConditions()
         
     def _processActions(self):
         """!Process model file"""
@@ -2646,7 +2730,7 @@ class ProcessModelFile:
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, 'condition')).strip()
             aid = list()
-            for anode in node.findall('loop-action'):
+            for anode in node.findall('loop-item'):
                 try:
                     aid.append(int(anode.text))
                 except ValueError:
@@ -2656,7 +2740,20 @@ class ProcessModelFile:
                                 'size'    : size,
                                 'text'    : text,
                                 'id'      : int(node.get('id', -1)),
-                                'actions' : aid })
+                                'items'   : aid })
+        
+    def _processConditions(self):
+        """!Process model conditions"""
+        for node in self.root.findall('if-else'):
+            pos, size = self._getDim(node)
+            text = self._filterValue(self._getNodeText(node, 'condition')).strip()
+            aid = list()
+
+            self.conditions.append({ 'pos'     : pos,
+                                     'size'    : size,
+                                     'text'    : text,
+                                     'id'      : int(node.get('id', -1)),
+                                     'items'   : aid })
         
 class WriteModelFile:
     """!Generic class for writing model file"""
@@ -2677,7 +2774,7 @@ class WriteModelFile:
         self._items()
         
         dataList = list()
-        for action in model.GetActions():
+        for action in model.GetItems(objType = ModelAction):
             for rel in action.GetRelations():
                 dataItem = rel.GetData()
                 if dataItem not in dataList:
@@ -2755,12 +2852,14 @@ class WriteModelFile:
         self.fd.write('%s</variables>\n' % (' ' * self.indent))
         
     def _items(self):
-        """!Write actions/loops"""
+        """!Write actions/loops/conditions"""
         for item in self.items:
             if isinstance(item, ModelAction):
                 self._action(item)
             elif isinstance(item, ModelLoop):
                 self._loop(item)
+            elif isinstance(item, ModelCondition):
+                self._condition(item)
         
     def _action(self, action):
         """!Write actions"""
@@ -2856,12 +2955,29 @@ class WriteModelFile:
         if text:
             self.fd.write('%s<condition>%s</condition>\n' %
                           (' ' * self.indent, self._filterValue(text)))
-        for action in loop.GetItems():
-            self.fd.write('%s<loop-action>%d</loop-action>\n' %
-                          (' ' * self.indent, action.GetId()))
+        for item in loop.GetItems():
+            self.fd.write('%s<loop-item>%d</loop-item>\n' %
+                          (' ' * self.indent, item.GetId()))
         self.indent -= 4
         self.fd.write('%s</loop>\n' % (' ' * self.indent))
-            
+
+    def _condition(self, condition):
+        """!Write conditions"""
+        bbox = condition.GetBoundingBoxMin()
+        self.fd.write('%s<if-else id="%d" pos="%d,%d" size="%d,%d">\n' % \
+                          (' ' * self.indent, condition.GetId(), condition.GetX(), condition.GetY(),
+                           bbox[0], bbox[1]))
+        text = condition.GetText()
+        self.indent += 4
+        if text:
+            self.fd.write('%s<condition>%s</condition>\n' %
+                          (' ' * self.indent, self._filterValue(text)))
+        for item in condition.GetItems():
+            self.fd.write('%s<condition-item>%d</condition-item>\n' %
+                          (' ' * self.indent, item.GetId()))
+        self.indent -= 4
+        self.fd.write('%s</if-else>\n' % (' ' * self.indent))
+        
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""
     def __init__(self, parent, settings = UserSettings,
@@ -3352,13 +3468,14 @@ class ModelListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
                     listmix.TextEditMixin,
                     listmix.ColumnSorterMixin):
-    def __init__(self, parent, columns, id = wx.ID_ANY,
+    def __init__(self, parent, columns, excludeId = [], id = wx.ID_ANY,
                  style = wx.LC_REPORT | wx.BORDER_NONE |
                  wx.LC_SORT_ASCENDING |wx.LC_HRULES |
                  wx.LC_VRULES, **kwargs):
         """!List of model variables"""
         self.parent = parent
         self.columns = columns
+        self.excludeId = excludeId
         try:
             self.frame  = parent.parent
         except AttributeError:
@@ -3658,31 +3775,13 @@ class VariableListCtrl(ModelListCtrl):
         self.PopupMenu(menu)
         menu.Destroy()
         
-class ModelLoop(ModelObject, ogl.RectangleShape):
+class ModelItem(ModelObject):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
-        """!Defines a loop"""
+        """!Abstract class for loops and conditions"""
         ModelObject.__init__(self, id)
-        
         self.parent  = parent
         self.text    = text
-        if not width:
-            width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
-        if not height:
-            height = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'height'))
-        self.items = items # list of items in the loop
-        
-        if self.parent.GetCanvas():
-            ogl.RectangleShape.__init__(self, width, height)
-            
-            self.SetCanvas(self.parent)
-            self.SetX(x)
-            self.SetY(y)
-            self.SetPen(wx.BLACK_PEN)
-            self.SetCornerRadius(100)
-            if text:
-                self.AddText('(' + str(self.id) + ') ' + text)
-            else:
-                self.AddText('(' + str(self.id) + ')')
+        self.items   = items  # list of items in the loop
         
     def GetText(self):
         """!Get loop text"""
@@ -3712,7 +3811,42 @@ class ModelLoop(ModelObject, ogl.RectangleShape):
             return _("Condition: ") + self.text
         else:
             return _("Condition: not defined")
-    
+
+    def AddRelation(self, rel):
+        """!Record relation"""
+        self.rels.append(rel)
+        
+    def Clear(self):
+        """!Clear object, remove rels"""
+        self.rels = list()
+        
+class ModelLoop(ModelItem, ogl.RectangleShape):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
+        """!Defines a loop"""
+        ModelItem.__init__(self, parent, x, y, id, width, height, text, items)
+        
+        if not width:
+            width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
+        if not height:
+            height = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'height'))
+        
+        if self.parent.GetCanvas():
+            ogl.RectangleShape.__init__(self, width, height)
+            
+            self.SetCanvas(self.parent)
+            self.SetX(x)
+            self.SetY(y)
+            self.SetPen(wx.BLACK_PEN)
+            self.SetCornerRadius(100)
+            if text:
+                self.AddText('(' + str(self.id) + ') ' + text)
+            else:
+                self.AddText('(' + str(self.id) + ')')
+
+    def GetName(self):
+        """!Get name"""
+        return _("loop")
+
 class ModelLoopDialog(wx.Dialog):
     """!Loop properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Loop properties"),
@@ -3730,10 +3864,11 @@ class ModelLoopDialog(wx.Dialog):
                                     value = shape.GetText())
         self.listBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("List of items in loop"))
-        self.actionList = ActionCheckListCtrl(parent = self.panel,
-                                              columns = [_("ID"), _("Name"),
-                                                         _("Command")])
-        self.actionList.Populate(self.parent.GetModel().GetActions())
+        self.itemList = ItemCheckListCtrl(parent = self.panel,
+                                          columns = [_("ID"), _("Name"),
+                                                     _("Command")],
+                                          excludeId = [shape.GetId()])
+        self.itemList.Populate(self.parent.GetModel().GetItems())
         
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnOk     = wx.Button(parent = self.panel, id = wx.ID_OK)
@@ -3744,6 +3879,7 @@ class ModelLoopDialog(wx.Dialog):
                 
         self._layout()
         self.SetMinSize(self.GetSize())
+        self.SetSize((500, 400))
         
     def _layout(self):
         """!Do layout"""
@@ -3754,7 +3890,7 @@ class ModelLoopDialog(wx.Dialog):
                       flag = wx.EXPAND)
         
         listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
-        listSizer.Add(item = self.actionList, proportion = 1,
+        listSizer.Add(item = self.itemList, proportion = 1,
                       flag = wx.EXPAND)
         
         btnSizer = wx.StdDialogButtonSizer()
@@ -3774,12 +3910,12 @@ class ModelLoopDialog(wx.Dialog):
         
         self.Layout()
 
-    def GetActions(self):
+    def GetItems(self):
         """!Get list of selected actions"""
         ids = list()
-        for i in range(self.actionList.GetItemCount()):
-            if self.actionList.IsChecked(i):
-                ids.append(i + 1) # starts at 1
+        for i in range(self.itemList.GetItemCount()):
+            if self.itemList.IsChecked(i):
+                ids.append(int(self.itemList.GetItem(i, 0).GetText()))
         
         return ids
         
@@ -3787,21 +3923,21 @@ class ModelLoopDialog(wx.Dialog):
         """!Get loop condition"""
         return self.condText.GetValue()
     
-class ActionPanel(wx.Panel):
+class ItemPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
                  **kwargs):
-        """!Manage model actions
+        """!Manage model items
         """
         self.parent = parent
         
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
         self.listBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                    label=" %s " % _("List of actions - right-click to delete"))
+                                    label=" %s " % _("List of items - right-click to delete"))
         
-        self.list = ActionListCtrl(parent = self,
-                                   columns = [_("ID"), _("Name"), _("In loop"),
-                                              _("Command")])
+        self.list = ItemListCtrl(parent = self,
+                                 columns = [_("ID"), _("Name"), _("In item"),
+                                            _("Command / condition")])
         
         self._layout()
 
@@ -3822,12 +3958,13 @@ class ActionPanel(wx.Panel):
         """!Reload list of variables"""
         self.list.OnReload(None)
         
-class ActionListCtrl(ModelListCtrl):
-    def __init__(self, parent, columns, disablePopup = False, **kwargs):
+class ItemListCtrl(ModelListCtrl):
+    def __init__(self, parent, columns, excludeId = [], disablePopup = False, **kwargs):
         """!List of model actions"""
         self.disablePopup = disablePopup
+        self.excludeId = excludeId
         
-        ModelListCtrl.__init__(self, parent, columns, **kwargs)
+        ModelListCtrl.__init__(self, parent, columns, excludeId, **kwargs)
         self.SetColumnWidth(1, 100)
         self.SetColumnWidth(2, 65)
         
@@ -3846,6 +3983,8 @@ class ActionListCtrl(ModelListCtrl):
         if len(self.columns) == 3:
             checked = list()
         for action in data:
+            if action.GetId() in self.excludeId:
+                continue
             if len(self.columns) == 3:
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),
@@ -3893,7 +4032,7 @@ class ActionListCtrl(ModelListCtrl):
             del self.itemDataMap[item]
             
             aId = self.GetItem(item, 0).GetText()
-            action = model.GetAction(int(aId))
+            action = model.GetItem(int(aId))
             if not action:
                 item = self.GetFirstSelected()
                 continue
@@ -3932,7 +4071,7 @@ class ActionListCtrl(ModelListCtrl):
         self.itemDataMap[itemIndex][columnIndex] = event.GetText()
         
         aId = int(self.GetItem(itemIndex, 0).GetText())
-        action = self.frame.GetModel().GetAction(aId)
+        action = self.frame.GetModel().GetItem(aId)
         if not action:
             event.Veto()
         if columnIndex == 0:
@@ -3942,7 +4081,7 @@ class ActionListCtrl(ModelListCtrl):
 
     def OnReload(self, event = None):
         """!Reload list of actions"""
-        self.Populate(self.frame.GetModel().GetActions())
+        self.Populate(self.frame.GetModel().GetItems())
 
     def OnRightUp(self, event):
         """!Mouse right button up"""
@@ -3987,9 +4126,9 @@ class ActionListCtrl(ModelListCtrl):
         self.frame.GetCanvas().Refresh()
         self.frame.ModelChanged()
 
-class ActionCheckListCtrl(ActionListCtrl, listmix.CheckListCtrlMixin):
-    def __init__(self, parent, columns, **kwargs):
-        ActionListCtrl.__init__(self, parent, columns, disablePopup = True, **kwargs)
+class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
+    def __init__(self, parent, columns, excludeId = [], **kwargs):
+        ItemListCtrl.__init__(self, parent, columns, excludeId, disablePopup = True, **kwargs)
         listmix.CheckListCtrlMixin.__init__(self)
         self.SetColumnWidth(0, 50)
         
@@ -3997,21 +4136,23 @@ class ActionCheckListCtrl(ActionListCtrl, listmix.CheckListCtrlMixin):
         """!Disable editing"""
         event.Veto()
 
-class ModelCondition(ModelObject, ogl.PolygonShape):
+class ModelCondition(ModelItem, ogl.PolygonShape):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, items = []):
         """!Defines a condition"""
-        ModelObject.__init__(self, id)
+        ModelItem.__init__(self, parent, x, y, id, width, height, text, items)
         
-        self.parent  = parent
-        self.text    = text
         if not width:
-            width = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'width'))
+            self.width = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'width'))
+        else:
+            self.width = width
         if not height:
-            height = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'height'))
-        self.items = items # list of items in the loop
+            self.height = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'height'))
+        else:
+            self.height = height
         
         if self.parent.GetCanvas():
             ogl.PolygonShape.__init__(self)
+            
             self.SetCanvas(self.parent)
             self.SetX(x)
             self.SetY(y)
@@ -4027,7 +4168,19 @@ class ModelCondition(ModelObject, ogl.PolygonShape):
                 self.AddText('(' + str(self.id) + ') ' + text)
             else:
                 self.AddText('(' + str(self.id) + ')')
-        
+
+    def GetName(self):
+        """!Get name"""
+        return _("if-else")
+
+    def GetWidth(self):
+        """!Get object width"""
+        return self.width
+
+    def GetHeight(self):
+        """!Get object height"""
+        return self.height
+
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
