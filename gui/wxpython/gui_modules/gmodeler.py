@@ -329,7 +329,6 @@ class Model(object):
                 alist.append(action)
             
             loopItem = self.GetItem(loop['id'])
-            print alist
             loopItem.SetItems(alist)
             
             for action in loopItem.GetItems():
@@ -1435,7 +1434,8 @@ if __name__ == "__main__":
                 rel.InsertLineControlPoint(point = wx.RealPoint(x, y))
             
         self._addEvent(rel)
-        print fromShape, toShape, rel
+        if isinstance(fromShape, ModelCondition): ### ???
+            fromShape = toShape
         fromShape.AddLine(rel, toShape)
         
         self.canvas.diagram.AddShape(rel)
@@ -1556,7 +1556,6 @@ if __name__ == "__main__":
                                                                 parent.GetY() + dy / 2))
                 rel.InsertLineControlPoint(point = wx.RealPoint(parent.GetX() + dx,
                                                                 parent.GetY() + dy / 2))
-
             parent = action
         
         # close loop
@@ -1577,7 +1576,8 @@ if __name__ == "__main__":
                                                         action.GetY() + dy))
         rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX() - dx,
                                                         loop.GetY()))
-        self.canvas.Refresh()
+        
+        self.canvas.Refresh(False)
         
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
@@ -2201,11 +2201,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             self._previousHandler.OnEndDragLeft(x, y, keys, attachment)
         
         shape = self.GetShape()
-        if isinstance(shape, ModelAction):
-            loop = shape.GetLoop()
-            if loop:
-                self.frame.DefineLoop(loop)
-
+        loop = shape.GetLoop()
+        if loop:
+            self.frame.DefineLoop(loop)
+        
     def OnEndSize(self, x, y):
         """!Resize shape"""
         self.frame.ModelChanged()
@@ -4137,33 +4136,33 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
         event.Veto()
 
 class ModelCondition(ModelItem, ogl.PolygonShape):
-    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = None, items = []):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
         """!Defines a condition"""
         ModelItem.__init__(self, parent, x, y, id, width, height, text, items)
         
         if not width:
-            self.width = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'width'))
+            self.width = UserSettings.Get(group='modeler', key='if-else', subkey=('size', 'width'))
         else:
             self.width = width
         if not height:
-            self.height = UserSettings.Get(group='modeler', key='condition', subkey=('size', 'height'))
+            self.height = UserSettings.Get(group='modeler', key='if-else', subkey=('size', 'height'))
         else:
             self.height = height
         
         if self.parent.GetCanvas():
             ogl.PolygonShape.__init__(self)
             
+            points = [(0, - self.height / 2),
+                      (self.width / 2, 0),
+                      (0, self.height / 2),
+                      (- self.width / 2, 0)]
+            self.Create(points)
+            
             self.SetCanvas(self.parent)
             self.SetX(x)
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             
-            points = [(0, - height / 2),
-                      (width / 2, 0),
-                      (0, height / 2),
-                      (- width / 2, 0)]
-            self.Create(points)
-                        
             if text:
                 self.AddText('(' + str(self.id) + ') ' + text)
             else:

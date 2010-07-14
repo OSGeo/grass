@@ -558,7 +558,7 @@ class Settings:
                         'height' : 40,
                         },
                     },
-                'condition' : {
+                'if-else' : {
                     'size' : {
                         'width' : 150,
                         'height' : 40,
