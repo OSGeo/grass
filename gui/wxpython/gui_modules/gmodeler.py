@@ -1432,7 +1432,7 @@ if __name__ == "__main__":
         if points:
             for x, y in points:
                 rel.InsertLineControlPoint(point = wx.RealPoint(x, y))
-            
+        
         self._addEvent(rel)
         if isinstance(fromShape, ModelCondition): ### ???
             fromShape = toShape
@@ -1540,44 +1540,37 @@ if __name__ == "__main__":
             self.canvas.GetDiagram().RemoveShape(rel)
         loop.Clear()
         
-        for action in loop.GetItems():
-            rel = ModelRelation(parent, action)
-            dx = action.GetX() - parent.GetX()
-            dy = action.GetY() - parent.GetY()
+        for item in loop.GetItems():
+            rel = ModelRelation(parent, item)
+            dx = item.GetX() - parent.GetX()
+            dy = item.GetY() - parent.GetY()
             loop.AddRelation(rel)
-            self.AddLine(rel)
             if dx != 0:
-                rel.MakeLineControlPoints(0)
-                rel.InsertLineControlPoint(point = wx.RealPoint(parent.GetX(),
-                                                                parent.GetY() + parent.GetHeight() / 2))
-                rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX(),
-                                                                action.GetY() - action.GetHeight() / 2))
-                rel.InsertLineControlPoint(point = wx.RealPoint(parent.GetX(),
-                                                                parent.GetY() + dy / 2))
-                rel.InsertLineControlPoint(point = wx.RealPoint(parent.GetX() + dx,
-                                                                parent.GetY() + dy / 2))
-            parent = action
+                rel.SetControlPoints(((parent.GetX(), parent.GetY() + dy / 2),
+                                     (parent.GetX() + dx, parent.GetY() + dy / 2)))
+            self.AddLine(rel)
+            parent = item
         
         # close loop
-        action = loop.GetItems()[-1]
-        rel = ModelRelation(action, loop)
+        item = loop.GetItems()[-1]
+        rel = ModelRelation(item, loop)
         loop.AddRelation(rel)
         self.AddLine(rel)
-        dx = (action.GetX() - loop.GetX()) + loop.GetWidth() / 2 + 50
-        dy = action.GetHeight() / 2 + 50
+        dx = (item.GetX() - loop.GetX()) + loop.GetWidth() / 2 + 50
+        dy = item.GetHeight() / 2 + 50
         rel.MakeLineControlPoints(0)
         rel.InsertLineControlPoint(point = wx.RealPoint(loop.GetX() - loop.GetWidth() / 2 ,
                                                         loop.GetY()))
-        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX(),
-                                                        action.GetY() + action.GetHeight() / 2))
-        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX(),
-                                                        action.GetY() + dy))
-        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX() - dx,
-                                                        action.GetY() + dy))
-        rel.InsertLineControlPoint(point = wx.RealPoint(action.GetX() - dx,
+        rel.InsertLineControlPoint(point = wx.RealPoint(item.GetX(),
+                                                        item.GetY() + item.GetHeight() / 2))
+        rel.InsertLineControlPoint(point = wx.RealPoint(item.GetX(),
+                                                        item.GetY() + dy))
+        rel.InsertLineControlPoint(point = wx.RealPoint(item.GetX() - dx,
+                                                        item.GetY() + dy))
+        rel.InsertLineControlPoint(point = wx.RealPoint(item.GetX() - dx,
                                                         loop.GetY()))
         
-        self.canvas.Refresh(False)
+        self.canvas.Refresh()
         
 class ModelCanvas(ogl.ShapeCanvas):
     """!Canvas where model is drawn"""
@@ -2201,6 +2194,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             self._previousHandler.OnEndDragLeft(x, y, keys, attachment)
         
         shape = self.GetShape()
+        if isinstance(shape, ModelLoop):
+            self.frame.DefineLoop(shape)
         loop = shape.GetLoop()
         if loop:
             self.frame.DefineLoop(loop)
