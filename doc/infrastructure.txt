@@ -2,7 +2,6 @@ How the GRASS Webserver and related infrastructure works
 
 written by M. Neteler, $Date$
 
-
 Related Wiki documents:
 * http://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo
 
@@ -11,21 +10,19 @@ Related Wiki documents:
 Maintainer: M. Neteler
 
 * http://grass.osgeo.org
-** X Ghz X CPU, sponsored by Telascience.org at San Diego Supercomputer Center (USA).
-** OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status#Telascience_Blades
-** Hardware: Blade xblade14-2
-   (http://wiki.osgeo.org/wiki/SAC_Service_Status#Telascience_Blades
-    http://wiki.osgeo.org/index.php/SAC)
+** Shared virtual OSGeo machine hosted at Oregon State University Open Source Lab
+   (server: projects.osgeo.osuosl.org)
+** OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status
+    http://wiki.osgeo.org/index.php/SAC
+** Login: via OSGeo LDAP, there is a "grass" LDAP group
 ** Software:
-*** OS: Fedora Core release 4 (Stentz)
+*** OS: Debian Lenny
 *** Apache Server with PHP
 ** Further addresses: http://www.grass-gis.org
-*** Apache rewrite engine to http://grass.osgeo.org
-** Notes: Since OSGeo-SAC doesn't want to hand out too many ssh accesses to the osgeo1 and osgeo2 machines, we moved grass.osgeo.org as
-virtual host onto Telascience.org infrastructure (sharing with other OSGeo services there)
+*** points through Apache rewrite engine to http://grass.osgeo.org
 
 * Backup:
-** grass.osgeo.org is backup'ed via rsync to osgeo2: http://wiki.osgeo.org/wiki/SAC:Backups#download.osgeo.org
+** VERIFY 2010: grass.osgeo.org is backup'ed via rsync to XXXX: http://wiki.osgeo.org/wiki/SAC:Backups#download.osgeo.org
 ** Wiki backup, via rsync to http://josef.fsv.cvut.cz/WIKI/grass-osgeo/index.php/Main_Page
 
 * Web pages:
@@ -37,7 +34,7 @@ virtual host onto Telascience.org infrastructure (sharing with other OSGeo servi
    that too many sites connect at grass.osgeo.org)
 ** tier-1 sites are mirrored via rsync to tier-2 mirrors (no hardcoded IPs)
 ** RSS feed: rss.xml file stored in SVN-Web
-** TODO: To be migrated to OSGeo Drupal (http://grass-dev.osgeo.net)
+** TODO: To be migrated to CMS or whatever: http://grass.osgeo.org/wiki/Web_site
 
 * i18N translation statistics (http://grass.osgeo.org/devel/i18n.php#statistics)
 ** based in Linux weekly snapshot
@@ -196,11 +193,19 @@ Maintainer: Prof. Giulio Antoniol
 
 * http://web.soccerlab.polymtl.ca/grass-evolution/grass-browsers/grass-index-en.html
   implemented and sponsored by Ecole Polytechnique de Montreal, Canada
-* Realtime analysis is sent to: http://grass.fbk.eu/mailman/listinfo/grass-qa
+* Realtime analysis is sent to: http://lists.osgeo.org/mailman/listinfo/grass-qa
 
 Further notification/functionality test systems:
 * http://cia.vc/stats/project/GRASS
 ** posts into #grass IRC channel
 ** posts into #osgeo-commits IRC channel
-* http://www-pool.math.tu-berlin.de/~soeren/grass/GRASS_TestSuite/?C=M;O=D
+
+== Previous hosting sponsors ==
+
+Numerous institutions have sponsored the GRASS Project with Hardware/Bandwidth (list of master site hosting):
+* 1997-1999: Institut fuer Landschaftspflege und Naturschutz (ILN), Universitaet Hannover, Germany
+* 1999-2001: Institut fuer Physische Geographie und Landschaftsoekologie, Universitaet Hannover, Germany
+* 2001-2008: ITC-irst, Trento, Italy
+* 2009-2010: Telascience.org at San Diego Supercomputer Center, California, USA
+* Since 2010: Oregon State University Open Source Lab (OSUOSL), Oregon, USA
 
