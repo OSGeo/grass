@@ -30,8 +30,12 @@ echo
 echo
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
-	echo $(date): STARTING configure
 
+	echo $(date): STARTING make distclean
+	make distclean
+
+
+	echo $(date): STARTING configure
 	./configure \
 		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-16/lib $OSGEO4W_ROOT_MSYS/lib" \
 		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-16/include $OSGEO4W_ROOT_MSYS/include" \
@@ -58,9 +62,6 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-odbc \
 	        --without-cairo
 #		--enable-largefile \
-	echo $(date): STARTING make clean
-	make clean
-
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
