@@ -311,6 +311,153 @@ class MapToolbar(AbstractToolbar):
                      self.printmap):
             self.EnableTool(tool, enabled)
         
+class GCPManToolbar(AbstractToolbar):
+    """!
+    Toolbar for managing ground control points
+
+    @param parent reference to GCP widget
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self.ToolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+
+    def ToolbarData(self):
+        self.gcpSave = wx.NewId()
+        self.gcpReload = wx.NewId()
+        self.gcpAdd = wx.NewId()
+        self.gcpDelete = wx.NewId()
+        self.gcpClear = wx.NewId()
+        self.rms = wx.NewId()
+        self.georect = wx.NewId()
+
+        return (
+            (self.gcpSave, 'grGcpSave', Icons["grGcpSave"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["grGcpSave"].GetLabel(), Icons["grGcpSave"].GetDesc(),
+             self.parent.SaveGCPs),
+            (self.gcpReload, 'grGcpReload', Icons["grGcpReload"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["grGcpReload"].GetLabel(), Icons["grGcpReload"].GetDesc(), 
+             self.parent.ReloadGCPs),
+            ("", "", "", "", "", "", ""),
+            (self.gcpAdd, 'grGrGcpAdd', Icons["grGcpAdd"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["grGcpAdd"].GetLabel(), Icons["grGcpAdd"].GetDesc(),
+             self.parent.AddGCP),
+            (self.gcpDelete, 'grGrGcpDelete', Icons["grGcpDelete"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["grGcpDelete"].GetLabel(), Icons["grGcpDelete"].GetDesc(), 
+             self.parent.DeleteGCP),
+            (self.gcpClear, 'grGcpClear', Icons["grGcpClear"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["grGcpClear"].GetLabel(), Icons["grGcpClear"].GetDesc(), 
+             self.parent.ClearGCP),
+            ("", "", "", "", "", "", ""),
+            (self.rms, 'grGcpRms', Icons["grGcpRms"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["grGcpRms"].GetLabel(), Icons["grGcpRms"].GetDesc(),
+             self.parent.OnRMS),
+            (self.georect, 'grGeorect', Icons["grGeorect"].GetBitmap(), 
+             wx.ITEM_NORMAL, Icons["grGeorect"].GetLabel(), Icons["grGeorect"].GetDesc(),
+             self.parent.OnGeorect),
+            )
+    
+class GCPDisplayToolbar(AbstractToolbar):
+    """
+    GCP Display toolbar
+    """
+    def __init__(self, parent):
+        """!
+        GCP Display toolbar constructor
+        """
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self.ToolbarData())
+        
+        # add tool to toggle active map window
+        self.togglemapid = wx.NewId()
+        self.togglemap = wx.Choice(parent=self, id=self.togglemapid,
+						    choices = [_('source'), _('target')],
+						    style=wx.CB_READONLY)
+
+        self.InsertControl(10, self.togglemap)
+
+        self.SetToolShortHelp(self.togglemapid, '%s %s %s' % (_('Set map canvas for '),
+                                                              Icons["zoom_back"].GetLabel(),
+                                                              _(' / Zoom to map')))
+
+        # realize the toolbar
+        self.Realize()
+        
+        self.action = { 'id' : self.gcpset }
+        self.defaultAction = { 'id' : self.gcpset,
+                               'bind' : self.parent.OnPointer }
+        
+        self.OnTool(None)
+        
+        self.EnableTool(self.zoomback, False)
+        
+    def ToolbarData(self):
+        """!Toolbar data"""
+        self.displaymap = wx.NewId()
+        self.rendermap = wx.NewId()
+        self.erase = wx.NewId()
+        self.gcpset = wx.NewId()
+        self.pan = wx.NewId()
+        self.zoomin = wx.NewId()
+        self.zoomout = wx.NewId()
+        self.zoomback = wx.NewId()
+        self.zoomtomap = wx.NewId()
+        self.zoommenu = wx.NewId()
+        self.settings = wx.NewId()
+        self.helpid = wx.NewId()
+        self.quit = wx.NewId()
+        
+        # tool, label, bitmap, kind, shortHelp, longHelp, handler
+        return (
+            (self.displaymap, "displaymap", Icons["displaymap"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["displaymap"].GetLabel(), Icons["displaymap"].GetDesc(),
+             self.parent.OnDraw),
+            (self.rendermap, "rendermap", Icons["rendermap"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["rendermap"].GetLabel(), Icons["rendermap"].GetDesc(),
+             self.parent.OnRender),
+            (self.erase, "erase", Icons["erase"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["erase"].GetLabel(), Icons["erase"].GetDesc(),
+             self.parent.OnErase),
+            ("", "", "", "", "", "", ""),
+            (self.gcpset, "grGcpSet", Icons["grGcpSet"].GetBitmap(),
+             wx.ITEM_RADIO, Icons["grGcpSet"].GetLabel(), Icons["grGcpSet"].GetDesc(),
+             self.parent.OnPointer),
+            (self.pan, "pan", Icons["pan"].GetBitmap(),
+             wx.ITEM_RADIO, Icons["pan"].GetLabel(), Icons["pan"].GetDesc(),
+             self.parent.OnPan),
+            (self.zoomin, "zoom_in", Icons["zoom_in"].GetBitmap(),
+             wx.ITEM_RADIO, Icons["zoom_in"].GetLabel(), Icons["zoom_in"].GetDesc(),
+             self.parent.OnZoomIn),
+            (self.zoomout, "zoom_out", Icons["zoom_out"].GetBitmap(),
+             wx.ITEM_RADIO, Icons["zoom_out"].GetLabel(), Icons["zoom_out"].GetDesc(),
+             self.parent.OnZoomOut),
+            (self.zoommenu, "zoommenu", Icons["zoommenu"].GetBitmap(),
+             wx.ITEM_NORMAL, _("Adjust display zoom"), Icons["zoommenu"].GetDesc(),
+             self.parent.OnZoomMenuGCP),
+            ("", "", "", "", "", "", ""),
+            (self.zoomback, "zoom_back", Icons["zoom_back"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["zoom_back"].GetLabel(), Icons["zoom_back"].GetDesc(),
+             self.parent.OnZoomBack),
+            (self.zoomtomap, "zoomtomap", Icons["zoom_extent"].GetBitmap(),
+             wx.ITEM_NORMAL, _("Zoom to map"), _("Zoom to displayed map"),
+             self.parent.OnZoomToMap),
+            ("", "", "", "", "", "", ""),
+            (self.settings, 'grSettings', Icons["grSettings"].GetBitmap(), 
+             wx.ITEM_NORMAL, Icons["grSettings"].GetLabel(), Icons["grSettings"].GetDesc(),
+             self.parent.OnSettings),
+            (self.helpid, 'grHelp', wx.ArtProvider.GetBitmap(id=wx.ART_HELP, client=wx.ART_TOOLBAR, size=globalvar.toolbarSize), 
+             wx.ITEM_NORMAL, _('Show Help'), _('Show Help for GCP Manager'),
+             self.parent.OnHelp),
+            ("", "", "", "", "", "", ""),
+            (self.quit, 'grGcpQuit', Icons["grGcpQuit"].GetBitmap(), 
+             wx.ITEM_NORMAL, Icons["grGcpQuit"].GetLabel(), Icons["grGcpQuit"].GetDesc(),
+             self.parent.OnQuit)
+            )
+    
 class GRToolbar(AbstractToolbar):
     """
     Georectification toolbar
