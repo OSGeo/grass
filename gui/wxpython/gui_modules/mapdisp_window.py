@@ -837,6 +837,17 @@ class BufferedWindow(MapWindow, wx.Window):
                 coordtype = 'mapcoord'
             self.parent.GetLayerManager().georectifying.DrawGCP(coordtype)
             
+        if not self.parent.IsStandalone() and \
+                self.parent.GetLayerManager().gcpmanagement:
+            # -> georectifier (redraw GCPs)
+            if self.parent.toolbars['gcpdisp']:
+                if self == self.parent.TgtMapWindow:
+                    coordtype = 'target'
+                else:
+                    coordtype = 'source'
+
+                self.parent.DrawGCP(coordtype)
+
         # 
         # clear measurement
         #
@@ -1148,6 +1159,9 @@ class BufferedWindow(MapWindow, wx.Window):
         # right mouse button released
         elif event.RightUp():
             self.OnRightUp(event)
+
+        elif event.Entering():
+            self.OnMouseEnter(event)
 
         elif event.Moving():
             self.OnMouseMoving(event)
@@ -1946,6 +1960,19 @@ class BufferedWindow(MapWindow, wx.Window):
             self.DrawLines(pdc=self.pdcTmp)
         
         elif self.mouse["use"] == "pointer" and \
+                self.parent.GetLayerManager().gcpmanagement:
+            # -> GCP manager
+            if self.parent.toolbars['gcpdisp']:
+                coord = self.Pixel2Cell(self.mouse['end'])
+                if self.parent.MapWindow == self.parent.SrcMapWindow:
+                    coordtype = 'source'
+                else:
+                    coordtype = 'target'
+
+                self.parent.GetLayerManager().gcpmanagement.SetGCPData(coordtype, coord, self, confirm=True)
+                self.UpdateMap(render=False, renderVector=False)
+
+        elif self.mouse["use"] == "pointer" and \
                 self.parent.GetLayerManager().georectifying:
             # -> georectifying
             coord = self.Pixel2Cell(self.mouse['end'])
@@ -2365,6 +2392,19 @@ class BufferedWindow(MapWindow, wx.Window):
         # update statusbar
         self.parent.StatusbarUpdate()
         
+    def OnMouseEnter(self, event):
+        """!
+        Mouse entered window and no mouse buttons were pressed
+        """
+        if self.parent.GetLayerManager().gcpmanagement:
+            if self.parent.toolbars['gcpdisp']:
+                if not self.parent.MapWindow == self:
+                    self.parent.MapWindow = self
+                    self.parent.Map = self.Map
+                    self.parent.UpdateActive(self)
+        else:
+            event.Skip()
+
     def OnMouseMoving(self, event):
         """!
         Motion event and no mouse buttons were pressed
@@ -2539,6 +2579,9 @@ class BufferedWindow(MapWindow, wx.Window):
         elif zoomtype == 0:
             dx = x1 - x2
             dy = y1 - y2
+            if dx == 0 and dy == 0:
+                dx = x1 - self.Map.width / 2
+                dy = y1 - self.Map.height / 2
             newreg['w'], newreg['n'] = self.Pixel2Cell((dx, dy))
             newreg['e'], newreg['s'] = self.Pixel2Cell((self.Map.width  + dx,
                                                         self.Map.height + dy))
@@ -2597,6 +2640,8 @@ class BufferedWindow(MapWindow, wx.Window):
                 toolbar = self.parent.toolbars['map']
             elif self.parent.GetName() == 'GRMapWindow':
                 toolbar = self.parent.toolbars['georect']
+            elif self.parent.GetName() == 'GCPMapWindow':
+                toolbar = self.parent.toolbars['gcpdisp']
             
             toolbar.Enable('zoomback', enable = False)
         
@@ -2641,6 +2686,8 @@ class BufferedWindow(MapWindow, wx.Window):
             toolbar = self.parent.toolbars['map']
         elif self.parent.GetName() == 'GRMapWindow':
             toolbar = self.parent.toolbars['georect']
+        elif self.parent.GetName() == 'GCPMapWindow':
+            toolbar = self.parent.toolbars['gcpdisp']
         
         toolbar.Enable('zoomback', enable)
         

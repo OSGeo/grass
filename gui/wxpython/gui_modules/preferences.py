@@ -424,6 +424,21 @@ class Settings:
                     'enabled' : True
                     },
                 },
+            'gcpman' : {
+                'rms' : {
+                    'highestonly' : True,
+                    'sdfactor' : 1,
+                    },
+                'symbol' : {
+                    'color' : (0, 0, 255, 255),
+                    'hcolor' : (255, 0, 0, 255),
+                    'scolor' : (0, 255, 0, 255),
+                    'ucolor' : (255, 165, 0, 255),
+                    'unused' : True,
+                    'size' : 8,
+                    'width' : 2,
+                    },
+                },
             'georect' : {
                 'symbol' : {
                     'color' : (0, 0, 255, 255),

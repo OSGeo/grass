@@ -1,5 +1,5 @@
 """!
-@package mapdisp.py
+@package gcpmapdisp.py
 
 @brief GIS map display canvas, with toolbar for various display
 management functions, and additional toolbars (vector digitizer, 3d
@@ -22,6 +22,7 @@ for details.
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
+@author Markus Metz
 """
 
 import os
@@ -134,7 +135,6 @@ class MapFrame(wx.Frame):
         #
         # Fancy gui
         #
-        # self._mgr = auimgr
         self._mgr = wx.aui.AuiManager(self)
 
         #
@@ -144,9 +144,18 @@ class MapFrame(wx.Frame):
                           'vdigit' : None,
                           'georect' : None, 
                           'gcpdisp' : None, 
+                          'gcpman' : None, 
                           'nviz' : None }
+        self.activemap = None
         for toolb in toolbars:
             self.AddToolbar(toolb)
+
+        if self.toolbars['gcpdisp']:
+            self.activemap = self.toolbars['gcpdisp'].togglemap
+            self.activemap.SetSelection(0)
+            self.SrcMap        = self.grwiz.SrcMap       # instance of render.Map
+            self.TgtMap        = self.grwiz.TgtMap       # instance of render.Map
+            self._mgr.SetDockSizeConstraint(0.5, 0.5)
 
         #
         # Add statusbar
@@ -154,11 +163,25 @@ class MapFrame(wx.Frame):
         self.statusbar = self.CreateStatusBar(number=4, style=0)
         self.statusbar.SetStatusWidths([-5, -2, -1, -1])
         self.statusbarWin = dict()
-        self.statusbarWin['toggle'] = wx.Choice(self.statusbar, wx.ID_ANY,
+        if self.toolbars['gcpdisp']:
+            self.statusbarWin['toggle'] = wx.Choice(self.statusbar, wx.ID_ANY,
+                                      choices = [_("Coordinates"),
+                                                 _("Extent"),
+                                                 _("Comp. region"),
+                                                 _("Show comp. extent"),
+                                                 _("Display mode"),
+                                                 _("Display geometry"),
+                                                 _("Map scale"),
+                                                 _("Go to GCP No."),
+                                                 _("RMS error")])
+            # set StatusBar to Go to GCP No.
+            self.statusbarWin['toggle'].SetSelection(7)
+        else:
+            self.statusbarWin['toggle'] = wx.Choice(self.statusbar, wx.ID_ANY,
                                                 choices = globalvar.MAP_DISPLAY_STATUSBAR_MODE)
-        self.statusbarWin['toggle'].SetSelection(UserSettings.Get(group='display',
-                                                                  key='statusbarMode',
-                                                                  subkey='selection'))
+            self.statusbarWin['toggle'].SetSelection(UserSettings.Get(group='display',
+                                                                      key='statusbarMode',
+                                                                      subkey='selection'))
         self.statusbar.Bind(wx.EVT_CHOICE, self.OnToggleStatus, self.statusbarWin['toggle'])
         # auto-rendering checkbox
         self.statusbarWin['render'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
@@ -207,11 +230,16 @@ class MapFrame(wx.Frame):
         self.statusbar.Bind(wx.EVT_COMBOBOX, self.OnChangeMapScale, self.statusbarWin['mapscale'])
 
         # go to
-        self.statusbarWin['goto'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                                                value="", style=wx.TE_PROCESS_ENTER,
-                                                size=(300, -1))
-        self.statusbarWin['goto'].Hide()
+        if self.toolbars['gcpdisp']:
+            self.statusbarWin['goto'] = wx.SpinCtrl(parent=self.statusbar, id=wx.ID_ANY,
+                                 min=0)
+            self.statusbar.Bind(wx.EVT_SPINCTRL, self.OnGoTo, self.statusbarWin['goto'])
+        else:
+            self.statusbarWin['goto'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
+                                                   value="", style=wx.TE_PROCESS_ENTER,
+                                                    size=(100, -1))
         self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.statusbarWin['goto'])
+        self.statusbarWin['goto'].Hide()
 
         # projection
         self.statusbarWin['projection'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
@@ -240,13 +268,25 @@ class MapFrame(wx.Frame):
         #
         # Init map display (buffered DC & set default cursor)
         #
-        self.MapWindow2D = BufferedWindow(self, id=wx.ID_ANY,
+        if self.toolbars['gcpdisp']:
+            self.grwiz.SwitchEnv('source')
+            self.SrcMapWindow = BufferedWindow(self, id=wx.ID_ANY,
+                                              Map=self.SrcMap, tree=self.tree, lmgr=self._layerManager)
+
+            self.grwiz.SwitchEnv('target')
+            self.TgtMapWindow = BufferedWindow(self, id=wx.ID_ANY,
+                                              Map=self.TgtMap, tree=self.tree, lmgr=self._layerManager)
+            self.MapWindow = self.SrcMapWindow
+            self.Map = self.SrcMap
+            self.SrcMapWindow.SetCursor(self.cursors["default"])
+            self.TgtMapWindow.SetCursor(self.cursors["default"])
+            self.activemap.Bind(wx.EVT_CHOICE, self.OnUpdateActive)
+        else:
+            # default is 2D display mode
+            self.MapWindow2D = BufferedWindow(self, id=wx.ID_ANY,
                                           Map=self.Map, tree=self.tree, lmgr=self._layerManager)
-        # default is 2D display mode
-        self.MapWindow = self.MapWindow2D
-        self.MapWindow.SetCursor(self.cursors["default"])
-        # used by Nviz (3D display mode)
-        self.MapWindow3D = None 
+            self.MapWindow = self.MapWindow2D
+            self.MapWindow.SetCursor(self.cursors["default"])
 
         #
         # initialize region values
@@ -259,11 +299,45 @@ class MapFrame(wx.Frame):
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
         self.Bind(render.EVT_UPDATE_PRGBAR, self.OnUpdateProgress)
+        if self.toolbars['gcpdisp']:
+            self.Bind(wx.EVT_SIZE,     self.OnDispResize)
         
         #
         # Update fancy gui style
         #
-        self._mgr.AddPane(self.MapWindow, wx.aui.AuiPaneInfo().CentrePane().
+        if self.toolbars['gcpdisp']:
+        #if (0):
+            # AuiManager wants a CentrePane , workaround to get two equally sized windows
+            self.list = self.CreateGCPList()
+
+            #self.SrcMapWindow.SetSize((300, 300))
+            #self.TgtMapWindow.SetSize((300, 300))
+            self.list.SetSize((100, 150))
+            self._mgr.AddPane(self.list, wx.aui.AuiPaneInfo().
+                      Name("gcplist").Caption(_("GCP List")).LeftDockable(False).
+                      RightDockable(False).PinButton().FloatingSize((600,200)).
+                      CloseButton(False).DestroyOnClose(True).
+                      Top().Layer(1).MinSize((200,100)))
+            self._mgr.AddPane(self.SrcMapWindow, wx.aui.AuiPaneInfo().
+                      Name("source").Caption(_("Source Display")).Dockable(False).
+                      CloseButton(False).DestroyOnClose(True).Floatable(False).
+                      Centre())
+            self._mgr.AddPane(self.TgtMapWindow, wx.aui.AuiPaneInfo().
+                      Name("target").Caption(_("Target Display")).Dockable(False).
+                      CloseButton(False).DestroyOnClose(True).Floatable(False).
+                      Right().Layer(0))
+
+            srcwidth, srcheight = self.SrcMapWindow.GetSize()
+            tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
+            tgtwidth = (srcwidth + tgtwidth) / 2
+            self._mgr.GetPane("target").Hide()
+            self._mgr.Update()
+            self.TgtMapWindow.SetSize((tgtwidth, tgtheight))
+            self._mgr.GetPane("source").BestSize((tgtwidth, tgtheight))
+            self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
+            self._mgr.GetPane("target").Show()
+        else:
+            self._mgr.AddPane(self.MapWindow, wx.aui.AuiPaneInfo().CentrePane().
                           Dockable(False).BestSize((-1,-1)).
                           CloseButton(False).DestroyOnClose(True).
                           Layer(0))
@@ -279,6 +353,17 @@ class MapFrame(wx.Frame):
         #
         self.digit = None
 
+        if self.toolbars['gcpdisp']:
+            # set active map
+            self.MapWindow = self.SrcMapWindow
+            self.Map = self.SrcMap
+            #
+            # Init zoom history for TgtMapWindow
+            #
+            self.TgtMapWindow.ZoomHistory(self.Map.region['n'],
+                                       self.Map.region['s'],
+                                       self.Map.region['e'],
+                                       self.Map.region['w'])
         #
         # Init zoom history
         #
@@ -304,7 +389,7 @@ class MapFrame(wx.Frame):
         Currently known toolbars are:
          - 'map'     - basic map toolbar
          - 'vdigit'  - vector digitizer
-         - 'gcpdisp' - GCP Manager Display
+         - 'gcpdisp'  - GCP Manager
          - 'georect' - georectifier
          - 'nviz'    - 3D view mode
         """
@@ -320,7 +405,7 @@ class MapFrame(wx.Frame):
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2).
                               BestSize((self.toolbars['map'].GetSize())))
-	
+
         # vector digitizer
         elif name == "vdigit":
             from vdigit import haveVDigit
@@ -359,6 +444,28 @@ class MapFrame(wx.Frame):
             self.MapWindow.zoomtype = 0
             self.MapWindow.pen     = wx.Pen(colour='red',   width=2, style=wx.SOLID)
             self.MapWindow.polypen = wx.Pen(colour='green', width=2, style=wx.SOLID)
+        # GCP display
+        elif name == "gcpdisp":
+            self.toolbars['gcpdisp'] = toolbars.GCPDisplayToolbar(self)
+
+            self._mgr.AddPane(self.toolbars['gcpdisp'],
+                              wx.aui.AuiPaneInfo().
+                              Name("gcpdisplaytoolbar").Caption(_("GCP Display toolbar")).
+                              ToolbarPane().Top().
+                              LeftDockable(False).RightDockable(False).
+                              BottomDockable(False).TopDockable(True).
+                              CloseButton(False).Layer(2))
+
+            self.toolbars['gcpman'] = toolbars.GCPManToolbar(self)
+
+            self._mgr.AddPane(self.toolbars['gcpman'],
+                              wx.aui.AuiPaneInfo().
+                              Name("gcpmanagertoolbar").Caption(_("GCP Manager toolbar")).
+                              ToolbarPane().Top().Row(1).
+                              LeftDockable(False).RightDockable(False).
+                              BottomDockable(False).TopDockable(True).
+                              CloseButton(False).Layer(2))
+
         # georectifier
         elif name == "georect":
             self.toolbars['georect'] = toolbars.GRToolbar(self, self.Map)
@@ -416,7 +523,7 @@ class MapFrame(wx.Frame):
                                                  Map=self.Map, tree=self.tree, lmgr=self._layerManager)
                 self.MapWindow = self.MapWindow3D
                 self.MapWindow.SetCursor(self.cursors["default"])
-                
+
                 # add Nviz notebookpage
                 self._layerManager.AddNviz()
                 
@@ -501,9 +608,19 @@ class MapFrame(wx.Frame):
         self.width, self.height = self.GetClientSize()
 
         Debug.msg(2, "MapFrame.__InitDisplay():")
-        self.Map.ChangeMapSize(self.GetClientSize())
-        self.Map.region = self.Map.GetRegion() # g.region -upgc
-        # self.Map.SetRegion() # adjust region to match display window
+        if self.toolbars['gcpdisp']:
+            self.grwiz.SwitchEnv('source')
+            self.SrcMap.ChangeMapSize(self.GetClientSize())
+            self.SrcMap.region = self.SrcMap.GetRegion() # g.region -upgc
+            self.grwiz.SwitchEnv('target')
+            self.TgtMap.ChangeMapSize(self.GetClientSize())
+            self.TgtMap.region = self.TgtMap.GetRegion() # g.region -upgc
+            # self.SrcMap.SetRegion() # adjust region to match display window
+            # self.TgtMap.SetRegion() # adjust region to match display window
+        else:
+            self.Map.ChangeMapSize(self.GetClientSize())
+            self.Map.region = self.Map.GetRegion() # g.region -upgc
+            # self.Map.SetRegion() # adjust region to match display window
 
     def OnUpdateProgress(self, event):
         """
@@ -523,11 +640,6 @@ class MapFrame(wx.Frame):
             # in georectifying session; display used to get get geographic
             # coordinates for GCPs
             self.OnPointer(event)
-        elif self._layerManager and \
-                self._layerManager.gcpmanagement:
-            # in georectifying session; display used to get get geographic
-            # coordinates for GCPs
-            self.OnPointer(event)
         else:
             # change bookcontrol page to page associated with display
             if self.page:
@@ -536,7 +648,7 @@ class MapFrame(wx.Frame):
                     self.layerbook.SetSelection(pgnum)
         
         event.Skip()
-        
+
     def OnDraw(self, event):
         """!Re-display current map composition
         """
@@ -549,7 +661,7 @@ class MapFrame(wx.Frame):
         qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.Map.DeleteLayer(layer)
-        
+
         # delete tmp lines
         if self.MapWindow.mouse["use"] in ("measure",
                                            "profile"):
@@ -565,6 +677,25 @@ class MapFrame(wx.Frame):
         
         # update statusbar
         self.StatusbarUpdate()
+
+    def OnDispResize(self, event):
+        """!GCP Map Display resized, adjust Map Windows
+        """
+        if self.toolbars['gcpdisp']:
+            # FIXME: does not work when reducing Map Display width
+            # tried a lot of MinSize, BestSize, also for both source and target map window
+            srcwidth, srcheight = self.SrcMapWindow.GetSize()
+            tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
+            tgtwidth = (srcwidth + tgtwidth) / 2
+            self._mgr.GetPane("target").Hide()
+            self._mgr.Update()
+            self.TgtMapWindow.SetSize((tgtwidth, tgtheight))
+            self._mgr.GetPane("source").BestSize((tgtwidth, srcheight))
+            self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
+            self._mgr.GetPane("target").Show()
+            self._mgr.Update()
+
+        pass
 
     def OnPointer(self, event):
         """!Pointer button clicked
@@ -595,6 +726,14 @@ class MapFrame(wx.Frame):
             else: # moveLine, deleteLine
                 self.MapWindow.mouse['box'] = 'box'
         
+        elif self._layerManager and self._layerManager.gcpmanagement:
+            self.SrcMapWindow.SetCursor(self.cursors["cross"])
+            self.SrcMapWindow.mouse['use'] = "pointer"
+            self.SrcMapWindow.mouse['box'] = "point"
+            self.TgtMapWindow.SetCursor(self.cursors["cross"])
+            self.TgtMapWindow.mouse['use'] = "pointer"
+            self.TgtMapWindow.mouse['box'] = "point"
+        
         elif self._layerManager and self._layerManager.georectifying:
             self.MapWindow.SetCursor(self.cursors["cross"])
         
@@ -618,6 +757,20 @@ class MapFrame(wx.Frame):
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["cross"])
 
+        if self._layerManager and self._layerManager.gcpmanagement:
+            if self.MapWindow == self.SrcMapWindow:
+                win = self.TgtMapWindow
+            elif self.MapWindow == self.TgtMapWindow:
+                win = self.SrcMapWindow
+
+            win.mouse['use'] = "zoom"
+            win.mouse['box'] = "box"
+            win.zoomtype = 1
+            win.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
+            
+            # change the cursor
+            win.SetCursor(self.cursors["cross"])
+
     def OnZoomOut(self, event):
         """
         Zoom out the map.
@@ -634,6 +787,20 @@ class MapFrame(wx.Frame):
         
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["cross"])
+
+        if self._layerManager and self._layerManager.gcpmanagement:
+            if self.MapWindow == self.SrcMapWindow:
+                win = self.TgtMapWindow
+            elif self.MapWindow == self.TgtMapWindow:
+                win = self.SrcMapWindow
+
+            win.mouse['use'] = "zoom"
+            win.mouse['box'] = "box"
+            win.zoomtype = -1
+            win.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
+            
+            # change the cursor
+            win.SetCursor(self.cursors["cross"])
 
     def OnZoomBack(self, event):
         """
@@ -656,11 +823,32 @@ class MapFrame(wx.Frame):
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
 
+        if self._layerManager and self._layerManager.gcpmanagement:
+            if self.MapWindow == self.SrcMapWindow:
+                win = self.TgtMapWindow
+            elif self.MapWindow == self.TgtMapWindow:
+                win = self.SrcMapWindow
+
+            win.mouse['use'] = "pan"
+            win.mouse['box'] = "pan"
+            win.zoomtype = 0
+            
+            # change the cursor
+            win.SetCursor(self.cursors["hand"])
+
     def OnErase(self, event):
         """
         Erase the canvas
         """
         self.MapWindow.EraseMap()
+
+        if self._layerManager and self._layerManager.gcpmanagement:
+            if self.MapWindow == self.SrcMapWindow:
+                win = self.TgtMapWindow
+            elif self.MapWindow == self.TgtMapWindow:
+                win = self.SrcMapWindow
+
+            win.EraseMap()
 
     def OnZoomRegion(self, event):
         """
@@ -750,81 +938,123 @@ class MapFrame(wx.Frame):
         """
         Go to position
         """
-        try:
-            if self.statusbarWin['projection'].IsChecked():
-                if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
-                    self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
+        if self.toolbars['gcpdisp']:
+            #GCPNo = int(event.GetString())
+            GCPNo = self.statusbarWin['goto'].GetValue()
+
+            if GCPNo < 0 or GCPNo > len(self.mapcoordlist):
+                wx.MessageBox(parent=self,
+                      message="%s 1 - %s." % (_("Valid Range:"),
+                                     len(self.mapcoordlist)),
+                      caption=_("Invalid GCP Number"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                return
+
+            if GCPNo == 0:
+                return
+
+            self.list.selectedkey = GCPNo
+            self.list.selected = self.list.FindItemData(-1, GCPNo)
+            self.list.render = False
+            self.list.SetItemState(self.list.selected,
+                              wx.LIST_STATE_SELECTED,
+                              wx.LIST_STATE_SELECTED)
+            self.list.render = True
+            
+            # Source MapWindow:
+            begin = (self.mapcoordlist[GCPNo][1], self.mapcoordlist[GCPNo][2])
+            begin = self.SrcMapWindow.Cell2Pixel(begin)
+            end = begin
+            self.SrcMapWindow.Zoom(begin, end, 0)
+
+            # redraw map
+            self.SrcMapWindow.UpdateMap()
+
+            # Target MapWindow:
+            begin = (self.mapcoordlist[GCPNo][3], self.mapcoordlist[GCPNo][4])
+            begin = self.TgtMapWindow.Cell2Pixel(begin)
+            end = begin
+            self.TgtMapWindow.Zoom(begin, end, 0)
+
+            # redraw map
+            self.TgtMapWindow.UpdateMap()
+
+        else:
+            try:
+                if self.statusbarWin['projection'].IsChecked():
+                    if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
+                        self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
+                    else:
+                        # reproject values
+                        projIn = UserSettings.Get(group='projection',
+                                                  key='statusbar',
+                                                  subkey='proj4')
+                        projOut = gcmd.RunCommand('g.proj',
+                                                  flags = 'jf',
+                                                  read = True)
+                        proj = projIn.split(' ')[0].split('=')[1]
+                        if proj in ('ll', 'latlong', 'longlat'):
+                            e, n = self.statusbarWin['goto'].GetValue().split(';')
+                            e, n = utils.DMS2Deg(e, n)
+                            proj, coord1 = utils.ReprojectCoordinates(coord = (e, n),
+                                                                      projIn = projIn,
+                                                                      projOut = projOut, flags = 'd')
+                            e, n = coord1
+                        else:
+                            e, n = map(float, self.statusbarWin['goto'].GetValue().split(';'))
+                            proj, coord1 = utils.ReprojectCoordinates(coord = (e, n),
+                                                                      projIn = projIn,
+                                                                      projOut = projOut, flags = 'd')
+                            e, n = coord1
                 else:
-                    # reproject values
-                    projIn = UserSettings.Get(group='projection',
-                                              key='statusbar',
-                                              subkey='proj4')
-                    projOut = gcmd.RunCommand('g.proj',
-                                              flags = 'jf',
-                                              read = True)
-                    proj = projIn.split(' ')[0].split('=')[1]
-                    if proj in ('ll', 'latlong', 'longlat'):
+                    if self.Map.projinfo['proj'] == 'll':
                         e, n = self.statusbarWin['goto'].GetValue().split(';')
-                        e, n = utils.DMS2Deg(e, n)
-                        proj, coord1 = utils.ReprojectCoordinates(coord = (e, n),
-                                                                  projIn = projIn,
-                                                                  projOut = projOut, flags = 'd')
-                        e, n = coord1
                     else:
                         e, n = map(float, self.statusbarWin['goto'].GetValue().split(';'))
-                        proj, coord1 = utils.ReprojectCoordinates(coord = (e, n),
-                                                                  projIn = projIn,
-                                                                  projOut = projOut, flags = 'd')
-                        e, n = coord1
-            else:
-                if self.Map.projinfo['proj'] == 'll':
-                    e, n = self.statusbarWin['goto'].GetValue().split(';')
+                        
+                region = self.Map.GetCurrentRegion()
+                if self.statusbarWin['projection'].IsChecked():
+                    if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
+                        self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
+                    else:
+                        region['center_easting'], region['center_northing'] = e, n
                 else:
-                    e, n = map(float, self.statusbarWin['goto'].GetValue().split(';'))
-                    
-            region = self.Map.GetCurrentRegion()
-            if self.statusbarWin['projection'].IsChecked():
-                if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
-                    self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
+                    if self.Map.projinfo['proj'] == 'll':
+                        region['center_easting'], region['center_northing'] = utils.DMS2Deg(e, n)
+                    else:
+                        region['center_easting'], region['center_northing'] = e, n
+            except ValueError:
+                region = self.Map.GetCurrentRegion()
+                precision = int(UserSettings.Get(group = 'projection', key = 'format',
+                                                 subkey = 'precision'))
+                format = UserSettings.Get(group = 'projection', key = 'format',
+                                          subkey = 'll')
+                if self.Map.projinfo['proj'] == 'll' and format == 'DMS':
+                        self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
+                                                                                region['center_northing'],
+                                                                                precision = precision))
                 else:
-                    region['center_easting'], region['center_northing'] = e, n
-            else:
-                if self.Map.projinfo['proj'] == 'll':
-                    region['center_easting'], region['center_northing'] = utils.DMS2Deg(e, n)
-                else:
-                    region['center_easting'], region['center_northing'] = e, n
-        except ValueError:
-            region = self.Map.GetCurrentRegion()
-            precision = int(UserSettings.Get(group = 'projection', key = 'format',
-                                             subkey = 'precision'))
-            format = UserSettings.Get(group = 'projection', key = 'format',
-                                      subkey = 'll')
-            if self.Map.projinfo['proj'] == 'll' and format == 'DMS':
-                    self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
-                                                                            region['center_northing'],
-                                                                            precision = precision))
-            else:
-                self.statusbarWin['goto'].SetValue("%.*f; %.*f" % \
-                                                       (precision, region['center_easting'],
-                                                        precision, region['center_northing']))
-            return
+                    self.statusbarWin['goto'].SetValue("%.*f; %.*f" % \
+                                                           (precision, region['center_easting'],
+                                                            precision, region['center_northing']))
+                return
+            
+            
+            dn = (region['nsres'] * region['rows']) / 2.
+            region['n'] = region['center_northing'] + dn
+            region['s'] = region['center_northing'] - dn
+            de = (region['ewres'] * region['cols']) / 2.
+            region['e'] = region['center_easting'] + de
+            region['w'] = region['center_easting'] - de
         
-        
-        dn = (region['nsres'] * region['rows']) / 2.
-        region['n'] = region['center_northing'] + dn
-        region['s'] = region['center_northing'] - dn
-        de = (region['ewres'] * region['cols']) / 2.
-        region['e'] = region['center_easting'] + de
-        region['w'] = region['center_easting'] - de
-        
-        self.Map.AdjustRegion()
+            self.Map.AdjustRegion()
 
-        # add to zoom history
-        self.MapWindow.ZoomHistory(region['n'], region['s'],
-                                   region['e'], region['w'])
+            # add to zoom history
+            self.MapWindow.ZoomHistory(region['n'], region['s'],
+                                       region['e'], region['w'])
         
-        # redraw a map
-        self.MapWindow.UpdateMap()
+            # redraw map
+            self.MapWindow.UpdateMap()
+
         self.statusbarWin['goto'].SetFocus()
         
     def StatusbarUpdate(self):
@@ -1000,58 +1230,70 @@ class MapFrame(wx.Frame):
             self.StatusbarEnableLongHelp(False)
 
         elif self.statusbarWin['toggle'].GetSelection() == 7: # go to
+
             self.statusbar.SetStatusText("")
-            region = self.Map.GetCurrentRegion()
-            precision = int(UserSettings.Get(group = 'projection', key = 'format',
-                                             subkey = 'precision'))
-            format = UserSettings.Get(group = 'projection', key = 'format',
-                                      subkey = 'll')
-            
-            if self.statusbarWin['projection'].IsChecked():
-                if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
-                    self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
-                else:
-                    proj, coord  = utils.ReprojectCoordinates(coord = (region['center_easting'],
-                                                                       region['center_northing']),
-                                                              projOut = UserSettings.Get(group='projection',
-                                                                                         key='statusbar',
-                                                                                         subkey='proj4'),
-                                                              flags = 'd')
-                    if coord:
-                        if proj in ('ll', 'latlong', 'longlat') and format == 'DMS':
-                            self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(coord[0],
-                                                                                    coord[1],
-                                                                                    precision = precision))
-                        else:
-                            self.statusbarWin['goto'].SetValue("%.*f; %.*f" % (precision, coord[0],
-                                                                               precision, coord[1]))
-                    else:
-                        self.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
+            if self.toolbars['gcpdisp']:
+                max = self.list.GetItemCount()
+                if max < 1:
+                    max = 1
+                self.statusbarWin['goto'].SetRange(0, max)
             else:
-                if self.Map.projinfo['proj'] == 'll' and format == 'DMS':
-                    self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
-                                                                            region['center_northing'],
-                                                                            precision = precision))
+                self.statusbar.SetStatusText("")
+                region = self.Map.GetCurrentRegion()
+                precision = int(UserSettings.Get(group = 'projection', key = 'format',
+                                                 subkey = 'precision'))
+                format = UserSettings.Get(group = 'projection', key = 'format',
+                                          subkey = 'll')
+                
+                if self.statusbarWin['projection'].IsChecked():
+                    if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
+                        self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
+                    else:
+                        proj, coord  = utils.ReprojectCoordinates(coord = (region['center_easting'],
+                                                                           region['center_northing']),
+                                                                  projOut = UserSettings.Get(group='projection',
+                                                                                             key='statusbar',
+                                                                                             subkey='proj4'),
+                                                                  flags = 'd')
+                        if coord:
+                            if proj in ('ll', 'latlong', 'longlat') and format == 'DMS':
+                                self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(coord[0],
+                                                                                        coord[1],
+                                                                                        precision = precision))
+                            else:
+                                self.statusbarWin['goto'].SetValue("%.*f; %.*f" % (precision, coord[0],
+                                                                                   precision, coord[1]))
+                        else:
+                            self.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
                 else:
-                    self.statusbarWin['goto'].SetValue("%.*f; %.*f" % (precision, region['center_easting'],
-                                                                       precision, region['center_northing']))
+                    if self.Map.projinfo['proj'] == 'll' and format == 'DMS':
+                        self.statusbarWin['goto'].SetValue("%s" % utils.Deg2DMS(region['center_easting'], 
+                                                                                region['center_northing'],
+                                                                                precision = precision))
+                    else:
+                        self.statusbarWin['goto'].SetValue("%.*f; %.*f" % (precision, region['center_easting'],
+                                                                           precision, region['center_northing']))
             self.statusbarWin['goto'].Show()
 
             # disable long help
             self.StatusbarEnableLongHelp(False)
         
         elif self.statusbarWin['toggle'].GetSelection() == 8: # projection
-            self.statusbar.SetStatusText("")
-            epsg = UserSettings.Get(group='projection', key='statusbar', subkey='epsg')
-            if epsg:
-                label = '%s (EPSG: %s)' % (_("Use defined projection"), epsg)
-                self.statusbarWin['projection'].SetLabel(label)
+            if self.toolbars['gcpdisp']: # RMS error, not projection
+                self.statusbar.SetStatusText(_("Forward: %s, Backward: %s") %
+                                             (self.fwd_rmserror, self.bkw_rmserror))
             else:
-                self.statusbarWin['projection'].SetLabel(_("Use defined projection"))
-            self.statusbarWin['projection'].Show()
-            
-            # disable long help
-            self.StatusbarEnableLongHelp(False)
+                self.statusbar.SetStatusText("")
+                epsg = UserSettings.Get(group='projection', key='statusbar', subkey='epsg')
+                if epsg:
+                    label = '%s (EPSG: %s)' % (_("Use defined projection"), epsg)
+                    self.statusbarWin['projection'].SetLabel(label)
+                else:
+                    self.statusbarWin['projection'].SetLabel(_("Use defined projection"))
+                self.statusbarWin['projection'].Show()
+                
+                # disable long help
+                self.StatusbarEnableLongHelp(False)
             
         else:
             self.statusbar.SetStatusText("", 1)
@@ -1070,14 +1312,15 @@ class MapFrame(wx.Frame):
                    (0, self.statusbarWin['mapscale']),
                    (0, self.statusbarWin['progress']),
                    (0, self.statusbarWin['projection']),
+                   (0, self.statusbarWin['goto']),
                    (1, self.statusbarWin['toggle']),
                    (2, self.statusbarWin['mask']),
                    (3, self.statusbarWin['render'])]
         for idx, win in widgets:
             rect = self.statusbar.GetFieldRect(idx)
+            wWin, hWin = win.GetBestSize()
             if idx == 0: # show region / mapscale / process bar
                 # -> size
-                wWin, hWin = win.GetBestSize()
                 if win == self.statusbarWin['progress']:
                     wWin = rect.width - 6
                 # -> position
@@ -1090,11 +1333,14 @@ class MapFrame(wx.Frame):
             else: # choice || auto-rendering
                 x, y = rect.x, rect.y - 1
                 w, h = rect.width, rect.height + 2
-                if idx == 2: # mask
+                if idx == 1: # choice
+                    h = hWin
+                elif idx == 2: # mask
                     x += 5
                     y += 4
                 elif idx == 3: # render
                     x += 5
+
             win.SetPosition((x, y))
             win.SetSize((w, h))
 
@@ -1106,14 +1352,14 @@ class MapFrame(wx.Frame):
             ltype = [{ 'ext' : 'ppm', 'type' : -1 },
                      { 'ext' : 'tif', 'type' : wx.BITMAP_TYPE_TIF }]
         else:
-            img = self.MapWindow.img
-            if not img:
-                gcmd.GMessage(parent = self,
-                              message = _("Nothing to render (empty map). Operation canceled."),
-                              msgType = 'info')
-                return
+            img = self.MapWindow.img 
+            if not img: 
+                gcmd.GMessage(parent = self, 
+                              message = _("Nothing to render (empty map). Operation canceled."), 
+                              msgType = 'info') 
+                return 
             filetype, ltype = gdialogs.GetImageHandlers(img)
-        
+
         # get size
         dlg = gdialogs.ImageSizeDialog(self)
         dlg.CentreOnParent()
@@ -1243,7 +1489,7 @@ class MapFrame(wx.Frame):
         
     def QueryMap(self, x, y):
         """!Query map layer features
-        
+
         Currently only raster and vector map layers are supported.
         
         @param x,y coordinates
@@ -1251,7 +1497,7 @@ class MapFrame(wx.Frame):
         #set query snap distance for v.what at mapunit equivalent of 10 pixels
         qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
         east, north = self.MapWindow.Pixel2Cell((x, y))
-        
+
         num = 0
         for layer in self.tree.GetSelections():
             type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
@@ -1283,7 +1529,7 @@ class MapFrame(wx.Frame):
                 raststr += "%s," % name
             elif type in ('vector', 'thememap', 'themechart'):
                 vectstr += "%s," % name
-        
+
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
         os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
@@ -1307,7 +1553,7 @@ class MapFrame(wx.Frame):
                         continue
                     vect.append(vector)
                 vectstr = ','.join(vect)
-            
+                
             if len(vectstr) <= 1:
                 self._layerManager.goutput.WriteCmdLog("Nothing to query.")
                 return
@@ -1861,7 +2107,10 @@ class MapFrame(wx.Frame):
         Set display extents to match selected raster (including NULLs)
         or vector map.
         """
-        self.MapWindow.ZoomToMap()
+        if self.toolbars['gcpdisp']:
+            self.MapWindow.ZoomToMap(layers = self.Map.GetListOfLayers())
+        else:
+            self.MapWindow.ZoomToMap()
 
     def OnZoomToRaster(self, event):
         """!
@@ -1897,6 +2146,71 @@ class MapFrame(wx.Frame):
         """
         self.MapWindow.SaveDisplayRegion()
         
+    def AdjustMap(self, newreg):
+        """!Adjust map window to new extents
+        """
+
+        # adjust map window
+        self.Map.region['n'] = newreg['n']
+        self.Map.region['s'] = newreg['s']
+        self.Map.region['e'] = newreg['e']
+        self.Map.region['w'] = newreg['w']
+
+        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
+                 self.Map.region['e'], self.Map.region['w'])
+
+        # LL locations
+        if self.Map.projinfo['proj'] == 'll':
+            if newreg['n'] > 90.0:
+                newreg['n'] = 90.0
+            if newreg['s'] < -90.0:
+                newreg['s'] = -90.0
+        
+        ce = newreg['w'] + (newreg['e'] - newreg['w']) / 2
+        cn = newreg['s'] + (newreg['n'] - newreg['s']) / 2
+        
+        # calculate new center point and display resolution
+        self.Map.region['center_easting'] = ce
+        self.Map.region['center_northing'] = cn
+        self.Map.region["ewres"] = (newreg['e'] - newreg['w']) / self.Map.width
+        self.Map.region["nsres"] = (newreg['n'] - newreg['s']) / self.Map.height
+        self.Map.AlignExtentFromDisplay()
+
+        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
+                 self.Map.region['e'], self.Map.region['w'])
+
+        if self.MapWindow.redrawAll is False:
+            self.MapWindow.redrawAll = True
+
+        self.MapWindow.UpdateMap()
+        self.StatusbarUpdate()
+
+    def OnZoomToSource(self, event):
+        """!Set target map window to match extents of source map window
+        """
+
+        if not self.MapWindow == self.TgtMapWindow:
+            self.MapWindow = self.TgtMapWindow
+            self.Map = self.TgtMap
+            self.UpdateActive(self.TgtMapWindow)
+
+        # get new N, S, E, W for target
+        newreg = self.GetNewExtend(self.SrcMap.region, 'source')
+        self.AdjustMap(newreg)
+
+    def OnZoomToTarget(self, event):
+        """!Set source map window to match extents of target map window
+        """
+
+        if not self.MapWindow == self.SrcMapWindow:
+            self.MapWindow = self.SrcMapWindow
+            self.Map = self.SrcMap
+            self.UpdateActive(self.SrcMapWindow)
+
+        # get new N, S, E, W for target
+        newreg = self.GetNewExtend(self.TgtMap.region, 'target')
+        self.AdjustMap(newreg)
+
     def OnZoomMenu(self, event):
         """!Popup Zoom menu
         """
@@ -1929,6 +2243,26 @@ class MapFrame(wx.Frame):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
         
+    def OnZoomMenuGCP(self, event):
+        """!Popup Zoom menu
+        """
+        point = wx.GetMousePosition()
+        zoommenu = wx.Menu()
+        # Add items to the menu
+
+        zoomsource = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust source display to target display'))
+        zoommenu.AppendItem(zoomsource)
+        self.Bind(wx.EVT_MENU, self.OnZoomToTarget, zoomsource)
+
+        zoomtarget = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust target display to source display'))
+        zoommenu.AppendItem(zoomtarget)
+        self.Bind(wx.EVT_MENU, self.OnZoomToSource, zoomtarget)
+
+        # Popup the menu. If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        self.PopupMenu(zoommenu)
+        zoommenu.Destroy()
+        
     def SetProperties(self, render=False, mode=0, showCompExtent=False,
                       constrainRes=False, projection=False):
         """!Set properies of map display window"""
@@ -1941,6 +2275,25 @@ class MapFrame(wx.Frame):
         if showCompExtent:
             self.MapWindow.regionCoords = []
         
+    def OnUpdateActive(self, event):
+
+        if self.activemap.GetSelection() == 0:
+            self.MapWindow = self.SrcMapWindow
+            self.Map = self.SrcMap
+        else:
+            self.MapWindow = self.TgtMapWindow
+            self.Map = self.TgtMap
+
+        self.UpdateActive(self.MapWindow)
+
+    def UpdateActive(self, win):
+
+        # optionally disable tool zoomback tool
+        self.toolbars['gcpdisp'].Enable('zoomback', enable = (len(self.MapWindow.zoomhistory) > 1))
+
+        self.activemap.SetSelection(win == self.TgtMapWindow)
+        self.StatusbarUpdate()
+
     def IsStandalone(self):
         """!Check if Map display is standalone"""
         if self._layerManager:
