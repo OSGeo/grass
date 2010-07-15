@@ -119,6 +119,7 @@ class GCPWizard(object):
 
         # GISRC file for source location/mapset of map(s) to georectify
         self.source_gisrc = ''
+        self.src_maps = []
 
         #
         # define wizard pages
@@ -594,7 +595,7 @@ class DispMapPage(TitledPage):
                        pos=(1, 1))
         
         self.srcselection = gselect.Select(self, id=wx.ID_ANY,
-                                        size=globalvar.DIALOG_GSELECT_SIZE, type='cell', updateOnPopup = False)
+                                    size=globalvar.DIALOG_GSELECT_SIZE, type=maptype, updateOnPopup = False)
         
         self.sizer.Add(item=self.srcselection,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
@@ -605,7 +606,7 @@ class DispMapPage(TitledPage):
                        pos=(2, 1))
 
         self.tgtselection = gselect.Select(self, id=wx.ID_ANY,
-                                        size=globalvar.DIALOG_GSELECT_SIZE, type='cell', updateOnPopup = False)
+                                        size=globalvar.DIALOG_GSELECT_SIZE, type=maptype, updateOnPopup = False)
         
         self.sizer.Add(item=self.tgtselection,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
@@ -672,9 +673,26 @@ class DispMapPage(TitledPage):
         global src_map
         global tgt_map
 
-        self.srcselection.SetElementList(maptype,
-                                      mapsets = [self.parent.newmapset, ])
-        self.srcselection.GetElementList()
+        self.srcselection.SetElementList(maptype)
+        ret = gcmd.RunCommand('i.group',
+                              parent = self,
+                              read = True,
+                              group = self.parent.grouppage.xygroup,
+                              flags = 'g')            
+
+        if ret:
+            self.parent.src_maps = ret.splitlines()
+        else:
+            wx.MessageBox(parent=self,
+                              caption=_("Select maps to display"),
+                              message=_('No maps in selected group <%s>. \n'
+                                        'Please edit group or select another group.') %
+                                        self.parent.grouppage.xygroup,
+                              style=wx.ICON_ERROR | wx.ID_OK | wx.CENTRE)
+            return
+
+        # filter out all maps not in group
+        self.srcselection.tcp.GetElementList(elements = self.parent.src_maps)
 
         self.parent.SwitchEnv('target')
         self.tgtselection.SetElementList(maptype)
@@ -719,6 +737,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         self.xylocation = self.grwiz.gisrc_dict['LOCATION_NAME']
         self.xymapset = self.grwiz.gisrc_dict['MAPSET']
         self.xygroup = self.grwiz.grouppage.xygroup
+        self.src_maps = self.grwiz.src_maps
         self.extension = self.grwiz.grouppage.extension
         self.outname = ''
         self.VectGRList = []
@@ -2329,9 +2348,9 @@ class GrSettingsDialog(wx.Dialog):
         self.srcselection = gselect.Select(panel, id=wx.ID_ANY,
                     size=globalvar.DIALOG_GSELECT_SIZE, type='cell', updateOnPopup = False)
         self.parent.grwiz.SwitchEnv('source')
-        self.srcselection.SetElementList(maptype,
-                                      mapsets = [self.parent.newmapset, ])
-        self.srcselection.GetElementList()
+        self.srcselection.SetElementList(maptype)
+        # filter out all maps not in group
+        self.srcselection.tcp.GetElementList(elements = self.parent.src_maps)
 
         # target map to display
         self.tgtselection = gselect.Select(panel, id=wx.ID_ANY,
