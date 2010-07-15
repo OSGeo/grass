@@ -6,6 +6,7 @@ FILES = wxGUI \
 	wxGUI.Vector_Digitizing_Tool \
 	wxGUI.Attribute_Table_Manager \
 	wxGUI.Nviz \
+	wxGUI.GCP_Manager \
 	wxGUI.Icons \
 	wxGUI.Modeler
 
