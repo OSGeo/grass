@@ -128,8 +128,9 @@ inmemory_fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
   boundaryType* nextedge;
   elevation_type h;
   cclabel_type u, v, ur, vr;
+  off_t nitems = boundaryStr->stream_len();
   boundaryStr->seek(0);
-  for (size_t i=0; i< boundaryStr->stream_len(); i++) {
+  for (size_t i=0; i< nitems; i++) {
 
     /*read next edge*/
     ae = boundaryStr->read_item(&nextedge);
