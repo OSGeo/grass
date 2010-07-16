@@ -520,12 +520,7 @@ class MapFrame(wx.Frame):
         """
         if self._layerManager and \
                 self._layerManager.georectifying:
-            # in georectifying session; display used to get get geographic
-            # coordinates for GCPs
-            self.OnPointer(event)
-        elif self._layerManager and \
-                self._layerManager.gcpmanagement:
-            # in georectifying session; display used to get get geographic
+            # in georectifying session; display used to get geographic
             # coordinates for GCPs
             self.OnPointer(event)
         else:

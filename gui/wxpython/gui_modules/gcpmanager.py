@@ -193,21 +193,22 @@ class GCPWizard(object):
             self.SrcMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
                               name=utils.GetLayerNameFromCmd(cmdlist),
                               l_hidden=False, l_opacity=1.0, l_render=False)
-            
-            #
-            # add layer to target map
-            #
-            if maptype == 'cell':
-                rendertype = 'raster'
-                cmdlist = ['d.rast', 'map=%s' % tgt_map]
-            else: # -> vector layer
-                rendertype = 'vector'
-                cmdlist = ['d.vect', 'map=%s' % tgt_map]
-            
-            self.SwitchEnv('target')
-            self.TgtMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
-                              name=utils.GetLayerNameFromCmd(cmdlist),
-                              l_hidden=False, l_opacity=1.0, l_render=False)
+
+            if tgt_map:
+                #
+                # add layer to target map
+                #
+                if maptype == 'cell':
+                    rendertype = 'raster'
+                    cmdlist = ['d.rast', 'map=%s' % tgt_map]
+                else: # -> vector layer
+                    rendertype = 'vector'
+                    cmdlist = ['d.vect', 'map=%s' % tgt_map]
+                
+                self.SwitchEnv('target')
+                self.TgtMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
+                                  name=utils.GetLayerNameFromCmd(cmdlist),
+                                  l_hidden=False, l_opacity=1.0, l_render=False)
             
             #
             # start GCP Manager
@@ -628,7 +629,7 @@ class DispMapPage(TitledPage):
 
         src_map = event.GetString()
 
-        if src_map == '' or tgt_map == '':
+        if src_map == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -652,7 +653,7 @@ class DispMapPage(TitledPage):
 
         tgt_map = event.GetString()
 
-        if src_map == '' or tgt_map == '':
+        if src_map == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -661,8 +662,8 @@ class DispMapPage(TitledPage):
         global src_map
         global tgt_map
 
-        if event.GetDirection() and (src_map == '' or tgt_map == ''):
-            wx.MessageBox(_('You must select maps in order to continue'))
+        if event.GetDirection() and (src_map == ''):
+            wx.MessageBox(_('You must select a source map in order to continue'))
             event.Veto()
             return
 
@@ -709,11 +710,17 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
     Manages ground control points for georectifying. Calculates RMS statics.
     Calls i.rectify or v.transform to georectify map.
     """
-    def __init__(self, parent, grwiz = None, mapdisp = None, id = wx.ID_ANY,
+    def __init__(self, parent, grwiz = None, id = wx.ID_ANY,
                  title = _("Manage Ground Control Points"),
                  size = (700, 300), toolbars=["gcpdisp"], Map=None, lmgr=None):
 
         self.grwiz = grwiz # GR Wizard
+
+        if tgt_map == '':
+            self.show_target = False
+        else:
+            self.show_target = True
+        
         #wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
         MapFrame.__init__(self, parent, id, title, size = size,
                             Map=Map, toolbars=["gcpdisp"], lmgr=lmgr, name='GCPMapWindow')
@@ -723,8 +730,6 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         #
         self.parent = parent # GMFrame
         self.parent.gcpmanagement = self
-        
-        self.mapdisp = self # XY-location Map Display
 
         self.grassdatabase = self.grwiz.grassdatabase
 
@@ -780,6 +785,8 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
         # polynomial order transformation for georectification
         self.gr_order = 1 
+        # region clipping for georectified map
+        self.clip_to_region = False
         # number of GCPs selected to be used for georectification (checked)
         self.GCPcount = 0
         # forward RMS error
@@ -795,8 +802,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                                    0.0,      # target north
                                    0.0,      # forward error
                                    0.0 ] )   # backward error
-        # region clipping for georectified map
-        self.clip_to_region = False
+
         # init vars to highlight high RMS errors
         self.highest_only = True
         self.show_unused =  True
@@ -915,8 +921,8 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                                    0.0,                # forward error
                                    0.0 ] )             # backward error
 
-        if self.mapdisp.statusbarWin['toggle'].GetSelection() == 7: # go to
-            self.mapdisp.StatusbarUpdate()
+        if self.statusbarWin['toggle'].GetSelection() == 7: # go to
+            self.StatusbarUpdate()
 
     def DeleteGCP(self, event):
         """
@@ -929,12 +935,38 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                           caption=_("Delete GCP"), style=wx.OK | wx.ICON_INFORMATION)
             return
 
-        item = self.list.DeleteGCPItem()
-        del self.mapcoordlist[item]
+        key = self.list.DeleteGCPItem()
+        del self.mapcoordlist[key]
 
-        if self.mapdisp.statusbarWin['toggle'].GetSelection() == 7: # go to
-            self.mapdisp.StatusbarUpdate()
-            self.statusbarWin['goto'].SetValue(0)
+        # update key and GCP number
+        for newkey in range(key, len(self.mapcoordlist)):
+            index = self.list.FindItemData(-1, newkey + 1)
+            self.mapcoordlist[newkey][0] = newkey
+            self.list.SetStringItem(index, 0, str(newkey))
+            self.list.SetItemData(index, newkey)
+
+        # update selected
+        if self.list.GetItemCount() > 0:
+            if self.list.selected < self.list.GetItemCount():
+                self.list.selectedkey = self.list.GetItemData(self.list.selected)
+            else:
+                self.list.selected = self.list.GetItemCount() - 1
+                self.list.selectedkey = self.list.GetItemData(self.list.selected)
+                
+            self.list.SetItemState(self.list.selected,
+                              wx.LIST_STATE_SELECTED,
+                              wx.LIST_STATE_SELECTED)
+        else:
+            self.list.selected = wx.NOT_FOUND
+            self.list.selectedkey = -1
+
+        self.UpdateColours()
+
+        if self.statusbarWin['toggle'].GetSelection() == 7: # go to
+            self.StatusbarUpdate()
+            if self.list.selectedkey > 0:
+                self.statusbarWin['goto'].SetValue(self.list.selectedkey)
+            #self.statusbarWin['goto'].SetValue(0)
 
     def ClearGCP(self, event):
         """
@@ -978,11 +1010,11 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         mapWin = None
         
         if coordtype == 'source':
-            mapWin = self.mapdisp.SrcMapWindow
+            mapWin = self.SrcMapWindow
             e_idx = 1
             n_idx = 2
         elif coordtype == 'target':
-            mapWin = self.mapdisp.TgtMapWindow
+            mapWin = self.TgtMapWindow
             e_idx = 3
             n_idx = 4
 
@@ -1058,7 +1090,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
         key = self.list.GetItemData(index)
         if confirm:
-            if self.mapdisp.MapWindow == self.mapdisp.SrcMapWindow:
+            if self.MapWindow == self.SrcMapWindow:
                 currloc = _("source")
             else:
                 currloc = _("target")
@@ -1141,8 +1173,8 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         
         self.GCPcount = 0
 
-        sourceMapWin = self.mapdisp.SrcMapWindow
-        targetMapWin = self.mapdisp.TgtMapWindow
+        sourceMapWin = self.SrcMapWindow
+        targetMapWin = self.TgtMapWindow
         #targetMapWin = self.parent.curr_page.maptree.mapdisplay.MapWindow
 
         if not sourceMapWin:
@@ -1437,10 +1469,11 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         if self.highest_only and highest_fwd_err > 0.0:
             self.list.SetItemTextColour(highest_idx, wx.RED)
 
-        sourceMapWin = self.mapdisp.SrcMapWindow
-        targetMapWin = self.mapdisp.TgtMapWindow
+        sourceMapWin = self.SrcMapWindow
         sourceMapWin.UpdateMap(render=srcrender, renderVector=srcrenderVector)
-        targetMapWin.UpdateMap(render=tgtrender, renderVector=tgtrenderVector)
+        if self.show_target:
+            targetMapWin = self.TgtMapWindow
+            targetMapWin.UpdateMap(render=tgtrender, renderVector=tgtrenderVector)
 
     def OnQuit(self, event):
         """!Quit georectifier"""
@@ -1588,10 +1621,11 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         self.bkw_rmserror = round((sumsq_bkw_err/GCPcount)**0.5,4)
         self.list.ResizeColumns()
 
-        sourceMapWin = self.mapdisp.SrcMapWindow
-        targetMapWin = self.mapdisp.TgtMapWindow
+        sourceMapWin = self.SrcMapWindow
         sourceMapWin.UpdateMap(render=False, renderVector=False)
-        targetMapWin.UpdateMap(render=False, renderVector=False)
+        if self.show_target:
+            targetMapWin = self.TgtMapWindow
+            targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def GetNewExtend(self, region, map = None):
 
@@ -1689,7 +1723,128 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                         quiet = True,
                         parent = self,
                         entry = 'wxGUI.GCP_Manager')
+
+    def OnUpdateActive(self, event):
+
+        if self.activemap.GetSelection() == 0:
+            self.MapWindow = self.SrcMapWindow
+            self.Map = self.SrcMap
+        else:
+            self.MapWindow = self.TgtMapWindow
+            self.Map = self.TgtMap
+
+        self.UpdateActive(self.MapWindow)
+
+    def UpdateActive(self, win):
+
+        # optionally disable tool zoomback tool
+        self.toolbars['gcpdisp'].Enable('zoomback', enable = (len(self.MapWindow.zoomhistory) > 1))
+
+        self.activemap.SetSelection(win == self.TgtMapWindow)
+        self.StatusbarUpdate()
+
+    def AdjustMap(self, newreg):
+        """!Adjust map window to new extents
+        """
+
+        # adjust map window
+        self.Map.region['n'] = newreg['n']
+        self.Map.region['s'] = newreg['s']
+        self.Map.region['e'] = newreg['e']
+        self.Map.region['w'] = newreg['w']
+
+        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
+                 self.Map.region['e'], self.Map.region['w'])
+
+        # LL locations
+        if self.Map.projinfo['proj'] == 'll':
+            if newreg['n'] > 90.0:
+                newreg['n'] = 90.0
+            if newreg['s'] < -90.0:
+                newreg['s'] = -90.0
         
+        ce = newreg['w'] + (newreg['e'] - newreg['w']) / 2
+        cn = newreg['s'] + (newreg['n'] - newreg['s']) / 2
+        
+        # calculate new center point and display resolution
+        self.Map.region['center_easting'] = ce
+        self.Map.region['center_northing'] = cn
+        self.Map.region["ewres"] = (newreg['e'] - newreg['w']) / self.Map.width
+        self.Map.region["nsres"] = (newreg['n'] - newreg['s']) / self.Map.height
+        self.Map.AlignExtentFromDisplay()
+
+        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
+                 self.Map.region['e'], self.Map.region['w'])
+
+        if self.MapWindow.redrawAll is False:
+            self.MapWindow.redrawAll = True
+
+        self.MapWindow.UpdateMap()
+        self.StatusbarUpdate()
+
+    def OnZoomToSource(self, event):
+        """!Set target map window to match extents of source map window
+        """
+
+        if not self.MapWindow == self.TgtMapWindow:
+            self.MapWindow = self.TgtMapWindow
+            self.Map = self.TgtMap
+            self.UpdateActive(self.TgtMapWindow)
+
+        # get new N, S, E, W for target
+        newreg = self.GetNewExtend(self.SrcMap.region, 'source')
+        self.AdjustMap(newreg)
+
+    def OnZoomToTarget(self, event):
+        """!Set source map window to match extents of target map window
+        """
+
+        if not self.MapWindow == self.SrcMapWindow:
+            self.MapWindow = self.SrcMapWindow
+            self.Map = self.SrcMap
+            self.UpdateActive(self.SrcMapWindow)
+
+        # get new N, S, E, W for target
+        newreg = self.GetNewExtend(self.TgtMap.region, 'target')
+        self.AdjustMap(newreg)
+
+    def OnZoomMenuGCP(self, event):
+        """!Popup Zoom menu
+        """
+        point = wx.GetMousePosition()
+        zoommenu = wx.Menu()
+        # Add items to the menu
+
+        zoomsource = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust source display to target display'))
+        zoommenu.AppendItem(zoomsource)
+        self.Bind(wx.EVT_MENU, self.OnZoomToTarget, zoomsource)
+
+        zoomtarget = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust target display to source display'))
+        zoommenu.AppendItem(zoomtarget)
+        self.Bind(wx.EVT_MENU, self.OnZoomToSource, zoomtarget)
+
+        # Popup the menu. If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        self.PopupMenu(zoommenu)
+        zoommenu.Destroy()
+        
+    def OnDispResize(self, event):
+        """!GCP Map Display resized, adjust Map Windows
+        """
+        if self.toolbars['gcpdisp']:
+            srcwidth, srcheight = self.SrcMapWindow.GetSize()
+            tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
+            tgtwidth = (srcwidth + tgtwidth) / 2
+            self._mgr.GetPane("target").Hide()
+            self._mgr.Update()
+            self.TgtMapWindow.SetSize((tgtwidth, tgtheight))
+            self._mgr.GetPane("source").BestSize((tgtwidth, srcheight))
+            self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
+            if self.show_target:
+                self._mgr.GetPane("target").Show()
+            self._mgr.Update()
+        pass
+
 class GCPList(wx.ListCtrl,
               CheckListCtrlMixin,
               ListCtrlAutoWidthMixin):
@@ -1781,10 +1936,11 @@ class GCPList(wx.ListCtrl,
 
         if self.render:
             # redraw points
-            sourceMapWin = self.gcp.mapdisp.SrcMapWindow
-            targetMapWin = self.gcp.mapdisp.TgtMapWindow
+            sourceMapWin = self.gcp.SrcMapWindow
             sourceMapWin.UpdateMap(render=False, renderVector=False)
-            targetMapWin.UpdateMap(render=False, renderVector=False)
+            if self.gcp.show_target:
+                targetMapWin = self.gcp.TgtMapWindow
+                targetMapWin.UpdateMap(render=False, renderVector=False)
 
         pass
     
@@ -1820,17 +1976,10 @@ class GCPList(wx.ListCtrl,
         if self.selected == wx.NOT_FOUND:
             return
 
+        key = self.GetItemData(self.selected)
         self.DeleteItem(self.selected)
 
-        if self.GetItemCount() > 0:
-            self.selected = self.GetItemCount() - 1
-            self.SetItemState(self.selected,
-                              wx.LIST_STATE_SELECTED,
-                              wx.LIST_STATE_SELECTED)
-        else:
-            self.selected = wx.NOT_FOUND
-
-        return self.selected
+        return key
         
     def ResizeColumns(self):
         """!Resize columns"""
@@ -1855,10 +2004,11 @@ class GCPList(wx.ListCtrl,
         if self.render and self.selected != event.GetIndex():
             self.selected = event.GetIndex()
             self.selectedkey = self.GetItemData(self.selected)
-            sourceMapWin = self.gcp.mapdisp.SrcMapWindow
-            targetMapWin = self.gcp.mapdisp.TgtMapWindow
+            sourceMapWin = self.gcp.SrcMapWindow
             sourceMapWin.UpdateMap(render=False, renderVector=False)
-            targetMapWin.UpdateMap(render=False, renderVector=False)
+            if self.gcp.show_target:
+                targetMapWin = self.gcp.TgtMapWindow
+                targetMapWin.UpdateMap(render=False, renderVector=False)
 
         event.Skip()
 
@@ -2150,8 +2300,8 @@ class GrSettingsDialog(wx.Dialog):
         # initialize variables
         #
         self.parent = parent
-        self.new_src_map = None
-        self.new_tgt_map = None
+        self.new_src_map = src_map
+        self.new_tgt_map = tgt_map
         self.sdfactor = 0
 
         self.symbol = {}
@@ -2462,7 +2612,7 @@ class GrSettingsDialog(wx.Dialog):
 
         tmp_map = event.GetString()
 
-        if not tmp_map == '' and not tmp_map == tgt_map:
+        if not tmp_map == tgt_map:
             self.new_tgt_map = tmp_map
 
     def OnClipRegion(self, event):
@@ -2506,7 +2656,7 @@ class GrSettingsDialog(wx.Dialog):
         srcrenderVector = False
         tgtrender = False
         tgtrenderVector = False
-        if self.new_src_map:
+        if self.new_src_map != src_map:
             # remove old layer
             layers = self.parent.grwiz.SrcMap.GetListOfLayers()
             self.parent.grwiz.SrcMap.DeleteLayer(layers[0])
@@ -2521,17 +2671,31 @@ class GrSettingsDialog(wx.Dialog):
             self.parent.grwiz.SwitchEnv('target')
             srcrender = True
 
-        if self.new_tgt_map:
+        if self.new_tgt_map != tgt_map:
             # remove old layer
             layers = self.parent.grwiz.TgtMap.GetListOfLayers()
-            self.parent.grwiz.TgtMap.DeleteLayer(layers[0])
+            if layers:
+                self.parent.grwiz.TgtMap.DeleteLayer(layers[0])
             tgt_map = self.new_tgt_map
-            cmdlist = ['d.rast', 'map=%s' % tgt_map]
-            self.parent.grwiz.TgtMap.AddLayer(type='raster', command=cmdlist, l_active=True,
-                              name=utils.GetLayerNameFromCmd(cmdlist),
-                              l_hidden=False, l_opacity=1.0, l_render=False)
 
-            tgtrender = True
+            if tgt_map != '':
+                cmdlist = ['d.rast', 'map=%s' % tgt_map]
+                self.parent.grwiz.TgtMap.AddLayer(type='raster', command=cmdlist, l_active=True,
+                                  name=utils.GetLayerNameFromCmd(cmdlist),
+                                  l_hidden=False, l_opacity=1.0, l_render=False)
+
+                tgtrender = True
+                if self.parent.show_target == False:
+                    self.parent.show_target = True
+                    self.parent._mgr.GetPane("target").Show()
+                    self.parent._mgr.Update()
+                    self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = True)
+            else: # tgt_map == ''
+                if self.parent.show_target == True:
+                    self.parent.show_target = False
+                    self.parent._mgr.GetPane("target").Hide()
+                    self.parent._mgr.Update()
+                    self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = False)
 
         self.parent.UpdateColours(srcrender, srcrenderVector, tgtrender, tgtrenderVector)
 
