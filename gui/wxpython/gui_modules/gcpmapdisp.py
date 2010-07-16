@@ -146,7 +146,7 @@ class MapFrame(wx.Frame):
                           'gcpdisp' : None, 
                           'gcpman' : None, 
                           'nviz' : None }
-        self.activemap = None
+
         for toolb in toolbars:
             self.AddToolbar(toolb)
 
@@ -238,8 +238,8 @@ class MapFrame(wx.Frame):
             self.statusbarWin['goto'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
                                                    value="", style=wx.TE_PROCESS_ENTER,
                                                     size=(100, -1))
-        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.statusbarWin['goto'])
         self.statusbarWin['goto'].Hide()
+        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.statusbarWin['goto'])
 
         # projection
         self.statusbarWin['projection'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
@@ -306,7 +306,6 @@ class MapFrame(wx.Frame):
         # Update fancy gui style
         #
         if self.toolbars['gcpdisp']:
-        #if (0):
             # AuiManager wants a CentrePane , workaround to get two equally sized windows
             self.list = self.CreateGCPList()
 
@@ -335,7 +334,8 @@ class MapFrame(wx.Frame):
             self.TgtMapWindow.SetSize((tgtwidth, tgtheight))
             self._mgr.GetPane("source").BestSize((tgtwidth, tgtheight))
             self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
-            self._mgr.GetPane("target").Show()
+            if self.show_target:
+                self._mgr.GetPane("target").Show()
         else:
             self._mgr.AddPane(self.MapWindow, wx.aui.AuiPaneInfo().CentrePane().
                           Dockable(False).BestSize((-1,-1)).
@@ -389,7 +389,8 @@ class MapFrame(wx.Frame):
         Currently known toolbars are:
          - 'map'     - basic map toolbar
          - 'vdigit'  - vector digitizer
-         - 'gcpdisp'  - GCP Manager
+         - 'gcpdisp' - GCP Manager, Display
+         - 'gcpman'  - GCP Manager, points management
          - 'georect' - georectifier
          - 'nviz'    - 3D view mode
         """
@@ -455,6 +456,9 @@ class MapFrame(wx.Frame):
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
+
+            if self.show_target == False:
+                self.toolbars['gcpdisp'].Enable('zoommenu', enable = False)
 
             self.toolbars['gcpman'] = toolbars.GCPManToolbar(self)
 
@@ -637,7 +641,12 @@ class MapFrame(wx.Frame):
         """
         if self._layerManager and \
                 self._layerManager.georectifying:
-            # in georectifying session; display used to get get geographic
+            # in georectifying session; display used to get geographic
+            # coordinates for GCPs
+            self.OnPointer(event)
+        elif self._layerManager and \
+                self._layerManager.gcpmanagement:
+            # in georectifying session; display used to get geographic
             # coordinates for GCPs
             self.OnPointer(event)
         else:
@@ -677,25 +686,6 @@ class MapFrame(wx.Frame):
         
         # update statusbar
         self.StatusbarUpdate()
-
-    def OnDispResize(self, event):
-        """!GCP Map Display resized, adjust Map Windows
-        """
-        if self.toolbars['gcpdisp']:
-            # FIXME: does not work when reducing Map Display width
-            # tried a lot of MinSize, BestSize, also for both source and target map window
-            srcwidth, srcheight = self.SrcMapWindow.GetSize()
-            tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
-            tgtwidth = (srcwidth + tgtwidth) / 2
-            self._mgr.GetPane("target").Hide()
-            self._mgr.Update()
-            self.TgtMapWindow.SetSize((tgtwidth, tgtheight))
-            self._mgr.GetPane("source").BestSize((tgtwidth, srcheight))
-            self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
-            self._mgr.GetPane("target").Show()
-            self._mgr.Update()
-
-        pass
 
     def OnPointer(self, event):
         """!Pointer button clicked
@@ -969,14 +959,15 @@ class MapFrame(wx.Frame):
             # redraw map
             self.SrcMapWindow.UpdateMap()
 
-            # Target MapWindow:
-            begin = (self.mapcoordlist[GCPNo][3], self.mapcoordlist[GCPNo][4])
-            begin = self.TgtMapWindow.Cell2Pixel(begin)
-            end = begin
-            self.TgtMapWindow.Zoom(begin, end, 0)
+            if self.show_target:
+                # Target MapWindow:
+                begin = (self.mapcoordlist[GCPNo][3], self.mapcoordlist[GCPNo][4])
+                begin = self.TgtMapWindow.Cell2Pixel(begin)
+                end = begin
+                self.TgtMapWindow.Zoom(begin, end, 0)
 
-            # redraw map
-            self.TgtMapWindow.UpdateMap()
+                # redraw map
+                self.TgtMapWindow.UpdateMap()
 
         else:
             try:
@@ -1352,12 +1343,12 @@ class MapFrame(wx.Frame):
             ltype = [{ 'ext' : 'ppm', 'type' : -1 },
                      { 'ext' : 'tif', 'type' : wx.BITMAP_TYPE_TIF }]
         else:
-            img = self.MapWindow.img 
-            if not img: 
-                gcmd.GMessage(parent = self, 
-                              message = _("Nothing to render (empty map). Operation canceled."), 
-                              msgType = 'info') 
-                return 
+            img = self.MapWindow.img
+            if not img:
+                gcmd.GMessage(parent = self,
+                              message = _("Nothing to render (empty map). Operation canceled."),
+                              msgType = 'info')
+                return
             filetype, ltype = gdialogs.GetImageHandlers(img)
 
         # get size
@@ -1553,7 +1544,7 @@ class MapFrame(wx.Frame):
                         continue
                     vect.append(vector)
                 vectstr = ','.join(vect)
-                
+            
             if len(vectstr) <= 1:
                 self._layerManager.goutput.WriteCmdLog("Nothing to query.")
                 return
@@ -2146,71 +2137,6 @@ class MapFrame(wx.Frame):
         """
         self.MapWindow.SaveDisplayRegion()
         
-    def AdjustMap(self, newreg):
-        """!Adjust map window to new extents
-        """
-
-        # adjust map window
-        self.Map.region['n'] = newreg['n']
-        self.Map.region['s'] = newreg['s']
-        self.Map.region['e'] = newreg['e']
-        self.Map.region['w'] = newreg['w']
-
-        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
-                 self.Map.region['e'], self.Map.region['w'])
-
-        # LL locations
-        if self.Map.projinfo['proj'] == 'll':
-            if newreg['n'] > 90.0:
-                newreg['n'] = 90.0
-            if newreg['s'] < -90.0:
-                newreg['s'] = -90.0
-        
-        ce = newreg['w'] + (newreg['e'] - newreg['w']) / 2
-        cn = newreg['s'] + (newreg['n'] - newreg['s']) / 2
-        
-        # calculate new center point and display resolution
-        self.Map.region['center_easting'] = ce
-        self.Map.region['center_northing'] = cn
-        self.Map.region["ewres"] = (newreg['e'] - newreg['w']) / self.Map.width
-        self.Map.region["nsres"] = (newreg['n'] - newreg['s']) / self.Map.height
-        self.Map.AlignExtentFromDisplay()
-
-        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
-                 self.Map.region['e'], self.Map.region['w'])
-
-        if self.MapWindow.redrawAll is False:
-            self.MapWindow.redrawAll = True
-
-        self.MapWindow.UpdateMap()
-        self.StatusbarUpdate()
-
-    def OnZoomToSource(self, event):
-        """!Set target map window to match extents of source map window
-        """
-
-        if not self.MapWindow == self.TgtMapWindow:
-            self.MapWindow = self.TgtMapWindow
-            self.Map = self.TgtMap
-            self.UpdateActive(self.TgtMapWindow)
-
-        # get new N, S, E, W for target
-        newreg = self.GetNewExtend(self.SrcMap.region, 'source')
-        self.AdjustMap(newreg)
-
-    def OnZoomToTarget(self, event):
-        """!Set source map window to match extents of target map window
-        """
-
-        if not self.MapWindow == self.SrcMapWindow:
-            self.MapWindow = self.SrcMapWindow
-            self.Map = self.SrcMap
-            self.UpdateActive(self.SrcMapWindow)
-
-        # get new N, S, E, W for target
-        newreg = self.GetNewExtend(self.TgtMap.region, 'target')
-        self.AdjustMap(newreg)
-
     def OnZoomMenu(self, event):
         """!Popup Zoom menu
         """
@@ -2243,26 +2169,6 @@ class MapFrame(wx.Frame):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
         
-    def OnZoomMenuGCP(self, event):
-        """!Popup Zoom menu
-        """
-        point = wx.GetMousePosition()
-        zoommenu = wx.Menu()
-        # Add items to the menu
-
-        zoomsource = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust source display to target display'))
-        zoommenu.AppendItem(zoomsource)
-        self.Bind(wx.EVT_MENU, self.OnZoomToTarget, zoomsource)
-
-        zoomtarget = wx.MenuItem(zoommenu, wx.ID_ANY, _('Adjust target display to source display'))
-        zoommenu.AppendItem(zoomtarget)
-        self.Bind(wx.EVT_MENU, self.OnZoomToSource, zoomtarget)
-
-        # Popup the menu. If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(zoommenu)
-        zoommenu.Destroy()
-        
     def SetProperties(self, render=False, mode=0, showCompExtent=False,
                       constrainRes=False, projection=False):
         """!Set properies of map display window"""
@@ -2275,25 +2181,6 @@ class MapFrame(wx.Frame):
         if showCompExtent:
             self.MapWindow.regionCoords = []
         
-    def OnUpdateActive(self, event):
-
-        if self.activemap.GetSelection() == 0:
-            self.MapWindow = self.SrcMapWindow
-            self.Map = self.SrcMap
-        else:
-            self.MapWindow = self.TgtMapWindow
-            self.Map = self.TgtMap
-
-        self.UpdateActive(self.MapWindow)
-
-    def UpdateActive(self, win):
-
-        # optionally disable tool zoomback tool
-        self.toolbars['gcpdisp'].Enable('zoomback', enable = (len(self.MapWindow.zoomhistory) > 1))
-
-        self.activemap.SetSelection(win == self.TgtMapWindow)
-        self.StatusbarUpdate()
-
     def IsStandalone(self):
         """!Check if Map display is standalone"""
         if self._layerManager:
