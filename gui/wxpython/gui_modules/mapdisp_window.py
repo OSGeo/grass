@@ -687,7 +687,7 @@ class BufferedWindow(MapWindow, wx.Window):
         @return wx.Image instance (map composition)
         """
         imgId = 99
-        if self.Map.mapfile and os.path.isfile(self.Map.mapfile) and \
+        if self.mapfile and self.Map.mapfile and os.path.isfile(self.Map.mapfile) and \
                 os.path.getsize(self.Map.mapfile):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:
