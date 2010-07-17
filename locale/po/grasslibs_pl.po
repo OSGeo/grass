@@ -2,23 +2,23 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005, 2009, GRASS Development Team
 # Artur Nieścior <nieart@interia.pl>, 2005, 2006.
-# Milena Nowotarska <do.milenki*gmail.com>, 2008, 2009.
-#
+# Milena Nowotarska <do.milenki*gmail.com>, 2008, 2009, 2010.
+# Milena Nowotarska <do.milenki * gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-02 22:57+0200\n"
-"PO-Revision-Date: 2009-10-28 23:19+0100\n"
-"Last-Translator: Milena Nowotarska <do.milenki*gmail.com>\n"
-"Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2010-07-17 19:05+0100\n"
+"Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
+"Language-Team: GRASS Translation Team\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.4.0\n"
+"X-Generator: Virtaal 0.6.1\n"
 
 #: ../lib/pngdriver/Graph_set.c:72
 #, c-format
@@ -228,6 +228,7 @@ msgstr "wsparcie koloru dla [%s] w mapsecie [%s] %s"
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr ""
+"Czytanie mapy rastrowej <%s@%s> żądanie dla wiersza %d jest poza regionem"
 
 #: ../lib/raster/get_row.c:96 ../lib/raster/get_row.c:101
 #: ../lib/raster/get_row.c:134 ../lib/raster/get_row.c:140
@@ -360,7 +361,7 @@ msgstr ""
 #: ../lib/raster/gdal.c:76
 #, c-format
 msgid "Unable to locate symbol <%s>"
-msgstr ""
+msgstr "Nie można zlokalizować symbolu <%s>"
 
 #: ../lib/raster/gdal.c:119
 msgid "Unable to load GDAL library"
@@ -452,7 +453,7 @@ msgstr "Nie można usunąć pliku '%s'"
 
 #: ../lib/raster/closecell.c:477
 msgid "unable to write f_format file for CELL maps"
-msgstr ""
+msgstr "nie można zapisać pliku f_format na mapy CELL"
 
 #: ../lib/raster/opencell.c:170 ../lib/raster/opencell.c:742
 #: ../lib/raster/opencell.c:779 ../lib/raster/opencell.c:831
@@ -499,9 +500,9 @@ msgid "Error reading map type for raster map <%s>"
 msgstr "Nie można utworzyć mapy rastrowej <%s>"
 
 #: ../lib/raster/opencell.c:209
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
-msgstr "[%s] w mapsecie [%s]-pole formatu w nagłówku pliku jest niepoprawne"
+msgstr "Mapa rastrowa <%s@%s>: format pola w nagłówku pliku jest nieprawidłowy"
 
 #: ../lib/raster/opencell.c:214
 #, fuzzy, c-format
@@ -551,11 +552,9 @@ msgid "Unable to create GDAL link"
 msgstr "Nie można otworzyć pliku GDAL"
 
 #: ../lib/raster/opencell.c:575
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
-msgstr ""
-"Mapa, które nie jest w bieżącym mapsecie nie może być otwarta do "
-"uaktualniania."
+msgstr "Mapa Raster <%s> nie znajduje się w bieżącym mapsecie (%s)"
 
 #: ../lib/raster/opencell.c:582
 #, c-format
@@ -720,7 +719,6 @@ msgid "which is missing."
 msgstr "brakujący."
 
 #: ../lib/raster/get_cellhd.c:71
-#, fuzzy
 msgid "whose header file can't be opened."
 msgstr "którego nagłówek nie może być otwarty."
 
@@ -1025,7 +1023,7 @@ msgstr ""
 
 #: ../lib/proj/get_proj.c:228
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
-msgstr ""
+msgstr "Nie można zainicjować PROJ.4 z poniższą listą parametrów:"
 
 #: ../lib/proj/get_proj.c:236
 #, c-format
@@ -1039,7 +1037,7 @@ msgstr ""
 #: ../lib/proj/get_proj.c:325
 #, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr ""
+msgstr "Nie można zainicjować pj ponieważ: %s"
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
@@ -1058,19 +1056,19 @@ msgid "Output Unit Factor"
 msgstr "Wyjściowy współczynnik jednostek"
 
 #: ../lib/proj/datum.c:270 ../lib/proj/datum.c:350
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr "nie można otworzyć pliku tabeli danych: %s"
+msgstr ""
 
 #: ../lib/proj/datum.c:283 ../lib/proj/datum.c:364
 #, fuzzy, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr "błąd w pliku tabeli danych, linia %d"
+msgstr "Błąd w pliku <%s> tabeli datum, linia %d"
 
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
 msgid "pj_transform() failed: %s"
-msgstr ""
+msgstr "pj_transform () nie powiodło się: %s"
 
 #: ../lib/proj/ellipse.c:76
 #, c-format
@@ -1106,7 +1104,7 @@ msgstr "Linie%s w tabelarycznym pliku elipsoidy <%s> są niepoprawne"
 
 #: ../lib/proj/convert.c:111
 msgid "Unable parse GRASS PROJ_INFO file"
-msgstr ""
+msgstr "Nie można przetworzyć pliku GRASS PROJ_INFO"
 
 #: ../lib/proj/convert.c:116
 #, fuzzy
@@ -1132,7 +1130,7 @@ msgstr ""
 #: ../lib/proj/convert.c:433
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr ""
+msgstr "Datum <% s> nie rozpoznane przez GRASS i nie znaleziono parametrów"
 
 #: ../lib/proj/convert.c:449
 #, c-format
@@ -1176,7 +1174,7 @@ msgstr ""
 #: ../lib/gis/view.c:545
 #, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
-msgstr ""
+msgstr " Okno zapisane w \"% s\" jest całkowicie poza bieżącym oknem GRASS."
 
 #: ../lib/gis/view.c:549
 #, c-format
@@ -1185,14 +1183,14 @@ msgid ""
 msgstr ""
 
 #: ../lib/gis/mapset_msc.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to make mapset element %s (%s): %s"
-msgstr "nie można utworzyć elementu mapsetu %s (%s)"
+msgstr "Nie można utworzyć elementu mapsetu %s (%s): %s"
 
 #: ../lib/gis/mapset_msc.c:64
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr "nie można utworzyć elementu mapsetu %s (%s)"
+msgstr "Nie można uzyskać dostępu do elementu mapsetu %s (%s): %s"
 
 #: ../lib/gis/adj_cellhd.c:44 ../lib/gis/adj_cellhd.c:192
 msgid "Illegal n-s resolution value"
@@ -1293,7 +1291,7 @@ msgstr "Wartość dla północy musi być większa niż dla południa"
 #: ../lib/gis/parser_interface.c:326 ../lib/gis/parser_html.c:149
 #: ../lib/gis/parser_help.c:189
 msgid "Allow output files to overwrite existing files"
-msgstr ""
+msgstr "Pozwól na nadpisanie istniejących plików przez pliki wyjściowe"
 
 #: ../lib/gis/parser_interface.c:334 ../lib/gis/parser_html.c:153
 #: ../lib/gis/parser_help.c:191
@@ -1306,17 +1304,18 @@ msgid "Quiet module output"
 msgstr ""
 
 #: ../lib/gis/parser.c:388
-#, c-format
+#, fuzzy, c-format
 msgid "BUG in descriptions, option '%s' in <%s> does not exist"
-msgstr ""
+msgstr "BUG (błąd) w opisach, opcja '% s' w <% s> nie istnieje"
 
 #: ../lib/gis/parser.c:490
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
+"Użyj albo flagi --quiet albo --verbose, ale nie obu. Przyjęto --verbose."
 
 #: ../lib/gis/parser.c:504
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
-msgstr ""
+msgstr "Użyj albo flagi --quiet albo --verbose, ale nie obu. Przyjęto --quiet."
 
 #: ../lib/gis/parser.c:534
 #, c-format
@@ -1349,7 +1348,7 @@ msgid ""
 "ERROR: illegal range syntax for parameter <%s>\n"
 msgstr ""
 "\n"
-"Błąd: niedopuszczalna składnia zakresu sla parametru <%s>\n"
+"Błąd: niedopuszczalna składnia zakresu dla parametru <%s>\n"
 
 #: ../lib/gis/parser.c:988
 #, c-format
@@ -1357,18 +1356,18 @@ msgid "       Presented as: %s\n"
 msgstr "       Przedstawiony jako: %s\n"
 
 #: ../lib/gis/parser.c:992
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "ERROR: value <%s> out of range for parameter <%s>\n"
 msgstr ""
 "\n"
-"Błąd: wartość <%s> zajduje się poza zakresem dla parametru <%s>\n"
+"Błąd: wartość <%s> zajduje się poza zakresem parametru <%s>\n"
 
 #: ../lib/gis/parser.c:994
 #, c-format
 msgid "       Legal range: %s\n"
-msgstr ""
+msgstr "       Dopuszczalny zakres: %s\n"
 
 #: ../lib/gis/parser.c:997
 #, fuzzy, c-format
@@ -1448,12 +1447,12 @@ msgstr "Niepoprawny plik histogramu dla  [%s w %s]"
 #: ../lib/gis/spawn.c:385
 #, c-format
 msgid "CreateProcess() failed: error = %d"
-msgstr ""
+msgstr "CreateProcess() nie powiodło się: błąd = %d"
 
 #: ../lib/gis/spawn.c:416
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr "G_spawn: nie można zignorować sygnału %d"
+msgstr "G_spawn: nie można przekierować deskryptora: %d"
 
 #: ../lib/gis/spawn.c:424 ../lib/gis/spawn.c:609
 #, c-format
@@ -1467,12 +1466,12 @@ msgstr "Nie można wykonać polecenia"
 #: ../lib/gis/spawn.c:518 ../lib/gis/spawn.c:526
 #, c-format
 msgid "G_spawn: unable to restore signal %d"
-msgstr ""
+msgstr "G_spawn: nie można przywrócić sygnału %d"
 
 #: ../lib/gis/spawn.c:557
 #, c-format
 msgid "G_spawn: unable to reset signal %d"
-msgstr ""
+msgstr "G_spawn: nie można przywrócić sygnału %d"
 
 #: ../lib/gis/spawn.c:566
 #, c-format
@@ -1487,12 +1486,12 @@ msgstr "G_spawn: nie można zablokować sygnału %d"
 #: ../lib/gis/spawn.c:585
 #, c-format
 msgid "G_spawn: unable to unblock signal %d"
-msgstr ""
+msgstr "G_spawn: nie można odblokować sygnału %d"
 
 #: ../lib/gis/spawn.c:614 ../lib/gis/spawn.c:623
 #, c-format
 msgid "G_spawn: unable to duplicate descriptor %d to %d"
-msgstr ""
+msgstr "G_spawn: nie można zduplikować deskryptora %d na %d"
 
 #: ../lib/gis/spawn.c:656
 msgid "Unable to create a new process"
@@ -1501,7 +1500,7 @@ msgstr "Nie można utworzyć nowego procesu"
 #: ../lib/gis/spawn.c:671
 #, c-format
 msgid "Unable to change directory to %s"
-msgstr "Nie można zmieńić katalogu %s"
+msgstr "Nie można zmienić katalogu %s"
 
 #: ../lib/gis/proj2.c:57
 msgid "State Plane"
@@ -1513,12 +1512,12 @@ msgstr "szerokość-długość geograficzna"
 
 #: ../lib/gis/proj2.c:61
 msgid "Other Projection"
-msgstr "Inne rzutowanie"
+msgstr "Inna projekcja"
 
 #: ../lib/gis/datum.c:160
 #, c-format
 msgid "unable to open datum table file: %s"
-msgstr "nie można otworzyć pliku tabeli danych: %s"
+msgstr "nie można otworzyć pliku tabeli datum: %s"
 
 #: ../lib/gis/datum.c:182
 #, c-format
@@ -1555,8 +1554,9 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:107
+#, fuzzy
 msgid "Example: income < 1000 and inhab >= 10000"
-msgstr ""
+msgstr "Przykład: dochód < 1000 i inhab >= 10000"
 
 #: ../lib/gis/parser_standard_options.c:115
 msgid "Table name"
@@ -1623,9 +1623,8 @@ msgid "Name of base raster map"
 msgstr "Nazwa bazowej mapy rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:240
-#, fuzzy
 msgid "Name of cover raster map"
-msgstr "Nazwa "
+msgstr "Nazwa mapy rastrowej pokrycia"
 
 #: ../lib/gis/parser_standard_options.c:248
 #, fuzzy
@@ -1738,7 +1737,7 @@ msgstr "Kolor"
 
 #: ../lib/gis/parser_standard_options.c:456
 msgid "Either a standard color name or R:G:B triplet"
-msgstr ""
+msgstr "Albo standardowa nazwa koloru albo R:G:B"
 
 #: ../lib/gis/parser_standard_options.c:465
 msgid "Background color"
@@ -1746,7 +1745,7 @@ msgstr "Kolor tła"
 
 #: ../lib/gis/parser_standard_options.c:467
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
-msgstr ""
+msgstr "Albo standardowy kolor GRASS, R:G:B, lub \"none\""
 
 #: ../lib/gis/parser_standard_options.c:478
 msgid "Units"
@@ -1769,7 +1768,7 @@ msgstr "%s plików dostępnych w mapsecie <%s>:\n"
 
 #: ../lib/gis/list.c:206
 msgid "G_list: Unknown element type"
-msgstr ""
+msgstr "G_list: Nieznany typ elementu"
 
 #: ../lib/gis/parser_html.c:40
 msgid "NAME"
@@ -1781,7 +1780,7 @@ msgstr "Słowa kluczowe"
 
 #: ../lib/gis/parser_html.c:58
 msgid "SYNOPSIS"
-msgstr ""
+msgstr "SKŁADNIA"
 
 #: ../lib/gis/parser_html.c:126 ../lib/init/grass.py:146
 msgid "Flags"
@@ -1824,9 +1823,9 @@ msgid "GISRC - variable not set"
 msgstr "GISRC - brak ustawień zmiennych"
 
 #: ../lib/gis/env.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "G_getenv(): Variable %s not set"
-msgstr "GISRC - brak ustawień zmiennych"
+msgstr "G_getenv (): Zmienna %s nie zdefiniowana"
 
 #: ../lib/gis/env.c:318
 #, c-format
@@ -2128,7 +2127,6 @@ msgid "duplicate projection field"
 msgstr "pole odwzorowania powtarza się"
 
 #: ../lib/gis/rd_cellhd.c:135
-#, fuzzy
 msgid "duplicate zone field"
 msgstr "powtórz pole strefy"
 
@@ -2141,22 +2139,18 @@ msgid "zone field missing"
 msgstr "brakuje pola strefy"
 
 #: ../lib/gis/rd_cellhd.c:169
-#, fuzzy
 msgid "duplicate north field"
 msgstr "powtórz pole Północy"
 
 #: ../lib/gis/rd_cellhd.c:177
-#, fuzzy
 msgid "duplicate south field"
 msgstr "powtórz pole Południa"
 
 #: ../lib/gis/rd_cellhd.c:185
-#, fuzzy
 msgid "duplicate east field"
 msgstr "powtórz pole Wschodu"
 
 #: ../lib/gis/rd_cellhd.c:193
-#, fuzzy
 msgid "duplicate west field"
 msgstr "powtórz pole Zachodu"
 
@@ -2217,22 +2211,18 @@ msgid "duplicate compressed field"
 msgstr ""
 
 #: ../lib/gis/rd_cellhd.c:336
-#, fuzzy
 msgid "north field missing"
 msgstr "brakuje pola Północy"
 
 #: ../lib/gis/rd_cellhd.c:338
-#, fuzzy
 msgid "south field missing"
 msgstr "brakuje pola Południa"
 
 #: ../lib/gis/rd_cellhd.c:340
-#, fuzzy
 msgid "west field missing"
 msgstr "brakuje pola Zachodu"
 
 #: ../lib/gis/rd_cellhd.c:342
-#, fuzzy
 msgid "east field missing"
 msgstr "brakuje pola Wschodu"
 
@@ -2853,9 +2843,9 @@ msgid "Number of faces: %d"
 msgstr "Liczba granic:   %d\n"
 
 #: ../lib/vector/Vlib/build.c:170
-#, fuzzy, c-format
+#, c-format
 msgid "Number of kernels: %d"
-msgstr "Liczba węzłów     :    %d\n"
+msgstr "Liczba węzłów     :    %d"
 
 #: ../lib/vector/Vlib/build.c:211
 #, c-format
@@ -5059,7 +5049,7 @@ msgstr "Uszkodzony plik logowania"
 
 #: ../lib/db/dbmi_base/default_name.c:127
 msgid "Programmer error"
-msgstr ""
+msgstr "Prawdopodobnie błąd programisty"
 
 #: ../lib/db/dbmi_client/table.c:46
 #, c-format
@@ -5099,12 +5089,10 @@ msgstr "Nieznany typ kolumny  (kolumna <%s>)"
 
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:220
 #: ../lib/db/dbmi_client/select.c:286
-#, fuzzy
 msgid "Missing column name"
 msgstr "Brak nazwy kolumny"
 
 #: ../lib/db/dbmi_client/select.c:215 ../lib/db/dbmi_client/select.c:281
-#, fuzzy
 msgid "Missing key column name"
 msgstr "Brak nazwy kolumny klucza"
 
@@ -5124,9 +5112,9 @@ msgid "Unable to open driver <%s>"
 msgstr "Nie można uruchomić sterownika <%s>"
 
 #: ../lib/db/dbmi_client/delete_tab.c:62
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "Nie można odłączyć tabeli: '%s'"
+msgstr "Nie można usunąć tabeli: '%s'"
 
 #: ../lib/sites/sites.c:97
 #, c-format
@@ -5657,3 +5645,728 @@ msgstr "podgrupa <%s> grupy <%s> odnosi się do następujących map rastrowych\n
 
 #~ msgid "Unknown Location"
 #~ msgstr "Nieznane położenie"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Nie można zaalokować pamięci\n"
+
+#~ msgid "Warning - no response from graphics monitor <%s>.\n"
+#~ msgstr "Ostrzeżenie - brak odpowiedzi od monitora grafiki <%s>.\n"
+
+#~ msgid "Check to see if the mouse is still active.\n"
+#~ msgstr "Sprawdź, czy mysz jest nadal aktywna.\n"
+
+#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
+#~ msgstr "Ostrzeżenie - brak odpowiedzi od monitora graficznego <%s>.\n"
+
+#~ msgid "No graphics monitor has been selected for output."
+#~ msgstr "Nie wskazano monitora do wyświetlenia rezultatu."
+
+#~ msgid "Please run \"d.mon\" to select a graphics monitor."
+#~ msgstr "Aby wybrać monitor uruchom polecenie \"d.mon\"."
+
+#~ msgid "Failed to get socket name for monitor <%s>."
+#~ msgstr "Nie można uzyskać nazwy gniazda dla monitora <%s>."
+
+#~ msgid "No socket to connect to for monitor <%s>."
+#~ msgstr "Brak gniazda do podłączenia dla monitora <%s>."
+
+#~ msgid "Socket is already in use or not accepting connections."
+#~ msgstr "Gniazdo jest już w użyciu lub nie akceptuje połączeń."
+
+#~ msgid "Use d.mon to select a monitor"
+#~ msgstr "Aby wybrać monitor uruchom \"d.mon\""
+
+#~ msgid "Trying to connect to something not a socket."
+#~ msgstr "Próbujesz połączyć się do czegoś co nie jest gniazdem."
+
+#~ msgid "Probably program error."
+#~ msgstr "Prawdopodobnie błąd programu"
+
+#~ msgid "Connect attempt timed out."
+#~ msgstr "Przekroczono limit czasu próby połączenia."
+
+#~ msgid "Probably an error with the server."
+#~ msgstr "Prawdopodobnie błąd związany z serwerem."
+
+#~ msgid "Connection failed."
+#~ msgstr "Połączenie nie powiodło się."
+
+#~ msgid "Unable to open file %s"
+#~ msgstr "Nie można otworzyć pliku %s"
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Nie można otworzyć pliku tymczasowego"
+
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "Wciśnij ENTER aby anulować\n"
+
+#~ msgid "Problem reading raster map"
+#~ msgstr "Problem podczas czytania mapy rastrowej"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "Mapa rastrowa %s@%s jest pusta"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Color table needed for file [%s] in mapset [%s].\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Dla pliku [%s] w mapsecie [%s] niezbędna jest tabela kolorów.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please identify the type desired:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Określ opisany typ:\n"
+
+#~ msgid "    1:  Random colors\n"
+#~ msgstr "    1:  Przypadkowe kolory\n"
+
+#~ msgid "    4:  Gray scale\n"
+#~ msgstr "    4:  Skala szarości\n"
+
+#~ msgid "    5:  Aspect\n"
+#~ msgstr "    5:  Aspekt\n"
+
+#~ msgid "    6:  Rainbow colors\n"
+#~ msgstr "    6:  Kolory tęczy\n"
+
+#~ msgid "    7:  Red through yellow to green\n"
+#~ msgstr "    7:  Czerwony poprzez żółty do zielonego\n"
+
+#~ msgid "    8:  Green through yellow to red\n"
+#~ msgstr "    8:  Zielony poprzez żółty do czerwonego\n"
+
+#~ msgid "RETURN  quit\n"
+#~ msgstr "RETURN zamknij\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "%s invalid; Try again > "
+#~ msgstr ""
+#~ "\n"
+#~ "%s niepoprawny; Spróbuj ponownie > "
+
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr "Nie można zapisać reguł quant: Mapa %s jest integer"
+
+#~ msgid "Cannot write quant rules for map %s"
+#~ msgstr "Nie można zapisać reguł quant dla mapy %s"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "Zakres danych integer dla %s@%s jest pusty"
+
+#, fuzzy
+#~ msgid "quantization file [%s] in mapset [%s] %s"
+#~ msgstr "kwantyzacja pliku [% s] w mapsecie [% s]% s"
+
+#, fuzzy
+#~ msgid "%s: map [%s] not open for write - request ignored"
+#~ msgstr "%s: mapa [%s] nie jest otwarta do zapisu - request ignored"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "map [%s] - nie można zapisać wiersza %d"
+
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "nie można znaleć tymczasowego pliku NULL: %s"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "błąd podczas zapisu zerowego wiersza %d"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "wsparcie kategorii dla [%s] w mapsecie [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "obsługa kategorii dla mapy wektorowej [%s] w mapsecie [%s] %s"
+
+#~ msgid "%s not found"
+#~ msgstr "%s nie znaleziono"
+
+#~ msgid "ERROR in reading %s"
+#~ msgstr "BŁĄD podczas wczytywania %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "Nie można otworzyć pliku tymczasowego"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please specify projection name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Określ nazwę odwzorowania\n"
+
+#~ msgid "Enter 'list' for the list of available projections\n"
+#~ msgstr "Wpisz 'list' aby uzyskać listę dostępnych odwzorowań\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "niepoprawne odwzorowanie\n"
+
+#~ msgid "EmbedGivenNulls: wrong data type!"
+#~ msgstr "EmbedGivenNulls: błędny typ danych!"
+
+#~ msgid "Null values have not been initialized. "
+#~ msgstr "Wartości NULL nie zostały zainicjalizowane."
+
+#~ msgid "G_gisinit() must be called first. "
+#~ msgstr "Najpierw należy nazwać G_gisinit()."
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Powiadom programistów GRASS o tym błędzie.\n"
+
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "G_set_null_value: błędny typ danych!"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Nazwa mapy rastrowej wysokości"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Nazwy map(y) rastrowych wysokości"
+
+#~ msgid "Name of input raster3d map"
+#~ msgstr "Nazwa wejściowej mapy rastrowej 3d"
+
+#~ msgid "Name of input raster3d map(s)"
+#~ msgstr "Nazwa wejściowej map(y) rastrowej 3d"
+
+#~ msgid "Name for output raster3d map"
+#~ msgstr "Nazwa wyjściowej mapy rastrowej 3d"
+
+#~ msgid "Layer number"
+#~ msgstr "Liczna warstw"
+
+#~ msgid ""
+#~ "A single vector map can be connected to multiple database tables. This "
+#~ "number determines which table to use."
+#~ msgstr ""
+#~ "Jedna mapa wektorowa może być podłączona do wielu tabel w bazie danych. "
+#~ "Liczba ta określa, która tabela zostanie użyta."
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Opis:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Słowa kluczowe:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Zastosowanie:\n"
+#~ " "
+
+#~ msgid ""
+#~ "\n"
+#~ "Flags:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Flagi:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Parameters:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Parametry:\n"
+
+#~ msgid "Allow overwrite"
+#~ msgstr "Nadpisz istniejący"
+
+#~ msgid "Run with minimal output messages"
+#~ msgstr "Uruchom wyjście z minimum komunikatów"
+
+#~ msgid "Run quietly"
+#~ msgstr "Uruchom bez komunikatów"
+
+#~ msgid ""
+#~ "\n"
+#~ "OPTION:   %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "OPCJA:   %s\n"
+
+#~ msgid "     key: %s\n"
+#~ msgstr "     klucz: %s\n"
+
+#~ msgid "  format: %s\n"
+#~ msgstr "  format: %s\n"
+
+#~ msgid " default: %s\n"
+#~ msgstr " domyślne: %s\n"
+
+#~ msgid "required: %s\n"
+#~ msgstr "wymagane: %s\n"
+
+#~ msgid "multiple: %s\n"
+#~ msgstr "wiele: %s\n"
+
+#~ msgid " options: %s\n"
+#~ msgstr " opcje: %s\n"
+
+#~ msgid "enter option > "
+#~ msgstr "wprowadź opcję >"
+
+#~ msgid "   Try again? "
+#~ msgstr "   Czy ponowić próbę ? "
+
+#~ msgid "Sorry, %s is not accepted.\n"
+#~ msgstr "Wartość %s nie jest poprawna\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "You have chosen:\n"
+#~ "  %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Wybrałeś:\n"
+#~ "  %s\n"
+
+#~ msgid "Is this correct? "
+#~ msgstr "Czy to się zgadza ?"
+
+#~ msgid "to accept the default"
+#~ msgstr "aby zaakceptopwać domyślne"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "wsparcie koloru dla [%s] w mapsecie [%s] %s"
+
+#~ msgid "Can't create timestamp file for %s map %s in mapset %s"
+#~ msgstr "Nie można utworzyć pliku znacznika czasu dla mapy %s w mapsecie %s"
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr "Określono nieprawidłowy znacznik czasu dla %s map %s w mapsecie %s"
+
+#~ msgid "Can't open timestamp file for %s map %s in mapset %s"
+#~ msgstr ""
+#~ "Nie można otworzyć pliku znacznika czasu dla %s map %s w mapsecie %s"
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "Nieprawidłowy znacznik czasu dla %s map %s w mapsecie %s"
+
+#~ msgid "Can not create a new process!"
+#~ msgstr "Nie można utworzyć nowego procesu!"
+
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "Błąd podczas czytania skompresowanej mapy <%s@%s>, rząd %d"
+
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "Błąd podczas czytania mapy <%s@%s>, rząd %d"
+
+#~ msgid "Unable to realloc buffer"
+#~ msgstr "Nie można realokować bufora"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "nie można określić domowego katalogu użytkownika"
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "Nie można utworzyć nagłówka pliku dla [%s]"
+
+#~ msgid "Can't read %s for [%s in %s]"
+#~ msgstr "Nie można odczytać %s dla [%s w %s]"
+
+#~ msgid "Can't create %s metadata file for [%s in %s]"
+#~ msgstr "Nie można utworzyć pliku metadanych %s dla [%s w %s]"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please specify ellipsoid name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Określ nazwę elipsoidy\n"
+
+#~ msgid "Enter 'list' for the list of available ellipsoids\n"
+#~ msgstr "Wpisz 'list' aby uzyskać listę dostępnych elipsoid\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid ellipsoid\n"
+#~ msgstr ""
+#~ "\n"
+#~ "niepoprawna elipsoida\n"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "region dla bieżącego mapseta %s\n"
+#~ "uruchom \"g.region\""
+
+#~ msgid "default region %s"
+#~ msgstr "domyślny region %s"
+
+#~ msgid "is not set"
+#~ msgstr "nie jest ustawiony"
+
+#~ msgid ""
+#~ "is invalid\n"
+#~ "%s"
+#~ msgstr ""
+#~ "jest niepoprawny\n"
+#~ "%s"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "wciśnij RETURN, aby kontynuować -->"
+
+#~ msgid "can't create histogram for [%s in %s]"
+#~ msgstr "nie można utworzyć histogramu dla  [%s w %s]"
+
+#~ msgid "to cancel request"
+#~ msgstr "aby skasować żądanie"
+
+#~ msgid "Enter a new %s file name"
+#~ msgstr "Wprowadź nową %s nazwę pliku"
+
+#~ msgid "Enter the name of an existing %s file"
+#~ msgstr "wprowadź nazwę istniejącego %s pliku"
+
+#~ msgid "Enter %s file name"
+#~ msgstr "Wprowadź %s nazwę pliku"
+
+#~ msgid "Enter 'list' for a list of existing %s files\n"
+#~ msgstr "Wprowadź 'list' aby wyświetlić listę istniejących %s plików\n"
+
+#~ msgid "Enter 'list -f' for "
+#~ msgstr "Wprowadź 'list -f' dla "
+
+#~ msgid "a list %s"
+#~ msgstr "lista %s"
+
+#~ msgid "an extended list"
+#~ msgstr "rozszerzona lista"
+
+#~ msgid "Hit RETURN %s\n"
+#~ msgstr "Naciśnij ENTER %s\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - not found **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - nie znaleziono **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s exists. ok to overwrite? "
+#~ msgstr ""
+#~ "\n"
+#~ "** %s istnieje. nadpisać? "
+
+#~ msgid ""
+#~ "\n"
+#~ "**<%s> illegal name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "**<%s> niedozwolona nazwa **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - illegal request **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - niedozwlone żądanie **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - exists, select another name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - istnieje, wybierz inną nazwę **\n"
+
+#, fuzzy
+#~ msgid "ask: can't happen"
+#~ msgstr "pytanie: nie może się zdarzyć"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "Niedozwolona nazwa pliku. Nazwa nie może zawierać '.' lub 'NULL'\n"
+
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "Niedozwolona nazwa pliku. Znak <%c> jest niedopuszczalny.\n"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "Zbyt wiele kategorii reklasyfikacji dla [%s w %s]"
+
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr ""
+#~ "Niedopuszczalny format reklasyfikacji w nagłówku pliku dla [%s w %s]"
+
+#~ msgid "Unable to create header file for [%s in %s]"
+#~ msgstr "Nie można utworzyć nagłówka pliku dla [%s w %s]"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "Nie można utworzyć pliku zależności w [%s w %s]"
+
+#~ msgid "ERROR in reading <%s> file for location <%s>"
+#~ msgstr "BŁĄD podczas wczytywania pliku <%s> do lokacji <%s>"
+
+#~ msgid ""
+#~ "closecell: can't move %s\n"
+#~ "to null file %s"
+#~ msgstr ""
+#~ "closecell: nie można przenieść %s\n"
+#~ "do pliku null %s"
+
+#~ msgid "Error writing floating point format file for map %s"
+#~ msgstr ""
+#~ "Błąd podczas zapisywania pliku w formacie zmiennoprzecinkowym dla mapy %s"
+
+#~ msgid ""
+#~ "closecell: can't move %s\n"
+#~ "to cell file %s"
+#~ msgstr ""
+#~ "closecell: nie można przenieść %s\n"
+#~ "do pliku cell %s"
+
+#~ msgid "unable to write quant file!"
+#~ msgstr "nie można zapisać pliku 'quant'!"
+
+#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgstr "Nie można pobrać wartość zmiennej środowiska GIS_LOCK"
+
+#~ msgid "G_malloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_malloc: nie można przydzielić %lu bajtów w %s:%d"
+
+#~ msgid "G_calloc: unable to allocate %lu * %lu bytes at %s:%d"
+#~ msgstr "G_calloc: nie można przydzielić %lu * %lu bajtów w %s:%d"
+
+#~ msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_realloc: nie można przydzielić %lu bajtów w %s:%d"
+
+#~ msgid "Unable to open raster map <%s@%s>"
+#~ msgstr "Nie można otworzyć mapy rastrowej <%s@%s>"
+
+#~ msgid "Unable to find <%s@%s>"
+#~ msgstr "Nie można odnaleźć <%s@%s>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different projection than current region. Found "
+#~ "raster map <%s@%s>, should be <%s>."
+#~ msgstr ""
+#~ "[%s] w mapsecie [%s] - w innym odwzorowaniu niż bieżący region:\n"
+#~ "znaleziona mapa [%s] w: <%s>, a powinno być <%s> "
+
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgstr ""
+#~ "Mapa rastrowa <%s@%s> znajduje się w innej strefie (%d) niż bieżący "
+#~ "region (%d)"
+
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s>: zły mapset"
+
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "Nie można odnaleźć '%s' w '%s'"
+
+#~ msgid "Unable to open '%s'"
+#~ msgstr "Nie można otworzyć '%s'"
+
+#~ msgid ""
+#~ "G_set_quant_rules() can be called only for raster maps opened for reading"
+#~ msgstr ""
+#~ "G_set_quant_rules () może być wywołana tylko dla map rastrowych otwartych "
+#~ "do odczytu"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please specify datum name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Określ nazwę układ odniesienia\n"
+
+#, fuzzy
+#~ msgid "Enter 'list' for the list of available datums\n"
+#~ msgstr "Wpisz 'list' aby uzyskać listę dostępnych układów odniesienia\n"
+
+#~ msgid "or 'custom' if you wish to enter custom parameters\n"
+#~ msgstr "lub \"custom\", jeśli chcesz wprowadzić niestandardowe parametry\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid datum\n"
+#~ msgstr ""
+#~ "\n"
+#~ "niepoprawny układ odniesienia\n"
+
+#~ msgid "one moment...\n"
+#~ msgstr "trwa proces...\n"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Brak pomocy dla polecenia [%s]\n"
+
+#~ msgid "Unable to open file %s in <%s>"
+#~ msgstr "W %s nie można otworzyć pliku %s"
+
+#~ msgid "line %d: <%s>"
+#~ msgstr "wiersz %d: <%s>"
+
+#~ msgid "with titles"
+#~ msgstr "z tytułami"
+
+#~ msgid "(no title)"
+#~ msgstr "(bez tytułu)"
+
+#~ msgid "Unable to read header file for raster map <%s@%s>."
+#~ msgstr "Nie można odczytać nagłówka pliku dla mapy rastrowej <%s@%s>."
+
+#~ msgid " It is a reclass of raster map <%s@%s> "
+#~ msgstr "To jest reklasyfikacja mapy rastrowej <%s@%s> "
+
+#, fuzzy
+#~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
+#~ msgstr ""
+#~ "To ejst reklasyfikacja [%s w %s], gdzie nagłówek pliku jest niepoprawny\n"
+
+#~ msgid " Invalid format."
+#~ msgstr "Format niepoprawny."
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "Nie można zapisać historii dla [%s]"
+
+#~ msgid "Not enough room in history file to record command line."
+#~ msgstr ""
+#~ "W pliku historii nie ma wystarczająco dużo miejsca, aby zapisać wiersz "
+#~ "poleceń."
+
+#~ msgid "Graphics driver [%s] started"
+#~ msgstr "Sterownik graficzny [%s] uruchomiony"
+
+#, fuzzy
+#~ msgid "Unknown command: %d last: %d"
+#~ msgstr ""
+#~ "\n"
+#~ "Nieznane polecenie: %d last: %d\n"
+
+#~ msgid "not implemented"
+#~ msgstr "Jeszcze nie zaimplementowano"
+
+#~ msgid ""
+#~ "Unable to build spatial index from topology, vector map is not opened at "
+#~ "topo level 2"
+#~ msgstr ""
+#~ "Nie można utworzyć indeksu przestrzennego z topologii, mapa wektorowa nie "
+#~ "jest otwarta na poziomie topo 2"
+
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr ""
+#~ "Nie można dodać połączenia do bazy danych, mapa nie jest otwarta w trybie "
+#~ "ZAPIS."
+
+#~ msgid "Unable to add database link"
+#~ msgstr "Nie można dodać połączenia do bazy danych."
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "Błąd w regule w wierszu %d w %s"
+
+#~ msgid "Intersections: %5d"
+#~ msgstr "Przecięcia: %5d"
+
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "Nie można zaprezentować %d z mapy wektorowej <%s>"
+
+#, fuzzy
+#~ msgid "Unable to read head file"
+#~ msgstr "Nie można odczytać nagłówka pliku"
+
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "Nie można otworzyć warstwy <%s>"
+
+#~ msgid "Unable to open category index file for vector map <%s@%s>"
+#~ msgstr ""
+#~ "Nie można otworzyć pliku indeksu kategorii dla mapy wektorowej <%s@%s>"
+
+#~ msgid "Feature: "
+#~ msgstr "Obiekt:"
+
+#~ msgid "OGR feature without ID ignored"
+#~ msgstr "Obiekt OGR bez ID został zignorowany."
+
+#~ msgid "Unable to open raster map <%s>"
+#~ msgstr "Nie można otworzyć mapy rastrowej <%s>"
+
+#~ msgid "Could not get raster row"
+#~ msgstr "Nie można odczytać rzędu rastra"
+
+#~ msgid "Unable to close input map"
+#~ msgstr "Nie można zamknąć mapy wejściowej "
+
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "Nie można utworzyć mapy rastrowej <%s>"
+
+#~ msgid "Unable to write raster row %i"
+#~ msgstr "Nie można zapisać rzędu rastra %i"
+
+#, fuzzy
+#~ msgid "The gauss elimination solver does not work with sparse matrices"
+#~ msgstr ""
+#~ "Metodę eliminacji Gaussa można użyć tylko dla macierzy kwadratowych w "
+#~ "postaci normalnej"
+
+#, fuzzy
+#~ msgid "The lu solver does not work with sparse matrices"
+#~ msgstr ""
+#~ "Metodę LU można użyć tylko dla macierzy kwadratowych w postaci normalnej"
+
+#, fuzzy
+#~ msgid "The cholesky solver does not work with sparse matrices"
+#~ msgstr ""
+#~ "Metodę LU można użyć tylko dla macierzy kwadratowych w postaci normalnej"
+
+#~ msgid "Matrix is not symmetric!"
+#~ msgstr "Macierz nie jest symetryczna!"
+
+#~ msgid ""
+#~ "taking too long to find points for interpolation--please change the "
+#~ "region to area where your points are. Continuing calculations..."
+#~ msgstr ""
+#~ "Zbyt długi czas obliczania - zmień region poszukiwań. Kontynuuj "
+#~ "obliczenia."
+
+#~ msgid "Vector is not 3D"
+#~ msgstr "Wektor nie jest trójwymiarowy"
+
+#~ msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
+#~ msgstr "Nie można odnaleźć kolumny z <%s> (sprawdź nazwę np. v.info)"
+
+#~ msgid "Column type of z column is not supported (must be integer or double)"
+#~ msgstr "Nieznany typ kolumny z (musi być liczba całkowita lub rzeczywista)"
+
+#~ msgid "Cannot read column type of smooth column"
+#~ msgstr "Nie można odczytać typu kolumny...."
+
+#~ msgid "Column type of s column is not supported (must be integer or double)"
+#~ msgstr "Nieznany typ kolumny s (musi być liczba całkowita lub rzeczywista)"
+
+#~ msgid "Reading lines from vector map ... "
+#~ msgstr "Czyta linie z mapy wektorowej ..."
+
+#~ msgid "Reading nodes from vector map ... "
+#~ msgstr "Czyta punkty z mapy wektorowej ..."
+
+#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
+#~ msgstr ""
+#~ "poza wyznaczonym regionem 2D/3D znajdują się pewne punkty -- pominięte "
+#~ "punkty %d"
+
+#~ msgid "ignoring %d points -- too dense"
+#~ msgstr "pominięto punkty %d -- punkty są zbyt gęsto"
+
+#~ msgid "some points outside of region -- will ignore..."
+#~ msgstr "pewne punkty poza regionem -- będą ignorowane"
