@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-02 22:57+0200\n"
-"PO-Revision-Date: 2010-03-29 23:43+0200\n"
+"PO-Revision-Date: 2010-07-18 13:25+0200\n"
 "Last-Translator: Robert Nuske <rnuske gwdg.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -2571,9 +2571,8 @@ msgid "The '-l' flag only works in Lat/Lon locations"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:206
-#, fuzzy
 msgid "Available GDAL Drivers:"
-msgstr "Vorhandene OGR-Treiber:"
+msgstr "Vorhandene GDAL-Treiber:"
 
 #: ../raster/r.in.gdal/main.c:227 ../raster/r.proj/main.c:282
 #: ../raster/r.out.gdal/main.c:232 ../vector/v.net/args.c:109
@@ -4497,19 +4496,16 @@ msgid "terrain"
 msgstr "Interpolationsmethode."
 
 #: ../raster/r.slope.aspect/main.c:154
-#, fuzzy
 msgid ""
 "Generates raster maps of slope, aspect, curvatures and partial derivatives "
 "from a elevation raster map."
 msgstr ""
 "Erzeugt Rasterkarten mit Hangneigung, Exposition, Wölbung und partiellen "
-"Ableitungen aus einer Rasterkarte mit Höheninformationen.Die Exposition "
-"werden vom Osten gegen den Uhrzeigersinn berechnet."
+"Ableitungen aus einer Rasterkarte mit Höheninformationen."
 
 #: ../raster/r.slope.aspect/main.c:156
-#, fuzzy
 msgid "Aspect is calculated counterclockwise from east."
-msgstr "Anisotropie-Winkel (in Grad gegen den Uhrzeigersinn von Osten)."
+msgstr "Exposition berechnet gegen den Uhrzeigersinn beginned im Osten."
 
 #: ../raster/r.slope.aspect/main.c:163 ../vector/v.surf.rst/main.c:198
 msgid "Name for output slope raster map"
@@ -5776,9 +5772,8 @@ msgid "Input raster map with specific yield in [1/m]"
 msgstr "Keine Eingabekarte(n) angegeben."
 
 #: ../raster/r.gwflow/main.c:86
-#, fuzzy
 msgid "Recharge"
-msgstr "Zeilen geändert"
+msgstr "Grundwasserneubildung"
 
 #: ../raster/r.gwflow/main.c:88
 #, fuzzy
@@ -6597,7 +6592,7 @@ msgstr "ABSCHNITT 4: Bestimme RUSLE LS und/oder den S Faktor."
 
 #: ../raster/r.watershed/ram/do_cum.c:16 ../raster/r.watershed/seg/do_cum.c:20
 msgid "SECTION 3: Accumulating Surface Flow with SFD."
-msgstr "ABSCHNITT 3: Akkumuliere Oberflächenabfluß mit SFD."
+msgstr "ABSCHNITT 3: Akkumuliere Oberflächenabfluß mit MFD."
 
 #: ../raster/r.watershed/ram/do_cum.c:118
 #: ../raster/r.watershed/seg/do_cum.c:138
@@ -9346,9 +9341,8 @@ msgid "List supported output formats"
 msgstr "Zeige unterstützte Dateiformate."
 
 #: ../raster/r.out.gdal/main.c:139
-#, fuzzy
 msgid "Do not write GDAL standard colortable"
-msgstr "Exportiere keine langen Farbtabellen."
+msgstr "Schreibe keine Standard GDAL-Farbtabelle."
 
 #: ../raster/r.out.gdal/main.c:140
 msgid "Only applicable to Byte or UInt16 data types."
@@ -9356,12 +9350,11 @@ msgstr "Nur anwendbar auf die Datentypen Byte oder UInt16."
 
 #: ../raster/r.out.gdal/main.c:144
 msgid "Force raster export despite any warnings of data loss"
-msgstr ""
+msgstr "Erzwinge den Rasterexport trotz Datenverlust-Warnungen."
 
 #: ../raster/r.out.gdal/main.c:145
-#, fuzzy
 msgid "Overrides nodata safety check."
-msgstr "Übersteuere die Überprüfung der Projektion."
+msgstr "Übersteuert den NoData Sicherheitscheck."
 
 #: ../raster/r.out.gdal/main.c:149
 msgid "Name of raster map (or group) to export"
@@ -9439,7 +9432,7 @@ msgid "Driver <%s> does not support creating rasters"
 msgstr "Der Treiber <%s> unterstützt die Erzeugung von Rasterdaten nicht."
 
 #: ../raster/r.out.gdal/main.c:354
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read data range of raster <%s>"
 msgstr "Kann den Wertebereich der Rasterkarte <%s> nicht lesen."
 
@@ -9451,6 +9444,7 @@ msgstr "Exportiere in den GDAL-Datentyp: %s"
 #: ../raster/r.out.gdal/main.c:426
 msgid "Raster export would result in complete data loss, aborting."
 msgstr ""
+"Rasterexport würde kompletten Datenverlust bedeuten, breche die Aktion ab."
 
 #: ../raster/r.out.gdal/main.c:437
 #, c-format
@@ -9458,6 +9452,8 @@ msgid ""
 "Precision loss: Raster map <%s> of type %s to be exported as %s. This can be "
 "avoided by using %s."
 msgstr ""
+"Präzisionsverlust: Rasterkarte <%s> vom Typ %s soll als %s exportiert "
+"werden. Dies kann verhindert werden mit %s."
 
 #: ../raster/r.out.gdal/main.c:448
 #, c-format
@@ -9465,6 +9461,9 @@ msgid ""
 "Precision loss: The range of <%s> can not be accurately preserved with GDAL "
 "datatype Float32. This can be avoided by exporting to Int32 or Float64."
 msgstr ""
+"Präzisionsverlust: Der Wertebereich von <%s> kann nicht korrekt erhalten "
+"werden mit dem GDAL Datentyp Float32. Dies kann verhindert werden durch "
+"Export nach Int32 oder Float64."
 
 #: ../raster/r.out.gdal/main.c:456
 #, c-format
@@ -9472,26 +9471,26 @@ msgid ""
 "Precision loss: Float32 can not preserve the DCELL precision of raster <%s>. "
 "This can be avoided by using Float64"
 msgstr ""
+"Präzisionsverlust: Float32 kann die Präzision der DCELL Rasterkarte <%s> "
+"nicht erhalten. Dies kann verhindert werden mit Float64."
 
 #: ../raster/r.out.gdal/main.c:465 ../raster/r.out.gdal/main.c:508
-#, fuzzy
 msgid "Forcing raster export."
-msgstr "Raster, Export"
+msgstr "Erzwinge Rasterkartenexport."
 
 #: ../raster/r.out.gdal/main.c:467 ../raster/r.out.gdal/main.c:481
 #: ../raster/r.out.gdal/main.c:510 ../raster/r.out.gdal/main.c:514
-#, fuzzy
 msgid "Raster export aborted."
-msgstr "Zu importierende Rasterdatei."
+msgstr "Export der Rasterkarte abgebrochen."
 
 #: ../raster/r.out.gdal/main.c:491
 msgid "Checking GDAL data type and nodata value"
 msgstr ""
 
 #: ../raster/r.out.gdal/main.c:494
-#, fuzzy, c-format
+#, c-format
 msgid "Checking options for raster map <%s> (band %d)..."
-msgstr "Exportiere Rasterkarte <%s> (Kanal %d)..."
+msgstr "Prüfe Optionen für die Rasterkarte <%s> (Kanal %d)..."
 
 #: ../raster/r.out.gdal/main.c:535
 msgid "Output file name not specified"
@@ -9515,9 +9514,8 @@ msgid "Unable to set projection"
 msgstr "Kann Projektion nicht setzten."
 
 #: ../raster/r.out.gdal/main.c:579
-#, fuzzy
 msgid "Exporting to GDAL raster"
-msgstr "Exportiere in den GDAL-Datentyp: %s"
+msgstr "Exportiere nach GDAL-Raster."
 
 #: ../raster/r.out.gdal/main.c:582
 #, c-format
@@ -9545,7 +9543,7 @@ msgstr "Kann Rasterkarte <%s> mit dem Treiber <%s> nicht erzeugen."
 #: ../raster/r.out.gdal/export_band.c:542
 #: ../raster/r.out.gdal/export_band.c:556
 msgid "Selected GDAL datatype does not cover data range."
-msgstr ""
+msgstr "Der gewählte GDAL-Datentyp deckt nicht den gesamten Werteberich ab."
 
 #: ../raster/r.out.gdal/main.c:631 ../raster/r.out.gdal/main.c:643
 #: ../raster/r.out.gdal/main.c:656 ../raster/r.out.gdal/main.c:669
@@ -9555,25 +9553,25 @@ msgstr ""
 #: ../raster/r.out.gdal/export_band.c:518
 #, c-format
 msgid "GDAL datatype: %s, range: %d - %d"
-msgstr ""
+msgstr "GDAL-Datentyp: %s, Wertebereich: %d - %d"
 
 #: ../raster/r.out.gdal/main.c:634 ../raster/r.out.gdal/main.c:646
 #: ../raster/r.out.gdal/main.c:659 ../raster/r.out.gdal/main.c:672
 #: ../raster/r.out.gdal/main.c:684 ../raster/r.out.gdal/main.c:697
 #, c-format
 msgid "Range to be exported: %g - %g"
-msgstr ""
+msgstr "Zu exportierender Wertebereich: %g - %g"
 
 #: ../raster/r.out.gdal/main.c:681 ../raster/r.out.gdal/export_band.c:530
 #, c-format
 msgid "GDAL datatype: %s, range: %u - %u"
-msgstr ""
+msgstr "GDAL-Datentyp: %s, Wertebereich: %u - %u"
 
 #: ../raster/r.out.gdal/main.c:694 ../raster/r.out.gdal/export_band.c:543
 #: ../raster/r.out.gdal/export_band.c:557
 #, c-format
 msgid "GDAL datatype: %s, range: %g - %g"
-msgstr ""
+msgstr "GDAL-Datentyp: %s, Wertebereich: %g - %g"
 
 #: ../raster/r.out.gdal/main.c:721 ../raster/r.out.gdal/main.c:734
 #: ../raster/r.out.gdal/main.c:748 ../raster/r.out.gdal/main.c:761
@@ -9589,12 +9587,12 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:779
 #, c-format
 msgid "GDAL datatype: %s, valid range: %d - %d"
-msgstr ""
+msgstr "GDAL-Datentyp: %s, gültiger Wertebereich: %d - %d"
 
 #: ../raster/r.out.gdal/main.c:737 ../raster/r.out.gdal/main.c:764
 #, c-format
 msgid "GDAL datatype: %s, valid range: %u - %u"
-msgstr ""
+msgstr "GDAL-Datentyp: %s, gültiger Wertebereich: %u - %u"
 
 #: ../raster/r.out.gdal/main.c:790
 #, c-format
@@ -9603,11 +9601,14 @@ msgid ""
 "raster: specified nodata value %g gets converted to %g by selected GDAL "
 "datatype."
 msgstr ""
+"NoData-Wert der Metadaten und der tatsächlichen Werte in den exportierten "
+"Rasterdaten stimmen nicht überein: Der angegebene NoData-Wert %g wird von "
+"dem gewählten GDAL-Datentyp nach %g konvertiert."
 
 #: ../raster/r.out.gdal/main.c:793
 #, c-format
 msgid "GDAL datatype: %s, valid range: %g - %g"
-msgstr ""
+msgstr "GDAL-Datentyp: %s, gültiger Wertebereich: %g - %g"
 
 #: ../raster/r.out.gdal/export_band.c:63 ../raster/r.out.gdal/export_band.c:69
 #: ../raster/r.out.gdal/export_band.c:360
@@ -9616,15 +9617,15 @@ msgid "Unable to allocate buffer for reading raster map"
 msgstr "Kann keinen Speicherplatz zum Lesen der Rasterkarte belegen."
 
 #: ../raster/r.out.gdal/export_band.c:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Input raster map contains cells with NULL-value (no-data). The value %d will "
 "be used to represent no-data values in the input map. You can specify a "
 "nodata value with the %s option."
 msgstr ""
-"Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert "
-"%d wurde verwendet um Nodata-Werte in der Eingabekarte zu kennzeichnen. Sie "
-"können Nodata-Wert mit dem Parameter %s bestimmen."
+"Die Eingabe-Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert "
+"%d wurde verwendet um NoData-Werte in der Eingabekarte zu kennzeichnen. Sie "
+"können NoData-Wert mit dem Parameter %s bestimmen."
 
 #: ../raster/r.out.gdal/export_band.c:184
 #, fuzzy, c-format
@@ -9643,6 +9644,9 @@ msgid ""
 "The default nodata value is present in rasterband <%s> and would lead to "
 "data loss. Please specify a custom nodata value with the %s parameter."
 msgstr ""
+"Der Standard-NoData-Wert ist im Rasterkanal <%s> vorhanden und würde zu "
+"Datenverlust führen. Bitte geben Sie einen eignen NoData-Wert mit dem "
+"Parameter %s an."
 
 #: ../raster/r.out.gdal/export_band.c:201
 #, c-format
@@ -9650,6 +9654,9 @@ msgid ""
 "The given nodata value is present in rasterband <%s> and would lead to data "
 "loss. Please specify a different nodata value with the %s parameter."
 msgstr ""
+"Der gewählte NoData-Wert ist im Rasterkanal <%s> vorhanden und würde zu "
+"Datenverlust führen. Bitte geben Sie einen anderen NoData-Wert mit dem "
+"Parameter %s an."
 
 #: ../raster/r.out.gdal/export_band.c:241
 msgid "Unable to get raster band"
@@ -9668,9 +9675,9 @@ msgstr "Kann GDAL-Rasterdatei nicht schreiben."
 #: ../raster/r.out.gdal/export_band.c:533
 #: ../raster/r.out.gdal/export_band.c:546
 #: ../raster/r.out.gdal/export_band.c:560
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> range: %g - %g"
-msgstr "Rasterkarte <%s> erzeugt."
+msgstr "Rasterkarte <%s> mit Wertebereich: %g - %g"
 
 #: ../raster/r.null/main.c:60
 #, fuzzy
@@ -11460,14 +11467,14 @@ msgid "input= and source= are mutually exclusive"
 msgstr "'input=' und 'source=' schließen sich gegenseitig aus."
 
 #: ../raster/r.external/main.c:649
-#, fuzzy, c-format
+#, c-format
 msgid "Imagery group <%s> already exists and will be overwritten."
-msgstr "Die Rasterkarte <%s> existiert bereits und wird überschrieben."
+msgstr "Bildgruppe <%s> existiert bereits und wird überschrieben."
 
 #: ../raster/r.external/main.c:689
-#, fuzzy, c-format
+#, c-format
 msgid "Imagery group <%s> created"
-msgstr "Rasterkarte <%s> erzeugt."
+msgstr "Bildgruppe <%s> erzeugt."
 
 #: ../raster/r.recode/main.c:49
 msgid "Recodes categorical raster maps."
@@ -13270,7 +13277,6 @@ msgid "scripts"
 msgstr "PostScript"
 
 #: ../general/g.message/main.c:36
-#, fuzzy
 msgid ""
 "Prints a message, warning, progress info, or fatal error in the GRASS way."
 msgstr "Gibt eine Nachricht, Warnung oder fatalen Fehler im GRASS-Stil aus."
@@ -13283,42 +13289,35 @@ msgstr ""
 
 #: ../general/g.message/main.c:42 ../general/g.message/main.c:47
 #: ../general/g.message/main.c:52 ../general/g.message/main.c:57
-#, fuzzy
 msgid "Type"
-msgstr "Typ: %s"
+msgstr "Typ"
 
 #: ../general/g.message/main.c:43
-#, fuzzy
 msgid "Print message as warning"
-msgstr "Gebe Nachricht als GRASS Warnung aus."
+msgstr "Gebe Nachricht als Warnung aus."
 
 #: ../general/g.message/main.c:48
-#, fuzzy
 msgid "Print message as fatal error"
-msgstr "Gebe Nachricht als GRASS Fataler-Fehler aus."
+msgstr "Gebe Nachricht als fatalen Fehler aus."
 
 #: ../general/g.message/main.c:53
-#, fuzzy
 msgid "Print message as debug message"
-msgstr "Gebe Nachricht als GRASS Debug-Nachricht aus."
+msgstr "Gebe Nachricht als Debug-Nachricht aus."
 
 #: ../general/g.message/main.c:58
-#, fuzzy
 msgid "Print message as progress info"
-msgstr "Gebe Nachricht als GRASS Warnung aus."
+msgstr "Gebe Nachricht als Fortschrittsinfo aus."
 
 #: ../general/g.message/main.c:62 ../general/g.message/main.c:67
 #: ../general/g.message/main.c:81
-#, fuzzy
 msgid "Level"
-msgstr "Stufen"
+msgstr "Level"
 
 #: ../general/g.message/main.c:63
 msgid "Print message in all but full quiet mode"
 msgstr "Gebe Nachricht in allen Modi außer dem schweigsamen aus."
 
 #: ../general/g.message/main.c:68
-#, fuzzy
 msgid "Print message only in verbose mode"
 msgstr "Gebe Nachricht nur im gesprächigen Modus aus."
 
@@ -13331,14 +13330,12 @@ msgid "Level to use for debug messages"
 msgstr "Level für Debug-Nachrichten."
 
 #: ../general/g.message/main.c:92
-#, fuzzy
 msgid "Select only one message level"
 msgstr "Wählen Sie nur ein Benachrichtigungs-Level."
 
 #: ../general/g.message/main.c:105
-#, fuzzy
 msgid "Unable to parse input message"
-msgstr "Kann die Eingabedatei <%s> nicht öffnen."
+msgstr "Kann die Nachricht nicht parsen."
 
 #: ../general/g.pnmcat/main.c:49
 msgid "Unsupported PPM file (format = P6 required)"
@@ -16260,9 +16257,10 @@ msgid "Text color, either a standard GRASS color or R:G:B triplet"
 msgstr "Textfarbe, entweder eine GRASS Standardfarbe oder ein R:G:B Tripel."
 
 #: ../display/d.text/main.c:172
-#, fuzzy
 msgid "Text background color, either a standard GRASS color or R:G:B triplet"
-msgstr "Textfarbe, entweder eine GRASS Standardfarbe oder ein R:G:B Tripel."
+msgstr ""
+"Texthintergrundfarbe, entweder eine GRASS Standardfarbe oder ein R:G:B "
+"Tripel."
 
 #: ../display/d.text/main.c:181
 msgid "The screen line number on which text will begin to be drawn"
@@ -19211,9 +19209,8 @@ msgstr "Minimale z-Höhe (benötigt den Schalter '-z' oder Spaltenname)."
 #: ../vector/v.random/main.c:104 ../vector/v.random/main.c:113
 #: ../vector/v.random/main.c:119 ../vector/v.random/main.c:129
 #: ../vector/v.random/main.c:134
-#, fuzzy
 msgid "3D output"
-msgstr "Ausgabe:"
+msgstr "3D-Ausgabe."
 
 #: ../vector/v.random/main.c:111
 msgid "Maximum z height (needs -z flag or column name)"
@@ -21296,9 +21293,8 @@ msgid "Error in pj_do_transform"
 msgstr "Fehler in pj_do_transform."
 
 #: ../vector/v.hull/main.c:53
-#, fuzzy
 msgid "Produces a convex hull for a given vector map."
-msgstr "Erzeugt Topologie für GRASS Vektorkarten."
+msgstr "Erzeugt eine konvexe Hülle für eine Vektorkarte."
 
 #: ../vector/v.hull/main.c:64
 msgid "Use all vector points (do not limit to current region)"
@@ -21311,9 +21307,9 @@ msgstr ""
 "besteht."
 
 #: ../vector/v.hull/main.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading vector points from <%s>"
-msgstr "Fehler beim Laden der Vektor-Punktkarte <%s>."
+msgstr "Fehler beim Laden von Vektorpunkten aus <%s>."
 
 #: ../vector/v.hull/main.c:91
 #, fuzzy, c-format
@@ -21321,14 +21317,13 @@ msgid "Convex hull calculation requires at least three points (%d found)"
 msgstr "Die Berechnung der konvexen Hülle erfordert zumindest drei Punkte."
 
 #: ../vector/v.hull/main.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%d points read from vector map <%s>"
-msgstr "%d Polylinien in der Vektorkarte <%s@%s> gespeichert."
+msgstr "%d Punkte aus der Vektorkarte <%s> gelesen."
 
 #: ../vector/v.hull/hull.c:106
-#, fuzzy
 msgid "Simple planar hulls not implemented yet"
-msgstr "Operation '%s' ist nicht implementiert."
+msgstr "Die einfache planere Hülle ist noch nicht implementiert."
 
 #: ../vector/v.in.dwg/main.c:84
 msgid "Converts DWG/DXF to GRASS vector map"
@@ -24489,19 +24484,16 @@ msgid "Breaking boundaries..."
 msgstr "Breche Grenzen auf..."
 
 #: ../vector/v.buffer/main.c:504 ../vector/v.buffer/main.c:582
-#, fuzzy
 msgid "Calculating centroids for areas..."
-msgstr "Berechne Zentralitätsmaße..."
+msgstr "Berechne Zentroide der Flächen..."
 
 #: ../vector/v.buffer/main.c:534
-#, fuzzy
 msgid "Generating list of boundaries to be deleted..."
-msgstr "Säubere Grenzen an den Knoten..."
+msgstr "Erstelle der zu löschenden Grenzen..."
 
 #: ../vector/v.buffer/main.c:566
-#, fuzzy
 msgid "Deleting boundaries..."
-msgstr "Breche Grenzen auf..."
+msgstr "Lösche Grenzen..."
 
 #: ../vector/v.edit/main.c:54
 #, fuzzy
@@ -25636,9 +25628,8 @@ msgstr ""
 "Format: Layer[/Name des Layers] Tabelle Schlüsselspalte Datenbanktreiber"
 
 #: ../vector/v.db.connect/main.c:79
-#, fuzzy
 msgid "Field separator for shell script style output"
-msgstr "Trennzeichen (Punkt-Modus)"
+msgstr "Feldtrennzeichen Shell-Skript-Stil Ausgabe"
 
 #: ../vector/v.db.connect/main.c:84
 msgid "Print all map connection parameters and exit"
@@ -31854,6 +31845,69 @@ msgid "Can't mark another point.  Only %d points allowed.  Sorry."
 msgstr ""
 "Kann keinen anderen Punkt markieren. Nur %d Punkte sind erlaubt. Sorry."
 
+#, fuzzy
+msgid ""
+"Calculates univariate statistics from a raster map based on vector polygons "
+"and uploads statistics to new attribute columns."
+msgstr ""
+"Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone "
+"und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
+
+#, fuzzy
+msgid "Raster file to be converted."
+msgstr "Zu importierende Rasterdatei."
+
+#, fuzzy
+msgid "File containing reclass rules; \"-\" to read from stdin"
+msgstr ""
+"Datei mit Kategorie-Beschriftungsregeln (oder \"-\" um von stdin zu lesen)."
+
+#, fuzzy
+msgid "terrain analysis"
+msgstr "Raster, Geländeanalyse"
+
+#, fuzzy
+msgid "Unable to open vector map <%s> on level 2"
+msgstr "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
+
+#, fuzzy
+msgid "Open vector map without topology (level 1)"
+msgstr "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
+
+#, fuzzy
+msgid "miles,feet,meters,kilometers,acres,hectares,radians,degrees"
+msgstr "mi(len),f(uß),me(ter),k(ilometer),a(cres),h(ektar)"
+
+msgid "Do not export long colortable"
+msgstr "Exportiere keine langen Farbtabellen."
+
+msgid ""
+"Input raster map contains cells with NULL-value (no-data). The value %d was "
+"used to represent no-data values in the input map. You can specify nodata "
+"value by %s parameter."
+msgstr ""
+"Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert "
+"%d wurde verwendet um Nodata-Werte in der Eingabekarte zu kennzeichnen. Sie "
+"können Nodata-Wert mit dem Parameter %s bestimmen."
+
+msgid ""
+"Sorry, if any of the following options are set:\n"
+"    basin, stream, half.basin, slope, or lS\n"
+"    you MUST provide a value for the basin threshold parameter."
+msgstr ""
+"Wenn eine der folgenden Optionen gesetzt wurde:\n"
+"    basin, stream, half.basin, slope oder lS\n"
+"    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
+
+msgid "Writes Z data to column instead of 3D vector"
+msgstr "Schreibt Z Werte in eine Spalte anstelle der 3D Vektorkarte."
+
+msgid "Convex hull calculation requires at least three points"
+msgstr "Die Berechnung der konvexen Hülle erfordert zumindest drei Punkte."
+
+msgid "enable MFD flow (default is SFD (D8))"
+msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))."
+
 #~ msgid "Sources and sinks in [m^3/s]"
 #~ msgstr "Quellen und Senken in [m^3/s]"
 
@@ -31868,24 +31922,6 @@ msgstr ""
 
 #~ msgid "Layer number of data column"
 #~ msgstr "Layernummer der Datenspalte"
-
-#, fuzzy
-#~ msgid ""
-#~ "Calculates univariate statistics from a raster map based on vector "
-#~ "polygons and uploads statistics to new attribute columns."
-#~ msgstr ""
-#~ "Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone "
-#~ "und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
-
-#, fuzzy
-#~ msgid "Raster file to be converted."
-#~ msgstr "Zu importierende Rasterdatei."
-
-#, fuzzy
-#~ msgid "File containing reclass rules; \"-\" to read from stdin"
-#~ msgstr ""
-#~ "Datei mit Kategorie-Beschriftungsregeln (oder \"-\" um von stdin zu "
-#~ "lesen)."
 
 #~ msgid "Name of vector input map containing stream(s)"
 #~ msgstr "Vektoreingabekarte mit dem Flussnetz."
@@ -31902,14 +31938,13 @@ msgstr ""
 #~ msgid "Name for the resultant watershed partition file"
 #~ msgstr "Name für die resultierende Einzugsgebietsdatei"
 
-#, fuzzy
 #~ msgid ""
 #~ "Input raster map contains cells with NULL-value (no-data). The value %f "
 #~ "will be used to represent no-data values in the input map. You can "
 #~ "specify a nodata value with the %s option."
 #~ msgstr ""
 #~ "Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der "
-#~ "Wert %d wurde verwendet um Nodata-Werte in der Eingabekarte zu "
+#~ "Wert %f wurde verwendet um Nodata-Werte in der Eingabekarte zu "
 #~ "kennzeichnen. Sie können Nodata-Wert mit dem Parameter %s bestimmen."
 
 #~ msgid "Name of the elevation raster map [m]"
@@ -31997,10 +32032,6 @@ msgstr ""
 #~ "(i)   OPTIONAL: Ausgabe für die angegebene Klasse des topgraphischen "
 #~ "Index."
 
-#, fuzzy
-#~ msgid "terrain analysis"
-#~ msgstr "Raster, Geländeanalyse"
-
 #~ msgid "Name of existing raster map containing elevation surface"
 #~ msgstr "Name einer existierenden Rasterkarte mit Höheninformationen."
 
@@ -32063,20 +32094,6 @@ msgstr ""
 
 #~ msgid "Unable to access table <%s>"
 #~ msgstr "Kann nicht auf die Tabelle <%s> zugreifen."
-
-#, fuzzy
-#~ msgid "Unable to open vector map <%s> on level 2"
-#~ msgstr ""
-#~ "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
-
-#, fuzzy
-#~ msgid "Open vector map without topology (level 1)"
-#~ msgstr ""
-#~ "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
-
-#, fuzzy
-#~ msgid "miles,feet,meters,kilometers,acres,hectares,radians,degrees"
-#~ msgstr "mi(len),f(uß),me(ter),k(ilometer),a(cres),h(ektar)"
 
 #~ msgid "Experimental NVIZ CLI prototype."
 #~ msgstr "Experimenteller Prototyp der NVIZ Kommandozeilenversion."
@@ -33161,18 +33178,6 @@ msgstr ""
 #~ msgid "Name of terrain raster map (DEM)"
 #~ msgstr "Name der Terrain Rasterkarte (DEM)."
 
-#~ msgid "Do not export long colortable"
-#~ msgstr "Exportiere keine langen Farbtabellen."
-
-#~ msgid ""
-#~ "Input raster map contains cells with NULL-value (no-data). The value %d "
-#~ "was used to represent no-data values in the input map. You can specify "
-#~ "nodata value by %s parameter."
-#~ msgstr ""
-#~ "Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der "
-#~ "Wert %d wurde verwendet um Nodata-Werte in der Eingabekarte zu "
-#~ "kennzeichnen. Sie können Nodata-Wert mit dem Parameter %s bestimmen."
-
 #~ msgid ""
 #~ "Input raster map contains cells with NULL-value (no-data). The value %g "
 #~ "was used to represent no-data values in the input map. You can specify "
@@ -34090,15 +34095,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Ausgabekarte: hilfreich für die visuelle Darstellung der Ergebnisse."
 
-#~ msgid ""
-#~ "Sorry, if any of the following options are set:\n"
-#~ "    basin, stream, half.basin, slope, or lS\n"
-#~ "    you MUST provide a value for the basin threshold parameter."
-#~ msgstr ""
-#~ "Wenn eine der folgenden Optionen gesetzt wurde:\n"
-#~ "    basin, stream, half.basin, slope oder lS\n"
-#~ "    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
-
 #~ msgid "Unable to open MASK"
 #~ msgstr "Kann die Maske (MASK) nicht öffnen."
 
@@ -34973,9 +34969,6 @@ msgstr ""
 #~ msgid "Column name and type (i.e. INTEGER, DOUBLE PRECISION) for z values"
 #~ msgstr "Spaltenname und -typ (z.B. INTEGER, DOUBLE PRECISION) für z Werte."
 
-#~ msgid "Writes Z data to column instead of 3D vector"
-#~ msgstr "Schreibt Z Werte in eine Spalte anstelle der 3D Vektorkarte."
-
 #~ msgid "v.random can't create 3D vector and attribute table at same time"
 #~ msgstr ""
 #~ "v.random kann 3D Vektorkarten und Attributtabellen nicht zu selben Zeit "
@@ -35116,9 +35109,6 @@ msgstr ""
 
 #~ msgid "Cannot open vector map <%s>"
 #~ msgstr "Kann die Vektorkarte <%s> nicht öffnen."
-
-#~ msgid "Convex hull calculation requires at least three points"
-#~ msgstr "Die Berechnung der konvexen Hülle erfordert zumindest drei Punkte."
 
 #~ msgid "Exports a GRASS vector map to SVG."
 #~ msgstr "Exportiert eine GRASS Vektorkarte nach SVG."
@@ -36494,9 +36484,6 @@ msgstr ""
 #~ msgid "Direction raster found <%s>"
 #~ msgstr "Richtungskarte gefunden <%s>."
 
-#~ msgid "enable MFD flow (default is SFD (D8))"
-#~ msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))."
-
 #~ msgid "unable to open flow accumulation map layer"
 #~ msgstr "Kann neue Fluss-Akkumulations-Karte nicht öffnen."
 
@@ -36518,3 +36505,388 @@ msgstr ""
 
 #~ msgid "It was impossible to open table"
 #~ msgstr "Es war unmöglich die Tabelle zu öffnen."
+
+#~ msgid "The initial piezometric head in [m]"
+#~ msgstr "Das initiale piezometrisches Niveau [m]"
+
+#~ msgid "The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet"
+#~ msgstr "Der Status jeder Zelle, = 0 - inaktiv, 1 - aktiv, 2 - dirichlet"
+
+#~ msgid "The z-part of the hydraulic conductivity tensor in [m/s]"
+#~ msgstr "Der Z-Anteil des hydraulischen Durchlässigkeits Tensors [m/s]."
+
+#~ msgid "Recharge raster map in m^3/s"
+#~ msgstr "Grundwasserneubildungskarte in m^3/s"
+
+#~ msgid ""
+#~ "The piezometric head result of the numerical calculation will be written "
+#~ "to this map"
+#~ msgstr ""
+#~ "Das resultierende piezometrisches Niveau der numerischen Berechnung wird "
+#~ "in diese Karte geschrieben."
+
+#~ msgid "Name of base raster map"
+#~ msgstr "Name der Basis-Rasterkarte."
+
+#~ msgid "Converting %s..."
+#~ msgstr "Konvertiere %s..."
+
+#~ msgid "Name for output raster map with lake"
+#~ msgstr "Name der Ausgabe-Rasterkarte mit See."
+
+#~ msgid "raster, terrain"
+#~ msgstr "Raster, Terrain"
+
+#~ msgid ""
+#~ "Sediment transport and erosion/deposition simulation using path sampling "
+#~ "method (SIMWE)"
+#~ msgstr ""
+#~ "Sedimenttransport und Erosions/Depositions Simulation unter Verwendung "
+#~ "der \"path sampling method\" (SIMWE)."
+
+#~ msgid "Name of the water depth raster map [m]"
+#~ msgstr "Name der Rasterkarte mit Wassertiefe [m]."
+
+#~ msgid "Name of the x-derivatives raster map [m/m]"
+#~ msgstr "Name der Rasterkarte mit Ableitung nach X [m/m]."
+
+#~ msgid "Name of the y-derivatives raster map [m/m]"
+#~ msgstr "Name der Rasterkarte mit Ableitung nach Y [m/m]."
+
+#~ msgid "Name of the detachment capacity coefficient raster map [s/m]"
+#~ msgstr "Name der Rasterkarte mit Trennungs-Kapazitätskoeffizienten [s/m]."
+
+#~ msgid "Name of the transport capacity coefficient raster map [s]"
+#~ msgstr "Name der Rasterkarte mit Transport-Kapazitätskoeffizienten [s/m]."
+
+#~ msgid "Name of the critical shear stress raster map [Pa]"
+#~ msgstr "Name der Rasterkarte mit kritische Scherrspannung [Pa]."
+
+#~ msgid "Name of the Mannings n raster map"
+#~ msgstr "Name der Rasterkarte mit Mannings n."
+
+#~ msgid "Name of the Mannings n value"
+#~ msgstr "Name des Mannings n Parameters."
+
+#~ msgid "Output transport capacity raster map [kg/ms]"
+#~ msgstr "Ausgabe-Rasterkarte der Transportkapazität [kg/ms]."
+
+#~ msgid "Output transp.limited erosion-deposition raster map [kg/m2s]"
+#~ msgstr ""
+#~ "Ausgabe der \"transp.limited\" Erosions-Depositions Rasterkarte [kg/m2s]."
+
+#~ msgid "Output sediment concentration raster map [particle/m3]"
+#~ msgstr "Ausgabe-Rasterkarte der Sedimentkonzentration [Partikel/m3]"
+
+#~ msgid "Output sediment flux raster map [kg/ms]"
+#~ msgstr "Ausgabe-Rasterkarte des Sedimentfluß [kg/ms]."
+
+#~ msgid "Output erosion-deposition raster map [kg/m2s]"
+#~ msgstr "Ausgabe der Erosions-Depositions-Rasterkarte [kg/m2s]."
+
+#~ msgid ""
+#~ "Overland flow hydrologic simulation using path sampling method (SIMWE)"
+#~ msgstr ""
+#~ "Hydrologische Simulation des Oberflächenabfluß mittels der 'path "
+#~ "sampling'-Methode (SIMWE)."
+
+#~ msgid "Name of the rainfall excess rate (rain-infilt) raster map [mm/hr]"
+#~ msgstr ""
+#~ "Name der Rasterkarte der Niederschlagsüberschussrate (rain-infilt) [mm/"
+#~ "hr]."
+
+#~ msgid "Name of the runoff infiltration rate raster map [mm/hr]"
+#~ msgstr "Name der Rasterkarte der Abflußinfiltrationsrate [mm/hr]."
+
+#~ msgid "Name of the flow controls raster map (permeability ratio 0-1)"
+#~ msgstr "Name Rasterkarte, die den Fluß kontrolliert (Permeabilität: 0-1)."
+
+#~ msgid "Output water discharge raster map [m3/s]"
+#~ msgstr "Ausgabe-Rasterkarte des Wasserabfluß [m3/s]."
+
+#~ msgid "Output simulation error raster map [m]"
+#~ msgstr "Ausgabe-Rasterkarte des Simulationsfehlers [m]."
+
+#~ msgid ""
+#~ "Threshold water depth [m] (diffusion increases after this water depth is "
+#~ "reached)"
+#~ msgstr ""
+#~ "Schwellwert der Wassertiefe [m] (Diffusion steigt, nachdem diese "
+#~ "Wassertiefe erreicht wurde)."
+
+#~ msgid "Boundary condition status, 0-inactive, 1-active, 2-dirichlet"
+#~ msgstr "Status der Randbedingungen, 0-inaktive, 1-aktive, 2-dirichlet."
+
+#~ msgid "Water sources and sinks in [m^3/s]"
+#~ msgstr "Wasserquellen und -senken [m^3/s]."
+
+#~ msgid "Specific yield in [1/m]"
+#~ msgstr "Spezifischer Ertrag [1/m]."
+
+#~ msgid "Recharge map e.g: 6*10^-9 per cell in [m^3/s*m^2]"
+#~ msgstr ""
+#~ "Anreicherungskarte (recharge map) z.B.: 6*10^-9 pro Zelle [m^3/s*m^2]."
+
+#~ msgid "The map storing the numerical result [m]"
+#~ msgstr "Karte der numerischen Ergebnisse [m]."
+
+#~ msgid "The height of the river bed in [m]"
+#~ msgstr "Höhe des Flussbetts [m]."
+
+#~ msgid "Water level (head) of the river with leakage connection in [m]"
+#~ msgstr "Wasserstand des Flusses (head) mit Sicker-Verbindung [m]."
+
+#~ msgid "The leakage coefficient of the river bed in [1/s]."
+#~ msgstr "Sicker-Koeffizient des Flussbettes [1/s]."
+
+#~ msgid "The height of the drainage bed in [m]"
+#~ msgstr "Höhe der Drainage [m]."
+
+#~ msgid "The leakage coefficient of the drainage bed in [1/s]"
+#~ msgstr "Sicker-Koeffizient der Drainage [1/s]."
+
+#~ msgid "Input map: amount of overland flow per cell"
+#~ msgstr "Eingabekarte mit der Größe des Oberflächenabfluss pro Zelle."
+
+#~ msgid "Input map: terrain blocking overland surface flow, for USLE"
+#~ msgstr ""
+#~ "Eingabekarte mit Gelände, dass den Oberflächenabfluss blockiert, für USLE."
+
+#~ msgid "Output map: number of cells that drain through each cell"
+#~ msgstr "Ausgabekarte mit Anzahl der Zellen, die durch jede Zelle abfließt."
+
+#~ msgid "Output map: unique label for each watershed basin"
+#~ msgstr "Ausgabekarte mit eindeutiger Kennzeichnung jedes Einzugsgebietes."
+
+#~ msgid "Output map: each half-basin is given a unique value"
+#~ msgstr "Ausgabekarte mit Einzugsgebietshälften mit eindeutigen Wert."
+
+#~ msgid "Output map: slope length and steepness (LS) factor for USLE"
+#~ msgstr "Ausgabekarte der Hanglängen und -Neigungsfaktoren (LS) für USLE."
+
+#~ msgid "Output map: slope steepness (S) factor for USLE"
+#~ msgstr "Ausgabekarte der Hangneigungsfaktoren (S) für USLE."
+
+#~ msgid "Input value: minimum size of exterior watershed basin"
+#~ msgstr "Eingabewert: kleinste Größe des äußeren Wassereinzugsgebiets."
+
+#~ msgid "Enable MFD flow (default is SFD (D8))"
+#~ msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))"
+
+#~ msgid ""
+#~ "Sorry, if any of the following options are set:\n"
+#~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
+#~ "    you MUST provide a value for the basin threshold parameter."
+#~ msgstr ""
+#~ "Wenn eine der folgenden Optionen gesetzt wurde:\n"
+#~ "    basin, stream, half.basin, slope oder slope.steepness\n"
+#~ "    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
+
+#~ msgid ""
+#~ "Filters and generates a depressionless elevation map and a flow direction "
+#~ "map from a given elevation layer."
+#~ msgstr ""
+#~ "Filtere und generiere ein depressionsloses Höhenmodell und eine "
+#~ "Fließrichtungskarte auf Basis eines gegebenen Höhenmodells."
+
+#~ msgid "Output direction raster map"
+#~ msgstr "Name der Ausgabe-Rasterkarte, der Fließrichtungen."
+
+#~ msgid "Output raster map of problem areas"
+#~ msgstr "Name der Ausgabe-Rasterkarte mit Problemflächen."
+
+#~ msgid "Surface generation program from rasterized contours."
+#~ msgstr ""
+#~ "Erzeugt eine Rasteroberfläche aus gerasterten Konturlinien mit "
+#~ "Höheninformationen."
+
+#~ msgid "Name of existing raster map containing contours"
+#~ msgstr "Name der existierenden Rasterkarte, die Konturlinien enthält."
+
+#~ msgid "Creates/modifies the color table associated with a raster map layer."
+#~ msgstr "Erzeugt/verändert die Farbtabelle einer Rasterkarte."
+
+#~ msgid "Raster map name from which to copy color table"
+#~ msgstr "Rasterkarte, von der die Farbtabelle kopiert werden soll."
+
+#~ msgid "Path to rules file (\"-\" to read rules from stdin)"
+#~ msgstr "Pfad zur Datei mit Regeln (\"-\" um Regeln von stdin zu lesen)."
+
+#~ msgid "Checking GDAl data type and nodata value"
+#~ msgstr "Prüfe GDAL Datentyp und NoData-Wert."
+
+#~ msgid "Range to be exported: %f - %f"
+#~ msgstr "Zu exportierender Wertebereich: %f - %f"
+
+#~ msgid ""
+#~ "Mismatch between metadata nodata value and actual nodata value in "
+#~ "exported raster: specified nodata value %f gets converted to %d by "
+#~ "selected GDAL datatype."
+#~ msgstr ""
+#~ "NoData-Wert der Metadaten und der tatsächlichen Werte in den exportierten "
+#~ "Rasterdaten stimmen nicht überein: Der angegebene NoData-Wert %f wird von "
+#~ "dem gewählten GDAL-Datentyp nach %d konvertiert."
+
+#~ msgid "Generates a raster map layer of distance to features in input layer."
+#~ msgstr ""
+#~ "Erzeugt eine Rasterkarte mit Distanzen zu Featuren in der Eingabekarte."
+
+#~ msgid "(i)   Basin map created by r.water.outlet (MASK)"
+#~ msgstr "(i)   Einzugsgebietskarte wurde von r.water.outlet (MASK) erstellt."
+
+#~ msgid "(o)   Direction map for depressionless elevation map"
+#~ msgstr "(o)   Richtungskarte für abflusslose Höhenkarte."
+
+#~ msgid "(i)   Number of topographic index classes"
+#~ msgstr "(i)   Anzahl der Klassen des Topgraphischen Indexes."
+
+#~ msgid "(o/i) Topographic index statistics file"
+#~ msgstr "(i/o) Statistik-Datei des Topographischen Indexes."
+
+#~ msgid "(i)   TOPMODEL Parameters file"
+#~ msgstr "(i)   Parameterdatei für TOPMODEL"
+
+#~ msgid "(i)   Rainfall and potential evapotranspiration data file"
+#~ msgstr "(i)    Datei mir Niederschlag und potentieller Evapotranspiration."
+
+#~ msgid ""
+#~ "Calculates cast shadow areas from sun position and DEM. Either A: exact "
+#~ "sun position is specified, or B: date/time to calculate the sun position "
+#~ "by r.sunmask itself."
+#~ msgstr ""
+#~ "Berechnet Schlagschattenbereiche zwischen Sonnenstand und DEM. Es können "
+#~ "entweder A: exakte Sonnenposition, oder B: Datum/Uhrzeit zur "
+#~ "selbständigen Berechnung durch r.sunmask, angegeben werden."
+
+#~ msgid "A: altitude of the sun above horizon, degrees"
+#~ msgstr "A: Höhe der Sonne über dem Horizont (in Grad)."
+
+#~ msgid "A: azimuth of the sun from the north, degrees"
+#~ msgstr "A: Winkel der Sonne, gemessen von der Nordrichtung (in Grad)."
+
+#~ msgid "B: minutes (0..60)"
+#~ msgstr "B: Minuten (0..60)"
+
+#~ msgid "B: seconds (0..60)"
+#~ msgstr "B: Sekunden (0..60)"
+
+#~ msgid ""
+#~ "B: timezone (east positive, offset from GMT, also use to adjust daylight "
+#~ "savings)"
+#~ msgstr ""
+#~ "B: Zeitzone (Ost positiv, Abstand von GMT; wird auch zur Anpassung an die "
+#~ "Winterzeit genutzt)."
+
+#~ msgid ""
+#~ "Creates a new map layer whose category values are based upon a "
+#~ "reclassification of the categories in an existing raster map layer."
+#~ msgstr ""
+#~ "Erzeugt eine neue Karte, deren Kategoriewerte auf einer Reklassifikation "
+#~ "der Kategorien einer existierenden Rasterkarte basieren."
+
+#~ msgid "Raster map to be reclassified"
+#~ msgstr "Rasterkarte, die neu klassifiziert werden soll."
+
+#~ msgid "Converts a raster map into a vector map layer."
+#~ msgstr "Konvertiert eine Rasterkarte in eine Vektorkarte."
+
+#~ msgid ""
+#~ "Do not build vector topology (use with care for massive point export)"
+#~ msgstr ""
+#~ "Erzeuge keine Vektor-Topologie (Vorsichtig einsetzen für den Export von "
+#~ "extrem großen Punktmengen)."
+
+#~ msgid "The map E grid coordinates"
+#~ msgstr "Ost Koordinaten des Austrittspunkts"
+
+#~ msgid "Stream width (in meters). Default is raster cell width"
+#~ msgstr "Flussbreite in Meter (Standard ist die Rasterzellenbreite)."
+
+#~ msgid ""
+#~ "Construction of slope curves (flowlines), flowpath lengths, and flowline "
+#~ "densities (upslope areas) from a raster digital elevation model (DEM)"
+#~ msgstr ""
+#~ "Erzeugt Hangkurven (flowlines), Fließlängen und Flussdichte (upslope "
+#~ "areas) aus einem angegebenen digitalen Höhenmodell (DEM)."
+
+#~ msgid "Output flowpath length raster map"
+#~ msgstr "Ausgabe-Rasterkarte, der Hanglänge."
+
+#~ msgid "Output flowline density raster map"
+#~ msgstr "Ausgabe-Rasterkarte der Fließdichte."
+
+#~ msgid "3-D lengths instead of 2-D"
+#~ msgstr "3D-Länge anstelle von 2D."
+
+#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+#~ msgstr ""
+#~ "Erstellt Karte mit topographischem Index [(ln(a/tan(beta)))] auf Basis "
+#~ "einer Karte mit Höhenwerten."
+
+#~ msgid "Output topographic index map"
+#~ msgstr "Ausgabekarte mit topographischem Index"
+
+#~ msgid "general, scripts"
+#~ msgstr "Allgemein, Skripte"
+
+#~ msgid "Color for drawing X's (Null values)"
+#~ msgstr "Farbe zum Zeichnen der X (NULL-Werte)."
+
+#~ msgid "Either text or -c should be given"
+#~ msgstr "Entweder text oder '-c' sollte angegeben werden. "
+
+#~ msgid "vector, interpolation"
+#~ msgstr "Vektor, Interpolation"
+
+#~ msgid ""
+#~ "If type is not given then DOUBLE PRECISION is used. Writes Z data to "
+#~ "column instead of 3D vector."
+#~ msgstr ""
+#~ "Wenn kein Typ angegeben wurde, wird DOUBLE PRECISION verwendet. Schreibe "
+#~ "Z Werte in eine Spalte an Stelle einer 3D Vektorkarte."
+
+#~ msgid "Using 'double precision' for column <%s>"
+#~ msgstr "Verwende 'double precision' für die Spalte <%s>"
+
+#~ msgid "For vector lines reads their vertices"
+#~ msgstr "Liest die Vertices einer Vektorlinie"
+
+#~ msgid "Convex hull calculation requires at least three points. Exiting."
+#~ msgstr ""
+#~ "Die Berechnung der konvexen Hülle erfordert mindestens drei Punkte. "
+#~ "Beende mich."
+
+#~ msgid "Name of input vector map containing lines"
+#~ msgstr "Namde der Eingabe-Vektorkarte mit Linien."
+
+#~ msgid "Name for output file (do not add extension)"
+#~ msgstr "Name der Ausgabedatei (Fügen Sie keine Dateiendung an)."
+
+#~ msgid "Surface"
+#~ msgstr "Oberfläche"
+
+#~ msgid "Volume"
+#~ msgstr "Volumen"
+
+#~ msgid "Compression for PNG files"
+#~ msgstr "Komprimierung für PNG-Dateien."
+
+#~ msgid "Display the HTML man pages of GRASS"
+#~ msgstr "Zeige die HTML-Handbuchseite von GRASS."
+
+#~ msgid ""
+#~ "Set color rules for features in a vector using a numeric attribute column."
+#~ msgstr ""
+#~ "Bestimme Farbregeln für Feature einer Vektorkarte unter Verwendung einer "
+#~ "numerischen Spalte der Attributtabelle."
+
+#~ msgid "Name of color column to populate"
+#~ msgstr "Name der Farbspalte, die gefüllt werden soll."
+
+#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
+#~ msgstr "Importiert Mapgen oder Matlab Vektorkarten nach GRASS."
+
+#~ msgid "All non-NULL and non-zero cells are considered as blocking terrain"
+#~ msgstr ""
+#~ "Alle Zellen, die nicht NULL sind oder den Wert Null haben werden als "
+#~ "echte Hindernis aufgefasst."
