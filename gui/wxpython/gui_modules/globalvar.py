@@ -143,7 +143,9 @@ def GetGRASSCmds(bin=True, scripts=True, gui_scripts=True):
     cmd = list()
     if bin is True:
         for file in os.listdir(os.path.join(gisbase, 'bin')):
-            if not EXT_BIN or file[-4:] == EXT_BIN:
+            if not EXT_BIN or \
+                    file[-4:] == EXT_BIN or \
+                    file[-4:] == EXT_SCT:
                 cmd.append(file)
         
         # add special call for setting vector colors
