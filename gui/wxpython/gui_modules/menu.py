@@ -1,3 +1,20 @@
+"""!
+@package menu.py
+
+@brief Menu classes for wxGUI
+
+Classes:
+ - Menu
+
+(C) 2010 by the GRASS Development Team
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Martin Landa <landa.martin gmail.com>
+"""
+
+import shlex
+
 import wx
 
 import globalvar
@@ -50,9 +67,13 @@ class Menu(wx.MenuBar):
         
         self.menucmd[menuItem.GetId()] = gcmd
         
-        if len(gcmd) > 0 and \
-                gcmd.split()[0] not in globalvar.grassCmd['all']:
-            menuItem.Enable (False)
+        if gcmd: 
+            try: 
+                cmd = shlex.split(str(gcmd)) 
+            except UnicodeError: 
+                cmd = shlex.split(utils.EncodeString((gcmd))) 
+            if cmd and cmd[0] not in globalvar.grassCmd['all']: 
+                menuItem.Enable(False)
         
         rhandler = eval('self.parent.' + handler)
         
