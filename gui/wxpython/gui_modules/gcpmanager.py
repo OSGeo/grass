@@ -781,7 +781,8 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             }
 
         # make a backup of the current points file
-        shutil.copy(self.file['points'], self.file['points_bak'])
+        if os.path.exists(self.file['points']):
+            shutil.copy(self.file['points'], self.file['points_bak'])
 
         # polynomial order transformation for georectification
         self.gr_order = 1 
@@ -1241,7 +1242,6 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         shutil.copy(self.file['points_bak'], self.file['points'])
 
         # delete all items in mapcoordlist
-        del self.mapcoordlist
         self.mapcoordlist = []
         self.mapcoordlist.append([ 0,        # GCP number
                                    0.0,      # source east
@@ -1252,6 +1252,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                                    0.0 ] )   # backward error
 
         self.list.LoadData()
+        self.itemDataMap = self.mapcoordlist
     
     def OnFocus(self, event):
         # self.grwiz.SwitchEnv('source')
@@ -1488,9 +1489,11 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                shutil.copy(self.file['points_bak'], self.file['points'])
+                if os.path.exists(self.file['points_bak']):
+                    shutil.copy(self.file['points_bak'], self.file['points'])
 
-            os.unlink(self.file['points_bak'])
+            if os.path.exists(self.file['points_bak']):
+                os.unlink(self.file['points_bak'])
 
             self.grwiz.Cleanup()
 
