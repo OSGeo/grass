@@ -175,8 +175,9 @@ stream2_CELL(AMI_STREAM<T>* str, dimension_type nrows, dimension_type ncols,
 
   /* open output raster map */
   int outfd;
-  if ( (outfd = Rast_open_new (cellname, mtype)) < 0) {
-  
+  if ( (outfd = Rast_open_new (cellname, mtype)) < 0)
+	G_fatal_error (_("Unable to create raster map <%s>"), cellname);
+
   /* Allocate output buffer */
   unsigned char *outrast;
   outrast = (unsigned char *)Rast_allocate_buf(mtype);
