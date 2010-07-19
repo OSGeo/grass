@@ -361,7 +361,7 @@ int db_table_to_sql(dbTable * table, dbString * sql)
 	}
     }
     db_append_string(sql, " )");
-    G_debug(3, db_get_string(sql));
+    G_debug(3, "sql statement: %s", db_get_string(sql));
 
     return DB_OK;
 }
