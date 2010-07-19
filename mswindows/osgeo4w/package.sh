@@ -31,9 +31,10 @@ echo
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
-	echo $(date): STARTING make distclean
-	make distclean
-
+	if [ -e include/Make/Grass.make ] ; then
+	    echo $(date): STARTING make distclean
+	    make distclean
+	fi
 
 	echo $(date): STARTING configure
 	./configure \
