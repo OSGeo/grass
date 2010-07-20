@@ -34,7 +34,6 @@ import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as  csel
 import wx.wizard as wiz
-from wx.lib.embeddedimage import PyEmbeddedImage
 
 import grass.script as grass
 
@@ -817,20 +816,15 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         self.itemDataMap = None
 
         # images for column sorting
-        SmallUpArrow = PyEmbeddedImage(
-            "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAADxJ"
-            "REFUOI1jZGRiZqAEMFGke2gY8P/f3/9kGwDTjM8QnAaga8JlCG3CAJdt2MQxDCAUaOjyjKMp"
-            "cRAYAABS2CPsss3BWQAAAABJRU5ErkJggg==")
-
-        SmallDnArrow = PyEmbeddedImage(
-            "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAEhJ"
-            "REFUOI1jZGRiZqAEMFGke9QABgYGBgYWdIH///7+J6SJkYmZEacLkCUJacZqAD5DsInTLhDR"
-            "bcPlKrwugGnCFy6Mo3mBAQChDgRlP4RC7wAAAABJRU5ErkJggg==")
-
         # CheckListCtrlMixin must set an ImageList first
         self.il = self.list.GetImageList(wx.IMAGE_LIST_SMALL)
-        self.sm_dn = self.il.Add(SmallDnArrow.GetBitmap())
-        self.sm_up = self.il.Add(SmallUpArrow.GetBitmap())
+        i_size = wx.Size(12, 12)
+        SmallUpArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_UP,
+                       client=wx.ART_FRAME_ICON, size=i_size)
+        SmallDnArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_DOWN,
+                       client=wx.ART_FRAME_ICON, size=i_size)
+        self.sm_dn = self.il.Add(SmallDnArrow)
+        self.sm_up = self.il.Add(SmallUpArrow)
 
         # set mouse characteristics
         self.mapwin = self.SrcMapWindow
