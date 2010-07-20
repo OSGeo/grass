@@ -44,21 +44,21 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
 	    sprintf(buf, "%d", year);
 	    break;
 	case DB_MONTH:
-	    sprintf(buf, "%d%c%d", year, ds, month);
+	    sprintf(buf, "%d%c%02d", year, ds, month);
 	    break;
 	case DB_DAY:
-	    sprintf(buf, "%d%c%d%c%d", year, ds, month, ds, day);
+	    sprintf(buf, "%d%c%02d%c%02d", year, ds, month, ds, day);
 	    break;
 	case DB_HOUR:
-	    sprintf(buf, "%d%c%d%c%d %d", year, ds, month, ds, day, hour);
+	    sprintf(buf, "%d%c%02d%c%02d %02d", year, ds, month, ds, day, hour);
 	    break;
 	case DB_MINUTE:
-	    sprintf(buf, "%d%c%d%c%d %d%c%02d",
+	    sprintf(buf, "%d%c%02d%c%02d %02d%c%02d",
 		    year, ds, month, ds, day, hour, ts, minute);
 	    break;
 	case DB_SECOND:
 	case DB_FRACTION:
-	    sprintf(buf, "%d%c%d%c%d %d%c%02d%c%s%.10g",
+	    sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g",
 		    year, ds, month, ds, day, hour, ts, minute, ts, xs,
 		    seconds);
 	    break;
@@ -70,17 +70,17 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
 	    sprintf(buf, "%d", month);
 	    break;
 	case DB_DAY:
-	    sprintf(buf, "%d%c%d", month, ds, day);
+	    sprintf(buf, "%02d%c%02d", month, ds, day);
 	    break;
 	case DB_HOUR:
-	    sprintf(buf, "%d%c%d %d", month, ds, day, hour);
+	    sprintf(buf, "%02d%c%02d %02d", month, ds, day, hour);
 	    break;
 	case DB_MINUTE:
-	    sprintf(buf, "%d%c%d %d%c%02d", month, ds, day, hour, ts, minute);
+	    sprintf(buf, "%02d%c%02d %02d%c%02d", month, ds, day, hour, ts, minute);
 	    break;
 	case DB_SECOND:
 	case DB_FRACTION:
-	    sprintf(buf, "%d%c%d %d%c%02d%c%s%.10g",
+	    sprintf(buf, "%02d%c%02d %02d%c%02d%c%s%.10g",
 		    month, ds, day, hour, ts, minute, ts, xs, seconds);
 	    break;
 	}
@@ -88,17 +88,17 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
     case DB_DAY:
 	switch (to) {
 	case DB_DAY:
-	    sprintf(buf, "%d", day);
+	    sprintf(buf, "%02d", day);
 	    break;
 	case DB_HOUR:
-	    sprintf(buf, "%d %d", day, hour);
+	    sprintf(buf, "%02d %02d", day, hour);
 	    break;
 	case DB_MINUTE:
-	    sprintf(buf, "%d %d%c%02d", day, hour, ts, minute);
+	    sprintf(buf, "%02d %02d%c%02d", day, hour, ts, minute);
 	    break;
 	case DB_SECOND:
 	case DB_FRACTION:
-	    sprintf(buf, "%d %d%c%02d%c%s%.10g",
+	    sprintf(buf, "%02d %02d%c%02d%c%s%.10g",
 		    day, hour, ts, minute, ts, xs, seconds);
 	    break;
 	}
@@ -106,14 +106,14 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
     case DB_HOUR:
 	switch (to) {
 	case DB_HOUR:
-	    sprintf(buf, "%d", hour);
+	    sprintf(buf, "%02d", hour);
 	    break;
 	case DB_MINUTE:
-	    sprintf(buf, "%d%c%02d", hour, ts, minute);
+	    sprintf(buf, "%02d%c%02d", hour, ts, minute);
 	    break;
 	case DB_SECOND:
 	case DB_FRACTION:
-	    sprintf(buf, "%d%c%02d%c%s%.10g", hour, ts, minute, ts, xs,
+	    sprintf(buf, "%02d%c%02d%c%s%.10g", hour, ts, minute, ts, xs,
 		    seconds);
 	    break;
 	}
@@ -121,11 +121,11 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
     case DB_MINUTE:
 	switch (to) {
 	case DB_MINUTE:
-	    sprintf(buf, "%d", minute);
+	    sprintf(buf, "%02d", minute);
 	    break;
 	case DB_SECOND:
 	case DB_FRACTION:
-	    sprintf(buf, "%d%c%s%.10g", minute, ts, xs, seconds);
+	    sprintf(buf, "%02d%c%s%.10g", minute, ts, xs, seconds);
 	    break;
 	}
 	break;
@@ -141,14 +141,14 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
     default:
 	switch (sqltype) {
 	case DB_SQL_TYPE_DATE:
-	    sprintf(buf, "%d%c%d%c%d", year, ds, month, ds, day);
+	    sprintf(buf, "%d%c%02d%c%02d", year, ds, month, ds, day);
 	    break;
 	case DB_SQL_TYPE_TIME:
-	    sprintf(buf, "%d%c%02d%c%s%.10g",
+	    sprintf(buf, "%02d%c%02d%c%s%.10g",
 		    hour, ts, minute, ts, xs, seconds);
 	    break;
 	case DB_SQL_TYPE_TIMESTAMP:
-	    sprintf(buf, "%d%c%d%c%d %d%c%02d%c%s%.10g",
+	    sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g",
 		    year, ds, month, ds, day, hour, ts, minute, ts, xs,
 		    seconds);
 	    break;
