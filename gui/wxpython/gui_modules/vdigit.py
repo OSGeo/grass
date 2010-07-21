@@ -1,13 +1,7 @@
 """!
 @package vdigit
 
-@brief Vector digitizer extension
-
-Usage:
-
-@code
-  from vdigit import VDigit as VDigit
-@endcode
+@brief wxGUI vector digitizer user interface
 
 Classes:
  - AbstractDigit 
@@ -60,16 +54,14 @@ except ImportError, err:
     haveVDigit = False
     GV_LINES = None
     PseudoDC = wx.PseudoDC
-    errorMsg = err
-    # is there a way to have this display on the terminal before the wx gui exits?
-    print >> sys.stderr, "\nWARNING: Vector digitizer is not available (%s).\n\n" \
-        "Note that the vector digitizer is currently not working under MS Windows " \
-        "(hopefully this will be fixed soon). " \
-        "Please keep an eye out for updated versions of GRASS." % err
-
+    errorMsg = _("Vector digitizer is not available.\n"
+                 "Reason: %s\n"
+                 "Note that the vector digitizer is currently not working under\nMS Windows "
+                 "(hopefully this will be fixed soon). "
+                 "Please keep\nan eye out for updated versions of GRASS." % err)
+    
 class AbstractDigit:
-    """
-    Abstract digitization class
+    """!Abstract digitization class
     """
     def __init__(self, mapwindow):
         """!Initialization
