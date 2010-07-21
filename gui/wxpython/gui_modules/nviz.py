@@ -23,23 +23,19 @@ import os
 import sys
 
 import wx
-try:
-    from wx import glcanvas
-    haveGLCanvas = True
-except ImportError, e:
-    haveGLCanvas = False
-    errorMsg = e
-
 import globalvar
 try:
+    from wx import glcanvas
     import nviz_mapdisp
     import nviz_tools
     haveNviz = True
 except ImportError, e:
     haveNviz = False
-    errorMsg = e
-    print >> sys.stderr, "\nWARNING: Nviz extension (3D view) is not available (%s). " % e
-
+    errorMsg = _("3D view mode is not available.\n"
+                 "Reason: %s\n"
+                 "Note that the 3D view mode is currently not working under\nMS Windows "
+                 "(hopefully this will be fixed soon). "
+                 "Please keep\nan eye out for updated versions of GRASS." % e)
 if haveNviz:
     GLWindow = nviz_mapdisp.GLWindow
     NvizToolWindow = nviz_tools.NvizToolWindow

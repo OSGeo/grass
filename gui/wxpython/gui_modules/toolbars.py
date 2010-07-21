@@ -36,9 +36,10 @@ import globalvar
 import gcmd
 import gdialogs
 import vdigit
-from vdigit import VDigitSettingsDialog as VDigitSettingsDialog
-from debug import Debug as Debug
+from vdigit import VDigitSettingsDialog, haveVDigit
+from debug import Debug
 from preferences import globalSettings as UserSettings
+from nviz import haveNviz
 from nviz_preferences import NvizPreferencesDialog
 
 gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
@@ -177,9 +178,23 @@ class MapToolbar(AbstractToolbar):
         self.InitToolbar(self.ToolbarData())
         
         # optional tools
-        self.combo = wx.ComboBox(parent=self, id=wx.ID_ANY, value=_('2D view'),
-                                 choices=[_('2D view'), _('3D view'), _('Digitize')],
+        choices = [_('2D view')]
+        lmgr = self.parent.GetLayerManager()
+        if haveNviz:
+            choices.append(_('3D view'))
+        else:
+            from nviz import errorMsg
+            lmgr.goutput.WriteWarning(errorMsg)
+        if haveVDigit:
+            choices.append(_('Digitize'))
+        else:
+            from vdigit import errorMsg
+            lmgr.goutput.WriteWarning(errorMsg)
+        
+        self.combo = wx.ComboBox(parent = self, id = wx.ID_ANY,
+                                 choices = choices,
                                  style=wx.CB_READONLY, size=(90, -1))
+        self.combo.SetSelection(0)
         
         self.comboid = self.AddControl(self.combo)
         self.parent.Bind(wx.EVT_COMBOBOX, self.OnSelectTool, self.comboid)

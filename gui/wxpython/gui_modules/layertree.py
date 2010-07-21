@@ -510,28 +510,32 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         return True
 
     def OnStartEditing(self, event):
+        """!Start editing vector map layer requested by the user
         """
-        Start editing vector map layer requested by the user
-        """
-        if not haveVDigit:
-            from vdigit import errorMsg
-            msg = _("Unable to start vector digitizer.\nThe VDigit python extension "
-                    "was not found or loaded properly.\n"
-                    "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg)
-            
-            self.mapdisplay.toolbars['map'].combo.SetValue (_("2D view"))
-            wx.MessageBox(parent=self.mapdisplay,
-                          message=msg,
-                          caption=_("Error"),
-                          style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-            return
-        
         try:
             maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         except:
             event.Skip()
             return
-
+        
+        if not haveVDigit:
+            from vdigit import errorMsg
+            msg = _("Unable to start wxGUI vector digitizer.\nDo you want to start "
+                    "TCL/TK digitizer (v.digit) instead?\n\n"
+                    "Details: %s" % errorMsg)
+            
+            self.mapdisplay.toolbars['map'].combo.SetValue (_("2D view"))
+            dlg = wx.MessageDialog(parent = self.mapdisplay,
+                                   message = msg,
+                                   caption=_("Vector digitizer failed"),
+                                   style = wx.YES_NO | wx.CENTRE)
+            if dlg.ShowModal() == wx.ID_YES:
+                self.lmgr.goutput.RunCmd(['v.digit', 'map=%s' % maplayer.GetName()],
+                                         switchPage=False)
+            
+            dlg.Destroy()
+            return
+        
         if not self.mapdisplay.toolbars['vdigit']: # enable tool
             self.mapdisplay.AddToolbar('vdigit')
         else: # tool already enabled
@@ -1135,11 +1139,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         #
         if self.mapdisplay.toolbars['nviz'] and \
                 self.GetPyData(self.layer_selected) is not None:
-
             if self.layer_selected.IsChecked():
                 # update Nviz tool window
                 type = self.GetPyData(self.layer_selected)[0]['maplayer'].type
-
+                
                 if type == 'raster':
                     self.lmgr.nviz.UpdatePage('surface')
                     self.lmgr.nviz.SetPage('surface')
@@ -1149,14 +1152,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif type == '3d-raster':
                     self.lmgr.nviz.UpdatePage('volume')
                     self.lmgr.nviz.SetPage('volume')
-            else:
-                for page in ('surface', 'vector', 'volume'):
-                    pageId = self.lmgr.nviz.page[page]['id']
-                    if pageId > -1:
-                        self.lmgr.nviz.notebook.RemovePage(pageId)
-                        self.lmgr.nviz.page[page]['id'] = -1
-                        self.lmgr.nviz.page['settings']['id'] = 1 
-
+        
     def OnCollapseNode(self, event):
         """!Collapse node
         """

@@ -375,23 +375,14 @@ class MapFrame(wx.Frame):
             import nviz
             
             # check for GLCanvas and OpenGL
-            msg = None
-            if not nviz.haveGLCanvas:
-                msg = _("Unable to switch to 3D display mode.\nThe GLCanvas class has not been "
-                        "included with this build "
-                        "of wxPython!\nSwitching back to "
-                        "2D display mode.\n\nDetails: %s" % nviz.errorMsg)
             if not nviz.haveNviz:
-                msg = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
-                        "was not found or loaded properly.\n"
-                        "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg)
-            
-            if msg:
                 self.toolbars['map'].combo.SetValue (_("2D view"))
-                wx.MessageBox(parent=self,
-                              message=msg,
-                              caption=_("Error"),
-                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                wx.MessageBox(parent = self,
+                              message = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
+                                          "was not found or loaded properly.\n"
+                                          "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg),
+                              caption = _("Error"),
+                              style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 return
             
             # add Nviz toolbar and disable 2D display mode tools
