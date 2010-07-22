@@ -47,6 +47,8 @@ int output_data(int tt, double ft)
     if (timesec >= 10000)
 	ndigit = 6;
 
+    Rast_set_window(&cellhd);
+
 /*
     if (outwalk) {
 	if (ts == 1) {
@@ -153,8 +155,6 @@ int output_data(int tt, double ft)
 	else
 	    erdep_fd = Rast_open_fp_new(erdep);
     }
-
-    Rast_set_window(&cellhd);
 
     if (my != Rast_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
@@ -595,6 +595,8 @@ int output_et()
 
     /*   float a1,a2; */
 
+    Rast_set_window(&cellhd);
+
     if (et) {
 	et_cell = Rast_allocate_f_buf();
 	/*      if (ts == 1) {
@@ -616,8 +618,6 @@ int output_et()
 	   else */
 	tc_fd = Rast_open_fp_new(tc);
     }
-
-    Rast_set_window(&cellhd);
 
     if (my != Rast_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,

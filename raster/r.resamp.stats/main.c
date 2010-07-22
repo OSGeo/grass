@@ -117,8 +117,6 @@ static void resamp_unweighted(void)
 
 	G_percent(row, dst_w.rows, 2);
 
-	Rast_set_window(&src_w);
-
 	for (i = 0; i < count; i++)
 	    Rast_get_d_row(infile, bufs[i], maprow0 + i);
 
@@ -148,7 +146,6 @@ static void resamp_unweighted(void)
 		(*method_fn) (&outbuf[col], values, n, closure);
 	}
 
-	Rast_set_window(&dst_w);
 	Rast_put_d_row(outfile, outbuf);
     }
 }
@@ -189,8 +186,6 @@ static void resamp_weighted(void)
 	int i;
 
 	G_percent(row, dst_w.rows, 2);
-
-	Rast_set_window(&src_w);
 
 	for (i = 0; i < count; i++)
 	    Rast_get_d_row(infile, bufs[i], maprow0 + i);
@@ -234,7 +229,6 @@ static void resamp_weighted(void)
 		(*method_fn) (&outbuf[col], values, n, closure);
 	}
 
-	Rast_set_window(&dst_w);
 	Rast_put_d_row(outfile, outbuf);
     }
 }
@@ -326,7 +320,8 @@ int main(int argc, char *argv[])
 	src_w.cols = c1 - c0;
     }
 
-    Rast_set_window(&src_w);
+    Rast_set_input_window(&src_w);
+    Rast_set_output_window(&dst_w);
 
     row_scale = 2 + ceil(dst_w.ns_res / src_w.ns_res);
     col_scale = 2 + ceil(dst_w.ew_res / src_w.ew_res);
@@ -334,22 +329,16 @@ int main(int argc, char *argv[])
     /* allocate buffers for input rows */
     bufs = G_malloc(row_scale * sizeof(DCELL *));
     for (row = 0; row < row_scale; row++)
-	bufs[row] = Rast_allocate_d_buf();
+	bufs[row] = Rast_allocate_d_input_buf();
 
     /* open old map */
     infile = Rast_open_old(parm.rastin->answer, "");
 
-    /* reset window to current region */
-    Rast_set_window(&dst_w);
-
     /* allocate output buffer */
-    outbuf = Rast_allocate_d_buf();
+    outbuf = Rast_allocate_d_output_buf();
 
     /* open new map */
     outfile = Rast_open_new(parm.rastout->answer, DCELL_TYPE);
-
-    /* prevent complaints about window changes */
-    G_suppress_warnings(1);
 
     if (flag.weight->answer && menu[method].method_w)
 	resamp_weighted();

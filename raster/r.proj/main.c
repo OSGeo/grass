@@ -307,7 +307,7 @@ int main(int argc, char **argv)
     /* this call causes r.proj to read the entire map into memeory */
     Rast_get_cellhd(inmap->answer, setname, &incellhd);
 
-    Rast_set_window(&incellhd);
+    Rast_set_input_window(&incellhd);
 
     if (G_projection() == PROJECTION_XY)
 	G_fatal_error(_("Unable to work with unprojected data (xy location)"));
@@ -380,7 +380,7 @@ int main(int argc, char **argv)
     if (incellhd.west < iwest)
 	incellhd.west = iwest;
 
-    Rast_set_window(&incellhd);
+    Rast_set_input_window(&incellhd);
 
     /* And switch back to original location */
 
@@ -415,7 +415,7 @@ int main(int argc, char **argv)
 	outcellhd.ns_res = outcellhd.ew_res = atof(res->answer);
 
     G_adjust_Cell_head(&outcellhd, 0, 0);
-    Rast_set_window(&outcellhd);
+    Rast_set_output_window(&outcellhd);
 
     G_message("");
     G_message(_("Input:"));
@@ -442,23 +442,23 @@ int main(int argc, char **argv)
 
     /* open and read the relevant parts of the input map and close it */
     G__switch_env();
-    Rast_set_window(&incellhd);
+    Rast_set_input_window(&incellhd);
     fdi = Rast_open_old(inmap->answer, setname);
     cell_type = Rast_get_map_type(fdi);
     ibuffer = readcell(fdi, memory->answer);
     Rast_close(fdi);
 
     G__switch_env();
-    Rast_set_window(&outcellhd);
+    Rast_set_output_window(&outcellhd);
 
     if (strcmp(interpol->answer, "nearest") == 0) {
 	fdo = Rast_open_new(mapname, cell_type);
-	obuffer = (CELL *) Rast_allocate_buf(cell_type);
+	obuffer = (CELL *) Rast_allocate_output_buf(cell_type);
     }
     else {
 	fdo = Rast_open_fp_new(mapname);
 	cell_type = FCELL_TYPE;
-	obuffer = (FCELL *) Rast_allocate_buf(cell_type);
+	obuffer = (FCELL *) Rast_allocate_output_buf(cell_type);
     }
 
     cell_size = Rast_cell_size(cell_type);

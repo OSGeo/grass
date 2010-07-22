@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     window.rows = 1;
     window.cols = 1;
     G_adjust_Cell_head(&window, 1, 1);
-    Rast_set_window(&window);
+    G_set_window(&window);
 
     G_begin_cell_area_calculations();
     window_area = G_area_of_cell_at_row(0);

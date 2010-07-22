@@ -16,24 +16,6 @@
 #include <grass/raster.h>
 
 /*!
- * \brief Zero a raster CELL buffer.
- *
- * This routines assigns each member of the raster buffer array
- * <i>buf</i> to zero. It assumes that <i>buf</i> has been allocated
- * using Rast_allocate_c_buf().
- *
- * \param buf data buffer
- */
-
-void Rast_zero_c_buf(CELL * buf)
-{
-    int i = Rast_window_cols();
-
-    while (i--)
-	*buf++ = 0;
-}
-
-/*!
  * \brief Zero a raster buffer.
  *
  * This routines assigns each member of the raster buffer array
@@ -46,4 +28,14 @@ void Rast_zero_c_buf(CELL * buf)
 void Rast_zero_buf(void *rast, RASTER_MAP_TYPE data_type)
 {
     memset(rast, 0, Rast_window_cols() * Rast_cell_size(data_type));
+}
+
+void Rast_zero_input_buf(void *rast, RASTER_MAP_TYPE data_type)
+{
+    memset(rast, 0, Rast_input_window_cols() * Rast_cell_size(data_type));
+}
+
+void Rast_zero_output_buf(void *rast, RASTER_MAP_TYPE data_type)
+{
+    memset(rast, 0, Rast_output_window_cols() * Rast_cell_size(data_type));
 }

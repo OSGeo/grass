@@ -500,8 +500,6 @@ int main(int argc, char *argv[])
 	      (int)(wbufferZone / stepx), (int)(sbufferZone / stepy),
 	      (int)(nbufferZone / stepy));
 
-    Rast_set_window(&cellhd);
-
     exit(EXIT_SUCCESS);
 }
 

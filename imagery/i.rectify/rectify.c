@@ -32,14 +32,13 @@ int rectify(char *name, char *mapset, char *result, int order)
      */
 
     select_target_env();
-    Rast_set_window(&target_window);
     Rast_set_cell_format(cellhd.format);
     select_current_env();
 
     /* open the file to be rectified
      * set window to cellhd first to be able to read file exactly
      */
-    Rast_set_window(&cellhd);
+    Rast_set_input_window(&cellhd);
     infd = Rast_open_old(name, mapset);
     map_type = Rast_get_map_type(infd);
     rast = (void *)G_calloc(Rast_window_cols() + 1, Rast_cell_size(map_type));

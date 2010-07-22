@@ -36,7 +36,7 @@ void Init()
     Out = (CELL **) G_malloc(sizeof(CELL *) * Rs);
     for (row = 0; row < Rs; row++) {
 	Out[row] = Rast_allocate_c_buf();
-	Rast_zero_c_buf(Out[row]);
+	Rast_zero_buf(Out[row], CELL_TYPE);
     }
 
     Cells = FlagCreate(Rs, Cs);
