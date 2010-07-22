@@ -26,9 +26,9 @@ try:
     from grass.lib.grass import *
     from grass.lib.ogsf  import *
     from grass.lib.nviz  import *
-except ImportError, e:
-    print >> sys.stderr, "\nWARNING: Nviz extension (3D view mode) disabled. Reason: %s" % e
-    sys.stderr.flush()
+    errorMsg = ''
+except ImportError, err:
+    errorMsg = err
 
 from debug import Debug
 

@@ -178,22 +178,43 @@ class MapToolbar(AbstractToolbar):
         self.InitToolbar(self.ToolbarData())
         
         # optional tools
-        choices = [_('2D view')]
-        lmgr = self.parent.GetLayerManager()
+        choices = [ _('2D view'), ]
+        self.toolId = { '2d' : 0 }
+        log = self.parent.GetLayerManager().GetLogWindow()
         if haveNviz:
             choices.append(_('3D view'))
+            self.toolId['3d'] = 1
         else:
-            from nviz import errorMsg
-            lmgr.goutput.WriteWarning(errorMsg)
+            from nviz import errorMsg as errorMsg1
+            from wxnviz import errorMsg as errorMsg2
+            if errorMsg2:
+                errorMsg = str(errorMsg1) + ' (' + str(errorMsg2) + ')'
+            log.WriteCmdLog(_('3D view mode not available'))
+            log.WriteWarning(_('Reason: %s') % errorMsg)
+            log.WriteLog(_('Note that the 3D view mode is currently not working under MS Windows '
+                           '(hopefully this will be fixed soon). '
+                           'Please keep an eye out for updated versions of GRASS.'), wrap = 60)
+            
+            self.toolId['3d'] = -1
         if haveVDigit:
             choices.append(_('Digitize'))
+            if self.toolId['3d'] > -1:
+                self.toolId['vdigit'] = 2
+            else:
+                self.toolId['vdigit'] = 1
         else:
             from vdigit import errorMsg
-            lmgr.goutput.WriteWarning(errorMsg)
+            log.WriteCmdLog(_('Vector digitizer not available'))
+            log.WriteWarning(_('Reason: %s') % errorMsg)
+            log.WriteLog(_('Note that the vector digitizer is currently not working under MS Windows '
+                           '(hopefully this will be fixed soon). '
+                           'Please keep an eye out for updated versions of GRASS.'), wrap = 60)
+            
+            self.toolId['vdigit'] = -1
         
         self.combo = wx.ComboBox(parent = self, id = wx.ID_ANY,
                                  choices = choices,
-                                 style=wx.CB_READONLY, size=(90, -1))
+                                 style = wx.CB_READONLY, size = (90, -1))
         self.combo.SetSelection(0)
         
         self.comboid = self.AddControl(self.combo)
@@ -289,20 +310,21 @@ class MapToolbar(AbstractToolbar):
             )
     
     def OnSelectTool(self, event):
-        """!
-        Select / enable tool available in tools list
+        """!Select / enable tool available in tools list
         """
         tool =  event.GetSelection()
         
-        if tool == 0:
+        if tool == self.toolId['2d']:
             self.ExitToolbars()
             self.Enable2D(True)
         
-        elif tool == 1 and not self.parent.toolbars['nviz']:
+        elif tool == self.toolId['3d'] and \
+                not self.parent.toolbars['nviz']:
             self.ExitToolbars()
             self.parent.AddToolbar("nviz")
             
-        elif tool == 2 and not self.parent.toolbars['vdigit']:
+        elif tool == self.toolId['vdigit'] and \
+                not self.parent.toolbars['vdigit']:
             self.ExitToolbars()
             self.parent.AddToolbar("vdigit")
             self.parent.MapWindow.SetFocus()
