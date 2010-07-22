@@ -266,7 +266,7 @@ static int close_new_gdal(int fd, int ok)
 	if (fcb->cur_row < fcb->cellhd.rows) {
 	    int row;
 
-	    Rast_zero_buf(fcb->data, fcb->map_type);
+	    Rast_zero_output_buf(fcb->data, fcb->map_type);
 	    for (row = fcb->cur_row; row < fcb->cellhd.rows; row++)
 		Rast_put_row(fd, fcb->data, fcb->map_type);
 	    G_free(fcb->data);
@@ -357,7 +357,7 @@ static int close_new(int fd, int ok)
 	}
 
 	if (fcb->cur_row < fcb->cellhd.rows) {
-	    Rast_zero_buf(fcb->data, fcb->map_type);
+	    Rast_zero_output_buf(fcb->data, fcb->map_type);
 	    for (row = fcb->cur_row; row < fcb->cellhd.rows; row++)
 		Rast_put_row(fd, fcb->data, fcb->map_type);
 	    G_free(fcb->data);

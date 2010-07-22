@@ -41,7 +41,7 @@ int write_map(char *name)
     int fd, row;
     void *rast;
 
-    Rast_set_window(&target_window);
+    Rast_set_output_window(&target_window);
 
     rast = Rast_allocate_buf(map_type);
     close(temp_fd);

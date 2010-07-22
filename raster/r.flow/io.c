@@ -199,7 +199,7 @@ void write_density_file(void)
     struct Colors colors;
     CELL val1, val2;
 
-    Rast_set_window(&region);
+    Rast_set_output_window(&region);
 
     G_message(_("Writing density file"));
     dsfd = Rast_open_new(parm.dsout, DCELL_TYPE);

@@ -121,11 +121,11 @@ int main(int argc, char *argv[])
 	src_w.cols = c1 - c0;
     }
 
-    Rast_set_window(&src_w);
+    Rast_set_input_window(&src_w);
 
     /* allocate buffers for input rows */
     for (row = 0; row < neighbors; row++)
-	bufs[row] = Rast_allocate_d_buf();
+	bufs[row] = Rast_allocate_d_input_buf();
 
     cur_row = -100;
 
@@ -133,15 +133,12 @@ int main(int argc, char *argv[])
     infile = Rast_open_old(rastin->answer, "");
 
     /* reset window to current region */
-    Rast_set_window(&dst_w);
+    Rast_set_output_window(&dst_w);
 
-    outbuf = Rast_allocate_d_buf();
+    outbuf = Rast_allocate_d_output_buf();
 
     /* open new map */
     outfile = Rast_open_new(rastout->answer, DCELL_TYPE);
-
-    G_suppress_warnings(1);
-    /* otherwise get complaints about window changes */
 
     switch (neighbors) {
     case 1:			/* nearest */
@@ -152,7 +149,6 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    Rast_set_window(&src_w);
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
@@ -170,7 +166,6 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    Rast_set_window(&dst_w);
 	    Rast_put_d_row(outfile, outbuf);
 	}
 	break;
@@ -184,7 +179,6 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    Rast_set_window(&src_w);
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
@@ -209,7 +203,6 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    Rast_set_window(&dst_w);
 	    Rast_put_d_row(outfile, outbuf);
 	}
 	break;
@@ -224,7 +217,6 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    Rast_set_window(&src_w);
 	    read_rows(infile, maprow0);
 
 	    for (col = 0; col < dst_w.cols; col++) {
@@ -282,7 +274,6 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    Rast_set_window(&dst_w);
 	    Rast_put_d_row(outfile, outbuf);
 	}
 	break;

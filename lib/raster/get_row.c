@@ -588,7 +588,7 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 
     if (!row_status) {
 	fcb->cur_row = -1;
-	Rast_zero_buf(rast, data_type);
+	Rast_zero_input_buf(rast, data_type);
 	return 0;
     }
 

@@ -100,10 +100,6 @@ int main(int argc, char *argv[])
     Cellmap_imag = opt.imag->answer;
     Cellmap_orig = opt.orig->answer;
 
-    /* open input raster map */
-    realfd = Rast_open_old(Cellmap_real, "");
-    imagfd = Rast_open_old(Cellmap_imag, "");
-
     /* get and compare the original window data */
     Rast_get_cellhd(Cellmap_real, "", &realhead);
     Rast_get_cellhd(Cellmap_imag, "", &imaghead);
@@ -119,6 +115,10 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("The real and imaginary original windows did not match"));
 
     Rast_set_window(&realhead);	/* set the window to the whole cell map */
+
+    /* open input raster map */
+    realfd = Rast_open_old(Cellmap_real, "");
+    imagfd = Rast_open_old(Cellmap_imag, "");
 
     /* get the rows and columns in the current window */
     rows = Rast_window_rows();

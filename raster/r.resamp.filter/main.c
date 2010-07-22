@@ -346,8 +346,6 @@ static void filter(void)
 	    num_rows = 0;
 	}
 
-	Rast_set_window(&src_w);
-
 	for (i = num_rows; i < rows; i++) {
 	    G_debug(5, "read: %p = %d", bufs[i], row0 + i);
 	    Rast_get_d_row(infile, inbuf, row0 + i);
@@ -358,7 +356,6 @@ static void filter(void)
 
 	v_filter(outbuf, bufs, row, rows);
 
-	Rast_set_window(&dst_w);
 	Rast_put_d_row(outfile, outbuf);
 	G_debug(5, "write: %d", row);
     }
@@ -514,18 +511,14 @@ int main(int argc, char *argv[])
     for (i = 0; i < row_scale; i++)
 	bufs[i] = Rast_allocate_d_buf();
 
-    Rast_set_window(&src_w);
+    Rast_set_input_window(&src_w);
+    Rast_set_output_window(&dst_w);
+
+    inbuf = Rast_allocate_d_input_buf();
+    outbuf = Rast_allocate_d_output_buf();
 
     infile = Rast_open_old(parm.rastin->answer, "");
-    inbuf = Rast_allocate_d_buf();
-
-    Rast_set_window(&dst_w);
-
     outfile = Rast_open_new(parm.rastout->answer, DCELL_TYPE);
-    outbuf = Rast_allocate_d_buf();
-
-    /* prevent complaints about window changes */
-    G_suppress_warnings(1);
 
     filter();
 

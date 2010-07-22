@@ -19,6 +19,7 @@
 #include "R.h"
 
 static void update_window_mappings(void);
+static void check_write_window(void);
 
 void Rast__init_window(void)
 {
@@ -29,6 +30,7 @@ void Rast__init_window(void)
 
     R__.rd_window = G__.window;
     R__.wr_window = G__.window;
+    R__.split_window = 0;
 
     G_initialize_done(&R__.window_set);
 }
@@ -44,6 +46,8 @@ void Rast_set_window(struct Cell_head *window)
 
     if (R__.split_window)
 	G_warning(_("Rast_set_window() called while window split"));
+
+    check_write_window();
 
     G_adjust_Cell_head(window, 0, 0);
 
@@ -62,6 +66,8 @@ void Rast_set_window(struct Cell_head *window)
 void Rast_set_output_window(struct Cell_head *window)
 {
     Rast__init();
+
+    check_write_window();
 
     G_adjust_Cell_head(window, 0, 0);
 
@@ -140,11 +146,26 @@ static void update_window_mappings(void)
 	    fcb->open_mode != OPEN_NEW_COMPRESSED)
 	    continue;
 
-	if (fcb->open_mode == OPEN_OLD)
+	if (fcb->open_mode == OPEN_OLD) {
+	    G_fatal_error(_("Input window changed while maps are open for read"));
 	    Rast__create_window_mapping(i);
+	}
     }
 
     /* turn masking (back) on if necessary */
     Rast__check_for_auto_masking();
+}
+
+static void check_write_window(void)
+{
+    int i;
+
+    for (i = 0; i < R__.fileinfo_count; i++) {
+	struct fileinfo *fcb = &R__.fileinfo[i];
+
+	if (fcb->open_mode == OPEN_NEW_UNCOMPRESSED ||
+	    fcb->open_mode == OPEN_NEW_COMPRESSED)
+	    G_fatal_error(_("Output window changed while maps are open for write"));
+    }
 }
 

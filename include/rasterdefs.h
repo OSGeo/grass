@@ -18,6 +18,18 @@ char *Rast_allocate_null_buf(void);
 unsigned char *Rast__allocate_null_bits(int);
 int Rast__null_bitstream_size(int);
 
+void *Rast_allocate_input_buf(RASTER_MAP_TYPE);
+CELL *Rast_allocate_c_input_buf(void);
+FCELL *Rast_allocate_f_input_buf(void);
+DCELL *Rast_allocate_d_input_buf(void);
+char *Rast_allocate_null_input_buf(void);
+
+void *Rast_allocate_output_buf(RASTER_MAP_TYPE);
+CELL *Rast_allocate_c_output_buf(void);
+FCELL *Rast_allocate_f_output_buf(void);
+DCELL *Rast_allocate_d_output_buf(void);
+char *Rast_allocate_null_output_buf(void);
+
 /* auto_mask.c */
 int Rast__check_for_auto_masking(void);
 void Rast_suppress_masking(void);
@@ -556,7 +568,8 @@ void Rast__create_window_mapping(int);
 int Rast_row_repeat_nomask(int, int);
 
 /* zero_cell.c */
-void Rast_zero_c_buf(CELL *);
 void Rast_zero_buf(void *, RASTER_MAP_TYPE);
+void Rast_zero_input_buf(void *, RASTER_MAP_TYPE);
+void Rast_zero_output_buf(void *, RASTER_MAP_TYPE);
 
 #endif /* GRASS_RASTERDEFS_H */

@@ -126,12 +126,6 @@ int main(int argc, char **argv)
     else
 	fixed_color = 1;
 
-    layer_fd = Rast_open_old(map_name, "");
-
-    /* determine the inputmap type (CELL/FCELL/DCELL) */
-    inmap_type = Rast_get_map_type(layer_fd);
-    map_type = DCELL_TYPE;
-
     /* Read in the map window associated with window */
 
     G_get_window(&window);
@@ -168,6 +162,12 @@ int main(int argc, char **argv)
 	l = 0;
 	r = ncols;
     }
+
+    layer_fd = Rast_open_old(map_name, "");
+
+    /* determine the inputmap type (CELL/FCELL/DCELL) */
+    inmap_type = Rast_get_map_type(layer_fd);
+    map_type = DCELL_TYPE;
 
     /* number of rows and cols in window */
 

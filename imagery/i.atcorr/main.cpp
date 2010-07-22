@@ -77,7 +77,7 @@ int hit = 0;
 int mis = 0;
 
 /* function prototypes */
-static void adjust_region (char *, const char *);
+static void adjust_region (const char *);
 static CELL round_c (FCELL);
 static void write_fp_to_cell (int, FCELL *);
 static void process_raster (int, InputMask, ScaleRange, int, int, int, bool, ScaleRange, bool);
@@ -92,11 +92,11 @@ static void read_scale (Option *, ScaleRange &);
    Atmospheric corrections should be done on the whole
    satelite image, not just portions.
 */
-static void adjust_region (char *name, const char *mapset)
+static void adjust_region (const char *name)
 {
     struct Cell_head iimg_head;	/* the input image header file */
 
-    Rast_get_cellhd(name, mapset, &iimg_head);
+    Rast_get_cellhd(name, "", &iimg_head);
 
     Rast_set_window(&iimg_head);
 }
@@ -409,11 +409,11 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 
 
 /* Copy the colors from map named iname to the map named oname */
-static void copy_colors (char *iname, const char *imapset, char *oname)
+static void copy_colors (const char *iname, char *oname)
 {
     struct Colors colors;
 
-    Rast_read_colors(iname, imapset, &colors);
+    Rast_read_colors(iname, "", &colors);
     Rast_write_colors(oname, G_mapset(), &colors);
 }
 
@@ -564,7 +564,6 @@ int main(int argc, char* argv[])
     int oimg_fd;	        /* output image's file descriptor */
     int ialt_fd = -1;       /* input elevation map's file descriptor */
     int ivis_fd = -1;       /* input visibility map's file descriptor */
-    const char *iimg_mapset, *ialt_mapset, *iviz_mapset;
     struct History hist;
     
     /* Define module */
@@ -578,29 +577,23 @@ int main(int argc, char* argv[])
     if (G_parser(argc, argv) < 0)
 	exit (EXIT_FAILURE);
 
-    /* open input raster */
-    if ( (iimg_mapset = G_find_raster2 ( opts.iimg->answer, "") ) == NULL )
-	G_fatal_error ( _("Raster map <%s> not found"), opts.iimg->answer);
-    if((iimg_fd = Rast_open_old(opts.iimg->answer, iimg_mapset)) < 0)
-	G_fatal_error (_("Unable to open raster map <%s>"),
-		       G_fully_qualified_name(opts.iimg->answer, iimg_mapset));
+    adjust_region(opts.iimg->answer);
 
-    adjust_region(opts.iimg->answer, iimg_mapset);
+    /* open input raster */
+    if((iimg_fd = Rast_open_old(opts.iimg->answer, "")) < 0)
+	G_fatal_error (_("Unable to open raster map <%s>"),
+		       opts.iimg->answer);
         
     if(opts.ialt->answer) {
-	if ( (ialt_mapset = G_find_raster2 ( opts.ialt->answer, "") ) == NULL )
-	    G_fatal_error ( _("Raster map <%s> not found"), opts.ialt->answer);
-	if((ialt_fd = Rast_open_old(opts.ialt->answer, ialt_mapset)) < 0)
+	if((ialt_fd = Rast_open_old(opts.ialt->answer, "")) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),
-			   G_fully_qualified_name(opts.ialt->answer, ialt_mapset));
+			   opts.ialt->answer);
     }
 
     if(opts.ivis->answer) {
-	if ( (iviz_mapset = G_find_raster2 ( opts.ivis->answer, "") ) == NULL )
-	    G_fatal_error ( _("Raster map <%s> not found"), opts.ivis->answer);
-	if((ivis_fd = Rast_open_old(opts.ivis->answer, iviz_mapset)) < 0)
+	if((ivis_fd = Rast_open_old(opts.ivis->answer, "")) < 0)
             G_fatal_error (_("Unable to open raster map <%s>"),
-			   G_fully_qualified_name(opts.ivis->answer, iviz_mapset));
+			   opts.ivis->answer);
     }
                 
     /* open a floating point raster or not? */
@@ -648,7 +641,7 @@ int main(int argc, char* argv[])
 
     /* Copy the colors of the input raster to the output raster.
        Scaling is ignored and color ranges might not be correct. */
-    copy_colors(opts.iimg->answer, iimg_mapset, opts.oimg->answer);
+    copy_colors(opts.iimg->answer, opts.oimg->answer);
 
     exit (EXIT_SUCCESS);
 }

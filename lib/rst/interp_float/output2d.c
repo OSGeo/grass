@@ -76,6 +76,8 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	     || (params->mcurv != NULL));
     cond1 = ((params->slope != NULL) || (params->aspect != NULL) || cond2);
 
+    Rast_set_window(cellhd);
+
     cell1 = Rast_allocate_f_buf();
 
     /*
@@ -110,20 +112,6 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
     if (ncols != params->nsizc) {
 	G_warning(_("First change your cols number to nsizc %d %d"),
 		  ncols, params->nsizc);
-	return -1;
-    }
-
-    Rast_set_window(cellhd);
-
-    if (nrows != Rast_window_rows()) {
-	G_warning(_("Rows changed from %d to %d"), nrows,
-		  Rast_window_rows());
-	return -1;
-    }
-
-    if (ncols != Rast_window_cols()) {
-	G_warning(_("Cols changed from %d to %d"), ncols,
-		  Rast_window_cols());
 	return -1;
     }
 
