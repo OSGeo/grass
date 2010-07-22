@@ -54,11 +54,7 @@ except ImportError, err:
     haveVDigit = False
     GV_LINES = None
     PseudoDC = wx.PseudoDC
-    errorMsg = _("Vector digitizer is not available.\n"
-                 "Reason: %s\n"
-                 "Note that the vector digitizer is currently not working under\nMS Windows "
-                 "(hopefully this will be fixed soon). "
-                 "Please keep\nan eye out for updated versions of GRASS." % err)
+    errorMsg = err
     
 class AbstractDigit:
     """!Abstract digitization class
