@@ -29,6 +29,7 @@ import sys
 import tempfile
 import shutil
 import time
+import cStringIO
 
 import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin
@@ -71,6 +72,32 @@ global maptype
 src_map = ''
 tgt_map = ''
 maptype = 'cell'
+
+def getSmallUpArrowData():
+    return \
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+\x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
+\x00\x00<IDAT8\x8dcddbf\xa0\x040Q\xa4{h\x18\xf0\xff\xdf\xdf\xffd\x1b\x00\xd3\
+\x8c\xcf\x10\x9c\x06\xa0k\xc2e\x08m\xc2\x00\x97m\xd8\xc41\x0c \x14h\xe8\xf2\
+\x8c\xa3)q\x10\x18\x00\x00R\xd8#\xec\xb2\xcd\xc1Y\x00\x00\x00\x00IEND\xaeB`\
+\x82' 
+
+def getSmallUpArrowImage():
+    stream = cStringIO.StringIO(getSmallUpArrowData())
+    return wx.ImageFromStream(stream)
+
+def getSmallDnArrowData():
+    return \
+"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+\x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
+\x00\x00HIDAT8\x8dcddbf\xa0\x040Q\xa4{\xd4\x00\x06\x06\x06\x06\x06\x16t\x81\
+\xff\xff\xfe\xfe'\xa4\x89\x91\x89\x99\x11\xa7\x0b\x90%\ti\xc6j\x00>C\xb0\x89\
+\xd3.\x10\xd1m\xc3\xe5*\xbc.\x80i\xc2\x17.\x8c\xa3y\x81\x01\x00\xa1\x0e\x04e\
+?\x84B\xef\x00\x00\x00\x00IEND\xaeB`\x82" 
+
+def getSmallDnArrowImage():
+    stream = cStringIO.StringIO(getSmallDnArrowData())
+    return wx.ImageFromStream(stream)
 
 class GCPWizard(object):
     """
@@ -220,8 +247,8 @@ class GCPWizard(object):
             self.gcpmgr.InitMapDisplay()
             self.gcpmgr.CenterOnScreen()
             self.gcpmgr.Show()
-            #self.gcpmgr.Centre()
-            #self.gcpmgr.Raise()
+            # need to update AUI here for wingrass
+            self.gcpmgr._mgr.Update()
         else:
             self.Cleanup()
                             
@@ -818,11 +845,18 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         # images for column sorting
         # CheckListCtrlMixin must set an ImageList first
         self.il = self.list.GetImageList(wx.IMAGE_LIST_SMALL)
-        i_size = wx.Size(12, 12)
-        SmallUpArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_UP,
-                       client=wx.ART_FRAME_ICON, size=i_size)
-        SmallDnArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_DOWN,
-                       client=wx.ART_FRAME_ICON, size=i_size)
+
+        # TODO: make a decision
+        use_art_provider = False
+        if use_art_provider:
+            i_size = wx.Size(12, 12)
+            SmallUpArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_UP,
+                           client=wx.ART_FRAME_ICON, size=i_size)
+            SmallDnArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_DOWN,
+                           client=wx.ART_FRAME_ICON, size=i_size)
+        else:
+            SmallUpArrow = wx.BitmapFromImage(getSmallUpArrowImage())            
+            SmallDnArrow = wx.BitmapFromImage(getSmallDnArrowImage())            
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
@@ -881,7 +915,10 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         
         # initialize column sorter
         self.itemDataMap = self.mapcoordlist
-        ColumnSorterMixin.__init__(self, self.list.GetColumnCount())
+        ncols = self.list.GetColumnCount()
+        ColumnSorterMixin.__init__(self, ncols)
+        # init to ascending sort on first click
+        self._colSortFlag = [1] * ncols
 
     def SetTarget(self, tgroup, tlocation, tmapset):
         """
@@ -1718,7 +1755,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         """!Show GCP Manager manual page"""
         gcmd.RunCommand('g.manual',
                         quiet = True,
-                        parent = self,
+                        parent = None,
                         entry = 'wxGUI.GCP_Manager')
 
     def OnUpdateActive(self, event):
@@ -1834,7 +1871,6 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             tgtwidth = (srcwidth + tgtwidth) / 2
             self._mgr.GetPane("target").Hide()
             self._mgr.Update()
-            self.TgtMapWindow.SetSize((tgtwidth, tgtheight))
             self._mgr.GetPane("source").BestSize((tgtwidth, srcheight))
             self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
             if self.show_target:
@@ -1849,7 +1885,7 @@ class GCPList(wx.ListCtrl,
     def __init__(self, parent, gcp, id=wx.ID_ANY,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES |
-                 wx.LC_SINGLE_SEL | wx.LC_SORT_DESCENDING):
+                 wx.LC_SINGLE_SEL):
 
         wx.ListCtrl.__init__(self, parent, id, pos, size, style)
 
@@ -1892,7 +1928,7 @@ class GCPList(wx.ListCtrl,
             info = wx.ListItem()
             info.SetMask(wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT)
             info.SetImage(-1)
-            info.m_format = 0
+            info.m_format = wx.LIST_FORMAT_LEFT
 
             idx_col = 0
             for lbl in (_('use'),
@@ -2685,14 +2721,18 @@ class GrSettingsDialog(wx.Dialog):
                 if self.parent.show_target == False:
                     self.parent.show_target = True
                     self.parent._mgr.GetPane("target").Show()
-                    self.parent._mgr.Update()
                     self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = True)
+                    self.parent.activemap.Enable()
+                    self.parent.TgtMapWindow.ZoomToMap(layers = self.parent.TgtMap.GetListOfLayers())
+                    self.parent._mgr.Update()
             else: # tgt_map == ''
                 if self.parent.show_target == True:
                     self.parent.show_target = False
                     self.parent._mgr.GetPane("target").Hide()
-                    self.parent._mgr.Update()
+                    self.parent.activemap.SetSelection(0)
+                    self.parent.activemap.Enable(False)
                     self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = False)
+                    self.parent._mgr.Update()
 
         self.parent.UpdateColours(srcrender, srcrenderVector, tgtrender, tgtrenderVector)
 

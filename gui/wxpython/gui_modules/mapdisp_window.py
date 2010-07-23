@@ -2402,6 +2402,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.parent.MapWindow = self
                     self.parent.Map = self.Map
                     self.parent.UpdateActive(self)
+                    # needed for wingrass
+                    self.SetFocus()
         else:
             event.Skip()
 

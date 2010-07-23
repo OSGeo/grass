@@ -278,9 +278,8 @@ class MapFrame(wx.Frame):
                                               Map=self.TgtMap, tree=self.tree, lmgr=self._layerManager)
             self.MapWindow = self.SrcMapWindow
             self.Map = self.SrcMap
-            self.SrcMapWindow.SetCursor(self.cursors["default"])
-            self.TgtMapWindow.SetCursor(self.cursors["default"])
-            self.activemap.Bind(wx.EVT_CHOICE, self.OnUpdateActive)
+            self.SrcMapWindow.SetCursor(self.cursors["cross"])
+            self.TgtMapWindow.SetCursor(self.cursors["cross"])
         else:
             # default is 2D display mode
             self.MapWindow2D = BufferedWindow(self, id=wx.ID_ANY,
@@ -301,6 +300,7 @@ class MapFrame(wx.Frame):
         self.Bind(render.EVT_UPDATE_PRGBAR, self.OnUpdateProgress)
         if self.toolbars['gcpdisp']:
             self.Bind(wx.EVT_SIZE,     self.OnDispResize)
+            self.activemap.Bind(wx.EVT_CHOICE, self.OnUpdateActive)
         
         #
         # Update fancy gui style
@@ -331,17 +331,19 @@ class MapFrame(wx.Frame):
             tgtwidth = (srcwidth + tgtwidth) / 2
             self._mgr.GetPane("target").Hide()
             self._mgr.Update()
-            self.TgtMapWindow.SetSize((tgtwidth, tgtheight))
             self._mgr.GetPane("source").BestSize((tgtwidth, tgtheight))
             self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
             if self.show_target:
                 self._mgr.GetPane("target").Show()
+            else:
+                self.activemap.Enable(False)
         else:
             self._mgr.AddPane(self.MapWindow, wx.aui.AuiPaneInfo().CentrePane().
                           Dockable(False).BestSize((-1,-1)).
                           CloseButton(False).DestroyOnClose(True).
                           Layer(0))
-        self._mgr.Update()
+        # called by GCPWizard
+        #self._mgr.Update()
 
         #
         # Init print module and classes
@@ -646,9 +648,9 @@ class MapFrame(wx.Frame):
             self.OnPointer(event)
         elif self._layerManager and \
                 self._layerManager.gcpmanagement:
-            # in georectifying session; display used to get geographic
-            # coordinates for GCPs
+            # in GCP Management, set focus to current MapWindow for mouse actions
             self.OnPointer(event)
+            self.MapWindow.SetFocus()
         else:
             # change bookcontrol page to page associated with display
             if self.page:
@@ -681,6 +683,10 @@ class MapFrame(wx.Frame):
         if self.toolbars['vdigit'] and self.digit:
             self.digit.driver.SetSelected([])
             self.MapWindow.UpdateMap(render=True, renderVector=True)
+        elif self.toolbars['gcpdisp']:
+            self.SrcMapWindow.UpdateMap(render=True)
+            self.TgtMapWindow.UpdateMap(render=True)
+            self._mgr.Update()
         else:
             self.MapWindow.UpdateMap(render=True)
         
