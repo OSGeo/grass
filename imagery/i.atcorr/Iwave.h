@@ -106,6 +106,9 @@ c        81  1st band of avnir        ( 0.390-0.550 )                  c
 c        82  2nd      "               ( 0.485-0.695 )                  c
 c        83  3rd      "               ( 0.545-0.745 )                  c
 c        84  4th      "               ( 0.700-0.925 )                  c
+c        85  Green band of IKONOS     ( 0.350-1.035 )                  c
+c        86  Red      "               ( 0.350-1.035 )                  c
+c        87  NIR      "               ( 0.350-1.035 )                  c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
 
@@ -143,6 +146,7 @@ private:
 	void irs_1c_liss(int iwa);
 	void aster(int iwa);
 	void avnir(int iwa);
+	void ikonos(int iwa);
 
 
 public:
