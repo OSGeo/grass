@@ -17,12 +17,31 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+/*!
+ * \brief Append a string to a History structure
+ *
+ *
+ * \param hist pointer to History structure which holds history info
+ * \param str string to append
+ *
+ * \return void
+ */
 void Rast_append_history(struct History *hist, const char *str)
 {
     hist->lines = G_realloc(hist->lines, (hist->nlines + 1) * sizeof(char *));
     hist->lines[hist->nlines++] = G_store(str);
 }
 
+/*!
+ * \brief Append a formated string to a History structure
+ *
+ *
+ * \param hist pointer to History structure which holds history info
+ * \param fmt a string of format characters
+ * \param ... the arguments associated with the format characters
+ *
+ * \return void
+ */
 void Rast_append_format_history(struct History *hist, const char *fmt, ...)
 {
     va_list ap;
@@ -145,11 +164,31 @@ void Rast_write_history(const char *name, struct History *hist)
     Rast__write_history(hist, fp);
 }
 
+
+/*!
+ * \brief Set the string of a specific history field
+ *
+ *
+ * \param hist pointer to History structure which holds history info
+ * \param field number of a specific history field, should be accessed with macros (HIST_MAPID, ...)
+ *
+ * \return string of the history field
+ */
 const char *Rast_get_history(struct History *hist, int field)
 {
     return hist->fields[field];
 }
 
+/*!
+ * \brief Set the string of a specific history field
+ *
+ *
+ * \param hist pointer to History structure which holds history info
+ * \param field number of a specific history field, should be accessed with macros (HIST_MAPID, ...)
+ * \param str string of the history field
+ *
+ * \return void
+ */
 void Rast_set_history(struct History *hist, int field, const char *str)
 {
     if (hist->fields[field])
