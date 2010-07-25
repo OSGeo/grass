@@ -214,7 +214,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if hasattr(self.lmgr, "nviz"):
                     self.lmgr.nviz.UpdateSettings()
                     
-                    self._display.SetView(self.view['pos']['x'], self.view['pos']['y'],
+                    self._display.SetView(self.view['position']['x'], self.view['position']['y'],
                                           self.iview['height']['value'],
                                           self.view['persp']['value'],
                                           self.view['twist']['value'])
@@ -284,7 +284,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateView(self, event):
         """!Change view settings"""
         data = self.view
-        self._display.SetView(data['pos']['x'], data['pos']['y'],
+        self._display.SetView(data['position']['x'], data['position']['y'],
                               self.iview['height']['value'],
                               data['persp']['value'],
                               data['twist']['value'])
@@ -298,8 +298,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateLight(self, event):
         """!Change light settings"""
         data = self.light
-        self._display.SetLight(x = data['pos']['x'], y = data['pos']['y'],
-                               z = data['pos']['z'], color = data['color'],
+        self._display.SetLight(x = data['position']['x'], y = data['position']['y'],
+                               z = data['position']['z'], color = data['color'],
                                bright = data['bright'] / 100.,
                                ambient = data['ambient'] / 100.)
         self._display.DrawLightingModel()
@@ -801,10 +801,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.view['z-exag']['min'] = 0
         self.view['z-exag']['max'] = self.view['z-exag']['value'] * 10
         
-        self.view['pos']['x'] = UserSettings.Get(group = 'nviz', key = 'view',
-                                                 subkey = ('pos', 'x'))
-        self.view['pos']['y'] = UserSettings.Get(group = 'nviz', key = 'view',
-                                                 subkey = ('pos', 'y'))
+        self.view['position']['x'] = UserSettings.Get(group = 'nviz', key = 'view',
+                                                 subkey = ('position', 'x'))
+        self.view['position']['y'] = UserSettings.Get(group = 'nviz', key = 'view',
+                                                 subkey = ('position', 'y'))
         self.view['persp']['value'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                        subkey = ('persp', 'value'))
         
