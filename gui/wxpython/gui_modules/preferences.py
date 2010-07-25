@@ -43,6 +43,7 @@ import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 
 from grass.script import core as grass
+
 import gcmd
 import utils
 import globalvar
@@ -451,7 +452,7 @@ class Settings:
                         'value' : 20,
                         'step' : 5,
                         },
-                    'pos' : {
+                    'position' : {
                         'x' : 0.84,
                         'y' : 0.16,
                         },
@@ -515,23 +516,23 @@ class Settings:
                         'value' : (0, 0, 0, 255), # constant: black
                         },
                     'draw' : {
-                        'mode' : 0, # isosurfaces
-                        'shading' : 1, # gouraud
+                        'mode'       : 0, # isosurfaces
+                        'shading'    : 1, # gouraud
                         'resolution' : 3, # polygon resolution
                         },
                     'shine': {
                         'map' : False,
-                        'value' : 60.0,
+                        'value' : 60,
                         },
                     },
                 'light' : {
-                    'pos' : {
+                    'position' : {
                         'x' : 0.68,
                         'y' : 0.68,
                         'z' : 80,
                         },
-                    'color'   : (255, 255, 255, 255), # white
                     'bright'  : 80,
+                    'color'   : (255, 255, 255, 255), # white
                     'ambient' : 20,
                     },
                 'fringe' : {
@@ -544,7 +545,7 @@ class Settings:
                     'color' : {
                         'valid'   :  (180, 234, 154, 255), # light green
                         'invalid' :  (255, 255, 255, 255), # white
-                        'running' :  (255, 0, 0),          # red
+                        'running' :  (255, 0, 0, 255),     # red
                         'disabled' : (211, 211, 211, 255), # light grey
                         },
                     'size' : {
@@ -558,9 +559,9 @@ class Settings:
                     },
                 'data' : { 
                     'color': {
-                        'raster'   : (215, 215, 248), # light blue
-                        'raster3d' : (215, 248, 215), # light green
-                        'vector'   : (248, 215, 215), # light red
+                        'raster'   : (215, 215, 248, 255), # light blue
+                        'raster3d' : (215, 248, 215, 255), # light green
+                        'vector'   : (248, 215, 215, 255), # light red
                         },
                     'size' : {
                         'width' : 175,
@@ -648,14 +649,11 @@ class Settings:
             settings = self.userSettings
 
         # look for settings file
-        # -> mapser
-        #  -> location
-        #   -> gisdbase
         gisenv = grass.gisenv()
         gisdbase = gisenv['GISDBASE']
         location_name = gisenv['LOCATION_NAME']
         mapset_name = gisenv['MAPSET']
-
+        
         filePath = os.path.join(os.path.expanduser("~"), '.grass7', 'wx') # MS Windows fix ?
         
         self.__ReadFile(filePath, settings)
@@ -744,7 +742,7 @@ class Settings:
                     subkeys = settings[group][key].keys()
                     for idx in range(len(subkeys)):
                         value = settings[group][key][subkeys[idx]]
-                        if type(value) == type({}):
+                        if type(value) == types.DictType:
                             if idx > 0:
                                 file.write('%s%s%s%s%s' % (os.linesep, group, self.sep, key, self.sep))
                             file.write('%s%s' % (subkeys[idx], self.sep))
@@ -756,12 +754,15 @@ class Settings:
                                                        svalue))
                                 if sidx < len(kvalues) - 1:
                                     file.write('%s' % self.sep)
+                            if idx < len(subkeys) - 1:
+                                file.write('%s%s%s%s%s' % (os.linesep, group, self.sep, key, self.sep))
                         else:
                             value = self.__parseValue(settings[group][key][subkeys[idx]])
                             file.write('%s%s%s' % (subkeys[idx], self.sep, value))
-                            if idx < len(subkeys) - 1:
+                            if idx < len(subkeys) - 1 and \
+                                    type(settings[group][key][subkeys[idx + 1]]) != types.DictType:
                                 file.write('%s' % self.sep)
-                    file.write('%s' % os.linesep)
+                    file.write(os.linesep)
         except IOError, e:
             raise gcmd.SettingsError(message=e)
         except StandardError, e:
@@ -839,9 +840,9 @@ class Settings:
             print >> sys.stderr, "Settings: unable to get value '%s:%s:%s'\n" % \
                 (group, key, subkey)
         
-    def Set(self, group, value, key=None, subkey=None, internal=False):
+    def Set(self, group, value, key = None, subkey = None, internal = False):
         """!Set value of key/subkey
-
+        
         Raise KeyError if group/key is not found
         
         @param group settings group
@@ -854,7 +855,7 @@ class Settings:
             settings = self.internalSettings
         else:
             settings = self.userSettings
-
+        
         try:
             if subkey is None:
                 if key is None:
@@ -869,7 +870,7 @@ class Settings:
                     settings[group][key][subkey] = value
         except KeyError:
             raise gcmd.SettingsError("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
-
+        
     def Append(self, dict, group, key, subkey, value):
         """!Set value of key/subkey
 
@@ -891,10 +892,18 @@ class Settings:
             # TODO: len(subkey) > 2
             if not dict[group][key].has_key(subkey[0]):
                 dict[group][key][subkey[0]] = {}
-            dict[group][key][subkey[0]][subkey[1]] = value
+            try:
+                dict[group][key][subkey[0]][subkey[1]] = value
+            except TypeError:
+                print >> sys.stderr, _("Unable to parse settings '%s' (%s:%s:%s:%s)") % \
+                    (value, group, key, subkey[0], subkey[1])
         else:
-            dict[group][key][subkey] = value
-
+            try:
+                dict[group][key][subkey] = value
+            except TypeError:
+                print >> sys.stderr, _("Unable to parse settings '%s' (%s:%s:%s)") % \
+                    (value, group, key, subkey)
+        
     def GetDefaultSettings(self):
         """!Get default user settings"""
         return self.defaultSettings

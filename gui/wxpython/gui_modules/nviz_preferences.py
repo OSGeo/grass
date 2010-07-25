@@ -89,7 +89,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         
         # position
         self.win['view']['pos'] = {}
-        posvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'pos')
+        posvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'position')
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Position:")),
                       pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
@@ -357,7 +357,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 for subvalue in value.keys():
                     win = self.FindWindowById(self.win[subgroup][subkey][subvalue])
                     val = settings[subgroup][subkey][subvalue]
-                    if subkey == 'pos':
+                    if subkey == 'position':
                         val = int(val * 100)
                     
                     win.SetValue(val)
