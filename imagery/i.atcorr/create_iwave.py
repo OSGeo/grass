@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 """
 Created on Sat Mar 27 11:35:32 2010
 
@@ -9,7 +9,7 @@ what is needed in the Iwave.cpp file
 
 Needs numpy and scipy
 
-@author: daniel
+@author: daniel victoria, 2010
 contact: daniel {dot} victoria {at} gmail {dot} com
 
 usage() explains how this is supposed to work
@@ -18,8 +18,7 @@ band in a column. First column has to be wavelength (nm)
 First line (and only first) is a header with Wl, followed by band names
 file name is used for sensor name
 
-Self though programer warning: beware of fractured python bellow
-and fractured english also :)
+Updated by: Anne Ghisla, 2010
 """
 import os
 import sys
