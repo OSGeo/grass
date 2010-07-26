@@ -24,6 +24,10 @@
 #%  key: e
 #%  description: Extended statistics (quartiles and 90th percentile)
 #%END
+#%flag
+#%  key: g
+#%  description: Print stats in shell script style
+#%END
 #%option
 #% key: table
 #% type: string
@@ -95,6 +99,7 @@ def main():
     tmp = grass.tempfile()
 
     extend = flags['e']
+    shellstyle = flags['g']
     table = options['table']
     column = options['column']
     database = options['database']
@@ -150,18 +155,29 @@ def main():
     if N <= 0:
         grass.fatal(_("No non-null values found"))
 
-    print ""
-    print "Number of values:", N
-    print "Minimum:", minv
-    print "Maximum:", maxv
-    print "Range:", maxv - minv
-    print "-----"
-    print "Mean:", sum/N
-    print "Arithmetic mean of absolute values:", sum3/N
-    print "Variance:", (sum2 - sum*sum/N)/N
-    print "Standard deviation:", math.sqrt((sum2 - sum*sum/N)/N)
-    print "Coefficient of variation:", (math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N)
-    print "-----"
+    if not shellstyle:
+        print ""
+        print "Number of values:", N
+        print "Minimum:", minv
+        print "Maximum:", maxv
+        print "Range:", maxv - minv
+        print "-----"
+        print "Mean:", sum/N
+        print "Arithmetic mean of absolute values:", sum3/N
+        print "Variance:", (sum2 - sum*sum/N)/N
+        print "Standard deviation:", math.sqrt((sum2 - sum*sum/N)/N)
+        print "Coefficient of variation:", (math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N)
+        print "-----"
+    else:
+        print "n=%d" % N
+        print "min=%f" % minv
+        print "max=%f" % maxv
+        print "range=%f" % (maxv - minv)
+        print "mean=%f" % (sum/N)
+        print "mean_abs=%f" % (sum3/N)
+        print "variance=%f" % ((sum2 - sum*sum/N)/N)
+        print "stddev=%f" % (math.sqrt((sum2 - sum*sum/N)/N))
+        print "coeff_var=%f" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
 
     if not extend:
         return
@@ -196,10 +212,16 @@ def main():
 
     q50 = (q50a + q50b) / 2
 
-    print "1st Quartile: %f" % q25
-    print "Median (%s N): %f" % (eostr, q50)
-    print "3rd Quartile: %f" % q75
-    print "90th Percentile: %f" % q90
+    if not shellstyle:
+        print "1st Quartile: %f" % q25
+        print "Median (%s N): %f" % (eostr, q50)
+        print "3rd Quartile: %f" % q75
+        print "90th Percentile: %f" % q90
+    else:
+        print "first_quartile=%f" % q25
+        print "median=%f" % q50
+        print "third_quartile=%f" % q75
+        print "percentile_90==%f" % q90
 
 if __name__ == "__main__":
     options, flags = grass.parser()
