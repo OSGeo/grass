@@ -43,7 +43,8 @@ int write_map(char *name)
 
     Rast_set_output_window(&target_window);
 
-    rast = Rast_allocate_buf(map_type);
+    /* working with split windows, can not use Rast_allocate_buf(map_type); */
+    rast = G_malloc(target_window.cols * Rast_cell_size(map_type));
     close(temp_fd);
     temp_fd = open(temp_name, 0);
     fd = Rast_open_new(name, map_type);
@@ -57,6 +58,7 @@ int write_map(char *name)
     close(temp_fd);
     unlink(temp_name);
     Rast_close(fd);
+    G_free(rast);
 
     return 0;
 }
