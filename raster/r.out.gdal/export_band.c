@@ -198,10 +198,10 @@ int exact_checks(GDALDataType export_datatype,
 	}
 	/* user-specified nodataval didn't work */
 	else {
-	    G_warning(_("The given nodata value is present in raster"
+	    G_warning(_("The user given nodata value %g is present in raster"
 			"band <%s> and would lead to data loss. Please specify a "
 			"different nodata value with the %s parameter."),
-		      name, nodatakey);
+		      nodataval, name, nodatakey);
 	}
 	ret = -1;
     }
