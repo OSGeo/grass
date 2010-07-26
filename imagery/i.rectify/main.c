@@ -187,7 +187,9 @@ int main(int argc, char *argv[])
 
     if (c->answer) {
 	/* Use current Region */
-	G_get_window(&target_window);
+	select_target_env();
+	G__get_window(&target_window, "", "WIND", G_mapset());
+	select_current_env();
     }
     else {
 	/* Calculate smallest region */
