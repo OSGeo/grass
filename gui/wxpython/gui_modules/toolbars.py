@@ -189,6 +189,8 @@ class MapToolbar(AbstractToolbar):
             from wxnviz import errorMsg as errorMsg2
             if errorMsg2:
                 errorMsg = str(errorMsg1) + ' (' + str(errorMsg2) + ')'
+            else:
+                errorMsg = str(errorMsg1)
             log.WriteCmdLog(_('3D view mode not available'))
             log.WriteWarning(_('Reason: %s') % errorMsg)
             log.WriteLog(_('Note that the 3D view mode is currently not working under MS Windows '

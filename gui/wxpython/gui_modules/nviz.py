@@ -28,6 +28,7 @@ try:
     from wx import glcanvas
     import nviz_mapdisp
     import nviz_tools
+    import wxnviz
     haveNviz = True
 except ImportError, err:
     haveNviz = False
