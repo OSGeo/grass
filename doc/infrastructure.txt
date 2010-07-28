@@ -49,7 +49,7 @@ Maintainer: M. Neteler
 * GRASS user manual HTML:
 ** generated during compilation of weekly Linux binary snapshot
 
-* GRASS programmer's manual (http://download.osgeo.org/grass/grass7_progman/):
+* GRASS programmer's manual (http://grass.osgeo.org/programming7/)
 ** HTML: cronjob run Saturday morning California time
 ** disabled: PDF: cronjob run Saturday morning California time
 

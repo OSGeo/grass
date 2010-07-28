@@ -5,14 +5,14 @@ How to get write access here?
 
 Write access is only granted to developers who agree to abide by
 RFC2 - Legal aspects of code contributions
-http://download.osgeo.org/grass/grass7_progman/rfc/rfc2_psc.html
+http://grass.osgeo.org/programming7/rfc/rfc2_psc.html
 and the code submission guidelines (file SUBMITTING in this 
 directory).
 
 This needs to be communicated to a GRASS developer. S/he will 
 then possibly propose you to the GRASS Project Steering committee
 after a period of evaluation. For details, see
-http://download.osgeo.org/grass/grass7_progman/rfc/main.html
+http://grass.osgeo.org/programming7/rfc/
 
 Once write access is granted, you, the new developer need to
 obtain an "osgeo_id" at http://www.osgeo.org/osgeo_userid
@@ -48,5 +48,5 @@ To generate the documents in PDF format, run
    make pdfdocs
 
 An online version is available at:
-http://download.osgeo.org/grass/grass7_progman/
+http://grass.osgeo.org/programming7/
 
