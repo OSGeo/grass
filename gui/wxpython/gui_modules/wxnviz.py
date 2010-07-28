@@ -487,8 +487,11 @@ class Nviz(object):
         Debug.msg(3, "Nviz::SetSurfaceAttr(): id=%d, attr=%d, map=%d, value=%s",
                   id, attr, map, value)
         
-        return 1 if ret else -2
-
+        if ret < 0:
+            return -2
+        
+        return 1
+    
     def UnsetSurfaceMask(self, id):
         """!Unset surface mask
         
@@ -541,7 +544,10 @@ class Nviz(object):
         
         ret = Nviz_unset_attr(id, MAP_OBJ_SURF, attr)
         
-        return 1 if ret else -2
+        if ret < 0:
+            return -2
+        
+        return 1
 
     def SetSurfaceRes(self, id, fine, coarse):
         """!Set surface resolution
@@ -852,7 +858,10 @@ class Nviz(object):
         
         ret = GVL_isosurf_del(id, isosurf_id)
         
-        return -3 if ret < 0 else 1
+        if ret < 0:
+            return -3
+
+        return 1
     
     def MoveIsosurface(self, id, isosurf_id, up):
         """!Move isosurface up/down in the list
@@ -877,7 +886,10 @@ class Nviz(object):
         else:
             ret = GVL_isosurf_move_down(id, isosurf_id)
         
-        return -3 if ret < 0 else 1
+        if ret < 0:
+            return -3
+
+        return 1
 
     def SetIsosurfaceColor(self, id, isosurf_id, map, value):
         """!Set isosurface color
@@ -990,7 +1002,10 @@ class Nviz(object):
                   "attr=%d, map=%d, value=%s",
                   id, isosurf_id, attr, map, value)
         
-        return 1 if ret > 0 else -2
+        if ret < 0:
+            return -2
+        
+        return 1
     
     def UnsetIsosurfaceMask(self, id, isosurf_id):
         """!Unset isosurface mask
@@ -1054,7 +1069,10 @@ class Nviz(object):
         
         ret = GVL_isosurf_unset_att(id, isosurf_id, attr)
         
-        return 1 if ret > 0 else -2
+        if ret < 0:
+            return -2
+        
+        return 1
 
     def SetIsosurfaceMode(self, id, mode):
         """!Set draw mode for isosurfaces
@@ -1070,7 +1088,10 @@ class Nviz(object):
         
         ret = GVL_isosurf_set_drawmode(id, mode)
         
-        return -2 if ret < 0 else 1
+        if ret < 0:
+            return -2
+        
+        return 1
     
     def SetIsosurfaceRes(self, id, res):
         """!Set draw resolution for isosurfaces
@@ -1086,7 +1107,10 @@ class Nviz(object):
         
         ret = GVL_isosurf_set_drawres(id, res, res, res)
         
-        return -2 if ret < 0 else 1
+        if ret < 0:
+            return -2
+        
+        return 1
 
     def SaveToFile(self, filename, width = 20, height = 20, itype = 'ppm'):
         """!Save current GL screen to ppm/tif file
