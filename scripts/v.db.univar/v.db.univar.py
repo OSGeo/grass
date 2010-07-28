@@ -5,6 +5,7 @@
 # MODULE:	v.db.univar (formerly called v.univar.sh)
 # AUTHOR(S):	Michael Barton, Arizona State University
 #               Converted to Python by Glynn Clements
+#               Sync'ed to r.univar by Markus Metz
 # PURPOSE:	Calculates univariate statistics from a GRASS vector map attribute column.
 #               Based on r.univar.sh by Markus Neteler
 # COPYRIGHT:	(C) 2005, 2007, 2008 by the GRASS Development Team
@@ -64,6 +65,15 @@
 #% description: WHERE conditions of SQL statement without 'where' keyword
 #% required : no
 #%end
+#%option
+#% key: percentile
+#% type: double
+#% description: Percentile to calculate (requires extended statistics flag)
+#% required : no
+#% answer: 90
+#% options: 0-100
+#% multiple: yes
+#%end
 
 import sys
 import os
@@ -105,9 +115,13 @@ def main():
     database = options['database']
     driver = options['driver']
     where = options['where']
+    perc = options['percentile']
+    
+    perc = [float(p) for p in perc.split(',')]
 
-    grass.message(_("Calculation for column <%s> of table <%s>...") % (column, table))
-    grass.message(_("Reading column values..."))
+    if not shellstyle:
+        grass.message(_("Calculation for column <%s> of table <%s>...") % (column, table))
+        grass.message(_("Reading column values..."))
 
     sql = "SELECT %s FROM %s" % (column, table)
     if where:
@@ -132,7 +146,8 @@ def main():
         tmpf.close()
 
     # calculate statistics
-    grass.message(_("Calculating statistics..."))
+    if not shellstyle:
+        grass.message(_("Calculating statistics..."))
 
     N = 0
     sum = 0.0
@@ -157,32 +172,34 @@ def main():
 
     if not shellstyle:
         print ""
-        print "Number of values:", N
-        print "Minimum:", minv
-        print "Maximum:", maxv
-        print "Range:", maxv - minv
+        print "Number of values: %d" % N
+        print "Minimum: %g" % minv
+        print "Maximum: %g" % maxv
+        print "Range: %g" % (maxv - minv)
         print "-----"
-        print "Mean:", sum/N
-        print "Arithmetic mean of absolute values:", sum3/N
-        print "Variance:", (sum2 - sum*sum/N)/N
-        print "Standard deviation:", math.sqrt((sum2 - sum*sum/N)/N)
-        print "Coefficient of variation:", (math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N)
+        print "Mean: %g" % (sum/N)
+        print "Arithmetic mean of absolute values: %g" % (sum3/N)
+        print "Variance: %g" % ((sum2 - sum*sum/N)/N)
+        print "Standard deviation: %g" % (math.sqrt((sum2 - sum*sum/N)/N))
+        print "Coefficient of variation: %g" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
+        print "Sum: %g" % sum
         print "-----"
     else:
         print "n=%d" % N
-        print "min=%f" % minv
-        print "max=%f" % maxv
-        print "range=%f" % (maxv - minv)
-        print "mean=%f" % (sum/N)
-        print "mean_abs=%f" % (sum3/N)
-        print "variance=%f" % ((sum2 - sum*sum/N)/N)
-        print "stddev=%f" % (math.sqrt((sum2 - sum*sum/N)/N))
-        print "coeff_var=%f" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
+        print "min=%.15g" % minv
+        print "max=%.15g" % maxv
+        print "range=%.15g" % (maxv - minv)
+        print "mean=%.15g" % (sum/N)
+        print "mean_abs=%.15g" % (sum3/N)
+        print "variance=%.15g" % ((sum2 - sum*sum/N)/N)
+        print "stddev=%.15g" % (math.sqrt((sum2 - sum*sum/N)/N))
+        print "coeff_var=%.15g" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
+        print "sum=%.15g" % sum
 
     if not extend:
         return
 
-    #preparations:
+    # preparations:
     sortfile(tmp, tmp + ".sort")
 
     number = N
@@ -193,7 +210,12 @@ def main():
     q50apos = round(N * 0.50)
     q50bpos = q50apos + (1 - odd)
     q75pos = round(N * 0.75)
-    q90pos = round(N * 0.90)
+
+    ppos = {}
+    pval = {}
+    for i in range(len(perc)):
+        ppos[i] = round(N * perc[i] / 100)
+        pval[i] = 0
 
     inf = file(tmp + ".sort")
     l = 1
@@ -206,22 +228,37 @@ def main():
             q50b = float(line.rstrip('\r\n'))
         if l == q75pos:
             q75 = float(line.rstrip('\r\n'))
-        if l == q90pos:
-            q90 = float(line.rstrip('\r\n'))
+        for i in range(len(ppos)):
+            if l == ppos[i]:
+                pval[i] = float(line.rstrip('\r\n'))
         l += 1
 
     q50 = (q50a + q50b) / 2
 
     if not shellstyle:
-        print "1st Quartile: %f" % q25
-        print "Median (%s N): %f" % (eostr, q50)
-        print "3rd Quartile: %f" % q75
-        print "90th Percentile: %f" % q90
+        print "1st Quartile: %g" % q25
+        print "Median (%s N): %g" % (eostr, q50)
+        print "3rd Quartile: %g" % q75
+        for i in range(len(perc)):
+            if perc[i] == int(perc[i]): # integer
+                if int(perc[i]) % 10 == 1 and int(perc[i]) != 11:
+                    print "%dst Percentile: %g" % (int(perc[i]), pval[i])
+                elif int(perc[i]) % 10 == 2 and int(perc[i]) != 12:
+                    print "%dnd Percentile: %g" % (int(perc[i]), pval[i])
+                elif int(perc[i]) % 10 == 3 and int(perc[i]) != 13:
+                    print "%drd Percentile: %g" % (int(perc[i]), pval[i])
+                else:
+                    print "%dth Percentile: %g" % (int(perc[i]), pval[i])
+            else:
+                print "%.15g Percentile: %g" % (perc[i], pval[i])
     else:
-        print "first_quartile=%f" % q25
-        print "median=%f" % q50
-        print "third_quartile=%f" % q75
-        print "percentile_90==%f" % q90
+        print "first_quartile=%g" % q25
+        print "median=%g" % q50
+        print "third_quartile=%g" % q75
+        for i in range(len(perc)):
+            percstr = "%.15g" % perc[i]
+            percstr = percstr.replace('.','_')
+            print "percentile_%s=%g" % (percstr, pval[i])
 
 if __name__ == "__main__":
     options, flags = grass.parser()
