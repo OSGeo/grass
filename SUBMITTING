@@ -14,7 +14,7 @@ following rules:
 
 
 1.  Get and read the GRASS 6 Programmer's Manual here:
-    http://download.osgeo.org/grass/grass7_progman/
+    http://grass.osgeo.org/programming7/
 
     or generate it from this source code (the programmer's manual is
     integrated in the source code in doxygen style):
