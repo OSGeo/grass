@@ -403,7 +403,7 @@ def importR():
         import rpy2.rinterface as rinterface #to speed up kriging? for plots.
         haveRpy2 = True
     except ImportError:
-        print >> sys.stderr, _("Rpy2 not found. Please install it and re-run.") # ok for other OSes?
+        print >> sys.stderr, _("Python module 'Rpy2' not found. Please install it and re-run v.krige.") # ok for other OSes?
         haveRpy2 = False
         if not haveRpy2:
             sys.exit(1)
