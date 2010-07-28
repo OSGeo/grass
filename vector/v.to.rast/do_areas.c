@@ -116,7 +116,7 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points, int field)
 	centroid = Vect_get_area_centroid(Map, i + 1);
 	if (centroid <= 0) {
 	    SETNULL(&cat);
-	    G_warning(_("Area without centroid (may be OK for island)"));
+	    G_debug(2,_("Area without centroid (OK for island)"));
 	}
 	else {
 	    Vect_read_line(Map, NULL, Cats, centroid);
