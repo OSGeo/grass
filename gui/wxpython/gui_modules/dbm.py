@@ -93,8 +93,9 @@ class VirtualAttributeList(wx.ListCtrl,
         
         try:
             keyColumn = self.LoadData(layer)
-        except gcmd.DBMError, e:
-            e.Show()
+        except gcmd.GException, e:
+            GError(parent = self,
+                   message = e)
             return
         
         #
@@ -150,10 +151,9 @@ class VirtualAttributeList(wx.ListCtrl,
         try:
             self.columns = self.mapDBInfo.tables[tableName]
         except KeyError:
-            raise gcmd.DBMError(message=_("Attribute table <%s> not found. "
-                                          "For creating the table switch to "
-                                          "'Manage layers' tab.") % tableName,
-                                parent=self.parent)
+            raise gcmd.GException(_("Attribute table <%s> not found. "
+                                    "For creating the table switch to "
+                                    "'Manage layers' tab.") % tableName)
         
         if not columns:
             columns = self.mapDBInfo.GetColumns(tableName)
@@ -303,13 +303,13 @@ class VirtualAttributeList(wx.ListCtrl,
                     cat = self.columns[columns[j]]['ctype'] (value)
                 except ValueError, e:
                     cat = -1
-                    gcmd.GMessage(parent = self,
-                                  message=_("Error loading attribute data. "
-                                            "Record number: %(rec)d. Unable to convert value '%(val)s' in "
-                                            "key column (%(key)s) to integer.\n\n"
-                                            "Details: %(detail)s") % \
-                                      { 'rec' : i + 1, 'val' : value,
-                                        'key' : keyColumn, 'detail' : e})
+                    gcmd.GError(parent = self,
+                                message=_("Error loading attribute data. "
+                                          "Record number: %(rec)d. Unable to convert value '%(val)s' in "
+                                          "key column (%(key)s) to integer.\n\n"
+                                          "Details: %(detail)s") % \
+                                    { 'rec' : i + 1, 'val' : value,
+                                      'key' : keyColumn, 'detail' : e})
             j += 1
         
         self.itemIndexMap.append(i)
@@ -1927,10 +1927,9 @@ class AttributeManager(wx.Frame):
                     keyColumn = listWin.LoadData(self.layer, where=whereCol + whereVal)
                 else:
                     keyColumn = listWin.LoadData(self.layer)
-            except gcmd.CmdError, e:
-                wx.MessageBox(parent=self,
-                              message=_("Loading attribute data failed.\n\n%s") % e.message,
-                              caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            except gcmd.GException, e:
+                gcmd.GError(parent = self,
+                            message = _("Loading attribute data failed.\n\n%s") % e.value)
                 self.FindWindowById(self.layerPage[self.layer]['where']).SetValue('')
         else:
             # advanced sql statement
@@ -1952,10 +1951,9 @@ class AttributeManager(wx.Frame):
                 try:
                     keyColumn = listWin.LoadData(self.layer, columns=cols,
                                                  where=where, sql=sql)
-                except gcmd.CmdError, e:
-                    wx.MessageBox(parent=self,
-                                  message=_("Loading attribute data failed.\n\n%s") % e.message,
-                                  caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                except gcmd.GException, e:
+                    gcmd.GError(parent = self,
+                                message = _("Loading attribute data failed.\n\n%s") % e.value)
                     win.SetValue("SELECT * FROM %s" % self.mapDBInfo.layers[self.layer]['table'])
         
         # sort by key column

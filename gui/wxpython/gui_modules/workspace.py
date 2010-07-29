@@ -36,7 +36,6 @@ import utils
 import globalvar
 from preferences import globalSettings as UserSettings
 
-#sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
 try:
     import wxnviz
 except ImportError:

@@ -408,15 +408,13 @@ class MapCalcFrame(wx.Frame):
         """
         name = self.newmaptxt.GetValue().strip()
         if not name:
-            gcmd.GMessage(parent = self,
-                          message = _("You must enter the name of a new map to create"),
-                          msgType = 'info')
+            gcmd.GError(parent = self,
+                        message = _("You must enter the name of a new map to create"))
             return
         
         if not self.text_mcalc.GetValue().strip():
-            gcmd.GMessage(parent = self,
-                          message = _("You must enter a mapcalc statement to create a new map"),
-                          msgType = 'info')
+            gcmd.GError(parent = self,
+                        message = _("You must enter a mapcalc statement to create a new map"))
             return
         
         mctxt = self.text_mcalc.GetValue().strip().replace("\n"," ")

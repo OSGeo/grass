@@ -1310,14 +1310,14 @@ class VDigitToolbar(AbstractToolbar):
         # open vector map
         try:
             if not self.parent.MapWindow.CheckPseudoDC():
-                raise gcmd.DigitError(parent=self.parent,
-                                      message=_("Unable to initialize display driver of vector "
-                                                "digitizer. See 'Command output' for details."))
+                raise gcmd.GException(_("Unable to initialize display driver of vector "
+                                        "digitizer. See 'Command output' for details."))
             self.parent.digit.SetMapName(mapLayer.GetName())
-        except gcmd.DigitError, e:
+        except gcmd.GException, e:
             self.mapLayer = None
             self.StopEditing()
-            print >> sys.stderr, e # wxMessageBox
+            GError(parent = self.parent,
+                   message = e)
             return False
         
         # update toolbar

@@ -414,8 +414,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         self.LoadRaster(item)
                     elif type ==  '3d-raster':
                         self.LoadRaster3d(item)
-                except gcmd.NvizError, e:
-                    print >> sys.stderr, "Nviz:" + e.message
+                except gcmd.GException, e:
+                    GError(parent = self,
+                           message = e)
                 
                 try:
                     if type ==  'vector':
@@ -426,8 +427,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                 if data['vector'][v]:
                                     vecType.append(v)
                         self.LoadVector(item, vecType)
-                except gcmd.NvizError, e:
-                    print >> sys.stderr, "Nviz:" + e.message
+                except gcmd.GException, e:
+                    GError(parent = self,
+                           message = e)
                 self.init = False
         
         stop = time.time()
@@ -463,8 +465,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         self.UnloadVector(layer, vecType)
                     
                     self.UpdateView(None)
-                except gcmd.NvizError, e:
-                    print >> sys.stderr, "Nviz:" + e.message
+                except gcmd.GException, e:
+                    gcmd.GError(parent = self,
+                                message = e)
                 
                 self.lmgr.nviz.UpdateSettings()        
         
@@ -1046,8 +1049,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 error = _("Unable to set data layer properties (id = %d)") % id
 
             if error:
-                raise gcmd.NvizError(parent = self.parent,
-                                     message = _("Setting data layer properties failed.\n\n%s") % error)
+                raise gcmd.GException(_("Setting data layer properties failed.\n\n%s") % error)
             
             for prop in ('size', 'width', 'marker', 'color'):
                 if data[prop].has_key('update'):

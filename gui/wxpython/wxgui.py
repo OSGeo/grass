@@ -191,7 +191,8 @@ class GMFrame(wx.Frame):
         self.workspaceChanged = False
         
         # start with layer manager on top
-        self.curr_page.maptree.mapdisplay.Raise()
+        if self.curr_page:
+            self.curr_page.maptree.mapdisplay.Raise()
         wx.CallAfter(self.Raise)
 
     def __createNoteBook(self):
@@ -625,11 +626,11 @@ class GMFrame(wx.Frame):
         # parse workspace file
         try:
             gxwXml = workspace.ProcessWorkspaceFile(etree.parse(filename))
-        except Exception, err:
-            raise gcmd.GStdError(_("Reading workspace file <%(file)s> failed.\n"
-                                   "Invalid file, unable to parse XML document."
-                                   "\n\n%(err)s") % { 'file' : filename, 'err': err},
-                                 parent = self)
+        except Exception, e:
+            gcmd.GError(parent = self.parent,
+                        message = _("Reading workspace file <%s> failed.\n"
+                                    "Invalid file, unable to parse XML document.") % filename)
+            return
         
         busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
                            parent=self)
