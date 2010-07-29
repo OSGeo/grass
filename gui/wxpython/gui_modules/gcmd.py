@@ -61,11 +61,10 @@ class GError:
     def __init__(self, message, parent = None):
         caption = _('Error')
         style = wx.OK | wx.ICON_ERROR | wx.CENTRE
-        
         exc_type, exc_value, exc_traceback = sys.exc_info()
         if exc_traceback:
             exception = traceback.format_exc()
-            reason = exception.splitlines()[-2].split(':', 1)[-1].strip()
+            reason = exception.splitlines()[-1].split(':', 1)[-1].strip()
         
         if Debug.get_level() > 0 and exc_traceback:
             sys.stderr.write(exception)

@@ -627,7 +627,7 @@ class GMFrame(wx.Frame):
         try:
             gxwXml = workspace.ProcessWorkspaceFile(etree.parse(filename))
         except Exception, e:
-            gcmd.GError(parent = self.parent,
+            gcmd.GError(parent = self,
                         message = _("Reading workspace file <%s> failed.\n"
                                     "Invalid file, unable to parse XML document.") % filename)
             return
