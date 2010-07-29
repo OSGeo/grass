@@ -4,13 +4,10 @@
 @brief wxGUI command interface
 
 Classes:
+ - GError
+ - GWarning
+ - GMessage
  - GException
- - GStdError
- - CmdError
- - SettingsError
- - DigitError
- - DBMError
- - NvizError
  - Popen (from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/440554)
  - Command
  - CommandThread
@@ -60,116 +57,56 @@ from grass.script import core as grass
 import utils
 from debug import Debug as Debug
 
-class GMessage:
-    def __init__(self, parent, message, msgType = 'error'):
-        if msgType == 'error':
-            caption = _('Error')
-            style = wx.OK | wx.ICON_ERROR | wx.CENTRE
-        elif msgType == 'info':
-            caption = _('Message')
-            style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE
-        elif msgType == 'warning':
-            caption = _('Warning')
-            style = wx.OK | wx.ICON_WARNING | wx.CENTRE
+class GError:
+    def __init__(self, message, parent = None):
+        caption = _('Error')
+        style = wx.OK | wx.ICON_ERROR | wx.CENTRE
         
-        if msgType != 'error':
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        if exc_traceback:
+            exception = traceback.format_exc()
+            reason = exception.splitlines()[-2].split(':', 1)[-1].strip()
+        
+        if Debug.get_level() > 0 and exc_traceback:
+            sys.stderr.write(exception)
+        
+        if exc_traceback:
+            wx.MessageBox(parent = parent,
+                          message = message + '\n\n%s: %s\n\n%s' % \
+                              (_('Reason'),
+                               reason, exception),
+                          caption = caption,
+                          style = style)
+        else:
             wx.MessageBox(parent = parent,
                           message = message,
                           caption = caption,
                           style = style)
-        else:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            if exc_traceback:
-                exception = traceback.format_exc()
-                reason = exception.splitlines()[-2].split(':', 1)[-1].strip()
-            
-            if Debug.get_level() > 0 and exc_traceback:
-                sys.stderr.write(exception)
-            
-            if exc_traceback:
-                wx.MessageBox(parent = parent,
-                              message = message + '\n\n%s: %s\n\n%s' % \
-                                  (_('Reason'),
-                                   reason, exception),
-                              caption = caption,
-                              style = style)
-            else:
-                wx.MessageBox(parent = parent,
-                              message = message,
-                              caption = caption,
-                              style = style)
-    
-class GError(Exception):
+
+class GWarning:
+    def __init__(self, message, parent = None):
+        caption = _('Warning')
+        style = wx.OK | wx.ICON_WARNING | wx.CENTRE
+        wx.MessageBox(parent = parent,
+                      message = message,
+                      caption = caption,
+                      style = style)
+        
+class GMessage:
+    def __init__(self, message, parent = None):
+        caption = _('Message')
+        style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE
+        wx.MessageBox(parent = parent,
+                      message = message,
+                      caption = caption,
+                      style = style)
+
+class GException(Exception):
     def __init__(self, value):
         self.value = value
 
     def __str__(self):
         return str(self.value)
-
-class GException(Exception):
-    """!Generic exception"""
-    def __init__(self, message, title = _("Error"), parent = None):
-        self.msg = message
-        self.parent = parent
-        self.title = title
-        
-    def Show(self):
-        GMessage(parent  = self.parent,
-                 message = self.msg,
-                 msgType = 'error')
-
-    def GetMessage(self):
-        return self.msg
-    
-    def __str__(self):
-        self.Show()
-        
-        return ''
-    
-class GStdError(GException):
-    """!Generic exception"""
-
-    def __init__(self, message, title = _("Error"), parent = None):
-        GException.__init__(self, message, title=title, parent=parent)
-    
-class CmdError(GException):
-    """!Exception used for GRASS commands.
-
-    See Command class (command exits with EXIT_FAILURE,
-    G_fatal_error() is called)."""
-    def __init__(self, cmd, message, parent=None):
-        GException.__init__(self, message,
-                            title=_("Error in command execution '%s'" % cmd),
-                            parent=parent)
-
-class SettingsError(GException):
-    """!Exception used for GRASS settings, see
-    gui_modules/preferences.py."""
-    def __init__(self, message, parent=None):
-        GException.__init__(self, message,
-                            title=_("Preferences error"),
-                            parent=parent)
-
-class DigitError(GException):
-    """!Exception raised during digitization session"""
-    def __init__(self, message, parent=None):
-        GException.__init__(self, message,
-                            title=_("Vector digitizer error"),
-                            parent=parent)
-
-class DBMError(GException):
-    """!Attribute Table Manager exception class"""
-    def __init__(self, message, parent=None):
-        GException.__init__(self, message,
-                            title=_("Attribute table manager error"),
-                            parent=parent)
-
-class NvizError(GException):
-    """!Nviz exception class"""
-    def __init__(self, message, parent=None):
-        GException.__init__(self, message,
-                            title=_("Nviz error"),
-                            parent=parent)
 
 class Popen(subprocess.Popen):
     """!Subclass subprocess.Popen"""
@@ -356,7 +293,7 @@ class Command:
         @param stdin   standard input stream
         @param verbose verbose level [0, 3] (--q, --v)
         @param wait    wait for child execution terminated
-        @param rerr    error handling (when CmdError raised).
+        @param rerr    error handling (when GException raised).
         True for redirection to stderr, False for GUI dialog,
         None for no operation (quiet mode)
         @param stdout  redirect standard output or None
@@ -404,14 +341,13 @@ class Command:
                            (' '.join(cmd), wait, self.returncode, self.cmdThread.isAlive()))
             if rerr is not None and self.returncode != 0:
                 if rerr is False: # GUI dialog
-                    raise CmdError(cmd=self.cmd,
-                                   message="%s '%s'%s%s%s %s%s" %
-                                   (_("Execution failed:"),
-                                    ' '.join(self.cmd),
-                                    os.linesep, os.linesep,
-                                    _("Details:"),
-                                    os.linesep,
-                                    _("Error: ") + self.__GetError()))
+                    raise GException("%s '%s'%s%s%s %s%s" % \
+                                         (_("Execution failed:"),
+                                          ' '.join(self.cmd),
+                                          os.linesep, os.linesep,
+                                          _("Details:"),
+                                          os.linesep,
+                                          _("Error: ") + self.__GetError()))
                 elif rerr == sys.stderr: # redirect message to sys
                     stderr.write("Execution failed: '%s'" % (' '.join(self.cmd)))
                     stderr.write("%sDetails:%s%s" % (os.linesep,
@@ -632,12 +568,10 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
 
     ret = ps.returncode
         
-    if ret != 0 and parent:
-        e = CmdError(cmd = prog,
-                     message = stderr,
-                     parent = parent)
-        e.Show()
-
+    if ret != 0 and parent: 
+        GError(parent = parent,
+               message = stderr)
+    
     if not read:
         if not getErrorMsg:
             return ret

@@ -71,7 +71,7 @@ import utils
 import goutput
 import gselect
 from debug        import Debug
-from gcmd         import GMessage, GError
+from gcmd         import GMessage, GException, GWarning, GError
 from gdialogs     import ElementDialog, GetImageHandlers
 from preferences  import PreferencesBaseDialog, globalSettings as UserSettings
 from ghelp        import SearchModuleWindow
@@ -227,7 +227,7 @@ class Model(object):
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
         except StandardError, e:
-            raise GError(e)
+            raise GException(e)
         
         if self.canvas:
             win = self.canvas.parent
@@ -689,8 +689,7 @@ class ModelFrame(wx.Frame):
         
         if not rast and not vect and not rast3d:
             GMessage(parent = self,
-                     message = _('Nothing to delete.'),
-                     msgType = 'info')
+                     message = _('Nothing to delete.'))
             return
         
         dlg = wx.MessageDialog(parent = self,
@@ -863,8 +862,7 @@ class ModelFrame(wx.Frame):
         """!Run entire model"""
         if self.model.GetNumItems() < 1:
             GMessage(parent = self, 
-                     message = _('Model is empty. Nothing to run.'),
-                     msgType = 'info')
+                     message = _('Model is empty. Nothing to run.'))
             return
         
         # validation
@@ -894,8 +892,8 @@ class ModelFrame(wx.Frame):
         
             err = dlg.GetErrors()
             if err:
-                GMessage(parent = self,
-                         message = unicode('\n'.join(err)))
+                GError(parent = self,
+                       message = unicode('\n'.join(err)))
                 return
         
         self.goutput.cmdThread.SetId(-1)
@@ -950,20 +948,17 @@ class ModelFrame(wx.Frame):
         """!Validate entire model"""
         if self.model.GetNumItems() < 1:
             GMessage(parent = self, 
-                     message = _('Model is empty. Nothing to validate.'),
-                     msgType = 'info')
+                     message = _('Model is empty. Nothing to validate.'))
             return
         
         errList = self._validateModel()
         
         if errList:
-            GMessage(parent = self,
-                     message = _('Model is not valid.\n\n%s') % '\n'.join(errList),
-                     msgType = 'warning')
+            GWarning(parent = self,
+                     message = _('Model is not valid.\n\n%s') % '\n'.join(errList))
         else:
             GMessage(parent = self,
-                     message = _('Model is valid.'),
-                     msgType = 'info')
+                     message = _('Model is valid.'))
     
     def OnExportImage(self, event):
         """!Export model to image (default image)
@@ -1446,10 +1441,10 @@ if __name__ == "__main__":
         """
         try:
             self.model.LoadModel(filename)
-        except GError, e:
-            GMessage(parent = self,
-                     message = _("Reading model file <%s> failed.\n"
-                                 "Invalid file, unable to parse XML document.") % filename)
+        except GException, e:
+            GError(parent = self,
+                   message = _("Reading model file <%s> failed.\n"
+                               "Invalid file, unable to parse XML document.") % filename)
         
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
@@ -1508,8 +1503,8 @@ if __name__ == "__main__":
         try:
             WriteModelFile(fd = tmpfile, model = self.model)
         except StandardError:
-            GMessage(parent = self,
-                     message = _("Writing current settings to model file failed."))
+            GError(parent = self,
+                   message = _("Writing current settings to model file failed."))
             return False
         
         try:
@@ -2397,15 +2392,15 @@ class ModelSearchDialog(wx.Dialog):
         cmd = self.GetCmd()
         
         if len(cmd) < 1:
-            GMessage(parent = self,
-                     message = _("Command not defined.\n\n"
-                                 "Unable to add new action to the model."))
+            GError(parent = self,
+                   message = _("Command not defined.\n\n"
+                               "Unable to add new action to the model."))
             return
         
         if cmd[0] not in globalvar.grassCmd['all']:
-            GMessage(parent = self,
-                     message = _("'%s' is not a GRASS module.\n\n"
-                                 "Unable to add new action to the model.") % cmd[0])
+            GError(parent = self,
+                   message = _("'%s' is not a GRASS module.\n\n"
+                               "Unable to add new action to the model.") % cmd[0])
             return
         
         self.EndModal(wx.ID_OK)
@@ -3618,8 +3613,8 @@ class VariablePanel(wx.Panel):
         self.name.SetFocus()
         
         if msg:
-            GMessage(parent = self,
-                     message = msg)
+            GError(parent = self,
+                   message = msg)
         else:
             self.type.SetSelection(0)
             self.value.SetValue('')

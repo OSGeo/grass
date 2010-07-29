@@ -41,6 +41,7 @@ from grass.script import core as grass
 import globalvar
 import utils
 import gcmd
+from gcmd import GException
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
@@ -131,8 +132,8 @@ class Layer(object):
                       'overlay')
         
         if self.type not in layertypes:
-            raise gcmd.GStdError(_("<%(name)s>: layer type <%(type)s> is not supported yet.") % \
-                                     {'type' : self.type, 'name' : self.name})
+            raise gcmd.GException(_("<%(name)s>: layer type <%(type)s> is not supported yet.") % \
+                                      {'type' : self.type, 'name' : self.name})
         
         #
         # start monitor
@@ -174,7 +175,7 @@ class Layer(object):
                 self.mapfile = None
                 self.maskfile = None
         
-        except gcmd.CmdError, e:
+        except gcmd.GException, e:
             print >> sys.stderr, e
             # clean up after problems
             try:
@@ -260,7 +261,7 @@ class Layer(object):
                         'shaded', 'rgb', 'his', 'rastarrow', 'rastnum',
                         'thememap', 'themechart', 'grid', 'labels',
                         'geodesic','rhumb'):
-            raise gcmd.GStdError(_("Unsupported map layer type '%s'") % str(type))
+            raise gcmd.GException(_("Unsupported map layer type '%s'") % str(type))
         
         self.type = type
 
@@ -612,18 +613,17 @@ class Map(object):
                               read = True,
                               **cmd)
         if not ret:
-            e  = gcmd.CmdError(cmd = 'g.region', message = '')
             if rast:
-                e.message = _("Unable to zoom to raster map <%s>.") % rast[0] + \
-                '%s%s' % (os.linesep, os.linesep) + e.message
+                message = _("Unable to zoom to raster map <%s>.") % rast[0] + \
+                    '%s%s' % (os.linesep, os.linesep) + e.message
             elif vect:
-                e.message = _("Unable to zoom to vector map <%s>.") % vect[0] + \
-                '%s%s' % (os.linesep, os.linesep) + e.message
+                message = _("Unable to zoom to vector map <%s>.") % vect[0] + \
+                    '%s%s' % (os.linesep, os.linesep) + e.message
             else:
-                e.message = _("Unable to get current geographic extent. "
-                              "Force quiting wxGUI. Please run manually g.region to "
-                              "fix the problem.")
-            e.Show()
+                message = _("Unable to get current geographic extent. "
+                            "Force quiting wxGUI. Please run manually g.region to "
+                            "fix the problem.")
+            GError(message)
             return self.region
         
         for reg in ret.splitlines():
@@ -952,7 +952,7 @@ class Map(object):
         Debug.msg (3, "Map.AddLayer(): layer=%s" % layer.name)
         if l_render:
             if not layer.Render():
-                raise gcmd.GStdError(_("Unable to render map layer <%s>.") % (name))
+                raise gcmd.GException(_("Unable to render map layer <%s>.") % (name))
         
         return layer
 
@@ -1034,8 +1034,8 @@ class Map(object):
             layer.SetOpacity(kargs['opacity'])
         
         if render and not layer.Render():
-            raise gcmd.GException(_("Unable to render map layer <%s>.") % 
-                                  (name))
+            raise GException(_("Unable to render map layer <%s>.") % 
+                             (name))
         
         return layer
 
@@ -1143,8 +1143,8 @@ class Map(object):
         self.overlays.append(overlay)
         
         if l_render and command != '' and not overlay.Render():
-            raise gcmd.GException(_("Unable render overlay <%s>.") % 
-                                  (name))
+            raise GException(_("Unable render overlay <%s>.") % 
+                             (name))
         
         return self.overlays[-1]
 
@@ -1182,8 +1182,8 @@ class Map(object):
             overlay.SetOpacity(kargs['opacity'])
         
         if render and command != [] and not overlay.Render():
-            raise gcmd.GException(_("Unable render overlay <%s>") % 
-                                  (name))
+            raise GException(_("Unable render overlay <%s>") % 
+                             (name))
         
         return overlay
 

@@ -1352,8 +1352,7 @@ class MapFrame(wx.Frame):
             img = self.MapWindow.img
             if not img:
                 gcmd.GMessage(parent = self,
-                              message = _("Nothing to render (empty map). Operation canceled."),
-                              msgType = 'info')
+                              message = _("Nothing to render (empty map). Operation canceled."))
                 return
             filetype, ltype = gdialogs.GetImageHandlers(img)
 

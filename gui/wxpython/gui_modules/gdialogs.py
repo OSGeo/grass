@@ -287,10 +287,11 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
             gcmd.RunCommand(prog = cmd[0],
                             overwrite = overwrite,
                             **cmd[1])
-        except gcmd.CmdError, e:
-            e.Show()
+        except gcmd.GException, e:
+            gcmd.GError(parent = self,
+                        message = e)
             return None
-
+        
         #
         # create attribute table
         #

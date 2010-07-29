@@ -47,7 +47,7 @@ from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
 from vdigit import haveVDigit
-from gcmd import GMessage
+from gcmd import GError
 try:
     import subprocess
 except:
@@ -1314,8 +1314,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mapname = utils.GetLayerNameFromCmd(dcmd, layerType=mapLayer.type,
                                                 fullyQualified=True)
             if not mapname:
-                GMessage(parent=self,
-                         message=_("Map <%s> not found.") % utils.GetLayerNameFromCmd(dcmd))
+                GError(parent=self,
+                       message=_("Map <%s> not found.") % utils.GetLayerNameFromCmd(dcmd))
                 return
             
             self.SetItemText(layer, mapname + ' (opacity: ' + str(opacity) + '%)')

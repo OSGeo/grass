@@ -589,8 +589,8 @@ class Settings:
         self.userSettings = copy.deepcopy(self.defaultSettings)
         try:
             self.ReadSettingsFile()
-        except gcmd.SettingsError, e:
-            print >> sys.stderr, e.message
+        except gcmd.GException, e:
+            print >> sys.stderr, e.value
 
         #
         # internal settings (based on user settings)
@@ -764,11 +764,11 @@ class Settings:
                                 file.write('%s' % self.sep)
                     file.write(os.linesep)
         except IOError, e:
-            raise gcmd.SettingsError(message=e)
+            raise gcmd.GException(e)
         except StandardError, e:
-            raise gcmd.SettingsError(message=_('Writing settings to file <%(file)s> failed.'
-                                               '\n\nDetails: %(detail)s') % { 'file' : filePath,
-                                                                              'detail' : e })
+            raise gcmd.GException(_('Writing settings to file <%(file)s> failed.'
+                                    '\n\nDetails: %(detail)s') % { 'file' : filePath,
+                                                                   'detail' : e })
         
         file.close()
         
@@ -835,8 +835,6 @@ class Settings:
                     return settings[group][key][subkey]  
 
         except KeyError:
-            #raise gcmd.SettingsError("%s %s:%s:%s." % (_("Unable to get value"),
-            #                                           group, key, subkey))
             print >> sys.stderr, "Settings: unable to get value '%s:%s:%s'\n" % \
                 (group, key, subkey)
         
@@ -869,7 +867,7 @@ class Settings:
                 else:
                     settings[group][key][subkey] = value
         except KeyError:
-            raise gcmd.SettingsError("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
+            raise gcmd.GException("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
         
     def Append(self, dict, group, key, subkey, value):
         """!Set value of key/subkey

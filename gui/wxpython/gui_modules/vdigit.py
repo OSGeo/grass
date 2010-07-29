@@ -111,26 +111,23 @@ class AbstractDigit:
         try:
             ret = self.driver.Reset(self.map)
         except StandardError, e:
-            raise gcmd.DigitError(parent=self.mapWindow.parent,
-                                  message="%s %s (%s)" % (_("Unable to initialize display driver of vector "
-                                                            "digitizer. See 'Command output' for details.\n\n"
-                                                            "Details:"), e, errorMsg))
+            raise gcmd.GException(_("Unable to initialize display driver of vector "
+                              "digitizer. See 'Command output' for details.\n\n"
+                              "Details: ") + e)
         
         if map and ret == -1:
-            raise gcmd.DigitError(parent=self.mapWindow.parent,
-                                  message=_('Unable to open vector map <%s> for editing.\n\n'
-                                            'Data are probably corrupted, '
-                                            'try to run v.build to rebuild '
-                                            'the topology (Vector->Develop vector map->'
-                                            'Create/rebuild topology).') % map)
+            raise gcmd.GException(_('Unable to open vector map <%s> for editing.\n\n'
+                                    'Data are probably corrupted, '
+                                    'try to run v.build to rebuild '
+                                    'the topology (Vector->Develop vector map->'
+                                    'Create/rebuild topology).') % map)
         if not map and ret != 0:
-            raise gcmd.DigitError(parent=self.mapWindow.parent,
-                                  message=_('Unable to open vector map <%s> for editing.\n\n'
-                                            'Data are probably corrupted, '
-                                            'try to run v.build to rebuild '
-                                            'the topology (Vector->Develop vector map->'
-                                            'Create/rebuild topology).') % map)
-
+            raise gcmd.GException(_('Unable to open vector map <%s> for editing.\n\n'
+                                    'Data are probably corrupted, '
+                                    'try to run v.build to rebuild '
+                                    'the topology (Vector->Develop vector map->'
+                                    'Create/rebuild topology).') % map)
+        
         if self.digit:
             self.digit.InitCats()
         
@@ -684,7 +681,7 @@ class VDigit(AbstractDigit):
             ret = -2
 
         if ret == -2:
-            raise gcmd.DigitError, _("Undo failed, data corrupted.")
+            raise gcmd.GException(_("Undo failed, data corrupted."))
 
         self.mapWindow.UpdateMap(render=False)
         
