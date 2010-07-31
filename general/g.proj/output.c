@@ -121,7 +121,7 @@ void print_proj4(int dontprettify)
 	if (i == proj4mod && *i == ' ')
 	    continue;
 
-	if (*i == ' ' && !(dontprettify))
+	if (*i == ' ' && *(i+1) == '+' && !(dontprettify))
 	    fputc('\n', stdout);
 	else
 	    fputc(*i, stdout);
