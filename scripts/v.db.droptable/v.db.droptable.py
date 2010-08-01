@@ -48,7 +48,7 @@
 
 import sys
 import os
-from grass.script import core as grass
+import grass.script as grass
 
 def main():
     force = flags['f']
@@ -85,7 +85,8 @@ def main():
 
     grass.message(_("Dropping table <%s>...") % table)
 
-    if grass.write_command('db.execute', stdin = "DROP TABLE %s" % table, input = '-') != 0:
+    if grass.write_command('db.execute', stdin = "DROP TABLE %s" % table, input = '-',
+                           database = database, driver = driver) != 0:
 	grass.fatal(_("An error occured while running db.execute"))
 
     grass.run_command('v.db.connect', flags = 'd', map = map, layer = layer)
