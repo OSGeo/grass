@@ -927,7 +927,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 static void get_null_value_row_gdal(int fd, char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    DCELL *tmp_buf = Rast_allocate_d_buf();
+    DCELL *tmp_buf = Rast_allocate_d_input_buf();
     int i;
 
     if (get_map_row_nomask(fd, tmp_buf, row, DCELL_TYPE) <= 0) {
