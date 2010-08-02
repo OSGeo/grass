@@ -408,29 +408,30 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         while(len(listOfItems) > 0):
             item = listOfItems.pop()
             type = self.tree.GetPyData(item)[0]['type']
-            if item not in self.layers:
-                try:
-                    if type ==  'raster':
-                        self.LoadRaster(item)
-                    elif type ==  '3d-raster':
-                        self.LoadRaster3d(item)
-                except gcmd.GException, e:
-                    GError(parent = self,
-                           message = e)
-                
-                try:
-                    if type ==  'vector':
-                        data = self.tree.GetPyData(item)[0]['nviz']
-                        vecType = []
-                        if data and data.has_key('vector'):
-                            for v in ('lines', 'points'):
-                                if data['vector'][v]:
-                                    vecType.append(v)
-                        self.LoadVector(item, vecType)
-                except gcmd.GException, e:
-                    GError(parent = self,
-                           message = e)
-                self.init = False
+            if item in self.layers:
+                continue
+            try:
+                if type ==  'raster':
+                    self.LoadRaster(item)
+                elif type ==  '3d-raster':
+                    self.LoadRaster3d(item)
+                elif type ==  'vector':
+                    # data = self.tree.GetPyData(item)[0]['nviz']
+                    # vecType = []
+                    # if data and data.has_key('vector'):
+                    #     for v in ('lines', 'points'):
+                    #         if data['vector'][v]:
+                    #             vecType.append(v)
+                    layer = self.tree.GetPyData(item)[0]['maplayer']
+                    npoints, nlines, nfeatures = self.lmgr.nviz.VectorInfo(layer)
+                    if npoints > 0:
+                        self.LoadVector(item, points = True)
+                    if nlines > 0:
+                        self.LoadVector(item, points = False)
+            except gcmd.GException, e:
+                GError(parent = self,
+                       message = e)
+            self.init = False
         
         stop = time.time()
         
@@ -488,7 +489,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         type = self.tree.GetPyData(item)[0]['maplayer'].type
         # reference to original layer properties (can be None)
         data = self.tree.GetPyData(item)[0]['nviz']
-        
         if data is None:
             # init data structure
             self.tree.GetPyData(item)[0]['nviz'] = {}
@@ -656,50 +656,49 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             win = toolWin.FindWindowById( \
                 toolWin.win['vector']['lines']['surface'])
             win.SetItems(self.GetLayerNames(layer.type))
-
-            # remove surface page
-            if toolWin.GetSelection() ==  toolWin.page[nvizType]['id']:
-                toolWin.RemovePage(toolWin.page[nvizType]['id'])
-                toolWin.page[nvizType]['id'] = -1
-                toolWin.page['settings']['id'] = 1
-        
-    def LoadVector(self, item, vecType = None):
+            
+    def LoadVector(self, item, points = None):
         """!Load 2D or 3D vector map overlay
         
         @param item layer item
-        @param vecType vector type (lines / points)
+        @param points True to load points, False to load lines, None
+        to load both
         """
         layer = self.tree.GetPyData(item)[0]['maplayer']
-        
         if layer.type !=  'vector':
             return
         
-        if vecType is None:
-            # load data type by default
-            vecType = []
-            for v in ('lines', 'points'):
-                if UserSettings.Get(group = 'nviz', key = 'vector',
-                                    subkey = [v, 'show']):
-                    vecType.append(v)
+        # if vecType is None:
+        #     # load data type by default
+        #     vecType = []
+        #     for v in ('lines', 'points'):
+        #         if UserSettings.Get(group = 'nviz', key = 'vector',
+        #                             subkey = [v, 'show']):
+        #             vecType.append(v)
         
         # set default properties
-        self.SetMapObjProperties(item, -1, 'lines')
-        self.SetMapObjProperties(item, -1, 'points')
+        if points is None:
+            self.SetMapObjProperties(item, -1, 'lines')
+            self.SetMapObjProperties(item, -1, 'points')
+            vecTypes = ('points', 'lines')
+        elif points:
+            self.SetMapObjProperties(item, -1, 'points')
+            vecTypes = ('points', )
+        else:
+            self.SetMapObjProperties(item, -1, 'lines')
+            vecTypes = ('lines', )
         
         id = -1
-        for type in vecType:
-            if type ==  'lines':
-                id = self._display.LoadVector(str(layer.name), False)
+        for vecType in vecTypes:
+            if vecType == 'lines':
+                id = self._display.LoadVector(str(layer.GetName()), False)
             else:
-                id = self._display.LoadVector(str(layer.name), True)
-
+                id = self._display.LoadVector(str(layer.GetName()), True)
             if id < 0:
                 print >> sys.stderr, "Nviz:" + _("Loading vector map <%(name)s> (%(type)s) failed") % \
-                    { 'name' : layer.name, 'type' : type }
-                continue
-            
+                    { 'name' : layer.name, 'type' : vecType }
             # update layer properties
-            self.SetMapObjProperties(item, id, type)
+            self.SetMapObjProperties(item, id, vecType)
         
         self.layers.append(item)
         
@@ -718,29 +717,36 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         return id
 
-    def UnloadVector(self, item, vecType = None):
+    def UnloadVector(self, item, points = None):
         """!Unload vector map overlay
         
         @param item layer item
-        @param vecType vector type (lines, points)
+        @param points,lines True to unload given feature type
         """
         layer = self.tree.GetPyData(item)[0]['maplayer']
         data = self.tree.GetPyData(item)[0]['nviz']['vector']
         
-        if vecType is None:
-            vecType = []
-            for v in ('lines', 'points'):
-                if UserSettings.Get(group = 'nviz', key = 'vector',
-                                    subkey = [v, 'show']):
-                    vecType.append(v)
+        # if vecType is None:
+        #     vecType = []
+        #     for v in ('lines', 'points'):
+        #         if UserSettings.Get(group = 'nviz', key = 'vector',
+        #                             subkey = [v, 'show']):
+        #             vecType.append(v)
         
-        for vtype in vecType:
-            if not data[vtype].has_key('object'):
+        if points is None:
+            vecTypes = ('points', 'lines')
+        elif points:
+            vecTypes = ('points', )
+        else:
+            vecTypes = ('lines', )
+        
+        for vecType in vecTypes:
+            if not data[vecType].has_key('object'):
                 continue
             
             id = data[vtype]['object']['id']
             
-            if vtype ==  'lines':
+            if vecType ==  'lines':
                 ret = self._display.UnloadVector(id, False)
             else:
                 ret = self._display.UnloadVector(id, True)
@@ -751,8 +757,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 print "Nviz:" + _("Vector map <%(name)s> (%(type)s) unloaded successfully") % \
                     { 'name' : layer.name, 'type' : vtype }
             
-            data[vtype].pop('object')
-
+            data[vecType].pop('object')
+            
             ### self.layers.remove(id)
         
     def Reset(self):

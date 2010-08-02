@@ -1499,8 +1499,8 @@ class NvizToolWindow(FN.FlatNotebook):
             return
         
         layer = self.mapWindow.GetLayerByName(name, mapType = 'raster')
-        self.UpdateSurfacePage(layer, data, updateName = False)
         self.EnablePage('surface', True)
+        self.UpdateSurfacePage(layer, data, updateName = False)
         
     def OnSetVector(self, event):
         """!Vector map selected, update properties page"""
@@ -1512,8 +1512,8 @@ class NvizToolWindow(FN.FlatNotebook):
             return
         
         layer = self.mapWindow.GetLayerByName(name, mapType = 'vector')
-        self.UpdateVectorPage(layer, data, updateName = False)
         self.EnablePage('vector', True)
+        self.UpdateVectorPage(layer, data, updateName = False)
 
     def OnSetRaster3D(self, event):
         """!3D Raster map selected, update surface page"""
@@ -1525,9 +1525,9 @@ class NvizToolWindow(FN.FlatNotebook):
             return
         
         layer = self.mapWindow.GetLayerByName(name, mapType = 'raster3d')
-        self.UpdateVolumePage(layer, data, updateName = False)
         self.EnablePage('volume', True)
-
+        self.UpdateVolumePage(layer, data, updateName = False)
+        
     def OnViewChange(self, event):
         """!Change view, render in quick mode"""
         # find control
@@ -1969,18 +1969,22 @@ class NvizToolWindow(FN.FlatNotebook):
         winId = event.GetId()
         if winId == self.win['vector']['lines']['show']:
             vecType = 'lines'
+            lines = True
+            points = False
         else: # points
-            vecType = 'points'
-        
+            vecType = 'points' 
+            lines = False
+            points = True
+       
         checked = event.IsChecked()
         name = self.FindWindowById(self.win['vector']['map']).GetValue()
         item = self.mapWindow.GetLayerByName(name, mapType = 'vector', dataType = 'item')
         data = self.GetLayerData('vector')['vector']
         
         if checked:
-            self.mapWindow.LoadVector(item, (vecType,))
+            self.mapWindow.LoadVector(item, lines = lines, points = points)
         else:
-            self.mapWindow.UnloadVector(item, (vecType,))
+            self.mapWindow.UnloadVector(item, lines = lines, points = points)
         
         self.UpdateVectorShow(vecType, checked)
         
@@ -2458,15 +2462,16 @@ class NvizToolWindow(FN.FlatNotebook):
         elif pageId in ('surface', 'vector', 'volume'):
             name = self.FindWindowById(self.win[pageId]['map']).GetValue()
             data = self.GetLayerData(pageId)
-            if pageId == 'surface':
-                layer = self.mapWindow.GetLayerByName(name, mapType = 'raster')
-                self.UpdateSurfacePage(layer, data['surface'])
-            elif pageId == 'vector':
-                layer = self.mapWindow.GetLayerByName(name, mapType = 'vector')
-                self.UpdateVectorPage(layer, data['vector'])
-            elif pageId == 'volume':
-                layer = self.mapWindow.GetLayerByName(name, mapType = 'raster3d')
-                self.UpdateVectorPage(layer, data['vector'])
+            if data:
+                if pageId == 'surface':
+                    layer = self.mapWindow.GetLayerByName(name, mapType = 'raster')
+                    self.UpdateSurfacePage(layer, data['surface'])
+                elif pageId == 'vector':
+                    layer = self.mapWindow.GetLayerByName(name, mapType = 'vector')
+                    self.UpdateVectorPage(layer, data['vector'])
+                elif pageId == 'volume':
+                    layer = self.mapWindow.GetLayerByName(name, mapType = 'raster3d')
+                    self.UpdateVectorPage(layer, data['vector'])
         elif pageId == 'light':
             zval = self.mapWindow.light['position']['z']
             bval = self.mapWindow.light['bright']
@@ -2477,7 +2482,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['light']['ambient'][control]).SetValue(aval)
         elif pageId == 'fringe':
             win = self.FindWindowById(self.win['fringe']['surface'])
-            win.SetValue(self.FindWindowById(self.win['raster']['map']).GetValue())
+            win.SetValue(self.FindWindowById(self.win['surface']['map']).GetValue())
         
         self.Update()
         self.pageChanging = False
@@ -2569,24 +2574,29 @@ class NvizToolWindow(FN.FlatNotebook):
         # enable/disable res widget + set draw mode
         self.SetSurfaceMode()
         color = self.FindWindowById(self.win['surface']['draw']['wire-color'])
+
+    def VectorInfo(self, layer):
+        """!Get number of points/lines
         
-    def UpdateVectorPage(self, layer, data, updateName = True):
-        """!Update vector page"""
+        @param layer MapLayer instance
+        
+        @return num of points/features (expect of points)
+        @return None
+        """
         vInfo = gcmd.RunCommand('v.info',
                                 parent = self,
                                 read = True,
                                 flags = 't',
-                                map = layer.name)
+                                map = layer.GetName())
         
         if not vInfo:
-            return
-        
-        npoints = nprimitives = 0
+            return None
+            
+        npoints = nlines = nprimitives = 0
         for line in vInfo.splitlines():
             key, value = line.split('=')
             if key == 'map3d':
                 mapIs3D = int(value)
-            
             elif key == 'points':
                 npoints = int(value)
                 nprimitives = npoints
@@ -2595,16 +2605,22 @@ class NvizToolWindow(FN.FlatNotebook):
                          'centroids',
                          'faces',
                          'kernels'):
+                nlines = int(value)
                 nprimitives += int(value)
         
+        return (npoints, nlines, nprimitives)
+        
+    def UpdateVectorPage(self, layer, data, updateName = True):
+        """!Update vector page"""
+        npoints, nlines, nfeatures = self.VectorInfo(layer)
         if mapIs3D:
             desc = _("Vector map is 3D")
             enable = False
         else:
             desc = _("Vector map is 2D")
             enable = True
-        desc += " - " + _("%(primitives)d primitives (%(points)d points)") % \
-            { 'primitives' : nprimitives, 'points' : npoints }
+        desc += " - " + _("%(features)d features (%(points)d points)") % \
+            { 'features' : nfeatures, 'points' : npoints }
         
         if updateName:
             self.FindWindowById(self.win['vector']['map']).SetValue(layer.name)
@@ -2624,7 +2640,7 @@ class NvizToolWindow(FN.FlatNotebook):
             showLines.SetValue(True)
         else:
             showLines.SetValue(False)
-            if nprimitives - npoints > 0:
+            if nlines > 0:
                 showLines.Enable(True)
             else:
                 showLines.Enable(False)
