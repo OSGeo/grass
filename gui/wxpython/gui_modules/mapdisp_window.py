@@ -172,7 +172,6 @@ class MapWindow(object):
         
         if dataType == 'layer':
             return mapLayer
-        
         item = self.tree.FindItemByData('maplayer', mapLayer)
         if not item:
             return None
