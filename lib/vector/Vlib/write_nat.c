@@ -251,7 +251,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 	    /* Reattach all centroids/isles in deleted areas + new area.
 	     *  Because isles are selected by box it covers also possible new isle created above */
 	    if (!first) {	/* i.e. old area/isle was deleted or new one created */
-		/* Reattache isles */
+		/* Reattach isles */
 		if (plus->built >= GV_BUILD_ATTACH_ISLES)
 		    Vect_attach_isles(Map, &abox);
 
@@ -782,16 +782,12 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 
     /* Rebuild areas/isles and attach centroids and isles */
     if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
-	int *new_areas, nnew_areas;
+	int new_areas[4], nnew_areas;
 
 	nnew_areas = 0;
-	new_areas = (int *)G_malloc(2 * n_adjacent * sizeof(int));
 	/* Rebuild areas/isles */
 	for (i = 0; i < n_adjacent; i++) {
-	    if (adjacent[i] > 0)
-		side = GV_RIGHT;
-	    else
-		side = GV_LEFT;
+	    side = adjacent[i] > 0 ? GV_RIGHT : GV_LEFT;
 
 	    G_debug(3, "Build area for line = %d, side = %d", adjacent[i],
 		    side);

@@ -324,7 +324,9 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box * box)
 
     for (i = 0; i < List->n_values; i++) {
 	isle = List->value[i];
-	Vect_attach_isle(Map, isle);
+	/* only attach isles that are not yet attached, see Vect_attach_isle() */
+	if (plus->Isle[isle]->area == 0)
+	    Vect_attach_isle(Map, isle);
     }
     return 0;
 }
