@@ -41,7 +41,6 @@ from grass.script import core as grass
 import globalvar
 import utils
 import gcmd
-from gcmd import GException
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
@@ -623,7 +622,7 @@ class Map(object):
                 message = _("Unable to get current geographic extent. "
                             "Force quiting wxGUI. Please run manually g.region to "
                             "fix the problem.")
-            GError(message)
+            gcmd.GError(message)
             return self.region
         
         for reg in ret.splitlines():
@@ -1034,8 +1033,8 @@ class Map(object):
             layer.SetOpacity(kargs['opacity'])
         
         if render and not layer.Render():
-            raise GException(_("Unable to render map layer <%s>.") % 
-                             (name))
+            raise gcmd.GException(_("Unable to render map layer <%s>.") % 
+                                  (name))
         
         return layer
 
@@ -1143,8 +1142,8 @@ class Map(object):
         self.overlays.append(overlay)
         
         if l_render and command != '' and not overlay.Render():
-            raise GException(_("Unable render overlay <%s>.") % 
-                             (name))
+            raise gcmd.GException(_("Unable render overlay <%s>.") % 
+                                  (name))
         
         return self.overlays[-1]
 
@@ -1182,8 +1181,8 @@ class Map(object):
             overlay.SetOpacity(kargs['opacity'])
         
         if render and command != [] and not overlay.Render():
-            raise GException(_("Unable render overlay <%s>") % 
-                             (name))
+            raise gcmd.GException(_("Unable render overlay <%s>") % 
+                                  (name))
         
         return overlay
 
