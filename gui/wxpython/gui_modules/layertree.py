@@ -399,7 +399,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             cmd = ['r.info']
         elif mltype == 'vector':
             cmd = ['v.info']
-        cmd.append('map=%s' % mapLayer.name)
+        cmd.append('map=%s' % mapLayer.GetName())
 
         # print output to command log area
         self.lmgr.goutput.RunCmd(cmd, switchPage=True)
@@ -410,7 +410,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         cmd = ['g.region',
                '-p',
-               'zoom=%s' % mapLayer.name]
+               'zoom=%s' % mapLayer.GetName()]
         
         # print output to command log area
         self.lmgr.goutput.RunCmd(cmd)
@@ -425,11 +425,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mltype = self.GetPyData(layer)[0]['type']
                 
             if mltype == 'raster':
-                rast.append(mapLayer.name)
+                rast.append(mapLayer.GetName())
             elif mltype == 'vector':
-                vect.append(mapLayer.name)
+                vect.append(mapLayer.GetName())
             elif mltype == '3d-raster':
-                rast3d.append(mapLayer.name)
+                rast3d.append(mapLayer.GetName())
 
         cmd = ['g.region']
         if rast:
@@ -447,7 +447,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnProfile(self, event):
         """!Plot profile of given raster map layer"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
-        if not mapLayer.name:
+        if not mapLayer.GetName():
             wx.MessageBox(parent=self,
                           message=_("Unable to create profile of "
                                     "raster map."),
@@ -463,13 +463,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if not self.profileFrame:
             self.profileFrame = profile.ProfileFrame(self.mapdisplay,
                                                      id=wx.ID_ANY, pos=wx.DefaultPosition, size=(700,300),
-                                                     style=wx.DEFAULT_FRAME_STYLE, rasterList=[mapLayer.name])
+                                                     style=wx.DEFAULT_FRAME_STYLE, rasterList=[mapLayer.GetName()])
             # show new display
             self.profileFrame.Show()
         
     def OnColorTable(self, event):
         """!Set color table for raster map"""
-        name = self.GetPyData(self.layer_selected)[0]['maplayer'].name
+        name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
         menuform.GUI().ParseCommand(['r.colors',
                                      'map=%s' % name],
                                     parentframe = self,
@@ -480,7 +480,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Plot histogram for given raster map layer
         """
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
-        if not mapLayer.name:
+        if not mapLayer.GetName():
             wx.MessageBox(parent=self,
                           message=_("Unable to display histogram of "
                                     "raster map."),
@@ -502,7 +502,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # show new display
             self.histogramFrame.Show()
 
-        self.histogramFrame.SetHistLayer(mapLayer.name)
+        self.histogramFrame.SetHistLayer(mapLayer.GetName())
         self.histogramFrame.HistWindow.UpdateHist()
         self.histogramFrame.Refresh()
         self.histogramFrame.Update()
@@ -1052,24 +1052,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.mapdisplay.MapWindow.UnloadRaster3d(item)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.MapWindow.UnloadVector(item)
-                    
-                    if hasattr(self.parent, "nviz"):
-                        toolWin = self.lmgr.nviz
-                        # remove vector page
-                        if toolWin.notebook.GetSelection() == toolWin.page['vector']['id']:
-                            toolWin.notebook.RemovePage(toolWin.page['vector']['id'])
-                            toolWin.page['vector']['id'] = -1
-                            toolWin.page['settings']['id'] = 1
-
+            
             self.mapdisplay.SetStatusText("", 0)
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.statusbarWin['render'].GetValue():
-        #    print "*** Checked OnRender *****"
-        #    self.mapdisplay.OnRender(None)
-
+        
     def OnCmdChanged(self, event):
         """!Change command string"""
         ctrl = event.GetEventObject().GetId()
@@ -1502,4 +1491,4 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             item = self.GetNextSibling(item)
 
         return None
-    
+
