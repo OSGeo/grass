@@ -714,7 +714,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             toolWin = self.lmgr.nviz
             
             toolWin.UpdatePage('vector')
-            toolWin.SetPage('vector')
+            ### toolWin.SetPage('vector')
         
         return id
 
@@ -754,16 +754,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data[vtype].pop('object')
 
             ### self.layers.remove(id)
-        
-        # update tools window
-        if hasattr(self.lmgr, "nviz") and \
-                vecType is None:
-            toolWin = self.lmgr.nviz
-            # remove surface page
-            if toolWin.GetSelection() ==  toolWin.page['surface']['id']:
-                toolWin.RemovePage(toolWin.page['surface']['id'])
-                toolWin.page['surface']['id'] = -1
-                toolWin.page['settings']['id'] = 1
         
     def Reset(self):
         """!Reset (unload data)"""
@@ -1081,18 +1071,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             layerName.append(mapLayer.GetName())
         
         return layerName
-    
-    def GetLayerData(self, type, name):
-        """!Return layer item data
-
-        @return {} if no layer item found
-        """
-        for item in self.layers:
-            mapLayer = self.tree.GetPyData(item)[0]['maplayer'].GetName()
-            if mapLayer ==  name:
-                return self.tree.GetPyData(item)[0]['nviz']
-        
-        return {}
     
     def GetLayerId(self, type, name):
         """!Get layer object id or -1"""
