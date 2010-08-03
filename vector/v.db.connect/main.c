@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 
 	    if (print->answer || shell_print->answer) {
 		if (!(shell_print->answer)) {
-		    G_message(_("Vector map <%s> is connected by:"),
+		    fprintf(stdout,_("Vector map <%s> is connected by:\n"),
 			      input);
 		}
 		for (i = 0; i < num_dblinks; i++) {
@@ -173,9 +173,10 @@ int main(int argc, char **argv)
 			const char *sep = sep_opt->answer;
 			if (!sep)
 			    sep = "=";
-			fprintf(stdout, "layer%s%d\n", sep, fi->number);
 			if (fi->name)
-			    fprintf(stdout, "name%s%s\n", sep, fi->name);
+			    fprintf(stdout, "layer%s%d/%s\n", sep, fi->number, fi->name);
+			else
+			    fprintf(stdout, "layer%s%d\n", sep, fi->number);
 			fprintf(stdout, "table%s%s\n", sep, fi->table);
 			fprintf(stdout, "key%s%s\n", sep, fi->key);
 			fprintf(stdout, "database%s%s\n", sep, fi->database);
@@ -183,15 +184,15 @@ int main(int argc, char **argv)
 		    }
 		    else {
 			if (fi->name) {
-			    G_message(_("layer <%d/%s>"), fi->number, fi->name);
+			    fprintf(stdout,_("layer <%d/%s>\n"), fi->number, fi->name);
 			}
 			else {
-			    G_message(_("layer <%d>"), fi->number);
+			    fprintf(stdout,_("layer <%d>\n"), fi->number);
 			}
-			G_message(_("table <%s>"), fi->table);
-			G_message(_("in database <%s>"), fi->database);;
-			G_message(_("through driver <%s>"), fi->driver);
-			G_message(_("with key <%s>"), fi->key);
+			fprintf(stdout,_("table <%s>\n"), fi->table);
+			fprintf(stdout,_("in database <%s>\n"), fi->database);;
+			fprintf(stdout,_("through driver <%s>\n"), fi->driver);
+			fprintf(stdout,_("with key <%s>\n"), fi->key);
 		    }
 		}
 	    }			/* end print */
