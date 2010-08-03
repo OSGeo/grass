@@ -78,6 +78,7 @@ int main(int argc, char **argv)
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
     sep_opt->description = _("Field separator for shell script style output");
     sep_opt->guisection = _("Print");
+    sep_opt->answer = "=";
 
     print = G_define_flag();
     print->key = 'p';
@@ -86,8 +87,7 @@ int main(int argc, char **argv)
 
     shell_print = G_define_flag();
     shell_print->key = 'g';
-    shell_print->label = _("Print all map connection parameters and exit "
-			   "in shell script style");
+    shell_print->label = _("Print all map connection parameters in shell script style and exit");
     shell_print->description =
 	_("Format: layer[/layer name] table key database driver");
     shell_print->guisection = _("Print");
@@ -171,32 +171,27 @@ int main(int argc, char **argv)
 
 		    if (shell_print->answer) {
 			const char *sep = sep_opt->answer;
-			if (fi->name) {
-			    fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
-				    fi->number, fi->name, sep,
-				    fi->table, sep, fi->key, sep,
-				    fi->database, sep, fi->driver);
-			}
-			else {
-			    fprintf(stdout, "%d%s%s%s%s%s%s%s%s\n",
-				    fi->number, sep,
-				    fi->table, sep, fi->key, sep,
-				    fi->database, sep, fi->driver);
-			}
+			if (!sep)
+			    sep = "=";
+			fprintf(stdout, "layer%s%d\n", sep, fi->number);
+			if (fi->name)
+			    fprintf(stdout, "name%s%s\n", sep, fi->name);
+			fprintf(stdout, "table%s%s\n", sep, fi->table);
+			fprintf(stdout, "key%s%s\n", sep, fi->key);
+			fprintf(stdout, "database%s%s\n", sep, fi->database);
+			fprintf(stdout, "driver%s%s\n", sep, fi->driver);
 		    }
 		    else {
 			if (fi->name) {
-			    fprintf(stdout,
-				    _("layer <%d/%s> table <%s> in database <%s> through driver "
-				     "<%s> with key <%s>\n"), fi->number, fi->name,
-				    fi->table, fi->database, fi->driver, fi->key);
+			    G_message(_("layer <%d/%s>"), fi->number, fi->name);
 			}
 			else {
-			    fprintf(stdout,
-				    _("layer <%d> table <%s> in database <%s> through driver "
-				     "<%s> with key <%s>\n"), fi->number,
-				    fi->table, fi->database, fi->driver, fi->key);
+			    G_message(_("layer <%d>"), fi->number);
 			}
+			G_message(_("table <%s>"), fi->table);
+			G_message(_("in database <%s>"), fi->database);;
+			G_message(_("through driver <%s>"), fi->driver);
+			G_message(_("with key <%s>"), fi->key);
 		    }
 		}
 	    }			/* end print */
