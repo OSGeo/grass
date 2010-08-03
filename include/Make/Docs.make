@@ -6,12 +6,11 @@ HTML2PDF=		htmldoc --footer d.1
 GRASS_PDFDIR=		$(DOCSDIR)/pdf
 
 # generate programmer's manual as single HTML document:
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
+
 htmldocs-single:
-	(cd lib/ ; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
-	(cd rfc/ ; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
-	(cd gui/wxpython/ ; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
-	(cd swig/; $(MAKE) cleandocs ; $(MAKE) htmldocs-single)
+	for dir in lib rfc gui/wxpython ; do \
+	  $(MAKE) -C $$dir htmldocs-single ; \
+	done
 
 # generate programmer's manual as multiple HTML documents:
 htmldocs:
@@ -37,7 +36,6 @@ latexdocs_dirs := $(patsubst %,%/latex,$(docs_dirs))
 
 htmldocs:
 	for dir in $(docs_dirs) ; do \
-	  $(MAKE) -C $$dir cleandocs ; \
 	  $(MAKE) -C $$dir htmldocs ; \
 	  done
 
@@ -49,7 +47,6 @@ packagehtmldocs: htmldocs
 
 pdfdocs:
 	for dir in $(docs_dirs) ; do \
-	  $(MAKE) -C $$dir cleandocs ; \
 	  $(MAKE) -C $$dir pdfdocs ; \
 	  done
 	@echo "Written PDF docs in: $(latexdocs_dirs)"
