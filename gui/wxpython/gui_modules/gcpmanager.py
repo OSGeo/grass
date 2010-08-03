@@ -679,11 +679,6 @@ class DispMapPage(TitledPage):
 
         tgt_map = event.GetString()
 
-        if src_map == '':
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-        else:
-            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-
     def OnPageChanging(self, event=None):
         global src_map
         global tgt_map
@@ -720,13 +715,15 @@ class DispMapPage(TitledPage):
 
         # filter out all maps not in group
         self.srcselection.tcp.GetElementList(elements = self.parent.src_maps)
+        src_map = self.parent.src_maps[0]
+        self.srcselection.SetValue(src_map)
 
         self.parent.SwitchEnv('target')
         self.tgtselection.SetElementList(maptype)
         self.tgtselection.GetElementList()
         self.parent.SwitchEnv('source')
 
-        if src_map == '' or tgt_map == '':
+        if src_map == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -1133,6 +1130,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                                     'North: %s') % (currloc, str(key), str(coord0), str(coord1)),
                           style=wx.ICON_QUESTION | wx.YES_NO | wx.CENTRE)
 
+            # for wingrass
+            if os.name == 'nt':
+                self.MapWindow.SetFocus()
             if ret == wx.NO:
                 return
             
@@ -1768,13 +1768,17 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             self.Map = self.TgtMap
 
         self.UpdateActive(self.MapWindow)
+        # for wingrass
+        if os.name == 'nt':
+            self.MapWindow.SetFocus()
 
     def UpdateActive(self, win):
 
         # optionally disable tool zoomback tool
         self.toolbars['gcpdisp'].Enable('zoomback', enable = (len(self.MapWindow.zoomhistory) > 1))
 
-        self.activemap.SetSelection(win == self.TgtMapWindow)
+        if self.activemap.GetSelection() != (win == self.TgtMapWindow):
+            self.activemap.SetSelection(win == self.TgtMapWindow)
         self.StatusbarUpdate()
 
     def AdjustMap(self, newreg):
