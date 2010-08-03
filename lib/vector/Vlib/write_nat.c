@@ -156,14 +156,11 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 	if (type == GV_BOUNDARY) {
 	    /* Delete neighbour areas/isles */
 	    first = 1;
-	    for (s = 1; s < 3; s++) {	/* for each node */
-		if (s == 1)
-		    node = Line->N1;	/* Node 1 */
-		else
-		    node = Line->N2;
+	    for (s = 0; s < 2; s++) {	/* for each node */
+		node = (s == 0 ? Line->N1 : Line->N2);
 		G_debug(3,
-			"  delete neighbour areas/iseles: side = %d node = %d",
-			s, node);
+			"  delete neighbour areas/isles: %s node = %d",
+			(s == 0 ? "first" : "second"), node);
 		Node = plus->Node[node];
 		n = 0;
 		for (i = 0; i < Node->n_lines; i++) {
@@ -176,7 +173,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		if (n > 2) {	/* more than 2 boundaries at node ( >= 2 old + 1 new ) */
 		    /* Line above (to the right), it is enough to check to the right, because if area/isle
 		     *  exists it is the same to the left */
-		    if (s == 1)
+		    if (!s)
 			next_line =
 			    dig_angle_next_line(plus, line, GV_RIGHT,
 						GV_BOUNDARY);
@@ -214,14 +211,12 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		    }
 		}
 	    }
-	    /* Build new areas/isles. Thas true that we deleted also adjacent areas/isles, but if
-	     *  they form new one our boundary must participate, so we need to build areas/isles
-	     *  just for our boundary */
-	    for (s = 1; s < 3; s++) {
-		if (s == 1)
-		    side = GV_LEFT;
-		else
-		    side = GV_RIGHT;
+	    /* Build new areas/isles.
+	     *  It's true that we deleted also adjacent areas/isles, but
+	     *  if they form new one our boundary must participate, so
+	     *  we need to build areas/isles just for our boundary */
+	    for (s = 0; s < 2; s++) {
+		side = (s == 0 ? GV_LEFT : GV_RIGHT);
 		G_debug(3, "  build area/isle on side = %d", side);
 
 		G_debug(3, "Build area for line = %d, side = %d", line, side);
@@ -246,7 +241,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		    else
 			Vect_box_extend(&abox, &box);
 		}
-		new_area[s - 1] = area;
+		new_area[s] = area;
 	    }
 	    /* Reattach all centroids/isles in deleted areas + new area.
 	     *  Because isles are selected by box it covers also possible new isle created above */
@@ -261,9 +256,9 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 	    }
 	    /* Add to category index */
 	    if (plus->update_cidx) {
-		for (s = 1; s < 3; s++) {
-		    if (new_area[s - 1] > 0) {
-			V2__add_area_cats_to_cidx_nat(Map, new_area[s - 1]);
+		for (s = 0; s < 2; s++) {
+		    if (new_area[s] > 0) {
+			V2__add_area_cats_to_cidx_nat(Map, new_area[s]);
 		    }
 		}
 	    }
@@ -782,12 +777,11 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 
     /* Rebuild areas/isles and attach centroids and isles */
     if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
-	int new_areas[4], nnew_areas;
+	int new_areas[4], nnew_areas = 0;
 
-	nnew_areas = 0;
 	/* Rebuild areas/isles */
 	for (i = 0; i < n_adjacent; i++) {
-	    side = adjacent[i] > 0 ? GV_RIGHT : GV_LEFT;
+	    side = (adjacent[i] > 0 ? GV_RIGHT : GV_LEFT);
 
 	    G_debug(3, "Build area for line = %d, side = %d", adjacent[i],
 		    side);
@@ -819,7 +813,7 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 	/* Reattach all centroids/isles in deleted areas + new area.
 	 *  Because isles are selected by box it covers also possible new isle created above */
 	if (!first) {		/* i.e. old area/isle was deleted or new one created */
-	    /* Reattache isles */
+	    /* Reattach isles */
 	    if (plus->built >= GV_BUILD_ATTACH_ISLES)
 		Vect_attach_isles(Map, &abox);
 
