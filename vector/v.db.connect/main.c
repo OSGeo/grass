@@ -78,7 +78,6 @@ int main(int argc, char **argv)
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
     sep_opt->description = _("Field separator for shell script style output");
     sep_opt->guisection = _("Print");
-    sep_opt->answer = "=";
 
     print = G_define_flag();
     print->key = 'p';
@@ -172,27 +171,31 @@ int main(int argc, char **argv)
 		    if (shell_print->answer) {
 			const char *sep = sep_opt->answer;
 			if (!sep)
-			    sep = "=";
+			    sep = "|";
 			if (fi->name)
-			    fprintf(stdout, "layer%s%d/%s\n", sep, fi->number, fi->name);
+			    fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
+				    fi->number, fi->name, sep,
+				    fi->table, sep, fi->key, sep,
+				    fi->database, sep, fi->driver);
 			else
-			    fprintf(stdout, "layer%s%d\n", sep, fi->number);
-			fprintf(stdout, "table%s%s\n", sep, fi->table);
-			fprintf(stdout, "key%s%s\n", sep, fi->key);
-			fprintf(stdout, "database%s%s\n", sep, fi->database);
-			fprintf(stdout, "driver%s%s\n", sep, fi->driver);
+			    fprintf(stdout, "%d%s%s%s%s%s%s%s%s\n",
+				    fi->number, sep,
+				    fi->table, sep, fi->key, sep,
+				    fi->database, sep, fi->driver);
 		    }
 		    else {
 			if (fi->name) {
-			    fprintf(stdout,_("layer <%d/%s>\n"), fi->number, fi->name);
+			    fprintf(stdout,
+				    _("layer <%d/%s> table <%s> in database <%s> through driver "
+				    "<%s> with key <%s>\n"), fi->number, fi->name,
+				    fi->table, fi->database, fi->driver, fi->key);
 			}
 			else {
-			    fprintf(stdout,_("layer <%d>\n"), fi->number);
+			    fprintf(stdout,
+				    _("layer <%d> table <%s> in database <%s> through driver "
+				    "<%s> with key <%s>\n"), fi->number,
+				    fi->table, fi->database, fi->driver, fi->key);
 			}
-			fprintf(stdout,_("table <%s>\n"), fi->table);
-			fprintf(stdout,_("in database <%s>\n"), fi->database);;
-			fprintf(stdout,_("through driver <%s>\n"), fi->driver);
-			fprintf(stdout,_("with key <%s>\n"), fi->key);
 		    }
 		}
 	    }			/* end print */
