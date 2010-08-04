@@ -1262,8 +1262,8 @@ class MapFrame(wx.Frame):
         mapname = None
         raststr = ''
         vectstr = ''
-        rcmd = ['r.what', '--q']
-        vcmd = ['v.what', '--q']
+        rcmd = ['r.what', '--v']
+        vcmd = ['v.what', '--v']
         for layer in self.tree.GetSelections():
             type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
             dcmd = self.tree.GetPyData(layer)[0]['cmd']
@@ -1340,8 +1340,7 @@ class MapFrame(wx.Frame):
             del self.tmpreg
         
     def QueryVector(self, x, y):
-        """
-        Query vector map layer features
+        """!Query vector map layer features
 
         Attribute data of selected vector object are displayed in GUI dialog.
         Data can be modified (On Submit)
@@ -1425,39 +1424,53 @@ class MapFrame(wx.Frame):
         
         point = wx.GetMousePosition()
         toolsmenu = wx.Menu()
-        # Add items to the menu
-        display = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
-                              text=_("Query raster/vector map(s) (display mode)"),
-                              kind=wx.ITEM_CHECK)
-        toolsmenu.AppendItem(display)
-        self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
-        numLayers = 0
-        for layer in self.tree.GetSelections():
-            type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-            if type in ('raster', 'rgb', 'his',
-                        'vector', 'thememap', 'themechart'):
-                numLayers += 1
-        if numLayers < 1:
-            display.Enable(False)
-        
-        if action == "displayAttrb":
-            display.Check(True)
-        
-        modify = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
-                             text=_("Query vector map (edit mode)"),
-                             kind=wx.ITEM_CHECK)
-        toolsmenu.AppendItem(modify)
-        self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
+
+        # add items to the menu
         if self.toolbars['nviz']:
+            raster = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
+                                 text = _("Query surface (raster map)"),
+                                 kind = wx.ITEM_CHECK)
+            toolsmenu.AppendItem(raster)
+            self.Bind(wx.EVT_MENU, self.OnQueryDisplay, raster)
+            if action == "displayAttrb":
+                display.Check(True)
+            vector = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
+                                 text = _("Query vector map"),
+                                 kind = wx.ITEM_CHECK)
+            toolsmenu.AppendItem(vector)
+            self.Bind(wx.EVT_MENU, self.OnQueryDisplay, vector)
+        else:
+            display = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
+                                  text=_("Query raster/vector map(s) (display mode)"),
+                                  kind=wx.ITEM_CHECK)
+            toolsmenu.AppendItem(display)
+            self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
+            numLayers = 0
+            for layer in self.tree.GetSelections():
+                type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+                if type in ('raster', 'rgb', 'his',
+                            'vector', 'thememap', 'themechart'):
+                    numLayers += 1
+            if numLayers < 1:
+                display.Enable(False)
+            
+            if action == "displayAttrb":
+                display.Check(True)
+            
+            modify = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
+                                 text=_("Query vector map (edit mode)"),
+                                 kind=wx.ITEM_CHECK)
+            toolsmenu.AppendItem(modify)
+            self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
             modify.Enable(False)
         
-        digitToolbar = self.toolbars['vdigit']
-        if self.tree.layer_selected:
-            layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
-            if layer_selected.GetType() != 'vector' or \
-                    (digitToolbar and \
-                         digitToolbar.GetLayer() == layer_selected):
-                modify.Enable(False)
+            digitToolbar = self.toolbars['vdigit']
+            if self.tree.layer_selected:
+                layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
+                if layer_selected.GetType() != 'vector' or \
+                        (digitToolbar and \
+                             digitToolbar.GetLayer() == layer_selected):
+                    modify.Enable(False)
             else:
                 if action == "modifyAttrb":
                     modify.Check(True)
