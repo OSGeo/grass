@@ -423,7 +423,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     #         if data['vector'][v]:
                     #             vecType.append(v)
                     layer = self.tree.GetPyData(item)[0]['maplayer']
-                    npoints, nlines, nfeatures = self.lmgr.nviz.VectorInfo(layer)
+                    npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(layer)
                     if npoints > 0:
                         self.LoadVector(item, points = True)
                     if nlines > 0:
@@ -463,7 +463,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                             for v in ('lines', 'points'):
                                 if data['vector'][v]:
                                     vecType.append(v)
-                        self.UnloadVector(layer, vecType)
+                        self.UnloadVector(layer, True)
+                        self.UnloadVector(layer, False)
                     
                     self.UpdateView(None)
                 except gcmd.GException, e:
@@ -744,7 +745,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if not data[vecType].has_key('object'):
                 continue
             
-            id = data[vtype]['object']['id']
+            id = data[vecType]['object']['id']
             
             if vecType ==  'lines':
                 ret = self._display.UnloadVector(id, False)
@@ -752,10 +753,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 ret = self._display.UnloadVector(id, True)
             if ret ==  0:
                 print >> sys.stderr, "Nviz:" + _("Unable to unload vector map <%(name)s> (%(type)s)") % \
-                    { 'name': layer.name, 'type' : vtype }
+                    { 'name': layer.name, 'type' : vecType }
             else:
                 print "Nviz:" + _("Vector map <%(name)s> (%(type)s) unloaded successfully") % \
-                    { 'name' : layer.name, 'type' : vtype }
+                    { 'name' : layer.name, 'type' : vecType }
             
             data[vecType].pop('object')
             

@@ -1971,11 +1971,9 @@ class NvizToolWindow(FN.FlatNotebook):
         winId = event.GetId()
         if winId == self.win['vector']['lines']['show']:
             vecType = 'lines'
-            lines = True
             points = False
         else: # points
             vecType = 'points' 
-            lines = False
             points = True
        
         checked = event.IsChecked()
@@ -1984,9 +1982,9 @@ class NvizToolWindow(FN.FlatNotebook):
         data = self.GetLayerData('vector')['vector']
         
         if checked:
-            self.mapWindow.LoadVector(item, lines = lines, points = points)
+            self.mapWindow.LoadVector(item, points = points)
         else:
-            self.mapWindow.UnloadVector(item, lines = lines, points = points)
+            self.mapWindow.UnloadVector(item, points = points)
         
         self.UpdateVectorShow(vecType, checked)
         
@@ -2610,11 +2608,11 @@ class NvizToolWindow(FN.FlatNotebook):
                 nlines = int(value)
                 nprimitives += int(value)
         
-        return (npoints, nlines, nprimitives)
+        return (npoints, nlines, nprimitives, mapIs3D)
         
     def UpdateVectorPage(self, layer, data, updateName = True):
         """!Update vector page"""
-        npoints, nlines, nfeatures = self.VectorInfo(layer)
+        npoints, nlines, nfeatures, mapIs3D = self.VectorInfo(layer)
         if mapIs3D:
             desc = _("Vector map is 3D")
             enable = False
