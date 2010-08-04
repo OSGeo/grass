@@ -26,6 +26,7 @@ import string
 import getopt
 import platform
 import signal
+import tempfile
 
 ### XML 
 try:
@@ -846,29 +847,29 @@ class GMFrame(wx.Frame):
 
     def SaveToWorkspaceFile(self, filename):
         """!Save layer tree layout to workspace file
-
+        
         Return True on success, False on error
         """
-
+        tmpfile = tempfile.TemporaryFile(mode='w+b')
         try:
-            file = open(filename, "w")
-        except IOError:
-            wx.MessageBox(parent=self,
-                          message=_("Unable to open workspace file <%s> for writing.") % filename,
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-            return False
-
-        try:
-            workspace.WriteWorkspaceFile(lmgr=self, file=file)
+            workspace.WriteWorkspaceFile(lmgr = self, file = tmpfile)
         except StandardError, e:
-            file.close()
-            wx.MessageBox(parent=self,
-                          message=_("Writing current settings to workspace file failed (%s)." % e),
-                          caption=_("Error"),
-                          style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message = _("Writing current settings to workspace file "
+                                    "failed."))
             return False
-
-        file.close()
+        
+        try:
+            mfile = open(filename, "w")
+            tmpfile.seek(0)
+            for line in tmpfile.readlines():
+                mfile.write(line)
+        except IOError:
+            gcmd.GError(parent = self,
+                        message = _("Unable to open file <%s> for writing.") % filename)
+            return False
+        
+        mfile.close()
         
         return True
     
