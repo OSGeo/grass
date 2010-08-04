@@ -840,6 +840,7 @@ class GMFrame(wx.Frame):
                 Debug.msg(4, "GMFrame.OnWorkspaceSave(): filename=%s" % self.workspaceFile)
                 self.SaveToWorkspaceFile(self.workspaceFile)
                 self.SetTitle(self.baseTitle + " - " + os.path.basename(self.workspaceFile))
+                self.workspaceChanged = False
         else:
             self.OnWorkspaceSaveAs()
 
