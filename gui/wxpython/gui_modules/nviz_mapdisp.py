@@ -33,11 +33,11 @@ from wx import glcanvas
 
 import gcmd
 import globalvar
-from debug import Debug as Debug
+from debug          import Debug
 from mapdisp_window import MapWindow
-from goutput import wxCmdOutput
-from preferences import globalSettings as UserSettings
-from workspace import Nviz as NvizDefault
+from goutput        import wxCmdOutput
+from preferences    import globalSettings as UserSettings
+from workspace      import Nviz as NvizDefault
 
 import wxnviz
 

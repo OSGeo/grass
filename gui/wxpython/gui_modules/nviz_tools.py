@@ -84,6 +84,8 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.Update()
         wx.CallAfter(self.SetPage, 'view')
+        wx.CallAfter(self.notebookData.SetSelection, 0)
+        wx.CallAfter(self.notebookAppearance.SetSelection, 0)
         
     def OnPageChanged(self, event):
         new = event.GetSelection()
