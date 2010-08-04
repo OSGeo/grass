@@ -345,17 +345,14 @@ class ProcessWorkspaceFile:
                 marker = str(node_vpoints.get('marker', ''))
                 markerId = list(UserSettings.Get(group='nviz', key='vector',
                                                  subkey=['points', 'marker'], internal=True)).index(marker)
-                nviz['vector']['points']['marker'] = markerId
+                nviz['vector']['points']['marker'] = { 'value' : markerId }
                 
                 node_mode = node_vpoints.find('mode')
                 if node_mode is not None:
                     nviz['vector']['points']['mode'] = {}
                     nviz['vector']['points']['mode']['type'] = str(node_mode.get('type', ''))
-                    nviz['vector']['points']['mode']['surface'] = ''
-                    
-                    # map
                     nviz['vector']['points']['mode']['surface'] = \
-                        self.__processLayerNvizNode(node_vpoints, 'map', str)
+                        self.__processLayerNvizNode(node_mode, 'map', str)
                 
                 # color
                 self.__processLayerNvizNode(node_vpoints, 'color', str,
@@ -404,7 +401,16 @@ class ProcessWorkspaceFile:
         """!Process given tag nviz/vector"""
         node_tag = node.find(tag)
         if node_tag is not None:
-            value = cast(self.__getNodeText(node_tag, 'value'))
+            if node_tag.find('value') is not None:
+                value = cast(self.__getNodeText(node_tag, 'value'))
+            else:
+                try:
+                    value = cast(node_tag.text)
+                except ValueError:
+                    if cast == str:
+                        value = ''
+                    else:
+                        value = None
             if dc:
                 dc[tag] = dict()
                 dc[tag]['value'] = value
@@ -916,9 +922,9 @@ class WriteWorkspaceFile(object):
             if attrb == 'lines':
                 self.file.write('%s<v%s>\n' % (' ' * self.indent, attrb))
             elif attrb == 'points':
-                markerId = data[attrb]['marker']
-                marker = UserSettings.Get(group='nviz', key='vector',
-                                          subkey=['points', 'marker'], internal=True)[markerId]
+                markerId = data[attrb]['marker']['value']
+                marker = UserSettings.Get(group = 'nviz', key = 'vector',
+                                          subkey = ['points', 'marker'], internal = True)[markerId]
                 self.file.write('%s<v%s marker="%s">\n' % (' ' * self.indent,
                                                            attrb,
                                                            marker))
