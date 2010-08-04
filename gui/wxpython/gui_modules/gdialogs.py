@@ -299,6 +299,9 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
             key = UserSettings.Get(group='atm', key='keycolumn', subkey='value')
             sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
             
+            gcmd.RunCommand('db.connect',
+                            flags = 'c')
+            
             gcmd.RunCommand('db.execute',
                             quiet = True,
                             parent = parent,
