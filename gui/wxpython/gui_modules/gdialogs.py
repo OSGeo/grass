@@ -254,10 +254,10 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
                           message=_("Unable to create vector map <%s>.") % outmap,
                           caption=_("Error"),
                           style=wx.ID_OK | wx.ICON_ERROR | wx.CENTRE)
-            return False
+            return (None, None)
         
         if outmap == '': # should not happen
-            return False
+            return (None, None)
         
         cmd[1][cmd[2]] = outmap
         
@@ -278,7 +278,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
                 overwrite = True
             else:
                 dlgOw.Destroy()
-                return False
+                return (None, None)
 
         if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') is True:
             overwrite = True
@@ -290,7 +290,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
         except gcmd.GException, e:
             gcmd.GError(parent = self,
                         message = e)
-            return None
+            return (None, None)
         
         #
         # create attribute table
@@ -307,7 +307,7 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
                             parent = parent,
                             input = '-',
                             stdin = sql)
-
+            
             gcmd.RunCommand('v.db.connect',
                             quiet = True,
                             parent = parent,
