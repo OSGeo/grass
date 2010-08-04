@@ -7,8 +7,9 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Markus Neteler <neteler itc.it>,
  *               Hamish Bowman <hamish_b yahoo com>
+ *               Martin Landa <landa.martin gmail.com> ('d' flag)
  * PURPOSE:      set parameters for connection to database
- * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -30,12 +31,11 @@
 int main(int argc, char *argv[])
 {
     dbConnection conn;
-    struct Flag *print, *check_set_default;
+    struct Flag *print, *check_set_default, *def;
 
     /*    struct Option *driver, *database, *user, *password, *keycol; */
     struct Option *driver, *database, *schema, *group;
     struct GModule *module;
-
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -46,8 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("connection settings"));
     module->description =
-	_("Prints/sets general DB connection for current mapset and exits.");
-
+	_("Prints/sets general DB connection for current mapset.");
 
     print = G_define_flag();
     print->key = 'p';
@@ -58,7 +57,13 @@ int main(int argc, char *argv[])
     check_set_default->key = 'c';
     check_set_default->description =
 	_("Check connection parameters, set if uninitialized, and exit");
-    check_set_default->guisection = _("Print");
+    check_set_default->guisection = _("Set");
+    
+    def = G_define_flag();
+    def->key = 'd';
+    def->label = _("Set from default settings and exit");
+    def->description = _("Overwrite current settings if initialized");
+    def->guisection = _("Set");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
@@ -102,7 +107,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-
     if (print->answer) {
 	/* get and print connection */
 	if (db_get_connection(&conn) == DB_OK) {
@@ -120,7 +124,6 @@ int main(int argc, char *argv[])
 
 	exit(EXIT_SUCCESS);
     }
-
 
     if (check_set_default->answer) {
 	/* check connection and set to system-wide default in required */
@@ -153,6 +156,16 @@ int main(int argc, char *argv[])
     }
 
 
+    if (def->answer) {
+	db_set_default_connection();
+	db_get_connection(&conn);
+	
+	G_important_message(_("Default driver / database set to:\n"
+			      "driver: %s\ndatabase: %s"), conn.driverName,
+			    conn.databaseName);
+	exit(EXIT_SUCCESS);
+    }
+    
     /* set connection */
     db_get_connection(&conn);	/* read current */
 
