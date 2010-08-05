@@ -98,10 +98,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # create nviz instance
         #
         if self.lmgr:
+            self.log = self.lmgr.goutput
             logerr = self.lmgr.goutput.cmd_stderr
             logmsg = self.lmgr.goutput.cmd_output
         else:
-            logerr = logmsg = None
+            self.log = logmsg = sys.stdout
+            logerr = sys.stderr
         self.nvizThread = NvizThread(logerr,
                                      self.parent.statusbarWin['progress'],
                                      logmsg)
@@ -246,40 +248,50 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
     def OnLeftUp(self, event):
         self.ReleaseMouse()
-        if self.mouse["use"] == "query":
-            result = self._display.QueryMap(event.GetX(), event.GetY())
-            log = self.lmgr.goutput
-            if result:
-                self.qpoints.append((result['x'], result['y'], result['z']))
-                log.WriteLog("%-30s: %.3f" % (_("Easting"),   result['x']))
-                log.WriteLog("%-30s: %.3f" % (_("Northing"),  result['y']))
-                log.WriteLog("%-30s: %.3f" % (_("Elevation"), result['z']))
-                log.WriteLog("%-30s: %s" % (_("Surface map elevation"), result['elevation']))
-                log.WriteLog("%-30s: %s" % (_("Surface map color"), result['color']))
-                if len(self.qpoints) > 1:
-                    prev = self.qpoints[-2]
-                    curr = self.qpoints[-1]
-                    dxy = math.sqrt(pow(prev[0]-curr[0], 2) +
-                                    pow(prev[1]-curr[1], 2))
-                    dxyz = math.sqrt(pow(prev[0]-curr[0], 2) +
-                                     pow(prev[1]-curr[1], 2) +
-                                     pow(prev[2]-curr[2], 2))
-                    log.WriteLog("%-30s: %.3f" % (_("XY distance from previous"), dxy))
-                    log.WriteLog("%-30s: %.3f" % (_("XYZ distance from previous"), dxyz))
-                    log.WriteLog("%-30s: %.3f" % (_("Distance along surface"),
-                                                self._display.GetDistanceAlongSurface(result['id'],
-                                                                                      (curr[0], curr[1]),
-                                                                                      (prev[0], prev[1]),
-                                                                                      useExag = False)))
-                    log.WriteLog("%-30s: %.3f" % (_("Distance along exag. surface"),
-                                                self._display.GetDistanceAlongSurface(result['id'],
-                                                                                      (curr[0], curr[1]),
-                                                                                      (prev[0], prev[1]),
+        if self.mouse["use"] == "nvizQuerySurface":
+            self.OnQuerySurface(event)
+        elif self.mouse["use"] == "nvizQueryVector":
+            self.OnQueryVector(event)
+    
+    def OnQuerySurface(self, event):
+        """!Query surface on given position"""
+        result = self._display.QueryMap(event.GetX(), event.GetY())
+        if result:
+            self.qpoints.append((result['x'], result['y'], result['z']))
+            self.log.WriteLog("%-30s: %.3f" % (_("Easting"),   result['x']))
+            self.log.WriteLog("%-30s: %.3f" % (_("Northing"),  result['y']))
+            self.log.WriteLog("%-30s: %.3f" % (_("Elevation"), result['z']))
+            self.log.WriteLog("%-30s: %s" % (_("Surface map elevation"), result['elevation']))
+            self.log.WriteLog("%-30s: %s" % (_("Surface map color"), result['color']))
+            if len(self.qpoints) > 1:
+                prev = self.qpoints[-2]
+                curr = self.qpoints[-1]
+                dxy = math.sqrt(pow(prev[0]-curr[0], 2) +
+                                pow(prev[1]-curr[1], 2))
+                dxyz = math.sqrt(pow(prev[0]-curr[0], 2) +
+                                 pow(prev[1]-curr[1], 2) +
+                                 pow(prev[2]-curr[2], 2))
+                self.log.WriteLog("%-30s: %.3f" % (_("XY distance from previous"), dxy))
+                self.log.WriteLog("%-30s: %.3f" % (_("XYZ distance from previous"), dxyz))
+                self.log.WriteLog("%-30s: %.3f" % (_("Distance along surface"),
+                                              self._display.GetDistanceAlongSurface(result['id'],
+                                                                                    (curr[0], curr[1]),
+                                                                                    (prev[0], prev[1]),
+                                                                                    useExag = False)))
+                self.log.WriteLog("%-30s: %.3f" % (_("Distance along exag. surface"),
+                                              self._display.GetDistanceAlongSurface(result['id'],
+                                                                                    (curr[0], curr[1]),
+                                                                                    (prev[0], prev[1]),
                                                                                       useExag = True)))
-                log.WriteLog('-' * 80)
-            else:
-                log.WriteLog(_("No point on surface"))
-                log.WriteLog('-' * 80)
+            self.log.WriteCmdLog('-' * 80)
+        else:
+            self.log.WriteLog(_("No point on surface"))
+            self.log.WriteCmdLog('-' * 80)
+    
+    def OnQueryVector(self, event):
+        """!Query vector on given position"""
+        self.log.WriteWarning(_("Function not implemented yet"))
+        self.log.WriteCmdLog('-' * 80)
         
     def UpdateView(self, event):
         """!Change view settings"""
