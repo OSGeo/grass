@@ -56,9 +56,9 @@ class NvizThread(Thread):
         self._display = None
         
         self.setDaemon(True)
-        
+
     def run(self):
-        self._display = wxnviz.Nviz(self.log)
+        self._display = wxnviz.Nviz(self.log, self.progressbar)
         
     def GetDisplay(self):
         """!Get display instance"""
@@ -104,6 +104,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         else:
             self.log = logmsg = sys.stdout
             logerr = sys.stderr
+        
         self.nvizThread = NvizThread(logerr,
                                      self.parent.statusbarWin['progress'],
                                      logmsg)
