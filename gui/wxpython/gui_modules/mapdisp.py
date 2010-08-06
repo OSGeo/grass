@@ -404,7 +404,8 @@ class MapFrame(wx.Frame):
 
             # erase map window
             self.MapWindow.EraseMap()
-
+            
+            self._layerManager.goutput.WriteCmdLog(_("Starting 3D view mode..."))
             self.statusbar.SetStatusText(_("Please wait, loading data..."), 0)
             
             # create GL window & NVIZ toolbar

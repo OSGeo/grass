@@ -32,17 +32,48 @@ except ImportError, err:
 
 from debug import Debug
 
+log      = None
+progress = None
+
+def print_error(msg, type):
+    """!Redirect stderr"""
+    global log
+    if log:
+        log.write(msg)
+    else:
+        print msg
+    
+    return 0
+
+def print_progress(value):
+    """!Redirect progress info"""
+    global progress
+    if progress:
+        progress.SetValue(value)
+    else:
+        print value
+    
+    return 0
+
+errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
+errfunc = errtype(print_error)
+
+pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
+perfunc = pertype(print_progress)
+
 class Nviz(object):
-    def __init__(self, log):
+    def __init__(self, glog, gprogress):
         """!Initialize Nviz class instance
         
         @param log logging area
         """
-        self.log = log
+        global errfunc, perfunc, log, progress
+        log = glog
+        progress = gprogress
         
         G_gisinit("")
-        # G_set_error_routine(&print_error)
-        # G_set_percent_routine(poiter(print_percent))
+        G_set_error_routine(errfunc) 
+        G_set_percent_routine(perfunc)
         
         GS_libinit()
         GVL_libinit()
@@ -56,8 +87,8 @@ class Nviz(object):
         
     def __del__(self):
         """!Destroy Nviz class instance"""
-        # G_unset_error_routine()
-        # G_unset_percent_routine()
+        G_unset_error_routine()
+        G_unset_percent_routine()
         del self.data
         del self.data_obj
         self.log = None
