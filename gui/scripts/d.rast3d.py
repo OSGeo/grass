@@ -6,19 +6,19 @@
 #
 # AUTHOR(S):    Martin Landa <landa.martin gmail.com>
 #
-# PURPOSE:	Wrapper for wxGUI -- add 3d raster map layer into layer tree
+# PURPOSE:	Wrapper for wxGUI to add 3D raster map into layer tree
 #
-# COPYRIGHT:	(C) 2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 2008, 2010 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+#		This program is free software under the GNU General
+#		Public License (>=v2). Read the file COPYING that
+#		comes with GRASS for details.
 #
 #############################################################################
 
 #%module
-#%  description: Displays 3d raster data in the active frame on the graphics monitor.
-#%  keywords: display, raster3d
+#% description: Displays 3D raster map layer.
+#% keywords: display, raster3d
 #%end
 
 #%option
