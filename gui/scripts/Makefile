@@ -1,17 +1,24 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Dir.make
+include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
-ETCDIR = $(ETC)/gui/scripts
+SCRIPTDIR = $(ETC)/gui/scripts
 
-SRCFILES := $(wildcard *.py)
-DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
+ifdef MINGW
+PYFILES := $(patsubst %.py, $(SCRIPTDIR)/%.py, $(filter %.py, $(PY_SOURCES)))
+else
+PYFILES := $(patsubst %.py, $(SCRIPTDIR)/%, $(filter %.py, $(PY_SOURCES)))
+endif
 
-default: $(DSTFILES)
+default: $(PYFILES)
 
-$(ETCDIR)/%: % | $(ETCDIR)
+$(SCRIPTDIR)/%: %.py | $(SCRIPTDIR)
 	$(INSTALL) $< $@
 
-$(ETCDIR):
-	$(MKDIR) $@
+$(SCRIPTDIR)/%.py: %.py | $(SCRIPTDIR)
+	$(INSTALL) $< $@
+
+$(SCRIPTDIR):
+	-test -d $@ | $(MKDIR) $@
