@@ -1152,42 +1152,41 @@ class GMFrame(wx.Frame):
         # start new map display if no display is available
         if not self.curr_page:
             self.NewDisplay(show=False)
-
+        
         point = wx.GetMousePosition()
         rastmenu = wx.Menu()
-
+        
         # add items to the menu
-        if self.curr_page.maptree.mapdisplay.toolbars['nviz']:
-            addrast3d = wx.MenuItem(rastmenu, -1, Icons ["addrast3d"].GetLabel())
-            addrast3d.SetBitmap(Icons["addrast3d"].GetBitmap (self.iconsize))
-            rastmenu.AppendItem(addrast3d)
-            self.Bind(wx.EVT_MENU, self.AddRaster3d, addrast3d)
-
+        addrast3d = wx.MenuItem(rastmenu, -1, Icons ["addrast3d"].GetLabel())
+        addrast3d.SetBitmap(Icons["addrast3d"].GetBitmap (self.iconsize))
+        rastmenu.AppendItem(addrast3d)
+        self.Bind(wx.EVT_MENU, self.AddRaster3d, addrast3d)
+        
         addshaded = wx.MenuItem(rastmenu, -1, Icons ["addshaded"].GetLabel())
         addshaded.SetBitmap(Icons["addshaded"].GetBitmap (self.iconsize))
         rastmenu.AppendItem(addshaded)
         self.Bind(wx.EVT_MENU, self.AddShaded, addshaded)
-
+        
         addrgb = wx.MenuItem(rastmenu, -1, Icons["addrgb"].GetLabel())
         addrgb.SetBitmap(Icons["addrgb"].GetBitmap(self.iconsize))
         rastmenu.AppendItem(addrgb)
         self.Bind(wx.EVT_MENU, self.AddRGB, addrgb)
-
+        
         addhis = wx.MenuItem(rastmenu, -1, Icons ["addhis"].GetLabel())
         addhis.SetBitmap(Icons["addhis"].GetBitmap (self.iconsize))
         rastmenu.AppendItem(addhis)
         self.Bind(wx.EVT_MENU, self.AddHIS, addhis)
-
+        
         addrastarrow = wx.MenuItem(rastmenu, -1, Icons ["addrarrow"].GetLabel())
         addrastarrow.SetBitmap(Icons["addrarrow"].GetBitmap (self.iconsize))
         rastmenu.AppendItem(addrastarrow)
         self.Bind(wx.EVT_MENU, self.AddRastarrow, addrastarrow)
-
+        
         addrastnums = wx.MenuItem(rastmenu, -1, Icons ["addrnum"].GetLabel())
         addrastnums.SetBitmap(Icons["addrnum"].GetBitmap (self.iconsize))
         rastmenu.AppendItem(addrastnums)
         self.Bind(wx.EVT_MENU, self.AddRastnum, addrastnums)
-
+        
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.PopupMenu(rastmenu)

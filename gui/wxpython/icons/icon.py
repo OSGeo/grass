@@ -228,7 +228,7 @@ Icons = {
     "addtext"    : MetaIcon (img=Icons["addtext"],
                              label=_("Add text layer")),
     "addrast3d"  : MetaIcon (img=Icons["addrast3d"],
-                             label=_("Add 3D raster map")),
+                             label=_("Add 3D raster map layer")),
     "settings"   : MetaIcon (img=Icons["settings"],
                              label=_("Show GUI settings")),
     # digit
