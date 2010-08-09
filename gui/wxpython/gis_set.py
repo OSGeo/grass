@@ -124,17 +124,17 @@ class GRASSStartup(wx.Frame):
 
         # buttons
         self.bstart = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                label=_("Start GRASS"))
+                                label=_("Start &GRASS"))
         self.bstart.SetDefault()
         self.bexit = wx.Button(parent=self.panel, id=wx.ID_EXIT)
         self.bstart.SetMinSize((180, self.bexit.GetSize()[1]))
         self.bhelp = wx.Button(parent=self.panel, id=wx.ID_HELP)
         self.bbrowse = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                 label=_("Browse"))
+                                 label=_("&Browse"))
         self.bmapset = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                 label=_("Create mapset"))
+                                 label=_("&Create mapset"))
         self.bwizard = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                 label=_("Location wizard"))
+                                 label=_("&Location wizard"))
         self.manageloc = wx.Choice(parent=self.panel, id=wx.ID_ANY,
                                    choices=[_('Rename mapset'), _('Rename location'),
                                             _('Delete mapset'), _('Delete location')])
@@ -728,7 +728,9 @@ class GRASSStartup(wx.Frame):
                 dlg.ShowModal()
                 dlg.Destroy()
                 return False
-
+        
+        self.bstart.SetFocus()
+        
         return True
 
     def OnStart(self, event):
