@@ -460,6 +460,7 @@ class GMConsole(wx.SplitterWindow):
                 #
                 try:
                     layertype = {'d.rast'         : 'raster',
+                                 'd.rast3d'       : 'raster3d',
                                  'd.rgb'          : 'rgb',
                                  'd.his'          : 'his',
                                  'd.shaded'       : 'shaded',
@@ -474,11 +475,11 @@ class GMConsole(wx.SplitterWindow):
                                  'd.rhumbline'    : 'rhumb',
                                  'd.labels'       : 'labels'}[cmdlist[0]]
                 except KeyError:
-                    wx.MessageBox(caption = _("Message"),
-                                  message=_("Command '%s' not yet implemented in the GUI. "
-                                            "Try adding it as a command layer instead.") % cmdlist[0])
+                    gcmd.GMessage(parent = self.parent,
+                                  message = _("Command '%s' not yet implemented in the WxGUI. "
+                                              "Try adding it as a command layer instead.") % cmdlist[0])
                     return None
-
+                
                 # add layer into layer tree
                 if cmdlist[0] == 'd.rast':
                     lname = utils.GetLayerNameFromCmd(cmdlist, fullyQualified = True,

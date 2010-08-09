@@ -24,6 +24,7 @@ from threading import Thread
 from ctypes import *
 try:
     from grass.lib.grass import *
+    from grass.lib.g3d   import *
     from grass.lib.ogsf  import *
     from grass.lib.nviz  import *
     errorMsg = ''
