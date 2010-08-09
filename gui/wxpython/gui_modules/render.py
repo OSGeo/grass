@@ -131,7 +131,7 @@ class Layer(object):
                       'overlay')
         
         if self.type not in layertypes:
-            raise gcmd.GException(_("<%(name)s>: layer type <%(type)s> is not supported yet.") % \
+            raise gcmd.GException(_("<%(name)s>: layer type <%(type)s> is not supported") % \
                                       {'type' : self.type, 'name' : self.name})
         
         #

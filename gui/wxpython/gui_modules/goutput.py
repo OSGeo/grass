@@ -460,7 +460,7 @@ class GMConsole(wx.SplitterWindow):
                 #
                 try:
                     layertype = {'d.rast'         : 'raster',
-                                 'd.rast3d'       : 'raster3d',
+                                 'd.rast3d'       : '3d-raster',
                                  'd.rgb'          : 'rgb',
                                  'd.his'          : 'his',
                                  'd.shaded'       : 'shaded',

@@ -279,7 +279,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID3, text=_("Properties"))
             self.Bind(wx.EVT_MENU, self.OnPopupProperties, id=self.popupID3)
             
-            if ltype in ('raster', 'vector', 'raster3d') and self.mapdisplay.toolbars['nviz']:
+            if ltype in ('raster', 'vector', '3d-raster') and self.mapdisplay.toolbars['nviz']:
                 self.popupMenu.Append(self.popupID11, _("3D view properties"))
                 self.Bind (wx.EVT_MENU, self.OnNvizProperties, id=self.popupID11)
             
@@ -618,7 +618,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.lmgr.nviz.SetPage('surface')
         elif ltype == 'vector':
             self.lmgr.nviz.SetPage('vector')
-        elif ltype == 'raster3d':
+        elif ltype == '3d-raster':
             self.lmgr.nviz.SetPage('volume')
         
     def RenameLayer (self, event):
@@ -812,11 +812,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # run properties dialog if no properties given
             if len(cmd) == 0:
                 self.PropertiesDialog(layer, show=True)
-                
-            if ltype == '3d-raster' and \
-                    not self.mapdisplay.toolbars['nviz']:
-                self.EnableItem(layer, False)
-            
+        
         else: # group
             self.SetPyData(layer, ({'cmd': None,
                                     'type' : ltype,

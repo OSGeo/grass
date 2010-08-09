@@ -762,18 +762,22 @@ class BufferedWindow(MapWindow, wx.Window):
         if self.tree:
             self.tree.rerender = False
         
-        if render:
-            # update display size
-            self.Map.ChangeMapSize(self.GetClientSize())
-            if self.parent.statusbarWin['resolution'].IsChecked():
-                # use computation region resolution for rendering
-                windres = True
+        try:
+            if render:
+                # update display size
+                self.Map.ChangeMapSize(self.GetClientSize())
+                if self.parent.statusbarWin['resolution'].IsChecked():
+                    # use computation region resolution for rendering
+                    windres = True
+                else:
+                    windres = False
+                self.mapfile = self.Map.Render(force = True, mapWindow = self.parent,
+                                               windres = windres)
             else:
-                windres = False
-            self.mapfile = self.Map.Render(force=True, mapWindow=self.parent,
-                                           windres=windres)
-        else:
-            self.mapfile = self.Map.Render(force=False, mapWindow=self.parent)
+                self.mapfile = self.Map.Render(force = False, mapWindow = self.parent)
+        except gcmd.GException, e:
+            gcmd.GError(message = e)
+            self.mapfile = None
         
         self.img = self.GetImage() # id=99
             
