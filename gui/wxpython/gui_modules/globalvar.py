@@ -135,7 +135,7 @@ else:
     EXT_BIN = ''
     EXT_SCT = ''
 
-def GetGRASSCmds(bin=True, scripts=True, gui_scripts=True):
+def GetGRASSCmds(bin = True, scripts = True, gui_scripts = True):
     """!Create list of all available GRASS commands to use when
     parsing string from the command line
     """
@@ -150,9 +150,9 @@ def GetGRASSCmds(bin=True, scripts=True, gui_scripts=True):
         
         # add special call for setting vector colors
         cmd.append('vcolors')
-    if scripts is True:
+    if scripts:
         cmd = cmd + os.listdir(os.path.join(gisbase, 'scripts')) 
-    if gui_scripts is True:
+    if gui_scripts:
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
         cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
        
@@ -166,7 +166,7 @@ def GetGRASSCmds(bin=True, scripts=True, gui_scripts=True):
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd = {}
 grassCmd['all'] = GetGRASSCmds()
-grassCmd['script'] = GetGRASSCmds(bin=False)
+grassCmd['script'] = GetGRASSCmds(bin = False)
 
 """@Toolbar icon size"""
 toolbarSize = (24, 24)
