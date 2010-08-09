@@ -98,14 +98,15 @@ class GMFrame(wx.Frame):
     GIS. Includes command console page for typing GRASS (and other)
     commands, tree widget page for managing map layers.
     """
-    def __init__(self, parent, id=wx.ID_ANY, title=_("GRASS GIS Layer Manager"),
-                 workspace=None):
+    def __init__(self, parent, id = wx.ID_ANY, title = _("GRASS GIS Layer Manager"),
+                 workspace = None,
+                 size = (575, 450), style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         self.parent    = parent
         self.baseTitle = title
         self.iconsize  = (16, 16)
         
-        wx.Frame.__init__(self, parent=parent, id=id, size=(550, 450),
-                          style=wx.DEFAULT_FRAME_STYLE)
+        wx.Frame.__init__(self, parent = parent, id = id, size = size,
+                          style = style, **kwargs)
                           
         self.SetTitle(self.baseTitle)
         self.SetName("LayerManager")
@@ -1138,7 +1139,6 @@ class GMFrame(wx.Frame):
         
         return self.curr_page.maptree.mapdisplay
 
-    # toolBar button handlers
     def OnAddRaster(self, event):
         """!Add raster map layer"""
         # start new map display if no display is available
@@ -1146,6 +1146,14 @@ class GMFrame(wx.Frame):
             self.NewDisplay(show=False)
         
         self.AddRaster(event)
+
+    def OnAddRaster3D(self, event):
+        """!Add 3D raster map layer"""
+        # start new map display if no display is available
+        if not self.curr_page:
+            self.NewDisplay(show=False)
+        
+        self.AddRaster3D(event)
         
     def OnAddRasterMisc(self, event):
         """!Add raster menu"""
@@ -1155,12 +1163,6 @@ class GMFrame(wx.Frame):
         
         point = wx.GetMousePosition()
         rastmenu = wx.Menu()
-        
-        # add items to the menu
-        addrast3d = wx.MenuItem(rastmenu, -1, Icons ["addrast3d"].GetLabel())
-        addrast3d.SetBitmap(Icons["addrast3d"].GetBitmap (self.iconsize))
-        rastmenu.AppendItem(addrast3d)
-        self.Bind(wx.EVT_MENU, self.AddRaster3d, addrast3d)
         
         addshaded = wx.MenuItem(rastmenu, -1, Icons ["addshaded"].GetLabel())
         addshaded.SetBitmap(Icons["addshaded"].GetBitmap (self.iconsize))
@@ -1271,7 +1273,7 @@ class GMFrame(wx.Frame):
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('raster')
 
-    def AddRaster3d(self, event):
+    def AddRaster3D(self, event):
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('3d-raster')
 
