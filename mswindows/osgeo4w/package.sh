@@ -38,8 +38,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	echo $(date): STARTING configure
 	./configure \
-		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-16/lib $OSGEO4W_ROOT_MSYS/lib" \
-		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-16/include $OSGEO4W_ROOT_MSYS/include" \
+		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-17/lib $OSGEO4W_ROOT_MSYS/lib" \
+		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-17/include $OSGEO4W_ROOT_MSYS/include" \
 		--exec-prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
 		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
 		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
@@ -61,8 +61,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--without-swig \
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 		--with-odbc \
-	        --without-cairo
-#		--enable-largefile \
+	        --without-cairo \
+	        --disable-largefile
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
