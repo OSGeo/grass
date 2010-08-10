@@ -13,14 +13,14 @@
 <!-- meta page description: SQLite driver -->
 <h1>SQLite driver in GRASS</h1>
 
-<H2>Creating a SQLite database</H2>
+<h2>Creating a SQLite database</h2>
 
 The SQLite driver is the default DBMI backend.
 GRASS is automatically creating the SQLite database if it is not yet
 existing when the first table is created in the SQLite database. It
 is sufficient to define the connection (see next step).
 
-<H2>Connecting GRASS to SQLite</H2>
+<h2>Connecting GRASS to SQLite</h2>
 
 The database name 'sqlite.db' is at user's choice.
 Also the file storage location can be freely chosen. If the database
@@ -33,20 +33,18 @@ db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
 db.connect -p
 </pre></div>
 
-<H2>Supported SQL commands</H2>
+<h2>Supported SQL commands</h2>
 
 All SQL commands supported by SQLite (for limitations, see
 SQLite help page:
 <a href="http://www.sqlite.org/lang.html">SQL As Understood By SQLite</a> and
 <a href="http://www.sqlite.org/omitted.html">Unsupported SQL</a>).
 
-
-<H2>Operators available in conditions</H2>
+<h2>Operators available in conditions</h2>
 
 All SQL operators supported by SQLite.
 
-
-<H2>Browsing table data in DB</H2>
+<h2>Browsing table data in DB</h2>
 
 A convenient SQLite front-end is <a href="http://sqlitebrowser.sourceforge.net/">sqlitebrowser</a>.
 To open a DB file stored within the current mapset,
@@ -61,7 +59,7 @@ sqlitebrowser "$GISDBASE/$LOCATION_NAME/$MAPSET"/sqlite.db
 <!-- doesnt work yet, why?:
   ah, pending patch: http://www.sqlite.org/cvstrac/tktview?tn=1476
 
-<H2>Adding an unique ID column</H2>
+<h2>Adding an unique ID column</h2>
 
 Import vector module require an unique ID column which can
 be generated as follows for a SQLite table:
@@ -76,18 +74,23 @@ echo "
 </pre></div>
 -->
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<em><a href="http://www.sqlite.org">SQLite web site</a>,
-<a href="http://www.sqlite.org/quickstart.html">SQLite manual</a>,
-<a HREF="db.connect.html">db.connect</a>,
-<a HREF="db.execute.html">db.execute</a>,
-<a HREF="sql.html">SQL support in GRASS GIS</a>,
-<a HREF="http://www.sqlite.org/cvstrac/wiki?p=ManagementTools">sqlite - Management Tools</a>
+<em>
+  <a href="db.connect.html">db.connect</a>,
+  <a href="db.execute.html">db.execute</a>,
+  <a href="db.select.html">db.select</a>
+  <br><br>
+  <a href="sql.html">SQL support in GRASS GIS</a>
+  <br><br>
+  <a href="http://www.sqlite.org">SQLite web site</a>,
+  <a href="http://www.sqlite.org/quickstart.html">SQLite manual</a>,
+  <a href="http://www.sqlite.org/cvstrac/wiki?p=ManagementTools">sqlite - Management Tools</a>
 </em>
 
-<p><i>Last changed: $Date$</i>
-<HR>
-<BR><a href=index.html>Help Index</a>
+<p>
+<i>Last changed: $Date$</i>
+<hr>
+<br><a href=index.html>Help Index</a>
 </body>
 </html>
