@@ -36,7 +36,7 @@ v.distance from=pnt to=ln upload=cat column=linecat
 
 <H3>Find nearest area</H3>
 
-For each point from vector map <B>pnt</B>, find <EM>nearest area</EM>
+For each point from vector map <B>pnt</B>, find the <EM>nearest area</EM>
 from map <B>ar</B> within the given threshold and write the related
 area categories to column <B>areacat</B> in an attribute table attached
 to vector map <B>pnt</B> (in the case that a point falls into a polygon area,
@@ -78,8 +78,12 @@ v.distance from=pnt to=map_to_query upload=cat col=somecol -p
 
 <H3>Point-in-polygon</H3>
 
-Find <EM>area</EM> from vector map <B>ar</B> for each point from
-vector map <B>pnt</B> in which the individual point falls, and
+The option <em>dmax=0</em> is here important because otherwise for
+points not falling into any area, the category of the nearest area is
+recorded.
+<br>
+For each point from vector map <B>pnt</B>, find the <EM>area</EM> from
+vector map <B>ar</B> in which the individual point falls, and
 write the related area categories to column <B>areacat</B> into
 the attribute table attached to vector map <B>pnt</B>:
 
@@ -141,6 +145,6 @@ given upload option.
 Janne Soimasuo 1994, University of Joensuu, Faculty of Forestry, Finland<BR>
 Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<BR>
 Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<BR>
-Martix-like output by Martin Landa, FBK-irst, Trento, Italy
+Matrix-like output by Martin Landa, FBK-irst, Trento, Italy
 
 <p><i>Last changed: $Date$</i>
