@@ -100,7 +100,7 @@ class GMFrame(wx.Frame):
     """
     def __init__(self, parent, id = wx.ID_ANY, title = _("GRASS GIS Layer Manager"),
                  workspace = None,
-                 size = (600, 450), style = wx.DEFAULT_FRAME_STYLE, **kwargs):
+                 size = (575, 450), style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         self.parent    = parent
         self.baseTitle = title
         self.iconsize  = (16, 16)
@@ -1260,7 +1260,12 @@ class GMFrame(wx.Frame):
         addrhumb.SetBitmap(Icons["addrhumb"].GetBitmap(self.iconsize))
         ovlmenu.AppendItem(addrhumb)
         self.Bind(wx.EVT_MENU, self.AddRhumb, addrhumb)
-
+        
+        addcmd = wx.MenuItem(ovlmenu, wx.ID_ANY, Icons["addcmd"].GetLabel())
+        addcmd.SetBitmap(Icons["addcmd"].GetBitmap(self.iconsize))
+        ovlmenu.AppendItem(addcmd)
+        self.Bind(wx.EVT_MENU, self.OnAddCommand, addcmd)
+        
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.PopupMenu(ovlmenu)
