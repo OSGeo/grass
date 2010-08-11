@@ -600,6 +600,7 @@ int main(int argc, char *argv[])
 	    tline = 0;
 	    dist = PORT_DOUBLE_MAX;
 	    for (i = 0; i < List->n_values; i++) {
+		tmp_tcat = -1;
 		Vect_read_line(&To, TPoints, TCats, List->value[i]);
 
 		tseg =
@@ -680,11 +681,6 @@ int main(int argc, char *argv[])
 		     * line bbox overlaps with search box, line itself is outside search box */
 		    enlarge = 1;
 		    fline--;
-		    box_edge = max / (enlarge_idx * enlarge_idx);
-		    while (box_edge < dist && enlarge_idx > 1) {
-			enlarge_idx -= 2;
-			box_edge = max / (enlarge_idx * enlarge_idx);
-		    }
 		}
 		else if (tline == 0 && enlarge_idx > 1) {
 		    /* no line within max dist, but search box can still be enlarged */
@@ -897,11 +893,6 @@ int main(int argc, char *argv[])
 		     * area bbox overlaps with search box, area itself is outside search box */
 		    enlarge = 1;
 		    fline--;
-		    box_edge = max / (enlarge_idx * enlarge_idx);
-		    while (box_edge < dist && enlarge_idx > 1) {
-			enlarge_idx -= 2;
-			box_edge = max / (enlarge_idx * enlarge_idx);
-		    }
 		}
 		else if (tarea == 0 && enlarge_idx > 1) {
 		    /* no area within max dist, but search box can still be enlarged */
