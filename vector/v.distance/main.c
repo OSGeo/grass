@@ -8,10 +8,11 @@
  *               - some additions 2002 Markus Neteler
  *               - updated to 5.7 by Radim Blazek 2003
  *               - OGR support by Martin Landa <landa.martin gmail.com> (2009)
+ *               - speed-up for dmax != 0 Markus Metz 2010
  *               
- * PURPOSE:      Calculates distance from a point to nearest line or point in vector layer. 
+ * PURPOSE:      Calculates distance from a point to nearest feature in vector layer. 
  *               
- * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -45,7 +46,7 @@
 #define TO_ATTR   10		/* attribute of nearest feature */
 #define END       11		/* end of list */
 
-/* Structure where are stored infos about nearest feature for each category */
+/* Structure to store info about nearest feature for each category */
 typedef struct
 {
     int from_cat;		/* category (from) */
@@ -224,7 +225,9 @@ int main(int argc, char *argv[])
     all_flag->key = 'a';
     all_flag->label =
 	_("Calculate distances to all features within the threshold");
-    all_flag->description = _("The output is written to stdout but may be uploaded " "to a new table created by this module. " "From categories are may be multiple.");	/* huh? */
+    all_flag->description = _("The output is written to stdout but may be uploaded "
+                              "to a new table created by this module. "
+			      "From categories are may be multiple.");	/* huh? */
 
     /* GUI dependency */
     from_opt->guidependency = G_store(from_field_opt->key);
@@ -343,6 +346,9 @@ int main(int argc, char *argv[])
 
 	G_debug(2, "max = %f", max);
     }
+
+    if (min > max)
+	G_fatal_error("dmin can not be larger than dmax");
 
     /* Open database driver */
     db_init_string(&stmt);
@@ -503,6 +509,9 @@ int main(int argc, char *argv[])
     /* Find nearest lines */
     if (to_type & (GV_POINTS | GV_LINES)) {
 	struct line_pnts *LLPoints;
+	double tmp_min = (min < 0 ? 0 : min);
+	double box_edge = 0;
+	int enlarge = 0, enlarge_idx = 11;
 
 	if (G_projection() == PROJECTION_LL) {
 	    LLPoints = Vect_new_line_struct();
@@ -515,27 +524,81 @@ int main(int argc, char *argv[])
 	    int tmp_tcat;
 	    double tmp_tangle, tangle;
 
-	    G_debug(3, "fline = %d", fline);
-	    G_percent(fline, nfrom, 2);
-	    ftype = Vect_read_line(&From, FPoints, FCats, fline);
-	    if (!(ftype & from_type))
-		continue;
+	    if (!enlarge) {
+		enlarge_idx = 11;
 
-	    Vect_cat_get(FCats, from_field, &fcat);
-	    if (fcat < 0 && !all)
-		continue;
+		G_debug(3, "fline = %d", fline);
+		G_percent(fline, nfrom, 2);
+		ftype = Vect_read_line(&From, FPoints, FCats, fline);
+		if (!(ftype & from_type))
+		    continue;
 
-	    box.E = FPoints->x[0] + max;
-	    box.W = FPoints->x[0] - max;
-	    box.N = FPoints->y[0] + max;
-	    box.S = FPoints->y[0] - max;
-	    box.T = PORT_DOUBLE_MAX;
-	    box.B = -PORT_DOUBLE_MAX;
+		Vect_cat_get(FCats, from_field, &fcat);
+		if (fcat < 0 && !all)
+		    continue;
+	    }
 
-	    Vect_select_lines_by_box(&To, &box, to_type, List);
+	    if (!all) {
+		box_edge = tmp_min;
+
+		if (!enlarge) {
+		    box.E = FPoints->x[0] + box_edge;
+		    box.W = FPoints->x[0] - box_edge;
+		    box.N = FPoints->y[0] + box_edge;
+		    box.S = FPoints->y[0] - box_edge;
+		    box.T = PORT_DOUBLE_MAX;
+		    box.B = -PORT_DOUBLE_MAX;
+
+		    Vect_select_lines_by_box(&To, &box, to_type, List);
+		}
+
+		if (max > 0 && (enlarge || (!enlarge && List->n_values == 0))) {
+		    /* enlarge search box until we get a hit */
+		    /* enlarge_idx starts with 11, rather arbitrary but works */
+		    /* the objective is to enlarge the search box in the first iterations
+		     * just a little bit to keep the number of hits low */
+		    for (; enlarge_idx > 0; enlarge_idx -= 2) {
+			box_edge = max / (enlarge_idx * enlarge_idx);
+
+			if (box_edge < tmp_min)
+			    continue;
+			
+			box.E = FPoints->x[0] + box_edge;
+			box.W = FPoints->x[0] - box_edge;
+			box.N = FPoints->y[0] + box_edge;
+			box.S = FPoints->y[0] - box_edge;
+			box.T = PORT_DOUBLE_MAX;
+			box.B = -PORT_DOUBLE_MAX;
+
+			Vect_select_lines_by_box(&To, &box, to_type, List);
+
+			if (List->n_values > 0) {
+			    if (enlarge_idx > 1) {
+				enlarge_idx -= 2;
+			    }
+			    break;
+			}
+		    }
+		}
+
+		if (enlarge)
+		    enlarge = 0;
+	    }
+	    else {
+		box.E = FPoints->x[0] + max;
+		box.W = FPoints->x[0] - max;
+		box.N = FPoints->y[0] + max;
+		box.S = FPoints->y[0] - max;
+		box.T = PORT_DOUBLE_MAX;
+		box.B = -PORT_DOUBLE_MAX;
+
+		Vect_select_lines_by_box(&To, &box, to_type, List);
+	    }
+
 	    G_debug(3, "  %d lines in box", List->n_values);
 
 	    tline = 0;
+	    dist = PORT_DOUBLE_MAX;
 	    for (i = 0; i < List->n_values; i++) {
 		Vect_read_line(&To, TPoints, TCats, List->value[i]);
 
@@ -595,7 +658,7 @@ int main(int argc, char *argv[])
 		    count++;
 		}
 		else {
-		    if (tline == 0 || (tmp_dist <= dist)) {
+		    if (tline == 0 || (tmp_dist < dist)) {
 			tline = List->value[i];
 			tcat = tmp_tcat;
 			dist = tmp_dist;
@@ -609,7 +672,27 @@ int main(int argc, char *argv[])
 	    }
 
 	    G_debug(4, "  dist = %f", dist);
-	    if (!all && tline > 0) {
+
+	    if (!all && max > 0) {
+		/* enlarging the search box is possible */
+		if (tline > 0 && dist >= box_edge) {
+		    /* line found but distance > search edge:
+		     * line bbox overlaps with search box, line itself is outside search box */
+		    enlarge = 1;
+		    fline--;
+		    box_edge = max / (enlarge_idx * enlarge_idx);
+		    while (box_edge < dist && enlarge_idx > 1) {
+			enlarge_idx -= 2;
+			box_edge = max / (enlarge_idx * enlarge_idx);
+		    }
+		}
+		else if (tline == 0 && enlarge_idx > 1) {
+		    /* no line within max dist, but search box can still be enlarged */
+		    enlarge = 1;
+		    fline--;
+		}
+	    }
+	    if (!enlarge && !all && tline > 0) {
 		/* find near by cat */
 		near =
 		    (NEAR *) bsearch((void *)&fcat, Near, nfcats,
@@ -640,27 +723,84 @@ int main(int argc, char *argv[])
 
     /* Find nearest areas */
     if (to_type & GV_AREA) {
+	double tmp_min = (min < 0 ? 0 : min);
+	double box_edge = 0;
+	int enlarge = 0, enlarge_idx = 11;
+	
 	G_message(_("Finding nearest areas..."));
 	for (fline = 1; fline <= nfrom; fline++) {
-	    G_debug(3, "fline = %d", fline);
-	    G_percent(fline, nfrom, 2);
-	    ftype = Vect_read_line(&From, FPoints, FCats, fline);
-	    if (!(ftype & from_type))
-		continue;
 
-	    Vect_cat_get(FCats, from_field, &fcat);
-	    if (fcat < 0 && !all)
-		continue;
+	    if (!enlarge) {
+		enlarge_idx = 11;
 
-	    /* select areas by box */
-	    box.E = FPoints->x[0] + max;
-	    box.W = FPoints->x[0] - max;
-	    box.N = FPoints->y[0] + max;
-	    box.S = FPoints->y[0] - max;
-	    box.T = PORT_DOUBLE_MAX;
-	    box.B = -PORT_DOUBLE_MAX;
+		G_debug(3, "fline = %d", fline);
+		G_percent(fline, nfrom, 2);
+		ftype = Vect_read_line(&From, FPoints, FCats, fline);
+		if (!(ftype & from_type))
+		    continue;
 
-	    Vect_select_areas_by_box(&To, &box, List);
+		Vect_cat_get(FCats, from_field, &fcat);
+		if (fcat < 0 && !all)
+		    continue;
+	    }
+
+	    if (!all) {
+		box_edge = tmp_min;
+
+		if (!enlarge) {
+		    box.E = FPoints->x[0] + box_edge;
+		    box.W = FPoints->x[0] - box_edge;
+		    box.N = FPoints->y[0] + box_edge;
+		    box.S = FPoints->y[0] - box_edge;
+		    box.T = PORT_DOUBLE_MAX;
+		    box.B = -PORT_DOUBLE_MAX;
+
+		    Vect_select_areas_by_box(&To, &box, List);
+		}
+
+		if (max > 0 && (enlarge || (!enlarge && List->n_values == 0))) {
+		    /* enlarge search box until we get a hit */
+		    /* enlarge_idx starts with 11, rather arbitrary but works */
+		    /* the objective is to enlarge the search box in the first iterations
+		     * just a little bit to keep the number of hits low */
+		    for (; enlarge_idx > 0; enlarge_idx -= 2) {
+			box_edge = max / (enlarge_idx * enlarge_idx);
+
+			if (box_edge < tmp_min)
+			    continue;
+			
+			box.E = FPoints->x[0] + box_edge;
+			box.W = FPoints->x[0] - box_edge;
+			box.N = FPoints->y[0] + box_edge;
+			box.S = FPoints->y[0] - box_edge;
+			box.T = PORT_DOUBLE_MAX;
+			box.B = -PORT_DOUBLE_MAX;
+
+			Vect_select_areas_by_box(&To, &box, List);
+
+			if (List->n_values > 0) {
+			    if (enlarge_idx > 1) {
+				enlarge_idx -= 2;
+			    }
+			    break;
+			}
+		    }
+		}
+
+		if (enlarge)
+		    enlarge = 0;
+	    }
+	    else {
+		box.E = FPoints->x[0] + max;
+		box.W = FPoints->x[0] - max;
+		box.N = FPoints->y[0] + max;
+		box.S = FPoints->y[0] - max;
+		box.T = PORT_DOUBLE_MAX;
+		box.B = -PORT_DOUBLE_MAX;
+
+		Vect_select_areas_by_box(&To, &box, List);
+	    }
+
 	    G_debug(4, "%d areas selected by box", List->n_values);
 
 	    /* For each area in box check the distance */
@@ -704,7 +844,7 @@ int main(int argc, char *argv[])
 				       &tmp_ty, NULL, &tmp_dist, NULL, NULL);
 
 		}
-		if (tmp_dist > max)
+		if (tmp_dist > max || tmp_dist < min)
 		    continue;	/* not in threshold */
 		Vect_get_area_cats(&To, area, TCats);
 		tmp_tcat = -1;
@@ -750,11 +890,31 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    if (!all && tarea > 0) {
+	    if (!all && max > 0) {
+		/* enlarging the search box is possible */
+		if (tarea > 0 && dist >= box_edge) {
+		    /* area found but distance > search edge:
+		     * area bbox overlaps with search box, area itself is outside search box */
+		    enlarge = 1;
+		    fline--;
+		    box_edge = max / (enlarge_idx * enlarge_idx);
+		    while (box_edge < dist && enlarge_idx > 1) {
+			enlarge_idx -= 2;
+			box_edge = max / (enlarge_idx * enlarge_idx);
+		    }
+		}
+		else if (tarea == 0 && enlarge_idx > 1) {
+		    /* no area within max dist, but search box can still be enlarged */
+		    enlarge = 1;
+		    fline--;
+		}
+	    }
+	    if (!enlarge && !all && tarea > 0) {
 		/* find near by cat */
 		near =
 		    (NEAR *) bsearch((void *)&fcat, Near, nfcats,
 				     sizeof(NEAR), cmp_near);
+
 		G_debug(4, "near.from_cat = %d near.count = %d dist = %f",
 			near->from_cat, near->count, near->dist);
 
@@ -858,8 +1018,14 @@ int main(int argc, char *argv[])
 	db_close_database_shutdown_driver(to_driver);
     }
 
+    if (!(print_flag->answer || (all && !table_opt->answer))) /* no printing */
+	G_message("Update database...");
+
     for (i = 0; i < count; i++) {
 	dbCatVal *catval = 0;
+
+	if (!(print_flag->answer || (all && !table_opt->answer))) /* no printing */
+	    G_percent(i, count, 1);
 
 	/* Write line connecting nearest points */
 	if (Outp != NULL) {
@@ -1096,6 +1262,7 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
+    G_percent(count, count, 1);
 
     if (driver)
 	db_commit_transaction(driver);
