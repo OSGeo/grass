@@ -25,6 +25,7 @@
 
 
 extern int n_polygons;
+extern int n_polygon_boundaries;
 extern double split_distance;
 
 /* centroid structure */

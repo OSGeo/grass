@@ -38,12 +38,14 @@
 #endif
 
 int n_polygons;
+int n_polygon_boundaries;
 double split_distance;
 
 int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);
 int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
 	     int field, int cat, double min_area, int type);
+int poly_count(OGRGeometryH hGeom);
 
 int main(int argc, char *argv[])
 {
@@ -820,16 +822,38 @@ int main(int argc, char *argv[])
 	OGR_L_ResetReading(Ogr_layer);
 	unsigned int n_features = 0, feature_count = 0;
 
+	n_polygon_boundaries = 0;
 	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
-	if (split_distance > -0.5 && n_features > 500) {
+
+	/* estimate distance for boundary splitting --> */
+
+	/* count polygons and isles */
+	G_message(_("Counting polygons for %d features..."), n_features);
+	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
+	    G_percent(feature_count++, n_features, 1);	/* show something happens */
+	    /* Geometry */
+	    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+	    if (Ogr_geometry != NULL) {
+		poly_count(Ogr_geometry);
+	    }
+	    OGR_F_Destroy(Ogr_feature);
+	}
+	/* rewind layer */
+	OGR_L_ResetReading(Ogr_layer);
+	feature_count = 0;
+
+	G_debug(0, "n polygon boundaries: %d", n_polygon_boundaries);
+	if (split_distance > -0.5 && n_polygon_boundaries > 50) {
 	    split_distance =
-		area_size / log(OGR_L_GetFeatureCount(Ogr_layer, 1));
+		area_size / log(n_features);
 	    /* divisor is the handle: increase divisor to decrease split_distance */
 	    split_distance = split_distance / 4.;
 	    G_debug(1, "root of area size: %f", area_size);
 	    G_verbose_message(_("Boundary splitting distance in map units: %G"),
 		      split_distance);
 	}
+	/* <-- estimate distance for boundary splitting */
+	
 	G_important_message(_("Importing map %d features..."), n_features);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 	    G_percent(feature_count++, n_features, 1);	/* show something happens */
