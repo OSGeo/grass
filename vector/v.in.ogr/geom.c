@@ -158,6 +158,37 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex, int f
     return 0;
 }
 
+/* count polygons and isles */
+int
+poly_count(OGRGeometryH hGeom)
+{
+    int i, nr, ret;
+    OGRwkbGeometryType eType;
+    OGRGeometryH hRing;
+
+    eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
+
+    if (eType == wkbPolygon) {
+	G_debug(3, "Polygon");
+	nr = OGR_G_GetGeometryCount(hGeom);
+	n_polygon_boundaries += nr;
+
+    }
+    else if (eType == wkbGeometryCollection || eType == wkbMultiPolygon) {
+	G_debug(3, "GeometryCollection or MultiPolygon");
+	nr = OGR_G_GetGeometryCount(hGeom);
+	for (i = 0; i < nr; i++) {
+	    hRing = OGR_G_GetGeometryRef(hGeom, i);
+
+	    ret = poly_count(hRing);
+	    if (ret == -1) {
+		G_warning(_("Cannot read part of geometry"));
+	    }
+	}
+    }
+    return 0;
+}
+
 /* Write geometry to output map */
 int
 geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
