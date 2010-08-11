@@ -615,6 +615,10 @@ class ModelFrame(wx.Frame):
         else:
             self.SetTitle(self.baseTitle)
         
+    def OnVariables(self, event):
+        """!Switch to variables page"""
+        self.notebook.SetSelection(2)
+        
     def OnRemoveItem(self, event):
         """!Remove shape
         """

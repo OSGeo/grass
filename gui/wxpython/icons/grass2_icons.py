@@ -86,6 +86,7 @@ IconsGrass2 = {
     "addthematic": 'layer-vector-thematic-add.png',
     "addchart"   : 'layer-vector-chart-add.png',
     "layeropts"  : 'options.png',
+    "modeler"    : 'modeler-main.png',
     # profile analysis
     "transect"     : 'layer-raster-profile.png',
     "profiledraw"  : 'show.png',
@@ -107,6 +108,7 @@ IconsGrass2 = {
     "imageSave"      : 'image-export.png',
     "pythonSave"     : 'python-export.png',
     "modelProperties" : 'options.png',
+    "modelVariables" : 'modeler-variables.png',
     # various
     "settings"       : 'settings.png',
     'redraw'         : 'redraw.png',

@@ -79,6 +79,7 @@ IconsGrass = {
     "addbarscale": 'module-d.barscale.gif',
     "addlegend"  : 'module-d.legend.gif',
     "quit"       : 'gui-exit.gif',
+    "modeler"    : wx.ART_ERROR,
     # analyze raster
     "analyze"    : 'gui-rastanalyze.gif',
     "measure"    : 'gui-measure.gif',
@@ -109,6 +110,7 @@ IconsGrass = {
     "imageSave"      : wx.ART_ERROR,
     "pythonSave"     : wx.ART_ERROR,
     "modelProperties" : wx.ART_ERROR,
+    "modelVariables" : wx.ART_ERROR,
     # various
     "settings"       : 'edit-color.gif',
     "redraw"         : 'gui-display.gif',

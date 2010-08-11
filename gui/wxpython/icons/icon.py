@@ -81,10 +81,9 @@ except:
     sys.exit(1)
 
 class MetaIcon:
+    """!Handle icon metadata (image path, tooltip, ...)
     """
-    Handle icon metadata (image path, tooltip, ...)
-    """
-    def __init__(self, img, label, desc=None):
+    def __init__(self, img, label, desc = None):
         self.imagepath = img
         if not self.imagepath:
             self.type = 'unknown'
@@ -93,41 +92,41 @@ class MetaIcon:
                 self.type = 'wx'
             else:
                 self.type = 'img'
-
+        
         self.label = label
-
+        
         if desc:
             self.description = desc
         else:
             self.description = ''
-
+        
     def __str__(self):
         """!Debugging"""
         return "label=%s, img=%s, type=%s" % (self.label, self.imagepath, self.type)
 
-    def GetBitmap(self, size=None):
+    def GetBitmap(self, size = None):
         """!Get bitmap"""
         bmp = None
-
+        
         if self.type == 'wx':
-            bmp = wx.ArtProvider.GetBitmap(id=self.imagepath, client=wx.ART_TOOLBAR, size=size)
+            bmp = wx.ArtProvider.GetBitmap(id = self.imagepath, client = wx.ART_TOOLBAR, size = size)
         elif self.type == 'img':
             if os.path.isfile(self.imagepath) and os.path.getsize(self.imagepath):
                 if size and len(size) == 2:
-                    image = wx.Image (name=self.imagepath)
-                    image.Rescale (size[0], size[1])
+                    image = wx.Image(name = self.imagepath)
+                    image.Rescale(size[0], size[1])
                     bmp = image.ConvertToBitmap()
                 elif self.imagepath:
-                    bmp = wx.Bitmap (name=self.imagepath)
-
+                    bmp = wx.Bitmap(name = self.imagepath)
+        
         return bmp
-
+    
     def GetLabel(self):
         return self.label
-
+    
     def GetDesc(self):
         return self.description
-
+    
     def GetImageName(self):
         return os.path.basename(self.imagepath)
 
@@ -343,6 +342,8 @@ Icons = {
                           label=_("Quit 3D view mode"),
                           desc=_("Switch back to 2D view mode")),
     # modeler
+    "modeler" : MetaIcon (img=Icons["modeler"],
+                          label=_("Start Graphical Modeler")),
     "modelNew" : MetaIcon (img=Icons["fileNew"],
                            label=_("Create new model (Ctrl+N)")),
     "modelOpen" : MetaIcon (img=Icons["fileOpen"],
@@ -367,7 +368,7 @@ Icons = {
                                 label=_("Show modeler settings")),
     "modelProperties" : MetaIcon (img=Icons["modelProperties"],
                                   label=_("Show model properties")),
-    "modelVariables" : MetaIcon (img=Icons["modelProperties"],
+    "modelVariables" : MetaIcon (img=Icons["modelVariables"],
                                  label=_("Manage model variables")),
     "modelRedraw" : MetaIcon (img=Icons["redraw"],
                               label=_("Redraw model canvas")),
