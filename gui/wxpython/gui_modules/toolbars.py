@@ -81,7 +81,6 @@ class AbstractToolbar(wx.ToolBar):
         if label:
             Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" % \
                   (tool, label, bitmap))
-            
             toolWin = self.AddLabelTool(tool, label, bitmap,
                                         bmpDisabled, kind,
                                         shortHelp, longHelp)
@@ -1632,6 +1631,9 @@ class ModelToolbar(AbstractToolbar):
              wx.ITEM_NORMAL, Icons['modelRun'].GetLabel(), Icons['modelRun'].GetDesc(),
              self.parent.OnRunModel),
             ('', '', '', '', '', '', ''),
+            (self.variables, "variables", Icons["modelVariables"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["modelVariables"].GetLabel(), Icons["modelVariables"].GetDesc(),
+             self.parent.OnVariables),
             (self.settings, "settings", Icons["modelSettings"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["modelSettings"].GetLabel(), Icons["modelSettings"].GetDesc(),
              self.parent.OnPreferences),
@@ -1698,7 +1700,7 @@ class LayerManagerToolbar(AbstractToolbar):
         
         # realize the toolbar
         self.Realize()
-        
+
     def ToolbarData(self):
         """!Toolbar data"""
         self.newdisplay = wx.NewId()
@@ -1716,6 +1718,7 @@ class LayerManagerToolbar(AbstractToolbar):
         self.delcmd = wx.NewId()
         self.attribute = wx.NewId()
         self.preferences = wx.NewId()
+        self.modeler = wx.NewId() 
         
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return (
@@ -1765,6 +1768,9 @@ class LayerManagerToolbar(AbstractToolbar):
              wx.ITEM_NORMAL, Icons["attrtable"].GetLabel(), Icons["attrtable"].GetDesc(),
              self.parent.OnShowAttributeTable),
             ('', '', '', '', '', '', ''),
+            (self.modeler, 'modeler', Icons["modeler"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["modeler"].GetLabel(), Icons["modeler"].GetDesc(),
+             self.parent.OnGModeler),
             (self.preferences, 'preferences', Icons["settings"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["settings"].GetLabel(), Icons["settings"].GetDesc(),
              self.parent.OnPreferences)

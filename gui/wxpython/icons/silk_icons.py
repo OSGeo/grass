@@ -89,6 +89,7 @@ IconsSilk = {
     "addthematic": 'thematic.png',
     "addchart"   : 'chart_bar.png',
     "layeropts"  : 'map_edit.png',
+    "modeler"    : wx.ART_ERROR,
     # profile analysis
     "transect"   : 'image_edit.png',
     "profiledraw"  : 'arrow_refresh.png',
@@ -111,6 +112,7 @@ IconsSilk = {
     "imageSave"      : wx.ART_ERROR,
     "pythonSave"     : wx.ART_ERROR,
     "modelProperties" : wx.ART_ERROR,
+    "modelVariables" : wx.ART_ERROR,
     # various
     "settings"     : 'color_swatch.png',
     "redraw"       : 'arrow_refresh.png',
