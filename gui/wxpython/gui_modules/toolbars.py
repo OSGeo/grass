@@ -1712,7 +1712,6 @@ class LayerManagerToolbar(AbstractToolbar):
         self.addshaded = wx.NewId()
         self.addvect = wx.NewId()
         self.addthematic = wx.NewId()
-        self.addcmd = wx.NewId()
         self.addgrp = wx.NewId()
         self.addovl = wx.NewId()
         self.delcmd = wx.NewId()
@@ -1751,9 +1750,6 @@ class LayerManagerToolbar(AbstractToolbar):
             (self.addthematic, 'addthematic', Icons["addthematic"].GetBitmap(),
              wx.ITEM_NORMAL, _("Add various vector-based map layers"), "",
              self.parent.OnAddVectorMisc),
-            (self.addcmd, 'addcmd',  Icons["addcmd"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["addcmd"].GetLabel(), Icons["addcmd"].GetDesc(),
-             self.parent.OnAddCommand),
             (self.addgrp, 'addgrp',  Icons["addgrp"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["addgrp"].GetLabel(), Icons["addgrp"].GetDesc(),
              self.parent.OnAddGroup),
