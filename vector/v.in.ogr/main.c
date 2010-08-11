@@ -842,10 +842,10 @@ int main(int argc, char *argv[])
 	OGR_L_ResetReading(Ogr_layer);
 	feature_count = 0;
 
-	G_debug(0, "n polygon boundaries: %d", n_polygon_boundaries);
+	G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
 	if (split_distance > -0.5 && n_polygon_boundaries > 50) {
 	    split_distance =
-		area_size / log(n_features);
+		area_size / log(n_polygon_boundaries);
 	    /* divisor is the handle: increase divisor to decrease split_distance */
 	    split_distance = split_distance / 4.;
 	    G_debug(1, "root of area size: %f", area_size);
