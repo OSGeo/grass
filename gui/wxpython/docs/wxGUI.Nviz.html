@@ -31,65 +31,40 @@ GRASS <em>workspace</em> file (gxw). Workspace contains information to
 restore "state" of the system in 2D and if wxNviz is enabled also in
 the 3D display mode.
 
-<h2>Data visualization</h2>
+<h2>3D View Toolbar</h2>
 
-<h3>Surfaces</h3>
+<center>
+<br><img src="wxGUI_nviz_toolbar.jpg" border="1"><br><br>
+</center>
 
-Each active raster map layer from the current layer tree is displayed
-as surface in the 3D space. Separate raster data or constants can be
-used for various attributes of the surface:
+<dl>
+  <dt><img src="icons/grass2/3d-view.png">&nbsp;
+    <em>Switch to view page</em></dt>
+  <dd>Switch 3D Layer Manager Toolbox's page to the <b>view</b>
+  control page.</dd>
+  <dt><img src="icons/grass2/3d-raster.png">&nbsp;
+    <em>Switch to surface page</em></dt>
+  <dd>Switch 3D Layer Manager Toolbox's page to the <b>surface</b>
+  control page (data properties).</dd>
+  <dt><img src="icons/grass2/3d-vector.png">&nbsp;
+    <em>Switch to vector page</em></dt>
+  <dd>Switch 3D Layer Manager Toolbox's page to the <b>vector</b>
+  control page (data properties).</dd>
+  <dt><img src="icons/grass2/3d-volume.png">&nbsp;
+    <em>Switch to volume page</em></dt>
+  <dd>Switch 3D Layer Manager Toolbox's page to the <b>volume</b>
+  control page (data properties).</dd>
+  <dt><img src="icons/grass2/3d-light.png">&nbsp;
+    <em>Switch to light page</em></dt>
+  <dd>Switch 3D Layer Manager Toolbox's page to the <b>light</b>
+  control page (appearance).</dd>
+  <dt><img src="icons/grass2/3d-fringe.png">&nbsp;
+    <em>Switch to fringe page</em></dt>
+  <dd>Switch 3D Layer Manager Toolbox's page to the <b>fringe</b>
+  control page (appearance).</dd>
+</dl>
 
-<ul>
-  <li><b>topography</b> - raster map or constant values used as elevation (z
-    values) for the current surface.</li>
-  <li><b>color</b> - raster map or constant color to drape over the current
-    surface. This option is useful for draping imagery such as aerial
-    photography over a DEM.</li>
-  <li><b>mask</b> - raster map that controls the areas displayed from
-    the current surface.</li>
-  <li><b>transparency</b> - raster map or constant value that controls
-    the transparency of the current surface. The default is completely
-    opaque. Range from 0 (opaque) to 255 (transparent).</li>
-  <li><b>shininess</b> - raster map or constant value that controls
-    the shininess (reflectivity) of the current surface. Range from 0 to
-    255.</li>
-  <li><b>emission</b> - raster map or constant value that controls the
-    light emitted from the current surface. Range from 0 to 255.</li>
-</ul>
-
-<h3>Vector data</h3>
-
-2D vector data can be draped on the selected surfaces with various
-markers to represent point data; you can use attribute of vector
-features to determine size, color, shape of glyph.
-
-3D vector data including volumes (closed group of faces with one
-kernel inside) is also supported.
-
-<h3>Volumes</h3>
-
-Volumes can be displayed either as isosurfaces or slices. Various
-attributes of the isosurface can be defined, similarly to surface
-attributes:
-
-<ul>
-  <li><b>level</b> - reference isosurface level (height in map
-  units).</li>
-  <li><b>color</b> - raster map or constant color to drape over the
-  current volume.</li>
-  <li><b>mask</b> - raster map that controls the areas displayed from
-    the current volume.</li>
-  <li><b>transparency</b> - raster map or constant value that controls
-    the transparency of the current volume. The default is completely
-    opaque. Range from 0 (opaque) to 255 (transparent).</li>
-  <li><b>shininess</b> - raster map or constant value that controls
-    the shininess (reflectivity) of the current volume. Range from 0 to
-    255.</li>
-  <li><b>emission</b> - raster map or constant value that controls the
-    light emitted from the current volume. Range from 0 to 255.</li>
-</ul>
-
-<h2>Toolbox</h2>
+<h2>3D View Layer Manager Toolbox</h2>
 
 The 3D view toolbox is integrated in the Layer Manager. The toolbox
 has several tabs:
@@ -127,7 +102,29 @@ in feet, a vertical exaggeration of 0.305 would produce a true
 <p>
 <em>Reset</em> returns all current settings to their default values.
 
-<h3>Data properties (surface)</h3>
+<h3>Data properties - Surface</h3>
+
+Each active raster map layer from the current layer tree is displayed
+as surface in the 3D space. Separate raster data or constants can be
+used for various attributes of the surface:
+
+<ul>
+  <li><b>topography</b> - raster map or constant values used as elevation (z
+    values) for the current surface.</li>
+  <li><b>color</b> - raster map or constant color to drape over the current
+    surface. This option is useful for draping imagery such as aerial
+    photography over a DEM.</li>
+  <li><b>mask</b> - raster map that controls the areas displayed from
+    the current surface.</li>
+  <li><b>transparency</b> - raster map or constant value that controls
+    the transparency of the current surface. The default is completely
+    opaque. Range from 0 (opaque) to 255 (transparent).</li>
+  <li><b>shininess</b> - raster map or constant value that controls
+    the shininess (reflectivity) of the current surface. Range from 0 to
+    255.</li>
+  <li><b>emission</b> - raster map or constant value that controls the
+    light emitted from the current surface. Range from 0 to 255.</li>
+</ul>
 
 This panel controls how loaded surfaces are drawn. The top half of the
 panel has options to set, unset or modify attributes of the current
@@ -164,8 +161,14 @@ cells. The surface appears faceted.
 <p>
 To set given draw settings for all loaded surfaces press button "All".
 
-<h3>Data properties (vector)</h3>
+<h3>Data properties - Vector</h3>
 
+2D vector data can be draped on the selected surfaces with various
+markers to represent point data; you can use attribute of vector
+features to determine size, color, shape of glyph.
+
+3D vector data including volumes (closed group of faces with one
+kernel inside) is also supported.
 This panel controls how loaded 2D or 3D vector data are drawn.
 
 <p>
@@ -202,8 +205,30 @@ markers:
   <li><b>asterisk</b> - 3D line-star.</li>
 </ul>
  
-<h3>Data properties (volume)</h3>
+<h3>Data properties - Volume</h3>
 
+Volumes can be displayed either as isosurfaces or slices. Various
+attributes of the isosurface can be defined, similarly to surface
+attributes:
+
+<ul>
+  <li><b>level</b> - reference isosurface level (height in map
+  units).</li>
+  <li><b>color</b> - raster map or constant color to drape over the
+  current volume.</li>
+  <li><b>mask</b> - raster map that controls the areas displayed from
+    the current volume.</li>
+  <li><b>transparency</b> - raster map or constant value that controls
+    the transparency of the current volume. The default is completely
+    opaque. Range from 0 (opaque) to 255 (transparent).</li>
+  <li><b>shininess</b> - raster map or constant value that controls
+    the shininess (reflectivity) of the current volume. Range from 0 to
+    255.</li>
+  <li><b>emission</b> - raster map or constant value that controls the
+    light emitted from the current volume. Range from 0 to 255.</li>
+</ul>
+
+<p>
 This panel controls how loaded volumes are drawn. Volume can be drawn
 in two different modes: <b>isosurface</b> or <b>slice</b>. The top
 part of the panel has drawing style options. The middle part has
@@ -272,7 +297,7 @@ Martin
 Landa, <a href="http://grass.osgeo.org/wiki/WxNviz_GSoC_2008">Google
 Summer of Code 2008</a> (mentor: Michael Barton)
 and <a href="http://grass.osgeo.org/wiki/WxNviz_GSoC_2010">Google
-Summer of Code 2008</a> (mentor: Helena Mitasova)
+Summer of Code 2010</a> (mentor: Helena Mitasova)
 
 <p>
 <i>$Date$</i>
