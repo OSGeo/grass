@@ -278,10 +278,20 @@
 #undef HAVE_FSEEKO		/* Do we need this? If HAVE_LARGEFILES is  */
 				/* defined, we have fseeko()		   */
 
-#ifdef __MINGW32__
+#if defined(__MINGW32__) && defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64
+/* add/remove as needed */
 #define off_t off64_t
+#define HAVE_FSEEKO
 #define fseeko fseeko64
 #define ftello ftello64
+#define lseek lseek64
+#define tell tell64
+#define seek seek64
+#define stat stat64
+#define fstat fstat64
+typedef struct _stati64 STRUCT_STAT;
+#else
+typedef struct stat STRUCT_STAT;
 #endif
 
 #endif	/* HAVE_LARGEFILES */
