@@ -225,7 +225,6 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     struct Map_info In, Out;
     struct field_info *Fi, *Fin;
     char old_path[GPATH_MAX], new_path[GPATH_MAX], buf[GPATH_MAX];
-    struct stat info;
     const char *files[] = { GV_FRMT_ELEMENT, GV_COOR_ELEMENT,
 	GV_HEAD_ELEMENT, GV_HIST_ELEMENT,
 	GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT,
@@ -276,7 +275,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 	sprintf(buf, "%s/%s", out, files[i]);
 	G__file_name(new_path, GV_DIRECTORY, buf, G_mapset());
 
-	if (stat(old_path, &info) == 0) {	/* file exists? */
+	if (access(old_path, F_OK) == 0) {	/* file exists? */
 	    G_debug(2, "copy %s to %s", old_path, new_path);
 	    if (copy_file(old_path, new_path)) {
 		G_warning(_("Unable to copy vector map <%s> to <%s>"),
