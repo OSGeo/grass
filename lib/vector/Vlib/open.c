@@ -959,7 +959,6 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     int err;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
-    struct stat info;
 
     G_debug(1, "Vect_open_sidx(): name = %s mapset= %s mode = %s", Map->name,
 	    Map->mapset, mode == 0 ? "old" : (mode == 1 ? "update" : "new"));
@@ -977,7 +976,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 	G__file_name(file_path, buf, GV_SIDX_ELEMENT, Map->mapset);
 
-	if (stat(file_path, &info) != 0)	/* does not exist */
+	if (access(file_path, F_OK) != 0)	/* does not exist */
 	    return 1;
 
 	Map->plus.spidx_fp.file =
