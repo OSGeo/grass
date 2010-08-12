@@ -1535,11 +1535,38 @@ class NvizToolbar(AbstractToolbar):
         
     def ToolbarData(self):
         """!Toolbar data"""
+        self.view = wx.NewId()
+        self.surface = wx.NewId()
+        self.vector = wx.NewId()
+        self.volume = wx.NewId()
+        self.light = wx.NewId()
+        self.fringe = wx.NewId()
         self.settings = wx.NewId()
         self.quit = wx.NewId()
-        
+
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return   (
+            (self.view, "view", Icons["nvizView"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizView"].GetLabel(), Icons["nvizView"].GetDesc(),
+             self.OnShowPage),
+            ("", "", "", "", "", "", ""),
+            (self.surface, "surface", Icons["nvizSurface"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizSurface"].GetLabel(), Icons["nvizSurface"].GetDesc(),
+             self.OnShowPage),
+            (self.vector, "vector", Icons["nvizVector"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizVector"].GetLabel(), Icons["nvizVector"].GetDesc(),
+             self.OnShowPage),
+            (self.volume, "volume", Icons["nvizVolume"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizVolume"].GetLabel(), Icons["nvizVolume"].GetDesc(),
+             self.OnShowPage),
+            ("", "", "", "", "", "", ""),
+            (self.light, "light", Icons["nvizLight"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizLight"].GetLabel(), Icons["nvizLight"].GetDesc(),
+             self.OnShowPage),
+            (self.fringe, "fringe", Icons["nvizFringe"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizFringe"].GetLabel(), Icons["nvizFringe"].GetDesc(),
+             self.OnShowPage),
+            ("", "", "", "", "", "", ""),
             (self.settings, "settings", Icons["nvizSettings"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["nvizSettings"].GetLabel(), Icons["nvizSettings"].GetDesc(),
              self.OnSettings),
@@ -1548,6 +1575,31 @@ class NvizToolbar(AbstractToolbar):
              self.OnExit),
             )
     
+    def OnShowPage(self, event):
+        """!Go to the selected page"""
+        lmgr = self.parent.GetLayerManager()
+        if not lmgr or not hasattr(lmgr, "nviz"):
+            event.Skip()
+            return
+        
+        eId = event.GetId()
+        if eId == self.view:
+            lmgr.nviz.SetPage('view')
+        elif eId == self.surface:
+            lmgr.nviz.SetPage('surface')
+        elif eId == self.surface:
+            lmgr.nviz.SetPage('surface')
+        elif eId == self.vector:
+            lmgr.nviz.SetPage('vector')
+        elif eId == self.volume:
+            lmgr.nviz.SetPage('volume')
+        elif eId == self.light:
+            lmgr.nviz.SetPage('light')
+        elif eId == self.fringe:
+            lmgr.nviz.SetPage('fringe')
+        
+        lmgr.Raise()
+        
     def OnSettings(self, event):
         """!Show nviz notebook page"""
         if not self.settingsDialog:

@@ -109,6 +109,13 @@ IconsGrass2 = {
     "pythonSave"     : 'python-export.png',
     "modelProperties" : 'options.png',
     "modelVariables" : 'modeler-variables.png',
+    # 3d view
+    "nvizView"       : '3d-view.png',
+    "nvizSurface"    : '3d-raster.png',
+    "nvizVector"     : '3d-vector.png',
+    "nvizVolume"     : '3d-volume.png',
+    "nvizLight"      : '3d-light.png',
+    "nvizFringe"     : '3d-fringe.png',
     # various
     "settings"       : 'settings.png',
     'redraw'         : 'redraw.png',
