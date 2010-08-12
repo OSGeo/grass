@@ -490,7 +490,6 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     char buf[500], file_path[2000];
     struct gvfile fp;
     struct Plus_head *Plus;
-    struct stat info;
 
     G_debug(2, "Vect_cidx_open(): name = %s mapset= %s", Map->name,
 	    Map->mapset);
@@ -500,7 +499,7 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
     G__file_name(file_path, buf, GV_CIDX_ELEMENT, Map->mapset);
 
-    if (stat(file_path, &info) != 0)	/* does not exist */
+    if (access(file_path, F_OK) != 0)	/* does not exist */
 	return 1;
 
 
