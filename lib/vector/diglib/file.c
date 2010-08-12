@@ -191,6 +191,7 @@ void dig_file_init(struct gvfile *file)
   \return 0 not loaded
   \return -1 error
 */
+/* unused, coor file is never loaded to memory. Remove ? MM 2010 */
 int dig_file_load(struct gvfile * file)
 {
     int ret, mode, load;
