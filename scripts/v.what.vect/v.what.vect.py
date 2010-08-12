@@ -83,7 +83,7 @@ def main():
 	upload = "to_attr",
 	dmax = options['dmax'],
 	from_layer = options['layer'],
-	to_layer = options['qlayer '])
+	to_layer = options['qlayer'])
 
 if __name__ == "__main__":
     options, flags = grass.parser()
