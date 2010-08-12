@@ -314,7 +314,7 @@ class MapFrame(wx.Frame):
 
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
-                              Name("maptoolbar").Caption(_("Map Toolbar")).
+                              Name("maptoolbar").Caption(_("Map toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
@@ -432,7 +432,7 @@ class MapFrame(wx.Frame):
                               Layer(0))
             self._mgr.AddPane(self.toolbars['nviz'],
                               wx.aui.AuiPaneInfo().
-                              Name("nviztoolbar").Caption(_("Nviz toolbar")).
+                              Name("nviztoolbar").Caption(_("3D view toolbar")).
                               ToolbarPane().Top().Row(1).
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
