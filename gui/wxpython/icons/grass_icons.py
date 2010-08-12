@@ -111,6 +111,13 @@ IconsGrass = {
     "pythonSave"     : wx.ART_ERROR,
     "modelProperties" : wx.ART_ERROR,
     "modelVariables" : wx.ART_ERROR,
+    # 3d view
+    "nvizView"       : wx.ART_ERROR,
+    "nvizSurface"    : wx.ART_ERROR,
+    "nvizVector"     : wx.ART_ERROR,
+    "nvizVolume"     : wx.ART_ERROR,
+    "nvizLight"      : wx.ART_ERROR,
+    "nvizFringe"     : wx.ART_ERROR,
     # various
     "settings"       : 'edit-color.gif',
     "redraw"         : 'gui-display.gif',

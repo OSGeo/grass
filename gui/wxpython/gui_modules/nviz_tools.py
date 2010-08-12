@@ -100,7 +100,8 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
-        self.page['view'] = { 'id' : 0 }
+        self.page['view'] = { 'id' : 0,
+                              'notebook' : self.GetId()}
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
@@ -302,10 +303,9 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
-        self.page['surface'] = {}
-        self.page['surface']['id'] = 1
-        self.page['surface']['panel'] = panel.GetId()
-        
+        self.page['surface'] = { 'id' : 0,
+                                 'panel' : panel.GetId(),
+                                 'notebook' : self.notebookData.GetId() }
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.win['surface'] = {}
@@ -612,10 +612,9 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
-        self.page['vector'] = {}
-        self.page['vector']['id'] = 2
-        self.page['vector']['panel'] = panel.GetId()
-        
+        self.page['vector'] = { 'id' : 1,
+                                'panel' : panel.GetId(),
+                                'notebook' : self.notebookData.GetId() }
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.win['vector'] = {}
@@ -876,10 +875,9 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
-        self.page['volume'] = {}
-        self.page['volume']['id'] = 3
-        self.page['volume']['panel'] = panel.GetId()
-        
+        self.page['volume'] = { 'id' : 2,
+                                'panel' : panel.GetId(),
+                                'notebook' : self.notebookData.GetId() }
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.win['volume'] = {}
@@ -1117,7 +1115,8 @@ class NvizToolWindow(FN.FlatNotebook):
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         
-        self.page['light'] = { 'id' : 4 } 
+        self.page['light'] = { 'id' : 0, 
+                               'notebook' : self.notebookAppearance.GetId() }
         self.win['light'] = {}
         
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1240,7 +1239,8 @@ class NvizToolWindow(FN.FlatNotebook):
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         
-        self.page['fringe'] = { 'id' : 2 } 
+        self.page['fringe'] = { 'id' : 1,
+                                'notebook' : self.notebookAppearance.GetId() }
         self.win['fringe'] = {}
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -2783,7 +2783,15 @@ class NvizToolWindow(FN.FlatNotebook):
         
     def SetPage(self, name):
         """!Get named page"""
-        self.SetSelection(self.page[name]['id'])
+        if name == 'view':
+            self.SetSelection(0)
+        elif name in ('surface', 'vector', 'volume'):
+            self.SetSelection(1)
+        else:
+            self.SetSelection(2)
+        win = self.FindWindowById(self.page[name]['notebook'])
+        
+        win.SetSelection(self.page[name]['id'])
 
 class PositionWindow(wx.Window):
     """!Abstract position control window, see subclasses
