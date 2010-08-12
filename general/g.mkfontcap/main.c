@@ -60,7 +60,6 @@ int main(int argc, char *argv[])
 
     FILE *outstream;
     char *fontcapfile;
-    struct stat status;
     int i;
 
     G_set_program_name(argv[0]);
@@ -104,7 +103,7 @@ int main(int argc, char *argv[])
 	else
 	    G_asprintf(&fontcapfile, "%s/etc/fontcap", gisbase);
 
-	if (!stat(fontcapfile, &status)) {	/* File exists? */
+	if (!access(fontcapfile, F_OK)) {	/* File exists? */
 	    if (!overwrite->answer)
 		G_fatal_error(_("Fontcap file %s already exists; use -%c flag if you "
 				"wish to overwrite it"),
