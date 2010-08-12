@@ -81,7 +81,6 @@ static int read_file(LOGIN * login)
 {
     int ret;
     const char *file;
-    struct stat info;
     FILE *fd;
     char buf[2001], dr[500], db[500], usr[500], pwd[500];
 
@@ -90,7 +89,7 @@ static int read_file(LOGIN * login)
 
     G_debug(3, "DB login file = <%s>", file);
 
-    if (stat(file, &info) != 0) {
+    if (access(file, F_OK) != 0) {
 	G_debug(3, "login file does not exist");
 	return 0;
     }
