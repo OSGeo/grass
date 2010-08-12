@@ -454,20 +454,19 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     /* delete support files if native format was opened for update (not head_only) */
     if (update && !head_only) {
 	char file_path[2000];
-	struct stat info;
 
 	sprintf(buf, "%s/%s", GV_DIRECTORY, name);
 
 	G__file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
-	if (stat(file_path, &info) == 0)	/* file exists? */
+	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
 
 	G__file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
-	if (stat(file_path, &info) == 0)	/* file exists? */
+	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
 
 	G__file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
-	if (stat(file_path, &info) == 0)	/* file exists? */
+	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
     }
 
@@ -879,7 +878,6 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     struct gvfile fp;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
-    struct stat info;
 
     G_debug(1, "Vect_open_topo(): name = %s mapset= %s", Map->name,
 	    Map->mapset);
@@ -889,7 +887,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
     G__file_name(file_path, buf, GV_TOPO_ELEMENT, Map->mapset);
 
-    if (stat(file_path, &info) != 0)	/* does not exist */
+    if (access(file_path, F_OK) != 0)	/* does not exist */
 	return 1;
 
     dig_file_init(&fp);
