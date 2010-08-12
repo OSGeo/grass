@@ -93,7 +93,6 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 {
     char buf[1000];
-    struct stat info;
 
     G_debug(1, "V1_open_new_nat(): name = %s", name);
 
@@ -121,7 +120,7 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
      * Vect_open_new(): remove this check ? */
     /* check to see if dig_plus file exists and if so, remove it */
     G__file_name(name_buf, buf, GV_TOPO_ELEMENT, G_mapset());
-    if (stat(name_buf, &info) == 0)	/* file exists? */
+    if (access(name_buf, F_OK) == 0)	/* file exists? */
 	unlink(name_buf);
 
     G__file_name(name_buf, buf, GV_COOR_ELEMENT, G_mapset());
