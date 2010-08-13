@@ -118,5 +118,6 @@ IconsGrass2 = {
     "nvizFringe"     : '3d-fringe.png',
     # various
     "settings"       : 'settings.png',
-    'redraw'         : 'redraw.png',
+    "redraw"         : 'redraw.png',
+    "help"           : 'help.png',
     }

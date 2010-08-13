@@ -1523,6 +1523,8 @@ class NvizToolbar(AbstractToolbar):
     """
     def __init__(self, parent, mapcontent):
         self.mapcontent = mapcontent
+        self.lmgr = parent.GetLayerManager()
+        
         AbstractToolbar.__init__(self, parent)
         
         # only one dialog can be open
@@ -1542,8 +1544,9 @@ class NvizToolbar(AbstractToolbar):
         self.light = wx.NewId()
         self.fringe = wx.NewId()
         self.settings = wx.NewId()
+        self.help = wx.NewId()
         self.quit = wx.NewId()
-
+        
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return   (
             (self.view, "view", Icons["nvizView"].GetBitmap(),
@@ -1570,6 +1573,10 @@ class NvizToolbar(AbstractToolbar):
             (self.settings, "settings", Icons["nvizSettings"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["nvizSettings"].GetLabel(), Icons["nvizSettings"].GetDesc(),
              self.OnSettings),
+            (self.help, "help", Icons["nvizHelp"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["nvizHelp"].GetLabel(), Icons["nvizHelp"].GetDesc(),
+             self.OnHelp),
+            ("", "", "", "", "", "", ""),
             (self.quit, 'quit', Icons["nvizQuit"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["nvizQuit"].GetLabel(), Icons["nvizQuit"].GetDesc(),
              self.OnExit),
@@ -1577,28 +1584,37 @@ class NvizToolbar(AbstractToolbar):
     
     def OnShowPage(self, event):
         """!Go to the selected page"""
-        lmgr = self.parent.GetLayerManager()
-        if not lmgr or not hasattr(lmgr, "nviz"):
+        if not self.lmgr or not hasattr(self.lmgr, "nviz"):
             event.Skip()
             return
         
         eId = event.GetId()
         if eId == self.view:
-            lmgr.nviz.SetPage('view')
+            self.lmgr.nviz.SetPage('view')
         elif eId == self.surface:
-            lmgr.nviz.SetPage('surface')
+            self.lmgr.nviz.SetPage('surface')
         elif eId == self.surface:
-            lmgr.nviz.SetPage('surface')
+            self.lmgr.nviz.SetPage('surface')
         elif eId == self.vector:
-            lmgr.nviz.SetPage('vector')
+            self.lmgr.nviz.SetPage('vector')
         elif eId == self.volume:
-            lmgr.nviz.SetPage('volume')
+            self.lmgr.nviz.SetPage('volume')
         elif eId == self.light:
-            lmgr.nviz.SetPage('light')
+            self.lmgr.nviz.SetPage('light')
         elif eId == self.fringe:
-            lmgr.nviz.SetPage('fringe')
+            self.lmgr.nviz.SetPage('fringe')
         
-        lmgr.Raise()
+        self.lmgr.Raise()
+
+    def OnHelp(self, event):
+        """!Show 3D view mode help"""
+        if not self.lmgr:
+            gcmd.RunCommand('g.manual',
+                            entry = 'wxGUI.Nviz')
+        else:
+            log = self.lmgr.GetLogWindow()
+            log.RunCmd(['g.manual',
+                        'entry=wxGUI.Nviz'])
         
     def OnSettings(self, event):
         """!Show nviz notebook page"""

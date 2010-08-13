@@ -121,4 +121,5 @@ IconsGrass = {
     # various
     "settings"       : 'edit-color.gif',
     "redraw"         : 'gui-display.gif',
+    "help"           : wx.ART_ERROR,
     }
