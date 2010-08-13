@@ -105,11 +105,12 @@ def main():
 	    "DROP TABLE ${table}",
 	    "CREATE TABLE ${table}(${coldef})",
 	    "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
+	    "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
 	    "DROP TABLE ${table}_backup",
 	    "COMMIT"
 	    ]
 	tmpl = string.Template(';\n'.join(cmds))
-	sql = tmpl.substitute(table = table, coldef = coltypes, colnames = colnames)
+	sql = tmpl.substitute(table = table, coldef = coltypes, colnames = colnames, keycol = keycol)
     else:
 	sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
     
