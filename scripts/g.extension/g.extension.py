@@ -272,6 +272,19 @@ def install_extension(svnurl, prefix, module):
         grass.fatal(_("GRASS Addons '%s' not found in repository") % module)
 
     os.chdir(os.path.join(tmpdir, module))
+
+    if os.path.exists(os.path.join(tmpdir, module, 'grass7.patch')):
+        grass.message(_("Patch for GRASS 7 detected. Applying..."))
+        if not grass.find_program('patch'):
+            grass.fatal(_("Program 'patch' required. Exiting."))
+        stdin = open(os.path.join(tmpdir, module, 'grass7.patch'))
+        grass.call(['patch',
+                    '-p0'],
+                   stdin = stdin)
+        # rename manual page
+        os.rename('description.html', module + '.html')
+        grass.verbose(_("Manual renamed from 'description.html' to '%s.html'") % module)
+    
     grass.message(_("Compiling '%s'...") % module)
     if grass.call(['make',
                    'MODULE_TOPDIR=%s' % gisbase]) != 0:
