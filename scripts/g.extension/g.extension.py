@@ -79,6 +79,10 @@
 #% description: List available modules in the add-ons repository in shell script style
 #% guisection: Print
 #%end
+#%flag
+#% key: d
+#% description: Don't deleted downloaded source code when installing new extension
+#%end
 
 import os
 import sys
@@ -90,6 +94,7 @@ import urllib
 from grass.script import core as grass
 
 # temp dir
+remove_tmpdir = True
 tmpdir = grass.tempfile()
 grass.try_remove(tmpdir)
 os.mkdir(tmpdir)
@@ -241,9 +246,12 @@ def get_module_script(f):
     return ret
 
 def cleanup():
-    global tmpdir
-    grass.try_rmdir(tmpdir)
-
+    global tmpdir, remove_tmpdir
+    if remove_tmpdir:
+        grass.try_rmdir(tmpdir)
+    else:
+        grass.info(_("Path to the source code: '%s'") % tmpdir)
+                        
 def install_extension(svnurl, prefix, module):
     gisbase = os.getenv('GISBASE')
     if not gisbase:
@@ -295,8 +303,8 @@ def install_extension(svnurl, prefix, module):
 
 def remove_extension(prefix, module):
     # is module available?
-    if not grass.find_program(module):
-        grass.fatal(_("'%s' not found") % module)
+    if not os.path.exists(os.path.join(prefix, 'bin', module)):
+        grass.fatal(_("Module '%s' not found") % module)
     
     for file in [os.path.join(prefix, 'bin', module),
                  os.path.join(prefix, 'scripts', module),
@@ -336,6 +344,13 @@ def main():
             grass.fatal(_("Unable to create '%s'\n%s") % (options['prefix'], e))
             
         grass.warning(_("'%s' created") % options['prefix'])
+    
+    if flags['d']:
+        if options['operation'] != 'add':
+            grass.warning(_("Flag 'd' is relevant only to 'operation=add'. Ignoring this flag."))
+        else:
+            global remove_tmpdir
+            remove_tmpdir = False
     
     if options['operation'] == 'add':
         install_extension(options['svnurl'], options['prefix'], options['extension'])
