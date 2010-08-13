@@ -399,12 +399,10 @@ class GCPManToolbar(AbstractToolbar):
             )
     
 class GCPDisplayToolbar(AbstractToolbar):
-    """
-    GCP Display toolbar
+    """!GCP Display toolbar
     """
     def __init__(self, parent):
-        """!
-        GCP Display toolbar constructor
+        """!GCP Display toolbar constructor
         """
         AbstractToolbar.__init__(self, parent)
         
@@ -487,8 +485,8 @@ class GCPDisplayToolbar(AbstractToolbar):
             (self.settings, 'grSettings', Icons["grSettings"].GetBitmap(), 
              wx.ITEM_NORMAL, Icons["grSettings"].GetLabel(), Icons["grSettings"].GetDesc(),
              self.parent.OnSettings),
-            (self.helpid, 'grHelp', wx.ArtProvider.GetBitmap(id=wx.ART_HELP, client=wx.ART_TOOLBAR, size=globalvar.toolbarSize), 
-             wx.ITEM_NORMAL, _('Show Help'), _('Show Help for GCP Manager'),
+            (self.helpid, 'grHelp', Icons["grHelp"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["grHelp"].GetLabel(), Icons["grHelp"].GetDesc(),
              self.parent.OnHelp),
             ("", "", "", "", "", "", ""),
             (self.quit, 'grGcpQuit', Icons["grGcpQuit"].GetBitmap(), 
@@ -497,12 +495,10 @@ class GCPDisplayToolbar(AbstractToolbar):
             )
     
 class GRToolbar(AbstractToolbar):
-    """
-    Georectification toolbar
+    """!Georectification toolbar
     """
     def __init__(self, parent, mapcontent):
-        """!
-        Georectification toolbar constructor
+        """!Georectification toolbar constructor
 
         @param parent reference to MapFrame
         @param mapcontent reference to render.Map (registred by MapFrame)
@@ -574,8 +570,8 @@ class GRToolbar(AbstractToolbar):
             event.Skip()
         
 class GCPToolbar(AbstractToolbar):
-    """!
-    Toolbar for managing ground control points during georectification
+    """!Toolbar for managing ground control points during
+    georectification
 
     @param parent reference to GCP widget
     """
