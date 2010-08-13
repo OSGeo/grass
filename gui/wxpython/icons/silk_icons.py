@@ -121,6 +121,7 @@ IconsSilk = {
     "nvizLight"      : wx.ART_ERROR,
     "nvizFringe"     : wx.ART_ERROR,
     # various
-    "settings"     : 'color_swatch.png',
-    "redraw"       : 'arrow_refresh.png',
+    "settings"       : 'color_swatch.png',
+    "redraw"         : 'arrow_refresh.png',
+    "help"           : wx.ART_ERROR,
     }
