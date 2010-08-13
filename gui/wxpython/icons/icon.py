@@ -334,6 +334,9 @@ Icons = {
     "grSettings": MetaIcon (img=Icons["settings"],
                             label=_("Settings"),
                             desc=_("Settings dialog for georectification tool")),
+    "grHelp": MetaIcon (img=Icons["help"],
+                        label=_('Show help'),
+                        desc = _('Show help for GCP Manager')),
     # nviz
     "nvizView": MetaIcon (img=Icons["nvizView"],
                           label=_("Switch to view control page")),
