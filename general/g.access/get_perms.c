@@ -1,10 +1,11 @@
+#include <grass/config.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "access.h"
 
 int get_perms(char *path, int *perms, int *group, int *other)
 {
-    struct stat buf;
+    STRUCT_STAT buf;
 
     if (stat(path, &buf) != 0)
 	return -1;
