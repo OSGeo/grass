@@ -15,6 +15,7 @@
  * \include
  * 
  */
+#include <grass/config.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <fcntl.h>
@@ -178,7 +179,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 
 int parseSetup(char *path, list l, g_areas g, char *raster)
 {
-    struct stat s;
+    STRUCT_STAT s;
     struct Cell_head cellhd;
     char *buf;
     const char *token;
