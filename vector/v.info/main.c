@@ -16,6 +16,7 @@
  *
  **************************************************************/
 
+#include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
@@ -40,6 +41,8 @@ int main(int argc, char *argv[])
     module->description =
 	_("Outputs basic information about a vector map.");
 
+    G_debug(1,"LFS is %s", sizeof(off_t) == 8 ? "available" : "not available");
+    
     parse_args(argc, argv,
 	       &input_opt, &field_opt,
 	       &hist_flag, &col_flag, &reg_flag, &topo_flag, &title_flag);
