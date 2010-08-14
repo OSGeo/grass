@@ -411,7 +411,7 @@ off_t AMI_STREAM<T>::stream_len(void) {
 
   return (st_size / sizeof(T));
 #else
-  struct stat buf;
+  STRUCT_STAT buf;
   if (stat(path, &buf) == -1) {
     perror("AMI_STREAM::stream_len(): fstat failed ");
 	perror(path);
