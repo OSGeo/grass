@@ -1,3 +1,4 @@
+#include <grass/config.h>
 #include <grass/dbmi.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -11,7 +12,7 @@
  */
 int db_isdir(const char *path)
 {
-    struct stat x;
+    STRUCT_STAT x;
 
     if (stat(path, &x) != 0)
 	return DB_FAILED;
