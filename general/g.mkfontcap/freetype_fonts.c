@@ -14,6 +14,7 @@
  *
  *****************************************************************************/
 
+#include <grass/config.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -21,7 +22,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/fontcap.h>
 
@@ -84,7 +84,7 @@ static void find_fonts(const char *dirpath)
     char filepath[GPATH_MAX];
     DIR *curdir;
     struct dirent *cur_entry;
-    struct stat info;
+    STRUCT_STAT info;
 
     curdir = opendir(dirpath);
     if (curdir == NULL)
