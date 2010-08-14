@@ -31,6 +31,8 @@
 
 /*============================== Prototypes ================================*/
 
+#include <grass/config.h>
+
 #ifdef __GNUC__
 # ifdef __MINGW32__
 #  include <malloc.h>
@@ -473,9 +475,8 @@ int G_is_dirsep(char);
 int G_is_absolute_path(const char *);
 char *G_convert_dirseps_to_host(char *);
 char *G_convert_dirseps_from_host(char *);
-struct stat;
-int G_lstat(const char *, struct stat *);
-int G_stat(const char *, struct stat *);
+int G_lstat(const char *, STRUCT_STAT *);
+int G_stat(const char *, STRUCT_STAT *);
 
 /* percent.c */
 void G_percent(long, long, int);
