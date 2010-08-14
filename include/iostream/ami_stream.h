@@ -38,6 +38,7 @@
 #ifndef _AMI_STREAM_H
 #define _AMI_STREAM_H
 
+#include <grass/config.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -52,7 +53,9 @@
 #include <iostream>
 using namespace std;
 
-#include <grass/config.h>
+extern "C" {
+#include <grass/gis.h>
+}
 
 #define MAX_STREAMS_OPEN 200
 
@@ -381,28 +384,32 @@ off_t AMI_STREAM<T>::stream_len(void) {
   fflush(fp);
 
 #ifdef __MINGW32__
-  //stat() fails on MS Windows if the file is open, so try ftell() instead.
+  //stat() fails on MS Windows if the file is open, so try G_ftell() instead.
   //FIXME: not 64bit safe, but WinGrass isn't either right now.
-  //try something with #ifdef HAVE_LARGEFILES ? (see fseeko() elsewhere in this file)
-  long posn_save, st_size;
+  off_t posn_save, st_size;
 
-  posn_save = ftell(fp);
+  posn_save = G_ftell(fp);
   if(posn_save == -1) {
      perror("ERROR: AMI_STREAM::stream_len(): ftell(fp) failed ");
      perror(path);
      exit(1);
   }
 
-  fseek(fp, 0, SEEK_END);
-  st_size = ftell(fp);
+  G_fseek(fp, 0, SEEK_END);
+  st_size = G_ftell(fp);
   if(st_size == -1) {
      perror("ERROR: AMI_STREAM::stream_len(): ftell[SEEK_END] failed ");
      perror(path);
      exit(1);
   }
 
-  fseek(fp, posn_save, SEEK_SET);
+  G_fseek(fp, posn_save, SEEK_SET);
 
+  //debug stream_len:
+  DEBUG_STREAM_LEN fprintf(stderr, "%s: length = %lld   sizeof(T)=%d\n",
+	  path, st_size, sizeof(T));
+
+  return (st_size / sizeof(T));
 #else
   struct stat buf;
   if (stat(path, &buf) == -1) {
@@ -411,16 +418,7 @@ off_t AMI_STREAM<T>::stream_len(void) {
     assert(0);
     exit(1);
   }
-#endif
 
-
-#ifdef __MINGW32__
-  //debug stream_len:
-  DEBUG_STREAM_LEN fprintf(stderr, "%s: length = %lld   sizeof(T)=%d\n",
-	  path, st_size, sizeof(T));
-
-  return (st_size / sizeof(T));
-#else
   //debug stream_len:
   DEBUG_STREAM_LEN fprintf(stderr, "%s: length = %lld   sizeof(T)=%d\n",
 	  path, buf.st_size, sizeof(T));
@@ -476,15 +474,7 @@ AMI_err AMI_STREAM<T>::seek(off_t offset) {
     seek_offset = offset * sizeof(T);
   }
 
-#ifdef HAVE_LARGEFILES
-  if (fseeko(fp, seek_offset, SEEK_SET) == -1) {
-#else
-  if (fseek(fp, seek_offset, SEEK_SET) == -1) {
-#endif
-    cerr << "AMI_STREAM::seek offset=" << seek_offset << " failed.\n";
-    assert(0);
-    exit(1);
-  }
+  G_fseek(fp, seek_offset, SEEK_SET);
   
   return AMI_ERROR_NO_ERROR;
 }
@@ -551,7 +541,7 @@ AMI_err AMI_STREAM<T>::read_item(T **elt)  {
   assert(fp);
 
   //if we go past substream range
-  if ((logical_eos >= 0) && ftell(fp) >= sizeof(T) * logical_eos) {
+  if ((logical_eos >= 0) && G_ftell(fp) >= sizeof(T) * logical_eos) {
     return AMI_ERROR_END_OF_STREAM;
   
   } else {
@@ -581,7 +571,7 @@ AMI_err AMI_STREAM<T>::read_array(T *data, off_t len, off_t *lenp=NULL) {
   assert(fp);
   
   //if we go past substream range
-  if ((logical_eos >= 0) && ftell(fp) >= sizeof(T) * logical_eos) {
+  if ((logical_eos >= 0) && G_ftell(fp) >= sizeof(T) * logical_eos) {
 	eof_reached = 1;
     return AMI_ERROR_END_OF_STREAM;
     
@@ -613,7 +603,7 @@ AMI_err AMI_STREAM<T>::write_item(const T &elt) {
 
   assert(fp);
   //if we go past substream range
-  if ((logical_eos >= 0) && ftell(fp) >= sizeof(T) * logical_eos) {
+  if ((logical_eos >= 0) && G_ftell(fp) >= sizeof(T) * logical_eos) {
     return AMI_ERROR_END_OF_STREAM;
   
   } else {
@@ -636,7 +626,7 @@ AMI_err AMI_STREAM<T>::write_array(const T *data, off_t len) {
 
   assert(fp);
   //if we go past substream range
-  if ((logical_eos >= 0) && ftell(fp) >= sizeof(T) * logical_eos) {
+  if ((logical_eos >= 0) && G_ftell(fp) >= sizeof(T) * logical_eos) {
     return AMI_ERROR_END_OF_STREAM;
     
   } else {
