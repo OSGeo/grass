@@ -160,9 +160,7 @@ open_stream(char* pathname, AMI_stream_type st) {
   case AMI_APPEND_STREAM:
     fp = fopen(pathname, "ab+");
     assert(fp);
-    if (fseek (fp, 0, SEEK_END) == -1) {
-      perror("AMI_STREAM: fseek failed ");
-    }
+    G_fseek (fp, 0, SEEK_END);
     break;
   case AMI_READ_WRITE_STREAM: 
       fp = fopen(pathname, "rb+");
