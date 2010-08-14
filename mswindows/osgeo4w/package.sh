@@ -62,7 +62,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 		--with-odbc \
 	        --without-cairo \
-	        --disable-largefile
+	        --enable-largefile
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
