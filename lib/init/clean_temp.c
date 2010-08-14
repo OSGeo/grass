@@ -1,3 +1,4 @@
+#include <grass/config.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
@@ -43,7 +44,7 @@ void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
     char buf[BUF_MAX];
     DIR *curdir;
     struct dirent *cur_entry;
-    struct stat info;
+    STRUCT_STAT info;
     int n, pathlen;
 
     curdir = opendir(pathname);
