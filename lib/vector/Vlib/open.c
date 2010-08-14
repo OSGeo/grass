@@ -771,7 +771,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 {
     char buf[2000], path[2000];
-    struct stat stat_buf;
+    STRUCT_STAT stat_buf;
     
     switch (Map->format) {
     case GV_FORMAT_NATIVE:
