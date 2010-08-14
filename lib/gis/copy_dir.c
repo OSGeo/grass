@@ -14,6 +14,7 @@
  *
  *****************************************************************************/
 
+#include <grass/config.h>
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
@@ -63,7 +64,7 @@
 int G_recursive_copy(const char *src, const char *dst)
 {
     DIR *dirp;
-    struct stat sb;
+    STRUCT_STAT sb;
 
     if (G_lstat(src, &sb) < 0)
 	return 1;
