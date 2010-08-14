@@ -20,14 +20,15 @@
  * Source best viewed with tabstop=4
  */
 
-#include<stdio.h>
-#include<regex.h>
-#include<fcntl.h>
-#include<stdlib.h>
-#include<string.h>
-#include<sys/types.h>
-#include<sys/stat.h>
-#include<unistd.h>
+#include <grass/config.h>
+#include <stdio.h>
+#include <regex.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "opt.h"
 #include "../type.h"
@@ -116,7 +117,7 @@ int main(int argc, char **argv)
 
     unsigned char *pbNodeAttr, *pbEdgeAttr, *pbToNodeAttr;
 
-    struct stat statdata;
+    STRUCT_STAT statdata;
 
     dglGraph_s graphOut;
 
