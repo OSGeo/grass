@@ -25,6 +25,7 @@
  * \date 2007-04-14
  */
 
+#include <grass/config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -58,7 +59,7 @@ static char *_make_toplevel(void)
     uid_t me;
     struct passwd *my_passwd;
 #endif
-    struct stat buf;
+    STRUCT_STAT buf;
     char *path;
 
     errno = 0;
@@ -193,7 +194,7 @@ static char *_make_sublevels(const char *elems)
 {
     int i, status;
     char *cp, *path, *top, *ptr;
-    struct stat buf;
+    STRUCT_STAT buf;
 
     /* Get top level path */
     if (NULL == (top = _make_toplevel()))

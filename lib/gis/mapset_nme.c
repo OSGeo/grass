@@ -9,6 +9,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
  */
 
+#include <grass/config.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
@@ -155,7 +156,7 @@ char **G_available_mapsets(void)
 
     while ((ent = readdir(dir))) {
 	char buf[GPATH_MAX];
-	struct stat st;
+	STRUCT_STAT st;
 
 	sprintf(buf, "%s/%s/WIND", G_location_path(), ent->d_name);
 

@@ -1,3 +1,4 @@
+#include <grass/config.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -115,7 +116,7 @@ char *G_convert_dirseps_from_host(char *path)
  * \return Return value from system lstat function
  **/
 
-int G_stat(const char *file_name, struct stat *buf)
+int G_stat(const char *file_name, STRUCT_STAT *buf)
 {
     return stat(file_name, buf);
 }
@@ -132,7 +133,7 @@ int G_stat(const char *file_name, struct stat *buf)
  * \return Return value from system lstat function
  **/
 
-int G_lstat(const char *file_name, struct stat *buf)
+int G_lstat(const char *file_name, STRUCT_STAT *buf)
 {
 #ifdef __MINGW32__
     return stat(file_name, buf);
