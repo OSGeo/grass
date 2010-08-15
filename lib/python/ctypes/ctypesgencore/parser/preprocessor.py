@@ -141,6 +141,9 @@ class PreprocessorParser(object):
 
         self.cparser.handle_status(cmd)
         
+        if sys.platform == 'win32':
+            cmd = ['sh.exe', '-c', cmd]
+
         pp = subprocess.Popen(cmd,
                               shell = True,
                               stdout = subprocess.PIPE,
