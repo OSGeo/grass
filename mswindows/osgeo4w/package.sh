@@ -58,7 +58,6 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-curses \
 		--with-regex \
 		--with-nls \
-		--without-swig \
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 		--with-odbc \
 	        --without-cairo \
