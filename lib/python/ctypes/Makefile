@@ -54,11 +54,11 @@ vedit_INC       = $(VECT_INC) $(VECT_CFLAGS)
 
 SED = sed
 CTYPESGEN = ./ctypesgen.py
-CTYPESFLAGS = --cpp "$(CC) -E $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC)"
+CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC)"
 EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).py) $(wildcard ctypesgencore/*/*.pyc)
 
 ifneq ($(MINGW),)
-EXTRA_LIBS = $(INTLLIB)
+INTLLIB = -lintl3
 endif
 
 include $(MODULE_TOPDIR)/include/Make/Python.make
