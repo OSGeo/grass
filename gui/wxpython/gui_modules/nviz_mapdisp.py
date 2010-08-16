@@ -490,6 +490,24 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         Debug.msg(3, "GLWindow.UnloadDataLayers(): time = %f" % (stop-start))        
 
+    def SetVectorFromCmd(self, item, data):
+        """!Set 3D view properties from cmd (d.vect)
+
+        @param item Layer Tree item
+        @param nviz data
+        """
+        cmd = self.tree.GetPyData(item)[0]['cmd']
+        if cmd[0] != 'd.vect':
+            return
+        for opt in cmd[1:]:
+            try:
+                key, value = opt.split('=')
+            except ValueError:
+                continue
+            if key == 'color':
+                data['lines']['color']['value'] = value
+                data['points']['color']['value'] = value
+
     def SetMapObjProperties(self, item, id, nvizType):
         """!Set map object properties
         
@@ -516,7 +534,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             elif type ==  'vector':
                 # reset to default properties (lines/points)
                 data['vector'] = self.nvizDefault.SetVectorDefaultProp()
-            
+                self.SetVectorFromCmd(item, data['vector'])
+                
             elif type ==  '3d-raster':
                 # reset to default properties 
                 data[nvizType] = self.nvizDefault.SetVolumeDefaultProp()
