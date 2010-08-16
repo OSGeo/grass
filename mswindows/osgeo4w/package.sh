@@ -1,6 +1,6 @@
 #!/c/OSGeo4W/apps/msys/bin/sh
 
-### set -e
+set -e
 
 if ! [ -d mswindows ]; then
 	echo Start from GRASS toplevel dir
@@ -38,8 +38,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	echo $(date): STARTING configure
 	./configure \
-		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-16/lib $OSGEO4W_ROOT_MSYS/lib" \
-		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-16/include $OSGEO4W_ROOT_MSYS/include" \
+		--with-libs="$OSGEO4W_ROOT_MSYS/apps/gdal-17/lib $OSGEO4W_ROOT_MSYS/lib" \
+		--with-includes="$OSGEO4W_ROOT_MSYS/apps/gdal-17/include $OSGEO4W_ROOT_MSYS/include" \
 		--exec-prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
 		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
 		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
