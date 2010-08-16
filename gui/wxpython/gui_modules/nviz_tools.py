@@ -296,7 +296,8 @@ class NvizToolWindow(FN.FlatNotebook):
         # fringe page
         self.notebookAppearance.AddPage(page = self._createFringePage(),
                                         text = " %s " % _("Fringe"))
-        
+        self.EnablePage('fringe', False)
+
         return self.notebookAppearance
     
     def _createSurfacePage(self):
@@ -1251,7 +1252,8 @@ class NvizToolWindow(FN.FlatNotebook):
         rboxSizer = wx.StaticBoxSizer(rbox, wx.VERTICAL)
         rmaps = gselect.Select(parent = panel, type = 'raster',
                                onPopup = self.GselectOnPopup)
-        self.win['fringe']['surface'] = rmaps.GetId()
+        rmaps.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetSurface)
+        self.win['fringe']['map'] = rmaps.GetId()
         rboxSizer.Add(item = rmaps, proportion = 0,
                       flag = wx.ALL,
                       border = 3)
@@ -1321,7 +1323,8 @@ class NvizToolWindow(FN.FlatNotebook):
     def GetLayerData(self, nvizType):
         """!Get nviz data"""
         name = self.FindWindowById(self.win[nvizType]['map']).GetValue()
-        if nvizType == 'surface':
+        
+        if nvizType == 'surface' or nvizType == 'fringe':
             return self.mapWindow.GetLayerByName(name, mapType = 'raster', dataType = 'nviz')
         elif nvizType == 'vector':
             return self.mapWindow.GetLayerByName(name, mapType = 'vector', dataType = 'nviz')
@@ -1335,7 +1338,8 @@ class NvizToolWindow(FN.FlatNotebook):
         enabled = event.IsChecked()
         win = self.FindWindowById(event.GetId())
         
-        data = self.GetLayerData('surface')['surface']
+        data = self.GetLayerData('fringe')['surface']
+        
         sid = data['object']['id']
         elev = self.FindWindowById(self.win['fringe']['elev']).GetValue()
         color = self.FindWindowById(self.win['fringe']['color']).GetValue()
@@ -1490,6 +1494,18 @@ class NvizToolWindow(FN.FlatNotebook):
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
+        
+    def OnSetSurface(self, event):
+        """!Surface selected, currently used for fringes"""
+        name = event.GetString()
+        try:
+            data = self.mapWindow.GetLayerByName(name, mapType = 'raster', dataType = 'nviz')['surface']
+        except:
+            self.EnablePage('fringe', False)
+            return
+        
+        layer = self.mapWindow.GetLayerByName(name, mapType = 'raster')
+        self.EnablePage('fringe', True)
         
     def OnSetRaster(self, event):
         """!Raster map selected, update surface page"""
@@ -1682,7 +1698,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def EnablePage(self, name, enabled = True):
         """!Enable/disable all widgets on page"""
         for key, item in self.win[name].iteritems():
-            if key == 'map':
+            if key == 'map' or key == 'surface':
                 continue
             if type(item) == types.DictType:
                 for sitem in self.win[name][key].itervalues():
