@@ -282,6 +282,7 @@
 #define	_NO_OLDNAMES
 /* but... */
 #define pid_t _pid_t
+#define mode_t _mode_t
 /* ...and these old names from fcntl.h: */
 #define O_RDONLY	_O_RDONLY
 #define O_WRONLY	_O_WRONLY
