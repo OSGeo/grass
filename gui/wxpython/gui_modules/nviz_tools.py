@@ -2498,7 +2498,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['light']['bright'][control]).SetValue(bval)
                 self.FindWindowById(self.win['light']['ambient'][control]).SetValue(aval)
         elif pageId == 'fringe':
-            win = self.FindWindowById(self.win['fringe']['surface'])
+            win = self.FindWindowById(self.win['fringe']['map'])
             win.SetValue(self.FindWindowById(self.win['surface']['map']).GetValue())
         
         self.Update()
