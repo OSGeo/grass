@@ -158,7 +158,7 @@ int init_vars(int argc, char *argv[])
     elebuf = Rast_allocate_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
-	ele_scale = 10000; 	/* should be enough to do the trick */
+	ele_scale = 1000; 	/* should be enough to do the trick */
     if (flat_flag)
 	ele_scale = 10000;
 
