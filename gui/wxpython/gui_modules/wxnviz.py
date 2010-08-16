@@ -22,14 +22,15 @@ import sys
 from threading import Thread
 
 from ctypes import *
-try:
-    from grass.lib.grass import *
-    from grass.lib.g3d   import *
-    from grass.lib.ogsf  import *
-    from grass.lib.nviz  import *
-    errorMsg = ''
-except ImportError, err:
-    errorMsg = err
+from grass.lib.grass import *
+from grass.lib.g3d   import *
+from grass.lib.ogsf  import *
+from grass.lib.nviz  import *
+
+errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
+errfunc = errtype(print_error)
+pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
+perfunc = pertype(print_progress)
 
 from debug import Debug
 
@@ -55,12 +56,6 @@ def print_progress(value):
         print value
     
     return 0
-
-errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
-errfunc = errtype(print_error)
-
-pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
-perfunc = pertype(print_progress)
 
 class Nviz(object):
     def __init__(self, glog, gprogress):

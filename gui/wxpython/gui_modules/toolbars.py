@@ -184,14 +184,9 @@ class MapToolbar(AbstractToolbar):
             choices.append(_('3D view'))
             self.toolId['3d'] = 1
         else:
-            from nviz import errorMsg as errorMsg1
-            from wxnviz import errorMsg as errorMsg2
-            if errorMsg2:
-                errorMsg = str(errorMsg1) + ' (' + str(errorMsg2) + ')'
-            else:
-                errorMsg = str(errorMsg1)
+            from nviz import errorMsg
             log.WriteCmdLog(_('3D view mode not available'))
-            log.WriteWarning(_('Reason: %s') % errorMsg)
+            log.WriteWarning(_('Reason: %s') % str(errorMsg))
             log.WriteLog(_('Note that the 3D view mode is currently not working under MS Windows '
                            '(hopefully this will be fixed soon). '
                            'Please keep an eye out for updated versions of GRASS.'), wrap = 60)
