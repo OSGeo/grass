@@ -259,6 +259,18 @@
 /*
  * Defines needed to get large file support - from cdrtools-2.01
  */
+
+/* MINGW32 LFS deactivated */
+/* to activate,
+ * - existing G_stat() must be used instead of stat()
+ * - existing G_stat() and G_lstat() must be updated
+ * - new function G_fstat() must be written and used instead of fstat()
+ *   (if fstat() is used at all)
+ * - new function G_lseek() must be written and used instead of lseek()
+ *   (eqivalent to G_fseek(); write G_ltell()?)
+ * - remove the following line and update below */
+#if 0
+
 #undef	HAVE_LARGEFILES
 
 #ifdef	HAVE_LARGEFILES		/* If we have working largefiles at all	   */
@@ -277,68 +289,34 @@
 				/* defined, we have fseeko()		   */
 
 #if defined(__MINGW32__) && defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64
+
 /* add/remove as needed */
-/* no old names for sys/types.h */
-#define	_NO_OLDNAMES
-/* but... */
-#define pid_t _pid_t
-#define mode_t _mode_t
-/* ...and these old names from fcntl.h: */
-#define O_RDONLY	_O_RDONLY
-#define O_WRONLY	_O_WRONLY
-#define O_RDWR		_O_RDWR
-#define O_ACCMODE	_O_ACCMODE
-#define O_APPEND	_O_APPEND
-#define O_CREAT		_O_CREAT
-#define O_TRUNC		_O_TRUNC
-#define O_EXCL		_O_EXCL
-#define O_TEXT		_O_TEXT
-#define O_BINARY	_O_BINARY
-#define O_TEMPORARY	_O_TEMPORARY
-#define O_NOINHERIT	_O_NOINHERIT
-#define O_SEQUENTIAL	_O_SEQUENTIAL
-#define O_RANDOM	_O_RANDOM
-
-/* ...and these old names from stat.h */
-#define S_IFIFO		_S_IFIFO
-#define S_IFCHR		_S_IFCHR
-#define S_IFBLK		_S_IFBLK
-#define S_IFDIR		_S_IFDIR
-#define S_IFREG		_S_IFREG
-#define S_IFMT		_S_IFMT
-#define S_IEXEC		_S_IEXEC
-#define S_IWRITE	_S_IWRITE
-#define S_IREAD		_S_IREAD
-#define S_IRWXU		_S_IRWXU
-#define S_IXUSR		_S_IXUSR
-#define S_IWUSR		_S_IWUSR
-#define S_IRUSR		_S_IRUSR
-
-#define S_ISDIR(m)	(((m) & S_IFMT) == S_IFDIR)
-#define S_ISFIFO(m)	(((m) & S_IFMT) == S_IFIFO)
-#define S_ISCHR(m)	(((m) & S_IFMT) == S_IFCHR)
-#define S_ISBLK(m)	(((m) & S_IFMT) == S_IFBLK)
-#define S_ISREG(m)	(((m) & S_IFMT) == S_IFREG)
-
-/* ..and these from timeb.h */
-#define ftime _ftime
-#define timeb _timeb
-
-#define off_t off64_t
+/* use own off_t definition */
+#define _OFF_T_
+typedef off_t off64_t
+/* fseeko and ftello are safe because not defined by MINGW */
+#define HAVE_FSEEKO
 #define fseeko fseeko64
 #define ftello ftello64
-#define lseek lseek64
+/* lseek is not safe, defined in io.h */
+#define _g_lseek lseek64
 /* use _stati64 compatible with MSVCRT < 6.1 */
-#define stat _stati64
-#define fstat _fstati64
+/* stat and fstat are not safe, defined in stat.h */
+#define _g_stat _stati64
+#define _g_fstat _fstati64
+#define _STRUCT_STAT_
 typedef struct _stati64 STRUCT_STAT;
-#else
+
+#endif /* MINGW32 LFS */
+
+#endif	/* HAVE_LARGEFILES */
+
+#endif /* 0 */
+
+#ifndef _STRUCT_STAT_
+#define _STRUCT_STAT_
 typedef struct stat STRUCT_STAT;
 #endif
-
-#else
-typedef struct stat STRUCT_STAT;
-#endif	/* HAVE_LARGEFILES */
 
 /* define if langinfo.h exists */
 #undef HAVE_LANGINFO_H
