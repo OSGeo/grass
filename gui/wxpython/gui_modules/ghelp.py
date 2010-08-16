@@ -768,8 +768,6 @@ class InstallExtensionWindow(wx.Frame):
 
         self.repoBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("Repository"))
-        self.findBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                    label=" %s " % _("Find extension by"))
         self.treeBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("List of extensions"))
         
@@ -818,7 +816,7 @@ class InstallExtensionWindow(wx.Frame):
                       flag = wx.EXPAND)
         repoSizer.Add(item = self.fullDesc)
         
-        findSizer = wx.StaticBoxSizer(self.findBox, wx.HORIZONTAL)
+        findSizer = wx.BoxSizer(wx.HORIZONTAL)
         findSizer.Add(item = self.search, proportion = 1)
         
         treeSizer = wx.StaticBoxSizer(self.treeBox, wx.HORIZONTAL)
