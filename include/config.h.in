@@ -320,6 +320,10 @@
 #define S_ISBLK(m)	(((m) & S_IFMT) == S_IFBLK)
 #define S_ISREG(m)	(((m) & S_IFMT) == S_IFREG)
 
+/* ..and these from timeb.h */
+#define ftime _ftime
+#define timeb _timeb
+
 #define off_t off64_t
 #define fseeko fseeko64
 #define ftello ftello64
