@@ -2600,13 +2600,14 @@ class NvizToolWindow(FN.FlatNotebook):
                 mapIs3D = int(value)
             elif key == 'points':
                 npoints = int(value)
-                nprimitives = npoints
-            elif key in ('lines',
-                         'boundaries',
+                nprimitives += npoints
+            elif key == 'lines':
+                nlines = int(value)
+                nprimitives += nlines
+            elif key in ('boundaries',
                          'centroids',
                          'faces',
                          'kernels'):
-                nlines = int(value)
                 nprimitives += int(value)
         
         return (npoints, nlines, nprimitives, mapIs3D)
