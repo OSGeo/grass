@@ -36,10 +36,12 @@ import globalvar
 import gselect
 import gcmd
 from preferences import globalSettings as UserSettings
-from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties
+try:
+    from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties
+    import wxnviz
+except ImportError:
+    pass
 from debug import Debug
-
-import wxnviz
 
 class NvizToolWindow(FN.FlatNotebook):
     """!Nviz (3D view) tools panel
