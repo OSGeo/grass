@@ -503,7 +503,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         type = self.tree.GetPyData(item)[0]['maplayer'].type
         # reference to original layer properties (can be None)
         data = self.tree.GetPyData(item)[0]['nviz']
-        if data is None:
+        
+        if not data:
             # init data structure
             self.tree.GetPyData(item)[0]['nviz'] = {}
             data = self.tree.GetPyData(item)[0]['nviz']
@@ -681,14 +682,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         layer = self.tree.GetPyData(item)[0]['maplayer']
         if layer.type !=  'vector':
             return
-        
-        # if vecType is None:
-        #     # load data type by default
-        #     vecType = []
-        #     for v in ('lines', 'points'):
-        #         if UserSettings.Get(group = 'nviz', key = 'vector',
-        #                             subkey = [v, 'show']):
-        #             vecType.append(v)
         
         # set default properties
         if points is None:

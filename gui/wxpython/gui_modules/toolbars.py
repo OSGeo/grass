@@ -1584,6 +1584,7 @@ class NvizToolbar(AbstractToolbar):
             event.Skip()
             return
         
+        self.lmgr.notebook.SetSelection(3)
         eId = event.GetId()
         if eId == self.view:
             self.lmgr.nviz.SetPage('view')
