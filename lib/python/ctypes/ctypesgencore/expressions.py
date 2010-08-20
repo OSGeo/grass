@@ -68,10 +68,17 @@ class ConstantExpressionNode(ExpressionNode):
     def evaluate(self, context):
         return self.value
 
+    try:
+        pos_inf = float('inf')
+        neg_inf = float('-inf')
+    except ValueError:
+        pos_inf = ()
+        neg_inf = ()
+
     def py_string(self, can_be_ctype):
-        if self.value == float('inf'):
+        if self.value == ConstantExpressionNode.pos_inf:
             return "float('inf')"
-        elif self.value == float('-inf'):
+        elif self.value == ConstantExpressionNode.neg_inf:
             return "float('-inf')"
         return repr(self.value)
 
