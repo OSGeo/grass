@@ -35,6 +35,10 @@ WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\""
 #The xgettext utility is used to automate the creation of
 #portable message files (.po)
 pot:
+	if [ ! -f ../gui/wxpython/menustrings.py ] ; then \
+		echo "Build GRASS before running 'make pot'" >&2 ; \
+		exit 1 ; \
+	fi
 	@echo "Generating $(LIBDOMAIN)..."
 	xgettext -k_ -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
 	@echo "Generating $(MODDOMAIN)..."
