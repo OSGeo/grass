@@ -1306,9 +1306,8 @@ msgid "Imports attribute tables in various formats."
 msgstr "Importuje tabele atrybutów w różnych formatach."
 
 #: ../gui/wxpython/menustrings.py:86
-#, fuzzy
 msgid "Export raster map"
-msgstr "Import map rastrowych"
+msgstr "Eksport mapy rastrowej"
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:118
 #, fuzzy
@@ -1634,9 +1633,8 @@ msgid "Raster 2.5D to volume"
 msgstr "Mapa rastrowa 2,5D do bryły rastrowej 3D"
 
 #: ../gui/wxpython/menustrings.py:161
-#, fuzzy
 msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-msgstr "Kreśli spływ po modelu powierzchni terenu w warstwie mapy rastrowej "
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:162
 msgid "Vector to raster"
@@ -2013,7 +2011,6 @@ msgstr ""
 "lokacji."
 
 #: ../gui/wxpython/menustrings.py:252
-#, fuzzy
 msgid "Tiling"
 msgstr "Kafelki"
 
@@ -2385,9 +2382,8 @@ msgid "Transform features"
 msgstr "Transformacje obiektów"
 
 #: ../gui/wxpython/menustrings.py:325
-#, fuzzy
 msgid "Clump"
-msgstr "Kolumny"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:326
 #, fuzzy
@@ -2623,15 +2619,13 @@ msgid "Edge density"
 msgstr "Wykrywanie krawędzi"
 
 #: ../gui/wxpython/menustrings.py:376
-#, fuzzy
 msgid ""
 "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
-msgstr "Oblicza shape index z mapy rastrowej GRASS"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:377
-#, fuzzy
 msgid "Contrast weighted edge density"
-msgstr "Oblicza shape index z mapy rastrowej GRASS"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:378
 #, fuzzy
@@ -2639,9 +2633,8 @@ msgid "Calculates contrast weighted edge density index on a raster map"
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:379
-#, fuzzy
 msgid "Patch area mean"
-msgstr "Mapa rastrowa 3D"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:380
 #, fuzzy
@@ -2651,9 +2644,8 @@ msgid ""
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:381
-#, fuzzy
 msgid "Patch area range"
-msgstr "Mapa rastrowa 3D"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:382
 #, fuzzy
@@ -2679,9 +2671,8 @@ msgid "Calculates coefficient of variation of patch area on a raster map"
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
 #: ../gui/wxpython/menustrings.py:387
-#, fuzzy
 msgid "Patch density"
-msgstr "Wykrywanie krawędzi"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:388
 #, fuzzy
@@ -2896,9 +2887,8 @@ msgid "Creates a fractal surface of a given fractal dimension."
 msgstr "Utwórz powierzchnię fraktalną dla zadanych rozmiarów fraktala."
 
 #: ../gui/wxpython/menustrings.py:435
-#, fuzzy
 msgid "Gaussian kernel density surface"
-msgstr "Utwórz powierzchnie"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:436
 msgid ""
@@ -2924,12 +2914,10 @@ msgid "Plane"
 msgstr "Płaszczyzna"
 
 #: ../gui/wxpython/menustrings.py:440
-#, fuzzy
 msgid ""
 "Creates raster plane map given dip (inclination), aspect (azimuth) and one "
 "point."
 msgstr ""
-"Tworzy mapę rastrową zawierającą koncentryczne kręgi wokół zadanych pubktów."
 
 #: ../gui/wxpython/menustrings.py:441
 #, fuzzy
@@ -3126,10 +3114,9 @@ msgid "Univariate raster statistics"
 msgstr "Aktualizuj statystyki mapy rastrowej"
 
 #: ../gui/wxpython/menustrings.py:484
-#, fuzzy
 msgid ""
 "Calculates univariate statistics from the non-null cells of a raster map."
-msgstr "Oblicza shape index z mapy rastrowej GRASS"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:485
 msgid "Sample transects"
@@ -3281,9 +3268,8 @@ msgid "Split polylines"
 msgstr "Rozdziel polilinie"
 
 #: ../gui/wxpython/menustrings.py:516
-#, fuzzy
 msgid "Creates points/segments from input vector lines and positions."
-msgstr "Utwórz linie równoległe do podanych linii"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:517
 msgid "Parallel lines"
@@ -3715,24 +3701,20 @@ msgid "Delaunay triangles"
 msgstr "Trójkąty Delone"
 
 #: ../gui/wxpython/menustrings.py:617
-#, fuzzy
 msgid ""
 "Creates a Delaunay triangulation from an input vector map containing points "
 "or centroids."
 msgstr ""
-"Tworzy mapę rastrową zawierającą koncentryczne kręgi wokół zadanych pubktów."
 
 #: ../gui/wxpython/menustrings.py:618
 msgid "Voronoi diagram/Thiessen polygons"
 msgstr "Utwórz diagram Voronoi/poligony Thiessena dla zbioru punktów"
 
 #: ../gui/wxpython/menustrings.py:619
-#, fuzzy
 msgid ""
 "Creates a Voronoi diagram from an input vector map containing points or "
 "centroids."
 msgstr ""
-"Tworzy mapę rastrową zawierającą koncentryczne kręgi wokół zadanych pubktów."
 
 #: ../gui/wxpython/menustrings.py:620
 msgid "Generate grid"
@@ -3787,9 +3769,8 @@ msgid "Remove outliers in point sets"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:632
-#, fuzzy
 msgid "Removes outliers from vector point data."
-msgstr "Utwórz z bazy danych"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:633
 msgid "Test/training point sets"
@@ -4791,7 +4772,6 @@ msgid "Validate model"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:872
-#, fuzzy
 msgid "Help"
 msgstr "Pomoc"
 
@@ -6179,7 +6159,6 @@ msgstr "Powierzchnia"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:70
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2704
-#, fuzzy
 msgid "Vector"
 msgstr "Wektor"
 
@@ -8333,7 +8312,7 @@ msgid "Drop all columns"
 msgstr "Usuń wszystkie kolumny"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1666
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Selected column '%s' will PERMANENTLY removed from table. Do you want to "
 "drop the column?"
@@ -10848,3 +10827,322 @@ msgstr "14 typów indeksów wegetacji"
 
 #~ msgid "Overlay raster maps"
 #~ msgstr "Przykryj mapy rastrowe"
+
+#~ msgid "Choose DXF file:"
+#~ msgstr "Wybierz plik DXF:"
+
+#~ msgid "GRASS %s Map Calculator"
+#~ msgstr "GRASS %s Kalkulator Map"
+
+#~ msgid "Create & manage ground control points"
+#~ msgstr "Stwórz & zarządzaj terenowymi punktami kontrolnymi GCP"
+
+#~ msgid "3d view tools"
+#~ msgstr "Narzędzia widoku 3d"
+
+#~ msgid "Import raster data using GDAL"
+#~ msgstr "Import danych rastrowych (GDAL)"
+
+#, fuzzy
+#~ msgid "Converts selected GDAL layers to GRASS raster maps using r.in.gdal"
+#~ msgstr ""
+#~ "Konwertuje wybrane warstwy GDAL do mapy rastrowej GRASS-a przy użyciu r."
+#~ "in.gdal."
+
+#~ msgid "Link GDAL supported raster file to a binary raster map layer."
+#~ msgstr ""
+#~ "Tworzy link rastrowych plików wspieranych przez GDAL do binarnej mapy "
+#~ "rastrowej."
+
+#, fuzzy
+#~ msgid "Link GDAL supported raster files to a binary raster map layers"
+#~ msgstr ""
+#~ "Tworzy link rastrowych plików wspieranych przez GDAL do binarnej mapy "
+#~ "rastrowej."
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr "Konwertuje plik rastrowy ASCII na binarną mapę rastrową."
+
+#~ msgid "ASCII polygons and lines import"
+#~ msgstr "Import poligonów i linii ASCII"
+
+#~ msgid ""
+#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "Konwertuje ESRI ARC/INFO ascii rastr (GRID) na (binarną) mapę rastrową."
+
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "Import pliku SPOT VGT NDVI do mapy rastrowej"
+
+#~ msgid "Downloads and imports data from WMS servers."
+#~ msgstr "Ściąga i importuje dane z serwerów WMS."
+
+#~ msgid "Convert OGR vector layers to GRASS vector map."
+#~ msgstr "Konwertuje warstwy wektorowe OGR na wektorowe mapy GRASS."
+
+#, fuzzy
+#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
+#~ msgstr ""
+#~ "Konwertuje wybrane warstwy OGR do mapy rastrowej GRASS-a przy użyciu r.in."
+#~ "ogr."
+
+#~ msgid "Creates a new vector as a read-only link to OGR layer."
+#~ msgstr ""
+#~ "Tworzy nową warstwę wektorową jako link do warstwy OGR tylko do odczytu."
+
+#, fuzzy
+#~ msgid "Creates a new vectors as a read-only link to OGR layers"
+#~ msgstr ""
+#~ "Tworzy nową warstwę wektorową jako link do warstwy OGR tylko do odczytu."
+
+#~ msgid "ASCII points/GRASS ASCII vector import"
+#~ msgstr "Import punktów ASCII/wektorów GRASS ASCII"
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr "Tworzy mapę wektorową z pliku punktów lub wektorów ASCII."
+
+#~ msgid "Old GRASS vector import"
+#~ msgstr "Import starego wektorowego formatu GRASS"
+
+#~ msgid "Multiple DXF layers import"
+#~ msgstr "Import wielu warstw DXF"
+
+#, fuzzy
+#~ msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)"
+#~ msgstr ""
+#~ "Konwertuje wybrane warstwy OGR do mapy rastrowej GRASS-a przy użyciu r.in."
+#~ "ogr."
+
+#~ msgid "GPSBabel GPS import"
+#~ msgstr "Import GPSBabel GPS"
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "Konwertuje tekstowy plik rastrowy 3D ASCII na binarną mapę rastrową 3D."
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "Konwertuje warstwę mapy rastrowej na plik tekstowy ASCII."
+
+#~ msgid "ASCII x,y,z export"
+#~ msgstr "Eksport do ASCII x,y,z"
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "Eksportuje mapę rastrową GRASS do pliku mapy GRIDATB.FOR (TOPMODEL)"
+
+#~ msgid "Raster File Series to MPEG Conversion Program."
+#~ msgstr "Program Konwersji Serii Plików Rastrowych do formatu MPG."
+
+#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
+#~ msgstr "Eksportuje raster GRASS-a do formatu PNG bez georeferencji."
+
+#~ msgid ""
+#~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
+#~ "resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr ""
+#~ "Konwertuje 3 warstwy rastrowe GRASS (R,G,B) do pliku obrazu PPM o "
+#~ "rozdzielczości piksela aktualnie zdefiniowanego regionu"
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr ""
+#~ "Konwertuje warstwę mapy rastrowej do pliku 'height-field' dla formatu "
+#~ "POVRAY."
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "Konwertuje mapę rastrową do formatu VTK-Ascii."
+
+#~ msgid "Multiple export formats using OGR"
+#~ msgstr "Eksport do różnych formatów OGR"
+
+#~ msgid "Converts to one of the supported OGR vector formats."
+#~ msgstr "Konwertuje do jednego z dostępnych formatów wektorowych OGR."
+
+#~ msgid "ASCII points/GRASS ASCII vector export"
+#~ msgstr "Eksport punktów ASCII do wektorów GRASS ASCII"
+
+#~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
+#~ msgstr ""
+#~ "Konwertuje binarną mapę wektorową GRASS-a do wektorowej mapy GRASS-a typu "
+#~ "ASCII."
+
+#~ msgid "Exports GRASS vector map layers to DXF file format."
+#~ msgstr "Eksportuje warstwy mapy wektorowej GRASS-a do formatu DXF."
+
+#~ msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"
+#~ msgstr "Konwertuje do formatu POV-Ray, GRASS x,y,z -> POV-Ray x,y,z"
+
+#~ msgid "Exports a GRASS vector map to SVG."
+#~ msgstr "Eksportuje mapę wektorową GRASS-a do SVG."
+
+#~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
+#~ msgstr "Konwertuje binarną mapę wektorową GRASS-a do VTK ASCII."
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "Konwertuje warstwę mapy rastrowej 3D na plik tekstowy ASCII."
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr "Eksportuje raster 3D GRASS-a do trójwymiarowego pliku Vis5D."
+
+#, fuzzy
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr "Konwertuje binarną mapę wektorową GRASS do mapy rastrowej GRASS."
+
+#~ msgid ""
+#~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
+#~ "raster map layer."
+#~ msgstr ""
+#~ "Konwertuje binarną mapę wektorową GRASS (punkty) do mapy rastrowej 3D "
+#~ "GRASS."
+
+#~ msgid "E&xit"
+#~ msgstr "&Koniec"
+
+#~ msgid "Config"
+#~ msgstr "Konfiguracja"
+
+#~ msgid "Raster"
+#~ msgstr "Raster"
+
+#, fuzzy
+#~ msgid "Digitize raster (requires XTerm)"
+#~ msgstr "Ustawienia (wymaga XTerm)"
+
+#~ msgid ""
+#~ "Creates a raster map layer showing buffer zones surrounding cells that "
+#~ "contain non-NULL category values."
+#~ msgstr ""
+#~ "Tworzy rastrową warstwę mapy ukazującą strefy buforowe otaczające komórki "
+#~ "rastra które zawierają wartości kategorii inne niż NULL"
+
+#~ msgid ""
+#~ "Generates raster map layers of slope, aspect, curvatures and partial "
+#~ "derivatives from a raster map layer of true elevation values. Aspect is "
+#~ "calculated counterclockwise from east."
+#~ msgstr ""
+#~ "Tworzy rastrowe warstwy spadków, ekspozycji, krzywizn i częściowych "
+#~ "pochodnych z rastrowej mapy rzeczywistych wysokości. Ekspozycja jest "
+#~ "obliczana w kierunku przeciwnym do ruchu wskazówek zegara od wschodu."
+
+#, fuzzy
+#~ msgid "Generates a raster map layer of distance to features in input layer."
+#~ msgstr ""
+#~ "Generuje warstwę mapy rastrowej of distance to features in input layer."
+
+#~ msgid ""
+#~ "Filters and generates a depressionless elevation map and a flow direction "
+#~ "map from a given elevation layer."
+#~ msgstr ""
+#~ "Filtruje rastrową mapę modelu terenu i generuje mapę powierzchni "
+#~ "pozbawionej depresji oraz mapę linii spływu."
+
+#, fuzzy
+#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+#~ msgstr "Tworzy mapęcieniowanego reliefu z mapy wysokości (DEM)."
+
+#, fuzzy
+#~ msgid "Surface generation program from rasterized contours."
+#~ msgstr "Oszacowanie powierzchni obszaru dla map rastrowych."
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "Tworzy topologię dla wektorowej mapy GRASS."
+
+#, fuzzy
+#~ msgid "Vector based generalization."
+#~ msgstr "Połączenie wektora z bazą danych"
+
+#, fuzzy
+#~ msgid "Change the type of geometry elements."
+#~ msgstr "Zmień typ obiektów geometrycznych."
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "Odpytuje mapę wektorowych w zadanych lokalizacjach."
+
+#, fuzzy
+#~ msgid "Create a new vector map layer by combining other vector map layers."
+#~ msgstr ""
+#~ "Tworzy nową warstwę wektorową jako link do warstwy OGR tylko do odczytu."
+
+#, fuzzy
+#~ msgid "Creates a GRASS vector map of a user-defined grid."
+#~ msgstr "Eksportuje mapę wektorową GRASS-a do SVG."
+
+#, fuzzy
+#~ msgid "Randomly generate a 2D/3D vector points map."
+#~ msgstr "Przypadkowo rozmieszczone komórki i punkty (wektorowe)"
+
+#~ msgid "Random location perturbations of GRASS vector points"
+#~ msgstr "Losowe rozrzucenie punktw wektorowych "
+
+#, fuzzy
+#~ msgid "Outputs basic information about a user-specified vector map."
+#~ msgstr ""
+#~ "Tworzy matrycę kowariancji/korelacji dla określonej przez użytkownika "
+#~ "warstwy/warstw mapy rastrowej."
+
+#~ msgid "Reports geometry statistics for vectors."
+#~ msgstr "Tworzy raport geometrii mapy rastrowej."
+
+#~ msgid "Imagery"
+#~ msgstr "Obraz"
+
+#~ msgid "Volumes"
+#~ msgstr "Raster 3d (volumes)"
+
+#~ msgid "3D raster map calculator"
+#~ msgstr "Kalkulator mapy rastrowej 3D"
+
+#~ msgid ""
+#~ "Creates and adds a new attribute table to a given layer of an existing "
+#~ "vector map."
+#~ msgstr ""
+#~ "Tworzy i dodaje nową tabelę atrybutów do zadanej warstwy istniejącej mapy "
+#~ "wektorowej."
+
+#~ msgid "Drops an attribute table."
+#~ msgstr "Usuwa tabelę atrybutów."
+
+#~ msgid "Reconnect vector to database"
+#~ msgstr "Ponownie łączy wektor z bazą danych"
+
+#~ msgid "GRASS GIS help"
+#~ msgstr "Pomoc GRASS GIS"
+
+#~ msgid "Display the HTML man pages of GRASS"
+#~ msgstr "Wyświetl podręcznik GRASSa w formacie HTML"
+
+#, fuzzy
+#~ msgid ""
+#~ "Current name: %s\n"
+#~ "Enter new name:"
+#~ msgstr ""
+#~ "Bieżąca nazwa: %s\n"
+#~ "Wprowadź nową nazwę:"
+
+#~ msgid "Unable to rename mapset"
+#~ msgstr "Nie można zmienić nazwy mapsetu"
+
+#~ msgid "Unable to rename location"
+#~ msgstr "Nie można zmienić nazwy lokacji"
+
+#, fuzzy
+#~ msgid "Command %s could not be run"
+#~ msgstr "Polecenie '%s' nie zostało jeszcze zaimplementowana."
+
+#, fuzzy
+#~ msgid "&Close"
+#~ msgstr "Zamknij"
+
+#, fuzzy
+#~ msgid "&Stop"
+#~ msgstr "górę"
+
+#~ msgid "Save current settings?"
+#~ msgstr "Zapisać bieżące ustawienia?"
+
+#~ msgid "List of categories"
+#~ msgstr "Lista kategorii"
+
+#, fuzzy
+#~ msgid "Vegetation Indices"
+#~ msgstr "Indeksy wegetacji"

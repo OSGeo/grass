@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-02 22:57+0200\n"
-"PO-Revision-Date: 2010-04-07 16:15+0100\n"
-"Last-Translator: Cristina Castellani <castellani.cristina@gmail.com>\n"
-"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2010-08-22 03:01+0100\n"
+"Last-Translator: Markus Neteler <neteler osgeo.org>\n"
+"Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -6178,7 +6178,6 @@ msgid "Set to all"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:405
-#, fuzzy
 msgid "Use draw settings for all loaded surfaces"
 msgstr "Usa impostazioni di disegno per tutte le superfici caricate"
 
@@ -6830,7 +6829,6 @@ msgid "Add new record into table"
 msgstr "Aggiungi record nella tabella"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1478
-#, fuzzy
 msgid "Mode"
 msgstr "Modalità"
 
@@ -9166,7 +9164,7 @@ msgstr "ctree"
 
 #: ../gui/wxpython/gui_modules/preferences.py:599
 msgid "aster"
-msgstr ""
+msgstr "aster"
 
 #: ../gui/wxpython/gui_modules/preferences.py:600
 msgid "gyro"
@@ -10745,3 +10743,35 @@ msgstr ""
 
 #~ msgid "Manage extensions"
 #~ msgstr "Gestisci estensioni"
+
+#~ msgid "Choose DXF file:"
+#~ msgstr "Scegli file DXF:"
+
+#~ msgid "GRASS %s Map Calculator"
+#~ msgstr "GRASS %s Map Calculator"
+
+#~ msgid "Create & manage ground control points"
+#~ msgstr "Crea & gestisci punti di controllo sul terreno"
+
+#~ msgid ""
+#~ "Unable to determine default DB connection settings. Please define DB "
+#~ "connection using db.connect module."
+#~ msgstr ""
+#~ "Impossibile determinare le impostazioni della connessione del DB. Per "
+#~ "favore definire la connessione al DB usando il modulo db.connect"
+
+#~ msgid "3d view tools"
+#~ msgstr "Strumenti visualizzazione 3D"
+
+#~ msgid ""
+#~ "Current name: %s\n"
+#~ "Enter new name:"
+#~ msgstr ""
+#~ "Nome attuale: %s\n"
+#~ "Inserisci il nuovo nome"
+
+#~ msgid "Unable to rename mapset"
+#~ msgstr "Impossibile rinominare il mapset"
+
+#~ msgid "Unable to rename location"
+#~ msgstr "Impossibile rinominare la location"

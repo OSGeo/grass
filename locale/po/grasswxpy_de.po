@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-02 22:57+0200\n"
-"PO-Revision-Date: 2010-07-18 13:49+0200\n"
-"Last-Translator: Robert Nuske <rnuske gwdg.de>\n"
+"PO-Revision-Date: 2010-08-22 02:41+0100\n"
+"Last-Translator: Markus Neteler <neteler osgeo.org>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
@@ -984,13 +984,13 @@ msgstr "Importiere Rasterdaten als GRASS-Karte mittels GDAL"
 #: ../gui/wxpython/menustrings.py:21
 #, fuzzy
 msgid "Bulk import of raster data"
-msgstr "Importiere Vektordaten mittels OGR"
+msgstr "Importiere Rasterdaten"
 
 #: ../gui/wxpython/menustrings.py:22
 #, fuzzy
 msgid "Converts multiple GDAL supported layers to GRASS raster maps."
 msgstr ""
-"Konvertiert ausgewï¿½hlte GDAL-Layer in GRASS Rasterkarte mittels r.in.gdal."
+"Konvertiert ausgewählte GDAL-Layer in GRASS Rasterkarte mittels r.in.gdal"
 
 #: ../gui/wxpython/menustrings.py:23
 #: ../gui/wxpython/gui_modules/gdialogs.py:1093
@@ -1000,18 +1000,18 @@ msgstr "Verknüpfe Rasterdaten"
 #: ../gui/wxpython/menustrings.py:24
 #, fuzzy
 msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
-msgstr "Verbinde GDAL-unterstï¿½tzt Rasterdaten mit einer Rasterkarte."
+msgstr "Verbinde GDAL-unterstützt Rasterdaten mit einer Rasterkarte."
 
 #: ../gui/wxpython/menustrings.py:25
 #, fuzzy
 msgid "Bulk link of raster data"
-msgstr "Kann Rasterkarte nicht entfernen"
+msgstr "Verknüpfe Rasterdaten"
 
 #: ../gui/wxpython/menustrings.py:26
 #, fuzzy
 msgid ""
 "Link multiple GDAL supported raster maps as pseudo GRASS raster map layers."
-msgstr "Verbinde GDAL-unterstï¿½tzte Rasterdaten als Rasterkarte"
+msgstr "Verbinde GDAL-unterstützte Rasterdaten als Rasterkarte"
 
 #: ../gui/wxpython/menustrings.py:27
 #, fuzzy
@@ -1138,7 +1138,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:52
 #, fuzzy
 msgid "Bulk import of vector data"
-msgstr "Importiere Vektordaten mittels OGR"
+msgstr "Importiere Vektordaten"
 
 #: ../gui/wxpython/menustrings.py:53
 #, fuzzy
@@ -1154,19 +1154,19 @@ msgstr "Verknüpfe Vektordaten"
 #, fuzzy
 msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
 msgstr ""
-"Erzeugt eine neue Vektorkarte als einen ausschlieï¿½lich lesbaren Link zu "
+"Erzeugt eine neue Vektorkarte als einen ausschließlich lesbaren Link zu "
 "einem OGR-Layer."
 
 #: ../gui/wxpython/menustrings.py:56
 #, fuzzy
 msgid "Bulk link of vector data"
-msgstr "Importiere Vektordaten mittels OGR"
+msgstr "Verknüpfe Vektordaten"
 
 #: ../gui/wxpython/menustrings.py:57
 #, fuzzy
 msgid "Creates multiple new pseduo-vector maps as a read-only links using OGR."
 msgstr ""
-"Erzeugt eine neue Vektorkarte als einen ausschlieï¿½lich lesbaren Link zu "
+"Erzeugt eine neue Vektorkarte als einen ausschließlich lesbaren Link zu "
 "einem OGR-Layer."
 
 #: ../gui/wxpython/menustrings.py:58
@@ -1207,15 +1207,13 @@ msgid "Converts files in DXF format to GRASS vector map format."
 msgstr "Konvertiere DXF Daten in GRASS Vektorkarten"
 
 #: ../gui/wxpython/menustrings.py:66
-#, fuzzy
 msgid "Bulk import of DXF"
-msgstr "Importiere Vektordaten mittels OGR"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:67
 #, fuzzy
 msgid "Converts multiple DXF layers to GRASS vector maps."
-msgstr ""
-"Konvertiert selktierte DXF-Datensï¿½tze zu GRASS Vektorkarten mit v.in.dxf."
+msgstr "Konvertiert selektierte DXF-Layer zu GRASS Vektorkarten (mit v.in.dxf)"
 
 #: ../gui/wxpython/menustrings.py:68
 msgid "ESRI e00 import"
@@ -1310,7 +1308,7 @@ msgstr "Exportiere Rasterkarte"
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:118
 #, fuzzy
 msgid "Common export formats"
-msgstr "Rasterdatenexport mit GDAL"
+msgstr "Konvertiert Koordinaten"
 
 #: ../gui/wxpython/menustrings.py:88
 msgid "Exports GRASS raster maps into GDAL supported formats."
@@ -1509,9 +1507,8 @@ msgid "Converts a vector map to VTK ASCII output."
 msgstr "Konvertieren eine GRASS Vektorkarte zu einer VTK ASCII-Datei."
 
 #: ../gui/wxpython/menustrings.py:132
-#, fuzzy
 msgid "Export 3D raster maps"
-msgstr "Exportiere Rasterkarte"
+msgstr "Exportiere 3D Rasterkarten"
 
 #: ../gui/wxpython/menustrings.py:133
 msgid "ASCII 3D export"
@@ -2135,9 +2132,8 @@ msgid "Creates a mask for limiting raster operation."
 msgstr "Erzeuge eine Maske (MASK) um Rasteroperationen zu begrenzen."
 
 #: ../gui/wxpython/menustrings.py:280
-#, fuzzy
 msgid "Raster calculator"
-msgstr "3D Rasterkartenrechner"
+msgstr "Rasterkartenrechner"
 
 #: ../gui/wxpython/menustrings.py:281 ../gui/wxpython/menustrings.py:754
 #, fuzzy
@@ -4353,9 +4349,8 @@ msgid "Establishes the current working 3D raster mask."
 msgstr "Aktuelle 3D Maske erstellen."
 
 #: ../gui/wxpython/menustrings.py:753
-#, fuzzy
 msgid "Volume calculator"
-msgstr "Kartenrechner"
+msgstr "Volumenrechner"
 
 #: ../gui/wxpython/menustrings.py:755
 msgid "Cross section"
@@ -4513,9 +4508,8 @@ msgid "Removes a database."
 msgstr "Entfernt eine Tabelle aus einer Datenbank."
 
 #: ../gui/wxpython/menustrings.py:789
-#, fuzzy
 msgid "Drop table"
-msgstr "Tabelle kopieren"
+msgstr "Tabelle löschen"
 
 #: ../gui/wxpython/menustrings.py:790
 #, fuzzy
@@ -4531,9 +4525,8 @@ msgid "Copy a table."
 msgstr "Kopiere eine Tabelle. "
 
 #: ../gui/wxpython/menustrings.py:793 ../gui/wxpython/menustrings.py:813
-#, fuzzy
 msgid "Drop column"
-msgstr "Lösche alle Spalten"
+msgstr "Lösche Spalte"
 
 #: ../gui/wxpython/menustrings.py:794
 #, fuzzy
@@ -4593,7 +4586,7 @@ msgid ""
 "Creates and connects a new attribute table to a given layer of an existing "
 "vector map."
 msgstr ""
-"Erzeugt eine neue Attributtabelle fï¿½r einen Layer einer existierenden "
+"Erzeugt eine neue Attributtabelle für einen Layer einer existierenden "
 "Vektorkarte."
 
 #: ../gui/wxpython/menustrings.py:807
@@ -4608,9 +4601,8 @@ msgstr ""
 "Vektorkarte um."
 
 #: ../gui/wxpython/menustrings.py:809
-#, fuzzy
 msgid "Join table"
-msgstr "Tabelle kopieren"
+msgstr "Tabelle joinen"
 
 #: ../gui/wxpython/menustrings.py:810
 #, fuzzy
@@ -4630,12 +4622,11 @@ msgstr ""
 "hinzu."
 
 #: ../gui/wxpython/menustrings.py:814
-#, fuzzy
 msgid ""
 "Drops a column from the attribute table connected to a given vector map."
 msgstr ""
-"Benennt eine Spalte einer Attributtabelle verbunden mit einer bestimmten "
-"Vektorkarte um."
+"Löscht eine Spalte in einer Attributtabelle die mit einer bestimmten "
+"Vektorkarte verbunden ist."
 
 #: ../gui/wxpython/menustrings.py:815 ../gui/wxpython/gui_modules/dbm.py:923
 msgid "Rename column"
@@ -4668,9 +4659,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:821
-#, fuzzy
 msgid "Reconnect vectors to database"
-msgstr "Verbinde Vektor erneut mit Datenbank"
+msgstr "Verbinde Vektoren erneut mit Datenbank"
 
 #: ../gui/wxpython/menustrings.py:822
 msgid "Reconnects vectors to a new database."
@@ -9714,7 +9704,7 @@ msgid ""
 "Check a mapset to make it accessible, uncheck it to hide it.%sNote: The "
 "current mapset is always accessible."
 msgstr ""
-"Aktiviere das Mapset, um es zugägnlich zu machen und deaktiviere um es zu "
+"Aktiviere das Mapset, um es zugänglich zu machen und deaktiviere um es zu "
 "verbergen. %sBemerkung: PERMANENT und das aktuelle Mapset sind immer "
 "zugänglich."
 
@@ -11148,3 +11138,90 @@ msgstr "Interaktive Änderung der Projektions-Einstellung der Location."
 
 #~ msgid "Display the HTML man pages of GRASS"
 #~ msgstr "Zeige die HTML-Handbuchseite von GRASS."
+
+#, fuzzy
+#~ msgid "Matlab-ASCII or Mapgen import"
+#~ msgstr "Matlab and MapGen Import"
+
+#, fuzzy
+#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+#~ msgstr "Importiere Mapgen oder Matlab Vektordaten in GRASS."
+
+#, fuzzy
+#~ msgid "Map calculator for raster map algebra."
+#~ msgstr "Kartenrechner für Rasterkarten-Algebra"
+
+#, fuzzy
+#~ msgid "Digitize vector map using Tcl/Tk digitizer"
+#~ msgstr "Digitalisiert Vektorkarten (erfordert TclTk)"
+
+#, fuzzy
+#~ msgid "Find shortest path for selected starting and ending node"
+#~ msgstr "Findet den kürzesten Weg von einem Start- zu einem Endpunktsknoten."
+
+#, fuzzy
+#~ msgid "Map calculator for 3D raster map algebra."
+#~ msgstr "Kartenrechner für Rasterkarten-Algebra"
+
+#~ msgid "Vector digitizer failed"
+#~ msgstr "Vektordigitalisierer abgebrochen"
+
+#~ msgid "Reason: %s"
+#~ msgstr "Grund: %s"
+
+#~ msgid ""
+#~ "Note that the 3D view mode is currently not working under MS Windows "
+#~ "(hopefully this will be fixed soon). Please keep an eye out for updated "
+#~ "versions of GRASS."
+#~ msgstr ""
+#~ "Beachten Sie, dass die 3D-Ansicht-Modus derzeit unter MS Windows nicht "
+#~ "funktioniert (dieses wird hoffentlich bald behoben sein). Bitte achten "
+#~ "Sie auf aktualisierte Versionen von GRASS."
+
+#~ msgid "Vector digitizer not available"
+#~ msgstr "Vektordigitalisierer nicht vorhanden"
+
+#~ msgid ""
+#~ "Note that the vector digitizer is currently not working under MS Windows "
+#~ "(hopefully this will be fixed soon). Please keep an eye out for updated "
+#~ "versions of GRASS."
+#~ msgstr ""
+#~ "Beachten Sie, dass der Vektordigitalisierer derzeit unter MS Windows "
+#~ "nicht funktioniert (dieses wird hoffentlich bald behoben sein). Bitte "
+#~ "achten Sie auf aktualisierte Versionen von GRASS."
+
+#~ msgid "Apply changes for the current session and close dialog"
+#~ msgstr "Wende Änderungen auf aktuelle Sitzung an und schließe Dialog"
+
+#~ msgid "Choose DXF file:"
+#~ msgstr "Wählen Sie DXF-Datei:"
+
+#~ msgid "GRASS %s Map Calculator"
+#~ msgstr "GRASS %s Kartenrechner"
+
+#~ msgid "Create & manage ground control points"
+#~ msgstr "Erzeuge & verwalte Ground Control Points"
+
+#~ msgid ""
+#~ "Unable to determine default DB connection settings. Please define DB "
+#~ "connection using db.connect module."
+#~ msgstr ""
+#~ "Kann die Standardeinstellungen der Datenbankverbindung nicht ermitteln. "
+#~ "Bitte definieren Sie eine DB-Verbindung mit dem Modul db.connect."
+
+#~ msgid "3d view tools"
+#~ msgstr "3D Ansichtswerkzeuge"
+
+#~ msgid ""
+#~ "Current name: %s\n"
+#~ "Enter new name:"
+#~ msgstr ""
+#~ "Aktueller Name: %s\n"
+#~ "\n"
+#~ "Geben Sie den neuen Namen ein:"
+
+#~ msgid "Unable to rename mapset"
+#~ msgstr "Kann Mapset nicht umbenennen"
+
+#~ msgid "Unable to rename location"
+#~ msgstr "Kann Location nicht umbenennen"
