@@ -16,28 +16,28 @@ BODY{	background: white;
 	font-family: arial,sans-serif;
 }
 
-H1{	background-color: white;
+H1{	background-color: transparent;
 	color: rgb(25%, 60%, 25%);
 	font-family: arial,sans-serif;
 	font-weight: bold;
 	font-size: x-large;
 }
 
-H2{	background-color: white;
+H2{	background-color: transparent;
 	color: rgb(25%, 60%, 25%);
 	font-family: arial,sans-serif;
 	font-weight: bold;
 	font-size: large;
 }
 
-H3{	background-color: white;
+H3{     background-color: transparent;
 	color: rgb(25%, 60%, 25%);
 	font-family: arial,sans-serif;
 	font-weight: bold;
 	font-size: large;
 }
 
-H4{	background-color: white;
+H4{	background-color: transparent;
 	color: rgb(25%, 60%, 25%);
 	font-family: arial,sans-serif;
 	font-weight: bold;
