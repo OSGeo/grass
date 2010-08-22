@@ -7,6 +7,11 @@
 # or:
 #   sys.path.append("/usr/local/grass-7.0.svn/etc/python")
 
+"""
+     ****  FIXME: needs to be ported from SWIG to Ctypes!  ****
+"""
+
+
 import os, sys
 from grass.lib import grass
 from grass.lib import vector as grassvect

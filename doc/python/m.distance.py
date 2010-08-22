@@ -23,6 +23,11 @@
 # Requires NumPrt module from  http://geosci.uchicago.edu/csc/numptr/
 #
 
+"""
+     ****  FIXME: needs to be ported from SWIG to Ctypes!  ****
+"""
+
+
 #%Module
 #%  label: Finds the distance between two or more points.
 #%  description: If the projection is latitude-longitude, this distance is measured along the geodesic.
