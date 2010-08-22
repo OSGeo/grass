@@ -65,7 +65,7 @@ int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
 {
     FILE *fp;
 
-    G_zero(&hist, sizeof(struct History));
+    Rast_clear_history(hist);
 
     fp = G_fopen_old_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name, mapset);
     if (!fp)
