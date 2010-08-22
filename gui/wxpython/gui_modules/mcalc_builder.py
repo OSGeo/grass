@@ -188,7 +188,7 @@ class MapCalcFrame(wx.Frame):
         self.btn['or'].SetToolTipString(_('logical OR'))
         self.btn['ornull'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "|||")
         self.btn['ornull'].SetToolTipString(_('logical OR (ignores NULLs'))
-        self.btn['cond'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "?:") 
+        self.btn['cond'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "a ? b : c") 
         self.btn['cond'].SetToolTipString(_('conditional'))
         
         #
@@ -365,8 +365,8 @@ class MapCalcFrame(wx.Frame):
         elif event.GetId() == self.btn['ornull'].GetId(): mark = "|||"
         elif event.GetId() == self.btn['and'].GetId(): mark = "&&"
         elif event.GetId() == self.btn['andnull'].GetId(): mark = "&&&"
-        elif event.GetId() == self.btn['cond'].GetId(): mark = "?:"
-        elif event.GetId() == self.btn['paren'].GetId(): mark = "()"        
+        elif event.GetId() == self.btn['cond'].GetId(): mark = " ? : "
+        elif event.GetId() == self.btn['paren'].GetId(): mark = "( )"        
         self._addSomething(mark)
         
     def OnSelect(self, event):
