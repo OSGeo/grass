@@ -1013,7 +1013,7 @@
 	  <command>r.mask</command>
 	</menuitem>
 	<menuitem>
-	  <label>Raster calculator</label>
+	  <label>Raster map calculator</label>
 	  <help>Raster map calculator.</help>
 	  <keywords>raster,algebra</keywords>
 	  <handler>OnMapCalculator</handler>

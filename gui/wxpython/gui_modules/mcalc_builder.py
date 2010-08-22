@@ -51,10 +51,10 @@ class MapCalcFrame(wx.Frame):
 
         if self.cmd == 'r.mapcalc':
             self.rast3d = False
-            title = _('GRASS GIS Raster Calculator')
+            title = _('GRASS GIS Raster Map Calculator')
         if self.cmd == 'r3.mapcalc':
             self.rast3d = True
-            title = _('GRASS GIS 3D Raster Calculator')
+            title = _('GRASS GIS 3D Raster Map Calculator')
             
         wx.Frame.__init__(self, parent, id = id, title = title, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
@@ -176,18 +176,18 @@ class MapCalcFrame(wx.Frame):
         self.btn['compl'].SetToolTipString(_('one\'s complement'))
         self.btn['not'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "!")
         self.btn['not'].SetToolTipString(_('NOT'))
-        self.btn['andbit'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = '&')
+        self.btn['andbit'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = '&&&')
         self.btn['andbit'].SetToolTipString(_('bitwise AND'))
         self.btn['orbit'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "|")
         self.btn['orbit'].SetToolTipString(_('bitwise OR'))
-        self.btn['and'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "&&&")
+        self.btn['and'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "&&&&&")
         self.btn['and'].SetToolTipString(_('logical AND'))
-        self.btn['andnull'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "&&&&&")
-        self.btn['andnull'].SetToolTipString(_('logical AND (ignores NULLs'))
+        self.btn['andnull'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "&&&&&&&")
+        self.btn['andnull'].SetToolTipString(_('logical AND (ignores NULLs)'))
         self.btn['or'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "||")
         self.btn['or'].SetToolTipString(_('logical OR'))
         self.btn['ornull'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "|||")
-        self.btn['ornull'].SetToolTipString(_('logical OR (ignores NULLs'))
+        self.btn['ornull'].SetToolTipString(_('logical OR (ignores NULLs)'))
         self.btn['cond'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "a ? b : c") 
         self.btn['cond'].SetToolTipString(_('conditional'))
         
