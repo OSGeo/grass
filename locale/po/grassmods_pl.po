@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grassmodes_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-02 22:57+0200\n"
-"PO-Revision-Date: 2010-07-17 17:59+0100\n"
+"PO-Revision-Date: 2010-08-22 20:30+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1930,9 +1930,8 @@ msgid "String representing no data cell value"
 msgstr "Ciąg znaków reprezentujący wartości komórek 'no data'"
 
 #: ../raster/r.describe/main.c:75
-#, fuzzy
 msgid "Number of quantization steps"
-msgstr "liczba stopni oceny liczebności"
+msgstr "Liczba stopni oceny liczebności"
 
 #: ../raster/r.describe/main.c:81
 msgid "Print the output one value per line"
@@ -9204,9 +9203,9 @@ msgid "Exporting raster map <%s> (band %d)..."
 msgstr "yjściowa mapa rastrowa"
 
 #: ../raster/r.out.gdal/main.c:595
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to export raster map <%s>"
-msgstr "Nie można utworzyć mapy rastrowej <%s>"
+msgstr "Nie można wyeksportować mapy rastrowej <%s>"
 
 #: ../raster/r.out.gdal/main.c:607
 #, fuzzy, c-format
@@ -21369,7 +21368,7 @@ msgstr "Nazwa źródłowej mapy wektorowej (A)"
 
 #: ../vector/v.select/args.c:14
 msgid "Layer number (vector map A)"
-msgstr "Liczba warstw (mapa wektorowa A)"
+msgstr "Numer warstwy (mapa wektorowa A)"
 
 #: ../vector/v.select/args.c:19 ../vector/v.overlay/main.c:71
 msgid "Feature type (vector map A)"
@@ -21381,7 +21380,7 @@ msgstr "Nazwa źródłowej mapy wektorowej (B)"
 
 #: ../vector/v.select/args.c:28
 msgid "Layer number (vector map B)"
-msgstr "Liczba warstw (mapa wektorowa A)"
+msgstr "Numer warstwy (mapa wektorowa B)"
 
 #: ../vector/v.select/args.c:33 ../vector/v.overlay/main.c:85
 msgid "Feature type (vector map B)"
@@ -22027,7 +22026,7 @@ msgstr "Zapisywanie centroidów ..."
 
 #: ../vector/v.overlay/area_area.c:264 ../vector/v.buffer/main.c:616
 msgid "Attaching centroids..."
-msgstr ""
+msgstr "Dołączanie centroidów..."
 
 #: ../vector/v.class/main.c:48
 msgid "Classifies attribute data, e.g. for thematic mapping"
@@ -36392,9 +36391,8 @@ msgstr "Nazwa wyjściowej mapy rastrowej"
 #~ msgid "Import as Double Precision Data (default: Integer)"
 #~ msgstr "Importuj jako Double Precision Data (domyślnie: Integer)"
 
-#, fuzzy
 #~ msgid "Bad number of bytes per cell"
-#~ msgstr "       Liczba bitów na komórkę rastra"
+#~ msgstr "Nieprawidłowa liczba bitów na komórkę rastra"
 
 #~ msgid "Name for output raster map with lake"
 #~ msgstr "Nazwa wyjściowej mapy rastrowej z jeziorem"
