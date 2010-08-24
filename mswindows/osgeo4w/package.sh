@@ -1,6 +1,6 @@
 #!/c/OSGeo4W/apps/msys/bin/sh
 
-set -e
+###set -e
 
 if ! [ -d mswindows ]; then
 	echo Start from GRASS toplevel dir
