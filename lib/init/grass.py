@@ -241,6 +241,8 @@ def read_gui():
 
     if grass_gui == 'gui':
 	grass_gui = default_gui
+    elif grass_gui == 'wx':
+	grass_gui = 'wxpython'
 
     # FIXME oldtcltk, gis.m, d.m no longer exist
     if grass_gui in ['d.m', 'gis.m', 'oldtcltk', 'tcltk']:
