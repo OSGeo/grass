@@ -1,8 +1,0 @@
-To install simply type the following:
-
-	python setup.py build
-
-As root you can then type:
-	
-	python setup.py install
-
