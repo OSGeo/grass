@@ -783,6 +783,7 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>g.proj</command>
 	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Convert coordinates</label>
 	      <help>Converts coordinates from one projection to another (cs2cs frontend).</help>
