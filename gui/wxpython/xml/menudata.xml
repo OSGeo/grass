@@ -767,9 +767,16 @@
 	  </items>
 	</menu>
 	<menu>
-	  <label>Manage projections</label>
+	  <label>Map projections</label>
 	  <items>
 	    <menuitem>
+	     <label>Display map projection</label>
+	     <help>Print projection information (in conventional GRASS format).</help>
+	     <keywords>general,projection</keywords>
+	     <handler>RunMenuCmd</handler>
+	     <command>g.proj -p</command>
+	   </menuitem>
+	   <menuitem>
 	      <label>Manage projections</label>
 	      <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
 	      <keywords>general,projection</keywords>
