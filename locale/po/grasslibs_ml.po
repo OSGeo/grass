@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_ml\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-02 22:57+0200\n"
-"PO-Revision-Date: 2010-05-04 19:52+0530\n"
+"PO-Revision-Date: 2010-08-24 11:31+0530\n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: GRASS Malayalam Translation Team <rashadkm@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: ../lib/raster/sample.c:70
 msgid "Unknown interpolation type"
-msgstr ""
+msgstr "തിരിച്ചരിയൻ പറ്റാത്ത ഇന്റെർപൊലെഷൻ"
 
 #: ../lib/raster/sample.c:327
 msgid "\"no data\" label found; setting to zero"
@@ -841,24 +841,24 @@ msgstr ""
 #: ../lib/symbol/read.c:211
 #, c-format
 msgid "Cannot read symbol line coordinates: %s"
-msgstr ""
+msgstr "സിംബെൽ ലൈൻ വിവരങ്ങൾ വായിക്കാൻ പട്ടുന്നില്ല: %s"
 
 #: ../lib/symbol/read.c:260
 #, c-format
 msgid ""
 "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr ""
+msgstr "തെറ്റായ ചിഹ്ന നാമം: %s'"
 
 #: ../lib/symbol/read.c:284
 #, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr ""
+msgstr "ചിഹ്ന ഫയൽ കാണാനോ/തുറക്കാനോ സാധിക്കുന്നില്ല: '%s'"
 
 #: ../lib/symbol/read.c:389 ../lib/symbol/read.c:407 ../lib/symbol/read.c:417
 #: ../lib/symbol/read.c:435
 #, c-format
 msgid "Incorrect symbol color: '%s', using default."
-msgstr ""
+msgstr "തെറ്റായ ചിഹ്ന നിറം: '%s'"
 
 #: ../lib/psdriver/Graph_set.c:199
 #, c-format
@@ -994,16 +994,16 @@ msgstr ""
 #: ../lib/proj/get_proj.c:148
 #, c-format
 msgid "Invalid zone %s specified"
-msgstr ""
+msgstr "തെറ്റായ സോൺ %s നൽകിയിരിക്കുന്നു"
 
 #: ../lib/proj/get_proj.c:228
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
-msgstr ""
+msgstr "തന്നിരിക്കുന്ന വിവരങ്ങൾ കൊൻണ്ട് പ്രൊജ്4 ആരൻബിക്കാൻ പറ്റുന്നില്ല"
 
 #: ../lib/proj/get_proj.c:236
 #, c-format
 msgid "The error message: %s"
-msgstr ""
+msgstr "തെറ്റായ സന്ദേശം: %s"
 
 #: ../lib/proj/get_proj.c:294
 msgid "Option input overflowed option table"
@@ -1012,43 +1012,43 @@ msgstr ""
 #: ../lib/proj/get_proj.c:325
 #, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr ""
+msgstr "pj ആരംബിക്കാൻ സധികുന്നില്ല: %s"
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
-msgstr ""
+msgstr "പ്രൊജക്ഷന്റെ വിവരങ്ങൾ നല്കുക"
 
 #: ../lib/proj/get_proj.c:404
 msgid "Input Unit Factor"
-msgstr ""
+msgstr "യുണിറ്റ് ഫക്റ്റെർ നല്കുക"
 
 #: ../lib/proj/get_proj.c:414
 msgid "Output Projection Parameters"
-msgstr ""
+msgstr "പ്രൊജക്ഷൻ വിവരങ്ങൾ പുറതു വിടുക്ക"
 
 #: ../lib/proj/get_proj.c:417
 msgid "Output Unit Factor"
-msgstr ""
+msgstr "യുണിറ്റ് ഫക്റ്റെർ നല്കുക"
 
 #: ../lib/proj/datum.c:270 ../lib/proj/datum.c:350
 #, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr ""
+msgstr "ദറ്റും പട്ടിക തുറക്കാൻ സധികുന്നില്ല <%s>"
 
 #: ../lib/proj/datum.c:283 ../lib/proj/datum.c:364
 #, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr ""
+msgstr "ദറ്റും പട്ടികയിലെ <%s> വരിയിൽ പിശക്, %d"
 
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
 msgid "pj_transform() failed: %s"
-msgstr ""
+msgstr "pj_transform() പാഴായി പ്പോയി: %s"
 
 #: ../lib/proj/ellipse.c:76
 #, c-format
 msgid "Invalid ellipsoid <%s> in file"
-msgstr ""
+msgstr "ഫയലിൽ ശെരിയല്ലാതത എല്ലിപ്സോയിട് <%s> കാണപ്പെട്ടു"
 
 #: ../lib/proj/ellipse.c:100
 msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
@@ -1056,54 +1056,54 @@ msgstr ""
 
 #: ../lib/proj/ellipse.c:104
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
-msgstr ""
+msgstr "ഫയലിൽ ഉള്ള എല്ലിപ്സോയിട് വിവരങ്ങൾ ശെരിയല്ല (a, rf, es or b)"
 
 #: ../lib/proj/ellipse.c:117
 msgid "No ellipsoid info given in file"
-msgstr ""
+msgstr "എല്ലിപ്സോയിട് വിവരങ്ങൾ ഫയലിൽ എല്ല"
 
 #: ../lib/proj/ellipse.c:217 ../lib/gis/get_ellipse.c:263
 #, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr ""
+msgstr "എല്ലിപ്സോയിട് പട്ടികയുടെ ഫയൽ <%s> തുറക്കാൻ പറ്റുന്നില്ല"
 
 #: ../lib/proj/ellipse.c:270 ../lib/gis/get_ellipse.c:322
 #, c-format
 msgid "Line%s of ellipsoid table file <%s> is invalid"
-msgstr ""
+msgstr "എല്ലിപ്സോയിട് പട്ടികയുടെ ഫയലിൽ, വര <%s> പിശക് <%s>"
 
 #: ../lib/proj/ellipse.c:271 ../lib/gis/get_ellipse.c:321
 #, c-format
 msgid "Lines%s of ellipsoid table file <%s> are invalid"
-msgstr ""
+msgstr "എല്ലിപ്സോയിട് പട്ടികയുടെ ഫയലിൽ, വര <%s> ശരിയല്ല <%s>"
 
 #: ../lib/proj/convert.c:111
 msgid "Unable parse GRASS PROJ_INFO file"
-msgstr ""
+msgstr "GRASS PROJ_INFO ഫയൽ പരിശോധിക്കാൻ പറ്റുന്നില്ല"
 
 #: ../lib/proj/convert.c:116
 msgid "Unable get PROJ.4-style parameter string"
-msgstr ""
+msgstr "PROJ.4- സ്റ്റയിൽ വിവരങ്ങൽ എടുക്കാൻ പറ്റുന്നില്ല"
 
 #: ../lib/proj/convert.c:130
 #, c-format
 msgid ""
 "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr ""
+msgstr "സ്റ്റയിൽ വിവരങ്ങൽ വായിക്കാൻ OGR പറ്റുന്നില്ല %s (OGR തെറ്റ് സന്ധേശ അക്കം %d)"
 
 #: ../lib/proj/convert.c:137
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
-msgstr ""
+msgstr "OGR ൻ WTK-സ്റ്റയിൽ വിവരങ്ങൾ ഇല്ല(OGR തെറ്റായ സന്ദേശ അക്കം %d)"
 
 #: ../lib/proj/convert.c:397
 msgid "No projection name! Projection parameters likely to be meaningless."
-msgstr ""
+msgstr "പ്രൊജെക്ഷൻ പേർ ഇല്ല! പ്രൊജെക്ഷൻ വിവരങ്ങൾ അർതമില്ലതാൺ"
 
 #: ../lib/proj/convert.c:433
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr ""
+msgstr "ഡേറ്റും <%s> ഗ്രാസ്സിൻ തിരിച്ചറിയാൻ പറ്റുന്നില്ല വിവരങ്ങൾ ഒന്നും തന്നയില്ല"
 
 #: ../lib/proj/convert.c:449
 #, c-format
@@ -1111,6 +1111,8 @@ msgid ""
 "Datum <%s> apparently recognised by GRASS but no parameters found. You may "
 "want to look into this."
 msgstr ""
+"ഡേറ്റും <%s> ഗ്രാസ്സിൻ കുറച്ച് തിരിച്ചരിയൻ സാധിച്ചു പക്ഷെ വിവരങ്ങൾ ഒന്നും തന്നയില്ല. നിങ്ങൽ "
+"ഇതിൽ നൊക്കണം"
 
 #: ../lib/proj/convert.c:453
 #, c-format
@@ -1127,7 +1129,7 @@ msgstr ""
 #: ../lib/gis/find_file.c:88
 #, c-format
 msgid "Using <%s@%s>"
-msgstr ""
+msgstr "ഉപയോഗിക്കുന്നു <%s@%s>"
 
 #: ../lib/gis/view.c:176
 #, c-format
@@ -4890,7 +4892,7 @@ msgstr ""
 #: ../lib/ogsf/gsd_img_mpeg.c:351
 #, c-format
 msgid "Unable to open <%s>"
-msgstr ""
+msgstr "തുറക്കാൻ പറ്റുന്നില്ല <%s>"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:361
 msgid "NVIZ has not been built with MPEG output support"
@@ -4931,7 +4933,7 @@ msgstr "ഗ്രാസ്സിലേക്ക് കയറുന്ന ഫയ�
 
 #: ../lib/db/dbmi_base/default_name.c:127
 msgid "Programmer error"
-msgstr ""
+msgstr "പ്രൊഗ്രാമിൽ പിശക്"
 
 #: ../lib/db/dbmi_client/table.c:46
 #, c-format
@@ -5521,3 +5523,107 @@ msgstr ""
 
 #~ msgid "    6:  Rainbow colors\n"
 #~ msgstr "    6: മഴവിൽ നിറങ്ങൾ\n"
+
+#~ msgid "ERROR %s from graphics driver.\n"
+#~ msgstr "ഗ്രാഫിക്ക്സ് ഡ്രൈവറിൽ പിശക് %s. \n"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "മെമ്മൊറിയിൽ സ്ഥ്ലമില്ല\n"
+
+#~ msgid "ERROR - eof from graphics monitor.\n"
+#~ msgstr "പിശക് - ഗ്രാഫിക്ക്സ് മോണിറ്റർ അവസാനിച്ചു. \n"
+
+#~ msgid "Warning - no response from graphics monitor <%s>.\n"
+#~ msgstr "തക്കീത് - ഗ്രാഫിക്ക്സ് മോണിറ്ററിൽ നിന്നും പ്രതികരണം ഇല്ല <%s>. \n"
+
+#~ msgid "Check to see if the mouse is still active.\n"
+#~ msgstr "മൗസ്സ് ഇപ്പോൾ സജീവമാണോ എന്ന് പരിശോഡിക്കുന്നു.\n"
+
+#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
+#~ msgstr "തെറ്റ് - ഗ്രാഫിക്ക്സ് മോണിറ്ററിൽ നിന്നും പ്രതികരണം ഇല്ല <%s>. \n"
+
+#~ msgid "No graphics monitor has been selected for output."
+#~ msgstr "ഗ്രാഫിക്ക്സ് മോണിറ്റർ തിരഞ്ഞെടുതിട്ടില്ല."
+
+#~ msgid "Please run \"d.mon\" to select a graphics monitor."
+#~ msgstr "ഗ്രാഫിക്ക്സ് മോണിറ്റർ തിരഞ്ഞെടുക്കുന്നതിനായി ദയവായി \"d.mon\" എന്ന് നൽകുക"
+
+#~ msgid "Failed to get socket name for monitor <%s>."
+#~ msgstr "ഗ്രാഫിക്ക്സ് മോണിറ്ററിൽ നിന്നും സൊക്കറ്റ് എടുക്കുന്നതിൽ പിശക് <%s>."
+
+#~ msgid "No socket to connect to for monitor <%s>."
+#~ msgstr "ഗ്രാഫിക്ക്സ് മോണിറ്ററിലേക്ക് യോജിപിക്കാൻ സൊക്കറ്റുകൾ ഒന്നും ഇല്ല <%s>."
+
+#~ msgid "Socket is already in use or not accepting connections."
+#~ msgstr "ഈ സൊക്കറ്റ് ഇപ്പോൾ ഉപയൊഗത്തിലാൺ അല്ലെങ്കിൽ പ്രതികരിക്കുന്നില്ല"
+
+#~ msgid "Use d.mon to select a monitor"
+#~ msgstr "മോണിറ്റർ തിരഞ്ഞെടുക്കുന്നതിനായി d.mon എന്ന് ചെയ്യുക"
+
+#~ msgid "Trying to connect to something not a socket."
+#~ msgstr "സോക്കറ്റല്ലാത്ത വസ്തുവുമായി ബന്ധിപ്പിക്കാൻ ശ്രമിച്ചു."
+
+#~ msgid "Probably program error."
+#~ msgstr "പ്രൊഗ്രാമിന്റെ പിശക് ആകാം"
+
+#~ msgid "Connect attempt timed out."
+#~ msgstr "കണക്ഷക്ട്ട് ചെയ്യുവനുള്ള ശ്രമം വിഫലമായി."
+
+#~ msgid "Probably an error with the server."
+#~ msgstr "സെർവറിൽ നിന്നുമുള്ള പിശകോ ആകാം"
+
+#~ msgid "Connection failed."
+#~ msgstr "കണക്ഷൻ നിർവീര്യമായി."
+
+#~ msgid "Unable to open file %s"
+#~ msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "താല്ക്കാലിക ഫയൽ തുറക്കാൻ പറ്റുന്നില്ല"
+
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "തിരസ്കരിക്കുന്നതിനയി ENTER അമർതുക\n"
+
+#~ msgid "Problem reading raster map"
+#~ msgstr "രാസ്റ്റർ മാപ്പ് വായിക്കുന്നതിൽ പിശക്"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "രാസ്റ്റർ മാപ്പ് %s@%s കാലിയാൺ"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Color table needed for file [%s] in mapset [%s].\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "നിറത്തിന്റെ പട്ടിക മാപ്സെറ്റിലെ ഫയലിനു [%s] വേണം [%s].\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please identify the type desired:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "ആവശ്യമുല്ല വഴി തിരഞ്ഞെടുക്കുക:\n"
+
+#~ msgid "    1:  Random colors\n"
+#~ msgstr "    1: ഓഡറിൽ അല്ലത്ത നിറങ്ങൾ\n"
+
+#~ msgid "    2:  Red, green, and blue color ramps\n"
+#~ msgstr "ചുവപ്പ്, പച്ച, നീല നിറമുല്ല റാമ്പ്സ്\n"
+
+#~ msgid "RETURN  quit\n"
+#~ msgstr "RETURN പുറത്തു കടക്കുക\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "%s invalid; Try again > "
+#~ msgstr ""
+#~ "\n"
+#~ "%s തെറ്റിപ്പൊയി; വീണ്ടും ശ്രമിക്കുക >"
+
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "ലെയർ തുറക്കാൻ പറ്റുന്നില്ല <%s>"
+
+#~ msgid "Unable to open raster map <%s>"
+#~ msgstr "റാസ്റ്റെർ മാപ്പ് തുറക്കാൻ പറ്റുനില്ല <%s>"
