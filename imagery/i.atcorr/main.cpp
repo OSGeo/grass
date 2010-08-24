@@ -460,7 +460,7 @@ static struct Options define_options (void)
     opts.iscl = G_define_option();
     opts.iscl->key          = "iscl";
     opts.iscl->type         = TYPE_INTEGER;
-    opts.iscl->key_desc     = "range";
+    opts.iscl->key_desc     = "min,max";
     opts.iscl->required     = NO;
     opts.iscl->answer       = "0,255";
     opts.iscl->description  = _("Input imagery range [0,255]");
@@ -490,7 +490,7 @@ static struct Options define_options (void)
     opts.oscl = G_define_option();
     opts.oscl->key          = "oscl";
     opts.oscl->type         = TYPE_INTEGER;
-    opts.oscl->key_desc     = "range";
+    opts.oscl->key_desc     = "min,max";
     opts.oscl->answer       = "0,255";
     opts.oscl->required     = NO;
     opts.oscl->description  = _("Rescale output raster map [0,255]");
