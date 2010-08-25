@@ -672,6 +672,17 @@ class ModelFrame(wx.Frame):
         dlg.ShowModal()
         self.canvas.Refresh()
         
+    def OnHelp(self, event):
+        """!Show help"""
+        if self.parent and self.parent.GetName() == 'LayerManager':
+            log = self.parent.GetLogWindow()
+            log.RunCmd(['g.manual',
+                        'entry=wxGUI.Modeler'])
+        else:
+            gcmd.RunCommand('g.manual',
+                            quiet = True,
+                            entry = 'wxGUI.Modeler')
+
     def OnModelProperties(self, event):
         """!Model properties dialog"""
         dlg = PropertiesDialog(parent = self)

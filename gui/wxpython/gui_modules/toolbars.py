@@ -1650,10 +1650,10 @@ class ModelToolbar(AbstractToolbar):
         self.run = wx.NewId()
         self.validate = wx.NewId()
         self.settings = wx.NewId()
-        # self.properties = wx.NewId()
         self.variables = wx.NewId()
         self.quit = wx.NewId()
         self.redraw = wx.NewId()
+        self.help = wx.NewId()
         
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return (
@@ -1699,11 +1699,15 @@ class ModelToolbar(AbstractToolbar):
             (self.settings, "settings", Icons["modelSettings"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["modelSettings"].GetLabel(), Icons["modelSettings"].GetDesc(),
              self.parent.OnPreferences),
+            (self.help, "help", Icons["modelHelp"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["modelHelp"].GetLabel(), Icons["modelHelp"].GetDesc(),
+             self.parent.OnHelp),
+            ('', '', '', '', '', '', ''),
             (self.quit, 'quit', Icons['quit'].GetBitmap(),
              wx.ITEM_NORMAL, Icons['quit'].GetLabel(), Icons['quit'].GetDesc(),
              self.parent.OnCloseWindow),
             )
-
+    
 class HistogramToolbar(AbstractToolbar):
     """!Histogram toolbar (see histogram.py)
     """

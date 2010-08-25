@@ -336,7 +336,7 @@ Icons = {
                             desc=_("Settings dialog for georectification tool")),
     "grHelp": MetaIcon (img=Icons["help"],
                         label=_('Show help'),
-                        desc = _('Show help for GCP Manager')),
+                        desc = _('Display GCP Manager manual page')),
     # nviz
     "nvizView": MetaIcon (img=Icons["nvizView"],
                           label=_("Switch to view control page"),
@@ -360,7 +360,7 @@ Icons = {
                               label=_("3D view mode tools"),
                               desc=_("Show/hide 3D view mode settings dialog")),
     "nvizHelp"   : MetaIcon (img=Icons["help"],
-                             label=_("Help for 3D view mode"),
+                             label=_("Show help"),
                              desc = _("Display 3D view mode manual page")),
     "nvizQuit": MetaIcon (img=Icons["quit"],
                           label=_("Quit 3D view mode"),
@@ -396,6 +396,9 @@ Icons = {
                                  label=_("Manage model variables")),
     "modelRedraw" : MetaIcon (img=Icons["redraw"],
                               label=_("Redraw model canvas")),
+    "modelHelp"   : MetaIcon (img=Icons["help"],
+                             label=_("Show help"),
+                             desc = _("Display Graphical Modeler manual page")),
     }
 
 # testing ...
