@@ -37,6 +37,7 @@
 #% answer: -
 #% required : yes
 #% key_desc : filename
+#% guisection: Files & format
 #%end
 #%option
 #% key: output
@@ -45,6 +46,7 @@
 #% description: Output coordinate file (omit to send to stdout)
 #% required : no
 #% key_desc : filename
+#% guisection: Files & format
 #%end
 #%option
 #% key: fs
@@ -54,38 +56,46 @@
 #% required : no
 #% key_desc : string
 #% answer : |
+#% guisection: Files & format
 #%end
 #%option
 #% key: proj_input
 #% type: string
 #% description: Input projection parameters (PROJ.4 style)
 #% required : no
+#% guisection: Projections
 #%end
 #%option
 #% key: proj_output
 #% type: string
 #% description: Output projection parameters (PROJ.4 style)
 #% required : no
+#% guisection: Projections
 #%end
 #%flag
 #% key: i
 #% description: Use LL WGS84 as input and current location as output projection
+#% guisection: Projections
 #%end
 #%flag
 #% key: o
 #% description: Use current location as input and LL WGS84 as output projection
+#% guisection: Projections
 #%end
 #%flag
 #% key: d
-#% description: Output long/lat in decimal degrees or other projections with many decimal places
+#% description: Output long/lat in decimal degrees, or other projections with many decimal places
+#% guisection: Files & format
 #%end
 #%flag
 #% key: e
 #% description: Include input coordinates in output file
+#% guisection: Files & format
 #%end
 #%flag
 #% key: c
 #% description: Include column names in output file
+#% guisection: Files & format
 #%end
 
 
