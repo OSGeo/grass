@@ -682,7 +682,7 @@ class ModelFrame(wx.Frame):
             gcmd.RunCommand('g.manual',
                             quiet = True,
                             entry = 'wxGUI.Modeler')
-
+        
     def OnModelProperties(self, event):
         """!Model properties dialog"""
         dlg = PropertiesDialog(parent = self)
@@ -1668,8 +1668,11 @@ class ModelObject:
     def Update(self):
         pass
 
-    def SetLoop(self, loop):
-        """!Register loop"""
+    def SetLoop(self, loop = None):
+        """!Register loop
+
+        @param loop reference to loop (None to unset)
+        """
         self.inLoop = loop
 
     def GetLoop(self):
@@ -1684,11 +1687,12 @@ class ModelObject:
         """!Get id of the loop
 
         @return loop id 
-        @return '' if action is not in the loop
+        @return None if action is not in the loop
         """
         if self.inLoop:
             return self.inLoop.GetId()
-        return ''
+        
+        return None
     
 class ModelAction(ModelObject, ogl.RectangleShape):
     """!Action class (GRASS module)"""
@@ -2182,8 +2186,13 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             if dlg.ShowModal() == wx.ID_OK:
                 shape.SetText(dlg.GetCondition())
                 alist = list()
-                for aId in dlg.GetItems():
+                ids = dlg.GetItems()
+                for aId in ids['unchecked']:
                     action = self.frame.GetModel().GetItem(aId)
+                    action.SetLoop()
+                for aId in ids['checked']:
+                    action = self.frame.GetModel().GetItem(aId)
+                    action.SetLoop(shape)
                     if action:
                         alist.append(action)
                 shape.SetItems(alist)
@@ -3877,10 +3886,7 @@ class ModelLoopDialog(wx.Dialog):
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnOk     = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOk.SetDefault()
-
-        #self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
-        #self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
-                
+        
         self._layout()
         self.SetMinSize(self.GetSize())
         self.SetSize((500, 400))
@@ -3916,10 +3922,14 @@ class ModelLoopDialog(wx.Dialog):
 
     def GetItems(self):
         """!Get list of selected actions"""
-        ids = list()
+        ids = { 'checked'   : list(),
+                'unchecked' : list() }
         for i in range(self.itemList.GetItemCount()):
+            iId = int(self.itemList.GetItem(i, 0).GetText())
             if self.itemList.IsChecked(i):
-                ids.append(int(self.itemList.GetItem(i, 0).GetText()))
+                ids['checked'].append(iId)
+            else:
+                ids['unchecked'].append(iId)
         
         return ids
         
