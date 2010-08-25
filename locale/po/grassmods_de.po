@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-02 22:57+0200\n"
-"PO-Revision-Date: 2010-07-18 13:25+0200\n"
+"PO-Revision-Date: 2010-08-25 16:32+0200\n"
 "Last-Translator: Robert Nuske <rnuske gwdg.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -28042,6 +28042,9 @@ msgid ""
 "Downloads, installs extensions from GRASS Addons SVN repository into local "
 "GRASS installation or removes installed extensions."
 msgstr ""
+"Download und Installation von Erweiterungen aus dem 'GRASS Addons SVN "
+"Repository' in der lokalen GRASS Installation oder Entfernt installierte "
+"Erweiterungen. "
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:4
 #, fuzzy
@@ -28054,17 +28057,16 @@ msgid "extensions"
 msgstr "Zeichenkodierung"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:6
-#, fuzzy
 msgid "Name of extension to install/remove"
-msgstr "Name einer neu zu erstellenden Location"
+msgstr "Name der zu installierenden/entfernenden Erweiterung"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:8
 msgid "SVN Addons repository URL"
-msgstr ""
+msgstr "URL des SVN Addons Repository"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:9
 msgid "Prefix where to install extension"
-msgstr ""
+msgstr "Präfix wo Erweiterungen installiert werden"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:10
 msgid "Menu item in wxGUI"
@@ -31845,7 +31847,6 @@ msgid "Can't mark another point.  Only %d points allowed.  Sorry."
 msgstr ""
 "Kann keinen anderen Punkt markieren. Nur %d Punkte sind erlaubt. Sorry."
 
-#, fuzzy
 msgid ""
 "Calculates univariate statistics from a raster map based on vector polygons "
 "and uploads statistics to new attribute columns."
@@ -31907,6 +31908,9 @@ msgstr "Die Berechnung der konvexen Hülle erfordert zumindest drei Punkte."
 
 msgid "enable MFD flow (default is SFD (D8))"
 msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))."
+
+msgid "Import Mapgen or Matlab vector maps into GRASS."
+msgstr "Importiert Mapgen oder Matlab Vektorkarten nach GRASS."
 
 #~ msgid "Sources and sinks in [m^3/s]"
 #~ msgstr "Quellen und Senken in [m^3/s]"
@@ -36883,10 +36887,45 @@ msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))."
 #~ msgid "Name of color column to populate"
 #~ msgstr "Name der Farbspalte, die gefüllt werden soll."
 
-#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
-#~ msgstr "Importiert Mapgen oder Matlab Vektorkarten nach GRASS."
-
 #~ msgid "All non-NULL and non-zero cells are considered as blocking terrain"
 #~ msgstr ""
 #~ "Alle Zellen, die nicht NULL sind oder den Wert Null haben werden als "
 #~ "echte Hindernis aufgefasst."
+
+#~ msgid ""
+#~ "The user given nodata value %g is present in rasterband <%s> and would "
+#~ "lead to data loss. Please specify a different nodata value with the %s "
+#~ "parameter."
+#~ msgstr ""
+#~ "Der gewählte NoData-Wert ist im Rasterkanal <%s> vorhanden und würde zu "
+#~ "Datenverlust führen. Bitte geben Sie einen anderen NoData-Wert mit dem "
+#~ "Parameter %s an."
+
+#~ msgid "UNIX filesystem access controls are not supported by MS-Windows"
+#~ msgstr ""
+#~ "Die Rechteverwaltung des UNIX Dateisystems wird von MS-Windows nicht "
+#~ "unterstützt."
+
+#~ msgid "Tool to maintain GRASS extensions in local GRASS installation."
+#~ msgstr ""
+#~ "Werkzeug um GRASS-Erweiterungen in lokaler GRASS-Installation zu "
+#~ "verwalten."
+
+#~ msgid "general, extensions"
+#~ msgstr "Allgemein, Erweiterungen"
+
+#~ msgid "List available modules in the GRASS Addons SVN repository"
+#~ msgstr "Zeige die im GRASS Addons Repository vorhandenen Module"
+
+#~ msgid ""
+#~ "A single vector map can be connected to multiple database tables. This "
+#~ "number determines which table to use"
+#~ msgstr ""
+#~ "Eine einzelne Vektorkarte kann mit mehreren Datenbanktabellen verbunden "
+#~ "sein. Diese Zahl bestimmt welche Tabelle verwendet werden soll."
+
+#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+#~ msgstr "Importiert Mapgen oder Matlab-ASCII Vektorkarten nach GRASS."
+
+#~ msgid "Signature file <%s> is empty"
+#~ msgstr "Signaturdatei <%s> ist leer."
