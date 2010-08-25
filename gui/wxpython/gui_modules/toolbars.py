@@ -187,9 +187,10 @@ class MapToolbar(AbstractToolbar):
             from nviz import errorMsg
             log.WriteCmdLog(_('3D view mode not available'))
             log.WriteWarning(_('Reason: %s') % str(errorMsg))
-            log.WriteLog(_('Note that the 3D view mode is currently not working under MS Windows '
+            log.WriteLog(_('Note that the wxGUI\'s 3D view mode is currently disabled '
                            '(hopefully this will be fixed soon). '
-                           'Please keep an eye out for updated versions of GRASS.'), wrap = 60)
+                           'Please keep an eye out for updated versions of GRASS. '
+                           'In the meantime you can use "NVIZ" from the File menu.'), wrap = 60)
             
             self.toolId['3d'] = -1
         if haveVDigit:
@@ -202,9 +203,10 @@ class MapToolbar(AbstractToolbar):
             from vdigit import errorMsg
             log.WriteCmdLog(_('Vector digitizer not available'))
             log.WriteWarning(_('Reason: %s') % errorMsg)
-            log.WriteLog(_('Note that the vector digitizer is currently not working under MS Windows '
+            log.WriteLog(_('Note that the wxGUI\'s vector digitizer is currently disabled '
                            '(hopefully this will be fixed soon). '
-                           'Please keep an eye out for updated versions of GRASS.'), wrap = 60)
+                           'Please keep an eye out for updated versions of GRASS. '
+                           'In the meantime you can use "v.digit" from the Develop Vector menu.'), wrap = 60)
             
             self.toolId['vdigit'] = -1
         
