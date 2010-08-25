@@ -1989,12 +1989,11 @@ def getInterfaceDescription(cmd):
 
     @param cmd command (name of GRASS module)
     """
-    cmdout = os.popen(cmd + r' --interface-description', "r").read()
-    if not len(cmdout) > 0:
-        raise IOError, _("Unable to fetch interface description for command '%s'.") % cmd
-    p = re.compile('(grass-interface.dtd)')
-    p.search(cmdout)
-    cmdout = p.sub(globalvar.ETCDIR + r'/grass-interface.dtd', cmdout)
+    try:
+        cmdout = grass.Popen([cmd, '--interface-description'], stdout = grass.PIPE).communicate()[0]
+    except OSError:
+        raise gcmd.GException, _("Unable to fetch interface description for command '%s'.") % cmd
+    cmdout.replace('grass-interface.dtd', os.path.join(globalvar.ETCDIR, 'grass-interface.dtd'))
     
     return cmdout
 
