@@ -630,6 +630,24 @@ class ModelFrame(wx.Frame):
         self.GetCanvas().Refresh()
         self.SetStatusText("", 0)
 
+    def OnCmdRun(self, event):
+        """!Run command"""
+        try:
+            action = self.GetModel().GetItems()[event.pid]
+            if hasattr(action, "task"):
+                action.Update(running = True)
+        except IndexError:
+            pass
+        
+    def OnCmdDone(self, event):
+        """!Command done (or aborted)"""
+        try:
+            action = self.GetModel().GetItems()[event.pid]
+            if hasattr(action, "task"):
+                action.Update(running = True)
+        except IndexError:
+            pass
+        
     def OnCloseWindow(self, event):
         """!Close window"""
         if self.modelChanged and \
@@ -936,7 +954,8 @@ class ModelFrame(wx.Frame):
                 
                 for action in item.GetItems():
                     for vars()[condVar] in eval(condText):
-                        self._runAction(action, params)
+                        if isinstance(action, ModelAction):
+                            self._runAction(action, params)
         
         if params:
             dlg.Destroy()
@@ -948,7 +967,7 @@ class ModelFrame(wx.Frame):
             paramsOrig = item.GetParams(dcopy = True)
             item.MergeParams(params[name])
             
-        self.SetStatusText(_('Running model...'), 0) 
+        self.SetStatusText(_('Running model...'), 0)
         self.goutput.RunCmd(command = item.GetLog(string = False),
                             onDone = self.OnDone)
             
