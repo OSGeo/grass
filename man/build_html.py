@@ -65,8 +65,9 @@ commercial settings around the world, as well as by many governmental
 agencies and environmental consulting companies.</p>
 
 <p>This reference manual details the use of modules distributed with
-Geographic Resources Analysis Support System (GRASS), an open source (GNU
-GPLed), image processing and geographic information system (GIS).</p>
+Geographic Resources Analysis Support System (GRASS), an open source
+(<a href="http://www.gnu.org/licenses/gpl.html">GNU GPLed</a>), image
+processing and geographic information system (GIS).</p>
 
 """)
 #"
@@ -130,7 +131,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
       <ul>
-      <li><a href="grass6.html">GRASS startup manual page</a></li>
+      <li><a href="grass7.html">GRASS startup manual page</a></li>
       <li><a href="general.html">General commands manual</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous</h3>
