@@ -15,9 +15,10 @@
  */
 
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <sys/stat.h>
 #include <locale.h>
 
@@ -112,6 +113,9 @@ void G__check_gisinit(void)
 
 static int gisinit(void)
 {
+#ifdef __MINGW32__
+    _fmode = O_BINARY;
+#endif
     /* Mark window as not set */
     G__.window_set = 0;
 
