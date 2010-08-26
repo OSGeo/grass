@@ -1,7 +1,7 @@
 """!
 @package gmodeler.py
 
-@brief Graphical modeler to create, edit, and manage models
+@brief wxGUI Graphical Modeler for creating, editing, and managing models
 
 Classes:
  - Model
@@ -22,12 +22,14 @@ Classes:
  - VariablePanel
  - ValiableListCtrl
  - ModelItem
+ - ModelItemDialog
  - ModelLoop
  - ModelLoopDialog
  - ItemPanel
  - ItemListCtrl
  - ItemCheckListCtrl
  - ModelCondition
+ - ModelConditionDialog
 
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -210,7 +212,7 @@ class Model(object):
         for data in self.GetData():
             if data.GetValue() == value and \
                     data.GetPrompt() == prompt:
-                return dataItem
+                return data
         
         return None
                 
@@ -332,7 +334,7 @@ class Model(object):
             loopItem.SetItems(alist)
             
             for action in loopItem.GetItems():
-                action.SetLoop(loopItem)
+                action.SetBlock(loopItem)
         
     def AddItem(self, newItem):
         """!Add item to the list"""
@@ -1645,7 +1647,7 @@ class ModelObject:
         self.rels = list() # list of ModelRelations
         
         self.isEnabled = True
-        self.inLoop = None
+        self.inBlock   = None
         
     def GetId(self):
         """!Get id"""
@@ -1658,7 +1660,7 @@ class ModelObject:
 
     def GetRelations(self, fdir = None):
         """!Get list of relations
-
+        
         @param fdir True for 'from'
         """
         if fdir is None:
@@ -1687,29 +1689,29 @@ class ModelObject:
     def Update(self):
         pass
 
-    def SetLoop(self, loop = None):
+    def SetBlock(self, item = None):
         """!Register loop
 
-        @param loop reference to loop (None to unset)
+        @param item reference to ModelObject which defines block of ModelObject (None to unset)
         """
-        self.inLoop = loop
+        self.inBlock = item
 
-    def GetLoop(self):
-        """!Get related loop
+    def GetBlock(self):
+        """!Get related ModelObject which defines block
 
-        @return ModelLoop instance
-        @return None if no loop defined
+        @return ModelLoop/ModelCondition instance
+        @return None if no block defined for this item
         """
-        return self.inLoop
+        return self.inBlock
     
-    def GetLoopId(self):
-        """!Get id of the loop
+    def GetBlockId(self):
+        """!Get id of ModelObject which defines block
 
-        @return loop id 
-        @return None if action is not in the loop
+        @return item id 
+        @return None if action is not in the block
         """
-        if self.inLoop:
-            return self.inLoop.GetId()
+        if self.inBlock:
+            return self.inBlock.GetId()
         
         return None
     
@@ -2200,7 +2202,6 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         
         elif isinstance(shape, ModelLoop):
             dlg = ModelLoopDialog(parent = self.frame, shape = shape)
-            ### shape.SetPropDialog(dlg)
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 shape.SetText(dlg.GetCondition())
@@ -2208,10 +2209,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 ids = dlg.GetItems()
                 for aId in ids['unchecked']:
                     action = self.frame.GetModel().GetItem(aId)
-                    action.SetLoop()
+                    action.SetBlock()
                 for aId in ids['checked']:
                     action = self.frame.GetModel().GetItem(aId)
-                    action.SetLoop(shape)
+                    action.SetBlock(shape)
                     if action:
                         alist.append(action)
                 shape.SetItems(alist)
@@ -2220,6 +2221,14 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             
             dlg.Destroy()
         
+        elif isinstance(shape, ModelCondition):
+            dlg = ModelConditionDialog(parent = self.frame, shape = shape)
+            dlg.CentreOnParent()
+            if dlg.ShowModal() == wx.ID_OK:
+                shape.SetText(dlg.GetCondition())
+            
+            dlg.Destroy()
+                   
     def OnBeginDragLeft(self, x, y, keys = 0, attachment = 0):
         """!Drag shape (begining)"""
         self.frame.ModelChanged()
@@ -2234,7 +2243,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape = self.GetShape()
         if isinstance(shape, ModelLoop):
             self.frame.DefineLoop(shape)
-        loop = shape.GetLoop()
+        loop = shape.GetBlock()
         if loop:
             self.frame.DefineLoop(loop)
         
@@ -3852,6 +3861,45 @@ class ModelItem(ModelObject):
         """!Clear object, remove rels"""
         self.rels = list()
         
+class ModelItemDialog(wx.Dialog):
+    """!Abstract item properties dialog"""
+    def __init__(self, parent, shape, title, id = wx.ID_ANY,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+        self.parent = parent
+        self.shape = shape
+        
+        wx.Dialog.__init__(self, parent, id, title = title, style = style, **kwargs)
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.condBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                    label=" %s " % _("Condition"))
+        self.condText = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
+                                    value = shape.GetText())
+        
+        self.itemList = ItemCheckListCtrl(parent = self.panel,
+                                          window = self,
+                                          columns = [_("ID"), _("Name"),
+                                                     _("Command")],
+                                          excludeId = [shape.GetId()])
+        self.itemList.Populate(self.parent.GetModel().GetItems())
+        
+        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        self.btnOk     = wx.Button(parent = self.panel, id = wx.ID_OK)
+        self.btnOk.SetDefault()
+        
+    def _layout(self):
+        """!Do layout (virtual method)"""
+        pass
+    
+    def GetItems(self):
+        """!Get list of selected actions"""
+        return self.itemList.GetItems()
+    
+    def GetCondition(self):
+        """!Get loop condition"""
+        return self.condText.GetValue()
+    
 class ModelLoop(ModelItem, ogl.RectangleShape):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
         """!Defines a loop"""
@@ -3879,32 +3927,15 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         """!Get name"""
         return _("loop")
 
-class ModelLoopDialog(wx.Dialog):
+class ModelLoopDialog(ModelItemDialog):
     """!Loop properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Loop properties"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        self.parent = parent
-        self.shape = shape
+        ModelItemDialog.__init__(self, parent, shape, title,
+                                 style = style, **kwargs)
         
-        wx.Dialog.__init__(self, parent, id, title = title, style = style, **kwargs)
-        
-        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
-        
-        self.condBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                    label=" %s " % _("Condition"))
-        self.condText = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
-                                    value = shape.GetText())
         self.listBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("List of items in loop"))
-        self.itemList = ItemCheckListCtrl(parent = self.panel,
-                                          columns = [_("ID"), _("Name"),
-                                                     _("Command")],
-                                          excludeId = [shape.GetId()])
-        self.itemList.Populate(self.parent.GetModel().GetItems())
-        
-        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
-        self.btnOk     = wx.Button(parent = self.panel, id = wx.ID_OK)
-        self.btnOk.SetDefault()
         
         self._layout()
         self.SetMinSize(self.GetSize())
@@ -3939,23 +3970,6 @@ class ModelLoopDialog(wx.Dialog):
         
         self.Layout()
 
-    def GetItems(self):
-        """!Get list of selected actions"""
-        ids = { 'checked'   : list(),
-                'unchecked' : list() }
-        for i in range(self.itemList.GetItemCount()):
-            iId = int(self.itemList.GetItem(i, 0).GetText())
-            if self.itemList.IsChecked(i):
-                ids['checked'].append(iId)
-            else:
-                ids['unchecked'].append(iId)
-        
-        return ids
-        
-    def GetCondition(self):
-        """!Get loop condition"""
-        return self.condText.GetValue()
-    
 class ItemPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
                  **kwargs):
@@ -3969,8 +3983,8 @@ class ItemPanel(wx.Panel):
                                     label=" %s " % _("List of items - right-click to delete"))
         
         self.list = ItemListCtrl(parent = self,
-                                 columns = [_("ID"), _("Name"), _("In item"),
-                                            _("Command / condition")])
+                                 columns = [_("ID"), _("Name"), _("In block"),
+                                            _("Command / Condition")])
         
         self._layout()
 
@@ -4013,7 +4027,7 @@ class ItemListCtrl(ModelListCtrl):
         """!Populate the list"""
         self.itemDataMap = dict()
         i = 0
-        if len(self.columns) == 3:
+        if len(self.columns) == 3: # ItemCheckList
             checked = list()
         for action in data:
             if action.GetId() in self.excludeId:
@@ -4022,11 +4036,17 @@ class ItemListCtrl(ModelListCtrl):
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),
                                        action.GetLog()]
-                checked.append(action.GetLoopId())
+                aId = action.GetBlockId()
+                if aId not in self.excludeId:
+                    aId = None
+                checked.append(aId)
             else:
+                bId = action.GetBlockId()
+                if not bId:
+                    bId = ''
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),
-                                       str(action.GetLoopId()),
+                                       str(bId),
                                        action.GetLog()]
             
             i += 1
@@ -4160,7 +4180,10 @@ class ItemListCtrl(ModelListCtrl):
         self.frame.ModelChanged()
 
 class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
-    def __init__(self, parent, columns, excludeId = [], **kwargs):
+    def __init__(self, parent, columns, window = None, excludeId = [], **kwargs):
+        self.parent = parent
+        self.window = window
+        
         ItemListCtrl.__init__(self, parent, columns, excludeId, disablePopup = True, **kwargs)
         listmix.CheckListCtrlMixin.__init__(self)
         self.SetColumnWidth(0, 50)
@@ -4168,7 +4191,36 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
     def OnBeginEdit(self, event):
         """!Disable editing"""
         event.Veto()
+        
+    def OnCheckItem(self, index, flag):
+        """!Item checked/unchecked"""
+        name = self.GetName()
+        if name == 'IfBlockList' and self.window:
+            self.window.OnCheckItemIf(index, flag)
+        elif name == 'ElseBlockList' and self.window:
+            self.window.OnCheckItemElse(index, flag)
+        
+    def GetItems(self):
+        """!Get list of selected actions"""
+        ids = { 'checked'   : list(),
+                'unchecked' : list() }
+        for i in range(self.GetItemCount()):
+            iId = int(self.GetItem(i, 0).GetText())
+            if self.IsChecked(i):
+                ids['checked'].append(iId)
+            else:
+                ids['unchecked'].append(iId)
+            
+        return ids
 
+    def CheckItemById(self, aId, flag):
+        """!Check/uncheck given item by id"""
+        for i in range(self.GetItemCount()):
+            iId = int(self.GetItem(i, 0).GetText())
+            if iId == aId:
+                self.CheckItem(i, flag)
+                break
+        
 class ModelCondition(ModelItem, ogl.PolygonShape):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
         """!Defines a condition"""
@@ -4214,6 +4266,84 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
         """!Get object height"""
         return self.height
 
+class ModelConditionDialog(ModelItemDialog):
+    """!Condition properties dialog"""
+    def __init__(self, parent, shape, id = wx.ID_ANY, title = _("If-else properties"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+        ModelItemDialog.__init__(self, parent, shape, title,
+                                 style = style, **kwargs)
+        
+        self.listBoxIf = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                      label=" %s " % _("List of items in 'if' block"))
+        self.itemListIf = self.itemList
+        self.itemListIf.SetName('IfBlockList')
+        
+        self.listBoxElse = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                        label=" %s " % _("List of items in 'else' block"))
+        self.itemListElse = ItemCheckListCtrl(parent = self.panel,
+                                              window = self,
+                                              columns = [_("ID"), _("Name"),
+                                                         _("Command")],
+                                              excludeId = [shape.GetId()])
+        self.itemListElse.SetName('ElseBlockList')
+        self.itemListElse.Populate(self.parent.GetModel().GetItems())
+        
+        self._layout()
+        self.SetMinSize(self.GetSize())
+        self.SetSize((500, 400))
+        
+    def _layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        condSizer = wx.StaticBoxSizer(self.condBox, wx.VERTICAL)
+        condSizer.Add(item = self.condText, proportion = 1,
+                      flag = wx.EXPAND)
+        
+        listIfSizer = wx.StaticBoxSizer(self.listBoxIf, wx.VERTICAL)
+        listIfSizer.Add(item = self.itemListIf, proportion = 1,
+                        flag = wx.EXPAND)
+        listElseSizer = wx.StaticBoxSizer(self.listBoxElse, wx.VERTICAL)
+        listElseSizer.Add(item = self.itemListElse, proportion = 1,
+                          flag = wx.EXPAND)
+        
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnOk)
+        btnSizer.Realize()
+
+        sizer.Add(item = condSizer, proportion = 0,
+                  flag = wx.EXPAND | wx.ALL, border = 3)
+        sizer.Add(item = listIfSizer, proportion = 1,
+                  flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 3)
+        sizer.Add(item = listElseSizer, proportion = 1,
+                  flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 3)
+        sizer.Add(item = btnSizer, proportion=0,
+                  flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+        
+        self.Layout()
+
+    def OnCheckItemIf(self, index, flag):
+        """!Item in if-block checked/unchecked"""
+        if flag is False:
+            return
+        
+        aId = int(self.itemListIf.GetItem(index, 0).GetText())
+        if aId in self.itemListElse.GetItems()['checked']:
+            self.itemListElse.CheckItemById(aId, False)
+            
+    def OnCheckItemElse(self, index, flag):
+        """!Item in else-block checked/unchecked"""
+        if flag is False:
+            return
+        
+        aId = int(self.itemListElse.GetItem(index, 0).GetText())
+        if aId in self.itemListIf.GetItems()['checked']:
+            self.itemListIf.CheckItemById(aId, False)
+        
 def main():
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
