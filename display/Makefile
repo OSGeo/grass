@@ -30,9 +30,7 @@ SUBDIRS = \
 	d.vect \
 	d.vect.chart \
 	d.thematic.area \
-	d.where \
-
-
+	d.where
 #	d.colors \
 #	d.extract \
 #	d.measure \
@@ -41,7 +39,9 @@ SUBDIRS = \
 #	d.zoom \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
+include $(MODULE_TOPDIR)/include/Make/Html.make
 
-default: parsubdirs
+default: parsubdirs $(HTMLDIR)/displaydrivers.html
 
-
+$(HTMLDIR)/displaydrivers.html: displaydrivers.html
+	$(INSTALL_DATA) $< $@
