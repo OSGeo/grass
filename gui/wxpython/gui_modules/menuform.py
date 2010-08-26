@@ -1993,10 +1993,9 @@ def getInterfaceDescription(cmd):
         cmdout = grass.Popen([cmd, '--interface-description'], stdout = grass.PIPE).communicate()[0]
     except OSError:
         raise gcmd.GException, _("Unable to fetch interface description for command '%s'.") % cmd
-    cmdout.replace('grass-interface.dtd', os.path.join(globalvar.ETCDIR, 'grass-interface.dtd'))
     
-    return cmdout
-
+    return cmdout.replace('grass-interface.dtd', os.path.join(globalvar.ETCDIR, 'grass-interface.dtd'))
+    
 class GrassGUIApp(wx.App):
     """!Stand-alone GRASS command GUI
     """
