@@ -2366,7 +2366,6 @@ class ModelSearchDialog(wx.Dialog):
         @param parent parent window
         @param id window id
         @param title window title
-
         @param kwargs wx.Dialogs' arguments
         """
         self.parent = parent
@@ -2382,6 +2381,7 @@ class ModelSearchDialog(wx.Dialog):
         
         self.cmd_prompt = prompt.GPromptSTC(parent = self)
         self.search = SearchModuleWindow(parent = self.panel, cmdPrompt = self.cmd_prompt, showTip = True)
+        wx.CallAfter(self.cmd_prompt.SetFocus)
         
         # get commands
         items = self.cmd_prompt.GetCommandItems()

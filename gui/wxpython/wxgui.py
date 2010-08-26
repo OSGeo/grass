@@ -196,7 +196,7 @@ class GMFrame(wx.Frame):
         if self.curr_page:
             self.curr_page.maptree.mapdisplay.Raise()
         wx.CallAfter(self.Raise)
-
+        
     def __createNoteBook(self):
         """!Creates notebook widgets"""
         if globalvar.hasAgw:
@@ -306,26 +306,17 @@ class GMFrame(wx.Frame):
                        onDone = self.OnDone)
         
     def OnMapsets(self, event):
+        """!Launch mapset access dialog
         """
-        Launch mapset access dialog
-        """
-        dlg = preferences.MapsetAccess(parent=self, id=wx.ID_ANY)
+        dlg = preferences.MapsetAccess(parent = self, id = wx.ID_ANY)
         dlg.CenterOnScreen()
-
-        # if OK is pressed...
+        
         if dlg.ShowModal() == wx.ID_OK:
             ms = dlg.GetMapsets()
-            # run g.mapsets with string of accessible mapsets
             gcmd.RunCommand('g.mapsets',
                             parent = self,
                             mapset = '%s' % ','.join(ms))
-            
-    def OnRDigit(self, event):
-        """
-        Launch raster digitizing module
-        """
-        pass
-
+        
     def OnCBPageChanged(self, event):
         """!Page in notebook (display) changed"""
         old_pgnum = event.GetOldSelection()
@@ -333,7 +324,6 @@ class GMFrame(wx.Frame):
         
         self.curr_page   = self.gm_cb.GetCurrentPage()
         self.curr_pagenum = self.gm_cb.GetSelection()
-        
         try:
             self.curr_page.maptree.mapdisplay.SetFocus()
             self.curr_page.maptree.mapdisplay.Raise()
@@ -348,7 +338,7 @@ class GMFrame(wx.Frame):
         if page == self.goutput.pageid:
             # remove '(...)'
             self.notebook.SetPageText(page, _("Command console"))
-            self.goutput.cmd_prompt.SetSTCFocus(True)
+            wx.CallAfter(self.goutput.cmd_prompt.SetFocus)
         self.SetStatusText('', 0)
         
         event.Skip()
