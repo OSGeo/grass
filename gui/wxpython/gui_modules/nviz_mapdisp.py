@@ -161,6 +161,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         Debug.msg(1, "GLCanvas.OnPaint()")
         
         dc = wx.PaintDC(self)
+        self.DoPaint()
+
+    def DoPaint(self):
         self.SetCurrent()
         
         if not self.initView:
@@ -223,7 +226,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                           self.view['twist']['value'])
                 
                 # redraw map
-                self.OnPaint(None)
+                self.DoPaint()
                 
                 # update statusbar
                 ### self.parent.StatusbarUpdate()

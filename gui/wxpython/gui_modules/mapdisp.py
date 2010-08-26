@@ -414,7 +414,7 @@ class MapFrame(wx.Frame):
                 # add Nviz notebookpage
                 self._layerManager.AddNviz()
                 
-                self.MapWindow3D.OnPaint(None) # -> LoadData
+                self.MapWindow3D.DoPaint() # -> LoadData
                 self.MapWindow3D.Show()
                 self.MapWindow3D.UpdateView(None)
             else:
