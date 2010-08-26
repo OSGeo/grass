@@ -39,7 +39,6 @@ SUBDIRS = \
 #	d.zoom \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
-include $(MODULE_TOPDIR)/include/Make/Html.make
 
 default: parsubdirs $(HTMLDIR)/displaydrivers.html
 
