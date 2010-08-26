@@ -35,7 +35,6 @@
 #% gisprompt: old_file,file,file
 #% description: Input coordinate file ('-' to read from stdin)
 #% answer: -
-#% required : yes
 #% key_desc : filename
 #% guisection: Files & format
 #%end
