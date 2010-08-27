@@ -118,7 +118,6 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index *Sindex,
 	/* Find centroids */
 	if (Points->n_points >= 4) {
 	    int centr, in;
-
 	    double x, y;
 
 	    Vect_line_box(Points, &box);
