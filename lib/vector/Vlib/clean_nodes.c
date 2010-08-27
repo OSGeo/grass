@@ -61,7 +61,6 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 	    int line1 = -999;	/* value not important, just for debug */
 	    int clean = 1;
 
-
 	    nlines = Vect_get_node_n_lines(Map, node);
 	    G_debug(3, "nlines = %d", nlines);
 
@@ -162,6 +161,10 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 			Vect_line_delete_point(Points, Points->n_points - 1);	/* last */
 		    }
 
+		    /* It may happen that it is one line: node could be deleted,
+		     * in that case we have to read the node coords first */
+		    Vect_get_node_coor(Map, node, &nx, &ny, &nz);
+
 		    if (Points->n_points > 1) {
 			new_short_line =
 			    Vect_rewrite_line(Map, abs(short_line),
@@ -179,7 +182,6 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 			else
 			    long_line = -new_short_line;
 		    }
-
 
 		    /* Add new line (must be before rewrite of long_line otherwise node could be deleted) */
 		    long_type =
@@ -200,7 +202,6 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 			type = GV_LINE;
 		    }
 
-		    Vect_get_node_coor(Map, node, &nx, &ny, &nz);
 		    Vect_reset_line(Points);
 		    Vect_append_point(Points, nx, ny, nz);
 		    Vect_append_point(Points, x, y, z);
@@ -242,7 +243,7 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 		angle1 = angle2;
 	    }
 
-	    if (clean)
+	    if (clean || !Vect_node_alive(Map, node))
 		break;
 	}
     }
