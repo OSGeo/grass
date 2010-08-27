@@ -827,20 +827,22 @@ int main(int argc, char *argv[])
 
 	/* estimate distance for boundary splitting --> */
 
-	/* count polygons and isles */
-	G_message(_("Counting polygons for %d features..."), n_features);
-	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
-	    G_percent(feature_count++, n_features, 1);	/* show something happens */
-	    /* Geometry */
-	    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-	    if (Ogr_geometry != NULL) {
-		poly_count(Ogr_geometry);
+	if (split_distance > -0.5) {
+	    /* count polygons and isles */
+	    G_message(_("Counting polygons for %d features..."), n_features);
+	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
+		G_percent(feature_count++, n_features, 1);	/* show something happens */
+		/* Geometry */
+		Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+		if (Ogr_geometry != NULL) {
+		    poly_count(Ogr_geometry);
+		}
+		OGR_F_Destroy(Ogr_feature);
 	    }
-	    OGR_F_Destroy(Ogr_feature);
+	    /* rewind layer */
+	    OGR_L_ResetReading(Ogr_layer);
+	    feature_count = 0;
 	}
-	/* rewind layer */
-	OGR_L_ResetReading(Ogr_layer);
-	feature_count = 0;
 
 	G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
 	if (split_distance > -0.5 && n_polygon_boundaries > 50) {
