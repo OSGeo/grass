@@ -784,7 +784,7 @@ in binary file are stored as double (8 bytes).
 <tr><td>Back_Major</td>    <td>C</td> <td>1</td> <td>supported from GRASS version (major)</td></tr>
 <tr><td>Back_Minor</td>    <td>C</td> <td>1</td> <td>supported from GRASS version (minor)</td></tr>
 <tr><td>byte_order</td>    <td>C</td> <td>1</td> <td>little or big endian flag</td></tr>
-<tr><td>header_size</td>   <td>L</td> <td>1</td> <td>header size of coor file</td></tr>
+<tr><td>head_size</td>     <td>L</td> <td>1</td> <td>header size of coor file</td></tr>
 <tr><td>with_z</td>        <td>C</td> <td>1</td> <td>2D or 3D flag; zero for 2D</td></tr>
 <tr><td>size</td>          <td>L</td> <td>1</td> <td>coor file size</td></tr>
 </table>
