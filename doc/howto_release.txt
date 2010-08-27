@@ -14,12 +14,14 @@ Contents
 ###########################################
 (A) HOWTO create a release
 
-1. Local work (basically at CEA)
+1. Local work (basically at FEM, Italy)
 
+   - svn up
    - check if
         ( cd doc/raster/r.example/ ; make )
         ( cd doc/vector/v.example/ ; make )
       still compile; fix otherwise
+   - make distclean
 
    - cleanup rubbish:
        find . -name '*~'     | xargs rm
@@ -41,7 +43,7 @@ Contents
 7
 0
 0RC1
-2009
+2010
       rm -f include/VERSION~
 
      #version:
@@ -96,7 +98,7 @@ Contents
 7
 0
 0svn
-2009
+2010
 
     rm -f include/VERSION~
     svn ci -m"back to SVN" include/VERSION
