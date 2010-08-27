@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
 SUBDIRS = docs vdigit
-EXTRA_CLEAN_FILES = menustrings.py
+EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc
 CLEAN_SUBDIRS = vdigit
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
