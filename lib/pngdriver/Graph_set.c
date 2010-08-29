@@ -13,10 +13,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#ifndef __MINGW32__
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef __MINGW32__
+#include <windows.h>
+#else
 #include <sys/mman.h>
 #endif
 
@@ -28,7 +30,6 @@ struct png_state png;
 
 static void map_file(void)
 {
-#ifndef __MINGW32__
     size_t size = HEADER_SIZE + png.width * png.height * sizeof(unsigned int);
     void *ptr;
     int fd;
@@ -37,9 +38,20 @@ static void map_file(void)
     if (fd < 0)
 	return;
 
+#ifdef __MINGW32__
+    png.handle = CreateFileMapping((HANDLE) _get_osfhandle(fd),
+				   NULL, PAGE_READWRITE,
+				   0, size, NULL);
+    if (!png.handle)
+	return;
+    ptr = MapViewOfFile(png.handle, FILE_MAP_WRITE, 0, 0, size);
+    if (!ptr)
+	return;
+#else
     ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t) 0);
     if (ptr == MAP_FAILED)
 	return;
+#endif
 
     if (png.grid)
 	G_free(png.grid);
@@ -48,7 +60,6 @@ static void map_file(void)
     close(fd);
 
     png.mapped = 1;
-#endif
 }
 
 int PNG_Graph_set(void)
