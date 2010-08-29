@@ -9649,7 +9649,7 @@ msgstr ""
 "Parameter %s an."
 
 #: ../raster/r.out.gdal/export_band.c:201
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The user given nodata value %g is present in rasterband <%s> and would lead "
 "to data loss. Please specify a different nodata value with the %s parameter."
@@ -13085,7 +13085,7 @@ msgstr "Gebe die GRASS 'Build'-Informationen aus."
 #: ../general/g.proj/main.c:77
 msgid "Print projection information (in conventional GRASS format)"
 msgstr ""
-"Gebe die Projetkionsinformationen (im konventionellen GRASS-Format) aus."
+"Gebe die Projektionsinformationen (im konventionellen GRASS-Format) aus."
 
 #: ../general/g.proj/main.c:83
 msgid "Verify datum information and print transformation parameters"
@@ -13094,7 +13094,7 @@ msgstr ""
 
 #: ../general/g.proj/main.c:89
 msgid "Print projection information in PROJ.4 format"
-msgstr "Gebe die Projetkionsinformationen im PROJ.4-Format aus."
+msgstr "Gebe die Projektionsinformationen im PROJ.4-Format aus."
 
 #: ../general/g.proj/main.c:95
 msgid ""
@@ -13103,7 +13103,7 @@ msgstr "Ausgabe ohne Zeilenumbrüche (nur bei WKT- und PROJ.4-Ausgaben)"
 
 #: ../general/g.proj/main.c:105
 msgid "Print projection information in WKT format"
-msgstr "Gebe die Projetkionsinformationen im WKT-Format aus."
+msgstr "Gebe die Projektionsinformationen im WKT-Format aus."
 
 #: ../general/g.proj/main.c:111
 msgid "Use ESRI-style format (applies to WKT output only)"
@@ -31891,16 +31891,101 @@ msgid "Can't mark another point.  Only %d points allowed.  Sorry."
 msgstr ""
 "Kann keinen anderen Punkt markieren. Nur %d Punkte sind erlaubt. Sorry."
 
+msgid ""
+"The given nodata value is present in rasterband <%s> and would lead to data "
+"loss. Please specify a different nodata value with the %s parameter."
+msgstr ""
+"Der gewählte NoData-Wert ist im Rasterkanal <%s> vorhanden und würde zu "
+"Datenverlust führen. Bitte geben Sie einen anderen NoData-Wert mit dem "
+"Parameter %s an."
+
+#, fuzzy
+msgid "Displays raster map layer in the active map display window."
+msgstr ""
+"Stellt Rasterkarten im aktiven Grafikfenster dar. Überlagerung ist auch "
+"möglich."
+
+#, fuzzy
+msgid ""
+"Name and type of the new column(s) ('name type [,name type, ...]' - types "
+"depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION "
+"and DATE)"
+msgstr ""
+"Name und Art der neuen Spalten (Art hängt von der verwendeten Datenbank ab, "
+"aber alle unterstützen VARCHAR(), INT, DOUBLE PRECISION and DATE)."
+
+#, fuzzy
+msgid "Raster file to be converted."
+msgstr "Zu importierende Rasterdatei."
+
+#, fuzzy
+msgid "File containing reclass rules; \"-\" to read from stdin"
+msgstr ""
+"Datei mit Kategorie-Beschriftungsregeln (oder \"-\" um von stdin zu lesen)."
+
+#, fuzzy
+msgid "terrain analysis"
+msgstr "Raster, Geländeanalyse"
+
+#, fuzzy
+msgid "Unable to open vector map <%s> on level 2"
+msgstr "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
+
+#, fuzzy
+msgid "Open vector map without topology (level 1)"
+msgstr "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
+
+#, fuzzy
+msgid "miles,feet,meters,kilometers,acres,hectares,radians,degrees"
+msgstr "mi(len),f(uß),me(ter),k(ilometer),a(cres),h(ektar)"
+
+msgid "Do not export long colortable"
+msgstr "Exportiere keine langen Farbtabellen."
+
+msgid ""
+"Input raster map contains cells with NULL-value (no-data). The value %d was "
+"used to represent no-data values in the input map. You can specify nodata "
+"value by %s parameter."
+msgstr ""
+"Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der Wert "
+"%d wurde verwendet um Nodata-Werte in der Eingabekarte zu kennzeichnen. Sie "
+"können Nodata-Wert mit dem Parameter %s bestimmen."
+
+msgid ""
+"Sorry, if any of the following options are set:\n"
+"    basin, stream, half.basin, slope, or lS\n"
+"    you MUST provide a value for the basin threshold parameter."
+msgstr ""
+"Wenn eine der folgenden Optionen gesetzt wurde:\n"
+"    basin, stream, half.basin, slope oder lS\n"
+"    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
+
+msgid "Writes Z data to column instead of 3D vector"
+msgstr "Schreibt Z Werte in eine Spalte anstelle der 3D Vektorkarte."
+
+msgid "Convex hull calculation requires at least three points"
+msgstr "Die Berechnung der konvexen Hülle erfordert zumindest drei Punkte."
+
+msgid "enable MFD flow (default is SFD (D8))"
+msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))."
+
+msgid "Import Mapgen or Matlab vector maps into GRASS."
+msgstr "Importiert Mapgen oder Matlab Vektorkarten nach GRASS."
+
+msgid "Default value: GRASS_GUI if defined otherwise tcltk"
+msgstr "Standardwert: GRASS_GUI wenn definiert, ansonsten tcltk"
+
+msgid ""
+"tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based GUI - "
+"Display Manager (d.m);wxpython;wxPython based next generation GUI;text;"
+"command line interface only"
+msgstr ""
+"tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk "
+"basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der "
+"nächsten Generation;text;Nur Kommandozeile"
+
 #~ msgid "Not enough room in history file"
 #~ msgstr "Nicht genug Platz in der History-Datei."
-
-#~ msgid ""
-#~ "The given nodata value is present in rasterband <%s> and would lead to "
-#~ "data loss. Please specify a different nodata value with the %s parameter."
-#~ msgstr ""
-#~ "Der gewählte NoData-Wert ist im Rasterkanal <%s> vorhanden und würde zu "
-#~ "Datenverlust führen. Bitte geben Sie einen anderen NoData-Wert mit dem "
-#~ "Parameter %s an."
 
 #~ msgid "New MAPSET name"
 #~ msgstr "Neuer Mapset Name."
@@ -31916,12 +32001,6 @@ msgstr ""
 
 #~ msgid "Name of workspace file"
 #~ msgstr "Name der Workspace-Datei."
-
-#, fuzzy
-#~ msgid "Displays raster map layer in the active map display window."
-#~ msgstr ""
-#~ "Stellt Rasterkarten im aktiven Grafikfenster dar. Überlagerung ist auch "
-#~ "möglich."
 
 #~ msgid "List of values to be displayed (FP maps)"
 #~ msgstr "Liste der Werte die angezeigt werden sollen (FP-Karten)."
@@ -32036,82 +32115,12 @@ msgstr ""
 #~ msgid "DXY [%s] COMPLETE"
 #~ msgstr "DXY [%s] KOMPLETT"
 
-#, fuzzy
-#~ msgid ""
-#~ "Name and type of the new column(s) ('name type [,name type, ...]' - types "
-#~ "depend on database backend, but all support VARCHAR(), INT, DOUBLE "
-#~ "PRECISION and DATE)"
-#~ msgstr ""
-#~ "Name und Art der neuen Spalten (Art hängt von der verwendeten Datenbank "
-#~ "ab, aber alle unterstützen VARCHAR(), INT, DOUBLE PRECISION and DATE)."
-
 #~ msgid ""
 #~ "Calculates univariate statistics from a raster map based on vector "
 #~ "polygons and uploads statistics to new attribute columns."
 #~ msgstr ""
 #~ "Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone "
 #~ "und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
-
-#, fuzzy
-#~ msgid "Raster file to be converted."
-#~ msgstr "Zu importierende Rasterdatei."
-
-#, fuzzy
-#~ msgid "File containing reclass rules; \"-\" to read from stdin"
-#~ msgstr ""
-#~ "Datei mit Kategorie-Beschriftungsregeln (oder \"-\" um von stdin zu "
-#~ "lesen)."
-
-#, fuzzy
-#~ msgid "terrain analysis"
-#~ msgstr "Raster, Geländeanalyse"
-
-#, fuzzy
-#~ msgid "Unable to open vector map <%s> on level 2"
-#~ msgstr ""
-#~ "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
-
-#, fuzzy
-#~ msgid "Open vector map without topology (level 1)"
-#~ msgstr ""
-#~ "Kann die Vektorkarte <%s> auf dem Topologischen Level %d nicht öffnen."
-
-#, fuzzy
-#~ msgid "miles,feet,meters,kilometers,acres,hectares,radians,degrees"
-#~ msgstr "mi(len),f(uß),me(ter),k(ilometer),a(cres),h(ektar)"
-
-#~ msgid "Do not export long colortable"
-#~ msgstr "Exportiere keine langen Farbtabellen."
-
-#~ msgid ""
-#~ "Input raster map contains cells with NULL-value (no-data). The value %d "
-#~ "was used to represent no-data values in the input map. You can specify "
-#~ "nodata value by %s parameter."
-#~ msgstr ""
-#~ "Die Eingabe Rasterkarte enthält Zellen mit dem NULL-Wert (no-data). Der "
-#~ "Wert %d wurde verwendet um Nodata-Werte in der Eingabekarte zu "
-#~ "kennzeichnen. Sie können Nodata-Wert mit dem Parameter %s bestimmen."
-
-#~ msgid ""
-#~ "Sorry, if any of the following options are set:\n"
-#~ "    basin, stream, half.basin, slope, or lS\n"
-#~ "    you MUST provide a value for the basin threshold parameter."
-#~ msgstr ""
-#~ "Wenn eine der folgenden Optionen gesetzt wurde:\n"
-#~ "    basin, stream, half.basin, slope oder lS\n"
-#~ "    MÜSSEN Sie ein Wert für den Parameter 'basin threshold' angegeben."
-
-#~ msgid "Writes Z data to column instead of 3D vector"
-#~ msgstr "Schreibt Z Werte in eine Spalte anstelle der 3D Vektorkarte."
-
-#~ msgid "Convex hull calculation requires at least three points"
-#~ msgstr "Die Berechnung der konvexen Hülle erfordert zumindest drei Punkte."
-
-#~ msgid "enable MFD flow (default is SFD (D8))"
-#~ msgstr "Aktiviere MFD-Fluss (Standard ist SFD (D8))."
-
-#~ msgid "Import Mapgen or Matlab vector maps into GRASS."
-#~ msgstr "Importiert Mapgen oder Matlab Vektorkarten nach GRASS."
 
 #~ msgid "Sources and sinks in [m^3/s]"
 #~ msgstr "Quellen und Senken in [m^3/s]"
@@ -36614,18 +36623,6 @@ msgstr ""
 #~ msgid "general, gui"
 #~ msgstr "Allgemein, GUI"
 
-#~ msgid "Default value: GRASS_GUI if defined otherwise tcltk"
-#~ msgstr "Standardwert: GRASS_GUI wenn definiert, ansonsten tcltk"
-
-#~ msgid ""
-#~ "tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based "
-#~ "GUI - Display Manager (d.m);wxpython;wxPython based next generation GUI;"
-#~ "text;command line interface only"
-#~ msgstr ""
-#~ "tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk "
-#~ "basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der "
-#~ "nächsten Generation;text;Nur Kommandozeile"
-
 #~ msgid "The old d.m GUI is not available for WinGRASS"
 #~ msgstr "Das alte d.m GUI gibt es nicht für WinGRASS."
 
@@ -37113,3 +37110,64 @@ msgstr ""
 
 #~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
 #~ msgstr "Importiert Mapgen oder Matlab-ASCII Vektorkarten nach GRASS."
+
+#~ msgid "New LOCATION name (not location path)"
+#~ msgstr "Neuer LOCATION Name (nicht der Pfad zur Location)."
+
+#~ msgid "New GISDBASE (full path to the directory where the new location is)"
+#~ msgstr ""
+#~ "Neue GISDBASE (vollständiger Pfad zu dem Verzeichnis, in dem sich die "
+#~ "neue L0cation befindet)."
+
+#, fuzzy
+#~ msgid "Default value: GRASS_GUI if defined, otherwise wxpython"
+#~ msgstr "Standardwert: GRASS_GUI wenn definiert, ansonsten tcltk"
+
+#, fuzzy
+#~ msgid ""
+#~ "wxpython;wxPython based GUI - wxGUI;tcltk;Tcl/Tk based GUI - GIS Manager "
+#~ "(gis.m);oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);text;"
+#~ "command line interface only"
+#~ msgstr ""
+#~ "tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk "
+#~ "basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der "
+#~ "nächsten Generation;text;Nur Kommandozeile"
+
+#~ msgid "List of categories to be displayed (INT maps)"
+#~ msgstr "Liste der Werte die angezeigt werden sollen (INT-Karten)."
+
+#~ msgid "Invert catlist"
+#~ msgstr "Invertiere Kategorieliste."
+
+#~ msgid "Area without centroid (may be OK for island)"
+#~ msgstr "Fläche ohne Zentroid (kann für Inseln OK sein)."
+
+#~ msgid "Print all map connection parameters and exit in shell script style"
+#~ msgstr ""
+#~ "Gibt alle Verbindungsparameter im Shellskript-Stil aus und beendet sich."
+
+#~ msgid "Vector map <%s> is connected by:"
+#~ msgstr "Vectorkarte <%s> ist verbunden durch:"
+
+#~ msgid "Width and height of output image"
+#~ msgstr "Breite und Höhe des Ausgabe-Bildes."
+
+#~ msgid "Prints/sets general DB connection for current mapset and exits."
+#~ msgstr ""
+#~ "Gibt oder setzt generelle Datenbankverbindung für das aktuelle Mapset und "
+#~ "beendet sich."
+
+#~ msgid "Name of file with sql statement"
+#~ msgstr "Name der Datei, die SQL-Befehle enthält"
+
+#~ msgid "Slower but accurate (applies to FP maps only)"
+#~ msgstr "Langsamer aber genau (gilt nur für Fließkomma-Karten)."
+
+#~ msgid "Set color rules based on stddev from a map's mean value."
+#~ msgstr "Bestimme Farbregeln basierend auf den Standardabweichungen."
+
+#~ msgid "Vector map for which to edit attribute table"
+#~ msgstr "Vektorkarte deren Attributtabelle editiert werden soll."
+
+#~ msgid "Layer where to add column"
+#~ msgstr "Layer, in dem eine Spalte hinzugefügt werden soll."

@@ -5844,76 +5844,75 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr ""
-#~ "V souboru s historií není dostatek místa, aby pøíkazová øádka mohla být "
-#~ "zaznamenána"
+msgid "Not enough room in history file to record command line"
+msgstr ""
+"V souboru s historií není dostatek místa, aby pøíkazová øádka mohla být "
+"zaznamenána"
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "V souboru s historií není dostatek místa pro pøíkazovou øádku (zkráceno)"
+msgid "Not enough room in history file for command line (truncated)"
+msgstr ""
+"V souboru s historií není dostatek místa pro pøíkazovou øádku (zkráceno)"
+
+msgid "Unknown Location"
+msgstr "Neznámá Location"
+
+#, fuzzy
+msgid "test, gmath"
+msgstr "test, gpde"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "mapa [%s] - nelze pøeèíst øádek %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr ""
+"Chyba pøi zapisování souboru s èísly s plovoucí desetinnou èárkou pro mapu %s"
+
+#, fuzzy
+msgid "OGR layer cannot be opened for update"
+msgstr "Formát OGR nelze aktualizovat"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Nelze zapsat prvek, vektorová mapa není otevøena"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "Nelze vytvoøit nový proces"
+
+msgid "Too many arguments"
+msgstr "Pøíli¹ mnoho argumentù"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"region pro aktuální mapset %s\n"
+"spus»te \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "výchozí region (zájmové území) %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "Nelze nastavit zaostøení"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "Potí¾e pøi ètení rastrové mapy"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "Nelze èíst soubor s barevnou ¹kálou pro rastrovou mapu <%s>"
+
+msgid "Incompatible library version for module"
+msgstr "Nekompatibilní verze knihovny pro modul"
 
 #~ msgid "Invalid view position coordinates, using %f,%f"
 #~ msgstr "Neplatné souøadnice bodu rozhledu, pou¾iji %f,%f"
-
-#~ msgid "Unknown Location"
-#~ msgstr "Neznámá Location"
-
-#, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "test, gpde"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "mapa [%s] - nelze pøeèíst øádek %d"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr ""
-#~ "Chyba pøi zapisování souboru s èísly s plovoucí desetinnou èárkou pro "
-#~ "mapu %s"
-
-#, fuzzy
-#~ msgid "OGR layer cannot be opened for update"
-#~ msgstr "Formát OGR nelze aktualizovat"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Nelze zapsat prvek, vektorová mapa není otevøena"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "Nelze vytvoøit nový proces"
-
-#~ msgid "Too many arguments"
-#~ msgstr "Pøíli¹ mnoho argumentù"
-
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "region pro aktuální mapset %s\n"
-#~ "spus»te \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "výchozí region (zájmové území) %s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Nelze nastavit zaostøení"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Potí¾e pøi ètení rastrové mapy"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "Nelze èíst soubor s barevnou ¹kálou pro rastrovou mapu <%s>"
-
-#~ msgid "Incompatible library version for module"
-#~ msgstr "Nekompatibilní verze knihovny pro modul"
 
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr "kvantizaèní soubor [%s] v mapsetu [%s] %s"
@@ -6716,3 +6715,54 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 
 #~ msgid "some points outside of region -- will ignore..."
 #~ msgstr "nìkteré body mimo region -- budou ignorovány..."
+
+#~ msgid "Probably program error."
+#~ msgstr "Pravdìpodobnì chyba programu."
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Nelze otevøít doèasný soubor"
+
+#~ msgid "Problem reading raster map"
+#~ msgstr "Potí¾e pøi ètení rastrové mapy"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "neplatná mapová projekce\n"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Prosím, oznamte tuto chybu vývojáøùm GRASSu.\n"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Název rastrové vrstvy vý¹kového modelu"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Název rastrové vrstvy/vrstev vý¹kového modelu"
+
+#~ msgid "to accept the default"
+#~ msgstr "pou¾ít výchozí"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "stisknìte RETURN pro pokraèování -->"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Nápovìda pro pøíkaz [%s] není dostupná\n"
+
+#~ msgid "Unable to add database link"
+#~ msgstr "Nelze pøidat spojení s databází."
+
+#~ msgid ""
+#~ "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
+#~ "excess)"
+#~ msgstr ""
+#~ "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je vìt¹í ne¾ by mìl "
+#~ "být (%ld bytù pøebývá)"
+
+#~ msgid ""
+#~ "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
+#~ "missing)."
+#~ msgstr ""
+#~ "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je men¹í ne¾ by mìl "
+#~ "být (%ld bytù chybí)"

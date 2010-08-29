@@ -5706,7 +5706,7 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "não consegui criar o arquivo de cabeçalho para [%s em %s]"
+msgstr "não foi possível abrir o arquivo %s em %s"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5774,16 +5774,63 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr ""
-#~ "Não há espaço suficiente no arquivo de histórico para gravar a linha de "
-#~ "comando."
+msgid "Not enough room in history file to record command line"
+msgstr ""
+"Não há espaço suficiente no arquivo de histórico para gravar a linha de "
+"comando."
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "Não há espaço suficiente no arquivo de histórico para a linha de comando "
-#~ "(truncada)."
+msgid "Not enough room in history file for command line (truncated)"
+msgstr ""
+"Não há espaço suficiente no arquivo de histórico para a linha de comando "
+"(truncada)."
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "mapa [%s] - não consegui escrever linha %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Erro escrevendo arquivo de ponto flutuante para mapa %s"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "não consegui escrever a linha, o mapa não foi aberto"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "Impossível criar novo processo"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"região do mapset atual %s\n"
+"execute \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "região padrão (default) %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "não consegui abrir [%s]"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "problema lendo arquivo cell raster"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "não consegui criar o arquivo de cabeçalho para [%s em %s]"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "não foi possível abrir o arquivo %s em %s"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "não foi possível abrir o arquivo %s em %s"
 
 #~ msgid "Unknown Location"
 #~ msgstr "Locação desconhecida"
@@ -5822,10 +5869,6 @@ msgstr ""
 #~ msgstr "não consegui criar novo processo"
 
 #, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "mapa [%s] - não consegui escrever linha %d"
-
-#, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "Impossível mudar de diretório para %s"
 
@@ -5844,10 +5887,6 @@ msgstr ""
 #~ msgstr "Erro escrevendo arquivo de ponto flutuante para mapa %s"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Erro escrevendo arquivo de ponto flutuante para mapa %s"
-
-#, fuzzy
 #~ msgid "Unable to read header file for raster map <%s@%s>."
 #~ msgstr "não consegui criar o arquivo de cabeçalho para [%s em %s]"
 
@@ -5861,14 +5900,6 @@ msgstr ""
 
 #~ msgid "can't create histogram for [%s in %s]"
 #~ msgstr "não consegui criar o histograma para [%s em %s]"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "não consegui escrever a linha, o mapa não foi aberto"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "Impossível criar novo processo"
 
 #~ msgid "Too many arguments"
 #~ msgstr "Argumentos demais"
@@ -5892,17 +5923,6 @@ msgstr ""
 #~ msgid "line %d: <%s>"
 #~ msgstr "linha %d: <%s>"
 
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "região do mapset atual %s\n"
-#~ "execute \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "região padrão (default) %s"
-
 #~ msgid "is not set"
 #~ msgstr "não está inicializado"
 
@@ -5912,18 +5932,6 @@ msgstr ""
 #~ msgstr ""
 #~ "é inválido\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "não consegui abrir [%s]"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "problema lendo arquivo cell raster"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "não consegui criar o arquivo de cabeçalho para [%s em %s]"
 
 #~ msgid "Vector is not 3D"
 #~ msgstr "Vetor não é 3D"
@@ -6064,14 +6072,6 @@ msgstr ""
 
 #~ msgid "Cannot open database %s"
 #~ msgstr "não consegui abrir banco de dados %s"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "não foi possível abrir o arquivo %s em %s"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "não foi possível abrir o arquivo %s em %s"
 
 #~ msgid "Cannot describe table <%s>"
 #~ msgstr "Impossível descrever tabela <%s>"
@@ -6457,3 +6457,296 @@ msgstr ""
 
 #~ msgid "unable to find [%s] in [%s]"
 #~ msgstr "não consegui encontrar [%s] em [%s]"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "não consegui alocar memória\n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "não foi possível abrir o arquivo %s em %s"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "não foi possível abrir o arquivo %s em %s"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "problema lendo arquivo cell raster"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "O raster %s@%s está vazio"
+
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr "não consegui escrever regras de quantização : o mapa %s é inteiro"
+
+#~ msgid ""
+#~ "G_set_window(): projection/zone differs from that of currently open "
+#~ "raster maps"
+#~ msgstr ""
+#~ "G_set_window(): projeção/zona difere daquela nos arquivos raster abertos"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "O intervalo de dados float para %s@%s está vazio"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "O intervalo de dados inteiros para %s@%s está vazio"
+
+#~ msgid "%s: map [%s] not open for write - request ignored"
+#~ msgstr "%s: map [%s] não está aberto para escrita - pedido ignorado"
+
+#~ msgid "%s: unopened file descriptor - request ignored"
+#~ msgstr "%s: descritor de arquivo não foi aberto - pedido ignorado"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "mapa [%s] - não consegui escrever linha %d"
+
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "não foi possível encontrar o arquivo null temporário: %s"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "erro escrevendo linha de nulos %d"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "suporte para a categoria [%s] no mapset [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "suporte da categoria para arquivo de vetores [%s] no mapset [%s] %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "não consegui abrir arquivo temporário"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "projeção inválida\n"
+
+#~ msgid "EmbedGivenNulls: wrong data type!"
+#~ msgstr "EmbedGivenNulls: tipo errado de dados!"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Por favor avise aos desenvolvedores do GRASS sobre este erro.\n"
+
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "G_set_null_value: tipo errado de dados!"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Nome do mapa raster de elevação"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Nome dos mapas raster de elevação"
+
+#~ msgid "Layer number"
+#~ msgstr "Número da camada"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Descrição:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Uso:\n"
+#~ " "
+
+#~ msgid " options: %s\n"
+#~ msgstr " opções: %s\n"
+
+#~ msgid "to accept the default"
+#~ msgstr "para aceitar os valores padrão"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "suporte das cores [%s] no mapset [%s] %s"
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr "Arquivo de data inválido para o %s mapa %s no mapset %s"
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "Arquivo de data inválido para o %s mapa %s no mapset %s"
+
+#, fuzzy
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "erro lendo mapa compactado [%s] no mapset [%s], linha %d"
+
+#, fuzzy
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "erro lendo mapa [%s] no mapset [%s], linha %d"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "não consegui encontrar o diretório do usuário"
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "não consegui criar o cabeçalho para o arquivo [%s]"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "região do mapset atual %s\n"
+#~ "execute \"g.region\""
+
+#~ msgid "default region %s"
+#~ msgstr "região padrão (default) %s"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "Pressione ENTER para continuar -->"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "Nome de arquivo ilegal. não pode ser '.' ou 'NULL'\n"
+
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "Nome de arquivo ilegal. O caractere <%c> não é permitido.\n"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "Categorias de reclassificação demais para [%s em %s]"
+
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr ""
+#~ "Formato de reclassificação ilegal no cabeçalho do arquivo para [%s em %s]"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "não é possível criar arquivo de dependência [%s em %s]"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different projection than current region. Found "
+#~ "raster map <%s@%s>, should be <%s>."
+#~ msgstr ""
+#~ "[%s] no mapset [%s] - está numa projeção diferente da região atual:\n"
+#~ "o mapa [%s] em: <%s>, deveria ser <%s> "
+
+#, fuzzy
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgstr ""
+#~ "[%s] no mapset [%s] - está em uma zona diferente [%d] da região atual [%d]"
+
+#, fuzzy
+#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
+#~ msgstr "[%s] em [%s] - bytes demais por célula (%d)"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "não consegui encontrar [%s]"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "No há ajuda disponível para o comando [%s]\n"
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "não consegui escrever os dados históricos para [%s]"
+
+#~ msgid "Not enough room in history file to record command line."
+#~ msgstr ""
+#~ "Não há espaço suficiente no arquivo de histórico para gravar a linha de "
+#~ "comando."
+
+#~ msgid "Not enough room in history file for command line (truncated)."
+#~ msgstr ""
+#~ "Não há espaço suficiente no arquivo de histórico para a linha de comando "
+#~ "(truncada)."
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr ""
+#~ "não é possível adicionar um link ao banco de dados, o mapa não está "
+#~ "aberto em modo ESCRITA."
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "não é possível adicionar um link ao banco de dados."
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "Erro na regra da linha %d em %s"
+
+#, fuzzy
+#~ msgid "Intersections: %5d"
+#~ msgstr "Outra projeção"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "Impossível mudar de diretório para %s"
+
+#, fuzzy
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr "ATENÇÃO: Programador solicitou open_level desconhecido\n"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "não foi possível abrir o arquivo %s em %s"
+
+#, fuzzy
+#~ msgid "OGR feature without ID ignored"
+#~ msgstr "Ignorando feição OGR sem ID"
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "Impossível mudar de diretório para %s"
+
+#~ msgid ""
+#~ "taking too long to find points for interpolation--please change the "
+#~ "region to area where your points are. Continuing calculations..."
+#~ msgstr ""
+#~ "demorando demais para encontrar pontos para interpolação--favor alterar a "
+#~ "região para a área onde estão os pontos. Continuando cálculos..."
+
+#~ msgid "strip exists with insufficient data"
+#~ msgstr "há uma faixa com dados insuficientes"
+
+#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
+#~ msgstr "há pontos fora da região 2D/3D especificada-- ignorei %d pontos"
+
+#~ msgid "ignoring %d points -- too dense"
+#~ msgstr "ignorando %d pontos -- muito denso"
+
+#~ msgid "some points outside of region -- will ignore..."
+#~ msgstr "alguns pontos fora da região -- vou ignorar..."
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "Impossível mudar de diretório para %s"
+
+#, fuzzy
+#~ msgid "Unable to open vector map <%s> on topology level %d"
+#~ msgstr "não foi possível abrir o mapa raster [%s em %s]"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "não consegui abrir arquivo temporário"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "não consegui abrir arquivo temporário"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr ""
+#~ "não é possível apagar a linha, o mapa '%s' não está aberto no nível 2"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr ""
+#~ "não consegui apagar a linha, o mapa '%s' não está aberto em modo de "
+#~ "escrita"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "Impossível mudar de diretório para %s"
+
+#~ msgid "Cannot find input map '%s'"
+#~ msgstr "não consegui encontrar mapa de entrada '%s'"
+
+#, fuzzy
+#~ msgid "Column type not supported"
+#~ msgstr "Feição OGR tipo %d não suportada)"
+
+#~ msgid "Cannot rewrite line"
+#~ msgstr "não consegui reescrever a linha"

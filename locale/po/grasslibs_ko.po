@@ -3426,11 +3426,11 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:252 ../lib/vector/Vlib/open.c:339
 #: ../lib/vector/Vlib/open.c:360
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
 "by v.build."
-msgstr ""
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:255
 #, fuzzy, c-format
@@ -5602,6 +5602,42 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
 #, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "'%s' 디버그파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
 #~ msgid "Unable to open raster map <%s>"
 #~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
@@ -5612,10 +5648,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unable to write raster row %i"
 #~ msgstr "자동 MASK파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
@@ -5634,10 +5666,6 @@ msgstr ""
 #~ msgstr "자동 MASK파일을 열 수 없습니다"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, fuzzy
 #~ msgid " It is a reclass of raster map <%s@%s> "
 #~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
@@ -5646,27 +5674,7 @@ msgstr ""
 #~ msgstr "임시파일을 열 수 없습니다"
 
 #, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, fuzzy
 #~ msgid "Unable to open file %s in <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
 #~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #, fuzzy
@@ -5692,14 +5700,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Cannot open database %s"
 #~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Cannot describe table <%s>"
@@ -5802,3 +5802,96 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "**<%s> 잘못된 이름 **\n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "취소를 원하시면 RETURN을 누르세요\n"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "벡터맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "임시파일을 열 수 없습니다"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 색상지원: %s"
+
+#, fuzzy
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+
+#, fuzzy
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to read header file for raster map <%s@%s>."
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr "임시파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "임시파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "임시파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "임시파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"

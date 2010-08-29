@@ -5817,371 +5817,371 @@ msgstr ""
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
+#, fuzzy
+msgid ""
+"\n"
+"Keywords:\n"
+" "
+msgstr ""
+"\n"
+"Parole chiave:\n"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "mappa [%s] - impossibile scrivere nella riga %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Errore scrivendo file di formato virgola mobile per mappa %s"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Non riesco a scrivere la linea, la mappa non è aperta"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "impossibile creare un nuovo processo"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"regione del mapset in uso %s\n"
+"esegui \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "regione predefinita %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "Impossibile aprire %s"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "problemi leggendo il file di cellule raster"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "Impossibile creare il file di intestazione per [%s in %s]"
+
+#, fuzzy
+msgid "Registering points"
+msgstr "Linee registrate: "
+
+#, fuzzy
+msgid "Registered points"
+msgstr "Linee registrate: "
+
+#, fuzzy
+msgid "Registered points (unique coordinates)"
+msgstr "Linee registrate: "
+
+#, fuzzy
+msgid "Duplicates"
+msgstr "duplicato campo est"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "G_malloc: out of memory"
+msgstr "G_malloc: fuori memoria"
+
+msgid "G_calloc: out of memory"
+msgstr "G_calloc: fuori memoria"
+
+msgid "G_realloc: out of memory"
+msgstr "G_realloc: fuori memoria"
+
+#, fuzzy
+msgid "Cannot get layer info"
+msgstr "Non posso cancellare la linea"
+
+#, fuzzy
+msgid "Cannot open database %s"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "Impossibile aprire il file %s in %s"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "Impossibile aprire il file %s in %s"
+
+#, fuzzy
+msgid "Cannot describe table <%s>"
+msgstr "Non posso scrivere i collegamenti del database"
+
+#, fuzzy
+msgid "Cannot read topo for line [%d]"
+msgstr "Non riesco a leggere l'istogramma per [%s in %s]"
+
+msgid "Output name '%s' is not valid rast name."
+msgstr "Il nome '%s' in output non è un nome di raster valido."
+
+msgid "Output map '%s' is used as input"
+msgstr "La mappa '%s' in output è utilizzata come input"
+
+msgid "unable to open raster map [%s in %s]"
+msgstr "impossibile aprire un raster [%s in %s]"
+
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "Non riesco a leggere il file di intestazione per [%s in %s]\n"
+
+msgid "Can't open header file for [%s in %s]"
+msgstr "Non riesco ad aprire il file di intestazione per [%s in %s]"
+
+#, fuzzy
+msgid "Cannot get field info"
+msgstr "Non posso cancellare la linea"
+
+#, fuzzy
+msgid "Cannot open database"
+msgstr "Non posso scrivere i collegamenti del database"
+
+msgid "Building topology ...\n"
+msgstr "Creazione topologia...\n"
+
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r%d aree create      \n"
+"%d isole create\n"
+
+#, fuzzy
+msgid "Cannot get column info"
+msgstr "Non posso cancellare la linea"
+
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "Vect_rewrite_line() non supportato per questo formato/livello"
+
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "Vect_delete_line() non supportato per questo formato/livello"
+
+#, fuzzy
+msgid "Cannot delete line"
+msgstr "Non riesco a riscrivere la linea"
+
+msgid "Output name '%s' is not valid vector name."
+msgstr "Il nome '%s' in output non è valido per un vettore."
+
+msgid "Cannot copy vector '%s' to '%s'"
+msgstr "Non posso copiare il vettore '%s' nel '%s'"
+
+#, fuzzy
+msgid "Cannot open existing vector map <%s>"
+msgstr "Non posso cancellare il vettoriale %s"
+
+#, fuzzy
+msgid "Cannot delete existing vector <%s>"
+msgstr "Non posso cancellare il vettoriale %s"
+
+msgid "Cannot open new vector %s"
+msgstr "Non posso aprire il nuovo vettoriale %s"
+
+msgid "Cannot open history file for vector '%s'"
+msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
+
+msgid "Could not stat file '%s'"
+msgstr "Non riesco a trovare il file \"%s\""
+
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "Non riesco ad aprire il vecchio vettoriale %s"
+
+msgid "%s - ** illegal name **"
+msgstr "%s - ** nome illegale **"
+
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "Non trovo un monitor grafico per <%s>.\n"
+
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr ""
+"Per piacere avvia \"d.mon\" per selezionare un monitor grafico valido.\n"
+
+#, fuzzy
+msgid "Can't stat %s\n"
+msgstr "Non è possibile trovare %s\n"
+
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "Errore - Monitor <%s> in uso.\n"
+
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "Errore - il Monitor <%s> è in uso da %s.\n"
+
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr ""
+"Errore - non riesco a completare il blocco del processo per il monitor <%"
+"s>.\n"
+
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "Errore - non riesco a creare una pipe al dispositivo grafico.\n"
+
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "Errore -il monitor grafico <%s> non è stato avviato!\n"
+
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "Per piacere avvia il monitor grafico <%s>.\n"
+
+msgid "Not connected...\n"
+msgstr "Non connesso...\n"
+
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "Non riesco a collegarmi al monitor. Provo a farlo ancora.\n"
+
+#, fuzzy
+msgid "Size of cell in fp maps = %d"
+msgstr "Dimensione della cella delle mappe in fp = %d\n"
+
+#, fuzzy
+msgid "type for writing floating maps = %d"
+msgstr "per mappe raster presenti %d\n"
+
+#, fuzzy
+msgid "current window = %p"
+msgstr "finestra corrente = %p\n"
+
+#, fuzzy
+msgid "Flag: window set? %d"
+msgstr "Flag: finestra scelta? %d\n"
+
+#, fuzzy
+msgid "File descriptor for automatic mask %d"
+msgstr "Descrizione del file per la maschera automatica %d\n"
+
+#, fuzzy
+msgid "Flag denoting automatic masking %d"
+msgstr "Descrizione del file per la maschera automatica %d\n"
+
+#, fuzzy
+msgid "CELL mask buffer %p"
+msgstr "CELL maschera del buffer %p\n"
+
+msgid "buffer for reading null rows %p"
+msgstr "buffer di lettura delle righe vuote %p"
+
+msgid "Pre/post compressed data buffer %p"
+msgstr "Buffer di dati pre/post compressi %p"
+
+msgid "sizeof compressed_buf %d"
+msgstr "dimensione del compressed_buf %d"
+
+msgid "work data buffer %p"
+msgstr "work data buffer %p"
+
+msgid "sizeof work_buf %d"
+msgstr "dimensione del work_buf %d"
+
+msgid "sizeof null_buf %d"
+msgstr "dimensione null_buf %d"
+
+msgid "sizeof mask_buf %d"
+msgstr "dimensione mask_buf %d"
+
+msgid "Histogram request %d"
+msgstr "Istogramma richiesto %d"
+
+msgid "G_dump: file #%d"
+msgstr "G_dump: file #%d"
+
+msgid "open mode = %d"
+msgstr "modalità di apertura = %d"
+
+msgid "Cell header %p"
+msgstr "Intestazione cella %p"
+
+#, fuzzy
+msgid "Table reclass %p"
+msgstr "Tabella di riclassificazione %p\n"
+
+#, fuzzy
+msgid "Cell stats %p"
+msgstr "Intestazione cella %p\n"
+
+#, fuzzy
+msgid "Range structure %p"
+msgstr "Struttura intervallo %p\n"
+
+#, fuzzy
+msgid "float Range structure %p"
+msgstr "Struttura intervallo %p\n"
+
+#, fuzzy
+msgid "want histogram?  %d"
+msgstr "vuoi un istogramma?  %d\n"
+
+#, fuzzy
+msgid "nbytes per cell for current row %d"
+msgstr "nbyte per cella nella riga corrente %d\n"
+
+#, fuzzy
+msgid "Decompressed data buffer %s"
+msgstr "Buffer di dati decompresso %s\n"
+
+#, fuzzy
+msgid "bytes per cell %d"
+msgstr "byte per cella %d\n"
+
+#, fuzzy
+msgid "type: int, float or double map %d"
+msgstr "tipi: mappa int, float o double %d\n"
+
+#, fuzzy
+msgid "Temporary name for NEW files %s"
+msgstr "Nome temporaneo per NUOVI file %s\n"
+
+#, fuzzy
+msgid "Temporary name for NEW NULL files %s"
+msgstr "Nome temporaneo per NUOVI file VUOTI %s\n"
+
+#, fuzzy
+msgid "Mapset of open file %s"
+msgstr "Mapset del file d'aprire%s\n"
+
+#, fuzzy
+msgid "io error warning given %d"
+msgstr "attenzione ho ricevuto un errore di i/o %d\n"
+
+#, fuzzy
+msgid "NULL_ROWS array[%d] = %p"
+msgstr "NULL_ROWS array[%d] = %p\n"
+
+#, fuzzy
+msgid "data buffer for reading null rows %p"
+msgstr "buffer di lettura delle righe vuote %p\n"
+
+#, fuzzy
+msgid "G_dump: end"
+msgstr "G_dump: file #%d\n"
+
+#, fuzzy
+msgid "Current window not settable"
+msgstr "finestra corrente = %p\n"
+
+#, fuzzy
+msgid "Cannot use current window"
+msgstr "finestra corrente = %p\n"
+
+#, fuzzy
+msgid "Not able to open cellfile for [%s]"
+msgstr "Impossibile aprire il file %s in %s"
+
+msgid "Too many open raster maps"
+msgstr "Troppi file raster aperti"
+
+msgid "Too many open files"
+msgstr "Troppi file aperti"
+
+msgid "ERROR: GISBASE not set\n"
+msgstr "ERRORE: GISBASE non definito\n"
+
+msgid "unable to find [%s] in [%s]"
+msgstr "impossibile trovare [%s] in [%s]"
+
 #~ msgid "Unknown Location"
 #~ msgstr "Posizione sconosciuta"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Keywords:\n"
-#~ " "
-#~ msgstr ""
-#~ "\n"
-#~ "Parole chiave:\n"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "mappa [%s] - impossibile scrivere nella riga %d"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Errore scrivendo file di formato virgola mobile per mappa %s"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Non riesco a scrivere la linea, la mappa non è aperta"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "impossibile creare un nuovo processo"
-
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "regione del mapset in uso %s\n"
-#~ "esegui \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "regione predefinita %s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Impossibile aprire %s"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "problemi leggendo il file di cellule raster"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "Impossibile creare il file di intestazione per [%s in %s]"
-
-#, fuzzy
-#~ msgid "Registering points"
-#~ msgstr "Linee registrate: "
-
-#, fuzzy
-#~ msgid "Registered points"
-#~ msgstr "Linee registrate: "
-
-#, fuzzy
-#~ msgid "Registered points (unique coordinates)"
-#~ msgstr "Linee registrate: "
-
-#, fuzzy
-#~ msgid "Duplicates"
-#~ msgstr "duplicato campo est"
-
-#~ msgid "Type"
-#~ msgstr "Tipo"
-
-#~ msgid "G_malloc: out of memory"
-#~ msgstr "G_malloc: fuori memoria"
-
-#~ msgid "G_calloc: out of memory"
-#~ msgstr "G_calloc: fuori memoria"
-
-#~ msgid "G_realloc: out of memory"
-#~ msgstr "G_realloc: fuori memoria"
-
-#, fuzzy
-#~ msgid "Cannot get layer info"
-#~ msgstr "Non posso cancellare la linea"
-
-#, fuzzy
-#~ msgid "Cannot open database %s"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Impossibile aprire il file %s in %s"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Impossibile aprire il file %s in %s"
-
-#, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "Non riesco a leggere l'istogramma per [%s in %s]"
-
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "Il nome '%s' in output non è un nome di raster valido."
-
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "La mappa '%s' in output è utilizzata come input"
-
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "impossibile aprire un raster [%s in %s]"
-
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "Non riesco a leggere il file di intestazione per [%s in %s]\n"
-
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "Non riesco ad aprire il file di intestazione per [%s in %s]"
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "Non posso cancellare la linea"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "Non posso scrivere i collegamenti del database"
-
-#~ msgid "Building topology ...\n"
-#~ msgstr "Creazione topologia...\n"
-
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r%d aree create      \n"
-#~ "%d isole create\n"
-
-#, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "Non posso cancellare la linea"
-
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "Vect_rewrite_line() non supportato per questo formato/livello"
-
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "Vect_delete_line() non supportato per questo formato/livello"
-
-#, fuzzy
-#~ msgid "Cannot delete line"
-#~ msgstr "Non riesco a riscrivere la linea"
-
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "Il nome '%s' in output non è valido per un vettore."
-
-#~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "Non posso copiare il vettore '%s' nel '%s'"
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "Non posso cancellare il vettoriale %s"
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "Non posso cancellare il vettoriale %s"
-
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "Non posso aprire il nuovo vettoriale %s"
-
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
-
-#~ msgid "Could not stat file '%s'"
-#~ msgstr "Non riesco a trovare il file \"%s\""
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "Non riesco ad aprire il vecchio vettoriale %s"
-
-#~ msgid "%s - ** illegal name **"
-#~ msgstr "%s - ** nome illegale **"
-
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "Non trovo un monitor grafico per <%s>.\n"
-
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr ""
-#~ "Per piacere avvia \"d.mon\" per selezionare un monitor grafico valido.\n"
-
-#, fuzzy
-#~ msgid "Can't stat %s\n"
-#~ msgstr "Non è possibile trovare %s\n"
-
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "Errore - Monitor <%s> in uso.\n"
-
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "Errore - il Monitor <%s> è in uso da %s.\n"
-
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr ""
-#~ "Errore - non riesco a completare il blocco del processo per il monitor <%"
-#~ "s>.\n"
-
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "Errore - non riesco a creare una pipe al dispositivo grafico.\n"
-
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "Errore -il monitor grafico <%s> non è stato avviato!\n"
-
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "Per piacere avvia il monitor grafico <%s>.\n"
-
-#~ msgid "Not connected...\n"
-#~ msgstr "Non connesso...\n"
-
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "Non riesco a collegarmi al monitor. Provo a farlo ancora.\n"
-
-#, fuzzy
-#~ msgid "Size of cell in fp maps = %d"
-#~ msgstr "Dimensione della cella delle mappe in fp = %d\n"
-
-#, fuzzy
-#~ msgid "type for writing floating maps = %d"
-#~ msgstr "per mappe raster presenti %d\n"
-
-#, fuzzy
-#~ msgid "current window = %p"
-#~ msgstr "finestra corrente = %p\n"
-
-#, fuzzy
-#~ msgid "Flag: window set? %d"
-#~ msgstr "Flag: finestra scelta? %d\n"
-
-#, fuzzy
-#~ msgid "File descriptor for automatic mask %d"
-#~ msgstr "Descrizione del file per la maschera automatica %d\n"
-
-#, fuzzy
-#~ msgid "Flag denoting automatic masking %d"
-#~ msgstr "Descrizione del file per la maschera automatica %d\n"
-
-#, fuzzy
-#~ msgid "CELL mask buffer %p"
-#~ msgstr "CELL maschera del buffer %p\n"
-
-#~ msgid "buffer for reading null rows %p"
-#~ msgstr "buffer di lettura delle righe vuote %p"
-
-#~ msgid "Pre/post compressed data buffer %p"
-#~ msgstr "Buffer di dati pre/post compressi %p"
-
-#~ msgid "sizeof compressed_buf %d"
-#~ msgstr "dimensione del compressed_buf %d"
-
-#~ msgid "work data buffer %p"
-#~ msgstr "work data buffer %p"
-
-#~ msgid "sizeof work_buf %d"
-#~ msgstr "dimensione del work_buf %d"
-
-#~ msgid "sizeof null_buf %d"
-#~ msgstr "dimensione null_buf %d"
-
-#~ msgid "sizeof mask_buf %d"
-#~ msgstr "dimensione mask_buf %d"
-
-#~ msgid "Histogram request %d"
-#~ msgstr "Istogramma richiesto %d"
-
-#~ msgid "G_dump: file #%d"
-#~ msgstr "G_dump: file #%d"
-
-#~ msgid "open mode = %d"
-#~ msgstr "modalità di apertura = %d"
-
-#~ msgid "Cell header %p"
-#~ msgstr "Intestazione cella %p"
-
-#, fuzzy
-#~ msgid "Table reclass %p"
-#~ msgstr "Tabella di riclassificazione %p\n"
-
-#, fuzzy
-#~ msgid "Cell stats %p"
-#~ msgstr "Intestazione cella %p\n"
-
-#, fuzzy
-#~ msgid "Range structure %p"
-#~ msgstr "Struttura intervallo %p\n"
-
-#, fuzzy
-#~ msgid "float Range structure %p"
-#~ msgstr "Struttura intervallo %p\n"
-
-#, fuzzy
-#~ msgid "want histogram?  %d"
-#~ msgstr "vuoi un istogramma?  %d\n"
-
-#, fuzzy
-#~ msgid "nbytes per cell for current row %d"
-#~ msgstr "nbyte per cella nella riga corrente %d\n"
-
-#, fuzzy
-#~ msgid "Decompressed data buffer %s"
-#~ msgstr "Buffer di dati decompresso %s\n"
-
-#, fuzzy
-#~ msgid "bytes per cell %d"
-#~ msgstr "byte per cella %d\n"
-
-#, fuzzy
-#~ msgid "type: int, float or double map %d"
-#~ msgstr "tipi: mappa int, float o double %d\n"
-
-#, fuzzy
-#~ msgid "Temporary name for NEW files %s"
-#~ msgstr "Nome temporaneo per NUOVI file %s\n"
-
-#, fuzzy
-#~ msgid "Temporary name for NEW NULL files %s"
-#~ msgstr "Nome temporaneo per NUOVI file VUOTI %s\n"
-
-#, fuzzy
-#~ msgid "Mapset of open file %s"
-#~ msgstr "Mapset del file d'aprire%s\n"
-
-#, fuzzy
-#~ msgid "io error warning given %d"
-#~ msgstr "attenzione ho ricevuto un errore di i/o %d\n"
-
-#, fuzzy
-#~ msgid "NULL_ROWS array[%d] = %p"
-#~ msgstr "NULL_ROWS array[%d] = %p\n"
-
-#, fuzzy
-#~ msgid "data buffer for reading null rows %p"
-#~ msgstr "buffer di lettura delle righe vuote %p\n"
-
-#, fuzzy
-#~ msgid "G_dump: end"
-#~ msgstr "G_dump: file #%d\n"
-
-#, fuzzy
-#~ msgid "Current window not settable"
-#~ msgstr "finestra corrente = %p\n"
-
-#, fuzzy
-#~ msgid "Cannot use current window"
-#~ msgstr "finestra corrente = %p\n"
-
-#, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Impossibile aprire il file %s in %s"
-
-#~ msgid "Too many open raster maps"
-#~ msgstr "Troppi file raster aperti"
-
-#~ msgid "Too many open files"
-#~ msgstr "Troppi file aperti"
-
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "ERRORE: GISBASE non definito\n"
-
-#~ msgid "unable to find [%s] in [%s]"
-#~ msgstr "impossibile trovare [%s] in [%s]"
 
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr "quantization file [%s] nel mapset [%s] %s"
@@ -6895,3 +6895,42 @@ msgstr ""
 
 #~ msgid "ignoring %d points -- too dense"
 #~ msgstr "Ignorati %d punti -- densità eccessiva"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Impossibile aprire il file %s in %s"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "problemi leggendo il file di cellule raster"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "proiezione non valida\n"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Per piacere avvisa gli sviluppatori GRASS per questo errore\n"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Nome della mappa raster in input"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Nome delle mappe raster in input"
+
+#~ msgid "to accept the default"
+#~ msgstr "per accettare i valori predefiniti"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "premi INVIO per continuare -->"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Nessun aiuto disponibile per il comando [%s]\n"
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "Non riesco ad aggiungere un collegamento database"

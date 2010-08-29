@@ -3424,11 +3424,11 @@ msgstr "%s उघडता आले नाही"
 
 #: ../lib/vector/Vlib/open.c:252 ../lib/vector/Vlib/open.c:339
 #: ../lib/vector/Vlib/open.c:360
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
 "by v.build."
-msgstr ""
+msgstr "%s उघडता आले नाही"
 
 #: ../lib/vector/Vlib/open.c:255
 #, fuzzy, c-format
@@ -5534,7 +5534,7 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "%s उघडता आले नाही"
+msgstr "उघडलेल्या फाइलचे नाव %s\n"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5602,6 +5602,42 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
 #, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "%s मिळाले नाही"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "%s उघडता आले नाही"
+
+#, fuzzy
 #~ msgid "Unable to open raster map <%s>"
 #~ msgstr "%s उघडता आले नाही"
 
@@ -5612,10 +5648,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unable to write raster row %i"
 #~ msgstr "%s उघडता आले नाही"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "%s मिळाले नाही"
 
 #, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
@@ -5630,10 +5662,6 @@ msgstr ""
 #~ msgstr "%s उघडता आले नाही"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "%s उघडता आले नाही"
-
-#, fuzzy
 #~ msgid " It is a reclass of raster map <%s@%s> "
 #~ msgstr "%s उघडता आले नाही"
 
@@ -5642,32 +5670,12 @@ msgstr ""
 #~ msgstr "temp फाइल उघडता आली नाही"
 
 #, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "%s उघडता आले नाही"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "%s उघडता आले नाही"
-
-#, fuzzy
 #~ msgid "Unable to open file %s in <%s>"
 #~ msgstr "%s उघडता आले नाही"
 
 #, fuzzy
 #~ msgid "ERROR in reading <%s> file for location <%s>"
 #~ msgstr "%s वाचताना त्रुटी"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "%s उघडता आले नाही"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "%s उघडता आले नाही"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "%s उघडता आले नाही"
 
 #, fuzzy
 #~ msgid "Unable to open category index file for vector map <%s@%s>"
@@ -5696,14 +5704,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Cannot open database %s"
 #~ msgstr "temp फाइल उघडता आली नाही"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "%s उघडता आले नाही"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "%s उघडता आले नाही"
 
 #, fuzzy
 #~ msgid "Cannot describe table <%s>"
@@ -5867,3 +5867,81 @@ msgstr ""
 #, fuzzy
 #~ msgid "Not able to open cellfile for [%s]"
 #~ msgstr "उघडलेल्या फाइलचे नाव %s\n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "%s उघडता आले नाही"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "%s@%s हा रास्टर नकाशा रिक्त आहे"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "temp फाइल उघडता आली नाही"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "पुढे जाण्यासाठी RETURN टाइप करा -->"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "%s उघडता आले नाही"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "[%s] या कमांडसाठी कोणतीही मदत उपलब्ध नाही\n"
+
+#, fuzzy
+#~ msgid "Unable to read header file for raster map <%s@%s>."
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr "temp फाइल उघडता आली नाही"
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "temp फाइल उघडता आली नाही"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "temp फाइल उघडता आली नाही"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "temp फाइल उघडता आली नाही"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr "%s उघडता आले नाही"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "%s उघडता आले नाही"

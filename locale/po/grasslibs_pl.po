@@ -5652,16 +5652,16 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "podgrupa <%s> grupy <%s> odnosi się do następujących map rastrowych\n"
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr ""
-#~ "W pliku historii nie ma wystarczająco dużo miejsca, aby zapisać wiersz "
-#~ "poleceń."
+msgid "Not enough room in history file to record command line"
+msgstr ""
+"W pliku historii nie ma wystarczająco dużo miejsca, aby zapisać wiersz "
+"poleceń."
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "W pliku historii nie ma wystarczająco dużo miejsca, aby zapisać wiersz "
-#~ "poleceń."
+msgid "Not enough room in history file for command line (truncated)"
+msgstr ""
+"W pliku historii nie ma wystarczająco dużo miejsca, aby zapisać wiersz "
+"poleceń."
 
 #~ msgid "Unknown Location"
 #~ msgstr "Nieznane położenie"

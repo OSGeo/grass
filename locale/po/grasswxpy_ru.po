@@ -1169,7 +1169,7 @@ msgstr "Импорт растровых данных используя GDAL"
 #: ../gui/wxpython/menustrings.py:21
 #, fuzzy
 msgid "Bulk import of raster data"
-msgstr "Импорт векторного слоя"
+msgstr "Импортировать растровый слой"
 
 #: ../gui/wxpython/menustrings.py:22
 #, fuzzy
@@ -1192,7 +1192,7 @@ msgstr "Импорт растра поддерживаемый GDAL в бина�
 #: ../gui/wxpython/menustrings.py:25
 #, fuzzy
 msgid "Bulk link of raster data"
-msgstr "Невозможно выгрузить растровый слой"
+msgstr "Основные метаданные растра"
 
 #: ../gui/wxpython/menustrings.py:26
 #, fuzzy
@@ -1332,7 +1332,7 @@ msgstr "Конвертировать векторные слои Convert OGR в 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1091
 #, fuzzy
 msgid "Link vector data"
-msgstr "Импорт векторного слоя"
+msgstr "Основные векторные метаданные"
 
 #: ../gui/wxpython/menustrings.py:55
 #, fuzzy
@@ -1343,7 +1343,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:56
 #, fuzzy
 msgid "Bulk link of vector data"
-msgstr "Импорт векторного слоя"
+msgstr "Основные векторные метаданные"
 
 #: ../gui/wxpython/menustrings.py:57
 #, fuzzy
@@ -1389,14 +1389,15 @@ msgid "Converts files in DXF format to GRASS vector map format."
 msgstr "Конвертировать файлов в формате DXF в векторные слои GRASS."
 
 #: ../gui/wxpython/menustrings.py:66
-#, fuzzy
 msgid "Bulk import of DXF"
-msgstr "Импорт векторного слоя"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:67
 #, fuzzy
 msgid "Converts multiple DXF layers to GRASS vector maps."
-msgstr "Конвертировать векторные слои Convert OGR в векторные слои GRASS."
+msgstr ""
+"Конвертировать выбранные слои DXF в векторные слои GRASS (используя v.in."
+"dxf)."
 
 #: ../gui/wxpython/menustrings.py:68
 msgid "ESRI e00 import"
@@ -1489,14 +1490,13 @@ msgid "Imports attribute tables in various formats."
 msgstr "Импорт атрибутивных таблиц в различных форматах."
 
 #: ../gui/wxpython/menustrings.py:86
-#, fuzzy
 msgid "Export raster map"
-msgstr "Импортировать растровый слой"
+msgstr "Экспорт растрового слоя"
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:118
 #, fuzzy
 msgid "Common export formats"
-msgstr "Координаты"
+msgstr "Конвертировать координаты"
 
 #: ../gui/wxpython/menustrings.py:88
 #, fuzzy
@@ -1694,7 +1694,7 @@ msgstr "Конвертировать бинарный векторный сло�
 #: ../gui/wxpython/menustrings.py:132
 #, fuzzy
 msgid "Export 3D raster maps"
-msgstr "Импортировать растровый слой"
+msgstr "Экспорт растрового слоя"
 
 #: ../gui/wxpython/menustrings.py:133
 msgid "ASCII 3D export"
@@ -1944,7 +1944,6 @@ msgid "Launches script file."
 msgstr "Выберите файл проекта"
 
 #: ../gui/wxpython/menustrings.py:190
-#, fuzzy
 msgid "Exit GUI"
 msgstr "Выйти из интерфейса"
 
@@ -2235,7 +2234,6 @@ msgid "Re-projects a raster map from one location to the current location."
 msgstr "Перепроектировать растровый слой из одной области в текущую."
 
 #: ../gui/wxpython/menustrings.py:258
-#, fuzzy
 msgid "Tiling"
 msgstr "Тайлинг"
 
@@ -4051,7 +4049,6 @@ msgid "Update area attributes from raster"
 msgstr "Обновить атрибуты полигона из растра"
 
 #: ../gui/wxpython/menustrings.py:642
-#, fuzzy
 msgid ""
 "Calculates univariate statistics from a GRASS raster map based on vector "
 "polygons and uploads statistics to new attribute columns."
@@ -5071,7 +5068,6 @@ msgid "Validate entire model"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:882
-#, fuzzy
 msgid "Help"
 msgstr "Помощь"
 
@@ -5210,9 +5206,8 @@ msgid "raster map"
 msgstr "Растровый слой"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:122
-#, fuzzy
 msgid "Operators"
-msgstr "Прозрачный"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:124
 msgid "Operands"
@@ -5348,9 +5343,8 @@ msgid "Insert existing %s"
 msgstr "перезаписать существующий файл"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:211
-#, fuzzy
 msgid "Insert mapcalc function"
-msgstr "Сечение"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:412
 #, fuzzy
@@ -7137,7 +7131,6 @@ msgstr "Поверхность"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:275
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:237
-#, fuzzy
 msgid "Vector"
 msgstr "Вектор"
 
@@ -7645,7 +7638,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gselect.py:1118
 #, fuzzy
 msgid "Choose input file"
-msgstr "Выберите файл проекта"
+msgstr "Выберите исходную папку"
 
 #: ../gui/wxpython/gui_modules/gselect.py:991
 msgid "Choose input directory"
@@ -8840,9 +8833,9 @@ msgid " row %d:"
 msgstr " строка  %d:"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:78
-#, python-format
+#, fuzzy, python-format
 msgid "GRASS SQL Builder (%(type)s): vector map <%(map)s>"
-msgstr ""
+msgstr "Конструктор SQL GRASS: %s"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:85
 #, fuzzy
@@ -9025,15 +9018,14 @@ msgid "3d raster map <%s> not found"
 msgstr "Слой <%s> не найден."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:188
-#, fuzzy
 msgid "3D view mode not available"
-msgstr "Инструменты NVIZ"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/toolbars.py:189
 #: ../gui/wxpython/gui_modules/toolbars.py:205
-#, fuzzy, python-format
+#, python-format
 msgid "Reason: %s"
-msgstr "Регион"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/toolbars.py:190
 msgid ""
@@ -11338,43 +11330,150 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-#~ msgid ""
-#~ "Reading workspace file <%(file)s> failed.\n"
-#~ "Invalid file, unable to parse XML document.\n"
-#~ "\n"
-#~ "%(err)s"
-#~ msgstr ""
-#~ "Не удалось прочитать файл <%s>. Поврежденный файл, невозможно обработать "
-#~ "документ XML."
+msgid ""
+"Reading workspace file <%(file)s> failed.\n"
+"Invalid file, unable to parse XML document.\n"
+"\n"
+"%(err)s"
+msgstr ""
+"Не удалось прочитать файл <%s>. Поврежденный файл, невозможно обработать "
+"документ XML."
+
+#, fuzzy
+msgid "GRASS GIS Map Calculator (3D raster)"
+msgstr "GRASS %s Калькулятор слоев"
+
+#, fuzzy
+msgid "Raster calculator"
+msgstr "3D растровый калькулятор"
+
+#, fuzzy
+msgid "Find extension by"
+msgstr "Управление проекциями"
+
+#, fuzzy
+msgid "3D Raster map"
+msgstr "Растровый слой"
+
+#, fuzzy
+msgid "Error in command execution '%s'"
+msgstr "Ошибка при выполнении команды %s"
+
+#, fuzzy
+msgid "module"
+msgstr "Код"
+
+#, fuzzy
+msgid "Select GRASS module"
+msgstr "Выбирите область проекта и набор"
+
+#, fuzzy
+msgid "Unable to get list of available mapsets."
+msgstr "Невозможно удалить набор"
+
+#, fuzzy
+msgid "Unable to get list of accessible mapsets."
+msgstr "Невозможно удалить набор"
+
+#, fuzzy
+msgid "Native"
+msgstr "Сохранить изменения"
+
+#, fuzzy
+msgid "Choose OGR data source"
+msgstr "Выберите каталог с данными GRASS"
+
+#, fuzzy
+msgid "label"
+msgstr "Добавить подписи"
+
+#, fuzzy
+msgid "help"
+msgstr "Помощь"
+
+#, fuzzy
+msgid "Run"
+msgstr "&Выполнить"
+
+#, fuzzy
+msgid "Saved NVIZ Settings"
+msgstr "Сохранить текущие настройки?"
+
+#, fuzzy
+msgid "Load and apply settings from user settings file"
+msgstr "Закрыть диалог и сохранить изменения в файле настроек пользователя"
+
+msgid "Import raster map"
+msgstr "Импортировать растровый слой"
+
+#, fuzzy
+msgid "Bulk raster map import"
+msgstr "3d растровый слой"
+
+#, fuzzy
+msgid "Link to external raster map"
+msgstr "Невозможно выгрузить растровый слой"
+
+msgid "Import vector map"
+msgstr "Импорт векторного слоя"
+
+#, fuzzy
+msgid "Link to external vector map"
+msgstr "Невозможно обновить векторный слой."
+
+#, fuzzy
+msgid "Bulk DXF layer import"
+msgstr "Импорт нескольких слоев DXF "
+
+#, fuzzy
+msgid "C&onfig"
+msgstr "Конфигурация"
+
+msgid "Map calculator for raster map algebra"
+msgstr "Калькулятор для растровой алгебры"
+
+#, fuzzy
+msgid "Digitize vector map (requires TclTk)"
+msgstr "Векторизовать растр (требует XTerm)"
+
+#, fuzzy
+msgid "Change the type of geometry elements"
+msgstr "Изменить тип геометрических элементов."
+
+#, fuzzy
+msgid "Show menu tree"
+msgstr "Дерево Штейнера"
+
+#, fuzzy
+msgid "Show menu tree in new window"
+msgstr "Плавающее окно"
+
+msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr."
+msgstr ""
+"Конвертировать векторные слои OGR в векторные слои GRASS используя v.in.ogr."
+
+msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)."
+msgstr ""
+"Конвертировать выбранные слои DXF в векторные слои GRASS (используя v.in."
+"dxf)."
+
+msgid "GRASS SQL Builder: %s"
+msgstr "Конструктор SQL GRASS: %s"
+
+msgid "Outputs basic information about a user-specified vector map layer."
+msgstr "Вывести основную информация о векторном слое, выбранном пользователем."
+
+msgid "Projection for current location"
+msgstr "Проекция для текущей области"
 
 #~ msgid "Unable to open workspace file <%s> for writing."
 #~ msgstr "Невозможно открыть файл проекта <%s> для записи."
 
-#, fuzzy
-#~ msgid "GRASS GIS Map Calculator (3D raster)"
-#~ msgstr "GRASS %s Калькулятор слоев"
-
 #~ msgid "Redraw GCP markers in map displays"
 #~ msgstr "Перерисовать GCP маркеры в окне карты"
 
-#, fuzzy
-#~ msgid "Raster calculator"
-#~ msgstr "3D растровый калькулятор"
-
 #~ msgid "Map calculator"
 #~ msgstr "Растровый калькулятор"
-
-#, fuzzy
-#~ msgid "Find extension by"
-#~ msgstr "Управление проекциями"
-
-#, fuzzy
-#~ msgid "3D Raster map"
-#~ msgstr "Растровый слой"
-
-#, fuzzy
-#~ msgid "Error in command execution '%s'"
-#~ msgstr "Ошибка при выполнении команды %s"
 
 #~ msgid "Preferences error"
 #~ msgstr "Ошибка настроек"
@@ -11388,30 +11487,6 @@ msgstr ""
 #~ msgid "Nviz error"
 #~ msgstr "ошибка Nviz"
 
-#, fuzzy
-#~ msgid "module"
-#~ msgstr "Код"
-
-#, fuzzy
-#~ msgid "Select GRASS module"
-#~ msgstr "Выбирите область проекта и набор"
-
-#, fuzzy
-#~ msgid "Unable to get list of available mapsets."
-#~ msgstr "Невозможно удалить набор"
-
-#, fuzzy
-#~ msgid "Unable to get list of accessible mapsets."
-#~ msgstr "Невозможно удалить набор"
-
-#, fuzzy
-#~ msgid "Native"
-#~ msgstr "Сохранить изменения"
-
-#, fuzzy
-#~ msgid "Choose OGR data source"
-#~ msgstr "Выберите каталог с данными GRASS"
-
 #~ msgid "Input DXF file"
 #~ msgstr "Исходный файл DXF"
 
@@ -11424,57 +11499,14 @@ msgstr ""
 #~ msgid "Select file extension:"
 #~ msgstr "Выберите расширение файла:"
 
-#, fuzzy
-#~ msgid "label"
-#~ msgstr "Добавить подписи"
-
-#, fuzzy
-#~ msgid "help"
-#~ msgstr "Помощь"
-
-#, fuzzy
-#~ msgid "Run"
-#~ msgstr "&Выполнить"
-
-#, fuzzy
-#~ msgid "Saved NVIZ Settings"
-#~ msgstr "Сохранить текущие настройки?"
-
-#, fuzzy
 #~ msgid "Load"
 #~ msgstr "Загрузить"
 
 #~ msgid "Default"
 #~ msgstr "По умолчанию"
 
-#, fuzzy
-#~ msgid "Load and apply settings from user settings file"
-#~ msgstr "Закрыть диалог и сохранить изменения в файле настроек пользователя"
-
 #~ msgid "Restore default settings"
 #~ msgstr "Восстановить настройки по умолчанию"
-
-#~ msgid "Import raster map"
-#~ msgstr "Импортировать растровый слой"
-
-#, fuzzy
-#~ msgid "Bulk raster map import"
-#~ msgstr "3d растровый слой"
-
-#, fuzzy
-#~ msgid "Link to external raster map"
-#~ msgstr "Невозможно выгрузить растровый слой"
-
-#~ msgid "Import vector map"
-#~ msgstr "Импорт векторного слоя"
-
-#, fuzzy
-#~ msgid "Link to external vector map"
-#~ msgstr "Невозможно обновить векторный слой."
-
-#, fuzzy
-#~ msgid "Bulk DXF layer import"
-#~ msgstr "Импорт нескольких слоев DXF "
 
 #~ msgid "Import grid 3D volume"
 #~ msgstr "Импорт объемных 3D гридов"
@@ -11483,15 +11515,8 @@ msgstr ""
 #~ msgstr "Экспорт 3D грид"
 
 #, fuzzy
-#~ msgid "C&onfig"
-#~ msgstr "Конфигурация"
-
-#, fuzzy
 #~ msgid "Change default GUI"
 #~ msgstr "&Установить по умолчанию"
-
-#~ msgid "Map calculator for raster map algebra"
-#~ msgstr "Калькулятор для растровой алгебры"
 
 #~ msgid ""
 #~ "Calculates cast shadow areas from sun position and DEM. Either A: exact "
@@ -11526,27 +11551,11 @@ msgstr ""
 #~ msgstr "Программа создания водосборного бассейна."
 
 #, fuzzy
-#~ msgid "Digitize vector map (requires TclTk)"
-#~ msgstr "Векторизовать растр (требует XTerm)"
-
-#, fuzzy
 #~ msgid "Interactive editing and digitization of vector maps."
 #~ msgstr "Интерактивно редактировать значения ячеек растрового слоя."
 
-#, fuzzy
-#~ msgid "Change the type of geometry elements"
-#~ msgstr "Изменить тип геометрических элементов."
-
 #~ msgid "Map calculator for volumetric map algebra"
 #~ msgstr "Калькулятор слоев для объемной алгебры"
-
-#, fuzzy
-#~ msgid "Show menu tree"
-#~ msgstr "Дерево Штейнера"
-
-#, fuzzy
-#~ msgid "Show menu tree in new window"
-#~ msgstr "Плавающее окно"
 
 #~ msgid "Map layers for each display"
 #~ msgstr "Слои для каждого дисплея"
@@ -11628,22 +11637,12 @@ msgstr ""
 #~ msgid "Multiple vector data import using OGR"
 #~ msgstr "Импорт нескольких векторных слоев используя OGR"
 
-#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr."
-#~ msgstr ""
-#~ "Конвертировать векторные слои OGR в векторные слои GRASS используя v.in."
-#~ "ogr."
-
 #~ msgid "Link to OGR"
 #~ msgstr "Связать с OGR"
 
 #, fuzzy
 #~ msgid "Multiple link to OGR"
 #~ msgstr "Связать с OGR"
-
-#~ msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)."
-#~ msgstr ""
-#~ "Конвертировать выбранные слои DXF в векторные слои GRASS (используя v.in."
-#~ "dxf)."
 
 #~ msgid "Garmin GPS import"
 #~ msgstr "Импорт Garmin GPS"
@@ -11759,9 +11758,6 @@ msgstr ""
 
 #~ msgid "Output vector map name"
 #~ msgstr "Имя выходного векторного слоя"
-
-#~ msgid "GRASS SQL Builder: %s"
-#~ msgstr "Конструктор SQL GRASS: %s"
 
 #~ msgid "Add overlay"
 #~ msgstr "Добавить оверлей"
@@ -11894,10 +11890,6 @@ msgstr ""
 #~ "Переклассифицировать векторные объекты в интерактивном режиме путем "
 #~ "введения команд SQL"
 
-#~ msgid "Outputs basic information about a user-specified vector map layer."
-#~ msgstr ""
-#~ "Вывести основную информация о векторном слое, выбранном пользователем."
-
 #~ msgid ""
 #~ "Hue-intensity-saturation (his) to red-green-blue (rgb) raster map color "
 #~ "transformation function."
@@ -11973,9 +11965,6 @@ msgstr ""
 
 #~ msgid "Close current workspace file"
 #~ msgstr "Закрыть текущий файл проекта"
-
-#~ msgid "Projection for current location"
-#~ msgstr "Проекция для текущей области"
 
 #~ msgid "Digitize raster map"
 #~ msgstr "Векторизовать растровый слой"
@@ -12106,3 +12095,548 @@ msgstr ""
 
 #~ msgid "Error in Attribute Table Manager"
 #~ msgstr "Ошибка в Менеджере атрибутивных таблиц"
+
+#~ msgid ""
+#~ "Reading workspace file <%s> failed. Invalid file, unable to parse XML "
+#~ "document."
+#~ msgstr ""
+#~ "Не удалось прочитать файл <%s>. Поврежденный файл, невозможно обработать "
+#~ "документ XML."
+
+#~ msgid "Writing current settings to workspace file failed (%s)."
+#~ msgstr "Сохранение текущих настроек в файл проекта не удалось (%s)."
+
+#, fuzzy
+#~ msgid "GRASS GIS Raster Map Calculator (3D raster)"
+#~ msgstr "GRASS %s Калькулятор слоев"
+
+#, fuzzy
+#~ msgid "Add various vector-based map layer"
+#~ msgstr "Добавить векторный слой"
+
+#, fuzzy
+#~ msgid "COPYING file missing"
+#~ msgstr "Отсутствует код EPSG."
+
+#~ msgid "Force re-rendering of all layers"
+#~ msgstr "Перерисовать все слои"
+
+#~ msgid "Create new workspace file"
+#~ msgstr "Создать файл рабочей области"
+
+#~ msgid "Load map layers into workspace"
+#~ msgstr "Загрузить слои карты в  рабочую область"
+
+#~ msgid "Open existing workspace file"
+#~ msgstr "Открыть  рабочую область"
+
+#~ msgid "Save current workspace to file"
+#~ msgstr "Сохранить текущую рабочую область в файл"
+
+#~ msgid "Add raster map layer"
+#~ msgstr "Добавить растровый слой"
+
+#~ msgid "Add vector map layer"
+#~ msgstr "Добавить векторный слой"
+
+#~ msgid "Add layer group"
+#~ msgstr "Добавить группу слоев"
+
+#~ msgid "Delete selected layer"
+#~ msgstr "Удалить выбранный слой"
+
+#~ msgid "Add RGB layer"
+#~ msgstr "Добавить RGB растр"
+
+#~ msgid "Add HIS layer"
+#~ msgstr "Добавить HIS растр"
+
+#~ msgid "Add 3D raster map"
+#~ msgstr "Добавить 3D растровый слой"
+
+#~ msgid "Reload GCPs from selected POINTS file"
+#~ msgstr "Загрузить GCP из выбранного файла POINTS"
+
+#~ msgid "Show Nviz settings dialog"
+#~ msgstr "Показать диалог настройки Nviz"
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr "Конвертировать растровый файл ASCII в бинарный растровый слой."
+
+#~ msgid "ASCII polygons and lines import"
+#~ msgstr "Импорт полигонов и линий ASCII"
+
+#~ msgid ""
+#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "Конвертировать растровый ascii  файл ESRI ARC/INFO (GRID) в бинарный "
+#~ "растровый слой."
+
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "Импорт файл SPOT VGT NDVI в растровый слой"
+
+#~ msgid ""
+#~ "Georeference, rectify and import Terra-ASTER imagery and relative DEM's "
+#~ "using gdalwarp."
+#~ msgstr ""
+#~ "Привязать, трансформировать и импортировать съемку Terra-ASTER и "
+#~ "относительные ЦМР используя gdalwarp."
+
+#~ msgid "Downloads and imports data from WMS servers."
+#~ msgstr "Загрузить и импортировать данные с серверов WMS."
+
+#~ msgid "Convert OGR vector layers to GRASS vector map."
+#~ msgstr "Конвертировать векторные слои Convert OGR в векторные слои GRASS."
+
+#, fuzzy
+#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
+#~ msgstr ""
+#~ "Конвертировать векторные слои OGR в векторные слои GRASS используя v.in."
+#~ "ogr."
+
+#~ msgid "ASCII points/GRASS ASCII vector import"
+#~ msgstr "Импорт точек ASCII/ASCII вектора GRASS"
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr ""
+#~ "Создать векторный слои из точечного файла ASCII или векторного файла "
+#~ "ASCII."
+
+#~ msgid "Old GRASS vector import"
+#~ msgstr "Импорт старого вектора GRASS "
+
+#~ msgid "GPSBabel GPS import"
+#~ msgstr "Импорт GPSBabel GPS"
+
+#~ msgid ""
+#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+#~ "file into a vector map."
+#~ msgstr ""
+#~ "Импорт точек, маршрутов и трэков из приемника GPS или файла данных "
+#~ "загруженных из GPS в векторный слой."
+
+#, fuzzy
+#~ msgid "Matlab-ASCII or Mapgen import"
+#~ msgstr "Импорт Matlab и MapGen"
+
+#, fuzzy
+#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+#~ msgstr "Импорт векторных слоев Mapgen или Matlab в GRASS."
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "Конвертация текстового файла 3D ASCII растра в бинарный 3D растровый слой"
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "Конвертирует растровый слой в текстовый файл ASCII."
+
+#~ msgid "ASCII x,y,z export"
+#~ msgstr "Экспорт ASCII x,y,z"
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr "Экспорт растрового слоя GRASS в слой GRIDATB.FOR (TOPMODEL)"
+
+#~ msgid "Raster File Series to MPEG Conversion Program."
+#~ msgstr "Программа перевод серий растровых файлов в MPEG."
+
+#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
+#~ msgstr "Экспорт растра GRASS в графический формат PNG без привязки."
+
+#~ msgid ""
+#~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
+#~ "resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr ""
+#~ "Конвертировать 3 растровых слоя GRASS (R,G,B) в изображение PPM  с "
+#~ "разрешением текущего региона."
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr "Конвертировать растровый слой в файл высот для POVRAY."
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr "Экспорт растрового слоя в Virtual Reality Modeling Language (VRML)"
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "Конвертировать растровые слои в формат VTK-Ascii"
+
+#~ msgid "Converts to one of the supported OGR vector formats."
+#~ msgstr "Конвертировать один из поддерживаемых форматов OGR."
+
+#~ msgid "ASCII points/GRASS ASCII vector export"
+#~ msgstr "Экспорт точек ASCII/GRASS ASCII"
+
+#~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
+#~ msgstr ""
+#~ "Конвертировать бинарный векторный слой GRASS в векторный слой GRASS ASCII."
+
+#~ msgid "Exports GRASS vector map layers to DXF file format."
+#~ msgstr "Экспорт векторного слоя GRASS в формат DXF."
+
+#~ msgid "Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y"
+#~ msgstr "Конвертировать в формат POV-Ray, GRASS x,y,z -> POV-Ray x,z,y"
+
+#~ msgid "Exports a GRASS vector map to SVG."
+#~ msgstr "Экспорт векторного слоя GRASS в SVG."
+
+#~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
+#~ msgstr "Конвертировать бинарный векторный слой GRASS в VTK ASCII."
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "Конвертировать 3D растровый слой в текстовый файл ASCII"
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr "Экспорт растрового слоя GRASS 3D в 3D файл Vis5D."
+
+#~ msgid "Multiple export formats using OGR"
+#~ msgstr "Форматы экспорта использующие OGR"
+
+#~ msgid "Converts a raster map into a vector map layer."
+#~ msgstr "Конвертировать растровый слой в векторный."
+
+#, fuzzy
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr ""
+#~ "Конвертировать бинарный векторный слой GRASS в растровый слой GRASS."
+
+#~ msgid ""
+#~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
+#~ "raster map layer."
+#~ msgstr ""
+#~ "Конвертировать бинарный векторный слой GRASS (только точки) в растровый "
+#~ "слой 3D GRASS."
+
+#~ msgid "E&xit"
+#~ msgstr "В&ыход"
+
+#~ msgid "Config"
+#~ msgstr "Конфигурация"
+
+#, fuzzy
+#~ msgid "Change projection for current location"
+#~ msgstr "Проекция для текущей области"
+
+#~ msgid "Convert coordinates from one projection to another (cs2cs frontend)."
+#~ msgstr ""
+#~ "Конвертировать координаты из одной проекции в другую (использует cs2cs)"
+
+#~ msgid "Raster"
+#~ msgstr "Растр"
+
+#~ msgid "Digitize raster (requires XTerm)"
+#~ msgstr "Векторизовать растр (требует XTerm)"
+
+#~ msgid "Creates/modifies the color table associated with a raster map layer."
+#~ msgstr "Создать/изменить цветовую таблицу растрового слоя"
+
+#~ msgid ""
+#~ "Creates a raster map layer showing buffer zones surrounding cells that "
+#~ "contain non-NULL category values."
+#~ msgstr ""
+#~ "Создать растровый слой показывающий растровые зоны окружающие ячейки "
+#~ "содержащие не-NULL значения категории."
+
+#~ msgid "Create a MASK for limiting raster operation"
+#~ msgstr "Создать MASK для ограничения растровых операций"
+
+#, fuzzy
+#~ msgid "Map calculator for raster map algebra."
+#~ msgstr "Калькулятор для растровой алгебры"
+
+#~ msgid "Calculates category or object oriented statistics."
+#~ msgstr "Рассчитать статистику по категориям или объектам."
+
+#~ msgid ""
+#~ "Generates raster map layers of slope, aspect, curvatures and partial "
+#~ "derivatives from a raster map layer of true elevation values. Aspect is "
+#~ "calculated counterclockwise from east."
+#~ msgstr ""
+#~ "Создать растровые слои крутизны, экспозиции, кривизны и частичных "
+#~ "производных склона ипользуя растровый слой высот. Экспозиция вычисляется "
+#~ "простив часовой стрелки начиная с востока."
+
+#, fuzzy
+#~ msgid "Generates a raster map layer of distance to features in input layer."
+#~ msgstr ""
+#~ "Создать растровый слой с протяженными зонами выращенными вокруг единичных "
+#~ "ячеек."
+
+#~ msgid ""
+#~ "Filters and generates a depressionless elevation map and a flow direction "
+#~ "map from a given elevation layer."
+#~ msgstr ""
+#~ "Отфильтровать и создать слой высот без депрессий и слой направлений "
+#~ "потоков из имеющегося слоя высот."
+
+#~ msgid "Flow computation for massive grids (Float version)."
+#~ msgstr "Расчет потока для массивных гридов (версия с плавающей запятой)"
+
+#~ msgid ""
+#~ "Overland flow hydrologic simulation using path sampling method (SIMWE)"
+#~ msgstr ""
+#~ "Гидрологическая симуляция  поверхностного стока с использованием метода "
+#~ "выбора траекторий (SIMWE)"
+
+#~ msgid ""
+#~ "Sediment transport and erosion/deposition simulation using path sampling "
+#~ "method (SIMWE)"
+#~ msgstr ""
+#~ "Симуляция переноса и эрозии/отложения наносов используя метод линейной "
+#~ "выборки (SIMWE)"
+
+#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+#~ msgstr "Создает слой индекса рельефа [ln(a/tan(beta))] слоя высот"
+
+#~ msgid ""
+#~ "r.recode.rules - Use ascii rules file to recode categories in raster map"
+#~ msgstr ""
+#~ "r.recode.rules - используйте ascii-файл правил для того, чтобы "
+#~ "перекодировать категории в растровом слое"
+
+#~ msgid "Surface generation program from rasterized contours."
+#~ msgstr "Программа генерирования поверхности из растеризованных изолиний."
+
+#, fuzzy
+#~ msgid "Digitize vector map using Tcl/Tk digitizer"
+#~ msgstr "Векторизовать растр (требует XTerm)"
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "Создать топологию для векторного слоя GRASS"
+
+#~ msgid "Vector based generalization."
+#~ msgstr "Векторная генерализация."
+
+#, fuzzy
+#~ msgid "Change the type of geometry elements."
+#~ msgstr "Изменить тип геометрических элементов."
+
+#~ msgid "Extrudes flat vector object to 3D with defined height."
+#~ msgstr "Выдвинуть в 3D плоский векторный объект на заданную высоту."
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "Создать запрос к векторному слою в заданных местоположениях."
+
+#~ msgid ""
+#~ "Creates a buffer around features of given type (areas must contain "
+#~ "centroid)."
+#~ msgstr ""
+#~ "Создать буфер вокруг объектов данного типа (площадные объекты должны "
+#~ "содержать центроиды)."
+
+#, fuzzy
+#~ msgid "Find shortest path for selected starting and ending node"
+#~ msgstr "Найти кратчайший путь по векторной сети"
+
+#~ msgid "Create a new vector map layer by combining other vector map layers."
+#~ msgstr ""
+#~ "Создать новый векторный слой путем комбинирования других векторных слоев."
+
+#~ msgid "Attach, delete or report vector categories to map geometry."
+#~ msgstr ""
+#~ "Прикрепить, удалить или вывести векторные категории для геометрии слоя."
+
+#~ msgid "Creates a GRASS vector map of a user-defined grid."
+#~ msgstr "Создать векторный слой GRASS из заданного пользователем грида."
+
+#~ msgid "Create points along input lines in new vector with 2 layers."
+#~ msgstr "Создать точки вдоль исходных линий в новый вектор с двумя слоями."
+
+#~ msgid "Randomly generate a 2D/3D vector points map."
+#~ msgstr "Создание случайных 2D/3D слоев точек."
+
+#~ msgid "Random location perturbations of GRASS vector points"
+#~ msgstr "Случайное смещение местоположений векторных точек GRASS"
+
+#, fuzzy
+#~ msgid "Outputs basic information about a user-specified vector map."
+#~ msgstr ""
+#~ "Вывести основную информация о векторном слое, выбранном пользователем."
+
+#~ msgid "Reports geometry statistics for vectors."
+#~ msgstr "Показать статистику геометрии для векторов."
+
+#~ msgid "Tests for normality for points."
+#~ msgstr "Тест нормальности для точек."
+
+#~ msgid "Imagery"
+#~ msgstr "Изображения"
+
+#~ msgid "Mosaics up to 4 images and extends colormap; creates map *.mosaic"
+#~ msgstr ""
+#~ "Мозаицировать до 4 изображений и расширить цветовую таблицу; создается "
+#~ "слой *.mosaic"
+
+#~ msgid "Volumes"
+#~ msgstr "Объемы"
+
+#, fuzzy
+#~ msgid "Map calculator for 3D raster map algebra."
+#~ msgstr "Калькулятор для растровой алгебры"
+
+#~ msgid "Drops an attribute table."
+#~ msgstr "Удалить атрибутивную таблицу."
+
+#~ msgid "GRASS GIS help"
+#~ msgstr "Помощь ГИС GRASS"
+
+#~ msgid "Display the HTML man pages of GRASS"
+#~ msgstr "Показать HTML-страницы помощи GRASS"
+
+#~ msgid "GRASS GIS GUI help"
+#~ msgstr "помощь по интерфейсу ГИС GRASS"
+
+#~ msgid "Nviz properties"
+#~ msgstr "Настройки NVIZ"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS file: '%s'"
+#~ msgstr "Невозможно прочитать коды EPSG: %s"
+
+#, fuzzy
+#~ msgid "Resolution cannot be 0"
+#~ msgstr "Разрешение:"
+
+#, fuzzy
+#~ msgid "3D View Tools"
+#~ msgstr "Инструменты NVIZ"
+
+#~ msgid "coarse:"
+#~ msgstr "грубо:"
+
+#~ msgid "fine:"
+#~ msgstr "точно:"
+
+#~ msgid "Wire color:"
+#~ msgstr "Цвет каркаса:"
+
+#~ msgid "Icon size:"
+#~ msgstr "Размер иконки:"
+
+#~ msgid "width:"
+#~ msgstr "ширина:"
+
+#~ msgid "symbol:"
+#~ msgstr "символ:"
+
+#~ msgid "color:"
+#~ msgstr "цвет:"
+
+#~ msgid "Layer properties"
+#~ msgstr "Свойства слоя"
+
+#~ msgid "Vector map <%s> is 3D"
+#~ msgstr "Векторный слой <%s> не 3D"
+
+#~ msgid "Vector map <%s> is 2D"
+#~ msgstr "Векторный слой <%s> 2D"
+
+#~ msgid "%(primitives)d primitives (%(points)d points)"
+#~ msgstr "%(primitives)d примитивов (%(points)d точек)"
+
+#, fuzzy
+#~ msgid "Error in command execution %s"
+#~ msgstr "Ошибка при выполнении команды %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to initialize display driver of vector digitizer. See 'Command "
+#~ "output' for details.\n"
+#~ "\n"
+#~ "Details:"
+#~ msgstr ""
+#~ "Невозможно инициализировать драйвер дисплея, ознакомьтесь с файлом README "
+#~ "если нужно больше информации.\n"
+#~ "\n"
+#~ "Подробности:"
+
+#~ msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
+#~ msgstr "<%(name)s>: тип слоя <%(type)s> пока не поддерживается."
+
+#~ msgid "Unable to open file"
+#~ msgstr "Невозможно открыть файл"
+
+#, fuzzy
+#~ msgid "DXF file:"
+#~ msgstr "Выбрать файл DXF:"
+
+#~ msgid "Parameter not found: %s"
+#~ msgstr "Параметр не найден: %s"
+
+#~ msgid "Parameter %(name)s (%(desc)s) is missing.\n"
+#~ msgstr "Параметр %(name)s (%(desc)s) отсутствует.\n"
+
+#~ msgid "Show manual page of the command"
+#~ msgstr "Показать описание для команды"
+
+#~ msgid "Run the command"
+#~ msgstr "Исполнить команду"
+
+#~ msgid "Copy the current command string to the clipboard"
+#~ msgstr "Копировать текущую командную строку в буфер обмена"
+
+#~ msgid "Valid range"
+#~ msgstr "Правильный диапазон"
+
+#~ msgid "Vector point layer not found (id=%d)"
+#~ msgstr "Точечный векторный слой не найден (id=%d)"
+
+#~ msgid "Unable to set data layer properties (id=%d)"
+#~ msgstr "Невозможно установить свойства слоя данных (id=%d)"
+
+#~ msgid "User GUI settings"
+#~ msgstr "Пользовательские настройки интерфейса"
+
+#~ msgid "Overlay raster maps"
+#~ msgstr "Наложить растровые слои"
+
+#, fuzzy
+#~ msgid ""
+#~ "Check a mapset to make it accessible, uncheck it to hide it.%sNote: The "
+#~ "current mapset is always accessible."
+#~ msgstr ""
+#~ "Включить доступность набора, выключить чтобы его скрыть. %sЗамечание: "
+#~ "PERMANENT и текущий набор доступны всегда."
+
+#~ msgid "Set ground control points (GCPs)"
+#~ msgstr "Установить точки привязки (GCPs)"
+
+#~ msgid "Start GRASS"
+#~ msgstr "Запустить GRASS"
+
+#~ msgid "Create mapset"
+#~ msgstr "Создать набор"
+
+#~ msgid "Import raster data using GDAL"
+#~ msgstr "Импорт растровых данных используя GDAL"
+
+#, fuzzy
+#~ msgid "Creates a new vectors as a read-only link to OGR layers"
+#~ msgstr ""
+#~ "Создать новый векторный слой путем комбинирования других векторных слоев."
+
+#~ msgid "Multiple DXF layers import"
+#~ msgstr "Импорт нескольких слоев DXF "
+
+#, fuzzy
+#~ msgid "Command %s could not be run"
+#~ msgstr "Команда '%s' еще не реализована."
+
+#, fuzzy
+#~ msgid "&Close"
+#~ msgstr "Код"
+
+#, fuzzy
+#~ msgid "&Stop"
+#~ msgstr "верх"
+
+#~ msgid "Save current settings?"
+#~ msgstr "Сохранить текущие настройки?"
+
+#~ msgid "Not implemented yet"
+#~ msgstr "Еще не реализовано."
+
+#~ msgid "List of categories"
+#~ msgstr "Список категорий"
+
+#~ msgid "Unable to run the command, another command is running..."
+#~ msgstr "Невозможно запустить команду, выполняется другая команда..."

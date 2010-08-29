@@ -2502,7 +2502,7 @@ msgstr ""
 #: ../lib/vector/diglib/file.c:205
 #, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "لم يمكن توفير ذاكرة كافية\n"
+msgstr "لم يمكن فتحه %s فى %s"
 
 #: ../lib/vector/diglib/file.c:220
 msgid "Vector memory mode not supported, using 'AUTO'"
@@ -5655,7 +5655,7 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+msgstr "لم يمكن فتحه %s فى %s"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5722,6 +5722,46 @@ msgstr ""
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "[%s]للخريطة-  %d لم يمكن كتابة الصف "
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "للخرائط الراسترية الموجودة %d\n"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "لم يمكن كتابة الخط حيث ان الخريطة غير مفتوحة"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "لم يتم انشاء عملية جديدة"
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "لم يحدد المشغل الأساسى"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr " %s لم يمكن فتح"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "للخرائط الراسترية الموجودة %d\n"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "لم يمكن فتحه %s فى %s"
+
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr "[%s] ملف التقسيم الكمى [%s]فى مجموعة الخرائط %s"
 
@@ -5756,10 +5796,6 @@ msgstr ""
 #~ msgstr "لم يتم انشاء عملية جديدة"
 
 #, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "[%s]للخريطة-  %d لم يمكن كتابة الصف "
-
-#, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
@@ -5776,24 +5812,12 @@ msgstr ""
 #~ msgstr "لم يتم انشاء عملية جديدة"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "للخرائط الراسترية الموجودة %d\n"
-
-#, fuzzy
 #~ msgid " It is a reclass of raster map <%s@%s> "
 #~ msgstr "أعادة تصنيف [%s in %s]"
 
 #, fuzzy
 #~ msgid "Unable to realloc buffer"
 #~ msgstr "لم يمكن توفير ذاكرة كافية\n"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "لم يمكن كتابة الخط حيث ان الخريطة غير مفتوحة"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "لم يتم انشاء عملية جديدة"
 
 #, fuzzy
 #~ msgid "Too many arguments"
@@ -5817,22 +5841,6 @@ msgstr ""
 
 #~ msgid "line %d: <%s>"
 #~ msgstr "خط %d: <%s>"
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "لم يحدد المشغل الأساسى"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr " %s لم يمكن فتح"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "للخرائط الراسترية الموجودة %d\n"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
 
 #, fuzzy
 #~ msgid "Unable to open category index file for vector map <%s@%s>"
@@ -5928,14 +5936,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Cannot open database %s"
 #~ msgstr "لم يتم كتابة روابط قاعدة البيانات"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "لم يمكن فتحه %s فى %s"
 
 #, fuzzy
 #~ msgid "Cannot describe table <%s>"
@@ -6386,3 +6386,196 @@ msgstr ""
 
 #~ msgid "unable to find [%s] in [%s]"
 #~ msgstr "[%s] لم يتم ايجاد [%s] فى"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "لم يمكن توفير ذاكرة كافية\n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "لم يمكن فتحه %s فى %s"
+
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "RETURN أضغط   لألغاء الأمر\n"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "للخرائط الراسترية الموجودة %d\n"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr " فارغة %s@%s الخريطة الراسترية"
+
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr "صحيحة فلا يمكن كتابة قواعد التقسيم %s أعداد الخريطة"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "فارغة %s@%s نطاق البيانات العشرية ل"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "فارغة %s@%s نطاق البيانات الصحيحة ل"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "[%s]للخريطة-  %d لم يمكن كتابة الصف "
+
+#, fuzzy
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "%d خطأ فى كتابة الصف المنعدم"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "دعم الفئة لملف فيكتورى [%s] مجموعة الخرائط [%s] %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "لم يمكن فتح ملف مؤقت"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map"
+#~ msgstr "إسم الراستر المدخلة"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "إسم الراستر المدخلة"
+
+#~ msgid "Layer number"
+#~ msgstr "رقم الطبقة"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "وصف:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "الإستخدام:\n"
+#~ " "
+
+#~ msgid "to accept the default"
+#~ msgstr "لقبول الأساس المخزن"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "دعم اللون [%s] مجموعة الخرائط [%s] %s"
+
+#, fuzzy
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
+
+#, fuzzy
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "لم يمكن تحديد مكان ملفات المستخدم"
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr " غير مسموح به والاسم غير صحيح <%c> الحرف"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "[%s فى %s]فئات معادة التصنيف متعددة "
+
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr "[%s فى %s]تشكيل أعادة التصنيف غير صحيح فى ملف العنوان الرئيسى"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "[%s فى %s]لم يمكن انشاء ملف الأستقلال "
+
+#, fuzzy
+#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
+#~ msgstr "[%s] فى [%s] - بيتة لكل خلية (%d) قيم كبيرة"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "[%s] لم يتم ايجاد"
+
+#, fuzzy
+#~ msgid "Unable to read header file for raster map <%s@%s>."
+#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr ""
+#~ "لم يتم اضافة رابط قاعدة البيانات حيث ان الخريطة غير مفتوحة على وضع الكتابة"
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "لم يتم اضافة رابط قاعدة البيانات"
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr " %s فى  %d خطا فى القاعدة على الصف"
+
+#, fuzzy
+#~ msgid "Intersections: %5d"
+#~ msgstr "مساقط أخرى"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr "تحذير: المبرمج طلب مستوى  غير معروف\n"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "Unable to open vector map <%s> on topology level %d"
+#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "لم يمكن فتح ملف مؤقت"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "لم يمكن فتح ملف مؤقت"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "لم يمكن محو الخط,الخريطة  غير مفتوحة على المستوى الثانى"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr " لم يمكن محو الخط,الخريطة  غير مفتوحة بوضع مهيأ للكتابة"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#~ msgid "Cannot find input map '%s'"
+#~ msgstr "'%s' لم يتم العثور على الخريطة المدخلة"
+
+#~ msgid "Cannot rewrite line"
+#~ msgstr "لم يمكن إعادة كتابة الخط"
+
+#, fuzzy
+#~ msgid "Color file for [%s] not available"
+#~ msgstr "غير متاح << %s >> الموقع"

@@ -1127,8 +1127,9 @@ msgid "Import raster data into a GRASS map layer using GDAL."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:21
+#, fuzzy
 msgid "Bulk import of raster data"
-msgstr ""
+msgstr "തിരഞ്ഞെടുക്കപെട്ട raster ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
 
 #: ../gui/wxpython/menustrings.py:22
 msgid "Converts multiple GDAL supported layers to GRASS raster maps."
@@ -1144,8 +1145,9 @@ msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:25
+#, fuzzy
 msgid "Bulk link of raster data"
-msgstr ""
+msgstr "തിരഞ്ഞെടുക്കപെട്ട raster ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
 
 #: ../gui/wxpython/menustrings.py:26
 msgid ""
@@ -1255,8 +1257,9 @@ msgid "Converts vector layers into a GRASS vector map using OGR."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:52
+#, fuzzy
 msgid "Bulk import of vector data"
-msgstr ""
+msgstr "തിരഞ്ഞെടുക്കപെട്ട vector ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
 
 #: ../gui/wxpython/menustrings.py:53
 msgid "Converts multiple OGR supported layers into GRASS vector maps."
@@ -1272,8 +1275,9 @@ msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:56
+#, fuzzy
 msgid "Bulk link of vector data"
-msgstr ""
+msgstr "തിരഞ്ഞെടുക്കപെട്ട vector ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
 
 #: ../gui/wxpython/menustrings.py:57
 msgid "Creates multiple new pseduo-vector maps as a read-only links using OGR."
@@ -1364,8 +1368,9 @@ msgid "Imports Mapgen or Matlab vector maps into GRASS."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:78
+#, fuzzy
 msgid "Import 3D raster data"
-msgstr ""
+msgstr "തിരഞ്ഞെടുക്കപെട്ട raster ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
 
 #: ../gui/wxpython/menustrings.py:79
 msgid "ASCII 3D import"
@@ -1571,8 +1576,9 @@ msgid "Converts a vector map to VTK ASCII output."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:132
+#, fuzzy
 msgid "Export 3D raster maps"
-msgstr ""
+msgstr "തിരഞ്ഞെടുക്കപെട്ട raster ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
 
 #: ../gui/wxpython/menustrings.py:133
 msgid "ASCII 3D export"
@@ -2183,7 +2189,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:286
 #, fuzzy
 msgid "Raster map calculator"
-msgstr "ഗ്രാസ്സ് മാപ്പ് ഗണനയന്ത്രം"
+msgstr "രാസ്റ്റെർ മാപ്പ് ലെയെർ ചേർക്കുക"
 
 #: ../gui/wxpython/menustrings.py:287 ../gui/wxpython/menustrings.py:760
 msgid "Raster map calculator."
@@ -10466,11 +10472,11 @@ msgid ""
 "home directory."
 msgstr "ഗ്രാസ്സിനു ഡാറ്റ ശെഖരിക്കാൻ ഒരു സ്ഥലം ആവശ്യമാണ്. ദയവയി ഒരു ഡയറക്ട്ടറി ഉണ്ടാക്കുക."
 
+msgid "GRASS GIS Map Calculator (3D raster)"
+msgstr "ഗ്രാസ്സ് മാപ്പ് ഗണനയന്ത്രം (3D raster)"
+
 #~ msgid "Unable to open workspace file <%s> for writing."
 #~ msgstr "വർക്സ്പേസ് ഫയൽ തുറക്കാൻ പറ്റുനില്ല <%s>"
-
-#~ msgid "GRASS GIS Map Calculator (3D raster)"
-#~ msgstr "ഗ്രാസ്സ് മാപ്പ് ഗണനയന്ത്രം (3D raster)"
 
 #~ msgid "Error in command execution '%s'"
 #~ msgstr "ആജ്ഞ നടപ്പാക്കുന്നതിൽ തെറ്റ് '%s'"
@@ -10496,3 +10502,97 @@ msgstr "ഗ്രാസ്സിനു ഡാറ്റ ശെഖരിക്ക�
 #, fuzzy
 #~ msgid "Import vector data using OGR"
 #~ msgstr "തിരഞ്ഞെടുക്കപെട്ട vector ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
+
+#, fuzzy
+#~ msgid "Unable to read workspace file"
+#~ msgstr "വർക്സ്പേസ് ഫയൽ അടയ്ക്കുക"
+
+#~ msgid "Writing current settings to workspace file failed (%s)."
+#~ msgstr "വർക്സ്പേസിലെ രംഗസജ്ജീകരണം മറ്റുനതിൽ പിശക് (%s)"
+
+#, fuzzy
+#~ msgid "GRASS GIS Raster Map Calculator (3D raster)"
+#~ msgstr "ഗ്രാസ്സ് മാപ്പ് ഗണനയന്ത്രം (3D raster)"
+
+#, fuzzy
+#~ msgid "Create new workspace file"
+#~ msgstr "പുതിയ വർക്സ്പേസ് ഉണ്ടാക്കുക"
+
+#, fuzzy
+#~ msgid "Open existing workspace file"
+#~ msgstr "വർക്സ്പേസ് ഫയൽ അടയ്ക്കുക"
+
+#, fuzzy
+#~ msgid "Save current workspace to file"
+#~ msgstr "വർക്സ്പേസ് ഫയൽ അടയ്ക്കുക"
+
+#, fuzzy
+#~ msgid "Add raster map layer"
+#~ msgstr "രാസ്റ്റെർ മാപ്പ് ലെയെർ ചേർക്കുക"
+
+#, fuzzy
+#~ msgid "Add vector map layer"
+#~ msgstr "വെക്റ്റർ മാപ്പ് ലെയെർ ചേർക്കുക"
+
+#~ msgid "Add layer group"
+#~ msgstr "ലെയെർ ഗ്രൂപ്പ് ചേർക്കുക"
+
+#~ msgid "Delete selected layer"
+#~ msgstr "തിരഞ്ഞെടുത്ത ലെയെർ എടുത്തു കളയുക"
+
+#~ msgid "Add RGB layer"
+#~ msgstr "RGB ലയെർ ചേർക്കുക"
+
+#~ msgid "Add HIS layer"
+#~ msgstr "HIS ലയെർ ചേർക്കുക"
+
+#~ msgid "Add 3D raster map"
+#~ msgstr "3D റസ്റ്റർ മാപ്പ് ചേർക്കുക"
+
+#, fuzzy
+#~ msgid "Save workspace to open file"
+#~ msgstr "വർക്സ്പേസ് സംഭരിച്ചു വെക്കുക"
+
+#, fuzzy
+#~ msgid "Close loaded workspace"
+#~ msgstr "വർക്സ്പേസ് ഫയൽ അടയ്ക്കുക"
+
+#, fuzzy
+#~ msgid "GRASS GIS help"
+#~ msgstr "പുറത്ത് കടക്കുക"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS file: '%s'"
+#~ msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കാൻ പറ്റുനില്ല: %s"
+
+#, fuzzy
+#~ msgid "Error in command execution %s"
+#~ msgstr "ആജ്ഞ നടപ്പാക്കുന്നതിൽ തെറ്റ് '%s'"
+
+#, fuzzy
+#~ msgid "DXF file:"
+#~ msgstr "ഫയൽ:"
+
+#, fuzzy
+#~ msgid "Run the command"
+#~ msgstr "ആജ്ന നടപക്കുക(Ctrl+R)"
+
+#~ msgid "Valid range"
+#~ msgstr "ധര്‍മ്മ്യമായ അണിയണിയായി നിറുത്തുക"
+
+#~ msgid "Start GRASS"
+#~ msgstr "തുടങ്ങുക"
+
+#~ msgid "Create mapset"
+#~ msgstr "മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
+
+#~ msgid ""
+#~ "Reading workspace file <%(file)s> failed.\n"
+#~ "Invalid file, unable to parse XML document.\n"
+#~ "\n"
+#~ "%(err)s"
+#~ msgstr ""
+#~ "ഈ വർക്ക്സ്പെസ് ഫയൽ വായികാൻ സാദിക്കുന്നില്ല <%(file)s>.\n"
+#~ "XML ഫയൽ വയിക്കുന്നത്തിൽ പിശക് <%(file)s. \n"
+#~ "\n"
+#~ "%(err)s"

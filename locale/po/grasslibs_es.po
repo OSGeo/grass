@@ -1543,7 +1543,7 @@ msgstr ""
 #: ../lib/gis/spawn.c:416
 #, fuzzy, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr "G_spawn: no es posible duplicar el descriptor %d a %d"
+msgstr "G_spawn: No es posible duplicar el descriptor de %d a %d."
 
 #: ../lib/gis/spawn.c:424 ../lib/gis/spawn.c:609
 #, c-format
@@ -6105,15 +6105,79 @@ msgstr ""
 "siguientes mapas raster:\n"
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr ""
-#~ "Memoria insuficiente en el historial para guardar la línea de comando."
+msgid "Not enough room in history file to record command line"
+msgstr "Memoria insuficiente en el historial para guardar la línea de comando."
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "Memoria insuficiente en el historial para guardar la línea de comando "
-#~ "(truncada)."
+msgid "Not enough room in history file for command line (truncated)"
+msgstr ""
+"Memoria insuficiente en el historial para guardar la línea de comando "
+"(truncada)."
+
+#, fuzzy
+msgid "test, gmath"
+msgstr "test, gpde"
+
+#, fuzzy
+msgid ""
+"\n"
+"Keywords:\n"
+" "
+msgstr ""
+"\n"
+"Palabras clave:\n"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "mapa [%s] - no es posible escribir en la fila %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Error al escribir un archivo del tipo flotante en el mapa %s"
+
+#, fuzzy
+msgid "OGR layer cannot be opened for update"
+msgstr "No se puede actualizar el formato OGR"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "No se puede escribir el razgo, el mapa vectorial no está abierto."
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "No se puede crear un nuevo proceso"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"región para directorio de mapas actual %s\n"
+"ejecute \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "región por defecto %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "No es posible establecer el foco."
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "Problema al leer el mapa ráster"
+
+#
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "No es posible leer el archivo de color del mapa raster <%s>"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "No se puede copiar la tabla <%s>"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "No se puede inicializar pj causa: %s"
 
 #~ msgid "Invalid view position coordinates, using %f,%f"
 #~ msgstr ""
@@ -6122,22 +6186,9 @@ msgstr ""
 #~ msgid "Unknown Location"
 #~ msgstr "Locación desconocida."
 
-#, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "test, gpde"
-
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr ""
 #~ "El archivo de cuantización [%s] en el directorio de mapas (mapset) [%s]%s."
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Keywords:\n"
-#~ " "
-#~ msgstr ""
-#~ "\n"
-#~ "Palabras clave:\n"
 
 #~ msgid ""
 #~ "\n"
@@ -6152,58 +6203,6 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "Parámetros:\n"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "mapa [%s] - no es posible escribir en la fila %d"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Error al escribir un archivo del tipo flotante en el mapa %s"
-
-#, fuzzy
-#~ msgid "OGR layer cannot be opened for update"
-#~ msgstr "No se puede actualizar el formato OGR"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "No se puede escribir el razgo, el mapa vectorial no está abierto."
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "No se puede crear un nuevo proceso"
-
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "región para directorio de mapas actual %s\n"
-#~ "ejecute \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "región por defecto %s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "No es posible establecer el foco."
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Problema al leer el mapa ráster"
-
-#
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "No es posible leer el archivo de color del mapa raster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "No se puede copiar la tabla <%s>"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "No se puede inicializar pj causa: %s"
 
 #~ msgid "Unable to open raster map <%s>"
 #~ msgstr "No ha sido posible abrir el mapa raster <%s>."
@@ -7156,3 +7155,84 @@ msgstr ""
 #, fuzzy
 #~ msgid "Cannot find input map '%s'"
 #~ msgstr "No se puede encontrar  o abrir el símbolo '%s'"
+
+#~ msgid "Probably program error."
+#~ msgstr "Probablemente un error en el programa."
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "No se puede abrir el archivo temporal."
+
+#~ msgid "Problem reading raster map"
+#~ msgstr "Problema leyendo el mapa raster."
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "El rango de datos flotantes para %s@%s está vacío."
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "El rango de datos enteros para %s@%s esta vacío."
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Proyección no válida.\n"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr ""
+#~ "Por favor notifique a los desarrolladores de GRASS acerca de este error.\n"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Nombre del mapa raster de elevación."
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Nombre(s) del (los) mapa(s) raster de elevación."
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Descripción:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Palabras clave:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Uso:\n"
+#~ " "
+
+#~ msgid "to accept the default"
+#~ msgstr "Aceptar el valor predeterminado."
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "Presione ENTER para continuar. -->"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "No hay ayuda disponible para el comando [%s].\n"
+
+#~ msgid "Unable to add database link"
+#~ msgstr "No ha sido posible añadir el enlace a la base de datos."
+
+#~ msgid ""
+#~ "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
+#~ "excess)"
+#~ msgstr ""
+#~ "El archivo de coordenadas del mapa vectorial <%s@%s> es mayor de lo que "
+#~ "debiera (%ld bytes de exceso)."
+
+#~ msgid ""
+#~ "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
+#~ "missing)."
+#~ msgstr ""
+#~ "El archivo de coordenadas del mapa vectorial <%s@%s> es menor de lo que "
+#~ "debería ser (faltan %ld bytes)."
