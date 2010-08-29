@@ -1,5 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
+
 int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 	     int *count, struct Categories *labels)
 {
@@ -70,13 +72,20 @@ int get_item(FILE * fd, int *type, long *cat, double **x, double **y,
 	    }
 	    continue;
 	}
+	if (sscanf(buf, "%s %s", east, north) != 2) {
+	    G_warning(_("Illegal coordinate <%s, %s>, skipping."), east, north);
+	    continue;
+	}
 
-	if (sscanf(buf, "%s %s", east, north) != 2)
+	if (!G_scan_northing(north, &n, G_projection())) {
+	    G_warning(_("Illegal north coordinate <%s>, skipping."), north);
 	    continue;
-	if (!G_scan_northing(north, &n, G_projection()))
+	}
+
+	if (!G_scan_easting(east, &e, G_projection())) {
+	    G_warning(_("Illegal east coordinate <%s>, skipping."), east);
 	    continue;
-	if (!G_scan_easting(east, &e, G_projection()))
-	    continue;
+	}
 
 	if (*count >= nalloc) {
 	    nalloc += 32;

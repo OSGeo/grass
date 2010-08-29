@@ -59,8 +59,5 @@ int main(int argc, char *argv[])
     if (n < 1)
 	G_fatal_error(_("Minimum number of rows to hold in memory is 1"));
 
-    /* otherwise get complaints about window changes */
-    G_suppress_warnings(1);
-
     exit(poly_to_rast(input->answer, output->answer, title->answer, n));
 }
