@@ -3,6 +3,10 @@
 
 #include <stdio.h>
 
+#ifdef __MINGW32__
+#include <windows.h>
+#endif
+
 #include <grass/config.h>
 #include "driver.h"
 #include "path.h"
@@ -18,6 +22,9 @@ struct png_state
     int true_color;
     int has_alpha;
     int mapped;
+#ifdef __MINGW32__
+    HANDLE handle;
+#endif
 
     double clip_top, clip_bot, clip_left, clip_rite;
     int width, height;

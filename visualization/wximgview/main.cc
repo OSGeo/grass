@@ -187,8 +187,12 @@ void MyApp::map_file()
     size = HEADER_SIZE + i_width * i_height * 4;
 
 #ifdef __MINGW32__
-    ptr = MapViewOfFile((HANDLE) _get_osfhandle(fd),
-			FILE_MAP_READ, 0, 0, size);
+    HANDLE handle = CreateFileMapping((HANDLE) _get_osfhandle(fd),
+				      NULL, PAGE_READONLY,
+				      0, size, NULL);
+    if (!handle)
+	return;
+    ptr = MapViewOfFile(handle, FILE_MAP_READ, 0, 0, size);
     if (!ptr)
 	G_fatal_error(_("Unable to map image file"));
 #else
