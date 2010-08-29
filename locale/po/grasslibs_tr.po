@@ -2469,7 +2469,7 @@ msgstr ""
 #: ../lib/vector/diglib/file.c:205
 #, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "vektör harita açılamadı"
+msgstr "Geçici dosya açılamıyor"
 
 #: ../lib/vector/diglib/file.c:220
 msgid "Vector memory mode not supported, using 'AUTO'"
@@ -2540,8 +2540,9 @@ msgid "Attempt to delete dead feature"
 msgstr ""
 
 #: ../lib/vector/Vlib/write_nat.c:910
+#, fuzzy
 msgid "Attempt to restore alive feature"
-msgstr ""
+msgstr "%d çizgisi okunamıyor"
 
 #: ../lib/vector/Vlib/legal_vname.c:45
 #, c-format
@@ -5577,7 +5578,7 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "<%s> için aralık dosyası açılamıyor"
+msgstr "[%s in %s] içindeki [%s] dosyası açılamadı"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5645,13 +5646,56 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr "Komut satırında kaydetmek için geçmiş dosyasında yetersiz alan"
+msgid "Not enough room in history file to record command line"
+msgstr "Komut satırında kaydetmek için geçmiş dosyasında yetersiz alan"
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "Komut satırında kaydetmek için geçmiş dosyasında yetersiz alan (kesiliyor)"
+msgid "Not enough room in history file for command line (truncated)"
+msgstr ""
+"Komut satırında kaydetmek için geçmiş dosyasında yetersiz alan (kesiliyor)"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "[%s] haritası - %d satırı yazılamıyor"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Kategori indeks dosyasını yazmada hata <%s>"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "vektör harita açılamadı"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "Yeni bir süreç oluşturulamıyor"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"geçerli %s harita takımı bölgesi\n"
+"\"g.region\" çalıştırın"
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "%s varsayılan bölge"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "<%s> vektörü kapatılamıyor"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "Girdi raster haritası adı"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "<%s> raster haritasının renk dosyası okunamıyor"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "<%s> tablosuna kopyalanamıyor"
 
 #~ msgid "Unknown Location"
 #~ msgstr "Bilinmeyen Mevki"
@@ -5683,10 +5727,6 @@ msgstr ""
 #~ msgid "Unable to write raster row %i"
 #~ msgstr "%i raster satırı yazılamıyor"
 
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "[%s] haritası - %d satırı yazılamıyor"
-
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "<%s@%s> raster haritası açılamıyor"
 
@@ -5696,23 +5736,11 @@ msgstr ""
 #~ msgid "Unable to open '%s'"
 #~ msgstr "'%s' açılamadı"
 
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Kategori indeks dosyasını yazmada hata <%s>"
-
 #~ msgid "can't create histogram for [%s in %s]"
 #~ msgstr "[%s deki %s] in histogramı oluşturulamıyor"
 
 #~ msgid "Feature: "
 #~ msgstr "Obje: "
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "vektör harita açılamadı"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "Yeni bir süreç oluşturulamıyor"
 
 #~ msgid "Too many arguments"
 #~ msgstr "Çok fazla parametre"
@@ -5732,17 +5760,6 @@ msgstr ""
 #~ msgid "line %d: <%s>"
 #~ msgstr "%d çizgi: <%s>"
 
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "geçerli %s harita takımı bölgesi\n"
-#~ "\"g.region\" çalıştırın"
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "%s varsayılan bölge"
-
 #~ msgid "is not set"
 #~ msgstr "ayarlanamadı"
 
@@ -5752,18 +5769,6 @@ msgstr ""
 #~ msgstr ""
 #~ "geçersizdir\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "<%s> vektörü kapatılamıyor"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Girdi raster haritası adı"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "<%s> raster haritasının renk dosyası okunamıyor"
 
 #~ msgid "Vector is not 3D"
 #~ msgstr "Vektör 3B değil"
@@ -5882,10 +5887,6 @@ msgstr ""
 
 #~ msgid "Cannot open database %s"
 #~ msgstr "%s veritabanı açılamıyor"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "<%s> tablosuna kopyalanamıyor"
 
 #~ msgid "Cannot describe table <%s>"
 #~ msgstr "<%s> tablosu tanımlanamıyor"
@@ -6221,3 +6222,249 @@ msgstr ""
 #, fuzzy
 #~ msgid "BUG (delete_area_cats_from_cidx): Area %d does not exist"
 #~ msgstr "%s: Alan %d mevcut değil"
+
+#, fuzzy
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Matris için boş alan ayrılamıyor"
+
+#~ msgid "Probably program error."
+#~ msgstr "Muhtemelen program hatası."
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "<%s> katmanı açılamıyor"
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Geçici dosya açılamıyor"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr " %s@%s için kayar nokta veri aralığı boş"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr " %s@%s için tamsayı veri aralığı boş"
+
+#~ msgid "%s: map [%s] not open for write - request ignored"
+#~ msgstr "%s: [%s] haritası yazmak için açılamıyor - istek yok sayıldı"
+
+#~ msgid "%s: unopened file descriptor - request ignored"
+#~ msgstr "%s: açılamayan dosya tanımlatıcı - istek yok sayıldı"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "[%s] haritası - %d satırı yazılamıyor"
+
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "%s geçici boş dosyası bulunamadı"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "%d boş satırları yazmada hata"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "[%s] %s harita takımındaki [%s] in kategori desteği"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "Geçici dosya açılamıyor"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "geçersiz projeksiyon\n"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Yükselti raster haritası adı"
+
+#~ msgid "Layer number"
+#~ msgstr "Katman numarası"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Tanım:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Anahtar kelimeler:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Kullanım:\n"
+#~ " "
+
+#, fuzzy
+#~ msgid " options: %s\n"
+#~ msgstr "       geçerli seçenekler: %s\n"
+
+#~ msgid "to accept the default"
+#~ msgstr "varsayılanı kabul et"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "[%s] %s harita takımındaki [%s] için renk desteği"
+
+#~ msgid "Can't create timestamp file for %s map %s in mapset %s"
+#~ msgstr ""
+#~ "%s harita takımındaki %s haritası %s için zaman damgası dosyası "
+#~ "oluşturulamıyor"
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr ""
+#~ " %s harita takımındaki %s haritası %s için geçersiz zaman damgası dosyası "
+#~ "belirlendi"
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr ""
+#~ " %s harita takımındaki %s haritası %s için geçersiz zaman damgası dosyası"
+
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "<%s@%s> sıkıştırılmış haritasını okumada hata, satır %d"
+
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "<%s@%s> haritasını okumada hata, satır %d"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "kullanıcı ev dizini belirlenemiyor"
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "[%s] için üstbilgi dosyası oluşturulamıyor"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "geçerli %s harita takımı bölgesi\n"
+#~ "\"g.region\" çalıştırın"
+
+#~ msgid "default region %s"
+#~ msgstr "%s varsayılan bölge"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "Devam etmek için ENTER'a basın -->"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "Uygun olmayan dosya adı. '.' veya 'NULL' olmamalı\n"
+
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "Uygun olmayan dosya adı. <%c> karakteri kullanılamaz.\n"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "[%s in %s] için çok fazla yeniden sınıflandırma kategorisi"
+
+#~ msgid "Unable to create header file for [%s in %s]"
+#~ msgstr "[%s deki %s] için üst bilgi dosyası oluşturulamıyor"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "[%s deki %s] için bağımlılık dosyası oluşturulamıyor"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "'%s' bulunamadı"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "[%s] komutu için yardım yoktur\n"
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "[%s] in geçmiş bilgisi yazılamıyor"
+
+#~ msgid "Not enough room in history file to record command line."
+#~ msgstr "Komut satırında kaydetmek için geçmiş dosyasında yetersiz alan"
+
+#~ msgid "Not enough room in history file for command line (truncated)."
+#~ msgstr ""
+#~ "Komut satırında kaydetmek için geçmiş dosyasında yetersiz alan (kesiliyor)"
+
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr "Veritabanı bağlantısı eklenemiyor, harita WRITE modunda açılmadı"
+
+#~ msgid "Unable to add database link"
+#~ msgstr "Veritabanı bağlantısı eklenemiyor"
+
+#, fuzzy
+#~ msgid "Intersections: %5d"
+#~ msgstr "Kesişimler:"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "<%s> vektör haritası silinemiyor"
+
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "<%s> katmanı açılamıyor"
+
+#~ msgid "OGR feature without ID ignored"
+#~ msgstr "ID'si olmayan OGR objesi görmezden gelindi"
+
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "<%s> raster haritası oluşturulamıyor"
+
+#~ msgid ""
+#~ "taking too long to find points for interpolation--please change the "
+#~ "region to area where your points are. Continuing calculations..."
+#~ msgstr ""
+#~ "enterpolasyon için nokta bulmak çok zaman alacak-- lütfen bölgeyi, "
+#~ "noktalarınızın bulunduğu alana değiştirn. Hesaplamaya devam ediliyor..."
+
+#~ msgid "strip exists with insufficient data"
+#~ msgstr "yetersiz veriye sahip şerit var"
+
+#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
+#~ msgstr ""
+#~ "Belirlenen 2D/3D bölgenin dışında noktalar var -- %d nokta yok sayılıyor"
+
+#~ msgid "ignoring %d points -- too dense"
+#~ msgstr "%d nokta yok sayılıyor -- çok yoğun"
+
+#~ msgid "some points outside of region -- will ignore..."
+#~ msgstr "bazı noktalar bölgenin dışında -- yok sayılacak..."
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "<%s> vektör haritası silinemiyor"
+
+#, fuzzy
+#~ msgid "Unable to open vector map <%s> on topology level %d"
+#~ msgstr "Vektör harita <%s> ten <%s> e kopyalanamıyor"
+
+#, fuzzy
+#~ msgid "Snapped vertices"
+#~ msgstr "Tüm kırıklık noktaları"
+
+#, fuzzy
+#~ msgid "New vertices"
+#~ msgstr "Tüm kırıklık noktaları"
+
+#, fuzzy
+#~ msgid "BUG (add_area_cats_to_cidx): Area %d does not exist"
+#~ msgstr "%s: Alan %d mevcut değil"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "%d çizgisi okunamıyor"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "Veritabanı bağlantısı eklenemiyor, harita WRITE modunda açılmadı"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr "Veritabanı bağlantısı eklenemiyor, harita WRITE modunda açılmadı"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "<%s> vektör haritası silinemiyor"
+
+#, fuzzy
+#~ msgid "Cannot find input map '%s'"
+#~ msgstr "Sembol bulunamıyor/açılamıyor: '%s'"
+
+#~ msgid "Cannot rewrite line"
+#~ msgstr "Çizgi yeniden yazılamıyor"

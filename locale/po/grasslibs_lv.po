@@ -5796,6 +5796,53 @@ msgstr ""
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "karte [%s] -  neiespējami ierakstīt rindu %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "eksistējošām rastra kartēm %d"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Nevar ierakstīt līniju,karte nav atvērta"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "neiespējami izveidot jaunu procesu"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"pašreizejās karšu biblotēkas reģions %s\n"
+"palaižot \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "noklusētais reģions %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "Neisespējami atvērt %s"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "eksistējošām rastra kartēm %d"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "neispējami mainīt direktoriju uz %s"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "Neiespējami atvērt failu %s iekš %s"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "Neiespējami atvērt failu %s iekš %s"
+
 #~ msgid "Unknown Location"
 #~ msgstr "Nezināma Atrašanās Vieta"
 
@@ -5830,10 +5877,6 @@ msgstr ""
 #~ msgstr "neiespējami rakstīt quant failu!"
 
 #, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "karte [%s] -  neiespējami ierakstīt rindu %d"
-
-#, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "neispējami mainīt direktoriju uz %s"
 
@@ -5849,10 +5892,6 @@ msgstr ""
 #~ msgstr "neiespējami rakstīt quant failu!"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "eksistējošām rastra kartēm %d"
-
-#, fuzzy
 #~ msgid "Unable to read header file for raster map <%s@%s>."
 #~ msgstr "neispējami mainīt direktoriju uz %s"
 
@@ -5866,14 +5905,6 @@ msgstr ""
 
 #~ msgid "can't create histogram for [%s in %s]"
 #~ msgstr "nevar izveidot histogrammu priekš [%s iekš %s]"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Nevar ierakstīt līniju,karte nav atvērta"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "neiespējami izveidot jaunu procesu"
 
 #, fuzzy
 #~ msgid "Too many arguments"
@@ -5899,17 +5930,6 @@ msgstr ""
 #~ msgid "line %d: <%s>"
 #~ msgstr "līnija %d: <%s>"
 
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "pašreizejās karšu biblotēkas reģions %s\n"
-#~ "palaižot \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "noklusētais reģions %s"
-
 #~ msgid "is not set"
 #~ msgstr "nav noteikts"
 
@@ -5919,18 +5939,6 @@ msgstr ""
 #~ msgstr ""
 #~ "ir nederīgs\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Neisespējami atvērt %s"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "eksistējošām rastra kartēm %d"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "neispējami mainīt direktoriju uz %s"
 
 #, fuzzy
 #~ msgid "Unable to open category index file for vector map <%s@%s>"
@@ -6016,14 +6024,6 @@ msgstr ""
 
 #~ msgid "Cannot open database %s"
 #~ msgstr "Nevar atvērt datubāzi %s"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Neiespējami atvērt failu %s iekš %s"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #, fuzzy
 #~ msgid "Cannot describe table <%s>"
@@ -6628,3 +6628,242 @@ msgstr ""
 
 #~ msgid "unable to find [%s] in [%s]"
 #~ msgstr "neiespējami atrast [%s] iekš [%s]"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Neiespējami piešķirt atmiņu\n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "Neiespējami atvērt failu %s iekš %s"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Neiespējami atvērt failu %s iekš %s"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "eksistējošām rastra kartēm %d"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr " Rastra karte %s@%s ir tukša"
+
+#, fuzzy
+#~ msgid ""
+#~ "G_set_window(): projection/zone differs from that of currently open "
+#~ "raster maps"
+#~ msgstr ""
+#~ "G_set_window(): projekcija/zona atšķiras no tās kas ir tekoši "
+#~ "atverajamajiem rastra failiem"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "'Peldošo' datu dipazons priekš %s@%s ir tukšs"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "Veselo skaitļu datu diapazons priekš %s@%s ir tukšs"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "karte [%s] -  neiespējami ierakstīt rindu %d"
+
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "neispējami atrast pagaidu null failu: %s"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "Kļūdas rakstīšana null row %d"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "kategoriju atbalsts priekš [%s] karšu biblotēkā [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "kategoriju atbalsts vektoru failam [%s] karšu biblotēkā [%s] %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "Nevar atvērt 'temp'/pagaidu failu"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "nederīga projekcija\n"
+
+#~ msgid "EmbedGivenNulls: wrong data type!"
+#~ msgstr "EmbedGivenNulls: nepareizs datu tips!"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Lūdzu dod ziņu GRASS izstrādātājiem par šo kļūdu.\n"
+
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "G_set_null_value: nepareizs datu tips!"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Reljefa rastra faila nosaukums"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Reljefa rastra faila(u) nosaukums(i)"
+
+#~ msgid "Layer number"
+#~ msgstr "Līmeņa numurs"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Apraksts:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Atslēgvārdi:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Pieleitojums:\n"
+#~ " "
+
+#~ msgid " options: %s\n"
+#~ msgstr " opcijas: %s\n"
+
+#~ msgid "to accept the default"
+#~ msgstr "lai apstiprinātu noklusēto"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "krāsu atbalsts [%s] karšu biblotēkā [%s] %s"
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr ""
+#~ "Nederīgs laikspiedols(timestamp) norādīts priekš %s kartes %s karšu "
+#~ "biblotēkā %s"
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr ""
+#~ "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu "
+#~ "biblotēkā %s"
+
+#, fuzzy
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
+
+#, fuzzy
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "neiespējami noteikt lietotāja mājas direktoriju"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "pašreizejās karšu biblotēkas reģions %s\n"
+#~ "palaižot \"g.region\""
+
+#~ msgid "default region %s"
+#~ msgstr "noklusētais reģions %s"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "spied ENTER lai turpinātu -->"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "Neatļauts faila nosaukums.  Nevar būt '.' vai 'NULL'\n"
+
+#, fuzzy
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "Neatļauts faila nosaukums. zīme <%c> nav atļauta.\n"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "Pārāk daudz pārklasificēšanas kategorijas priekš [%s iekš %s]"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "Niespējami izveidot atkarību failu [%s iekš %s]"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "neiespējami atrast [%s]"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Nav pieejama palīdzība komandai [%s]\n"
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "nevar ierakstīt vēstures informāciju priekš [%s]"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr ""
+#~ "Nevar pievienot datubāzes saiti,karte nav atvērta rakstīšanas 'WRITE' "
+#~ "režijmā."
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "Nevar pievienot datubāzes saiti"
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "Kļūda noteikuma rindā %d iekš %s "
+
+#, fuzzy
+#~ msgid "Intersections: %5d"
+#~ msgstr "Cita Projekcija"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "neispējami mainīt direktoriju uz %s"
+
+#, fuzzy
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr ""
+#~ "Brīdinājums. Programma atklājusi nezināmu atvērtolīmeni (open_level) \n"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "Neiespējami atvērt failu %s iekš %s"
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "neispējami mainīt direktoriju uz %s"
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "neispējami mainīt direktoriju uz %s"
+
+#, fuzzy
+#~ msgid "Unable to open vector map <%s> on topology level %d"
+#~ msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "Nevar atvērt 'temp'/pagaidu failu"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "Nevar atvērt 'temp'/pagaidu failu"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "Nevar izdzēst līniju, karte '%s' karte nav atvērta līmenī 2"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr ""
+#~ "Nevar izdzēst līniju, karte '%s' karte nav atvērta rakstīšanas 'write' "
+#~ "režijmā"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "neispējami mainīt direktoriju uz %s"
+
+#~ msgid "Cannot find input map '%s'"
+#~ msgstr "Nevar atrast ieejas karti '%s'"
+
+#~ msgid "Cannot rewrite line"
+#~ msgstr "Nevar pārrakstīt līniju"
+
+#~ msgid "Color file for [%s] not available"
+#~ msgstr "Krāsu fails priekš [%s] nav pieejams"

@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2010-02-18 17:47+0900\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2010-03-03 13:31+0900\n"
+"Last-Translator: AkiraTaniguchi <taniguti@apptec.co.jp>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1435,12 +1435,12 @@ msgstr "���"
 #: ../lib/gis/spawn.c:385
 #, c-format
 msgid "CreateProcess() failed: error = %d"
-msgstr ""
+msgstr "CreateProcess()失敗しました: エラー = %d"
 
 #: ../lib/gis/spawn.c:416
 #, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr ""
+msgstr "G_spawn: 記述子をリダイレクトすることができない%d"
 
 #: ../lib/gis/spawn.c:424 ../lib/gis/spawn.c:609
 #, c-format
@@ -5140,7 +5140,7 @@ msgstr "不正なテーブルマップ名 <%s>. 文字 <%c> は許可されて�
 
 #: ../lib/db/dbmi_base/login.c:111
 msgid "Login file corrupted"
-msgstr ""
+msgstr "ログインファイルが破損しています"
 
 #: ../lib/db/dbmi_base/default_name.c:127
 #, fuzzy
@@ -5186,11 +5186,11 @@ msgstr "不明な列タイプ (列 <%s>)"
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:220
 #: ../lib/db/dbmi_client/select.c:286
 msgid "Missing column name"
-msgstr ""
+msgstr "カラム名がありません"
 
 #: ../lib/db/dbmi_client/select.c:215 ../lib/db/dbmi_client/select.c:281
 msgid "Missing key column name"
-msgstr ""
+msgstr "キーカラム名がありません"
 
 #: ../lib/db/dbmi_client/select.c:307
 #, c-format
@@ -5753,135 +5753,135 @@ msgstr "グループ <%s> のサブグループ <%s> は空です\n"
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "グループ <%s> のサブグループ <%s> は次のラスターマップを参照します\n"
 
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "�������: ����� �����������n"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "���"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "���"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "����� ���� ���\n"
+
+#, fuzzy
+msgid "Cannot open database %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "���"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot read topo for line [%d]"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid rast name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot get field info"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open database"
+msgstr "���"
+
+#, fuzzy
+msgid "Output name '%s' is not valid vector name."
+msgstr "���."
+
+#, fuzzy
+msgid "Cannot open existing vector map <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot delete existing vector <%s>"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open new vector %s"
+msgstr "���"
+
+#, fuzzy
+msgid "Cannot open history file for vector '%s'"
+msgstr "���"
+
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "���"
+
+#, fuzzy
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "����������<%s> � �����.\n"
+
+#, fuzzy
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "�����\"d.mon\" ����� �����������\n"
+
+#, fuzzy
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "��� - ����<%s> ���\n"
+
+#, fuzzy
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "��� - � �� ����������(lock) ������<%s>.\n"
+
+#, fuzzy
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "��� - ����� (pipe) ������� �����.\n"
+
+#, fuzzy
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "��� - ����������<%s> � ����\n"
+
+#, fuzzy
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "���� ����������<%s>.\n"
+
+#, fuzzy
+msgid "Not connected...\n"
+msgstr "�������...\n"
+
+#, fuzzy
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr "����� ����� ���� ���� ����\n"
+
+#, fuzzy
+msgid "ERROR: GISBASE not set\n"
+msgstr "���: GISBASE � �����\n"
+
+#, fuzzy
+msgid "%s/%s' was found in more mapsets (also found in <%s>)"
+msgstr "%s/%s' was found in more mapsets (also found in <%s>) "
+
 #~ msgid "Invalid view position coordinates, using %f,%f"
 #~ msgstr "不正な視点位置座標,用法は %f,%f"
 
 #~ msgid "Unknown Location"
 #~ msgstr "不明なロケーション"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "�������: ����� �����������n"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "����� ���� ���\n"
-
-#, fuzzy
-#~ msgid "Cannot open database %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "����������<%s> � �����.\n"
-
-#, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "�����\"d.mon\" ����� �����������\n"
-
-#, fuzzy
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "��� - ����<%s> ���\n"
-
-#, fuzzy
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "��� - � �� ����������(lock) ������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "��� - ����� (pipe) ������� �����.\n"
-
-#, fuzzy
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "��� - ����������<%s> � ����\n"
-
-#, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "���� ����������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Not connected...\n"
-#~ msgstr "�������...\n"
-
-#, fuzzy
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "����� ����� ���� ���� ����\n"
-
-#, fuzzy
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "���: GISBASE � �����\n"
-
-#, fuzzy
-#~ msgid "%s/%s' was found in more mapsets (also found in <%s>)"
-#~ msgstr "%s/%s' was found in more mapsets (also found in <%s>) "
 
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr "量子化ファイル [%s] マップセット内 [%s] %s"
@@ -6692,3 +6692,52 @@ msgstr "グループ <%s> のサブグループ <%s> は次のラスターマッ
 #~ "\n"
 #~ "用例:\n"
 #~ " "
+
+#~ msgid "Probably program error."
+#~ msgstr "プログラムのエラー"
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "一時ファイルが開けません"
+
+#~ msgid "Problem reading raster map"
+#~ msgstr "ラスターマップの読み取りに問題があります"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "無効な投影法\n"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "このエラーをGRASS開発者に報告してください.\n"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "標高ラスターマップ名"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "標高ラスターマップ名"
+
+#~ msgid "to accept the default"
+#~ msgstr "デフォルトの許可"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "続行のためにリターンを押す -->"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "コマンドのヘルプが利用できません [%s]\n"
+
+#~ msgid "Unable to add database link"
+#~ msgstr "データベース リンクを追加できません"
+
+#~ msgid ""
+#~ "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
+#~ "excess)"
+#~ msgstr "ベクトルマップ <%s@%s> の座標ファイルが大きすぎます(%ld バイト超過)"
+
+#~ msgid ""
+#~ "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
+#~ "missing)."
+#~ msgstr ""
+#~ "ベクトル <%s@%s> の座標ファイルが小さすぎます (%ld バイトが不足していま"
+#~ "す)."

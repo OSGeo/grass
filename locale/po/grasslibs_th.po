@@ -5775,7 +5775,7 @@ msgstr "เริ่มทำงาน  cholesky decomposition solver"
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
+msgstr "ไม่สามารถเปิดไฟล์ [%s] ของกลุ่ม [%s ใน %s]"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5843,19 +5843,66 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้"
+msgid "Not enough room in history file to record command line"
+msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้"
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้(ตัดสั้น)"
+msgid "Not enough room in history file for command line (truncated)"
+msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้(ตัดสั้น)"
+
+#, fuzzy
+msgid "test, gmath"
+msgstr "ทดสอบ, gpde"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียนแถวได้ %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "ข้อผิดพลาดในการเขียน floating point format file สำหรับแผนที่ %s"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "ไม่สามารถเขียน,แผนที่ไม่ไดถูกเปิด"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "ไม่สามารถสร้างการทำงานใหม่ได้"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"ขอบเขตสำหรับชุดแผนที่ %s\n"
+"ทำงาน \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "ขอบเขตตั้งต้น %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "ไม่สามารถเปิดได้ %s"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "มีปัญหาในการอ่าน cell ไฟล์"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "ไม่สามารถคัดลอกตารางได้ <%s>"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "ไม่สามารถระบุ pj เพราะว่า: %s"
 
 #~ msgid "Unknown Location"
 #~ msgstr "ตำแหน่งที่ไม่รู้จัก"
-
-#, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "ทดสอบ, gpde"
 
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr "ไฟล์บอกจำนวน [%s] ในชุดแผนที่ [%s] %s"
@@ -5888,10 +5935,6 @@ msgstr ""
 #~ msgstr "ไม่สามารถแถวของแผนที่เชิงภาพ %i"
 
 #, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียนแถวได้ %d"
-
-#, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "ไม่สามารถเปิดแผนที่เชิงภาพ <%s> "
 
@@ -5907,10 +5950,6 @@ msgstr ""
 #~ msgstr "ไม่สามารถเขียนไปที่ quant ไฟล์ได้!"
 
 #~ msgid "Error writing floating point format file for map %s"
-#~ msgstr "ข้อผิดพลาดในการเขียน floating point format file สำหรับแผนที่ %s"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
 #~ msgstr "ข้อผิดพลาดในการเขียน floating point format file สำหรับแผนที่ %s"
 
 #, fuzzy
@@ -5936,14 +5975,6 @@ msgstr ""
 #~ msgid "Unable to feature %d from vector map <%s>"
 #~ msgstr "ไม่สามารถลบแผนที่เชิงเส้น  <%s> ได้"
 
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "ไม่สามารถเขียน,แผนที่ไม่ไดถูกเปิด"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "ไม่สามารถสร้างการทำงานใหม่ได้"
-
 #~ msgid "Too many arguments"
 #~ msgstr "ตัวแปรมากเกินไป"
 
@@ -5966,17 +5997,6 @@ msgstr ""
 #~ msgid "line %d: <%s>"
 #~ msgstr "บรรทัด %d: <%s>"
 
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "ขอบเขตสำหรับชุดแผนที่ %s\n"
-#~ "ทำงาน \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "ขอบเขตตั้งต้น %s"
-
 #~ msgid "is not set"
 #~ msgstr "ไม่มีการกำหนด"
 
@@ -5986,18 +6006,6 @@ msgstr ""
 #~ msgstr ""
 #~ "ไม่ถูกต้อง\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "ไม่สามารถเปิดได้ %s"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "มีปัญหาในการอ่าน cell ไฟล์"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์สำหรับ [%s in %s]"
 
 #~ msgid "Vector is not 3D"
 #~ msgstr "ข้อมูลเชิงเส้น ไม่ใช่แบบ 3D"
@@ -6195,14 +6203,6 @@ msgstr ""
 
 #~ msgid "Cannot open database %s"
 #~ msgstr "ไม่สามารถเปิดฐานข้อมูลได้ %s"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "ไม่สามารถคัดลอกตารางได้ <%s>"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "ไม่สามารถระบุ pj เพราะว่า: %s"
 
 #~ msgid "Cannot describe table <%s>"
 #~ msgstr "ไม่สามารถ บรรยายตารางนี้ได้ <%s>"
@@ -6559,3 +6559,307 @@ msgstr ""
 
 #~ msgid "unable to find [%s] in [%s]"
 #~ msgstr "ไม่สามารถค้นหา [%s] ใน [%s]"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "ไม่สามารถจองหน่วยความจำได้\n"
+
+#~ msgid "Probably program error."
+#~ msgstr "อาจจะเกิดจากข้อผิดพลาดของ โปรแกรม"
+
+#~ msgid "Unable to open file %s"
+#~ msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "มีปัญหาในการอ่าน cell ไฟล์"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "แผนที่เชิงภาพ %s@%s ว่าเปล่า"
+
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr "ไม่สามารถเขียนกฎของปริมาณ: แผนที่ %s คือจำนวนเต็ม"
+
+#~ msgid ""
+#~ "G_set_window(): projection/zone differs from that of currently open "
+#~ "raster maps"
+#~ msgstr "G_set_window(): การฉาย/โซน แตกต่างจากข้อมูลแผนที่เชิงภาพ"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "ช่วงขอมูล floating สำหรับ %s@%s ว่าเปล่า"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "ช่วงข้อมูล จำนวนเต็ม %s@%s ว่าเปล่า"
+
+#~ msgid "%s: map [%s] not open for write - request ignored"
+#~ msgstr "%s: แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียน - การร้องขอถูกยกเลิก"
+
+#~ msgid "%s: unopened file descriptor - request ignored"
+#~ msgstr "%s: ไม่สามารถเปิดตัวอธิบายไฟล์ได้ - การร้องขอถูกยกเลิก"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "แผนที่ [%s] ไม่ได้ถูกเปิดเพื่อเขียนแถวได้ %d"
+
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "ไม่สามารถค้นหาไฟล์ชั่คราวได้ %s"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "การเขียนผิดพลาด ที่แถวเปล่า %d"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "การแบ่งกลุ่มรองรับสำหรับ [%s] ในชุดแผนที่  [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "การแบ่งกลุ่มรองรับสำหรับแผนที่เชิงเส้น [%s] ในชุดแผนที่  [%s] %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "ไม่สามารถเปิด temp ไฟล์"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "การฉายภาพไม่ถูกต้อง\n"
+
+#~ msgid "EmbedGivenNulls: wrong data type!"
+#~ msgstr "EmbedGivenNulls:ข้อมูลผิดประเภท!"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "โปรดแจ้งขอ้ผิดพลาดให้กับ ทีพัฒนา GRASS\n"
+
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "G_set_null_value: ข้อมูลผิดประเภท!"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "ชื่อข้อมูลความสูงเชิงภาพ"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "ชื่อข้อมูลความสูงเชิงภาพ"
+
+#~ msgid "Layer number"
+#~ msgstr "จำนวนชั้นข้อมูล"
+
+#~ msgid ""
+#~ "A single vector map can be connected to multiple database tables. This "
+#~ "number determines which table to use."
+#~ msgstr ""
+#~ "แผนที่เชิงเส้น 1 แผนที่สามารถเชื่อมต่อกับหลายตารางในฐานข้อมูล "
+#~ "ลำดับระบุการเชื่อมต่อกับตารางใด"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "คำอธิบาย:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "คำเฉพาะ:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "วิธีใช้:\n"
+#~ " "
+
+#~ msgid " options: %s\n"
+#~ msgstr "เงื่อนไข: %s\n"
+
+#~ msgid "to accept the default"
+#~ msgstr "ใช้ค่าตั้งต้น"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "รองรับการใช้สีสำหรับ [%s] ในชุดแผนที่  [%s] %s"
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr "ไฟล์ลงเวลาไม่ถูกต้อง สำหรับ %s แผนที่ %s ในชุดแผนที่ %s"
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "ไฟล์ลงเวลาไม่ถูกต้อง สำหรับ %s แผนที่ %s ในชุดแผนที่ %s"
+
+#, fuzzy
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "ผิดพลาดในการอ่านการบีบอัดแผนที่ [%s] ในชุดแผนที่ [%s], แถว %d"
+
+#, fuzzy
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "ผิดพลาดในการอ่านแผนที่ [%s] ในชุดแผนที่ [%s], แถว %d"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "ไม่สามารถหา  home directory ของผู้ใช้"
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "ไม่สามารถสร้างส่วนหัวของไฟล์ [%s] ได้"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "ขอบเขตสำหรับชุดแผนที่ %s\n"
+#~ "ทำงาน \"g.region\""
+
+#~ msgid "default region %s"
+#~ msgstr "ขอบเขตตั้งต้น %s"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "กด RETURN เพื่อดำเนินการต่อ -->"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "ชือไฟล์ไม่ถูกต้อง  ไม่สามารถใช้ '.' หรือ 'NULL'\n"
+
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "ชือไฟล์ไม่ถูกต้อง ตัวอักษร <%c> ใช้ไม่ได้\n"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "กลุ่มมากเกินไป สำหรับ [%s in %s]"
+
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr "รูปแบบการจัดกลุ่มในส่วนหัวของไฟล์ไม่ถูกต้อง สำหรับ [%s ใน %s]"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "ไม่สามารถสร้าง  dependency  ของไฟล์สำหรับ [%s ใน %s]"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different projection than current region. Found "
+#~ "raster map <%s@%s>, should be <%s>."
+#~ msgstr ""
+#~ "[%s] ในชุดแผนที่ [%s] - ในการฉายภาพที่แตกต่างจากขอบเขตปัจจุบัน:\n"
+#~ " พบแผนที่ [%s] ใน: <%s>, ควรจะ <%s> "
+
+#, fuzzy
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgstr "[%s] ชุดแผนที่ [%s] - ในโซนที่แตกต่าง [%d] จากขอบเขตปัจจุบัน [%d]"
+
+#, fuzzy
+#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
+#~ msgstr "[%s] ใน [%s] - bytes ต่อ cell (%d) ใหญ่เกินไป"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "ไม่สามารถค้นหา  [%s]"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "ไม่มีความช่วยเหลือสำหรับคำสั่งนี้ [%s]\n"
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "ไม่สามารถเขียนข้อมูลประวัติ สำหรับ [%s]"
+
+#~ msgid "Not enough room in history file to record command line."
+#~ msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้"
+
+#~ msgid "Not enough room in history file for command line (truncated)."
+#~ msgstr "ไฟล์ประวัติเต็มไม่สามารถบันทึกคำสั่งต่อได้(ตัดสั้น)"
+
+#~ msgid "%d errors in category string."
+#~ msgstr "%d ผิดพลาดในหมวดของตัวอักษร"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr "ไม่สามารถเพิ่มการเชื่อมฐานข้อมูล, แผนที่ไม่ได้เปิดเพื่อ การเขียน"
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "ไม่สามารถเพิ่มการเชื่อมฐานข้อมูล,"
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "ผิดพลาดใน กฏ บน แถว %d ใน %s"
+
+#, fuzzy
+#~ msgid "Intersections: %5d"
+#~ msgstr "การฉายแบบอื่น"
+
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr "โปรแกรมเมอร์ต้องการทราบระดับที่จะเปิด %d"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "ไม่สามารถเปิดไฟล์ %s ได้"
+
+#, fuzzy
+#~ msgid "OGR feature without ID ignored"
+#~ msgstr "ข้อมูล %d ไม่มี ID ตัดออก"
+
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "ไม่สามารถสร้างแผนที่เชิงภาพ <%s> "
+
+#~ msgid "test, gpde"
+#~ msgstr "ทดสอบ, gpde"
+
+#~ msgid ""
+#~ "taking too long to find points for interpolation--please change the "
+#~ "region to area where your points are. Continuing calculations..."
+#~ msgstr ""
+#~ "ใช้เวลานานในการหาจุดเพื่อ  interpolation--โปรดเปลี่ยนขอบเขตของพื้นที่ตามจุดที่คุณเลือก "
+#~ "แล้วคำนวนต่อ..."
+
+#~ msgid "Reading lines from vector map ... "
+#~ msgstr "กำลังอ่าน ข้อมูลจาก ข้อมูลเชิงเส้น..."
+
+#~ msgid "Reading nodes from vector map ... "
+#~ msgstr "กำลังอ่าน  nodes จากข้อมูลเชิงเส้น"
+
+#~ msgid "strip exists with insufficient data"
+#~ msgstr "มี strip อยู่แต่ข้อมูลใช้ไม่ได้"
+
+#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
+#~ msgstr "ไม่มีจุดอยู่นอกขอบเขต2 D/3D --ยกเลิก %d จุด"
+
+#~ msgid "ignoring %d points -- too dense"
+#~ msgstr "กำลังยกเลิก %d จุด -- แน่นเกินไป"
+
+#~ msgid "some points outside of region -- will ignore..."
+#~ msgstr "บางจุดอยู่นอกขอบเขต -- ตัดออก..."
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "ไม่สามารถลบแผนที่เชิงเส้น  <%s> ได้"
+
+#, fuzzy
+#~ msgid "Unable to open vector map <%s> on topology level %d"
+#~ msgstr "ไม่สามารถคัดลอกแผนที่เชิงเส้น  <%s> ไปเป็น <%s>"
+
+#~ msgid "Snapped vertices"
+#~ msgstr "ดูดเข้าหา จุดหัก"
+
+#~ msgid "New vertices"
+#~ msgstr "เพิ่ม จุดหัก"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "ไม่สามารถอ่าน ส่วนหัวของไฟล์ได้"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด ในระดับ 2"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr "ไม่สามารถลบ,แผนที่ '%s ไม่ไดถูกเปิด เพื่อเขียน"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "ไม่สามารถลบแผนที่เชิงเส้น  <%s> ได้"
+
+#~ msgid "Cannot find input map '%s'"
+#~ msgstr "ไม่พบแผนที่สำหรับนำเข้า '%s'"
+
+#~ msgid "Column type not supported"
+#~ msgstr "ไม่รองรับ ชนิด Column นี้"
+
+#~ msgid "Cannot rewrite line"
+#~ msgstr "ไม่สามารถเขียนใหม่"

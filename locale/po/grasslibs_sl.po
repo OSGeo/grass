@@ -5726,7 +5726,7 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "Nezmo¾en ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo¾en odpreti datoteko %s v %s"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5793,6 +5793,53 @@ msgstr ""
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "sloj [%s] - nezmo¾en zapisati vrstico %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "za obstojeèe rastrske sloje %d\n"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Ne morem zapisati linije, sloj ni odprt"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "ne morem ustvariti novega procesa"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"regija za trenutni \"mapset\" %s\n"
+"po¾eni \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "privzeta regija %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "Ne morem odpreti %s"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "za obstojeèe rastrske sloje %d\n"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "Nezmo¾en ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "Nezmo¾en odpreti datoteko %s v %s"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "Nezmo¾en odpreti datoteko %s v %s"
+
 #~ msgid "Unknown Location"
 #~ msgstr "Nepoznan \"location\""
 
@@ -5830,10 +5877,6 @@ msgstr ""
 #~ msgstr "ne morem ustvariti novega procesa"
 
 #, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "sloj [%s] - nezmo¾en zapisati vrstico %d"
-
-#, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "ne morem spremeniti direktorija v %s"
 
@@ -5850,10 +5893,6 @@ msgstr ""
 #~ msgstr "ne morem ustvariti novega procesa"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "za obstojeèe rastrske sloje %d\n"
-
-#, fuzzy
 #~ msgid "Unable to read header file for raster map <%s@%s>."
 #~ msgstr "Nezmo¾en ustvariti datoteko z vzglavjem za [%s v %s]"
 
@@ -5867,14 +5906,6 @@ msgstr ""
 
 #~ msgid "can't create histogram for [%s in %s]"
 #~ msgstr "ne morem ustvariti histograma za [%s v %s]"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Ne morem zapisati linije, sloj ni odprt"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "ne morem ustvariti novega procesa"
 
 #, fuzzy
 #~ msgid "Too many arguments"
@@ -5903,17 +5934,6 @@ msgstr ""
 #~ msgid "line %d: <%s>"
 #~ msgstr "linija %d: <%s>"
 
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "regija za trenutni \"mapset\" %s\n"
-#~ "po¾eni \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "privzeta regija %s"
-
 #~ msgid "is not set"
 #~ msgstr "ni nastavljena"
 
@@ -5923,18 +5943,6 @@ msgstr ""
 #~ msgstr ""
 #~ "je neveljaven\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Ne morem odpreti %s"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "za obstojeèe rastrske sloje %d\n"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "Nezmo¾en ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #, fuzzy
 #~ msgid "Unable to open category index file for vector map <%s@%s>"
@@ -6046,14 +6054,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Cannot open database %s"
 #~ msgstr "Ne morem zapisati povezav z bazo podatkov."
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
 
 #, fuzzy
 #~ msgid "Cannot describe table <%s>"
@@ -6689,3 +6689,259 @@ msgstr ""
 
 #~ msgid "unable to find [%s] in [%s]"
 #~ msgstr "ne najdem [%s] v [%s]"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Nezmo¾en dodeliti spomin\n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "za obstojeèe rastrske sloje %d\n"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "Rastrski sloj %s@%s je prazen"
+
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr "Ne morem zapisati \"quant\" pravil: sloj %s je integer"
+
+#, fuzzy
+#~ msgid ""
+#~ "G_set_window(): projection/zone differs from that of currently open "
+#~ "raster maps"
+#~ msgstr ""
+#~ "G_set_window(): projekcija/cona je razlièna od tiste, ki je doloèena za "
+#~ "trenutno odprte rastrske sloje"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "Razpon plavajoèih podatkov za %s@%s je prazen"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "Razpon integer podatkov za %s@%s je prazen"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "sloj [%s] - nezmo¾en zapisati vrstico %d"
+
+#, fuzzy
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "Nezmo¾en odpreti datoteko s tabelo fundamentalne toèke: %s"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "napaka pri pisanju \"null\" vrstice %d"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "podpora za kategorije za [%s] v \"mapset\" [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "podpora za kategorije za vektorski sloj [%s] v \"mapset\" [%s] %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "Ne morem odpreti temp datoteke"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "neveljavna projekcija\n"
+
+#~ msgid "EmbedGivenNulls: wrong data type!"
+#~ msgstr "EmbedGivenNulls: napaèen tip podatkov!"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Prosim sporoèite razvijalcem GRASS-a o tej napaki.\n"
+
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "G_set_null_value: napaèen tip podatkov!"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Ime vhodnega rastrskega sloja"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Ime vhodnega rastrskega sloja"
+
+#~ msgid "Layer number"
+#~ msgstr "©tevilka sloja"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Opis:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Uporaba:\n"
+#~ " "
+
+#~ msgid " options: %s\n"
+#~ msgstr "mo¾nosti: %s\n"
+
+#~ msgid "to accept the default"
+#~ msgstr "za izbrati privzeto"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "barvna podpora za [%s] v \"mapset\" [%s] %s"
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr "timestamp doloèen za %s v sloju %s v \"mapset\" %s je neveljaven "
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
+
+#, fuzzy
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "napaka pri branju %s sloja [%s] v \"mapset\" [%s], vrstica %d"
+
+#, fuzzy
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "napaka pri branju %s sloja [%s] v \"mapset\" [%s], vrstica %d"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "ne morem doloèiti uporabnikovega domaèega direktorija"
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "Nezmo¾en ustvariti vzglavno datoteko za [%s]"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "regija za trenutni \"mapset\" %s\n"
+#~ "po¾eni \"g.region\""
+
+#~ msgid "default region %s"
+#~ msgstr "privzeta regija %s"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "pritisnite RETURN za nadaljevanje -->"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "Neveljavno ime datoteke. Ne more biti '.' ali 'NULL'\n"
+
+#, fuzzy
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "Neveljavno ime. Znak <%c> je prepovedan."
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "Preveè reklasifikacijskih kategorij za [%s v %s]"
+
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr ""
+#~ "Neveljaven reklasifikacijski format v vzglavni datoteki za [%s v %s]"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "Nezmo¾en ustvariti datoteko odvisnosti v [%s v %s]"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different projection than current region. Found "
+#~ "raster map <%s@%s>, should be <%s>."
+#~ msgstr ""
+#~ "[%s] v \"mapset\" [%s] - je v drugaèni projekciji kot trenutna regija:\n"
+#~ "najden sloj [%s] v: <%s>, moral bi biti <%s> "
+
+#, fuzzy
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgstr "[%s] v \"mapset\" [%s] - v drugi coni [%d] kot trenutna regija [%d]"
+
+#, fuzzy
+#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
+#~ msgstr "[%s] v [%s] - bajtov na celico (%d) preveè"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "ne najdem [%s]"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Za ukaz [%s] ni na voljo pomoèi\n"
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "ne morem zapisati \"history\" podatkov za [%s]"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr ""
+#~ "Ne morem dodati povezave z bazo podatkov, sloj ni odprt v ZAPISOVALNEM "
+#~ "naèinu."
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "Ne morem dodati povezave z bazo podatkov."
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "Napaka v pravilu na vrstici %d v %s"
+
+#, fuzzy
+#~ msgid "Intersections: %5d"
+#~ msgstr "Druga projekcija"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "ne morem spremeniti direktorija v %s"
+
+#, fuzzy
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr "Opozorilo, Za¾elen programer: nepoznan open_level\n"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "Nezmo¾en odpreti datoteko %s v %s"
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "ne morem spremeniti direktorija v %s"
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "ne morem spremeniti direktorija v %s"
+
+#, fuzzy
+#~ msgid "Unable to open vector map <%s> on topology level %d"
+#~ msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "Ne morem odpreti temp datoteke"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "Ne morem odpreti temp datoteke"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "Ne morem izbrisati linije, sloj '%s' ni odprt na nivoju 2"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr "Ne morem izbrisati linije, sloj '%s' ni odprt v zapisovalnem naèinu"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "ne morem spremeniti direktorija v %s"
+
+#~ msgid "Cannot find input map '%s'"
+#~ msgstr "Ne najdem vhodnega sloja '%s'"
+
+#~ msgid "Cannot rewrite line"
+#~ msgstr "Ne morem prepisati linije"
+
+#, fuzzy
+#~ msgid "Color file for [%s] not available"
+#~ msgstr "LOCATION  << %s >>  ne obstaja"

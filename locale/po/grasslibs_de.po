@@ -5878,271 +5878,269 @@ msgstr ""
 "Untergruppe <%s> der Gruppe <%s> referenziert die folgenden Rasterkarten\n"
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr ""
-#~ "Nicht genügend Platz in der History-Datei um die Kommandozeile zu "
-#~ "speichern."
+msgid "Not enough room in history file to record command line"
+msgstr ""
+"Nicht genügend Platz in der History-Datei um die Kommandozeile zu speichern."
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "Nicht genügend Platz in der History-Datei für die Kommandozeile "
-#~ "(angeschnitten)."
+msgid "Not enough room in history file for command line (truncated)"
+msgstr ""
+"Nicht genügend Platz in der History-Datei für die Kommandozeile "
+"(angeschnitten)."
+
+#, fuzzy
+msgid "test, gmath"
+msgstr "test, gpde"
+
+#, fuzzy
+msgid ""
+"\n"
+"Keywords:\n"
+" "
+msgstr ""
+"\n"
+"Schlüsselwörter:\n"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Fehler beim Schreiben der Flißekommakarte %s."
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "Kann keinen neuen Prozess erzeugen."
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"Region des gegenwärtigen Mapsets %s\n"
+"Führen Sie \"g.region\" aus"
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "Standard Region %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "Kann %s nicht öffnen."
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "Karte [%s] - Kann Zeile %d nicht schreiben. "
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Vektor Karte"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "Raster Karte"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "Raster Karte"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Cannot get layer info"
+msgstr "Kann die Layer-Informationen nicht abfragen."
+
+msgid "Cannot open database %s"
+msgstr "Kann Datenbank '%s' nicht öffnen."
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "Kann Datei %s nicht öffnen."
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "Kann Datei %s in %s nicht öffnen"
+
+#, fuzzy
+msgid "Registering points"
+msgstr "Registriere Linien..."
+
+#, fuzzy
+msgid "Registered points"
+msgstr "Registriere Linien..."
+
+#, fuzzy
+msgid "Registered points (unique coordinates)"
+msgstr "Registriere Linien..."
+
+#, fuzzy
+msgid "Duplicates"
+msgstr "Doppeltes Ost-Feld"
+
+msgid "G_malloc: out of memory"
+msgstr "G_malloc: Kein Speicher mehr da."
+
+msgid "G_calloc: out of memory"
+msgstr "G_calloc: Kein Speicher mehr da."
+
+msgid "G_realloc: out of memory"
+msgstr "G_realloc: Kein Speicher mehr da."
+
+#, fuzzy
+msgid "Cannot describe table <%s>"
+msgstr "Kann Tabelle <%s> nicht beschreiben"
+
+#, fuzzy
+msgid "Attempt to delete dead line"
+msgstr "Versuch, eine tote Fläche zu löschen"
+
+#, fuzzy
+msgid "Unable to connect lines %d,%d"
+msgstr "Kann Datei head nicht lesen"
+
+#, fuzzy
+msgid "Output name '%s' is not valid rast name."
+msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
+
+#, fuzzy
+msgid "Output map '%s' is used as input"
+msgstr "Ergebniskarte '%s' ist gleichzeitig Eingabekarte."
+
+#, fuzzy
+msgid "unable to open raster map [%s in %s]"
+msgstr "Kann nicht zum Verzeichnis %s wechseln."
+
+msgid "Insufficent memory for allocation of gaussian"
+msgstr "Ungenügend Speicher zum Allokieren der Gausschen..."
+
+#, fuzzy
+msgid "Cannot read topo for line [%d]"
+msgstr "Kann Datei head nicht lesen"
+
+#, fuzzy
+msgid "Can't read header file for [%s in %s]\n"
+msgstr "Kann range Datei für [%s in %s] nicht lesen."
+
+#, fuzzy
+msgid "Can't open header file for [%s in %s]"
+msgstr "Kann range Datei für [%s in %s] nicht lesen."
+
+#, fuzzy
+msgid "Cannot get field info"
+msgstr "Kann die Layer-Informationen nicht abfragen."
+
+#, fuzzy
+msgid "Cannot open database"
+msgstr "Kann Datenbank '%s' nicht öffnen."
+
+#, fuzzy
+msgid "Building topology ...\n"
+msgstr "Bitte Topologie für Vektorkarte <'%s> neu erzeugen\n"
+
+msgid ""
+"\r%d areas built      \n"
+"%d isles built\n"
+msgstr ""
+"\r%d Flächen erstellt \n"
+"%d Inselflächen erstellt\n"
+
+#, fuzzy
+msgid "Cannot get column info"
+msgstr "Kann die Layer-Informationen nicht abfragen."
+
+#, fuzzy
+msgid "OGR feature type [%d] not supported"
+msgstr "OGR Feature Typ %d wird nicht unterstützt."
+
+#, fuzzy
+msgid "Vect_rewrite_line() for this format/level not supported"
+msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
+
+#, fuzzy
+msgid "Vect_delete_line() for this format/level not supported"
+msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
+
+#, fuzzy
+msgid "Output name '%s' is not valid vector name."
+msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
+
+#, fuzzy
+msgid "Cannot copy vector '%s' to '%s'"
+msgstr "Kann Rasterkarte [%s in %s] nicht öffnen."
+
+#, fuzzy
+msgid "Cannot open existing vector map <%s>"
+msgstr "Kann nicht zum Verzeichnis %s wechseln."
+
+#, fuzzy
+msgid "Cannot delete existing vector <%s>"
+msgstr "Kann nicht zum Verzeichnis %s wechseln."
+
+#, fuzzy
+msgid "Cannot open new vector %s"
+msgstr "Kann die Debug-Datei '%s' nicht öffnen."
+
+#, fuzzy
+msgid "Cannot open history file for vector '%s'"
+msgstr "Kann die History-Datei für die Vektorkarte <%s> nicht öffnen."
+
+#, fuzzy
+msgid "Could not stat file '%s'"
+msgstr "Kann Datei %s nicht öffnen."
+
+#, fuzzy
+msgid "Can't open directory %s"
+msgstr "Kann nicht zum Verzeichnis %s wechseln."
+
+msgid "Starting lu solver method"
+msgstr "Starte lu-Solver Methode"
+
+#, fuzzy
+msgid "%s - ** illegal name **"
+msgstr ""
+"\n"
+"**<%s> unerlaubter Name **\n"
+
+#, fuzzy
+msgid "Gauss-Seidel -- iteration %5i error %g\n"
+msgstr "sparse SOR -- Durchlauf %5i Fehler %g\n"
+
+#, fuzzy
+msgid "No such graphics monitor as <%s>.\n"
+msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
+
+#, fuzzy
+msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
+msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
+
+#, fuzzy
+msgid "Can't stat %s\n"
+msgstr "eine Liste %s ein."
+
+msgid "Error - Monitor <%s> is in use.\n"
+msgstr "Fehler - Monitor <%s> wird bereits benutzt.\n"
+
+msgid "Error - Monitor <%s> is in use by %s.\n"
+msgstr "Fehler - Monitor <%s> wird bereits von %s benutzt.\n"
+
+msgid "Error - Could not complete locking process for monitor <%s>.\n"
+msgstr "Fehler - Kann den Locking-Prozess für Monitor <%s> nicht beenden.\n"
+
+msgid "Error - Can't set up pipe to graphics device.\n"
+msgstr "Fehler - Kann keine Pipe zum Graphik-Gerät aufbauen.\n"
+
+msgid "Error - Graphics monitor <%s> not running!\n"
+msgstr "Fehler - Graphik-Monitor <%s> läuft nicht!\n"
+
+#, fuzzy
+msgid "Please start graphics monitor <%s>.\n"
+msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
+
+msgid "Not connected...\n"
+msgstr "Nicht verbunden...\n"
+
+msgid "Couldn't connect to monitor. Will try once more.\n"
+msgstr ""
+"Kann nicht mit einem Monitor verbinden. Versuche es noch ein weiteres Mal.\n"
 
 #~ msgid "Invalid view position coordinates, using %f,%f"
 #~ msgstr "Ungültige Koordinaten für den Betrachtungspunkt, verwende %f,%f"
-
-#, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "test, gpde"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "Keywords:\n"
-#~ " "
-#~ msgstr ""
-#~ "\n"
-#~ "Schlüsselwörter:\n"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Fehler beim Schreiben der Flißekommakarte %s."
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "Kann keinen neuen Prozess erzeugen."
-
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "Region des gegenwärtigen Mapsets %s\n"
-#~ "Führen Sie \"g.region\" aus"
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "Standard Region %s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Kann %s nicht öffnen."
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "Karte [%s] - Kann Zeile %d nicht schreiben. "
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Vektor Karte"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Raster Karte"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "Raster Karte"
-
-#~ msgid "Type"
-#~ msgstr "Typ"
-
-#~ msgid "Cannot get layer info"
-#~ msgstr "Kann die Layer-Informationen nicht abfragen."
-
-#~ msgid "Cannot open database %s"
-#~ msgstr "Kann Datenbank '%s' nicht öffnen."
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Kann Datei %s nicht öffnen."
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Kann Datei %s in %s nicht öffnen"
-
-#, fuzzy
-#~ msgid "Registering points"
-#~ msgstr "Registriere Linien..."
-
-#, fuzzy
-#~ msgid "Registered points"
-#~ msgstr "Registriere Linien..."
-
-#, fuzzy
-#~ msgid "Registered points (unique coordinates)"
-#~ msgstr "Registriere Linien..."
-
-#, fuzzy
-#~ msgid "Duplicates"
-#~ msgstr "Doppeltes Ost-Feld"
-
-#~ msgid "G_malloc: out of memory"
-#~ msgstr "G_malloc: Kein Speicher mehr da."
-
-#~ msgid "G_calloc: out of memory"
-#~ msgstr "G_calloc: Kein Speicher mehr da."
-
-#~ msgid "G_realloc: out of memory"
-#~ msgstr "G_realloc: Kein Speicher mehr da."
-
-#, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Kann Tabelle <%s> nicht beschreiben"
-
-#, fuzzy
-#~ msgid "Attempt to delete dead line"
-#~ msgstr "Versuch, eine tote Fläche zu löschen"
-
-#, fuzzy
-#~ msgid "Unable to connect lines %d,%d"
-#~ msgstr "Kann Datei head nicht lesen"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
-
-#, fuzzy
-#~ msgid "Output map '%s' is used as input"
-#~ msgstr "Ergebniskarte '%s' ist gleichzeitig Eingabekarte."
-
-#, fuzzy
-#~ msgid "unable to open raster map [%s in %s]"
-#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
-
-#~ msgid "Insufficent memory for allocation of gaussian"
-#~ msgstr "Ungenügend Speicher zum Allokieren der Gausschen..."
-
-#, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "Kann Datei head nicht lesen"
-
-#, fuzzy
-#~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "Kann range Datei für [%s in %s] nicht lesen."
-
-#, fuzzy
-#~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "Kann range Datei für [%s in %s] nicht lesen."
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "Kann die Layer-Informationen nicht abfragen."
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "Kann Datenbank '%s' nicht öffnen."
-
-#, fuzzy
-#~ msgid "Building topology ...\n"
-#~ msgstr "Bitte Topologie für Vektorkarte <'%s> neu erzeugen\n"
-
-#~ msgid ""
-#~ "\r%d areas built      \n"
-#~ "%d isles built\n"
-#~ msgstr ""
-#~ "\r%d Flächen erstellt \n"
-#~ "%d Inselflächen erstellt\n"
-
-#, fuzzy
-#~ msgid "Cannot get column info"
-#~ msgstr "Kann die Layer-Informationen nicht abfragen."
-
-#, fuzzy
-#~ msgid "OGR feature type [%d] not supported"
-#~ msgstr "OGR Feature Typ %d wird nicht unterstützt."
-
-#, fuzzy
-#~ msgid "Vect_rewrite_line() for this format/level not supported"
-#~ msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
-
-#, fuzzy
-#~ msgid "Vect_delete_line() for this format/level not supported"
-#~ msgstr "Vect_write_line() wird für dieses Format/Level nicht unterstützt."
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "Ausgabename '%s' ist kein erlaubter Rasterkartenname."
-
-#, fuzzy
-#~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "Kann Rasterkarte [%s in %s] nicht öffnen."
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
-
-#, fuzzy
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "Kann die Debug-Datei '%s' nicht öffnen."
-
-#, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "Kann die History-Datei für die Vektorkarte <%s> nicht öffnen."
-
-#, fuzzy
-#~ msgid "Could not stat file '%s'"
-#~ msgstr "Kann Datei %s nicht öffnen."
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "Kann nicht zum Verzeichnis %s wechseln."
-
-#~ msgid "Starting lu solver method"
-#~ msgstr "Starte lu-Solver Methode"
-
-#, fuzzy
-#~ msgid "%s - ** illegal name **"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> unerlaubter Name **\n"
-
-#, fuzzy
-#~ msgid "Gauss-Seidel -- iteration %5i error %g\n"
-#~ msgstr "sparse SOR -- Durchlauf %5i Fehler %g\n"
-
-#, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
-
-#, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "Bitte benutzen Sie \"d.mon\", um einen Graphik-Monitor auszuwählen."
-
-#, fuzzy
-#~ msgid "Can't stat %s\n"
-#~ msgstr "eine Liste %s ein."
-
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "Fehler - Monitor <%s> wird bereits benutzt.\n"
-
-#~ msgid "Error - Monitor <%s> is in use by %s.\n"
-#~ msgstr "Fehler - Monitor <%s> wird bereits von %s benutzt.\n"
-
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "Fehler - Kann den Locking-Prozess für Monitor <%s> nicht beenden.\n"
-
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "Fehler - Kann keine Pipe zum Graphik-Gerät aufbauen.\n"
-
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "Fehler - Graphik-Monitor <%s> läuft nicht!\n"
-
-#, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "Fehler - keine Antwort vom Graphikmonitor <%s>.\n"
-
-#~ msgid "Not connected...\n"
-#~ msgstr "Nicht verbunden...\n"
-
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr ""
-#~ "Kann nicht mit einem Monitor verbinden. Versuche es noch ein weiteres "
-#~ "Mal.\n"
 
 #~ msgid "Unknown Location"
 #~ msgstr "Unbekannte Location"

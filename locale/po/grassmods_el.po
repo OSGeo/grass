@@ -2480,9 +2480,8 @@ msgid "The '-l' flag only works in Lat/Lon locations"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:206
-#, fuzzy
 msgid "Available GDAL Drivers:"
-msgstr "Δίνει τη λίστα για όλους τους οδηγούς βάσεων δεδομένων"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:227 ../raster/r.proj/main.c:282
 #: ../raster/r.out.gdal/main.c:232 ../vector/v.net/args.c:109
@@ -3026,7 +3025,7 @@ msgstr ""
 #: ../raster/r.resamp.bspline/main.c:595 ../vector/v.surf.bspline/main.c:718
 #, fuzzy
 msgid "Writing output..."
-msgstr "Αδυναμία κλεισίματος του εξαγόμενου χάρτη"
+msgstr "Εγγραφή %s από %s..."
 
 #: ../raster/r.resamp.bspline/crosscorr.c:160
 #, c-format
@@ -3132,7 +3131,7 @@ msgstr ""
 #: ../raster/r.drain/main.c:144
 #, fuzzy
 msgid "Name of vector map(s) containing starting point(s)"
-msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+msgstr "Όνομα του αρχείου που περιέχει SQL εντολές"
 
 #: ../raster/r.drain/main.c:149
 msgid "Copy input cell values on output"
@@ -8301,8 +8300,9 @@ msgid "Raster map from which to copy color table"
 msgstr ""
 
 #: ../raster/r.colors/main.c:191
+#, fuzzy
 msgid "Path to rules file"
-msgstr ""
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
 
 #: ../raster/r.colors/main.c:192
 msgid "\"-\" to read rules from stdin"
@@ -8818,7 +8818,7 @@ msgstr "Σφάλμα κατά το κλείσιμο 3Δ ράστερ αρχείου"
 #: ../raster/r.out.gdal/main.c:510 ../raster/r.out.gdal/main.c:514
 #, fuzzy
 msgid "Raster export aborted."
-msgstr "Το 3Δ ράστερ αρχείο θα μετατραπεί σε ASCII"
+msgstr "Ο χάρτης raster  <%s> δεν βρέθηκε"
 
 #: ../raster/r.out.gdal/main.c:491
 msgid "Checking GDAL data type and nodata value"
@@ -9955,9 +9955,8 @@ msgid "Name of raster map to be reclassified"
 msgstr "Χρώμα"
 
 #: ../raster/r.reclass/main.c:65
-#, fuzzy
 msgid "File containing reclass rules"
-msgstr "Όνομα του αρχείου που περιέχει υπογραφές (signatures)"
+msgstr ""
 
 #: ../raster/r.reclass/main.c:66
 #, fuzzy
@@ -12459,7 +12458,7 @@ msgstr ""
 #: ../general/g.message/main.c:105
 #, fuzzy
 msgid "Unable to parse input message"
-msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+msgstr "Αδυναμία κλεισίματος του χάρτη input"
 
 #: ../general/g.pnmcat/main.c:49
 msgid "Unsupported PPM file (format = P6 required)"
@@ -19545,8 +19544,9 @@ msgstr ""
 
 #: ../vector/v.out.ogr/args.c:14
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:9
+#, fuzzy
 msgid "Feature type(s)"
-msgstr ""
+msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
 
 #: ../vector/v.out.ogr/args.c:16
 msgid ""
@@ -19824,9 +19824,8 @@ msgid "Error in pj_do_transform"
 msgstr ""
 
 #: ../vector/v.hull/main.c:53
-#, fuzzy
 msgid "Produces a convex hull for a given vector map."
-msgstr "Όνομα εισαγώμενων ράστερ χαρτών"
+msgstr ""
 
 #: ../vector/v.hull/main.c:64
 msgid "Use all vector points (do not limit to current region)"
@@ -19839,7 +19838,7 @@ msgstr ""
 #: ../vector/v.hull/main.c:88
 #, fuzzy, c-format
 msgid "Error loading vector points from <%s>"
-msgstr "Σφάλμα ανοίγματος 3Δ ράστερ χάρτη <%s>"
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
 
 #: ../vector/v.hull/main.c:91
 #, c-format
@@ -20112,8 +20111,9 @@ msgstr ""
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:233
 #: ../vector/v.lidar.edgedetection/edgedetection.c:309
+#, fuzzy
 msgid "Impossible to update aux table"
-msgstr ""
+msgstr "Αδυναμία λίστας βάσεων δεδομένων"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:246
 #: ../vector/v.lidar.edgedetection/edgedetection.c:258
@@ -21905,7 +21905,7 @@ msgstr ""
 #: ../vector/v.to.rast/vect2rast.c:35
 #, fuzzy
 msgid "Loading data..."
-msgstr "Εγγραφή %s από %s..."
+msgstr "Φόρτωση δεδομένων... (%dx%dx%d)"
 
 #: ../vector/v.to.rast/vect2rast.c:41
 #, c-format
@@ -23409,9 +23409,9 @@ msgid "Copying attribute table(s)..."
 msgstr "Αντιγράφει ένα πίνακα"
 
 #: ../vector/v.category/main.c:554
-#, fuzzy, c-format
+#, c-format
 msgid "%d features modified."
-msgstr "Ο χάρτης raster  <%s> δεν βρέθηκε"
+msgstr ""
 
 #: ../vector/v.surf.rst/main.c:145
 msgid "RST"
@@ -23704,9 +23704,8 @@ msgid "npoints = %d, nterrain = %d"
 msgstr ""
 
 #: ../vector/v.lidar.correction/main.c:369
-#, fuzzy
 msgid "Mean calculation"
-msgstr "Ο χάρτης raster  <%s> δεν βρέθηκε"
+msgstr ""
 
 #: ../vector/v.lidar.correction/main.c:383
 msgid "Only TERRAIN points"
@@ -25778,11 +25777,12 @@ msgstr ""
 #: ../locale/scriptstrings/m.proj_to_translate.c:24
 #, fuzzy
 msgid "Files & format"
-msgstr "Διαμόρφωση"
+msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:6
+#, fuzzy
 msgid "Output coordinate file (omit to send to stdout)"
-msgstr ""
+msgstr "Όνομα εξαγόμενου διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:8
 msgid "Field separator (format: input[,output])"
@@ -25800,9 +25800,8 @@ msgstr ""
 #: ../locale/scriptstrings/m.proj_to_translate.c:14
 #: ../locale/scriptstrings/m.proj_to_translate.c:16
 #: ../locale/scriptstrings/m.proj_to_translate.c:18
-#, fuzzy
 msgid "Projections"
-msgstr "Όνομα τοποθεσία"
+msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:13
 msgid "Output projection parameters (PROJ.4 style)"
@@ -25950,8 +25949,9 @@ msgid "Destination projection, defaults to this location's projection"
 msgstr ""
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:11
+#, fuzzy
 msgid "Maximum number of columns for a tile in the source projection"
-msgstr ""
+msgstr "Νούμερο επιπέδου"
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:12
 msgid "Maximum number of rows for a tile in the source projection"
@@ -25997,8 +25997,9 @@ msgid "SPOT sensor"
 msgstr ""
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:11
+#, fuzzy
 msgid "Name of input raster map (green: tm2 | qbird_green | spot1)"
-msgstr ""
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη (NIR: tm4 | qbird_nir | spot2"
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:12
 #, fuzzy
@@ -26121,8 +26122,9 @@ msgid "Base name for red, green and blue output maps containing the blend"
 msgstr ""
 
 #: ../locale/scriptstrings/r.blend_to_translate.c:6
+#, fuzzy
 msgid "Percentage weight of first map for color blending"
-msgstr ""
+msgstr "Όνομα του πρώτου ράστερ χάρτη για blending"
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:1
 msgid ""
@@ -26161,12 +26163,14 @@ msgid "Vector map to be queried"
 msgstr "Ascii ράστερ χάρτης που θα εισαχθεί"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:9
+#, fuzzy
 msgid "Layer of the query vector containing data"
-msgstr ""
+msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:10
+#, fuzzy
 msgid "Column to be queried"
-msgstr ""
+msgstr "Ascii ράστερ χάρτης που θα εισαχθεί"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:11
 msgid "Maximum query distance in map units"
@@ -26182,8 +26186,9 @@ msgid "SRTM input tile (file without .hgt.zip extension)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.in.srtm_to_translate.c:5
+#, fuzzy
 msgid "Output raster map (default: input tile)"
-msgstr ""
+msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
 
 #: ../locale/scriptstrings/r.in.srtm_to_translate.c:6
 msgid "Input is a 1-arcsec tile (default: 3-arcsec)"
@@ -26232,21 +26237,24 @@ msgid "Value to calculate"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:1
+#, fuzzy
 msgid ""
 "Allows to update a column in the attribute table connected to a vector map."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:5
+#, fuzzy
 msgid "Vector map to edit the attribute table for"
-msgstr ""
+msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:6
 msgid "Layer to which the table to be changed is connected"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:7
+#, fuzzy
 msgid "Column to update"
-msgstr ""
+msgstr "Ascii ράστερ χάρτης που θα εισαχθεί"
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:8
 msgid ""
@@ -26254,8 +26262,9 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:9
+#, fuzzy
 msgid "Column to query"
-msgstr ""
+msgstr "Ascii ράστερ χάρτης που θα εισαχθεί"
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:10
 msgid ""
@@ -26375,8 +26384,9 @@ msgid "Name of new database"
 msgstr "Αδυναμία λίστας βάσεων δεδομένων"
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:7
+#, fuzzy
 msgid "Old schema"
-msgstr ""
+msgstr "Η διάταξη της βάσης δεδομένων"
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:8
 #, fuzzy
@@ -26414,17 +26424,20 @@ msgid "Overwrite existing file"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:1
+#, fuzzy
 msgid ""
 "Renames a column in the attribute table connected to a given vector map."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:5
+#, fuzzy
 msgid "Vector map for which to rename attribute column"
-msgstr ""
+msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:6
+#, fuzzy
 msgid "Layer where to rename column"
-msgstr ""
+msgstr "Νούμερο επιπέδου"
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:7
 msgid "Old and new name of the column (old,new)"
@@ -26461,8 +26474,9 @@ msgid "Name of file containing rules"
 msgstr "Όνομα του αρχείου που περιέχει υπογραφές (signatures)"
 
 #: ../locale/scriptstrings/v.colors_to_translate.c:16
+#, fuzzy
 msgid "Save placeholder raster map for use with d.legend"
-msgstr ""
+msgstr "Χρώμα"
 
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:1
 msgid "Exports attribute tables into various formats."
@@ -26478,8 +26492,9 @@ msgid "Table file to be exported or DB connection string"
 msgstr ""
 
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:6
+#, fuzzy
 msgid "Table format"
-msgstr ""
+msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
 
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:7
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:6
@@ -26491,9 +26506,8 @@ msgid "Import ASCII x,y[,z] coordinates as a series of lines."
 msgstr ""
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:2
-#, fuzzy
 msgid "vector, import"
-msgstr "raster3d, voxel, εισάγεται"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:3
 msgid "Create a 3D line from 3 column data"
@@ -26725,18 +26739,20 @@ msgid "Drops an attribute table."
 msgstr "διαγραφή ενός πίνακα ιδιοτήτων."
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:5
+#, fuzzy
 msgid "Table to drop"
-msgstr ""
+msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
 
 #: ../locale/scriptstrings/r.grow_to_translate.c:3
 msgid "radius is in map units rather than cells"
 msgstr ""
 
 #: ../locale/scriptstrings/v.in.gns_to_translate.c:1
+#, fuzzy
 msgid ""
 "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector "
 "points map."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.in.gns_to_translate.c:4
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:4
@@ -26768,12 +26784,14 @@ msgid "Name of input raster map to calculate statistics from"
 msgstr "Νούμερο των υποπεριοχών για συλλογή στατιστικών από αυτά"
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:12
+#, fuzzy
 msgid "Column prefix for new attribute columns"
-msgstr ""
+msgstr "Αδυναμία αντιγραφής πίνακα <%s>"
 
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:1
+#, fuzzy
 msgid "Imports geonames.org country files into a GRASS vector points map."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:5
 msgid "Uncompressed geonames file from (with .txt extension)"
@@ -26789,20 +26807,23 @@ msgid "Imports Mapgen or Matlab vector maps into GRASS."
 msgstr ""
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:4
+#, fuzzy
 msgid "Input map is in Matlab format"
-msgstr ""
+msgstr "Όνομα εισαγώμενου διανυσματικού χάρτη "
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:5
 msgid "Create a 3D vector points map from 3 column Matlab data"
 msgstr ""
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:6
+#, fuzzy
 msgid "Name of input file in Mapgen/Matlab format"
-msgstr ""
+msgstr "Όνομα εισαγώμενου διανυσματικού χάρτη "
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:7
+#, fuzzy
 msgid "Name for output vector map (omit for display to stdout)"
-msgstr ""
+msgstr "Όνομα εξαγόμενου διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.build.all_to_translate.c:1
 msgid "Rebuilds topology on all vector maps in the current mapset."
@@ -26868,10 +26889,11 @@ msgid "Percent to brighten"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:1
+#, fuzzy
 msgid ""
 "Adds one or more columns to the attribute table connected to a given vector "
 "map."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:5
 #, fuzzy
@@ -26894,17 +26916,20 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:1
+#, fuzzy
 msgid "Drops a column from selected attribute table"
-msgstr ""
+msgstr "διαγραφή ενός πίνακα ιδιοτήτων."
 
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:5
+#, fuzzy
 msgid "Table from which to drop attribute column"
-msgstr ""
+msgstr "Αδυναμία αντιγραφής πίνακα <%s>"
 
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:6
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:7
+#, fuzzy
 msgid "Name of the column"
-msgstr ""
+msgstr "Νούμερο επιπέδου"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:1
 msgid "Downloads and imports data from WMS servers."
@@ -27077,8 +27102,9 @@ msgid "Layer number or name. If -1, all layers are extracted."
 msgstr ""
 
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:9
+#, fuzzy
 msgid "Name of column used to dissolve common boundaries"
-msgstr ""
+msgstr "Όνομα του δεύτερου ράστερ χάρτη για blending"
 
 #: ../locale/scriptstrings/v.centroids_to_translate.c:1
 msgid "Adds missing centroids to closed boundaries."
@@ -27093,24 +27119,28 @@ msgid "Category number starting value"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.droptable_to_translate.c:1
+#, fuzzy
 msgid "Removes existing attribute table of a vector map."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.db.droptable_to_translate.c:5
 msgid "Force removal (required for actual deletion of table)"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.droptable_to_translate.c:6
+#, fuzzy
 msgid "Vector map from which to remove attribute table"
-msgstr ""
+msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
 
 #: ../locale/scriptstrings/v.db.droptable_to_translate.c:7
+#, fuzzy
 msgid "Name of existing attribute table (default: vector map name)"
-msgstr ""
+msgstr "Όνομα υπάρχοντως 3Δ ράστερ χάρτη"
 
 #: ../locale/scriptstrings/v.db.droptable_to_translate.c:8
+#, fuzzy
 msgid "Layer from which to drop linked attribute table"
-msgstr ""
+msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:1
 #, fuzzy
@@ -27118,16 +27148,18 @@ msgid "Allows to join a table to a vector map table."
 msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:5
+#, fuzzy
 msgid "Vector map to which to join other table"
-msgstr ""
+msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:6
 msgid "layer,column"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:7
+#, fuzzy
 msgid "Layer where to join"
-msgstr ""
+msgstr "Νούμερο επιπέδου"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:8
 msgid "column"
@@ -27147,21 +27179,25 @@ msgid "ocolumn"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:12
+#, fuzzy
 msgid "Join column in other table"
-msgstr ""
+msgstr "Αριθμός γραμμών που θα εμφανίζονται στο υπόμνημα."
 
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:1
+#, fuzzy
 msgid ""
 "Drops a column from the attribute table connected to a given vector map."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:5
+#, fuzzy
 msgid "Vector map for which to drop attribute column"
-msgstr ""
+msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
 
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:6
+#, fuzzy
 msgid "Layer where to drop column"
-msgstr ""
+msgstr "Νούμερο επιπέδου"
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:1
 msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
@@ -27180,32 +27216,39 @@ msgid "use transformation rules for LANDSAT-7"
 msgstr ""
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:7
+#, fuzzy
 msgid "raster input map (LANDSAT channel 1)"
-msgstr ""
+msgstr "Αδυναμία κλεισίματος του χάρτη input."
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:8
+#, fuzzy
 msgid "raster input map (LANDSAT channel 2)"
-msgstr ""
+msgstr "Αδυναμία κλεισίματος του χάρτη input."
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:9
+#, fuzzy
 msgid "raster input map (LANDSAT channel 3)"
-msgstr ""
+msgstr "Αδυναμία κλεισίματος του χάρτη input."
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:10
+#, fuzzy
 msgid "raster input map (LANDSAT channel 4)"
-msgstr ""
+msgstr "Αδυναμία κλεισίματος του χάρτη input."
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:11
+#, fuzzy
 msgid "raster input map (LANDSAT channel 5)"
-msgstr ""
+msgstr "Αδυναμία κλεισίματος του χάρτη input."
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:12
+#, fuzzy
 msgid "raster input map (LANDSAT channel 7)"
-msgstr ""
+msgstr "Αδυναμία κλεισίματος του χάρτη input."
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:13
+#, fuzzy
 msgid "raster output TC maps prefix"
-msgstr ""
+msgstr "Αδυναμία κλεισίματος του χάρτη input."
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:1
 msgid ""
@@ -27214,12 +27257,14 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:5
+#, fuzzy
 msgid "Vector map for which to add new attribute table"
-msgstr ""
+msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:6
+#, fuzzy
 msgid "Name of new attribute table (default: vector map name)"
-msgstr ""
+msgstr "Όνομα υπάρχοντως 3Δ ράστερ χάρτη"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:7
 #, fuzzy
@@ -27315,8 +27360,9 @@ msgid "LANDSAT TM band 7."
 msgstr ""
 
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:1
+#, fuzzy
 msgid "Imports attribute tables in various formats."
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
 
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:4
 msgid "Table file to be imported or DB connection string"
@@ -27327,8 +27373,9 @@ msgid "Table name of SQL DB table"
 msgstr ""
 
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:7
+#, fuzzy
 msgid "Name for auto-generated unique key column"
-msgstr ""
+msgstr "Χρώμα"
 
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:1
 msgid "Interactively edit cell values in a raster map."
@@ -27351,12 +27398,14 @@ msgid "Minimum size of each cell"
 msgstr "Ελάχιστο μέγεθος κάθε κελιού"
 
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:10
+#, fuzzy
 msgid "Maximum number of rows to load"
-msgstr ""
+msgstr "Νούμερο επιπέδου"
 
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:11
+#, fuzzy
 msgid "Maximum number of columns to load"
-msgstr ""
+msgstr "Νούμερο επιπέδου"
 
 #: ../locale/scriptstrings/d.polar_to_translate.c:1
 msgid "Draws polar diagram of angle map such as aspect or flow directions"
@@ -27379,10 +27428,11 @@ msgid "Plot using Xgraph"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:1
+#, fuzzy
 msgid ""
 "Calculates univariate statistics on selected table column for a GRASS vector "
 "map."
-msgstr ""
+msgstr "Παράγει στατιστικά όγκου για 3Δ ράστερ χάρτες."
 
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:4
 msgid "Extended statistics (quartiles and 90th percentile)"
@@ -27393,8 +27443,9 @@ msgid "Print stats in shell script style"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:6
+#, fuzzy
 msgid "Name of data table"
-msgstr ""
+msgstr "Αδυναμία λίστας βάσεων δεδομένων"
 
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:7
 msgid "Column on which to calculate statistics (must be numeric)"
@@ -27681,14 +27732,14 @@ msgid "Unable to allocate memory for raster row"
 msgstr "Αδυναμία λήψης γραμμής υψομέτρων από ράστερ"
 
 #: ../imagery/i.pca/main.c:380
-#, fuzzy, c-format
+#, c-format
 msgid "Transforming <%s>..."
-msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+msgstr ""
 
 #: ../imagery/i.pca/main.c:395
-#, fuzzy, c-format
+#, c-format
 msgid "Rescaling <%s> to range %d,%d..."
-msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+msgstr ""
 
 #: ../imagery/i.pca/support.c:44
 msgid "Eigen values, (vectors), and [percent importance]:"
@@ -29630,6 +29681,172 @@ msgstr ""
 msgid "Can't mark another point.  Only %d points allowed.  Sorry."
 msgstr ""
 
+#, fuzzy
+msgid "Raster file to be converted."
+msgstr "Το 3Δ ράστερ αρχείο θα μετατραπεί σε ASCII"
+
+#, fuzzy
+msgid "Unable to open vector map <%s> on level 2"
+msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
+
+#, fuzzy
+msgid "<%s> table created in database."
+msgstr "Δίνει τη λίστα όλων των πινάκων για μία δεδομένη βάση δεδομένων."
+
+#, fuzzy
+msgid ""
+"Calculate the groundwater distance velocity vector field \n"
+"and write the x, y, and z components to maps named name_[xyz].\n"
+"Name is basename for the new raster3d maps"
+msgstr ""
+"Υπολογίστε την ταχύτητα του υπογειου νερού (διανυσματικό μερος) και γράψτε "
+"τα χ , ψ και ζ στοιχεία στο χάρτη με όνομα name_[xyz]. Το όνομα είναι το "
+"βασικό όνομα για τους νέους ράστερ 3Δ χάρτες"
+
+#, fuzzy
+msgid "Unable to get cell header for <%s>"
+msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
+
+#, fuzzy
+msgid "Unable to open cellfile for <%s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+
+#, fuzzy
+msgid "Error reading <%s>"
+msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
+
+#, fuzzy
+msgid "%s: Error reading from raster map <%s>"
+msgstr "Σφάλμα ανοίγματος 3Δ ράστερ χάρτη <%s>"
+
+#, fuzzy
+msgid "unable to open map <%s> in <%s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s@%s>"
+
+#, fuzzy
+msgid "unable to read map <%s> in <%s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s@%s>"
+
+#, fuzzy
+msgid "Unable to open base map <%s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+
+#, fuzzy
+msgid "Unable to open cover map <%s>"
+msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
+
+#, fuzzy
+msgid "Unable to open output map <%s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+
+#, fuzzy
+msgid "Unable to read header for <%s>"
+msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
+
+#, fuzzy
+msgid "Error reading row %d (error = %d)"
+msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
+
+#, fuzzy
+msgid "Unable to read row %d"
+msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
+
+#, fuzzy
+msgid "Unable to read region <%s>"
+msgstr "Αδυναμία δημιουργίας πίνακα <%s>"
+
+#, fuzzy
+msgid "unable to open accumulation map layer"
+msgstr "Αδυναμία ανοίγματος χάρτη υψομέτρων"
+
+#, fuzzy
+msgid "Unable to open input map <%s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+
+#, fuzzy
+msgid "Pass %d:"
+msgstr "Κωδικός"
+
+#, fuzzy
+msgid "Unable to read raster map row %ld"
+msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
+
+#, fuzzy
+msgid "Failed writing raster map row %ld"
+msgstr "Δεν ήταν δυνατή η εγγραφή γραμμής ράστερ"
+
+#, fuzzy
+msgid "Unable to read from <%s> row %d"
+msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
+
+#, fuzzy
+msgid "Unable to read file header of raster map <%s>"
+msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+msgid "Unable to write to raster map<%s>"
+msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>."
+
+#, fuzzy
+msgid "Unable to open training map <%s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+
+#, fuzzy
+msgid "Unable to open training map <%s in %s>"
+msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s@%s>"
+
+#, fuzzy
+msgid "Cannot open cell file [%s]"
+msgstr "Δεν μπορώ να ανοίξω την βάση δεδομένων %s"
+
+#, fuzzy
+msgid "Cannot read file header of [%s])"
+msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
+
+#, fuzzy
+msgid "Could not open <%s>"
+msgstr "Δεν μπορεί να κλείσει ο G3D χάρτης <%s>"
+
+#, fuzzy
+msgid "Unable to read header of raster map <%s> "
+msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+msgid "Unable to read raster map <%s> row %d >"
+msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
+
+#, fuzzy
+msgid "Name of QC"
+msgstr "Όνομα αρχείου εξαγωγής"
+
+#, fuzzy
+msgid "Unable to find the real-image map <%s>"
+msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
+
+#, fuzzy
+msgid "Unable to find the imaginary-image <%s>"
+msgstr "Αδυναμία φόρτωσης δεδομένων πίνακα <%s>"
+
+#, fuzzy
+msgid "Group [%s] not found."
+msgstr "Η στήλη <%s> δεν βρέθηκε"
+
+#, fuzzy
+msgid "Writing viewable versions of transformed data to files..."
+msgstr "Εγγραφή %s από %s..."
+
+#, fuzzy
+msgid "Unable to proceed"
+msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
+
+#, fuzzy
+msgid "Unable to read head of %s"
+msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
+
+#, fuzzy
+msgid "Default value: GRASS_GUI if defined otherwise tcltk"
+msgstr "Προεπιλογή"
+
 #~ msgid "Sources and sinks in [m^3/s]"
 #~ msgstr "Sources and sinks in [m^3/s]"
 
@@ -29638,20 +29855,8 @@ msgstr ""
 #~ msgstr "Εξαγωγή όνομα οδηγού"
 
 #, fuzzy
-#~ msgid "Raster file to be converted."
-#~ msgstr "Το 3Δ ράστερ αρχείο θα μετατραπεί σε ASCII"
-
-#, fuzzy
 #~ msgid "Unable to access table <%s>"
 #~ msgstr "Αδυναμία δημιουργίας πίνακα <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open vector map <%s> on level 2"
-#~ msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "<%s> table created in database."
-#~ msgstr "Δίνει τη λίστα όλων των πινάκων για μία δεδομένη βάση δεδομένων."
 
 #~ msgid ""
 #~ "\n"
@@ -29686,30 +29891,8 @@ msgstr ""
 #~ msgid "Unable to close elevation map"
 #~ msgstr "Αδυναμία κλεισίματος χάρτη υψομέτρων"
 
-#, fuzzy
-#~ msgid ""
-#~ "Calculate the groundwater distance velocity vector field \n"
-#~ "and write the x, y, and z components to maps named name_[xyz].\n"
-#~ "Name is basename for the new raster3d maps"
-#~ msgstr ""
-#~ "Υπολογίστε την ταχύτητα του υπογειου νερού (διανυσματικό μερος) και "
-#~ "γράψτε τα χ , ψ και ζ στοιχεία στο χάρτη με όνομα name_[xyz]. Το όνομα "
-#~ "είναι το βασικό όνομα για τους νέους ράστερ 3Δ χάρτες"
-
 #~ msgid "unable to close input raster map"
 #~ msgstr "Αδυναμία κλεισίματος του χάρτη εισαγωγής"
-
-#, fuzzy
-#~ msgid "Unable to get cell header for <%s>"
-#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open cellfile for <%s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
-
-#, fuzzy
-#~ msgid "Error reading <%s>"
-#~ msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
 
 #, fuzzy
 #~ msgid "Horizon file no. %d <%s> not found"
@@ -29722,38 +29905,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unable to close input map"
 #~ msgstr "Αδυναμία κλεισίματος του χάρτη input"
-
-#, fuzzy
-#~ msgid "%s: Error reading from raster map <%s>"
-#~ msgstr "Σφάλμα ανοίγματος 3Δ ράστερ χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "unable to open map <%s> in <%s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s@%s>"
-
-#, fuzzy
-#~ msgid "unable to read map <%s> in <%s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s@%s>"
-
-#, fuzzy
-#~ msgid "Unable to open base map <%s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open cover map <%s>"
-#~ msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open output map <%s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read header for <%s>"
-#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "Error reading row %d (error = %d)"
-#~ msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
 
 #, fuzzy
 #~ msgid "Unable to read raster <map %d of %d> row %d"
@@ -29773,11 +29924,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Initializing output..."
-#~ msgstr "Αδυναμία κλεισίματος του εξαγόμενου χάρτη"
-
-#, fuzzy
-#~ msgid "Unable to read row %d"
-#~ msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
+#~ msgstr "Εγγραφή %s από %s..."
 
 #, fuzzy
 #~ msgid "Unable to read raster map row %d "
@@ -29788,10 +29935,6 @@ msgstr ""
 #~ msgstr "Δεν ήταν δυνατή η εγγραφή γραμμής ράστερ"
 
 #, fuzzy
-#~ msgid "Unable to read region <%s>"
-#~ msgstr "Αδυναμία δημιουργίας πίνακα <%s>"
-
-#, fuzzy
 #~ msgid "unable to open new LS factor map layer."
 #~ msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
 
@@ -29800,24 +29943,12 @@ msgstr ""
 #~ msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
 
 #, fuzzy
-#~ msgid "unable to open accumulation map layer"
-#~ msgstr "Αδυναμία ανοίγματος χάρτη υψομέτρων"
-
-#, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s@%s>"
 
 #, fuzzy
-#~ msgid "Unable to open input map <%s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
-
-#, fuzzy
 #~ msgid "Could not get raster row"
 #~ msgstr "Αδυναμία ανάγνωσης της γραμμής (row) του χάρτη"
-
-#, fuzzy
-#~ msgid "Pass %d:"
-#~ msgstr "Κωδικός"
 
 #, fuzzy
 #~ msgid "Unable to open table <%s_edge_Interpolation>"
@@ -29826,54 +29957,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Layer is only used for WHERE SQL statement"
 #~ msgstr "Χρησιμοποιήστε sb.select για SELECT SQL εντολές"
-
-#, fuzzy
-#~ msgid "Unable to read raster map row %ld"
-#~ msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
-
-#, fuzzy
-#~ msgid "Failed writing raster map row %ld"
-#~ msgstr "Δεν ήταν δυνατή η εγγραφή γραμμής ράστερ"
-
-#, fuzzy
-#~ msgid "Unable to read from <%s> row %d"
-#~ msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
-
-#, fuzzy
-#~ msgid "Unable to read file header of raster map <%s>"
-#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "Unable to write to raster map<%s>"
-#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>."
-
-#, fuzzy
-#~ msgid "Unable to open training map <%s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open training map <%s in %s>"
-#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s@%s>"
-
-#, fuzzy
-#~ msgid "Cannot open cell file [%s]"
-#~ msgstr "Δεν μπορώ να ανοίξω την βάση δεδομένων %s"
-
-#, fuzzy
-#~ msgid "Cannot read file header of [%s])"
-#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "Could not open <%s>"
-#~ msgstr "Δεν μπορεί να κλείσει ο G3D χάρτης <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read header of raster map <%s> "
-#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read raster map <%s> row %d >"
-#~ msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
 
 #~ msgid "raster3d, voxel, export"
 #~ msgstr "ράστερ 3D, voxel, εξαγωγή"
@@ -29908,10 +29991,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "raster, imagery, statistics"
 #~ msgstr "ράστερ 3Δ, στατιστικά"
-
-#, fuzzy
-#~ msgid "Name of QC"
-#~ msgstr "Όνομα αρχείου εξαγωγής"
 
 #, fuzzy
 #~ msgid "Unable to select record from table <%s> (key %s, column %s)"
@@ -29962,14 +30041,6 @@ msgstr ""
 #~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
 
 #, fuzzy
-#~ msgid "Unable to find the real-image map <%s>"
-#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
-
-#, fuzzy
-#~ msgid "Unable to find the imaginary-image <%s>"
-#~ msgstr "Αδυναμία φόρτωσης δεδομένων πίνακα <%s>"
-
-#, fuzzy
 #~ msgid "Saturation map name"
 #~ msgstr "Όνομα τοποθεσία"
 
@@ -30002,10 +30073,6 @@ msgstr ""
 #~ msgstr "Όνομα του αρχείου που περιέχει SQL εντολές"
 
 #, fuzzy
-#~ msgid "Group [%s] not found."
-#~ msgstr "Η στήλη <%s> δεν βρέθηκε"
-
-#, fuzzy
 #~ msgid "Subgroup [%s] not found."
 #~ msgstr "Η στήλη <%s> δεν βρέθηκε"
 
@@ -30031,10 +30098,6 @@ msgstr ""
 #~ msgstr "Σφάλμα ανοίγματος 3Δ ράστερ χάρτη <%s>"
 
 #, fuzzy
-#~ msgid "Writing viewable versions of transformed data to files..."
-#~ msgstr "Εγγραφή %s από %s..."
-
-#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ " group <%s> not found"
@@ -30045,20 +30108,12 @@ msgstr ""
 #~ msgstr "Η στήλη <%s> δεν βρέθηκε"
 
 #, fuzzy
-#~ msgid "Unable to proceed"
-#~ msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
-
-#, fuzzy
 #~ msgid "Output file to contain final report"
 #~ msgstr "Όνομα του αρχείου που περιέχει SQL εντολές"
 
 #, fuzzy
 #~ msgid "Can't creat reportfile: "
 #~ msgstr "Αδυναμία δημιουργίας πίνακα <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read head of %s"
-#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>"
 
 #, fuzzy
 #~ msgid "group=[%s] - not found."
@@ -30228,6 +30283,337 @@ msgstr ""
 #~ msgid "%s@%s: zone doesn't match current settings"
 #~ msgstr "Κλείσιμο εφαρμογής, χωρίς να αλλάξουν οι τρέχουσες επιλογές"
 
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "Μετατρέπει ένα 3Δ επίπεδο ράστερ χάρτη σε ένα ASCII αρχείο κειμένου"
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "Μετατροπή ενός 3Δ ASCII ράστερ αρχείου σε (binary) 3Δ ράστερ επίπεδο"
+
+#~ msgid "raster3d, voxel"
+#~ msgstr "ράστερ 3Δ, voxel"
+
+#~ msgid "Unable to create raster map"
+#~ msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
+
+#~ msgid "The initial piezometric head in [m]"
+#~ msgstr "Η αρχική πιεζομετρική στήλη σε [m]"
+
+#~ msgid "The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet"
+#~ msgstr "Η κατάσταση κάθε κελιού, = 0 - inactive, 1 - active, 2 - dirichlet"
+
+#~ msgid "The z-part of the hydraulic conductivity tensor in [m/s]"
+#~ msgstr "Το z-μέρος της υδραυλικής αγωγιμότητας σε [m/s]"
+
+#~ msgid "Specific yield in 1/m"
+#~ msgstr "Specific yield in 1/m"
+
+#~ msgid "Recharge raster map in m^3/s"
+#~ msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+
+#~ msgid ""
+#~ "The piezometric head result of the numerical calculation will be written "
+#~ "to this map"
+#~ msgstr ""
+#~ "Η πιεζομετρική στήλη, αποτέλεσμα των αριθμητικών υπολογισμών θα γραφτεί "
+#~ "σε αυτό το χάρτη"
+
+#~ msgid ""
+#~ "Calculate the groundwater distance velocity vector field and write the x, "
+#~ "y, and z components to maps named name_[xyz]. Name is basename for the "
+#~ "new raster3d maps"
+#~ msgstr ""
+#~ "Υπολογίστε την ταχύτητα του υπογειου νερού (διανυσματικό μερος) και "
+#~ "γράψτε τα χ , ψ και ζ στοιχεία στο χάρτη με όνομα name_[xyz]. Το όνομα "
+#~ "είναι το βασικό όνομα για τους νέους ράστερ 3Δ χάρτες"
+
+#~ msgid "raster3d, statistics"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr "Εξαγωγή του GRASS 3Δ ράστερ χάρτη σε 3 διάστατο Vis5D αρχείο"
+
 #, fuzzy
-#~ msgid "Default value: GRASS_GUI if defined otherwise tcltk"
+#~ msgid "Name of base raster map"
+#~ msgstr "Όνομα χάρτη υποβάθρου ράστερ"
+
+#, fuzzy
+#~ msgid "Name of the longitude input raster map [decimal degrees]"
+#~ msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#, fuzzy
+#~ msgid "raster, terrain"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#, fuzzy
+#~ msgid "Unable to find row %d, col %d: %f"
+#~ msgstr "Αδυναμία δημιουργίας ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "unable to open flow accumulation map layer"
+#~ msgstr "Αδυναμία ανοίγματος χάρτη υψομέτρων"
+
+#, fuzzy
+#~ msgid "Generates a raster map layer of distance to features in input layer."
+#~ msgstr "Μετατρέπει ένα 3Δ επίπεδο ράστερ χάρτη σε ένα ASCII αρχείο κειμένου"
+
+#, fuzzy
+#~ msgid "(i)   TOPMODEL Parameters file"
+#~ msgstr "Παράμετροι"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Όνομα ράστερ χάρτη υψομέτρου"
+
+#, fuzzy
+#~ msgid "Calculating map %01d of %01d (angle %lf, raster map <%s>)"
+#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Data range of raster map <%s> is empty"
+#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Unable to read range of raster map <%s>"
+#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Stream width (in meters). Default is raster cell width"
 #~ msgstr "Προεπιλογή"
+
+#, fuzzy
+#~ msgid "Default value: GRASS_GUI if defined, otherwise wxpython"
+#~ msgstr "Προεπιλογή"
+
+#~ msgid "Color for drawing X's (Null values)"
+#~ msgstr "Χρώμα για τον σχεδιασμό Χ's  (Null values)"
+
+#, fuzzy
+#~ msgid "R_color file for [%s] not available"
+#~ msgstr "Χρώμα"
+
+#, fuzzy
+#~ msgid "Range file for [%s] not available"
+#~ msgstr "Χρώμα"
+
+#, fuzzy
+#~ msgid "Layer number (write to)"
+#~ msgstr "Νούμερο επιπέδου"
+
+#, fuzzy
+#~ msgid "vector, import, database, points"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#, fuzzy
+#~ msgid "Layer number (from)"
+#~ msgstr "Νούμερο επιπέδου"
+
+#, fuzzy
+#~ msgid "Layer number (to)"
+#~ msgstr "Νούμερο επιπέδου"
+
+#, fuzzy
+#~ msgid "Calculate area centroids..."
+#~ msgstr "Αδυναμία υπολογισμού κέντρων πολυγώνου για την επιφάνεια %d"
+
+#~ msgid "OGR driver: column '%s', OGR type %d  is not supported"
+#~ msgstr "OGR driver: στήλη '%s', OGR τύπος %d δεν υποστηρίζεται"
+
+#~ msgid "database, attribute table"
+#~ msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
+
+#~ msgid "Prints/sets general DB connection for current mapset and exits."
+#~ msgstr "Εκτυπώνει/σετάρει γενική DB σύνδεση για το τρέχων maps και κλείνει"
+
+#~ msgid "Database schema"
+#~ msgstr "Η διάταξη της βάσης δεδομένων"
+
+#~ msgid "database, SQL"
+#~ msgstr "Βάση δεδομένων, SQL"
+
+#~ msgid "Name of file with sql statement"
+#~ msgstr "Όνομα αρχείου με sql εντολή"
+
+#~ msgid "The password was stored in file"
+#~ msgstr "Ο κωδικός αποθηκεύτηκε στο αρχείο"
+
+#, fuzzy
+#~ msgid "raster, elevation"
+#~ msgstr "ράστερ 3Δ, voxel"
+
+#~ msgid "Name for output file (do NOT add extension)"
+#~ msgstr "Όνομα αρχείου εξαγωγής (ΜΗΝ προσθέσετε επέκταση αρχείου)"
+
+#, fuzzy
+#~ msgid "Compression for PNG files"
+#~ msgstr "Όνομα αρχείου PNG."
+
+#, fuzzy
+#~ msgid "Do not crop away margins"
+#~ msgstr "Αδυναμία αντιγραφής πίνακα <%s>"
+
+#, fuzzy
+#~ msgid "raster, tiling"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#, fuzzy
+#~ msgid "raster, imagery, mosaicking"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#, fuzzy
+#~ msgid "Reports geometry statistics for vectors."
+#~ msgstr "Παράγει στατιστικά όγκου για 3Δ ράστερ χάρτες."
+
+#, fuzzy
+#~ msgid "display, export, GPS"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#, fuzzy
+#~ msgid "sites, vector, import"
+#~ msgstr "raster3d, voxel, εισάγεται"
+
+#, fuzzy
+#~ msgid "vector, export, GPS"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#~ msgid "vector, color table"
+#~ msgstr "διάνυσμα, πίνακας χρωμάτων"
+
+#, fuzzy
+#~ msgid "Layer number of data column"
+#~ msgstr "Νούμερο επιπέδου"
+
+#, fuzzy
+#~ msgid "Name of color column to populate"
+#~ msgstr "Όνομα αρχείου εξαγωγής"
+
+#, fuzzy
+#~ msgid "Number of seconds to pause between slides"
+#~ msgstr "Αριθμός γραμμών που θα εμφανίζονται στο υπόμνημα."
+
+#, fuzzy
+#~ msgid "vector, import, GPS"
+#~ msgstr "raster3d, voxel, εισάγεται"
+
+#, fuzzy
+#~ msgid "Number of subframes"
+#~ msgstr "Νούμερο των υποπεριοχών για συλλογή στατιστικών από αυτά"
+
+#, fuzzy
+#~ msgid "vector, import, gazetteer"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#, fuzzy
+#~ msgid "Name of vector polygon map"
+#~ msgstr "Όνομα εισαγώμενων ράστερ χαρτών"
+
+#, fuzzy
+#~ msgid "Name of raster map to calculate statistics from"
+#~ msgstr "Νούμερο των υποπεριοχών για συλλογή στατιστικών από αυτά"
+
+#~ msgid "Name of .dmrc settings file"
+#~ msgstr "Όνομα αρχείου .dmrc"
+
+#, fuzzy
+#~ msgid "Name of GIS manager settings file (.grc)"
+#~ msgstr "Όνομα αρχείου .dmrc"
+
+#, fuzzy
+#~ msgid "calculates univariate statistics from a GRASS raster map"
+#~ msgstr "Παράγει στατιστικά όγκου για 3Δ ράστερ χάρτες."
+
+#, fuzzy
+#~ msgid "raster, imagery, colors"
+#~ msgstr "raster3d, voxel, εισάγεται"
+
+#, fuzzy
+#~ msgid "raster, elevation, interpolation"
+#~ msgstr "ράστερ 3Δ, voxel"
+
+#, fuzzy
+#~ msgid "vector, area, dissolve"
+#~ msgstr "ράστερ 3Δ, στατιστικά"
+
+#, fuzzy
+#~ msgid "vector, centroid, area"
+#~ msgstr "διάνυσμα, πίνακας χρωμάτων"
+
+#~ msgid "Name of PNG file"
+#~ msgstr "Όνομα αρχείου PNG."
+
+#, fuzzy
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
+
+#, fuzzy
+#~ msgid "Vector map for which to edit attribute table"
+#~ msgstr "βάση δεδομένων, πίνακας ιδιοτήτων"
+
+#, fuzzy
+#~ msgid "Layer where to add column"
+#~ msgstr "Νούμερο επιπέδου"
+
+#, fuzzy
+#~ msgid "Writing data..."
+#~ msgstr "Εγγραφή %s από %s..."
+
+#, fuzzy
+#~ msgid "Name of fractal surface raster layer"
+#~ msgstr "Όνομα χάρτη υποβάθρου ράστερ"
+
+#, fuzzy
+#~ msgid "File [%s] not found"
+#~ msgstr "Η στήλη <%s> δεν βρέθηκε"
+
+#, fuzzy
+#~ msgid "Reading sites map (%s) ..."
+#~ msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+
+#, fuzzy
+#~ msgid "ID values"
+#~ msgstr "Χρώμα"
+
+#, fuzzy
+#~ msgid "Cannot open database %s"
+#~ msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
+
+#, fuzzy
+#~ msgid "Cannot insert into table: %s"
+#~ msgstr "Δεν μπορώ να δω λίστα των πινάκων:\n"
+
+#, fuzzy
+#~ msgid "Type of elements"
+#~ msgstr "Τύπος"
+
+#, fuzzy
+#~ msgid "Rotating data arrays..."
+#~ msgstr "Εγγραφή %s από %s..."
+
+#, fuzzy
+#~ msgid "Unable to open output file."
+#~ msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου"
+
+#, fuzzy
+#~ msgid "Cannot read row from raster map"
+#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Red input raster map"
+#~ msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#, fuzzy
+#~ msgid "Output hue raster map"
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Output saturation raster map"
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Can't open seed signature file <%s>"
+#~ msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
+
+#, fuzzy
+#~ msgid "<%s> is an ilegal name"
+#~ msgstr "<%s> είναι μη επιτρεπτό όνομα αρχείου"

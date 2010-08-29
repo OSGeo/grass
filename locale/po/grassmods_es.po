@@ -13406,7 +13406,7 @@ msgstr "Seleccionar sólo un nivel de mensajes."
 #: ../general/g.message/main.c:105
 #, fuzzy
 msgid "Unable to parse input message"
-msgstr "No se puede abrir el archivo de entrada <%s>"
+msgstr "No se puede cerrar el mapa de entrada"
 
 #: ../general/g.pnmcat/main.c:49
 msgid "Unsupported PPM file (format = P6 required)"
@@ -19331,7 +19331,7 @@ msgstr "Altura Z mínima (necesita el opción -z)"
 #: ../vector/v.random/main.c:134
 #, fuzzy
 msgid "3D output"
-msgstr "Salida:"
+msgstr "Crear salida 3D"
 
 #: ../vector/v.random/main.c:111
 #, fuzzy
@@ -21310,11 +21310,10 @@ msgid "Interpolation: Creating table: It was impossible to create table <%s>."
 msgstr "Interpolación: creando tabla: no se pudo crear la tabla <%s>."
 
 #: ../vector/v.surf.bspline/main.c:395
-#, fuzzy
 msgid ""
 "Cannot allocate memory for auxiliar matrix.Consider changing region "
 "resolution"
-msgstr "No se puede asignar memoria para la cadena"
+msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:593
 #, c-format
@@ -21421,9 +21420,8 @@ msgid "Error in pj_do_transform"
 msgstr "Error en pj_do_transform"
 
 #: ../vector/v.hull/main.c:53
-#, fuzzy
 msgid "Produces a convex hull for a given vector map."
-msgstr "Crea topología para mapa vectorial de GRASS."
+msgstr ""
 
 #: ../vector/v.hull/main.c:64
 msgid "Use all vector points (do not limit to current region)"
@@ -25733,9 +25731,8 @@ msgstr "Nombre de la columna"
 
 #: ../vector/v.net.centrality/main.c:130 ../vector/v.net.centrality/main.c:136
 #: ../vector/v.net.centrality/main.c:142 ../vector/v.net.centrality/main.c:148
-#, fuzzy
 msgid "Columns"
-msgstr "Columna(s)"
+msgstr "Columnas"
 
 #: ../vector/v.net.centrality/main.c:135
 #, fuzzy
@@ -25798,7 +25795,7 @@ msgstr "Formato: capa[/nombre de capa] tabla clave base de datos controlador"
 #: ../vector/v.db.connect/main.c:79
 #, fuzzy
 msgid "Field separator for shell script style output"
-msgstr "Separador de campos (modo de puntos)"
+msgstr "Imprimir las estadísticas en estilo de script de consola"
 
 #: ../vector/v.db.connect/main.c:84
 msgid "Print all map connection parameters and exit"
@@ -28180,16 +28177,18 @@ msgstr "Canal rojo LANDSAT"
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:6
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:8
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:10
+#, fuzzy
 msgid "Sensor"
-msgstr ""
+msgstr "Canal rojo LANDSAT"
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:7
 msgid "QuickBird sensor"
 msgstr ""
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:9
+#, fuzzy
 msgid "SPOT sensor"
-msgstr ""
+msgstr "Canal rojo LANDSAT"
 
 #: ../locale/scriptstrings/i.fusion.brovey_to_translate.c:11
 #, fuzzy
@@ -28967,7 +28966,6 @@ msgstr ""
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:42
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:59
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:61
-#, fuzzy
 msgid "Misc"
 msgstr "Miscelánea"
 
@@ -32193,6 +32191,374 @@ msgid "Can't mark another point.  Only %d points allowed.  Sorry."
 msgstr ""
 "No se puede marcar otro punto. Sólo se permiten puntos %d. Lo sentimos."
 
+#, fuzzy
+msgid "Displays raster map layer in the active map display window."
+msgstr ""
+"Muestra y superpone las capas del mapa ráster en el marco activo de la "
+"pantalla."
+
+#, fuzzy
+msgid "Raster file to be converted."
+msgstr "Mapa ráster a importar"
+
+#, fuzzy
+msgid "File containing reclass rules; \"-\" to read from stdin"
+msgstr ""
+"Archivo que contiene reglas de etiquetas de categorías (o \"-\" para leer de "
+"stdin)"
+
+#, fuzzy
+msgid "GDAL datatype: %s, range: %f - %f"
+msgstr "El mapa ráster <%s> ya existe"
+
+#, fuzzy
+msgid "terrain analysis"
+msgstr "ráster, análisis de estructura del paisaje"
+
+#, fuzzy
+msgid "Unable to open vector map <%s> on level 2"
+msgstr "No se puede abrir el mapa vectorial <%s> en el nivel topológico %d"
+
+#, fuzzy
+msgid "Open vector map without topology (level 1)"
+msgstr "No se puede abrir el mapa vectorial <%s> en el nivel topológico %d"
+
+#, fuzzy
+msgid "miles,feet,meters,kilometers,acres,hectares,radians,degrees"
+msgstr ""
+"mi(llas),f(pies),me(tros),k(ilómetros),a(cres),h(ectáreas),p(orcentaje)"
+
+#, fuzzy
+msgid "Print bounds and exit (shell style)"
+msgstr "Imprimir resultados en estilo de script de consola"
+
+#, fuzzy
+msgid "Estimate spline step value"
+msgstr "Estadística a utilizar para los valores ráster"
+
+#, fuzzy
+msgid "<%s> table created in database."
+msgstr "<%s> creado en la base de datos."
+
+#, fuzzy
+msgid ""
+"Calculate the groundwater distance velocity vector field \n"
+"and write the x, y, and z components to maps named name_[xyz].\n"
+"Name is basename for the new raster3d maps"
+msgstr "Calcula vectorial a nombre nombre."
+
+#, fuzzy
+msgid "report"
+msgstr "Informe amplio"
+
+#, fuzzy
+msgid "Unable to get cell header for <%s>"
+msgstr "No se puede obtener la cabecera de %s"
+
+#, fuzzy
+msgid "Unable to open cellfile for <%s>"
+msgstr "No se puede abrir el archivo <%s>"
+
+#, fuzzy
+msgid "Error reading <%s>"
+msgstr "Error al leer el mapa ráster [%s]."
+
+#, fuzzy
+msgid "%s: Error reading from raster map <%s>"
+msgstr "Error al leer el mapa ráster [%s]."
+
+#, fuzzy
+msgid "r.li.worker (pid %i) exited with abnormal status: %i"
+msgstr "r.li.worker (pid %i) salió con el estado anormal %i"
+
+#, fuzzy
+msgid "r.li.worker (pid %i) terminated successfully"
+msgstr "r.li.worker (pid %i) terminado"
+
+#, fuzzy
+msgid "unable to open map <%s> in <%s>"
+msgstr "No se puede abrir el mapa ráster <%s> en <%s>"
+
+#, fuzzy
+msgid "unable to read map <%s> in <%s>"
+msgstr "No se puede leer la región <%s> en <%s>"
+
+#, fuzzy
+msgid "Unable to open base map <%s>"
+msgstr "No se puede abrir el mapa ráster <%s>"
+
+#, fuzzy
+msgid "Unable to open cover map <%s>"
+msgstr "No se puede abrir el mapa vectorial <%s>"
+
+#, fuzzy
+msgid "Unable to open output map <%s>"
+msgstr "No se puede abrir el archivo de salida <%s>"
+
+#, fuzzy
+msgid "Unable to read header for <%s>"
+msgstr "No se puede obtener la cabecera de %s"
+
+#, fuzzy
+msgid "Error reading row %d (error = %d)"
+msgstr "No se puede obtener la fila %d (error = %d)"
+
+#, fuzzy
+msgid "Cannot set region to output region"
+msgstr "¡No se puede establecer la región para volver a la región inicial!"
+
+#, fuzzy
+msgid "Cannot set region to back to the initial region"
+msgstr "¡No se puede establecer la región para volver a la región inicial!"
+
+#, fuzzy
+msgid "Unable to read row %d"
+msgstr "No se puede leer la fila %i\n"
+
+#, fuzzy
+msgid "Unable to read region <%s>"
+msgstr "No se puede establacer la región <%s>"
+
+#, fuzzy
+msgid "unable to open accumulation map layer"
+msgstr "no se puede abrir nueva capa de mapa de acumulación."
+
+#, fuzzy
+msgid "SECTION 4: Extracting Streams."
+msgstr "Extrayendo áreas..."
+
+#, fuzzy
+msgid "Error reading row <%d>"
+msgstr "Error al escribir la fila nula [%d]."
+
+#, fuzzy
+msgid "Name of input raster map containing starting points"
+msgstr "Nombre del mapa ráster de entrada que contiene costes de fricción"
+
+#, fuzzy
+msgid "Unable to open input map <%s>"
+msgstr "No se puede abrir el archivo de entrada <%s>"
+
+#, fuzzy
+msgid "Error reading row %d"
+msgstr "Error al escribir la fila nula [%d]."
+
+#, fuzzy
+msgid "Pass %d:"
+msgstr "Pase: %d\n"
+
+#, fuzzy
+msgid "Unable to read raster map row %ld"
+msgstr "No se puede leer la fila %d del mapa ráster"
+
+#, fuzzy
+msgid "Failed writing raster map row %ld"
+msgstr "Fallo al escribir la fila del mapa ráster"
+
+#, fuzzy
+msgid "Unable to read from <%s> row %d"
+msgstr "No se puede leer en el mapa ráster <%s> la fila %d"
+
+#, fuzzy
+msgid "Unable to read file header of raster map <%s>"
+msgstr "No se puede leer la cabecera del mapa ráster <%s>"
+
+#, fuzzy
+msgid "Unable to write to raster map<%s>"
+msgstr "No se pueden escribir los mapas ráster"
+
+#, fuzzy
+msgid "Cannot open cell file [%s]"
+msgstr "No se puede abrir el archivo de reglas <%s>"
+
+#, fuzzy
+msgid "Cannot read file header of [%s])"
+msgstr "No se puede leer la cabecera del archivo <%s>"
+
+#, fuzzy
+msgid "Could not open <%s>"
+msgstr "No se pudo abrir el mapa %s"
+
+#, fuzzy
+msgid "Cannot write to output raster file"
+msgstr "Nombre para el archivo ráster de salida"
+
+#, fuzzy
+msgid "Unable to read header of raster map <%s> "
+msgstr "No se puede leer la cabecera del mapa ráster <%s>"
+
+#, fuzzy
+msgid "Unable to read raster map <%s> row %d >"
+msgstr "No se puede leer en el mapa ráster <%s> la fila %d"
+
+#, fuzzy
+msgid "qcname"
+msgstr "nombre"
+
+#, fuzzy
+msgid "Name of QC"
+msgstr "Nombre del archivo PNG"
+
+#, fuzzy
+msgid "250m band number is out of allowed range [1,2]"
+msgstr "Número de borde fuera de rango"
+
+#, fuzzy
+msgid "Cannot read file header of [%s]"
+msgstr "No se puede leer la cabecera del archivo <%s>"
+
+#, fuzzy
+msgid "Converts a binary GRASS vector map layer into a GRASS raster map layer."
+msgstr ""
+"Convierte un mapa vectorial binario de GRASS en una capa de mapa ráster de "
+"GRASS."
+
+#, fuzzy
+msgid "%d points written to vector map"
+msgstr "%d puntos escritos en mapa vectorial"
+
+#, fuzzy
+msgid "Traces a flow through an elevation model on a raster map layer."
+msgstr ""
+"Traza un flujo mediante un modelo de elevación sobre una capa de mapa ráster."
+
+#, fuzzy
+msgid "The E and N coordinates of starting point(s)"
+msgstr "Coordenadas de cuadrícula E y N de mapa de los puntos iniciales"
+
+#, fuzzy
+msgid "Vector map(s) containing starting point(s)"
+msgstr "Mapa(s) vectorial que contiene el punto(s) de inicio"
+
+#, fuzzy
+msgid "raster, rainfall, erosion, USLE"
+msgstr "ráster, elevación, interpolación"
+
+#, fuzzy
+msgid ""
+"Outputs a raster map layer showing the cumulative cost of moving between "
+"different geographic locations on an input raster map layer whose cell "
+"category values represent cost."
+msgstr ""
+"Produce una capa de mapa ráster que muestre el coste acumulado de moverse "
+"entre diferentes localizaciones geográficas en una capa de mapa ráster de "
+"entrada cuyos valores de categoría de celdas representan coste."
+
+#, fuzzy
+msgid "Bad Start Cell"
+msgstr "Celda de inicio incorrecta"
+
+#, fuzzy
+msgid "SECTION 3: Accumulating Surface Flow with MFD"
+msgstr "SECCIÓN 3: acumulando flujo de superficie."
+
+#, fuzzy
+msgid "raster, soil, erosion, USLE"
+msgstr "ráster, volumen, conversión"
+
+#, fuzzy
+msgid "Unable to find the real-image map <%s>"
+msgstr "%s: %s - No fue posible encontrar el mapa de imagen real."
+
+#, fuzzy
+msgid ""
+"Unable to open real-image in the cell_misc directory.\n"
+"Input map probably wasn't created by i.fft"
+msgstr ""
+"No fue posible abrir el mapa de imagen real en el directorio cell_misc \n"
+"El mapa de entrada posiblemente no fue creado por ifft"
+
+#, fuzzy
+msgid "Unable to find the imaginary-image <%s>"
+msgstr "%s: %s - No se pudo encontrar la imagen imaginaria."
+
+#, fuzzy
+msgid ""
+"Unable to open imaginary-image in the cell_misc directory.\n"
+"Input map probably wasn't created by i.fft"
+msgstr ""
+"No fue posible abrir el mapa de imagen imaginaria en el directorio "
+"cell_misc \n"
+"El mapa de entrada posiblemente no fue creado por ifft"
+
+#, fuzzy
+msgid "Range less than or equal to zero not allowed."
+msgstr "Rango menor o igual a cero no permitido."
+
+#, fuzzy
+msgid "Writing viewable versions of transformed data to files..."
+msgstr ""
+"Escribiendo versiones visibles de los datos transformados a archivos..."
+
+#, fuzzy
+msgid "Unable to open file in the cell_misc directory."
+msgstr "No se puede abrir el archivo en el directorio cell_misc."
+
+#, fuzzy
+msgid "Name of image to be rectified which will  be initially drawn on screen."
+msgstr ""
+"El nombre de la imagen para rectificar que se dibujará inicialmente en "
+"pantalla."
+
+#, fuzzy
+msgid ""
+"Name of a map from target mapset which  will be initially drawn on screen."
+msgstr ""
+"Nombre de un mapa del conjunto de mapas de destino que se dibujará "
+"inicialmente en pantalla"
+
+#, fuzzy
+msgid "raster, imagery, fusion"
+msgstr "ráster, imaginería, importar"
+
+#, fuzzy
+msgid "Can't make random color table for floating point map"
+msgstr ""
+"No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
+
+#, fuzzy
+msgid "Can't make grey.eq color table for floating point map"
+msgstr ""
+"No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
+
+#, fuzzy
+msgid "%s - unknown color request"
+msgstr "%s - solicitud de color desconocido"
+
+#, fuzzy
+msgid "The column must be type integer or string"
+msgstr "Nombre de columna (debe ser de tipo numérico)"
+
+#, fuzzy
+msgid "Processing ainput areas ..."
+msgstr "Procesando líneas de la entrada A..."
+
+#, fuzzy
+msgid ""
+"Elevation raster map <%s> does not cover the entire area of the input vector "
+"map <%s>. "
+msgstr "%d categorías con más de un elemento en el mapa vectorial <%s>"
+
+#, fuzzy
+msgid "name for new map image (lives in ~/.gpsdrive)"
+msgstr "nombre para el nuevo mapa de imagen (reside en ~/.gpsdrive)"
+
+#, fuzzy
+msgid "Displays thematic vectormap"
+msgstr "Visualizar mapa vectorial temático"
+
+#, fuzzy
+msgid "Name of input raster map(s)"
+msgstr "Nombre del mapa ráster de entrada"
+
+#, fuzzy
+msgid "Terrain raster map (DEM)"
+msgstr "Mapa ráster de terreno (MDT)"
+
+#, fuzzy
+msgid "imagery group"
+msgstr "Grupo de imaginería"
+
 #~ msgid "Not enough room in history file"
 #~ msgstr "Espacio insuficiente en archivo histórico"
 
@@ -32210,12 +32576,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Name of workspace file"
 #~ msgstr "Nombre de archivo de color"
-
-#, fuzzy
-#~ msgid "Displays raster map layer in the active map display window."
-#~ msgstr ""
-#~ "Muestra y superpone las capas del mapa ráster en el marco activo de la "
-#~ "pantalla."
 
 #~ msgid "List of values to be displayed (FP maps)"
 #~ msgstr "Lista de valores a mostrar (mapas FP)"
@@ -32357,16 +32717,6 @@ msgstr ""
 #~ msgid "Layer number of data column"
 #~ msgstr "Capa a la que añadir la columna"
 
-#, fuzzy
-#~ msgid "Raster file to be converted."
-#~ msgstr "Mapa ráster a importar"
-
-#, fuzzy
-#~ msgid "File containing reclass rules; \"-\" to read from stdin"
-#~ msgstr ""
-#~ "Archivo que contiene reglas de etiquetas de categorías (o \"-\" para leer "
-#~ "de stdin)"
-
 #~ msgid "Generates a raster map layer showing watershed subbasins."
 #~ msgstr "Genera una capa de mapa ráster mostrando subcuencas hidrográficas."
 
@@ -32388,10 +32738,6 @@ msgstr ""
 #~ "El mapa ráster de entrada contiene celdas con valor NULO (sin datos). "
 #~ "Para los valores sin datos se usó el valor %d. Puede especificar el valor "
 #~ "para para las celdas sin datos con el parámetro %s."
-
-#, fuzzy
-#~ msgid "GDAL datatype: %s, range: %f - %f"
-#~ msgstr "El mapa ráster <%s> ya existe"
 
 #, fuzzy
 #~ msgid "Name of the elevation raster map [m]"
@@ -32476,10 +32822,6 @@ msgstr ""
 #~ msgid "(i)   OPTIONAL Output for given topographic index class"
 #~ msgstr "(E)   Salida OPCIONAL para clase de índice topográfico dada"
 
-#, fuzzy
-#~ msgid "terrain analysis"
-#~ msgstr "ráster, análisis de estructura del paisaje"
-
 #~ msgid "Name of existing raster map containing elevation surface"
 #~ msgstr ""
 #~ "Nombre de mapa ráster existente que contiene superficie de elevación"
@@ -32545,19 +32887,6 @@ msgstr ""
 #~ msgid "Unable to access table <%s>"
 #~ msgstr "No se puede crear la tabla <%s>"
 
-#, fuzzy
-#~ msgid "Unable to open vector map <%s> on level 2"
-#~ msgstr "No se puede abrir el mapa vectorial <%s> en el nivel topológico %d"
-
-#, fuzzy
-#~ msgid "Open vector map without topology (level 1)"
-#~ msgstr "No se puede abrir el mapa vectorial <%s> en el nivel topológico %d"
-
-#, fuzzy
-#~ msgid "miles,feet,meters,kilometers,acres,hectares,radians,degrees"
-#~ msgstr ""
-#~ "mi(llas),f(pies),me(tros),k(ilómetros),a(cres),h(ectáreas),p(orcentaje)"
-
 #~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
 #~ msgstr "Convierte mapas ráster 3D (G3D) en formato VTK-ASCII"
 
@@ -32573,10 +32902,6 @@ msgstr ""
 #~ "Convierte un mapa ráster de GRASS en un archivo de imagen PPM a la "
 #~ "resolución de píxel de la región definida actualmente."
 
-#, fuzzy
-#~ msgid "Print bounds and exit (shell style)"
-#~ msgstr "Imprimir resultados en estilo de script de consola"
-
 #~ msgid ""
 #~ "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel "
 #~ "resolution of the currently defined region."
@@ -32587,10 +32912,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Band to select"
 #~ msgstr " Ningún monitor seleccionado"
-
-#, fuzzy
-#~ msgid "Estimate spline step value"
-#~ msgstr "Estadística a utilizar para los valores ráster"
 
 #~ msgid "It was impossible to create <Auxiliar_outlier_table>."
 #~ msgstr "Fue imposible crear <Auxiliar_outlier_table>."
@@ -32603,10 +32924,6 @@ msgstr ""
 #~ msgid "Attribute table column with values to interpolate (if layer>0)"
 #~ msgstr ""
 #~ "Columna de la tabla de atributos con valores a interpolar (si capa>0)"
-
-#, fuzzy
-#~ msgid "<%s> table created in database."
-#~ msgstr "<%s> creado en la base de datos."
 
 #~ msgid "M.Q. solution"
 #~ msgstr "Solución M.Q."
@@ -32653,13 +32970,6 @@ msgstr ""
 #~ msgid "Unable to close elevation map"
 #~ msgstr "No se puede cerrar el mapa de elevación"
 
-#, fuzzy
-#~ msgid ""
-#~ "Calculate the groundwater distance velocity vector field \n"
-#~ "and write the x, y, and z components to maps named name_[xyz].\n"
-#~ "Name is basename for the new raster3d maps"
-#~ msgstr "Calcula vectorial a nombre nombre."
-
 #~ msgid ""
 #~ "Use a sparse linear equation system, only available with iterative solvers"
 #~ msgstr ""
@@ -32687,17 +32997,9 @@ msgstr ""
 #~ msgid "Unable to write raster row"
 #~ msgstr "No se puede escribir la fila ráster"
 
-#, fuzzy
-#~ msgid "report"
-#~ msgstr "Informe amplio"
-
 #~ msgid "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),p(ercent)"
 #~ msgstr ""
 #~ "mi(llas),f(pies),me(tros),k(ilómetros),a(cres),h(ectáreas),p(orcentaje)"
-
-#, fuzzy
-#~ msgid "Unable to get cell header for <%s>"
-#~ msgstr "No se puede obtener la cabecera de %s"
 
 #, fuzzy
 #~ msgid "Unable to write quant file"
@@ -32715,10 +33017,6 @@ msgstr ""
 
 #~ msgid "Cannot open raster map <%s>"
 #~ msgstr "No se puede abrir el mapa ráster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open cellfile for <%s>"
-#~ msgstr "No se puede abrir el archivo <%s>"
 
 #~ msgid "Cannot create category file of <%s>"
 #~ msgstr "No se puede crear el archivo de categoría de <%s>"
@@ -32740,10 +33038,6 @@ msgstr ""
 
 #~ msgid "Unable to read header of raster map <%s>"
 #~ msgstr "No se puede leer la cabecera del mapa ráster <%s>"
-
-#, fuzzy
-#~ msgid "Error reading <%s>"
-#~ msgstr "Error al leer el mapa ráster [%s]."
 
 #~ msgid "Reading row %d"
 #~ msgstr "Leyendo la fila %d"
@@ -32856,23 +33150,11 @@ msgstr ""
 #~ msgid "Cannot read row"
 #~ msgstr "No se puede leer la fila"
 
-#, fuzzy
-#~ msgid "%s: Error reading from raster map <%s>"
-#~ msgstr "Error al leer el mapa ráster [%s]."
-
 #~ msgid "Error in pipe creation"
 #~ msgstr "Error en la creación de tubería"
 
 #~ msgid "Error opening channel %i"
 #~ msgstr "Error al abrir el canal %i"
-
-#, fuzzy
-#~ msgid "r.li.worker (pid %i) exited with abnormal status: %i"
-#~ msgstr "r.li.worker (pid %i) salió con el estado anormal %i"
-
-#, fuzzy
-#~ msgid "r.li.worker (pid %i) terminated successfully"
-#~ msgstr "r.li.worker (pid %i) terminado"
 
 #~ msgid "Cannot close %s file (PIPE)"
 #~ msgstr "No se puede cerrar el archivo %s (TUBERÍA)"
@@ -32971,31 +33253,11 @@ msgstr ""
 #~ " \t\t\t\tpid = %i \n"
 #~ " "
 
-#, fuzzy
-#~ msgid "unable to open map <%s> in <%s>"
-#~ msgstr "No se puede abrir el mapa ráster <%s> en <%s>"
-
-#, fuzzy
-#~ msgid "unable to read map <%s> in <%s>"
-#~ msgstr "No se puede leer la región <%s> en <%s>"
-
 #~ msgid "Unable to get header for %s"
 #~ msgstr "No se puede obtener la cabecera de %s"
 
 #~ msgid "Cannot reset current region"
 #~ msgstr "No se puede restablecer la región actual"
-
-#, fuzzy
-#~ msgid "Unable to open base map <%s>"
-#~ msgstr "No se puede abrir el mapa ráster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open cover map <%s>"
-#~ msgstr "No se puede abrir el mapa vectorial <%s>"
-
-#, fuzzy
-#~ msgid "Unable to open output map <%s>"
-#~ msgstr "No se puede abrir el archivo de salida <%s>"
 
 #~ msgid "Cannot create category file for <%s>"
 #~ msgstr "No se puede crear el archivo de categoría para <%s>"
@@ -33032,22 +33294,6 @@ msgstr ""
 #~ msgstr "Error al leer el mapa 'saturación'"
 
 #, fuzzy
-#~ msgid "Unable to read header for <%s>"
-#~ msgstr "No se puede obtener la cabecera de %s"
-
-#, fuzzy
-#~ msgid "Error reading row %d (error = %d)"
-#~ msgstr "No se puede obtener la fila %d (error = %d)"
-
-#, fuzzy
-#~ msgid "Cannot set region to output region"
-#~ msgstr "¡No se puede establecer la región para volver a la región inicial!"
-
-#, fuzzy
-#~ msgid "Cannot set region to back to the initial region"
-#~ msgstr "¡No se puede establecer la región para volver a la región inicial!"
-
-#, fuzzy
 #~ msgid "Unable to read raster <map %d of %d> row %d"
 #~ msgstr "No se puede leer en el mapa ráster <%s> la fila %d"
 
@@ -33076,10 +33322,6 @@ msgstr ""
 #~ msgid "Error writing null row [%d]."
 #~ msgstr "Error al escribir la fila nula [%d]."
 
-#, fuzzy
-#~ msgid "Unable to read row %d"
-#~ msgstr "No se puede leer la fila %i\n"
-
 #~ msgid "Swapping header data"
 #~ msgstr "Intercambiando datos de cabecera"
 
@@ -33096,10 +33338,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Failed writing raster map row %d"
 #~ msgstr "Fallo al escribir la fila del mapa ráster"
-
-#, fuzzy
-#~ msgid "Unable to read region <%s>"
-#~ msgstr "No se puede establacer la región <%s>"
 
 #~ msgid "Invalid region: %s"
 #~ msgstr "Región no válida: %s"
@@ -33152,14 +33390,6 @@ msgstr ""
 #~ msgid "unable to open accum file in valid_basins()"
 #~ msgstr "no se puede abrir el archivo de acumulación en valid_basins()"
 
-#, fuzzy
-#~ msgid "unable to open accumulation map layer"
-#~ msgstr "no se puede abrir nueva capa de mapa de acumulación."
-
-#, fuzzy
-#~ msgid "SECTION 4: Extracting Streams."
-#~ msgstr "Extrayendo áreas..."
-
 #~ msgid "Can't create raster map <%s>"
 #~ msgstr "No se puede crear el mapa ráster <%s>"
 
@@ -33175,14 +33405,6 @@ msgstr ""
 
 #~ msgid "Unable to close new basin map layer"
 #~ msgstr "No se puede cerrar la capa del nuevo mapa de cuenca"
-
-#, fuzzy
-#~ msgid "Error reading row <%d>"
-#~ msgstr "Error al escribir la fila nula [%d]."
-
-#, fuzzy
-#~ msgid "Name of input raster map containing starting points"
-#~ msgstr "Nombre del mapa ráster de entrada que contiene costes de fricción"
 
 #~ msgid "Number of the segment to create (segment library)"
 #~ msgstr "Número del segmento a crear (biblioteca de segmento)"
@@ -33297,14 +33519,6 @@ msgstr ""
 #~ msgid "Use a sparse matrix, only available with iterative solvers"
 #~ msgstr "Usar"
 
-#, fuzzy
-#~ msgid "Unable to open input map <%s>"
-#~ msgstr "No se puede abrir el archivo de entrada <%s>"
-
-#, fuzzy
-#~ msgid "Error reading row %d"
-#~ msgstr "Error al escribir la fila nula [%d]."
-
 #~ msgid "Error reading input"
 #~ msgstr "Error al leer la entrada"
 
@@ -33322,10 +33536,6 @@ msgstr ""
 
 #~ msgid "<Auxiliar_edge_table> created in database."
 #~ msgstr "<Auxiliar_edge_table> creada en la base de datos."
-
-#, fuzzy
-#~ msgid "Pass %d:"
-#~ msgstr "Pase: %d\n"
 
 #, fuzzy
 #~ msgid "Creating auxiliar table for archiving overlapping zones"
@@ -33527,20 +33737,8 @@ msgstr ""
 #~ msgid "Current region cannot be set."
 #~ msgstr "No se puede establecer la región actual."
 
-#, fuzzy
-#~ msgid "Unable to read raster map row %ld"
-#~ msgstr "No se puede leer la fila %d del mapa ráster"
-
-#, fuzzy
-#~ msgid "Failed writing raster map row %ld"
-#~ msgstr "Fallo al escribir la fila del mapa ráster"
-
 #~ msgid "Unable to allocate the input row buffer"
 #~ msgstr "No se puede asignar el buffer de la fila de entrada"
-
-#, fuzzy
-#~ msgid "Unable to read from <%s> row %d"
-#~ msgstr "No se puede leer en el mapa ráster <%s> la fila %d"
 
 #~ msgid "Unable to open the cell map MASK."
 #~ msgstr "No se puede abrir la MÁSCARA de mapa de celdas."
@@ -33562,14 +33760,6 @@ msgstr ""
 #~ msgid "Unable to open band files."
 #~ msgstr "No se pueden abrir los archivos de bandas."
 
-#, fuzzy
-#~ msgid "Unable to read file header of raster map <%s>"
-#~ msgstr "No se puede leer la cabecera del mapa ráster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to write to raster map<%s>"
-#~ msgstr "No se pueden escribir los mapas ráster"
-
 #~ msgid "Error while reading input raster map."
 #~ msgstr "Error al leer el mapa ráster de entrada."
 
@@ -33587,32 +33777,8 @@ msgstr ""
 #~ msgid "Unable to open training map <%s in %s>"
 #~ msgstr "No se puede abrir el mapa vectorial <%s> en <%s>"
 
-#, fuzzy
-#~ msgid "Cannot open cell file [%s]"
-#~ msgstr "No se puede abrir el archivo de reglas <%s>"
-
-#, fuzzy
-#~ msgid "Cannot read file header of [%s])"
-#~ msgstr "No se puede leer la cabecera del archivo <%s>"
-
-#, fuzzy
-#~ msgid "Could not open <%s>"
-#~ msgstr "No se pudo abrir el mapa %s"
-
 #~ msgid "Could not read from <%s>"
 #~ msgstr "No fue posible leer desde <%s>"
-
-#, fuzzy
-#~ msgid "Cannot write to output raster file"
-#~ msgstr "Nombre para el archivo ráster de salida"
-
-#, fuzzy
-#~ msgid "Unable to read header of raster map <%s> "
-#~ msgstr "No se puede leer la cabecera del mapa ráster <%s>"
-
-#, fuzzy
-#~ msgid "Unable to read raster map <%s> row %d >"
-#~ msgstr "No se puede leer en el mapa ráster <%s> la fila %d"
 
 #~ msgid "Error reading row of data"
 #~ msgstr "Error al leer la fila de datos"
@@ -33855,22 +34021,6 @@ msgstr ""
 #~ msgstr "imaginería"
 
 #, fuzzy
-#~ msgid "qcname"
-#~ msgstr "nombre"
-
-#, fuzzy
-#~ msgid "Name of QC"
-#~ msgstr "Nombre del archivo PNG"
-
-#, fuzzy
-#~ msgid "250m band number is out of allowed range [1,2]"
-#~ msgstr "Número de borde fuera de rango"
-
-#, fuzzy
-#~ msgid "Cannot read file header of [%s]"
-#~ msgstr "No se puede leer la cabecera del archivo <%s>"
-
-#, fuzzy
 #~ msgid "imagery, classification, supervised, SMAP"
 #~ msgstr "vectorial, transformación"
 
@@ -33966,13 +34116,6 @@ msgstr ""
 
 #~ msgid "vector, raster, conversion"
 #~ msgstr "vectorial, ráster, conversión"
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts a binary GRASS vector map layer into a GRASS raster map layer."
-#~ msgstr ""
-#~ "Convierte un mapa vectorial binario de GRASS en una capa de mapa ráster "
-#~ "de GRASS."
 
 #~ msgid "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares)"
 #~ msgstr "mi(llas),f(pies),me(tros),k(ilómetros),a(cres),h(ectáreas)"
@@ -34101,10 +34244,6 @@ msgstr ""
 #~ msgid "Unknown keyword <%s> in vector head"
 #~ msgstr "Palabra clave <%s> desconocida en la cabecera del vectorial"
 
-#, fuzzy
-#~ msgid "%d points written to vector map"
-#~ msgstr "%d puntos escritos en mapa vectorial"
-
 #~ msgid "vector, raster, attribute table"
 #~ msgstr "vectorial, ráster, tabla de atributos"
 
@@ -34112,7 +34251,7 @@ msgstr ""
 #~ msgstr "vectorial, metadatos"
 
 #~ msgid "Tychonov regularization weight"
-#~ msgstr "Peso de regularización Tychonov"
+#~ msgstr "Peso de regularización Tychonov "
 
 #~ msgid "vector, LIDAR"
 #~ msgstr "vectorial, LIDAR"
@@ -34300,22 +34439,8 @@ msgstr ""
 #~ msgid "Selects data from table."
 #~ msgstr "Selecciona datos de una tabla."
 
-#, fuzzy
-#~ msgid "Traces a flow through an elevation model on a raster map layer."
-#~ msgstr ""
-#~ "Traza un flujo mediante un modelo de elevación sobre una capa de mapa "
-#~ "ráster."
-
 #~ msgid "Output drain raster map"
 #~ msgstr "Producir mapa ráster de drenaje"
-
-#, fuzzy
-#~ msgid "The E and N coordinates of starting point(s)"
-#~ msgstr "Coordenadas de cuadrícula E y N de mapa de los puntos iniciales"
-
-#, fuzzy
-#~ msgid "Vector map(s) containing starting point(s)"
-#~ msgstr "Mapa(s) vectorial que contiene el punto(s) de inicio"
 
 #~ msgid ""
 #~ "Unused; retained for compatibility purposes, will be removed in future"
@@ -34395,10 +34520,6 @@ msgstr ""
 #~ msgstr "ráster, exportar, VRML"
 
 #, fuzzy
-#~ msgid "raster, rainfall, erosion, USLE"
-#~ msgstr "ráster, elevación, interpolación"
-
-#, fuzzy
 #~ msgid "raster, flow, hydrology"
 #~ msgstr "ráster, goemorfología"
 
@@ -34408,16 +34529,6 @@ msgstr ""
 
 #~ msgid "raster, cost surface, cumulative costs"
 #~ msgstr "ráster, superficie de coste, coste acumulado"
-
-#, fuzzy
-#~ msgid ""
-#~ "Outputs a raster map layer showing the cumulative cost of moving between "
-#~ "different geographic locations on an input raster map layer whose cell "
-#~ "category values represent cost."
-#~ msgstr ""
-#~ "Produce una capa de mapa ráster que muestre el coste acumulado de moverse "
-#~ "entre diferentes localizaciones geográficas en una capa de mapa ráster de "
-#~ "entrada cuyos valores de categoría de celdas representan coste."
 
 #~ msgid "Source map is: Integer cell type"
 #~ msgstr "El mapa de origen es: tipo de celda entero"
@@ -34450,10 +34561,6 @@ msgstr ""
 
 #~ msgid "Nothing to show"
 #~ msgstr "Nada que mostrar"
-
-#, fuzzy
-#~ msgid "Bad Start Cell"
-#~ msgstr "Celda de inicio incorrecta"
 
 #~ msgid "%s %f-%f lower cost higher or equal"
 #~ msgstr "%s %f-%f coste inferior más alto o igual"
@@ -34502,10 +34609,6 @@ msgstr ""
 #~ msgid "unable to open new S map layer."
 #~ msgstr "no se puede abrir nueva capa de mapa S."
 
-#, fuzzy
-#~ msgid "SECTION 3: Accumulating Surface Flow with MFD"
-#~ msgstr "SECCIÓN 3: acumulando flujo de superficie."
-
 #~ msgid "unable to open MASK"
 #~ msgstr "no se puede abrir MÁSCARA"
 
@@ -34523,10 +34626,6 @@ msgstr ""
 #~ "Lo siento, si alguna de las siguientes opciones es establecida:\n"
 #~ "    cuenca, corriente, semicuenca, pendiente o IS\n"
 #~ "    DEBE proporcionar un valor para el parámetro de umbral de cuenca."
-
-#, fuzzy
-#~ msgid "raster, soil, erosion, USLE"
-#~ msgstr "ráster, volumen, conversión"
 
 #, fuzzy
 #~ msgid "raster, random, surface"
@@ -34636,50 +34735,12 @@ msgstr ""
 #~ msgstr "Mostrar más comentarios (por omisión=silencio)"
 
 #, fuzzy
-#~ msgid "Unable to find the real-image map <%s>"
-#~ msgstr "%s: %s - No fue posible encontrar el mapa de imagen real."
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to open real-image in the cell_misc directory.\n"
-#~ "Input map probably wasn't created by i.fft"
-#~ msgstr ""
-#~ "No fue posible abrir el mapa de imagen real en el directorio cell_misc \n"
-#~ "El mapa de entrada posiblemente no fue creado por ifft"
-
-#, fuzzy
-#~ msgid "Unable to find the imaginary-image <%s>"
-#~ msgstr "%s: %s - No se pudo encontrar la imagen imaginaria."
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to open imaginary-image in the cell_misc directory.\n"
-#~ "Input map probably wasn't created by i.fft"
-#~ msgstr ""
-#~ "No fue posible abrir el mapa de imagen imaginaria en el directorio "
-#~ "cell_misc \n"
-#~ "El mapa de entrada posiblemente no fue creado por ifft"
-
-#, fuzzy
 #~ msgid "Subgroup [%s] in group [%s] contains no files."
 #~ msgstr "El subgrupo [%s] en el grupo [%s] no contiene archivos."
 
 #, fuzzy
 #~ msgid "Transposing eigen matrix..."
 #~ msgstr "Trasponiendo la matriz de valores propios..."
-
-#, fuzzy
-#~ msgid "Range less than or equal to zero not allowed."
-#~ msgstr "Rango menor o igual a cero no permitido."
-
-#, fuzzy
-#~ msgid "Writing viewable versions of transformed data to files..."
-#~ msgstr ""
-#~ "Escribiendo versiones visibles de los datos transformados a archivos..."
-
-#, fuzzy
-#~ msgid "Unable to open file in the cell_misc directory."
-#~ msgstr "No se puede abrir el archivo en el directorio cell_misc."
 
 #, fuzzy
 #~ msgid "Subgroup [%s] doesn't have any files"
@@ -34711,24 +34772,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
-#~ "Name of image to be rectified which will  be initially drawn on screen."
-#~ msgstr ""
-#~ "El nombre de la imagen para rectificar que se dibujará inicialmente en "
-#~ "pantalla."
-
-#, fuzzy
-#~ msgid ""
-#~ "Name of a map from target mapset which  will be initially drawn on screen."
-#~ msgstr ""
-#~ "Nombre de un mapa del conjunto de mapas de destino que se dibujará "
-#~ "inicialmente en pantalla"
-
-#, fuzzy
-#~ msgid "raster, imagery, fusion"
-#~ msgstr "ráster, imaginería, importar"
-
-#, fuzzy
-#~ msgid ""
 #~ "Name of old database. The database must be in form printed by v.db."
 #~ "connect -g, i.e. with substituted variables"
 #~ msgstr ""
@@ -34736,48 +34779,12 @@ msgstr ""
 #~ "forma impresa por v.db.connect -g, esto es, con variables sustituidas"
 
 #, fuzzy
-#~ msgid "Can't make random color table for floating point map"
-#~ msgstr ""
-#~ "No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
-
-#, fuzzy
-#~ msgid "Can't make grey.eq color table for floating point map"
-#~ msgstr ""
-#~ "No se puede hacer tabla de colores logarítmica para mapas de coma flotante"
-
-#, fuzzy
-#~ msgid "%s - unknown color request"
-#~ msgstr "%s - solicitud de color desconocido"
-
-#, fuzzy
 #~ msgid "Could not read range file"
 #~ msgstr "No se puede leer el archivo de intervalo"
 
 #, fuzzy
-#~ msgid "The column must be type integer or string"
-#~ msgstr "Nombre de columna (debe ser de tipo numérico)"
-
-#, fuzzy
 #~ msgid "%d update/insert errors"
 #~ msgstr "%d errores al insertar"
-
-#, fuzzy
-#~ msgid "Processing ainput areas ..."
-#~ msgstr "Procesando líneas de la entrada A..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Elevation raster map <%s> does not cover the entire area of the input "
-#~ "vector map <%s>. "
-#~ msgstr "%d categorías con más de un elemento en el mapa vectorial <%s>"
-
-#, fuzzy
-#~ msgid "name for new map image (lives in ~/.gpsdrive)"
-#~ msgstr "nombre para el nuevo mapa de imagen (reside en ~/.gpsdrive)"
-
-#, fuzzy
-#~ msgid "Displays thematic vectormap"
-#~ msgstr "Visualizar mapa vectorial temático"
 
 #, fuzzy
 #~ msgid "display, legend"
@@ -34843,18 +34850,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "raster input maps"
 #~ msgstr "Mapa ráster de entrada"
-
-#, fuzzy
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "Nombre del mapa ráster de entrada"
-
-#, fuzzy
-#~ msgid "Terrain raster map (DEM)"
-#~ msgstr "Mapa ráster de terreno (MDT)"
-
-#, fuzzy
-#~ msgid "imagery group"
-#~ msgstr "Grupo de imaginería"
 
 #~ msgid "Cannot open database %s by driver %s"
 #~ msgstr "No se puede abrir la base de datos %s por el controlador %s"
@@ -37544,3 +37539,1256 @@ msgstr ""
 
 #~ msgid "Create 3D file"
 #~ msgstr "Crear archivo 3D"
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file"
+#~ msgstr "Convierte una capa de mapa ráster 3D en un archivo de texto ASCII"
+
+#~ msgid ""
+#~ "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+#~ msgstr ""
+#~ "Convertir un archivo de texto ráster ASCII 3D en una capa de mapa ráster "
+#~ "3D (binaria)"
+
+#~ msgid "The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet"
+#~ msgstr "Estado para cada celda, = 0 - inactiva,  1 - activa, 2 - dirichlet"
+
+#~ msgid "The z-part of the hydraulic conductivity tensor in [m/s]"
+#~ msgstr "Parte Z del tensor de conductividad hidráulica en [m/s]"
+
+#~ msgid "Recharge raster map in m^3/s"
+#~ msgstr "Recargar mapa ráster en m^3/s"
+
+#, fuzzy
+#~ msgid ""
+#~ "The piezometric head result of the numerical calculation will be written "
+#~ "to this map"
+#~ msgstr "a."
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculate the groundwater distance velocity vector field and write the x, "
+#~ "y, and z components to maps named name_[xyz]. Name is basename for the "
+#~ "new raster3d maps"
+#~ msgstr "Calcula vectorial a nombre nombre."
+
+#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+#~ msgstr "Exportar un mapa ráster 3D GRASS a archivo tridimensional Vis5D."
+
+#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
+#~ msgstr ""
+#~ "Exporta mapa ráster de GRASS a archivo de mapa GRIDATB.FOR (TOPMODEL)"
+
+#~ msgid "Name of base raster map"
+#~ msgstr "Nombre de mapa ráster de base"
+
+#~ msgid "Converts a raster map layer into a height-field file for POVRAY."
+#~ msgstr ""
+#~ "Convierte una capa de mapa ráster en un archivo de campo altura para "
+#~ "POVRAY."
+
+#~ msgid "raster, map algebra"
+#~ msgstr "ráster, álgebra de mapas"
+
+#~ msgid "Converts a raster map layer into an ASCII text file."
+#~ msgstr "Convierte una capa de mapa ráster a un archivo de texto ASCII."
+
+#~ msgid "Converting %s..."
+#~ msgstr "Convirtiendo %s..."
+
+#~ msgid "Unable to find stop vector <%s>"
+#~ msgstr "No se puede encontrar el vector de fin <%s>"
+
+#~ msgid "Import as Floating Point Data (default: Integer)"
+#~ msgstr "Importar como datos de coma flotante (por omisión: entero)"
+
+#~ msgid "Import as Double Precision Data (default: Integer)"
+#~ msgstr "Importar como datos de precisión doble (por omisión; entero)"
+
+#, fuzzy
+#~ msgid "Bad number of bytes per cell"
+#~ msgstr "        Número de bytes por celda"
+
+#~ msgid "Bytes do not match File size"
+#~ msgstr "Los bytes no corresponden al tamaño de archivo"
+
+#, fuzzy
+#~ msgid "Name for output raster map with lake"
+#~ msgstr "Nombre para el mapa ráster de salida"
+
+#, fuzzy
+#~ msgid "raster, interpolation"
+#~ msgstr "vectorial, interpolación"
+
+#~ msgid "raster, statistics"
+#~ msgstr "ráster, estadísticas"
+
+#~ msgid "Converts raster maps into the VTK-Ascii format"
+#~ msgstr "Convierte mapas ráster al formato VTK-ASCII"
+
+#, fuzzy
+#~ msgid "raster, terrain"
+#~ msgstr "vectorial, interpolación"
+
+#, fuzzy
+#~ msgid "Name of the water depth raster map [m]"
+#~ msgstr "Nombre del mapa ráster de altura del agua"
+
+#, fuzzy
+#~ msgid "Name of the x-derivatives raster map [m/m]"
+#~ msgstr "Nombre del mapa ráster de derivadas X"
+
+#, fuzzy
+#~ msgid "Name of the y-derivatives raster map [m/m]"
+#~ msgstr "Nombre del mapa ráster de derivadas Y"
+
+#, fuzzy
+#~ msgid "Name of the detachment capacity coefficient raster map [s/m]"
+#~ msgstr "Nombre mapa ráster de coeficiente de capacidad de separación"
+
+#, fuzzy
+#~ msgid "Name of the transport capacity coefficient raster map [s]"
+#~ msgstr "Nombre del mapa ráster de coeficiente de capacidad de transporte"
+
+#, fuzzy
+#~ msgid "Name of the critical shear stress raster map [Pa]"
+#~ msgstr "Nombre del mapa ráster de "
+
+#~ msgid "Name of the Mannings n raster map"
+#~ msgstr "Nombre del mapa ráster n de Mannings"
+
+#, fuzzy
+#~ msgid "Name of the Mannings n value"
+#~ msgstr "Nombre del mapa ráster n de Mannings"
+
+#, fuzzy
+#~ msgid "Output transport capacity raster map [kg/ms]"
+#~ msgstr "Producir mapa ráster de capacidad de transporte"
+
+#, fuzzy
+#~ msgid "Output transp.limited erosion-deposition raster map [kg/m2s]"
+#~ msgstr "Producir mapa ráster de erosión-deposición "
+
+#, fuzzy
+#~ msgid "Output sediment concentration raster map [particle/m3]"
+#~ msgstr "Producir mapa ráster de concentración de sedimentos"
+
+#, fuzzy
+#~ msgid "Output sediment flux raster map [kg/ms]"
+#~ msgstr "Producir mapa ráster de flujo de sedimentos"
+
+#, fuzzy
+#~ msgid "Output erosion-deposition raster map [kg/m2s]"
+#~ msgstr "Producir mapa ráster de erosión-deposición"
+
+#, fuzzy
+#~ msgid ""
+#~ "Overland flow hydrologic simulation using path sampling method (SIMWE)"
+#~ msgstr ""
+#~ "Modelo hidrológico de flujo superficial basado en el concepto de dualidad "
+#~ "partícula-terreno (SIMWE)"
+
+#~ msgid "Name of the rainfall excess rate (rain-infilt) raster map [mm/hr]"
+#~ msgstr ""
+#~ "Nombre del mapa ráster [mm/hr] de tasa de exceso de precipitación (lluvia-"
+#~ "infiltración)"
+
+#, fuzzy
+#~ msgid "Name of the runoff infiltration rate raster map [mm/hr]"
+#~ msgstr "Nombre ráster"
+
+#~ msgid "Name of the flow controls raster map (permeability ratio 0-1)"
+#~ msgstr ""
+#~ "Nombre del mapa ráster de controles de flujo (relación de permeabilidad 0-"
+#~ "1)"
+
+#, fuzzy
+#~ msgid "Output water discharge raster map [m3/s]"
+#~ msgstr "Producir mapa ráster de descarga de agua"
+
+#, fuzzy
+#~ msgid "Output simulation error raster map [m]"
+#~ msgstr "Producir mapa ráster de error de simulación"
+
+#, fuzzy
+#~ msgid ""
+#~ "Threshold water depth [m] (diffusion increases after this water depth is "
+#~ "reached)"
+#~ msgstr ""
+#~ "Profundidad de agua de la cuenca (la difusión aumenta después de alcanzar "
+#~ "esta profundidad)"
+
+#~ msgid ""
+#~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
+#~ "resolution of the CURRENTLY DEFINED REGION."
+#~ msgstr ""
+#~ "Convierte 3 capas ráster de GRASS (R,G,B) a un archivo de imagen PPM a la "
+#~ "resolución de píxel de la REGIÓN ACTUALMENTE DEFINIDA."
+
+#, fuzzy
+#~ msgid "Boundary condition status, 0-inactive, 1-active, 2-dirichlet"
+#~ msgstr ""
+#~ "Estado de la condición de los contornos, 0-inactiva, 1-activa, 2-dirichlet"
+
+#~ msgid "Water sources and sinks in [m^3/s]"
+#~ msgstr "Fuentes de agua y sumideros en [m³/s]"
+
+#~ msgid "Specific yield in [1/m]"
+#~ msgstr "Rendimiento específico en [1/m]"
+
+#~ msgid "Recharge map e.g: 6*10^-9 per cell in [m^3/s*m^2]"
+#~ msgstr "Recargar mapa; ejemplo: 6*10^-9 por celda en [m³/s*m²]"
+
+#~ msgid "The map storing the numerical result [m]"
+#~ msgstr "Mapa que guarda el resultado numérico [m]"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculate the groundwater filter velocity vector field [m/s]\n"
+#~ "and write the x, and y components to maps named name_[xy]"
+#~ msgstr "Calcular vectorial a nombre"
+
+#, fuzzy
+#~ msgid "The height of the river bed in [m]"
+#~ msgstr "La altura de la cuenca del río en [m]"
+
+#, fuzzy
+#~ msgid "The height of the drainage bed in [m]"
+#~ msgstr "La altura de la cuenca del río en [m]"
+
+#~ msgid "raster, buffer"
+#~ msgstr "ráster, buffer"
+
+#~ msgid "Input map: amount of overland flow per cell"
+#~ msgstr "Mapa de entrada: cantidad de flujo superficial por celda"
+
+#, fuzzy
+#~ msgid "Input map: terrain blocking overland surface flow, for USLE"
+#~ msgstr "Mapa de entrada: flujo de superficie "
+
+#~ msgid "Output map: number of cells that drain through each cell"
+#~ msgstr "Mapa de salida: número de celdas que drenan a través de cada celda"
+
+#~ msgid "Output map: unique label for each watershed basin"
+#~ msgstr "Mapa de salida: etiqueta única para cada cuenca hidrográfica"
+
+#~ msgid "Output map: each half-basin is given a unique value"
+#~ msgstr "Mapa de salida: se da un valor único a cada semicuenca"
+
+#~ msgid "Output map: slope length and steepness (LS) factor for USLE"
+#~ msgstr ""
+#~ "Mapa de salida: factor de longitud e inclinación de la pendiente (LS) "
+#~ "para USLE"
+
+#~ msgid "Output map: slope steepness (S) factor for USLE"
+#~ msgstr "Mapa de salida: factor de inclinación de la pendiente (S) para USLE"
+
+#~ msgid "Input value: minimum size of exterior watershed basin"
+#~ msgstr "Valor de entrada: tamaño mínimo de la cuenca hidrográfica exterior"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sorry, if any of the following options are set:\n"
+#~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
+#~ "    you MUST provide a value for the basin threshold parameter."
+#~ msgstr ""
+#~ "Lo siento, si alguna de las siguientes opciones es establecida:\n"
+#~ "    cuenca, corriente, semicuenca, pendiente o IS\n"
+#~ "    DEBE proporcionar un valor para el parámetro de umbral de cuenca."
+
+#, fuzzy
+#~ msgid ""
+#~ "USAGE for basin delineation:\n"
+#~ "%s -4 el=elevation_map t=swale_threshold [ov=overland_flow_map] "
+#~ "[dr=drain_direction_map] [de=depression_map] [ac=accumulation_map] "
+#~ "[di=display_map] ba=watershed_basin_map [se=stream_segment_map]\n"
+#~ "\n"
+#~ "USAGE for ARMSED FILE creation:\n"
+#~ "%s [-4] el=elevation_map t=swale_threshold [ov=overland_flow_map] "
+#~ "[dr=drain_direction_map] [de=depression_map] [ac=accumulation_map] "
+#~ "[di=display_map] [ba=watershed_basin_map] [se=stream_segment_map] "
+#~ "ha=half_basin_map ar=ARMSED_file_name\n"
+#~ "\n"
+#~ "USAGE for slope length determination:\n"
+#~ "%s [-4] el=elevation_map t=swale_threshold [dr=drain_direction_map] "
+#~ "[de=depression_map] [ac=accumulation_map] [di=display_map] "
+#~ "[ms=max_slope_length] [ob=overland_blocking_map] [S=slope_steepness_map] "
+#~ "LS=length_slope_map [r=rill_erosion_map] [sd=slope_deposition value or "
+#~ "map]"
+#~ msgstr ""
+#~ "USO para delineación de cuenca:\n"
+#~ "%s -4 el= mostrar mostrar nombre mostrar máximo"
+
+#, fuzzy
+#~ msgid "unable to open flow accumulation map layer"
+#~ msgstr "no se puede abrir nueva capa de mapa de acumulación."
+
+#~ msgid "Error writing color file for <%s>"
+#~ msgstr "Error al escribir el archivo de color para <%s>"
+
+#~ msgid "Raster File Series to MPEG Conversion Program."
+#~ msgstr "Programa de conversión de series de archivos ráster a MPEG."
+
+#~ msgid ""
+#~ "Filters and generates a depressionless elevation map and a flow direction "
+#~ "map from a given elevation layer."
+#~ msgstr ""
+#~ "Filtra y genera un mapa de elevación sin depresiones y un mapa de "
+#~ "dirección de flujo a partir de una capa de elevación dada."
+
+#~ msgid "Output direction raster map"
+#~ msgstr "Producir mapa ráster de dirección"
+
+#~ msgid "Output raster map of problem areas"
+#~ msgstr "Producir mapa ráster de áreas problemáticas"
+
+#~ msgid "raster, resample"
+#~ msgstr "ráster, remuestrear"
+
+#~ msgid "Surface generation program from rasterized contours."
+#~ msgstr ""
+#~ "Programa de generación de superficies a partir de contornos rasterizados."
+
+#~ msgid "Name of existing raster map containing contours"
+#~ msgstr "Nombre del mapa ráster existente que contiene los contornos"
+
+#~ msgid "Creates/modifies the color table associated with a raster map layer."
+#~ msgstr ""
+#~ "Crea/modifica la tabla de colores asociada a una capa de mapa ráster."
+
+#~ msgid "Raster map name from which to copy color table"
+#~ msgstr "Nombre del mapa ráster del que copiar la tabla de colores"
+
+#, fuzzy
+#~ msgid "Path to rules file (\"-\" to read rules from stdin)"
+#~ msgstr "Archivo de coordenadas de entrada (omitir para leer de stdin)"
+
+#~ msgid "CHILD[pid = %i]: unable to open %s mask ... continue without!!!"
+#~ msgstr ""
+#~ "CHILD[pid = %i]: no se puede abrir la máscara %s ... ¡¡¡Se continúa sin "
+#~ "ella!!!"
+
+#~ msgid "Cannot create %s/.r.li/ directory"
+#~ msgstr "No se puede crear el directorio %s/.r.li/"
+
+#~ msgid "Cannot create %s/.r.li/output/ directory"
+#~ msgstr "No se puede crear el directorio %s/.r.li/output/"
+
+#~ msgid "r.li.worker (pid %i) exited with abnormal status %i"
+#~ msgstr "r.li.worker (pid %i) salió con el estado anormal %i"
+
+#~ msgid "r.li.worker (pid %i) terminated"
+#~ msgstr "r.li.worker (pid %i) terminado"
+
+#~ msgid "Cannot make stat of %s configuration file"
+#~ msgstr "No se puede la estadística del archivo de configuración %s"
+
+#, fuzzy
+#~ msgid "raster, null data"
+#~ msgstr "vectorial, metadatos"
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr ""
+#~ "Exportar un mapa ráster al Lenguaje de Modelado de Realidad Virtual (VRML)"
+
+#, fuzzy
+#~ msgid "Generates a raster map layer of distance to features in input layer."
+#~ msgstr ""
+#~ "Genera una capa de mapa ráster con áreas contiguas incrementadas en una "
+#~ "celda."
+
+#~ msgid "(i)   Basin map created by r.water.outlet (MASK)"
+#~ msgstr "(i)   Mapa de cuenca creado por r.water.outlet (MÁSCARA)"
+
+#~ msgid "(o)   Direction map for depressionless elevation map"
+#~ msgstr "(S)   Mapa de dirección para mapa de elevación sin depresiones"
+
+#~ msgid "(i)   Number of topographic index classes"
+#~ msgstr "(E)   Número de clases de índice topográfico"
+
+#~ msgid "(o/i) Topographic index statistics file"
+#~ msgstr "(S/E) Archivo de estadísticas de índice topográfico"
+
+#~ msgid "(i)   TOPMODEL Parameters file"
+#~ msgstr "(E)   Archivo de parámetros TOPMODEL"
+
+#~ msgid "(i)   Rainfall and potential evapotranspiration data file"
+#~ msgstr ""
+#~ "(E)   Archivo de datos de precipitaciones y evotranspiración potencial"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates cast shadow areas from sun position and DEM. Either A: exact "
+#~ "sun position is specified, or B: date/time to calculate the sun position "
+#~ "by r.sunmask itself."
+#~ msgstr "Calcula áreas a."
+
+#~ msgid "A: altitude of the sun above horizon, degrees"
+#~ msgstr "A: altura del sol sobre el horizonte, grados"
+
+#~ msgid "A: azimuth of the sun from the north, degrees"
+#~ msgstr "A: azimut del sol desde el Norte, grados"
+
+#~ msgid "B: minutes (0..60)"
+#~ msgstr "B: minutos (0..60)"
+
+#~ msgid "B: seconds (0..60)"
+#~ msgstr "B: segundos (0..60)"
+
+#~ msgid ""
+#~ "B: timezone (east positive, offset from GMT, also use to adjust daylight "
+#~ "savings)"
+#~ msgstr ""
+#~ "B: zona horaria (Este positivo, compensar desde GMT, también uso para "
+#~ "ajustar ahorros de luz solar)"
+
+#~ msgid ""
+#~ "Creates a new map layer whose category values are based upon a "
+#~ "reclassification of the categories in an existing raster map layer."
+#~ msgstr ""
+#~ "Crea una nueva capa de mapa cuyos valores de categorías están basados en "
+#~ "una reclasificación de las categorías de una capa de mapa ráster "
+#~ "existente."
+
+#~ msgid "Raster map to be reclassified"
+#~ msgstr "Mapa por reclasificar"
+
+#~ msgid "Converts a raster map into a vector map layer."
+#~ msgstr "Convierte un mapa ráster en una capa de mapa vectorial."
+
+#~ msgid ""
+#~ "Do not build vector topology (use with care for massive point export)"
+#~ msgstr ""
+#~ "No construir topología vectorial (usar con cuidado para exportación "
+#~ "masiva de puntos)"
+
+#~ msgid "The map E grid coordinates"
+#~ msgstr "Coordenadas de cuadrícula E del mapa"
+
+#, fuzzy
+#~ msgid "Calculating map %01d of %01d (angle %lf, raster map <%s>)"
+#~ msgstr "No se puede leer el intervalo fp del mapa ráster <%s>"
+
+#, fuzzy
+#~ msgid "Unable to read range of raster map <%s>"
+#~ msgstr "No se puede leer el intervalo fp del mapa ráster <%s>"
+
+#~ msgid "Name of vector input map containing stream(s)"
+#~ msgstr "Nombre del vectorial de entrada que contiene corriente(s)"
+
+#~ msgid "Stream width (in meters). Default is raster cell width"
+#~ msgstr ""
+#~ "Anchura de corriente (en metros). Por defecto es la anchura de celda "
+#~ "ráster."
+
+#~ msgid ""
+#~ "Construction of slope curves (flowlines), flowpath lengths, and flowline "
+#~ "densities (upslope areas) from a raster digital elevation model (DEM)"
+#~ msgstr ""
+#~ "Construcción de curvas de pendiente (líneas de flujo), longitudes de ruta "
+#~ "de flujo y densidades de líneas de flujo (áreas pendiente arriba) a "
+#~ "partir de un modelo de elevación digital (MDT) ráster"
+
+#~ msgid "Output flowpath length raster map"
+#~ msgstr "Mapa ráster de longitud de ruta de corriente de salida"
+
+#~ msgid "Output flowline density raster map"
+#~ msgstr "Mapa ráster de densidad de línea de corriente de salida"
+
+#~ msgid "3-D lengths instead of 2-D"
+#~ msgstr "Longitudes 3D en vez de 2D"
+
+#~ msgid "Converts ASCII raster file to binary raster map layer."
+#~ msgstr ""
+#~ "Convierte un archivo ráster ASCII en una capa de mapa ráster binaria."
+
+#~ msgid "Show the category label in the grid cell(s)"
+#~ msgstr "Mostrar la etiqueta de categoría en la celda(s) de cuadrícula"
+
+#~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
+#~ msgstr ""
+#~ "Crea mapa de índices topográficos [ln(a/tan(beta))] a partir de mapa de "
+#~ "elevación."
+
+#~ msgid "Output topographic index map"
+#~ msgstr "Producir mapa de índice topográfico"
+
+#~ msgid "raster, geomorphology"
+#~ msgstr "ráster, goemorfología"
+
+#~ msgid ""
+#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
+#~ "map layer."
+#~ msgstr ""
+#~ "Convierte un archivo ráster ASCII ARC/INFO de ESRI (GRID) en una capa de "
+#~ "mapa ráster (binario)."
+
+#~ msgid "File containing weights"
+#~ msgstr "Archivo que contiene pesos"
+
+#~ msgid "general, map management"
+#~ msgstr "general, gestión de mapas"
+
+#, fuzzy
+#~ msgid "general, scripts"
+#~ msgstr "ráster, proyección"
+
+#~ msgid "New LOCATION name (not location path)"
+#~ msgstr "Nombre de la nueva LOCALIZACIÓN (no ruta de la localización)"
+
+#~ msgid "New GISDBASE (full path to the directory where the new location is)"
+#~ msgstr ""
+#~ "Nueva BASE DE DATOS (ruta completa al directorio donde se encuentra la "
+#~ "nueva localización)"
+
+#~ msgid "format"
+#~ msgstr "formato"
+
+#~ msgid "Color for drawing X's (Null values)"
+#~ msgstr "Color para dibujar las X (Valores nulos)"
+
+#~ msgid "display, cartography"
+#~ msgstr "mostrar, cartografía"
+
+#~ msgid "name"
+#~ msgstr "nombre"
+
+#~ msgid "Monitor: waitpid: expected %d but got %d"
+#~ msgstr "Monitor: waitpid: se esperaba %d pero se obtuvo %d"
+
+#~ msgid "Either text or -c should be given"
+#~ msgstr "Texto o se debe dar -c"
+
+#~ msgid "Unable to set size"
+#~ msgstr "No se puede establecer el tamaño"
+
+#~ msgid "Text conversion error"
+#~ msgstr "Error en la conversión de texto"
+
+#~ msgid "Error reading hue data"
+#~ msgstr "Error al leer datos de tonalidad"
+
+#, fuzzy
+#~ msgid "R_color file for [%s] not available"
+#~ msgstr "Archivo de color para <%s> no disponible"
+
+#, fuzzy
+#~ msgid "Range file for [%s] not available"
+#~ msgstr "Archivo de categoría para <%s> no disponible"
+
+#~ msgid ""
+#~ "Displays and overlays raster map layers in the active display frame on "
+#~ "the graphics monitor."
+#~ msgstr ""
+#~ "Muestra y superpone las capas del mapa ráster en el marco activo de la "
+#~ "pantalla."
+
+#~ msgid "List of categories to be displayed (INT maps)"
+#~ msgstr "Lista de categorías para mostrar (mapas INT)"
+
+#~ msgid "Invert catlist"
+#~ msgstr "Invertir lista de categorías"
+
+#, fuzzy
+#~ msgid "Displays vector data in the active frame on the graphics monitor."
+#~ msgstr ""
+#~ "Muestra datos vectoriales de GRASS en el marco activo de la pantalla."
+
+#, fuzzy
+#~ msgid "Unable to read symbol, unable todisplay points"
+#~ msgstr "No se puede leer el símbolo, no se pueden mostrar los puntos"
+
+#~ msgid "Vector map attribute column to use for comparison"
+#~ msgstr "Columna de atributos del mapa vectorial a usar para comparación"
+
+#~ msgid "Vector map to store differences"
+#~ msgstr "Mapa vectorial para guardar las diferencias"
+
+#~ msgid ""
+#~ "Option scaling factor for values read from raster map. Sampled values "
+#~ "will be multiplied by this factor"
+#~ msgstr ""
+#~ "Opción factor de escala para valores leídos de un mapa ráster. Los "
+#~ "valores muestrados se multiplicarán por este factor"
+
+#~ msgid "vector, networking"
+#~ msgstr "vectorial, trabajo en red"
+
+#~ msgid "Required for operation 'connect'"
+#~ msgstr "Requerido para la operación 'conectar'"
+
+#~ msgid ""
+#~ "nodes;new point is placed on each node (line end) if doesn't exist;"
+#~ "connect;connect still unconnected points to vector network by inserting "
+#~ "new line(s);report;print to standard output {line_category "
+#~ "start_point_category end_point_category};nreport;print to standard output "
+#~ "{point_category line_category[,line_category...]}"
+#~ msgstr ""
+#~ "nodos;el nuevo punto es situado en cada nodo (final de línea) si no "
+#~ "existe;conectar;conecta puntos aún si conectar a la red vectorial "
+#~ "insertando nueva línea(s);informar;imprimir a la salida estándar "
+#~ "{line_category start_point_category end_point_category};nreport;imprimir "
+#~ "a la salida estándar {point_category line_category[,line_category...]}"
+
+#~ msgid "%d new points written to output"
+#~ msgstr "%d puntos nuevos escritos en la salida"
+
+#~ msgid "Exports a GRASS vector map to SVG."
+#~ msgstr "Exporta un mapa vectorial de GRASS a SVG."
+
+#, fuzzy
+#~ msgid "Layer number (write to)"
+#~ msgstr "Nombre del mapa vectorial de entrada"
+
+#~ msgid "vector, interpolation"
+#~ msgstr "vectorial, interpolación"
+
+#, fuzzy
+#~ msgid "Layer but not column with z values given"
+#~ msgstr "Columna de la tabla de atributos con valores a interpolar"
+
+#~ msgid "Vector based generalization."
+#~ msgstr "Generalización basada en vectoriales."
+
+#~ msgid "Number of vertices was reduced from %d to %d [%d%%]"
+#~ msgstr "El número de vértices se redujo de %d a %d [%d%%]"
+
+#~ msgid "Creates topology for GRASS vector map."
+#~ msgstr "Crea topología para mapa vectorial de GRASS."
+
+#~ msgid "Vector map <%s> not found in the current mapset"
+#~ msgstr ""
+#~ "No se encuentra el mapa vectorial <%s> en el directorio de mapas actual"
+
+#~ msgid "Convert OGR vector layers to GRASS vector map."
+#~ msgstr "Convertir capas vectoriales OGR a mapas vectoriales de GRASS."
+
+#~ msgid "Total area: %e (%d areas)"
+#~ msgstr "Áreas total: %e (%d áreas)"
+
+#~ msgid "Overlapping area: %e (%d areas)"
+#~ msgstr "Área solapada: %e (%d áreas)"
+
+#~ msgid "Area without category: %e (%d areas)"
+#~ msgstr "Área sin categoría: %e (%d áreas)"
+
+#~ msgid ""
+#~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
+#~ "raster map layer."
+#~ msgstr ""
+#~ "Convierte un mapa vectorial binario de GRASS (sólo puntos) en una capa de "
+#~ "mapa ráster 3D de GRASS."
+
+#, fuzzy
+#~ msgid "vector, extract"
+#~ msgstr "vectorial, exportar"
+
+#~ msgid "Random location perturbations of GRASS vector points"
+#~ msgstr ""
+#~ "Perturbaciones de localizaciones aleatorias de puntos vectoriales de GRASS"
+
+#~ msgid ""
+#~ "Parameter(s) of distribution. If the distribution is uniform, only one "
+#~ "parameter, the maximum, is needed. For a normal distribution, two "
+#~ "parameters, the mean and standard deviation, are required."
+#~ msgstr ""
+#~ "Parámetro(s) de distribución. Se la distribución es uniforme, sólo se "
+#~ "necesita un parámetro, el máximo. Para una distribución normal se "
+#~ "requieren dos parámetros, la media y la desviación estándar."
+
+#, fuzzy
+#~ msgid "Layer number (from)"
+#~ msgstr "Número de capa"
+
+#, fuzzy
+#~ msgid "Layer number (to)"
+#~ msgstr "Número de capa"
+
+#~ msgid "Randomly generate a 2D/3D vector points map."
+#~ msgstr ""
+#~ "Genera un mapa de puntos vectorial 2D/3D de GRASS de forma aleatoria."
+
+#, fuzzy
+#~ msgid "Using 'double precision' for column <%s>"
+#~ msgstr "No se puede usar la columna '%s'"
+
+#~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
+#~ msgstr "Convierte un mapa vectorial binario de GRASS a salida ASCII VTK."
+
+#~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
+#~ msgstr ""
+#~ "Convierte un mapa vectorial binario de GRASS a un mapa vectorial ASCII de "
+#~ "GRASS"
+
+#~ msgid "Path to resulting ASCII file or ASCII vector name if '-o' is defined"
+#~ msgstr ""
+#~ "Ruta al archivo ASCII resultante o nombre del vectorial ASCII si se "
+#~ "define '-o'"
+
+#~ msgid "vector, paint labels"
+#~ msgstr "vectorial, etiquetas de pintura"
+
+#~ msgid "vector, geometry"
+#~ msgstr "vectorial, geometría"
+
+#, fuzzy
+#~ msgid "Output quadrant centres, number of points is written as category"
+#~ msgstr "Salida puntos"
+
+#, fuzzy
+#~ msgid "Counting sites in quadrats..."
+#~ msgstr "lugares."
+
+#~ msgid "Creates a GRASS vector map of a user-defined grid."
+#~ msgstr ""
+#~ "Crea un mapa vectorial de GRASS de una cuadrícula definida por el usuario."
+
+#, fuzzy
+#~ msgid "Either 'rules' or 'col' must be specified"
+#~ msgstr "Se debe especificar el valor umbral"
+
+#~ msgid "vector, kernel density"
+#~ msgstr "vectorial, densidad de kernel"
+
+#~ msgid "Converts to one of the supported OGR vector formats."
+#~ msgstr "Convierte a uno de los formatos vectoriales OGR soportados."
+
+#~ msgid ""
+#~ "Export features with category (labeled) only. Otherwise all features are "
+#~ "exported"
+#~ msgstr ""
+#~ "Exportar sólo elementos con categoría (etiquetados). En caso contrario se "
+#~ "exportarán todos."
+
+#~ msgid ""
+#~ "Vector map <%s> is 3D. Use format specific layer creation options "
+#~ "(parameter 'lco') to export in 3D rather than 2D (default)"
+#~ msgstr ""
+#~ "El mapa vectorial <%s> es 3D. Use opciones de creación de capa "
+#~ "específicas para el formato (parámetro 'Ico') para exportar en 3D en vez "
+#~ "de 2D (predeterminado)."
+
+#~ msgid "Key column '%s' not found"
+#~ msgstr "Columna clave '%s' no encontrada"
+
+#~ msgid "Exporting %i points/lines..."
+#~ msgstr "Exportando %i puntos/líneas..."
+
+#~ msgid "%d features written"
+#~ msgstr "%d elementos escritos"
+
+#, fuzzy
+#~ msgid "Convex hull calculation requires at least three points. Exiting."
+#~ msgstr "puntos"
+
+#~ msgid "Create a new vector map layer by combining other vector map layers."
+#~ msgstr ""
+#~ "Crear una capa de mapa vectorial nueva combinando otras capas de mapas "
+#~ "vectoriales."
+
+#~ msgid ""
+#~ "Creates a buffer around features of given type (areas must contain "
+#~ "centroid)."
+#~ msgstr ""
+#~ "Crear un buffer alrededor de los elementos de tipo dado (las áreas deben "
+#~ "contener centroide)."
+
+#~ msgid "Buffer distance in map units"
+#~ msgstr "Distancia de buffer en unidades de mapa"
+
+#~ msgid "vector, querying"
+#~ msgstr "vectorial, consultar"
+
+#~ msgid "Queries a vector map layer at given locations."
+#~ msgstr "Consulta una capa de mapa vectorial en las localizaciones dadas."
+
+#~ msgid "If not given reads from standard input"
+#~ msgstr "Si no se da lee de la entrada estándar"
+
+#~ msgid "vector, transformation"
+#~ msgstr "vectorial, transformación"
+
+#~ msgid "Copying vector objects from vector map <%s>..."
+#~ msgstr "Copiando objetos vectoriales del mapa vectorial <%s>..."
+
+#~ msgid "Name of input vector map containing lines"
+#~ msgstr "Nombre del mapa vectorial de entrada que contiene líneas"
+
+#~ msgid "Name for output vector map where segments will be written"
+#~ msgstr ""
+#~ "Nombre del mapa vectorial de salida en el que se escribirán los segmentos"
+
+#~ msgid "Tests for normality for points."
+#~ msgstr "Test de normalidad para puntos."
+
+#~ msgid ""
+#~ "Calculates univariate statistics for attribute. Variance and standard "
+#~ "deviation is calculated only for points if specified."
+#~ msgstr ""
+#~ "Calcula estadísticas univariante para atributos. La varianza y la "
+#~ "desviación estándar sólo se calculan para puntos si se especifica."
+
+#, fuzzy
+#~ msgid "Calculate area centroids..."
+#~ msgstr "Imposible calcular el centroide del área"
+
+#, fuzzy
+#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+#~ msgstr ""
+#~ "Convierte un mapa vectorial binario de GRASS en una capa de mapa ráster "
+#~ "de GRASS."
+
+#~ msgid "Area without centroid (may be OK for island)"
+#~ msgstr "Área sin centroide (puede ser correcto para islas)"
+
+#~ msgid "Create points along input lines in new vector with 2 layers."
+#~ msgstr ""
+#~ "Creaa puntos a lo largo de líneas de entrada en un nuevo vectorial con 2 "
+#~ "capas."
+
+#, fuzzy
+#~ msgid "%d points written to output vector map"
+#~ msgstr "Escritos [%d] puntos en el mapa vectorial de salida"
+
+#~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
+#~ msgstr ""
+#~ "Crea un mapa vectorial a partir de archivo de puntos ASCII o archivo "
+#~ "ASCII vectorial."
+
+#~ msgid "Creates a new vector as a read-only link to OGR layer."
+#~ msgstr ""
+#~ "Crea un nuevo vectorial como un enlace de sólo lectura a una capa OGR."
+
+#~ msgid ""
+#~ "Threshold in map units, one value for each tool (default: 0.0[,0.0,...])"
+#~ msgstr ""
+#~ "Umbral en unidades de mapa, un valor para cada herramienta (por omisión: "
+#~ "0.0[,0.0,...])"
+
+#~ msgid "Copying vector lines..."
+#~ msgstr "Copiando líneas vectoriales..."
+
+#~ msgid "%d lines / boundaries removed"
+#~ msgstr "%d líneas / contornos eliminados"
+
+#~ msgid "Duplicate area centroids: %5d"
+#~ msgstr "Centroides de área duplicados: %5d"
+
+#~ msgid "Attribute table column with values to interpolate"
+#~ msgstr "Columna de la tabla de atributos con valores a interpolar"
+
+#~ msgid "No data points found"
+#~ msgstr "No se han encontrado puntos de datos"
+
+#~ msgid "Lines buffers... "
+#~ msgstr "Buffers de líneas... "
+
+#~ msgid "Difference in x,y direction for moving feature or vertex"
+#~ msgstr "Diferencia en dirección X, Y para mover elemento o vértice"
+
+#~ msgid "Error reading ASCII file: '%s'"
+#~ msgstr "Error al leer el archivo ASCII: '%s'"
+
+#, fuzzy
+#~ msgid "Outputs basic information about a user-specified vector map."
+#~ msgstr ""
+#~ "Muestra información básica sobre una capa de mapa vectorial especificada "
+#~ "por el usuario."
+
+#~ msgid "Displaying column types/names for database connection of layer %d:"
+#~ msgstr ""
+#~ "Mostrando tipos/nombres de columna para la conexión a base de datos de la "
+#~ "capa %d:"
+
+#~ msgid "Map scale:       1:%d"
+#~ msgstr "Escala del mapa:     1:%d"
+
+#~ msgid "Map format:      %s"
+#~ msgstr "Formato del mapa:    %s"
+
+#~ msgid "Name of creator: %s"
+#~ msgstr "Nombre del creador:  %s"
+
+#~ msgid "Organization:    %s"
+#~ msgstr "Organización:        %s"
+
+#~ msgid "Source date:     %s"
+#~ msgstr "Fecha del origen:    %s"
+
+#~ msgid "  Digitization threshold: %s"
+#~ msgstr "  Umbral de digitalización: %s"
+
+#~ msgid "  Comments:"
+#~ msgstr "  Comentarios:"
+
+#~ msgid "Extrudes flat vector object to 3D with defined height."
+#~ msgstr "Eleva objetos vectoriales planos a 3D con alturas definidas."
+
+#, fuzzy
+#~ msgid "vector, category"
+#~ msgstr "vectorial, geometría"
+
+#~ msgid "Attach, delete or report vector categories to map geometry."
+#~ msgstr ""
+#~ "Acjuntar, borrar o informar categorías del vectorial a la geometría del "
+#~ "mapa."
+
+#~ msgid "Output surface raster map (elevation)"
+#~ msgstr "Producir mapa ráster de superficie (elevación)"
+
+#~ msgid "Output cross-validation errors vector point file"
+#~ msgstr ""
+#~ "Producir archivo de puntos vectorial de errores de validación cruzada"
+
+#, fuzzy
+#~ msgid "Output vector map showing quadtree segmentation"
+#~ msgstr "Producir mapa vectorial que muestre segmentación quadtree"
+
+#~ msgid "Output vector map showing overlapping windows"
+#~ msgstr "Producir mapa vectorial que muestre ventanas solapadas"
+
+#~ msgid ""
+#~ "Name of the attribute column with values to be used for approximation (if "
+#~ "layer>0)"
+#~ msgstr ""
+#~ "Nombre de la columna de atributos con valores a usar para la aproximación "
+#~ "(si capa>0)"
+
+#~ msgid ""
+#~ "Processing all selected output files\n"
+#~ "will require %d bytes of disk space for temp files"
+#~ msgstr ""
+#~ "Procesar todos los archivos de salida seleccionados\n"
+#~ "necesitará %d bytes en disco para archivos temporales"
+
+#~ msgid "Cannot write raster maps -- try to increase resolution"
+#~ msgstr ""
+#~ "No se pueden escribir los mapas ráster -- intente aumentar la resolución"
+
+#~ msgid "Print all map connection parameters and exit in shell script style"
+#~ msgstr ""
+#~ "Imprimir todos los parámetros de conexión del mapa y salir en estilo de "
+#~ "script de consola"
+
+#~ msgid "Vector map <%s> is connected by:"
+#~ msgstr "El mapa vectorial <%s> está conectado por:"
+
+#~ msgid "Exports GRASS vector map layers to DXF file format."
+#~ msgstr "Exporta capas vectoriales de GRASS a formato de archivo DXF."
+
+#~ msgid "Unable to determine raster cell type"
+#~ msgstr "No se puede determinar el tipo de celda ráster"
+
+#, fuzzy
+#~ msgid "Name for output file (do not add extension)"
+#~ msgstr "Nombre para el archivo de salida (NO añadir extensión)"
+
+#, fuzzy
+#~ msgid "Width and height of output image"
+#~ msgstr "Anchura y altura de cuadros en la cuadrícula"
+
+#, fuzzy
+#~ msgid "Surface"
+#~ msgstr "Varianza de la suma"
+
+#, fuzzy
+#~ msgid "Volume"
+#~ msgstr "Columnas"
+
+#~ msgid "OGR driver: column '%s', OGR type %d  is not supported"
+#~ msgstr "Controlador OGR: columna '%s', tipo OGR %d no soportado"
+
+#~ msgid "Prints/sets general DB connection for current mapset and exits."
+#~ msgstr ""
+#~ "Imprime/establece la conexión general a la base de datos para el "
+#~ "directorio de mapas actual y sale."
+
+#~ msgid "Database schema"
+#~ msgstr "Esquema de la base de datos"
+
+#~ msgid "database, SQL"
+#~ msgstr "base de datos, SQL"
+
+#~ msgid "Name of file with sql statement"
+#~ msgstr "Nombre de archivo con sentencia SQL"
+
+#~ msgid "The password was stored in file"
+#~ msgstr "La contraseña se guardó en archivo"
+
+#~ msgid ""
+#~ "Convert all old GRASS < Ver5.7 vector maps in current mapset to current "
+#~ "format"
+#~ msgstr ""
+#~ "Convierte todos los mapas vectoriales del antiguo GRASS < Ver5.7 del "
+#~ "directorio de mapas actual al formato actual."
+
+#~ msgid "raster, elevation"
+#~ msgstr "ráster, elevación"
+
+#~ msgid "Convert coordinates from one projection to another (cs2cs frontend)."
+#~ msgstr "Convierte coordenadas de una proyección a otra (interfaz cs2cs)."
+
+#~ msgid "Input coordinate file (omit to read from stdin)"
+#~ msgstr "Archivo de coordenadas de entrada (omitir para leer de stdin)"
+
+#~ msgid "Images"
+#~ msgstr "Imágenes"
+
+#~ msgid "Compression for PNG files"
+#~ msgstr "Compresión para archivos PNG"
+
+#~ msgid "PostScript"
+#~ msgstr "PostScript"
+
+#, fuzzy
+#~ msgid "Do not crop away margins"
+#~ msgstr "Imposible copiar la tabla"
+
+#~ msgid "raster, tiling"
+#~ msgstr "ráster, teselado"
+
+#, fuzzy
+#~ msgid "general, extensions"
+#~ msgstr "ráster, proyección"
+
+#, fuzzy
+#~ msgid "List available modules in the GRASS Addons SVN repository"
+#~ msgstr "Listar reglas disponibles y salir"
+
+#~ msgid "display, diagram"
+#~ msgstr "mostrar, diagrama"
+
+#~ msgid "Reports geometry statistics for vectors."
+#~ msgstr "Informa estadísticas de geometría para vectoriales."
+
+#~ msgid "Display the HTML man pages of GRASS"
+#~ msgstr "Mostrar las páginas man HTML de GRASS"
+
+#~ msgid "Create a MASK for limiting raster operation"
+#~ msgstr "Crear una MÁSCARA para limitar la operación ráster"
+
+#~ msgid "Raster map to use as MASK"
+#~ msgstr "Mapa ráster a usar como MÁSCARA"
+
+#~ msgid "Category values to use for MASK (format: 1 2 3 thru 7 *)"
+#~ msgstr "Valores de categoría a usar para MÁSCARA (formato: 1 2 3 thru 7 *)"
+
+#~ msgid "Create inverse MASK from specified 'maskcats' list"
+#~ msgstr "Crear MASK inversa a partir de la lista 'maskcats' especificada"
+
+#~ msgid "Remove existing MASK (overrides other options)"
+#~ msgstr "Eliminar MÁSCARA existente (ignora otras opciones)"
+
+#, fuzzy
+#~ msgid "Name of color column to populate"
+#~ msgstr "Nombre de la columna a mostrar"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from a raster map based on vector "
+#~ "polygons and uploads statistics to new attribute columns."
+#~ msgstr ""
+#~ "Calcular estadísticas univariantes a partir de un mapa ráster de GRASS "
+#~ "basadas en polígonos vectoriales y carga las estadísticas en nuevas "
+#~ "columnas de atributos."
+
+#~ msgid "Name of vector polygon map"
+#~ msgstr "Nombre del mapa de polígono vectorial"
+
+#~ msgid "Name of raster map to calculate statistics from"
+#~ msgstr "Nombre del mapa ráster del que calcular estadísticas"
+
+#, fuzzy
+#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+#~ msgstr "Importar mapas vectoriales Mapgen o Matlab a GRASS."
+
+#~ msgid "calculates univariate statistics from a GRASS raster map"
+#~ msgstr ""
+#~ "Calcula estadísticas univariantes a partir de un mapa ráster de GRASS."
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "Show help"
+#~ msgstr "Mostrar ayuda"
+
+#~ msgid "Folder to save downloaded data to"
+#~ msgstr "Carpeta en la que guardar los datos descargados"
+
+#, fuzzy
+#~ msgid "Layer number. If -1, all layers are extracted."
+#~ msgstr "Número de capa. Si es -1, se extraerán todas las capas"
+
+#, fuzzy
+#~ msgid "Import GetFeature from WFS"
+#~ msgstr "Importar GetFeature de WFS"
+
+#~ msgid "raster, landscape structure analysis"
+#~ msgstr "ráster, análisis de estructura del paisaje"
+
+#~ msgid "Import of SPOT VGT NDVI file into a raster map"
+#~ msgstr "Importar archivo SPOT VGT NDVI a un mapa ráster"
+
+#~ msgid "also import quality map (SM status map layer) and filter NDVI map"
+#~ msgstr ""
+#~ "importar también mapa de calidad (capa de mapa de estado SM) y filtrar "
+#~ "mapa NDVI"
+
+#~ msgid "existing SPOT VGT NDVI HDF file (0001_NDV.HDF)"
+#~ msgstr "archivo SPOT VGT NDVI HDF existente (0001_NDV.HDF)"
+
+#~ msgid "Vector map for which to edit attribute table"
+#~ msgstr "Mapa vectorial para el que editar la tabla de atributos"
+
+#~ msgid "Layer where to add column"
+#~ msgstr "Capa a la que añadir la columna"
+
+#, fuzzy
+#~ msgid "Computing row %d of covariance matrix..."
+#~ msgstr "Calculando la fila %d de la matriz de covarianza:"
+
+#, fuzzy
+#~ msgid "imagery, rectify"
+#~ msgstr "grupo de imaginería"
+
+#, fuzzy
+#~ msgid "No camera reference file selected for group <%s>"
+#~ msgstr "Nombre de la tabla del sistema de referencia"
+
+#, fuzzy
+#~ msgid "Bad format in camera file for group <%s>"
+#~ msgstr "¿Editar el archivo de categorías para [%s]?"
+
+#, fuzzy
+#~ msgid "Bad format in initial exposusre station file for group <%s>"
+#~ msgstr "¿Editar el archivo de categorías para [%s]?"
+
+#, fuzzy
+#~ msgid "raster, terrain analysis"
+#~ msgstr "ráster, análisis de estructura del paisaje"
+
+#~ msgid "SECTION 3: Accumulating Surface Flow."
+#~ msgstr "SECCIÓN 3: acumulando flujo de superficie."
+
+#~ msgid "Name of input vector points map"
+#~ msgstr "Nombre del mapa vectorial de puntos de entrada"
+
+#~ msgid "Eigen values:"
+#~ msgstr "Valores Eigen:"
+
+#, fuzzy
+#~ msgid "<%s> vector map will be interpolated"
+#~ msgstr "No se creará ningún dato vectorial."
+
+#, fuzzy
+#~ msgid "Auto-balancing of colors for LANDSAT images"
+#~ msgstr "Balance automático de colores para imágenes LANDSAT"
+
+#, fuzzy
+#~ msgid ""
+#~ "displays spectral response at user specified locations in group or images"
+#~ msgstr ""
+#~ "muestra la respuesta espectral en localizaciones especificadas por el "
+#~ "usuario en grupo o imágenes"
+
+#, fuzzy
+#~ msgid "group input"
+#~ msgstr "entrada de grupo"
+
+#, fuzzy
+#~ msgid "write output to PNG image"
+#~ msgstr "escribir la salida a imagen PNG"
+
+#, fuzzy
+#~ msgid "label with coordinates instead of numbering"
+#~ msgstr "Etiquetar con coordenadas en vez de numeración"
+
+#, fuzzy
+#~ msgid ""
+#~ "Reclasses a raster map greater or less than user specified area size (in "
+#~ "hectares)"
+#~ msgstr ""
+#~ "Reclasifica un mapa ráster mayor o menor que la superficie indicada por "
+#~ "el usuario (en hectáreas)"
+
+#, fuzzy
+#~ msgid "lesser val option that sets the <= area size limit [hectares]"
+#~ msgstr ""
+#~ "Opción de valor menor que establece el <= límite de tamaño de área "
+#~ "(hectáreas)"
+
+#, fuzzy
+#~ msgid "greater val option that sets the >= area size limit [hectares]"
+#~ msgstr ""
+#~ "Opción de valor mayor que establece el >= límite de tamaño de área "
+#~ "(hectáreas)"
+
+#, fuzzy
+#~ msgid "Writing data to file..."
+#~ msgstr "Escribiendo los datos transformados a archivo..."
+
+#, fuzzy
+#~ msgid "1 class."
+#~ msgstr "%d clases."
+
+#~ msgid "Writing %s"
+#~ msgstr "Escribiendo %s"
+
+#~ msgid "ID values"
+#~ msgstr "Valores ID"
+
+#~ msgid "To_map"
+#~ msgstr "A_mapa"
+
+#~ msgid "To layer"
+#~ msgstr "A la capa"
+
+#~ msgid "vector, attribute table"
+#~ msgstr "vectorial, tabla de atributos"
+
+#, fuzzy
+#~ msgid "Type of elements"
+#~ msgstr "Nombre de un elemento"
+
+#~ msgid "Output hue raster map"
+#~ msgstr "Mapa ráster de salida de matiz"
+
+#~ msgid "Name of the x-derivatives raster map [m/m] or [ft/ft]"
+#~ msgstr "Nombre del mapa ráster de derivadas de X [m/m] o [pies/pies]"
+
+#~ msgid "Multiplier"
+#~ msgstr "Multiplicador"
+
+#~ msgid "Unable to delete line %d"
+#~ msgstr "No se puede borrar la línea %d"
+
+#~ msgid "Column(s)"
+#~ msgstr "Columna(s)"
+
+#~ msgid "Cannot open OGR data source '%s'"
+#~ msgstr "No se puede abrir el origen de datos OGR '%s'"
+
+#, fuzzy
+#~ msgid "<%s> is an ilegal name"
+#~ msgstr "<%s> es un nombre de archivo no admitido"
+
+#, fuzzy
+#~ msgid "Direction raster found <%s>"
+#~ msgstr "Escribiendo mapa ráster <%s>"
+
+#, fuzzy
+#~ msgid "Input value: maximum length of surface flow in map units, for USLE"
+#~ msgstr "Valor de entrada: longitud máxima de flujo de superficie, para USLE"
+
+#, fuzzy
+#~ msgid ""
+#~ "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),r(adians),d"
+#~ "(egrees)"
+#~ msgstr ""
+#~ "mi(llas),f(pies),me(tros),k(ilómetros),a(cres),h(ectáreas),p(orcentaje)"
+
+#, fuzzy
+#~ msgid "vector, spatial query"
+#~ msgstr "vectorial, consultar"

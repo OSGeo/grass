@@ -2524,7 +2524,7 @@ msgstr ""
 #: ../lib/vector/diglib/file.c:205
 #, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "n"
+msgstr "का"
 
 #: ../lib/vector/diglib/file.c:220
 msgid "Vector memory mode not supported, using 'AUTO'"
@@ -5736,6 +5736,51 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr ""
 
 #, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "नहीं"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "है नहीं"
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "a"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr "के लिए जी"
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "डिफ़ॉल्ट है नहीं सेट"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "का"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "के लिए"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "का"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "का"
+
+#, fuzzy
 #~ msgid ""
 #~ "\n"
 #~ "Flags:\n"
@@ -5764,10 +5809,6 @@ msgstr ""
 #~ msgstr "a"
 
 #, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "नहीं"
-
-#, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "के लिए"
 
@@ -5784,10 +5825,6 @@ msgstr ""
 #~ msgstr "a"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "के लिए"
-
-#, fuzzy
 #~ msgid "Unable to read header file for raster map <%s@%s>."
 #~ msgstr "के लिए"
 
@@ -5802,14 +5839,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "can't create histogram for [%s in %s]"
 #~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "है नहीं"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "a"
 
 #, fuzzy
 #~ msgid "Unable to open file %s in <%s>"
@@ -5832,15 +5861,6 @@ msgstr ""
 #~ msgstr "का"
 
 #, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr "के लिए जी"
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "डिफ़ॉल्ट है नहीं सेट"
-
-#, fuzzy
 #~ msgid "is not set"
 #~ msgstr "है नहीं सेट"
 
@@ -5849,18 +5869,6 @@ msgstr ""
 #~ "is invalid\n"
 #~ "%s"
 #~ msgstr "है अवैध n"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "के लिए"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "के लिए"
 
 #, fuzzy
 #~ msgid "Vector is not 3D"
@@ -5970,14 +5978,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Cannot open database %s"
 #~ msgstr "लिंक ."
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "का"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "का"
 
 #, fuzzy
 #~ msgid "ERROR %s from graphics driver.\n"
@@ -6515,3 +6515,246 @@ msgstr ""
 #~ "\n"
 #~ "**<%s> illegal name **\n"
 #~ msgstr "n n"
+
+#, fuzzy
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "Unable to open file %s"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Unable to open temporary file"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "Problem reading raster map"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr "है"
+
+#, fuzzy
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr "है"
+
+#, fuzzy
+#~ msgid ""
+#~ "G_set_window(): projection/zone differs from that of currently open "
+#~ "raster maps"
+#~ msgstr "जी सेट का"
+
+#, fuzzy
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "के लिए है"
+
+#, fuzzy
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "के लिए है"
+
+#, fuzzy
+#~ msgid "error writing null row %d"
+#~ msgstr "त्रुटि"
+
+#, fuzzy
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "का त्रुटि n"
+
+#, fuzzy
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "जी सेट!"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "Layer number"
+#~ msgstr "संख्या"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr "n "
+
+#, fuzzy
+#~ msgid " options: %s\n"
+#~ msgstr "n"
+
+#, fuzzy
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "त्रुटि"
+
+#, fuzzy
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "त्रुटि"
+
+#, fuzzy
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr "के लिए जी"
+
+#, fuzzy
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "फ़ाइलनाम  n"
+
+#, fuzzy
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "फ़ाइलनाम  नहीं."
+
+#, fuzzy
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
+#~ msgstr "बाइट्स बड़ा"
+
+#, fuzzy
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "नहीं के लिए n"
+
+#, fuzzy
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr "लिंक  है नहीं."
+
+#, fuzzy
+#~ msgid "Unable to add database link"
+#~ msgstr "लिंक ."
+
+#, fuzzy
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "त्रुटि चालू"
+
+#, fuzzy
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr "चेतावनी n"
+
+#, fuzzy
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "का"
+
+#, fuzzy
+#~ msgid "OGR feature without ID ignored"
+#~ msgstr "विशेषता."
+
+#, fuzzy
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid ""
+#~ "taking too long to find points for interpolation--please change the "
+#~ "region to area where your points are. Continuing calculations..."
+#~ msgstr "के लिए."
+
+#, fuzzy
+#~ msgid "some points outside of region -- will ignore..."
+#~ msgstr "का."
+
+#, fuzzy
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Unable to open vector map <%s> on topology level %d"
+#~ msgstr "नक़ल"
+
+#, fuzzy
+#~ msgid "Attempt to delete dead line"
+#~ msgstr "के लिए n"
+
+#, fuzzy
+#~ msgid "Unable to rewrite line %d"
+#~ msgstr "के लिए n"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgstr "है नहीं चालू"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgstr "है नहीं"
+
+#, fuzzy
+#~ msgid "Unable to delete line %d from vector map <%s>"
+#~ msgstr "के लिए"
+
+#, fuzzy
+#~ msgid "Cannot get field info"
+#~ msgstr "के लिए n"
+
+#, fuzzy
+#~ msgid "Column type not supported"
+#~ msgstr "विशेषता नहीं"
+
+#, fuzzy
+#~ msgid "Color file for [%s] not available"
+#~ msgstr "नहीं"

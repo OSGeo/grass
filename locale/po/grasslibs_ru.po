@@ -5781,7 +5781,7 @@ msgstr "Запуск алгоритма cholesky-декомпозиции"
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "Невозможно создать файл заголовка для [%s в %s]"
+msgstr "Невозможно открыть файл [%s] группы [%s в %s]"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
@@ -5849,23 +5849,74 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "подгруппа <%s> группы <%s> ссылается на следующие растровые слои\n"
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr "Недостаточно места в файле истории для записи командной строки"
+msgid "Not enough room in history file to record command line"
+msgstr "Недостаточно места в файле истории для записи командной строки"
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "Недостаточно места в файле истории для записи командной строки (truncated)"
+msgid "Not enough room in history file for command line (truncated)"
+msgstr ""
+"Недостаточно места в файле истории для записи командной строки (truncated)"
+
+#, fuzzy
+msgid "test, gmath"
+msgstr "тест, gpde"
+
+#, fuzzy
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "слой [%s] - невозможно записать строку %d"
+
+#, fuzzy
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Ошибка записи в файл с плавающей точкой для слоя %s"
+
+#, fuzzy
+msgid "OGR layer cannot be opened for update"
+msgstr "OGR формат не может быть обновлен"
+
+#, fuzzy
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Невозможно записать объект, векторный слой не открыт "
+
+#, fuzzy
+msgid "Unable to create a new process!"
+msgstr "Невозможно создать новый процесс"
+
+#, fuzzy
+msgid ""
+"Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"регион для текущего набора %s\n"
+"выполните \"g.region\""
+
+#, fuzzy
+msgid "Default region %s"
+msgstr "регион по умолчанию %s"
+
+#, fuzzy
+msgid "Unable to set region"
+msgstr "Невозможно установить фокус"
+
+#, fuzzy
+msgid "Failed writing raster map"
+msgstr "Ошибка чтения растрового слоя"
+
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "Невозможно прочитать цветовой файл для растрового слоя <%s>"
+
+#, fuzzy
+msgid "Unable to query drawable"
+msgstr "Невозможно скопировать таблицу <%s>"
+
+#, fuzzy
+msgid "Failed to initialize Xlib surface"
+msgstr "Невозможно инициализировать pj причину: %s"
 
 #~ msgid "Invalid view position coordinates, using %f,%f"
 #~ msgstr "Неправильные координаты позиции вида, используется %f,%f"
 
 #~ msgid "Unknown Location"
 #~ msgstr "Область неизвестна"
-
-#, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "тест, gpde"
 
 #~ msgid "quantization file [%s] in mapset [%s] %s"
 #~ msgstr "файл разбиения значений [%s] в наборе [%s] %s"
@@ -5896,10 +5947,6 @@ msgstr "подгруппа <%s> группы <%s> ссылается на сле
 #~ msgid "Unable to write raster row %i"
 #~ msgstr "Невозможно записать строку растра %i"
 
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "слой [%s] - невозможно записать строку %d"
-
 #~ msgid "Unable to open raster map <%s@%s>"
 #~ msgstr "Невозможно открыть растровый слой <%s@%s>"
 
@@ -5913,10 +5960,6 @@ msgstr "подгруппа <%s> группы <%s> ссылается на сле
 #~ msgstr "невозможно записать quant файл!"
 
 #~ msgid "Error writing floating point format file for map %s"
-#~ msgstr "Ошибка записи в файл с плавающей точкой для слоя %s"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
 #~ msgstr "Ошибка записи в файл с плавающей точкой для слоя %s"
 
 #~ msgid "Unable to read header file for raster map <%s@%s>."
@@ -5936,18 +5979,6 @@ msgstr "подгруппа <%s> группы <%s> ссылается на сле
 
 #~ msgid "Unable to feature %d from vector map <%s>"
 #~ msgstr "Невозможно удалить объект %d из векторного слоя <%s>"
-
-#, fuzzy
-#~ msgid "OGR layer cannot be opened for update"
-#~ msgstr "OGR формат не может быть обновлен"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Невозможно записать объект, векторный слой не открыт "
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "Невозможно создать новый процесс"
 
 #~ msgid "Too many arguments"
 #~ msgstr "Слишком много параметров"
@@ -5970,17 +6001,6 @@ msgstr "подгруппа <%s> группы <%s> ссылается на сле
 #~ msgid "line %d: <%s>"
 #~ msgstr "строка %d: <%s>"
 
-#, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "регион для текущего набора %s\n"
-#~ "выполните \"g.region\""
-
-#, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "регион по умолчанию %s"
-
 #~ msgid "is not set"
 #~ msgstr "не установлен"
 
@@ -5990,18 +6010,6 @@ msgstr "подгруппа <%s> группы <%s> ссылается на сле
 #~ msgstr ""
 #~ "неверно\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Невозможно установить фокус"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Ошибка чтения растрового слоя"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "Невозможно прочитать цветовой файл для растрового слоя <%s>"
 
 #~ msgid "Vector is not 3D"
 #~ msgstr "Вектор не 3D "
@@ -6130,14 +6138,6 @@ msgstr "подгруппа <%s> группы <%s> ссылается на сле
 #~ msgstr ""
 #~ "Параметр релаксации используемый алгоритмами jacobi и sor для ускорения "
 #~ "или стабилизации"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Невозможно скопировать таблицу <%s>"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Невозможно инициализировать pj причину: %s"
 
 #~ msgid "Registering points"
 #~ msgstr "Регистрация точек"
@@ -6697,3 +6697,318 @@ msgstr "подгруппа <%s> группы <%s> ссылается на сле
 
 #~ msgid "Cannot find input map '%s'"
 #~ msgstr "Невозможно найти исходный слой '%s'"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Невозможно выделить память\n"
+
+#~ msgid "Probably program error."
+#~ msgstr "Возможная программная ошибка."
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Невозможно открыть временный файл"
+
+#~ msgid "Problem reading raster map"
+#~ msgstr "Ошибка чтения растрового слоя"
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr " Растровый слой %s@%s пуст"
+
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr ""
+#~ "Невозможно записать правила разбиения значений: слой %s целочисленный "
+
+#~ msgid ""
+#~ "G_set_window(): projection/zone differs from that of currently open "
+#~ "raster maps"
+#~ msgstr ""
+#~ "G_set_window(): проекция/зона отличается от текущих открытых растровых "
+#~ "карт"
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "Диапазон с плавающей точкой для %s@%s пуст"
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "Целочисленный диапазон для %s@%s пуст"
+
+#~ msgid "%s: map [%s] not open for write - request ignored"
+#~ msgstr "%s: слой [%s] не открыт для записи - запрос игнорирован"
+
+#~ msgid "%s: unopened file descriptor - request ignored"
+#~ msgstr "%s: дескриптор файла не открыт  - запрос игнорирован"
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "слой [%s] - невозможно записать строку %d"
+
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "невозможно найти временный null-файл %s"
+
+#~ msgid "error writing null row %d"
+#~ msgstr "ошибка при записи нулевой строки %d"
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "категории [%s] в наборе [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "категории векторного слоя [%s] в наборе [%s] %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "Не могу открыть временный файл"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "неверная проекция\n"
+
+#~ msgid "EmbedGivenNulls: wrong data type!"
+#~ msgstr "EmbedGivenNulls: неверный тип данных!"
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Сообщите разработчикам GRASS об этой ошибке.\n"
+
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "G_set_null_value: неверный тип данных!"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Имя растрового слоя высот"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Имя растрового(ыз) слоя(слоев) высот"
+
+#~ msgid "Layer number"
+#~ msgstr "Номер слоя"
+
+#~ msgid ""
+#~ "A single vector map can be connected to multiple database tables. This "
+#~ "number determines which table to use."
+#~ msgstr ""
+#~ "Единственная векторная карта может быть подключена к нескольким таблицами "
+#~ "базы данных. Это число определяет какую таблицу использовать."
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Описание:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Ключевые слова:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Использование:\n"
+#~ " "
+
+#~ msgid "to accept the default"
+#~ msgstr "чтобы установить по умолчанию"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "поддержка цвета для [%s] в наборе [%s] %s"
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr "Задана неверная временная метка для %s карты %s в наборе %s"
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "Неверный формат файла временной метки для %s карты %s в наборе %s"
+
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "Ошибка чтения сжатой слоя [%s] из набора [%s], ряд %d"
+
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "Ошибка чтения слоя <%s@%s>, ряд %d"
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "невозможно определить домашний каталог пользователя"
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "Невозможно создать файл заголовка для [%s]"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "регион для текущего набора %s\n"
+#~ "выполните \"g.region\""
+
+#~ msgid "default region %s"
+#~ msgstr "регион по умолчанию %s"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "нажмите RETURN для продолжения -->"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "Неправильное имя файла.  Не должно быть '.' или 'NULL'\n"
+
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "Неправильное имя файла. Знак <%c> недопустим.\n"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "Слишком много категорий для реклассификации [%s в %s]"
+
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr "Неправильный формат реклассификации в файле заголовка для [%s в %s]"
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "Невозможно создать файл зависимости для [%s в %s]"
+
+#~ msgid "G_malloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_malloc: невозможно выделить %lu байт в %s:%d"
+
+#~ msgid "G_calloc: unable to allocate %lu * %lu bytes at %s:%d"
+#~ msgstr "G_calloc: невозможно выделить %lu * %lu байт в %s:%d"
+
+#~ msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_realloc: невозможно выделить %lu байт в %s:%d"
+
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different projection than current region. Found "
+#~ "raster map <%s@%s>, should be <%s>."
+#~ msgstr ""
+#~ "Растровый слой <%s@%s> в проекции отличной от проекции текущего региона. "
+#~ "Найден растровый слой <%s@%s>, должно быть <%s> ."
+
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgstr "Растровый слой <%s@%s> в другой зоне (%d) чем текущий регион (%d)"
+
+#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
+#~ msgstr "Растровый слой <%s@%s>: слишком много байт на ячейку (%d) "
+
+#~ msgid ""
+#~ "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+#~ msgstr ""
+#~ "слой <%s@%s> является связью GDAL но GRASS скомпилирован без поддержки "
+#~ "GDAL"
+
+#~ msgid "G__open_raster_new(): no temp files available"
+#~ msgstr "G__open_raster_new(): недоступны временные файлы"
+
+#~ msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
+#~ msgstr ""
+#~ "G_set_fp_type(): может быть вызвано только с FCELL_TYPE или DCELL_TYPE"
+
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "Невозможно найти '%s' в '%s'"
+
+#~ msgid ""
+#~ "G_set_quant_rules() can be called only for raster maps opened for reading"
+#~ msgstr ""
+#~ "G_set_quant_rules() может быть вызван только для растровых слоев для "
+#~ "чтения"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Нет справки для команды [%s]\n"
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "невозможно записать историю для [%s]"
+
+#~ msgid "Not enough room in history file to record command line."
+#~ msgstr "Недостаточно места в файле истории для записи командной строки"
+
+#~ msgid "Not enough room in history file for command line (truncated)."
+#~ msgstr ""
+#~ "Недостаточно места в файле истории для записи командной строки (truncated)"
+
+#~ msgid ""
+#~ "Unable to build spatial index from topology, vector map is not opened at "
+#~ "topo level 2"
+#~ msgstr ""
+#~ "Невозможно построить пространственный индекс из топологии, векторный слой "
+#~ "не открыт на втором топо уровне"
+
+#~ msgid "%d errors in category string."
+#~ msgstr "%d ошибок в строке категории."
+
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr ""
+#~ "Невозможно добавить связь с базой данных, слой не открыт в режиме записи"
+
+#~ msgid "Unable to add database link"
+#~ msgstr "Невозможно связь с базой данных"
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "Ошибка в правиле для ряда %d в %s"
+
+#~ msgid ""
+#~ "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
+#~ "excess)"
+#~ msgstr ""
+#~ "Файлы coor векторного слоя <%s@%s> больше, чем они должны быть (на %ld "
+#~ "байтов)"
+
+#~ msgid ""
+#~ "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
+#~ "missing)."
+#~ msgstr ""
+#~ "Файлы coor векторного слоя <%s@%s> меньше, чем они должны быть (на %ld "
+#~ "байтов)"
+
+#~ msgid "Intersections: %5d"
+#~ msgstr "Пересечения: %5d"
+
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr "Programmer requested unknown open level %d"
+
+#~ msgid "OGR format cannot be updated"
+#~ msgstr "OGR формат не может быть обновлен"
+
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "Невозможно открыть слой <%s>"
+
+#~ msgid ""
+#~ "Random read is not supported by OGR for this layer, cannot build support"
+#~ msgstr "Для этого слоя OGR не поддерживается cлучайное чтение"
+
+#~ msgid "OGR feature without ID ignored"
+#~ msgstr "OGR объект без ID проигнорирован"
+
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "Невозможно создать растровый слой <%s>"
+
+#~ msgid "test, gpde"
+#~ msgstr "тест, gpde"
+
+#~ msgid ""
+#~ "taking too long to find points for interpolation--please change the "
+#~ "region to area where your points are. Continuing calculations..."
+#~ msgstr ""
+#~ "попытка найти точки для интерполяции заняла слишком много времени -- "
+#~ "попробуйте изменить регион на область где точки есть. Вычисление "
+#~ "продолжается..."
+
+#~ msgid "Reading lines from vector map ... "
+#~ msgstr "Чтение линий из векторного слоя ..."
+
+#~ msgid "Reading nodes from vector map ... "
+#~ msgstr "Чтение узлов из векторного слоя ..."
+
+#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
+#~ msgstr "есть точки вне указанного 2D/3D региона -- игнорируются %d точек"
+
+#~ msgid "ignoring %d points -- too dense"
+#~ msgstr "точки %d игнорируются -- точки стоят слишком часто"
+
+#~ msgid "some points outside of region -- will ignore..."
+#~ msgstr "некоторые точки вне региона -- будут проигнорированы"
+
+#~ msgid "Unable to delete layer/category %d/%d line %d"
+#~ msgstr "Невозможно удалить слой/категорию %d/%d линии %d"
+
+#~ msgid "Snapped vertices"
+#~ msgstr "Прилепленные вершины"
+
+#~ msgid "New vertices"
+#~ msgstr "Новые узлы"
+
+#~ msgid "Breaks"
+#~ msgstr "Разрывы"
