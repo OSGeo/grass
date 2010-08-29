@@ -929,7 +929,7 @@ class TextDialog(wx.Dialog):
         #
         # x-axis label
         #
-        label = wx.StaticText(parent=self, id=wx.ID_ANY, label=("X-axis label:"))
+        label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("X-axis label:"))
         gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
         self.xlabelentry = wx.TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(250,-1))
         # self.xlabelentry.SetFont(self.font)
