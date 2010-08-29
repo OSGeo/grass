@@ -2040,7 +2040,7 @@ class DefaultFontDialog(wx.Dialog):
                                           key='font', subkey='encoding')
 
             label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                  label=("Character encoding:"))
+                                  label=_("Character encoding:"))
             gridSizer.Add(item=label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(2, 0))
@@ -2058,7 +2058,7 @@ class DefaultFontDialog(wx.Dialog):
             self.fontsize = self.settings.Get(group='display',
                                           key='outputfont', subkey='size')
             label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=("Font size:"))
+                              label=_("Font size:"))
             gridSizer.Add(item=label,
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
