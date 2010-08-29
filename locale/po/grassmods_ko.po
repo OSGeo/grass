@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-02 22:57+0200\n"
+"POT-Creation-Date: 2010-08-29 12:41+0200\n"
 "PO-Revision-Date: 2005-08-09 22:53-0500\n"
 "Last-Translator: Huidae Cho\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../raster3d/r3.out.ascii/main.c:58 ../raster3d/r3.out.ascii/main.c:302
-#: ../raster3d/r3.info/r3.info.main.c:426 ../raster3d/r3.to.rast/main.c:374
+#: ../raster3d/r3.info/r3.info.main.c:422 ../raster3d/r3.to.rast/main.c:372
 #: ../raster3d/r3.in.v5d/main.c:222 ../raster3d/r3.out.v5d/main.c:331
 #: ../raster/r.to.rast3elev/main.c:486 ../raster/r.to.rast3/main.c:328
 msgid "Error closing 3d raster map"
@@ -59,7 +59,7 @@ msgstr ""
 #: ../raster3d/r3.stats/main.c:568 ../raster3d/base/r3.null.main.c:202
 #: ../raster3d/base/r3.mask.main.c:133 ../raster3d/r3.out.v5d/main.c:289
 #: ../raster/r.to.rast3elev/main.c:348 ../raster/r.univar/r3.univar_main.c:77
-#: ../visualization/nviz2/cmd/main.c:49
+#: ../visualization/nviz2/cmd/main.c:51
 #, fuzzy
 msgid "raster3d"
 msgstr "출력할 래스터맵"
@@ -79,7 +79,7 @@ msgstr ""
 #: ../raster3d/r3.out.v5d/main.c:290 ../raster/r.out.mat/main.c:63
 #: ../raster/r.out.ascii/main.c:60 ../raster/r.out.png/main.c:113
 #: ../raster/r.out.vtk/main.c:60 ../raster/r.out.ppm/main.c:54
-#: ../raster/r.out.tiff/main.c:93 ../raster/r.out.gdal/main.c:130
+#: ../raster/r.out.tiff/main.c:92 ../raster/r.out.gdal/main.c:130
 #: ../raster/r.out.vrml/main.c:48 ../vector/v.out.svg/main.c:74
 #: ../vector/v.out.vtk/main.c:48 ../vector/v.out.ascii/main.c:44
 #: ../vector/v.out.ogr/main.c:81 ../vector/v.out.pov/main.c:47
@@ -168,7 +168,6 @@ msgstr ""
 #: ../display/d.what.rast/main.c:115 ../display/d.what.rast/opencell.c:13
 #: ../vector/v.vol.rst/main.c:645 ../visualization/nviz2/cmd/surface.c:54
 #: ../visualization/nviz2/cmd/surface.c:104 ../doc/raster/r.example/main.c:105
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:392
 #: ../imagery/i.evapo.time_integration/main.c:163
 #: ../imagery/i.evapo.time_integration/main.c:189
 #: ../imagery/i.evapo.time_integration/main.c:221
@@ -183,39 +182,39 @@ msgstr ""
 msgid "Error opening grid3 file [%s]"
 msgstr ""
 
-#: ../raster3d/r3.info/r3.info.main.c:159
-#: ../raster3d/r3.info/r3.info.main.c:167
-#: ../raster3d/r3.info/r3.info.main.c:173
-#: ../raster3d/r3.info/r3.info.main.c:178
-#: ../raster3d/r3.info/r3.info.main.c:185
-#: ../raster3d/r3.info/r3.info.main.c:196
-#: ../raster3d/r3.info/r3.info.main.c:202
-#: ../raster3d/r3.info/r3.info.main.c:218
-#: ../raster3d/r3.info/r3.info.main.c:225
-#: ../raster3d/r3.info/r3.info.main.c:232
-#: ../raster3d/r3.info/r3.info.main.c:237
-#: ../raster3d/r3.info/r3.info.main.c:242
-#: ../raster3d/r3.info/r3.info.main.c:249
-#: ../raster3d/r3.info/r3.info.main.c:256
-#: ../raster3d/r3.info/r3.info.main.c:266
-#: ../raster3d/r3.info/r3.info.main.c:276
-#: ../raster3d/r3.info/r3.info.main.c:286
-#: ../raster3d/r3.info/r3.info.main.c:299
-#: ../raster3d/r3.info/r3.info.main.c:309
-#: ../raster3d/r3.info/r3.info.main.c:314
-#: ../raster3d/r3.info/r3.info.main.c:322
-#: ../raster3d/r3.info/r3.info.main.c:335 ../raster/r.info/main.c:307
-#: ../raster/r.info/main.c:437
+#: ../raster3d/r3.info/r3.info.main.c:158
+#: ../raster3d/r3.info/r3.info.main.c:165
+#: ../raster3d/r3.info/r3.info.main.c:171
+#: ../raster3d/r3.info/r3.info.main.c:176
+#: ../raster3d/r3.info/r3.info.main.c:182
+#: ../raster3d/r3.info/r3.info.main.c:193
+#: ../raster3d/r3.info/r3.info.main.c:199
+#: ../raster3d/r3.info/r3.info.main.c:214
+#: ../raster3d/r3.info/r3.info.main.c:221
+#: ../raster3d/r3.info/r3.info.main.c:228
+#: ../raster3d/r3.info/r3.info.main.c:233
+#: ../raster3d/r3.info/r3.info.main.c:238
+#: ../raster3d/r3.info/r3.info.main.c:245
+#: ../raster3d/r3.info/r3.info.main.c:252
+#: ../raster3d/r3.info/r3.info.main.c:262
+#: ../raster3d/r3.info/r3.info.main.c:272
+#: ../raster3d/r3.info/r3.info.main.c:282
+#: ../raster3d/r3.info/r3.info.main.c:295
+#: ../raster3d/r3.info/r3.info.main.c:305
+#: ../raster3d/r3.info/r3.info.main.c:310
+#: ../raster3d/r3.info/r3.info.main.c:318
+#: ../raster3d/r3.info/r3.info.main.c:331 ../raster/r.info/main.c:307
+#: ../raster/r.info/main.c:433
 msgid "Cannot allocate memory for string"
 msgstr ""
 
-#: ../raster3d/r3.info/r3.info.main.c:288
-#: ../raster3d/r3.info/r3.info.main.c:350 ../raster3d/r3.mkdspf/main.c:172
+#: ../raster3d/r3.info/r3.info.main.c:284
+#: ../raster3d/r3.info/r3.info.main.c:346 ../raster3d/r3.mkdspf/main.c:172
 #, c-format
 msgid "Error reading range for [%s]"
 msgstr ""
 
-#: ../raster3d/r3.info/r3.info.main.c:405
+#: ../raster3d/r3.info/r3.info.main.c:401
 msgid "Error while reading history file"
 msgstr ""
 
@@ -246,7 +245,7 @@ msgstr ""
 #: ../raster/r.in.poly/main.c:30 ../raster/r.in.gdal/main.c:81
 #: ../raster/r.in.bin/main.c:236 ../raster/r.in.xyz/main.c:161
 #: ../raster/r.external/main.c:524 ../raster/r.in.ascii/main.c:70
-#: ../vector/v.in.ogr/main.c:104 ../vector/v.in.db/main.c:53
+#: ../vector/v.in.ogr/main.c:106 ../vector/v.in.db/main.c:53
 #: ../vector/v.in.sites/main.c:58 ../vector/v.in.dxf/main.c:65
 #: ../vector/v.in.dwg/main.c:83 ../vector/v.convert/main.c:37
 #: ../vector/v.in.ascii/main.c:49
@@ -272,7 +271,7 @@ msgstr "출력할 래스터맵"
 msgid "Error closing new 3d raster map"
 msgstr ""
 
-#: ../raster3d/r3.in.ascii/main.c:286
+#: ../raster3d/r3.in.ascii/main.c:285
 msgid "Error closing ascii file"
 msgstr ""
 
@@ -1056,7 +1055,7 @@ msgstr "출력할 래스터맵"
 #: ../raster/r.mfilter/main.c:56 ../raster/r.resample/main.c:54
 #: ../raster/r.patch/main.c:52 ../raster/simwe/r.sim.sediment/main.c:112
 #: ../raster/simwe/r.sim.water/main.c:119 ../raster/r.to.rast3elev/main.c:347
-#: ../raster/r.out.ppm/main.c:53 ../raster/r.resamp.filter/main.c:387
+#: ../raster/r.out.ppm/main.c:53 ../raster/r.resamp.filter/main.c:384
 #: ../raster/r.out.ppm3/main.c:56 ../raster/r.transect/main.c:103
 #: ../raster/r.random/main.c:51 ../raster/r.los/main.c:93
 #: ../raster/r.gwflow/main.c:205 ../raster/r.statistics2/main.c:101
@@ -1071,7 +1070,7 @@ msgstr "출력할 래스터맵"
 #: ../raster/r.fill.dir/main.c:85 ../raster/r.resamp.interp/main.c:72
 #: ../raster/r.univar/r.univar_main.c:73 ../raster/r.cross/main.c:73
 #: ../raster/r.resamp.rst/main.c:148 ../raster/r.category/main.c:52
-#: ../raster/r.clump/main.c:46 ../raster/r.out.tiff/main.c:92
+#: ../raster/r.clump/main.c:46 ../raster/r.out.tiff/main.c:91
 #: ../raster/r.in.xyz/main.c:160 ../raster/r.texture/main.c:75
 #: ../raster/r.surf.random/main.c:36 ../raster/r.out.arc/main.c:60
 #: ../raster/r.surf.contour/main.c:59 ../raster/r.colors/main.c:158
@@ -1104,17 +1103,16 @@ msgstr "출력할 래스터맵"
 #: ../raster/r.flow/main.c:421 ../raster/r.what.color/main.c:88
 #: ../raster/r.in.ascii/main.c:69 ../raster/r.what/main.c:91
 #: ../raster/r.random.cells/main.c:45 ../raster/r.ros/main.c:211
-#: ../raster/r.topidx/main.c:39 ../raster/r.resamp.stats/main.c:262
+#: ../raster/r.topidx/main.c:39 ../raster/r.resamp.stats/main.c:256
 #: ../raster/r.region/main.c:51 ../raster/r.in.mat/main.c:91
 #: ../raster/r.param.scale/interface.c:54 ../raster/r.in.arc/main.c:60
 #: ../raster/r.support.stats/main.c:38 ../raster/r.neighbors/main.c:116
 #: ../raster/r.bitpattern/main.c:63 ../raster/r.quantile/main.c:255
-#: ../display/d.colortable/main.c:61 ../display/d.rast/main.c:54
+#: ../display/d.colortable/main.c:61 ../display/d.rast/main.c:53
 #: ../vector/v.sample/main.c:76 ../vector/v.to.rast/main.c:41
 #: ../vector/v.neighbors/main.c:50 ../vector/v.what.rast/main.c:81
 #: ../visualization/nviz/src/nvizMain.c:71
-#: ../visualization/nviz2/cmd/main.c:47 ../doc/raster/r.example/main.c:83
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:153
+#: ../visualization/nviz2/cmd/main.c:49 ../doc/raster/r.example/main.c:83
 #: ../locale/scriptstrings/i.spectral_to_translate.c:3
 #: ../locale/scriptstrings/r.regression.line_to_translate.c:2
 #: ../locale/scriptstrings/r.buffer_to_translate.c:2
@@ -1166,7 +1164,7 @@ msgid "Creation options"
 msgstr ""
 
 #: ../raster/r.external.out/main.c:247 ../raster/r.in.gdal/main.c:142
-#: ../raster/r.external/main.c:572 ../vector/v.in.ogr/main.c:202
+#: ../raster/r.external/main.c:572 ../vector/v.in.ogr/main.c:203
 msgid "List supported formats and exit"
 msgstr ""
 
@@ -1179,22 +1177,22 @@ msgstr ""
 #: ../raster/r.external/main.c:573 ../general/g.proj/main.c:75
 #: ../general/g.proj/main.c:81 ../general/g.proj/main.c:87
 #: ../general/g.proj/main.c:93 ../general/g.proj/main.c:104
-#: ../general/g.proj/main.c:109 ../general/g.region/main.c:81
-#: ../general/g.region/main.c:87 ../general/g.region/main.c:92
-#: ../general/g.region/main.c:98 ../general/g.region/main.c:104
-#: ../general/g.region/main.c:110 ../general/g.region/main.c:116
-#: ../general/g.region/main.c:124 ../general/g.region/main.c:129
-#: ../general/g.region/main.c:135 ../general/g.region/main.c:140
-#: ../vector/v.to.db/parse.c:94 ../vector/v.to.db/parse.c:99
-#: ../vector/v.to.db/parse.c:105 ../vector/v.what/main.c:82
-#: ../vector/v.what/main.c:87 ../vector/v.what/main.c:92
-#: ../vector/v.external/args.c:41 ../vector/v.external/args.c:46
-#: ../vector/v.info/parse.c:20 ../vector/v.info/parse.c:26
-#: ../vector/v.info/parse.c:31 ../vector/v.info/parse.c:36
-#: ../vector/v.info/parse.c:41 ../vector/v.db.connect/main.c:80
-#: ../vector/v.db.connect/main.c:85 ../vector/v.db.connect/main.c:93
-#: ../vector/v.db.connect/main.c:100 ../db/db.connect/main.c:55
-#: ../db/db.connect/main.c:61
+#: ../general/g.proj/main.c:109 ../general/g.mapset/main.c:87
+#: ../general/g.region/main.c:81 ../general/g.region/main.c:87
+#: ../general/g.region/main.c:92 ../general/g.region/main.c:98
+#: ../general/g.region/main.c:104 ../general/g.region/main.c:110
+#: ../general/g.region/main.c:116 ../general/g.region/main.c:124
+#: ../general/g.region/main.c:129 ../general/g.region/main.c:135
+#: ../general/g.region/main.c:140 ../vector/v.to.db/parse.c:94
+#: ../vector/v.to.db/parse.c:99 ../vector/v.to.db/parse.c:105
+#: ../vector/v.what/main.c:82 ../vector/v.what/main.c:87
+#: ../vector/v.what/main.c:92 ../vector/v.external/args.c:41
+#: ../vector/v.external/args.c:46 ../vector/v.info/parse.c:20
+#: ../vector/v.info/parse.c:26 ../vector/v.info/parse.c:31
+#: ../vector/v.info/parse.c:36 ../vector/v.info/parse.c:41
+#: ../vector/v.db.connect/main.c:80 ../vector/v.db.connect/main.c:85
+#: ../vector/v.db.connect/main.c:92 ../vector/v.db.connect/main.c:99
+#: ../db/db.connect/main.c:54
 #: ../locale/scriptstrings/g.extension_to_translate.c:13
 #: ../locale/scriptstrings/g.extension_to_translate.c:15
 #: ../locale/scriptstrings/g.extension_to_translate.c:17
@@ -1242,7 +1240,6 @@ msgstr ""
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:5
 #: ../locale/scriptstrings/r.grow_to_translate.c:4
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:4
-#: ../locale/scriptstrings/r.colors.stddev_to_translate.c:4
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:4
 #: ../imagery/i.zc/main.c:64
 msgid "Name of input raster map"
@@ -1531,12 +1528,27 @@ msgstr ""
 msgid "Minimum number of rows to hold in memory is 1"
 msgstr ""
 
-#: ../raster/r.in.poly/poly2rast.c:50 ../raster/r.in.xyz/main.c:531
+#: ../raster/r.in.poly/get_item.c:76
+#, fuzzy, c-format
+msgid "Illegal coordinate <%s, %s>, skipping."
+msgstr "출력할 래스터맵"
+
+#: ../raster/r.in.poly/get_item.c:81
+#, fuzzy, c-format
+msgid "Illegal north coordinate <%s>, skipping."
+msgstr "출력할 래스터맵"
+
+#: ../raster/r.in.poly/get_item.c:86
+#, fuzzy, c-format
+msgid "Illegal east coordinate <%s>, skipping."
+msgstr "출력할 래스터맵"
+
+#: ../raster/r.in.poly/poly2rast.c:55 ../raster/r.in.xyz/main.c:531
 #, c-format
 msgid "Pass #%d (of %d) ..."
 msgstr ""
 
-#: ../raster/r.in.poly/poly2rast.c:72 ../raster/r.carve/raster.c:33
+#: ../raster/r.in.poly/poly2rast.c:77 ../raster/r.carve/raster.c:33
 #: ../vector/v.to.rast/vect2rast.c:175
 #, fuzzy
 msgid "Writing raster map..."
@@ -1555,12 +1567,12 @@ msgstr ""
 #: ../vector/v.net.alloc/main.c:60 ../vector/v.net/main.c:45
 #: ../vector/v.out.svg/main.c:73 ../vector/v.net.visibility/main.c:45
 #: ../vector/v.to.db/main.c:36 ../vector/v.generalize/main.c:78
-#: ../vector/v.build/main.c:35 ../vector/v.in.ogr/main.c:103
+#: ../vector/v.build/main.c:35 ../vector/v.in.ogr/main.c:105
 #: ../vector/v.to.rast3/main.c:48 ../vector/v.extract/main.c:91
 #: ../vector/v.in.db/main.c:52 ../vector/v.net.iso/main.c:72
 #: ../vector/v.net.salesman/main.c:96 ../vector/v.perturb/main.c:60
 #: ../vector/v.in.region/main.c:38 ../vector/v.net.distance/main.c:60
-#: ../vector/v.distance/main.c:115 ../vector/v.in.sites/main.c:57
+#: ../vector/v.distance/main.c:118 ../vector/v.in.sites/main.c:57
 #: ../vector/v.random/main.c:84 ../vector/v.out.vtk/main.c:47
 #: ../vector/v.out.ascii/main.c:43 ../vector/v.net.allpairs/main.c:54
 #: ../vector/v.outlier/main.c:69 ../vector/v.label.sa/main.c:38
@@ -1590,7 +1602,7 @@ msgstr ""
 #: ../vector/v.clean/main.c:45 ../vector/v.clean/test/topocheck.c:42
 #: ../vector/v.surf.idw/main.c:85 ../vector/v.parallel/main.c:46
 #: ../vector/v.buffer/main.c:146 ../vector/v.edit/main.c:53
-#: ../vector/v.info/main.c:37 ../vector/v.info/print.c:226
+#: ../vector/v.info/main.c:38 ../vector/v.info/print.c:226
 #: ../vector/v.extrude/main.c:69 ../vector/v.category/main.c:71
 #: ../vector/v.surf.rst/main.c:142 ../vector/v.lidar.correction/main.c:69
 #: ../vector/v.net.centrality/main.c:95 ../vector/v.db.connect/main.c:49
@@ -1600,7 +1612,7 @@ msgstr ""
 #: ../vector/v.to.3d/main.c:37 ../vector/v.out.dxf/main.c:56
 #: ../vector/v.net.spanningtree/main.c:46
 #: ../visualization/nviz/src/nvizMain.c:72
-#: ../visualization/nviz2/cmd/main.c:48 ../doc/vector/v.example/main.c:50
+#: ../visualization/nviz2/cmd/main.c:50 ../doc/vector/v.example/main.c:50
 #: ../locale/scriptstrings/v.convert.all_to_translate.c:2
 #: ../locale/scriptstrings/v.in.e00_to_translate.c:2
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:2
@@ -1669,13 +1681,13 @@ msgstr "출력할 래스터맵"
 #: ../vector/v.to.db/update.c:46 ../vector/v.to.db/query.c:89
 #: ../vector/v.to.rast3/main.c:81 ../vector/v.extract/main.c:274
 #: ../vector/v.in.db/main.c:122 ../vector/v.net.distance/main.c:198
-#: ../vector/v.distance/main.c:361 ../vector/v.distance/main.c:398
+#: ../vector/v.distance/main.c:419 ../vector/v.distance/main.c:455
 #: ../vector/v.in.sites/main.c:165 ../vector/v.random/main.c:172
 #: ../vector/v.net.allpairs/main.c:139 ../vector/v.label.sa/labels.c:77
 #: ../vector/v.in.dxf/write_vect.c:211 ../vector/v.mkgrid/main.c:225
 #: ../vector/v.lrs/v.lrs.create/main.c:288
 #: ../vector/v.lrs/v.lrs.create/main.c:296 ../vector/v.reclass/main.c:130
-#: ../vector/v.out.ogr/main.c:369 ../vector/v.surf.bspline/main.c:337
+#: ../vector/v.out.ogr/main.c:369 ../vector/v.surf.bspline/main.c:338
 #: ../vector/v.surf.bspline/crosscorr.c:119 ../vector/v.in.dwg/main.c:212
 #: ../vector/v.vol.rst/main.c:629 ../vector/v.vol.rst/user1.c:100
 #: ../vector/v.net.timetable/main.c:93 ../vector/v.patch/main.c:133
@@ -1691,7 +1703,7 @@ msgstr "출력할 래스터맵"
 #: ../vector/v.buffer/main.c:293 ../vector/v.edit/select.c:520
 #: ../vector/v.info/print.c:145 ../vector/v.extrude/main.c:168
 #: ../vector/v.surf.rst/main.c:573 ../vector/v.net.centrality/main.c:222
-#: ../vector/v.db.connect/main.c:216 ../vector/v.db.connect/main.c:324
+#: ../vector/v.db.connect/main.c:218 ../vector/v.db.connect/main.c:326
 #: ../vector/v.net.components/main.c:139 ../vector/v.drape/main.c:250
 #: ../vector/v.what.rast/main.c:131 ../vector/v.to.3d/trans3.c:55
 #: ../vector/v.to.3d/trans2.c:54 ../doc/vector/v.example/main.c:130
@@ -1701,8 +1713,8 @@ msgstr "출력할 래스터맵"
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.contour/main.c:172 ../vector/v.in.ogr/main.c:801
-#: ../vector/v.net.distance/main.c:210 ../vector/v.distance/main.c:819
+#: ../raster/r.contour/main.c:172 ../vector/v.in.ogr/main.c:802
+#: ../vector/v.net.distance/main.c:210 ../vector/v.distance/main.c:981
 #: ../vector/v.net.allpairs/main.c:151 ../vector/v.in.dwg/main.c:237
 #: ../vector/v.net.timetable/main.c:103 ../vector/v.overlay/main.c:454
 #: ../vector/v.convert/att.c:81 ../vector/v.net.flow/main.c:170
@@ -1713,7 +1725,7 @@ msgstr "출력할 래스터맵"
 msgid "Unable to create table: '%s'"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.contour/main.c:177 ../vector/v.in.ogr/main.c:806
+#: ../raster/r.contour/main.c:177 ../vector/v.in.ogr/main.c:807
 #: ../vector/v.in.sites/main.c:176 ../vector/v.in.dxf/write_vect.c:240
 #: ../vector/v.reclass/main.c:227 ../vector/v.in.dwg/main.c:241
 #: ../vector/v.convert/att.c:86 ../vector/v.to.points/main.c:298
@@ -1723,8 +1735,8 @@ msgid "Unable to create index for table <%s>, key <%s>"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.contour/main.c:182 ../raster/r.to.vect/main.c:210
-#: ../vector/v.sample/main.c:196 ../vector/v.in.ogr/main.c:812
-#: ../vector/v.distance/main.c:824 ../vector/v.in.sites/main.c:181
+#: ../vector/v.sample/main.c:196 ../vector/v.in.ogr/main.c:813
+#: ../vector/v.distance/main.c:986 ../vector/v.in.sites/main.c:181
 #: ../vector/v.random/main.c:201 ../vector/v.in.dxf/write_vect.c:237
 #: ../vector/v.mkgrid/main.c:251 ../vector/v.reclass/main.c:232
 #: ../vector/v.in.dwg/main.c:246 ../vector/v.overlay/main.c:464
@@ -2008,7 +2020,7 @@ msgstr ""
 #: ../raster/r.out.ascii/main.c:167 ../raster/r.out.ppm3/main.c:126
 #: ../raster/r.profile/main.c:145 ../raster/r.category/main.c:177
 #: ../raster/r.out.arc/main.c:136 ../general/g.pnmcomp/main.c:241
-#: ../general/g.pnmcomp/main.c:258 ../general/g.transform/main.c:278
+#: ../general/g.pnmcomp/main.c:258 ../general/g.transform/main.c:281
 #: ../display/d.nviz/main.c:196 ../vector/v.net/main.c:97
 #: ../vector/v.out.vtk/main.c:167 ../vector/v.out.ascii/main.c:96
 #, fuzzy, c-format
@@ -2086,10 +2098,10 @@ msgstr ""
 msgid "Output world file"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.out.png/main.c:175 ../display/d.graph/main.c:108
-#: ../display/d.graph/do_graph.c:105 ../display/d.graph/do_graph.c:355
-#: ../display/d.graph/do_graph.c:370 ../display/d.labels/color.c:68
-#: ../display/d.rast/display.c:27
+#: ../raster/r.out.png/main.c:175 ../raster/r.out.tiff/main.c:163
+#: ../display/d.graph/main.c:108 ../display/d.graph/do_graph.c:105
+#: ../display/d.graph/do_graph.c:355 ../display/d.graph/do_graph.c:370
+#: ../display/d.labels/color.c:68 ../display/d.rast/display.c:27
 #, c-format
 msgid "[%s]: No such color"
 msgstr ""
@@ -2109,11 +2121,11 @@ msgstr "출력할 래스터맵"
 msgid "Writing world file"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.out.png/main.c:428 ../raster/r.out.tiff/main.c:389
+#: ../raster/r.out.png/main.c:428 ../raster/r.out.tiff/main.c:422
 msgid "Got null file name"
 msgstr ""
 
-#: ../raster/r.out.png/main.c:430 ../raster/r.out.tiff/main.c:391
+#: ../raster/r.out.png/main.c:430 ../raster/r.out.tiff/main.c:424
 msgid "Got null region struct"
 msgstr ""
 
@@ -2276,7 +2288,7 @@ msgstr ""
 #: ../vector/v.lrs/v.lrs.create/main.c:258
 #: ../vector/v.lrs/v.lrs.label/main.c:287
 #: ../vector/v.lrs/v.lrs.segment/main.c:139
-#: ../vector/v.surf.bspline/main.c:218 ../vector/v.surf.bspline/main.c:283
+#: ../vector/v.surf.bspline/main.c:218 ../vector/v.surf.bspline/main.c:278
 #: ../vector/v.lidar.edgedetection/main.c:214
 #: ../vector/v.lidar.growing/main.c:127 ../vector/v.convert/old2new.c:26
 #: ../vector/v.convert/att.c:31 ../vector/v.edit/main.c:127
@@ -2399,8 +2411,8 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:92 ../raster/r.in.gdal/main.c:96
 #: ../raster/r.colors/main.c:165 ../raster/r.out.gdal/main.c:150
 #: ../raster/r.out.gdal/main.c:186 ../raster/r.external/main.c:531
-#: ../raster/r.external/main.c:541 ../vector/v.in.ogr/main.c:116
-#: ../vector/v.in.ogr/main.c:120 ../vector/v.in.dxf/main.c:107
+#: ../raster/r.external/main.c:541 ../vector/v.in.ogr/main.c:117
+#: ../vector/v.in.ogr/main.c:121 ../vector/v.in.dxf/main.c:107
 msgid "Required"
 msgstr ""
 
@@ -2420,7 +2432,7 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:129 ../vector/v.in.ogr/main.c:183
+#: ../raster/r.in.gdal/main.c:129 ../vector/v.in.ogr/main.c:184
 msgid "Name for new location to create"
 msgstr ""
 
@@ -2429,7 +2441,7 @@ msgid "Override projection (use location's projection)"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:138 ../raster/r.external/main.c:564
-#: ../vector/v.in.ogr/main.c:231
+#: ../vector/v.in.ogr/main.c:232
 msgid "Extend location extents based on new dataset"
 msgstr ""
 
@@ -2468,7 +2480,7 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:232 ../vector/v.net/args.c:109
 #: ../vector/v.net/args.c:115 ../vector/v.net/args.c:121
 #: ../vector/v.net/args.c:125 ../vector/v.net/args.c:135
-#: ../vector/v.in.ogr/main.c:280 ../vector/v.in.ogr/main.c:329
+#: ../vector/v.in.ogr/main.c:281 ../vector/v.in.ogr/main.c:330
 #: ../vector/v.proj/main.c:164 ../vector/v.select/main.c:92
 #: ../vector/v.external/main.c:66 ../vector/v.external/main.c:72
 #: ../vector/v.external/main.c:75
@@ -2511,13 +2523,13 @@ msgid ""
 "with r.region before going any further."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:332 ../vector/v.in.ogr/main.c:484
+#: ../raster/r.in.gdal/main.c:332 ../vector/v.in.ogr/main.c:485
 msgid ""
 "Unable to convert input map projection to GRASS format; cannot create new "
 "location."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:338 ../vector/v.in.ogr/main.c:490
+#: ../raster/r.in.gdal/main.c:338 ../vector/v.in.ogr/main.c:491
 #, c-format
 msgid "Location <%s> created"
 msgstr ""
@@ -2529,13 +2541,13 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:367 ../raster/r.external/main.c:105
-#: ../vector/v.in.ogr/main.c:520
+#: ../vector/v.in.ogr/main.c:521
 #, fuzzy
 msgid "Over-riding projection check"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.in.gdal/main.c:378 ../raster/r.external/main.c:113
-#: ../vector/v.in.ogr/main.c:529
+#: ../vector/v.in.ogr/main.c:530
 msgid ""
 "Projection of dataset does not appear to match current location.\n"
 "\n"
@@ -2550,7 +2562,7 @@ msgid "Dataset PROJ_INFO is:\n"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:421 ../raster/r.external/main.c:156
-#: ../vector/v.in.ogr/main.c:545 ../vector/v.in.ogr/main.c:552
+#: ../vector/v.in.ogr/main.c:546 ../vector/v.in.ogr/main.c:553
 msgid "Import dataset PROJ_INFO is:\n"
 msgstr ""
 
@@ -2568,7 +2580,7 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:451 ../raster/r.external/main.c:186
-#: ../vector/v.in.ogr/main.c:603
+#: ../vector/v.in.ogr/main.c:604
 msgid "Projection of input dataset and current location appear to match"
 msgstr ""
 
@@ -2693,30 +2705,27 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:256 ../raster/r.slope.aspect/main.c:262
 #: ../raster/r.resamp.rst/main.c:223 ../raster/r.resamp.rst/main.c:231
 #: ../raster/r.resamp.rst/main.c:239 ../raster/r.resamp.rst/main.c:247
-#: ../raster/r.resamp.rst/main.c:255 ../vector/v.surf.bspline/main.c:100
-#: ../vector/v.surf.bspline/main.c:124 ../vector/v.surf.bspline/main.c:133
-#: ../vector/v.surf.bspline/main.c:142 ../vector/v.surf.bspline/main.c:150
-#: ../vector/v.surf.bspline/main.c:154 ../vector/v.surf.bspline/main.c:161
-#: ../vector/v.vol.rst/main.c:274 ../vector/v.vol.rst/main.c:282
-#: ../vector/v.vol.rst/main.c:290 ../vector/v.vol.rst/main.c:323
-#: ../vector/v.vol.rst/main.c:332 ../vector/v.vol.rst/main.c:341
-#: ../vector/v.vol.rst/main.c:349 ../vector/v.vol.rst/main.c:358
-#: ../vector/v.vol.rst/main.c:366 ../vector/v.lidar.edgedetection/main.c:96
+#: ../raster/r.resamp.rst/main.c:255 ../general/g.mapset/main.c:56
+#: ../general/g.mapset/main.c:64 ../general/g.mapset/main.c:75
+#: ../vector/v.surf.bspline/main.c:100 ../vector/v.surf.bspline/main.c:124
+#: ../vector/v.surf.bspline/main.c:133 ../vector/v.surf.bspline/main.c:142
+#: ../vector/v.surf.bspline/main.c:150 ../vector/v.surf.bspline/main.c:154
+#: ../vector/v.surf.bspline/main.c:161 ../vector/v.vol.rst/main.c:274
+#: ../vector/v.vol.rst/main.c:282 ../vector/v.vol.rst/main.c:290
+#: ../vector/v.vol.rst/main.c:323 ../vector/v.vol.rst/main.c:332
+#: ../vector/v.vol.rst/main.c:341 ../vector/v.vol.rst/main.c:349
+#: ../vector/v.vol.rst/main.c:358 ../vector/v.vol.rst/main.c:366
+#: ../vector/v.lidar.edgedetection/main.c:96
 #: ../vector/v.lidar.edgedetection/main.c:105
 #: ../vector/v.lidar.edgedetection/main.c:114
 #: ../vector/v.lidar.edgedetection/main.c:123
 #: ../vector/v.lidar.edgedetection/main.c:132
 #: ../vector/v.lidar.edgedetection/main.c:140
 #: ../vector/v.lidar.edgedetection/main.c:149 ../vector/v.db.connect/main.c:60
-#: ../vector/v.db.connect/main.c:64
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:189
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:199
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:276
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:285
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:296
-#: ../imagery/i.cluster/main.c:102 ../imagery/i.cluster/main.c:118
-#: ../imagery/i.cluster/main.c:126 ../imagery/i.cluster/main.c:135
-#: ../imagery/i.cluster/main.c:143 ../imagery/i.cluster/main.c:151
+#: ../vector/v.db.connect/main.c:64 ../imagery/i.cluster/main.c:102
+#: ../imagery/i.cluster/main.c:118 ../imagery/i.cluster/main.c:126
+#: ../imagery/i.cluster/main.c:135 ../imagery/i.cluster/main.c:143
+#: ../imagery/i.cluster/main.c:151
 msgid "Settings"
 msgstr ""
 
@@ -2902,12 +2911,14 @@ msgid "Output vector with interpolation grid"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.resamp.bspline/main.c:92
-msgid "Length of each spline step in the east-west direction. Default: ewres."
+msgid ""
+"Length of each spline step in the east-west direction. Default: 1.5 * ewres."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:100
 msgid ""
-"Length of each spline step in the north-south direction. Default: nsres."
+"Length of each spline step in the north-south direction. Default: 1.5 * "
+"nsres."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:107 ../vector/v.surf.bspline/main.c:139
@@ -2948,7 +2959,7 @@ msgid "spline step in ns direction %g"
 msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:198 ../vector/v.outlier/main.c:273
-#: ../vector/v.surf.bspline/main.c:418
+#: ../vector/v.surf.bspline/main.c:419
 #: ../vector/v.lidar.edgedetection/main.c:295
 #: ../vector/v.lidar.correction/main.c:275
 #, c-format
@@ -2956,7 +2967,7 @@ msgid "adjusted EW splines %d"
 msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:199 ../vector/v.outlier/main.c:274
-#: ../vector/v.surf.bspline/main.c:419
+#: ../vector/v.surf.bspline/main.c:420
 #: ../vector/v.lidar.edgedetection/main.c:296
 #: ../vector/v.lidar.correction/main.c:276
 #, c-format
@@ -2984,7 +2995,7 @@ msgstr ""
 #: ../vector/v.net.allpairs/main.c:114 ../vector/v.outlier/main.c:202
 #: ../vector/v.outlier/main.c:207 ../vector/v.outlier/main.c:213
 #: ../vector/v.in.dxf/main.c:149 ../vector/v.mkgrid/main.c:211
-#: ../vector/v.delaunay/main.c:125 ../vector/v.surf.bspline/main.c:303
+#: ../vector/v.delaunay/main.c:125 ../vector/v.surf.bspline/main.c:298
 #: ../vector/v.hull/main.c:106 ../vector/v.lidar.edgedetection/main.c:242
 #: ../vector/v.net.timetable/main.c:325 ../vector/v.net.bridge/main.c:88
 #: ../vector/v.net.connectivity/main.c:123 ../vector/v.voronoi/main.c:157
@@ -3002,7 +3013,7 @@ msgid "Unable to create vector map <%s>"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.resamp.bspline/main.c:409 ../vector/v.outlier/main.c:329
-#: ../vector/v.surf.bspline/main.c:487
+#: ../vector/v.surf.bspline/main.c:488
 #: ../vector/v.lidar.edgedetection/main.c:351
 #: ../vector/v.lidar.growing/main.c:247
 #: ../vector/v.lidar.correction/main.c:331
@@ -3014,7 +3025,7 @@ msgstr ""
 msgid "No data within this subregion. Consider increasing the spline step."
 msgstr ""
 
-#: ../raster/r.resamp.bspline/main.c:595 ../vector/v.surf.bspline/main.c:716
+#: ../raster/r.resamp.bspline/main.c:595 ../vector/v.surf.bspline/main.c:718
 #, fuzzy
 msgid "Writing output..."
 msgstr "출력할 래스터맵"
@@ -3221,7 +3232,7 @@ msgid "direction read: %lf, neighbour found: %i"
 msgstr ""
 
 #: ../raster/r.support/main.c:56 ../raster/r.info/main.c:71
-#: ../vector/v.support/main.c:40 ../vector/v.info/main.c:38
+#: ../vector/v.support/main.c:40 ../vector/v.info/main.c:39
 #, fuzzy
 msgid "metadata"
 msgstr "출력할 래스터맵"
@@ -3289,7 +3300,7 @@ msgstr ""
 msgid "Raster map <%s> not found in current mapset"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.support/main.c:181 ../raster/r.in.xyz/main.c:475
+#: ../raster/r.support/main.c:180 ../raster/r.in.xyz/main.c:475
 #: ../raster/r.in.mat/main.c:129 ../raster/r.in.arc/main.c:124
 #: ../general/g.cairocomp/main.c:45 ../display/d.where/main.c:160
 #: ../display/d.linegraph/main.c:199 ../display/d.linegraph/main.c:210
@@ -3300,37 +3311,33 @@ msgstr "출력할 래스터맵"
 msgid "Unable to open input file <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.support/main.c:187 ../raster/r.support/main.c:205
-msgid "Not enough room in history file"
-msgstr ""
-
-#: ../raster/r.support/main.c:287 ../raster/r.statistics/main.c:98
+#: ../raster/r.support/main.c:249 ../raster/r.statistics/main.c:98
 #: ../display/d.title/main.c:109
 #, fuzzy, c-format
 msgid "Unable to read category file of raster map <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.support/main.c:291
+#: ../raster/r.support/main.c:253
 #, c-format
 msgid "cats table for [%s] set to %s"
 msgstr ""
 
-#: ../raster/r.support/main.c:315 ../raster/r.support/main.c:343
+#: ../raster/r.support/main.c:277 ../raster/r.support/main.c:305
 #, c-format
 msgid "[%s] is a reclass of another map. Exiting."
 msgstr ""
 
-#: ../raster/r.support/main.c:326
+#: ../raster/r.support/main.c:288
 #, c-format
 msgid "Writing new null file for [%s]... "
 msgstr ""
 
-#: ../raster/r.support/main.c:347
+#: ../raster/r.support/main.c:309
 #, c-format
 msgid "Removing null file for [%s]...\n"
 msgstr ""
 
-#: ../raster/r.support/main.c:354 ../display/d.what.vect/main.c:153
+#: ../raster/r.support/main.c:316 ../display/d.what.vect/main.c:153
 msgid "Done."
 msgstr ""
 
@@ -4282,12 +4289,10 @@ msgid "Name for output aspect raster map"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.slope.aspect/main.c:178
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:188
 msgid "Format for reporting the slope"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:188
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:198
 msgid "Type of output aspect and slope maps"
 msgstr ""
 
@@ -4324,17 +4329,14 @@ msgid "Name for output second order partial derivative dxy raster map"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:243
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:272
 msgid "Multiplicative factor to convert elevation units to meters"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:252
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:281
 msgid "Minimum slope val. (in percent) for which aspect is computed"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:261
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:295
 msgid "Do not align the current region to the elevation layer"
 msgstr ""
 
@@ -4376,58 +4378,56 @@ msgid "Elevation products for mapset <%s> in <%s>"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.slope.aspect/main.c:987
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1042
 #, c-format
 msgid "Min computed aspect %.4f, max computed aspect %.4f"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:1051
+#: ../raster/r.slope.aspect/main.c:1050
 #, fuzzy, c-format
 msgid "Aspect raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1108
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1161
+#: ../raster/r.slope.aspect/main.c:1107
 #, c-format
 msgid "Min computed slope %.4f, max computed slope %.4f"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:1161
+#: ../raster/r.slope.aspect/main.c:1159
 #, fuzzy, c-format
 msgid "Slope raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1233
+#: ../raster/r.slope.aspect/main.c:1230
 #, fuzzy, c-format
 msgid "Profile curve raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1260
+#: ../raster/r.slope.aspect/main.c:1256
 #, fuzzy, c-format
 msgid "Tangential curve raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1285
+#: ../raster/r.slope.aspect/main.c:1280
 #, fuzzy, c-format
 msgid "E-W slope raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1310
+#: ../raster/r.slope.aspect/main.c:1304
 #, fuzzy, c-format
 msgid "N-S slope raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1335
+#: ../raster/r.slope.aspect/main.c:1328
 #, fuzzy, c-format
 msgid "Dxx raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1360
+#: ../raster/r.slope.aspect/main.c:1352
 #, fuzzy, c-format
 msgid "Dyy raster map <%s> complete"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.slope.aspect/main.c:1385
+#: ../raster/r.slope.aspect/main.c:1376
 #, fuzzy, c-format
 msgid "Dxy raster map <%s> complete"
 msgstr "출력할 래스터맵"
@@ -4509,7 +4509,7 @@ msgstr "출력할 래스터맵"
 #: ../vector/v.net.connectivity/main.c:117 ../vector/v.support/main.c:130
 #: ../vector/v.lidar.growing/main.c:139 ../vector/v.lidar.growing/main.c:143
 #: ../vector/v.net.flow/main.c:134 ../vector/v.buffer/main.c:273
-#: ../vector/v.edit/main.c:142 ../vector/v.info/main.c:54
+#: ../vector/v.edit/main.c:142 ../vector/v.info/main.c:57
 #: ../vector/v.surf.rst/main.c:535 ../vector/v.surf.rst/main.c:618
 #: ../vector/v.lidar.correction/main.c:183
 #: ../vector/v.net.centrality/main.c:190 ../vector/v.net.components/main.c:110
@@ -4696,7 +4696,6 @@ msgid "Name of an output layer"
 msgstr ""
 
 #: ../raster/r.resample/main.c:111 ../raster/r.resamp.rst/main.c:476
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:600
 msgid "Percent complete: "
 msgstr ""
 
@@ -5172,66 +5171,66 @@ msgstr ""
 msgid "Filter <%s> not found"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.resamp.filter/main.c:388 ../raster/r.resamp.interp/main.c:73
-#: ../raster/r.resamp.stats/main.c:263 ../vector/v.sample/main.c:77
+#: ../raster/r.resamp.filter/main.c:385 ../raster/r.resamp.interp/main.c:73
+#: ../raster/r.resamp.stats/main.c:257 ../vector/v.sample/main.c:77
 #, fuzzy
 msgid "resample"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.resamp.filter/main.c:390
+#: ../raster/r.resamp.filter/main.c:387
 #, fuzzy
 msgid "Resamples raster map layers using an analytic kernel."
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.resamp.filter/main.c:401
+#: ../raster/r.resamp.filter/main.c:398
 msgid "Filter kernel(s)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:409
+#: ../raster/r.resamp.filter/main.c:406
 msgid "Filter radius"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:416
+#: ../raster/r.resamp.filter/main.c:413
 msgid "Filter radius (horizontal)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:423
+#: ../raster/r.resamp.filter/main.c:420
 msgid "Filter radius (vertical)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:427 ../raster/r.series/main.c:175
-#: ../raster/r.resamp.stats/main.c:289
+#: ../raster/r.resamp.filter/main.c:424 ../raster/r.series/main.c:175
+#: ../raster/r.resamp.stats/main.c:283
 msgid "Propagate NULLs"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:434
+#: ../raster/r.resamp.filter/main.c:431
 msgid "radius= and x_radius=/y_radius= are mutually exclusive"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:438
+#: ../raster/r.resamp.filter/main.c:435
 msgid "Either radius= or x_radius=/y_radius= required"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:440
+#: ../raster/r.resamp.filter/main.c:437
 msgid "Both x_radius= and y_radius= required"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:462
+#: ../raster/r.resamp.filter/main.c:459
 msgid "Differing number of values for filter= and [xy_]radius="
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:465
+#: ../raster/r.resamp.filter/main.c:462
 #, c-format
 msgid "Too many filters (max: %d)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:483
+#: ../raster/r.resamp.filter/main.c:480
 #, fuzzy
 msgid "At least one filter must be finite"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.resamp.filter/main.c:559 ../raster/r.resamp.interp/main.c:313
-#: ../raster/r.resamp.stats/main.c:381
+#: ../raster/r.resamp.filter/main.c:552 ../raster/r.resamp.interp/main.c:304
+#: ../raster/r.resamp.stats/main.c:370
 #, c-format
 msgid "Unable to read color table for %s"
 msgstr ""
@@ -5785,7 +5784,7 @@ msgstr "출력할 래스터맵"
 msgid "%s: %s - illegal distance specification"
 msgstr ""
 
-#: ../raster/r.series/main.c:102 ../raster/r.resamp.stats/main.c:302
+#: ../raster/r.series/main.c:102 ../raster/r.resamp.stats/main.c:296
 #, c-format
 msgid "Unknown method <%s>"
 msgstr ""
@@ -5805,7 +5804,7 @@ msgstr ""
 msgid "Aggregate operation"
 msgstr ""
 
-#: ../raster/r.series/main.c:156 ../raster/r.resamp.stats/main.c:283
+#: ../raster/r.series/main.c:156 ../raster/r.resamp.stats/main.c:277
 #: ../raster/r.neighbors/main.c:179
 #, fuzzy
 msgid "Quantile to calculate for method=quantile"
@@ -7620,6 +7619,7 @@ msgstr ""
 #: ../raster/r.univar/r.univar_main.c:38
 #: ../raster/r.univar/r3.univar_main.c:37 ../vector/v.univar/main.c:89
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:13
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:11
 msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr ""
 
@@ -7959,54 +7959,54 @@ msgstr "출력할 래스터맵"
 msgid "Pass %d..."
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:95
+#: ../raster/r.out.tiff/main.c:94
 msgid "Exports a GRASS raster map to a 8/24bit TIFF image file."
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:104
+#: ../raster/r.out.tiff/main.c:103
 #, fuzzy
 msgid "Name for new TIFF file"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.out.tiff/main.c:111
+#: ../raster/r.out.tiff/main.c:110
 msgid "TIFF file compression"
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:116
+#: ../raster/r.out.tiff/main.c:115
 msgid "TIFF Palette output (8bit instead of 24bit)."
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:125
+#: ../raster/r.out.tiff/main.c:124
 msgid "Output TIFF world file"
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:129
+#: ../raster/r.out.tiff/main.c:128
 msgid "Output Tiled TIFF"
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:153
+#: ../raster/r.out.tiff/main.c:176
 #, c-format
 msgid ""
 "Raster map <%s>> is a floating point map. Fractional values will be rounded "
 "to integer"
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:159
+#: ../raster/r.out.tiff/main.c:182
 msgid ""
 "Color map for palette must have less than 256 colors for the available range "
 "of data"
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:173
+#: ../raster/r.out.tiff/main.c:196
 #, fuzzy, c-format
 msgid "Unable to open TIFF file <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.out.tiff/main.c:386
+#: ../raster/r.out.tiff/main.c:419
 msgid "Writing TIFF World file"
 msgstr ""
 
-#: ../raster/r.out.tiff/main.c:394
+#: ../raster/r.out.tiff/main.c:427
 #, fuzzy
 msgid "Unable to open TIFF world file for writing"
 msgstr "출력할 래스터맵"
@@ -8114,7 +8114,7 @@ msgid "Reading data ..."
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.in.xyz/main.c:602 ../raster/r.in.xyz/main.c:610
-#: ../raster/r.in.xyz/main.c:1102 ../raster/r.in.xyz/main.c:1110
+#: ../raster/r.in.xyz/main.c:1101 ../raster/r.in.xyz/main.c:1109
 #, c-format
 msgid ""
 "Not enough data columns. Incorrect delimiter or column number? Found the "
@@ -8122,21 +8122,21 @@ msgid ""
 "[%s]"
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:606 ../raster/r.in.xyz/main.c:1106
+#: ../raster/r.in.xyz/main.c:606 ../raster/r.in.xyz/main.c:1105
 msgid "Line ignored as requested"
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:625 ../raster/r.in.xyz/main.c:1140
+#: ../raster/r.in.xyz/main.c:625 ../raster/r.in.xyz/main.c:1139
 #, c-format
 msgid "Bad y-coordinate line %lu column %d. <%s>"
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:632 ../raster/r.in.xyz/main.c:1125
+#: ../raster/r.in.xyz/main.c:632 ../raster/r.in.xyz/main.c:1124
 #, c-format
 msgid "Bad x-coordinate line %lu column %d. <%s>"
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:639 ../raster/r.in.xyz/main.c:1155
+#: ../raster/r.in.xyz/main.c:639 ../raster/r.in.xyz/main.c:1154
 #, c-format
 msgid "Bad z-coordinate line %lu column %d. <%s>"
 msgstr ""
@@ -8145,16 +8145,16 @@ msgstr ""
 msgid "Writing to map ..."
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:1060
+#: ../raster/r.in.xyz/main.c:1059
 #, c-format
 msgid "%lu points found in region."
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:1087
+#: ../raster/r.in.xyz/main.c:1086
 msgid "Scanning data ..."
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:1175
+#: ../raster/r.in.xyz/main.c:1174
 #, c-format
 msgid "Range:     min         max\n"
 msgstr ""
@@ -8661,66 +8661,66 @@ msgstr ""
 msgid "unable to open <%s> mask ... continuing without!"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:95
+#: ../raster/r.li/r.li.daemon/daemon.c:96
 msgid "Cannot create random access file"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:102
+#: ../raster/r.li/r.li.daemon/daemon.c:103
 #, fuzzy, c-format
 msgid "Cannot create %s/.grass7/ directory"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.li/r.li.daemon/daemon.c:109
+#: ../raster/r.li/r.li.daemon/daemon.c:110
 #, c-format
 msgid "Cannot create %s/.grass7/r.li/ directory"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:116
+#: ../raster/r.li/r.li.daemon/daemon.c:117
 #, c-format
 msgid "Cannot create %s/.grass7/r.li/output/ directory"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:193
+#: ../raster/r.li/r.li.daemon/daemon.c:194
 #, fuzzy, c-format
 msgid "Cannot find configuration file <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.li/r.li.daemon/daemon.c:200
-#: ../raster/r.li/r.li.daemon/daemon.c:204
+#: ../raster/r.li/r.li.daemon/daemon.c:201
+#: ../raster/r.li/r.li.daemon/daemon.c:205
 msgid "Cannot read setup file"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:208
+#: ../raster/r.li/r.li.daemon/daemon.c:209
 #, fuzzy
 msgid "Unable to parse configuration file"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.li/r.li.daemon/daemon.c:359
+#: ../raster/r.li/r.li.daemon/daemon.c:360
 msgid "Irregular maskedoverlay areas definition"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:362
+#: ../raster/r.li/r.li.daemon/daemon.c:363
 #, c-format
 msgid "The configuration file can be used only with \t\t\t%s rasterfile"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:369
+#: ../raster/r.li/r.li.daemon/daemon.c:370
 msgid "Illegal configuration file (sample area)"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:403
+#: ../raster/r.li/r.li.daemon/daemon.c:404
 msgid "Too many units to place"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:472
+#: ../raster/r.li/r.li.daemon/daemon.c:473
 msgid "Too many strats for raster map"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:506
+#: ../raster/r.li/r.li.daemon/daemon.c:507
 msgid "Illegal areas disposition"
 msgstr ""
 
-#: ../raster/r.li/r.li.daemon/daemon.c:575
+#: ../raster/r.li/r.li.daemon/daemon.c:576
 msgid "Cannot make lseek"
 msgstr ""
 
@@ -9041,8 +9041,8 @@ msgstr ""
 #: ../raster/r.out.gdal/export_band.c:201
 #, c-format
 msgid ""
-"The given nodata value is present in rasterband <%s> and would lead to data "
-"loss. Please specify a different nodata value with the %s parameter."
+"The user given nodata value %g is present in rasterband <%s> and would lead "
+"to data loss. Please specify a different nodata value with the %s parameter."
 msgstr ""
 
 #: ../raster/r.out.gdal/export_band.c:241
@@ -9217,7 +9217,7 @@ msgstr ""
 msgid "Name of color file"
 msgstr ""
 
-#: ../raster/r.out.vrml/main.c:72 ../visualization/nviz2/cmd/args.c:491
+#: ../raster/r.out.vrml/main.c:72 ../visualization/nviz2/cmd/args.c:498
 msgid "Vertical exaggeration"
 msgstr ""
 
@@ -9272,15 +9272,19 @@ msgstr "출력할 래스터맵"
 msgid "File containing expression(s) to evaluate"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.mapcalc/main.c:152
+#: ../raster/r.mapcalc/main.c:145
+msgid "file= and expression= are mutually exclusive"
+msgstr ""
+
+#: ../raster/r.mapcalc/main.c:155
 msgid "parse error"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:161
+#: ../raster/r.mapcalc/main.c:164
 msgid "Floating point error(s) occured in the calculation"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:166
+#: ../raster/r.mapcalc/main.c:169
 msgid "Overflow occured in the calculation"
 msgstr ""
 
@@ -9580,8 +9584,8 @@ msgstr ""
 
 #: ../raster/r.sunmask/main.c:142 ../raster/r.sunmask/main.c:151
 #: ../raster/r.sunmask/main.c:218 ../raster/r.sunmask/main.c:228
-#: ../visualization/nviz2/cmd/args.c:292 ../visualization/nviz2/cmd/args.c:360
-#: ../visualization/nviz2/cmd/args.c:429
+#: ../visualization/nviz2/cmd/args.c:299 ../visualization/nviz2/cmd/args.c:367
+#: ../visualization/nviz2/cmd/args.c:436
 msgid "Position"
 msgstr ""
 
@@ -10156,8 +10160,8 @@ msgid "Use raster values as categories instead of unique sequence (CELL only)"
 msgstr ""
 
 #: ../raster/r.to.vect/main.c:96 ../raster/r.to.vect/main.c:103
-#: ../vector/v.in.ogr/main.c:193 ../vector/v.in.ogr/main.c:216
-#: ../vector/v.in.ogr/main.c:237 ../vector/v.to.rast/main.c:72
+#: ../vector/v.in.ogr/main.c:194 ../vector/v.in.ogr/main.c:217
+#: ../vector/v.in.ogr/main.c:238 ../vector/v.to.rast/main.c:72
 #: ../vector/v.to.rast/main.c:86 ../vector/v.to.rast/main.c:92
 #, fuzzy
 msgid "Attributes"
@@ -10203,7 +10207,7 @@ msgid "Unable to insert into table: %s"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.to.vect/util.c:157 ../raster/r.to.vect/areas_io.c:370
-#: ../vector/v.in.ogr/main.c:913 ../vector/v.random/main.c:296
+#: ../vector/v.in.ogr/main.c:938 ../vector/v.random/main.c:296
 #, c-format
 msgid "Cannot insert new row: %s"
 msgstr ""
@@ -10592,19 +10596,19 @@ msgid ""
 "or 'latin' option!"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:598 ../raster/r.in.ascii/main.c:195
+#: ../raster/r.horizon/main.c:596 ../raster/r.in.ascii/main.c:195
 #: ../raster/r.in.arc/main.c:134
 #, c-format
 msgid "OOPS: rows changed from %d to %d"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:602 ../raster/r.in.ascii/main.c:198
+#: ../raster/r.horizon/main.c:600 ../raster/r.in.ascii/main.c:198
 #: ../raster/r.in.arc/main.c:137
 #, c-format
 msgid "OOPS: cols changed from %d to %d"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:790 ../raster/r.horizon/main.c:808
+#: ../raster/r.horizon/main.c:788 ../raster/r.horizon/main.c:806
 #: ../display/d.grid/plot.c:187 ../display/d.grid/plot.c:193
 #: ../display/d.grid/plot.c:238 ../display/d.grid/plot.c:244
 #: ../display/d.grid/plot.c:373 ../display/d.grid/plot.c:389
@@ -10620,7 +10624,7 @@ msgstr ""
 msgid "Error in pj_do_proj"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:1110
+#: ../raster/r.horizon/main.c:1108
 #, fuzzy, c-format
 msgid "Calculating map %01d of %01d (angle %.2f, raster map <%s>)"
 msgstr "출력할 래스터맵"
@@ -10998,7 +11002,7 @@ msgstr ""
 msgid "Raster map(s) to report on"
 msgstr ""
 
-#: ../raster/r.report/parse.c:45 ../misc/m.measure/main.c:59
+#: ../raster/r.report/parse.c:45 ../misc/m.measure/main.c:58
 #: ../locale/scriptstrings/v.report_to_translate.c:12
 msgid "Units"
 msgstr ""
@@ -11034,7 +11038,6 @@ msgid "Name of an output file to hold the report"
 msgstr ""
 
 #: ../raster/r.report/parse.c:96 ../raster/r.bitpattern/main.c:88
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:290
 msgid "Quiet"
 msgstr ""
 
@@ -11504,13 +11507,6 @@ msgstr ""
 #: ../display/d.legend/main.c:154 ../display/d.legend/main.c:160
 #: ../display/d.legend/main.c:165 ../display/d.legend/main.c:170
 #: ../display/d.legend/main.c:175 ../display/d.legend/main.c:180
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:208
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:217
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:227
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:237
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:247
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:257
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:267
 msgid "Advanced"
 msgstr ""
 
@@ -11714,16 +11710,16 @@ msgstr ""
 msgid "Writing topographic index map..."
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.resamp.stats/main.c:265
+#: ../raster/r.resamp.stats/main.c:259
 #, fuzzy
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.resamp.stats/main.c:275
+#: ../raster/r.resamp.stats/main.c:269
 msgid "Aggregation method"
 msgstr ""
 
-#: ../raster/r.resamp.stats/main.c:293
+#: ../raster/r.resamp.stats/main.c:287
 msgid "Weight according to area (slower)"
 msgstr ""
 
@@ -12124,13 +12120,13 @@ msgstr ""
 #: ../general/g.pnmcomp/main.c:281 ../general/g.message/main.c:33
 #: ../general/g.tempfile/main.c:36 ../general/g.pnmcat/main.c:121
 #: ../general/g.setproj/main.c:78 ../general/g.list/main.c:45
-#: ../general/g.transform/main.c:317 ../general/g.mapset/main.c:45
+#: ../general/g.transform/main.c:320 ../general/g.mapset/main.c:45
 #: ../general/g.mapsets/main.c:59 ../general/g.copy/main.c:40
 #: ../general/g.mremove/main.c:59 ../general/g.findetc/main.c:28
 #: ../general/g.ppmtopng/main.c:117 ../general/g.gisenv/main.c:38
 #: ../general/g.rename/main.c:43 ../general/g.filename/main.c:39
 #: ../general/g.mlist/main.c:63 ../general/g.region/main.c:62
-#: ../general/g.cairocomp/main.c:193 ../general/g.mkfontcap/main.c:71
+#: ../general/g.cairocomp/main.c:193 ../general/g.mkfontcap/main.c:70
 #: ../general/g.gui/main.c:36 ../general/g.remove/main.c:101
 #: ../general/g.findfile/main.c:35
 #: ../locale/scriptstrings/g.extension_to_translate.c:3
@@ -12166,14 +12162,64 @@ msgstr ""
 msgid "Access for others"
 msgstr ""
 
-#: ../general/g.access/main.c:63
-msgid "Access to the PERMANENT mapset must be open, nothing changed"
+#: ../general/g.access/main.c:59
+msgid "UNIX filesystem access controls are not supported by MS-Windows"
 msgstr ""
 
 #: ../general/g.access/main.c:67
+msgid "Access to the PERMANENT mapset must be open, nothing changed"
+msgstr ""
+
+#: ../general/g.access/main.c:71
 #, fuzzy
 msgid "Unable to determine mapset permissions"
 msgstr "출력할 래스터맵"
+
+#: ../general/g.access/set_perms.c:26
+#, fuzzy
+msgid "Unable to change mapset permissions"
+msgstr "출력할 래스터맵"
+
+#: ../general/g.access/exp_perms.c:11 ../general/g.access/exp_perms.c:29
+msgid "have"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:12
+msgid "read "
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:15
+msgid "Everyone"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:16
+msgid "has"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:19
+msgid "Only users in your group"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:22
+msgid "Only users outside your group"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:25
+msgid "Only you"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:31
+#, c-format
+msgid "%s %s %s %saccess to mapset %s"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:32
+msgid "will"
+msgstr ""
+
+#: ../general/g.access/exp_perms.c:32
+msgid "now"
+msgstr ""
 
 #: ../general/g.proj/input.c:91
 msgid "Error reading WKT projection description"
@@ -12802,45 +12848,45 @@ msgstr ""
 msgid "Error conducting transform (%d)"
 msgstr "출력할 래스터맵"
 
-#: ../general/g.transform/main.c:196
+#: ../general/g.transform/main.c:199
 msgid "Poorly placed control points"
 msgstr ""
 
-#: ../general/g.transform/main.c:198
+#: ../general/g.transform/main.c:201
 msgid "Insufficient memory"
 msgstr ""
 
-#: ../general/g.transform/main.c:200
+#: ../general/g.transform/main.c:203
 msgid "Parameter error"
 msgstr ""
 
-#: ../general/g.transform/main.c:202
+#: ../general/g.transform/main.c:205
 msgid "No active control points"
 msgstr ""
 
-#: ../general/g.transform/main.c:297
+#: ../general/g.transform/main.c:300
 #, fuzzy, c-format
 msgid "Invalid coordinates: [%s]"
 msgstr "출력할 래스터맵"
 
-#: ../general/g.transform/main.c:318 ../vector/v.transform/main.c:84
+#: ../general/g.transform/main.c:321 ../vector/v.transform/main.c:84
 #, fuzzy
 msgid "transformation"
 msgstr "출력할 래스터맵"
 
-#: ../general/g.transform/main.c:319
+#: ../general/g.transform/main.c:322
 msgid "GCP"
 msgstr ""
 
-#: ../general/g.transform/main.c:321
+#: ../general/g.transform/main.c:324
 msgid "Computes a coordinate transformation based on the control points."
 msgstr ""
 
-#: ../general/g.transform/main.c:330
+#: ../general/g.transform/main.c:333
 msgid "Rectification polynomial order"
 msgstr ""
 
-#: ../general/g.transform/main.c:338
+#: ../general/g.transform/main.c:341
 msgid ""
 "idx;point index;src;source coordinates;dst;destination coordinates;fwd;"
 "forward coordinates (destination);rev;reverse coordinates (source);fxy;"
@@ -12848,32 +12894,32 @@ msgid ""
 "difference (source);fd;forward error (destination);rd;reverse error (source)"
 msgstr ""
 
-#: ../general/g.transform/main.c:348 ../vector/v.out.ascii/args.c:44
+#: ../general/g.transform/main.c:351 ../vector/v.out.ascii/args.c:44
 msgid "Output format"
 msgstr ""
 
-#: ../general/g.transform/main.c:352
+#: ../general/g.transform/main.c:355
 msgid "Display summary information"
 msgstr ""
 
-#: ../general/g.transform/main.c:358
+#: ../general/g.transform/main.c:361
 #, fuzzy
 msgid "File containing coordinates to transform (\"-\" to read from stdin)"
 msgstr "출력할 래스터맵"
 
-#: ../general/g.transform/main.c:359
+#: ../general/g.transform/main.c:362
 msgid "Local x,y coordinates to target east,north"
 msgstr ""
 
-#: ../general/g.transform/main.c:363
+#: ../general/g.transform/main.c:366
 msgid "Reverse transform of coords file or coeff. dump"
 msgstr ""
 
-#: ../general/g.transform/main.c:364
+#: ../general/g.transform/main.c:367
 msgid "Target east,north coordinates to local x,y"
 msgstr ""
 
-#: ../general/g.transform/main.c:368
+#: ../general/g.transform/main.c:371
 msgid "Display transform matrix coefficients"
 msgstr ""
 
@@ -12886,88 +12932,91 @@ msgstr "출력할 래스터맵"
 msgid "Change current mapset."
 msgstr ""
 
-#: ../general/g.mapset/main.c:54
-msgid "New MAPSET name"
+#: ../general/g.mapset/main.c:48
+msgid "Optionally create new mapset or list available mapsets."
 msgstr ""
 
-#: ../general/g.mapset/main.c:61
-msgid "New LOCATION name (not location path)"
+#: ../general/g.mapset/main.c:55
+#, fuzzy
+msgid "Name of mapset where to switch"
+msgstr "출력할 래스터맵"
+
+#: ../general/g.mapset/main.c:63
+msgid "Location name (not location path)"
 msgstr ""
 
-#: ../general/g.mapset/main.c:69
-msgid "New GISDBASE (full path to the directory where the new location is)"
+#: ../general/g.mapset/main.c:74
+msgid ""
+"GIS data directory (full path to the directory where the new location is)"
 msgstr ""
 
-#: ../general/g.mapset/main.c:73
+#: ../general/g.mapset/main.c:80
 msgid "Create mapset if it doesn't exist"
 msgstr ""
 
-#: ../general/g.mapset/main.c:78
+#: ../general/g.mapset/main.c:82
+#: ../locale/scriptstrings/r.mask_to_translate.c:5
+#: ../locale/scriptstrings/r.mask_to_translate.c:7
+#: ../locale/scriptstrings/r.mask_to_translate.c:9
+msgid "Create"
+msgstr ""
+
+#: ../general/g.mapset/main.c:86
 msgid "List available mapsets"
 msgstr ""
 
-#: ../general/g.mapset/main.c:84
+#: ../general/g.mapset/main.c:93
 #, fuzzy
 msgid "Either mapset= or -l must be used"
 msgstr "출력할 래스터맵"
 
-#: ../general/g.mapset/main.c:129
+#: ../general/g.mapset/main.c:138
 #, fuzzy, c-format
 msgid "<%s> is already the current mapset"
 msgstr "출력할 래스터맵"
 
-#: ../general/g.mapset/main.c:137
+#: ../general/g.mapset/main.c:146
 msgid "You don't have permission to use this mapset"
 msgstr ""
 
-#: ../general/g.mapset/main.c:146
+#: ../general/g.mapset/main.c:155
 msgid "The mapset does not exist. Use -c flag to create it."
 msgstr ""
 
-#: ../general/g.mapset/main.c:155
+#: ../general/g.mapset/main.c:164
 #, fuzzy
 msgid "Unable to read GIS_LOCK environment variable"
 msgstr "출력할 래스터맵"
 
-#: ../general/g.mapset/main.c:169
+#: ../general/g.mapset/main.c:178
 #, c-format
 msgid ""
 "%s is currently running GRASS in selected mapset or lock file cannot be "
 "checked"
 msgstr ""
 
-#: ../general/g.mapset/main.c:174
+#: ../general/g.mapset/main.c:183
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "출력할 래스터맵"
 
-#: ../general/g.mapset/main.c:188
+#: ../general/g.mapset/main.c:197
 msgid "Your shell continues to use the history for the old mapset"
 msgstr ""
 
-#: ../general/g.mapset/main.c:192
+#: ../general/g.mapset/main.c:201
 #, c-format
 msgid ""
 "You can switch the history by commands:\n"
 "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
 msgstr ""
 
-#: ../general/g.mapset/main.c:197
+#: ../general/g.mapset/main.c:206
 #, c-format
 msgid ""
 "You can switch the history by commands:\n"
 "history -S; history -L %s/.history; setenv histfile=%s/.history"
 msgstr ""
-
-#: ../general/g.mapsets/dsply_path.c:19
-#, c-format
-msgid "Your mapset search list:\n"
-msgstr ""
-
-#: ../general/g.mapsets/dsply_path.c:29
-#, fuzzy, c-format
-msgid "<%s> not found in mapset list"
-msgstr "출력할 래스터맵"
 
 #: ../general/g.mapsets/main.c:62
 msgid ""
@@ -13019,14 +13068,12 @@ msgstr ""
 msgid "Cannot open SEARCH_PATH for write"
 msgstr ""
 
-#: ../general/g.mapsets/dsply_maps.c:23
-#, c-format
+#: ../general/g.mapsets/list.c:10
 msgid "Available mapsets:"
 msgstr ""
 
-#: ../general/g.mapsets/dsply_maps.c:33
-#, c-format
-msgid "** no mapsets **\n"
+#: ../general/g.mapsets/list.c:35
+msgid "Accessible mapsets:"
 msgstr ""
 
 #: ../general/g.copy/main.c:43
@@ -13542,40 +13589,40 @@ msgstr ""
 msgid "input= and opacity= must have the same number of values"
 msgstr ""
 
-#: ../general/g.mkfontcap/main.c:73
+#: ../general/g.mkfontcap/main.c:72
 msgid ""
 "Generates the font configuration file by scanning various directories for "
 "fonts"
 msgstr ""
 
-#: ../general/g.mkfontcap/main.c:79
+#: ../general/g.mkfontcap/main.c:78
 msgid "Overwrite font configuration file if already existing"
 msgstr ""
 
-#: ../general/g.mkfontcap/main.c:84
+#: ../general/g.mkfontcap/main.c:83
 msgid ""
 "Write font configuration file to standard output instead of $GISBASE/etc"
 msgstr ""
 
-#: ../general/g.mkfontcap/main.c:92
+#: ../general/g.mkfontcap/main.c:91
 msgid ""
 "Comma-separated list of extra directories to scan for Freetype-compatible "
 "fonts as well as the defaults (see documentation)"
 msgstr ""
 
-#: ../general/g.mkfontcap/main.c:109
+#: ../general/g.mkfontcap/main.c:108
 #, c-format
 msgid ""
 "Fontcap file %s already exists; use -%c flag if you wish to overwrite it"
 msgstr ""
 
-#: ../general/g.mkfontcap/main.c:121
+#: ../general/g.mkfontcap/main.c:120
 msgid ""
 "This GRASS installation was compiled without Freetype support, extradirs "
 "parameter ignored"
 msgstr ""
 
-#: ../general/g.mkfontcap/main.c:148
+#: ../general/g.mkfontcap/main.c:147
 #, fuzzy, c-format
 msgid "Cannot open %s for writing: %s"
 msgstr "출력할 래스터맵"
@@ -13597,13 +13644,12 @@ msgid "Default value: GRASS_GUI if defined otherwise wxpython"
 msgstr ""
 
 #: ../general/g.gui/main.c:46
-msgid "wxpython;wxPython based GUI;text;command line interface only"
+msgid "wxpython;wxPython based GUI (wxGUI);text;command line interface only"
 msgstr ""
 
 #: ../general/g.gui/main.c:53
-#, fuzzy
-msgid "Name of workspace file"
-msgstr "출력할 래스터맵"
+msgid "Name of workspace file to load on start-up (valid only for wxGUI)"
+msgstr ""
 
 #: ../general/g.gui/main.c:57
 msgid "Update default GUI setting"
@@ -13616,6 +13662,11 @@ msgstr ""
 #: ../general/g.gui/main.c:90
 #, c-format
 msgid "<%s> is now the default GUI"
+msgstr ""
+
+#: ../general/g.gui/main.c:104
+#, c-format
+msgid "Launching '%s' GUI in the background, please wait ..."
 msgstr ""
 
 #: ../general/g.remove/main.c:109
@@ -13657,7 +13708,7 @@ msgstr "출력할 래스터맵"
 msgid "Unable to read FP range for %s"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.profile/main.c:191 ../display/d.font/main.c:45
+#: ../display/d.profile/main.c:191 ../display/d.font/main.c:46
 #: ../display/d.rast.arrow/main.c:95 ../display/d.grid/main.c:51
 #: ../display/d.erase/main.c:29 ../display/d.geodesic/main.c:43
 #: ../display/d.path/main.c:48 ../display/d.colorlist/main.c:35
@@ -13672,7 +13723,7 @@ msgstr "출력할 래스터맵"
 #: ../display/d.linegraph/main.c:119 ../display/d.title/main.c:49
 #: ../display/d.graph/main.c:58 ../display/d.what.vect/main.c:56
 #: ../display/d.text/main.c:139 ../display/d.labels/main.c:43
-#: ../display/d.rast/main.c:53 ../display/d.rast.num/main.c:71
+#: ../display/d.rast/main.c:52 ../display/d.rast.num/main.c:71
 #: ../display/d.nviz/main.c:68 ../display/d.zoom/main.c:61
 #: ../display/d.vect/main.c:117 ../visualization/ximgview/main.c:290
 #: ../locale/scriptstrings/d.correlate_to_translate.c:2
@@ -13701,7 +13752,7 @@ msgstr ""
 msgid "At least two points are required"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.profile/main.c:261 ../display/d.font/main.c:85
+#: ../display/d.profile/main.c:261 ../display/d.font/main.c:86
 #: ../display/d.rast.arrow/main.c:223 ../display/d.grid/main.c:210
 #: ../display/d.erase/main.c:50 ../display/d.geodesic/main.c:95
 #: ../display/d.path/main.c:153 ../display/d.fontlist/main.c:53
@@ -13714,7 +13765,7 @@ msgstr "출력할 래스터맵"
 #: ../display/d.extract/main.c:78 ../display/d.histogram/main.c:188
 #: ../display/d.linegraph/main.c:257 ../display/d.graph/main.c:101
 #: ../display/d.what.vect/main.c:142 ../display/d.text/main.c:290
-#: ../display/d.labels/main.c:116 ../display/d.rast/main.c:104
+#: ../display/d.labels/main.c:116 ../display/d.rast/main.c:92
 #: ../display/d.rast.num/main.c:192 ../display/d.zoom/main.c:217
 #: ../display/d.zoom/redraw.c:38 ../display/d.vect/main.c:376
 #: ../vector/v.label/main.c:233 ../imagery/i.points/main.c:123
@@ -13722,43 +13773,43 @@ msgstr "출력할 래스터맵"
 msgid "No graphics device selected"
 msgstr ""
 
-#: ../display/d.font/main.c:47
+#: ../display/d.font/main.c:48
 msgid ""
 "Selects the font in which text will be displayed on the user's graphics "
 "monitor."
 msgstr ""
 
-#: ../display/d.font/main.c:55
+#: ../display/d.font/main.c:56
 msgid "Choose new current font"
 msgstr ""
 
-#: ../display/d.font/main.c:62
+#: ../display/d.font/main.c:63
 msgid "Path to Freetype-compatible font including file name"
 msgstr ""
 
-#: ../display/d.font/main.c:70
+#: ../display/d.font/main.c:71
 msgid "Character encoding"
 msgstr ""
 
-#: ../display/d.font/main.c:74
+#: ../display/d.font/main.c:75
 msgid "List fonts"
 msgstr ""
 
-#: ../display/d.font/main.c:78 ../display/d.fontlist/main.c:47
+#: ../display/d.font/main.c:79 ../display/d.fontlist/main.c:47
 msgid "List fonts verbosely"
 msgstr ""
 
-#: ../display/d.font/main.c:104
+#: ../display/d.font/main.c:105
 #, fuzzy, c-format
 msgid "Unable to access font path %s: %s"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.font/main.c:108
+#: ../display/d.font/main.c:109
 #, c-format
 msgid "Font path %s is not a file"
 msgstr ""
 
-#: ../display/d.font/main.c:125
+#: ../display/d.font/main.c:126
 #, c-format
 msgid ""
 "Font name <%s> is invalid. Check font name or consider running 'g.mkfontcap'"
@@ -14205,6 +14256,7 @@ msgid ""
 msgstr ""
 
 #: ../display/d.legend/main.c:91 ../display/d.zoom/main.c:75
+#: ../locale/scriptstrings/r.colors.stddev_to_translate.c:4
 msgid "Name of raster map"
 msgstr ""
 
@@ -14375,8 +14427,8 @@ msgstr ""
 
 #: ../display/d.vect.chart/plot.c:37 ../display/d.thematic.area/plot1.c:105
 #: ../display/d.vect/area.c:54 ../display/d.vect/plot1.c:113
-#: ../vector/v.generalize/misc.c:160 ../vector/v.distance/main.c:356
-#: ../vector/v.distance/main.c:392 ../vector/v.surf.bspline/crosscorr.c:110
+#: ../vector/v.generalize/misc.c:160 ../vector/v.distance/main.c:414
+#: ../vector/v.distance/main.c:449 ../vector/v.surf.bspline/crosscorr.c:110
 #: ../vector/v.overlay/main.c:277 ../vector/v.to.rast/support.c:127
 #: ../vector/v.to.rast/support.c:278 ../vector/v.buffer/main.c:288
 #: ../vector/v.edit/select.c:506 ../vector/v.extrude/main.c:163
@@ -14597,33 +14649,33 @@ msgid "Layer number. If -1, all layers are displayed."
 msgstr ""
 
 #: ../display/d.thematic.area/main.c:129 ../display/d.thematic.area/main.c:132
-#: ../display/d.rast/main.c:68 ../display/d.rast/main.c:77
-#: ../display/d.rast/main.c:94 ../display/d.vect/main.c:141
-#: ../display/d.vect/main.c:144 ../display/d.vect/main.c:147
-#: ../display/d.vect/main.c:353 ../vector/v.in.ogr/main.c:132
-#: ../vector/v.in.ogr/main.c:146 ../vector/v.in.ogr/main.c:168
-#: ../vector/v.extract/main.c:108 ../vector/v.extract/main.c:113
-#: ../vector/v.extract/main.c:119 ../vector/v.extract/main.c:123
-#: ../vector/v.extract/main.c:126 ../vector/v.extract/main.c:136
-#: ../vector/v.extract/main.c:146 ../vector/v.out.ascii/args.c:21
-#: ../vector/v.out.ascii/args.c:35 ../vector/v.net.allpairs/main.c:65
-#: ../vector/v.net.allpairs/main.c:67 ../vector/v.net.allpairs/main.c:69
-#: ../vector/v.reclass/main.c:77 ../vector/v.reclass/main.c:82
-#: ../vector/v.select/args.c:16 ../vector/v.select/args.c:21
-#: ../vector/v.select/args.c:30 ../vector/v.select/args.c:35
-#: ../vector/v.select/args.c:83 ../vector/v.to.points/main.c:184
-#: ../vector/v.to.points/main.c:188 ../vector/v.clean/main.c:52
-#: ../vector/v.clean/main.c:54 ../vector/v.buffer/main.c:155
-#: ../vector/v.buffer/main.c:160 ../vector/v.edit/args.c:42
-#: ../vector/v.edit/args.c:47 ../vector/v.edit/args.c:125
-#: ../vector/v.edit/args.c:129 ../vector/v.edit/args.c:138
-#: ../vector/v.edit/args.c:147 ../vector/v.edit/args.c:156
-#: ../vector/v.edit/args.c:159 ../vector/v.edit/args.c:173
-#: ../vector/v.edit/args.c:202 ../vector/v.category/main.c:80
-#: ../vector/v.category/main.c:83 ../vector/v.category/main.c:87
-#: ../vector/v.surf.rst/main.c:177 ../vector/v.surf.rst/main.c:187
-#: ../vector/v.net.centrality/main.c:109 ../vector/v.net.centrality/main.c:111
-#: ../vector/v.to.3d/args.c:20 ../vector/v.to.3d/args.c:25
+#: ../display/d.rast/main.c:67 ../display/d.rast/main.c:82
+#: ../display/d.vect/main.c:141 ../display/d.vect/main.c:144
+#: ../display/d.vect/main.c:147 ../display/d.vect/main.c:353
+#: ../vector/v.in.ogr/main.c:133 ../vector/v.in.ogr/main.c:147
+#: ../vector/v.in.ogr/main.c:169 ../vector/v.extract/main.c:108
+#: ../vector/v.extract/main.c:113 ../vector/v.extract/main.c:119
+#: ../vector/v.extract/main.c:123 ../vector/v.extract/main.c:126
+#: ../vector/v.extract/main.c:136 ../vector/v.extract/main.c:146
+#: ../vector/v.out.ascii/args.c:21 ../vector/v.out.ascii/args.c:35
+#: ../vector/v.net.allpairs/main.c:65 ../vector/v.net.allpairs/main.c:67
+#: ../vector/v.net.allpairs/main.c:69 ../vector/v.reclass/main.c:77
+#: ../vector/v.reclass/main.c:82 ../vector/v.select/args.c:16
+#: ../vector/v.select/args.c:21 ../vector/v.select/args.c:30
+#: ../vector/v.select/args.c:35 ../vector/v.select/args.c:83
+#: ../vector/v.to.points/main.c:184 ../vector/v.to.points/main.c:188
+#: ../vector/v.clean/main.c:52 ../vector/v.clean/main.c:54
+#: ../vector/v.buffer/main.c:155 ../vector/v.buffer/main.c:160
+#: ../vector/v.edit/args.c:42 ../vector/v.edit/args.c:47
+#: ../vector/v.edit/args.c:125 ../vector/v.edit/args.c:129
+#: ../vector/v.edit/args.c:138 ../vector/v.edit/args.c:147
+#: ../vector/v.edit/args.c:156 ../vector/v.edit/args.c:159
+#: ../vector/v.edit/args.c:173 ../vector/v.edit/args.c:202
+#: ../vector/v.category/main.c:80 ../vector/v.category/main.c:83
+#: ../vector/v.category/main.c:87 ../vector/v.surf.rst/main.c:177
+#: ../vector/v.surf.rst/main.c:187 ../vector/v.net.centrality/main.c:109
+#: ../vector/v.net.centrality/main.c:111 ../vector/v.to.3d/args.c:20
+#: ../vector/v.to.3d/args.c:25
 #, fuzzy
 msgid "Selection"
 msgstr "출력할 래스터맵"
@@ -14665,15 +14717,15 @@ msgid "'layer' must be > 0"
 msgstr ""
 
 #: ../display/d.thematic.area/main.c:195 ../display/d.what.vect/what.c:409
-#: ../display/d.vect/main.c:457 ../vector/v.db.connect/main.c:170
+#: ../display/d.vect/main.c:457 ../vector/v.db.connect/main.c:169
 #, c-format
 msgid "Database connection not defined"
 msgstr ""
 
 #: ../display/d.thematic.area/main.c:199 ../display/d.vect/main.c:461
 #: ../vector/v.out.svg/main.c:137 ../vector/v.in.sites/main.c:160
-#: ../vector/v.edit/select.c:513 ../vector/v.db.connect/main.c:210
-#: ../vector/v.db.connect/main.c:276 ../vector/v.drape/main.c:245
+#: ../vector/v.edit/select.c:513 ../vector/v.db.connect/main.c:212
+#: ../vector/v.db.connect/main.c:278 ../vector/v.drape/main.c:245
 #: ../doc/vector/v.example/main.c:125 ../db/db.execute/main.c:63
 #: ../db/db.tables/main.c:46 ../db/db.droptable/main.c:44
 #: ../db/db.createdb/main.c:43 ../db/db.columns/main.c:45
@@ -15400,41 +15452,45 @@ msgstr "출력할 래스터맵"
 msgid "Error: %s\n"
 msgstr ""
 
-#: ../display/d.rast/main.c:55
-msgid "Displays raster map layer in the active map display window."
-msgstr ""
+#: ../display/d.rast/main.c:54
+#, fuzzy
+msgid "Displays raster map layer."
+msgstr "출력할 래스터맵"
 
-#: ../display/d.rast/main.c:59
+#: ../display/d.rast/main.c:58
 msgid "Raster map to be displayed"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.rast/main.c:67
-msgid "List of categories to be displayed (INT maps)"
-msgstr ""
+#: ../display/d.rast/main.c:66
+#, fuzzy
+msgid "List of categories or values to be displayed"
+msgstr "출력할 래스터맵"
 
-#: ../display/d.rast/main.c:76
-msgid "List of values to be displayed (FP maps)"
-msgstr ""
-
-#: ../display/d.rast/main.c:85
+#: ../display/d.rast/main.c:72
 msgid "Background color (for null)"
 msgstr ""
 
-#: ../display/d.rast/main.c:89
+#: ../display/d.rast/main.c:73 ../display/d.vect/main.c:263
+msgid "Either a standard color name or R:G:B triplet"
+msgstr ""
+
+#: ../display/d.rast/main.c:77
 msgid "Make null cells opaque"
 msgstr ""
 
-#: ../display/d.rast/main.c:93
-msgid "Invert catlist"
+#: ../display/d.rast/main.c:81
+msgid "Invert value list"
 msgstr ""
 
-#: ../display/d.rast/main.c:109
-msgid "Ignoring catlist: map is floating point (please use 'val=')"
-msgstr ""
+#: ../display/d.rast/main.c:203
+#, fuzzy, c-format
+msgid "[%s]: illegal category specified"
+msgstr "출력할 래스터맵"
 
-#: ../display/d.rast/main.c:115
-msgid "Ignoring vallist: map is integer (please use 'cat=')"
-msgstr ""
+#: ../display/d.rast/main.c:234
+#, fuzzy, c-format
+msgid "[%s]: illegal value specified"
+msgstr "출력할 래스터맵"
 
 #: ../display/d.rast.num/main.c:73
 msgid ""
@@ -15756,10 +15812,6 @@ msgstr ""
 msgid "Label color"
 msgstr ""
 
-#: ../display/d.vect/main.c:263
-msgid "Either a standard color name or R:G:B triplet"
-msgstr ""
-
 #: ../display/d.vect/main.c:270
 msgid "Label background color"
 msgstr ""
@@ -16014,7 +16066,7 @@ msgid "Column type <%s> not supported (must be integer or double precision)"
 msgstr ""
 
 #: ../vector/v.sample/main.c:158 ../vector/v.to.rast3/main.c:91
-#: ../vector/v.surf.bspline/main.c:350 ../vector/v.class/main.c:121
+#: ../vector/v.surf.bspline/main.c:351 ../vector/v.class/main.c:121
 #: ../vector/v.normal/main.c:133 ../vector/v.univar/main.c:154
 #: ../vector/v.surf.idw/read_sites.c:54 ../ps/ps.map/catval.c:67
 #: ../ps/ps.map/catval.c:132 ../ps/ps.map/catval.c:199
@@ -16036,7 +16088,7 @@ msgstr "출력할 래스터맵"
 #: ../vector/v.sample/main.c:192 ../vector/v.net.distance/main.c:214
 #: ../vector/v.net.timetable/main.c:107 ../vector/v.net.flow/main.c:174
 #: ../vector/v.net.path/path.c:113 ../vector/v.net.centrality/main.c:246
-#: ../vector/v.db.connect/main.c:329 ../vector/v.net.components/main.c:153
+#: ../vector/v.db.connect/main.c:331 ../vector/v.net.components/main.c:153
 msgid "Cannot create index"
 msgstr ""
 
@@ -16054,7 +16106,7 @@ msgid "No record for category %d in table <%s>"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.sample/main.c:239 ../vector/v.to.rast3/main.c:95
-#: ../vector/v.surf.bspline/main.c:347
+#: ../vector/v.surf.bspline/main.c:348
 #: ../vector/v.surf.bspline/crosscorr.c:129 ../vector/v.class/main.c:118
 #: ../vector/v.univar/main.c:151 ../vector/v.surf.idw/read_sites.c:51
 #: ../vector/v.buffer/main.c:309 ../vector/v.what.rast/main.c:153
@@ -16067,7 +16119,7 @@ msgid "Unable to insert row: %s"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.db.select/main.c:53 ../vector/v.to.db/main.c:37
-#: ../vector/v.in.db/main.c:54 ../vector/v.distance/main.c:116
+#: ../vector/v.in.db/main.c:54 ../vector/v.distance/main.c:119
 #: ../vector/v.db.connect/main.c:50 ../db/db.connect/main.c:45
 #: ../db/db.execute/main.c:109 ../db/db.drivers/main.c:74
 #: ../db/db.tables/main.c:95 ../db/db.droptable/main.c:78
@@ -16094,7 +16146,7 @@ msgid "database"
 msgstr ""
 
 #: ../vector/v.db.select/main.c:54 ../vector/v.to.db/main.c:38
-#: ../vector/v.distance/main.c:117 ../vector/v.db.connect/main.c:51
+#: ../vector/v.distance/main.c:120 ../vector/v.db.connect/main.c:51
 #: ../vector/v.what.rast/main.c:82 ../db/db.connect/main.c:46
 #: ../db/db.execute/main.c:110 ../db/db.drivers/main.c:75
 #: ../db/db.tables/main.c:96 ../db/db.columns/main.c:93
@@ -16161,7 +16213,7 @@ msgstr "출력할 래스터맵"
 
 #: ../vector/v.db.select/main.c:142 ../vector/v.to.rast3/main.c:77
 #: ../vector/v.extract/main.c:266 ../vector/v.to.rast/vect2rast.c:48
-#: ../vector/v.info/print.c:136 ../vector/v.db.connect/main.c:206
+#: ../vector/v.info/print.c:136 ../vector/v.db.connect/main.c:208
 #: ../vector/v.to.3d/trans3.c:48 ../vector/v.to.3d/trans2.c:47
 #, c-format
 msgid "Database connection not defined for layer <%s>"
@@ -16405,7 +16457,7 @@ msgstr ""
 #: ../vector/v.out.svg/main.c:150 ../vector/v.random/main.c:211
 #: ../vector/v.out.ogr/main.c:374 ../vector/v.patch/main.c:140
 #: ../vector/v.patch/main.c:178 ../vector/v.in.ascii/main.c:407
-#: ../vector/v.info/print.c:150 ../vector/v.db.connect/main.c:221
+#: ../vector/v.info/print.c:150 ../vector/v.db.connect/main.c:223
 #: ../vector/v.drape/main.c:256 ../doc/vector/v.example/main.c:136
 #: ../db/db.describe/main.c:63
 #, fuzzy, c-format
@@ -16535,10 +16587,8 @@ msgid "Query layer number or name (read from)"
 msgstr ""
 
 #: ../vector/v.to.db/parse.c:47 ../vector/v.to.db/parse.c:89
-#: ../db/db.select/main.c:191 ../db/db.select/main.c:196
-#: ../db/db.select/main.c:202 ../db/db.select/main.c:211
-#: ../db/db.select/main.c:216 ../db/db.select/main.c:248
-#: ../db/db.select/main.c:258
+#: ../db/db.select/main.c:197 ../db/db.select/main.c:202
+#: ../db/db.select/main.c:248 ../db/db.select/main.c:258
 msgid "Query"
 msgstr ""
 
@@ -16902,296 +16952,301 @@ msgstr "출력할 래스터맵"
 msgid "Unable to build topology for <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:105
+#: ../vector/v.in.ogr/main.c:107
 #, fuzzy
 msgid "Converts vector layers into a GRASS vector map using OGR."
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:112
+#: ../vector/v.in.ogr/main.c:113
 msgid "OGR datasource name"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:113
+#: ../vector/v.in.ogr/main.c:114
 msgid ""
 "Examples:\n"
 "\t\tESRI Shapefile: directory containing shapefiles\n"
 "\t\tMapInfo File: directory containing mapinfo files"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:128
+#: ../vector/v.in.ogr/main.c:129
 msgid "OGR layer name. If not given, all available layers are imported"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:130
+#: ../vector/v.in.ogr/main.c:131
 msgid ""
 "Examples:\n"
 "\t\tESRI Shapefile: shapefile name\n"
 "\t\tMapInfo File: mapinfo file name"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:140
+#: ../vector/v.in.ogr/main.c:141
 msgid "Import subregion only"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:141 ../vector/v.in.ogr/main.c:225
+#: ../vector/v.in.ogr/main.c:142 ../vector/v.in.ogr/main.c:226
 msgid "Subregion"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:143
+#: ../vector/v.in.ogr/main.c:144
 msgid "Format: xmin,ymin,xmax,ymax - usually W,S,E,N"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:154
+#: ../vector/v.in.ogr/main.c:155
 msgid "Minimum size of area to be imported (square units)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:155 ../vector/v.in.ogr/main.c:176
+#: ../vector/v.in.ogr/main.c:156 ../vector/v.in.ogr/main.c:177
 msgid "Min-area & snap"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:156
+#: ../vector/v.in.ogr/main.c:157
 msgid "Smaller areas and islands are ignored. Should be greater than snap^2"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:162
+#: ../vector/v.in.ogr/main.c:163
 msgid "Optionally change default input type"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:164
+#: ../vector/v.in.ogr/main.c:165
 msgid ""
 "point;import area centroids as points;line;import area boundaries as lines;"
 "boundary;import lines as area boundaries;centroid;import points as centroids"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:175
+#: ../vector/v.in.ogr/main.c:176
 msgid "Snapping threshold for boundaries"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:177
+#: ../vector/v.in.ogr/main.c:178
 msgid "'-1' for no snap"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:191
+#: ../vector/v.in.ogr/main.c:192
 msgid ""
 "List of column names to be used instead of original names, first is used for "
 "category column"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:198
+#: ../vector/v.in.ogr/main.c:199
 msgid "List available layers in data source and exit"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:207
+#: ../vector/v.in.ogr/main.c:208
 msgid "Do not clean polygons (not recommended)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:211 ../vector/v.random/main.c:133
+#: ../vector/v.in.ogr/main.c:212 ../vector/v.random/main.c:133
 msgid "Create 3D output"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:215 ../vector/v.select/args.c:78
+#: ../vector/v.in.ogr/main.c:216 ../vector/v.select/args.c:78
 #: ../vector/v.voronoi/main.c:136 ../vector/v.overlay/main.c:123
 #: ../vector/v.to.points/main.c:215
 msgid "Do not create attribute table"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:221
+#: ../vector/v.in.ogr/main.c:222
 msgid "Override dataset projection (use location's projection)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:226
+#: ../vector/v.in.ogr/main.c:227
 msgid "Limit import to the current region"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:236
+#: ../vector/v.in.ogr/main.c:237
 msgid "Change column names to lowercase characters"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:242
+#: ../vector/v.in.ogr/main.c:243
 msgid ""
 "Create the location specified by the \"location\" parameter and exit. Do not "
 "import the vector file."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:261
+#: ../vector/v.in.ogr/main.c:262
 msgid "Available OGR Drivers:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:301
+#: ../vector/v.in.ogr/main.c:302
 #, fuzzy, c-format
 msgid "Unable to open data source <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:309 ../vector/v.external/list.c:41
+#: ../vector/v.in.ogr/main.c:310 ../vector/v.external/list.c:41
 #, c-format
 msgid "Data source contains %d layers:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:335
+#: ../vector/v.in.ogr/main.c:336
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:338 ../vector/v.edit/main.c:88
+#: ../vector/v.in.ogr/main.c:339 ../vector/v.edit/main.c:88
 #, fuzzy, c-format
 msgid "Vector map <%s> already exists"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:363 ../vector/v.external/main.c:80
+#: ../vector/v.in.ogr/main.c:364 ../vector/v.external/main.c:80
 #, fuzzy, c-format
 msgid "Layer <%s> not available"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:379
+#: ../vector/v.in.ogr/main.c:380
 msgid "Select either the current region flag or the spatial option, not both"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:407
+#: ../vector/v.in.ogr/main.c:408
 msgid "4 parameters required for 'spatial' parameter"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:505
+#: ../vector/v.in.ogr/main.c:506
 msgid ""
 "Unable to convert input map projection information to GRASS format for "
 "checking"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:535
+#: ../vector/v.in.ogr/main.c:536
 msgid "GRASS LOCATION PROJ_INFO is:\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:595
+#: ../vector/v.in.ogr/main.c:596
 #, c-format
 msgid ""
 "\n"
 "You can use the -o flag to %s to override this projection check.\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:598
+#: ../vector/v.in.ogr/main.c:599
 msgid ""
 "Consider generating a new location with 'location' parameter from input data "
 "set.\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:621
+#: ../vector/v.in.ogr/main.c:622
 #, fuzzy, c-format
 msgid "Using temporary vector <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:640
+#: ../vector/v.in.ogr/main.c:641
 #, c-format
 msgid "Layer: %s"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:704
+#: ../vector/v.in.ogr/main.c:705
 #, c-format
 msgid "Column name changed: '%s' -> '%s'"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:740
+#: ../vector/v.in.ogr/main.c:741
 #, c-format
 msgid "Writing column <%s> with fixed length %d chars (may be truncated)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:763
+#: ../vector/v.in.ogr/main.c:764
 #, c-format
 msgid ""
 "Width for column %s set to 255 (was not specified by OGR), some strings may "
 "be truncated!"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:775
+#: ../vector/v.in.ogr/main.c:776
 #, c-format
 msgid "Writing column %s with fixed length %d chars (may be truncated)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:779
+#: ../vector/v.in.ogr/main.c:780
 #, c-format
 msgid "Column type not supported (%s)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:794
+#: ../vector/v.in.ogr/main.c:795
 #, fuzzy, c-format
 msgid "Unable open database <%s> by driver <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:831
+#: ../vector/v.in.ogr/main.c:832
+#, fuzzy, c-format
+msgid "Counting polygons for %d features..."
+msgstr "출력할 래스터맵"
+
+#: ../vector/v.in.ogr/main.c:854
 #, c-format
 msgid "Boundary splitting distance in map units: %G"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:834
+#: ../vector/v.in.ogr/main.c:859
 #, c-format
 msgid "Importing map %d features..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:929
+#: ../vector/v.in.ogr/main.c:954
 #, c-format
 msgid "%d %s without geometry"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:955
+#: ../vector/v.in.ogr/main.c:980
 msgid "Cleaning polygons, result is not guaranteed!"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:959
+#: ../vector/v.in.ogr/main.c:984
 #, c-format
 msgid "Snap boundaries (threshold = %.3e):"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:973
+#: ../vector/v.in.ogr/main.c:998
 msgid "Break polygons:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:978 ../vector/v.in.ogr/main.c:992
+#: ../vector/v.in.ogr/main.c:1003 ../vector/v.in.ogr/main.c:1017
 msgid "Remove duplicates:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:988
+#: ../vector/v.in.ogr/main.c:1013
 msgid "Break boundaries:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:996
+#: ../vector/v.in.ogr/main.c:1021
 msgid "Clean boundaries at nodes:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1003
+#: ../vector/v.in.ogr/main.c:1028
 msgid "Change boundary dangles to lines:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1007
+#: ../vector/v.in.ogr/main.c:1032
 msgid "Change dangles to lines:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1013
+#: ../vector/v.in.ogr/main.c:1038
 msgid "Change boundary bridges to lines:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1017
+#: ../vector/v.in.ogr/main.c:1042
 msgid "Remove bridges:"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1023
+#: ../vector/v.in.ogr/main.c:1048
 #, fuzzy
 msgid "Merge boundaries:"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:1041 ../vector/v.overlay/area_area.c:68
+#: ../vector/v.in.ogr/main.c:1066 ../vector/v.overlay/area_area.c:68
 #: ../vector/v.buffer/main.c:517 ../vector/v.buffer/main.c:594
 msgid "Cannot calculate area centroid"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1057
+#: ../vector/v.in.ogr/main.c:1082
 #, c-format
 msgid "Find centroids for layer: %s"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1078
+#: ../vector/v.in.ogr/main.c:1103
 #, fuzzy
 msgid "Write centroids:"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.ogr/main.c:1128
+#: ../vector/v.in.ogr/main.c:1153
 #, c-format
 msgid ""
 "%d areas represent more (overlapping) features, because polygons overlap in "
@@ -17199,90 +17254,85 @@ msgid ""
 "The number of features for those areas is stored as category in layer %d"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1138
+#: ../vector/v.in.ogr/main.c:1163
 #, c-format
 msgid "%d input polygons\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1139
+#: ../vector/v.in.ogr/main.c:1164
 #, c-format
 msgid "%d input polygons"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1142
+#: ../vector/v.in.ogr/main.c:1167
 #, c-format
 msgid "Total area: %G (%d areas)\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1143
+#: ../vector/v.in.ogr/main.c:1168
 #, c-format
 msgid "Total area: %G (%d areas)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1146
+#: ../vector/v.in.ogr/main.c:1171
 #, c-format
 msgid "Overlapping area: %G (%d areas)\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1148
+#: ../vector/v.in.ogr/main.c:1173
 #, c-format
 msgid "Overlapping area: %G (%d areas)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1152
+#: ../vector/v.in.ogr/main.c:1177
 #, c-format
 msgid "Area without category: %G (%d areas)\n"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1154
+#: ../vector/v.in.ogr/main.c:1179
 #, c-format
 msgid "Area without category: %G (%d areas)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1195
+#: ../vector/v.in.ogr/main.c:1220
 msgid ""
 "Input data contains 3D features. Created vector is 2D only, use -z flag to "
 "import 3D vector"
 msgstr ""
 
-#: ../vector/v.in.ogr/geom.c:193 ../vector/v.in.ogr/geom.c:206
-#: ../vector/v.in.ogr/geom.c:234 ../vector/v.in.ogr/geom.c:280
+#: ../vector/v.in.ogr/geom.c:193
+#, fuzzy
+msgid "Cannot read part of geometry"
+msgstr "출력할 래스터맵"
+
+#: ../vector/v.in.ogr/geom.c:232 ../vector/v.in.ogr/geom.c:245
+#: ../vector/v.in.ogr/geom.c:273 ../vector/v.in.ogr/geom.c:319
 msgid "Skipping empty geometry feature"
 msgstr ""
 
-#: ../vector/v.in.ogr/geom.c:250
+#: ../vector/v.in.ogr/geom.c:289
 #, c-format
 msgid "Degenerate polygon ([%d] vertices)"
 msgstr ""
 
-#: ../vector/v.in.ogr/geom.c:255
-#, c-format
-msgid "Area size [%.1e], area not imported"
-msgstr ""
-
-#: ../vector/v.in.ogr/geom.c:291
+#: ../vector/v.in.ogr/geom.c:332
 #, c-format
 msgid "Degenerate island ([%d] vertices)"
 msgstr ""
 
-#: ../vector/v.in.ogr/geom.c:296
-#, c-format
-msgid "Island size [%.1e], island not imported"
-msgstr ""
-
-#: ../vector/v.in.ogr/geom.c:320
+#: ../vector/v.in.ogr/geom.c:366
 msgid "Cannot calculate centroid"
 msgstr ""
 
-#: ../vector/v.in.ogr/geom.c:351
+#: ../vector/v.in.ogr/geom.c:397
 msgid "No centroid written for polygon with 0 vertices"
 msgstr ""
 
-#: ../vector/v.in.ogr/geom.c:372
+#: ../vector/v.in.ogr/geom.c:418
 msgid "Cannot write part of geometry"
 msgstr ""
 
-#: ../vector/v.in.ogr/geom.c:378
+#: ../vector/v.in.ogr/geom.c:424
 msgid "Unknown geometry type"
 msgstr ""
 
@@ -17459,6 +17509,9 @@ msgid "Input table name"
 msgstr ""
 
 #: ../vector/v.in.db/main.c:66 ../vector/v.in.db/main.c:70
+#: ../db/db.execute/main.c:120 ../db/db.execute/main.c:125
+#: ../db/db.execute/main.c:130 ../db/db.select/main.c:205
+#: ../db/db.select/main.c:210 ../db/db.select/main.c:216
 #, fuzzy
 msgid "Connection"
 msgstr "출력할 래스터맵"
@@ -17490,12 +17543,12 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.in.db/main.c:141 ../vector/v.transform/trans_digit.c:96
-#: ../vector/v.db.connect/main.c:282
+#: ../vector/v.db.connect/main.c:284
 #, fuzzy, c-format
 msgid "Missing column <%s> in table <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.in.db/main.c:144 ../vector/v.db.connect/main.c:288
+#: ../vector/v.in.db/main.c:144 ../vector/v.db.connect/main.c:290
 msgid "Data type of key column must be integer"
 msgstr ""
 
@@ -17698,8 +17751,8 @@ msgid "From layer number or name"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.net.distance/main.c:76 ../vector/v.net.distance/main.c:81
-#: ../vector/v.net.distance/main.c:87 ../vector/v.distance/main.c:124
-#: ../vector/v.distance/main.c:129 ../vector/v.distance/main.c:136
+#: ../vector/v.net.distance/main.c:87 ../vector/v.distance/main.c:127
+#: ../vector/v.distance/main.c:132 ../vector/v.distance/main.c:139
 msgid "From"
 msgstr ""
 
@@ -17719,8 +17772,8 @@ msgstr "출력할 래스터맵"
 
 #: ../vector/v.net.distance/main.c:92 ../vector/v.net.distance/main.c:97
 #: ../vector/v.net.distance/main.c:103 ../vector/v.net.distance/main.c:110
-#: ../vector/v.distance/main.c:141 ../vector/v.distance/main.c:146
-#: ../vector/v.distance/main.c:153 ../vector/v.distance/main.c:209
+#: ../vector/v.distance/main.c:144 ../vector/v.distance/main.c:149
+#: ../vector/v.distance/main.c:156 ../vector/v.distance/main.c:212
 msgid "To"
 msgstr ""
 
@@ -17746,60 +17799,60 @@ msgstr "출력할 래스터맵"
 msgid "Cannot grant privileges on table <%s>"
 msgstr ""
 
-#: ../vector/v.distance/main.c:119
+#: ../vector/v.distance/main.c:122
 msgid ""
 "Finds the nearest element in vector map 'to' for elements in vector map "
 "'from'."
 msgstr ""
 
-#: ../vector/v.distance/main.c:123
+#: ../vector/v.distance/main.c:126
 #, fuzzy
 msgid "Name of existing vector map (from)"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:128
+#: ../vector/v.distance/main.c:131
 #, fuzzy
 msgid "Layer number or name (from)"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:135
+#: ../vector/v.distance/main.c:138
 #, fuzzy
 msgid "Feature type (from)"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:140
+#: ../vector/v.distance/main.c:143
 #, fuzzy
 msgid "Name of existing vector map (to)"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:145
+#: ../vector/v.distance/main.c:148
 #, fuzzy
 msgid "Layer number or name (to)"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:152
+#: ../vector/v.distance/main.c:155
 #, fuzzy
 msgid "Feature type (to)"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:158
+#: ../vector/v.distance/main.c:161
 #, fuzzy
 msgid "Name for output vector map containing lines connecting nearest elements"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:166
+#: ../vector/v.distance/main.c:169
 msgid "Maximum distance or -1 for no limit"
 msgstr ""
 
-#: ../vector/v.distance/main.c:173
+#: ../vector/v.distance/main.c:176
 msgid "Minimum distance or -1 for no limit"
 msgstr ""
 
-#: ../vector/v.distance/main.c:182
+#: ../vector/v.distance/main.c:185
 msgid "Values describing the relation between two nearest features"
 msgstr ""
 
-#: ../vector/v.distance/main.c:184
+#: ../vector/v.distance/main.c:187
 msgid ""
 "cat;category of the nearest feature;dist;minimum distance to nearest feature;"
 "to_x;x coordinate of the nearest point on 'to' feature;to_y;y coordinate of "
@@ -17811,139 +17864,144 @@ msgid ""
 "attribute of nearest feature given by to_column option"
 msgstr ""
 
-#: ../vector/v.distance/main.c:202
+#: ../vector/v.distance/main.c:205
 msgid ""
 "Column name(s) where values specified by 'upload' option will be uploaded"
 msgstr ""
 
-#: ../vector/v.distance/main.c:203
+#: ../vector/v.distance/main.c:206
 msgid "From_map"
 msgstr ""
 
-#: ../vector/v.distance/main.c:208
+#: ../vector/v.distance/main.c:211
 msgid "Column name of nearest feature (used with upload=to_attr)"
 msgstr ""
 
-#: ../vector/v.distance/main.c:214
+#: ../vector/v.distance/main.c:217
 msgid "Name of table created for output when the distance to all flag is used"
 msgstr ""
 
-#: ../vector/v.distance/main.c:219
+#: ../vector/v.distance/main.c:222
 msgid "Print output to stdout, don't update attribute table"
 msgstr ""
 
-#: ../vector/v.distance/main.c:221
+#: ../vector/v.distance/main.c:224
 msgid "First column is always category of 'from' feature called from_cat"
 msgstr ""
 
-#: ../vector/v.distance/main.c:226
+#: ../vector/v.distance/main.c:229
 msgid "Calculate distances to all features within the threshold"
 msgstr ""
 
-#: ../vector/v.distance/main.c:227
+#: ../vector/v.distance/main.c:230
 msgid ""
 "The output is written to stdout but may be uploaded to a new table created "
 "by this module. From categories are may be multiple."
 msgstr ""
 
-#: ../vector/v.distance/main.c:283
+#: ../vector/v.distance/main.c:288
 msgid "to_column option missing"
 msgstr ""
 
-#: ../vector/v.distance/main.c:295
+#: ../vector/v.distance/main.c:300
 msgid "Too many column names"
 msgstr ""
 
-#: ../vector/v.distance/main.c:302
+#: ../vector/v.distance/main.c:307
 msgid "Not enough column names"
 msgstr ""
 
-#: ../vector/v.distance/main.c:374 ../vector/v.distance/main.c:408
+#: ../vector/v.distance/main.c:367
+#, fuzzy, c-format
+msgid "No features of selected type in To vector <%s>"
+msgstr "출력할 래스터맵"
+
+#: ../vector/v.distance/main.c:432 ../vector/v.distance/main.c:465
 #: ../vector/v.reclass/main.c:141 ../vector/v.to.3d/trans3.c:63
 #: ../vector/v.to.3d/trans2.c:62
 #, c-format
 msgid "Column <%s> not found in table <%s>"
 msgstr ""
 
-#: ../vector/v.distance/main.c:384
+#: ../vector/v.distance/main.c:441
 #, fuzzy
 msgid "Unable to open default database"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:440
+#: ../vector/v.distance/main.c:497
 msgid "Incompatible column types"
 msgstr ""
 
-#: ../vector/v.distance/main.c:513
+#: ../vector/v.distance/main.c:570
 #, fuzzy
 msgid "Finding nearest feature..."
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:643
+#: ../vector/v.distance/main.c:754
 #, fuzzy
 msgid "Finding nearest areas..."
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.distance/main.c:715
+#: ../vector/v.distance/main.c:863
 #, c-format
 msgid "More cats found in to_layer (area=%d)"
 msgstr ""
 
-#: ../vector/v.distance/main.c:856
+#: ../vector/v.distance/main.c:1018
 msgid "DATETIME type not yet supported, no attributes will be uploaded"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1105
+#: ../vector/v.distance/main.c:1274
 #, c-format
 msgid "%d categories with more than 1 feature in vector map <%s>"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1108
+#: ../vector/v.distance/main.c:1277
 #, c-format
 msgid "%d categories - no nearest feature found"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1117
+#: ../vector/v.distance/main.c:1286
 #, c-format
 msgid "%d distances calculated"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1118
+#: ../vector/v.distance/main.c:1287
 #, c-format
 msgid "%d records inserted"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1120
+#: ../vector/v.distance/main.c:1289
 #, c-format
 msgid "%d insert errors"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1124
+#: ../vector/v.distance/main.c:1293
 #, c-format
 msgid "%d categories read from the map"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1126
+#: ../vector/v.distance/main.c:1295
 #, c-format
 msgid "%d categories exist in the table"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1128
+#: ../vector/v.distance/main.c:1297
 #, c-format
 msgid "%d categories read from the map exist in the table"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1131
+#: ../vector/v.distance/main.c:1300
 #, c-format
 msgid "%d categories read from the map don't exist in the table"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1133 ../vector/v.what.rast/main.c:361
+#: ../vector/v.distance/main.c:1302 ../vector/v.what.rast/main.c:361
 #, c-format
 msgid "%d records updated"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1135 ../vector/v.what.rast/main.c:362
+#: ../vector/v.distance/main.c:1304 ../vector/v.what.rast/main.c:362
 #, c-format
 msgid "%d update errors"
 msgstr ""
@@ -18303,7 +18361,7 @@ msgid "Unable to read name of driver"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.outlier/main.c:168 ../vector/v.outlier/main.c:234
-#: ../vector/v.surf.bspline/main.c:209 ../vector/v.surf.bspline/main.c:364
+#: ../vector/v.surf.bspline/main.c:209 ../vector/v.surf.bspline/main.c:365
 #: ../vector/v.lidar.edgedetection/main.c:190
 #: ../vector/v.lidar.edgedetection/main.c:202
 #: ../vector/v.lidar.edgedetection/main.c:252
@@ -18322,7 +18380,7 @@ msgid "Old auxiliar table could not be dropped"
 msgstr ""
 
 #: ../vector/v.outlier/main.c:178 ../vector/v.surf.bspline/main.c:222
-#: ../vector/v.surf.bspline/main.c:287
+#: ../vector/v.surf.bspline/main.c:282
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> at the topological level"
 msgstr "출력할 래스터맵"
@@ -18354,13 +18412,12 @@ msgstr ""
 msgid "Outlier detection"
 msgstr ""
 
-#: ../vector/v.outlier/main.c:420 ../vector/v.surf.bspline/main.c:710
-#: ../vector/v.lidar.edgedetection/main.c:457
+#: ../vector/v.outlier/main.c:420 ../vector/v.lidar.edgedetection/main.c:457
 #: ../vector/v.lidar.correction/main.c:426
 msgid "No data within this subregion. Consider changing the spline step."
 msgstr ""
 
-#: ../vector/v.outlier/main.c:430 ../vector/v.surf.bspline/main.c:732
+#: ../vector/v.outlier/main.c:430 ../vector/v.surf.bspline/main.c:734
 #: ../vector/v.lidar.edgedetection/main.c:467
 #: ../vector/v.lidar.correction/main.c:437
 msgid "Auxiliar table could not be dropped"
@@ -19820,48 +19877,55 @@ msgstr "출력할 래스터맵"
 msgid "Cross validation finished for sie = %f and sin = %f"
 msgstr ""
 
-#: ../vector/v.surf.bspline/main.c:273
-#, c-format
-msgid ""
-"No vector map of sparse points to interpolate was specified. Interpolation "
-"will be done with <%s> vector map"
-msgstr ""
-
-#: ../vector/v.surf.bspline/main.c:279
+#: ../vector/v.surf.bspline/main.c:274
 #, fuzzy, c-format
 msgid "Vector map <%s> of sparse points will be interpolated"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.surf.bspline/main.c:295
+#: ../vector/v.surf.bspline/main.c:290
 #, c-format
 msgid ""
 "Sorry, <%s> driver is not allowed for vector output in this module. Try with "
 "a raster output or other driver."
 msgstr ""
 
-#: ../vector/v.surf.bspline/main.c:331
+#: ../vector/v.surf.bspline/main.c:312
+#, fuzzy, c-format
+msgid "Points in input vector map <%s> will be interpolated"
+msgstr "출력할 래스터맵"
+
+#: ../vector/v.surf.bspline/main.c:323
+#, fuzzy, c-format
+msgid "Cells for raster map <%s> will be interpolated"
+msgstr "출력할 래스터맵"
+
+#: ../vector/v.surf.bspline/main.c:332
 msgid "Cannot read field info"
 msgstr ""
 
-#: ../vector/v.surf.bspline/main.c:352
+#: ../vector/v.surf.bspline/main.c:353
 #, c-format
 msgid "[%d] records selected from table"
 msgstr ""
 
-#: ../vector/v.surf.bspline/main.c:371
+#: ../vector/v.surf.bspline/main.c:372
 #, c-format
 msgid "Interpolation: Creating table: It was impossible to create table <%s>."
 msgstr ""
 
-#: ../vector/v.surf.bspline/main.c:394
+#: ../vector/v.surf.bspline/main.c:395
 msgid ""
 "Cannot allocate memory for auxiliar matrix.Consider changing region "
 "resolution"
 msgstr ""
 
-#: ../vector/v.surf.bspline/main.c:591
+#: ../vector/v.surf.bspline/main.c:593
 #, c-format
 msgid "Interpolation: (%d,%d): No record for point (cat = %d)"
+msgstr ""
+
+#: ../vector/v.surf.bspline/main.c:712
+msgid "No data within this subregion. Consider increasing spline step values."
 msgstr ""
 
 #: ../vector/v.surf.bspline/crosscorr.c:73
@@ -22179,7 +22243,7 @@ msgid "Get area %d failed"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.to.rast/do_areas.c:119
-msgid "Area without centroid (may be OK for island)"
+msgid "Area without centroid (OK for island)"
 msgstr ""
 
 #: ../vector/v.to.rast/do_areas.c:126
@@ -23231,11 +23295,11 @@ msgstr "출력할 래스터맵"
 msgid "Layer must be > 0 for 'where'"
 msgstr ""
 
-#: ../vector/v.info/main.c:39
+#: ../vector/v.info/main.c:40
 msgid "history"
 msgstr ""
 
-#: ../vector/v.info/main.c:41
+#: ../vector/v.info/main.c:42
 #, fuzzy
 msgid "Outputs basic information about a vector map."
 msgstr "출력할 래스터맵"
@@ -23252,7 +23316,7 @@ msgstr ""
 msgid "Print topology information only"
 msgstr ""
 
-#: ../vector/v.info/print.c:128 ../vector/v.db.connect/main.c:159
+#: ../vector/v.info/print.c:128 ../vector/v.db.connect/main.c:158
 #, c-format
 msgid "Database connection for map <%s> is not defined in DB file"
 msgstr ""
@@ -23811,31 +23875,31 @@ msgstr ""
 msgid "Bad arguments to anyfunc %s (argc = %d)"
 msgstr ""
 
-#: ../vector/v.mapcalc/map.c:67
+#: ../vector/v.mapcalc/map.c:68
 #, c-format
 msgid "Performing 1 arg map function on map %s"
 msgstr ""
 
-#: ../vector/v.mapcalc/map.c:78
+#: ../vector/v.mapcalc/map.c:79
 #, c-format
 msgid "Performing 2 arg map function on maps %s and %s"
 msgstr ""
 
-#: ../vector/v.mapcalc/map.c:90
+#: ../vector/v.mapcalc/map.c:91
 #, c-format
 msgid "Performing map %s + %s"
 msgstr ""
 
-#: ../vector/v.mapcalc/map.c:264
+#: ../vector/v.mapcalc/map.c:265
 msgid "Can't call bad map-function"
 msgstr ""
 
-#: ../vector/v.mapcalc/map.c:276
+#: ../vector/v.mapcalc/map.c:277
 #, c-format
 msgid "Bad arguments to mapfunc %s (argc = %d)"
 msgstr ""
 
-#: ../vector/v.mapcalc/map.c:300
+#: ../vector/v.mapcalc/map.c:301
 #, c-format
 msgid "No function defined to perform map %c map"
 msgstr ""
@@ -23984,78 +24048,78 @@ msgid "Print all map connection parameters and exit"
 msgstr ""
 
 #: ../vector/v.db.connect/main.c:89
-msgid "Print all map connection parameters and exit in shell script style"
+msgid "Print all map connection parameters in shell script style and exit"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:92
+#: ../vector/v.db.connect/main.c:91
 msgid "Format: layer[/layer name] table key database driver"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:98
+#: ../vector/v.db.connect/main.c:97
 msgid "Print types/names of table columns for specified layer and exit"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:105
+#: ../vector/v.db.connect/main.c:104
 msgid "Overwrite connection parameter for certain layer"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:110
+#: ../vector/v.db.connect/main.c:109
 msgid "Delete connection for certain layer (not the table)"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:144
+#: ../vector/v.db.connect/main.c:143
 msgid "Please choose only one print style"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:152
+#: ../vector/v.db.connect/main.c:151
 #, fuzzy
 msgid "Unable to modify vector map stored in other mapset"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.db.connect/main.c:165
+#: ../vector/v.db.connect/main.c:164
 #, fuzzy, c-format
-msgid "Vector map <%s> is connected by:"
+msgid "Vector map <%s> is connected by:\n"
 msgstr "출력할 래스터맵"
 
-#: ../vector/v.db.connect/main.c:190
+#: ../vector/v.db.connect/main.c:192
 #, c-format
 msgid ""
 "layer <%d/%s> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:196
+#: ../vector/v.db.connect/main.c:198
 #, c-format
 msgid ""
 "layer <%d> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:259
+#: ../vector/v.db.connect/main.c:261
 #, c-format
 msgid "Use -o to overwrite existing link for layer <%d>"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:267 ../vector/v.db.connect/main.c:307
+#: ../vector/v.db.connect/main.c:269 ../vector/v.db.connect/main.c:309
 #, c-format
 msgid "Table <%s> does not exist in database <%s>"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:295 ../vector/v.db.connect/main.c:313
+#: ../vector/v.db.connect/main.c:297 ../vector/v.db.connect/main.c:315
 #, c-format
 msgid ""
 "The table <%s> is now part of vector map <%s> and may be deleted or "
 "overwritten by GRASS modules"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:334
+#: ../vector/v.db.connect/main.c:336
 #, c-format
 msgid "Cannot grant privileges on table %s"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:337
+#: ../vector/v.db.connect/main.c:339
 msgid "Select privileges were granted on the table"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:344
+#: ../vector/v.db.connect/main.c:346
 msgid ""
 "For defining a new connection you have to specify these parameters: driver, "
 "database, table [, key [, layer]]"
@@ -24437,38 +24501,38 @@ msgstr ""
 msgid "Name of Arc cost column"
 msgstr "출력할 래스터맵"
 
-#: ../misc/m.measure/main.c:46
+#: ../misc/m.measure/main.c:45
 msgid "Measures the lengths and areas of features."
 msgstr ""
 
-#: ../misc/m.measure/main.c:47 ../misc/m.cogo/main.c:225
+#: ../misc/m.measure/main.c:46 ../misc/m.cogo/main.c:225
 #: ../locale/scriptstrings/m.proj_to_translate.c:2
 msgid "miscellaneous"
 msgstr ""
 
-#: ../misc/m.measure/main.c:48
+#: ../misc/m.measure/main.c:47
 msgid "measurement"
 msgstr ""
 
-#: ../misc/m.measure/main.c:52
+#: ../misc/m.measure/main.c:51
 #, fuzzy
 msgid "Vertex coordinates"
 msgstr "출력할 래스터맵"
 
-#: ../misc/m.measure/main.c:60
+#: ../misc/m.measure/main.c:59
 msgid "Default: location map units"
 msgstr ""
 
-#: ../misc/m.measure/main.c:64
+#: ../misc/m.measure/main.c:63
 #, fuzzy
 msgid "Shell script style"
 msgstr "출력할 래스터맵"
 
-#: ../misc/m.measure/main.c:107
+#: ../misc/m.measure/main.c:106
 msgid "Length:"
 msgstr ""
 
-#: ../misc/m.measure/main.c:118
+#: ../misc/m.measure/main.c:117
 msgid "Area:"
 msgstr ""
 
@@ -24518,7 +24582,7 @@ msgid "Input parse error on line %d"
 msgstr ""
 
 #: ../visualization/nviz/src/nvizMain.c:73
-#: ../visualization/nviz2/cmd/main.c:46
+#: ../visualization/nviz2/cmd/main.c:48
 #, fuzzy
 msgid "visualization"
 msgstr "출력할 래스터맵"
@@ -24595,283 +24659,329 @@ msgstr ""
 msgid "Loading data failed"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/main.c:50
+#: ../visualization/nviz2/cmd/main.c:52
 msgid "Allows rendering GIS data is a 3D space."
 msgstr ""
 
-#: ../visualization/nviz2/cmd/main.c:51
+#: ../visualization/nviz2/cmd/main.c:53
 msgid ""
 "Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster "
 "data) in a 3D space."
 msgstr ""
 
-#: ../visualization/nviz2/cmd/main.c:139
+#: ../visualization/nviz2/cmd/main.c:131
 #, c-format
 msgid "Vertical exaggeration not given, using calculated value %.0f"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/main.c:149
+#: ../visualization/nviz2/cmd/main.c:143
 #, c-format
 msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/main.c:174
+#: ../visualization/nviz2/cmd/main.c:204
 #, fuzzy
 msgid "Unsupported output format"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/main.c:176 ../imagery/i.cluster/main.c:335
+#: ../visualization/nviz2/cmd/main.c:206 ../imagery/i.cluster/main.c:335
 #, fuzzy, c-format
 msgid "File <%s> created."
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:47
+#: ../visualization/nviz2/cmd/args.c:49
 msgid "Use draw mode for all loaded surfaces"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:48 ../visualization/nviz2/cmd/args.c:114
-#: ../visualization/nviz2/cmd/args.c:123 ../visualization/nviz2/cmd/args.c:130
-#: ../visualization/nviz2/cmd/args.c:136 ../visualization/nviz2/cmd/args.c:145
-#: ../visualization/nviz2/cmd/args.c:154 ../visualization/nviz2/cmd/args.c:164
-#: ../visualization/nviz2/cmd/args.c:172 ../visualization/nviz2/cmd/args.c:182
-#: ../visualization/nviz2/cmd/args.c:190 ../visualization/nviz2/cmd/args.c:200
+#: ../visualization/nviz2/cmd/args.c:50 ../visualization/nviz2/cmd/args.c:122
+#: ../visualization/nviz2/cmd/args.c:131 ../visualization/nviz2/cmd/args.c:138
+#: ../visualization/nviz2/cmd/args.c:144 ../visualization/nviz2/cmd/args.c:152
+#: ../visualization/nviz2/cmd/args.c:161 ../visualization/nviz2/cmd/args.c:171
+#: ../visualization/nviz2/cmd/args.c:179 ../visualization/nviz2/cmd/args.c:189
+#: ../visualization/nviz2/cmd/args.c:197 ../visualization/nviz2/cmd/args.c:207
 msgid "Surfaces"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:73
+#: ../visualization/nviz2/cmd/args.c:81
 #, fuzzy
-msgid "Name for output file (without extension)"
+msgid "Name for output image file (without extension)"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:74 ../visualization/nviz2/cmd/args.c:88
-#: ../visualization/nviz2/cmd/args.c:98
+#: ../visualization/nviz2/cmd/args.c:82 ../visualization/nviz2/cmd/args.c:96
+#: ../visualization/nviz2/cmd/args.c:106
 msgid "Image"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:86
+#: ../visualization/nviz2/cmd/args.c:94
 msgid "Graphics file format"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:96
-msgid "Width and height of output image"
+#: ../visualization/nviz2/cmd/args.c:104
+msgid "Size (width, height) of output image"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:113
+#: ../visualization/nviz2/cmd/args.c:121
 #, fuzzy
 msgid "Name of raster map(s) for elevation"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:122
+#: ../visualization/nviz2/cmd/args.c:130
 #, fuzzy
 msgid "Elevation value(s)"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:129
+#: ../visualization/nviz2/cmd/args.c:137
 #, fuzzy
 msgid "Name of raster map(s) for color"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:135
+#: ../visualization/nviz2/cmd/args.c:143
 msgid "Color value(s)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:144
+#: ../visualization/nviz2/cmd/args.c:151
 #, fuzzy
 msgid "Name of raster map(s) for mask"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:153
+#: ../visualization/nviz2/cmd/args.c:160
 #, fuzzy
 msgid "Name of raster map(s) for transparency"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:163
+#: ../visualization/nviz2/cmd/args.c:170
 msgid "Transparency value(s)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:171
+#: ../visualization/nviz2/cmd/args.c:178
 #, fuzzy
 msgid "Name of raster map(s) for shininess"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:181
+#: ../visualization/nviz2/cmd/args.c:188
 msgid "Shininess value(s)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:189
+#: ../visualization/nviz2/cmd/args.c:196
 #, fuzzy
 msgid "Name of raster map(s) for emission"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:199
+#: ../visualization/nviz2/cmd/args.c:206
 msgid "Emission value(s)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:213
+#: ../visualization/nviz2/cmd/args.c:220
 msgid "Draw mode"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:216 ../visualization/nviz2/cmd/args.c:227
-#: ../visualization/nviz2/cmd/args.c:238 ../visualization/nviz2/cmd/args.c:250
-#: ../visualization/nviz2/cmd/args.c:262 ../visualization/nviz2/cmd/args.c:271
-#: ../visualization/nviz2/cmd/args.c:283 ../visualization/nviz2/cmd/args.c:293
-#: ../visualization/nviz2/cmd/args.c:513 ../visualization/nviz2/cmd/args.c:525
+#: ../visualization/nviz2/cmd/args.c:223 ../visualization/nviz2/cmd/args.c:234
+#: ../visualization/nviz2/cmd/args.c:245 ../visualization/nviz2/cmd/args.c:257
+#: ../visualization/nviz2/cmd/args.c:269 ../visualization/nviz2/cmd/args.c:278
+#: ../visualization/nviz2/cmd/args.c:290 ../visualization/nviz2/cmd/args.c:300
+#: ../visualization/nviz2/cmd/args.c:520 ../visualization/nviz2/cmd/args.c:532
 msgid "Draw"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:225
+#: ../visualization/nviz2/cmd/args.c:232
 msgid "Fine resolution"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:236
+#: ../visualization/nviz2/cmd/args.c:243
 msgid "Coarse resolution"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:247
+#: ../visualization/nviz2/cmd/args.c:254
 msgid "Draw style"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:259 ../visualization/nviz2/cmd/args.c:280
+#: ../visualization/nviz2/cmd/args.c:266 ../visualization/nviz2/cmd/args.c:287
 msgid "Shading"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:268
+#: ../visualization/nviz2/cmd/args.c:275
 msgid "Wire color"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:304
+#: ../visualization/nviz2/cmd/args.c:311
 #, fuzzy
 msgid "Name of line vector overlay map(s)"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:305 ../visualization/nviz2/cmd/args.c:316
-#: ../visualization/nviz2/cmd/args.c:327 ../visualization/nviz2/cmd/args.c:339
-#: ../visualization/nviz2/cmd/args.c:349 ../visualization/nviz2/cmd/args.c:361
+#: ../visualization/nviz2/cmd/args.c:312 ../visualization/nviz2/cmd/args.c:323
+#: ../visualization/nviz2/cmd/args.c:334 ../visualization/nviz2/cmd/args.c:346
+#: ../visualization/nviz2/cmd/args.c:356 ../visualization/nviz2/cmd/args.c:368
 #, fuzzy
 msgid "Vector lines"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:315
+#: ../visualization/nviz2/cmd/args.c:322
 #, fuzzy
 msgid "Vector line width"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:324
+#: ../visualization/nviz2/cmd/args.c:331
 #, fuzzy
 msgid "Vector line color"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:336
+#: ../visualization/nviz2/cmd/args.c:343
 msgid "Vector line display mode"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:348
+#: ../visualization/nviz2/cmd/args.c:355
 msgid "Vector line height"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:372
+#: ../visualization/nviz2/cmd/args.c:379
 #, fuzzy
 msgid "Name of point vector overlay map(s)"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:373 ../visualization/nviz2/cmd/args.c:384
-#: ../visualization/nviz2/cmd/args.c:396 ../visualization/nviz2/cmd/args.c:407
-#: ../visualization/nviz2/cmd/args.c:420 ../visualization/nviz2/cmd/args.c:430
+#: ../visualization/nviz2/cmd/args.c:380 ../visualization/nviz2/cmd/args.c:391
+#: ../visualization/nviz2/cmd/args.c:403 ../visualization/nviz2/cmd/args.c:414
+#: ../visualization/nviz2/cmd/args.c:427 ../visualization/nviz2/cmd/args.c:437
 #, fuzzy
 msgid "Vector points"
 msgstr "출력할 래스터맵"
 
-#: ../visualization/nviz2/cmd/args.c:383
+#: ../visualization/nviz2/cmd/args.c:390
 msgid "Icon size"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:395
+#: ../visualization/nviz2/cmd/args.c:402
 msgid "Icon width"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:404
+#: ../visualization/nviz2/cmd/args.c:411
 msgid "Icon color"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:416
+#: ../visualization/nviz2/cmd/args.c:423
 msgid "Icon marker"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:446
+#: ../visualization/nviz2/cmd/args.c:453
 msgid "Viewpoint position (x,y model coordinates)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:447 ../visualization/nviz2/cmd/args.c:458
-#: ../visualization/nviz2/cmd/args.c:468 ../visualization/nviz2/cmd/args.c:480
+#: ../visualization/nviz2/cmd/args.c:454 ../visualization/nviz2/cmd/args.c:465
+#: ../visualization/nviz2/cmd/args.c:475 ../visualization/nviz2/cmd/args.c:487
 msgid "Viewpoint"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:457
+#: ../visualization/nviz2/cmd/args.c:464
 msgid "Viewpoint height (in map units)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:467
+#: ../visualization/nviz2/cmd/args.c:474
 msgid "Viewpoint field of view (in degrees)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:479
+#: ../visualization/nviz2/cmd/args.c:486
 msgid "Viewpoint twist angle (in degrees)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:500 ../visualization/nviz2/cmd/args.c:535
-#: ../visualization/nviz2/cmd/args.c:547 ../visualization/nviz2/cmd/args.c:557
+#: ../visualization/nviz2/cmd/args.c:507 ../visualization/nviz2/cmd/args.c:542
+#: ../visualization/nviz2/cmd/args.c:554 ../visualization/nviz2/cmd/args.c:564
 msgid "Volumes"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:510
+#: ../visualization/nviz2/cmd/args.c:517
 msgid "Volume draw mode"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:522
+#: ../visualization/nviz2/cmd/args.c:529
 msgid "Volume shading"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:534
+#: ../visualization/nviz2/cmd/args.c:541
 msgid "Volume position"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:545
+#: ../visualization/nviz2/cmd/args.c:552
 msgid "Volume resolution"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:556
+#: ../visualization/nviz2/cmd/args.c:563
 msgid "Isosurface level"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:602
+#: ../visualization/nviz2/cmd/args.c:578
+msgid "Light position (x,y,z model coordinates)"
+msgstr ""
+
+#: ../visualization/nviz2/cmd/args.c:579 ../visualization/nviz2/cmd/args.c:585
+#: ../visualization/nviz2/cmd/args.c:594 ../visualization/nviz2/cmd/args.c:604
+msgid "Lighting"
+msgstr ""
+
+#: ../visualization/nviz2/cmd/args.c:584
+msgid "Light color"
+msgstr ""
+
+#: ../visualization/nviz2/cmd/args.c:593
+msgid "Light brightness"
+msgstr ""
+
+#: ../visualization/nviz2/cmd/args.c:603
+msgid "Light ambient"
+msgstr ""
+
+#: ../visualization/nviz2/cmd/args.c:615
+msgid ""
+"nw;North-West edge;ne;North-East edge;sw;South-West edge;se;South-East edge"
+msgstr ""
+
+#: ../visualization/nviz2/cmd/args.c:619
+#, fuzzy
+msgid "Fringe edges"
+msgstr "출력할 래스터맵"
+
+#: ../visualization/nviz2/cmd/args.c:620 ../visualization/nviz2/cmd/args.c:626
+#: ../visualization/nviz2/cmd/args.c:635
+msgid "Fringe"
+msgstr ""
+
+#: ../visualization/nviz2/cmd/args.c:625
+#, fuzzy
+msgid "Fringe color"
+msgstr "출력할 래스터맵"
+
+#: ../visualization/nviz2/cmd/args.c:634
+#, fuzzy
+msgid "Fringe elevation"
+msgstr "출력할 래스터맵"
+
+#: ../visualization/nviz2/cmd/args.c:679
 #, c-format
 msgid "At least one <%s> or <%s> required"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:616 ../visualization/nviz2/cmd/args.c:646
-#: ../visualization/nviz2/cmd/args.c:658 ../visualization/nviz2/cmd/args.c:664
-#: ../visualization/nviz2/cmd/args.c:670 ../visualization/nviz2/cmd/args.c:676
+#: ../visualization/nviz2/cmd/args.c:693 ../visualization/nviz2/cmd/args.c:723
+#: ../visualization/nviz2/cmd/args.c:735 ../visualization/nviz2/cmd/args.c:741
+#: ../visualization/nviz2/cmd/args.c:747 ../visualization/nviz2/cmd/args.c:753
 #, c-format
 msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:652
+#: ../visualization/nviz2/cmd/args.c:729
 #, c-format
 msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:689 ../visualization/nviz2/cmd/args.c:703
-#: ../visualization/nviz2/cmd/args.c:710
+#: ../visualization/nviz2/cmd/args.c:766 ../visualization/nviz2/cmd/args.c:780
+#: ../visualization/nviz2/cmd/args.c:787
 #, c-format
 msgid "Inconsistent number of attributes (<%s> %d: <%s> %d)"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:696
+#: ../visualization/nviz2/cmd/args.c:773
 #, c-format
 msgid "Inconsistent number of attributes (<%s> %d: <%s> %d"
 msgstr ""
 
-#: ../visualization/nviz2/cmd/args.c:722
+#: ../visualization/nviz2/cmd/args.c:799
 #, c-format
 msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"
 msgstr ""
@@ -25013,124 +25123,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Unable to copy attribute table to vector map <%s>"
 msgstr "출력할 래스터맵"
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/opennew.c:16
-#, c-format
-msgid "Failed in attempt to open %s"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:155
-msgid ""
-"Generates raster map layers of slope, aspect, curvatures and partial "
-"derivatives from a raster map layer of true elevation values. Aspect is "
-"calculated counterclockwise from east."
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:164
-msgid "Raster elevation file name"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:172
-msgid "Output slope filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:180
-msgid "Output aspect filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:207
-msgid "Output profile curvature filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:216
-msgid "Output tangential curvature filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:226
-msgid "Output first order partial derivative dx (E-W slope) filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:236
-msgid "Output first order partial derivative dy (N-S slope) filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:246
-msgid "Output second order partial derivative dxx filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:256
-msgid "Output second order partial derivative dyy filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:266
-msgid "Output second order partial derivative dxy filename"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:328
-msgid ""
-"The '-q' flag is superseded and will be removed in future. Please use '--"
-"quiet' instead."
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:412
-#, c-format
-msgid "wrong type: %s"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1021
-#, fuzzy
-msgid "Creating support files..."
-msgstr "출력할 래스터맵"
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1023
-#, c-format
-msgid "Elevation products for mapset [%s] in [%s]"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1104
-#, c-format
-msgid "ASPECT [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1212
-#, c-format
-msgid "SLOPE [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1283
-#, c-format
-msgid "PROFILE CURVE [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1309
-#, c-format
-msgid "TANGENTIAL CURVE [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1333
-#, c-format
-msgid "E-W SLOPE [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1357
-#, c-format
-msgid "N-S SLOPE [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1381
-#, c-format
-msgid "DXX [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1405
-#, c-format
-msgid "DYY [%s] COMPLETE"
-msgstr ""
-
-#: ../swig/perl/R_slope_aspect/r_slope_aspect/r_slope_aspect.c:1429
-#, c-format
-msgid "DXY [%s] COMPLETE"
-msgstr ""
 
 #: ../ps/ps.map/ps_vlines.c:57 ../ps/ps.map/ps_vpoints.c:73
 #: ../ps/ps.map/ps_vareas.c:165
@@ -25394,31 +25386,41 @@ msgid "connection settings"
 msgstr "출력할 래스터맵"
 
 #: ../db/db.connect/main.c:49
-msgid "Prints/sets general DB connection for current mapset and exits."
+msgid "Prints/sets general DB connection for current mapset."
 msgstr ""
 
-#: ../db/db.connect/main.c:54
+#: ../db/db.connect/main.c:53
 msgid "Print current connection parameters and exit"
 msgstr ""
 
-#: ../db/db.connect/main.c:60
+#: ../db/db.connect/main.c:59
 msgid "Check connection parameters, set if uninitialized, and exit"
 msgstr ""
 
-#: ../db/db.connect/main.c:66 ../db/db.connect/main.c:70
-#: ../db/db.connect/main.c:74 ../db/db.connect/main.c:84
+#: ../db/db.connect/main.c:60 ../db/db.connect/main.c:66
+#: ../db/db.connect/main.c:71 ../db/db.connect/main.c:75
+#: ../db/db.connect/main.c:79 ../db/db.connect/main.c:89
 msgid "Set"
 msgstr ""
 
-#: ../db/db.connect/main.c:82
+#: ../db/db.connect/main.c:64
+msgid "Set from default settings and exit"
+msgstr ""
+
+#: ../db/db.connect/main.c:65
+#, fuzzy
+msgid "Overwrite current settings if initialized"
+msgstr "출력할 래스터맵"
+
+#: ../db/db.connect/main.c:87
 msgid "Default group of database users to which select privilege is granted"
 msgstr ""
 
-#: ../db/db.connect/main.c:118
+#: ../db/db.connect/main.c:122
 msgid "Database connection not defined. Run db.connect."
 msgstr ""
 
-#: ../db/db.connect/main.c:138
+#: ../db/db.connect/main.c:141 ../db/db.connect/main.c:163
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -25426,11 +25428,11 @@ msgid ""
 "database: %s"
 msgstr ""
 
-#: ../db/db.connect/main.c:145
+#: ../db/db.connect/main.c:148
 msgid "Default driver is not set"
 msgstr ""
 
-#: ../db/db.connect/main.c:148
+#: ../db/db.connect/main.c:151
 msgid "Default database is not set"
 msgstr ""
 
@@ -25664,7 +25666,7 @@ msgstr ""
 msgid "'-' to read from standard input"
 msgstr "출력할 래스터맵"
 
-#: ../db/db.execute/main.c:133
+#: ../db/db.execute/main.c:136
 msgid "Ignore SQL errors and continue"
 msgstr ""
 
@@ -25722,17 +25724,17 @@ msgstr ""
 msgid "succeeded"
 msgstr ""
 
-#: ../db/db.select/main.c:208
+#: ../db/db.select/main.c:194
 msgid "SQL select statement"
 msgstr ""
 
-#: ../db/db.select/main.c:210
+#: ../db/db.select/main.c:196
 msgid "For example: 'select * from rybniky where kapri = 'hodne'"
 msgstr ""
 
-#: ../db/db.select/main.c:215
+#: ../db/db.select/main.c:201
 #, fuzzy
-msgid "Name of file with sql statement"
+msgid "Name of file with SQL select statement(s)"
 msgstr "출력할 래스터맵"
 
 #: ../db/db.select/main.c:247
@@ -25935,7 +25937,7 @@ msgid "Calculates linear regression from two raster maps: y = a + b*x"
 msgstr ""
 
 #: ../locale/scriptstrings/r.regression.line_to_translate.c:5
-msgid "Slower but accurate (applies to FP maps only)"
+msgid "Slower but more accurate (applies to FP maps only)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.regression.line_to_translate.c:6
@@ -26037,45 +26039,62 @@ msgid "Input coordinate file ('-' to read from stdin)"
 msgstr "출력할 래스터맵"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:5
-msgid "Output coordinate file (omit to send to stdout)"
+#: ../locale/scriptstrings/m.proj_to_translate.c:7
+#: ../locale/scriptstrings/m.proj_to_translate.c:10
+#: ../locale/scriptstrings/m.proj_to_translate.c:20
+#: ../locale/scriptstrings/m.proj_to_translate.c:22
+#: ../locale/scriptstrings/m.proj_to_translate.c:24
+msgid "Files & format"
 msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:6
-msgid "Field separator (format: input[,output])"
-msgstr ""
-
-#: ../locale/scriptstrings/m.proj_to_translate.c:7
-msgid "Valid field separators are also \"space\", \"tab\", or \"comma\""
+msgid "Output coordinate file (omit to send to stdout)"
 msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:8
-msgid "Input projection parameters (PROJ.4 style)"
+msgid "Field separator (format: input[,output])"
 msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:9
-msgid "Output projection parameters (PROJ.4 style)"
-msgstr ""
-
-#: ../locale/scriptstrings/m.proj_to_translate.c:10
-msgid "Use LL WGS84 as input and current location as output projection"
+msgid "Valid field separators are also \"space\", \"tab\", or \"comma\""
 msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:11
-msgid "Use current location as input and LL WGS84 as output projection"
+msgid "Input projection parameters (PROJ.4 style)"
 msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:12
+#: ../locale/scriptstrings/m.proj_to_translate.c:14
+#: ../locale/scriptstrings/m.proj_to_translate.c:16
+#: ../locale/scriptstrings/m.proj_to_translate.c:18
+#, fuzzy
+msgid "Projections"
+msgstr "출력할 래스터맵"
+
+#: ../locale/scriptstrings/m.proj_to_translate.c:13
+msgid "Output projection parameters (PROJ.4 style)"
+msgstr ""
+
+#: ../locale/scriptstrings/m.proj_to_translate.c:15
+msgid "Use LL WGS84 as input and current location as output projection"
+msgstr ""
+
+#: ../locale/scriptstrings/m.proj_to_translate.c:17
+msgid "Use current location as input and LL WGS84 as output projection"
+msgstr ""
+
+#: ../locale/scriptstrings/m.proj_to_translate.c:19
 msgid ""
-"Output long/lat in decimal degrees or other projections with many decimal "
+"Output long/lat in decimal degrees, or other projections with many decimal "
 "places"
 msgstr ""
 
-#: ../locale/scriptstrings/m.proj_to_translate.c:13
+#: ../locale/scriptstrings/m.proj_to_translate.c:21
 #, fuzzy
 msgid "Include input coordinates in output file"
 msgstr "출력할 래스터맵"
 
-#: ../locale/scriptstrings/m.proj_to_translate.c:14
+#: ../locale/scriptstrings/m.proj_to_translate.c:23
 msgid "Include column names in output file"
 msgstr ""
 
@@ -26317,6 +26336,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:16
 msgid "List available modules in the add-ons repository in shell script style"
+msgstr ""
+
+#: ../locale/scriptstrings/g.extension_to_translate.c:18
+msgid "Don't deleted downloaded source code when installing new extension"
 msgstr ""
 
 #: ../locale/scriptstrings/d.correlate_to_translate.c:1
@@ -26600,12 +26623,6 @@ msgstr ""
 msgid "Raster map to use as mask"
 msgstr "출력할 래스터맵"
 
-#: ../locale/scriptstrings/r.mask_to_translate.c:5
-#: ../locale/scriptstrings/r.mask_to_translate.c:7
-#: ../locale/scriptstrings/r.mask_to_translate.c:9
-msgid "Create"
-msgstr ""
-
 #: ../locale/scriptstrings/r.mask_to_translate.c:6
 msgid "Category values to use for mask (format: 1 2 3 thru 7 *)"
 msgstr ""
@@ -26800,6 +26817,7 @@ msgid "GpsBabel supported output format"
 msgstr "출력할 래스터맵"
 
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:13
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:7
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:8
 msgid ""
 "A single vector map can be connected to multiple database tables. This "
@@ -26813,7 +26831,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:15
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:47
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:9
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:10
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
@@ -27136,18 +27154,22 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:5
 #, fuzzy
-msgid "Vector map for which to edit attribute table"
+msgid "Name of vector map for which to edit attribute table"
 msgstr "출력할 래스터맵"
 
 #: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:6
-msgid "Layer where to add column"
+#, fuzzy
+msgid "Layer number where to add column(s)"
+msgstr "출력할 래스터맵"
+
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:8
+msgid "Name and type of the new column(s) ('name type [,name type, ...]')"
 msgstr ""
 
-#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:7
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:9
 msgid ""
-"Name and type of the new column(s) ('name type [,name type, ...]' - types "
-"depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION "
-"and DATE)"
+"Data types depend on database backend, but all support VARCHAR(), INT, "
+"DOUBLE PRECISION and DATE"
 msgstr ""
 
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:1
@@ -27288,7 +27310,7 @@ msgid "Requires list available layers flag"
 msgstr ""
 
 #: ../locale/scriptstrings/r.colors.stddev_to_translate.c:1
-msgid "Set color rules based on stddev from a map's mean value."
+msgid "Set color rules based on stddev from a raster map's mean value."
 msgstr ""
 
 #: ../locale/scriptstrings/r.colors.stddev_to_translate.c:5
@@ -27653,18 +27675,23 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:5
 #, fuzzy
-msgid "Name of data table"
+msgid "Print stats in shell script style"
 msgstr "출력할 래스터맵"
 
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:6
+#, fuzzy
+msgid "Name of data table"
+msgstr "출력할 래스터맵"
+
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
 msgid "Column on which to calculate statistics (must be numeric)"
 msgstr ""
 
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:8
 msgid "Database/directory for table"
 msgstr ""
 
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:8
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:9
 msgid "Database driver"
 msgstr ""
 
@@ -27727,6 +27754,11 @@ msgstr "출력할 래스터맵"
 #: ../imagery/i.smap/read_sig.c:27
 #, fuzzy, c-format
 msgid "Signature file <%s> is invalid"
+msgstr "출력할 래스터맵"
+
+#: ../imagery/i.smap/read_sig.c:30
+#, fuzzy, c-format
+msgid "Signature file <%s> is empty"
 msgstr "출력할 래스터맵"
 
 #: ../imagery/i.smap/parse.c:20 ../imagery/i.maxlik/main.c:79
@@ -28276,19 +28308,19 @@ msgstr "출력할 래스터맵"
 msgid "Group <%s> contains no raster maps; run i.group"
 msgstr ""
 
-#: ../imagery/i.rectify/main.c:202
+#: ../imagery/i.rectify/main.c:204
 #, c-format
 msgid "Using region: N=%f S=%f, E=%f W=%f"
 msgstr ""
 
-#: ../imagery/i.rectify/main.c:216
+#: ../imagery/i.rectify/main.c:218
 #, fuzzy, c-format
 msgid ""
 "Input raster map <%s> does not exist in group <%s>.\n"
 " Try:\n"
 msgstr "출력할 래스터맵"
 
-#: ../imagery/i.rectify/main.c:222
+#: ../imagery/i.rectify/main.c:224
 msgid "Exit!"
 msgstr ""
 
@@ -28378,7 +28410,7 @@ msgstr ""
 msgid "Error while writing to temp file"
 msgstr "출력할 래스터맵"
 
-#: ../imagery/i.rectify/write.c:54
+#: ../imagery/i.rectify/write.c:55
 #, fuzzy, c-format
 msgid "Error writing row %d"
 msgstr "출력할 래스터맵"
@@ -28388,12 +28420,12 @@ msgstr "출력할 래스터맵"
 msgid "Rectified input raster map <%s> will be saved as <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../imagery/i.rectify/rectify.c:91
+#: ../imagery/i.rectify/rectify.c:90
 #, fuzzy, c-format
 msgid "Raster map <%s@%s>: projection don't match current settings"
 msgstr "출력할 래스터맵"
 
-#: ../imagery/i.rectify/rectify.c:97
+#: ../imagery/i.rectify/rectify.c:96
 #, fuzzy, c-format
 msgid "Raster map <%s@%s>: zone don't match current settings"
 msgstr "출력할 래스터맵"
@@ -28894,7 +28926,7 @@ msgstr "출력할 래스터맵"
 msgid "Name of input raster map (image fft, imaginary part"
 msgstr "출력할 래스터맵"
 
-#: ../imagery/i.ifft/main.c:119
+#: ../imagery/i.ifft/main.c:115
 msgid "The real and imaginary original windows did not match"
 msgstr ""
 
@@ -29932,6 +29964,18 @@ msgstr ""
 #, c-format
 msgid "Can't mark another point.  Only %d points allowed.  Sorry."
 msgstr ""
+
+#, fuzzy
+#~ msgid "<%s> not found in mapset list"
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Name of workspace file"
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Creating support files..."
+#~ msgstr "출력할 래스터맵"
 
 #, fuzzy
 #~ msgid "Raster file to be converted."
