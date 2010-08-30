@@ -10,7 +10,7 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Surface interpolation from vector point data by Inverse
  *               Distance Squared Weighting
- * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
     parm.col = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.col->required = NO;
     parm.col->description = _("Name of attribute column with values to interpolate");
+    parm.col->guisection = _("Values");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -107,6 +108,7 @@ int main(int argc, char *argv[])
     parm.npoints->required = NO;
     parm.npoints->description = _("Number of interpolation points");
     parm.npoints->answer = "12";
+    parm.npoints->guisection = _("Settings");
 
     flag.noindex = G_define_flag();
     flag.noindex->key = 'n';
@@ -114,11 +116,13 @@ int main(int argc, char *argv[])
     flag.noindex->description = _("Slower but uses"
 				  " less memory and includes points from outside region"
 				  " in the interpolation");
+    flag.noindex->guisection = _("Settings");
 
     flag.withz = G_define_flag();
     flag.withz->key = 'z';
     flag.withz->description = _("Use z coordinates for approximation (3D vector maps only)");
-    
+    flag.withz->guisection = _("Values");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
