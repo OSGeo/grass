@@ -3,19 +3,19 @@
 # Copyright (C) 2004, GRASS Development Team
 #
 # Bui Huu Manh <bhmanh73@yahoo.com>, 2006.
-# Markus Neteler <neteler@itc.it>, 2004, 2009.
+# Markus Neteler <neteler@itc.it>, 2004, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_vi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2009-09-11 09:54+0700\n"
+"PO-Revision-Date: 2010-08-27 11:18+0700\n"
 "Last-Translator: \n"
-"Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.2\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../lib/pngdriver/Graph_set.c:72
@@ -719,9 +719,9 @@ msgid "bad rule (%s): [%s]"
 msgstr "quy tắc tồi (%s): [%d]"
 
 #: ../lib/raster/color_rules.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load color rules <%s>"
-msgstr "Không thể đóng vec-tơ <%s>"
+msgstr "Không thể nạp các quy tắc màu <%s>"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
@@ -1195,14 +1195,14 @@ msgstr ""
 "tại. "
 
 #: ../lib/gis/mapset_msc.c:61
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to make mapset element %s (%s): %s"
-msgstr "Không thể tạo thành phần %s (%s) cho bộ bản đồ"
+msgstr "Không thể tạo thành phần cho bộ bản đồ %s (%s): %s"
 
 #: ../lib/gis/mapset_msc.c:65
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr "Không thể tạo thành phần %s (%s) cho bộ bản đồ"
+msgstr "Không thể truy cập thành phần của bộ bản đồ %s (%s): %s"
 
 #: ../lib/gis/adj_cellhd.c:44 ../lib/gis/adj_cellhd.c:192
 msgid "Illegal n-s resolution value"
@@ -1463,12 +1463,12 @@ msgstr ""
 #: ../lib/gis/spawn.c:385
 #, c-format
 msgid "CreateProcess() failed: error = %d"
-msgstr ""
+msgstr "CreateProcess() thất bại: lỗi = %d"
 
 #: ../lib/gis/spawn.c:416
-#, fuzzy, c-format
+#, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr "G_spawn: không thể sao lặp lại mô tả %d tới %d"
+msgstr "G_spawn: không thể chuyển hướng trình mô tả %d"
 
 #: ../lib/gis/spawn.c:424 ../lib/gis/spawn.c:609
 #, c-format
@@ -1975,7 +1975,7 @@ msgstr "VỊ TRÍ << %s >>  không dùng được"
 
 #: ../lib/gis/myname.c:46
 msgid "This location has no description."
-msgstr ""
+msgstr "Location này không có mô tả."
 
 #: ../lib/gis/debug.c:81
 #, c-format
@@ -2297,6 +2297,8 @@ msgid ""
 "Incompatible library version for module. You need to rebuild GRASS or "
 "untangle multiple installations."
 msgstr ""
+"Phiên bản thư viện cho mô-đun không tương thích. Bạn cần phải xây dựng lại "
+"GRASS hoặc gỡ rối việc cài đặt nhiều lần."
 
 #: ../lib/gis/gisinit.c:66
 #, c-format
@@ -2498,16 +2500,15 @@ msgstr "Cố gắng xoá thông tin đảo chết %d khỏi vùng chết %d"
 
 #: ../lib/vector/diglib/file.c:161
 msgid "Writing to file loaded to memory not supported"
-msgstr ""
+msgstr "Việc ghi vào tập tin nạp trong bộ nhớ không được hỗ trợ"
 
 #: ../lib/vector/diglib/file.c:205
-#, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "Không thể mở tập tin tạm"
+msgstr "Không thể nạp tập tin vào bộ nhớ, tập tin không được mở"
 
 #: ../lib/vector/diglib/file.c:220
 msgid "Vector memory mode not supported, using 'AUTO'"
-msgstr ""
+msgstr "Chế độ bộ nhớ cho véc-tơ không được hỗ trợ, dùng chế độ 'TỰ ĐỘNG'"
 
 #: ../lib/vector/diglib/spindex_rw.c:294
 #, fuzzy, c-format
@@ -4947,7 +4948,6 @@ msgid "Range request error for legend"
 msgstr "Lỗi yêu cầu miền cho chú giải"
 
 #: ../lib/ogsf/gsd_legend.c:385
-#, fuzzy
 msgid "Unable to show discrete FP range (use list"
 msgstr "Không thể hiển thị miền FP rời rạc (dùng danh sách"
 
@@ -5184,12 +5184,11 @@ msgstr "Tên bản đồ bảng không hợp lệ <%s>. Ký tự <%c> không đ�
 
 #: ../lib/db/dbmi_base/login.c:111
 msgid "Login file corrupted"
-msgstr ""
+msgstr "Tập tin đăng nhập bị hỏng"
 
 #: ../lib/db/dbmi_base/default_name.c:127
-#, fuzzy
 msgid "Programmer error"
-msgstr "Có thể là lỗi chương trình."
+msgstr "Lỗi của lập trình viên"
 
 #: ../lib/db/dbmi_client/table.c:46
 #, c-format
@@ -5230,11 +5229,11 @@ msgstr "Kiểu cột không biết (cột <%s>)"
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:220
 #: ../lib/db/dbmi_client/select.c:286
 msgid "Missing column name"
-msgstr ""
+msgstr "Thiếu tên cột"
 
 #: ../lib/db/dbmi_client/select.c:215 ../lib/db/dbmi_client/select.c:281
 msgid "Missing key column name"
-msgstr ""
+msgstr "Thiếu tên cột khoá"
 
 #: ../lib/db/dbmi_client/select.c:307
 #, c-format
@@ -5775,19 +5774,19 @@ msgid "Starting cholesky decomposition solver"
 msgstr "Đang bắt đầu bộ giải khai triển Cholesky"
 
 #: ../lib/imagery/points.c:124
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "Không thể mở tập tin [%s] của nhóm [%s trong %s]"
+msgstr "Không thể mở tập tin điểm khống chế của nhóm [%s trong %s]"
 
 #: ../lib/imagery/points.c:132
-#, fuzzy, c-format
+#, c-format
 msgid "Bad format in control point file for group [%s in %s]"
-msgstr "Không thể mở tập tin [%s] của nhóm [%s trong %s]"
+msgstr "Định dạng tập tin điểm khống chế của nhóm [%s trong %s] không tốt"
 
 #: ../lib/imagery/points.c:159
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create control point file for group [%s in %s]"
-msgstr "Không thể tạo tập [%s] cho nhóm [%s ở %s]"
+msgstr "Không thể tạo tập tin điểm khống chế cho nhóm [%s trong %s]"
 
 #: ../lib/imagery/fopen.c:23
 #, c-format
@@ -5974,9 +5973,8 @@ msgstr "Không thể mở tập tin %s trong %s"
 #~ msgid "Feature: "
 #~ msgstr "Đối tượng: "
 
-#, fuzzy
 #~ msgid "Unable to feature %d from vector map <%s>"
-#~ msgstr "Không thể với đối tượng %d từ bản đồ vec-tơ <%s>"
+#~ msgstr "Không thể đọc đối tượng %d từ bản đồ vec-tơ <%s>"
 
 #~ msgid "Too many arguments"
 #~ msgstr "Quá nhiều đối số"

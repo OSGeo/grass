@@ -3,19 +3,19 @@
 # Copyright (C) 2004, GRASS Development Team
 #
 # Markus Neteler <neteler@itc.it>, 2004.
-# Bui Huu Manh <bhmanh73@yahoo.com>, 2006, 2009.
+# Bui Huu Manh <bhmanh73@yahoo.com>, 2006, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_vi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2009-09-11 15:39+0700\n"
+"PO-Revision-Date: 2010-08-27 14:37+0700\n"
 "Last-Translator: \n"
-"Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.2\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../raster3d/r3.out.ascii/main.c:58 ../raster3d/r3.out.ascii/main.c:302
@@ -2562,9 +2562,8 @@ msgid "The '-l' flag only works in Lat/Lon locations"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:206
-#, fuzzy
 msgid "Available GDAL Drivers:"
-msgstr "Các trình điều khiển OGR dùng được:"
+msgstr "Các trình điều khiển GDAL dùng được:"
 
 #: ../raster/r.in.gdal/main.c:227 ../raster/r.proj/main.c:282
 #: ../raster/r.out.gdal/main.c:232 ../vector/v.net/args.c:109
@@ -3033,14 +3032,12 @@ msgid ""
 msgstr "Giá trị bước spline nội suy theo hướng bắc"
 
 #: ../raster/r.resamp.bspline/main.c:107 ../vector/v.surf.bspline/main.c:139
-#, fuzzy
 msgid "Spline interpolation algorithm"
-msgstr "Thuật toán tổng quát hoá"
+msgstr "Thuật toán nội suy spline"
 
 #: ../raster/r.resamp.bspline/main.c:116 ../vector/v.surf.bspline/main.c:148
-#, fuzzy
 msgid "Tykhonov regularization parameter (affects smoothing)"
-msgstr "Trọng số của phép chính quy hóa Tychonov"
+msgstr "Tham số của phép chính quy hóa Tykhonov (ảnh hưởng đến độ trơn)"
 
 #: ../raster/r.resamp.bspline/main.c:122
 #, fuzzy
@@ -3048,12 +3045,12 @@ msgid "Only interpolate null cells in input raster map"
 msgstr "Giữ các giá trị rỗng trong bản đồ raster đầu ra"
 
 #: ../raster/r.resamp.bspline/main.c:128 ../vector/v.surf.bspline/main.c:89
-#, fuzzy
 msgid ""
 "Find the best Tykhonov regularizing parameter using a \"leave-one-out\" "
 "cross validation method"
 msgstr ""
-"Tìm các tham số tốt nhất bằng cách dùng một phương pháp kiểm chứng chéo"
+"Tìm tham số chính quy hoá Tykhonov tốt nhất bằng cách dùng phương pháp kiểm "
+"chứng chéo 'chừa-ra-một\""
 
 #: ../raster/r.resamp.bspline/main.c:163
 #, fuzzy
@@ -3081,7 +3078,7 @@ msgstr "Giá trị bước spline nội suy theo hướng đông"
 #: ../vector/v.lidar.correction/main.c:275
 #, c-format
 msgid "adjusted EW splines %d"
-msgstr ""
+msgstr "các đường spline ĐT %d được điều chỉnh"
 
 #: ../raster/r.resamp.bspline/main.c:199 ../vector/v.outlier/main.c:274
 #: ../vector/v.surf.bspline/main.c:420
@@ -3089,7 +3086,7 @@ msgstr ""
 #: ../vector/v.lidar.correction/main.c:276
 #, c-format
 msgid "adjusted NS splines %d"
-msgstr ""
+msgstr "các đường spline BN %d được điều chỉnh"
 
 #: ../raster/r.resamp.bspline/main.c:268 ../raster/r.resamp.bspline/main.c:329
 #, fuzzy
@@ -3135,18 +3132,17 @@ msgstr "Không thể tạo bản đồ vec-tơ <%s>"
 #: ../vector/v.lidar.edgedetection/main.c:351
 #: ../vector/v.lidar.growing/main.c:247
 #: ../vector/v.lidar.correction/main.c:331
-#, fuzzy, c-format
+#, c-format
 msgid "subregion %d of %d"
-msgstr "Số lần chạy %d trong số %d:"
+msgstr "Vùng con %d của %d"
 
 #: ../raster/r.resamp.bspline/main.c:589
 msgid "No data within this subregion. Consider increasing the spline step."
 msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:595 ../vector/v.surf.bspline/main.c:718
-#, fuzzy
 msgid "Writing output..."
-msgstr "Đang ghi ra bản đồ..."
+msgstr "Đang ghi đầu ra..."
 
 #: ../raster/r.resamp.bspline/crosscorr.c:160
 #, fuzzy, c-format
@@ -4438,19 +4434,16 @@ msgid "terrain"
 msgstr "Phương pháp nội suy"
 
 #: ../raster/r.slope.aspect/main.c:154
-#, fuzzy
 msgid ""
 "Generates raster maps of slope, aspect, curvatures and partial derivatives "
 "from a elevation raster map."
 msgstr ""
 "Tạo ra các lớp bản đồ độ dốc, hướng, độ cong và các đạo hàm riêng từ một lớp "
-"bản đồ raster có các giá trị độ cao thực. Hướng được tính ngược chiều kim "
-"đồng hồ từ hướng đông."
+"bản đồ raster độ cao."
 
 #: ../raster/r.slope.aspect/main.c:156
-#, fuzzy
 msgid "Aspect is calculated counterclockwise from east."
-msgstr "Góc xoay (độ, ngược chiều kim đồng hồ tính từ hướng Đông"
+msgstr "Hướng được tính ngược chiều kim đồng hồ từ hướng Đông."
 
 #: ../raster/r.slope.aspect/main.c:163 ../vector/v.surf.rst/main.c:198
 msgid "Name for output slope raster map"
@@ -4472,9 +4465,8 @@ msgstr "Tên của bản đồ raster độ dốc đầu ra"
 #: ../vector/v.surf.rst/main.c:217 ../vector/v.surf.rst/main.c:223
 #: ../vector/v.surf.rst/main.c:229 ../vector/v.surf.rst/main.c:236
 #: ../vector/v.surf.rst/main.c:243 ../vector/v.surf.rst/main.c:250
-#, fuzzy
 msgid "Outputs"
-msgstr "Bản đồ đầu ra"
+msgstr "Đầu ra"
 
 #: ../raster/r.slope.aspect/main.c:169 ../vector/v.surf.rst/main.c:204
 msgid "Name for output aspect raster map"
@@ -5278,9 +5270,9 @@ msgid "Unable to write et file"
 msgstr "Không thể ghi tập tin et"
 
 #: ../raster/simwe/simlib/hydro.c:211
-#, fuzzy, c-format
+#, c-format
 msgid "nwalk (%d) > maxw (%d)!"
-msgstr "nwalk > maxw!"
+msgstr "nwalk (%d) > maxw (%d)!"
 
 #: ../raster/simwe/simlib/hydro.c:431
 msgid "Unable to write raster maps"
@@ -5699,9 +5691,8 @@ msgid "Input raster map with specific yield in [1/m]"
 msgstr "(các) Bản đồ raster đầu vào không được chỉ định."
 
 #: ../raster/r.gwflow/main.c:86
-#, fuzzy
 msgid "Recharge"
-msgstr "Các hàng bị thay đổi"
+msgstr "Nạp lại"
 
 #: ../raster/r.gwflow/main.c:88
 #, fuzzy
@@ -6403,13 +6394,12 @@ msgid "Slope steepness (S) factor for USLE"
 msgstr "Bản đồ đầu ra: hệ số độ dốc của triền dốc (S) dùng cho USLE "
 
 #: ../raster/r.watershed/front/main.c:181
-#, fuzzy
 msgid "Convergence factor for MFD (1-10)"
-msgstr "Hệ số chuyển đổi cho các giá trị z"
+msgstr "Hệ số chuyển đổi cho MFD (1-10)"
 
 #: ../raster/r.watershed/front/main.c:183
 msgid "1 = most diverging flow, 10 = most converging flow. Recommended: 5"
-msgstr ""
+msgstr "1 = dòng chảy phân tán nhất, 10 = dòng chảy hội tụ nhất. Khuyến cáo: 5"
 
 #: ../raster/r.watershed/front/main.c:190
 msgid "Maximum memory to be used with -m flag (in MB)"
@@ -6421,7 +6411,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:196
 msgid "SFD: single flow direction, MFD: multiple flow direction"
-msgstr ""
+msgstr "SFD: dòng chảy một hướng, MFD: dòng chảy nhiều hướng"
 
 #: ../raster/r.watershed/front/main.c:201
 msgid "Allow only horizontal and vertical flow of water"
@@ -6436,14 +6426,16 @@ msgid ""
 "Only needed if memory requirements exceed available RAM; see manual on how "
 "to calculate memory requirements"
 msgstr ""
+"Chỉ cần hiết nếu yêu cầu bộ nhớ vượt quá RAM; xem tài liệu hướng dẫn cách "
+"tính nhu cầu bộ nhớ"
 
 #: ../raster/r.watershed/front/main.c:213
 msgid "Use positive flow accumulation even for likely underestimates"
-msgstr ""
+msgstr "Dùng tích luỹ dòng chảy dương cho cả các giá trị ước lượng có thể thấp"
 
 #: ../raster/r.watershed/front/main.c:215
 msgid "See manual for a detailed description of flow accumulation output"
-msgstr ""
+msgstr "Xem hướng dẫn để biết mô tả chi tiết đầu ra tích luỹ dòng chảy"
 
 #: ../raster/r.watershed/front/main.c:220
 msgid "Beautify flat areas"
@@ -6490,32 +6482,29 @@ msgid "SECTION %d: Watershed determination."
 msgstr "PHẦN %d: Xác định đường chia nước."
 
 #: ../raster/r.watershed/ram/sg_factor.c:14
-#, fuzzy
 msgid "SECTION 4: RUSLE LS and/or S factor determination."
-msgstr "PHẦN 4: Xác định chiều dài dốc."
+msgstr "PHẦN 4: Phép xác định hệ số RUSLE LS và/hoặc S."
 
 #: ../raster/r.watershed/ram/do_cum.c:16 ../raster/r.watershed/seg/do_cum.c:20
-#, fuzzy
 msgid "SECTION 3: Accumulating Surface Flow with SFD."
-msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
+msgstr "PHẦN 3: Dòng chảy bề mặt tích luỹ với SFD."
 
 #: ../raster/r.watershed/ram/do_cum.c:118
 #: ../raster/r.watershed/seg/do_cum.c:138
-#, fuzzy
 msgid "SECTION 3: Accumulating Surface Flow with MFD."
-msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
+msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy với MFD."
 
 #: ../raster/r.watershed/ram/do_cum.c:312
 #: ../raster/r.watershed/seg/do_cum.c:364
 #, c-format
 msgid "MFD: cumulative proportion of flow distribution not 1.0 but %f"
-msgstr ""
+msgstr "MFD: tỷ lệ tích luỹ của phân bố dòng chảy không phải là 1,0 mà là %f"
 
 #: ../raster/r.watershed/ram/do_cum.c:368
 #: ../raster/r.watershed/seg/do_cum.c:430
 #, c-format
 msgid "MFD: A * path already processed when distributing flow: %d of %d cells"
-msgstr ""
+msgstr "MFD: Một đường dẫn * được xử lý khi phân bố dòng chảy: %d của %d ô"
 
 #: ../raster/r.watershed/ram/usage.c:9 ../raster/r.watershed/seg/usage.c:9
 #, fuzzy, c-format
@@ -7413,7 +7402,6 @@ msgid "Computing bins"
 msgstr "Đang các hộc"
 
 #: ../raster/r.statistics3/main.c:166 ../raster/r.quantile/main.c:134
-#, fuzzy
 msgid "Binning data"
 msgstr "Đang tạo hộc dữ liệu"
 
@@ -7453,7 +7441,6 @@ msgid "List of percentiles"
 msgstr "Danh sách các phân vị"
 
 #: ../raster/r.statistics3/main.c:414 ../raster/r.quantile/main.c:279
-#, fuzzy
 msgid "Number of bins to use"
 msgstr "Số lượng hộc cần dùng"
 
@@ -8265,7 +8252,7 @@ msgstr "Đang thay đổi trở lại vùng nguyên thủy..."
 #: ../raster/r.resamp.rst/main.c:488
 #, c-format
 msgid "dnorm in mainc after grid before out1= %f"
-msgstr ""
+msgstr "dnorm trong mainc sau lưới trước khi out1= %f"
 
 #: ../raster/r.resamp.rst/main.c:492
 msgid "split_and_interpolate() failed"
@@ -8274,7 +8261,7 @@ msgstr ""
 #: ../raster/r.resamp.rst/main.c:507
 #, c-format
 msgid "dnorm in mainc after grid before out2= %f"
-msgstr ""
+msgstr "dnorm trong mainc sau lưới trước khi out2= %f"
 
 #: ../raster/r.resamp.rst/main.c:513
 #, fuzzy
@@ -8531,9 +8518,8 @@ msgid "Please specify a reasonable column number."
 msgstr "Vui lòng chỉ định số thứ tự cột hợp lý."
 
 #: ../raster/r.in.xyz/main.c:307
-#, fuzzy
 msgid "Invalid zrange"
-msgstr "Giá trị easting không hợp lệ"
+msgstr "Miền zrange không hợp lệ"
 
 #: ../raster/r.in.xyz/main.c:394
 msgid "Unable to calculate percentile without the pth option specified!"
@@ -8557,9 +8543,8 @@ msgid "zrange will not be taken into account during scan"
 msgstr "miền giá trị z (zrange) sẽ không được xem xét trong quá trình quét"
 
 #: ../raster/r.in.xyz/main.c:524
-#, fuzzy
 msgid "Reading data ..."
-msgstr "Đang đọc dữ liệu..."
+msgstr "Đang đọc dữ liệu ..."
 
 #: ../raster/r.in.xyz/main.c:602 ../raster/r.in.xyz/main.c:610
 #: ../raster/r.in.xyz/main.c:1101 ../raster/r.in.xyz/main.c:1109
@@ -9222,9 +9207,8 @@ msgid "List supported output formats"
 msgstr "Liệt kê các định dạng đầu ra được hỗ trợ"
 
 #: ../raster/r.out.gdal/main.c:139
-#, fuzzy
 msgid "Do not write GDAL standard colortable"
-msgstr "Không xuất ra bảng màu dài"
+msgstr "Không bảng màu chuẩn của GDAL"
 
 #: ../raster/r.out.gdal/main.c:140
 msgid "Only applicable to Byte or UInt16 data types."
@@ -9232,11 +9216,11 @@ msgstr "Chỉ áp dụng được cho các kiểu dữ liệu Byte hoặc UInt16
 
 #: ../raster/r.out.gdal/main.c:144
 msgid "Force raster export despite any warnings of data loss"
-msgstr ""
+msgstr "Buộc xuất ra raster bất kể cảnh báo mất dữ liệu"
 
 #: ../raster/r.out.gdal/main.c:145
 msgid "Overrides nodata safety check."
-msgstr ""
+msgstr "Ghi đè kiểm tra an toàn phần không-dữ-liệu"
 
 #: ../raster/r.out.gdal/main.c:149
 msgid "Name of raster map (or group) to export"
@@ -9303,9 +9287,8 @@ msgstr ""
 "cho bộ dữ liệu trung gian."
 
 #: ../raster/r.out.gdal/main.c:274
-#, fuzzy
 msgid "Unable to get in-memory raster driver"
-msgstr "Không thể lấy trình điều khiển raster bộ nhớ nội tại"
+msgstr "Không thể lấy trình điều khiển raster trong-bộ-nhớ"
 
 #: ../raster/r.out.gdal/main.c:278
 #, c-format
@@ -9313,9 +9296,9 @@ msgid "Driver <%s> does not support creating rasters"
 msgstr "Trình điều khiển <%s> không hỗ trợ việc tạo các raster"
 
 #: ../raster/r.out.gdal/main.c:354
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read data range of raster <%s>"
-msgstr "Không thể đọc miền của bản đồ raster <%s>"
+msgstr "Không thể đọc miền dữ liệu của bản đồ raster <%s>"
 
 #: ../raster/r.out.gdal/main.c:411
 #, c-format
@@ -9324,7 +9307,7 @@ msgstr "Đang xuất ra kiểu dữ liệu GDAL: %s"
 
 #: ../raster/r.out.gdal/main.c:426
 msgid "Raster export would result in complete data loss, aborting."
-msgstr ""
+msgstr "Việc xuất raster có thể dẫn đến mất dữ liệu hoàn toàn, đang huỷ lệnh."
 
 #: ../raster/r.out.gdal/main.c:437
 #, c-format
@@ -9332,6 +9315,8 @@ msgid ""
 "Precision loss: Raster map <%s> of type %s to be exported as %s. This can be "
 "avoided by using %s."
 msgstr ""
+"Mất độ chính xác: Bản đồ raster <%s> kiểu %s cần được xuất thành %s. Có thể "
+"tránh điều này bằng cách dùng %s."
 
 #: ../raster/r.out.gdal/main.c:448
 #, c-format
@@ -9339,6 +9324,9 @@ msgid ""
 "Precision loss: The range of <%s> can not be accurately preserved with GDAL "
 "datatype Float32. This can be avoided by exporting to Int32 or Float64."
 msgstr ""
+"Mất độ chính xác: Miền của <%s> không thể được bảo toàn một cách chính xác "
+"với kiểu dữ liệu GDAL Float32. Có thể tránh điều này bằng cách xuất ra Int32 "
+"hoặc Float64."
 
 #: ../raster/r.out.gdal/main.c:456
 #, c-format
@@ -9346,26 +9334,26 @@ msgid ""
 "Precision loss: Float32 can not preserve the DCELL precision of raster <%s>. "
 "This can be avoided by using Float64"
 msgstr ""
+"Mất độ chính xác:  Float32 không thể bảo toàn độ chính xác DCELL của bản đồ "
+"raster <%s>. Có thể tránh điều này bằng cách dùng Float64"
 
 #: ../raster/r.out.gdal/main.c:465 ../raster/r.out.gdal/main.c:508
-#, fuzzy
 msgid "Forcing raster export."
-msgstr "raster, xuất"
+msgstr "Buộc phải xuất raster."
 
 #: ../raster/r.out.gdal/main.c:467 ../raster/r.out.gdal/main.c:481
 #: ../raster/r.out.gdal/main.c:510 ../raster/r.out.gdal/main.c:514
-#, fuzzy
 msgid "Raster export aborted."
-msgstr "raster, xuất"
+msgstr "Việc xuất raster bị huỷ."
 
 #: ../raster/r.out.gdal/main.c:491
 msgid "Checking GDAL data type and nodata value"
 msgstr ""
 
 #: ../raster/r.out.gdal/main.c:494
-#, fuzzy, c-format
+#, c-format
 msgid "Checking options for raster map <%s> (band %d)..."
-msgstr "Đang xuất bản đồ raster <%s> (băng %d)..."
+msgstr "Đang kiểm tra các tuỳ chọn cho bản đồ raster <%s> (băng %d)..."
 
 #: ../raster/r.out.gdal/main.c:535
 msgid "Output file name not specified"
@@ -9389,9 +9377,8 @@ msgid "Unable to set projection"
 msgstr "Không thể thiết lập phép chiếu"
 
 #: ../raster/r.out.gdal/main.c:579
-#, fuzzy
 msgid "Exporting to GDAL raster"
-msgstr "Đang xuất ra kiểu dữ liệu GDAL: %s"
+msgstr "Đang xuất raster GDAL"
 
 #: ../raster/r.out.gdal/main.c:582
 #, c-format
@@ -9419,7 +9406,7 @@ msgstr "Không thể tạo bản đồ raster <%s> bằng trình điều khiển
 #: ../raster/r.out.gdal/export_band.c:542
 #: ../raster/r.out.gdal/export_band.c:556
 msgid "Selected GDAL datatype does not cover data range."
-msgstr ""
+msgstr "Kiểu dữ liệu GDAL được chọn không bao trùm hết miền dữ liệu."
 
 #: ../raster/r.out.gdal/main.c:631 ../raster/r.out.gdal/main.c:643
 #: ../raster/r.out.gdal/main.c:656 ../raster/r.out.gdal/main.c:669
@@ -9429,25 +9416,25 @@ msgstr ""
 #: ../raster/r.out.gdal/export_band.c:518
 #, c-format
 msgid "GDAL datatype: %s, range: %d - %d"
-msgstr ""
+msgstr "Kiểu dữ liệu GDAL: %s, miền: %d - %d"
 
 #: ../raster/r.out.gdal/main.c:634 ../raster/r.out.gdal/main.c:646
 #: ../raster/r.out.gdal/main.c:659 ../raster/r.out.gdal/main.c:672
 #: ../raster/r.out.gdal/main.c:684 ../raster/r.out.gdal/main.c:697
-#, fuzzy, c-format
+#, c-format
 msgid "Range to be exported: %g - %g"
-msgstr "Tập tin raster cần nhập"
+msgstr "Miền cần xuất: %g - %g"
 
 #: ../raster/r.out.gdal/main.c:681 ../raster/r.out.gdal/export_band.c:530
 #, c-format
 msgid "GDAL datatype: %s, range: %u - %u"
-msgstr ""
+msgstr "Kiểu dữ liệu GDAL: %s, miền: %u - %u"
 
 #: ../raster/r.out.gdal/main.c:694 ../raster/r.out.gdal/export_band.c:543
 #: ../raster/r.out.gdal/export_band.c:557
 #, c-format
 msgid "GDAL datatype: %s, range: %g - %g"
-msgstr ""
+msgstr "Kiểu dữ liệu GDAL : %s, miền: %g - %g"
 
 #: ../raster/r.out.gdal/main.c:721 ../raster/r.out.gdal/main.c:734
 #: ../raster/r.out.gdal/main.c:748 ../raster/r.out.gdal/main.c:761
@@ -9463,12 +9450,12 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:779
 #, c-format
 msgid "GDAL datatype: %s, valid range: %d - %d"
-msgstr ""
+msgstr "Kiểu dữ liệu GDAL: %s, miền hợp lệ: %d - %d"
 
 #: ../raster/r.out.gdal/main.c:737 ../raster/r.out.gdal/main.c:764
 #, c-format
 msgid "GDAL datatype: %s, valid range: %u - %u"
-msgstr ""
+msgstr "Kiểu dữ liệu GDAL: %s, miền hợp lệ: %u - %u"
 
 #: ../raster/r.out.gdal/main.c:790
 #, c-format
@@ -9477,11 +9464,14 @@ msgid ""
 "raster: specified nodata value %g gets converted to %g by selected GDAL "
 "datatype."
 msgstr ""
+"Giá trị không-dữ-liệu trong đặc tả dữ liệu và giá trị không-dữ-liệu thực "
+"trong raster xuất ra không khớp nhau: giá trị không-dữ-liệu đã chỉ định %g "
+"bị kiểu dữ liệu GDAL đã chọn chuyển thành %g."
 
 #: ../raster/r.out.gdal/main.c:793
 #, c-format
 msgid "GDAL datatype: %s, valid range: %g - %g"
-msgstr ""
+msgstr "Kiểu dữ liệu GDAL: %s, miền hợp lệ: %g - %g"
 
 #: ../raster/r.out.gdal/export_band.c:63 ../raster/r.out.gdal/export_band.c:69
 #: ../raster/r.out.gdal/export_band.c:360
@@ -9490,15 +9480,15 @@ msgid "Unable to allocate buffer for reading raster map"
 msgstr "Không thể cấp phát đệm để đọc bản đồ raster"
 
 #: ../raster/r.out.gdal/export_band.c:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Input raster map contains cells with NULL-value (no-data). The value %d will "
 "be used to represent no-data values in the input map. You can specify a "
 "nodata value with the %s option."
 msgstr ""
-"Bản đồ raster đầu vào chứa các ô với giá trị RỖNG (không có dữ liệu). Giá "
-"trị %d được dùng để biểu thị các giá trị không có dữ liệu trong bản đồ đầu "
-"vào. Bạn có thể chỉ định giá trị không dữ liệu bằng tham số %s."
+"Bản đồ raster đầu vào chứa các ô với giá trị RỖNG (không-dữ-liệu). Giá trị %"
+"d được dùng để biểu thị các giá trị không-dữ-liệu trong bản đồ đầu vào. Bạn "
+"có thể chỉ định giá trị không-dữ-liệu bằng tuỳ chọn %s."
 
 #: ../raster/r.out.gdal/export_band.c:184
 #, fuzzy, c-format
@@ -9517,6 +9507,9 @@ msgid ""
 "The default nodata value is present in rasterband <%s> and would lead to "
 "data loss. Please specify a custom nodata value with the %s parameter."
 msgstr ""
+"Giá trị không-dữ-liệu mặc định có trong băng raster <%s> và sẽ dẫn đến việc "
+"mất dữ liệu. Vui lòng chỉ định một giá trị không-dữ-liệu tuỳ chọn bằng tham "
+"số %s."
 
 #: ../raster/r.out.gdal/export_band.c:201
 #, c-format
@@ -9524,6 +9517,9 @@ msgid ""
 "The user given nodata value %g is present in rasterband <%s> and would lead "
 "to data loss. Please specify a different nodata value with the %s parameter."
 msgstr ""
+"Giá trị không-dữ-liệu %g do người dùng cung cấp có trong băng raster <%s> và "
+"sẽ dẫn đến mất dữ liệu. Vui lòng chỉ định một giá trị không-dữ-liệu khác "
+"bằng tham số %s."
 
 #: ../raster/r.out.gdal/export_band.c:241
 msgid "Unable to get raster band"
@@ -9542,9 +9538,9 @@ msgstr "Không thể ghi tập tin raster GDAL"
 #: ../raster/r.out.gdal/export_band.c:533
 #: ../raster/r.out.gdal/export_band.c:546
 #: ../raster/r.out.gdal/export_band.c:560
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> range: %g - %g"
-msgstr "Bản đồ raster <%s> được tạo ra."
+msgstr "Bản đồ raster <%s> miền: %g - %g"
 
 #: ../raster/r.null/main.c:60
 #, fuzzy
@@ -11297,9 +11293,8 @@ msgid "Name of non-file GDAL data source"
 msgstr "Tên của nguồn dữ liệu GDAL phi-tập-tin"
 
 #: ../raster/r.external/main.c:547
-#, fuzzy
 msgid "Band to select (default: all)"
-msgstr "Băng cần chọn (mặc định là tất cả các băng)"
+msgstr "Băng cần chọn (mặc định: tất cả)"
 
 #: ../raster/r.external/main.c:568
 msgid "Require exact range"
@@ -11322,14 +11317,14 @@ msgid "input= and source= are mutually exclusive"
 msgstr "Hai tham số input= và source= loại bỏ nhau"
 
 #: ../raster/r.external/main.c:649
-#, fuzzy, c-format
+#, c-format
 msgid "Imagery group <%s> already exists and will be overwritten."
-msgstr "Bản đồ raster <%s> đã có và sẽ bị ghi đè"
+msgstr "Nhóm ảnh <%s> đã có và sẽ bị ghi đè."
 
 #: ../raster/r.external/main.c:689
-#, fuzzy, c-format
+#, c-format
 msgid "Imagery group <%s> created"
-msgstr "Bản đồ raster <%s> được tạo ra."
+msgstr "Nhóm ảnh <%s> được tạo ra"
 
 #: ../raster/r.recode/main.c:49
 msgid "Recodes categorical raster maps."
@@ -11363,9 +11358,8 @@ msgid "Unable to read f_range for map %s"
 msgstr "%s: không thể đọc miền giá trị cho [%s]"
 
 #: ../raster/r.recode/read_rules.c:24 ../display/d.colortable/main.c:148
-#, fuzzy
 msgid "Data range is empty"
-msgstr "Miền dữ liệu từ %ld đến %ld\n"
+msgstr "Miền dữ liệu bị rỗng"
 
 #: ../raster/r.recode/read_rules.c:30
 #, fuzzy, c-format
@@ -11410,7 +11404,7 @@ msgstr "g.trị_cũ:*:g.trị_mới          (khoảng [g.trị_cũ, inf])"
 
 #: ../raster/r.recode/read_rules.c:91
 msgid "When finished type \"end\"."
-msgstr ""
+msgstr "Khi kết thúc gõ lệnh \"end\"."
 
 #: ../raster/r.volume/main.c:60
 msgid ""
@@ -12316,6 +12310,9 @@ msgid ""
 "%.2f]! Needs to be at least identical or the current region resolution lower "
 "than the input map resolution"
 msgstr ""
+"Độ phân giải vùng hiện tại [%.2fx%.2f] thấp hơn độ phân giải bản đồ đầu vào "
+"[%.2fx%.2f]! Tối thiểu là độ phân giải dùng hiện tại phải giống hoặc thấp "
+"hơn độ phân giải của bản đồ đầu vào"
 
 #: ../raster/r.topidx/file_io.c:78
 msgid "Writing topographic index map..."
@@ -12768,7 +12765,7 @@ msgstr "In ra thông tin khi biên dịch GRASS"
 
 #: ../general/g.version/main.c:57
 msgid "Print the GIS library revision number and time"
-msgstr ""
+msgstr "In ra số lần và thời gian kiểm tra thư viện GIS"
 
 #: ../general/g.access/main.c:39
 msgid "Controls access to the current mapset for other users on the system."
@@ -12787,6 +12784,8 @@ msgstr "Truy cập cho các người khác"
 #: ../general/g.access/main.c:59
 msgid "UNIX filesystem access controls are not supported by MS-Windows"
 msgstr ""
+"Các kiểm soát truy cập hệ thống tập tin UNIX không được hỗ trợ trong M$-"
+"Windows"
 
 #: ../general/g.access/main.c:67
 msgid "Access to the PERMANENT mapset must be open, nothing changed"
@@ -12887,19 +12886,16 @@ msgstr ""
 "(không quy chiếu)' sẽ được dùng"
 
 #: ../general/g.proj/main.c:64
-#, fuzzy
 msgid ""
 "Converts co-ordinate system descriptions (i.e. projection information) "
 "between various formats (including GRASS format)."
 msgstr ""
 "Chuyển đổi các mô tả hệ toạ độ (tức là thông tin phép chiếu) giữa các định "
-"dạng khác nhau (kể cả định dạng của GRASS). Cũng có thể dùng để tạo các vị "
-"trí của GRASS."
+"dạng khác nhau (kể cả định dạng của GRASS)."
 
 #: ../general/g.proj/main.c:67
-#, fuzzy
 msgid "Can also be used to create GRASS locations."
-msgstr "Không thể tạo vị trí: %s"
+msgstr "Cũng có thể dùng để tạo các Location của GRASS."
 
 #: ../general/g.proj/main.c:70
 msgid "Prints and manipulates GRASS projection information files."
@@ -12950,21 +12946,16 @@ msgstr "Mã phép chiếu EPSG"
 
 #: ../general/g.proj/main.c:154 ../general/g.proj/main.c:160
 msgid "Datum"
-msgstr ""
+msgstr "Mốc toạ độ chuẩn"
 
 #: ../general/g.proj/main.c:155
-#, fuzzy
 msgid "Index number of datum transform parameters"
-msgstr ""
-"Số chỉ mục của các tham số chuyển đổi mốc tọa độ chuẩn, nhập \"0\" để chỉ "
-"không được chỉ định hoặc nhập \"-1\" để liệt kê và thoát"
+msgstr "Số chỉ mục của các tham số chuyển đổi mốc tọa độ chuẩn"
 
 #: ../general/g.proj/main.c:156
-#, fuzzy
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
-"Số chỉ mục của các tham số chuyển đổi mốc tọa độ chuẩn, nhập \"0\" để chỉ "
-"không được chỉ định hoặc nhập \"-1\" để liệt kê và thoát"
+"nhập \"0\" để chỉ không được chỉ định hoặc nhập \"-1\" để liệt kê và thoát"
 
 #: ../general/g.proj/main.c:162
 msgid ""
@@ -12974,9 +12965,8 @@ msgstr ""
 "Buộc ghi đè thông tin chuyển đổi mốc tọa độ chuẩn trong hệ toạ độ đầu vào"
 
 #: ../general/g.proj/main.c:167 ../general/g.proj/main.c:176
-#, fuzzy
 msgid "Create/Edit"
-msgstr "Tạo"
+msgstr "Tạo/Chỉnh sửa"
 
 #: ../general/g.proj/main.c:168
 msgid ""
@@ -13148,7 +13138,6 @@ msgid "scripts"
 msgstr "Tập tin đầu ra PostScript"
 
 #: ../general/g.message/main.c:36
-#, fuzzy
 msgid ""
 "Prints a message, warning, progress info, or fatal error in the GRASS way."
 msgstr "In ra thông báo, cảnh báo hoặc lỗi nghiêm trọng theo kiểu của GRASS."
@@ -13161,44 +13150,37 @@ msgstr ""
 
 #: ../general/g.message/main.c:42 ../general/g.message/main.c:47
 #: ../general/g.message/main.c:52 ../general/g.message/main.c:57
-#, fuzzy
 msgid "Type"
-msgstr "Đến kiểu"
+msgstr "Kiểu"
 
 #: ../general/g.message/main.c:43
-#, fuzzy
 msgid "Print message as warning"
-msgstr "In ra thông báo dưới dạng cảnh báo kiểu GRASS"
+msgstr "In ra thông báo dưới dạng cảnh báo"
 
 #: ../general/g.message/main.c:48
-#, fuzzy
 msgid "Print message as fatal error"
-msgstr "In ra thông báo dưới dạng lỗi nghiêm trọng kiểu GRASS"
+msgstr "In ra thông báo dưới dạng lỗi nghiêm trọng"
 
 #: ../general/g.message/main.c:53
-#, fuzzy
 msgid "Print message as debug message"
-msgstr "In ra thông báo dưới dạng thông báo gỡ lỗi kiểu GRASS"
+msgstr "In ra thông báo dưới dạng thông báo gỡ lỗi"
 
 #: ../general/g.message/main.c:58
-#, fuzzy
 msgid "Print message as progress info"
-msgstr "In ra thông báo dưới dạng cảnh báo kiểu GRASS"
+msgstr "In ra thông báo dưới dạng thông tin tiến trình"
 
 #: ../general/g.message/main.c:62 ../general/g.message/main.c:67
 #: ../general/g.message/main.c:81
-#, fuzzy
 msgid "Level"
-msgstr "Các cấp"
+msgstr "Cấp"
 
 #: ../general/g.message/main.c:63
 msgid "Print message in all but full quiet mode"
 msgstr "In ra thông báo toàn bộ nhưng ở chế độ im lặng hoàn toàn"
 
 #: ../general/g.message/main.c:68
-#, fuzzy
 msgid "Print message only in verbose mode"
-msgstr "In ra thông báo chỉ khi ở chế độ đầy đủ"
+msgstr "Chỉ in ra thông báo khi ở chế độ đầy đủ"
 
 #: ../general/g.message/main.c:75
 msgid "Text of the message to be printed"
@@ -13209,14 +13191,12 @@ msgid "Level to use for debug messages"
 msgstr "Cấp để dùng cho các thông báo gỡ lỗi"
 
 #: ../general/g.message/main.c:92
-#, fuzzy
 msgid "Select only one message level"
-msgstr "Chỉ chọn một cấp thông báo."
+msgstr "Chỉ chọn một cấp thông báo"
 
 #: ../general/g.message/main.c:105
-#, fuzzy
 msgid "Unable to parse input message"
-msgstr "Không thể đóng bản đồ đầu vào"
+msgstr "Không thể phân tách thông báo đầu vào"
 
 #: ../general/g.pnmcat/main.c:49
 msgid "Unsupported PPM file (format = P6 required)"
@@ -13748,9 +13728,8 @@ msgid "Cannot open SEARCH_PATH for write"
 msgstr "Không thể mở SEARCH_PATH để ghi"
 
 #: ../general/g.mapsets/list.c:10
-#, fuzzy
 msgid "Available mapsets:"
-msgstr "Liệt kê các bộ bản đồ có thể dùng"
+msgstr "Các bộ bản đồ có thể dùng:"
 
 #: ../general/g.mapsets/list.c:35
 #, fuzzy
@@ -13930,9 +13909,9 @@ msgid "<%s> already exists in mapset <%s>"
 msgstr "<%s> đã có trong bộ bản đồ <%s>"
 
 #: ../general/g.rename/main.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s=%s,%s: files could be the same, no rename possible"
-msgstr "%s=%s,%s: các tập tin giống nhau, không cần đổi tên"
+msgstr "%s=%s,%s: các tập tin có vẻ giống nhau, không cần đổi tên"
 
 #: ../general/g.rename/main.c:103
 msgid "Renaming reclass maps"
@@ -14362,9 +14341,8 @@ msgid "Update default GUI setting"
 msgstr "Cập nhật thiết lập GUI mặc định"
 
 #: ../general/g.gui/main.c:62
-#, fuzzy
 msgid "Do not launch GUI after updating the default GUI setting"
-msgstr "Cập nhật thiết lập GUI mặc định"
+msgstr "Không khởi động GDĐH sau khi cập nhật thiết lập GDĐH mặc định"
 
 #: ../general/g.gui/main.c:90
 #, c-format
@@ -15647,23 +15625,20 @@ msgid "Displays the color table associated with a raster map layer."
 msgstr "Trình bày bảng màu liên quan đến một lớp bản đồ raster."
 
 #: ../display/d.colortable/main.c:67
-#, fuzzy
 msgid "Name of raster map whose color table is to be displayed"
-msgstr "Tên của bản đồ hướng raster cần trình bày"
+msgstr "Tên của bản đồ raster có bảng màu cần trình bày"
 
 #: ../display/d.colortable/main.c:75
 msgid "Color of lines separating the colors of the color table"
-msgstr ""
+msgstr "Màu của các dòng phân biệt với màu của bảng màu"
 
 #: ../display/d.colortable/main.c:81
-#, fuzzy
 msgid "Number of lines to appear in the color table"
-msgstr "Số dòng xuất hiện trong chú giải"
+msgstr "Số dòng xuất hiện trong bảng màu"
 
 #: ../display/d.colortable/main.c:87
-#, fuzzy
 msgid "Number of columns to appear in the color table"
-msgstr "Số dòng xuất hiện trong chú giải"
+msgstr "Số cột xuất hiện trong bảng màu"
 
 #: ../display/d.colortable/main.c:92
 msgid "Don't draw a collar showing the NULL color in FP maps"
@@ -16112,9 +16087,8 @@ msgid "Text color, either a standard GRASS color or R:G:B triplet"
 msgstr "Màu chữ, hoặc là một màu chuẩn của GRASS, hoặc bộ ba R:G:B"
 
 #: ../display/d.text/main.c:172
-#, fuzzy
 msgid "Text background color, either a standard GRASS color or R:G:B triplet"
-msgstr "Màu chữ, hoặc là một màu chuẩn của GRASS, hoặc bộ ba R:G:B"
+msgstr "Màu nền của chữ, hoặc là một màu chuẩn của GRASS, hoặc bộ ba R:G:B"
 
 #: ../display/d.text/main.c:181
 msgid "The screen line number on which text will begin to be drawn"
@@ -17713,7 +17687,7 @@ msgstr "Tổng quát hoá (%s) ..."
 #: ../vector/v.generalize/main.c:464
 #, c-format
 msgid "%d boundaries were deleted, input areas are not preserved"
-msgstr ""
+msgstr "% ranh giới bị xoá, các vùng đầu vào không được bảo toàn"
 
 #: ../vector/v.generalize/main.c:487
 #, c-format
@@ -17723,16 +17697,18 @@ msgstr "Không thể tạo trọng tâm cho vùng %d"
 #: ../vector/v.generalize/main.c:494
 msgid "New centroids were calculated, attribute attachment may be changed"
 msgstr ""
+"Các trọng tâm mới được tính toán, phép gắn thuộc tính có thể bị thay đổi"
 
 #: ../vector/v.generalize/main.c:514
 msgid ""
 "Areas may have disappeared and/or area attribute attachment may have changed"
 msgstr ""
+"Các vùng có thể biến mất và/hoặc phép gắn thuộc tính vùng có thể đã thay đổi"
 
 #: ../vector/v.generalize/main.c:515
 #, c-format
 msgid "Try v.clean tool=prune thresh=%f"
-msgstr ""
+msgstr "Hãy thử dùng v.clean tool=prune thresh=%f"
 
 #: ../vector/v.generalize/main.c:519
 #, fuzzy, c-format
@@ -18191,7 +18167,7 @@ msgstr "Không thể ghi một phần của hình học"
 #: ../vector/v.in.ogr/geom.c:232 ../vector/v.in.ogr/geom.c:245
 #: ../vector/v.in.ogr/geom.c:273 ../vector/v.in.ogr/geom.c:319
 msgid "Skipping empty geometry feature"
-msgstr ""
+msgstr "Bỏ qua đối tượng hình học rỗng"
 
 #: ../vector/v.in.ogr/geom.c:289
 #, c-format
@@ -18329,9 +18305,9 @@ msgid "Ignored text entry: %s"
 msgstr "Mục văn bản bị bỏ qua: %s"
 
 #: ../vector/v.extract/main.c:280
-#, fuzzy, c-format
+#, c-format
 msgid "Unable select records from table <%s>"
-msgstr "Không thể chọn các bản ghi từ bảng LRS: %s"
+msgstr "Không thể chọn các bản ghi từ bảng <%s>"
 
 #: ../vector/v.extract/main.c:281
 #, c-format
@@ -18998,9 +18974,8 @@ msgstr "Chiều cao z nhỏ nhất (cần cờ -z hoặc tên cột)"
 #: ../vector/v.random/main.c:104 ../vector/v.random/main.c:113
 #: ../vector/v.random/main.c:119 ../vector/v.random/main.c:129
 #: ../vector/v.random/main.c:134
-#, fuzzy
 msgid "3D output"
-msgstr "Tạo đầu ra 3D"
+msgstr "Đầu ra 3D"
 
 #: ../vector/v.random/main.c:111
 msgid "Maximum z height (needs -z flag or column name)"
@@ -19237,7 +19212,7 @@ msgstr "Loại bỏ các đối tượng ngoại lệ khỏi dữ liệu điểm
 #: ../vector/v.lidar.edgedetection/main.c:81
 #: ../vector/v.lidar.correction/main.c:76
 msgid "Estimate point density and distance"
-msgstr ""
+msgstr "Ước lượng mật độ và khoảng cách điểm"
 
 #: ../vector/v.outlier/main.c:77 ../vector/v.surf.bspline/main.c:95
 #: ../vector/v.lidar.edgedetection/main.c:83
@@ -19246,6 +19221,8 @@ msgid ""
 "Estimate point density and distance for the input vector points within the "
 "current region extends and quit"
 msgstr ""
+"Ước lượng mật độ và khoảng cách điểm dùng cho các điểm vector đầu vào trong "
+"phạm vi vùng hiện tại và thoát"
 
 #: ../vector/v.outlier/main.c:89
 msgid "Name of output outlier vector map"
@@ -19266,9 +19243,8 @@ msgid "Interpolation spline step value in north direction"
 msgstr "Giá trị bước spline nội suy theo hướng bắc"
 
 #: ../vector/v.outlier/main.c:119
-#, fuzzy
 msgid "Tykhonov regularization weight"
-msgstr "Trọng số của phép chính quy hóa Tychonov"
+msgstr "Trọng số của phép chính quy hóa Tykhonov"
 
 #: ../vector/v.outlier/main.c:126
 msgid "Threshold for the outliers"
@@ -19304,7 +19280,6 @@ msgstr ""
 #: ../vector/v.lidar.edgedetection/main.c:193
 #: ../vector/v.lidar.edgedetection/main.c:205
 #: ../vector/v.lidar.correction/main.c:169
-#, fuzzy
 msgid "Old auxiliar table could not be dropped"
 msgstr "Không thể bỏ bảng phụ (auxiliar table)"
 
@@ -19316,21 +19291,20 @@ msgstr "Không thể mở bản đồ vec-tơ <%s> ở cấp tôpô"
 
 #: ../vector/v.outlier/main.c:183 ../vector/v.lidar.edgedetection/main.c:224
 #: ../vector/v.lidar.correction/main.c:187
-#, fuzzy, c-format
+#, c-format
 msgid "Input vector map <%s> is not 3D!"
-msgstr "Bản đồ vec-tơ <%s> không phải kiểu 3D"
+msgstr "Bản đồ vec-tơ đầu vào <%s> không phải kiểu 3D!"
 
 #: ../vector/v.outlier/main.c:193 ../vector/v.surf.bspline/main.c:246
 #: ../vector/v.lidar.edgedetection/main.c:234
 #: ../vector/v.lidar.correction/main.c:197
-#, fuzzy
 msgid "No points in current region!"
-msgstr "Chỉ dùng các điểm trong vùng hiện tại"
+msgstr "Không có điểm nào trong vùng hiện tại!"
 
 #: ../vector/v.outlier/main.c:240
-#, fuzzy, c-format
+#, c-format
 msgid "It was impossible to create <%s> table."
-msgstr "Không thể nào tạo được <%s>."
+msgstr "Không thể tạo bảng <%s>."
 
 #: ../vector/v.outlier/main.c:390 ../vector/v.lidar.edgedetection/main.c:414
 #: ../vector/v.lidar.correction/main.c:400
@@ -19338,14 +19312,14 @@ msgid "Bilinear interpolation"
 msgstr "Phép nội suy song tuyến tính"
 
 #: ../vector/v.outlier/main.c:402
-#, fuzzy
 msgid "Outlier detection"
-msgstr "Màu đường viền"
+msgstr "Phát hiện giá trị ngoại biên"
 
 #: ../vector/v.outlier/main.c:420 ../vector/v.lidar.edgedetection/main.c:457
 #: ../vector/v.lidar.correction/main.c:426
 msgid "No data within this subregion. Consider changing the spline step."
 msgstr ""
+"Không có dữ liệu trong vùng con này. Hãy cân nhắc việc thay đổi bước spline."
 
 #: ../vector/v.outlier/main.c:430 ../vector/v.surf.bspline/main.c:734
 #: ../vector/v.lidar.edgedetection/main.c:467
@@ -19725,14 +19699,12 @@ msgid "Removing duplicates..."
 msgstr "Loại bỏ các đối tượng lặp..."
 
 #: ../vector/v.delaunay/main.c:146
-#, fuzzy
 msgid "no points to triangulate"
-msgstr "Số điểm cần cấp phát"
+msgstr "không có điểm để chạy phép tính tam giác"
 
 #: ../vector/v.delaunay/main.c:149
-#, fuzzy
 msgid "Delaunay triangulation..."
-msgstr "Các tính toán bề mặt sơ bộ..."
+msgstr "Phép tam giác Delaunay..."
 
 #: ../vector/v.delaunay/main.c:161
 #, fuzzy
@@ -19759,9 +19731,8 @@ msgid "All allocated edges have been used."
 msgstr "Tất cả các gờ đã định vị trí được sử dụng."
 
 #: ../vector/v.delaunay/in_out.c:93
-#, fuzzy
 msgid "Writing edges..."
-msgstr "Đang ghi các đỉnh..."
+msgstr "Đang ghi các gờ..."
 
 #: ../vector/v.delaunay/in_out.c:215
 #, fuzzy
@@ -20871,14 +20842,12 @@ msgid "Name of input vector map of sparse points"
 msgstr "Tên của bản đồ vec-tơ đầu vào chứa các điểm thưa thớt"
 
 #: ../vector/v.surf.bspline/main.c:123
-#, fuzzy
 msgid "Length of each spline step in the east-west direction"
-msgstr "Giá trị bước spline nội suy theo hướng đông"
+msgstr "Chiều dài của mỗi bước spline theo hướng đông-tây"
 
 #: ../vector/v.surf.bspline/main.c:132
-#, fuzzy
 msgid "Length of each spline step in the north-south direction"
-msgstr "Giá trị bước spline nội suy theo hướng bắc"
+msgstr "Chiều dài của mỗi bước spline theo hướng bắc-nam"
 
 #: ../vector/v.surf.bspline/main.c:160
 #, fuzzy
@@ -20890,9 +20859,8 @@ msgid "Choose either vector or raster output, not both"
 msgstr "Chọn đầu ra kiểu vec-tơ hoặc raster, không được chọn cả hai"
 
 #: ../vector/v.surf.bspline/main.c:176
-#, fuzzy
 msgid "No raster or vector or cross-validation output"
-msgstr "Không có đầu ra raster lẫn vec-tơ"
+msgstr "Không có đầu ra raster lẫn vec-tơ hoặc kiểm chứng chéo"
 
 #: ../vector/v.surf.bspline/main.c:230
 #, fuzzy
@@ -20907,12 +20875,12 @@ msgstr "Ít nhất một trong hai 'distance=' và 'value=' phải được cung
 #: ../vector/v.surf.bspline/main.c:265
 #, c-format
 msgid "Cross validation finished for sie = %f and sin = %f"
-msgstr ""
+msgstr "Phép kiểm chứng chéo kết thúc với sie = %f và sin = %f"
 
 #: ../vector/v.surf.bspline/main.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "Vector map <%s> of sparse points will be interpolated"
-msgstr "Bản đồ vec-tơ <%s> sẽ được nội suy"
+msgstr "Bản đồ vec-tơ <%s> có các điểm phân tán sẽ được nội suy"
 
 #: ../vector/v.surf.bspline/main.c:290
 #, c-format
@@ -20948,11 +20916,12 @@ msgid "Interpolation: Creating table: It was impossible to create table <%s>."
 msgstr "Nội suy: Đang tạo bảng: Không thể nào tạo được bảng <%s>."
 
 #: ../vector/v.surf.bspline/main.c:395
-#, fuzzy
 msgid ""
 "Cannot allocate memory for auxiliar matrix.Consider changing region "
 "resolution"
-msgstr "Không thể cấp phát bộ nhớ cho chuỗi "
+msgstr ""
+"Không thể cấp phát bộ nhớ cho ma trận phụ. Hãy cân nhắc việc thay đổi độ "
+"phân giải vùng"
 
 #: ../vector/v.surf.bspline/main.c:593
 #, c-format
@@ -21052,7 +21021,7 @@ msgstr "Lỗi trong pj_do_transform"
 
 #: ../vector/v.hull/main.c:53
 msgid "Produces a convex hull for a given vector map."
-msgstr ""
+msgstr "Tạo một bao lồi cho một bản đồ véc-tơ cho trước."
 
 #: ../vector/v.hull/main.c:64
 msgid "Use all vector points (do not limit to current region)"
@@ -21063,9 +21032,9 @@ msgid "Create a 'flat' 2D hull even if the input is 3D points"
 msgstr "Tạo một bao 2D 'phẳng' ngay cả khi đầu vào là các điểm 3D"
 
 #: ../vector/v.hull/main.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading vector points from <%s>"
-msgstr "Lỗi khi đang nạp bản đồ điểm vec-tơ <%s>"
+msgstr "Lỗi khi đang nạp điểm véc-tơ từ <%s>"
 
 #: ../vector/v.hull/main.c:91
 #, fuzzy, c-format
@@ -21073,14 +21042,13 @@ msgid "Convex hull calculation requires at least three points (%d found)"
 msgstr "Việc tính toán bao đòi hỏi ít nhất ba điểm"
 
 #: ../vector/v.hull/main.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%d points read from vector map <%s>"
-msgstr "%d đường được lưu trong bản đồ vec-tơ <%s@%s>"
+msgstr "Đọc %d điểm từ bản đồ vec-tơ <%>"
 
 #: ../vector/v.hull/hull.c:106
-#, fuzzy
 msgid "Simple planar hulls not implemented yet"
-msgstr "Không tìm thấy vùng <%s>"
+msgstr "Chức năng bao phẳng (planar hull) chưa được thực hiện"
 
 #: ../vector/v.in.dwg/main.c:84
 msgid "Converts DWG/DXF to GRASS vector map"
@@ -21312,14 +21280,12 @@ msgid "It was impossible to create <%s> interpolation table in database."
 msgstr "Không thể nào tạo được bảng nội suy <%s> trong CSDL."
 
 #: ../vector/v.lidar.edgedetection/main.c:393
-#, fuzzy
 msgid "Allocating memory for bilinear interpolation"
-msgstr "Bộ nhớ cấp phát cho phép nội suy song tuyến tính"
+msgstr "Cấp phát bộ nhớ cho phép nội suy song tuyến tính"
 
 #: ../vector/v.lidar.edgedetection/main.c:426
-#, fuzzy
 msgid "Allocating memory for bicubic interpolation"
-msgstr "Bộ nhớ cấp phát cho phép nội suy bậc ba"
+msgstr "Cấp phát bộ nhớ cho phép nội suy bậc ba"
 
 #: ../vector/v.lidar.edgedetection/main.c:431
 msgid "Bicubic interpolation"
@@ -21340,22 +21306,19 @@ msgstr "Đang bỏ <%s>"
 #: ../vector/v.lidar.edgedetection/edgedetection.c:304
 #: ../vector/v.lidar.edgedetection/edgedetection.c:322
 #: ../vector/v.lidar.edgedetection/edgedetection.c:352
-#, fuzzy
 msgid "Impossible to read from aux table"
-msgstr "Không thể nào đọc được CSDL"
+msgstr "Không thể nào đọc được bảng phụ (aux table)"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:233
 #: ../vector/v.lidar.edgedetection/edgedetection.c:309
-#, fuzzy
 msgid "Impossible to update aux table"
-msgstr "Không thể nào cập nhật được CSDL"
+msgstr "Không thể nào cập nhật được bảng phụ (aux table)"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:246
 #: ../vector/v.lidar.edgedetection/edgedetection.c:258
 #: ../vector/v.lidar.edgedetection/edgedetection.c:379
-#, fuzzy
 msgid "Impossible to write to aux table"
-msgstr "Không thể nào ghi được CSDL"
+msgstr "Không thể nào ghi được vào bảng phụ (aux table)"
 
 #: ../vector/v.net.timetable/main.c:218
 #, fuzzy, c-format
@@ -21877,9 +21840,8 @@ msgstr ""
 "việc xây dựng bên trong"
 
 #: ../vector/v.lidar.growing/main.c:84
-#, fuzzy
 msgid "Input vector (v.lidar.edgedetection output"
-msgstr "Tên bản đồ vec-tơ quan sát đầu vào (đầu ra của v.lidar.growing)"
+msgstr "Vec-tơ đầu vào (đầu ra của v.lidar.edgedetection"
 
 #: ../vector/v.lidar.growing/main.c:94
 msgid "Name of the first pulse vector map"
@@ -21894,9 +21856,9 @@ msgid "Threshold for double pulse in region growing"
 msgstr "Ngưỡng cho xung kép trong việc làm lớn vùng"
 
 #: ../vector/v.lidar.growing/main.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open table <%s>"
-msgstr "Không thể chép bảng <%s>"
+msgstr "Không thể mở bảng <%s>"
 
 #: ../vector/v.lidar.growing/main.c:202
 msgid "Setting regions and boxes"
@@ -21913,9 +21875,8 @@ msgid "Columns = %d"
 msgstr "Cột = %d"
 
 #: ../vector/v.lidar.growing/main.c:289
-#, fuzzy
 msgid "read points in input vector"
-msgstr "Đang đọc bản đồ vec-tơđầu vào"
+msgstr "đọc các điểm trong véc-tơ đầu vào"
 
 #: ../vector/v.lidar.growing/main.c:438
 msgid "Region Growing"
@@ -22272,9 +22233,9 @@ msgid "Unable to open file with coordinates <%s>"
 msgstr "Không thể mở tập tin chứa tọa độ <%s>"
 
 #: ../vector/v.transform/main.c:293
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to tokenize column string: [%s]"
-msgstr "Không thể chia chuỗi cột: %s"
+msgstr "Không thể thẻ hoá chuỗi cột: [%s]"
 
 #: ../vector/v.transform/main.c:320
 #, c-format
@@ -23693,6 +23654,8 @@ msgid ""
 "Could not close attribute table. The DBMI driver did not accept all "
 "attributes"
 msgstr ""
+"Không thể đóng bảng thuộc tính. Trình điều khiển DBMI không chấp nhận tất cả "
+"các thuộc tính"
 
 #: ../vector/v.external/main.c:49
 #, fuzzy
@@ -24104,18 +24067,16 @@ msgstr "Đệm khoảng cách dọc theo trục lớn tính theo đơn vị bả
 #: ../vector/v.buffer/main.c:170 ../vector/v.buffer/main.c:178
 #: ../vector/v.buffer/main.c:186 ../vector/v.buffer/main.c:192
 #: ../vector/v.buffer/main.c:200 ../vector/v.buffer/main.c:209
-#, fuzzy
 msgid "Distance"
-msgstr "Tắt"
+msgstr "Khoảng cách"
 
 #: ../vector/v.buffer/main.c:177
 msgid "Buffer distance along minor axis in map units"
 msgstr "Đệm khoảng cách dọc theo trục nhỏ tính theo đơn vị bản đồ"
 
 #: ../vector/v.buffer/main.c:191
-#, fuzzy
 msgid "Name of column to use for buffer distances"
-msgstr "Cột thuộc tính dùng làm khoảng cách đệm"
+msgstr "Tên cột dùng làm khoảng cách đệm"
 
 #: ../vector/v.buffer/main.c:199
 msgid "Scaling factor for attribute column values"
@@ -24209,19 +24170,16 @@ msgid "Breaking boundaries..."
 msgstr "Đang ngắt các ranh giới..."
 
 #: ../vector/v.buffer/main.c:504 ../vector/v.buffer/main.c:582
-#, fuzzy
 msgid "Calculating centroids for areas..."
-msgstr "Đang tính các số đo độ trung tâm..."
+msgstr "Đang tính trong tâm cho các vùng..."
 
 #: ../vector/v.buffer/main.c:534
-#, fuzzy
 msgid "Generating list of boundaries to be deleted..."
-msgstr "Đang làm sạch ranh giới tại các nốt..."
+msgstr "Đang tạo danh sách các ranh giới cần xoá..."
 
 #: ../vector/v.buffer/main.c:566
-#, fuzzy
 msgid "Deleting boundaries..."
-msgstr "Đang ngắt các ranh giới..."
+msgstr "Đang xoá các ranh giới..."
 
 #: ../vector/v.edit/main.c:54
 #, fuzzy
@@ -25243,9 +25201,8 @@ msgid "npoints = %d, nterrain = %d"
 msgstr "npoints = %d, nterrain = %d"
 
 #: ../vector/v.lidar.correction/main.c:369
-#, fuzzy
 msgid "Mean calculation"
-msgstr "Phép tính của trị trung bình"
+msgstr "Phép tính trị trung bình"
 
 #: ../vector/v.lidar.correction/main.c:383
 msgid "Only TERRAIN points"
@@ -32001,13 +31958,11 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "New MAPSET name"
 #~ msgstr "Tên BỘ BẢN ĐỒ mới"
 
-#, fuzzy
 #~ msgid "Your mapset search list:\n"
-#~ msgstr "In ra đường dẫn tìm kiếm bộ bản đồ hiện tại"
+#~ msgstr "Danh sách tìm kiếm bộ bản đồ của bạn:\n"
 
-#, fuzzy
 #~ msgid "<%s> not found in mapset list"
-#~ msgstr "Không tìm thấy cột <%s> trong bảng <%s>"
+#~ msgstr "Không tìm thấy <%s> trong danh sách bộ bản đồ"
 
 #~ msgid "Name of workspace file"
 #~ msgstr "Tên của tập tin không gian làm việc"
@@ -32032,13 +31987,12 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Island size [%.1e], island not imported"
 #~ msgstr "Kích thước đảo [%.1e], đảo không được nhập vào"
 
-#, fuzzy
 #~ msgid ""
 #~ "No vector map of sparse points to interpolate was specified. "
 #~ "Interpolation will be done with <%s> vector map"
 #~ msgstr ""
-#~ "Không có bản đồ vector để nội suy. Phép nội suy sẽ được thực hiện với bản "
-#~ "đồ <%s>"
+#~ "Bản đồ véc-tơ với các điểm phân tán để nội suy không được chỉ định. Phép "
+#~ "nội suy sẽ được thực hiện với bản đồ véc-tơ  <%s>"
 
 #~ msgid "Failed in attempt to open %s"
 #~ msgstr "Thất bại trong việc mở %s"
@@ -32153,15 +32107,14 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Name for the resultant watershed partition file"
 #~ msgstr "Tên dùng cho tập tin phân vùng đường chia nước tạo thành"
 
-#, fuzzy
 #~ msgid ""
 #~ "Input raster map contains cells with NULL-value (no-data). The value %f "
 #~ "will be used to represent no-data values in the input map. You can "
 #~ "specify a nodata value with the %s option."
 #~ msgstr ""
-#~ "Bản đồ raster đầu vào chứa các ô với giá trị RỖNG (không có dữ liệu). Giá "
-#~ "trị %d được dùng để biểu thị các giá trị không có dữ liệu trong bản đồ "
-#~ "đầu vào. Bạn có thể chỉ định giá trị không dữ liệu bằng tham số %s."
+#~ "Bản đồ raster đầu vào chứa các ô với giá trị RỖNG (không-dữ-liệu). Giá "
+#~ "trị %f được dùng để biểu thị các giá trị không có dữ liệu trong bản đồ "
+#~ "đầu vào. Bạn có thể chỉ định giá trị không dữ liệu bằng tuỳ chọn %s."
 
 #~ msgid "Name of the elevation raster map [m]"
 #~ msgstr "Tên của bản đồ raster độ cao [m]"
@@ -32306,9 +32259,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "<%s> has not been created in database."
 #~ msgstr "<%s> không được tạo trong CSDL"
 
-#, fuzzy
 #~ msgid "Unable to access table <%s>"
-#~ msgstr "Không thể tạo bảng <%s>"
+#~ msgstr "Không thể truy cập bảng <%s>"
 
 #~ msgid "Experimental NVIZ CLI prototype."
 #~ msgstr "Mẫu thử nghiệm NVIZ CLI."
@@ -32713,9 +32665,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Error reading 'saturation' map"
 #~ msgstr "Lỗi khi đọc bản đồ 'saturation' (độ bão hòa)"
 
-#, fuzzy
 #~ msgid "Unable to read raster <map %d of %d> row %d"
-#~ msgstr "Không thể đọc bản đồ raster <%s> hàng %d"
+#~ msgstr "Không thể đọc <bản đồ raster %d của %d> hàng %d"
 
 #~ msgid "Writing map, row %d"
 #~ msgstr "Đang ghi bản đồ, hàng %d"
@@ -32786,16 +32737,14 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "unable to open new aspect map layer."
 #~ msgstr "không thể mở lớp bản đồ hướng mới."
 
-#, fuzzy
 #~ msgid "unable to open new LS factor map layer."
-#~ msgstr "không thể mở lớp bản đồ L mới"
+#~ msgstr "không thể mở lớp bản đồ hệ số LS mới."
 
 #~ msgid "unable to open new slope length map layer."
 #~ msgstr "không thể mở lớp bản đồ chiều dài dốc mới."
 
-#, fuzzy
 #~ msgid "unable to open new S factor map layer."
-#~ msgstr "không thể mở lớp bản đồ S mới."
+#~ msgstr "không thể mở lớp bản đồ hệ số S mới."
 
 #~ msgid "SECTION 2: A * Search."
 #~ msgstr "PHẦN 2: A * Tìm."
@@ -39231,9 +39180,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Converts raster maps into the VTK-Ascii format"
 #~ msgstr "Đổi các bản đồ raster thành định dạng ASCII VTK"
 
-#, fuzzy
 #~ msgid "raster, terrain"
-#~ msgstr "raster, nội suy"
+#~ msgstr "raster, địa hình"
 
 #~ msgid ""
 #~ "Sediment transport and erosion/deposition simulation using path sampling "
@@ -39391,14 +39339,13 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgstr ""
 #~ "Giá trị đầu vào: Độ dài lớn nhất của các dòng chảy bề mặt, dùng cho USLE"
 
-#, fuzzy
 #~ msgid ""
 #~ "Sorry, if any of the following options are set:\n"
 #~ "    basin, stream, half.basin, length.slope, or slope.steepness\n"
 #~ "    you MUST provide a value for the basin threshold parameter."
 #~ msgstr ""
 #~ "Xin lỗi, nếu bất kỳ tùy chọn nào sau đây được thiết lập:\n"
-#~ "    basin, stream, half.basin, slope, hay lS\n"
+#~ "    basin, stream, half.basin, length.slope, hay slope.steepnes\n"
 #~ "    thì bạn PHẢI cung cấp một giá trị cho tham số ngưỡng lưu vực."
 
 #~ msgid ""
@@ -39439,9 +39386,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ "LS=bản_đồ_dốc_chiều_dài [r=bản_đồ_xói_mòn_suối_nhỏ] [sd=giá_trị hoặc "
 #~ "bản_đồ_dịch_chuyển_độ_dốc]"
 
-#, fuzzy
 #~ msgid "unable to open flow accumulation map layer"
-#~ msgstr "không thể mở lớp bản đồ accum (tích lũy) mới."
+#~ msgstr "không thể mở lớp bản đồ tích lũy dòng chảy"
 
 #~ msgid "Error writing color file for <%s>"
 #~ msgstr "Lỗi khi đang ghi tập tin màu cho <%s>"
@@ -39502,9 +39448,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Cannot make stat of %s configuration file"
 #~ msgstr "Không thể tạo thống kê của tập tin cấu hình %s"
 
-#, fuzzy
 #~ msgid "Range to be exported: %f - %f"
-#~ msgstr "Tập tin raster cần nhập"
+#~ msgstr "Miền cần xuất: %f - %f"
 
 #~ msgid "raster, null data"
 #~ msgstr "raster, dữ liệu rỗng"
@@ -39641,9 +39586,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "general, map management"
 #~ msgstr "tổng quát, quản lý bản đồ"
 
-#, fuzzy
 #~ msgid "general, scripts"
-#~ msgstr "tổng quát, thiết lập"
+#~ msgstr "tổng quát, tập lệnh"
 
 #~ msgid "New LOCATION name (not location path)"
 #~ msgstr "Tên của VỊ TRÍ mới (không phải đường dẫn vị trí)"
@@ -39651,9 +39595,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "New GISDBASE (full path to the directory where the new location is)"
 #~ msgstr "GISDBASE mới (đường dẫn đầy đủ đến thư mục chứa vị trí mới)"
 
-#, fuzzy
 #~ msgid "** no mapsets **\n"
-#~ msgstr "** không tìm thấy tập tin %s**\n"
+#~ msgstr "** không có bộ bản đồ **\n"
 
 #~ msgid "format"
 #~ msgstr "định dạng"
@@ -39696,13 +39639,11 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Error reading hue data"
 #~ msgstr "Lỗi khi đọc dữ liệu 'hue' (màu sắc)"
 
-#, fuzzy
 #~ msgid "R_color file for [%s] not available"
-#~ msgstr "Tập tin màu cho [%s] không có"
+#~ msgstr "Không có tập tin R_color dùng cho [%s]"
 
-#, fuzzy
 #~ msgid "Range file for [%s] not available"
-#~ msgstr "Tập tin phạm trù cho [%s] không có"
+#~ msgstr "Không có tập tin miền cho [%s]"
 
 #~ msgid ""
 #~ "Displays and overlays raster map layers in the active display frame on "
@@ -39772,9 +39713,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "vector, interpolation"
 #~ msgstr "vector, nội suy"
 
-#, fuzzy
 #~ msgid "Layer but not column with z values given"
-#~ msgstr "Cột trong bảng thuộc tính chứa giá trị cần nội suy"
+#~ msgstr "Có lớp nhưng không có cột chứa giá trị z"
 
 #~ msgid "Vector based generalization."
 #~ msgstr "Phép tổng quát hoá dựa trên vec-tơ."
@@ -39828,19 +39768,19 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Randomly generate a 2D/3D vector points map."
 #~ msgstr "Tạo ngẫu nhiên một bản đồ điểm vector 2D/3D."
 
-#, fuzzy
 #~ msgid ""
 #~ "If type is not given then DOUBLE PRECISION is used. Writes Z data to "
 #~ "column instead of 3D vector."
-#~ msgstr "Ghi dữ liệu Z vào cột thay vì vào vec-tơ 3D"
+#~ msgstr ""
+#~ "Nếu không cung cấp kiểu thì kiểu DOUBLE PRECISION được dùng. Ghi dữ liệu "
+#~ "Z vào cột thay vì vào véc-tơ 3D."
 
 #~ msgid "v.random can't create 3D vector and attribute table at same time"
 #~ msgstr ""
 #~ "v.random không thể tạo vec-tơ 3D và bảng thuộc tính một cách đồng thời"
 
-#, fuzzy
 #~ msgid "Using 'double precision' for column <%s>"
-#~ msgstr "Không thể dùng cột <%s>"
+#~ msgstr "Dùng 'double precision' cho cột <%s>"
 
 #~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
 #~ msgstr "Đổi một bản đồ vector nhị phân GRASS thành đầu ra ASCII VTK."
@@ -39904,9 +39844,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "%d features written"
 #~ msgstr "%d đối tượng được ghi"
 
-#, fuzzy
 #~ msgid "Convex hull calculation requires at least three points. Exiting."
-#~ msgstr "Việc tính toán bao đòi hỏi ít nhất ba điểm"
+#~ msgstr "Việc tính toán bao lồi cần có ít nhất ba điểm. Thoát lệnh."
 
 #~ msgid "Create a new vector map layer by combining other vector map layers."
 #~ msgstr ""
@@ -39925,9 +39864,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ msgid "Buffer distance in map units"
 #~ msgstr "Khoảng cách đệm tính theo đơn vị bản đồ"
 
-#, fuzzy
 #~ msgid "Use the distance option instead of the buffer option."
-#~ msgstr "Dùng radian thay vì dùng độ để chỉ góc xoay"
+#~ msgstr "Dùng tuỳ chọn khoảng cách thay vì tuỳ chọn đệm."
 
 #~ msgid "vector, querying"
 #~ msgstr "vec-tơ, truy vấn"
@@ -39960,9 +39898,8 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #~ "Tính các thống kê một biến cho thuộc tính. Phương sai và  độ lệch chuẩn "
 #~ "chỉ được tính cho các điểm nếu được chỉ định."
 
-#, fuzzy
 #~ msgid "Calculate area centroids..."
-#~ msgstr "Không thể tính trọng tâm vùng."
+#~ msgstr "Tính trọng tâm vùng..."
 
 #~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
 #~ msgstr ""
@@ -40671,3 +40608,81 @@ msgstr "PHẦN 3: Dòng chảy bề mặt tích lũy."
 #, fuzzy
 #~ msgid "<%s> is an ilegal name"
 #~ msgstr "[%s] là tên không hợp lệ"
+
+#~ msgid "Enable MFD flow (default is SFD (D8))"
+#~ msgstr "Kích hoạt dòng chảy MFD (mặc định là SFD (D8))"
+
+#~ msgid "Checking GDAl data type and nodata value"
+#~ msgstr "Kiểm tra kiểu dữ liệu GDAL và giá trị không-dữ-liệu"
+
+#~ msgid ""
+#~ "Mismatch between metadata nodata value and actual nodata value in "
+#~ "exported raster: specified nodata value %f gets converted to %d by "
+#~ "selected GDAL datatype."
+#~ msgstr ""
+#~ "Giá trị không-dữ-liệu trong đặc tả dữ liệu và giá trị không-dữ-liệu thực "
+#~ "trong raster xuất ra không khớp nhau: giá trị không-dữ-liệu đã chỉ định %"
+#~ "f bị kiểu dữ liệu GDAL đã chọn chuyển thành %d."
+
+#~ msgid "The old d.m GUI is not available for WinGRASS"
+#~ msgstr "GDĐH kiểu cũ d.m không có trên WinGRASS"
+
+#~ msgid ""
+#~ "<%s> is a floating point map. Ignoring [lines] and drawing continuous "
+#~ "color ramp"
+#~ msgstr ""
+#~ "<%s> là một bản đồ kiểu dấu chấm động. Bỏ qua [các dòng] và vẽ thang màu "
+#~ "liên tục"
+
+#~ msgid ""
+#~ "<%s> is a floating point map. Ignoring [cols] and drawing continuous "
+#~ "color ramp"
+#~ msgstr ""
+#~ "<%s> là một bản đồ kiểu dấu chấm động. Bỏ qua các cột và vẽ thang màu "
+#~ "liên tục"
+
+#~ msgid "Need either 3D vector or layer and column with z values"
+#~ msgstr "Không có lớp véc-tơ 3D lẫn lớp có cột giá trị z"
+
+#~ msgid ""
+#~ "The map contains islands. To preserve them in the output map, use the -c "
+#~ "flag"
+#~ msgstr "Bản có chứa đảo. Để bảo tồn chúng trong bản đồ đầu ra, dùng cờ -c"
+
+#~ msgid "For vector lines reads their vertices"
+#~ msgstr "Đối với đường véc-tơ, đọc đỉnh của chúng"
+
+#~ msgid "This does nothing. It is retained for backwards compatibility"
+#~ msgstr ""
+#~ "Lệnh này không làm gì hết. Nó được giữ lại chỉ nhằm mục đích tương thích "
+#~ "ngược"
+
+#~ msgid ""
+#~ "This is an alias to the distance option. It is retained for backwards "
+#~ "compatibility"
+#~ msgstr ""
+#~ "Đây là một tên khác (alias) của tuỳ chọn khoảng cách. Nó được giữ lại chỉ "
+#~ "nhằm mục đích tương thích ngược"
+
+#~ msgid ""
+#~ "The buffer option has been replaced by the distance option and will be "
+#~ "removed in future."
+#~ msgstr ""
+#~ "Tuỳ chọn đệm đã được thay thế bằng tuỳ chọn khoảng cách và sau này sẽ "
+#~ "được loại bỏ."
+
+#~ msgid ""
+#~ "tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);oldtcltk;Old Tcl/Tk based "
+#~ "GUI - Display Manager (d.m);wxpython;wxPython based next generation GUI;"
+#~ "text;command line interface only"
+#~ msgstr ""
+#~ "tcltk;GDĐH dựa trên cơ sở Tcl/Tk - Trình Quản lý GIS (gis.m);oldtcltk;"
+#~ "GDĐH dựa trên Tcl/Tk kiểu cũ - Bộ Quản lý Trình bày (d.m);wxpython;GDĐH "
+#~ "thế hệ sau này dựa trên wxPython;text;giao diện chỉ có dòng lệnh"
+
+#~ msgid ""
+#~ "Output long/lat in decimal degrees or other projections with many decimal "
+#~ "places"
+#~ msgstr ""
+#~ "Xuất ra kinh/vĩ dạng độ thập phân hoặc các phép chiếu khác có nhiều chữ "
+#~ "số thập phân"
