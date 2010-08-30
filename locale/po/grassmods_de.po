@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2010-08-25 16:32+0200\n"
+"PO-Revision-Date: 2010-08-29 16:09+0200\n"
 "Last-Translator: Robert Nuske <rnuske gwdg.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -27804,9 +27804,8 @@ msgstr "Eingabe-Koordinatendatei (auslassen für lesen von stdin)."
 #: ../locale/scriptstrings/m.proj_to_translate.c:20
 #: ../locale/scriptstrings/m.proj_to_translate.c:22
 #: ../locale/scriptstrings/m.proj_to_translate.c:24
-#, fuzzy
 msgid "Files & format"
-msgstr "Tabellenformat"
+msgstr "Dateien & Formate"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:6
 msgid "Output coordinate file (omit to send to stdout)"
@@ -27831,9 +27830,8 @@ msgstr "Eingabe-Projektionsparameter (PROJ.4 Stil)."
 #: ../locale/scriptstrings/m.proj_to_translate.c:14
 #: ../locale/scriptstrings/m.proj_to_translate.c:16
 #: ../locale/scriptstrings/m.proj_to_translate.c:18
-#, fuzzy
 msgid "Projections"
-msgstr "Projeziere... "
+msgstr "Projektionen"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:13
 msgid "Output projection parameters (PROJ.4 style)"
@@ -27850,13 +27848,12 @@ msgid "Use current location as input and LL WGS84 as output projection"
 msgstr "Verwende LL WGS84 als Eingabe-Projektion und Ausgabe-Projektion."
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:19
-#, fuzzy
 msgid ""
 "Output long/lat in decimal degrees, or other projections with many decimal "
 "places"
 msgstr ""
-"Gebe long/lat in Dezimalgrad oder einer anderen Projektion mit vielen "
-"Dezimalstellen aus."
+"Gebe long/lat in Dezimalgrad oder anderen Projektionen mit vielen "
+"Dezimalstellen aus"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:21
 #, fuzzy
@@ -37119,19 +37116,17 @@ msgstr ""
 #~ "Neue GISDBASE (vollständiger Pfad zu dem Verzeichnis, in dem sich die "
 #~ "neue L0cation befindet)."
 
-#, fuzzy
 #~ msgid "Default value: GRASS_GUI if defined, otherwise wxpython"
-#~ msgstr "Standardwert: GRASS_GUI wenn definiert, ansonsten tcltk"
+#~ msgstr "Standardwert: GRASS_GUI wenn definiert, ansonsten wxpython"
 
-#, fuzzy
 #~ msgid ""
 #~ "wxpython;wxPython based GUI - wxGUI;tcltk;Tcl/Tk based GUI - GIS Manager "
 #~ "(gis.m);oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);text;"
 #~ "command line interface only"
 #~ msgstr ""
-#~ "tcltk;Tcl/Tk basiertes GUI - GIS Manager (gis.m);oldtcltk;Altes Tcl/Tk "
-#~ "basiertes GUI - Display Manager (d.m);wxpython;wxPython basiertes GUI der "
-#~ "nächsten Generation;text;Nur Kommandozeile"
+#~ "wxpython;wxPython basiertes GUI - wxGUI;tcltk;Tcl/Tk basiertes GUI - GIS "
+#~ "Manager (gis.m);oldtcltk;Altes Tcl/Tkbasiertes GUI - Display Manager (d."
+#~ "m);text;Nur Kommandozeile"
 
 #~ msgid "List of categories to be displayed (INT maps)"
 #~ msgstr "Liste der Werte die angezeigt werden sollen (INT-Karten)."
