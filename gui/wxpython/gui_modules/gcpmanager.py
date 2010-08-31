@@ -19,9 +19,9 @@ Classes:
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Markus Metz
 @author Michael Barton
 @author Updated by Martin Landa <landa.martin gmail.com>
+@author Markus Metz redesign georectfier -> GCP Manager
 """
 
 import os
@@ -1519,6 +1519,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             if os.path.exists(self.file['points_bak']):
                 os.unlink(self.file['points_bak'])
 
+            self.SrcMap.Clean()
+            self.TgtMap.Clean()
+
             self.grwiz.Cleanup()
 
             self.Destroy()
@@ -1746,10 +1749,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
     def OnHelp(self, event):
         """!Show GCP Manager manual page"""
-        gcmd.RunCommand('g.manual',
-                        quiet = True,
-                        parent = None,
-                        entry = 'wxGUI.GCP_Manager')
+        cmdlist = ['g.manual', 'entry=wxGUI.GCP_Manager']
+        self.parent.goutput.RunCmd(cmdlist, compReg=False,
+                                       switchPage=False)
 
     def OnUpdateActive(self, event):
 
