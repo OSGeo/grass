@@ -158,8 +158,8 @@ def GetGRASSCmds(bin = True, scripts = True, gui_scripts = True):
        
     if subprocess.mswindows:
         for idx in range(len(cmd)):
-            cmd[idx] = cmd[idx].replace(EXT_BIN, '')
-            cmd[idx] = cmd[idx].replace(EXT_SCT, '')
+            if cmd[idx][-4:] in (EXT_BIN, EXT_SCT):
+                cmd[idx] = cmd[idx][:-4]
     
     return cmd
 
