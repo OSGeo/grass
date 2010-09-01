@@ -219,6 +219,18 @@ class MapFrame(wx.Frame):
         self.statusbarWin['goto'].Hide()
         self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.statusbarWin['goto'])
 
+        # projection, unused but BufferedWindow checks for it
+        self.statusbarWin['projection'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
+                                                      label=_("Use defined projection"))
+        self.statusbarWin['projection'].SetValue(False)
+        size = self.statusbarWin['projection'].GetSize()
+        self.statusbarWin['projection'].SetMinSize((size[0] + 150, size[1]))
+        self.statusbarWin['projection'].SetToolTip(wx.ToolTip (_("Reproject coordinates displayed "
+                                                                 "in the statusbar. Projection can be "
+                                                                 "defined in GUI preferences dialog "
+                                                                 "(tab 'Display')")))
+        self.statusbarWin['projection'].Hide()
+
         # mask
         self.statusbarWin['mask'] = wx.StaticText(parent = self.statusbar, id = wx.ID_ANY,
                                                   label = '')
