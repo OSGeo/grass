@@ -29,7 +29,7 @@ IconsSilk = {
     "zoom_out"   : 'zoom_out.png',
     "zoom_back"  : 'zoom_back.png',
     "zoommenu"   : 'zoom.png',
-    "zoom_extent" : 'zoom_extend.png',
+    "zoom_extent" : 'zoom_extent.png',
     # analyze raster (mapdisplay)
     "analyze"    : 'application_lightning.png',
     "measure"    : 'sum.png',
