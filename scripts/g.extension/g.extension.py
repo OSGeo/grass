@@ -103,6 +103,7 @@ def check():
     # check if we have the svn client
     if not grass.find_program('svn'):
         grass.fatal(_('svn client required. Please install subversion first.'))
+    # probably test here if we have "make" and "install" programs here too. gcc?
 
 def expand_module_class_name(c):
     name = { 'd'  : 'display',
