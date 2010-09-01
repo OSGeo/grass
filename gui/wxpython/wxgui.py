@@ -72,7 +72,6 @@ import gui_modules.rules as rules
 import gui_modules.mcalc_builder as mapcalculator
 import gui_modules.gcmd as gcmd
 import gui_modules.georect as georect
-import gui_modules.gcpmanager as gcpmanager
 import gui_modules.dbm as dbm
 import gui_modules.workspace as workspace
 import gui_modules.goutput as goutput
@@ -258,6 +257,7 @@ class GMFrame(wx.Frame):
     def OnGCPManager(self, event):
         """!Launch georectifier module
         """
+        import gui_modules.gcpmanager as gcpmanager
         gcpmanager.GCPWizard(self)
 
     def OnGModeler(self, event):
