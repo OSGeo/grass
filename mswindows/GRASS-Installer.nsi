@@ -16,9 +16,9 @@
 
 !define MSYS_BATCH "C:\OSGeo4W\usr\src\grass_trunk\mswindows\osgeo4w\msys.bat"
 
-;Select if you are building a "Development Version" or a "Release Version" of the GRASS Installer
+;Select if you are building a "Development Version" (Devel) or a "Release Version" (Release) of the GRASS Installer
 
-!define INSTALLER_TYPE "Dev70"
+!define INSTALLER_TYPE "Devel"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 ;set compression configuration
@@ -30,11 +30,17 @@ SetCompressorDictSize 64
 
 ;Version variables
 
-!define DEV70_VERSION_NUMBER "7.0.SVN"
-!define DEV70_SVN_REVISION "36599"
-!define DEV70_BINARY_REVISION "1"
-!define DEV70_GRASS_COMMAND "grass70"
-!define DEV70_GRASS_BASE "GRASS-70-SVN"
+!define RELEASE_VERSION_NUMBER "7.0.0"
+!define RELEASE_SVN_REVISION "36599"
+!define RELEASE_BINARY_REVISION "1"
+!define RELEASE_GRASS_COMMAND "grass70"
+!define RELEASE_GRASS_BASE "GRASS-70"
+
+!define DEVEL_VERSION_NUMBER "7.0.SVN"
+!define DEVEL_SVN_REVISION "36599"
+!define DEVEL_BINARY_REVISION "1"
+!define DEVEL_GRASS_COMMAND "grass70svn"
+!define DEVEL_GRASS_BASE "GRASS-70-SVN"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
@@ -51,16 +57,26 @@ SetCompressorDictSize 64
 
 ;Set the installer variables, depending on the selected version to build
 
-!if ${INSTALLER_TYPE} == "Dev70"
-        !define VERSION_NUMBER "${DEV70_VERSION_NUMBER}"
-	!define SVN_REVISION "${DEV70_SVN_REVISION}"
-	!define BINARY_REVISION "${DEV70_BINARY_REVISION}"
-	!define GRASS_COMMAND "${DEV70_GRASS_COMMAND}"
-	!define GRASS_BASE "${DEV70_GRASS_BASE}"
+!if ${INSTALLER_TYPE} == "Release"
+	!define VERSION_NUMBER "${RELEASE_VERSION_NUMBER}"
+	!define SVN_REVISION "${RELEASE_SVN_REVISION}"
+	!define BINARY_REVISION "${RELEASE_BINARY_REVISION}"
+	!define GRASS_COMMAND "${RELEASE_GRASS_COMMAND}"
+	!define GRASS_BASE "${RELEASE_GRASS_BASE}"
+	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup.exe"
+	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-${BINARY_REVISION}"
+	!define CHECK_INSTALL_NAME "GRASS"
+	!define PACKAGE_FOLDER ".\GRASS-70-Release-Package"
+!else if ${INSTALLER_TYPE} == "Devel"
+	!define VERSION_NUMBER "${DEVEL_VERSION_NUMBER}"
+	!define SVN_REVISION "${DEVEL_SVN_REVISION}"
+	!define BINARY_REVISION "${DEVEL_BINARY_REVISION}"
+	!define GRASS_COMMAND "${DEVEL_GRASS_COMMAND}"
+	!define GRASS_BASE "${DEVEL_GRASS_BASE}"
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}-Setup.exe"
 	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}"
 	!define CHECK_INSTALL_NAME "GRASS 70 SVN"
-	!define PACKAGE_FOLDER ".\GRASS-70-Dev-Package"
+	!define PACKAGE_FOLDER ".\GRASS-70-Devel-Package"
 !endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -193,7 +209,7 @@ Function .onInit
 	Var /GLOBAL MESSAGE_3_
 	
 	Var /GLOBAL R_HKLM_INSTALL_PATH 
-	Var /GLOBAL R_HKCU_INSTALL_PATH 
+	Var /GLOBAL R_HKCU_INSTALL_PATH
 	
 	ReadRegStr $UNINSTALL_STRING HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString"
 	ReadRegStr $INSTALL_PATH HKLM "Software\${GRASS_BASE}" "InstallPath"
@@ -636,11 +652,11 @@ Section "GRASS" SecGRASS
 	; not working after changing to start Grass7 by grass70.py
 	;CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
 	;"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
-	
+					
 	; new attempt to get Grass70-wx-gui and a working msys-shell in a windows command line
 	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\set_shell_start_${GRASS_COMMAND}.bat" ""\
 	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS-Windows-commandline"
- 
+ 	
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
 	
@@ -660,7 +676,7 @@ Section "GRASS" SecGRASS
 	
 	;CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
 	;"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
-	
+
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\set_shell_start_${GRASS_COMMAND}.bat" ""\
 	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS-Windows-commandline"
 	
@@ -682,8 +698,8 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '@echo off$\r$\n'
 	FileWrite $0 'rem #########################################################################$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
-	FileWrite $0 'rem # File dynamically created by NSIS installer script$\r$\n'
-	FileWrite $0 'rem # Written by Marco Pasetti$\r$\n'
+	FileWrite $0 'rem # File dynamically created by NSIS installer script;$\r$\n'
+	FileWrite $0 'rem # Written by Marco Pasetti;$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
 	FileWrite $0 'rem #########################################################################$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
@@ -751,8 +767,8 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '"$INSTALL_DIR\${GRASS_COMMAND}.bat"$\r$\n'
 	FileClose $0
-	done_create_set_shell_start_grass.bat:
-	
+ 	done_create_set_shell_start_grass.bat:
+			
 	;Set the UNIX_LIKE GRASS Path
 	Var /GLOBAL UNIX_LIKE_DRIVE
 	Var /GLOBAL UNIX_LIKE_GRASS_PATH
@@ -799,12 +815,29 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '#! /bin/sh$\r$\n'
 	FileWrite $0 '#########################################################################$\r$\n'
 	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# File dynamically created by NSIS installer script$\r$\n'
-	FileWrite $0 '# Written by Marco Pasetti$\r$\n'
+	FileWrite $0 '# File dynamically created by NSIS installer script;$\r$\n'
+	FileWrite $0 '# Written by Marco Pasetti;$\r$\n'
 	FileWrite $0 '#$\r$\n'
 	FileWrite $0 '#########################################################################$\r$\n'
 	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# GRASS Initialization$\r$\n'
+	FileWrite $0 '# MODULE:   	GRASS Initialization$\r$\n'
+	FileWrite $0 '# AUTHOR(S):	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th$\r$\n'
+	FileWrite $0 '# PURPOSE:  	The source file for this shell script is in$\r$\n'
+	FileWrite $0 '#   	    	lib/init/grass.src and is the grass startup script. It$\r$\n'
+	FileWrite $0 '#   	    	requires a source file because the definition of GISBASE$\r$\n'
+	FileWrite $0 '#   	    	is not known until compile time and is substituted from the$\r$\n'
+	FileWrite $0 '#   	    	Makefile. Any command line options are passed to Init.sh.$\r$\n'
+	FileWrite $0 '# COPYRIGHT:  	(C) 2000-2010 by the GRASS Development Team$\r$\n'
+	FileWrite $0 '#$\r$\n'
+	FileWrite $0 '#             	This program is free software under the GNU General Public$\r$\n'
+	FileWrite $0 '#   	    	License (>=v2). Read the file COPYING that comes with GRASS$\r$\n'
+	FileWrite $0 '#   	    	for details.$\r$\n'
+	FileWrite $0 '#$\r$\n'
+	FileWrite $0 '#########################################################################$\r$\n'
+	FileWrite $0 '#$\r$\n'
+	FileWrite $0 '# Modified by Marco Pasetti$\r$\n'
+	FileWrite $0 '# added the export PATH instruction to let GRASS work from$\r$\n'
+	FileWrite $0 '# the MSYS environment in the dynamic NSIS installation$\r$\n'
 	FileWrite $0 '#$\r$\n'
 	FileWrite $0 '#########################################################################$\r$\n'
 	FileWrite $0 '$\r$\n'
@@ -982,7 +1015,7 @@ SectionEnd
 Section "Uninstall"
 	;remove files & folders
 	RMDir /r "$INSTDIR"
-	
+	        	
 	;remove the Desktop ShortCut
 	SetShellVarContext current
 	Delete "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk"
