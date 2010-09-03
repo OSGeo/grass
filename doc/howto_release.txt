@@ -105,8 +105,8 @@ Contents
 
 
  o Store the source tarball (twice) in (use scp -p FILES grass:):
-    SERVER1=download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/source/
-    SERVER2=grass.osgeo.org:/osgeo/grass/grass-web-public/grass$MAJOR$MINOR/source/
+    SERVER1=grass.osgeo.org:/osgeo/grass/grass-web-public/grass$MAJOR$MINOR/source/
+    SERVER2=download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/source/
     echo $SERVER1
     echo $SERVER2
 
@@ -136,10 +136,10 @@ Contents
       - download new source code package, compile with most settings
       -  cd dist.$ARCH/docs/html
          echo www/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
-         scp -r * neteler@download.osgeo.org:/osgeo/download/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
-         scp -r * neteler@grass.osgeo.org:/osgeo/download/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
+         scp -r * neteler@grass.osgeo.org:/osgeo/grass/grass-web-public/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
+         scp -r * neteler@download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
 
- o stable release: update cronjob 'cron_grass70_release_src_snapshot.sh' to next but one
+ o stable release: update cronjob 'cron_grass_HEAD_src_snapshot.sh' to next but one
                    release tag for the differences
 
 2. Tell others about it:
