@@ -96,7 +96,7 @@ def main():
     os.system("g.gisenv set=GRASS_PYCMDFILE=%s" % command_file)
 
     if start != "":
-        os.spawnlp(os.P_NOWAIT, os.environ["GRASS_PYTHON"], os.environ["GRASS_PYTHON"], "%s/etc/wxpython/gui_modules/mapdisp.py" % os.environ["GISBASE"], start, command_file)
+        os.spawnlp(os.P_NOWAIT, os.environ["GRASS_PYTHON"], os.environ["GRASS_PYTHON"], "%s/etc/gui/wxpython/gui_modules/mapdisp.py" % os.environ["GISBASE"], start, command_file)
         return
 
 #    if stop != "" or select != "" or unlock != "":
