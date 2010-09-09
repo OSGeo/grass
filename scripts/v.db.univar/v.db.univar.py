@@ -142,7 +142,7 @@ def main():
     # check if result is empty
     tmpf = file(tmp)
     if tmpf.read(1) == '':
-        grass.fatal(_("Table <%s> contains no data."), table)
+        grass.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
 
     # calculate statistics
