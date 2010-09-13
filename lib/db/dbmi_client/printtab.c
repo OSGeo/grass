@@ -15,7 +15,7 @@
 #include <string.h>
 #include <grass/dbmi.h>
 
-static void print_priv();
+static void print_priv(FILE * fd, char *label, int priv);
 
 /*!
   \brief Print table definition info
