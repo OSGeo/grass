@@ -17,21 +17,6 @@
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 
-/*!
-  \brief Returns column structure for given table and column number
-  
-  \param table pointer to dbTable
-  \param n     column index (starting with '0')
-
-  \return pointer to dbColumn
-  \return NULL on error
-*/
-dbColumn *db_get_table_column(dbTable * table, int n)
-{
-    if (n < 0 || n >= table->numColumns)
-	return ((dbColumn *) NULL);
-    return &table->columns[n];
-}
 
 /*!
   \brief Returns column value for given column structure
@@ -470,4 +455,39 @@ void db_free_column(dbColumn * column)
     /* match init? */
     db_free_string(&column->description);
     db_free_string(&column->defaultValue.s);
+}
+
+
+/*!
+ * \brief Copy a db column from source to destination
+ *
+ * \param src The column to copy from
+ * \param dest An allocated column to copy to which will be initialized. In case dest is NULL a new column will be allocated and returned
+ * \return The pointer of copied/allocated column
+ */
+dbColumn *db_copy_column(dbColumn *dest, dbColumn *src)
+{
+    dbColumn *new = dest;
+
+    if(new == NULL)
+        new = (dbColumn *) db_calloc(sizeof(dbColumn), 1);
+    else
+        db_init_column(new);
+
+    db_copy_string(&new->columnName, &src->columnName);
+    db_copy_string(&new->description, &src->description);
+    db_copy_value(&new->defaultValue, &src->defaultValue);
+    db_copy_value(&new->value, &src->value);
+    new->dataLen = src->dataLen;
+    new->hasDefaultValue = src->hasDefaultValue;
+    new->hostDataType = src->hostDataType;
+    new->nullAllowed = src->nullAllowed;
+    new->precision = src->precision;
+    new->scale = src->scale;
+    new->select = src->select;
+    new->sqlDataType = src->sqlDataType;
+    new->update = src->update;
+    new->useDefaultValue = src->useDefaultValue;
+    
+    return new;
 }

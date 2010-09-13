@@ -29,7 +29,8 @@ static char *dbmscap_files[] = {
     NULL
 };
 
-static void add_entry();
+static void
+add_entry(dbDbmscap ** list, char *name, char *startup, char *comment);
 
 static char *dbmscap_filename(int err_flag)
 {

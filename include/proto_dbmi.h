@@ -7,6 +7,7 @@ int db_add_column(dbDriver * driver, dbString * tableName, dbColumn * column);
 void db__add_cursor_to_driver_state(dbCursor * cursor);
 int db_alloc_cursor_column_flags(dbCursor * cursor);
 int db_alloc_cursor_table(dbCursor * cursor, int ncols);
+int db_append_table_column(dbTable * , dbColumn *);
 dbDirent *db_alloc_dirent_array(int count);
 dbHandle *db_alloc_handle_array(int count);
 dbIndex *db_alloc_index_array(int count);
@@ -31,6 +32,7 @@ int db_CatValArray_get_value_double(dbCatValArray * arr, int key,
 void db_char_to_lowercase(char *s);
 void db_char_to_uppercase(char *s);
 void db_clear_error(void);
+dbTable *db_clone_table(dbTable *);
 void db__close_all_cursors(void);
 int db_close_cursor(dbCursor * cursor);
 int db_close_database(dbDriver * driver);
@@ -52,6 +54,7 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
 					  dbString * string);
 int db_convert_value_to_string(dbValue * value, int sqltype,
 			       dbString * string);
+dbColumn *db_copy_column(dbColumn *, dbColumn *);
 void db_copy_dbmscap_entry(dbDbmscap * dst, dbDbmscap * src);
 int db_copy_string(dbString * dst, const dbString * src);
 int db_table_to_sql(dbTable *, dbString *);

@@ -19,8 +19,9 @@ typedef struct dirent dir_entry;
 extern DIR *opendir();
 extern dir_entry *readdir();
 
-static int get_perm();
-static void sort_dirent();
+static int cmp_dirent(const void *aa, const void *bb);
+static int get_perm(char *path);
+static void sort_dirent(dbDirent * a, int n);
 
 
 /*!

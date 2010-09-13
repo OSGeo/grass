@@ -100,7 +100,7 @@ int db_get_column(dbDriver * Driver, const char *tname, const char *cname,
 {
     int i, ncols;
     dbTable *Table;
-    dbColumn *Col, *NCol;
+    dbColumn *Col;
     dbString tabname;
 
     db_init_string(&tabname);
@@ -119,25 +119,7 @@ int db_get_column(dbDriver * Driver, const char *tname, const char *cname,
     for (i = 0; i < ncols; i++) {
 	Col = db_get_table_column(Table, i);
 	if (G_strcasecmp(db_get_column_name(Col), cname) == 0) {
-	    NCol = (dbColumn *) malloc(sizeof(dbColumn));
-	    db_init_column(NCol);
-	    db_set_string(&(NCol->columnName), db_get_column_name(Col));
-	    db_set_string(&(NCol->description),
-			  db_get_column_description(Col));
-	    NCol->sqlDataType = Col->sqlDataType;
-	    NCol->hostDataType = Col->hostDataType;
-	    db_copy_value(&(NCol->value), &(Col->value));
-	    NCol->dataLen = Col->dataLen;
-	    NCol->precision = Col->precision;
-	    NCol->scale = Col->scale;
-	    NCol->nullAllowed = Col->nullAllowed;
-	    NCol->hasDefaultValue = Col->hasDefaultValue;
-	    NCol->useDefaultValue = Col->useDefaultValue;
-	    db_copy_value(&(NCol->defaultValue), &(Col->defaultValue));
-	    NCol->select = Col->select;
-	    NCol->update = Col->update;
-
-	    *Column = NCol;
+	    *Column = db_copy_column(NULL, Col);
 	    return DB_OK;
 	}
     }
