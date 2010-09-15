@@ -7,7 +7,7 @@ in the current location. The projection information is taken from the
 current PROJ_INFO files, as set with <i><a href="g.setproj.html">g.setproj</a>
 </i> and viewed with <i><a href="g.proj.html">g.proj</a></i>.
 
-<h4>Introduction</h4>
+<h3>Introduction</h3>
 
 <h5>Map projections</h5>
 
@@ -83,7 +83,7 @@ the PROJ_INFO and PROJ_UNITS files in the PERMANENT mapset directory for every
 GRASS location.
 <br><br>
 
-<h4>Design of r.proj</h4>
+<h3>Design of r.proj</h3>
 
 As discussed briefly above, the fundamental step in re-projecting a
 raster is resampling the source grid at locations corresponding to the
@@ -175,7 +175,7 @@ may be odd with trimming.
 
 <h2>EXAMPLES</h2>
 
-<h4>Inline method</h4>
+<h3>Inline method</h3>
 With GRASS running in the destination location use the <b>-g</b> flag to
 show the input map's bounds once projected into the current working projection,
 then use that to set the region bounds before performing the reprojection:
@@ -231,7 +231,7 @@ GRASS> r.proj input=elevation location=ll_wgs84 mapset=user1 memory=800
 </pre></div>
 
 
-<h4>v.in.region method</h4>
+<h3>v.in.region method</h3>
 <div class="code"><pre>
 
 # In the source location, use v.in.region to generate a bounding box around the

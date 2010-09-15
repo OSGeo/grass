@@ -14,7 +14,7 @@ considered as a category.
 
 <h2>EXAMPLES</h2>
 
-<h4>Basic outlier removal</h4>
+<h3>Basic outlier removal</h3>
 
 <div class="code"><pre>
 v.outlier input=vector_map output=vector_output outlier=vector_outlier thres_O=25
@@ -22,7 +22,7 @@ v.outlier input=vector_map output=vector_output outlier=vector_outlier thres_O=2
 
 In this case, a basic outlier removal is done with a threshold of 25 m.
 
-<h4>Basic outlier removal</h4>
+<h3>Basic outlier removal</h3>
 
 <div class="code"><pre>
 v.outlier -q input=vector_map output=vector_output outlier=vector_outlier qgis=vector_qgis
@@ -32,7 +32,7 @@ Now, the outlier removal uses the default threshold and there is also
 an output vector available for visualizaton in QGIS
  (<a href="http://www.qgis.org">http://www.qgis.org</a>).
 
-<h4>North carolina location example</h4>
+<h3>North carolina location example</h3>
 
 <div class="code"><pre>
 v.outlier --o --v input=elev_lid792_bepts@PERMANENT output=elev_lid792_bepts_nooutliers outlier=elev_lid792_bepts_outliers soe=5 son=5 thres_o=0.1

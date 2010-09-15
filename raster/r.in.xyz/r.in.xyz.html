@@ -40,7 +40,7 @@ Available statistics for populating the raster are:<br>
 
 <h2>NOTES</h2>
 
-<h4>Gridded data</h4>
+<h3>Gridded data</h3>
 
 If data is known to be on a regular grid <em>r.in.xyz</em> can reconstruct
 the map perfectly as long as some care is taken to set up the region
@@ -60,7 +60,7 @@ min, max</i>, or <i>median</i> methods. With n=1 throughout, the result
 should be identical regardless of which of those methods are used.
 
 
-<h4>Memory use</h4>
+<h3>Memory use</h3>
 
 While the <b>input</b> file can be arbitrarily large, <em>r.in.xyz</em>
 will use a large amount of system memory for large raster regions (10000x10000).
@@ -85,7 +85,7 @@ preserving data precision and limiting system resource consumption.
 If reading data from a <tt>stdin</tt> stream, the program can only run using
 a single pass.
 
-<h4>Setting region bounds and resolution</h4>
+<h3>Setting region bounds and resolution</h3>
 
 You can use the <b>-s</b> scan flag to find the extent of the input data
 (and thus point density) before performing the full import. Use
@@ -115,7 +115,7 @@ resolution so fine that you only catch one data point per cell -- you might
 as well use "<tt>v.in.ascii&nbsp;-zbt</tt>" directly.
 
 
-<h4>Filtering</h4>
+<h3>Filtering</h3>
 
 Points falling outside the current region will be skipped. This includes
 points falling <em>exactly</em> on the southern region bound.
@@ -148,13 +148,13 @@ map. [In this example the user may want to include a lower bound filter in
 <em>r.neighbors</em> to smooth the stddev map before further use.]
 
 
-<h4>Reprojection</h4>
+<h3>Reprojection</h3>
 
 If the raster map is to be reprojected, it may be more appropriate to reproject
 the input points with <em>m.proj</em> or <em>cs2cs</em> before running
 <em>r.in.xyz</em>.
 
-<h4>Interpolation into a DEM</h4>
+<h3>Interpolation into a DEM</h3>
 
 The vector engine's topographic abilities introduce a finite memory overhead
 per vector point which will typically limit a vector map to approximately

@@ -55,7 +55,7 @@ when cross-validation is selected.
 
 <h2>EXAMPLES</h2>
 
-<h4>Basic interpolation</h4>
+<h3>Basic interpolation</h3>
 
 <div class="code"><pre>
 r.resamp.bspline input=raster_surface output=interpolated_surface method=bicubic
@@ -64,7 +64,7 @@ r.resamp.bspline input=raster_surface output=interpolated_surface method=bicubic
 A bicubic spline interpolation will be done and a raster map with estimated
 (i.e., interpolated) values will be created. 
 
-<h4>Interpolation of NULL cells and patching</h4>
+<h3>Interpolation of NULL cells and patching</h3>
 
 <div class="code"><pre>
 # set region to area with NULL cells, align region to input map
@@ -77,7 +77,7 @@ g.region rast=input -p
 r.patch input=input_raster,interpolated_nulls output=input_raster_gapfilled
 </pre></div>
 
-<h4>Estimation of <b><i>lambda</i></b> parameter with a cross validation proccess</h4>
+<h3>Estimation of <b><i>lambda</i></b> parameter with a cross validation proccess</h3>
 
 A random sample of points should be generated first with
 <a href="r.random.html">r.random</a>, and the current region should not
