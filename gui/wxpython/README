@@ -1,5 +1,5 @@
-wxPython GRASS Graphical User Interface
-=======================================
+wxPython GRASS Graphical User Interface (wxGUI)
+===============================================
 
 $Date$
 
@@ -138,9 +138,12 @@ environment variable, e.g.
 $ export GRASS_WX_DEBUG=3
 
 
-6 - EXTENSIONS - VECTOR DIGITIZER AND 3D VIEWER
+6 - VECTOR DIGITIZER
 
-To enable digitizer you need to compile 'vdigit' or 'nviz'
-component. Note that you must configure GRASS with C++ (--with-cxx),
-Python (--with-python) and wxWidgets (--with-wxwidgets) support.
+To enable digitizer you need to compile 'vdigit' component. Note that
+you must configure GRASS with C++ (--with-cxx), Python (--with-python)
+and wxWidgets (--with-wxwidgets) support.
 
+$ cd gui/wxpython/vdigit
+$ make
+$ make install

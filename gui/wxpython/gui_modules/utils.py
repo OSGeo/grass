@@ -268,10 +268,15 @@ def GetVectorNumberOfLayers(vector):
     if not vector:
         return layers
     
+    fullname = grass.find_file(name = vector, element = 'vector')['fullname']
+    if not fullname:
+        Debug.msg(5, "utils.GetVectorNumberOfLayers(): vector map '%s' not found" % vector)
+        return layers
+    
     ret = gcmd.RunCommand('v.db.connect',
                           flags = 'g',
                           read = True,
-                          map = vector,
+                          map = fullname,
                           fs = ';')
         
     if not ret:
@@ -287,7 +292,7 @@ def GetVectorNumberOfLayers(vector):
             pass
     
     Debug.msg(3, "utils.GetVectorNumberOfLayers(): vector=%s -> %s" % \
-                  (vector, ','.join(layers)))
+                  (fullname, ','.join(layers)))
     
     return layers
 
