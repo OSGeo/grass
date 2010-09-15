@@ -121,7 +121,7 @@ resolution can be found using <em><a href="g.region.html">g.region</a></em>.
 This problem doesn't arise with floating point maps.
 
 
-<h4>Algorithm notes</h4>
+<h3>Algorithm notes</h3>
 
 The fundamental approach to calculating minimum travel cost is as
 follows:<p> The user generates a raster map indicating the cost of
@@ -202,7 +202,7 @@ only one) starting location(s). Cells surrounded by asterisks are
 those that are different between operations using and not using the
 Knight's move (<b>-k</b>) option.
 
-<h4>Output analysis</h4>
+<h3>Output analysis</h3>
 
 The output map can be viewed, for example, as an elevation model in which
 the starting location(s) is/are the lowest point(s). Outputs from  <em>r.cost</em>
@@ -212,7 +212,7 @@ model between any given cell and the <em>r.cost</em> starting location(s). The
 two programs, when used together, generate least-cost paths or corridors between any 
 two map locations (cells).
 
-<h4>Shortest distance surfaces</h4>
+<h3>Shortest distance surfaces</h3>
 The <em>r.cost</em> module allows for computing the shortest distance 
 of each pixel from raster lines, such as determining the shortest distances
 of households to the nearby road. For this cost surfaces with cost value 1 are

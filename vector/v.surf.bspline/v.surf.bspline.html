@@ -88,7 +88,7 @@ is generated.
 
 <h2>EXAMPLES</h2>
 
-<h4>Basic interpolation</h4>
+<h3>Basic interpolation</h3>
 
 <div class="code"><pre>
 v.surf.bspline input=point_vector output=interpolate_surface method=bicubic
@@ -97,7 +97,7 @@ v.surf.bspline input=point_vector output=interpolate_surface method=bicubic
 A bicubic spline interpolation will be done and a vector points map with estimated
 (i.e., interpolated) values will be created. 
 
-<h4>Basic interpolation and raster output with a longer spline step</h4>
+<h3>Basic interpolation and raster output with a longer spline step</h3>
 
 <div class="code"><pre>
 v.surf.bspline input=point_vector raster=interpolate_surface sie=25 sin=25
@@ -106,13 +106,13 @@ v.surf.bspline input=point_vector raster=interpolate_surface sie=25 sin=25
 A bilinear spline interpolation will be done with a spline step length of 25 map
 units. An interpolated raster map will be created at the current region resolution.
 
-<h4>Estimation of <b><i>lambda_i</i></b> parameter with a cross validation proccess</h4>
+<h3>Estimation of <b><i>lambda_i</i></b> parameter with a cross validation proccess</h3>
 
 <div class="code"><pre>
 v.surf.bspline -c input=point_vector 
 </pre></div>
 
-<h4>Estimation on sparse points</h4>
+<h3>Estimation on sparse points</h3>
 
 <div class="code"><pre>
 v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surface
@@ -120,7 +120,7 @@ v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surfac
 
 An output map of vector points will be created, corresponding to the sparse vector map, with interpolated values.
 
-<h4>Using attribute values instead Z-coordinates</h4>
+<h3>Using attribute values instead Z-coordinates</h3>
 <div class="code"><pre>
 v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attrib_column
 </pre></div>
@@ -128,7 +128,7 @@ v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attr
 The interpolation will be done using the values in attrib_column, in the
 table associated with layer 1.
 
-<h4>North carolina location example using Z-coordinates for interpolation</h4>
+<h3>North carolina location example using Z-coordinates for interpolation</h3>
 <div class="code"><pre>
 v.surf.bspline --o --v input=elev_lid792_bepts@PERMANENT raster=elev_lid792_rast sie=5 sin=5 method=bicubic lambda_i=0.1 -z
 </pre></div>

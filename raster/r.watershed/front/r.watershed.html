@@ -178,7 +178,7 @@ number (usually less than one), the GRASS output map is of type DCELL.
 
 <h2>NOTES</h2>
 
-<h4>A<sup>T</sup> least-cost search algorithm</h4>
+<h3>A<sup>T</sup> least-cost search algorithm</h3>
 <em>r.watershed</em> uses an A<sup>T</sup> least-cost search algorithm 
 (see <a href="#references">REFERENCES</a> section) designed to minimize 
 the impact of DEM data errors. Compared to <em>r.terraflow</em>, this 
@@ -203,7 +203,7 @@ The algorithm produces results similar to those obtained when running
 <em><a href="r.cost.html">r.cost</a></em> and
 <em><a href="r.drain.html">r.drain</a></em> on every cell on the map.
 
-<h4>Multiple flow direction (MFD)</h4>
+<h3>Multiple flow direction (MFD)</h3>
 
 <em>r.watershed</em> offers two methods to calculate surface flow: 
 single flow direction (SFD, D8) and multiple flow direction (MFD). With 
@@ -218,7 +218,7 @@ factor of 5 (Holmgren, 1994). If many small sliver basins are created
 with MFD, setting the convergence factor to a higher value can reduce 
 the amount of small sliver basins.
 
-<h4>In-memory mode and disk swap mode</h4>
+<h3>In-memory mode and disk swap mode</h3>
 There are two versions of this program: <em>ram</em> and <em>seg</em>.
 <em>ram</em> is used by default, <em>seg</em> can be used by setting 
 the <em>-m</em> flag.
@@ -246,7 +246,7 @@ regions in mind and may be useful here as an alternative, although disk
 space requirements of <em>r.terraflow</em> are several times higher than
 of <em>seg</em>.
 
-<h4>Large regions with many cells</h4>
+<h3>Large regions with many cells</h3>
 In some situations, the region size (number of cells) may be too large for
 the amount of time or memory available. Running <em>r.watershed</em> may
 then require use of a coarser resolution. To make the results more closely
@@ -263,7 +263,7 @@ which <em>r.watershed</em> will be run, <em>r.watershed</em> should be run
 using the values from the <em>neighborhood</em> output map layer that
 represents the minimum elevation within the region of the coarser cell.
 
-<h4>Basin threshold</h4>
+<h3>Basin threshold</h3>
 The minimum size of drainage basins, defined by the <em>threshold</em>
 parameter, is only relevant for those watersheds with a single stream
 having at least the <em>threshold</em> of cells flowing into it.
@@ -273,7 +273,7 @@ Interior drainage basins can be of any size because the length of
 an interior stream segment is determined by the distance between the
 tributaries flowing into it.
 
-<h4>MASK and no data</h4>
+<h3>MASK and no data</h3>
 <p>
 The <em>r.watershed</em> program does not require the user to have the
 current geographic region filled with elevation values.  Areas without
@@ -292,7 +292,7 @@ e.g. with <em>r.fillnulls</em>.
 <p>
 Zero (0) and negative values will be treated as elevation data (not no_data).
 
-<h4>Further processing of output layers</h4>
+<h3>Further processing of output layers</h3>
 <p>
 Problem areas, i.e. those parts of a basin with a likely underestimate of
 flow accumulation, can be easily identified with e.g.

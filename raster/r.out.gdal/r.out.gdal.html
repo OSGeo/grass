@@ -80,7 +80,7 @@ Typical boundaries of primitive integral types</a></em>
 for details.
 
 
-<h4>Ranges of GDAL data types</h4>
+<h3>Ranges of GDAL data types</h3>
 <pre>
   GDAL data type	       minimum  	maximum
 
@@ -120,7 +120,7 @@ possible values which is very large for e.g. Int32 or Float32. E.g.
 stretching the color table to actual min/max would help (sometimes under
 symbology).
 
-<h4>GeoTIFF caveats</h4>
+<h3>GeoTIFF caveats</h3>
 
 GeoTIFF exports can only be displayed by standard image viewers
 if the GDAL data type was set to Byte and the GeoTIFF contains either
@@ -137,7 +137,7 @@ efficient, but not supported by some applications.
 This issue only arises when writing out multi-band imagery groups.
 <p>
 
-<h4>Improving GeoTIFF compatibility</h4>
+<h3>Improving GeoTIFF compatibility</h3>
 
 To create a GeoTIFF that is highly compatible with various other GIS
 software packages, it is recommended to keep the GeoTIFF file as simple
@@ -175,31 +175,31 @@ overviews.
 
 <h2>EXAMPLES</h2>
 
-<h4>Export the integer raster roads map to GeoTIFF format:</h4>
+<h3>Export the integer raster roads map to GeoTIFF format:</h3>
 <div class="code"><pre>
 r.out.gdal input=roads output=roads.tif type=UInt16
 </pre></div>
 <p>
 
-<h4>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h4>
+<h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
 r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="PROFILE=GeoTIFF,TFW=YES"
 </pre></div>
 <p>
 
-<h4>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h4>
+<h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
 i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
 r.out.gdal in=nc_landsat_rgb out=nc_landsat_rgb.tif type=Byte createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
 <p>
 
-<h4>Export the floating point raster elevation map to ERDAS/IMG format:</h4>
+<h3>Export the floating point raster elevation map to ERDAS/IMG format:</h3>
 <div class="code"><pre>
 r.out.gdal input=elevation.10m output=elev_dem10.img format=HFA type=Float32
 </pre></div>
 
-<h4>Export group of image maps as multi-band file</h4>
+<h3>Export group of image maps as multi-band file</h3>
 <div class="code"><pre>
 g.list group
 i.group group=tm7 subgroup=tm7 input=tm7_10,tm7_20,tm7_30,tm7_40,tm7_50,tm7_60,tm7_70
