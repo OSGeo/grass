@@ -61,9 +61,16 @@ dbDriver *db_start_driver_open_database(const char *drvname,
 */
 int db_close_database_shutdown_driver(dbDriver * driver)
 {
-    int status = db_close_database(driver);
-    if (db_shutdown_driver(driver) != 0)
+    int status;
+
+    status = db_close_database(driver);
+    G_debug(2, "db_close_database() result: %d  (%d means success)",
+	    status, DB_OK);
+
+    if (db_shutdown_driver(driver) != 0) {
         status = DB_FAILED;
+	G_debug(2, "db_shutdown_driver() failed");
+    }
 
     return status;
 }
