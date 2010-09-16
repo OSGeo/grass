@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     double **inrast_matrix, **outrast_matrix;	/* Matrix to store the auxiliar raster values */
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
     double **N, **obsVect;	/* Interpolation and least-square matrix */
+    char **mask_matrix;   /* matrix for masking */
 
     /* Structs declarations */
     int inrastfd, outrastfd;
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *in_opt, *out_opt, *grid_opt, *stepE_opt, *stepN_opt,
-		  *lambda_f_opt, *method_opt;
+		  *lambda_f_opt, *method_opt, *mask_opt;
     struct Flag *null_flag, *cross_corr_flag;
 
     struct Reg_dimens dims;
@@ -83,6 +84,12 @@ int main(int argc, char *argv[])
     grid_opt->key = "grid";
     grid_opt->description = _("Output vector with interpolation grid");
     grid_opt->required = NO;
+    
+    mask_opt = G_define_standard_option(G_OPT_R_INPUT);
+    mask_opt->key = "mask";
+    mask_opt->label = _("Raster map to use for masking");
+    mask_opt->description = _("Only cells that are not NULL and not zero are interpolated");
+    mask_opt->required = NO;
 
     stepE_opt = G_define_option();
     stepE_opt->key = "se";
@@ -328,6 +335,42 @@ int main(int argc, char *argv[])
     if (!(outrast_matrix = G_alloc_matrix(nrows, ncols)))
 	G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
 			"Consider changing region (resolution)"));
+			
+    /* Alloc and load masking matrix */
+    if (mask_opt->answer) {
+	int maskfd;
+	DCELL dval;
+	
+	G_message(_("Load masking map"));
+	
+	mask_matrix = (char **)G_calloc(nrows, sizeof(char *));
+	mask_matrix[0] = (char *)G_calloc(nrows * ncols, sizeof(char));
+	for (row = 1; row < nrows; row++)
+	    mask_matrix[row] = mask_matrix[row - 1] + ncols;
+
+
+	maskfd = Rast_open_old(mask_opt->answer, "");
+	drastbuf = Rast_allocate_buf(DCELL_TYPE);
+
+	for (row = 0; row < nrows; row++) {
+	    G_percent(row, nrows, 2);
+	    Rast_get_d_row(maskfd, drastbuf, row);
+	    for (col = 0; col < ncols; col++) {
+		dval = drastbuf[col];
+		if (Rast_is_d_null_value(&dval) || dval == 0)
+		    mask_matrix[row][col] = 0;
+		else
+		    mask_matrix[row][col] = 1;
+	    }
+	}
+
+	G_percent(row, nrows, 2);
+	G_free(drastbuf);
+	Rast_close(maskfd);
+    }
+    else
+	mask_matrix = NULL;
+			
 
     /* initialize output */
     G_message("initializing output");
@@ -487,7 +530,7 @@ int main(int argc, char *argv[])
 		    G_debug(1, "read input NULL cells");
 
 		    observ_null =
-			P_Read_Raster_Region_Nulls(inrast_matrix, &src_reg,
+			P_Read_Raster_Region_Nulls(inrast_matrix, mask_matrix, &src_reg,
 			                         dest_box, general_box,
 						 &npoints_null, dim_vect, mean);
 
@@ -557,8 +600,8 @@ int main(int argc, char *argv[])
 			    subregion_row, subregion_col);
 		    outrast_matrix =
 			P_Regular_Points(&elaboration_reg, &dest_reg, general_box,
-					 overlap_box, outrast_matrix, parVect,
-					 stepN, stepE, dims.overlap, mean,
+					 overlap_box, outrast_matrix, mask_matrix,
+					 parVect, stepN, stepE, dims.overlap, mean,
 					 nsplx, nsply, nrows, ncols, interp_method);
 		}
 		else {		/* only interpolate NULL cells */
@@ -570,8 +613,9 @@ int main(int argc, char *argv[])
 			    npoints_null);
 
 		    outrast_matrix =
-			P_Sparse_Raster_Points(outrast_matrix, &elaboration_reg,
-			                &dest_reg, general_box, overlap_box,
+			P_Sparse_Raster_Points(outrast_matrix,
+			                &elaboration_reg, &dest_reg,
+					general_box, overlap_box,
 					observ_null, parVect,
 					stepE, stepN,
 					dims.overlap, nsplx, nsply,
@@ -594,6 +638,10 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("Writing output..."));
     G_free_matrix(inrast_matrix);
+    if (mask_opt->answer) {
+	G_free(mask_matrix[0]);
+	G_free(mask_matrix);
+    }
     /* Writing the output raster map */
     Rast_set_fp_type(DCELL_TYPE);
     outrastfd = Rast_open_fp_new(out_opt->answer);
