@@ -22,7 +22,7 @@
 #include <math.h>
 #include "bspline.h"
 
-struct Point *P_Read_Raster_Region_Nulls(double **matrix,
+struct Point *P_Read_Raster_Region_Nulls(double **matrix, char **mask_matrix,
 				       struct Cell_head *Original,
 				       struct bound_box output_box,
 				       struct bound_box General,
@@ -77,6 +77,11 @@ struct Point *P_Read_Raster_Region_Nulls(double **matrix,
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
 
+	    if (mask_matrix) {
+		if (!mask_matrix[row][col])
+		    continue;
+	    }
+	    
 	    Z = matrix[row][col];
 
 	    if (Rast_is_d_null_value(&Z)) {
@@ -110,9 +115,8 @@ struct Point *P_Read_Raster_Region_Nulls(double **matrix,
 }
 
 double **P_Sparse_Raster_Points(double **matrix, struct Cell_head *Elaboration,
-                struct Cell_head *Original, struct bound_box General,
-		struct bound_box Overlap, struct Point *obs,
-		double *param, double pe, double pn,
+		struct Cell_head *Original, struct bound_box General, struct bound_box Overlap,
+		struct Point *obs, double *param, double pe, double pn,
 		double overlap, int nsplx, int nsply, int num_points,
 		int bilin, double mean)
 {
