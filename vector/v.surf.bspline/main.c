@@ -646,7 +646,7 @@ int main(int argc, char *argv[])
 			    subregion_row, subregion_col);
 		    raster_matrix =
 			P_Regular_Points(&elaboration_reg, &original_reg, general_box,
-					 overlap_box, raster_matrix, parVect,
+					 overlap_box, raster_matrix, NULL, parVect,
 					 stepN, stepE, dims.overlap, mean,
 					 nsplx, nsply, nrows, ncols, bilin);
 		}
