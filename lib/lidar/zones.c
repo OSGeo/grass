@@ -547,7 +547,6 @@ void P_Aux_to_Raster(double **matrix, int fd)
 {
     int ncols, col, nrows, row;
     void *ptr, *raster;
-    struct Cell_head Original;
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();

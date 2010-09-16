@@ -189,7 +189,7 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 /*------------------------------------------------------------------------------------------------*/
 double **P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
                           struct bound_box General, struct bound_box Overlap,
-			  double **matrix, double *param,
+			  double **matrix, char **mask_matrix, double *param,
 			  double passoN, double passoE, double overlap,
 			  double mean, int nsplx, int nsply,
 			  int nrows, int ncols, int bilin)
@@ -224,6 +224,12 @@ double **P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Origi
 
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
+
+	    if (mask_matrix) {
+		if (!mask_matrix[row][col])
+		    continue;
+	    }
+
 	    X = Rast_col_to_easting((double)(col) + 0.5, Original);
 	    Y = Rast_row_to_northing((double)(row) + 0.5, Original);
 

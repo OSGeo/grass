@@ -143,6 +143,7 @@ double **P_Regular_Points(struct Cell_head *, /**/
 			  struct bound_box, /**/
 			  struct bound_box, /**/
 			  double **, /**/
+			  char **, /**/
 			  double *, /**/
 			  double, /**/
 			  double, /**/
