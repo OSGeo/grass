@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     const char *dtm_mapset, *cost_mapset, *search_mapset;
     void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL;
     SEGMENT cost_seg, dir_seg;
-    const char *in_file, *dir_out_file;
+    const char *in_file, *dir_out_file = NULL;
     double *value;
     char buf[400];
     extern struct Cell_head window;
@@ -132,7 +132,6 @@ int main(int argc, char *argv[])
     double min_cost, old_min_cost;
     double cur_dir;
     double zero = 0.0;
-    int at_percent = 0;
     int col = 0, row = 0, nrows = 0, ncols = 0;
     int maxcost, par_number;
     int nseg;
@@ -140,7 +139,7 @@ int main(int argc, char *argv[])
     int segments_in_memory;
     int cost_fd, cum_fd, dtm_fd, dir_fd;
     int have_stop_points = 0, dir = 0;
-    int in_fd, dir_out_fd;
+    int in_fd, dir_out_fd = 0;
     double my_dtm, my_cost, check_dtm;
     double null_cost, dnullval;
     double a, b, c, d, lambda, slope_factor;
@@ -159,7 +158,9 @@ int main(int argc, char *argv[])
     struct start_pt *pres_start_pt = NULL;
     struct start_pt *pres_stop_pt = NULL;
     struct cc {
-	double cost_in, cost_out, dtm;
+	double dtm;		/* elevation model */
+	double cost_in;		/* friction costs */
+	double cost_out;	/* cumulative costs */
     } costs;
 
     void *ptr1, *ptr2;
@@ -614,7 +615,7 @@ int main(int argc, char *argv[])
 
     /* read required maps cost and dtm */
     {
-	int i, skip_nulls;
+	int skip_nulls;
 	double p_dtm, p_cost;
 
 	Rast_set_d_null_value(&dnullval, 1);
@@ -639,7 +640,7 @@ int main(int argc, char *argv[])
 	    ptr1 = cost_cell;
 	    ptr2 = dtm_cell;
 
-	    for (i = 0; i < ncols; i++) {
+	    for (col = 0; col < ncols; col++) {
 		if (Rast_is_null_value(ptr1, cost_data_type)) {
 		    p_cost = null_cost;
 		    if (skip_nulls) {
@@ -682,7 +683,7 @@ int main(int argc, char *argv[])
 		}
 
 		costs.dtm = p_dtm;
-		segment_put(&cost_seg, &costs, row, i);
+		segment_put(&cost_seg, &costs, row, col);
 		ptr1 = G_incr_void_ptr(ptr1, cost_dsize);
 		ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
 	    }
@@ -693,13 +694,11 @@ int main(int argc, char *argv[])
     }
 
     if (dir == 1) {
-	int i;
-
 	G_message(_("Initializing directional output "));
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    for (i = 0; i < ncols; i++) {
-		segment_put(&dir_seg, &dnullval, row, i);
+	    for (col = 0; col < ncols; col++) {
+		segment_put(&dir_seg, &dnullval, row, col);
 	    }
 	}
 	G_percent(1, 1, 1);
@@ -893,9 +892,10 @@ int main(int argc, char *argv[])
      *   3) Free the memory allocated to the present cell.
      */
 
+    G_debug(1, "total cells: %ld", total_cells);
+    G_debug(1, "nrows x ncols: %d", nrows * ncols);
     G_message(_("Finding cost path"));
     n_processed = 0;
-    at_percent = 0;
 
     pres_cell = get_lowest();
     while (pres_cell != NULL) {
@@ -930,11 +930,17 @@ int main(int argc, char *argv[])
 	}
 
 	my_dtm = costs.dtm;
-	if (Rast_is_d_null_value(&my_dtm))
+	if (Rast_is_d_null_value(&my_dtm)) {
+	    delete(pres_cell);
+	    pres_cell = get_lowest();
 	    continue;
+	}
 	my_cost = costs.cost_in;
-	if (Rast_is_d_null_value(&my_cost))
+	if (Rast_is_d_null_value(&my_cost)) {
+	    delete(pres_cell);
+	    pres_cell = get_lowest();
 	    continue;
+	}
 
 	G_percent(n_processed++, total_cells, 1);
 
@@ -1033,6 +1039,7 @@ int main(int argc, char *argv[])
 	    if (col < 0 || col >= ncols)
 		continue;
 
+	    min_cost = dnullval;
 	    segment_get(&cost_seg, &costs, row, col);
 	    switch (neighbor) {
 	    case 1:
@@ -1320,9 +1327,8 @@ int main(int argc, char *argv[])
 	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
+	    segment_get(&cost_seg, &costs, row, col);
 	    old_min_cost = costs.cost_out;
-	    if (dir == 1)
-		segment_put(&dir_seg, &cur_dir, row, col);
 
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
@@ -1331,16 +1337,12 @@ int main(int argc, char *argv[])
 		if (dir == 1)
 		    segment_put(&dir_seg, &cur_dir, row, col);
 	    }
-	    else {
-		if (old_min_cost > min_cost) {
+	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
 		segment_put(&cost_seg, &costs, row, col);
-		    new_cell = insert(min_cost, row, col);
-		    if (dir == 1)
-			segment_put(&dir_seg, &cur_dir, row, col);
-		}
-		else {
-		}
+		new_cell = insert(min_cost, row, col);
+		if (dir == 1)
+		    segment_put(&dir_seg, &cur_dir, row, col);
 	    }
 	}
 
