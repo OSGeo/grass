@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 
@@ -272,13 +273,42 @@ int db_get_table_delete_priv(dbTable * table)
   \param idx     column index (starting with '0')
 
   \return pointer to dbColumn
-  \return NULL on error
+  \return NULL if not found
 */
 dbColumn *db_get_table_column(dbTable * table, int idx)
 {
     if (idx < 0 || idx >= table->numColumns)
 	return ((dbColumn *) NULL);
     return &table->columns[idx];
+}
+
+/*!
+  \brief Returns column structure for given table and column name
+
+  \param table pointer to dbTable
+  \param name the name of the column
+
+  \return pointer to dbColumn
+  \return NULL if not found
+*/
+dbColumn *db_get_table_column_by_name(dbTable * table, const char* name)
+{
+    dbColumn *c = NULL;
+    int i, columns = table->numColumns;
+
+    for(i = 0; i < columns; i++ ) {
+        c = db_get_table_column(table, i);
+
+        if(c == NULL)
+            return c;
+
+        if(strcmp(name, db_get_string(&c->columnName)) == 0)
+            break;
+
+        c = NULL;
+    }
+
+    return c;
 }
 
 /*!
