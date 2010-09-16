@@ -119,6 +119,33 @@ int test_table(void)
             sum++;
         }
 
+	/*Now test the set column and get column by name functions*/
+	db_set_table_column(t2, 0, create_column("new_first", "new first column", DB_SQL_TYPE_DOUBLE_PRECISION));
+	db_set_table_column(t2, 1, create_column("new_second", "new second column", DB_SQL_TYPE_REAL));
+	db_set_table_column(t2, 2, create_column("new_third", "new third column", DB_SQL_TYPE_INTEGER));
+
+        G_message("##### Second table new columns:\n");
+        db_print_table_definition(stdout, t2);
+
+	dbColumn *c1 = db_get_table_column_by_name(t2, "new_first");
+	dbColumn *c2 = db_get_table_column_by_name(t2, "new_second");
+	dbColumn *c3 = db_get_table_column_by_name(t2, "new_third");
+
+
+        /*We check the column names*/
+        if(strcmp(c1->columnName.string, "new_first") != 0) {
+            G_warning("Error set table or get table by name first column");
+            sum++;
+        }
+        if(strcmp(c2->columnName.string, "new_second") != 0) {
+            G_warning("Error set table or get table by name second column");
+            sum++;
+        }
+        if(strcmp(c3->columnName.string, "new_third") != 0) {
+            G_warning("Error set table or get table by name third column");
+            sum++;
+        }
+
 	return sum;
 }
 
