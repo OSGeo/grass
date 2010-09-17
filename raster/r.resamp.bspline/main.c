@@ -504,7 +504,7 @@ int main(int argc, char *argv[])
 	    dim_vect = nsplx * nsply;
 
 	    observ =
-		P_Read_Raster_Region_Map(inrast_matrix, &elaboration_reg,
+		P_Read_Raster_Region_Map(inrast_matrix, mask_matrix, &elaboration_reg,
 		                         &src_reg, &npoints, &n_nulls,
 					 dim_vect);
 
@@ -523,24 +523,25 @@ int main(int argc, char *argv[])
 		    subregion_row, subregion_col, mean);
 
 	    observ_null = NULL;
-	    if (null_flag->answer) {
-		if (n_nulls) {
-		    /* read input NULL cells */
+	    if (null_flag->answer && n_nulls) {
+		/* read input NULL cells */
 
-		    G_debug(1, "read input NULL cells");
+		G_debug(1, "read input NULL cells");
 
-		    observ_null =
-			P_Read_Raster_Region_Nulls(inrast_matrix, mask_matrix, &src_reg,
-			                         dest_box, general_box,
-						 &npoints_null, dim_vect, mean);
+		observ_null =
+		    P_Read_Raster_Region_Nulls(inrast_matrix, mask_matrix, &src_reg,
+					     dest_box, general_box,
+					     &npoints_null, dim_vect, mean);
 
-		    G_debug(1, "%d nulls in elaboration, %d nulls in general", n_nulls, npoints_null);
-		    if (npoints_null == 0) {
-			G_free(observ_null);
-			n_nulls = 0;
-		    }
+		G_debug(1, "%d nulls in elaboration, %d nulls in general", n_nulls, npoints_null);
+		if (npoints_null == 0) {
+		    G_free(observ_null);
+		    n_nulls = 0;
 		}
 	    }
+	    else if (npoints == 0 && n_nulls == 0)
+		/* nothing to interpolate, disable warning below */
+		npoints = 1;
 	    else
 		n_nulls = 1;
 
