@@ -384,13 +384,13 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     return obs;
 }
 
-struct Point *P_Read_Raster_Region_Map(double **matrix,
+struct Point *P_Read_Raster_Region_Map(double **matrix, char **mask_matrix,
 				       struct Cell_head *Elaboration,
 				       struct Cell_head *Original,
 				       int *num_points, int *num_nulls, int dim_vect)
 {
     int col, row, startcol, endcol, startrow, endrow, nrows, ncols;
-    int pippo, npoints, nnulls;
+    int pippo, npoints, nnulls, all_masked = 0;
     double x, y, z;
     struct Point *obs;
     struct bound_box elaboration_box;
@@ -404,6 +404,9 @@ struct Point *P_Read_Raster_Region_Map(double **matrix,
     npoints = nnulls = 0;
     nrows = Original->rows;
     ncols = Original->cols;
+    
+    if (mask_matrix)
+	all_masked = 1;
 
     if (Original->north > Elaboration->north)
 	startrow = (Original->north - Elaboration->north) / Original->ns_res - 1;
@@ -434,6 +437,12 @@ struct Point *P_Read_Raster_Region_Map(double **matrix,
 	    z = matrix[row][col];
 
 	    if (!Rast_is_d_null_value(&z)) {
+
+		if (mask_matrix && all_masked) {
+		    if (mask_matrix[row][col])
+			all_masked = 0;
+		}
+
 		x = Rast_col_to_easting((double)(col) + 0.5, Original);
 		y = Rast_row_to_northing((double)(row) + 0.5, Original);
 
@@ -460,8 +469,12 @@ struct Point *P_Read_Raster_Region_Map(double **matrix,
 	}
     }
 
+    /* num_nulls indicates how many points to interpolate */
+    if (all_masked)
+	*num_nulls = 0;
+    else
+	*num_nulls = nnulls;
     *num_points = npoints;
-    *num_nulls = nnulls;
     return obs;
 }
 
