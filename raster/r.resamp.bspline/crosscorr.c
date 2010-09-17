@@ -164,7 +164,7 @@ int cross_correlation(double **matrix, struct Cell_head *src_reg, double passWE,
     /*Cats = Vect_new_cats_struct (); */
 
     /* Current region is read and points recorded into observ */
-    observ = P_Read_Raster_Region_Map(matrix, &region, src_reg, &ndata, &nnulls, 1024);
+    observ = P_Read_Raster_Region_Map(matrix, NULL, &region, src_reg, &ndata, &nnulls, 1024);
     G_debug(5, "CrossCorrelation: %d points read in region. ", ndata);
     G_verbose_message(_("%d points read in region"),
 		      ndata);
