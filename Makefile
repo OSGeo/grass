@@ -126,6 +126,7 @@ DOXNAME=grass
 
 include $(MODULE_TOPDIR)/include/Make/Install.make
 include $(MODULE_TOPDIR)/include/Make/Docs.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 .PHONY: default libs
 .PHONY: cleandistdirs cleanscriptstrings clean libsclean distclean
