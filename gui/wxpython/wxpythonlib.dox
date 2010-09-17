@@ -1,6 +1,4 @@
-/*! \page wxpythonlib GRASS WxPython based graphical user interface
-
-<h2>GRASS wxpython based graphical user interface</h2>
+/*! \page wxpythonlib GRASS WxPython-based Graphical User Interface
 
 The plan for a native GRASS Graphical User Interface (GUI) found is origin
 in the project "GFOSS–TN", a collaboration between FBK (Fondazione Bruno
@@ -20,7 +18,7 @@ of OpenGL. As result, Map Display Window will support 3D rendering including
 3D raster (voxels) and 3D vector data.
 
 Development plans:
-<p>
+
 A Map Composer, a tool for hardcopy map outputs is planned to be developed
 in the first half of 2008. Currently, the tools for creating hardcopy maps
 (map layout) are limited in GRASS because its focus on modeling and spatial
@@ -30,17 +28,13 @@ display to an external image file such as a png. These map features are very bas
 and cannot be customized. The goal is to allow users to prepare simple cartographic
 outputs comparable e.g. with other, proprietary GIS map layout functionality.
 
-<P>
 See: 
-<ul>
-<li> wxgui.py
-<li> gis_set.py
-<li> menustrings.py
-</ul>
+- wxgui.py
+- gis_set.py
+- menustrings.py
 
-<h2>References</h2>
+<section>References</section>
 
-M. Landa, C. Moretto, M. Neteler, M. Zanolli, L. Manganelli, 2008: wxPython GUI per GRASS GIS. Proc. IX Meeting degli Utenti Italiani di GRASS - GFOSS - 21-22 Feb 2008, Perugia, Italy (<a href="http://gama.fsv.cvut.cz/~landa/publications/2008/gfoss-it-08/paper/grass-gfoss-tn.pdf">PDF</a>)
+M. Landa, C. Moretto, M. Neteler, M. Zanolli, L. Manganelli, 2008: wxPython GUI per GRASS GIS. Proc. IX Meeting degli Utenti Italiani di GRASS - GFOSS - 21-22 Feb 2008, Perugia, Italy (<a href="http://geo.fsv.cvut.cz/~landa/publications/2008/gfoss-it-08/paper/grass-gfoss-tn.pdf">PDF</a>)
 
 */
-

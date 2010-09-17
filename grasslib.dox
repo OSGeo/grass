@@ -1,7 +1,7 @@
 /*! \mainpage GRASS 7 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006, 2007, 2008
+     * updated 8/2005, 2006, 2007, 2008, 2010
   -->
 
 <a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
@@ -113,7 +113,6 @@ undocumented.</i>
 
 \section interfaces Interfaces
 
- - \ref swiglib
  - \ref pythonlib
 
 \section gui GUI
