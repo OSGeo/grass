@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     double **raster_matrix;	/* Matrix to store the auxiliar raster values */
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
     double **N, **obsVect;	/* Interpolation and least-square matrix */
+    char **mask_matrix;   /* matrix for masking */
 
     /* Structs declarations */
     int raster;
@@ -57,7 +58,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *stepE_opt,
-	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt;
+	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt, *mask_opt;
     struct Flag *cross_corr_flag, *spline_step_flag, *withz_flag;
 
     struct Reg_dimens dims;
@@ -113,6 +114,12 @@ int main(int argc, char *argv[])
     out_map_opt = G_define_standard_option(G_OPT_R_OUTPUT);
     out_map_opt->key = "raster";
     out_map_opt->required = NO;
+
+    mask_opt = G_define_standard_option(G_OPT_R_INPUT);
+    mask_opt->key = "mask";
+    mask_opt->label = _("Raster map to use for masking (applies to raster output only)");
+    mask_opt->description = _("Only cells that are not NULL and not zero are interpolated");
+    mask_opt->required = NO;
 
     stepE_opt = G_define_option();
     stepE_opt->key = "sie";
@@ -394,7 +401,43 @@ int main(int argc, char *argv[])
 	if (!(raster_matrix = G_alloc_matrix(nrows, ncols)))
 	    G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
 			    "Consider changing region resolution"));
+		  
+	if (mask_opt->answer) {
+	    int row, col, maskfd;
+	    DCELL dval, *drastbuf;
+	    
+	    G_message(_("Load masking map"));
+	    
+	    mask_matrix = (char **)G_calloc(nrows, sizeof(char *));
+	    mask_matrix[0] = (char *)G_calloc(nrows * ncols, sizeof(char));
+	    for (row = 1; row < nrows; row++)
+		mask_matrix[row] = mask_matrix[row - 1] + ncols;
+
+
+	    maskfd = Rast_open_old(mask_opt->answer, "");
+	    drastbuf = Rast_allocate_buf(DCELL_TYPE);
+
+	    for (row = 0; row < nrows; row++) {
+		G_percent(row, nrows, 2);
+		Rast_get_d_row(maskfd, drastbuf, row);
+		for (col = 0; col < ncols; col++) {
+		    dval = drastbuf[col];
+		    if (Rast_is_d_null_value(&dval) || dval == 0)
+			mask_matrix[row][col] = 0;
+		    else
+			mask_matrix[row][col] = 1;
+		}
+	    }
+
+	    G_percent(row, nrows, 2);
+	    G_free(drastbuf);
+	    Rast_close(maskfd);
+	}
+	else
+	    mask_matrix = NULL;
     }
+    else
+	mask_matrix = NULL;
 
     /*------------------------------------------------------------------
       | Subdividing and working with tiles: 									
@@ -646,7 +689,7 @@ int main(int argc, char *argv[])
 			    subregion_row, subregion_col);
 		    raster_matrix =
 			P_Regular_Points(&elaboration_reg, &original_reg, general_box,
-					 overlap_box, raster_matrix, NULL, parVect,
+					 overlap_box, raster_matrix, mask_matrix, parVect,
 					 stepN, stepE, dims.overlap, mean,
 					 nsplx, nsply, nrows, ncols, bilin);
 		}
