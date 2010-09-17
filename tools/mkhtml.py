@@ -92,6 +92,7 @@ def write_toc():
     global src_data
     level  = 1
     idx    = 0
+    indent = 4
     
     sys.stdout.write('<a name="TOC"></a><h2>TABLE OF CONTENT</h2>\n\n<ul>\n')
     src_list = src_data.splitlines()
@@ -110,7 +111,8 @@ def write_toc():
                 
         idx += 1
     
-    sys.stdout.write('</ul>\n')
+    for l in range(level, 0, -1):
+        sys.stdout.write('%s</ul>\n' % (' ' * (l - 1) * indent))
     src_data = '\n'.join(src_list)
 
 if not re.search('<html>', src_data, re.IGNORECASE):
