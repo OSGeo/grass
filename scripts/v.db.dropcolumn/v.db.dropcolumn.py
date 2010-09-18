@@ -45,7 +45,7 @@
 #%option
 #% key: column
 #% type: string
-#% description: Name of the column
+#% description: Name of the column to drop
 #% required : yes
 #%end
 
