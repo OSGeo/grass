@@ -1147,15 +1147,15 @@ class GdalImportDialog(ImportDialog):
                            'output=%s' % output]
             else: # gdal
                 if self.dsnInput.GetType() == 'dir':
-                    dsn = os.path.join(dsn, layer)
+                    idsn = os.path.join(dsn, layer)
                 
                 if self.link:
                     cmd = ['r.external',
-                           'input=%s' % dsn,
+                           'input=%s' % idsn,
                            'output=%s' % output]
                 else:
                     cmd = ['r.in.gdal',
-                           'input=%s' % dsn,
+                           'input=%s' % idsn,
                            'output=%s' % output]
             
             if self.overwrite.IsChecked():
