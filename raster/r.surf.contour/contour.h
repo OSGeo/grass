@@ -24,7 +24,7 @@ extern int maxc;
 extern int maxr;
 extern int array_size;
 extern double i_val_l_f;
-extern CELL **con;
+extern DCELL **con;
 extern FLAG *seen, *mask;
 extern NODE *zero;
 
@@ -35,8 +35,8 @@ NODE *add_in(int, int, int, int, NODE *, int *);
 NODE *addpts(NODE *, int, int, int, int, int *);
 
 /* find_con.c */
-int find_con(int, int, double *, double *, CELL *, CELL *);
+int find_con(int, int, double *, double *, DCELL *, DCELL *);
 
 /* read_cell.c */
-CELL **read_cell(const char *);
-void free_cell(CELL **);
+DCELL **read_cell(const char *);
+void free_cell(DCELL **);
