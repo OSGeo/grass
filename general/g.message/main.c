@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-
     if (fatal->answer + warning->answer + debug_flag->answer +
 	verbose->answer > 1)
 	G_fatal_error(_("Select only one message level"));
@@ -94,9 +93,9 @@ int main(int argc, char *argv[])
     debug_level = atoi(debug_opt->answer);
     
     if (fatal->answer)
-	G_fatal_error(message->answer);
+	G_fatal_error("%s", message->answer);
     else if (warning->answer)
-	G_warning(message->answer);
+	G_warning("%s", message->answer);
     else if (percent->answer) {
 	int i, n, s;
 	i = n = s = -1;
@@ -107,13 +106,13 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "\n");
     }
     else if (debug_flag->answer)
-	G_debug(debug_level, message->answer);
+	G_debug(debug_level, "%s", message->answer);
     else if (important->answer)
-	G_important_message(message->answer);
+	G_important_message("%s", message->answer);
     else if (verbose->answer)
-	G_verbose_message(message->answer);
+	G_verbose_message("%s", message->answer);
     else
-	G_message(message->answer);
+	G_message("%s", message->answer);
 
     exit(EXIT_SUCCESS);
 }
