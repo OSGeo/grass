@@ -36,19 +36,19 @@ int maxc;
 int maxr;
 int array_size;
 double i_val_l_f;
-CELL **con;
+DCELL **con;
 FLAG *seen, *mask;
 NODE *zero;
 
 int main(int argc, char *argv[])
 {
     int r, c;
-    CELL con1, con2;
+    DCELL con1, con2;
     double d1, d2;
-    CELL *alt_row;
+    DCELL *alt_row;
     const char *con_name, *alt_name;
     int file_fd;
-    CELL value;
+    DCELL value;
     struct History history;
     struct GModule *module;
     struct Option *opt1, *opt2;
@@ -77,15 +77,15 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
     i_val_l_f = nrows + ncols;
     con = read_cell(con_name);
-    alt_row = (CELL *) G_malloc(ncols * sizeof(CELL));
+    alt_row = (DCELL *) G_malloc(ncols * sizeof(DCELL));
     seen = flag_create(nrows, ncols);
     mask = flag_create(nrows, ncols);
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
 	file_fd = Rast_open_old("MASK", G_mapset());
 	for (r = 0; r < nrows; r++) {
-	    Rast_get_c_row_nomask(file_fd, alt_row, r);
+	    Rast_get_d_row_nomask(file_fd, alt_row, r);
 	    for (c = 0; c < ncols; c++)
-		if (!alt_row[c])
+		if (Rast_is_d_null_value(&(alt_row[c])))
 		    FLAG_SET(mask, r, c);
 	}
 	Rast_close(file_fd);
@@ -95,25 +95,25 @@ int main(int argc, char *argv[])
     maxc = ncols - 1;
     maxr = nrows - 1;
     array_size = INIT_AR;
-    file_fd = Rast_open_c_new(alt_name);
+    file_fd = Rast_open_new(alt_name, DCELL_TYPE);
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 1);
 	for (c = 0; c < ncols; c++) {
 	    if (FLAG_GET(mask, r, c))
 		continue;
 	    value = con[r][c];
-	    if (value != 0) {
+	    if (!Rast_is_d_null_value(&value)) {
 		alt_row[c] = value;
 		continue;
 	    }
 	    find_con(r, c, &d1, &d2, &con1, &con2);
 	    if (con2 > 0)
-		alt_row[c] = (CELL) (d2 * con1 / (d1 + d2) +
-				     d1 * con2 / (d1 + d2) + 0.5);
+		alt_row[c] = (DCELL) (d2 * con1 / (d1 + d2) +
+				     d1 * con2 / (d1 + d2) /* + 0.5 */);
 	    else
 		alt_row[c] = con1;
 	}
-	Rast_put_row(file_fd, alt_row, CELL_TYPE);
+	Rast_put_row(file_fd, alt_row, DCELL_TYPE);
     }
     G_percent(1, 1, 1);
     
