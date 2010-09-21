@@ -50,6 +50,7 @@ static struct menu menu[] = {
     {c_mode, w_mode, NO_CATS, 1, 0, "mode", "most frequently occuring value"},
     {c_min, NULL, NO_CATS, 1, 0, "minimum", "lowest value"},
     {c_max, NULL, NO_CATS, 1, 0, "maximum", "highest value"},
+    {c_range, NULL, NO_CATS, 1, 0, "range", "range value"},
     {c_stddev, w_stddev, NO_CATS, 0, 1, "stddev", "standard deviation"},
     {c_sum, w_sum, NO_CATS, 1, 0, "sum", "sum of values"},
     {c_var, w_var, NO_CATS, 0, 1, "variance", "statistical variance"},
