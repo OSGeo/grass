@@ -125,8 +125,7 @@ class TitledPage(BaseClass, wiz.WizardPageSimple):
         self.Layout()
 
 class DatabasePage(TitledPage):
-    """
-    Wizard page for setting GIS data directory and location name
+    """!Wizard page for setting GIS data directory and location name
     """
     def __init__(self, wizard, parent, grassdatabase):
         TitledPage.__init__(self, wizard, _("Define GRASS Database and Location Name"))
@@ -1575,15 +1574,13 @@ class CustomPage(TitledPage):
                 nextButton.Enable()
 
 class SummaryPage(TitledPage):
-    """
-    Shows summary result of choosing coordinate system parameters
+    """!Shows summary result of choosing coordinate system parameters
     prior to creating location
     """
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Summary"))
-
         self.parent = parent
-
+        
         # labels
         self.ldatabase  = self.MakeLabel("")
         self.llocation  = self.MakeLabel("")
@@ -1591,11 +1588,8 @@ class SummaryPage(TitledPage):
         self.lproj4string = self.MakeLabel("")
         self.lproj4stringLabel = self.MakeLabel("")
         
-        self.lprojection.Wrap(400)
-        
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
-        # self.Bind(wx.EVT_BUTTON, self.OnFinish, wx.ID_FINISH)
-
+        
         # do sub-page layout
         self.__DoLayout()
         
@@ -1631,10 +1625,9 @@ class SummaryPage(TitledPage):
                        border=5, pos=(5, 0), span=(1, 2))
 
     def OnEnterPage(self,event):
+        """!Insert values into text controls for summary of location
+        creation options
         """
-        Insert values into text controls for summary of location creation options
-        """
-
         database = self.parent.startpage.grassdatabase
         location = self.parent.startpage.location
         proj4string = self.parent.CreateProj4String()
@@ -1651,64 +1644,54 @@ class SummaryPage(TitledPage):
             self.lproj4string.Show()
             self.lproj4stringLabel.SetLabel(_("PROJ.4 definition:"))
             if coordsys == 'proj':
-                ret, msg, err = gcmd.RunCommand('g.proj',
-                                       flags = 'j',
-                                       proj4 = proj4string,
-                                       datumtrans = dtrans,
-                                       location = location,
-                                       getErrorMsg = True,
-                                       read = True)
+                ret, projlabel, err = gcmd.RunCommand('g.proj',
+                                                      flags = 'jf',
+                                                      proj4 = proj4string,
+                                                      datumtrans = dtrans,
+                                                      location = location,
+                                                      getErrorMsg = True,
+                                                      read = True)
             elif coordsys == 'epsg':
-                ret, msg, err = gcmd.RunCommand('g.proj',
-                                       flags = 'j',
-                                       epsg = epsgcode,
-                                       datumtrans = dtrans,
-                                       location = location,
-                                       getErrorMsg = True,
-                                       read = True)
+                ret, projlabel, err = gcmd.RunCommand('g.proj',
+                                                      flags = 'jf',
+                                                      epsg = epsgcode,
+                                                      datumtrans = dtrans,
+                                                      location = location,
+                                                      getErrorMsg = True,
+                                                      read = True)
             
             if ret == 0:
-                projlabel = ''
-                for line in msg.splitlines():
-                    projlabel = projlabel + '%s ' % line
-                self.lproj4string.SetLabel(projlabel)
+                self.lproj4string.SetLabel(projlabel.replace(' ', os.linesep))
             else:
-                wx.MessageBox(err, 'Error', wx.ICON_ERROR)
-
-            self.lproj4string.Wrap(400)
-            
+                gcmd.GError(err, parent = self)
+        
         projdesc = self.parent.projpage.projdesc
         ellipsedesc = self.parent.ellipsepage.ellipsedesc
         datumdesc = self.parent.datumpage.datumdesc
         self.ldatabase.SetLabel(database)
         self.llocation.SetLabel(location)
-        label = ''
         
+        label = ''
         if coordsys == 'epsg':
             label = 'EPSG code %s (%s)' % (self.parent.epsgpage.epsgcode, self.parent.epsgpage.epsgdesc)
-            self.lprojection.SetLabel(label)
         elif coordsys == 'file':
             label = 'matches file %s' % self.parent.filepage.georeffile
-            self.lprojection.SetLabel(label)
         elif coordsys == 'wkt':
             label = 'matches file %s' % self.parent.wktpage.wktfile
-            self.lprojection.SetLabel(label)
         elif coordsys == 'proj':
             label = ('%s, %s %s' % (projdesc, datumdesc, ellipsedesc))
-            self.lprojection.SetLabel(label)
         elif coordsys == 'xy':
             label = ('XY coordinate system (not projected).')
-            self.lprojection.SetLabel(label)
         elif coordsys == 'custom':
-            label = ('%s' % self.parent.custompage.customstring)
-            self.lprojection.SetLabel(label)
-
+            label = ('%s' % self.parent.custompage.customstring.replace(' ', os.linesep))
+        self.lprojection.SetLabel(label)
+        
     def OnFinish(self, event):
         dlg = wx.MessageDialog(parent=self.wizard,
                                message=_("Do you want to create GRASS location <%s>?") % location,
                                caption=_("Create new location?"),
                                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-
+        
         if dlg.ShowModal() == wx.ID_NO:
             dlg.Destroy()
             event.Veto()
@@ -1717,15 +1700,14 @@ class SummaryPage(TitledPage):
             event.Skip()
 
 class LocationWizard(wx.Object):
-    """!
-    Start wizard here and finish wizard here
+    """!Start wizard here and finish wizard here
     """
     def __init__(self, parent, grassdatabase):
         self.__cleanUp()
         
         global coordsys
         self.parent = parent
-
+        
         #
         # define wizard image
         #
@@ -1743,7 +1725,7 @@ class LocationWizard(wx.Object):
         #
         self.datumtrans = 0
         self.proj4string = ''
-
+        
         #
         # define wizard pages
         #
@@ -1795,7 +1777,7 @@ class LocationWizard(wx.Object):
         self.custompage.SetNext(self.sumpage)
 
         self.sumpage.SetPrev(self.csystemspage)
-
+        
         #
         # do pages layout
         #
@@ -1811,7 +1793,7 @@ class LocationWizard(wx.Object):
         self.custompage.DoLayout()
         self.sumpage.DoLayout()
         self.wizard.FitToPage(self.datumpage)
-
+                
         # new location created?
         self.location = None 
         success = False
@@ -2093,7 +2075,8 @@ class LocationWizard(wx.Object):
             proj4string = '%s %s' % (proj4string, item)
             
         # set datum and transform parameters if relevant
-        if datum != '': proj4string = '%s +datum=%s' % (proj4string, datum)
+        if datum != '':
+            proj4string = '%s +datum=%s' % (proj4string, datum)
         if datumparams:
             for item in datumparams:
                 proj4string = '%s +%s' % (proj4string,item)
