@@ -8,9 +8,6 @@ int find_con(int r, int c, double *d1, double *d2, DCELL * con1, DCELL * con2)
     double dd, shortest;
     DCELL value;
 
-/*    *con1 = 0;
-    *con2 = 0;
-*/
     Rast_set_d_null_value(con1, 1);
     Rast_set_d_null_value(con2, 1);
     *d1 = *d2 = 1.0;

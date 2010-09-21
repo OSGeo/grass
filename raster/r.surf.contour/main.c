@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
     file_fd = Rast_open_new(alt_name, DCELL_TYPE);
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 1);
+	Rast_set_d_null_value(alt_row, ncols);
 	for (c = 0; c < ncols; c++) {
 	    if (FLAG_GET(mask, r, c))
 		continue;
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	    find_con(r, c, &d1, &d2, &con1, &con2);
-	    if (con2 > 0)
+	    if (!Rast_is_d_null_value(&con2))
 		alt_row[c] = d2 * con1 / (d1 + d2) + 
 		             d1 * con2 / (d1 + d2);
 	    else
