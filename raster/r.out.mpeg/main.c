@@ -54,7 +54,7 @@
 
 
 /* global variables */
-int nrows, ncols, numviews, quality, quiet = 0;
+int nrows, ncols, numviews, quality, quiet = FALSE;
 char *vfiles[MAXVIEWS][MAXIMAGES];
 char outfile[GPATH_MAX];
 const char *encoder;
@@ -80,7 +80,7 @@ static int check_encoder(const char *encoder)
 
     status = G_spawn_ex(
 	encoder, encoder,
-	SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, "/dev/null",
+	SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
 	NULL);
 
     G_suppress_warnings(prev);
@@ -100,7 +100,10 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    module->description = _("Raster file series to MPEG movie conversion program.");
+    G_add_keyword(_("animation"));
+
+    module->description =
+	_("Raster map series to MPEG movie conversion.");
 
     for (i = 0; i < MAXVIEWS; i++) {
 	char buf[BUFSIZ];
@@ -133,22 +136,19 @@ int main(int argc, char **argv)
     qual->description =
 	_("Quality factor (1 = highest quality, lowest compression)");
 
-    qt = G_define_flag();
-    qt->key = 'q';
-    qt->description = _("Quiet - suppress progress report");
-
     conv = G_define_flag();
     conv->key = 'c';
-    conv->description =
-	_("Convert on the fly, use less disk space\n\t(requires r.out.ppm with stdout option)");
+    conv->label = _("Convert on the fly, uses less disk space");
+    conv->description =	_("(requires r.out.ppm with stdout option)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+
     parse_command(viewopts, vfiles, &numviews, &frames);
 
-    if (qt->answer)
-	quiet = 1;
+    if (G_verbose() <= G_verbose_min())
+	quiet = TRUE;
 
     r_out = 0;
     if (conv->answer)
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 
     scale = 1.0;
 
-    {				/* find animation image size */
+    {	/* find animation image size */
 	int max, min;
 	char *p;
 
@@ -296,8 +296,8 @@ static int load_files(void)
 	    }
 
 	    name = vfiles[vnum][cnt];
-	    if (!quiet)
-		G_message("\r%s <%s>", _("Reading file"), name);
+
+	    G_message(_("Reading file <%s> ..."), name);
 
 	    fd = Rast_open_old(name, "");
 
@@ -345,8 +345,8 @@ static int load_files(void)
 
     if (quiet)
 	ret = G_spawn(encoder, encoder, mpfilename,
-		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, "/dev/null",
-		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, "/dev/null",
+		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, G_DEV_NULL,
+		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
 		      NULL);
     else
 	ret = G_spawn(encoder, encoder, mpfilename, NULL);
@@ -378,8 +378,8 @@ static int use_r_out(void)
 
     if (quiet)
 	ret = G_spawn(encoder, encoder, mpfilename,
-		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, "/dev/null",
-		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, "/dev/null",
+		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, G_DEV_NULL,
+		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
 		      NULL);
     else
 	ret = G_spawn(encoder, encoder, mpfilename, NULL);
@@ -505,7 +505,3 @@ static void parse_command(struct Option **viewopts,
 	}
     }
 }
-
-/*********************************************************************/
-
-/*********************************************************************/
