@@ -1793,7 +1793,9 @@ class LocationWizard(wx.Object):
         self.custompage.DoLayout()
         self.sumpage.DoLayout()
         self.wizard.FitToPage(self.datumpage)
-                
+        size = self.wizard.GetPageSize()
+        self.wizard.SetPageSize((size[0], size[1] + 75))
+        
         # new location created?
         self.location = None 
         success = False
