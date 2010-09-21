@@ -34,7 +34,6 @@
 #include <grass/rbtree.h>
 
 /* internal functions */
-void rbtree_destroy2(struct RB_NODE *);
 struct RB_NODE *rbtree_single(struct RB_NODE *, int);
 struct RB_NODE *rbtree_double(struct RB_NODE *, int);
 void *rbtree_first(struct RB_TRAV *);
@@ -48,7 +47,7 @@ int is_red(struct RB_NODE *);
  */
 struct RB_TREE *rbtree_create(rb_compare_fn *compare, size_t rb_datasize)
 {
-    struct RB_TREE *tree = G_malloc(sizeof(*tree));
+    struct RB_TREE *tree = (struct RB_TREE *)malloc(sizeof(struct RB_TREE));
 
     if (tree == NULL) {
 	G_warning("RB tree: Out of memory!");
@@ -217,10 +216,10 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 
     /* Replace and remove if found */
     if (f != NULL) {
-	G_free(f->data);
+	free(f->data);
 	f->data = q->data;
 	p->link[p->link[1] == q] = q->link[q->link[0] == NULL];
-	G_free(q);
+	free(q);
 	tree->count--;
 	removed = 1;
     }
@@ -410,18 +409,32 @@ void *rbtree_next(struct RB_TRAV *trav)
 /* destroy the tree */
 void rbtree_destroy(struct RB_TREE *tree)
 {
-    rbtree_destroy2(tree->root);
-    G_free(tree);
-}
+    struct RB_NODE *it = tree->root;
+    struct RB_NODE *save;
 
-void rbtree_destroy2(struct RB_NODE *root)
-{
-    if (root != NULL) {
-	rbtree_destroy2(root->link[0]);
-	rbtree_destroy2(root->link[1]);
-	G_free(root->data);
-	G_free(root);
+    /*
+    Rotate away the left links so that
+    we can treat this like the destruction
+    of a linked list
+    */
+    while ( it != NULL ) {
+	if ( it->link[0] == NULL ) {
+	    /* No left links, just kill the node and move on */
+	    save = it->link[1];
+	    free(it->data);
+	    free(it);
+	}
+	else {
+	    /* Rotate away the left link and check again */
+	    save = it->link[0];
+	    it->link[0] = save->link[1];
+	    save->link[1] = it;
+	}
+
+	it = save;
     }
+
+  free(tree);
 }
 
 /* used for debugging: check for errors in tree structure */
@@ -486,12 +499,12 @@ int rbtree_debug(struct RB_TREE *tree, struct RB_NODE *root)
 /* add a new node to the tree */
 struct RB_NODE *rbtree_make_node(size_t datasize, void *data)
 {
-    struct RB_NODE *new_node = G_malloc(sizeof(*new_node));
+    struct RB_NODE *new_node = (struct RB_NODE *)malloc(sizeof(*new_node));
 
     if (new_node == NULL)
 	G_fatal_error("RB Search Tree: Out of memory!");
 
-    new_node->data = G_malloc(datasize);
+    new_node->data = malloc(datasize);
     if (new_node->data == NULL)
 	G_fatal_error("RB Search Tree: Out of memory!");
 
