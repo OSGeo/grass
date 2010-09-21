@@ -409,16 +409,16 @@ void *rbtree_next(struct RB_TRAV *trav)
 /* destroy the tree */
 void rbtree_destroy(struct RB_TREE *tree)
 {
-    struct RB_NODE *it = tree->root;
-    struct RB_NODE *save;
+    struct RB_NODE *it;
+    struct RB_NODE *save = tree->root;
 
     /*
     Rotate away the left links so that
     we can treat this like the destruction
     of a linked list
     */
-    while ( it != NULL ) {
-	if ( it->link[0] == NULL ) {
+    while((it = save) != NULL) {
+	if (it->link[0] == NULL) {
 	    /* No left links, just kill the node and move on */
 	    save = it->link[1];
 	    free(it->data);
@@ -430,11 +430,8 @@ void rbtree_destroy(struct RB_TREE *tree)
 	    it->link[0] = save->link[1];
 	    save->link[1] = it;
 	}
-
-	it = save;
     }
-
-  free(tree);
+    free(tree);
 }
 
 /* used for debugging: check for errors in tree structure */
