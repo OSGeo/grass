@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_d_row_nomask(file_fd, alt_row, r);
 	    for (c = 0; c < ncols; c++)
-		if (Rast_is_d_null_value(&(alt_row[c])))
+		if (Rast_is_d_null_value(&(alt_row[c])) || alt_row[c] == 0)
 		    FLAG_SET(mask, r, c);
 	}
 	Rast_close(file_fd);
@@ -108,8 +108,8 @@ int main(int argc, char *argv[])
 	    }
 	    find_con(r, c, &d1, &d2, &con1, &con2);
 	    if (con2 > 0)
-		alt_row[c] = (DCELL) (d2 * con1 / (d1 + d2) +
-				     d1 * con2 / (d1 + d2) /* + 0.5 */);
+		alt_row[c] = d2 * con1 / (d1 + d2) + 
+		             d1 * con2 / (d1 + d2);
 	    else
 		alt_row[c] = con1;
 	}
