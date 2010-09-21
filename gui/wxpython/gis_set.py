@@ -436,8 +436,7 @@ class GRASSStartup(wx.Frame):
         if mapset ==  'PERMANENT':
             GMessage(parent = self,
                      message = _('Mapset <PERMANENT> is required for valid GRASS location.\n\n'
-                                 'This mapset cannot be renamed.'),
-                     msgType = 'info')
+                                 'This mapset cannot be renamed.'))
             return
         
         dlg = wx.TextEntryDialog(parent = self,
@@ -514,8 +513,7 @@ class GRASSStartup(wx.Frame):
         if mapset ==  'PERMANENT':
             GMessage(parent = self,
                      message = _('Mapset <PERMANENT> is required for valid GRASS location.\n\n'
-                                 'This mapset cannot be deleted.'),
-                     msgType = 'info')
+                                 'This mapset cannot be deleted.'))
             return
         
         dlg = wx.MessageDialog(parent = self, message = _("Do you want to continue with deleting mapset <%(mapset)s> "
