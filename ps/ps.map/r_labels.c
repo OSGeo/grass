@@ -12,7 +12,7 @@ static char *help[] = {
 
 int read_labels(char *name, char *mapset)
 {
-    char fullname[100];
+    char fullname[GNAME_MAX+GMAPSET_MAX+5];
     char buf[1024];
     char *key, *data;
 
