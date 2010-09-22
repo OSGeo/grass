@@ -1,4 +1,4 @@
-#define MAXLABELS 10
+#define MAXLABELS 50
 
 struct labels
 {
