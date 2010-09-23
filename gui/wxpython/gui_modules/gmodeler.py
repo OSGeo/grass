@@ -2837,8 +2837,10 @@ class ProcessModelFile:
             cmd.append('%s=%s' % (name,
                                   self._filterValue(self._getNodeText(p, 'value'))))
         
-        task = menuform.GUI().ParseCommand(cmd = cmd,
-                                           show = None)
+        task, err = menuform.GUI().ParseCommand(cmd = cmd,
+                                                show = None, checkError = True)
+        if err:
+            GWarning(os.linesep.join(err))
         
         for opt, name in parameterized:
             if opt == 'flag':

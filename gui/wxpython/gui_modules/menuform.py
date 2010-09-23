@@ -2039,7 +2039,7 @@ class GUI:
         return processTask(tree).GetTask()
     
     def ParseCommand(self, cmd, gmpath = None, completed = None, parentframe = None,
-                     show = True, modal = False, centreOnParent = True):
+                     show = True, modal = False, centreOnParent = True, checkError = False):
         """!Parse command
         
         Note: cmd is given as list
@@ -2072,6 +2072,7 @@ class GUI:
             if 'flags' in dcmd_params:
                 self.grass_task.flags = dcmd_params['flags']
         
+        err = list()
         # update parameters if needed && validate command
         if len(cmd) > 1:
             i = 0
@@ -2092,8 +2093,13 @@ class GUI:
                             value = option
                         else:
                             raise ValueError, _("Unable to parse command %s") % ' '.join(cmd)
-
-                    element = self.grass_task.get_param(key)['element']
+                    
+                    element = self.grass_task.get_param(key, raiseError = False)
+                    if not element:
+                        err.append(_("%s: parameter '%s' not available") % (cmd[0], key))
+                        continue
+                    element = element['element']
+                    
                     if element in ['cell', 'vector']:
                         # mapname -> mapname@mapset
                         try:
@@ -2137,7 +2143,10 @@ class GUI:
         
         self.cmd = cmd
         
-        return self.grass_task
+        if checkError:
+            return self.grass_task, err
+        else:
+            return self.grass_task
     
     def GetCommandInputMapParamKey(self, cmd):
         """!Get parameter key for input raster/vector map
