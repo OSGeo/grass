@@ -6,7 +6,7 @@
  *               Midlands Regional Research Laboratory (ASSIST)
  * AUTHOR(S):    Markus Neteler <neteler itc.it> (original contributor)
  * PURPOSE:      produces a raster map layer of uniform random deviates
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -37,9 +37,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("random"));
     module->description =
-	_("Produces a raster map layer of uniform random "
+	_("Produces a raster map of uniform random "
 	  "deviates whose range can be expressed by the user.");
-
 
     out = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -57,7 +56,7 @@ int main(int argc, char *argv[])
 
     i_flag = G_define_flag();
     i_flag->key = 'i';
-    i_flag->description = _("Create an integer map");
+    i_flag->description = _("Create an integer raster map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -65,5 +64,7 @@ int main(int argc, char *argv[])
     randsurf(out->answer, atoi(min->answer), atoi(max->answer),
 	     i_flag->answer);
 
+    G_done_msg(_("Raster map <%s> generated."), out->answer);
+    
     exit(EXIT_SUCCESS);
 }
