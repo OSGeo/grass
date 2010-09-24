@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grassmodes_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2010-08-22 20:30+0100\n"
+"PO-Revision-Date: 2010-09-19 00:34+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1785,9 +1785,9 @@ msgstr "Nie można utworzyć indeksu dla tabeli <%s>, klucz <%s>"
 #: ../vector/v.in.dwg/main.c:246 ../vector/v.overlay/main.c:464
 #: ../vector/v.convert/att.c:91 ../vector/v.to.points/main.c:304
 #: ../vector/v.in.ascii/main.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to grant privileges on table <%s>"
-msgstr "%s: Czcionka nie moż byś czytana"
+msgstr ""
 
 #: ../raster/r.contour/main.c:200 ../vector/v.overlay/line_area.c:217
 #: ../vector/v.overlay/area_area.c:238 ../vector/v.convert/att.c:111
@@ -7851,7 +7851,7 @@ msgstr ""
 #: ../raster/r.univar/r3.univar_main.c:42 ../vector/v.what/main.c:91
 #: ../vector/v.univar/main.c:93
 msgid "Print the stats in shell script style"
-msgstr ""
+msgstr "Wyświetl statystyki w stylu skryptu shell"
 
 #: ../raster/r.univar/r.univar_main.c:47
 #: ../raster/r.univar/r3.univar_main.c:46 ../vector/v.univar/main.c:97
@@ -19463,9 +19463,8 @@ msgstr "Nie można obliczyć centroid powierzchni"
 #: ../vector/v.delaunay/memory.c:74 ../vector/v.delaunay/memory.c:84
 #: ../vector/v.delaunay/memory.c:92 ../vector/v.delaunay/memory.c:104
 #: ../vector/v.delaunay/memory.c:108
-#, fuzzy
 msgid "Not enough memory."
-msgstr "Niewystarczająca ilość pamięci dla az"
+msgstr "Niewystarczająca ilość pamięci."
 
 #: ../vector/v.delaunay/memory.c:124
 msgid "All allocated edges have been used."
@@ -22818,7 +22817,7 @@ msgstr "Konwertuje binarną mapę wektorową GRASS do mapy rastrowej GRASS."
 #: ../vector/v.to.rast/main.c:61
 #, fuzzy
 msgid "Source of raster values"
-msgstr "Informacje statystyczne dla rastrowych warstw mapy."
+msgstr "Źródło wartości rastra"
 
 #: ../vector/v.to.rast/main.c:62
 msgid ""
@@ -22828,23 +22827,20 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.to.rast/main.c:71
-#, fuzzy
 msgid "Name of column for attr parameter (data type must be numeric)"
-msgstr "Nazwa kolumny (musi to być typ numeryczny)"
+msgstr "Nazwa kolumny (typ pola musi być numeryczny)"
 
 #: ../vector/v.to.rast/main.c:80
 msgid "Raster value"
 msgstr "Wartość rastra"
 
 #: ../vector/v.to.rast/main.c:85
-#, fuzzy
 msgid "Name of color definition column (with RRR:GGG:BBB entries)"
-msgstr "Nazwa kolumny definicji koloru (do użycia z flagą -a)"
+msgstr "Nazwa kolumny z definicją koloru (z danymi RRR:GGG:BBB)"
 
 #: ../vector/v.to.rast/main.c:91
-#, fuzzy
 msgid "Name of column used as raster category labels"
-msgstr "Nazwa istniejącej warstwy mapy rastrowej"
+msgstr "Nazwa kolumny z etykietami kategorii rastra"
 
 #: ../vector/v.to.rast/main.c:112
 msgid "Column parameter missing (or use value parameter)"
@@ -22898,19 +22894,19 @@ msgid "Column type (%s) not supported (did you mean 'labelcolumn'?)"
 msgstr "Ten typ kolumny nie jest obsługiwany"
 
 #: ../vector/v.to.rast/vect2rast.c:96
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to use column <%s>"
-msgstr "Nie mozna otworzyć pliku wejściowego <%s@%s>."
+msgstr "Nie można użyć kolumny <%s>"
 
 #: ../vector/v.to.rast/vect2rast.c:114 ../vector/v.to.rast/support.c:482
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown use type: %d"
-msgstr "Typ nieznany: %c"
+msgstr "Typ nieznany: %d"
 
 #: ../vector/v.to.rast/vect2rast.c:125
 #, fuzzy
 msgid "Unknown raster map type"
-msgstr "Wyświetl tylko typ mapy rastrowej"
+msgstr "Nieznany rodzaj mapy rastrowej"
 
 #: ../vector/v.to.rast/vect2rast.c:133
 #, fuzzy, c-format
@@ -24849,8 +24845,7 @@ msgstr "Obliczanie średniej klas ..."
 
 #: ../vector/v.db.connect/main.c:53
 msgid "Prints/sets DB connection for a vector map to attribute table."
-msgstr ""
-"Wyświetla/ustawia połączenie DB dla mapy wektorowej z tabelą atrybutów."
+msgstr "Wyświetla/ustawia połączenie DB mapy wektorowej z tabelą atrybutów."
 
 #: ../vector/v.db.connect/main.c:71
 msgid "Key column name"
@@ -27661,14 +27656,14 @@ msgid "Overwrite existing file"
 msgstr "Nadpisz istniejący plik"
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:1
-#, fuzzy
 msgid ""
 "Renames a column in the attribute table connected to a given vector map."
-msgstr "Nie można skopiować elementów z mapy wektorowej [%s]"
+msgstr ""
+"Zmienia nazwę kolumny w tabeli atrybutów połączonej z zadaną mapą wektorową."
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:5
 msgid "Vector map for which to rename attribute column"
-msgstr ""
+msgstr "Mapa wektorowa której nazwa kolumny ma być zmieniona"
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:6
 msgid "Layer where to rename column"
@@ -27676,7 +27671,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:7
 msgid "Old and new name of the column (old,new)"
-msgstr ""
+msgstr "Stara i nowa nazwa kolumny (stara,nowa)"
 
 #: ../locale/scriptstrings/v.colors_to_translate.c:1
 msgid ""
@@ -36969,11 +36964,8 @@ msgstr "Nazwa wyjściowej mapy rastrowej"
 #~ msgid "Calculate area centroids..."
 #~ msgstr "Nie można obliczyć centroid powierzchni"
 
-#, fuzzy
 #~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
-#~ msgstr ""
-#~ "Tworzy binarną mapę wektorową w formacie GRASS określonych izolinii z "
-#~ "warstwy rastrowej formatu GRASS."
+#~ msgstr "Konwertuje binarną mapę wektorową GRASS do mapy rastrowej GRASS."
 
 #, fuzzy
 #~ msgid "%d points written to output vector map"
@@ -37216,3 +37208,6 @@ msgstr "Nazwa wyjściowej mapy rastrowej"
 #, fuzzy
 #~ msgid "Vector map for which to edit attribute table"
 #~ msgstr "Mapa rastrowa w której mają być wypełnione zera"
+
+#~ msgid "Verbose output (also print out sun position etc.)"
+#~ msgstr "Pokazuj komunikaty (również pozycję słońca itp.)"

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2010-07-17 19:05+0100\n"
+"PO-Revision-Date: 2010-09-17 23:56+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: GRASS Translation Team\n"
 "MIME-Version: 1.0\n"
@@ -1285,17 +1285,17 @@ msgstr "Wartość dla północy musi być większa niż dla południa"
 #: ../lib/gis/parser_interface.c:326 ../lib/gis/parser_html.c:149
 #: ../lib/gis/parser_help.c:189
 msgid "Allow output files to overwrite existing files"
-msgstr "Pozwól na nadpisanie istniejących plików przez pliki wyjściowe"
+msgstr "Nadpisz pliki"
 
 #: ../lib/gis/parser_interface.c:334 ../lib/gis/parser_html.c:153
 #: ../lib/gis/parser_help.c:191
 msgid "Verbose module output"
-msgstr ""
+msgstr "Pokazuj komunikaty modułu"
 
 #: ../lib/gis/parser_interface.c:341 ../lib/gis/parser_html.c:156
 #: ../lib/gis/parser_help.c:192
 msgid "Quiet module output"
-msgstr ""
+msgstr "Bez komunikatów modułu"
 
 #: ../lib/gis/parser.c:388
 #, fuzzy, c-format
