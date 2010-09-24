@@ -6,7 +6,7 @@ detailed algorithm description is available at the
 <a href="http://modis-sr.ltdri.org/index.html">Land Surface Reflectance Science
 Computing Facility website</a> and Mauro A. Homem Antunes <a
 href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his
-6s version</a>.
+6S version</a>.
 
 <p>
 Current region settings are ignored. The region is adjusted to cover the input
@@ -564,6 +564,48 @@ r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 se
 </pre></div>
 
 If the overpass time is unknown, use the <a href="http://www-air.larc.nasa.gov/tools/predict.htm">Satellite Overpass Predictor</a>.
+<p>
+Convert DN (digital number = pixel values) to Radiance at top-of-atmosphere (TOA), using the
+formula
+<div class="code"><pre>
+   L&#955; = ((LMAX&#955; - LMIN&#955;)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMIN&#955;
+</pre></div>
+Where:
+<ul>
+<li> L&#955; = Spectral Radiance at the sensor's aperture in Watt/(meter squared * ster * &#956;m), the
+      apparent radiance as seen by the satellite sensor;</li>
+<li> QCAL = the quantized calibrated pixel value in DN;</li>
+<li> LMIN&#955; = the spectral radiance that is scaled to QCALMIN in watts/(meter squared * ster * &#956;m);</li>
+<li> LMAX&#955; = the spectral radiance that is scaled to QCALMAX in watts/(meter squared * ster * &#956;m);</li>
+<li> QCALMIN = the minimum quantized calibrated pixel value (corresponding to LMIN&#955;) in DN;</li>
+<li> QCALMAX = the maximum quantized calibrated pixel value (corresponding to LMAX&#955;) in DN=255.</li>
+</ul>
+
+LMIN&#955; and LMAX&#955; are the radiances related to the minimal and maximal DN value, and are reported
+in the metadata file for each image, or in the table 1. High gain or low gain is also reported
+in the metadata file of each Landsat image. The minimal DN value (QCALMIN) is 1 for Landsat ETM+
+images (see
+<a href="http://landsathandbook.gsfc.nasa.gov/handbook/handbook_htmls/chapter11/chapter11.html">Landsat handbook</a>),
+and the maximal DN value (QCALMAX) is 255. QCAL is the DN value for every
+separate pixel in the Landsat image.
+<p>
+We extract the coefficients and apply them in order to obtain the radiance map:
+<div class="code"><pre>
+CHAN=4
+r.info lsat7_2002_${CHAN}0 -h | tr '\n' ' ' | sed 's+ ++g' | tr ':' '\n' | grep "LMIN_BAND${CHAN}\|LMAX_BAND${CHAN}"
+LMAX_BAND4=241.100,p016r035_7x20020524.met
+LMIN_BAND4=-5.100,p016r035_7x20020524.met
+QCALMAX_BAND4=255.0,p016r035_7x20020524.met
+QCALMIN_BAND4=1.0,p016r035_7x20020524.met
+</pre></div>
+
+Conversion to radiance (this calculation is done for band 4, for the other bands, the numbers in italics
+need to be replaced with their related values):
+
+<div class="code"><pre>
+r.mapcalc "lsat7_2002_40_rad=((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_40 - 1.0) + (-5.1)"
+</pre></div>
+
 
 <div class="code"><pre>
 # using an integer DEM greatly accelerates the i.atcorr computations
@@ -593,7 +635,7 @@ we need to define decimal hours:<br>
 Finally, run the atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
 -o to use cache acceleration):
 <div class="code"><pre>
-i.atcorr -r -a -o lsat7_2002_40 ialt=elev_int icnd=icnd_lsat4.txt oimg=lsat7_2002_40_atcorr
+i.atcorr -r -a -o lsat7_2002_40_rad ialt=elev_int icnd=icnd_lsat4.txt oimg=lsat7_2002_40_atcorr
 </pre></div>
 
 Note that the altitude value from 'icnd_lsat4.txt' file is read at the beginning
@@ -637,9 +679,9 @@ The GRASS Wiki page about <a href="http://grass.osgeo.org/wiki/Atmospheric_corre
 Second simulation of the satellite signal in the solar spectrum, 6S: An
 overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
 
-<li> <a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6s manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6s homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
+<li> <a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6S manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6S homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
 
-<li>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6s version</a>
+<li>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6S version</a>
 </ul>
 
 <p><i>Last changed: $Date$</i>
