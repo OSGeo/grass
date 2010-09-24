@@ -76,10 +76,10 @@ def write_toc_level(line, src_list, pattern, pattern_level, level, idx):
     
     if pattern_level > level:
         for l in range(level, pattern_level):
-            sys.stdout.write('%s<ul>\n' % (' ' * l * indent))
+            sys.stdout.write('%s<li><ul>\n' % (' ' * l * indent))
     elif level > pattern_level:
         for l in range(level, pattern_level, -1):
-            sys.stdout.write('%s</ul>\n' % (' ' * (l - 1) * indent))
+            sys.stdout.write('%s</ul></li>\n' % (' ' * (l - 1) * indent))
     level = pattern_level
     
     sys.stdout.write('%s<li><a href="#%s">%s</a></li>\n' % (' ' * level * indent,
