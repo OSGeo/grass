@@ -82,7 +82,7 @@ def write_toc_level(line, src_list, pattern, pattern_level, level, idx):
             sys.stdout.write('%s</ul>\n' % (' ' * (l - 1) * indent))
     level = pattern_level
     
-    sys.stdout.write('%s<li><a href="#%s">%s</a>\n' % (' ' * level * indent,
+    sys.stdout.write('%s<li><a href="#%s">%s</a></li>\n' % (' ' * level * indent,
                                                        filter_toc_item(text), filter_toc_item(text)))
     src_list[idx] = '<a name="%s"></a>' % filter_toc_item(text) + line
     
