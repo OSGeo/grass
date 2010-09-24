@@ -34,7 +34,6 @@ SUBDIRS = \
 	r.out.xyz \
 	r.plane \
 	r.reclass.area \
-	r.regression.line \
 	r.shaded.relief \
 	r.tileset \
 	v.build.all \
