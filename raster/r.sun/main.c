@@ -1157,8 +1157,6 @@ int OUTGR(void)
 	fd12 = Rast_open_fp_new(glob_rad);
     }
 
-    Rast_set_window(&cellhd);
-
     if (m != Rast_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d", m, Rast_window_rows());
     if (n != Rast_window_cols())
