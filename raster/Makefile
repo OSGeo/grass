@@ -73,6 +73,7 @@ SUBDIRS = \
 	r.reclass \
 	r.recode \
 	r.region \
+	r.regression.line \
 	r.report \
 	r.resamp.bspline \
 	r.resamp.filter \
