@@ -15,4 +15,9 @@ cmd: $(BIN)/$(PGM)$(EXE) html
 $(BIN)/$(PGM)$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
 	$(call linker)
 
+install:
+	$(INSTALL) $(ARCH_DISTDIR)/bin/$(PGM)$(EXE) $(INST_DIR)/bin/
+	$(INSTALL_DATA) $(HTMLDIR)/$(PGM).html $(INST_DIR)/docs/html/
+	$(INSTALL_DATA) $(ARCH_DISTDIR)/man/man1/$(PGM).1 $(INST_DIR)/man/man1/
+
 .PHONY: cmd
