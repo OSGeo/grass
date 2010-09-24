@@ -1,6 +1,6 @@
 <H2>DESCRIPTION</H2>
 
-<EM>r3.stats</EM> calculates volume statistics for raster3d maps.
+<EM>r3.stats</EM> calculates volume statistics for raster3D maps.
 Volumes are created on base of value subranges or groups of equal values.
 The default number of subranges is 20 and can vary from 1 to infinite. 
 Larger subranges will result in larger memory consumption.
@@ -9,8 +9,8 @@ If the flag <em>-e</em> is set, the number of subrange will be ignored.
 
 <H2>NOTES</H2>
 
-As with most GRASS raster3d modules, <EM>r3.univar</EM> operates on the cell
-array defined by the current 3d region settings, not the original extent and
+As with most GRASS raster3D modules, <EM>r3.univar</EM> operates on the cell
+array defined by the current 3D region settings, not the original extent and
 resolution of the input map. See <em><A HREF="g.region.html">g.region</A></em>.
 <P>
 The region setting will not effect the memory consumption of this module.
@@ -20,9 +20,9 @@ You can expect a huge time consumption to calculate the equal value groups (flag
 if you use large region settings + maps which have many equal value groups (> 100000).
 
 <H2>EXAMPLES</H2>
-<H3>Lausanne FOSS4G 2006 3d demo dataset example</H3>
+<H3>Lausanne FOSS4G 2006 3D demo dataset example</H3>
 
-The 3d raster map <em>geology</em> has three values. Each value represents 
+The 3D raster map <em>geology</em> has three values. Each value represents 
 a specific geological layer, clay = 1, sand = 2 and bedrock = 3. To calculate
 the volume of each geological layer, we can use the flag <em>-e</em> to group
 equal values into single volumes. 
@@ -50,10 +50,10 @@ Sum of all cells:
 <H3>Generic example</H3>
 
 <div class="code"><pre>
-#create a small 3d region
+#create a small 3D region
 g.region n=1000 s=0 e=2000 w=0 t=300 b=0 res3=100
 
-#create a raster3d map with row() and null values
+#create a raster3D map with row() and null values
 r3.mapcalc "volmap = if(row() == 5, null(), row())"
 
 #run r3.stats with a subrange of 10
