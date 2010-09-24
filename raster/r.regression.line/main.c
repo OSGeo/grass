@@ -104,6 +104,10 @@ int main(int argc, char *argv[])
 	    count++;
 	}
     }
+    Rast_close(map1_fd);
+    Rast_close(map2_fd);
+    G_free(map1_buf);
+    G_free(map2_buf);
 
     B = (sumXY - sumX * sumY / count) / (sumsqX - sumX * sumX / count);
     R = (sumXY - sumX * sumY / count) /
