@@ -27,12 +27,15 @@ reflectance at the <b>i.atcorr</b> runtime. The output data are always
 reflectance.
 
 <p>
-An example 6s parameters <em>icnd</em> file for <b>i.atcorr</b>:
+Note that the satellite overpass time has to be specified in Greenwich Mean Time (GMT).
+
+<p>
+An example 6S parameters <em>icnd</em> file for <b>i.atcorr</b>:
 
 <p>
 <div class="code"><pre>
 8                            - geometrical conditions=Landsat ETM+
-2 19 13.00 -47.410 -20.234   - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
+2 19 13.00 -47.410 -20.234   - month day hh.ddd longitude latitude ("hh.ddd" is in decimal hours GMT)
 1                            - atmospheric mode=tropical
 1                            - aerosols model=continental
 15                           - visibility [km] (aerosol model concentration)
@@ -532,38 +535,64 @@ micrometer.</td>
 
 <h2>EXAMPLES</h2>
 
-North Carolina sample dataset: Atmospheric correction of a LANDSAT-7 channel:
-
+<b>Atmospheric correction of a LANDSAT-7 channel</b>
+<p>
+The example is based on the North Carolina sample dataset (GMT -5 hours).
+First we set the computational region to the satellite map, e.g. channel 4:
 <div class="code"><pre>
 g.region rast=lsat7_2002_40 -p
+</pre></div>
 
-# check metadata for sun position (use to verify overpass time with i.atcorr output):
+It is important to verify the available metadata for the sun position which
+has to be defined for the atmospheric correction. An option is to check the
+satellite overpass time with sun position as reported in
+<a href="ftp://ftp.glcf.umiacs.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>. For the North Carolina sample dataset, they have also been
+stored for each channel and can be retrieved like this:
+
+<div class="code"><pre>
 r.info lsat7_2002_40
+</pre></div>
 
+In this case, we have: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION = 64.7730999.
+<p>
+
+If the sun position metadata are unavailable, we can also calculate them from the
+overpass time as follows (r.sunmask uses <a href="http://www.nrel.gov/midc/solpos/solpos.html">SOLPOS</a>):
+<div class="code"><pre>
+r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 sec=7 timezone=-5
+# .. reports: sun azimuth: 121.342461, sun angle above horz.(refraction corrected): 65.396652
+</pre></div>
+
+If the overpass time is unknown, use the <a href="http://www-air.larc.nasa.gov/tools/predict.htm">Satellite Overpass Predictor</a>.
+
+<div class="code"><pre>
 # using an integer DEM greatly accelerates the i.atcorr computations
 r.mapcalc "elev_int = round(elevation)"
 
 # find mean elevation (target above sea level, used as initialization value in control file)
 r.univar elev_int
+</pre></div>
 
-# check satellite overpass time with sun position reported in <a href="ftp://ftp.glcf.umiacs.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>
-# here: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION = 64.7730999
-r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=11 min=40 sec=0 timezone=-4
-# .. reports: sun azimuth: 120.555206, sun angle above horz.(refraction corrected): 65.028458
+Create a control file 'icnd.txt' for channel 4 (NIR), based on metadata. For the overpass time,
+we need to define decimal hours:<br>
+10:42:07 NC local time = 10.70 decimal hours (decimal minutes: 42 * 100 / 60) which is 15.70 GMT:
 
-# create control file 'icnd.txt' for channel 4 (NIR), based on metadata
-# 11:40 local time is 15.66 decimal hour GMT(decimal minutes: 40 * 100 / 60):
-echo "8                            - geometrical conditions=Landsat ETM+
-5 24 15.66 -78.691 35.749     - month day hh.ddd longitude latitude ("hh.ddd" is a decimal hour GMT)
+<div class="code"><pre>
+#--------- start of control file -----
+8                            - geometrical conditions=Landsat ETM+
+5 24 15.70 -78.691 35.749    - month day hh.ddd longitude latitude ("hh.ddd" is in GMT decimal hours)
 2                            - atmospheric mode=midlatitude summer
 1                            - aerosols model=continental
 50                           - visibility [km] (aerosol model concentration)
 -0.110                       - mean target elevation above sea level [km]
 -1000                        - sensor on board a satellite
-64                           - 4th band of ETM+ Landsat 7" > icnd_lsat4.txt
+64                           - 4th band of ETM+ Landsat 7
+#--------- end of control file -------
+</pre></div>
 
-# run atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
-#                             -o to use cache acceleration):
+Finally, run the atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
+-o to use cache acceleration):
+<div class="code"><pre>
 i.atcorr -r -a -o lsat7_2002_40 ialt=elev_int icnd=icnd_lsat4.txt oimg=lsat7_2002_40_atcorr
 </pre></div>
 
