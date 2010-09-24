@@ -151,7 +151,7 @@ v.db.addcolumn mygeodetic_pts col="zval double precision"
 # the 'z_value' col contains 'N/A' strings, not to be converted
 v.db.update mygeodetic_pts col=zval \
             qcol="CAST(z_value AS double precision)" \
-            where="z_value <> 'N/A'"
+            where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
 <h2>SEE ALSO</h2>
