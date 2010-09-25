@@ -68,7 +68,6 @@ move %PACKAGE_DIR%\extralib\libgrass_*.dll %PACKAGE_DIR%\lib
 mkdir %PACKAGE_DIR%\extrabin
 
 copy %OSGEO4W_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
-del %PACKAGE_DIR%\extrabin\svn*.exe
 del %PACKAGE_DIR%\extrabin\osgeo4w-*.exe
 
 @echo.
