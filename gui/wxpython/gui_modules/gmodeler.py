@@ -30,6 +30,7 @@ Classes:
  - ItemCheckListCtrl
  - ModelCondition
  - ModelConditionDialog
+ - WritePythonFile
 
 (C) 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -1088,7 +1089,7 @@ class ModelFrame(wx.Frame):
         
         if not filename:
             return
-
+        
         # check for extension
         if filename[-3:] != ".py":
             filename += ".py"
@@ -1103,10 +1104,10 @@ class ModelFrame(wx.Frame):
                 return
             
             dlg.Destroy()
-
+        
         fd = open(filename, "w")
         try:
-            self._writePython(fd)
+            WritePythonFile(fd, self.model)
         finally:
             fd.close()
         
@@ -1115,133 +1116,6 @@ class ModelFrame(wx.Frame):
         
         self.SetStatusText(_("Model exported to <%s>") % filename)
 
-    def _writePython(self, fd):
-        """!Write model to file"""
-        properties = self.model.GetProperties()
-        
-        fd.write(
-r"""#!/usr/bin/env python
-#
-############################################################################
-#
-# MODULE:       %s
-#
-# AUTHOR(S):	%s
-#               
-# PURPOSE:      %s
-#
-# DATE:         %s
-#
-#############################################################################
-""" % (properties['name'],
-       properties['author'],
-       properties['description'],
-       time.asctime()))
-        
-        fd.write(
-r"""
-import sys
-import os
-import atexit
-
-import grass.script as grass
-""")
-        
-        # cleanup()
-        rast, vect, rast3d, msg = self.model.GetIntermediateData()
-        fd.write(
-r"""
-def cleanup():
-""")
-        if rast:
-            fd.write(
-r"""    grass.run_command('g.remove',
-                      rast=%s)
-""" % ','.join(map(lambda x: "'" + x + "'", rast)))
-        if vect:
-            fd.write(
-r"""    grass.run_command('g.remove',
-                      vect = %s)
-""" % ','.join(map(lambda x: "'" + x + "'", vect)))
-        if rast3d:
-            fd.write(
-r"""    grass.run_command('g.remove',
-                      rast3d = %s)
-""" % ','.join(map(lambda x: "'" + x + "'", rast3d)))
-        if not rast and not vect and not rast3d:
-            fd.write('    pass\n')
-        
-        fd.write("\ndef main():\n")
-        indent = 4
-        for item in self.model.GetItems():
-            if isinstance(item, ModelAction):
-                if item.GetLoopId():
-                    continue
-                self._writePythonAction(fd, item, indent)
-            elif isinstance(item, ModelLoop):
-                # substitute conditiond
-                variables = self.model.GetVariables()
-                cond = item.GetText()
-                for variable in variables:
-                    pattern= re.compile('%' + variable)
-                    if pattern.search(cond):
-                        value = variables[variable].get('value', '')
-                        if variables[variable].get('type', 'string') == 'string':
-                            value = '"' + value + '"'
-                        cond = pattern.sub(value, cond)
-                fd.write('%sfor %s:\n' % (' ' * indent, cond))
-                indent += 4
-                for action in item.GetItems():
-                    self._writePythonAction(fd, action, indent)
-                indent -= 4
-        
-        fd.write("\n    return 0\n")
-        
-        fd.write(
-r"""
-if __name__ == "__main__":
-    options, flags = grass.parser()
-    atexit.register(cleanup)
-    sys.exit(main())
-""")
-        
-    def _writePythonAction(self, fd, item, indent):
-        task = menuform.GUI().ParseCommand(cmd = item.GetLog(string = False),
-                                           show = None)
-        opts = task.get_options()
-        flags = ''
-        params = list()
-        strcmd = "%sgrass.run_command(" % (' ' * indent)
-        cmdIndent = len(strcmd)
-        for f in opts['flags']:
-            if f.get('value', False) == True:
-                name = f.get('name', '')
-                if len(name) > 1:
-                    params.append('%s = True' % name)
-                else:
-                    flags += name
-            
-        for p in opts['params']:
-            name = p.get('name', None)
-            value = p.get('value', None)
-            if name and value:
-                ptype = p.get('type', 'string')
-                if ptype == 'string':
-                    params.append('%s = "%s"' % (name, value))
-                else:
-                    params.append("%s = %s" % (name, value))
-        
-        fd.write(strcmd + '"%s"' % task.get_name())
-        if flags:
-            fd.write(",\n%sflags = '%s'" % (' ' * cmdIndent, flags))
-        if len(params) > 0:
-            fd.write(",\n")
-            for opt in params[:-1]:
-                fd.write("%s%s,\n" % (' ' * cmdIndent, opt))
-            fd.write("%s%s)\n" % (' ' * cmdIndent, params[-1]))
-        else:
-            fd.write(")\n")
-        
     def _validateModel(self):
         """!Validate model"""
         self.SetStatusText(_('Validating model...'), 0)
@@ -4480,6 +4354,164 @@ class ModelConditionDialog(ModelItemDialog):
         """!Get items"""
         return { 'if'   : self.itemListIf.GetItems(),
                  'else' : self.itemListElse.GetItems() }
+
+class WritePythonFile:
+    def __init__(self, fd, model):
+        """!Class for exporting model to Python script
+
+        @param fd file desciptor
+        """
+        self.fd     = fd
+        self.model  = model
+        self.indent = 4
+
+        self._writePython()
+        
+    def _writePython(self):
+        """!Write model to file"""
+        properties = self.model.GetProperties()
+        
+        self.fd.write(
+r"""#!/usr/bin/env python
+#
+############################################################################
+#
+# MODULE:       %s
+#
+# AUTHOR(S):	%s
+#               
+# PURPOSE:      %s
+#
+# DATE:         %s
+#
+#############################################################################
+""" % (properties['name'],
+       properties['author'],
+       properties['description'],
+       time.asctime()))
+        
+        self.fd.write(
+r"""
+import sys
+import os
+import atexit
+
+import grass.script as grass
+""")
+        
+        # cleanup()
+        rast, vect, rast3d, msg = self.model.GetIntermediateData()
+        self.fd.write(
+r"""
+def cleanup():
+""")
+        if rast:
+            self.fd.write(
+r"""    grass.run_command('g.remove',
+                      rast=%s)
+""" % ','.join(map(lambda x: "'" + x + "'", rast)))
+        if vect:
+            self.fd.write(
+r"""    grass.run_command('g.remove',
+                      vect = %s)
+""" % ','.join(map(lambda x: "'" + x + "'", vect)))
+        if rast3d:
+            self.fd.write(
+r"""    grass.run_command('g.remove',
+                      rast3d = %s)
+""" % ','.join(map(lambda x: "'" + x + "'", rast3d)))
+        if not rast and not vect and not rast3d:
+            self.fd.write('    pass\n')
+        
+        self.fd.write("\ndef main():\n")
+        for item in self.model.GetItems():
+            self._writePythonItem(item)
+        
+        self.fd.write("\n    return 0\n")
+        
+        self.fd.write(
+r"""
+if __name__ == "__main__":
+    options, flags = grass.parser()
+    atexit.register(cleanup)
+    sys.exit(main())
+""")
+        
+    def _writePythonItem(self, item, ignoreBlock = True):
+        """!Write model object to Python file"""
+        if isinstance(item, ModelAction):
+            if ignoreBlock and item.GetBlockId(): # ignore items in loops of conditions
+                return
+            self._writePythonAction(item)
+        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
+            # substitute condition
+            variables = self.model.GetVariables()
+            cond = item.GetText()
+            for variable in variables:
+                pattern= re.compile('%' + variable)
+                if pattern.search(cond):
+                    value = variables[variable].get('value', '')
+                    if variables[variable].get('type', 'string') == 'string':
+                        value = '"' + value + '"'
+                    cond = pattern.sub(value, cond)
+            if isinstance(item, ModelLoop):
+                self.fd.write('%sfor %s:\n' % (' ' * self.indent, cond))
+                self.indent += 4
+                for action in item.GetItems():
+                    self._writePythonItem(action, ignoreBlock = False)
+                self.indent -= 4
+            else: # ModelCondition
+                self.fd.write('%sif %s:\n' % (' ' * self.indent, cond))
+                self.indent += 4
+                condItems = item.GetItems()
+                for action in condItems['if']:
+                    self._writePythonItem(action, ignoreBlock = False)
+                if condItems['else']:
+                    self.indent -= 4
+                    self.fd.write('%selse:\n' % (' ' * self.indent))
+                    self.indent += 4
+                    for action in condItems['else']:
+                        self._writePythonItem(action, ignoreBlock = False)
+                self.indent += 4
+        
+    def _writePythonAction(self, item):
+        """!Write model action to Python file"""
+        task = menuform.GUI().ParseCommand(cmd = item.GetLog(string = False),
+                                           show = None)
+        opts = task.get_options()
+        flags = ''
+        params = list()
+        strcmd = "%sgrass.run_command(" % (' ' * self.indent)
+        cmdIndent = len(strcmd)
+        for f in opts['flags']:
+            if f.get('value', False) == True:
+                name = f.get('name', '')
+                if len(name) > 1:
+                    params.append('%s = True' % name)
+                else:
+                    flags += name
+            
+        for p in opts['params']:
+            name = p.get('name', None)
+            value = p.get('value', None)
+            if name and value:
+                ptype = p.get('type', 'string')
+                if ptype == 'string':
+                    params.append('%s = "%s"' % (name, value))
+                else:
+                    params.append("%s = %s" % (name, value))
+        
+        self.fd.write(strcmd + '"%s"' % task.get_name())
+        if flags:
+            self.fd.write(",\n%sflags = '%s'" % (' ' * cmdIndent, flags))
+        if len(params) > 0:
+            self.fd.write(",\n")
+            for opt in params[:-1]:
+                self.fd.write("%s%s,\n" % (' ' * cmdIndent, opt))
+            self.fd.write("%s%s)\n" % (' ' * cmdIndent, params[-1]))
+        else:
+            self.fd.write(")\n")
+
         
 def main():
     app = wx.PySimpleApp()
