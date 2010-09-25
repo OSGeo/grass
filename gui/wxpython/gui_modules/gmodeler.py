@@ -1394,7 +1394,7 @@ if __name__ == "__main__":
             for p in params['params']:
                 if p.get('prompt', '') in ('raster', 'vector', 'raster3d') and \
                         (p.get('value', None) or \
-                             p.get('age', 'old') != 'old'):
+                             (p.get('age', 'old') != 'old' and p.get('required', 'no') == 'yes')):
                     data = layer.FindData(p.get('name', ''))
                     if data:
                         data.SetValue(p.get('value', ''))
@@ -1629,12 +1629,21 @@ if __name__ == "__main__":
         for rel in condition.GetRelations():
             self.canvas.GetDiagram().RemoveShape(rel)
         condition.Clear()
-
+        dxIf   = condition.GetX() + condition.GetWidth() / 2
+        dxElse = condition.GetX() - condition.GetWidth() / 2
+        dy     = condition.GetY()
         for branch in items.keys():
             for item in items[branch]:
                 rel = ModelRelation(parent, item)
                 condition.AddRelation(rel)
                 self.AddLine(rel)
+                rel.MakeLineControlPoints(0)
+                if branch == 'if':
+                    rel.InsertLineControlPoint(point = wx.RealPoint(item.GetX() - item.GetWidth() / 2, item.GetY()))
+                    rel.InsertLineControlPoint(point = wx.RealPoint(dxIf, dy))
+                else:
+                    rel.InsertLineControlPoint(point = wx.RealPoint(dxElse, dy))
+                    rel.InsertLineControlPoint(point = wx.RealPoint(item.GetX() - item.GetWidth() / 2, item.GetY()))
                 parent = item
         
         self.canvas.Refresh()
@@ -3613,14 +3622,14 @@ class ModelListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
                     listmix.TextEditMixin,
                     listmix.ColumnSorterMixin):
-    def __init__(self, parent, columns, excludeId = [], id = wx.ID_ANY,
+    def __init__(self, parent, columns, id = wx.ID_ANY,
                  style = wx.LC_REPORT | wx.BORDER_NONE |
                  wx.LC_SORT_ASCENDING |wx.LC_HRULES |
                  wx.LC_VRULES, **kwargs):
         """!List of model variables"""
         self.parent = parent
         self.columns = columns
-        self.excludeId = excludeId
+        self.shape = None
         try:
             self.frame  = parent.parent
         except AttributeError:
@@ -3981,7 +3990,7 @@ class ModelItemDialog(wx.Dialog):
                                           window = self,
                                           columns = [_("ID"), _("Name"),
                                                      _("Command")],
-                                          excludeId = [shape.GetId()])
+                                          shape = shape)
         self.itemList.Populate(self.parent.GetModel().GetItems())
         
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
@@ -4110,12 +4119,11 @@ class ItemPanel(wx.Panel):
         self.list.OnReload(None)
         
 class ItemListCtrl(ModelListCtrl):
-    def __init__(self, parent, columns, excludeId = [], disablePopup = False, **kwargs):
+    def __init__(self, parent, columns, disablePopup = False, **kwargs):
         """!List of model actions"""
         self.disablePopup = disablePopup
-        self.excludeId = excludeId
-        
-        ModelListCtrl.__init__(self, parent, columns, excludeId, **kwargs)
+                
+        ModelListCtrl.__init__(self, parent, columns, **kwargs)
         self.SetColumnWidth(1, 100)
         self.SetColumnWidth(2, 65)
         
@@ -4130,30 +4138,36 @@ class ItemListCtrl(ModelListCtrl):
     def Populate(self, data):
         """!Populate the list"""
         self.itemDataMap = dict()
+        if self.shape:
+            if isinstance(self.shape, ModelCondition):
+                if self.GetName() == 'ElseBlockList':
+                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['else'])
+                else:
+                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['if'])
+            else:
+                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems())
+        else:
+            shapeItems = list()
         i = 0
         if len(self.columns) == 3: # ItemCheckList
             checked = list()
         for action in data:
-            if action.GetId() in self.excludeId:
-                continue
             if len(self.columns) == 3:
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),
                                        action.GetLog()]
                 aId = action.GetBlockId()
-                if len(aId) > 0:
-                    if aId[0] not in self.excludeId:
-                        aId = None
+                if action.GetId() in shapeItems:
+                    checked.append(aId)
                 else:
-                    aId = None
-                checked.append(aId)
+                    checked.append(None)
             else:
                 bId = action.GetBlockId()
                 if not bId:
                     bId = ''
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),
-                                       str(bId),
+                                       ','.join(map(str, bId)),
                                        action.GetLog()]
             
             i += 1
@@ -4287,13 +4301,15 @@ class ItemListCtrl(ModelListCtrl):
         self.frame.ModelChanged()
 
 class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
-    def __init__(self, parent, columns, window = None, excludeId = [], **kwargs):
+    def __init__(self, parent, shape, columns, window = None, **kwargs):
         self.parent = parent
         self.window = window
         
-        ItemListCtrl.__init__(self, parent, columns, excludeId, disablePopup = True, **kwargs)
+        ItemListCtrl.__init__(self, parent, columns, disablePopup = True, **kwargs)
         listmix.CheckListCtrlMixin.__init__(self)
         self.SetColumnWidth(0, 50)
+        
+        self.shape  = shape
         
     def OnBeginEdit(self, event):
         """!Disable editing"""
@@ -4400,7 +4416,7 @@ class ModelConditionDialog(ModelItemDialog):
                                               window = self,
                                               columns = [_("ID"), _("Name"),
                                                          _("Command")],
-                                              excludeId = [shape.GetId()])
+                                              shape = shape)
         self.itemListElse.SetName('ElseBlockList')
         self.itemListElse.Populate(self.parent.GetModel().GetItems())
         
