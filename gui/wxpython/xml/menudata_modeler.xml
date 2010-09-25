@@ -41,7 +41,7 @@
 	  <label>Export to Python</label>
 	  <help>Export model to Python script</help>
 	  <handler>OnExportPython</handler>
-	  <shortcut>Ctrl+E</shortcut>
+	  <shortcut>Ctrl+P</shortcut>
 	</menuitem>
 	<separator />
 	<menuitem>
