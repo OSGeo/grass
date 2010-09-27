@@ -3,13 +3,15 @@
  *
  *   Calculates linear regression from two raster maps: y = a + b*x
  *   Copyright (C) 2010 by the GRASS Development Team
- *   Author(s): Markus Metz
+ *   Author(s): original author Dr. Agustin Lobo
+ *              Markus Metz (conversion to C for speed)
  *
  *      This program is free software under the GNU General Public
  *      License (>=v2). Read the file COPYING that comes with GRASS
  *      for details.
  *
  *   This program is a replacement for the r.regression.line script
+ *   (the C version is up to 200x faster than the script version)
  */
 
 #include <stdio.h>
