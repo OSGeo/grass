@@ -33,7 +33,7 @@ FILE *run_reclass(struct Popen *child, const char *basemap, const char *outputma
 {
     char input[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1];
     char output[7 + GNAME_MAX + 1];
-    const char *argv[4];
+    const char *argv[5];
     FILE *fp;
 
     sprintf(input, "input=%s", basemap);
@@ -42,7 +42,8 @@ FILE *run_reclass(struct Popen *child, const char *basemap, const char *outputma
     argv[0] = "r.reclass";
     argv[1] = input;
     argv[2] = output;
-    argv[3] = NULL;
+    argv[3] = "rules=-";
+    argv[4] = NULL;
 
     fp = G_popen_write(child, argv[0], argv);
     if (!fp)
