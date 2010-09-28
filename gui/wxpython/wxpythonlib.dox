@@ -1,21 +1,16 @@
-/*! \page wxpythonlib GRASS WxPython-based Graphical User Interface
+/*! \mainpage wxpythonlib GRASS WxPython-based Graphical User Interface
 
-The plan for a native <b>Graphical User Interface</b> (GUI) for GRASS
-found is origin in the project <a
-href="http://geo.fsv.cvut.cz/~landa/publications/2008/unpublished/fbk-report/technology-for-geoinformatics.html">GFOSS-TN</a>,
-a collaboration between <a href="http://www.fbk.eu">FBK</a>
-(Fondazione Bruno Kessler) and the Information System Service of the
-Trento municipality (Italy).
-
-This GUI is written in the Python programming language using <a
+The GUI (Graphical User Interface) is written in the Python
+programming language using <a
 href="http://www.wxpython.org">wxPython</a> library - a blending of
 the <a href="http://www.wxwidgets.org">wxWidgets</a> library for
 Python.
 
-The GUI is composed of two main components:
+The wxPython GUI (so called <em>wxGUI</em>) is composed of two main
+<em>components</em>:
 
-- Layer Manager and
-- Map Display Window.
+- <b>Layer Manager</b> and
+- <b>Map Display Window</b>.
 
 The <em>Layer Manager</em> allows users to run different GRASS modules
 from a menu, includes map layer management, integrated command-line
@@ -24,11 +19,370 @@ integrates basic tools for zooming, panning, data querying,
 decorations (north arrows, barscale, etc.). Additional tools like
 vector digitizer or georectification tool are also available.
 
-Ongoing development focuses on stability, portability and on the
-integration of OpenGL. As result, Map Display Window will support 3D
-rendering including 3D raster (voxels) and 3D vector data.
+<b>Table of content</b>
 
-Development plans:
+- \ref background
+- \ref classes
+ - \ref core
+ - \ref lmgr
+ - \ref mapdisp
+ - \ref wscreen
+ - \ref atm
+ - \ref georect
+ - \ref gmodeler
+ - \ref vdigit
+ - \ref wxnviz
+ - \ref locWizard
+ - \ref mcalc
+ - \ref misc
+- \ref devel
+- \ref seeAlso
+- \ref refs
+
+\section background Background
+
+The plan for a native GUI for GRASS found its origin in the project <a
+href="http://geo.fsv.cvut.cz/~landa/publications/2008/unpublished/fbk-report/technology-for-geoinformatics.html">GFOSS-TN</a>,
+a collaboration between <a href="http://www.fbk.eu">FBK</a>
+(Fondazione Bruno Kessler) and the Information System Service of the
+Trento municipality (Italy). The wxGUI is successor of Tcl/Tk GUI
+available in GRASS 5 and GRASS 6.
+
+\section classes List of Modules and Classes
+
+\subsection core Core modules
+
+- gui_modules/debug.py
+ - gui_modules::debug::DebugMsg
+
+- gui_modules/gcmd.py
+ - gui_modules::gcmd::GError
+ - gui_modules::gcmd::GWarning
+ - gui_modules::gcmd::GMessage
+ - gui_modules::gcmd::GException
+ - gui_modules::gcmd::Popen
+ - gui_modules::gcmd::Command
+ - gui_modules::gcmd::CommandThread
+
+- gui_modules/globalvar.py
+
+- gui_modules/gselect.py
+ - gui_modules::gselect::Select
+ - gui_modules::gselect::VectorSelect
+ - gui_modules::gselect::TreeCtrlComboPopup
+ - gui_modules::gselect::VectorDBInfo
+ - gui_modules::gselect::LayerSelect
+ - gui_modules::gselect::LayerNameSelect
+ - gui_modules::gselect::DriverSelect
+ - gui_modules::gselect::DatabaseSelect
+ - gui_modules::gselect::TableSelect
+ - gui_modules::gselect::ColumnSelect
+ - gui_modules::gselect::LocationSelect
+ - gui_modules::gselect::MapsetSelect
+ - gui_modules::gselect::SubGroupSelect
+ - gui_modules::gselect::FormatSelect
+ - gui_modules::gselect::GdalSelect
+
+- gui_modules/menuform.py
+ - gui_modules::menuform::UpdateThread
+ - gui_modules::menuform::UpdateQThread
+ - gui_modules::menuform::grassTask
+ - gui_modules::menuform::processTask
+ - gui_modules::menuform::mainFrame
+ - gui_modules::menuform::cmdPanel
+ - gui_modules::menuform::GrassGUIApp
+ - gui_modules::menuform::GUI
+ - gui_modules::menuform::FloatValidator
+
+- gui_modules/units.py
+ - gui_modules::units::BaseUnits
+
+- gui_modules/utils.py
+
+\subsection lmgr Layer Manager
+
+- wxgui.py
+ - wxgui::GMFrame
+ - wxgui::GMApp
+
+- gui_modules/layertree.py
+ - gui_modules::layertree::LayerTree
+
+- gui_modules/goutput.py
+ - gui_modules::goutput::CmdThread
+ - gui_modules::goutput::GMConsole
+ - gui_modules::goutput::GMStdout
+ - gui_modules::goutput::GMStderr
+ - gui_modules::goutput::GMStc
+
+- gui_modules/ghelp.py
+ - gui_modules::ghelp::HelpFrame
+ - gui_modules::ghelp::SearchModuleWindow
+ - gui_modules::ghelp::MenuTreeWindow
+ - gui_modules::ghelp::ItemTree
+ - gui_modules::ghelp::MenuTree
+ - gui_modules::ghelp::AboutWindow
+ - gui_modules::ghelp::InstallExtensionWindow
+ - gui_modules::ghelp::ExtensionTree
+ - gui_modules::ghelp::HelpWindow
+ - gui_modules::ghelp::HelpPanel
+
+- gui_modules/menudata.py
+ - gui_modules::menudata::MenuData
+ - gui_modules::menudata::ManagerData
+ - gui_modules::menudata::ModelerData
+
+- gui_modules/menu.py
+ - gui_modules::menu::Menu
+
+- gui_modules/preferences.py
+ - gui_modules::preferences::Settings
+ - gui_modules::preferences::PreferencesBaseDialog
+ - gui_modules::preferences::PreferencesDialog
+ - gui_modules::preferences::DefaultFontDialog
+ - gui_modules::preferences::MapsetAccess
+ - gui_modules::preferences::CheckListMapset
+
+- gui_modules/prompt.py
+ - gui_modules::prompt::PromptListCtrl
+ - gui_modules::prompt::TextCtrlAutoComplete
+ - gui_modules::prompt::GPrompt
+ - gui_modules::prompt::GPromptPopUp
+ - gui_modules::prompt::GPromptSTC
+
+\subsection mapdisp Map Display Window
+
+- gui_modules/disp_print.py
+ - gui_modules::disp_print::MapPrint
+ - gui_modules::disp_print::PrintOptions
+
+- gui_modules/mapdisp_command.py
+ - gui_modules::mapdisp_command::Command
+
+- gui_modules/mapdisp.py
+ - gui_modules::mapdisp::MapFrame
+ - gui_modules::mapdisp::MapApp
+
+- gui_modules/mapdisp_window.py
+ - gui_modules::mapdisp_window::MapWindow
+ - gui_modules::mapdisp_window::BufferedWindow
+
+- gui_modules/render.py
+ - gui_modules::render::Layer
+ - gui_modules::render::MapLayer
+ - gui_modules::render::Overlay
+ - gui_modules::render::Map
+
+- gui_modules/toolbars.py
+ - gui_modules::toolbars::AbstractToolbar
+ - gui_modules::toolbars::MapToolbar
+ - gui_modules::toolbars::GCPManToolbar
+ - gui_modules::toolbars::GCPDisplayToolbar
+ - gui_modules::toolbars::GRToolbar
+ - gui_modules::toolbars::GCPToolbar
+ - gui_modules::toolbars::VDigitToolbar
+ - gui_modules::toolbars::ProfileToolbar
+ - gui_modules::toolbars::NvizToolbar
+ - gui_modules::toolbars::ModelToolbar
+ - gui_modules::toolbars::HistogramToolbar
+ - gui_modules::toolbars::LayerManagerToolbar
+
+\subsection wscreen Welcome screen
+
+- gis_set_error.py
+- gis_set.py
+ - gis_set::GRASSStartup
+ - gis_set::StartUp
+ - gis_set::GListBox
+
+\subsection atm Attribute Table Manager
+
+- gui_modules/dbm_base.py
+ - gui_modules::dbm_base::VectorDBInfo
+
+- gui_modules/dbm_dialogs.py
+ - gui_modules::dbm_dialogs::DisplayAttributesDialog
+ - gui_modules::dbm_dialogs::ModifyTableRecord
+
+- gui_modules/dbm.py
+ - gui_modules::dbm::Log
+ - gui_modules::dbm::VirtualAttributeList
+ - gui_modules::dbm::AttributeManager
+ - gui_modules::dbm::TableListCtrl
+ - gui_modules::dbm::LayerListCtrl
+ - gui_modules::dbm::LayerBook
+
+- gui_modules/sqlbuilder.py
+ - gui_modules::sqlbuilder::SQLFrame
+
+\subsection georect Georectifier
+
+- gui_modules/gcpmanager.py
+ - gui_modules::gcpmanager::GCPWizard
+ - gui_modules::gcpmanager::LocationPage
+ - gui_modules::gcpmanager::GroupPage
+ - gui_modules::gcpmanager::DispMapPage
+ - gui_modules::gcpmanager::GCP
+ - gui_modules::gcpmanager::GCPList
+ - gui_modules::gcpmanager::VectGroup
+ - gui_modules::gcpmanager::EditGCP
+ - gui_modules::gcpmanager::GrSettingsDialog
+
+- gui_modules/gcpmapdisp.py
+ - gui_modules::gcpmapdisp::MapFrame
+
+- gui_modules/georect.py
+ - gui_modules::georect::GeorectWizard
+ - gui_modules::georect::LocationPage
+ - gui_modules::georect::GroupPage
+ - gui_modules::georect::DispMapPage
+ - gui_modules::georect::GCP
+ - gui_modules::georect::GCPList
+ - gui_modules::georect::VectGroup
+ - gui_modules::georect::EditGPC
+ - gui_modules::georect::GrSettingsDialog
+
+\subsection gmodeler Graphical Modeler
+
+- gui_modules/gmodeler.py
+ - gui_modules::gmodeler::Model
+ - gui_modules::gmodeler::ModelFrame
+ - gui_modules::gmodeler::ModelCanvas
+ - gui_modules::gmodeler::ModelObject
+ - gui_modules::gmodeler::ModelAction
+ - gui_modules::gmodeler::ModelData
+ - gui_modules::gmodeler::ModelDataDialog
+ - gui_modules::gmodeler::ModelEvtHandler
+ - gui_modules::gmodeler::ModelSearchDialog
+ - gui_modules::gmodeler::ModelRelation
+ - gui_modules::gmodeler::ProcessModelFile
+ - gui_modules::gmodeler::WriteModelFile
+ - gui_modules::gmodeler::PreferencesDialog
+ - gui_modules::gmodeler::PropertiesDialog
+ - gui_modules::gmodeler::ModelParamDialog
+ - gui_modules::gmodeler::ModelListCtrl
+ - gui_modules::gmodeler::VariablePanel
+ - gui_modules::gmodeler::VariableListCtrl
+ - gui_modules::gmodeler::ModelItem
+ - gui_modules::gmodeler::ModelItemDialog
+ - gui_modules::gmodeler::ModelLoop
+ - gui_modules::gmodeler::ModelLoopDialog
+ - gui_modules::gmodeler::ItemPanel
+ - gui_modules::gmodeler::ItemListCtrl
+ - gui_modules::gmodeler::ItemCheckListCtrl
+ - gui_modules::gmodeler::ModelCondition
+ - gui_modules::gmodeler::ModelConditionDialog
+ - gui_modules::gmodeler::WritePythonFile
+
+\subsection vdigit Vector digitizer
+
+- gui_modules/vdigit.py
+ - gui_modules::vdigit::AbstractDigit
+ - gui_modules::vdigit::VDigit
+ - gui_modules::vdigit::AbstractDisplayDriver
+ - gui_modules::vdigit::CDisplayDriver
+ - gui_modules::vdigit::VDigitSettingsDialog
+ - gui_modules::vdigit::VDigitCategoryDialog
+ - gui_modules::vdigit::CategoryListCtrl
+ - gui_modules::vdigit::VDigitZBulkDialog
+ - gui_modules::vdigit::VDigitDuplicatesDialog
+ - gui_modules::vdigit::CheckListFeature
+
+\subsection wxnviz 3D view mode (wxNviz)
+
+- gui_modules/nviz_mapdisp.py
+ - gui_modules::nviz_mapdisp::NvizThread
+ - gui_modules::nviz_mapdisp::GLWindow
+
+- gui_modules/nviz_preferences.py
+ - gui_modules::nviz_preferences::NvizPreferencesDialog
+
+- gui_modules/nviz.py
+
+- gui_modules/nviz_tools.py
+
+ - gui_modules::nviz_tools::NvizToolWindow
+ - gui_modules::nviz_tools::PositionWindow
+ - gui_modules::nviz_tools::ViewPositionWindow
+ - gui_modules::nviz_tools::LightPositionWindow
+
+- gui_modules/wxnviz.py
+ - gui_modules::wxnviz::Nviz
+
+\subsection locWizard Location Wizard
+
+- gui_modules/location_wizard.py
+ - gui_modules::location_wizard::BaseClass
+ - gui_modules::location_wizard::TitledPage
+ - gui_modules::location_wizard::DatabasePage
+ - gui_modules::location_wizard::CoordinateSystemPage
+ - gui_modules::location_wizard::ProjectionsPage
+ - gui_modules::location_wizard::ItemList
+ - gui_modules::location_wizard::ProjParamsPage
+ - gui_modules::location_wizard::DatumPage
+ - gui_modules::location_wizard::EllipsePage
+ - gui_modules::location_wizard::GeoreferencedFilePage
+ - gui_modules::location_wizard::WKTPage
+ - gui_modules::location_wizard::EPSGPage
+ - gui_modules::location_wizard::CustomPage
+ - gui_modules::location_wizard::SummaryPage
+ - gui_modules::location_wizard::LocationWizard
+ - gui_modules::location_wizard::RegionDef
+ - gui_modules::location_wizard::TransList
+ - gui_modules::location_wizard::SelectTransformDialog
+
+\subsection mcalc Map Calculator
+
+- gui_modules/mcalc_builder.py
+ - gui_modules::mcalc_builder::MapCalcFrame
+
+\subsection misc Miscellaneous
+
+- gui_modules/colorrules.py
+ - gui_modules::colorrules::ColorTable
+ - gui_modules::colorrules::BufferedWindow
+
+- gui_modules/gdialogs.py
+ - gui_modules::gdialogs::ElementDialog
+ - gui_modules::gdialogs::LocationDialog
+ - gui_modules::gdialogs::MapsetDialog
+ - gui_modules::gdialogs::NewVectorDialog
+ - gui_modules::gdialogs::SavedRegion
+ - gui_modules::gdialogs::DecorationDialog
+ - gui_modules::gdialogs::TextLayerDialog
+ - gui_modules::gdialogs::LoadMapLayersDialog
+ - gui_modules::gdialogs::ImportDialog
+ - gui_modules::gdialogs::GdalImportDialog
+ - gui_modules::gdialogs::DxfImportDialog
+ - gui_modules::gdialogs::LayersList
+ - gui_modules::gdialogs::SetOpacityDialog
+ - gui_modules::gdialogs::StaticWrapText
+ - gui_modules::gdialogs::ImageSizeDialog
+
+- gui_modules/histogram.py
+ - gui_modules::histogram::BufferedWindow
+ - gui_modules::histogram::HistFrame
+
+- gui_modules/ogc_services.py
+ - gui_modules::ogc_services::WMSDialog
+ - gui_modules::ogc_services::LayersList
+
+- gui_modules/profile.py
+ - gui_modules::profile::ProfileFrame
+ - gui_modules::profile::SetRasterDialog
+ - gui_modules::profile::TextDialog
+ - gui_modules::profile::OptDialog
+
+- gui_modules/rules.py
+ - gui_modules::rules::RulesText
+
+- gui_modules/vclean.py
+ - gui_modules::vclean::VectorCleaningFrame
+
+\section devel Further Development
+
+Ongoing development focuses on stability, portability and on the
+integration of OpenGL (see \ref wxnviz).
 
 A Map Composer, a tool for hardcopy map outputs is also planned to be
 developed. Currently, the tools for creating hardcopy maps (map
@@ -39,6 +393,8 @@ monitor and then export the display to an external image file such as
 a png. These map features are very basic and cannot be customized. The
 goal is to allow users to prepare simple cartographic outputs
 comparable e.g. with other, proprietary GIS map layout functionality.
+
+For more info see http://trac.osgeo.org/grass/wiki/wxGUIDevelopment
 
 \section seeAlso See also
 
