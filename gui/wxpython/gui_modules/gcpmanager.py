@@ -836,17 +836,8 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         # CheckListCtrlMixin must set an ImageList first
         self.il = self.list.GetImageList(wx.IMAGE_LIST_SMALL)
 
-        # TODO: make a decision
-        use_art_provider = False
-        if use_art_provider:
-            i_size = wx.Size(12, 12)
-            SmallUpArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_UP,
-                           client=wx.ART_FRAME_ICON, size=i_size)
-            SmallDnArrow = wx.ArtProvider.GetBitmap(id=wx.ART_GO_DOWN,
-                           client=wx.ART_FRAME_ICON, size=i_size)
-        else:
-            SmallUpArrow = wx.BitmapFromImage(getSmallUpArrowImage())            
-            SmallDnArrow = wx.BitmapFromImage(getSmallDnArrowImage())            
+        SmallUpArrow = wx.BitmapFromImage(getSmallUpArrowImage())            
+        SmallDnArrow = wx.BitmapFromImage(getSmallDnArrowImage())            
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
