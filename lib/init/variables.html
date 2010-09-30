@@ -23,10 +23,10 @@ There are two types of variables:
 
 There are a number of <i>shell</i> environment variable groups:
 <ul>
+<li><a href="#cairo">Cairo driver</a></li>
 <li><a href="#png">PNG driver</a></li>
 <li><a href="#ps">PS driver (PostScript)</a></li>
 <li><a href="#html">HTMLMAP driver</a></li>
-<!--<li><a href="#cairo">Cairo driver</a></li>-->
 <li><a href="#dirrend">variables for direct rendering</a></li>
 <li><a href="#internal">variables for internal use</a></li>
 </ul>
@@ -275,124 +275,46 @@ text
     Set to any value to disable the use of GLX Pixmaps.</dd>
 </dl>
 
+<a name="cairo"></a>
+<h3>List of selected GRASS Cairo driver environment variables</h3>
+
+<blockquote>
+[ These variables control the function of the Cairo driver. ]
+</blockquote>
+
+See <a href="cairodriver.html">Cairo driver</a> manual page for detailed
+list of the variables.
+
 <a name="png"></a>
 <h3>List of selected GRASS PNG driver environment variables</h3>
 
 <blockquote>
-[ These variables control the function of the PNG driver ]
+[ These variables control the function of the PNG driver. ]
 </blockquote>
 
 See <a href="pngdriver.html">PNG driver</a> manual page for detailed
 list of the variables.
 
-<!--
-    2008/03 -- -- variables are described in PNG driver manual
-   page. The link should be enough here.
-
-   <P></P>
-
-<p>GRASS_PNGFILE
-  <br>&nbsp; name of PNG output file. If it ends with ".ppm" a PPM file will be created.
-  
-<p>GRASS_WIDTH
-  <br>&nbsp; defines the width of GRASS monitor, see also GRASS_HEIGHT
-  
-<p>GRASS_HEIGHT
-  <br>&nbsp; defines the height of GRASS monitor, see also GRASS_WIDTH
-  
-<p>GRASS_BACKGROUNDCOLOR
-  <br>&nbsp; defines the background color of the image created by the PNG driver
-  
-<p>GRASS_TRANSPARENT
-  <br>&nbsp; if "TRUE", the image created by the PNG driver will have a
-  transparent background
-  
-<p>GRASS_PNG_COMPRESSION
-  <br>&nbsp; compression level of PNG files (0 = none, 1 = fastest, 9 = best)
-  
-<p>GRASS_TRUECOLOR
-  <br>&nbsp; if "TRUE", the PNG driver generates a true-color image
-  
-<p>GRASS_PNG_AUTO_WRITE
-  <br>&nbsp; tells the PNG driver to write the image to a file whenever a
-  client disconnects, rather than waiting until you stop the monitor
-  
-<p>GRASS_PNG_READ
-  <br>&nbsp; if "TRUE", the PNG driver will initialize the image from
-  the contents of $GRASS_PNGFILE
-  
-<p>GRASS_PNG_MAPPED
-  <br>&nbsp; if "TRUE", the PNG driver will map $GRASS_PNGFILE as its framebuffer,
-     rather than using memory; this only works with BMP files
-  -->
-
 <a name="ps"></a>
 <h3>List of selected GRASS PS driver environment variables</h3>
 
 <blockquote>
-[ These variables control the function of the PS driver ]
+[ These variables control the function of the PS driver. ]
 </blockquote>
 
 See <a href="psdriver.html">PS driver</a> manual page for detailed
 list of the variables.
 
-<!--
-    2008/03 -- -- variables are described in PS driver manual
-   page. The link should be enough here.
-
-<P></P>
-
-<p>GRASS_PSFILE
-<br>&nbsp; name of output file. If it ends with ".eps" an EPS file
-will be created.
-
-<p>GRASS_PAPER <br>&nbsp; sets the screen dimensions and margins to
-fit a standard paper size, see also GRASS_WIDTH, GRASS_HEIGHT.
-
-<p>GRASS_WIDTH
-<br>&nbsp; defines the width of the screen, see also GRASS_HEIGHT
-
-<p>GRASS_HEIGHT
-<br>&nbsp; defines the height of the screen, see also GRASS_WIDTH
-
-<p>GRASS_TRUECOLOR
-<br>&nbsp; if "TRUE", the PS driver generates color output, otherwise
-monochrome.
-
-<p>GRASS_LANDSCAPE
-<br>&nbsp; if "TRUE", the screen is rotated 90 degrees
-counter-clockwise so that a "landscape" screen fits better on
-"portrait" paper.
-
-<p>GRASS_PS_HEADER
-<br>&nbsp; if "FALSE", the output is appended to any existing file,
-and no prolog or setup sections are generated.
-
-<p>GRASS_PS_TRAILER
-<br>&nbsp; if "FALSE", no trailer section is generated.
--->
-
 <a name="html"></a>
 <h3>List of selected HTMLMAP driver environment variables</h3>
 
 <blockquote>
-[ These variables control the function of the HTMLMAP driver ]
+[ These variables control the function of the HTMLMAP driver. ]
 </blockquote>
 
-See <a href="htmlmapdriver.html">HTMLMAP driver</a> manual page for
+See <a href="htmldriver.html">HTMLMAP driver</a> manual page for
 detailed list of the variables.
 
-<!--
-<a name="cairo"></a>
-<h3>List of selected Cairo driver environment variables</h3>
-
-<blockquote>
-[ These variables control the function of the Cairo driver ]
-</blockquote>
-
-See <a href="cairodriver.html">Cairo driver</a> manual page for
-detailed list of the variables.
--->
 <a name="dirrend"></a>
 <h3>List of selected GRASS environment variables for direct rendering</h3>
 <blockquote>
