@@ -677,8 +677,8 @@ class GMConsole(wx.SplitterWindow):
         
         if event.aborted:
             # Thread aborted (using our convention of None return)
-            self.WriteLog(_('Please note that the data are left in incosistent stage '
-                            'and can be corrupted'), self.cmd_output.StyleWarning)
+            self.WriteLog(_('Please note that the data are left in inconsistent state '
+                            'and may be corrupted'), self.cmd_output.StyleWarning)
             self.WriteCmdLog('(%s) %s (%d sec)' % (str(time.ctime()),
                                                    _('Command aborted'),
                                                    (time.time() - event.time)))
