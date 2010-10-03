@@ -1245,10 +1245,6 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         if self.CheckGCPcount():
             # calculate RMS
             self.RMSError(self.xygroup, self.gr_order)
-        else:
-            # draw GCPs (source and target)
-            sourceMapWin.UpdateMap(render=False, renderVector=False)
-            targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def ReloadGCPs(self, event):
         """!Reload data from file"""
@@ -1268,6 +1264,13 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
         self.list.LoadData()
         self.itemDataMap = self.mapcoordlist
+
+        # draw GCPs (source and target)
+        sourceMapWin = self.SrcMapWindow
+        sourceMapWin.UpdateMap(render=False, renderVector=False)
+        if self.show_target:
+            targetMapWin = self.TgtMapWindow
+            targetMapWin.UpdateMap(render=False, renderVector=False)
     
     def OnFocus(self, event):
         # self.grwiz.SwitchEnv('source')
@@ -1278,6 +1281,12 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         RMS button handler
         """
         self.RMSError(self.xygroup,self.gr_order)
+
+        sourceMapWin = self.SrcMapWindow
+        sourceMapWin.UpdateMap(render=False, renderVector=False)
+        if self.show_target:
+            targetMapWin = self.TgtMapWindow
+            targetMapWin.UpdateMap(render=False, renderVector=False)
         
     def CheckGCPcount(self, msg=False):
         """
@@ -1641,12 +1650,6 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         self.fwd_rmserror = round((sumsq_fwd_err/GCPcount)**0.5,4)
         self.bkw_rmserror = round((sumsq_bkw_err/GCPcount)**0.5,4)
         self.list.ResizeColumns()
-
-        sourceMapWin = self.SrcMapWindow
-        sourceMapWin.UpdateMap(render=False, renderVector=False)
-        if self.show_target:
-            targetMapWin = self.TgtMapWindow
-            targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def GetNewExtend(self, region, map = None):
 
