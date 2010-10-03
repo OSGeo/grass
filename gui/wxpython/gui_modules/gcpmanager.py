@@ -1265,6 +1265,10 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         self.list.LoadData()
         self.itemDataMap = self.mapcoordlist
 
+        if self._col != -1:
+            self.list.ClearColumnImage(self._col)
+        self._colSortFlag = [1] * self.list.GetColumnCount()
+
         # draw GCPs (source and target)
         sourceMapWin = self.SrcMapWindow
         sourceMapWin.UpdateMap(render=False, renderVector=False)
