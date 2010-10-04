@@ -99,7 +99,7 @@ class GMFrame(wx.Frame):
     """
     def __init__(self, parent, id = wx.ID_ANY, title = _("GRASS GIS Layer Manager"),
                  workspace = None,
-                 size = (575, 450), style = wx.DEFAULT_FRAME_STYLE, **kwargs):
+                 size = (600, 450), style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         self.parent    = parent
         self.baseTitle = title
         self.iconsize  = (16, 16)

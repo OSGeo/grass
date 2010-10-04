@@ -1046,7 +1046,7 @@ class ImportDialog(wx.Dialog):
         """!Add imported/linked layers into layer tree"""
         self.commandId += 1
         
-        if not self.add.IsChecked():
+        if not self.add.IsChecked() or returncode != 0:
             return
         
         maptree = self.parent.curr_page.maptree
@@ -1061,8 +1061,8 @@ class ImportDialog(wx.Dialog):
         if self.importType == 'gdal':
             cmd = ['d.rast',
                    'map=%s' % name]
-            if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
-                cmd.append('-n')
+            if UserSettings.Get(group='cmd', key='rasterOverlay', subkey='enabled'):
+                cmd.append('-o')
                 
             item = maptree.AddLayer(ltype='raster',
                                     lname=name,
@@ -1103,7 +1103,6 @@ class GdalImportDialog(ImportDialog):
         if not link:
             self.overrideCheck = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                              label=_("Override projection (use location's projection)"))
-            self.overrideCheck.SetValue(True)
         
         if link:
             self.add.SetLabel(_("Add linked layers into layer tree"))
@@ -1249,11 +1248,10 @@ class DxfImportDialog(ImportDialog):
             self.btn_run.Enable(False)
         
 class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
-                 listmix.CheckListCtrlMixin):
-#                 listmix.CheckListCtrlMixin, listmix.TextEditMixin):
+                 listmix.CheckListCtrlMixin, listmix.TextEditMixin):
     """!List of layers to be imported (dxf, shp...)"""
-    def __init__(self, parent, pos=wx.DefaultPosition,
-                 log=None):
+    def __init__(self, parent, pos = wx.DefaultPosition,
+                 log = None):
         self.parent = parent
         
         wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
@@ -1263,8 +1261,8 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
         # setup mixins
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-        # listmix.TextEditMixin.__init__(self)
-        
+        listmix.TextEditMixin.__init__(self)
+
         self.InsertColumn(0, _('Layer'))
         self.InsertColumn(1, _('Layer name'))
         self.InsertColumn(2, _('Name for GRASS map'))
