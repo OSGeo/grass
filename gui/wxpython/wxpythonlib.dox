@@ -300,7 +300,6 @@ available in GRASS 5 and GRASS 6.
 - gui_modules/nviz.py
 
 - gui_modules/nviz_tools.py
-
  - gui_modules::nviz_tools::NvizToolWindow
  - gui_modules::nviz_tools::PositionWindow
  - gui_modules::nviz_tools::ViewPositionWindow
