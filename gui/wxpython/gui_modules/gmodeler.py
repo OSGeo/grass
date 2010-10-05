@@ -991,7 +991,7 @@ class ModelFrame(wx.Frame):
         if params.has_key(name):
             item.SetParams(paramsOrig)
         
-    def OnDone(self, returncode):
+    def OnDone(self, cmd, returncode):
         """!Computation finished"""
         self.SetStatusText('', 0)
         

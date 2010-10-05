@@ -128,7 +128,8 @@ class CmdThread(threading.Thread):
                     self.requestCmdColor = callable(*argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
             
-            event = wxCmdDone(aborted = aborted,
+            event = wxCmdDone(cmd = args[0],
+                              aborted = aborted,
                               returncode = returncode,
                               time = requestTime,
                               pid = requestId,
@@ -697,7 +698,7 @@ class GMConsole(wx.SplitterWindow):
             self.btn_abort.Enable(False)
         
         if event.onDone:
-            event.onDone(returncode = event.returncode)
+            event.onDone(cmd = event.cmd, returncode = event.returncode)
         
         self.console_progressbar.SetValue(0) # reset progress bar on '0%'
 
