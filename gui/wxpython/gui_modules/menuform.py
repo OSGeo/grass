@@ -876,6 +876,21 @@ class mainFrame(wx.Frame):
         
         event.Skip()
 
+    def OnDone(self, cmd, returncode):
+        """!This function is launched from OnRun() when command is
+        finished
+
+        @param returncode command's return code (0 for success)
+        """
+        if self.parent.GetName() != 'LayerTree' or \
+                returncode != 0:
+            return
+        
+        if cmd[0] in ('r.colors'):
+            display = self.parent.GetMapDisplay()
+            if display:
+                display.GetWindow().UpdateMap(render = True)
+        
     def OnOK(self, event):
         """!OK button pressed"""
         cmd = self.OnApply(event)
@@ -916,7 +931,7 @@ class mainFrame(wx.Frame):
             try:
                 if self.task.path:
                     cmd[0] = self.task.path # full path
-                self.goutput.RunCmd(cmd)
+                self.goutput.RunCmd(cmd, onDone = self.OnDone)
             except AttributeError, e:
                 print >> sys.stderr, "%s: Propably not running in wxgui.py session?" % (e)
                 print >> sys.stderr, "parent window is: %s" % (str(self.parent))

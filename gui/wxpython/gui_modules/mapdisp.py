@@ -1337,9 +1337,9 @@ class MapFrame(wx.Frame):
             if vectstr:
                 gcmd.RunCommand(vcmd)
         
-    def _QueryMapDone(self, returncode):
+    def _QueryMapDone(self, cmd, returncode):
         """!Restore settings after querying (restore GRASS_REGION)
-
+        
         @param returncode command return code
         """
         if hasattr(self, "tmpreg"):
