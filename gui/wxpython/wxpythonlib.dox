@@ -1,4 +1,4 @@
-/*! \mainpage wxpythonlib GRASS WxPython-based Graphical User Interface
+/*! \page wxpythonlib GRASS WxPython-based Graphical User Interface
 
 The GUI (Graphical User Interface) is written in the Python
 programming language using <a
