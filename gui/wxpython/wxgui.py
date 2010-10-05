@@ -1133,7 +1133,7 @@ class GMFrame(wx.Frame):
         """!Add raster map layer"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
         
         self.AddRaster(event)
 
@@ -1141,7 +1141,7 @@ class GMFrame(wx.Frame):
         """!Add 3D raster map layer"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
         
         self.AddRaster3D(event)
         
@@ -1149,7 +1149,7 @@ class GMFrame(wx.Frame):
         """!Add raster menu"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
         
         point = wx.GetMousePosition()
         rastmenu = wx.Menu()
@@ -1191,7 +1191,7 @@ class GMFrame(wx.Frame):
         """!Add vector map layer"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
         
         self.AddVector(event)
         
@@ -1199,7 +1199,7 @@ class GMFrame(wx.Frame):
         """!Add vector menu"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
 
         point = wx.GetMousePosition()
         vectmenu = wx.Menu()
@@ -1226,7 +1226,7 @@ class GMFrame(wx.Frame):
         """!Add decoration overlay menu""" 
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
 
         point = wx.GetMousePosition()
         ovlmenu = wx.Menu()
@@ -1317,7 +1317,7 @@ class GMFrame(wx.Frame):
         """!Add command line layer"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
 
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('command')
@@ -1329,7 +1329,7 @@ class GMFrame(wx.Frame):
         """!Add layer group"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
 
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('group')
@@ -1356,7 +1356,7 @@ class GMFrame(wx.Frame):
         """!Add layer vector labels"""
         # start new map display if no display is available
         if not self.curr_page:
-            self.NewDisplay(show=False)
+            self.NewDisplay(show = True)
 
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('labels')
