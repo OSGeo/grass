@@ -20,12 +20,13 @@ such GRASS programs as
 
 To rescale an elevation raster map layer with category
 values ranging from 1090 meters to 1800 meters into the
-range 0-255, the following command line could be used:
+range 0-255, the following command line could be used
+(without the <em>from</em> parameter, the full value range will 
+be used):
 
-<dl>
-<dd>
-<b>r.rescale input=</b>elevation <b>from=</b>1090,1800 <b>output=</b>elevation.255 <b>to=</b>0,255
-</dl>
+<div class="code"><pre>
+r.rescale input=elevation from=1090,1800 output=elevation.255 to=0,255
+</pre></div>
 
 <h2>NOTES</h2>
 
@@ -49,6 +50,7 @@ selected as the input range.
 <em><a href="r.info.html">r.info</a></em>,
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>,
 <em><a href="r.reclass.html">r.reclass</a></em>,
+<em><a href="r.rescale.eq.html">r.rescale.eq</a></em>,
 <em><a href="r.report.html">r.report</a></em>,
 <em><a href="r.resample.html">r.resample</a></em>,
 <em><a href="r.stats.html">r.stats</a></em>
