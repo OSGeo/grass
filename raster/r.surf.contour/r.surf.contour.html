@@ -34,7 +34,7 @@ interpolates from the uphill and downhill values by the true distance.
 
 <dd>Name of an existing raster map that contains a set of 
 initial category values (i.e., some cells contain known elevation
-values (denoting contours) while the rest contain NULL values or zeros (0)).
+values (denoting contours) while the rest contain NULL values).
 
 <dt><b>output=</b><em>name</em> 
 
@@ -42,6 +42,10 @@ values (denoting contours) while the rest contain NULL values or zeros (0)).
 a smooth (e.g., elevation) surface generated from
 the known category values in the input raster map layer.
 </dl>
+
+<p>
+An existing MASK raster map is respected for both reading <em>input</em>
+and writing <em>output</em>.
 
 <h2>NOTES</h2>
 
@@ -64,22 +68,6 @@ slight anomalies may occur.  The speed of <em>r.surf.contour</em> is dependent
 on how far "apart" the contour lines are from each other (as measured in
 raster cells).  Since a flood fill algorithm is used, the program's running
 time will grow exponentially with the distance between contour lines.
-
-<h2>BUGS</h2>
-
-<em>r.surf.contour</em> has not been fully updated for NULL support and still
-considers a value of "<tt>0</tt>" to be NULL. Thus any contour lines at 0 
-elevation (e.g. the coastline) will be ignored. In such cases converting any
-0 values in the input map to -1 with <em>r.mapcalc</em> may be a suitable
-work-around.
-<p>
-Currently <em>r.surf.contour</em> will only produce CELL (integer) map output.
-If you would like a finer grade output map (i.e. floating point) it is
-recommended to multiply the <b>input</b> map by 1000 (for example) using
-<em>r.mapcalc</em>, then divide the resultant <em>r.surf.contour</em> 
-<b>output</b> map by 1000.0, again with <em>r.mapcalc</em>.
-<p>
-Volunteers are sought to remedy both these issues.
 
 <h2>SEE ALSO</h2>
 

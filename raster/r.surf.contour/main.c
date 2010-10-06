@@ -9,7 +9,8 @@
  *               Huidae Cho <grass4u gmail.com>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>, 
- *               Jan-Oliver Wagner <jan intevation.de>
+ *               Jan-Oliver Wagner <jan intevation.de>,
+ *               Markus Metz
  * PURPOSE:      Interpolates a raster elevation map from a rasterized
  *               contour map
  * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
