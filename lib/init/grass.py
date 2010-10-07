@@ -52,6 +52,9 @@ location = None
 create_new = None
 grass_gui = None
 
+def warning(text):
+    sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
+
 def try_remove(path):
     try:
 	os.remove(path)
