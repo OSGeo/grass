@@ -3,11 +3,16 @@
 <em>r.univar</em> calculates the univariate statistics of a raster map.
 This includes the number of cells counted, minimum and maximum cell values,
 range, arithmetic mean, population variance, standard deviation, and 
-coefficient of variation.
+coefficient of variation. Statistics are calculated separately for every
+category/zone found in the <b>zones</b> input map if given.
 If the <b>-e</b> extended statistics flag is given the 1st quartile, median,
 3rd quartile, and given <b>percentile</b> are calculated.
 If the <b>-g</b> flag is given the results are presented in a format suitable
 for use in a shell script.
+If the <b>-t</b> flag is given the results are presented in tabular format
+with "|" as field separator. The table can immediately be converted to a
+vector attribute table which can then be linked to a vector, e.g. the vector
+that was rasterized to create the <b>zones</b> input raster.
 
 <h2>NOTES</h2>
 
@@ -20,22 +25,91 @@ extended statistics flag is used with a very large region setting. If the
 region is too large the module should exit gracefully with a memory allocation
 error. Basic statistics can be calculated using any size input region.
 <p>
-The <em>r.quantile</em> module will be significantly more efficient for
-calculating percentiles with large maps.
+Without a <b>zones</b> input raster, the <em>r.quantile</em> module will
+be significantly more efficient for calculating percentiles with large maps.
+
+<h2>EXAMPLE</h2>
+
+Calculate the raster statistics for zones within a vector map coverage
+and upload the results for mean, min and max back to the vector map.
+
+<div class="code"><pre>
+#### set the raster region to match the map
+g.region vect=fields res=10 -ap
+
+#### create rasterized version of vector map
+v.to.rast in=fields out=fields.10m use=cat type=area labelcolumn=label
+r.colors fields.10m color=random
+
+#### perform analysis
+r.univar -t map=elevation.10m zones=fields.10m | \
+  cut -f1,5,6,8 -d'|' > fields_stats.txt
+
+
+#### populate vector DB with stats
+
+# create working copy of vector map
+g.copy vect=fields,fields_stats
+
+# create new attribute columns to hold output
+v.db.addcol map=fields_stats \
+  columns='mean_elev DOUBLE PRECISION, min_elev DOUBLE PRECISION, max_elev DOUBLE PRECISION'
+
+# create SQL command file, and execute it
+sed -e '1d' fields_stats.txt | awk -F'|' \
+  '{print "UPDATE fields_stats SET min_elev = "$2", max_elev = "$3", \
+  mean_elev = "$4" WHERE cat = "$1";"}' \
+   > fields_stats_sqlcmd.txt
+
+db.execute input=fields_stats_sqlcmd.txt
+<!--
+
+###### alternate method with db.in.ogr:  (needs work) ######
+
+#### convert text file table to a database table
+# not safe for commas in the label
+tr '|' ',' < fields_stats.txt > fields_stats.csv
+echo '"Integer","String","Real","Real","Real"' > fields_stats.csvt
+
+# import table
+db.in.ogr dsn=fields_stats.csv output=fields_data
+
+# view table
+db.select fields_data
+
+# remove temporary files
+rm fields_stats.csv fields_stats.csvt fields_stats.txt
+
+
+#### populate vector DB with stats
+
+# create working copy of vector map
+g.copy vect=fields,fields_stats
+
+# create new attribute columns to hold output
+v.db.addcol map=fields_stats \
+  columns='mean_elev DOUBLE PRECISION, min_elev DOUBLE PRECISION, max_elev DOUBLE PRECISION'
+
+# perform DB step  (broken)
+## how to automatically collate by key column, ie copy between tables?
+## SELECT INTO? JOIN?
+echo "INSERT INTO fields_stats (mean_elev,min_elev,max_elev) SELECT mean,min,max FROM fields_data" | db.execute
+-->
+
+#### view completed table
+v.db.select fields_stats
+</pre></div>
 
 
 <h2>TODO</h2>
 
 <i>mode, skewness, kurtosis</i>
 
-
-
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="g.region.html">g.region</a><br>
 <a href="r3.univar.html">r3.univar</a><br>
-<a href="r.univar.sh.html">r.univar.sh</a><br>
 <a href="r.average.html">r.average</a><br>
 <a href="r.median.html">r.median</a><br>
 <a href="r.mode.html">r.mode</a><br>
@@ -43,16 +117,17 @@ calculating percentiles with large maps.
 <a href="r.sum.html">r.sum</a><br>
 <a href="r.series.html">r.series</a><br>
 <a href="r.stats.html">r.stats</a><br>
+<a href="v.rast.stats.html">v.rast.stats</a><br>
 <a href="r.statistics.html">r.statistics</a><br>
 <a href="v.univar.html">v.univar</a><br>
-<a href="v.univar.sh.html">v.univar.sh</a><br>
 </em>
 
 
 <h2>AUTHORS</h2>
 
 Hamish Bowman, Otago University, New Zealand<br>
-Extended statistics by Martin Landa
+Extended statistics by Martin Landa<br>
+Zonal loop by Markus Metz
 
 <p>
 <i>Last changed: $Date$</i>
