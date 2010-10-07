@@ -437,13 +437,19 @@ class GMConsole(wx.SplitterWindow):
         
         # update history file
         env = grass.gisenv()
-        fileHistory = open(os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'],
-                                        '.bash_history'), 'a')
-        cmdString = ' '.join(cmdlist)
         try:
-            fileHistory.write(cmdString + '\n')
-        finally:
-            fileHistory.close()
+            fileHistory = open(os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'],
+                                            '.bash_history'), 'a')
+        except IOError, e:
+            self.WriteError(str(e))
+            fileHistory = None
+
+        cmdString = ' '.join(cmdlist)
+        if fileHistory:
+            try:
+                fileHistory.write(cmdString + '\n')
+            finally:
+                fileHistory.close()
         
         # update history items
         if self.parent.GetName() == 'LayerManager':
