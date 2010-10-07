@@ -8,6 +8,7 @@
  *              Based on r.univar from Hamish Bowman, University of Otago, New Zealand
  *              and Martin Landa
  *              heapsort code from http://de.wikipedia.org/wiki/Heapsort
+ *              Zonal stats: Markus Metz
  *
  *      This program is free software under the GNU General Public
  *      License (>=v2). Read the file COPYING that comes with GRASS
@@ -110,10 +111,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /*Set the defaults */
+    /* Set the defaults */
     G3d_initDefaults();
 
-    /*get the current region */
+    /* get the current region */
     G3d_getWindow(&region);
 
     cols = region.cols;
@@ -138,10 +139,10 @@ int main(int argc, char *argv[])
     if (strcmp(zone_info.sep, "comma") == 0)
 	zone_info.sep = ",";
 
-    dmin = 0.0 / 0.0;	/*set to nan as default */
-    dmax = 0.0 / 0.0;	/*set to nan as default */
-    zone_info.min = 0.0 / 0.0;	/*set to nan as default */
-    zone_info.max = 0.0 / 0.0;	/*set to nan as default */
+    dmin = 0.0 / 0.0;	/* set to nan as default */
+    dmax = 0.0 / 0.0;	/* set to nan as default */
+    zone_info.min = 0.0 / 0.0;	/* set to nan as default */
+    zone_info.max = 0.0 / 0.0;	/* set to nan as default */
     zone_info.n_zones = 0;
 
     /* open 3D zoning raster with default region */
@@ -185,7 +186,7 @@ int main(int argc, char *argv[])
 	use_zone = 1;
     }
 
-    /*Open 3D input raster with default region */
+    /* Open 3D input raster with default region */
     infile = param.inputfile->answer;
 
     if (NULL == G_find_grid3(infile, ""))
@@ -211,7 +212,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    for (z = 0; z < depths; z++) {	/*From the bottom to the top */
+    for (z = 0; z < depths; z++) {	/* From the bottom to the top */
 	if (!(param.shell_style->answer))
 	    G_percent(z, depths - 1, 10);
 	for (y = 0; y < rows; y++) {

@@ -113,7 +113,7 @@ int print_stats(univar_stat * stats)
 	char sum_str[100];
 	double mean, variance, stdev, var_coef;
 
-	/*for extendet stats */
+	/* for extendet stats */
 	double quartile_25 = 0.0, quartile_75 = 0.0, *quartile_perc;
 	double median = 0.0;
 	unsigned int i;
@@ -349,7 +349,7 @@ int print_stats_table(univar_stat * stats)
 	char sum_str[100];
 	double mean, variance, stdev, var_coef;
 
-	/*for extendet stats */
+	/* for extendet stats */
 	double quartile_25 = 0.0, quartile_75 = 0.0, *quartile_perc;
 	double median = 0.0;
 	int qpos_25, qpos_75, *qpos_perc;

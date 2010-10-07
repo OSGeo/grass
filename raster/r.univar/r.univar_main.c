@@ -6,6 +6,7 @@
  *   Copyright (C) 2004-2006 by the GRASS Development Team
  *   Author(s): Hamish Bowman, University of Otago, New Zealand
  *              Extended stats: Martin Landa
+ *              Zonal stats: Markus Metz
  *
  *      This program is free software under the GNU General Public
  *      License (>=v2). Read the file COPYING that comes with GRASS
@@ -125,8 +126,8 @@ int main(int argc, char *argv[])
     if (strcmp(zone_info.sep, "comma") == 0)
 	zone_info.sep = ",";
 
-    zone_info.min = 0.0 / 0.0;	/*set to nan as default */
-    zone_info.max = 0.0 / 0.0;	/*set to nan as default */
+    zone_info.min = 0.0 / 0.0;	/* set to nan as default */
+    zone_info.max = 0.0 / 0.0;	/* set to nan as default */
     zone_info.n_zones = 0;
 
     fdz = -1;
