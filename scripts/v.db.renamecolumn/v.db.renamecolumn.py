@@ -46,7 +46,7 @@
 #% type: string
 #% description: Old and new name of the column (old,new)
 #% required : yes
-#% multiple: yes
+#% multiple: no
 #% key_desc: oldcol,newcol
 #%end
 
