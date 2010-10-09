@@ -564,7 +564,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         ps.stdin = None
     
     stdout, stderr = ps.communicate()
-
+    
     ret = ps.returncode
         
     if ret != 0 and parent: 

@@ -61,7 +61,7 @@ class Layer(object):
     """
     def __init__(self, type, cmd, name=None,
                  active=True, hidden=False, opacity=1.0):
-        """
+        """!
         @todo pass cmd as tuple instead of list
         
         @param type layer type ('raster', 'vector', 'overlay', 'command', etc.)
@@ -80,7 +80,7 @@ class Layer(object):
             for c in cmd:
                 self.cmd.append(utils.CmdToTuple(c))
         else:
-            self.cmd  = utils.CmdToTuple(cmd)
+            self.cmd = utils.CmdToTuple(cmd)
         
         self.active  = active
         self.hidden  = hidden
@@ -936,7 +936,6 @@ class Map(object):
         # l_opacity must be <0;1>
         if l_opacity < 0: l_opacity = 0
         elif l_opacity > 1: l_opacity = 1
-        
         layer = MapLayer(type=type, name=name, cmd=command,
                          active=l_active, hidden=l_hidden, opacity=l_opacity)
         

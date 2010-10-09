@@ -2732,8 +2732,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         
     def ZoomToMap(self, layers = None, ignoreNulls = False, render = True):
-        """!
-        Set display extents to match selected raster
+        """!Set display extents to match selected raster
         or vector map(s).
 
         @param layer list of layers to be zoom to
@@ -2754,7 +2753,7 @@ class BufferedWindow(MapWindow, wx.Window):
         for l in layers:
             # only raster/vector layers are currently supported
             if l.type == 'raster':
-                rast.append(l.name)
+                rast.append(l.GetName())
             elif l.type == 'vector':
                 digitToolbar = self.parent.toolbars['vdigit']
                 if digitToolbar and digitToolbar.GetLayer() == l:
