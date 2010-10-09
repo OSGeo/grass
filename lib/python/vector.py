@@ -73,16 +73,16 @@ def vector_db(map, **args):
 def vector_layer_db(map, layer):
     """!Return the database connection details for a vector map layer.
     If db connection for given layer is not defined, fatal() is called.
-
+    
     @param map map name
     @param layer layer number
-
+    
     @return parsed output
     """
     try:
         f = vector_db(map)[int(layer)]
     except KeyError:
-	grass.fatal("Database connection not defined for layer %s" % layer)
+	fatal("Database connection not defined for layer %s" % layer)
 
     return f
 
