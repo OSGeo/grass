@@ -1855,6 +1855,13 @@
 	      <command>v.build</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Rebuild topology on all vector maps</label>
+	      <help>Rebuilds topology on all vector maps in the current mapset..</help>
+	      <keywords>vector,topology</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.build.all</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Clean vector map</label>
 	      <help>Toolset for cleaning topology of vector map.</help>
 	      <keywords>vector,topology</keywords>

@@ -255,6 +255,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupID13 = wx.NewId()
             self.popupID14 = wx.NewId()
             self.popupID15 = wx.NewId()
+            self.popupID16 = wx.NewId()
 
         self.popupMenu = wx.Menu()
 
@@ -324,10 +325,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                     internal=True) == layer.GetName():
                     self.popupMenu.Check(self.popupID14, True)
             
+            self.popupMenu.Append(self.popupID16, text=_("Rebuild topology"))
+            self.Bind(wx.EVT_MENU, self.OnTopology, id=self.popupID16)
+
             if layer.GetMapset() != grass.gisenv()['MAPSET']:
                 # only vector map in current mapset can be edited
                 self.popupMenu.Enable (self.popupID5, False)
                 self.popupMenu.Enable (self.popupID6, False)
+                self.popupMenu.Enable (self.popupID16, False)
             elif digitToolbar and digitToolbar.GetLayer():
                 # vector map already edited
                 vdigitLayer = digitToolbar.GetLayer()
@@ -340,6 +345,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.popupMenu.Enable(self.popupID1, False)
                     # disable 'bgmap'
                     self.popupMenu.Enable(self.popupID14, False)
+                    # disable 'topology'
+                    self.popupMenu.Enable (self.popupID16, False)
                 else:
                     # disable 'start editing'
                     self.popupMenu.Enable(self.popupID5, False)
@@ -388,6 +395,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()
 
+    def OnTopology(self, event):
+        """!Rebuild topology of selected vector map"""
+        mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
+        cmd = ['v.build',
+               'map=%s' % mapLayer.GetName()]
+        self.lmgr.goutput.RunCmd(cmd, switchPage = True)
+        
     def OnMetadata(self, event):
         """!Print metadata of raster/vector map layer
         TODO: Dialog to modify metadata
