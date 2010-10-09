@@ -30,6 +30,8 @@
 int main(int argc, char **argv)
 {
     char *input;
+    const char *driver_default, *database_default;
+    
     struct GModule *module;
     struct Option *inopt, *dbdriver, *dbdatabase, *dbtable, *field_opt,
 	*dbkey, *sep_opt;
@@ -56,11 +58,15 @@ int main(int argc, char **argv)
 
     dbdriver = G_define_standard_option(G_OPT_DB_DRIVER);
     dbdriver->options = db_list_drivers();
-    dbdriver->answer = G_store(db_get_default_driver_name());
+    driver_default = db_get_default_driver_name();
+    if (driver_default)
+	dbdriver->answer = G_store(driver_default);
     dbdriver->guisection = _("Settings");
 
     dbdatabase = G_define_standard_option(G_OPT_DB_DATABASE);
-    dbdatabase->answer = G_store(db_get_default_database_name());
+    database_default = db_get_default_database_name();
+    if (database_default)
+	dbdatabase->answer = G_store(database_default);
     dbdatabase->guisection = _("Settings");
 
     dbtable = G_define_standard_option(G_OPT_DB_TABLE);
