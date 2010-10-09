@@ -443,7 +443,7 @@ class GMConsole(wx.SplitterWindow):
         except IOError, e:
             self.WriteError(str(e))
             fileHistory = None
-
+        
         cmdString = ' '.join(cmdlist)
         if fileHistory:
             try:
@@ -521,11 +521,18 @@ class GMConsole(wx.SplitterWindow):
                     tmpreg = os.getenv("GRASS_REGION")
                     if os.environ.has_key("GRASS_REGION"):
                         del os.environ["GRASS_REGION"]
-                
-                if len(cmdlist) == 1 and cmdlist[0] not in ('v.krige'):
+
+                if len(cmdlist) == 1:
                     import menuform
+                    task = menuform.GUI().ParseInterface(cmdlist)
+                    if not task.has_required():
+                        task = None # run command
+                else:
+                    task = None
+                
+                if task and cmdlist[0] not in ('v.krige'):
                     # process GRASS command without argument
-                    menuform.GUI().ParseCommand(cmdlist, parentframe=self)
+                    menuform.GUI().ParseCommand(cmdlist, parentframe = self)
                 else:
                     # process GRASS command with argument
                     self.cmdThread.RunCmd(GrassCmd,

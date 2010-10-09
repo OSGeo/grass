@@ -160,9 +160,9 @@ class MapsetDialog(ElementDialog):
                  location = None, id =  wx.ID_ANY):
         ElementDialog.__init__(self, parent, title, label = _("Name of mapset:"))
         if location:
-            self.SetTitle(self.GetTitle() + '<%s>' % location)
+            self.SetTitle(self.GetTitle() + ' <%s>' % location)
         else:
-            self.SetTitle(self.GetTitle() + '<%s>' % grass.gisenv()['LOCATION_NAME'])
+            self.SetTitle(self.GetTitle() + ' <%s>' % grass.gisenv()['LOCATION_NAME'])
         
         self.element = gselect.MapsetSelect(parent = self.panel, id = wx.ID_ANY,
                                             size = globalvar.DIALOG_GSELECT_SIZE)

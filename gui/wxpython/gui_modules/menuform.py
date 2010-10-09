@@ -356,7 +356,7 @@ class grassTask:
     parser and use by the interface constructor.
 
     Use as either grassTask() for empty definition or
-    grassTask('grass.command' ) for parsed filling.
+    grassTask('grass.command') for parsed filling.
     """
     def __init__(self, grassModule = None):
         self.path = grassModule
@@ -513,6 +513,14 @@ class grassTask:
         return { 'flags'  : self.flags,
                  'params' : self.params }
     
+    def has_required(self):
+        """!Check if command has at least one required paramater"""
+        for p in self.params:
+            if p.get('required', False) == True:
+                return True
+        
+        return False
+
 class processTask:
     """!A ElementTree handler for the --interface-description output,
     as defined in grass-interface.dtd. Extend or modify this and the
@@ -882,7 +890,7 @@ class mainFrame(wx.Frame):
 
         @param returncode command's return code (0 for success)
         """
-        if self.parent.GetName() != 'LayerTree' or \
+        if self.parent and self.parent.GetName() != 'LayerTree' or \
                 returncode != 0:
             return
         
@@ -918,24 +926,23 @@ class mainFrame(wx.Frame):
         """!Run the command"""
         cmd = self.createCmd()
         
-        if cmd == None or len(cmd) < 2:
+        if not cmd or len(cmd) < 1:
             return
-
+        
         if self.standalone or cmd[0][0:2] != "d.":
             # Send any non-display command to parent window (probably wxgui.py)
-            # put to parents
-            # switch to 'Command output'
+            # put to parents switch to 'Command output'
             if self.notebookpanel.notebook.GetSelection() != self.notebookpanel.goutputId:
                 self.notebookpanel.notebook.SetSelection(self.notebookpanel.goutputId)
             
             try:
                 if self.task.path:
                     cmd[0] = self.task.path # full path
+                
                 self.goutput.RunCmd(cmd, onDone = self.OnDone)
             except AttributeError, e:
                 print >> sys.stderr, "%s: Propably not running in wxgui.py session?" % (e)
                 print >> sys.stderr, "parent window is: %s" % (str(self.parent))
-            # Send any other command to the shell.
         else:
             gcmd.Command(cmd)
         
@@ -945,8 +952,7 @@ class mainFrame(wx.Frame):
                     self.btn_clipboard,
                     self.btn_help):
             btn.Enable(False)
-        ### self.btn_abort.Enable(True)
-
+        
     def OnAbort(self, event):
         """!Abort running command"""
         event = goutput.wxCmdAbort(aborted=True)
