@@ -160,7 +160,6 @@ class GMConsole(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent = self, id = wx.ID_ANY)
         
         # initialize variables
-        self.Map             = None
         self.parent          = parent # GMFrame | CmdPanel | ?
         if notebook:
             self._notebook = notebook
@@ -422,13 +421,6 @@ class GMConsole(wx.SplitterWindow):
         @param switchPage switch to output page
         @param onDone function to be called when command is finished
         """
-        # map display window available ?
-        try:
-            curr_disp = self.parent.curr_page.maptree.mapdisplay
-            self.Map = curr_disp.GetRender()
-        except:
-            curr_disp = None
-        
         # command given as a string ?
         try:
             cmdlist = command.strip().split(' ')
@@ -720,62 +712,68 @@ class GMConsole(wx.SplitterWindow):
         # set focus on prompt
         if self.parent.GetName() == "LayerManager":
             self.btn_abort.Enable(False)
+            if event.cmd[0] in ('r.colors'):
+                display = self.parent.GetLayerTree().GetMapDisplay()
+                if display:
+                    display.GetWindow().UpdateMap(render = True)
+        
         else:
             # updated command dialog
             dialog = self.parent.parent
 
             if hasattr(self.parent.parent, "btn_abort"):
                 dialog.btn_abort.Enable(False)
-
+            
             if hasattr(self.parent.parent, "btn_cancel"):
                 dialog.btn_cancel.Enable(True)
-
+            
             if hasattr(self.parent.parent, "btn_clipboard"):
                 dialog.btn_clipboard.Enable(True)
-
+            
             if hasattr(self.parent.parent, "btn_help"):
                 dialog.btn_help.Enable(True)
-
+            
             if hasattr(self.parent.parent, "btn_run"):
                 dialog.btn_run.Enable(True)
             
-            if event.returncode == 0 and \
-                    not event.aborted and hasattr(dialog, "addbox") and \
-                    dialog.addbox.IsChecked():
-                # add created maps into layer tree
+            if event.returncode == 0 and not event.aborted:
                 winName = self.parent.parent.parent.GetName()
                 if winName == 'LayerManager':
-                    mapTree = self.parent.parent.parent.curr_page.maptree
+                    mapTree = self.parent.parent.parent.GetLayerTree()
+                elif winName == 'LayerTree':
+                    mapTree = self.parent.parent.parent
                 else: # GMConsole
-                    mapTree = self.parent.parent.parent.parent.curr_page.maptree
+                    mapTree = self.parent.parent.parent.parent.GetLayerTree()
                 
                 cmd = dialog.notebookpanel.createCmd(ignoreErrors = True)
-                for p in dialog.task.get_options()['params']:
-                    prompt = p.get('prompt', '')
-                    if prompt in ('raster', 'vector', '3d-raster') and \
-                       p.get('age', 'old') == 'new' and \
-                       p.get('value', None):
-                        name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True, param = p.get('name', ''))
-                        
-                        if mapTree.GetMap().GetListOfLayers(l_name = name):
-                            continue
-                        
-                        if prompt == 'raster':
-                            lcmd = ['d.rast',
-                                    'map=%s' % name]
-                        else:
-                            lcmd = ['d.vect',
-                                    'map=%s' % name]
-                        mapTree.AddLayer(ltype = prompt,
-                                         lcmd = lcmd,
-                                         lname = name)
-                
+                if hasattr(dialog, "addbox") and dialog.addbox.IsChecked():
+                    # add created maps into layer tree
+                    for p in dialog.task.get_options()['params']:
+                        prompt = p.get('prompt', '')
+                        if prompt in ('raster', 'vector', '3d-raster') and \
+                                p.get('age', 'old') == 'new' and \
+                                p.get('value', None):
+                            name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True, param = p.get('name', ''))
+                            
+                            if mapTree.GetMap().GetListOfLayers(l_name = name):
+                                continue
+                            
+                            if prompt == 'raster':
+                                lcmd = ['d.rast',
+                                        'map=%s' % name]
+                            else:
+                                lcmd = ['d.vect',
+                                        'map=%s' % name]
+                            mapTree.AddLayer(ltype = prompt,
+                                             lcmd = lcmd,
+                                             lname = name)
+            
             if hasattr(dialog, "get_dcmd") and \
                     dialog.get_dcmd is None and \
                     dialog.closebox.IsChecked():
                 time.sleep(1)
                 dialog.Close()
-
+        
         event.Skip()
         
     def OnProcessPendingOutputWindowEvents(self, event):

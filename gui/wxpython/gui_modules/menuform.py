@@ -516,7 +516,7 @@ class grassTask:
     def has_required(self):
         """!Check if command has at least one required paramater"""
         for p in self.params:
-            if p.get('required', False) == True:
+            if p.get('required', 'no') == 'yes':
                 return True
         
         return False
@@ -890,12 +890,16 @@ class mainFrame(wx.Frame):
 
         @param returncode command's return code (0 for success)
         """
-        if self.parent and self.parent.GetName() != 'LayerTree' or \
+        if self.parent and self.parent.GetName() not in ('LayerTree', 'LayerManager') or \
                 returncode != 0:
             return
         
         if cmd[0] in ('r.colors'):
-            display = self.parent.GetMapDisplay()
+            if self.parent.GetName() == 'LayerTree':
+                display = self.parent.GetMapDisplay()
+            else: # Layer Manager
+                display = self.parent.GetLayerTree().GetMapDisplay()
+            
             if display:
                 display.GetWindow().UpdateMap(render = True)
         
