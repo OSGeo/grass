@@ -1,14 +1,14 @@
 """
 @package colorrules.py
 
-@brief Dialog for interactive management of raster color tables and vector
-rgb_column
+@brief Dialog for interactive management of raster color tables and
+vector rgb_column
 
 Classes:
  - ColorTable
  - BuferedWindow
 
-(C) 2008 by the GRASS Development Team
+(C) 2008, 2010 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -36,23 +36,20 @@ from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
 class ColorTable(wx.Frame):
-    def __init__(self, parent, id=wx.ID_ANY, title='',
-                 pos=wx.DefaultPosition, size=(-1, -1),
+    def __init__(self, parent, cmd, id=wx.ID_ANY, title = _("Set color table"),
                  style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
-        wx.Frame.__init__(self, parent, id, title, pos, size, style)
-        """
-        Dialog for interactively entering rules for map management
+        """!Dialog for interactively entering rules for map management
         commands
 
         @param cmd command (given as list)
         """
         self.parent = parent # GMFrame
-  
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.cmd    = cmd
         
-        # grass command
-        self.cmd = kwargs['cmd']
+        wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
+        
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         # input map to change
         self.inmap = ''
@@ -98,14 +95,7 @@ class ColorTable(wx.Frame):
             self.SetTitle(_('Create new color table for vector map'))
             self.elem = 'vector'
             crlabel = _('Enter vector attribute values or ranges (n or n1 to n2)')
-
-        #
-        # Set the size & cursor
-        #
-        self.SetClientSize(size)
-
-        ### self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
-
+        
         # top controls
         if self.cmd == 'r.colors':
             maplabel = _('Select raster map:')
@@ -195,7 +185,8 @@ class ColorTable(wx.Frame):
         
         # layout
         self.__doLayout()
-
+        self.SetMinSize(self.GetSize())
+        
         self.CentreOnScreen()
         self.Show()
         
@@ -220,7 +211,6 @@ class ColorTable(wx.Frame):
         # body & preview
         #
         bodySizer =  wx.GridBagSizer(hgap=5, vgap=5)
-
         row = 0
         bodySizer.Add(item=self.cr_label, pos=(row, 0), span=(1, 3),
                       flag=wx.ALL, border=5)
@@ -247,6 +237,7 @@ class ColorTable(wx.Frame):
         
         bodySizer.Add(item=self.preview, pos=(row, 2),
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
+        bodySizer.AddGrowableRow(row)
         bodySizer.AddGrowableCol(2)
         
         row += 1
@@ -270,7 +261,7 @@ class ColorTable(wx.Frame):
         
         sizer.Add(item=bodySizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=5)
-
+        
         sizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
                                      style=wx.LI_HORIZONTAL),
                   proportion=0,
@@ -330,29 +321,21 @@ class ColorTable(wx.Frame):
         self.cr_panel.SetupScrolling()
         
     def InitDisplay(self):
+        """!Initialize preview display, set dimensions and region
         """
-        Initialize preview display, set dimensions and region
-        """
-        #self.width, self.height = self.GetClientSize()
         self.width = self.Map.width = 400
         self.height = self.Map.height = 300
         self.Map.geom = self.width, self.height
 
     def OnErase(self, event):
-        """
-        Erase the histogram display
+        """!Erase the histogram display
         """
         self.PreviewWindow.Draw(self.HistWindow.pdc, pdctype='clear')
 
     def OnCloseWindow(self, event):
-        """
-        Window closed
+        """!Window closed
         Also remove associated rendered images
         """
-        #try:
-        #    self.propwin.Close(True)
-        #except:
-        #    pass
         self.Map.Clean()
         self.Destroy()
         
@@ -503,7 +486,10 @@ class ColorTable(wx.Frame):
         
     def OnApply(self, event):
         self.CreateColorTable()
-    
+        display = self.parent.GetLayerTree().GetMapDisplay()
+        if display:
+            display.GetWindow().UpdateMap(render = True)
+        
     def OnOK(self, event):
         self.OnApply(event)
         self.Destroy()
