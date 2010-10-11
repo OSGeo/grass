@@ -4,6 +4,7 @@
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *               David Johnson
+ *               Print color table by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
@@ -130,7 +131,7 @@ int main(int argc, char **argv)
 {
     int overwrite;
     int is_from_stdin;
-    int remove;
+    int remove, print;
     int have_colors;
     struct Colors colors, colors_tmp;
     struct Cell_stats statf;
@@ -144,7 +145,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Flag *r, *w, *l, *g, *a, *e, *n;
+	struct Flag *r, *w, *l, *g, *a, *e, *n, *p;
     } flag;
     struct
     {
@@ -226,6 +227,10 @@ int main(int argc, char **argv)
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Define");
 
+    flag.p = G_define_flag();
+    flag.p->key = 'p';
+    flag.p->description = _("Print current color table and exit");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -236,7 +241,8 @@ int main(int argc, char **argv)
 
     overwrite = !flag.w->answer;
     remove = flag.r->answer;
-
+    print = flag.p->answer;
+    
     name = opt.map->answer;
     style = opt.colr->answer;
     cmap = opt.rast->answer;
@@ -244,9 +250,9 @@ int main(int argc, char **argv)
 
     if (!name)
 	G_fatal_error(_("No raster map specified"));
-
-    if (!cmap && !style && !rules && !remove)
-	G_fatal_error(_("One of \"-r\" or options \"color\", \"raster\" or \"rules\" must be specified!"));
+    
+    if (!cmap && !style && !rules && !remove && !print)
+	G_fatal_error(_("One of \"-r\", \"-p\" or options \"color\", \"raster\" or \"rules\" must be specified!"));
 
     if (!!style + !!cmap + !!rules > 1)
 	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
@@ -262,6 +268,11 @@ int main(int argc, char **argv)
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
+    if (print) {
+	Rast_print_colors(name, mapset, stdout);
+	return EXIT_SUCCESS;
+    }
+    
     if (remove) {
 	int stat = Rast_remove_colors(name, mapset);
 
@@ -274,9 +285,11 @@ int main(int argc, char **argv)
 
     G_suppress_warnings(1);
     have_colors = Rast_read_colors(name, mapset, &colors);
-    /*if (have_colors >= 0)
-       Rast_free_colors(&colors); */
-
+    /*
+      if (have_colors >= 0)
+      Rast_free_colors(&colors);
+    */
+    
     if (have_colors > 0 && !overwrite)
 	exit(EXIT_SUCCESS);
 
