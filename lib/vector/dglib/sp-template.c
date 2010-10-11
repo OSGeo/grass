@@ -23,6 +23,16 @@
 
 /*
  * SHORTEST PATH CACHE
+ * 
+ * components:
+ *   - visited network: a node is marked as visited when its departing
+ *     edges have been added to the cache
+ *   - predist network: node distances from start node
+ *   - NodeHeap: holds unvisited nodes, the next node extracted is the
+ *     one closest to SP start
+ *
+ * not all nodes in the cache have been visited, but distances from
+ * SP start are known for all nodes in the cache
  */
 #if !defined(DGL_DEFINE_TREE_PROCS) && !defined(DGL_DEFINE_FLAT_PROCS)
 
@@ -60,7 +70,6 @@ static int DGL_SP_CACHE_DISTANCE_FUNC(dglGraph_s * pgraph,
 				      dglInt32_t nStart,
 				      dglInt32_t nDestination)
 {
-    dglTreeTouchI32_s *pVisitedItem, VisitedItem;
     dglTreePredist_s *pPredistItem, PredistItem;
 
     if (pCache->nStartNode != nStart) {
@@ -68,15 +77,9 @@ static int DGL_SP_CACHE_DISTANCE_FUNC(dglGraph_s * pgraph,
 	return -pgraph->iErrno;
     }
 
-    VisitedItem.nKey = nDestination;
-    if ((pVisitedItem = avl_find(pCache->pvPredist, &VisitedItem)) == NULL) {
-	pgraph->iErrno = DGL_ERR_TailNodeNotFound;
-	return -pgraph->iErrno;
-    }
-
     PredistItem.nKey = nDestination;
     if ((pPredistItem = avl_find(pCache->pvPredist, &PredistItem)) == NULL) {
-	pgraph->iErrno = DGL_ERR_UnexpectedNullPointer;
+	pgraph->iErrno = DGL_ERR_TailNodeNotFound;
 	return -pgraph->iErrno;
     }
 
@@ -90,7 +93,6 @@ static dglSPReport_s *DGL_SP_CACHE_REPORT_FUNC(dglGraph_s * pgraph,
 					       dglInt32_t nStart,
 					       dglInt32_t nDestination)
 {
-    dglTreeTouchI32_s VisitedItem;
     dglTreePredist_s *pPredistItem, PredistItem;
     dglInt32_t *pEdge;
     dglInt32_t *pDestination;
@@ -105,9 +107,9 @@ static dglSPReport_s *DGL_SP_CACHE_REPORT_FUNC(dglGraph_s * pgraph,
 	return NULL;
     }
 
-    VisitedItem.nKey = nDestination;
+    PredistItem.nKey = nDestination;
 
-    if (avl_find(pCache->pvVisited, &VisitedItem) == NULL) {
+    if (avl_find(pCache->pvPredist, &PredistItem) == NULL) {
 	pgraph->iErrno = DGL_ERR_TailNodeNotFound;
 	return NULL;
     }
@@ -312,6 +314,7 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
     dglEdgesetTraverser_s laT;
 
     dglSPCache_s spCache;
+    int new_cache = 0;
 
     /*
      * shortest path distance temporary min heap
@@ -346,6 +349,7 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
     if (pCache == NULL) {
 	pCache = &spCache;
 	DGL_SP_CACHE_INITIALIZE_FUNC(pgraph, pCache, nStart);
+	new_cache = 1;
     }
     else {
 	if (ppReport) {
@@ -364,20 +368,10 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	if (pgraph->iErrno == DGL_ERR_HeadNodeNotFound) {
 	    DGL_SP_CACHE_RELEASE_FUNC(pgraph, pCache);
 	    DGL_SP_CACHE_INITIALIZE_FUNC(pgraph, pCache, nStart);
+	    new_cache = 1;
 	}
 	else if (pgraph->iErrno != DGL_ERR_TailNodeNotFound) {
 	    goto sp_error;
-	}
-	/*
-	 * reset visited status for existing cache: fix for BUG1
-	 */
-	if (pCache->pvVisited) {
-	    avl_destroy(pCache->pvVisited, dglTreeTouchI32Cancel);
-
-	    if ((pCache->pvVisited =
-		avl_create(dglTreeTouchI32Compare, NULL,
-			dglTreeGetAllocator())) == NULL)
-		return -1;
 	}
     }
 
@@ -409,43 +403,46 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	goto sp_error;
     }
 
-    /*
-     * now we inspect all edges departing from the start node
-     * - at each loop 'pedge' points to the edge in the edge buffer
-     * - we invoke the caller's clip() and eventually skip the edge (clip() != 0)
-     * - we insert a item in the predist network to set actual predecessor and distance
-     *   (there is no precedecessor at this stage) and actual distance from the starting node
-     *   (at this stage it equals the edge's cost)
-     * - we insert a item in the node min-heap (sorted on node distance), storing the offset of the
-     *   edge in the edge buffer.
-     * In the case of undirected graph (version 3) we inspect input edges as well.
-     */
-    pEdgeset = _DGL_OUTEDGESET(pgraph, pStart);
-    if (DGL_EDGESET_T_INITIALIZE_FUNC(pgraph, &laT, pEdgeset) < 0) {
-	goto sp_error;
-    }
-    for (pEdge = DGL_EDGESET_T_FIRST_FUNC(&laT);
-	 pEdge; pEdge = DGL_EDGESET_T_NEXT_FUNC(&laT)
-	) {
-	__EDGELOOP_BODY_1(0);
-    }
-    DGL_EDGESET_T_RELEASE_FUNC(&laT);
-
-    if (pgraph->Version == 3) {
-	pEdgeset = _DGL_INEDGESET(pgraph, pStart);
+    /* if we do not need a new cache, we just continue with the unvisited
+     * nodes in the cache */
+    if (new_cache) {
+	/*
+	 * now we inspect all edges departing from the start node
+	 * - at each loop 'pedge' points to the edge in the edge buffer
+	 * - we invoke the caller's clip() and eventually skip the edge (clip() != 0)
+	 * - we insert a item in the predist network to set actual predecessor and distance
+	 *   (there is no precedecessor at this stage) and actual distance from the starting node
+	 *   (at this stage it equals the edge's cost)
+	 * - we insert a item in the node min-heap (sorted on node distance), storing the offset of the
+	 *   edge in the edge buffer.
+	 * In the case of undirected graph (version 3) we inspect input edges as well.
+	 */
+	pEdgeset = _DGL_OUTEDGESET(pgraph, pStart);
 	if (DGL_EDGESET_T_INITIALIZE_FUNC(pgraph, &laT, pEdgeset) < 0) {
 	    goto sp_error;
 	}
 	for (pEdge = DGL_EDGESET_T_FIRST_FUNC(&laT);
 	     pEdge; pEdge = DGL_EDGESET_T_NEXT_FUNC(&laT)
 	    ) {
-	    if (DGL_EDGE_STATUS(pEdge) & DGL_ES_DIRECTED)
-		continue;
-	    __EDGELOOP_BODY_1(1);
+	    __EDGELOOP_BODY_1(0);
 	}
 	DGL_EDGESET_T_RELEASE_FUNC(&laT);
-    }
 
+	if (pgraph->Version == 3) {
+	    pEdgeset = _DGL_INEDGESET(pgraph, pStart);
+	    if (DGL_EDGESET_T_INITIALIZE_FUNC(pgraph, &laT, pEdgeset) < 0) {
+		goto sp_error;
+	    }
+	    for (pEdge = DGL_EDGESET_T_FIRST_FUNC(&laT);
+		 pEdge; pEdge = DGL_EDGESET_T_NEXT_FUNC(&laT)
+		) {
+		if (DGL_EDGE_STATUS(pEdge) & DGL_ES_DIRECTED)
+		    continue;
+		__EDGELOOP_BODY_1(1);
+	    }
+	    DGL_EDGESET_T_RELEASE_FUNC(&laT);
+	}
+    }
 
     /*
      * Now we begin extracting nodes from the min-heap. Each node extracted is
@@ -470,7 +467,6 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	    pStart = _DGL_EDGE_HEADNODE(pgraph, pEdge);	/* reversed head/tail */
 	}
 
-
 	/*
 	 * We do not want to explore twice the same node as a relative starting point,
 	 * that's the meaning of 'visited'. We mark actual start node as 'visited' by
@@ -488,20 +484,16 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	}
 
 	/*
-	 * Dijkstra algorithm ends when the destination node is extracted from
-	 * the min distance heap, that means: no other path exist in the network giving
-	 * a shortest output.
-	 * If this happens we jump to the epilogue in order to build a path report and return.
-	 */
-	if (DGL_NODE_ID(pStart) == nDestination) {
-	    goto destination_found;
-	}
-
-	/*
 	 * Give up with visited nodes now
 	 */
 	if (pVisitedItem) {
-	    continue;
+	    if (DGL_NODE_ID(pStart) == nDestination) {
+		/* should not happen but does not harm
+		 * this case should have been handled above */
+		goto destination_found;
+	    }
+	    else
+		continue;
 	}
 
 	/*
@@ -509,8 +501,13 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	 * blind alley. Just give up this direction and continue looping.
 	 * This only applies to v1 and v2 (digraphs)
 	 */
-	if (!(DGL_NODE_STATUS(pStart) & DGL_NS_HEAD) && pgraph->Version < 3)
-	    continue;
+	if (!(DGL_NODE_STATUS(pStart) & DGL_NS_HEAD) && pgraph->Version < 3) {
+	    if (DGL_NODE_ID(pStart) == nDestination) {
+		goto destination_found;
+	    }
+	    else
+		continue;
+	}
 
 	/*
 	 * save actual edge for later clip()
@@ -534,6 +531,10 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	 * Scan the edgeset and loads pedge at each iteration with next-edge.
 	 * iWay == DGL_EDGESET_T_WAY_OUT then pedge is a out arc (departing from node) else ot is a in arc.
 	 * V1 has no in-degree support so iWay is always OUT, V2/3 have in-degree support.
+	 *
+	 * This loop needs to be done also when destination is found, otherwise
+	 * the node is marked as visited but its departing edges are not added to the cache
+	 * --> loose end, we might need these edges later on
 	 */
 	pEdgeset = _DGL_OUTEDGESET(pgraph, pStart);
 	if (DGL_EDGESET_T_INITIALIZE_FUNC(pgraph, &laT, pEdgeset) < 0) {
@@ -560,13 +561,23 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s * pgraph,
 	    }
 	    DGL_EDGESET_T_RELEASE_FUNC(&laT);
 	}
+
+	/*
+	 * Dijkstra algorithm ends when the destination node is extracted from
+	 * the min distance heap, that means: no other path exist in the network giving
+	 * a shortest output.
+	 * If this happens we jump to the epilogue in order to build a path report and return.
+	 */
+	if (DGL_NODE_ID(pStart) == nDestination) {
+	    goto destination_found;
+	}
     }
 
   sp_error:
     if (pCache == &spCache) {
 	DGL_SP_CACHE_RELEASE_FUNC(pgraph, pCache);
     }
-    return -pgraph->iErrno;	/* ==0 path not found */
+    return -pgraph->iErrno;	/* == 0 path not found */
 
   destination_found:		/* path found - build a shortest path report or report the distance only */
 
