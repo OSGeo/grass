@@ -25,15 +25,20 @@
  * SHORTEST PATH CACHE
  * 
  * components:
+ *   - start node id
  *   - visited network: a node is marked as visited when its departing
  *     edges have been added to the cache
  *   - predist network: node distances from start node
  *   - NodeHeap: holds unvisited nodes, the next node extracted is the
- *     one closest to SP start
+ *     unvisited node closest to SP start
  *
- * not all nodes in the cache have been visited, but distances from
- * SP start are known for all nodes in the cache
+ * not all nodes in the predist network have been visited, SP from start
+ * is known only for visited nodes
+ * unvisited nodes can be reached, but not necessarily on the shortest
+ * possible path
+ * important for DGL_SP_CACHE_DISTANCE_FUNC and DGL_SP_CACHE_REPORT_FUNC
  */
+
 #if !defined(DGL_DEFINE_TREE_PROCS) && !defined(DGL_DEFINE_FLAT_PROCS)
 
 int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s * pgraph, dglSPCache_s * pCache,
