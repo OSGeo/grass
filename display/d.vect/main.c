@@ -116,7 +116,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("vector"));
-    module->description = _("Displays vector map layer in the active map display window.");
+    module->description = _("Displays user-specified vector map "
+			    "in the active graphics frame.");
     
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
