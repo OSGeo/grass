@@ -42,7 +42,8 @@ int Rast_print_colors(const char *name, const char *mapset, FILE *file)
     
     /* first look for secondary color table in current mapset */
     sprintf(element, "colr2/%s", mapset);
-    if (print_color_table(element, name, mapset, file) < 0)
+    if (print_color_table(element, name, G_mapset(), file) < 0)
+	/* now look for the regular color table */
 	if (print_color_table("colr", name, mapset, file) < 0)
 	    return -2;
     
