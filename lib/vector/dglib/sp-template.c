@@ -70,6 +70,7 @@ static int DGL_SP_CACHE_DISTANCE_FUNC(dglGraph_s * pgraph,
 				      dglInt32_t nStart,
 				      dglInt32_t nDestination)
 {
+    dglTreeTouchI32_s VisitedItem;
     dglTreePredist_s *pPredistItem, PredistItem;
 
     if (pCache->nStartNode != nStart) {
@@ -77,9 +78,15 @@ static int DGL_SP_CACHE_DISTANCE_FUNC(dglGraph_s * pgraph,
 	return -pgraph->iErrno;
     }
 
+    VisitedItem.nKey = nDestination;
+    if (avl_find(pCache->pvVisited, &VisitedItem) == NULL) {
+	pgraph->iErrno = DGL_ERR_TailNodeNotFound;
+	return -pgraph->iErrno;
+    }
+
     PredistItem.nKey = nDestination;
     if ((pPredistItem = avl_find(pCache->pvPredist, &PredistItem)) == NULL) {
-	pgraph->iErrno = DGL_ERR_TailNodeNotFound;
+	pgraph->iErrno = DGL_ERR_UnexpectedNullPointer;
 	return -pgraph->iErrno;
     }
 
@@ -93,6 +100,7 @@ static dglSPReport_s *DGL_SP_CACHE_REPORT_FUNC(dglGraph_s * pgraph,
 					       dglInt32_t nStart,
 					       dglInt32_t nDestination)
 {
+    dglTreeTouchI32_s VisitedItem;
     dglTreePredist_s *pPredistItem, PredistItem;
     dglInt32_t *pEdge;
     dglInt32_t *pDestination;
@@ -107,10 +115,15 @@ static dglSPReport_s *DGL_SP_CACHE_REPORT_FUNC(dglGraph_s * pgraph,
 	return NULL;
     }
 
-    PredistItem.nKey = nDestination;
-
-    if (avl_find(pCache->pvPredist, &PredistItem) == NULL) {
+    VisitedItem.nKey = nDestination;
+    if (avl_find(pCache->pvVisited, &VisitedItem) == NULL) {
 	pgraph->iErrno = DGL_ERR_TailNodeNotFound;
+	return NULL;
+    }
+
+    PredistItem.nKey = nDestination;
+    if (avl_find(pCache->pvPredist, &PredistItem) == NULL) {
+	pgraph->iErrno = DGL_ERR_UnexpectedNullPointer;
 	return NULL;
     }
 
