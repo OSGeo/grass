@@ -1,1 +1,1 @@
-#define ROWCOL short
+#define ROWCOL int

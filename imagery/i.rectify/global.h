@@ -55,7 +55,7 @@ int exec_rectify(int, char *);
 
 /* get_wind.c */
 int get_target_window(int);
-int georef_window(struct Cell_head *, struct Cell_head *, int);
+int georef_window(struct Cell_head *, struct Cell_head *, int, double);
 
 /* matrix.c */
 int compute_georef_matrix(struct Cell_head *, struct Cell_head *, int);

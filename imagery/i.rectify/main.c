@@ -69,10 +69,10 @@ int main(int argc, char *argv[])
     char group[INAME_LEN], extension[INAME_LEN];
     char result[NFILES][15];
     int order;			/* ADDED WITH CRS MODIFICATIONS */
-    int n, i, m, k;
+    int n, i, m, k = 0;
     int got_file = 0;
 
-    struct Option *grp, *val, *ifile, *ext;
+    struct Option *grp, *val, *ifile, *ext, *tres;
     struct Flag *c, *a;
     struct GModule *module;
 
@@ -109,6 +109,12 @@ int main(int argc, char *argv[])
     val->required = YES;
     val->description = _("Rectification polynom order (1-3)");
 
+    tres = G_define_option();
+    tres->key = "res";
+    tres->type = TYPE_DOUBLE;
+    tres->required = NO;
+    tres->description = _("Target resolution (ignored if -c flag used)");
+
     c = G_define_flag();
     c->key = 'c';
     c->description =
@@ -143,8 +149,11 @@ int main(int argc, char *argv[])
 		      MAXORDER);
 
     /* determine the number of files in this group */
-    if (I_get_group_ref(group, &ref) <= 0)
+    if (I_get_group_ref(group, &ref) <= 0) {
+	G_warning(_("Location: %s"), G_location());
+	G_warning(_("Mapset: %s"), G_mapset());
 	G_fatal_error(_("Group <%s> does not exist"), grp->answer);
+    }
 
     if (ref.nfiles <= 0) {
 	G_important_message(_("Group <%s> contains no raster maps; run i.group"),
@@ -184,21 +193,20 @@ int main(int argc, char *argv[])
     /* get the target */
     get_target(group);
 
-
-    if (c->answer) {
-	/* Use current Region */
-	select_target_env();
-	G__get_window(&target_window, "", "WIND", G_mapset());
-	select_current_env();
-    }
-    else {
+    if (!c->answer) {
+	double res = -1;
+	
+	if (tres->answer) {
+	    if (!((res = atof(tres->answer)) > 0))
+		G_warning(_("Target resolution must be > 0, ignored"));
+	}
 	/* Calculate smallest region */
 	if (a->answer)
 	    Rast_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd);
 	else
 	    Rast_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd);
 
-	georef_window(&cellhd, &target_window, order);
+	georef_window(&cellhd, &target_window, order, res);
     }
 
     G_verbose_message(_("Using region: N=%f S=%f, E=%f W=%f"), target_window.north,
