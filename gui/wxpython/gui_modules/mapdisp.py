@@ -666,15 +666,17 @@ class MapFrame(wx.Frame):
         # event.Skip()
 
     def OnToggleRender(self, event):
-        """
-        Enable/disable auto-rendering
+        """!Enable/disable auto-rendering
         """
         if self.statusbarWin['render'].GetValue():
             self.OnRender(None)
 
+    def IsAutoRendered(self):
+        """!Check if auto-rendering is enabled"""
+        return self.statusbarWin['render'].IsChecked()
+    
     def OnToggleShowRegion(self, event):
-        """
-        Show/Hide extent in map canvas
+        """!Show/Hide extent in map canvas
         """
         if self.statusbarWin['region'].GetValue():
             # show extent
