@@ -284,7 +284,7 @@ int Vect_save_topo(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_topo_dump(const struct Map_info *Map, FILE * out)
+int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 {
     int i, j, line, isle;
     struct P_node *Node;
@@ -295,7 +295,7 @@ int Vect_topo_dump(const struct Map_info *Map, FILE * out)
     const struct Plus_head *plus;
 
     plus = &(Map->plus);
-
+    
     fprintf(out, "---------- TOPOLOGY DUMP ----------\n");
 
     /* box */
@@ -310,8 +310,8 @@ int Vect_topo_dump(const struct Map_info *Map, FILE * out)
 	    continue;
 	}
 	Node = plus->Node[i];
-	fprintf(out, "node = %d, n_lines = %d, xy = %f, %f\n", i,
-		Node->n_lines, Node->x, Node->y);
+	fprintf(out, "node = %d, n_lines = %d, xyz = %f, %f, %f\n", i,
+		Node->n_lines, Node->x, Node->y, Node->z);
 	for (j = 0; j < Node->n_lines; j++) {
 	    line = Node->lines[j];
 	    Line = plus->Line[abs(line)];
