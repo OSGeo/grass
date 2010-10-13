@@ -894,13 +894,13 @@ class mainFrame(wx.Frame):
                 returncode != 0:
             return
         
-        if cmd[0] in ('r.colors'):
+        if cmd[0] in globalvar.cmdAutoRender:
             if self.parent.GetName() == 'LayerTree':
                 display = self.parent.GetMapDisplay()
             else: # Layer Manager
                 display = self.parent.GetLayerTree().GetMapDisplay()
             
-            if display:
+            if display and display.IsAutoRendered():
                 display.GetWindow().UpdateMap(render = True)
         
     def OnOK(self, event):

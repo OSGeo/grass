@@ -712,9 +712,9 @@ class GMConsole(wx.SplitterWindow):
         # set focus on prompt
         if self.parent.GetName() == "LayerManager":
             self.btn_abort.Enable(False)
-            if event.cmd[0] in ('r.colors'):
+            if event.cmd[0] in globalvar.cmdAutoRender:
                 display = self.parent.GetLayerTree().GetMapDisplay()
-                if display:
+                if display and display.IsAutoRendered():
                     display.GetWindow().UpdateMap(render = True)
         
         else:
