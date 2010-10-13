@@ -1108,11 +1108,15 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             else:
                 currloc = _("target")
             ret = wx.MessageBox(parent=self,
-                          caption=_("Set GCP coordinates"),
-                          message=_('Set %s coordinates for GCP No. %s? \n\n'
-                                    'East: %s \n'
-                                    'North: %s') % (currloc, str(key), str(coord0), str(coord1)),
-                          style=wx.ICON_QUESTION | wx.YES_NO | wx.CENTRE)
+                                caption=_("Set GCP coordinates"),
+                                message=_('Set %(coor)s coordinates for GCP No. %(key)s? \n\n'
+                                          'East: %(coor0)s \n'
+                                          'North: %(coor1)s') % \
+                                    { 'coor' : currloc,
+                                      'key' : str(key),
+                                      'coor0' : str(coord0),
+                                      'coor1' : str(coord1) },
+                                style=wx.ICON_QUESTION | wx.YES_NO | wx.CENTRE)
 
             # for wingrass
             if os.name == 'nt':

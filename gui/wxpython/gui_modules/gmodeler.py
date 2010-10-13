@@ -819,8 +819,9 @@ class ModelFrame(wx.Frame):
         
         self.modelFile = filename
         self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.modelFile))
-        self.SetStatusText(_('%d items (%d actions) loaded into model') % \
-                               (self.model.GetNumItems(), self.model.GetNumItems(actionOnly = True)), 0)
+        self.SetStatusText(_('%(items)d items (%(actions)d actions) loaded into model') % \
+                               { 'items' : self.model.GetNumItems(),
+                                 'actions' : self.model.GetNumItems(actionOnly = True) }, 0)
         
     def OnModelSave(self, event = None):
         """!Save model to file"""
