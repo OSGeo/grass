@@ -893,14 +893,14 @@ class Settings:
             try:
                 dict[group][key][subkey[0]][subkey[1]] = value
             except TypeError:
-                print >> sys.stderr, _("Unable to parse settings '%s' (%s:%s:%s:%s)") % \
-                    (value, group, key, subkey[0], subkey[1])
+                print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
+                    ' (' + group + ':' + key + ':' + subkey[0] + ':' + subkey[1] + ')'
         else:
             try:
                 dict[group][key][subkey] = value
             except TypeError:
-                print >> sys.stderr, _("Unable to parse settings '%s' (%s:%s:%s)") % \
-                    (value, group, key, subkey)
+                print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
+                    ' (' + group + ':' + key + ':' + subkey + ')'
         
     def GetDefaultSettings(self):
         """!Get default user settings"""
@@ -2171,13 +2171,12 @@ class MapsetAccess(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                              label=_("Check a mapset to make it accessible, uncheck it to hide it.%s"
-                                      "  Notes:%s"
-                                      "    - The current mapset is always accessible.%s"
-                                      "    - You may only write to the current mapset.%s"
-                                      "    - You may only write to mapsets which you own.") %
-                                       (os.linesep, os.linesep, os.linesep, os.linesep))
-
+                              label=_("Check a mapset to make it accessible, uncheck it to hide it.\n"
+                                      "  Notes:\n"
+                                      "    - The current mapset is always accessible.\n"
+                                      "    - You may only write to the current mapset.\n"
+                                      "    - You may only write to mapsets which you own."))
+        
         sizer.Add(item=label, proportion=0,
                   flag=wx.ALL, border=5)
 

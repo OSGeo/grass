@@ -846,8 +846,9 @@ class MapFrame(wx.Frame):
             self.StatusbarEnableLongHelp(False)
         
         elif self.statusbarWin['toggle'].GetSelection() == 8: # RMS error
-            self.statusbar.SetStatusText(_("Forward: %s, Backward: %s") %
-                                         (self.fwd_rmserror, self.bkw_rmserror))
+            self.statusbar.SetStatusText(_("Forward: %(forw)s, Backward: %(back)s") %
+                                         { 'forw' : self.fwd_rmserror,
+                                           'back' : self.bkw_rmserror })
             # disable long help
             # self.StatusbarEnableLongHelp(False)
             
