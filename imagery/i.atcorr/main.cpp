@@ -77,14 +77,14 @@ int hit = 0;
 int mis = 0;
 
 /* function prototypes */
-static void adjust_region (const char *);
-static CELL round_c (FCELL);
-static void write_fp_to_cell (int, FCELL *);
-static void process_raster (int, InputMask, ScaleRange, int, int, int, bool, ScaleRange, bool);
-static void copy_colors (char *, const char *, char *);
-static void define_module (void);
-static struct Options define_options (void);
-static void read_scale (Option *, ScaleRange &);
+static void adjust_region(const char *);
+static CELL round_c(FCELL);
+static void write_fp_to_cell(int, FCELL *);
+static void process_raster(int, InputMask, ScaleRange, int, int, int, bool, ScaleRange, bool);
+static void copy_colors(char *, const char *, char *);
+static void define_module(void);
+static struct Options define_options(void);
+static void read_scale(Option *, ScaleRange &);
 
 
 /* 
@@ -92,7 +92,7 @@ static void read_scale (Option *, ScaleRange &);
    Atmospheric corrections should be done on the whole
    satelite image, not just portions.
 */
-static void adjust_region (const char *name)
+static void adjust_region(const char *name)
 {
     struct Cell_head iimg_head;	/* the input image header file */
 
@@ -103,9 +103,9 @@ static void adjust_region (const char *name)
 
 
 /* Rounds a floating point cell value */
-static CELL round_c (FCELL x)
+static CELL round_c(FCELL x)
 {
-    if (x >= 0.0)
+    if(x >= 0.0)
 	return (CELL)(x + .5);
 
     return (CELL)(-(-x + .5));
@@ -113,7 +113,7 @@ static CELL round_c (FCELL x)
 
 
 /* Converts the buffer to cell and write it to disk */
-static void write_fp_to_cell (int ofd, FCELL* buf)
+static void write_fp_to_cell(int ofd, FCELL* buf)
 {
     CELL* cbuf;
     int col;
@@ -235,7 +235,7 @@ struct IntPair
 typedef std::map<IntPair, TransformInput> CacheMap;
 
 
-const TransformInput& optimize_va (const FCELL& vis, const FCELL& alt)
+const TransformInput& optimize_va(const FCELL& vis, const FCELL& alt)
 {
     static CacheMap timap;
     static TransformInput ti;
@@ -272,7 +272,7 @@ const TransformInput& optimize_va (const FCELL& vis, const FCELL& alt)
    oflt: if true use FCELL_TYPE for output
    oscale: output file's range (default is min = 0, max = 255)
 */
-static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
+static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
 			    int ialt_fd, int ivis_fd, int ofd, bool oflt,
 			    ScaleRange oscale, bool optimize)
 {
@@ -392,7 +392,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
             buf[col] = buf[col] * ((float)oscale.max - (float)oscale.min) + oscale.min;
 
             if(~oflt && (buf[col] > (float)oscale.max))
-		G_warning (_("The output data will overflow. Reflectance > 100%%"));
+		G_warning(_("The output data will overflow. Reflectance > 100%%"));
 	}
 
         /* write output */
@@ -409,7 +409,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 
 
 /* Copy the colors from map named iname to the map named oname */
-static void copy_colors (const char *iname, char *oname)
+static void copy_colors(const char *iname, char *oname)
 {
     struct Colors colors;
 
@@ -419,7 +419,7 @@ static void copy_colors (const char *iname, char *oname)
 
 
 /* Define our module so that Grass can print it if the user wants to know more. */
-static void define_module (void)
+static void define_module(void)
 {
     struct GModule *module;
 
@@ -450,60 +450,56 @@ static void define_module (void)
 
 
 /* Define the options and flags */
-static struct Options define_options (void)
+static struct Options define_options(void)
 {
     struct Options opts;
 
-    opts.iimg = G_define_standard_option (G_OPT_R_INPUT);
-    opts.iimg->key		= "iimg";
-
+    opts.iimg = G_define_standard_option(G_OPT_R_INPUT);
+    
     opts.iscl = G_define_option();
-    opts.iscl->key          = "iscl";
+    opts.iscl->key          = "range";
     opts.iscl->type         = TYPE_INTEGER;
     opts.iscl->key_desc     = "min,max";
     opts.iscl->required     = NO;
     opts.iscl->answer       = "0,255";
-    opts.iscl->description  = _("Input imagery range [0,255]");
+    opts.iscl->description  = _("Input range");
     opts.iscl->guisection = _("Input");
 
-    opts.ialt = G_define_standard_option (G_OPT_R_INPUT);
-    opts.ialt->key		= "ialt";
+    opts.ialt = G_define_standard_option(G_OPT_R_ELEV);
     opts.ialt->required	        = NO;
-    opts.ialt->answer	        = "dem_float";
-    opts.ialt->description	= _("Input altitude raster map in m (optional)");
+    opts.ialt->description      = _("Name of input elevation raster map (in m)");
     opts.ialt->guisection       = _("Input");
 
-    opts.ivis = G_define_standard_option (G_OPT_R_INPUT);
-    opts.ivis->key		= "ivis";
+    opts.ivis = G_define_standard_option(G_OPT_R_INPUT);
+    opts.ivis->key		= "visibility";
     opts.ivis->required	        = NO;
-    opts.ivis->description	= _("Input visibility raster map in km (optional)");
+    opts.ivis->description	= _("Name of input visibility raster map (in km)");
     opts.ivis->guisection       = _("Input");
 
-    opts.icnd = G_define_standard_option (G_OPT_F_INPUT);
-    opts.icnd->key		= "icnd";
+    opts.icnd = G_define_standard_option(G_OPT_F_INPUT);
+    opts.icnd->key		= "input";
     opts.icnd->required	        = YES;
     opts.icnd->description	= _("Name of input text file");
 
-    opts.oimg = G_define_standard_option (G_OPT_R_OUTPUT);
-    opts.oimg->key		= "oimg";
+    opts.oimg = G_define_standard_option(G_OPT_R_OUTPUT);
 
     opts.oscl = G_define_option();
-    opts.oscl->key          = "oscl";
+    opts.oscl->key          = "rescale";
     opts.oscl->type         = TYPE_INTEGER;
     opts.oscl->key_desc     = "min,max";
     opts.oscl->answer       = "0,255";
     opts.oscl->required     = NO;
-    opts.oscl->description  = _("Rescale output raster map [0,255]");
+    opts.oscl->description  = _("Rescale output raster map");
     opts.oscl->guisection = _("Output");
 
     opts.oflt = G_define_flag();
     opts.oflt->key = 'f';
-    opts.oflt->description = _("Output raster is floating point");
+    opts.oflt->description = _("Output raster map as floating point");
     opts.oflt->guisection = _("Output");
 
     opts.irad = G_define_flag();
     opts.irad->key = 'r';
-    opts.irad->description = _("Input map converted to reflectance (default is radiance)");
+    opts.irad->description = _("Input raster map converted to reflectance (default is radiance)");
     opts.irad->guisection = _("Input");
 
     opts.etmafter = G_define_flag();
@@ -524,7 +520,7 @@ static struct Options define_options (void)
 }
 
 /* Read the min and max values from the iscl and oscl options */
-void read_scale (Option *scl, ScaleRange &range)
+void read_scale(Option *scl, ScaleRange &range)
 {
     /* set default values */
     range.min = 0;
@@ -537,7 +533,7 @@ void read_scale (Option *scl, ScaleRange &range)
 
         if(range.min==range.max)
         {
-            G_warning (_("Scale range length should be > 0; Using default values: [0,255]"));
+            G_warning(_("Scale range length should be > 0; Using default values: [0,255]"));
 
             range.min = 0;
             range.max = 255;
@@ -574,25 +570,25 @@ int main(int argc, char* argv[])
 
     /**** Start ****/
     G_gisinit(argv[0]);
-    if (G_parser(argc, argv) < 0)
-	exit (EXIT_FAILURE);
+    if(G_parser(argc, argv) < 0)
+	exit(EXIT_FAILURE);
 
     adjust_region(opts.iimg->answer);
 
     /* open input raster */
     if((iimg_fd = Rast_open_old(opts.iimg->answer, "")) < 0)
-	G_fatal_error (_("Unable to open raster map <%s>"),
+	G_fatal_error(_("Unable to open raster map <%s>"),
 		       opts.iimg->answer);
         
     if(opts.ialt->answer) {
 	if((ialt_fd = Rast_open_old(opts.ialt->answer, "")) < 0)
-            G_fatal_error (_("Unable to open raster map <%s>"),
+            G_fatal_error(_("Unable to open raster map <%s>"),
 			   opts.ialt->answer);
     }
 
     if(opts.ivis->answer) {
 	if((ivis_fd = Rast_open_old(opts.ivis->answer, "")) < 0)
-            G_fatal_error (_("Unable to open raster map <%s>"),
+            G_fatal_error(_("Unable to open raster map <%s>"),
 			   opts.ivis->answer);
     }
                 
@@ -600,13 +596,13 @@ int main(int argc, char* argv[])
     if(opts.oflt->answer)
     {
 	if((oimg_fd = Rast_open_fp_new(opts.oimg->answer)) < 0)
-	    G_fatal_error (_("Unable to create raster map <%s>"),
+	    G_fatal_error(_("Unable to create raster map <%s>"),
 			   opts.oimg->answer);
     }
     else
     {
 	if((oimg_fd = Rast_open_new(opts.oimg->answer, CELL_TYPE)) < 0)
-	    G_fatal_error (_("Unable to create raster map <%s>"),
+	    G_fatal_error(_("Unable to create raster map <%s>"),
 			   opts.oimg->answer);
     }
 
@@ -643,5 +639,5 @@ int main(int argc, char* argv[])
        Scaling is ignored and color ranges might not be correct. */
     copy_colors(opts.iimg->answer, opts.oimg->answer);
 
-    exit (EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
