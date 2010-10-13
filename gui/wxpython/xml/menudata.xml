@@ -678,12 +678,6 @@
 	  <handler>OnCloseWindow</handler>
 	  <shortcut>Ctrl+W</shortcut>
 	</menuitem>
-	<menuitem>
-	  <label>Quit GRASS GIS</label>
-	  <help>Quit GRASS session including wxGUI</help>
-	  <handler>OnQuit</handler>
-	  <shortcut>Ctrl+Q</shortcut>
-	</menuitem>
       </items>
     </menu>
     <menu>

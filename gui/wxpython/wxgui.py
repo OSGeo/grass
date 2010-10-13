@@ -1435,23 +1435,8 @@ class GMFrame(wx.Frame):
         
         event.Skip()
 
-    def OnQuit(self, event):
-        """!Quit GRASS session (wxGUI and shell)"""
-        # quit wxGUI session
-        self.OnCloseWindow(event)
-
-        # quit GRASS shell
-        try:
-            pid = int(os.environ['GIS_LOCK'])
-        except (KeyError, ValueError):
-            sys.stderr.write('\n')
-            sys.stderr.write(_("WARNING: Unable to quit GRASS, unknown GIS_LOCK"))
-            return
-        
-        os.kill(pid, signal.SIGQUIT)
-        
     def OnCloseWindow(self, event):
-        """!Cleanup when wxGUI is quit"""
+        """!Cleanup when wxGUI is quitted"""
         if not self.curr_page:
             self._auimgr.UnInit()
             self.Destroy()
