@@ -287,9 +287,9 @@ class GCPWizard(object):
             return False
 
         if grc == 'target':
-            os.environ["GISRC"] = str(self.target_gisrc)
+            os.environ['GISRC'] = str(self.target_gisrc)
         elif grc == 'source':
-            os.environ["GISRC"] = str(self.source_gisrc)
+            os.environ['GISRC'] = str(self.source_gisrc)
 
         return True
     
@@ -441,7 +441,7 @@ class GroupPage(TitledPage):
         self.xygroup = ''
 
         # default extension
-        self.extension = 'georect' + str(os.getpid())
+        self.extension = '.georect' + str(os.getpid())
 
         #
         # layout
@@ -1325,16 +1325,31 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
         if maptype == 'cell':
             self.grwiz.SwitchEnv('source')
-            cmdlist = ['i.rectify','-a','group=%s' % self.xygroup,
-                       'extension=%s' % self.extension,'order=%s' % self.gr_order]
-            if self.clip_to_region:
-                cmdlist.append('-c')
-            
-            self.parent.goutput.RunCmd(cmdlist, compReg=False,
-                                       switchPage=True)
-            
-            time.sleep(.1)
 
+            if self.clip_to_region:
+                flags = "ac"
+            else:
+                flags = "a"
+
+            busy = wx.BusyInfo(message=_("Rectifying images, please wait..."),
+                               parent=self)
+            wx.Yield()
+
+            ret, msg = gcmd.RunCommand('i.rectify',
+                                  parent = self,
+                                  getErrorMsg = True,
+                                  quiet = True,
+                                  group = self.xygroup,
+                                  extension = self.extension,
+                                  order = self.gr_order,
+                                  flags = flags)
+
+            busy.Destroy()
+
+            # provide feedback on failure
+            if ret != 0:
+                print >> sys.stderr, msg
+                
         elif maptype == 'vector':
             outmsg = ''
             # loop through all vectors in VREF
