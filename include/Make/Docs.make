@@ -28,8 +28,7 @@ docs_dirs = \
 	lib/vector \
 	lib/vector/dglib \
 	gui/wxpython \
-	rfc \
-	swig
+	rfc
 
 htmldocs_dirs := $(patsubst %,%/html,$(docs_dirs))
 latexdocs_dirs := $(patsubst %,%/latex,$(docs_dirs))
