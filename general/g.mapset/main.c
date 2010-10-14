@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     location_opt->multiple = NO;
     location_opt->description = _("Location name (not location path)");
     location_opt->guisection = _("Settings");
-    location_opt->answer = (char *) G__getenv("LOCATION_NAME");
 
     gisdbase_opt = G_define_option();
     gisdbase_opt->key = "gisdbase";
@@ -73,7 +72,6 @@ int main(int argc, char *argv[])
     gisdbase_opt->description =
 	_("GIS data directory (full path to the directory where the new location is)");
     gisdbase_opt->guisection = _("Settings");
-    gisdbase_opt->answer = (char *) G__getenv("GISDBASE");
 
     f_add = G_define_flag();
     f_add->key = 'c';
