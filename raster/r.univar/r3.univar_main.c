@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
 	if (G3d_readRange(zonemap, mapset, &zone_range) == -1)
 	    G_fatal_error("Can not read range for zoning raster");
 	G3d_range_min_max(zmap, &dmin, &dmax);
-	if (Rast_read_cats(zonemap, mapset, &(zone_info.cats)))
+	if (G3d_readCats(zonemap, mapset, &(zone_info.cats)))
 	    G_warning("no category support for zoning raster");
 
 	/* properly round dmin and dmax */
