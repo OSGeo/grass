@@ -233,9 +233,11 @@ int main(int argc, char *argv[])
     png_info_init(info_ptr);
 #endif
     png_init_io(png_ptr, fp);
-    info_ptr->width = win.cols;
-    info_ptr->height = win.rows;
-    info_ptr->bit_depth = depth;
+
+    png_set_IHDR(png_ptr, info_ptr, win.cols, win.rows, depth,
+		 do_alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB,
+		 PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
+		 PNG_FILTER_TYPE_DEFAULT);
 
     /* explicit filter-type (or none) required */
     if ((filter >= 0) && (filter <= 4)) {
@@ -244,7 +246,7 @@ int main(int argc, char *argv[])
 
     png_set_compression_level(png_ptr, png_compr);
 
-    if(do_alpha) {
+    if (do_alpha) {
 	png_color_16 background_color;
 	background_color.red = (png_uint_16)def_red;
 	background_color.green = (png_uint_16)def_grn;
@@ -274,11 +276,6 @@ int main(int argc, char *argv[])
 	/*if(!gscale->answer){ *//* 24BIT COLOR IMAGE */
 
 	if (TRUE) {
-	    if (do_alpha)
-		info_ptr->color_type = PNG_COLOR_TYPE_RGB_ALPHA;
-	    else
-		info_ptr->color_type = PNG_COLOR_TYPE_RGB;
-
 	    /* write the png-info struct */
 	    png_write_info(png_ptr, info_ptr);
 
