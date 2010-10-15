@@ -91,9 +91,8 @@ class BaseClass(wx.Object):
                          size=size)
 
 class TitledPage(BaseClass, wiz.WizardPageSimple):
-    """
-    Class to make wizard pages. Generic methods to make
-    labels, text entries, and buttons.
+    """!Class to make wizard pages. Generic methods to make labels,
+    text entries, and buttons.
     """
     def __init__(self, parent, title):
 
@@ -109,19 +108,17 @@ class TitledPage(BaseClass, wiz.WizardPageSimple):
         
     def DoLayout(self):
         """!Do page layout"""
-      
-
         self.pagesizer.Add(item=self.title, proportion=0,
-                     flag=wx.ALIGN_CENTRE | wx.ALL,
-                     border=5)
+                           flag=wx.ALIGN_CENTRE | wx.ALL,
+                           border=5)
         self.pagesizer.Add(item=wx.StaticLine(self, -1), proportion=0,
-                     flag=wx.EXPAND | wx.ALL,
-                     border=0)
-        self.pagesizer.Add(item=self.sizer)
-
+                           flag=wx.EXPAND | wx.ALL,
+                           border=0)
+        self.pagesizer.Add(item=self.sizer, proportion = 1,
+                           flag = wx.EXPAND)
+        
         self.SetAutoLayout(True)
         self.SetSizer(self.pagesizer)
-        # tmpsizer.Fit(self)
         self.Layout()
 
 class DatabasePage(TitledPage):
@@ -168,22 +165,14 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(2, 2))
-        # self.sizer.Add(item=self.MakeLabel(_("(projection/coordinate system)")),
-        #                flag=wx.ALIGN_LEFT |
-        #                wx.ALIGN_CENTER_VERTICAL |
-        #                wx.ALL, border=5,
-        #                pos=(2, 4))
-
+        
         # bindings
         self.Bind(wx.EVT_BUTTON,                self.OnBrowse, self.bbrowse)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED,  self.OnEnterPage)
         self.tgisdbase.Bind(wx.EVT_TEXT,        self.OnChangeName)
         self.tlocation.Bind(wx.EVT_TEXT,        self.OnChangeName)
-
-        # do page layout
-        # self.DoLayout()
-
+        
     def OnChangeName(self, event):
         """!Name for new location was changed"""
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
@@ -650,15 +639,12 @@ class ItemList(wx.ListCtrl,
         if len(data) > 0:
             return data[0]
         else:
-#            self.Populate(self.sourceData)
             return []
 
 class ProjParamsPage(TitledPage):
+    """!Wizard page for selecting method of setting coordinate system
+    parameters (select coordinate system option)
     """
-    Wizard page for selecting method of setting coordinate system parameters
-    (select coordinate system option)
-    """
-
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Choose projection parameters"))
         global coordsys
@@ -671,7 +657,10 @@ class ProjParamsPage(TitledPage):
         
         self.p4projparams = ''
         self.projdesc = ''
-        
+
+        self.sizer.AddGrowableCol(1)
+        self.sizer.AddGrowableRow(1)
+
         radioSBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                  label = " %s " % _("Select datum or ellipsoid (next page)"))
         radioSBSizer = wx.StaticBoxSizer(radioSBox)
@@ -759,8 +748,8 @@ class ProjParamsPage(TitledPage):
             
             self.prjParamSizer = wx.GridBagSizer(vgap=0, hgap=0) 
             
-            self.pagesizer.Add(item = paramSBSizer, proportion = 1, 
-                               flag = wx.EXPAND | wx.ALIGN_TOP | wx.ALL, border = 10)
+            self.sizer.Add(item = paramSBSizer, pos=(1, 1),
+                           flag = wx.EXPAND)
             paramSBSizer.Add(item = self.panel, proportion = 1, 
                              flag = wx.ALIGN_CENTER | wx.EXPAND)
             
@@ -841,8 +830,7 @@ class ProjParamsPage(TitledPage):
             self.parent.sumpage.SetPrev(self.parent.ellipsepage)
     
 class DatumPage(TitledPage):
-    """
-    Wizard page for selecting datum (with associated ellipsoid)
+    """!Wizard page for selecting datum (with associated ellipsoid)
     and datum transformation parameters (select coordinate system option)
     """
 
@@ -1581,12 +1569,13 @@ class SummaryPage(TitledPage):
         TitledPage.__init__(self, wizard, _("Summary"))
         self.parent = parent
         
+        self.panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
+
         # labels
-        self.ldatabase  = self.MakeLabel("")
-        self.llocation  = self.MakeLabel("")
-        self.lprojection = self.MakeLabel("")
-        self.lproj4string = self.MakeLabel("")
-        self.lproj4stringLabel = self.MakeLabel("")
+        self.ldatabase  = self.MakeLabel()
+        self.llocation  = self.MakeLabel()
+        self.lprojection = self.MakeLabel()
+        self.lproj4string = self.MakeLabel(parent = self.panel)
         
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         
@@ -1596,6 +1585,17 @@ class SummaryPage(TitledPage):
     def __DoLayout(self):
         """!Do page layout"""
         self.sizer.AddGrowableCol(1)
+        self.sizer.AddGrowableRow(4)
+        
+        proj4Sizer = wx.BoxSizer(wx.VERTICAL)
+        proj4Sizer.Add(item = self.lproj4string, proportion = 1,
+                       flag = wx.EXPAND | wx.ALL, border = 1)
+        self.panel.SetSizer(proj4Sizer)
+        self.panel.SetAutoLayout(True)
+        proj4Sizer.Fit(self.panel)
+        self.panel.Layout()
+        self.panel.SetupScrolling()
+
         self.sizer.Add(item=self.MakeLabel(_("GRASS Database:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(1, 0))
@@ -1614,17 +1614,14 @@ class SummaryPage(TitledPage):
         self.sizer.Add(item=self.lprojection,
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(3, 1))
-        self.sizer.Add(item=self.lproj4stringLabel,
+        self.sizer.Add(item=self.MakeLabel(_("PROJ.4 definition:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(4, 0))
-        self.sizer.Add(item=self.lproj4string,
-                       flag=wx.ALIGN_LEFT | wx.ALL,
+        self.sizer.Add(item=self.panel,
+                       flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
                        border=5, pos=(4, 1))
-        self.sizer.Add(item=(10,20),
-                       flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-                       border=5, pos=(5, 0), span=(1, 2))
-
-    def OnEnterPage(self,event):
+        
+    def OnEnterPage(self, event):
         """!Insert values into text controls for summary of location
         creation options
         """
@@ -1635,14 +1632,7 @@ class SummaryPage(TitledPage):
         dtrans = self.parent.datumtrans
         
         global coordsys
-        if coordsys not in ['proj', 'epsg']:
-            self.lproj4stringLabel.Hide()
-            self.lproj4string.Hide()
-            self.lproj4stringLabel.SetLabel('')
-            self.lproj4string.SetLabel('')
-        else:
-            self.lproj4string.Show()
-            self.lproj4stringLabel.SetLabel(_("PROJ.4 definition:"))
+        if coordsys in ('proj', 'epsg'):
             if coordsys == 'proj':
                 ret, projlabel, err = gcmd.RunCommand('g.proj',
                                                       flags = 'jf',
@@ -1659,11 +1649,14 @@ class SummaryPage(TitledPage):
                                                       location = location,
                                                       getErrorMsg = True,
                                                       read = True)
-            
+
+            finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
                 self.lproj4string.SetLabel(projlabel.replace(' ', os.linesep))
+                finishButton.Enable(True)
             else:
                 gcmd.GError(err, parent = self)
+                finishButton.Enable(False)
         
         projdesc = self.parent.projpage.projdesc
         ellipsedesc = self.parent.ellipsepage.ellipsedesc
@@ -1683,7 +1676,8 @@ class SummaryPage(TitledPage):
         elif coordsys == 'xy':
             label = ('XY coordinate system (not projected).')
         elif coordsys == 'custom':
-            label = ('%s' % self.parent.custompage.customstring.replace(' ', os.linesep))
+            label = _("custom")
+            self.lproj4string.SetLabel(('%s' % self.parent.custompage.customstring.replace(' ', os.linesep)))
         self.lprojection.SetLabel(label)
         
     def OnFinish(self, event):
