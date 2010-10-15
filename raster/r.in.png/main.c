@@ -58,12 +58,15 @@ static int Header;
 static int Float;
 
 static char *input, *output, *title;
-static double d_gamma, alpha, t_gamma;
+static double f_gamma, d_gamma, alpha, t_gamma;
 static int ialpha;
 
 static png_structp png_ptr;
 static png_infop info_ptr;
-  
+
+static png_uint_32 width, height;
+static int bit_depth, color_type, interlace_type, compression_type, filter_type;
+
 static double gamma_correct(double k)
 {
     return pow(k, 1.0 / t_gamma);
@@ -109,12 +112,12 @@ static void write_row_int(png_bytep p)
     int x, c;
     channel *ch;
 
-    for (x = 0; x < info_ptr->width; x++)
+    for (x = 0; x < width; x++)
 	for (c = 0; c < 6; c++)
 	{
 	    ch = &channels[c];
 	    if (ch->active)
-		ch->buf[x] = (CELL) get_png_val(&p, info_ptr->bit_depth);
+		ch->buf[x] = (CELL) get_png_val(&p, bit_depth);
 	}
 
     if (channels[C_A].active && ialpha > 0)
@@ -122,7 +125,7 @@ static void write_row_int(png_bytep p)
 	{
 	    ch = &channels[c];
 	    if (c != C_A && ch->active)
-		for (x = 0; x < info_ptr->width; x++)
+		for (x = 0; x < width; x++)
 		    if (channels[C_A].buf[x] <= ialpha)
 			Rast_set_c_null_value(&ch->buf[x], 1);
 	}
@@ -140,12 +143,12 @@ static void write_row_float(png_bytep p)
     int x, c;
     channel *ch;
 
-    for (x = 0; x < info_ptr->width; x++)
+    for (x = 0; x < width; x++)
 	for (c = 0; c < 6; c++)
 	{
 	    ch = &channels[c];
 	    if (ch->active)
-		ch->fbuf[x] = (FCELL) get_png_val(&p, info_ptr->bit_depth)
+		ch->fbuf[x] = (FCELL) get_png_val(&p, bit_depth)
 		    / ch->maxval;
 	}
 
@@ -154,7 +157,7 @@ static void write_row_float(png_bytep p)
 	{
 	    ch = &channels[c];
 	    if (c != C_A && ch->active)
-		for (x = 0; x < info_ptr->width; x++)
+		for (x = 0; x < width; x++)
 		    ch->fbuf[x] = gamma_correct(ch->fbuf[x]);
 	}
 
@@ -163,7 +166,7 @@ static void write_row_float(png_bytep p)
 	{
 	    ch = &channels[c];
 	    if (c != C_A && ch->active)
-		for (x = 0; x < info_ptr->width; x++)
+		for (x = 0; x < width; x++)
 		    if (channels[C_A].fbuf[x] <= alpha)
 			Rast_set_f_null_value(&ch->fbuf[x], 1);
 	}
@@ -186,11 +189,16 @@ static void write_colors_int(int c)
 
     Rast_init_colors(&colors);
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_PALETTE)
+    if (color_type == PNG_COLOR_TYPE_PALETTE)
     {
-	for (i = 0; i < info_ptr->num_palette; i++)
+	png_colorp palette;
+	int num_palette;
+
+	png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette);
+
+	for (i = 0; i < num_palette; i++)
 	{
-	    png_colorp col = &info_ptr->palette[i];
+	    png_colorp col = &palette[i];
 	    Rast_set_c_color((CELL) i, col->red, col->green, col->blue, &colors);
 	}
     }
@@ -230,7 +238,7 @@ static void print_header(void)
     const char *type_string = "";
     const char *alpha_string = "";
 
-    switch (info_ptr->color_type)
+    switch (color_type)
     {
     case PNG_COLOR_TYPE_GRAY:
 	type_string = "gray";
@@ -258,23 +266,23 @@ static void print_header(void)
 	break;
     }
 
-    if (info_ptr->valid & PNG_INFO_tRNS)
+    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
 	alpha_string = "+transparency";
 
-    if (info_ptr->valid & PNG_INFO_gAMA)
-	sprintf(gamma_string, ", image gamma = %4.2f", info_ptr->gamma);
+    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_gAMA))
+	sprintf(gamma_string, ", image gamma = %4.2f", f_gamma);
 
-    fprintf(stderr, "%ld x %ld image, %d bit%s %s%s%s%s\n",
-	    info_ptr->width, info_ptr->height,
-	    info_ptr->bit_depth, info_ptr->bit_depth > 1 ? "s" : "",
+    fprintf(stderr, "%lu x %lu image, %d bit%s %s%s%s%s\n",
+	    (unsigned long) width, (unsigned long) height,
+	    bit_depth, bit_depth > 1 ? "s" : "",
 	    type_string, alpha_string,
 	    gamma_string,
-	    info_ptr->interlace_type ? ", Adam7 interlaced" : "");
+	    interlace_type ? ", Adam7 interlaced" : "");
 }
 
 static void read_png(void)
 {
-    char sig_buf[8];
+    unsigned char sig_buf[8];
     png_bytep png_buffer;
     png_bytep *png_rows;
     int linesize;
@@ -282,7 +290,6 @@ static void read_png(void)
     int y, c;
     png_color_8p sig_bit;
     int sbit, interlace;
-    double f_gamma;
     FILE *ifp;
 
     /* initialize input stream and PNG library */
@@ -313,6 +320,9 @@ static void read_png(void)
 
     png_read_info(png_ptr, info_ptr);
 
+    png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,
+		 &color_type, &interlace_type, &compression_type, &filter_type);
+
     if (Header || G_verbose() == G_verbose_max())
 	print_header();
 
@@ -337,12 +347,12 @@ static void read_png(void)
     if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
 	png_set_tRNS_to_alpha(png_ptr);
 
-    if (Float && info_ptr->color_type == PNG_COLOR_TYPE_PALETTE)
+    if (Float && color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_palette_to_rgb(png_ptr);
 
     png_read_update_info(png_ptr, info_ptr);
 
-    interlace = (info_ptr->interlace_type != PNG_INTERLACE_NONE);
+    interlace = (interlace_type != PNG_INTERLACE_NONE);
 
     ialpha = (int) (alpha * channels[C_A].maxval);
 
@@ -355,13 +365,13 @@ static void read_png(void)
     linesize = png_get_rowbytes(png_ptr, info_ptr);
 
     png_buffer = G_malloc(interlace
-			  ? info_ptr->height * linesize
+			  ? height * linesize
 			  : linesize);
 
     if (interlace)
     {
-	png_rows = G_malloc(info_ptr->height * sizeof(png_bytep));
-	for (y = 0; y < info_ptr->height; y++)
+	png_rows = G_malloc(height * sizeof(png_bytep));
+	for (y = 0; y < height; y++)
 	    png_rows[y] = png_buffer + y * linesize;
     }
 
@@ -369,8 +379,8 @@ static void read_png(void)
 
     Rast_get_window(&cellhd);
 
-    cellhd.rows = info_ptr->height;
-    cellhd.cols = info_ptr->width;
+    cellhd.rows = height;
+    cellhd.cols = width;
     cellhd.north = cellhd.rows;
     cellhd.south = 0.0;
     cellhd.east = cellhd.cols;
@@ -382,7 +392,7 @@ static void read_png(void)
 
     /* initialize channel information */
 
-    switch (info_ptr->color_type)
+    switch (color_type)
     {
     case PNG_COLOR_TYPE_GRAY:
 	init_channel(&channels[C_Y]);
@@ -421,11 +431,11 @@ static void read_png(void)
     }
     else
     {
-	channels[C_R].maxval = (1 << info_ptr->bit_depth) - 1;
-	channels[C_G].maxval = (1 << info_ptr->bit_depth) - 1;
-	channels[C_B].maxval = (1 << info_ptr->bit_depth) - 1;
-	channels[C_Y].maxval = (1 << info_ptr->bit_depth) - 1;
-	channels[C_A].maxval = (1 << info_ptr->bit_depth) - 1;
+	channels[C_R].maxval = (1 << bit_depth) - 1;
+	channels[C_G].maxval = (1 << bit_depth) - 1;
+	channels[C_B].maxval = (1 << bit_depth) - 1;
+	channels[C_Y].maxval = (1 << bit_depth) - 1;
+	channels[C_A].maxval = (1 << bit_depth) - 1;
     }
 
     /* read image and write raster layers */
@@ -433,7 +443,7 @@ static void read_png(void)
     if (interlace)
 	png_read_image(png_ptr, png_rows);
 
-    for (y = 0; y < info_ptr->height; y++)
+    for (y = 0; y < height; y++)
     {
 	png_bytep p;
 
