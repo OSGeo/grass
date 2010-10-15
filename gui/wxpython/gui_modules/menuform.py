@@ -1187,8 +1187,12 @@ class cmdPanel(wx.Panel):
             else:
                 title_sizer = wx.BoxSizer(wx.HORIZONTAL)
                 title_txt = wx.StaticText(parent=which_panel)
+                if p['key_desc']:
+                    ltype = ','.join(p['key_desc'])
+                else:
+                    ltype = p['type']
                 rtitle_txt = wx.StaticText(parent=which_panel,
-                                           label = '(' + p['name'] + ', ' + p['type'] + ')')
+                                           label = '(' + p['name'] + '=' + ltype + ')')
                 title_sizer.Add(item=title_txt, proportion=1,
                                 flag=wx.LEFT | wx.TOP | wx.EXPAND, border=5)
                 title_sizer.Add(item=rtitle_txt, proportion=0,
