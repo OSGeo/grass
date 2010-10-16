@@ -13,38 +13,32 @@
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
+#include <math.h>
 
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
 #include "global.h"
 
-int exec_rectify(int order, char *extension)
+int exec_rectify(int order, char *extension, char *interp_method)
 /* ADDED WITH CRS MODIFICATIONS */
 {
     char *name;
     char *mapset;
     char *result;
-    char *type;
-    int i, n;
+    char *type = "raster";
+    int n;
     struct Colors colr;
     struct Categories cats;
     struct History hist;
     int colr_ok, cats_ok;
     long start_time, rectify_time, compress_time;
 
-
-    /* allocate the output cell matrix */
-    cell_buf = (void **)G_calloc(NROWS, sizeof(void *));
-    n = NCOLS * Rast_cell_size(map_type);
-    for (i = 0; i < NROWS; i++) {
-	cell_buf[i] = (void *)G_malloc(n);
-	Rast_set_null_value(cell_buf[i], NCOLS, map_type);
-    }
+    Rast_set_output_window(&target_window);
 
     /* rectify each file */
     for (n = 0; n < ref.nfiles; n++) {
-	if ((i = ref_list[n]) < 0) {
+	if (ref_list[n] < 0) {
 	    /* continue; */
 	    name = ref.file[n].name;
 	    mapset = ref.file[n].mapset;
@@ -63,20 +57,13 @@ int exec_rectify(int order, char *extension)
 	    colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
 
 	    /* Initialze History */
-	    type = "raster";
 	    Rast_short_history(name, type, &hist);
 
 	    time(&start_time);
 
-	    if (rectify(name, mapset, result, order)) {
+	    if (rectify(name, mapset, result, order, interp_method)) {
 		select_target_env();
 
-	    /***
-	     * This clobbers (with wrong values) head
-	     * written by gislib.  99% sure it should
-	     * be removed.  EGM 2002/01/03
-            Rast_put_cellhd (result,&target_window);
-	     */
 		if (cats_ok) {
 		    Rast_write_cats(result, &cats);
 		    Rast_free_cats(&cats);
@@ -101,10 +88,10 @@ int exec_rectify(int order, char *extension)
 	    }
 	    else
 		report(name, mapset, result, (long)0, (long)0, 0);
+
+	    G_free(result);
 	}
     }
-
-    G_done_msg("");
 
     return 0;
 }
