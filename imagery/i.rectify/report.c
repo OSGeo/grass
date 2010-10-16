@@ -8,13 +8,7 @@ int report(char *name, char *mapset, char *result,
     long seconds;
     long ncells;
 
-    select_current_env();
-    G_message(_("Rectify <%s@%s> (location <%s>)"),
-	      name, mapset, G_location());
-    select_target_env();
-    G_message(_("into  <%s@%s> (location <%s>) ... %s"),
-	      result, G_mapset(), G_location(), ok ? _("complete") : _("failed"));
-    select_current_env();
+    G_message("%s", ok ? _("complete") : _("failed"));
 
     if (!ok)
 	return 1;

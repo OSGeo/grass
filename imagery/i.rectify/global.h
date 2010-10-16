@@ -5,31 +5,47 @@
  * (which goes on behind the scenes) may actual increase the i/o.
  */
 #include <grass/gis.h>
-
-#define NROWS 64
-#define NCOLS 256
-
 #include <grass/imagery.h>
-#include "rowcol.h"
 
-#define IDX int
+#define L2BDIM 6
+#define BDIM (1<<(L2BDIM))
+#define L2BSIZE (2*(L2BDIM))
+#define BSIZE (1<<(L2BSIZE))
+#define HI(i) ((i)>>(L2BDIM))
+#define LO(i) ((i)&((BDIM)-1))
 
-extern ROWCOL row_map[NROWS][NCOLS];
-extern ROWCOL col_map[NROWS][NCOLS];
-extern ROWCOL row_min[NROWS];
-extern ROWCOL row_max[NROWS];
-extern ROWCOL row_left[NROWS];
-extern ROWCOL row_right[NROWS];
-extern IDX row_idx[NROWS];
-extern int matrix_rows, matrix_cols;
+typedef DCELL block[BDIM][BDIM];
 
-extern void **cell_buf;
+struct cache
+{
+    int fd;
+    int stride;
+    int nblocks;
+    block **grid;
+    block *blocks;
+    int *refs;
+};
+
+extern char *seg_mb;
+extern int seg_rows, seg_cols;
+
 extern int temp_fd;
 extern RASTER_MAP_TYPE map_type;
 extern char *temp_name;
 extern int *ref_list;
 extern char **new_name;
 extern struct Ref ref;
+
+typedef void (*func) (struct cache *, void *, int, double *, double *, struct Cell_head *);
+
+extern func interpolate;		/* interpolation routine        */
+
+struct menu
+{
+    func method;		/* routine to interpolate new value      */
+    char *name;			/* method name                           */
+    char *text;			/* menu display - full description       */
+};
 
 /* georef coefficients */
 
@@ -51,20 +67,23 @@ int select_target_env(void);
 int show_env(void);
 
 /* exec.c */
-int exec_rectify(int, char *);
+int exec_rectify(int, char *, char *);
 
 /* get_wind.c */
 int get_target_window(int);
 int georef_window(struct Cell_head *, struct Cell_head *, int, double);
 
-/* matrix.c */
-int compute_georef_matrix(struct Cell_head *, struct Cell_head *, int);
-
-/* perform.c */
-int perform_georef(int, void *);
-
 /* rectify.c */
-int rectify(char *, char *, char *, int);
+int rectify(char *, char *, char *, int, char *);
+
+/* readcell.c */
+extern struct cache *readcell(int, const char *);
+extern block *get_block(struct cache *, int);
+
+#define BKIDX(c,y,x) ((y) * (c)->stride + (x))
+#define BKPTR(c,y,x) ((c)->grid[BKIDX((c),(y),(x))])
+#define BLOCK(c,y,x) (BKPTR((c),(y),(x)) ? BKPTR((c),(y),(x)) : get_block((c),BKIDX((c),(y),(x))))
+#define CPTR(c,y,x) (&(*BLOCK((c),HI((y)),HI((x))))[LO((y))][LO((x))])
 
 /* report.c */
 int report(char *, char *, char *, long, long, int);
@@ -72,6 +91,19 @@ int report(char *, char *, char *, long, long, int);
 /* target.c */
 int get_target(char *);
 
-/* write.c */
-int write_matrix(int, int);
-int write_map(char *);
+/* declare resampling methods */
+/* bilinear.c */
+extern void p_bilinear(struct cache *, void *, int, double *, double *,
+		       struct Cell_head *);
+/* cubic.c */
+extern void p_cubic(struct cache *, void *, int, double *, double *,
+		    struct Cell_head *);
+/* nearest.c */
+extern void p_nearest(struct cache *, void *, int, double *, double *,
+		      struct Cell_head *);
+/* bilinear_f.c */
+extern void p_bilinear_f(struct cache *, void *, int, double *, double *,
+		       struct Cell_head *);
+/* cubic_f.c */
+extern void p_cubic_f(struct cache *, void *, int, double *, double *,
+		    struct Cell_head *);

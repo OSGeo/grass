@@ -7,10 +7,10 @@ points identified in
 or
 <EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
 
-to calculate a transformation matrix based on a  first,
+to calculate a transformation matrix based on a first,
 second, or third order polynomial and then converts x,y
 cell coordinates to standard map coordinates for each pixel
-in the image.  The result is a planimetric image with a
+in the image. The result is a planimetric image with a
 transformed coordinate system (i.e., a different coordinate
 system than before it was rectified).
 
@@ -21,111 +21,55 @@ or
 <EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
 
 must be run before <EM>i.rectify</EM>, and both programs
-are required to rectify an image.  An image must be
+are required to rectify an image. An image must be
 rectified before it can reside in a standard coordinate
 LOCATION, and therefore be analyzed with the other map
-layers in the standard coordinate LOCATION.  Upon
+layers in the standard coordinate LOCATION. Upon
 completion of <EM>i.rectify</EM>, the rectified image is
-deposited in the target standard coordinate LOCATION.  This
+deposited in the target standard coordinate LOCATION. This
 LOCATION is selected using
 
 <EM><A HREF="i.target.html">i.target</A></EM>.
 
-<H2>Program Prompts</H2>
+<p>More than one raster map may be rectified at a time. Each cell file
+should be given a unique output file name. The rectified image or
+rectified raster maps will be located in the target LOCATION when the
+program is completed. The original unrectified files are not modified
+or removed.
 
-The first prompt in the program asks for the name of
-the group containing the files to be rectified.
-
-
-<PRE>
-     Enter the group containing files to be rectified
-     Enter 'list' for a list of existing imagery groups
-     Enter 'list -f' for a verbose listing
-     Hit RETURN to cancel request
-     &gt;
-</PRE>
-
- This is the same imagery group that was selected in 
-
-<EM><A HREF="i.points.html">i.points</A></EM>
-or
-<EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
-
-and the group that contains the raster maps with the marked
-points and their associated map  coordinates.  You are then
-asked to select the raster map(s) within the group to be
-rectified:
-
-
-<PRE>
-Please select the file(s) to rectify by naming an output file
-
-       spot1.1 in mapsetname      .............
-       spot1.2 in mapsetname      .............
-       spot1.3 in mapsetname      .............
-       spotclass1 in mapsetname   spotrectify1.
-    
-       spotreject1 in mapsetname  .............
-
-(enter list by any name to get a list of existing raster maps)
-
-AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
-           (OR&lt;Ctrl-C&gt; TO CANCEL)
-</PRE>
-
-More than one raster map may be rectified at a time.  Each
-cell file should be given a unique output file name.
-
-
-<P>
-
-Next, you are asked to select one of two windows regions:
-
-
-<PRE>
-  Please select one of the following options
-  1.  Use the current window in the target location
-  2.  Determine the smallest window which covers the image
-  &gt;
-</PRE>
-
-The <EM>i.rectify</EM> program will only rectify that
-portion of the image or raster map that occurs within the
-chosen window region, and only that portion of the cell
-file will be relocated in the target database.  It is
+<p>
+If the <b>-c</b> flag is used, <EM>i.rectify</EM> will only rectify that
+portion of the image or raster map that occurs within the chosen window
+region in the target location, and only that portion of the cell
+file will be relocated in the target database. It is
 important therefore, to check the current mapset window in
-the target LOCATION if choice number one is selected.
+the target LOCATION if the <b>-c</b> flag is used.
 
 <P>
 
 If you are rectifying a file with plans to patch it to
 another file using the GRASS program <em>r.patch</em>,
 choose option number one, the current window in the target
-location.  This window, however, must be the default window
-for the target LOCATION.  When a file being rectified is
+location. This window, however, must be the default window
+for the target LOCATION. When a file being rectified is
 smaller than the default window in which it is being
-rectified, zeros are added to the rectified file.  Patching
-files of the same size that contain 0/non-zero data,
-eliminates the possibility of a no-data line the patched
-result.  This is because, when the images are patched, the
-zeros in the image are "covered" with non-zero pixel
-values.  When rectifying files that are going to be
+rectified, NULLs are added to the rectified file. Patching
+files of the same size that contain NULL data,
+eliminates the possibility of a no-data line in the patched
+result. This is because, when the images are patched, the
+NULLs in the image are "covered" with non-NULL pixel
+values. When rectifying files that are going to be
 patched, rectify all of the files using the same default
 window.
 
-
+<h3>Coordinate transformation</h3>
 <P>
+The desired order of transformation (1, 2, or 3) is selected with the
+<b>order</b> option.
 
-Select the order of transformation desired with the <b>order</b> option:
+The program will calculate the RMSE and check the required number of points.
 
-<PRE>
-Select order of transformation --&gt;   1st Order   2nd Order  3rd Order
-</PRE>
-
-The program will immediately recalculate the RMSE and the
-number of points required.
-
-<h3>Linear affine transformation (1st order transformation)</h3>
+<h4>Linear affine transformation (1st order transformation)</h4>
 
 <DL>
 	<DD> x' = ax + by +c
@@ -134,21 +78,19 @@ number of points required.
 
 The a,b,c,A,B,C are determined by least squares regression
 based on the control points entered.  This transformation
-applies scaling, translation and rotation.  It is NOT a
+applies scaling, translation and rotation. It is NOT a
 general purpose rubber-sheeting, nor is it ortho-photo
 rectification using a DEM, not second order polynomial,
-etc.  It can be used if (1) you have geometrically correct
+etc. It can be used if (1) you have geometrically correct
 images, and (2) the terrain or camera distortion effect can
 be ignored.
 
+<H4>Polynomial Transformation Matrix (2nd, 3d order transformation)</H4>
 
-<H3>Polynomial Transformation Matrix (2nd, 3d order transformation)</H3>
-
-The ANALYZE function has been changed to support
-calculating the registration coefficients using a first,
-second, or third order transformation matrix.  The number
-of control points required for a selected order of
-transformation (represented by n) is
+<EM>i.rectify</EM> uses a first, second, or third order transformation
+matrix to calculate the registration coefficients. The number
+of control points required for a selected order of transformation
+(represented by n) is
 
 <DL>
 <DD>((n + 1) * (n + 2) / 2) 
@@ -156,20 +98,44 @@ transformation (represented by n) is
 
 or 3, 6, and 10 respectively. It is strongly recommended
 that one or more additional points be identified to allow
-for an overly- determined transformation calculation which
+for an overly-determined transformation calculation which
 will generate the Root Mean Square (RMS) error values for
-each included point.  The RMS error values for all the
+each included point. The RMS error values for all the
 included control points are immediately recalculated when
 the user selects a different transformation order from the
-menu bar.  The polynomial equations are performed using a 
+menu bar. The polynomial equations are performed using a 
 modified Gaussian elimination method.
 
-<H3>Program Execution</H3>
-
-Note:  The rectified image or rectified raster maps will be
-located in the target LOCATION when the program is
-completed.  The original unrectified files are not modified
-or removed.
+<h3>Resampling method</h3>
+<p>
+The rectified data is resampled with one of five different methods: 
+<em>nearest</em>, <em>bilinear</em>, <em>cubic</em>, <em>bilinear_f</em>
+or <em>cubic_f</em>.
+<p>
+The <em>method=nearest</em> method, which performs a nearest neighbor assignment,
+is the fastest of the three resampling methods. It is primarily used for
+categorical data such as a land use classification, since it will not change
+the values of the data cells. The <em>method=bilinear</em> method determines the new
+value of the cell based on a weighted distance average of the 4 surrounding
+cells in the input map. The <em>method=cubic</em> method determines the new value of
+the cell based on a weighted distance average of the 16 surrounding cells in
+the input map.
+<p>
+The bilinear and cubic interpolation methods are most appropriate for
+continuous data and cause some smoothing. Both options should not be used
+with categorical data, since the cell values will be altered.
+<p>
+In the bilinear and cubic methods, if any of the surrounding cells used to
+interpolate the new cell value are NULL, the resulting cell will be NULL, even if
+the nearest cell is not NULL. This will cause some thinning along NULL borders,
+such as the coasts of land areas in a DEM. The bilinear_f and cubic_f
+interpolation methods can be used if thinning along NULL edges is not desired.
+These methods "fall back" to simpler interpolation methods along NULL borders.
+That is, from cubic to bilinear to nearest.
+<p>
+If nearest neighbor assignment is used, the output map has the same raster
+format as the input map. If any of the other interpolations is used, the
+output map is written as floating point.
 
 <P>
 <!--
@@ -180,19 +146,12 @@ mode.
 
 <h2>NOTES</h2>
 
-<EM>i.rectify</EM> uses nearest neighbor resampling during
-the transformation choosing the actual pixel that has its centre nearest to
-the point location in the image. Advantage of this method is that the pixel
-brightness of the image is kept as <EM>i.rectify</EM> rearranges the
-geometry of the image pixels.
-<P>
-
 If <em>i.rectify</em> starts normally but after some time the following text is seen:
 <br><tt>
-GIS ERROR: error while writing to temp file
+ERROR: Error writing segment file
 </tt><br>
-the user may try the flag <EM>-c</EM> (or the module needs more free space
-on the hard drive).
+the user may try the <b>-c</b> flag or the module needs more free space
+on the hard drive.
 
 
 <H2>SEE ALSO</H2>
@@ -210,8 +169,9 @@ Processing manual</A></EM>
 <A HREF="i.points.html">i.points</A>,
 <A HREF="i.vpoints.html">i.vpoints</A>,
 <A HREF="i.target.html">i.target</A>
-</EM><br>
-<em><a href="gm_georect.html">gis.m: GEORECTIFY TOOL</a></em>
+<br>
+<a href="wxGUI.GCP_Manager.html">Manage Ground Control Points</a>,
+<a href="gm_georect.html">gis.m: GEORECTIFY TOOL</a></em>
 
 
 <H2>AUTHORS</H2>
