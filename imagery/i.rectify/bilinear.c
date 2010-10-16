@@ -32,7 +32,11 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
       result;			/* result of interpolation       */
     DCELL *c00, *c01, *c10, *c11;
 
-    /* cut indices to integer */
+    /* cut indices to integer and get nearest cells */
+    /* example: *row_idx = 2.1
+     * nearest rows are 1 and 2, not 2 and 3 */
+    *row_idx -= 0.5;
+    *col_idx -= 0.5;
     row0 = (int)floor(*row_idx);
     col0 = (int)floor(*col_idx);
     row1 = row0 + 1;

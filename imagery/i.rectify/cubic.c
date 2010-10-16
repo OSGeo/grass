@@ -33,7 +33,14 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
       val[4];			/* buffer for temporary values   */
     DCELL *cellp[4][4];
 
-    /* cut indices to integer */
+    /* cut indices to integer and get nearest cells */
+    /* example: *row_idx = 2.1
+     * nearest rows are 0, 1, 2 and 3, not 1, 2, 3 and 4
+     * row 0 streches from 0 to 1, row 4 from 4 to 5
+     * 2.1 - 1 = 1.1
+     * 4 - 2.1 = 1.9 */
+    *row_idx -= 0.5;
+    *col_idx -= 0.5;
     row = (int)floor(*row_idx);
     col = (int)floor(*col_idx);
 

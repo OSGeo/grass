@@ -20,7 +20,8 @@ void p_nearest(struct cache *ibuffer,	/* input buffer                  */
     int row, col;		/* row/col of nearest neighbor   */
     DCELL *cellp;
 
-    /* cut indices to integer */
+    /* cut indices to integer and get nearest cell */
+    /* the row_idx, col_idx correction for bilinear/bicubic does not apply here */
     row = (int)floor(*row_idx);
     col = (int)floor(*col_idx);
 
