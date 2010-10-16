@@ -42,7 +42,7 @@ void p_bilinear_f(struct cache *ibuffer,	/* input buffer                  */
         return;
     }
     
-    p_bilinear(ibuffer, obufptr, cell_type, col_idx, row_idx, cellhd);
+    p_bilinear(ibuffer, obufptr, cell_type, row_idx, col_idx, cellhd);
     /* fallback to nearest if bilinear is null */
     if (Rast_is_d_null_value(obufptr))
         Rast_set_d_value(obufptr, *cellp, cell_type);
