@@ -47,7 +47,7 @@ void p_cubic_f(struct cache *ibuffer,	/* input buffer                  */
     if (Rast_is_f_null_value(obufptr)) {
         p_bilinear(ibuffer, obufptr, cell_type, col_idx, row_idx, cellhd);
         /* fallback to nearest if bilinear is null */
-		if (Rast_is_f_null_value(obufptr))
+	if (Rast_is_f_null_value(obufptr))
             Rast_set_f_value(obufptr, *cellp, cell_type);
     }
 }

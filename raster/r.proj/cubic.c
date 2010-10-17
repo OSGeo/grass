@@ -35,8 +35,8 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
     FCELL *cellp[4][4];
 
     /* cut indices to integer */
-    row = (int)floor(*row_idx);
-    col = (int)floor(*col_idx);
+    row = (int)floor(*row_idx - 0.5);
+    col = (int)floor(*col_idx - 0.5);
 
     /* check for out of bounds of map - if out of bounds set NULL value     */
     if (row - 1 < 0 || row + 2 >= cellhd->rows ||
@@ -59,8 +59,8 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
 	}
 
     /* do the interpolation  */
-    t = *col_idx - col;
-    u = *row_idx - row;
+    t = *col_idx - 0.5 - col;
+    u = *row_idx - 0.5 - row;
 
     for (i = 0; i < 4; i++) {
 	FCELL **tmp = cellp[i];

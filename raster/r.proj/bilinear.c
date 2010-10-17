@@ -33,8 +33,8 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
     FCELL *c00, *c01, *c10, *c11;
 
     /* cut indices to integer */
-    row0 = (int)floor(*row_idx);
-    col0 = (int)floor(*col_idx);
+    row0 = (int)floor(*row_idx - 0.5);
+    col0 = (int)floor(*col_idx - 0.5);
     row1 = row0 + 1;
     col1 = col0 + 1;
 
@@ -58,8 +58,8 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
     }
 
     /* do the interpolation  */
-    t = *col_idx - col0;
-    u = *row_idx - row0;
+    t = *col_idx - 0.5 - col0;
+    u = *row_idx - 0.5 - row0;
     tu = t * u;
 
     result = Rast_interp_bilinear(t, u, *c00, *c01, *c10, *c11);

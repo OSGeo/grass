@@ -236,11 +236,13 @@ int main(int argc, char **argv)
 	G_fatal_error(_("option <%s>: <%s> exists."), "output", mapname);
 
     setname = imapset->answer ? imapset->answer : G_store(G_mapset());
-
     if (strcmp(inlocation->answer, G_location()) == 0 &&
         (!indbase->answer || strcmp(indbase->answer, G_gisdbase()) == 0))
+#if 0
 	G_fatal_error(_("Input and output locations can not be the same"));
-
+#else
+	G_warning(_("Input and output locations are the same"));
+#endif
     G_get_window(&outcellhd);
 
     if(gprint_bounds->answer && !print_bounds->answer)
