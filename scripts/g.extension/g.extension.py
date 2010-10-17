@@ -53,30 +53,23 @@
 #% type: string
 #% key_desc: path
 #% description: Prefix where to install extension
-#% answer: $(HOME)/.grass7/addons
+#% answer: $GRASS_ADDON_PATH
 #% required: yes
-#%end
-#%option
-#% key: menuitem
-#% type: string
-#% label: Menu item in wxGUI
-#% description: Given as string, e.g. 'Imagery;Filter image'
-#% required: no
 #%end
 
 #%flag
 #% key: l
-#% description: List available modules in the add-ons repository
+#% description: List available modules in the GRASS Addons SVN repository
 #% guisection: Print
 #%end
 #%flag
 #% key: f
-#% description: List available modules in the add-ons repository including modules description
+#% description: List available modules in the GRASS Addons SVN repository including modules description
 #% guisection: Print
 #%end
 #%flag
 #% key: g
-#% description: List available modules in the add-ons repository in shell script style
+#% description: List available modules in the GRASS Addons SVN repository (shell script style)
 #% guisection: Print
 #%end
 #%flag
@@ -268,8 +261,13 @@ def install_extension(svnurl, prefix, module):
     grass.message(_("Fetching '%s' from GRASS-Addons SVN (be patient)...") % module)
     global tmpdir
     os.chdir(tmpdir)
+    if grass.verbosity() == 0:
+        outdev = open(os.devnull, 'w')
+    else:
+        outdev = sys.stdout
+    
     if grass.call(['svn', 'checkout',
-                   url]) != 0:
+                   url], stdout = outdev) != 0:
         grass.fatal(_("GRASS Addons '%s' not found in repository") % module)
 
     os.chdir(os.path.join(tmpdir, module))
@@ -281,14 +279,16 @@ def install_extension(svnurl, prefix, module):
         stdin = open(os.path.join(tmpdir, module, 'grass7.patch'))
         grass.call(['patch',
                     '-p0'],
-                   stdin = stdin)
+                   stdin = stdin,
+                   stdout = outdev)
         # rename manual page
         os.rename('description.html', module + '.html')
         grass.verbose(_("Manual renamed from 'description.html' to '%s.html'") % module)
     
     grass.message(_("Compiling '%s'...") % module)
     if grass.call(['make',
-                   'MODULE_TOPDIR=%s' % gisbase]) != 0:
+                   'MODULE_TOPDIR=%s' % gisbase],
+                   stdout = outdev) != 0:
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
     
     grass.message(_("Installing '%s'...") % module)
@@ -303,12 +303,14 @@ def install_extension(svnurl, prefix, module):
         ret = grass.call(['make',
                           'MODULE_TOPDIR=%s' % gisbase,
                           'INST_DIR=%s' % prefix,
-                          'install'])
+                          'install'],
+                          stdout = outdev)
     except IOError:
         ret = grass.call(['sudo', 'make',
                           'MODULE_TOPDIR=%s' % gisbase,
                           'INST_DIR=%s' % prefix,
-                          'install'])
+                          'install'],
+                          stdout = outdev)
     
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
@@ -327,18 +329,27 @@ def remove_extension(prefix, module):
             os.remove(file)
                     
     grass.message(_("'%s' successfully uninstalled.") % module)
+
+def create_dir(path):
+    if os.path.isdir(path):
+        return
     
-def update_menu(menuitem, module, operation):
-    grass.warning(_('Not implemented'))
-    if operation == 'add':
-        pass
-    else: # remove
-        pass
+    try:
+        os.makedirs(path)
+    except OSError, e:
+        grass.fatal(_("Unable to create '%s': %s") % (path, e))
+    
+    grass.debug("'%s' created" % path)
+    
+def check_dirs():
+    create_dir(os.path.join(options['prefix'], 'bin'))
+    create_dir(os.path.join(options['prefix'], 'docs', 'html'))
+    create_dir(os.path.join(options['prefix'], 'man', 'man1'))
 
 def main():
     # check dependecies
     check()
-
+    
     # list available modules
     if flags['l'] or flags['f'] or flags['g']:
         list_available_modules(options['svnurl'], full = flags['f'], shell = flags['g'])
@@ -347,17 +358,15 @@ def main():
         if not options['extension']:
             grass.fatal(_('You need to define an extension name or use -l'))
     
-    # TODO: check more variable
-    if '$(HOME)' in options['prefix']:
-        options['prefix'] = options['prefix'].replace('$(HOME)', os.environ['HOME'])  
-
-    if not os.path.isdir(options['prefix']):
-        try:
-            os.makedirs(options['prefix'])
-        except OSError, e:
-            grass.fatal(_("Unable to create '%s'\n%s") % (options['prefix'], e))
-            
-        grass.warning(_("'%s' created") % options['prefix'])
+    # define path
+    if options['prefix'] == '$GRASS_ADDON_PATH':
+        if not os.environ.has_key('GRASS_ADDON_PATH') or \
+                not os.environ['GRASS_ADDON_PATH']:
+            grass.warning(_("GRASS_ADDON_PATH is not defined, installing to ~/.grass7/addons/"))
+            options['prefix'] = os.path.join(os.environ['HOME'], '.grass7', 'addons')
+    
+    # check dirs
+    check_dirs()
     
     if flags['d']:
         if options['operation'] != 'add':
@@ -370,9 +379,6 @@ def main():
         install_extension(options['svnurl'], options['prefix'], options['extension'])
     else: # remove
         remove_extension(options['prefix'], options['extension'])
-
-    if options['menuitem']:
-        update_menu(options['menuitem'], options['extension'], options['operation'])
     
     return 0
 
