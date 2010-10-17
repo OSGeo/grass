@@ -76,6 +76,10 @@
 #% key: d
 #% description: Don't delete downloaded source code when installing new extension
 #%end
+#%flag
+#% key: i
+#% description: Don't install new extension, just compile it
+#%end
 
 import os
 import sys
@@ -246,7 +250,7 @@ def cleanup():
     else:
         grass.info(_("Path to the source code: '%s'") % tmpdir)
                         
-def install_extension(svnurl, prefix, module):
+def install_extension(svnurl, prefix, module, no_install):
     gisbase = os.getenv('GISBASE')
     if not gisbase:
         grass.fatal(_('$GISBASE not defined'))
@@ -290,6 +294,9 @@ def install_extension(svnurl, prefix, module):
                    'MODULE_TOPDIR=%s' % gisbase],
                    stdout = outdev) != 0:
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
+    
+    if no_install:
+        return
     
     grass.message(_("Installing '%s'...") % module)
     # can we write ?
@@ -376,7 +383,7 @@ def main():
             remove_tmpdir = False
     
     if options['operation'] == 'add':
-        install_extension(options['svnurl'], options['prefix'], options['extension'])
+        install_extension(options['svnurl'], options['prefix'], options['extension'], flags['i'])
     else: # remove
         remove_extension(options['prefix'], options['extension'])
     
