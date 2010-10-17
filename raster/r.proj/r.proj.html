@@ -147,16 +147,17 @@ resolution of the target location should be set appropriately beforehand.
 
 <p>
 A simple way to do this is to check the projected bounds of the input map
-in the current location's projection using the <b>-p</b> flag. The  <b>-g</b>
+in the current location's projection using the <b>-p</b> flag. The <b>-g</b>
 flag reports the same thing, but in a form which can be directly cut and
 pasted into a <em>g.region</em> command. After setting the region in that
 way you might check the cell resolution with "<em>g.region -p</em>" then
 snap it to a regular grid with <em>g.region</em>'s -a flag. E.g.
-<tt>g.region&nbsp;-a&nbsp;res=5 -p</tt>.
+<tt>g.region&nbsp;-a&nbsp;res=5 -p</tt>. Note that this is just a rough guide.
 
 <p>
-A more involved way to do this is to generate a vector "box" map of the region in
-the source location using <em><a href="v.in.region.html">v.in.region</a></em>.
+A more involvedi, but more accurate, way to do this is to generate a vector
+"box" map of the region in the source location using
+ <em><a href="v.in.region.html">v.in.region</a></em>.
 This "box" map is then reprojected into the target location with
 <em><a href="v.proj.html">v.proj</a></em>.
 Next the region in the target location is set to the extent of the new vector
