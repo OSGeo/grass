@@ -723,7 +723,7 @@ def verbosity():
     if vbstr:
 	return int(vbstr)
     else:
-	return 0
+	return 2
 
 ## various utilities, not specific to GRASS
 
