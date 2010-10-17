@@ -74,7 +74,7 @@
 #%end
 #%flag
 #% key: d
-#% description: Don't deleted downloaded source code when installing new extension
+#% description: Don't delete downloaded source code when installing new extension
 #%end
 
 import os
