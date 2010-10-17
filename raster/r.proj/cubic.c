@@ -26,13 +26,13 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
 	     struct Cell_head *cellhd	/* information of output map     */
     )
 {
-    int row,			/* row indices for interp        */
-      col;			/* column indices for interp     */
+    int row;			/* row indices for interp        */
+    int col;			/* column indices for interp     */
     int i, j;
-    FCELL t, u,			/* intermediate slope            */
-      result,			/* result of interpolation       */
-      val[4];			/* buffer for temporary values   */
-    FCELL *cellp[4][4];
+    FCELL t, u;			/* intermediate slope            */
+    FCELL result;		/* result of interpolation       */
+      FCELL val[4];		/* buffer for temporary values   */
+    FCELL cell[4][4];
 
     /* cut indices to integer */
     row = (int)floor(*row_idx - 0.5);
@@ -46,16 +46,13 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
     }
 
     for (i = 0; i < 4; i++)
-	for (j = 0; j < 4; j++)
-	    cellp[i][j] = CPTR(ibuffer, row - 1 + i, col - 1 + j);
-
-    /* check for NULL value                                         */
-    for (i = 0; i < 4; i++)
 	for (j = 0; j < 4; j++) {
-	    if (Rast_is_f_null_value(cellp[i][j])) {
+	    const FCELL *cellp = CPTR(ibuffer, row - 1 + i, col - 1 + j);
+	    if (Rast_is_f_null_value(cellp)) {
 		Rast_set_null_value(obufptr, 1, cell_type);
 		return;
 	    }
+	    cell[i][j] = *cellp;
 	}
 
     /* do the interpolation  */
@@ -63,9 +60,8 @@ void p_cubic(struct cache *ibuffer,	/* input buffer                  */
     u = *row_idx - 0.5 - row;
 
     for (i = 0; i < 4; i++) {
-	FCELL **tmp = cellp[i];
-
-	val[i] = Rast_interp_cubic(t, *tmp[0], *tmp[1], *tmp[2], *tmp[3]);
+	const FCELL *tmp = cell[i];
+	val[i] = Rast_interp_cubic(t, tmp[0], tmp[1], tmp[2], tmp[3]);
     }
 
     result = Rast_interp_cubic(u, val[0], val[1], val[2], val[3]);
