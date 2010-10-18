@@ -23,7 +23,7 @@ void p_bilinear_f(struct cache *ibuffer,	/* input buffer                  */
 {
     /* start nearest neighbor to do some basic tests */
     int row, col;		/* row/col of nearest neighbor   */
-    DCELL *cellp;
+    DCELL *cellp, cell;
 
     /* cut indices to integer */
     row = (int)floor(*row_idx);
@@ -41,9 +41,10 @@ void p_bilinear_f(struct cache *ibuffer,	/* input buffer                  */
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
-    
-    p_bilinear(ibuffer, obufptr, cell_type, row_idx, col_idx, cellhd);
+    cell = *cellp;
+
+    p_bilinear(ibuffer, obufptr, cell_type, col_idx, row_idx, cellhd);
     /* fallback to nearest if bilinear is null */
     if (Rast_is_d_null_value(obufptr))
-        Rast_set_d_value(obufptr, *cellp, cell_type);
+        Rast_set_d_value(obufptr, cell, cell_type);
 }

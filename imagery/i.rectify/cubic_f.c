@@ -24,7 +24,7 @@ void p_cubic_f(struct cache *ibuffer,	/* input buffer                  */
 {
     /* start nearest neighbor to do some basic tests */
     int row, col;		/* row/col of nearest neighbor   */
-    DCELL *cellp;
+    DCELL *cellp, cell;
 
     /* cut indices to integer */
     row = (int)floor(*row_idx);
@@ -42,6 +42,7 @@ void p_cubic_f(struct cache *ibuffer,	/* input buffer                  */
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
+	cell = *cellp;
     
     p_cubic(ibuffer, obufptr, cell_type, row_idx, col_idx, cellhd);
     /* fallback to bilinear if cubic is null */
