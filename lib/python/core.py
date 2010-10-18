@@ -87,11 +87,11 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     @endcode
 
     @param prog GRASS module
-    @param flags flags to be used
-    @param overwrite True to enable overwriting the output (--o)
-    @param quiet run quietly (--q)
-    @param verbose run verbosely (--v)
-    @param options
+    @param flags flags to be used (given as a string)
+    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
+    @param quiet True to run quietly (<tt>--q</tt>)
+    @param verbose True to run verbosely (<tt>--v</tt>)
+    @param options module's parameters
 
     @return list of arguments
     """
@@ -130,12 +130,12 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     \endcode
     
     @param prog GRASS module
-    @param flags flags to be used
-    @param overwrite True to enable overwriting the output (--o)
-    @param quiet run quietly (--q)
-    @param verbose run verbosely (--v)
-    @param kwargs
-
+    @param flags flags to be used (given as a string)
+    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
+    @param quiet True to run quietly (<tt>--q</tt>)
+    @param verbose True to run verbosely (<tt>--v</tt>)
+    @param kwargs module's parameters
+    
     @return Popen object
     """
     options = {}
@@ -159,10 +159,10 @@ def run_command(*args, **kwargs):
     complete, returning its exit code. Similar to subprocess.call(), but
     with the make_command() interface.
 
-    @param args
-    @param kwargs
+    @param args list of unnamed arguments (see start_command() for details)
+    @param kwargs list of named arguments (see start_command() for details)
 
-    @return exit code
+    @return exit code (0 for success)
     """
     ps = start_command(*args, **kwargs)
     return ps.wait()
@@ -184,8 +184,8 @@ def pipe_command(*args, **kwargs):
     MONITOR='x0';
     \endcode
     
-    @param args
-    @param kwargs
+    @param args list of unnamed arguments (see start_command() for details)
+    @param kwargs list of named arguments (see start_command() for details)
 
     @return Popen object
     """
@@ -196,9 +196,9 @@ def feed_command(*args, **kwargs):
     """!Passes all arguments to start_command, but also adds
     "stdin = PIPE". Returns the Popen object.
 
-    @param args
-    @param kwargs
-
+    @param args list of unnamed arguments (see start_command() for details)
+    @param kwargs list of named arguments (see start_command() for details)
+    
     @return Popen object
     """
     kwargs['stdin'] = PIPE
@@ -208,9 +208,9 @@ def read_command(*args, **kwargs):
     """!Passes all arguments to pipe_command, then waits for the process to
     complete, returning its stdout (i.e. similar to shell `backticks`).
 
-    @param args
-    @param kwargs
-
+    @param args list of unnamed arguments (see start_command() for details)
+    @param kwargs list of named arguments (see start_command() for details)
+    
     @return stdout
     """
     ps = pipe_command(*args, **kwargs)
@@ -227,9 +227,9 @@ def parse_command(*args, **kwargs):
     parse_command(..., parse = (grass.parse_key_val, { 'sep' : ':' }))
     @endcode
 
-    @param args
-    @param kwargs
-
+    @param args list of unnamed arguments (see start_command() for details)
+    @param kwargs list of named arguments (see start_command() for details)
+    
     @return parsed module output
     """
     parse = None
@@ -251,8 +251,8 @@ def write_command(*args, **kwargs):
     """!Passes all arguments to feed_command, with the string specified
     by the 'stdin' argument fed to the process' stdin.
 
-    @param args
-    @param kwargs
+    @param args list of unnamed arguments (see start_command() for details)
+    @param kwargs list of named arguments (see start_command() for details)
 
     @return return code
     """
@@ -266,12 +266,13 @@ def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     """!Interface to os.execvpe(), but with the make_command() interface.
 
     @param prog GRASS module
-    @param flags flags to be used
-    @param overwrite True to enable overwriting the output (--o)
-    @param quiet run quietly (--q)
-    @param verbose run verbosely (--v)
-    @param env environment variable (default os.environ)
-    @param kwargs
+    @param flags flags to be used (given as a string)
+    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
+    @param quiet True to run quietly (<tt>--q</tt>)
+    @param verbose True to run verbosely (<tt>--v</tt>)
+    @param env directory with enviromental variables
+    @param kwargs module's parameters
+
     """
     args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     if env == None:
