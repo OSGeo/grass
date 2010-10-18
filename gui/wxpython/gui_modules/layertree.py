@@ -61,8 +61,7 @@ except ImportError:
 TREE_ITEM_HEIGHT = 25
 
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
-    """
-    Creates layer tree structure
+    """!Creates layer tree structure
     """
     def __init__(self, parent,
                  id = wx.ID_ANY, style=wx.SUNKEN_BORDER,
@@ -640,7 +639,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.EditLabel(self.layer_selected)
 
     def AddLayer(self, ltype, lname=None, lchecked=None,
-                 lopacity=1.0, lcmd=None, lgroup=None, lvdigit=None, lnviz=None):
+                 lopacity=1.0, lcmd=None, lgroup=None, lvdigit=None, lnviz=None, multiple = True):
         """!Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
@@ -652,14 +651,25 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         @param lgroup index of group item (-1 for root) or None
         @param lvdigit vector digitizer settings (eg. geometry attributes)
         @param lnviz layer Nviz properties
+        @param multiple True to allow multiple map layers in layer tree
         """
+        if lname and not multiple:
+            # check for duplicates
+            item = self.GetFirstVisibleItem()
+            while item and item.IsOk():
+                if self.GetPyData(item)[0]['type'] == 'vector':
+                    name = self.GetPyData(item)[0]['maplayer'].GetName()
+                    if name == lname:
+                        return
+                item = self.GetNextVisible(item)
+        
         self.first = True
         params = {} # no initial options parameters
 
         # deselect active item
         if self.layer_selected:
             self.SelectItem(self.layer_selected, select=False)
-
+        
         Debug.msg (3, "LayerTree().AddLayer(): ltype=%s" % (ltype))
         
         if ltype == 'command':
@@ -1368,20 +1378,20 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     mapWin.ResetView()
         
     def ReorderLayers(self):
-        """!Add commands from data associated with
-        any valid layers (checked or not) to layer list in order to
-        match layers in layer tree."""
+        """!Add commands from data associated with any valid layers
+        (checked or not) to layer list in order to match layers in
+        layer tree."""
 
         # make a list of visible layers
         treelayers = []
-
+        
         vislayer = self.GetFirstVisibleItem()
-
+        
         if not vislayer or self.GetPyData(vislayer) is None:
             return
-
+        
         itemList = ""
-
+        
         for item in range(self.GetCount()):
             itemList += self.GetItemText(vislayer) + ','
             if self.GetPyData(vislayer)[0]['type'] != 'group':
@@ -1391,15 +1401,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 break
             else:
                 vislayer = self.GetNextVisible(vislayer)
-
+        
         Debug.msg (4, "LayerTree.ReorderLayers(): items=%s" % \
                    (itemList))
-
+        
         # reorder map layers
         treelayers.reverse()
         self.Map.ReorderLayers(treelayers)
         self.reorder = False
-
+        
     def ChangeLayer(self, item):
         """!Change layer"""
         type = self.GetPyData(item)[0]['type']
