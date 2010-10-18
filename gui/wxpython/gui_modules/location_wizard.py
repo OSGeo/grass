@@ -122,8 +122,7 @@ class TitledPage(BaseClass, wiz.WizardPageSimple):
         self.Layout()
 
 class DatabasePage(TitledPage):
-    """!Wizard page for setting GIS data directory and location name
-    """
+    """!Wizard page for setting GIS data directory and location name"""
     def __init__(self, wizard, parent, grassdatabase):
         TitledPage.__init__(self, wizard, _("Define GRASS Database and Location Name"))
 
@@ -169,7 +168,6 @@ class DatabasePage(TitledPage):
         # bindings
         self.Bind(wx.EVT_BUTTON,                self.OnBrowse, self.bbrowse)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
-        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED,  self.OnEnterPage)
         self.tgisdbase.Bind(wx.EVT_TEXT,        self.OnChangeName)
         self.tlocation.Bind(wx.EVT_TEXT,        self.OnChangeName)
         
@@ -185,6 +183,7 @@ class DatabasePage(TitledPage):
         event.Skip()
 
     def OnBrowse(self, event):
+        """!Choose GRASS data directory"""
         dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
                            os.getcwd(), wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() == wx.ID_OK:
@@ -213,17 +212,10 @@ class DatabasePage(TitledPage):
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetValue()
 
-    def OnEnterPage(self, event):
-        """!Wizard page changed"""
-        self.grassdatabase = self.tgisdbase.GetValue()
-        self.location = self.tlocation.GetValue()
-
-        event.Skip()
         
 class CoordinateSystemPage(TitledPage):
-    """
-    Wizard page for choosing method for location creation
-    """
+    """!Wizard page for choosing method for location creation"""
+    
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Choose method for creating a new location"))
 
@@ -332,9 +324,7 @@ class CoordinateSystemPage(TitledPage):
             self.parent.sumpage.SetPrev(self.parent.csystemspage)
 
 class ProjectionsPage(TitledPage):
-    """
-    Wizard page for selecting projection (select coordinate system option)
-    """
+    """!Wizard page for selecting projection (select coordinate system option)"""
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Choose projection"))
 
@@ -385,10 +375,7 @@ class ProjectionsPage(TitledPage):
         self.projlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED,  self.OnEnterPage)
-
-        # do layout
-        # self.Layout()
-
+        
     def OnPageChanging(self,event):
         if event.GetDirection() and self.proj not in self.parent.projections.keys():
             event.Veto()
@@ -398,7 +385,7 @@ class ProjectionsPage(TitledPage):
         self.proj = event.GetString().lower()
         self.p4proj = ''
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-        if len(self.proj) == 0 and nextButton.IsEnabled():
+        if self.proj not in self.parent.projections.keys() and nextButton.IsEnabled():
             nextButton.Enable(False)
         
         if self.proj in self.parent.projections.keys():
@@ -615,7 +602,6 @@ class ItemList(wx.ListCtrl,
 
     def Search (self, index, pattern):
         """!Search projection by description
-
         Return first found item or None
         """
         if pattern == '':
@@ -739,9 +725,9 @@ class ProjParamsPage(TitledPage):
         self.projdesc = self.parent.projections[self.parent.projpage.proj][0]
         if self.prjParamSizer is None:
             # entering page for the first time
-            paramSBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+            self.paramSBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                      label=_(" Enter parameters for %s projection ") % self.projdesc)
-            paramSBSizer = wx.StaticBoxSizer(paramSBox)
+            paramSBSizer = wx.StaticBoxSizer(self.paramSBox)
             
             self.panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
             self.panel.SetupScrolling()
@@ -758,7 +744,7 @@ class ProjParamsPage(TitledPage):
                     
         if event.GetDirection(): 
             self.prjParamSizer.Clear(True)
-
+            self.paramSBox.SetLabel(_(" Enter parameters for %s projection ") % self.projdesc)
             self.pparam = dict()
             row = 0
             for paramgrp in self.parent.projections[self.parent.projpage.proj][1]:
@@ -945,6 +931,7 @@ class DatumPage(TitledPage):
         event.Skip()
 
     def OnDText(self, event):
+        """!Datum code changed"""
         self.datum = event.GetString()
 
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
@@ -973,6 +960,7 @@ class DatumPage(TitledPage):
         event.Skip()
 
     def OnDSearch(self, event):
+        """!Search geodetic datum by desc"""
         str =  self.searchb.GetValue()
         try:
             self.datum, self.ellipsoid, self.datumdesc = self.datumlist.Search(index=[0,1,2], pattern=str)
@@ -982,6 +970,7 @@ class DatumPage(TitledPage):
         event.Skip()
 
     def OnDatumSelected(self, event):
+        """!Datum selected"""
         index = event.m_itemIndex
         item = event.GetItem()
 
@@ -991,9 +980,7 @@ class DatumPage(TitledPage):
         event.Skip()
 
 class EllipsePage(TitledPage):
-    """
-    Wizard page for selecting ellipsoid (select coordinate system option)
-    """
+    """!Wizard page for selecting ellipsoid (select coordinate system option)"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Specify ellipsoid"))
@@ -1099,6 +1086,7 @@ class EllipsePage(TitledPage):
         event.Skip()
 
     def OnItemSelected(self,event):
+        """!Ellipsoid selected"""
         index = event.m_itemIndex
         item = event.GetItem()
 
@@ -1108,10 +1096,8 @@ class EllipsePage(TitledPage):
         event.Skip()
 
 class GeoreferencedFilePage(TitledPage):
-    """
-    Wizard page for selecting georeferenced file to use
-    for setting coordinate system parameters
-    """
+    """!Wizard page for selecting georeferenced file to use
+    for setting coordinate system parameters"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Select georeferenced file"))
@@ -1152,13 +1138,14 @@ class GeoreferencedFilePage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event):
-        if event.GetDirection() and self.georeffile == '':
+        if event.GetDirection() and not os.path.isfile(self.georeffile):
             event.Veto()
         self.GetNext().SetPrev(self)
 
         event.Skip()
 
     def OnText(self, event):
+        """!File changed"""
         self.georeffile = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
         if len(self.georeffile) > 0 and os.path.isfile(self.georeffile):
@@ -1182,14 +1169,9 @@ class GeoreferencedFilePage(TitledPage):
 
         event.Skip()
 
-    def OnCreate(self, event):
-        pass
-
 class WKTPage(TitledPage):
-    """
-    Wizard page for selecting WKT file to use
-    for setting coordinate system parameters
-    """
+    """!Wizard page for selecting WKT file to use
+    for setting coordinate system parameters"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Select WKT file"))
@@ -1227,13 +1209,14 @@ class WKTPage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event):
-        if event.GetDirection() and self.wktfile == '':
+        if event.GetDirection() and not os.path.isfile(self.wktfile):
             event.Veto()
         self.GetNext().SetPrev(self)
 
         event.Skip()
 
     def OnText(self, event):
+        """!File changed"""
         self.wktfile = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
         if len(self.wktfile) > 0 and os.path.isfile(self.wktfile):
@@ -1257,14 +1240,9 @@ class WKTPage(TitledPage):
 
         event.Skip()
 
-    def OnCreate(self, event):
-        pass
-
 class EPSGPage(TitledPage):
-    """
-    Wizard page for selecting EPSG code for
-    setting coordinate system parameters
-    """
+    """!Wizard page for selecting EPSG code for
+    setting coordinate system parameters"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Choose EPSG Code"))
@@ -1471,10 +1449,8 @@ class EPSGPage(TitledPage):
         self.epsglist.Populate(data, update=True)
         
 class CustomPage(TitledPage):
-    """
-    Wizard page for entering custom PROJ.4 string
-    for setting coordinate system parameters
-    """
+    """!Wizard page for entering custom PROJ.4 string
+    for setting coordinate system parameters"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard,
@@ -1509,14 +1485,9 @@ class CustomPage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
-        event.Skip()
-
     def OnPageChanging(self, event):
-        if event.GetDirection() and not self.customstring:
-            event.Veto()
-        elif not event.GetDirection() and not self.customstring:
-            return
-        else: # check for datum tranforms            
+        if event.GetDirection():
+        # check for datum tranforms            
             ret, out, err = gcmd.RunCommand('g.proj',
                                             read = True, getErrorMsg = True,
                                             proj4 = self.customstring, 
@@ -1563,19 +1534,19 @@ class CustomPage(TitledPage):
 
 class SummaryPage(TitledPage):
     """!Shows summary result of choosing coordinate system parameters
-    prior to creating location
-    """
+    prior to creating location"""
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Summary"))
         self.parent = parent
-        
-        self.panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
+
+        self.panel_proj4string = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        self.panel_proj = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
 
         # labels
         self.ldatabase  = self.MakeLabel()
         self.llocation  = self.MakeLabel()
-        self.lprojection = self.MakeLabel()
-        self.lproj4string = self.MakeLabel(parent = self.panel)
+        self.lprojection = self.MakeLabel(parent = self.panel_proj)
+        self.lproj4string = self.MakeLabel(parent = self.panel_proj4string)
         
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         
@@ -1585,16 +1556,21 @@ class SummaryPage(TitledPage):
     def __DoLayout(self):
         """!Do page layout"""
         self.sizer.AddGrowableCol(1)
-        self.sizer.AddGrowableRow(4)
+        self.sizer.AddGrowableRow(3,1)
+        self.sizer.AddGrowableRow(4,5)
         
-        proj4Sizer = wx.BoxSizer(wx.VERTICAL)
-        proj4Sizer.Add(item = self.lproj4string, proportion = 1,
-                       flag = wx.EXPAND | wx.ALL, border = 1)
-        self.panel.SetSizer(proj4Sizer)
-        self.panel.SetAutoLayout(True)
-        proj4Sizer.Fit(self.panel)
-        self.panel.Layout()
-        self.panel.SetupScrolling()
+        projSizer = wx.BoxSizer(wx.VERTICAL)
+        projSizer.Add(item = self.lprojection, proportion = 1,
+                       flag = wx.EXPAND | wx.ALL, border = 5)
+        self.panel_proj.SetSizer(projSizer)        
+        
+        proj4stringSizer = wx.BoxSizer(wx.VERTICAL)
+        proj4stringSizer.Add(item = self.lproj4string, proportion = 1,
+                       flag = wx.EXPAND | wx.ALL, border = 5)
+        self.panel_proj4string.SetSizer(proj4stringSizer)
+
+        self.panel_proj4string.SetupScrolling()
+        self.panel_proj.SetupScrolling(scroll_y=False)
 
         self.sizer.Add(item=self.MakeLabel(_("GRASS Database:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
@@ -1611,16 +1587,16 @@ class SummaryPage(TitledPage):
         self.sizer.Add(item=self.MakeLabel(_("Projection:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(3, 0))
-        self.sizer.Add(item=self.lprojection,
-                       flag=wx.ALIGN_LEFT | wx.ALL,
-                       border=5, pos=(3, 1))
+        self.sizer.Add(item=self.panel_proj,
+                       flag=wx.ALIGN_LEFT | wx.ALL| wx.EXPAND,
+                       border=0, pos=(3, 1))
         self.sizer.Add(item=self.MakeLabel(_("PROJ.4 definition:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(4, 0))
-        self.sizer.Add(item=self.panel,
+        self.sizer.Add(item=self.panel_proj4string,
                        flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
-                       border=5, pos=(4, 1))
-        
+                       border=0, pos=(4, 1))
+   
     def OnEnterPage(self, event):
         """!Insert values into text controls for summary of location
         creation options
@@ -1656,6 +1632,7 @@ class SummaryPage(TitledPage):
                 finishButton.Enable(True)
             else:
                 gcmd.GError(err, parent = self)
+                self.lproj4string.SetLabel('')
                 finishButton.Enable(False)
         
         projdesc = self.parent.projpage.projdesc
@@ -1669,12 +1646,15 @@ class SummaryPage(TitledPage):
             label = 'EPSG code %s (%s)' % (self.parent.epsgpage.epsgcode, self.parent.epsgpage.epsgdesc)
         elif coordsys == 'file':
             label = 'matches file %s' % self.parent.filepage.georeffile
+            self.lproj4string.SetLabel("")
         elif coordsys == 'wkt':
             label = 'matches file %s' % self.parent.wktpage.wktfile
+            self.lproj4string.SetLabel("")
         elif coordsys == 'proj':
             label = ('%s, %s %s' % (projdesc, datumdesc, ellipsedesc))
         elif coordsys == 'xy':
             label = ('XY coordinate system (not projected).')
+            self.lproj4string.SetLabel("")
         elif coordsys == 'custom':
             label = _("custom")
             self.lproj4string.SetLabel(('%s' % self.parent.custompage.customstring.replace(' ', os.linesep)))
