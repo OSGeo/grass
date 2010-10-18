@@ -23,50 +23,38 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
 		struct Cell_head *cellhd	/* information of output map     */
     )
 {
-    int row0,			/* lower row index for interp    */
-      row1,			/* upper row index for interp    */
-      col0,			/* lower column index for interp */
-      col1;			/* upper column index for interp */
-    DCELL t, u,			/* intermediate slope            */
-      tu,			/* t * u                         */
-      result;			/* result of interpolation       */
-    DCELL *c00, *c01, *c10, *c11;
+    int row;			/* row indices for interp        */
+    int col;			/* column indices for interp     */
+    int i, j;
+    DCELL t, u;			/* intermediate slope            */
+    DCELL result;		/* result of interpolation       */
+    DCELL c[2][2];
 
-    /* cut indices to integer and get nearest cells */
-    /* example: *row_idx = 2.1
-     * nearest rows are 1 and 2, not 2 and 3 */
-    *row_idx -= 0.5;
-    *col_idx -= 0.5;
-    row0 = (int)floor(*row_idx);
-    col0 = (int)floor(*col_idx);
-    row1 = row0 + 1;
-    col1 = col0 + 1;
+    /* cut indices to integer */
+    row = (int)floor(*row_idx - 0.5);
+    col = (int)floor(*col_idx - 0.5);
 
     /* check for out of bounds - if out of bounds set NULL value and return */
-    if (row0 < 0 || row1 >= cellhd->rows || col0 < 0 || col1 >= cellhd->cols) {
+    if (row < 0 || row + 1 >= cellhd->rows || col < 0 || col + 1 >= cellhd->cols) {
 	Rast_set_null_value(obufptr, 1, cell_type);
 	return;
     }
 
-    c00 = CPTR(ibuffer, row0, col0);
-    c01 = CPTR(ibuffer, row0, col1);
-    c10 = CPTR(ibuffer, row1, col0);
-    c11 = CPTR(ibuffer, row1, col1);
-
-    /* check for NULL values */
-    if (Rast_is_f_null_value(c00) ||
-	Rast_is_f_null_value(c01) ||
-	Rast_is_f_null_value(c10) || Rast_is_f_null_value(c11)) {
-	Rast_set_null_value(obufptr, 1, cell_type);
-	return;
-    }
+    for (i = 0; i < 2; i++)
+	for (j = 0; j < 2; j++) {
+	    const DCELL *cellp = CPTR(ibuffer, row + i, col + j);
+	    if (Rast_is_f_null_value(cellp)) {
+		Rast_set_null_value(obufptr, 1, cell_type);
+		return;
+	    }
+	    c[i][j] = *cellp;
+	}
 
     /* do the interpolation  */
-    t = *col_idx - col0;
-    u = *row_idx - row0;
-    tu = t * u;
+    t = *col_idx - 0.5 - col;
+    u = *row_idx - 0.5 - row;
 
-    result = Rast_interp_bilinear(t, u, *c00, *c01, *c10, *c11);
+    result = Rast_interp_bilinear(t, u, c[0][0], c[0][1], c[1][0], c[1][1]);
 
     Rast_set_d_value(obufptr, result, cell_type);
 }
