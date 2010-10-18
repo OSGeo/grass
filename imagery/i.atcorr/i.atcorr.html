@@ -1,38 +1,41 @@
 <h2>DESCRIPTION</h2>
 
-<b>i.atcorr</b> performs atmospheric correction on the input raster using the
-6S algorithm (Second Simulation of Satellite Signal in the Solar Spectrum). A
-detailed algorithm description is available at the 
-<a href="http://modis-sr.ltdri.org/index.html">Land Surface Reflectance Science
-Computing Facility website</a> and Mauro A. Homem Antunes <a
-href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his
-6S version</a>.
+<b>i.atcorr</b> performs atmospheric correction on the input raster
+map using the 6S algorithm (<em>Second Simulation of Satellite Signal
+in the Solar Spectrum</em>). A detailed algorithm description is
+available at the
+<a href="http://modis-sr.ltdri.org/index.html">Land Surface
+Reflectance Science Computing Facility website</a>.<!-- and Mauro
+A. Homem
+Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website
+about his 6S version</a>.-->
 
 <p>
-Current region settings are ignored. The region is adjusted to cover the input
-raster before the atmospheric correction is performed. The previous settings
-are restored afterwards.
+<em>Important note: Current region settings are ignored!</em> The region is adjusted
+to cover the input raster map before the atmospheric correction is
+performed. The previous settings are restored afterwards.
 
 <p>
-Because using a continuous elevation <em>ialt</em> (input altitude map) or 
-visibility <em>ivis</em> (input visibility map) map makes execution time much
-longer, it is advised to use categorized maps instead, in conjuction with flag <em>-o</em>.
-This flag tells <b>i.atcorr</b> to try and speedup calculations. However, this option
-under certain conditions can make execution time longer.
+Because using a continuous <b>elevation</b> or <b>visibility</b>
+raster map makes execution time much longer, it is advised to use
+categorized raster maps instead, in conjuction with flag <b>-o</b>.
+This flag tells <em>i.atcorr</em> to try and speedup
+calculations. However, this option under certain conditions can make
+execution time longer.
 
 <p>
-If flag <em>-r</em> is used, the input data are treated as reflectance.
-Otherwise, the input data are treated as radiance values and are converted to
-reflectance at the <b>i.atcorr</b> runtime. The output data are always
-reflectance.
+If flag <b>-r</b> is used, the input raster data are treated as
+<em>reflectance</em>. Otherwise, the input raster data are treated
+as <em>radiance</em> values and are converted to reflectance at
+the <em>i.atcorr</em> runtime. The output data are always reflectance.
 
 <p>
-Note that the satellite overpass time has to be specified in Greenwich Mean Time (GMT).
+Note that the satellite overpass time has to be specified in Greenwich
+Mean Time (GMT).
 
 <p>
-An example 6S parameters <em>icnd</em> file for <b>i.atcorr</b>:
+An example 6S parameters:
 
-<p>
 <div class="code"><pre>
 8                            - geometrical conditions=Landsat ETM+
 2 19 13.00 -47.410 -20.234   - month day hh.ddd longitude latitude ("hh.ddd" is in decimal hours GMT)
@@ -45,24 +48,19 @@ An example 6S parameters <em>icnd</em> file for <b>i.atcorr</b>:
 </pre></div>
 
 If the position is not available in longitude-latitude (WGS84), the 
-<em><a href="m.proj.html">m.proj</a></em>
-conversion module can be used to reproject from a different projection.
+<em><a href="m.proj.html">m.proj</a></em> conversion module can be
+used to reproject from a different projection.
 
-<h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
-1. It should be explained under what circumstances the use of categorized maps
-in conjuction with flag <em>-o</em> can slow down the calculations instead of
-speeding them up.
+<h2>6S CODE PARAMETER CHOICES</h2>
 
-<H2>6S CODE PARAMETER CHOICES</H2>
+<h3>A. Geometrical conditions</h3>
 
-<h3>A. Geometrical conditions:</h3>
-
-<table CELLPADDING="3" border="1">
+<table border="1">
 
 <tr>
-<td>Code</td>
-<td>Description</td>
-<td>Details</td>
+<td><b>Code</b></td>
+<td><b>Description</b></td>
+<td><b>Details</b></td>
 </tr>
 
 <tr>
@@ -70,7 +68,7 @@ speeding them up.
 <td><b>meteosat</b> observation</td>
 <td>enter month,day,decimal hour (universal time-hh.ddd)
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-n. of column,n. of line.(full scale 5000*2500)&nbsp;</td>
+n. of column,n. of line. (full scale 5000*2500)&nbsp;</td>
 </tr>
 
 <tr>
@@ -78,7 +76,7 @@ n. of column,n. of line.(full scale 5000*2500)&nbsp;</td>
 <td><b>goes east </b>observation</td>
 <td>enter month,day,decimal hour (universal time-hh.ddd)
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-n. of column,n. of line.(full scale 17000*12000)c</td>
+n. of column,n. of line. (full scale 17000*12000)c</td>
 </tr>
 
 <tr>
@@ -86,7 +84,7 @@ n. of column,n. of line.(full scale 17000*12000)c</td>
 <td><b>goes west</b> observation</td>
 <td>enter month,day,decimal hour (universal time-hh.ddd)
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-n. of column,n. of line.(full scale 17000*12000)</td>
+n. of column,n. of line. (full scale 17000*12000)</td>
 </tr>
 
 <tr>
@@ -158,19 +156,20 @@ the ascendant node at equator</td>
 </table>
 
 <blockquote>
-* NOTE: for HRV, TM, ETM+, LISS and ASTER experiments, longitude and latitude
-are the coordinates of the scene center. Latitude must be &gt;0 for northern
-hemisphere and &lt;0 for southern. Longitude must be &gt;0 for eastern hemisphere
-and &lt;0 for western.
+* <em>NOTE</em>: for HRV, TM, ETM+, LISS and ASTER experiments,
+longitude and latitude are the coordinates of the scene
+center. Latitude must be &gt;0 for northern hemisphere and &lt;0 for
+southern. Longitude must be &gt;0 for eastern hemisphere and &lt;0 for
+western.
 </blockquote>
 
-<br><h3>B. Atmospheric model</h3>
+<h3>B. Atmospheric model</h3>
 
-<table CELLPADDING="3" border="1">
+<table border="1">
 
 <tr>
-<td>Code</td>
-<td>Meaning</td>
+<td><b>Code</b></td>
+<td><b>Meaning</b></td>
 </tr>
 
 <tr>
@@ -236,56 +235,56 @@ ozone content:
 
 </table>
 
-<br><h3>C. Aerosols model</h3>
+<h3>C. Aerosols model</h3>
 
-<table CELLPADDING="3" border="1">
+<table border="1">
 
 <tr>
-<td>Code</td>
-<td>Meaning</td>
-<td>Details</td>
+<td><b>Code</b></td>
+<td><b>Meaning</b></td>
+<td><b>Details</b></td>
 </tr>
 
 <tr>
 <td>0</td>
 <td>no aerosols</td>
-<td></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>1</td>
 <td>continental model</td>
-<td></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>2</td>
 <td>maritime model</td>
-<td></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>3</td>
 <td>urban model</td>
-<td></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>4</td>
 <td>shettle model for background desert aerosol</td>
-<td></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>5</td>
 <td>biomass burning</td>
-<td></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>6</td>
 <td>stratospheric model</td>
-<td></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
@@ -339,7 +338,7 @@ refractive index.</td>
 </tr>
 </table>
 
-<br><h3>D. Aerosol concentration model (visibility)</h3>
+<h3>D. Aerosol concentration model (visibility)</h3>
 
 <blockquote>If you have an estimate of the meteorological parameter visibility
 v, enter directly the value of v [km] (the aerosol optical depth will be
@@ -349,10 +348,10 @@ visibility and enter the aerosol optical depth at 550nm (iaer means 'i' for inpu
 and 'aer' for aerosol).
 <p>NOTE: if iaer=0, enter v=-1.</blockquote>
 
-<br><h3>E. Target altitude (xps), sensor platform (xpp)</h3>
+<h3>E. Target altitude (xps), sensor platform (xpp)</h3>
 
 Target altitude (xps, in negative [km]):
-<blockquote>xps &lt;=0 means the target is at the sea level.
+<blockquote>xps &lt;= 0 means the target is at the sea level.
 <br>otherwise xps expresses the altitude of the target (e.g., mean elevation)
 in [km], given as negative value
 </blockquote>
@@ -360,12 +359,14 @@ in [km], given as negative value
 <p>
 Sensor platform (xpp, in negative [km] or -1000):
 <blockquote>
-<br>xpp=-1000 means that the sensor is on board a satellite.
-<br>xpp=0 means that the sensor is at the ground level.
-<br>-100&lt;xpp&lt;0 defines the altitude of the sensor expressed in [km];
+<br>xpp = -1000 means that the sensor is on board a satellite.
+<br>xpp = 0 means that the sensor is at the ground level.
+<br>-100 &lt; xpp &lt; 0 defines the altitude of the sensor expressed in [km];
  this altitude is given <b>relative to the target</b> altitude as negative value.
+</blockquote>
 
-<p>For aircraft simulations only (xpp is neither equal to 0 nor equal to -1000):
+<p>
+For aircraft simulations only (xpp is neither equal to 0 nor equal to -1000):
 <blockquote>
 puw,po3 (water vapor content,ozone content between the aircraft and the surface)
 <br>taerp (the aerosol optical thickness at 550nm between the aircraft and the
@@ -375,21 +376,20 @@ puw,po3 will then be interpolated from the us62 standard profile according
 to the values at the ground level. taerp will be computed according to a 2km
 exponential profile for aerosol.
 </blockquote>
-</blockquote>
 
-<br><h3>F. Sensor band</h3>
+<h3>F. Sensor band</h3>
 
 <p>There are two possibilities: either define your own spectral conditions
 (codes -2, -1, 0, or 1) or choose a code indicating the band of one of the
 pre-defined satellites.
 
 <p>Define your own spectral conditions:
-<p>
-<table CELLPADDING="3" border="1">
+
+<table border="1">
 
 <tr>
-<td>Code</td>
-<td>Meaning</td>
+<td><b>Code</b></td>
+<td><b>Meaning</b></td>
 </tr>
 
 <tr>
@@ -417,11 +417,12 @@ micrometer.</td>
 </tr>
 </table>
 
-<p>Pre-defined satellite bands:
 <p>
-<table CELLPADDING="3" border="1">
+Pre-defined satellite bands:
 
-<tr><td>Code</td><td>Meaning</td></tr>
+<table border="1">
+
+<tr><td><b>Code</b></td><td><b>Meaning</b></td></tr>
 
 <tr><td>2</td><td><b>meteosat</b> vis band (0.350-1.110)</td></tr>
 
@@ -535,8 +536,8 @@ micrometer.</td>
 
 <h2>EXAMPLES</h2>
 
-<b>Atmospheric correction of a LANDSAT-7 channel</b>
-<p>
+<h3>Atmospheric correction of a LANDSAT-7 channel</h3>
+
 The example is based on the North Carolina sample dataset (GMT -5 hours).
 First we set the computational region to the satellite map, e.g. channel 4:
 <div class="code"><pre>
@@ -556,8 +557,10 @@ r.info lsat7_2002_40
 In this case, we have: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION = 64.7730999.
 <p>
 
-If the sun position metadata are unavailable, we can also calculate them from the
-overpass time as follows (r.sunmask uses <a href="http://www.nrel.gov/midc/solpos/solpos.html">SOLPOS</a>):
+If the sun position metadata are unavailable, we can also calculate
+them from the overpass time as follows
+(<em><a href="r.sunmask.html">r.sunmask</a></em>
+uses <a href="http://www.nrel.gov/midc/solpos/solpos.html">SOLPOS</a>):
 <div class="code"><pre>
 r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 sec=7 timezone=-5
 # .. reports: sun azimuth: 121.342461, sun angle above horz.(refraction corrected): 65.396652
@@ -646,6 +649,11 @@ the raster elevation values are used from the map.
 Note that the process is computationally intensive.<br>
 Note also, that <em>i.atcorr</em> reports solar elevation angle above horizon rather than solar zenith angle.
 
+<h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
+1. It should be explained under what circumstances the use of categorized maps
+in conjuction with flag <em>-o</em> can slow down the calculations instead of
+speeding them up.
+
 <h2>SEE ALSO</h2>
 
 The GRASS Wiki page about <a href="http://grass.osgeo.org/wiki/Atmospheric_correction">Atmospheric correction</a>
@@ -655,7 +663,24 @@ The GRASS Wiki page about <a href="http://grass.osgeo.org/wiki/Atmospheric_corre
 <A HREF="m.proj.html">m.proj</a>
 </em>
 
-<H2>AUTHORS</H2>
+<h2>REFERENCES</h2>
+
+<ul>
+<li> Vermote, E.F., Tanre, D., Deuze, J.L., Herman, M., and Morcrette, J.J., 1997,
+Second simulation of the satellite signal in the solar spectrum, 6S: An
+overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
+
+<!--
+
+Not Found
+
+<li> <a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6S manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6S homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
+-->
+
+<li>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6S version</a>
+</ul>
+
+<h2>AUTHORS</h2>
 
 <p><em>Original version of the program for GRASS 5:</em>
 <br>Christo Zietsman, 13422863(at)sun.ac.za
@@ -672,17 +697,6 @@ The GRASS Wiki page about <a href="http://grass.osgeo.org/wiki/Atmospheric_corre
 <p><em>AVNIR, IKONOS sensors addition 7/2010:</em>
 <br>Daniel Victoria, Anne Ghisla
 
-<h2>REFERENCES</h2>
-
-<ul>
-<li> Vermote, E.F., Tanre, D., Deuze, J.L., Herman, M., and Morcrette, J.J., 1997,
-Second simulation of the satellite signal in the solar spectrum, 6S: An
-overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
-
-<li> <a href="http://modis-sr.ltdri.org/6S_code/6S_code2_thinner_stuff/6S_ltdri_org_manual.html">6S manual</a> at the <a href="http://modis-sr.ltdri.org/6S_code/index.html">6S homepage</a> of the Land Surface Reflectance Science Computing Facility (also <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, and <a href="www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>)
-
-<li>Mauro A. Homem Antunes <a href="http://www.ltid.inpe.br/dsr/mauro/6s/download_6s.html">website about his 6S version</a>
-</ul>
-
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
 
