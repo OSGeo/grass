@@ -349,8 +349,8 @@
 	    <separator />
 	    <menuitem>
 	      <label>MPEG-1 export</label>
-	      <help>Raster file series to MPEG movie conversion program.</help>
-	      <keywords>raster</keywords>
+	      <help>Raster map series to MPEG movie conversion.</help>
+	      <keywords>raster,animation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.mpeg</command>
 	    </menuitem>
@@ -765,7 +765,7 @@
 	  <items>
 	    <menuitem>
 	     <label>Display map projection</label>
-	     <help>Print projection information (in conventional GRASS format).</help>
+	     <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
 	     <keywords>general,projection</keywords>
 	     <handler>RunMenuCmd</handler>
 	     <command>g.proj -p</command>
@@ -930,7 +930,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Color tables (stddev)</label>
-	      <help>Set color rules based on stddev from a map's mean value.</help>
+	      <help>Set color rules based on stddev from a raster map's mean value.</help>
 	      <keywords>raster,color table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.colors.stddev</command>
@@ -1513,15 +1513,15 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Reclassify interactively</label>
-	      <help>Creates a new map layer whose category values are based upon a reclassification of the categories in an existing raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <help>Reclassify raster map based on category values.</help>
+	      <keywords>raster,reclassification</keywords>
 	      <handler>RulesCmd</handler>
 	      <command>r.reclass</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Reclassify using rules file</label>
-	      <help>Creates a new map layer whose category values are based upon a reclassification of the categories in an existing raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <help>Reclassify raster map based on category values.</help>
+	      <keywords>raster,reclassification</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.reclass</command>
 	    </menuitem>
@@ -1620,7 +1620,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Random deviates surface</label>
-	      <help>Produces a raster map layer of uniform random deviates whose range can be expressed by the user.</help>
+	      <help>Produces a raster map of uniform random deviates whose range can be expressed by the user.</help>
 	      <keywords>raster,surface,random</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.surf.random</command>
@@ -1806,7 +1806,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Linear regression</label>
-	      <help>Calculates linear regression from two raster maps: y = a + b*x</help>
+	      <help>Calculates linear regression from two raster maps: y = a + b*x.</help>
 	      <keywords>raster,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.regression.line</command>
@@ -1850,7 +1850,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Rebuild topology on all vector maps</label>
-	      <help>Rebuilds topology on all vector maps in the current mapset..</help>
+	      <help>Rebuilds topology on all vector maps in the current mapset.</help>
 	      <keywords>vector,topology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.build.all</command>
@@ -2637,8 +2637,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Landsat DN to radiance/reflectance</label>
-	      <help>Computes correction from DN to top of atmosphere radiance reflectance, optionally DOS amtospheric correction.</help>
-	      <keywords>imagery,Landsat,radiance,reflectance,Dark Object Subtraction, atmospheric correction</keywords>
+	      <help>Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+.</help>
+	      <keywords>imagery,landsat,top-of-atmosphere reflectance,dos-type simple atmospheric correction</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.landsat.toar</command>
 	    </menuitem>
@@ -2907,7 +2907,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Connect</label>
-	      <help>Prints/sets general DB connection for current mapset and exits.</help>
+	      <help>Prints/sets general DB connection for current mapset.</help>
 	      <keywords>database,attribute table,connection settings</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>db.connect</command>
