@@ -2632,65 +2632,29 @@
 	  </items>
 	</menu>
     <separator />
-	<menuitem>
-	  <label>Atmospheric correction</label>
-	  <help>Performs atmospheric correction using the 6S algorithm.</help>
-	  <keywords>imagery,atmospheric correction</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>i.atcorr</command>
-	</menuitem>
 	<menu>
-	  <label>Evapotranspiration calculation</label>
+	  <label>Satellite images tools</label>
 	  <items>
 	    <menuitem>
-	      <label>Evapotranspiration</label>
-	      <help>actual evapotranspiration for diurnal period (Bastiaanssen, 1995)</help>
-	      <keywords>imagery,actual evapotranspiration,energy balance,SEBAL</keywords>
+	      <label>Landsat DN to radiance/reflectance</label>
+	      <help>Computes correction from DN to top of atmosphere radiance reflectance, optionally DOS amtospheric correction.</help>
+	      <keywords>imagery,Landsat,radiance,reflectance,Dark Object Subtraction, atmospheric correction</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.eb.eta</command>
-	    </menuitem>
-	    <separator />
-	    <menuitem>
-	      <label>Albedo</label>
-	      <help>Computes broad band albedo from surface reflectance.</help>
-	      <keywords>imagery,albedo,surface reflectance</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>i.albedo</command>
+	      <command>i.landsat.toar</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Evaporative fraction</label>
-	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)</help>
-	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
+	      <label>Modis quality control</label>
+	      <help>Extract quality control parameters from Modis QC layers</help>
+	      <keywords>QC,Quality Control,surface reflectance,Modis</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.eb.evapfr</command>
+	      <command>i.modis.qc</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Sensible heat flux</label>
-	      <help>Computes sensible heat flux iteration SEBAL 01.</help>
-	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
+	      <label>Atmospheric correction</label>
+	      <help>Performs atmospheric correction using the 6S algorithm.</help>
+	      <keywords>imagery,atmospheric correction</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.eb.h_SEBAL01</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Soil heat flux</label>
-	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
-	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>i.eb.soilheatflux</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Emissivity</label>
-	      <help>Computes emissivity from NDVI, generic method for spares land.</help>
-	      <keywords>emissivity,land flux,energy balance</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>i.emissivity</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Temporal integration of ETa</label>
-	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
-	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>i.evapo.time_integration</command>
+	      <command>i.atcorr</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>LatLong map</label>
@@ -2700,11 +2664,74 @@
 	      <command>i.latlong</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Sunshine hours</label>
+	      <help>creates a sunshine hours map</help>
+	      <keywords>sunshine,hours,daytime</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.sunhours</command>
+	    </menuitem>
+	  </items>
+	</menu>
+	<menu>
+	  <label>Evapotranspiration calculation</label>
+	  <items>
+	    <menuitem>
 	      <label>Vegetation indices</label>
 	      <help>Calculates different types of vegetation indices.</help>
 	      <keywords>imagery,vegetation index,biophysical parameters</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.vi</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Albedo</label>
+	      <help>Computes broad band albedo from surface reflectance.</help>
+	      <keywords>imagery,albedo,surface reflectance</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.albedo</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Emissivity</label>
+	      <help>Computes emissivity from NDVI, generic method for spares land.</help>
+	      <keywords>emissivity,land flux,energy balance</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.emissivity</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Soil heat flux</label>
+	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
+	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.eb.soilheatflux</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Sensible heat flux</label>
+	      <help>Computes sensible heat flux iteration SEBAL 01.</help>
+	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.eb.h_SEBAL01</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Evaporative fraction</label>
+	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)</help>
+	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.eb.evapfr</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Evapotranspiration</label>
+	      <help>actual evapotranspiration for diurnal period (Bastiaanssen, 1995)</help>
+	      <keywords>imagery,actual evapotranspiration,energy balance,SEBAL</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.eb.eta</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Temporal integration of ETa</label>
+	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
+	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.evapo.time_integration</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -2714,20 +2741,6 @@
 	  <keywords>imagery,biomass,fpar,yield</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>i.biomass</command>
-	</menuitem>
-	<menuitem>
-	  <label>Modis quality control</label>
-	  <help>Extract quality control parameters from Modis QC layers</help>
-	  <keywords>QC,Quality Control,surface reflectance,Modis</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>i.modis.qc</command>
-	</menuitem>
-	<menuitem>
-	  <label>Sunshine hours</label>
-	  <help>creates a sunshine hours map</help>
-	  <keywords>sunshine,hours,daytime</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>i.sunhours</command>
 	</menuitem>
 	<separator />
 	<menu>
