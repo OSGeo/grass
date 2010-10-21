@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
 		    dn_mode[i] = j;
 		}
 	    }
-	    G_message("... DN = %.2d [%d] : mode %.2d [%d] %s",
+	    G_message("... DN = %.2d [%lu] : mode %.2d [%lu] %s",
 		      dn_dark[i], hist[dn_dark[i]],
 		      dn_mode[i], hist[dn_mode[i]],
 		      hist[255] >
