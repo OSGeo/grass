@@ -17,6 +17,7 @@ SUBDIRS = \
 	i.gensigset \
 	i.group \
 	i.his.rgb \
+	i.landsat.toar \
 	i.latlong \
 	i.maxlik \
 	i.modis.qc \
