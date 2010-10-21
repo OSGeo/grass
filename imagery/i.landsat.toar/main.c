@@ -10,11 +10,11 @@
  * PURPOSE:      Calculate TOA Radiance or Reflectance and Kinetic Temperature
  *               for Landsat 1/2/3/4/5 MS, 4/5 TM or 7 ETM+
  *
- * COPYRIGHT:    (C) 2002, 2005 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002, 2005, 2008, 2010 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -30,34 +30,31 @@ int main(int argc, char *argv[])
 {
     struct History history;
     struct GModule *module;
-
-    struct Cell_head cellhd, window;
-    char *mapset;
-
+    
+    struct Cell_head cellhd;
+    
     void *inrast, *outrast;
     int infd, outfd;
     void *ptr;
     int nrows, ncols, row, col;
-
+    
     RASTER_MAP_TYPE in_data_type;
-
-    int verbose = TRUE;
+    
     struct Option *input, *metfn, *sensor, *adate, *pdate, *elev,
 	*bgain, *metho, *perc, *dark, *satz, *atmo;
     char *name, *met;
     struct Flag *msss, *verbo, *frad, *l5_mtl;
-
+    
     lsat_data lsat;
     char band_in[127], band_out[127];
     int i, j, q, method, pixel, dn_dark[MAX_BANDS], dn_mode[MAX_BANDS];
-    int sensor_id;
     double qcal, rad, ref, percent, ref_mode, sat_zenith, rayleigh;
-
+    
     struct Colors colors;
     struct FPRange range;
     double min, max;
     unsigned long hist[256], h_max;
-
+    
     /* initialize GIS environment */
     G_gisinit(argv[0]);
 
@@ -67,24 +64,18 @@ int main(int argc, char *argv[])
 	_("Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+.");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("landsat"));
-    G_add_keyword(_("top-of-atmosphere radiance"));
     G_add_keyword(_("top-of-atmosphere reflectance"));
     G_add_keyword(_("dos-type simple atmospheric correction"));
 
     /* It defines the different parameters */
-    input = G_define_option();
+    input = G_define_standard_option(G_OPT_R_INPUT);
     input->key = "band_prefix";
-    input->type = TYPE_STRING;
-    input->required = YES;
-    input->gisprompt = "input,cell,raster";
-    input->description = _("Base name of the landsat band rasters (.#)");
+    input->description = _("Base name of Landsat band rasters (.#)");
 
-    metfn = G_define_option();
+    metfn = G_define_standard_option(G_OPT_F_INPUT);
     metfn->key = "metfile";
-    metfn->type = TYPE_STRING;
     metfn->required = NO;
-    metfn->gisprompt = "old_file,file,file";
-    metfn->description = _("Landsat ETM+ or TM5 header file (.met)");
+    metfn->description = _("Name of Landsat ETM+ or TM5 header file (.met)");
 
     metho = G_define_option();
     metho->key = "method";
@@ -93,18 +84,22 @@ int main(int argc, char *argv[])
     metho->options = "uncorrected,corrected,dos1,dos2,dos2b,dos3,dos4";
     metho->description = _("Atmospheric correction method");
     metho->answer = "uncorrected";
-
+    metho->guisection = _("Settings");
+    
     sensor = G_define_option();
     sensor->key = "sensor";
-    sensor->type = TYPE_INTEGER;
+    sensor->type = TYPE_STRING;
     sensor->description = _("Spacecraft sensor");
-    sensor->options = "1,2,3,4,5,7";
+    sensor->options = "mss1,mss2,mss3,tm4,tm5,tm7";
     sensor->descriptions =
-	_("1;Landsat-1 MSS;"
-	  "2;Landsat-2 MSS;"
-	  "3;Landsat-3 MSS;"
-	  "4;Landsat-4 TM;" "5;Landsat-5 TM;" "7;Landsat-7 ETM+");
+	_("mss1;Landsat-1 MSS;"
+	  "mss2;Landsat-2 MSS;"
+	  "mss3;Landsat-3 MSS;"
+	  "tm4;Landsat-4 TM;"
+	  "tm5;Landsat-5 TM;"
+	  "tm7;Landsat-7 ETM+");
     sensor->required = NO;
+    sensor->guisection = _("Settings");
 
     adate = G_define_option();
     adate->key = "date";
@@ -112,12 +107,14 @@ int main(int argc, char *argv[])
     adate->required = NO;
     adate->key_desc = "yyyy-mm-dd";
     adate->description = _("Image acquisition date (yyyy-mm-dd)");
-
+    adate->guisection = _("Date settings");
+    
     elev = G_define_option();
     elev->key = "solar_elevation";
     elev->type = TYPE_DOUBLE;
     elev->required = NO;
     elev->description = _("Solar elevation in degrees");
+    elev->guisection = _("Settings");
 
     bgain = G_define_option();
     bgain->key = "gain";
@@ -125,6 +122,7 @@ int main(int argc, char *argv[])
     bgain->required = NO;
     bgain->description =
 	_("Gain (H/L) of all Landsat ETM+ bands (1-5,61,62,7,8)");
+    bgain->guisection = _("Settings");
 
     pdate = G_define_option();
     pdate->key = "product_date";
@@ -132,6 +130,7 @@ int main(int argc, char *argv[])
     pdate->required = NO;
     pdate->key_desc = "yyyy-mm-dd";
     pdate->description = _("Image creation date (yyyy-mm-dd)");
+    pdate->guisection = _("Date settings");
 
     perc = G_define_option();
     perc->key = "percent";
@@ -139,6 +138,7 @@ int main(int argc, char *argv[])
     perc->required = NO;
     perc->description = _("Percent of solar radiance in path radiance");
     perc->answer = "0.01";
+    perc->guisection = _("Settings");
 
     dark = G_define_option();
     dark->key = "pixel";
@@ -147,6 +147,7 @@ int main(int argc, char *argv[])
     dark->description =
 	_("Minimum pixels to consider digital number as dark object");
     dark->answer = "1000";
+    dark->guisection = _("Settings");
 
     satz = G_define_option();
     satz->key = "sat_zenith";
@@ -154,6 +155,7 @@ int main(int argc, char *argv[])
     satz->required = NO;
     satz->description = _("Satellite zenith in degrees");
     satz->answer = "8.2000";
+    satz->guisection = _("Settings");
 
     atmo = G_define_option();
     atmo->key = "rayleigh";
@@ -161,19 +163,22 @@ int main(int argc, char *argv[])
     atmo->required = NO;
     atmo->description = _("Rayleigh atmosphere");	/* scattering coefficient? */
     atmo->answer = "0.0";
+    atmo->guisection = _("Settings");
 
     /* define the different flags */
     frad = G_define_flag();
     frad->key = 'r';
     frad->description = _("Output at-sensor radiance for all bands");
-
+    
     msss = G_define_flag();
     msss->key = 's';
-    msss->description = _("Set sensor of Landsat-4/5 to MSS");
+    msss->description = _("Set sensor of Landsat TM4/5 to MSS");
+    msss->guisection = _("Settings");
 
     l5_mtl = G_define_flag();
     l5_mtl->key = 't';
-    l5_mtl->description = _("Landsat 5TM has a .MTL file instead of .met");
+    l5_mtl->description = _("Landsat TM5 has a .mtl file instead of .met");
+    l5_mtl->guisection = _("Settings");
 
     verbo = G_define_flag();
     verbo->key = 'v';
@@ -217,14 +222,9 @@ int main(int argc, char *argv[])
     sat_zenith = atof(satz->answer);
     rayleigh = atof(atmo->answer);
 
-    if (sensor->answer)
-	sensor_id = atoi(sensor->answer);
-    else
-	G_fatal_error(_("Must select type of satellite"));
-
     /* Data from MET file: only Landsat-7 ETM+ and Landsat-5 TM  */
     if (met != NULL) {
-	if (sensor_id == 7)
+	if (strcmp(sensor->answer, "tm7") == 0)
 	    met_ETM(met, &lsat);
 	else if (l5_mtl->answer)
 	    mtl_TM5(met, &lsat);
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Lacking date or solar elevation for this satellite"));
     }
     else {
-	if (sensor_id == 7) {	/* Need gain */
+	if (strcmp(sensor->answer, "tm7") == 0) {	/* Need gain */
 	    if (bgain->answer != NULL && strlen(bgain->answer) == 9) {
 		set_ETM(&lsat, bgain->answer);
 		G_message("Landsat 7 ETM+");
@@ -256,29 +256,29 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else {			/* Not need gain */
-	    if (sensor_id == 5) {
+	    if (strcmp(sensor->answer, "tm5") == 0) {
 		if (msss->answer)
 		    set_MSS5(&lsat);
 		else
 		    set_TM5(&lsat);
 		G_message("Landsat-5 %s", lsat.sensor);
 	    }
-	    else if (sensor_id == 4) {
+	    else if (strcmp(sensor->answer, "tm4") == 0) {
 		if (msss->answer)
 		    set_MSS4(&lsat);
 		else
 		    set_TM4(&lsat);
 		G_message("Landsat-4 %s", lsat.sensor);
 	    }
-	    else if (sensor_id == 3) {
+	    else if (strcmp(sensor->answer, "mss3") == 0) {
 		set_MSS3(&lsat);
 		G_message("Landsat-3 MSS");
 	    }
-	    else if (sensor_id == 2) {
+	    else if (strcmp(sensor->answer, "mss2") == 0) {
 		set_MSS2(&lsat);
 		G_message("Landsat-2 MSS");
 	    }
-	    else if (sensor_id == 1) {
+	    else if (strcmp(sensor->answer, "mss1") == 0) {
 		set_MSS1(&lsat);
 		G_message("Landsat-1 MSS");
 	    }
@@ -360,7 +360,7 @@ int main(int argc, char *argv[])
 	    }
 	    /* DN of dark object */
 	    for (j = lsat.band[i].qcalmin; j < 256; j++) {
-		if (hist[j] >= pixel) {
+	      if (hist[j] >= (unsigned int) pixel) {
 		    dn_dark[i] = j;
 		    break;
 		}
@@ -456,7 +456,7 @@ int main(int argc, char *argv[])
 	if ((infd = Rast_open_old(band_in, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), band_in);
 	in_data_type = Rast_get_map_type(infd);
-	Rast_get_cellhd(band_in, mapset, &cellhd);
+	Rast_get_cellhd(band_in, "", &cellhd);
 
 	/* set same size as original band raster */
 	G_set_window(&cellhd);
@@ -481,8 +481,7 @@ int main(int argc, char *argv[])
 		      thermal) ? _("temperature") : _("reflectance")),
 		  band_in, band_out);
 	for (row = 0; row < nrows; row++) {
-	    if (verbose)
-		G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 2);
 
 	    Rast_get_row(infd, inrast, row, in_data_type);
 	    for (col = 0; col < ncols; col++) {
@@ -524,6 +523,8 @@ int main(int argc, char *argv[])
 	    }
 	    Rast_put_row(outfd, outrast, DCELL_TYPE);
 	}
+	G_percent(1, 1, 1);
+	
 	ref_mode = 0.;
 	if (method > DOS && !lsat.band[i].thermal) {
 	    ref_mode = lsat_qcal2rad(dn_mode[i], &lsat.band[i]);
