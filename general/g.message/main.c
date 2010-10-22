@@ -103,7 +103,6 @@ int main(int argc, char *argv[])
 	if (s == -1) 
 	    G_fatal_error(_("Unable to parse input message"));
 	G_percent(i, n, s);
-	fprintf(stderr, "\n");
     }
     else if (debug_flag->answer)
 	G_debug(debug_level, "%s", message->answer);
