@@ -69,14 +69,16 @@ int main(int argc, char *argv[])
     opt.mapset->required = NO;
     opt.mapset->multiple = YES;
     opt.mapset->description = _("Name(s) of existing mapset(s)");
-
+    opt.mapset->guisection = _("Search path");
+    
     opt.add = G_define_option();
     opt.add->key = "addmapset";
     opt.add->type = TYPE_STRING;
     opt.add->required = NO;
     opt.add->multiple = YES;
     opt.add->description =
-	_("Name(s) of existing mapset(s) to add to search list");
+	_("Name(s) of existing mapset(s) to add to search path");
+    opt.add->guisection = _("Search path");
 
     opt.remove = G_define_option();
     opt.remove->key = "removemapset";
@@ -84,18 +86,21 @@ int main(int argc, char *argv[])
     opt.remove->required = NO;
     opt.remove->multiple = YES;
     opt.remove->description =
-	_("Name(s) of existing mapset(s) to remove from search list");
-    
+	_("Name(s) of existing mapset(s) to remove from search path");
+    opt.remove->guisection = _("Search path");
+
     opt.fs = G_define_standard_option(G_OPT_F_SEP);
     opt.fs->answer = "space";
     
     opt.list = G_define_flag();
     opt.list->key = 'l';
     opt.list->description = _("List all available mapsets");
+    opt.list->guisection = _("Print");
 
     opt.print = G_define_flag();
     opt.print->key = 'p';
     opt.print->description = _("Print current mapset search path");
+    opt.print->guisection = _("Print");
 
     opt.dialog = G_define_flag();
     opt.dialog->key = 's';
