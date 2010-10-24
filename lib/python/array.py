@@ -17,13 +17,16 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Glynn Clements
-
 """
 
 import os
 import numpy
 
 import core as grass
+
+# i18N
+import gettext
+gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
 class array(numpy.memmap):
     def __new__(cls, dtype = numpy.double):
@@ -58,10 +61,10 @@ class array(numpy.memmap):
 	elif kind in 'biu':
 	    flags = 'i'
 	else:
-	    raise ValueError('invalid kind <%s>' % kind)
+	    raise ValueError(_('invalid kind <%s>') % kind)
 
 	if size not in [1,2,4,8]:
-	    raise ValueError('invalid size <%d>' % size)
+	    raise ValueError(_('invalid size <%d>') % size)
 
 	return grass.run_command(
 	    'r.out.bin',
@@ -83,14 +86,14 @@ class array(numpy.memmap):
 	    elif size == 8:
 		flags = 'd'
 	    else:
-		raise ValueError('invalid FP size <%d>' % size)
+		raise ValueError(_('invalid FP size <%d>') % size)
 	    size = None
 	elif kind in 'biu':
 	    if size not in [1,2,4]:
-		raise ValueError('invalid integer size <%d>' % size)
+		raise ValueError(_('invalid integer size <%d>') % size)
 	    flags = None
 	else:
-	    raise ValueError('invalid kind <%s>' % kind)
+	    raise ValueError(_('invalid kind <%s>') % kind)
 
 	reg = grass.region()
 
