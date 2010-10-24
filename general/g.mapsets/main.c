@@ -58,10 +58,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
-    module->description =
-	_("Modifies the user's current mapset "
-	  "search path, affecting the user's access to data existing "
-	  "under the other GRASS mapsets in the current location.");
+    G_add_keyword(_("search path"));
+    module->label = _("Modifies the user's current mapset search path.");
+    module->description = _("Affects the user's access to data existing "
+			    "under the other mapsets in the current location.");
 
     opt.mapset = G_define_option();
     opt.mapset->key = "mapset";
