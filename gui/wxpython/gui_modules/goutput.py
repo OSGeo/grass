@@ -737,13 +737,19 @@ class GMConsole(wx.SplitterWindow):
                 dialog.btn_run.Enable(True)
             
             if event.returncode == 0 and not event.aborted:
-                winName = self.parent.parent.parent.GetName()
+                try:
+                    winName = self.parent.parent.parent.GetName()
+                except AttributeError:
+                    winName = ''
+                
                 if winName == 'LayerManager':
                     mapTree = self.parent.parent.parent.GetLayerTree()
                 elif winName == 'LayerTree':
                     mapTree = self.parent.parent.parent
-                else: # GMConsole
+                elif winName: # GMConsole
                     mapTree = self.parent.parent.parent.parent.GetLayerTree()
+                else:
+                    mapTree = None
                 
                 cmd = dialog.notebookpanel.createCmd(ignoreErrors = True)
                 if hasattr(dialog, "addbox") and dialog.addbox.IsChecked():
