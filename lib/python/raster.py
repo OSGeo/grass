@@ -27,6 +27,10 @@ import string
 
 from core import *
 
+# i18N
+import gettext
+gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+
 # add raster history
 
 def raster_history(map):
@@ -43,7 +47,8 @@ def raster_history(map):
         run_command('r.support', map = map, history = os.environ['CMDLINE'])
         return True
     
-    warning("Unable to write history for <%s>. Raster map <%s> not found in current mapset." % (map, map))
+    warning(_("Unable to write history for <%s>. "
+              "Raster map <%s> not found in current mapset." % (map, map)))
     return False
 
 # run "r.info -rgstmpud ..." and parse output
@@ -88,5 +93,4 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
                    quiet = quiet,
                    verbose = verbose,
                    overwrite = overwrite) != 0:
-	fatal("An error occurred while running r.mapcalc")
-    
+	fatal(_("An error occurred while running r.mapcalc"))
