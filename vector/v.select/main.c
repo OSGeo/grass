@@ -6,7 +6,7 @@
  *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com> (GEOS support)
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 	    G_percent(aline, nalines, 2);	/* must be before any continue */
 
 	    /* Check category */
-	    if (Vect_get_line_cat(&(In[0]), aline, ifield[0]) < 0) {
+	    if (!flag.cat->answer && Vect_get_line_cat(&(In[0]), aline, ifield[0]) < 0) {
 		nskipped++;
 		continue;
 	    }
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 		    G_debug(3, "  bline = %d", bline);
 		    
 		    /* Check category */
-		    if (!Vect_get_line_cat(&(In[1]), bline, ifield[1]) < 0) {
+		    if (!flag.cat->answer && Vect_get_line_cat(&(In[1]), bline, ifield[1]) < 0) {
 			nskipped++;
 			continue;
 		    }
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 
 		    bline = List->value[i];
 
-		    if (Vect_get_line_cat(&(In[1]), bline, ifield[1]) < 0) {
+		    if (!flag.cat->answer && Vect_get_line_cat(&(In[1]), bline, ifield[1]) < 0) {
 			nskipped++;
 			continue;
 		    }
