@@ -787,7 +787,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.CallTipShow(pos, usage + '\n\n' + description)
             
         elif (event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown()) or \
-                event.GetKeyCode() == 61 or event.GetKeyCode() == 44:
+                (not event.ShiftDown() and (event.GetKeyCode() == 61 or event.GetKeyCode() == 44)):
             # Autocompletion for map/data file name entry after '=', ',', or manually
             pos = self.GetCurrentPos()
             entry = self.GetTextLeft()
