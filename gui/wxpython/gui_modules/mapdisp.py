@@ -1870,9 +1870,8 @@ class MapFrame(wx.Frame):
         self.propwin[type] = propwin
 
     def OnZoomToMap(self, event):
-        """!
-        Set display extents to match selected raster (including NULLs)
-        or vector map.
+        """!Set display extents to match selected raster (including
+        NULLs) or vector map.
         """
         self.MapWindow.ZoomToMap()
 

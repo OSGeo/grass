@@ -914,8 +914,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return True
 
     def DrawCompRegionExtent(self):
-        """!
-        Draw computational region extent in the display
+        """!Draw computational region extent in the display
         
         Display region is drawn as a blue box inside the computational region,
         computational region inside a display region as a red box).
@@ -2735,12 +2734,12 @@ class BufferedWindow(MapWindow, wx.Window):
         """!Set display extents to match selected raster
         or vector map(s).
 
-        @param layer list of layers to be zoom to
-        @param ignoreNulls True to ignore null-values
+        @param layers list of layers to be zoom to
+        @param ignoreNulls True to ignore null-values (valid only for rasters)
         @param render True to re-render display
         """
         zoomreg = {}
-
+        
         if not layers:
             layers = self.GetSelectedLayer(multi = True)
         
@@ -2763,7 +2762,10 @@ class BufferedWindow(MapWindow, wx.Window):
                     updated = True
                 else:
                     vect.append(l.name)
-        
+            elif l.type == 'rgb':
+                for rname in l.GetName().splitlines():
+                    rast.append(rname)
+            
         if not updated:
             self.Map.GetRegion(rast = rast,
                                vect = vect,

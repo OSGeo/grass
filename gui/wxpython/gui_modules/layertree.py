@@ -443,7 +443,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 vect.append(mapLayer.GetName())
             elif mltype == '3d-raster':
                 rast3d.append(mapLayer.GetName())
-
+            elif mltype == 'rgb':
+                for rname in mapLayer.GetName().splitlines():
+                    rast.append(rname)
+        
         cmd = ['g.region']
         if rast:
             cmd.append('rast=%s' % ','.join(rast))

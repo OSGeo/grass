@@ -233,7 +233,7 @@ class Layer(object):
         
         return int (self.opacity * 100)
 
-    def GetName(self, fullyQualified=True):
+    def GetName(self, fullyQualified = True):
         """!Get map layer name
 
         @param fullyQualified if True return 'name@mapset' otherwise
