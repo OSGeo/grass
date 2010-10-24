@@ -76,7 +76,11 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
     flag->table = G_define_flag();
     flag->table->key = 't';
     flag->table->description = _("Do not create attribute table");
-
+    
+    flag->cat = G_define_flag();
+    flag->cat->key = 'c';
+    flag->cat->description = _("Do not skip features without category");
+    
     flag->reverse = G_define_flag();
     flag->reverse->key = 'r';
     flag->reverse->description = _("Reverse selection");

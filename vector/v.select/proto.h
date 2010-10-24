@@ -16,7 +16,7 @@ struct GParm {
 	*operator, *relate;
 };
 struct GFlag {
-    struct Flag *table, *reverse, *geos;
+    struct Flag *table, *reverse, *geos, *cat;
 };
 
 /* args.c */
