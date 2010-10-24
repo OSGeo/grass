@@ -183,7 +183,8 @@ def vector_db_select(map, layer = 1, **kwargs):
     try:
         key = vector_db(map = map)[layer]['key']
     except KeyError:
-        error(_('Missing layer %d in vector map <%s>') % (layer, map))
+        error(_('Missing layer %(layer)d in vector map <%(map)s>') % \
+                  { 'layer' : layer, 'map' : map })
         return { 'columns' : [], 'values' : {} }
         
     if kwargs.has_key('columns'):
