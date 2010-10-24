@@ -167,6 +167,10 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - mlist_grouped()
 
+<b>Interface to g.mapsets</b>
+
+ - mapsets()
+
 <b>Color parsing</b>
 
  - parse_color()
