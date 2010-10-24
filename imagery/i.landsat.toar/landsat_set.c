@@ -45,7 +45,8 @@ void sensor_TM(lsat_data * lsat)
     double wmin[] = { 0.45, 0.52, 0.63, 0.76, 1.55, 10.40, 2.08 };
     /* 30, 30, 30, 30, 30, 120, 30 */
 
-    strcpy(lsat->sensor, "TM");
+    if (!lsat->sensor)
+      strcpy(lsat->sensor, "TM");
 
     lsat->bands = 7;
     for (i = 0; i < lsat->bands; i++) {

@@ -28,7 +28,7 @@ void get_value_met7(const char mettext[], char *text, char value[])
 {
     char *ptr;
 
-    value[0] = 0;
+    value[0] = '\0';
 
     ptr = strstr(mettext, text);
     if (ptr == NULL)
@@ -163,7 +163,7 @@ void met_TM5(char *metfile, lsat_data * lsat)
 
 
     get_value_met(mettext, "SolarElevation", value);
-    if (!value)
+    if (!value[0])
 	G_warning("Unable to read solar elevation from metadata file");
     else
 	lsat->sun_elev = atof(value);
@@ -228,7 +228,6 @@ void mtl_TM5(char *metfile, lsat_data * lsat)
     char name[MAX_STR], value[MAX_STR];
     int i;
 
-    static int band[] = { 1, 2, 3, 4, 5, 6, 7 };
     static int code[] = { 1, 2, 3, 4, 5, 6, 7 };
 
     if ((f = fopen(metfile, "r")) == NULL)
@@ -238,8 +237,11 @@ void mtl_TM5(char *metfile, lsat_data * lsat)
 
     /* --------------------------------------- */
     get_value_met7(mettext, "SENSOR_ID", value);
-    chrncpy(lsat->sensor, value + 1, 3);
-
+    if (value[1] == 'M')
+	chrncpy(lsat->sensor, value + 1, 4);
+    else
+	chrncpy(lsat->sensor, value + 1, 3);
+    
     if (lsat->creation[0] == 0) {
 	get_value_met7(mettext, "PRODUCT_CREATION_TIME", value);
 	chrncpy(lsat->creation, value, 11);
@@ -257,7 +259,10 @@ void mtl_TM5(char *metfile, lsat_data * lsat)
     set_TM5(lsat);
     /* ... and we rewrite the necessary 'a la Landsat 7' */
 
-    lsat->bands = 7;
+    if (strcmp(lsat->sensor, "MSS") == 0)
+	lsat->bands = 4;
+    else
+	lsat->bands = 7;
     for (i = 0; i < lsat->bands; i++) {
 	lsat->band[i].code = *(code + i);
 	snprintf(name, MAX_STR, "LMAX_BAND%d", lsat->band[i].code);

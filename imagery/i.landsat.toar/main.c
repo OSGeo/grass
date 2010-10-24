@@ -40,13 +40,13 @@ int main(int argc, char *argv[])
     
     RASTER_MAP_TYPE in_data_type;
     
-    struct Option *input, *metfn, *sensor, *adate, *pdate, *elev,
+    struct Option *band_prefix, *output_suffix, *metfn, *sensor, *adate, *pdate, *elev,
 	*bgain, *metho, *perc, *dark, *satz, *atmo;
-    char *name, *met;
-    struct Flag *msss, *verbo, *frad, *l5_mtl;
+    char *basename, *met, *suffixname, *sensorname;
+    struct Flag *msss, *frad, *l5_mtl;
     
     lsat_data lsat;
-    char band_in[127], band_out[127];
+    char band_in[GNAME_MAX], band_out[GNAME_MAX];
     int i, j, q, method, pixel, dn_dark[MAX_BANDS], dn_mode[MAX_BANDS];
     double qcal, rad, ref, percent, ref_mode, sat_zenith, rayleigh;
     
@@ -68,28 +68,31 @@ int main(int argc, char *argv[])
     G_add_keyword(_("dos-type simple atmospheric correction"));
 
     /* It defines the different parameters */
-    input = G_define_standard_option(G_OPT_R_INPUT);
-    input->key = "band_prefix";
-    input->description = _("Base name of Landsat band rasters (.#)");
+    band_prefix = G_define_option();
+    band_prefix->key = "band_prefix";
+    band_prefix->label = _("Base name of input raster bands");
+    band_prefix->description = _("Example: 'B.' for B.1, B.2, ...");
+    band_prefix->type = TYPE_STRING;
+    band_prefix->required = YES;
+
+    output_suffix = G_define_option();
+    output_suffix->key = "output_suffix";
+    output_suffix->label = _("Suffix for output raster maps");
+    output_suffix->description = _("Example: '_toar' generates B.1_toar, B.2_toar, ...");
+    output_suffix->type = TYPE_STRING;
+    output_suffix->required = YES;
 
     metfn = G_define_standard_option(G_OPT_F_INPUT);
     metfn->key = "metfile";
     metfn->required = NO;
-    metfn->description = _("Name of Landsat ETM+ or TM5 header file (.met)");
+    metfn->description = _("Name of Landsat ETM+ or TM5 header file (.met/.mtl)");
+    metfn->guisection = _("Metadata");
 
-    metho = G_define_option();
-    metho->key = "method";
-    metho->type = TYPE_STRING;
-    metho->required = NO;
-    metho->options = "uncorrected,corrected,dos1,dos2,dos2b,dos3,dos4";
-    metho->description = _("Atmospheric correction method");
-    metho->answer = "uncorrected";
-    metho->guisection = _("Settings");
-    
     sensor = G_define_option();
     sensor->key = "sensor";
     sensor->type = TYPE_STRING;
-    sensor->description = _("Spacecraft sensor");
+    sensor->label = _("Spacecraft sensor");
+    sensor->description = _("Required only if 'metfile' not given");
     sensor->options = "mss1,mss2,mss3,tm4,tm5,tm7";
     sensor->descriptions =
 	_("mss1;Landsat-1 MSS;"
@@ -99,38 +102,51 @@ int main(int argc, char *argv[])
 	  "tm5;Landsat-5 TM;"
 	  "tm7;Landsat-7 ETM+");
     sensor->required = NO;
-    sensor->guisection = _("Settings");
+    sensor->guisection = _("Metadata");
 
+    metho = G_define_option();
+    metho->key = "method";
+    metho->type = TYPE_STRING;
+    metho->required = NO;
+    metho->options = "uncorrected,corrected,dos1,dos2,dos2b,dos3,dos4";
+    metho->label = _("Atmospheric correction method");
+    metho->description = _("Required only if 'metfile' not given");
+    metho->answer = "uncorrected";
+    metho->guisection = _("Metadata");
+    
     adate = G_define_option();
     adate->key = "date";
     adate->type = TYPE_STRING;
     adate->required = NO;
     adate->key_desc = "yyyy-mm-dd";
-    adate->description = _("Image acquisition date (yyyy-mm-dd)");
-    adate->guisection = _("Date settings");
+    adate->label = _("Image acquisition date (yyyy-mm-dd)");
+    adate->description = _("Required only if 'metfile' not given");
+    adate->guisection = _("Metadata");
     
     elev = G_define_option();
     elev->key = "solar_elevation";
     elev->type = TYPE_DOUBLE;
     elev->required = NO;
-    elev->description = _("Solar elevation in degrees");
-    elev->guisection = _("Settings");
-
-    bgain = G_define_option();
-    bgain->key = "gain";
-    bgain->type = TYPE_STRING;
-    bgain->required = NO;
-    bgain->description =
-	_("Gain (H/L) of all Landsat ETM+ bands (1-5,61,62,7,8)");
-    bgain->guisection = _("Settings");
+    elev->label = _("Solar elevation in degrees");
+    elev->description = _("Required only if 'metfile' not given");
+    elev->guisection = _("Metadata");
 
     pdate = G_define_option();
     pdate->key = "product_date";
     pdate->type = TYPE_STRING;
     pdate->required = NO;
     pdate->key_desc = "yyyy-mm-dd";
-    pdate->description = _("Image creation date (yyyy-mm-dd)");
-    pdate->guisection = _("Date settings");
+    pdate->label = _("Image creation date (yyyy-mm-dd)");
+    pdate->description = _("Required only if 'metfile' not given");
+    pdate->guisection = _("Metadata");
+
+    bgain = G_define_option();
+    bgain->key = "gain";
+    bgain->type = TYPE_STRING;
+    bgain->required = NO;
+    bgain->label =
+	_("Gain (H/L) of all Landsat ETM+ bands (1-5,61,62,7,8)");
+    bgain->guisection = _("Settings");
 
     perc = G_define_option();
     perc->key = "percent";
@@ -178,11 +194,7 @@ int main(int argc, char *argv[])
     l5_mtl = G_define_flag();
     l5_mtl->key = 't';
     l5_mtl->description = _("Landsat TM5 has a .mtl file instead of .met");
-    l5_mtl->guisection = _("Settings");
-
-    verbo = G_define_flag();
-    verbo->key = 'v';
-    verbo->description = _("Show parameters applied");
+    l5_mtl->guisection = _("Metadata");
 
     /* options and afters parser */
     if (G_parser(argc, argv))
@@ -194,8 +206,12 @@ int main(int argc, char *argv[])
      * Stores options and flag to variables
      *****************************************/
     met = metfn->answer;
-    name = input->answer;
-
+    basename = band_prefix->answer;
+    suffixname = output_suffix->answer;
+    sensorname = sensor -> answer ? sensor->answer: "";
+    
+    G_zero(&lsat, sizeof(lsat));
+    
     if (adate->answer != NULL) {
 	strncpy(lsat.date, adate->answer, 11);
 	lsat.date[10] = '\0';
@@ -224,7 +240,7 @@ int main(int argc, char *argv[])
 
     /* Data from MET file: only Landsat-7 ETM+ and Landsat-5 TM  */
     if (met != NULL) {
-	if (strcmp(sensor->answer, "tm7") == 0)
+	if (strcmp(sensorname, "tm7") == 0)
 	    met_ETM(met, &lsat);
 	else if (l5_mtl->answer)
 	    mtl_TM5(met, &lsat);
@@ -236,54 +252,55 @@ int main(int argc, char *argv[])
 	if (!lsat.sensor || lsat.number > 7 || lsat.number < 1)
 	    G_fatal_error(_("Failed to identify satellite"));
 
-	G_message(_("Landsat-%d %s with data set in met file [%s]"),
+	G_debug(1, "Landsat-%d %s with data set in met file [%s]",
 		  lsat.number, lsat.sensor, met);
 	if (elev->answer != NULL)
 	    lsat.sun_elev = atof(elev->answer);	/* Overwrite solar elevation of met file */
     }
     /* Data from date and solar elevation */
     else if (adate->answer == NULL || elev->answer == NULL) {
-	G_fatal_error(_("Lacking date or solar elevation for this satellite"));
+	G_fatal_error(_("Lacking '%s' or '%s' for this satellite"),
+		      adate->key, elev->key);
     }
     else {
-	if (strcmp(sensor->answer, "tm7") == 0) {	/* Need gain */
+	if (strcmp(sensorname, "tm7") == 0) {	/* Need gain */
 	    if (bgain->answer != NULL && strlen(bgain->answer) == 9) {
 		set_ETM(&lsat, bgain->answer);
-		G_message("Landsat 7 ETM+");
+		G_debug(1, "Landsat 7 ETM+");
 	    }
 	    else {
 		G_fatal_error(_("Landsat-7 requires band gain with 9 (H/L) data"));
 	    }
 	}
 	else {			/* Not need gain */
-	    if (strcmp(sensor->answer, "tm5") == 0) {
+	    if (strcmp(sensorname, "tm5") == 0) {
 		if (msss->answer)
 		    set_MSS5(&lsat);
 		else
 		    set_TM5(&lsat);
-		G_message("Landsat-5 %s", lsat.sensor);
+		G_debug(1, "Landsat-5 %s", lsat.sensor);
 	    }
-	    else if (strcmp(sensor->answer, "tm4") == 0) {
+	    else if (strcmp(sensorname, "tm4") == 0) {
 		if (msss->answer)
 		    set_MSS4(&lsat);
 		else
 		    set_TM4(&lsat);
-		G_message("Landsat-4 %s", lsat.sensor);
+		G_debug(1, "Landsat-4 %s", lsat.sensor);
 	    }
-	    else if (strcmp(sensor->answer, "mss3") == 0) {
+	    else if (strcmp(sensorname, "mss3") == 0) {
 		set_MSS3(&lsat);
-		G_message("Landsat-3 MSS");
+		G_debug(1, "Landsat-3 MSS");
 	    }
-	    else if (strcmp(sensor->answer, "mss2") == 0) {
+	    else if (strcmp(sensorname, "mss2") == 0) {
 		set_MSS2(&lsat);
-		G_message("Landsat-2 MSS");
+		G_debug(1, "Landsat-2 MSS");
 	    }
-	    else if (strcmp(sensor->answer, "mss1") == 0) {
+	    else if (strcmp(sensorname, "mss1") == 0) {
 		set_MSS1(&lsat);
-		G_message("Landsat-1 MSS");
+		G_debug(1, "Landsat-1 MSS");
 	    }
 	    else {
-		G_fatal_error(_("Unknown satellite type"));
+		G_fatal_error(_("Unknown satellite type (defined by '%s')"), sensor->key);
 	    }
 	}
     }
@@ -323,7 +340,7 @@ int main(int argc, char *argv[])
 	    for (j = 0; j < 256; j++)
 		hist[j] = 0L;
 
-	    snprintf(band_in, 127, "%s.%d", name, lsat.band[i].code);
+	    sprintf(band_in, "%s%d", basename, lsat.band[i].code);
 	    if ((infd = Rast_open_old(band_in, "")) < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), band_in);
 	    Rast_get_cellhd(band_in, "", &cellhd);
@@ -335,7 +352,7 @@ int main(int argc, char *argv[])
 	    nrows = Rast_window_rows();
 	    ncols = Rast_window_cols();
 
-	    G_message("Calculating dark pixel of [%s] ... ", band_in);
+	    G_message("Calculating dark pixel of <%s>... ", band_in);
 	    for (row = 0; row < nrows; row++) {
 		Rast_get_row(infd, inrast, row, in_data_type);
 		for (col = 0; col < ncols; col++) {
@@ -374,11 +391,11 @@ int main(int argc, char *argv[])
 		    dn_mode[i] = j;
 		}
 	    }
-	    G_message("... DN = %.2d [%lu] : mode %.2d [%lu] %s",
-		      dn_dark[i], hist[dn_dark[i]],
-		      dn_mode[i], hist[dn_mode[i]],
-		      hist[255] >
-		      hist[dn_mode[i]] ? ", excluding DN > 241" : "");
+	    G_verbose_message("... DN = %.2d [%lu] : mode %.2d [%lu] %s",
+			      dn_dark[i], hist[dn_dark[i]],
+			      dn_mode[i], hist[dn_mode[i]],
+			      hist[255] >
+			      hist[dn_mode[i]] ? ", excluding DN > 241" : "");
 
 	    G_free(inrast);
 	    Rast_close(infd);
@@ -389,69 +406,68 @@ int main(int argc, char *argv[])
     }
 
     if (strlen(lsat.creation) == 0)
-	G_fatal_error(_("Unknown production date"));
+	G_fatal_error(_("Unknown production date (defined by '%s')"), pdate->key);
 
-	/*****************************************
-	 * ------------ VERBOSE ------------------
-	 *****************************************/
-    if (verbo->answer) {
-	fprintf(stdout, " ACQUISITION DATE %s [production date %s]\n",
+    if (G_verbose() > G_verbose_std()) {
+	fprintf(stderr, " SENSOR: %s\n", lsat.sensor);
+	fprintf(stderr, " ACQUISITION DATE %s [production date %s]\n",
 		lsat.date, lsat.creation);
-	fprintf(stdout, "   earth-sun distance    = %.8lf\n", lsat.dist_es);
-	fprintf(stdout, "   solar elevation angle = %.8lf\n", lsat.sun_elev);
-	fprintf(stdout, "   Method of calculus = %s\n",
+	fprintf(stderr, "   earth-sun distance    = %.8lf\n", lsat.dist_es);
+	fprintf(stderr, "   solar elevation angle = %.8lf\n", lsat.sun_elev);
+	fprintf(stderr, "   Method of calculus = %s\n",
 		(method == CORRECTED ? "CORRECTED"
 		 : (method == UNCORRECTED ? "UNCORRECTED" : metho->answer)));
 	if (method > DOS) {
-	    fprintf(stdout,
+	    fprintf(stderr,
 		    "   percent of solar irradiance in path radiance = %.4lf\n",
 		    percent);
 	}
 	for (i = 0; i < lsat.bands; i++) {
-	    fprintf(stdout, "-------------------\n");
-	    fprintf(stdout, " BAND %d %s (code %d)\n",
+	    fprintf(stderr, "-------------------\n");
+	    fprintf(stderr, " BAND %d %s (code %d)\n",
 		    lsat.band[i].number,
 		    (lsat.band[i].thermal ? "thermal " : ""),
 		    lsat.band[i].code);
-	    fprintf(stdout,
+	    fprintf(stderr,
 		    "   calibrated digital number (DN): %.1lf to %.1lf\n",
 		    lsat.band[i].qcalmin, lsat.band[i].qcalmax);
-	    fprintf(stdout, "   calibration constants (L): %.3lf to %.3lf\n",
+	    fprintf(stderr, "   calibration constants (L): %.3lf to %.3lf\n",
 		    lsat.band[i].lmin, lsat.band[i].lmax);
-	    fprintf(stdout, "   at-%s radiance = %.5lf * DN + %.5lf\n",
+	    fprintf(stderr, "   at-%s radiance = %.5lf * DN + %.5lf\n",
 		    (method > DOS ? "surface" : "sensor"), lsat.band[i].gain,
 		    lsat.band[i].bias);
 	    if (lsat.band[i].thermal) {
-		fprintf(stdout,
+		fprintf(stderr,
 			"   at-sensor temperature = %.3lf / log[(%.3lf / radiance) + 1.0]\n",
 			lsat.band[i].K2, lsat.band[i].K1);
 	    }
 	    else {
-		fprintf(stdout,
+		fprintf(stderr,
 			"   mean solar exoatmospheric irradiance (ESUN): %.3lf\n",
 			lsat.band[i].esun);
-		fprintf(stdout, "   at-%s reflectance = radiance / %.5lf\n",
+		fprintf(stderr, "   at-%s reflectance = radiance / %.5lf\n",
 			(method > DOS ? "surface" : "sensor"),
 			lsat.band[i].K2);
 		if (method > DOS) {
-		    fprintf(stdout,
+		    fprintf(stderr,
 			    "   the darkness DN with a least %d pixels is %d\n",
 			    pixel, dn_dark[i]);
-		    fprintf(stdout, "   the mode of DN is %d\n", dn_mode[i]);
+		    fprintf(stderr, "   the mode of DN is %d\n", dn_mode[i]);
 		}
 	    }
 	}
-	fprintf(stdout, "-------------------\n");
-	fflush(stdout);
+	fprintf(stderr, "-------------------\n");
+	fflush(stderr);
     }
 
 	/*****************************************
 	 * ------------ CALCULUS -----------------
 	 *****************************************/
 
+    G_message(_("Calculating..."));
     for (i = 0; i < lsat.bands; i++) {
-	snprintf(band_in, 127, "%s.%d", name, lsat.band[i].code);
-	snprintf(band_out, 127, "%s.toar.%d", name, lsat.band[i].code);
+	sprintf(band_in, "%s%d", basename, lsat.band[i].code);
+	sprintf(band_out, "%s%d%s", basename, lsat.band[i].code, suffixname);
 
 	if ((infd = Rast_open_old(band_in, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), band_in);
@@ -475,7 +491,7 @@ int main(int argc, char *argv[])
 	nrows = Rast_window_rows();
 	ncols = Rast_window_cols();
 	/* ================================================================= */
-	G_message(_("Writing %s of <%s> to <%s> ..."),
+	G_message(_("Writing %s of <%s> to <%s>..."),
 		  (frad->answer ? _("radiance")
 		   : (lsat.band[i].
 		      thermal) ? _("temperature") : _("reflectance")),

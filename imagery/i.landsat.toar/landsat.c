@@ -130,8 +130,8 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 	    break;
 	}
 	rad_sun = TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;
-	G_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n", TAUv, TAUz,
-		  Edown);
+	G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n", TAUv, TAUz,
+			  Edown);
 
 	lsat->band[i].K1 = 0.;
 	lsat->band[i].K2 = rad_sun;
