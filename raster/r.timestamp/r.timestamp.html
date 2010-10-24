@@ -1,108 +1,136 @@
 <h2>DESCRIPTION</h2>
 
-This command has 2 modes of operation. If no date argument is supplied, then
-the current timestamp for the raster map is printed. If a date argument is
-specified, then the timestamp for the raster map is set to the specified
-date(s).  See EXAMPLES below.
+This command has 2 modes of operation. If no <b>date</b> argument is
+supplied, then the current timestamp for the raster map is printed. If
+a date argument is specified, then the timestamp for the raster map is
+set to the specified date(s). See examples below.
 
 <h2>NOTES</h2>
 
-Strings containing spaces should be quoted. For specifying a range
-of time, the two timestamps should be separated by a forward slash.
-To remove the timestamp from a raster map, use <b>date=</b><em>none</em>.
+Strings containing spaces should be quoted. For specifying a range of
+time, the two timestamps should be separated by a forward slash. To
+remove the timestamp from a raster map, use <b>date=none</b>.
+
+<h2>TIMESTAMP FORMAT</h2>
+
+The timestamp values must use the format as described in the <em>GRASS
+Datetime Library</em>. The source tree for this library should have a
+description of the format. For convience, the formats are reproduced
+here:
+
+<p>
+There are two types of datetime values:
+
+<ul>
+  <li><em>absolute</em> and
+  <li><em>relative</em>.
+</ul>
+
+Absolute values specify exact dates and/or times. Relative values
+specify a span of time. 
+
+<h3>Absolute</h3>
+
+The general format for absolute values is:
+
+<div class="code"><pre>
+  day month year [bc] hour:minute:seconds timezone
+
+	     day is 1-31
+	     month is jan,feb,...,dec
+	     year is 4 digit year
+	     [bc] if present, indicates dates is BC
+	     hour is 0-23 (24 hour clock)
+	     mintue is 0-59
+	     second is 0-59.9999 (fractions of second allowed)
+	     timezone is +hhmm or -hhmm (eg, -0600)
+</pre></div>
+
+Some parts can be missing, for example
+
+<div class="code"><pre>
+	     1994 [bc]
+	     Jan 1994 [bc]
+	     15 jan 1000 [bc]
+	     15 jan 1994 [bc] 10 [+0000]
+	     15 jan 1994 [bc] 10:00 [+0100]
+	     15 jan 1994 [bc] 10:00:23.34 [-0500]
+</pre></div>
+
+<h3>Relative</h3>
+
+There are two types of relative datetime values, year-month and
+day-second. The formats are:
+
+<div class="code"><pre>
+	     [-] # years # months
+	     [-] # days # hours # minutes # seconds
+</pre></div>
+
+The words years, months, days, hours, minutes, seconds are literal
+words, and the # are the numeric values. Examples:
+
+<div class="code"><pre>
+	     2 years
+	     5 months
+	     2 years 5 months
+	     100 days
+	     15 hours 25 minutes 35.34 seconds
+	     100 days 25 minutes
+	     1000 hours 35.34 seconds
+</pre></div>
+
+The following are <i>illegal</i> because it mixes year-month and
+day-second (because the number of days in a month or in a year vary):
+
+<div class="code"><pre>
+	     3 months 15 days
+	     3 years 10 days
+</pre></div>
 
 <h2>EXAMPLES</h2>
 
- <b>r.timestamp map=soils</b><br>
-	  Prints the timestamp for the "soils" raster map. If
-	  there is no timestamp for soils, nothing is printed. If
-	  there is a timestamp, one or two time strings are printed,
-	  depending on if the timestamp for the map consists of a
-	  single date or two dates (ie start and end dates).
-<p>
-<b>     r.timestamp map=soils date='15 sep 1987'</b><br>
-	  Sets the timestamp for "soils" to the single date<br>
-	  "15 sep 1987"
-<p>
-<b>     r.timestamp map=soils date='15 sep 1987/20 feb 1988'</b><br>
-	  Sets the timestamp for "soils" to have the start date<br>
-	  "15 sep 1987" and the end date "20 feb 1988"
-<p>
-<b>     r.timestamp map=soils date=none</b><br>
-	  Removes the timestamp for the "soils" raster map
+Prints the timestamp for the "soils" raster map. If there is no
+timestamp for "soils", nothing is printed. If there is a timestamp,
+one or two time strings are printed, depending on if the timestamp for
+the map consists of a single date or two dates (ie start and end
+dates).
 
+<div class="code"><pre>
+    r.timestamp map=soils
+</pre></div>
 
-<h2>TIMESTAMP FORMAT</h2>
-     The timestamp values must use the format as described in the
-     GRASS datetime library.  The source tree for this library
-     should have a description of the format. For convience, the
-     formats as of Feb, 1996 are reproduced here:
-<p>
-     There are two types of datetime values: absolute and
-     relative. Absolute values specify exact dates and/or times.
-     Relative values specify a span of time. Some examples will
-     help clarify:
-<p>
-<b>Absolute</b><p>
-	  The general format for absolute values is:
-<tt>
-	     day month year [bc] hour:minute:seconds timezone
-<br>
-	     day is 1-31<br>
-	     month is jan,feb,...,dec<br>
-	     year is 4 digit year<br>
-	     [bc] if present, indicates dates is BC<br>
-	     hour is 0-23 (24 hour clock)<br>
-	     mintue is 0-59<br>
-	     second is 0-59.9999 (fractions of second allowed)<br>
-	     timezone is +hhmm or -hhmm (eg, -0600)<br>
-</tt><p>
-	  parts can be missing
-<p><tt>
-	     1994 [bc]<br>
-	     Jan 1994 [bc]<br>
-	     15 jan 1000 [bc]<br>
-	     15 jan 1994 [bc] 10 [+0000]<br>
-	     15 jan 1994 [bc] 10:00 [+0100]<br>
-	     15 jan 1994 [bc] 10:00:23.34 [-0500]<br>
-</tt>
-<b>Relative</b><p>
-	  There are two types of relative datetime values, year-
-	  month and day-second.	 The formats are:
-<p><tt>
-	     [-] # years # months<br>
-	     [-] # days # hours # minutes # seconds
-</tt><p>
-	  The words years, months, days, hours, minutes, seconds
-	  are literal words, and the # are the numeric values.<br>
-	  Examples:<p>
-<tt>
-	     2 years<br>
-	     5 months<br>
-	     2 years 5 months<br>
-	     100 days<br>
-	     15 hours 25 minutes 35.34 seconds<br>
-	     100 days 25 minutes<br>
-	     1000 hours 35.34 seconds
-</tt><p>
-	  The following are <i>illegal</i> because it mixes year-month
-	  and day-second (because the number of days in a month
-	  or in a year vary):<p>
-<tt>
-	     3 months 15 days<br>
-	     3 years 10 days
-</tt>
+Sets the timestamp for "soils" to the single date "15 sep 1987".
 
-<h2>SEE ALSO</h2>
+<div class="code"><pre>
+    r.timestamp map=soils date='15 sep 1987'
+</pre></div>
 
-<em><a HREF="v.timestamp.html">v.timestamp</a></em>
+Sets the timestamp for "soils" to have the start date "15 sep 1987"
+and the end date "20 feb 1988".
+
+<div class="code"><pre>
+    r.timestamp map=soils date='15 sep 1987/20 feb 1988'
+</pre></div>
+
+Removes the timestamp for the "soils" raster map.
+
+<div class="code"><pre>
+    r.timestamp map=soils date=none
+</pre></div>
 
 <h2>BUGS</h2>
 Spaces in the timestamp value are required.
 
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="r.info.html">r.info</a>
+</em>
+
 <h2>AUTHOR</h2>
 
-Michael Shapiro, <br>
-U.S.Army Construction Engineering Research Laboratory
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
