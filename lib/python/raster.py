@@ -47,8 +47,8 @@ def raster_history(map):
         run_command('r.support', map = map, history = os.environ['CMDLINE'])
         return True
     
-    warning(_("Unable to write history for <%s>. "
-              "Raster map <%s> not found in current mapset." % (map, map)))
+    warning(_("Unable to write history for <%(map)s>. "
+              "Raster map <%(map)s> not found in current mapset." % { 'map' : map, 'map' : map}))
     return False
 
 # run "r.info -rgstmpud ..." and parse output
