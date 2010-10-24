@@ -1,213 +1,210 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>i.landsat.toar</EM> is used to transform the calibrated digital number
-of Landsat imagery products to top-of-atmosphere radiance or
-top-of-atmosphere reflectance and temperature (band 6 of the sensors TM and
-ETM+). Optionally, it can be used to calculate the at-surface radiance or
-reflectance with atmospheric correction (DOS method).
+<em>i.landsat.toar</em> is used to transform the calibrated digital
+number of Landsat imagery products to top-of-atmosphere radiance or
+top-of-atmosphere reflectance and temperature (band 6 of the sensors
+TM and ETM+). Optionally, it can be used to calculate the at-surface
+radiance or reflectance with atmospheric correction (DOS method).
 
-<p> Usually, to do so the production date, the acquisition date, and the
-solar elevation is needed. Moreover, for Landsat-7 ETM+ it is also needed
-the gain (high or low) of the nine respective bands.</p>
+<p>
+Usually, to do so the production date, the acquisition date, and the
+solar elevation is needed. Moreover, for Landsat-7 ETM+ it is also
+needed the gain (high or low) of the nine respective bands.
 
-<p> Optionally, the data can be read from header file (.met) for all
-Landsat MSS, TM and ETM+. However, if the solar elevation or the product
-creation date are given the values of the metfile are overwriten. This is
-necessary when the data in the metfile is incorrect or not accurate.</p>
+<p>
+Optionally, the data can be read from header file (.met) for all
+Landsat MSS, TM and ETM+. However, if the solar elevation or the
+product creation date are given the values of the metfile are
+overwriten. This is necessary when the data in the metfile is
+incorrect or not accurate.
 
-<p> <b>Attention</b>: Any null value or smaller than QCALmin in the input
-raster is set to null in the output raster and it is not included in the
-equations.</p>
+<p>
+<b>Attention</b>: Any null value or smaller than QCALmin in the input
+raster is set to null in the output raster and it is not included in
+the equations.
 
+<h2>Uncorrected at-sensor values (method=uncorrected, default)</h2>
 
-<H2>Uncorrected at-sensor values (method=uncorrected, default)</H2>
-
-<p> The standard geometric and radiometric corrections result in a
-calibrated digital number (QCAL = DN) images. To further standardize the
-impact of illumination geometry, the QCAL images are first converted first
-to at-sensor radiance and then to at-sensor reflectance. The thermal band
-is first converted from QCAL to at-sensor radiance, and then to effective
-at-sensor temperature in Kelvin degrees.</p>
+The standard geometric and radiometric corrections result in a
+calibrated digital number (QCAL = DN) images. To further standardize
+the impact of illumination geometry, the QCAL images are first
+converted first to at-sensor radiance and then to at-sensor
+reflectance. The thermal band is first converted from QCAL to
+at-sensor radiance, and then to effective at-sensor temperature in
+Kelvin degrees.
 
 <p>
 Radiometric calibration converts QCAL to <b>at-sensor radiance</b>, a
-radiometric quantity measured in  W/(m&sup2; * sr * &micro;m) using the equations:
-  <ul>
-    <li> gain = (Lmax - Lmin) / (QCALmax - QCALmin)</li>
-    <li> bias = Lmin - gain * QCALmin </li>
-    <li> radiance = gain * QCAL + bias </li>
-  </ul>
-where,
-<em>Lmax</em> and <em>Lmin</em> are the calibration constants, and
-<em>QCALmax</em> and <em>QCALmin</em> are the highest and the lowest points
-of the range of rescaled radiance in QCAL.
+radiometric quantity measured in W/(m&sup2; * sr * &micro;m) using the
+equations:
+<ul>
+  <li> gain = (Lmax - Lmin) / (QCALmax - QCALmin)</li>
+  <li> bias = Lmin - gain * QCALmin </li>
+  <li> radiance = gain * QCAL + bias </li>
+</ul>
+
+where, <em>Lmax</em> and <em>Lmin</em> are the calibration constants,
+and <em>QCALmax</em> and <em>QCALmin</em> are the highest and the
+lowest points of the range of rescaled radiance in QCAL.
 
 <p>
 Then, to calculate <b>at-sensor reflectance</b> the equations are:
-  <ul>
-    <li> sun_radiance = [Esun * sin(e)] / (PI * d^2)</li>
-    <li> reflectance = radiance / sun_radiance </li>
-  </ul>
-where,
-<em>d</em> is the earth-sun distance in astronomical units,
-<em>e</em> is the solar elevation angle, and
-<em>Esun</em> is the mean solar exoatmospheric irradiance in W/(m&sup2; * &micro;m).
 
+<ul>
+  <li> sun_radiance = [Esun * sin(e)] / (PI * d^2)</li>
+  <li> reflectance = radiance / sun_radiance </li>
+</ul>
 
-<H2>Corrected at-sensor values (method=corrected)</H2>
+where, <em>d</em> is the earth-sun distance in astronomical
+units, <em>e</em> is the solar elevation angle, and <em>Esun</em> is
+the mean solar exoatmospheric irradiance in W/(m&sup2; * &micro;m).
 
-<p>
+<h2>Corrected at-sensor values (method=corrected)</h2>
+
 At-sensor reflectance values range from zero to one, whereas at-sensor
-radiance must be greater or equal to zero. However, since Lmin can be a
-negative number then the at-sensor values can also be negative. To avoid
-these possible negative values and set the minimum possible values
-at-sensor to zero, this method corrects the radiance to output a corrected
-at-sensor values using the equations (not for thermal bands):
-  <ul>
-    <li> radiance = (uncorrected_radiance - Lmin) </li>
-    <li> reflectance = radiance / sun_radiance </li>
-  </ul>
-
-
-<p>
-<b>Note</b>: Other possibility to avoid negative values is set to zero this
-values (radiance and/or reflectance), but this option is ease with
-uncorrected method and r.mapcalc.</p>
-
-
-<H2>Simplified at-surface values (method=dos[1-4])</H2>
-
-<p>
-Atmospheric correction and reflectance calibration remove the path
-radiance, i.e. the stray light from the atmosphere, and the spectral effect
-of solar illumination. To output these simple <b>at-surface radiance</b>
-and <b>at-surface reflectance</b>, the equations are (not for thermal
+radiance must be greater or equal to zero. However, since Lmin can be
+a negative number then the at-sensor values can also be negative. To
+avoid these possible negative values and set the minimum possible
+values at-sensor to zero, this method corrects the radiance to output
+a corrected at-sensor values using the equations (not for thermal
 bands):
-  <ul>
-    <li> sun_radiance = TAUv * [Esun * sin(e) * TAUz + Esky] / (PI * d^2) </li>
-    <li> radiance_path = radiance_dark - percent * sun_radiance </li>
-    <li> radiance = (at-sensor_radiance - radiance_path) </li>
-    <li> reflectance = radiance / sun_radiance </li>
-  </ul>
-where,
-<em>percent</em> is a value between 0.0 and 1.0 (usually 0.01),
-<em>Esky</em> is the diffuse sky irradiance,
-<em>TAUz</em> is the atmospheric transmittance along the path from the sun
-to the ground surface, and
-<em>TAUv</em> is the atmospheric transmittance along the path from the
-ground surface to the sensor.
-<em>radiance_dark</em> is the at-sensor radiance calculated from the
-darkest object, i.e. DN with a least 'dark_parameter' (usually 1000) pixels
-for the entire image.
+<ul>
+  <li> radiance = (uncorrected_radiance - Lmin) </li>
+  <li> reflectance = radiance / sun_radiance </li>
+</ul>
+
+<p>
+<b>Note</b>: Other possibility to avoid negative values is set to zero
+this values (radiance and/or reflectance), but this option is ease
+with uncorrected method
+and <em><a href="r.mapcalc.html">r.mapcalc</a></em>.
+
+<h2>Simplified at-surface values (method=dos[1-4])</h2>
+
+Atmospheric correction and reflectance calibration remove the path
+radiance, i.e. the stray light from the atmosphere, and the spectral
+effect of solar illumination. To output these simple <b>at-surface
+radiance</b> and <b>at-surface reflectance</b>, the equations are (not
+for thermal bands):
+
+<ul>
+  <li> sun_radiance = TAUv * [Esun * sin(e) * TAUz + Esky] / (PI * d^2) </li>
+  <li> radiance_path = radiance_dark - percent * sun_radiance </li>
+  <li> radiance = (at-sensor_radiance - radiance_path) </li>
+  <li> reflectance = radiance / sun_radiance </li>
+</ul>
+
+where, <em>percent</em> is a value between 0.0 and 1.0 (usually
+0.01), <em>Esky</em> is the diffuse sky irradiance, <em>TAUz</em> is
+the atmospheric transmittance along the path from the sun to the
+ground surface, and <em>TAUv</em> is the atmospheric transmittance
+along the path from the ground surface to the
+sensor. <em>radiance_dark</em> is the at-sensor radiance calculated
+from the darkest object, i.e. DN with a least 'dark_parameter'
+(usually 1000) pixels for the entire image.
 
 The values are,
-  <ul>
-	<li>DOS1: TAUv = 1.0, TAUz = 1.0 and Esky = 0.0</li>
-	<li>DOS2: TAUv = 1.0, Esky = 0.0, and TAUz = sin(e) for all bands
-	   with maximum wave length less than 1. (i.e. bands 4-6 MSS, 1-4 TM,
-	   and 1-4 ETM+) other bands TAUz = 1.0</li>
-	<li>DOS3: TAUv = exp[-t/cos(sat_zenith)],
-	   TAUz = exp[-t/sin(e)], Esky = rayleigh</li>
-	<li>DOS4: TAUv = exp[-t/cos(sat_zenith)],
-	   TAUz = exp[-t/sin(e)], Esky = PI * radiance_dark </li>
-  </ul>
+
+<ul>
+  <li>DOS1: TAUv = 1.0, TAUz = 1.0 and Esky = 0.0</li>
+  <li>DOS2: TAUv = 1.0, Esky = 0.0, and TAUz = sin(e) for all bands
+    with maximum wave length less than 1. (i.e. bands 4-6 MSS, 1-4 TM,
+    and 1-4 ETM+) other bands TAUz = 1.0</li>
+  <li>DOS3: TAUv = exp[-t/cos(sat_zenith)],
+    TAUz = exp[-t/sin(e)], Esky = rayleigh</li>
+  <li>DOS4: TAUv = exp[-t/cos(sat_zenith)],
+    TAUz = exp[-t/sin(e)], Esky = PI * radiance_dark </li>
+</ul>
+
+<b>Attention</b>: Output radiance remain untouched (i.e. no set to
+0. when it is negative) then they are possible negative
+values. However, output reflectance is set to 0. when is obtained a
+negative value.
+
+<h2>NOTES</h2>
+
+In verbose mode (flag <b>--verbose</b>), the program write basic
+satellite data and the parameters used in the transformations.
 
 <p>
-<b>Attention</b>: Output radiance remain untouched (i.e. no set to 0. when
-it is negative) then they are possible negative values. However, output
-reflectance is set to 0. when is obtained a negative value.</p>
-
-
-<H2>NOTES</H2>
+In L5_MTL mode (flag <b>-t</b>), the Landsat 5TM imagery that has a
+_MTL.txt metadata file can be processed. Landsat 7 ETM+ does not need
+a flag since .met and _MTL.txt are sufficient compatible for this
+sensor.
 
 <p>
-In verbose mode (flag -v), the program write basic satellite data and the
-parameters used in the transformations.</p>
+Production date is not an exact value but it is necessary to apply
+correct calibration constants, which were changed in the dates:
+<ul>
+  <li>Landsat-1 MSS: never </li>
+  <li>Landsat-2 MSS: July 16, 1975</li>
+  <li>Landsat-3 MSS: June 1, 1978</li>
+  <li>Landsat-4 MSS: August 26, 1982 and April 1, 1983</li>
+  <li>Landsat-4 TM:  August 1, 1983 and January 15, 1984</li>
+  <li>Landsat-5 MSS: April 6, 1984 and November 9, 1984</li>
+  <li>Landsat-5 TM:  May 4, 2003 and April, 2 2007</li>
+  <li>Landsat-7 ETM+: July 1, 2000</li>
+</ul>
 
-<p>
-In L5_MTL mode (flag -t), the Landsat 5TM imagery that has a _MTL.txt metadata
-file can be processed. Landsat 7 ETM+ does not need a flag since .met and _MTL.txt
-are sufficient compatible for this sensor.</p>
+<h2>EXAMPLES</h2>
 
-<p>
-Production date is not an exact value but it is necessary to apply correct
-calibration constants, which were changed in the dates:
-  <ul>
-    <li>Landsat-1 MSS: never </li>
-    <li>Landsat-2 MSS: July 16, 1975</li>
-    <li>Landsat-3 MSS: June 1, 1978</li>
-    <li>Landsat-4 MSS: August 26, 1982 and April 1, 1983</li>
-    <li>Landsat-4 TM:  August 1, 1983 and January 15, 1984</li>
-    <li>Landsat-5 MSS: April 6, 1984 and November 9, 1984</li>
-    <li>Landsat-5 TM:  May 4, 2003 and April, 2 2007</li>
-    <li>Landsat-7 ETM+: July 1, 2000</li>
-  </ul>
-
-
-<H2>EXAMPLES</H2>
-
-<p>
 Transform digital numbers of Landsat-7 ETM+ in band rasters 203_30.1,
 203_30.2 [...] to uncorrected at-sensor reflectance in output files
-203_30.toar.1, 203_30.toar.2 [...] and at-sensor temperature in output
-files 293_39.toar.61 and 293_39.toar.62:</p>
+203_30.1_toar, 203_30.2_toar [...] and at-sensor temperature in output
+files 293_39.61_toar and 293_39.62_toar:
 
 <div class="code"><pre>
-i.landsat.toar -7 band=203_30 met=p203r030_7x20010620.met
+    i.landsat.toar -7 band_prefix=203_30. output_suffix=_toar met=p203r030_7x20010620.met
 </pre></div>
 
-<p>or</p>
+or
 
 <div class="code"><pre>
-i.landsat.toar -7 band=203_30 product=2004-06-07 date=2001-06-20 \
-   solar=64.3242970 gain="HHHLHLHHL"
+    i.landsat.toar -7 band_prefix=203_30. output_suffix=_toar product_date=2004-06-07 date=2001-06-20 \
+    solar_elevation=64.3242970 gain="HHHLHLHHL"
 </pre></div>
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
+
 <ol>
-
-    <li>Chander G., B.L. Markham and D.L. Helder: Remote Sensing of
-        Environment, vol. 113, 2009.</li>
-
-    <li>Chander G.H. and B. Markham: IEEE Transactions On Geoscience And
-        Remote Sensing, vol. 41, no. 11, November 2003.</li>
-
-    <li>Chavez P.S., jr. 1996. Image-based atmospheric corrections -
-        Revisited and Improved. Photogrammetric Engineering and Remote
-	Sensing 62(9): 1025-1036.</li>
-
-    <li>Huang et al: At-Satellite Reflectance: A First Order Normalization
-        Of Landsat 7 ETM+ Images. 2002.</li>
-
-    <li>R. Irish: <a href="http://ltpwww.gsfc.nasa.gov/IAS/handbook/handbook_toc.html">Landsat
-        7. Science Data Users Handbook. February 17, 2007.</a></li>
-
-    <li>Markham B.L. and J.L. Barker: Landsat MSS and TM Post-Calibration
-        Dynamic Ranges, Exoatmospheric Reflectances and At-Satellite
-	Temperatures. EOSAT Landsat Technical Notes, No. 1, 1986</li>
-
-    <li>Moran M.S., R.D. Jackson, P.N. Slater and P.M. Teillet: Remote
-        Sensing of Environment, vol. 41. 1992.</li>
-
-    <li>Song et al : Classification and Change Detection Using Landsat TM
-        Data: When and How to Correct Atmospheric Effects?. Remote Sensing
-	of Environment, vol. 75. 2001. </li>
+  <li>Chander G., B.L. Markham and D.L. Helder: Remote Sensing of
+    Environment, vol. 113, 2009.</li>
+  
+  <li>Chander G.H. and B. Markham: IEEE Transactions On Geoscience And
+    Remote Sensing, vol. 41, no. 11, November 2003.</li>
+  
+  <li>Chavez P.S., jr. 1996. Image-based atmospheric corrections -
+    Revisited and Improved. Photogrammetric Engineering and Remote
+    Sensing 62(9): 1025-1036.</li>
+  
+  <li>Huang et al: At-Satellite Reflectance: A First Order Normalization
+    Of Landsat 7 ETM+ Images. 2002.</li>
+  
+  <li>R. Irish: <a href="http://landsathandbook.gsfc.nasa.gov/handbook/handbook_htmls/chapter5/chapter5.html">Landsat
+      7. Science Data Users Handbook</a>. February 17, 2007.</li>
+  
+  <li>Markham B.L. and J.L. Barker: Landsat MSS and TM Post-Calibration
+    Dynamic Ranges, Exoatmospheric Reflectances and At-Satellite
+    Temperatures. EOSAT Landsat Technical Notes, No. 1, 1986</li>
+  
+  <li>Moran M.S., R.D. Jackson, P.N. Slater and P.M. Teillet: Remote
+    Sensing of Environment, vol. 41. 1992.</li>
+  
+  <li>Song et al : Classification and Change Detection Using Landsat TM
+    Data: When and How to Correct Atmospheric Effects?. Remote Sensing
+    of Environment, vol. 75. 2001. </li>
 </ol>
 
-
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em>
-<A HREF="r.mapcalc.html">r.mapcalc</A><br>
-<A HREF="r.in.gdal.html">r.in.gdal</A><br>
+  <A href="r.mapcalc.html">r.mapcalc</a>,
+  <A href="r.in.gdal.html">r.in.gdal</a>
 </em>
 
+<h2>AUTHOR</h2>
 
-<H2>AUTHOR</H2>
-
-E. Jorge Tizado  (ej.tizado unileon es)<br>
-Dept. Biodiversity and Environmental Management,
-University of León, Spain<BR>
+E. Jorge Tizado  (ej.tizado unileon es), Dept. Biodiversity and Environmental Management, University of León, Spain
 
 <p>
 <i>Last changed: $Date: 2010-10-16 09:57:25 +1100 (Sat, 16 Oct 2010) $</i>
