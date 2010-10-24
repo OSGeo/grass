@@ -572,15 +572,20 @@ def find_file(name, element = 'cell', mapset = None):
 # interface to g.list
 
 def list_grouped(type):
-    """!Returns the output from running g.list, as a dictionary where the keys
-    are mapset names and the values are lists of maps in that mapset. Example:
+    """!List elements grouped by mapsets.
 
-    \code
+    Returns the output from running g.list, as a dictionary where the
+    keys are mapset names and the values are lists of maps in that
+    mapset. Example:
+
+    @code
     >>> grass.list_grouped('rast')['PERMANENT']
     ['aspect', 'erosion1', 'quads', 'soils', 'strm.dist', ...
-    \endcode
+    @endcode
     
-    @param type element type
+    @param type element type (rast, vect, rast3d, region, ...)
+
+    @return directory of mapsets/elements
     """
     dashes_re = re.compile("^----+$")
     mapset_re = re.compile("<(.*)>")
@@ -598,20 +603,30 @@ def list_grouped(type):
 	    continue
         if mapset:
             result[mapset].extend(line.split())
+    
     return result
 
-def mlist_grouped(type, mapset = None, pattern = None):
-    """!Returns the output from running g.mlist, as a dictionary where the keys
-    are mapset names and the values are lists of maps in that mapset. 
+def mlist_grouped(type, pattern = None):
+    """!List of elements grouped by mapsets.
 
-    @param type element type
-    @param mapset mapset name (default all mapset in search path)
+    Returns the output from running g.mlist, as a dictionary where the
+    keys are mapset names and the values are lists of maps in that
+    mapset. Example:
+
+    @code
+    >>> grass.mlist_grouped('rast', pattern='r*')['PERMANENT']
+    ['railroads', 'roads', 'rstrct.areas', 'rushmore']
+    @endcode
+    
+    @param type element type (rast, vect, rast3d, region, ...)
     @param pattern pattern string
+
+    @return directory of mapsets/elements
     """
     result = {}
     mapset_element = None
     for line in read_command("g.mlist", flags="m",
-                             type = type, mapset = mapset, pattern = pattern).splitlines():
+                             type = type, pattern = pattern).splitlines():
         try:
             map, mapset_element = line.split('@')
         except ValueError:
@@ -632,29 +647,33 @@ def _concat(xs):
     return result
 
 def list_pairs(type):
-    """!Returns the output from running g.list, as a list of (map, mapset)
+    """!List of elements as tuples.
+
+    Returns the output from running g.list, as a list of (map, mapset)
     pairs. Example:
 
-    \code
+    @code
     >>> grass.list_pairs('rast')
     [('aspect', 'PERMANENT'), ('erosion1', 'PERMANENT'), ('quads', 'PERMANENT'), ...
-    \endcode
-
-    @param type element type
-
+    @endcode
+    
+    @param type element type (rast, vect, rast3d, region, ...)
+    
     @return list of tuples (map, mapset)
     """
     return _concat([[(map, mapset) for map in maps]
 		    for mapset, maps in list_grouped(type).iteritems()])
 
 def list_strings(type):
-    """!Returns the output from running g.list, as a list of qualified
+    """!List of elements as strings.
+
+    Returns the output from running g.list, as a list of qualified
     names. Example:
 
-    \code
+    @code
     >>> grass.list_strings('rast')
     ['aspect@PERMANENT', 'erosion1@PERMANENT', 'quads@PERMANENT', 'soils@PERMANENT', ...
-    \endcode
+    @endcode
 
     @param type element type
     
