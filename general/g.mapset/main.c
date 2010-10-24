@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
-    module->label = _("Change current mapset.");
-    module->description = _("Optionally create new mapset or list available mapsets.");
+    module->label = _("Changes current mapset.");
+    module->description = _("Optionally create new mapset or list available mapsets in given location.");
     
     mapset_opt = G_define_option();
     mapset_opt->key = "mapset";
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 
     /* Clean temporary directory */
     sprintf(path, "%s/etc/clean_temp", G_gisbase());
-    G_message(_("Cleaning up temporary files..."));
+    G_verbose_message(_("Cleaning up temporary files..."));
     G_spawn(path, "clean_temp", NULL);
 
     /* Reset variables */
@@ -192,20 +192,23 @@ int main(int argc, char *argv[])
 
     G_free(mapset_old_path);
 
-    G_warning(_("Your shell continues to use the history for the old mapset"));
+    G_important_message(_("Your shell continues to use the history for the old mapset"));
 
     if ((shell = getenv("SHELL"))) {
 	if (strstr(shell, "bash")) {
-	    G_message(_("You can switch the history by commands:\n"
-			"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"),
-		      mapset_new_path, mapset_new_path);
+	    G_important_message(_("You can switch the history by commands:\n"
+				  "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"),
+				mapset_new_path, mapset_new_path);
 	}
 	else if (strstr(shell, "tcsh")) {
-	    G_message(_("You can switch the history by commands:\n"
-			"history -S; history -L %s/.history; setenv histfile=%s/.history"),
-		      mapset_new_path, mapset_new_path);
+	    G_important_message(_("You can switch the history by commands:\n"
+				  "history -S; history -L %s/.history; setenv histfile=%s/.history"),
+				mapset_new_path, mapset_new_path);
 	}
     }
+
+    G_message(_("Your current mapset is <%s>"), mapset_new);
+    
     G_free(mapset_new_path);
 
     return (EXIT_SUCCESS);
