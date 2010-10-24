@@ -863,6 +863,28 @@ def command_info(cmd):
                 
     return cmdinfo
 
+# interface to g.mapsets
+
+def mapsets(accessible = True):
+    """!List accessible mapsets (mapsets in search path)
+
+    @param accessible False to list all mapsets in the location
+
+    @return list of mapsets
+    """
+    if accessible:
+        flags = 'p'
+    else:
+        flags = 'l'
+    mapsets = read_command('g.mapsets',
+                           flags = flags,
+                           fs = 'newline',
+                           quiet = True)
+    if not mapsets:
+        fatal(_("Unable to list mapsets"))
+        
+    return mapsets.splitlines()
+
 # get debug_level
 if find_program('g.gisenv', ['--help']):
     debug_level = int(gisenv().get('DEBUG', 0))
