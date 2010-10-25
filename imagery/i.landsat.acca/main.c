@@ -6,8 +6,9 @@
  * AUTHOR(S):    E. Jorge Tizado - ej.tizado@unileon.es
  *
  * PURPOSE:      Landsat TM/ETM+ Automatic Cloud Cover Assessment
+ *               Adopted for GRASS 7 by Martin Landa <landa.martin gmail.com>
  *
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -66,7 +67,8 @@ int check_raster(char *raster_name)
        }
      */
     if ((map_type = Rast_get_map_type(raster_fd)) != DCELL_TYPE) {
-	G_fatal_error(_("Input raster map <%s> is not floating point (process DN using i.landsat.toar to radiance first)"), raster_name);
+	G_fatal_error(_("Input raster map <%s> is not floating point "
+			"(process DN using i.landsat.toar to radiance first)"), raster_name);
     }
 
     return raster_fd;
@@ -134,7 +136,8 @@ int main(int argc, char *argv[])
     hist->description =
 	_("Number of classes in the cloud temperature histogram");
     hist->answer = "100";
-
+    hist->guisection = _("Cloud settings");
+    
     sat5 = G_define_flag();
     sat5->key = '5';
     sat5->label = _("Data is Landsat-5 TM");
@@ -148,15 +151,18 @@ int main(int argc, char *argv[])
     csig = G_define_flag();
     csig->key = 'x';
     csig->description = _("Always use cloud signature (step 14)");
+    csig->guisection = _("Cloud settings");
 
     pass2 = G_define_flag();
     pass2->key = '2';
     pass2->description =
 	_("Bypass second-pass processing, and merge warm (not ambiguous) and cold clouds");
+    pass2->guisection = _("Cloud settings");
 
     shadow = G_define_flag();
     shadow->key = 's';
     shadow->description = _("Include a category for cloud shadows");
+    shadow->guisection = _("Cloud settings");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

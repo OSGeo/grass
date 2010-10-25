@@ -146,8 +146,8 @@ void filter_holes(Gfile * out)
 	/* Read row values */
 	if (row != 0) {
 	    Rast_get_c_row(out->fd, arast, row - 1);
-	    Rast_get_c_row(out->fd, brast, row);
 	}
+	Rast_get_c_row(out->fd, brast, row);
 	if (row != (nrows - 1)) {
 	    Rast_get_c_row(out->fd, crast, row + 1);
 	}
