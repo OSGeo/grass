@@ -6,6 +6,7 @@
  * AUTHOR(S):    E. Jorge Tizado - ej.tizado@unileon.es
  *		 Hamish Bowman (small grassification cleanups)
  *               Yann Chemin (v7 + L5TM _MTL.txt support)
+ *               Adopted for GRASS 7 by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Calculate TOA Radiance or Reflectance and Kinetic Temperature
  *               for Landsat 1/2/3/4/5 MS, 4/5 TM or 7 ETM+
