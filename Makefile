@@ -122,10 +122,11 @@ distclean: clean
 	-rm -f include/config.h include/version.h
 	-rm -f include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex 2>/dev/null
 
-DOXNAME=grass
-
 include $(MODULE_TOPDIR)/include/Make/Install.make
 include $(MODULE_TOPDIR)/include/Make/Docs.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
+
+DOXNAME=grass
 
 .PHONY: default libs
 .PHONY: cleandistdirs cleanscriptstrings clean libsclean distclean

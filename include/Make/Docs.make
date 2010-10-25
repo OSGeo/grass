@@ -8,13 +8,12 @@ GRASS_PDFDIR=		$(DOCSDIR)/pdf
 # generate programmer's manual as single HTML document:
 
 htmldocs-single:
+	$(MAKE) -C . htmldox-single
 	for dir in lib rfc gui/wxpython ; do \
-	  $(MAKE) -C $$dir htmldocs-single ; \
+	  $(MAKE) -C $$dir htmldox-single ; \
 	done
 
 # generate programmer's manual as multiple HTML documents:
-htmldocs:
-
 docs_dirs = \
 	lib/db \
 	lib/g3d \
@@ -34,25 +33,26 @@ htmldocs_dirs := $(patsubst %,%/html,$(docs_dirs))
 latexdocs_dirs := $(patsubst %,%/latex,$(docs_dirs))
 
 htmldocs:
+	$(MAKE) -C . htmldox
 	for dir in $(docs_dirs) ; do \
-	  $(MAKE) -C $$dir htmldocs ; \
+	  $(MAKE) -C $$dir htmldox ; \
 	  done
 
 packagehtmldocs: htmldocs
 	tar chvfz $(GRASS_NAME)refman_$(DATE)_html.tar.gz $(htmldocs_dirs)
 
 #alternatively, the docs can be generated as single PDF document (see doxygen FAQ for 'TeX capacity exceeded'):
-#  (cd lib/ ; make pdfdocs)
+#  (cd lib/ ; make pdfdox)
 
 pdfdocs:
 	for dir in $(docs_dirs) ; do \
-	  $(MAKE) -C $$dir pdfdocs ; \
+	  $(MAKE) -C $$dir pdfdox ; \
 	  done
 	@echo "Written PDF docs in: $(latexdocs_dirs)"
 
 cleandocs:
 	for dir in $(docs_dirs) ; do \
-	  $(MAKE) -C $$dir cleandocs ; \
+	  $(MAKE) -C $$dir cleandox ; \
 	  done
 
 indices = \
