@@ -720,7 +720,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Change working environment</label>
-	      <help>Change current mapset.</help>
+	      <help>Changes current mapset.</help>
 	      <keywords>general,settings</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>g.mapset</command>
@@ -845,8 +845,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Timestamp</label>
-	      <help>Print/add/remove a timestamp for a raster map.</help>
-	      <keywords>raster</keywords>
+	      <help>Modifies a timestamp for a raster map.</help>
+	      <keywords>raster,metadata,timestamp</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.timestamp</command>
 	    </menuitem>
@@ -2641,6 +2641,13 @@
 	      <keywords>imagery,landsat,top-of-atmosphere reflectance,dos-type simple atmospheric correction</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.landsat.toar</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Landsat cloud cover assessment</label>
+	      <help>Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).</help>
+	      <keywords>imagery,landsat,acca</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.landsat.acca</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Modis quality control</label>
