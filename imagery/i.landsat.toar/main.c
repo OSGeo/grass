@@ -40,9 +40,9 @@ int main(int argc, char *argv[])
     
     RASTER_MAP_TYPE in_data_type;
     
-    struct Option *band_prefix, *output_suffix, *metfn, *sensor, *adate, *pdate, *elev,
+    struct Option *input_prefix, *output_prefix, *metfn, *sensor, *adate, *pdate, *elev,
 	*bgain, *metho, *perc, *dark, *satz, *atmo;
-    char *basename, *met, *suffixname, *sensorname;
+    char *inputname, *met, *outputname, *sensorname;
     struct Flag *msss, *frad, *l5_mtl;
     
     lsat_data lsat;
@@ -68,19 +68,19 @@ int main(int argc, char *argv[])
     G_add_keyword(_("dos-type simple atmospheric correction"));
 
     /* It defines the different parameters */
-    band_prefix = G_define_option();
-    band_prefix->key = "band_prefix";
-    band_prefix->label = _("Base name of input raster bands");
-    band_prefix->description = _("Example: 'B.' for B.1, B.2, ...");
-    band_prefix->type = TYPE_STRING;
-    band_prefix->required = YES;
+    input_prefix = G_define_option();
+    input_prefix->key = "input_prefix";
+    input_prefix->label = _("Base name of input raster bands");
+    input_prefix->description = _("Example: 'B.' for B.1, B.2, ...");
+    input_prefix->type = TYPE_STRING;
+    input_prefix->required = YES;
 
-    output_suffix = G_define_option();
-    output_suffix->key = "output_suffix";
-    output_suffix->label = _("Suffix for output raster maps");
-    output_suffix->description = _("Example: '_toar' generates B.1_toar, B.2_toar, ...");
-    output_suffix->type = TYPE_STRING;
-    output_suffix->required = YES;
+    output_prefix = G_define_option();
+    output_prefix->key = "output_prefix";
+    output_prefix->label = _("Prefix for output raster maps");
+    output_prefix->description = _("Example: 'B.toar.' generates B.toar.1, B.toar.2, ...");
+    output_prefix->type = TYPE_STRING;
+    output_prefix->required = YES;
 
     metfn = G_define_standard_option(G_OPT_F_INPUT);
     metfn->key = "metfile";
@@ -206,8 +206,8 @@ int main(int argc, char *argv[])
      * Stores options and flag to variables
      *****************************************/
     met = metfn->answer;
-    basename = band_prefix->answer;
-    suffixname = output_suffix->answer;
+    inputname = input_prefix->answer;
+    outputname = output_prefix->answer;
     sensorname = sensor -> answer ? sensor->answer: "";
     
     G_zero(&lsat, sizeof(lsat));
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
 	    for (j = 0; j < 256; j++)
 		hist[j] = 0L;
 
-	    sprintf(band_in, "%s%d", basename, lsat.band[i].code);
+	    sprintf(band_in, "%s%d", inputname, lsat.band[i].code);
 	    if ((infd = Rast_open_old(band_in, "")) < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), band_in);
 	    Rast_get_cellhd(band_in, "", &cellhd);
@@ -466,8 +466,8 @@ int main(int argc, char *argv[])
 
     G_message(_("Calculating..."));
     for (i = 0; i < lsat.bands; i++) {
-	sprintf(band_in, "%s%d", basename, lsat.band[i].code);
-	sprintf(band_out, "%s%d%s", basename, lsat.band[i].code, suffixname);
+	sprintf(band_in, "%s%d", inputname, lsat.band[i].code);
+	sprintf(band_out, "%s%d", outputname, lsat.band[i].code);
 
 	if ((infd = Rast_open_old(band_in, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), band_in);
