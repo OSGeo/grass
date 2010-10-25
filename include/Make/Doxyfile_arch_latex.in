@@ -448,17 +448,18 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = bin.* \
+EXCLUDE                = bin.@ARCH@ \
 		         db \
 			 debian \
 			 demolocation \
 			 display \
-			 dist.* \
+			 dist.@ARCH@ \
 			 doc \
 			 general \
 		         gui/wxpython/vdigit \
 			 gui/wxpython/nviz \
 			 imagery \
+			 include \
                          lib/python/ctypes \
 			 locale \
 			 macosx \

@@ -8,12 +8,12 @@ checkdoxygen:
 	@(type doxygen > /dev/null || (echo "ERROR: Install 'doxygen' software first (get from http://www.doxygen.org)" && exit 1))
 
 # generate docs as single HTML document:
-htmldocs-single: checkdoxygen cleandocs
+htmldox-single: checkdoxygen cleandox
 	doxygen $(MODULE_TOPDIR)/include/Make/Doxyfile_arch_html
 	@echo "HTML reference in directory ./html/index.html"
 
 # generate docs as multiple HTML documents:
-htmldocs: checkdoxygen cleandocs
+htmldox: checkdoxygen cleandox
 # hack needed to get main page at beginning:
 	@mv $(DOXINPUT) $(DOXINPUT).org
 	@sed 's+/\*! \\page +/\*! \\mainpage +g' $(DOXINPUT).org > $(DOXINPUT)
@@ -22,7 +22,7 @@ htmldocs: checkdoxygen cleandocs
 	@echo "HTML reference in directory ./html/index.html"
 
 # NOTE: stubs/ and sqlp/ are excluded in ./Doxyfile_arch_latex
-latexdocs: checkdoxygen cleandocs
+latexdox: checkdoxygen cleandox
 	test ! -d latex || (cd ./latex && $(MAKE) clean)
 # hack needed to get main page at beginning:
 	@mv $(DOXINPUT) $(DOXINPUT).org
@@ -34,7 +34,7 @@ latexdocs: checkdoxygen cleandocs
 	@mv $(DOXINPUT).org $(DOXINPUT)
 	@echo "Latex reference in directory ./latex/refman.dvi"
 
-pdfdocs: checkdoxygen cleandocs
+pdfdox: checkdoxygen cleandox
 	test ! -d latex || (cd ./latex && $(MAKE) clean)
 # hack needed to get main page at beginning:
 	@mv $(DOXINPUT) $(DOXINPUT).org
@@ -46,5 +46,5 @@ pdfdocs: checkdoxygen cleandocs
 	@mv $(DOXINPUT).org $(DOXINPUT)
 	@echo "PDF reference in directory ./latex/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}$(DOXOUTPUT)_`date '+%Y_%m_%d'`_refman.pdf"
 
-cleandocs:
+cleandox:
 	rm -rf ./latex ./html
