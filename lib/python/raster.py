@@ -70,9 +70,18 @@ def raster_info(map):
     
     @return parsed raster info
     """
+
+    def float_or_null(s):
+        if s == 'NULL':
+            return None
+        else:
+            return float(s)
+
     s = read_command('r.info', flags = 'rgstmpud', map = map)
     kv = parse_key_val(s)
-    for k in ['min', 'max', 'north', 'south', 'east', 'west']:
+    for k in ['min', 'max']:
+	kv[k] = float_or_null(kv[k])
+    for k in ['north', 'south', 'east', 'west']:
 	kv[k] = float(kv[k])
     for k in ['nsres', 'ewres']:
 	kv[k] = float_or_dms(kv[k])
