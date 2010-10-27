@@ -117,6 +117,25 @@ xcopy %OSGEO4W_DIR%\share\proj %PACKAGE_DIR%\proj /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy shared GDAL files to PACKAGE_DIR\share\gdal
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+mkdir %PACKAGE_DIR%\share
+mkdir %PACKAGE_DIR%\share\gdal
+xcopy %OSGEO4W_DIR%\share\gdal %PACKAGE_DIR%\share\gdal /S/V/F/I
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy shared GEOTIFF files to PACKAGE_DIR\share\epsg_csv
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+mkdir %PACKAGE_DIR%\share\epsg_csv
+xcopy %OSGEO4W_DIR%\share\epsg_csv %PACKAGE_DIR%\share\epsg_csv /S/V/F/I
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
 @echo Copy Tcl/Tk content to PACKAGE_DIR\tcl-tk
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
