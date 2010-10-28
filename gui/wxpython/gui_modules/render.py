@@ -236,8 +236,11 @@ class Layer(object):
     def GetName(self, fullyQualified = True):
         """!Get map layer name
 
-        @param fullyQualified if True return 'name@mapset' otherwise
-        ('name', 'mapset')
+        @param fullyQualified True to return fully qualified name as a
+        string 'name@mapset' otherwise directory { 'name', 'mapset' }
+        is returned
+
+        @return string / directory
         """
         if fullyQualified:
             return self.name

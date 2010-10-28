@@ -890,18 +890,33 @@ class mainFrame(wx.Frame):
 
         @param returncode command's return code (0 for success)
         """
-        if self.parent and self.parent.GetName() not in ('LayerTree', 'LayerManager') or \
-                returncode != 0:
+        if not self.parent or returncode != 0:
+            return
+        if self.parent.GetName() not in ('LayerTree', 'LayerManager'):
             return
         
-        if cmd[0] in globalvar.cmdAutoRender:
-            if self.parent.GetName() == 'LayerTree':
-                display = self.parent.GetMapDisplay()
-            else: # Layer Manager
-                display = self.parent.GetLayerTree().GetMapDisplay()
+        if self.parent.GetName() == 'LayerTree':
+            display = self.parent.GetMapDisplay()
+        else: # Layer Manager
+            display = self.parent.GetLayerTree().GetMapDisplay()
             
-            if display and display.IsAutoRendered():
+        if not display or not display.IsAutoRendered():
+            return
+        
+        mapLayers = map(lambda x: x.GetName(),
+                        display.GetRender().GetListOfLayers(l_type = 'raster') +
+                        display.GetRender().GetListOfLayers(l_type = 'vector'))
+        
+        task = GUI().ParseCommand(cmd, show = None)
+        for p in task.get_options()['params']:
+            if p.get('prompt', '') not in ('raster', 'vector'):
+                continue
+            mapName = p.get('value', '')
+            if '@' not in mapName:
+                mapName = mapName + '@' + grass.gisenv()['MAPSET']
+            if mapName in mapLayers:
                 display.GetWindow().UpdateMap(render = True)
+                return
         
     def OnOK(self, event):
         """!OK button pressed"""
