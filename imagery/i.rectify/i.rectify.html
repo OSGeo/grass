@@ -121,17 +121,17 @@ cells in the input map. The <em>method=cubic</em> method determines the new valu
 the cell based on a weighted distance average of the 16 surrounding cells in
 the input map.
 <p>
-The bilinear and cubic interpolation methods are most appropriate for
-continuous data and cause some smoothing. Both options should not be used
+The bilinear, cubic and lanczos interpolation methods are most appropriate for
+continuous data and cause some smoothing. These options should not be used
 with categorical data, since the cell values will be altered.
 <p>
-In the bilinear and cubic methods, if any of the surrounding cells used to
+In the bilinear, cubic and lanczos methods, if any of the surrounding cells used to
 interpolate the new cell value are NULL, the resulting cell will be NULL, even if
 the nearest cell is not NULL. This will cause some thinning along NULL borders,
-such as the coasts of land areas in a DEM. The bilinear_f and cubic_f
+such as the coasts of land areas in a DEM. The bilinear_f, cubic_f and lanczos_f
 interpolation methods can be used if thinning along NULL edges is not desired.
 These methods "fall back" to simpler interpolation methods along NULL borders.
-That is, from cubic to bilinear to nearest.
+That is, from lanczos to cubic to bilinear to nearest.
 <p>
 If nearest neighbor assignment is used, the output map has the same raster
 format as the input map. If any of the other interpolations is used, the
