@@ -386,6 +386,12 @@ DCELL Rast_interp_bicubic(double, double,
 		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
 		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
 		       DCELL);
+DCELL Rast_interp_lanczos(double, double, DCELL *);
+DCELL Rast_interp_cubic_bspline(double, DCELL, DCELL, DCELL, DCELL);
+DCELL Rast_interp_bicubic_bspline(double, double,
+		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
+		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
+		       DCELL);
 
 /* mask_info.c */
 char *Rast_mask_info(void);
