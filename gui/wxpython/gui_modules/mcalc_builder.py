@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 @author Michael Barton, Arizona State University
 @author Martin Landa <landa.martin gmail.com>
+@author Tim Michelsen (load/save expression)
 """
 
 import os
@@ -138,6 +139,11 @@ class MapCalcFrame(wx.Frame):
         self.btn_cmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                  label = _("Command dialog"))
         self.btn_cmd.SetToolTipString(_('Open %s dialog') % self.cmd)
+        self.btn_save = wx.Button(parent = self.panel, id = wx.ID_SAVE)
+        self.btn_save.SetToolTipString(_('Save expression to file'))
+        self.btn_load = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                  label = _("&Load"))
+        self.btn_load.SetToolTipString(_('Load expression from file'))
         
         self.btn = dict()        
         self.btn['pow'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "^")
@@ -237,7 +243,9 @@ class MapCalcFrame(wx.Frame):
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnMCalcRun)
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.btn_cmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
-
+        self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveExpression)
+        self.btn_load.Bind(wx.EVT_BUTTON, self.OnLoadExpression)
+        
         self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
         self.function.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
@@ -304,11 +312,17 @@ class MapCalcFrame(wx.Frame):
         buttonSizer4 = wx.BoxSizer(wx.HORIZONTAL)
         buttonSizer4.Add(item = self.btn_cmd,
                          flag = wx.ALL, border = 5)
-        buttonSizer4.Add(item = self.btn_close,
+        buttonSizer4.AddSpacer(10)
+        buttonSizer4.Add(item = self.btn_load,
+                         flag = wx.ALL, border = 5)
+        buttonSizer4.Add(item = self.btn_save,
+                         flag = wx.ALL, border = 5)                         
+        buttonSizer4.AddSpacer(10)
+        buttonSizer4.Add(item = self.btn_help,
                          flag = wx.ALL, border = 5)
         buttonSizer4.Add(item = self.btn_run,
                          flag = wx.ALL, border = 5)
-        buttonSizer4.Add(item = self.btn_help,
+        buttonSizer4.Add(item = self.btn_close,
                          flag = wx.ALL, border = 5)
         
         operatorSizer.Add(item = buttonSizer1, proportion = 0,
@@ -459,6 +473,62 @@ class MapCalcFrame(wx.Frame):
         if display and display.IsAutoRendered():
             display.GetWindow().UpdateMap(render = True)
         
+    def OnSaveExpression(self, event):
+        """!Saves expression to file
+        """
+        mctxt = self.newmaptxt.GetValue() + ' = ' + self.text_mcalc.GetValue() + os.linesep
+        
+        #dialog
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Choose a file name to save the expression"),
+                            wildcard = _("Expression file (*)|*"),
+                            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if not path:
+                dlg.Destroy()
+                return
+            
+            try:
+                fobj = open(path, 'w')
+                fobj.write(mctxt)
+            finally:
+                fobj.close()
+        
+        dlg.Destroy()
+
+    def OnLoadExpression(self, event):
+        """!Load expression from file
+        """
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Choose a file name to load the expression"),
+                            wildcard = _("Expression file (*)|*"),
+                            style = wx.OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if not path:
+                dlg.Destroy()
+                return
+
+            try:
+                fobj = open(path,'r')
+                mctxt = fobj.read()
+            finally:
+                fobj.close()
+            
+            try:
+                result, exp = mctxt.split('=', 1)
+            except ValueError:
+                result = ''
+                exp = mctxt
+            
+            self.newmaptxt.SetValue(result.strip())
+            self.text_mcalc.SetValue(exp.strip())
+            self.text_mcalc.SetFocus()
+            self.text_mcalc.SetInsertionPointEnd()
+        
+        dlg.Destroy()
+                
     def OnClear(self, event):
         """!Clears text area
         """
