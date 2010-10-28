@@ -94,8 +94,8 @@ accomplishing this, therefore, is as follows:
 map from a different location, projects it and write it out to the current
 location.
 <br>
-The projected data is resampled with one of three different methods: 
-nearest neighbor, bilinear and cubic convolution.
+The projected data is resampled with one of four different methods: 
+nearest neighbor, bilinear, cubic convolution or lanczos.
 <p>
 The <em>method=nearest</em> method, which performs a nearest neighbor assignment,
 is the fastest of the three resampling methods. It is primarily used for
@@ -104,19 +104,24 @@ the values of the data cells. The <em>method=bilinear</em> method determines the
 value of the cell based on a weighted distance average of the 4 surrounding
 cells in the input map. The <em>method=cubic</em> method determines the new value of
 the cell based on a weighted distance average of the 16 surrounding cells in
-the input map.
+the input map. The <em>method=lanzcos</em> method determines the new value of
+the cell based on a weighted distance average of the 25 surrounding cells in
+the input map. Compared to cubic, lanczos puts a higher weight on cells close
+to the center and a lower weight on cells away from the center, resulting in
+slightly better contrast.
 <p>
-The bilinear and cubic interpolation methods are most appropriate for
-continuous data and cause some smoothing. Both options should not be used
+The bilinear, cubic and lanczos interpolation methods are most appropriate for
+continuous data and cause some smoothing. The amount of smoothing decreases from
+bilinear to cubic to lanczos. These options should not be used
 with categorical data, since the cell values will be altered.
 <p>
-In the bilinear and cubic methods, if any of the surrounding cells used to
+In the bilinear, cubic and lanczos methods, if any of the surrounding cells used to
 interpolate the new cell value are null, the resulting cell will be null, even if
 the nearest cell is not null. This will cause some thinning along null borders,
-such as the coasts of land areas in a DEM. The bilinear_f and cubic_f
+such as the coasts of land areas in a DEM. The bilinear_f, cubic_f and lanczos_f
 interpolation methods can be used if thinning along null edges is not desired.
 These methods "fall back" to simpler interpolation methods along null borders.
-That is, from cubic to bilinear to nearest.
+That is, from lanczos to cubic to bilinear to nearest.
 <p>
 If nearest neighbor assignment is used, the output map has the same raster
 format as the input map. If any of the interpolations is used, the
@@ -155,7 +160,7 @@ snap it to a regular grid with <em>g.region</em>'s -a flag. E.g.
 <tt>g.region&nbsp;-a&nbsp;res=5 -p</tt>. Note that this is just a rough guide.
 
 <p>
-A more involvedi, but more accurate, way to do this is to generate a vector
+A more involved, but more accurate, way to do this is to generate a vector
 "box" map of the region in the source location using
  <em><a href="v.in.region.html">v.in.region</a></em>.
 This "box" map is then reprojected into the target location with

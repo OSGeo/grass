@@ -49,6 +49,7 @@
 *                Glynn Clements 2006: Use G_interp_* functions, modified      
 *                  version of r.proj which uses a tile cache instead  of loading the
 *                  entire map into memory.
+*                Markus Metz 2010: lanczos and lanczos fallback interpolation methods
 
 *****************************************************************************/
 
@@ -68,8 +69,10 @@ struct menu menu[] = {
     {p_nearest, "nearest", "nearest neighbor"},
     {p_bilinear, "bilinear", "bilinear"},
     {p_cubic, "cubic", "cubic convolution"},
+    {p_lanczos, "lanczos", "lanczos filter"},
     {p_bilinear_f, "bilinear_f", "bilinear with fallback"},
     {p_cubic_f, "cubic_f", "cubic convolution with fallback"},
+    {p_lanczos_f, "lanczos_f", "lanczos filter with fallback"},
     {NULL, NULL, NULL}
 };
 
