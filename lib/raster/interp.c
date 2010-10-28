@@ -54,43 +54,44 @@ DCELL Rast_interp_bicubic(double u, double v,
 
 DCELL Rast_interp_lanczos(double u, double v, DCELL *c)
 {
-    int i, j;
-    double uweight, vweight[5], d;
-    DCELL result = 0;
+    int i;
+    double uweight[5], vweight[5], d;
 
     for (i = 0; i < 5; i++) {
-	d = u - i + 2;
+	d = v - i + 2;
 	if (d == 0)
-	    uweight = 1;
+	    vweight[i] = 1;
 	else {
 	    d *= M_PI;
-	    uweight = LANCZOS_FILTER(d);
+	    vweight[i] = LANCZOS_FILTER(d);
 	}
-
-	for (j = 0; j < 5; j++) {
-	    if (i == 0) {
-		d = v - j + 2;
-		if (d == 0)
-		    vweight[j] = 1;
-		else {
-		    d *= M_PI;
-		    vweight[j] = LANCZOS_FILTER(d);
-		}
-	    }
-
-	    result += *(c++) * uweight * vweight[j];
+	d = u - i + 2;
+	if (d == 0)
+	    uweight[i] = 1;
+	else {
+	    d *= M_PI;
+	    uweight[i] = LANCZOS_FILTER(d);
 	}
     }
-    
-    return result;
+
+    return ((c[0] * vweight[0] + c[1] * vweight[1] + c[2] * vweight[2]
+	    + c[3] * vweight[3] + c[4] * vweight[4]) * uweight[0] +
+	    (c[5] * vweight[0] + c[6] * vweight[1] + c[7] * vweight[2]
+	    + c[8] * vweight[3] + c[9] * vweight[4]) * uweight[1] + 
+	    (c[10] * vweight[0] + c[11] * vweight[1] + c[12] * vweight[2]
+	    + c[13] * vweight[3] + c[14] * vweight[4]) * uweight[2] + 
+	    (c[15] * vweight[0] + c[16] * vweight[1] + c[17] * vweight[2]
+	    + c[18] * vweight[3] + c[19] * vweight[4]) * uweight[3] + 
+	    (c[20] * vweight[0] + c[21] * vweight[1] + c[22] * vweight[2]
+	    + c[23] * vweight[3] + c[24] * vweight[4]) * uweight[4]);
 }
 
 DCELL Rast_interp_cubic_bspline(double u, DCELL c0, DCELL c1, DCELL c2, DCELL c3)
 {
-    return (u * (u * (u * ( 1 * c3 - 3 * c2 + 3 * c1 - 1 * c0) +
-			  ( 0 * c3 + 3 * c2 - 6 * c1 + 3 * c0)) +
-			  ( 0 * c3 + 3 * c2 + 0 * c1 - 3 * c0)) +
-			    0 * c3 + 1 * c2 + 4 * c1 + 1 * c0) / 6;
+    return (u * (u * (u * (c3 - 3 * c2 + 3 * c1 - c0) +
+			  (3 * c2 - 6 * c1 + 3 * c0)) +
+			  (3 * c2 - 3 * c0)) +
+			   c2 + 4 * c1 + c0) / 6;
 }
 
 DCELL Rast_interp_bicubic_bspline(double u, double v,
