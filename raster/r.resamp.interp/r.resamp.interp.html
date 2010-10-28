@@ -3,7 +3,7 @@
 <em>r.resamp.interp</em> resamples an input raster map by interpolating between
 the neighboring cells via a selectable resampling algorithm. All cells
 present in the neighborhood of the input raster cell must be non-null to
-generate a non-null cell in the output raster map. A choice of three
+generate a non-null cell in the output raster map. A choice of four
 interpolation methods is available; each uses the weighted values of a different
 number of adjacent cells in the input map to determine the value of each
 cell in the output map as follows:
@@ -11,6 +11,7 @@ cell in the output map as follows:
 <li>nearest neighbour (1 cell)</li>
 <li>bilinear (4 cells)</li>
 <li>bicubic (16 cells)</li>
+<li>lanczos (25 cells)</li>
 </ul>
 
 <p>
@@ -28,7 +29,7 @@ r.resamp.rst</em>) resample the map to match the current region settings.
 </p>
  
 <p>
-Note that for bilinear and bicubic interpolation,
+Note that for bilinear, bicubic and lanczos interpolation,
 cells of the output raster that cannot be bounded by the appropriate number
 of input cell centers are set to NULL (NULL propagation). This could occur
 due to the input cells being outside the current region, being NULL or MASKed.
