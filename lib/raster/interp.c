@@ -99,10 +99,10 @@ DCELL Rast_interp_bicubic_bspline(double u, double v,
 			  DCELL c20, DCELL c21, DCELL c22, DCELL c23,
 			  DCELL c30, DCELL c31, DCELL c32, DCELL c33)
 {
-    DCELL c0 = Rast_interp_bspline_cubic(u, c00, c01, c02, c03);
-    DCELL c1 = Rast_interp_bspline_cubic(u, c10, c11, c12, c13);
-    DCELL c2 = Rast_interp_bspline_cubic(u, c20, c21, c22, c23);
-    DCELL c3 = Rast_interp_bspline_cubic(u, c30, c31, c32, c33);
+    DCELL c0 = Rast_interp_cubic_bspline(u, c00, c01, c02, c03);
+    DCELL c1 = Rast_interp_cubic_bspline(u, c10, c11, c12, c13);
+    DCELL c2 = Rast_interp_cubic_bspline(u, c20, c21, c22, c23);
+    DCELL c3 = Rast_interp_cubic_bspline(u, c30, c31, c32, c33);
 
-    return Rast_interp_bspline_cubic(v, c0, c1, c2, c3);
+    return Rast_interp_cubic_bspline(v, c0, c1, c2, c3);
 }
