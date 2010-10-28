@@ -179,6 +179,3 @@ else:
 
 """@Check version of wxPython, use agwStyle for 2.8.11+"""
 hasAgw = CheckWxVersion()
-
-"""@List of commands for auto-rendering"""
-cmdAutoRender = [ 'r.colors', 'i.landsat.rgb' ]

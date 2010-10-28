@@ -712,11 +712,23 @@ class GMConsole(wx.SplitterWindow):
         # set focus on prompt
         if self.parent.GetName() == "LayerManager":
             self.btn_abort.Enable(False)
-            if event.cmd[0] in globalvar.cmdAutoRender:
-                display = self.parent.GetLayerTree().GetMapDisplay()
-                if display and display.IsAutoRendered():
-                    display.GetWindow().UpdateMap(render = True)
-        
+            display = self.parent.GetLayerTree().GetMapDisplay()
+            if display and display.IsAutoRendered():
+                mapLayers = map(lambda x: x.GetName(),
+                                display.GetRender().GetListOfLayers(l_type = 'raster') +
+                                display.GetRender().GetListOfLayers(l_type = 'vector'))
+                
+                task = menuform.GUI().ParseCommand(event.cmd, show = None)
+                for p in task.get_options()['params']:
+                    if p.get('prompt', '') not in ('raster', 'vector'):
+                        continue
+                    mapName = p.get('value', '')
+                    if '@' not in mapName:
+                        mapName = mapName + '@' + grass.gisenv()['MAPSET']
+                    if mapName in mapLayers:
+                        display.GetWindow().UpdateMap(render = True)
+                        return
+            
         else:
             # updated command dialog
             dialog = self.parent.parent
