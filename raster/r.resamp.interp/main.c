@@ -4,7 +4,8 @@
  * MODULE:       r.resamp.interp
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor),
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
- *               Dylan Beaudette, Hamish Bowman <hamish_b yahoo.com>
+ *               Dylan Beaudette, Hamish Bowman <hamish_b yahoo.com>,
+ *               Markus Metz (lanczos)
  * PURPOSE:      
  * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
  *
@@ -13,6 +14,9 @@
  *               for details.
  *
  *****************************************************************************/
+
+/* TODO: add fallback methods, see e.g. r.proj */
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -21,7 +25,7 @@
 #include <grass/glocale.h>
 
 static int neighbors;
-static DCELL *bufs[4];
+static DCELL *bufs[5];
 static int cur_row;
 
 static void read_rows(int infile, int row)
@@ -82,7 +86,7 @@ int main(int argc, char *argv[])
     method->type = TYPE_STRING;
     method->required = NO;
     method->description = _("Interpolation method");
-    method->options = "nearest,bilinear,bicubic";
+    method->options = "nearest,bilinear,bicubic,lanczos";
     method->answer = "bilinear";
 
     if (G_parser(argc, argv))
@@ -94,6 +98,8 @@ int main(int argc, char *argv[])
 	neighbors = 2;
     else if (G_strcasecmp(method->answer, "bicubic") == 0)
 	neighbors = 4;
+    else if (G_strcasecmp(method->answer, "lanczos") == 0)
+	neighbors = 5;
     else
 	G_fatal_error(_("Invalid method: %s"), method->answer);
 
@@ -106,11 +112,11 @@ int main(int argc, char *argv[])
     {
 	double north = Rast_row_to_northing(0.5, &dst_w);
 	double south = Rast_row_to_northing(dst_w.rows - 0.5, &dst_w);
-	int r0 = (int)floor(Rast_northing_to_row(north, &src_w) - 0.5) - 1;
+	int r0 = (int)floor(Rast_northing_to_row(north, &src_w) - 0.5) - 2;
 	int r1 = (int)floor(Rast_northing_to_row(south, &src_w) - 0.5) + 3;
 	double west = Rast_col_to_easting(0.5, &dst_w);
 	double east = Rast_col_to_easting(dst_w.cols - 0.5, &dst_w);
-	int c0 = (int)floor(Rast_easting_to_col(west, &src_w) - 0.5) - 1;
+	int c0 = (int)floor(Rast_easting_to_col(west, &src_w) - 0.5) - 2;
 	int c1 = (int)floor(Rast_easting_to_col(east, &src_w) - 0.5) + 3;
 
 	src_w.south -= src_w.ns_res * (r1 - src_w.rows);
@@ -271,6 +277,76 @@ int main(int argc, char *argv[])
 						   c10, c11, c12, c13,
 						   c20, c21, c22, c23,
 						   c30, c31, c32, c33);
+		}
+	    }
+
+	    Rast_put_d_row(outfile, outbuf);
+	}
+	break;
+
+    case 5:			/* lanczos */
+	for (row = 0; row < dst_w.rows; row++) {
+	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
+	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
+	    int maprow1 = (int)floor(maprow_f + 0.5);
+	    int maprow0 = maprow1 - 2;
+	    double v = maprow_f - maprow1;
+
+	    G_percent(row, dst_w.rows, 2);
+
+	    read_rows(infile, maprow0);
+
+	    for (col = 0; col < dst_w.cols; col++) {
+		double east = Rast_col_to_easting(col + 0.5, &dst_w);
+		double mapcol_f = Rast_easting_to_col(east, &src_w) - 0.5;
+		int mapcol2 = (int)floor(mapcol_f + 0.5);
+		int mapcol0 = mapcol2 - 2;
+		int mapcol1 = mapcol2 - 1;
+		int mapcol3 = mapcol2 + 1;
+		int mapcol4 = mapcol2 + 2;
+		double u = mapcol_f - mapcol2;
+		double c[25];
+		int i = 0, do_lanczos = 1;
+
+		c[i++] = bufs[0][mapcol0];
+		c[i++] = bufs[0][mapcol1];
+		c[i++] = bufs[0][mapcol2];
+		c[i++] = bufs[0][mapcol3];
+		c[i++] = bufs[0][mapcol4];
+
+		c[i++] = bufs[1][mapcol0];
+		c[i++] = bufs[1][mapcol1];
+		c[i++] = bufs[1][mapcol2];
+		c[i++] = bufs[1][mapcol3];
+		c[i++] = bufs[1][mapcol4];
+
+		c[i++] = bufs[2][mapcol0];
+		c[i++] = bufs[2][mapcol1];
+		c[i++] = bufs[2][mapcol2];
+		c[i++] = bufs[2][mapcol3];
+		c[i++] = bufs[2][mapcol4];
+
+		c[i++] = bufs[3][mapcol0];
+		c[i++] = bufs[3][mapcol1];
+		c[i++] = bufs[3][mapcol2];
+		c[i++] = bufs[3][mapcol3];
+		c[i++] = bufs[3][mapcol4];
+
+		c[i++] = bufs[4][mapcol0];
+		c[i++] = bufs[4][mapcol1];
+		c[i++] = bufs[4][mapcol2];
+		c[i++] = bufs[4][mapcol3];
+		c[i++] = bufs[4][mapcol4];
+
+		for (i = 0; i < 25; i++) {
+		    if (Rast_is_d_null_value(&(c[i]))) {
+			Rast_set_d_null_value(&outbuf[col], 1);
+			do_lanczos = 0;
+		    }
+		}
+
+		if (do_lanczos) {
+		    outbuf[col] = Rast_interp_lanczos(v, u, c);
 		}
 	    }
 
