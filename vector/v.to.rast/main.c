@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("conversion"));
     G_add_keyword(_("rasterization"));
-    module->description = _("Converts a vector map into a raster map.");
+    module->description = _("Converts (rasterize) a vector map into a raster map.");
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -50,8 +50,10 @@ int main(int argc, char *argv[])
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "point,line,area";
     type_opt->answer = "point,line,area";
-
+    type_opt->guisection = _("Selection");
+    
     output = G_define_standard_option(G_OPT_R_OUTPUT);
+    
     use_opt = G_define_option();
     use_opt->key = "use";
     use_opt->type = TYPE_STRING;
@@ -68,16 +70,8 @@ int main(int argc, char *argv[])
     col = G_define_standard_option(G_OPT_DB_COLUMN);
     col->key = "attrcolumn";
     col->description =
-	_("Name of column for attr parameter (data type must be numeric)");
+	_("Name of column for 'attr' parameter (data type must be numeric)");
     col->guisection = _("Attributes");
-
-    val_opt = G_define_option();
-    val_opt->key = "value";
-    val_opt->type = TYPE_DOUBLE;
-    val_opt->required = NO;
-    val_opt->multiple = NO;
-    val_opt->answer = "1";
-    val_opt->description = _("Raster value");
 
     rgbcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     rgbcol_opt->key = "rgbcolumn";
@@ -90,6 +84,14 @@ int main(int argc, char *argv[])
     label_opt->description =
 	_("Name of column used as raster category labels");
     label_opt->guisection = _("Attributes");
+
+    val_opt = G_define_option();
+    val_opt->key = "value";
+    val_opt->type = TYPE_DOUBLE;
+    val_opt->required = NO;
+    val_opt->multiple = NO;
+    val_opt->answer = "1";
+    val_opt->description = _("Raster value (for use=val)");
     
     rows = G_define_option();
     rows->key = "rows";
