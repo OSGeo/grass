@@ -43,7 +43,7 @@ void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
     for (i = 0; i < 2; i++)
 	for (j = 0; j < 2; j++) {
 	    const DCELL *cellp = CPTR(ibuffer, row + i, col + j);
-	    if (Rast_is_f_null_value(cellp)) {
+	    if (Rast_is_d_null_value(cellp)) {
 		Rast_set_null_value(obufptr, 1, cell_type);
 		return;
 	    }
