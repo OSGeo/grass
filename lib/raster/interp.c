@@ -15,8 +15,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#define LANCZOS_FILTER(x) ((2 * sin(x) * sin((x) / 2)) / ((x) * (x)))
-
 DCELL Rast_interp_linear(double u, DCELL c0, DCELL c1)
 {
     return u * (c1 - c0) + c0;
@@ -54,25 +52,54 @@ DCELL Rast_interp_bicubic(double u, double v,
 
 DCELL Rast_interp_lanczos(double u, double v, DCELL *c)
 {
-    int i;
-    double uweight[5], vweight[5], d;
+    double uweight[5], vweight[5], d, d_pi;
+    double sind, sincd1, sincd2;
 
-    for (i = 0; i < 5; i++) {
-	d = v - i + 2;
-	if (d == 0)
-	    vweight[i] = 1;
-	else {
-	    d *= M_PI;
-	    vweight[i] = LANCZOS_FILTER(d);
-	}
-	d = u - i + 2;
-	if (d == 0)
-	    uweight[i] = 1;
-	else {
-	    d *= M_PI;
-	    uweight[i] = LANCZOS_FILTER(d);
-	}
-    }
+    d = v + 2;
+    d_pi = d * M_PI;
+    sind = 2 * sin(d_pi);
+    sincd1 = sind * sin(d_pi / 2);
+    vweight[0] = (d == 0 ? 1 : sincd1 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    sincd2 = -sind * sin(d_pi / 2);
+    vweight[1] = (d == 0 ? 1 : sincd2 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    vweight[2] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    vweight[3] = (d == 0 ? 1 : -sincd2 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    vweight[4] = (d == 0 ? 1 : sincd1 / (d_pi * d_pi));
+
+    d = u + 2;
+    d_pi = d * M_PI;
+    sind = 2 * sin(d_pi);
+    sincd1 = sind * sin(d_pi / 2);
+    uweight[0] = (d == 0 ? 1 : sincd1 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    sincd2 = -sind * sin(d_pi / 2);
+    uweight[1] = (d == 0 ? 1 : sincd2 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    uweight[2] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    uweight[3] = (d == 0 ? 1 : -sincd2 / (d_pi * d_pi));
+
+    d -= 1.;
+    d_pi = d * M_PI;
+    uweight[4] = (d == 0 ? 1 : sincd1 / (d_pi * d_pi));
 
     return ((c[0] * vweight[0] + c[1] * vweight[1] + c[2] * vweight[2]
 	    + c[3] * vweight[3] + c[4] * vweight[4]) * uweight[0] +
