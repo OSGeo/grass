@@ -27,7 +27,6 @@ struct cache
 };
 
 extern char *seg_mb;
-extern int seg_rows, seg_cols;
 
 extern int temp_fd;
 extern RASTER_MAP_TYPE map_type;
