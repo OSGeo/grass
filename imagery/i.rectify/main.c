@@ -198,9 +198,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Invalid order (%d); please enter 1 to %d"), order,
 		      MAXORDER);
 
-    if (!(seg_mb > 0))
-	G_fatal_error(_("Amount of memory to use in MB must be > 0"));
-
     /* determine the number of files in this group */
     if (I_get_group_ref(group, &ref) <= 0) {
 	G_warning(_("Location: %s"), G_location());
@@ -253,6 +250,7 @@ int main(int argc, char *argv[])
     /* get the target */
     get_target(group);
 
+    /* do not use current region in target location */
     if (!c->answer) {
 	double res = -1;
 	
