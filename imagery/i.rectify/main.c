@@ -33,7 +33,6 @@
 #include "crs.h"
 
 char *seg_mb;
-int seg_rows, seg_cols;
 
 int temp_fd;
 RASTER_MAP_TYPE map_type;
