@@ -108,17 +108,19 @@ modified Gaussian elimination method.
 
 <h3>Resampling method</h3>
 <p>
-The rectified data is resampled with one of five different methods: 
-<em>nearest</em>, <em>bilinear</em>, <em>cubic</em>, <em>bilinear_f</em>
-or <em>cubic_f</em>.
+The rectified data is resampled with one of seven different methods: 
+<em>nearest</em>, <em>bilinear</em>, <em>cubic</em>, <em>lanczos</em>,
+<em>bilinear_f</em>, <em>cubic_f</em>, or <em>lanczos_f</em>.
 <p>
 The <em>method=nearest</em> method, which performs a nearest neighbor assignment,
-is the fastest of the three resampling methods. It is primarily used for
+is the fastest of the resampling methods. It is primarily used for
 categorical data such as a land use classification, since it will not change
 the values of the data cells. The <em>method=bilinear</em> method determines the new
 value of the cell based on a weighted distance average of the 4 surrounding
 cells in the input map. The <em>method=cubic</em> method determines the new value of
 the cell based on a weighted distance average of the 16 surrounding cells in
+the input map.  The <em>method=lanczos</em> method determines the new value of
+the cell based on a weighted distance average of the 25 surrounding cells in
 the input map.
 <p>
 The bilinear, cubic and lanczos interpolation methods are most appropriate for
