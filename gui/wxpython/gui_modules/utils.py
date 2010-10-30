@@ -34,7 +34,11 @@ def normalize_whitespace(text):
 
 def split(s):
     """!Platform spefic shlex.split"""
-    return shlex.split(s, posix = (sys.platform != "win32"))
+    if sys.version_info >= (2, 6):
+        return shlex.split(s, posix = (sys.platform != "win32"))
+    else:
+        # TODO
+        return shlex.split(s)
 
 def GetTempfile(pref=None):
     """
