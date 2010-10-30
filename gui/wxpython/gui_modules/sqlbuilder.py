@@ -39,7 +39,6 @@ if not os.getenv("GRASS_WXBUNDLED"):
 import wx
 
 import grass.script as grass
-grass.set_fatal_exit(False)
 
 import gcmd
 import dbm_base
