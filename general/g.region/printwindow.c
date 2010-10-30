@@ -173,13 +173,13 @@ void print_window(struct Cell_head *window, int print_flag)
 	    fprintf(stdout, "cells=%lld\n",
 		    (long long)window->rows * window->cols);
 	    if (print_flag & PRINT_3D)
-		fprintf(stdout, "3dcells=%lld\n",
+		fprintf(stdout, "cells3=%lld\n",
 			(long long)window->rows3 * window->cols3 *
 			window->depths);
 #else
 	    fprintf(stdout, "cells=%ld\n", (long)window->rows * window->cols);
 	    if (print_flag & PRINT_3D)
-		fprintf(stdout, "3dcells=%ld\n",
+		fprintf(stdout, "cells3=%ld\n",
 			(long)window->rows3 * window->cols3 * window->depths);
 #endif
 	}
@@ -217,14 +217,14 @@ void print_window(struct Cell_head *window, int print_flag)
 	    fprintf(stdout, "%-*s %lld\n", width, "cells:",
 		    (long long)window->rows * window->cols);
 	    if (print_flag & PRINT_3D)
-		fprintf(stdout, "%-*s %lld\n", width, "3dcells:",
+		fprintf(stdout, "%-*s %lld\n", width, "cells3:",
 			(long long)window->rows3 * window->cols3 *
 			window->depths);
 #else
 	    fprintf(stdout, "%-*s %ld\n", width, "cells:",
 		    (long)window->rows * window->cols);
 	    if (print_flag & PRINT_3D)
-		fprintf(stdout, "%-*s %ld\n", width, "3dcells:",
+		fprintf(stdout, "%-*s %ld\n", width, "cells3:",
 			(long)window->rows3 * window->cols3 * window->depths);
 #endif
 	}
