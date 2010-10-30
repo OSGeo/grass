@@ -36,8 +36,9 @@ def split(s):
     """!Platform spefic shlex.split"""
     if sys.version_info >= (2, 6):
         return shlex.split(s, posix = (sys.platform != "win32"))
+    elif sys.platform == "win32":
+        return shlex.split(s.replace('\\', r'\\'))
     else:
-        # TODO
         return shlex.split(s)
 
 def GetTempfile(pref=None):
