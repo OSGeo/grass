@@ -613,7 +613,7 @@ class GPrompt(object):
         if cmdString[:2] == 'd.' and not self.parent.curr_page:
             self.parent.NewDisplay(show=True)
         
-        cmd = shlex.split(str(cmdString))
+        cmd = utils.split(cmdString)
         if len(cmd) > 1:
             self.parent.RunCmd(cmd, switchPage = True)
         else:

@@ -18,6 +18,7 @@ import platform
 import string
 import glob
 import locale
+import shlex
 
 import globalvar
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
@@ -30,6 +31,10 @@ from debug import Debug
 def normalize_whitespace(text):
     """!Remove redundant whitespace from a string"""
     return string.join(string.split(text), ' ')
+
+def split(s):
+    """!Platform spefic shlex.split"""
+    return shlex.split(s, posix = (sys.platform != "win32"))
 
 def GetTempfile(pref=None):
     """
