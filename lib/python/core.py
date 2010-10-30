@@ -760,19 +760,25 @@ def basename(path, ext = None):
 # find a program (replacement for "which")
 
 def find_program(pgm, args = []):
-    """!Attempt to run a program, with optional arguments. Return False
-    if the attempt failed due to a missing executable, True otherwise
+    """!Attempt to run a program, with optional arguments. 
 
     @param pgm program name
     @param args list of arguments
+
+    @return False if the attempt failed due to a missing executable
+    @return True otherwise
     """
     nuldev = file(os.devnull, 'w+')
     try:
-	call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
-	found = True
+	ret = call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
+        if ret == 0:
+            found = True
+        else:
+            found = False
     except:
 	found = False
     nuldev.close()
+    
     return found
 
 # try to remove a file, without complaints
