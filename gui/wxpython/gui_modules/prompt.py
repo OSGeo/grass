@@ -875,11 +875,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             
         elif event.GetKeyCode() == wx.WXK_RETURN and \
                 self.AutoCompActive() == False:
+            # run command on line when <return> is pressed
+            
             if self.parent.GetName() == "ModelerDialog":
                 self.parent.OnOk(None)
                 return
-            
-            # Run command on line when <return> is pressed    
             
             # find the command to run
             line = self.GetCurLine()[0].strip()
@@ -892,11 +892,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             except UnicodeError:
                 cmd = shlex.split(utils.EncodeString((line)))
             
-            # send the command list to the processor 
+            #  send the command list to the processor 
             self.parent.RunCmd(cmd)
             
             # add command to history    
-            self.cmdbuffer.append(line)
+            self.cmdbuffer.append(' '.join(cmd))
             
             # keep command history to a managable size
             if len(self.cmdbuffer) > 200:
@@ -910,7 +910,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             items = self.GetTextLeft().split()
             if len(items) == 1:
                 cmd = items[0].strip()
-                if not self.cmdDesc or cmd != self.cmdDesc.get_name():
+                if cmd in globalvar.grassCmd['all'] and \
+                        (not self.cmdDesc or cmd != self.cmdDesc.get_name()):
                     try:
                         self.cmdDesc = menuform.GUI().ParseInterface(cmd = [cmd])
                     except IOError:

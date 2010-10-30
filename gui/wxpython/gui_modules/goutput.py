@@ -405,27 +405,21 @@ class GMConsole(wx.SplitterWindow):
 
     def RunCmd(self, command, compReg = True, switchPage = False,
                onDone = None):
-        """!Run in GUI GRASS (or other) commands typed into console
-        command text widget, and send stdout output to output text
-        widget.
-
-        Command is transformed into a list for processing.
-
+        """!Run command typed into console command prompt (GPrompt).
+        
         @todo Display commands (*.d) are captured and processed
         separately by mapdisp.py. Display commands are rendered in map
         display widget that currently has the focus (as indicted by
         mdidx).
-
-        @param command command (list)
-        @param compReg if true use computation region
+        
+        @param command command given as a list (produced e.g. by shlex.split())
+        @param compReg True use computation region
         @param switchPage switch to output page
         @param onDone function to be called when command is finished
         """
-        # command given as a string ?
-        try:
-            cmdlist = command.strip().split(' ')
-        except:
-            cmdlist = command
+        if len(command) == 0:
+            Debug.msg(2, "GPrompt:RunCmd(): empty command")
+            return
         
         # update history file
         env = grass.gisenv()
@@ -436,10 +430,9 @@ class GMConsole(wx.SplitterWindow):
             self.WriteError(str(e))
             fileHistory = None
         
-        cmdString = ' '.join(cmdlist)
         if fileHistory:
             try:
-                fileHistory.write(cmdString + '\n')
+                fileHistory.write(' '.join(command) + os.linesep)
             finally:
                 fileHistory.close()
         
@@ -450,13 +443,12 @@ class GMConsole(wx.SplitterWindow):
             except AttributeError:
                 pass
         
-        if cmdlist[0] in globalvar.grassCmd['all']:
+        if command[0] in globalvar.grassCmd['all']:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
-            if self.parent.GetName() == "LayerManager" and cmdlist[0][0:2] == "d.":
-                #
+            if self.parent.GetName() == "LayerManager" and \
+                    command[0][0:2] == "d.":
                 # display GRASS commands
-                #
                 try:
                     layertype = {'d.rast'         : 'raster',
                                  'd.rast3d'       : '3d-raster',
@@ -472,19 +464,19 @@ class GMConsole(wx.SplitterWindow):
                                  'd.grid'         : 'grid',
                                  'd.geodesic'     : 'geodesic',
                                  'd.rhumbline'    : 'rhumb',
-                                 'd.labels'       : 'labels'}[cmdlist[0]]
+                                 'd.labels'       : 'labels'}[command[0]]
                 except KeyError:
                     gcmd.GMessage(parent = self.parent,
                                   message = _("Command '%s' not yet implemented in the WxGUI. "
-                                              "Try adding it as a command layer instead.") % cmdlist[0])
+                                              "Try adding it as a command layer instead.") % command[0])
                     return None
                 
                 # add layer into layer tree
-                if cmdlist[0] == 'd.rast':
-                    lname = utils.GetLayerNameFromCmd(cmdlist, fullyQualified = True,
+                if command[0] == 'd.rast':
+                    lname = utils.GetLayerNameFromCmd(command, fullyQualified = True,
                                                       layerType = 'raster')
-                elif cmdlist[0] == 'd.vect':
-                    lname = utils.GetLayerNameFromCmd(cmdlist, fullyQualified = True,
+                elif command[0] == 'd.vect':
+                    lname = utils.GetLayerNameFromCmd(command, fullyQualified = True,
                                                       layerType = 'vector')
                 else:
                     lname = None
@@ -492,19 +484,16 @@ class GMConsole(wx.SplitterWindow):
                 if self.parent.GetName() == "LayerManager":                
                     self.parent.curr_page.maptree.AddLayer(ltype=layertype,
                                                            lname=lname,
-                                                           lcmd=cmdlist)
+                                                           lcmd=command)
             
             else:
-                #
                 # other GRASS commands (r|v|g|...)
-                #
-                
-                # switch to 'Command output'
+                # switch to 'Command output' if required
                 if switchPage:
                     if self._notebook.GetSelection() != self.parent.goutput.pageid:
                         self._notebook.SetSelection(self.parent.goutput.pageid)
                     
-                    self.parent.SetFocus() # -> set focus
+                    self.parent.SetFocus()
                     self.parent.Raise()
                 
                 # activate computational region (set with g.region)
@@ -513,23 +502,23 @@ class GMConsole(wx.SplitterWindow):
                     tmpreg = os.getenv("GRASS_REGION")
                     if os.environ.has_key("GRASS_REGION"):
                         del os.environ["GRASS_REGION"]
-
-                if len(cmdlist) == 1:
+                
+                if len(command) == 1:
                     import menuform
-                    task = menuform.GUI().ParseInterface(cmdlist)
+                    task = menuform.GUI().ParseInterface(command)
                     if not task.has_required():
                         task = None # run command
                 else:
                     task = None
                 
-                if task and cmdlist[0] not in ('v.krige'):
+                if task and command[0] not in ('v.krige'):
                     # process GRASS command without argument
-                    menuform.GUI().ParseCommand(cmdlist, parentframe = self)
+                    menuform.GUI().ParseCommand(command, parentframe = self)
                 else:
                     # process GRASS command with argument
                     self.cmdThread.RunCmd(GrassCmd,
                                           onDone,
-                                          cmdlist,
+                                          command,
                                           self.cmd_stdout, self.cmd_stderr)                                          
                     self.cmd_output_timer.Start(50)
                     
@@ -541,12 +530,15 @@ class GMConsole(wx.SplitterWindow):
         else:
             # Send any other command to the shell. Send output to
             # console output window
-            self.cmdThread.RunCmd(GrassCmd,
-                                  onDone,
-                                  cmdlist,
-                                  self.cmd_stdout, self.cmd_stderr)                                         
-            self.cmd_output_timer.Start(50)
-                
+            if grass.find_program(command[0]):
+                self.cmdThread.RunCmd(GrassCmd,
+                                      onDone,
+                                      command,
+                                      self.cmd_stdout, self.cmd_stderr)                                         
+                self.cmd_output_timer.Start(50)
+            else:
+                self.WriteError(_("Command '%s' not found") % command[0])
+        
         return None
 
     def ClearHistory(self, event):
