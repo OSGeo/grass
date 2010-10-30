@@ -700,31 +700,30 @@ class GMConsole(wx.SplitterWindow):
         self.console_progressbar.SetValue(0) # reset progress bar on '0%'
 
         self.cmd_output_timer.Stop()
-
-        # set focus on prompt
+        
         if self.parent.GetName() == "LayerManager":
             self.btn_abort.Enable(False)
+            if event.cmd[0] not in globalvar.grassCmd['all']:
+                return
             display = self.parent.GetLayerTree().GetMapDisplay()
-            if display and display.IsAutoRendered():
-                mapLayers = map(lambda x: x.GetName(),
-                                display.GetRender().GetListOfLayers(l_type = 'raster') +
-                                display.GetRender().GetListOfLayers(l_type = 'vector'))
-                
-                task = menuform.GUI().ParseCommand(event.cmd, show = None)
-                for p in task.get_options()['params']:
-                    if p.get('prompt', '') not in ('raster', 'vector'):
-                        continue
-                    mapName = p.get('value', '')
-                    if '@' not in mapName:
-                        mapName = mapName + '@' + grass.gisenv()['MAPSET']
-                    if mapName in mapLayers:
-                        display.GetWindow().UpdateMap(render = True)
-                        return
+            if not display or not display.IsAutoRendered():
+                return
+            mapLayers = map(lambda x: x.GetName(),
+                            display.GetRender().GetListOfLayers(l_type = 'raster') +
+                            display.GetRender().GetListOfLayers(l_type = 'vector'))
             
-        else:
-            # updated command dialog
+            task = menuform.GUI().ParseCommand(event.cmd, show = None)
+            for p in task.get_options()['params']:
+                if p.get('prompt', '') not in ('raster', 'vector'):
+                    continue
+                mapName = p.get('value', '')
+                if '@' not in mapName:
+                    mapName = mapName + '@' + grass.gisenv()['MAPSET']
+                if mapName in mapLayers:
+                    display.GetWindow().UpdateMap(render = True)
+                    return
+        else: # standalone dialogs
             dialog = self.parent.parent
-
             if hasattr(self.parent.parent, "btn_abort"):
                 dialog.btn_abort.Enable(False)
             
@@ -783,8 +782,6 @@ class GMConsole(wx.SplitterWindow):
                     dialog.closebox.IsChecked():
                 time.sleep(1)
                 dialog.Close()
-        
-        event.Skip()
         
     def OnProcessPendingOutputWindowEvents(self, event):
         self.ProcessPendingEvents()
