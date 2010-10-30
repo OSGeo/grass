@@ -55,8 +55,15 @@ class Popen(subprocess.Popen):
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
-fatal_exit = True # abort on fatal()
-debug_level = 0   # DEBUG level
+class ScriptException(Exception):
+    def __init__(self, msg):
+        self.value = msg
+    
+    def __str__(self):
+        return repr(self.value)
+        
+raise_on_error = True  # raise exception instead of calling fatal()
+debug_level = 0        # DEBUG level
 
 def call(*args, **kwargs):
     return Popen(*args, **kwargs).wait()
@@ -282,45 +289,37 @@ def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
 # interface to g.message
 
 def message(msg, flag = None):
-    """!Display a message using g.message
+    """!Display a message using `g.message`
 
     @param msg message to be displayed
     @param flag flags (given as string)
-
-    @return g.message's exit code
     """
     run_command("g.message", flags = flag, message = msg)
 
 def debug(msg, debug = 1):
-    """!Display a debugging message using g.message -d
+    """!Display a debugging message using `g.message -d`
 
     @param msg debugging message to be displayed
     @param debug debug level (0-5)
-
-    @return g.message's exit code
     """
     run_command("g.message", flags = 'd', message = msg, debug = debug)
     
 def verbose(msg):
-    """!Display a verbose message using g.message -v
+    """!Display a verbose message using `g.message -v`
     
     @param msg verbose message to be displayed
-
-    @return g.message's exit code
     """
     message(msg, flag = 'v')
 
 def info(msg):
-    """!Display an informational message using g.message -i
+    """!Display an informational message using `g.message -i`
 
     @param msg informational message to be displayed
-
-    @return g.message's exit code
     """
     message(msg, flag = 'i')
 
 def percent(i, n, s):
-    """!Display a progress info message using g.message -p
+    """!Display a progress info message using `g.message -p`
     
     @code
     message(_("Percent complete..."))
@@ -333,50 +332,44 @@ def percent(i, n, s):
     @param i current item
     @param n total number of items
     @param s increment size
-    
-    @return g.message's exit code
     """
     message("%d %d %d" % (i, n, s), flag = 'p')
 
 def warning(msg):
-    """!Display a warning message using g.message -w
+    """!Display a warning message using `g.message -w`
 
     @param msg warning message to be displayed
-
-    @return g.message's exit code
     """
     message(msg, flag = 'w')
 
 def error(msg):
-    """!Display an error message using g.message -e
+    """!Display an error message using `g.message -e`
 
+    Raise exception when on_error is 'raise'.
+    
     @param msg error message to be displayed
-
-    @return g.message's exit code
     """
-    message(msg, flag = 'e')
+    if raise_on_error:
+        raise ScriptException(msg)
+    else:
+        message(msg, flag = 'e')
 
 def fatal(msg):
-    """!Display an error message using g.message -e, then abort
-
+    """!Display an error message using `g.message -e`, then abort
+    
     @param msg error message to be displayed
-
-    @return g.message's exit code
     """
     error(msg)
+    sys.exit(1)
     
-    global fatal_exit
-    if fatal_exit:
-        sys.exit(1)
-    
-def set_fatal_exit(exit = True):
-    """!Set fatal_exit variable
+def raise_on_error(raise_exp = True):
+    """!Define behaviour on error (error() called)
 
-    @param exit True to abort on fatal() otherwise just error message
-    is printed"""
-    global fatal_exit
-    fatal_exit = exit
-    
+    @param raise_exp True to raise ScriptException instead of calling error()
+    """
+    global raise_on_error
+    raise_on_error = raise_exp
+
 # interface to g.parser
 
 def _parse_opts(lines):
