@@ -17,9 +17,13 @@ while importing the data. All vector features completely or partially
 falling into this rectangle subregion are imported.
 The <b>-r</b> current region flag is identical, but uses the current region
 settings as the spatial bounds (see <em><a href="g.region.html">g.region</a></em>).
-<P>
+<p>
 Topology cleaning on areas is automatically performed, but may fail in
 special cases (then use <a href="v.clean.html">v.clean</a>).
+<p>
+The <b>min_area</b> threshold value is being specified as area size
+in map units with the exception of latitude-longitude locations in which
+it is being specified solely in square meters.
 
 <h3>Supported OGR Vector Formats</h3>
 
