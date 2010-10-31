@@ -366,9 +366,13 @@ def fatal(msg):
 def set_raise_on_error(raise_exp = True):
     """!Define behaviour on error (error() called)
 
-    @param raise_exp True to raise ScriptException instead of calling error()
+    @param raise_exp True to raise ScriptException instead of calling
+    error()
+    
+    @return current status
     """
     global raise_on_error
+    tmp_raise = raise_on_error
     raise_on_error = raise_exp
 
 # interface to g.parser
