@@ -62,7 +62,7 @@ class ScriptException(Exception):
     def __str__(self):
         return repr(self.value)
         
-raise_on_error = True  # raise exception instead of calling fatal()
+raise_on_error = False # raise exception instead of calling fatal()
 debug_level = 0        # DEBUG level
 
 def call(*args, **kwargs):
@@ -349,6 +349,7 @@ def error(msg):
     
     @param msg error message to be displayed
     """
+    global raise_on_error
     if raise_on_error:
         raise ScriptException(msg)
     else:
@@ -362,7 +363,7 @@ def fatal(msg):
     error(msg)
     sys.exit(1)
     
-def raise_on_error(raise_exp = True):
+def set_raise_on_error(raise_exp = True):
     """!Define behaviour on error (error() called)
 
     @param raise_exp True to raise ScriptException instead of calling error()
