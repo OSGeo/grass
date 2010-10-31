@@ -1522,7 +1522,7 @@
 	    <menuitem>
 	      <label>Recode</label>
 	      <help>Recodes categorical raster maps.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,recode categories</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.recode</command>
 	    </menuitem>

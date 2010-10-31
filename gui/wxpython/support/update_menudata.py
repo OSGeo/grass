@@ -91,7 +91,8 @@ def updateData(data, modules):
             desc = modules[module]['label']
         else:
             desc = modules[module]['desc']
-        node.find('help').text = desc
+        if node.find('handler').text == 'OnMenuCmd':
+            node.find('help').text = desc
         
         if not modules[module].has_key('keywords'):
             grass.warning('%s: keywords missing' % module)
