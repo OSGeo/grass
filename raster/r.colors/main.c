@@ -290,8 +290,10 @@ int main(int argc, char **argv)
       Rast_free_colors(&colors);
     */
     
-    if (have_colors > 0 && !overwrite)
-	exit(EXIT_SUCCESS);
+    if (have_colors > 0 && !overwrite) {
+	G_warning(_("Color table exists. Exiting."));
+	exit(EXIT_FAILURE);
+    }
 
     G_suppress_warnings(0);
 
