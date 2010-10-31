@@ -68,7 +68,6 @@ import gui_modules.menudata as menudata
 import gui_modules.menuform as menuform
 import gui_modules.histogram as histogram
 import gui_modules.profile as profile
-import gui_modules.rules as rules
 import gui_modules.mcalc_builder as mapcalculator
 import gui_modules.gcmd as gcmd
 import gui_modules.georect as georect
@@ -888,40 +887,19 @@ class GMFrame(wx.Frame):
         self.disp_idx = 0
         self.curr_page = None
         
-    def RulesCmd(self, event, cmd = ''):
+    def RulesCmd(self, event):
+        """!Launches dialog for commands that need rules input and
+        processes rules
         """
-        Launches dialog for commands that need rules
-        input and processes rules
-        """
-        if event:
-            cmd = self.GetMenuCmd(event)
-                
-        if cmd[0] == 'r.colors' or cmd[0] == 'vcolors':
-            ctable = colorrules.ColorTable(self, cmd=cmd[0])
-            ctable.Show()
+        cmd = self.GetMenuCmd(event)
+        
+        if cmd[0] == 'r.colors':
+            ctable = colorrules.ColorTable(self, raster = True)
         else:
-            dlg = rules.RulesText(self, cmd=cmd)
-            dlg.CenterOnScreen()
-            if dlg.ShowModal() == wx.ID_OK:
-                gtemp = utils.GetTempfile()
-                output = open(gtemp, "w")
-                try:
-                    output.write(dlg.rules)
-                finally:
-                    output.close()
-    
-                cmdlist = [cmd[0],
-                           'input=%s' % dlg.inmap,
-                           'output=%s' % dlg.outmap,
-                           'rules=%s' % gtemp]
-    
-                if dlg.overwrite == True:
-                    cmdlist.append('--o')
-    
-                dlg.Destroy()
-    
-                self.goutput.RunCmd(cmdlist)
-
+            ctable = colorrules.ColorTable(self, raster = False)
+        ctable.CentreOnScreen()
+        ctable.Show()
+        
     def OnInstallExtension(self, event):
         """!Install extension from GRASS Addons SVN repository"""
         win = InstallExtensionWindow(self, size = (550, 400))
