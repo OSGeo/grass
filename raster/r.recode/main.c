@@ -6,11 +6,11 @@
  *               Bob Covill <bcovill tekmap.ns.ca>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      Recode categorical raster maps
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -46,35 +46,33 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("recode categories"));
     module->description = _("Recodes categorical raster maps.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
-    parm.input->description = _("Raster map to be recoded");
-
+    parm.input->description = _("Name of raster map to be recoded");
+    
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    parm.rules = G_define_option();
+    parm.rules = G_define_standard_option(G_OPT_F_INPUT);
     parm.rules->key = "rules";
-    parm.rules->type = TYPE_STRING;
-    parm.rules->description = _("File containing recode rules; \"-\" to read from stdin");
-    parm.rules->key_desc = "name";
-    parm.rules->gisprompt = "old_file,file,input";
-    parm.rules->answer = "-";
-
+    parm.rules->label = _("File containing recode rules");
+    parm.rules->description = _("\"-\" to read from stdin");
+    
     parm.title = G_define_option();
     parm.title->key = "title";
     parm.title->required = NO;
     parm.title->type = TYPE_STRING;
-    parm.title->description = _("Title for the resulting raster map");
-
+    parm.title->description = _("Title for output raster map");
+    
     parm.a = G_define_flag();
     parm.a->key = 'a';
-    parm.a->description = _("Align the current region to the input map");
+    parm.a->description = _("Align the current region to the input raster map");
 
     parm.d = G_define_flag();
     parm.d->key = 'd';
-    parm.d->description = _("Force output to double map type (DCELL)");
-
+    parm.d->description = _("Force output to 'double' raster map type (DCELL)");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -88,7 +86,7 @@ int main(int argc, char *argv[])
     if (strcmp(parm.rules->answer, "-") != 0) {
 	srcfp = fopen(parm.rules->answer, "r");
 	if (!srcfp)
-	    G_fatal_error(_("Cannot open rules file <%s>"),
+	    G_fatal_error(_("Unable to open file <%s>"),
 			  parm.rules->answer);
     }
 
