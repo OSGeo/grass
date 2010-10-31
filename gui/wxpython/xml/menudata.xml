@@ -937,7 +937,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Color rules</label>
-	      <help>Creates/modifies the color table associated with a raster map.</help>
+	      <help>Interactive management of raster color tables.</help>
 	      <keywords>raster,color table</keywords>
 	      <handler>RulesCmd</handler>
 	      <command>r.colors</command>
@@ -1512,14 +1512,7 @@
 	      <command>r.reclass.area</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Reclassify interactively</label>
-	      <help>Reclassify raster map based on category values.</help>
-	      <keywords>raster,reclassification</keywords>
-	      <handler>RulesCmd</handler>
-	      <command>r.reclass</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Reclassify using rules file</label>
+	      <label>Reclassify</label>
 	      <help>Reclassify raster map based on category values.</help>
 	      <keywords>raster,reclassification</keywords>
 	      <handler>OnMenuCmd</handler>
@@ -1527,18 +1520,11 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Recode interactively</label>
+	      <label>Recode</label>
 	      <help>Recodes categorical raster maps.</help>
 	      <keywords>raster</keywords>
-	      <handler>RulesCmd</handler>
-	      <command>r.recode</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Recode using rules file</label>
-	      <help>r.recode.file - Use ascii rules file to recode categories in raster map</help>
-	      <keywords>raster,recode</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>r.recode.file</command>
+	      <command>r.recode</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -1989,10 +1975,10 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Color rules</label>
-	      <help>Set colors interactively by entering color rules</help>
+	      <help>Interacrive management of vector color tables.</help>
 	      <handler>RulesCmd</handler>
-	      <keywords>vector, colors</keywords>
-	      <command>vcolors</command>
+	      <keywords>vector,color table</keywords>
+	      <command>v.colors</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -2244,14 +2230,7 @@
 	      <command>v.category</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Reclassify objects interactively</label>
-	      <help>Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column.</help>
-	      <keywords>vector,reclass,attributes</keywords>
-	      <handler>RulesCmd</handler>
-	      <command>v.reclass</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Reclassify objects using rules file</label>
+	      <label>Reclassify</label>
 	      <help>Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column.</help>
 	      <keywords>vector,reclass,attributes</keywords>
 	      <handler>OnMenuCmd</handler>
