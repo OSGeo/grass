@@ -134,7 +134,7 @@ class ColorTable(wx.Frame):
         # color table and preview window
         self.cr_label = wx.StaticText(parent=self, id=wx.ID_ANY,
                                       label=crlabel)
-        self.cr_panel = self.__colorrulesPanel()
+        self.cr_panel = self._colorRulesPanel()
         # add two rules as default
         self.AddRules(2)
         
@@ -286,11 +286,12 @@ class ColorTable(wx.Frame):
         sizer.Fit(self)
         self.Layout()
         
-    def __colorrulesPanel(self):
+    def _colorRulesPanel(self):
+        """!Create rules panel"""
         cr_panel = scrolled.ScrolledPanel(parent=self, id=wx.ID_ANY,
                                           size=(180, 300),
                                           style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
-        
+        cr_panel.SetupScrolling(scroll_x = False)
         self.cr_sizer = wx.GridBagSizer(vgap=2, hgap=4)
         
         cr_panel.SetSizer(self.cr_sizer)
@@ -313,11 +314,12 @@ class ColorTable(wx.Frame):
             self.Bind(wx.EVT_CHECKBOX, self.OnRuleEnable, enable)
             # value
             txt_ctrl = wx.TextCtrl(parent=self.cr_panel, id=1000 + num,
-                                   size=(100,-1),
+                                   size=(90, -1),
                                    style=wx.TE_NOHIDESEL)
             self.Bind(wx.EVT_TEXT, self.OnRuleValue, txt_ctrl)
             # color
-            color_ctrl = csel.ColourSelect(self.cr_panel, id=2000+num)
+            color_ctrl = csel.ColourSelect(self.cr_panel, id=2000 + num,
+                                           size = globalvar.DIALOG_COLOR_SIZE)
             self.Bind(csel.EVT_COLOURSELECT, self.OnRuleColor, color_ctrl)
             self.ruleslines[enable.GetId()] = { 'value' : '',
                                                 'color': "0:0:0" }
@@ -327,10 +329,10 @@ class ColorTable(wx.Frame):
             self.cr_sizer.Add(item=txt_ctrl, pos=(num, 1),
                               flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
             self.cr_sizer.Add(item=color_ctrl, pos=(num, 2),
-                              flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
+                              flag=wx.ALIGN_CENTER | wx.RIGHT, border=10)
         
         self.cr_panel.Layout()
-        self.cr_panel.SetupScrolling()
+        self.cr_panel.SetupScrolling(scroll_x = False)
         
     def InitDisplay(self):
         """!Initialize preview display, set dimensions and region
