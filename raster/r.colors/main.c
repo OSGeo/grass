@@ -4,7 +4,6 @@
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *               David Johnson
- *               Print color table by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
@@ -28,6 +27,14 @@
 static char **rules;
 static int nrules;
 
+static int cmp(const void *aa, const void *bb)
+{
+    char *const *a = (char *const *)aa;
+    char *const *b = (char *const *)bb;
+
+    return strcmp(*a, *b);
+}
+
 static void scan_rules(void)
 {
     char path[GPATH_MAX];
@@ -41,6 +48,8 @@ static void scan_rules(void)
     rules[nrules++] = G_store("random");
     rules[nrules++] = G_store("grey.eq");
     rules[nrules++] = G_store("grey.log");
+
+    qsort(rules, nrules, sizeof(char *), cmp);
 }
 
 static char *rules_list(void)
@@ -131,7 +140,7 @@ int main(int argc, char **argv)
 {
     int overwrite;
     int is_from_stdin;
-    int remove, print;
+    int remove;
     int have_colors;
     struct Colors colors, colors_tmp;
     struct Cell_stats statf;
@@ -145,7 +154,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Flag *r, *w, *l, *g, *a, *e, *n, *p;
+	struct Flag *r, *w, *l, *g, *a, *e, *n;
     } flag;
     struct
     {
@@ -204,8 +213,7 @@ int main(int argc, char **argv)
     flag.l = G_define_flag();
     flag.l->key = 'l';
     flag.l->description = _("List available rules then exit");
-    flag.l->guisection = _("Print");
-
+    
     flag.n = G_define_flag();
     flag.n->key = 'n';
     flag.n->description = _("Invert colors");
@@ -226,11 +234,6 @@ int main(int argc, char **argv)
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Define");
 
-    flag.p = G_define_flag();
-    flag.p->key = 'p';
-    flag.p->description = _("Print current color table and exit");
-    flag.p->guisection = _("Print");
-    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -241,7 +244,6 @@ int main(int argc, char **argv)
 
     overwrite = !flag.w->answer;
     remove = flag.r->answer;
-    print = flag.p->answer;
     
     name = opt.map->answer;
     style = opt.colr->answer;
@@ -251,8 +253,8 @@ int main(int argc, char **argv)
     if (!name)
 	G_fatal_error(_("No raster map specified"));
     
-    if (!cmap && !style && !rules && !remove && !print)
-	G_fatal_error(_("One of \"-r\", \"-p\" or options \"color\", \"raster\" or \"rules\" must be specified!"));
+    if (!cmap && !style && !rules && !remove)
+	G_fatal_error(_("One of \"-r\" or options \"color\", \"raster\" or \"rules\" must be specified!"));
 
     if (!!style + !!cmap + !!rules > 1)
 	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
@@ -268,11 +270,6 @@ int main(int argc, char **argv)
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    if (print) {
-	Rast_print_colors(name, mapset, stdout);
-	return EXIT_SUCCESS;
-    }
-    
     if (remove) {
 	int stat = Rast_remove_colors(name, mapset);
 
