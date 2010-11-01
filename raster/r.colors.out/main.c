@@ -7,11 +7,11 @@
  *
  * PURPOSE:      Allows export of the color table for a raster map layer.
  *
- * COPYRIGHT:    (C) 2008 Glynn Clements and the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010 Glynn Clements and the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  ***************************************************************************/
 
@@ -61,17 +61,17 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("export"));
     G_add_keyword(_("color table"));
     module->description =
 	_("Exports the color table associated with a raster map layer.");
 
     opt.map = G_define_standard_option(G_OPT_R_MAP);
-    opt.map->required = YES;
 
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
-    opt.file->required = NO;
-    opt.file->description = _("Path to rules file (\"-\" to write rules to stdout)");
+    opt.file->label = _("Path to output rules file");
+    opt.file->description = _("\"-\" to write to stdout");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     perc = flag.p->answer ? 1 : 0;
 
     if (Rast_read_colors(name, "", &colors) < 0)
-	G_fatal_error(_("Can't read color table for <%s>"));
+	G_fatal_error(_("Unable to read color table for raster map <%s>"));
 
     Rast_read_fp_range(name, "", &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
@@ -135,7 +135,6 @@ int main(int argc, char **argv)
 	Rast_get_default_color(&r, &g, &b, &colors);
 	fprintf(fp, "default %d:%d:%d\n", r, g, b);
     }
-
 
     if (fp != stdout)
 	fclose(fp);
