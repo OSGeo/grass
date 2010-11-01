@@ -25,21 +25,21 @@
  *----------------------------------------------------------------------------*/
 
 /* uncomment to get debug output */
-/*#define DEBUG */
 
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/gprojects.h>
 #include "solpos00.h"
 
 struct posdata pd, *pdat;	/* declare solpos data struct and a pointer for it */
 
 
-long G_calc_solar_position(double longitude, double latitude, double timezone,
-			   int year, int month, int day, int hour, int minute,
-			   int second)
+long calc_solar_position(double longitude, double latitude, double timezone,
+			 int year, int month, int day, int hour, int minute,
+			 int second)
 {
 
     /* Note: this code is valid from year 1950 to 2050 (solpos restriction)
@@ -63,8 +63,8 @@ long G_calc_solar_position(double longitude, double latitude, double timezone,
 
     /* we don't like to run G_calc_solar_position in xy locations */
     if (window.proj == 0)
-	G_fatal_error
-	    ("Can't calculate sun position in xy locations. Specify sunposition directly.");
+	G_fatal_error(_("Unable to calculate sun position in un-projected locations. "
+			"Specify sunposition directly."));
 
     pdat = &pd;			/* point to the structure for convenience */
 
@@ -75,58 +75,45 @@ long G_calc_solar_position(double longitude, double latitude, double timezone,
     S_init(pdat);
 
     /* check if given point is in current window */
-#ifdef DEBUG
-    fprintf(stderr, "window.north: %f, window.south: %f\n", window.north,
+    G_debug(1, "window.north: %f, window.south: %f\n", window.north,
 	    window.south);
-    fprintf(stderr, "window.west:  %f, window.east : %f\n", window.west,
+    G_debug(1, "window.west:  %f, window.east : %f\n", window.west,
 	    window.east);
-#endif
+    
     inside = 0;
     if (latitude >= window.south && latitude <= window.north &&
 	longitude >= window.west && longitude <= window.east)
 	inside = 1;
     if (!inside)
-	G_warning
-	    ("Specified point %f, %f outside of current region, is that intended? Anyway, it will be used.\n",
-	     longitude, latitude);
+	G_warning(_("Specified point %f, %f outside of current region, "
+		    "is that intended? Anyway, it will be used."),
+		  longitude, latitude);
 
     /* if coordinates are not in lat/long format, transform them: */
     if ((G_projection() != PROJECTION_LL) && window.proj != 0) {
-#ifdef DEBUG
-	fprintf(stderr,
-		"Transforming input coordinates to lat/long (req. for solar position)\n");
-#endif
-
+	G_debug(1, "Transforming input coordinates to lat/long (req. for solar position)");
+	
 	/* read current projection info */
 	if ((in_proj_info = G_get_projinfo()) == NULL)
-	    G_fatal_error("Can't get projection info of current location");
+	    G_fatal_error(_("Unable to get projection info of current location"));
 
 	if ((in_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error("Can't get projection units of current location");
+	    G_fatal_error(_("Unable to get projection units of current location"));
 
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-	    G_fatal_error
-		("Can't get projection key values of current location");
-
+	    G_fatal_error(_("Unable to get projection key values of current location"));
+	
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
 
-#ifdef DEBUG
 	/* Try using pj_print_proj_params() instead of all this */
-	fprintf(stderr, "Projection found in location:\n");
-	fprintf(stderr, "IN: meter: %f zone: %i proj: %s (iproj struct)\n",
+	G_debug(1, "Projection found in location:");
+	G_debug(1, "IN: meter: %f zone: %i proj: %s (iproj struct)",
 		iproj.meters, iproj.zone, iproj.proj);
-	fprintf(stderr, "IN: ellps: a: %f  es: %f\n", iproj.pj->a,
-		iproj.pj->es);
-	fprintf(stderr, "IN: x0: %f y0: %f\n", iproj.pj->x0, iproj.pj->y0);
-	fprintf(stderr, "IN: lam0: %f phi0: %f\n", iproj.pj->lam0,
-		iproj.pj->phi0);
-	fprintf(stderr, "IN: k0: %f\n", iproj.pj->k0);
-	fprintf(stderr, "IN coord: longitude: %f, latitude: %f\n", longitude,
+	G_debug(1, "IN coord: longitude: %f, latitude: %f", longitude,
 		latitude);
 	/* see src/include/projects.h, struct PJconsts */
-#endif
-
+	
 	/* set output projection to lat/long for solpos */
 	oproj.zone = 0;
 	oproj.meters = 1.;
@@ -137,17 +124,12 @@ long G_calc_solar_position(double longitude, double latitude, double timezone,
 	/* XX do the transform 
 	 *               outx        outy    in_info  out_info */
 	if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) {
-	    fprintf(stderr,
-		    "Error in pj_do_proj (projection of input coordinate pair)\n");
-	    exit(0);
+	    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 	}
 
-#ifdef DEBUG
-	fprintf(stderr, "Transformation to lat/long:\n");
-	fprintf(stderr, "OUT: longitude: %f, latitude: %f\n", longitude,
+	G_debug(1, "Transformation to lat/long:");
+	G_debug(1, "OUT: longitude: %f, latitude: %f", longitude,
 		latitude);
-#endif
-
 
     }				/* transform if not LL */
 
