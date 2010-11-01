@@ -25,7 +25,7 @@ import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
 
-from grass.script import core as grass
+import grass.script as grass
 
 import dbm
 import gcmd
@@ -306,13 +306,13 @@ class ColorTable(wx.Frame):
     def AddRules(self, nrules):
         """!Add rules"""
         snum = len(self.ruleslines.keys())
-        for num in range(snum, snum+nrules):
+        for num in range(snum, snum + nrules):
             # enable
             enable = wx.CheckBox(parent=self.cr_panel, id=num)
             enable.SetValue(True)
             self.Bind(wx.EVT_CHECKBOX, self.OnRuleEnable, enable)
             # value
-            txt_ctrl = wx.TextCtrl(parent=self.cr_panel, id=1000+num, value='',
+            txt_ctrl = wx.TextCtrl(parent=self.cr_panel, id=1000 + num,
                                    size=(100,-1),
                                    style=wx.TE_NOHIDESEL)
             self.Bind(wx.EVT_TEXT, self.OnRuleValue, txt_ctrl)
@@ -355,26 +355,28 @@ class ColorTable(wx.Frame):
         """!Raster/vector map selected"""
         if event:
             self.inmap = event.GetString()
+
+        if self.inmap:
+            if self.raster:
+                mapType = 'cell'
+            else:
+                mapType = 'vector'
+            if not grass.find_file(name = self.inmap, element = mapType)['file']:
+                self.inmap = None
         
         if not self.inmap:
             self.btnPreview.Enable(False)
             self.btnOK.Enable(False)
             self.btnApply.Enable(False)
+            self.OnLoadTable(event)
             return
         
         if self.raster:
-            info = gcmd.RunCommand('r.info',
-                                   parent = self,
-                                   read = True,
-                                   flags = 'r',
-                                   map = self.inmap)
+            info = grass.raster_info(map = self.inmap)
             
             if info:
-                for line in info.splitlines():
-                    if 'min' in line:
-                        self.properties['min'] = float(line.split('=')[1])
-                    elif 'max' in line:
-                        self.properties['max'] = float(line.split('=')[1])
+                self.properties['min'] = info['min']
+                self.properties['max'] = info['max']
                 self.OnLoadTable(event)
             else:
                 self.inmap = ''
@@ -386,8 +388,13 @@ class ColorTable(wx.Frame):
                 self.cr_label.SetLabel(_('Enter raster category values or percents'))
                 return
             
-            self.cr_label.SetLabel(_('Enter raster category values or percents (range = %(min)d-%(max)d)') %
-                                     { 'min' : self.properties['min'],
+            if info['datatype'] == 'CELL':
+                mapRange = _('range')
+            else:
+                mapRange = _('fp range')
+            self.cr_label.SetLabel(_('Enter raster category values or percents (%(range)s = %(min)d-%(max)d)') %
+                                     { 'range' : mapRange,
+                                       'min' : self.properties['min'],
                                        'max' : self.properties['max'] })
         
         else:
@@ -440,31 +447,21 @@ class ColorTable(wx.Frame):
         """!Rule value changed"""
         num = event.GetId()
         vals = event.GetString().strip()
-
+        
         if vals == '':
             return
 
         tc = self.FindWindowById(num)
         
         if self.raster:
-            try:
-                if vals != '-' and \
-                        vals[-1] != '%':
-                    float(vals)
-            except (IndexError, ValueError):
-                tc.SetValue('')
-                self.ruleslines[num-1000]['value'] = ''
-                return
-            
             self.ruleslines[num-1000]['value'] = vals
-            
+        
         else:
             if self.properties['column'] == '' or self.properties['rgb'] == '':
                 tc.SetValue('')
-                wx.MessageBox(parent=self,
+                gcmd.GMessage(parent=self,
                               message=_("Please select attribute column "
-                                        "and RGB color column first"),
-                              style=wx.CENTRE)
+                                        "and RGB color column first"))
             else:
                 try:
                     self.ruleslines[num-1000]['value'] = self.SQLConvert(vals)
@@ -499,34 +496,33 @@ class ColorTable(wx.Frame):
         return sqlrule
         
     def OnLoadTable(self, event):
-        """!Load current color table (using `r.colors -p`)"""
-        ctable = gcmd.RunCommand('r.colors',
-                                 parent = self,
-                                 read = True,
-                                 flags = 'p',
-                                 map = self.inmap)
+        """!Load current color table (using `r.colors.out`)"""
         self.ruleslines.clear()
         self.cr_panel.DestroyChildren()
+        if self.inmap:
+            ctable = gcmd.RunCommand('r.colors.out',
+                                     parent = self,
+                                     read = True,
+                                     map = self.inmap,
+                                     rules = '-')
+        else:
+            self.OnPreview(event)
+            return
+        
         rulesNumber = len(ctable.splitlines())
         self.AddRules(rulesNumber)
         
         count = 0
-        for line in ctable.splitlines()[1:]:
-            item = line.split()
-            for part in range(0, 2):
-                itemSplit = item[part].split(':', 1)
-                self.ruleslines[count]['value'] = itemSplit[0]
-                if ':' not in itemSplit[1]:
-                    itemSplit[1] += (':' + itemSplit[1]) * 2
-                self.ruleslines[count]['color'] = itemSplit[1]
-                self.FindWindowById(count + 1000).SetValue(itemSplit[0])
-                rgb = list()
-                for color in itemSplit[1].split(':'):
-                    rgb.append(int(color))
-                self.FindWindowById(count + 2000).SetColour(rgb)
-                count += 1
-                if count < rulesNumber - 1:
-                    break
+        for line in ctable.splitlines():
+            value, color = map(lambda x: x.strip(), line.split(' '))
+            self.ruleslines[count]['value'] = value
+            self.ruleslines[count]['color'] = color
+            self.FindWindowById(count + 1000).SetValue(value)
+            rgb = list()
+            for c in color.split(':'):
+                rgb.append(int(c))
+            self.FindWindowById(count + 2000).SetColour(rgb)
+            count += 1
         
         self.OnPreview(tmp = False)
         
@@ -575,6 +571,10 @@ class ColorTable(wx.Frame):
         
     def OnPreview(self, event = None, tmp = True):
         """!Update preview (based on computational region)"""
+        if not self.inmap:
+            self.preview.EraseMap()
+            return
+        
         # raster
         if self.raster:
             cmdlist = ['d.rast',
@@ -633,6 +633,14 @@ class ColorTable(wx.Frame):
                         parent = self,
                         entry = cmd)
         
+    def _IsNumber(self, s):
+        """!Check if 's' is a number"""
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
+        
     def CreateColorTable(self, force = False):
         """!Creates color table
 
@@ -644,6 +652,12 @@ class ColorTable(wx.Frame):
         for rule in self.ruleslines.itervalues():
             if not rule['value']: # skip empty rules
                 continue
+            if rule['value'] not in ('nv', 'default') and \
+                    rule['value'][-1] != '%' and \
+                    not self._IsNumber(rule['value']):
+                gcmd.GError(_("Invalid rule value '%s'. Unable to apply color table.") % rule['value'],
+                            parent = self)
+                return False
             
             if self.raster:
                 rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
@@ -690,12 +704,10 @@ class ColorTable(wx.Frame):
 class BufferedWindow(wx.Window):
     """!A Buffered window class"""
     def __init__(self, parent, id,
-                 pos = wx.DefaultPosition,
-                 size = wx.DefaultSize,
                  style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map=None):
-
-        wx.Window.__init__(self, parent, id, pos, size, style)
+                 Map=None, **kwargs):
+        
+        wx.Window.__init__(self, parent, id, style = style, **kwargs)
 
         self.parent = parent
         self.Map = Map
@@ -819,7 +831,7 @@ class BufferedWindow(wx.Window):
         Debug.msg (2, "BufferedWindow.UpdatePreview(%s): render=%s" % (img, self.render))
         oldfont = ""
         oldencoding = ""
-
+        
         if self.render:
             # make sure that extents are updated
             self.Map.region = self.Map.GetRegion()
@@ -829,7 +841,7 @@ class BufferedWindow(wx.Window):
             self.mapfile = self.Map.Render(force=self.render)
             self.img = self.GetImage()
             self.resize = False
-
+        
         if not self.img:
             return
         
@@ -838,7 +850,7 @@ class BufferedWindow(wx.Window):
         self.pdc.RemoveAll()
         # draw map image background
         self.Draw(self.pdc, self.img, pdctype='image')
-
+        
         self.resize = False
         
     def EraseMap(self):
