@@ -72,7 +72,8 @@ int main(int argc, char **argv)
     opt.file->key = "rules";
     opt.file->label = _("Path to output rules file");
     opt.file->description = _("\"-\" to write to stdout");
-
+    opt.file->answer = "-";
+    
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description = _("Output values as percentages");
