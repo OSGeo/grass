@@ -70,7 +70,6 @@ import gui_modules.histogram as histogram
 import gui_modules.profile as profile
 import gui_modules.mcalc_builder as mapcalculator
 import gui_modules.gcmd as gcmd
-import gui_modules.georect as georect
 import gui_modules.dbm as dbm
 import gui_modules.workspace as workspace
 import gui_modules.goutput as goutput
@@ -248,11 +247,6 @@ class GMFrame(wx.Frame):
         if self.workspaceFile:
             self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile) + '*')
         
-    def OnGeorectify(self, event):
-        """!Launch georectifier module
-        """
-        georect.GeorectWizard(self)
-
     def OnGCPManager(self, event):
         """!Launch georectifier module
         """
@@ -942,7 +936,6 @@ class GMFrame(wx.Frame):
     def OnMapCalculator(self, event, cmd = ''):
         """!Init map calculator for interactive creation of mapcalc statements
         """
-
         if event:
             cmd = self.GetMenuCmd(event)
 
