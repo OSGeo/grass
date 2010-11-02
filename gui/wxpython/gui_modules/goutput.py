@@ -703,7 +703,8 @@ class GMConsole(wx.SplitterWindow):
         
         if self.parent.GetName() == "LayerManager":
             self.btn_abort.Enable(False)
-            if event.cmd[0] not in globalvar.grassCmd['all']:
+            if event.cmd[0] not in globalvar.grassCmd['all'] or \
+                    event.cmd[0] == 'r.mapcalc':
                 return
             display = self.parent.GetLayerTree().GetMapDisplay()
             if not display or not display.IsAutoRendered():
