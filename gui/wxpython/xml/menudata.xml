@@ -614,14 +614,9 @@
 	</menu>
 	<separator />
 	<menuitem>
-	  <label>Manage Ground Control Points</label>
+	  <label>Georectify</label>
 	  <help>Manage Ground Control Points for Georectification</help>
 	  <handler>OnGCPManager</handler>
-	</menuitem>
-	<menuitem>
-	  <label>Georectify</label>
-	  <help>Georectify raster and vector maps</help>
-	  <handler>OnGeorectify</handler>
 	</menuitem>
 	<separator />
 	<menuitem>
