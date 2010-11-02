@@ -506,8 +506,8 @@ class GMConsole(wx.SplitterWindow):
                 if len(command) == 1:
                     import menuform
                     task = menuform.GUI().ParseInterface(command)
-                    if not task.has_required():
-                        task = None # run command
+                    # if not task.has_required():
+                    # task = None # run command
                 else:
                     task = None
                 
