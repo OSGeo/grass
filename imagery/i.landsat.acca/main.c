@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("acca"));
     
     band_prefix = G_define_option();
-    band_prefix->key = "band_prefix";
+    band_prefix->key = "input_prefix";
     band_prefix->label = _("Base name of input raster bands");
     band_prefix->description = _("Example: 'B.' for B.1, B.2, ...");
     band_prefix->type = TYPE_STRING;
