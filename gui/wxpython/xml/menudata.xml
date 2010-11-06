@@ -576,7 +576,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Vector to raster</label>
-	      <help>Converts a vector map into a raster map.</help>
+	      <help>Converts (rasterize) a vector map into a raster map.</help>
 	      <keywords>vector,raster,conversion,rasterization</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.to.rast</command>
@@ -898,9 +898,9 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Reproject raster</label>
+	      <label>Reproject raster map</label>
 	      <help>Re-projects a raster map from one location to the current location.</help>
-	      <keywords>raster,projection</keywords>
+	      <keywords>raster,projection,transformation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.proj</command>
 	    </menuitem>
@@ -940,7 +940,7 @@
 	    <menuitem>
 	      <label>Export color table</label>
 	      <help>Exports the color table associated with a raster map layer.</help>
-	      <keywords>raster,color table</keywords>
+	      <keywords>raster,export,color table</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>r.colors.out</command>
 	    </menuitem>
@@ -1943,8 +1943,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Reproject vector map</label>
-	      <help>Allows projection conversion of vector maps.</help>
-	      <keywords>vector,projection</keywords>
+	      <help>Re-projects a vector map from one location to the current location.</help>
+	      <keywords>vector,projection,transformation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.proj</command>
 	    </menuitem>
