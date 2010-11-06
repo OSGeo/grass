@@ -1,16 +1,14 @@
-
-/**
-   \file list.c
+/*!
+   \file lib/gis/list.c
 
    \brief List elements
 
    \author Unknown (probably CERL)
 
-   (C) 2000 by the GRASS Development Team
+   (C) 2000, 2010 by the GRASS Development Team
 
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 */
 
 #include <stdlib.h>
@@ -26,28 +24,28 @@
 static int list_element(FILE *, const char *, const char *, const char *,
 			int (*)(const char *, const char *, const char *));
 
-
-/**
-   \brief General purpose list function.
-
-   Will list files from all mapsets
-   in the mapset list for a specified database element.
-
-   Note: output is to stdout piped thru the more utility
-
-   lister (char *name char *mapset, char* buf)
-   
-   Given file 'name', and 'mapset', lister() should copy a string into 'buf'
-   when called with name == "", should set buf to general title for mapset list.
-
-   \param element    Database element (eg, "cell", "cellhd", etc)
-   \param desc       Description for element (if NULL, element is used)
-   \param mapset     Mapset to be listed "" to list all mapsets in mapset search list 
-   "." will list current mapset
-   \param lister     If given will call this routine to get a list
-   title. NULL if no titles desired. 
-
-   \return
+/*!
+  \brief General purpose list function
+  
+  Will list files from all mapsets in the mapset list for a specified
+  database element.
+  
+  Note: output is to stdout piped thru the more utility
+  
+  \code
+  lister (char *name char *mapset, char* buf)
+  \endcode
+  
+  Given file <em>name</em>, and </em>mapset</em>, lister() should
+  copy a string into 'buf' when called with name == "", should set
+  buf to general title for mapset list.
+  
+  \param element    database element (eg, "cell", "cellhd", etc.)
+  \param desc       description for element (if NULL, element is used)
+  \param mapset     mapset to be listed "" to list all mapsets in mapset search list 
+                    "." will list current mapset
+  \param lister     if given will call this routine to get a list title.
+                    NULL if no titles desired. 
 */
 void G_list_element(const char *element,
 		    const char *desc,
@@ -96,9 +94,8 @@ void G_list_element(const char *element,
     G_close_pager(&pager);
 }
 
-static int list_element(
-    FILE *out, const char *element, const char *desc, const char *mapset,
-    int (*lister)(const char *, const char *, const char *))
+static int list_element(FILE *out, const char *element, const char *desc, const char *mapset,
+			int (*lister)(const char *, const char *, const char *))
 {
     char path[GPATH_MAX];
     int count = 0;
@@ -166,15 +163,16 @@ static int list_element(
 }
 
 /*!
- * \brief List specified type of elements. Application must release
- the allocated memory.
- * \param element Element type (G_ELEMENT_RASTER, G_ELEMENT_VECTOR, 
- G_ELEMENT_REGION )
- * \param gisbase Path to GISBASE
- * \param location Location name
- * \param mapset Mapset name
- * \return Zero terminated array of element names
- */
+  \brief List specified type of elements. Application must release
+  the allocated memory.
+ 
+  \param element element type (G_ELEMENT_RASTER, G_ELEMENT_VECTOR, G_ELEMENT_REGION )
+  \param gisbase path to GISBASE
+  \param location location name
+  \param mapset mapset name
+
+ \return zero terminated array of element names
+*/
 char **G_list(int element, const char *gisbase, const char *location,
 	      const char *mapset)
 {
@@ -243,12 +241,12 @@ char **G_list(int element, const char *gisbase, const char *location,
     return list;
 }
 
-/**
-   \brief Free list
-   
-   \param list char* array to be freed
-
-   \return
+/*!
+  \brief Free list
+  
+  \param list char* array to be freed
+  
+  \return
 */
 void G_free_list(char **list)
 {
