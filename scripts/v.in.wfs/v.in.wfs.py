@@ -40,12 +40,12 @@ import urllib
 
 def main():
     out = options['output']
-    wfs_url = options['wfs']
+    wfs_url = options['url']
 
     tmp = grass.tempfile()
     tmpxml = tmp + '.xml'
 
-    grass.message(_("Retrieving data ..."))
+    grass.message(_("Retrieving data..."))
     inf = urllib.urlopen(wfs_url)
     outf = file(tmpxml, 'wb')
     while True:
@@ -56,10 +56,14 @@ def main():
     inf.close()
     outf.close()
 
-    grass.run_command('v.in.ogr', flags = 'o', dsn = tmpxml, out = out)
+    grass.message(_("Importing data..."))
+    ret = grass.run_command('v.in.ogr', flags = 'o', dsn = tmpxml, out = out)
     grass.try_remove(tmpxml)
-
-    grass.message(_("Vector points map <%s> imported from WFS.") % out)
+    
+    if ret == 0:
+        grass.message(_("Vector points map <%s> imported from WFS.") % out)
+    else:
+        grass.message(_("WFS import failed"))
 
 if __name__ == "__main__":
     options, flags = grass.parser()
