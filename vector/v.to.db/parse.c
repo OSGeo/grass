@@ -131,7 +131,10 @@ int parse_command_line(int argc, char *argv[])
     }
 
     if (!options.print) {
-	if (options.option == O_AREA || options.option == O_LENGTH || options.option == O_COUNT || options.option == O_QUERY || options.option == O_COMPACT || options.option == O_FD || options.option == O_PERIMETER || options.option == O_SLOPE || options.option == O_SINUOUS || options.option == O_AZIMUTH) {	/* one column required */
+	if (options.option == O_AREA || options.option == O_LENGTH || options.option == O_COUNT ||
+	    options.option == O_QUERY || options.option == O_COMPACT || options.option == O_FD ||
+	    options.option == O_PERIMETER || options.option == O_SLOPE || options.option == O_SINUOUS ||
+	    options.option == O_AZIMUTH) {	/* one column required */
 	    if (ncols != 1) {
 		G_fatal_error(_("This option requires one column"));
 	    }
@@ -141,7 +144,7 @@ int parse_command_line(int argc, char *argv[])
 		G_fatal_error(_("This option requires two columns"));
 	    }
 	}
-	else if (options.option == O_COOR) {
+	else if (options.option == O_COOR || options.option == O_START || options.option == O_END) {
 	    if (ncols < 2) {
 		G_fatal_error(_("This option requires at least two columns"));
 	    }
