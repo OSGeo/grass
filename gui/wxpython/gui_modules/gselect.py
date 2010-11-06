@@ -1375,6 +1375,7 @@ class ProjSelect(wx.ComboBox):
         if ret:
             for line in ret.splitlines():
                 listMaps.append(line.strip())
+        utils.ListSortLower(listMaps)
         
         self.SetItems(listMaps)
         self.SetValue('')
