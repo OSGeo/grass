@@ -97,7 +97,7 @@ class GMFrame(wx.Frame):
     """
     def __init__(self, parent, id = wx.ID_ANY, title = _("GRASS GIS Layer Manager"),
                  workspace = None,
-                 size = (600, 450), style = wx.DEFAULT_FRAME_STYLE, **kwargs):
+                 size = globalvar.GM_WINDOW_SIZE, style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         self.parent    = parent
         self.baseTitle = title
         self.iconsize  = (16, 16)
@@ -1487,6 +1487,18 @@ class GMApp(wx.App):
         wx.SplashScreen (bitmap=introBmp, splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
                          milliseconds=2000, parent=None, id=wx.ID_ANY)
         wx.Yield()
+        
+        w, h = wx.GetDisplaySize()
+        if globalvar.MAP_WINDOW_SIZE[0] + globalvar.GM_WINDOW_SIZE[0] > w:
+            gmX = w - globalvar.GM_WINDOW_SIZE[0]
+            dim = '%d,0,%d,%d,0,0,%d,%d' % \
+                (gmX,
+                 globalvar.GM_WINDOW_SIZE[0],
+                 globalvar.GM_WINDOW_SIZE[1],
+                 globalvar.MAP_WINDOW_SIZE[0],
+                 globalvar.MAP_WINDOW_SIZE[1])
+            UserSettings.Set(group = 'general', key = 'defWindowPos',
+                             subkey = 'dim', value = dim)
         
         # create and show main frame
         mainframe = GMFrame(parent=None, id=wx.ID_ANY,
