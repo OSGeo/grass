@@ -208,6 +208,13 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>v.convert</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>Historical GRASS vector import (all maps)</label>
+	      <help>Converts all older versions of GRASS vector maps in current mapset to current format.</help>
+	      <keywords>vector,import,conversion</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.convert.all</command>
+	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>DXF import</label>
@@ -220,6 +227,14 @@
 	      <label>Bulk import of DXF</label>
 	      <help>Converts multiple DXF layers to GRASS vector maps.</help>
 	      <handler>OnImportDxfFile</handler>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>WFS</label>
+	      <help>Import GetFeature from WFS.</help>
+	      <keywords>vector,import,wfs</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.in.wfs</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -703,7 +718,9 @@
 	    <menuitem>
 	      <label>Mapset access</label>
 	      <help>Set/unset access to other mapsets in current location</help>
+	      <keywords>general,settings,search path</keywords>
 	      <handler>OnMapsets</handler>
+	      <command>g.mapsets</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>User access</label>
@@ -880,6 +897,13 @@
 	      <keywords>raster,surface,resampling</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.resamp.bspline</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Resample using analytic kernel</label>
+	      <help>Resamples raster map layers using an analytic kernel.</help>
+	      <keywords>raster,resample</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>r.resamp.filter</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
