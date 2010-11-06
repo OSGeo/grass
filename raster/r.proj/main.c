@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     inmap = G_define_standard_option(G_OPT_R_INPUT);
     inmap->description = _("Name of input raster map to re-project");
     inmap->required = NO;
-    inmap->guisection = _("Input");
+    inmap->guisection = _("Source");
 
     inlocation = G_define_option();
     inlocation->key = "location";
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
     imapset->description = _("Mapset containing input raster map");
     imapset->gisprompt = "old,mapset,mapset";
     imapset->key_desc = "name";
-    imapset->guisection = _("Input");
+    imapset->guisection = _("Source");
 
     indbase = G_define_option();
     indbase->key = "dbase";
@@ -177,15 +177,15 @@ int main(int argc, char **argv)
     indbase->description = _("Path to GRASS database of input location");
     indbase->gisprompt = "old,dbase,dbase";
     indbase->key_desc = "path";
-    indbase->guisection = _("Input");
+    indbase->guisection = _("Source");
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outmap->required = NO;
     outmap->description = _("Name for output raster map (default: input)");
-    outmap->guisection = _("Output");
+    outmap->guisection = _("Target");
 
     ipolname = make_ipol_list();
-
+    
     interpol = G_define_option();
     interpol->key = "method";
     interpol->type = TYPE_STRING;
@@ -193,6 +193,7 @@ int main(int argc, char **argv)
     interpol->answer = "nearest";
     interpol->options = ipolname;
     interpol->description = _("Interpolation method to use");
+    interpol->guisection = _("Target");
 
     memory = G_define_option();
     memory->key = "memory";
@@ -205,6 +206,7 @@ int main(int argc, char **argv)
     res->type = TYPE_DOUBLE;
     res->required = NO;
     res->description = _("Resolution of output map");
+    res->guisection = _("Target");
 
     list = G_define_flag();
     list->key = 'l';
@@ -218,12 +220,13 @@ int main(int argc, char **argv)
     print_bounds->key = 'p';
     print_bounds->description =
 	_("Print input map's bounds in the current projection and exit");
-
+    print_bounds->guisection = _("Target");
+    
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
     gprint_bounds->description =
 	_("Print input map's bounds in the current projection and exit (shell style)");
-
+    gprint_bounds->guisection = _("Target");
 
     /* The parser checks if the map already exists in current mapset,
        we switch out the check and do it
