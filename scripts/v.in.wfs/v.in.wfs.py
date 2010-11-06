@@ -7,11 +7,11 @@
 #               Hamish Bowman (fixes)
 #               Converted to Python by Glynn Clements
 # PURPOSE:	WFS support
-# COPYRIGHT:	(C) 2006, 2007, 2008 Markus Neteler and GRASS Development Team
+# COPYRIGHT:	(C) 2006, 2007, 2008, 2010 Markus Neteler and GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+#		This program is free software under the GNU General
+#		Public License (>=v2). Read the file COPYING that
+#		comes with GRASS for details.
 #
 # GetFeature example:
 # http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0
@@ -19,19 +19,20 @@
 
 #%Module
 #% description: Import GetFeature from WFS.
-#%End
+#% keywords: vector, import, wfs
+#%end
 #%option
-#% key: wfs
+#% key: url
 #% type: string
-#% description: GetFeature URL starting with http
-#%End
+#% description: GetFeature URL starting with 'http'
+#%end
 #%option
 #% key: output
 #% type: string
 #% gisprompt: new,vector,vector
-#% description: Vector output map
+#% description: Name for output vector map
 #% required : yes
-#%End
+#%end
 
 import os
 from grass.script import core as grass
