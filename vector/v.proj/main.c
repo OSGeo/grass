@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
     mapopt = G_define_standard_option(G_OPT_V_INPUT);
     mapopt->required = NO;
-    mapopt->guisection = _("Input");
+    mapopt->guisection = _("Source");
     
     ilocopt = G_define_option();
     ilocopt->key = "location";
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     isetopt->description = _("Mapset containing input vector map");
     isetopt->gisprompt = "old,mapset,mapset";
     isetopt->key_desc = "name";
-    isetopt->guisection = _("Input");
+    isetopt->guisection = _("Source");
 
     ibaseopt = G_define_option();
     ibaseopt->key = "dbase";
@@ -95,12 +95,12 @@ int main(int argc, char *argv[])
     ibaseopt->description = _("Path to GRASS database of input location");
     ibaseopt->gisprompt = "old,dbase,dbase";
     ibaseopt->key_desc = "path";
-    ibaseopt->guisection = _("Input");
+    ibaseopt->guisection = _("Source");
 
     omapopt = G_define_standard_option(G_OPT_V_OUTPUT);
     omapopt->required = NO;
     omapopt->description = _("Name for output vector map (default: input)");
-    omapopt->guisection = _("Output");
+    omapopt->guisection = _("Target");
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     flag.transformz->label =
 	_("Assume z co-ordinate is ellipsoidal height and "
 	  "transform if possible");
-    flag.transformz->guisection = _("Output");
+    flag.transformz->guisection = _("Target");
 
     /* The parser checks if the map already exists in current mapset,
        we switch out the check and do it
