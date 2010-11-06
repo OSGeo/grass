@@ -313,6 +313,27 @@ class UpdateThread(Thread):
                 if pGroup:
                     self.data[win.Insert] = { 'group' : pGroup.get('value', '')}
             
+            elif name == 'LocationSelect':
+                pDbase = self.task.get_param('dbase', element='element', raiseError=False)
+                if pDbase:
+                    self.data[win.UpdateItems] = { 'dbase' : pDbase.get('value', '')}
+
+            elif name == 'MapsetSelect':
+                pDbase = self.task.get_param('dbase', element='element', raiseError=False)
+                pLocation = self.task.get_param('location', element='element', raiseError=False)
+                if pDbase and pLocation:
+                    self.data[win.UpdateItems] = { 'dbase' : pDbase.get('value', ''),
+                                                   'location' : pLocation.get('value', '')}
+
+            elif name == 'ProjSelect':
+                pDbase = self.task.get_param('dbase', element='element', raiseError=False)
+                pLocation = self.task.get_param('location', element='element', raiseError=False)
+                pMapset = self.task.get_param('mapset', element='element', raiseError=False)
+                if pDbase and pLocation and pMapset:
+                    self.data[win.UpdateItems] = { 'dbase' : pDbase.get('value', ''),
+                                                   'location' : pLocation.get('value', ''),
+                                                   'mapset' : pMapset.get('value', '')}
+            
 def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
 
@@ -1378,7 +1399,10 @@ class cmdPanel(wx.Panel):
                                               'dbtable',
                                               'dbcolumn',
                                               'layer',
-                                              'layer_all') and \
+                                              'layer_all',
+                                              'location',
+                                              'mapset',
+                                              'dbase') and \
                        p.get('element', '') != 'file':
                     if p.get('multiple', 'no') == 'yes':
                         multiple = True
@@ -1388,21 +1412,36 @@ class cmdPanel(wx.Panel):
                         mapsets = [grass.gisenv()['MAPSET'],]
                     else:
                         mapsets = None
-                    selection = gselect.Select(parent=which_panel, id=wx.ID_ANY,
-                                               size=globalvar.DIALOG_GSELECT_SIZE,
-                                               type=p.get('element', ''),
-                                               multiple=multiple, mapsets=mapsets)
+                    if self.task.name in ('r.proj', 'v.proj') \
+                            and p.get('name', '') == 'input':
+                        if self.task.name == 'r.proj':
+                            isRaster = True
+                        else:
+                            isRaster = False
+                        selection = gselect.ProjSelect(parent=which_panel,
+                                                       isRaster = isRaster)
+                        p['wxId'] = [ selection.GetId(), ]
+                        selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                        formatSelector = False
+                        selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                    else:
+                        selection = gselect.Select(parent=which_panel, id=wx.ID_ANY,
+                                                   size=globalvar.DIALOG_GSELECT_SIZE,
+                                                   type=p.get('element', ''),
+                                                   multiple=multiple, mapsets=mapsets)
+                        formatSelector = True
+                        # A select.Select is a combobox with two children: a textctl and a popupwindow;
+                        # we target the textctl here
+                        p['wxId'] = [selection.GetChildren()[0].GetId(), ]
+                        selection.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetValue)
+                    
                     if p.get('value','') != '':
                         selection.SetValue(p['value']) # parameter previously set
                     
-                    # A select.Select is a combobox with two children: a textctl and a popupwindow;
-                    # we target the textctl here
-                    p['wxId'] = [selection.GetChildren()[0].GetId(), ]
-                    selection.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetValue)
                     if p.get('prompt', '') == 'vector':
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                         
-                        if p.get('age', '') == 'old':
+                        if formatSelector and p.get('age', '') == 'old':
                             # OGR supported (read-only)
                             self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
                             
@@ -1468,12 +1507,19 @@ class cmdPanel(wx.Panel):
                                              'dbtable',
                                              'dbcolumn',
                                              'layer',
-                                             'layer_all'):
+                                             'layer_all',
+                                             'location',
+                                             'mapset',
+                                             'dbase'):
                     if p.get('multiple', 'no') == 'yes':
                         win = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
                                           size=globalvar.DIALOG_TEXTCTRL_SIZE)
                         win.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
+                        value = p.get('value', '')
+                        if not value:
+                            value = p.get('default', '')
+                        
                         if p.get('prompt', '') in ('layer',
                                                    'layer_all'):
                             if p.get('prompt', '') == 'layer_all':
@@ -1504,18 +1550,12 @@ class cmdPanel(wx.Panel):
                                     border = 5)
 
                         elif p.get('prompt', '') == 'dbdriver':
-                            value = p.get('value', '')
-                            if not value:
-                                value = p.get('default', '')
                             win = gselect.DriverSelect(parent = which_panel,
                                                        choices = p.get('values', []),
                                                        value = value)
                             win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbname':
-                            value = p.get('value', '')
-                            if not value:
-                                value = p.get('default', '')
                             win = gselect.DatabaseSelect(parent = which_panel,
                                                          value = value)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
@@ -1530,19 +1570,35 @@ class cmdPanel(wx.Panel):
                                                   size=globalvar.DIALOG_TEXTCTRL_SIZE)
                                 win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbcolumn':
-                            value = p.get('value', '')
-                            if not value:
-                                value = p.get('default', '')
                             win = gselect.ColumnSelect(parent = which_panel,
                                                        value = value,
                                                        param = p)
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             win.Bind(wx.EVT_TEXT,     self.OnSetValue)
 
-                    try:
-                        p['wxId'] = [ win.GetId(), ]
-                    except AttributeError:
-                        pass
+                        elif p.get('prompt', '') == 'location':
+                            win = gselect.LocationSelect(parent = which_panel,
+                                                         value = value)
+                            win.Bind(wx.EVT_COMBOBOX,     self.OnUpdateSelection)
+                            win.Bind(wx.EVT_COMBOBOX,     self.OnSetValue)
+                        
+                        elif p.get('prompt', '') == 'mapset':
+                            win = gselect.MapsetSelect(parent = which_panel,
+                                                       value = value)
+                            win.Bind(wx.EVT_COMBOBOX,     self.OnUpdateSelection)
+                            win.Bind(wx.EVT_COMBOBOX,     self.OnSetValue)
+                            
+                        elif p.get('prompt', '') == 'dbase':
+                            win = gselect.DbaseSelect(parent = which_panel,
+                                                      changeCallback=self.OnSetValue)
+                            win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            p['wxId'] = [ win.GetChildren()[1].GetId() ]
+                            
+                    if not p.has_key('wxId'):
+                        try:
+                            p['wxId'] = [ win.GetId(), ]
+                        except AttributeError:
+                            pass
                     
                     which_sizer.Add(item=win, proportion=0,
                                     flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
@@ -1661,6 +1717,9 @@ class cmdPanel(wx.Panel):
         pColumn = []
         pGroup = None
         pSubGroup = None
+        pDbase = None
+        pLocation = None
+        pMapset = None
         for p in self.task.params:
             if p.get('gisprompt', False) == False:
                 continue
@@ -1679,7 +1738,7 @@ class cmdPanel(wx.Panel):
                 continue
             
             prompt = p.get('element', '')
-            if prompt == 'vector':
+            if prompt in ('cell', 'vector'):
                 name = p.get('name', '')
                 if name in ('map', 'input'):
                     pMap = p
@@ -1697,6 +1756,12 @@ class cmdPanel(wx.Panel):
                 pGroup = p
             elif prompt == 'subgroup':
                 pSubGroup = p
+            elif prompt == 'dbase':
+                pDbase = p
+            elif prompt == 'location':
+                pLocation = p
+            elif prompt == 'mapset':
+                pMapset = p
         
         # collect ids
         pColumnIds = []
@@ -1726,14 +1791,22 @@ class cmdPanel(wx.Panel):
         
         if pGroup and pSubGroup:
             pGroup['wxId-bind'] = pSubGroup['wxId']
+
+        if pDbase and pLocation:
+            pDbase['wxId-bind'] = pLocation['wxId']
+
+        if pLocation and pMapset:
+            pLocation['wxId-bind'] = pMapset['wxId']
+        
+        if pLocation and pMapset and pMap:
+            pLocation['wxId-bind'] = pMap['wxId']
+            pMapset['wxId-bind'] = pMap['wxId']
         
 	#
 	# determine panel size
 	#
         maxsizes = (0,0)
         for section in sections:
-            # tabsizer[section].SetSizeHints( tab[section] )
-            #tab[section].SetAutoLayout(True)
             tab[section].SetSizer( tabsizer[section] )
             tabsizer[section].Fit( tab[section] )
             tab[section].Layout()
@@ -1745,16 +1818,13 @@ class cmdPanel(wx.Panel):
         self.constrained_size = (min(600, maxsizes[0]) + 25, min(400, maxsizes[1]) + 25)
         for section in sections:
             tab[section].SetMinSize( (self.constrained_size[0], self.panelMinHeight) )
-            # tab[section].SetMinSize( constrained_size )
-
+        
         if self.manual_tab.IsLoaded():
             self.manual_tab.SetMinSize( (self.constrained_size[0], self.panelMinHeight) )
         
         self.SetSizer( panelsizer )
         panelsizer.Fit(self.notebook)
-
-        self.hasMain = tab.has_key( _('Required') ) # publish, to enclosing Frame for instance
-
+        
         self.Bind(EVT_DIALOG_UPDATE, self.OnUpdateDialog)
         
     def OnFileText(self, event):
@@ -1957,7 +2027,8 @@ class cmdPanel(wx.Panel):
                     break
             
             if found:
-                if name in ('LayerSelect', 'DriverSelect', 'TableSelect'):
+                if name in ('LayerSelect', 'DriverSelect', 'TableSelect',
+                            'LocationSelect', 'MapsetSelect'):
                     porf['value'] = me.GetStringSelection()
                 elif name == 'GdalSelect':
                     porf['value'] = event.dsn
@@ -1965,7 +2036,7 @@ class cmdPanel(wx.Panel):
                     porf['parameterized'] = me.IsChecked()
                 else:
                     porf['value'] = me.GetValue()
-                
+        
         self.OnUpdateValues(event)
         
         event.Skip()

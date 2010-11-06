@@ -144,34 +144,45 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("projection"));
+    G_add_keyword(_("transformation"));
     module->description =
 	_("Re-projects a raster map from one location to the current location.");
 
     inmap = G_define_standard_option(G_OPT_R_INPUT);
     inmap->description = _("Name of input raster map to re-project");
     inmap->required = NO;
+    inmap->guisection = _("Input");
 
     inlocation = G_define_option();
     inlocation->key = "location";
     inlocation->type = TYPE_STRING;
     inlocation->required = YES;
-    inlocation->description = _("Location of input raster map");
+    inlocation->description = _("Location containing input raster map");
+    inlocation->gisprompt = "old,location,location";
+    inlocation->key_desc = "name";
 
     imapset = G_define_option();
     imapset->key = "mapset";
     imapset->type = TYPE_STRING;
     imapset->required = NO;
-    imapset->description = _("Mapset of input raster map");
+    imapset->description = _("Mapset containing input raster map");
+    imapset->gisprompt = "old,mapset,mapset";
+    imapset->key_desc = "name";
+    imapset->guisection = _("Input");
 
     indbase = G_define_option();
     indbase->key = "dbase";
     indbase->type = TYPE_STRING;
     indbase->required = NO;
     indbase->description = _("Path to GRASS database of input location");
+    indbase->gisprompt = "old,dbase,dbase";
+    indbase->key_desc = "path";
+    indbase->guisection = _("Input");
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outmap->required = NO;
     outmap->description = _("Name for output raster map (default: input)");
+    outmap->guisection = _("Output");
 
     ipolname = make_ipol_list();
 
@@ -276,11 +287,17 @@ int main(int argc, char **argv)
 
     /* if requested, list the raster maps in source location - MN 5/2001 */
     if (list->answer) {
-	if (isatty(0))		/* check if on command line */
-	    G_message(_("Checking location <%s>, mapset <%s>..."),
-		      inlocation->answer, setname);
-	G_list_element("cell", "raster", setname, 0);
-	exit(EXIT_SUCCESS);	/* leave r.proj after listing */
+	int i;
+	char **list;
+	G_verbose_message(_("Checking location <%s> mapset <%s>"),
+			  inlocation->answer, imapset->answer);
+	list = G_list(G_ELEMENT_RASTER, G__getenv("GISDBASE"),
+		      G__getenv("LOCATION_NAME"), imapset->answer);
+	for (i = 0; list[i]; i++) {
+	    fprintf(stdout, "%s\n", list[i]);
+	}
+	fflush(stdout);
+	exit(EXIT_SUCCESS);	/* leave v.proj after listing */
     }
 
     if (!inmap->answer)
@@ -422,7 +439,7 @@ int main(int argc, char **argv)
     G_adjust_Cell_head(&outcellhd, 0, 0);
     Rast_set_output_window(&outcellhd);
 
-    G_message("");
+    G_message(" ");
     G_message(_("Input:"));
     G_message(_("Cols: %d (%d)"), incellhd.cols, icols);
     G_message(_("Rows: %d (%d)"), incellhd.rows, irows);
@@ -432,7 +449,7 @@ int main(int argc, char **argv)
     G_message(_("East: %f (%f)"), incellhd.east, ieast);
     G_message(_("EW-res: %f"), incellhd.ew_res);
     G_message(_("NS-res: %f"), incellhd.ns_res);
-    G_message("");
+    G_message(" ");
 
     G_message(_("Output:"));
     G_message(_("Cols: %d (%d)"), outcellhd.cols, ocols);
@@ -443,7 +460,7 @@ int main(int argc, char **argv)
     G_message(_("East: %f (%f)"), outcellhd.east, oeast);
     G_message(_("EW-res: %f"), outcellhd.ew_res);
     G_message(_("NS-res: %f"), outcellhd.ns_res);
-    G_message("");
+    G_message(" ");
 
     /* open and read the relevant parts of the input map and close it */
     G__switch_env();
@@ -516,7 +533,7 @@ int main(int argc, char **argv)
     Rast_command_history(&history);
     Rast_write_history(mapname, &history);
 
-    G_done_msg("");
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
 
