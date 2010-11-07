@@ -9,14 +9,15 @@
 #define OP_WITHIN     5
 #define OP_CONTAINS   6
 #define OP_OVERLAPS   7
-#define OP_RELATE     8
+#define OP_OVERLAP    8
+#define OP_RELATE     9
 
 struct GParm {
     struct Option *input[2], *output, *type[2], *field[2],
 	*operator, *relate;
 };
 struct GFlag {
-    struct Flag *table, *reverse, *geos, *cat;
+    struct Flag *table, *reverse, *cat;
 };
 
 /* args.c */
