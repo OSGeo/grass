@@ -1915,7 +1915,7 @@ class MapFrame(wx.Frame):
         zoommenu = wx.Menu()
         # Add items to the menu
 
-        zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to computational region (set with g.region)'))
+        zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to computational region'))
         zoommenu.AppendItem(zoomwind)
         self.Bind(wx.EVT_MENU, self.OnZoomToWind, zoomwind)
 
