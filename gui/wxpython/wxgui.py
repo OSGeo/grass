@@ -428,7 +428,7 @@ class GMFrame(wx.Frame):
         """!Parse command selected from menu"""
         if event:
             cmd = self.GetMenuCmd(event)
-        menuform.GUI().ParseCommand(cmd, parentframe=self)
+        menuform.GUI().ParseCommand(cmd, parentframe = self)
 
     def OnRunScript(self, event):
         """!Run script"""
