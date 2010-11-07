@@ -492,7 +492,7 @@ int main(int argc, char *argv[])
 	nrows = Rast_window_rows();
 	ncols = Rast_window_cols();
 	/* ================================================================= */
-	G_message(_("Writing %s of <%s> to <%s>..."),
+	G_important_message(_("Writing %s of <%s> to <%s>..."),
 		  (frad->answer ? _("radiance")
 		   : (lsat.band[i].
 		      thermal) ? _("temperature") : _("reflectance")),
