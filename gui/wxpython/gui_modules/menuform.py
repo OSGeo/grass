@@ -2154,7 +2154,7 @@ class GUI:
         return processTask(tree).GetTask()
     
     def ParseCommand(self, cmd, gmpath = None, completed = None, parentframe = None,
-                     show = True, modal = False, centreOnParent = True, checkError = False):
+                     show = True, modal = False, centreOnParent = False, checkError = False):
         """!Parse command
         
         Note: cmd is given as list
