@@ -22,9 +22,10 @@ These correspond to directories where fonts can be found on some common
 operating systems. Extra directories to search can easily by added using the
 <em>extradirs</em> parameter, which accepts a comma-separated list. An extra
 directory may optionally contain an environment variable <em>at the start</em> 
-of the string, if enclosed in ${xxx} syntax (see examples above).</p>
+of the string, if enclosed in ${xxx} syntax (see examples above).
 
-<p>The module will normally write to the standard fontcap file location,
+<p>
+The module will normally write to the standard fontcap file location,
 <tt>$GISBASE/etc/fontcap</tt>. If the environment variable
 <strong>GRASS_FONT_CAP</strong> is set, the output will instead be written 
 to the file specified by that variable. This is useful if you don't have
@@ -41,10 +42,10 @@ g.mkfontcap
 <p>
 to create a personal copy and then to make GRASS use that file
 instead of the system copy.
-</p>
 
-<p>The output list of fonts is sorted first by type (Stroke fonts first,
-followed by Freetype) and within each type by the short name of the font.</p>
+<p>
+The output list of fonts is sorted first by type (Stroke fonts first,
+followed by Freetype) and within each type by the short name of the font.
 
 <H2>SEE ALSO</H2>
  
