@@ -76,18 +76,17 @@ int main(int argc, char *argv[])
 	operator = OP_WITHIN;
     else if (parm.operator->answer[0] == 'c' && parm.operator->answer[1] == 'o')
 	operator = OP_CONTAINS;
-    else if (parm.operator->answer[0] == 'o')
-	operator = OP_OVERLAPS;
+    else if (parm.operator->answer[0] == 'o') {
+	if (strcmp(parm.operator->answer, "overlaps") == 0)
+	    operator = OP_OVERLAPS;
+	else
+	    operator = OP_OVERLAP;
+    }
     else if (parm.operator->answer[0] == 'r')
 	operator = OP_RELATE;
     else
 	G_fatal_error(_("Unknown operator"));
     
-    if (operator != OP_OVERLAPS && flag.geos && !flag.geos->answer) {
-	G_fatal_error(_("Enable GEOS operators (flag '%c') to use '%s'"),
-		      flag.geos->key, parm.operator->answer);
-    }
-
     if (operator == OP_RELATE && !parm.relate->answer) {
 	G_fatal_error(_("Required parameter <%s> not set"),
 		      parm.relate->key);
@@ -153,7 +152,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    /* Read line and check type */
-	    if (flag.geos && flag.geos->answer) {
+	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 		AGeom = Vect_read_line_geos(&(In[0]), aline, &ltype);
 #endif
@@ -195,7 +194,7 @@ int main(int argc, char *argv[])
 			continue;
 		    }
 		    
-		    if (flag.geos && flag.geos->answer) {
+		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 			if(line_relate_geos(&(In[1]), AGeom,
 					    bline, operator, parm.relate->answer)) {
@@ -237,7 +236,7 @@ int main(int argc, char *argv[])
 			continue;
 		    }
 
-		    if (flag.geos && flag.geos->answer) {
+		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 			if(area_relate_geos(&(In[1]), AGeom,
 					    barea, operator, parm.relate->answer)) {
@@ -254,7 +253,7 @@ int main(int argc, char *argv[])
 		    }
 		}
 	    }
-	    if (flag.geos && flag.geos->answer) {
+	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 		GEOSGeom_destroy(AGeom);
 #endif
@@ -285,7 +284,7 @@ int main(int argc, char *argv[])
 	    abox.T = PORT_DOUBLE_MAX;
 	    abox.B = -PORT_DOUBLE_MAX;
 
-	    if (flag.geos && flag.geos->answer) { 
+	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 		AGeom = Vect_read_area_geos(&(In[0]), aarea);
 #endif
@@ -308,7 +307,7 @@ int main(int argc, char *argv[])
 			continue;
 		    }
 		    
-		    if (flag.geos && flag.geos->answer) {
+		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 			if(line_relate_geos(&(In[1]), AGeom,
 					    bline, operator, parm.relate->answer)) {
@@ -377,7 +376,7 @@ int main(int argc, char *argv[])
 			bcentroid = Vect_get_area_centroid(&(In[1]), barea);
 			Vect_read_line(&(In[1]), BPoints, NULL, bcentroid);
 
-			if (flag.geos && flag.geos->answer) {
+			if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 			    if(area_relate_geos(&(In[1]), AGeom,
 						barea, operator, parm.relate->answer)) {
@@ -407,7 +406,7 @@ int main(int argc, char *argv[])
 		    }
 		}
 	    }
-	    if (flag.geos && flag.geos->answer) {
+	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
 		GEOSGeom_destroy(AGeom);
 #endif

@@ -6,7 +6,7 @@ map by features from another one.
 <p>
 Supported operators (without GEOS):
 <ul>
-  <li><tt>overlaps</tt> - features partially or completely overlap
+  <li><tt>overlap</tt> - features partially or completely overlap
 </ul>
 
 Supported operators (with GEOS):
@@ -43,14 +43,14 @@ with respect to ownership, area, etc.
 Extract forest fire points from larger fire vector map:
 
 <div class="code"><pre>
-v.select ainput=fire binput=forest output=forest_fire operator=overlaps
+v.select ainput=fire binput=forest output=forest_fire operator=overlap
 </pre></div>
 
 Extract Italian rivers from VMAP0 watercourses map:
 
 <div class="code"><pre>
 v.select ainput=watrcrsl_eurnasia_wgs84 binput=italy_area \
-         output=watrcrsl_italy operator=overlaps
+         output=watrcrsl_italy operator=overlap
 </pre></div>
 
 <h2>TODO</h2>
