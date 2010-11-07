@@ -44,12 +44,14 @@ of 45 degrees.
 <P>
 GRASS aspect maps are measured using Cartesian conventions, i.e. in degrees 
 counterclockwise from east. e.g.:
-<pre>
+
+<div class="code"><pre>
 90  North
 180 West
 270 South
-0,360 East</pre>
-<P>
+0,360 East
+</pre></div>
+
 They can be created from a raster elevation map with <em>r.slope.aspect</em>.
 <P>
 Compass type aspect maps are measured in degrees clockwise from north.
@@ -62,12 +64,12 @@ direction "to", as opposed to atmospheric conventions (direction "from").
 
 Convert U,V velocity component maps into magnitide,direction maps for use 
 with <em>d.rast.arrow</em>:
-<pre>
-  r.mapcalc 'magnitude = sqrt(U_map^2 + V_map^2)'
-  r.mapcalc 'direction = atan(U_map, V_map)'
-  d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
-</pre>
-<BR>
+  
+<div class="code"><pre>
+r.mapcalc "magnitude = sqrt(U_map^2 + V_map^2)"
+r.mapcalc "direction = atan(U_map, V_map)"
+d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
+</pre></div>
 
 <H2>SEE ALSO</H2>
 
