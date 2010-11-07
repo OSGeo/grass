@@ -65,7 +65,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     """
     def __init__(self, parent,
                  id = wx.ID_ANY, style=wx.SUNKEN_BORDER,
-                 ctstyle=CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
+                 ctstyle = CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
                  CT.TR_MULTIPLE, **kwargs):
         
@@ -196,6 +196,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_DELETE_ITEM,      self.OnDeleteLayer)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
         self.Bind(wx.EVT_TREE_END_DRAG,         self.OnEndDrag)
+        self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnRenamed)
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
         
@@ -222,9 +223,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """!Key pressed"""
         key = event.GetKeyCode()
         
-        if key == wx.WXK_DELETE and self.lmgr:
+        if key == wx.WXK_DELETE and self.lmgr and \
+                not self.GetEditControl():
             self.lmgr.OnDeleteLayer(None)
-
+        
         event.Skip()
         
     def OnLayerContextMenu (self, event):
@@ -266,7 +268,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         if ltype != "command": # rename
             self.popupMenu.Append(self.popupID2, text=_("Rename"))
-            self.Bind(wx.EVT_MENU, self.RenameLayer, id=self.popupID2)
+            self.Bind(wx.EVT_MENU, self.OnRenameLayer, id=self.popupID2)
             if numSelected > 1:
                 self.popupMenu.Enable(self.popupID2, False)
             
@@ -587,12 +589,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """!Popup opacity level indicator"""
         if not self.GetPyData(self.layer_selected)[0]['ctrl']:
             return
-
-        #win = self.FindWindowById(self.GetPyData(self.layer_selected)[0]['ctrl'])
-        #type = win.GetName()
-        #
-        #self.layer_selected.DeleteWindow()
-
+        
         maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         current_opacity = maplayer.GetOpacity()
         
@@ -604,11 +601,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             new_opacity = dlg.GetOpacity() # string
             self.Map.ChangeOpacity(maplayer, new_opacity)
             maplayer.SetOpacity(new_opacity)
-            opacity_pct = int(new_opacity * 100)
-            layername = self.GetItemText(self.layer_selected)
-            layerbase = layername.split('(')[0].strip()
             self.SetItemText(self.layer_selected,
-                             layerbase + ' (opacity: ' + str(opacity_pct) + '%)')
+                             self._getLayerName(self.layer_selected))
             
             # vector layer currently edited
             if self.mapdisplay.toolbars['vdigit'] and \
@@ -619,9 +613,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # redraw map if auto-rendering is enabled
             self.rerender = True
             self.reorder = True
-            #if self.mapdisplay.statusbarWin['render'].GetValue():
-            #    print "*** Opacity OnRender *****"
-            #    self.mapdisplay.OnRender(None)
 
     def OnNvizProperties(self, event):
         """!Nviz-related properties (raster/vector/volume)
@@ -637,9 +628,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == '3d-raster':
             self.lmgr.nviz.SetPage('volume')
         
-    def RenameLayer (self, event):
+    def OnRenameLayer (self, event):
         """!Rename layer"""
         self.EditLabel(self.layer_selected)
+        self.GetEditControl().SetSelection(-1, -1)
+        
+    def OnRenamed(self, event):
+        """!Layer renamed"""
+        item = self.layer_selected
+        self.GetPyData(item)[0]['label'] = event.GetLabel()
+        self.SetItemText(item, self._getLayerName(item)) # not working, why?
+        
+        event.Skip()
 
     def AddLayer(self, ltype, lname=None, lchecked=None,
                  lopacity=1.0, lcmd=None, lgroup=None, lvdigit=None, lnviz=None, multiple = True):
@@ -809,6 +809,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetPyData(layer, ({'cmd'      : cmd,
                                     'type'     : ltype,
                                     'ctrl'     : ctrlId,
+                                    'label'    : None,
                                     'maplayer' : None,
                                     'vdigit'   : lvdigit,
                                     'nviz'     : lnviz,
@@ -841,11 +842,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.PropertiesDialog(layer, show=True)
         
         else: # group
-            self.SetPyData(layer, ({'cmd': None,
-                                    'type' : ltype,
-                                    'ctrl' : None,
+            self.SetPyData(layer, ({'cmd'      : None,
+                                    'type'     : ltype,
+                                    'ctrl'     : None,
+                                    'label'    : None,
                                     'maplayer' : None,
-                                    'propwin' : None}, 
+                                    'propwin'  : None}, 
                                    None))
 
         # use predefined layer name if given
@@ -855,16 +857,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             elif ltype == 'command':
                 ctrl.SetValue(lname)
             else:
-                name = lname + ' (opacity: ' + \
-                       str(self.GetPyData(layer)[0]['maplayer'].GetOpacity()) + '%)'
-                self.SetItemText(layer, name)
-                
+                self.SetItemText(layer, self._getLayerName(layer))
+        
         # updated progress bar range (mapwindow statusbar)
         if checked is True:
             self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active=True)))
-
-        # layer.SetHeight(TREE_ITEM_HEIGHT)
-
+            
         return layer
 
     def PropertiesDialog (self, layer, show=True):
@@ -1004,10 +1002,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.statusbarWin['render'].GetValue():
-        #    print "*** Delete OnRender *****"
-        #    self.mapdisplay.OnRender(None)
-
+        
         if self.mapdisplay.toolbars['vdigit']:
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool=True)
 
@@ -1226,16 +1221,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.statusbarWin['render'].GetValue():
-        #    print "*** Drop OnRender *****"
-        #    self.mapdisplay.OnRender(None)
-
+        
         # select new item
         self.SelectItem(newItem)
         
     def RecreateItem (self, dragItem, dropTarget, parent=None):
-        """
-        Recreate item (needed for OnEndDrag())
+        """!Recreate item (needed for OnEndDrag())
         """
         Debug.msg (4, "LayerTree.RecreateItem(): layer=%s" % \
                    self.GetItemText(dragItem))
@@ -1317,26 +1308,36 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return newItem
 
+    def _getLayerName(self, item):
+        """!Get layer name string"""
+        mapLayer = self.GetPyData(item)[0]['maplayer']
+        mapname  = self.GetPyData(item)[0]['label']
+        opacity  = int(mapLayer.GetOpacity(float = True) * 100)
+        if not mapname:
+            dcmd    = self.GetPyData(item)[0]['cmd']
+            mapname = utils.GetLayerNameFromCmd(dcmd, layerType = mapLayer.GetType(),
+                                                fullyQualified = True)
+        if not mapname:
+            return None
+        
+        return mapname + ' (%s %d' % (_('opacity:'), opacity) + '%)'
+        
+        
     def GetOptData(self, dcmd, layer, params, propwin):
-        """!Process layer data"""
+        """!Process layer data (when changes in propertiesdialog are applied)"""
         # set layer text to map name
         if dcmd:
-            mapLayer = self.GetPyData(layer)[0]['maplayer']
-            opacity = int(mapLayer.GetOpacity(float=True) * 100)
-            mapname = utils.GetLayerNameFromCmd(dcmd, layerType=mapLayer.type,
-                                                fullyQualified=True)
+            self.GetPyData(layer)[0]['cmd'] = dcmd
+            mapname = self._getLayerName(layer)
             if not mapname:
-                GError(parent=self,
-                       message=_("Map <%s> not found.") % utils.GetLayerNameFromCmd(dcmd))
+                GError(parent = self,
+                       message = _("Map <%s> not found.") % utils.GetLayerNameFromCmd(dcmd))
                 return
-            
-            self.SetItemText(layer, mapname + ' (opacity: ' + str(opacity) + '%)')
+            self.SetItemText(layer, mapname)
         
         # update layer data
         if params:
             self.SetPyData(layer, (self.GetPyData(layer)[0], params))
-        if dcmd:
-            self.GetPyData(layer)[0]['cmd'] = dcmd
         self.GetPyData(layer)[0]['propwin'] = propwin
         
         # change parameters for item in layers list in render.Map
@@ -1452,9 +1453,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
-        #if self.mapdisplay.statusbarWin['render'].GetValue():
-        #    print "*** Change OnRender *****"
-        #    self.mapdisplay.OnRender(None)
         
     def OnCloseWindow(self, event):
         pass
