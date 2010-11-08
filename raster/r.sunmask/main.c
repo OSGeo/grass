@@ -114,13 +114,15 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("sun position"));
     module->label = _("Calculates cast shadow areas from sun position and elevation raster map.");
     module->description = _("Either exact sun position (A) is specified, or date/time to calculate "
-	  "the sun position (B) by r.sunmask itself.");
+			    "the sun position (B) by r.sunmask itself.");
     
     parm.opt1 = G_define_standard_option(G_OPT_R_ELEV);
-
+    
     parm.opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.opt2->required = NO;
     
     parm.opt3 = G_define_option();
     parm.opt3->key = "altitude";
@@ -224,11 +226,13 @@ int main(int argc, char *argv[])
     flag3 = G_define_flag();
     flag3->key = 's';
     flag3->description = _("Calculate sun position only and exit");
-
+    flag3->guisection = _("Print");
+    
     flag4 = G_define_flag();
     flag4->key = 'g';
     flag4->description =
 	_("Print the sun position output in shell script style");
+    flag4->guisection = _("Print");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -338,7 +342,7 @@ int main(int argc, char *argv[])
 	if (retval == 0) {	/* error check */
 	    if (flag3->answer) {
 		if (flag4->answer) {
-		    fprintf(stdout, "date=%d.%02d.%02d\n", pdat->year,
+		    fprintf(stdout, "date=%d/%02d/%02d\n", pdat->year,
 			    pdat->month, pdat->day);
 		    fprintf(stdout, "daynum=%d\n", pdat->daynum);
 		    fprintf(stdout, "time=%02i:%02i:%02i\n", pdat->hour,
@@ -362,24 +366,24 @@ int main(int argc, char *argv[])
 		    }
 		}
 		else {
-		    G_message(_("%d.%02d.%02d, daynum %d, time: %02i:%02i:%02i (decimal time: %f)"),
-			      pdat->year, pdat->month, pdat->day,
-			      pdat->daynum, pdat->hour, pdat->minute,
-			      pdat->second,
-			      pdat->hour + (pdat->minute * 100.0 / 60.0 +
-					    pdat->second * 100.0 / 3600.0) /
-			      100.);
-		    G_message(_("long: %f, lat: %f, timezone: %f"),
-			      pdat->longitude, pdat->latitude,
-			      pdat->timezone);
-		    G_message(_("Solar position: sun azimuth: %f, sun angle above horz.(refraction corrected): %f"),
-			      pdat->azim, pdat->elevref);
-
+		    fprintf(stdout, "%d/%02d/%02d, daynum: %d, time: %02i:%02i:%02i (decimal time: %f)\n",
+			    pdat->year, pdat->month, pdat->day,
+			    pdat->daynum, pdat->hour, pdat->minute,
+			    pdat->second,
+			    pdat->hour + (pdat->minute * 100.0 / 60.0 +
+					  pdat->second * 100.0 / 3600.0) /
+			    100.);
+		    fprintf(stdout, "long: %f, lat: %f, timezone: %f\n",
+			    pdat->longitude, pdat->latitude,
+			    pdat->timezone);
+		    fprintf(stdout, "Solar position: sun azimuth: %f, sun angle above horz. (refraction corrected): %f\n",
+			    pdat->azim, pdat->elevref);
+		    
 		    if (sretr / 60 <= 24.0) {
-			G_message(_("Sunrise time (without refraction): %02d:%02d:%02d\n"),
-				  sretr / 60, sretr % 60, sretr_sec);
-			G_message(_("Sunset time  (without refraction): %02d:%02d:%02d\n"),
-				  ssetr / 60, ssetr % 60, ssetr_sec);
+			fprintf(stdout, "Sunrise time (without refraction): %02d:%02d:%02d\n",
+				sretr / 60, sretr % 60, sretr_sec);
+			fprintf(stdout, "Sunset time  (without refraction): %02d:%02d:%02d\n",
+				ssetr / 60, ssetr % 60, ssetr_sec);
 		    }
 		}
 	    }
@@ -425,7 +429,6 @@ int main(int argc, char *argv[])
     }
 
     if (flag3->answer && (use_solpos == 1)) {	/* we only want the sun position */
-	G_message(_("No map calculation requested. Finished."));
 	exit(EXIT_SUCCESS);
     }
     else if (flag3->answer && (use_solpos == 0)) {
@@ -434,9 +437,12 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
+    if (!outname)
+	G_fatal_error(_("Option <%s> required"), parm.opt2->key);
+
     elev_fd = Rast_open_old(name, "");
     output_fd = Rast_open_c_new(outname);
-
+    
     data_type = Rast_get_map_type(elev_fd);
     elevbuf.v = Rast_allocate_buf(data_type);
     tmpbuf.v = Rast_allocate_buf(data_type);
@@ -461,7 +467,6 @@ int main(int argc, char *argv[])
     row1 = 0;
 
     G_message(_("Calculating shadows from DEM..."));
-
     while (row1 < window.rows) {
 	G_percent(row1, window.rows, 2);
 	col1 = 0;
@@ -514,6 +519,7 @@ int main(int argc, char *argv[])
 	Rast_put_row(output_fd, outbuf.c, CELL_TYPE);
 	row1 += 1;
     }
+    G_percent(1, 1, 1);
 
     Rast_close(output_fd);
     Rast_close(elev_fd);
