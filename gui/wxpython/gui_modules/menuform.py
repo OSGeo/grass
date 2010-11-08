@@ -1799,7 +1799,7 @@ class cmdPanel(wx.Panel):
             pLocation['wxId-bind'] = pMapset['wxId']
         
         if pLocation and pMapset and pMap:
-            pLocation['wxId-bind'] = pMap['wxId']
+            pLocation['wxId-bind'] += pMap['wxId']
             pMapset['wxId-bind'] = pMap['wxId']
         
 	#
@@ -2014,28 +2014,29 @@ class cmdPanel(wx.Panel):
         for selectors.
         """
         myId = event.GetId()
-        me  = wx.FindWindowById(myId)
+        me = wx.FindWindowById(myId)
         name = me.GetName()
-        
+
+        found = False
         for porf in self.task.params + self.task.flags:
             if not porf.has_key('wxId'):
                 continue
-            found = False
-            for id in porf['wxId']:
-                if id == myId:
-                    found = True
-                    break
-            
-            if found:
-                if name in ('LayerSelect', 'DriverSelect', 'TableSelect',
-                            'LocationSelect', 'MapsetSelect'):
-                    porf['value'] = me.GetStringSelection()
-                elif name == 'GdalSelect':
-                    porf['value'] = event.dsn
-                elif name == 'ModelParam':
-                    porf['parameterized'] = me.IsChecked()
-                else:
-                    porf['value'] = me.GetValue()
+            if myId in porf['wxId']:
+                found = True
+                break
+        
+        if not found:
+            return
+        
+        if name in ('LayerSelect', 'DriverSelect', 'TableSelect',
+                    'LocationSelect', 'MapsetSelect', 'ProjSelect'):
+            porf['value'] = me.GetStringSelection()
+        elif name == 'GdalSelect':
+            porf['value'] = event.dsn
+        elif name == 'ModelParam':
+            porf['parameterized'] = me.IsChecked()
+        else:
+            porf['value'] = me.GetValue()
         
         self.OnUpdateValues(event)
         
