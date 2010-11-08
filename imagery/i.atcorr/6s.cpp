@@ -158,6 +158,9 @@ void printOutput()
 {
     static const string head(" 6s version 4.2b ");
 
+    if (G_verbose() <= G_verbose_std())
+	return;
+    
     cout << endl << endl << endl;
     Output::Begin(); Output::Repeat(30,'*'); Output::Print(head); Output::Repeat(30,'*'); Output::End();
 
