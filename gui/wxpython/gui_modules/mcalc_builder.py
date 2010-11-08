@@ -465,7 +465,7 @@ class MapCalcFrame(wx.Frame):
         if not self.addbox.IsChecked():
             return
         name = self.newmaptxt.GetValue().strip() + '@' + grass.gisenv()['MAPSET']
-        self.parent.GetLayerTree().AddLayer(ltype = 'vector',
+        self.parent.GetLayerTree().AddLayer(ltype = 'raster',
                                             lname = name,
                                             lcmd = ['d.rast', 'map=%s' % name],
                                             multiple = False)
