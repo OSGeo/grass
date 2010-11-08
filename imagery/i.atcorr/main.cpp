@@ -294,7 +294,6 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
     if(ialt_fd >= 0) alt = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
     if(ivis_fd >= 0) vis = (FCELL*)Rast_allocate_buf(FCELL_TYPE);
 
-    G_verbose_message(_("Percent complete..."));
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
@@ -323,7 +322,8 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
 	        Rast_set_f_null_value(&buf[col], 1);
 	        continue;
 	    }
-	    alt[col] /= 1000.0f; /* converting to km from input which should be in meter */
+	    if (ialt_fd >= 0)
+		alt[col] /= 1000.0f; /* converting to km from input which should be in meter */
 
             /* check if both maps are active and if whether any value has changed */
             if((ialt_fd >= 0) && (ivis_fd >= 0) && ((prev_vis != vis[col]) || (prev_alt != alt[col])))
@@ -399,7 +399,8 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
 	if(oflt) Rast_put_row(ofd, buf, FCELL_TYPE);
 	else write_fp_to_cell(ofd, buf);
     }
-
+    G_percent(1, 1, 1);
+    
     /* free allocated memory */
     G_free(buf);
     if(ialt_fd >= 0) G_free(alt);
