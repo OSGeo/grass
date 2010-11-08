@@ -791,6 +791,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # Autocompletion for map/data file name entry after '=', ',', or manually
             pos = self.GetCurrentPos()
             entry = self.GetTextLeft()
+            if 'r.mapcalc' in entry:
+                self.InsertText(pos, '=')
+                self.CharRight()
+                return
+            
             if event.GetKeyCode() != 44:
                 self.promptType = None
             
@@ -911,6 +916,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             if len(items) == 1:
                 cmd = items[0].strip()
                 if cmd in globalvar.grassCmd['all'] and \
+                        cmd != 'r.mapcalc' and \
                         (not self.cmdDesc or cmd != self.cmdDesc.get_name()):
                     try:
                         self.cmdDesc = menuform.GUI().ParseInterface(cmd = [cmd])

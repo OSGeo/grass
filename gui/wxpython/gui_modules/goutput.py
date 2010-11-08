@@ -530,14 +530,11 @@ class GMConsole(wx.SplitterWindow):
         else:
             # Send any other command to the shell. Send output to
             # console output window
-            if grass.find_program(command[0]):
-                self.cmdThread.RunCmd(GrassCmd,
-                                      onDone,
-                                      command,
-                                      self.cmd_stdout, self.cmd_stderr)                                         
-                self.cmd_output_timer.Start(50)
-            else:
-                self.WriteError(_("Command '%s' not found") % command[0])
+            self.cmdThread.RunCmd(GrassCmd,
+                                  onDone,
+                                  command,
+                                  self.cmd_stdout, self.cmd_stderr)                                         
+            self.cmd_output_timer.Start(50)
         
         return None
 
