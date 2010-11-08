@@ -47,7 +47,7 @@ void read_png(void)
     if (i_width != png.width || i_height != png.height)
 	G_fatal_error
 	    ("PNG: input file has incorrect dimensions: expected: %dx%d got: %lux%lu",
-	     png.width, png.height, i_width, i_height);
+	     png.width, png.height, (unsigned long) i_width, (unsigned long) i_height);
 
     if (png.true_color) {
 	if (color_type != PNG_COLOR_TYPE_RGB_ALPHA)

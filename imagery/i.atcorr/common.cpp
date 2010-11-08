@@ -8,7 +8,7 @@ Sixs_trunc sixs_trunc; /* initialized in discom global routine */
 
 Sixs_disc sixs_disc = 
 {
-    {0}, {0}, {0}, {0}, {0}, {0}, 
+    {{0}}, {{0}}, {{0}}, {{0}}, {{0}}, {{0}}, 
     { .4f, .488f, .515f, .55f, .633f, .694f, .86f, 1.536f, 2.25f, 3.75f },/* wldis */
     {0},
     {0}
@@ -16,7 +16,7 @@ Sixs_disc sixs_disc =
 
 Sixs_sos sixs_sos = 
 {
-    {0},
+    {{0}},
     {
 	-1.f, -.9996f, -.9976f, -.9942f, -.9893f, -.9828f,
 	-.9749f, -.9655f, -.9546f, -.9422f, -.9285f, -.9133f, -.8967f,
