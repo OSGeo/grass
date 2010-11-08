@@ -226,7 +226,7 @@ void acca_first(Gfile *out, Gfile band[],
 	G_fatal_error(_("Unable to create raster map <%s>"), out->name);
 
     /* ----- ----- */
-    G_message(_("Processing first pass..."));
+    G_important_message(_("Processing first pass..."));
 
     stats[SUM_COLD] = 0.;
     stats[SUM_WARM] = 0.;
@@ -380,9 +380,9 @@ void acca_second(Gfile * out, Gfile band,
 	G_fatal_error(_("Unable to create raster map <%s>"), tmp.name);
 
     if (upper == 0.)
-	G_message(_("Removing ambiguous pixels..."));
+	G_important_message(_("Removing ambiguous pixels..."));
     else
-	G_message(_("Pass two processing..."));
+	G_important_message(_("Pass two processing..."));
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
