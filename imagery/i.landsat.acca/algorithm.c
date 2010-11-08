@@ -126,8 +126,8 @@ void acca_algorithm(Gfile * out, Gfile band[],
     G_message(_("* Snow cover: %.2lf %%"), 100. * value[SNOW]);
     G_message(_("* Cloud cover: %.2lf %%"), 100. * signa[COVER]);
     G_message(_("* Temperature of clouds:"));
-    G_message(_("** Maximum: %.2lf "), signa[KMAX]);
-    G_message(_("** Mean (%s cloud)  : %.2lf K"),
+    G_message(_("** Maximum: %.2lf K"), signa[KMAX]);
+    G_message(_("** Mean (%s cloud): %.2lf K"),
 	    (review_warm ? "cold" : "all"), signa[KMEAN]);
     G_message(_("** Minimum: %.2lf K"), signa[KMIN]);
 
