@@ -433,7 +433,7 @@ class GMFrame(wx.Frame):
     def OnRunScript(self, event):
         """!Run script"""
         # open dialog and choose script file
-        dlg = wx.FileDialog(parent = self, message = _("Choose script file"),
+        dlg = wx.FileDialog(parent = self, message = _("Choose script file to run"),
                             defaultDir = os.getcwd(),
                             wildcard = _("Python script (*.py)|*.py|Bash script (*.sh)|*.sh"))
         
@@ -445,13 +445,13 @@ class GMFrame(wx.Frame):
             return False
 
         if not os.path.exists(filename):
-            wx.MessageBox(parent = self,
-                          message = _("Script file '%s' doesn't exist. Operation cancelled.") % filename,
-                          caption = _("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message = _("Script file '%s' doesn't exist. "
+                                    "Operation cancelled.") % filename)
             return
         
         self.goutput.WriteCmdLog(_("Launching script '%s'...") % filename)
-        self.goutput.RunCmd(filename, switchPage = True)
+        self.goutput.RunCmd([filename], switchPage = True)
         
     def OnChangeLocation(self, event):
         """Change current location"""
