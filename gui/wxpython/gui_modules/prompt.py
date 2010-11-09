@@ -898,7 +898,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 cmd = utils.split(utils.EncodeString((line)))
             
             #  send the command list to the processor 
-            self.parent.RunCmd(cmd)
+            if cmd[0] in ('r.mapcalc', 'r3.mapcalc'):
+                self.parent.parent.OnMapCalculator(event = None, cmd = cmd)
+            else:
+                self.parent.RunCmd(cmd)
             
             # add command to history    
             self.cmdbuffer.append(' '.join(cmd))
