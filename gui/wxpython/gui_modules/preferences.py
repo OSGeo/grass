@@ -218,6 +218,9 @@ class Settings:
                 'addNewLayer' : {
                     'enabled' : True,
                     },
+                'interactiveInput' : {
+                    'enabled' : True,
+                    },
                 },
             #
             # Workspace
@@ -1376,9 +1379,20 @@ class PreferencesDialog(PreferencesBaseDialog):
                           name="IsChecked")
         add.SetValue(self.settings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
         self.winId['cmd:addNewLayer:enabled'] = add.GetId()
-        
+    
         gridSizer.Add(item=add,
                       pos=(row, 0), span=(1, 2))
+        
+        row += 1
+        # interactive input
+        interactive = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                  label = _("Allow interactive input"),
+                                  name = "IsChecked")
+        interactive.SetValue(self.settings.Get(group='cmd', key='interactiveInput', subkey='enabled'))
+        self.winId['cmd:interactiveInput:enabled'] = interactive.GetId()
+        gridSizer.Add(item = interactive,
+                      pos = (row, 0), span = (1, 2))
+        
         row += 1
         # verbosity
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,

@@ -1655,8 +1655,8 @@ class cmdPanel(wx.Panel):
                     # a textctl and a button;
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
-
-                    if p.get('age', 'new_file') == 'old_file':
+                    if p.get('age', 'new_file') == 'old_file' and \
+                            UserSettings.Get(group='cmd', key='interactiveInput', subkey='enabled'):
                         # widget for interactive input
                         ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
                                            style = wx.TE_MULTILINE,
