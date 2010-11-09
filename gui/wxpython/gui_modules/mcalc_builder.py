@@ -39,7 +39,7 @@ from preferences import globalSettings as UserSettings
 
 class MapCalcFrame(wx.Frame):
     """!Mapcalc Frame class. Calculator-style window to create and run
-    r(3).mapcalc statements
+    r(3).mapcalc statements.
     """
     def __init__(self, parent, cmd, id = wx.ID_ANY,
                  style = wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
@@ -63,6 +63,7 @@ class MapCalcFrame(wx.Frame):
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        self.CreateStatusBar()
         
         #
         # variables
@@ -249,7 +250,9 @@ class MapCalcFrame(wx.Frame):
         self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
         self.function.Bind(wx.EVT_COMBOBOX, self.OnSelect)
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
-        
+        self.newmaptxt.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
+        self.text_mcalc.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
+
         self._layout()
 
         self.SetMinSize(self.GetBestSize())
@@ -334,7 +337,7 @@ class MapCalcFrame(wx.Frame):
                          flag = wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
         
         controlSizer.Add(item = operatorSizer, proportion = 1,
-                         flag = wx.RIGHT, border = 5)
+                         flag = wx.RIGHT | wx.EXPAND, border = 5)
         controlSizer.Add(item = operandSizer, proportion = 0,
                          flag = wx.EXPAND)
 
@@ -400,6 +403,12 @@ class MapCalcFrame(wx.Frame):
         """
         item = event.GetString()
         self._addSomething(item)
+
+    def OnUpdateStatusBar(self, event):
+        """!Update statusbar text"""
+        self.SetStatusText("r.mapcalc ' %s = %s'" % (self.newmaptxt.GetValue(),
+                                                     self.text_mcalc.GetValue()))
+        event.Skip()
         
     def _addSomething(self, what):
         """!Inserts operators, map names, and functions into text area
@@ -558,7 +567,7 @@ class MapCalcFrame(wx.Frame):
         
 if __name__ == "__main__":
     app = wx.App(0)
-    frame = MapCalcFrame(None, cmd = 'r.mapcalc')
+    frame = MapCalcFrame(parent = None, cmd = 'r.mapcalc')
     frame.Show()
     app.MainLoop()
 
