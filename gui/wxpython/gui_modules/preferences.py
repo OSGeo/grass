@@ -74,7 +74,7 @@ class Settings:
                 'defWindowPos' : {
                     'enabled' : True,
                     'dim' : '%d,0,%d,%d,0,0,%d,%d' % \
-                        (globalvar.MAP_WINDOW_SIZE[0],
+                        (globalvar.MAP_WINDOW_SIZE[0] + 5,
                          globalvar.GM_WINDOW_SIZE[0],
                          globalvar.GM_WINDOW_SIZE[1],
                          globalvar.MAP_WINDOW_SIZE[0],
