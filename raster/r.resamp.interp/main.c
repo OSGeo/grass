@@ -301,52 +301,27 @@ int main(int argc, char *argv[])
 		double mapcol_f = Rast_easting_to_col(east, &src_w) - 0.5;
 		int mapcol2 = (int)floor(mapcol_f + 0.5);
 		int mapcol0 = mapcol2 - 2;
-		int mapcol1 = mapcol2 - 1;
-		int mapcol3 = mapcol2 + 1;
 		int mapcol4 = mapcol2 + 2;
 		double u = mapcol_f - mapcol2;
 		double c[25];
-		int i = 0, do_lanczos = 1;
+		int ci = 0, i, j, do_lanczos = 1;
 
-		c[i++] = bufs[0][mapcol0];
-		c[i++] = bufs[0][mapcol1];
-		c[i++] = bufs[0][mapcol2];
-		c[i++] = bufs[0][mapcol3];
-		c[i++] = bufs[0][mapcol4];
-
-		c[i++] = bufs[1][mapcol0];
-		c[i++] = bufs[1][mapcol1];
-		c[i++] = bufs[1][mapcol2];
-		c[i++] = bufs[1][mapcol3];
-		c[i++] = bufs[1][mapcol4];
-
-		c[i++] = bufs[2][mapcol0];
-		c[i++] = bufs[2][mapcol1];
-		c[i++] = bufs[2][mapcol2];
-		c[i++] = bufs[2][mapcol3];
-		c[i++] = bufs[2][mapcol4];
-
-		c[i++] = bufs[3][mapcol0];
-		c[i++] = bufs[3][mapcol1];
-		c[i++] = bufs[3][mapcol2];
-		c[i++] = bufs[3][mapcol3];
-		c[i++] = bufs[3][mapcol4];
-
-		c[i++] = bufs[4][mapcol0];
-		c[i++] = bufs[4][mapcol1];
-		c[i++] = bufs[4][mapcol2];
-		c[i++] = bufs[4][mapcol3];
-		c[i++] = bufs[4][mapcol4];
-
-		for (i = 0; i < 25; i++) {
-		    if (Rast_is_d_null_value(&(c[i]))) {
-			Rast_set_d_null_value(&outbuf[col], 1);
-			do_lanczos = 0;
+		for (i = 0; i < 5; i++) {
+		    for (j = mapcol0; j <= mapcol4; j++) {
+			c[ci] = bufs[i][j];
+			if (Rast_is_d_null_value(&(c[ci]))) {
+			    Rast_set_d_null_value(&outbuf[col], 1);
+			    do_lanczos = 0;
+			    break;
+			}
+			ci++;
 		    }
+		    if (!do_lanczos)
+			break;
 		}
 
 		if (do_lanczos) {
-		    outbuf[col] = Rast_interp_lanczos(v, u, c);
+		    outbuf[col] = Rast_interp_lanczos(u, v, c);
 		}
 	    }
 
