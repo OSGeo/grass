@@ -1201,7 +1201,7 @@ class GdalSelect(wx.Panel):
         
         layerId = 1
         if self.format.GetStringSelection() == 'PostgreSQL':
-            dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+            dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetValue()
         else:
             dsn = self.input[self.dsnType][1].GetValue()
         if self.dsnType == 'file':
@@ -1221,13 +1221,13 @@ class GdalSelect(wx.Panel):
         elif self.dsnType == 'db':
             ret = gcmd.RunCommand('v.in.ogr',
                                   quiet = True,
-                                  parent = self,
                                   read = True,
                                   flags = 'l',
                                   dsn = dsn)
             if not ret:
-                self.list.LoadData()
-                self.btn_run.Enable(False)
+                self.parent.list.LoadData()
+                if hasattr(self, "btn_run"):
+                    self.btn_run.Enable(False)
                 return
             layerId = 1
             for line in ret.splitlines():
@@ -1319,7 +1319,7 @@ class GdalSelect(wx.Panel):
     def GetDsn(self):
         """!Get DSN"""
         if self.format.GetStringSelection() == 'PostgreSQL':
-            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetValue()
         
         return self.input[self.dsnType][1].GetValue()
 
