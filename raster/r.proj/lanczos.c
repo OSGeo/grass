@@ -59,7 +59,7 @@ void p_lanczos(struct cache *ibuffer,	/* input buffer                  */
     t = *col_idx - 0.5 - col;
     u = *row_idx - 0.5 - row;
 
-    result = Rast_interp_lanczos(u, t, cell);
+    result = Rast_interp_lanczos(t, u, cell);
 
     Rast_set_f_value(obufptr, result, cell_type);
 }
