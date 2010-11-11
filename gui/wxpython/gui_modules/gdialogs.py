@@ -1042,7 +1042,7 @@ class ImportDialog(wx.Dialog):
         """!Import/Link data (each layes as separate vector map)"""
         pass
     
-    def AddLayers(self, returncode):
+    def AddLayers(self, returncode, cmd = None):
         """!Add imported/linked layers into layer tree"""
         self.commandId += 1
         
@@ -1282,7 +1282,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
             self.SetStringItem(index, 1, "%s" % str(name))
             self.SetStringItem(index, 2, "%s" % str(grassName))
             # check by default
-            self.CheckItem(index, True)
+            ### self.CheckItem(index, True)
         
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE_USEHEADER)
 
