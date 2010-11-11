@@ -71,10 +71,7 @@ disabling of topology.
 <p>
 A GRASS ASCII vector map (in <b>standard format</b> mode) may contain a mix
 of primitives including points, lines, boundaries, centroids, areas,
-faces, and kernels.
-<!--This format is described in the
-<a HREF="http://freegis.org/cgi-bin/viewcvs.cgi/~checkout~/grass6/doc/vector/vector.html#ascii">GRASS
-Vector ASCII Format Specification</a>.--> The GRASS ASCII vector format
+faces, and kernels. The GRASS ASCII vector format
 may contain a header with various metadata (see example below). 
 The header is not required if the <b>-n</b> flag is used.
 
@@ -235,7 +232,8 @@ C  1 1
 </pre></div>
 
 <h3>Example 1b) - standard format mode</h3>
-Sample ASCII 3D line vector map for 'standard' format mode with simplified input.
+Sample ASCII 3D line vector map for 'standard' format mode with simplified input
+(note the space field separator).
 Note the <b>-z</b> flag indicating 3D vector input, and the <b>-n</b> flag
 indicating no vector header should be expected from the input file.
 The example can be tested in the Spearfish sample dataset:
@@ -253,7 +251,7 @@ echo "L 5 1
 This can be used to create a vector line of a GPS track: the GPS points have
 to be stored into a file with a preceding 'L' and the number of points (per line).
 
-<h3>Example 2</h3>
+<h3>Example 2 - point format mode</h3>
 
 Generate a 2D points vector map 'coords.txt' as ASCII file:
 <div class="code"><pre>
@@ -272,7 +270,7 @@ v.in.ascii input=coords.txt output=mymap
 As the <b>cat</b> option is set to 0 by default, an extra column 'cat'
 containing the IDs will be auto-generated.
 
-<h3>Example 3</h3>
+<h3>Example 3 - point format mode</h3>
 
 Generate a 2D points vector map 'points.dat' as ASCII file:
 <div class="code"><pre>
@@ -293,7 +291,7 @@ cat points.dat | v.in.ascii out=mypoints x=2 y=3 cat=1 \
 <p>
 The module is reading from standard input, using the default '|' (pipe) delimiter.
 
-<h3>Example 4</h3>
+<h3>Example 4 - point format mode</h3>
 
 Generating a 3D points vector map from DBMS (idcol must be an integer column):<br>
 <div class="code"><pre>
@@ -305,7 +303,7 @@ The module is reading from standard input, using the default '|' (pipe) delimite
 The import works for 2D maps as well (no elev column and no '-z' flag).
 
 
-<h3>Example 5</h3>
+<h3>Example 5 - point format mode</h3>
 
 Generate a 3D points vector map 'points3d.dat' with attributes as ASCII file:
 <div class="code"><pre>
@@ -329,7 +327,7 @@ v.info mypoints3D
 </pre></div>
 
 
-<h3>Example 6</h3>
+<h3>Example 6 - point format mode</h3>
 
 Generate points file by clicking onto the map:
 <div class="code"><pre>
@@ -346,7 +344,7 @@ The 'point' string (or some similar entry) is required to generate a database ta
 When simply piping the coordinates (and optionally height) without additional column(s) 
 into <em>v.in.ascii</em>, only the vector map geometry will be generated.
 
-<h3>Example 7</h3>
+<h3>Example 7 - point format mode</h3>
 
 Convert ground control points from i.points into vector points:
 <div class="code"><pre>
