@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     path = G_define_option();
     path->key = "path";
     path->description =
-	"input file that contains the weight to calculate the index";
+	"Input file that contains the weight to calculate the index";
     path->type = TYPE_STRING;
     path->required = YES;
     path->gisprompt = "old_file,file,input";
