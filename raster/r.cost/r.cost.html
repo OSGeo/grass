@@ -33,13 +33,13 @@ All non-NULL cells are considered to be starting points.
 Each <em>x,y</em> <b>coordinate</b> pair gives the geographic location of a
 point from which the transportation cost should be figured. As many points as
 desired can be entered by the user. These starting points can also be read
-from a vector points file through the <b>start_sites</b> option or from a
+from a vector points file through the <b>start_points</b> option or from a
 raster map through the <b>start_rast</b> option.
 <p>
 <em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
 or one of the stop points given with <b>stop_coordinates</b> is reached.
 Alternatively, the stop points can be read from a vector points file with the
-<b>stop_sites</b> option. During execution, once the cumulative cost to all 
+<b>stop_points</b> option. During execution, once the cumulative cost to all 
 stopping points has been determined, processing stops.
 
 Both sites read from a vector points file and those given on the command line
