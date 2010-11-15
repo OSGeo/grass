@@ -630,9 +630,9 @@ def GetListOfMapsets(dbase, location, selectable = False):
                     os.path.isfile(os.path.join(dbase, location, mapset, "WIND")) and \
                     os.path.basename(mapset) != 'PERMANENT':
                 listOfMapsets.append(EncodeString(os.path.basename(mapset)))
-        ListSortLower(listOfMapsets)
         listOfMapsets.insert(0, 'PERMANENT')
-    
+
+    ListSortLower(listOfMapsets)    
     return listOfMapsets
 
 def GetColorTables():
