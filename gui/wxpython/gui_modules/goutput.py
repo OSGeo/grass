@@ -530,10 +530,25 @@ class GMConsole(wx.SplitterWindow):
         else:
             # Send any other command to the shell. Send output to
             # console output window
-            self.cmdThread.RunCmd(GrassCmd,
-                                  onDone,
-                                  command,
-                                  self.cmd_stdout, self.cmd_stderr)                                         
+            if len(command) == 1:
+                import menuform
+                try:
+                    task = menuform.GUI().ParseInterface(command)
+                except:
+                    task = None
+                # if not task.has_required():
+                # task = None # run command
+            else:
+                task = None
+                
+            if task:
+                # process GRASS command without argument
+                menuform.GUI().ParseCommand(command, parentframe = self)
+            else:
+                self.cmdThread.RunCmd(GrassCmd,
+                                      onDone,
+                                      command,
+                                      self.cmd_stdout, self.cmd_stderr)                                         
             self.cmd_output_timer.Start(50)
         
         return None
