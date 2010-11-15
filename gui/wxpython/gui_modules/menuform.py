@@ -1316,17 +1316,13 @@ class cmdPanel(wx.Panel):
                             txt2.SetName("TextCtrl")
                             style = wx.EXPAND | wx.BOTTOM | wx.LEFT
                         
-                        if p.get('value', '') != '':
-                            # parameter previously set
+                        value = self._GetValue(p)
+                        # parameter previously set
+                        if value:
                             if txt2.GetName() == "SpinCtrl":
-                                txt2.SetValue(int(p['value']))
+                                txt2.SetValue(value)
                             else:
-                                txt2.SetValue(p['value'])
-                        elif p.get('default', '') != '':
-                            if txt2.GetName() == "SpinCtrl":
-                                txt2.SetValue(int(p['default']))
-                            else:
-                                txt2.SetValue(p['default'])
+                                txt2.SetValue(value)
                         
                         which_sizer.Add(item=txt2, proportion=0,
                                         flag=style, border=5)
@@ -1339,8 +1335,9 @@ class cmdPanel(wx.Panel):
                         cb = wx.ComboBox(parent = which_panel, id = wx.ID_ANY, value = p.get('default',''),
                                          size = globalvar.DIALOG_COMBOBOX_SIZE,
                                          choices = valuelist, style = wx.CB_DROPDOWN)
-                        if p.get('value', '') != '':
-                            cb.SetValue(p['value']) # parameter previously set
+                        value = self._GetValue(p)
+                        if value:
+                            cb.SetValue(value) # parameter previously set
                         which_sizer.Add(item = cb, proportion = 0,
                                         flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
                         p['wxId'] = [cb.GetId(),]
@@ -1359,9 +1356,11 @@ class cmdPanel(wx.Panel):
                         len(p.get('key_desc', [])) > 1:
                     txt3 = wx.TextCtrl(parent=which_panel, value = p.get('default',''))
                     
-                    if p.get('value','') != '':
-                        txt3.SetValue(str(p['value'])) # parameter previously set
-
+                    value = self._GetValue(p)
+                    if value:
+                        # parameter previously set
+                        txt3.SetValue(str(value))
+                    
                     txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
                     style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
                 else:
@@ -1373,10 +1372,9 @@ class cmdPanel(wx.Panel):
                                            min=minValue, max=maxValue)
                         style = wx.BOTTOM | wx.LEFT | wx.RIGHT
                         
-                        if p.get('value', '') != '':
-                            txt3.SetValue(int(p['value'])) # parameter previously set
-                        elif p.get('default', '') != '':
-                            txt3.SetValue(int(p['default']))
+                        value = self._GetValue(p)
+                        if value:
+                            txt3.SetValue(int(value)) # parameter previously set
                         
                         txt3.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
                     else:
@@ -1384,8 +1382,9 @@ class cmdPanel(wx.Panel):
                                            validator = FloatValidator())
                         style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
                         
-                        if p.get('value', '') != '':
-                            txt3.SetValue(str(p['value'])) # parameter previously set
+                        value = self._GetValue(p)
+                        if value:
+                            txt3.SetValue(str(value)) # parameter previously set
                     
                 txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
                 
@@ -1442,10 +1441,7 @@ class cmdPanel(wx.Panel):
                         # we target the textctl here
                         p['wxId'] = [selection.GetChildren()[0].GetId(), ]
                         selection.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetValue)
-                    
-                    if p.get('value','') != '':
-                        selection.SetValue(p['value']) # parameter previously set
-                    
+                        
                     if p.get('prompt', '') == 'vector':
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                         
@@ -1654,8 +1650,9 @@ class cmdPanel(wx.Panel):
                                                       buttonText=_('Browse'),
                                                       startDirectory=os.getcwd(), fileMode=0,
                                                       changeCallback=self.OnSetValue)
-                    if p.get('value','') != '':
-                        fbb.SetValue(p['value']) # parameter previously set
+                    value = self._GetValue(p)
+                    if value:
+                        fbb.SetValue(value) # parameter previously set
                     which_sizer.Add(item=fbb, proportion=0,
                                     flag=wx.EXPAND | wx.RIGHT, border=5)
                     
@@ -1834,6 +1831,15 @@ class cmdPanel(wx.Panel):
         panelsizer.Fit(self.notebook)
         
         self.Bind(EVT_DIALOG_UPDATE, self.OnUpdateDialog)
+
+    def _GetValue(self, p):
+        """!Get value or default value of given parameter
+
+        @param p parameter directory
+        """
+        if p.get('value', '') != '':
+            return p['value']
+        return p.get('default', '')
         
     def OnFileText(self, event):
         """File input interactively entered"""
