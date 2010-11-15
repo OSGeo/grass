@@ -7,7 +7,7 @@
  *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("map algebra"));
-    module->description = _("Raster map matrix filter.");
+    module->description = _("Performs raster map matrix filter.");
 
     /* Define the different options */
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     opt3 = G_define_standard_option(G_OPT_F_INPUT);
     opt3->key = "filter";
     opt3->required = YES;
-    opt3->description = _("Name of filter file");
+    opt3->description = _("Path to filter file");
 
     opt4 = G_define_option();
     opt4->key = "repeat";
@@ -75,7 +75,8 @@ int main(int argc, char **argv)
     opt4->required = NO;
     opt4->answer = "1";
     opt4->description = _("Number of times to repeat the filter");
-
+    opt4->guisection = _("Filter");
+    
     opt5 = G_define_option();
     opt5->key = "title";
     opt5->type = TYPE_STRING;
@@ -93,6 +94,7 @@ int main(int argc, char **argv)
     flag2 = G_define_flag();
     flag2->key = 'z';
     flag2->description = _("Apply filter only to null data values");
+    flag2->guisection = _("Filter");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
