@@ -452,11 +452,13 @@ static void wps_print_process_description_begin(int store, int status, const cha
     int i;
 
     fprintf(stdout,"\t<ProcessDescription wps:processVersion=\"1\" storeSupported=\"%s\" statusSupported=\"%s\">\n", (store?"true":"false"), (status?"true":"false"));
-       if(identifier)
+    if(identifier)
     {
         fprintf(stdout,"\t\t<ows:Identifier>");
         print_escaped_for_xml(stdout, identifier);
         fprintf(stdout,"</ows:Identifier>\n");
+    } else {
+	G_fatal_error("Identifier not defined");
     }
 
     if(title)
@@ -464,7 +466,13 @@ static void wps_print_process_description_begin(int store, int status, const cha
         fprintf(stdout,"\t\t<ows:Title>");
         print_escaped_for_xml(stdout, title);
         fprintf(stdout, "</ows:Title>\n");
+    } else {
+	G_warning("Title not defined!");
+        fprintf(stdout,"\t\t<ows:Title>");
+        print_escaped_for_xml(stdout, "No title available");
+        fprintf(stdout, "</ows:Title>\n");
     }
+
 
     if(abstract)
     {
@@ -621,12 +629,19 @@ static void wps_print_ident_title_abstract(const char *identifier, const char *t
         fprintf(stdout,"\t\t\t\t<ows:Identifier>");
         print_escaped_for_xml(stdout, identifier);
         fprintf(stdout,"</ows:Identifier>\n");
+    } else {
+	G_fatal_error("Identifier not defined");
     }
 
     if(title)
     {
         fprintf(stdout,"\t\t\t\t<ows:Title>");
         print_escaped_for_xml(stdout, title);
+        fprintf(stdout, "</ows:Title>\n");
+    } else {
+	G_warning("Title not defined!");
+        fprintf(stdout,"\t\t\t\t<ows:Title>");
+        print_escaped_for_xml(stdout, "No title available");
         fprintf(stdout, "</ows:Title>\n");
     }
 
