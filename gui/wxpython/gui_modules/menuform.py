@@ -2119,10 +2119,13 @@ def getInterfaceDescription(cmd):
 
     @param cmd command (name of GRASS module)
     """
+    nuldev = file(os.devnull, 'w+')
     try:
-        cmdout = grass.Popen([cmd, '--interface-description'], stdout = grass.PIPE).communicate()[0]
+        cmdout = grass.Popen([cmd, '--interface-description'], stdout = grass.PIPE,
+                             stderr = nuldev).communicate()[0]
     except OSError:
         raise gcmd.GException, _("Unable to fetch interface description for command '%s'.") % cmd
+    nuldev.close()
     
     return cmdout.replace('grass-interface.dtd', os.path.join(globalvar.ETCDIR, 'grass-interface.dtd'))
     
