@@ -387,11 +387,19 @@ class grassTask:
         self.label = ''
         self.flags = list()
         self.keywords = list()
-        
+        self.errorMsg = ''
+
         if grassModule is not None:
-            processTask(tree = etree.fromstring(getInterfaceDescription(grassModule)),
-                        task = self)
+            try:
+                processTask(tree = etree.fromstring(getInterfaceDescription(grassModule)),
+                            task = self)
+            except gcmd.GException, e:
+                self.errorMsg = str(e)
         
+    def get_error_msg(self):
+        """!Get error message ('' for no error)"""
+        return self.errorMsg
+    
     def get_name(self):
         """!Get task name"""
         return self.name
@@ -2120,6 +2128,11 @@ class GrassGUIApp(wx.App):
         wx.App.__init__(self, False)
         
     def OnInit(self):
+        msg = self.grass_task.get_error_msg()
+        if msg:
+            gcmd.GError(msg + '\n\nTry to set up GRASS_ADDON_PATH variable.')
+            return True
+        
         self.mf = mainFrame(parent = None, ID = wx.ID_ANY, task_description = self.grass_task)
         self.mf.CentreOnScreen()
         self.mf.Show(True)
