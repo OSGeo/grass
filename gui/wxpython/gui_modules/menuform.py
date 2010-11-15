@@ -1676,7 +1676,7 @@ class cmdPanel(wx.Panel):
                                                              label = _('or enter values interactively')),
                                         proportion=0,
                                         flag=wx.EXPAND | wx.RIGHT | wx.LEFT | wx.BOTTOM, border=5)
-                        which_sizer.Add(item=ifbb, proportion=0,
+                        which_sizer.Add(item=ifbb, proportion=1,
                                         flag=wx.EXPAND | wx.RIGHT | wx.LEFT, border=5)
                         p['wxId'].append(ifbb.GetId())
             
