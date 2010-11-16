@@ -821,7 +821,7 @@ class MapsetSelect(wx.ComboBox):
             self.location = location
         
         if setItems:
-            self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = True)) # selectable
+            self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = False)) # selectable
 
     def UpdateItems(self, location, dbase = None):
         """!Update list of mapsets for given location
@@ -833,7 +833,7 @@ class MapsetSelect(wx.ComboBox):
             self.gisdbase = dbase
         self.location = location
         if location:
-            self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = True))
+            self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = False))
         else:
             self.SetItems([])
         

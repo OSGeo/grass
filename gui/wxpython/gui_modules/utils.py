@@ -627,11 +627,9 @@ def GetListOfMapsets(dbase, location, selectable = False):
     else:
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
             if os.path.isdir(mapset) and \
-                    os.path.isfile(os.path.join(dbase, location, mapset, "WIND")) and \
-                    os.path.basename(mapset) != 'PERMANENT':
+                    os.path.isfile(os.path.join(dbase, location, mapset, "WIND")):
                 listOfMapsets.append(EncodeString(os.path.basename(mapset)))
-        listOfMapsets.insert(0, 'PERMANENT')
-
+    
     ListSortLower(listOfMapsets)    
     return listOfMapsets
 
