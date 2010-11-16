@@ -17,7 +17,7 @@ int rectify(char *name, char *mapset, char *result, int order, char *interp_meth
 {
     struct Cell_head cellhd;
     int ncols, nrows;
-    int row;
+    int row, col;
     double row_idx, col_idx;
     int infd, cell_size, outfd;
     void *trast, *tptr;
@@ -62,16 +62,15 @@ int rectify(char *name, char *mapset, char *result, int order, char *interp_meth
     outfd = Rast_open_new(result, map_type);
     trast = Rast_allocate_output_buf(map_type);
 
-    row = 0;
-    for (n1 = target_window.north - target_window.ns_res / 2.;
-         n1 > target_window.south; n1 -= target_window.ns_res) {
+    for (row = 0; row < nrows; row++) {
+	n1 = target_window.north - (row + 0.5) * target_window.ns_res;
 
-	G_percent(row++, nrows, 2);
+	G_percent(row, nrows, 2);
 
 	Rast_set_null_value(trast, ncols, map_type);
 	tptr = trast;
-	for (e1 = target_window.west + target_window.ew_res / 2.;
-	     e1 < target_window.east; e1 += target_window.ew_res) {
+	for (col = 0; col < ncols; col++) {
+	    e1 = target_window.west + (col + 0.5) * target_window.ew_res;
 
 	    /* backwards transformation of target cell center */
 	    CRS_georef(e1, n1, &ex, &nx, E21, N21, order);
