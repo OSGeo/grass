@@ -971,11 +971,16 @@ class ImportDialog(wx.Dialog):
         self.btn_cancel.SetToolTipString(_("Close dialog"))
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # run
-        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK)
+        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label = _("&Import"))
+        self.btn_run.SetToolTipString(_("Import selected layers"))
         self.btn_run.SetDefault()
         self.btn_run.Enable(False)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-
+        # run command dialog
+        self.btn_cmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                 label = _("Command dialog"))
+        self.btn_cmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
+        
     def doLayout(self):
         """!Do layout"""
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1010,11 +1015,15 @@ class ImportDialog(wx.Dialog):
         #
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         
-        btnsizer.Add(item=self.btn_cancel, proportion=0,
+        btnsizer.Add(item=self.btn_cmd, proportion=0,
                      flag=wx.ALL | wx.ALIGN_CENTER,
                      border=10)
         
         btnsizer.Add(item=self.btn_run, proportion=0,
+                     flag=wx.ALL | wx.ALIGN_CENTER,
+                     border=10)
+        
+        btnsizer.Add(item=self.btn_cancel, proportion=0,
                      flag=wx.ALL | wx.ALIGN_CENTER,
                      border=10)
         
@@ -1040,6 +1049,10 @@ class ImportDialog(wx.Dialog):
 
     def OnRun(self, event):
         """!Import/Link data (each layes as separate vector map)"""
+        pass
+
+    def OnCmdDialog(self, event):
+        """!Show command dialog"""
         pass
     
     def AddLayers(self, returncode, cmd = None):
@@ -1085,6 +1098,8 @@ class GdalImportDialog(ImportDialog):
     """!Dialog for bulk import of various raster/vector data"""
     def __init__(self, parent, ogr = False, link = False):
         self.link = link
+        self.ogr  = ogr
+        
         if ogr:
             ImportDialog.__init__(self, parent, type = 'ogr')
             if link:
@@ -1114,9 +1129,17 @@ class GdalImportDialog(ImportDialog):
         if link:
             self.btn_run.SetLabel(_("&Link"))
             self.btn_run.SetToolTipString(_("Link selected layers"))
+            if ogr:
+                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'v.external')
+            else:
+                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'r.external')
         else:
             self.btn_run.SetLabel(_("&Import"))
             self.btn_run.SetToolTipString(_("Import selected layers"))
+            if ogr:
+                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'v.in.ogr')
+            else:
+                self.btn_cmd.SetToolTipString(_('Open %s dialog') % 'r.in.gdal')
         
         self.doLayout()
 
@@ -1171,6 +1194,22 @@ class GdalImportDialog(ImportDialog):
                                        onDone = self.AddLayers)
         
         self.OnCancel()
+
+    def OnCmdDialog(self, event):
+        """!Show command dialog"""
+        if self.link:
+            if self.ogr:
+                name = 'v.external'
+            else:
+                name = 'r.external'
+        else:
+            if self.ogr:
+                name = 'v.in.ogr'
+            else:
+                name = 'r.in.gdal'
+        
+        menuform.GUI().ParseCommand(cmd = [name],
+                                    parentframe = self, modal = True)
         
 class DxfImportDialog(ImportDialog):
     """!Dialog for bulk import of DXF layers""" 
@@ -1246,6 +1285,11 @@ class DxfImportDialog(ImportDialog):
             self.btn_run.Enable(True)
         else:
             self.btn_run.Enable(False)
+
+    def OnCmdDialog(self, event):
+        """!Show command dialog"""
+        menuform.GUI().ParseCommand(cmd = ['v.in.dxf'],
+                                    parentframe = self, modal = True)
         
 class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
                  listmix.CheckListCtrlMixin, listmix.TextEditMixin):

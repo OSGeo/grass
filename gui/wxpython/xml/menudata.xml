@@ -57,26 +57,15 @@
 	      <label>Import raster data</label>
 	      <help>Import raster data into a GRASS map layer using GDAL.</help>
 	      <keywords>raster,import</keywords>
-	      <handler>OnMenuCmd</handler>
+	      <handler>OnImportGdalLayers</handler>
 	      <command>r.in.gdal</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Bulk import of raster data</label>
-	      <help>Converts multiple GDAL supported layers to GRASS raster maps.</help>
-	      <handler>OnImportGdalLayers</handler>
-	    </menuitem>
-	    <separator />
 	    <menuitem>
 	      <label>Link raster data</label>
 	      <help>Link GDAL supported raster data as a pseudo GRASS raster map layer.</help>
 	      <keywords>raster,import</keywords>
-              <handler>OnMenuCmd</handler>
-	      <command>r.external</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Bulk link of raster data</label>
-	      <help>Link multiple GDAL supported raster maps as pseudo GRASS raster map layers.</help>
               <handler>OnLinkGdalLayers</handler>
+	      <command>r.external</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -165,26 +154,15 @@
 	      <label>Import vector data</label>
 	      <help>Converts vector layers into a GRASS vector map using OGR.</help>
 	      <keywords>vector,import</keywords>
-	      <handler>OnMenuCmd</handler>
+	      <handler>OnImportOgrLayers</handler>
 	      <command>v.in.ogr</command>
 	    </menuitem>
-	    <menuitem>
-	      <label>Bulk import of vector data</label>
-	      <help>Converts multiple OGR supported layers into GRASS vector maps.</help>
-	      <handler>OnImportOgrLayers</handler>
-	    </menuitem>
-	    <separator />
 	    <menuitem>
 	      <label>Link vector data</label>
 	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
 	      <keywords>vector,external,ogr</keywords>
-              <handler>OnMenuCmd</handler>
-	      <command>v.external</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Bulk link of vector data</label>
-	      <help>Creates multiple new pseduo-vector maps as a read-only links using OGR.</help>
               <handler>OnLinkOgrLayers</handler>
+	      <command>v.external</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -220,13 +198,8 @@
 	      <label>DXF import</label>
 	      <help>Converts files in DXF format to GRASS vector map format.</help>
 	      <keywords>vector,import,dxf</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>v.in.dxf</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Bulk import of DXF</label>
-	      <help>Converts multiple DXF layers to GRASS vector maps.</help>
 	      <handler>OnImportDxfFile</handler>
+	      <command>v.in.dxf</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
