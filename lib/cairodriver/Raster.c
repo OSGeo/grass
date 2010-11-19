@@ -12,9 +12,9 @@
   \author Glynn Clements  
 */
 
-#include <grass/glocale.h>
 
 #include "cairodriver.h"
+#include <grass/glocale.h>
 
 static int src_t, src_b, src_l, src_r, src_w, src_h;
 static double dst_t, dst_b, dst_l, dst_r, dst_w, dst_h;
@@ -117,6 +117,7 @@ void Cairo_end_raster(void)
     cairo_save(cairo);
     cairo_translate(cairo, dst_l, dst_t);
     cairo_scale(cairo, dst_w / src_w, dst_h / src_h);
+    cairo_surface_mark_dirty(src_surf);
     cairo_set_source_surface(cairo, src_surf, 0, 0);
     cairo_pattern_set_filter(cairo_get_source(cairo), CAIRO_FILTER_NEAREST);
     cairo_paint(cairo);
