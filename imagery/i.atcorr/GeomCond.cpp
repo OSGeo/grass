@@ -366,6 +366,7 @@ void GeomCond::parse()
     case 10: /* aster            * enter month,day,hh.ddd,long.,lat. */
     case 11: /* avnir            * enter month,day,hh.ddd,long.,lat. */
     case 12: /* ikonos           * enter month,day,hh.ddd,long.,lat. */
+    case 13: /* rapideye         * enter month,day,hh.ddd,long.,lat. */
     {
 	cin >> month;
 	cin >> jday;
@@ -424,7 +425,8 @@ void GeomCond::print()
 	string(" liss     observation        "),
 	string(" aster    observation        "),
 	string(" avnir    observation        "),
-	string(" ikonos   observation        ")
+	string(" ikonos   observation        "),
+	string(" rapideye observation        ")
     };
 
     static const string head(" geometrical conditions identity  ");

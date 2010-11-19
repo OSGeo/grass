@@ -109,6 +109,11 @@ c        84  4th      "               ( 0.700-0.925 )                  c
 c        85  Green band of IKONOS     ( 0.350-1.035 )                  c
 c        86  Red      "               ( 0.350-1.035 )                  c
 c        87  NIR      "               ( 0.350-1.035 )                  c
+c        88  Blue band of RapidEye  ( 0.438-0.513 )                  c
+c        89  Green      "               ( 0.463-0.594 )                  c
+c        90  Red      "               ( 0.624-0.690 )                  c
+c        91  RedEdge      "               ( 0.500-0.737 )                  c
+c        92  NIR      "               ( 0.520-0.862 )                  c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
 
@@ -147,6 +152,7 @@ private:
 	void aster(int iwa);
 	void avnir(int iwa);
 	void ikonos(int iwa);
+	void rapideye(int iwa);
 
 
 public:
