@@ -41,6 +41,10 @@ from grass.script import core as grass
 
 print >> sys.stderr, "TODO: implement r.li.setup wizard..."
 
+#@NOTE: r.li.setup writes in the settings file with 
+## r.li.windows.tcl:
+#exec echo "SAMPLINGFRAME $per_x|$per_y|$per_rl|$per_cl" >> $env(TMP).set
+
 class BaseClass(wx.Object):
     """!Base class providing basic methods"""
     def __init__(self):

@@ -2182,6 +2182,100 @@ void IWave::ikonos(int iwa)
     }
 }
 
+/* Following filter function created using create_iwave.py */
+
+void IWave::rapideye(int iwa)
+{
+
+    /* "Blue" of rapideye */
+    static const float sr1[30] = {
+		.0200, .5050, .7300, .7450, .7600, .7750, .7800,
+		.8000, .8000, .8000, .8100, .8000, .8100, .8200,
+		.8300, .8400, .8500, .8650, .8800, .8900, .9200,
+		.9500, .9700, .9700, 1.0000, 1.0000
+    };
+
+    /* "Green" of rapideye */
+    static const float sr2[53] = {
+		.0100, .0183, .0267, .0105, .0132, .0158, .0184,
+		.0237, .0263, .0289, .0288, .0268, .0248, .0228,
+		.0188, .0168, .0148, .0128, .0108, .0200, .1200,
+		.8700, .8700, .8800, .8700, .8800, .8800, .8800,
+		.8900, .9000, .9000, .9050, .9200, .9250, .9300,
+		.9500, .9550, .9700, .9750, .9800, .9800, .9900,
+		.9900, .9850, 1.0000, .2750
+    };
+
+    /* "Red" of rapideye */
+    static const float sr3[27] = {
+		.0100, .0300, .2000, .7900, .8500, .8750, .8800,
+		.9000, .9100, .9100, .9200, .9300, .9450, .9500,
+		.9700, .9750, .9900, .9900, .9900, .9900, 1.0000,
+		.8600, .1150
+    };
+
+    /* "RedEdge " of rapideye */
+    static const float sr4[95] = {
+		.0300, .0285, .0271, .0256, .0241, .0226, .0212,
+		.0182, .0168, .0153, .0138, .0124, .0109, .0101,
+		.0108, .0111, .0114, .0118, .0121, .0124, .0128,
+		.0134, .0138, .0141, .0144, .0147, .0151, .0154,
+		.0161, .0164, .0167, .0170, .0174, .0177, .0180,
+		.0187, .0190, .0193, .0197, .0200, .0200, .0200,
+		.0200, .0200, .0200, .0200, .0200, .0200, .0200,
+		.0200, .0200, .0197, .0191, .0185, .0178, .0172,
+		.0159, .0153, .0146, .0140, .0133, .0127, .0121,
+		.0108, .0101, .0200, .1050, .4900, .9450, 1.0000,
+		1.0000, .9900, .9900, .9900, .9800, .9750, .9700,
+		.9600, .9450, .9400, .9000, .4300, .0950
+    };
+
+    /* "NIR " of rapideye */
+    static const float sr5[137] = {
+		.0100, .0102, .0103, .0105, .0106, .0108, .0110,
+		.0113, .0115, .0116, .0118, .0119, .0121, .0123,
+		.0126, .0128, .0129, .0131, .0132, .0134, .0136,
+		.0139, .0141, .0142, .0144, .0145, .0147, .0149,
+		.0152, .0154, .0155, .0157, .0158, .0160, .0162,
+		.0165, .0167, .0168, .0170, .0171, .0173, .0175,
+		.0178, .0180, .0181, .0183, .0184, .0186, .0188,
+		.0191, .0193, .0194, .0196, .0197, .0199, .0199,
+		.0192, .0188, .0185, .0182, .0178, .0175, .0171,
+		.0164, .0161, .0158, .0154, .0151, .0147, .0144,
+		.0137, .0134, .0130, .0127, .0123, .0120, .0116,
+		.0110, .0106, .0103, .0100, .0100, .0250, .0700,
+		.5000, .8850, 1.0000, .9750, .9700, .9750, .9800,
+		.9700, .9600, .9600, .9600, .9600, .9600, .9600,
+		.9500, .9400, .9400, .9300, .9300, .9300, .9300,
+		.9200, .9200, .9100, .9000, .8900, .8850, .8800,
+		.8600, .8400, .8400, .8150, .5800, .2450, .0800,
+
+    };
+
+    static const float wli[5] = {0.438, 0.463, 0.624, 0.500, 0.520};
+    static const float wls[5] = {0.513, 0.594, 0.690, 0.737, 0.862};
+
+    ffu.wlinf = (float)wli[iwa-1];
+    ffu.wlsup = (float)wls[iwa-1];
+
+    int i;
+    for(i = 0; i < 1501; i++) ffu.s[i] = 0;
+
+    switch(iwa)
+    {
+    case 1: for(i = 0; i < 30; i++)  ffu.s[75+i] = sr1[i];
+        break;
+    case 2: for(i = 0; i < 53; i++)  ffu.s[85+i] = sr2[i];
+        break;
+    case 3: for(i = 0; i < 27; i++)  ffu.s[149+i] = sr3[i];
+        break;
+    case 4: for(i = 0; i < 95; i++)  ffu.s[100+i] = sr4[i];
+        break;
+    case 5: for(i = 0; i < 137; i++)  ffu.s[108+i] = sr5[i];
+        break;
+    }
+}
+
 float IWave::equivwl() const
 {
     float seb = 0;
@@ -2251,6 +2345,7 @@ void IWave::parse()
 	else if(iwave <= 80)	aster(iwave - 71);
 	else if(iwave <= 84)    avnir(iwave - 80);
 	else if(iwave <= 87)    ikonos(iwave - 84);
+	else if(iwave <= 92)    rapideye(iwave - 87);
 	else G_warning(_("Unsupported iwave value: %d"), iwave);
     }
 
@@ -2267,7 +2362,7 @@ void IWave::parse()
 /* --- spectral condition ---- */
 void IWave::print()
 {
-    static const string nsat[89] = {
+    static const string nsat[94] = {
 	string(" constant        "), string(" user s          "),
 	string(" meteosat        "), string(" goes east       "), string(" goes west       "),
 	string(" avhrr 1 (noaa6) "), string(" avhrr 2 (noaa6) "),
@@ -2303,8 +2398,10 @@ void IWave::print()
 	string(" aster 4         "), string(" aster 5         "), string(" aster 6         "),
 	string(" aster 7         "), string(" aster 8         "), string(" aster 9         "),
 	string(" avnir 1         "), string(" avnir 2         "), string(" avnir 3         "),
-	string(" avnir 4         "), string(" ikonos green    "), string(" ikonos red      "),
-	string(" ikonos NIR      ")
+	string(" avnir 4         "),
+	string(" ikonos green    "), string(" ikonos red      "),	string(" ikonos NIR      "),
+	string(" rapideye blue   "), string(" rapideye green  "),	string(" rapideye red    "),
+	string(" rapideye rededge"), string(" rapideye NIR    "),
     };
 
 
