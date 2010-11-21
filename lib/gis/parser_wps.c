@@ -477,7 +477,6 @@ static void wps_print_process_description_begin(int store, int status, const cha
     if(abstract)
     {
         fprintf(stdout,"\t\t<ows:Abstract>");
-        fprintf(stdout, "The manual page of this module is available here: ");
         fprintf(stdout, "http://grass.osgeo.org/grass70/manuals/html70_user/%s.html", identifier);
         fprintf(stdout, "</ows:Abstract>\n");
     }
@@ -707,7 +706,7 @@ static void wps_print_literal_input_output(int inout_type, int min, int max, con
         fprintf(stdout,"\t\t\t\t\t<ows:AllowedValues>\n");
         if(type == TYPE_RANGE)
         {
-            fprintf(stdout,"\t\t\t\t\t\t<ows:Range ows:rangeClosure=\"%s\">\n", "0");
+            fprintf(stdout,"\t\t\t\t\t\t<ows:Range ows:rangeClosure=\"closed\">\n");
             fprintf(stdout,"\t\t\t\t\t\t\t<ows:MinimumValue>%s</ows:MinimumValue>\n", range[0]);
             fprintf(stdout,"\t\t\t\t\t\t\t<ows:MaximumValue>%s</ows:MaximumValue>\n", range[1]);
             fprintf(stdout,"\t\t\t\t\t\t</ows:Range>\n");
