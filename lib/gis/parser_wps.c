@@ -660,6 +660,8 @@ static void wps_print_literal_input_output(int inout_type, int min, int max, con
                                 const char **choices, int num_choices, const char *default_value, int type)
 {
     int i;
+    char range[2][24];
+    char *str;
 
     if(inout_type == WPS_INPUT)
         fprintf(stdout,"\t\t\t<Input minOccurs=\"%i\" maxOccurs=\"%i\">\n", min, max);
@@ -689,13 +691,26 @@ static void wps_print_literal_input_output(int inout_type, int min, int max, con
         fprintf(stdout,"\t\t\t\t\t<ows:AnyValue/>\n");
     else
     {
+        /* Check for range values */
+        if(strcmp(datatype, "integer") == 0 || strcmp(datatype, "float") == 0) {
+            str = strtok((char*)choices[0], "-");
+            if(str != NULL) {
+                G_snprintf(range[0], 24, "%s", str);
+                str = strtok(NULL, "-");
+                if(str != NULL) {
+                    G_snprintf(range[1], 24, "%s", str);
+                    type = TYPE_RANGE;
+                }
+            }
+        }
+
         fprintf(stdout,"\t\t\t\t\t<ows:AllowedValues>\n");
-        if(type == TYPE_RANGE && num_choices > 1)
+        if(type == TYPE_RANGE)
         {
-        fprintf(stdout,"\t\t\t\t\t\t<ows:Range ows:rangeClosure=\"%s\">\n", "0");
-        fprintf(stdout,"\t\t\t\t\t\t\t<ows:MinimumValue>%s</ows:MinimumValue>\n", choices[0]);
-        fprintf(stdout,"\t\t\t\t\t\t\t<ows:MaximumValue>%s</ows:MaximumValue>\n", choices[1]);
-        fprintf(stdout,"\t\t\t\t\t\t</ows:Range>\n");
+            fprintf(stdout,"\t\t\t\t\t\t<ows:Range ows:rangeClosure=\"%s\">\n", "0");
+            fprintf(stdout,"\t\t\t\t\t\t\t<ows:MinimumValue>%s</ows:MinimumValue>\n", range[0]);
+            fprintf(stdout,"\t\t\t\t\t\t\t<ows:MaximumValue>%s</ows:MaximumValue>\n", range[1]);
+            fprintf(stdout,"\t\t\t\t\t\t</ows:Range>\n");
         }
         else
         {
