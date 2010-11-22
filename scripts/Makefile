@@ -32,10 +32,12 @@ SUBDIRS = \
 	r.in.wms \
 	r.mask \
 	r.out.xyz \
+	r.pack \
 	r.plane \
 	r.reclass.area \
 	r.shaded.relief \
 	r.tileset \
+	r.unpack \
 	v.build.all \
 	v.centroids \
 	v.colors \
