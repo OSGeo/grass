@@ -412,7 +412,7 @@ void GeomCond::parse()
 /* ---- print geometrical conditions ---- */
 void GeomCond::print()
 {
-    static const string etiq1[13] = {
+    static const string etiq1[14] = {
 	string(" user defined conditions     "),
 	string(" meteosat observation        "),
 	string(" goes east observation       "),
