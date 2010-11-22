@@ -923,7 +923,7 @@ def create_location(location, epsg = None, proj4 = None, filename = None, wkt = 
     @return True on success
     @return False on failure
     """
-    if epgs:
+    if epsg:
         ret = run_command('g.proj',
                           flags = 'c',
                           epsg = epsg,
