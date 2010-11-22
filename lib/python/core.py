@@ -908,6 +908,90 @@ def mapsets(accessible = True):
         
     return mapsets.splitlines()
 
+# interface to `g.proj -c`
+
+def create_location(location, epsg = None, proj4 = None, filename = None, wkt = None, datum = None):
+    """!Create new location
+
+    @param location location name to create
+    @param epgs if given create new location based on EPSG code
+    @param proj4 if given create new location based on Proj4 definition
+    @param filename if given create new location based on georeferenced file
+    @param wkt if given create new location based on WKT definition (path to PRJ file)
+    @param datum datum transformation parameters (used for epsg and proj4)
+
+    @return True on success
+    @return False on failure
+    """
+    if epgs:
+        ret = run_command('g.proj',
+                          flags = 'c',
+                          epsg = epsg,
+                          location = location,
+                          datumtrans = datum)
+    elif proj4:
+        ret = run_command('g.proj',
+                          flags = 'c',
+                          proj4 = proj4,
+                          location = location,
+                          datumtrans = datum)
+    elif filename:
+        ret = run_command('g.proj',
+                          flags = 'c',
+                          georef = filename,
+                          location = location)
+    elif wkt:
+        ret = run_command('g.proj',
+                          flags = 'c',
+                          wkt = wktfile,
+                          location = location)
+    else:
+        ret = _create_location_xy(location)
+        
+def _create_location_xy(location):
+    """!Create unprojected location"""
+    try:
+        os.mkdir(location)
+        os.mkdir(os.path.join(location, 'PERMANENT'))
+        # create DEFAULT_WIND and WIND files
+        regioninfo = ['proj:       0',
+                      'zone:       0',
+                      'north:      1',
+                      'south:      0',
+                      'east:       1',
+                      'west:       0',
+                      'cols:       1',
+                      'rows:       1',
+                      'e-w resol:  1',
+                      'n-s resol:  1',
+                      'top:        1',
+                      'bottom:     0',
+                      'cols3:      1',
+                      'rows3:      1',
+                      'depths:     1',
+                      'e-w resol3: 1',
+                      'n-s resol3: 1',
+                      't-b resol:  1']
+        
+        defwind = open(os.path.join(location,
+                                    "PERMANENT", "DEFAULT_WIND"), 'w')
+        for param in regioninfo:
+            defwind.write(param + '%s' % os.linesep)
+        defwind.close()
+            
+        shutil.copy(os.path.join(location, "PERMANENT", "DEFAULT_WIND"),
+                    os.path.join(location, "PERMANENT", "WIND"))
+        
+        # create MYNAME file
+        myname = open(os.path.join(location, "PERMANENT",
+                                   "MYNAME"), 'w')
+        myname.write('%s' % os.linesep)
+        myname.close()
+    except OSError:
+        return 1
+    
+    return 0
+
 # get debug_level
 if find_program('g.gisenv', ['--help']):
     debug_level = int(gisenv().get('DEBUG', 0))
