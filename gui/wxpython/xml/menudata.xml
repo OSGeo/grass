@@ -145,6 +145,13 @@
 	      <help>Download and import data from WMS servers.</help>
 	      <handler>OnImportWMS</handler>
 	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Unpack raster map</label>
+	      <help>Unpacks a raster map packed with r.pack.</help>
+	      <keywords>raster,import,copying</keywords><handler>OnMenuCmd</handler>
+	      <command>r.unpack</command>
+	    </menuitem>
 	  </items>
 	</menu>
 	<menu>
@@ -390,6 +397,13 @@
 	      <keywords>raster,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.vtk</command>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Pack raster map</label>
+	      <help>Packs up a raster map and support files for copying.</help>
+	      <keywords>raster,export,copying</keywords><handler>OnMenuCmd</handler>
+	      <command>r.pack</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -1086,7 +1100,7 @@
 	    <menuitem>
 	      <label>Shadows map</label>
 	      <help>Calculates cast shadow areas from sun position and elevation raster map.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,sun position</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sunmask</command>
 	    </menuitem>
@@ -2543,7 +2557,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Matrix/convolving filter</label>
-	      <help>Raster map matrix filter.</help>
+	      <help>Performs raster map matrix filter.</help>
 	      <keywords>raster,map algebra</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.mfilter</command>
