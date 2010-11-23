@@ -486,7 +486,7 @@ int main(int argc, char *argv[])
 	expected += 892;
 
     if (file_size != expected) {
-	G_warning(_("File Size "PRI_OFF_T" ... Total Bytes "PRI_OFF_T),
+	G_warning(_("File Size %"PRI_OFF_T" ... Total Bytes %"PRI_OFF_T),
 		  file_size, expected);
 	G_fatal_error(_("Bytes do not match file size"));
     }
