@@ -117,13 +117,23 @@ class CmdThread(threading.Thread):
             # set default color table for raster data
             if UserSettings.Get(group='cmd', key='rasterColorTable', subkey='enabled') and \
                     args[0][0][:2] == 'r.':
-                moduleInterface = menuform.GUI().ParseCommand(args[0], show = None)
-                outputParam = moduleInterface.get_param(value = 'output', raiseError = False)
                 colorTable = UserSettings.Get(group='cmd', key='rasterColorTable', subkey='selection')
-                if outputParam and outputParam['prompt'] == 'raster':
+                mapName = None
+                if args[0][0] == 'r.mapcalc':
+                    try:
+                        mapName = args[0][1].split('=', 1)[0].strip()
+                    except KeyError:
+                        pass
+                else:
+                    moduleInterface = menuform.GUI().ParseCommand(args[0], show = None)
+                    outputParam = moduleInterface.get_param(value = 'output', raiseError = False)
+                    if outputParam and outputParam['prompt'] == 'raster':
+                        mapName = outputParam['value']
+                
+                if mapName:
                     argsColor = list(args)
                     argsColor[0] = [ 'r.colors',
-                                     'map=%s' % outputParam['value'],
+                                     'map=%s' % mapName,
                                      'color=%s' % colorTable ]
                     self.requestCmdColor = callable(*argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
@@ -481,7 +491,7 @@ class GMConsole(wx.SplitterWindow):
                 else:
                     lname = None
                 
-                if self.parent.GetName() == "LayerManager":                
+                if self.parent.GetName() == "LayerManager":
                     self.parent.curr_page.maptree.AddLayer(ltype=layertype,
                                                            lname=lname,
                                                            lcmd=command)

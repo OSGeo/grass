@@ -132,7 +132,7 @@ class MapCalcFrame(wx.Frame):
         #
         # Buttons
         #
-        self.btn_clear = wx.Button(parent = self.panel, id = wx.ID_CLEAR)
+        self.btn_clear = wx.Button(parent = self.panel, id = wx.ID_CLEAR, label = _("Cl&ear"))
         self.btn_help = wx.Button(parent = self.panel, id = wx.ID_HELP)
         self.btn_run = wx.Button(parent = self.panel, id = wx.ID_ANY, label = _("&Run"))
         self.btn_run.SetDefault()
@@ -320,7 +320,7 @@ class MapCalcFrame(wx.Frame):
                          flag = wx.ALL, border = 5)
         buttonSizer4.Add(item = self.btn_save,
                          flag = wx.ALL, border = 5)                         
-        buttonSizer4.AddSpacer(10)
+        buttonSizer4.AddSpacer(30)
         buttonSizer4.Add(item = self.btn_help,
                          flag = wx.ALL, border = 5)
         buttonSizer4.Add(item = self.btn_run,
@@ -351,15 +351,16 @@ class MapCalcFrame(wx.Frame):
         sizer.Add(item = expressSizer, proportion = 1,
                   flag = wx.EXPAND | wx.LEFT | wx.RIGHT,
                   border = 5)
+        sizer.Add(item = buttonSizer4, proportion = 0,
+                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 3)
+        
         sizer.Add(item = self.overwrite, proportion = 0,
-                  flag = wx.EXPAND | wx.LEFT | wx.RIGHT,
+                  flag = wx.LEFT | wx.RIGHT,
                   border = 5)
         if self.addbox.IsShown():
             sizer.Add(item = self.addbox, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.TOP | wx.RIGHT,
+                      flag = wx.LEFT | wx.RIGHT,
                       border = 5)
-        sizer.Add(item = buttonSizer4, proportion = 0,
-                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 1)
         
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(sizer)
@@ -406,8 +407,8 @@ class MapCalcFrame(wx.Frame):
 
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
-        self.SetStatusText("r.mapcalc ' %s = %s'" % (self.newmaptxt.GetValue(),
-                                                     self.text_mcalc.GetValue()))
+        self.SetStatusText("r.mapcalc '%s = %s'" % (self.newmaptxt.GetValue(),
+                                                    self.text_mcalc.GetValue()))
         event.Skip()
         
     def _addSomething(self, what):
@@ -474,10 +475,13 @@ class MapCalcFrame(wx.Frame):
         if not self.addbox.IsChecked():
             return
         name = self.newmaptxt.GetValue().strip() + '@' + grass.gisenv()['MAPSET']
-        self.parent.GetLayerTree().AddLayer(ltype = 'raster',
-                                            lname = name,
-                                            lcmd = ['d.rast', 'map=%s' % name],
-                                            multiple = False)
+        mapTree = self.parent.GetLayerTree()
+        if not mapTree.GetMap().GetListOfLayers(l_name = name):
+            mapTree.AddLayer(ltype = 'raster',
+                             lname = name,
+                             lcmd = ['d.rast', 'map=%s' % name],
+                             multiple = False)
+        
         display = self.parent.GetLayerTree().GetMapDisplay()
         if display and display.IsAutoRendered():
             display.GetWindow().UpdateMap(render = True)

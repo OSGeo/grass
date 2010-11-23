@@ -737,10 +737,29 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         
         cmd = text.split()[0]
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
-            try:
-                self.cmdDesc = menuform.GUI().ParseInterface(cmd = [cmd])
-            except IOError:
-                self.cmdDesc = None
+            if cmd in ('r.mapcalc', 'r3.mapcalc'):
+                self.parent.parent.OnMapCalculator(event = None, cmd = [cmd])
+                # add command to history & clean prompt
+                self.UpdateCmdHistory([cmd])
+                self.OnCmdErase(None)
+            else:
+                try:
+                    self.cmdDesc = menuform.GUI().ParseInterface(cmd = [cmd])
+                except IOError:
+                    self.cmdDesc = None
+        
+    def UpdateCmdHistory(self, cmd):
+        """!Update command history
+        
+        @param cmd command given as a list
+        """
+        # add command to history    
+        self.cmdbuffer.append(' '.join(cmd))
+        
+        # keep command history to a managable size
+        if len(self.cmdbuffer) > 200:
+            del self.cmdbuffer[0]
+        self.cmdindex = len(self.cmdbuffer)
         
     def OnKeyPressed(self, event):
         """!Key press capture for autocompletion, calltips, and command history
@@ -898,20 +917,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 cmd = utils.split(utils.EncodeString((line)))
             
             #  send the command list to the processor 
-            if cmd[0] in ('r.mapcalc', 'r3.mapcalc'):
+            if cmd[0] in ('r.mapcalc', 'r3.mapcalc') and len(cmd) == 1:
                 self.parent.parent.OnMapCalculator(event = None, cmd = cmd)
             else:
                 self.parent.RunCmd(cmd)
             
-            # add command to history    
-            self.cmdbuffer.append(' '.join(cmd))
-            
-            # keep command history to a managable size
-            if len(self.cmdbuffer) > 200:
-                del self.cmdbuffer[0]
-            self.cmdindex = len(self.cmdbuffer)
-            
-            # reset command-line
+            # add command to history & clean prompt
+            self.UpdateCmdHistory(cmd)
             self.OnCmdErase(None)
             
         elif event.GetKeyCode() == wx.WXK_SPACE:
