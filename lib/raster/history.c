@@ -310,6 +310,7 @@ void Rast_clear_history(struct History *hist)
     if (hist->lines)
 	G_free(hist->lines);
 
+    hist->lines = NULL;
     hist->nlines = 0;
 }
 
