@@ -2,13 +2,14 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2010, GRASS Development Team
 #
+# Shulin Yang <shulin.yang.9 gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_zh\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2007-11-29 12:13+0800\n"
-"Last-Translator: Su Yongheng <night2008@gmail.com>\n"
+"PO-Revision-Date: 2010-11-23 06:57+0700\n"
+"Last-Translator: Shulin Yang <shulin.yang.9@gmail.com>\n"
 "Language-Team: Simplified Chinese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,36 +20,37 @@ msgstr ""
 
 #: ../gui/wxpython/wxgui.py:101
 msgid "GRASS GIS Layer Manager"
-msgstr ""
+msgstr "GRASS GIS层管理器"
 
 #: ../gui/wxpython/wxgui.py:214
 msgid "Map layers"
-msgstr ""
+msgstr "地图层"
 
 #: ../gui/wxpython/wxgui.py:218 ../gui/wxpython/wxgui.py:340
 msgid "Command console"
-msgstr ""
+msgstr "命令控制台"
 
 #: ../gui/wxpython/wxgui.py:222
+#, fuzzy
 msgid "Search module"
-msgstr ""
+msgstr "搜索"
 
 #: ../gui/wxpython/wxgui.py:235 ../gui/wxpython/gui_modules/toolbars.py:184
 msgid "3D view"
-msgstr ""
+msgstr "3D视图"
 
 #: ../gui/wxpython/wxgui.py:280
 msgid "Choose model to run"
-msgstr ""
+msgstr "选择要运行的模型"
 
 #: ../gui/wxpython/wxgui.py:282 ../gui/wxpython/gui_modules/gmodeler.py:791
 #: ../gui/wxpython/gui_modules/gmodeler.py:834
 msgid "GRASS Model File (*.gxm)|*.gxm"
-msgstr ""
+msgstr "GRASS模型文件(*.gxm)|*.gxm"
 
 #: ../gui/wxpython/wxgui.py:291 ../gui/wxpython/gui_modules/gmodeler.py:1233
 msgid "Validating model..."
-msgstr ""
+msgstr "验证模型..."
 
 #: ../gui/wxpython/wxgui.py:295 ../gui/wxpython/gui_modules/gmodeler.py:907
 #, python-format
@@ -57,40 +59,44 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"无效模型。仍然运行该模型？\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/wxgui.py:297 ../gui/wxpython/gui_modules/gmodeler.py:909
 msgid "Run model?"
-msgstr ""
+msgstr "是否运行模型？"
 
 #: ../gui/wxpython/wxgui.py:304 ../gui/wxpython/gui_modules/gmodeler.py:972
 msgid "Running model..."
-msgstr ""
+msgstr "模型运行中..."
 
 #: ../gui/wxpython/wxgui.py:354 ../gui/wxpython/wxgui.py:1459
 msgid "Do you want to save changes in the workspace?"
-msgstr ""
+msgstr "是否保存您对工作区的改动？"
 
 #: ../gui/wxpython/wxgui.py:356 ../gui/wxpython/wxgui.py:1461
 msgid "Do you want to store current settings to workspace file?"
-msgstr ""
+msgstr "是否保存当前设置到工作区文件？"
 
 #: ../gui/wxpython/wxgui.py:363
 #, python-format
 msgid "Close Map Display %d"
-msgstr ""
+msgstr "关闭地图显示%d"
 
 #: ../gui/wxpython/wxgui.py:439
 msgid "Choose script file"
 msgstr ""
 
 #: ../gui/wxpython/wxgui.py:441
+#, fuzzy
 msgid "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
-msgstr ""
+msgstr "Bash脚本(*.sh)|*.sh|Python script (*.py)|*.py"
 
 #: ../gui/wxpython/wxgui.py:452
 #, python-format
 msgid "Script file '%s' doesn't exist. Operation cancelled."
-msgstr ""
+msgstr "脚本'%s'不存在，操作已取消。"
 
 #: ../gui/wxpython/wxgui.py:453 ../gui/wxpython/wxgui.py:473
 #: ../gui/wxpython/wxgui.py:494 ../gui/wxpython/scripts/r.li.setup.py:333
@@ -147,17 +153,17 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:467 ../gui/wxpython/gis_set.py:503
 #: ../gui/wxpython/gis_set.py:570 ../gui/wxpython/gis_set.py:728
 msgid "Error"
-msgstr ""
+msgstr "错误"
 
 #: ../gui/wxpython/wxgui.py:456
 #, python-format
 msgid "Launching script '%s'..."
-msgstr ""
+msgstr "启动脚本 '%s' ..."
 
 #: ../gui/wxpython/wxgui.py:471
 #, python-format
 msgid "Unable to switch to location <%(loc)s> mapset <%(mapset)s>."
-msgstr ""
+msgstr "无法切换到地点 <%(loc)s> 地图集 <%(mapset)s>."
 
 #: ../gui/wxpython/wxgui.py:479
 #, python-format
@@ -165,39 +171,41 @@ msgid ""
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"当前地点为 <%(loc)s>.\n"
+"当前地图集为 <%(mapset)s>."
 
 #: ../gui/wxpython/wxgui.py:482 ../gui/wxpython/wxgui.py:498
 #: ../gui/wxpython/gui_modules/ghelp.py:561
 msgid "Info"
-msgstr ""
+msgstr "消息"
 
 #: ../gui/wxpython/wxgui.py:493
 #, python-format
 msgid "Unable to switch to mapset <%s>."
-msgstr ""
+msgstr "无法切换到地图集 <%s>."
 
 #: ../gui/wxpython/wxgui.py:497
 #, python-format
 msgid "Current mapset is <%s>."
-msgstr ""
+msgstr "当前地图集为<%s>."
 
 #: ../gui/wxpython/wxgui.py:558
 msgid ""
 "Current workspace is not empty. Do you want to store current settings to "
 "workspace file?"
-msgstr ""
+msgstr "当前工作区非空，是否将当前设置保存到工作区文件？"
 
 #: ../gui/wxpython/wxgui.py:561
 msgid "Create new workspace?"
-msgstr ""
+msgstr "是否创建新工作区？"
 
 #: ../gui/wxpython/wxgui.py:587
 msgid "Choose workspace file"
-msgstr ""
+msgstr "选择工作区文件"
 
 #: ../gui/wxpython/wxgui.py:588 ../gui/wxpython/wxgui.py:795
 msgid "GRASS Workspace File (*.gxw)|*.gxw"
-msgstr ""
+msgstr "GRASS工作区文件(*.gxw)|*.gxw"
 
 #: ../gui/wxpython/wxgui.py:623
 #, python-format
@@ -205,55 +213,57 @@ msgid ""
 "Reading workspace file <%s> failed.\n"
 "Invalid file, unable to parse XML document."
 msgstr ""
+"读取工作区文件<%s>失败。\n"
+"无效文件，无法解析XML文档。"
 
 #: ../gui/wxpython/wxgui.py:627 ../gui/wxpython/wxgui.py:736
 #: ../gui/wxpython/wxgui.py:772
 msgid "Please wait, loading workspace..."
-msgstr ""
+msgstr "请稍候，工作区加载中..."
 
 #: ../gui/wxpython/wxgui.py:728 ../gui/wxpython/menustrings.py:15
 msgid "Load map layers into layer tree"
-msgstr ""
+msgstr "加载地图层到层列表"
 
 #: ../gui/wxpython/wxgui.py:756
 msgid "Choose GRC file to load"
-msgstr ""
+msgstr "选择要加载的GRC文件"
 
 #: ../gui/wxpython/wxgui.py:757
 msgid "Old GRASS Workspace File (*.grc)|*.grc"
-msgstr ""
+msgstr "旧版本工作区文件(*.grc)|*.grc"
 
 #: ../gui/wxpython/wxgui.py:794
 msgid "Choose file to save current workspace"
-msgstr ""
+msgstr "选择用来保存当前工作区的文件"
 
 #: ../gui/wxpython/wxgui.py:809 ../gui/wxpython/wxgui.py:825
 #, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
-msgstr ""
+msgstr "工作区文件<%s>已经存在，是否覆盖？"
 
 #: ../gui/wxpython/wxgui.py:811 ../gui/wxpython/wxgui.py:828
 #: ../gui/wxpython/menustrings.py:9
 msgid "Save workspace"
-msgstr ""
+msgstr "保存工作区"
 
 #: ../gui/wxpython/wxgui.py:849
 msgid "Writing current settings to workspace file failed."
-msgstr ""
+msgstr "保存当前设置到工作区文件失败。"
 
 #: ../gui/wxpython/wxgui.py:860 ../gui/wxpython/gui_modules/gmodeler.py:1553
 #: ../gui/wxpython/gui_modules/profile.py:597
 #, python-format
 msgid "Unable to open file <%s> for writing."
-msgstr ""
+msgstr "无法打开文件<%s>。"
 
 #: ../gui/wxpython/wxgui.py:1027
 msgid "Nothing to import. No WMS layer selected."
-msgstr ""
+msgstr "没有选择WMS层，无法导入。"
 
 #: ../gui/wxpython/wxgui.py:1053
 msgid "Attribute management is available only for vector maps."
-msgstr ""
+msgstr "属性表管理操作只对矢量地图有效。"
 
 #: ../gui/wxpython/wxgui.py:1055 ../gui/wxpython/wxgui.py:1499
 #: ../gui/wxpython/gui_modules/dbm_dialogs.py:81
@@ -263,11 +273,11 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/dbm.py:2089 ../gui/wxpython/gis_set.py:455
 #: ../gui/wxpython/gis_set.py:490
 msgid "Message"
-msgstr ""
+msgstr "消息"
 
 #: ../gui/wxpython/wxgui.py:1065
 msgid "Please wait, loading attribute data..."
-msgstr ""
+msgstr "请稍候，属性数据加载中..."
 
 #: ../gui/wxpython/wxgui.py:1386
 #, python-format
@@ -276,14 +286,20 @@ msgid ""
 "%s\n"
 "from layer tree?"
 msgstr ""
+"是否将图层\n"
+"%s\n"
+"从层列表中移除？"
 
 #: ../gui/wxpython/wxgui.py:1389
 msgid "Do you want to remove selected map layer(s) from layer tree?"
 msgstr ""
+"是否将选中的图层\n"
+"%s\n"
+"从层列表中移除？"
 
 #: ../gui/wxpython/wxgui.py:1393
 msgid "Remove map layer"
-msgstr ""
+msgstr "移除图层"
 
 #: ../gui/wxpython/wxgui.py:1443
 msgid "WARNING: Unable to quit GRASS, unknown GIS_LOCK"
@@ -291,47 +307,47 @@ msgstr ""
 
 #: ../gui/wxpython/wxgui.py:1468
 msgid "Quit GRASS GUI"
-msgstr ""
+msgstr "退出GRASS"
 
 #: ../gui/wxpython/wxgui.py:1498
 msgid "No map layer selected. Operation cancelled."
-msgstr ""
+msgstr "没有选择图层，操作已取消。"
 
 #: ../gui/wxpython/icons/icon.py:80
 msgid "Unable to load icon theme..."
-msgstr ""
+msgstr "无法加载图标主题..."
 
 #: ../gui/wxpython/icons/icon.py:139
 msgid "Display map"
-msgstr ""
+msgstr "显示地图"
 
 #: ../gui/wxpython/icons/icon.py:140
 msgid "Re-render modified map layers"
-msgstr ""
+msgstr "重新渲染改动后的图层"
 
 #: ../gui/wxpython/icons/icon.py:142
 msgid "Re-render map"
-msgstr ""
+msgstr "重新渲染地图"
 
 #: ../gui/wxpython/icons/icon.py:143
 msgid "Force re-rendering all map layers"
-msgstr ""
+msgstr "强制重新渲染所有图层"
 
 #: ../gui/wxpython/icons/icon.py:145
 msgid "Erase display"
-msgstr ""
+msgstr "清屏"
 
 #: ../gui/wxpython/icons/icon.py:147
 msgid "Pointer"
-msgstr ""
+msgstr "光标"
 
 #: ../gui/wxpython/icons/icon.py:149
 msgid "Zoom in"
-msgstr ""
+msgstr "放大"
 
 #: ../gui/wxpython/icons/icon.py:150
 msgid "Drag or click mouse to zoom"
-msgstr ""
+msgstr "拖动或点击鼠标放大"
 
 #: ../gui/wxpython/icons/icon.py:152
 msgid "Zoom out"
@@ -339,139 +355,138 @@ msgstr "放大"
 
 #: ../gui/wxpython/icons/icon.py:153
 msgid "Drag or click mouse to unzoom"
-msgstr ""
+msgstr "拖动或点击鼠标缩小"
 
 #: ../gui/wxpython/icons/icon.py:155
 msgid "Pan"
-msgstr ""
+msgstr "平移"
 
 #: ../gui/wxpython/icons/icon.py:156
 msgid "Drag with mouse to pan"
-msgstr ""
+msgstr "用鼠标拖动平移"
 
 #: ../gui/wxpython/icons/icon.py:158
 msgid "Query raster/vector map(s)"
-msgstr ""
+msgstr "查询网格/矢量地图"
 
 #: ../gui/wxpython/icons/icon.py:159
 msgid "Query selected raster/vector map(s)"
-msgstr ""
+msgstr "查询选中的网格/矢量地图"
 
 #: ../gui/wxpython/icons/icon.py:161
 msgid "Return to previous zoom"
-msgstr ""
+msgstr "返回前一放大水平"
 
 #: ../gui/wxpython/icons/icon.py:163
 msgid "Zoom options"
-msgstr ""
+msgstr "放大选项"
 
 #: ../gui/wxpython/icons/icon.py:164
 msgid "Display zoom management"
-msgstr ""
+msgstr "打开放大管理器"
 
 #: ../gui/wxpython/icons/icon.py:166
 msgid "Zoom to selected map layer(s)"
-msgstr ""
+msgstr "绽放到选中的图层"
 
 #: ../gui/wxpython/icons/icon.py:168
 msgid "Add map elements"
-msgstr ""
+msgstr "添加地图元素"
 
 #: ../gui/wxpython/icons/icon.py:169
 msgid "Overlay elements like scale and legend onto map"
-msgstr ""
+msgstr "添加比例尺或图例等元素到地图"
 
 #: ../gui/wxpython/icons/icon.py:171
 msgid "Add scalebar and north arrow"
-msgstr ""
+msgstr "添加比例尺和指北针"
 
 #: ../gui/wxpython/icons/icon.py:173
 msgid "Add legend"
-msgstr ""
+msgstr "添加图例"
 
 #: ../gui/wxpython/icons/icon.py:175
 msgid "Save display to graphic file"
-msgstr ""
+msgstr "保存当前地图到图形"
 
 #: ../gui/wxpython/icons/icon.py:177
 #: ../gui/wxpython/gui_modules/histogram.py:434
 #: ../gui/wxpython/gui_modules/mapdisp.py:1148
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1407
 msgid "Print display"
-msgstr ""
+msgstr "打印当前地图"
 
 #: ../gui/wxpython/icons/icon.py:180
 msgid "Start new display"
-msgstr ""
+msgstr "创建新地图"
 
 #: ../gui/wxpython/icons/icon.py:182
 msgid "Create new workspace file (Ctrl+N)"
-msgstr ""
+msgstr "创建新工作区(Ctrl+N)"
 
 #: ../gui/wxpython/icons/icon.py:184
 msgid "Load map layers into workspace (Ctrl+L)"
-msgstr ""
+msgstr "加载图层到工作区(Ctrl+L)"
 
 #: ../gui/wxpython/icons/icon.py:186
 msgid "Open existing workspace file (Ctrl+O)"
-msgstr ""
+msgstr "打开已有工作区(Ctrl+O)"
 
 #: ../gui/wxpython/icons/icon.py:188
 msgid "Save current workspace to file (Ctrl+S)"
-msgstr ""
+msgstr "保存当前工作区到文件(Ctrl+S)"
 
 #: ../gui/wxpython/icons/icon.py:190
 msgid "Add raster map layer (Ctrl+R)"
-msgstr ""
+msgstr "添加栅格图层(Ctrl+R)"
 
 #: ../gui/wxpython/icons/icon.py:192
 msgid "Add vector map layer (Ctrl+V)"
-msgstr ""
+msgstr "添加矢量图层(Ctrl+V)"
 
 #: ../gui/wxpython/icons/icon.py:194
 msgid "Add command layer"
-msgstr ""
+msgstr "添加命令层"
 
 #: ../gui/wxpython/icons/icon.py:196
-#, fuzzy
 msgid "Add group"
-msgstr "列名"
+msgstr "添加组"
 
 #: ../gui/wxpython/icons/icon.py:198
 msgid "Add grid or vector labels overlay"
-msgstr ""
+msgstr "添加栅格或矢量标注层"
 
 #: ../gui/wxpython/icons/icon.py:200
 msgid "Delete selected map layer"
-msgstr ""
+msgstr "删除选中的图层"
 
 #: ../gui/wxpython/icons/icon.py:202
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: ../gui/wxpython/icons/icon.py:204
 msgid "Show attribute table"
-msgstr ""
+msgstr "打开属性表"
 
 #: ../gui/wxpython/icons/icon.py:206
 msgid "Add RGB map layer"
-msgstr ""
+msgstr "添加RGB图层"
 
 #: ../gui/wxpython/icons/icon.py:208
 msgid "Add HIS map layer"
-msgstr ""
+msgstr "添加HIS图层"
 
 #: ../gui/wxpython/icons/icon.py:210
 msgid "Add shaded relief map layer"
-msgstr ""
+msgstr "添加彩色地势图层"
 
 #: ../gui/wxpython/icons/icon.py:212
 msgid "Add raster flow arrows"
-msgstr ""
+msgstr "添加栅格流向箭头"
 
 #: ../gui/wxpython/icons/icon.py:214
 msgid "Add raster cell numbers"
-msgstr ""
+msgstr "添加栅格像元数字"
 
 #: ../gui/wxpython/icons/icon.py:216
 msgid "Add thematic area (choropleth) map layer"
@@ -479,42 +494,41 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:218
 msgid "Add thematic chart layer"
-msgstr ""
+msgstr "添加主题图表层"
 
 #: ../gui/wxpython/icons/icon.py:220
 msgid "Add grid layer"
-msgstr ""
+msgstr "添加网格层"
 
 #: ../gui/wxpython/icons/icon.py:222
 msgid "Add geodesic line layer"
-msgstr ""
+msgstr "添加测地线层"
 
 #: ../gui/wxpython/icons/icon.py:224
 msgid "Add rhumbline layer"
-msgstr ""
+msgstr "添加等角航线层"
 
 #: ../gui/wxpython/icons/icon.py:226
 msgid "Add labels"
-msgstr ""
+msgstr "添加标注"
 
 #: ../gui/wxpython/icons/icon.py:228
 #: ../gui/wxpython/gui_modules/mapdisp.py:1828
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:2058
 msgid "Add text layer"
-msgstr ""
+msgstr "添加文本层"
 
 #: ../gui/wxpython/icons/icon.py:230
-#, fuzzy
 msgid "Add 3D raster map layer"
-msgstr "栅格地图"
+msgstr "添加三维栅格图层"
 
 #: ../gui/wxpython/icons/icon.py:231
 msgid "Note that 3D raster data are rendered only in 3D view mode"
-msgstr ""
+msgstr "3D栅格数据仅在3D视图模式下渲染"
 
 #: ../gui/wxpython/icons/icon.py:233
 msgid "Show GUI settings"
-msgstr ""
+msgstr "打开GUI设置"
 
 #: ../gui/wxpython/icons/icon.py:236
 msgid "Digitize new point"
@@ -522,7 +536,7 @@ msgstr "矢量化新点"
 
 #: ../gui/wxpython/icons/icon.py:237 ../gui/wxpython/icons/icon.py:246
 msgid "Left: new point"
-msgstr ""
+msgstr "左：创建新点"
 
 #: ../gui/wxpython/icons/icon.py:239
 msgid "Digitize new line"
@@ -531,55 +545,55 @@ msgstr "矢量化新线"
 #: ../gui/wxpython/icons/icon.py:240 ../gui/wxpython/icons/icon.py:243
 #: ../gui/wxpython/icons/icon.py:264
 msgid "Left: new point; Middle: undo last point; Right: close line"
-msgstr ""
+msgstr "左：创建新点；中：取消最近一次创建的点；右：结束该线"
 
 #: ../gui/wxpython/icons/icon.py:242
 msgid "Digitize new boundary"
-msgstr ""
+msgstr "数字化新界限"
 
 #: ../gui/wxpython/icons/icon.py:245
 msgid "Digitize new centroid"
-msgstr ""
+msgstr "数字化新形心"
 
 #: ../gui/wxpython/icons/icon.py:248
 msgid "Add new vertex"
-msgstr ""
+msgstr "添加新顶点"
 
 #: ../gui/wxpython/icons/icon.py:249 ../gui/wxpython/icons/icon.py:252
 #: ../gui/wxpython/icons/icon.py:255 ../gui/wxpython/icons/icon.py:267
 #: ../gui/wxpython/icons/icon.py:270 ../gui/wxpython/icons/icon.py:273
 #: ../gui/wxpython/icons/icon.py:279 ../gui/wxpython/icons/icon.py:285
 msgid "Left: Select; Middle: Unselect; Right: Confirm"
-msgstr ""
+msgstr "左：选择；中：撤消选择；右：确认"
 
 #: ../gui/wxpython/icons/icon.py:251
 #: ../gui/wxpython/gui_modules/toolbars.py:921
 msgid "Copy categories"
-msgstr ""
+msgstr "复制类别"
 
 #: ../gui/wxpython/icons/icon.py:254
 msgid "Delete feature(s)"
-msgstr ""
+msgstr "删除要素"
 
 #: ../gui/wxpython/icons/icon.py:257
 msgid "Display/update attributes"
-msgstr ""
+msgstr "显示/更新属性"
 
 #: ../gui/wxpython/icons/icon.py:258 ../gui/wxpython/icons/icon.py:261
 msgid "Left: Select"
-msgstr ""
+msgstr "左：选择"
 
 #: ../gui/wxpython/icons/icon.py:260
 msgid "Display/update categories"
-msgstr ""
+msgstr "显示/更新类别"
 
 #: ../gui/wxpython/icons/icon.py:263
 msgid "Edit line/boundary"
-msgstr ""
+msgstr "编辑线/边界"
 
 #: ../gui/wxpython/icons/icon.py:266
 msgid "Move feature(s)"
-msgstr ""
+msgstr "移动要素"
 
 #: ../gui/wxpython/icons/icon.py:269
 msgid "Move vertex"
@@ -592,39 +606,39 @@ msgstr "删除顶点"
 #: ../gui/wxpython/icons/icon.py:275 ../gui/wxpython/icons/icon.py:335
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1286
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 #: ../gui/wxpython/icons/icon.py:276
 msgid "Settings dialog for digitization tool"
-msgstr ""
+msgstr "数字化工具设置对话框"
 
 #: ../gui/wxpython/icons/icon.py:278
 msgid "Split line/boundary"
-msgstr ""
+msgstr "拆分线/边界"
 
 #: ../gui/wxpython/icons/icon.py:281
 msgid "Quit digitizing tool"
-msgstr ""
+msgstr "退出数字化工具"
 
 #: ../gui/wxpython/icons/icon.py:283
 msgid "Additional tools (copy, flip, connect, etc.)"
-msgstr ""
+msgstr "更多工具(复制，翻转，连接等)"
 
 #: ../gui/wxpython/icons/icon.py:287
 msgid "Undo"
-msgstr ""
+msgstr "撤消"
 
 #: ../gui/wxpython/icons/icon.py:288
 msgid "Undo previous changes"
-msgstr ""
+msgstr "撤消前一改动"
 
 #: ../gui/wxpython/icons/icon.py:291
 msgid "Analyze map"
-msgstr ""
+msgstr "分析地图"
 
 #: ../gui/wxpython/icons/icon.py:293
 msgid "Measure distance"
-msgstr ""
+msgstr "测量距离"
 
 #: ../gui/wxpython/icons/icon.py:295
 msgid "Draw transect in map display window to profile"
@@ -643,37 +657,38 @@ msgid "Profile options"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:303
+#, fuzzy
 msgid "Save profile data to csv file"
-msgstr ""
+msgstr "保存剖面线图为csv文件"
 
 #: ../gui/wxpython/icons/icon.py:305
 msgid "Create histogram of image or raster file"
-msgstr ""
+msgstr "创建图像或栅格文件的直方图"
 
 #: ../gui/wxpython/icons/icon.py:307
 msgid "Select font"
-msgstr ""
+msgstr "选择字体"
 
 #: ../gui/wxpython/icons/icon.py:309
 msgid "Select color"
-msgstr ""
+msgstr "选择颜色"
 
 #: ../gui/wxpython/icons/icon.py:311
 #: ../gui/wxpython/gui_modules/gdialogs.py:415
 msgid "Set options"
-msgstr ""
+msgstr "选项设置"
 
 #: ../gui/wxpython/icons/icon.py:313
 msgid "Analyze"
-msgstr ""
+msgstr "分析"
 
 #: ../gui/wxpython/icons/icon.py:316
 msgid "Set GCP"
-msgstr ""
+msgstr "设定地面控制点(GCP)"
 
 #: ../gui/wxpython/icons/icon.py:317
 msgid "Define GCP (Ground Control Points)"
-msgstr ""
+msgstr "定义GCP(地面控制点)"
 
 #: ../gui/wxpython/icons/icon.py:319 ../gui/wxpython/menustrings.py:174
 #: ../gui/wxpython/gui_modules/gcpmanager.py:180
@@ -688,26 +703,24 @@ msgid "Recalculate RMS error"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:323
-#, fuzzy
 msgid "Save GCPs to POINTS file"
-msgstr "保存当前显示为图片文件"
+msgstr "保存地面控制点为POINTS文件"
 
 #: ../gui/wxpython/icons/icon.py:325
 msgid "Add new GCP"
-msgstr ""
+msgstr "添加新地面控制点(GCP)"
 
 #: ../gui/wxpython/icons/icon.py:327
 msgid "Delete selected GCP"
-msgstr ""
+msgstr "删除选中的地面控制点(GCP)"
 
 #: ../gui/wxpython/icons/icon.py:329
 msgid "Clear selected GCP"
-msgstr ""
+msgstr "清除选中的地面控制点(GCP)"
 
 #: ../gui/wxpython/icons/icon.py:331
-#, fuzzy
 msgid "Reload GCPs from POINTS file"
-msgstr "保存当前显示为图片文件"
+msgstr "从POINTS文件重新转入地面控制点"
 
 #: ../gui/wxpython/icons/icon.py:333
 msgid "Quit georectification module"
@@ -719,9 +732,8 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:338 ../gui/wxpython/icons/icon.py:363
 #: ../gui/wxpython/icons/icon.py:400
-#, fuzzy
 msgid "Show help"
-msgstr "矢量地图 %s - 未发现"
+msgstr "显示帮助"
 
 #: ../gui/wxpython/icons/icon.py:339
 msgid "Display GCP Manager manual page"
@@ -732,9 +744,8 @@ msgid "Switch to view control page"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:343
-#, fuzzy
 msgid "Change view settings"
-msgstr "创建新数据集"
+msgstr "改变显示设置"
 
 #: ../gui/wxpython/icons/icon.py:345
 msgid "Switch to surface (raster) control page"
@@ -750,7 +761,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:349
 msgid "Change 2D/3D vector settings"
-msgstr ""
+msgstr "改变二维/三维矢量设置"
 
 #: ../gui/wxpython/icons/icon.py:351
 msgid "Switch to volume (3D raster) control page"
@@ -765,9 +776,8 @@ msgid "Switch to lighting control page"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:355
-#, fuzzy
 msgid "Change lighting settings"
-msgstr "创建新数据集"
+msgstr "改变光线设置"
 
 #: ../gui/wxpython/icons/icon.py:357
 msgid "Switch to fringe control page"
@@ -779,87 +789,84 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:360
 msgid "3D view mode tools"
-msgstr ""
+msgstr "三维显示模式工具"
 
 #: ../gui/wxpython/icons/icon.py:361
 msgid "Show/hide 3D view mode settings dialog"
-msgstr ""
+msgstr "显示/隐藏3D显示模式设置对话框"
 
 #: ../gui/wxpython/icons/icon.py:364
 msgid "Display 3D view mode manual page"
-msgstr ""
+msgstr "查看三维显示模式帮助"
 
 #: ../gui/wxpython/icons/icon.py:366
 msgid "Quit 3D view mode"
-msgstr ""
+msgstr "退出三维显示模式"
 
 #: ../gui/wxpython/icons/icon.py:367
 msgid "Switch back to 2D view mode"
-msgstr ""
+msgstr "切换到2D显示模式"
 
 #: ../gui/wxpython/icons/icon.py:370
 msgid "Start Graphical Modeler"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:372
-#, fuzzy
 msgid "Create new model (Ctrl+N)"
-msgstr "创建新数据集"
+msgstr "创建新模型(Ctrl+N)"
 
 #: ../gui/wxpython/icons/icon.py:374
 msgid "Load model from file (Ctrl+O)"
-msgstr ""
+msgstr "从文件加载模型(Ctrl+O)"
 
 #: ../gui/wxpython/icons/icon.py:376
 msgid "Save current model to file (Ctrl+S)"
-msgstr ""
+msgstr "保存当前模型到文件(Ctrl+S)"
 
 #: ../gui/wxpython/icons/icon.py:378 ../gui/wxpython/menustrings.py:852
-#, fuzzy
 msgid "Export model to image"
-msgstr "创建表"
+msgstr "将模型输出到图形"
 
 #: ../gui/wxpython/icons/icon.py:380 ../gui/wxpython/menustrings.py:854
 msgid "Export model to Python script"
-msgstr ""
+msgstr "导出模型到Python脚本"
 
 #: ../gui/wxpython/icons/icon.py:382 ../gui/wxpython/menustrings.py:862
 msgid "Add action (GRASS module) to model"
-msgstr ""
+msgstr "添加动作(GRASS模块)到模型"
 
 #: ../gui/wxpython/icons/icon.py:384 ../gui/wxpython/menustrings.py:864
 msgid "Add data item to model"
-msgstr ""
+msgstr "添加数据项到模型"
 
 #: ../gui/wxpython/icons/icon.py:386 ../gui/wxpython/menustrings.py:866
 msgid "Define relation between data and action items"
-msgstr ""
+msgstr "定义数据和动作关系"
 
 #: ../gui/wxpython/icons/icon.py:388 ../gui/wxpython/menustrings.py:178
 #: ../gui/wxpython/menustrings.py:877
 msgid "Run model"
-msgstr ""
+msgstr "运行模型"
 
 #: ../gui/wxpython/icons/icon.py:390 ../gui/wxpython/menustrings.py:879
 msgid "Validate model"
-msgstr ""
+msgstr "验证模型"
 
 #: ../gui/wxpython/icons/icon.py:392
 msgid "Show modeler settings"
-msgstr ""
+msgstr "查看建模设置"
 
 #: ../gui/wxpython/icons/icon.py:394
 msgid "Show model properties"
-msgstr ""
+msgstr "查看模型属性"
 
 #: ../gui/wxpython/icons/icon.py:396
-#, fuzzy
 msgid "Manage model variables"
-msgstr "保存当前显示为图片文件"
+msgstr "管理模型变量"
 
 #: ../gui/wxpython/icons/icon.py:398
 msgid "Redraw model canvas"
-msgstr ""
+msgstr "重画模型画布"
 
 #: ../gui/wxpython/icons/icon.py:401
 msgid "Display Graphical Modeler manual page"
@@ -867,19 +874,22 @@ msgstr ""
 
 #: ../gui/wxpython/scripts/vkrige.py:33
 msgid "No GRASS-python library found."
-msgstr ""
+msgstr "找不到Grass-python库。"
 
 #: ../gui/wxpython/scripts/vkrige.py:67
+#, fuzzy
 msgid "Input Data"
-msgstr ""
+msgstr "输入地图"
 
 #: ../gui/wxpython/scripts/vkrige.py:73
+#, fuzzy
 msgid "Point dataset:"
-msgstr ""
+msgstr "只打印栅格图的类型"
 
 #: ../gui/wxpython/scripts/vkrige.py:85
+#, fuzzy
 msgid "Numeric column:"
-msgstr ""
+msgstr "列数"
 
 #: ../gui/wxpython/scripts/vkrige.py:96
 msgid "Kriging"
@@ -896,12 +906,18 @@ msgid "Output"
 msgstr ""
 
 #: ../gui/wxpython/scripts/vkrige.py:121
+#, fuzzy
 msgid "Name for the output raster map:"
 msgstr ""
+"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+"输出栅格图的名称\n"
+"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+"输出栅格文件的名称"
 
 #: ../gui/wxpython/scripts/vkrige.py:129
+#, fuzzy
 msgid "Export variance map as well: "
-msgstr ""
+msgstr "创建 3D 栅格地图\n"
 
 #: ../gui/wxpython/scripts/vkrige.py:142
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:218
@@ -954,12 +970,13 @@ msgid "Auto-fit variogram"
 msgstr ""
 
 #: ../gui/wxpython/scripts/vkrige.py:415
+#, fuzzy
 msgid "Model: "
-msgstr ""
+msgstr "  "
 
 #: ../gui/wxpython/scripts/vkrige.py:499
 msgid "Work in progress! No functionality provided."
-msgstr ""
+msgstr "开发中！暂不可用。"
 
 #: ../gui/wxpython/scripts/r.li.setup.py:137
 msgid "I m!"
@@ -968,7 +985,7 @@ msgstr ""
 #: ../gui/wxpython/scripts/r.li.setup.py:330
 #: ../gui/wxpython/gui_modules/location_wizard.py:1964
 msgid "Unable to create new location"
-msgstr ""
+msgstr "无法创建新地点"
 
 #: ../gui/wxpython/scripts/r.li.setup.py:332
 #: ../gui/wxpython/gui_modules/location_wizard.py:211
@@ -983,6 +1000,8 @@ msgid ""
 "Location <%(loc)s> will be created in GIS data directory <%(dir)s>.You will "
 "need to change the default GIS data directory in the GRASS startup screen."
 msgstr ""
+"将在目录<%(dir)s>下创建新地点<%(loc)s>.如需改变缺省目录，请在GRASS启动时设"
+"置。"
 
 #: ../gui/wxpython/scripts/r.li.setup.py:358
 #: ../gui/wxpython/gui_modules/location_wizard.py:1992
@@ -992,59 +1011,60 @@ msgstr "新GIS数据目录"
 #: ../gui/wxpython/scripts/r.li.setup.py:519
 #: ../gui/wxpython/gui_modules/location_wizard.py:2153
 msgid "EPSG code missing."
-msgstr ""
+msgstr "没有EPSG代码。"
 
 #: ../gui/wxpython/scripts/r.li.setup.py:543
 #: ../gui/wxpython/scripts/r.li.setup.py:567
 #: ../gui/wxpython/gui_modules/location_wizard.py:2177
 #: ../gui/wxpython/gui_modules/location_wizard.py:2201
 msgid "File not found."
-msgstr ""
+msgstr "找不到文件"
 
 #: ../gui/wxpython/scripts/r.li.setup.py:587
 #: ../gui/wxpython/gui_modules/location_wizard.py:1583
 msgid "Summary"
-msgstr ""
+msgstr "总结"
 
 #: ../gui/wxpython/scripts/r.li.setup.py:609
 #: ../gui/wxpython/gui_modules/location_wizard.py:1605
 msgid "GRASS Database:"
-msgstr ""
+msgstr "GRASS数据库："
 
 #: ../gui/wxpython/scripts/r.li.setup.py:615
 #: ../gui/wxpython/gui_modules/location_wizard.py:1611
 msgid "Location Name:"
-msgstr ""
+msgstr "地点名称："
 
 #: ../gui/wxpython/scripts/r.li.setup.py:621
 #: ../gui/wxpython/gui_modules/location_wizard.py:1617
 msgid "Projection:"
-msgstr ""
+msgstr "投影："
 
 #: ../gui/wxpython/scripts/r.li.setup.py:656
 #: ../gui/wxpython/gui_modules/location_wizard.py:1652
 msgid "PROJ.4 definition:"
-msgstr ""
+msgstr "PROJ.4设置："
 
 #: ../gui/wxpython/scripts/r.li.setup.py:712
 #: ../gui/wxpython/gui_modules/location_wizard.py:1708
 #, python-format
 msgid "Do you want to create GRASS location <%s>?"
-msgstr ""
+msgstr "创建GRASS地点<%s>?"
 
 #: ../gui/wxpython/scripts/r.li.setup.py:713
 #: ../gui/wxpython/gui_modules/location_wizard.py:1709
 msgid "Create new location?"
-msgstr ""
+msgstr "创建新地点？"
 
 #: ../gui/wxpython/menustrings.py:2 ../gui/wxpython/menustrings.py:840
+#, fuzzy
 msgid "&File"
-msgstr ""
+msgstr "&文件"
 
 #: ../gui/wxpython/menustrings.py:3
 #: ../gui/wxpython/gui_modules/preferences.py:1739
 msgid "Workspace"
-msgstr ""
+msgstr "工作区"
 
 #: ../gui/wxpython/menustrings.py:4 ../gui/wxpython/menustrings.py:841
 msgid "New"
@@ -1052,15 +1072,15 @@ msgstr "新建"
 
 #: ../gui/wxpython/menustrings.py:5
 msgid "Create new workspace"
-msgstr ""
+msgstr "创建新工作区"
 
 #: ../gui/wxpython/menustrings.py:6 ../gui/wxpython/menustrings.py:843
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: ../gui/wxpython/menustrings.py:7
 msgid "Load workspace from file"
-msgstr ""
+msgstr "加载工作区文件"
 
 #: ../gui/wxpython/menustrings.py:8 ../gui/wxpython/menustrings.py:845
 msgid "Save"
@@ -1068,11 +1088,11 @@ msgstr "保存"
 
 #: ../gui/wxpython/menustrings.py:10 ../gui/wxpython/menustrings.py:847
 msgid "Save as"
-msgstr ""
+msgstr "另存为"
 
 #: ../gui/wxpython/menustrings.py:11
 msgid "Save workspace to file"
-msgstr ""
+msgstr "保存工作区到文件"
 
 #: ../gui/wxpython/menustrings.py:12 ../gui/wxpython/menustrings.py:849
 msgid "Close"
@@ -1080,34 +1100,33 @@ msgstr "关闭"
 
 #: ../gui/wxpython/menustrings.py:13
 msgid "Close workspace file"
-msgstr ""
+msgstr "关闭工作区文件"
 
 #: ../gui/wxpython/menustrings.py:14
 msgid "Load map layers"
-msgstr ""
+msgstr "加载地图层"
 
 #: ../gui/wxpython/menustrings.py:16
 msgid "Load GRC file (Tcl/Tk GUI)"
-msgstr ""
+msgstr "加载GRC文件(Tcl/Tk图形界面)"
 
 #: ../gui/wxpython/menustrings.py:17
 msgid "Load map layers from GRC file to layer tree"
-msgstr ""
+msgstr "从GRC文件加载地图层到图层列表"
 
 #: ../gui/wxpython/menustrings.py:18 ../gui/wxpython/menustrings.py:19
 #: ../gui/wxpython/gui_modules/gdialogs.py:1099
-#, fuzzy
 msgid "Import raster data"
-msgstr "创建表"
+msgstr "导入栅格数据"
 
 #: ../gui/wxpython/menustrings.py:20
+#, fuzzy
 msgid "Import raster data into a GRASS map layer using GDAL."
-msgstr ""
+msgstr "将二元栅格文件导入到GRASS栅格图层中。"
 
 #: ../gui/wxpython/menustrings.py:21
-#, fuzzy
 msgid "Bulk import of raster data"
-msgstr "输入的栅格图"
+msgstr "批量导入栅格数据"
 
 #: ../gui/wxpython/menustrings.py:22
 #, fuzzy
@@ -1116,9 +1135,8 @@ msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
 
 #: ../gui/wxpython/menustrings.py:23
 #: ../gui/wxpython/gui_modules/gdialogs.py:1097
-#, fuzzy
 msgid "Link raster data"
-msgstr "矢量导入完成"
+msgstr "链接栅格图层"
 
 #: ../gui/wxpython/menustrings.py:24
 #, fuzzy
@@ -1144,11 +1162,11 @@ msgstr ""
 msgid ""
 "Create a raster map from an assemblage of many coordinates using univariate "
 "statistics."
-msgstr ""
+msgstr "使用单元统计从多点座标集创建栅格地图"
 
 #: ../gui/wxpython/menustrings.py:29
 msgid "ASCII grid import"
-msgstr ""
+msgstr "导入ASCII网格"
 
 #: ../gui/wxpython/menustrings.py:30
 msgid "Converts a GRASS ASCII raster file to binary raster map."
@@ -1159,22 +1177,20 @@ msgid "ASCII polygons, lines, and point import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:32
-#, fuzzy
 msgid "Creates raster maps from ASCII polygon/line/point data files."
-msgstr "以当前目录中的ASCII格式的(多边形/线形)数据文件来创建栅格地图。"
+msgstr "从ASCII格式的多边形/线形/点数据文件创建栅格地图。"
 
 #: ../gui/wxpython/menustrings.py:33
 msgid "Raw binary array import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:34
-#, fuzzy
 msgid "Import a binary raster file into a GRASS raster map layer."
-msgstr "将二进制栅格文件导入到GRASS栅格图层中。"
+msgstr "将二元栅格文件导入到GRASS栅格图层中。"
 
 #: ../gui/wxpython/menustrings.py:35
 msgid "ESRI ASCII grid import"
-msgstr ""
+msgstr "导入ESRI ASCII网格"
 
 #: ../gui/wxpython/menustrings.py:36
 msgid ""
@@ -1183,7 +1199,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:37
 msgid "GRIDATB.FOR import"
-msgstr ""
+msgstr "导入GRIDATB.FOR"
 
 #: ../gui/wxpython/menustrings.py:38
 msgid "Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map"
@@ -1191,16 +1207,15 @@ msgstr "将GRIDATB.FOR地图文件(TOPMODEL)导入到GRASS栅格图中"
 
 #: ../gui/wxpython/menustrings.py:39
 msgid "Matlab 2D array import"
-msgstr ""
+msgstr "导入Matlab 2D数组"
 
 #: ../gui/wxpython/menustrings.py:40
-#, fuzzy
 msgid "Imports a binary MAT-File(v4) to a GRASS raster."
-msgstr "将二进制的MAT-File(v4)导入为GRASS栅格。"
+msgstr "将二元MAT-File(v4)导入为GRASS栅格。"
 
 #: ../gui/wxpython/menustrings.py:41
 msgid "SPOT NDVI import"
-msgstr ""
+msgstr "导入SPOT NDVI"
 
 #: ../gui/wxpython/menustrings.py:42
 msgid "Imports SPOT VGT NDVI data into a raster map."
@@ -1208,7 +1223,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:43
 msgid "SRTM HGT import"
-msgstr ""
+msgstr "导入SRTM HGT"
 
 #: ../gui/wxpython/menustrings.py:44
 msgid "Imports SRTM HGT files into raster map."
@@ -1216,7 +1231,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:45
 msgid "Terra ASTER HDF import"
-msgstr ""
+msgstr "导入Terra ASTER HDF"
 
 #: ../gui/wxpython/menustrings.py:46
 msgid ""
@@ -1226,7 +1241,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:47
 msgid "WMS import"
-msgstr ""
+msgstr "导入WMS"
 
 #: ../gui/wxpython/menustrings.py:48
 msgid "Download and import data from WMS servers."
@@ -1234,18 +1249,17 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:49 ../gui/wxpython/menustrings.py:50
 #: ../gui/wxpython/gui_modules/gdialogs.py:1093
-#, fuzzy
 msgid "Import vector data"
-msgstr "输入的栅格图"
+msgstr "导入矢量数据"
 
 #: ../gui/wxpython/menustrings.py:51
+#, fuzzy
 msgid "Converts vector layers into a GRASS vector map using OGR."
-msgstr ""
+msgstr "将OGR矢量图层转化为GRASS矢量图层。"
 
 #: ../gui/wxpython/menustrings.py:52
-#, fuzzy
 msgid "Bulk import of vector data"
-msgstr "导入旧的GRASS矢量格式"
+msgstr "批量导入矢量数据"
 
 #: ../gui/wxpython/menustrings.py:53
 msgid "Converts multiple OGR supported layers into GRASS vector maps."
@@ -1253,23 +1267,21 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:54
 #: ../gui/wxpython/gui_modules/gdialogs.py:1091
-#, fuzzy
 msgid "Link vector data"
-msgstr "矢量导入完成"
+msgstr "链接矢量数据"
 
 #: ../gui/wxpython/menustrings.py:55
 #, fuzzy
 msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
-msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+msgstr "创建作为只读OGR图层链接的新矢量图层。"
 
 #: ../gui/wxpython/menustrings.py:56
 msgid "Bulk link of vector data"
-msgstr ""
+msgstr "批量链接矢量数据"
 
 #: ../gui/wxpython/menustrings.py:57
-#, fuzzy
 msgid "Creates multiple new pseduo-vector maps as a read-only links using OGR."
-msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+msgstr "通过OGR创建作为只读链接的伪矢量图层。"
 
 #: ../gui/wxpython/menustrings.py:58
 msgid "ASCII points or GRASS ASCII format"
@@ -1281,47 +1293,44 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:60
 msgid "ASCII points as a vector lines"
-msgstr ""
+msgstr "以ASCII点数据为矢量线段"
 
 #: ../gui/wxpython/menustrings.py:61
 msgid "Import ASCII x,y[,z] coordinates as a series of lines."
-msgstr ""
+msgstr "将ASCII x,y[,z]座标导入为多线段。"
 
 #: ../gui/wxpython/menustrings.py:62
+#, fuzzy
 msgid "Historical GRASS vector import"
-msgstr ""
+msgstr "导入旧版GRASS矢量数据"
 
 #: ../gui/wxpython/menustrings.py:63
-#, fuzzy
 msgid "Imports older versions of GRASS vector maps."
-msgstr "输入的 2D 矢量地图的名称"
+msgstr "导入旧版GRASS矢量地图。"
 
 #: ../gui/wxpython/menustrings.py:64
 msgid "DXF import"
-msgstr ""
+msgstr "导入DXF"
 
 #: ../gui/wxpython/menustrings.py:65
-#, fuzzy
 msgid "Converts files in DXF format to GRASS vector map format."
-msgstr "转化为一种支持的 OGR 矢量格式。"
+msgstr "转化DXF格式到GRASS矢量格式。"
 
 #: ../gui/wxpython/menustrings.py:66
 msgid "Bulk import of DXF"
-msgstr ""
+msgstr "批量导入DXF"
 
 #: ../gui/wxpython/menustrings.py:67
-#, fuzzy
 msgid "Converts multiple DXF layers to GRASS vector maps."
-msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+msgstr "批量转化DXF图层到GRASS矢量图层。"
 
 #: ../gui/wxpython/menustrings.py:68
 msgid "ESRI e00 import"
-msgstr ""
+msgstr "导入ESRI e00格式数据"
 
 #: ../gui/wxpython/menustrings.py:69
-#, fuzzy
 msgid "Import E00 file into a vector map."
-msgstr "输入的 2D 矢量地图的名称"
+msgstr "导入E00文件为矢量地图。"
 
 #: ../gui/wxpython/menustrings.py:70
 msgid "GPS data import"
@@ -1335,23 +1344,21 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:72
 msgid "Geonames import"
-msgstr ""
+msgstr "导入Geonames数据"
 
 #: ../gui/wxpython/menustrings.py:73
-#, fuzzy
 msgid "Imports geonames.org country files into a GRASS vector points map."
-msgstr "输入的 2D 矢量地图的名称"
+msgstr "将geonames.org country文件导入为GRASS点数据地图。"
 
 #: ../gui/wxpython/menustrings.py:74
 msgid "GEOnet import"
-msgstr ""
+msgstr "导入GEOnet数据"
 
 #: ../gui/wxpython/menustrings.py:75
-#, fuzzy
 msgid ""
 "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector "
 "points map."
-msgstr "输入的 2D 矢量地图的名称"
+msgstr "将US-NGA GEOnet Names Server (GNS) country文件导入为GRASS点数据地图。"
 
 #: ../gui/wxpython/menustrings.py:76
 msgid "Matlab array or Mapgen format import"
@@ -1362,13 +1369,12 @@ msgid "Imports Mapgen or Matlab vector maps into GRASS."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:78
-#, fuzzy
 msgid "Import 3D raster data"
-msgstr "创建 3D 栅格地图\n"
+msgstr "导入三维栅格地图"
 
 #: ../gui/wxpython/menustrings.py:79
 msgid "ASCII 3D import"
-msgstr ""
+msgstr "导入三维ASCII数据"
 
 #: ../gui/wxpython/menustrings.py:80
 msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
@@ -1376,7 +1382,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:81
 msgid "Vis5D import"
-msgstr ""
+msgstr "导入Vis5D数据"
 
 #: ../gui/wxpython/menustrings.py:82
 msgid "Import 3-dimensional Vis5D files."
@@ -1384,34 +1390,31 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:83
 msgid "Import database table"
-msgstr ""
+msgstr "导入数据库表"
 
 #: ../gui/wxpython/menustrings.py:84
 msgid "Multiple import formats using OGR"
-msgstr ""
+msgstr "使用OGR导入不同格式数据"
 
 #: ../gui/wxpython/menustrings.py:85
-#, fuzzy
 msgid "Imports attribute tables in various formats."
-msgstr "已有输入栅格文件大的名称"
+msgstr "导入多种格式的属性表格"
 
 #: ../gui/wxpython/menustrings.py:86
 msgid "Export raster map"
-msgstr ""
+msgstr "导出栅格地图"
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:118
-#, fuzzy
 msgid "Common export formats"
-msgstr "列出支持的格式然后退出"
+msgstr "常用导出格式"
 
 #: ../gui/wxpython/menustrings.py:88
-#, fuzzy
 msgid "Exports GRASS raster maps into GDAL supported formats."
-msgstr "将GRASS栅格输出为二元数组。"
+msgstr "将GRASS栅格输出为GDAL支持的格式。"
 
 #: ../gui/wxpython/menustrings.py:89
 msgid "ASCII grid export"
-msgstr ""
+msgstr "导出ASCII栅格数据"
 
 #: ../gui/wxpython/menustrings.py:90
 msgid "Converts a raster map layer into a GRASS ASCII text file."
@@ -1424,7 +1427,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:92
 msgid ""
 "Export a raster map to a text file as x,y,z values based on cell centers."
-msgstr ""
+msgstr "将栅格数据像元中心导出为x,y,z值形式的文本文件。"
 
 #: ../gui/wxpython/menustrings.py:93
 msgid "ESRI ASCII grid export"
@@ -1573,9 +1576,8 @@ msgid "Converts a vector map to VTK ASCII output."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:132
-#, fuzzy
 msgid "Export 3D raster maps"
-msgstr "创建 3D 栅格地图\n"
+msgstr "导出三维栅格地图"
 
 #: ../gui/wxpython/menustrings.py:133
 msgid "ASCII 3D export"
@@ -1606,9 +1608,8 @@ msgid "Common export formats using OGR"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:141
-#, fuzzy
 msgid "Exports attribute tables into various formats."
-msgstr "已有输入栅格文件大的名称"
+msgstr "属性表导出"
 
 #: ../gui/wxpython/menustrings.py:142
 msgid "Manage maps and volumes"
@@ -1681,9 +1682,8 @@ msgid "Raster series to volume"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:159
-#, fuzzy
 msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr "将 2D 栅格分块地图r转化为一个 3D 栅格地图"
+msgstr "将 2D 栅格分块地图转化为一个 3D 栅格地图"
 
 #: ../gui/wxpython/menustrings.py:160
 msgid "Raster 2.5D to volume"
@@ -1722,9 +1722,8 @@ msgid "Sites to vector"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:169
-#, fuzzy
 msgid "Converts a GRASS site_lists file into a vector map."
-msgstr "将栅格图转化为矢量图层。"
+msgstr "将GRASS site_lists文件转化为矢量图层。"
 
 #: ../gui/wxpython/menustrings.py:170
 msgid "Volume to raster series"
@@ -1736,12 +1735,14 @@ msgstr "将 3D 栅格图转化为 2D 栅格图"
 
 #: ../gui/wxpython/menustrings.py:172
 #: ../gui/wxpython/gui_modules/gcpmanager.py:730
+#, fuzzy
 msgid "Manage Ground Control Points"
-msgstr ""
+msgstr "设定地面控制点"
 
 #: ../gui/wxpython/menustrings.py:173
+#, fuzzy
 msgid "Manage Ground Control Points for Georectification"
-msgstr ""
+msgstr "在需要校正的影像上标记地面控制点"
 
 #: ../gui/wxpython/menustrings.py:175
 msgid "Georectify raster and vector maps"
@@ -1863,23 +1864,20 @@ msgid "Change working environment"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:206 ../gui/wxpython/menustrings.py:210
-#, fuzzy
 msgid "Change current mapset."
-msgstr "从当前区域设置"
+msgstr "改变当前地图集"
 
 #: ../gui/wxpython/menustrings.py:207
-#, fuzzy
 msgid "Change location and mapset"
-msgstr "创建新数据集"
+msgstr "改变地点和地图集"
 
 #: ../gui/wxpython/menustrings.py:208
 msgid "Change current location and mapset."
-msgstr ""
+msgstr "改变当前地点和地图集"
 
 #: ../gui/wxpython/menustrings.py:209
-#, fuzzy
 msgid "Change mapset"
-msgstr "创建新数据集"
+msgstr "切换地图集"
 
 #: ../gui/wxpython/menustrings.py:211
 msgid "Show settings"
@@ -1912,9 +1910,8 @@ msgid "Display map projection"
 msgstr "投影管理"
 
 #: ../gui/wxpython/menustrings.py:219
-#, fuzzy
 msgid "Print projection information (in conventional GRASS format)."
-msgstr "不能将输入地图的投影信息转换为 GRASS 格式来检查"
+msgstr "输出投影信息（GRASS传统模式）。"
 
 #: ../gui/wxpython/menustrings.py:220
 msgid "Manage projections"
@@ -1943,8 +1940,9 @@ msgid "Install new extension from GRASS AddOns SVN repository."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:226
+#, fuzzy
 msgid "Manage add-ons extensions"
-msgstr ""
+msgstr "投影管理"
 
 #: ../gui/wxpython/menustrings.py:227
 msgid "Tool to maintain the extensions in local GRASS installation."
@@ -2117,12 +2115,14 @@ msgid "Color rules"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:267
+#, fuzzy
 msgid "Export color table"
-msgstr ""
+msgstr "色彩表类型"
 
 #: ../gui/wxpython/menustrings.py:268
+#, fuzzy
 msgid "Exports the color table associated with a raster map layer."
-msgstr ""
+msgstr "根据栅格图层创建/修改色彩表。"
 
 #: ../gui/wxpython/menustrings.py:269
 msgid "Blend 2 color rasters"
@@ -2310,9 +2310,10 @@ msgid "Shadows map"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:308
+#, fuzzy
 msgid ""
 "Calculates cast shadow areas from sun position and elevation raster map."
-msgstr ""
+msgstr "无法关闭新的 g3d 地图"
 
 #: ../gui/wxpython/menustrings.py:309
 msgid "Terrain analysis"
@@ -2368,10 +2369,13 @@ msgid "Slope and aspect"
 msgstr "坡度和方位"
 
 #: ../gui/wxpython/menustrings.py:319
+#, fuzzy
 msgid ""
 "Generates raster maps of slope, aspect, curvatures and partial derivatives "
 "from a elevation raster map."
 msgstr ""
+"根据栅格图层的实际高程值，生成坡度、坡向、曲率和偏导数。坡向从东边开始逆时针"
+"计算。"
 
 #: ../gui/wxpython/menustrings.py:320
 msgid "Terrain parameters"
@@ -2550,8 +2554,9 @@ msgid "Watershed subbasins"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:361
+#, fuzzy
 msgid "Generates watershed subbasins raster map."
-msgstr ""
+msgstr "为栅格图层生成区域统计值。"
 
 #: ../gui/wxpython/menustrings.py:362
 msgid "Watershed analysis"
@@ -2566,8 +2571,9 @@ msgid "Watershed basin creation"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:365
+#, fuzzy
 msgid "Creates watershed basins."
-msgstr ""
+msgstr "生成一个栅格图层，显示一个流域的子流域"
 
 #: ../gui/wxpython/menustrings.py:366 ../gui/wxpython/menustrings.py:763
 msgid "Groundwater modeling"
@@ -3180,7 +3186,7 @@ msgstr "重新调整栅格图层的类别值范围。"
 #: ../gui/wxpython/menustrings.py:501
 #, fuzzy
 msgid "&Vector"
-msgstr "矢量地图 %s - 未发现"
+msgstr "矢量地图"
 
 #: ../gui/wxpython/menustrings.py:502
 msgid "Develop vector map"
@@ -3515,8 +3521,9 @@ msgid "Finds shortest path on vector network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:581
+#, fuzzy
 msgid "Shortest path for sets of features"
-msgstr ""
+msgstr "平滑转角"
 
 #: ../gui/wxpython/menustrings.py:582
 msgid ""
@@ -3581,8 +3588,9 @@ msgid "Computes strongly and weakly connected components in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:597
+#, fuzzy
 msgid "Centrality"
-msgstr ""
+msgstr "对比"
 
 #: ../gui/wxpython/menustrings.py:598
 msgid ""
@@ -3599,8 +3607,9 @@ msgid "Create Steiner tree for the network and given terminals"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:601
+#, fuzzy
 msgid "Minimum spanning tree"
-msgstr ""
+msgstr "最低等高线的级数"
 
 #: ../gui/wxpython/menustrings.py:602
 msgid "Computes minimum spanning tree for the network."
@@ -3875,8 +3884,9 @@ msgid "Tests for normality for vector points."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:667
+#, fuzzy
 msgid "&Imagery"
-msgstr ""
+msgstr "输入文件"
 
 #: ../gui/wxpython/menustrings.py:668
 msgid "Develop images and groups"
@@ -4324,8 +4334,9 @@ msgid ""
 msgstr "计算栅格地图中非空像元的一元统计值"
 
 #: ../gui/wxpython/menustrings.py:774
+#, fuzzy
 msgid "&Database"
-msgstr ""
+msgstr "数据库名称："
 
 #: ../gui/wxpython/menustrings.py:775
 msgid "Database information"
@@ -4590,8 +4601,9 @@ msgid "Display the HTML man pages of GRASS GIS"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:834
+#, fuzzy
 msgid "GUI help"
-msgstr ""
+msgstr "未知的类型"
 
 #: ../gui/wxpython/menustrings.py:836 ../gui/wxpython/menustrings.py:837
 #: ../gui/wxpython/gui_modules/ghelp.py:477
@@ -4604,13 +4616,15 @@ msgid "Create new model"
 msgstr "创建新数据集"
 
 #: ../gui/wxpython/menustrings.py:844
+#, fuzzy
 msgid "Load model from file"
-msgstr ""
+msgstr "地图东向和北向格网坐标的起点"
 
 #: ../gui/wxpython/menustrings.py:846
 #: ../gui/wxpython/gui_modules/gmodeler.py:816
+#, fuzzy
 msgid "Save model"
-msgstr ""
+msgstr "详细模式"
 
 #: ../gui/wxpython/menustrings.py:848
 #, fuzzy
@@ -4618,47 +4632,54 @@ msgid "Save model to file"
 msgstr "保存当前显示为图片文件"
 
 #: ../gui/wxpython/menustrings.py:850
+#, fuzzy
 msgid "Close model file"
-msgstr ""
+msgstr "拷贝表失败"
 
 #: ../gui/wxpython/menustrings.py:851
 #, fuzzy
 msgid "Export to image"
-msgstr "栅格地图"
+msgstr "创建表"
 
 #: ../gui/wxpython/menustrings.py:853
+#, fuzzy
 msgid "Export to Python"
-msgstr ""
+msgstr "导入地图 %d 的要素..."
 
 #: ../gui/wxpython/menustrings.py:855
+#, fuzzy
 msgid "Quit modeler"
-msgstr ""
+msgstr "安静模式"
 
 #: ../gui/wxpython/menustrings.py:856
+#, fuzzy
 msgid "Close modeler window"
-msgstr ""
+msgstr "无法创建文件 [%s]"
 
 #: ../gui/wxpython/menustrings.py:859
 #: ../gui/wxpython/gui_modules/gmodeler.py:3025
+#, fuzzy
 msgid "Modeler settings"
-msgstr ""
+msgstr "无法获取栅格行\n"
 
 #: ../gui/wxpython/menustrings.py:860
 msgid "&Model"
-msgstr ""
+msgstr "  &模型"
 
 #: ../gui/wxpython/menustrings.py:861
 #, fuzzy
 msgid "Add action"
-msgstr "列名"
+msgstr "添加命令"
 
 #: ../gui/wxpython/menustrings.py:863
+#, fuzzy
 msgid "Add data"
-msgstr ""
+msgstr "栅格图的名称"
 
 #: ../gui/wxpython/menustrings.py:865
+#, fuzzy
 msgid "Define relation"
-msgstr ""
+msgstr "非法的输出文件名"
 
 #: ../gui/wxpython/menustrings.py:867
 msgid "Add loop"
@@ -4671,7 +4692,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:869
 #, fuzzy
 msgid "Add condition"
-msgstr "列名"
+msgstr "可选项"
 
 #: ../gui/wxpython/menustrings.py:870
 msgid "Adds condition (if/else) to model"
@@ -4680,16 +4701,18 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:871
 #, fuzzy
 msgid "Remove item"
-msgstr "删除顶点"
+msgstr "移除表"
 
 #: ../gui/wxpython/menustrings.py:872
+#, fuzzy
 msgid "Remove action/data from model"
-msgstr ""
+msgstr "从数据库中删除一个表。"
 
 #: ../gui/wxpython/menustrings.py:873
 #: ../gui/wxpython/gui_modules/gmodeler.py:3310
+#, fuzzy
 msgid "Model properties"
-msgstr ""
+msgstr "要素类型"
 
 #: ../gui/wxpython/menustrings.py:874
 msgid "Model properties (name, purpose, etc.)"
@@ -4700,12 +4723,14 @@ msgid "Delete intermediate data"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:876
+#, fuzzy
 msgid "Delete intermediate data defined in the model"
-msgstr ""
+msgstr "点模式下不创建表"
 
 #: ../gui/wxpython/menustrings.py:878
+#, fuzzy
 msgid "Run entire model"
-msgstr ""
+msgstr "以详细模式运行"
 
 #: ../gui/wxpython/menustrings.py:880
 msgid "Validate entire model"
@@ -4724,8 +4749,9 @@ msgid "About Graphical Modeler"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:885
+#, fuzzy
 msgid "Display information about Graphical Modeler"
-msgstr ""
+msgstr "显示活动xmonitor信息"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:94
 msgid "Create new color table for raster map"
@@ -4821,7 +4847,7 @@ msgstr "地图计算"
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:57
 #, fuzzy
 msgid "GRASS GIS 3D Raster Map Calculator"
-msgstr "栅格地图"
+msgstr "地图计算"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:67
 #, fuzzy
@@ -4852,8 +4878,9 @@ msgid "Expression"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:137
+#, fuzzy
 msgid "Command dialog"
-msgstr ""
+msgstr "添加命令"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:138
 #, python-format
@@ -4985,8 +5012,9 @@ msgid "You must enter a mapcalc statement to create a new map"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/menudata.py:80
+#, fuzzy
 msgid "Unknow tag"
-msgstr ""
+msgstr "未知的类型"
 
 #: ../gui/wxpython/gui_modules/dbm_dialogs.py:71
 msgid "Database connection is not defined in DB file."
@@ -5165,21 +5193,24 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:613
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2542
+#, fuzzy
 msgid "Select source map to display:"
-msgstr ""
+msgstr "只打印矢量地图的范围"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:624
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2547
+#, fuzzy
 msgid "Select target map to display:"
-msgstr ""
+msgstr "只打印矢量地图的范围"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:680
 msgid "You must select a source map in order to continue"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:702
+#, fuzzy
 msgid "Select maps to display"
-msgstr ""
+msgstr "要显示的文本： "
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:703
 #, python-format
@@ -5200,24 +5231,24 @@ msgid "Delete GCP"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1045
+#, fuzzy
 msgid "mapwin not defined for "
-msgstr ""
+msgstr "无法打开像元文件 [%s]"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1116
 #: ../gui/wxpython/gui_modules/toolbars.py:411
-#, fuzzy
 msgid "source"
-msgstr "变化的总和"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1118
 #: ../gui/wxpython/gui_modules/toolbars.py:411
-#, fuzzy
 msgid "target"
-msgstr "面\n"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1120
+#, fuzzy
 msgid "Set GCP coordinates"
-msgstr ""
+msgstr "地图北向格网坐标"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1121
 #, python-format
@@ -5239,12 +5270,14 @@ msgid "POINTS file saved for group <%s>"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1207
+#, fuzzy
 msgid "source mapwin not defined"
-msgstr ""
+msgstr "%s - 未发现"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1213
+#, fuzzy
 msgid "target mapwin not defined"
-msgstr ""
+msgstr "数据库连接未定义"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1242
 #: ../gui/wxpython/gui_modules/georect.py:1005
@@ -5291,16 +5324,17 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1461
 #, fuzzy
 msgid "GCP Manager settings"
-msgstr "栅格地图"
+msgstr "改变区域设置"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1507
+#, fuzzy
 msgid "Quit GCP Manager"
-msgstr ""
+msgstr "退出显示管理器"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1508
 #, fuzzy
 msgid "Save ground control points?"
-msgstr "矢量地图 %s - 未发现"
+msgstr "设定地面控制点"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1585
 msgid ""
@@ -5335,13 +5369,13 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1932
 #, fuzzy
 msgid "source E"
-msgstr "列名"
+msgstr "数据库名称"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1916
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1933
 #, fuzzy
 msgid "source N"
-msgstr "列名"
+msgstr "数据库名称"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1917
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1934
@@ -5388,14 +5422,13 @@ msgid "Select vector map(s) to add to group:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2236
-#, fuzzy
 msgid "Ground Control Point No."
-msgstr "矢量地图 %s - 未发现"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2255
 #, fuzzy
 msgid "source E:"
-msgstr "列名"
+msgstr "数据库名称"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2256
 msgid "target E:"
@@ -5404,7 +5437,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2257
 #, fuzzy
 msgid "source N:"
-msgstr "列名"
+msgstr "数据库名称"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2258
 msgid "target N:"
@@ -5472,18 +5505,17 @@ msgid "Color for high RMS error:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2453
+#, fuzzy
 msgid "Color for selected GCP:"
-msgstr ""
+msgstr "%d 条记录被更新"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2470
-#, fuzzy
 msgid "Color for unused GCPs:"
-msgstr "颜色"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2486
-#, fuzzy
 msgid "Show unused GCPs"
-msgstr "矢量地图 %s - 未发现"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2495
 msgid "Symbol size:"
@@ -5492,11 +5524,12 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2510
 #, fuzzy
 msgid "Line width:"
-msgstr "线"
+msgstr "% 宽度"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2567
+#, fuzzy
 msgid "Rectification"
-msgstr ""
+msgstr "** 错误的颜色规范 **\n"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2573
 #: ../gui/wxpython/gui_modules/georect.py:764
@@ -5527,7 +5560,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2625
 #, fuzzy
 msgid "Update settings"
-msgstr "栅格地图"
+msgstr "打开设置"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2621
 msgid "RMS threshold factor must be > 0"
@@ -5540,9 +5573,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2743
-#, python-format
+#, fuzzy, python-format
 msgid "GCP Manager settings saved to file '%s'."
-msgstr ""
+msgstr "已有的MAT-File(v4)的名称"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:123
 #: ../gui/wxpython/gui_modules/mapdisp.py:740
@@ -5561,8 +5594,9 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/mapdisp.py:1013
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1130
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1264
+#, fuzzy
 msgid "Error in projection (check the settings)"
-msgstr ""
+msgstr "为 [%s] 读取范围时发生错误"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:907
 msgid "MASK"
@@ -5578,8 +5612,9 @@ msgid "No vector map selected for editing."
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:1625
+#, fuzzy
 msgid "Vector digitizer"
-msgstr ""
+msgstr "矢量地图 %s - 未发现"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2316
 msgid "Z bulk-labeling dialog"
@@ -5590,9 +5625,9 @@ msgid "Zoom to saved region extents"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2846
-#, python-format
+#, fuzzy, python-format
 msgid "Region <%s> not found. Operation canceled."
-msgstr ""
+msgstr "未发现区域<%s>"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2867
 msgid "Save display extents to region file"
@@ -5658,8 +5693,9 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:246
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1286
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1289
+#, fuzzy
 msgid "Use defined projection"
-msgstr ""
+msgstr "无法获取栅格行\n"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:222
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:250
@@ -5669,8 +5705,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:317
+#, fuzzy
 msgid "Map toolbar"
-msgstr ""
+msgstr "包含结果的栅格图的名称"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:329
 #: ../gui/wxpython/gui_modules/layertree.py:523
@@ -5722,8 +5759,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:404
+#, fuzzy
 msgid "Starting 3D view mode..."
-msgstr ""
+msgstr "写入新文件...\n"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:405
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:524
@@ -5769,12 +5807,12 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/mapdisp.py:1445
 #, fuzzy
 msgid "Query surface (raster map)"
-msgstr "栅格地图"
+msgstr "输出的栅格图"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1452
 #, fuzzy
 msgid "Query vector map"
-msgstr "栅格地图"
+msgstr "写入 %s ... "
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1460
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1681
@@ -5861,13 +5899,15 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/ghelp.py:69
 #: ../gui/wxpython/gui_modules/ghelp.py:77
+#, fuzzy
 msgid "description"
-msgstr ""
+msgstr "无法获取栅格行\n"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:70
 #: ../gui/wxpython/gui_modules/ghelp.py:79
+#, fuzzy
 msgid "command"
-msgstr ""
+msgstr "添加命令"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:71
 #: ../gui/wxpython/gui_modules/ghelp.py:78
@@ -5880,9 +5920,9 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/ghelp.py:146
 #: ../gui/wxpython/gui_modules/ghelp.py:179
-#, python-format
+#, fuzzy, python-format
 msgid "%d modules found"
-msgstr ""
+msgstr "%s - 未发现"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:212
 msgid "Menu tree (double-click to run command)"
@@ -5898,9 +5938,9 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/ghelp.py:338
 #: ../gui/wxpython/gui_modules/goutput.py:588
-#, python-format
+#, fuzzy, python-format
 msgid "%d modules match"
-msgstr ""
+msgstr "%d 个点写入矢量文件"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:353
 #: ../gui/wxpython/gui_modules/ghelp.py:968
@@ -5928,12 +5968,14 @@ msgid "Authors"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ghelp.py:565
+#, fuzzy
 msgid "Contributors"
-msgstr ""
+msgstr "无法创建属性表"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:566
+#, fuzzy
 msgid "Translators"
-msgstr ""
+msgstr "地形参数"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:599
 #: ../gui/wxpython/gui_modules/ghelp.py:624
@@ -5973,15 +6015,16 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/ghelp.py:762
 msgid "Fetch & install new extension from GRASS Addons"
-msgstr ""
+msgstr "从GRASS插件安装扩展"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:770
 msgid "Repository"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ghelp.py:772
+#, fuzzy
 msgid "List of extensions"
-msgstr ""
+msgstr "等高线级数的列表"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:777
 msgid "Fetch full info including description and keywords (takes time)"
@@ -6008,9 +6051,9 @@ msgid "Fetch list of available extensions by clicking on 'Fetch' button"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ghelp.py:865
-#, python-format
+#, fuzzy, python-format
 msgid "%d items match"
-msgstr ""
+msgstr "%d 个点写入矢量文件"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:877
 msgid "Fetching list of modules from GRASS-Addons SVN (be patient)..."
@@ -6230,16 +6273,17 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1555
 #: ../gui/wxpython/gui_modules/location_wizard.py:1559
+#, fuzzy
 msgid "Datum transform is required."
-msgstr ""
+msgstr "输出栅格文件的标题"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1750
 msgid "Define new GRASS Location"
-msgstr ""
+msgstr "定义新GRASS地点"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1833
 msgid "Do you want to set the default region extents and resolution now?"
-msgstr ""
+msgstr "现在设置地域范围和分辨率？"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1835
 #, fuzzy, python-format
@@ -6253,19 +6297,22 @@ msgid ""
 "\n"
 "Details: %(err)s"
 msgstr ""
+"无法创建地点<%(loc)s>.\n"
+"\n"
+"更多信息: %(err)s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1853
 #: ../gui/wxpython/gui_modules/location_wizard.py:1860
 msgid "Location wizard"
-msgstr ""
+msgstr "地点向导"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1858
 msgid "Location wizard canceled. Location not created."
-msgstr ""
+msgstr "地点向导已取消，没有创建新地点。"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2220
 msgid "Set default region extent and resolution"
-msgstr ""
+msgstr "设置缺省地域范围和分辨率"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2267
 msgid "&Set region"
@@ -6356,7 +6403,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/location_wizard.py:2621
 #, python-format
 msgid "Invalid value: %s"
-msgstr ""
+msgstr "无效数值: %s"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2705
 msgid "Select datum transformation"
@@ -6371,59 +6418,67 @@ msgid "set up vector cleaning tools"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:75
+#, fuzzy
 msgid "break lines/boundaries"
-msgstr ""
+msgstr "写入 %s ... "
 
 #: ../gui/wxpython/gui_modules/vclean.py:76
+#, fuzzy
 msgid "remove duplicates"
-msgstr ""
+msgstr "移除 [%s] 的空文件...\n"
 
 #: ../gui/wxpython/gui_modules/vclean.py:77
 #, fuzzy
 msgid "remove dangles"
-msgstr "删除顶点"
+msgstr "移除 [%s] 的空文件...\n"
 
 #: ../gui/wxpython/gui_modules/vclean.py:78
+#, fuzzy
 msgid "change boundary dangles to lines"
-msgstr ""
+msgstr "管理边界定义"
 
 #: ../gui/wxpython/gui_modules/vclean.py:79
 #, fuzzy
 msgid "remove bridges"
-msgstr "删除顶点"
+msgstr "移除 [%s] 的空文件...\n"
 
 #: ../gui/wxpython/gui_modules/vclean.py:80
 msgid "change bridges to lines"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:81
+#, fuzzy
 msgid "snap lines/boundaries"
-msgstr ""
+msgstr "写入 %s ... "
 
 #: ../gui/wxpython/gui_modules/vclean.py:82
+#, fuzzy
 msgid "remove duplicate area centroids"
-msgstr ""
+msgstr "移除 [%s] 的空文件...\n"
 
 #: ../gui/wxpython/gui_modules/vclean.py:83
 msgid "break polygons"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:84
+#, fuzzy
 msgid "prune lines/boundaries"
-msgstr ""
+msgstr "将要导入的栅格文件"
 
 #: ../gui/wxpython/gui_modules/vclean.py:85
 #, fuzzy
 msgid "remove small areas"
-msgstr "删除顶点"
+msgstr "移除 [%s] 的空文件...\n"
 
 #: ../gui/wxpython/gui_modules/vclean.py:86
+#, fuzzy
 msgid "remove lines/boundaries of zero length"
-msgstr ""
+msgstr "将要导入的栅格文件"
 
 #: ../gui/wxpython/gui_modules/vclean.py:87
+#, fuzzy
 msgid "remove small angles at nodes"
-msgstr ""
+msgstr "移除 [%s] 的空文件...\n"
 
 #: ../gui/wxpython/gui_modules/vclean.py:120
 #: ../gui/wxpython/gui_modules/vclean.py:121
@@ -6437,7 +6492,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/vclean.py:127
 #, fuzzy
 msgid "Select input vector map:"
-msgstr "创建新数据集"
+msgstr "无法打开输入的dig文件。"
 
 #: ../gui/wxpython/gui_modules/vclean.py:133
 #, fuzzy
@@ -6447,7 +6502,7 @@ msgstr "要素类型"
 #: ../gui/wxpython/gui_modules/vclean.py:137
 #, fuzzy
 msgid "Select output vector map:"
-msgstr "创建新数据集"
+msgstr "输出矢量文件的名称"
 
 #: ../gui/wxpython/gui_modules/vclean.py:167
 #: ../gui/wxpython/gui_modules/menuform.py:759
@@ -6460,9 +6515,8 @@ msgid "point"
 msgstr "点"
 
 #: ../gui/wxpython/gui_modules/vclean.py:204
-#, fuzzy
 msgid "line"
-msgstr "线"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:205
 #, fuzzy
@@ -6483,7 +6537,7 @@ msgstr "面\n"
 #: ../gui/wxpython/gui_modules/vclean.py:208
 #, fuzzy
 msgid "face"
-msgstr "输入失败"
+msgstr "变化的总和"
 
 #: ../gui/wxpython/gui_modules/vclean.py:362
 #, python-format
@@ -6495,17 +6549,18 @@ msgid "Please select a cleaning tool to remove"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:385
-#, python-format
+#, fuzzy, python-format
 msgid "%s. cleaning tool moved up"
-msgstr ""
+msgstr "点模式下不建立拓扑"
 
 #: ../gui/wxpython/gui_modules/vclean.py:387
 msgid "1. cleaning tool can not be moved up "
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:389
+#, fuzzy
 msgid "Please select a cleaning tool to move up"
-msgstr ""
+msgstr "点模式下不建立拓扑"
 
 #: ../gui/wxpython/gui_modules/vclean.py:412
 #, python-format
@@ -6531,8 +6586,9 @@ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:456
+#, fuzzy
 msgid "Executing selected cleaning operations..."
-msgstr ""
+msgstr "导入地图 %d 的要素..."
 
 #: ../gui/wxpython/gui_modules/vclean.py:510
 msgid "Vector cleaning command copied to clipboard"
@@ -6551,8 +6607,9 @@ msgid "Data"
 msgstr "要素类型"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:76
+#, fuzzy
 msgid "Appearance"
-msgstr ""
+msgstr "变化"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:110
 msgid "Control View"
@@ -6678,14 +6735,12 @@ msgid "Volume"
 msgstr "列名"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:296
-#, fuzzy
 msgid "Lighting"
-msgstr "线"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:300
-#, fuzzy
 msgid "Fringe"
-msgstr "线"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:318
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:671
@@ -6792,8 +6847,9 @@ msgid "res."
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:490
+#, fuzzy
 msgid "style"
-msgstr ""
+msgstr "要素类型"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:493
 msgid "wire"
@@ -6806,12 +6862,11 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/nviz_tools.py:503
 #, fuzzy
 msgid "wire color"
-msgstr "边框颜色"
+msgstr " nv color\n"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:517
-#, fuzzy
 msgid "Fine:"
-msgstr "线"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:552
 msgid "Mask zeros:"
@@ -6851,8 +6906,9 @@ msgstr "线"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:670
 #: ../gui/wxpython/gui_modules/nviz_tools.py:803
+#, fuzzy
 msgid "width"
-msgstr ""
+msgstr "% 宽度"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:686
 #: ../gui/wxpython/gui_modules/nviz_tools.py:788
@@ -6861,8 +6917,9 @@ msgid "color"
 msgstr "颜色"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:701
+#, fuzzy
 msgid "display"
-msgstr ""
+msgstr "显示文本"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:706
 msgid "on surface"
@@ -6892,8 +6949,9 @@ msgid "size"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:821
+#, fuzzy
 msgid "symbol"
-msgstr ""
+msgstr "读取 %s ..."
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:923
 msgid "isosurfaces"
@@ -6920,21 +6978,22 @@ msgid "Topography level"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1128
-#, fuzzy
 msgid "Show light model"
-msgstr "矢量地图 %s - 未发现"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1133
 msgid "Follow source viewpoint"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1139
+#, fuzzy
 msgid "Light source position"
-msgstr ""
+msgstr "无法获取栅格行\n"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1183
+#, fuzzy
 msgid "Light color and intensity"
-msgstr ""
+msgstr "文本高亮显示的颜色 (仅用于 ps.map 输出)"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1196
 msgid "Brightness:"
@@ -6989,20 +7048,23 @@ msgid "%(features)d features (%(points)d points)"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:38
+#, fuzzy
 msgid "Import data from WMS server"
-msgstr ""
+msgstr "使用的插值方法"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:54
+#, fuzzy
 msgid " Server settings "
-msgstr ""
+msgstr "无法获取栅格行\n"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:56
 msgid "Server:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:63
+#, fuzzy
 msgid " List of layers "
-msgstr ""
+msgstr "将要导入的栅格文件"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:69
 #: ../gui/wxpython/gui_modules/gdialogs.py:1111
@@ -7011,12 +7073,14 @@ msgid "Add imported layers into layer tree"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:79
+#, fuzzy
 msgid "&Connect"
-msgstr ""
+msgstr "相关性"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:80
+#, fuzzy
 msgid "Connect to the server"
-msgstr ""
+msgstr "通过DBMI连接到数据库。"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:85
 #: ../gui/wxpython/gui_modules/gdialogs.py:1119
@@ -7029,16 +7093,18 @@ msgid "Import selected layers"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:237
+#, fuzzy
 msgid "Layer / Style"
-msgstr ""
+msgstr "图层 '%s' 不可用"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:238
 msgid "Title"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:248
+#, fuzzy
 msgid "Layers"
-msgstr ""
+msgstr "图层 %d"
 
 #: ../gui/wxpython/gui_modules/prompt.py:392
 #, python-format
@@ -7120,8 +7186,9 @@ msgid "overwrite existing file"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gselect.py:286
+#, fuzzy
 msgid "Not selectable element"
-msgstr ""
+msgstr "SQL选择语句"
 
 #: ../gui/wxpython/gui_modules/gselect.py:942
 #, fuzzy
@@ -7195,8 +7262,9 @@ msgid "Format:"
 msgstr "OGR 格式"
 
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:29
+#, fuzzy
 msgid "3D view settings"
-msgstr ""
+msgstr "打开设置"
 
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:67
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:146
@@ -7249,13 +7317,14 @@ msgid "Nviz settings saved to file <%s>."
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:472
-#, python-format
+#, fuzzy, python-format
 msgid "3D view settings saved to file <%s>."
-msgstr ""
+msgstr "已有的MAT-File(v4)的名称"
 
 #: ../gui/wxpython/gui_modules/gcmd.py:75
+#, fuzzy
 msgid "Reason"
-msgstr ""
+msgstr "读取 %s ..."
 
 #: ../gui/wxpython/gui_modules/gcmd.py:344
 msgid "Execution failed:"
@@ -7466,8 +7535,9 @@ msgid "No category"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1499
+#, fuzzy
 msgid "Digitize new area"
-msgstr ""
+msgstr "矢量化新线"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1504
 msgid "Add centroid to left/right area"
@@ -7486,12 +7556,14 @@ msgid "Delete record from table"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1534
+#, fuzzy
 msgid "Geometry attributes"
-msgstr ""
+msgstr "无法创建属性表"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1540
+#, fuzzy
 msgid "perimeter"
-msgstr ""
+msgstr "参数："
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1606
 msgid ""
@@ -7693,28 +7765,29 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:175
 msgid "Go to GCP No."
-msgstr ""
+msgstr "转到如下标号的地面控制点(GCP)。"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:176
 msgid "RMS error"
-msgstr ""
+msgstr "均方差错误"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:316
 msgid "GCP List"
-msgstr ""
+msgstr "地面控制点(GCP)列表"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:321
 #, fuzzy
 msgid "Source Display"
-msgstr "列名"
+msgstr "数据库名称"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:325
+#, fuzzy
 msgid "Target Display"
-msgstr ""
+msgstr "要显示的文本： "
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:405
 msgid "Map Toolbar"
-msgstr ""
+msgstr "地图工具栏"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:417
 #, python-format
@@ -7727,12 +7800,13 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:456
+#, fuzzy
 msgid "GCP Display toolbar"
-msgstr ""
+msgstr "包含结果的栅格图的名称"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:469
 msgid "GCP Manager toolbar"
-msgstr ""
+msgstr "地面控制点(GCP)管理器工具栏"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:493
 #, python-format
@@ -7749,12 +7823,14 @@ msgid "Nviz toolbar"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:943
+#, fuzzy
 msgid "Valid Range:"
-msgstr ""
+msgstr "无效的区域：%s"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:945
+#, fuzzy
 msgid "Invalid GCP Number"
-msgstr ""
+msgstr "无法读取掩模"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1280
 #, python-format
@@ -7782,18 +7858,18 @@ msgstr "栅格地图"
 #: ../gui/wxpython/gui_modules/gmodeler.py:411
 #, fuzzy
 msgid "3D raster maps"
-msgstr "栅格地图"
+msgstr "基础栅格图"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:414
 #, fuzzy
 msgid "Vector maps"
-msgstr "矢量地图 %s - 未发现"
+msgstr "矢量地图"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:440
 #: ../gui/wxpython/gui_modules/gmodeler.py:563
 #, fuzzy
 msgid "Variables"
-msgstr "创建表"
+msgstr "变化"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:506
 msgid "GRASS GIS Graphical Modeler"
@@ -7801,15 +7877,16 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:561
 msgid "Model"
-msgstr ""
+msgstr "  模型"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:562
 msgid "Items"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:631
+#, fuzzy
 msgid "Redrawing model..."
-msgstr ""
+msgstr "读取地图"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:658
 msgid "Do you want to save changes in the model?"
@@ -7838,9 +7915,9 @@ msgid "Delete intermediate data?"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:746
-#, python-format
+#, fuzzy, python-format
 msgid "%d maps deleted from current mapset"
-msgstr ""
+msgstr "无法创建栅格地图 %s"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:761
 #: ../gui/wxpython/gui_modules/gmodeler.py:873
@@ -7856,8 +7933,9 @@ msgid "Create new model?"
 msgstr "创建新数据集"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:789
+#, fuzzy
 msgid "Choose model file"
-msgstr ""
+msgstr "拷贝表失败"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:807
 #, python-format
@@ -7866,23 +7944,25 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:813
 #: ../gui/wxpython/gui_modules/gmodeler.py:850
-#, python-format
+#, fuzzy, python-format
 msgid "Model file <%s> already exists. Do you want to overwrite this file?"
-msgstr ""
+msgstr "栅格地图 %i 文件名成： %s 已经存在。它将被覆盖！\n"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:823
 #: ../gui/wxpython/gui_modules/gmodeler.py:863
-#, python-format
+#, fuzzy, python-format
 msgid "File <%s> saved"
-msgstr ""
+msgstr "位置名称"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:832
+#, fuzzy
 msgid "Choose file to save current model"
-msgstr ""
+msgstr "使用当前的区域"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:852
+#, fuzzy
 msgid "File already exists"
-msgstr ""
+msgstr "dig_att文件不存在。"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:900
 msgid "Model is empty. Nothing to run."
@@ -7893,12 +7973,12 @@ msgid "Model is empty. Nothing to validate."
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:994
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Model is not valid.\n"
 "\n"
 "%s"
-msgstr ""
+msgstr "[%s] 的类别文件无效"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:997
 msgid "Model is valid."
@@ -7906,26 +7986,28 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1059
 #: ../gui/wxpython/gui_modules/gmodeler.py:1102
-#, python-format
+#, fuzzy, python-format
 msgid "Model exported to <%s>"
-msgstr ""
+msgstr "无法创建文件 [%s]"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1067
+#, fuzzy
 msgid "Choose file to save"
-msgstr ""
+msgstr "拷贝表失败"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1069
 msgid "Python script (*.py)|*.py"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1083
-#, python-format
+#, fuzzy, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
-msgstr ""
+msgstr "栅格地图 %i 文件名成： %s 已经存在。它将被覆盖！\n"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1085
+#, fuzzy
 msgid "Save file"
-msgstr ""
+msgstr "保存组文件"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1350
 msgid "wxGUI Graphical Modeler"
@@ -7966,22 +8048,24 @@ msgid "unknown"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2085
+#, fuzzy
 msgid "Data properties"
-msgstr ""
+msgstr "要素类型"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2092
 #, fuzzy
 msgid "Name of raster map:"
-msgstr "栅格地图"
+msgstr "栅格图的名称"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2094
 #, fuzzy
 msgid "Name of vector map:"
-msgstr "创建新数据集"
+msgstr "输入的 2D 矢量地图的名称"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2096
+#, fuzzy
 msgid "Name of element:"
-msgstr ""
+msgstr "输入图层的名称"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2270
 #: ../gui/wxpython/gui_modules/layertree.py:264
@@ -7991,7 +8075,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gmodeler.py:2274
 #, fuzzy
 msgid "Disable"
-msgstr "创建表"
+msgstr "表"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2277
 #, fuzzy
@@ -8001,12 +8085,12 @@ msgstr "表"
 #: ../gui/wxpython/gui_modules/gmodeler.py:2282
 #, fuzzy
 msgid "Add control point"
-msgstr "矢量地图 %s - 未发现"
+msgstr "没有起始点"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2284
 #, fuzzy
 msgid "Remove control point"
-msgstr "矢量地图 %s - 未发现"
+msgstr "没有起始点"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2291
 msgid "Intermediate"
@@ -8020,7 +8104,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gmodeler.py:2306
 #, fuzzy
 msgid "Change ID"
-msgstr "创建新数据集"
+msgstr "更改值"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2362
 msgid "Add new GRASS module to the model"
@@ -8049,29 +8133,31 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3040
+#, fuzzy
 msgid "Action"
-msgstr ""
+msgstr "无法获取栅格行\n"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3045
 msgid "Validity"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3053
+#, fuzzy
 msgid "Valid:"
-msgstr ""
+msgstr "无效的区域：%s"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3070
+#, fuzzy
 msgid "Invalid:"
-msgstr ""
+msgstr "无效的区域：%s"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3087
 msgid "Running:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3104
-#, fuzzy
 msgid "Disabled:"
-msgstr "创建表"
+msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3124
 #: ../gui/wxpython/gui_modules/gmodeler.py:3243
@@ -8086,16 +8172,17 @@ msgstr "类型"
 #: ../gui/wxpython/gui_modules/gmodeler.py:3189
 #, fuzzy
 msgid "Raster:"
-msgstr "栅格地图"
+msgstr "栅格值"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3206
+#, fuzzy
 msgid "3D raster:"
-msgstr ""
+msgstr "基础栅格图"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3223
 #, fuzzy
 msgid "Vector:"
-msgstr "矢量地图 %s - 未发现"
+msgstr "矢量地图"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3317
 #: ../gui/wxpython/gui_modules/layertree.py:351
@@ -8106,11 +8193,12 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gmodeler.py:3319
 #, fuzzy
 msgid "Commands"
-msgstr "列名"
+msgstr "添加命令"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3339
+#, fuzzy
 msgid "Apply properties"
-msgstr ""
+msgstr "要素类型"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3353
 msgid "Name:"
@@ -8128,7 +8216,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gmodeler.py:3420
 #, fuzzy
 msgid "Model parameters"
-msgstr "参数："
+msgstr "地形参数"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3567
 msgid "List of variables - right-click to delete"
@@ -8149,8 +8237,9 @@ msgid "Default value"
 msgstr "默认值："
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3575
+#, fuzzy
 msgid "Add new variable"
-msgstr ""
+msgstr "添加新项"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3579
 msgid "integer"
@@ -8165,8 +8254,9 @@ msgid "string"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3589
+#, fuzzy
 msgid "Add new variable to the model"
-msgstr ""
+msgstr "设置 GRASS 变量"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3737
 #, python-format
@@ -8184,16 +8274,17 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gmodeler.py:3852
 #, fuzzy
 msgid "Condition: "
-msgstr "无法获取栅格行\n"
+msgstr "可选项"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3854
+#, fuzzy
 msgid "Condition: not defined"
-msgstr ""
+msgstr "数据库连接未定义\n"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3876
 #, fuzzy
 msgid "Condition"
-msgstr "无法获取栅格行\n"
+msgstr "可选项"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3882
 #: ../gui/wxpython/gui_modules/gmodeler.py:3986
@@ -8206,8 +8297,9 @@ msgid "loop"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3932
+#, fuzzy
 msgid "Loop properties"
-msgstr ""
+msgstr "要素类型"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3938
 msgid "List of items in loop"
@@ -8240,16 +8332,18 @@ msgid "Delete records"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4163
+#, fuzzy
 msgid "Normalize"
-msgstr ""
+msgstr "归一化"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4259
 msgid "if-else"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4271
+#, fuzzy
 msgid "If-else properties"
-msgstr ""
+msgstr "要素类型"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4277
 msgid "List of items in 'if' block"
@@ -8376,20 +8470,24 @@ msgid "Click here to hide search module engine"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/goutput.py:232
+#, fuzzy
 msgid "C&lear output"
-msgstr ""
+msgstr "创建 3D 输出"
 
 #: ../gui/wxpython/gui_modules/goutput.py:234
+#, fuzzy
 msgid "&Clear command"
-msgstr ""
+msgstr "添加命令"
 
 #: ../gui/wxpython/gui_modules/goutput.py:238
+#, fuzzy
 msgid "&Save output"
-msgstr ""
+msgstr "创建 3D 输出"
 
 #: ../gui/wxpython/gui_modules/goutput.py:240
+#, fuzzy
 msgid "&Abort command"
-msgstr ""
+msgstr "添加命令"
 
 #: ../gui/wxpython/gui_modules/goutput.py:242
 msgid "Abort the running command"
@@ -8425,14 +8523,14 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:227
 #: ../gui/wxpython/gui_modules/wxnviz.py:238
-#, python-format
+#, fuzzy, python-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "未找到栅格图<%s>"
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:302
 #, fuzzy, python-format
 msgid "Vector map <%s> not found"
-msgstr "矢量地图 %s - 未发现"
+msgstr "未发现矢量地图<%s>"
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:354
 #: ../gui/wxpython/gui_modules/wxnviz.py:366
@@ -8474,10 +8572,13 @@ msgid ""
 "will be fixed soon). Please keep an eye out for updated versions of GRASS. "
 "In the meantime you can use \"v.digit\" from the Develop Vector menu."
 msgstr ""
+"wxGUI适量数字化暂不可用(希望能尽快恢复)，请随时检查GRASS更新版本。目前您可以"
+"从建立矢量地图菜单下使用\"v.digit\" 。"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:416
+#, fuzzy
 msgid "Set map canvas for "
-msgstr ""
+msgstr "非法的输出文件名"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:418
 #, fuzzy
@@ -8544,7 +8645,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1183
 msgid "Vector map is not 3D. Operation canceled."
-msgstr ""
+msgstr "非三维矢量地图，操作已取消。"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1249
 #: ../gui/wxpython/gui_modules/toolbars.py:1348
@@ -8555,45 +8656,46 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/toolbars.py:1288
 #, python-format
 msgid "Please wait, opening vector map <%s> for editing..."
-msgstr ""
+msgstr "正在打开矢量地图<%s>，请稍候..."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1305
 msgid ""
 "Unable to initialize display driver of vector digitizer. See 'Command "
 "output' for details."
-msgstr ""
+msgstr "初始化适量数字化器显示驱动失败，参考“命令输出”获取更多信息。"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1356
 #, python-format
 msgid "Do you want to save changes in vector map <%s>?"
-msgstr ""
+msgstr "保存对矢量地图<%s>所作的发动?"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1358
 msgid "Save changes?"
-msgstr ""
+msgstr "是否保存更改？"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1365
 #, python-format
 msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
-msgstr ""
+msgstr "关闭和重建矢量地图拓扑中，请稍候 <%s>..."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1430
 #: ../gui/wxpython/gui_modules/toolbars.py:1435
 msgid "New vector map"
-msgstr ""
+msgstr "新矢量地图"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1811
 msgid "Add various raster-based map layers"
-msgstr ""
+msgstr "添加栅格地图层"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1817
+#, fuzzy
 msgid "Add various vector-based map layers"
-msgstr ""
+msgstr "添加直方图图层"
 
 #: ../gui/wxpython/gui_modules/utils.py:498
 #, python-format
 msgid "failed to open '%s'"
-msgstr ""
+msgstr "无法打开'%s'"
 
 #: ../gui/wxpython/gui_modules/render.py:134
 #, python-format
@@ -8631,8 +8733,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/render.py:907
+#, fuzzy
 msgid "ERROR: Rendering failed"
-msgstr ""
+msgstr "读取dig文件...\n"
 
 #: ../gui/wxpython/gui_modules/render.py:954
 #: ../gui/wxpython/gui_modules/render.py:1036
@@ -8715,8 +8818,9 @@ msgid "Area size"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/dbm.py:401
+#, fuzzy
 msgid "Line length"
-msgstr ""
+msgstr " nv color\n"
 
 #: ../gui/wxpython/gui_modules/dbm.py:402
 msgid "Compactness of an area"
@@ -8731,8 +8835,9 @@ msgid "Perimeter length of an area"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/dbm.py:405
+#, fuzzy
 msgid "Number of features for each category"
-msgstr ""
+msgstr "重复过滤的次数"
 
 #: ../gui/wxpython/gui_modules/dbm.py:406
 msgid "Slope steepness of 3D line"
@@ -8743,8 +8848,9 @@ msgid "Line sinuousity"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/dbm.py:408
+#, fuzzy
 msgid "Line azimuth"
-msgstr ""
+msgstr "% 宽度"
 
 #: ../gui/wxpython/gui_modules/dbm.py:560
 #: ../gui/wxpython/gui_modules/dbm.py:3078
@@ -9122,17 +9228,20 @@ msgid "Select GRASS location and mapset"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:109
+#, fuzzy
 msgid "Name of GRASS location:"
-msgstr ""
+msgstr "将要创建的新区域的名称"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:129
 #: ../gui/wxpython/gui_modules/gdialogs.py:161
+#, fuzzy
 msgid "Name of mapset:"
-msgstr ""
+msgstr "栅格图的名称"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:159
+#, fuzzy
 msgid "Select mapset in GRASS location"
-msgstr ""
+msgstr "在当前路径访问其他地图集"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:191
 msgid "Name for new vector map:"
@@ -9223,8 +9332,9 @@ msgid "Map layer type:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:779
+#, fuzzy
 msgid "Select toggle"
-msgstr ""
+msgstr "无法获取栅格行\n"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:786
 msgid "Mapset:"
@@ -9239,8 +9349,9 @@ msgid "List of maps:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:865
+#, fuzzy
 msgid "Invert selection"
-msgstr ""
+msgstr "反向清扫完成"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:939
 msgid "Multiple import"
@@ -9296,12 +9407,14 @@ msgid "opaque"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1498
+#, fuzzy
 msgid "Set image size"
-msgstr ""
+msgstr "保存当前显示为图片文件"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1507
+#, fuzzy
 msgid "Image size"
-msgstr ""
+msgstr "输入文件"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1554
 msgid "Template:"
@@ -9355,8 +9468,9 @@ msgid "Nothing to profile"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/profile.py:576
+#, fuzzy
 msgid "Comma separated value (*.csv)|*.csv"
-msgstr ""
+msgstr "以逗号分隔值的列表：如1.4,3.8,13"
 
 #: ../gui/wxpython/gui_modules/profile.py:579
 msgid "Path and prefix (for raster name) to save profile values..."
@@ -9367,8 +9481,9 @@ msgid "This feature is not yet functional"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/profile.py:675
+#, fuzzy
 msgid "Under Construction"
-msgstr ""
+msgstr "无法创建表：%s"
 
 #: ../gui/wxpython/gui_modules/profile.py:702
 msgid "Profile text settings"
@@ -9540,8 +9655,9 @@ msgid "Change opacity level"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/layertree.py:283
+#, fuzzy
 msgid "3D view properties"
-msgstr ""
+msgstr "要素类型"
 
 #: ../gui/wxpython/gui_modules/layertree.py:287
 msgid "Zoom to selected map(s)"
@@ -9674,26 +9790,26 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/menuform.py:148
 #: ../gui/wxpython/gui_modules/menuform.py:1509
 msgid "Select Color"
-msgstr ""
+msgstr "选择颜色"
 
 #: ../gui/wxpython/gui_modules/menuform.py:414
 #, python-format
 msgid "Parameter element '%(element)s' not found: '%(value)s'"
-msgstr ""
+msgstr "参数项'%(element)s'没有：'%(value)s'"
 
 #: ../gui/wxpython/gui_modules/menuform.py:437
 #, python-format
 msgid "Flag not found: %s"
-msgstr ""
+msgstr "找不到标记：%s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:463
 #, python-format
 msgid "Parameter '%(name)s' (%(desc)s) is missing."
-msgstr ""
+msgstr "参数 '%(name)s' (%(desc)s)缺失。"
 
 #: ../gui/wxpython/gui_modules/menuform.py:489
 msgid "<required>"
-msgstr ""
+msgstr "<必需>"
 
 #: ../gui/wxpython/gui_modules/menuform.py:714
 msgid "Enter parameters for '"
@@ -9701,19 +9817,19 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/menuform.py:725
 msgid "Close this window without executing the command (Ctrl+Q)"
-msgstr ""
+msgstr "不执行命令而关闭窗口(Ctrl+Q)"
 
 #: ../gui/wxpython/gui_modules/menuform.py:730
 msgid "Show manual page of the command (Ctrl+H)"
-msgstr ""
+msgstr "显示该命令帮助(Ctrl+H)"
 
 #: ../gui/wxpython/gui_modules/menuform.py:751
 msgid "Run the command (Ctrl+R)"
-msgstr ""
+msgstr "运行命令(Ctrl+R)"
 
 #: ../gui/wxpython/gui_modules/menuform.py:793
 msgid "Add created map(s) into layer tree"
-msgstr ""
+msgstr "将创建的地图加入层列表"
 
 #: ../gui/wxpython/gui_modules/menuform.py:802
 #: ../gui/wxpython/gui_modules/preferences.py:1360
@@ -9723,7 +9839,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/menuform.py:950
 #, python-format
 msgid "'%s' copied to clipboard"
-msgstr ""
+msgstr "'%s'已复制到剪贴板"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1012
 #: ../gui/wxpython/gui_modules/menuform.py:1025
@@ -9735,24 +9851,26 @@ msgstr "安静模式"
 #: ../gui/wxpython/gui_modules/menuform.py:1015
 #: ../gui/wxpython/gui_modules/menuform.py:1025
 msgid "Optional"
-msgstr ""
+msgstr "可选"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1065
 msgid "Manual"
-msgstr ""
+msgstr "手册"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1106
 #: ../gui/wxpython/gui_modules/menuform.py:1580
+#, fuzzy
 msgid "Parameterized in model"
-msgstr ""
+msgstr "需要的 g3d 文件未找到"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1177
 msgid "[multiple]"
-msgstr ""
+msgstr "[多项]"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1225
+#, fuzzy
 msgid "valid range"
-msgstr ""
+msgstr "无效的区域：%s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1371
 #, fuzzy
@@ -9775,31 +9893,31 @@ msgstr "地形参数"
 #: ../gui/wxpython/gui_modules/menuform.py:1544
 #, python-format
 msgid "Choose %s"
-msgstr ""
+msgstr "选择%s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1571
 msgid "or enter values interactively"
-msgstr ""
+msgstr "或交互式输入数值"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1961
 #, python-format
 msgid "Error in %s"
-msgstr ""
+msgstr "%s出错"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1995
 #, python-format
 msgid "Unable to fetch interface description for command '%s'."
-msgstr ""
+msgstr "无法找到命令'%s'的界面描述。"
 
 #: ../gui/wxpython/gui_modules/menuform.py:2094
 #, python-format
 msgid "Unable to parse command %s"
-msgstr ""
+msgstr "无法解析命令：%s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:2213
 #, python-format
 msgid "usage: %s <grass command>"
-msgstr ""
+msgstr "用法：%s <grass命令>"
 
 #: ../gui/wxpython/gui_modules/globalvar.py:127
 msgid "Go to"
@@ -9807,28 +9925,33 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/globalvar.py:128
 #: ../gui/wxpython/gui_modules/preferences.py:1604
+#, fuzzy
 msgid "Projection"
-msgstr ""
+msgstr "绘制 ... "
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:265
 msgid "Easting"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:266
+#, fuzzy
 msgid "Northing"
-msgstr ""
+msgstr "未找到任何记录。\n"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:267
+#, fuzzy
 msgid "Elevation"
-msgstr ""
+msgstr "高程图"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:268
+#, fuzzy
 msgid "Surface map elevation"
-msgstr ""
+msgstr "输出的表面栅格文件 (高程)"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:269
+#, fuzzy
 msgid "Surface map color"
-msgstr ""
+msgstr "管理地图颜色"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:278
 msgid "XY distance from previous"
@@ -9839,21 +9962,24 @@ msgid "XYZ distance from previous"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:280
+#, fuzzy
 msgid "Distance along surface"
-msgstr ""
+msgstr "纹理特征"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:285
+#, fuzzy
 msgid "Distance along exag. surface"
-msgstr ""
+msgstr "纹理特征"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:292
 #, fuzzy
 msgid "No point on surface"
-msgstr "变化的总和"
+msgstr "指定点的数量"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:297
+#, fuzzy
 msgid "Function not implemented yet"
-msgstr ""
+msgstr "未发现区域<%s>"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:604
 msgid "Loading raster map"
@@ -9905,14 +10031,14 @@ msgid "Vector map <%(name)s> (%(type)s) unloaded successfully"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1072
-#, python-format
+#, fuzzy, python-format
 msgid "Vector point layer not found (id = %d)"
-msgstr ""
+msgstr "矢量地图 %s - 未发现"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1074
-#, python-format
+#, fuzzy, python-format
 msgid "Unable to set data layer properties (id = %d)"
-msgstr ""
+msgstr "无法获取行 %d (从栅格图 %s 中)"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1077
 #, python-format
@@ -10027,7 +10153,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/preferences.py:913
 #, fuzzy
 msgid "User settings"
-msgstr "栅格地图"
+msgstr "打开设置"
 
 #: ../gui/wxpython/gui_modules/preferences.py:933
 msgid "Set to default"
@@ -10051,8 +10177,9 @@ msgid "Key column cannot be empty string."
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1058
+#, fuzzy
 msgid "GUI settings"
-msgstr ""
+msgstr "打开设置"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1082
 msgid "General settings"
@@ -10109,8 +10236,9 @@ msgid "Enable auto-rendering"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1313
+#, fuzzy
 msgid "Enable auto-zooming to selected map layer"
-msgstr ""
+msgstr "没有选中的图层"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1338
 msgid "Command dialog settings"
@@ -10129,8 +10257,9 @@ msgid "Make null cells opaque"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1421
+#, fuzzy
 msgid "Default color table"
-msgstr ""
+msgstr "将要查询的栅格地图"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1447
 msgid "Vector settings"
@@ -10173,16 +10302,18 @@ msgid "Key column:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1611
+#, fuzzy
 msgid "Projection statusbar settings"
-msgstr ""
+msgstr "退出。当前设定未改变"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1637
 msgid "Proj.4 string (required):"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1653
+#, fuzzy
 msgid "EPSG file:"
-msgstr ""
+msgstr "DXF文件"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1668
 msgid ""
@@ -10191,16 +10322,19 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1676
+#, fuzzy
 msgid "&Load EPSG codes"
-msgstr ""
+msgstr "无效EPSG码"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1687
+#, fuzzy
 msgid "Coordinates format"
-msgstr ""
+msgstr "要查询的坐标"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1696
+#, fuzzy
 msgid "LL projections"
-msgstr ""
+msgstr "投影管理"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1715
 msgid "Precision:"
@@ -10233,24 +10367,25 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1844
-#, python-format
+#, fuzzy, python-format
 msgid "Unable to read EPSG codes: %s"
-msgstr ""
+msgstr "无法创建文件 [%s]"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1873
 #: ../gui/wxpython/gui_modules/preferences.py:1882
 #: ../gui/wxpython/gui_modules/preferences.py:1892
-#, python-format
+#, fuzzy, python-format
 msgid "EPSG code %s not found"
-msgstr ""
+msgstr "驱动 %s 未发现"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1900
 msgid "Select default display font"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1925
+#, fuzzy
 msgid "Select output font"
-msgstr ""
+msgstr "选择默认的文件字体"
 
 #: ../gui/wxpython/gui_modules/preferences.py:2019
 msgid "Select font:"
@@ -10419,12 +10554,14 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:128
+#, fuzzy
 msgid "Start &GRASS"
-msgstr ""
+msgstr "登入GRASS"
 
 #: ../gui/wxpython/gis_set.py:134
+#, fuzzy
 msgid "&Browse"
-msgstr ""
+msgstr "浏览"
 
 #: ../gui/wxpython/gis_set.py:136
 #, fuzzy
@@ -10432,8 +10569,9 @@ msgid "&Create mapset"
 msgstr "创建新数据集"
 
 #: ../gui/wxpython/gis_set.py:138
+#, fuzzy
 msgid "&Location wizard"
-msgstr ""
+msgstr "位置名称"
 
 #: ../gui/wxpython/gis_set.py:140
 msgid "Rename mapset"
@@ -10605,6 +10743,654 @@ msgstr ""
 msgid "3D Raster map"
 msgstr "栅格地图"
 
+#, fuzzy
+msgid "Convert OGR vector layers to GRASS vector map."
+msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+
+#, fuzzy
+msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+
+#, fuzzy
+msgid "Raster"
+msgstr "栅格值"
+
+msgid ""
+"Generates raster map layers of slope, aspect, curvatures and partial "
+"derivatives from a raster map layer of true elevation values. Aspect is "
+"calculated counterclockwise from east."
+msgstr ""
+"根据栅格图层的实际高程值，生成坡度、坡向、曲率和偏导数。坡向从东边开始逆时针"
+"计算。"
+
+#, fuzzy
+msgid "Unable to read EPGS file: '%s'"
+msgstr "无法创建文件 [%s]"
+
+msgid "Default"
+msgstr "默认值："
+
+#, fuzzy
+msgid "Vector map <%s> is 3D"
+msgstr "矢量地图 %s - 未发现"
+
+#, fuzzy
+msgid "Vector map <%s> is 2D"
+msgstr "矢量地图 %s - 未发现"
+
+#, fuzzy
+msgid "DXF file:"
+msgstr "DXF文件"
+
+msgid "Add new"
+msgstr "添加新项"
+
+msgid "  Mode "
+msgstr "  "
+
+msgid "Open settings"
+msgstr "打开设置"
+
+msgid "Add command"
+msgstr "添加命令"
+
+msgid "Browse..."
+msgstr "浏览"
+
+msgid "Invalid EPSG Code!"
+msgstr "无效EPSG码"
+
+msgid "Search"
+msgstr "搜索"
+
+#, fuzzy
+msgid "Create new mapset in selected location"
+msgstr "在当前路径访问其他地图集"
+
+msgid "Enter GRASS"
+msgstr "登入GRASS"
+
+msgid "Add histogram layer"
+msgstr "添加直方图图层"
+
+msgid "Add cell values layer"
+msgstr "添加格网值图层"
+
+msgid "Add raster legend layer"
+msgstr "添加栅格比例尺图层"
+
+#, fuzzy
+msgid "Zoom display to selected map"
+msgstr "没有选中的图层"
+
+msgid "Display text"
+msgstr "显示文本"
+
+msgid "Text to display: "
+msgstr "要显示的文本： "
+
+msgid "%  width"
+msgstr "% 宽度"
+
+#, fuzzy
+msgid "Export data table"
+msgstr "创建表"
+
+msgid "Change region settings"
+msgstr "改变区域设置"
+
+msgid "Manage map colors"
+msgstr "管理地图颜色"
+
+msgid "ASCII points file or GRASS ASCII vector file"
+msgstr "ASCII点文件或GRASS ASCII矢量文件"
+
+msgid "Matlab and MapGen files"
+msgstr "Matlab和MapGen文件"
+
+msgid "Create new group file"
+msgstr "创建新组文件"
+
+msgid "Save group file"
+msgstr "保存组文件"
+
+msgid "Close group"
+msgstr "关闭组"
+
+msgid "Save display to image file"
+msgstr "保存当前显示为图片文件"
+
+msgid "Exit Display Manager"
+msgstr "退出显示管理器"
+
+msgid "Select default text font"
+msgstr "选择默认的文件字体"
+
+msgid "Display information about active xmonitor"
+msgstr "显示活动xmonitor信息"
+
+msgid "Manage boundary definitions"
+msgstr "管理边界定义"
+
+msgid "Manage null values"
+msgstr "管理null值"
+
+#, fuzzy
+msgid "top surface 2D raster map"
+msgstr "输出的栅格图"
+
+msgid "Input map"
+msgstr "输入地图"
+
+msgid "Minimum contour level"
+msgstr "最低等高线的级数"
+
+msgid "Number of times to repeat the filter"
+msgstr "重复过滤的次数"
+
+#, fuzzy
+msgid "not found"
+msgstr "%s - 未发现"
+
+#, fuzzy
+msgid "Seed point coordinates"
+msgstr "地图北向格网坐标"
+
+msgid "Run verbosely"
+msgstr "以详细模式运行"
+
+#, fuzzy
+msgid "No data"
+msgstr "栅格图的名称"
+
+#, fuzzy
+msgid "The lower value is not valid"
+msgstr "[%s] 的类别文件无效"
+
+#, fuzzy
+msgid "Unable to open file <%s> for write"
+msgstr "无法找到文件 [%s]。"
+
+#, fuzzy
+msgid ""
+"\n"
+"%s must create a map layer of watershed basins"
+msgstr "生成一个栅格图层，显示一个流域的子流域"
+
+#, fuzzy
+msgid "Projecting..."
+msgstr "绘制 ... "
+
+#, fuzzy
+msgid "Reading file"
+msgstr "读取dig文件...\n"
+
+#, fuzzy
+msgid "Reading map..."
+msgstr "读取地图"
+
+#, fuzzy
+msgid "Invalid zrange"
+msgstr "无效的区域：%s"
+
+msgid "Contrast"
+msgstr "对比"
+
+msgid "Variance"
+msgstr "变化"
+
+#, fuzzy
+msgid "raster, color table"
+msgstr "将要查询的栅格地图"
+
+msgid "Type of color table"
+msgstr "色彩表类型"
+
+msgid "Raster map name from which to copy color table"
+msgstr "提供色彩表的栅格图名称"
+
+#, fuzzy
+msgid "Unable to set projection"
+msgstr "无法创建表：%s"
+
+#, fuzzy
+msgid "Invalid type: %d"
+msgstr "无效的区域：%s"
+
+#, fuzzy
+msgid "Smooth corners of area features"
+msgstr "平滑转角"
+
+#, fuzzy
+msgid "Comma separated value list"
+msgstr "以逗号分隔值的列表：如1.4,3.8,13"
+
+#, fuzzy
+msgid "Enter the category number for this %s: "
+msgstr "编辑 [%s] 的类别文件？"
+
+#, fuzzy
+msgid "Unable to set window"
+msgstr "无法创建文件 [%s]"
+
+msgid "Coordinates for query"
+msgstr "要查询的坐标"
+
+#, fuzzy
+msgid "Region <%s> not found"
+msgstr "未发现区域<%s>"
+
+#, fuzzy
+msgid "Setting map name to <%s>"
+msgstr "非法的输出文件名"
+
+#, fuzzy
+msgid "Failed to copy file"
+msgstr "输出文件的名称"
+
+#, fuzzy
+msgid "Unable to write to <%s>"
+msgstr "无法创建文件 [%s]"
+
+#, fuzzy
+msgid "List of percentiles"
+msgstr "等高线级数的列表"
+
+#, fuzzy
+msgid "<%s> already exists"
+msgstr "dig_att文件不存在。"
+
+#, fuzzy
+msgid "Error reading WKT projection description"
+msgstr "为 [%s] 读取范围时发生错误"
+
+#, fuzzy
+msgid "general, projection"
+msgstr "无法获取栅格行\n"
+
+#, fuzzy
+msgid "Name of new location to create"
+msgstr "将要创建的新区域的名称"
+
+#, fuzzy
+msgid "No active control points"
+msgstr "没有起始点"
+
+#, fuzzy
+msgid "general, settings"
+msgstr "无法获取栅格行\n"
+
+#, fuzzy
+msgid "<%s> is already the current mapset"
+msgstr "无法创建栅格地图 %s"
+
+msgid "GRASS variable to set"
+msgstr "设置 GRASS 变量"
+
+#, fuzzy
+msgid "Name of an element"
+msgstr "输入图层的名称"
+
+#, fuzzy
+msgid "Print data types"
+msgstr "只打印栅格图的类型"
+
+#, fuzzy
+msgid "Unable to set region <%s>"
+msgstr "无法插入新行：%s"
+
+#, fuzzy
+msgid "GUI type"
+msgstr "未知的类型"
+
+#, fuzzy
+msgid "Name of workspace file"
+msgstr "输出文件的名称"
+
+#, fuzzy
+msgid "Name of a mapset"
+msgstr "栅格图的名称"
+
+#, fuzzy
+msgid "Choose new current font"
+msgstr "使用当前的区域"
+
+#, fuzzy
+msgid "Reading symbol"
+msgstr "读取 %s ..."
+
+#, fuzzy
+msgid "Node cost column"
+msgstr "列数"
+
+msgid "Name of raster map"
+msgstr "栅格图的名称"
+
+#, fuzzy
+msgid "Chart properties"
+msgstr "要素类型"
+
+#, fuzzy
+msgid "Line color 1"
+msgstr " nv color\n"
+
+#, fuzzy
+msgid "Selection"
+msgstr "无法获取栅格行\n"
+
+msgid "Database connection not defined"
+msgstr "数据库连接未定义"
+
+#, fuzzy
+msgid "Displays the color table associated with a raster map layer."
+msgstr "根据栅格图层创建/修改色彩表。"
+
+#, fuzzy
+msgid "Name of vector map"
+msgstr "输入的 2D 矢量地图的名称"
+
+#, fuzzy
+msgid "Copy attributes"
+msgstr "无法创建属性表"
+
+msgid "Create 3D output"
+msgstr "创建 3D 输出"
+
+#, fuzzy
+msgid "Layer <%s> not available"
+msgstr "图层 '%s' 不可用"
+
+#, fuzzy
+msgid "Reverse selection"
+msgstr "反向清扫完成"
+
+#, fuzzy
+msgid "Connection"
+msgstr "相关性"
+
+#, fuzzy
+msgid "Feature type (to)"
+msgstr "要素类型"
+
+#, fuzzy
+msgid "Parameter '%s' ignored in standard mode"
+msgstr "需要的 g3d 文件未找到"
+
+#, fuzzy
+msgid "Nothing to do"
+msgstr "未找到任何记录。\n"
+
+#, fuzzy
+msgid "DXF layers"
+msgstr " nv color\n"
+
+#, fuzzy
+msgid "List of layers to import"
+msgstr "将要导入的栅格文件"
+
+#, fuzzy
+msgid "Line layer"
+msgstr " nv color\n"
+
+#, fuzzy
+msgid "OGR driver <%s> not found"
+msgstr "驱动 %s 未发现"
+
+#, fuzzy
+msgid "Checking location <%s> mapset <%s>"
+msgstr "输入的栅格图"
+
+#, fuzzy
+msgid "Reading input vector map"
+msgstr "无法打开输入的dig文件。"
+
+#, fuzzy
+msgid "Name of output vector area map"
+msgstr "输出矢量文件的名称"
+
+#, fuzzy
+msgid "Writing selected features..."
+msgstr "导入地图 %d 的要素..."
+
+#, fuzzy
+msgid "Snapping boundaries..."
+msgstr "写入 %s ... "
+
+#, fuzzy
+msgid "Breaking boundaries..."
+msgstr "写入 %s ... "
+
+#, fuzzy
+msgid "Reading coordinates from file."
+msgstr "地图东向和北向格网坐标的起点"
+
+#, fuzzy
+msgid "Rebuilding topology..."
+msgstr "矢量文件读取错误"
+
+#, fuzzy
+msgid "Querying vector map <%s>..."
+msgstr "写入 %s ... "
+
+#, fuzzy
+msgid "Column name or expression"
+msgstr "列名"
+
+#, fuzzy
+msgid "Writing new file..."
+msgstr "写入新文件...\n"
+
+#, fuzzy
+msgid "no points to triangulate"
+msgstr "指定点的数量"
+
+#, fuzzy
+msgid "Writing edges..."
+msgstr "写入 %s ... "
+
+#, fuzzy
+msgid "No records selected"
+msgstr "%d 条记录被更新"
+
+msgid "Do not create table in points mode"
+msgstr "点模式下不创建表"
+
+#, fuzzy
+msgid "Remove duplicates"
+msgstr "移除 [%s] 的空文件...\n"
+
+#, fuzzy
+msgid "Remove dangles"
+msgstr "移除 [%s] 的空文件...\n"
+
+#, fuzzy
+msgid "Remove bridges"
+msgstr "移除 [%s] 的空文件...\n"
+
+#, fuzzy
+msgid "Remove duplicate area centroids"
+msgstr "移除 [%s] 的空文件...\n"
+
+#, fuzzy
+msgid "Remove small areas"
+msgstr "移除 [%s] 的空文件...\n"
+
+#, fuzzy
+msgid "%d lines / boundaries removed"
+msgstr "将要导入的栅格文件"
+
+#, fuzzy
+msgid "Rebuilding topology for output vector map..."
+msgstr "矢量文件读取错误"
+
+#, fuzzy
+msgid "Operation not implemented"
+msgstr "未发现区域<%s>"
+
+#, fuzzy
+msgid "Layer/table"
+msgstr "图层 '%s' 不可用"
+
+msgid "Output surface raster map (elevation)"
+msgstr "输出的表面栅格文件 (高程)"
+
+#, fuzzy
+msgid "The file '%s' already exists and will be overwritten."
+msgstr "栅格地图 %i 文件名成： %s 已经存在。它将被覆盖！\n"
+
+#, fuzzy
+msgid "File <%s> created."
+msgstr "位置名称"
+
+#, fuzzy
+msgid "Image"
+msgstr "输入文件"
+
+#, fuzzy
+msgid "Fine resolution"
+msgstr "非法的输出文件名"
+
+#, fuzzy
+msgid "Draw style"
+msgstr "要素类型"
+
+#, fuzzy
+msgid "Volume position"
+msgstr "无法获取栅格行\n"
+
+#, fuzzy
+msgid "Unable to set draw mode for surface id %d"
+msgstr "无法获取行 %d (从栅格图 %s 中)"
+
+#, fuzzy
+msgid "Invalid BMP header"
+msgstr "无法读取掩模"
+
+#, fuzzy
+msgid "Image file"
+msgstr "输入文件"
+
+msgid "Unknown type"
+msgstr "未知的类型"
+
+msgid "Location name"
+msgstr "位置名称"
+
+msgid "SQL select statement"
+msgstr "SQL选择语句"
+
+#, fuzzy
+msgid "Vector map to modify"
+msgstr "只打印矢量地图的范围"
+
+#, fuzzy
+msgid "Export as waypoints"
+msgstr "导入地图 %d 的要素..."
+
+#, fuzzy
+msgid "Redraw all frames"
+msgstr "打印区域总面积"
+
+#, fuzzy
+msgid "Name of GIS manager settings file (.grc)"
+msgstr "已有的MAT-File(v4)的名称"
+
+#, fuzzy
+msgid "Display monitor to start"
+msgstr "包含结果的栅格图的名称"
+
+#, fuzzy
+msgid "Image format requested from the server"
+msgstr "使用的插值方法"
+
+#, fuzzy
+msgid "%d classes found"
+msgstr "%s - 未发现"
+
+msgid "Mark ground control points on image to be rectified."
+msgstr "在需要校正的影像上标记地面控制点"
+
+#, fuzzy
+msgid "%s@%s: projection doesn't match current settings"
+msgstr "退出。当前设定未改变"
+
+#, fuzzy
+msgid "Hilight color for text"
+msgstr "文本高亮显示的颜色 (仅用于 ps.map 输出)"
+
+msgid "Vector map %s - not found"
+msgstr "矢量地图 %s - 未发现"
+
+#, fuzzy
+msgid "%s: unable to open %s"
+msgstr "无法打开<%s>"
+
+msgid "Database connection not defined\n"
+msgstr "数据库连接未定义\n"
+
+#, fuzzy
+msgid "%s map not found"
+msgstr "%s - 未发现"
+
+#, fuzzy
+msgid "Cannot open file for <%s>"
+msgstr "无法打开像元文件 [%s]"
+
+#, fuzzy
+msgid "Querying input '%s' ... "
+msgstr "读取 %s ..."
+
+#, fuzzy
+msgid "Raster map <%s>] not found"
+msgstr "未找到栅格图<%s>"
+
+#, fuzzy
+msgid "Checking location %s, mapset %s:"
+msgstr "输入的栅格图"
+
+msgid "Normalized"
+msgstr "归一化"
+
+#, fuzzy
+msgid "[%d] files patched"
+msgstr "%d 个点写入矢量文件"
+
+msgid "vector map <%s> not found"
+msgstr "未发现矢量地图<%s>"
+
+msgid "Elevation map"
+msgstr "高程图"
+
+#, fuzzy
+msgid "verbose mode"
+msgstr "详细模式"
+
+#, fuzzy
+msgid "bad color specification"
+msgstr "** 错误的颜色规范 **\n"
+
+#, fuzzy
+msgid "Nothing Found."
+msgstr "未找到任何记录。\n"
+
+msgid "Quiet mode"
+msgstr "安静模式"
+
+msgid "Connect to the database through DBMI."
+msgstr "通过DBMI连接到数据库。"
+
+#, fuzzy
+msgid "Name for output raster map(s)"
+msgstr ""
+"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+"输出栅格图的名称\n"
+"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+"输出栅格文件的名称"
+
+#, fuzzy
+msgid "Output raster map required"
+msgstr "输出栅格文件的标题"
+
 #~ msgid "Run"
 #~ msgstr "运行"
 
@@ -10620,28 +11406,19 @@ msgstr "栅格地图"
 #~ msgid "Import GDAL supported raster file into a binary raster map layer."
 #~ msgstr "将GDAL支持的栅格文件导入到二元栅格图层中。"
 
-#, fuzzy
 #~ msgid "Converts ASCII raster file to binary raster map layer."
-#~ msgstr "将ASCII栅格文本文件转化为(二元)栅格图层。"
+#~ msgstr "将ASCII栅格文本文件转化为二元栅格图层。"
 
-#, fuzzy
 #~ msgid ""
 #~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
 #~ "map layer."
-#~ msgstr ""
-#~ "将ESRI ARC/INFO ASCII形式的栅格文件(GRID)转换为(二进制形式的)栅格图层。"
+#~ msgstr "将ESRI ARC/INFO ASCII形式的栅格文件(GRID)转换为(二元)栅格图层。"
 
-#, fuzzy
 #~ msgid "Import of SPOT VGT NDVI file into a raster map"
-#~ msgstr "将二进制栅格文件导入到GRASS栅格图层中。"
+#~ msgstr "导入SPOT VGT NDVI文件为栅格图层"
 
-#, fuzzy
-#~ msgid "Convert OGR vector layers to GRASS vector map."
-#~ msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
-
-#, fuzzy
 #~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
-#~ msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+#~ msgstr "将ASCII格式的点数据或矢量数据转化为GRASS栅格图层。"
 
 #, fuzzy
 #~ msgid ""
@@ -10671,11 +11448,11 @@ msgstr "栅格地图"
 #~ msgid "Converts a raster map layer into a height-field file for POVRAY."
 #~ msgstr "将栅格图层转换为用于POVRAY的、含有高程信息的文件。"
 
-#, fuzzy
 #~ msgid ""
 #~ "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel "
 #~ "resolution of the currently defined region."
-#~ msgstr "以当前区域的像素分辨率，将GRASS栅格文件输出为PPM影像文件。"
+#~ msgstr ""
+#~ "以当前区域的像素分辨率，将GRASS栅格文件输出为8/24bit的TIFF图像文件。"
 
 #~ msgid "Converts raster maps into the VTK-Ascii format"
 #~ msgstr "将栅格地图转化为 VTK-Ascii 格式"
@@ -10684,21 +11461,17 @@ msgstr "栅格地图"
 #~ msgid "Converts to one of the supported OGR vector formats."
 #~ msgstr "转化为一种支持的 OGR 矢量格式。"
 
-#, fuzzy
 #~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
-#~ msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+#~ msgstr "将GRASS二元矢量图层转化为GRASS ASCII矢量图层。"
 
-#, fuzzy
 #~ msgid "Exports GRASS vector map layers to DXF file format."
-#~ msgstr "将GRASS栅格输出为二元数组。"
+#~ msgstr "将GRASS栅格输出为DXF格式文件。"
 
-#, fuzzy
 #~ msgid "Exports a GRASS vector map to SVG."
-#~ msgstr "将GRASS栅格输出为二元数组。"
+#~ msgstr "将GRASS栅格输出为SVG格式。"
 
-#, fuzzy
 #~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
-#~ msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
+#~ msgstr "将GRASS二元矢量图层转化为VTK ASCII格式。"
 
 #~ msgid "Converts a 3D raster map layer into an ASCII text file"
 #~ msgstr "将 3D 栅格图层转化为 ASCII 文本文件"
@@ -10709,12 +11482,9 @@ msgstr "栅格地图"
 #~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
 #~ msgstr "将 3D 栅格图 (G3D) 转化为 VTK-Ascii 格式"
 
+#, fuzzy
 #~ msgid "Converts a raster map into a vector map layer."
 #~ msgstr "将栅格图转化为矢量图层。"
-
-#, fuzzy
-#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
-#~ msgstr "将GRASS矢量图层转化为GRASS栅格图层。"
 
 #~ msgid ""
 #~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
@@ -10724,17 +11494,11 @@ msgstr "栅格地图"
 #~ msgid "E&xit"
 #~ msgstr "退出（&x）"
 
-#, fuzzy
 #~ msgid "Change projection for current location"
-#~ msgstr "无法获得当前区域的投影信息"
+#~ msgstr "改变当前地点的投影"
 
-#, fuzzy
 #~ msgid "Interactively reset the location's projection settings."
-#~ msgstr "覆盖投影(使用区域的投影)"
-
-#, fuzzy
-#~ msgid "Raster"
-#~ msgstr "栅格值"
+#~ msgstr "手动重设当前地点的投影设置。"
 
 #, fuzzy
 #~ msgid ""
@@ -10768,14 +11532,6 @@ msgstr "栅格地图"
 #~ "通过太阳位置和DEM计算阴影区域。有两个选择，A指定准确的太阳位置；B指定日期/"
 #~ "时间让r.sunmask自己计算太阳的位置。"
 
-#~ msgid ""
-#~ "Generates raster map layers of slope, aspect, curvatures and partial "
-#~ "derivatives from a raster map layer of true elevation values. Aspect is "
-#~ "calculated counterclockwise from east."
-#~ msgstr ""
-#~ "根据栅格图层的实际高程值，生成坡度、坡向、曲率和偏导数。坡向从东边开始逆时"
-#~ "针计算。"
-
 #, fuzzy
 #~ msgid "Generates a raster map layer of distance to features in input layer."
 #~ msgstr "生成一个栅格图层包含一个像元增长所形成的连续区域。"
@@ -10793,6 +11549,7 @@ msgstr "栅格地图"
 #~ msgid "Generates a raster map layer showing watershed subbasins."
 #~ msgstr "生成一个栅格图层，显示一个流域的子流域"
 
+#, fuzzy
 #~ msgid "Watershed basin analysis program."
 #~ msgstr "流域分析程序。"
 
@@ -10890,33 +11647,11 @@ msgstr "栅格地图"
 #~ msgid "Map calculator"
 #~ msgstr "地图计算"
 
-#, fuzzy
-#~ msgid "Unable to read EPGS file: '%s'"
-#~ msgstr "无法创建文件 [%s]"
-
-#~ msgid "Default"
-#~ msgstr "默认值："
-
-#, fuzzy
-#~ msgid "Vector map <%s> is 3D"
-#~ msgstr "矢量地图 %s - 未发现"
-
-#, fuzzy
-#~ msgid "Vector map <%s> is 2D"
-#~ msgstr "矢量地图 %s - 未发现"
-
-#, fuzzy
-#~ msgid "DXF file:"
-#~ msgstr "DXF文件"
-
 #~ msgid "   Category:"
 #~ msgstr "　　分类："
 
 #~ msgid "Insert new record to table"
 #~ msgstr "向表中插入新记录"
-
-#~ msgid "Add new"
-#~ msgstr "添加新项"
 
 #~ msgid "Welcome to v.digit"
 #~ msgstr "欢迎来到v.digit"
@@ -10933,9 +11668,6 @@ msgstr "栅格地图"
 #~ msgid "  Layer"
 #~ msgstr "  图层"
 
-#~ msgid "  Mode "
-#~ msgstr "  "
-
 #~ msgid "Insert new record into table"
 #~ msgstr "向表中插入新记录"
 
@@ -10945,17 +11677,11 @@ msgstr "栅格地图"
 #~ msgid "Redraw"
 #~ msgstr "重绘"
 
-#~ msgid "Open settings"
-#~ msgstr "打开设置"
-
 #~ msgid "Save and exit"
 #~ msgstr "保存并关闭"
 
 #~ msgid "mouse button actions (left, middle, right)"
 #~ msgstr "鼠标动作（左键，中键，右键）"
-
-#~ msgid "Add command"
-#~ msgstr "添加命令"
 
 #~ msgid "Table successfully created"
 #~ msgstr "成功创建表"
@@ -10984,17 +11710,11 @@ msgstr "栅格地图"
 #~ msgid "WARNING: cant get enviromental variable"
 #~ msgstr "警告：无法获取环境变量"
 
-#~ msgid "Browse..."
-#~ msgstr "浏览"
-
 #~ msgid "WARNING: epsg-codes file not found"
 #~ msgstr "警告：找不到epsg-codes文件"
 
 #~ msgid "WARNING: The epsg-codes file was not found!"
 #~ msgstr "警告：找不到此epsg-codes文件！"
-
-#~ msgid "Invalid EPSG Code!"
-#~ msgstr "无效EPSG码"
 
 #~ msgid ""
 #~ "g.proj returned the following message:\n"
@@ -11002,9 +11722,6 @@ msgstr "栅格地图"
 #~ msgstr ""
 #~ "g.proj返回以下信息：\n"
 #~ "%s"
-
-#~ msgid "Search"
-#~ msgstr "搜索"
 
 #~ msgid "Search text: "
 #~ msgstr "搜索文本"
@@ -11027,15 +11744,8 @@ msgstr "栅格地图"
 #~ msgid "Welcome to GRASS GIS Version"
 #~ msgstr "欢迎来到GRASS GIS版本"
 
-#, fuzzy
-#~ msgid "Create new mapset in selected location"
-#~ msgstr "在当前路径访问其他地图集"
-
 #~ msgid "WARNING: invalid mapset name"
 #~ msgstr "警告：无效的数据集名"
-
-#~ msgid "Enter GRASS"
-#~ msgstr "登入GRASS"
 
 #~ msgid "WARNING: invalid mapset"
 #~ msgstr "警告：无效的数据集"
@@ -11109,21 +11819,8 @@ msgstr "栅格地图"
 #~ msgid "Start new map display monitor"
 #~ msgstr "启动新地图显示管理器"
 
-#~ msgid "Add histogram layer"
-#~ msgstr "添加直方图图层"
-
-#~ msgid "Add cell values layer"
-#~ msgstr "添加格网值图层"
-
-#~ msgid "Add raster legend layer"
-#~ msgstr "添加栅格比例尺图层"
-
 #~ msgid "Add raster labels layer (using v.labels file)"
 #~ msgstr "添加栅格注记图层（使用v.labels文件）"
-
-#, fuzzy
-#~ msgid "Zoom display to selected map"
-#~ msgstr "没有选中的图层"
 
 #, fuzzy
 #~ msgid "Save display extents to named region"
@@ -11134,12 +11831,6 @@ msgstr "栅格地图"
 
 #~ msgid "     align text with coordinate point  "
 #~ msgstr "    对齐文本到坐标点"
-
-#~ msgid "Display text"
-#~ msgstr "显示文本"
-
-#~ msgid "Text to display: "
-#~ msgstr "要显示的文本： "
 
 #~ msgid "     text rotation (degrees)"
 #~ msgstr "     文本旋转（度数）"
@@ -11155,9 +11846,6 @@ msgstr "栅格地图"
 
 #~ msgid "Raster map: "
 #~ msgstr "栅格地图： "
-
-#~ msgid "%  width"
-#~ msgstr "% 宽度"
 
 #, fuzzy
 #~ msgid "Raster map for profile"
@@ -11187,18 +11875,11 @@ msgstr "栅格地图"
 #~ msgid "Multiple GPS formats using GPSBabel"
 #~ msgstr "使用GDAL的多种格式"
 
-#, fuzzy
-#~ msgid "Export data table"
-#~ msgstr "创建表"
-
 #~ msgid "&Config"
 #~ msgstr "配置（&c）"
 
 #~ msgid "Display region settings"
 #~ msgstr "显示区域设置"
-
-#~ msgid "Change region settings"
-#~ msgstr "改变区域设置"
 
 #~ msgid "Show current GRASS version"
 #~ msgstr "显示当前GRASS版本"
@@ -11208,9 +11889,6 @@ msgstr "栅格地图"
 
 #~ msgid "Digitize raster"
 #~ msgstr "栅格数字化"
-
-#~ msgid "Manage map colors"
-#~ msgstr "管理地图颜色"
 
 #~ msgid "Query by coordinate(s)"
 #~ msgstr "通过坐标系查询"
@@ -11304,14 +11982,8 @@ msgstr "栅格地图"
 #~ msgid "Various formats using OGR"
 #~ msgstr "使用OGR的多种格式"
 
-#~ msgid "ASCII points file or GRASS ASCII vector file"
-#~ msgstr "ASCII点文件或GRASS ASCII矢量文件"
-
 #~ msgid "ESRI e00 format"
 #~ msgstr "ESRI e00格式"
-
-#~ msgid "Matlab and MapGen files"
-#~ msgstr "Matlab和MapGen文件"
 
 #~ msgid "Grid 3D"
 #~ msgstr "3D格网"
@@ -11394,23 +12066,11 @@ msgstr "栅格地图"
 #~ msgid "Groups"
 #~ msgstr "组文件"
 
-#~ msgid "Create new group file"
-#~ msgstr "创建新组文件"
-
 #~ msgid "Open group file"
 #~ msgstr "打开组文件"
 
-#~ msgid "Save group file"
-#~ msgstr "保存组文件"
-
 #~ msgid "Save group file as name"
 #~ msgstr "另存组文件为"
-
-#~ msgid "Close group"
-#~ msgstr "关闭组"
-
-#~ msgid "Save display to image file"
-#~ msgstr "保存当前显示为图片文件"
 
 #~ msgid "Save map to Postscript file"
 #~ msgstr "保存地图为Postscript文件"
@@ -11420,9 +12080,6 @@ msgstr "栅格地图"
 
 #~ msgid "print"
 #~ msgstr "打印"
-
-#~ msgid "Exit Display Manager"
-#~ msgstr "退出显示管理器"
 
 #~ msgid "Zoom to maximum extent of all displayed maps"
 #~ msgstr "缩放到所有已显示地图的最大范围"
@@ -11445,9 +12102,6 @@ msgstr "栅格地图"
 #~ msgid "Text"
 #~ msgstr "文本"
 
-#~ msgid "Select default text font"
-#~ msgstr "选择默认的文件字体"
-
 #~ msgid "Select default freetype text font"
 #~ msgstr "选择默认的freetype文件字体"
 
@@ -11463,17 +12117,8 @@ msgstr "栅格地图"
 #~ msgid "Set active xmonitor to specified size"
 #~ msgstr "设置当前xmonitor为特定大小"
 
-#~ msgid "Display information about active xmonitor"
-#~ msgstr "显示活动xmonitor信息"
-
 #~ msgid "Compress/decompress raster file"
 #~ msgstr "压缩/解压缩栅格文件"
-
-#~ msgid "Manage boundary definitions"
-#~ msgstr "管理边界定义"
-
-#~ msgid "Manage null values"
-#~ msgstr "管理null值"
 
 #~ msgid "Manage timestamps for files"
 #~ msgstr "管理文件的时间戳"
@@ -11729,10 +12374,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Float value to represent no data cell/points"
 #~ msgstr "表示无数据像元的浮点值"
-
-#, fuzzy
-#~ msgid "top surface 2D raster map"
-#~ msgstr "输出的栅格图"
 
 #, fuzzy
 #~ msgid "bottom surface 2D raster map"
@@ -12009,9 +12650,6 @@ msgstr "栅格地图"
 #~ msgid "Reading map"
 #~ msgstr "读取地图"
 
-#~ msgid "Input map"
-#~ msgstr "输入地图"
-
 #~ msgid "GRIDATB i/o map file"
 #~ msgstr "GRIDATB i/o 地图文件"
 
@@ -12158,9 +12796,6 @@ msgstr "栅格地图"
 
 #~ msgid "List of contour levels"
 #~ msgstr "等高线级数的列表"
-
-#~ msgid "Minimum contour level"
-#~ msgstr "最低等高线的级数"
 
 #~ msgid "Maximum contour level"
 #~ msgstr "最高等高线的级数"
@@ -12313,9 +12948,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Name of filter file"
 #~ msgstr "过滤器文件的名称"
-
-#~ msgid "Number of times to repeat the filter"
-#~ msgstr "重复过滤的次数"
 
 #~ msgid "Output raster map title"
 #~ msgstr "输出栅格文件的标题"
@@ -12827,10 +13459,6 @@ msgstr "栅格地图"
 #~ msgstr "未发现输入的矢量"
 
 #, fuzzy
-#~ msgid "not found"
-#~ msgstr "%s - 未发现"
-
-#, fuzzy
 #~ msgid "Setting grey color table for <%s> (8bit, full range)"
 #~ msgstr "为<%s在%s中>创建颜色表"
 
@@ -13194,10 +13822,6 @@ msgstr "栅格地图"
 #~ "输出栅格图的名称\n"
 #~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
 #~ "输出栅格文件的名称"
-
-#, fuzzy
-#~ msgid "Seed point coordinates"
-#~ msgstr "地图北向格网坐标"
 
 #, fuzzy
 #~ msgid "Name of raster map with seed (at least 1 cell > 0)"
@@ -13616,9 +14240,6 @@ msgstr "栅格地图"
 #~ msgid "Keep null values in output raster map"
 #~ msgstr "在输出地图上保留空值"
 
-#~ msgid "Run verbosely"
-#~ msgstr "以详细模式运行"
-
 #~ msgid "Must specify exactly one of start_points, start_rast or coordinate"
 #~ msgstr "必须明确指定一个 start_points，start_rast 或坐标"
 
@@ -13640,10 +14261,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Finding cost path..."
 #~ msgstr "寻找路径"
-
-#, fuzzy
-#~ msgid "No data"
-#~ msgstr "栅格图的名称"
 
 #, fuzzy
 #~ msgid "Peak cost value: %f."
@@ -13863,19 +14480,11 @@ msgstr "栅格地图"
 #~ msgstr "[%s] 的类别文件无效"
 
 #, fuzzy
-#~ msgid "The lower value is not valid"
-#~ msgstr "[%s] 的类别文件无效"
-
-#, fuzzy
 #~ msgid "Name for new PPM file (use '-' for stdout)"
 #~ msgstr "新的PPM文件的名称。(out=-用于标准输出)"
 
 #~ msgid "Output greyscale instead of color"
 #~ msgstr "输出灰度图而不是彩色图"
-
-#, fuzzy
-#~ msgid "Unable to open file <%s> for write"
-#~ msgstr "无法找到文件 [%s]。"
 
 #, fuzzy
 #~ msgid "Converting..."
@@ -14376,12 +14985,6 @@ msgstr "栅格地图"
 #~ msgstr "输入地图：洼地的位置"
 
 #, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "%s must create a map layer of watershed basins"
-#~ msgstr "生成一个栅格图层，显示一个流域的子流域"
-
-#, fuzzy
 #~ msgid "be used for every cell in the current region."
 #~ msgstr "打印当前区域"
 
@@ -14586,16 +15189,8 @@ msgstr "栅格地图"
 #~ msgstr "输出图"
 
 #, fuzzy
-#~ msgid "Projecting..."
-#~ msgstr "绘制 ... "
-
-#, fuzzy
 #~ msgid "Input raster map is outside current region"
 #~ msgstr "起点 %d 在当前范围之外"
-
-#, fuzzy
-#~ msgid "Reading file"
-#~ msgstr "读取dig文件...\n"
 
 #, fuzzy
 #~ msgid "Error reading wildcard"
@@ -14643,10 +15238,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Find unresolved areas only"
 #~ msgstr "只查找未解决区域"
-
-#, fuzzy
-#~ msgid "Reading map..."
-#~ msgstr "读取地图"
 
 #, fuzzy
 #~ msgid "Found %d unresolved areas"
@@ -14846,10 +15437,6 @@ msgstr "栅格地图"
 #~ msgstr "请指定合理的 z 字段。"
 
 #, fuzzy
-#~ msgid "Invalid zrange"
-#~ msgstr "无效的区域：%s"
-
-#, fuzzy
 #~ msgid "Unable to open input file <%s>"
 #~ msgstr "无法打开输入文件 <%s@%s>"
 
@@ -14880,14 +15467,8 @@ msgstr "栅格地图"
 #~ msgid "Features"
 #~ msgstr "要素类型"
 
-#~ msgid "Contrast"
-#~ msgstr "对比"
-
 #~ msgid "Correlation"
 #~ msgstr "相关性"
-
-#~ msgid "Variance"
-#~ msgstr "变化"
 
 #~ msgid "Sum Average"
 #~ msgstr "平均值的总和"
@@ -14960,16 +15541,6 @@ msgstr "栅格地图"
 
 #~ msgid "Output elevation raster map"
 #~ msgstr "输出的高程栅格图"
-
-#, fuzzy
-#~ msgid "raster, color table"
-#~ msgstr "将要查询的栅格地图"
-
-#~ msgid "Type of color table"
-#~ msgstr "色彩表类型"
-
-#~ msgid "Raster map name from which to copy color table"
-#~ msgstr "提供色彩表的栅格图名称"
 
 #, fuzzy
 #~ msgid "Path to rules file (\"-\" to read rules from stdin)"
@@ -15228,10 +15799,6 @@ msgstr "栅格地图"
 #~ msgstr "无法设置用户/密码"
 
 #, fuzzy
-#~ msgid "Unable to set projection"
-#~ msgstr "无法创建表：%s"
-
-#, fuzzy
 #~ msgid "Exporting raster map <%s> (band %d)..."
 #~ msgstr "写入栅格地图 %i\n"
 
@@ -15390,10 +15957,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Unable to close raster map"
 #~ msgstr "无法关闭输出地图"
-
-#, fuzzy
-#~ msgid "Invalid type: %d"
-#~ msgstr "无效的区域：%s"
 
 #, fuzzy
 #~ msgid "Too many arguments for function '%s'"
@@ -15672,10 +16235,6 @@ msgstr "栅格地图"
 #~ msgid "Extracting points..."
 #~ msgstr "写入 %s ... "
 
-#, fuzzy
-#~ msgid "Smooth corners of area features"
-#~ msgstr "平滑转角"
-
 #~ msgid ""
 #~ "Use raster values as categories instead of unique sequence (CELL only)"
 #~ msgstr "使用栅格值作为类别，而不使用独立值(只对栅格单元)"
@@ -15712,10 +16271,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Extracting lines..."
 #~ msgstr "写入 %s ... "
-
-#, fuzzy
-#~ msgid "Comma separated value list"
-#~ msgstr "以逗号分隔值的列表：如1.4,3.8,13"
 
 #, fuzzy
 #~ msgid "File containing category label rules (or \"-\" to read from stdin)"
@@ -15835,10 +16390,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "No graphics device selected!"
 #~ msgstr "为选择图形设备"
-
-#, fuzzy
-#~ msgid "Enter the category number for this %s: "
-#~ msgstr "编辑 [%s] 的类别文件？"
 
 #, fuzzy
 #~ msgid "Enter a label for category %ld [%s] "
@@ -15980,10 +16531,6 @@ msgstr "栅格地图"
 #~ "输出栅格图的名称\n"
 #~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
 #~ "输出栅格文件的名称"
-
-#, fuzzy
-#~ msgid "Unable to set window"
-#~ msgstr "无法创建文件 [%s]"
 
 #, fuzzy
 #~ msgid "Error reading input"
@@ -16410,9 +16957,6 @@ msgstr "栅格地图"
 #~ msgid "Size of point cache"
 #~ msgstr "点的缓存的大小"
 
-#~ msgid "Coordinates for query"
-#~ msgstr "要查询的坐标"
-
 #~ msgid "Show the category label in the grid cell(s)"
 #~ msgstr "在格网单元上显示类别标签"
 
@@ -16501,10 +17045,6 @@ msgstr "栅格地图"
 #~ msgstr "无法写入 <%s>"
 
 #, fuzzy
-#~ msgid "Region <%s> not found"
-#~ msgstr "未发现区域<%s>"
-
-#, fuzzy
 #~ msgid "Unable to read region <%s> in <%s>"
 #~ msgstr "无法读取区域<%s>在<%s>中"
 
@@ -16544,10 +17084,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Reading MAT-File..."
 #~ msgstr "读取 %s ..."
-
-#, fuzzy
-#~ msgid "Setting map name to <%s>"
-#~ msgstr "非法的输出文件名"
 
 #, fuzzy
 #~ msgid "Writing new raster map..."
@@ -16605,10 +17141,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "ARC/INFO ASCII raster file (GRID) to be imported"
 #~ msgstr "将要导入的ARC/INFO ASCII形式的栅格文件(GRID)"
-
-#, fuzzy
-#~ msgid "Failed to copy file"
-#~ msgstr "输出文件的名称"
 
 #, fuzzy
 #~ msgid "Illegal line in header"
@@ -16670,10 +17202,6 @@ msgstr "栅格地图"
 #~ msgstr "比特模式的值"
 
 #, fuzzy
-#~ msgid "Unable to write to <%s>"
-#~ msgstr "无法创建文件 [%s]"
-
-#, fuzzy
 #~ msgid "Computing bins"
 #~ msgstr "导入地图 %d 的要素..."
 
@@ -16694,10 +17222,6 @@ msgstr "栅格地图"
 #~ msgstr "行数"
 
 #, fuzzy
-#~ msgid "List of percentiles"
-#~ msgstr "等高线级数的列表"
-
-#, fuzzy
 #~ msgid "Number of bins to use"
 #~ msgstr "将要创建的点的数目"
 
@@ -16712,10 +17236,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "<%s> not found"
 #~ msgstr "%s - 未发现"
-
-#, fuzzy
-#~ msgid "<%s> already exists"
-#~ msgstr "dig_att文件不存在。"
 
 #, fuzzy
 #~ msgid "Force remove"
@@ -16746,20 +17266,12 @@ msgstr "栅格地图"
 #~ msgstr "无法创建栅格地图 %s"
 
 #, fuzzy
-#~ msgid "Error reading WKT projection description"
-#~ msgstr "为 [%s] 读取范围时发生错误"
-
-#, fuzzy
 #~ msgid "Unable to open file [%s] for reading"
 #~ msgstr "无法找到文件 [%s]。"
 
 #, fuzzy
 #~ msgid "Unable to translate EPSG code"
 #~ msgstr "无法创建栅格地图 %s"
-
-#, fuzzy
-#~ msgid "general, projection"
-#~ msgstr "无法获取栅格行\n"
 
 #, fuzzy
 #~ msgid "Can also be used to create GRASS locations."
@@ -16784,10 +17296,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Create/Edit"
 #~ msgstr "相关性"
-
-#, fuzzy
-#~ msgid "Name of new location to create"
-#~ msgstr "将要创建的新区域的名称"
 
 #, fuzzy
 #~ msgid "Unable to create projection files: %s"
@@ -16902,19 +17410,11 @@ msgstr "栅格地图"
 #~ msgstr "要查询的坐标"
 
 #, fuzzy
-#~ msgid "No active control points"
-#~ msgstr "没有起始点"
-
-#, fuzzy
 #~ msgid "general, transformation, GCP"
 #~ msgstr "插值点的数量"
 
 #~ msgid "Output format"
 #~ msgstr "输出的格式"
-
-#, fuzzy
-#~ msgid "general, settings"
-#~ msgstr "无法获取栅格行\n"
 
 #, fuzzy
 #~ msgid "Create mapset if it doesn't exist"
@@ -16927,10 +17427,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Either mapset= or -l must be used"
 #~ msgstr "必须指定两个图层"
-
-#, fuzzy
-#~ msgid "<%s> is already the current mapset"
-#~ msgstr "无法创建栅格地图 %s"
 
 #, fuzzy
 #~ msgid "Unable to read GIS_LOCK environment variable"
@@ -17008,16 +17504,9 @@ msgstr "栅格地图"
 #~ msgid "<%s> nothing removed"
 #~ msgstr "%s - 未发现"
 
-#~ msgid "GRASS variable to set"
-#~ msgstr "设置 GRASS 变量"
-
 #, fuzzy
 #~ msgid "Prints GRASS data base file names."
 #~ msgstr "输入的数据库名称"
-
-#, fuzzy
-#~ msgid "Name of an element"
-#~ msgstr "输入图层的名称"
 
 #, fuzzy
 #~ msgid "Name of a database file"
@@ -17030,10 +17519,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Map name exclusion pattern (default: none)"
 #~ msgstr "输出分隔符(默认：tab)"
-
-#, fuzzy
-#~ msgid "Print data types"
-#~ msgstr "只打印栅格图的类型"
 
 #, fuzzy
 #~ msgid "Print mapset names"
@@ -17147,10 +17632,6 @@ msgstr "栅格地图"
 #~ msgstr "<%s> - 非法的区域名称"
 
 #, fuzzy
-#~ msgid "Unable to set region <%s>"
-#~ msgstr "无法插入新行：%s"
-
-#, fuzzy
 #~ msgid "Unable to update current region"
 #~ msgstr "无法更新当前区域"
 
@@ -17188,20 +17669,8 @@ msgstr "栅格地图"
 #~ msgstr "无法获取栅格行\n"
 
 #, fuzzy
-#~ msgid "GUI type"
-#~ msgstr "未知的类型"
-
-#, fuzzy
-#~ msgid "Name of workspace file"
-#~ msgstr "输出文件的名称"
-
-#, fuzzy
 #~ msgid "Name of an existing map"
 #~ msgstr "已有栅格地图的名称"
-
-#, fuzzy
-#~ msgid "Name of a mapset"
-#~ msgstr "栅格图的名称"
 
 #, fuzzy
 #~ msgid "Raster map to be profiled"
@@ -17238,10 +17707,6 @@ msgstr "栅格地图"
 #~ "Selects the font in which text will be displayed on the user's graphics "
 #~ "monitor."
 #~ msgstr "选择字体，该字体用于图形监视器上文本的显示。"
-
-#, fuzzy
-#~ msgid "Choose new current font"
-#~ msgstr "使用当前的区域"
 
 #, fuzzy
 #~ msgid "Path to Freetype-compatible font including file name"
@@ -17308,10 +17773,6 @@ msgstr "栅格地图"
 #~ msgstr ""
 #~ "无法使用 WGS84 来输出，因为该区域不包含基准面转换参数。尝试运行 g."
 #~ "setproj。"
-
-#, fuzzy
-#~ msgid "Reading symbol"
-#~ msgstr "读取 %s ..."
 
 #, fuzzy
 #~ msgid "Manages display frames on the user's graphics monitor."
@@ -17437,10 +17898,6 @@ msgstr "栅格地图"
 #~ msgstr "打印当前区域"
 
 #, fuzzy
-#~ msgid "Node cost column"
-#~ msgstr "列数"
-
-#, fuzzy
 #~ msgid "Original line color"
 #~ msgstr "文本颜色"
 
@@ -17500,9 +17957,6 @@ msgstr "栅格地图"
 #~ msgid "Display screen rectangle of current region"
 #~ msgstr "使用当前的区域"
 
-#~ msgid "Name of raster map"
-#~ msgstr "栅格图的名称"
-
 #, fuzzy
 #~ msgid "Category file for <%s> not available"
 #~ msgstr "[%s] 的类别文件无效"
@@ -17530,10 +17984,6 @@ msgstr "栅格地图"
 #~ msgstr "要素类型"
 
 #, fuzzy
-#~ msgid "Chart properties"
-#~ msgstr "要素类型"
-
-#, fuzzy
 #~ msgid "Attribute columns containing data"
 #~ msgstr "属性字段"
 
@@ -17554,10 +18004,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Displays a barscale on the graphics monitor."
 #~ msgstr "选择字体，该字体用于图形监视器上文本的显示。"
-
-#, fuzzy
-#~ msgid "Line color 1"
-#~ msgstr " nv color\n"
 
 #, fuzzy
 #~ msgid "Line color 2"
@@ -17629,10 +18075,6 @@ msgstr "栅格地图"
 #~ msgstr "打印的份数"
 
 #, fuzzy
-#~ msgid "Selection"
-#~ msgstr "无法获取栅格行\n"
-
-#, fuzzy
 #~ msgid "Boundaries"
 #~ msgstr "无法更新边界"
 
@@ -17655,9 +18097,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "'layer' must be > 0"
 #~ msgstr "必须指定两个图层"
-
-#~ msgid "Database connection not defined"
-#~ msgstr "数据库连接未定义"
 
 #~ msgid "Unable to open database <%s>"
 #~ msgstr "无法打开数据库 <%s>"
@@ -17719,10 +18158,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Unknown item type in pad: %s"
 #~ msgstr "未知的类型：%c"
-
-#, fuzzy
-#~ msgid "Displays the color table associated with a raster map layer."
-#~ msgstr "根据栅格图层创建/修改色彩表。"
 
 #, fuzzy
 #~ msgid "Name of raster map whose color table is to be displayed"
@@ -17946,10 +18381,6 @@ msgstr "栅格地图"
 
 #~ msgid "Don't add to list of rasters and commands in monitor"
 #~ msgstr "增加"
-
-#, fuzzy
-#~ msgid "Name of vector map"
-#~ msgstr "输入的 2D 矢量地图的名称"
 
 #, fuzzy
 #~ msgid "ERROR: can not get \"list\" items"
@@ -18549,10 +18980,6 @@ msgstr "栅格地图"
 #~ msgstr "插值点的数量"
 
 #, fuzzy
-#~ msgid "Copy attributes"
-#~ msgstr "无法创建属性表"
-
-#, fuzzy
 #~ msgid "Unknown method"
 #~ msgstr "未知的方法 <%s>"
 
@@ -18678,9 +19105,6 @@ msgstr "栅格地图"
 #~ msgid "Do not clean polygons (not recommended)"
 #~ msgstr "不清理多边形 (不推荐)"
 
-#~ msgid "Create 3D output"
-#~ msgstr "创建 3D 输出"
-
 #~ msgid "Do not create attribute table"
 #~ msgstr "无法创建属性表"
 
@@ -18699,10 +19123,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Vector map <%s> already exists"
 #~ msgstr "dig_att文件不存在。"
-
-#, fuzzy
-#~ msgid "Layer <%s> not available"
-#~ msgstr "图层 '%s' 不可用"
 
 #, fuzzy
 #~ msgid "4 parameters required for 'spatial' parameter"
@@ -18814,10 +19234,6 @@ msgstr "栅格地图"
 #~ msgstr "矢量导入完成"
 
 #, fuzzy
-#~ msgid "Reverse selection"
-#~ msgstr "反向清扫完成"
-
-#, fuzzy
 #~ msgid "Types to be extracted"
 #~ msgstr "将要导入的栅格文件"
 
@@ -18876,10 +19292,6 @@ msgstr "栅格地图"
 
 #~ msgid "Input table name"
 #~ msgstr "输入的表的名称"
-
-#, fuzzy
-#~ msgid "Connection"
-#~ msgstr "相关性"
 
 #, fuzzy
 #~ msgid "Name of column containing x coordinate"
@@ -18977,10 +19389,6 @@ msgstr "栅格地图"
 
 #, fuzzy
 #~ msgid "Feature type (from)"
-#~ msgstr "要素类型"
-
-#, fuzzy
-#~ msgid "Feature type (to)"
 #~ msgstr "要素类型"
 
 #, fuzzy
@@ -19169,10 +19577,6 @@ msgstr "栅格地图"
 #~ msgstr "用来创建标签的属性字段的名称"
 
 #, fuzzy
-#~ msgid "Parameter '%s' ignored in standard mode"
-#~ msgstr "需要的 g3d 文件未找到"
-
-#, fuzzy
 #~ msgid "dig_att file already exist"
 #~ msgstr "dig_att文件不存在。"
 
@@ -19256,10 +19660,6 @@ msgstr "栅格地图"
 #~ msgstr "要素类型"
 
 #, fuzzy
-#~ msgid "Nothing to do"
-#~ msgstr "未找到任何记录。\n"
-
-#, fuzzy
 #~ msgid "Incompatible types"
 #~ msgstr "未知的类型"
 
@@ -19284,16 +19684,8 @@ msgstr "栅格地图"
 #~ msgstr "列出可用的格式并退出"
 
 #, fuzzy
-#~ msgid "DXF layers"
-#~ msgstr " nv color\n"
-
-#, fuzzy
 #~ msgid "Name of input DXF file"
 #~ msgstr "输入图层的名称"
-
-#, fuzzy
-#~ msgid "List of layers to import"
-#~ msgstr "将要导入的栅格文件"
 
 #, fuzzy
 #~ msgid "Unable to open DXF file <%s>"
@@ -19378,10 +19770,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Input vector map containing points"
 #~ msgstr "包含线的输入地图"
-
-#, fuzzy
-#~ msgid "Line layer"
-#~ msgstr " nv color\n"
 
 #, fuzzy
 #~ msgid "Point layer"
@@ -19791,10 +20179,6 @@ msgstr "栅格地图"
 #~ msgstr "不允许合并的类型。"
 
 #, fuzzy
-#~ msgid "OGR driver <%s> not found"
-#~ msgstr "驱动 %s 未发现"
-
-#, fuzzy
 #~ msgid "Unable to create OGR layer"
 #~ msgstr "无法创建 %s"
 
@@ -19880,10 +20264,6 @@ msgstr "栅格地图"
 #~ msgstr "无法找到矢量地图 [%s]"
 
 #, fuzzy
-#~ msgid "Checking location <%s> mapset <%s>"
-#~ msgstr "输入的栅格图"
-
-#, fuzzy
 #~ msgid "Vector map <%s> in location <%s> mapset <%s> not found"
 #~ msgstr "矢量文件 [%s] 不可用"
 
@@ -19896,16 +20276,8 @@ msgstr "栅格地图"
 #~ msgstr "创建一些临时文件 ..."
 
 #, fuzzy
-#~ msgid "Reading input vector map"
-#~ msgstr "无法打开输入的dig文件。"
-
-#, fuzzy
 #~ msgid "Name of input vector points map"
 #~ msgstr "输入的 2D 矢量地图的名称"
-
-#, fuzzy
-#~ msgid "Name of output vector area map"
-#~ msgstr "输出矢量文件的名称"
 
 #, fuzzy
 #~ msgid "Use all vector points (do not limit to current region)"
@@ -20133,10 +20505,6 @@ msgstr "栅格地图"
 #~ msgstr "绘制 ... "
 
 #, fuzzy
-#~ msgid "Writing selected features..."
-#~ msgstr "导入地图 %d 的要素..."
-
-#, fuzzy
 #~ msgid "Layer %d - no table"
 #~ msgstr "图层 '%s' 不可用"
 
@@ -20200,14 +20568,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Building parts of topology..."
 #~ msgstr "建立空间索引..."
-
-#, fuzzy
-#~ msgid "Snapping boundaries..."
-#~ msgstr "写入 %s ... "
-
-#, fuzzy
-#~ msgid "Breaking boundaries..."
-#~ msgstr "写入 %s ... "
 
 #, fuzzy
 #~ msgid "Removing duplicates..."
@@ -20336,10 +20696,6 @@ msgstr "栅格地图"
 #~ "数据库：%s\n"
 #~ "表：%s\n"
 #~ "关键列：%s\n"
-
-#, fuzzy
-#~ msgid "Reading coordinates from file."
-#~ msgstr "地图东向和北向格网坐标的起点"
 
 #, fuzzy
 #~ msgid "vector, transformation"
@@ -20480,10 +20836,6 @@ msgstr "栅格地图"
 #~ msgstr "建立空间索引..."
 
 #, fuzzy
-#~ msgid "Rebuilding topology..."
-#~ msgstr "矢量文件读取错误"
-
-#, fuzzy
 #~ msgid "Breaking lines..."
 #~ msgstr "写入 %s ... "
 
@@ -20496,16 +20848,8 @@ msgstr "栅格地图"
 #~ msgstr "写入 %s ... "
 
 #, fuzzy
-#~ msgid "Querying vector map <%s>..."
-#~ msgstr "写入 %s ... "
-
-#, fuzzy
 #~ msgid "Writing centroids..."
 #~ msgstr "写入线的结点"
-
-#, fuzzy
-#~ msgid "Column name or expression"
-#~ msgstr "列名"
 
 #, fuzzy
 #~ msgid "vector, geometry, topology"
@@ -20558,10 +20902,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Line %d label: %d matched another label: %d."
 #~ msgstr "警告：线%d的标签：%d与以知标签：%d相同。"
-
-#, fuzzy
-#~ msgid "Writing new file..."
-#~ msgstr "写入新文件...\n"
 
 #, fuzzy
 #~ msgid "[%d] points and lines written to output file."
@@ -20778,14 +21118,6 @@ msgstr "栅格地图"
 #~ msgstr "<reference> 的参数太多"
 
 #, fuzzy
-#~ msgid "no points to triangulate"
-#~ msgstr "指定点的数量"
-
-#, fuzzy
-#~ msgid "Writing edges..."
-#~ msgstr "写入 %s ... "
-
-#, fuzzy
 #~ msgid "Calculate area centroids..."
 #~ msgstr "无法计算面的质心。"
 
@@ -20889,10 +21221,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Unknown column <%s> in table <%s>"
 #~ msgstr "未知的类型"
-
-#, fuzzy
-#~ msgid "No records selected"
-#~ msgstr "%d 条记录被更新"
 
 #, fuzzy
 #~ msgid "Column type (%s) not supported"
@@ -21045,9 +21373,6 @@ msgstr "栅格地图"
 #~ msgid "Don't expect a header when reading in standard format"
 #~ msgstr "在标准格式中读取的时侯不期望头信息"
 
-#~ msgid "Do not create table in points mode"
-#~ msgstr "点模式下不创建表"
-
 #~ msgid "Do not build topology in points mode"
 #~ msgstr "点模式下不建立拓扑"
 
@@ -21164,28 +21489,8 @@ msgstr "栅格地图"
 #~ msgstr "面\n"
 
 #, fuzzy
-#~ msgid "Remove duplicates"
-#~ msgstr "移除 [%s] 的空文件...\n"
-
-#, fuzzy
-#~ msgid "Remove dangles"
-#~ msgstr "移除 [%s] 的空文件...\n"
-
-#, fuzzy
-#~ msgid "Remove bridges"
-#~ msgstr "移除 [%s] 的空文件...\n"
-
-#, fuzzy
 #~ msgid "Snap vertices"
 #~ msgstr "写入线的结点"
-
-#, fuzzy
-#~ msgid "Remove duplicate area centroids"
-#~ msgstr "移除 [%s] 的空文件...\n"
-
-#, fuzzy
-#~ msgid "Remove small areas"
-#~ msgstr "移除 [%s] 的空文件...\n"
 
 #, fuzzy
 #~ msgid "Copying vector lines..."
@@ -21198,14 +21503,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Tool: Remove duplicate area centroids"
 #~ msgstr "移除 [%s] 的空文件...\n"
-
-#, fuzzy
-#~ msgid "%d lines / boundaries removed"
-#~ msgstr "将要导入的栅格文件"
-
-#, fuzzy
-#~ msgid "Rebuilding topology for output vector map..."
-#~ msgstr "矢量文件读取错误"
 
 #, fuzzy
 #~ msgid "Building topology for error vector map..."
@@ -21361,10 +21658,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "No feature modified"
 #~ msgstr "%d 个点写入矢量文件"
-
-#, fuzzy
-#~ msgid "Operation not implemented"
-#~ msgstr "未发现区域<%s>"
 
 #, fuzzy
 #~ msgid "Name of vector map to edit"
@@ -21538,10 +21831,6 @@ msgstr "栅格地图"
 #~ msgstr "%-5d个质心写入输出文件。\n"
 
 #, fuzzy
-#~ msgid "Layer/table"
-#~ msgstr "图层 '%s' 不可用"
-
-#, fuzzy
 #~ msgid "type       count        min        max\n"
 #~ msgstr ""
 #~ "                          检查地图残差\n"
@@ -21558,9 +21847,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Outputs"
 #~ msgstr "输出图"
-
-#~ msgid "Output surface raster map (elevation)"
-#~ msgstr "输出的表面栅格文件 (高程)"
 
 #~ msgid "Output slope raster map"
 #~ msgstr "输出的坡面栅格文件"
@@ -21803,10 +22089,6 @@ msgstr "栅格地图"
 #~ msgstr "dig_att文件不存在。"
 
 #, fuzzy
-#~ msgid "The file '%s' already exists and will be overwritten."
-#~ msgstr "栅格地图 %i 文件名成： %s 已经存在。它将被覆盖！\n"
-
-#, fuzzy
 #~ msgid "%s: Cannot write dxf file."
 #~ msgstr "无法打开dig_cats文件。"
 
@@ -21878,16 +22160,8 @@ msgstr "栅格地图"
 #~ msgstr "列出支持的格式然后退出"
 
 #, fuzzy
-#~ msgid "File <%s> created."
-#~ msgstr "位置名称"
-
-#, fuzzy
 #~ msgid "Name for output file (do not add extension)"
 #~ msgstr "输出报告的名称"
-
-#, fuzzy
-#~ msgid "Image"
-#~ msgstr "输入文件"
 
 #, fuzzy
 #~ msgid "Graphics file format"
@@ -21934,16 +22208,8 @@ msgstr "栅格地图"
 #~ msgstr "比特模式的值"
 
 #, fuzzy
-#~ msgid "Fine resolution"
-#~ msgstr "非法的输出文件名"
-
-#, fuzzy
 #~ msgid "Coarse resolution"
 #~ msgstr "相关性"
-
-#, fuzzy
-#~ msgid "Draw style"
-#~ msgstr "要素类型"
 
 #, fuzzy
 #~ msgid "Name of line vector overlay map(s)"
@@ -21974,10 +22240,6 @@ msgstr "栅格地图"
 #~ msgstr "各向异性角度(单位：度)"
 
 #, fuzzy
-#~ msgid "Volume position"
-#~ msgstr "无法获取栅格行\n"
-
-#, fuzzy
 #~ msgid "Volume resolution"
 #~ msgstr "非法的输出文件名"
 
@@ -21992,10 +22254,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Surface id %d doesn't exist"
 #~ msgstr "栅格地图 [%s] 未发现"
-
-#, fuzzy
-#~ msgid "Unable to set draw mode for surface id %d"
-#~ msgstr "无法获取行 %d (从栅格图 %s 中)"
 
 #, fuzzy
 #~ msgid "Error tokenize '%s'"
@@ -22030,16 +22288,8 @@ msgstr "栅格地图"
 #~ msgstr "无法读取掩模"
 
 #, fuzzy
-#~ msgid "Invalid BMP header"
-#~ msgstr "无法读取掩模"
-
-#, fuzzy
 #~ msgid "Unable to map image file"
 #~ msgstr "无法打开输出文件 <%s>"
-
-#, fuzzy
-#~ msgid "Image file"
-#~ msgstr "输入文件"
 
 #, fuzzy
 #~ msgid "My first raster module"
@@ -22352,9 +22602,6 @@ msgstr "栅格地图"
 #~ msgid "Cannot get list of tables:\n"
 #~ msgstr "无法获取表中记录：\n"
 
-#~ msgid "Unknown type"
-#~ msgstr "未知的类型"
-
 #~ msgid "OGR driver: column '%s', OGR type %d  is not supported"
 #~ msgstr "OGR驱动：列'%s'，OGR类型%d不支持"
 
@@ -22482,15 +22729,9 @@ msgstr "栅格地图"
 #~ msgid "Unable to list databases"
 #~ msgstr "无法列出数据库"
 
-#~ msgid "Location name"
-#~ msgstr "位置名称"
-
 #, fuzzy
 #~ msgid "Test %s."
 #~ msgstr "图层 %d"
-
-#~ msgid "SQL select statement"
-#~ msgstr "SQL选择语句"
 
 #~ msgid "For example: 'select * from rybniky where kapri = 'hodne'"
 #~ msgstr "例如：'select * from 表A where 城市 = '上海'"
@@ -22760,10 +23001,6 @@ msgstr "栅格地图"
 #~ msgstr "包含结果的栅格图的名称"
 
 #, fuzzy
-#~ msgid "Vector map to modify"
-#~ msgstr "只打印矢量地图的范围"
-
-#, fuzzy
 #~ msgid "Layer in the vector to be modified"
 #~ msgstr "需要查询的已有栅格地图的名称"
 
@@ -22895,10 +23132,6 @@ msgstr "栅格地图"
 #~ msgstr "矢量导入完成"
 
 #, fuzzy
-#~ msgid "Export as waypoints"
-#~ msgstr "导入地图 %d 的要素..."
-
-#, fuzzy
 #~ msgid "Export as routes"
 #~ msgstr "导入地图 %d 的要素..."
 
@@ -22977,10 +23210,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Redraws the current display frame in the GRASS monitor"
 #~ msgstr "错误：没有地图显示在GRASS的监视器上\n"
-
-#, fuzzy
-#~ msgid "Redraw all frames"
-#~ msgstr "打印区域总面积"
 
 #, fuzzy
 #~ msgid "Slide show of GRASS raster/vector maps."
@@ -23096,10 +23325,6 @@ msgstr "栅格地图"
 #~ msgstr "已有的MAT-File(v4)的名称"
 
 #, fuzzy
-#~ msgid "Name of GIS manager settings file (.grc)"
-#~ msgstr "已有的MAT-File(v4)的名称"
-
-#, fuzzy
 #~ msgid "Table from which to drop attribute column"
 #~ msgstr "需要编辑属性表的输入矢量点地图的名称"
 
@@ -23138,10 +23363,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "raster, imagery, colors"
 #~ msgstr "矢量导入完成"
-
-#, fuzzy
-#~ msgid "Display monitor to start"
-#~ msgstr "包含结果的栅格图的名称"
 
 #, fuzzy
 #~ msgid "Name of shaded relief or aspect map"
@@ -23189,10 +23410,6 @@ msgstr "栅格地图"
 
 #, fuzzy
 #~ msgid "Source projection to request from server"
-#~ msgstr "使用的插值方法"
-
-#, fuzzy
-#~ msgid "Image format requested from the server"
 #~ msgstr "使用的插值方法"
 
 #, fuzzy
@@ -23779,10 +23996,6 @@ msgstr "栅格地图"
 #~ msgstr "%s - 未发现"
 
 #, fuzzy
-#~ msgid "%d classes found"
-#~ msgstr "%s - 未发现"
-
-#, fuzzy
 #~ msgid "Name for output file containing result signatures"
 #~ msgstr "包含错误矩阵和K曲线的输出文件的名称"
 
@@ -23862,9 +24075,6 @@ msgstr "栅格地图"
 #~ msgid "Unable to open the signature file"
 #~ msgstr "无法创建文件 [%s]"
 
-#~ msgid "Mark ground control points on image to be rectified."
-#~ msgstr "在需要校正的影像上标记地面控制点"
-
 #, fuzzy
 #~ msgid "Creates control points on an image to be ortho-rectified."
 #~ msgstr "在需要校正的影像上标记地面控制点"
@@ -23935,10 +24145,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Unable to write row %d"
 #~ msgstr "无法创建文件 [%s]"
-
-#, fuzzy
-#~ msgid "%s@%s: projection doesn't match current settings"
-#~ msgstr "退出。当前设定未改变"
 
 #, fuzzy
 #~ msgid "%s@%s: zone doesn't match current settings"
@@ -24535,10 +24741,6 @@ msgstr "栅格地图"
 
 #~ msgid "Cannot insert into table: %s"
 #~ msgstr "无法向表中插入新记录：%s"
-
-#, fuzzy
-#~ msgid "Hilight color for text"
-#~ msgstr "文本高亮显示的颜色 (仅用于 ps.map 输出)"
 
 #, fuzzy
 #~ msgid "Removed vertices: %5d"
@@ -25212,9 +25414,6 @@ msgstr "栅格地图"
 #~ msgid "Could not access %s layer"
 #~ msgstr "无法获取 %s 图层"
 
-#~ msgid "Vector map %s - not found"
-#~ msgstr "矢量地图 %s - 未发现"
-
 #~ msgid "Raster map containing elevation data"
 #~ msgstr "包含高程数据的栅格图"
 
@@ -25242,10 +25441,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "%s: %s - map not found"
 #~ msgstr "%s：[%s] 未找到"
-
-#, fuzzy
-#~ msgid "%s: unable to open %s"
-#~ msgstr "无法打开<%s>"
 
 #~ msgid "%s - not found"
 #~ msgstr "%s - 未发现"
@@ -25295,9 +25490,6 @@ msgstr "栅格地图"
 #~ msgid "Unkown item type in pad: %s"
 #~ msgstr "未知的类型：%c"
 
-#~ msgid "Database connection not defined\n"
-#~ msgstr "数据库连接未定义\n"
-
 #, fuzzy
 #~ msgid "Can't read header for <%s> in <%s>"
 #~ msgstr "无法读取<%s>的头信息在<%s>中"
@@ -25315,10 +25507,6 @@ msgstr "栅格地图"
 
 #~ msgid "<%s=%s> ** invalid input **"
 #~ msgstr "<%s=%s> ** 无效的输入 **"
-
-#, fuzzy
-#~ msgid "%s map not found"
-#~ msgstr "%s - 未发现"
 
 #, fuzzy
 #~ msgid "cannot read head of %s"
@@ -25719,10 +25907,6 @@ msgstr "栅格地图"
 #~ msgid "Unable to create output raster map <%s>"
 #~ msgstr "不能创建输出地图 <%s>"
 
-#, fuzzy
-#~ msgid "Cannot open file for <%s>"
-#~ msgstr "无法打开像元文件 [%s]"
-
 #~ msgid "Name of the random surface to be produced"
 #~ msgstr "将要产生的随机表面的名称"
 
@@ -25791,10 +25975,6 @@ msgstr "栅格地图"
 #~ msgstr "未发现矢量地图<%s>"
 
 #, fuzzy
-#~ msgid "Querying input '%s' ... "
-#~ msgstr "读取 %s ..."
-
-#, fuzzy
 #~ msgid "Copying %s input lines ... "
 #~ msgstr "无法打开矢量质心点地图。"
 
@@ -25830,10 +26010,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Read coordinates from standard input"
 #~ msgstr "地图东向和北向格网坐标的起点"
-
-#, fuzzy
-#~ msgid "Raster map <%s>] not found"
-#~ msgstr "未找到栅格图<%s>"
 
 #~ msgid "Cannot start driver '%s'."
 #~ msgstr "无法初始化驱动'%s'。"
@@ -25945,10 +26121,6 @@ msgstr "栅格地图"
 #~ msgstr "输入地图的地图集"
 
 #, fuzzy
-#~ msgid "Checking location %s, mapset %s:"
-#~ msgstr "输入的栅格图"
-
-#, fuzzy
 #~ msgid "Input map [%s] in location [%s] in mapset [%s] not found."
 #~ msgstr "矢量文件 [%s] 不可用"
 
@@ -25995,9 +26167,6 @@ msgstr "栅格地图"
 
 #~ msgid "%s: can't create %s"
 #~ msgstr "%s：无法创建 %s"
-
-#~ msgid "Normalized"
-#~ msgstr "归一化"
 
 #, fuzzy
 #~ msgid "Cell file [%s] not found"
@@ -26099,10 +26268,6 @@ msgstr "栅格地图"
 #~ msgstr "无法打开输入文件 <%s@%s>"
 
 #, fuzzy
-#~ msgid "[%d] files patched"
-#~ msgstr "%d 个点写入矢量文件"
-
-#, fuzzy
 #~ msgid "Column type  not supported"
 #~ msgstr "列的类型不支持"
 
@@ -26149,9 +26314,6 @@ msgstr "栅格地图"
 
 #~ msgid "%s: ERROR can't open tempfile"
 #~ msgstr "%s：错误，不能打开临时文件"
-
-#~ msgid "vector map <%s> not found"
-#~ msgstr "未发现矢量地图<%s>"
 
 #, fuzzy
 #~ msgid "unable to find raster map [%s]"
@@ -26232,9 +26394,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "Unable to read row %d in raster map [%s]"
 #~ msgstr "无法创建栅格地图 %s"
-
-#~ msgid "Elevation map"
-#~ msgstr "高程图"
 
 #~ msgid "Topographic index ln(a/tanB) map"
 #~ msgstr "地形索引ln(a/tanB)图"
@@ -26366,10 +26525,6 @@ msgstr "栅格地图"
 #~ msgstr "无法创建文件 [%s]"
 
 #, fuzzy
-#~ msgid "verbose mode"
-#~ msgstr "详细模式"
-
-#, fuzzy
 #~ msgid "Vector map with points for which to modify the attribute table"
 #~ msgstr "需要编辑属性表的输入矢量点地图的名称"
 
@@ -26499,10 +26654,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "%s:line %d:%s"
 #~ msgstr "%s：行%d：%s\n"
-
-#, fuzzy
-#~ msgid "bad color specification"
-#~ msgstr "** 错误的颜色规范 **\n"
 
 #, fuzzy
 #~ msgid "%s - unknown color"
@@ -26728,10 +26879,6 @@ msgstr "栅格地图"
 
 #, fuzzy
 #~ msgid "No line found."
-#~ msgstr "未找到任何记录。\n"
-
-#, fuzzy
-#~ msgid "Nothing Found."
 #~ msgstr "未找到任何记录。\n"
 
 #, fuzzy
@@ -26970,9 +27117,6 @@ msgstr "栅格地图"
 #~ msgid "%s Quit\n"
 #~ msgstr "%s 退出\n"
 
-#~ msgid "Quiet mode"
-#~ msgstr "安静模式"
-
 #~ msgid ""
 #~ "3 raster maps (r,g,b) which are used to create rgb values [redmap,"
 #~ "greenmap,bluemap]"
@@ -27018,9 +27162,6 @@ msgstr "栅格地图"
 
 #~ msgid "The resolution of raster and raster3d maps should be equal!"
 #~ msgstr "栅格地图和3D栅格地图的分辨率应该一致！"
-
-#~ msgid "Connect to the database through DBMI."
-#~ msgstr "通过DBMI连接到数据库。"
 
 #~ msgid ""
 #~ "Feature type. Possible combinations of more types: point,centroid or line,"
@@ -27075,14 +27216,6 @@ msgstr "栅格地图"
 #~ msgstr "无法打开矢量文件<%s>在<%s>中"
 
 #, fuzzy
-#~ msgid "Name for output raster map(s)"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
-#~ "输出栅格图的名称\n"
-#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
-#~ "输出栅格文件的名称"
-
-#, fuzzy
 #~ msgid "Maximum distance of spatial correlation (value >= 0.0)"
 #~ msgstr "点到网络的最小距离"
 
@@ -27093,10 +27226,6 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "High (%d) must be greater than 1"
 #~ msgstr "nsteps 必须大于 0，使用 nsteps=255"
-
-#, fuzzy
-#~ msgid "Output raster map required"
-#~ msgstr "输出栅格文件的标题"
 
 #, fuzzy
 #~ msgid "<%s> is an ilegal name"
@@ -27125,3 +27254,202 @@ msgstr "栅格地图"
 #, fuzzy
 #~ msgid "raster, random, cell"
 #~ msgstr "将要查询的栅格地图"
+
+#, fuzzy
+#~ msgid "Choose script file to run"
+#~ msgstr "选择脚本文件"
+
+#~ msgid "Add thematic layer"
+#~ msgstr "添加主题图层"
+
+#~ msgid "GRASS_PYCMDFILE - File not found. Run p.mon."
+#~ msgstr "找不到文件GRASS_PYCMDFILE，运行p.mon."
+
+#~ msgid "ASCII polygons and lines import"
+#~ msgstr "导入ASCII多边形和线条"
+
+#~ msgid "Binary file import"
+#~ msgstr "导入二进制文件"
+
+#~ msgid "Import SRTM HGT files into GRASS"
+#~ msgstr "导入SRTM HGT文件到GRASS"
+
+#~ msgid ""
+#~ "Georeference, rectify and import Terra-ASTER imagery and relative DEM's "
+#~ "using gdalwarp."
+#~ msgstr ""
+#~ "用gdalwarp对Terra-ASTER图像及相应数字高程数据进行地理参照、矫正并导入"
+
+#~ msgid "Downloads and imports data from WMS servers"
+#~ msgstr "从WMS服务器下载并倒入数据"
+
+#~ msgid "ASCII points/GRASS ASCII vector import"
+#~ msgstr "导入ASCII点/GRASS ASCII矢量数据"
+
+#, fuzzy
+#~ msgid "Historical GRASS vector import (all maps)"
+#~ msgstr "导入旧版GRASS矢量数据"
+
+#, fuzzy
+#~ msgid "Import GetFeature from WFS"
+#~ msgstr "使用的插值方法"
+
+#~ msgid "Garmin GPS import"
+#~ msgstr "导入Garmin GPS数据"
+
+#~ msgid ""
+#~ "Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
+#~ "vector map."
+#~ msgstr "从Garmin GPS接收器将路点、路线和航迹导入为矢量地图"
+
+#~ msgid "GPSBabel GPS import"
+#~ msgstr "导入GPSBabel数据"
+
+#~ msgid ""
+#~ "Import waypoints, routes, and tracks from a GPS receiver or GPS download "
+#~ "file into a vector map."
+#~ msgstr "从GPS接收器或GPS下载文件将路点、路线和航迹导入为矢量地图。"
+
+#~ msgid "Matlab array and MapGen import"
+#~ msgstr "Matlab数组和MapGen文件导入"
+
+#, fuzzy
+#~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
+#~ msgstr "将Mapgen或Matlab矢量地图导入到GRASS。"
+
+#~ msgid ""
+#~ "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable "
+#~ "and 1 time step)"
+#~ msgstr "导入三维Vis5D文件（如含一个变量和一个时间戳的v5d文件）"
+
+#~ msgid "ASCII x,y,z export"
+#~ msgstr "导出ASCII x,y,z数据"
+
+#~ msgid "Export GRASS raster as non-georeferenced PNG image."
+#~ msgstr "将GRASS栅格输出为不含地理参照信息的PNG图片。"
+
+#, fuzzy
+#~ msgid "Converts (rasterize) a vector map into a raster map."
+#~ msgstr "将GRASS二元矢量图层转化为GRASS栅格图层。"
+
+#, fuzzy
+#~ msgid "Changes current mapset."
+#~ msgstr "改变当前地图集"
+
+#, fuzzy
+#~ msgid "Modifies a timestamp for a raster map."
+#~ msgstr "打印/添加/删除 栅格图的时间戳。"
+
+#, fuzzy
+#~ msgid "Reproject raster map"
+#~ msgstr "导出栅格地图"
+
+#, fuzzy
+#~ msgid "Create a MASK for limiting raster operation"
+#~ msgstr "在当前路径访问其他地图集"
+
+#, fuzzy
+#~ msgid "Thins non-zero cells that denote linear features in a raster map."
+#~ msgstr "抽稀栅格图层上表示线形要素的非零像元"
+
+#, fuzzy
+#~ msgid ""
+#~ "Produces a raster map of uniform random deviates whose range can be "
+#~ "expressed by the user."
+#~ msgstr "产生一个有一致随机偏离的栅格图层，随机偏离的范围能够由用户输入。"
+
+#, fuzzy
+#~ msgid "Rebuild topology on all vector maps"
+#~ msgstr "矢量文件读取错误"
+
+#, fuzzy
+#~ msgid "Re-projects a vector map from one location to the current location."
+#~ msgstr "将栅格图从一个区域重投影到当前区域"
+
+#, fuzzy
+#~ msgid "Interacrive management of vector color tables."
+#~ msgstr "提供色彩表的栅格图名称"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from a raster map based on vector "
+#~ "polygons and uploads statistics to new attribute columns."
+#~ msgstr "计算栅格地图中非空像元的一元统计值"
+
+#, fuzzy
+#~ msgid "Performs raster map matrix filter."
+#~ msgstr "栅格文件的矩阵过滤器"
+
+#, fuzzy
+#~ msgid "Enter raster category values or percents"
+#~ msgstr "编辑 [%s] 的类别文件？"
+
+#, fuzzy
+#~ msgid "Save color table to file"
+#~ msgstr "保存工作区到文件"
+
+#, fuzzy
+#~ msgid "range"
+#~ msgstr "无效的区域：%s"
+
+#, fuzzy
+#~ msgid "fp range"
+#~ msgstr "无效的区域：%s"
+
+#, fuzzy
+#~ msgid "Nothing to save."
+#~ msgstr "未找到任何记录。\n"
+
+#, fuzzy
+#~ msgid "Save expression to file"
+#~ msgstr "保存当前显示为图片文件"
+
+#, fuzzy
+#~ msgid "Load expression from file"
+#~ msgstr "地图东向和北向格网坐标的起点"
+
+#, fuzzy
+#~ msgid "Add created raster map into layer tree"
+#~ msgstr "将创建的地图加入层列表"
+
+#, fuzzy
+#~ msgid "Choose a file name to save the expression"
+#~ msgstr "列名"
+
+#, fuzzy
+#~ msgid "Choose a file name to load the expression"
+#~ msgstr "列名"
+
+#, fuzzy
+#~ msgid "Choose GIS Data Directory"
+#~ msgstr "新GIS数据目录"
+
+#~ msgid "Forward: %(forw)s, Backward: %(back)s"
+#~ msgstr "继续：%(forw)s,后退：%(back)s"
+
+#, fuzzy
+#~ msgid "<not defined>"
+#~ msgstr "%s - 未发现"
+
+#, fuzzy
+#~ msgid "Rebuild topology"
+#~ msgstr "矢量文件读取错误"
+
+#, fuzzy
+#~ msgid "%(cmd)s: parameter '%(key)s' not available"
+#~ msgstr "图层 '%s' 不可用"
+
+#, fuzzy
+#~ msgid "Unable to parse settings '%s'"
+#~ msgstr "无法插入新行：%s"
+
+#, fuzzy
+#~ msgid "Manage access to mapsets"
+#~ msgstr "改变当前地图集"
+
+#, fuzzy
+#~ msgid "Link GDAL supported raster file to a binary raster map layer."
+#~ msgstr "将GDAL支持的栅格文件导入到二元栅格图层中。"
+
+#~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
+#~ msgstr "用v.in.ogr将选中的OGR图层转化为GRASS矢量地图"
