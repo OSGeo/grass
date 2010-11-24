@@ -447,6 +447,14 @@ def tempfile():
     """!Returns the name of a temporary file, created with g.tempfile."""
     return read_command("g.tempfile", pid = os.getpid()).strip()
 
+def tempdir():
+    """!Returns the name of a temporary dir, created with g.tempfile."""
+    tmp = read_command("g.tempfile", pid = os.getpid()).strip()
+    try_remove(tmp)
+    os.mkdir(tmp)
+    
+    return tmp
+
 # key-value parsers
 
 def parse_key_val(s, sep = '=', dflt = None, val_type = None, vsep = None):
@@ -793,7 +801,7 @@ def try_remove(path):
     """!Attempt to remove a file; no exception is generated if the
     attempt fails.
 
-    @param path path
+    @param path path to file to remove
     """
     try:
 	os.remove(path)
@@ -806,12 +814,12 @@ def try_rmdir(path):
     """!Attempt to remove a directory; no exception is generated if the
     attempt fails.
 
-    @param path path
+    @param path path to directory to remove
     """
     try:
 	os.rmdir(path)
     except:
-	pass
+	shutil.rmtree(path, ignore_errors = True)
 
 def float_or_dms(s):
     """!Convert DMS to float.
