@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
                 || !(input6->answer) || !(input7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
-    if ((infd_redchan = Rast_open_old(redchan, "")) < 0)
+    infd_redchan = Rast_open_old(redchan, "");
     inrast_redchan = Rast_allocate_d_buf();
 
     if (nirchan) {
