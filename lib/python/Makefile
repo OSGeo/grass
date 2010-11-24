@@ -34,7 +34,7 @@ $(GDIR)/__init__.py: grass__init__.py | $(GDIR)
 $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-setup.py: setup.py.tmp
+setup.py: setup.py.sed
 	sed \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	$< > $@
