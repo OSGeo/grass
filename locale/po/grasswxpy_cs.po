@@ -11,12 +11,13 @@ msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-29 12:41+0200\n"
-"PO-Revision-Date: 2010-03-07 14:25+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2010-11-24 21:18+0100\n"
+"Last-Translator: Jan Trochta <j.trochta@gmail.com>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../gui/wxpython/wxgui.py:101
@@ -24,7 +25,6 @@ msgid "GRASS GIS Layer Manager"
 msgstr "GRASS GIS správce vrstev"
 
 #: ../gui/wxpython/wxgui.py:214
-#, fuzzy
 msgid "Map layers"
 msgstr "Mapové vrstvy"
 
@@ -34,7 +34,7 @@ msgstr "Pøíkazová konzole"
 
 #: ../gui/wxpython/wxgui.py:222
 msgid "Search module"
-msgstr "Najít model"
+msgstr "Hledat modul"
 
 #: ../gui/wxpython/wxgui.py:235 ../gui/wxpython/gui_modules/toolbars.py:184
 msgid "3D view"
@@ -42,16 +42,16 @@ msgstr "3D pohled"
 
 #: ../gui/wxpython/wxgui.py:280
 msgid "Choose model to run"
-msgstr "Zvolit model ke spu¹tìní"
+msgstr "Vybrat model ke spu¹tìní"
 
 #: ../gui/wxpython/wxgui.py:282 ../gui/wxpython/gui_modules/gmodeler.py:791
 #: ../gui/wxpython/gui_modules/gmodeler.py:834
 msgid "GRASS Model File (*.gxm)|*.gxm"
-msgstr "Soubor GRASS modelu (*gxm)|*gxm"
+msgstr "GRASS soubor modulu (*.gxm)|*.gxm"
 
 #: ../gui/wxpython/wxgui.py:291 ../gui/wxpython/gui_modules/gmodeler.py:1233
 msgid "Validating model..."
-msgstr "Validuji model..."
+msgstr "Vyhodnocuji model..."
 
 #: ../gui/wxpython/wxgui.py:295 ../gui/wxpython/gui_modules/gmodeler.py:907
 #, python-format
@@ -60,17 +60,17 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Model není validní. Pøejete si pøesto spustit moded?\n"
+"Modul je neplatný. Chcete jej pøesto spustit? \n"
 "\n"
 "%s"
 
 #: ../gui/wxpython/wxgui.py:297 ../gui/wxpython/gui_modules/gmodeler.py:909
 msgid "Run model?"
-msgstr "Spustit model?"
+msgstr "Spustit modul?"
 
 #: ../gui/wxpython/wxgui.py:304 ../gui/wxpython/gui_modules/gmodeler.py:972
 msgid "Running model..."
-msgstr "Spou¹tím model..."
+msgstr "Spou¹tím modul"
 
 #: ../gui/wxpython/wxgui.py:354 ../gui/wxpython/wxgui.py:1459
 msgid "Do you want to save changes in the workspace?"
@@ -92,12 +92,12 @@ msgstr "Zvolit soubor workspace"
 
 #: ../gui/wxpython/wxgui.py:441
 msgid "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
-msgstr ""
+msgstr "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
 
 #: ../gui/wxpython/wxgui.py:452
-#, fuzzy, python-format
+#, python-format
 msgid "Script file '%s' doesn't exist. Operation cancelled."
-msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
+msgstr "Soubor skriptu '%s' neexistuje. Operace zru¹ena."
 
 #: ../gui/wxpython/wxgui.py:453 ../gui/wxpython/wxgui.py:473
 #: ../gui/wxpython/wxgui.py:494 ../gui/wxpython/scripts/r.li.setup.py:333
@@ -159,12 +159,12 @@ msgstr "Chyba"
 #: ../gui/wxpython/wxgui.py:456
 #, python-format
 msgid "Launching script '%s'..."
-msgstr ""
+msgstr "Spou¹tím script  '%s'..."
 
 #: ../gui/wxpython/wxgui.py:471
 #, python-format
 msgid "Unable to switch to location <%(loc)s> mapset <%(mapset)s>."
-msgstr ""
+msgstr "Nelze se pøepnout do location <%(loc)s> mapset <%(mapset)s>."
 
 #: ../gui/wxpython/wxgui.py:479
 #, python-format
@@ -172,6 +172,8 @@ msgid ""
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"Souèasná location je <%(loc)s>.\n"
+"Souèasný mapset je <%(mapset)s>."
 
 #: ../gui/wxpython/wxgui.py:482 ../gui/wxpython/wxgui.py:498
 #: ../gui/wxpython/gui_modules/ghelp.py:561
@@ -179,14 +181,14 @@ msgid "Info"
 msgstr "Informace"
 
 #: ../gui/wxpython/wxgui.py:493
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to switch to mapset <%s>."
-msgstr "Nelze vytvoøit vektorovou mapu <%s>."
+msgstr "Nelze se pøepnout do mapsetu <%s>."
 
 #: ../gui/wxpython/wxgui.py:497
-#, fuzzy, python-format
+#, python-format
 msgid "Current mapset is <%s>."
-msgstr "Zmìnit souèasný mapset"
+msgstr "Souèasný mapset je <%s>."
 
 #: ../gui/wxpython/wxgui.py:558
 msgid ""
@@ -206,16 +208,16 @@ msgstr "Zvolit soubor workspace"
 
 #: ../gui/wxpython/wxgui.py:588 ../gui/wxpython/wxgui.py:795
 msgid "GRASS Workspace File (*.gxw)|*.gxw"
-msgstr ""
+msgstr "GRASS soubor pracovního prostøedí (*.gxw)|*.gxw"
 
 #: ../gui/wxpython/wxgui.py:623
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
 "Invalid file, unable to parse XML document."
 msgstr ""
-"Ètení souboru s modelem <%s> selhalo. Neplatný soubor, nelze parsrovat XML "
-"dokument."
+"Ètení souboru workspace <%s> selhalo. \n"
+"Neplatný soubor, nelze parsovat XML dokument."
 
 #: ../gui/wxpython/wxgui.py:627 ../gui/wxpython/wxgui.py:736
 #: ../gui/wxpython/wxgui.py:772
@@ -232,7 +234,7 @@ msgstr "Vyberte soubor GRC k naètení"
 
 #: ../gui/wxpython/wxgui.py:757
 msgid "Old GRASS Workspace File (*.grc)|*.grc"
-msgstr ""
+msgstr "Starý soubor pracovního prostøedí  (*.grc)|*.grc"
 
 #: ../gui/wxpython/wxgui.py:794
 msgid "Choose file to save current workspace"
@@ -249,9 +251,8 @@ msgid "Save workspace"
 msgstr "Ulo¾it pracovní oblast"
 
 #: ../gui/wxpython/wxgui.py:849
-#, fuzzy
 msgid "Writing current settings to workspace file failed."
-msgstr "Zápis aktuálního nastavení do souboru pracovní oblasti selhalo (%s)."
+msgstr "Zápis aktuálního nastavení do souboru pracovní oblasti selhalo."
 
 #: ../gui/wxpython/wxgui.py:860 ../gui/wxpython/gui_modules/gmodeler.py:1553
 #: ../gui/wxpython/gui_modules/profile.py:597
@@ -261,7 +262,7 @@ msgstr "Nelze otevøít soubor <%s> pro zápis."
 
 #: ../gui/wxpython/wxgui.py:1027
 msgid "Nothing to import. No WMS layer selected."
-msgstr ""
+msgstr "Nic  neimportováno. Nebyla vybrána WMS vrstva."
 
 #: ../gui/wxpython/wxgui.py:1053
 msgid "Attribute management is available only for vector maps."
@@ -321,16 +322,14 @@ msgid "Display map"
 msgstr "Zobrazit mapu"
 
 #: ../gui/wxpython/icons/icon.py:140
-#, fuzzy
 msgid "Re-render modified map layers"
-msgstr "Odstranit mapovou vrstvu"
+msgstr "Pøekreslit zmìnìné mapové vrstvy"
 
 #: ../gui/wxpython/icons/icon.py:142
 msgid "Re-render map"
 msgstr "Pøekreslit mapu"
 
 #: ../gui/wxpython/icons/icon.py:143
-#, fuzzy
 msgid "Force re-rendering all map layers"
 msgstr "Vynutit pøekreslení v¹ech mapových vrstev"
 
@@ -387,7 +386,6 @@ msgid "Display zoom management"
 msgstr "Správa zvìt¹ování displeje"
 
 #: ../gui/wxpython/icons/icon.py:166
-#, fuzzy
 msgid "Zoom to selected map layer(s)"
 msgstr "Pøiblí¾it na vybranou mapu"
 
@@ -423,50 +421,42 @@ msgid "Start new display"
 msgstr "Spustit nový displej"
 
 #: ../gui/wxpython/icons/icon.py:182
-#, fuzzy
 msgid "Create new workspace file (Ctrl+N)"
-msgstr "Vytvoøit nový soubor pracovní oblasti"
+msgstr "Vytvoøit nový soubor pracovní oblasti (Ctrl+N)"
 
 #: ../gui/wxpython/icons/icon.py:184
-#, fuzzy
 msgid "Load map layers into workspace (Ctrl+L)"
-msgstr "Naèíst mapové vrstvy do pracovní oblasti"
+msgstr "Naèíst mapové vrstvy do pracovní oblasti (Ctrl+L)"
 
 #: ../gui/wxpython/icons/icon.py:186
-#, fuzzy
 msgid "Open existing workspace file (Ctrl+O)"
-msgstr "Otevøít existující soubor s pracovní oblastí"
+msgstr "Otevøít existující soubor s pracovní oblastí (Ctrl+O)"
 
 #: ../gui/wxpython/icons/icon.py:188
-#, fuzzy
 msgid "Save current workspace to file (Ctrl+S)"
-msgstr "Ulo¾it pracovní oblast do souboru"
+msgstr "Ulo¾it pracovní oblast do souboru (Ctrl+S)"
 
 #: ../gui/wxpython/icons/icon.py:190
-#, fuzzy
 msgid "Add raster map layer (Ctrl+R)"
-msgstr "Pøidat rastrovou vrstvu"
+msgstr "Pøidat rastrovou vrstvu (Ctrl+R)"
 
 #: ../gui/wxpython/icons/icon.py:192
-#, fuzzy
 msgid "Add vector map layer (Ctrl+V)"
-msgstr "Pøidat vektorovou vrstvu"
+msgstr "Pøidat vektorovou vrstvu (Ctrl+V)"
 
 #: ../gui/wxpython/icons/icon.py:194
 msgid "Add command layer"
 msgstr "Pøidat vrstvu s pøíkazem"
 
 #: ../gui/wxpython/icons/icon.py:196
-#, fuzzy
 msgid "Add group"
-msgstr "Pøidat vrstvu se skupinou"
+msgstr "Pøidat skupinu"
 
 #: ../gui/wxpython/icons/icon.py:198
 msgid "Add grid or vector labels overlay"
 msgstr "Pøidat vrstvu s popisky nebo møí¾kou"
 
 #: ../gui/wxpython/icons/icon.py:200
-#, fuzzy
 msgid "Delete selected map layer"
 msgstr "Odstranit vybranou vrstvu"
 
@@ -479,12 +469,10 @@ msgid "Show attribute table"
 msgstr "Zobrazit atributovou tabulku"
 
 #: ../gui/wxpython/icons/icon.py:206
-#, fuzzy
 msgid "Add RGB map layer"
 msgstr "Pøidat vrstvu RGB"
 
 #: ../gui/wxpython/icons/icon.py:208
-#, fuzzy
 msgid "Add HIS map layer"
 msgstr "Pøidat vrstvu HIS"
 
@@ -532,18 +520,16 @@ msgid "Add text layer"
 msgstr "Pøidat vrstvu s textem"
 
 #: ../gui/wxpython/icons/icon.py:230
-#, fuzzy
 msgid "Add 3D raster map layer"
-msgstr "Pøidat rastrovou vrstvu"
+msgstr "Pøidat 3D rastrovou vrstvu"
 
 #: ../gui/wxpython/icons/icon.py:231
 msgid "Note that 3D raster data are rendered only in 3D view mode"
-msgstr ""
+msgstr "3D rastrová data mohou být zobrazena pouze v 3D módu"
 
 #: ../gui/wxpython/icons/icon.py:233
-#, fuzzy
 msgid "Show GUI settings"
-msgstr "Ukázat nastavení"
+msgstr "Ukázat nastavení GUI"
 
 #: ../gui/wxpython/icons/icon.py:236
 msgid "Digitize new point"
@@ -672,9 +658,8 @@ msgid "Profile options"
 msgstr "Nastavení profilu"
 
 #: ../gui/wxpython/icons/icon.py:303
-#, fuzzy
 msgid "Save profile data to csv file"
-msgstr "Ulo¾it kompozici displeje do souboru"
+msgstr "Ulo¾it profilová data do souboru csv"
 
 #: ../gui/wxpython/icons/icon.py:305
 msgid "Create histogram of image or raster file"
@@ -734,7 +719,6 @@ msgid "Clear selected GCP"
 msgstr "Vymazat vybrané vlicovací bod"
 
 #: ../gui/wxpython/icons/icon.py:331
-#, fuzzy
 msgid "Reload GCPs from POINTS file"
 msgstr "Znovu naèíst vlicovací body z vybraného souboru POINTS"
 
@@ -748,9 +732,8 @@ msgstr "Nastavení nástroje pro georektifikaci"
 
 #: ../gui/wxpython/icons/icon.py:338 ../gui/wxpython/icons/icon.py:363
 #: ../gui/wxpython/icons/icon.py:400
-#, fuzzy
 msgid "Show help"
-msgstr "Nápovìda GRASS GIS"
+msgstr "Ukázat nápovìdu"
 
 #: ../gui/wxpython/icons/icon.py:339
 msgid "Display GCP Manager manual page"
@@ -761,27 +744,24 @@ msgid "Switch to view control page"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:343
-#, fuzzy
 msgid "Change view settings"
-msgstr "Zmìnit nastavení"
+msgstr "Zmìnit nastavení zobrazení"
 
 #: ../gui/wxpython/icons/icon.py:345
 msgid "Switch to surface (raster) control page"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:346
-#, fuzzy
 msgid "Change surface (loaded raster maps) settings"
-msgstr "Pøepsat rastrovou mapu na základì pravidel"
+msgstr "Zmìnit nastavení povrchu (naètené rastrové mapy)"
 
 #: ../gui/wxpython/icons/icon.py:348
 msgid "Switch to vector (2D/3D) control page"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:349
-#, fuzzy
 msgid "Change 2D/3D vector settings"
-msgstr "Zmìnit nastavení"
+msgstr "Zmìnit nastavení 2D/3D vektoru"
 
 #: ../gui/wxpython/icons/icon.py:351
 msgid "Switch to volume (3D raster) control page"
@@ -789,16 +769,15 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:352
 msgid "Change volume (loaded 3D raster maps) settings"
-msgstr ""
+msgstr "Zmìnit nastavení  3D rastrù"
 
 #: ../gui/wxpython/icons/icon.py:354
 msgid "Switch to lighting control page"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:355
-#, fuzzy
 msgid "Change lighting settings"
-msgstr "Zmìnit nastavení"
+msgstr "Zmìnit nastavení osvìtlení"
 
 #: ../gui/wxpython/icons/icon.py:357
 msgid "Switch to fringe control page"
@@ -809,122 +788,109 @@ msgid "Switch on/off fringes"
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:360
-#, fuzzy
 msgid "3D view mode tools"
-msgstr "Nástroje 3D pohledu"
+msgstr "Nástroje 3D zobrazení"
 
 #: ../gui/wxpython/icons/icon.py:361
-#, fuzzy
 msgid "Show/hide 3D view mode settings dialog"
-msgstr "Ukázat nastavení Nviz"
+msgstr "Ukázat /schovat nastavení 3D zobrazení"
 
 #: ../gui/wxpython/icons/icon.py:364
 msgid "Display 3D view mode manual page"
-msgstr ""
+msgstr "Zobrazit manuálové stránky pro 3D zobrazení"
 
 #: ../gui/wxpython/icons/icon.py:366
 msgid "Quit 3D view mode"
-msgstr ""
+msgstr "Ukonèit 3D zobrazení"
 
 #: ../gui/wxpython/icons/icon.py:367
 msgid "Switch back to 2D view mode"
-msgstr ""
+msgstr "Zpátky na 2D zobrazení"
 
 #: ../gui/wxpython/icons/icon.py:370
-#, fuzzy
 msgid "Start Graphical Modeler"
-msgstr "O Grafickém modeleru"
+msgstr "Spustit Grafické modelování"
 
 #: ../gui/wxpython/icons/icon.py:372
-#, fuzzy
 msgid "Create new model (Ctrl+N)"
-msgstr "Vytvoøit nový soubor pracovní oblasti"
+msgstr "Vytvoøit nový model (Ctrl+N)"
 
 #: ../gui/wxpython/icons/icon.py:374
-#, fuzzy
 msgid "Load model from file (Ctrl+O)"
-msgstr "Naèíst soubor workspace"
+msgstr "Naèíst smodel ze souboru (Ctrl+O)"
 
 #: ../gui/wxpython/icons/icon.py:376
-#, fuzzy
 msgid "Save current model to file (Ctrl+S)"
-msgstr "Ulo¾it pracovní oblast do souboru"
+msgstr "Ulo¾it model do souboru (Ctrl+S)"
 
 #: ../gui/wxpython/icons/icon.py:378 ../gui/wxpython/menustrings.py:852
-#, fuzzy
 msgid "Export model to image"
-msgstr "Export vektorové mapy"
+msgstr "Export modelu do obrázku"
 
 #: ../gui/wxpython/icons/icon.py:380 ../gui/wxpython/menustrings.py:854
 msgid "Export model to Python script"
-msgstr ""
+msgstr "Exportovat model do Python skriptu"
 
 #: ../gui/wxpython/icons/icon.py:382 ../gui/wxpython/menustrings.py:862
 msgid "Add action (GRASS module) to model"
-msgstr ""
+msgstr "Pøidat akci do modelu"
 
 #: ../gui/wxpython/icons/icon.py:384 ../gui/wxpython/menustrings.py:864
 msgid "Add data item to model"
-msgstr ""
+msgstr "Pøidat data do modelu"
 
 #: ../gui/wxpython/icons/icon.py:386 ../gui/wxpython/menustrings.py:866
 msgid "Define relation between data and action items"
-msgstr ""
+msgstr "Definovat vztah mezi daty a akcemi"
 
 #: ../gui/wxpython/icons/icon.py:388 ../gui/wxpython/menustrings.py:178
 #: ../gui/wxpython/menustrings.py:877
 msgid "Run model"
-msgstr ""
+msgstr "Spustit model"
 
 #: ../gui/wxpython/icons/icon.py:390 ../gui/wxpython/menustrings.py:879
 msgid "Validate model"
-msgstr "Validovat model"
+msgstr "Vyhodnotit model"
 
 #: ../gui/wxpython/icons/icon.py:392
-#, fuzzy
 msgid "Show modeler settings"
-msgstr "Ukázat nastavení"
+msgstr "Ukázat nastavení modelování"
 
 #: ../gui/wxpython/icons/icon.py:394
-#, fuzzy
 msgid "Show model properties"
-msgstr "Vlastnosti vrstvy"
+msgstr "Ukázat vlastnosti modelování"
 
 #: ../gui/wxpython/icons/icon.py:396
-#, fuzzy
 msgid "Manage model variables"
-msgstr "Správa tabulek"
+msgstr "Spravovat promìnné modelu"
 
 #: ../gui/wxpython/icons/icon.py:398
 msgid "Redraw model canvas"
-msgstr ""
+msgstr "Pøekreslit okno modelování"
 
 #: ../gui/wxpython/icons/icon.py:401
-#, fuzzy
 msgid "Display Graphical Modeler manual page"
-msgstr "Zobrazit informace o Grafickém Modeleru"
+msgstr "Zobrazit manuálové stránky grafického modelování"
 
 #: ../gui/wxpython/scripts/vkrige.py:33
 msgid "No GRASS-python library found."
-msgstr ""
+msgstr "Nenalezena kniohovna GRASS-Python."
 
 #: ../gui/wxpython/scripts/vkrige.py:67
 msgid "Input Data"
-msgstr ""
+msgstr "Vstupní data"
 
 #: ../gui/wxpython/scripts/vkrige.py:73
 msgid "Point dataset:"
-msgstr ""
+msgstr "bodová data:"
 
 #: ../gui/wxpython/scripts/vkrige.py:85
-#, fuzzy
 msgid "Numeric column:"
-msgstr "Sloupec s klíèem"
+msgstr "Èíselný sloupec:"
 
 #: ../gui/wxpython/scripts/vkrige.py:96
-#, fuzzy
 msgid "Kriging"
-msgstr "Dla¾dice"
+msgstr "Krigování"
 
 #: ../gui/wxpython/scripts/vkrige.py:111
 #: ../gui/wxpython/gui_modules/gmodeler.py:564
@@ -937,14 +903,12 @@ msgid "Output"
 msgstr "Výstup"
 
 #: ../gui/wxpython/scripts/vkrige.py:121
-#, fuzzy
 msgid "Name for the output raster map:"
-msgstr "Název vektorové mapy:"
+msgstr "Název výstupní rastrové mapy:"
 
 #: ../gui/wxpython/scripts/vkrige.py:129
-#, fuzzy
 msgid "Export variance map as well: "
-msgstr "Export rastrové mapy"
+msgstr "Exporovat také mapu rozdílu:"
 
 #: ../gui/wxpython/scripts/vkrige.py:142
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:218
@@ -966,47 +930,43 @@ msgstr "&Spustit"
 
 #: ../gui/wxpython/scripts/vkrige.py:270
 msgid "Kriging Module"
-msgstr ""
+msgstr "modul Krigování"
 
 #: ../gui/wxpython/scripts/vkrige.py:274
-#, fuzzy
 msgid "Ready."
-msgstr "Znovu naèíst"
+msgstr "Pøipraven."
 
 #: ../gui/wxpython/scripts/vkrige.py:298
 msgid "Variogram fitting"
-msgstr ""
+msgstr "Pøizpùsobení variogramu"
 
 #: ../gui/wxpython/scripts/vkrige.py:308
 msgid "Plot/refresh variogram"
-msgstr ""
+msgstr "Vykreslit variogram"
 
 #: ../gui/wxpython/scripts/vkrige.py:319
-#, fuzzy
 msgid ":"
-msgstr "X:"
+msgstr ":"
 
 #: ../gui/wxpython/scripts/vkrige.py:344
 msgid "Kriging techniques"
-msgstr ""
+msgstr "Techniky krigování"
 
 #: ../gui/wxpython/scripts/vkrige.py:358
-#, fuzzy
 msgid "Block size:"
-msgstr "Velikost ikon:"
+msgstr "Velikost bloku:"
 
 #: ../gui/wxpython/scripts/vkrige.py:391
 msgid "Auto-fit variogram"
-msgstr ""
+msgstr "Automatické pøizpùsobení variogramu"
 
 #: ../gui/wxpython/scripts/vkrige.py:415
-#, fuzzy
 msgid "Model: "
-msgstr "Mód:"
+msgstr "Model:"
 
 #: ../gui/wxpython/scripts/vkrige.py:499
 msgid "Work in progress! No functionality provided."
-msgstr ""
+msgstr "Na vývoji se pracuje! Zatím ¾ádnou funkci nemá."
 
 #: ../gui/wxpython/scripts/r.li.setup.py:137
 msgid "I m!"
@@ -1128,9 +1088,8 @@ msgid "Close"
 msgstr "Zavøít"
 
 #: ../gui/wxpython/menustrings.py:13
-#, fuzzy
 msgid "Close workspace file"
-msgstr "Zvolit soubor workspace"
+msgstr "Zavøít soubor pracovního prostøedí"
 
 #: ../gui/wxpython/menustrings.py:14
 msgid "Load map layers"
@@ -1146,14 +1105,12 @@ msgstr "Naèíst mapové vrstvy ze souboru GRD do stromu vrstev"
 
 #: ../gui/wxpython/menustrings.py:18 ../gui/wxpython/menustrings.py:19
 #: ../gui/wxpython/gui_modules/gdialogs.py:1099
-#, fuzzy
 msgid "Import raster data"
-msgstr "Import rastrové mapy"
+msgstr "Import rastrových dat"
 
 #: ../gui/wxpython/menustrings.py:20
-#, fuzzy
 msgid "Import raster data into a GRASS map layer using GDAL."
-msgstr "import rastrových dat pomocí GDAL"
+msgstr "Import rastrových dat pomocí GDAL."
 
 #: ../gui/wxpython/menustrings.py:21
 #, fuzzy
@@ -1167,14 +1124,12 @@ msgstr "Pøevede vybrané GDAL vrstvy na GRASS rastrové mapy pou¾itím r.in.gdal."
 
 #: ../gui/wxpython/menustrings.py:23
 #: ../gui/wxpython/gui_modules/gdialogs.py:1097
-#, fuzzy
 msgid "Link raster data"
-msgstr "Naèítám rastrovou mapu"
+msgstr "Pøipojit rastrová data"
 
 #: ../gui/wxpython/menustrings.py:24
-#, fuzzy
 msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
-msgstr "Pøipojí rastrový soubor podporovaný GDAL k binární rastrové mapì."
+msgstr "Pøipojí rastrový soubor podporovaný GDAL jako GRASS rastrovou vrstvu"
 
 #: ../gui/wxpython/menustrings.py:25
 #, fuzzy
@@ -1248,9 +1203,8 @@ msgstr ""
 "Importuje mapový soubor GRIDATB.FOR (TOPMODEL) jako rastrovou mapu GRASSu"
 
 #: ../gui/wxpython/menustrings.py:39
-#, fuzzy
 msgid "Matlab 2D array import"
-msgstr "Matlab and MapGen import"
+msgstr "Import Matlab 2D pole"
 
 #: ../gui/wxpython/menustrings.py:40
 msgid "Imports a binary MAT-File(v4) to a GRASS raster."
@@ -1298,14 +1252,12 @@ msgstr "Stáhne a importuje data z WMS serverù."
 
 #: ../gui/wxpython/menustrings.py:49 ../gui/wxpython/menustrings.py:50
 #: ../gui/wxpython/gui_modules/gdialogs.py:1093
-#, fuzzy
 msgid "Import vector data"
-msgstr "Import vektorové mapy"
+msgstr "Import vektorových dat"
 
 #: ../gui/wxpython/menustrings.py:51
-#, fuzzy
 msgid "Converts vector layers into a GRASS vector map using OGR."
-msgstr "Konvertuje vektorové vrstvy OGR na GRASS vektorové mapy."
+msgstr "Pøevede vektorové vrstvy do GRASS vektoru pomocí OGR."
 
 #: ../gui/wxpython/menustrings.py:52
 #, fuzzy
@@ -1319,14 +1271,12 @@ msgstr "Konvertuje vektorové vrstvy OGR na GRASS vektorové mapy."
 
 #: ../gui/wxpython/menustrings.py:54
 #: ../gui/wxpython/gui_modules/gdialogs.py:1091
-#, fuzzy
 msgid "Link vector data"
-msgstr "Základní metadata vektorové mapy"
+msgstr "Pøipojit vektorová data"
 
 #: ../gui/wxpython/menustrings.py:55
-#, fuzzy
 msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
-msgstr "Vytvoøí nový vektor jako vrstvu pouze ke ètení pøipojenou pomocí OGR."
+msgstr "Vytvoøí nový pseudo- vektor jako pøipojenou vrstvu pomocí OGR."
 
 #: ../gui/wxpython/menustrings.py:56
 #, fuzzy
@@ -1349,16 +1299,14 @@ msgid "Creates a vector map from an ASCII points file or ASCII vector file."
 msgstr "Vytvoøí vektorovou mapu ze souboru ASCII bodù nebo ASCII vektoru"
 
 #: ../gui/wxpython/menustrings.py:60
-#, fuzzy
 msgid "ASCII points as a vector lines"
-msgstr "Import ASCII body/GRASS ASCII vektory"
+msgstr "Import ASCII body jako vektorové linie"
 
 #: ../gui/wxpython/menustrings.py:61
 msgid "Import ASCII x,y[,z] coordinates as a series of lines."
-msgstr ""
+msgstr "Importuje ASCII x,y[,z] souøadnice jako sérii linií."
 
 #: ../gui/wxpython/menustrings.py:62
-#, fuzzy
 msgid "Historical GRASS vector import"
 msgstr "Import starého vektorového formátu GRASS"
 
@@ -1437,9 +1385,8 @@ msgid "Imports Mapgen or Matlab vector maps into GRASS."
 msgstr "Importuje vektory ve formátu Mapgen nebo Matlab do GRASSu"
 
 #: ../gui/wxpython/menustrings.py:78
-#, fuzzy
 msgid "Import 3D raster data"
-msgstr "Import rastrové mapy"
+msgstr "Import 3D rastrových map"
 
 #: ../gui/wxpython/menustrings.py:79
 msgid "ASCII 3D import"
@@ -1479,9 +1426,8 @@ msgid "Export raster map"
 msgstr "Export rastrové mapy"
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:118
-#, fuzzy
 msgid "Common export formats"
-msgstr "Pøevod souøadnic"
+msgstr "Export do bì¾ných formátù"
 
 #: ../gui/wxpython/menustrings.py:88
 msgid "Exports GRASS raster maps into GDAL supported formats."
@@ -1528,9 +1474,8 @@ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
 msgstr "Exportuje rastrovou mapu GRASSu do GRIDATB.FOR souboru (TOPMODEL)"
 
 #: ../gui/wxpython/menustrings.py:97
-#, fuzzy
 msgid "Matlab 2D array export"
-msgstr "Matlab and MapGen import"
+msgstr "Export do Matlab 2D pole"
 
 #: ../gui/wxpython/menustrings.py:98
 msgid "Exports a GRASS raster to a binary MAT-File."
@@ -1679,9 +1624,8 @@ msgid "Converts a vector map to VTK ASCII output."
 msgstr "Pøeveï GRASS vektor na formát VTK ASCII."
 
 #: ../gui/wxpython/menustrings.py:132
-#, fuzzy
 msgid "Export 3D raster maps"
-msgstr "Export rastrové mapy"
+msgstr "Export 3D rastrových map"
 
 #: ../gui/wxpython/menustrings.py:133
 msgid "ASCII 3D export"
@@ -1856,14 +1800,12 @@ msgstr "Pøevede 3D rastrové mapy na 2D rastrové mapy"
 
 #: ../gui/wxpython/menustrings.py:172
 #: ../gui/wxpython/gui_modules/gcpmanager.py:730
-#, fuzzy
 msgid "Manage Ground Control Points"
-msgstr "Vlicovací body (GCP)"
+msgstr "Spravovat Vlicovací body (GCP)"
 
 #: ../gui/wxpython/menustrings.py:173
-#, fuzzy
 msgid "Manage Ground Control Points for Georectification"
-msgstr "Vlicovací body (GCP)"
+msgstr "Správa vlicovacích bodù pro georektifikaci"
 
 #: ../gui/wxpython/menustrings.py:175
 msgid "Georectify raster and vector maps"
@@ -1871,15 +1813,15 @@ msgstr "Georektifikovat rastrové a vektorové mapy"
 
 #: ../gui/wxpython/menustrings.py:176
 msgid "Graphical modeler"
-msgstr ""
+msgstr "Grafické modelování"
 
 #: ../gui/wxpython/menustrings.py:177
 msgid "Launch Graphical modeler"
-msgstr ""
+msgstr "Spustit grafické modelování"
 
 #: ../gui/wxpython/menustrings.py:179
 msgid "Run model prepared by Graphical modeler"
-msgstr ""
+msgstr "Spustit model pøipravený v grafickém modelování"
 
 #: ../gui/wxpython/menustrings.py:180
 msgid "NVIZ (requires Tcl/Tk)"
@@ -1890,13 +1832,12 @@ msgid "nviz - Visualization and animation tool for GRASS data."
 msgstr "nviz - Nástroj pro vizualizaci a animaci GRASS dat"
 
 #: ../gui/wxpython/menustrings.py:182
-#, fuzzy
 msgid "NVIZ (non-interactive)"
-msgstr "Editovat vektorovu mapu (NEinteraktivnì) "
+msgstr "3D zobrazení NVIZ (NEinteraktivní) "
 
 #: ../gui/wxpython/menustrings.py:183
 msgid "Allows rendering GIS data is a 3D space."
-msgstr ""
+msgstr "Umo¾òuje zobrazení GIS dat ve 3D prostoru."
 
 #: ../gui/wxpython/menustrings.py:184
 msgid "Bearing/distance to coordinates"
@@ -1919,23 +1860,20 @@ msgid "Hardcopy PostScript map output utility."
 msgstr "Nástroj pro tvorbu mapových výstupù ve formátu PostScript."
 
 #: ../gui/wxpython/menustrings.py:188
-#, fuzzy
 msgid "Launch script"
-msgstr "Popis vrstvy"
+msgstr "Spustit skript"
 
 #: ../gui/wxpython/menustrings.py:189
-#, fuzzy
 msgid "Launches script file."
-msgstr "Zvolit soubor workspace"
+msgstr "Spou¹tím soubor se skriptem."
 
 #: ../gui/wxpython/menustrings.py:190
 msgid "Exit GUI"
 msgstr "Konec grafického prostøedí"
 
 #: ../gui/wxpython/menustrings.py:191
-#, fuzzy
 msgid "Quit wxGUI session"
-msgstr "Konec grafického prostøedí"
+msgstr "Ukonèit WxGUI sezení"
 
 #: ../gui/wxpython/menustrings.py:192
 #, fuzzy
@@ -1995,19 +1933,16 @@ msgid "Change current mapset."
 msgstr "Zmìnit souèasný mapset"
 
 #: ../gui/wxpython/menustrings.py:207
-#, fuzzy
 msgid "Change location and mapset"
-msgstr "Vybrat lokaci a mapset projektu"
+msgstr "Zmìnit location a mapset"
 
 #: ../gui/wxpython/menustrings.py:208
-#, fuzzy
 msgid "Change current location and mapset."
-msgstr "Vybrat lokaci a mapset projektu"
+msgstr "Zmìnit souèasnou location a mapset"
 
 #: ../gui/wxpython/menustrings.py:209
-#, fuzzy
 msgid "Change mapset"
-msgstr "Vytvoøit mapset"
+msgstr "Zmìnit mapset"
 
 #: ../gui/wxpython/menustrings.py:211
 msgid "Show settings"
@@ -2030,18 +1965,16 @@ msgid "Displays version and copyright information."
 msgstr "Zobrazí verzi a informace o licenci a autorských právech"
 
 #: ../gui/wxpython/menustrings.py:217
-#, fuzzy
 msgid "Map projections"
-msgstr "Správa kartografických zobrazení"
+msgstr "Mapová projekce"
 
 #: ../gui/wxpython/menustrings.py:218
-#, fuzzy
 msgid "Display map projection"
-msgstr "Zobrazit celý region"
+msgstr "Zobrazit projekci mapy"
 
 #: ../gui/wxpython/menustrings.py:219
 msgid "Print projection information (in conventional GRASS format)."
-msgstr ""
+msgstr "Vytisknout informace o projekci (v GRASS formátu)"
 
 #: ../gui/wxpython/menustrings.py:220
 msgid "Manage projections"
@@ -2073,9 +2006,8 @@ msgid "Install new extension from GRASS AddOns SVN repository."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:226
-#, fuzzy
 msgid "Manage add-ons extensions"
-msgstr "Správa kartografických zobrazení"
+msgstr "Správa roz¹íøení GRASS"
 
 #: ../gui/wxpython/menustrings.py:227
 msgid "Tool to maintain the extensions in local GRASS installation."
@@ -2092,9 +2024,8 @@ msgstr ""
 "digitizér, atd)"
 
 #: ../gui/wxpython/menustrings.py:230
-#, fuzzy
 msgid "&Raster"
-msgstr "Rastr"
+msgstr "&Rastr"
 
 #: ../gui/wxpython/menustrings.py:231
 msgid "Develop raster map"
@@ -2251,14 +2182,12 @@ msgid "Color rules"
 msgstr "Pravidla pro barvy"
 
 #: ../gui/wxpython/menustrings.py:267
-#, fuzzy
 msgid "Export color table"
-msgstr "Nastavit tabulku barev"
+msgstr "Exportovat barevnou tabulku"
 
 #: ../gui/wxpython/menustrings.py:268
-#, fuzzy
 msgid "Exports the color table associated with a raster map layer."
-msgstr "Vytvoøí/upraví tabulku barev spojenou s rastrovou mapou."
+msgstr "Exportuje tabulku barev spojenou s rastrovou mapou."
 
 #: ../gui/wxpython/menustrings.py:269
 msgid "Blend 2 color rasters"
@@ -2346,7 +2275,6 @@ msgid "Creates a mask for limiting raster operation."
 msgstr "Vytvoø MASKu pro limitní rastrové operace"
 
 #: ../gui/wxpython/menustrings.py:286
-#, fuzzy
 msgid "Raster map calculator"
 msgstr "3D rastrový kalkulátor"
 
@@ -2458,10 +2386,10 @@ msgid "Shadows map"
 msgstr "Stínovaná mapa"
 
 #: ../gui/wxpython/menustrings.py:308
-#, fuzzy
 msgid ""
 "Calculates cast shadow areas from sun position and elevation raster map."
-msgstr "Poèítej podle kontrastu vá¾ený index hustoty hran"
+msgstr ""
+"Vypoèítá zastínìné místa z digitálního modelu terénu podle pozice slunce."
 
 #: ../gui/wxpython/menustrings.py:309
 msgid "Terrain analysis"
@@ -2519,14 +2447,12 @@ msgid "Slope and aspect"
 msgstr "Míra svahu a expozice"
 
 #: ../gui/wxpython/menustrings.py:319
-#, fuzzy
 msgid ""
 "Generates raster maps of slope, aspect, curvatures and partial derivatives "
 "from a elevation raster map."
 msgstr ""
 "Vytvoøí rastrovou mapu sklonu, expozice, køivosti a parciálních derivací "
-"odvozenou z digitálního modelu terénu. Expozice je poèítána proti smìru "
-"hodinových ruèièek s poèátkem na východì."
+"odvozenou z digitálního modelu terénu."
 
 #: ../gui/wxpython/menustrings.py:320
 msgid "Terrain parameters"
@@ -2640,9 +2566,8 @@ msgid "Flow accumulation"
 msgstr "Akumulace toku gridu"
 
 #: ../gui/wxpython/menustrings.py:345
-#, fuzzy
 msgid "Flow computation for massive grids (float version)."
-msgstr "Výpoèet toky v gridu"
+msgstr "Výpoèet odtoku pro velké rastry."
 
 #: ../gui/wxpython/menustrings.py:346
 msgid "Flow lines"
@@ -2715,9 +2640,8 @@ msgid "Watershed subbasins"
 msgstr "Rozvodnice subpovodí"
 
 #: ../gui/wxpython/menustrings.py:361
-#, fuzzy
 msgid "Generates watershed subbasins raster map."
-msgstr "Vytvoøí statistiku ploch pro rastrové vrstvy."
+msgstr "Vytvoøí mapy povodí v rastrové mapì."
 
 #: ../gui/wxpython/menustrings.py:362
 msgid "Watershed analysis"
@@ -3210,11 +3134,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:466
 msgid "Ordinary or block kriging"
-msgstr ""
+msgstr "Bì¾né nebo blokové krigování"
 
 #: ../gui/wxpython/menustrings.py:467
 msgid "Performs ordinary or block kriging."
-msgstr ""
+msgstr "Provede bì¾né nwebo blokové krigování."
 
 #: ../gui/wxpython/menustrings.py:468
 msgid "Fill NULL cells"
@@ -3374,9 +3298,8 @@ msgstr ""
 "mapy."
 
 #: ../gui/wxpython/menustrings.py:501
-#, fuzzy
 msgid "&Vector"
-msgstr "Vektor"
+msgstr "&Vektor"
 
 #: ../gui/wxpython/menustrings.py:502
 msgid "Develop vector map"
@@ -3730,34 +3653,30 @@ msgid "Finds shortest path on vector network."
 msgstr "Nalézá nejkrat¹í cestu ve vektorové síti."
 
 #: ../gui/wxpython/menustrings.py:581
-#, fuzzy
 msgid "Shortest path for sets of features"
-msgstr "Nalézá nejkrat¹í cestu ve vektorové síti."
+msgstr "Nejkrat¹í cesta pro skupinu prvkù"
 
 #: ../gui/wxpython/menustrings.py:582
 msgid ""
 "Computes shortest distance via the network between the given sets of "
 "features."
-msgstr ""
+msgstr "Vypoèítá nejkrat¹í vzdálenost v síti mezi zadanými body."
 
 #: ../gui/wxpython/menustrings.py:583
-#, fuzzy
 msgid "Shortest path using timetables"
-msgstr "Nejkrat¹í cesta"
+msgstr "Nejkrat¹í cesta pomocí èasového rozvrhu"
 
 #: ../gui/wxpython/menustrings.py:584
-#, fuzzy
 msgid "Finds shortest path using timetables."
-msgstr "Nalézá nejkrat¹í cestu ve vektorové síti."
+msgstr "Hledá nejkrat¹í cestu pomocí èasového rozvrhu."
 
 #: ../gui/wxpython/menustrings.py:585
-#, fuzzy
 msgid "Shortest path for all pairs"
-msgstr "Nejkrat¹í cesta"
+msgstr "Nejkrat¹í cesta pro v¹echny dvojice"
 
 #: ../gui/wxpython/menustrings.py:586
 msgid "Computes the shortest path between all pairs of nodes in the network."
-msgstr ""
+msgstr "Vypoèítá nejkrat¹í cestu mezi páry bodù v síti."
 
 #: ../gui/wxpython/menustrings.py:587
 msgid "Visibility network"
@@ -3777,29 +3696,27 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:591
 msgid "Maximum flow"
-msgstr ""
+msgstr "Maximální tok"
 
 #: ../gui/wxpython/menustrings.py:592
 msgid "Computes the maximum flow between two sets of nodes in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:593
-#, fuzzy
 msgid "Vertex connectivity"
-msgstr "Databázové spojení"
+msgstr "Spojení vrcholù"
 
 #: ../gui/wxpython/menustrings.py:594
 msgid "Computes vertex connectivity between two sets of nodes in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:595
-#, fuzzy
 msgid "Components"
-msgstr "Hlavní komponenty"
+msgstr "Souèásti"
 
 #: ../gui/wxpython/menustrings.py:596
 msgid "Computes strongly and weakly connected components in the network."
-msgstr ""
+msgstr "Vypoèítá silnì a slabì pøipojené souèásti v síti"
 
 #: ../gui/wxpython/menustrings.py:597
 #, fuzzy
@@ -3822,11 +3739,11 @@ msgstr "vytvoøí Steinerùv strom pro sí» a zadané terminály"
 
 #: ../gui/wxpython/menustrings.py:601
 msgid "Minimum spanning tree"
-msgstr ""
+msgstr "Strom nejkrat¹í vzdálenosti"
 
 #: ../gui/wxpython/menustrings.py:602
 msgid "Computes minimum spanning tree for the network."
-msgstr ""
+msgstr "Vypoèítá nejkrat¹í vzdálenosti pro sí»"
 
 #: ../gui/wxpython/menustrings.py:603
 msgid "Traveling salesman analysis"
@@ -3902,9 +3819,8 @@ msgid "Convex hull"
 msgstr "Konvexní obal"
 
 #: ../gui/wxpython/menustrings.py:621
-#, fuzzy
 msgid "Produces a convex hull for a given vector map."
-msgstr "Vytvoøit novou tabulku barev pro vektorovou mapu"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:622
 msgid "Delaunay triangles"
@@ -4118,9 +4034,8 @@ msgid "Tests for normality for vector points."
 msgstr "Test normality bodù"
 
 #: ../gui/wxpython/menustrings.py:667
-#, fuzzy
 msgid "&Imagery"
-msgstr "Obraz"
+msgstr "&Obrazová data"
 
 #: ../gui/wxpython/menustrings.py:668
 msgid "Develop images and groups"
@@ -4495,9 +4410,8 @@ msgstr ""
 "LANDSAT TM"
 
 #: ../gui/wxpython/menustrings.py:751
-#, fuzzy
 msgid "V&olumes"
-msgstr "3D rastr"
+msgstr "&3D rastr"
 
 #: ../gui/wxpython/menustrings.py:752
 msgid "Develop volumes"
@@ -4528,9 +4442,8 @@ msgid "Establishes the current working 3D raster mask."
 msgstr "Vytvoøí aktuální pracovní 3D rastrovou masku."
 
 #: ../gui/wxpython/menustrings.py:759
-#, fuzzy
 msgid "Volume calculator"
-msgstr "Mapový kalkulátor"
+msgstr "3D mapový kalkulátor"
 
 #: ../gui/wxpython/menustrings.py:761
 msgid "Cross section"
@@ -4594,9 +4507,8 @@ msgstr ""
 "Spoèítá univariantní statistiku z ne-nullových 3D bunìk 3D rastrové vrstvy."
 
 #: ../gui/wxpython/menustrings.py:774
-#, fuzzy
 msgid "&Database"
-msgstr "Databáze"
+msgstr "&Databáze"
 
 #: ../gui/wxpython/menustrings.py:775
 msgid "Database information"
@@ -4686,9 +4598,8 @@ msgid "Removes a database."
 msgstr "Vytvoøit z databáze"
 
 #: ../gui/wxpython/menustrings.py:795
-#, fuzzy
 msgid "Drop table"
-msgstr "Kopírovat tabulku"
+msgstr "Smazat tabulku"
 
 #: ../gui/wxpython/menustrings.py:796
 #, fuzzy
@@ -4704,9 +4615,8 @@ msgid "Copy a table."
 msgstr "Kopíruje tabulku."
 
 #: ../gui/wxpython/menustrings.py:799 ../gui/wxpython/menustrings.py:819
-#, fuzzy
 msgid "Drop column"
-msgstr "Odstranit v¹echny sloupce"
+msgstr "Odstranit sloupec"
 
 #: ../gui/wxpython/menustrings.py:800
 #, fuzzy
@@ -4761,35 +4671,27 @@ msgid "New table"
 msgstr "Vytvoøit tabulku"
 
 #: ../gui/wxpython/menustrings.py:812
-#, fuzzy
 msgid ""
 "Creates and connects a new attribute table to a given layer of an existing "
 "vector map."
 msgstr ""
-"Vytvoøí a pøidá novou atributovou tabulku k zadané vrstvì existující "
-"vektorové mapy."
+"Vytvoøí a pøipojí novou atributovou tabulku k dané vrstvì vektorové mapy."
 
 #: ../gui/wxpython/menustrings.py:813
 msgid "Remove table"
 msgstr "Odstranit tabulku"
 
 #: ../gui/wxpython/menustrings.py:814
-#, fuzzy
 msgid "Removes existing attribute table of a vector map."
-msgstr ""
-"Pøejmenuje sloupec v atributové tabulce pøipojené k zadané vektorové mapì."
+msgstr "Odstraní existující atributovou tabulu z vektorové mapy."
 
 #: ../gui/wxpython/menustrings.py:815
-#, fuzzy
 msgid "Join table"
-msgstr "Kopírovat tabulku"
+msgstr "Spojit tabulky"
 
 #: ../gui/wxpython/menustrings.py:816
-#, fuzzy
 msgid "Allows to join a table to a vector map table."
-msgstr ""
-"Umo¾ní pøiøadit novou hodnotu sloupci v atributové tabulce pøipojené k "
-"zadané mapì."
+msgstr "Umo¾ní pøipojení tabulky k vektorové mapì."
 
 #: ../gui/wxpython/menustrings.py:817
 msgid "Add columns"
@@ -4804,11 +4706,9 @@ msgstr ""
 "vektorové mapì."
 
 #: ../gui/wxpython/menustrings.py:820
-#, fuzzy
 msgid ""
 "Drops a column from the attribute table connected to a given vector map."
-msgstr ""
-"Pøejmenuje sloupec v atributové tabulce pøipojené k zadané vektorové mapì."
+msgstr "Odstraní soupec z atributové tabulky pøipojené k dané vektorové mapì."
 
 #: ../gui/wxpython/menustrings.py:821 ../gui/wxpython/gui_modules/dbm.py:932
 msgid "Rename column"
@@ -4842,9 +4742,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:827
-#, fuzzy
 msgid "Reconnect vectors to database"
-msgstr "Znovu navázat spojení s databází"
+msgstr "Znovu navázat spojení vetoru s databází"
 
 #: ../gui/wxpython/menustrings.py:828
 msgid "Reconnects vectors to a new database."
@@ -4861,10 +4760,9 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:831 ../gui/wxpython/menustrings.py:881
 msgid "&Help"
-msgstr "Ná&povìda"
+msgstr "&Nápovìda"
 
 #: ../gui/wxpython/menustrings.py:832
-#, fuzzy
 msgid "GRASS help"
 msgstr "Nápovìda GRASS GIS"
 
@@ -4875,7 +4773,7 @@ msgstr "Zobrazuje manuálové stránky GRASSu ve formátu HTML"
 
 #: ../gui/wxpython/menustrings.py:834
 msgid "GUI help"
-msgstr "Nápovìda GUI"
+msgstr "Nápovìda wxGUI"
 
 #: ../gui/wxpython/menustrings.py:836 ../gui/wxpython/menustrings.py:837
 #: ../gui/wxpython/gui_modules/ghelp.py:477
@@ -4901,32 +4799,32 @@ msgstr "Ulo¾it model do souboru"
 
 #: ../gui/wxpython/menustrings.py:850
 msgid "Close model file"
-msgstr "Uzavøít soubor s modelem"
+msgstr "Zavøít soubor modelu"
 
 #: ../gui/wxpython/menustrings.py:851
 msgid "Export to image"
-msgstr "Exportovat jako obrázek"
+msgstr "Export do obrazu"
 
 #: ../gui/wxpython/menustrings.py:853
 msgid "Export to Python"
-msgstr "Exportovat jako Python skript"
+msgstr "Export do Python"
 
 #: ../gui/wxpython/menustrings.py:855
 msgid "Quit modeler"
-msgstr "Ukonèit modeler"
+msgstr "Ukonèit modelování"
 
 #: ../gui/wxpython/menustrings.py:856
 msgid "Close modeler window"
-msgstr "Uzavøít okno modeleru"
+msgstr "Zavøít okno modelování"
 
 #: ../gui/wxpython/menustrings.py:859
 #: ../gui/wxpython/gui_modules/gmodeler.py:3025
 msgid "Modeler settings"
-msgstr "Nastavení modeleru"
+msgstr "Nastavení modelování"
 
 #: ../gui/wxpython/menustrings.py:860
 msgid "&Model"
-msgstr "&Model"
+msgstr "&Modelování"
 
 #: ../gui/wxpython/menustrings.py:861
 msgid "Add action"
@@ -4934,38 +4832,35 @@ msgstr "Pøidat akci"
 
 #: ../gui/wxpython/menustrings.py:863
 msgid "Add data"
-msgstr "Pøidat data"
+msgstr "Pøidata data"
 
 #: ../gui/wxpython/menustrings.py:865
 msgid "Define relation"
-msgstr "Definovat relaci"
+msgstr "Definovat vztah"
 
 #: ../gui/wxpython/menustrings.py:867
-#, fuzzy
 msgid "Add loop"
-msgstr "Pøidat vrstvu se skupinou"
+msgstr "Pøidat smyèku"
 
 #: ../gui/wxpython/menustrings.py:868
 msgid "Adds loop (for) to model"
-msgstr ""
+msgstr "Pøidat smyèku do modelu"
 
 #: ../gui/wxpython/menustrings.py:869
-#, fuzzy
 msgid "Add condition"
-msgstr "Pøidat akci"
+msgstr "Pøidat podmínku"
 
 #: ../gui/wxpython/menustrings.py:870
-#, fuzzy
 msgid "Adds condition (if/else) to model"
-msgstr "%d akcí nahráno do modelu"
+msgstr "Pøidá podmínky (if/else) do modelu"
 
 #: ../gui/wxpython/menustrings.py:871
 msgid "Remove item"
-msgstr "Odstranit polo¾ku"
+msgstr "Odstranit prvek"
 
 #: ../gui/wxpython/menustrings.py:872
 msgid "Remove action/data from model"
-msgstr "Odstranit akci/data z modelu"
+msgstr "Odstranit data/akce z modelu"
 
 #: ../gui/wxpython/menustrings.py:873
 #: ../gui/wxpython/gui_modules/gmodeler.py:3310
@@ -4974,23 +4869,23 @@ msgstr "Vlastnosti modelu"
 
 #: ../gui/wxpython/menustrings.py:874
 msgid "Model properties (name, purpose, etc.)"
-msgstr "Vlastnosti modelu (název, popis, atd.)"
+msgstr "Vlastnosti modelu (jméno, úèel, atd.)"
 
 #: ../gui/wxpython/menustrings.py:875
 msgid "Delete intermediate data"
-msgstr "Odstranit pøechodná data"
+msgstr "Smazat doèasná data"
 
 #: ../gui/wxpython/menustrings.py:876
 msgid "Delete intermediate data defined in the model"
-msgstr "Odstranit pøechodná data definovaná v modelu"
+msgstr "Smazat prùbì¾ná data definována v modellu"
 
 #: ../gui/wxpython/menustrings.py:878
 msgid "Run entire model"
-msgstr ""
+msgstr "Sopustit celý model"
 
 #: ../gui/wxpython/menustrings.py:880
 msgid "Validate entire model"
-msgstr ""
+msgstr "Vyhodnotit celý model"
 
 #: ../gui/wxpython/menustrings.py:882
 msgid "Help"
@@ -4998,15 +4893,15 @@ msgstr "Nápovìda"
 
 #: ../gui/wxpython/menustrings.py:883
 msgid "Display the HTML man pages of Graphical modeler"
-msgstr "Zobrazuje manuálové stránky Grafického modeleru ve formátu HTML"
+msgstr "Zobrazit manuálové HTML stránky Grafického modelování"
 
 #: ../gui/wxpython/menustrings.py:884
 msgid "About Graphical Modeler"
-msgstr "O Grafickém modeleru"
+msgstr "O grafickém modelování"
 
 #: ../gui/wxpython/menustrings.py:885
 msgid "Display information about Graphical Modeler"
-msgstr "Zobrazit informace o Grafickém Modeleru"
+msgstr "Zobrazit informace o Grafickém modelování"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:94
 msgid "Create new color table for raster map"
@@ -5066,25 +4961,25 @@ msgstr "Prosím nejdøíve vyberte atributový sloupec  a sloupec s RGB hodnotami"
 
 #: ../gui/wxpython/gui_modules/histogram.py:175
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:669
-#, fuzzy
 msgid "Please wait, exporting image..."
-msgstr "Prosím èekejte, aktualizuji data..."
+msgstr "Prosím èekejte, exportuji obrázek..."
 
 #: ../gui/wxpython/gui_modules/histogram.py:265
-#, fuzzy
 msgid "GRASS GIS Histogram of image or raster map"
-msgstr "Vytvoøit histogram obrazu nebo rastrového souboru"
+msgstr "GRASS GIS HIstogram obrazu nebo rastrové mapy"
 
 #: ../gui/wxpython/gui_modules/histogram.py:351
 msgid "Select font for histogram text"
-msgstr ""
+msgstr "vybrat font pro text histogramu"
 
 #: ../gui/wxpython/gui_modules/histogram.py:397
 #: ../gui/wxpython/gui_modules/mapdisp.py:1111
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1370
 #: ../gui/wxpython/gui_modules/gmodeler.py:1031
 msgid "Choose a file name to save the image (no need to add extension)"
-msgstr "Vybrat soubor pro ulo¾ení obrázku (pøípona není vy¾adována)"
+msgstr ""
+"vyberte jméno souboru pro ulo¾ení obrázku (není potøeba zadávat pøíponu "
+"soubru)"
 
 #: ../gui/wxpython/gui_modules/histogram.py:426
 #: ../gui/wxpython/gui_modules/mapdisp.py:1140
@@ -5099,120 +4994,106 @@ msgid "Print preview"
 msgstr "Náhled tisku"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:54
-#, fuzzy
 msgid "GRASS GIS Raster Map Calculator"
-msgstr "GRASS %s mapový kalkulátor"
+msgstr "GRASS GIS rastrový mapový kalkulátor"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:57
-#, fuzzy
 msgid "GRASS GIS 3D Raster Map Calculator"
-msgstr "GRASS %s mapový kalkulátor"
+msgstr "GRASS GIS 3D rastrový mapový kalkulátor"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:67
-#, fuzzy
 msgid "mapcalc statement"
-msgstr "SQL pøíkaz"
+msgstr "mapcalc formule"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:115
 #: ../gui/wxpython/gui_modules/nviz_tools.py:890
-#, fuzzy
 msgid "3D raster map"
-msgstr "3D rastrová mapa:"
+msgstr "3D rastrová mapa"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:118
-#, fuzzy
 msgid "raster map"
-msgstr "Rastrová mapa"
+msgstr "rastrová mapa"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:122
 msgid "Operators"
-msgstr ""
+msgstr "Operátory"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:124
-#, fuzzy
 msgid "Operands"
-msgstr "Otevøít"
+msgstr "Operandy"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:126
-#, fuzzy
 msgid "Expression"
-msgstr "Emise"
+msgstr "výraz"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:137
-#, fuzzy
 msgid "Command dialog"
-msgstr "Dialog nastavení pøíkazù"
+msgstr "Dialog pøíkazu"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:138
-#, fuzzy, python-format
+#, python-format
 msgid "Open %s dialog"
-msgstr "Zavøít dialog "
+msgstr "Otevøít %s dialog "
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:142
 msgid "exponent"
-msgstr ""
+msgstr "exponent"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:144
 msgid "divide"
-msgstr ""
+msgstr "dìlìní"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:146
-#, fuzzy
 msgid "add"
-msgstr "Pøidat"
+msgstr "seèíst"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:148
-#, fuzzy
 msgid "subtract"
-msgstr "povrch"
+msgstr "odeèíst"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:150
 msgid "modulus"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:152
-#, fuzzy
 msgid "multiply"
-msgstr "[mnohonásobné]"
+msgstr "násobit"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:157
 msgid "left shift"
-msgstr ""
+msgstr "posun doleva"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:159
 msgid "right shift"
-msgstr ""
+msgstr "posun doprava"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:161
 msgid "right shift (unsigned)"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:163
-#, fuzzy
 msgid "greater than"
-msgstr "krat¹í ne¾"
+msgstr "více ne¾"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:165
-#, fuzzy
 msgid "greater than or equal to"
-msgstr "Vytvoøit/znovu sestavit topologii"
+msgstr "více ne¾ nebo rovno"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:167
-#, fuzzy
 msgid "less than"
-msgstr "del¹í ne¾"
+msgstr "ménì ne¾"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:169
 msgid "less than or equal to"
-msgstr ""
+msgstr "ménì ne¾ nebo rovno"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:171
 msgid "equal to"
-msgstr ""
+msgstr "rovno"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:173
 msgid "not equal to"
-msgstr ""
+msgstr "není rovno"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:176
 #, fuzzy
@@ -5221,7 +5102,7 @@ msgstr "Zobr. výpoè. region"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:178
 msgid "NOT"
-msgstr ""
+msgstr "NOT"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:180
 msgid "bitwise AND"
@@ -5233,19 +5114,19 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:184
 msgid "logical AND"
-msgstr ""
+msgstr "Logické AND"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:186
 msgid "logical AND (ignores NULLs)"
-msgstr ""
+msgstr "logické AND (ignoruje NULL hodnoty)"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:188
 msgid "logical OR"
-msgstr ""
+msgstr "logické OR"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:190
 msgid "logical OR (ignores NULLs)"
-msgstr ""
+msgstr "logické OR (ignoruje NULL hodnoty)"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:192
 #, fuzzy
@@ -5253,28 +5134,26 @@ msgid "conditional"
 msgstr "Volitelné"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:204
-#, fuzzy, python-format
+#, python-format
 msgid "Name for new %s to create"
-msgstr "Název nové vektorové mapy:"
+msgstr "Jméno pro novì vytváøenou %s"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "Insert existing %s"
-msgstr "pøepsat existující soubor"
+msgstr "Vlo¾it existující %s"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:211
 msgid "Insert mapcalc function"
-msgstr ""
+msgstr "Vlo¾it funkci mapcalc"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:412
-#, fuzzy
 msgid "You must enter the name of a new map to create"
-msgstr "Musíte vlo¾it pøíponu k mapì pokud chcete dále pokraèovat"
+msgstr "Musíte vlo¾it jméno novì vytváøené mapy"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:417
-#, fuzzy
 msgid "You must enter a mapcalc statement to create a new map"
-msgstr "Musíte vlo¾it pøíponu k mapì pokud chcete dále pokraèovat"
+msgstr "Musíte vlo¾it mapcalc formuli pro vytvoøení nové mapy"
 
 #: ../gui/wxpython/gui_modules/menudata.py:80
 #, fuzzy
@@ -5458,32 +5337,26 @@ msgid "You must enter an map name extension in order to continue"
 msgstr "Musíte vlo¾it pøíponu k mapì pokud chcete dále pokraèovat"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:605
-#, fuzzy
 msgid "Select maps to display for ground control point (GCP) creation"
-msgstr ""
-"Vybrat obraz/mapu k zobrazení v displeji pro vytvoøení vlicovacích bodù"
+msgstr "Vyberte mapy zobrazené pro vytvoøení vlicovacích bodù"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:613
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2542
-#, fuzzy
 msgid "Select source map to display:"
-msgstr "Vybrat zdrojový mapset:"
+msgstr "Vyberte zdrojovou mapu k zobrazení:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:624
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2547
-#, fuzzy
 msgid "Select target map to display:"
-msgstr "Rastrová map pro profil"
+msgstr "Vyberte cílovou mapu k zobrazení:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:680
-#, fuzzy
 msgid "You must select a source map in order to continue"
-msgstr "Musíte vybrat platný obraz/mapu pokud chcete dále pokraèovat"
+msgstr "Musíte vybrat zdrojovo mapu pokud chcete pokraèovat"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:702
-#, fuzzy
 msgid "Select maps to display"
-msgstr "Vybrat výchozí písmo"
+msgstr "Vybrat mapy pro zobrazení"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:703
 #, python-format
@@ -5491,6 +5364,8 @@ msgid ""
 "No maps in selected group <%s>. \n"
 "Please edit group or select another group."
 msgstr ""
+"®Ádná mapa ve skupine <%s>. \n"
+"Prosím upravte skupinu nebo vyberte jinou."
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:956
 #: ../gui/wxpython/gui_modules/georect.py:846
@@ -5509,20 +5384,17 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1116
 #: ../gui/wxpython/gui_modules/toolbars.py:411
-#, fuzzy
 msgid "source"
-msgstr "povrch"
+msgstr "zdroj"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1118
 #: ../gui/wxpython/gui_modules/toolbars.py:411
-#, fuzzy
 msgid "target"
-msgstr "hrubý"
+msgstr "cíl"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1120
-#, fuzzy
 msgid "Set GCP coordinates"
-msgstr "Pøevod souøadnic"
+msgstr "Nastavit souøadnice vlicovacím bodùm"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1121
 #, python-format
@@ -5539,9 +5411,9 @@ msgid "Writing POINTS file failed"
 msgstr "Zapisování souboru POINTS selhalo"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1191
-#, fuzzy, python-format
+#, python-format
 msgid "POINTS file saved for group <%s>"
-msgstr "soubor POINTS byl ulo¾en"
+msgstr "soubor POINTS byl ulo¾en pro skupinu <%s>"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1207
 msgid "source mapwin not defined"
@@ -5600,72 +5472,69 @@ msgstr ""
 "Vektorová mapa <%s> ji¾ existuje. Zmìòte pøíponu a georektifikujte znovu."
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1461
-#, fuzzy
 msgid "GCP Manager settings"
-msgstr "Nastavení okna Správy vrstev"
+msgstr "Nastavení správce vlicovacích bodù"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1507
 msgid "Quit GCP Manager"
-msgstr ""
+msgstr "Ukonèit Správce GCP"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1508
-#, fuzzy
 msgid "Save ground control points?"
-msgstr "Nastavit vlicovací body (GCP)"
+msgstr "Ulo¾it vlicovací body (GCP)?"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1585
 msgid ""
 "Could not calculate RMS Error. \n"
 "Possible error with g.transform."
 msgstr ""
+"Nelze spoèítat RMS chybu. \n"
+"Mo¾ná chyba s g.transform."
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1717
 msgid "Adjust GCP Displays "
-msgstr ""
+msgstr "Pøispùsobit zobrazení vlicovacích bodù"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1718
 msgid ""
 "Could not calculate new extends. \n"
 "Possible error with g.transform."
 msgstr ""
+"Nelze spoèítat nový rozsah. \n"
+"mo¾ná chyba s g.transform."
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1849
 msgid "Adjust source display to target display"
-msgstr ""
+msgstr "Pøizpùsobit zdrojový displej cílovému"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1853
 msgid "Adjust target display to source display"
-msgstr ""
+msgstr "Pøizpùsobit cílový displej zdrojovému"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1914
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1931
-#, fuzzy
 msgid "use"
-msgstr "zru¹it"
+msgstr "pou¾ít"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1915
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1932
-#, fuzzy
 msgid "source E"
-msgstr "povrch"
+msgstr "V souøadnice zdroje "
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1916
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1933
-#, fuzzy
 msgid "source N"
-msgstr "povrch"
+msgstr "S souøadnice zdroje"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1917
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1934
-#, fuzzy
 msgid "target E"
-msgstr "Cílová obrazová skupina"
+msgstr "Cílová V souøadnice"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1918
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1935
-#, fuzzy
 msgid "target N"
-msgstr "Cílová obrazová skupina"
+msgstr "Cílová S souøadnice"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1919
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1936
@@ -5702,27 +5571,24 @@ msgid "Select vector map(s) to add to group:"
 msgstr "Vybrat vektorovou mapu pro pøidání do skupiny:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2236
-#, fuzzy
 msgid "Ground Control Point No."
-msgstr "Vlicovací bod"
+msgstr "Vlicovací bod (GCP) èíslo"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2255
-#, fuzzy
 msgid "source E:"
-msgstr "povrch"
+msgstr "Zdroj V:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2256
 msgid "target E:"
-msgstr ""
+msgstr "Cílová V souøadnice:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2257
-#, fuzzy
 msgid "source N:"
-msgstr "povrch"
+msgstr "Zdroj S:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2258
 msgid "target N:"
-msgstr ""
+msgstr "Cílová S souøadnice:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2352
 #: ../gui/wxpython/gui_modules/profile.py:1033
@@ -5756,11 +5622,11 @@ msgstr "Symbolika"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2387
 msgid "Highlight highest RMS error only"
-msgstr ""
+msgstr "Zvýraznit pouze bod s nejvìt¹í RMS"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2393
 msgid "Highlight RMS error > M + SD * factor:"
-msgstr ""
+msgstr "Zvýraznit RMS chybu > M + SO * faktor:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2394
 msgid ""
@@ -5768,6 +5634,9 @@ msgid ""
 "mean + standard deviation * given factor. \n"
 "Recommended values for this factor are between 1 and 2."
 msgstr ""
+"Zvýraznit vlicovací body s RMS chybou vét¹í ne¾ \n"
+"prùmìr + standartní odchylka * daný faktor. \n"
+"Doporuèené hodnoty faktoru jsou mezi 1 a 2."
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2410
 #: ../gui/wxpython/gui_modules/georect.py:1700
@@ -5785,37 +5654,31 @@ msgstr "Barva:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2436
 msgid "Color for high RMS error:"
-msgstr ""
+msgstr "Barva pro vysokou RMS chybu:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2453
-#, fuzzy
 msgid "Color for selected GCP:"
-msgstr "Vymazat vybrané vlicovací bod"
+msgstr "Barva pro vybraný vlicovací bod:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2470
-#, fuzzy
 msgid "Color for unused GCPs:"
-msgstr "Pravidla pro barvy"
+msgstr "Barva pro nevybraný vlicovací bod:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2486
-#, fuzzy
 msgid "Show unused GCPs"
-msgstr "Ukázat linie"
+msgstr "Zobrazit nepou¾ívané vlicovací body"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2495
-#, fuzzy
 msgid "Symbol size:"
-msgstr "Nastavení symbolu"
+msgstr "Velikost symbolu:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2510
-#, fuzzy
 msgid "Line width:"
-msgstr "©íøka linie"
+msgstr "©íøka linie:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2567
-#, fuzzy
 msgid "Rectification"
-msgstr "Nástrojová li¹ta pro georektifikaci"
+msgstr "Rektifikace"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2573
 #: ../gui/wxpython/gui_modules/georect.py:764
@@ -5844,24 +5707,25 @@ msgstr "Spojit s výpoèetním regionem v cílové location"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2620
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2625
-#, fuzzy
 msgid "Update settings"
-msgstr "Nastavení rastru"
+msgstr "Aktualizovat nastavení"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2621
 msgid "RMS threshold factor must be > 0"
-msgstr ""
+msgstr "Prahová hodnota RMS musí být > 0"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2626
 msgid ""
 "RMS threshold factor is < 1\n"
 "Too many points might be highlighted"
 msgstr ""
+"Prahová hodnota RMS je < 1 \n"
+"Pøíli¹ mnoho bodù mù¾e být zvýraznìno"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2743
-#, fuzzy, python-format
+#, python-format
 msgid "GCP Manager settings saved to file '%s'."
-msgstr "Nastavení profilu ulo¾eno do souboru '%s'."
+msgstr "Nastavení Správce vlicovacích bodù ulo¾eno do souboru '%s'."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:123
 #: ../gui/wxpython/gui_modules/mapdisp.py:740
@@ -5873,7 +5737,7 @@ msgstr "Nastavení profilu ulo¾eno do souboru '%s'."
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1086
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1247
 msgid "Projection not defined (check the settings)"
-msgstr ""
+msgstr "Projekce není definována (zkontrolujte nastavení)"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:140
 #: ../gui/wxpython/gui_modules/mapdisp.py:887
@@ -5881,7 +5745,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1130
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1264
 msgid "Error in projection (check the settings)"
-msgstr ""
+msgstr "Chyba v projekci (zkontrolujte nastavení)"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:907
 msgid "MASK"
@@ -5897,9 +5761,8 @@ msgid "No vector map selected for editing."
 msgstr "Nebyla vybrána ¾ádná vektorová mapa pro editaci."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:1625
-#, fuzzy
 msgid "Vector digitizer"
-msgstr "Chyba digitizéru"
+msgstr "Vektorová digitalizace"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2316
 msgid "Z bulk-labeling dialog"
@@ -5910,9 +5773,9 @@ msgid "Zoom to saved region extents"
 msgstr "Pøiblí¾it na ulo¾ený region"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2846
-#, fuzzy, python-format
+#, python-format
 msgid "Region <%s> not found. Operation canceled."
-msgstr "Je potøeba nejménì %d vlicovacích bodù. Operace zru¹ena."
+msgstr "Region <%s> nebyl nalezen. Operace ukonèena."
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:2867
 msgid "Save display extents to region file"
@@ -5984,9 +5847,8 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:246
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1286
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1289
-#, fuzzy
 msgid "Use defined projection"
-msgstr "Vybrat projekci"
+msgstr "Pou¾ít definovanou projekci"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:222
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:250
@@ -5994,11 +5856,12 @@ msgid ""
 "Reproject coordinates displayed in the statusbar. Projection can be defined "
 "in GUI preferences dialog (tab 'Display')"
 msgstr ""
+"Zmìní projekci souøadnic zobrazených ve stavovém øádku. Projekci lze "
+"definovat v nastavení GUI (zálo¾ka 'Displej')"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:317
-#, fuzzy
 msgid "Map toolbar"
-msgstr "Nástrojová li¹ta pro správu mapy"
+msgstr "Nástrojová li¹ta pro správu map"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:329
 #: ../gui/wxpython/gui_modules/layertree.py:523
@@ -6009,6 +5872,10 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
+"Nelze spustit WxGUI vektorovou digitalizaci. \n"
+"Chcete místo toho spustit TCL/TK digitalizaci (v.digit)?\n"
+"\n"
+"Detaily: %s"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:333
 #: ../gui/wxpython/gui_modules/mapdisp.py:343
@@ -6020,13 +5887,12 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/toolbars.py:180
 #: ../gui/wxpython/gui_modules/layertree.py:527
 msgid "2D view"
-msgstr "2D pohled"
+msgstr "2D zobrazení"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:336
 #: ../gui/wxpython/gui_modules/layertree.py:530
-#, fuzzy
 msgid "Vector digitizer failed"
-msgstr "Chyba vektorové digitalizace"
+msgstr "Vektorová digitalizace selhala"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:356
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:438
@@ -6055,9 +5921,8 @@ msgstr ""
 "Detaily: %s"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:404
-#, fuzzy
 msgid "Starting 3D view mode..."
-msgstr "Validuji model..."
+msgstr "Spou¹tím 3D zobrazení..."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:405
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:524
@@ -6065,15 +5930,13 @@ msgid "Please wait, loading data..."
 msgstr "Prosím èekejte, naèítám data..."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:435
-#, fuzzy
 msgid "3D view toolbar"
-msgstr "Nástrojová li¹ta pro Nviz"
+msgstr "Nástrojová li¹ta pro 3D zobrazení"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1096
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1355
-#, fuzzy
 msgid "Nothing to render (empty map). Operation canceled."
-msgstr "Nebyla vybrána ¾ádná mapová vrstva. Operace ukonèena."
+msgstr "Není co zobrazit (prázdná mapa). Operace ukonèena."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1269
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1506
@@ -6103,14 +5966,12 @@ msgid "Only vector map from the current mapset can be modified."
 msgstr "Upravována mù¾e být pouze vektorová mapa z aktuálního mapsetu"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1445
-#, fuzzy
 msgid "Query surface (raster map)"
-msgstr "Dotazování rastrové vrstvy"
+msgstr "Dotaz na rastrovou mapu"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1452
-#, fuzzy
 msgid "Query vector map"
-msgstr "Pøekrýt vektorové mapy"
+msgstr "Dotaz na vektorovou mapu"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1460
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1681
@@ -6199,49 +6060,46 @@ msgstr "GRASS GIS Mapové okno: "
 
 #: ../gui/wxpython/gui_modules/ghelp.py:69
 #: ../gui/wxpython/gui_modules/ghelp.py:77
-#, fuzzy
 msgid "description"
-msgstr "Popis"
+msgstr "popis"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:70
 #: ../gui/wxpython/gui_modules/ghelp.py:79
-#, fuzzy
 msgid "command"
-msgstr "Pøíkazù"
+msgstr "pøíkaz"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:71
 #: ../gui/wxpython/gui_modules/ghelp.py:78
 msgid "keywords"
-msgstr ""
+msgstr "klíèová slova"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:74
 msgid "Find module(s)"
-msgstr ""
+msgstr "Najít modul"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:146
 #: ../gui/wxpython/gui_modules/ghelp.py:179
 #, python-format
 msgid "%d modules found"
-msgstr ""
+msgstr " %d nalezených modulù"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:212
 msgid "Menu tree (double-click to run command)"
-msgstr ""
+msgstr "Nabídka (dvojklikem spustíte pøíkaz)"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:222
-#, fuzzy
 msgid "Run selected command"
-msgstr "Spustit pøíkaz"
+msgstr "Spustit vybraný pøíkaz"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:283
 msgid "You must run this command from the menu or command line"
-msgstr ""
+msgstr "Musíte spustit tento pøíkaz z menu nebo z pøíkazové øádky"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:338
 #: ../gui/wxpython/gui_modules/goutput.py:588
 #, python-format
 msgid "%d modules match"
-msgstr ""
+msgstr "%d modulù odpovídá"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:353
 #: ../gui/wxpython/gui_modules/ghelp.py:968
@@ -6250,14 +6108,12 @@ msgid "Menu tree"
 msgstr "Steinerùv strom"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:508
-#, fuzzy
 msgid "Official GRASS site:"
-msgstr "Oficiální GRASS stránka: http://grass.osgeo.org"
+msgstr "Oficiální GRASS stránka:"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:524
-#, fuzzy
 msgid "GIS Library Revision:"
-msgstr "GIS knihovna"
+msgstr "Verze GIS knihovny:"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:562
 msgid "Copyright"
@@ -6272,23 +6128,21 @@ msgid "Authors"
 msgstr "Autoøi"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:565
-#, fuzzy
 msgid "Contributors"
-msgstr "Atributy"
+msgstr "Tvùrci"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:566
-#, fuzzy
 msgid "Translators"
-msgstr "Prùhledný"
+msgstr "Pøekladatelé"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:599
 #: ../gui/wxpython/gui_modules/ghelp.py:624
 #: ../gui/wxpython/gui_modules/ghelp.py:648
 #: ../gui/wxpython/gui_modules/ghelp.py:684
 #: ../gui/wxpython/gui_modules/ghelp.py:725
-#, fuzzy, python-format
+#, python-format
 msgid "%s file missing"
-msgstr "Kód EPSG chybí."
+msgstr "%s soubor chybí"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:671
 #: ../gui/wxpython/gui_modules/ghelp.py:733
@@ -6297,82 +6151,79 @@ msgstr "Kód EPSG chybí."
 #: ../gui/wxpython/gui_modules/gmodeler.py:3882
 #: ../gui/wxpython/gui_modules/gmodeler.py:3986
 #: ../gui/wxpython/gui_modules/gmodeler.py:4285
-#, fuzzy
 msgid "Name"
-msgstr "Ulo¾it"
+msgstr "Jméno"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:671
 #: ../gui/wxpython/gui_modules/ghelp.py:735
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:671
 msgid "Country"
-msgstr ""
+msgstr "Zemì"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:671
 msgid "OSGeo_ID"
-msgstr ""
+msgstr "OSGeo_ID"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:737
-#, fuzzy
 msgid "Language"
-msgstr "Spravovat"
+msgstr "Jazyk"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:762
 msgid "Fetch & install new extension from GRASS Addons"
-msgstr ""
+msgstr "Stáhnout & instalovat nové roz¹íøení z GRASS Addons"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:770
 msgid "Repository"
-msgstr ""
+msgstr "Repozitáø"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:772
-#, fuzzy
 msgid "List of extensions"
-msgstr "Vyberte pøíponu souboru:"
+msgstr "Seznam roz¹íøení"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:777
 msgid "Fetch full info including description and keywords (takes time)"
 msgstr ""
+"Stáhnout v¹echny informace v¹etnì popisu a klíèových slov (èasovì nároèné)"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:788
 msgid "&Fetch"
-msgstr ""
+msgstr "&Stáhnout"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:789
 msgid "Fetch list of available modules from GRASS Addons SVN repository"
-msgstr ""
+msgstr "Stáhnout seznam dostupných modulù z GRASS Addons SVN repozitáøe"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:792
 msgid "&Install"
-msgstr ""
+msgstr "&Instalovat"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:793
 msgid "Install selected add-ons GRASS module"
-msgstr ""
+msgstr "Instalovat vybrané GRASS moduly"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:857
 msgid "Fetch list of available extensions by clicking on 'Fetch' button"
-msgstr ""
+msgstr "Stáhne seznam dostupných roz¹íøení kliknutím na tlaèítko 'Stáhnout' "
 
 #: ../gui/wxpython/gui_modules/ghelp.py:865
 #, python-format
 msgid "%d items match"
-msgstr ""
+msgstr "%d prvkù odpovídá"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:877
 msgid "Fetching list of modules from GRASS-Addons SVN (be patient)..."
-msgstr ""
+msgstr "Stahuji seznam modulù z GRASS Addons SVN (buïte trpìliví prosím).."
 
 #: ../gui/wxpython/gui_modules/ghelp.py:1119
 msgid "&Next"
-msgstr ""
+msgstr "&Dal¹í"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:1122
-#, fuzzy
 msgid "&Previous"
-msgstr "Náhled"
+msgstr "&Pøedchozí"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:132
 msgid "Define GRASS Database and Location Name"
@@ -6499,13 +6350,12 @@ msgid " Enter parameters for %s projection "
 msgstr "Definujte parametry pro %s projekci"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:796
-#, fuzzy
 msgid "No"
-msgstr "S"
+msgstr "Ne"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:796
 msgid "Yes"
-msgstr ""
+msgstr "Budi¾"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:851
 msgid "Specify geodetic datum"
@@ -6582,7 +6432,7 @@ msgstr "Vlo¾te PROJ.4 parametry:"
 #: ../gui/wxpython/gui_modules/location_wizard.py:1555
 #: ../gui/wxpython/gui_modules/location_wizard.py:1559
 msgid "Datum transform is required."
-msgstr "Geodetické datum je vy¾adováno."
+msgstr "Je vy¾adováno datum transformace"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1750
 msgid "Define new GRASS Location"
@@ -6722,63 +6572,55 @@ msgstr "Vyberte ze seznamu transofrmací datumu"
 
 #: ../gui/wxpython/gui_modules/vclean.py:36
 msgid "set up vector cleaning tools"
-msgstr ""
+msgstr "Nastavit nástroje pro èi¹tìní vektorù"
 
 #: ../gui/wxpython/gui_modules/vclean.py:75
-#, fuzzy
 msgid "break lines/boundaries"
-msgstr "Pøipojit vybrané linie/hranice"
+msgstr "pøeru¹it linie/hranice"
 
 #: ../gui/wxpython/gui_modules/vclean.py:76
-#, fuzzy
 msgid "remove duplicates"
-msgstr "Zkontrolovat zdvojené prvky"
+msgstr "odstranit zdvojené prvky"
 
 #: ../gui/wxpython/gui_modules/vclean.py:77
-#, fuzzy
 msgid "remove dangles"
-msgstr "Vybrat dangles"
+msgstr "Odstranit pøívìsky"
 
 #: ../gui/wxpython/gui_modules/vclean.py:78
 msgid "change boundary dangles to lines"
-msgstr ""
+msgstr "Zmìní pøívìsky hranic na linie"
 
 #: ../gui/wxpython/gui_modules/vclean.py:79
-#, fuzzy
 msgid "remove bridges"
-msgstr "Odstranit tabulku"
+msgstr "odstranit mosty"
 
 #: ../gui/wxpython/gui_modules/vclean.py:80
 msgid "change bridges to lines"
-msgstr ""
+msgstr "Zmìnit mosty na linie"
 
 #: ../gui/wxpython/gui_modules/vclean.py:81
-#, fuzzy
 msgid "snap lines/boundaries"
-msgstr "Otoèit vybrané linie/hranice"
+msgstr "spojit linie/hranice"
 
 #: ../gui/wxpython/gui_modules/vclean.py:82
 msgid "remove duplicate area centroids"
-msgstr ""
+msgstr "Odstranit duplicitní centroidy v plo¹e"
 
 #: ../gui/wxpython/gui_modules/vclean.py:83
 msgid "break polygons"
-msgstr ""
+msgstr "rozdìlí polygony"
 
 #: ../gui/wxpython/gui_modules/vclean.py:84
-#, fuzzy
 msgid "prune lines/boundaries"
-msgstr "Otoèit vybrané linie/hranice"
+msgstr "proøezat linie/hranice"
 
 #: ../gui/wxpython/gui_modules/vclean.py:85
-#, fuzzy
 msgid "remove small areas"
-msgstr "Odstranit mapovou vrstvu"
+msgstr "Odstranit malé plochy"
 
 #: ../gui/wxpython/gui_modules/vclean.py:86
-#, fuzzy
 msgid "remove lines/boundaries of zero length"
-msgstr "Rozdìlit vybrané linie/hranice na prùseèíku"
+msgstr "Odstranit linie/hranice nulové délky"
 
 #: ../gui/wxpython/gui_modules/vclean.py:87
 msgid "remove small angles at nodes"
@@ -6786,120 +6628,107 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/vclean.py:120
 #: ../gui/wxpython/gui_modules/vclean.py:121
-#, fuzzy
 msgid "Set up vector cleaning tools"
-msgstr "Vybrat vektorový prvek"
+msgstr "Nastavit vektorový èistící nástroj"
 
 #: ../gui/wxpython/gui_modules/vclean.py:123
 msgid "Choose cleaning tools and set thresholds"
-msgstr ""
+msgstr "Vybrat èistící nástroj a nastavit prahovou hodnotu"
 
 #: ../gui/wxpython/gui_modules/vclean.py:127
-#, fuzzy
 msgid "Select input vector map:"
-msgstr "Vybrat vektorovou mapu:"
+msgstr "Vyberte vstupní vektorovou mapu:"
 
 #: ../gui/wxpython/gui_modules/vclean.py:133
-#, fuzzy
 msgid " Feature type: "
-msgstr "ID prvku:"
+msgstr "Typ prvku:"
 
 #: ../gui/wxpython/gui_modules/vclean.py:137
-#, fuzzy
 msgid "Select output vector map:"
-msgstr "Vybrat vektorovou mapu:"
+msgstr "Vybrat výstupní vektorovou mapu:"
 
 #: ../gui/wxpython/gui_modules/vclean.py:167
 #: ../gui/wxpython/gui_modules/menuform.py:759
-#, fuzzy
 msgid "Copy the current command string to the clipboard (Ctrl+C)"
-msgstr "Kopírovat pøíkaz jako øetìzec do schránky"
+msgstr "Kopírovat pøíkaz do schránky (Ctrl+C)"
 
 #: ../gui/wxpython/gui_modules/vclean.py:203
-#, fuzzy
 msgid "point"
-msgstr "Bod"
+msgstr "bod"
 
 #: ../gui/wxpython/gui_modules/vclean.py:204
-#, fuzzy
 msgid "line"
-msgstr "zemìpisné èáry"
+msgstr "linie"
 
 #: ../gui/wxpython/gui_modules/vclean.py:205
-#, fuzzy
 msgid "boundary"
-msgstr "Upravit linii/hranici"
+msgstr "hranice"
 
 #: ../gui/wxpython/gui_modules/vclean.py:206
-#, fuzzy
 msgid "centroid"
-msgstr "Pøidat centroidy"
+msgstr "centroid"
 
 #: ../gui/wxpython/gui_modules/vclean.py:207
 #: ../gui/wxpython/gui_modules/vdigit.py:1539
-#, fuzzy
 msgid "area"
-msgstr "hrubý"
+msgstr "plocha"
 
 #: ../gui/wxpython/gui_modules/vclean.py:208
-#, fuzzy
 msgid "face"
 msgstr "povrch"
 
 #: ../gui/wxpython/gui_modules/vclean.py:362
 #, python-format
 msgid "%s. cleaning tool removed, will be ignored"
-msgstr ""
+msgstr "%s. èistící nástroj odstranìn, bude ignorováno"
 
 #: ../gui/wxpython/gui_modules/vclean.py:364
 msgid "Please select a cleaning tool to remove"
-msgstr ""
+msgstr "Prosím vyberte èistící nástroj pro odstranìní"
 
 #: ../gui/wxpython/gui_modules/vclean.py:385
-#, fuzzy, python-format
+#, python-format
 msgid "%s. cleaning tool moved up"
-msgstr "Sada nástrojù k èi¹tìní topologie vektorové mapy."
+msgstr "%s. èistící nástroj byl posunut nahoru"
 
 #: ../gui/wxpython/gui_modules/vclean.py:387
 msgid "1. cleaning tool can not be moved up "
-msgstr ""
+msgstr "První èistící nástroj ji¾ nejde posunout vý¹"
 
 #: ../gui/wxpython/gui_modules/vclean.py:389
-#, fuzzy
 msgid "Please select a cleaning tool to move up"
-msgstr "Sada nástrojù k èi¹tìní topologie vektorové mapy."
+msgstr "Prosím vyberte èistící nástroj pro posun nahoru"
 
 #: ../gui/wxpython/gui_modules/vclean.py:412
 #, python-format
 msgid "%s. cleaning tool moved down"
-msgstr ""
+msgstr "%s. èistící nástroj posunut dolù"
 
 #: ../gui/wxpython/gui_modules/vclean.py:414
 msgid "Last cleaning tool can not be moved down "
-msgstr ""
+msgstr "Poslední èistící nástroj ji¾ nejde posunout dolù"
 
 #: ../gui/wxpython/gui_modules/vclean.py:416
 msgid "Please select a cleaning tool to move down"
-msgstr ""
+msgstr "Prosím vyberte èistící nástroj, který chcete posunout dolù"
 
 #: ../gui/wxpython/gui_modules/vclean.py:427
 #, python-format
 msgid "cleaning tool: '%s'"
-msgstr ""
+msgstr "èistící nástroj: '%s'"
 
 #: ../gui/wxpython/gui_modules/vclean.py:435
 #, python-format
 msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
-msgstr ""
+msgstr "Prahová hodnota pro %(num)s.nástroj '%(tool)s': %(thresh)s"
 
 #: ../gui/wxpython/gui_modules/vclean.py:456
 msgid "Executing selected cleaning operations..."
-msgstr ""
+msgstr "Spustit vybrané èistící nástroje...."
 
 #: ../gui/wxpython/gui_modules/vclean.py:510
-#, fuzzy
 msgid "Vector cleaning command copied to clipboard"
-msgstr "Kopírovat pøíkaz jako øetìzec do schránky"
+msgstr "Pøíkaz pro èi¹tìní vektoru byl zkopírován do schráky"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:68
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:48
@@ -6914,7 +6743,7 @@ msgstr "Data"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:76
 msgid "Appearance"
-msgstr ""
+msgstr "Vzhled"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:110
 msgid "Control View"
@@ -7034,19 +6863,16 @@ msgid "Vector"
 msgstr "Vektor"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:280
-#, fuzzy
 msgid "Volume"
 msgstr "3D rastr"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:296
-#, fuzzy
 msgid "Lighting"
-msgstr "Zvýraznìní"
+msgstr "Osvìtlení"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:300
-#, fuzzy
 msgid "Fringe"
-msgstr "jemný:"
+msgstr "Okraj"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:318
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:671
@@ -7144,19 +6970,17 @@ msgid "Use draw settings for all loaded surfaces"
 msgstr "Pou¾ít vykreslovací nastavení pro v¹echny naètené povrchy"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:468
-#, fuzzy
 msgid "Coarse:"
-msgstr "hrubý:"
+msgstr "Hrubý:"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:472
 #: ../gui/wxpython/gui_modules/nviz_tools.py:522
 msgid "res."
-msgstr ""
+msgstr "rozl."
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:490
-#, fuzzy
 msgid "style"
-msgstr "Styl"
+msgstr "styl"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:493
 msgid "wire"
@@ -7167,14 +6991,12 @@ msgid "surface"
 msgstr "povrch"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:503
-#, fuzzy
 msgid "wire color"
 msgstr "barva sítì"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:517
-#, fuzzy
 msgid "Fine:"
-msgstr "jemný:"
+msgstr "Vyhlazený:"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:552
 msgid "Mask zeros:"
@@ -7193,9 +7015,8 @@ msgid "Position"
 msgstr "Pozice"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:627
-#, fuzzy
 msgid "Vector map"
-msgstr "Vektorové mapy"
+msgstr "Vektorová mapa"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:651
 msgid "Show vector lines"
@@ -7207,26 +7028,22 @@ msgid "Vector lines"
 msgstr "Vektorové linie"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:667
-#, fuzzy
 msgid "Line:"
-msgstr "Linie"
+msgstr "Linie:"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:670
 #: ../gui/wxpython/gui_modules/nviz_tools.py:803
-#, fuzzy
 msgid "width"
-msgstr "¹íøka:"
+msgstr "¹íøka"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:686
 #: ../gui/wxpython/gui_modules/nviz_tools.py:788
-#, fuzzy
 msgid "color"
-msgstr "barva:"
+msgstr "barva"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:701
-#, fuzzy
 msgid "display"
-msgstr "Displej"
+msgstr "zobrazit"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:706
 msgid "on surface"
@@ -7247,19 +7064,16 @@ msgid "Vector points"
 msgstr "Vektorové body"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:767
-#, fuzzy
 msgid "Icon:"
-msgstr "Velikost ikon:"
+msgstr "Ikona:"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:770
-#, fuzzy
 msgid "size"
-msgstr " Velikost"
+msgstr "velikost"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:821
-#, fuzzy
 msgid "symbol"
-msgstr "symbol:"
+msgstr "symbol"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:923
 msgid "isosurfaces"
@@ -7286,27 +7100,24 @@ msgid "Topography level"
 msgstr "Úroveò topografie"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1128
-#, fuzzy
 msgid "Show light model"
-msgstr "Ukázat linie"
+msgstr "Ukázat svìtelný model"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1133
 msgid "Follow source viewpoint"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1139
-#, fuzzy
 msgid "Light source position"
-msgstr "Vybrat zdrojovou location:"
+msgstr "Umístìní zdroje svìtla"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1183
 msgid "Light color and intensity"
-msgstr ""
+msgstr "Barva svìtla a intenzita"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1196
-#, fuzzy
 msgid "Brightness:"
-msgstr "Bohatost"
+msgstr "Jas:"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1206
 msgid "Ambient:"
@@ -7314,27 +7125,27 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1267
 msgid "Edges with fringe"
-msgstr ""
+msgstr "Hrany s okrajem"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1269
 msgid "N && W"
-msgstr ""
+msgstr "S && Z"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1270
 msgid "N && E"
-msgstr ""
+msgstr "S && V"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1271
 msgid "S && W"
-msgstr ""
+msgstr "J &c Z"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1272
 msgid "S && E"
-msgstr ""
+msgstr "J && V"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1292
 msgid "Elevation of fringe from bottom:"
-msgstr ""
+msgstr "Vý¹ka okraje ze spodní strany"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2306
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2308
@@ -7342,37 +7153,31 @@ msgid "Level"
 msgstr "Úroveò"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2637
-#, fuzzy
 msgid "Vector map is 3D"
-msgstr "Vektorové mapa <%s> je 3D"
+msgstr "Vektorové mapa je 3D"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2640
-#, fuzzy
 msgid "Vector map is 2D"
-msgstr "Vektorová mapa <%s> je 2D"
+msgstr "Vektorová mapa je 2D"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:2642
-#, fuzzy, python-format
+#, python-format
 msgid "%(features)d features (%(points)d points)"
-msgstr "%(primitives)d prvkù (%(points)d bodù)"
+msgstr "%(features)d prvkù (%(points)d bodù)"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:38
-#, fuzzy
 msgid "Import data from WMS server"
-msgstr "Stáhne a importuje data z WMS serverù."
+msgstr "Importovat data z WMS serveru"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:54
-#, fuzzy
 msgid " Server settings "
-msgstr "Obecné nastavení"
+msgstr "Nastavení serveru"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:56
-#, fuzzy
 msgid "Server:"
-msgstr "Ovladaè"
+msgstr "Server:"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:63
-#, fuzzy
 msgid " List of layers "
 msgstr "Seznam vrstev"
 
@@ -7383,13 +7188,12 @@ msgid "Add imported layers into layer tree"
 msgstr "Pøidat importované vrstvy do stromu vrstev"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:79
-#, fuzzy
 msgid "&Connect"
-msgstr "Spojení "
+msgstr "&Spojení "
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:80
 msgid "Connect to the server"
-msgstr ""
+msgstr "Pøipojit k serveru"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:85
 #: ../gui/wxpython/gui_modules/gdialogs.py:1119
@@ -7402,29 +7206,26 @@ msgid "Import selected layers"
 msgstr "Importovat vybrané vrstvy"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:237
-#, fuzzy
 msgid "Layer / Style"
-msgstr "Vrstva k odstranìní"
+msgstr "Vrstva / Styl"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:238
-#, fuzzy
 msgid "Title"
-msgstr "Soubor"
+msgstr "Název"
 
 #: ../gui/wxpython/gui_modules/ogc_services.py:248
-#, fuzzy
 msgid "Layers"
-msgstr "Vrstva"
+msgstr "Vrstvy"
 
 #: ../gui/wxpython/gui_modules/prompt.py:392
-#, fuzzy, python-format
+#, python-format
 msgid "Warning: flag <%(flag)s> not found in '%(module)s'"
-msgstr "CHYBA: Location <%s> nebyla nalezena"
+msgstr "Upozornìní: volba <%(flag)s> nebyla nalezena v '%(module)s'"
 
 #: ../gui/wxpython/gui_modules/prompt.py:395
-#, fuzzy, python-format
+#, python-format
 msgid "Warning: option <%(param)s> not found in '%(module)s'"
-msgstr "CHYBA: Location <%s> nebyla nalezena"
+msgstr "Upozornìní: volba <%(param)s> nebyla nalezena v '%(module)s'"
 
 #: ../gui/wxpython/gui_modules/prompt.py:632
 msgid "Type GRASS command and run by pressing ENTER"
@@ -7496,14 +7297,12 @@ msgid "overwrite existing file"
 msgstr "pøepsat existující soubor"
 
 #: ../gui/wxpython/gui_modules/gselect.py:286
-#, fuzzy
 msgid "Not selectable element"
-msgstr "Odstranit zvolený sloupec"
+msgstr "Prvek nelze vybrat"
 
 #: ../gui/wxpython/gui_modules/gselect.py:942
-#, fuzzy
 msgid "Source name"
-msgstr "Název sloupce"
+msgstr "Jméno zdroje"
 
 #: ../gui/wxpython/gui_modules/gselect.py:952
 #: ../gui/wxpython/gui_modules/menuform.py:1545
@@ -7511,9 +7310,8 @@ msgid "File"
 msgstr "Soubor"
 
 #: ../gui/wxpython/gui_modules/gselect.py:956
-#, fuzzy
 msgid "Directory"
-msgstr "Smìr"
+msgstr "Adresáø"
 
 #: ../gui/wxpython/gui_modules/gselect.py:960
 #: ../gui/wxpython/gui_modules/dbm.py:2283
@@ -7524,7 +7322,7 @@ msgstr "Databáze"
 
 #: ../gui/wxpython/gui_modules/gselect.py:964
 msgid "Protocol"
-msgstr ""
+msgstr "Protokol"
 
 #: ../gui/wxpython/gui_modules/gselect.py:968
 msgid "Source type"
@@ -7532,9 +7330,8 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gselect.py:982
 #: ../gui/wxpython/gui_modules/gselect.py:1118
-#, fuzzy
 msgid "Choose input file"
-msgstr "Vyberte vstupní adresáø"
+msgstr "Vyberte vstupní soubor"
 
 #: ../gui/wxpython/gui_modules/gselect.py:991
 msgid "Choose input directory"
@@ -7542,38 +7339,32 @@ msgstr "Vyberte vstupní adresáø"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1000
 #: ../gui/wxpython/gui_modules/gselect.py:1243
-#, fuzzy
 msgid "Choose file"
-msgstr "Vyberte soubor DXF:"
+msgstr "Vyberte soubor"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1031
-#, fuzzy
 msgid "File:"
-msgstr "Soubor"
+msgstr "Soubor:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1034
-#, fuzzy
 msgid "Directory:"
-msgstr "Smìr"
+msgstr "Adresáø:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1037
-#, fuzzy
 msgid "Database:"
-msgstr "Databáze"
+msgstr "Databáze:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1040
-#, fuzzy
 msgid "Protocol:"
-msgstr "Kód projekce:"
+msgstr "Protokol:"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1061
 msgid "Format:"
-msgstr ""
+msgstr "Formát:"
 
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:29
-#, fuzzy
 msgid "3D view settings"
-msgstr "Obecné nastavení"
+msgstr "Nastavení 3D zobrazení"
 
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:67
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:146
@@ -7626,13 +7417,13 @@ msgid "Nviz settings saved to file <%s>."
 msgstr "Nastavení Nviz ulo¾eno do souboru <%s>."
 
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:472
-#, fuzzy, python-format
+#, python-format
 msgid "3D view settings saved to file <%s>."
-msgstr "Nastavení Nviz ulo¾eno do souboru <%s>."
+msgstr "Nastavení 3D zobrazení bylo ulo¾eno do souboru <%s>."
 
 #: ../gui/wxpython/gui_modules/gcmd.py:75
 msgid "Reason"
-msgstr ""
+msgstr "Dùvod"
 
 #: ../gui/wxpython/gui_modules/gcmd.py:344
 msgid "Execution failed:"
@@ -7653,7 +7444,6 @@ msgid "Unable to exectute command: '%s'"
 msgstr "Nelze vykonat pøíkaz: '%s'"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:114
-#, fuzzy
 msgid ""
 "Unable to initialize display driver of vector digitizer. See 'Command "
 "output' for details.\n"
@@ -7807,7 +7597,7 @@ msgstr "del¹í ne¾"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1408
 msgid "dangle"
-msgstr "dangle"
+msgstr "pøívìsek"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1413
 msgid "Select dangles"
@@ -7852,17 +7642,16 @@ msgid "No category"
 msgstr "®ádná kategorie"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1499
-#, fuzzy
 msgid "Digitize new area"
-msgstr "Digitalizovat nový prvek"
+msgstr "DIgitalizovat novou plochu"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1504
 msgid "Add centroid to left/right area"
-msgstr ""
+msgstr "Pøidat centroid do levé/pravé plochy"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1510
 msgid "Do not attach category to boundaries"
-msgstr ""
+msgstr "Nezadávat kategorie hranicím"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1519
 msgid "Delete existing feature(s)"
@@ -7873,20 +7662,20 @@ msgid "Delete record from table"
 msgstr "Odstranit záznam s tabulky"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1534
-#, fuzzy
 msgid "Geometry attributes"
-msgstr "Atributový dotaz"
+msgstr "Atributy geometrie prvku"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1540
-#, fuzzy
 msgid "perimeter"
-msgstr "Parametry"
+msgstr "Obvod"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1606
 msgid ""
 "Note: These settings are stored  in the workspace not in the vector "
 "digitizer preferences."
 msgstr ""
+"POzníámka: Tyto nastavení jsou ulo¾eny v souboru pracovního prostøedí a ne v "
+"nastavení vektorové digitalizace."
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1636
 msgid "Highlight"
@@ -7964,7 +7753,7 @@ msgstr "Nastavení digitizéru ulo¾eno do souboru <%s>."
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1957
 msgid "List of categories - right-click to delete"
-msgstr "Sesznam kategorií - kliknìte pravým tlaèítkem pro vymazání"
+msgstr "Seznam kategorií - kliknìte pravým tlaèítkem pro vymazání"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:1988
 msgid "Add new category"
@@ -8021,7 +7810,7 @@ msgstr "Nelze modifikovat vektorovou mapu."
 #: ../gui/wxpython/gui_modules/vdigit.py:2464
 #, python-format
 msgid "%d lines selected for z bulk-labeling"
-msgstr "% linie vybráno pro oznaèení z souøadnice"
+msgstr "%d linií vybráno pro oznaèení z souøadnice"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:2467
 msgid "Set value"
@@ -8084,27 +7873,23 @@ msgstr "Mìøítko mapy"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:175
 msgid "Go to GCP No."
-msgstr ""
+msgstr "Jdi na vlicovací bod è."
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:176
-#, fuzzy
 msgid "RMS error"
 msgstr "RMS (støední kvadratická) chyba"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:316
-#, fuzzy
 msgid "GCP List"
-msgstr "Seznam"
+msgstr "Seznam vlicovacích bodù (GCP)"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:321
-#, fuzzy
 msgid "Source Display"
-msgstr "Vymazat displej"
+msgstr "Zdrojový displej"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:325
-#, fuzzy
 msgid "Target Display"
-msgstr "Vymazat displej"
+msgstr "Cílový displej"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:405
 msgid "Map Toolbar"
@@ -8126,14 +7911,12 @@ msgstr ""
 "Detaily: %s"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:456
-#, fuzzy
 msgid "GCP Display toolbar"
-msgstr "Zobrazit mapu"
+msgstr "Panel nástrojù vlicovacích bodù"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:469
-#, fuzzy
 msgid "GCP Manager toolbar"
-msgstr "Správa barev"
+msgstr "Správa panelu nástrojù vlicovacích bodù"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:493
 #, python-format
@@ -8155,13 +7938,12 @@ msgid "Nviz toolbar"
 msgstr "Nástrojová li¹ta pro Nviz"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:943
-#, fuzzy
 msgid "Valid Range:"
-msgstr "Povolený rozsah"
+msgstr "Povolený rozsah:"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:945
 msgid "Invalid GCP Number"
-msgstr ""
+msgstr "Neplatné èíslo vlicovacího bodu"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1280
 #, python-format
@@ -8174,14 +7956,12 @@ msgid "Unable to decode value. Set encoding in GUI preferences ('Attributes')."
 msgstr "Nelze pøekódovat hodnotu. Zmìòte kódování v nastavení GUI ('Atributy')"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:89
-#, fuzzy
 msgid "model"
-msgstr "Model"
+msgstr "model"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:90
-#, fuzzy
 msgid "Script generated by wxGUI Graphical Modeler."
-msgstr "Skript vytvoøený wxGUI Grafickým modelerem"
+msgstr "Skript vytvoøen pomocí wxGUi grafického modelování."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:408
 msgid "Raster maps"
@@ -8197,41 +7977,36 @@ msgstr "Vektorové mapy"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:440
 #: ../gui/wxpython/gui_modules/gmodeler.py:563
-#, fuzzy
 msgid "Variables"
-msgstr "Hodnoty"
+msgstr "Promìnné"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:506
 msgid "GRASS GIS Graphical Modeler"
-msgstr "GRASS GIS Grafický modeler"
+msgstr "GRASS GIS grafické modelování"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:561
 msgid "Model"
-msgstr "Model"
+msgstr "Modelování"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:562
 msgid "Items"
-msgstr ""
+msgstr "Prvky"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:631
-#, fuzzy
 msgid "Redrawing model..."
-msgstr "Spou¹tím model..."
+msgstr "Pøekresluji model..."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:658
-#, fuzzy
 msgid "Do you want to save changes in the model?"
-msgstr "Chcete ulo¾it zmìny v pracovním prostøedí?"
+msgstr "Chcete ulo¾it zmìny v modelu?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:660
-#, fuzzy
 msgid "Do you want to store current model settings to model file?"
-msgstr "Chcete ulo¾it souèasné nastavní do souboru pracovního prostøedí?"
+msgstr "Chcete ulo¾it souèasné nastavní do souboru modelu?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:666
-#, fuzzy
 msgid "Quit Graphical Modeler"
-msgstr "O Grafickém modeleru"
+msgstr "Ukonèit Grafické modelování"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:727
 #: ../gui/wxpython/gui_modules/dbm.py:2088
@@ -8241,16 +8016,16 @@ msgstr "Není co smazat"
 #: ../gui/wxpython/gui_modules/gmodeler.py:731
 #, python-format
 msgid "Do you want to permanently delete data?%s"
-msgstr "Pøejete si nenávratnì smazat data?%s"
+msgstr "Chcete trvale odstranit data? %s"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:732
 msgid "Delete intermediate data?"
-msgstr "Smazat pøechodná data?"
+msgstr "Smazat doèasná data"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:746
 #, python-format
 msgid "%d maps deleted from current mapset"
-msgstr "%d map smazáno z aktuálního mapsetu"
+msgstr " %d map bylo smazáno ze souèasného mapsetu"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:761
 #: ../gui/wxpython/gui_modules/gmodeler.py:873
@@ -8258,8 +8033,8 @@ msgid ""
 "Current model is not empty. Do you want to store current settings to model "
 "file?"
 msgstr ""
-"Aktuální model není prázdný. Pøejete si ulo¾it nastavení tohoto modulu do "
-"souboru?"
+"Souèasný model není prázdný. Pøejete si ulo¾it aktuální nastavení do souboru "
+"modelu?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:764
 #: ../gui/wxpython/gui_modules/gmodeler.py:876
@@ -8268,7 +8043,7 @@ msgstr "Vytvoøit nový model?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:789
 msgid "Choose model file"
-msgstr "Vyberte soubor s modelem"
+msgstr "Vyberte model ze souboru"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:807
 #, fuzzy, python-format
@@ -8285,7 +8060,7 @@ msgstr "Soubor s modelem <%s> ji¾ existuje. Pøejete si tento soubor pøepsat?"
 #: ../gui/wxpython/gui_modules/gmodeler.py:863
 #, python-format
 msgid "File <%s> saved"
-msgstr "Soubor <%s> ulo¾en"
+msgstr "Soubor <%s> byl ulo¾en"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:832
 msgid "Choose file to save current model"
@@ -8297,40 +8072,40 @@ msgstr "Soubor ji¾ existuje"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:900
 msgid "Model is empty. Nothing to run."
-msgstr "Model je prázdný. Nic ke spu¹tìní."
+msgstr "Model je prázdný. Není co spustit."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:987
 msgid "Model is empty. Nothing to validate."
-msgstr "Model je prázdný. Nic k validaci."
+msgstr "Model je prázdný. Není co vyhodnotit."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:994
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Model is not valid.\n"
 "\n"
 "%s"
 msgstr ""
-"Model není validní.\n"
+"Model není platný.\n"
 "\n"
 "%s"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:997
 msgid "Model is valid."
-msgstr "Model je validní"
+msgstr "Model je platný"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1059
 #: ../gui/wxpython/gui_modules/gmodeler.py:1102
 #, python-format
 msgid "Model exported to <%s>"
-msgstr "Model exportován jako <%s>"
+msgstr "Model exportován do <%s>"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1067
 msgid "Choose file to save"
-msgstr "Vybrat soubor pro ulo¾ení"
+msgstr "Vyberte soubor k ulo¾ení"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1069
 msgid "Python script (*.py)|*.py"
-msgstr "Skript Python (*.py)|*.py"
+msgstr "Python skript (*.py)|*.py"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1083
 #, python-format
@@ -8343,14 +8118,14 @@ msgstr "Ulo¾it soubor"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1350
 msgid "wxGUI Graphical Modeler"
-msgstr "wxGUI Grafický modeler"
+msgstr "wxGUI Grafické modelování"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1352
 msgid ""
 "(C) 2010 by the GRASS Development Team\n"
 "\n"
 msgstr ""
-"(C) 2010 Vývojový tým GRASS\n"
+"(C) 2010 by the GRASS Development Team\n"
 "\n"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1353
@@ -8358,17 +8133,18 @@ msgid ""
 "This program is free software under the GNU General Public License(>=v2). "
 "Read the file COPYING that comes with GRASS for details."
 msgstr ""
-"Tento program je svobodný software licencovaný pod V¹eobecnou licencí GNU "
-"(>=2). Podívejte se na soubor COPYING, který je souèástí balíèku GRASS."
+"Tento program je volnì ¹iøitelný pro licencí GNU General Public License"
+"(>=v2). Pro více detailù si prosím pøe¹tìte soubor COPYING který je pøilo¾en "
+"k instalaci."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1482
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Reading model file <%s> failed.\n"
 "Invalid file, unable to parse XML document."
 msgstr ""
-"Ètení souboru s modelem <%s> selhalo. Neplatný soubor, nelze parsrovat XML "
-"dokument."
+"Ètení souboru modelu <%s> selhalo. \n"
+"Neplatný soubor, nelze parsovat XML dokument."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1488
 msgid "Please wait, loading model..."
@@ -8376,7 +8152,7 @@ msgstr "Prosím èekejte, naèítám model..."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1543
 msgid "Writing current settings to model file failed."
-msgstr "Zápis aktuálního nastavení modelu do souboru selhalo."
+msgstr "Zápis aktuálního nastavení do souboru modelu selhalo."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1796
 #: ../gui/wxpython/gui_modules/gmodeler.py:1853
@@ -8387,19 +8163,19 @@ msgstr "neznámý"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2085
 msgid "Data properties"
-msgstr "Vlastnosti datové polo¾ky"
+msgstr "Vlastnosti dat"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2092
 msgid "Name of raster map:"
-msgstr "Název rastrové mapy:"
+msgstr "Jméno rastrové mapy:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2094
 msgid "Name of vector map:"
-msgstr "Název vektorové mapy:"
+msgstr "Jméno vektorové mapy:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2096
 msgid "Name of element:"
-msgstr "Název elementu:"
+msgstr "Jméno prvku:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2270
 #: ../gui/wxpython/gui_modules/layertree.py:264
@@ -8407,26 +8183,24 @@ msgid "Remove"
 msgstr "Odstranit"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2274
-#, fuzzy
 msgid "Disable"
-msgstr "Seznam tabulek"
+msgstr "Zakázat"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2277
-#, fuzzy
 msgid "Enable"
-msgstr "Tabulka"
+msgstr "Povolit"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2282
 msgid "Add control point"
-msgstr "Vlo¾it vrcholový bod"
+msgstr "Pøidat vlicovací bod"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2284
 msgid "Remove control point"
-msgstr "Odstranit vrcholový bod"
+msgstr "Odstranit vlicovací bod"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2291
 msgid "Intermediate"
-msgstr "Pøechodná data"
+msgstr "pøechodné"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2302
 #: ../gui/wxpython/gui_modules/layertree.py:279
@@ -8434,13 +8208,12 @@ msgid "Properties"
 msgstr "Vlastnosti"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2306
-#, fuzzy
 msgid "Change ID"
-msgstr "Vytvoøit mapset"
+msgstr "Zmìnit ID"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2362
 msgid "Add new GRASS module to the model"
-msgstr ""
+msgstr "Pøidat nový modul do modelu"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2380
 #: ../gui/wxpython/gui_modules/gmodeler.py:3883
@@ -8455,7 +8228,7 @@ msgid ""
 "\n"
 "Unable to add new action to the model."
 msgstr ""
-"Pøíkaz není definován.\n"
+"Pøíkaz není definován. \n"
 "\n"
 "Nelze pøidat novou akci do modelu."
 
@@ -8466,7 +8239,7 @@ msgid ""
 "\n"
 "Unable to add new action to the model."
 msgstr ""
-"'%s' není GRASS modulem.\n"
+"'%s' není GRASS modul. \n"
 "\n"
 "Nelze pøidat novou akci do modelu."
 
@@ -8476,29 +8249,29 @@ msgstr "Akce"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3045
 msgid "Validity"
-msgstr "Validita"
+msgstr "Ovìøování"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3053
 msgid "Valid:"
-msgstr "Validní:"
+msgstr "Platné"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3070
 msgid "Invalid:"
-msgstr "Nevalidní:"
+msgstr "Neplatné:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3087
 msgid "Running:"
-msgstr "Bì¾ící:"
+msgstr "Bì¾í:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3104
-#, fuzzy
 msgid "Disabled:"
-msgstr "Seznam tabulek"
+msgstr "Zakázané:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3124
 #: ../gui/wxpython/gui_modules/gmodeler.py:3243
+#, fuzzy
 msgid "Shape size"
-msgstr "Velikost tvaru"
+msgstr "Index ostrosti"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3181
 #: ../gui/wxpython/gui_modules/profile.py:1252
@@ -8507,15 +8280,15 @@ msgstr "Typ"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3189
 msgid "Raster:"
-msgstr "Rastrová data"
+msgstr "Rastr:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3206
 msgid "3D raster:"
-msgstr "3D rastrová data"
+msgstr "3D rastr:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3223
 msgid "Vector:"
-msgstr "Vektorová data"
+msgstr "Vektor:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3317
 #: ../gui/wxpython/gui_modules/layertree.py:351
@@ -8529,11 +8302,11 @@ msgstr "Pøíkazy"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3339
 msgid "Apply properties"
-msgstr "Pou¾ít vlastnosti"
+msgstr "Pøijmout vlastnosti"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3353
 msgid "Name:"
-msgstr "Název:"
+msgstr "Jméno:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3362
 msgid "Description:"
@@ -8548,9 +8321,8 @@ msgid "Model parameters"
 msgstr "Parametry modelu"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3567
-#, fuzzy
 msgid "List of variables - right-click to delete"
-msgstr "Sesznam kategorií - kliknìte pravým tlaèítkem pro vymazání"
+msgstr "Seznam promìnných - kliknìte pravým tlaèítkem pro vymazání"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3570
 #: ../gui/wxpython/gui_modules/gmodeler.py:3617
@@ -8561,14 +8333,12 @@ msgstr "Datový typ"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3571
 #: ../gui/wxpython/gui_modules/gmodeler.py:3623
-#, fuzzy
 msgid "Default value"
-msgstr "Nastavit hodnotu"
+msgstr "výchozí hodnota"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3575
-#, fuzzy
 msgid "Add new variable"
-msgstr "Pøidat nový opìrný bod"
+msgstr "Pøidat novou promìnnou"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3579
 #, fuzzy
@@ -8576,83 +8346,71 @@ msgid "integer"
 msgstr "Ukazatel"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3580
-#, fuzzy
 msgid "float"
-msgstr "plocha"
+msgstr "desetinné èíslo"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3581
-#, fuzzy
 msgid "string"
-msgstr "Dla¾dice"
+msgstr "øetìzec"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3589
 msgid "Add new variable to the model"
-msgstr ""
+msgstr "Pøidat novou promìnnou do modelu"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3737
-#, fuzzy, python-format
+#, python-format
 msgid "Variable <%s> already exists in the model. Adding variable failed."
-msgstr ""
-"Nelze vytvoøit novou atributovou tabulku. Tabulka <%s> ji¾ existuje v "
-"databázi."
+msgstr "Promìnná <%s> ji¾ v modelu existuje. pøidání promìnné selhalo."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3766
-#, fuzzy
 msgid "Do you want to delete all variables from the model?"
-msgstr "Pøejete si odstranit vybranou mapovou vrstvu ze stromu vrstev?"
+msgstr "Pøejete si odstranit v¹echny promìnné z modelu?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3768
-#, fuzzy
 msgid "Delete variables"
-msgstr "Odstranit v¹e"
+msgstr "Smazat promìnné"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3852
-#, fuzzy
 msgid "Condition: "
-msgstr "Volitelné"
+msgstr "Podmínka:"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3854
 msgid "Condition: not defined"
-msgstr ""
+msgstr "Podmínka: nedefinována"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3876
-#, fuzzy
 msgid "Condition"
-msgstr "Volitelné"
+msgstr "Podmínka"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3882
 #: ../gui/wxpython/gui_modules/gmodeler.py:3986
 #: ../gui/wxpython/gui_modules/gmodeler.py:4285
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3928
 msgid "loop"
-msgstr ""
+msgstr "smyèka"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3932
-#, fuzzy
 msgid "Loop properties"
-msgstr "Vlastnosti modelu"
+msgstr "Vlastnosti smyèky"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3938
-#, fuzzy
 msgid "List of items in loop"
-msgstr "Vyberte pøíponu souboru:"
+msgstr "Seznam prvkù ve smyèce"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3983
-#, fuzzy
 msgid "List of items - right-click to delete"
-msgstr "Sesznam kategorií - kliknìte pravým tlaèítkem pro vymazání"
+msgstr "Sesznam prvkù - pryvým klikem sma¾ete"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3986
 msgid "In block"
-msgstr ""
+msgstr "V bloku"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3987
-#, fuzzy
 msgid "Command / Condition"
-msgstr "Dialog nastavení pøíkazù"
+msgstr "Pøíkaz / Podmínka"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4106
 #: ../gui/wxpython/gui_modules/dbm.py:1181
@@ -8676,20 +8434,19 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4259
 msgid "if-else"
-msgstr ""
+msgstr "if-else"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4271
-#, fuzzy
 msgid "If-else properties"
-msgstr "Vlastnosti modelu"
+msgstr "Vlastnosti If-else"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4277
 msgid "List of items in 'if' block"
-msgstr ""
+msgstr "Seznam prvkù v bloku 'if' "
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4282
 msgid "List of items in 'else' block"
-msgstr ""
+msgstr "Seznam prvkù v bloku 'else' "
 
 #: ../gui/wxpython/gui_modules/workspace.py:983
 #, python-format
@@ -8806,22 +8563,20 @@ msgid "SQL Builder"
 msgstr "SQL Pomocník"
 
 #: ../gui/wxpython/gui_modules/goutput.py:206
-#, fuzzy
 msgid "Click here to show search module engine"
-msgstr "Kliknìte zde pro zobrazení 3D nastavení"
+msgstr "Kliknìte zde pro zobrazení vyhledávacího modulu"
 
 #: ../gui/wxpython/gui_modules/goutput.py:207
-#, fuzzy
 msgid "Click here to hide search module engine"
-msgstr "Kliknìte zde pro skrytí 3D nastavení"
+msgstr "Kliknìte zde pro skrytí vyhledávacího modulu"
 
 #: ../gui/wxpython/gui_modules/goutput.py:232
 msgid "C&lear output"
-msgstr "&Vyèistit výstup"
+msgstr "V&yèistit výstup"
 
 #: ../gui/wxpython/gui_modules/goutput.py:234
 msgid "&Clear command"
-msgstr "&Smazat pøíkaz"
+msgstr "&Vyèistit pøíkaz"
 
 #: ../gui/wxpython/gui_modules/goutput.py:238
 msgid "&Save output"
@@ -8836,13 +8591,13 @@ msgid "Abort the running command"
 msgstr "Pøeru¹it bì¾ící pøíkaz"
 
 #: ../gui/wxpython/gui_modules/goutput.py:479
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Command '%s' not yet implemented in the WxGUI. Try adding it as a command "
 "layer instead."
 msgstr ""
-"Pøíkaz '%s' je¹tì nebyl implementován do GUI. Zkuste jej pøidat jako vrstvu "
-"pøíkazù."
+"Pøíkaz '%s' je¹tì nebyl implementován do WxGUI. Zkuste jej pøidat jako "
+"vrstvu pøíkazù."
 
 #: ../gui/wxpython/gui_modules/goutput.py:565
 msgid "Save file as..."
@@ -8869,30 +8624,30 @@ msgstr "Nelze rozkódovat text. Prosím nastavte kódování v nastavení GUI"
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:227
 #: ../gui/wxpython/gui_modules/wxnviz.py:238
-#, fuzzy, python-format
+#, python-format
 msgid "Raster map <%s> not found"
-msgstr "Mapa <%s> nebyla nalezena."
+msgstr "Rastrová mapa <%s> nebyla nalezena."
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:302
-#, fuzzy, python-format
+#, python-format
 msgid "Vector map <%s> not found"
-msgstr "Mapa <%s> nebyla nalezena."
+msgstr "Vektorová mapa <%s> nebyla nalezena."
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:354
 #: ../gui/wxpython/gui_modules/wxnviz.py:366
-#, fuzzy, python-format
+#, python-format
 msgid "3d raster map <%s> not found"
-msgstr "Mapa <%s> nebyla nalezena."
+msgstr "3D rastrová mapa <%s> nebyla nalezena."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:188
 msgid "3D view mode not available"
-msgstr ""
+msgstr "3D mód není k dispozici"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:189
 #: ../gui/wxpython/gui_modules/toolbars.py:205
 #, python-format
 msgid "Reason: %s"
-msgstr ""
+msgstr "Dùvody: %s"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:190
 msgid ""
@@ -8900,6 +8655,9 @@ msgid ""
 "(hopefully this will be fixed soon). Please keep an eye out for updated "
 "versions of GRASS. In the meantime you can use \"NVIZ\" from the File menu."
 msgstr ""
+"WxGui 3D zobrazení není v souèasné dobì dostupné na MS Windows (Doufáme ¾e "
+"se to brzy zmìní). Prosím kontrolujte nové verze GRASS GIS. Zatím mù¾ete "
+"pou¾ít modul \"NVIZ\" z nabídky."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:197
 #: ../gui/wxpython/gui_modules/toolbars.py:1317
@@ -8907,9 +8665,8 @@ msgid "Digitize"
 msgstr "Digitalizovat"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:204
-#, fuzzy
 msgid "Vector digitizer not available"
-msgstr "Nástrojová li¹tavektorové digitalizace"
+msgstr "Vektorová digitalizace není dostupná"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:206
 msgid ""
@@ -8917,15 +8674,17 @@ msgid ""
 "will be fixed soon). Please keep an eye out for updated versions of GRASS. "
 "In the meantime you can use \"v.digit\" from the Develop Vector menu."
 msgstr ""
+"WxGui vektorová digitalizaceí není v souèasné dobì dostupná (Doufáme ¾e se "
+"to brzy zmìní). Prosím kontrolujte nové verze GRASS GIS. Zatím mù¾ete pou¾ít "
+"modul \"v.digit\" z nabídky vytvoøit vektor."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:416
 msgid "Set map canvas for "
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/toolbars.py:418
-#, fuzzy
 msgid " / Zoom to map"
-msgstr "Pøiblí¾it na vybranou mapu"
+msgstr " / Pøiblí¾it na mapu"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:472
 msgid "Adjust display zoom"
@@ -9001,15 +8760,12 @@ msgid "Please wait, opening vector map <%s> for editing..."
 msgstr "Prosím poèkejte, otevírá se vektorová mapa <%s> pro editaci..."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1305
-#, fuzzy
 msgid ""
 "Unable to initialize display driver of vector digitizer. See 'Command "
 "output' for details."
 msgstr ""
-"Nelze inicializovat ovladaè displeje, prohlédnìte je soubor README pro více "
-"informaci.\n"
-"\n"
-"Detaily:"
+"Nelze inicializovat ovladaè displeje pro vektorovou digitalizaci. Pro "
+"detaily pøejdìte na výstup pøíkazu."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1356
 #, python-format
@@ -9036,19 +8792,18 @@ msgid "Add various raster-based map layers"
 msgstr "Pøidat rùzné vrstvy zalo¾ené na rastru"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1817
-#, fuzzy
 msgid "Add various vector-based map layers"
-msgstr "Pøidat vektorovou vrstvu"
+msgstr "Pøidat rùznévektorové vrstvy"
 
 #: ../gui/wxpython/gui_modules/utils.py:498
-#, fuzzy, python-format
+#, python-format
 msgid "failed to open '%s'"
-msgstr "Nelze otevøít soubor"
+msgstr "Nelze otevøít  '%s'"
 
 #: ../gui/wxpython/gui_modules/render.py:134
-#, fuzzy, python-format
+#, python-format
 msgid "<%(name)s>: layer type <%(type)s> is not supported"
-msgstr "<%(name)s>: typ vrstvy <%(type)s> není  je¹tì podporován."
+msgstr "<%(name)s>: typ vrstvy <%(type)s> není je¹tì podporován"
 
 #: ../gui/wxpython/gui_modules/render.py:263
 #, python-format
@@ -9063,7 +8818,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/render.py:444
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
-msgstr ""
+msgstr "Chyba: Nelze otevøít '%(file)s'. Dùvod: %(ret)s. wxGUI konèí.\n"
 
 #: ../gui/wxpython/gui_modules/render.py:616
 #, python-format
@@ -9085,7 +8840,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/render.py:907
 msgid "ERROR: Rendering failed"
-msgstr ""
+msgstr "Chyba: vykreslování selhalo"
 
 #: ../gui/wxpython/gui_modules/render.py:954
 #: ../gui/wxpython/gui_modules/render.py:1036
@@ -9157,27 +8912,24 @@ msgstr ""
 "Detaily: %(detail)s"
 
 #: ../gui/wxpython/gui_modules/dbm.py:390
-#, fuzzy
 msgid "Sort ascending"
-msgstr "Spustit editaci"
+msgstr "Seøadit vzestupnì"
 
 #: ../gui/wxpython/gui_modules/dbm.py:391
-#, fuzzy
 msgid "Sort descending"
-msgstr "Spustit editaci"
+msgstr "seøadit sestupnì"
 
 #: ../gui/wxpython/gui_modules/dbm.py:394
 msgid "Calculate (only numeric columns)"
-msgstr ""
+msgstr "Spoèítat (pouze èíselné sloupce)"
 
 #: ../gui/wxpython/gui_modules/dbm.py:400
 msgid "Area size"
-msgstr ""
+msgstr "Velikost plochy"
 
 #: ../gui/wxpython/gui_modules/dbm.py:401
-#, fuzzy
 msgid "Line length"
-msgstr "délka"
+msgstr "Délka linie"
 
 #: ../gui/wxpython/gui_modules/dbm.py:402
 msgid "Compactness of an area"
@@ -9189,11 +8941,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/dbm.py:404
 msgid "Perimeter length of an area"
-msgstr ""
+msgstr "Délka obvodu plochy"
 
 #: ../gui/wxpython/gui_modules/dbm.py:405
 msgid "Number of features for each category"
-msgstr ""
+msgstr "Poèet prvkù pro ka¾dou kategorii"
 
 #: ../gui/wxpython/gui_modules/dbm.py:406
 msgid "Slope steepness of 3D line"
@@ -9205,9 +8957,8 @@ msgid "Line sinuousity"
 msgstr "styl linie"
 
 #: ../gui/wxpython/gui_modules/dbm.py:408
-#, fuzzy
 msgid "Line azimuth"
-msgstr "©íøka linie"
+msgstr "Azimut linie"
 
 #: ../gui/wxpython/gui_modules/dbm.py:560
 #: ../gui/wxpython/gui_modules/dbm.py:3078
@@ -9430,29 +9181,29 @@ msgid "Drop all columns"
 msgstr "Odstranit v¹echny sloupce"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1675
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Selected column '%s' will PERMANENTLY removed from table. Do you want to "
 "drop the column?"
 msgstr ""
-"Vybrané záznamy dat (%d) budou natrvalo smazány z tabulky. Pøejete si je "
+"Vybraný sloupec '%s' bude NAV®DY odstranìn z tabulky. Chcete tento sloupec "
 "smazat?"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1678
 #: ../gui/wxpython/gui_modules/dbm.py:1715
-#, fuzzy
 msgid "Drop column(s)"
-msgstr "Odstranit v¹echny sloupce"
+msgstr "Odstranit sloupec"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1712
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Selected columns\n"
 "%s\n"
 "will PERMANENTLY removed from table. Do you want to drop the columns?"
 msgstr ""
-"Vybrané záznamy dat (%d) budou natrvalo smazány z tabulky. Pøejete si je "
-"smazat?"
+"Vybrané sloupce\n"
+"%s\n"
+"budou NAV®DY odstranìny z tabulky. Chcete smazat tyto sloupce?"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1750
 msgid "Unable to add column to the table. No column name defined."
@@ -9511,13 +9262,12 @@ msgid "Key"
 msgstr "Klíè"
 
 #: ../gui/wxpython/gui_modules/dbm.py:2359
-#, fuzzy
 msgid ""
 "Unknown default DB connection. Please define DB connection using db.connect "
 "module."
 msgstr ""
-"Nelze získat informace o DB nastavení. Prosím definujte toto nastavení "
-"pomocí modulu db.connect."
+"Neznámé výchozí spojení DB. Prosím definujte toto nastavení pomocí modulu db."
+"connect."
 
 #: ../gui/wxpython/gui_modules/dbm.py:2380
 msgid "Add layer"
@@ -9613,20 +9363,20 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:108
 msgid "Select GRASS location and mapset"
-msgstr "Vybrat lokaci a mapset projektu"
+msgstr "Vybrat GRASS location a mapset"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:109
 msgid "Name of GRASS location:"
-msgstr "Název GRASS lokace:"
+msgstr "Název GRASS location:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:129
 #: ../gui/wxpython/gui_modules/gdialogs.py:161
 msgid "Name of mapset:"
-msgstr "Název mapsetu:"
+msgstr "Jméno Mapsetu:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:159
 msgid "Select mapset in GRASS location"
-msgstr "Vybrat mapset v GRASS lokaci"
+msgstr "Vybrat mapset v GRASS location"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:191
 msgid "Name for new vector map:"
@@ -9717,18 +9467,16 @@ msgstr ""
 "Dvojklik pro zmìnu nastavení."
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:738
-#, fuzzy
 msgid "&Load"
-msgstr "Nahrát"
+msgstr "&Nahrát"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:767
 msgid "Map layer type:"
 msgstr "Typ mapové vrstvy:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:779
-#, fuzzy
 msgid "Select toggle"
-msgstr "Vybrat dangles"
+msgstr "Vybrat pøepínaè"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:786
 msgid "Mapset:"
@@ -9743,9 +9491,8 @@ msgid "List of maps:"
 msgstr "Seznam map:"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:865
-#, fuzzy
 msgid "Invert selection"
-msgstr "Prùøez"
+msgstr "Obrátit výbìr"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:939
 msgid "Multiple import"
@@ -9757,9 +9504,8 @@ msgid " List of %s layers "
 msgstr "Seznam  %s vrstev"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1105
-#, fuzzy
 msgid "Override projection (use location's projection)"
-msgstr "Interaktivnì vyma¾e nastavení projekce location"
+msgstr "Pøepsat projekci (bude pou¾ita projekce location)"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1109
 msgid "Add linked layers into layer tree"
@@ -9803,16 +9549,15 @@ msgstr "Neprùhledný"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1498
 msgid "Set image size"
-msgstr ""
+msgstr "Nastavit velikost obrazu"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1507
-#, fuzzy
 msgid "Image size"
-msgstr "Nastavení stránky"
+msgstr "Velikost obrazu"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:1554
 msgid "Template:"
-msgstr ""
+msgstr "©ablona:"
 
 #: ../gui/wxpython/gui_modules/profile.py:34
 msgid ""
@@ -9821,6 +9566,10 @@ msgid ""
 "distribution). See the Numeric Python site (http://numpy.scipy.org) for "
 "information on downloading source or binaries."
 msgstr ""
+"Tento modul vy¾aduje NumPy modul, který nemù¾e být importován. Nejspí¹e není "
+"nainstalován (není souèást standartní Python instalace). Podívejte se na "
+"stránku Numeric Python (http://numpy.scipy.org) pro dal¹í informace o "
+"instalaci."
 
 #: ../gui/wxpython/gui_modules/profile.py:56
 msgid "Profile Analysis"
@@ -9863,19 +9612,19 @@ msgstr "Nebylo zvoleno nic pro profilování"
 
 #: ../gui/wxpython/gui_modules/profile.py:576
 msgid "Comma separated value (*.csv)|*.csv"
-msgstr ""
+msgstr "teèkou oddìlené hodnoty (*.csv)|*.csv"
 
 #: ../gui/wxpython/gui_modules/profile.py:579
 msgid "Path and prefix (for raster name) to save profile values..."
-msgstr ""
+msgstr "Cesta a pøedpona (k jménu rastru) pro ulo¾ení hodnot profilu... "
 
 #: ../gui/wxpython/gui_modules/profile.py:674
 msgid "This feature is not yet functional"
-msgstr ""
+msgstr "Tento prvek je¹tì není funkèní"
 
 #: ../gui/wxpython/gui_modules/profile.py:675
 msgid "Under Construction"
-msgstr ""
+msgstr "Ve vývoji"
 
 #: ../gui/wxpython/gui_modules/profile.py:702
 msgid "Profile text settings"
@@ -9914,9 +9663,8 @@ msgid "Title font size (pts):"
 msgstr "Velikost písma nadpisu (pts):"
 
 #: ../gui/wxpython/gui_modules/profile.py:932
-#, fuzzy
 msgid "X-axis label:"
-msgstr "Popisek osy Y:"
+msgstr "Popisek osy X:"
 
 #: ../gui/wxpython/gui_modules/profile.py:942
 msgid "Y-axis label:"
@@ -9945,9 +9693,8 @@ msgid "Weight:"
 msgstr "Váha:"
 
 #: ../gui/wxpython/gui_modules/profile.py:1035
-#, fuzzy
 msgid "Apply changes for the current session and close dialog"
-msgstr "Aplikovat zmìny jen pro toto spu¹tìní"
+msgstr "Pøijmout zmìny pr souèasné sezení a zavøít dialogové okno"
 
 #: ../gui/wxpython/gui_modules/profile.py:1091
 #: ../gui/wxpython/gui_modules/profile.py:1441
@@ -10035,9 +9782,9 @@ msgid "Show legend"
 msgstr "Zobrazit legendu"
 
 #: ../gui/wxpython/gui_modules/layertree.py:123
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS Map Display: %(id)d  - Location: %(loc)s"
-msgstr "GRASS GIS Mapové okno: "
+msgstr "GRASS GIS Mapové okno: %(id)d - Location: %(loc)s"
 
 #: ../gui/wxpython/gui_modules/layertree.py:133
 msgid "Map Layers"
@@ -10048,9 +9795,8 @@ msgid "Change opacity level"
 msgstr "Zmìnit úroveò prùhlednosti"
 
 #: ../gui/wxpython/gui_modules/layertree.py:283
-#, fuzzy
 msgid "3D view properties"
-msgstr "Vlastnosti Nviz"
+msgstr "Vlastnosti 3D zobrazení"
 
 #: ../gui/wxpython/gui_modules/layertree.py:287
 msgid "Zoom to selected map(s)"
@@ -10189,7 +9935,7 @@ msgstr "Zvolit barvu"
 #: ../gui/wxpython/gui_modules/menuform.py:414
 #, python-format
 msgid "Parameter element '%(element)s' not found: '%(value)s'"
-msgstr ""
+msgstr "Parametry prvku  '%(element)s' nebyly nalezeny: '%(value)s'"
 
 #: ../gui/wxpython/gui_modules/menuform.py:437
 #, python-format
@@ -10197,9 +9943,9 @@ msgid "Flag not found: %s"
 msgstr "Pøepínaè nebyl nalezen: %s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:463
-#, fuzzy, python-format
+#, python-format
 msgid "Parameter '%(name)s' (%(desc)s) is missing."
-msgstr "Parametr %(name)s (%(desc)s) chybí.\n"
+msgstr "Parametr %(name)s (%(desc)s) chybí."
 
 #: ../gui/wxpython/gui_modules/menuform.py:489
 msgid "<required>"
@@ -10210,22 +9956,18 @@ msgid "Enter parameters for '"
 msgstr "Definujte parametry pro '"
 
 #: ../gui/wxpython/gui_modules/menuform.py:725
-#, fuzzy
 msgid "Close this window without executing the command (Ctrl+Q)"
-msgstr "Zavøi toto okno bez zpu¹tìní pøíkazu"
+msgstr "Zavøi toto okno bez spu¹tìní pøíkazu (Ctrl+Q)"
 
 #: ../gui/wxpython/gui_modules/menuform.py:730
-#, fuzzy
 msgid "Show manual page of the command (Ctrl+H)"
-msgstr "Ukázat manuál pøíkazu"
+msgstr "Ukázat manuálovou stránku pøíkazu (Ctrl+H)"
 
 #: ../gui/wxpython/gui_modules/menuform.py:751
-#, fuzzy
 msgid "Run the command (Ctrl+R)"
-msgstr "Spustit pøíkaz"
+msgstr "Spustit pøíkaz (Ctrl+R)"
 
 #: ../gui/wxpython/gui_modules/menuform.py:793
-#, fuzzy
 msgid "Add created map(s) into layer tree"
 msgstr "Pøidat vytvoøenou mapu do stromu vrstev"
 
@@ -10256,18 +9998,16 @@ msgstr "Manuálová stránka"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1106
 #: ../gui/wxpython/gui_modules/menuform.py:1580
-#, fuzzy
 msgid "Parameterized in model"
-msgstr "Paramentr nebyl nalezen: %s"
+msgstr "Parametrizace v modelu"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1177
 msgid "[multiple]"
 msgstr "[mnohonásobné]"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1225
-#, fuzzy
 msgid "valid range"
-msgstr "Povolený rozsah"
+msgstr "platný rozsah"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1371
 msgid "Format"
@@ -10292,9 +10032,8 @@ msgid "Choose %s"
 msgstr "Vybrat %s"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1571
-#, fuzzy
 msgid "or enter values interactively"
-msgstr "Pøekódovat interaktivnì"
+msgstr "nebo vlo¾te hodnoty interaktivnì"
 
 #: ../gui/wxpython/gui_modules/menuform.py:1961
 #, python-format
@@ -10318,46 +10057,40 @@ msgstr "pou¾ití: %s <grass pøíkaz>"
 
 #: ../gui/wxpython/gui_modules/globalvar.py:127
 msgid "Go to"
-msgstr ""
+msgstr "Jdi na"
 
 #: ../gui/wxpython/gui_modules/globalvar.py:128
 #: ../gui/wxpython/gui_modules/preferences.py:1604
-#, fuzzy
 msgid "Projection"
-msgstr "Projekce:"
+msgstr "Projekce"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:265
-#, fuzzy
 msgid "Easting"
 msgstr "Východ"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:266
-#, fuzzy
 msgid "Northing"
 msgstr "Sever"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:267
-#, fuzzy
 msgid "Elevation"
-msgstr "podle vý¹ky"
+msgstr "Vý¹ka"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:268
-#, fuzzy
 msgid "Surface map elevation"
-msgstr "Tvorba povrchu"
+msgstr "Vý¹ka mapy povrchu"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:269
-#, fuzzy
 msgid "Surface map color"
-msgstr "Správa barevné ¹kály obrazových dat"
+msgstr "Barva mapy povrchu"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:278
 msgid "XY distance from previous"
-msgstr ""
+msgstr "XY vzdálenost od pøedchozího"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:279
 msgid "XYZ distance from previous"
-msgstr ""
+msgstr "XYZ vzdálenost od pøedchozího"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:280
 #, fuzzy
@@ -10370,13 +10103,12 @@ msgid "Distance along exag. surface"
 msgstr "Vzdálenost podél transektu"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:292
-#, fuzzy
 msgid "No point on surface"
-msgstr "na povrchu"
+msgstr "®ádný bod na povrchu"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:297
 msgid "Function not implemented yet"
-msgstr ""
+msgstr "Funcke je¹tì není ilplementována"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:604
 msgid "Loading raster map"
@@ -10427,14 +10159,14 @@ msgid "Vector map <%(name)s> (%(type)s) unloaded successfully"
 msgstr "Vektorová mapa <%(name)s> (%(type)s) úspì¹nì naètena"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1072
-#, fuzzy, python-format
+#, python-format
 msgid "Vector point layer not found (id = %d)"
-msgstr "Vektorová bodová vrstva nenalezena (id=%d)"
+msgstr "Vektorová bodová vrstva nenalezena (id = %d)"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1074
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to set data layer properties (id = %d)"
-msgstr "Nelze nastavit vlastnosti datové vrstvy (id=%d)"
+msgstr "Nelze nastavit vlastnosti datové vrstvy (id = %d)"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:1077
 #, python-format
@@ -10556,9 +10288,8 @@ msgid "Unable to parse settings '%s' (%s:%s:%s)"
 msgstr "Nelze spustit pøíkaz %s"
 
 #: ../gui/wxpython/gui_modules/preferences.py:913
-#, fuzzy
 msgid "User settings"
-msgstr "U¾ivatelské nastavení grafického prostøedí"
+msgstr "U¾ivatelské nastavení"
 
 #: ../gui/wxpython/gui_modules/preferences.py:933
 msgid "Set to default"
@@ -10570,7 +10301,7 @@ msgstr "Znovu nastavit výchozí nastavení a ulo¾it"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1001
 msgid "Settings applied to current session but not saved"
-msgstr ""
+msgstr "Nastavení jsou pøijata ale nejsou ulo¾ena "
 
 #: ../gui/wxpython/gui_modules/preferences.py:1015
 #, python-format
@@ -10582,9 +10313,8 @@ msgid "Key column cannot be empty string."
 msgstr "Klíèový sloupec nemù¾e obsahovat prázdný øetìzec."
 
 #: ../gui/wxpython/gui_modules/preferences.py:1058
-#, fuzzy
 msgid "GUI settings"
-msgstr "U¾ivatelské nastavení grafického prostøedí"
+msgstr "Nastavení grafického prostøedí (GUI)"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1082
 msgid "General settings"
@@ -10623,9 +10353,8 @@ msgid "Default font for GRASS displays:"
 msgstr "Výchozí písmo pro GRASS monitory:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1203
-#, fuzzy
 msgid "Font for command output:"
-msgstr "Výstup pøíkazù"
+msgstr "Font pro výstup pøíkazù:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1217
 msgid "Default display settings"
@@ -10644,9 +10373,8 @@ msgid "Enable auto-rendering"
 msgstr "Zapnout/vypnout automatické vykreslování"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1313
-#, fuzzy
 msgid "Enable auto-zooming to selected map layer"
-msgstr "Nelze nastavit zoom podle rastrové mapy <%s>."
+msgstr "Povolit automatické pøiblí¾ení na vybranou mapovou vrstvu"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1338
 msgid "Command dialog settings"
@@ -10665,9 +10393,8 @@ msgid "Make null cells opaque"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/preferences.py:1421
-#, fuzzy
 msgid "Default color table"
-msgstr "Nastavit tabulku barev"
+msgstr "Výchozí tabulka barev"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1447
 msgid "Vector settings"
@@ -10710,44 +10437,40 @@ msgid "Key column:"
 msgstr "Sloupec s klíèem:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1611
-#, fuzzy
 msgid "Projection statusbar settings"
-msgstr "Nastavení písma profilu"
+msgstr "Nastavení stavového øádku projekce"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1637
 msgid "Proj.4 string (required):"
-msgstr ""
+msgstr "Proj.4 øatìzec (vy¾adováno):"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1653
-#, fuzzy
 msgid "EPSG file:"
-msgstr "Kód EPSG:"
+msgstr "Soubor s EPSG kódy:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1668
 msgid ""
 "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string "
 "directly."
 msgstr ""
+"Naèíst EPSG kódy (buïte trpìliví), vlo¾it EPSG k´d nebo vlo¾it Proj.4øetìzec "
+"pøímo."
 
 #: ../gui/wxpython/gui_modules/preferences.py:1676
-#, fuzzy
 msgid "&Load EPSG codes"
-msgstr "Kód EPSG:"
+msgstr "&Naèíst Kódy EPSG:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1687
-#, fuzzy
 msgid "Coordinates format"
-msgstr "Souøadnice"
+msgstr "Formát souøadnic"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1696
-#, fuzzy
 msgid "LL projections"
-msgstr "Správa kartografických zobrazení"
+msgstr "Projekce Lat/long"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1715
-#, fuzzy
 msgid "Precision:"
-msgstr "Projekce:"
+msgstr "Pøesnost:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1742
 msgid "Loading workspace"
@@ -10778,25 +10501,24 @@ msgstr ""
 "GUI"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1844
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to read EPSG codes: %s"
-msgstr "Nelze naèíst seznam: %s"
+msgstr "Nelze pøe¹íst EPSG kódy: %s"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1873
 #: ../gui/wxpython/gui_modules/preferences.py:1882
 #: ../gui/wxpython/gui_modules/preferences.py:1892
-#, fuzzy, python-format
+#, python-format
 msgid "EPSG code %s not found"
-msgstr "CHYBA: Location <%s> nebyla nalezena"
+msgstr "EPSG kód %s nebyl nalezen"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1900
 msgid "Select default display font"
 msgstr "Vybrat výchozí písmo"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1925
-#, fuzzy
 msgid "Select output font"
-msgstr "Vybrat font"
+msgstr "Zvolit font výstupu"
 
 #: ../gui/wxpython/gui_modules/preferences.py:2019
 msgid "Select font:"
@@ -10804,12 +10526,11 @@ msgstr "Vybrat font:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:2043
 msgid "Character encoding:"
-msgstr ""
+msgstr "Kódování znakù:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:2061
-#, fuzzy
 msgid "Font size:"
-msgstr "Velikost ikon:"
+msgstr "Velikost fontu:"
 
 #: ../gui/wxpython/gui_modules/preferences.py:2160
 msgid "Set/unset access to mapsets in current location"
@@ -10981,24 +10702,20 @@ msgstr ""
 "mapset nebo lokaci"
 
 #: ../gui/wxpython/gis_set.py:128
-#, fuzzy
 msgid "Start &GRASS"
-msgstr "Spustit GRASS"
+msgstr "Spustit &GRASS"
 
 #: ../gui/wxpython/gis_set.py:134
-#, fuzzy
 msgid "&Browse"
-msgstr "Procházet"
+msgstr "&Procházet"
 
 #: ../gui/wxpython/gis_set.py:136
-#, fuzzy
 msgid "&Create mapset"
-msgstr "Vytvoøit mapset"
+msgstr "&Vytvoøit mapset"
 
 #: ../gui/wxpython/gis_set.py:138
-#, fuzzy
 msgid "&Location wizard"
-msgstr "Prùvodce vytvoøením location"
+msgstr "&Prùvodce vytvoøením location"
 
 #: ../gui/wxpython/gis_set.py:140
 msgid "Rename mapset"
@@ -11026,7 +10743,7 @@ msgstr "Spustit GRASS seanci"
 
 #: ../gui/wxpython/gis_set.py:209 ../gui/wxpython/gis_set.py:571
 msgid "Unable to set GRASS database. Check your locale settings."
-msgstr ""
+msgstr "Nelze nastavit GRASS databázi. Zkontrolujte nastavení."
 
 #: ../gui/wxpython/gis_set.py:227
 #, python-format
@@ -11044,15 +10761,19 @@ msgid ""
 "\n"
 "This mapset cannot be renamed."
 msgstr ""
+"Mapset <PERMANENT> je vy¾adován pro ka¾kou location. \n"
+"\n"
+" Tento mapset nemù¾e být pøejmenován."
 
 #: ../gui/wxpython/gis_set.py:444 ../gui/wxpython/gis_set.py:479
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Current name: %s\n"
 "\n"
 "Enter new name:"
 msgstr ""
 "Aktuální jméno: %s\n"
+"\n"
 "Vlo¾te nové jméno:"
 
 #: ../gui/wxpython/gis_set.py:445
@@ -11060,44 +10781,52 @@ msgid "Rename selected mapset"
 msgstr "Pøejmenovat vybraný mapset"
 
 #: ../gui/wxpython/gis_set.py:456
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "Mapset <%s> already exists in location."
 msgstr ""
-"Nelze vytvoøit novou atributovou tabulku. Tabulka <%s> ji¾ existuje v "
-"databázi."
+"Nelze pøejmenovat mapset. \n"
+"\n"
+"Mapset <%s> ji¾ existuje v location."
 
 #: ../gui/wxpython/gis_set.py:468
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "%s"
-msgstr "Nelze pøejmenovat mapset"
+msgstr ""
+"Nelze pøejmenovat mapset. \n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/gis_set.py:480
 msgid "Rename selected location"
 msgstr "Pøejmenovat vybranou lokaci"
 
 #: ../gui/wxpython/gis_set.py:491
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "Location <%s> already exists in GRASS database."
 msgstr ""
-"Nelze vytvoøit novou atributovou tabulku. Tabulka <%s> ji¾ existuje v "
-"databázi."
+"Nelze pøejmenovat location. \n"
+"\n"
+"Location <%s> ji¾ existuje v GRASS databázi"
 
 #: ../gui/wxpython/gis_set.py:504
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "%s"
-msgstr "Nelze pøejmenovat lokaci"
+msgstr ""
+"Nelze pøejmenovat location. \n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/gis_set.py:516
 msgid ""
@@ -11105,6 +10834,9 @@ msgid ""
 "\n"
 "This mapset cannot be deleted."
 msgstr ""
+"Mapset <PERMANENT> je vy¾adován pro ka¾dou location. \n"
+"\n"
+"Tento mapset nemù¾e být smazán."
 
 #: ../gui/wxpython/gis_set.py:521
 #, python-format
@@ -11298,13 +11030,12 @@ msgstr "Digitalizovat vektorovou vrstvu (vy¾aduje TclTk)"
 msgid "Change the type of geometry elements"
 msgstr "Zmìnit typ geometrických prvkù."
 
-#, fuzzy
 msgid ""
 "Calculates univariate statistics from a raster map based on vector polygons "
 "and uploads statistics to new attribute columns."
 msgstr ""
-"Spoèítá základní statistiku rastrového souboru na základì vektorových "
-"polygonù a ulo¾í ji do nových sloupeèkù atributové tabulky."
+"Spoèítá jednorozmìrnou statistiku z rastrové mapy zal¾ené na vektorových "
+"polygonech a ulo¾í výsledek do nového stributového sloupce."
 
 #, fuzzy
 msgid "Show menu tree"
@@ -11557,14 +11288,18 @@ msgstr "Projekce aktuální location"
 msgid "Converts selected GDAL layers to GRASS raster maps using r.in.gdal"
 msgstr "Pøevede vybrané GDAL vrstvy na GRASS rastrové mapy pou¾itím r.in.gdal."
 
+#, fuzzy
 msgid "Link GDAL supported raster file to a binary raster map layer."
-msgstr "Pøipojí rastrový soubor podporovaný GDAL k binární rastrové mapì."
+msgstr "Import rastrových souborù podporovaných knihovnou GDAL."
 
 msgid "Link GDAL supported raster files to a binary raster map layers"
 msgstr "Pøipojí rastrové soubory podporované GDAL k binární rastrové mapì"
 
+#, fuzzy
 msgid "Creates a new vector as a read-only link to OGR layer."
-msgstr "Vytvoøí nový vektor jako vrstvu pouze ke ètení pøipojenou pomocí OGR."
+msgstr ""
+"Vytvoøí nové vektorovévrstvy  jako vrstvy pouze ke ètení pøipojené pomocí "
+"OGR."
 
 msgid "Converts selected DXF layers to GRASS vector maps (using v.in.dxf)"
 msgstr ""
@@ -11584,6 +11319,241 @@ msgstr ""
 "Vytvoøí a pøidá novou atributovou tabulku k zadané vrstvì existující "
 "vektorové mapy."
 
+msgid "Vector digitizer error"
+msgstr "Chyba vektorové digitalizace"
+
+msgid "Layer properties"
+msgstr "Vlastnosti vrstvy"
+
+msgid "Load"
+msgstr "Nahrát"
+
+msgid "Create new workspace file"
+msgstr "Vytvoøit nový soubor pracovní oblasti"
+
+msgid "Load map layers into workspace"
+msgstr "Naèíst mapové vrstvy do pracovní oblasti"
+
+msgid "Open existing workspace file"
+msgstr "Otevøít existující soubor s pracovní oblastí"
+
+msgid "Save current workspace to file"
+msgstr "Ulo¾it pracovní oblast do souboru"
+
+msgid "Add vector map layer"
+msgstr "Pøidat vektorovou vrstvu"
+
+msgid "Close this window without executing the command"
+msgstr "Zavøi toto okno bez spu¹tìní pøíkazu"
+
+msgid "Show manual page of the command"
+msgstr "Ukázat manuálovou stránku pøíkazu"
+
+msgid "Run the command"
+msgstr "Spustit pøíkaz"
+
+msgid "coarse:"
+msgstr "hrubý:"
+
+msgid "fine:"
+msgstr "jemný:"
+
+msgid "Wire color:"
+msgstr "barva sítì"
+
+msgid "width:"
+msgstr "¹íøka:"
+
+msgid "symbol:"
+msgstr "symbol:"
+
+msgid "color:"
+msgstr "barva:"
+
+msgid "Import raster data using GDAL"
+msgstr "Import rastrových dat pomocí GDAL"
+
+msgid "Downloads and imports data from WMS servers."
+msgstr "Stáhne a importuje data z WMS serverù."
+
+msgid "Convert OGR vector layers to GRASS vector map."
+msgstr "Konvertuje vektorové vrstvy OGR na GRASS vektorové mapy."
+
+msgid "Creates a new vectors as a read-only link to OGR layers"
+msgstr ""
+"Vytvoøí nové vektorovévrstvy  jako vrstvy pouze ke ètení pøipojené pomocí "
+"OGR."
+
+msgid "Old GRASS vector import"
+msgstr "Import starého vektorového formátu GRASS"
+
+msgid "Export GRASS raster as non-georeferenced PNG image format."
+msgstr "Export GRASS rastrové mapy jako nepøipojený PNG obraz."
+
+msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+msgstr "Pøevede binární GRASS vektorovou mapu do GRASS rastrové mapy."
+
+msgid ""
+"r.recode.rules - Use ascii rules file to recode categories in raster map"
+msgstr ""
+"r.recode.rules -Pou¾ít soubor s ascii pravidly pro pøekódování kategorií v "
+"rastrové mapì"
+
+msgid "Imagery"
+msgstr "Obraz"
+
+msgid "Add various vector-based map layer"
+msgstr "Pèèidat rùzné vrstvy zalo¾ené na vektoru"
+
+msgid "COPYING file missing"
+msgstr "SOubor COPYING chybí"
+
+msgid ""
+"Reading workspace file <%s> failed. Invalid file, unable to parse XML "
+"document."
+msgstr ""
+"Ètení souboru workspace <%s> selhalo. Neplatný soubor, nelze parsovat XML "
+"dokument."
+
+msgid "Writing current settings to workspace file failed (%s)."
+msgstr "Zápis aktuálního nastavení do souboru pracovní oblasti selhalo (%s)."
+
+msgid "Official GRASS site: http://grass.osgeo.org"
+msgstr "Oficiální GRASS stránka: http://grass.osgeo.org"
+
+msgid "GIS Library"
+msgstr "GIS knihovna"
+
+msgid "Force re-rendering of all layers"
+msgstr "Vynutit pøekreslení v¹ech mapových vrstev"
+
+msgid "Add raster map layer"
+msgstr "Pøidat rastrovou vrstvu"
+
+msgid "Add layer group"
+msgstr "Pøidat vrstvu se skupinou"
+
+msgid "Delete selected layer"
+msgstr "Odstranit vybranou vrstvu"
+
+msgid "Add RGB layer"
+msgstr "Pøidat vrstvu RGB"
+
+msgid "Add HIS layer"
+msgstr "Pøidat vrstvu HIS"
+
+msgid "Reload GCPs from selected POINTS file"
+msgstr "Znovu naèíst vlicovací body z vybraného souboru POINTS"
+
+msgid "Show Nviz settings dialog"
+msgstr "Ukázat nastavení Nviz"
+
+#, fuzzy
+msgid "Matlab-ASCII or Mapgen import"
+msgstr "Matlab and MapGen import"
+
+msgid "Raster"
+msgstr "Rastr"
+
+msgid ""
+"Generates raster map layers of slope, aspect, curvatures and partial "
+"derivatives from a raster map layer of true elevation values. Aspect is "
+"calculated counterclockwise from east."
+msgstr ""
+"Vytvoøí rastrovou mapu sklonu, expozice, køivosti a parciálních derivací "
+"odvozenou z digitálního modelu terénu. Expozice je poèítána proti smìru "
+"hodinových ruèièek s poèátkem na východì."
+
+msgid "Flow computation for massive grids (Float version)."
+msgstr "Výpoèet toky v gridu"
+
+msgid "Volumes"
+msgstr "3D rastr"
+
+msgid "GRASS GIS help"
+msgstr "Nápovìda GRASS GIS"
+
+msgid "Nviz properties"
+msgstr "Vlastnosti Nviz"
+
+#, fuzzy
+msgid "3D View Tools"
+msgstr "Nástroje 3D pohledu"
+
+msgid "Icon size:"
+msgstr "Velikost ikon:"
+
+msgid "Vector map <%s> is 3D"
+msgstr "Vektorové mapa <%s> je 3D"
+
+msgid "Vector map <%s> is 2D"
+msgstr "Vektorová mapa <%s> je 2D"
+
+msgid "%(primitives)d primitives (%(points)d points)"
+msgstr "%(primitives)d prvkù (%(points)d bodù)"
+
+msgid ""
+"Unable to initialize display driver of vector digitizer. See 'Command "
+"output' for details.\n"
+"\n"
+"Details:"
+msgstr ""
+"Nelze inicializovat ovladaè displeje pro vektorovou digitalizaci. Pro "
+"detaily pøejdìte na výstup pøíkazu.\n"
+"\n"
+"Detaily:"
+
+msgid ""
+"Command '%s' not yet implemented in the GUI. Try adding it as a command "
+"layer instead."
+msgstr ""
+"Pøíkaz '%s' je¹tì nebyl implementován do GUI. Zkuste jej pøidat jako vrstvu "
+"pøíkazù."
+
+msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
+msgstr "<%(name)s>: typ vrstvy <%(type)s> není  je¹tì podporován."
+
+msgid "Unable to open file"
+msgstr "Nelze otevøít soubor"
+
+msgid "Parameter not found: %s"
+msgstr "Paramentr nebyl nalezen: %s"
+
+msgid "Parameter %(name)s (%(desc)s) is missing.\n"
+msgstr "Parametr %(name)s (%(desc)s) chybí.\n"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopírovat pøíkaz jako øetìzec do schránky"
+
+msgid "Valid range"
+msgstr "Povolený rozsah"
+
+msgid "Vector point layer not found (id=%d)"
+msgstr "Vektorová bodová vrstva nenalezena (id=%d)"
+
+msgid "Unable to set data layer properties (id=%d)"
+msgstr "Nelze nastavit vlastnosti datové vrstvy (id=%d)"
+
+msgid "User GUI settings"
+msgstr "U¾ivatelské nastavení grafického prostøedí"
+
+#, fuzzy
+msgid ""
+"Check a mapset to make it accessible, uncheck it to hide it.%sNote: The "
+"current mapset is always accessible."
+msgstr ""
+"Za¹krtnout mapset pro pøístup, zru¹it pro skrytí.%s Poznámka: Mapset "
+"PERMANENT a aktuální mapset jsou v¾dy pøístupné."
+
+msgid "Start GRASS"
+msgstr "Spustit GRASS"
+
+msgid "Create mapset"
+msgstr "Vytvoøit mapset"
+
+msgid "Select file extension:"
+msgstr "Vyberte pøíponu souboru:"
+
 #~ msgid "Unable to open workspace file <%s> for writing."
 #~ msgstr "Nelze otevøít soubor workspace <%s> pro zápis."
 
@@ -11599,9 +11569,6 @@ msgstr ""
 #~ msgid "Preferences error"
 #~ msgstr "Chyba pøedvolby"
 
-#~ msgid "Vector digitizer error"
-#~ msgstr "Chyba vektorové digitalizace"
-
 #~ msgid "Attribute table manager error"
 #~ msgstr "Chyba správce atributových tabulek"
 
@@ -11614,9 +11581,6 @@ msgstr ""
 #~ msgid "Restore default settings"
 #~ msgstr "Obnovit výchozí nastavení"
 
-#~ msgid "Layer properties"
-#~ msgstr "Vlastnosti vrstvy"
-
 #~ msgid "Map layers for each display"
 #~ msgstr "Seznam mapových vrstev"
 
@@ -11628,9 +11592,6 @@ msgstr ""
 
 #~ msgid "Choose directory:"
 #~ msgstr "Vyberte adresáø:"
-
-#~ msgid "Load"
-#~ msgstr "Nahrát"
 
 #~ msgid "wxGUI closed."
 #~ msgstr "wxGUI zavøeno."
@@ -11674,7 +11635,7 @@ msgstr ""
 #~ msgstr "Vytvoøí rastrovou mapu ukazující dílèí povodí v povodích."
 
 #~ msgid "Watershed basin analysis program."
-#~ msgstr "Program na analýzu povodí."
+#~ msgstr "Analýza povodí"
 
 #~ msgid "Watershed basin creation program."
 #~ msgstr "Program na vymezování povodí."
@@ -11880,30 +11841,6 @@ msgstr ""
 #~ msgid "Interactive input for supervised classification (requires Xterm)"
 #~ msgstr "Interaktivní vstup pro øízenou klasifikaci"
 
-#~ msgid "Create new workspace file"
-#~ msgstr "Vytvoøit nový soubor pracovní oblasti"
-
-#~ msgid "Load map layers into workspace"
-#~ msgstr "Naèíst mapové vrstvy do pracovní oblasti"
-
-#~ msgid "Open existing workspace file"
-#~ msgstr "Otevøít existující soubor s pracovní oblastí"
-
-#~ msgid "Save current workspace to file"
-#~ msgstr "Ulo¾it pracovní oblast do souboru"
-
-#~ msgid "Add vector map layer"
-#~ msgstr "Pøidat vektorovou vrstvu"
-
-#~ msgid "Close this window without executing the command"
-#~ msgstr "Zavøi toto okno bez spu¹tìní pøíkazu"
-
-#~ msgid "Show manual page of the command"
-#~ msgstr "Ukázat manuálovou stránku pøíkazu"
-
-#~ msgid "Run the command"
-#~ msgstr "Spustit pøíkaz"
-
 #~ msgid "Resolution cannot be 0"
 #~ msgstr "Rozli¹ení nemù¾e být 0"
 
@@ -11915,27 +11852,6 @@ msgstr ""
 
 #~ msgid "Error in command execution %s"
 #~ msgstr "Chyba pøi vykonání pøíkazu %s"
-
-#~ msgid "coarse:"
-#~ msgstr "hrubý:"
-
-#~ msgid "fine:"
-#~ msgstr "jemný:"
-
-#~ msgid "Wire color:"
-#~ msgstr "barva sítì"
-
-#~ msgid "width:"
-#~ msgstr "¹íøka:"
-
-#~ msgid "symbol:"
-#~ msgstr "symbol:"
-
-#~ msgid "color:"
-#~ msgstr "barva:"
-
-#~ msgid "Import raster data using GDAL"
-#~ msgstr "Import rastrových dat pomocí GDAL"
 
 #~ msgid "Converts ASCII raster file to binary raster map layer."
 #~ msgstr "Pøevede ASCII rastrový soubor na binární rastrovou mapu."
@@ -11959,29 +11875,15 @@ msgstr ""
 #~ "Georeferencuje, rektifikuje a importuje snímky ve formátu Terra-ASTER a "
 #~ "pøíbuzných DMT za pou¾ití gdalwarp."
 
-#~ msgid "Downloads and imports data from WMS servers."
-#~ msgstr "Stáhne a importuje data z WMS serverù."
-
-#~ msgid "Convert OGR vector layers to GRASS vector map."
-#~ msgstr "Konvertuje vektorové vrstvy OGR na GRASS vektorové mapy."
-
 #~ msgid "Converts selected OGR layers to GRASS vector maps using v.in.ogr"
 #~ msgstr ""
 #~ "Pøevede vybrané OGR vrstvy do GRASS vektorové mapy pou¾itím v.in.ogr."
-
-#~ msgid "Creates a new vectors as a read-only link to OGR layers"
-#~ msgstr ""
-#~ "Vytvoøí nové vektorovévrstvy  jako vrstvy pouze ke ètení pøipojené pomocí "
-#~ "OGR."
 
 #~ msgid "ASCII points/GRASS ASCII vector import"
 #~ msgstr "Import ASCII body/GRASS ASCII vektory"
 
 #~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
 #~ msgstr "Vytvoøí vektorovou mapu ze souboru ASCII bodù nebo ASCII vektoru"
-
-#~ msgid "Old GRASS vector import"
-#~ msgstr "Import starého vektorového formátu GRASS"
 
 #~ msgid "Multiple DXF layers import"
 #~ msgstr "Hromadný import DXF vrstev"
@@ -12013,9 +11915,6 @@ msgstr ""
 
 #~ msgid "Raster File Series to MPEG Conversion Program."
 #~ msgstr "Program, vytváøející MPEG ze série rastrových map"
-
-#~ msgid "Export GRASS raster as non-georeferenced PNG image format."
-#~ msgstr "Export GRASS rastrové mapy jako nepøipojený PNG obraz."
 
 #~ msgid ""
 #~ "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
@@ -12064,9 +11963,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Exportuje 3D rastrový soubor GRASSu do 3-dimenzionálního Vis5D souboru."
 
-#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
-#~ msgstr "Pøevede binární GRASS vektorovou mapu do GRASS rastrové mapy."
-
 #~ msgid ""
 #~ "Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
 #~ "raster map layer."
@@ -12095,7 +11991,7 @@ msgstr ""
 #~ "rastrové mapy."
 
 #~ msgid "Create a MASK for limiting raster operation"
-#~ msgstr "Vytvoø MASKu pro limitní rastrové operace"
+#~ msgstr "Vytvoøí MASKu proomezení rastrových operací"
 
 #~ msgid "Calculates category or object oriented statistics."
 #~ msgstr ""
@@ -12107,12 +12003,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Interaktivní nástroj pou¾itý pro nastavení vzorkù a analýzu pracovní "
 #~ "oblasti, která bude pou¾ita dal¹ími r.le moduly."
-
-#~ msgid ""
-#~ "r.recode.rules - Use ascii rules file to recode categories in raster map"
-#~ msgstr ""
-#~ "r.recode.rules -Pou¾ít soubor s ascii pravidly pro pøekódování kategorií "
-#~ "v rastrové mapì"
 
 #~ msgid "Creates topology for GRASS vector map."
 #~ msgstr "Vytváøí topologii pro vektorovou mapu GRASSu."
@@ -12168,9 +12058,6 @@ msgstr ""
 #~ msgid "Tests for normality for points."
 #~ msgstr "Test normality bodù"
 
-#~ msgid "Imagery"
-#~ msgstr "Obraz"
-
 #~ msgid "Mosaics up to 4 images and extends colormap; creates map *.mosaic"
 #~ msgstr ""
 #~ "Vytvoøí mozaiku ze 4 a více snímkù, roztáhne barevnou paletu a vytvoøí "
@@ -12186,80 +12073,24 @@ msgstr ""
 #~ "Vytvoøí spektrální signatury pro obrazová data povolením u¾ivateli "
 #~ "naèrtnout oblasti zájmu."
 
-#~ msgid "Add various vector-based map layer"
-#~ msgstr "Pèèidat rùzné vrstvy zalo¾ené na vektoru"
-
-#~ msgid "COPYING file missing"
-#~ msgstr "SOubor COPYING chybí"
-
 #~ msgid "GPL.TXT file missing"
 #~ msgstr "Soubor GPL.TXT chybí"
 
 #~ msgid "AUTHORS file missing"
 #~ msgstr "Soubor AUTHORS chybí"
 
-#~ msgid ""
-#~ "Reading workspace file <%s> failed. Invalid file, unable to parse XML "
-#~ "document."
-#~ msgstr ""
-#~ "Ètení souboru workspace <%s> selhalo. Neplatný soubor, nelze parsovat XML "
-#~ "dokument."
-
-#~ msgid "Writing current settings to workspace file failed (%s)."
-#~ msgstr ""
-#~ "Zápis aktuálního nastavení do souboru pracovní oblasti selhalo (%s)."
-
 #, fuzzy
 #~ msgid "GRASS GIS Raster Map Calculator (3D raster)"
 #~ msgstr "GRASS %s mapový kalkulátor"
 
-#~ msgid "Official GRASS site: http://grass.osgeo.org"
-#~ msgstr "Oficiální GRASS stránka: http://grass.osgeo.org"
-
-#~ msgid "GIS Library"
-#~ msgstr "GIS knihovna"
-
-#~ msgid "Force re-rendering of all layers"
-#~ msgstr "Vynutit pøekreslení v¹ech mapových vrstev"
-
-#~ msgid "Add raster map layer"
-#~ msgstr "Pøidat rastrovou vrstvu"
-
-#~ msgid "Add layer group"
-#~ msgstr "Pøidat vrstvu se skupinou"
-
-#~ msgid "Delete selected layer"
-#~ msgstr "Odstranit vybranou vrstvu"
-
-#~ msgid "Add RGB layer"
-#~ msgstr "Pøidat vrstvu RGB"
-
-#~ msgid "Add HIS layer"
-#~ msgstr "Pøidat vrstvu HIS"
-
-#~ msgid "Reload GCPs from selected POINTS file"
-#~ msgstr "Znovu naèíst vlicovací body z vybraného souboru POINTS"
-
-#~ msgid "Show Nviz settings dialog"
-#~ msgstr "Ukázat nastavení Nviz"
-
-#, fuzzy
-#~ msgid "Matlab-ASCII or Mapgen import"
-#~ msgstr "Matlab and MapGen import"
-
-#, fuzzy
 #~ msgid "Import Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "Importuje vektory ve formátu Mapgen nebo Matlab do GRASSu"
+#~ msgstr "Importuje vektory ve formátu Mapgen nebo Matlab do GRASS."
 
 #~ msgid "Converts a raster map into a vector map layer."
 #~ msgstr "Pøevede rastrovou mapu na vektorovou."
 
-#, fuzzy
 #~ msgid "Change projection for current location"
-#~ msgstr "Projekce aktuální location"
-
-#~ msgid "Raster"
-#~ msgstr "Rastr"
+#~ msgstr "Zmìnit projekci pro souèasnou location"
 
 #~ msgid "Creates/modifies the color table associated with a raster map layer."
 #~ msgstr "Vytvoøí/upraví tabulku barev spojenou s rastrovou mapou."
@@ -12271,18 +12102,8 @@ msgstr ""
 #~ "Vytvoøí rastrovou mapu zachycující obalové zóny kolem bunìk s neNULLovou "
 #~ "hodnotou."
 
-#, fuzzy
 #~ msgid "Map calculator for raster map algebra."
-#~ msgstr "Mapový kalkulátor pro rastrovou algebru"
-
-#~ msgid ""
-#~ "Generates raster map layers of slope, aspect, curvatures and partial "
-#~ "derivatives from a raster map layer of true elevation values. Aspect is "
-#~ "calculated counterclockwise from east."
-#~ msgstr ""
-#~ "Vytvoøí rastrovou mapu sklonu, expozice, køivosti a parciálních derivací "
-#~ "odvozenou z digitálního modelu terénu. Expozice je poèítána proti smìru "
-#~ "hodinových ruèièek s poèátkem na východì."
+#~ msgstr "Mapový kalkulátor pro rastrovou algebru."
 
 #~ msgid "Generates a raster map layer of distance to features in input layer."
 #~ msgstr "Vytvoøí rastrovou mapu vzdáleností k prvkùm ve vstupní mapì."
@@ -12294,21 +12115,18 @@ msgstr ""
 #~ "Z rastrové mapy digitálního modelu terénu odstraní umìle vytvoøené "
 #~ "sní¾eniny a vytvoøí mapu smìru odtoku."
 
-#~ msgid "Flow computation for massive grids (Float version)."
-#~ msgstr "Výpoèet toky v gridu"
-
 #~ msgid ""
 #~ "Overland flow hydrologic simulation using path sampling method (SIMWE)"
 #~ msgstr ""
-#~ "Hydrologický model povrchového odtoku s pou¾itím metody vzorové cesty "
+#~ "Hydrologický model povrchového odtoku s pou¾itím metody vzorkování cesty "
 #~ "(SIMWE)"
 
 #~ msgid ""
 #~ "Sediment transport and erosion/deposition simulation using path sampling "
 #~ "method (SIMWE)"
 #~ msgstr ""
-#~ "Simulace transportu sedimentù a eroze/usazování za pou¾ití vzorové cesty "
-#~ "(SIMWE)"
+#~ "Simulace transportu sedimentù a eroze/usazování za pou¾ití metody "
+#~ "vzorkování cesty (SIMWE)"
 
 #~ msgid "Creates topographic index [ln(a/tan(beta))] map from elevation map."
 #~ msgstr ""
@@ -12318,9 +12136,8 @@ msgstr ""
 #~ msgid "Surface generation program from rasterized contours."
 #~ msgstr "Program pro tvorbu povrchù z vrstevnic ulo¾ených v rastrové vrstvì."
 
-#, fuzzy
 #~ msgid "Digitize vector map using Tcl/Tk digitizer"
-#~ msgstr "Digitalizovat vektorovou vrstvu (vy¾aduje TclTk)"
+#~ msgstr "Digitalizovat vektorovou vrstvu pomocí Tcl/tk digitalizace"
 
 #~ msgid ""
 #~ "Set color rules for features in a vector using a numeric attribute column."
@@ -12333,110 +12150,236 @@ msgstr ""
 #~ msgstr ""
 #~ "Hledá nejkrat¹í cestu ve vektorové síti pro zadaný zaèátek a konec trasy."
 
-#~ msgid "Volumes"
-#~ msgstr "3D rastr"
-
-#, fuzzy
 #~ msgid "Map calculator for 3D raster map algebra."
-#~ msgstr "Mapový kalkulátor pro rastrovou algebru"
+#~ msgstr "Mapový kalkulátor pro 3D rastrovou algebru."
 
 #~ msgid "Drops an attribute table."
 #~ msgstr "Vyjmout atributovou tabulku."
 
-#~ msgid "GRASS GIS help"
-#~ msgstr "Nápovìda GRASS GIS"
-
 #~ msgid "Display the HTML man pages of GRASS"
 #~ msgstr "Zobrazuje manuálové stránky GRASSu ve formátu HTML"
-
-#~ msgid "Nviz properties"
-#~ msgstr "Vlastnosti Nviz"
 
 #, fuzzy
 #~ msgid "Unable to read EPGS file: '%s'"
 #~ msgstr "Nelze naèíst seznam EPSG kódù: %s"
 
 #, fuzzy
-#~ msgid "3D View Tools"
-#~ msgstr "Nástroje 3D pohledu"
-
-#~ msgid "Icon size:"
-#~ msgstr "Velikost ikon:"
-
-#~ msgid "Vector map <%s> is 3D"
-#~ msgstr "Vektorové mapa <%s> je 3D"
-
-#~ msgid "Vector map <%s> is 2D"
-#~ msgstr "Vektorová mapa <%s> je 2D"
-
-#~ msgid "%(primitives)d primitives (%(points)d points)"
-#~ msgstr "%(primitives)d prvkù (%(points)d bodù)"
-
-#~ msgid ""
-#~ "Unable to initialize display driver of vector digitizer. See 'Command "
-#~ "output' for details.\n"
-#~ "\n"
-#~ "Details:"
-#~ msgstr ""
-#~ "Nelze inicializovat ovladaè displeje pro vektorovou digitalizaci. Pro "
-#~ "detaily pøejdìte na výstup pøíkazu.\n"
-#~ "\n"
-#~ "Detaily:"
-
-#~ msgid ""
-#~ "Command '%s' not yet implemented in the GUI. Try adding it as a command "
-#~ "layer instead."
-#~ msgstr ""
-#~ "Pøíkaz '%s' je¹tì nebyl implementován do GUI. Zkuste jej pøidat jako "
-#~ "vrstvu pøíkazù."
-
-#~ msgid "<%(name)s>: layer type <%(type)s> is not supported yet."
-#~ msgstr "<%(name)s>: typ vrstvy <%(type)s> není  je¹tì podporován."
-
-#~ msgid "Unable to open file"
-#~ msgstr "Nelze otevøít soubor"
-
-#, fuzzy
 #~ msgid "DXF file:"
 #~ msgstr "Vyberte soubor DXF:"
-
-#~ msgid "Parameter not found: %s"
-#~ msgstr "Paramentr nebyl nalezen: %s"
-
-#~ msgid "Parameter %(name)s (%(desc)s) is missing.\n"
-#~ msgstr "Parametr %(name)s (%(desc)s) chybí.\n"
-
-#~ msgid "Copy the current command string to the clipboard"
-#~ msgstr "Kopírovat pøíkaz jako øetìzec do schránky"
-
-#~ msgid "Valid range"
-#~ msgstr "Povolený rozsah"
-
-#~ msgid "Vector point layer not found (id=%d)"
-#~ msgstr "Vektorová bodová vrstva nenalezena (id=%d)"
-
-#~ msgid "Unable to set data layer properties (id=%d)"
-#~ msgstr "Nelze nastavit vlastnosti datové vrstvy (id=%d)"
-
-#~ msgid "User GUI settings"
-#~ msgstr "U¾ivatelské nastavení grafického prostøedí"
-
-#, fuzzy
-#~ msgid ""
-#~ "Check a mapset to make it accessible, uncheck it to hide it.%sNote: The "
-#~ "current mapset is always accessible."
-#~ msgstr ""
-#~ "Za¹krtnout mapset pro pøístup, zru¹it pro skrytí.%s Poznámka: Mapset "
-#~ "PERMANENT a aktuální mapset jsou v¾dy pøístupné."
 
 #~ msgid "Set ground control points (GCPs)"
 #~ msgstr "Nastavit vlicovací body (GCP)"
 
-#~ msgid "Start GRASS"
-#~ msgstr "Spustit GRASS"
+#~ msgid "Choose script file to run"
+#~ msgstr "Vybrat soubor se skritp"
 
-#~ msgid "Create mapset"
-#~ msgstr "Vytvoøit mapset"
+#~ msgid "GRASS_PYCMDFILE - File not found. Run p.mon."
+#~ msgstr "GRASS_PYCMDFILE - soubor nenalezen. Spou¹tím p.mon."
 
-#~ msgid "Select file extension:"
-#~ msgstr "Vyberte pøíponu souboru:"
+#~ msgid "Downloads and imports data from WMS servers"
+#~ msgstr "Stáhne a importuje data z WMS serverù"
+
+#~ msgid "Historical GRASS vector import (all maps)"
+#~ msgstr "Import starého vektorového formátu GRASS (v¹echny mapy)"
+
+#~ msgid ""
+#~ "Convert all old GRASS < Ver5.7 vector maps in current mapset to current "
+#~ "format"
+#~ msgstr "Pøevede starou verzi GRASS vektoru (< 5.7) do souèasného formátu"
+
+#~ msgid "WFS"
+#~ msgstr "WFS"
+
+#~ msgid "Import GetFeature from WFS"
+#~ msgstr "Import GetFeature z WFS"
+
+#~ msgid "Matlab array and MapGen import"
+#~ msgstr "Import Matlab pole a MapGen"
+
+#~ msgid "Export GRASS raster as non-georeferenced PNG image."
+#~ msgstr ""
+#~ "Export GRASS rastrové mapy jako  souøadnicovì nepøipojený PNG obraz."
+
+#~ msgid "Converts (rasterize) a vector map into a raster map."
+#~ msgstr "Pøevod (rastrizace) vektorové mapy do rastrové."
+
+#~ msgid "Changes current mapset."
+#~ msgstr "Zmìní souèasný mapset."
+
+#~ msgid "Tool to maintain GRASS extensions in local GRASS installation."
+#~ msgstr "Nástroj pro správu GRASS roz¹íøení"
+
+#~ msgid "Modifies a timestamp for a raster map."
+#~ msgstr "Upravuje èasové razítko pro rastrovou mapu."
+
+#~ msgid "Reproject raster map"
+#~ msgstr "Zmìnit projekci rastrové mapy"
+
+#~ msgid "Interactive management of raster color tables."
+#~ msgstr "Interaktivní správa rastrové tabulky barev."
+
+#~ msgid "Thins non-zero cells that denote linear features in a raster map."
+#~ msgstr ""
+#~ "Zmen¹í nenulové buòky tak, aby vznikly lineární struktury v rastrové mapì."
+
+#~ msgid "Reclassify"
+#~ msgstr "Reklasifikovat"
+
+#~ msgid "Recode"
+#~ msgstr "Pøekódovat"
+
+#~ msgid ""
+#~ "Produces a raster map of uniform random deviates whose range can be "
+#~ "expressed by the user."
+#~ msgstr ""
+#~ "Vytvoøí rastrovou mapu uniformních náhodných odchylek, jejich¾ rozsah "
+#~ "mù¾e být zadán u¾ivatelem."
+
+#~ msgid "Rebuild topology on all vector maps"
+#~ msgstr "Pøebudujetopologii v¹ech vektorových map"
+
+#~ msgid "Rebuilds topology on all vector maps in the current mapset."
+#~ msgstr "Pøebuduje topologii v¹ech vektorových map v souèasném mapsetu."
+
+#~ msgid "Re-projects a vector map from one location to the current location."
+#~ msgstr ""
+#~ "Zmìní projekci vektorové mapy ze zvolené location do aktuální location."
+
+#~ msgid "Interacrive management of vector color tables."
+#~ msgstr "Interaktivní správa vektorové tabulky barev"
+
+#~ msgid "Performs raster map matrix filter."
+#~ msgstr "Maticový filtr na rastrové mapì."
+
+#~ msgid "Enter raster category values or percents"
+#~ msgstr "Vlo¾te hodnoty rastrových kategorií nebo procenta"
+
+#~ msgid "Save color table to file"
+#~ msgstr "Ulo¾it barevnou tabulku do souboru"
+
+#~ msgid "range"
+#~ msgstr "rozmezí"
+
+#~ msgid ""
+#~ "Enter raster category values or percents (%(range)s = %(min)d-%(max)d)"
+#~ msgstr ""
+#~ "Vlo¾te hodnoty rastrových kategorií nebo procenta (%(range)s = %(min)d-%"
+#~ "(max)d)"
+
+#~ msgid "Nothing to save."
+#~ msgstr "Není co ulo¾it"
+
+#~ msgid "Invalid rule value '%s'. Unable to apply color table."
+#~ msgstr "Neplatná hodnota pravidla '%s'. nelze pou¾ít barevnou tabulka."
+
+#~ msgid ""
+#~ "Color table already exists. Check out 'replace existing color table' to "
+#~ "overwrite it."
+#~ msgstr ""
+#~ "Tabulka barev ji¾ existuje.Zkuste 'nahradit exstující tabuku barev' pro "
+#~ "její pøepsání."
+
+#~ msgid "Save expression to file"
+#~ msgstr "Ulo¾it výraz do souboru"
+
+#~ msgid "Load expression from file"
+#~ msgstr "Naèíst výraz ze souboru"
+
+#~ msgid "Add created raster map into layer tree"
+#~ msgstr "Pøidat vytvoøenou rastrovou mapu do stromu vrstev"
+
+#~ msgid "Choose a file name to save the expression"
+#~ msgstr "Vyberte jméno souboru pro ulo¾ení výrazu"
+
+#~ msgid "Expression file (*)|*"
+#~ msgstr "SOubor s výrazem (*)|*"
+
+#~ msgid "Choose a file name to load the expression"
+#~ msgstr "Vyberte soubor pro naètení výrazu"
+
+#~ msgid ""
+#~ "Set %(coor)s coordinates for GCP No. %(key)s? \n"
+#~ "\n"
+#~ "East: %(coor0)s \n"
+#~ "North: %(coor1)s"
+#~ msgstr ""
+#~ "Nastavit %(coor)s souøadnice pro vlicovací bod èíslo %(key)s? \n"
+#~ "\n"
+#~ "Východ: %(coor0)s \n"
+#~ "Sever: %(coor1)s"
+
+#~ msgid "Rectifying images, please wait..."
+#~ msgstr "Rektifikuji obrazy. prosím poèkejte..."
+
+#~ msgid "Zoom to computational region"
+#~ msgstr "Pøiblí¾it na výpoèetní region"
+
+#~ msgid "custom"
+#~ msgstr "volitelné"
+
+#~ msgid "Choose GIS Data Directory"
+#~ msgstr "Zvolit adresáø GRASS dat"
+
+#~ msgid "Forward: %(forw)s, Backward: %(back)s"
+#~ msgstr "Dopøedná: %(forw)s, Zpìtná: %(back)s"
+
+#~ msgid "%(items)d items (%(actions)d actions) loaded into model"
+#~ msgstr "%(items)d prvkù (%(actions)d akcí) naèteno do modelu"
+
+#~ msgid ""
+#~ "Module r.mapcalc cannot be used in the model. Use r.mapcalculator instead."
+#~ msgstr ""
+#~ "Modul r.mapcalc nelze pou¾ít pro modelování. Místo nìj pou¾ijte r."
+#~ "mapcalculator."
+
+#~ msgid "<not defined>"
+#~ msgstr "<nedefinováno>"
+
+#~ msgid ""
+#~ "Please note that the data are left in inconsistent state and may be "
+#~ "corrupted"
+#~ msgstr "Data jsou ponechána v nevhodném stavu a mohou být poru¹ena"
+
+#~ msgid "Show Help"
+#~ msgstr "Ukázat nápovìdu"
+
+#~ msgid "Show Help for GCP Manager"
+#~ msgstr "Ukázat nápovédu proSprávce vlicovacích bodù"
+
+#~ msgid "Rebuild topology"
+#~ msgstr "Vytvoøit/znovu sestavit topologii"
+
+#~ msgid "Unable to initialize display driver of vector digitizer"
+#~ msgstr "Nelze inicializovat ovladaè displeje pro vektorovou digitalizaci."
+
+#~ msgid "opacity:"
+#~ msgstr "prùhlednost:"
+
+#~ msgid "%(cmd)s: parameter '%(key)s' not available"
+#~ msgstr "%(cmd)s: parametr '%(key)s' není dostupný"
+
+#~ msgid "Unable to parse settings '%s'"
+#~ msgstr "Nelze provést nastavení '%s'"
+
+#~ msgid "Allow interactive input"
+#~ msgstr "Povolit interaktivní vstup"
+
+#~ msgid "Manage access to mapsets"
+#~ msgstr "Správa pøístupu do mapsetù"
+
+#~ msgid ""
+#~ "Check a mapset to make it accessible, uncheck it to hide it.\n"
+#~ "  Notes:\n"
+#~ "    - The current mapset is always accessible.\n"
+#~ "    - You may only write to the current mapset.\n"
+#~ "    - You may only write to mapsets which you own."
+#~ msgstr ""
+#~ "Za¹krtnout mapset pro pøístup, zru¹it pro skrytí.\n"
+#~ "Poznámka:\n"
+#~ " - Souèasný m,apset je v¾dy pøástupný.\n"
+#~ " - Mù¾ete zapisovat pouze do souèasného mapsetu.\n"
+#~ " - Mù¾ete zapisovat pouze do mapsetu  který vlastníte."
+
+#, fuzzy
+#~ msgid "Generates stream channels."
+#~ msgstr "Rozdìlit stream na kanály"
