@@ -1,6 +1,6 @@
 """!@package grass.script.vector
 
-@brief GRASS Python scripting module
+@brief GRASS Python scripting module (vector functions)
 
 Vector related functions to be used in Python scripts.
 

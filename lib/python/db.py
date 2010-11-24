@@ -1,6 +1,6 @@
 """!@package grass.script.db
 
-@brief GRASS Python scripting module
+@brief GRASS Python scripting module (database functions)
 
 Database related functions to be used in Python scripts.
 
