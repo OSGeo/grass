@@ -99,7 +99,7 @@ def main():
 
     raster = options['raster']
     colprefix = options['colprefix']
-    vector = options['vector']
+    vector = options['input']
     layer = options['layer']
     percentile = options['percentile']
 
