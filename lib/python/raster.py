@@ -1,6 +1,6 @@
 """!@package grass.script.raster
 
-@brief GRASS Python scripting module
+@brief GRASS Python scripting module (raster functions)
 
 Raster related functions to be used in Python scripts.
 
