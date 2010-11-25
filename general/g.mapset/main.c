@@ -81,6 +81,7 @@ int main(int argc, char *argv[])
 
     f_list = G_define_flag();
     f_list->key = 'l';
+    f_list->suppress_required = 1;
     f_list->description = _("List available mapsets");
     f_list->guisection = _("Print");
     

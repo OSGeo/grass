@@ -294,6 +294,9 @@ void G__usage_xml(void)
 		fprintf(stdout, "\n\t\t</label>\n");
 	    }
 
+	    if (flag->suppress_required)
+		fprintf(stdout, "\t\t<suppress_required/>\n");
+
 	    if (flag->description) {
 		fprintf(stdout, "\t\t<description>\n\t\t\t");
 		print_escaped_for_xml(stdout, flag->description);

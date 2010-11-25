@@ -20,6 +20,7 @@ struct state {
     int overwrite;
     int quiet;
     int has_required;
+    int suppress_required;
 
     struct GModule module_info;	/* general information on the corresponding module */
 

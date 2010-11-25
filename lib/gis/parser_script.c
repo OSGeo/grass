@@ -69,6 +69,8 @@ void G__script(void)
 	for (flag = &st->first_flag; flag; flag = flag->next_flag) {
 	    fprintf(fp, "#%%flag\n");
 	    fprintf(fp, "#%% key: %c\n", flag->key);
+	    if (flag->suppress_required)
+		fprintf(fp, "#%% suppress_required: yes\n");
 	    if (flag->label)
 		fprintf(fp, "#%% label: %s\n", flag->label);
 	    if (flag->description)
