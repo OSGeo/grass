@@ -2180,7 +2180,7 @@ class MapsetAccess(wx.Dialog):
                  title=_('Manage access to mapsets'),
                  size = (350, 400),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
+        wx.Dialog.__init__(self, parent, id, title, size = size, style = style)
 
         self.all_mapsets_ordered = utils.ListOfMapsets(get = 'ordered')
         self.accessible_mapsets  = utils.ListOfMapsets(get = 'accessible')
