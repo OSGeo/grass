@@ -555,7 +555,8 @@ int G_parser(int argc, char **argv)
 	error += check_opts();
 
     /* Make sure all required options are set */
-    error += check_required();
+    if (!st->suppress_required)
+	error += check_required();
     
     if (error) {
 	if (G_verbose() > G_verbose_min())
@@ -799,6 +800,8 @@ static int set_flag(int f)
     while (flag) {
 	if (flag->key == f) {
 	    flag->answer = 1;
+	    if (flag->suppress_required)
+		st->suppress_required = 1;
 	    return (0);
 	}
 	flag = flag->next_flag;

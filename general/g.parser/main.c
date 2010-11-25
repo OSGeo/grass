@@ -73,6 +73,20 @@ char *translate(const char *arg)
 #endif
 }
 
+static int parse_boolean(struct context *ctx, const char *arg)
+{
+    if (strcasecmp(arg, "yes") == 0)
+	return YES;
+
+    if (strcasecmp(arg, "no") == 0)
+	return NO;
+
+    fprintf(stderr, "Unknown boolean value \"%s\" at line %d\n",
+	    arg, ctx->line);
+
+    return NO;
+}
+
 static void parse_toplevel(struct context *ctx, const char *cmd)
 {
     if (strcasecmp(cmd, "module") == 0) {
@@ -136,6 +150,11 @@ static void parse_flag(struct context *ctx, const char *cmd, const char *arg)
 	return;
     }
 
+    if (strcasecmp(cmd, "suppress_required") == 0) {
+	ctx->flag->key = parse_boolean(ctx, arg);
+	return;
+    }
+
     if (strcasecmp(cmd, "answer") == 0) {
 	ctx->flag->answer = atoi(arg);
 	return;
@@ -180,20 +199,6 @@ static int parse_type(struct context *ctx, const char *arg)
     fprintf(stderr, "Unknown type \"%s\" at line %d\n", arg, ctx->line);
 
     return TYPE_STRING;
-}
-
-static int parse_boolean(struct context *ctx, const char *arg)
-{
-    if (strcasecmp(arg, "yes") == 0)
-	return YES;
-
-    if (strcasecmp(arg, "no") == 0)
-	return NO;
-
-    fprintf(stderr, "Unknown boolean value \"%s\" at line %d\n",
-	    arg, ctx->line);
-
-    return NO;
 }
 
 static void parse_option(struct context *ctx, const char *cmd,
