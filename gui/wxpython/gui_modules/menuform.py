@@ -388,7 +388,7 @@ class grassTask:
         self.flags = list()
         self.keywords = list()
         self.errorMsg = ''
-
+        
         if grassModule is not None:
             try:
                 processTask(tree = etree.fromstring(getInterfaceDescription(grassModule)),
@@ -478,14 +478,18 @@ class grassTask:
         
     def getCmdError(self):
         """!Get error string produced by getCmd(ignoreErrors = False)
-
+        
         @return list of errors
         """
         errorList = list()
+        # determine if suppress_required flag is given
+        for f in self.flags:
+            if f['value'] and f['suppress_required']:
+                return errorList
         
         for p in self.params:
-            if p.get('value', '') == '' and p.get('required', 'no') != 'no':
-                if p.get('default', '') == '':
+            if not p.get('value', '') and p.get('required', 'no') != 'no':
+                if not p.get('default', ''):
                     desc = p.get('label', '')
                     if not desc:
                         desc = p['description']
@@ -505,7 +509,7 @@ class grassTask:
         cmd = [self.name]
         
         for flag in self.flags:
-            if 'value' in flag and flag['value']:
+            if flag['value']:
                 if len(flag['name']) > 1: # e.g. overwrite
                     cmd += [ '--' + flag['name'] ]
                 else:
@@ -576,14 +580,14 @@ class processTask:
         self.task.name = self.root.get('name', default = 'unknown')
         
         # keywords
-        for keyword in self.__getNodeText(self.root, 'keywords').split(','):
+        for keyword in self._getNodeText(self.root, 'keywords').split(','):
             self.task.keywords.append(keyword.strip())
         
-        self.task.label       = self.__getNodeText(self.root, 'label')
-        self.task.description = self.__getNodeText(self.root, 'description')
+        self.task.label       = self._getNodeText(self.root, 'label')
+        self.task.description = self._getNodeText(self.root, 'description')
         
     def __processParams(self):
-        """!Process parameters description"""
+        """!Process parameters"""
         for p in self.root.findall('parameter'):
             # gisprompt
             node_gisprompt = p.find('gisprompt')
@@ -601,8 +605,8 @@ class processTask:
             node_values = p.find('values')
             if node_values is not None:
                 for pv in node_values.findall('value'):
-                    values.append(self.__getNodeText(pv, 'name'))
-                    desc = self.__getNodeText(pv, 'description')
+                    values.append(self._getNodeText(pv, 'name'))
+                    desc = self._getNodeText(pv, 'description')
                     if desc:
                         values_desc.append(desc)
             
@@ -618,30 +622,37 @@ class processTask:
                 "type"           : p.get('type'),
                 "required"       : p.get('required'),
                 "multiple"       : p.get('multiple'),
-                "label"          : self.__getNodeText(p, 'label'),
-                "description"    : self.__getNodeText(p, 'description'),
+                "label"          : self._getNodeText(p, 'label'),
+                "description"    : self._getNodeText(p, 'description'),
                 'gisprompt'      : gisprompt,
                 'age'            : age,
                 'element'        : element,
                 'prompt'         : prompt,
-                "guisection"     : self.__getNodeText(p, 'guisection'),
-                "guidependency"  : self.__getNodeText(p, 'guidependency'),
-                "default"        : self.__getNodeText(p, 'default'),
+                "guisection"     : self._getNodeText(p, 'guisection'),
+                "guidependency"  : self._getNodeText(p, 'guidependency'),
+                "default"        : self._getNodeText(p, 'default'),
                 "values"         : values,
                 "values_desc"    : values_desc,
                 "value"          : '',
                 "key_desc"       : key_desc } )
             
     def __processFlags(self):
-        """!Process flags description"""
+        """!Process flags"""
         for p in self.root.findall('flag'):
+            if p.find('suppress_required') is not None:
+                suppress_required = True
+            else:
+                suppress_required = False
+            
             self.task.flags.append( {
-                    "name"        : p.get('name'),
-                    "label"       : self.__getNodeText(p, 'label'),
-                    "description" : self.__getNodeText(p, 'description'),
-                    "guisection"  : self.__getNodeText(p, 'guisection') } )
-        
-    def __getNodeText(self, node, tag, default = ''):
+                    "name"              : p.get('name'),
+                    "label"             : self._getNodeText(p, 'label'),
+                    "description"       : self._getNodeText(p, 'description'),
+                    "guisection"        : self._getNodeText(p, 'guisection'),
+                    "suppress_required" : suppress_required,
+                    "value"             : False } )
+            
+    def _getNodeText(self, node, tag, default = ''):
         """!Get node text"""
         p = node.find(tag)
         if p is not None:

@@ -50,8 +50,9 @@ int main(int argc, char *argv[])
     mapset_opt = G_define_option();
     mapset_opt->key = "mapset";
     mapset_opt->type = TYPE_STRING;
-    mapset_opt->required = NO;
+    mapset_opt->required = YES;
     mapset_opt->multiple = NO;
+    mapset_opt->key_desc = "name";
     mapset_opt->description = _("Name of mapset where to switch");
     mapset_opt->guisection = _("Settings");
 
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     location_opt->type = TYPE_STRING;
     location_opt->required = NO;
     location_opt->multiple = NO;
+    location_opt->key_desc = "name";
     location_opt->description = _("Location name (not location path)");
     location_opt->guisection = _("Settings");
 
@@ -69,8 +71,8 @@ int main(int argc, char *argv[])
     gisdbase_opt->required = NO;
     gisdbase_opt->multiple = NO;
     gisdbase_opt->key_desc = "path";
-    gisdbase_opt->description =
-	_("GIS data directory (full path to the directory where the new location is)");
+    gisdbase_opt->label = _("GIS data directory");
+    gisdbase_opt->description = _("Full path to the directory where the new location is");
     gisdbase_opt->guisection = _("Settings");
 
     f_add = G_define_flag();
