@@ -80,20 +80,15 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     module->description =
-	_("Import raster data into a GRASS map layer using GDAL.");
+	_("Imports raster data into a GRASS raster map using GDAL library.");
 
     /* -------------------------------------------------------------------- */
     /*      Setup and fetch parameters.                                     */
     /* -------------------------------------------------------------------- */
-    parm.input = G_define_standard_option(G_OPT_R_INPUT);
+    parm.input = G_define_standard_option(G_OPT_F_INPUT);
     parm.input->description = _("Raster file to be imported");
-    parm.input->gisprompt = "old_file,file,input";
-    parm.input->required = NO;	/* not required because of -f flag */
-    parm.input->guisection = _("Required");
-
+    
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.output->required = NO;	/* not required because of -f flag */
-    parm.output->guisection = _("Required");
 
     parm.band = G_define_option();
     parm.band->key = "band";
@@ -113,6 +108,7 @@ int main(int argc, char *argv[])
     parm.target->required = NO;
     parm.target->description =
 	_("Name of location to read projection from for GCPs transformation");
+    parm.target->key_desc = "name";
 
     parm.title = G_define_option();
     parm.title->key = "title";
@@ -127,6 +123,7 @@ int main(int argc, char *argv[])
     parm.outloc->type = TYPE_STRING;
     parm.outloc->required = NO;
     parm.outloc->description = _("Name for new location to create");
+    parm.outloc->key_desc = "name";
 
     flag_o = G_define_flag();
     flag_o->key = 'o';
@@ -141,7 +138,8 @@ int main(int argc, char *argv[])
     flag_f->key = 'f';
     flag_f->description = _("List supported formats and exit");
     flag_f->guisection = _("Print");
-
+    flag_f->suppress_required = 1;
+    
     flag_l = G_define_flag();
     flag_l->key = 'l';
     flag_l->description =
@@ -221,13 +219,6 @@ int main(int argc, char *argv[])
 	}
 	exit(EXIT_SUCCESS);
     }
-
-
-    if (!input)
-	G_fatal_error(_("Required parameter <%s> not set"), parm.input->key);
-
-    if (!output)
-	G_fatal_error(_("Name for output raster map not specified"));
 
     if (!parm.outloc->answer) {	/* Check if the map exists */
 	if (G_find_raster2(output, G_mapset())) {
