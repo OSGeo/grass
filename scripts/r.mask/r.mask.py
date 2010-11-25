@@ -76,12 +76,15 @@ def main():
 	    grass.run_command('g.remove', rast = 'MASK')
 	    grass.message(_("Raster MASK removed"))
  	else:
-	    grass.warning(_("No existing MASK to remove"))
+	    grass.fatal(_("No existing MASK to remove"))
     else:
-	if exists and not grass.overwrite():
-	    grass.fatal(_("MASK already found in current mapset. Delete first or overwrite"))
+	if exists:
+            if not grass.overwrite():
+                grass.fatal(_("MASK already found in current mapset. Delete first or overwrite."))
+            else:
+                grass.warning(_("MASK already exists and will be overwritten"))
 
-	p = grass.feed_command('r.reclass', input = input, output = 'MASK', overwrite = True)
+	p = grass.feed_command('r.reclass', input = input, output = 'MASK', overwrite = True, rules = '-')
 	p.stdin.write("%s = 1" % maskcats)
 	p.stdin.close()
 	p.wait()
