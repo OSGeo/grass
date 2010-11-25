@@ -919,49 +919,87 @@ def mapsets(accessible = True):
 
 # interface to `g.proj -c`
 
-def create_location(location, epsg = None, proj4 = None, filename = None, wkt = None, datum = None):
+def create_location(dbase, location,
+                    epsg = None, proj4 = None, filename = None, wkt = None,
+                    datum = None):
     """!Create new location
 
+    Raise ScriptException on error.
+    
+    @param dbase path to GRASS database
     @param location location name to create
     @param epgs if given create new location based on EPSG code
     @param proj4 if given create new location based on Proj4 definition
     @param filename if given create new location based on georeferenced file
     @param wkt if given create new location based on WKT definition (path to PRJ file)
     @param datum datum transformation parameters (used for epsg and proj4)
-
-    @return True on success
-    @return False on failure
     """
+    gisdbase = None
+    if epsg or proj4 or filename or wkt:
+        gisdbase = gisenv()['GISDBASE']
+        run_command('g.gisenv',
+                    set = 'GISDBASE=%s' % dbase)
+    if not os.path.exists(dbase):
+            os.mkdir(dbase)
+
+    kwargs = dict()
+    if datum:
+        kwargs['datum'] = datum
+    
     if epsg:
-        ret = run_command('g.proj',
+        ps = pipe_command('g.proj',
+                          quiet = True,
                           flags = 'c',
                           epsg = epsg,
                           location = location,
-                          datumtrans = datum)
+                          stderr = PIPE,
+                         **kwargs)
     elif proj4:
-        ret = run_command('g.proj',
+        ps = pipe_command('g.proj',
+                          quiet = True,
                           flags = 'c',
                           proj4 = proj4,
                           location = location,
-                          datumtrans = datum)
+                          stderr = PIPE,
+                          **kwargs)
     elif filename:
-        ret = run_command('g.proj',
+        ps = pipe_command('g.proj',
+                          quiet = True,
                           flags = 'c',
                           georef = filename,
-                          location = location)
+                          location = location,
+                          stderr = PIPE)
     elif wkt:
-        ret = run_command('g.proj',
+        ps = pipe_command('g.proj',
+                          quiet = True,
                           flags = 'c',
                           wkt = wktfile,
-                          location = location)
+                          location = location,
+                          stderr = PIPE)
     else:
-        ret = _create_location_xy(location)
-        
-def _create_location_xy(location):
-    """!Create unprojected location"""
+        return _create_location_xy(dbase, location)
+
+    error = ps.communicate()[1]
+    run_command('g.gisenv',
+                set = 'GISDBASE=%s' % gisdbase)
+    
+    if ps.returncode != 0 and error:
+        raise ScriptException(repr(error))
+    
+def _create_location_xy(database, location):
+    """!Create unprojected location
+
+    Raise ScriptException on error.
+    
+    @param database GRASS database where to create new location
+    @param location location name
+    """
+    cur_dir = os.getcwd()
     try:
+        os.chdir(database)
         os.mkdir(location)
         os.mkdir(os.path.join(location, 'PERMANENT'))
+        
         # create DEFAULT_WIND and WIND files
         regioninfo = ['proj:       0',
                       'zone:       0',
@@ -996,11 +1034,11 @@ def _create_location_xy(location):
                                    "MYNAME"), 'w')
         myname.write('%s' % os.linesep)
         myname.close()
-    except OSError:
-        return 1
+        
+        os.chdir(cur_dir)
+    except OSError, e:
+        raise ScriptException(repr(e))
     
-    return 0
-
 # get debug_level
 if find_program('g.gisenv', ['--help']):
     debug_level = int(gisenv().get('DEBUG', 0))
