@@ -113,7 +113,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->description = _("Table name");
-	Opt->gisprompt = "old_dbtable,dbtable,dbtable";
+	Opt->gisprompt = "old,dbtable,dbtable";
 	break;
     case G_OPT_DB_DRIVER:
 	Opt->key = "driver";
@@ -122,7 +122,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->description = _("Driver name");
-	Opt->gisprompt = "old_dbdriver,dbdriver,dbdriver";
+	Opt->gisprompt = "old,dbdriver,dbdriver";
 	break;
     case G_OPT_DB_DATABASE:
 	Opt->key = "database";
@@ -131,7 +131,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->description = _("Database name");
-	Opt->gisprompt = "old_dbname,dbname,dbname";
+	Opt->gisprompt = "old,dbname,dbname";
 	break;
     case G_OPT_DB_SCHEMA:
 	Opt->key = "schema";
@@ -150,7 +150,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->description = _("Name of attribute column");
-	Opt->gisprompt = "old_dbcolumn,dbcolumn,dbcolumn";
+	Opt->gisprompt = "old,dbcolumn,dbcolumn";
 	break;
     case G_OPT_DB_COLUMNS:
 	Opt->key = "columns";
@@ -159,7 +159,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = YES;
 	Opt->description = _("Name of attribute column(s)");
-	Opt->gisprompt = "old_dbcolumn,dbcolumn,dbcolumn";
+	Opt->gisprompt = "old,dbcolumn,dbcolumn";
 	break;
 
 	/* imagery group */
@@ -375,7 +375,7 @@ struct Option *G_define_standard_option(int opt)
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
 	      "Layer name for OGR access.");
-	Opt->gisprompt = "old_layer,layer,layer";
+	Opt->gisprompt = "old,layer,layer";
 	break;
     case G_OPT_V_FIELD_ALL:
 	Opt->key = "layer";
@@ -387,7 +387,7 @@ struct Option *G_define_standard_option(int opt)
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
 	      "Layer name for OGR access.");
-	Opt->gisprompt = "old_layer,layer,layer_all";
+	Opt->gisprompt = "old,layer,layer_all";
 	break;
     case G_OPT_V_CAT:
 	Opt->key = "cat";
@@ -424,7 +424,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "path";
 	Opt->required = YES;
-	Opt->gisprompt = "old_file,file,input";
+	Opt->gisprompt = "old,file,input";
 	Opt->description = _("Path to input file");
 	break;
     case G_OPT_F_OUTPUT:
@@ -432,7 +432,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "path";
 	Opt->required = YES;
-	Opt->gisprompt = "new_file,file,output";
+	Opt->gisprompt = "new,file,output";
 	Opt->description = _("Path for output file");
 	break;
     case G_OPT_F_SEP:
@@ -452,7 +452,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->answer = DEFAULT_FG_COLOR;
-	Opt->gisprompt = "old_color,color,color";
+	Opt->gisprompt = "old,color,color";
 	Opt->label = _("Color");
 	Opt->description = _("Either a standard color name or R:G:B triplet");
 	break;
@@ -462,7 +462,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->answer = DEFAULT_BG_COLOR;
-	Opt->gisprompt = "old_color,color,color_none";
+	Opt->gisprompt = "old,color,color_none";
 	Opt->label = _("Background color");
 	Opt->description =
 	    _("Either a standard GRASS color, R:G:B triplet, or \"none\"");
