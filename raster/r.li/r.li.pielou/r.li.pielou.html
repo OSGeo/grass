@@ -1,0 +1,51 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.li.pielou</em>  calculates the "pielou's diversity index" as: <br>
+<img src="r_li_pielou.png"><br>
+with:
+<ul>
+  <li><b>J</b>: Pielou eveness index</li>
+  <li><b>H'</b>: Shannon index</li>
+  <li><b>S</b>: number of classes</li>
+</ul>
+
+<h2>NOTES</h2>
+Do not use absolute path names for output files. They are raster if
+moving window disposition was selected, otherwise they are in
+<tt>~/.r.li/output/</tt> folder.
+<br>
+If the input raster contains NULL value cells, <em>r.li.pielou</em>
+returns -1 for these cells. <br>
+If you want to keep NULL values instead, run subsequently on the resulting map:
+<br>
+<div class="code"><pre>
+r.null setnull=-1 map=my_map
+</pre></div>
+
+<h2>EXAMPLES</h2>
+To calculate Pielou's diversity index on the map "my_map", using the
+previously created "my_conf" configuration file (<em>r.li.setup</em>)
+and saving results in "my_out" raster map, run:<br>
+<div class="code"><pre>
+r.li.pielou map=my_map conf=my_conf output=my_out
+</pre></div>
+
+
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
+
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a>,
+<a href="r.li.setup.html">r.li.setup</a>
+</em>
+
+<h2>AUTHORS</h2>
+Luca Delucchi and Duccio Rocchini, Fondazione E. Mach (Italy), based on the <em>r.li.shannon</em> code
+developed by Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+
+<p><i>Last changed: $Date$</i>
+

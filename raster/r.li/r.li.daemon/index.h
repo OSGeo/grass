@@ -5,6 +5,7 @@
  *  
  * \author Claudio Porta, Lucio Davide Spano, Serena Pallecchi students of Computer Science University of Pisa (Italy)
  *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
+  *        Luca Delucchi and Duccio Rocchini, Fondazione Edmund Mach, Italy: r.li.pielou, r.li.renyi
  *
  *
  * This program is free software under the GPL (>=v2)
@@ -12,7 +13,6 @@
  * 
  * \version 1.1
  *
- * BUGS: please send bugs reports to spano@cli.di.unipi.it porta@cli.di.unipi.it pallecch@cli.di.unipi.it
  */
 
 
@@ -31,6 +31,10 @@ int patch_density(int fd, char **par, area_des ad, double *result);
 int patch_number(int fd, char **par, area_des ad, double *result);
 int shape_index(int fd, char **par, area_des ad, double *result);
 int shannon(int fd, char **par, area_des ad, double *result);
+
+int pielou(int fd, char **par, area_des ad, double *result);
+int renyi(int fd, char **par, area_des ad, double *result);
+
 int simpson(int fd, char **par, area_des ad, double *result);
 int meanPatchSize(int fd, char **par, area_des ad, double *result);
 int meanPixelAttribute(int fd, char **par, area_des ad, double *result);

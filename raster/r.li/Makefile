@@ -13,6 +13,8 @@ SUBDIRS1 = \
 	r.li.padsd \
 	r.li.patchdensity \
 	r.li.patchnum \
+	r.li.pielou \
+	r.li.renyi \
 	r.li.richness \
 	r.li.shannon \
 	r.li.shape \
