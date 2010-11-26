@@ -133,6 +133,7 @@ int main(int argc, char *argv[])
     flag_l->key = 'l';
     flag_l->description = _("List supported output formats");
     flag_l->guisection = _("Print");
+    flag_l->suppress_required = TRUE;
 
     flag_c = G_define_flag();
     flag_c->key = 'c';
@@ -145,9 +146,10 @@ int main(int argc, char *argv[])
     flag_f->description = _("Overrides nodata safety check.");
 
     input = G_define_standard_option(G_OPT_R_INPUT);
-    input->required = NO;
     input->description = _("Name of raster map (or group) to export");
-    input->guisection = _("Required");
+
+    output = G_define_standard_option(G_OPT_F_OUTPUT);
+    output->description = _("Name for output raster file");
 
     format = G_define_option();
     format->key = "format";
@@ -170,7 +172,8 @@ int main(int argc, char *argv[])
 #endif
     format->answer = "GTiff";
     format->required = NO;
-
+    format->guisection = _("Format");
+    
     type = G_define_option();
     type->key = "type";
     type->type = TYPE_STRING;
@@ -178,12 +181,7 @@ int main(int argc, char *argv[])
     type->options =
 	"Byte,Int16,UInt16,Int32,UInt32,Float32,Float64,CInt16,CInt32,CFloat32,CFloat64";
     type->required = NO;
-
-    output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->required = NO;
-    output->gisprompt = "new_file,file,output";
-    output->description = _("Name for output raster file");
-    output->guisection = _("Required");
+    type->guisection = _("Format");
 
     createopt = G_define_option();
     createopt->key = "createopt";
@@ -227,10 +225,7 @@ int main(int argc, char *argv[])
 	supported_formats(&gdal_formats);
 	exit(EXIT_SUCCESS);
     }
-
-    if (!input->answer)
-	G_fatal_error(_("Required parameter <%s> not set"), input->key);
-
+    
     /* Try to open input GRASS raster.. */
     mapset = G_find_raster2(input->answer, "");
 
@@ -408,8 +403,8 @@ int main(int argc, char *argv[])
     }
 
     /* got a GDAL datatype, report to user */
-    G_message(_("Exporting to GDAL data type: %s"),
-	      GDALGetDataTypeName(datatype));
+    G_verbose_message(_("Exporting to GDAL data type: %s"),
+		      GDALGetDataTypeName(datatype));
 
     G_debug(3, "Input map datatype=%s\n",
 	    (maptype == CELL_TYPE ? "CELL" :
@@ -488,7 +483,7 @@ int main(int argc, char *argv[])
     }
 
     /* exact range and nodata checks for each band */
-    G_message(_("Checking GDAL data type and nodata value"));
+    G_message(_("Checking GDAL data type and nodata value..."));
     for (band = 0; band < ref.nfiles; band++) {
 	if (ref.nfiles > 1) {
 	    G_verbose_message(_("Checking options for raster map <%s> (band %d)..."),
@@ -531,8 +526,6 @@ int main(int argc, char *argv[])
 
     GDALDatasetH hCurrDS = NULL, hMEMDS = NULL, hDstDS = NULL;
 
-    if (!output->answer)
-	G_fatal_error(_("Output file name not specified"));
     if (hMEMDriver) {
 	hMEMDS =
 	    GDALCreate(hMEMDriver, "", cellhead.cols, cellhead.rows,
@@ -576,7 +569,7 @@ int main(int argc, char *argv[])
     AttachMetadata(hCurrDS, metaopt->answers);
 
     /* Export to GDAL raster */
-    G_message(_("Exporting to GDAL raster"));
+    G_message(_("Exporting raster data to %s format..."), format->answer);
     for (band = 0; band < ref.nfiles; band++) {
 	if (ref.nfiles > 1) {
 	    G_verbose_message(_("Exporting raster map <%s> (band %d)..."),
@@ -615,7 +608,7 @@ int main(int argc, char *argv[])
 
     CSLDestroy(papszOptions);
 
-    G_done_msg(" ");
+    G_done_msg("File <%s> created.", output->answer);
     exit(EXIT_SUCCESS);
 }
 
