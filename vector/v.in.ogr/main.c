@@ -104,22 +104,19 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
-    module->description = _("Converts vector layers into a GRASS vector map using OGR.");
+    module->description = _("Converts vector daya into a GRASS vector map using OGR library.");
 
     dsn_opt = G_define_option();
     dsn_opt->key = "dsn";
     dsn_opt->type = TYPE_STRING;
-    dsn_opt->required = NO;
+    dsn_opt->required =YES;
     dsn_opt->label = _("OGR datasource name");
     dsn_opt->description = _("Examples:\n"
 			     "\t\tESRI Shapefile: directory containing shapefiles\n"
 			     "\t\tMapInfo File: directory containing mapinfo files");
-    dsn_opt->guisection = _("Required");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    out_opt->required = NO;
-    out_opt->guisection = _("Required");
-
+    
     layer_opt = G_define_option();
     layer_opt->key = "layer";
     layer_opt->type = TYPE_STRING;
@@ -182,7 +179,8 @@ int main(int argc, char *argv[])
     outloc_opt->type = TYPE_STRING;
     outloc_opt->required = NO;
     outloc_opt->description = _("Name for new location to create");
-
+    outloc_opt->key_desc = "name";
+    
     cnames_opt = G_define_option();
     cnames_opt->key = "cnames";
     cnames_opt->type = TYPE_STRING;
@@ -197,11 +195,13 @@ int main(int argc, char *argv[])
     list_flag->key = 'l';
     list_flag->description =
 	_("List available layers in data source and exit");
-
+    list_flag->suppress_required = TRUE;
+    
     formats_flag = G_define_flag();
     formats_flag->key = 'f';
     formats_flag->description = _("List supported formats and exit");
-
+    formats_flag->suppress_required = TRUE;
+    
     /* if using -c, you lose topological information ! */
     no_clean_flag = G_define_flag();
     no_clean_flag->key = 'c';
@@ -323,11 +323,6 @@ int main(int argc, char *argv[])
     if (list_flag->answer) {
 	fflush(stdout);
 	exit(EXIT_SUCCESS);
-    }
-
-    /* check if output name was given */
-    if (out_opt->answer == NULL) {
-	G_fatal_error(_("Required parameter <%s> not set"), out_opt->key);
     }
 
     if (!outloc_opt->answer) {	/* Check if the map exists */
