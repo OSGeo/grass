@@ -1551,7 +1551,7 @@ class cmdPanel(wx.Panel):
                             else:
                                 all = False
                             win = wx.BoxSizer(wx.HORIZONTAL)
-                            if p.get('age', 'old_layer') == 'old_layer':
+                            if p.get('age', 'old') == 'old':
                                 win1 = gselect.LayerSelect(parent=which_panel,
                                                           all=all,
                                                           default=p['default'])
@@ -1585,7 +1585,7 @@ class cmdPanel(wx.Panel):
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         elif p.get('prompt', '') == 'dbtable':
-                            if p.get('age', 'old_dbtable') == 'old_dbtable':
+                            if p.get('age', 'old') == 'old':
                                 win = gselect.TableSelect(parent=which_panel)
                                 win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                                 win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
@@ -1680,7 +1680,7 @@ class cmdPanel(wx.Panel):
                     # a textctl and a button;
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
-                    if p.get('age', 'new_file') == 'old_file' and \
+                    if p.get('age', 'new') == 'old' and \
                             UserSettings.Get(group='cmd', key='interactiveInput', subkey='enabled'):
                         # widget for interactive input
                         ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
