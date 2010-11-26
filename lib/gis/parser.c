@@ -1287,8 +1287,18 @@ static int check_overwrite(void)
 
 	    if (strcmp(age, "new") == 0) {
 		int i;
+		char found = FALSE;
 		for (i = 0; opt->answers[i]; i++) {
-		    if (G_find_file(element, opt->answers[i], G_mapset())) {	/* found */
+		    if (strcmp(element, "file") == 0) {
+			if (access(opt->answers[i], F_OK) == 0) {
+			    found = TRUE;
+			}
+		    }
+		    else {
+			if(G_find_file(element, opt->answers[i], G_mapset()))
+			    found = TRUE;
+		    }
+		    if (found) {	/* found */
 			if (!st->overwrite && !over) {
 			    if (G_info_format() != G_INFO_FORMAT_GUI) {
 				fprintf(stderr,
