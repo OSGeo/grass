@@ -171,9 +171,7 @@ int main(int argc, char **argv)
 	_("Creates/modifies the color table associated with a raster map.");
     
     opt.map = G_define_standard_option(G_OPT_R_MAP);
-    opt.map->required = NO;
-    opt.map->guisection = _("Required");
-
+    
     scan_rules();
 
     opt.colr = G_define_option();
@@ -213,7 +211,9 @@ int main(int argc, char **argv)
     flag.l = G_define_flag();
     flag.l->key = 'l';
     flag.l->description = _("List available rules then exit");
-    
+    flag.l->suppress_required = TRUE;
+    flag.l->guisection = _("Print");
+      
     flag.n = G_define_flag();
     flag.n->key = 'n';
     flag.n->description = _("Invert colors");
