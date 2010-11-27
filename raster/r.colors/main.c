@@ -211,7 +211,7 @@ int main(int argc, char **argv)
     flag.l = G_define_flag();
     flag.l->key = 'l';
     flag.l->description = _("List available rules then exit");
-    flag.l->suppress_required = TRUE;
+    flag.l->suppress_required = YES;
     flag.l->guisection = _("Print");
       
     flag.n = G_define_flag();

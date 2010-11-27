@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     flag.list->key = 'l';
     flag.list->description = _("List available DXF layers and exit");
     flag.list->guisection = _("DXF layers");
-    flag.list->suppress_required = TRUE;
+    flag.list->suppress_required = YES;
     
     flag.invert = G_define_flag();
     flag.invert->key = 'i';
