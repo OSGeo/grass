@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     flag_l->key = 'l';
     flag_l->description = _("List supported output formats");
     flag_l->guisection = _("Print");
-    flag_l->suppress_required = TRUE;
+    flag_l->suppress_required = YES;
 
     flag_c = G_define_flag();
     flag_c->key = 'c';

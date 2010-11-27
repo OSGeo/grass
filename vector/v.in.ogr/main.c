@@ -195,12 +195,12 @@ int main(int argc, char *argv[])
     list_flag->key = 'l';
     list_flag->description =
 	_("List available layers in data source and exit");
-    list_flag->suppress_required = TRUE;
+    list_flag->suppress_required = YES;
     
     formats_flag = G_define_flag();
     formats_flag->key = 'f';
     formats_flag->description = _("List supported formats and exit");
-    formats_flag->suppress_required = TRUE;
+    formats_flag->suppress_required = YES;
     
     /* if using -c, you lose topological information ! */
     no_clean_flag = G_define_flag();

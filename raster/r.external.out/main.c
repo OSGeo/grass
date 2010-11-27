@@ -7,7 +7,7 @@
  *
  * PURPOSE:      Make GRASS write raster maps utilizing the GDAL library.
  *
- * COPYRIGHT:    (C) 2008 by Glynn Clements and the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -212,16 +212,18 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("import"));
+    G_add_keyword(_("export"));
+    G_add_keyword(_("external"));
     module->description =
-	_("Link GDAL supported raster file to a binary raster map layer.");
+	_("Defines raster output format utilizing GDAL library.");
 
     parm.dir = G_define_option();
     parm.dir->key = "directory";
     parm.dir->description = _("Name of output directory");
-    parm.dir->required = NO;
+    parm.dir->required = YES;
     parm.dir->type = TYPE_STRING;
-
+    parm.dir->key_desc = "path";
+    
     parm.ext = G_define_option();
     parm.ext->key = "extension";
     parm.ext->description = _("Extension for output files");
@@ -231,7 +233,7 @@ int main(int argc, char *argv[])
     parm.format = G_define_option();
     parm.format->key = "format";
     parm.format->description = _("Format of output files");
-    parm.format->required = NO;
+    parm.format->required = YES;
     parm.format->type = TYPE_STRING;
     parm.format->options = format_list();
 
@@ -246,16 +248,19 @@ int main(int argc, char *argv[])
     flag_f->key = 'f';
     flag_f->description = _("List supported formats and exit");
     flag_f->guisection = _("Print");
-
+    flag_f->suppress_required = YES;
+    
     flag_r = G_define_flag();
     flag_r->key = 'r';
     flag_r->description = _("Cease using GDAL and revert to native output");
-
+    flag_r->suppress_required = YES;
+    
     flag_p = G_define_flag();
     flag_p->key = 'p';
     flag_p->description = _("Print current status");
     flag_p->guisection = _("Print");
-
+    flag_p->suppress_required = YES;
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
