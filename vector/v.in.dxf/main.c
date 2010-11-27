@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword(_("dxf"));
     module->description =
-	_("Converts files in DXF format to GRASS vector map format.");
+	_("Converts file in DXF format to GRASS vector map.");
 
     flag.extent = G_define_flag();
     flag.extent->key = 'e';
@@ -85,13 +85,14 @@ int main(int argc, char *argv[])
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
-    flag.list->description = _("List available layers and exit");
+    flag.list->description = _("List available DXF layers and exit");
     flag.list->guisection = _("DXF layers");
-
+    flag.list->suppress_required = TRUE;
+    
     flag.invert = G_define_flag();
     flag.invert->key = 'i';
     flag.invert->description =
-	_("Invert selection by layers (don't import layers in list)");
+	_("Invert selection by DXF layers (don't import layers in list)");
     flag.invert->guisection = _("DXF layers");
 
     flag.one_layer = G_define_flag();
@@ -100,18 +101,16 @@ int main(int argc, char *argv[])
     flag.one_layer->guisection = _("DXF layers");
 
     opt.input = G_define_standard_option(G_OPT_F_INPUT);
-    opt.input->description = _("Name of input DXF file");
+    opt.input->description = _("Path to input DXF file");
 
     opt.output = G_define_standard_option(G_OPT_V_OUTPUT);
-    opt.output->required = NO;
-    opt.output->guisection = _("Required");
     
     opt.layers = G_define_option();
     opt.layers->key = "layers";
     opt.layers->type = TYPE_STRING;
     opt.layers->required = NO;
     opt.layers->multiple = YES;
-    opt.layers->description = _("List of layers to import (default: all)");
+    opt.layers->description = _("List of DXF layers to import (default: all)");
     opt.layers->guisection = _("DXF layers");
 
     if (G_parser(argc, argv))
@@ -126,7 +125,7 @@ int main(int argc, char *argv[])
     opt_layers = opt.layers->answers;
 
     if (flag_invert && !opt_layers)
-	G_fatal_error(_("Please specify list of layers to exclude"));
+	G_fatal_error(_("Please specify list of DXF layers to exclude"));
 
     /* open DXF file */
     if (!(dxf = dxf_open(opt.input->answer)))
