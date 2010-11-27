@@ -98,7 +98,7 @@ os.mkdir(tmpdir)
 
 def check():
     # check if we have the svn client
-    if not grass.find_program('svn'):
+    if not grass.find_program('svn', ['help']):
         grass.fatal(_('svn client required. Please install subversion first.'))
     # probably test here if we have "make" and "install" programs as well. how about gcc?
 
