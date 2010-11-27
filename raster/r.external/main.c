@@ -7,7 +7,7 @@
  *
  * PURPOSE:      Link raster map into GRASS utilizing the GDAL library.
  *
- * COPYRIGHT:    (C) 2008 by Glynn Clements and the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -522,14 +522,13 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("external"));
     module->description =
-	_("Link GDAL supported raster data as a pseudo GRASS raster map layer.");
+	_("Link GDAL supported raster data as a pseudo GRASS raster map.");
 
     parm.input = G_define_standard_option(G_OPT_F_INPUT);
     parm.input->description = _("Raster file to be linked");
-    parm.input->required = NO;
-    parm.input->guisection = _("Required");
-
+    
     parm.source = G_define_option();
     parm.source->key = "source";
     parm.source->description = _("Name of non-file GDAL data source");
@@ -537,9 +536,7 @@ int main(int argc, char *argv[])
     parm.source->type = TYPE_STRING;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.output->required = NO;	/* not required because of -f flag */
-    parm.output->guisection = _("Required");
-
+    
     parm.band = G_define_option();
     parm.band->key = "band";
     parm.band->type = TYPE_INTEGER;
@@ -571,7 +568,8 @@ int main(int argc, char *argv[])
     flag_f->key = 'f';
     flag_f->description = _("List supported formats and exit");
     flag_f->guisection = _("Print");
-
+    flag_f->suppress_required = TRUE;
+    
     flag_h = G_define_flag();
     flag_h->key = 'h';
     flag_h->description = _("Flip horizontally");
