@@ -29,7 +29,7 @@
 #%  description: Calculate extended statistics
 #%END
 #%option
-#% key: input
+#% key: vector
 #% type: string
 #% key_desc: name
 #% gisprompt: old,vector,vector
@@ -99,7 +99,7 @@ def main():
 
     raster = options['raster']
     colprefix = options['colprefix']
-    vector = options['input']
+    vector = options['vector']
     layer = options['layer']
     percentile = options['percentile']
 
