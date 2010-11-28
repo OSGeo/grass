@@ -147,13 +147,13 @@ static void dangles(struct Map_info *Map, int type, int option,
 
     if (option == CHTYPE_DANGLE) {
 	type = GV_BOUNDARY;	/* process boundaries only */
-	lmsg = "changed lines";
+	lmsg = _("Changed");
     }
     else if (option == REMOVE_DANGLE) {
-	lmsg = "removed lines";
+	lmsg = _("Removed");
     }
     else {
-	lmsg = "selected lines";
+	lmsg = _("Selected");
     }
 
     if (List_dangle)
@@ -261,6 +261,6 @@ static void dangles(struct Map_info *Map, int type, int option,
 	    dangles_removed++;
 	}			/* lcount == 1 */
     }				/* node <= nnodes */
-    G_verbose_message("Removed lines: %d", lines_removed);
-    G_verbose_message("Removed dangles: %d", dangles_removed);
+    G_verbose_message(_("%s lines: %d"), lmsg, lines_removed);
+    G_verbose_message(_("%s dangles: %d"), lmsg, dangles_removed);
 }
