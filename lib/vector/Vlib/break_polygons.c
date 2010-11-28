@@ -240,10 +240,9 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 	}
     }
 
-    /* G_sleep (10); */
-
     nbreaks = 0;
     nallpoints = 0;
+    G_debug(2, "Break polygons: unique vertices: %d", RBTree->count);
 
     /* uncomment to check if search tree is healthy */
     /* if (rbtree_debug(RBTree, RBTree->root) == 0)
@@ -346,5 +345,9 @@ Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
     }
 
     rbtree_destroy(RBTree);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_line_struct(BPoints);
+    Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(ErrCats);
     G_verbose_message(_("Breaks: %d"), nbreaks);
 }
