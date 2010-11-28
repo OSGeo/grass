@@ -3,14 +3,15 @@
 #include "local_proto.h"
 
 void parse_args(int argc, char **argv,
-		struct Options* options, struct Flags *flags)
+		struct Options *options, struct Flags *flags)
 {
     options->input = G_define_standard_option(G_OPT_V_INPUT);
 
     options->type = G_define_standard_option(G_OPT_V3_TYPE);
-    options->type->options = "point,line,boundary,centroid,area,face,kernel,auto";
+    options->type->options =
+	"point,line,boundary,centroid,area,face,kernel,auto";
     options->type->answer = "auto";
-    
+
     options->type->label = _("Feature type(s)");
     options->type->description =
 	_("Combination of types is not supported "
@@ -34,7 +35,8 @@ void parse_args(int argc, char **argv,
     options->layer->required = NO;
     options->layer->label =
 	_("OGR layer name. If not specified, input name is used.");
-    options->layer->description = _("For example: ESRI Shapefile: shapefile name");
+    options->layer->description =
+	_("For example: ESRI Shapefile: shapefile name");
     options->layer->guisection = _("Creation");
 
     options->format = G_define_option();
@@ -73,17 +75,19 @@ void parse_args(int argc, char **argv,
 
     flags->nocat = G_define_flag();
     flags->nocat->key = 's';
-    flags->nocat->description = _("Skip export of GRASS category ID ('cat') attribute");
+    flags->nocat->description =
+	_("Skip export of GRASS category ID ('cat') attribute");
 
     flags->cat = G_define_flag();
     flags->cat->key = 'c';
-    flags->cat->description = _("Also export features without category (not labeled). "
-			      "Otherwise only features with category are exported.");
+    flags->cat->description =
+	_("Also export features without category (not labeled). "
+	  "Otherwise only features with category are exported.");
 
     flags->esristyle = G_define_flag();
     flags->esristyle->key = 'e';
     flags->esristyle->description = _("Use ESRI-style .prj file format "
-			       "(applies to Shapefile output only)");
+				      "(applies to Shapefile output only)");
 
     flags->poly = G_define_flag();
     flags->poly->key = 'p';
@@ -91,8 +95,9 @@ void parse_args(int argc, char **argv,
 
     flags->new = G_define_flag();
     flags->new->key = 'n';
-    flags->new->description = _("Create a new empty OGR layer in defined OGR datasource and exit. Nothing is read from input.");
-    
+    flags->new->description =
+	_("Create a new empty OGR layer in defined OGR datasource and exit. Nothing is read from input.");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 }
