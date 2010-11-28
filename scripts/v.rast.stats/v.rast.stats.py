@@ -16,20 +16,20 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Calculates univariate statistics from a GRASS raster map based on vector polygons and uploads statistics to new attribute columns.
-#%  keywords: vector
-#%  keywords: raster
-#%  keywords: statistics
-#%End
+#%module
+#% description: Calculates univariate statistics from a raster map based on vector polygon map and uploads statistics to new attribute columns.
+#% keywords: vector
+#% keywords: raster
+#% keywords: statistics
+#%end
 #%flag
-#%  key: c
-#%  description: Continue if upload column(s) already exist
-#%END
+#% key: c
+#% description: Continue if upload column(s) already exist
+#%end
 #%flag
-#%  key: e
-#%  description: Calculate extended statistics
-#%END
+#% key: e
+#% description: Calculate extended statistics
+#%end
 #%option
 #% key: vector
 #% type: string
@@ -38,13 +38,13 @@
 #% label: Name of input vector polygon map
 #% description: Data source for OGR access
 #% required : yes
-#%End
+#%end
 #%option
 #% key: layer
 #% type: integer
 #% label: Layer number or name
 #% description: A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for OGR access.
-#% gisprompt: old_layer,layer,layer
+#% gisprompt: old,layer,layer
 #% answer: 1
 #% required : no
 #%end
@@ -55,9 +55,9 @@
 #% gisprompt: old,cell,raster
 #% description: Name of input raster map to calculate statistics from
 #% required : yes
-#%END
+#%end
 #%option
-#% key: colprefix
+#% key: column_prefix
 #% type: string
 #% description: Column prefix for new attribute columns
 #% required : yes
