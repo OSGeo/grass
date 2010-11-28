@@ -27,4 +27,4 @@ char *OGR_list_write_drivers();
 
 /* create.c */
 void create_ogr_layer(const char *, const char *, const char *,
-		      unsigned int, const char **, const char **);
+		      unsigned int, char **, char **);
