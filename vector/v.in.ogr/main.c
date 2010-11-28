@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
     char **available_layer_names;	/* names of layers to be imported */
     int navailable_layers;
     int layer_id;
+    unsigned int n_features, feature_count;
     int overwrite;
     double area_size = 0.;
 
@@ -615,14 +616,8 @@ int main(int argc, char *argv[])
     G_find_vector(buf, G_mapset());
     sprintf(tempvect, "%s_tmp", buf);
     G_verbose_message(_("Using temporary vector <%s>"), tempvect);
-    if (z_flag->answer) {
-	Vect_open_new(&Map, out_opt->answer, 1);
-	Vect_open_new(&Tmp, tempvect, 1);
-    }
-    else {
-	Vect_open_new(&Map, out_opt->answer, 0);
-	Vect_open_new(&Tmp, tempvect, 0);
-    }
+    Vect_open_new(&Map, out_opt->answer, z_flag->answer != 0);
+    Vect_open_new(&Tmp, tempvect, z_flag->answer != 0);
 
     Vect_hist_command(&Map);
 
@@ -815,7 +810,7 @@ int main(int argc, char *argv[])
 	cat = 1;
 	nogeom = 0;
 	OGR_L_ResetReading(Ogr_layer);
-	unsigned int n_features = 0, feature_count = 0;
+	n_features = feature_count = 0;
 
 	n_polygon_boundaries = 0;
 	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
@@ -998,7 +993,7 @@ int main(int argc, char *argv[])
 	G_message(_("Remove duplicates:"));
 	Vect_remove_duplicates(&Tmp, GV_BOUNDARY | GV_CENTROID, NULL);
 
-	/* split boundaries here ? */
+	/* in non-pathological cases, the bulk of the cleaning is now done */
 
 	/* Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
 	 * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
@@ -1024,7 +1019,7 @@ int main(int argc, char *argv[])
 	    Vect_chtype_dangles(&Tmp, -1.0, NULL);
 	}
 	else {
-	    G_message(_("Change dangles to lines:"));
+	    G_message(_("Remove dangles:"));
 	    Vect_remove_dangles(&Tmp, GV_BOUNDARY, -1.0, NULL);
 	}
 
@@ -1077,11 +1072,14 @@ int main(int argc, char *argv[])
 	    G_message(_("Find centroids for layer: %s"), layer_names[layer]);
 	    layer_id = layers[layer];
 	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
+	    n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
 	    OGR_L_ResetReading(Ogr_layer);
 
 	    cat = 0;		/* field = layer + 1 */
+	    G_percent(cat, n_features, 2);
 	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 		cat++;
+		G_percent(cat, n_features, 2);
 		/* Geometry */
 		Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 		if (Ogr_geometry != NULL) {
@@ -1137,13 +1135,6 @@ int main(int argc, char *argv[])
 	    
 	Vect_spatial_index_destroy(&si);
 
-	/* G_message("%s", separator); */
-	/* Vect_build_partial(&Map, GV_BUILD_NONE); */
-
-	/* not needed */
-	/* G_message("%s", separator);
-	   Vect_build(&Map); */
-
 	if (n_overlaps > 0) {
 	    G_warning(_("%d areas represent more (overlapping) features, because polygons overlap "
 		       "in input layer(s). Such areas are linked to more than 1 row in attribute table. "
@@ -1183,6 +1174,8 @@ int main(int argc, char *argv[])
 
     /* Copy temporary vector to output vector */
     Vect_copy_map_lines(&Tmp, &Map);
+    /* release memory occupied by topo, we may need that memory for main output */
+    Vect_set_release_support(&Tmp);
     Vect_close(&Tmp);
     Vect_delete(tempvect);
 
