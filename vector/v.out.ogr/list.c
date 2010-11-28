@@ -10,7 +10,7 @@ char *OGR_list_write_drivers(void)
     char OGRdrivers[2000];
 
     OGRdrivers[0] = '\0';
-    
+
     /* Open OGR DSN */
     OGRRegisterAll();
     G_debug(2, "driver count = %d", OGRGetDriverCount());
