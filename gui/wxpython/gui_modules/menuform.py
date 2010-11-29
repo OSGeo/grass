@@ -1431,10 +1431,7 @@ class cmdPanel(wx.Panel):
                                               'mapset',
                                               'dbase') and \
                        p.get('element', '') != 'file':
-                    if p.get('multiple', 'no') == 'yes':
-                        multiple = True
-                    else:
-                        multiple = False
+                    multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
                         mapsets = [grass.gisenv()['MAPSET'],]
                     else:
