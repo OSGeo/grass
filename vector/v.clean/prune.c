@@ -209,7 +209,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 	}
     }
 
-    G_important_message(_("\n%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"),
+    G_important_message(_("%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"),
 			nremoved, nvertices, 100.0 * nremoved / nvertices);
 
     if (not_pruned_lines > 0)
