@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     int i, j, k, centroid, otype, donocat;
     int num_to_export;
     int field;
+    int overwrite;
     struct GModule *module;
     struct Options options;
     struct Flags flags;
@@ -279,7 +280,15 @@ int main(int argc, char *argv[])
     if (drn == -1)
 	G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
     Ogr_driver = OGRGetDriver(drn);
-
+    
+    overwrite = G_check_overwrite(argc, argv);
+    if (overwrite || flags.append->answer) {
+	G_verbose_message(_("Overwrite/Append existing layer requires "
+			    "opening data source in update mode, forcing '-%c' flag"),
+			  flags.update->key);
+	flags.update->answer = TRUE;
+    }
+    
     if (flags.update->answer) {
 	G_debug(1, "Update OGR data source");
 	Ogr_ds = OGR_Dr_Open(Ogr_driver, options.dsn->answer, TRUE);
@@ -297,18 +306,27 @@ int main(int argc, char *argv[])
 		      options.dsn->answer);
 
     /* check if OGR layer exists */
-    if (OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer)) {
-	if (!G_check_overwrite(argc, argv)) {
-	    G_fatal_error(_("OGR layer <%s> already exists in '%s'"),
-			  options.layer->answer, options.dsn->answer);
+    if (flags.append->answer || overwrite) {
+	if (OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer)) {
+	    if (!overwrite && !flags.append->answer) {
+		G_fatal_error(_("OGR layer <%s> already exists in '%s'"),
+			      options.layer->answer, options.dsn->answer);
+	    }
+	    else if (overwrite) {
+		G_warning(_("OGR layer <%s> already exists and will be overwritten"),
+			  options.layer->answer);
+		papszLCO = CSLSetNameValue(papszLCO, "OVERWRITE", "YES");
+	    }
 	}
 	else {
-	    G_warning(_("OGR layer <%s> already exists and will be overwritten"),
-		      options.layer->answer);
-	    papszLCO = CSLSetNameValue(papszLCO, "OVERWRITE", "YES");
+	    if (flags.append->answer) {
+		G_warning(_("OGR layer <%s> doesn't exists, "
+			    "creating new OGR layer instead"),
+			  options.layer->answer);
+		flags.append->answer = FALSE;
+	    }
 	}
     }
-
     /* check if the map is 3d */
     if (Vect_is_3d(&In)) {
 	/* specific check for ESRI ShapeFile */
@@ -344,12 +362,19 @@ int main(int argc, char *argv[])
     }
 
     G_debug(1, "Create OGR layer");
-    Ogr_layer =
-	OGR_DS_CreateLayer(Ogr_ds, options.layer->answer, Ogr_projection,
-			   wkbtype, papszLCO);
+    if (flags.append->answer)
+	Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer);
+    else 
+	Ogr_layer = OGR_DS_CreateLayer(Ogr_ds, options.layer->answer, Ogr_projection, wkbtype,
+				       papszLCO);
+    
     CSLDestroy(papszLCO);
-    if (Ogr_layer == NULL)
-	G_fatal_error(_("Unable to create OGR layer"));
+    if (Ogr_layer == NULL) {
+	if (flags.append->answer)
+	    G_fatal_error(_("OGR layer <%s> not found"), options.layer->answer);
+	else
+	    G_fatal_error(_("Unable to create OGR layer"));
+    }
 
     db_init_string(&dbstring);
 
@@ -359,80 +384,97 @@ int main(int argc, char *argv[])
 	doatt = 1;		/* do attributes */
 	Fi = Vect_get_field(&In, field);
 	if (Fi == NULL) {
+	    char create_field = TRUE;
 	    G_warning(_("No attribute table found -> using only category numbers as attributes"));
 	    /* if we have no more than a 'cat' column, then that has to
 	       be exported in any case */
 	    if (flags.nocat->answer) {
 		G_warning(_("Exporting 'cat' anyway, as it is the only attribute table field"));
-		flags.nocat->answer = 0;
+		flags.nocat->answer = FALSE;
 	    }
-	    Ogr_field = OGR_Fld_Create("cat", OFTInteger);
-	    OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
-	    OGR_Fld_Destroy(Ogr_field);
-
+	    
+	    if (flags.append->answer) {
+		Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
+		if (OGR_FD_GetFieldIndex(Ogr_field, "cat") > -1)
+		    create_field = FALSE;
+		else 
+		    G_warning(_("New attribute column <%s> added to the table"),
+			      "cat");
+	    }
+	    
+	    if (create_field) {
+		Ogr_field = OGR_Fld_Create("cat", OFTInteger);
+		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		OGR_Fld_Destroy(Ogr_field);
+	    }
+	    
 	    doatt = 0;
-	}
-	else {
-	    Driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	    if (!Driver)
-		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			      Fi->database, Fi->driver);
+	 }
+	 else {
+	     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	     if (!Driver)
+		 G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			       Fi->database, Fi->driver);
 
-	    db_set_string(&dbstring, Fi->table);
-	    if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
-		G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
+	     db_set_string(&dbstring, Fi->table);
+	     if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
+		 G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
 
-	    ncol = db_get_table_number_of_columns(Table);
-	    G_debug(2, "ncol = %d", ncol);
-	    keycol = -1;
-	    for (i = 0; i < ncol; i++) {
-		Column = db_get_table_column(Table, i);
-		colsqltype = db_get_column_sqltype(Column);
-		G_debug(2, "col %d: %s (%s)", i, db_get_column_name(Column),
-			db_sqltype_name(colsqltype));
-		colctype = db_sqltype_to_Ctype(colsqltype);
+	     ncol = db_get_table_number_of_columns(Table);
+	     G_debug(2, "ncol = %d", ncol);
+	     keycol = -1;
+	     for (i = 0; i < ncol; i++) {
+		 Column = db_get_table_column(Table, i);
+		 colsqltype = db_get_column_sqltype(Column);
+		 G_debug(2, "col %d: %s (%s)", i, db_get_column_name(Column),
+			 db_sqltype_name(colsqltype));
+		 colctype = db_sqltype_to_Ctype(colsqltype);
 
-		switch (colctype) {
-		case DB_C_TYPE_INT:
-		    ogr_ftype = OFTInteger;
-		    break;
-		case DB_C_TYPE_DOUBLE:
-		    ogr_ftype = OFTReal;
-		    break;
-		case DB_C_TYPE_STRING:
-		    ogr_ftype = OFTString;
-		    break;
-		case DB_C_TYPE_DATETIME:
-		    ogr_ftype = OFTString;
-		    break;
+		 switch (colctype) {
+		 case DB_C_TYPE_INT:
+		     ogr_ftype = OFTInteger;
+		     break;
+		 case DB_C_TYPE_DOUBLE:
+		     ogr_ftype = OFTReal;
+		     break;
+		 case DB_C_TYPE_STRING:
+		     ogr_ftype = OFTString;
+		     break;
+		 case DB_C_TYPE_DATETIME:
+		     ogr_ftype = OFTString;
+		     break;
+		 }
+		 G_debug(2, "ogr_ftype = %d", ogr_ftype);
+
+		 strcpy(key1, Fi->key);
+		 G_tolcase(key1);
+		 strcpy(key2, db_get_column_name(Column));
+		 G_tolcase(key2);
+		 if (strcmp(key1, key2) == 0)
+		     keycol = i;
+		 G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
+			 db_get_column_name(Column), key1, key2, keycol);
+
+		 if (flags.nocat->answer &&
+		     strcmp(Fi->key, db_get_column_name(Column)) == 0)
+		     /* skip export of 'cat' field */
+		     continue;
+
+		 if (flags.append->answer) {
+		     Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
+		     if (OGR_FD_GetFieldIndex(Ogr_field, db_get_column_name(Column)) > -1)
+			 /* skip existing fields */
+			 continue;
+		     else
+			 G_warning(_("New attribute column <%s> added to the table"),
+				   db_get_column_name(Column));
 		}
-		G_debug(2, "ogr_ftype = %d", ogr_ftype);
-
-		strcpy(key1, Fi->key);
-		G_tolcase(key1);
-		strcpy(key2, db_get_column_name(Column));
-		G_tolcase(key2);
-		if (strcmp(key1, key2) == 0)
-		    keycol = i;
-		G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
-			db_get_column_name(Column), key1, key2, keycol);
-
-		if (!flags.nocat->answer) {
-		    Ogr_field =
-			OGR_Fld_Create(db_get_column_name(Column), ogr_ftype);
-		    OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
-		    OGR_Fld_Destroy(Ogr_field);
-		}
-		else {
-		    /* skip export of 'cat' field */
-		    if (strcmp(Fi->key, db_get_column_name(Column)) != 0) {
-			Ogr_field =
-			    OGR_Fld_Create(db_get_column_name(Column),
-					   ogr_ftype);
-			OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
-			OGR_Fld_Destroy(Ogr_field);
-		    }
-		}
+		    
+		Ogr_field =
+		    OGR_Fld_Create(db_get_column_name(Column),
+				   ogr_ftype);
+		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		OGR_Fld_Destroy(Ogr_field);
 	    }
 	    if (keycol == -1)
 		G_fatal_error(_("Key column <%s> not found"), Fi->key);

@@ -73,25 +73,33 @@ void parse_args(int argc, char **argv,
     flags->update->key = 'u';
     flags->update->description = _("Open an existing datasource for update");
 
+    flags->append = G_define_flag();
+    flags->append->key = 'a';
+    flags->append->description = _("Append to existing layer instead of creating new if it exists");
+    
     flags->nocat = G_define_flag();
     flags->nocat->key = 's';
     flags->nocat->description =
 	_("Skip export of GRASS category ID ('cat') attribute");
-
+    flags->nocat->guisection = _("Creation");
+    
     flags->cat = G_define_flag();
     flags->cat->key = 'c';
     flags->cat->description =
 	_("Also export features without category (not labeled). "
 	  "Otherwise only features with category are exported.");
+    flags->cat->guisection = _("Input");
 
     flags->esristyle = G_define_flag();
     flags->esristyle->key = 'e';
     flags->esristyle->description = _("Use ESRI-style .prj file format "
 				      "(applies to Shapefile output only)");
-
+    flags->esristyle->guisection = _("Creation");
+    
     flags->poly = G_define_flag();
     flags->poly->key = 'p';
     flags->poly->description = _("Export lines as polygons");
+    flags->poly->guisection = _("Creation");
 
     flags->new = G_define_flag();
     flags->new->key = 'n';

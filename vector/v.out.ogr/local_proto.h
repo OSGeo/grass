@@ -11,7 +11,7 @@ struct Options {
 };
 
 struct Flags {
-    struct Flag *cat, *esristyle, *poly, *update, *nocat, *new;
+    struct Flag *cat, *esristyle, *poly, *update, *nocat, *new, *append;
 };
 
 /* args.c */
