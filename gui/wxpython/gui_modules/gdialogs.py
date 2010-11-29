@@ -829,11 +829,7 @@ class LoadMapLayersDialog(wx.Dialog):
         @param type layer type ('raster' or 'vector')
         @param mapset mapset name
         """
-        try:
-            self.map_layers = grass.mlist_grouped(type=type, mapset=mapset)[mapset]
-        except KeyError:
-            self.map_layers = []
-        
+        self.map_layers = grass.mlist(type = type, mapset = mapset)
         self.layers.Set(self.map_layers)
         
         # check all items by default

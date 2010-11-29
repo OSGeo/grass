@@ -613,40 +613,6 @@ def list_grouped(type):
     
     return result
 
-def mlist_grouped(type, pattern = None):
-    """!List of elements grouped by mapsets.
-
-    Returns the output from running g.mlist, as a dictionary where the
-    keys are mapset names and the values are lists of maps in that
-    mapset. Example:
-
-    @code
-    >>> grass.mlist_grouped('rast', pattern='r*')['PERMANENT']
-    ['railroads', 'roads', 'rstrct.areas', 'rushmore']
-    @endcode
-    
-    @param type element type (rast, vect, rast3d, region, ...)
-    @param pattern pattern string
-
-    @return directory of mapsets/elements
-    """
-    result = {}
-    mapset_element = None
-    for line in read_command("g.mlist", flags="m",
-                             type = type, pattern = pattern).splitlines():
-        try:
-            map, mapset_element = line.split('@')
-        except ValueError:
-            print >> sys.stderr, "Invalid element '%s'" % line
-            continue
-        
-        if result.has_key(mapset_element):
-            result[mapset_element].append(map)
-        else:
-	    result[mapset_element] = [map, ]
-    
-    return result
-
 def _concat(xs):
     result = []
     for x in xs:
@@ -687,6 +653,60 @@ def list_strings(type):
     @return list of strings ('map@@mapset')
     """
     return ["%s@%s" % pair for pair in list_pairs(type)]
+
+# interface to g.mlist
+
+def mlist(type, pattern = None, mapset = None):
+    """!List of elements
+
+    @param type element type (rast, vect, rast3d, region, ...)
+    @param pattern pattern string
+    @param mapset mapset name (if not given use search path)
+
+    @return list of elements
+    """
+    result = list()
+    for line in read_command("g.mlist",
+                             type = type,
+                             pattern = pattern,
+                             mapset = mapset).splitlines():
+        result.append(line.strip())
+    
+    return result
+    
+def mlist_grouped(type, pattern = None):
+    """!List of elements grouped by mapsets.
+
+    Returns the output from running g.mlist, as a dictionary where the
+    keys are mapset names and the values are lists of maps in that
+    mapset. Example:
+
+    @code
+    >>> grass.mlist_grouped('rast', pattern='r*')['PERMANENT']
+    ['railroads', 'roads', 'rstrct.areas', 'rushmore']
+    @endcode
+    
+    @param type element type (rast, vect, rast3d, region, ...)
+    @param pattern pattern string
+
+    @return directory of mapsets/elements
+    """
+    result = dict()
+    mapset_element = None
+    for line in read_command("g.mlist", flags = "m",
+                             type = type, pattern = pattern).splitlines():
+        try:
+            map, mapset_element = line.split('@')
+        except ValueError:
+            warning(_("Invalid element '%s'") % line)
+            continue
+        
+        if result.has_key(mapset_element):
+            result[mapset_element].append(map)
+        else:
+	    result[mapset_element] = [map, ]
+    
+    return result
 
 # color parsing
 
