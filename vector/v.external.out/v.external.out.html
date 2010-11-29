@@ -1,0 +1,41 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.external.out</em> instructs GRASS to write vector maps as data
+files (e.g. ESRI Shapefile) using OGR library.
+
+<h2>EXAMPLE</h2>
+
+The module <em>v.external.out</em> can be used along with
+<em><a href="v.external.html">v.external</a></em> to process external
+geodata in GRASS while writing out the results directly in ESRI
+Shapefile format:
+
+<div class="code"><pre>
+# register Shapefile in GRASS database:
+v.external dsn=cities.shp output=cities
+
+# define output directory for GRASS calculation results:
+v.external.out directory=$HOME/gisoutput/
+
+# do something (here: spatial query), write output directly as Shapefile
+v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="v.in.ogr.html">v.in.ogr</a>,
+  <a href="v.out.ogr.html">v.out.ogr</a>,
+  <a href="v.external.html">v.external</a>
+</em>
+
+<h2>REFERENCES</h2>
+
+OGR Pages: <a href="http://www.gdal.osgeo.org/ogr">http://www.gdal.osgeo.org/ogr</a>
+
+<h2>AUTHOR</h2>
+
+Martin Landa, CTU in Prague, Czech Republic (based on r.external.out code)
+
+<p>
+<i>Last changed: $Date$</i>
