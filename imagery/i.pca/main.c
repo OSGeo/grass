@@ -64,17 +64,21 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("image transformation"));
     G_add_keyword(_("PCA"));
-    module->description = _("Principal components analysis (pca) program "
+    module->description = _("Principal components analysis (PCA) "
 			    "for image processing.");
 
     /* Define options */
     opt_in = G_define_standard_option(G_OPT_R_INPUTS);
     opt_in->description = _("Name of two or more input raster maps");
 
-    opt_out = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt_out = G_define_option();
     opt_out->label = _("Base name for output raster maps");
     opt_out->description =
 	_("A numerical suffix will be added for each component map");
+    opt_out->key = "output_prefix";
+    opt_out->type = TYPE_STRING;
+    opt_out->key_desc = "string";
+    opt_out->required = YES;
 
     opt_scale = G_define_option();
     opt_scale->key = "rescale";
@@ -82,9 +86,12 @@ int main(int argc, char *argv[])
     opt_scale->key_desc = "min,max";
     opt_scale->required = NO;
     opt_scale->answer = "0,255";
+    opt_scale->label =
+	_("Rescaling range for output maps");
     opt_scale->description =
-	_("Rescaling range for output maps (for no rescaling use 0,0)");
-
+	_("For no rescaling use 0,0");
+    opt_scale->guisection = _("Rescale");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
