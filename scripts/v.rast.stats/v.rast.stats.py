@@ -100,7 +100,7 @@ def main():
     nuldev = file(os.devnull, 'w')
 
     raster = options['raster']
-    colprefix = options['colprefix']
+    colprefix = options['column_prefix']
     vector = options['vector']
     layer = options['layer']
     percentile = options['percentile']
