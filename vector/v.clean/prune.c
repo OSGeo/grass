@@ -210,7 +210,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
     }
 
     G_important_message(_("%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"),
-			nremoved, nvertices, 100.0 * nremoved / nvertices);
+			nremoved, nvertices, 100.0 * nremoved / (nvertices ? nvertices : 1));
 
     if (not_pruned_lines > 0)
 	G_message(_("%d boundaries not pruned because pruning would damage topology"),
