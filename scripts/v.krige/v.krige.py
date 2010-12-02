@@ -410,8 +410,8 @@ def importR():
         if not robjects.r.require(each, quietly = True)[0]:
             missingPackagesList.append(each)
     if missingPackagesList:
-        errorString = "R package(s) " + " ".join(["%s" % e for e in missingPackagesList] +  "missing. Install it/them and re-run v.krige.")
-        grass.fatal(_(errorString))
+        errorString = _("R package(s) ") + ", ".join(map(str, missingPackagesList)) +  _(" missing. Install it/them and re-run v.krige.")
+        grass.fatal(errorString)
     
 if __name__ == '__main__':
     if len(sys.argv) > 1:
