@@ -397,16 +397,12 @@ def importR():
     # rpy2
     global robjects
     global rinterface
-    grass.message(_('Loading packages, please wait...'))
+    grass.message(_('Loading dependencies, please wait...'))
     try:
         import rpy2.robjects as robjects
         import rpy2.rinterface as rinterface #to speed up kriging? for plots.
-        haveRpy2 = True
     except ImportError:
-        print >> sys.stderr, _("Python module 'Rpy2' not found. Please install it and re-run v.krige.") # ok for other OSes?
-        haveRpy2 = False
-        if not haveRpy2:
-            sys.exit(1)
+        grass.fatal(_("Python module 'Rpy2' not found. Please install it and re-run v.krige.")) # ok for other OSes?
         
     # R packages check. Will create one error message after check of all packages.
     missingPackagesList = []
@@ -415,7 +411,7 @@ def importR():
             missingPackagesList.append(each)
     if missingPackagesList:
         errorString = "R package(s) " + " ".join(["%s" % e for e in missingPackagesList] +  "missing. Install it/them and re-run v.krige.")
-        sys.exit(_(errorString))
+        grass.fatal(_(errorString))
     
 if __name__ == '__main__':
     if len(sys.argv) > 1:
