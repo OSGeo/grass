@@ -23,6 +23,7 @@ import os
 import sys
 import shlex
 import copy
+import difflib
 
 import wx
 import wx.stc
@@ -498,32 +499,6 @@ class GPrompt(object):
         self.cmdbuffer = self._readHistory()
         self.cmdindex = len(self.cmdbuffer)
 
-    def CheckKey(self, text, keywords):
-        """!Check if text is in keywords (unused)"""
-        found = 0
-        keys = text.split(',')
-        if len(keys) > 1: # -> multiple keys
-            for k in keys[:-1]:
-                k = k.strip()
-                for key in keywords: 
-                    if k == key: # full match
-                        found += 1
-                        break
-            k = keys[-1].strip()
-            for key in keywords:
-                if k in key: # partial match
-                    found +=1
-                    break
-        else:
-            for key in keywords:
-                if text in key: # partial match
-                    found +=1
-                    break
-        
-        if found == len(keys):
-            return True
-        
-        return False
         
     def _readHistory(self):
         """!Get list of commands from history file"""
@@ -551,7 +526,7 @@ class GPrompt(object):
             return self.moduleDesc[cmd]['desc']
         
         return ''
-            
+    
     def GetCommandItems(self):
         """!Get list of available commands"""
         items = list()
@@ -560,7 +535,7 @@ class GPrompt(object):
             mList = self.autoCompFilter
         else:
             mList = self.moduleList
-        
+            
         if not mList:
             return items
         
@@ -571,7 +546,7 @@ class GPrompt(object):
             for command in mList[prefix]:
                 name = prefix + '.' + command
                 items.append(name)
-        
+                
         items.sort()
         
         return items
@@ -581,14 +556,23 @@ class GPrompt(object):
         result = dict()
         for module in globalvar.grassCmd['all']:
             try:
-                group, name = module.split('.', 1)
+                group, name = module.split('.',1)
             except ValueError:
                 continue # TODO
             
             if not result.has_key(group):
                 result[group] = list()
             result[group].append(name)
-        
+            
+            # for better auto-completion: 
+            # not only result['r']={...,'colors.out',...}, but also result['r.colors']={'out',...}
+            for i in range(len(name.split('.'))-1):
+                group = '.'.join([group,name.split('.',1)[0]])
+                name = name.split('.',1)[1]
+                if not result.has_key(group):
+                    result[group] = list()
+                result[group].append(name)
+      
         # sort list of names
         for group in result.keys():
             result[group].sort()
@@ -639,7 +623,7 @@ class GPrompt(object):
     def GetInput(self):
         """!Get main prompt widget"""
         return self.input
-
+    
 class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
     """!Interactive wxGUI prompt - popup version"""
     def __init__(self, parent):
@@ -719,23 +703,69 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPressed)
         self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnItemSelected)
-
-    def SetFilter(self, items):
-        """!Sets filter
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
         
-        @param choices list of items to be filtered
-        """
-        self.autoCompFilter = items
-        
+    def OnItemChanged(self, event):
+        """!Change text in statusbar 
+        if the item selection in the auto-completion list is changed"""
+        # list of commands
+        if self.toComplete['entity'] == 'command':
+            item = self.toComplete['cmd'].rpartition('.')[0] + '.' + self.autoCompList[event.GetIndex()] 
+            try:
+                desc = self.moduleDesc[item]['desc']        
+            except KeyError:
+                desc = '' 
+            self.ShowStatusText(desc)
+        # list of flags    
+        elif self.toComplete['entity'] == 'flags':
+            desc = self.cmdDesc.get_flag(self.autoCompList[event.GetIndex()])['description']
+            self.ShowStatusText(desc)
+        # list of parameters
+        elif self.toComplete['entity'] == 'params':
+            item = self.cmdDesc.get_param(self.autoCompList[event.GetIndex()])
+            desc = item['name'] + '=' + item['type']
+            if not item['required']:
+                desc = '[' + desc + ']'
+            desc += ': ' + item['description']
+            self.ShowStatusText(desc)
+        # list of flags and commands       
+        elif self.toComplete['entity'] == 'params+flags':
+            if self.autoCompList[event.GetIndex()][0] == '-':
+                desc = self.cmdDesc.get_flag(self.autoCompList[event.GetIndex()].strip('-'))['description']
+            else:
+                item = self.cmdDesc.get_param(self.autoCompList[event.GetIndex()])
+                desc = item['name'] + '=' + item['type']
+                if not item['required']:
+                    desc = '[' + desc + ']'
+                desc += ': ' + item['description']
+            self.ShowStatusText(desc)
+        else:
+            self.ShowStatusText('')
+            
     def OnItemSelected(self, event):
         """!Item selected from the list"""
-        text = self.GetTextLeft()[:self.AutoCompPosStart()] + event.GetText() + ' '
-        self.SetText(text)
+        lastWord = self.GetWordLeft()
+        # to insert selection correctly if selected word partly matches written text
+        match = difflib.SequenceMatcher(None, event.GetText(), lastWord)
+        matchTuple = match.find_longest_match(0, len(event.GetText()), 0, len(lastWord))
+    
+        compl = event.GetText()[matchTuple[2]:]
+        text = self.GetTextLeft() + compl
+        # add space or '=' at the end
+        end = '='
+        for char in ('.','-','='):
+            if text.split(' ')[-1].find(char) >= 0:
+                end = ' '
+        
+        compl += end
+        text += end
+
+        self.AddText(compl)
         pos = len(text)
-        self.SetSelectionStart(pos)
         self.SetCurrentPos(pos)
         
-        cmd = text.split()[0]
+        cmd = text.strip().split(' ')[0]
+
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
             if cmd in ('r.mapcalc', 'r3.mapcalc'):
                 self.parent.parent.OnMapCalculator(event = None, cmd = [cmd])
@@ -761,35 +791,209 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             del self.cmdbuffer[0]
         self.cmdindex = len(self.cmdbuffer)
         
+    def EntityToComplete(self):
+        """!Determines which part of command (flags, parameters) should
+        be completed at current cursor position"""
+        entry = self.GetTextLeft()
+        toComplete = dict()
+        try:
+            cmd = entry.split()[0].strip()
+        except IndexError:
+            return None
+        
+        if len(entry.split(' ')) > 1:
+            if cmd in globalvar.grassCmd['all']:
+                toComplete['cmd'] = cmd
+                if entry[-1] == ' ':
+                    words = entry.split(' ')
+                    if any(word.startswith('-') for word in words):
+                        toComplete['entity'] = 'params'
+                        return toComplete
+                    else:
+                        toComplete['entity'] = 'params+flags'
+                        return toComplete
+                    
+                else:
+                    #get word left from current position
+                    word = self.GetWordLeft(withDelimiter = True)
+                    if word[0] == '=':
+                        # get name of parameter
+                        paramName = self.GetWordLeft(withDelimiter = False, ignoredDelimiter = '=').strip('=')
+                        if paramName:
+                            try:
+                                param = self.cmdDesc.get_param(paramName)
+                            except ValueError:
+                                return
+                        else:
+                            return
+
+                        if param['values']:
+                            toComplete['entity'] = 'param values'
+                            return toComplete
+                        elif param['prompt'] == 'raster' and param['element'] == 'cell':
+                            toComplete['entity'] = 'raster map'
+                            return toComplete
+                        elif param['prompt'] == 'vector' and param['element'] == 'vector':
+                            toComplete['entity'] = 'vector map'
+                            return toComplete
+                    elif word[0] == '-':
+                        toComplete['entity'] = 'flags'
+                        return toComplete
+                    elif word[0] == ' ':
+                        toComplete['entity'] = 'params'
+                        return toComplete
+                                       
+            else:
+                return None
+        else:
+            toComplete['entity'] = 'command'
+            toComplete['cmd'] = cmd
+            return toComplete
+                
+            
+    def GetWordLeft(self, withDelimiter = False, ignoredDelimiter = None):
+        """!Get word left from current cursor position. The beginning
+        of the word is given by space or chars: .,-= 
+        
+        @param withDelimiter returns the word with the initial delimeter
+        @param ignoredDelimiter finds the word ignoring certain delimeter
+        """
+        textLeft = self.GetTextLeft()
+        
+        parts = list()
+        ignoredDelimiter = ignoredDelimiter if ignoredDelimiter is not None else ''
+        for char in set(' .,-=') - set(ignoredDelimiter):
+            delimiter = '' if not withDelimiter else char
+            parts.append(delimiter + textLeft.rpartition(char)[2])
+        return min(parts, key=lambda x: len(x))
+        
+        
+    def ShowList(self):
+        """!Show sorted auto-completion list if it is not empty"""
+        if len(self.autoCompList) > 0:
+            self.autoCompList.sort()
+            self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))    
+        
     def OnKeyPressed(self, event):
         """!Key press capture for autocompletion, calltips, and command history
 
         @todo event.ControlDown() for manual autocomplete
         """
-        # keycodes used: "." = 46, "=" = 61, "," = 44 
-        
+        # keycodes used: "." = 46, "=" = 61, "-" = 45 
+        pos = self.GetCurrentPos()
+        #complete command after pressing '.'
         if event.GetKeyCode() == 46 and not event.ShiftDown():
-            # GRASS command autocomplete when '.' is pressed after 'r', 'v', 'i', 'g', 'db', or 'd'
             self.autoCompList = list()
-            pos = self.GetCurrentPos()
+            entry = self.GetTextLeft()
             self.InsertText(pos, '.')
             self.CharRight()
-            
+            self.toComplete = self.EntityToComplete()
+            if self.toComplete['entity'] == 'command': 
+                try:
+                    self.autoCompList = self.moduleList[entry.strip()]
+                except KeyError:
+                    return
+            self.ShowList()
+
+        # complete flags after pressing '-'       
+        elif event.GetKeyCode() == 45 and not event.ShiftDown(): 
+            self.autoCompList = list()
             entry = self.GetTextLeft()
-            if entry not in ['r.', 'v.', 'i.', 'g.', 'db.', 'd.']:
-                return
+            self.InsertText(pos, '-')
+            self.CharRight()
+            self.toComplete = self.EntityToComplete()
+            if self.toComplete['entity'] == 'flags':
+                if self.GetTextLeft()[-2:] == ' -': # complete e.g. --quite
+                    for flag in self.cmdDesc.get_options()['flags']:
+                        if len(flag['name']) == 1:
+                            self.autoCompList.append(flag['name'])
+                else:
+                    for flag in self.cmdDesc.get_options()['flags']:
+                        if len(flag['name']) > 1:
+                            self.autoCompList.append(flag['name'])            
+            self.ShowList()
             
-            if self.autoCompFilter:
-                self.autoCompList = self.autoCompFilter[entry[:-1]]
-            else:
-                self.autoCompList = self.moduleList[entry[:-1]]
-            if len(self.autoCompList) > 0:
-                self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))
+        # complete map or values after parameter
+        elif event.GetKeyCode() == 61 and not event.ShiftDown():
+            self.autoCompList = list()
+            self.InsertText(pos, '=')
+            self.CharRight()
+            self.toComplete = self.EntityToComplete()
+            if self.toComplete:
+                if self.toComplete['entity'] == 'raster map':
+                    self.autoCompList = self.mapList['raster']
+                elif self.toComplete['entity'] == 'vector map':
+                    self.autoCompList = self.mapList['vector']
+                elif self.toComplete['entity'] == 'param values':
+                    param = self.GetWordLeft(withDelimiter = False, ignoredDelimiter='=').strip(' =')
+                    self.autoCompList = self.cmdDesc.get_param(param)['values']
+            self.ShowList()
             
+        # complete after pressing CTRL + Space          
+        elif event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown():
+            self.autoCompList = list()
+            self.toComplete = self.EntityToComplete()
+            if self.toComplete is None:
+                return 
+
+            #complete command
+            if self.toComplete['entity'] == 'command':
+                for command in globalvar.grassCmd['all']:
+                    if command.find(self.toComplete['cmd']) == 0:
+                        dotNumber = list(self.toComplete['cmd']).count('.') 
+                        self.autoCompList.append(command.split('.',dotNumber)[-1])
+                
+            
+            # complete flags in such situations (| is cursor):
+            # r.colors -| ...w, q, l
+            # r.colors -w| ...w, q, l  
+            elif self.toComplete['entity'] == 'flags':
+                for flag in self.cmdDesc.get_options()['flags']:
+                    if len(flag['name']) == 1:
+                        self.autoCompList.append(flag['name'])
+                    
+            # complete parameters in such situations (| is cursor):
+            # r.colors -w | ...color, map, rast, rules
+            # r.colors col| ...color
+            elif self.toComplete['entity'] == 'params':
+                for param in self.cmdDesc.get_options()['params']:
+                    if param['name'].find(self.GetWordLeft(withDelimiter=False)) == 0:
+                        self.autoCompList.append(param['name'])           
+            
+            # complete flags or parameters in such situations (| is cursor):
+            # r.colors | ...-w, -q, -l, color, map, rast, rules
+            # r.colors color=grey | ...-w, -q, -l, color, map, rast, rules
+            elif self.toComplete['entity'] == 'params+flags':
+                self.autoCompList = list()
+                
+                for param in self.cmdDesc.get_options()['params']:
+                    self.autoCompList.append(param['name'])
+                for flag in self.cmdDesc.get_options()['flags']:
+                    if len(flag['name']) == 1:
+                        self.autoCompList.append('-' + flag['name'])
+                    else:
+                        self.autoCompList.append('--' + flag['name'])
+                    
+                self.ShowList() 
+                   
+            # complete map or values after parameter  
+            # r.buffer input=| ...list of raster maps
+            # r.buffer units=| ... feet, kilometers, ...   
+            elif self.toComplete['entity'] == 'raster map':
+                self.autoCompList = list()
+                self.autoCompList = self.mapList['raster']
+            elif self.toComplete['entity'] == 'vector map':
+                self.autoCompList = list()
+                self.autoCompList = self.mapList['vector']
+            elif self.toComplete['entity'] == 'param values':
+                self.autoCompList = list()
+                param = self.GetWordLeft(withDelimiter = False, ignoredDelimiter='=').strip(' =')
+                self.autoCompList = self.cmdDesc.get_param(param)['values']
+                
+            self.ShowList()
+
         elif event.GetKeyCode() == wx.WXK_TAB:
             # show GRASS command calltips (to hide press 'ESC')
-            
-            pos = self.GetCurrentPos()
             entry = self.GetTextLeft()
             try:
                 cmd = entry.split()[0].strip()
@@ -805,67 +1009,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.CallTipSetForeground("BLACK")
             self.CallTipShow(pos, usage + '\n\n' + description)
             
-        elif (event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown()) or \
-                (not event.ShiftDown() and (event.GetKeyCode() == 61 or event.GetKeyCode() == 44)):
-            # Autocompletion for map/data file name entry after '=', ',', or manually
-            pos = self.GetCurrentPos()
-            entry = self.GetTextLeft()
-            if 'r.mapcalc' in entry:
-                self.InsertText(pos, '=')
-                self.CharRight()
-                return
-            
-            if event.GetKeyCode() != 44:
-                self.promptType = None
-            
-            if not self.cmdDesc:
-                # No partial or complete GRASS command found
-                return
-            
-            try:
-                # find last typed option
-                arg = entry.rstrip('=').rsplit(' ', 1)[1]
-            except:
-                arg = ''
-            
-            try:
-                self.promptType = self.cmdDesc.get_param(arg)['prompt']
-            except:
-                pass
-            
-            if event.GetKeyCode() == 61:
-                # autocompletion after '='
-                # insert the '=' and move to after the '=', ready for a map name
-                self.InsertText(pos, '=')
-                self.CharRight()
-                
-            elif event.GetKeyCode() == 44:
-                # autocompletion after ','
-                # if comma is pressed, use the same maptype as previous for multiple map entries
-                
-                # insert the comma and move to after the comma ready for a map name
-                self.InsertText(pos,',')
-                self.CharRight()
-                
-                #must apply to an entry where '=[string]' has already been entered
-                if '=' not in arg:
-                    return
-
-            elif event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown():
-                # manual autocompletion
-                # map entries without arguments (as in r.info [mapname]) use ctrl-shift
-                if not self.cmdDesc:
-                    return
-                
-                try:
-                    param = self.cmdDesc.get_list_params()[0]
-                    self.promptType = self.cmdDesc.get_param(param)['prompt']
-                except IndexError:
-                    return
-            
-            if self.promptType and self.promptType in ('raster', 'raster3d', 'vector'):
-                self.autoCompList = self.mapList[self.promptType]
-                self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))
             
         elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and \
                  not self.AutoCompActive():
@@ -896,6 +1039,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             pos = self.GetCurrentPos()            
             self.InsertText(pos,txt)
             self.LineEnd()
+            self.parent.parent.statusbar.SetStatusText('')
             
         elif event.GetKeyCode() == wx.WXK_RETURN and \
                 self.AutoCompActive() == False:
@@ -925,6 +1069,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # add command to history & clean prompt
             self.UpdateCmdHistory(cmd)
             self.OnCmdErase(None)
+            self.parent.parent.statusbar.SetStatusText('')
             
         elif event.GetKeyCode() == wx.WXK_SPACE:
             items = self.GetTextLeft().split()
@@ -941,6 +1086,15 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         
         else:
             event.Skip()
+
+    def ShowStatusText(self, text):
+        """!Sets statusbar text, if it's too long, it is cut off"""
+        maxLen = self.parent.parent.statusbar.GetFieldRect(0).GetWidth()/ 7 # any better way?
+        if len(text) < maxLen:
+            self.parent.parent.statusbar.SetStatusText(text)
+        else:
+            self.parent.parent.statusbar.SetStatusText(text[:maxLen]+'...')
+        
         
     def GetTextLeft(self):
         """!Returns all text left of the caret"""
