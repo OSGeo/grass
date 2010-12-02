@@ -592,7 +592,7 @@ int main(int argc, char *argv[])
 		int i;
 
 		nparameters = nsplx * nsply;
-		BW = P_get_BandWidth(P_BILINEAR, nsply) + 2 * (bilin == P_BICUBIC);
+		BW = P_get_BandWidth(bilin, nsply);
 
 		/* Least Squares system */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
