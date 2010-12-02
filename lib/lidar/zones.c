@@ -220,7 +220,7 @@ int P_get_BandWidth(int interpolator, int nsplines)
 {
     /* Returns the interpolation matrixes BandWidth dimension */
 
-    if (interpolator == 1) {
+    if (interpolator == P_BILINEAR) {
 	return (2 * nsplines + 1);
     }
     else {
