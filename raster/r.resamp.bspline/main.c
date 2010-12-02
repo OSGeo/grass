@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
 
 	/* only works if source reg = dest reg with buffer */
 	/* messing with elaboration region is dangerous... */
-	align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_ROW);
+	/* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_ROW); */
 	align_interp_boxes(&general_box, &overlap_box, &dest_reg,
 	                last_general_box, last_overlap_box, GENERAL_ROW);
 
@@ -419,7 +419,7 @@ int main(int argc, char *argv[])
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  FIRST_ROW);
-	    align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_ROW);
+	    /* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_ROW); */
 	    align_interp_boxes(&general_box, &overlap_box, &dest_reg,
 			    last_general_box, last_overlap_box, FIRST_ROW);
 	}
@@ -459,7 +459,7 @@ int main(int argc, char *argv[])
 
 	    /* only works if source reg = dest reg with buffer */
 	    /* messing with elaboration region is dangerous... */
-	    align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_COLUMN);
+	    /* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_COLUMN); */
 	    align_interp_boxes(&general_box, &overlap_box, &dest_reg,
 	              last_general_box, last_overlap_box, GENERAL_COLUMN);
 
@@ -467,7 +467,7 @@ int main(int argc, char *argv[])
 
 		P_set_regions(&elaboration_reg, &general_box, &overlap_box,
 			      dims, FIRST_COLUMN);
-		align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_COLUMN);
+		/* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_COLUMN); */
 		align_interp_boxes(&general_box, &overlap_box, &dest_reg,
 			  last_general_box, last_overlap_box, FIRST_COLUMN);
 	    }
@@ -549,7 +549,7 @@ int main(int argc, char *argv[])
 		int i;
 
 		nparameters = nsplx * nsply;
-		BW = P_get_BandWidth(P_BILINEAR, nsply) + 2 * (interp_method == P_BICUBIC);
+		BW = P_get_BandWidth(interp_method, nsply > nsplx ? nsply : nsplx);
 
 		/* Least Squares system */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
