@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     
     /* set up command line */
     map = G_define_standard_option(G_OPT_R_MAP);
-    map->description = _("Raster map to be displayed");
+    map->description = _("Name of raster map to be displayed");
 
     vallist = G_define_option();
     vallist->key = "values";
@@ -72,10 +72,12 @@ int main(int argc, char **argv)
     bg->gisprompt = "old_color,color,color";
     bg->label = _("Background color (for null)");
     bg->description = _("Either a standard color name or R:G:B triplet");
+    bg->guisection = _("Null cells");
 
     flag_n = G_define_flag();
     flag_n->key = 'n';
     flag_n->description = _("Make null cells opaque");
+    flag_n->guisection = _("Null cells");
 
     flag_i = G_define_flag();
     flag_i->key = 'i';
