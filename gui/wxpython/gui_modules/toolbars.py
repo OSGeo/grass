@@ -1623,6 +1623,9 @@ class NvizToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = "point"
         self.parent.MapWindow.polycoords = []
         
+        # return to map layer page (gets rid of ugly exit bug)
+        self.lmgr.notebook.SetSelection(0)
+
         # disable the toolbar
         self.parent.RemoveToolbar("nviz")
         
