@@ -178,10 +178,13 @@ class WMSDialog(wx.Dialog):
             self.list.LoadData()
             self.btn_import.Enable(False)
             return # no layers found
-
+        
         lastLayer = lastStyle = ''
         for line in ret.splitlines():
-            key, value = line.split(':', 1)
+            try:
+                key, value = line.split(':', 1)
+            except ValueError:
+                continue
             key = key.strip().lower()
             value = value.strip()
             

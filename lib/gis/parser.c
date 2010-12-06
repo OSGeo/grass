@@ -473,6 +473,12 @@ int G_parser(int argc, char **argv)
 	while (--argc) {
 	    ptr = *(++argv);
 
+	    if (strcmp(ptr, "help") == 0 ||
+		strcmp(ptr, "-help") == 0 || strcmp(ptr, "--help") == 0) {
+		G_usage();
+		exit(EXIT_SUCCESS);
+	    }
+
 	    /* Overwrite option */
 	    if (strcmp(ptr, "--o") == 0 || strcmp(ptr, "--overwrite") == 0) {
 		st->overwrite = 1;

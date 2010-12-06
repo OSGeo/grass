@@ -998,19 +998,26 @@ class GMFrame(wx.Frame):
                     cmd = ['r.in.wms',
                            'mapserver=%s' % dlg.GetSettings()['server'],
                            'layers=%s' % layer,
-                           'output=%s' % layer]
+                           'output=%s' % layer,
+                           'format=png',
+                           '--overwrite']
                     styles = ','.join(layers[layer])
                     if styles:
                         cmd.append('styles=%s' % styles)
                     self.goutput.RunCmd(cmd, switchPage = True)
+
+                    self.curr_page.maptree.AddLayer(ltype = 'raster',
+                                                    lname = layer,
+                                                    lcmd = ['d.rast', 'map=%s' % layer],
+                                                    multiple = False)
             else:
                 self.goutput.WriteWarning(_("Nothing to import. No WMS layer selected."))
-        
+                
+                
         dlg.Destroy()
         
     def OnShowAttributeTable(self, event):
-        """
-        Show attribute table of the given vector map layer
+        """!Show attribute table of the given vector map layer
         """
         if not self.curr_page:
             self.MsgNoLayerSelected()
