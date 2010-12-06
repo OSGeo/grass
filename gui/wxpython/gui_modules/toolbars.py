@@ -1308,8 +1308,8 @@ class VDigitToolbar(AbstractToolbar):
         except gcmd.GException, e:
             self.mapLayer = None
             self.StopEditing()
-            GError(parent = self.parent,
-                   message = e)
+            gcmd.GError(parent = self.parent,
+                        message = str(e))
             return False
         
         # update toolbar
