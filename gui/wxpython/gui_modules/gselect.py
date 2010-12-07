@@ -1008,13 +1008,13 @@ class GdalSelect(wx.Panel):
         
         # dsn widgets
         if not ogr:
-            filemask = 'GeoTIFF (*.tif)|*.tif'
+            filemask = 'GeoTIFF (*.tif)|*.%s' % self._getExtPattern('tif')
         else:
-            filemask = 'ESRI Shapefile (*.shp)|*.shp'
+            filemask = 'ESRI Shapefile (*.shp)|*.%s' % self._getExtPattern('shp')
         
         dsnFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText = '',
-                                              dialogTitle=_('Choose input file'),
+                                              dialogTitle=_('Choose file to import'),
                                               buttonText=_('Browse'),
                                               startDirectory=os.getcwd(),
                                               changeCallback=self.OnSetDsn,
@@ -1129,14 +1129,21 @@ class GdalSelect(wx.Panel):
         
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
-        
+
+    def _getExtPattern(self, ext):
+        """!Get pattern for case-insensitive mask"""
+        pattern = ''
+        for c in ext:
+            pattern += '[' + c + c.upper() + ']'
+
+        return pattern
+
     def OnSetType(self, event):
         """!Datasource type changed"""
         sel = event.GetSelection()
         win = self.input[self.dsnType][1]
         self.dsnSizer.Remove(win)
         win.Hide()
-        
         if sel == self.sourceMap['file']:   # file
             self.dsnType = 'file'
             format = self.input[self.dsnType][2][0]
@@ -1144,13 +1151,14 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
-                format += ' (*.%s)|*.%s' % (ext, ext)
+                format += ' (*.%s)|*.%s' % (ext, self._getExtPattern(ext))
+                print format
             except KeyError:
                 format += ' (*.*)|*.*'
             
             win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                              dialogTitle=_('Choose input file'),
+                                              dialogTitle=_('Choose file to import'),
                                               buttonText=_('Browse'),
                                               startDirectory=os.getcwd(),
                                               changeCallback=self.OnSetDsn,
@@ -1213,7 +1221,7 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(self.format.GetStringSelection())
             except KeyError:
                 ext = ''
-            for file in glob.glob(os.path.join(dsn, "*.%s") % ext):
+            for file in glob.glob(os.path.join(dsn, "*.%s") % self._getExtPattern(ext)):
                 baseName = os.path.basename(file)
                 grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
                 data.append((layerId, baseName, grassName))
@@ -1269,7 +1277,7 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
-                format += ' (*.%s)|*.%s' % (ext, ext)
+                format += ' (*.%s)|*.%s' % (ext, self._getExtPattern(ext))
             except KeyError:
                 format += ' (*.*)|*.*'
             
