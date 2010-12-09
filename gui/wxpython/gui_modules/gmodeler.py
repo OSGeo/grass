@@ -952,7 +952,7 @@ class ModelFrame(wx.Frame):
             if not item.IsEnabled():
                 continue
             if isinstance(item, ModelAction):
-                if item.GetLoopId():
+                if item.GetBlockId():
                     continue
                 self._runAction(item, params)
             elif isinstance(item, ModelLoop):
@@ -1033,12 +1033,11 @@ class ModelFrame(wx.Frame):
             if xmax > xmaxImg:
                 xmaxImg = xmax
             if ymin < yminImg:
-                xminImg = xmin
-            if ymax < ymaxImg:
-                xminImg = xmin
-        
-        size = wx.Size(int(xmaxImg - xminImg),
-                       int(ymaxImg - ymaxImg))
+                yminImg = ymin
+            if ymax > ymaxImg:
+                ymaxImg = ymax
+        size = wx.Size(int(xmaxImg - xminImg) + 50,
+                       int(ymaxImg - yminImg) + 50)
         bitmap = wx.EmptyBitmap(width = size.width, height = size.height)
         
         filetype, ltype = GetImageHandlers(wx.ImageFromBitmap(bitmap))
