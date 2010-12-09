@@ -722,7 +722,7 @@ class GMConsole(wx.SplitterWindow):
         self.console_progressbar.SetValue(0) # reset progress bar on '0%'
 
         self.cmd_output_timer.Stop()
-        
+
         if self.parent.GetName() == "LayerManager":
             self.btn_abort.Enable(False)
             if event.cmd[0] not in globalvar.grassCmd['all'] or \
@@ -745,6 +745,8 @@ class GMConsole(wx.SplitterWindow):
                 if mapName in mapLayers:
                     display.GetWindow().UpdateMap(render = True)
                     return
+        elif self.parent.GetName() == 'Modeler':
+            pass
         else: # standalone dialogs
             dialog = self.parent.parent
             if hasattr(self.parent.parent, "btn_abort"):
