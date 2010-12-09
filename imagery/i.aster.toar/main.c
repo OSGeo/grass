@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
     /* Define the different options */
     input = G_define_standard_option(G_OPT_R_INPUTS);
-    input->description = _("Names of ASTER DN layers (9 layers)");
+    input->description = _("Names of ASTER DN layers (15 layers)");
 
     input1 = G_define_option();
     input1->key = _("doy");
