@@ -1,7 +1,8 @@
 <H2>DESCRIPTION</H2>
 
-<EM>i.aster.toar</EM> calculates the Top Of Atmosphere (TOA) reflectance for Terra-Aster L1B in the visible, NIR and SWIR bands (9 layers) and brigthness temperature for the TIR bands, all from L1B DN values. 
+<EM>i.aster.toar</EM> calculates the Top Of Atmosphere (TOA) reflectance for Terra-Aster L1B in the visible, NIR and SWIR bands (9+1 bands) and brigthness temperature for the TIR bands (5 bands), all from L1B DN values. 
 It is useful after importing your Aster imagery from storage format that is generally in standard DN values range.
+The order of input bands is VNIR: 1,2,3N,3B, SWIR: 4,5,6,7,8,9 TIR: 10,11,12,13,14 in one comma-separated list.
 
 <H2>NOTES</H2>
 Internally, a gain code is defined to modify gains according to spectral bands following the GeoSystems GmbH ATCOR Ver. 2.0 Calibration Files. The function is defined in gain_aster.c file.
