@@ -2,6 +2,7 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	i.albedo \
+	i.aster.toar \
 	i.atcorr \
 	i.biomass \
 	i.cca \

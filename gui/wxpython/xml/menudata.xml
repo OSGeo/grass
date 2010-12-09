@@ -2621,6 +2621,13 @@
 	  <label>Satellite images tools</label>
 	  <items>
 	    <menuitem>
+	      <label>Aster DN to radiance/reflectance</label>
+	      <help>Calculates top-of-atmosphere radiance or reflectance and temperature for Aster.</help>
+	      <keywords>imagery,Terra-ASTER,top-of-atmosphere reflectance</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.aster.toar</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Landsat DN to radiance/reflectance</label>
 	      <help>Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+.</help>
 	      <keywords>imagery,landsat,top-of-atmosphere reflectance,dos-type simple atmospheric correction</keywords>
