@@ -19,6 +19,10 @@ First line (and only first) is a header with Wl, followed by band names
 file name is used for sensor name
 
 Updated by: Anne Ghisla, 2010
+Bug fix (9/12/2010) by Daniel:
+   1) function interpolate_band was not generating the spectral response for the last value in the filter function. Fixed
+   2) function pretty_print was not printing the 8th value of every line, cutting the filter function short.
+ 
 """
 import os
 import sys
@@ -86,7 +90,7 @@ def interpolate_band(values):
     # interpolating
     f = interpolate.interp1d(response[:,0],response[:,1])
     
-    filter_f = f(np.arange(response[0,0], response[-1,0], 2.5))
+    filter_f = f(np.arange(response[0,0], response[-1,0] + 2.5, 2.5))
     
     # convert limits from nanometers to micrometers
     lowerlimit = response[0,0]/1000
@@ -117,8 +121,11 @@ def pretty_print(filter_f):
     8 values per line, with spaces, commas and all the rest
     """
     pstring = ''
-    for i in range(len(filter_f)):
+    for i in range(len(filter_f)+1):
         if i%8 is 0:
+            if i is not 0:
+                value_wo_leading_zero = ('%.4f' % (filter_f[i-1])).lstrip('0')
+                pstring += value_wo_leading_zero+', '
             if i is not 1: 
                 # trim the trailing whitespace at the end of line
                 pstring = pstring.rstrip()
