@@ -65,20 +65,26 @@ int main(int argc, char *argv[])
     char *result;		/*output raster name */
 
     /*Prepare new names for output files */
-    char *result0, *result1, *result2, *result3, *result4;
-    char *result5, *result6, *result7, *result8, *result9;
-    char *result10, *result11, *result12, *result13, *result14;
+    char result0[GNAME_MAX], result1[GNAME_MAX];
+    char result2[GNAME_MAX], result3[GNAME_MAX];
+    char result4[GNAME_MAX], result5[GNAME_MAX];
+    char result6[GNAME_MAX], result7[GNAME_MAX];
+    char result8[GNAME_MAX], result9[GNAME_MAX];
+    char result10[GNAME_MAX], result11[GNAME_MAX];
+    char result12[GNAME_MAX], result13[GNAME_MAX];
+    char result14[GNAME_MAX];
 
     /*File Descriptors */
     int infd[MAXFILES];
     int outfd[MAXFILES];
-    char **ptr;
-    int nfiles = 0;
+    char **names, **ptr;
+    /* For some strange reason infd[0] cannot be used later */
+    /* So nfiles is initialized with nfiles = 1 */
+    int nfiles = 1;
     int i = 0, j = 0;
     int radiance = 0;
     void *inrast[MAXFILES];
     DCELL *outrast[MAXFILES];
-    int data_format;		/* 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
     RASTER_MAP_TYPE in_data_type[MAXFILES];
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE;	/* 0=numbers  1=text */
     double gain[MAXFILES], offset[MAXFILES];
@@ -147,6 +153,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    names = input->answers;
     ptr = input->answers;
     doy = atof(input1->answer);
     sun_elevation = atof(input2->answer);
@@ -158,38 +165,21 @@ int main(int argc, char *argv[])
     /*Prepare the ouput file names */
 
     /********************/
-    result0 = result;
-    result1 = result;
-    result2 = result;
-    result3 = result;
-    result4 = result;
-    result5 = result;
-    result6 = result;
-    result7 = result;
-    result8 = result;
-    result9 = result;
-    result10 = result;
-    result11 = result;
-    result12 = result;
-    result13 = result;
-    result14 = result;
-
-    result0 = strcat(result0, ".1");
-    result1 = strcat(result1, ".2");
-    result2 = strcat(result2, ".3N");
-    result3 = strcat(result3, ".3B");
-    result4 = strcat(result4, ".4");
-    result5 = strcat(result5, ".5");
-    result6 = strcat(result6, ".6");
-    result7 = strcat(result7, ".7");
-    result8 = strcat(result8, ".8");
-    result9 = strcat(result9, ".9");
-    result10 = strcat(result10, ".10");
-    result11 = strcat(result11, ".11");
-    result12 = strcat(result12, ".12");
-    result13 = strcat(result13, ".13");
-    result14 = strcat(result14, ".14");
-
+    sprintf(result0,"%s%s", result, ".1");
+    sprintf(result1,"%s%s", result, ".2");
+    sprintf(result2,"%s%s", result, ".3N");
+    sprintf(result3,"%s%s", result, ".3B");
+    sprintf(result4,"%s%s", result, ".4");
+    sprintf(result5,"%s%s", result, ".5");
+    sprintf(result6,"%s%s", result, ".6");
+    sprintf(result7,"%s%s", result, ".7");
+    sprintf(result8,"%s%s", result, ".8");
+    sprintf(result9,"%s%s", result, ".9");
+    sprintf(result10,"%s%s", result, ".10");
+    sprintf(result11,"%s%s", result, ".11");
+    sprintf(result12,"%s%s", result, ".12");
+    sprintf(result13,"%s%s", result, ".13");
+    sprintf(result14,"%s%s", result, ".14");
     /********************/
     /*Prepare radiance boundaries */
 
@@ -235,23 +225,25 @@ int main(int argc, char *argv[])
 
     /********************/
     for (; *ptr != NULL; ptr++) {
-	if (nfiles >= MAXFILES)
+	if (nfiles > MAXFILES+1)
 	    G_fatal_error(_("Too many input maps. Only %d allowed."),
-			  MAXFILES);
+			  MAXFILES+1);
 	name = *ptr;
-
 	/* Allocate input buffer */
 	in_data_type[nfiles] = Rast_map_type(name, "");
+	/* For some strange reason infd[0] cannot be used later */
+	/* So nfiles is initialized with nfiles = 1 */
 	infd[nfiles] = Rast_open_old(name, "");
 
 	Rast_get_cellhd(name, "", &cellhd);
-
-	inrast[nfiles] = Rast_allocate_buf(in_data_type[nfiles]);
+	/* Because of nfiles init with 1 */
+	/* To return index init with 0 later in code [nfiles-1] */
+	inrast[nfiles-1] = Rast_allocate_buf(in_data_type[nfiles]);
 	nfiles++;
     }
-    if (nfiles < MAXFILES) {
+    nfiles--;
+    if (nfiles < MAXFILES+1) 
 	G_fatal_error(_("The input band number should be 15"));
-    }
 
     /***************************************************/
     /* Allocate output buffer, use input map data_type */
@@ -284,8 +276,8 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	/* read input map */
-	for (i = 0; i < MAXFILES; i++)
-	    Rast_get_row(infd[i], inrast[i], row, in_data_type[i]);
+	for (i = 1; i < MAXFILES; i++)
+	    Rast_get_row(infd[i], inrast[i-1], row, in_data_type[i]);
 
 	/*process the data */
 	for (col = 0; col < ncols; col++) {
