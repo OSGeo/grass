@@ -661,14 +661,15 @@ class ColorTable(wx.Frame):
         for rule in self.ruleslines.itervalues():
             if not rule['value']: # skip empty rules
                 continue
-            if rule['value'] not in ('nv', 'default') and \
-                    rule['value'][-1] != '%' and \
-                    not self._IsNumber(rule['value']):
-                gcmd.GError(_("Invalid rule value '%s'. Unable to apply color table.") % rule['value'],
-                            parent = self)
-                return False
             
             if self.raster:
+                if rule['value'] not in ('nv', 'default') and \
+                        rule['value'][-1] != '%' and \
+                        not self._IsNumber(rule['value']):
+                    gcmd.GError(_("Invalid rule value '%s'. Unable to apply color table.") % rule['value'],
+                                parent = self)
+                    return False
+                
                 rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
             else:
                 rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.properties['table'],
