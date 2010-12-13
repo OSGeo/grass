@@ -902,7 +902,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.InsertText(pos, '-')
             self.CharRight()
             self.toComplete = self.EntityToComplete()
-            if self.toComplete['entity'] == 'flags':
+            if self.toComplete['entity'] == 'flags' and self.cmdDesc:
                 if self.GetTextLeft()[-2:] == ' -': # complete e.g. --quite
                     for flag in self.cmdDesc.get_options()['flags']:
                         if len(flag['name']) == 1:

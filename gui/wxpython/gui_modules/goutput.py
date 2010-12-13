@@ -735,7 +735,12 @@ class GMConsole(wx.SplitterWindow):
                             display.GetRender().GetListOfLayers(l_type = 'raster') +
                             display.GetRender().GetListOfLayers(l_type = 'vector'))
             
-            task = menuform.GUI().ParseCommand(event.cmd, show = None)
+            try:
+                task = menuform.GUI().ParseCommand(event.cmd, show = None)
+            except gcmd.GException:
+                task = None
+                return
+            
             for p in task.get_options()['params']:
                 if p.get('prompt', '') not in ('raster', 'vector'):
                     continue
