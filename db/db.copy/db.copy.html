@@ -45,15 +45,15 @@ db.copy from_driver=pg  from_database="host=localhost,dbname=meteo" \
 <div class="code"><pre>
 db.copy from_driver=dbf from_database=$HOME/grassdata/spearfish60/user1/dbf \
    from_table=ammprv to_driver=sqlite \
-   to_database=$HOME/grassdata/spearfish60/user1/mysqlite.db to_table=ammprv
+   to_database=$HOME/grassdata/spearfish60/user1/sqlite.db to_table=ammprv
 
 # convenient viewer:
-sqlitebrowser $HOME/grassdata/spearfish60/user1/mysqlite.db
+sqlitebrowser $HOME/grassdata/spearfish60/user1/sqlite.db
 </pre></div>
 
 <h3>SQLite -> DBF</h3>
 <div class="code"><pre>
-db.copy from_driver=sqlite from_database=$HOME/grassdata/spearfish60/user1/mysqlite.db \
+db.copy from_driver=sqlite from_database=$HOME/grassdata/spearfish60/user1/sqlite.db \
    from_table=ammprv to_driver=dbf to_database=$HOME/grassdata/spearfish60/user1/dbf \
    to_table=ammprv
 </pre></div>
