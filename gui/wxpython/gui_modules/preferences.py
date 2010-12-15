@@ -56,7 +56,7 @@ class Settings:
         # key/value separator
         #
         self.sep = ';'
-
+        
         try:
             projFile = utils.PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
         except KeyError:
@@ -590,6 +590,11 @@ class Settings:
                     },
                 },
             }
+
+        # quick fix, http://trac.osgeo.org/grass/ticket/1233
+        # TODO
+        if sys.platform == 'darwin':
+            self.defaultSettings['general']['defWindowPos']['enabled'] = False
         
         #
         # user settings

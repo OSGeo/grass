@@ -151,7 +151,7 @@ class GMFrame(wx.Frame):
         wx.CallAfter(self.notebook.SetSelection, 0)
         
         # use default window layout ?
-        if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
+        if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled'):
             dim = UserSettings.Get(group='general', key='defWindowPos', subkey='dim')
             try:
                x, y = map(int, dim.split(',')[0:2])
@@ -1101,7 +1101,7 @@ class GMFrame(wx.Frame):
         self.curr_page.maptree.Layout()
         
         # use default window layout
-        if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled') is True:
+        if UserSettings.Get(group='general', key='defWindowPos', subkey='enabled'):
             dim = UserSettings.Get(group='general', key='defWindowPos', subkey='dim')
             idx = 4 + self.disp_idx * 4
             try:
