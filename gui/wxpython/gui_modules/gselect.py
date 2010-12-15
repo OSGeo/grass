@@ -320,9 +320,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                         
                         if self.filterElements:
                             if self.filterElements(fullqElem):
-                                self.AddItem(fullqElem, parent=dir_node)
+                                self.AddItem(elem, parent=dir_node)
                         else:
-                            self.AddItem(fullqElem, parent=dir_node)
+                            self.AddItem(elem, parent=dir_node)
             except:
                 continue
 
@@ -377,7 +377,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         return item
 
     def OnMotion(self, evt):
-        # have the selection follow the mouse, like in a real combobox
+        """!Have the selection follow the mouse, like in a real combobox
+        """
         item, flags = self.seltree.HitTest(evt.GetPosition())
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
             self.seltree.SelectItem(item)
@@ -385,22 +386,25 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         evt.Skip()
 
     def OnLeftDown(self, evt):
-        # do the combobox selection
+        """!Do the combobox selection
+        """
         item, flags = self.seltree.HitTest(evt.GetPosition())
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
             self.curitem = item
-
+            
             if self.seltree.GetRootItem() == self.seltree.GetItemParent(item):
                 self.value = [] # cannot select mapset item
             else:
+                mapsetItem = self.seltree.GetItemParent(item)
+                fullName = self.seltree.GetItemText(item) + '@' + self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
                 if self.multiple is True:
                     # text item should be unique
-                    self.value.append(self.seltree.GetItemText(item))
+                    self.value.append(fullName)
                 else:
-                    self.value = [self.seltree.GetItemText(item), ]
-
+                    self.value = [fullName, ]
+            
             self.Dismiss()
-
+        
         evt.Skip()
 
     def SetData(self, **kargs):
