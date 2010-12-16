@@ -8,14 +8,12 @@ SUBDIRS = rtree \
 	vedit \
 	neta
 
-#doxygen:
-DOXNAME=vector
-
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
-default: parsubdirs
+DOXNAME=vector
 
+default: parsubdirs
 
 diglib: rtree
 
