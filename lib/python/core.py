@@ -941,7 +941,7 @@ def mapsets(accessible = True):
 
 def create_location(dbase, location,
                     epsg = None, proj4 = None, filename = None, wkt = None,
-                    datum = None):
+                    datum = None, desc = None):
     """!Create new location
 
     Raise ScriptException on error.
@@ -953,6 +953,7 @@ def create_location(dbase, location,
     @param filename if given create new location based on georeferenced file
     @param wkt if given create new location based on WKT definition (path to PRJ file)
     @param datum datum transformation parameters (used for epsg and proj4)
+    @param desc description of the location (creates MYNAME file)
     """
     gisdbase = None
     if epsg or proj4 or filename or wkt:
@@ -961,7 +962,7 @@ def create_location(dbase, location,
                     set = 'GISDBASE=%s' % dbase)
     if not os.path.exists(dbase):
             os.mkdir(dbase)
-
+    
     kwargs = dict()
     if datum:
         kwargs['datum'] = datum
@@ -973,7 +974,7 @@ def create_location(dbase, location,
                           epsg = epsg,
                           location = location,
                           stderr = PIPE,
-                         **kwargs)
+                          **kwargs)
     elif proj4:
         ps = pipe_command('g.proj',
                           quiet = True,
@@ -997,15 +998,27 @@ def create_location(dbase, location,
                           location = location,
                           stderr = PIPE)
     else:
-        return _create_location_xy(dbase, location)
+        _create_location_xy(dbase, location)
+    
+    if epsg or proj4 or filename or wkt:
+        error = ps.communicate()[1]
+        run_command('g.gisenv',
+                    set = 'GISDBASE=%s' % gisdbase)
+        
+        if ps.returncode != 0 and error:
+            raise ScriptException(repr(error))
 
-    error = ps.communicate()[1]
-    run_command('g.gisenv',
-                set = 'GISDBASE=%s' % gisdbase)
-    
-    if ps.returncode != 0 and error:
-        raise ScriptException(repr(error))
-    
+    try:
+        fd = open(os.path.join(dbase, location,
+                               'PERMANENT', 'MYNAME'), 'w')
+        if desc:
+            fd.write(desc + os.linesep)
+        else:
+            fd.write(os.linesep)
+        fd.close()
+    except OSError, e:
+        raise ScriptException(repr(e))
+        
 def _create_location_xy(database, location):
     """!Create unprojected location
 
@@ -1048,12 +1061,6 @@ def _create_location_xy(database, location):
             
         shutil.copy(os.path.join(location, "PERMANENT", "DEFAULT_WIND"),
                     os.path.join(location, "PERMANENT", "WIND"))
-        
-        # create MYNAME file
-        myname = open(os.path.join(location, "PERMANENT",
-                                   "MYNAME"), 'w')
-        myname.write('%s' % os.linesep)
-        myname.close()
         
         os.chdir(cur_dir)
     except OSError, e:

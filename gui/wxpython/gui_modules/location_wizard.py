@@ -127,14 +127,16 @@ class DatabasePage(TitledPage):
         TitledPage.__init__(self, wizard, _("Define GRASS Database and Location Name"))
 
         self.grassdatabase = grassdatabase
-        self.location = ''
-
+        self.location      = ''
+        self.description   = ''
+        
         # buttons
         self.bbrowse = self.MakeButton(_("Browse"))
 
         # text controls
-        self.tgisdbase = self.MakeTextCtrl(grassdatabase, size=(300, -1))
-        self.tlocation = self.MakeTextCtrl("newLocation", size=(300, -1))
+        self.tgisdbase    = self.MakeTextCtrl(grassdatabase, size=(300, -1))
+        self.tlocation    = self.MakeTextCtrl("newLocation", size=(300, -1))
+        self.tdescription = self.MakeTextCtrl(size=(300, 150), style = wx.TE_MULTILINE)
         
         # layout
         self.sizer.AddGrowableCol(3)
@@ -153,7 +155,7 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(1, 3))
-        #
+        
         self.sizer.Add(item=self.MakeLabel("%s:" % _("Project Location")),
                        flag=wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -164,6 +166,17 @@ class DatabasePage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(2, 2))
+
+        self.sizer.Add(item=self.MakeLabel("%s:" % _("Description")),
+                       flag=wx.ALIGN_RIGHT |
+                       wx.ALIGN_TOP |
+                       wx.ALL, border=5,
+                       pos=(3, 1))
+        self.sizer.Add(item=self.tdescription,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(3, 2))
         
         # bindings
         self.Bind(wx.EVT_BUTTON,                self.OnBrowse, self.bbrowse)
@@ -192,26 +205,23 @@ class DatabasePage(TitledPage):
             
         dlg.Destroy()
 
-    def OnPageChanging(self,event=None):
-        error = ''
+    def OnPageChanging(self, event = None):
+        error = None
         if os.path.isdir(os.path.join(self.tgisdbase.GetValue(), self.tlocation.GetValue())):
             error = _("Location already exists in GRASS Database.")
 
-        if error != '':
-            dlg = wx.MessageDialog(parent=self, message="%s <%s>.%s%s" % (_("Unable to create location"),
-                                                                          str(self.tlocation.GetValue()),
-                                                                          os.linesep,
-                                                                          error),
-                                   caption=_("Error"),  style=wx.OK | wx.ICON_ERROR)
-            
-            dlg.ShowModal()
-            dlg.Destroy()
+        if error:
+            gcmd.GError(parent = self,
+                        message="%s <%s>.%s%s" % (_("Unable to create location"),
+                                                  str(self.tlocation.GetValue()),
+                                                  os.linesep,
+                                                  error))
             event.Veto()
             return
 
-        self.location = self.tlocation.GetValue()
+        self.location      = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetValue()
-
+        self.description   = self.tdescription.GetValue()
         
 class CoordinateSystemPage(TitledPage):
     """!Wizard page for choosing method for location creation"""
@@ -1952,16 +1962,19 @@ class LocationWizard(wx.Object):
         try:
             if coordsys == "xy":
                 grass.create_location(dbase = self.startpage.grassdatabase,
-                                      location = self.startpage.location)
+                                      location = self.startpage.location,
+                                      desc = self.startpage.description)
             elif coordsys == "proj":
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
                                       proj4 = self.CreateProj4String(),
-                                      datum = self.datumtrans)
+                                      datum = self.datumtrans,
+                                      desc = self.startpage.description)
             elif coordsys == 'custom':
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
-                                      proj4 = self.custompage.customstring)
+                                      proj4 = self.custompage.customstring,
+                                      desc = self.startpage.description)
             elif coordsys == "epsg":
                 if not self.epsgpage.epsgcode:
                     return _('EPSG code missing.')
@@ -1969,7 +1982,8 @@ class LocationWizard(wx.Object):
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
                                       epsg = self.epsgpage.epsgcode,
-                                      datum = self.datumtrans)
+                                      datum = self.datumtrans,
+                                      desc = self.startpage.description)
             elif coordsys == "file":
                 if not self.filepage.georeffile or \
                         not os.path.isfile(self.filepage.georeffile):
@@ -1977,7 +1991,8 @@ class LocationWizard(wx.Object):
                 
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
-                                      filename = self.filepage.georeffile)
+                                      filename = self.filepage.georeffile,
+                                      desc = self.startpage.description)
             elif coordsys == "wkt":
                 if not self.wktpage.wktfile or \
                         not os.path.isfile(self.wktpage.wktfile):
@@ -1985,7 +2000,8 @@ class LocationWizard(wx.Object):
                 
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
-                                      filename = self.wktpage.wktfile)
+                                      filename = self.wktpage.wktfile,
+                                      desc = self.startpage.description)
         
         except grass.ScriptException, e:
             return str(e)
@@ -2035,8 +2051,7 @@ class LocationWizard(wx.Object):
         return proj4string
 
 class RegionDef(BaseClass, wx.Frame):
-    """
-    Page for setting default region extents and resolution
+    """!Page for setting default region extents and resolution
     """
     def __init__(self, parent, id=wx.ID_ANY,
                  title=_("Set default region extent and resolution"), location=None):
