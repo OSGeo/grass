@@ -94,12 +94,12 @@ int main(int argc, char *argv[])
     
     opt.list = G_define_flag();
     opt.list->key = 'l';
-    opt.list->description = _("List all available mapsets");
+    opt.list->description = _("List all available mapsets in alphabetical order");
     opt.list->guisection = _("Print");
 
     opt.print = G_define_flag();
     opt.print->key = 'p';
-    opt.print->description = _("Print current mapset search path");
+    opt.print->description = _("Print mapsets in current search path");
     opt.print->guisection = _("Print");
 
     opt.dialog = G_define_flag();
