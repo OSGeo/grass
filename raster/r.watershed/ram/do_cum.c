@@ -148,6 +148,7 @@ int do_cum_mfd(void)
 	G_percent(killer, do_points, 1);
 	this_index = astar_pts[killer];
 	seg_index_rc(alt_seg, this_index, &r, &c);
+	FLAG_SET(worked, r, c);
 	aspect = asp[this_index];
 	if (aspect) {
 	    dr = r + asp_r[ABS(aspect)];
@@ -361,7 +362,6 @@ int do_cum_mfd(void)
 		if (er_flag && !is_swale)
 		    slope_length(r, c, r_max, c_max);
 	    }
-	    FLAG_SET(worked, r, c);
 	}
     }
     if (workedon)
