@@ -12,15 +12,16 @@ int close_maps(void)
     DCELL min, max;
     DCELL clr_min, clr_max;
     DCELL sum, sum_sqr, stddev, lstddev, dvalue;
-    WAT_ALT wa;
+    WAT_ALT *wabuf;
 
     /* bseg_close(&swale); */
     bseg_close(&bitflags);
-    cseg_close(&alt);
     if (wat_flag) {
 	G_message(_("Closing accumulation map"));
 	sum = sum_sqr = stddev = 0.0;
 	dbuf = Rast_allocate_d_buf();
+	wabuf = G_malloc(ncols * sizeof(WAT_ALT));
+	seg_flush(&watalt);
 	if (abs_acc) {
 	    G_warning("Writing out only positive flow accumulation values.");
 	    G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
@@ -31,10 +32,10 @@ int close_maps(void)
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 1);
 	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+	    seg_get_row(&watalt, (char *)wabuf, r);
 	    for (c = 0; c < ncols; c++) {
 		/* dseg_get(&wat, &dvalue, r, c); */
-		seg_get(&watalt, (char *)&wa, r, c);
-		dvalue = wa.wat;
+		dvalue = wabuf[c].wat;
 		if (Rast_is_d_null_value(&dvalue) == 0 && dvalue) {
 		    if (abs_acc) {
 			dvalue = fabs(dvalue);
@@ -52,6 +53,8 @@ int close_maps(void)
 	G_percent(r, nrows, 1);    /* finish it */
 
 	Rast_close(fd);
+	G_free(wabuf);
+	G_free(dbuf);
 
 	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
 	G_debug(1, "stddev: %f", stddev);
@@ -123,12 +126,12 @@ int close_maps(void)
     seg_close(&watalt);
     if (asp_flag) {
 	G_message(_("Closing flow direction map"));
-	cseg_write_cellfile(&asp, asp_name);
+	bseg_write_cellfile(&asp, asp_name);
 	Rast_init_colors(&colors);
 	Rast_make_grey_scale_colors(&colors, 1, 8);
 	Rast_write_colors(asp_name, this_mapset, &colors);
     }
-    cseg_close(&asp);
+    bseg_close(&asp);
     if (ls_flag) {
 	G_message(_("Closing LS map"));
 	dseg_write_cellfile(&l_s, ls_name);

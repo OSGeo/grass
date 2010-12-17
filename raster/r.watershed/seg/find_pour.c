@@ -4,7 +4,9 @@ int find_pourpts(void)
 {
     int row, col;
     double easting, northing, stream_length;
-    CELL old_elev, basin_num, value;
+    CELL old_elev, basin_num;
+    char aspect;
+    WAT_ALT wa;
     char is_swale;
 
     ocs_alloced = 2 * bas_thres;
@@ -16,10 +18,10 @@ int find_pourpts(void)
 	G_percent(row, nrows, 1);
 	northing = window.north - (row + .5) * window.ns_res;
 	for (col = 0; col < ncols; col++) {
-	    cseg_get(&asp, &value, row, col);
+	    bseg_get(&asp, &aspect, row, col);
 	    bseg_get(&bitflags, &is_swale, row, col);
 	    is_swale = FLAG_GET(is_swale, SWALEFLAG);
-	    if (value < 0 && is_swale > 0) {
+	    if (aspect < 0 && is_swale > 0) {
 		basin_num += 2;
 		if (arm_flag) {
 		    easting = window.west + (col + .5) * window.ew_res;
@@ -34,7 +36,8 @@ int find_pourpts(void)
 		    else {
 			stream_length = 0.0;
 		    }
-		    cseg_get(&alt, &old_elev, row, col);
+		    seg_get(&watalt, (char *) &wa, row, col);
+		    old_elev = wa.ele;
 		}
 		basin_num =
 		    def_basin(row, col, basin_num, stream_length, old_elev);

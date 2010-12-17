@@ -12,19 +12,20 @@ int init_vars(int argc, char *argv[])
     int r, c;
     int ele_fd, fd, wat_fd;
     int seg_rows, seg_cols, num_cseg_total, num_open_segs, num_open_array_segs;
+    double memory_divisor, heap_mem, seg_factor;
 
     /* int page_block, num_cseg; */
     int max_bytes;
-    CELL *buf, alt_value, asp_value, block_value;
-    char worked_value, flag_value;
+    CELL *buf, alt_value, *alt_value_buf, block_value;
+    char asp_value;
+    char worked_value, flag_value, *flag_value_buf;
     DCELL wat_value;
     DCELL dvalue;
-    WAT_ALT wa;
+    WAT_ALT wa, *wabuf;
     char MASK_flag;
     void *elebuf, *ptr, *watbuf, *watptr;
     int ele_map_type, wat_map_type;
     size_t ele_size, wat_size;
-    CELL cellone = 1;
     int ct_dir, r_nbr, c_nbr;
 
     G_gisinit(argv[0]);
@@ -145,23 +146,52 @@ int init_vars(int argc, char *argv[])
     if (sides == 4)
 	diag *= 0.5;
 
-    /* segment parameters: one size fits all. Fine tune? */
     /* Segment rows and cols: 64 */
-    /* 1 segment open for all data structures used in A* Search: 0.18 MB */
-    /* is really 0.22 MB but search heap holds max 5% of all points
-     * i.e. we will probably never need all open segments for search heap
-     */
 
     seg_rows = SROW;
     seg_cols = SCOL;
+    /* seg_factor * <size in bytes> = segment size in KB */
+    seg_factor = seg_rows * seg_rows / 1024.;
 
     if (segs_mb < 3.0) {
-	segs_mb = 300;
+	segs_mb = 3;
 	G_warning(_("Maximum memory to be used was smaller than 3 MB,"
-	            " set to default = 300 MB."));
+	            " set to 3 MB."));
     }
 
-    num_open_segs = segs_mb / 0.18;
+    /* balance segment files */
+    /* elevation + accumulation: * 2 */
+    memory_divisor =  seg_factor * 8 * 2;
+    /* aspect: as is */
+    memory_divisor += seg_factor;
+    /* flags: * 4 */
+    memory_divisor += seg_factor * 4;
+    /* astar_points: / 16 */
+    /* ideally only a few but large segments */
+    memory_divisor += seg_factor * sizeof(POINT) / 16.;
+    /* heap points: / 5 */
+    memory_divisor += seg_factor * sizeof(HEAP_PNT) / 5.;
+    /* RUSLE */
+    if (er_flag) {
+	/* r_h */
+	memory_divisor += seg_factor * 4.;
+	/* s_l */
+	memory_divisor += seg_factor * 8.;
+	/* s_g */
+	if (sg_flag)
+	    memory_divisor += seg_factor * 8.;
+	/* l_s */
+	if (ls_flag)
+	    memory_divisor += seg_factor * 8.;
+	/* ril */
+	if (ril_flag)
+	    memory_divisor += seg_factor * 8.;
+    }
+    
+    /* KB -> MB */
+    memory_divisor /= 1024.;
+    num_open_segs = segs_mb / memory_divisor;
+    heap_mem = num_open_segs * seg_factor * sizeof(HEAP_PNT) / (5. * 1024.);
 
     G_debug(1, "segs MB: %.0f", segs_mb);
     G_debug(1, "region rows: %d", nrows);
@@ -184,11 +214,11 @@ int init_vars(int argc, char *argv[])
 	num_open_segs = num_cseg_total;
     G_debug(1, "  open segments after adjusting:\t%d", num_open_segs);
 
-    if (num_cseg_total * 0.18 < 1024.0)
-	G_verbose_message(_("Will need up to %.2f MB of disk space"), num_cseg_total * 0.18);
+    if (num_cseg_total * memory_divisor < 1024.0)
+	G_verbose_message(_("Will need up to %.2f MB of disk space"), num_cseg_total * memory_divisor);
     else
-	G_verbose_message(_("Will need up to %.2f GB (%.2f MB) of disk space"),
-	           (num_cseg_total * 0.18) / 1024.0, num_cseg_total * 0.18);
+	G_verbose_message(_("Will need up to %.2f GB (%.0f MB) of disk space"),
+	           (num_cseg_total * memory_divisor) / 1024.0, num_cseg_total * memory_divisor);
 
     if (er_flag) {
 	cseg_open(&r_h, seg_rows, seg_cols, num_open_segs);
@@ -197,11 +227,10 @@ int init_vars(int argc, char *argv[])
     
     /* read elevation input and mark NULL/masked cells */
 
-    /* scattered access: alt, watalt, listflag, asp */
-    cseg_open(&alt, seg_rows, seg_cols, num_open_segs);
-    seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs, sizeof(WAT_ALT));
-    bseg_open(&bitflags, seg_rows, seg_cols, num_open_segs);
-    cseg_open(&asp, seg_rows, seg_cols, num_open_segs);
+    /* scattered access: alt, watalt, bitflags, asp */
+    seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs * 2, sizeof(WAT_ALT));
+    bseg_open(&bitflags, seg_rows, seg_cols, num_open_segs * 4);
+    bseg_open(&asp, seg_rows, seg_cols, num_open_segs);
 
     /* open elevation input */
     ele_fd = Rast_open_old(ele_name, "");
@@ -225,6 +254,9 @@ int init_vars(int argc, char *argv[])
 	watbuf = watptr = NULL;
 	wat_fd = wat_size = wat_map_type = -1;
     }
+    wabuf = G_malloc(ncols * sizeof(WAT_ALT));
+    flag_value_buf = G_malloc(ncols * sizeof(char));
+    alt_value_buf = Rast_allocate_buf(CELL_TYPE);
 
     /* read elevation input and mark NULL/masked cells */
     G_message("SECTION 1a: Mark masked and NULL cells");
@@ -242,13 +274,13 @@ int init_vars(int argc, char *argv[])
 	
 	for (c = 0; c < ncols; c++) {
 
-	    flag_value = 0;
+	    flag_value_buf[c] = 0;
 
 	    /* check for masked and NULL cells */
 	    if (Rast_is_null_value(ptr, ele_map_type)) {
-		FLAG_SET(flag_value, NULLFLAG);
-		FLAG_SET(flag_value, INLISTFLAG);
-		FLAG_SET(flag_value, WORKEDFLAG);
+		FLAG_SET(flag_value_buf[c], NULLFLAG);
+		FLAG_SET(flag_value_buf[c], INLISTFLAG);
+		FLAG_SET(flag_value_buf[c], WORKEDFLAG);
 		Rast_set_c_null_value(&alt_value, 1);
 		/* flow accumulation */
 		Rast_set_d_null_value(&wat_value, 1);
@@ -291,26 +323,26 @@ int init_vars(int argc, char *argv[])
 		}
 
 	    }
-	    cseg_put(&alt, &alt_value, r, c);
-	    wa.wat = wat_value;
-	    wa.ele = alt_value;
-	    seg_put(&watalt, (char *)&wa, r, c);
-
-	    if (flag_value)
-		bseg_put(&bitflags, &flag_value, r, c);
-	    
-	    if (er_flag) {
-		cseg_put(&r_h, &alt_value, r, c);
-	    }
+	    wabuf[c].wat = wat_value;
+	    wabuf[c].ele = alt_value;
+	    alt_value_buf[c] = alt_value;
 	    ptr = G_incr_void_ptr(ptr, ele_size);
 	    if (run_flag) {
 		watptr = G_incr_void_ptr(watptr, wat_size);
 	    }
 	}
+	seg_put_row(&watalt, (char *) wabuf, r);
+
+	bseg_put_row(&bitflags, flag_value_buf, r);
+	
+	if (er_flag) {
+	    cseg_put_row(&r_h, alt_value_buf, r);
+	}
     }
     G_percent(nrows, nrows, 1);    /* finish it */
     Rast_close(ele_fd);
-    G_free(elebuf);
+    G_free(wabuf);
+    G_free(flag_value_buf);
     
     if (run_flag) {
 	Rast_close(wat_fd);
@@ -321,15 +353,18 @@ int init_vars(int argc, char *argv[])
     
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
+	CELL cval;
+	char charone = 1;
+	
 	fd = Rast_open_old(pit_name, "");
 	buf = Rast_allocate_c_buf();
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 1);
 	    Rast_get_c_row(fd, buf, r);
 	    for (c = 0; c < ncols; c++) {
-		asp_value = buf[c];
-		if (!Rast_is_c_null_value(&asp_value) && asp_value) {
-		    cseg_put(&asp, &cellone, r, c);
+		cval = buf[c];
+		if (!Rast_is_c_null_value(&cval) && cval) {
+		    bseg_put(&asp, &charone, r, c);
 		    bseg_get(&bitflags, &flag_value, r, c);
 		    FLAG_SET(flag_value, PITFLAG);
 		    bseg_put(&bitflags, &flag_value, r, c);
@@ -370,7 +405,7 @@ int init_vars(int argc, char *argv[])
 	
 	/* dseg_open(&slp, SROW, SCOL, num_open_segs); */
 
-	    dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
+	dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
 	if (sg_flag)
 	    dseg_open(&s_g, 1, seg_rows * seg_cols, num_open_segs);
 	if (ls_flag)
@@ -378,49 +413,39 @@ int init_vars(int argc, char *argv[])
     }
 
     G_debug(1, "open segments for A* points");
-    /* rounded down power of 2 */
-    seg_cols = (int) (pow(2, (int)(log(num_open_segs / 8.0) / log(2) + 0.1)) + 0.1);
-    if (seg_cols < 2)
-	seg_cols = 2;
-    num_open_array_segs = num_open_segs / seg_cols;
-    if (num_open_array_segs == 0)
-	num_open_array_segs = 1;
-    /* n cols in segment */
-    seg_cols *= seg_rows * seg_rows;
-    /* n segments in row */
+    /* columns per segment */
+    seg_cols = seg_rows * seg_rows;
     num_cseg_total = do_points / seg_cols;
     if (do_points % seg_cols > 0)
 	num_cseg_total++;
     /* no need to have more segments open than exist */
+    num_open_array_segs = num_open_segs / 16.;
     if (num_open_array_segs > num_cseg_total)
 	num_open_array_segs = num_cseg_total;
-
-    if (num_open_array_segs > 4)
-	num_open_array_segs = 4;
+    if (num_open_array_segs < 1)
+	num_open_array_segs = 1;
     
     seg_open(&astar_pts, 1, do_points, 1, seg_cols, num_open_array_segs,
 	     sizeof(POINT));
 
     /* one-based d-ary search_heap with astar_pts */
     G_debug(1, "open segments for A* search heap");
-    /* rounded down power of 2 */
-    seg_cols = (int) (pow(2, (int)(log(num_open_segs / 8.0) / log(2) + 0.1)) + 0.1);
-    if (seg_cols < 2)
-	seg_cols = 2;
-    num_open_array_segs = num_open_segs / seg_cols;
-    if (num_open_array_segs == 0)
-	num_open_array_segs = 1;
-    /* n cols in segment */
-    seg_cols *= seg_rows * seg_rows;
-    /* n segments in row */
-    num_cseg_total = (do_points + 1) / seg_cols;
-    if ((do_points + 1) % seg_cols > 0)
+    G_debug(1, "heap memory %.2f MB", heap_mem);
+    /* columns per segment */
+    /* larger is faster */
+    seg_cols = seg_rows * seg_rows * seg_rows;
+    num_cseg_total = do_points / seg_cols;
+    if (do_points % seg_cols > 0)
 	num_cseg_total++;
     /* no need to have more segments open than exist */
+    num_open_array_segs = (2 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
     if (num_open_array_segs > num_cseg_total)
 	num_open_array_segs = num_cseg_total;
+    if (num_open_array_segs < 2)
+	num_open_array_segs = 2;
 
-    G_debug(1, "A* search heap open segments %d, target 8", num_open_array_segs);
+    G_debug(1, "A* search heap open segments %d, total %d",
+            num_open_array_segs, num_cseg_total);
     /* the search heap will not hold more than 5% of all points at any given time ? */
     /* chances are good that the heap will fit into one large segment */
     seg_open(&search_heap, 1, do_points + 1, 1, seg_cols,
@@ -441,7 +466,7 @@ int init_vars(int argc, char *argv[])
 		if (!FLAG_GET(flag_value, NULLFLAG)) {
 		    if (er_flag)
 			dseg_put(&s_l, &half_res, r, c);
-		    cseg_get(&asp, &asp_value, r, c);
+		    bseg_get(&asp, &asp_value, r, c);
 		    if (r == 0 || c == 0 || r == nrows - 1 ||
 			c == ncols - 1 || asp_value != 0) {
 			/* dseg_get(&wat, &wat_value, r, c); */
@@ -471,11 +496,14 @@ int init_vars(int argc, char *argv[])
 			    asp_value = -6;
 			else if (c == ncols - 1)
 			    asp_value = -8;
-			if (-1 == cseg_put(&asp, &asp_value, r, c))
+			if (-1 == bseg_put(&asp, &asp_value, r, c))
 			    exit(EXIT_FAILURE);
 			/* cseg_get(&alt, &alt_value, r, c); */
 			alt_value = wa.ele;
-			add_pt(r, c, alt_value, asp_value, 1);
+			add_pt(r, c, alt_value);
+			FLAG_SET(flag_value, INLISTFLAG);
+			FLAG_SET(flag_value, EDGEFLAG);
+			bseg_put(&bitflags, &flag_value, r, c);
 		    }
 		    else {
 			seg_get(&watalt, (char *)&wa, r, c);
@@ -487,8 +515,11 @@ int init_vars(int argc, char *argv[])
 			    bseg_get(&bitflags, &worked_value, r_nbr, c_nbr);
 			    if (FLAG_GET(worked_value, NULLFLAG)) {
 				asp_value = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
-				add_pt(r, c, wa.ele, asp_value, 1);
-				cseg_put(&asp, &asp_value, r, c);
+				add_pt(r, c, wa.ele);
+				FLAG_SET(flag_value, INLISTFLAG);
+				FLAG_SET(flag_value, EDGEFLAG);
+				bseg_put(&bitflags, &flag_value, r, c);
+				bseg_put(&asp, &asp_value, r, c);
 				wat_value = wa.wat;
 				if (wat_value > 0) {
 				    wa.wat = -wat_value;
@@ -509,7 +540,7 @@ int init_vars(int argc, char *argv[])
 		/* bseg_put(&worked, &zero, r, c); */
 		if (er_flag)
 		    dseg_put(&s_l, &half_res, r, c);
-		cseg_get(&asp, &asp_value, r, c);
+		bseg_get(&asp, &asp_value, r, c);
 		if (r == 0 || c == 0 || r == nrows - 1 ||
 		    c == ncols - 1 || asp_value != 0) {
 		    seg_get(&watalt, (char *)&wa, r, c);
@@ -536,10 +567,14 @@ int init_vars(int argc, char *argv[])
 			asp_value = -6;
 		    else if (c == ncols - 1)
 			asp_value = -8;
-		    if (-1 == cseg_put(&asp, &asp_value, r, c))
+		    if (-1 == bseg_put(&asp, &asp_value, r, c))
 			exit(EXIT_FAILURE);
 		    /* cseg_get(&alt, &alt_value, r, c); */
-		    add_pt(r, c, wa.ele, asp_value, 1);
+		    add_pt(r, c, wa.ele);
+		    bseg_get(&bitflags, &flag_value, r, c);
+		    FLAG_SET(flag_value, INLISTFLAG);
+		    FLAG_SET(flag_value, EDGEFLAG);
+		    bseg_put(&bitflags, &flag_value, r, c);
 		}
 	    }
 	}

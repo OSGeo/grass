@@ -44,9 +44,7 @@
 
 #define POINT       struct points
 POINT {
-    int r, c; /* , downr, downc */
-    char asp;      /* drainage direction */
-    char guessed;   /* accumulation will likely be an underestimate */
+    int r, c;
 };
 
 #define HEAP_PNT    struct heap_point
@@ -80,16 +78,16 @@ extern int nrows, ncols;
 extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
 extern SSEG astar_pts;
-extern BSEG bitflags, s_b;
-extern CSEG dis, alt, asp, bas, haf, r_h, dep;
+extern BSEG bitflags, s_b, asp;
+extern CSEG dis, bas, haf, r_h, dep;
 extern SSEG watalt;
 extern DSEG slp, s_l, s_g, l_s, ril;
 extern double segs_mb;
 extern char zero, one;
 extern double ril_value, d_zero, d_one;
 extern int sides;
-extern int drain[3][3];
-extern int updrain[3][3];
+extern char drain[3][3];
+extern char updrain[3][3];
 extern int nextdr[8];
 extern int nextdc[8];
 extern char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
@@ -139,13 +137,7 @@ CELL def_basin(int, int, CELL, double, CELL);
 
 /* do_astar.c */
 int do_astar(void);
-int add_pt(int, int, CELL, char, int);
-HEAP_PNT drop_pt(void);
-int sift_up(int, HEAP_PNT);
-int sift_up_mem(int, HEAP_PNT);
-int sift_down_disk(void);
-int fill_mem_heap(void);
-int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b);
+int add_pt(int, int, CELL);
 double get_slope(int, int, int, int, CELL, CELL);
 
 /* do_cum.c */

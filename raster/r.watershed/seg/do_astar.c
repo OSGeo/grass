@@ -3,14 +3,18 @@
 #include "Gwater.h"
 #include "do_astar.h"
 
+HEAP_PNT drop_pt(void);
+int sift_up(int, HEAP_PNT);
+int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b);
 double get_slope2(CELL, CELL, double);
 
 int do_astar(void)
 {
     int doer, count;
     int upr, upc, r = -1, c = -1, ct_dir;
-    CELL alt_val, alt_nbr[8], alt_up;
-    CELL asp_val;
+    CELL alt_val, alt_nbr[8];
+    WAT_ALT wa;
+    char asp_val;
     char flag_value, is_in_list, is_worked;
     HEAP_PNT heap_p;
 
@@ -78,8 +82,8 @@ int do_astar(void)
 		skip_diag = 0;
 		/* avoid diagonal flow direction bias */
 		if (!is_worked) {
-		    cseg_get(&alt, &alt_up, upr, upc);
-		    alt_nbr[ct_dir] = alt_up;
+		    seg_get(&watalt, (char *)&wa, upr, upc);
+		    alt_nbr[ct_dir] = wa.ele;
 		    slope[ct_dir] =
 			get_slope2(alt_val, alt_nbr[ct_dir],
 				   dist_to_nbr[ct_dir]);
@@ -107,9 +111,10 @@ int do_astar(void)
 		if (is_in_list == 0 && skip_diag == 0) {
 		    /* set flow direction */
 		    asp_val = drain[upr - r + 1][upc - c + 1];
-		    add_pt(upr, upc, alt_nbr[ct_dir], asp_val, 0);
-		    cseg_put(&asp, &asp_val, upr, upc);
-
+		    add_pt(upr, upc, alt_nbr[ct_dir]);
+		    bseg_put(&asp, &asp_val, upr, upc);
+		    FLAG_SET(flag_value, INLISTFLAG);
+		    bseg_put(&bitflags, &flag_value, upr, upc);
 
 		    if (alt_nbr[ct_dir] < alt_val) {
 			if (ct_dir < 4)
@@ -128,25 +133,27 @@ int do_astar(void)
 		else if (is_in_list && is_worked == 0 &&
 			 FLAG_GET(flag_value, EDGEFLAG)) {
 		    /* neighbour is edge in list, not yet worked */
-		    cseg_get(&asp, &asp_val, upr, upc);
+		    bseg_get(&asp, &asp_val, upr, upc);
 		    if (asp_val < 0) {
 			/* adjust flow direction for edge cell */
 			asp_val = drain[upr - r + 1][upc - c + 1];
-			cseg_put(&asp, &asp_val, upr, upc);
-			heap_p.pnt.guessed = 1;
+			bseg_put(&asp, &asp_val, upr, upc);
+			seg_get(&watalt, (char *)&wa, r, c);
+			if (wa.wat > 0) {
+			    wa.wat = -wa.wat;
+			    seg_put(&watalt, (char *)&wa, r, c);
+			}
+			    
 		    }
 		}
 	    }
 	}
 	/* add astar points to sorted list for flow accumulation */
-	cseg_get(&asp, &asp_val, r, c);
-	heap_p.pnt.asp = asp_val;
 	seg_put(&astar_pts, (char *)&heap_p.pnt, 0, doer);
 	doer--;
 	bseg_get(&bitflags, &flag_value, r, c);
 	FLAG_SET(flag_value, WORKEDFLAG);
 	bseg_put(&bitflags, &flag_value, r, c);
-
     }
     if (doer != -1)
 	G_fatal_error(_("bug in A* Search: doer %d heap size %d count %d"),
@@ -178,21 +185,9 @@ int cmp_pnt(HEAP_PNT * a, HEAP_PNT * b)
 }
 
 /* add point routine for min heap */
-int add_pt(int r, int c, CELL ele, char asp, int is_edge)
+int add_pt(int r, int c, CELL ele)
 {
     HEAP_PNT heap_p;
-    char flag_value;
-
-    bseg_get(&bitflags, &flag_value, r, c);
-    if (is_edge) {
-	FLAG_SET(flag_value, EDGEFLAG);
-	heap_p.pnt.guessed = 1;
-    }
-    else {
-	heap_p.pnt.guessed = 0;
-    }
-    FLAG_SET(flag_value, INLISTFLAG);
-    bseg_put(&bitflags, &flag_value, r, c);
 
     /* add point to next free position */
 
@@ -202,7 +197,6 @@ int add_pt(int r, int c, CELL ele, char asp, int is_edge)
     heap_p.ele = ele;
     heap_p.pnt.r = r;
     heap_p.pnt.c = c;
-    heap_p.pnt.asp = asp;
 
     nxt_avail_pt++;
 

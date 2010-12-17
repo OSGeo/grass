@@ -6,7 +6,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 {
     int r, rr, c, cc, uprow = 0, upcol = 0;
     double slope;
-    CELL downdir, asp_value, hih_ele, new_ele, aspect, value;
+    CELL hih_ele, new_ele, value;
+    char downdir, asp_value, aspect;
     DCELL dvalue, max_drain;	/* flow acc is now DCELL */
     int updir, riteflag, leftflag, thisdir;
     WAT_ALT wa;
@@ -18,7 +19,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	    for (c = col - 1, cc = 0; c <= col + 1; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
 
-		    cseg_get(&asp, &aspect, r, c);
+		    bseg_get(&asp, &aspect, r, c);
 		    if (aspect == drain[rr][cc]) {
 			seg_get(&watalt, (char *)&wa, r, c);
 			dvalue = wa.wat;
@@ -35,7 +36,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	}
 	if (max_drain > -1) {
 	    updir = drain[row - uprow + 1][col - upcol + 1];
-	    cseg_get(&asp, &downdir, row, col);
+	    bseg_get(&asp, &downdir, row, col);
 	    if (downdir < 0)
 		downdir = -downdir;
 	    if (arm_flag) {
@@ -49,7 +50,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 		}
 		else {		/* sides == 4 */
 
-		    cseg_get(&asp, &asp_value, uprow, upcol);
+		    bseg_get(&asp, &asp_value, uprow, upcol);
 		    if (downdir == 2 || downdir == 6) {
 			if (asp_value == 2 || asp_value == 6)
 			    stream_length += window.ns_res;
@@ -69,7 +70,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	    for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 		for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 		    if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
-			cseg_get(&asp, &aspect, r, c);
+			bseg_get(&asp, &aspect, r, c);
 			if (aspect == drain[rr][cc]) {
 			    thisdir = updrain[rr][cc];
 			    switch (haf_basin_side(updir,
@@ -101,7 +102,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	}
 	else {
 	    if (arm_flag) {
-		cseg_get(&alt, &hih_ele, row, col);
+		seg_get(&watalt, (char *) &wa, row, col);
+		hih_ele = wa.ele;
 		slope = (hih_ele - old_elev) / stream_length;
 		if (slope < MIN_SLOPE)
 		    slope = MIN_SLOPE;

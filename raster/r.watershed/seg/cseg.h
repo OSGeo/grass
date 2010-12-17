@@ -49,6 +49,7 @@ int bseg_open(BSEG *, int, int, int);
 
 /* bseg_put.c */
 int bseg_put(BSEG *, char *, int, int);
+int bseg_put_row(BSEG *, char *, int);
 
 /* bseg_read.c */
 int bseg_read_cell(BSEG *, char *, char *);
@@ -67,6 +68,7 @@ int cseg_open(CSEG *, int, int, int);
 
 /* cseg_put.c */
 int cseg_put(CSEG *, CELL *, int, int);
+int cseg_put_row(CSEG *, CELL *, int);
 
 /* cseg_read.c */
 int cseg_read_cell(CSEG *, char *, char *);
@@ -85,6 +87,7 @@ int dseg_open(DSEG *, int, int, int);
 
 /* dseg_put.c */
 int dseg_put(DSEG *, double *, int, int);
+int dseg_put_row(DSEG *, double *, int);
 
 /* dseg_read.c */
 int dseg_read_cell(DSEG *, char *, char *);
@@ -103,12 +106,15 @@ int seg_open(SSEG *, int, int, int, int, int, int);
 
 /* seg_put.c */
 int seg_put(SSEG *, char *, int, int);
+int seg_put_row(SSEG *, char *, int);
 
 /* sseg_close.c */
 int seg_close(SSEG *);
 
 /* sseg_get.c */
 int seg_get(SSEG *, char *, int, int);
+int seg_get_row(SSEG *, char *, int);
+int seg_flush(SSEG *);
 
 /* sseg_open.c */
 int seg_open(SSEG *, int, int, int, int, int, int);

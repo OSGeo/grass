@@ -8,7 +8,7 @@
 int do_cum(void)
 {
     int r, c, dr, dc;
-    CELL asp_val, asp_val_down;
+    char asp_val, asp_val_down;
     char is_swale, this_flag_value, flag_value;
     DCELL value, valued;
     POINT point;
@@ -28,7 +28,7 @@ int do_cum(void)
 	seg_get(&astar_pts, (char *)&point, 0, killer);
 	r = point.r;
 	c = point.c;
-	asp_val = point.asp;
+	bseg_get(&asp, &asp_val, r, c);
 	if (asp_val) {
 	    dr = r + asp_r[ABS(asp_val)];
 	    dc = c + asp_c[ABS(asp_val)];
@@ -67,10 +67,10 @@ int do_cum(void)
 	    seg_put(&watalt, (char *)&wadown, dr, dc);
 	    /* update asp for depression */
 	    if (is_swale && pit_flag) {
-		cseg_get(&asp, &asp_val_down, dr, dc);
+		bseg_get(&asp, &asp_val_down, dr, dc);
 		if (asp_val > 0 && asp_val_down == 0) {
 		    asp_val = -asp_val;
-		    cseg_put(&asp, &asp_val, r, c);
+		    bseg_put(&asp, &asp_val, r, c);
 		}
 	    }
 	    if (is_swale || fabs(valued) >= threshold) {
@@ -80,7 +80,7 @@ int do_cum(void)
 		is_swale = 1;
 	    }
 	    else {
-		if (er_flag && !is_swale)
+		if (er_flag && !is_swale && !FLAG_GET(this_flag_value, RUSLEBLOCKFLAG))
 		    slope_length(r, c, dr, dc);
 	    }
 	}
@@ -128,7 +128,8 @@ int do_cum_mfd(void)
     double *dist_to_nbr, *weight, sum_weight, max_weight;
     int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side, max_side;
     double dx, dy;
-    CELL ele, *ele_nbr, asp_val, asp_val_down;
+    CELL ele, *ele_nbr;
+    char asp_val, asp_val_down;
     double prop, max_acc;
     int workedon, edge, is_swale, flat;
     char *flag_nbr, this_flag_value, flag_value;
@@ -171,7 +172,7 @@ int do_cum_mfd(void)
 	seg_get(&astar_pts, (char *)&point, 0, killer);
 	r = point.r;
 	c = point.c;
-	asp_val = point.asp;
+	bseg_get(&asp, &asp_val, r, c);
 	if (asp_val) {
 	    dr = r + asp_r[ABS(asp_val)];
 	    dc = c + asp_c[ABS(asp_val)];
@@ -180,20 +181,17 @@ int do_cum_mfd(void)
 	else
 	    dr = dc = -1;
 
-	seg_get(&watalt, (char *)&wa, r, c);
-	value = wa.wat;
-	if (point.guessed && value > 0) {
-	    value = -value;
-	    wa.wat = value;
-	    seg_put(&watalt, (char *)&wa, r, c);
-	}
-
+	/* WORKEDFLAG has been set during A* Search
+	 * reversed meaning here: 0 = done, 1 = not yet done */
 	bseg_get(&bitflags, &this_flag_value, r, c);
 	FLAG_UNSET(this_flag_value, WORKEDFLAG);
 	
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
 	    r_max = dr;
 	    c_max = dc;
+
+	    seg_get(&watalt, (char *)&wa, r, c);
+	    value = wa.wat;
 
 	    /* get weights */
 	    max_weight = 0;
@@ -216,10 +214,6 @@ int do_cum_mfd(void)
 
 		wat_nbr[ct_dir] = 0;
 		ele_nbr[ct_dir] = 0;
-
-		/* WORKEDFLAG has been set during A* Search
-		 * reversed meaning here: 0 = done, 1 = not yet done */
-		FLAG_UNSET(flag_nbr[ct_dir], WORKEDFLAG);
 
 		/* check if neighbour is within region */
 		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
@@ -282,8 +276,9 @@ int do_cum_mfd(void)
 		is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
 		if (is_swale && asp_val > 0) {
 		    asp_val = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
-		    cseg_put(&asp, &asp_val, r, c);
+		    bseg_put(&asp, &asp_val, r, c);
 		}
+		bseg_put(&bitflags, &this_flag_value, r, c);
 		continue;
 	    }
 
@@ -355,7 +350,7 @@ int do_cum_mfd(void)
 
 		/* adjust main drainage direction to A* path if possible */
 		/*if (fabs(wat_nbr[np_side]) >= max_acc) {
-		    max_acc = fabs(wat_nbr[ct_dir]);
+		    max_acc = fabs(wat_nbr[np_side]);
 		    r_max = dr;
 		    c_max = dc;
 		} */
@@ -393,7 +388,7 @@ int do_cum_mfd(void)
 		else
 		    asp_val = drain[r - r_max + 1][c - c_max + 1];
 		    
-		cseg_put(&asp, &asp_val, r, c);
+		bseg_put(&asp, &asp_val, r, c);
 	    }
 	    is_swale = FLAG_GET(this_flag_value, SWALEFLAG);
 	    /* start new stream */
@@ -405,10 +400,10 @@ int do_cum_mfd(void)
 	    }
 	    /* update asp for depression */
 	    if (is_swale && pit_flag) {
-		cseg_get(&asp, &asp_val_down, dr, dc);
+		bseg_get(&asp, &asp_val_down, dr, dc);
 		if (asp_val > 0 && asp_val_down == 0) {
 		    asp_val = -asp_val;
-		    cseg_put(&asp, &asp_val, r, c);
+		    bseg_put(&asp, &asp_val, r, c);
 		}
 	    }
 	    /* continue stream */
