@@ -6,9 +6,10 @@
 int sg_factor(void)
 {
     int r, c;
-    CELL downer, low_elev, hih_elev;
+    CELL low_elev, hih_elev;
     double height, length, S, sin_theta;
     char flag_value;
+    WAT_ALT wa;
 
     G_message(_("SECTION 5: RUSLE LS and/or S factor determination."));
     for (r = nrows - 1; r >= 0; r--) {
@@ -18,10 +19,10 @@ int sg_factor(void)
 	    if (FLAG_GET(flag_value, NULLFLAG))
 		continue;
 	    
-	    cseg_get(&alt, &low_elev, r, c);
+	    seg_get(&watalt, (char *) &wa, r, c);
+	    low_elev = wa.ele;
 	    cseg_get(&r_h, &hih_elev, r, c);
 	    dseg_get(&s_l, &length, r, c);
-	    cseg_get(&asp, &downer, r, c);
 	    height = 1.0 * (hih_elev - low_elev) / ele_scale;
 	    if (length > max_length) {
 		height *= max_length / length;

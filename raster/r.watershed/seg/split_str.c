@@ -4,7 +4,9 @@ CELL
 split_stream(int row, int col, int new_r[], int new_c[], int ct,
 	     CELL basin_num, double stream_length, CELL old_elev)
 {
-    CELL downdir, old_basin, new_elev, aspect;
+    CELL old_basin, new_elev;
+    char downdir, aspect;
+    WAT_ALT wa;
     double slope, easting, northing;
     int doit, ctr, updir, splitdir[9];
     int thisdir, leftflag, riteflag;
@@ -15,14 +17,14 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
     for (ctr = 1; ctr <= ct; ctr++)
 	splitdir[ctr] = drain[row - new_r[ctr] + 1][col - new_c[ctr] + 1];
     updir = splitdir[1];
-    cseg_get(&asp, &downdir, row, col);
+    bseg_get(&asp, &downdir, row, col);
     if (downdir < 0)
 	downdir = -downdir;
     riteflag = leftflag = 0;
     for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 	    if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
-		cseg_get(&asp, &aspect, r, c);
+		bseg_get(&asp, &aspect, r, c);
 		if (aspect == drain[rr][cc]) {
 		    doit = 1;
 		    thisdir = updrain[rr][cc];
@@ -61,7 +63,8 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
     }
     old_basin = basin_num;
     if (arm_flag) {
-	cseg_get(&alt, &new_elev, row, col);
+	seg_get(&watalt, (char *) &wa, row, col);
+	new_elev = wa.ele;
 	if ((slope = (new_elev - old_elev) / stream_length) < MIN_SLOPE)
 	    slope = MIN_SLOPE;
 	fprintf(fp, " %f %f\n", slope, stream_length);

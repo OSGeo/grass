@@ -36,16 +36,16 @@ int nrows, ncols;
 double half_res, diag, max_length, dep_slope;
 int bas_thres, tot_parts;
 SSEG astar_pts;
-BSEG bitflags, s_b;
-CSEG dis, alt, asp, bas, haf, r_h, dep;
+BSEG bitflags, s_b, asp;
+CSEG dis, alt, bas, haf, r_h, dep;
 SSEG watalt;
 DSEG slp, s_l, s_g, l_s, ril;
 double segs_mb;
 char zero, one;
 double ril_value, d_zero, d_one;
 int sides;
-int drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
-int updrain[3][3] = { {3, 2, 1}, {4, 0, 8}, {5, 6, 7} };
+char drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
+char updrain[3][3] = { {3, 2, 1}, {4, 0, 8}, {5, 6, 7} };
 int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
 int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
 char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 	if (arm_flag) {
 	    fp = fopen(arm_name, "w");
 	}
-	num_open_segs = segs_mb / 0.2;
+	num_open_segs = segs_mb / 0.4;
 	if (num_open_segs > (ncols / SCOL + 1) * (nrows / SROW + 1)) {
 	    num_open_segs = (ncols / SCOL + 1) * (nrows / SROW + 1);
 	}

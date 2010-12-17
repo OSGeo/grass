@@ -5,7 +5,8 @@ int
 overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 {
     int r, rr, c, cc;
-    CELL new_ele, new_max_ele, value;
+    CELL new_ele, new_max_ele;
+    char aspect;
 
     cseg_put(&bas, &basin_num, row, col);
     cseg_put(&haf, &haf_num, row, col);
@@ -13,8 +14,8 @@ overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num, CELL * 
     for (r = row - 1, rr = 0; r <= row + 1; r++, rr++) {
 	for (c = col - 1, cc = 0; c <= col + 1; c++, cc++) {
 	    if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
-		cseg_get(&asp, &value, r, c);
-		if (value == drain[rr][cc]) {
+		bseg_get(&asp, &aspect, r, c);
+		if (aspect == drain[rr][cc]) {
 		    overland_cells(r, c, basin_num, haf_num, &new_ele);
 		}
 	    }
@@ -39,7 +40,7 @@ int
 overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 {
     int r, rr, c, cc, next_r, next_c;
-    CELL value;
+    char aspect;
     int top = 0;
 
     /* put root on stack */
@@ -59,8 +60,8 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
 	for (r = next_r - 1, rr = 0; r <= next_r + 1; r++, rr++) {
 	    for (c = next_c - 1, cc = 0; c <= next_c + 1; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
-		    cseg_get(&asp, &value, r, c);
-		    if (value == drain[rr][cc]) {
+		    bseg_get(&asp, &aspect, r, c);
+		    if (aspect == drain[rr][cc]) {
 			if (top >= ocs_alloced) {
 			    ocs_alloced += bas_thres;
 			    ocs = (OC_STACK *)G_realloc(ocs, ocs_alloced * sizeof(OC_STACK));
