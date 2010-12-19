@@ -15,7 +15,7 @@ Shapefile format:
 v.external dsn=cities.shp output=cities
 
 # define output directory for GRASS calculation results:
-v.external.out directory=$HOME/gisoutput/
+v.external.out dsn=$HOME/gisoutput
 
 # do something (here: spatial query), write output directly as Shapefile
 v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
@@ -31,7 +31,7 @@ v.select ainput=cities atype=point binput=forests btype=area operator=within out
 
 <h2>REFERENCES</h2>
 
-OGR Pages: <a href="http://gdal.osgeo.org/ogr">http://gdal.osgeo.org/ogr</a>
+OGR Library website: <a href="http://gdal.osgeo.org/ogr">http://gdal.osgeo.org/ogr</a>
 
 <h2>AUTHOR</h2>
 
