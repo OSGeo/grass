@@ -5,9 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   \todo Implement V1_open_new_ogr()
-   
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2010 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -29,6 +27,7 @@
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
+#include <cpl_string.h>
 
 /*!
    \brief Open existing OGR layer (level 1 - without feature index file)
@@ -201,4 +200,81 @@ int V2_open_old_ogr(struct Map_info *Map)
     return 0;
 }
 
+/*!
+   \brief Create new OGR layer in given OGR datasource (level 1)
+
+   \param[out] Map pointer to Map_info structure
+   \param name name of OGR layer to create
+   \param with_z 2D or 3D (unused?)
+
+   \return 0 success
+   \return -1 error 
+*/
+int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
+{
+    OGRSFDriverH   Ogr_driver;
+    OGRDataSourceH Ogr_ds;
+    OGRLayerH      Ogr_layer;
+    
+    int            i;
+    char         **Ogr_layer_options;
+     
+    Ogr_layer_options = NULL;
+    
+    OGRRegisterAll();
+	    
+    Ogr_driver = OGRGetDriverByName(Map->fInfo.ogr.driver_name);
+    if (!Ogr_driver) {
+	G_warning(_("Unable to get OGR driver <%s>"), Map->fInfo.ogr.driver_name);
+	return -1;
+    }
+    Map->fInfo.ogr.driver = Ogr_driver;
+    
+    /* TODO: creation options */
+    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, Map->fInfo.ogr.dsn, NULL);
+    if (!Ogr_ds) {
+	G_warning(_("Unable to create OGR data source '%s'"),
+		  Map->fInfo.ogr.dsn);
+	return -1;
+    }
+    Map->fInfo.ogr.ds = Ogr_ds;
+
+    Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, Map->fInfo.ogr.layer_name);
+    if (Ogr_layer) {
+	for (i = 0; i < OGR_DS_GetLayerCount(Ogr_ds); i++) {
+	    if (OGR_DS_GetLayer(Ogr_ds, i) == Ogr_layer) {
+		if (G_get_overwrite()) {
+		    G_warning(_("OGR layer <%s> already exists and will be overwritten"),
+		      Map->fInfo.ogr.layer_name);
+
+		    if (OGR_DS_DeleteLayer(Ogr_ds, i) != OGRERR_NONE) {
+			G_warning(_("Unable to delete OGR layer <%s>"),
+				  Map->fInfo.ogr.layer_name);
+			return -1;
+		    }
+		}
+		else {
+		    G_fatal_error(_("OGR layer <%s> already exists in datasource '%s'"),
+				  Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
+		}
+		break;
+	    }
+	}
+    }
+    
+    /* create new OGR layer */
+    /* TODO: spatial reference */
+    /* Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "OVERWRITE", "YES"); */
+    Ogr_layer = OGR_DS_CreateLayer(Ogr_ds, Map->fInfo.ogr.layer_name,
+				   NULL, wkbPoint, Ogr_layer_options);
+    CSLDestroy(Ogr_layer_options);
+    if (!Ogr_layer) {
+	G_warning(_("Unable to create OGR layer <%s> in '%s'"),
+		  Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
+	return -1;
+    }
+    Map->fInfo.ogr.layer = Ogr_layer;
+    
+    return 0;
+}
 #endif

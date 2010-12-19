@@ -20,12 +20,9 @@ void print_status(void)
     key_val = G_fread_key_value(fp);
     fclose(fp);
 
-    p = G_find_key_value("directory", key_val);
-    fprintf(stdout, _("directory: %s\n"),
+    p = G_find_key_value("dsn", key_val);
+    fprintf(stdout, _("dsn: %s\n"),
 	    p ? p : _("not set (default 'ogr')"));
-
-    p = G_find_key_value("extension", key_val);
-    fprintf(stdout, _("extension: %s\n"), p ? p : _("<none>"));
 
     p = G_find_key_value("format", key_val);
     fprintf(stdout, _("format: %s\n"),

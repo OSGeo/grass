@@ -43,7 +43,7 @@ void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
 }
 
 /*!
-  \brief Writes feature on level 1
+  \brief Writes feature on level 1 (OGR interface)
 
   \param Map pointer to Map_info structure
   \param type feature type
@@ -60,15 +60,19 @@ off_t V1_write_line_ogr(struct Map_info *Map,
 
     struct field_info *Fi;
     
-    OGRGeometryH Ogr_geometry;
-    OGRFeatureH Ogr_feature;
-    OGRFeatureDefnH Ogr_featuredefn;
-    
+    OGRGeometryH       Ogr_geometry;
+    OGRFeatureH        Ogr_feature;
+    OGRFeatureDefnH    Ogr_featuredefn;
+    OGRwkbGeometryType Ogr_geom_type;
+
     if (!Map->fInfo.ogr.layer) {
 	G_warning(_("OGR layer not defined"));
 	return -1;
     }
 
+    Ogr_featuredefn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
+    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
+    
     /* determine matching OGR feature geometry type */
     /* NOTE: centroids are not supported in OGR,
      *       pseudotopo holds virtual centroids */
@@ -76,16 +80,30 @@ off_t V1_write_line_ogr(struct Map_info *Map,
      *       pseudotopo treats polygons as boundaries */
     
     if (type & (GV_POINT | GV_KERNEL)) {
+	if (Ogr_geom_type != wkbPoint &&
+	    Ogr_geom_type != wkbPoint25D) {
+	    G_warning(_("Feature is not a point. Skipping."));
+	    return -1;
+	}
 	Ogr_geometry = OGR_G_CreateGeometry(wkbPoint);
     }
     else if (type & GV_LINE) {
+	if (Ogr_geom_type != wkbLineString &&
+	    Ogr_geom_type != wkbLineString25D) {
+	    G_warning(_("Feature is not a line Skipping."));
+	    return -1;
+	}
 	Ogr_geometry = OGR_G_CreateGeometry(wkbLineString);
     }
     else if (type & GV_FACE) {
+	if (Ogr_geom_type != wkbPolygon25D) {
+	    G_warning(_("Feature is not a face. Skipping."));
+	    return -1;
+	}
 	Ogr_geometry = OGR_G_CreateGeometry(wkbPolygon25D);
     }
     else {
-	G_warning("V1_write_line_ogr(): %s (%d)", _("Unsupported feature type"), type);
+	G_warning(_("Unsupported feature type (%d)"), type);
 	return -1;
     }
 
@@ -98,30 +116,20 @@ off_t V1_write_line_ogr(struct Map_info *Map,
     
     G_debug(4, "   n_points = %d", points->n_points);
 
-    Ogr_featuredefn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
-    
     /* create feature & set geometry */
     Ogr_feature = OGR_F_Create(Ogr_featuredefn);
     OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
     /* write attributes */
-    if (cats->n_cats > 0) {
+    Fi = Vect_get_field(Map, cats->field[0]);
+    if (Fi && cats->n_cats > 0) {
 	cat = cats->cat[0];
 	if (cats->n_cats > 1) {
 	    G_warning(_("Feature has more categories, using "
 			"category %d (from layer %d)"),
 		      cat, cats->field[0]);
 	}
-	
-	Fi = Vect_get_field(Map, cats->field[0]);
-	if (!Fi) {
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  cats->field[0]);
-	}
 	write_attributes(cat, Fi, Map->fInfo.ogr.layer, Ogr_feature);
-    }
-    else { /* no attributes */
-	G_warning(_("Feature has no categories"));
     }
     
     /* write feature into layer */
@@ -277,17 +285,14 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 */
 int V2_delete_line_ogr(struct Map_info *Map, off_t line)
 {
-    int ret, i, side, type, first, next_line, area;
+    int ret, i, type, first;
     struct P_line *Line;
-    struct P_area *Area;
     struct Plus_head *plus;
-    struct bound_box box, abox;
-    int adjacent[4], n_adjacent;
     static struct line_cats *Cats = NULL;
 
     G_debug(3, "V2_delete_line_nat(), line = %d", (int) line);
 
-    type = first = n_adjacent = 0;
+    type = first = 0;
     Line = NULL;
     plus = &(Map->plus);
 

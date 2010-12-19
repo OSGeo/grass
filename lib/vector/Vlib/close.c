@@ -57,7 +57,7 @@ static int (*Close_array[][2]) () = {
 /*!
    \brief Close vector map
 
-   \param Map pointer to Map_info
+   \param Map pointer to Map_info (vector map to close)
 
    \return 0 on success
    \return non-zero on error
@@ -146,6 +146,10 @@ int Vect_close(struct Map_info *Map)
     Map->name = NULL;
     G_free((void *)Map->mapset);
     Map->mapset = NULL;
+    G_free((void *)Map->location);
+    Map->location = NULL;
+    G_free((void *)Map->gisdbase);
+    Map->gisdbase = NULL;
 
     Map->open = VECT_CLOSED_CODE;
 

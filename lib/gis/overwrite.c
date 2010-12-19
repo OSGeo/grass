@@ -1,24 +1,21 @@
-
-/**
- * \file overwrite.c
+/*!
+ * \file lib/gis/overwrite.c
  *
  * \brief GIS Library - Check for overwrite.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2008, 2010 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team, Martin Landa <landa.martin gmail.com>
- *
- * \date 2007-2008
  */
 
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 
-/**
+/*!
  * \brief Check for overwrite mode
  *
  * Check variables OVERWRITE, GRASS_OVERWRITE and '--o' flag.
@@ -27,8 +24,8 @@
  * we can switch out the check and do it
  * in the module after the parser.
  *
- * \param[in] argc number of arguments
- * \param[in] argv array of arguments
+ * \param argc number of arguments
+ * \param argv array of arguments
  *
  * \return 1 if overwrite
  * \return 0 if not overwrite

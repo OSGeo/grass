@@ -8,18 +8,11 @@
 void parse_args(int argc, char **argv,
 		struct _options *options, struct _flags *flags)
 {
-    options->dir = G_define_option();
-    options->dir->key = "directory";
-    options->dir->description = _("Name of output directory");
-    options->dir->required = YES;
-    options->dir->type = TYPE_STRING;
-    options->dir->key_desc = "path";
-
-    options->ext = G_define_option();
-    options->ext->key = "extension";
-    options->ext->description = _("Extension for output files");
-    options->ext->required = NO;
-    options->ext->type = TYPE_STRING;
+    options->dsn = G_define_option();
+    options->dsn->key = "dsn";
+    options->dsn->description = _("Name for output OGR datasource");
+    options->dsn->required = YES;
+    options->dsn->type = TYPE_STRING;
 
     options->format = G_define_option();
     options->format->key = "format";
@@ -44,7 +37,7 @@ void parse_args(int argc, char **argv,
 
     flags->r = G_define_flag();
     flags->r->key = 'r';
-    flags->r->description = _("Cease using OGR and revert to native output");
+    flags->r->description = _("Cease using OGR, revert to native output and exit");
     flags->r->suppress_required = YES;
 
     flags->p = G_define_flag();

@@ -758,6 +758,16 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
     fflush(fd);
 }
 
+/*!
+  \Get overwrite value
+
+  \return 1 overwrite enabled
+  \return 0 overwrite disabled
+*/
+int G_get_overwrite()
+{
+    return st->overwrite;
+}
 
 void define_keywords(void)
 {
@@ -1304,6 +1314,11 @@ static int check_overwrite(void)
 			if(G_find_file(element, opt->answers[i], G_mapset()))
 			    found = TRUE;
 		    }
+		    
+		    if (found && strcmp(element, "vector") == 0 &&
+			G_find_file("", "OGR", G_mapset()))
+			found = FALSE;
+		    
 		    if (found) {	/* found */
 			if (!st->overwrite && !over) {
 			    if (G_info_format() != G_INFO_FORMAT_GUI) {

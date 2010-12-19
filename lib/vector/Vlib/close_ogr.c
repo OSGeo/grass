@@ -37,14 +37,17 @@ int V1_close_ogr(struct Map_info *Map)
     if (!VECT_OPEN(Map))
 	return -1;
 
-    if (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW)
+    if (Map->format != GV_FORMAT_OGR_DIRECT &&
+	(Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW))
 	Vect__write_head(Map);
 
     if (Map->fInfo.ogr.feature_cache)
 	OGR_F_Destroy(Map->fInfo.ogr.feature_cache);
 
+    if (Map->fInfo.ogr.driver)
+	OGR_DS_Destroy(Map->fInfo.ogr.driver);
     OGR_DS_Destroy(Map->fInfo.ogr.ds);
-
+    
     for (i = 0; i < Map->fInfo.ogr.lines_alloc; i++) {
 	Vect_destroy_line_struct(Map->fInfo.ogr.lines[i]);
     }
@@ -52,6 +55,7 @@ int V1_close_ogr(struct Map_info *Map)
     G_free(Map->fInfo.ogr.lines);
     G_free(Map->fInfo.ogr.lines_types);
 
+    G_free(Map->fInfo.ogr.driver_name);
     G_free(Map->fInfo.ogr.dsn);
     G_free(Map->fInfo.ogr.layer_name);
 
