@@ -12,7 +12,7 @@
  * PURPOSE:    "Extrudes" flat polygons and lines to 3D with defined height
  *              Useful for creating buildings for displaying with NVIZ
  *
- * COPYRIGHT:  (C) 2005-2009 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2005-2010 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2). Read the file COPYING that comes
@@ -131,9 +131,12 @@ int main(int argc, char *argv[])
 
     trace = (t_flag->answer) ? 1 : 0;
     area = (only_type & GV_AREA) ? 1 : 0;
-    if (area && (only_type & GV_BOUNDARY)) {
-	/* do not wrire wall twice -> disable boundary type */
-	only_type &= ~GV_BOUNDARY;
+    if (area) {
+	if (only_type & GV_BOUNDARY) {
+	    /* do not wrire wall twice -> disable boundary type */
+	    only_type &= ~GV_BOUNDARY;
+	}
+	only_type &= ~GV_AREA;
     }
 
     centroid = 0;
@@ -489,6 +492,7 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	    nlines++;
 
 	    if (type == GV_AREA) {
+		/* roof */
 		Vect_append_point(Points_roof, Points->x[k], Points->y[k],
 				  Points->z[k] + objheight + voffset_curr);
 	    }
