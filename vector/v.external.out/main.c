@@ -43,11 +43,6 @@ int main(int argc, char *argv[])
 
     parse_args(argc, argv, &options, &flags);
 
-    if (flags.p->answer) {
-	print_status();
-	exit(EXIT_SUCCESS);
-    }
-
     if (flags.f->answer) {
 	list_formats();
 	exit(EXIT_SUCCESS);
@@ -61,8 +56,13 @@ int main(int argc, char *argv[])
     if (options.format->answer)
 	check_format(options.format->answer);
 
-    make_link(options.dir->answer, options.ext->answer,
-	      options.format->answer, options.opts->answers);
+    if (options.dsn->answer)
+	make_link(options.dsn->answer,
+		  options.format->answer, options.opts->answers);
+    
+    if (flags.p->answer) {
+	print_status();
+    }
 
     exit(EXIT_SUCCESS);
 }

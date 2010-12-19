@@ -163,16 +163,19 @@ struct Coor_info
 
 /*! \brief Non-native format info (OGR)
 
-  \todo Structure size should not change depending on compilation I think, do it better
-*/
+  \todo Structure size should not change depending on compilation I
+think, do it better */
 struct Format_info_ogr
 {
+    char *driver_name;          /* OGR driver name */
     char *dsn;                  /* OGR datasource name */
     char *layer_name;           /* OGR layer name */
 #ifdef HAVE_OGR
+    OGRSFDriverH driver;        /* pointer to OGRDriver */
     OGRDataSourceH ds;          /* pointer to OGRDataSourceH */
     OGRLayerH layer;            /* pointer to OGRLayerH */
 #else
+    void *driver;
     void *ds;
     void *layer;
 #endif
@@ -193,11 +196,11 @@ struct Format_info_ogr
     int feature_cache_id;	/* id of feature read in feature_cache */
 
     /* Array where OGR feature/part info is stored for each line in
-     * GRASS.  This is not used for GV_CENTROID.  Because one feature
+     * GRASS. This is not used for GV_CENTROID. Because one feature
      * may contain more elements (geometry collection also
      * recursively), offset for one line may be stored in more
-     * records.  First record is FID, next records are part indexes if
-     * necessary.  Example: 5. ring in 3. polygon in 7. feature
+     * records. First record is FID, next records are part indexes if
+     * necessary. Example: 5. ring in 3. polygon in 7. feature
      * (multipolygon) of geometry collection which has FID = 123 123
      * (feature 123: geometry colletion) 6 (7. feature in geometry
      * collection: multiPolygon) 2 (3. polygon) 4 (5. ring in the

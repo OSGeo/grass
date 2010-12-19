@@ -28,11 +28,16 @@
 #include <grass/glocale.h>
 
 /*
-  \brief Number of available levels
+  \brief Number of levels - without and with topology
 */
 #define MAX_OPEN_LEVEL 2
 
 static int open_old_dummy()
+{
+    return 0;
+}
+
+static int open_new_dummy()
 {
     return 0;
 }
@@ -60,6 +65,22 @@ static int (*Open_old_array[][2]) () = {
     open_old_dummy, format}
     , {
     open_old_dummy, format}
+#endif
+};
+
+static int (*Open_new_array[][2]) () = {
+    {
+    open_new_dummy, V1_open_new_nat}
+#ifdef HAVE_OGR
+    , {
+    open_new_dummy, V1_open_new_ogr}
+    , {
+    open_new_dummy, V1_open_new_ogr}
+#else
+    , {
+    open_new_dummy, format}
+    , {
+    open_new_dummy, format}
 #endif
 };
 
@@ -669,6 +690,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_debug(2, "Vect_open_new(): name = %s", name);
+
+    G_zero(Map, sizeof(struct Map_info));
     
     /* init header */
     Vect__init_head(Map);
@@ -690,49 +713,78 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     if (Vect_legal_filename(name) < 0) {
 	sprintf(errmsg, _("Vector map name is not SQL compliant"));
 	fatal_error(ferror, errmsg);
-	return (-1);
+	return -1;
     }
 
-    /* Check if map already exists */
-    if (G_find_vector2(name, G_mapset()) != NULL) {
-	G_warning(_("Vector map <%s> already exists and will be overwritten"),
-		  name);
+    /* determine output format native or ogr */
+    if (G_find_file2("", "OGR", G_mapset())) {
+	/* OGR */
+	FILE *fp;
+	struct Key_Value *key_val;
+	const char *p;
 
-	ret = Vect_delete(name);
-	if (ret == -1) {
-	    sprintf(errmsg, _("Unable to delete vector map <%s>"), name);
+	Map->format = GV_FORMAT_OGR_DIRECT;
+	fp = G_fopen_old("", "OGR", G_mapset());
+	if (!fp) {
+	    sprintf(errmsg, _("Unable to open OGR file"));
 	    fatal_error(ferror, errmsg);
-	    return (-1);
+	}
+	key_val = G_fread_key_value(fp);
+	fclose(fp);
+
+	p = G_find_key_value("format", key_val);
+	if (p)
+	    Map->fInfo.ogr.driver_name = G_store(p);
+       	p = G_find_key_value("dsn", key_val);
+	if (p)
+	    Map->fInfo.ogr.dsn = G_store(p);
+	Map->fInfo.ogr.layer_name = G_store(name);
+    }
+    else {
+	/* native */
+	Map->format = GV_FORMAT_NATIVE;
+
+	/* check if map already exists */
+	if (G_find_vector2(name, G_mapset()) != NULL) {
+	    G_warning(_("Vector map <%s> already exists and will be overwritten"),
+		      name);
+	    
+	    ret = Vect_delete(name);
+	    if (ret == -1) {
+		sprintf(errmsg, _("Unable to delete vector map <%s>"), name);
+		fatal_error(ferror, errmsg);
+		return -1;
+	    }
 	}
     }
 
-    Map->name = G_store(name);
-    Map->mapset = G_store(G_mapset());
+    Map->name     = G_store(name);
+    Map->mapset   = G_store(G_mapset());
     Map->location = G_store(G_location());
     Map->gisdbase = G_store(G_gisdbase());
-
-    Map->format = GV_FORMAT_NATIVE;
-
+    
     /* set 2D/3D */
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = (with_z != 0);
 
-    if (V1_open_new_nat(Map, name, with_z) < 0) {
+    if ((*Open_new_array[Map->format][1]) (Map, name, with_z) < 0) {
 	sprintf(errmsg, _("Unable to create vector map <%s>"),
 		Vect_get_full_name(Map));
 	fatal_error(ferror, errmsg);
-	return (-1);
+	return -1;
     }
 
-    /* Open history file */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    Map->hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
-    if (Map->hist_fp == NULL) {
-	sprintf(errmsg, _("Unable to open history file of vector map <%s>"),
-		Vect_get_full_name(Map));
-	fatal_error(ferror, errmsg);
-	return (-1);
+    if (Map->format == GV_FORMAT_NATIVE) {
+        /* Open history file */
+	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+	Map->hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
+	if (Map->hist_fp == NULL) {
+	    sprintf(errmsg, _("Unable to open history file of vector map <%s>"),
+		    Vect_get_full_name(Map));
+	    fatal_error(ferror, errmsg);
+	    return -1;
+	}
     }
-
+    
     Open_level = 0;
 
     /* initialize topo */

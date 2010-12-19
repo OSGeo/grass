@@ -119,7 +119,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
     /* If topology is already build (map on level2), set level to 1 so that lines will
      *  be read by V1_read_ (all lines) */
     Map->level = 1;		/* may be not needed, because  V1_read is used directly by Vect_build_ */
-    Map->support_updated = 1;
+    if (Map->format != GV_FORMAT_OGR_DIRECT)
+	Map->support_updated = 1;
 
     if (Map->plus.Spidx_built == 0)
 	Vect_open_sidx(Map, 2);

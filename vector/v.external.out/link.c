@@ -4,7 +4,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-void make_link(const char *dir, const char *ext,
+void make_link(const char *dsn,
 	       const char *format, char **options)
 {
     struct Key_Value *key_val = G_create_key_value();
@@ -32,17 +32,8 @@ void make_link(const char *dir, const char *ext,
 	*p++ = '\0';
     }
 
-    if (ext && ext[0] != '.') {
-	char *p;
-
-	G_asprintf(&p, ".%s", ext);
-	ext = p;
-    }
-
-    if (dir)
-	G_set_key_value("directory", dir, key_val);
-    if (ext)
-	G_set_key_value("extension", ext, key_val);
+    if (dsn)
+	G_set_key_value("dsn", dsn, key_val);
     if (format)
 	G_set_key_value("format", format, key_val);
     if (opt_str)

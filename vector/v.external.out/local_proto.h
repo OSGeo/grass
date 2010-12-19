@@ -2,7 +2,7 @@
 #define V_EXTERNAL_OUT_LOCAL_PROTO_H
 
 struct _options {
-    struct Option *dir, *ext, *format, *opts;
+    struct Option *dsn, *format, *opts;
 };
 
 struct _flags {
@@ -17,7 +17,7 @@ void parse_args(int, char **,
 void check_format(const char *);
 
 /* link.c */
-void make_link(const char *, const char *,
+void make_link(const char *,
 	       const char *, char **);
 
 /* list.c */
