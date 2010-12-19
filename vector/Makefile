@@ -90,7 +90,8 @@ SUBDIRS = \
 	v.out.ogr \
 	v.in.ogr \
 	v.external \
-	v.in.dwg
+	v.in.dwg \
+	v.external.out
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
