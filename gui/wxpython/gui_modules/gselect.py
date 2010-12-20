@@ -77,6 +77,14 @@ class Select(wx.combo.ComboCtrl):
             self.tcp.SetData(type = type, mapsets = mapsets,
                              multiple = multiple,
                              updateOnPopup = updateOnPopup, onPopup = onPopup)
+        self.GetChildren()[0].Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+     
+    def OnKeyDown(self, event):
+        """!Shows popupwindow if down arrow key is pressed"""
+        if event.GetKeyCode() == wx.WXK_DOWN:
+            self.ShowPopup() 
+        else:
+            event.Skip()
         
     def SetElementList(self, type, mapsets = None):
         """!Set element list
@@ -139,6 +147,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                                    |wx.TR_LINES_AT_ROOT
                                    |wx.SIMPLE_BORDER
                                    |wx.TR_FULL_ROW_HIGHLIGHT)
+        self.seltree.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.seltree.Bind(wx.EVT_MOTION, self.OnMotion)
         self.seltree.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.seltree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.mapsetExpanded)
@@ -146,7 +155,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.mapsetActivated)
         self.seltree.Bind(wx.EVT_TREE_SEL_CHANGED, self.mapsetSelected)
         self.seltree.Bind(wx.EVT_TREE_DELETE_ITEM, lambda x: None)
-
+        
     # the following dummy handler are needed to keep tree events from propagating up to
     # the parent GIS Manager layer tree
     def mapsetExpanded(self, event):
@@ -177,6 +186,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         """!Set filter for GIS elements, see e.g. VectorSelect"""
         self.filterElements = filter
         
+    def _startsWith(self, text):
+        return True if text.startswith(self.GetCombo().GetValue()) else False
+    
     def OnPopup(self, force = False):
         """!Limited only for first selected"""
         if not force and not self.updateOnPopup:
@@ -187,8 +199,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             selected = None
             exclude  = False
             
+        self.SetFilter(self._startsWith)   
         self.GetElementList(selected, exclude)
-    
+        
     def GetElementList(self, elements = None, exclude = False):
         """!Get filtered list of GIS elements in accessible mapsets
         and display as tree with all relevant elements displayed
@@ -375,6 +388,47 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
         item = self.seltree.AppendItem(parent, text=value)
         return item
+    
+    # able to recieve only wx.EVT_KEY_UP
+    def OnKeyUp(self, event):
+        """!Enables to select items using keyboard"""
+        
+        item = self.seltree.GetSelection()
+        if event.GetKeyCode() == wx.WXK_DOWN:
+            self.seltree.SelectItem(self.seltree.GetNextVisible(item))
+            
+        # problem with GetPrevVisible   
+        elif event.GetKeyCode() == wx.WXK_UP: 
+            if self.seltree.ItemHasChildren(item) and self.seltree.IsExpanded(self.seltree.GetPrevSibling(item)):
+                itemPrev = self.seltree.GetLastChild(self.seltree.GetPrevSibling(item))
+            else:
+                itemPrev = self.seltree.GetPrevSibling(item)
+                if not wx.TreeItemId.IsOk(itemPrev):
+                    itemPrev = self.seltree.GetItemParent(item)
+                    if item == self.seltree.GetFirstChild(self.seltree.GetRootItem())[0]:
+                        itemPrev = item
+            self.seltree.SelectItem(itemPrev)
+            
+        elif event.GetKeyCode() == wx.WXK_RIGHT:
+            if self.seltree.ItemHasChildren(item):
+                self.seltree.Expand(item)
+        
+        elif event.GetKeyCode() == wx.WXK_LEFT:
+            if self.seltree.ItemHasChildren(item):
+                self.seltree.Collapse(item)
+                
+        elif event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.Dismiss()
+            
+        elif event.GetKeyCode() == wx.WXK_RETURN:
+            if self.seltree.GetRootItem() == self.seltree.GetItemParent(item):
+                self.value = [] 
+            else:
+                mapsetItem = self.seltree.GetItemParent(item)
+                fullName = self.seltree.GetItemText(item) + '@' \
+                            + self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
+                self.value = [fullName, ]
+                self.Dismiss()
 
     def OnMotion(self, evt):
         """!Have the selection follow the mouse, like in a real combobox
@@ -396,7 +450,8 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 self.value = [] # cannot select mapset item
             else:
                 mapsetItem = self.seltree.GetItemParent(item)
-                fullName = self.seltree.GetItemText(item) + '@' + self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
+                fullName = self.seltree.GetItemText(item) + '@' + \
+                    self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
                 if self.multiple is True:
                     # text item should be unique
                     self.value.append(fullName)
