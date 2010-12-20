@@ -54,10 +54,10 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
 	    return 0;
 	}
 	if (!Rast_get_d_color(&fval, &red, &grn, &blu, colors)) {
-	    fprintf(stdout, "%f: *\n", fval);
+	    fprintf(stdout, "%.15g: *\n", fval);
 	    return 0;
 	}
-	fprintf(stdout, "%f: ", fval);
+	fprintf(stdout, "%.15g: ", fval);
 	fprintf(stdout, fmt, red, grn, blu);
 	fprintf(stdout, "\n");
 	return 1;
