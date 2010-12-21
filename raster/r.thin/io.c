@@ -108,7 +108,8 @@ int open_file(char *name)
 	G_fatal_error(_("%s: Unable to create temporary file <%s> -- errno = %d"),
 		      error_prefix, work_file_name, errno);
     }
-    buf = (CELL *) G_malloc(buf_len = n_cols * sizeof(CELL));
+    buf_len = n_cols * sizeof(CELL);
+    buf = (CELL *) G_malloc(buf_len);
     for (col = 0; col < n_cols; col++)
 	buf[col] = 0;
     for (i = 0; i < PAD; i++) {
@@ -120,6 +121,10 @@ int open_file(char *name)
     }
     for (row = 0; row < n_rows; row++) {
 	Rast_get_c_row(cell_file, buf + PAD, row);
+	for (col = 0; col < n_cols; col++) {
+	    if (Rast_is_c_null_value(&buf[col]))
+		buf[col] = 0;
+	}
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
 	    G_fatal_error(_("%s: Error writing temporary file"),
