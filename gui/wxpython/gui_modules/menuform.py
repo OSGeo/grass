@@ -75,6 +75,7 @@ except ImportError:
     import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
+import wx.lib.scrolledpanel as scrolled
 from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
 from wx.lib.newevent import NewEvent
 
@@ -713,28 +714,28 @@ class mainFrame(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=ID, title=title,
                           pos=wx.DefaultPosition, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
                           name = "MainFrame")
-
+        
         self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
-
+        
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
-
+        
         # statusbar
         self.CreateStatusBar()
-
+        
         # icon
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
         
         guisizer = wx.BoxSizer(wx.VERTICAL)
-
+        
         # set apropriate output window
         if self.parent:
             self.standalone = False
         else:
             self.standalone = True
         
-        # logo+description
+        # logo + description
         topsizer = wx.BoxSizer(wx.HORIZONTAL)
-
+        
         # GRASS logo
         self.logo = wx.StaticBitmap(parent=self.panel,
                                     bitmap=wx.Bitmap(name=os.path.join(imagepath,
@@ -742,10 +743,8 @@ class mainFrame(wx.Frame):
                                                      type=wx.BITMAP_TYPE_PNG))
         topsizer.Add (item=self.logo, proportion=0, border=3,
                       flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL)
-
-        #
-        # put module description
-        #
+        
+        # add module description
         if self.task.label != '':
             module_desc = self.task.label + ' ' + self.task.description
         else:
@@ -759,14 +758,14 @@ class mainFrame(wx.Frame):
         
         self.panel.SetSizerAndFit(guisizer)
         self.Layout()
-
+        
         # notebooks
         self.notebookpanel = cmdPanel(parent = self.panel, task = self.task,
                                       mainFrame = self)
         self.goutput = self.notebookpanel.goutput
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add (item=self.notebookpanel, proportion=1, flag=wx.EXPAND)
-
+        
         # status bar
         status_text = _("Enter parameters for '") + self.task.name + "'"
         try:
@@ -774,7 +773,7 @@ class mainFrame(wx.Frame):
             self.updateValuesHook()
         except ValueError:
             self.SetStatusText( status_text )
-
+        
         # buttons
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         # cancel
@@ -782,24 +781,20 @@ class mainFrame(wx.Frame):
         self.btn_cancel.SetToolTipString(_("Close this window without executing the command (Ctrl+Q)"))
         btnsizer.Add(item=self.btn_cancel, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-        # help
-        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
-        self.btn_help.SetToolTipString(_("Show manual page of the command (Ctrl+H)"))
-        self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         if not hasattr(self.notebookpanel, "manual_tab_id"):
             self.btn_help.Hide()
         if self.get_dcmd is not None: # A callback has been set up
             btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
             btn_ok = wx.Button(parent=self.panel, id=wx.ID_OK)
             btn_ok.SetDefault()
-
+            
             btnsizer.Add(item=btn_apply, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
                          border=10)
             btnsizer.Add(item=btn_ok, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
                          border=10)
-
+            
             btn_apply.Bind(wx.EVT_BUTTON, self.OnApply)
             btn_ok.Bind(wx.EVT_BUTTON, self.OnOK)
         else: # We're standalone
@@ -807,36 +802,31 @@ class mainFrame(wx.Frame):
             self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label= _("&Run"))
             self.btn_run.SetToolTipString(_("Run the command (Ctrl+R)"))
             self.btn_run.SetDefault()
-            # abort
-            ### self.btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
-            ### self.btn_abort.SetToolTipString(_("Abort the running command"))
-            ### self.btn_abort.Enable(False)
             # copy
             self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
             self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard (Ctrl+C)"))
-
-            ### btnsizer.Add(item=self.btn_abort, proportion=0,
-            ### flag=wx.ALL | wx.ALIGN_CENTER,
-            ### border=10)
-
+            
             btnsizer.Add(item=self.btn_run, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
                          border=10)
-
+            
             btnsizer.Add(item=self.btn_clipboard, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
                          border=10)
-
+            
             self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-            ### self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
             self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
-
+        # help
+        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
+        self.btn_help.SetToolTipString(_("Show manual page of the command (Ctrl+H)"))
+        self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
+        
         # add help button
         btnsizer.Add(item=self.btn_help, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
-
+        
         guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
                      border = 30)
-
+        
         if self.parent and not self.modeler:
             addLayer = False
             for p in self.task.params:
@@ -861,19 +851,16 @@ class mainFrame(wx.Frame):
             guisizer.Add(item=self.closebox, proportion=0,
                          flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                          border=5)
-
+        
         self.Bind(wx.EVT_CLOSE,  self.OnCancel)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         
-        #constrained_size = self.notebookpanel.GetSize()
+        # constrained_size = self.notebookpanel.GetSize()
         # 80 takes the tabbar into account
-        #self.notebookpanel.SetSize( (constrained_size[0] + 25, constrained_size[1]) ) 
-        #self.notebookpanel.Layout()
-
-        #
+        ### self.notebookpanel.SetSize( (constrained_size[0] + 25, constrained_size[1]) ) 
+        ### self.notebookpanel.Layout()
+        
         # do layout
-        #
-        guisizer.SetSizeHints(self.panel)
         # called automatically by SetSizer()
         self.panel.SetAutoLayout(True) 
         self.panel.SetSizerAndFit(guisizer)
@@ -883,20 +870,19 @@ class mainFrame(wx.Frame):
         self.SetSize((sizeFrame[0], sizeFrame[1] +
                       self.notebookpanel.constrained_size[1] -
                       self.notebookpanel.panelMinHeight))
-
+        
         # thread to update dialog
         # create queues
         self.requestQ = Queue.Queue()
         self.resultQ = Queue.Queue()
         self.updateThread = UpdateQThread(self.notebookpanel, self.requestQ, self.resultQ)
-
+        
         self.Layout()
-
-        #keep initial window size limited for small screens
+        
+        # keep initial window size limited for small screens
         width, height = self.GetSizeTuple()
-        if width > 640: width = 640
-        if height > 480: height = 480
-        self.SetSize((width, height))
+        self.SetSize(wx.Size(min(width, 640),
+                             min(height, 480)))
         
         # fix goutput's pane size
         if self.goutput:
@@ -1131,8 +1117,8 @@ class cmdPanel(wx.Panel):
         tab = {}
         tabsizer = {}
         for section in sections:
-            tab[section] = wx.ScrolledWindow( parent=self.notebook )
-            tab[section].SetScrollRate(10,10)
+            tab[section] = scrolled.ScrolledPanel(parent=self.notebook)
+            tab[section].SetScrollRate(10, 10)
             tabsizer[section] = wx.BoxSizer(orient=wx.VERTICAL)
             self.notebook.AddPage( tab[section], text=section )
 
@@ -2005,8 +1991,8 @@ class cmdPanel(wx.Panel):
         pass
 
     def OnCheckBoxMulti(self, event):
-        """
-        Fill the values as a ','-separated string according to current status of the checkboxes.
+        """!Fill the values as a ','-separated string according to
+        current status of the checkboxes.
         """
         me = event.GetId()
         theParam = None
