@@ -867,9 +867,8 @@ class mainFrame(wx.Frame):
         
         sizeFrame = self.GetBestSize()
         self.SetMinSize(sizeFrame)
-        self.SetSize((sizeFrame[0], sizeFrame[1] +
-                      self.notebookpanel.constrained_size[1] -
-                      self.notebookpanel.panelMinHeight))
+        self.SetSize(wx.Size(sizeFrame[0], sizeFrame[1] + 0.33 * max(self.notebookpanel.panelMinHeight,
+                                                                     self.notebookpanel.constrained_size[1])))
         
         # thread to update dialog
         # create queues
@@ -881,8 +880,8 @@ class mainFrame(wx.Frame):
         
         # keep initial window size limited for small screens
         width, height = self.GetSizeTuple()
-        self.SetSize(wx.Size(min(width, 640),
-                             min(height, 480)))
+        self.SetSize(wx.Size(min(width, 650),
+                             min(height, 500)))
         
         # fix goutput's pane size
         if self.goutput:
@@ -1265,10 +1264,10 @@ class cmdPanel(wx.Panel):
                         p.get('gisprompt',False) ==  False and \
                         p.get('type', '') ==  'string':
                     title_txt.SetLabel(" %s: (%s, %s) " % (title, p['name'], p['type']))
-                    if len(valuelist) > 6:
-                        hSizer = wx.StaticBoxSizer (box = title_txt, orient = wx.VERTICAL)
+                    if valuelist_desc:
+                        hSizer = wx.StaticBoxSizer(box = title_txt, orient = wx.VERTICAL)
                     else:
-                        hSizer = wx.StaticBoxSizer (box = title_txt, orient = wx.HORIZONTAL)
+                        hSizer = wx.StaticBoxSizer(box = title_txt, orient = wx.HORIZONTAL)
                     isEnabled = {}
                     # copy default values
                     if p['value'] ==  '':
@@ -1294,15 +1293,14 @@ class cmdPanel(wx.Panel):
                         hSizer.Add(item = chkbox, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.ALL, border = 1)
                         chkbox.Bind(wx.EVT_CHECKBOX, self.OnCheckBoxMulti)
-
                         idx +=  1
                         
                     which_sizer.Add(item = hSizer, proportion = 0,
-                                     flag = wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border = 5)
+                                    flag = wx.EXPAND | wx.TOP | wx.RIGHT | wx.LEFT, border = 5)
                 elif p.get('gisprompt', False) ==  False:
                     if len(valuelist) ==  1: # -> textctrl
                         title_txt.SetLabel("%s (%s %s):" % (title, _('valid range'),
-                                                          str(valuelist[0])))
+                                                            str(valuelist[0])))
                         
                         if p.get('type', '') ==  'integer' and \
                                 not p.get('multiple', False):
@@ -1813,13 +1811,13 @@ class cmdPanel(wx.Panel):
 	#
 	# determine panel size
 	#
-        maxsizes = (0,0)
+        maxsizes = (0, 0)
         for section in sections:
             tab[section].SetSizer(tabsizer[section])
             tabsizer[section].Fit(tab[section])
             tab[section].Layout()
             minsecsizes = tabsizer[section].GetSize()
-            maxsizes = map(lambda x: max(maxsizes[x], minsecsizes[x]), (0,1))
+            maxsizes = map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1))
 
         # TODO: be less arbitrary with these 600
         self.panelMinHeight = 100
