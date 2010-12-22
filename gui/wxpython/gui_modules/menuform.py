@@ -848,6 +848,8 @@ class mainFrame(wx.Frame):
             self.closebox = wx.CheckBox(parent = self.panel,
                                         label = _('Close dialog on finish'), style = wx.NO_BORDER)
             self.closebox.SetValue(UserSettings.Get(group = 'cmd', key = 'closeDlg', subkey = 'enabled'))
+            self.closebox.SetToolTipString(_("Close dialog when command is successfully finished. "
+                                             "Change this settings in Preferences dialog ('Command' tab)."))
             guisizer.Add(item = self.closebox, proportion = 0,
                          flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                          border = 5)

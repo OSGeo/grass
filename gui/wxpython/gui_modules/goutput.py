@@ -809,8 +809,10 @@ class GMConsole(wx.SplitterWindow):
             
             if hasattr(dialog, "get_dcmd") and \
                     dialog.get_dcmd is None and \
-                    dialog.closebox.IsChecked():
-                time.sleep(1)
+                    dialog.closebox.IsChecked() and \
+                    (event.returncode == 0 or event.aborted):
+                self.cmd_output.Update()
+                time.sleep(2)
                 dialog.Close()
         
     def OnProcessPendingOutputWindowEvents(self, event):

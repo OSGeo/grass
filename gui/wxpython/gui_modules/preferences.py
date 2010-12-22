@@ -181,7 +181,7 @@ class Settings:
                     'enabled' : False
                     },
                 'closeDlg' : {
-                    'enabled' : False
+                    'enabled' : True
                     },
                 'verbosity' : {
                     'selection' : 'grassenv'
@@ -1370,7 +1370,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         row += 1
         # close
         close = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                            label=_("Close dialog on finish"),
+                            label=_("Close dialog when command is successfully finished"),
                             name="IsChecked")
         close.SetValue(self.settings.Get(group='cmd', key='closeDlg', subkey='enabled'))
         self.winId['cmd:closeDlg:enabled'] = close.GetId()
