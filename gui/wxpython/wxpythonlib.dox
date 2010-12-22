@@ -231,17 +231,6 @@ available in GRASS 5 and GRASS 6.
 - gui_modules/gcpmapdisp.py
  - gui_modules::gcpmapdisp::MapFrame
 
-- gui_modules/georect.py
- - gui_modules::georect::GeorectWizard
- - gui_modules::georect::LocationPage
- - gui_modules::georect::GroupPage
- - gui_modules::georect::DispMapPage
- - gui_modules::georect::GCP
- - gui_modules::georect::GCPList
- - gui_modules::georect::VectGroup
- - gui_modules::georect::EditGPC
- - gui_modules::georect::GrSettingsDialog
-
 \subsection gmodeler Graphical Modeler
 
 - gui_modules/gmodeler.py
@@ -371,9 +360,6 @@ available in GRASS 5 and GRASS 6.
  - gui_modules::profile::SetRasterDialog
  - gui_modules::profile::TextDialog
  - gui_modules::profile::OptDialog
-
-- gui_modules/rules.py
- - gui_modules::rules::RulesText
 
 - gui_modules/vclean.py
  - gui_modules::vclean::VectorCleaningFrame
