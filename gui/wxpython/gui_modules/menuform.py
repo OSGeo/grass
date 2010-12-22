@@ -33,8 +33,8 @@ pythonw on a Mac.
 @todo
  - verify option value types
 
-Copyright (C) 2000-2010 by the GRASS Development Team
-This program is free software under the GPL (>=v2) Read the file
+Copyright(C) 2000-2010 by the GRASS Development Team
+This program is free software under the GPL(>=v2) Read the file
 COPYING coming with GRASS for details.
 
 @author Jan-Oliver Wagner <jan@intevation.de>
@@ -741,20 +741,20 @@ class mainFrame(wx.Frame):
                                     bitmap = wx.Bitmap(name = os.path.join(imagepath,
                                                                        'grass_form.png'),
                                                      type = wx.BITMAP_TYPE_PNG))
-        topsizer.Add (item = self.logo, proportion = 0, border = 3,
-                      flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL)
+        topsizer.Add(item = self.logo, proportion = 0, border = 3,
+                     flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL)
         
         # add module description
-        if self.task.label !=  '':
+        if self.task.label:
             module_desc = self.task.label + ' ' + self.task.description
         else:
             module_desc = self.task.description
         self.description = gdialogs.StaticWrapText(parent = self.panel,
                                                    label = module_desc)
-        topsizer.Add (item = self.description, proportion = 1, border = 5,
-                      flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
-                      
-        guisizer.Add (item = topsizer, proportion = 0, flag = wx.EXPAND)
+        topsizer.Add(item = self.description, proportion = 1, border = 5,
+                     flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+        
+        guisizer.Add(item = topsizer, proportion = 0, flag = wx.EXPAND)
         
         self.panel.SetSizerAndFit(guisizer)
         self.Layout()
@@ -764,7 +764,7 @@ class mainFrame(wx.Frame):
                                       mainFrame = self)
         self.goutput = self.notebookpanel.goutput
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
-        guisizer.Add (item = self.notebookpanel, proportion = 1, flag = wx.EXPAND)
+        guisizer.Add(item = self.notebookpanel, proportion = 1, flag = wx.EXPAND)
         
         # status bar
         status_text = _("Enter parameters for '") + self.task.name + "'"
@@ -803,7 +803,7 @@ class mainFrame(wx.Frame):
             self.btn_run.SetToolTipString(_("Run the command (Ctrl+R)"))
             self.btn_run.SetDefault()
             # copy
-            self.btn_clipboard = wx.Button(parent = self.panel, id = wx.ID_COPY)
+            self.btn_clipboard = wx.Button(parent = self.panel, id = wx.ID_COPY, label = _("C&opy"))
             self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard (Ctrl+C)"))
             
             btnsizer.Add(item = self.btn_run, proportion = 0,
@@ -854,11 +854,6 @@ class mainFrame(wx.Frame):
         
         self.Bind(wx.EVT_CLOSE,  self.OnCancel)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-        
-        # constrained_size = self.notebookpanel.GetSize()
-        # 80 takes the tabbar into account
-        ### self.notebookpanel.SetSize((constrained_size[0] + 25, constrained_size[1])) 
-        ### self.notebookpanel.Layout()
         
         # do layout
         # called automatically by SetSizer()
@@ -1154,7 +1149,7 @@ class cmdPanel(wx.Panel):
             # if label is given: description -> tooltip
             if f.get('label','') !=  '':
                 title = text_beautify(f['label'])
-                tooltip = text_beautify (f['description'], width = -1)
+                tooltip = text_beautify(f['description'], width = -1)
             else:
                 title = text_beautify(f['description'])
                 tooltip = None
@@ -1215,7 +1210,7 @@ class cmdPanel(wx.Panel):
             # otherwise description -> lavel
             if p.get('label','') !=  '':
                 title = text_beautify(p['label'])
-                tooltip = text_beautify (p['description'], width = -1)
+                tooltip = text_beautify(p['description'], width = -1)
             else:
                 title = text_beautify(p['description'])
                 tooltip = None
@@ -1232,7 +1227,7 @@ class cmdPanel(wx.Panel):
                     p.get('multiple', False) and \
                     p.get('gisprompt',False) ==  False and \
                     p.get('type', '') ==  'string':
-                title_txt = wx.StaticBox (parent = which_panel, id = wx.ID_ANY)
+                title_txt = wx.StaticBox(parent = which_panel, id = wx.ID_ANY)
             else:
                 title_sizer = wx.BoxSizer(wx.HORIZONTAL)
                 title_txt = wx.StaticText(parent = which_panel)
