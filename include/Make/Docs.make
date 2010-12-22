@@ -51,6 +51,7 @@ pdfdocs:
 	@echo "Written PDF docs in: $(latexdocs_dirs)"
 
 cleandocs:
+	$(MAKE) -C . cleandox
 	for dir in $(docs_dirs) ; do \
 	  $(MAKE) -C $$dir cleandox ; \
 	  done
