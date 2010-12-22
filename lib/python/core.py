@@ -418,11 +418,11 @@ def parser():
     if not os.getenv("GISBASE"):
         print >> sys.stderr, "You must be in GRASS GIS to run this program."
         sys.exit(1)
-
+    
     cmdline = [basename(sys.argv[0])]
     cmdline += ['"' + arg + '"' for arg in sys.argv[1:]]
     os.environ['CMDLINE'] = ' '.join(cmdline)
-
+    
     argv = sys.argv[:]
     name = argv[0]
     if not os.path.isabs(name):
@@ -430,14 +430,14 @@ def parser():
 	    argv[0] = os.path.abspath(name)
 	else:
 	    argv[0] = os.path.join(sys.path[0], name)
-
+    
     p = Popen(['g.parser', '-s'] + argv, stdout = PIPE)
     s = p.communicate()[0]
     lines = s.splitlines()
-
+    
     if not lines or lines[0].rstrip('\r\n') != "@ARGS_PARSED@":
 	sys.stdout.write(s)
-	sys.exit()
+	sys.exit(1)
 
     return _parse_opts(lines[1:])
 
