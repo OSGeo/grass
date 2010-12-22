@@ -134,7 +134,13 @@ int main(int argc, char **argv)
     display_opt->answer = "shape";
     display_opt->options = "shape,cat,topo,dir,attr,zcoor";
     display_opt->description = _("Display");
-
+    display_opt->descriptions = _("shape;Display geometry of features;"
+				  "cat;Display category numbers of features;"
+				  "topo;Display topology information (nodes, edges);"
+				  "dir;Display direction of linear features;"
+				  "attr;Display selected attribute based on 'attrcolumn';"
+				  "zcoor;Display z-coordinate of features (only for 3D vector maps)");
+    
     /* Query */
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->answer = "point,line,boundary,centroid,area,face";
