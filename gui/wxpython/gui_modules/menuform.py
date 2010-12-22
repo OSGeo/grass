@@ -864,8 +864,13 @@ class mainFrame(wx.Frame):
         
         sizeFrame = self.GetBestSize()
         self.SetMinSize(sizeFrame)
-        self.SetSize(wx.Size(sizeFrame[0], sizeFrame[1] + 0.33 * max(self.notebookpanel.panelMinHeight,
-                                                                     self.notebookpanel.constrained_size[1])))
+        
+        if hasattr(self, "closebox"):
+            scale = 0.33
+        else:
+            scale = 0.50
+        self.SetSize(wx.Size(sizeFrame[0], sizeFrame[1] + scale * max(self.notebookpanel.panelMinHeight,
+                                                                      self.notebookpanel.constrained_size[1])))
         
         # thread to update dialog
         # create queues
