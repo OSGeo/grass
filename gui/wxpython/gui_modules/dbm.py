@@ -2350,7 +2350,7 @@ class LayerBook(wx.Notebook):
                                   quiet = True)
         
         for line in connect.splitlines():
-            item, value = line.split(':')
+            item, value = line.split(':', 1)
             self.defaultConnect[item.strip()] = value.strip()
         
         if len(self.defaultConnect['driver']) == 0 or \
