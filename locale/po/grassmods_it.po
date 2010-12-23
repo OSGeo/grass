@@ -19,6 +19,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -1935,12 +1936,12 @@ msgstr "Genera statistiche per layer raster"
 #: ../raster/r.basins.fill/main.c:61
 #, fuzzy
 msgid "Name of input coded stream network raster map"
-msgstr "Nome di un nuovo file raster"
+msgstr "Nome della mappa raster d'inserimento dati"
 
 #: ../raster/r.basins.fill/main.c:65
 #, fuzzy
 msgid "Name of input thinned ridge network raster map"
-msgstr "Nome di un nuovo file raster"
+msgstr "Nome della mappa raster d'inserimento dati"
 
 #: ../raster/r.basins.fill/main.c:73
 msgid "Number of passes through the dataset"
@@ -2317,7 +2318,7 @@ msgstr "Pendenza"
 
 #: ../raster/r.walk/main.c:306 ../raster/r.cost/main.c:234
 msgid "Use the 'Knight's move'; slower, but more accurate"
-msgstr "Usa la 'Mossa del cavallo'; pi lenta ma di maggior accuratezza"
+msgstr "Usa la 'Mossa del cavallo'; più lenta ma di maggior accuratezza"
 
 #: ../raster/r.walk/main.c:310
 msgid "Keep null values in output map"
@@ -6021,9 +6022,8 @@ msgid "Quantile to calculate for method=quantile"
 msgstr "Non riesco ad impostare user/password"
 
 #: ../raster/r.series/main.c:164
-#, fuzzy
 msgid "Threshold to calculate for method=threshold"
-msgstr "Non riesco ad impostare user/password"
+msgstr ""
 
 #: ../raster/r.series/main.c:171
 msgid "Ignore values outside this range"
@@ -7566,7 +7566,7 @@ msgstr "Mostra mappe raster della location d input ed esci"
 #, fuzzy
 msgid ""
 "Print input map's bounds in the current projection and exit (shell style)"
-msgstr "Mostra mappe raster della location d input ed esci"
+msgstr "mostra i parametri della connessione in uso ed esce"
 
 #: ../raster/r.proj/main.c:236 ../vector/v.proj/main.c:122
 #, c-format
@@ -9000,7 +9000,7 @@ msgstr "Non riesco ad aprire il cellfile per [%s]"
 #: ../raster/r.li/r.li.daemon/daemon.c:209
 #, fuzzy
 msgid "Unable to parse configuration file"
-msgstr "impossibile aprire <%s>"
+msgstr "Nome del file di output"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:360
 msgid "Irregular maskedoverlay areas definition"
@@ -9492,7 +9492,7 @@ msgstr "Raggio del buffer"
 #: ../raster/r.grow/main.c:142 ../raster/r.grow.distance/main.c:170
 #: ../locale/scriptstrings/r.grow_to_translate.c:7
 msgid "Metric"
-msgstr "Metrico"
+msgstr "Misura"
 
 #: ../raster/r.grow/main.c:151 ../locale/scriptstrings/r.grow_to_translate.c:8
 msgid "Value to write for input cells which are non-NULL (-1 => NULL)"
@@ -9927,9 +9927,8 @@ msgstr ""
 #: ../raster/r.sunmask/main.c:175 ../raster/r.sunmask/main.c:183
 #: ../raster/r.sunmask/main.c:191 ../raster/r.sunmask/main.c:199
 #: ../raster/r.sunmask/main.c:208
-#, fuzzy
 msgid "Time"
-msgstr "nnome"
+msgstr ""
 
 #: ../raster/r.sunmask/main.c:165
 msgid "Month (B)"
@@ -9952,9 +9951,8 @@ msgid "Seconds (B)"
 msgstr ""
 
 #: ../raster/r.sunmask/main.c:206
-#, fuzzy
 msgid "Timezone"
-msgstr "Fatto.\n"
+msgstr ""
 
 #: ../raster/r.sunmask/main.c:207
 msgid "East positive, offset from GMT, also use to adjust daylight savings"
@@ -10198,9 +10196,8 @@ msgid "Maximum distance of spatial correlation (value >= 0.0)"
 msgstr "Distanza massima dal punto visualizzato (metri)"
 
 #: ../raster/r.random.surface/main.c:85
-#, fuzzy
 msgid "Distance decay exponent (value > 0.0)"
-msgstr "'%s' dev'essere > 0 per '%s'"
+msgstr ""
 
 #: ../raster/r.random.surface/main.c:94
 msgid "Distance filter remains flat before beginning exponent"
@@ -10222,7 +10219,7 @@ msgstr ""
 #: ../raster/r.random.surface/main.c:128 ../raster/r.random.cells/init.c:89
 #, fuzzy, c-format
 msgid "Generating raster map <%s>..."
-msgstr "Mappa raster risultante"
+msgstr "Nome del driver in input"
 
 #: ../raster/r.random.surface/init.c:73
 #, fuzzy, c-format
@@ -10255,9 +10252,9 @@ msgid "Seed (%d) smaller than minimum (%d)"
 msgstr ""
 
 #: ../raster/r.random.surface/init.c:159
-#, fuzzy, c-format
+#, c-format
 msgid "Distance value (%d): %lf must be >= 0.0"
-msgstr "'%s' dev'essere > 0 per '%s'"
+msgstr ""
 
 #: ../raster/r.random.surface/init.c:187
 #, c-format
@@ -10378,7 +10375,7 @@ msgstr "File contenente le direttive SQL"
 #: ../raster/r.reclass/main.c:66
 #, fuzzy
 msgid "\"-\" to read from stdin"
-msgstr "File raster ascii da importare"
+msgstr "Nome del raster"
 
 #: ../raster/r.reclass/main.c:72 ../raster/r.recode/main.c:68
 msgid "Title for the resulting raster map"
@@ -11918,7 +11915,7 @@ msgstr ""
 #: ../raster/r.what/main.c:131
 #, fuzzy
 msgid "Output header row"
-msgstr "Nome del driver in output"
+msgstr "Output solo in metri"
 
 #: ../raster/r.what/main.c:135
 #, fuzzy
@@ -12597,9 +12594,8 @@ msgid "have"
 msgstr ""
 
 #: ../general/g.access/exp_perms.c:12
-#, fuzzy
 msgid "read "
-msgstr "area"
+msgstr ""
 
 #: ../general/g.access/exp_perms.c:15
 msgid "Everyone"
@@ -17802,7 +17798,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:622
 #, fuzzy, c-format
 msgid "Using temporary vector <%s>"
-msgstr "Errore nella lettura del file dbmscap\n"
+msgstr "Nome della mappa raster risultante"
 
 #: ../vector/v.in.ogr/main.c:641
 #, c-format
@@ -17844,7 +17840,7 @@ msgstr "Non riesco ad aprire il database %s col driver %s"
 #: ../vector/v.in.ogr/main.c:832
 #, fuzzy, c-format
 msgid "Counting polygons for %d features..."
-msgstr "Sto disegnando ..."
+msgstr "Sto copiando le tabelle..."
 
 #: ../vector/v.in.ogr/main.c:854
 #, fuzzy, c-format
@@ -17905,7 +17901,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1048
 #, fuzzy
 msgid "Merge boundaries:"
-msgstr "Non riesco a copiare la tabella"
+msgstr "Sto disegnando ..."
 
 #: ../vector/v.in.ogr/main.c:1066 ../vector/v.overlay/area_area.c:68
 #: ../vector/v.buffer/main.c:517 ../vector/v.buffer/main.c:594
@@ -17913,9 +17909,9 @@ msgid "Cannot calculate area centroid"
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1082
-#, c-format
+#, fuzzy, c-format
 msgid "Find centroids for layer: %s"
-msgstr ""
+msgstr "Non riesco a trovare il file raster %s"
 
 #: ../vector/v.in.ogr/main.c:1103
 #, fuzzy
@@ -21531,7 +21527,7 @@ msgstr "Sto disegnando ..."
 #: ../vector/v.select/main.c:164
 #, fuzzy, c-format
 msgid "Unable to read line id %d from vector map <%s>"
-msgstr "impossibile aprire <%s>"
+msgstr "Impossibile ottenere informazioni sul layer vettoriale"
 
 #: ../vector/v.select/main.c:270 ../vector/v.out.pov/main.c:171
 #, fuzzy
@@ -21651,8 +21647,9 @@ msgid "Reading sites..."
 msgstr "Mappa raster risultante"
 
 #: ../vector/v.voronoi/main.c:178
+#, fuzzy
 msgid "Voronoi triangulation..."
-msgstr ""
+msgstr "Utilizzando le coordinate del centro della mappa\n"
 
 #: ../vector/v.voronoi/main.c:263
 #, fuzzy
@@ -27948,8 +27945,9 @@ msgid "vector, import"
 msgstr "File di input"
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:3
+#, fuzzy
 msgid "Create a 3D line from 3 column data"
-msgstr ""
+msgstr "Crea un nuovo vettoriale (punti) da una tabella contenente coordinate"
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:4
 #, fuzzy
@@ -33998,6 +33996,77 @@ msgid "Bad format in initial exposusre station file for group [%s]"
 msgstr "Errore nella lettura del file dbmscap\n"
 
 #, fuzzy
+msgid "Output aspect filename"
+msgstr "Nome della tabella in output"
+
+#, fuzzy
+msgid "Vector map for which to edit attribute table"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
+msgid "vector, query"
+msgstr "vettore da rimuovere"
+
+#, fuzzy
+msgid "Illegal configuration file"
+msgstr "Nome del file di output"
+
+#, fuzzy
+msgid "raster, projection"
+msgstr "Nome del raster"
+
+#, fuzzy
+msgid "Cannot make stat of %s configuration file"
+msgstr "Nome del file di output"
+
+msgid "Total area: %e (%d areas)"
+msgstr "Area totale: %e (%d areas)"
+
+msgid "Area without category: %e (%d areas)"
+msgstr "Aree senza categoria: %e (%d areas)"
+
+msgid "Converts a binary GRASS vector map into a GRASS raster map ."
+msgstr "Converte vettore binario GRASS in raster GRASS"
+
+msgid "Duplicate area centroids"
+msgstr "Centroidi dell'area duplicati"
+
+#, fuzzy
+msgid "Computing row %d of covariance matrix..."
+msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+msgid "Converting %s..."
+msgstr "Mappa raster risultante"
+
+msgid "New LOCATION name (not location path)"
+msgstr "Nome della nuova LOCATION (non il percorso della location)"
+
+msgid "New GISDBASE (full path to the directory where the new location is)"
+msgstr ""
+"Nuovo GISDBASE (percorso intero della directory dove la nuova location è "
+"situata)"
+
+#, fuzzy
+msgid "Name for output file (do not add extension)"
+msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+msgid "Width and height of output image"
+msgstr "Spessore dell'evidenziazione"
+
+msgid "Surface"
+msgstr "Superficie"
+
+#, fuzzy
+msgid "Volume"
+msgstr "colonne: %d"
+
+#, fuzzy
+msgid "Layer where to add column"
+msgstr "Non riesco a descrivere la tabella"
+
+#, fuzzy
 #~ msgid "Not enough room in history file"
 #~ msgstr "Non riesco a trovare il file raster %s"
 
@@ -34034,10 +34103,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgstr "Nome della tabella in output"
 
 #, fuzzy
-#~ msgid "Output aspect filename"
-#~ msgstr "Nome della tabella in output"
-
-#, fuzzy
 #~ msgid "Output profile curvature filename"
 #~ msgstr "Nome del driver in output"
 
@@ -34052,10 +34117,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #, fuzzy
 #~ msgid "Elevation products for mapset [%s] in [%s]"
 #~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "Vector map for which to edit attribute table"
-#~ msgstr "Non riesco a descrivere la tabella"
 
 #, fuzzy
 #~ msgid "Input elevation map"
@@ -35038,10 +35099,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgstr "%d categrie caricate dalla tabella"
 
 #, fuzzy
-#~ msgid "vector, query"
-#~ msgstr "vettore da rimuovere"
-
-#, fuzzy
 #~ msgid "Areas buffers... "
 #~ msgstr "Nome mappa raster"
 
@@ -35273,20 +35330,12 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgstr "Nome del file in output"
 
 #, fuzzy
-#~ msgid "Illegal configuration file"
-#~ msgstr "Nome del file di output"
-
-#, fuzzy
 #~ msgid "Unable to open MASK"
 #~ msgstr "impossibile aprire <%s>"
 
 #, fuzzy
 #~ msgid "unable to open MASK"
 #~ msgstr "impossibile aprire <%s>"
-
-#, fuzzy
-#~ msgid "raster, projection"
-#~ msgstr "Nome del raster"
 
 #, fuzzy
 #~ msgid "raster, import, LIDAR"
@@ -36293,10 +36342,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgstr "Nome della mappa di output"
 
 #, fuzzy
-#~ msgid "Cannot make stat of %s configuration file"
-#~ msgstr "Nome del file di output"
-
-#, fuzzy
 #~ msgid "raster, null data"
 #~ msgstr "File di input"
 
@@ -36416,12 +36461,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 
 #~ msgid "Creates topology for GRASS vector map."
 #~ msgstr "Crea topologia per un vettore GRASS"
-
-#~ msgid "Total area: %e (%d areas)"
-#~ msgstr "Area totale: %e (%d areas)"
-
-#~ msgid "Area without category: %e (%d areas)"
-#~ msgstr "Aree senza categoria: %e (%d areas)"
 
 #, fuzzy
 #~ msgid "vector, extract"
@@ -36552,9 +36591,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgid "Calculate area centroids..."
 #~ msgstr "Centroidi dell'area duplicati"
 
-#~ msgid "Converts a binary GRASS vector map into a GRASS raster map ."
-#~ msgstr "Converte vettore binario GRASS in raster GRASS"
-
 #~ msgid "Create points along input lines in new vector with 2 layers."
 #~ msgstr ""
 #~ "Crea punti lungo una linea di input in un nuovo vettoriale con 2 layer"
@@ -36571,9 +36607,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 
 #~ msgid "%d lines / boundaries removed"
 #~ msgstr "%d linee / confini rimossi"
-
-#~ msgid "Duplicate area centroids"
-#~ msgstr "Centroidi dell'area duplicati"
 
 #, fuzzy
 #~ msgid "Attribute table column with values to interpolate"
@@ -36823,10 +36856,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgstr "Nome del raster"
 
 #, fuzzy
-#~ msgid "Computing row %d of covariance matrix..."
-#~ msgstr "Non riesco a trovare il file raster %s"
-
-#, fuzzy
 #~ msgid ""
 #~ "Unable to open real-image in the 'cell_misc' directory. Raster map "
 #~ "probably wasn't created by i.fft"
@@ -36914,10 +36943,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 
 #~ msgid "Converts a raster map layer into an ASCII text file."
 #~ msgstr "Converte un raster in un file di testo ASCII"
-
-#, fuzzy
-#~ msgid "Converting %s..."
-#~ msgstr "Mappa raster risultante"
 
 #~ msgid "Import GDAL supported raster file into a binary raster map layer."
 #~ msgstr "Importa file raster supportato da GDAL in un layer raster binario"
@@ -37105,14 +37130,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgid "general, scripts"
 #~ msgstr "Nome del raster"
 
-#~ msgid "New LOCATION name (not location path)"
-#~ msgstr "Nome della nuova LOCATION (non il percorso della location)"
-
-#~ msgid "New GISDBASE (full path to the directory where the new location is)"
-#~ msgstr ""
-#~ "Nuovo GISDBASE (percorso intero della directory dove la nuova location è "
-#~ "situata)"
-
 #, fuzzy
 #~ msgid "Monitor: waitpid: expected %d but got %d"
 #~ msgstr "Monitor: waitpid: atteso %d ma ricevuto %d\n"
@@ -37150,21 +37167,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #, fuzzy
 #~ msgid "Vector map <%s> is connected by:"
 #~ msgstr "raster <%s> non trovato"
-
-#, fuzzy
-#~ msgid "Name for output file (do not add extension)"
-#~ msgstr "Nome di un file vettoriale in output"
-
-#, fuzzy
-#~ msgid "Width and height of output image"
-#~ msgstr "Spessore dell'evidenziazione"
-
-#~ msgid "Surface"
-#~ msgstr "Superficie"
-
-#, fuzzy
-#~ msgid "Volume"
-#~ msgstr "colonne: %d"
 
 #~ msgid "Prints/sets general DB connection for current mapset and exits."
 #~ msgstr ""
@@ -37209,10 +37211,6 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #~ msgstr "Importa file SPOT VGT NDVI in un raster"
 
 #, fuzzy
-#~ msgid "Layer where to add column"
-#~ msgstr "Non riesco a descrivere la tabella"
-
-#, fuzzy
 #~ msgid "stay with source monitor"
 #~ msgstr "Nome del raster"
 
@@ -37231,3 +37229,255 @@ msgstr "Errore nella lettura del file dbmscap\n"
 #, fuzzy
 #~ msgid "Bad format in initial exposusre station file for group <%s>"
 #~ msgstr "Errore nella lettura del file dbmscap\n"
+
+#, fuzzy
+#~ msgid "raster, hydrology"
+#~ msgstr "File di input"
+
+#, fuzzy
+#~ msgid "raster, png"
+#~ msgstr "File di input"
+
+#, fuzzy
+#~ msgid "Export GRASS raster as non-georeferenced PNG image."
+#~ msgstr "Esporta raster GRASS in formati supportati da GDAL"
+
+#, fuzzy
+#~ msgid "raster, export, color table"
+#~ msgstr "Mappa(e) raster da leggere"
+
+#, fuzzy
+#~ msgid "Path to output rules file"
+#~ msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+#~ msgid "\"-\" to write to stdout"
+#~ msgstr "Valore da scrivere per null"
+
+#, fuzzy
+#~ msgid "Path to filter file"
+#~ msgstr "Nome di un file vettoriale in output"
+
+#, fuzzy
+#~ msgid "Filter"
+#~ msgstr "Tipo di grafico"
+
+#, fuzzy
+#~ msgid "raster, projection, transformation"
+#~ msgstr "Stampa solo il tipo di mappa raster"
+
+#, fuzzy
+#~ msgid "Location containing input raster map"
+#~ msgstr "Location contenente la mappa vettoriale di input"
+
+#, fuzzy
+#~ msgid "Mapset containing input raster map"
+#~ msgstr "Mapset contenente la mappa vettoriale di input"
+
+#, fuzzy
+#~ msgid "Target"
+#~ msgstr "area"
+
+#, fuzzy
+#~ msgid "raster, random"
+#~ msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+#~ msgid "Create an integer raster map"
+#~ msgstr "Mappa raster risultante"
+
+#, fuzzy
+#~ msgid "Raster map <%s> generated."
+#~ msgstr "ERRORE: <%s> esiste già\n"
+
+#, fuzzy
+#~ msgid "raster, sun position"
+#~ msgstr "Nome del raster"
+
+#, fuzzy
+#~ msgid "Empty east coordinate specified"
+#~ msgstr "Sono state specificate delle coordinate ovest vuote."
+
+#, fuzzy
+#~ msgid "Empty north coordinate specified"
+#~ msgstr "Sono state specificate delle coordinate nord vuote."
+
+#, fuzzy
+#~ msgid "Either define sun position or location/date/time parameters"
+#~ msgstr ""
+#~ "Definisci la posizione del sole oppure i parametri di luogo/data/tempo"
+
+#, fuzzy
+#~ msgid "Calculating sun position... (using solpos (V. %s) from NREL)"
+#~ msgstr "Calcolo la posizione del sole (utilizzando solpos(V %S) da NREL)\n"
+
+#, fuzzy
+#~ msgid "Option <%s> required"
+#~ msgstr "Location <%s> creata!"
+
+#, fuzzy
+#~ msgid "Unable to open range file for raster map <%s>"
+#~ msgstr "Non riesco a trovare il file raster %s"
+
+#, fuzzy
+#~ msgid "Unable to get projection info of current location"
+#~ msgstr "Stampa le informazioni di proiezione in formato WKT"
+
+#, fuzzy
+#~ msgid "Unable to get projection units of current location"
+#~ msgstr "Nome della mappa di output"
+
+#, fuzzy
+#~ msgid "Unable to get projection key values of current location"
+#~ msgstr "Nome della mappa di output"
+
+#, fuzzy
+#~ msgid "<%s> is an ilegal name"
+#~ msgstr "[%s] è un nome illegale"
+
+#, fuzzy
+#~ msgid "raster, thin"
+#~ msgstr "File di input"
+
+#, fuzzy
+#~ msgid "raster, metadata, timestamp"
+#~ msgstr "File di input"
+
+#, fuzzy
+#~ msgid "Modifies a timestamp for a raster map."
+#~ msgstr "Stampa/aggiungi/rimuovi un timestamp di un raster"
+
+#, fuzzy
+#~ msgid "Datetime, datetime1/datetime2, or 'none' to remove"
+#~ msgstr "nessuno"
+
+#, fuzzy
+#~ msgid "raster, conversion, vectorization"
+#~ msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+#~ msgid "Name of raster map to be recoded"
+#~ msgstr "Nome della mappa raster da mostrare"
+
+#, fuzzy
+#~ msgid "Title for output raster map"
+#~ msgstr "Titolo del file raster in output"
+
+#, fuzzy
+#~ msgid "Align the current region to the input raster map"
+#~ msgstr "Utilizza la regione corrente"
+
+#, fuzzy
+#~ msgid "Changes current mapset."
+#~ msgstr "Cambia il mapset corrente."
+
+#, fuzzy
+#~ msgid "Your current mapset is <%s>"
+#~ msgstr "mostra i parametri della connessione in uso ed esce"
+
+#, fuzzy
+#~ msgid "general, settings, search path"
+#~ msgstr "Nome del raster"
+
+#, fuzzy
+#~ msgid "Modifies the user's current mapset search path."
+#~ msgstr "mostra i parametri della connessione in uso ed esce"
+
+#, fuzzy
+#~ msgid ""
+#~ "Affects the user's access to data existing under the other mapsets in the "
+#~ "current location."
+#~ msgstr ""
+#~ "Copia i file disponibili nell'attuale percorso di ricerca del mapset e "
+#~ "della location in uso dall'utente nelle appropriate cartelle del mapset "
+#~ "corrente"
+
+#, fuzzy
+#~ msgid "Name(s) of existing mapset(s) to add to search path"
+#~ msgstr "Nome di una mappa raster esistente"
+
+#, fuzzy
+#~ msgid "Name(s) of existing mapset(s) to remove from search path"
+#~ msgstr "Nome di una mappa raster esistente"
+
+#, fuzzy
+#~ msgid "display, raster, RGB"
+#~ msgstr "mostra"
+
+#, fuzzy
+#~ msgid "Name of raster map to be used for '%s'"
+#~ msgstr "Nome della mappa raster da utilizzare per <%s>"
+
+#, fuzzy
+#~ msgid "Displays user-specified raster map in the active graphics frame."
+#~ msgstr ""
+#~ "Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
+#~ "nel monitor grafico dell'utente."
+
+#, fuzzy
+#~ msgid "Displays user-specified vector map in the active graphics frame."
+#~ msgstr ""
+#~ "Seleziona il tipo di carattere con cui il testo deve essere rappresentato "
+#~ "nel monitor grafico dell'utente."
+
+#, fuzzy
+#~ msgid ""
+#~ "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),r(adians),d"
+#~ "(egrees)"
+#~ msgstr "mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),p(ercent)"
+
+#, fuzzy
+#~ msgid "vector, projection, transformation"
+#~ msgstr "Nome del raster"
+
+#, fuzzy
+#~ msgid "Re-projects a vector map from one location to the current location."
+#~ msgstr "Riproietta un raster da una location alla location corrente"
+
+#, fuzzy
+#~ msgid "Name for output vector map (default: input)"
+#~ msgstr "Mostra il titolo del file raster"
+
+#, fuzzy
+#~ msgid "vector, spatial query"
+#~ msgstr "vettore da rimuovere"
+
+#, fuzzy
+#~ msgid "Do not skip features without category"
+#~ msgstr "%d punti senza categoria non considerati"
+
+#, fuzzy
+#~ msgid ""
+#~ "Required parameter <%s> not set:\n"
+#~ "\t(%s)"
+#~ msgstr "raster <%s> non trovato"
+
+#, fuzzy
+#~ msgid "Unable select categories from table <%s>"
+#~ msgstr "Non riesco a selezionare dati dalla tabella"
+
+#, fuzzy
+#~ msgid "Converts (rasterize) a vector map into a raster map."
+#~ msgstr "Converte vettore binario GRASS in raster GRASS"
+
+#, fuzzy
+#~ msgid "Name of column for 'attr' parameter (data type must be numeric)"
+#~ msgstr ""
+#~ "Nome della colonna per il parametro attr (tipo di dato dovrà essere "
+#~ "numerico)"
+
+#, fuzzy
+#~ msgid "Raster value (for use=val)"
+#~ msgstr "File raster per superficie"
+
+#, fuzzy
+#~ msgid "Unparsable longitude value: [%s]"
+#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+#~ msgid "Unparsable latitude value: [%s]"
+#~ msgstr "Non riesco ad aprire il cellfile per [%s]"
+
+#, fuzzy
+#~ msgid "vector, import, wfs"
+#~ msgstr "File di input"
