@@ -79,13 +79,6 @@ if not os.getenv("GRASS_WXBUNDLED"):
 import wx
 import wx.lib.flatnotebook as FN
 
-try:
-    import subprocess
-except:
-    compatPath = os.path.join(globalvar.ETCWXDIR, "compat")
-    sys.path.append(compatPath)
-    import subprocess
-
 """
 Query layer (generated for example by selecting item in the Attribute Table Manager)
 Deleted automatically on re-render action
@@ -129,7 +122,7 @@ MAP_DISPLAY_STATUSBAR_MODE = [_("Coordinates"),
                               _("Projection"),]
 
 """!File name extension binaries/scripts"""
-if subprocess.mswindows:
+if sys.platform == 'win32':
     EXT_BIN = '.exe'
     EXT_SCT = '.py'
 else:
@@ -137,17 +130,21 @@ else:
     EXT_SCT = ''
 
 def GetGRASSCmds(bin = True, scripts = True, gui_scripts = True):
-    """!Create list of all available GRASS commands to use when
-    parsing string from the command line
+    """!Create list of available GRASS commands to use when parsing
+    string from the command line
+
+    @param bin True to include executable into list
+    @param scripts True to include scripts into list
+    @param gui_scripts True to include GUI scripts into list
     """
     gisbase = os.environ['GISBASE']
     cmd = list()
-    if bin is True:
-        for file in os.listdir(os.path.join(gisbase, 'bin')):
+    if bin:
+        for executable in os.listdir(os.path.join(gisbase, 'bin')):
+            ext = os.path.splitext(executable)[1]
             if not EXT_BIN or \
-                    file[-4:] == EXT_BIN or \
-                    file[-4:] == EXT_SCT:
-                cmd.append(file)
+                    ext in (EXT_BIN, EXT_SCT):
+                cmd.append(executable)
         
         # add special call for setting vector colors
         cmd.append('vcolors')
@@ -156,18 +153,19 @@ def GetGRASSCmds(bin = True, scripts = True, gui_scripts = True):
     if gui_scripts:
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
         cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
-       
-    if subprocess.mswindows:
+    
+    if sys.platform == 'win32':
         for idx in range(len(cmd)):
-            if cmd[idx][-4:] in (EXT_BIN, EXT_SCT):
-                cmd[idx] = cmd[idx][:-4]
+            name, ext = os.path.splitext(cmd[idx])
+            if ext in (EXT_BIN, EXT_SCT):
+                cmd[idx] = name
     
     return cmd
 
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd = {}
 grassCmd['all'] = GetGRASSCmds()
-grassCmd['script'] = GetGRASSCmds(bin = False)
+grassCmd['script'] = GetGRASSCmds(bin = False, gui_scripts = False)
 
 """@Toolbar icon size"""
 toolbarSize = (24, 24)
