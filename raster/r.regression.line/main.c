@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "   meanX (Mean of map1): %f\n", meanX);
 	fprintf(stdout, "   sdX (Standard deviation of map1): %f\n", sdX);
 	fprintf(stdout, "   meanY (Mean of map2): %f\n", meanY);
-	fprintf(stdout, "   sdY (Standard deviation of map1): %f", sdY);
+	fprintf(stdout, "   sdY (Standard deviation of map1): %f\n", sdY);
     }
 
     exit(EXIT_SUCCESS);
