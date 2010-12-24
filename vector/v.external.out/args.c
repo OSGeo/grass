@@ -39,7 +39,8 @@ void parse_args(int argc, char **argv,
     flags->r->key = 'r';
     flags->r->description = _("Cease using OGR, revert to native output and exit");
     flags->r->suppress_required = YES;
-
+    flags->r->guisection = _("Native");
+    
     flags->p = G_define_flag();
     flags->p->key = 'p';
     flags->p->description = _("Print current status");
