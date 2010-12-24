@@ -1,16 +1,14 @@
 /*!
-   \file build.c
+   \file lib/vector/Vlib/build.c
 
    \brief Vector library - Building topology
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2010 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -56,7 +54,6 @@ int Vect_build(struct Map_info *Map)
 {
     return Vect_build_partial(Map, GV_BUILD_ALL);
 }
-
 
 /*!
    \brief Return current highest built level (part)
@@ -127,6 +124,10 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     plus = &(Map->plus);
     if (build > GV_BUILD_NONE) {
+	if (Vect_maptype(Map) != GV_FORMAT_NATIVE)
+	    G_message(_("Using external data format '%s'"),
+		      Vect_get_ogr_format_info(Map));
+	
 	G_message(_("Building topology for vector map <%s>..."),
 		  Vect_get_full_name(Map));
     }

@@ -901,8 +901,9 @@ const char *Vect_maptype_info(const struct Map_info *Map)
   \brief Gets vector map format
 
   Currently are implemeted:
-   - Native format (GV_FORMAT_NATIVE)
-   - OGR format    (GV_FORMAT_OGR)
+   - Native format                    (GV_FORMAT_NATIVE)
+   - OGR format linked via v.external (GV_FORMAT_OGR)
+   - OGR format                       (GV_FORMAT_DIRECT)
 
   \param Map pointer to Map_info structure
   

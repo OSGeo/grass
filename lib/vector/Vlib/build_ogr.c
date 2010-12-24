@@ -5,15 +5,21 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   Line offset is
+    - centroids   : FID
+    - other types : index of the first record (which is FID) in offset array.
+ 
+   Category: FID, not all layer have FID, OGRNullFID is defined
+   (5/2004) as -1, so FID should be only >= 0
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   (C) 2001-2010 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek, Piero Cavalieri
- */
+   \author Various updates for GRASS 7 by Martin Landa <landa.martin gmail.com>
+*/
 
 #include <grass/config.h>
 #include <string.h>
@@ -23,22 +29,14 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-/* 
- *   Line offset is
- *      - centroids   : FID
- *      - other types : index of the first record (which is FID) in offset array.
- *
- *   Category: FID, not all layer have FID, OGRNullFID is defined (5/2004) as -1, so FID should be only >= 0
- *
- */
-
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
-/* 
- *  This structure keeps info about geometry parts above current geometry, path to curent geometry in the 
- *  feature. First 'part' number however is feature Id 
- */
+/*! 
+  \brief This structure keeps info about geometry parts above
+  current geometry, path to curent geometry in the * feature. First
+  'part' number however is feature Id
+*/
 typedef struct
 {
     int *part;
@@ -46,27 +44,36 @@ typedef struct
     int n_parts;
 } GEOM_PARTS;
 
-/* Init parts */
+/*!
+  \brief Init parts
+*/
 static void init_parts(GEOM_PARTS * parts)
 {
     parts->part = NULL;
     parts->a_parts = parts->n_parts = 0;
 }
 
-/* Reset parts */
+/*!
+  \brief 
+  Reset parts
+*/
 static void reset_parts(GEOM_PARTS * parts)
 {
     parts->n_parts = 0;
 }
 
-/* Free parts */
+/*!
+  \brief Free parts
+*/
 static void free_parts(GEOM_PARTS * parts)
 {
     G_free(parts->part);
     parts->a_parts = parts->n_parts = 0;
 }
 
-/* Add new part number to parts */
+/*!
+  \brief Add new part number to parts
+*/
 static void add_part(GEOM_PARTS * parts, int part)
 {
     if (parts->a_parts == parts->n_parts) {
@@ -79,13 +86,17 @@ static void add_part(GEOM_PARTS * parts, int part)
     parts->n_parts++;
 }
 
-/* Remove last part */
+/*!
+  \brief Remove last part
+*/
 static void del_part(GEOM_PARTS * parts)
 {
     parts->n_parts--;
 }
 
-/* Add parts to offset */
+/*!
+  \brief Add parts to offset
+*/
 static void add_parts_to_offset(struct Map_info *Map, GEOM_PARTS * parts)
 {
     int i, j;
@@ -106,7 +117,9 @@ static void add_parts_to_offset(struct Map_info *Map, GEOM_PARTS * parts)
     Map->fInfo.ogr.offset_num += parts->n_parts;
 }
 
-/* add line to support structures */
+/*!
+  \brief Add line to support structures
+*/
 static int add_line(struct Map_info *Map, int type, struct line_pnts *Points,
 		    int FID, GEOM_PARTS * parts)
 {
@@ -148,7 +161,9 @@ static int add_line(struct Map_info *Map, int type, struct line_pnts *Points,
     return line;
 }
 
-/* Recursively add geometry to topology */
+/*!
+  \brief Recursively add geometry to topology
+*/
 static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 			GEOM_PARTS * parts)
 {
