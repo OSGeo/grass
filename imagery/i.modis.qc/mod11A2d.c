@@ -1,4 +1,4 @@
-/* mod11A2 LST Error Flag bits[4-5]
+/* mod11A2 LST Error Flag bits[6-7]
  * 00 -> class 0: Average LST error <= 1
  * 01 -> class 1: Average LST error <= 2
  * 10 -> class 2: Average LST error <= 3 
