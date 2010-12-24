@@ -96,7 +96,7 @@ char *Rast_get_cell_title(const char *, const char *);
 int Rast_cell_stats_histo_eq(struct Cell_stats *, CELL, CELL, CELL, CELL, int,
 			     void (*)(CELL, CELL, CELL));
 
-/* closecell.c */
+/* close.c */
 void Rast_close(int);
 void Rast_unopen(int);
 void Rast__unopen_all(void);
@@ -429,7 +429,7 @@ void Rast__convert_01_flags(const char *, unsigned char *, int);
 void Rast__convert_flags_01(char *, const unsigned char *, int);
 void Rast__init_null_bits(unsigned char *, int);
 
-/* opencell.c */
+/* open.c */
 int Rast_open_old(const char *, const char *);
 int Rast__open_old(const char *, const char *);
 int Rast_open_c_new(const char *);

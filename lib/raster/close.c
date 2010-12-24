@@ -1,5 +1,5 @@
 /*!
- * \file raster/closecell.c
+ * \file raster/close.c
  * 
  * \brief Raster Library - Close raster file
  *
