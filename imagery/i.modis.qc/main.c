@@ -49,6 +49,12 @@ CELL mod09A1si(CELL pixel);
 CELL mod09A1sj(CELL pixel);
 CELL mod09A1sk(CELL pixel);
 
+    /* MOD11A1 Products (1Km, daily) */ 
+CELL mod11A1a(CELL pixel);
+CELL mod11A1b(CELL pixel);
+CELL mod11A1c(CELL pixel);
+CELL mod11A1d(CELL pixel);
+
     /* MOD11A2 Products (1Km, 8-Days) */ 
 CELL mod11A2a(CELL pixel);
 CELL mod11A2b(CELL pixel);
@@ -98,6 +104,7 @@ int main(int argc, char *argv[])
     input->descriptions =_("mod09Q1;surf. refl. 250m 8-days;"
                             "mod09A1;surf. refl. 500m 8-days;"
                             "mod09A1s;surf. refl. 500m 8-days, State QA;"
+                            "mod11A1;LST 1Km daily (Day/Night);"
                             "mod11A2;LST 1Km 8-days (Day/Night);");
     input->answer = "mod09Q1";
 
@@ -112,6 +119,10 @@ int main(int argc, char *argv[])
                             "data_quality;mod09: Band-Wise Data Quality Flag;"
                             "diff_orbit_from_500m;mod09: 250m Band is at Different Orbit than 500m;"
                             "modland_qa_bits;mod09: MODIS Land General Quality Assessment;"
+                            "mandatory_qa;mod11A1: MODIS Land General Quality Assessment;"
+                            "data_quality_flag;mod11A1: Detailed Quality Indications;"
+                            "emis_error;mod11A1: Average Emissivity Error Classes;"
+                            "lst_error;mod11A1: Average LST Error Classes;"
                             "data_quality_flag;mod11A2: Detailed Quality Indications;"
                             "emis_error;mod11A2: Average Emissivity Error Classes;"
                             "mandatory_qa;mod11A2: MODIS Land General Quality Assessment;"
@@ -178,6 +189,12 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("mod09Q1 product only has 2 bands"));
     }
     
+    if ((!strcmp(qcflag, "mandatory_qa") && (strcmp(product, "mod11A1"))) ||
+        (!strcmp(qcflag, "data_quality_flag") && (strcmp(product, "mod11A1"))) ||
+        (!strcmp(qcflag, "emis_error") && (strcmp(product, "mod11A1"))) ||
+        (!strcmp(qcflag, "lst_error") && (strcmp(product, "mod11A1"))))
+        G_fatal_error(_("This flag is only available for MOD11A1 @ 1Km products"));
+
     if ((!strcmp(qcflag, "mandatory_qa") && (strcmp(product, "mod11A2"))) || 
 	(!strcmp(qcflag, "data_quality_flag") && (strcmp(product, "mod11A2"))) ||
 	(!strcmp(qcflag, "emis_error") && (strcmp(product, "mod11A2"))) ||
@@ -260,6 +277,21 @@ int main(int argc, char *argv[])
 	        if (!strcmp(qcflag, "diff_orbit_from_500m"))
                 /*calculate different orbit from 500m flag  */ 
                     c = mod09Q1f(c);
+            }
+            else if (!strcmp(product, "mod11A1"))
+            {
+                if (!strcmp(qcflag, "mandatory_qa"))
+                /*calculate mod11A1 mandatory qa flags  */
+                    c = mod11A1a(c);
+                if (!strcmp(qcflag, "data_quality_flag"))
+                /*calculate mod11A1 data quality flag  */
+                    c = mod11A1b(c);
+                if (!strcmp(qcflag, "emis_error"))
+                /*calculate mod11A1 emissivity error flag  */
+                    c = mod11A1c(c);
+                if (!strcmp(qcflag, "lst_error"))
+                /*calculate mod11A1 lst error flag  */
+                    c = mod11A1d(c);
             }
             else if (!strcmp(product, "mod11A2"))
             {
