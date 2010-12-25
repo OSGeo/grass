@@ -723,6 +723,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 	struct Key_Value *key_val;
 	const char *p;
 
+	G_debug(2, " using OGR format");
 	Map->format = GV_FORMAT_OGR_DIRECT;
 	fp = G_fopen_old("", "OGR", G_mapset());
 	if (!fp) {
@@ -742,6 +743,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     }
     else {
 	/* native */
+	G_debug(2, " using native format");
 	Map->format = GV_FORMAT_NATIVE;
 
 	/* check if map already exists */

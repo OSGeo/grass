@@ -179,7 +179,10 @@ struct Format_info_ogr
     void *ds;
     void *layer;
 #endif
-
+    
+    char **dsn_options;
+    char **layer_options;
+    
     /* Level 1 (used by V*_read_next_line_ogr) */
     struct line_pnts **lines;	/* points cache */
     int *lines_types;           /* list of line types */

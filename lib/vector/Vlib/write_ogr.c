@@ -66,8 +66,8 @@ off_t V1_write_line_ogr(struct Map_info *Map,
     OGRwkbGeometryType Ogr_geom_type;
 
     if (!Map->fInfo.ogr.layer) {
-	G_warning(_("OGR layer not defined"));
-	return -1;
+	if (V2_open_new_ogr(Map, type) < 0)
+	    return -1;
     }
 
     Ogr_featuredefn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);

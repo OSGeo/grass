@@ -202,11 +202,13 @@ int V2_open_old_ogr(struct Map_info *Map)
 }
 
 /*!
-   \brief Create new OGR layer in given OGR datasource (level 1)
+   \brief Prepare OGR datasource for creating new OGR layer (level 1)
 
+   New OGR layer can be created by V2_open_new_ogr().
+   
    \param[out] Map pointer to Map_info structure
    \param name name of OGR layer to create
-   \param with_z 2D or 3D (unused?)
+   \param with_z WITH_Z for 3D vector data otherwise WITHOUT_Z
 
    \return 0 success
    \return -1 error 
@@ -217,11 +219,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     OGRDataSourceH  Ogr_ds;
     OGRLayerH       Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
-    
-    OGRSpatialReferenceH Ogr_spatial_ref;
 
-    struct Key_Value *projinfo, *projunits;
-    
     int            i, nlayers;
     char         **Ogr_layer_options;
      
@@ -249,7 +247,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     for (i = 0; i < nlayers; i++) {
       	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), Map->fInfo.ogr.layer_name) == 0) {	
+	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), name) == 0) {	
 	    if (G_get_overwrite()) {
 		G_warning(_("OGR layer <%s> already exists and will be overwritten"),
 			  Map->fInfo.ogr.layer_name);
@@ -264,17 +262,73 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 		G_fatal_error(_("OGR layer <%s> already exists in datasource '%s'"),
 			      Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
 	    }
+	    Map->fInfo.ogr.layer = NULL;
 	    break;
 	}
     }
     
-    /* create new OGR layer */
-    projinfo = G_get_projinfo();
+    return 0;
+}
+
+/*!
+   \brief Create new OGR layer in given OGR datasource (level 2)
+
+   V1_open_new_ogr() is required to be called before this function.
+
+   \param[in,out] Map pointer to Map_info structure
+   \param type feature type (GV_POINT, GV_LINE, ...)
+
+   \return 0 success
+   \return -1 error 
+*/
+int V2_open_new_ogr(struct Map_info *Map, int type)
+{
+    OGRLayerH            Ogr_layer;
+    OGRSpatialReferenceH Ogr_spatial_ref;
+    
+    struct Key_Value *projinfo, *projunits;
+    
+    OGRwkbGeometryType Ogr_geom_type;
+    char             **Ogr_layer_options;
+    
+    if (!Map->fInfo.ogr.driver_name ||
+	!Map->fInfo.ogr.layer_name ||
+	!Map->fInfo.ogr.ds)
+	return -1;
+    
+    /* get spatial reference */
+    projinfo  = G_get_projinfo();
     projunits = G_get_projunits();
     Ogr_spatial_ref = GPJ_grass_to_osr(projinfo, projunits);
-    /* Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "OVERWRITE", "YES"); */
-    Ogr_layer = OGR_DS_CreateLayer(Ogr_ds, Map->fInfo.ogr.layer_name,
-				   Ogr_spatial_ref, wkbPoint, Ogr_layer_options);
+
+    switch(type) {
+    case GV_POINT:
+	Ogr_geom_type = wkbPoint;
+	break;
+    case GV_LINE:
+	Ogr_geom_type = wkbLineString;
+	break;
+    case GV_AREA:
+	Ogr_geom_type = wkbPolygon;
+	break;
+    default:
+	G_warning(_("Unsupported geometry type (%d)"), type);
+	return -1;
+    }
+    
+    Ogr_layer_options = Map->fInfo.ogr.layer_options;
+    if (Vect_is_3d(Map)) {
+	if (strcmp(Map->fInfo.ogr.driver_name, "PostgreSQL") == 0) {
+	    Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "3");
+	}
+    }
+    else {
+	if (strcmp(Map->fInfo.ogr.driver_name, "PostgreSQL") == 0) {
+	    Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "2");
+	}
+    }
+    Ogr_layer = OGR_DS_CreateLayer(Map->fInfo.ogr.ds, Map->fInfo.ogr.layer_name,
+				   Ogr_spatial_ref, Ogr_geom_type, Ogr_layer_options);
     CSLDestroy(Ogr_layer_options);
     if (!Ogr_layer) {
 	G_warning(_("Unable to create OGR layer <%s> in '%s'"),
@@ -282,7 +336,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 	return -1;
     }
     Map->fInfo.ogr.layer = Ogr_layer;
-    
+
     return 0;
 }
 #endif
