@@ -193,18 +193,8 @@ def main():
 
     if group:
 	# ## PARSES THE GROUP FILES - gets rid of ugly header info from group list output
-	maps = []
-	s = grass.read_command('i.group', flags='l', group = group, quiet = True)
-	active = False
-	for l in s.splitlines():
-	    if l == '-------------':
-		active = not active
-		continue
-	    if not active:
-		continue
-	    f = l.replace(' in ','@').split()
-	    maps += f
-	rastermaps = maps
+	s = grass.read_command('i.group', flags='g', group = group, quiet = True)
+	rastermaps = s.splitlines()
     else:
 	# ## get data from list of files and set the x-axis labels
 	rastermaps = raster.split(',')
