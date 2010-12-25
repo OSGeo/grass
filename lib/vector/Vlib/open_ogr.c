@@ -21,8 +21,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <grass/vector.h>
 #include <grass/gis.h>
+#include <grass/vector.h>
+#include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #ifdef HAVE_OGR
@@ -217,6 +218,10 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     OGRLayerH       Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
     
+    OGRSpatialReferenceH Ogr_spatial_ref;
+
+    struct Key_Value *projinfo, *projunits;
+    
     int            i, nlayers;
     char         **Ogr_layer_options;
      
@@ -264,10 +269,12 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     }
     
     /* create new OGR layer */
-    /* TODO: spatial reference */
+    projinfo = G_get_projinfo();
+    projunits = G_get_projunits();
+    Ogr_spatial_ref = GPJ_grass_to_osr(projinfo, projunits);
     /* Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "OVERWRITE", "YES"); */
     Ogr_layer = OGR_DS_CreateLayer(Ogr_ds, Map->fInfo.ogr.layer_name,
-				   NULL, wkbPoint, Ogr_layer_options);
+				   Ogr_spatial_ref, wkbPoint, Ogr_layer_options);
     CSLDestroy(Ogr_layer_options);
     if (!Ogr_layer) {
 	G_warning(_("Unable to create OGR layer <%s> in '%s'"),
