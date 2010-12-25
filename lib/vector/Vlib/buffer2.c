@@ -1,5 +1,5 @@
 /*!
-   \file buffer2.c
+   \file lib/vector/Vlib/buffer2.c
 
    \brief Vector library - nearest, adjust, parallel lines
 

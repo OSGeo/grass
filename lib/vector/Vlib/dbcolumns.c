@@ -1,5 +1,5 @@
 /*!
-   \file dbcolumns.c
+   \file lib/vector/Vlib/dbcolumns.c
 
    \brief Vector library - DB info on vectors maps
 

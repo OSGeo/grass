@@ -1,5 +1,5 @@
 /*!
-   \file close_nat.c
+   \file lib/vector/Vlib/close_nat.c
 
    \brief Vector library - Close map (native format)
 

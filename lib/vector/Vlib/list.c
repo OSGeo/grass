@@ -1,6 +1,6 @@
 
 /*!
- * \file list.c
+ * \file lib/vector/Vlib/list.c
  *
  * \brief Vector library - list definition
  *

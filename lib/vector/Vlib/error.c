@@ -1,5 +1,5 @@
 /*!
-   \file error.c
+   \file lib/vector/Vlib/error.c
 
    \brief Vector library - error management
 

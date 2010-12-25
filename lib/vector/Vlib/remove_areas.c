@@ -1,5 +1,5 @@
 /*!
-   \file remove_areas.c
+   \file lib/vector/Vlib/remove_areas.c
 
    \brief Vector library - clean geometry (remove small areas)
 

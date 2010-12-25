@@ -1,5 +1,5 @@
 /*!
- * \file find.c
+ * \file lib/vector/Vlib/find.c
  *
  * \brief Vector library - Find nearest vector feature.
  *

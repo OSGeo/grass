@@ -1,5 +1,5 @@
 /*!
-   \file tin.c
+   \file lib/vector/Vlib/tin.c
 
    \brief Vector library - TIN
 

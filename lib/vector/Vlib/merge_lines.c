@@ -1,5 +1,5 @@
 /*!
-   \file merge_lines.c
+   \file lib/vector/Vlib/merge_lines.c
 
    \brief Vector library - clean geometry (merge lines/boundaries)
 

@@ -1,5 +1,5 @@
 /*!
- * \file Vlib/cindex.c
+ * \file lib/vector/Vlib/cindex.c
  *
  * \brief Vector library - category index.
  *

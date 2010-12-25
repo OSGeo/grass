@@ -1,5 +1,5 @@
 /*!
-  \file vector/Vlib/ascii.c
+  \file lib/vector/Vlib/ascii.c
  
   \brief Vector library - GRASS ASCII vector format
  

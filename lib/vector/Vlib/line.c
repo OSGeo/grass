@@ -1,5 +1,5 @@
 /*!
-   \file vector/Vlib/line.c
+   \file lib/vector/Vlib/line.c
 
    \brief Vector library - vector feature geometry 
 

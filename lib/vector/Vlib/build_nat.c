@@ -1,5 +1,5 @@
 /*!
-   \file build_nat.c
+   \file lib/vector/Vlib/build_nat.c
 
    \brief Vector library - Building topology for native format
 

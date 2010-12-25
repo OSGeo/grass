@@ -1,5 +1,5 @@
 /*!
-   \file hist.c
+   \file lib/vector/Vlib/hist.c
 
    \brief Vector library - history manipulation
 

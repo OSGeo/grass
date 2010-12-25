@@ -1,5 +1,5 @@
 /*!
-   \file clean_nodes.c
+   \file lib/vector/Vlib/clean_nodes.c
 
    \brief Vector library - Clean boundaries at nodes
 

@@ -1,5 +1,5 @@
 /*!
-   \file read_nat.c
+   \file lib/vector/Vlib/read_nat.c
 
    \brief Vector library - reading data (native format)
 

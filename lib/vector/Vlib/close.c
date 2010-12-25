@@ -1,5 +1,5 @@
 /*!
-   \file close.c
+   \file lib/vector/Vlib/close.c
 
    \brief Vector library - Close map
 

@@ -1,5 +1,5 @@
 /*!
- * \file snap.c
+ * \file lib/vector/Vlib/snap.c
  *
  * \brief Vector library - Clean vector map (snap lines)
  *

@@ -1,5 +1,5 @@
 /*!
-   \file legal_vname.c
+   \file lib/vector/Vlib/legal_vname.c
 
    \brief Vector library - Check if map name is legal vector map name
 
