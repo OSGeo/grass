@@ -212,11 +212,12 @@ int V2_open_old_ogr(struct Map_info *Map)
 */
 int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 {
-    OGRSFDriverH   Ogr_driver;
-    OGRDataSourceH Ogr_ds;
-    OGRLayerH      Ogr_layer;
+    OGRSFDriverH    Ogr_driver;
+    OGRDataSourceH  Ogr_ds;
+    OGRLayerH       Ogr_layer;
+    OGRFeatureDefnH Ogr_featuredefn;
     
-    int            i;
+    int            i, nlayers;
     char         **Ogr_layer_options;
      
     Ogr_layer_options = NULL;
@@ -239,26 +240,26 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     }
     Map->fInfo.ogr.ds = Ogr_ds;
 
-    Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, Map->fInfo.ogr.layer_name);
-    if (Ogr_layer) {
-	for (i = 0; i < OGR_DS_GetLayerCount(Ogr_ds); i++) {
-	    if (OGR_DS_GetLayer(Ogr_ds, i) == Ogr_layer) {
-		if (G_get_overwrite()) {
-		    G_warning(_("OGR layer <%s> already exists and will be overwritten"),
-		      Map->fInfo.ogr.layer_name);
-
-		    if (OGR_DS_DeleteLayer(Ogr_ds, i) != OGRERR_NONE) {
-			G_warning(_("Unable to delete OGR layer <%s>"),
-				  Map->fInfo.ogr.layer_name);
-			return -1;
-		    }
+    nlayers = OGR_DS_GetLayerCount(Ogr_ds);
+    for (i = 0; i < nlayers; i++) {
+      	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
+	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), Map->fInfo.ogr.layer_name) == 0) {	
+	    if (G_get_overwrite()) {
+		G_warning(_("OGR layer <%s> already exists and will be overwritten"),
+			  Map->fInfo.ogr.layer_name);
+		
+		if (OGR_DS_DeleteLayer(Ogr_ds, i) != OGRERR_NONE) {
+		    G_warning(_("Unable to delete OGR layer <%s>"),
+			      Map->fInfo.ogr.layer_name);
+		    return -1;
 		}
-		else {
-		    G_fatal_error(_("OGR layer <%s> already exists in datasource '%s'"),
-				  Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
-		}
-		break;
 	    }
+	    else {
+		G_fatal_error(_("OGR layer <%s> already exists in datasource '%s'"),
+			      Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
+	    }
+	    break;
 	}
     }
     
