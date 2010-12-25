@@ -1,5 +1,5 @@
 /*!
-  \file vector/Vlib/open_nat.c
+  \file lib/vector/Vlib/open_nat.c
   
   \brief Vector library - open vector map (native format) - level 1
   

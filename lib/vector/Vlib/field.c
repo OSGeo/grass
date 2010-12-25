@@ -1,5 +1,5 @@
 /*!
-  \file vector/Vlib/field.c
+  \file lib/vector/Vlib/field.c
   
   \brief Vector library - field (layer) related fns.
   

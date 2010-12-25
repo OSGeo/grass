@@ -1,5 +1,5 @@
 /*!
-   \file constraint.c
+   \file lib/vector/Vlib/constraint.c
 
    \brief Vector library - constraints
 

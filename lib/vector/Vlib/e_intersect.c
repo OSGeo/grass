@@ -1,5 +1,5 @@
 /*!
-   \file e_intersect.c
+   \file lib/vector/Vlib/e_intersect.c
 
    \brief Vector library - intersection (lower level functions)
 

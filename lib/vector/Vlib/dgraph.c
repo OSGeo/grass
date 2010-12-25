@@ -1,5 +1,5 @@
 /*!
-   \file dgraph.c
+   \file lib/vector/Vlib/dgraph.c
 
    \brief Vector library - intersection (lower level functions)
 

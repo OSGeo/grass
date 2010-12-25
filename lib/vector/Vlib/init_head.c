@@ -1,5 +1,5 @@
 /*!
-   \file vector/Vlib/init_head.c
+   \file lib/vector/Vlib/init_head.c
 
    \brief Vector library - init header of vector maps
    

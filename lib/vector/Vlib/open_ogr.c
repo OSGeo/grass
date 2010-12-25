@@ -1,5 +1,5 @@
 /*!
-   \file vector/Vlib/open_ogr.c
+   \file lib/vector/Vlib/open_ogr.c
 
    \brief Vector library - Open OGR layer as vector map layer
 

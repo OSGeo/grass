@@ -1,5 +1,5 @@
 /*!
-   \file Vlib/select.c
+   \file lib/vector/Vlib/select.c
 
    \brief Vector library - spatial index
 

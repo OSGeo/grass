@@ -1,5 +1,5 @@
 /*!
-   \file type.c
+   \file lib/vector/Vlib/type.c
 
    \brief Vector library - feature type
 

@@ -1,5 +1,5 @@
 /*!
-   \file box.c
+   \file lib/vector/Vlib/box.c
 
    \brief Vector library - bounding box
 

@@ -1,5 +1,5 @@
 /*!
- * \file vector/Vlib/open.c
+ * \file lib/vector/Vlib/open.c
  *
  * \brief Vector library - Open vector map (native or OGR format)
  *

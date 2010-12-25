@@ -1,5 +1,5 @@
 /*!
-   \file lib/vector/Vlib/read_ogr.c
+   \file lib/vector/Vlib/lib/vector/Vlib/read_ogr.c
 
    \brief Vector library - reading data (OGR format)
 

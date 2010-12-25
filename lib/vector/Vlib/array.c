@@ -1,5 +1,5 @@
 /*!
-   \file array.c
+   \file lib/vector/Vlib/array.c
 
    \brief Vector library - category array
 

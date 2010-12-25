@@ -1,5 +1,5 @@
 /*!
-   \file Vlib/sindex.c
+   \file lib/vector/Vlib/sindex.c
 
    \brief Vector library - select vector features
 

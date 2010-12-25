@@ -1,5 +1,5 @@
 /*!
- * \file map.c
+ * \file lib/vector/Vlib/map.c
  *
  * \brief Vector library - Manipulate with vector map
  *

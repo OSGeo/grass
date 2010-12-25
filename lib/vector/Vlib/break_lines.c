@@ -1,5 +1,5 @@
 /*!
- * \file break_lines.c
+ * \file lib/vector/Vlib/break_lines.c
  *
  * \brief Vector library - Clean vector map (break lines)
  *

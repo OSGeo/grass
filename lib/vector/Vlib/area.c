@@ -1,5 +1,5 @@
 /*!
-   \file area.c
+   \file lib/vector/Vlib/area.c
 
    \brief Vector library - area-related functions 
 

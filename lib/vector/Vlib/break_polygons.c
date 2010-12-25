@@ -1,5 +1,5 @@
 /*!
-   \file break_polygons.c
+   \file lib/vector/Vlib/break_polygons.c
 
    \brief Vector library - clean geometry (break polygons)
 

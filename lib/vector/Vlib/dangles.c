@@ -1,5 +1,5 @@
 /*!
-   \file dangles.c
+   \file lib/vector/Vlib/dangles.c
 
    \brief Vector library - clean geometry (dangles)
 

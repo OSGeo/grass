@@ -1,5 +1,5 @@
 /*!
-   \file graph.c
+   \file lib/vector/Vlib/graph.c
 
    \brief Vector library - graph manipulation
 

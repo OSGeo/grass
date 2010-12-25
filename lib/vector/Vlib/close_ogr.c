@@ -1,5 +1,5 @@
 /*!
-   \file close_ogr.c
+   \file lib/vector/Vlib/close_ogr.c
 
    \brief Vector library - Close map (OGR)
 

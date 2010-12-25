@@ -1,5 +1,5 @@
 /*!
- * \file net.c
+ * \file lib/vector/Vlib/net.c
  *
  * \brief Vector library - net releated fns
  *

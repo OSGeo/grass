@@ -1,5 +1,5 @@
 /*!
-   \file overlay.c
+   \file lib/vector/Vlib/overlay.c
 
    \brief Vector library - overlays
 

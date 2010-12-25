@@ -1,5 +1,5 @@
 /*!
-  \file vector/Vlib/simple_features.c
+  \file lib/vector/Vlib/simple_features.c
  
   \brief Vector library - OGC Simple Features Access
 

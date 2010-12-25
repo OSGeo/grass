@@ -1,5 +1,5 @@
 /*!
-   \file remove_duplicates.c
+   \file lib/vector/Vlib/remove_duplicates.c
 
    \brief Vector library - clean geometry (remove duplicates)
 

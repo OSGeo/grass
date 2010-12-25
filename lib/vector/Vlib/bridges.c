@@ -1,5 +1,5 @@
 /*!
-   \file bridges.c
+   \file lib/vector/Vlib/bridges.c
 
    \brief Vector library - clean geometry (bridges)
 

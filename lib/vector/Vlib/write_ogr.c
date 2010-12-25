@@ -1,5 +1,5 @@
 /*!
-   \file vector/Vlib/write_ogr.c
+   \file lib/vector/Vlib/write_ogr.c
 
    \brief Vector library - write vector feature (OGR format)
 

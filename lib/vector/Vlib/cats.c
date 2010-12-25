@@ -1,5 +1,5 @@
 /*!
- * \file cats.c
+ * \file lib/vector/Vlib/cats.c
  *
  * \brief Vector library - Category management
  *

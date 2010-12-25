@@ -1,5 +1,5 @@
 /*!
-   \file window.c
+   \file lib/vector/Vlib/window.c
 
    \brief Vector library - window/region
 
