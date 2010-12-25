@@ -15,7 +15,7 @@
    (C) 2001-2010 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Radim Blazek, Piero Cavalieri
    \author Various updates for GRASS 7 by Martin Landa <landa.martin gmail.com>
@@ -371,6 +371,10 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 	return 0;
     }
 
+    G_message(_("Using external data format '%s' (feature type '%s')"),
+	      Vect_get_ogr_format_info(Map),
+	      Vect_get_ogr_geometry_type(Map));
+    
     /* initialize data structures */
     init_parts(&parts);
 

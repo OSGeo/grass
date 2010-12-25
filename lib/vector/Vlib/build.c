@@ -124,10 +124,6 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     plus = &(Map->plus);
     if (build > GV_BUILD_NONE) {
-	if (Vect_maptype(Map) != GV_FORMAT_NATIVE)
-	    G_message(_("Using external data format '%s'"),
-		      Vect_get_ogr_format_info(Map));
-	
 	G_message(_("Building topology for vector map <%s>..."),
 		  Vect_get_full_name(Map));
     }

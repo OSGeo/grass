@@ -5,13 +5,14 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2010 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author Update to GRASS 7 (OGR support) by Martin Landa <landa.martin gmail.com>
  */
 
 #include <grass/config.h>
@@ -24,12 +25,12 @@
 static int lookup(const char *file, const char *key, char *value, size_t len);
 
 /*!
-   \brief Print vector map header
+   \brief Print vector map header to stdout
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return 0 on success
- */
+*/
 int Vect_print_header(const struct Map_info *Map)
 {
     fprintf(stdout, "\nSelected information from dig header\n");
@@ -41,28 +42,26 @@ int Vect_print_header(const struct Map_info *Map)
     return 0;
 }
 
-
 /*!
    \brief Read vector map header from map head file
 
-   \param Map vector map
+   \param Map pointrt to Map_info structure
 
    \return 0
- */
+*/
 int Vect_read_header(struct Map_info *Map)
 {
     Vect__read_head(Map);
     return 0;
 }
 
-
 /*!
    \brief Write vector map header to map head file
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return 0
- */
+*/
 int Vect_write_header(const struct Map_info *Map)
 {
     /* do some sanity checking here */
@@ -70,11 +69,10 @@ int Vect_write_header(const struct Map_info *Map)
     return 0;
 }
 
-
 /*! 
-   \brief Writes head information to text file.
+   \brief Writes head information to text file (GV_HEAD_ELEMENT)
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return 0 on success
    \return -1 on error
@@ -90,7 +88,7 @@ int Vect__write_head(const struct Map_info *Map)
     if (head_fp == NULL) {
 	G_warning(_("Unable to open header file of vector <%s>"),
 		  Vect_get_full_name(Map));
-	return (-1);
+	return -1;
     }
 
     fprintf(head_fp, "ORGANIZATION: %s\n", Vect_get_organization(Map));
@@ -108,7 +106,7 @@ int Vect__write_head(const struct Map_info *Map)
 }
 
 /*!
-   \brief Reads head information from text file (GV_HEAD_ELEMENT).
+   \brief Reads head information from text file (GV_HEAD_ELEMENT) - for internal use only
 
    \param Map pointer to Map_info structure
 
@@ -138,7 +136,7 @@ int Vect__read_head(struct Map_info *Map)
     if (head_fp == NULL) {
 	G_warning(_("Unable to open header file of vector <%s>"),
 		  Vect_get_full_name(Map));
-	return (-1);
+	return -1;
     }
 
     while (G_getl2(buff, 2000, head_fp)) {
@@ -180,39 +178,40 @@ int Vect__read_head(struct Map_info *Map)
 	else if (strncmp(buff, "MAP THRESH:", sizeof(char) * 11) == 0)
 	    Vect_set_thresh(Map, atof(ptr));
 	else
-	    G_warning(_("Unknown keyword %s in vector head"), buff);
+	    G_warning(_("Unknown keyword '%s' in vector head"), buff);
     }
 
     fclose(head_fp);
-    return (0);
+
+    return 0;
 }
 
 /*!
-   \brief Get map name
+   \brief Get name of vector map
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return poiter to map name
- */
+   \return string containing name
+*/
 const char *Vect_get_name(const struct Map_info *Map)
 {
-    return (Map->name);
+    return Map->name;
 }
 
 /*!
-   \brief Get mapset name
+   \brief Get name of mapset where vector map lives
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return poiter to mapset name
- */
+   \return string containing mapset name
+*/
 const char *Vect_get_mapset(const struct Map_info *Map)
 {
-    return (Map->mapset);
+    return Map->mapset;
 }
 
 /*!
-  \brief Get full vector map name
+  \brief Get fully qualified name of vector map
   
   - for GV_FORMAT_NATIVE and GV_FORMAT_OGR returns "map@mapset"
   - for GV_FORMAT_OGR_DIRECT returns "layer@datasourse"
@@ -221,7 +220,7 @@ const char *Vect_get_mapset(const struct Map_info *Map)
   
   \param Map pointer to Map_info structure
   
-  \return pointer to map name (name@mapset)
+  \return allocated string "name@mapset"
  */
 const char *Vect_get_full_name(const struct Map_info *Map)
 {
@@ -254,11 +253,11 @@ const char *Vect_get_full_name(const struct Map_info *Map)
 
    \param Map pointer to Map_info structure
 
-   \return poiter to string with OGR datasource name
+   \return string containing OGR datasource name
  */
 const char *Vect_get_ogr_dsn_name(const struct Map_info *Map)
 {
-    return (Map->fInfo.ogr.dsn);
+    return Map->fInfo.ogr.dsn;
 }
 
 /*!
@@ -266,20 +265,22 @@ const char *Vect_get_ogr_dsn_name(const struct Map_info *Map)
 
    \param Map pointer to Map_info structure
 
-   \return poiter to string with OGR layer name
+   \return string containing OGR layer name
  */
 const char *Vect_get_ogr_layer_name(const struct Map_info *Map)
 {
-    return (Map->fInfo.ogr.layer_name);
+    return Map->fInfo.ogr.layer_name;
 }
 
 /*!
   \brief Get OGR format info (relevant only for OGR format)
 
+  Allocated space should be freed by G_free().
+
   \param Map pointer to Map_info structure
   
-  \return poiter to string with OGR format info (allocated by G_store())
-  \return NULL on error
+  \return string containing name of OGR format (allocated by G_store())
+  \return NULL on error (or on missing OGR support)
 */
 const char *Vect_get_ogr_format_info(const struct Map_info *Map)
 {
@@ -291,28 +292,61 @@ const char *Vect_get_ogr_format_info(const struct Map_info *Map)
 #endif
     return NULL;
 }
-   
+
 /*!
-   \brief Check if vector map is 3D (with z)
+  \brief Get OGR geometry type (relevant only for OGR format)
 
-   \param Map vector map
+  \param Map pointer to Map_info structure
 
-   \return 1 map is 3D
-   \return 0 map is not 3D
+  \return allocated string containing geometry type info
+  \return NULL on error (or on missing OGR support)
+*/
+const char *Vect_get_ogr_geometry_type(const struct Map_info *Map)
+{
+#ifdef HAVE_OGR
+    OGRwkbGeometryType Ogr_geom_type;
+    OGRFeatureDefnH    Ogr_feature_defn;
+    
+    if (!Map->fInfo.ogr.layer)
+	return NULL;
+
+    Ogr_feature_defn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
+    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_feature_defn);
+    switch(Ogr_geom_type) {
+    case wkbPoint:
+	return G_store(_("point"));
+    case wkbLineString:
+	return G_store(_("linestring"));
+    case wkbPolygon:
+	return G_store(_("polygon"));
+    default:
+	return G_store(_("unknown"));
+    }
+#endif
+    return NULL;
+}
+
+/*!
+   \brief Check if vector map is 3D
+
+   \param Map pointer to Map_info structure
+
+   \return TRUE  vector map is 3D
+   \return FALSE vector map is not 3D
  */
 int Vect_is_3d(const struct Map_info *Map)
 {
-    return (Map->head.with_z);
+    return Map->head.with_z;
 }
 
 /*!
    \brief Set organization string in map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param str organization name
 
    \return 0
- */
+*/
 int Vect_set_organization(struct Map_info *Map, const char *str)
 {
     G_free(Map->head.organization);
@@ -324,26 +358,26 @@ int Vect_set_organization(struct Map_info *Map, const char *str)
 /*!
    \brief Get organization string from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return organization string
+   \return string containing organization name
  */
 const char *Vect_get_organization(const struct Map_info *Map)
 {
-    return (Map->head.organization);
+    return Map->head.organization;
 }
 
 /*!
-   \brief Set date of digitization string in map header
+   \brief Set date of digitization in map header
 
-   SUGGESTION: this should be coupled to DateTime functions to support
+   \todo This should be coupled to DateTime functions to support
    time series
 
-   \param Map vector map
-   \param str data string
+   \param Map pointer to Map_info structure
+   \param str date given as string
 
    \return 0
- */
+*/
 int Vect_set_date(struct Map_info *Map, const char *str)
 {
     G_free(Map->head.date);
@@ -353,12 +387,9 @@ int Vect_set_date(struct Map_info *Map, const char *str)
 }
 
 /*!
-   \brief Get date of digitization string from map header
+   \brief Get date of digitization from map header
 
-   SUGGESTION: this should be coupled to DateTime functions to support
-   time series
-
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return date of digitization string
  */
@@ -368,13 +399,13 @@ const char *Vect_get_date(const struct Map_info *Map)
 }
 
 /*!
-   \brief Set user name string who digitized the map in map header
+   \brief Set name of user who digitized the map in map header
 
-   \param Map vector map
-   \param str user name string
+   \param Map pointer to Map_info structure
+   \param str user name
 
-   \return 0 on success
- */
+   \return 0
+*/
 int Vect_set_person(struct Map_info *Map, const char *str)
 {
     G_free(Map->head.your_name);
@@ -386,22 +417,22 @@ int Vect_set_person(struct Map_info *Map, const char *str)
 /*!
    \brief Get user name string who digitized the map from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return user name string
+   \return string containing user name
  */
 const char *Vect_get_person(const struct Map_info *Map)
 {
-    return (Map->head.your_name);
+    return Map->head.your_name;
 }
 
 /*!
-   \brief Set map name string in map header
+   \brief Set map name in map header
 
-   \param Map vector map
-   \param str map name string
+   \param Map pointer to Map_info structure
+   \param str map name to be set
 
-   \return 0 on success
+   \return 0 
  */
 int Vect_set_map_name(struct Map_info *Map, const char *str)
 {
@@ -412,24 +443,24 @@ int Vect_set_map_name(struct Map_info *Map, const char *str)
 }
 
 /*!
-   \brief Get map name string in map header
+   \brief Get map name from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return map name string
- */
+   \return string containing map name
+*/
 const char *Vect_get_map_name(const struct Map_info *Map)
 {
-    return (Map->head.map_name);
+    return Map->head.map_name;
 }
 
 /*!
-   \brief Set date string when the source map was originally produced in map header
+   \brief Set date when the source map was originally produced in map header
 
-   \param Map vector map
-   \param str date when the source map was originally produced string
+   \param Map pointer to Map_info structure
+   \param str date given as a string
 
-   \return 0 on success
+   \return 0
  */
 int Vect_set_map_date(struct Map_info *Map, const char *str)
 {
@@ -440,24 +471,24 @@ int Vect_set_map_date(struct Map_info *Map, const char *str)
 }
 
 /*!
-   \brief Get date string when the source map was originally produced in map header
+   \brief Get date when the source map was originally produced from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return date when the source map was originally produced string
+   \return string containg a date
  */
 const char *Vect_get_map_date(const struct Map_info *Map)
 {
-    return (Map->head.source_date);
+    return Map->head.source_date;
 }
 
 /*!
    \brief Set map scale in map header
 
-   \param Map vector map
-   \param map scale
+   \param Map pointer to Map_info structure
+   \param scale map scale
 
-   \return 0 on success
+   \return 0
  */
 int Vect_set_scale(struct Map_info *Map, int scale)
 {
@@ -469,22 +500,22 @@ int Vect_set_scale(struct Map_info *Map, int scale)
 /*!
    \brief Get map scale from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return map scale
  */
 int Vect_get_scale(const struct Map_info *Map)
 {
-    return ((int) Map->head.orig_scale);
+    return (int) Map->head.orig_scale;
 }
 
 /*!
    \brief Set comment or other info string in map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param str comment or other info string
 
-   \return 0 on success
+   \return 0
  */
 int Vect_set_comment(struct Map_info *Map, const char *str)
 {
@@ -497,22 +528,22 @@ int Vect_set_comment(struct Map_info *Map, const char *str)
 /*!
    \brief Get comment or other info string from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return comment or other info string
  */
 const char *Vect_get_comment(const struct Map_info *Map)
 {
-    return (Map->head.line_3);
+    return Map->head.line_3;
 }
 
 /*!
    \brief Set projection zone in map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param zone projection zone
 
-   \return 0 on success
+   \return 0
  */
 int Vect_set_zone(struct Map_info *Map, int zone)
 {
@@ -524,26 +555,28 @@ int Vect_set_zone(struct Map_info *Map, int zone)
 /*!
    \brief Get projection zone from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return projection zone
  */
 int Vect_get_zone(const struct Map_info *Map)
 {
-    return (Map->head.plani_zone);
+    return Map->head.plani_zone;
 }
 
 /*!
    \brief Set projection in map header
 
-   \param Map vector map
+   Supported projections:
+    - PROJECTION_XY  0 - x,y (Raw imagery),
+    - PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
+    - PROJECTION_SP  2 - State Plane (in feet),
+    - PROJECTION_LL  3 - Latitude-Longitude
 
-   PROJECTION_XY  0 - x,y (Raw imagery),
-   PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
-   PROJECTION_SP  2 - State Plane (in feet),
-   PROJECTION_LL  3 - Latitude-Longitude
+   \param Map pointer to Map_info structure
+   \param proj projection code
    
-   \return 0 on success
+   \return 0
  */
 int Vect_set_proj(struct Map_info *Map, int proj)
 {
@@ -555,28 +588,27 @@ int Vect_set_proj(struct Map_info *Map, int proj)
 /*!
    \brief Get projection from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return PROJECTION_XY  0 - x,y (Raw imagery),
    \return PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
    \return PROJECTION_SP  2 - State Plane (in feet),
    \return PROJECTION_LL  3 - Latitude-Longitude
- */
+*/
 int Vect_get_proj(const struct Map_info *Map)
 {
-    return (Map->proj);
+    return Map->proj;
 }
 
 /*!
-   \brief Query cartographic projection name of vector map
+   \brief Query cartographic projection name of pointer to Map_info structure
 
    Returns a pointer to a string which is a printable name for
-   projection code <em>proj</em> (as returned by
-   Vect_get_proj()).
+   projection code <em>proj</em> (as returned by Vect_get_proj()).
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
-   \return poiter to projection name
+   \return allocated string containing projection name
    \return NULL if <em>proj</em> is not a valid projection
  */
 
@@ -601,29 +633,29 @@ const char *Vect_get_proj_name(const struct Map_info *Map)
 /*!
    \brief Set threshold used for digitization in map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param thresh threshold used for digitization
 
-   \return 0 on success
+   \return 0
  */
 int Vect_set_thresh(struct Map_info *Map, double thresh)
 {
     G_debug(1, "Vect_set_thresh(): thresh = %f", thresh);
     Map->head.digit_thresh = thresh;
-    return (0);
+    return 0;
 }
 
 /*!
    \brief Get threshold used for digitization from map header
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return threshold used for digitization
  */
 double Vect_get_thresh(const struct Map_info *Map)
 {
     G_debug(1, "Vect_get_thresh(): thresh = %f", Map->head.digit_thresh);
-    return (Map->head.digit_thresh);
+    return Map->head.digit_thresh;
 }
 
 
@@ -633,5 +665,5 @@ static int lookup(const char *file, const char *key, char *value, size_t len)
     char path[GPATH_MAX];
 
     G__file_name(path, "", file, "PERMANENT");
-    return G_lookup_key_value_from_file(path, key, value, (int)len) == 1;
+    return G_lookup_key_value_from_file(path, key, value, (int) len) == 1;
 }
