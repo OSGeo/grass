@@ -156,10 +156,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Number of points must be > 0 (%d given)"), n);
     }
 
-    if (flag.z->answer)
-	Vect_open_new(&Out, output, WITH_Z);
-    else
-	Vect_open_new(&Out, output, WITHOUT_Z);
+    /* create new vector map */
+    Vect_open_new(&Out, output, flag.z->answer ? WITH_Z : WITHOUT_Z);
 
     /* Do we need to write random values into attribute table? */
     if (parm.zcol->answer) {
