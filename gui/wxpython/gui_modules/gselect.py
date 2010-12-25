@@ -198,8 +198,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         else:
             selected = None
             exclude  = False
-            
-        self.SetFilter(self._startsWith)   
+        
+        text = self.GetCombo().GetValue().strip()
+        if grass.find_file(name = text, element = self.type)['fullname']:
+            self.SetFilter(None)
+        else:
+            self.SetFilter(self._startsWith)   
         self.GetElementList(selected, exclude)
         
     def GetElementList(self, elements = None, exclude = False):
