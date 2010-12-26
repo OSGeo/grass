@@ -77,10 +77,10 @@ class Select(wx.combo.ComboCtrl):
             self.tcp.SetData(type = type, mapsets = mapsets,
                              multiple = multiple,
                              updateOnPopup = updateOnPopup, onPopup = onPopup)
-        self.GetChildren()[0].Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.GetChildren()[0].Bind(wx.EVT_KEY_UP, self.OnKeyUp)
      
-    def OnKeyDown(self, event):
-        """!Shows popupwindow if down arrow key is pressed"""
+    def OnKeyUp(self, event):
+        """!Shows popupwindow if down arrow key is released"""
         if event.GetKeyCode() == wx.WXK_DOWN:
             self.ShowPopup() 
         else:
@@ -185,10 +185,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
     def SetFilter(self, filter):
         """!Set filter for GIS elements, see e.g. VectorSelect"""
         self.filterElements = filter
-        
-    def _startsWith(self, text):
-        """!Filter items - currently unused"""
-        return True if text.startswith(self.GetCombo().GetValue()) else False
     
     def OnPopup(self, force = False):
         """!Limited only for first selected"""
@@ -207,10 +203,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         if inputText:
             root = self.seltree.GetRootItem()
             match = self.FindItem(root, inputText, startLetters = True)
-            if wx.TreeItemId.IsOk(self.seltree.GetPrevSibling(match)):
-                match = self.seltree.GetPrevSibling(match)
-            else: 
-                match = self.seltree.GetItemParent(match)
             self.seltree.EnsureVisible(match)
             self.seltree.SelectItem(match)
             
@@ -460,8 +452,13 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 mapsetItem = self.seltree.GetItemParent(item)
                 fullName = self.seltree.GetItemText(item) + '@' \
                             + self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
-                self.value = [fullName, ]
-                self.Dismiss()
+                if self.multiple is True:
+                    # text item should be unique
+                    self.value.append(fullName)
+                else:
+                    self.value = [fullName, ]
+            
+            self.Dismiss()
 
     def OnMotion(self, evt):
         """!Have the selection follow the mouse, like in a real combobox
