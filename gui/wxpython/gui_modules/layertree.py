@@ -47,7 +47,7 @@ from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
 from vdigit import haveVDigit
-from gcmd import GError
+from gcmd import GWarning
 try:
     import subprocess
 except:
@@ -1328,13 +1328,19 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # set layer text to map name
         if dcmd:
             self.GetPyData(layer)[0]['cmd'] = dcmd
-            mapname = self._getLayerName(layer)
-            if not mapname:
-                GError(parent = self,
-                       message = _("Map <%s> not found.") % utils.GetLayerNameFromCmd(dcmd))
+            mapText  = self._getLayerName(layer)
+            mapName  = utils.GetLayerNameFromCmd(dcmd)
+            mapLayer = self.GetPyData(layer)[0]['maplayer']
+            self.SetItemText(layer, mapName)
+            
+            if not mapText or \
+                    (mapLayer and \
+                         not grass.find_file(name = mapName, element = mapLayer.GetType())['fullname']):
+                propwin.Hide()
+                GWarning(parent = self,
+                         message = _("Map <%s> not found.") % mapName)
                 return
-            self.SetItemText(layer, mapname)
-        
+            
         # update layer data
         if params:
             self.SetPyData(layer, (self.GetPyData(layer)[0], params))
@@ -1350,9 +1356,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 render = UserSettings.Get(group = 'display', key = 'autoRendering', subkey = 'enabled')
                 self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
                                                     render = render)
-        
+
+        # update nviz session        
         if self.mapdisplay.toolbars['nviz'] and dcmd:
-            # update nviz session
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             mapWin = self.mapdisplay.MapWindow
             if len(mapLayer.GetCmd()) > 0:

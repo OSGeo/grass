@@ -75,7 +75,7 @@ def GetTempfile(pref=None):
 def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                         layerType = None):
     """!Get map name from GRASS command
-
+    
     @param dcmd GRASS command (given as list)
     @param fullyQualified change map name to be fully qualified
     @param force parameter otherwise 'input'/'map'
@@ -131,12 +131,10 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                         findType = 'cell'
                     else:
                         findType = layerType
-                    result = grass.find_file(mapname, element=findType)
+                    mapset = grass.find_file(mapname, element=findType)['mapset']
                 except AttributeError, e: # not found
                     return ''
-                if result:
-                    mapset = result['mapset']
-                else:
+                if not mapset:
                     mapset = grass.gisenv()['MAPSET']
             else:
                 mapset = grass.gisenv()['MAPSET']
