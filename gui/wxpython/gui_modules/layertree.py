@@ -1335,7 +1335,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             if not mapText or \
                     (mapLayer and \
-                         not grass.find_file(name = mapName, element = mapLayer.GetType())['fullname']):
+                         not grass.find_file(name = mapName, element = mapLayer.GetElement())['fullname']):
                 propwin.Hide()
                 GWarning(parent = self,
                          message = _("Map <%s> not found.") % mapName)
