@@ -187,6 +187,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.filterElements = filter
         
     def _startsWith(self, text):
+        """!Filter items - currently unused"""
         return True if text.startswith(self.GetCombo().GetValue()) else False
     
     def OnPopup(self, force = False):
@@ -198,14 +199,22 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         else:
             selected = None
             exclude  = False
-        
-        text = self.GetCombo().GetValue().strip()
-        if grass.find_file(name = text, element = self.type)['fullname']:
-            self.SetFilter(None)
-        else:
-            self.SetFilter(self._startsWith)   
+ 
         self.GetElementList(selected, exclude)
         
+        # selects map starting according to written text
+        inputText = self.GetCombo().GetValue().strip()
+        if inputText:
+            root = self.seltree.GetRootItem()
+            match = self.FindItem(root, inputText, startLetters = True)
+            if wx.TreeItemId.IsOk(self.seltree.GetPrevSibling(match)):
+                match = self.seltree.GetPrevSibling(match)
+            else: 
+                match = self.seltree.GetItemParent(match)
+            self.seltree.EnsureVisible(match)
+            self.seltree.SelectItem(match)
+            
+      
     def GetElementList(self, elements = None, exclude = False):
         """!Get filtered list of GIS elements in accessible mapsets
         and display as tree with all relevant elements displayed
@@ -372,17 +381,22 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.seltree.SelectItem(first_dir)
     
     # helpers
-    def FindItem(self, parentItem, text):
+    def FindItem(self, parentItem, text, startLetters = False):
+        """!Finds item with given name or starting with given text"""
+        startletters = startLetters
         item, cookie = self.seltree.GetFirstChild(parentItem)
-        while item:
+        while wx.TreeItemId.IsOk(item):
             if self.seltree.GetItemText(item) == text:
                 return item
             if self.seltree.ItemHasChildren(item):
-                item = self.FindItem(item, text)
+                item = self.FindItem(item, text, startLetters = startletters)
+                if wx.TreeItemId.IsOk(item):
+                    return item
+            elif startletters and self.seltree.GetItemText(item).startswith(text.split('@')[0]):
+                return item
             item, cookie = self.seltree.GetNextChild(parentItem, cookie)
         return wx.TreeItemId()
-
-
+    
     def AddItem(self, value, parent=None):
         if not parent:
             root = self.seltree.GetRootItem()
@@ -412,6 +426,21 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                     if item == self.seltree.GetFirstChild(self.seltree.GetRootItem())[0]:
                         itemPrev = item
             self.seltree.SelectItem(itemPrev)
+        
+        # selects first item starting with the written text in next mapset
+        elif event.GetKeyCode() == wx.WXK_TAB:
+            selected = self.seltree.GetSelection()
+            if self.seltree.ItemHasChildren(selected):
+                parent = selected
+            else:
+                parent = self.seltree.GetItemParent(selected)
+            nextSibling = self.seltree.GetNextSibling(parent)
+            if wx.TreeItemId.IsOk(nextSibling):
+                match = self.FindItem(nextSibling, self.GetCombo().GetValue().strip(), True) 
+            else: 
+                match = self.FindItem(self.seltree.GetFirstChild(self.seltree.GetItemParent(parent))[0],
+                                        self.GetCombo().GetValue().strip(), True) 
+            self.seltree.SelectItem(match)
             
         elif event.GetKeyCode() == wx.WXK_RIGHT:
             if self.seltree.ItemHasChildren(item):
