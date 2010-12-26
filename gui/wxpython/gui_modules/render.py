@@ -219,6 +219,12 @@ class Layer(object):
         """!Get map layer type"""
         return self.type
     
+    def GetElement(self):
+        """!Get map element type"""
+        if self.type == 'raster':
+            return 'cell'
+        return self.type
+    
     def GetOpacity(self, float=False):
         """
         Get layer opacity level
