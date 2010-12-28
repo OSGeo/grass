@@ -1777,7 +1777,6 @@ class LayerManagerToolbar(AbstractToolbar):
         self.workspaceOpen = wx.NewId()
         self.workspaceSave = wx.NewId()
         self.addrast = wx.NewId()
-        self.addrast3d = wx.NewId()
         self.addshaded = wx.NewId()
         self.addvect = wx.NewId()
         self.addthematic = wx.NewId()
@@ -1807,9 +1806,6 @@ class LayerManagerToolbar(AbstractToolbar):
             (self.addrast, 'addrast', Icons["addrast"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["addrast"].GetLabel(), Icons["addrast"].GetDesc(),
              self.parent.OnAddRaster),
-            (self.addrast3d, 'addrast3d', Icons["addrast3d"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["addrast3d"].GetLabel(), Icons["addrast3d"].GetDesc(),
-             self.parent.OnAddRaster3D),
             (self.addshaded, 'addshaded', Icons["addshaded"].GetBitmap(),
              wx.ITEM_NORMAL, _("Add various raster-based map layers"), "",
              self.parent.OnAddRasterMisc),
