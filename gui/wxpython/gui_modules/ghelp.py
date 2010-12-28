@@ -42,7 +42,7 @@ import gdialogs
 class HelpFrame(wx.Frame):
     """!GRASS Quickstart help window"""
     def __init__(self, parent, id, title, size, file):
-        wx.Frame.__init__(self, parent=parent, id=id, title=title, size=size)
+        wx.Frame.__init__(self, parent = parent, id = id, title = title, size = size)
         
         sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -50,7 +50,7 @@ class HelpFrame(wx.Frame):
         content = HelpPanel(parent = self)
         content.LoadPage(file)
         
-        sizer.Add(item = content, proportion=1, flag=wx.EXPAND)
+        sizer.Add(item = content, proportion = 1, flag = wx.EXPAND)
         
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
@@ -71,7 +71,7 @@ class SearchModuleWindow(wx.Panel):
                              _('keywords')    : 'keywords' }
         
         self.box = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                label=" %s " % _("Find module(s)"))
+                                label = " %s " % _("Find module(s)"))
         
         self.searchBy = wx.Choice(parent = self, id = wx.ID_ANY,
                                   choices = [_('description'),
@@ -103,18 +103,18 @@ class SearchModuleWindow(wx.Panel):
         gridSizer.AddGrowableCol(1)
         
         gridSizer.Add(item = self.searchBy,
-                      flag=wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
         gridSizer.Add(item = self.search,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
         row = 1
         if self.showTip:
             gridSizer.Add(item = self.searchTip,
-                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
             row += 1
         
         if self.showChoice:
             gridSizer.Add(item = self.searchChoice,
-                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
         
         sizer.Add(item = gridSizer, proportion = 1)
         
@@ -209,7 +209,7 @@ class MenuTreeWindow(wx.Panel):
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
         self.dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                    label=" %s " % _("Menu tree (double-click to run command)"))
+                                    label = " %s " % _("Menu tree (double-click to run command)"))
         # tree
         self.tree = MenuTree(parent = self, data = menudata.ManagerData())
         self.tree.Load()
@@ -249,10 +249,10 @@ class MenuTreeWindow(wx.Panel):
         sizer.Add(item = dataSizer, proportion = 1,
                   flag = wx.EXPAND | wx.ALL, border = 5)
 
-        sizer.Add(item = self.search, proportion=0,
+        sizer.Add(item = self.search, proportion = 0,
                   flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
         
-        sizer.Add(item = btnSizer, proportion=0,
+        sizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALIGN_RIGHT | wx.BOTTOM | wx.RIGHT, border = 5)
         
         sizer.Fit(self)
@@ -282,7 +282,7 @@ class MenuTreeWindow(wx.Panel):
             wx.MessageBox(parent = self,
                           message = _('You must run this command from the menu or command line',
                                       'This command require an XTerm'),
-                          caption = _('Message'), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                          caption = _('Message'), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
         elif data['command']:
             eval(handler)(event = None, cmd = data['command'].split())
         else:
@@ -473,8 +473,8 @@ class AboutWindow(wx.Frame):
 
         @todo improve styling
         """
-        wx.Frame.__init__(self, parent=parent, id=wx.ID_ANY, size=(550,400), 
-                          title=_('About GRASS GIS'))
+        wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, size = (550,400), 
+                          title = _('About GRASS GIS'))
         
         panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
@@ -488,7 +488,7 @@ class AboutWindow(wx.Frame):
         
         infoTxt = wx.Panel(parent = panel, id = wx.ID_ANY)
         infoSizer = wx.BoxSizer(wx.VERTICAL)
-        infoGridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+        infoGridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
         infoGridSizer.AddGrowableCol(0)
         infoGridSizer.AddGrowableCol(1)
         logo = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass.ico")
@@ -558,12 +558,12 @@ class AboutWindow(wx.Frame):
         aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
         
         # make pages for About GRASS notebook
-        pg1 = aboutNotebook.AddPage(infoTxt,      text=_("Info"))
-        pg2 = aboutNotebook.AddPage(copyrightwin, text=_("Copyright"))
-        pg3 = aboutNotebook.AddPage(licensewin,   text=_("License"))
-        pg4 = aboutNotebook.AddPage(authorwin,    text=_("Authors"))
-        pg5 = aboutNotebook.AddPage(contribwin,   text=_("Contributors"))
-        pg5 = aboutNotebook.AddPage(transwin,     text=_("Translators"))
+        pg1 = aboutNotebook.AddPage(infoTxt,      text = _("Info"))
+        pg2 = aboutNotebook.AddPage(copyrightwin, text = _("Copyright"))
+        pg3 = aboutNotebook.AddPage(licensewin,   text = _("License"))
+        pg4 = aboutNotebook.AddPage(authorwin,    text = _("Authors"))
+        pg5 = aboutNotebook.AddPage(contribwin,   text = _("Contributors"))
+        pg5 = aboutNotebook.AddPage(transwin,     text = _("Translators"))
         
         wx.CallAfter(aboutNotebook.SetSelection, 0)
         
@@ -581,10 +581,10 @@ class AboutWindow(wx.Frame):
         infoSizer.Fit(infoTxt)
         
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(item=aboutNotebook, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=1)
-        sizer.Add(item=btnSizer, proportion=0,
-                  flag=wx.ALL | wx.ALIGN_RIGHT, border=1)
+        sizer.Add(item = aboutNotebook, proportion = 1,
+                  flag = wx.EXPAND | wx.ALL, border = 1)
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 1)
         panel.SetSizer(sizer)
         self.Layout()
     
@@ -599,14 +599,14 @@ class AboutWindow(wx.Frame):
             copytext = _('%s file missing') % 'COPYING'
         
         # put text into a scrolling panel
-        copyrightwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                              size=wx.DefaultSize,
+        copyrightwin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
+                                              size = wx.DefaultSize,
                                               style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
-        copyrighttxt = wx.StaticText(copyrightwin, id=wx.ID_ANY, label=copytext)
+        copyrighttxt = wx.StaticText(copyrightwin, id = wx.ID_ANY, label = copytext)
         copyrightwin.SetAutoLayout(True)
         copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        copyrightwin.sizer.Add(item=copyrighttxt, proportion=1,
-                               flag=wx.EXPAND | wx.ALL, border=3)
+        copyrightwin.sizer.Add(item = copyrighttxt, proportion = 1,
+                               flag = wx.EXPAND | wx.ALL, border = 3)
         copyrightwin.SetSizer(copyrightwin.sizer)
         copyrightwin.Layout()
         copyrightwin.SetupScrolling()
@@ -623,13 +623,13 @@ class AboutWindow(wx.Frame):
         else:
             license = _('%s file missing') % 'GPL.TXT'
         # put text into a scrolling panel
-        licensewin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+        licensewin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
                                             style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
-        licensetxt = wx.StaticText(licensewin, id=wx.ID_ANY, label=license)
+        licensetxt = wx.StaticText(licensewin, id = wx.ID_ANY, label = license)
         licensewin.SetAutoLayout(True)
         licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
-        licensewin.sizer.Add(item=licensetxt, proportion=1,
-                flag=wx.EXPAND | wx.ALL, border=3)
+        licensewin.sizer.Add(item = licensetxt, proportion = 1,
+                flag = wx.EXPAND | wx.ALL, border = 3)
         licensewin.SetSizer(licensewin.sizer)
         licensewin.Layout()
         licensewin.SetupScrolling()
@@ -646,14 +646,14 @@ class AboutWindow(wx.Frame):
             authorsFile.close()
         else:
             authors = _('%s file missing') % 'AUTHORS'
-        authorwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
-                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        authortxt = wx.StaticText(authorwin, id=wx.ID_ANY, label=authors)
+        authorwin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
+                                           style  =  wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        authortxt = wx.StaticText(authorwin, id = wx.ID_ANY, label = authors)
         authorwin.SetAutoLayout(1)
         authorwin.SetupScrolling()
         authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        authorwin.sizer.Add(item=authortxt, proportion=1,
-                flag=wx.EXPAND | wx.ALL, border=3)
+        authorwin.sizer.Add(item = authortxt, proportion = 1,
+                flag = wx.EXPAND | wx.ALL, border = 3)
         authorwin.SetSizer(authorwin.sizer)
         authorwin.Layout()      
         
@@ -673,25 +673,25 @@ class AboutWindow(wx.Frame):
         else:
             contribs = None
         
-        contribwin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+        contribwin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
                                            style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
         contribwin.SetAutoLayout(1)
         contribwin.SetupScrolling()
         contribwin.sizer = wx.BoxSizer(wx.VERTICAL)
         
         if not contribs:
-            contribtxt = wx.StaticText(contribwin, id=wx.ID_ANY,
-                                       label=_('%s file missing') % 'contibutors.csv')
-            contribwin.sizer.Add(item=contribtxt, proportion=1,
-                                 flag=wx.EXPAND | wx.ALL, border=3)
+            contribtxt = wx.StaticText(contribwin, id = wx.ID_ANY,
+                                       label = _('%s file missing') % 'contibutors.csv')
+            contribwin.sizer.Add(item = contribtxt, proportion = 1,
+                                 flag = wx.EXPAND | wx.ALL, border = 3)
         else:
-            contribBox = wx.FlexGridSizer(cols=4, vgap=5, hgap=5)
+            contribBox = wx.FlexGridSizer(cols = 4, vgap = 5, hgap = 5)
             for developer in contribs:
                 for item in developer:
                     contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
                                                         label = item))
-            contribwin.sizer.Add(item=contribBox, proportion=1,
-                                 flag=wx.EXPAND | wx.ALL, border=3)
+            contribwin.sizer.Add(item = contribBox, proportion = 1,
+                                 flag = wx.EXPAND | wx.ALL, border = 3)
         
         contribwin.SetSizer(contribwin.sizer)
         contribwin.Layout()      
@@ -714,19 +714,19 @@ class AboutWindow(wx.Frame):
         else:
             translators = None
         
-        translatorswin = scrolled.ScrolledPanel(self, id=wx.ID_ANY, 
+        translatorswin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
                                            style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
         translatorswin.SetAutoLayout(1)
         translatorswin.SetupScrolling()
         translatorswin.sizer = wx.BoxSizer(wx.VERTICAL)
         
         if not translators:
-            translatorstxt = wx.StaticText(translatorswin, id=wx.ID_ANY,
-                                           label=_('%s file missing') % 'translators.csv')
-            translatorswin.sizer.Add(item=translatorstxt, proportion=1,
-                                 flag=wx.EXPAND | wx.ALL, border=3)
+            translatorstxt = wx.StaticText(translatorswin, id = wx.ID_ANY,
+                                           label = _('%s file missing') % 'translators.csv')
+            translatorswin.sizer.Add(item = translatorstxt, proportion = 1,
+                                 flag = wx.EXPAND | wx.ALL, border = 3)
         else:
-            translatorsBox = wx.FlexGridSizer(cols=3, vgap=5, hgap=5)
+            translatorsBox = wx.FlexGridSizer(cols = 3, vgap = 5, hgap = 5)
             languages = translators.keys()
             languages.sort()
             translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
@@ -745,8 +745,8 @@ class AboutWindow(wx.Frame):
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
                                                             label = lang))
             
-            translatorswin.sizer.Add(item=translatorsBox, proportion=1,
-                                 flag=wx.EXPAND | wx.ALL, border=3)
+            translatorswin.sizer.Add(item = translatorsBox, proportion = 1,
+                                 flag = wx.EXPAND | wx.ALL, border = 3)
         
         translatorswin.SetSizer(translatorswin.sizer)
         translatorswin.Layout()      
@@ -767,13 +767,13 @@ class InstallExtensionWindow(wx.Frame):
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
         self.repoBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                    label=" %s " % _("Repository"))
+                                    label = " %s " % _("Repository"))
         self.treeBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                    label=" %s " % _("List of extensions"))
+                                    label = " %s " % _("List of extensions"))
         
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
                                 value = 'https://svn.osgeo.org/grass/grass-addons')
-        self.fullDesc = wx.CheckBox(parent = self.panel, id=wx.ID_ANY,
+        self.fullDesc = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Fetch full info including description and keywords (takes time)"))
         self.fullDesc.SetValue(False)
         
@@ -834,7 +834,7 @@ class InstallExtensionWindow(wx.Frame):
                   flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         sizer.Add(item = treeSizer, proportion = 1,
                   flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
-        sizer.Add(item = btnSizer, proportion=0,
+        sizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         
         self.panel.SetSizer(sizer)
@@ -1074,7 +1074,7 @@ class HelpWindow(wx.html.HtmlWindow):
         
         super(HelpWindow, self).OnLinkClicked(linkinfo)
         
-    def fillContentsFromFile(self, htmlFile, skip_description=True):
+    def fillContentsFromFile(self, htmlFile, skip_description = True):
         """!Load content from file"""
         aLink = re.compile(r'(<a href="?)(.+\.html?["\s]*>)', re.IGNORECASE)
         imgLink = re.compile(r'(<img src="?)(.+\.[png|gif])', re.IGNORECASE)
