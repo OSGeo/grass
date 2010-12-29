@@ -78,7 +78,7 @@ IconsGrass2 = {
     "vectmisc"   : 'layer-vector-more.png',
     "addcmd"     : 'layer-command-add.png',
     "addgrp"     : 'layer-group-add.png',
-    "addovl"     : 'layer-grid-add.png',
+    "addovl"     : 'layer-more.png',
     "addgrid"    : 'layer-grid-add.png',
     "addlabels"  : 'layer-label-add.png',
     "delcmd"     : 'layer-remove.png',
