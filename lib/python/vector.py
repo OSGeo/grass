@@ -262,8 +262,8 @@ def vector_what(name, coord, distance = 0.0):
     if os.environ.has_key("LC_ALL"):
         locale = os.environ["LC_ALL"]
         os.environ["LC_ALL"] = "C"
-    
-    if type(name) is types.StringType:
+
+    if type(name) in (types.StringType, types.UnicodeType):
         name_list = [name]
     else:
         name_list = name
