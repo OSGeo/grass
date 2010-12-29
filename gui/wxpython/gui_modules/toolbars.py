@@ -1777,9 +1777,9 @@ class LayerManagerToolbar(AbstractToolbar):
         self.workspaceOpen = wx.NewId()
         self.workspaceSave = wx.NewId()
         self.addrast = wx.NewId()
-        self.addshaded = wx.NewId()
+        self.rastmisc = wx.NewId()
         self.addvect = wx.NewId()
-        self.addthematic = wx.NewId()
+        self.vectmisc = wx.NewId()
         self.addgrp = wx.NewId()
         self.addovl = wx.NewId()
         self.delcmd = wx.NewId()
@@ -1806,14 +1806,14 @@ class LayerManagerToolbar(AbstractToolbar):
             (self.addrast, 'addrast', Icons["addrast"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["addrast"].GetLabel(), Icons["addrast"].GetDesc(),
              self.parent.OnAddRaster),
-            (self.addshaded, 'addshaded', Icons["addshaded"].GetBitmap(),
-             wx.ITEM_NORMAL, _("Add various raster-based map layers"), "",
+            (self.rastmisc, 'rastmisc', Icons["rastmisc"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["rastmisc"].GetLabel(), Icons["rastmisc"].GetDesc(),
              self.parent.OnAddRasterMisc),
             (self.addvect, 'addvect', Icons["addvect"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["addvect"].GetLabel(), Icons["addvect"].GetDesc(),
              self.parent.OnAddVector),
-            (self.addthematic, 'addthematic', Icons["addthematic"].GetBitmap(),
-             wx.ITEM_NORMAL, _("Add various vector-based map layers"), "",
+            (self.vectmisc, 'vectmisc', Icons["vectmisc"].GetBitmap(),
+             wx.ITEM_NORMAL, Icons["vectmisc"].GetLabel(), Icons["vectmisc"].GetDesc(),
              self.parent.OnAddVectorMisc),
             (self.addgrp, 'addgrp',  Icons["addgrp"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["addgrp"].GetLabel(), Icons["addgrp"].GetDesc(),
