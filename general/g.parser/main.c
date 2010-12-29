@@ -9,7 +9,7 @@
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>, 
  *               Radim Blazek <radim.blazek gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2001-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -151,7 +151,7 @@ static void parse_flag(struct context *ctx, const char *cmd, const char *arg)
     }
 
     if (strcasecmp(cmd, "suppress_required") == 0) {
-	ctx->flag->key = parse_boolean(ctx, arg);
+	ctx->flag->suppress_required = parse_boolean(ctx, arg);
 	return;
     }
 
