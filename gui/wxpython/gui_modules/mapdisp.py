@@ -1484,11 +1484,12 @@ class MapFrame(wx.Frame):
             
             digitToolbar = self.toolbars['vdigit']
             if self.tree.layer_selected:
-                layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
-                if layer_selected.GetType() != 'vector' or \
-                        (digitToolbar and \
-                             digitToolbar.GetLayer() == layer_selected):
-                    modify.Enable(False)
+                mapLayer = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
+                if mapLayer.GetType() == 'vector' and \
+                        mapLayer.GetMapset() == grass.gisenv()['MAPSET'] and \
+                        (not digitToolbar or (digitToolbar and \
+                             digitToolbar.GetLayer() != mapLayer)):
+                    modify.Enable(True)
             else:
                 if action == "modifyAttrb":
                     modify.Check(True)
