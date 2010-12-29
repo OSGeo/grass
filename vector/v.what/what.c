@@ -158,11 +158,11 @@ void what(double east, double north, double maxdist, int topo, int showextra, in
 			    north_buf);
 		}
 		else {
-		    fprintf(stdout, "\nEast: %s\nNorth: %s\n", east_buf,
+		    fprintf(stdout, "East: %s\nNorth: %s\n", east_buf,
 			    north_buf);
 		}
 		if (notty)
-		    fprintf(stderr, "\nEast: %s\nNorth: %s\n", east_buf,
+		    fprintf(stderr, "East: %s\nNorth: %s\n", east_buf,
 			    north_buf);
 	    }
 	    nlines++;
@@ -174,7 +174,7 @@ void what(double east, double north, double maxdist, int topo, int showextra, in
 
 	if (line + area > 0 || G_verbose() >= G_verbose_std()) {
 	    if (script) {
-		fprintf(stdout, "Map=%s\nMapset=%s\n", Map[i].name,
+		fprintf(stdout, "\nMap=%s\nMapset=%s\n", Map[i].name,
 			Map[i].mapset);
 	    }
 	    else {
@@ -205,22 +205,22 @@ void what(double east, double north, double maxdist, int topo, int showextra, in
 	    
 	    switch (type) {
 	    case GV_POINT:
-		sprintf(buf, "Point\n");
+		sprintf(buf, "Point");
 		break;
 	    case GV_LINE:
-		sprintf(buf, "Line\n");
+		sprintf(buf, "Line");
 		break;
 	    case GV_BOUNDARY:
-		sprintf(buf, "Boundary\n");
+		sprintf(buf, "Boundary");
 		break;
 	    case GV_FACE:
-		sprintf(buf, "Face\n");
+		sprintf(buf, "Face");
 		break;
 	    case GV_CENTROID:
-		sprintf(buf, "Centroid\n");
+		sprintf(buf, "Centroid");
 		break;
 	    default:
-		sprintf(buf, "Unknown\n");
+		sprintf(buf, "Unknown");
 	    }
 	    if (type & GV_LINES) {
 		if (G_projection() == 3)
@@ -302,7 +302,7 @@ void what(double east, double north, double maxdist, int topo, int showextra, in
 			fprintf(stdout, "Length=%f\n", l);
 		}
 		else {
-		    fprintf(stdout, _("Type: %s"), buf);
+		    fprintf(stdout, _("Type: %s\n"), buf);
 		    fprintf(stdout, _("Id: %d\n"), line);
 		    if (type & GV_LINES)
 			fprintf(stdout, _("Length: %f\n"), l);
