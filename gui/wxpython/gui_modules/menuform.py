@@ -392,6 +392,7 @@ class grassTask:
         self.flags = list()
         self.keywords = list()
         self.errorMsg = ''
+        self.firstParam = None
         
         if grassModule is not None:
             try:
@@ -399,6 +400,13 @@ class grassTask:
                             task = self)
             except gcmd.GException, e:
                 self.errorMsg = str(e)
+                
+            self.define_first()
+        
+    def define_first(self):
+        """!Define first parameter"""
+        if len(self.params) > 0:
+            self.firstParam = self.params[0]['name']
         
     def get_error_msg(self):
         """!Get error message ('' for no error)"""
@@ -450,8 +458,7 @@ class grassTask:
             return None
 
     def set_param(self, aParam, aValue, element = 'value'):
-        """
-        Set param value/values.
+        """!Set param value/values.
         """
         try:
             param = self.get_param(aParam)
@@ -461,8 +468,7 @@ class grassTask:
         param[element] = aValue
             
     def get_flag(self, aFlag):
-        """
-        Find and return a flag by name.
+        """!Find and return a flag by name.
         """
         for f in self.flags:
             if f['name'] ==  aFlag:
@@ -470,8 +476,7 @@ class grassTask:
         raise ValueError, _("Flag not found: %s") % aFlag
 
     def set_flag(self, aFlag, aValue, element = 'value'):
-        """
-        Enable / disable flag.
+        """!Enable / disable flag.
         """
         try:
             param = self.get_flag(aFlag)
@@ -578,7 +583,8 @@ class processTask:
         self.__processModule()
         self.__processParams()
         self.__processFlags()
-
+        self.task.define_first()
+        
     def __processModule(self):
         """!Process module description"""
         self.task.name = self.root.get('name', default = 'unknown')
@@ -2232,11 +2238,11 @@ class GUI:
                     try:
                         key, value = option.split('=', 1)
                     except:
-                        if i ==  0: # add key name of first parameter if not given
+                        if i == 0: # add key name of first parameter if not given
                             key = self.grass_task.firstParam
                             value = option
                         else:
-                            raise gcmd.GException, _("Unable to parse command %s") % ' '.join(cmd)
+                            raise gcmd.GException, _("Unable to parse command '%s'") % ' '.join(cmd)
                     
                     element = self.grass_task.get_param(key, raiseError = False)
                     if not element:
