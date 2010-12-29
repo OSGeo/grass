@@ -1099,13 +1099,13 @@ class GdalImportDialog(ImportDialog):
         if ogr:
             ImportDialog.__init__(self, parent, type = 'ogr')
             if link:
-                self.SetTitle(_("Link vector data"))
+                self.SetTitle(_("Link external vector data"))
             else:
                 self.SetTitle(_("Import vector data"))
         else:
             ImportDialog.__init__(self, parent, type = 'gdal') 
             if link:
-                self.SetTitle(_("Link raster data"))
+                self.SetTitle(_("Link external raster data"))
             else:
                 self.SetTitle(_("Import raster data"))
        
