@@ -68,6 +68,7 @@ IconsGrass2 = {
     "fileLoad"   : 'layer-open.png',
     "fileOpen"   : 'open.png',
     "fileSave"   : 'save.png',
+    "fileImport" : 'layer-import.png',
     "addrast"    : 'layer-raster-add.png',
     "rastmisc"   : 'layer-raster-more.png',
     "addrast3d"  : 'layer-raster3d-add.png',

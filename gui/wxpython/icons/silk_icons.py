@@ -71,6 +71,7 @@ IconsSilk = {
     "fileLoad"   : 'page_white_get.png',
     "fileOpen"   : 'folder.png',
     "fileSave"   : 'page_save.png',
+    "fileImport" : 'page_white_get.png',
     "addrast"    : 'image_add.png',
     "rastmisc"   : 'picture_empty.png',
     "addrast3d"  : 'bricks.png',

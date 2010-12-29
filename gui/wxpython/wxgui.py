@@ -516,21 +516,26 @@ class GMFrame(wx.Frame):
         win.Show(True)  
         
     def OnWorkspace(self, event):
-        """!Workspace menu (new, load)"""
+        """!Workspace menu (new, load, import)"""
         point = wx.GetMousePosition()
         menu = wx.Menu()
 
-        # Add items to the menu
-        new = wx.MenuItem(menu, wx.ID_ANY, Icons["workspaceNew"].GetLabel())
-        new.SetBitmap(Icons["workspaceNew"].GetBitmap(self.iconsize))
-        menu.AppendItem(new)
-        self.Bind(wx.EVT_MENU, self.OnWorkspaceNew, new)
-
-        load = wx.MenuItem(menu, wx.ID_ANY, Icons["workspaceLoad"].GetLabel())
-        load.SetBitmap(Icons["workspaceLoad"].GetBitmap(self.iconsize))
-        menu.AppendItem(load)
-        self.Bind(wx.EVT_MENU, self.OnWorkspaceLoad, load)
-
+        for key, handler in (('workspaceNew',  self.OnWorkspaceNew),
+                             ('workspaceLoad', self.OnWorkspaceLoad),
+                             (None, None),
+                             ('rastImport',    self.OnImportGdalLayers),
+                             ('rastLink',      self.OnLinkGdalLayers),
+                             (None, None),
+                             ('vectImport',    self.OnImportOgrLayers),
+                             ('vectLink',      self.OnLinkOgrLayers)):
+            if key is None:
+                menu.AppendSeparator()
+                continue
+            item = wx.MenuItem(menu, wx.ID_ANY, Icons[key].GetLabel())
+            item.SetBitmap(Icons[key].GetBitmap(self.iconsize))
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, handler, item)
+        
         # create menu
         self.PopupMenu(menu)
         menu.Destroy()

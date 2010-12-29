@@ -53,9 +53,10 @@ IconsGrass = {
     # layer manager
     "newdisplay" : 'gui-startmon.gif',
     "fileNew"    : 'file-new.gif',
-    "fileLoad"   : 'file-new.gif', # change the icon if possible
+    "fileLoad"   : 'file-new.gif', 
     "fileOpen"   : 'file-open.gif',
     "fileSave"   : 'file-save.gif',
+    "fileImport" : 'file-new.gif',
     "addrast"    : 'element-cell.gif',
     "rastmisc"   : 'module-d.shadedmap.gif',
     "addrast3d"  : 'element-grid3.gif',
