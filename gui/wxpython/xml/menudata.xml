@@ -61,7 +61,7 @@
 	      <command>r.in.gdal</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Link raster data</label>
+	      <label>Link external raster data</label>
 	      <help>Link GDAL supported raster data as a pseudo GRASS raster map layer.</help>
 	      <keywords>raster,import</keywords>
               <handler>OnLinkGdalLayers</handler>
@@ -165,7 +165,7 @@
 	      <command>v.in.ogr</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Link vector data</label>
+	      <label>Link external vector data</label>
 	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
 	      <keywords>vector,external,ogr</keywords>
               <handler>OnLinkOgrLayers</handler>
