@@ -6,7 +6,7 @@
 List of classes:
  - VectorDBInfo
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2010 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -16,6 +16,7 @@ for details.
 """
 
 import os
+import types
 
 import wx
 
@@ -23,9 +24,11 @@ import gselect
 import gcmd
 from preferences import globalSettings as UserSettings
 
+import grass.script as grass
+
 def unicodeValue(value):
     """!Encode value"""
-    enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+    enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
     if enc:
         value = unicode(value, enc)
     elif os.environ.has_key('GRASS_DB_ENCODING'):
@@ -40,25 +43,25 @@ def unicodeValue(value):
 
 def createDbInfoDesc(panel, mapDBInfo, layer):
     """!Create database connection information content"""
-    infoFlexSizer = wx.FlexGridSizer (cols=2, hgap=1, vgap=1)
+    infoFlexSizer = wx.FlexGridSizer (cols = 2, hgap = 1, vgap = 1)
     infoFlexSizer.AddGrowableCol(1)
     
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Driver:"))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=mapDBInfo.layers[layer]['driver']))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Database:"))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=mapDBInfo.layers[layer]['database']))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Table:"))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=mapDBInfo.layers[layer]['table']))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Key:"))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=mapDBInfo.layers[layer]['key']))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = "Driver:"))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = mapDBInfo.layers[layer]['driver']))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = "Database:"))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = mapDBInfo.layers[layer]['database']))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = "Table:"))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = mapDBInfo.layers[layer]['table']))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = "Key:"))
+    infoFlexSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = mapDBInfo.layers[layer]['key']))
     
     return infoFlexSizer
         
@@ -86,63 +89,36 @@ class VectorDBInfo(gselect.VectorDBInfo):
         Return line id or None if no line is found"""
         line = None
         nselected = 0
-        
-        if os.environ.has_key("LC_ALL"):
-            locale = os.environ["LC_ALL"]
-            os.environ["LC_ALL"] = "C"
-        
-        ### FIXME (implement script-style output)        
-        ret = gcmd.RunCommand('v.what',
-                              quiet = True,
-                              read = True,
-                              flags = 'a',
-                              map = self.map,
-                              east_north = '%f,%f' % \
-                                  (float(queryCoords[0]), float(queryCoords[1])),
-                              distance = float(qdist))
-        
-        if os.environ.has_key("LC_ALL"):
-            os.environ["LC_ALL"] = locale
-        
-        data = {}
-        if ret:
-            readAttrb = False
-            for item in ret.splitlines():
-                try:
-                    key, value = item.split(':', 1)
-                except ValueError:
-                    continue
-                
-                if key == 'Layer' and readAttrb:
-                    readAttrb = False
-                
-                if readAttrb:
-                    name, value = item.split(':', 1)
-                    name = name.strip()
-                    value = value.strip()
-                    # append value to the column
-                    if len(value) < 1:
-                        value = None
-                    else:
-                        if self.tables[table][name]['ctype'] != type(''):
-                            value = self.tables[table][name]['ctype'] (value.strip())
-                        else:
-                            value = unicodeValue(value.strip())
-                    self.tables[table][name]['values'].append(value)
-                else:
-                    if not data.has_key(key):
-                        data[key] = []
-                    data[key].append(value.strip())
-                    
-                    if key == 'Table':
-                        table = value.strip()
-                        
-                    if key == 'Key column': # skip attributes
-                        readAttrb = True
 
-        return data
+        data = grass.vector_what(name = self.map,
+                                 coord = (float(queryCoords[0]), float(queryCoords[1])),
+                                 distance = float(qdist))
+
+        if len(data) < 1:
+            return None
+        
+        # process attributes
+        table = data[0]['Table']
+        for key, value in data[0]['Attributes'].iteritems():
+            if len(value) < 1:
+                value = None
+            else:
+                if self.tables[table][key]['ctype'] != types.StringType:
+                    value = self.tables[table][key]['ctype'] (value)
+                else:
+                    value = unicodeValue(value)
+            self.tables[table][key]['values'].append(value)
+        
+        ret = dict()
+        for key, value in data[0].iteritems():
+            if key == 'Attributes':
+                continue
+            ret[key] = list()
+            ret[key].append(value)
+        
+        return ret
     
-    def SelectFromTable(self, layer, cols='*', where=None):
+    def SelectFromTable(self, layer, cols = '*', where = None):
         """!Select records from the table
 
         Return number of selected records, -1 on error
@@ -155,9 +131,9 @@ class VectorDBInfo(gselect.VectorDBInfo):
         table = self.layers[layer]["table"] # get table desc
         # select values (only one record)
         if where is None or where is '':
-            sql="SELECT %s FROM %s" % (cols, table)
+            sql = "SELECT %s FROM %s" % (cols, table)
         else:
-            sql="SELECT %s FROM %s WHERE %s" % (cols, table, where)
+            sql = "SELECT %s FROM %s WHERE %s" % (cols, table, where)
 
         ret = gcmd.RunCommand('db.select',
                               parent = self,
