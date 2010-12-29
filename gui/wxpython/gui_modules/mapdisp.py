@@ -85,10 +85,10 @@ class MapFrame(wx.Frame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
-    def __init__(self, parent=None, id=wx.ID_ANY, title=_("GRASS GIS - Map display"),
-                 style=wx.DEFAULT_FRAME_STYLE, toolbars=["map"],
-                 tree=None, notebook=None, lmgr=None, page=None,
-                 Map=None, auimgr=None, **kwargs):
+    def __init__(self, parent = None, id = wx.ID_ANY, title = _("GRASS GIS - Map display"),
+                 style = wx.DEFAULT_FRAME_STYLE, toolbars = ["map"],
+                 tree = None, notebook = None, lmgr = None, page = None,
+                 Map = None, auimgr = None, **kwargs):
         """!Main map display window with toolbars, statusbar and
         DrawWindow
 
@@ -151,26 +151,26 @@ class MapFrame(wx.Frame):
         #
         # Add statusbar
         #
-        self.statusbar = self.CreateStatusBar(number=4, style=0)
+        self.statusbar = self.CreateStatusBar(number = 4, style = 0)
         self.statusbar.SetStatusWidths([-5, -2, -1, -1])
         self.statusbarWin = dict()
         self.statusbarWin['toggle'] = wx.Choice(self.statusbar, wx.ID_ANY,
                                                 choices = globalvar.MAP_DISPLAY_STATUSBAR_MODE)
-        self.statusbarWin['toggle'].SetSelection(UserSettings.Get(group='display',
-                                                                  key='statusbarMode',
-                                                                  subkey='selection'))
+        self.statusbarWin['toggle'].SetSelection(UserSettings.Get(group = 'display',
+                                                                  key = 'statusbarMode',
+                                                                  subkey = 'selection'))
         self.statusbar.Bind(wx.EVT_CHOICE, self.OnToggleStatus, self.statusbarWin['toggle'])
         # auto-rendering checkbox
-        self.statusbarWin['render'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                                  label=_("Render"))
+        self.statusbarWin['render'] = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
+                                                  label = _("Render"))
         self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleRender, self.statusbarWin['render'])
-        self.statusbarWin['render'].SetValue(UserSettings.Get(group='display',
-                                                              key='autoRendering',
-                                                              subkey='enabled'))
+        self.statusbarWin['render'].SetValue(UserSettings.Get(group = 'display',
+                                                              key = 'autoRendering',
+                                                              subkey = 'enabled'))
         self.statusbarWin['render'].SetToolTip(wx.ToolTip (_("Enable/disable auto-rendering")))
         # show region
-        self.statusbarWin['region'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                                  label=_("Show computational extent"))
+        self.statusbarWin['region'] = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
+                                                  label = _("Show computational extent"))
         self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleShowRegion, self.statusbarWin['region'])
         
         self.statusbarWin['region'].SetValue(False)
@@ -182,10 +182,10 @@ class MapFrame(wx.Frame):
                                                              "computational region inside a display region "
                                                              "as a red box).")))
         # set resolution
-        self.statusbarWin['resolution'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                                      label=_("Constrain display resolution to computational settings"))
+        self.statusbarWin['resolution'] = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
+                                                      label = _("Constrain display resolution to computational settings"))
         self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleResolution, self.statusbarWin['resolution'])
-        self.statusbarWin['resolution'].SetValue(UserSettings.Get(group='display', key='compResolution', subkey='enabled'))
+        self.statusbarWin['resolution'].SetValue(UserSettings.Get(group = 'display', key = 'compResolution', subkey = 'enabled'))
         self.statusbarWin['resolution'].Hide()
         self.statusbarWin['resolution'].SetToolTip(wx.ToolTip (_("Constrain display resolution "
                                                                  "to computational region settings. "
@@ -194,7 +194,7 @@ class MapFrame(wx.Frame):
         # map scale
         self.statusbarWin['mapscale'] = wx.ComboBox(parent = self.statusbar, id = wx.ID_ANY,
                                                     style = wx.TE_PROCESS_ENTER,
-                                                    size=(150, -1))
+                                                    size = (150, -1))
         self.statusbarWin['mapscale'].SetItems(['1:1000',
                                                 '1:5000',
                                                 '1:10000',
@@ -207,15 +207,15 @@ class MapFrame(wx.Frame):
         self.statusbar.Bind(wx.EVT_COMBOBOX, self.OnChangeMapScale, self.statusbarWin['mapscale'])
 
         # go to
-        self.statusbarWin['goto'] = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                                                value="", style=wx.TE_PROCESS_ENTER,
-                                                size=(300, -1))
+        self.statusbarWin['goto'] = wx.TextCtrl(parent = self.statusbar, id = wx.ID_ANY,
+                                                value = "", style = wx.TE_PROCESS_ENTER,
+                                                size = (300, -1))
         self.statusbarWin['goto'].Hide()
         self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo, self.statusbarWin['goto'])
 
         # projection
-        self.statusbarWin['projection'] = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                                      label=_("Use defined projection"))
+        self.statusbarWin['projection'] = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
+                                                      label = _("Use defined projection"))
         self.statusbarWin['projection'].SetValue(False)
         size = self.statusbarWin['projection'].GetSize()
         self.statusbarWin['projection'].SetMinSize((size[0] + 150, size[1]))
@@ -231,8 +231,8 @@ class MapFrame(wx.Frame):
         self.statusbarWin['mask'].SetForegroundColour(wx.Colour(255, 0, 0))
         
         # on-render gauge
-        self.statusbarWin['progress'] = wx.Gauge(parent=self.statusbar, id=wx.ID_ANY,
-                                      range=0, style=wx.GA_HORIZONTAL)
+        self.statusbarWin['progress'] = wx.Gauge(parent = self.statusbar, id = wx.ID_ANY,
+                                      range = 0, style = wx.GA_HORIZONTAL)
         self.statusbarWin['progress'].Hide()
         
         self.StatusbarReposition() # reposition statusbar
@@ -240,8 +240,8 @@ class MapFrame(wx.Frame):
         #
         # Init map display (buffered DC & set default cursor)
         #
-        self.MapWindow2D = BufferedWindow(self, id=wx.ID_ANY,
-                                          Map=self.Map, tree=self.tree, lmgr=self._layerManager)
+        self.MapWindow2D = BufferedWindow(self, id = wx.ID_ANY,
+                                          Map = self.Map, tree = self.tree, lmgr = self._layerManager)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
         self.MapWindow.SetCursor(self.cursors["default"])
@@ -347,9 +347,9 @@ class MapFrame(wx.Frame):
                 log = self._layerManager.goutput
             else:
                 log = None
-            self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent=self, mapcontent=self.Map,
-                                                             layerTree=self.tree,
-                                                             log=log)
+            self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent = self, mapcontent = self.Map,
+                                                             layerTree = self.tree,
+                                                             log = log)
             
             self._mgr.AddPane(self.toolbars['vdigit'],
                               wx.aui.AuiPaneInfo().
@@ -363,8 +363,8 @@ class MapFrame(wx.Frame):
             # change mouse to draw digitized line
             self.MapWindow.mouse['box'] = "point"
             self.MapWindow.zoomtype = 0
-            self.MapWindow.pen     = wx.Pen(colour='red',   width=2, style=wx.SOLID)
-            self.MapWindow.polypen = wx.Pen(colour='green', width=2, style=wx.SOLID)
+            self.MapWindow.pen     = wx.Pen(colour = 'red',   width = 2, style = wx.SOLID)
+            self.MapWindow.polypen = wx.Pen(colour = 'green', width = 2, style = wx.SOLID)
         # georectifier
         elif name == "georect":
             self.toolbars['georect'] = toolbars.GRToolbar(self, self.Map)
@@ -406,8 +406,8 @@ class MapFrame(wx.Frame):
             
             # create GL window & NVIZ toolbar
             if not self.MapWindow3D:
-                self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
-                                                 Map=self.Map, tree=self.tree, lmgr=self._layerManager)
+                self.MapWindow3D = nviz.GLWindow(self, id = wx.ID_ANY,
+                                                 Map = self.Map, tree = self.tree, lmgr = self._layerManager)
                 self.MapWindow = self.MapWindow3D
                 self.MapWindow.SetCursor(self.cursors["default"])
                 
@@ -530,7 +530,7 @@ class MapFrame(wx.Frame):
         """!Re-render map composition (each map layer)
         """
         # delete tmp map layers (queries)
-        qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)
+        qlayer = self.Map.GetListOfLayers(l_name = globalvar.QUERYLAYER)
         for layer in qlayer:
             self.Map.DeleteLayer(layer)
         
@@ -543,9 +543,9 @@ class MapFrame(wx.Frame):
         # deselect features in vdigit
         if self.toolbars['vdigit'] and self.digit:
             self.digit.driver.SetSelected([])
-            self.MapWindow.UpdateMap(render=True, renderVector=True)
+            self.MapWindow.UpdateMap(render = True, renderVector = True)
         else:
-            self.MapWindow.UpdateMap(render=True)
+            self.MapWindow.UpdateMap(render = True)
         
         # update statusbar
         self.StatusbarUpdate()
@@ -597,7 +597,7 @@ class MapFrame(wx.Frame):
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
         self.MapWindow.zoomtype = 1
-        self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
+        self.MapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
         
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["cross"])
@@ -614,7 +614,7 @@ class MapFrame(wx.Frame):
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
         self.MapWindow.zoomtype = -1
-        self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
+        self.MapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
         
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["cross"])
@@ -738,13 +738,13 @@ class MapFrame(wx.Frame):
         """
         try:
             if self.statusbarWin['projection'].IsChecked():
-                if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
+                if not UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'proj4'):
                     self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
                 else:
                     # reproject values
-                    projIn = UserSettings.Get(group='projection',
-                                              key='statusbar',
-                                              subkey='proj4')
+                    projIn = UserSettings.Get(group = 'projection',
+                                              key = 'statusbar',
+                                              subkey = 'proj4')
                     projOut = gcmd.RunCommand('g.proj',
                                               flags = 'jf',
                                               read = True)
@@ -770,7 +770,7 @@ class MapFrame(wx.Frame):
                     
             region = self.Map.GetCurrentRegion()
             if self.statusbarWin['projection'].IsChecked():
-                if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
+                if not UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'proj4'):
                     self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
                 else:
                     region['center_easting'], region['center_northing'] = e, n
@@ -841,12 +841,12 @@ class MapFrame(wx.Frame):
                                       subkey = 'll')
             
             if self.statusbarWin['projection'].IsChecked():
-                if not UserSettings.Get(group='projection', key='statusbar', subkey='proj4'):
+                if not UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'proj4'):
                     self.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
                 else:
-                    projOut = UserSettings.Get(group='projection',
-                                               key='statusbar',
-                                               subkey='proj4')
+                    projOut = UserSettings.Get(group = 'projection',
+                                               key = 'statusbar',
+                                               subkey = 'proj4')
                     proj, coord1 = utils.ReprojectCoordinates(coord = (region["w"], region["s"]),
                                                               projOut = projOut, flags = 'd')
                     proj, coord2 = utils.ReprojectCoordinates(coord = (region["e"], region["n"]),
@@ -999,9 +999,9 @@ class MapFrame(wx.Frame):
                 else:
                     proj, coord  = utils.ReprojectCoordinates(coord = (region['center_easting'],
                                                                        region['center_northing']),
-                                                              projOut = UserSettings.Get(group='projection',
-                                                                                         key='statusbar',
-                                                                                         subkey='proj4'),
+                                                              projOut = UserSettings.Get(group = 'projection',
+                                                                                         key = 'statusbar',
+                                                                                         subkey = 'proj4'),
                                                               flags = 'd')
                     if coord:
                         if proj in ('ll', 'latlong', 'longlat') and format == 'DMS':
@@ -1028,7 +1028,7 @@ class MapFrame(wx.Frame):
         
         elif self.statusbarWin['toggle'].GetSelection() == 8: # projection
             self.statusbar.SetStatusText("")
-            epsg = UserSettings.Get(group='projection', key='statusbar', subkey='epsg')
+            epsg = UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'epsg')
             if epsg:
                 label = '%s (EPSG: %s)' % (_("Use defined projection"), epsg)
                 self.statusbarWin['projection'].SetLabel(label)
@@ -1042,7 +1042,7 @@ class MapFrame(wx.Frame):
         else:
             self.statusbar.SetStatusText("", 1)
 
-    def StatusbarEnableLongHelp(self, enable=True):
+    def StatusbarEnableLongHelp(self, enable = True):
         """!Enable/disable toolbars long help"""
         for toolbar in self.toolbars.itervalues():
             if toolbar:
@@ -1113,7 +1113,7 @@ class MapFrame(wx.Frame):
                             message = _("Choose a file name to save the image "
                                         "(no need to add extension)"),
                             wildcard = filetype,
-                            style=wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
         
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
@@ -1223,7 +1223,7 @@ class MapFrame(wx.Frame):
         self.toolbars['map'].action['desc'] = 'modifyAttrb'
         
         self.MapWindow.mouse['use'] = "queryVector"
-        self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
+        self.MapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
         self._OnQuery()
         
     def OnNvizQuerySurface(self, event):
@@ -1293,7 +1293,7 @@ class MapFrame(wx.Frame):
         
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
+        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres = False)
         
         # build query commands for any selected rasters and vectors
         if raststr != '':
@@ -1328,8 +1328,8 @@ class MapFrame(wx.Frame):
         if self._layerManager:
             if raststr:
                 self._layerManager.goutput.RunCmd(rcmd,
-                                                  compReg=False,
-                                                  onDone = self._QueryMapDone)
+                                                  compReg = False,
+                                                  onDone  =  self._QueryMapDone)
             if vectstr:
                 self._layerManager.goutput.RunCmd(vcmd,
                                                   onDone = self._QueryMapDone)
@@ -1363,18 +1363,18 @@ class MapFrame(wx.Frame):
         """
         if not self.tree.layer_selected or \
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] != 'vector':
-            wx.MessageBox(parent=self,
-                          message=_("No vector map selected for querying."),
-                          caption=_("Vector querying"),
-                          style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            wx.MessageBox(parent = self,
+                          message = _("No vector map selected for querying."),
+                          caption = _("Vector querying"),
+                          style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             return
         
         if self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetMapset() != \
                 grass.gisenv()['MAPSET']:
-            wx.MessageBox(parent=self,
-                          message=_("Only vector map from the current mapset can be modified."),
-                          caption=_("Vector querying"),
-                          style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            wx.MessageBox(parent = self,
+                          message = _("Only vector map from the current mapset can be modified."),
+                          caption = _("Vector querying"),
+                          style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             return
         
         posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
@@ -1389,23 +1389,23 @@ class MapFrame(wx.Frame):
         
         if self.dialogs['attributes'] is None:
             self.dialogs['attributes'] = \
-                dbm_dialogs.DisplayAttributesDialog(parent=self.MapWindow,
-                                                    map=mapName,
-                                                    query=((east, north), qdist),
-                                                    pos=posWindow,
-                                                    action="update")
+                dbm_dialogs.DisplayAttributesDialog(parent = self.MapWindow,
+                                                    map = mapName,
+                                                    query = ((east, north), qdist),
+                                                    pos = posWindow,
+                                                    action = "update")
         else:
             # selection changed?
             if not self.dialogs['attributes'].mapDBInfo or \
                     self.dialogs['attributes'].mapDBInfo.map != mapName:
-                self.dialogs['attributes'].UpdateDialog(map=mapName, query=((east, north), qdist))
+                self.dialogs['attributes'].UpdateDialog(map = mapName, query = ((east, north), qdist))
             else:
-                self.dialogs['attributes'].UpdateDialog(query=((east, north), qdist))
+                self.dialogs['attributes'].UpdateDialog(query = ((east, north), qdist))
                 
         cats = self.dialogs['attributes'].GetCats()
         
         try:
-            qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)[0]
+            qlayer = self.Map.GetListOfLayers(l_name = globalvar.QUERYLAYER)[0]
         except IndexError:
             qlayer = None
         
@@ -1413,22 +1413,22 @@ class MapFrame(wx.Frame):
             # highlight feature & re-draw map
             if qlayer:
                 qlayer.SetCmd(self.AddTmpVectorMapLayer(mapName, cats,
-                                                        useId=False,
-                                                        addLayer=False))
+                                                        useId = False,
+                                                        addLayer = False))
             else:
-                qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId=False)
+                qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId = False)
             
             # set opacity based on queried layer
-            opacity = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetOpacity(float=True)
+            opacity = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetOpacity(float = True)
             qlayer.SetOpacity(opacity)
             
-            self.MapWindow.UpdateMap(render=False, renderVector=False)
+            self.MapWindow.UpdateMap(render = False, renderVector = False)
             if not self.dialogs['attributes'].IsShown():
                 self.dialogs['attributes'].Show()
         else:
             if qlayer:
                 self.Map.DeleteLayer(qlayer)
-                self.MapWindow.UpdateMap(render=False, renderVector=False)
+                self.MapWindow.UpdateMap(render = False, renderVector = False)
             if self.dialogs['attributes'].IsShown():
                 self.dialogs['attributes'].Hide()
         
@@ -1458,9 +1458,9 @@ class MapFrame(wx.Frame):
             if action == "nvizQueryVector":
                 vector.Check(True)
         else:
-            display = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
-                                  text=_("Query raster/vector map(s) (display mode)"),
-                                  kind=wx.ITEM_CHECK)
+            display = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
+                                  text = _("Query raster/vector map(s) (display mode)"),
+                                  kind = wx.ITEM_CHECK)
             toolsmenu.AppendItem(display)
             self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
             numLayers = 0
@@ -1475,13 +1475,13 @@ class MapFrame(wx.Frame):
             if action == "displayAttrb":
                 display.Check(True)
             
-            modify = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
-                                 text=_("Query vector map (edit mode)"),
-                                 kind=wx.ITEM_CHECK)
+            modify = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
+                                 text = _("Query vector map (edit mode)"),
+                                 kind = wx.ITEM_CHECK)
             toolsmenu.AppendItem(modify)
             self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
             modify.Enable(False)
-        
+            
             digitToolbar = self.toolbars['vdigit']
             if self.tree.layer_selected:
                 layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
@@ -1503,7 +1503,7 @@ class MapFrame(wx.Frame):
         @param useId use feature id instead of category 
         """
         # color settings from ATM
-        color = UserSettings.Get(group='atm', key='highlight', subkey='color')
+        color = UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'color')
         colorStr = str(color[0]) + ":" + \
             str(color[1]) + ":" + \
             str(color[2])
@@ -1522,7 +1522,7 @@ class MapFrame(wx.Frame):
                    "map=%s" % name,
                    "color=%s" % colorStr,
                    "fcolor=%s" % colorStr,
-                   "width=%d"  % UserSettings.Get(group='atm', key='highlight', subkey='width')]
+                   "width=%d"  % UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'width')]
         if icon != '':
             pattern.append('icon=%s' % icon)
         if size > 0:
@@ -1540,18 +1540,13 @@ class MapFrame(wx.Frame):
                 cmd[-1].append("layer=%d" % layer)
                 cmd[-1].append("cats=%s" % utils.ListOfCatsToRange(lcats))
         
-        #     if self.icon:
-        #         cmd.append("icon=%s" % (self.icon))
-        #     if self.pointsize:
-        #         cmd.append("size=%s" % (self.pointsize))
-
         if addLayer:
             if useId:
-                return self.Map.AddLayer(type='vector', name=globalvar.QUERYLAYER, command=cmd,
-                                         l_active=True, l_hidden=True, l_opacity=1.0)
+                return self.Map.AddLayer(type = 'vector', name = globalvar.QUERYLAYER, command = cmd,
+                                         l_active = True, l_hidden = True, l_opacity = 1.0)
             else:
-                return self.Map.AddLayer(type='command', name=globalvar.QUERYLAYER, command=cmd,
-                                         l_active=True, l_hidden=True, l_opacity=1.0)
+                return self.Map.AddLayer(type = 'command', name = globalvar.QUERYLAYER, command = cmd,
+                                         l_active = True, l_hidden = True, l_opacity = 1.0)
         else:
             return cmd
 
@@ -1594,8 +1589,8 @@ class MapFrame(wx.Frame):
         self.MapWindow.mouse['use'] = "measure"
         self.MapWindow.mouse['box'] = "line"
         self.MapWindow.zoomtype = 0
-        self.MapWindow.pen     = wx.Pen(colour='red', width=2, style=wx.SHORT_DASH)
-        self.MapWindow.polypen = wx.Pen(colour='green', width=2, style=wx.SHORT_DASH)
+        self.MapWindow.pen     = wx.Pen(colour = 'red', width = 2, style = wx.SHORT_DASH)
+        self.MapWindow.polypen = wx.Pen(colour = 'green', width = 2, style = wx.SHORT_DASH)
 
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["pencil"])
@@ -1659,8 +1654,8 @@ class MapFrame(wx.Frame):
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
         self.profile = profile.ProfileFrame(self,
-                                            id=wx.ID_ANY, pos=wx.DefaultPosition, size=(700,300),
-                                            style=wx.DEFAULT_FRAME_STYLE, rasterList=raster)
+                                            id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
+                                            style = wx.DEFAULT_FRAME_STYLE, rasterList = raster)
         self.profile.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be profiled
@@ -1717,8 +1712,8 @@ class MapFrame(wx.Frame):
         """!Init histogram display canvas and tools
         """
         self.histogram = histogram.HistFrame(self,
-                                             id=wx.ID_ANY, size=globalvar.HIST_WINDOW_SIZE,
-                                             style=wx.DEFAULT_FRAME_STYLE)
+                                             id = wx.ID_ANY, size = globalvar.HIST_WINDOW_SIZE,
+                                             style = wx.DEFAULT_FRAME_STYLE)
 
         #show new display
         self.histogram.Show()
@@ -1769,12 +1764,12 @@ class MapFrame(wx.Frame):
 
         # decoration overlay control dialog
         self.dialogs['barscale'] = \
-            gdialogs.DecorationDialog(parent=self, title=_('Scale and North arrow'),
-                                      size=(350, 200),
-                                      style=wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
-                                      cmd=['d.barscale', 'at=0,5'],
-                                      ovlId=id,
-                                      name='barscale',
+            gdialogs.DecorationDialog(parent = self, title = _('Scale and North arrow'),
+                                      size = (350, 200),
+                                      style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
+                                      cmd = ['d.barscale', 'at = 0,5'],
+                                      ovlId = id,
+                                      name = 'barscale',
                                       checktxt = _("Show/hide scale and North arrow"),
                                       ctrltxt = _("scale object"))
 
@@ -1799,12 +1794,12 @@ class MapFrame(wx.Frame):
 
         # Decoration overlay control dialog
         self.dialogs['legend'] = \
-            gdialogs.DecorationDialog(parent=self, title=('Legend'),
-                                      size=(350, 200),
-                                      style=wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
-                                      cmd=cmd,
-                                      ovlId=id,
-                                      name='legend',
+            gdialogs.DecorationDialog(parent = self, title = ('Legend'),
+                                      size = (350, 200),
+                                      style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
+                                      cmd = cmd,
+                                      ovlId = id,
+                                      name = 'legend',
                                       checktxt = _("Show/hide legend"),
                                       ctrltxt = _("legend object")) 
 
@@ -1826,9 +1821,9 @@ class MapFrame(wx.Frame):
             else:
                 id = 101
 
-        self.dialogs['text'] = gdialogs.TextLayerDialog(parent=self, ovlId=id, 
-                                                        title=_('Add text layer'),
-                                                        size=(400, 200))
+        self.dialogs['text'] = gdialogs.TextLayerDialog(parent = self, ovlId = id, 
+                                                        title = _('Add text layer'),
+                                                        size = (400, 200))
         self.dialogs['text'].CenterOnParent()
 
         # If OK button pressed in decoration control dialog
@@ -1851,10 +1846,10 @@ class MapFrame(wx.Frame):
             self.MapWindow.pdc.SetId(id)
             self.MapWindow.textdict[id] = self.dialogs['text'].GetValues()
             
-            self.MapWindow.Draw(self.MapWindow.pdcDec, img=self.MapWindow.textdict[id],
-                                drawid=id, pdctype='text', coords=coords)
+            self.MapWindow.Draw(self.MapWindow.pdcDec, img = self.MapWindow.textdict[id],
+                                drawid = id, pdctype = 'text', coords = coords)
             
-            self.MapWindow.UpdateMap(render=False, renderVector=False)
+            self.MapWindow.UpdateMap(render = False, renderVector = False)
             
         self.MapWindow.mouse['use'] = 'pointer'
 
@@ -1864,8 +1859,8 @@ class MapFrame(wx.Frame):
         """
         # Reset comand and rendering options in render.Map. Always render decoration.
         # Showing/hiding handled by PseudoDC
-        self.Map.ChangeOverlay(ovltype=type, type='overlay', name='', command=dcmd,
-                               l_active=True, l_render=False)
+        self.Map.ChangeOverlay(ovltype = type, type = 'overlay', name = '', command = dcmd,
+                               l_active = True, l_render = False)
         self.params[type] = params
         self.propwin[type] = propwin
 
@@ -1940,8 +1935,8 @@ class MapFrame(wx.Frame):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
         
-    def SetProperties(self, render=False, mode=0, showCompExtent=False,
-                      constrainRes=False, projection=False):
+    def SetProperties(self, render = False, mode = 0, showCompExtent = False,
+                      constrainRes = False, projection = False):
         """!Set properies of map display window"""
         self.statusbarWin['render'].SetValue(render)
         self.statusbarWin['toggle'].SetSelection(mode)
@@ -1977,8 +1972,8 @@ class MapApp(wx.App):
         else:
             Map = None
 
-        self.mapFrm = MapFrame(parent=None, id=wx.ID_ANY, Map=Map,
-                               size=globalvar.MAP_WINDOW_SIZE)
+        self.mapFrm = MapFrame(parent = None, id = wx.ID_ANY, Map = Map,
+                               size = globalvar.MAP_WINDOW_SIZE)
         #self.SetTopWindow(Map)
         self.mapFrm.Show()
 
@@ -2019,7 +2014,7 @@ if __name__ == "__main__":
     cmdfilename = sys.argv[2]
 
     import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
     print >> sys.stderr, "\nStarting monitor <%s>...\n" % (title)
 
