@@ -13,7 +13,7 @@ grass.vector_db(map)
 ...
 @endcode
 
-(C) 2008-2009 by the GRASS Development Team
+(C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -23,6 +23,7 @@ for details.
 """
 
 import os
+import types
 
 from core import *
 
@@ -216,3 +217,106 @@ def vector_db_select(map, layer = 1, **kwargs):
     
     return { 'columns' : columns,
              'values' : values }
+
+# interface to v.what
+def vector_what(name, coord, distance = 0.0):
+    """!Query vector map at given locations
+    
+    To query one vector map at one location
+    @code
+    print grass.vector_what(name = 'archsites', coord = (595743, 4925281), distance = 250)
+
+    [{'Category': 8, 'Map': 'archsites', 'Layer': 1, 'Key_column': 'cat',
+      'Database': '/home/martin/grassdata/spearfish60/PERMANENT/dbf/',
+      'Mapset': 'PERMANENT', 'Driver': 'dbf',
+      'Attributes': {'str1': 'No_Name', 'cat': '8'},
+      'Table': 'archsites', 'Type': 'Point', 'Id': 8}]
+    @endcode
+
+    To query one vector map at more locations
+    @code
+    for q in grass.vector_what(name = ('archsites', 'roads'), coord = (595743, 4925281),
+                               distance = 250):
+        print q['Map'], q['Attributes']
+                            
+    archsites {'str1': 'No_Name', 'cat': '8'}
+    roads {'label': 'interstate', 'cat': '1'}
+    @endcode
+
+    To query more vector maps at one location
+    @code
+    for q in grass.vector_what(name = 'archsites', coord = [(595743, 4925281), (597950, 4918898)],
+                               distance = 250):
+        print q['Map'], q['Attributes']
+
+    archsites {'str1': 'No_Name', 'cat': '8'}
+    archsites {'str1': 'Bob_Miller', 'cat': '22'}
+    @endcode
+
+    @param name vector map(s) to query given as string or list/tuple
+    @param coord coordinates of query given as tuple (easting, northing) or list of tuples
+    @param distance query threshold distance (in map units)
+
+    @return parsed list
+    """
+    if os.environ.has_key("LC_ALL"):
+        locale = os.environ["LC_ALL"]
+        os.environ["LC_ALL"] = "C"
+    
+    if type(name) is types.StringType:
+        name_list = [name]
+    else:
+        name_list = name
+    
+    layer_list = ['-1'] * len(name_list)
+    
+    coord_list = list()
+    if type(coord) is types.TupleType:
+        coord_list.append('%f,%f' % (coord[0], coord[1]))
+    else:
+        for e, n in coord:
+            coord_list.append('%f,%f' % (e, n))
+    
+    ret = read_command('v.what',
+                       quiet      = True,
+                       flags      = 'ag',
+                       map        = ','.join(name_list),
+                       layer      = ','.join(layer_list),
+                       east_north = ','.join(coord_list),
+                       distance   = float(distance))
+    
+    if os.environ.has_key("LC_ALL"):
+        os.environ["LC_ALL"] = locale
+        
+    data = list()
+    if not ret:
+        return data
+    
+    dict_attrb = None
+    for item in ret.splitlines():
+        try:
+            key, value = map(lambda x: x.strip(), item.split('=', 1))
+        except ValueError:
+            continue
+        if key in ('East', 'North'):
+            continue
+        
+        if key == 'Map':
+            dict_main  = { 'Map' : value }
+            dict_attrb = None
+            data.append(dict_main)
+            continue
+        else:
+            if dict_attrb is not None:
+                dict_attrb[key] = value
+            else:
+                if key in ('Category', 'Layer', 'Id'):
+                    dict_main[key] = int(value)
+                else:
+                    dict_main[key] = value
+            if key == 'Key_column':
+                # skip attributes
+                dict_attrb = dict()
+                dict_main['Attributes'] = dict_attrb
+    
+    return data
