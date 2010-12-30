@@ -1061,6 +1061,9 @@ class GdalSelect(wx.Panel):
         self.parent = parent
         self.ogr    = ogr
         wx.Panel.__init__(self, parent = panel, id = wx.ID_ANY)
+
+        self.settingsBox = wx.StaticBox(parent = self, id=wx.ID_ANY,
+                                        label=" %s " % _("Settings"))
         
         self.inputBox = wx.StaticBox(parent = self, id=wx.ID_ANY,
                                      label=" %s " % _("Source name"))
@@ -1087,6 +1090,18 @@ class GdalSelect(wx.Panel):
         if 'protocol' not in exclude:
             sources.append(_("Protocol"))
             self.sourceMap['pro'] = idx
+        
+        if self.ogr:
+            self.settingsFile = os.path.join(os.path.expanduser("~"), '.grass7', 'wxOGR')
+        else:
+            self.settingsFile = os.path.join(os.path.expanduser("~"), '.grass7', 'wxGDAL')
+        
+        self._settings = self._loadSettings()
+        self.settingsChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+        self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsLoad)
+        self.settingsChoice.SetItems(self._settings.keys())
+        self.btnSettings = wx.Button(parent = self, id = wx.ID_SAVE)
+        self.btnSettings.Bind(wx.EVT_BUTTON, self.OnSettingsSave)
         
         self.source = wx.RadioBox(parent = self, id = wx.ID_ANY,
                                   label = _('Source type'),
@@ -1188,6 +1203,20 @@ class GdalSelect(wx.Panel):
     def _layout(self):
         """!Layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
+        settingsSizer.Add(item = wx.StaticText(parent = self,
+                                               id = wx.ID_ANY,
+                                               label = _("Load settings:")),
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+                          border  = 5)
+        settingsSizer.Add(item = self.settingsChoice,
+                          proportion = 1,
+                          flag = wx.EXPAND)
+        settingsSizer.Add(item = self.btnSettings,
+                          flag = wx.LEFT,
+                          border = 5)
+        
         inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
         
         self.dsnSizer = wx.GridBagSizer(vgap=3, hgap=3)
@@ -1210,9 +1239,11 @@ class GdalSelect(wx.Panel):
         
         inputSizer.Add(item=self.dsnSizer, proportion=1,
                        flag=wx.EXPAND | wx.ALL)
-        
-        mainSizer.Add(item=self.source, proportion=0,
+
+        mainSizer.Add(item=settingsSizer, proportion=0,
                       flag=wx.ALL | wx.EXPAND, border=5)
+        mainSizer.Add(item=self.source, proportion=0,
+                      flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=5)
         mainSizer.Add(item=inputSizer, proportion=0,
                       flag=wx.ALL | wx.EXPAND, border=5)
         
@@ -1227,9 +1258,79 @@ class GdalSelect(wx.Panel):
 
         return pattern
 
-    def OnSetType(self, event):
+    def OnSettingsLoad(self, event):
+        """!Load named settings"""
+        name = event.GetString()
+        if not self._settings.has_key(name):
+            gcmd.GError(parent = self,
+                        message = _("Settings named '%s' not found") % name)
+            return
+        data = self._settings[name]
+        self.OnSetType(event = None, sel = self.sourceMap[data[0]])
+        self.OnSetFormat(event = None, format = data[2])
+        self.OnSetDsn(event = None, path = data[1])
+        
+    def OnSettingsSave(self, event):
+        """!Save settings"""
+        dlg = wx.TextEntryDialog(parent = self,
+                                 message = _("Name:"),
+                                 caption = _("Save settings"))
+        if dlg.ShowModal() != wx.ID_OK:
+            return
+        
+        if not dlg.GetValue():
+            gcmd.GMessage(parent = self,
+                          message = _("Name not given, settings is not saved."))
+            return
+
+        data = self._loadSettings()
+        try:
+            fd = open(self.settingsFile, 'w')
+            fd.write(dlg.GetValue() + ';' + self.dsnType + ';' +
+                     self._getDsn() + ';' +
+                     self.format.GetStringSelection())
+            fd.write('\n')
+        except IOError:
+            gcmd.GError(parent = self,
+                        message = _("Unable to save settings."))
+            return
+        fd.close()
+        dlg.Destroy()
+                
+    def _loadSettings(self):
+        """!Load settings from the file
+
+        The file is defined by self.SettingsFile.
+        
+        @return parsed dict
+        @return empty dict on error
+        """
+        data = dict()
+        if not os.path.exists(self.settingsFile):
+            return data
+        
+        try:
+            fd = open(self.settingsFile, 'r')
+            for line in fd.readlines():
+                try:
+                    name, ftype, dsn, format = line.rstrip('\n').split(';')
+                    data[name] = (ftype, dsn, format)
+                except ValueError:
+                    pass
+        except IOError:
+            return data
+        
+        fd.close()
+        
+        return data
+
+    def OnSetType(self, event, sel = None):
         """!Datasource type changed"""
-        sel = event.GetSelection()
+        if event:
+            sel = event.GetSelection()
+        else:
+            self.source.SetSelection(sel)
+        
         win = self.input[self.dsnType][1]
         self.dsnSizer.Remove(win)
         win.Hide()
@@ -1263,7 +1364,7 @@ class GdalSelect(wx.Panel):
         if self.parent.GetName() == 'MultiImportDialog':
             self.parent.list.DeleteAllItems()
         self.format.SetItems(self.input[self.dsnType][2])        
-
+        
         if sel in (self.sourceMap['file'],
                    self.sourceMap['dir']):
             win = self.input[self.dsnType][1]
@@ -1287,19 +1388,35 @@ class GdalSelect(wx.Panel):
         
         self.dsnSizer.Layout()
         
-    def OnSetDsn(self, event):
+    def _getDsn(self):
+        """!Get datasource name"""
+        if self.format.GetStringSelection() == 'PostgreSQL':
+            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+        
+        return self.input[self.dsnType][1].GetValue()
+    
+    def OnSetDsn(self, event, path = None):
         """!Input DXF file/OGR dsn defined, update list of layer widget"""
-        path = event.GetString()
+        if event:
+            path = event.GetString()
+        else:
+            if self.format.GetStringSelection() == 'PostgreSQL':
+                for item in path.split(':', 1)[1].split(','):
+                    key, value = item.split('=', 1)
+                    if key == 'dbname':
+                        self.input[self.dsnType][1].SetStringSelection(value)
+                        break
+            else:
+                self.input[self.dsnType][1].SetValue(path)
+        
         if not path:
             return 
         
         data = list()        
         
         layerId = 1
-        if self.format.GetStringSelection() == 'PostgreSQL':
-            dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetValue()
-        else:
-            dsn = self.input[self.dsnType][1].GetValue()
+        dsn = self._getDsn()
+        
         if self.dsnType == 'file':
             baseName = os.path.basename(dsn)
             grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
@@ -1343,9 +1460,10 @@ class GdalSelect(wx.Panel):
             else:
                 self.parent.btn_run.Enable(False)
         
-        event.Skip()
+        if event:
+            event.Skip()
         
-    def OnSetFormat(self, event):
+    def OnSetFormat(self, event, format = None):
         """!Format changed"""
         if self.dsnType not in ['file', 'db']:
             return
@@ -1358,7 +1476,10 @@ class GdalSelect(wx.Panel):
         else: # database
             win.Hide()
         
-        format = event.GetString()
+        if event:
+            format = event.GetString()
+        else:
+            self.format.SetStringSelection(format)
         
         if self.dsnType == 'file':
             try:
@@ -1415,7 +1536,7 @@ class GdalSelect(wx.Panel):
     def GetDsn(self):
         """!Get DSN"""
         if self.format.GetStringSelection() == 'PostgreSQL':
-            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetValue()
+            return 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
         
         return self.input[self.dsnType][1].GetValue()
 
