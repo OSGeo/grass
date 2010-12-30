@@ -37,8 +37,7 @@
    Map->fInfo.ogr.layer_name must be set before.
 
    \param[in,out] Map pointer to Map_info structure
-   \param update non-zero for write mode, otherwise read-only
-   (write mode is currently not supported)
+   \param update TRUE for write mode, otherwise read-only
    
    \return 0 success
    \return -1 error
@@ -49,15 +48,10 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     OGRDataSourceH Ogr_ds;
     OGRLayerH Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
-
+    OGRwkbGeometryType Ogr_geom_type;
+    
     Ogr_layer = NULL;
-
-    /*
-    if (update) {
-	G_warning(_("Write mode is not supported for OGR format"));
-	return -1;
-    }
-    */
+    Ogr_geom_type = wkbUnknown;
     
     if (!Map->fInfo.ogr.dsn) {
 	G_fatal_error(_("OGR datasource not defined"));
@@ -90,6 +84,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 	if (strcmp(OGR_FD_GetName(Ogr_featuredefn), Map->fInfo.ogr.layer_name) == 0) {
+	    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
 	    layer = i;
 	    break;
 	}
@@ -109,12 +104,21 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     Map->fInfo.ogr.lines_num = 0;
     Map->fInfo.ogr.lines_next = 0;
     
-    Map->head.with_z = WITHOUT_Z;	/* TODO: 3D */
+    switch(Ogr_geom_type) {
+    case wkbPoint25D: case wkbLineString25D: case wkbPolygon25D:
+    case wkbMultiPoint25D: case wkbMultiLineString25D: case wkbMultiPolygon25D:
+    case wkbGeometryCollection25D:
+	Map->head.with_z = WITH_Z;
+	break;
+    default:
+	Map->head.with_z = WITHOUT_Z;
+	break;
+    }
     
     Map->fInfo.ogr.feature_cache = NULL;
     Map->fInfo.ogr.feature_cache_id = -1;	/* FID >= 0 */
     
-    return (0);
+    return 0;
 }
 
 /*!
@@ -219,7 +223,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     OGRDataSourceH  Ogr_ds;
     OGRLayerH       Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
-
+    
     int            i, nlayers;
     char         **Ogr_layer_options;
      

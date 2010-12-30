@@ -57,7 +57,7 @@ static void list_formats(void)
     /* -------------------------------------------------------------------- */
     int iDr;
 
-    fprintf(stdout, _("Supported Formats:\n"));
+    G_message(_("Supported formats:"));
     for (iDr = 0; iDr < GDALGetDriverCount(); iDr++) {
 	GDALDriverH hDriver = GDALGetDriver(iDr);
 	const char *pszRWFlag;
@@ -69,7 +69,7 @@ static void list_formats(void)
 	else
 	    pszRWFlag = "ro";
 
-	fprintf(stdout, "  %s (%s): %s\n",
+	fprintf(stdout, " %s (%s): %s\n",
 		GDALGetDriverShortName(hDriver),
 		pszRWFlag, GDALGetDriverLongName(hDriver));
     }

@@ -1,4 +1,5 @@
 #include <grass/gis.h>
+#include <grass/vector.h>
 #include <grass/glocale.h>
 
 #include "ogr_api.h"
@@ -9,14 +10,14 @@ void list_formats(FILE *fd) {
     
     OGRSFDriverH Ogr_driver;
     
-    G_message(_("Available drivers:\n"));
+    G_message(_("Supported formats:"));
     for (i = 0; i < OGRGetDriverCount(); i++) {
 	Ogr_driver = OGRGetDriver(i);
 	fprintf(fd, " %s\n", OGR_Dr_GetName(Ogr_driver));
     }
 }
 
-int list_layers(FILE *fd, const char *dsn, const char *layer)
+int list_layers(FILE *fd, const char *dsn, const char *layer, int *is3D)
 {
     int i, ret;
     int nlayers;
@@ -25,6 +26,7 @@ int list_layers(FILE *fd, const char *dsn, const char *layer)
     OGRDataSourceH Ogr_ds;
     OGRLayerH Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
+    OGRwkbGeometryType Ogr_geom_type;
     
     ret = -1;
     
@@ -50,6 +52,19 @@ int list_layers(FILE *fd, const char *dsn, const char *layer)
 	
 	if (layer)
 	    if (strcmp(layer_name, layer) == 0) {
+		if (is3D) {
+		    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
+		    switch(Ogr_geom_type) {
+		    case wkbPoint25D: case wkbLineString25D: case wkbPolygon25D:
+		    case wkbMultiPoint25D: case wkbMultiLineString25D: case wkbMultiPolygon25D:
+		    case wkbGeometryCollection25D:
+			*is3D = WITH_Z;
+			break;
+		    default:
+			*is3D = WITHOUT_Z;
+			break;
+		    }
+		}
 		ret = i;
 	    }
     }

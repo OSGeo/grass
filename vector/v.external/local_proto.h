@@ -18,6 +18,6 @@ void get_args(const struct _options *, const struct _flags *,
 
 /* list.c */
 void list_formats(FILE *);
-int list_layers(FILE *, const char *, const char *);
+int list_layers(FILE *, const char *, const char *, int *);
 
 #endif

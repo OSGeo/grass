@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Create a new vector as a link to OGR layer (read-only)
  *               
- * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     
     FILE *fd;
     
-    int ilayer;
+    int ilayer, is3D;
     char buf[GPATH_MAX];
      
     G_gisinit(argv[0]);
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     if (flags.layer->answer) {
 	if (!options.dsn->answer)
 	    G_fatal_error(_("Required parameter <%s> not set"), options.dsn->key);
-	list_layers(stdout, options.dsn->answer, NULL);
+	list_layers(stdout, options.dsn->answer, NULL, NULL);
 	exit(EXIT_SUCCESS);
     }
 
@@ -75,15 +75,14 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Required parameter <%s> not set"), options.layer->key);
         
 
-    ilayer = list_layers(NULL, options.dsn->answer, options.layer->answer);
+    ilayer = list_layers(NULL, options.dsn->answer, options.layer->answer, &is3D);
     if (ilayer == -1) {
 	G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
     }
     
     G_debug(2, "layer '%s' was found", options.layer->answer);
 
-    /* TODO: support 3d vector data */
-    Vect_open_new(&Map, options.output->answer, WITHOUT_Z);
+    Vect_open_new(&Map, options.output->answer, is3D);
     Vect_hist_command(&Map);
     Vect_close(&Map);
     
@@ -116,7 +115,7 @@ int main(int argc, char *argv[])
       Vect_close(&Map);
     }
 
-    G_done_msg(_("<%s> created."), options.output->answer);
+    G_done_msg(_("Link to vector map <%s> created."), options.output->answer);
 
     exit(EXIT_SUCCESS);
 }
