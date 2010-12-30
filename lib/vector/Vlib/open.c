@@ -177,17 +177,17 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     /* initialize Map->head */
     Vect__init_head(Map);
     /* initialize support structures for 2D, update to 3D when reading support files */
-    Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = 0;
+    Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = WITHOUT_Z;
     /* initialize Map->plus */
     dig_init_plus(&(Map->plus));
 
     /* check OGR mapset */
-    ogr_mapset = 0;
+    ogr_mapset = FALSE;
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcasecmp(xmapset, "ogr") == 0) {
 	    /* unique OGR mapset detected */
 	    G_debug(1, "OGR mapset detected");
-	    ogr_mapset = 1;
+	    ogr_mapset = TRUE;
 	    Map->fInfo.ogr.dsn = G_store(xname);
 	    if (layer) {
 		Map->fInfo.ogr.layer_name = G_store(layer); /* no layer to be open */
@@ -491,7 +491,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	    unlink(file_path);
     }
 
-    return (level);
+    return level;
 }
 
 /*!
@@ -920,7 +920,7 @@ int Vect_maptype(const struct Map_info *Map)
  * \brief Open topology file ('topo')
  *
  * \param[in,out] Map pointer to Map_info structure
- * \param head_only open only head
+ * \param head_only TRUE to read only header
  *
  * \return 0 on success
  * \return 1 file does not exist
