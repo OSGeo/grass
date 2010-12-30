@@ -517,17 +517,20 @@ class grassTask:
         """
         cmd = [self.name]
         
+        suppress_required = False
         for flag in self.flags:
             if flag['value']:
                 if len(flag['name']) > 1: # e.g. overwrite
                     cmd +=  [ '--' + flag['name'] ]
                 else:
                     cmd +=  [ '-' + flag['name'] ]
+                if flag['suppress_required']:
+                    suppress_required = True
         for p in self.params:
             if p.get('value','') ==  '' and p.get('required', False):
                 if p.get('default', '') !=  '':
                     cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
-                elif ignoreErrors is False:
+                elif ignoreErrors is True and not suppress_required:
                     cmd +=  [ '%s=%s' % (p['name'], _('<required>')) ]
             elif p.get('value','') !=  '' and p['value'] !=  p.get('default','') :
                 # Output only values that have been set, and different from defaults
