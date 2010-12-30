@@ -2135,7 +2135,7 @@ def getInterfaceDescription(cmd):
     except OSError, e:
         raise gcmd.GException, _("Unable to fetch interface description for command '%s'. "
                                  "Details: %s") % (cmd, repr(e))
-    if cmderr:
+    if cmderr and cmderr[:7] != 'WARNING':
         raise gcmd.GException, _("Unable to fetch interface description for command '%s'. "
                                  "Details: %s") % (cmd, cmderr)
     
