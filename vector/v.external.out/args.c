@@ -20,8 +20,7 @@ void parse_args(int argc, char **argv,
     options->format->required = YES;
     options->format->type = TYPE_STRING;
     options->format->options = format_list();
-    options->format->answer = "ESRI Shapefile";
-
+ 
     options->opts = G_define_option();
     options->opts->key = "options";
     options->opts->description = _("Creation options");
