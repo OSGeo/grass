@@ -24,6 +24,7 @@ for details.
 
 import os
 import types
+import __builtin__
 
 from core import *
 
@@ -219,12 +220,12 @@ def vector_db_select(map, layer = 1, **kwargs):
              'values' : values }
 
 # interface to v.what
-def vector_what(name, coord, distance = 0.0):
+def vector_what(map, coord, distance = 0.0):
     """!Query vector map at given locations
     
     To query one vector map at one location
     @code
-    print grass.vector_what(name = 'archsites', coord = (595743, 4925281), distance = 250)
+    print grass.vector_what(map = 'archsites', coord = (595743, 4925281), distance = 250)
 
     [{'Category': 8, 'Map': 'archsites', 'Layer': 1, 'Key_column': 'cat',
       'Database': '/home/martin/grassdata/spearfish60/PERMANENT/dbf/',
@@ -235,7 +236,7 @@ def vector_what(name, coord, distance = 0.0):
 
     To query one vector map at more locations
     @code
-    for q in grass.vector_what(name = ('archsites', 'roads'), coord = (595743, 4925281),
+    for q in grass.vector_what(map = ('archsites', 'roads'), coord = (595743, 4925281),
                                distance = 250):
         print q['Map'], q['Attributes']
                             
@@ -245,7 +246,7 @@ def vector_what(name, coord, distance = 0.0):
 
     To query more vector maps at one location
     @code
-    for q in grass.vector_what(name = 'archsites', coord = [(595743, 4925281), (597950, 4918898)],
+    for q in grass.vector_what(map = 'archsites', coord = [(595743, 4925281), (597950, 4918898)],
                                distance = 250):
         print q['Map'], q['Attributes']
 
@@ -253,7 +254,7 @@ def vector_what(name, coord, distance = 0.0):
     archsites {'str1': 'Bob_Miller', 'cat': '22'}
     @endcode
 
-    @param name vector map(s) to query given as string or list/tuple
+    @param map vector map(s) to query given as string or list/tuple
     @param coord coordinates of query given as tuple (easting, northing) or list of tuples
     @param distance query threshold distance (in map units)
 
@@ -263,12 +264,12 @@ def vector_what(name, coord, distance = 0.0):
         locale = os.environ["LC_ALL"]
         os.environ["LC_ALL"] = "C"
 
-    if type(name) in (types.StringType, types.UnicodeType):
-        name_list = [name]
+    if type(map) in (types.StringType, types.UnicodeType):
+        map_list = [map]
     else:
-        name_list = name
+        map_list = map
     
-    layer_list = ['-1'] * len(name_list)
+    layer_list = ['-1'] * len(map_list)
     
     coord_list = list()
     if type(coord) is types.TupleType:
@@ -280,7 +281,7 @@ def vector_what(name, coord, distance = 0.0):
     ret = read_command('v.what',
                        quiet      = True,
                        flags      = 'ag',
-                       map        = ','.join(name_list),
+                       map        = ','.join(map_list),
                        layer      = ','.join(layer_list),
                        east_north = ','.join(coord_list),
                        distance   = float(distance))
@@ -295,7 +296,7 @@ def vector_what(name, coord, distance = 0.0):
     dict_attrb = None
     for item in ret.splitlines():
         try:
-            key, value = map(lambda x: x.strip(), item.split('=', 1))
+            key, value = __builtin__.map(lambda x: x.strip(), item.split('=', 1))
         except ValueError:
             continue
         if key in ('East', 'North'):

@@ -90,7 +90,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
         line = None
         nselected = 0
 
-        data = grass.vector_what(name = self.map,
+        data = grass.vector_what(map = self.map,
                                  coord = (float(queryCoords[0]), float(queryCoords[1])),
                                  distance = float(qdist))
 
