@@ -76,7 +76,7 @@ class AbstractToolbar(wx.ToolBar):
         
         @return id of tool
         """
-        bmpDisabled=wx.NullBitmap
+        bmpDisabled = wx.NullBitmap
         
         if label:
             Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" % \
@@ -90,7 +90,7 @@ class AbstractToolbar(wx.ToolBar):
         
         return tool
     
-    def EnableLongHelp(self, enable=True):
+    def EnableLongHelp(self, enable = True):
         """!Enable/disable long help
         
         @param enable True for enable otherwise disable
@@ -111,7 +111,7 @@ class AbstractToolbar(wx.ToolBar):
         
         if self.parent.toolbars['vdigit']:
             # update vdigit toolbar (unselect currently selected tool)
-            id = self.parent.toolbars['vdigit'].GetAction(type='id')
+            id = self.parent.toolbars['vdigit'].GetAction(type = 'id')
             self.parent.toolbars['vdigit'].ToggleTool(id, False)
         
         if event:
@@ -129,7 +129,7 @@ class AbstractToolbar(wx.ToolBar):
             # initialize toolbar
             self.ToggleTool(self.action['id'], True)
         
-    def GetAction(self, type='desc'):
+    def GetAction(self, type = 'desc'):
         """!Get current action info"""
         return self.action.get(type, '')
     
@@ -347,8 +347,7 @@ class MapToolbar(AbstractToolbar):
             self.EnableTool(tool, enabled)
         
 class GCPManToolbar(AbstractToolbar):
-    """!
-    Toolbar for managing ground control points
+    """!Toolbar for managing ground control points
 
     @param parent reference to GCP widget
     """
@@ -407,9 +406,9 @@ class GCPDisplayToolbar(AbstractToolbar):
         
         # add tool to toggle active map window
         self.togglemapid = wx.NewId()
-        self.togglemap = wx.Choice(parent=self, id=self.togglemapid,
+        self.togglemap = wx.Choice(parent = self, id = self.togglemapid,
 						    choices = [_('source'), _('target')],
-						    style=wx.CB_READONLY)
+						    style = wx.CB_READONLY)
 
         self.InsertControl(10, self.togglemap)
 
@@ -628,7 +627,7 @@ class VDigitToolbar(AbstractToolbar):
     """
     Toolbar for digitization
     """
-    def __init__(self, parent, mapcontent, layerTree=None, log=None):
+    def __init__(self, parent, mapcontent, layerTree = None, log = None):
         self.mapcontent    = mapcontent # Map class instance
         self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.log           = log        # log area
@@ -654,7 +653,7 @@ class VDigitToolbar(AbstractToolbar):
                         'id'   : self.addPoint }
         
         # list of available vector maps
-        self.UpdateListOfLayers(updateTool=True)
+        self.UpdateListOfLayers(updateTool = True)
         
         # realize toolbar
         self.Realize()
@@ -760,7 +759,7 @@ class VDigitToolbar(AbstractToolbar):
     
     def OnTool(self, event):
         """!Tool selected -> disable selected tool in map toolbar"""
-        id = self.parent.toolbars['map'].GetAction(type='id')
+        id = self.parent.toolbars['map'].GetAction(type = 'id')
         self.parent.toolbars['map'].ToggleTool(id, False)
         
         # set cursor
@@ -786,7 +785,7 @@ class VDigitToolbar(AbstractToolbar):
         
         # clear tmp canvas
         if self.action['id'] != id:
-            self.parent.MapWindow.ClearLines(pdc=self.parent.MapWindow.pdcTmp)
+            self.parent.MapWindow.ClearLines(pdc = self.parent.MapWindow.pdcTmp)
             if self.parent.digit and \
                     len(self.parent.digit.driver.GetSelected()) > 0:
                 # cancel action
@@ -917,17 +916,17 @@ class VDigitToolbar(AbstractToolbar):
         point = wx.GetMousePosition()
         toolMenu = wx.Menu()
         # Add items to the menu
-        cats = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                           text=_('Copy categories'),
-                           kind=wx.ITEM_CHECK)
+        cats = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                           text = _('Copy categories'),
+                           kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(cats)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyCats, cats)
         if self.action['desc'] == "copyCats":
             cats.Check(True)
         
-        attrb = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                            text=_('Duplicate attributes'),
-                            kind=wx.ITEM_CHECK)
+        attrb = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                            text = _('Duplicate attributes'),
+                            kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(attrb)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyAttrb, attrb)
         if self.action['desc'] == "copyAttrs":
@@ -995,8 +994,8 @@ class VDigitToolbar(AbstractToolbar):
                 self.parent.digit = None
         
         if not self.settingsDialog:
-            self.settingsDialog = VDigitSettingsDialog(parent=self.parent, title=_("Digitization settings"),
-                                                       style=wx.DEFAULT_DIALOG_STYLE)
+            self.settingsDialog = VDigitSettingsDialog(parent = self.parent, title = _("Digitization settings"),
+                                                       style = wx.DEFAULT_DIALOG_STYLE)
             self.settingsDialog.Show()
 
     def OnAdditionalToolMenu(self, event):
@@ -1004,73 +1003,73 @@ class VDigitToolbar(AbstractToolbar):
         point = wx.GetMousePosition()
         toolMenu = wx.Menu()
         # Add items to the menu
-        copy = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                           text=_('Copy features from (background) vector map'),
-                           kind=wx.ITEM_CHECK)
+        copy = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                           text = _('Copy features from (background) vector map'),
+                           kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(copy)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopy, copy)
         if self.action['desc'] == "copyLine":
             copy.Check(True)
         
-        flip = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                           text=_('Flip selected lines/boundaries'),
-                           kind=wx.ITEM_CHECK)
+        flip = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                           text = _('Flip selected lines/boundaries'),
+                           kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(flip)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnFlip, flip)
         if self.action['desc'] == "flipLine":
             flip.Check(True)
         
-        merge = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                            text=_('Merge selected lines/boundaries'),
-                            kind=wx.ITEM_CHECK)
+        merge = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                            text = _('Merge selected lines/boundaries'),
+                            kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(merge)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnMerge, merge)
         if self.action['desc'] == "mergeLine":
             merge.Check(True)
         
-        breakL = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                             text=_('Break selected lines/boundaries at intersection'),
-                             kind=wx.ITEM_CHECK)
+        breakL = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                             text = _('Break selected lines/boundaries at intersection'),
+                             kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(breakL)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnBreak, breakL)
         if self.action['desc'] == "breakLine":
             breakL.Check(True)
         
-        snap = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                           text=_('Snap selected lines/boundaries (only to nodes)'),
-                           kind=wx.ITEM_CHECK)
+        snap = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                           text = _('Snap selected lines/boundaries (only to nodes)'),
+                           kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(snap)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnSnap, snap)
         if self.action['desc'] == "snapLine":
             snap.Check(True)
         
-        connect = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                              text=_('Connect selected lines/boundaries'),
-                              kind=wx.ITEM_CHECK)
+        connect = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                              text = _('Connect selected lines/boundaries'),
+                              kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(connect)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnConnect, connect)
         if self.action['desc'] == "connectLine":
             connect.Check(True)
         
-        query = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                            text=_('Query features'),
-                            kind=wx.ITEM_CHECK)
+        query = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                            text = _('Query features'),
+                            kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(query)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnQuery, query)
         if self.action['desc'] == "queryLine":
             query.Check(True)
         
-        zbulk = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                            text=_('Z bulk-labeling of 3D lines'),
-                            kind=wx.ITEM_CHECK)
+        zbulk = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                            text = _('Z bulk-labeling of 3D lines'),
+                            kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(zbulk)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnZBulk, zbulk)
         if self.action['desc'] == "zbulkLine":
             zbulk.Check(True)
         
-        typeconv = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
-                               text=_('Feature type conversion'),
-                               kind=wx.ITEM_CHECK)
+        typeconv = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                               text = _('Feature type conversion'),
+                               kind = wx.ITEM_CHECK)
         toolMenu.AppendItem(typeconv)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnTypeConversion, typeconv)
         if self.action['desc'] == "typeConv":
@@ -1171,7 +1170,7 @@ class VDigitToolbar(AbstractToolbar):
             return
         
         Debug.msg(2, "Digittoolbar.OnQuery(): %s" % \
-                      UserSettings.Get(group='vdigit', key='query', subkey='selection'))
+                      UserSettings.Get(group = 'vdigit', key = 'query', subkey = 'selection'))
         self.action = { 'desc' : "queryLine",
                         'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
@@ -1179,9 +1178,9 @@ class VDigitToolbar(AbstractToolbar):
     def OnZBulk(self, event):
         """!Z bulk-labeling selected lines/boundaries"""
         if not self.parent.digit.driver.Is3D():
-            wx.MessageBox(parent=self.parent,
-                          message=_("Vector map is not 3D. Operation canceled."),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            wx.MessageBox(parent = self.parent,
+                          message = _("Vector map is not 3D. Operation canceled."),
+                          caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
             return
         
         if self.action['desc'] == 'zbulkLine': # select previous action
@@ -1223,7 +1222,7 @@ class VDigitToolbar(AbstractToolbar):
         """
         if event.GetSelection() == 0: # create new vector map layer
             if self.mapLayer:
-                openVectorMap = self.mapLayer.GetName(fullyQualified=False)['name']
+                openVectorMap = self.mapLayer.GetName(fullyQualified = False)['name']
             else:
                 openVectorMap = None
             mapName = gdialogs.CreateNewVector(self.parent,
@@ -1231,17 +1230,17 @@ class VDigitToolbar(AbstractToolbar):
                                                cmd = (('v.edit',
                                                        { 'tool' : 'create' },
                                                        'map')),
-                                               disableAdd=True)[0]
+                                               disableAdd = True)[0]
             if mapName:
                 # add layer to map layer tree
                 if self.layerTree:
-                    self.layerTree.AddLayer(ltype='vector',
-                                            lname=mapName,
-                                            lchecked=True,
-                                            lopacity=1.0,
-                                            lcmd=['d.vect', 'map=%s' % mapName])
+                    self.layerTree.AddLayer(ltype = 'vector',
+                                            lname = mapName,
+                                            lchecked = True,
+                                            lopacity = 1.0,
+                                            lcmd = ['d.vect', 'map=%s' % mapName])
                     
-                    vectLayers = self.UpdateListOfLayers(updateTool=True)
+                    vectLayers = self.UpdateListOfLayers(updateTool = True)
                     selection = vectLayers.index(mapName)
                 else:
                     pass # TODO (no Layer Manager)
@@ -1267,8 +1266,7 @@ class VDigitToolbar(AbstractToolbar):
         return True
     
     def StartEditing (self, mapLayer):
-        """
-        Start editing selected vector map layer.
+        """!Start editing selected vector map layer.
 
         @param mapLayer reference to MapLayer instance
         """
@@ -1280,10 +1278,10 @@ class VDigitToolbar(AbstractToolbar):
         
         # unset background map if needed
         if mapLayer:
-            if UserSettings.Get(group='vdigit', key='bgmap',
-                                subkey='value', internal=True) == mapLayer.GetName():
-                UserSettings.Set(group='vdigit', key='bgmap',
-                                 subkey='value', value='', internal=True)
+            if UserSettings.Get(group = 'vdigit', key = 'bgmap',
+                                subkey = 'value', internal = True) == mapLayer.GetName():
+                UserSettings.Set(group = 'vdigit', key = 'bgmap',
+                                 subkey = 'value', value = '', internal = True)
             
             self.parent.statusbar.SetStatusText(_("Please wait, "
                                                   "opening vector map <%s> for editing...") % \
@@ -1295,7 +1293,7 @@ class VDigitToolbar(AbstractToolbar):
         from vdigit import VDigit as VDigit
         # use vdigit's PseudoDC
         self.parent.MapWindow.DefinePseudoDC(vdigit = True)
-        self.parent.digit = VDigit(mapwindow=self.parent.MapWindow)
+        self.parent.digit = VDigit(mapwindow = self.parent.MapWindow)
         
         self.mapLayer = mapLayer
         
@@ -1327,9 +1325,9 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.digit.driver.SetDevice(self.parent.MapWindow.pdcVector)
 
         if not self.parent.MapWindow.resize:
-            self.parent.MapWindow.UpdateMap(render=True)
+            self.parent.MapWindow.UpdateMap(render = True)
         
-        opacity = mapLayer.GetOpacity(float=True)
+        opacity = mapLayer.GetOpacity(float = True)
         if opacity < 1.0:
             alpha = int(opacity * 255)
             self.parent.digit.driver.UpdateSettings(alpha)
@@ -1350,13 +1348,13 @@ class VDigitToolbar(AbstractToolbar):
         # save changes
         if self.mapLayer:
             Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % self.mapLayer.GetName())
-            if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
+            if UserSettings.Get(group = 'vdigit', key = 'saveOnExit', subkey = 'enabled') is False:
                 if self.parent.digit.GetUndoLevel() > -1:
-                    dlg = wx.MessageDialog(parent=self.parent,
-                                           message=_("Do you want to save changes "
+                    dlg = wx.MessageDialog(parent = self.parent,
+                                           message = _("Do you want to save changes "
                                                      "in vector map <%s>?") % self.mapLayer.GetName(),
-                                           caption=_("Save changes?"),
-                                           style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                                           caption = _("Save changes?"),
+                                           style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                     if dlg.ShowModal() == wx.ID_NO:
                         # revert changes
                         self.parent.digit.Undo(0)
@@ -1396,7 +1394,7 @@ class VDigitToolbar(AbstractToolbar):
         
         return True
     
-    def UpdateListOfLayers (self, updateTool=False):
+    def UpdateListOfLayers (self, updateTool = False):
         """!
         Update list of available vector map layers.
         This list consists only editable layers (in the current mapset)
@@ -1413,8 +1411,8 @@ class VDigitToolbar(AbstractToolbar):
         
         # select vector map layer in the current mapset
         layerNameList = []
-        self.layers = self.mapcontent.GetListOfLayers(l_type="vector",
-                                                      l_mapset=grass.gisenv()['MAPSET'])
+        self.layers = self.mapcontent.GetListOfLayers(l_type = "vector",
+                                                      l_mapset = grass.gisenv()['MAPSET'])
         for layer in self.layers:
             if not layer.name in layerNameList: # do not duplicate layer
                 layerNameList.append (layer.GetName())
@@ -1426,9 +1424,9 @@ class VDigitToolbar(AbstractToolbar):
                 value = layerNameSelected
 
             if not self.comboid:
-                self.combo = wx.ComboBox(self, id=wx.ID_ANY, value=value,
-                                         choices=[_('New vector map'), ] + layerNameList, size=(115, -1),
-                                         style=wx.CB_READONLY)
+                self.combo = wx.ComboBox(self, id = wx.ID_ANY, value = value,
+                                         choices = [_('New vector map'), ] + layerNameList, size = (115, -1),
+                                         style = wx.CB_READONLY)
                 self.comboid = self.InsertControl(0, self.combo)
                 self.parent.Bind(wx.EVT_COMBOBOX, self.OnSelectMap, self.comboid)
             else:
@@ -1616,7 +1614,7 @@ class NvizToolbar(AbstractToolbar):
             self.settingsDialog = NvizPreferencesDialog(parent = self.parent)
         self.settingsDialog.Show()
             
-    def OnExit (self, event=None):
+    def OnExit (self, event = None):
         """!Quit nviz tool (swith to 2D mode)"""
         # set default mouse settings
         self.parent.MapWindow.mouse['use'] = "pointer"
