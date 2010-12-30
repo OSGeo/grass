@@ -30,7 +30,6 @@
 double **G_alloc_matrix(int rows, int cols)
 {
     double **m;
-
     int i;
 
     m = (double **)G_calloc(rows, sizeof(double *));
@@ -70,14 +69,14 @@ int main(int argc, char *argv[])
     struct Option *input_row_wet, *input_col_wet;
     struct Option *input_row_dry, *input_col_dry;
     struct Flag *flag2, *flag3;
-	/********************************/
+    /********************************/
     double xp, yp;
     double xmin, ymin;
     double xmax, ymax;
     double stepx, stepy;
     double latitude, longitude;
     int rowDry, colDry, rowWet, colWet;
-	/********************************/
+    /********************************/
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -181,10 +180,15 @@ int main(int argc, char *argv[])
     ustar = atof(input_ustar->answer);
     ea = atof(input_ea->answer);
 
-    m_row_wet = atof(input_row_wet->answer);
-    m_col_wet = atof(input_col_wet->answer);
-    m_row_dry = atof(input_row_dry->answer);
-    m_col_dry = atof(input_col_dry->answer);
+    if(input_row_wet->answer&&
+    input_col_wet->answer&&
+    input_row_dry->answer&&
+    input_col_dry->answer){
+        m_row_wet = atof(input_row_wet->answer);
+        m_col_wet = atof(input_col_wet->answer);
+        m_row_dry = atof(input_row_dry->answer);
+        m_col_dry = atof(input_col_dry->answer);
+    }
     if ((!input_row_wet->answer || !input_col_wet->answer ||
 	 !input_row_dry->answer || !input_col_dry->answer) &&
 	!flag2->answer) {
@@ -196,10 +200,13 @@ int main(int argc, char *argv[])
 	G_message(_("Dry Pixel=> x:%f y:%f"), m_col_dry, m_row_dry);
     }
     else {
-	G_message(_("Wet Pixel=> row:%.0f col:%.0f"), m_row_wet, m_col_wet);
-	G_message(_("Dry Pixel=> row:%.0f col:%.0f"), m_row_dry, m_col_dry);
+        if(flag2->answer)
+	    G_message(_("Automatic mode selected"));
+	else {
+	    G_message(_("Wet Pixel=> row:%.0f col:%.0f"), m_row_wet, m_col_wet);
+	    G_message(_("Dry Pixel=> row:%.0f col:%.0f"), m_row_dry, m_col_dry);
+	}
     }
-
     /* check legal output name */
     if (G_legal_filename(h0) < 0)
 	G_fatal_error(_("<%s> is an illegal name"), h0);
@@ -238,9 +245,7 @@ int main(int argc, char *argv[])
     /* Allocate output buffer */
     /***************************************************/
     outrast = Rast_allocate_d_buf();
-
     outfd = Rast_open_new(h0, DCELL_TYPE);
-
     /***************************************************/
     /* Allocate memory for temporary images            */
     double **d_Roh, **d_Rah;
@@ -252,21 +257,15 @@ int main(int argc, char *argv[])
     /***************************************************/
 
     /* MANUAL T0DEM WET/DRY PIXELS */
-    DCELL d_Rn_dry;
-    DCELL d_g0_dry;
-    DCELL d_t0dem_dry;
-    DCELL d_t0dem_wet;
+    DCELL d_Rn_dry,d_g0_dry;
+    DCELL d_t0dem_dry,d_t0dem_wet;
 
     if (flag2->answer) {
 	/* Process tempk min / max pixels */
 	/* Internal use only */
-	DCELL d_Rn_wet;
-	DCELL d_g0_wet;
-	DCELL d_Rn;
-	DCELL d_g0;
-	DCELL d_h0;
-	DCELL t0dem_min;
-	DCELL t0dem_max;
+	DCELL d_Rn_wet,d_g0_wet;
+	DCELL d_Rn,d_g0,d_h0;
+	DCELL t0dem_min,t0dem_max;
         /*********************/
 	for (row = 0; row < nrows; row++) {
 	    DCELL d_t0dem;
@@ -325,6 +324,7 @@ int main(int argc, char *argv[])
 	G_message("h0_dry=%f", d_Rn_dry - d_g0_dry);
     }/* END OF FLAG2 */
 
+    G_message("Passed here");
 
     /* MANUAL T0DEM WET/DRY PIXELS */
     /*DRY PIXEL */
@@ -375,10 +375,8 @@ int main(int argc, char *argv[])
 
     /* INITIALIZATION */
     for (row = 0; row < nrows; row++) {
-	DCELL d_t0dem;
-	DCELL d_z0m;
-	DCELL d_rah1;
-	DCELL d_roh1;
+	DCELL d_t0dem,d_z0m;
+	DCELL d_rah1,d_roh1;
 	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
@@ -430,16 +428,9 @@ int main(int argc, char *argv[])
 
     /* ITERATION 1 */
     for (row = 0; row < nrows; row++) {
-	DCELL d_t0dem;
-	DCELL d_z0m;
-	DCELL d_h1;
-	DCELL d_rah1;
-	DCELL d_rah2;
-	DCELL d_roh1;
-	DCELL d_L;
-	DCELL d_x;
-	DCELL d_psih;
-	DCELL d_psim;
+	DCELL d_t0dem,d_z0m;
+	DCELL d_h1,d_rah1,d_rah2,d_roh1;
+	DCELL d_L,d_x,d_psih,d_psim;
 	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
@@ -455,12 +446,10 @@ int main(int argc, char *argv[])
 		/* do nothing */
 	    }
 	    else {
-		if (d_rah1 < 1.0) {
+		if (d_rah1 < 1.0) 
 		    d_h1 = 0.0;
-		}
-		else {
+		else 
 		    d_h1 = (1004 * d_roh1) * (a * d_t0dem + b) / d_rah1;
-		}
 		d_L =-1004*d_roh1*pow(ustar,3)*d_t0dem/(d_h1*9.81*0.41);
 		d_x = pow((1-16*(5/d_L)),0.25);
 		d_psim =2*log((1+d_x)/2)+log((1+pow(d_x,2))/2)-2*atan(d_x)+0.5*M_PI;
