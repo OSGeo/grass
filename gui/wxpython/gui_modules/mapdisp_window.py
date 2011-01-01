@@ -42,7 +42,6 @@ from vdigit import GV_LINES as VDigit_Lines_Type
 from vdigit import VDigitCategoryDialog
 from vdigit import VDigitZBulkDialog
 from vdigit import VDigitDuplicatesDialog
-from vdigit import PseudoDC as VDigitPseudoDC
 
 class MapWindow(object):
     """!Abstract map window class
@@ -303,44 +302,17 @@ class BufferedWindow(MapWindow, wx.Window):
         self.dragid   = -1
         self.lastpos  = (0, 0)
 
-    def DefinePseudoDC(self, vdigit = False):
-        """!Define PseudoDC class to use
-
-        @vdigit True to use PseudoDC from vdigit
+    def DefinePseudoDC(self):
+        """!Define PseudoDC objects to use
         """
         # create PseudoDC used for background map, map decorations like scales and legends
-        self.pdc = self.PseudoDC(vdigit)
+        self.pdc = wx.PseudoDC()
         # used for digitization tool
         self.pdcVector = None
         # decorations (region box, etc.)
-        self.pdcDec = self.PseudoDC(vdigit)
+        self.pdcDec = wx.PseudoDC()
         # pseudoDC for temporal objects (select box, measurement tool, etc.)
-        self.pdcTmp = self.PseudoDC(vdigit)
-        
-    def PseudoDC(self, vdigit = False):
-        """!Create PseudoDC instance"""
-        if vdigit:
-            PseudoDC = VDigitPseudoDC
-        else:
-            PseudoDC = wx.PseudoDC
-        
-        return PseudoDC()
-    
-    def CheckPseudoDC(self):
-        """!Try to draw background
-        
-        @return True on success
-        @return False on failure
-        """
-        try:
-            self.pdc.BeginDrawing()
-            self.pdc.SetBackground(wx.Brush(self.GetBackgroundColour()))
-            self.pdc.BeginDrawing()
-        except StandardError, e:
-            traceback.print_exc(file = sys.stderr)
-            return False
-        
-        return True
+        self.pdcTmp = wx.PseudoDC()
     
     def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0]):
         """!Draws map and overlay decorations
@@ -808,9 +780,9 @@ class BufferedWindow(MapWindow, wx.Window):
         if renderVector and digitToolbar and \
                 digitToolbar.GetLayer():
             # set region
-            self.parent.digit.driver.UpdateRegion()
+            self.parent.digit.GetDisplay().UpdateRegion()
             # re-calculate threshold for digitization tool
-            self.parent.digit.driver.GetThreshold()
+            # self.parent.digit.driver.GetThreshold()
             # draw map
             if self.pdcVector:
                 self.pdcVector.Clear()
@@ -821,7 +793,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 item = None
             
             if item and self.tree.IsItemChecked(item):
-                self.parent.digit.driver.DrawMap()
+                self.parent.digit.GetDisplay().DrawMap()
 
             # translate tmp objects (pointer position)
             if digitToolbar.GetAction() == 'moveLine':
@@ -906,7 +878,7 @@ class BufferedWindow(MapWindow, wx.Window):
         else:
             self.parent.statusbarWin['mask'].SetLabel('')
         
-        Debug.msg (2, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
+        Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
                    (render, renderVector, (stop-start)))
         
         return True
@@ -2334,10 +2306,10 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def OnMiddleDown(self, event):
-        """!
-        Middle mouse button pressed
+        """!Middle mouse button pressed
         """
-        self.mouse['begin'] = event.GetPositionTuple()[:]
+        if event:
+            self.mouse['begin'] = event.GetPositionTuple()[:]
         
         digitToolbar = self.parent.toolbars['vdigit']
         # digitization tool
@@ -2751,7 +2723,7 @@ class BufferedWindow(MapWindow, wx.Window):
             elif l.type == 'vector':
                 digitToolbar = self.parent.toolbars['vdigit']
                 if digitToolbar and digitToolbar.GetLayer() == l:
-                    w, s, b, e, n, t = self.parent.digit.driver.GetMapBoundingBox()
+                    w, s, b, e, n, t = self.parent.digit.GetDisplay().GetMapBoundingBox()
                     self.Map.GetRegion(n = n, s = s, w = w, e = e,
                                        update = True)
                     updated = True

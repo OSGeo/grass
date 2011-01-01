@@ -40,4 +40,6 @@ all = [
     "vdigit.py",
     "workspace.py",
     "wxnviz.py",
+    "wxvdriver.py",
+    "wxvdigit.py",
 ]
