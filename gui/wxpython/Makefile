@@ -1,8 +1,7 @@
 MODULE_TOPDIR = ../..
 
-SUBDIRS = docs vdigit
+SUBDIRS = docs
 EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc
-CLEAN_SUBDIRS = vdigit
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
@@ -13,7 +12,7 @@ ETCDIR = $(ETC)/gui/wxpython
 SRCFILES := $(wildcard scripts/* compat/* gui_modules/* icons/*.* icons/silk/* images/* xml/*) gis_set.py gis_set_error.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
-DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat gui_modules icons icons/silk images scripts vdigit xml)
+DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat gui_modules icons icons/silk images scripts xml)
 
 default: $(DSTFILES) menustrings.py
 	$(MAKE) parsubdirs

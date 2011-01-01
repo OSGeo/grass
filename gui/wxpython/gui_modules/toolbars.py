@@ -35,8 +35,7 @@ import wx
 import globalvar
 import gcmd
 import gdialogs
-import vdigit
-from vdigit import VDigitSettingsDialog, haveVDigit
+from vdigit import VDigitSettingsDialog, haveVDigit, VDigit
 from debug import Debug
 from preferences import globalSettings as UserSettings
 from nviz import haveNviz
@@ -193,6 +192,7 @@ class MapToolbar(AbstractToolbar):
                            'In the meantime you can use "NVIZ" from the File menu.'), wrap = 60)
             
             self.toolId['3d'] = -1
+
         if haveVDigit:
             choices.append(_('Digitize'))
             if self.toolId['3d'] > -1:
@@ -787,7 +787,7 @@ class VDigitToolbar(AbstractToolbar):
         if self.action['id'] != id:
             self.parent.MapWindow.ClearLines(pdc = self.parent.MapWindow.pdcTmp)
             if self.parent.digit and \
-                    len(self.parent.digit.driver.GetSelected()) > 0:
+                    len(self.parent.digit.GetDisplay().GetSelected()) > 0:
                 # cancel action
                 self.parent.MapWindow.OnMiddleDown(None)
         
@@ -986,10 +986,8 @@ class VDigitToolbar(AbstractToolbar):
     def OnSettings(self, event):
         """!Show settings dialog"""
         if self.parent.digit is None:
-            reload(vdigit)
-            from vdigit import VDigit as VDigit
             try:
-                self.parent.digit = VDigit(mapwindow=self.parent.MapWindow)
+                self.parent.digit = VDigit(mapwindow = self.parent.MapWindow)
             except SystemExit:
                 self.parent.digit = None
         
@@ -1268,13 +1266,13 @@ class VDigitToolbar(AbstractToolbar):
     def StartEditing (self, mapLayer):
         """!Start editing selected vector map layer.
 
-        @param mapLayer reference to MapLayer instance
+        @param mapLayer MapLayer to be edited
         """
         # deactive layer
         self.mapcontent.ChangeLayerActive(mapLayer, False)
         
         # clean map canvas
-        ### self.parent.MapWindow.EraseMap()
+        self.parent.MapWindow.EraseMap()
         
         # unset background map if needed
         if mapLayer:
@@ -1284,25 +1282,17 @@ class VDigitToolbar(AbstractToolbar):
                                  subkey = 'value', value = '', internal = True)
             
             self.parent.statusbar.SetStatusText(_("Please wait, "
-                                                  "opening vector map <%s> for editing...") % \
-                                                    mapLayer.GetName(),
+                                                  "opening vector map <%s> for editing...") % mapLayer.GetName(),
                                                 0)
-        
-        # reload vdigit module
-        reload(vdigit)
-        from vdigit import VDigit as VDigit
-        # use vdigit's PseudoDC
-        self.parent.MapWindow.DefinePseudoDC(vdigit = True)
+
+        self.parent.MapWindow.pdcVector = wx.PseudoDC()
         self.parent.digit = VDigit(mapwindow = self.parent.MapWindow)
         
         self.mapLayer = mapLayer
         
         # open vector map
         try:
-            if not self.parent.MapWindow.CheckPseudoDC():
-                raise gcmd.GException(_("Unable to initialize display driver of vector "
-                                        "digitizer. See 'Command output' for details."))
-            self.parent.digit.SetMapName(mapLayer.GetName())
+            self.parent.digit.OpenMap(mapLayer.GetName())
         except gcmd.GException, e:
             self.mapLayer = None
             self.StopEditing()
@@ -1320,10 +1310,6 @@ class VDigitToolbar(AbstractToolbar):
         if self.parent.MapWindow.mouse['use'] == 'pointer':
             self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
         
-        # create pseudoDC for drawing the map
-        self.parent.MapWindow.pdcVector = vdigit.PseudoDC()
-        self.parent.digit.driver.SetDevice(self.parent.MapWindow.pdcVector)
-
         if not self.parent.MapWindow.resize:
             self.parent.MapWindow.UpdateMap(render = True)
         
@@ -1340,9 +1326,6 @@ class VDigitToolbar(AbstractToolbar):
         @return True on success
         @return False on failure
         """
-        # use wx's PseudoDC
-        self.parent.MapWindow.DefinePseudoDC(vdigit = False)
-        
         self.combo.SetValue (_('Select vector map'))
         
         # save changes
@@ -1364,9 +1347,9 @@ class VDigitToolbar(AbstractToolbar):
                                                   "closing and rebuilding topology of "
                                                   "vector map <%s>...") % self.mapLayer.GetName(),
                                                 0)
-        
-            self.parent.digit.SetMapName(None) # -> close map
-        
+            
+            self.parent.digit.CloseMap()
+            
             # re-active layer 
             item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
             if item and self.parent.tree.IsItemChecked(item):
@@ -1374,10 +1357,7 @@ class VDigitToolbar(AbstractToolbar):
         
         # change cursor
         self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
-        
-        # disable pseudodc for vector map layer
         self.parent.MapWindow.pdcVector = None
-        self.parent.digit.driver.SetDevice(None)
         
         # close dialogs
         for dialog in ('attributes', 'category'):
