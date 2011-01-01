@@ -15,7 +15,7 @@
 
 #include <grass/vedit.h>
 
-struct _region
+static struct _region
 {
     double center_easting;
     double center_northing;
@@ -26,7 +26,7 @@ struct _region
     double map_res;
 } region;
 
-struct _state
+static struct _state
 {
     int nitems_alloc;
 
