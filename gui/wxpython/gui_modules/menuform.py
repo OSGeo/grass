@@ -855,12 +855,13 @@ class mainFrame(wx.Frame):
                              flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                              border = 5)
         
-        closeBox = False
+        hasNew = False
         for p in self.task.params:
             if p.get('age', 'old') ==  'new':
-                closeBox = True
+                hasNew = True
+                break
         
-        if self.get_dcmd is None and closeBox:
+        if self.get_dcmd is None and hasNew:
             # close dialog when command is terminated
             self.closebox = wx.CheckBox(parent = self.panel,
                                         label = _('Close dialog on finish'), style = wx.NO_BORDER)
