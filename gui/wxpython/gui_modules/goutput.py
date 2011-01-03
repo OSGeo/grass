@@ -809,6 +809,7 @@ class GMConsole(wx.SplitterWindow):
             
             if hasattr(dialog, "get_dcmd") and \
                     dialog.get_dcmd is None and \
+                    hasattr(dialog, "closebox") and \
                     dialog.closebox.IsChecked() and \
                     (event.returncode == 0 or event.aborted):
                 self.cmd_output.Update()
