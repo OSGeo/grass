@@ -66,7 +66,7 @@ class GError:
             exception = traceback.format_exc()
             reason = exception.splitlines()[-1].split(':', 1)[-1].strip()
         
-        if Debug.get_level() > 0 and exc_traceback:
+        if Debug.GetLevel() > 0 and exc_traceback:
             sys.stderr.write(exception)
         
         if exc_traceback:

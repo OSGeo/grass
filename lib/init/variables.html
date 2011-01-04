@@ -406,7 +406,7 @@ detailed list of the variables.
 <h2>List of selected GRASS gisenv variables</h2>
 
 <blockquote>
-  [ Use <em>g.gisenv</em> to get/set/unset/change them ]
+  [ Use <em><a href="g.gisenv.html">g.gisenv</a></em> to get/set/unset/change them ]
 </blockquote>
 
 <dl>
@@ -414,9 +414,13 @@ detailed list of the variables.
   <dt>DEBUG</dt>
   <dd>[entire GRASS]<br>
     sets level of debug message output (0: no debug messages)
-    <div class="code"><pre>
-	g.gisenv set=DEBUG=0
-    </pre></div>
+<div class="code"><pre>
+g.gisenv set=DEBUG=0
+</pre></div>
+
+  <dt>WX_DEBUG</dt>
+  <dd>[wxGUI]<br>
+    sets level of debug message output for <em><a href="wxGUI.html">wxGUI</a></em> (0: no debug messages, 1-5 debug levels)
   
   <dt>GISDBASE</dt>
   <dd>initial database</dd>

@@ -11,7 +11,7 @@ from debug import Debug as Debug
 Debug.msg (3, 'debug message')
 @endcode
          
-COPYRIGHT: (C) 2007-2009 by the GRASS Development Team
+COPYRIGHT: (C) 2007-2009, 2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -23,47 +23,47 @@ import sys
 
 import globalvar
 
+import grass.script as grass
+
 class DebugMsg:
-    """!
-    wxGUI debugging
+    """!wxGUI debugging
 
     @code
-    export GRASS_WX_DEBUG=[0-5]
+    g.gisenv set=WX_DEBUG=[0-5]
     @endcode
     """
     def __init__(self):
         # default level
         self.debuglevel = 0
-        # update level
-        self._update_level()
-
-    def _update_level(self):
-        debug = os.getenv("GRASS_WX_DEBUG")
-        if debug is not None:
-            try:
-                # only GUI debug messages [GUI:level]
-                level = int (debug[-1])
-            except:
-                level = self.debuglevel
-                
-            if self.debuglevel != level:
-                self.debuglevel = level
         
-    def msg (self, level, message, *args):
-        self._update_level()
+        self.SetLevel()
+
+    def SetLevel(self):
+        """!Initialize gui debug level
+        """
+        self.debuglevel = int(grass.gisenv().get('WX_DEBUG', 0))
+        
+    def msg(self, level, message, *args):
+        """!Print debug message
+
+        @param level debug level (0-5)
+        @param message message to be printed
+        @param *args formatting params
+        """
+        # self.SetLevel()
         if self.debuglevel > 0 and level > 0 and level <= self.debuglevel:
             if args:
-                print >> sys.stderr, "GUI D%d/%d: " % (level, self.debuglevel) + \
-                    message % args
+                sys.stderr.write("GUI D%d/%d: " % (level, self.debuglevel) + \
+                    message % args + os.linesep)
             else:
-                print >> sys.stderr, "GUI D%d/%d: " % (level, self.debuglevel) + \
-                    message
+                sys.stderr.write("GUI D%d/%d: " % (level, self.debuglevel) + \
+                                     message + os.linesep)
             sys.stderr.flush() # force flush (required for MS Windows)
         
-    def get_level(self):
+    def GetLevel(self):
         """!Return current GUI debug level"""
         return self.debuglevel
-    
+
 # Debug instance
 Debug = DebugMsg()
 
@@ -75,4 +75,3 @@ if __name__ == "__main__":
                 
     for level in range (4):
         Debug.msg (level, "message level=%d" % level)
-    
