@@ -1095,7 +1095,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 	    Map->plus.Spidx_file = 1;
 	    dig_spidx_init(Plus);
 	}
-	G_debug(0, "%s based spatial index",
+	G_debug(1, "%s based spatial index",
 	           Map->plus.Spidx_file == 0 ? "Memory" : "File");
 
 	if (mode == 1) {
