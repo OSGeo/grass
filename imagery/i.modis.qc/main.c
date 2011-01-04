@@ -106,7 +106,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("QC"));
     G_add_keyword(_("Quality Control"));
-    G_add_keyword(_("surface reflectance"));
+    G_add_keyword(_("Surface Reflectance"));
+    G_add_keyword(_("Land Surface Temperature"));
+    G_add_keyword(_("Vegetation"));
     G_add_keyword(_("Modis"));
     module->description =
 	_("Extract quality control parameters from Modis QC layers");
@@ -123,7 +125,7 @@ int main(int argc, char *argv[])
                             "mod11A1;LST 1Km daily (Day/Night);"
                             "mod11A2;LST 1Km 8-days (Day/Night);"
                             "mod13A2;VI 1Km 16-days;");
-    input->answer = "mod09Q1";
+    input->answer = "mod13A2";
 
     input1 = G_define_option();
     input1->key = "qcname";
@@ -135,7 +137,7 @@ int main(int argc, char *argv[])
                             "cloud;mod09: Cloud State;"
                             "data_quality;mod09: Band-Wise Data Quality Flag;"
                             "diff_orbit_from_500m;mod09: 250m Band is at Different Orbit than 500m;"
-                            "modland_qa_bits;mod09: MODIS Land General Quality Assessment;"
+                            "modland_qa;mod09: MODIS Land General Quality Assessment;"
                             "mandatory_qa_11A1;mod11A1: MODIS Land General Quality Assessment;"
                             "data_quality_flag_11A1;mod11A1: Detailed Quality Indications;"
                             "emis_error_11A1;mod11A1: Average Emissivity Error Classes;"
@@ -155,7 +157,7 @@ int main(int argc, char *argv[])
                             "land_water;mod09A1s: StateQA Internal Snow Mask"
                             "mod35_snow_ice;mod09A1s: StateQA Internal Snow Mask"
                             "pixel_adjacent_to_cloud;mod09A1s: StateQA Internal Snow Mask"
-			    "modland_qa_bits;mod13A2: MODIS Land General Quality Assessment"
+			    "modland_qa;mod13A2: MODIS Land General Quality Assessment"
 			    "vi_usefulness;mod13A2: Quality estimation of the pixel"
 			    "aerosol_quantity:mod13A2: Quantity range of Aerosol"
 			    "pixel_adjacent_to_cloud:mod13A2: if pixel is a cloud neighbour"
@@ -164,11 +166,11 @@ int main(int argc, char *argv[])
 			    "land_water: separate land from various water objects"
 			    "possible_snow_ice:mod13A2: if snow/ice present in pixel"
 			    "possible_shadow:mod13A2: if shadow is present in pixel");
-    input1->answer = "modland_qa_bits";
+    input1->answer = "modland_qa";
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->description =
-	_("Name of the surface reflectance QC layer [bit array]");
+	_("Name of the input QC layer [bit array]");
 
     input_band = G_define_option();
     input_band->key = "band";
@@ -275,7 +277,7 @@ int main(int argc, char *argv[])
 		Rast_set_c_null_value(&outrast[col], 1);
             else if (!strcmp(product, "mod09A1"))
             {
-	        if (!strcmp(qcflag, "modland_qa_bits")) 
+	        if (!strcmp(qcflag, "modland_qa")) 
 		/*calculate modland QA bits extraction  */ 
 		    c = mod09A1a(c);
 	        if (!strcmp(qcflag, "data_quality"))
@@ -290,7 +292,7 @@ int main(int argc, char *argv[])
 	    }
             else if (!strcmp(product, "mod09Q1"))
             {
-	        if (!strcmp(qcflag, "modland_qa_bits")) 
+	        if (!strcmp(qcflag, "modland_qa")) 
 		/*calculate modland QA bits extraction  */ 
 		    c = mod09Q1a(c);
 	        if (!strcmp(qcflag, "cloud"))
