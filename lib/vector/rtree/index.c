@@ -68,9 +68,14 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
 	for (i = 0; i < MAXLEVEL; i++) {
 	    new_rtree->nb[i][0].dirty = 0;
 	    new_rtree->nb[i][1].dirty = 0;
+	    new_rtree->nb[i][2].dirty = 0;
 	    new_rtree->nb[i][0].pos = -1;
 	    new_rtree->nb[i][1].pos = -1;
-	    new_rtree->mru[i] = 0;
+	    new_rtree->nb[i][2].pos = -1;
+	    /* usage order */
+	    new_rtree->used[i][0] = 2;
+	    new_rtree->used[i][1] = 1;
+	    new_rtree->used[i][2] = 0;
 	}
 
 	/* write empty root node */
@@ -78,7 +83,8 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
 	RTreeWriteNode(n, new_rtree);
 	new_rtree->nb[0][0].n = *n;
 	new_rtree->nb[0][0].pos = rootpos;
-	new_rtree->mru[0] = 0;
+	new_rtree->used[0][0] = 0;
+	new_rtree->used[0][2] = 2;
 	RTreeFreeNode(n);
 
 	new_rtree->insert_rect = RTreeInsertRectF;

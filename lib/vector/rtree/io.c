@@ -39,10 +39,20 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
     }
     t->free_nodes.pos[t->free_nodes.avail++] = pos;
     
-    which = pos == t->nb[level][1].pos;
+    which = (pos == t->nb[level][2].pos ? 2 : pos == t->nb[level][1].pos);
     t->nb[level][which].pos = -1;
     t->nb[level][which].dirty = 0;
-    t->mru[level] = which == 0;
+    
+    /* make it lru */
+    if (t->used[level][0] == which) {
+	t->used[level][0] = t->used[level][1];
+	t->used[level][1] = t->used[level][2];
+	t->used[level][2] = which; 
+    }
+    else if (t->used[level][1] == which) {
+	t->used[level][1] = t->used[level][2];
+	t->used[level][2] = which; 
+    }
 }
 
 /* looks for free node position, sets file pointer, returns position */
@@ -67,14 +77,11 @@ size_t RTreeReadNode(struct Node *n, off_t nodepos, struct RTree *t)
 /* get node from buffer or file */
 void RTreeGetNode(struct Node *n, off_t nodepos, int level, struct RTree *t)
 {
-    int which = nodepos == t->nb[level][1].pos;
+    int which = (nodepos == t->nb[level][2].pos ? 2 : nodepos == t->nb[level][1].pos);
 
     if (t->nb[level][which].pos != nodepos) {
-	/* which is 0 */
-	/* replace least recently used */
-	/* least recently used is faster than most recently used */
-	if (t->nb[level][which].pos != -1)
-	    which = t->mru[level] == 0;
+	/* replace least recently used (fastest method of lru, pseudo-lru, mru) */
+	which = t->used[level][2];
 	/* rewrite node in buffer */
 	if (t->nb[level][which].dirty) {
 	    RTreeRewriteNode(&(t->nb[level][which].n), t->nb[level][which].pos, t);
@@ -83,7 +90,16 @@ void RTreeGetNode(struct Node *n, off_t nodepos, int level, struct RTree *t)
 	RTreeReadNode(&(t->nb[level][which].n), nodepos, t);
 	t->nb[level][which].pos = nodepos;
     }
-    t->mru[level] = which;
+    /* make it mru */
+    if (t->used[level][2] == which) {
+	t->used[level][2] = t->used[level][1];
+	t->used[level][1] = t->used[level][0];
+	t->used[level][0] = which; 
+    }
+    else if (t->used[level][1] == which) {
+	t->used[level][1] = t->used[level][0];
+	t->used[level][0] = which; 
+    }
     *n = t->nb[level][which].n;
 }
 
@@ -104,21 +120,41 @@ size_t RTreeRewriteNode(struct Node *n, off_t nodepos, struct RTree *t)
 /* update node in buffer */
 void RTreePutNode(struct Node *n, off_t nodepos, struct RTree *t)
 {
-    int which = nodepos == t->nb[n->level][1].pos;
+    int which = (nodepos == t->nb[n->level][2].pos ? 2 : nodepos == t->nb[n->level][1].pos);
     
     t->nb[n->level][which].n = *n;
     t->nb[n->level][which].dirty = 1;
-    t->mru[n->level] = which;
+
+    /* make it mru */
+    if (t->used[n->level][2] == which) {
+	t->used[n->level][2] = t->used[n->level][1];
+	t->used[n->level][1] = t->used[n->level][0];
+	t->used[n->level][0] = which; 
+    }
+    else if (t->used[n->level][1] == which) {
+	t->used[n->level][1] = t->used[n->level][0];
+	t->used[n->level][0] = which; 
+    }
 }
 
 /* update rectangle */
 void RTreeUpdateRect(struct Rect *r, struct Node *n, off_t nodepos, int b, struct RTree *t)
 {
-    int which = nodepos == t->nb[n->level][1].pos;
+    int which = (nodepos == t->nb[n->level][2].pos ? 2 : nodepos == t->nb[n->level][1].pos);
     
     t->nb[n->level][which].n.branch[b].rect = n->branch[b].rect = *r;
     t->nb[n->level][which].dirty = 1;
-    t->mru[n->level] = which;
+
+    /* make it mru */
+    if (t->used[n->level][2] == which) {
+	t->used[n->level][2] = t->used[n->level][1];
+	t->used[n->level][1] = t->used[n->level][0];
+	t->used[n->level][0] = which; 
+    }
+    else if (t->used[n->level][1] == which) {
+	t->used[n->level][1] = t->used[n->level][0];
+	t->used[n->level][0] = which; 
+    }
 }
 
 /* flush pending changes to file */
@@ -131,5 +167,7 @@ void RTreeFlushBuffer(struct RTree *t)
 	    RTreeRewriteNode(&(t->nb[i][0].n), t->nb[i][0].pos, t);
 	if (t->nb[i][1].dirty)
 	    RTreeRewriteNode(&(t->nb[i][1].n), t->nb[i][1].pos, t);
+	if (t->nb[i][2].dirty)
+	    RTreeRewriteNode(&(t->nb[i][2].n), t->nb[i][2].pos, t);
     }
 }

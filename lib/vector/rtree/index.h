@@ -129,16 +129,19 @@ struct RTree
         off_t *pos;         /* array of available positions */
     } free_nodes;
 
-    /* node buffer for file-based index, two nodes per level
-     * more than two nodes per level would require too complex cache management:
-     * lru or pseudo-lru replacement, searching for buffered nodes */
+    /* node buffer for file-based index, three nodes per level
+     * more than three nodes per level would require too complex cache management */
     struct NodeBuffer
     {
 	struct Node n;	    /* buffered node */
 	off_t pos;	    /* file position of buffered node */
 	char dirty;         /* node in buffer was modified */
-    } nb[MAXLEVEL][2];
-    char mru[MAXLEVEL];     /* most recently used buffered node per level */
+    } nb[MAXLEVEL][3];
+
+    /* usage order of buffered nodes per level
+     * used[level][0] = most recently used
+     * used[level][2] = least recently used */
+    char used[MAXLEVEL][3];
 
     /* insert, delete, search */
     rt_insert_fn *insert_rect;
