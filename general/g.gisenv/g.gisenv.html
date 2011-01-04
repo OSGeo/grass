@@ -1,208 +1,173 @@
 <h2>DESCRIPTION</h2>
 
-When a user runs GRASS, certain variables are set
-specifying the GRASS data base, location, mapset,
-peripheral device drivers, etc., being used in the current
-GRASS session.  These variable name settings are recognized
-as long as the user is running a GRASS session.
-
+When a user runs GRASS, certain variables are set specifying the GRASS
+data base, location, mapset, peripheral device drivers, etc., being
+used in the current GRASS session. These variable name settings are
+recognized as long as the user is running a GRASS session.
 
 <h2>OPTIONS</h2>
 
-No prompts are given to the user when running
-<em>g.gisenv</em>.  If run without arguments,
-<em>g.gisenv</em> lists all of the user's current GRASS
-variable settings.  Results are sent to standard output,
+No prompts are given to the user when running <em>g.gisenv</em>. If
+run without arguments, <em>g.gisenv</em> lists all of the user's
+current GRASS variable settings. Results are sent to standard output,
 and may look like this:
 
-
 <div class="code"><pre>
-GISDBASE=/usr/grass5/data
+GISDBASE=/opt/grassdata/
 LOCATION_NAME=spearfish
 MAPSET=PERMANENT
 </pre></div>
 
-In this example, the full path name of the user's current
-location (i.e., <kbd>$LOCATION_NAME</kbd>) is
-<kbd>/usr/grass5/data/spearfish</kbd>, and the full path
-name of the user's current mapset (i.e.,
-<kbd>$MAPSET</kbd>) is
-<kbd>/usr/grass5/data/spearfish/PERMANENT</kbd>.
-
+In this example, the full path name of the user's current location
+(i.e., <tt>$LOCATION_NAME</tt>) is
+<tt>/opt/grassdata/spearfish</tt>, and the full path name of the
+user's current mapset (i.e., <tt>$MAPSET</tt>)
+is <tt>/opt/grassdata/spearfish/PERMANENT</tt>.
 
 <p>
-
-If the user specifies a <em>variable_name</em> on the
-command line (e.g., <b>g.gisenv MAPSET</b>), only the value
-for that particular GRASS variable is output to standard
-output.  Possible variable names depend on the user's
-system, see <a href=variables.html>variables list</a> for details.
-
+If the user specifies a <em>variable_name</em> on the command line
+(e.g., <tt>g.gisenv MAPSET</tt>), only the value for that particular
+GRASS variable is output to standard output. Possible variable names
+depend on the user's system, see <em><a href="variables.html">variables
+list</a></em> for details.
 
 <p>
-
-While other variables may be associated with each GRASS session
-(e.g., DIGITIZER, PAINTER, DISPLAY, and other variables), those stated
-below are essential.
-
+While other variables may be associated with each GRASS session (e.g.,
+GRASS_GUI, GIS_LOCK, and other variables), those stated below
+are essential.
 
 <dl>
 <dt><em>GISDBASE</em>
-
-<dd>The <kbd>$GISDBASE</kbd> is a directory in which all
-users' GRASS data are stored.  Within the
-
-<kbd>$GISDBASE</kbd>, data are segregated into
-subdirectories (called "locations") based on the map
-coordinate system used and the geographic extent of the
-data.  Each "location" directory itself contains
-subdirectories called "mapsets"; each "mapset" stores "data
-base elements" -- the directories (e.g., the
-<kbd>cell</kbd>, <kbd>cellhd</kbd>, <kbd>dig</kbd>, etc.,
-directories) in which GRASS data files are actually
-stored.
+<dd>The <tt>$GISDBASE</tt> is a directory in which all users' GRASS
+data are stored. Within the <tt>$GISDBASE</tt>, data are segregated
+into subdirectories (called &quot;locations&quot;) based on the map
+coordinate system used and the geographic extent of the data.  Each
+&quot;location&quot; directory itself contains subdirectories called
+&quot;mapsets&quot;; each &quot;mapset&quot; stores &quot;data base
+elements&quot; - the directories (e.g.,
+the <tt>cell</tt>, <tt>cellhd</tt>, <tt>vector</tt>, etc., directories)
+in which GRASS data files are actually stored.
 
 <dt><em>LOCATION_NAME</em>
 
-<dd>The user must choose to work with the data under a single
-GRASS location within any given GRASS session; this
-location is then called the <em>current GRASS
-location</em>, and is specified by the variable
-<kbd>$LOCATION_NAME</kbd>.  The <kbd>$LOCATION_NAME</kbd>
-
-is the GRASS data base location whose data will be affected
-by any GRASS commands issued during the user's current
-GRASS session, and is a subdirectory of the current
-<kbd>$GISDBASE</kbd>.  Each "location" directory can
-contain multiple "mapset" directories (including the
-special mapset <kbd>PERMANENT</kbd>).  Maps stored under
-the same GRASS <kbd>LOCATION_NAME</kbd> (and/or within the
-same <kbd>MAPSET</kbd>) must use the same coordinate system
-and typically fall within the boundaries of the same
-geographic region (aka, "location").
-
+<dd>The user must choose to work with the data under a single GRASS
+location within any given GRASS session; this location is then called
+the <em>current GRASS location</em>, and is specified by the variable
+<tt>$LOCATION_NAME</tt>. The <tt>$LOCATION_NAME</tt> is the GRASS data
+base location whose data will be affected by any GRASS commands issued
+during the user's current GRASS session, and is a subdirectory of the
+current <tt>$GISDBASE</tt>. Each &quot;location&quot; directory can
+contain multiple &quot;mapset&quot; directories (including the special
+mapset <tt>PERMANENT</tt>).  Maps stored under the same
+GRASS <tt>$LOCATION_NAME</tt> (and/or within the same <tt>MAPSET</tt>)
+must use the same coordinate system and typically fall within the
+boundaries of the same geographic region (aka, &quot;location&quot;).
 
 <dt><em>MAPSET</em>
 
-<dd>Each "mapset" contains a set of maps relevant to the
-<kbd>LOCATION_NAME</kbd> directory in which it appears.
-Each <kbd>LOCATION_NAME</kbd> can contain multiple
-mapsets.  (Mapsets which fall under the same
-
-<kbd>LOCATION_NAME</kbd> all contain data geographically
-relevant to the <kbd>LOCATION_NAME</kbd>, and all store
-data in the same map coordinate system.  Frequently, maps
-are placed into different mapsets to distinguish file
-ownership -- e.g., each user might have his own mapset,
-storing any maps that he has created and/or are relevant to
-his work.) During each GRASS session, the user must choose
-one mapset to be the <em>current mapset</em>;  the current
-mapset setting is given by <kbd>$MAPSET</kbd>, and is a
-subdirectory of <kbd>$LOCATION_NAME</kbd>.  During a single
-GRASS session, the user can use available data in any of
-the mapsets stored under the current
-<kbd>LOCATION_NAME</kbd> directory that are in the user's
-mapset search path and accessible by the user.  However,
-within a single GRASS session, the user only has
-<em>write</em> access to data stored under the <em>current
-mapset</em> (specified by the variable
-
-<kbd>$MAPSET</kbd>).
-
+<dd>Each &quot;mapset&quot; contains a set of maps relevant to the
+<tt>$LOCATION_NAME</tt> directory in which it appears.
+Each <tt>$LOCATION_NAME</tt> can contain multiple mapsets. (Mapsets
+which fall under the same <tt>$LOCATION_NAME</tt> all contain data
+geographically relevant to the <tt>$LOCATION_NAME</tt>, and all store
+data in the same map coordinate system.  Frequently, maps are placed
+into different mapsets to distinguish file ownership - e.g., each user
+might have his own mapset, storing any maps that he has created and/or
+are relevant to his work.) During each GRASS session, the user must
+choose one mapset to be the <em>current mapset</em>; the current
+mapset setting is given by <tt>$MAPSET</tt>, and is a subdirectory
+of <tt>$LOCATION_NAME</tt>.  During a single GRASS session, the user
+can use available data in any of the mapsets stored under the
+current <tt>$LOCATION_NAME</tt> directory that are in the user's
+mapset search path and accessible by the user.  However, within a
+single GRASS session, the user only has <em>write</em> access to data
+stored under the <em>current mapset</em> (specified by the
+variable <tt>$MAPSET</tt>).
 
 <p>
-
-Each "mapset" stores GRASS data base elements (i.e., the
-directories in which GRASS data files are stored).  Any
-maps created or modified by the user in the current GRASS
-session will be stored here.  The <kbd>MAPSET</kbd>
-directory <kbd>PERMANENT</kbd> is generally reserved for
-the set of maps that form the base set for all users
-working under each <kbd>LOCATION_NAME</kbd>.
+Each &quot;mapset&quot; stores GRASS data base elements (i.e., the
+directories in which GRASS data files are stored).  Any maps created
+or modified by the user in the current GRASS session will be stored
+here. The <tt>$MAPSET</tt> directory <tt>PERMANENT</tt> is generally
+reserved for the set of maps that form the base set for all users
+working under each <tt>$LOCATION_NAME</tt>.
 
 </dl>
 
-Once within a GRASS session, GRASS users have access only
-to the data under a single GRASS data base directory (the
-<em>current GRASS data base</em>, specified by the variable
-
-<kbd>$GISDBASE</kbd>), and to a single GRASS location
-directory (the <em>current location</em>, specified by the
-variable <kbd>$LOCATION_NAME</kbd>).  Within a single
+Once within a GRASS session, GRASS users have access only to the data
+under a single GRASS data base directory (the <em>current GRASS data
+base</em>, specified by the variable <tt>$GISDBASE</tt>), and to a
+single GRASS location directory (the <em>current location</em>,
+specified by the variable <tt>$LOCATION_NAME</tt>).  Within a single
 session, the user may only <em>modify</em> the data in the
 <em>current mapset</em> (specified by the variable
-<kbd>$MAPSET</kbd>), but may <em>use</em> data available
-under other mapsets under the same
-
-<kbd>LOCATION_NAME</kbd>.
-
+<tt>$MAPSET</tt>), but may <em>use</em> data available under other
+mapsets under the same <tt>$LOCATION_NAME</tt>.
 
 <p>
-
-All of these names must be legal names on the user's
-current system.  For UNIX users, names less than 14
-characters and containing no non-printing or space codes
-are permissible.  Examples of permissible names include:
-<em>one</em>, <em>mymap</em>, <em>VeGe_map</em>, and
+All of these names must be legal names on the user's current system.
+<!--For UNIX users, names less than 14 characters and containing no
+non-printing or space codes are permissible.  Examples of permissible
+names include: <em>one</em>, <em>mymap</em>, <em>VeGe_map</em>, and
 <em>1_for_me</em>.  The underscore character can safely be
 used in place of a blank for multiple-word names.
-
+-->
 <h2>NOTES</h2>
 
 The output from
 
 <em>g.gisenv</em>
 
-when invoked without arguments is directly usable by /bin/sh.
-The following command will cast each variable into the UNIX environment:
-<p>
+when invoked without arguments is directly usable by Bash.  The
+following command will cast each variable into the UNIX environment:
 
 <div class="code"><pre>
-<b>eval `g.gisenv`</b>
+eval `g.gisenv`
 </pre></div>
 
-<p>
-This works only for <em>/bin/sh</em>. The format of the
-output is not compatible with other UNIX shells.
+This works only for <em>Bash</em>. The format of the output is not
+compatible with other UNIX shells.
 
-<h3>GRASS Debugging:</h3>
+<h3>GRASS Debugging</h3>
 
-To print debugging messages, the variable DEBUG must be set to level equal or 
-greater than 0:
-<P>
+To print debugging messages, the variable DEBUG must be set to level
+equal or greater than 0:
+
 <div class="code"><pre>
-<TT>g.gisenv set="DEBUG=3"</TT>
+g.gisenv set="DEBUG=3"
 </pre></div>
-<P>
 
 Levels: (recommended levels)
 <ul>
-<li> 0 - silence
-<li>  1 - message is printed once or few times per module
-<li>  3 - each row (raster) or line (vector)
-<li>  5 - each cell (raster) or point (vector)
+  <li> 0 - silence
+  <li> 1 - message is printed once or few times per module
+  <li> 3 - each row (raster) or line (vector)
+  <li> 5 - each cell (raster) or point (vector)
 </ul>
 
 To disable debugging messages, DEBUG must be set back to 0:
-<P>
-<div class="code"><pre>
-<TT>g.gisenv set="DEBUG=0"</TT>
-</pre></div>
-<P>
 
+<div class="code"><pre>
+g.gisenv set="DEBUG=0"
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="g.access.html">g.access</a></em><br>
-<em><a HREF="g.ask.html">g.ask</a></em><br>
-<em><a HREF="g.filename.html">g.filename</a></em><br>
-<em><a HREF="g.findfile.html">g.findfile</a></em><br>
-<em><a HREF="g.mapsets.html">g.mapsets</a></em><br>
-<em><a href="variables.html">variables list</a></em>
+<em>
+  <a href="g.access.html">g.access</a>,
+  <a href="g.filename.html">g.filename</a>,
+  <a href="g.findfile.html">g.findfile</a>,
+  <a href="g.mapsets.html">g.mapsets</a>
+</em>
+<br><br>
+<em>
+  See also <a href="variables.html">variables list</a>
+</em>
 
 <h2>AUTHOR</h2>
 
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
