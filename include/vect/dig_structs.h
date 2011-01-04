@@ -335,10 +335,9 @@ struct Plus_head
     /*** spatial index ***/
     int Spidx_built;		 /* set to 1 if spatial index is available */
     int Spidx_new;               /* set to 1 if new spatial index will be generated */
+    int Spidx_file;              /* set to 1 to build new indices in file */
 
     struct gvfile spidx_fp;	 /* spatial index file pointer */
-
-    char *spidx_node_fname;      /* node spatial index file name */
 
     off_t Node_spidx_offset;	 /* offset of nodes in sidx file */
     off_t Line_spidx_offset;     /* offset of lines in sidx file */
