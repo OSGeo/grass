@@ -5,14 +5,18 @@
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Converts Quality Control indicators into human readable classes
  * 		 for Modis surface reflectance products 250m/500m
- * 		 (MOD09Q/MOD09A)
+ * 		 (MOD09Q/MOD09A), Modis LST (MOD11A1, MOD11A2), Modis Vegetation
+ *		 (MOD13A2)
  *
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008 -2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
  *   	    	 for details.
- * 
+ *
+ * CHANGELOG:	 Added support MOD11A1 (Markus, December 2010)
+ *		 Added support MOD13A2 (Yann, January 2011)
+ *
  *****************************************************************************/
 
 
@@ -36,7 +40,7 @@ CELL mod09A1a(CELL pixel);
 CELL mod09A1c(CELL pixel, int bandno);
 CELL mod09A1d(CELL pixel);
 CELL mod09A1e(CELL pixel);
-    /* MOD09A1 Products (500m, 8Days, State QA) */
+    /* MOD09A1 Products (500m, 8-Days, State QA) */
 CELL mod09A1sa(CELL pixel);
 CELL mod09A1sb(CELL pixel);
 CELL mod09A1sc(CELL pixel);
@@ -60,6 +64,18 @@ CELL mod11A2a(CELL pixel);
 CELL mod11A2b(CELL pixel);
 CELL mod11A2c(CELL pixel);
 CELL mod11A2d(CELL pixel);
+
+    /* MOD13A2 Products (1Km, 16-Days) */ 
+CELL mod13A2a (CELL pixel);
+CELL mod13A2b (CELL pixel);
+CELL mod13A2c (CELL pixel);
+CELL mod13A2d (CELL pixel);
+CELL mod13A2e (CELL pixel);
+CELL mod13A2f (CELL pixel);
+CELL mod13A2g (CELL pixel);
+CELL mod13A2h (CELL pixel);
+CELL mod13A2i (CELL pixel);
+
 
 int main(int argc, char *argv[]) 
 {
@@ -105,7 +121,8 @@ int main(int argc, char *argv[])
                             "mod09A1;surf. refl. 500m 8-days;"
                             "mod09A1s;surf. refl. 500m 8-days, State QA;"
                             "mod11A1;LST 1Km daily (Day/Night);"
-                            "mod11A2;LST 1Km 8-days (Day/Night);");
+                            "mod11A2;LST 1Km 8-days (Day/Night);"
+                            "mod13A2;VI 1Km 16-days;");
     input->answer = "mod09Q1";
 
     input1 = G_define_option();
@@ -138,7 +155,15 @@ int main(int argc, char *argv[])
                             "land_water;mod09A1s: StateQA Internal Snow Mask"
                             "mod35_snow_ice;mod09A1s: StateQA Internal Snow Mask"
                             "pixel_adjacent_to_cloud;mod09A1s: StateQA Internal Snow Mask"
-);
+			    "modland_qa_bits;mod13A2: MODIS Land General Quality Assessment"
+			    "vi_usefulness;mod13A2: Quality estimation of the pixel"
+			    "aerosol_quantity:mod13A2: Quantity range of Aerosol"
+			    "pixel_adjacent_to_cloud:mod13A2: if pixel is a cloud neighbour"
+			    "brdf_correction_performed:mod13A2: if BRDF correction performed"
+			    "mixed_clouds:mod13A2: if pixel mixed with clouds"
+			    "land_water: separate land from various water objects"
+			    "possible_snow_ice:mod13A2: if snow/ice present in pixel"
+			    "possible_shadow:mod13A2: if shadow is present in pixel");
     input1->answer = "modland_qa_bits";
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
@@ -177,7 +202,7 @@ int main(int argc, char *argv[])
 	bandno = atoi(input_band->answer);
 
     result = output->answer;
-
+    /*mod09Q1*/
     if ((!strcmp(qcflag, "cloud") && (strcmp(product, "mod09Q1"))) || 
 	(!strcmp(qcflag, "diff_orbit_from_500m") && (strcmp(product, "mod09Q1"))))
 	G_fatal_error(_("This flag is only available for MOD09Q1 @ 250m products"));
@@ -189,30 +214,37 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("mod09Q1 product only has 2 bands"));
     }
     
+    /*mod11A1*/
     if ((!strcmp(qcflag, "mandatory_qa") && (strcmp(product, "mod11A1"))) ||
         (!strcmp(qcflag, "data_quality_flag") && (strcmp(product, "mod11A1"))) ||
         (!strcmp(qcflag, "emis_error") && (strcmp(product, "mod11A1"))) ||
         (!strcmp(qcflag, "lst_error") && (strcmp(product, "mod11A1"))))
         G_fatal_error(_("This flag is only available for MOD11A1 @ 1Km products"));
-
+    /*mod11A2*/
     if ((!strcmp(qcflag, "mandatory_qa") && (strcmp(product, "mod11A2"))) || 
 	(!strcmp(qcflag, "data_quality_flag") && (strcmp(product, "mod11A2"))) ||
 	(!strcmp(qcflag, "emis_error") && (strcmp(product, "mod11A2"))) ||
 	(!strcmp(qcflag, "lst_error") && (strcmp(product, "mod11A2"))))
 	G_fatal_error(_("This flag is only available for MOD11A2 @ 1Km products"));
 
-    if ((!strcmp(qcflag, "aerosol_quantity") && (strcmp(product, "mod09A1s"))) || 
-	(!strcmp(qcflag, "brdf_correction_performed") && (strcmp(product, "mod09A1s"))) ||
+    /*mod09A1*/
+    if (
 	(!strcmp(qcflag, "cirrus_detected") && (strcmp(product, "mod09A1s"))) ||
 	(!strcmp(qcflag, "cloud_shadow") && (strcmp(product, "mod09A1s"))) ||
 	(!strcmp(qcflag, "cloud_state") && (strcmp(product, "mod09A1s"))) ||
 	(!strcmp(qcflag, "internal_cloud_algorithm") && (strcmp(product, "mod09A1s"))) ||
 	(!strcmp(qcflag, "internal_fire_algorithm") && (strcmp(product, "mod09A1s"))) ||
 	(!strcmp(qcflag, "internal_snow_mask") && (strcmp(product, "mod09A1s"))) ||
-	(!strcmp(qcflag, "land_water") && (strcmp(product, "mod09A1s"))) ||
-	(!strcmp(qcflag, "mod35_snow_ice") && (strcmp(product, "mod09A1s"))) ||
-	(!strcmp(qcflag, "pixel_adjacent_to_cloud") && (strcmp(product, "mod09A1s"))))
+	(!strcmp(qcflag, "mod35_snow_ice") && (strcmp(product, "mod09A1s"))))
 	G_fatal_error(_("This flag is only available for MOD09A1s @ 500m products"));
+
+    /*mod13A2*/
+    if ((!strcmp(qcflag, "vi_usefulness") && (strcmp(product, "mod13A2"))) ||
+        (!strcmp(qcflag, "mixed_clouds") && (strcmp(product, "mod13A2"))) ||
+        (!strcmp(qcflag, "possible_snow_ice") && (strcmp(product, "mod13A2"))) ||
+        (!strcmp(qcflag, "possible_shadow") && (strcmp(product, "mod13A2"))))
+        G_fatal_error(_("This flag is only available for MOD13A2 @ 1Km products"));
+
 
     infd = Rast_open_old(qcchan, "");
 
@@ -343,6 +375,36 @@ int main(int argc, char *argv[])
 	        if (!strcmp(qcflag, "internal_snow_mask")) 
 		/*calculate mod09A1s internal snow mask flag  */ 
                     c = mod09A1sk(c);
+            }
+            else if (!strcmp(product, "mod13A2"))
+            {
+                if (!strcmp(qcflag, "modland_qa")) 
+		/*calculate mod11A2 MODIS Land Quality flags  */ 
+                    c = mod13A2a(c);
+	        if (!strcmp(qcflag, "vi_usefulness"))
+		/*calculate mod13A2 estimate of vi usefulness flag  */ 
+                    c = mod13A2b(c);
+                if (!strcmp(qcflag, "aerosol_quantity")) 
+		/*calculate mod13A2 aerosol quantity range flag  */ 
+                    c = mod13A2c(c);
+	        if (!strcmp(qcflag, "pixel_adjacent_to_cloud")) 
+		/*calculate mod13A2 adjacent cloud detected flag  */ 
+                    c = mod13A2d(c);
+	        if (!strcmp(qcflag, "brdf_correction_performed")) 
+		/*calculate mod13A2 BRDF correction performed flag  */ 
+                    c = mod13A2e(c);
+	        if (!strcmp(qcflag, "mixed_clouds")) 
+		/*calculate mod13A2 pixel has clouds flag  */ 
+                    c = mod13A2f(c);
+	        if (!strcmp(qcflag, "land_water")) 
+		/*calculate mod13A2 land and water types screening flag  */ 
+                    c = mod13A2g(c);
+	        if (!strcmp(qcflag, "possible_snow_ice")) 
+		/*calculate mod13A2 possible presence of snow or ice flag  */ 
+                    c = mod13A2h(c);
+	        if (!strcmp(qcflag, "possible_shadow")) 
+		/*calculate mod13A2 possible presence of shadow flag  */ 
+                    c = mod13A2i(c);
             }
 	    else
                 G_fatal_error(_("Unknown flag name, please check spelling"));
