@@ -5,11 +5,11 @@
 * AUTHOR(S):    Antonin Guttman - original code
 *               Daniel Green (green@superliminal.com) - major clean-up
 *                               and implementation of bounding spheres
-*               Markus Metz - R*-tree
+*               Markus Metz - file-based and memory-based R*-tree
 *               
 * PURPOSE:      Multidimensional index
 *
-* COPYRIGHT:    (C) 2009 by the GRASS Development Team
+* COPYRIGHT:    (C) 2010 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -251,7 +251,7 @@ RectReal RTreeRectSphericalVolume(struct Rect *R, struct RTree *t)
 /*
  * The exact volume of the bounding sphere for the given Rect.
  */
-RectReal RTreeRectSphericalVolume(struct Rect * r, struct RTree * t)
+RectReal RTreeRectSphericalVolume(struct Rect *r, struct RTree *t)
 {
     int i;
     double sum_of_squares = 0, radius, half_extent;
@@ -272,7 +272,7 @@ RectReal RTreeRectSphericalVolume(struct Rect * r, struct RTree * t)
 /*-----------------------------------------------------------------------------
 | Calculate the n-dimensional surface area of a rectangle
 -----------------------------------------------------------------------------*/
-RectReal RTreeRectSurfaceArea(struct Rect * r, struct RTree * t)
+RectReal RTreeRectSurfaceArea(struct Rect *r, struct RTree *t)
 {
     int i, j;
     RectReal j_extent, sum = (RectReal) 0;
@@ -301,7 +301,7 @@ RectReal RTreeRectSurfaceArea(struct Rect * r, struct RTree * t)
 | Calculate the n-dimensional margin of a rectangle
 | the margin is the sum of the lengths of the edges
 -----------------------------------------------------------------------------*/
-RectReal RTreeRectMargin(struct Rect * r, struct RTree * t)
+RectReal RTreeRectMargin(struct Rect *r, struct RTree *t)
 {
     int i;
     RectReal margin = 0.0;
@@ -342,6 +342,26 @@ struct Rect RTreeCombineRect(struct Rect *r, struct Rect *rr, struct RTree *t)
 
 
 /*-----------------------------------------------------------------------------
+| Decide whether two rectangles are identical.
+-----------------------------------------------------------------------------*/
+int RTreeCompareRect(struct Rect *r, struct Rect *s, struct RTree *t)
+{
+    register int i, j;
+
+    assert(r && s);
+
+    for (i = 0; i < t->ndims; i++) {
+	j = i + NUMDIMS;	/* index for high sides */
+	if (r->boundary[i] != s->boundary[i] ||
+	    r->boundary[j] != s->boundary[j]) {
+	    return 0;
+	}
+    }
+    return 1;
+}
+
+
+/*-----------------------------------------------------------------------------
 | Decide whether two rectangles overlap.
 -----------------------------------------------------------------------------*/
 int RTreeOverlap(struct Rect *r, struct Rect *s, struct RTree *t)
@@ -368,7 +388,7 @@ int RTreeContained(struct Rect *r, struct Rect *s, struct RTree *t)
 {
     register int i, j, result;
 
-    assert(r && s);		/* same as in RTreeOverlap() */
+    assert(r && s);
 
     /* undefined rect is contained in any other */
     if (Undefined(r))
