@@ -85,13 +85,16 @@ static int write_row(int file, const void *buf, int row, int buf_len)
 int open_file(char *name)
 {
     int cell_file, buf_len;
-    int i, row, col;
-    char cell[100];
+    int i, row;
     CELL *buf;
 
     /* open raster map */
-    strcpy(cell, name);
-    cell_file = Rast_open_old(cell, "");
+    cell_file = Rast_open_old(name, "");
+    
+    if (Rast_get_map_type(cell_file) != CELL_TYPE) {
+	Rast_close(cell_file);
+	G_fatal_error(_("Input raster must be of type CELL."));
+    }
 
     n_rows = Rast_window_rows();
     n_cols = Rast_window_cols();
@@ -110,8 +113,7 @@ int open_file(char *name)
     }
     buf_len = n_cols * sizeof(CELL);
     buf = (CELL *) G_malloc(buf_len);
-    for (col = 0; col < n_cols; col++)
-	buf[col] = 0;
+    Rast_set_c_null_value(buf, n_cols);
     for (i = 0; i < PAD; i++) {
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
@@ -121,10 +123,6 @@ int open_file(char *name)
     }
     for (row = 0; row < n_rows; row++) {
 	Rast_get_c_row(cell_file, buf + PAD, row);
-	for (col = 0; col < n_cols; col++) {
-	    if (Rast_is_c_null_value(&buf[col]))
-		buf[col] = 0;
-	}
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
 	    G_fatal_error(_("%s: Error writing temporary file"),
@@ -132,8 +130,7 @@ int open_file(char *name)
 	}
     }
 
-    for (col = 0; col < n_cols; col++)
-	buf[col] = 0;
+    Rast_set_c_null_value(buf, n_cols);
 
     for (i = 0; i < PAD; i++) {
 	if (write(work_file, buf, buf_len) != buf_len) {
@@ -154,7 +151,7 @@ int open_file(char *name)
 int close_file(char *name)
 {
     int cell_file, row, k;
-    int row_count, col_count, col;
+    int row_count, col_count;
     CELL *buf;
 
     cell_file = Rast_open_c_new(name);
@@ -167,10 +164,6 @@ int close_file(char *name)
 
     for (row = 0, k = PAD; row < row_count; row++, k++) {
 	buf = get_a_row(k);
-	for (col = 0; col < n_cols; col++) {
-	    if (buf[col] == 0)
-		Rast_set_null_value(&buf[col], 1, CELL_TYPE);
-	}
 	Rast_put_row(cell_file, buf + PAD, CELL_TYPE);
     }
     Rast_close(cell_file);
