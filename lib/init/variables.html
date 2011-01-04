@@ -240,6 +240,12 @@ text
     set to override Python executable.<br>
     On Mac OS X this should be the pythonw executable for the wxGUI to work.</dd>
   
+  <dt>GRASS_VECTOR_LOWMEM</dt>
+  <dd>[vectorlib]<br>
+    If the environment variable GRASS_VECTOR_LOWMEM exists, memory
+    consumption will be reduced when building vector topology
+    support structures. Recommended for creating large vectors.</dd>
+
   <dt>GRASS_WXBUNDLED</dt>
   <dd>[wxGUI]<br>
     set to tell wxGUI that a bundled wxPython will be used.<br>
