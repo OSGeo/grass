@@ -121,6 +121,7 @@ void RTreeUpdateRect(struct Rect *r, struct Node *n, off_t nodepos, int b, struc
     t->mru[n->level] = which;
 }
 
+/* flush pending changes to file */
 void RTreeFlushBuffer(struct RTree *t)
 {
     int i;

@@ -243,7 +243,6 @@ int RTreeInsertRectF(struct Rect *r, union Child child, int level,
     for (i = 0; i < MAXLEVEL; i++)
 	overflow[i] = 1;
 
-    /* no R*-tree like forced reinsertion for file-based index ? */
     result =
 	RTreeInsertRect2F(r, child, level, &newnode, &newnode_pos, t,
 	                  &reInsertList, overflow);
@@ -258,9 +257,9 @@ int RTreeInsertRectF(struct Rect *r, union Child child, int level,
 	b.rect = RTreeNodeCover(&oldroot, t);
 	b.child.pos = t->rootpos;
 	RTreeAddBranch(&b, &newroot, NULL, NULL, NULL, NULL, t);
-	/* branch for new node created by RTreeInsertRect2F */
+	/* branch for new node created by RTreeInsertRect2F() */
 	b.rect = RTreeNodeCover(&newnode, t);
-	b.child.pos = newnode_pos;  /* offset to new node as returned by RTreeInsertRect2F */
+	b.child.pos = newnode_pos;  /* offset to new node as returned by RTreeInsertRect2F() */
 	RTreeAddBranch(&b, &newroot, NULL, NULL, NULL, NULL, t);
 	/* write new root node */
 	t->rootpos = RTreeGetNodePos(t);
@@ -290,7 +289,7 @@ int RTreeInsertRectF(struct Rect *r, union Child child, int level,
 		b.rect = RTreeNodeCover(&oldroot, t);
 		b.child.pos = t->rootpos;
 		RTreeAddBranch(&b, &newroot, NULL, NULL, NULL, NULL, t);
-		/* branch for new node created by RTreeFInsertRect2() */
+		/* branch for new node created by RTreeInsertRect2F() */
 		b.rect = RTreeNodeCover(&newnode, t);
 		b.child.pos = newnode_pos; 
 		RTreeAddBranch(&b, &newroot, NULL, NULL, NULL, NULL, t);
@@ -387,8 +386,6 @@ RTreeDeleteRect2F(struct Rect *r, union Child child, struct RTree *t,
 	    nr = RTreeNodeCover(&(s[down].sn), t);
 	    /* rewrite rect */
 	    if (!RTreeCompareRect(&nr, &(s[top].sn.branch[i].rect), t)) {
-		//s[top].sn.branch[i].rect = nr;
-		//RTreeRewriteRect(&nr, s[top].pos, i, t);
 		RTreeUpdateRect(&nr, &(s[top].sn), s[top].pos, i, t);
 	    }
 	}

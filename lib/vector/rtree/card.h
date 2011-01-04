@@ -30,6 +30,5 @@ extern int LEAFCARD;
 
 #define MAXKIDS(level, t) ((level) > 0 ? (t)->nodecard : (t)->leafcard)
 #define MINFILL(level, t) ((level) > 0 ? (t)->minfill_node_split : (t)->minfill_leaf_split)
-//#define MINFILL(level, t) ((level) > 0 ? (t)->nodecard * 0.4 : (t)->leafcard * 0.4)
 
 #endif
