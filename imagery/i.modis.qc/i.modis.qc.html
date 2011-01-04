@@ -1,6 +1,6 @@
 <H2>DESCRIPTION</H2>
 
-<EM>i.modis.qc</EM> Extracts Requested Quality Assessment flags from the following Modis products: MOD09A1, MOD09Q1 and MOD11A2. This does include MOD09A1 QA_state_500m layer (see Notes).
+<EM>i.modis.qc</EM> Extracts Requested Quality Assessment flags from the following Modis products: MOD09A1, MOD09Q1, MOD11A1, MOD11A2, MOD13A2. This does include MOD09A1 QA_state_500m layer (see Notes).
 
 <pre>
 <EM>MOD09A1/Q1: MODLAND QA Bits. bits=[0-1]</EM>
@@ -244,7 +244,95 @@
  <li>[1]= class 1: No snow</li>
 </ul>
 
+<pre>
+<EM>MOD13A2: Mandatory QA Flags 1Km bits[0-1]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: VI produced, good quality</li>
+ <li>[01]= class 1: VI produced, but check other QA</li>
+ <li>[10]= class 2: Pixel produced, but most probably cloud</li>
+ <li>[11]= class 3: Pixel not produced due to other reasons than clouds</li>
+</ul>
 
+<pre>
+<EM>MOD13A2: VI Usefulness Flag bits[2-5]</EM>
+</pre>
+<ul>
+ <li>[0000]= class 0: Highest quality</li>
+ <li>[0001]= class 1: Lower quality</li>
+ <li>[0010]= class 2: Decreasing quality</li>
+ <li>[0100]= class 3: Decreasing quality</li>
+ <li>[1000]= class 4: Decreasing quality</li>
+ <li>[1001]= class 5: Decreasing quality</li>
+ <li>[1010]= class 6: Decreasing quality</li>
+ <li>[1100]= class 7: Lowest quality</li>
+ <li>[1101]= class 8: Quality so low that it is not useful</li>
+ <li>[1110]= class 9: L1B data faulty</li>
+ <li>[1111]= class 10: Not useful for any other reason/not processed</li>
+<ul>
+
+<pre>
+<EM>MOD13A2: Aerosol quantity Flags 1Km bits[6-7]</EM>
+<ul>
+ <li>[00]= class 0: Climatology</li>
+ <li>[01]= class 1: Low</li>
+ <li>[10]= class 2: Average</li>
+ <li>[11]= class 3: High</li>
+</ul>
+
+<pre>
+<EM>MOD13A2: Adjacent cloud detected 1Km bit[8]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: No</li>
+ <li>[01]= class 1: Yes</li>
+</ul>
+
+<pre>
+<EM>MOD13A2: Atmosphere BRDF correction performed 1Km bit[9]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: No</li>
+ <li>[01]= class 1: Yes</li>
+</ul>
+
+<pre>
+<EM>MOD13A2: Mixed clouds 1Km bit[10]</EM>
+</pre>
+<ul>
+ <li>[00]= class 0: No</li>
+ <li>[01]= class 1: Yes</li>
+</ul>
+
+<pre>
+<EM>MOD13A2: Land/Water Flags 1Km bits[11-13]</EM>
+</pre>
+<ul>
+ <li>[000]= class 0: Shallow Ocean</li>
+ <li>[001]= class 1: Land (Nothing else but land)</li>
+ <li>[010]= class 2: Ocean Coastlines and lake shorelines</li>
+ <li>[011]= class 3: Shallow inland water</li>
+ <li>[100]= class 4: Ephemeral water</li>
+ <li>[101]= class 5: Deep inland water</li>
+ <li>[110]= class 6: Moderate or continental ocean</li>
+ <li>[111]= class 7: Deep ocean</li>
+</ul>
+
+<pre>
+<EM>MOD13A2: Possible Snow/Ice 1Km bits[14]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: No</li>
+ <li>[1]= class 1: Yes</li>
+</ul>
+
+<pre>
+<EM>MOD13A2: Possible Shadow 1Km bits[15]</EM>
+</pre>
+<ul>
+ <li>[0]= class 0: No</li>
+ <li>[1]= class 1: Yes</li>
+</ul> 
 
 <H2>NOTES</H2>
 In MOD09A1: It seems that cloud related info is not filled properly in the standard QC (MOD09A1 in this module) since version 3, State-QA 500m images (MOD09A1s in this module) should be used (see Vermote et al., 2008).<br>
