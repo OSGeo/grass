@@ -24,21 +24,6 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-
-struct FBranch			/* branch for file based index */
-{
-    struct Rect rect;
-    off_t child;		/* position of child node in file */
-};
-
-struct FNode			/* node for file based index */
-{
-    int count;			/* number of branches */
-    int level;			/* 0 is leaf, others positive */
-    struct FBranch branch[MAXCARD];
-};
-
-
 /*!
    \brief Write spatial index header to file
 
@@ -115,10 +100,10 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* identical for all spatial indices: */
     t = ptr->Node_spidx;
     /* byte 12 : n dimensions */
-    if (0 >= dig__fwrite_port_C(&(t->ndims), 1, fp))
+    if (0 >= dig__fwrite_port_C((const char *)&(t->ndims), 1, fp))
 	return (-1);
     /* byte 13 : n sides */
-    if (0 >= dig__fwrite_port_C(&(t->nsides), 1, fp))
+    if (0 >= dig__fwrite_port_C((const char *)&(t->nsides), 1, fp))
 	return (-1);
     /* bytes 14 - 17 : nodesize */
     if (0 >= dig__fwrite_port_I(&(t->nodesize), 1, fp))
@@ -140,13 +125,13 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 
     /* Node spatial index */
     /* bytes 34 - 37 : n nodes */
-    if (0 >= dig__fwrite_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 38 - 41 : n leafs */
-    if (0 >= dig__fwrite_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 42 - 45 : n levels */
-    if (0 >= dig__fwrite_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 46 - 49 (LFS 53) : root node offset */
     if (0 >=
@@ -157,13 +142,13 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* Line spatial index */
     t = ptr->Line_spidx;
     /* bytes 50 - 53 (LFS 54 - 57) : n nodes */
-    if (0 >= dig__fwrite_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 54 - 57 (LFS 58 - 61) : n leafs */
-    if (0 >= dig__fwrite_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 58 - 61 (LFS 62 - 65) : n levels */
-    if (0 >= dig__fwrite_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 62 - 65 (LFS 66 - 73) : root node offset */
     if (0 >=
@@ -174,13 +159,13 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* Area spatial index */
     t = ptr->Area_spidx;
     /* bytes 66 - 69 (LFS 74 - 77) : n nodes */
-    if (0 >= dig__fwrite_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 70 - 73 (LFS 78 - 81) : n leafs */
-    if (0 >= dig__fwrite_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 74 - 77 (LFS 82 - 85) : n levels */
-    if (0 >= dig__fwrite_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 78 - 81 (LFS 86 - 93) : root node offset */
     if (0 >=
@@ -191,13 +176,13 @@ int dig_Wr_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* Isle spatial index */
     t = ptr->Isle_spidx;
     /* bytes 82 - 85 (LFS 94 - 97) : n nodes */
-    if (0 >= dig__fwrite_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 86 - 89 (LFS 98 - 101) : n leafs */
-    if (0 >= dig__fwrite_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fwrite_port_I((const int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 90 - 93 (LFS 102 - 105) : n levels */
-    if (0 >= dig__fwrite_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 94 - 97 (LFS 106 - 113) : root node offset */
     if (0 >=
@@ -338,14 +323,14 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* identical for all spatial indices: */
     t = ptr->Node_spidx;
     /* byte 12 : n dimensions */
-    if (0 >= dig__fread_port_C(&(t->ndims), 1, fp))
+    if (0 >= dig__fread_port_C((char *)&(t->ndims), 1, fp))
 	return (-1);
     ptr->Line_spidx->ndims = t->ndims;
     ptr->Area_spidx->ndims = t->ndims;
     ptr->Isle_spidx->ndims = t->ndims;
 
     /* byte 13 : n sides */
-    if (0 >= dig__fread_port_C(&(t->nsides), 1, fp))
+    if (0 >= dig__fread_port_C((char *)&(t->nsides), 1, fp))
 	return (-1);
     ptr->Line_spidx->nsides = t->nsides;
     ptr->Area_spidx->nsides = t->nsides;
@@ -390,13 +375,13 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
 
     /* Node spatial index */
     /* bytes 34 - 37 : n nodes */
-    if (0 >= dig__fread_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 38 - 41 : n leafs */
-    if (0 >= dig__fread_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 42 - 45 : n levels */
-    if (0 >= dig__fread_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 46 - 49 (LFS 53) : root node offset */
     if (0 >=
@@ -408,13 +393,13 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* Line spatial index */
     t = ptr->Line_spidx;
     /* bytes 50 - 53 (LFS 54 - 57) : n nodes */
-    if (0 >= dig__fread_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 54 - 57 (LFS 58 - 61) : n leafs */
-    if (0 >= dig__fread_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 58 - 61 (LFS 62 - 65) : n levels */
-    if (0 >= dig__fread_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 62 - 65 (LFS 66 - 73) : root node offset */
     if (0 >=
@@ -426,13 +411,13 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* Area spatial index */
     t = ptr->Area_spidx;
     /* bytes 66 - 69 (LFS 74 - 77) : n nodes */
-    if (0 >= dig__fread_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 70 - 73 (LFS 78 - 81) : n leafs */
-    if (0 >= dig__fread_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 74 - 77 (LFS 82 - 85) : n levels */
-    if (0 >= dig__fread_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 78 - 81 (LFS 86 - 93) : root node offset */
     if (0 >=
@@ -444,13 +429,13 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* Isle spatial index */
     t = ptr->Isle_spidx;
     /* bytes 82 - 85 (LFS 94 - 97) : n nodes */
-    if (0 >= dig__fread_port_I(&(t->n_nodes), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_nodes), 1, fp))
 	return (-1);
     /* bytes 86 - 89 (LFS 98 - 101) : n leafs */
-    if (0 >= dig__fread_port_I(&(t->n_leafs), 1, fp))
+    if (0 >= dig__fread_port_I((int *)&(t->n_leafs), 1, fp))
 	return (-1);
     /* bytes 90 - 93 (LFS 102 - 105) : n levels */
-    if (0 >= dig__fread_port_I(&(t->n_levels), 1, fp))
+    if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
 	return (-1);
     /* bytes 94 - 97 (LFS 106 - 113) : root node offset */
     if (0 >=
@@ -598,13 +583,13 @@ int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
    \return offset to root node on success
  */
 
-static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
+static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
 				 struct RTree *t, int off_t_size)
 {
     off_t nextfreepos = startpos;
-    int sidx_nodesize;
+    int sidx_nodesize, sidx_leafsize;
     struct Node *n;
-    int i, j, writeout;
+    int i, j, writeout, maxcard;
     struct spidxstack
     {
 	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
@@ -615,9 +600,11 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 
     /* should be foolproof */
     sidx_nodesize =
-	(int)(2 * PORT_INT + MAXCARD * (off_t_size + NUMSIDES * PORT_DOUBLE));
+	(int)(2 * PORT_INT + t->nodecard * (off_t_size + NUMSIDES * PORT_DOUBLE));
+    sidx_leafsize =
+	(int)(2 * PORT_INT + t->leafcard * (off_t_size + NUMSIDES * PORT_DOUBLE));
 
-    /* stack size of t->n_levels + 1 would be enough because of
+    /* stack size of t->rootlevel + 1 would be enough because of
      * depth-first post-order traversal:
      * only one node per level on stack at any given time */
 
@@ -661,7 +648,8 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 	    /* write with dig__fwrite_port_* fns */
 	    dig__fwrite_port_I(&(s[top].sn->count), 1, fp);
 	    dig__fwrite_port_I(&(s[top].sn->level), 1, fp);
-	    for (j = 0; j < MAXCARD; j++) {
+	    maxcard = s[top].sn->level ? t->nodecard : t->leafcard;
+	    for (j = 0; j < maxcard; j++) {
 		dig__fwrite_port_D(s[top].sn->branch[j].rect.boundary,
 				   NUMSIDES, fp);
 		/* leaf node: vector object IDs are stored in child.id */
@@ -678,7 +666,7 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
 	     * they hold the position in file of the next nodes down the tree */
 	    if (top >= 0) {
 		s[top].pos[s[top].branch_id - 1] = nextfreepos;
-		nextfreepos += sidx_nodesize;
+		nextfreepos += (s[top + 1].sn->level ? sidx_nodesize : sidx_leafsize);
 	    }
 	}
     }
@@ -686,6 +674,123 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
     return nextfreepos;
 }
 
+
+/*!
+   \brief Write RTree body from temporary file to sidx file
+   Must be called when new or updated vector is closed
+
+   \param[out] fp pointer to struct gvfile
+   \param startpos offset to struct gvfile where to start writing out
+   \param t pointer to RTree
+   \param off_t_size size of off_t used to write struct gvfile
+
+   \return -1 on error
+   \return offset to root node on success
+ */
+
+static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
+				 struct RTree *t, int off_t_size)
+{
+    off_t nextfreepos = startpos;
+    int sidx_nodesize, sidx_leafsize;
+    struct Node *n;
+    int i, j, writeout, maxcard;
+    struct spidxstack
+    {
+	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
+	struct Node sn;		/* stack node */
+	int branch_id;		/* branch no to follow down */
+    } s[MAXLEVEL];
+    int top = 0;
+    
+    /* write pending changes to file */
+    RTreeFlushBuffer(t);
+
+    /* should be foolproof */
+    sidx_nodesize =
+	(int)(2 * PORT_INT + t->nodecard * (off_t_size + NUMSIDES * PORT_DOUBLE));
+    sidx_leafsize =
+	(int)(2 * PORT_INT + t->leafcard * (off_t_size + NUMSIDES * PORT_DOUBLE));
+
+    /* stack size of t->rootlevel + 1 would be enough because of
+     * depth-first post-order traversal:
+     * only one node per level on stack at any given time */
+
+    /* add root node position to stack */
+    s[top].branch_id = i = 0;
+    RTreeReadNode(&s[top].sn, t->rootpos, t);
+
+    /* depth-first postorder traversal 
+     * all children of a node are visitied and written out first
+     * when a child is written out, its position in file is stored in pos[] for
+     * the parent node and written out with the parent node */
+    /* root node is written out last and its position returned */
+
+    while (top >= 0) {
+	n = &(s[top].sn);
+	writeout = 1;
+	/* this is an internal node in the RTree
+	 * all its children are processed first,
+	 * before it is written out to the sidx file */
+	if (s[top].sn.level > 0) {
+	    for (i = s[top].branch_id; i < t->nodecard; i++) {
+		s[top].pos[i] = -1;
+		if (n->branch[i].child.pos >= 0) {
+		    s[top++].branch_id = i + 1;
+		    RTreeReadNode(&s[top].sn, n->branch[i].child.pos, t);
+		    s[top].branch_id = 0;
+		    writeout = 0;
+		    break;
+		}
+	    }
+	    if (writeout) {
+		/* nothing else found, ready to write out */
+		s[top].branch_id = t->nodecard;
+	    }
+	}
+	if (writeout) {
+	    /* write node to sidx file */
+	    if (G_ftell(fp->file) != nextfreepos)
+		G_fatal_error(_("Writing sidx: wrong node position in file"));
+
+	    /* write with dig__fwrite_port_* fns */
+	    dig__fwrite_port_I(&(s[top].sn.count), 1, fp);
+	    dig__fwrite_port_I(&(s[top].sn.level), 1, fp);
+	    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
+	    for (j = 0; j < maxcard; j++) {
+		dig__fwrite_port_D(s[top].sn.branch[j].rect.boundary,
+				   NUMSIDES, fp);
+		/* leaf node: vector object IDs are stored in child.id */
+		if (s[top].sn.level == 0)
+		    s[top].pos[j] = (off_t) s[top].sn.branch[j].child.id;
+		dig__fwrite_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
+	    }
+
+	    top--;
+	    /* update corresponding child position of parent node
+	     * this node is only updated if its level is > 0, i.e.
+	     * this is an internal node
+	     * children of internal nodes do not have an ID, instead
+	     * they hold the position in file of the next nodes down the tree */
+	    if (top >= 0) {
+		s[top].pos[s[top].branch_id - 1] = nextfreepos;
+		nextfreepos += (s[top + 1].sn.level ? sidx_nodesize : sidx_leafsize);
+	    }
+	}
+    }
+    
+    return nextfreepos;
+}
+
+/* write RTree body to sidx file */
+static off_t rtree_write_to_sidx(struct gvfile *fp, off_t startpos,
+				 struct RTree *t, int off_t_size)
+{
+    if (t->fd > -1)
+	return rtree_write_from_file(fp, startpos, t, off_t_size);
+    else
+	return rtree_write_from_memory(fp, startpos, t, off_t_size);
+}
 
 /*!
    \brief Load RTree body from sidx file to memory
@@ -699,21 +804,20 @@ static off_t rtree_write_to_sidx(struct gvfile * fp, off_t startpos,
    \return pointer to root node on success
  */
 
-struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
+static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 				  struct RTree *t, int off_t_size)
 {
     struct Node *newnode = NULL;
-    int i, j, loadnode;
+    int i, j, loadnode, maxcard;
     struct spidxstack
     {
-	off_t childpos[MAXCARD];
-	off_t pos;		/* file position of child node */
+	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
 	struct Node sn;		/* stack node */
 	int branch_id;		/* branch no to follow down */
     } s[50], *last;
     int top = 0;
 
-    /* stack size of t->n_levels + 1 would be enough because of
+    /* stack size of t->rootlevel + 1 would be enough because of
      * depth-first postorder traversal:
      * only one node per level on stack at any given time */
 
@@ -723,17 +827,13 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
     /* read with dig__fread_port_* fns */
     dig__fread_port_I(&(s[top].sn.count), 1, fp);
     dig__fread_port_I(&(s[top].sn.level), 1, fp);
-    for (j = 0; j < MAXCARD; j++) {
+    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
+    for (j = 0; j < maxcard; j++) {
 	dig__fread_port_D(s[top].sn.branch[j].rect.boundary, NUMSIDES, fp);
-	dig__fread_port_O(&(s[top].childpos[j]), 1, fp, off_t_size);
+	dig__fread_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
 	/* leaf node: vector object IDs are stored in child.id */
 	if (s[top].sn.level == 0) {
-	    if (s[top].childpos[j]) {
-	    s[top].sn.branch[j].child.id =
-		(int)s[top].childpos[j];
-	    }
-	    else
-		s[top].sn.branch[j].child.id = 0;
+	    s[top].sn.branch[j].child.id = (int)s[top].pos[j];
 	}
 	else {
 	    s[top].sn.branch[j].child.ptr = NULL;
@@ -753,29 +853,25 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	 * before it is transfered to the RTree in memory */
 	if (s[top].sn.level > 0) {
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
-		if (s[top].childpos[i] > 0) {
+		if (s[top].pos[i] > 0) {
 		    s[top++].branch_id = i + 1;
-		    s[top].pos = last->childpos[i];
-		    G_fseek(fp->file, s[top].pos, SEEK_SET);
+		    G_fseek(fp->file, last->pos[i], SEEK_SET);
 		    /* read with dig__fread_port_* fns */
 		    dig__fread_port_I(&(s[top].sn.count), 1, fp);
 		    dig__fread_port_I(&(s[top].sn.level), 1, fp);
-		    for (j = 0; j < MAXCARD; j++) {
+		    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
+		    for (j = 0; j < maxcard; j++) {
 			dig__fread_port_D(s[top].sn.branch[j].rect.boundary,
 					  NUMSIDES, fp);
-			dig__fread_port_O(&(s[top].childpos[j]), 1, fp,
+			dig__fread_port_O(&(s[top].pos[j]), 1, fp,
 					  off_t_size);
 			/* leaf node
 			 * vector object IDs are stored in file as
 			 * off_t but always fit into an int, see dig_structs.h
 			 * vector object IDs are transfered to child.id */
 			if (s[top].sn.level == 0) {
-			    if (s[top].childpos[j]) {
-				s[top].sn.branch[j].child.id =
-				    (int)s[top].childpos[j];
-			    }
-			    else
-				s[top].sn.branch[j].child.id = 0;
+			    s[top].sn.branch[j].child.id =
+				(int)s[top].pos[j];
 			}
 			else {
 			    s[top].sn.branch[j].child.ptr = NULL;
@@ -785,7 +881,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 		    loadnode = 0;
 		    break;
 		}
-		else if (last->childpos[i] < 0)
+		else if (last->pos[i] < 0)
 		    G_fatal_error("corrupt spatial index");
 	    }
 	    if (loadnode) {
@@ -800,7 +896,8 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	    /* copy from stack node */
 	    newnode->level = s[top].sn.level;
 	    newnode->count = s[top].sn.count;
-	    for (j = 0; j < MAXCARD; j++) {
+	    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
+	    for (j = 0; j < maxcard; j++) {
 		newnode->branch[j].rect = s[top].sn.branch[j].rect;
 		newnode->branch[j].child = s[top].sn.branch[j].child;
 	    }
@@ -816,8 +913,144 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 	    }
 	}
     }
+    
+    t->root = newnode;
+}
 
-    return newnode;
+/*!
+   \brief Load RTree body from sidx file to temporary file
+   Must be called when old vector is opened in update mode
+
+   \param fp pointer to struct gvfile
+   \param rootpos position of root node in file
+   \param t pointer to RTree
+   \param off_t_size size of off_t used to read struct gvfile
+
+   \return offset to root node
+ */
+
+static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
+				  struct RTree *t, int off_t_size)
+{
+    struct Node newnode;
+    off_t newnode_pos = -1;
+    int i, j, loadnode, maxcard;
+    struct spidxstack
+    {
+	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
+	struct Node sn;		/* stack node */
+	int branch_id;		/* branch no to follow down */
+    } s[MAXLEVEL], *last;
+    int top = 0;
+
+    /* stack size of t->rootlevel + 1 would be enough because of
+     * depth-first postorder traversal:
+     * only one node per level on stack at any given time */
+
+    /* add root node position to stack */
+    last = &(s[top]);
+    G_fseek(fp->file, rootpos, SEEK_SET);
+    /* read with dig__fread_port_* fns */
+    dig__fread_port_I(&(s[top].sn.count), 1, fp);
+    dig__fread_port_I(&(s[top].sn.level), 1, fp);
+    maxcard = t->rootlevel ? t->nodecard : t->leafcard;
+    for (j = 0; j < maxcard; j++) {
+	dig__fread_port_D(s[top].sn.branch[j].rect.boundary, NUMSIDES, fp);
+	dig__fread_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
+	/* leaf node: vector object IDs are stored in child.id */
+	if (s[top].sn.level == 0) {
+	    s[top].sn.branch[j].child.id = (int)s[top].pos[j];
+	}
+	else {
+	    s[top].sn.branch[j].child.pos = -1;
+	}
+    }
+
+    s[top].branch_id = i = 0;
+
+    /* depth-first postorder traversal */
+    /* root node is loaded last and returned */
+
+    while (top >= 0) {
+	last = &(s[top]);
+	loadnode = 1;
+	/* this is an internal node in the RTree
+	 * all its children are read first,
+	 * before it is transfered to the RTree in memory */
+	if (s[top].sn.level > 0) {
+	    for (i = s[top].branch_id; i < t->nodecard; i++) {
+		if (s[top].pos[i] > 0) {
+		    s[top++].branch_id = i + 1;
+		    G_fseek(fp->file, last->pos[i], SEEK_SET);
+		    /* read with dig__fread_port_* fns */
+		    dig__fread_port_I(&(s[top].sn.count), 1, fp);
+		    dig__fread_port_I(&(s[top].sn.level), 1, fp);
+		    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
+		    for (j = 0; j < maxcard; j++) {
+			dig__fread_port_D(s[top].sn.branch[j].rect.boundary,
+					  NUMSIDES, fp);
+			dig__fread_port_O(&(s[top].pos[j]), 1, fp,
+					  off_t_size);
+			/* leaf node
+			 * vector object IDs are stored in file as
+			 * off_t but always fit into an int, see dig_structs.h
+			 * vector object IDs are transfered to child.id */
+			if (s[top].sn.level == 0) {
+			    s[top].sn.branch[j].child.id =
+				    (int)s[top].pos[j];
+			}
+			else {
+			    s[top].sn.branch[j].child.pos = -1;
+			}
+		    }
+		    s[top].branch_id = 0;
+		    loadnode = 0;
+		    break;
+		}
+		else if (last->pos[i] < 0)
+		    G_fatal_error("corrupt spatial index");
+	    }
+	    if (loadnode) {
+		/* nothing else found, ready to load */
+		s[top].branch_id = t->nodecard;
+	    }
+	}
+	if (loadnode) {
+	    /* ready to load node and write to temp file */
+
+	    /* copy from stack node */
+	    newnode.level = s[top].sn.level;
+	    newnode.count = s[top].sn.count;
+	    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
+	    for (j = 0; j < maxcard; j++) {
+		newnode.branch[j].rect = s[top].sn.branch[j].rect;
+		newnode.branch[j].child = s[top].sn.branch[j].child;
+	    }
+	    newnode_pos = RTreeGetNodePos(t);
+	    RTreeWriteNode(&newnode, t);
+
+	    top--;
+	    /* update child of parent node
+	     * this node is only updated if its level is > 0, i.e.
+	     * this is an internal node
+	     * children of internal nodes do not have an ID, instead
+	     * they point to the next nodes down the tree */
+	    if (top >= 0) {
+		s[top].sn.branch[s[top].branch_id - 1].child.pos = newnode_pos;
+	    }
+	}
+    }
+    
+    t->rootpos = newnode_pos;
+}
+
+static void rtree_load_from_sidx(struct gvfile *fp, off_t rootpos,
+				  struct RTree *t, int off_t_size)
+{
+    if (t->fd > -1)
+	return rtree_load_to_file(fp, rootpos, t, off_t_size);
+    else
+	return rtree_load_to_memory(fp, rootpos, t, off_t_size);
 }
 
 /*!
@@ -828,7 +1061,7 @@ struct Node *rtree_load_from_sidx(struct gvfile * fp, off_t rootpos,
 
    \return 0
  */
-int dig_Wr_spidx(struct gvfile * fp, struct Plus_head *Plus)
+int dig_Wr_spidx(struct gvfile *fp, struct Plus_head *Plus)
 {
     G_debug(1, "dig_Wr_spidx()");
 
@@ -891,24 +1124,20 @@ int dig_Rd_spidx(struct gvfile * fp, struct Plus_head *Plus)
     dig_set_cur_port(&(Plus->spidx_port));
 
     /* Nodes */
-    Plus->Node_spidx->root =
-	rtree_load_from_sidx(fp, Plus->Node_spidx_offset,
-			     Plus->Node_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Node_spidx_offset,
+			 Plus->Node_spidx, Plus->spidx_port.off_t_size);
 
     /* Lines */
-    Plus->Line_spidx->root =
-	rtree_load_from_sidx(fp, Plus->Line_spidx_offset,
-			     Plus->Line_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Line_spidx_offset,
+			 Plus->Line_spidx, Plus->spidx_port.off_t_size);
 
     /* Areas */
-    Plus->Area_spidx->root =
-	rtree_load_from_sidx(fp, Plus->Area_spidx_offset,
-			     Plus->Area_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Area_spidx_offset,
+			 Plus->Area_spidx, Plus->spidx_port.off_t_size);
 
     /* Isles */
-    Plus->Isle_spidx->root =
-	rtree_load_from_sidx(fp, Plus->Isle_spidx_offset,
-			     Plus->Isle_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Isle_spidx_offset,
+			 Plus->Isle_spidx, Plus->spidx_port.off_t_size);
 
     /* 3D future : */
     /* Faces */
@@ -959,21 +1188,20 @@ int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
 int rtree_search(struct RTree *t, struct Rect *r, SearchHitCallback shcb,
 		 void *cbarg, struct Plus_head *Plus)
 {
-    struct FNode *n;
-    int hitCount = 0, found;
+    int hitCount = 0, found, maxcard;
     int i, j;
     struct spidxstack
     {
-	off_t pos;		/* file position of stack node */
-	struct FNode sn;	/* stack node */
+	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
+	struct Node sn;	        /* stack node */
 	int branch_id;		/* branch no to follow down */
-    } s[50];
+    } s[50], *last;
     int top = 0;
 
     assert(r);
     assert(t);
 
-    /* stack size of t->n_levels + 1 is enough because of depth first search */
+    /* stack size of t->rootlevel + 1 is enough because of depth first search */
     /* only one node per level on stack at any given time */
 
     dig_set_cur_port(&(Plus->spidx_port));
@@ -983,39 +1211,50 @@ int rtree_search(struct RTree *t, struct Rect *r, SearchHitCallback shcb,
     /* read with dig__fread_port_* fns */
     dig__fread_port_I(&(s[top].sn.count), 1, &(Plus->spidx_fp));
     dig__fread_port_I(&(s[top].sn.level), 1, &(Plus->spidx_fp));
-    for (j = 0; j < MAXCARD; j++) {
+    maxcard = t->rootlevel ? t->nodecard : t->leafcard;
+    for (j = 0; j < maxcard; j++) {
 	dig__fread_port_D(s[top].sn.branch[j].rect.boundary, NUMSIDES,
 			  &(Plus->spidx_fp));
-	dig__fread_port_O(&(s[top].sn.branch[j].child), 1, &(Plus->spidx_fp),
+	dig__fread_port_O(&(s[top].pos[j]), 1, &(Plus->spidx_fp),
 			  Plus->spidx_port.off_t_size);
+	/* leaf node: vector object IDs are stored in child.id */
+	if (s[top].sn.level == 0) {
+	    s[top].sn.branch[j].child.id = (int)s[top].pos[j];
+	}
+	else {
+	    s[top].sn.branch[j].child.pos = s[top].pos[j];
+	}
     }
 
-    s[top].pos = t->rootpos;
     s[top].branch_id = i = 0;
-    n = &(s[top].sn);
 
     while (top >= 0) {
-	n = &(s[top].sn);
+	last = &(s[top]);
 	if (s[top].sn.level > 0) {	/* this is an internal node in the tree */
 	    found = 1;
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
-		if (s[top].sn.branch[i].child &&
+		if (s[top].pos[i] > 0 &&
 		    RTreeOverlap(r, &(s[top].sn.branch[i].rect), t)) {
 		    s[top++].branch_id = i + 1;
-		    s[top].pos = n->branch[i].child;
-
-		    dig_fseek(&(Plus->spidx_fp), s[top].pos, SEEK_SET);
+		    dig_fseek(&(Plus->spidx_fp), last->pos[i], SEEK_SET);
 		    /* read with dig__fread_port_* fns */
 		    dig__fread_port_I(&(s[top].sn.count), 1,
 				      &(Plus->spidx_fp));
 		    dig__fread_port_I(&(s[top].sn.level), 1,
 				      &(Plus->spidx_fp));
-		    for (j = 0; j < MAXCARD; j++) {
+		    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
+		    for (j = 0; j < maxcard; j++) {
 			dig__fread_port_D(s[top].sn.branch[j].rect.boundary,
 					  NUMSIDES, &(Plus->spidx_fp));
-			dig__fread_port_O(&(s[top].sn.branch[j].child), 1,
+			dig__fread_port_O(&(s[top].pos[j]), 1,
 					  &(Plus->spidx_fp),
 					  Plus->spidx_port.off_t_size);
+			if (s[top].sn.level == 0) {
+			    s[top].sn.branch[j].child.id = (int)s[top].pos[j];
+			}
+			else {
+			    s[top].sn.branch[j].child.pos = s[top].pos[j];
+			}
 		    }
 
 		    s[top].branch_id = 0;
@@ -1031,11 +1270,11 @@ int rtree_search(struct RTree *t, struct Rect *r, SearchHitCallback shcb,
 	}
 	else {			/* this is a leaf node */
 	    for (i = 0; i < t->leafcard; i++) {
-		if (s[top].sn.branch[i].child &&
+		if (s[top].sn.branch[i].child.id &&
 		    RTreeOverlap(r, &(s[top].sn.branch[i].rect), t)) {
 		    hitCount++;
 		    if (shcb) {	/* call the user-provided callback */
-			if (!shcb((int)s[top].sn.branch[i].child, cbarg)) {
+			if (!shcb((int)s[top].sn.branch[i].child.id, cbarg)) {
 			    /* callback wants to terminate search early */
 			    return hitCount;
 			}

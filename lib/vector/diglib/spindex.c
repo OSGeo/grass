@@ -15,9 +15,11 @@
    \author Update to GRASS 7 Markus Metz
  */
 
-#include <grass/config.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -37,14 +39,44 @@ int dig_spidx_init(struct Plus_head *Plus)
 
     ndims = (Plus->with_z != 0) ? 3 : 2;
     Plus->spidx_with_z = (Plus->with_z != 0);
+    
+    if (Plus->Spidx_file) {
+	int fd;
+	char *filename;
+	
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Node_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
 
-    Plus->Node_spidx = RTreeNewIndex(ndims);
-    Plus->Line_spidx = RTreeNewIndex(ndims);
-    Plus->Area_spidx = RTreeNewIndex(ndims);
-    Plus->Isle_spidx = RTreeNewIndex(ndims);
-    Plus->Face_spidx = NULL;
-    Plus->Volume_spidx = NULL;
-    Plus->Hole_spidx = NULL;
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Line_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
+
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Area_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
+
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Isle_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
+
+	Plus->Face_spidx = NULL;
+	Plus->Volume_spidx = NULL;
+	Plus->Hole_spidx = NULL;
+    }
+    else {
+	Plus->Node_spidx = RTreeNewIndex(-1, 0, ndims);
+	Plus->Line_spidx = RTreeNewIndex(-1, 0, ndims);
+	Plus->Area_spidx = RTreeNewIndex(-1, 0, ndims);
+	Plus->Isle_spidx = RTreeNewIndex(-1, 0, ndims);
+	Plus->Face_spidx = NULL;
+	Plus->Volume_spidx = NULL;
+	Plus->Hole_spidx = NULL;
+    }
 
     Plus->Node_spidx_offset = 0L;
     Plus->Line_spidx_offset = 0L;
@@ -71,8 +103,21 @@ void dig_spidx_free_nodes(struct Plus_head *Plus)
     ndims = Plus->with_z ? 3 : 2;
 
     /* Node spidx */
-    RTreeFreeIndex(Plus->Node_spidx);
-    Plus->Node_spidx = RTreeNewIndex(ndims);
+    if (Plus->Node_spidx->fd > -1) {
+	int fd;
+	char *filename;
+	
+	close(Plus->Node_spidx->fd);
+	RTreeFreeIndex(Plus->Node_spidx);
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Node_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
+    }
+    else {
+	RTreeFreeIndex(Plus->Node_spidx);
+	Plus->Node_spidx = RTreeNewIndex(-1, 0, ndims);
+    }
 }
 
 /*! 
@@ -87,8 +132,21 @@ void dig_spidx_free_lines(struct Plus_head *Plus)
     ndims = Plus->with_z ? 3 : 2;
 
     /* Line spidx */
-    RTreeFreeIndex(Plus->Line_spidx);
-    Plus->Line_spidx = RTreeNewIndex(ndims);
+    if (Plus->Line_spidx->fd > -1) {
+	int fd;
+	char *filename;
+	
+	close(Plus->Line_spidx->fd);
+	RTreeFreeIndex(Plus->Line_spidx);
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Line_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
+    }
+    else {
+	RTreeFreeIndex(Plus->Line_spidx);
+	Plus->Line_spidx = RTreeNewIndex(-1, 0, ndims);
+    }
 }
 
 /*! 
@@ -103,8 +161,21 @@ void dig_spidx_free_areas(struct Plus_head *Plus)
     ndims = Plus->with_z ? 3 : 2;
 
     /* Area spidx */
-    RTreeFreeIndex(Plus->Area_spidx);
-    Plus->Area_spidx = RTreeNewIndex(ndims);
+    if (Plus->Area_spidx->fd > -1) {
+	int fd;
+	char *filename;
+	
+	close(Plus->Area_spidx->fd);
+	RTreeFreeIndex(Plus->Area_spidx);
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Area_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
+    }
+    else {
+	RTreeFreeIndex(Plus->Area_spidx);
+	Plus->Area_spidx = RTreeNewIndex(-1, 0, ndims);
+    }
 }
 
 /*! 
@@ -119,8 +190,21 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
     ndims = Plus->with_z ? 3 : 2;
 
     /* Isle spidx */
-    RTreeFreeIndex(Plus->Isle_spidx);
-    Plus->Isle_spidx = RTreeNewIndex(ndims);
+    if (Plus->Isle_spidx->fd > -1) {
+	int fd;
+	char *filename;
+	
+	close(Plus->Isle_spidx->fd);
+	RTreeFreeIndex(Plus->Isle_spidx);
+	filename = G_tempfile();
+	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+	Plus->Isle_spidx = RTreeNewIndex(fd, 0, ndims);
+	remove(filename);
+    }
+    else {
+	RTreeFreeIndex(Plus->Isle_spidx);
+	Plus->Isle_spidx = RTreeNewIndex(-1, 0, ndims);
+    }
 }
 
 /*! 
@@ -131,16 +215,29 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
 void dig_spidx_free(struct Plus_head *Plus)
 {
     /* Node spidx */
+    if (Plus->Node_spidx->fd > -1)
+	close(Plus->Node_spidx->fd);
     RTreeFreeIndex(Plus->Node_spidx);
 
     /* Line spidx */
+    if (Plus->Line_spidx->fd > -1)
+	close(Plus->Line_spidx->fd);
     RTreeFreeIndex(Plus->Line_spidx);
 
     /* Area spidx */
+    if (Plus->Area_spidx->fd > -1)
+	close(Plus->Area_spidx->fd);
     RTreeFreeIndex(Plus->Area_spidx);
 
     /* Isle spidx */
+    if (Plus->Isle_spidx->fd > -1)
+	close(Plus->Isle_spidx->fd);
     RTreeFreeIndex(Plus->Isle_spidx);
+
+    /* 3D future : */
+    /* Face spidx */
+    /* Volume spidx */
+    /* Hole spidx */
 }
 
 /*!
