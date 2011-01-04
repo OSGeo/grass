@@ -34,7 +34,7 @@ void Vect_spatial_index_init(struct spatial_index * si, int with_z)
 {
     G_debug(1, "Vect_spatial_index_init()");
 
-    si->si_tree = RTreeNewIndex(2 + with_z);
+    si->si_tree = RTreeNewIndex(-1, 0, 2 + (with_z != 0));
 }
 
 /*!

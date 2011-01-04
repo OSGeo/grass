@@ -677,7 +677,7 @@ Vect_line_intersection(struct line_pnts *APoints,
      *  in bound box */
 
     /* Create rtree for B line */
-    MyRTree = RTreeNewIndex(2);
+    MyRTree = RTreeNewIndex(-1, 0, 2);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];
@@ -1214,7 +1214,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
      *  in bound box */
 
     /* Create rtree for B line */
-    MyRTree = RTreeNewIndex(2);
+    MyRTree = RTreeNewIndex(-1, 0, 2);
     for (i = 0; i < BPoints->n_points - 1; i++) {
 	if (BPoints->x[i] <= BPoints->x[i + 1]) {
 	    rect.boundary[0] = BPoints->x[i];

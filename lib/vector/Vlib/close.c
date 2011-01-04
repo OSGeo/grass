@@ -112,7 +112,7 @@ int Vect_close(struct Map_info *Map)
 	if (Map->format != GV_FORMAT_OGR_DIRECT &&
 	    Map->plus.Spidx_built == 1 &&
 	    Map->plus.built == GV_BUILD_ALL)
-	    Vect_save_sidx(Map);
+	    fclose(Map->plus.spidx_fp.file);
     }
 
     if (Map->level == 2 && Map->plus.release_support) {

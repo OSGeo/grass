@@ -523,21 +523,21 @@ int Vect_save_sidx(struct Map_info *Map)
 
     plus = &(Map->plus);
 
-    if (Map->plus.Spidx_built == 0) {
+    if (plus->Spidx_built == 0) {
 	G_warning("Spatial index not available, can not be saved");
 	return 0;
     }
 
     /* new or update mode ? */
-    if (Map->plus.Spidx_new == 1) {
+    if (plus->Spidx_new == 1) {
 
 	/*  write out rtrees to sidx file  */
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 	G__file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
 	G_debug(1, "Open sidx: %s", fname);
-	dig_file_init(&(Map->plus.spidx_fp));
-	Map->plus.spidx_fp.file = fopen(fname, "w+");
-	if (Map->plus.spidx_fp.file == NULL) {
+	dig_file_init(&(plus->spidx_fp));
+	plus->spidx_fp.file = fopen(fname, "w+");
+	if (plus->spidx_fp.file == NULL) {
 	    G_warning(_("Unable open spatial index file for write <%s>"),
 		      fname);
 	    return 0;
@@ -546,10 +546,11 @@ int Vect_save_sidx(struct Map_info *Map)
 	/* set portable info */
 	dig_init_portable(&(plus->spidx_port), dig__byte_order_out());
 
-	if (0 > dig_Wr_spidx(&(Map->plus.spidx_fp), plus)) {
+	if (0 > dig_Wr_spidx(&(plus->spidx_fp), plus)) {
 	    G_warning(_("Error writing out spatial index file"));
 	    return 0;
 	}
+	dig_spidx_free(plus);
 	Map->plus.Spidx_new = 0;
     }
 

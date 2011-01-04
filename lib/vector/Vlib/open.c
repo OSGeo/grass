@@ -179,6 +179,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     /* initialize support structures for 2D, update to 3D when reading support files */
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = WITHOUT_Z;
     /* initialize Map->plus */
+    Map->plus.Spidx_file = 0;
     dig_init_plus(&(Map->plus));
 
     /* check OGR mapset */
@@ -280,6 +281,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     /* zone not set */
     if (Vect_get_zone(Map) == -1)
 	Vect_set_zone(Map, G_zone());
+    Vect_set_proj(Map, G_projection());
     
     G_debug(1, "Level request = %d", level_request);
 
@@ -790,6 +792,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Open_level = 0;
 
     /* initialize topo */
+    Map->plus.Spidx_file = 0;
     dig_init_plus(&(Map->plus));
 
     /* open new spatial index */
@@ -1083,6 +1086,17 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     if (mode) {
 	/* open new spatial index */
 	Map->plus.Spidx_new = 1;
+	
+	/* file based or memory based */
+	if (getenv("GRASS_VECTOR_LOWMEM")) {
+	    /* free old indices */
+	    dig_spidx_free(Plus);
+	    /* initialize file based indices */
+	    Map->plus.Spidx_file = 1;
+	    dig_spidx_init(Plus);
+	}
+	G_debug(0, "%s based spatial index",
+	           Map->plus.Spidx_file == 0 ? "Memory" : "File");
 
 	if (mode == 1) {
 	    /* load spatial index for update */
