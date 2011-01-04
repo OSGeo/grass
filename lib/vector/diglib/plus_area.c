@@ -19,6 +19,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+static int debug_level = -1;
+
 /*!
  * \brief Build topo for area from lines
  *
@@ -58,16 +60,16 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
     int n_lines;
     struct P_line *Line;
     int node;
-    const char *dstr;
-    int debug_level;
 
-    dstr = G__getenv("DEBUG");
+    if (debug_level == -1) {
+	const char *dstr = G__getenv("DEBUG");
 
-    if (dstr != NULL)
-	debug_level = atoi(dstr);
-    else
-	debug_level = 0;
-	
+	if (dstr != NULL)
+	    debug_level = atoi(dstr);
+	else
+	    debug_level = 0;
+    }
+
     G_debug(3, "dig_build_area_with_line(): first_line = %d, side = %d",
 	    first_line, side);
 
@@ -482,15 +484,15 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
     plus_t node;
     struct P_node *Node;
     struct P_line *Line;
-    const char *dstr;
-    int debug_level;
 
-    dstr = G__getenv("DEBUG");
+    if (debug_level == -1) {
+	const char *dstr = G__getenv("DEBUG");
 
-    if (dstr != NULL)
-	debug_level = atoi(dstr);
-    else
-	debug_level = 0;
+	if (dstr != NULL)
+	    debug_level = atoi(dstr);
+	else
+	    debug_level = 0;
+    }
 
     G_debug(3, "dig__angle_next_line: line = %d, side = %d, type = %d",
 	    current_line, side, type);
