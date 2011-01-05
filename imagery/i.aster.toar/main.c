@@ -108,17 +108,17 @@ int main(int argc, char *argv[])
     input->description = _("Names of ASTER DN layers (15 layers)");
 
     input1 = G_define_option();
-    input1->key = _("doy");
+    input1->key = "doy";
     input1->type = TYPE_DOUBLE;
     input1->required = YES;
-    input1->gisprompt = _("value, parameter");
+    input1->gisprompt = "value";
     input1->description = _("Day of Year of satellite overpass [0-366]");
 
     input2 = G_define_option();
-    input2->key = _("sun_elevation");
+    input2->key = "sun_elevation";
     input2->type = TYPE_DOUBLE;
     input2->required = YES;
-    input2->gisprompt = _("value, parameter");
+    input2->gisprompt = "value";
     input2->description = _("Sun elevation angle (degrees, < 90.0)");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -126,27 +126,27 @@ int main(int argc, char *argv[])
 
     /* Define the different flags */
     flag0 = G_define_flag();
-    flag0->key = _('r');
-    flag0->description = _("output is radiance (W/m2)");
+    flag0->key = 'r';
+    flag0->description = _("Output is radiance (W/m2)");
 
     flag1 = G_define_flag();
-    flag1->key = _('a');
+    flag1->key = 'a';
     flag1->description = _("VNIR is High Gain");
 
     flag2 = G_define_flag();
-    flag2->key = _('b');
+    flag2->key = 'b';
     flag2->description = _("SWIR is High Gain");
 
     flag3 = G_define_flag();
-    flag3->key = _('c');
+    flag3->key = 'c';
     flag3->description = _("VNIR is Low Gain 1");
 
     flag4 = G_define_flag();
-    flag4->key = _('d');
+    flag4->key = 'd';
     flag4->description = _("SWIR is Low Gain 1");
 
     flag5 = G_define_flag();
-    flag5->key = _('e');
+    flag5->key = 'e';
     flag5->description = _("SWIR is Low Gain 2");
 
     /********************/
