@@ -2693,7 +2693,7 @@
 	  </items>
 	</menu>
 	<menu>
-	  <label>Evapotranspiration calculation</label>
+	  <label>Satellite images products</label>
 	  <items>
 	    <menuitem>
 	      <label>Vegetation indices</label>
@@ -2717,6 +2717,18 @@
 	      <command>i.emissivity</command>
 	    </menuitem>
 	    <separator />
+	    <menuitem>
+	      <label>Biomass growth</label>
+	      <help>Computes biomass growth, precursor of crop yield calculation</help>
+	      <keywords>imagery,biomass,fpar,yield</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.biomass</command>
+	    </menuitem>
+	   </items>
+	  </menu> 
+	  <menu> 
+	  <label>Evapotranspiration calculation</label>
+	  <items>
 	    <menuitem>
 	      <label>Soil heat flux</label>
 	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
@@ -2755,13 +2767,6 @@
 	    </menuitem>
 	  </items>
 	</menu>
-	<menuitem>
-	  <label>Biomass growth</label>
-	  <help>Computes biomass growth, precursor of crop yield calculation</help>
-	  <keywords>imagery,biomass,fpar,yield</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>i.biomass</command>
-	</menuitem>
 	<separator />
 	<menu>
 	  <label>Report and statistics</label>
