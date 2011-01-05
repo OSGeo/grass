@@ -132,10 +132,10 @@ clear the display and start from scratch.
 
 5 - DEBUGGING
 
-To enable GUI debug messages on given level set GRASS_DEBUG_WX
-environment variable, e.g.
+To enable GUI debug messages on given level set WX_DEBUG environment
+variable, e.g.
 
-$ export GRASS_WX_DEBUG=3
+$ g.gisenv set="WX_DEBUG=3"
 
 
 6 - VECTOR DIGITIZER
