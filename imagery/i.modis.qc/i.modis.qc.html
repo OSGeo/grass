@@ -1,6 +1,6 @@
 <H2>DESCRIPTION</H2>
 
-<EM>i.modis.qc</EM> Extracts Requested Quality Assessment flags from the following Modis products: MOD09A1, MOD09Q1, MOD11A1, MOD11A2, MOD13A2. This does include MOD09A1 QA_state_500m layer (see Notes).
+<EM>i.modis.qc</EM> Extracts Requested Quality Assessment flags from the following Modis products: MOD09A1, MOD09Q1, MOD11A1, MOD11A2, MOD13A2, MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 
 <pre>
 <EM>MOD09A1/Q1: MODLAND QA Bits. bits=[0-1]</EM>
@@ -333,6 +333,61 @@
  <li>[0]= class 0: No</li>
  <li>[1]= class 1: Yes</li>
 </ul> 
+
+
+<pre>
+<EM>MCD43B2: Albedo Quality Ancillary Platform Data 1Km bits[0-3]</EM>
+<EM>SDS: BRDF_Albedo_Ancillary</EM>
+</pre>
+<ul>
+ <li>[0000]= class 0: Satellite Platform: Terra</li>
+ <li>[0001]= class 1: Satellite Platform: Terrra/Aqua</li>
+ <li>[0010]= class 2: Satellite Platform: Aqua</li>
+ <li>[1111]= class 15: Fill Value</li>
+ <li>Classes 3-14: Not used</li>
+</ul>
+
+<pre>
+<EM>MCD43B2: Albedo Quality Ancillary Land/Water Data 1Km bits[4-7]</EM>
+<EM>SDS: BRDF_Albedo_Ancillary</EM>
+</pre>
+<ul>
+ <li>[0000] class 0: Shallow Ocean</li>
+ <li>[0001] class 1: Land (Nothing else but land)</li>
+ <li>[0010] class 2: Ocean and lake shorelines</li>
+ <li>[0011] class 3: Shallow inland water</li>
+ <li>[0100] class 4: Ephemeral water</li>
+ <li>[0101] class 5: Deep inland water</li>
+ <li>[0110] class 6: Moderate or continental ocean</li>
+ <li>[0111] class 7: Deep ocean</li>
+ <li>[1111] class 15: Fill Value</li>
+ <li>Classes 8-14: Not used</li>
+</ul>
+
+<pre>
+<EM>MCD43B2: Albedo Quality Ancillary Sun Zenith Angle at Local Solar Noon Data 1Km bits[8-14]</EM>
+<EM>SDS: BRDF_Albedo_Ancillary</EM>
+</pre>
+<ul>
+   Returns integer value [0-90], 127 is Fill Value
+</ul>
+
+
+<pre>
+<EM>MCD43B2: Band-wise Albedo Quality Data 1Km</EM>
+<EM>SDS: BRDF_Albedo_Band_Quality</EM>
+</pre>
+bits[0-3][4-7][8-11][12-15][16-19][20-23][24-27]<br>
+<ul>
+ <li>[0000]= class 0: best quality, 75% or more with best full inversions</li>
+ <li>[0001]= class 1: good quality, 75% or more with full inversions</li>
+ <li>[0010]= class 2: Mixed, 50% or less full inversions and 25% or less fill values</li> 
+ <li>[0011]= class 3: All magnitude inversions or 50% or less fill values</li> 
+ <li>[0100]= class 4: 75% or more fill values</li> 
+ <li>Classes 5-14: Not Used</li>
+ <li>[1111]= class 15: Fill Value</li>
+</ul>
+
 
 <H2>NOTES</H2>
 In MOD09A1: It seems that cloud related info is not filled properly in the standard QC (MOD09A1 in this module) since version 3, State-QA 500m images (MOD09A1s in this module) should be used (see Vermote et al., 2008).<br>
