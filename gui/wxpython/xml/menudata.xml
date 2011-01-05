@@ -2511,6 +2511,7 @@
 	    </menuitem>
 	  </items>
 	</menu>
+	<separator />
 	<menuitem>
 	  <label>Rectify image or raster</label>
 	  <help>Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points.</help>
@@ -2518,6 +2519,19 @@
 	  <handler>OnMenuCmd</handler>
 	  <command>i.rectify</command>
 	</menuitem>
+	<menuitem>
+	  <label>Histogram</label>
+	  <help>Generate histogram of image</help>
+	  <handler>DispHistogram</handler>
+	</menuitem>
+	<menuitem>
+	  <label>Spectral response</label>
+	  <help>Displays spectral response at user specified locations in group or images.</help>
+	  <keywords>imagery,raster,multispectral</keywords>
+	  <handler>OnMenuCmd</handler>
+	  <command>i.spectral</command>
+	</menuitem>
+	<separator />
 	<menuitem>
 	  <label>Brovey sharpening</label>
 	  <help>Brovey transform to merge multispectral and high-res panchromatic channels</help>
@@ -2585,25 +2599,6 @@
 	    </menuitem>
 	  </items>
 	</menu>
-	<menuitem>
-	  <label>Histogram</label>
-	  <help>Generate histogram of image</help>
-	  <handler>DispHistogram</handler>
-	</menuitem>
-	<menuitem>
-	  <label>Spectral response</label>
-	  <help>Displays spectral response at user specified locations in group or images.</help>
-	  <keywords>imagery,raster,multispectral</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>i.spectral</command>
-	</menuitem>
-	<menuitem>
-	  <label>Tasseled cap vegetation index</label>
-	  <help>Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data</help>
-	  <keywords>raster,imagery</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>i.tasscap</command>
-	</menuitem>
 	<menu>
 	  <label>Transform image</label>
 	  <items>
@@ -2655,6 +2650,7 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>i.landsat.toar</command>
 	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Landsat cloud cover assessment</label>
 	      <help>Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).</help>
@@ -2669,6 +2665,7 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>i.modis.qc</command>
 	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Atmospheric correction</label>
 	      <help>Performs atmospheric correction using the 6S algorithm.</help>
@@ -2676,6 +2673,7 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>i.atcorr</command>
 	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>LatLong map</label>
 	      <help>creates a latitude/longitude map</help>
@@ -2702,6 +2700,14 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>i.vi</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>Tasseled cap vegetation index</label>
+	      <help>Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data</help>
+	      <keywords>raster,imagery,Landsat</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.tasscap</command>
+	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Albedo</label>
 	      <help>Computes broad band albedo from surface reflectance.</help>
