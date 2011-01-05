@@ -3,8 +3,8 @@
 
 @brief wxGUI vector digitizer (base class)
 
-Code based on wxVdigit C++ component from GRASS 6.4.0. Converted to
-Python in 2010/12-2011/01.
+Code based on wxVdigit C++ component from GRASS 6.4.0
+(gui/wxpython/vdigit). Converted to Python in 2010/12-2011/01.
 
 List of classes:
  - IVDigit
@@ -20,14 +20,19 @@ This program is free software under the GNU General Public License
 from debug       import Debug
 from preferences import globalSettings as UserSettings
 
-from wxvdriver import DisplayDriver
+from wxvdriver   import DisplayDriver
 
 from grass.lib.grass  import *
 from grass.lib.vector import *
+from grass.lib.vedit  import *
 
 class IVDigit:
     def __init__(self, mapwindow):
-        self.map       = None
+        """!Base class for vector digitizer (ctypes interface)
+        
+        @parem mapwindow reference for map window (BufferedWindow)
+        """
+        self.mapInfo   = None      # pointer to Map_info
         self.mapWindow = mapwindow
         
         if not mapwindow.parent.IsStandalone():
@@ -46,22 +51,21 @@ class IVDigit:
         
         # layer / max category
         self.cats = dict()
+
         # settings
-        self._settings = {
-            'breakLines'  : None,
-            'addCentroid' : None,
-            'catBoundary' : None
+        self.settings = {
+            'breakLines'  : False,
+            'addCentroid' : False,
+            'catBoundary' : True,
             }
+        
         # undo/redo
         self.changesets = dict()
-        self.changesetCurrent = None # first changeset to apply
-        self.changesetEnd     = None # last changeset to be applied
+        self.changesetCurrent = -1 # first changeset to apply
+        self.changesetEnd     = -1 # last changeset to be applied
         
-        if self._display.mapInfo:
+        if self.mapInfo:
             self.InitCats()
-        
-        # initial value for undo/redo
-        self.changesetEnd = self.changesetCurrent = -1
         
     def __del__(self):
         pass # free changesets ?
@@ -69,9 +73,34 @@ class IVDigit:
     def _setCategory(self):
         pass
     
-    def _openBackgroundVectorMap(self):
-        pass
+    def _openBackgroundMap(self, bgmap):
+        """!Open background vector map
 
+        @todo support more background maps then only one
+        
+        @param bgmap name of vector map to be opened
+
+        @return map_info
+        @return None on error
+        """
+        name = c_char()
+        mapset = c_char()
+        if not G__name_is_fully_qualified(bgmap, byref(name), byref(mapset)):
+            name = bgmap
+            mapset = G_find_vector2(bgmap, '')
+        else:
+            name = name.value
+            mapset = mapset.value
+
+        if (name == Vect_get_name(self.mapInfo) and \
+                mapset == Vect_get_mapset(self.mapInfo)):
+            return None
+
+        bgMapInfo = map_info()
+	if Vect_open_old(byref(bgMapInfo), name, mapset) == -1:
+            return None
+        return bgMapInfo
+    
     def _breakLineAtIntersection(self):
         pass
     
@@ -85,9 +114,30 @@ class IVDigit:
     def _addActionsAfter(self):
         pass
 
-    def _addActionToChangeset(self):
-        pass
-
+    def _addActionToChangeset(self, changeset, add, line):
+        """!Add action to changeset
+        
+        @param changeset id of changeset
+        @param add True to add, otherwise delete
+        @param line feature id
+        """
+        if not self.mapInfo:
+            return 
+        
+        if not Vect_line_alive(self.mapInfo, line):
+            return
+        
+        offset = Vect_get_line_offset(self.mapInfo, line)
+        
+        if not self.changesets.has_key(changeset):
+            self.changesets[changeset] = list()
+            self.changesetCurrent = changeset
+        
+        self.changesets[changeset].append((type, line, offset))
+        
+        Debug.msg(3, "IVDigit._addActionToChangeset(): changeset=%d, type=%d, line=%d, offset=%d",
+                  changeset, type, line, offset)
+        
     def _applyChangeset(self):
         pass
 
@@ -97,77 +147,48 @@ class IVDigit:
     def _removeActionFromChangeset(self):
         pass
 
-    def AddPoint (self, map, point, x, y, z=None):
-        """!Add new point/centroid
-
-        @param map   map name (unused, for compatability with VEdit)
-        @param point feature type (if true point otherwise centroid)
-        @param x,y,z coordinates
+    def AddFeature(self, ftype, points):
+        """!Add new feature
+        
+        @param ftype feature type (point, line, centroid, boundary)
+        @param points tuple of points ((x, y), (x, y), ...)
+        
+        @return new feature id
         """
-        if UserSettings.Get(group='vdigit', key="categoryMode", subkey='selection') == 2:
+        if UserSettings.Get(group = 'vdigit', key = "categoryMode", subkey = 'selection') == 2:
             layer = -1 # -> no category
             cat   = -1
         else:
-            layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
-            cat   = self.SetCategory()
-            
-        if point:
-            type = wxvdigit.GV_POINT 
-        else:
-            type = wxvdigit.GV_CENTROID 
-
-        snap, thresh = self.__getSnapThreshold()
-
-        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
-                                     subkey='value', internal=True))
-        if z:
-            ret = self.digit.AddLine(type, [x, y, z], layer, cat,
-                                     bgmap, snap, thresh)
-        else:
-            ret = self.digit.AddLine(type, [x, y], layer, cat,
-                                     bgmap, snap, thresh)
-        self.toolbar.EnableUndo()
-
-        return ret
+            layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
+            cat   = self.cats.get(layer, 1)
         
-    def AddLine (self, map, line, coords):
-        """!Add line/boundary
-
-        @param map    map name (unused, for compatability with VEdit)
-        @param line   feature type (if True line, otherwise boundary)
-        @param coords list of coordinates
-        """
-        if len(coords) < 2:
+        snap, thresh = self._display.GetThreshold()
+        
+        bgmap = str(UserSettings.Get(group = 'vdigit', key = 'bgmap',
+                                     subkey = 'value', internal = True))
+        
+        if ftype == 'point':
+            vtype = GV_POINT
+        elif ftype == 'line':
+            vtype = GV_LINE
+        elif ftype == 'centroid':
+            vtype = GV_CENTROID
+        elif ftype == 'boundary':
+            vtype = GV_BOUNDARY
+        else:
+            gcmd.GError(parent = self.mapwindow,
+                        message = _("Unknown feature type '%s'") % ftype)
             return
         
-        if UserSettings.Get(group='vdigit', key="categoryMode", subkey='selection') == 2:
-            layer = -1 # -> no category
-            cat   = -1
-        else:
-            layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
-            cat   = self.SetCategory()
+        if vtype & GV_LINES and len(points) < 2:
+            gcmd.GError(parent = self.mapwindow,
+                        message = _("Not enough points for line"))
+            return
         
-        if line:
-            type = wxvdigit.GV_LINE
-        else:
-            type = wxvdigit.GV_BOUNDARY
-        
-        listCoords = []
-        for c in coords:
-            for x in c:
-                listCoords.append(x)
-        
-        snap, thresh = self.__getSnapThreshold()
-        
-        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
-                                     subkey='value', internal=True))
-        
-        ret = self.digit.AddLine(type, listCoords, layer, cat,
-                                 bgmap, snap, thresh)
-
         self.toolbar.EnableUndo()
         
-        return ret
+        return self._addFeature(vtype, points, layer, cat,
+                                bgmap, snap, thresh)
     
     def DeleteSelectedLines(self):
         """!Delete selected features
@@ -567,23 +588,6 @@ class IVDigit:
         
         return ret
     
-    def __getSnapThreshold(self):
-        """!Get snap mode and threshold value
-
-        @return (snap, thresh)
-        """
-        thresh = self.driver.GetThreshold()
-
-        if thresh > 0.0:
-            if UserSettings.Get(group='vdigit', key='snapToVertex', subkey='enabled') is True:
-                snap = wxvdigit.SNAPVERTEX
-            else:
-                snap = wxvdigit.SNAP
-        else:
-            snap = wxvdigit.NO_SNAP
-
-        return (snap, thresh)
-
     def GetDisplay(self):
         """!Get display driver instance"""
         return self._display
@@ -594,13 +598,12 @@ class IVDigit:
         @param map name of vector map to be set up
         """
         Debug.msg (3, "AbstractDigit.SetMapName map=%s" % name)
-        self.map = name
         
         name, mapset = name.split('@')
         try:
-            ret = self._display.OpenMap(str(name), str(mapset), True)
+            self.mapInfo = self._display.OpenMap(str(name), str(mapset), True)
         except SystemExit:
-                ret = -1
+            pass
         
         # except StandardError, e:
         #     raise gcmd.GException(_("Unable to initialize display driver of vector "
@@ -625,7 +628,7 @@ class IVDigit:
     def CloseMap(self):
         """!Close currently open vector map
         """
-        if not self.map:
+        if not self.mapInfo:
             return
         
         self._display.CloseMap()
@@ -637,30 +640,29 @@ class IVDigit:
         @return -1 on error
         """
         self.cats.clear()
-        mapInfo = self._display.mapInfo
-        if not mapInfo:
+        if not self.mapInfo:
             return -1
         
-        ndblinks = Vect_get_num_dblinks(byref(mapInfo))
+        ndblinks = Vect_get_num_dblinks(self.mapInfo)
         for i in range(ndblinks):
-            fi = Vect_get_dblink(byref(mapInfo), i).contents
+            fi = Vect_get_dblink(self.mapInfo, i).contents
             if fi:
                 self.cats[fi.number] = None
         
         # find max category
-        nfields = Vect_cidx_get_num_fields(byref(mapInfo))
+        nfields = Vect_cidx_get_num_fields(self.mapInfo)
         Debug.msg(2, "wxDigit.InitCats(): nfields=%d", nfields)
         
         for i in range(nfields):
-            field = Vect_cidx_get_field_number(byref(mapInfo), i)
-            ncats = Vect_cidx_get_num_cats_by_index(byref(mapInfo), i)
+            field = Vect_cidx_get_field_number(self.mapInfo, i)
+            ncats = Vect_cidx_get_num_cats_by_index(self.mapInfo, i)
             if field <= 0:
                 continue
             for j in range(ncats):
                 cat = c_int()
                 type = c_int()
                 id = c_int()
-                Vect_cidx_get_cat_by_index(byref(mapInfo), i, j,
+                Vect_cidx_get_cat_by_index(self.mapInfo, i, j,
                                            byref(cat), byref(type), byref(id))
                 if self.cats.has_key(field):
                     if cat > self.cats[field]:
@@ -675,8 +677,149 @@ class IVDigit:
                 self.cats[field] = 0 # first category 1
 	    Debug.msg(3, "wxDigit.InitCats(): layer=%d, cat=%d", field, self.cats[field])
         
-    def AddLine(self):
-        pass
+    def _errorWriteLine(self):
+        """!Show error dialog
+        """
+        gcmd.GError(parent = self.mapwindow,
+                    message = _("Writing new feature failed"))
+        
+    def _addFeature(self, type, coords, layer, cat, bgmap, snap, threshold):
+        """!Add new feature to the vector map
+
+        @param type feature type (GV_POINT, GV_LINE, GV_BOUNDARY, ...)
+        @coords tuple of coordinates ((x, y), (x, y), ...)
+        @param layer layer number (-1 for no cat)
+        @param cat category number
+        @param bgmap name of background vector map (None for no background) to be used for snapping
+        @param snap snap to node/vertex
+        @param threshold threshold for snapping
+        
+        @return -1 on error
+        @return feature id of new feature
+        """
+        if not self.mapInfo:
+            return -1
+        
+        is3D = bool(Vect_is_3d(self.mapInfo))
+        
+        Debug.msg(2, "IVDigit._addFeature(): npoints=%d, layer=%d, cat=%d, snap=%d",
+                  len(coords), layer, cat, snap)
+        
+        if not (type & (GV_POINTS | GV_LINES)): # TODO: 3D
+            return -1
+        
+        # try to open background map if asked
+        bgMapInfo = None
+        if bgmap:
+            bgMapInfo = self._openBackgroundMap(bgmap)
+            if not bgMapInfo:
+                gcmd.GError(parent = self.mapwindow,
+                            message = _("Unable to open background vector map <%s>") % bgmap)
+                return -1
+        
+        Points = Vect_new_line_struct()
+        Cats   = Vect_new_cats_struct() 
+        
+        # set category
+        if layer > 0 and \
+                (type != GV_BOUNDARY or \
+                     (type == GV_BOUNDARY and self.settings['catBoundary'])):
+            Vect_cat_set(Cats, layer, cat)
+            self.cats[layer] = max(cat, self.cats.get(layer, 0))
+        
+        # append points
+        for c in coords:
+            Vect_append_point(Points, c[0], c[1], 0.0)
+        
+        if type & GV_BOUNDARY:
+            # close boundary
+            cPoints = Points.contents
+            last = cPoints.n_points - 1
+            if Vect_points_distance(cPoints.x[0], cPoints.x[0], cPoints.z[0],
+                                    cPoints.x[last], cPoints.x[last], cPoints.z[last],
+                                    is3D) <= threshold:
+                cPoints.x[last] = cPoints.x[0]
+                cPoints.y[last] = cPoints.y[0]
+                cPoints.z[last] = cPoints.z[0]
+        
+        if snap != NO_SNAP and (type & (GV_POINT | GV_LINES)):
+            # apply snapping (node or vertex)
+            modeSnap = not (snap == SNAP)
+            if bgMapInfo:
+                Vedit_snap_line(self.mapInfo, byref(bgMapInfo), 1,
+                                -1, Points, threshold, modeSnap)
+            else:
+                # Vedit_snap_line(self.mapInfo, None, 0,
+                #                -1, Points, threshold, modeSnap)
+                pass
+        
+        newline = Vect_write_line(self.mapInfo, type, Points, Cats)
+        if newline < 0:
+            self._errorWriteLine()
+            return -1
+        
+        left = right = -1
+        if type & GV_BOUNDARY and self.settings['addCentroid']:
+            # add centroids for left/right area
+            bpoints = Vect_new_line_struct()
+            cleft = c_int()
+            cright = c_int()
+            
+            Vect_get_line_areas(self.mapInfo, newline,
+                                byref(cleft), byref(cright))
+            left = cleft.value
+            right = cright.value
+            
+            # check if area exists and has no centroid inside
+            if layer > 0 and (left > 0 or right > 0):
+                Vect_cat_set(Cats, layer, cat)
+                self.cats[layer] = max(cat, self.cats.get(layer, 0))
+            
+            x = c_double()
+            y = c_double()
+            if left > 0 and \
+                    Vect_get_area_centroid(self.mapInfo, left) == 0:
+                if Vect_get_area_points(self.mapInfo, left, bpoints) > 0 and \
+                        Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
+                    Vect_reset_line(bpoints)
+                    Vect_append_point(bpoints, x.value, y.value, 0.0)
+                    if Vect_write_line(self.mapInfo, GV_CENTROID,
+                                       bpoints, Cats) < 0:
+                        self._errorWriteLine()
+                        return -1
+            
+            if right > 0 and \
+                    Vect_get_area_centroid(self.mapInfo, right) == 0:
+                if Vect_get_area_points(byref(self.mapInfo), right, bpoints) > 0 and \
+                        Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
+                    Vect_reset_line(bpoints)
+                    Vect_append_point(bpoints, x.value, y.value, 0.0)
+                    if Vect_write_line(byref(self.mapInfo), GV_CENTROID,
+                                       bpoints, Cats) < 0:
+                        self._errorWriteLine()
+                        return -1
+            Vect_destroy_line_struct(bpoints)
+        
+        # register changeset
+        self._addActionToChangeset(len(self.changesets), True, newline)
+        
+        # break at intersection
+        if self.settings['breakLines']:
+            self._breakLineAtIntersection(newline, Points, changeset)
+        
+        Vect_destroy_line_struct(Points)
+        Vect_destroy_cats_struct(Cats)
+        
+        # close background map if opened
+        if bgMapInfo:
+            Vect_close(byref(bgMapInfo))
+        
+        if type & GV_BOUNDARY and \
+                not self.settings['catBoundary'] and \
+        	left < 1 and right < 1:
+            newline = None # ?
+        
+        return newline
 
     def RewriteLine(self):
         pass
@@ -734,20 +877,6 @@ class IVDigit:
 
     def CopyCats(self):
         pass
-
-    def GetCategory(self, layer):
-        """!Get max category number for layer
-        
-        @param layer layer number
-        
-        @return category number (0 if no category found)
-        @return -1 on error
-        """
-        if cats.find(layer) != cats.end():
-            Debug.msg(3, "vdigit.GetCategory(): layer=%d, cat=%d", layer, cats[layer])
-            return cats[layer]
-        
-        return 0
     
     def GetLineCats(self):
         pass
@@ -775,24 +904,23 @@ class IVDigit:
         self._settings['addCentroid'] = addCentroid
         self._settings['catBoundary'] = None # !catBoundary # do not attach
 
-    def SetCategory(self):
-        """!Return category number to use (according Settings)"""
+    def _getCategory(self):
+        """!Get current category number to be use"""
         if not UserSettings.Get(group = 'vdigit', key = 'categoryMode', subkey = 'selection'):
             self.SetCategoryNextToUse()
         
         return UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value')
 
-    def SetCategoryNextToUse(self):
-        """!Find maximum category number in the map layer
-        and update Digit.settings['category']
-
-        @return 'True' on success, 'False' on failure
+    def _setCategoryNextToUse(self):
+        """!Find maximum category number for the given layer and
+        update the settings
         """
-        # vector map layer without categories, reset to '1'
+        # reset 'category' to '1' (for maps with no attributes)
         UserSettings.Set(group = 'vdigit', key = 'category', subkey = 'value', value = 1)
         
-        if self.map:
-            cat = self.GetCategory(UserSettings.Get(group = 'vdigit', key = 'layer', subkey = 'value'))
-            cat += 1
-            UserSettings.Set(group = 'vdigit', key = 'category', subkey = 'value',
-                             value = cat)
+        # get max category number for given layer and update the settings
+        cat = self.cats.get(UserSettings.Get(group = 'vdigit', key = 'layer', subkey = 'value'), 0)
+        cat += 1
+        UserSettings.Set(group = 'vdigit', key = 'category', subkey = 'value',
+                         value = cat)
+        

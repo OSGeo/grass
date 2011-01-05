@@ -3,8 +3,8 @@
 
 @brief wxGUI vector digitizer (display driver)
 
-Code based on wxVdigit C++ component from GRASS 6.4.0. Converted to
-Python in 2010/12-2011/01.
+Code based on wxVdigit C++ component from GRASS 6.4.0
+(gui/wxpython/vdigit). Converted to Python in 2010/12-2011/01.
 
 List of classes:
  - DisplayDriver
@@ -35,9 +35,11 @@ class DisplayDriver:
         @param device    wx.PseudoDC device where to draw vector objects
         @param deviceTmp wx.PseudoDC device where to draw temporary vector objects
         """
-        G_gisinit("")             # initialize GRASS libs
+        G_gisinit('')             # initialize GRASS libs
         
-        self.mapInfo = None       # open vector map (Map_Info structure)
+        self.mapInfoObj = None    # open vector map (Map_Info structure)
+        self.mapInfo    = None    # pointer to self.mapInfoObj
+        
         self.dc      = device     # PseudoDC devices
         self.dcTmp   = deviceTmp
         self.mapObj  = mapObj
@@ -111,6 +113,8 @@ class DisplayDriver:
         self.drawSegments = False
 
         self.UpdateSettings()
+
+        Vect_set_fatal_error(GV_FATAL_PRINT)
         
     # def __del__(self):
     #     """!Close currently open vector map"""
@@ -329,7 +333,7 @@ class DisplayDriver:
         if not self.mapInfo or not self.dc or not self.dcTmp:
             return -1
         
-        rlist = Vedit_render_map(byref(self.mapInfo), byref(self._getRegionBox()), self._getDrawFlag(),
+        rlist = Vedit_render_map(self.mapInfo, byref(self._getRegionBox()), self._getDrawFlag(),
                                  self.region['center_easting'], self.region['center_northing'],
                                  self.mapObj.width, self.mapObj.height,
                                  max(self.region['nsres'], self.region['ewres'])).contents
@@ -374,7 +378,7 @@ class DisplayDriver:
             dc_ids.append(1)
         else:
             # only first selected feature
-            # Vect_read_line(byref(self.mapInfo), byref(self.points), None,
+            # Vect_read_line(self.mapInfo, byref(self.points), None,
             # self.selected.ids->value[0]);
             npoints = self.points.n_points
             # node - segment - vertex - segment - node
@@ -431,15 +435,15 @@ class DisplayDriver:
         """
         ret = 0
         if self.mapInfo:
-            if self.mapInfo.mode == GV_MODE_RW:
+            if self.mapInfoObj.mode == GV_MODE_RW:
                 # rebuild topology
-                Vect_build_partial(byref(self.mapInfo), GV_BUILD_NONE)
-                Vect_build(byref(self.mapInfo))
+                Vect_build_partial(self.mapInfo, GV_BUILD_NONE)
+                Vect_build(self.mapInfo)
 
             # close map and store topo/cidx
-            ret = Vect_close(byref(self.mapInfo))
-            del self.mapInfo
-            self.mapInfo = None
+            ret = Vect_close(self.mapInfo)
+            del self.mapInfoObj
+            self.mapInfo = self.mapInfoObj = None
         
         return ret
     
@@ -449,13 +453,14 @@ class DisplayDriver:
         @param name name of vector map to be open
         @param mapset name of mapset where the vector map lives
    
-        @return topo level on success
-        @return -1 on error
+        @return map_info
+        @return None on error
         """
         Debug.msg("DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
                   name, mapset, update)
-        if not self.mapInfo:
-            self.mapInfo = Map_info()
+        if not self.mapInfoObj:
+            self.mapInfoObj = Map_info()
+            self.mapInfo = pointer(self.mapInfoObj)
         
         # define open level (level 2: topology)
         Vect_set_open_level(2)
@@ -465,15 +470,15 @@ class DisplayDriver:
         
         # open existing map
         if update:
-            ret = Vect_open_update(byref(self.mapInfo), name, mapset)
+            ret = Vect_open_update(self.mapInfo, name, mapset)
         else:
-            ret = Vect_open_old(byref(self.mapInfo), name, mapset)
-        
+            ret = Vect_open_old(self.mapInfo, name, mapset)
+
         if ret == -1: # error
-            del self.mapInfo
-            self.mapInfo = None
+            del self.mapInfoObj
+            self.mapInfo = self.mapInfoObj = None
         
-        return ret
+        return self.mapInfo
     
     def ReloadMap(self):
         pass
@@ -490,7 +495,7 @@ class DisplayDriver:
             return None
         
         bbox = bound_box()
-        Vect_get_map_box(byref(self.mapInfo), byref(bbox))
+        Vect_get_map_box(self.mapInfo, byref(bbox))
 
         return bbox.W, bbox.S, bbox.B, \
             bbox.E, bbox.N, bbox.T
@@ -541,14 +546,17 @@ class DisplayDriver:
         self.region = self.mapObj.GetCurrentRegion()
         
     def GetThreshold(self, type = 'snapping', value = None, units = None):
-        """!Return threshold in map units
+        """!Return threshold value in map units
         
+        @param type snapping mode (node, vertex)
         @param value threshold to be set up
         @param units units (map, screen)
+
+        @return (snap mode id, threshold value)
         """
         if value is None:
             value = UserSettings.Get(group = 'vdigit', key = type, subkey =' value')
-
+        
         if units is None:
             units = UserSettings.Get(group = 'vdigit', key = type, subkey = 'units')
         
@@ -562,6 +570,12 @@ class DisplayDriver:
         else:
             threshold = value
         
-        Debug.msg(4, "DisplayDriver.GetThreshold(): type=%s, thresh=%f" % (type, threshold))
-        
-        return threshold
+        if threshold > 0.0:
+            if UserSettings.Get(group = 'vdigit', key = 'snapToVertex', subkey = 'enabled'):
+                snap = SNAPVERTEX
+            else:
+                snap = SNAP
+        else:
+            snap = NO_SNAP
+
+        return (snap, threshold)
