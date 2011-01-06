@@ -65,12 +65,12 @@ int graph_init(NdglGraph_s * g, int vertices)
 /* writes the most important part of the In network to Out network
  * according to the thresholds, output is bigger for smaller
  * thresholds. Function returns the number of points written 
- TODO: rewrite ilist by somthing more space and time efficient
+ TODO: rewrite ilist by something more space and time efficient
  or at least, implement append which does not check whether
  the value is already in the list*/
 int graph_generalization(struct Map_info *In, struct Map_info *Out,
-			 double degree_thresh, double closeness_thresh,
-			 double betweeness_thresh)
+			 int mask_type, double degree_thresh, 
+			 double closeness_thresh, double betweeness_thresh)
 {
 
     int i;
@@ -85,7 +85,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
     double *betw, *betweeness;
     struct ilist **prev;
 
-    Vect_net_build_graph(In, GV_LINE | GV_BOUNDARY, 0, 0, NULL, NULL, NULL, 0,
+    Vect_net_build_graph(In, mask_type, 0, 0, NULL, NULL, NULL, 0,
 			 0);
     gr = &(In->graph);
     /* build own graph by edge<->vertex */
@@ -207,7 +207,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 		}
 	    }
 	}
-	/*finally run another BFS from the leaves in the BFS DAG
+	/* finally run another BFS from the leaves in the BFS DAG
 	 * and calculate betweeness centrality measure */
 	front = 0;
 	back = 0;
@@ -245,8 +245,10 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 	     (comp[i] - 1.0) / closeness[i] >= closeness_thresh &&
 	     betweeness[i] >= betweeness_thresh)) {
 	    type = Vect_read_line(In, Points, Cats, i);
-	    output += Points->n_points;
-	    Vect_write_line(Out, type, Points, Cats);
+	    if (type & mask_type) {
+		output += Points->n_points;
+		Vect_write_line(Out, type, Points, Cats);
+	    }
 	}
     }
 

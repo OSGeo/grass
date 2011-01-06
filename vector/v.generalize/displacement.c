@@ -26,7 +26,7 @@
 #include "matrix.h"
 
 /* snakes method modified for displacement.
- * Function returns somthing. This function affects only the
+ * Function returns something. This function affects only the
  * lines specified in varray (or all lines if varray is null).
  Other lines are copied */
 int snakes_displacement(struct Map_info *In, struct Map_info *Out,
@@ -111,7 +111,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     }
 
     threshold2 = threshold * threshold;
-    /*select only the points which need to be displace */
+    /*select only the points which need to be displaced */
     for (i = 0; i < index; i++) {
 	if (need[point_index[i]])
 	    continue;
