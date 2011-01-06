@@ -3,7 +3,7 @@
  *
  * MODULE:     v.generalize
  *
- * AUTHOR(S):  Daniel Bundala
+ * AUTHOR(S):  Daniel Bundala, Markus Metz
  *
  * PURPOSE:    miscellaneous functions of v.generalize
  *          
@@ -74,7 +74,7 @@ int get_furthest(struct line_pnts *Points, int a, int b, int with_z,
 }
 
 /* TODO: The collection of categories is horrible in current version! 
- * Rverything repeats many times. We need some data structure
+ * Everything repeats many times. We need some data structure
  * implementing set! */
 int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
 {
@@ -184,5 +184,141 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
     G_free(ocats);
     G_free(nocats);
     G_free(fields);
+    return 1;
+}
+
+/* parse filter option and select appropriate lines */
+/* return array with selected lines or NULL */
+struct varray *parse_filter_options(struct Map_info *Map, int layer,
+                      int mask_type, char *where, char *cats, int *chcat)
+{
+    struct varray *varray;
+
+    if (where) {
+	if (layer < 1)
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
+	if (cats)
+	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
+	*chcat = 1;
+	varray = Vect_new_varray(Vect_get_num_lines(Map));
+	if (Vect_set_varray_from_db
+	    (Map, layer, where, mask_type, 1, varray) == -1) {
+	    G_warning(_("Unable to load data from database"));
+	}
+    }
+    else if (cats) {
+	if (layer < 1)
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "cat");
+	varray = Vect_new_varray(Vect_get_num_lines(Map));
+	*chcat = 1;
+	if (Vect_set_varray_from_cat_string
+	    (Map, layer, cats, mask_type, 1, varray) == -1) {
+	    G_warning(_("Problem loading category values"));
+	}
+    }
+    else
+	return NULL;
+	
+    return varray;
+}
+
+/* check topology corruption by boundary modification
+ * return 0 on corruption, 1 if modification is ok */
+int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
+               struct line_pnts *Points, struct line_cats *Cats)
+{
+    int i, intersect, newline, left_old, right_old,
+	left_new, right_new;
+    struct bound_box box;
+    static struct line_pnts *BPoints = NULL;
+    static struct ilist *List = NULL;
+
+    if (!BPoints)
+	BPoints = Vect_new_line_struct();
+    if (!List)
+	List = Vect_new_list();
+
+    /* Check intersection of the modified boundary with other boundaries */
+    Vect_line_box(Points, &box);
+    Vect_select_lines_by_box(Out, &box, GV_BOUNDARY, List);
+
+    intersect = 0;
+    for (i = 0; i < List->n_values; i++) {
+	int j, bline;
+	struct line_pnts **AXLines, **BXLines;
+	int naxlines, nbxlines;
+
+	bline = List->value[i];
+	if (bline == line)
+	    continue;
+
+	Vect_read_line(Out, BPoints, NULL, bline);
+
+	/* Vect_line_intersection is quite slow, hopefully not so bad because only few 
+	 * intersections should be found if any */
+
+	Vect_line_intersection(Points, BPoints, &AXLines, &BXLines,
+			       &naxlines, &nbxlines, 0);
+
+	G_debug(4,
+		"bline = %d intersect = %d naxlines = %d nbxlines = %d",
+		bline, intersect, naxlines, nbxlines);
+
+	/* Free */
+	if (naxlines > 0) {
+	    for (j = 0; j < naxlines; j++) {
+		Vect_destroy_line_struct(AXLines[j]);
+	    }
+	    G_free(AXLines);
+	}
+	if (nbxlines > 0) {
+	    for (j = 0; j < nbxlines; j++) {
+		Vect_destroy_line_struct(BXLines[j]);
+	    }
+	    G_free(BXLines);
+	}
+
+	if (naxlines > 1 || nbxlines > 1) {
+	    intersect = 1;
+	    break;
+	}
+    }
+    
+    /* modified boundary intersects another boundary */
+    if (intersect)
+	return 0;
+
+    /* Get centroids on the left and right side */
+    Vect_get_line_areas(Out, line, &left_old, &right_old);
+    if (left_old < 0)
+	left_old = Vect_get_isle_area(Out, abs(left_old));
+    if (left_old > 0)
+	left_old = Vect_get_area_centroid(Out, left_old);
+    if (right_old < 0)
+	right_old = Vect_get_isle_area(Out, abs(right_old));
+    if (right_old > 0)
+	right_old = Vect_get_area_centroid(Out, right_old);
+
+    /* OK, rewrite modified boundary */
+    newline = Vect_rewrite_line(Out, line, GV_BOUNDARY, Points, Cats);
+
+    /* Check position of centroids */
+    Vect_get_line_areas(Out, newline, &left_new, &right_new);
+    if (left_new < 0)
+	left_new = Vect_get_isle_area(Out, abs(left_new));
+    if (left_new > 0)
+	left_new = Vect_get_area_centroid(Out, left_new);
+    if (right_new < 0)
+	right_new = Vect_get_isle_area(Out, abs(right_new));
+    if (right_new > 0)
+	right_new = Vect_get_area_centroid(Out, right_new);
+
+    if (left_new != left_old || right_new != right_old) {
+	G_debug(3,
+		"The modified boundary changes attachement of centroid -> not modified");
+	Vect_rewrite_line(Out, newline, GV_BOUNDARY, APoints, Cats);
+	return 0;
+    }
+    
     return 1;
 }
