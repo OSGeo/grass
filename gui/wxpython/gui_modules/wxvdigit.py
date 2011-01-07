@@ -25,6 +25,7 @@ from wxvdriver   import DisplayDriver
 from grass.lib.grass  import *
 from grass.lib.vector import *
 from grass.lib.vedit  import *
+from grass.lib.dbmi   import *
 
 class IVDigit:
     def __init__(self, mapwindow):
@@ -32,7 +33,7 @@ class IVDigit:
         
         @parem mapwindow reference for map window (BufferedWindow)
         """
-        self.mapInfo   = None      # pointer to Map_info
+        self.poMapInfo   = None      # pointer to Map_info
         self.mapWindow = mapwindow
         
         if not mapwindow.parent.IsStandalone():
@@ -64,7 +65,7 @@ class IVDigit:
         self.changesetCurrent = -1 # first changeset to apply
         self.changesetEnd     = -1 # last changeset to be applied
         
-        if self.mapInfo:
+        if self.poMapInfo:
             self.InitCats()
         
     def __del__(self):
@@ -92,8 +93,8 @@ class IVDigit:
             name = name.value
             mapset = mapset.value
 
-        if (name == Vect_get_name(self.mapInfo) and \
-                mapset == Vect_get_mapset(self.mapInfo)):
+        if (name == Vect_get_name(self.poMapInfo) and \
+                mapset == Vect_get_mapset(self.poMapInfo)):
             return None
 
         bgMapInfo = map_info()
@@ -121,13 +122,13 @@ class IVDigit:
         @param add True to add, otherwise delete
         @param line feature id
         """
-        if not self.mapInfo:
+        if not self.poMapInfo:
             return 
         
-        if not Vect_line_alive(self.mapInfo, line):
+        if not Vect_line_alive(self.poMapInfo, line):
             return
         
-        offset = Vect_get_line_offset(self.mapInfo, line)
+        offset = Vect_get_line_offset(self.poMapInfo, line)
         
         if not self.changesets.has_key(changeset):
             self.changesets[changeset] = list()
@@ -147,6 +148,15 @@ class IVDigit:
     def _removeActionFromChangeset(self):
         pass
 
+    def _listToIList(self, plist):
+        """!Generate from list struct_ilist
+        """
+        ilist = Vect_new_list()
+        for val in plist:
+            Vect_list_append(ilist, val)
+        
+        return ilist
+        
     def AddFeature(self, ftype, points):
         """!Add new feature
         
@@ -162,7 +172,8 @@ class IVDigit:
             layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
             cat   = self.cats.get(layer, 1)
         
-        snap, thresh = self._display.GetThreshold()
+        thresh = self._display.GetThreshold()
+        snap   = self._display.GetSnapMode()
         
         bgmap = str(UserSettings.Get(group = 'vdigit', key = 'bgmap',
                                      subkey = 'value', internal = True))
@@ -193,13 +204,91 @@ class IVDigit:
     def DeleteSelectedLines(self):
         """!Delete selected features
 
-        @return number of deleted lines
+        @return number of deleted features
         """
-        nlines = self.digit.DeleteLines(UserSettings.Get(group='vdigit', key='delRecord', subkey='enabled'))
+        deleteRec = UserSettings.Get(group = 'vdigit', key = 'delRecord', subkey = 'enabled')
+        if not self.poMapInfo:
+            return -1
+        
+        n_dblinks = Vect_get_num_dblinks(self.poMapInfo)
+        Cats_del = None
+        
+        # collect categories for delete if requested
+        if deleteRec:
+            poCats    = Vect_new_cats_struct()
+            poCatsDel = Vect_new_cats_struct()
+            for i in self._display.selected['ids']:
+                if Vect_read_line(self.poMapInfo, None, poCats, i) < 0:
+                    Vect_destroy_cats_struct(poCatsDel)
+                    self._errorReadLine()
+                    return -1
+                
+                cats = poCats.contents
+                for j in range(cats.n_cats):
+                    Vect_cat_set(poCatsDel, cats.field[j], cats.cat[j])
+            
+            Vect_destroy_cats_struct(poCats)
+        
+        # register changeset
+        changeset = self._addActionsBefore()
+        
+        ilist = self._listToIList(self._display.selected['ids'])
+        nlines = Vedit_delete_lines(self.poMapInfo, ilist)
+        Vect_destroy_list(ilist)
+        self._display.selected['ids'] = list()
+        
+        if nlines > 0 and deleteRec:
+            handle  = dbHandle()
+            poHandle = pointer(handle)
+            stmt    = dbString()
+            poStmt   = pointer(stmt)
+            
+            for dblink in range(n_dblinks):
+                poFi = Vect_get_dblink(self.poMapInfo, dblink)
+                if poFi is None:
+                    self._errorDbLink(dblink)
+                    return -1
+                
+                Fi = poFi.contents
+                poDriver = db_start_driver(Fi.driver)
+                if poDriver is None:
+                    self._errorDriver(Fi.driver)
+                    return -1
+                
+                db_init_handle(poHandle)
+                db_set_handle(poHandle, Fi.database, None)
+                if db_open_database(poDriver, poHandle) != DB_OK:
+                    self._errorDbDatabase(Fi.driver, Fi.database)
+                    return -1
+                
+                db_init_string(poStmt)
+                db_set_string(poStmt, "DELETE FROM %s WHERE" % Fi.table)
+                n_cats = 0;
+                catsDel = CatsDel.contents
+                for c in range(catsDel.n_cats):
+                    if catsDel.field[c] == Fi.number:
+                        if n_cats > 0:
+                            db_append_string(poStmt, " or")
+                    
+		    db_append_string(poStmt, " %s = %d" % (Fi.key, catsDel.cat[c]))
+		    n_cats += 1
+                
+                Vect_cat_del(poCatsDel, Fi.number)
+                
+                if n_cats and \
+                        db_execute_immediate(poDriver, poStmt) != DB_OK:
+                    self._errorDbExecute(db_get_string(poStmt))
+                    return -1
+                
+                db_close_database(poDriver)
+                db_shutdown_driver(poDriver)
+        
+        if poCatsDel:
+            Vect_destroy_cats_struct(poCatsDel)
         
         if nlines > 0:
             self.toolbar.EnableUndo()
-            
+        
         return nlines
 
     def MoveSelectedLines(self, move):
@@ -601,7 +690,7 @@ class IVDigit:
         
         name, mapset = name.split('@')
         try:
-            self.mapInfo = self._display.OpenMap(str(name), str(mapset), True)
+            self.poMapInfo = self._display.OpenMap(str(name), str(mapset), True)
         except SystemExit:
             pass
         
@@ -628,7 +717,7 @@ class IVDigit:
     def CloseMap(self):
         """!Close currently open vector map
         """
-        if not self.mapInfo:
+        if not self.poMapInfo:
             return
         
         self._display.CloseMap()
@@ -640,29 +729,29 @@ class IVDigit:
         @return -1 on error
         """
         self.cats.clear()
-        if not self.mapInfo:
+        if not self.poMapInfo:
             return -1
         
-        ndblinks = Vect_get_num_dblinks(self.mapInfo)
+        ndblinks = Vect_get_num_dblinks(self.poMapInfo)
         for i in range(ndblinks):
-            fi = Vect_get_dblink(self.mapInfo, i).contents
+            fi = Vect_get_dblink(self.poMapInfo, i).contents
             if fi:
                 self.cats[fi.number] = None
         
         # find max category
-        nfields = Vect_cidx_get_num_fields(self.mapInfo)
+        nfields = Vect_cidx_get_num_fields(self.poMapInfo)
         Debug.msg(2, "wxDigit.InitCats(): nfields=%d", nfields)
         
         for i in range(nfields):
-            field = Vect_cidx_get_field_number(self.mapInfo, i)
-            ncats = Vect_cidx_get_num_cats_by_index(self.mapInfo, i)
+            field = Vect_cidx_get_field_number(self.poMapInfo, i)
+            ncats = Vect_cidx_get_num_cats_by_index(self.poMapInfo, i)
             if field <= 0:
                 continue
             for j in range(ncats):
                 cat = c_int()
                 type = c_int()
                 id = c_int()
-                Vect_cidx_get_cat_by_index(self.mapInfo, i, j,
+                Vect_cidx_get_cat_by_index(self.poMapInfo, i, j,
                                            byref(cat), byref(type), byref(id))
                 if self.cats.has_key(field):
                     if cat > self.cats[field]:
@@ -697,10 +786,10 @@ class IVDigit:
         @return -1 on error
         @return feature id of new feature
         """
-        if not self.mapInfo:
+        if not self.poMapInfo:
             return -1
         
-        is3D = bool(Vect_is_3d(self.mapInfo))
+        is3D = bool(Vect_is_3d(self.poMapInfo))
         
         Debug.msg(2, "IVDigit._addFeature(): npoints=%d, layer=%d, cat=%d, snap=%d",
                   len(coords), layer, cat, snap)
@@ -717,43 +806,43 @@ class IVDigit:
                             message = _("Unable to open background vector map <%s>") % bgmap)
                 return -1
         
-        Points = Vect_new_line_struct()
-        Cats   = Vect_new_cats_struct() 
+        poPoints = Vect_new_line_struct()
+        poCats   = Vect_new_cats_struct() 
         
         # set category
         if layer > 0 and \
                 (type != GV_BOUNDARY or \
                      (type == GV_BOUNDARY and self.settings['catBoundary'])):
-            Vect_cat_set(Cats, layer, cat)
+            Vect_cat_set(poCats, layer, cat)
             self.cats[layer] = max(cat, self.cats.get(layer, 0))
         
         # append points
         for c in coords:
-            Vect_append_point(Points, c[0], c[1], 0.0)
+            Vect_append_point(poPoints, c[0], c[1], 0.0)
         
         if type & GV_BOUNDARY:
             # close boundary
-            cPoints = Points.contents
-            last = cPoints.n_points - 1
-            if Vect_points_distance(cPoints.x[0], cPoints.x[0], cPoints.z[0],
-                                    cPoints.x[last], cPoints.x[last], cPoints.z[last],
+            points = poPoints.contents
+            last = points.n_points - 1
+            if Vect_points_distance(points.x[0], points.x[0], points.z[0],
+                                    points.x[last], points.x[last], points.z[last],
                                     is3D) <= threshold:
-                cPoints.x[last] = cPoints.x[0]
-                cPoints.y[last] = cPoints.y[0]
-                cPoints.z[last] = cPoints.z[0]
+                points.x[last] = points.x[0]
+                points.y[last] = points.y[0]
+                points.z[last] = points.z[0]
         
         if snap != NO_SNAP and (type & (GV_POINT | GV_LINES)):
             # apply snapping (node or vertex)
             modeSnap = not (snap == SNAP)
             if bgMapInfo:
-                Vedit_snap_line(self.mapInfo, byref(bgMapInfo), 1,
-                                -1, Points, threshold, modeSnap)
+                Vedit_snap_line(self.poMapInfo, byref(bgMapInfo), 1,
+                                -1, poPoints, threshold, modeSnap)
             else:
-                # Vedit_snap_line(self.mapInfo, None, 0,
-                #                -1, Points, threshold, modeSnap)
+                # Vedit_snap_line(self.poMapInfo, None, 0,
+                #                -1, poPoints, threshold, modeSnap)
                 pass
         
-        newline = Vect_write_line(self.mapInfo, type, Points, Cats)
+        newline = Vect_write_line(self.poMapInfo, type, poPoints, poCats)
         if newline < 0:
             self._errorWriteLine()
             return -1
@@ -765,37 +854,37 @@ class IVDigit:
             cleft = c_int()
             cright = c_int()
             
-            Vect_get_line_areas(self.mapInfo, newline,
+            Vect_get_line_areas(self.poMapInfo, newline,
                                 byref(cleft), byref(cright))
             left = cleft.value
             right = cright.value
             
             # check if area exists and has no centroid inside
             if layer > 0 and (left > 0 or right > 0):
-                Vect_cat_set(Cats, layer, cat)
+                Vect_cat_set(poCats, layer, cat)
                 self.cats[layer] = max(cat, self.cats.get(layer, 0))
             
             x = c_double()
             y = c_double()
             if left > 0 and \
-                    Vect_get_area_centroid(self.mapInfo, left) == 0:
-                if Vect_get_area_points(self.mapInfo, left, bpoints) > 0 and \
+                    Vect_get_area_centroid(self.poMapInfo, left) == 0:
+                if Vect_get_area_points(self.poMapInfo, left, bpoints) > 0 and \
                         Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    if Vect_write_line(self.mapInfo, GV_CENTROID,
-                                       bpoints, Cats) < 0:
+                    if Vect_write_line(self.poMapInfo, GV_CENTROID,
+                                       bpoints, poCats) < 0:
                         self._errorWriteLine()
                         return -1
             
             if right > 0 and \
-                    Vect_get_area_centroid(self.mapInfo, right) == 0:
-                if Vect_get_area_points(byref(self.mapInfo), right, bpoints) > 0 and \
+                    Vect_get_area_centroid(self.poMapInfo, right) == 0:
+                if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and \
                         Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    if Vect_write_line(byref(self.mapInfo), GV_CENTROID,
-                                       bpoints, Cats) < 0:
+                    if Vect_write_line(byref(self.poMapInfo), GV_CENTROID,
+                                       bpoints, poCats) < 0:
                         self._errorWriteLine()
                         return -1
             Vect_destroy_line_struct(bpoints)
@@ -805,10 +894,10 @@ class IVDigit:
         
         # break at intersection
         if self.settings['breakLines']:
-            self._breakLineAtIntersection(newline, Points, changeset)
+            self._breakLineAtIntersection(newline, poPoints, changeset)
         
-        Vect_destroy_line_struct(Points)
-        Vect_destroy_cats_struct(Cats)
+        Vect_destroy_line_struct(poPoints)
+        Vect_destroy_cats_struct(poCats)
         
         # close background map if opened
         if bgMapInfo:

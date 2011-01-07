@@ -49,9 +49,10 @@ struct rpoint {
 
 struct robject {
     /* object to be rendered */
+    int            fid;       /* feature id */
     int            type;
     int            npoints;
-    struct rpoint *point;   /* list of points */
+    struct rpoint *point;     /* list of points */
 };
 
 struct robject_list {

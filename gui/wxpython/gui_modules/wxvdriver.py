@@ -34,22 +34,24 @@ class DisplayDriver:
         
         @param device    wx.PseudoDC device where to draw vector objects
         @param deviceTmp wx.PseudoDC device where to draw temporary vector objects
+        @param mapOng    Map Object (render.Map)
+        @param log       logging device (None to discard messages)
         """
         G_gisinit('')             # initialize GRASS libs
         
-        self.mapInfoObj = None    # open vector map (Map_Info structure)
-        self.mapInfo    = None    # pointer to self.mapInfoObj
+        self.mapInfo   = None     # open vector map (Map_Info structure)
+        self.poMapInfo = None     # pointer to self.mapInfo
+        self.is3D      = False    # is open vector map 3D
         
         self.dc      = device     # PseudoDC devices
         self.dcTmp   = deviceTmp
         self.mapObj  = mapObj
         self.region  = mapObj.GetCurrentRegion()
         self.log     = log        # log device
-        
-        # objects used by GRASS vector library
-        self.points       = line_pnts()
-        self.pointsScreen = list()
-        self.cats         = line_cats()
+
+        # GRASS lib
+        self.poPoints = Vect_new_line_struct()
+        self.poCats   = Vect_new_cats_struct()
         
         # selected objects
         self.selected = {
@@ -109,18 +111,21 @@ class DisplayDriver:
             'vertex'      : 0,
             }
         
-        self.drawSelected = None
+        self.drawSelected = False
         self.drawSegments = False
-
+        
         self.UpdateSettings()
-
+        
         Vect_set_fatal_error(GV_FATAL_PRINT)
         
-    # def __del__(self):
-    #     """!Close currently open vector map"""
-    #     if self.mapInfo:
-    #         self.CloseMap()
-    
+    def __del__(self):
+        """!Close currently open vector map"""
+        if self.poMapInfo:
+            self.CloseMap()
+        
+        Vect_destroy_line_struct(self.poPoints)
+        Vect_destroy_cats_struct(self.poCats)
+        
     def _cell2Pixel(self, east, north, elev):
         """!Conversion from geographic coordinates (east, north)
         to screen (x, y)
@@ -176,8 +181,11 @@ class DisplayDriver:
         pdc.SetId(dcId) # 0 | 1 (selected)
         
         Debug.msg(3, "_drawObject(): type=%d npoints=%d", robj.type, robj.npoints)
-        points = list() 
-        self._setPen(robj.type, pdc)
+        points = list()
+        if self._isSelected(robj.fid):
+            pdc.SetPen(wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID))
+        else:
+            self._setPen(robj.type, pdc)
         
         for i in range(robj.npoints):
             p = robj.point[i]
@@ -296,8 +304,31 @@ class DisplayDriver:
     def _printIds(self):
         pass
 
-    def _isSelected(self, featId, foo = False):
+    def _isSelected(self, line, force = False):
+        """!Check if vector object selected?
+   
+        @param line feature id
+
+        @return True if vector object is selected
+        @return False if vector object is not selected
+        """
+        if len(self.selected['cats']) < 1 or force:
+            # select by id
+            if line in self.selected['ids']:
+                return True
+        else: 
+            # select by cat
+            cats = self.poCats.contents
+            for i in range(cats.n_cats):
+                if cats.field[i] == self.selected['field'] and \
+                        cats.cat[i] in self.selected['cats']:
+                    # remember id
+                    # -> after drawing all features selected.cats is reseted */
+                    self.selected['ids'].append(line)
+                    return True
+        
         return False
+
 
     def _isDuplicated(self, featId):
         return False
@@ -330,10 +361,10 @@ class DisplayDriver:
         """
         Debug.msg(1, "DisplayDriver.DrawMap(): force=%d", force)
         
-        if not self.mapInfo or not self.dc or not self.dcTmp:
+        if not self.poMapInfo or not self.dc or not self.dcTmp:
             return -1
         
-        rlist = Vedit_render_map(self.mapInfo, byref(self._getRegionBox()), self._getDrawFlag(),
+        rlist = Vedit_render_map(self.poMapInfo, byref(self._getRegionBox()), self._getDrawFlag(),
                                  self.region['center_easting'], self.region['center_northing'],
                                  self.mapObj.width, self.mapObj.height,
                                  max(self.region['nsres'], self.region['ewres'])).contents
@@ -354,40 +385,167 @@ class DisplayDriver:
         # list of ids - see IsSelected()
         ### selected.field = -1;
         ### Vect_reset_list(selected.cats);
+
+    def _getSelectType(self):
+        """!Get type(s) to be selected
+
+        Used by SelectLinesByBox() and SelectLinesByPoint()
+        """
+        ftype = 0
+        for feature in (('point',    GV_POINT),
+                        ('line',     GV_LINE),
+                        ('centroid', GV_CENTROID),
+                        ('boundary', GV_BOUNDARY)):
+            if UserSettings.Get(group = 'vdigit', key = 'selectType',
+                                subkey = [feature[0], 'enabled']):
+                ftype |= feature[1]
         
-    def SelectLinesByBox(self):
-        pass
+        return ftype
 
-    def SelectLineByPoint(self):
-        pass
+    def SelectLinesByBox(self, bbox, drawSeg):
+        """!Select vector objects by given bounding box
+   
+        If line id is already in the list of selected lines, then it will
+        be excluded from this list.
 
+        
+        @param bbox bounding box definition
+        @param drawSeg True to draw segments of line
+
+        @return number of selected features
+        @return -1 on error
+        """
+        if not self.poMapInfo:
+            return -1
+        
+        self.drawSegments = drawSeg
+        self.drawSelected = True
+    
+        # select by ids
+        self.selected['cats'] = list()
+
+        poList = Vect_new_list()
+        poBbox = Vect_new_line_struct()
+        for p in bbox:
+            Vect_append_point(poBbox, p[0], p[1], 0.0)
+        
+        Vect_select_lines_by_polygon(self.poMapInfo, poBbox,
+                                     0, None, # isles
+                                     self._getSelectType(), poList)
+        
+        flist = poList.contents
+        nlines = flist.n_values
+        for i in range(nlines):
+            line = flist.value[i]
+            if UserSettings.Get(group = 'vdigit', key = 'selectInside',
+                                subkey = 'enabled'):
+                inside = True
+                Vect_read_line(self.poMapInfo, self.poPoints, None, line)
+                points = poPoints.contents
+                for p in range(points.n_points):
+                    if not Vect_point_in_poly(points.x[p], points.y[p],
+                                              byref(bbox)):
+                        inside = False
+                        break
+                    
+                if not inside:
+                    continue # skip lines just overlapping bbox
+        
+            if not self._isSelected(line):
+                self.selected['ids'].append(line)
+            else:
+                self.selected['ids'].remove(line)
+        
+        Vect_destroy_line_struct(poBbox)
+        Vect_destroy_list(poList)
+        
+        return nlines
+
+    def SelectLineByPoint(self, point):
+        """!Select vector feature by given point in given
+        threshold
+   
+        Only one vector object can be selected. Bounding boxes of
+        all segments are stores.
+        
+        @param point points coordinates (x, y)
+        
+        @return point on line if line found
+        """
+        self.drawSelected = True
+        
+        poFound = Vect_new_list()
+        # select by ids 
+        self.selected['cats'] = list()
+        
+        line_nearest = Vect_find_line_list(self.poMapInfo, point[0], point[1], 0,
+                                           self._getSelectType(), self.GetThreshold(), self.is3D,
+                                           None, poFound)
+        
+        if line_nearest > 0:
+            if not self._isSelected(line_nearest):
+                self.selected['ids'].append(line_nearest)
+            else:
+                self.selected['ids'].remove(line_nearest)
+        
+        px = c_double()
+        py = c_double()
+        pz = c_double()
+	ftype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line_nearest)
+	Vect_line_distance (self.poPoints, point[0], point[1], 0.0, self.is3D,
+			    byref(px), byref(py), byref(pz),
+			    None, None, None)
+        
+	# check for duplicates 
+	if self.settings['highlightDupl']['enabled']:
+            found = poFound.contents
+	    for i in range(found.n_values):
+		line = found.value[i]
+		if line != line_nearest:
+                    self.selected['ids'].append(line)
+	    
+            self.getDuplicates()
+	    
+	    for i in range(found.n_values):
+		line = found.value[i]
+		if line != line_nearest and not self._isDuplicated(line):
+                    self.selected['ids'].remove(line)
+        
+        Vect_destroy_list(poFound)
+        
+        # drawing segments can be very expensive
+        # only one features selected
+        self.drawSegments = True
+        
+        return (px.value, py.value, pz.value)
+    
     def GetSelected(self, grassId = False):
         """!Get ids of selected objects
         
         @param grassId if true return GRASS line ids, false to return PseudoDC ids
-   
+        
         @return list of ids of selected vector objects
         """
         if grassId:
             # return ListToVector(selected.ids);
             pass
-
+        
         dc_ids = list()
-
+        
         if not self.drawSegments:
             dc_ids.append(1)
         else:
             # only first selected feature
-            # Vect_read_line(self.mapInfo, byref(self.points), None,
+            # Vect_read_line(self.poMapInfo, byref(self.points), None,
             # self.selected.ids->value[0]);
-            npoints = self.points.n_points
+            # npoints = self.points.n_points
             # node - segment - vertex - segment - node
-            for i in range(1, 2 * self.points.npoints):
-                dc_ids.append(i)
+            # for i in range(1, 2 * self.points.npoints):
+            #     dc_ids.append(i)
+            pass
         
         return dc_ids
-
-
+    
     def GetSelectedCoord(self):
         pass
 
@@ -399,28 +557,22 @@ class DisplayDriver:
 
     def SetSelected(self, ids, layer = -1):
         """!Set selected vector objects
-   
-        @param ids list of feature ids to be set
-        @param layer field number (-1 for ids instead of cats)
+
+        @param list of ids (None to unselect features)
+        @param layer layer number for features selected based on category number
         """
         if ids:
             self.drawSelected = True
         else:
             self.drawSelected = False
-            return
-
+        
         if layer > 0:
             selected.field = layer
-            # VectorToList(selected.cats, id);
+            self.selected['cats'] = ids
         else:
             field = -1
-            # VectorToList(selected.ids, id);
-        
-        return 1
-
-    def UnSelect(self):
-        pass
-
+            self.selected['ids'] = ids
+    
     def GetSelectedVertex(self):
         pass
 
@@ -434,16 +586,15 @@ class DisplayDriver:
         @return non-zero on error
         """
         ret = 0
-        if self.mapInfo:
-            if self.mapInfoObj.mode == GV_MODE_RW:
-                # rebuild topology
-                Vect_build_partial(self.mapInfo, GV_BUILD_NONE)
-                Vect_build(self.mapInfo)
+        if self.poMapInfo:
+            # rebuild topology
+            Vect_build_partial(self.poMapInfo, GV_BUILD_NONE)
+            Vect_build(self.poMapInfo)
 
             # close map and store topo/cidx
-            ret = Vect_close(self.mapInfo)
-            del self.mapInfoObj
-            self.mapInfo = self.mapInfoObj = None
+            ret = Vect_close(self.poMapInfo)
+            del self.mapInfo
+            self.poMapInfo = self.mapInfo = None
         
         return ret
     
@@ -458,9 +609,9 @@ class DisplayDriver:
         """
         Debug.msg("DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
                   name, mapset, update)
-        if not self.mapInfoObj:
-            self.mapInfoObj = Map_info()
-            self.mapInfo = pointer(self.mapInfoObj)
+        if not self.mapInfo:
+            self.mapInfo = Map_info()
+            self.poMapInfo = pointer(self.mapInfo)
         
         # define open level (level 2: topology)
         Vect_set_open_level(2)
@@ -470,15 +621,16 @@ class DisplayDriver:
         
         # open existing map
         if update:
-            ret = Vect_open_update(self.mapInfo, name, mapset)
+            ret = Vect_open_update(self.poMapInfo, name, mapset)
         else:
-            ret = Vect_open_old(self.mapInfo, name, mapset)
-
-        if ret == -1: # error
-            del self.mapInfoObj
-            self.mapInfo = self.mapInfoObj = None
+            ret = Vect_open_old(self.poMapInfo, name, mapset)
+        self.is3D = Vect_is_3d(self.poMapInfo)
         
-        return self.mapInfo
+        if ret == -1: # error
+            del self.mapInfo
+            self.poMapInfo = self.mapInfo = None
+        
+        return self.poMapInfo
     
     def ReloadMap(self):
         pass
@@ -491,11 +643,11 @@ class DisplayDriver:
 
         @return (w,s,b,e,n,t)
         """
-        if not self.mapInfo:
+        if not self.poMapInfo:
             return None
         
         bbox = bound_box()
-        Vect_get_map_box(self.mapInfo, byref(bbox))
+        Vect_get_map_box(self.poMapInfo, byref(bbox))
 
         return bbox.W, bbox.S, bbox.B, \
             bbox.E, bbox.N, bbox.T
@@ -541,9 +693,27 @@ class DisplayDriver:
             self.settings[key]['color'] = color
         
     def UpdateRegion(self):
-        """!Update geographical region used by display driver.
+        """!Update geographical region used by display driver
         """
         self.region = self.mapObj.GetCurrentRegion()
+        
+    def GetSnapMode(self):
+        """!Get snapping mode
+
+        - snap to vertex
+        - snap to nodes
+        - no snapping
+        
+        @return snap mode
+        """
+        threshold = self.GetThreshold()
+        if threshold > 0.0:
+            if UserSettings.Get(group = 'vdigit', key = 'snapToVertex', subkey = 'enabled'):
+                return SNAPVERTEX
+            else:
+                return SNAP
+        else:
+            return NO_SNAP
         
     def GetThreshold(self, type = 'snapping', value = None, units = None):
         """!Return threshold value in map units
@@ -552,7 +722,7 @@ class DisplayDriver:
         @param value threshold to be set up
         @param units units (map, screen)
 
-        @return (snap mode id, threshold value)
+        @return threshold value
         """
         if value is None:
             value = UserSettings.Get(group = 'vdigit', key = type, subkey =' value')
@@ -566,16 +736,7 @@ class DisplayDriver:
         if units == "screen pixels":
             # pixel -> cell
             res = max(self.region['nsres'], self.region['ewres'])
-            threshold = value * res
-        else:
-            threshold = value
+            return value * res
         
-        if threshold > 0.0:
-            if UserSettings.Get(group = 'vdigit', key = 'snapToVertex', subkey = 'enabled'):
-                snap = SNAPVERTEX
-            else:
-                snap = SNAP
-        else:
-            snap = NO_SNAP
-
-        return (snap, threshold)
+        return value
+        

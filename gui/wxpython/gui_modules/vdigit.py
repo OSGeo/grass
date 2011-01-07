@@ -39,15 +39,17 @@ import globalvar
 from units import Units
 from preferences import globalSettings as UserSettings
 try:
-    from wxvdigit  import IVDigit
+    from wxvdigit  import IVDigit, GV_LINES
     haveVDigit = True
-    GV_LINES = 10
     errorMsg = ''
 except ImportError, err:
     haveVDigit = False
-    GV_LINES = None
     errorMsg = err
-    
+    GV_LINES = -1
+    class IVDigit:
+        def __init__(self):
+            pass
+
 class VDigit(IVDigit):
     def __init__(self, mapwindow):
         """!Base class of vector digitizer
