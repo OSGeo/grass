@@ -156,6 +156,7 @@ struct robject *draw_line(struct Map_info *Map, int line, int draw_flag)
     state.type = Vect_read_line(Map, state.Points, NULL, line);
 
     obj = (struct robject *)G_malloc(sizeof(struct robject));
+    obj->fid = line;
     draw = FALSE;
     if (state.type & GV_LINES) {
 	if (state.type == GV_LINE) {

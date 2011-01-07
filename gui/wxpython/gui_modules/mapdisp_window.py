@@ -1727,16 +1727,13 @@ class BufferedWindow(MapWindow, wx.Window):
                     drawSeg = True
                 else:
                     drawSeg = False
-
-                nselected = digitClass.GetDisplay().SelectLinesByBox(pos1, pos2,
-                                                               digitClass.GetSelectType(),
-                                                               drawSeg)
-                    
+                
+                nselected = digitClass.GetDisplay().SelectLinesByBox(bbox = (pos1, pos2),
+                                                                     drawSeg = drawSeg)
                 if nselected == 0:
-                    if digitClass.GetDisplay().SelectLineByPoint(pos1,
-                                                           digitClass.GetSelectType()) is not None:
+                    if digitClass.GetDisplay().SelectLineByPoint(pos1) is not None:
                         nselected = 1
-        
+                
         if nselected > 0:
             if digitToolbar.GetAction() in ("moveLine",
                                             "moveVertex"):
@@ -2317,9 +2314,9 @@ class BufferedWindow(MapWindow, wx.Window):
                     # remove last vertex & line
                     if len(self.vdigitMove['id']) > 1:
                         self.vdigitMove['id'].pop()
-
+                
                 self.UpdateMap(render = False, renderVector = False)
-
+            
             elif digitToolbar.GetAction() in ["deleteLine", "moveLine", "splitLine",
                                               "addVertex", "removeVertex", "moveVertex",
                                               "copyCats", "flipLine", "mergeLine",
@@ -2329,9 +2326,9 @@ class BufferedWindow(MapWindow, wx.Window):
                 digitClass.GetDisplay().SetSelected([])
                 if digitToolbar.GetAction() in ["moveLine", "moveVertex", "editLine"] and \
                         hasattr(self, "vdigitMove"):
-
-                    del self.vdigitMove
                     
+                    del self.vdigitMove
+                
                 elif digitToolbar.GetAction() == "copyCats":
                     try:
                         del self.copyCatsList
@@ -2358,9 +2355,12 @@ class BufferedWindow(MapWindow, wx.Window):
             self.redrawAll = True
 
     def OnMiddleUp(self, event):
-        """!
-        Middle mouse button released
+        """!Middle mouse button released
         """
+        if self.parent.toolbars['vdigit']:
+            event.Skip()
+            return
+        
         self.mouse['end'] = event.GetPositionTuple()[:]
         
         # set region in zoom or pan
@@ -2376,8 +2376,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.parent.StatusbarUpdate()
         
     def OnMouseEnter(self, event):
-        """!
-        Mouse entered window and no mouse buttons were pressed
+        """!Mouse entered window and no mouse buttons were pressed
         """
         if self.parent.GetLayerManager().gcpmanagement:
             if self.parent.toolbars['gcpdisp']:
@@ -2391,8 +2390,7 @@ class BufferedWindow(MapWindow, wx.Window):
             event.Skip()
 
     def OnMouseMoving(self, event):
-        """!
-        Motion event and no mouse buttons were pressed
+        """!Motion event and no mouse buttons were pressed
         """
         digitToolbar = self.parent.toolbars['vdigit']
         if self.mouse["use"] == "pointer" and digitToolbar:
