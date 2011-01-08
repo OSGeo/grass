@@ -28,16 +28,52 @@ from grass.lib.grass  import *
 from grass.lib.vector import *
 from grass.lib.vedit  import *
 
+log      = None
+progress = None
+
+def print_error(msg, type):
+    """!Redirect stderr"""
+    global log
+    if log:
+        log.write(msg)
+    else:
+        print msg
+    
+    return 0
+
+def print_progress(value):
+    """!Redirect progress info"""
+    global progress
+    if progress:
+        progress.SetValue(value)
+    else:
+        print value
+    
+    return 0
+
+errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
+errfunc = errtype(print_error)
+pertype = CFUNCTYPE(UNCHECKED(c_int), c_int)
+perfunc = pertype(print_progress)
+
 class DisplayDriver:
-    def __init__(self, device, deviceTmp, mapObj, window, log = None):
+    def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
         """Display driver used by vector digitizer
         
         @param device    wx.PseudoDC device where to draw vector objects
         @param deviceTmp wx.PseudoDC device where to draw temporary vector objects
         @param mapOng    Map Object (render.Map)
-        @param log       logging device (None to discard messages)
+        @param windiow   parent window for dialogs
+        @param glog      logging device (None to discard messages)
+        @param gprogress progress bar device (None to discard message)
         """
+        global errfunc, perfunc, log, progress
+        log = glog
+        progress = gprogress
+        
         G_gisinit('')             # initialize GRASS libs
+        G_set_error_routine(errfunc) 
+        G_set_percent_routine(perfunc)
         
         self.mapInfo   = None     # open vector map (Map_Info structure)
         self.poMapInfo = None     # pointer to self.mapInfo
@@ -121,6 +157,9 @@ class DisplayDriver:
         
     def __del__(self):
         """!Close currently open vector map"""
+        G_unset_error_routine()
+        G_unset_percent_routine()
+        
         if self.poMapInfo:
             self.CloseMap()
         

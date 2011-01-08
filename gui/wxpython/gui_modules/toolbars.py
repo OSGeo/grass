@@ -624,8 +624,7 @@ class GCPToolbar(AbstractToolbar):
             )
     
 class VDigitToolbar(AbstractToolbar):
-    """
-    Toolbar for digitization
+    """!Toolbar for digitization
     """
     def __init__(self, parent, mapcontent, layerTree = None, log = None):
         self.mapcontent    = mapcontent # Map class instance
@@ -670,8 +669,7 @@ class VDigitToolbar(AbstractToolbar):
         self.FixSize(width = 105)
         
     def ToolbarData(self):
-        """!
-        Toolbar data
+        """!Toolbar data
         """
         data = []
         
@@ -1343,9 +1341,11 @@ class VDigitToolbar(AbstractToolbar):
                                                   "closing and rebuilding topology of "
                                                   "vector map <%s>...") % self.mapLayer.GetName(),
                                                 0)
-            
+            self.parent.GetLayerManager().notebook.SetSelection(1)
             self.parent.digit.CloseMap()
-            
+            self.parent.GetLayerManager().GetLogWindow().GetProgressBar().SetValue(0)
+            self.parent.GetLayerManager().GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
+                                                                       self.mapLayer.GetName())
             # re-active layer 
             item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
             if item and self.parent.tree.IsItemChecked(item):
