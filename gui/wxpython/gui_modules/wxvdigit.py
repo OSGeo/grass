@@ -110,9 +110,12 @@ class IVDigit:
         self.mapWindow = mapwindow
         
         if not mapwindow.parent.IsStandalone():
-            self.log = mapwindow.parent.GetLayerManager().goutput.cmd_stderr
+            goutput = mapwindow.parent.GetLayerManager().GetLogWindow()
+            log = goutput.GetLog(err = True)
+            progress = goutput.GetProgressBar()
         else:
-            self.log = sys.stderr
+            log = sys.stderr
+            progress = None
         
         self.toolbar = mapwindow.parent.toolbars['vdigit']
         
@@ -122,7 +125,8 @@ class IVDigit:
                                       deviceTmp = mapwindow.pdcTmp,
                                       mapObj    = mapwindow.Map,
                                       window    = mapwindow,
-                                      log       = self.log)
+                                      glog      = log,
+                                      gprogress = progress)
         
         # GRASS lib
         self.poPoints = Vect_new_line_struct()

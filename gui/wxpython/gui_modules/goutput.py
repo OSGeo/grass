@@ -569,6 +569,20 @@ class GMConsole(wx.SplitterWindow):
         self.cmd_output.SetReadOnly(True)
         self.console_progressbar.SetValue(0)
 
+    def GetProgressBar(self):
+        """!Return progress bar widget"""
+        return self.console_progressbar
+    
+    def GetLog(self, err = False):
+        """!Get widget used for logging
+
+        @param err True to get stderr widget
+        """
+        if err:
+            return self.cmd_stderr
+        
+        return self.cmd_stdout
+    
     def SaveHistory(self, event):
         """!Save history of commands"""
         self.history = self.cmd_output.GetSelectedText()
