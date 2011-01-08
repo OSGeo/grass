@@ -15,7 +15,7 @@ Classes:
 Functions:
  - RunCommand
 
-(C) 2007-2008, 2010 by the GRASS Development Team
+(C) 2007-2008, 2010-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -58,8 +58,9 @@ import utils
 from debug import Debug as Debug
 
 class GError:
-    def __init__(self, message, parent = None):
-        caption = _('Error')
+    def __init__(self, message, parent = None, caption = None):
+        if not caption:
+            caption = _('Error')
         style = wx.OK | wx.ICON_ERROR | wx.CENTRE
         exc_type, exc_value, exc_traceback = sys.exc_info()
         if exc_traceback:

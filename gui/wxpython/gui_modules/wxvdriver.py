@@ -21,7 +21,7 @@ import math
 
 import wx
 
-from debug import Debug as Debug
+from debug import Debug
 from preferences import globalSettings as UserSettings
 
 from grass.lib.grass  import *
@@ -29,7 +29,7 @@ from grass.lib.vector import *
 from grass.lib.vedit  import *
 
 class DisplayDriver:
-    def __init__(self, device, deviceTmp, mapObj, log = None):
+    def __init__(self, device, deviceTmp, mapObj, window, log = None):
         """Display driver used by vector digitizer
         
         @param device    wx.PseudoDC device where to draw vector objects
@@ -47,6 +47,7 @@ class DisplayDriver:
         self.dcTmp   = deviceTmp
         self.mapObj  = mapObj
         self.region  = mapObj.GetCurrentRegion()
+        self.window  = window
         self.log     = log        # log device
 
         # GRASS lib
@@ -186,6 +187,8 @@ class DisplayDriver:
             
             dcId = 1
             self.topology['highlight'] += 1
+            if not self.drawSelected:
+                return
         else:
             pdc = self.dc
             pen, brush = self._definePen(robj.type)
@@ -207,15 +210,17 @@ class DisplayDriver:
                 while i < robj.npoints - 1:
                     point_beg = wx.Point(robj.point[i].x, robj.point[i].y)
                     point_end = wx.Point(robj.point[i+1].x, robj.point[i+1].y)
-                    
                     pdc.SetId(dcId) # set unique id & set bbox for each segment
                     pdc.SetPen(pen)
-                    rect = wx.RectPP(point_beg, point_end)
-                    pdc.SetIdBounds(dcId, rect)
+                    pdc.SetIdBounds(dcId - 1, wx.Rect(point_beg.x, point_beg.y, 0, 0))
+                    pdc.SetIdBounds(dcId, wx.RectPP(point_beg, point_end))
                     pdc.DrawLine(point_beg.x, point_beg.y,
                                  point_end.x, point_end.y)
                     i    += 1
                     dcId += 2
+                pdc.SetIdBounds(dcId - 1, wx.Rect(robj.point[robj.npoints - 1].x,
+                                                  robj.point[robj.npoints - 1].y,
+                                                  0, 0))
             else:
                 points = list()
                 for i in range(robj.npoints):
@@ -540,7 +545,7 @@ class DisplayDriver:
     def GetSelected(self, grassId = True):
         """!Get ids of selected objects
         
-        @param grassId if true return GRASS line ids, false to return PseudoDC ids
+        @param grassId True for feature id, False for PseudoDC id
         
         @return list of ids of selected vector objects
         """
@@ -551,21 +556,17 @@ class DisplayDriver:
         
         if not self.drawSegments:
             dc_ids.append(1)
-        else:
+        elif len(self.selected['ids']) > 0:
             # only first selected feature
-            # Vect_read_line(self.poMapInfo, byref(self.points), None,
-            # self.selected.ids->value[0]);
-            # npoints = self.points.n_points
+            Vect_read_line(self.poMapInfo, self.poPoints, None,
+                           self.selected['ids'][0])
+            points = self.poPoints.contents
             # node - segment - vertex - segment - node
-            # for i in range(1, 2 * self.points.npoints):
-            #     dc_ids.append(i)
-            pass
+            for i in range(1, 2 * points.n_points):
+                dc_ids.append(i)
         
         return dc_ids
-    
-    def GetSelectedCoord(self):
-        pass
-
+        
     def GetDuplicates(self):
         pass
 
@@ -654,9 +655,13 @@ class DisplayDriver:
         
         return returnId
 
-    def DrawSelected(self):
-        pass
-    
+    def DrawSelected(self, flag):
+        """!Draw selected features
+        
+        @param flag True to draw selected features
+        """
+        self.drawSelected = bool(flag)
+        
     def CloseMap(self):
         """!Close vector map
         
@@ -691,9 +696,6 @@ class DisplayDriver:
             self.mapInfo = Map_info()
             self.poMapInfo = pointer(self.mapInfo)
         
-        # define open level (level 2: topology)
-        Vect_set_open_level(2)
-        
         # avoid GUI crash when G_fatal_error() is called (opening the vector map)
         Vect_set_fatal_error(GV_FATAL_PRINT)
         
@@ -707,6 +709,20 @@ class DisplayDriver:
         if ret == -1: # error
             del self.mapInfo
             self.poMapInfo = self.mapInfo = None
+        elif ret < 2:
+            dlg = wx.MessageDialog(parent = self.window,
+                                   message = _("Topology for vector map <%s> is not available. "
+                                               "Topology is required by digitizer. Do you want to "
+                                               "rebuild topology (takes some time) and open the vector map "
+                                               "for editing?") % name,
+                                   caption=_("Topology missing"),
+                                   style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+            ret = dlg.ShowModal()
+            if ret != wx.ID_YES:
+                del self.mapInfo
+                self.poMapInfo = self.mapInfo = None
+            else:
+                Vect_build(self.poMapInfo)
         
         return self.poMapInfo
     
