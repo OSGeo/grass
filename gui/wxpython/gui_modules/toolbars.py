@@ -1291,13 +1291,9 @@ class VDigitToolbar(AbstractToolbar):
         self.mapLayer = mapLayer
         
         # open vector map
-        try:
-            self.parent.digit.OpenMap(mapLayer.GetName())
-        except gcmd.GException, e:
+        if self.parent.digit.OpenMap(mapLayer.GetName()) is None:
             self.mapLayer = None
             self.StopEditing()
-            gcmd.GError(parent = self.parent,
-                        message = str(e))
             return False
         
         # update toolbar

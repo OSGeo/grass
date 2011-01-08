@@ -7,6 +7,7 @@ Code based on wxVdigit C++ component from GRASS 6.4.0
 (gui/wxpython/vdigit). Converted to Python in 2010/12-2011/01.
 
 List of classes:
+ - VDigitError
  - IVDigit
 
 (C) 2007-2011 by the GRASS Development Team
@@ -17,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from gcmd        import GError
 from debug       import Debug
 from preferences import globalSettings as UserSettings
 
@@ -26,6 +28,77 @@ from grass.lib.grass  import *
 from grass.lib.vector import *
 from grass.lib.vedit  import *
 from grass.lib.dbmi   import *
+
+class VDigitError:
+    def __init__(self, parent):
+        self.parent  = parent
+        self.caption = _('Digitization Error')
+    
+    def NoMap(self, name = None):
+        """!No map for editing"""
+        if name:
+            message = _('Unable to open vector map <%s>.') % name
+        else:
+            message =  _('No vector map open for editing.')
+        GError(message + ' ' + _('Operation cancelled.'),
+               parent  = self.parent,
+               caption = self.caption)
+
+    def WriteLine(self):
+        """!Writing line failed
+        """
+        GError(message = _('Writing new feature failed. '
+                           'Operation cancelled.'),
+               parent  = self.parent,
+               caption = self.caption)
+
+    def ReadLine(self, line):
+        """!Reading line failed
+        """
+        GError(message = _('Reading feature id %d failed. '
+                           'Operation cancelled.') % line,
+               parent  = self.parent,
+               caption = self.caption)
+
+    def DbLink(self, dblink):
+        """!No dblink available
+        """
+        GError(message = _('Database link %d not available. '
+                           'Operation cancelled.') % dblink,
+               parent  = self.parent,
+               caption = self.caption)
+
+    def Driver(self, driver):
+        """!Staring driver failed
+        """
+        GError(message = _('Unable to start database driver <%s>. '
+                           'Operation cancelled.') % driver,
+               parent  = self.parent,
+               caption = self.caption)
+
+    def Database(self, driver, database):
+        """!Opening database failed
+        """
+        GError(message = _('Unable to open database <%s> by driver <%s>. '
+                           'Operation cancelled.') % (database, driver),
+               parent  = self.parent,
+               caption = self.caption)
+
+    def DbExecute(self, sql):
+        """!Sql query failed
+        """
+        GError(message = _("Unable to execute SQL query '%s'. "
+                           "Operation cancelled.") % sql,
+               parent  = self.parent,
+               caption = self.caption)
+
+    def DeadLine(self, line):
+        """!Dead line
+        """
+        GError(message = _("Feature id %d is marked as dead. "
+                           "Operation cancelled.") % line,
+               parent  = self.parent,
+               caption = self.caption)
 
 class IVDigit:
     def __init__(self, mapwindow):
@@ -43,9 +116,12 @@ class IVDigit:
         
         self.toolbar = mapwindow.parent.toolbars['vdigit']
         
+        self._error   = VDigitError(parent = self.mapWindow)
+        
         self._display = DisplayDriver(device    = mapwindow.pdcVector,
                                       deviceTmp = mapwindow.pdcTmp,
                                       mapObj    = mapwindow.Map,
+                                      window    = mapwindow,
                                       log       = self.log)
         
         # GRASS lib
@@ -88,7 +164,7 @@ class IVDigit:
         
         @param bgmap name of vector map to be opened
 
-        @return map_info
+        @return pointer to map_info
         @return None on error
         """
         name = c_char()
@@ -107,7 +183,8 @@ class IVDigit:
         bgMapInfo = map_info()
 	if Vect_open_old(byref(bgMapInfo), name, mapset) == -1:
             return None
-        return bgMapInfo
+        
+        return pointer(bgMapInfo)
     
     def _breakLineAtIntersection(self):
         pass
@@ -145,7 +222,7 @@ class IVDigit:
         @param line feature id
         @param add True to add, otherwise delete
         """
-        if not self.poMapInfo:
+        if not self._checkMap():
             return 
         
         if not Vect_line_alive(self.poMapInfo, line):
@@ -211,9 +288,6 @@ class IVDigit:
             layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
             cat   = self.cats.get(layer, 1)
         
-        thresh = self._display.GetThreshold()
-        snap   = self._display.GetSnapMode()
-        
         bgmap = str(UserSettings.Get(group = 'vdigit', key = 'bgmap',
                                      subkey = 'value', internal = True))
         
@@ -226,19 +300,19 @@ class IVDigit:
         elif ftype == 'boundary':
             vtype = GV_BOUNDARY
         else:
-            gcmd.GError(parent = self.mapwindow,
-                        message = _("Unknown feature type '%s'") % ftype)
+            GError(parent = self.mapWindow,
+                   message = _("Unknown feature type '%s'") % ftype)
             return
         
         if vtype & GV_LINES and len(points) < 2:
-            gcmd.GError(parent = self.mapwindow,
-                        message = _("Not enough points for line"))
+            GError(parent = self.mapWindow,
+                   message = _("Not enough points for line"))
             return
         
         self.toolbar.EnableUndo()
         
         return self._addFeature(vtype, points, layer, cat,
-                                bgmap, snap, thresh)
+                                bgmap, self._display.GetSnapMode(), self._display.GetThreshold())
     
     def DeleteSelectedLines(self):
         """!Delete selected features
@@ -246,7 +320,7 @@ class IVDigit:
         @return number of deleted features
         """
         deleteRec = UserSettings.Get(group = 'vdigit', key = 'delRecord', subkey = 'enabled')
-        if not self.poMapInfo:
+        if not self._checkMap():
             return -1
         
         n_dblinks = Vect_get_num_dblinks(self.poMapInfo)
@@ -259,7 +333,7 @@ class IVDigit:
             for i in self._display.selected['ids']:
                 if Vect_read_line(self.poMapInfo, None, poCats, i) < 0:
                     Vect_destroy_cats_struct(poCatsDel)
-                    self._errorReadLine()
+                    self._error.ReadLine(i)
                     return -1
                 
                 cats = poCats.contents
@@ -285,19 +359,19 @@ class IVDigit:
             for dblink in range(n_dblinks):
                 poFi = Vect_get_dblink(self.poMapInfo, dblink)
                 if poFi is None:
-                    self._errorDbLink(dblink)
+                    self._error.DbLink(dblink)
                     return -1
                 
                 Fi = poFi.contents
                 poDriver = db_start_driver(Fi.driver)
                 if poDriver is None:
-                    self._errorDriver(Fi.driver)
+                    self._error.Driver(Fi.driver)
                     return -1
                 
                 db_init_handle(poHandle)
                 db_set_handle(poHandle, Fi.database, None)
                 if db_open_database(poDriver, poHandle) != DB_OK:
-                    self._errorDbDatabase(Fi.driver, Fi.database)
+                    self._error.Database(Fi.driver, Fi.database)
                     return -1
                 
                 db_init_string(poStmt)
@@ -316,7 +390,7 @@ class IVDigit:
                 
                 if n_cats and \
                         db_execute_immediate(poDriver, poStmt) != DB_OK:
-                    self._errorDbExecute(db_get_string(poStmt))
+                    self._error.DbExecute(db_get_string(poStmt))
                     return -1
                 
                 db_close_database(poDriver)
@@ -335,44 +409,114 @@ class IVDigit:
 
         @param move direction (x, y)
         """
-        snap, thresh = self.__getSnapThreshold()
+        if not self._checkMap():
+            return -1
+        
+        thresh = self._display.GetThreshold()
+        snap   = self._display.GetSnapMode()
         
         bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
                                      subkey='value', internal=True))
         
-        try:
-            nlines = self.digit.MoveLines(move[0], move[1], 0.0, # TODO 3D
-                                          bgmap, snap, thresh)
-        except SystemExit:
-            pass
+        poBgMapInfo = None
+        nbgmaps     = 0
+        if bgmap:
+            poBgMapInfo = self._openBackgroundMap(bgmap)
+            if not pobgMapInfo:
+                self._error.NoMap(bgmap)
+                return -1
+            nbgmaps = 1
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        # register changeset
+        changeset = self._addActionsBefore()
+        
+        poList = self._listToIList(self._display.selected['ids'])
+        nlines = Vedit_move_lines(self.poMapInfo, poBgMapInfo, nbgmaps,
+                                  poList,
+                                  move[0], move[1], 0,
+                                  snap, thresh)
+        Vect_destroy_list(poList)
+        
+        if nlines > 0:
+            self._addActionsAfter(changeset, nlines)
+        else:
+            changesets.remove(changeset)
+        
+        if nlines > 0 and self.settings['breakLines']:
+            for i in range(1, nlines):
+                self._breakLineAtIntersection(nlines + i, None, changeset)
+        
+        if poBgMapInfo:
+            Vect_close(poBgMapInfo)
         
         if nlines > 0:
             self.toolbar.EnableUndo()
         
         return nlines
 
-    def MoveSelectedVertex(self, coords, move):
+    def MoveSelectedVertex(self, point, move):
         """!Move selected vertex of the line
 
-        @param coords click coordinates
-        @param move   X,Y direction
-
+        @param point location point
+        @param move  x,y direction
+        
         @return id of new feature
         @return 0 vertex not moved (not found, line is not selected)
+        @return -1 on error
         """
-        snap, thresh = self.__getSnapThreshold()
-
+        if not self._checkMap():
+            return -1
+        
+        if len(self._display.selected['ids']) != 1:
+            return -1
+                
         bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
                                      subkey='value', internal=True))
         
-        moved = self.digit.MoveVertex(coords[0], coords[1], 0.0, # TODO 3D
-                                      move[0], move[1], 0.0,
-                                      bgmap, snap,
-                                      self.driver.GetThreshold(type='selectThresh'), thresh)
+        # try to open background map if asked
+        poBgMapInfo = None
+        nbgmaps     = 0
+        if bgmap:
+            poBgMapInfo = self._openBackgroundMap(bgmap)
+            if not poBgMapInfo:
+                self._error.NoMap(bgmap)
+                return -1
+            nbgmaps = 1
+        
+        Vect_reset_line(self.poPoints)
+        Vect_append_point(self.poPoints, point[0], point[1], 0.0)
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        changeset = self._addActionsBefore()
+        
+        # move only first found vertex in bbox 
+        poList = self._listToIList(self._display.selected['ids'])
 
-        if moved:
+        moved = Vedit_move_vertex(self.poMapInfo, poBgMapInfo, nbgmaps,
+                                  poList, self.poPoints,
+                                  self._display.GetThreshold(type = 'selectThresh'),
+                                  self._display.GetThreshold(),
+                                  move[0], move[1], 0.0,
+                                  1, self._display.GetSnapMode())
+        
+        if moved > 0:
+            self._addActionsAfter(changeset, nlines)
+        else:
+            changesets.remove(changeset)
+        
+        if moved > 0 and self.settings['breakLines']:
+            self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
+                                          None, changeset)
+        
+        if poBgMapInfo:
+            Vect_close(poBgMapInfo)
+        
+        if moved > 0:
             self.toolbar.EnableUndo()
-
+        
         return moved
 
     def AddVertex(self, coords):
@@ -418,11 +562,11 @@ class IVDigit:
         @return -1 error
         """
         thresh = self._display.GetThreshold('selectThresh')
-        if not self.poMapInfo:
+        if not self._checkMap():
             return -1
         
         poList  = self._listToIList(self._display.selected['ids'])
-        
+        Vect_reset_line(self.poPoints)
         Vect_append_point(self.poPoints, point[0], point[1], 0.0)
         
         nlines = Vect_get_num_lines(self.poMapInfo)
@@ -453,34 +597,30 @@ class IVDigit:
         @return feature id of new line
         @return -1 on error
         """
+        if self._checkMap():
+            return -1
+        
         try:
             lineid = line[0]
         except:
             lineid = -1
-
+        
         if len(coords) < 2:
             self.DeleteSelectedLines()
             return 0
-            
-        listCoords = []
-        for c in coords:
-            for x in c:
-                listCoords.append(x)
-
-        snap, thresh = self.__getSnapThreshold()
+        
+        snap   = self._display.GetSnapMode()
+        thresh = self._display.GetThreshold()
         
         bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
                                      subkey='value', internal=True))
         
-        try:
-            ret = self.digit.RewriteLine(lineid, listCoords,
+        ret = self.digit.RewriteLine(lineid, listCoords,
                                          bgmap, snap, thresh)
-        except SystemExit:
-            pass
-
+        
         if ret > 0:
             self.toolbar.EnableUndo()
-
+        
         return ret
 
     def FlipLine(self):
@@ -745,35 +885,18 @@ class IVDigit:
         Debug.msg (3, "AbstractDigit.SetMapName map=%s" % name)
         
         name, mapset = name.split('@')
-        try:
-            self.poMapInfo = self._display.OpenMap(str(name), str(mapset), True)
-        except SystemExit:
-            pass
         
-        # except StandardError, e:
-        #     raise gcmd.GException(_("Unable to initialize display driver of vector "
-        #                             "digitizer. See 'Command output' for details.\n\n"
-        #                             "Details: ") + repr(e))
+        self.poMapInfo = self._display.OpenMap(str(name), str(mapset), True)
         
-        # if map and ret == -1:
-        #     raise gcmd.GException(_('Unable to open vector map <%s> for editing.\n\n'
-        #                             'Data are probably corrupted, '
-        #                             'try to run v.build to rebuild '
-        #                             'the topology (Vector->Develop vector map->'
-        #                             'Create/rebuild topology).') % map)
-        # if not map and ret != 0:
-        #     raise gcmd.GException(_('Unable to open vector map <%s> for editing.\n\n'
-        #                             'Data are probably corrupted, '
-        #                             'try to run v.build to rebuild '
-        #                             'the topology (Vector->Develop vector map->'
-        #                             'Create/rebuild topology).') % map)
+        if self.poMapInfo:
+            self.InitCats()
         
-        self.InitCats()
-
+        return self.poMapInfo
+    
     def CloseMap(self):
         """!Close currently open vector map
         """
-        if not self.poMapInfo:
+        if not self._checkMap():
             return
         
         self._display.CloseMap()
@@ -785,7 +908,7 @@ class IVDigit:
         @return -1 on error
         """
         self.cats.clear()
-        if not self.poMapInfo:
+        if not self._checkMap():
             return -1
         
         ndblinks = Vect_get_num_dblinks(self.poMapInfo)
@@ -822,12 +945,15 @@ class IVDigit:
                 self.cats[field] = 0 # first category 1
 	    Debug.msg(3, "wxDigit.InitCats(): layer=%d, cat=%d", field, self.cats[field])
         
-    def _errorWriteLine(self):
-        """!Show error dialog
+    def _checkMap(self):
+        """!Check if map is open
         """
-        gcmd.GError(parent = self.mapwindow,
-                    message = _("Writing new feature failed"))
+        if not self.poMapInfo:
+            self._error.NoMap()
+            return False
         
+        return True
+
     def _addFeature(self, type, coords, layer, cat, bgmap, snap, threshold):
         """!Add new feature to the vector map
 
@@ -842,7 +968,7 @@ class IVDigit:
         @return -1 on error
         @return feature id of new feature
         """
-        if not self.poMapInfo:
+        if not self._checkMap():
             return -1
         
         is3D = bool(Vect_is_3d(self.poMapInfo))
@@ -854,15 +980,17 @@ class IVDigit:
             return -1
         
         # try to open background map if asked
-        bgMapInfo = None
+        poBgMapInfo = None
+        nbgmaps     = 0
         if bgmap:
-            bgMapInfo = self._openBackgroundMap(bgmap)
-            if not bgMapInfo:
-                gcmd.GError(parent = self.mapwindow,
-                            message = _("Unable to open background vector map <%s>") % bgmap)
+            poBgMapInfo = self._openBackgroundMap(bgmap)
+            if not poBgMapInfo:
+                self._error.NoMap(bgmap)
                 return -1
+            nbgmaps = 1
         
         # set category
+        Vect_reset_cats(self.poCats)
         if layer > 0 and \
                 (type != GV_BOUNDARY or \
                      (type == GV_BOUNDARY and self.settings['catBoundary'])):
@@ -870,6 +998,7 @@ class IVDigit:
             self.cats[layer] = max(cat, self.cats.get(layer, 0))
         
         # append points
+        Vect_reset_line(self.poPoints)
         for c in coords:
             Vect_append_point(self.poPoints, c[0], c[1], 0.0)
         
@@ -887,17 +1016,12 @@ class IVDigit:
         if snap != NO_SNAP and (type & (GV_POINT | GV_LINES)):
             # apply snapping (node or vertex)
             modeSnap = not (snap == SNAP)
-            if bgMapInfo:
-                Vedit_snap_line(self.poMapInfo, byref(bgMapInfo), 1,
-                                -1, self.poPoints, threshold, modeSnap)
-            else:
-                # Vedit_snap_line(self.poMapInfo, None, 0,
-                #                -1, poPoints, threshold, modeSnap)
-                pass
+            Vedit_snap_line(self.poMapInfo, poBgMapInfo, nbgmaps,
+                            -1, self.poPoints, threshold, modeSnap)
         
         newline = Vect_write_line(self.poMapInfo, type, self.poPoints, self.poCats)
         if newline < 0:
-            self._errorWriteLine()
+            self._error.WriteLine()
             return -1
         
         left = right = -1
@@ -927,7 +1051,7 @@ class IVDigit:
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
                     if Vect_write_line(self.poMapInfo, GV_CENTROID,
                                        bpoints, self.poCats) < 0:
-                        self._errorWriteLine()
+                        self._error.WriteLine()
                         return -1
             
             if right > 0 and \
@@ -938,7 +1062,7 @@ class IVDigit:
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
                     if Vect_write_line(byref(self.poMapInfo), GV_CENTROID,
                                        bpoints, self.poCats) < 0:
-                        self._errorWriteLine()
+                        self._error.WriteLine()
                         return -1
             Vect_destroy_line_struct(bpoints)
         
@@ -952,6 +1076,7 @@ class IVDigit:
         # close background map if opened
         if bgMapInfo:
             Vect_close(byref(bgMapInfo))
+        del bgMapInfo
         
         if type & GV_BOUNDARY and \
                 not self.settings['catBoundary'] and \
@@ -1008,7 +1133,7 @@ class IVDigit:
         @return 0 nothing changed
         @return -1 error
         """
-        if not self.poMapInfo:
+        if not self._checkMap():
             return -1
         
         selected = self._display.selected
@@ -1016,6 +1141,7 @@ class IVDigit:
             return 0
         
         poList  = self._listToIList(selected['ids'])
+        Vect_reset_line(self.poPoints)
         Vect_append_point(self.poPoints, coords[0], coords[1], 0.0)
         
         nlines = Vect_get_num_lines(self.poMapInfo)
@@ -1066,7 +1192,7 @@ class IVDigit:
         @return list of layer/cats
         """
         ret = dict()
-        if not self.poMapInfo:
+        if not self._checkMap():
             return ret
         
         if line == -1 and len(self._display.selected['ids']) < 1:
@@ -1076,11 +1202,11 @@ class IVDigit:
             line = self._display.selected['ids'][0]
             
         if not Vect_line_alive(self.poMapInfo, line):
-            self._errorDeadLine(line)
+            self._error.DeadLine(line)
             return ret
         
         if Vect_read_line(self.poMapInfo, None, self.poCats, line) < 0:
-            self._errorReadLineMsg(line)
+            self._error.ReadLine(line)
             return ret
         
         cats = self.poCats.contents

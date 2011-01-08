@@ -1,13 +1,13 @@
 """!
 @package mapdisp_window.py
 
-@brief GIS map display canvas, buffered window.
+@brief Map display canvas - buffered window.
 
 Classes:
  - MapWindow
  - BufferedWindow
 
-(C) 2006-2010 by the GRASS Development Team
+(C) 2006-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -1413,8 +1413,6 @@ class BufferedWindow(MapWindow, wx.Window):
         self.vdigitMove['begin'] = None
         # list of ids to modify    
         self.vdigitMove['id'] = []
-        # ids geographic coordinates
-        self.vdigitMove['coord'] = {}
                 
         if digitToolbar.GetAction() in ["moveVertex", "editLine"]:
             # set pen
@@ -1727,20 +1725,19 @@ class BufferedWindow(MapWindow, wx.Window):
                 if nselected == 0:
                     if digitClass.GetDisplay().SelectLineByPoint(pos1) is not None:
                         nselected = 1
-                
+        
         if nselected > 0:
             if digitToolbar.GetAction() in ("moveLine",
                                             "moveVertex"):
                 # get pseudoDC id of objects which should be redrawn
                 if digitToolbar.GetAction() == "moveLine":
                     # -> move line
-                    self.vdigitMove['id'] = digitClass.GetDisplay().GetSelected(grassId = False)
-                    self.vdigitMove['coord'] = digitClass.GetDisplay().GetSelectedCoord()
+                    self.vdigitMove['id']    = digitClass.GetDisplay().GetSelected(grassId = False)
                 else: # moveVertex
                     self.vdigitMove['id'] = digitClass.GetDisplay().GetSelectedVertex(pos1)
                     if len(self.vdigitMove['id']) == 0: # no vertex found
                         digitClass.GetDisplay().SetSelected([])
-                
+            
             #
             # check for duplicates
             #
@@ -2063,8 +2060,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.parent.OnAddLegend(None)
         
     def OnRightDown(self, event):
-        """!
-        Right mouse button pressed
+        """!Right mouse button pressed
         """
         Debug.msg (5, "BufferedWindow.OnRightDown(): use=%s" % \
                    self.mouse["use"])
@@ -2405,7 +2401,7 @@ class BufferedWindow(MapWindow, wx.Window):
                         # move vertex ->
                         # (vertex, left vertex, left line,
                         # right vertex, right line)
-
+                        
                         # do not draw static lines
                         if digitToolbar.GetAction() == "moveVertex":
                             self.polycoords = []
@@ -2413,7 +2409,7 @@ class BufferedWindow(MapWindow, wx.Window):
                             self.pdcTmp.RemoveId(self.vdigitMove['id'][0])
                             if self.vdigitMove['id'][1] > 0: # previous vertex
                                 x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.vdigitMove['id'][1])[0:2])
-                                self.pdcTmp.RemoveId(self.vdigitMove['id'][1]+1)
+                                self.pdcTmp.RemoveId(self.vdigitMove['id'][1] + 1)
                                 self.polycoords.append((x, y))
                             ### x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.vdigitMove['id'][0])[0:2])
                             self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
