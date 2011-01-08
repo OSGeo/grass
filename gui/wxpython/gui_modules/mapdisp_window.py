@@ -503,8 +503,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 tool(event)
         
     def OnPaint(self, event):
-        """!
-        Draw PseudoDC's to buffered paint DC
+        """!Draw PseudoDC's to buffered paint DC
 
         self.pdc for background and decorations
         self.pdcVector for vector map which is edited
@@ -714,7 +713,7 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # initialize process bar (only on 'render')
         #
-        if render is True or renderVector is True:
+        if render or renderVector:
             self.parent.statusbarWin['progress'].Show()
             if self.parent.statusbarWin['progress'].GetRange() > 0:
                 self.parent.statusbarWin['progress'].SetValue(1)
@@ -722,9 +721,8 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # render background image if needed
         #
-        
         # update layer dictionary if there has been a change in layers
-        if self.tree and self.tree.reorder == True:
+        if self.tree and self.tree.reorder:
             self.tree.ReorderLayers()
         
         # reset flag for auto-rendering
@@ -749,7 +747,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mapfile = None
         
         self.img = self.GetImage() # id=99
-            
+        
         #
         # clear pseudoDcs
         #
@@ -769,7 +767,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 id = self.imagedict[self.img]['id']
             except:
                 return False
-
+            
             self.Draw(self.pdc, self.img, drawid = id)
         
         #
@@ -784,16 +782,18 @@ class BufferedWindow(MapWindow, wx.Window):
             # self.parent.digit.GetDisplay().GetThreshold()
             # draw map
             if self.pdcVector:
-                self.pdcVector.Clear()
+                # self.pdcVector.Clear()
                 self.pdcVector.RemoveAll()
+            
             try:
                 item = self.tree.FindItemByData('maplayer', digitToolbar.GetLayer())
             except TypeError:
                 item = None
             
             if item and self.tree.IsItemChecked(item):
+                self.redrawAll = True
                 self.parent.digit.GetDisplay().DrawMap()
-
+            
             # translate tmp objects (pointer position)
             if digitToolbar.GetAction() == 'moveLine':
                 if  hasattr(self, "vdigitMove") and \
@@ -814,7 +814,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 id = self.imagedict[img]['id']
                 self.Draw(self.pdc, img = img, drawid = id,
                           pdctype = self.overlays[id]['pdcType'], coords = self.overlays[id]['coords'])
-
+        
         for id in self.textdict.keys():
             self.Draw(self.pdc, img = self.textdict[id], drawid = id,
                       pdctype = 'text', coords = [10, 10, 10, 10])
@@ -1425,8 +1425,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.pdcTmp.SetPen(self.polypen)
 
     def OnLeftDownVDigitDisplayCA(self, event):
-        """!
-        Left mouse button down - vector digitizer display categories
+        """!Left mouse button down - vector digitizer display categories
         or attributes action
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1444,10 +1443,9 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # select feature by point
         cats = {}
-        if digitClass.GetDisplay().SelectLineByPoint(coords,
-                                               digitClass.GetSelectType()) is None:
+        if digitClass.GetDisplay().SelectLineByPoint(coords) is None:
             return
-
+        
         if UserSettings.Get(group = 'vdigit', key = 'checkForDupl',
                             subkey = 'enabled'):
             lines = digitClass.GetDisplay().GetSelected()
@@ -1470,7 +1468,7 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 # upgrade dialog
                 self.parent.dialogs['attributes'].UpdateDialog(cats = cats)
-
+           
             if self.parent.dialogs['attributes']:
                 if len(cats.keys()) > 0:
                     # highlight feature & re-draw map
@@ -1493,7 +1491,7 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 # update currently open dialog
                 self.parent.dialogs['category'].UpdateDialog(cats = cats)
-                            
+                
             if self.parent.dialogs['category']:
                 if len(cats.keys()) > 0:
                     # highlight feature & re-draw map
@@ -1502,8 +1500,8 @@ class BufferedWindow(MapWindow, wx.Window):
                 else:
                     if self.parent.dialogs['category'].IsShown():
                         self.parent.dialogs['category'].Hide()
-                
-        self.UpdateMap(render = False)
+        
+        self.UpdateMap(render = False, renderVector = True)
  
     def OnLeftDownVDigitCopyCA(self, event):
         """!
@@ -1551,8 +1549,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.DrawLines(self.pdcTmp, polycoords = (begin, end))
         
     def OnLeftDown(self, event):
-        """!
-        Left mouse button pressed
+        """!Left mouse button pressed
         """
         Debug.msg (5, "BufferedWindow.OnLeftDown(): use=%s" % \
                    self.mouse["use"])
@@ -1646,8 +1643,7 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def OnLeftUpVDigitVarious(self, event):
-        """!
-        Left mouse button up - vector digitizer various actions
+        """!Left mouse button up - vector digitizer various actions
         """
         digitToolbar = self.parent.toolbars['vdigit']
         digitClass   = self.parent.digit
@@ -1660,7 +1656,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if digitToolbar.GetAction() in ("moveVertex",
                                         "editLine"):
             if len(digitClass.GetDisplay().GetSelected()) == 0:
-                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1, type = VDigit_Lines_Type)
+                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1)
                 
                 if digitToolbar.GetAction() == "editLine":
                     try:
@@ -1694,18 +1690,16 @@ class BufferedWindow(MapWindow, wx.Window):
                                           "copyAttrs"):
             if not hasattr(self, "copyCatsIds"):
                 # 'from' -> select by point
-                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1, digitClass.GetSelectType())
+                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1)
                 if nselected:
                     self.copyCatsList = digitClass.GetDisplay().GetSelected()
             else:
                 # -> 'to' -> select by bbox
                 digitClass.GetDisplay().SetSelected([])
                 # return number of selected features (by box/point)
-                nselected = digitClass.GetDisplay().SelectLinesByBox(pos1, pos2,
-                                                               digitClass.GetSelectType())
+                nselected = digitClass.GetDisplay().SelectLinesByBox((pos1, pos2))
                 if nselected == 0:
-                    if digitClass.GetDisplay().SelectLineByPoint(pos1,
-                                                           digitClass.GetSelectType()) is not None:
+                    if digitClass.GetDisplay().SelectLineByPoint(pos1) is not None:
                         nselected = 1
                         
                 if nselected > 0:
@@ -1777,8 +1771,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.UpdateMap(render = False, renderVector = False)
         
     def OnLeftUpVDigitModifyLine(self, event):
-        """!
-        Left mouse button up - vector digitizer split line, add/remove
+        """!Left mouse button up - vector digitizer split line, add/remove
         vertex action
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1786,15 +1779,13 @@ class BufferedWindow(MapWindow, wx.Window):
         
         pos1 = self.Pixel2Cell(self.mouse['begin'])
         
-        pointOnLine = digitClass.GetDisplay().SelectLineByPoint(pos1,
-                                                          type = VDigit_Lines_Type)
-
+        pointOnLine = digitClass.GetDisplay().SelectLineByPoint(pos1)
         if not pointOnLine:
             return
 
         if digitToolbar.GetAction() in ["splitLine", "addVertex"]:
             self.UpdateMap(render = False) # highlight object
-            self.DrawCross(pdc = self.pdcTmp, coords = self.Cell2Pixel(pointOnLine),
+            self.DrawCross(pdc = self.pdcTmp, coords = self.Cell2Pixel((pointOnLine[0], pointOnLine[1])),
                            size = 5)
         else: # removeVertex
             # get only id of vertex
@@ -1827,8 +1818,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if UserSettings.Get(group = 'vdigit', key = 'bgmap',
                             subkey = 'value', internal = True) == '':
             # no background map -> copy from current vector map layer
-            nselected = digitClass.GetDisplay().SelectLinesByBox(pos1, pos2,
-                                                           digitClass.GetSelectType())
+            nselected = digitClass.GetDisplay().SelectLinesByBox((pos1, pos2))
 
             if nselected > 0:
                 # highlight selected features
@@ -1877,9 +1867,8 @@ class BufferedWindow(MapWindow, wx.Window):
         # select lines to be labeled
         pos1 = self.polycoords[0]
         pos2 = self.polycoords[1]
-        nselected = digitClass.GetDisplay().SelectLinesByBox(pos1, pos2,
-                                                       digitClass.GetSelectType())
-
+        nselected = digitClass.GetDisplay().SelectLinesByBox((pos1, pos2))
+        
         if nselected > 0:
             # highlight selected features
             self.UpdateMap(render = False)
@@ -2365,7 +2354,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # set region in zoom or pan
         begin = self.mouse['begin']
-        end = self.mouse['end']
+        end   = self.mouse['end']
         
         self.Zoom(begin, end, 0) # no zoom
         

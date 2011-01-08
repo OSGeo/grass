@@ -48,6 +48,10 @@ class IVDigit:
                                       mapObj    = mapwindow.Map,
                                       log       = self.log)
         
+        # GRASS lib
+        self.poPoints = Vect_new_line_struct()
+        self.poCats   = Vect_new_cats_struct()
+        
         # self.SetCategory()
         
         # layer / max category
@@ -69,8 +73,11 @@ class IVDigit:
             self.InitCats()
         
     def __del__(self):
-        pass # free changesets ?
-
+        Vect_destroy_line_struct(self.poPoints)
+        self.poPoints = None
+        Vect_destroy_cats_struct(self.poCats)
+        self.poCats = None
+        
     def _setCategory(self):
         pass
     
@@ -110,17 +117,33 @@ class IVDigit:
   
         @return changeset id
         """
-        pass
+        changeset = len(self.changesets)
+        for line in self._display.selected['ids']:
+            if Vect_line_alive(self.poMapInfo, line):
+                self._addActionToChangeset(changeset, line, add = False)
+        
+        return changeset
     
-    def _addActionsAfter(self):
-        pass
+    def _addActionsAfter(self, changeset, nlines):
+        """!Register action after operation
 
-    def _addActionToChangeset(self, changeset, add, line):
+        @param changeset changeset id
+        @param nline number of lines
+        """
+        for line in self._display.selected['ids']:
+            if Vect_line_alive(self.poMapInfo, line):
+                self._removeActionFromChangeset(changeset, line, add = False)
+        
+        for line in range(nlines + 1, Vect_get_num_lines(self.poMapInfo)):
+            if Vect_line_alive(self.poMapInfo, line):
+                self._addActionToChangeset(changeset, line, add = True)
+        
+    def _addActionToChangeset(self, changeset, line, add):
         """!Add action to changeset
         
         @param changeset id of changeset
-        @param add True to add, otherwise delete
         @param line feature id
+        @param add True to add, otherwise delete
         """
         if not self.poMapInfo:
             return 
@@ -134,7 +157,9 @@ class IVDigit:
             self.changesets[changeset] = list()
             self.changesetCurrent = changeset
         
-        self.changesets[changeset].append((type, line, offset))
+        self.changesets[changeset].append({ 'type'   : type,
+                                            'line'   : line,
+                                            'offset' : offset })
         
         Debug.msg(3, "IVDigit._addActionToChangeset(): changeset=%d, type=%d, line=%d, offset=%d",
                   changeset, type, line, offset)
@@ -142,11 +167,25 @@ class IVDigit:
     def _applyChangeset(self):
         pass
 
-    def _freeChangeset(self):
-        pass
-
     def _removeActionFromChangeset(self):
-        pass
+        """!Remove action from changeset
+        
+        @param changeset changeset id
+        @param line line id
+        @param add True for add, False for delete
+        
+        @return number of actions in changeset
+        @return -1 on error
+        """
+        if changeset not in self.changesets.keys():
+            return -1
+        
+        alist = self.changesets[changeset] 
+        for action in alist:
+            if action['type'] == type and action['line'] == line:
+                alist.remove(action)
+        
+        return len(alist)
 
     def _listToIList(self, plist):
         """!Generate from list struct_ilist
@@ -264,7 +303,7 @@ class IVDigit:
                 db_init_string(poStmt)
                 db_set_string(poStmt, "DELETE FROM %s WHERE" % Fi.table)
                 n_cats = 0;
-                catsDel = CatsDel.contents
+                catsDel = poCatsDel.contents
                 for c in range(catsDel.n_cats):
                     if catsDel.field[c] == Fi.number:
                         if n_cats > 0:
@@ -345,9 +384,8 @@ class IVDigit:
         @return 0 nothing changed
         @return -1 on failure
         """
-        added = self.digit.ModifyLineVertex(1, coords[0], coords[1], 0.0, # TODO 3D
-                                            self.driver.GetThreshold(type='selectThresh'))
-
+        added = self._ModifyLineVertex(coords, add = True)
+        
         if added > 0:
             self.toolbar.EnableUndo()
 
@@ -362,27 +400,45 @@ class IVDigit:
         @return 0 nothing changed
         @return -1 on failure
         """
-        deleted = self.digit.ModifyLineVertex(0, coords[0], coords[1], 0.0, # TODO 3D
-                                              self.driver.GetThreshold(type='selectThresh'))
-
+        deleted = self._ModifyLineVertex(coords, add = False)
+        
         if deleted > 0:
             self.toolbar.EnableUndo()
 
         return deleted
 
 
-    def SplitLine(self, coords):
-        """!Split selected line/boundary on position 'coords'
+    def SplitLine(self, point):
+        """!Split/break selected line/boundary on given position
 
-        @param coords coordinates to split line
-
+        @param point point where to split line
+        
         @return 1 line modified
         @return 0 nothing changed
         @return -1 error
         """
-        ret = self.digit.SplitLine(coords[0], coords[1], 0.0, # TODO 3D
-                                   self.driver.GetThreshold('selectThresh'))
+        thresh = self._display.GetThreshold('selectThresh')
+        if not self.poMapInfo:
+            return -1
+        
+        poList  = self._listToIList(self._display.selected['ids'])
+        
+        Vect_append_point(self.poPoints, point[0], point[1], 0.0)
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        changeset = self._addActionsBefore()
+        
+        ret = Vedit_split_lines(self.poMapInfo, poList,
+                                self.poPoints, thresh, poList)
+        
+        if ret > 0:
+            self._addActionsAfter(changeset, nlines)
+        else:
+            self.changesets.remove(changeset);
 
+        Vect_destroy_list(poList)
+        
         if ret > 0:
             self.toolbar.EnableUndo()
 
@@ -806,23 +862,20 @@ class IVDigit:
                             message = _("Unable to open background vector map <%s>") % bgmap)
                 return -1
         
-        poPoints = Vect_new_line_struct()
-        poCats   = Vect_new_cats_struct() 
-        
         # set category
         if layer > 0 and \
                 (type != GV_BOUNDARY or \
                      (type == GV_BOUNDARY and self.settings['catBoundary'])):
-            Vect_cat_set(poCats, layer, cat)
+            Vect_cat_set(self.poCats, layer, cat)
             self.cats[layer] = max(cat, self.cats.get(layer, 0))
         
         # append points
         for c in coords:
-            Vect_append_point(poPoints, c[0], c[1], 0.0)
+            Vect_append_point(self.poPoints, c[0], c[1], 0.0)
         
         if type & GV_BOUNDARY:
             # close boundary
-            points = poPoints.contents
+            points = self.poPoints.contents
             last = points.n_points - 1
             if Vect_points_distance(points.x[0], points.x[0], points.z[0],
                                     points.x[last], points.x[last], points.z[last],
@@ -836,13 +889,13 @@ class IVDigit:
             modeSnap = not (snap == SNAP)
             if bgMapInfo:
                 Vedit_snap_line(self.poMapInfo, byref(bgMapInfo), 1,
-                                -1, poPoints, threshold, modeSnap)
+                                -1, self.poPoints, threshold, modeSnap)
             else:
                 # Vedit_snap_line(self.poMapInfo, None, 0,
                 #                -1, poPoints, threshold, modeSnap)
                 pass
         
-        newline = Vect_write_line(self.poMapInfo, type, poPoints, poCats)
+        newline = Vect_write_line(self.poMapInfo, type, self.poPoints, self.poCats)
         if newline < 0:
             self._errorWriteLine()
             return -1
@@ -861,7 +914,7 @@ class IVDigit:
             
             # check if area exists and has no centroid inside
             if layer > 0 and (left > 0 or right > 0):
-                Vect_cat_set(poCats, layer, cat)
+                Vect_cat_set(self.poCats, layer, cat)
                 self.cats[layer] = max(cat, self.cats.get(layer, 0))
             
             x = c_double()
@@ -873,7 +926,7 @@ class IVDigit:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
                     if Vect_write_line(self.poMapInfo, GV_CENTROID,
-                                       bpoints, poCats) < 0:
+                                       bpoints, self.poCats) < 0:
                         self._errorWriteLine()
                         return -1
             
@@ -884,20 +937,17 @@ class IVDigit:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
                     if Vect_write_line(byref(self.poMapInfo), GV_CENTROID,
-                                       bpoints, poCats) < 0:
+                                       bpoints, self.poCats) < 0:
                         self._errorWriteLine()
                         return -1
             Vect_destroy_line_struct(bpoints)
         
         # register changeset
-        self._addActionToChangeset(len(self.changesets), True, newline)
+        self._addActionToChangeset(len(self.changesets), newline, add = True)
         
         # break at intersection
         if self.settings['breakLines']:
-            self._breakLineAtIntersection(newline, poPoints, changeset)
-        
-        Vect_destroy_line_struct(poPoints)
-        Vect_destroy_cats_struct(poCats)
+            self._breakLineAtIntersection(newline, self.poPoints, changeset)
         
         # close background map if opened
         if bgMapInfo:
@@ -913,9 +963,6 @@ class IVDigit:
     def RewriteLine(self):
         pass
     
-    def SplitLine(self):
-        pass
-
     def DeleteLines(self):
         pass
 
@@ -949,9 +996,53 @@ class IVDigit:
     def MoveVertex(self):
         pass
 
-    def ModifyLineVertex(self):
-        pass
-
+    def _ModifyLineVertex(self, coords, add = True):
+        """!Add or remove vertex
+        
+        Shape of line/boundary is not changed when adding new vertex.
+        
+        @param coords coordinates of point
+        @param add True to add, False to remove
+        
+        @return id id of the new feature
+        @return 0 nothing changed
+        @return -1 error
+        """
+        if not self.poMapInfo:
+            return -1
+        
+        selected = self._display.selected
+        if len(selected['ids']) != 1:
+            return 0
+        
+        poList  = self._listToIList(selected['ids'])
+        Vect_append_point(self.poPoints, coords[0], coords[1], 0.0)
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        thresh = self._display.GetThreshold(type = 'selectThresh')
+        
+        changeset = self._addActionsBefore()
+        
+        if add:
+            ret = Vedit_add_vertex(self.poMapInfo, poList,
+                                   self.poPoints, thresh)
+        else:
+            ret = Vedit_remove_vertex(self.poMapInfo, poList,
+                                      self.poPoints, thresh)
+        
+        if ret > 0:
+            self._addActionsAfter(changeset, nlines)
+        else:
+            self.changesets.remove(changeset)
+        
+        if not add and ret > 0 and self.settings['breakLines']:
+            self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
+                                          None, changeset)
+        
+        Vect_destroy_list(poList)
+        
+        return nlines + 1 # feature is write at the end of the file
+    
     def SelectLinesByQuery(self):
         pass
 
@@ -967,14 +1058,51 @@ class IVDigit:
     def CopyCats(self):
         pass
     
-    def GetLineCats(self):
-        pass
+    def GetLineCats(self, line):
+        """!Get list of layer/category(ies) for selected feature.
+
+        @param line feature id (-1 for first selected feature)
+
+        @return list of layer/cats
+        """
+        ret = dict()
+        if not self.poMapInfo:
+            return ret
+        
+        if line == -1 and len(self._display.selected['ids']) < 1:
+            return ret
+        
+        if line == -1:
+            line = self._display.selected['ids'][0]
+            
+        if not Vect_line_alive(self.poMapInfo, line):
+            self._errorDeadLine(line)
+            return ret
+        
+        if Vect_read_line(self.poMapInfo, None, self.poCats, line) < 0:
+            self._errorReadLineMsg(line)
+            return ret
+        
+        cats = self.poCats.contents
+        for i in range(cats.n_cats):
+            field = cats.field[i]
+            if field not in ret:
+                ret[field] = list()
+            ret[field].append(cats.cat[i])
+        
+        return ret
 
     def SetLineCats(self):
         pass
     
     def GetLayers(self):
-        pass
+        """!Get list of layers
+        
+        Requires self.InitCats() to be called.
+
+        @return list of layers
+        """
+        return self.cats.keys()
     
     def Undo(self):
         pass
@@ -1000,7 +1128,7 @@ class IVDigit:
         
         return UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value')
 
-    def _setCategoryNextToUse(self):
+    def SetCategoryNextToUse(self):
         """!Find maximum category number for the given layer and
         update the settings
         """

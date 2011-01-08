@@ -271,8 +271,8 @@ class DisplayAttributesDialog(wx.Dialog):
         """!Cancel button pressed"""
         self.parent.parent.dialogs['attributes'] = None
         if self.parent.parent.digit:
-            self.parent.parent.digit.driver.SetSelected([])
-            self.parent.UpdateMap(render=False)
+            self.parent.parent.digit.GetDisplay().SetSelected([])
+            self.parent.UpdateMap(render = False)
         else:
             self.parent.parent.OnRender(None)
 

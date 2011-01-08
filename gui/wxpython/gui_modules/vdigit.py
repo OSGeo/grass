@@ -69,7 +69,8 @@ class VDigitSettingsDialog(wx.Dialog):
         # notebook
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
         self.__CreateSymbologyPage(notebook)
-        parent.digit.SetCategory() # update category number (next to use)
+        if not UserSettings.Get(group = 'vdigit', key = 'categoryMode', subkey = 'selection'):
+            self.parent.digit.SetCategoryNextToUse()
         self.__CreateGeneralPage(notebook)
         self.__CreateAttributesPage(notebook)
         self.__CreateQueryPage(notebook)
@@ -631,12 +632,12 @@ class VDigitSettingsDialog(wx.Dialog):
         if value < 0:
             region = self.parent.MapWindow.Map.GetRegion()
             res = (region['nsres'] + region['ewres']) / 2.
-            threshold = self.parent.digit.driver.GetThreshold(value = res)
+            threshold = self.parent.digit.GetDisplay().GetThreshold(value = res)
         else:
             if self.snappingUnit.GetStringSelection() == "map units":
                 threshold = value
             else:
-                threshold = self.parent.digit.driver.GetThreshold(value = value)
+                threshold = self.parent.digit.GetDisplay().GetThreshold(value = value)
             
         if value == 0:
             self.snappingInfo.SetLabel(_("Snapping disabled"))
@@ -656,7 +657,7 @@ class VDigitSettingsDialog(wx.Dialog):
         """!Snapping units change -> update static text"""
         value = self.snappingValue.GetValue()
         units = self.snappingUnit.GetStringSelection()
-        threshold = self.parent.digit.driver.GetThreshold(value = value, units = units)
+        threshold = self.parent.digit.GetDisplay().GetThreshold(value = value, units = units)
 
         if units == "map units":
             self.snappingInfo.SetLabel(_("Snapping threshold is %(value).1f %(units)s") % 
@@ -1166,7 +1167,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         """!Cancel button pressed"""
         self.parent.parent.dialogs['category'] = None
         if self.parent.parent.digit:
-            self.parent.parent.digit.driver.SetSelected([])
+            self.parent.parent.digit.GetDisplay().SetSelected([])
             self.parent.UpdateMap(render = False)
         else:
             self.parent.parent.OnRender(None)
