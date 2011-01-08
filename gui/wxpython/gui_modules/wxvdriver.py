@@ -155,7 +155,7 @@ class DisplayDriver:
         @return -1 on failure
         """
         if not pdc or not point:
-            return -1;
+            return -1
         
         pdc.DrawLine(point.x - size, point.y, point.x + size, point.y)
         pdc.DrawLine(point.x, point.y - size, point.x, point.y + size)
@@ -175,53 +175,64 @@ class DisplayDriver:
         if not self.dc or not self.dcTmp:
             return -1
         
-        dcId = 0
-        pdc = self.dc
-        # draw object to the device
-        pdc.SetId(dcId) # 0 | 1 (selected)
-        
         Debug.msg(3, "_drawObject(): type=%d npoints=%d", robj.type, robj.npoints)
-        points = list()
+        brush = None
         if self._isSelected(robj.fid):
-            pdc.SetPen(wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID))
+            pdc = self.dcTmp
+            if self.settings['highlightDupl']['enabled'] and self._isDuplicated(robj.fid):
+                pen = wx.Pen(self.settings['highlightDupl'], self.settings['lineWidth'], wx.SOLID)
+            else:            
+                pen = wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID)
+            
+            dcId = 1
+            self.topology['highlight'] += 1
         else:
-            self._setPen(robj.type, pdc)
+            pdc = self.dc
+            pen, brush = self._definePen(robj.type)
+            dcId = 0
         
-        for i in range(robj.npoints):
-            p = robj.point[i]
-
-            if robj.type & (TYPE_POINT | TYPE_CENTROIDIN | TYPE_CENTROIDOUT | TYPE_CENTROIDDUP |
-                            TYPE_NODEONE | TYPE_NODETWO | TYPE_VERTEX): # -> point
+        pdc.SetPen(pen)        
+        if brush:
+            pdc.SetBrush(brush)
+        
+        if robj.type & (TYPE_POINT | TYPE_CENTROIDIN | TYPE_CENTROIDOUT | TYPE_CENTROIDDUP |
+                        TYPE_NODEONE | TYPE_NODETWO | TYPE_VERTEX): # -> point
+            for i in range(robj.npoints):
+                p = robj.point[i]
                 self._drawCross(pdc, p)
-            else: # -> line
-                # if dcId > 0 and self.drawSegments:
-                #     dcId = 2 # first segment
-                #     i = 0
-                #     while (i < len(self.pointsScreen) - 2):
-                #         point_beg = wx.Point(self.pointsScreen[i])
-                #         point_end = wx.Point(self.pointsScreen[i + 1])
-                        
-                #         pdc.SetId(dcId) # set unique id & set bbox for each segment
-                #         pdc.SetPen(pen)
-                #         rect = wx.Rect(point_beg, point_end)
-                #         pdc.SetIdBounds(dcId, rect)
-                #         pdc.DrawLine(point_beg.x, point_beg.y,
-                #                      point_end.x, point_end.y)
-                #         i    += 2
-                #         dcId += 2
-                # else:
-                points.append(wx.Point(p.x, p.y))
-        
-        if points:
-            if robj.type == TYPE_AREA:
-                pdc.DrawPolygon(points)
+        else:
+            if dcId > 0 and self.drawSegments:
+                dcId = 2 # first segment
+                i = 0
+                while i < robj.npoints - 1:
+                    point_beg = wx.Point(robj.point[i].x, robj.point[i].y)
+                    point_end = wx.Point(robj.point[i+1].x, robj.point[i+1].y)
+                    
+                    pdc.SetId(dcId) # set unique id & set bbox for each segment
+                    pdc.SetPen(pen)
+                    rect = wx.RectPP(point_beg, point_end)
+                    pdc.SetIdBounds(dcId, rect)
+                    pdc.DrawLine(point_beg.x, point_beg.y,
+                                 point_end.x, point_end.y)
+                    i    += 1
+                    dcId += 2
             else:
-                pdc.DrawLines(points)
+                points = list()
+                for i in range(robj.npoints):
+                    p = robj.point[i]
+                    points.append(wx.Point(p.x, p.y))
+                    
+                if robj.type == TYPE_AREA:
+                    pdc.DrawPolygon(points)
+                else:
+                    pdc.DrawLines(points)
         
-    def _setPen(self, rtype, pdc):
-        """!Set pen/brush based on rendered object)
+    def _definePen(self, rtype):
+        """!Define pen/brush based on rendered object)
         
         Updates also self.topology dict
+
+        @return pen, brush
         """
         if rtype == TYPE_POINT:
             key = 'point'
@@ -258,11 +269,14 @@ class DisplayDriver:
         if key in ('area', 'isle'):
             pen = wx.TRANSPARENT_PEN
             if key == 'area':
-                pdc.SetBrush(wx.Brush(self.settings[key]['color'], wx.SOLID))
+                brush = wx.Brush(self.settings[key]['color'], wx.SOLID)
             else:
-                pdc.SetBrush(wx.TRANSPARENT_BRUSH)
+                brush = wx.TRANSPARENT_BRUSH
         else:
-            pdc.SetPen(wx.Pen(self.settings[key]['color'], self.settings['lineWidth'], wx.SOLID))
+            pen = wx.Pen(self.settings[key]['color'], self.settings['lineWidth'], wx.SOLID)
+            brush = None
+        
+        return pen, brush
         
     def _getDrawFlag(self):
         """!Get draw flag from the settings
@@ -370,22 +384,22 @@ class DisplayDriver:
                                  max(self.region['nsres'], self.region['ewres'])).contents
         # ResetTopology()
         
-        self.dc.BeginDrawing()
-        self.dcTmp.BeginDrawing()
+        #self.dc.BeginDrawing()
+        #self.dcTmp.BeginDrawing()
         
         # draw objects
         for i in range(rlist.nitems):
             robj = rlist.item[i].contents
             self._drawObject(robj)
         
-        self.dc.EndDrawing()
-        self.dcTmp.EndDrawing()
+        #self.dc.EndDrawing()
+        #self.dcTmp.EndDrawing()
         
         # reset list of selected features by cat 
         # list of ids - see IsSelected()
-        ### selected.field = -1;
-        ### Vect_reset_list(selected.cats);
-
+        self.selected['field'] = -1
+        self.selected['cats'] = list()
+        
     def _getSelectType(self):
         """!Get type(s) to be selected
 
@@ -402,16 +416,15 @@ class DisplayDriver:
         
         return ftype
 
-    def SelectLinesByBox(self, bbox, drawSeg):
+    def SelectLinesByBox(self, bbox, drawSeg = False):
         """!Select vector objects by given bounding box
-   
+        
         If line id is already in the list of selected lines, then it will
         be excluded from this list.
-
         
         @param bbox bounding box definition
         @param drawSeg True to draw segments of line
-
+        
         @return number of selected features
         @return -1 on error
         """
@@ -420,14 +433,19 @@ class DisplayDriver:
         
         self.drawSegments = drawSeg
         self.drawSelected = True
-    
+        
         # select by ids
         self.selected['cats'] = list()
-
+        
         poList = Vect_new_list()
         poBbox = Vect_new_line_struct()
-        for p in bbox:
-            Vect_append_point(poBbox, p[0], p[1], 0.0)
+        x1, y1 = bbox[0]
+        x2, y2 = bbox[1]
+        Vect_append_point(poBbox, x1, y1, 0.0)
+        Vect_append_point(poBbox, x2, y1, 0.0)
+        Vect_append_point(poBbox, x2, y2, 0.0)
+        Vect_append_point(poBbox, x1, y2, 0.0)
+        Vect_append_point(poBbox, x1, y1, 0.0)
         
         Vect_select_lines_by_polygon(self.poMapInfo, poBbox,
                                      0, None, # isles
@@ -519,7 +537,7 @@ class DisplayDriver:
         
         return (px.value, py.value, pz.value)
     
-    def GetSelected(self, grassId = False):
+    def GetSelected(self, grassId = True):
         """!Get ids of selected objects
         
         @param grassId if true return GRASS line ids, false to return PseudoDC ids
@@ -527,8 +545,7 @@ class DisplayDriver:
         @return list of ids of selected vector objects
         """
         if grassId:
-            # return ListToVector(selected.ids);
-            pass
+            return self.selected['ids']
         
         dc_ids = list()
         
@@ -573,8 +590,69 @@ class DisplayDriver:
             field = -1
             self.selected['ids'] = ids
     
-    def GetSelectedVertex(self):
-        pass
+    def GetSelectedVertex(self, pos):
+        """Get PseudoDC vertex id of selected line
+
+        Set bounding box for vertices of line.
+        
+        \param pos position
+        
+        \return id of center, left and right vertex
+        \return 0 no line found
+        \return -1 on error
+        """
+        returnId = list()
+        # only one object can be selected
+        if len(self.selected['ids']) != 1 or not self.drawSegments:
+            return returnId
+        
+        startId = 1
+        line = self.selected['ids'][0]
+        
+        ftype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
+        
+        minDist = 0.0
+        Gid = -1
+        # find the closest vertex (x, y)
+        DCid = 1
+        points = self.poPoints.contents
+        for idx in range(points.n_points):
+            dist = Vect_points_distance(pos[0], pos[1], 0.0,
+                                        points.x[idx], points.y[idx], points.z[idx], 0)
+            
+            if idx == 0:
+                minDist = dist
+                Gid     = idx
+            else:
+                if minDist > dist:
+                    minDist = dist
+                    Gid = idx
+            
+            vx, vy = self._cell2Pixel(points.x[idx], points.y[idx], points.z[idx])
+            rect = wx.Rect(vx, vy, 0, 0)
+            self.dc.SetIdBounds(DCid, rect)
+            DCid += 2
+        
+        if minDist > self.GetThreshold():
+            return returnId
+        
+        # translate id
+        DCid = Gid * 2 + 1
+        
+        # add selected vertex
+        returnId.append(DCid)
+        # left vertex
+        if DCid == startId:
+            returnId.append(-1)
+        else:
+            returnId.append(DCid - 2)
+        # right vertex
+        if DCid == (points.n_points - 1) * 2 + startId:
+            returnId.append(-1)
+        else:
+            returnId.append(DCid + 2)
+        
+        return returnId
 
     def DrawSelected(self):
         pass
@@ -725,7 +803,7 @@ class DisplayDriver:
         @return threshold value
         """
         if value is None:
-            value = UserSettings.Get(group = 'vdigit', key = type, subkey =' value')
+            value = UserSettings.Get(group = 'vdigit', key = type, subkey = 'value')
         
         if units is None:
             units = UserSettings.Get(group = 'vdigit', key = type, subkey = 'units')

@@ -38,13 +38,13 @@ static struct robject *draw_line(struct Map_info *, int, int);
 static struct robject *draw_line_vertices();
 static void draw_line_nodes(struct Map_info *, int, int,
 			    struct robject_list *);
-static int draw_line_dir(struct robject_list *);
+static int draw_line_dir(struct robject_list *, int);
 static void list_append(struct robject_list *, struct robject *);
 static struct robject *robj_alloc(int, int);
 static void robj_points(struct robject *, const struct line_pnts *);
 static double dist_in_px(double);
 static void en_to_xy(double, double, int *, int *);
-static void draw_arrow(int, int, int, int, double, int,
+static void draw_arrow(int, int, int, int, double, int, int,
 		       struct robject_list *);
 static void draw_area(struct Map_info *, int, struct robject_list *);
 
@@ -115,6 +115,7 @@ struct robject_list *Vedit_render_map(struct Map_info *Map,
 	    /* vertices */
 	    if (draw_flag & DRAW_VERTEX) {
 		robj = draw_line_vertices();
+		robj->fid = fid;
 		if (robj)
 		    list_append(list_obj, robj);
 	    }
@@ -124,7 +125,7 @@ struct robject_list *Vedit_render_map(struct Map_info *Map,
 	    }
 	    /* direction */
 	    if (draw_flag & DRAW_DIRECTION) {
-		draw_line_dir(list_obj);
+	      draw_line_dir(list_obj, fid);
 	    }
 	}
     }
@@ -248,7 +249,7 @@ void draw_line_nodes(struct Map_info *Map, int line, int draw_flag,
     struct robject *robj;
 
     Vect_get_line_nodes(Map, line, &(nodes[0]), &(nodes[1]));
-
+    
     for (i = 0; i < sizeof(nodes) / sizeof(int); i++) {
 	type = 0;
 	if (Vect_get_node_n_lines(Map, nodes[i]) == 1) {
@@ -269,6 +270,7 @@ void draw_line_nodes(struct Map_info *Map, int line, int draw_flag,
 
 	robj = robj_alloc(type, 1);
 	en_to_xy(east, north, &x, &y);
+	robj->fid = line;
 	robj->point->x = x;
 	robj->point->y = y;
 
@@ -329,7 +331,7 @@ struct robject *draw_line_vertices()
 /*!
    \brief Draw line dirs
  */
-int draw_line_dir(struct robject_list *list)
+int draw_line_dir(struct robject_list *list, int line)
 {
     int narrows;
     int size;			/* arrow length in pixels */
@@ -363,7 +365,7 @@ int draw_line_dir(struct robject_list *list)
 
 	    en_to_xy(e, n, &x1, &y1);
 
-	    draw_arrow(x0, y0, x1, y1, angle, size, list);
+	    draw_arrow(x0, y0, x1, y1, angle, size, line, list);
 
 	    if (narrows > 1e2)	// low resolution, break
 		break;
@@ -385,7 +387,7 @@ int draw_line_dir(struct robject_list *list)
 
 		    en_to_xy(e, n, &x1, &y1);
 
-		    draw_arrow(x0, y0, x1, y1, angle, size, list);
+		    draw_arrow(x0, y0, x1, y1, angle, size, line, list);
 		}
 	    }
 	}
@@ -409,14 +411,15 @@ double dist_in_px(double dist)
 /*!
    \brief Draw arrow
  */
-void draw_arrow(int x0, int y0, int x1, int y1, double angle, int size,
+void draw_arrow(int x0, int y0, int x1, int y1, double angle, int size, int line,
 		struct robject_list *list)
 {
     double angle_symb;
     struct robject *robj;
 
     robj = robj_alloc(TYPE_DIRECTION, 3);
-
+    robj->fid = line;
+    
     angle_symb = angle - M_PI / 2.;
     robj->point[0].x = (int)x1 + size * cos(angle_symb);
     robj->point[0].y = (int)y1 - size * sin(angle_symb);
