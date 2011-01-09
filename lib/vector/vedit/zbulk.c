@@ -1,37 +1,34 @@
+/*!
+  \file lib/vector/vedit/zbulk.c
 
-/**
-   \file vector/vedit/zbulk.c
-
-   \brief Vedit library - Bulk labeling (automated labeling of vector
-   features)
-
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Martin Landa <landa.martin gmail.com>
-
-   \date 2007-2008
+  \brief Vedit library - Bulk labeling (automated labeling of vector
+  features)
+  
+  (C) 2007-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/config.h>
 #include <grass/dbmi.h>
 #include <grass/vedit.h>
 
-/**
-   \brief Lines z-bulk labeling
-
-   Automated labeling (z coordinate assignment) of vector lines (iso-lines).
-
-   \param Map vector map
-   \param List list of selected lines
-   \param point_start_end staring and ending point
-   \param start starting value
-   \param step step value
-
-   \return number of modified features
-   \return -1 on error
+/*!
+  \brief Lines z-bulk labeling
+  
+  Automated labeling (z coordinate assignment) of vector lines (iso-lines).
+  
+  \param Map pointer to Map_info
+  \param List list of selected lines
+  \param point_start_end staring and ending point
+  \param start starting value
+  \param step step value
+  
+  \return number of modified features
+  \return -1 on error
 */
 int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
 			double x1, double y1, double x2, double y2,

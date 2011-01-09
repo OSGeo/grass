@@ -1,35 +1,32 @@
+/*!
+  \file lib/vector/vedit/cats.c
 
-/**
-   \file vector/vedit/cats.c
+  \brief Vedit library - category manipulation
+  
+  (C) 2006-2008 by the GRASS Development Team
 
-   \brief Vedit library - category manipulation
-
-   (C) 2006-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Jachym Cepicky <jachym.cepicky gmail.com>
-   \author Martin Landa <landa.martin gmail.com>
-
-   \date 2006-2008
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Jachym Cepicky <jachym.cepicky gmail.com>
+  \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/config.h>
 #include <grass/glocale.h>
 #include <grass/vedit.h>
 
-/**
-   \brief Add / remove categories
-
-   \param Map vector map
-   \param List list of selected primitives
-   \param layer layer number
-   \param del action (non-zero for delete otherwise add)
-   \param cats_list list of category numbers
-
-   \return number of modified primitives
-   \return -1 on error
+/*!
+  \brief Add / remove categories
+  
+  \param Map pointer to Map_info
+  \param List list of selected primitives
+  \param layer layer number
+  \param del action (non-zero for delete otherwise add)
+  \param cats_list list of category numbers
+  
+  \return number of modified primitives
+  \return -1 on error
 */
 int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
 		      int layer, int del, struct cat_list *Clist)

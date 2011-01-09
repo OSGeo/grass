@@ -3,7 +3,7 @@
 
    \brief Vedit library - render vector features (used by wxGUI digitizer)
 
-   (C) 2010 by the GRASS Development Team
+   (C) 2010-2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -49,15 +49,15 @@ static void draw_arrow(int, int, int, int, double, int, int,
 static void draw_area(struct Map_info *, int, struct robject_list *);
 
 /*!
-   \brief Render vector features into list
-
-   \param Map pointer to Map_info structure
-   \param box bounding box of region to be rendered
-   \param draw_flag types of objects to be rendered (see vedit.h)
-   \param center_easing, center_northing, map_width, map_height, map_res values used for conversion en->xy
-
-   \return pointer to robject_list structure
- */
+  \brief Render vector features into list
+  
+  \param Map pointer to Map_info structure
+  \param box bounding box of region to be rendered
+  \param draw_flag types of objects to be rendered (see vedit.h)
+  \param center_easing, center_northing, map_width, map_height, map_res values used for conversion en->xy
+  
+  \return pointer to robject_list structure
+*/
 struct robject_list *Vedit_render_map(struct Map_info *Map,
 				      struct bound_box *box, int draw_flag,
 				      double center_easting,
@@ -125,7 +125,7 @@ struct robject_list *Vedit_render_map(struct Map_info *Map,
 	    }
 	    /* direction */
 	    if (draw_flag & DRAW_DIRECTION) {
-	      draw_line_dir(list_obj, fid);
+		draw_line_dir(list_obj, fid);
 	    }
 	}
     }

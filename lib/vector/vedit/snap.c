@@ -1,32 +1,29 @@
+/*!
+  \file lib/vector/vedit/snap.c
 
-/**
-   \file vector/vedit/snap.c
-
-   \brief Vedit library - snapping
-
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Martin Landa <landa.martin gmail.com>
-
-   \date 2007-2008
+  \brief Vedit library - snapping
+  
+  (C) 2007-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/vedit.h>
 
-/**
-   \brief Snap given point to the nearest primitive
-   
-   \param Map vector map
-   \param line line to be excluded (point on line)
-   \param x,y,z point on line to be snapped
-   \param thresh snapping threshold (>0)
-   \param vertex snap also to vertex (non-zero)
-
-   \return 1 snapped
-   \return 0 not snapped
+/*!
+  \brief Snap given point to the nearest primitive
+  
+  \param Map pointer to Map_info
+  \param line line to be excluded (point on line)
+  \param x,y,z point on line to be snapped
+  \param thresh snapping threshold (>0)
+  \param vertex snap also to vertex (non-zero)
+  
+  \return 1 snapped
+  \return 0 not snapped
 */
 int Vedit_snap_point(struct Map_info *Map,
 		     int line, double *x, double *y, double *z, double thresh,
@@ -84,20 +81,20 @@ int Vedit_snap_point(struct Map_info *Map,
     return snapped;
 }
 
-/**
-   \brief Snap selected primitive to its nearest primitive
-   
-   \param Map vector map
-   \param BgMap,nbgmaps list of background maps used for snapping
-   \param line line id to be snapped (if already written, otherwise -1)
-   \param Points line geometry
-   \param layer layer number
-   \param thresh threshold value used for snapping (>0)
-   \param to_vertex allow snapping also to vertex
-
-   \return 1 line snapped
-   \return 0 line not snapped
-   \return -1 line is dead (if 'line' is > 0)
+/*!
+  \brief Snap selected primitive to its nearest primitive
+  
+  \param Map pointer to Map_info
+  \param BgMap,nbgmaps list of background maps used for snapping
+  \param line line id to be snapped (if already written, otherwise -1)
+  \param Points line geometry
+  \param layer layer number
+  \param thresh threshold value used for snapping (>0)
+  \param to_vertex allow snapping also to vertex
+  
+  \return 1 line snapped
+  \return 0 line not snapped
+  \return -1 line is dead (if 'line' is > 0)
 */
 int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap,
 		    int nbgmaps, int line, struct line_pnts *Points,
@@ -162,18 +159,18 @@ int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap,
     return rewrite;
 }
 
-/**
-   \brief Snap lines/boundaries
-   
-   \param Map vector map
-   \param BgMap,nbgmaps list of background maps used for snapping
-   \param List list of lines to be snapped
-   \param layer layer number
-   \param thresh threshold value used for snapping (>0)
-   \param to_vertex allow snapping also to vertex
-
-   \return number of snapped lines
-   \return -1 on error
+/*!
+  \brief Snap lines/boundaries
+  
+  \param Map pointer to Map_info
+  \param BgMap,nbgmaps list of background maps used for snapping
+  \param List list of lines to be snapped
+  \param layer layer number
+  \param thresh threshold value used for snapping (>0)
+  \param to_vertex allow snapping also to vertex
+  
+  \return number of snapped lines
+  \return -1 on error
 */
 int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap,
 		     int nbgmaps, struct ilist *List, double thresh,

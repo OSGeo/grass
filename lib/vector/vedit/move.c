@@ -1,33 +1,30 @@
-
-/**
-   \file vector/vedit/move.c
-
-   \brief Vedit library - move primitives
-
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Martin Landa <landa.martin gmail.com>
-   \author Jachym Cepicky <jachym.cepicky gmail.com>
-
-   \date 2007-2008
+/*!
+  \file lib/vector/vedit/move.c
+  
+  \brief Vedit library - move primitives
+  
+  (C) 2007-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Martin Landa <landa.martin gmail.com>
+  \author Jachym Cepicky <jachym.cepicky gmail.com>
 */
 
 #include <grass/vedit.h>
 
-/**
-   \brief Move selected primitives
-   
-   \param Map vector map
-   \param BgMap, nbgmaps list of background vector maps used for snapping   
-   \param List list of primitives to be moved
-   \param move_x,move_y,move_z direction (move_z used only if map is 3D)
-   \param snap enable snapping (see globals.h)
-
-   \return number of modified primitives
-   \return -1 on error
+/*!
+  \brief Move selected primitives
+  
+  \param Map pointer to Map_info
+  \param BgMap, nbgmaps list of background vector maps used for snapping   
+  \param List list of primitives to be moved
+  \param move_x,move_y,move_z direction (move_z used only if map is 3D)
+  \param snap enable snapping (see globals.h)
+  
+  \return number of modified primitives
+  \return -1 on error
 */
 int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap,
 		     int nbgmaps, struct ilist *List, double move_x,

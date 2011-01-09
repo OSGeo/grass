@@ -1,38 +1,35 @@
-
-/**
-   \file vector/vedit/vertex.c
-
-   \brief Vedit library - vertex manipulation
-
-   (C) 2006-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Jachym Cepicky <jachym.cepicky gmail.com>
-   \author Martin Landa <landa.martin gmail.com>
-
-   \date 2006-2008
+/*!
+  \file lib/vector/vedit/vertex.c
+  
+  \brief Vedit library - vertex manipulation
+  
+  (C) 2006-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Jachym Cepicky <jachym.cepicky gmail.com>
+  \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/vedit.h>
 
-/**
-   \brief Move all vertices in bounding box(es)
-
-   \param Map vector map
-   \param BgMap, nbgmaps list of background vector maps for snapping
-   \param List list of selected lines
-   \param coord points location
-   \param thresh_coords threshold value for selecting lines
-   \param thresh_snap threshold value used for snapping
-   \param move_x,move_y,move_z direction (move_z is used when map is 3D)
-   \param move_first move only first vertex found in the bounding box
-   \param snap snapping mode (see vedit.h)
-
-   \return number of moved verteces
-   \return -1 on error
- */
+/*!
+  \brief Move all vertices in bounding box(es)
+  
+  \param Map pointer to Map_info
+  \param BgMap, nbgmaps list of background vector maps for snapping
+  \param List list of selected lines
+  \param coord points location
+  \param thresh_coords threshold value for selecting lines
+  \param thresh_snap threshold value used for snapping
+  \param move_x,move_y,move_z direction (move_z is used when map is 3D)
+  \param move_first move only first vertex found in the bounding box
+  \param snap snapping mode (see vedit.h)
+  
+  \return number of moved verteces
+  \return -1 on error
+*/
 int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
 		      int nbgmaps, struct ilist *List,
 		      struct line_pnts *coord, double thresh_coords,
@@ -179,20 +176,20 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
     return nvertices_moved;
 }
 
-/**
-   \brief Add new vertex to line
-
-   Shape of line is not changed.
-
-   \todo 3D
-
-   \param Map vector map
-   \param List list of lines
-   \param coord points location
-   \param thresh find line in given threshold
-
-   \return number of add verteces
-   \return -1 on error
+/*!
+  \brief Add new vertex to line
+  
+  Shape of line is not changed.
+  
+  \todo 3D
+  
+  \param Map pointer to Map_info
+  \param List list of lines
+  \param coord points location
+  \param thresh find line in given threshold
+  
+  \return number of add verteces
+  \return -1 on error
 */
 int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,
 		     struct line_pnts *coord, double thresh)
@@ -269,18 +266,18 @@ int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,
     return nvertices_added;
 }
 
-/**
-   \brief Remove vertex from line
-
-   \todo 3D
-
-   \param Map vector map
-   \param List list of selected lines
-   \param coord points location
-   \param thresh threshold value to find a line
-
-   \return number of removed vertices
-   \return -1 on error
+/*!
+  \brief Remove vertex from line
+  
+  \todo 3D
+  
+  \param Map pointer to Map_info
+  \param List list of selected lines
+  \param coord points location
+  \param thresh threshold value to find a line
+  
+  \return number of removed vertices
+  \return -1 on error
 */
 int Vedit_remove_vertex(struct Map_info *Map, struct ilist *List,
 			struct line_pnts *coord, double thresh)

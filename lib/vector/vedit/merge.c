@@ -1,49 +1,46 @@
-
-/**
-   \file vector/vedit/merge.c
-
-   \brief Vedit library - merge lines
-
-   (C) 2006-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Jachym Cepicky <jachym.cepicky gmail.com>
-   \author Martin Landa <landa.martin gmail.com>
-
-   \date 2006-2008
+/*!
+  \file lib/vector/vedit/merge.c
+  
+  \brief Vedit library - merge lines
+  
+  (C) 2006-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Jachym Cepicky <jachym.cepicky gmail.com>
+  \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/vedit.h>
 
-/**
-   \brief Merge two given lines a, b
+/*!
+  \brief Merge two given lines a, b
+  
+  a : Points1/Cats1
+  b : Points2/Cats2
+  merged line : Points/Cats
    
-   a : Points1/Cats1
-   b : Points2/Cats2
-   merged line : Points/Cats
-   
-   \param Points1,Cats1 first line
-   \param Points2,Cats2 second line
-   \param thresh threshold value
-   \param[out] Points result line
-
-   \return 1 on success
-   \return 0 on error
+  \param Points1,Cats1 first line
+  \param Points2,Cats2 second line
+  \param thresh threshold value
+  \param[out] Points result line
+  
+  \return 1 on success
+  \return 0 on error
 */
 static int merge_lines(struct line_pnts *Points1, struct line_cats *Cats1,
 		       struct line_pnts *Points2, struct line_cats *Cats2,
 		       double thresh, struct line_pnts **Points);
 
-/**
-   \brief Merge lines/boundaries
- 
-   At least two lines need to be given.
-
-   \param Map vector map
-   \param List list of selected lines
-
+/*!
+  \brief Merge lines/boundaries
+  
+  At least two lines need to be given.
+  
+  \param Map pointer to Map_info
+  \param List list of selected lines
+  
    \return number of merged lines
    \return -1 on error
 */
