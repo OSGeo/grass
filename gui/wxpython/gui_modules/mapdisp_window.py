@@ -1704,11 +1704,11 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.copyCatsIds = digitClass.GetDisplay().GetSelected()
 
         elif digitToolbar.GetAction() == "queryLine":
-            selected = digitClass.SelectLinesByQuery(pos1, pos2)
+            selected = digitClass.SelectLinesByQuery(bbox = (pos1, pos2))
             nselected = len(selected)
             if nselected > 0:
                 digitClass.GetDisplay().SetSelected(selected)
-
+        
         else:
             # -> moveLine || deleteLine, etc. (select by point/box)
             if digitToolbar.GetAction() == 'moveLine' and \
@@ -1741,7 +1741,7 @@ class BufferedWindow(MapWindow, wx.Window):
             #
             # check for duplicates
             #
-            if UserSettings.Get(group = 'vdigit', key = 'checkForDupl', subkey = 'enabled') is True:
+            if UserSettings.Get(group = 'vdigit', key = 'checkForDupl', subkey = 'enabled'):
                 dupl = digitClass.GetDisplay().GetDuplicates()
                 self.UpdateMap(render = False)
                     
