@@ -62,9 +62,7 @@ The library is used by <tt>v.edit</tt> module and wxGUI %vector digitizer.
 
  - Vedit_bulk_labeling()
 
-\section authors Authors
-
- Martin Landa <landa.martin gmail.com>
+ - Vedit_render_map()
 
 \section seealso See Also
 
@@ -72,5 +70,8 @@ The library is used by <tt>v.edit</tt> module and wxGUI %vector digitizer.
   
  - \ref dbmilib
 
-Last change: $Date$
+\section authors Authors
+
+ Martin Landa <landa.martin gmail.com>
+
 */

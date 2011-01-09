@@ -1,31 +1,28 @@
+/*!
+  \file lib/vector/vedit/distance.c
 
-/**
-   \file vector/vedit/distance.c
+  \brief Vedit library - distance calculation
+  
+  (C) 2007-2008 by the GRASS Development Team
 
-   \brief Vedit library - distance calculation
-
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Martin Landa <landa.martin gmail.com>
-
-   \date 2007-2008
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/vedit.h>
 
-/**
-   \brief Calculate distances between two lines
- 
-   \todo LL projection
-
-   \param Points1 first line geometry
-   \param Points2 second line geometry
-   \param[out] index of minimal distance
-
-   \return minimal distance betwen two lines (their nodes)
+/*!
+  \brief Calculate distances between two lines
+  
+  \todo LL projection
+  
+  \param Points1 first line geometry
+  \param Points2 second line geometry
+  \param[out] index of minimal distance
+  
+  \return minimal distance betwen two lines (their nodes)
 */
 double Vedit_get_min_distance(struct line_pnts *Points1,
 			      struct line_pnts *Points2, int with_z,

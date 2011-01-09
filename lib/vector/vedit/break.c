@@ -1,16 +1,14 @@
-/**
-   \file vector/vedit/break.c
+/*!
+  \file lib/vector/vedit/break.c
 
-   \brief Vedit library - split, break, connect lines
-
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Martin Landa <landa.martin gmail.com>
-
-   \date 2007-2008
+  \brief Vedit library - split, break, connect lines
+  
+  (C) 2007-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
+  \author Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/config.h>
@@ -20,17 +18,17 @@
 static int connect_lines(struct Map_info *, int, int, int,
 			 double, struct ilist *);
 
-/**
-   \brief Split selected lines on given position
-   
-   \param Map vector map
-   \param List list of selected lines
-   \param coord points location
-   \param[out] List_updated list of rewritten features (or NULL)
-
-   \return number of modified lines
-   \return -1 on error
- */
+/*!
+  \brief Split selected lines on given position
+  
+  \param Map pointer to Map_info
+  \param List list of selected lines
+  \param coord points location
+  \param[out] List_updated list of rewritten features (or NULL)
+  
+  \return number of modified lines
+  \return -1 on error
+*/
 int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
 		      struct line_pnts *coord, double thresh,
 		      struct ilist *List_updated)
@@ -131,20 +129,20 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
     return nlines_modified;
 }
 
-/**
-   \brief Connect lines in given threshold
- 
-   <pre>
-        \         	     \
+/*!
+  \brief Connect lines in given threshold
+  
+  \code
+        \	             \
    id1   \           ->	      \
                                \
    id2 ---------           -----+---
-   </pre>
+   \endcode
 
    If two lines are selected and <i>thresh</i> is -1, no limit is
    applied.
 
-   \param Map vector map
+   \param Map pointer to Map_info
    \param List list of selected lines
    \param thresh threshold value
 
