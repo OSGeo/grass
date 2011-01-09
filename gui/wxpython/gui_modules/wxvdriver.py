@@ -584,6 +584,24 @@ class DisplayDriver:
         
         return (px.value, py.value, pz.value)
     
+    def _listToIList(self, plist):
+        """!Generate from list struct_ilist
+        """
+        ilist = Vect_new_list()
+        for val in plist:
+            Vect_list_append(ilist, val)
+        
+        return ilist
+        
+    def GetSelectedIList(self):
+        """!Get list of selected objects as struct_ilist
+
+        Returned IList must be freed by Vect_destroy_list().
+        
+        @return struct_ilist
+        """
+        return self._listToIList(self.selected['ids'])
+        
     def GetSelected(self, grassId = True):
         """!Get ids of selected objects
         
@@ -632,7 +650,7 @@ class DisplayDriver:
         else:
             field = -1
             self.selected['ids'] = ids
-    
+        
     def GetSelectedVertex(self, pos):
         """Get PseudoDC vertex id of selected line
 
@@ -833,24 +851,6 @@ class DisplayDriver:
         """!Update geographical region used by display driver
         """
         self.region = self.mapObj.GetCurrentRegion()
-        
-    def GetSnapMode(self):
-        """!Get snapping mode
-
-        - snap to vertex
-        - snap to nodes
-        - no snapping
-        
-        @return snap mode
-        """
-        threshold = self.GetThreshold()
-        if threshold > 0.0:
-            if UserSettings.Get(group = 'vdigit', key = 'snapToVertex', subkey = 'enabled'):
-                return SNAPVERTEX
-            else:
-                return SNAP
-        else:
-            return NO_SNAP
         
     def GetThreshold(self, type = 'snapping', value = None, units = None):
         """!Return threshold value in map units

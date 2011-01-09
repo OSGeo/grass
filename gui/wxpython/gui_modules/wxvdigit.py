@@ -31,6 +31,10 @@ from grass.lib.dbmi   import *
 
 class VDigitError:
     def __init__(self, parent):
+        """!Class for managing error messages for vector digitizer
+
+        @param parent parent window for dialogs
+        """
         self.parent  = parent
         self.caption = _('Digitization Error')
     
@@ -136,7 +140,7 @@ class IVDigit:
         
         # layer / max category
         self.cats = dict()
-
+        
         # settings
         self.settings = {
             'breakLines'  : False,
@@ -189,6 +193,24 @@ class IVDigit:
             return None
         
         return pointer(bgMapInfo)
+
+    def _getSnapMode(self):
+        """!Get snapping mode
+
+        - snap to vertex
+        - snap to nodes
+        - no snapping
+        
+        @return snap mode
+        """
+        threshold = self._display.GetThreshold()
+        if threshold > 0.0:
+            if UserSettings.Get(group = 'vdigit', key = 'snapToVertex', subkey = 'enabled'):
+                return SNAPVERTEX
+            else:
+                return SNAP
+        else:
+            return NO_SNAP
     
     def _breakLineAtIntersection(self):
         pass
@@ -248,7 +270,7 @@ class IVDigit:
     def _applyChangeset(self):
         pass
 
-    def _removeActionFromChangeset(self):
+    def _removeActionFromChangeset(self, changeset, line, add):
         """!Remove action from changeset
         
         @param changeset changeset id
@@ -268,15 +290,6 @@ class IVDigit:
         
         return len(alist)
 
-    def _listToIList(self, plist):
-        """!Generate from list struct_ilist
-        """
-        ilist = Vect_new_list()
-        for val in plist:
-            Vect_list_append(ilist, val)
-        
-        return ilist
-        
     def AddFeature(self, ftype, points):
         """!Add new feature
         
@@ -316,7 +329,7 @@ class IVDigit:
         self.toolbar.EnableUndo()
         
         return self._addFeature(vtype, points, layer, cat,
-                                bgmap, self._display.GetSnapMode(), self._display.GetThreshold())
+                                bgmap, self._getSnapMode(), self._display.GetThreshold())
     
     def DeleteSelectedLines(self):
         """!Delete selected features
@@ -349,9 +362,9 @@ class IVDigit:
         # register changeset
         changeset = self._addActionsBefore()
         
-        ilist = self._listToIList(self._display.selected['ids'])
-        nlines = Vedit_delete_lines(self.poMapInfo, ilist)
-        Vect_destroy_list(ilist)
+        poList = self._display.GetSelectedIList()
+        nlines = Vedit_delete_lines(self.poMapInfo, poList)
+        Vect_destroy_list(poList)
         self._display.selected['ids'] = list()
         
         if nlines > 0 and deleteRec:
@@ -417,7 +430,7 @@ class IVDigit:
             return -1
         
         thresh = self._display.GetThreshold()
-        snap   = self._display.GetSnapMode()
+        snap   = self._getSnapMode()
         
         bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
                                      subkey='value', internal=True))
@@ -436,7 +449,7 @@ class IVDigit:
         # register changeset
         changeset = self._addActionsBefore()
         
-        poList = self._listToIList(self._display.selected['ids'])
+        poList = self._display.GetSelectedIList()
         nlines = Vedit_move_lines(self.poMapInfo, poBgMapInfo, nbgmaps,
                                   poList,
                                   move[0], move[1], 0,
@@ -446,7 +459,7 @@ class IVDigit:
         if nlines > 0:
             self._addActionsAfter(changeset, nlines)
         else:
-            changesets.remove(changeset)
+            del self.changesets[changeset]
         
         if nlines > 0 and self.settings['breakLines']:
             for i in range(1, nlines):
@@ -497,19 +510,19 @@ class IVDigit:
         changeset = self._addActionsBefore()
         
         # move only first found vertex in bbox 
-        poList = self._listToIList(self._display.selected['ids'])
-
+        poList = self._display.GetSelectedIList()
         moved = Vedit_move_vertex(self.poMapInfo, poBgMapInfo, nbgmaps,
                                   poList, self.poPoints,
                                   self._display.GetThreshold(type = 'selectThresh'),
                                   self._display.GetThreshold(),
                                   move[0], move[1], 0.0,
-                                  1, self._display.GetSnapMode())
+                                  1, self._getSnapMode())
+        Vect_destroy_list(poList)
         
         if moved > 0:
             self._addActionsAfter(changeset, nlines)
         else:
-            changesets.remove(changeset)
+            del self.changesets[changeset]
         
         if moved > 0 and self.settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
@@ -569,7 +582,7 @@ class IVDigit:
         if not self._checkMap():
             return -1
         
-        poList  = self._listToIList(self._display.selected['ids'])
+        poList  = self._display.GetSelectedIList()
         Vect_reset_line(self.poPoints)
         Vect_append_point(self.poPoints, point[0], point[1], 0.0)
         
@@ -579,17 +592,14 @@ class IVDigit:
         
         ret = Vedit_split_lines(self.poMapInfo, poList,
                                 self.poPoints, thresh, poList)
-        
-        if ret > 0:
-            self._addActionsAfter(changeset, nlines)
-        else:
-            self.changesets.remove(changeset);
-
         Vect_destroy_list(poList)
         
         if ret > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
+        else:
+            del self.changesets[changeset]
+        
         return ret
 
     def EditLine(self, line, coords):
@@ -613,14 +623,12 @@ class IVDigit:
             self.DeleteSelectedLines()
             return 0
         
-        snap   = self._display.GetSnapMode()
-        thresh = self._display.GetThreshold()
-        
         bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
                                      subkey='value', internal=True))
         
         ret = self.digit.RewriteLine(lineid, listCoords,
-                                         bgmap, snap, thresh)
+                                     bgmap, self._getSnapMode(),
+                                     self._display.GetThreshold())
         
         if ret > 0:
             self.toolbar.EnableUndo()
@@ -641,7 +649,7 @@ class IVDigit:
         # register changeset
         changeset = self._addActionsBefore()
         
-        poList = self._listToIList(self._display.selected['ids'])
+        poList = self._display.GetSelectedIList()
         ret = Vedit_flip_lines(self.poMapInfo, poList)
         Vect_destroy_list(poList)
         
@@ -649,7 +657,7 @@ class IVDigit:
             self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
         else:
-            changesets.remove(changeset)
+            del self.changesets[changeset]
         
         return ret
 
@@ -659,11 +667,23 @@ class IVDigit:
         @return number of modified lines
         @return -1 on error
         """
-        ret = self.digit.MergeLines()
-
+        if not self._checkMap():
+            return -1
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        changeset = self._addActionsBefore()
+        
+        poList = self._display.GetSelectedIList()
+        ret = Vedit_merge_lines(self.poMapInfo, poList)
+        Vect_destroy_list(poList)
+        
         if ret > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
+        else:
+            del self.changesets[changeset]
+                
         return ret
 
     def BreakLine(self):
@@ -672,11 +692,24 @@ class IVDigit:
         @return number of modified lines
         @return -1 on error
         """
-        ret = self.digit.BreakLines()
-
+        if not self._checkMap():
+            return -1
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        changeset = self._addActionsBefore()
+        
+        poList = self._display.GetSelectedIList()
+        ret = Vect_break_lines_list(self.poMapInfo, poList, None,
+                                    GV_LINES, None)
+        Vect_destroy_list(poList)
+        
         if ret > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
+        else:
+            del self.changesets[changeset]
+                
         return ret
 
     def SnapLine(self):
@@ -685,14 +718,24 @@ class IVDigit:
         @return on success
         @return -1 on error
         """
-        snap, thresh = self.__getSnapThreshold()
-        ret = self.digit.SnapLines(thresh)
+        if not self._checkMap():
+            return -1
         
-        if ret == 0:
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        changeset = self._addActionsBefore()
+        
+        poList = self._display.GetSelectedIList()
+        Vect_snap_lines_list(self.poMapInfo, poList,
+                             self._display.GetThreshold(), None)
+        Vect_destroy_list(poList)
+        
+        if nlines < Vect_get_num_lines(self.poMapInfo):
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
-        return ret
-
+        else:
+            del self.changesets[changeset]
+        
     def ConnectLine(self):
         """!Connect selected lines/boundaries
 
@@ -700,12 +743,25 @@ class IVDigit:
         @return 0 lines not connected
         @return -1 on error
         """
-        snap, thresh = self.__getSnapThreshold()
-        ret = self.digit.ConnectLines(thresh)
-
+        if not self._checkMap():
+            return -1
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        # register changeset
+        changeset = self._addActionsBefore()
+        
+        poList = self._display.GetSelectedIList()
+        ret = Vedit_connect_lines(self.poMapInfo, poList,
+                                  self._display.GetThreshold())
+        Vect_destroy_list(poList)
+        
         if ret > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
+        else:
+            del self.changesets[changeset]
+        
         return ret
         
     def CopyLine(self, ids=[]):
@@ -748,30 +804,72 @@ class IVDigit:
 
         return ret
 
-    def SelectLinesByQuery(self, pos1, pos2):
-        """!Select features by query
-
-        @param pos1, pos2 bounding box definition
-        """
-        thresh = self.SelectLinesByQueryThresh()
-        
-        w, n = pos1
-        e, s = pos2
-
-        query = wxvdigit.QUERY_UNKNOWN
-        if UserSettings.Get(group='vdigit', key='query', subkey='selection') == 0:
-            query = wxvdigit.QUERY_LENGTH
+    def _selectLinesByQueryThresh(self):
+        """!Generic method used for SelectLinesByQuery() -- to get
+        threshold value"""
+        thresh = 0.0
+        if UserSettings.Get(group = 'vdigit', key = 'query', subkey = 'selection') == 0:
+            thresh = UserSettings.Get(group = 'vdigit', key = 'queryLength', subkey = 'thresh')
+            if UserSettings.Get(group = 'vdigit', key = "queryLength", subkey = 'than-selection') == 0:
+                thresh = -1 * thresh
         else:
-            query = wxvdigit.QUERY_DANGLE
-
-        type = wxvdigit.GV_POINTS | wxvdigit.GV_LINES # TODO: 3D
+            thresh = UserSettings.Get(group = 'vdigit', key = 'queryDangle', subkey = 'thresh')
+            if UserSettings.Get(group = 'vdigit', key = "queryDangle", subkey = 'than-selection') == 0:
+                thresh = -1 * thresh
         
-        ids = self.digit.SelectLinesByQuery(w, n, 0.0, e, s, 1000.0,
-                                            UserSettings.Get(group='vdigit', key='query', subkey='box'),
-                                            query, type, thresh)
+        return thresh
 
-        Debug.msg(4, "VDigit.SelectLinesByQuery(): %s" % \
-                      ",".join(["%d" % v for v in ids]))
+    def SelectLinesByQuery(self, bbox):
+        """!Select features by query
+        
+        @todo layer / 3D
+        
+        @param bbox bounding box definition
+        """
+        if not self._checkMap():
+            return -1
+        
+        thresh = self._selectLinesByQueryThresh()
+        
+        query = QUERY_UNKNOWN
+        if UserSettings.Get(group = 'vdigit', key = 'query', subkey = 'selection') == 0:
+            query = QUERY_LENGTH
+        else:
+            query = QUERY_DANGLE
+        
+        ftype = GV_POINTS | GV_LINES # TODO: 3D
+        layer = 1 # TODO
+        
+        ids = list()
+        poList = Vect_new_list()
+        coList = poList.contents
+        if UserSettings.Get(group = 'vdigit', key = 'query', subkey = 'box'):
+            Vect_reset_line(self.poPoints)
+            x1, y1 = bbox[0]
+            x2, y2 = bbox[1]
+            z1 = z2 = 0.0
+            
+            Vect_append_point(self.poPoints, x1, y1, z1)
+            Vect_append_point(self.poPoints, x2, y1, z2)
+            Vect_append_point(self.poPoints, x2, y2, z1)
+            Vect_append_point(self.poPoints, x1, y2, z2)
+            Vect_append_point(self.poPoints, x1, y1, z1)
+	
+            Vect_select_lines_by_polygon(self.poMapInfo, self.poPoints, 0, None,
+                                         ftype, poList)
+            
+            if coList.n_values == 0:
+                return ids
+        
+        Vedit_select_by_query(self.poMapInfo,
+                              ftype, layer, thresh, query,
+                              poList)
+        
+        for i in range(coList.n_values):
+            ids.append(int(coList.value[i]))
+            
+        Debug.msg(3, "IVDigit.SelectLinesByQuery(): lines=%d", coList.n_values)    
+        Vect_destroy_list(poList)
         
         return ids
 
@@ -1091,9 +1189,8 @@ class IVDigit:
             self._breakLineAtIntersection(newline, self.poPoints, changeset)
         
         # close background map if opened
-        if bgMapInfo:
-            Vect_close(byref(bgMapInfo))
-        del bgMapInfo
+        if poBgMapInfo:
+            Vect_close(poBgMapInfo)
         
         if type & GV_BOUNDARY and \
                 not self.settings['catBoundary'] and \
@@ -1157,7 +1254,7 @@ class IVDigit:
         if len(selected['ids']) != 1:
             return 0
         
-        poList  = self._listToIList(selected['ids'])
+        poList  = self._display.GetSelectedIList()
         Vect_reset_line(self.poPoints)
         Vect_append_point(self.poPoints, coords[0], coords[1], 0.0)
         
@@ -1172,23 +1269,19 @@ class IVDigit:
         else:
             ret = Vedit_remove_vertex(self.poMapInfo, poList,
                                       self.poPoints, thresh)
+        Vect_destroy_list(poList)
         
         if ret > 0:
             self._addActionsAfter(changeset, nlines)
         else:
-            self.changesets.remove(changeset)
+            del self.changesets[changeset]
         
         if not add and ret > 0 and self.settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None, changeset)
-        
-        Vect_destroy_list(poList)
-        
+                
         return nlines + 1 # feature is write at the end of the file
     
-    def SelectLinesByQuery(self):
-        pass
-
     def GetLineLength(self):
         pass
 
