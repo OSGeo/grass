@@ -15,7 +15,7 @@ Classes:
  - HistogramToolbar
  - LayerManagerToolbar
 
-(C) 2007-2010 by the GRASS Development Team
+(C) 2007-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -1173,10 +1173,9 @@ class VDigitToolbar(AbstractToolbar):
 
     def OnZBulk(self, event):
         """!Z bulk-labeling selected lines/boundaries"""
-        if not self.parent.digit.driver.Is3D():
-            wx.MessageBox(parent = self.parent,
-                          message = _("Vector map is not 3D. Operation canceled."),
-                          caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+        if not self.parent.digit.IsVector3D():
+            gcmd.GError(parent = self.parent,
+                        message = _("Vector map is not 3D. Operation canceled."))
             return
         
         if self.action['desc'] == 'zbulkLine': # select previous action

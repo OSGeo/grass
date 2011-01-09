@@ -873,6 +873,14 @@ class IVDigit:
         
         return ids
 
+    def IsVector3D(self):
+        """!Check if open vector map is 3D
+        """
+        if not self._checkMap():
+            return False
+        
+        return Vect_is_3d(self.poMapInfo)
+    
     def GetLineCats(self, line=-1):
         """!Get layer/category pairs from given (selected) line
         
@@ -942,14 +950,27 @@ class IVDigit:
         @return number of modified features
         @return -1 on error
         """
-        ret = self.digit.TypeConvLines()
-
+        if not self._checkMap():
+            return -1
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        # register changeset
+        changeset = self._addActionsBefore()
+        
+        poList = self._display.GetSelectedIList()
+        ret = Vedit_chtype_lines(self.poMapInfo, poList)
+        Vect_destroy_list(poList)
+        
         if ret > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
+        else:
+            del self.changesets[changeset]
+        
         return ret
 
-    def Undo(self, level=-1):
+    def Undo(self, level = -1):
         """!Undo action
 
         @param level levels to undo (0 to revert all)
@@ -980,11 +1001,25 @@ class IVDigit:
         @return number of modified lines
         @return -1 on error
         """
-        ret = self.digit.ZBulkLabeling(pos1[0], pos1[1], pos2[0], pos2[1],
-                                       start, step)
+        if not self._checkMap():
+            return -1
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        # register changeset
+        changeset = self._addActionsBefore()
+        
+        poList = self._display.GetSelectedIList()
+        ret = Vedit_bulk_labeling(self.poMapInfo, poList,
+                                  pos1[0], pos1[1], pos2[0], pos2[1],
+                                  start, step)
+        Vect_destroy_list(poList)
         
         if ret > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
+        else:
+            del self.changesets[changeset]
         
         return ret
     
