@@ -633,11 +633,24 @@ class IVDigit:
         @return number of modified lines
         @return -1 on error
         """
-        ret = self.digit.FlipLines()
-
+        if not self._checkMap():
+            return -1
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        # register changeset
+        changeset = self._addActionsBefore()
+        
+        poList = self._listToIList(self._display.selected['ids'])
+        ret = Vedit_flip_lines(self.poMapInfo, poList)
+        Vect_destroy_list(poList)
+        
         if ret > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
+        else:
+            changesets.remove(changeset)
+        
         return ret
 
     def MergeLine(self):

@@ -345,7 +345,8 @@ int draw_line_dir(struct robject_list *list, int line)
     limit = 5;			// 5px for line segment
 
     dist = Vect_line_length(state.Points);
-
+    G_debug(5, "  draw_line_dir() line=%d", line);
+						  
     if (dist_in_px(dist) >= limit) {
 	while (1) {
 	    pos = (narrows + 1) * 8 * limit * region.map_res;
