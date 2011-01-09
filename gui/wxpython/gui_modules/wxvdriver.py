@@ -133,20 +133,7 @@ class DisplayDriver:
             }
         
         # topology
-        self.topology = {
-            'highlight'   : 0,
-            'point'       : 0,
-            'line'        : 0,
-            'boundaryNo'  : 0,
-            'boundaryOne' : 0,
-            'boundaryTwo' : 0,
-            'centroidIn'  : 0,
-            'centroidOut' : 0,
-            'centroidDup' : 0,
-            'nodeOne'     : 0,
-            'nodeTwo'     : 0,
-            'vertex'      : 0,
-            }
+        self._resetTopology()
         
         self.drawSelected = False
         self.drawSegments = False
@@ -165,6 +152,24 @@ class DisplayDriver:
         
         Vect_destroy_line_struct(self.poPoints)
         Vect_destroy_cats_struct(self.poCats)
+
+    def _resetTopology(self):
+        """!Reset topology dict
+        """
+        self.topology = {
+            'highlight'   : 0,
+            'point'       : 0,
+            'line'        : 0,
+            'boundaryNo'  : 0,
+            'boundaryOne' : 0,
+            'boundaryTwo' : 0,
+            'centroidIn'  : 0,
+            'centroidOut' : 0,
+            'centroidDup' : 0,
+            'nodeOne'     : 0,
+            'nodeTwo'     : 0,
+            'vertex'      : 0,
+            }
         
     def _cell2Pixel(self, east, north, elev):
         """!Conversion from geographic coordinates (east, north)
@@ -324,38 +329,38 @@ class DisplayDriver:
         
     def _getDrawFlag(self):
         """!Get draw flag from the settings
-
+        
         See vedit.h for list of draw flags.
         
         @return draw flag (int)
         """
         ret = 0
         if self.settings['point']['enabled']:
-            ret |= TYPE_POINT
+            ret |= DRAW_POINT
         if self.settings['line']['enabled']:
-            ret |= TYPE_LINE
+            ret |= DRAW_LINE
         if self.settings['boundaryNo']['enabled']:
-            ret |= TYPE_BOUNDARYNO
+            ret |= DRAW_BOUNDARYNO
         if self.settings['boundaryTwo']['enabled']:
-            ret |= TYPE_BOUNDARYTWO
+            ret |= DRAW_BOUNDARYTWO
         if self.settings['boundaryOne']['enabled']:
-            ret |= TYPE_BOUNDARYONE
+            ret |= DRAW_BOUNDARYONE
         if self.settings['centroidIn']['enabled']:
-            ret |= TYPE_CENTROIDIN
+            ret |= DRAW_CENTROIDIN
         if self.settings['centroidOut']['enabled']:
-            ret |= TYPE_CENTROIDOUT
+            ret |= DRAW_CENTROIDOUT
         if self.settings['centroidDup']['enabled']:
-            ret |= TYPE_CENTROIDDUP
+            ret |= DRAW_CENTROIDDUP
         if self.settings['nodeOne']['enabled']:
-            ret |= TYPE_NODEONE
+            ret |= DRAW_NODEONE
         if self.settings['nodeTwo']['enabled']:
-            ret |= TYPE_NODETWO
+            ret |= DRAW_NODETWO
         if self.settings['vertex']['enabled']:
-            ret |= TYPE_VERTEX
+            ret |= DRAW_VERTEX
         if self.settings['area']['enabled']:
-            ret |= TYPE_AREA
+            ret |= DRAW_AREA
         if self.settings['direction']['enabled']:
-            ret |= TYPE_DIRECTION
+            ret |= DRAW_DIRECTION
         
         return ret
         
@@ -391,9 +396,6 @@ class DisplayDriver:
     def _isDuplicated(self, featId):
         return False
 
-    def _resetTopology(self):
-        pass
-
     def _getRegionBox(self):
         """!Get bound_box() from current region
 
@@ -426,18 +428,19 @@ class DisplayDriver:
                                  self.region['center_easting'], self.region['center_northing'],
                                  self.mapObj.width, self.mapObj.height,
                                  max(self.region['nsres'], self.region['ewres'])).contents
-        # ResetTopology()
         
-        #self.dc.BeginDrawing()
-        #self.dcTmp.BeginDrawing()
+        self._resetTopology()
+        
+        self.dc.BeginDrawing()
+        self.dcTmp.BeginDrawing()
         
         # draw objects
         for i in range(rlist.nitems):
             robj = rlist.item[i].contents
             self._drawObject(robj)
         
-        #self.dc.EndDrawing()
-        #self.dcTmp.EndDrawing()
+        self.dc.EndDrawing()
+        self.dcTmp.EndDrawing()
         
         # reset list of selected features by cat 
         # list of ids - see IsSelected()
@@ -740,6 +743,7 @@ class DisplayDriver:
         
         # open existing map
         if update:
+            print >> sys.stderr, name, mapset
             ret = Vect_open_update(self.poMapInfo, name, mapset)
         else:
             ret = Vect_open_old(self.poMapInfo, name, mapset)
