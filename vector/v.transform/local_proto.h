@@ -21,4 +21,4 @@ int print_transform_error(int);
 
 /* trans_digit.c */
 int transform_digit_file(struct Map_info *, struct Map_info *, int,
-			 double, double *, char *, char **, int);
+			 double, int, double *, char *, char **, int);

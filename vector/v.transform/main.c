@@ -10,7 +10,7 @@
 * PURPOSE:      To transform a vector map's coordinates via a set of tie
 *               points.
 *
-* COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
+* COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
     struct Option *vold, *vnew, *pointsfile, *xshift, *yshift, *zshift,
 	*xscale, *yscale, *zscale, *zrot, *columns, *table, *field;
-    struct Flag *tozero_flag, *print_mat_flag;
+    struct Flag *tozero_flag, *print_mat_flag, *swap_flag;
 
     char mon[4], date[40], buf[1000];
     struct Map_info Old, New;
@@ -94,6 +94,11 @@ int main(int argc, char *argv[])
     print_mat_flag->key = 'm';
     print_mat_flag->description =
 	_("Print the transformation matrix to stdout");
+    
+    swap_flag = G_define_flag();
+    swap_flag->key = 's';
+    swap_flag->description =
+	_("Swap coordinates x, y and then apply other parameters");
     
     vold = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -307,7 +312,7 @@ int main(int argc, char *argv[])
     trans_params[IDX_ZROT] = atof(zrot->answer);
 
     transform_digit_file(&Old, &New, Coord.name[0] ? 1 : 0,
-			 ztozero, trans_params,
+			 ztozero, swap_flag->answer, trans_params,
 			 table->answer, columns_name, Vect_get_field_number(&Old, field->answer));
 
     if (Vect_copy_tables(&Old, &New, 0))
