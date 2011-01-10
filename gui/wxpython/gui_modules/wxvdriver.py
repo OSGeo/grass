@@ -140,8 +140,6 @@ class DisplayDriver:
         
         self.UpdateSettings()
         
-        Vect_set_fatal_error(GV_FATAL_PRINT)
-        
     def __del__(self):
         """!Close currently open vector map"""
         G_unset_error_routine()
@@ -463,7 +461,20 @@ class DisplayDriver:
         
         return ftype
 
-    def SelectLinesByBox(self, bbox, drawSeg = False):
+    def _validLine(self, line):
+        """!Check if feature id is valid
+
+        @param line feature id
+
+        @return True valid feature id
+        @return False invalid
+        """
+        if line > 0 and line <= Vect_get_num_lines(self.poMapInfo):
+            return True
+        
+        return False
+    
+    def SelectLinesByBox(self, bbox, drawSeg = False, poMapInfo = None):
         """!Select vector objects by given bounding box
         
         If line id is already in the list of selected lines, then it will
@@ -471,30 +482,41 @@ class DisplayDriver:
         
         @param bbox bounding box definition
         @param drawSeg True to draw segments of line
-        
+        @param poMapInfo use external Map_info, None for self.poMapInfo
+
         @return number of selected features
-        @return -1 on error
+        @return None on error
         """
-        if not self.poMapInfo:
-            return -1
+        thisMapInfo = poMapInfo is None
+        if not poMapInfo:
+            poMapInfo = self.poMapInfo
         
-        self.drawSegments = drawSeg
-        self.drawSelected = True
+        if not poMapInfo:
+            return None
         
-        # select by ids
-        self.selected['cats'] = list()
+        if thisMapInfo:
+            self.drawSegments = drawSeg
+            self.drawSelected = True
+        
+            # select by ids
+            self.selected['cats'] = list()
+        
+        if thisMapInfo:
+            selected = self.selected['ids']
+        else:
+            selected = list()
         
         poList = Vect_new_list()
-        poBbox = Vect_new_line_struct()
         x1, y1 = bbox[0]
         x2, y2 = bbox[1]
+        poBbox = Vect_new_line_struct()
         Vect_append_point(poBbox, x1, y1, 0.0)
         Vect_append_point(poBbox, x2, y1, 0.0)
         Vect_append_point(poBbox, x2, y2, 0.0)
         Vect_append_point(poBbox, x1, y2, 0.0)
         Vect_append_point(poBbox, x1, y1, 0.0)
         
-        Vect_select_lines_by_polygon(self.poMapInfo, poBbox,
+        Vect_select_lines_by_polygon(poMapInfo, poBbox,
                                      0, None, # isles
                                      self._getSelectType(), poList)
         
@@ -505,28 +527,30 @@ class DisplayDriver:
             if UserSettings.Get(group = 'vdigit', key = 'selectInside',
                                 subkey = 'enabled'):
                 inside = True
-                Vect_read_line(self.poMapInfo, self.poPoints, None, line)
-                points = poPoints.contents
+                if not self._validLine(line):
+                    return None
+                Vect_read_line(poMapInfo, self.poPoints, None, line)
+                points = self.poPoints.contents
                 for p in range(points.n_points):
                     if not Vect_point_in_poly(points.x[p], points.y[p],
-                                              byref(bbox)):
+                                              poBbox):
                         inside = False
                         break
                     
                 if not inside:
                     continue # skip lines just overlapping bbox
-        
+            
             if not self._isSelected(line):
-                self.selected['ids'].append(line)
+                selected.append(line)
             else:
-                self.selected['ids'].remove(line)
+                del selected[line]
         
         Vect_destroy_line_struct(poBbox)
         Vect_destroy_list(poList)
         
-        return nlines
+        return len(selected)
 
-    def SelectLineByPoint(self, point):
+    def SelectLineByPoint(self, point, poMapInfo = None):
         """!Select vector feature by given point in given
         threshold
    
@@ -534,29 +558,46 @@ class DisplayDriver:
         all segments are stores.
         
         @param point points coordinates (x, y)
-        
-        @return point on line if line found
+        @param poMapInfo use external Map_info, None for self.poMapInfo
+
+        @return dict {'line' : feature id, 'point' : point on line}
+        @return None nothing found
         """
-        self.drawSelected = True
+        thisMapInfo = poMapInfo is None
+        if not poMapInfo:
+            poMapInfo = self.poMapInfo
+        
+        if not poMapInfo:
+            return None
+
+        if thisMapInfo:
+            self.drawSelected = True
+            # select by ids 
+            self.selected['cats'] = list()
+        
+        if thisMapInfo:
+            selected = self.selected['ids']
+        else:
+            selected = list()
         
         poFound = Vect_new_list()
-        # select by ids 
-        self.selected['cats'] = list()
         
-        line_nearest = Vect_find_line_list(self.poMapInfo, point[0], point[1], 0,
+        line_nearest = Vect_find_line_list(poMapInfo, point[0], point[1], 0,
                                            self._getSelectType(), self.GetThreshold(), self.is3D,
                                            None, poFound)
         
         if line_nearest > 0:
             if not self._isSelected(line_nearest):
-                self.selected['ids'].append(line_nearest)
+                selected.append(line_nearest)
             else:
-                self.selected['ids'].remove(line_nearest)
+                del selected[line_nearest]
         
         px = c_double()
         py = c_double()
         pz = c_double()
-	ftype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line_nearest)
+        if not self._validLine(line_nearest):
+            return None
+	ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, line_nearest)
 	Vect_line_distance (self.poPoints, point[0], point[1], 0.0, self.is3D,
 			    byref(px), byref(py), byref(pz),
 			    None, None, None)
@@ -567,22 +608,24 @@ class DisplayDriver:
 	    for i in range(found.n_values):
 		line = found.value[i]
 		if line != line_nearest:
-                    self.selected['ids'].append(line)
+                    selected.append(line)
 	    
             self.getDuplicates()
 	    
 	    for i in range(found.n_values):
 		line = found.value[i]
 		if line != line_nearest and not self._isDuplicated(line):
-                    self.selected['ids'].remove(line)
+                    del selected[line]
         
         Vect_destroy_list(poFound)
         
-        # drawing segments can be very expensive
-        # only one features selected
-        self.drawSegments = True
+        if thisMapInfo:
+            # drawing segments can be very expensive
+            # only one features selected
+            self.drawSegments = True
         
-        return (px.value, py.value, pz.value)
+        return { 'line'  : line_nearest,
+                 'point' : (px.value, py.value, pz.value) }
     
     def _listToIList(self, plist):
         """!Generate from list struct_ilist
@@ -593,13 +636,16 @@ class DisplayDriver:
         
         return ilist
         
-    def GetSelectedIList(self):
+    def GetSelectedIList(self, ilist = None):
         """!Get list of selected objects as struct_ilist
 
         Returned IList must be freed by Vect_destroy_list().
         
         @return struct_ilist
         """
+        if ilist:
+            return self._listToIList(ilist)
+        
         return self._listToIList(self.selected['ids'])
         
     def GetSelected(self, grassId = True):
@@ -670,6 +716,8 @@ class DisplayDriver:
         startId = 1
         line = self.selected['ids'][0]
         
+        if not self._validLine(line):
+            return -1
         ftype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
         
         minDist = 0.0
@@ -756,12 +804,8 @@ class DisplayDriver:
             self.mapInfo = Map_info()
             self.poMapInfo = pointer(self.mapInfo)
         
-        # avoid GUI crash when G_fatal_error() is called (opening the vector map)
-        Vect_set_fatal_error(GV_FATAL_PRINT)
-        
         # open existing map
         if update:
-            print >> sys.stderr, name, mapset
             ret = Vect_open_update(self.poMapInfo, name, mapset)
         else:
             ret = Vect_open_old(self.poMapInfo, name, mapset)
