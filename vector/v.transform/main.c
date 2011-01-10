@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 	_("Print the transformation matrix to stdout");
     
     swap_flag = G_define_flag();
-    swap_flag->key = 's';
+    swap_flag->key = 'w';
     swap_flag->description =
 	_("Swap coordinates x, y and then apply other parameters");
     
