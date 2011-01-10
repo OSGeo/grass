@@ -1654,7 +1654,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if digitToolbar.GetAction() in ("moveVertex",
                                         "editLine"):
             if len(digitClass.GetDisplay().GetSelected()) == 0:
-                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1)
+                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1)['point']
                 
                 if digitToolbar.GetAction() == "editLine":
                     try:
@@ -1688,7 +1688,7 @@ class BufferedWindow(MapWindow, wx.Window):
                                           "copyAttrs"):
             if not hasattr(self, "copyCatsIds"):
                 # 'from' -> select by point
-                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1)
+                nselected = digitClass.GetDisplay().SelectLineByPoint(pos1)['point']
                 if nselected:
                     self.copyCatsList = digitClass.GetDisplay().GetSelected()
             else:
@@ -1776,7 +1776,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         pos1 = self.Pixel2Cell(self.mouse['begin'])
         
-        pointOnLine = digitClass.GetDisplay().SelectLineByPoint(pos1)
+        pointOnLine = digitClass.GetDisplay().SelectLineByPoint(pos1)['point']
         if not pointOnLine:
             return
 
@@ -1824,7 +1824,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.UpdateMap(render = False, renderVector = False)
         else:
             # copy features from background map
-            self.copyIds += digitClass.SelectLinesFromBackgroundMap(pos1, pos2)
+            self.copyIds += digitClass.SelectLinesFromBackgroundMap(bbox = (pos1, pos2))
             if len(self.copyIds) > 0:
                 color = UserSettings.Get(group = 'vdigit', key = 'symbol',
                                          subkey = ['highlight', 'color'])

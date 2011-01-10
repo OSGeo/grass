@@ -112,6 +112,10 @@ class IVDigit:
         """
         self.poMapInfo   = None      # pointer to Map_info
         self.mapWindow = mapwindow
+
+        # background map
+        self.bgMapInfo   = Map_info()
+        self.poBgMapInfo = self.popoBgMapInfo = None
         
         if not mapwindow.parent.IsStandalone():
             goutput = mapwindow.parent.GetLayerManager().GetLogWindow()
@@ -162,10 +166,20 @@ class IVDigit:
         Vect_destroy_cats_struct(self.poCats)
         self.poCats = None
         
-    def _setCategory(self):
-        pass
-    
-    def _openBackgroundMap(self, bgmap):
+        if self.poBgMapInfo:
+            Vect_close(self.poBgMapInfo)
+            self.poBgMapInfo = self.popoBgMapInfo = None
+            del self.bgMapInfo
+        
+    def CloseBackgroundMap(self):
+        """!Close background vector map"""
+        if not self.poBgMapInfo:
+            return
+        
+        Vect_close(self.poBgMapInfo)
+        self.poBgMapInfo = self.popoBgMapInfo = None
+        
+    def OpenBackgroundMap(self, bgmap):
         """!Open background vector map
 
         @todo support more background maps then only one
@@ -175,25 +189,28 @@ class IVDigit:
         @return pointer to map_info
         @return None on error
         """
-        name = c_char()
-        mapset = c_char()
-        if not G__name_is_fully_qualified(bgmap, byref(name), byref(mapset)):
-            name = bgmap
-            mapset = G_find_vector2(bgmap, '')
+        name   = create_string_buffer(GNAME_MAX)
+        mapset = create_string_buffer(GMAPSET_MAX)
+        if not G_name_is_fully_qualified(bgmap, name, mapset):
+            name   = str(bgmap)
+            mapset = str(G_find_vector2(bgmap, ''))
         else:
-            name = name.value
-            mapset = mapset.value
-
+            name   = str(name.value)
+            mapset = str(mapset.value)
+        
         if (name == Vect_get_name(self.poMapInfo) and \
                 mapset == Vect_get_mapset(self.poMapInfo)):
-            return None
-
-        bgMapInfo = map_info()
-	if Vect_open_old(byref(bgMapInfo), name, mapset) == -1:
-            return None
+            self.poBgMapInfo = self.popoBgMapInfo = None
+            self._error.NoMap(bgmap)
+            return
         
-        return pointer(bgMapInfo)
-
+        self.poBgMapInfo = pointer(self.bgMapInfo)
+        self.popoBgMapInfo = pointer(self.poBgMapInfo)
+	if Vect_open_old(self.poBgMapInfo, name, mapset) == -1:
+            self.poBgMapInfo = self.popoBgMapInfo = None
+            self._error.NoMap(bgmap)
+            return
+        
     def _getSnapMode(self):
         """!Get snapping mode
 
@@ -226,6 +243,51 @@ class IVDigit:
                 self._addActionToChangeset(changeset, line, add = False)
         
         return changeset
+
+    def _applyChangeset(self, changeset, undo):
+        """!Apply changeset (undo/redo changeset)
+        
+        @param changeset changeset id
+        @param undo True for undo otherwise redo
+
+        @return 1 changeset applied
+        @return 0 changeset not applied
+        @return -1 on error
+        """
+        if changeset < 0 or changeset > len(self.changesets.keys()):
+            return -1
+        
+        if self.changesetEnd < 0:
+            self.changesetEnd = changeset
+            
+        ret = 0
+        actions = self.changesets[changeset]
+        for action in actions: 
+            add = action['add']
+            line = action['line']
+            if (undo and add) or \
+                    (not undo and not add):
+                if Vect_line_alive(self.poMapInfo, line):
+                    Debug.msg(3, "IVDigit._applyChangeset(): changeset=%d, action=add, line=%d -> deleted",
+                              changeset, line)
+                    Vect_delete_line(self.poMapInfo, line)
+                    ret = 1
+                else:
+                    Debug.msg(3, "Digit.ApplyChangeset(): changeset=%d, action=add, line=%d dead",
+                              changeset, line)
+            else: # delete
+                offset = action['offset']
+                if not Vect_line_alive(self.poMapInfo, line):
+                    Debug.msg(3, "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d -> added",
+                              changeset, line)
+                    if Vect_restore_line(self.poMapInfo, line, offset) < 0:
+                        return -1
+                    ret = 1
+                else:
+                    Debug.msg(3, "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d alive",
+                              changeset, line)
+        
+        return ret
     
     def _addActionsAfter(self, changeset, nlines):
         """!Register action after operation
@@ -260,16 +322,13 @@ class IVDigit:
             self.changesets[changeset] = list()
             self.changesetCurrent = changeset
         
-        self.changesets[changeset].append({ 'type'   : type,
+        self.changesets[changeset].append({ 'add'    : add,
                                             'line'   : line,
                                             'offset' : offset })
         
         Debug.msg(3, "IVDigit._addActionToChangeset(): changeset=%d, type=%d, line=%d, offset=%d",
                   changeset, type, line, offset)
         
-    def _applyChangeset(self):
-        pass
-
     def _removeActionFromChangeset(self, changeset, line, add):
         """!Remove action from changeset
         
@@ -285,7 +344,7 @@ class IVDigit:
         
         alist = self.changesets[changeset] 
         for action in alist:
-            if action['type'] == type and action['line'] == line:
+            if action['add'] == add and action['line'] == line:
                 alist.remove(action)
         
         return len(alist)
@@ -304,9 +363,6 @@ class IVDigit:
         else:
             layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
             cat   = self.cats.get(layer, 1)
-        
-        bgmap = str(UserSettings.Get(group = 'vdigit', key = 'bgmap',
-                                     subkey = 'value', internal = True))
         
         if ftype == 'point':
             vtype = GV_POINT
@@ -329,7 +385,7 @@ class IVDigit:
         self.toolbar.EnableUndo()
         
         return self._addFeature(vtype, points, layer, cat,
-                                bgmap, self._getSnapMode(), self._display.GetThreshold())
+                                self._getSnapMode(), self._display.GetThreshold())
     
     def DeleteSelectedLines(self):
         """!Delete selected features
@@ -432,25 +488,13 @@ class IVDigit:
         thresh = self._display.GetThreshold()
         snap   = self._getSnapMode()
         
-        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
-                                     subkey='value', internal=True))
-        
-        poBgMapInfo = None
-        nbgmaps     = 0
-        if bgmap:
-            poBgMapInfo = self._openBackgroundMap(bgmap)
-            if not pobgMapInfo:
-                self._error.NoMap(bgmap)
-                return -1
-            nbgmaps = 1
-        
         nlines = Vect_get_num_lines(self.poMapInfo)
         
         # register changeset
         changeset = self._addActionsBefore()
         
         poList = self._display.GetSelectedIList()
-        nlines = Vedit_move_lines(self.poMapInfo, poBgMapInfo, nbgmaps,
+        nlines = Vedit_move_lines(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                                   poList,
                                   move[0], move[1], 0,
                                   snap, thresh)
@@ -464,9 +508,6 @@ class IVDigit:
         if nlines > 0 and self.settings['breakLines']:
             for i in range(1, nlines):
                 self._breakLineAtIntersection(nlines + i, None, changeset)
-        
-        if poBgMapInfo:
-            Vect_close(poBgMapInfo)
         
         if nlines > 0:
             self.toolbar.EnableUndo()
@@ -488,19 +529,6 @@ class IVDigit:
         
         if len(self._display.selected['ids']) != 1:
             return -1
-                
-        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
-                                     subkey='value', internal=True))
-        
-        # try to open background map if asked
-        poBgMapInfo = None
-        nbgmaps     = 0
-        if bgmap:
-            poBgMapInfo = self._openBackgroundMap(bgmap)
-            if not poBgMapInfo:
-                self._error.NoMap(bgmap)
-                return -1
-            nbgmaps = 1
         
         Vect_reset_line(self.poPoints)
         Vect_append_point(self.poPoints, point[0], point[1], 0.0)
@@ -511,7 +539,7 @@ class IVDigit:
         
         # move only first found vertex in bbox 
         poList = self._display.GetSelectedIList()
-        moved = Vedit_move_vertex(self.poMapInfo, poBgMapInfo, nbgmaps,
+        moved = Vedit_move_vertex(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                                   poList, self.poPoints,
                                   self._display.GetThreshold(type = 'selectThresh'),
                                   self._display.GetThreshold(),
@@ -527,9 +555,6 @@ class IVDigit:
         if moved > 0 and self.settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None, changeset)
-        
-        if poBgMapInfo:
-            Vect_close(poBgMapInfo)
         
         if moved > 0:
             self.toolbar.EnableUndo()
@@ -622,9 +647,6 @@ class IVDigit:
         if len(coords) < 2:
             self.DeleteSelectedLines()
             return 0
-        
-        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
-                                     subkey='value', internal=True))
         
         ret = self.digit.RewriteLine(lineid, listCoords,
                                      bgmap, self._getSnapMode(),
@@ -764,7 +786,7 @@ class IVDigit:
         
         return ret
         
-    def CopyLine(self, ids=[]):
+    def CopyLine(self, ids = []):
         """!Copy features from (background) vector map
 
         @param ids list of line ids to be copied
@@ -772,17 +794,28 @@ class IVDigit:
         @return number of copied features
         @return -1 on error
         """
-        bgmap = str(UserSettings.Get(group='vdigit', key='bgmap',
-                                     subkey='value', internal=True))
+        if not self._checkMap():
+            return -1
         
-        if len(bgmap) > 0:
-            ret = self.digit.CopyLines(ids, bgmap)
-        else:
-            ret = self.digit.CopyLines(ids, None)
-
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        poList = self._display.GetSelectedIList(ids)
+        ret = Vedit_copy_lines(self.poMapInfo, self.poBgMapInfo,
+                               poList)
+        Vect_destroy_list(poList)
+        
         if ret > 0:
+            changeset = len(self.changesets)
+            for line in (range(nlines + 1, Vect_get_num_lines(self.poMapInfo))):
+                self._addActionToChangeset(changeset, line, add = True)
             self.toolbar.EnableUndo()
+        else:
+            del self.changesets[changeset]
 
+        if ret > 0 and self.poBgMapInfo and self.settings['breakLines']:
+            for i in range(1, ret):
+                self._breakLineAtIntersection(nlines + i, None, changeset)
+        
         return ret
 
     def CopyCats(self, fromId, toId, copyAttrb=False):
@@ -977,17 +1010,47 @@ class IVDigit:
 
         @return id of current changeset
         """
-        try:
-            ret = self.digit.Undo(level)
-        except SystemExit:
-            ret = -2
+        changesetLast = len(self.changesets.keys()) - 1
 
-        if ret == -2:
-            raise gcmd.GException(_("Undo failed, data corrupted."))
-
-        self.mapWindow.UpdateMap(render=False)
+        if changesetLast < 0:
+            return changesetLast
         
-        if ret < 0: # disable undo tool
+        if self.changesetCurrent == -2: # value uninitialized 
+            self.changesetCurrent = changesetLast
+            
+        if level > 0 and self.changesetCurrent < 0:
+            self.changesetCurrent = 0
+        
+        if level == 0:
+            # 0 -> undo all
+            level = -1 * changesetLast + 1
+
+        Debug.msg(2, "Digit.Undo(): changeset_last=%d, changeset_current=%d, level=%d",
+                  changesetLast, self.changesetCurrent, level)
+    
+        if level < 0: # undo
+            if self.changesetCurrent + level < -1:
+                return changesetCurrent;
+            for changeset in range(self.changesetCurrent, self.changesetCurrent + level, -1):
+                self._applyChangeset(changeset, undo = True)
+        elif level > 0: # redo 
+            if self.changesetCurrent + level > len(self.changesets.keys()):
+                return self.changesetCurrent
+            for changeset in range(self.changesetCurrent, self.changesetCurrent + level):
+                self._applyChangeset(changeset, undo = False)
+        
+        self.changesetCurrent += level
+
+        Debug.msg(2, "Digit.Undo(): changeset_current=%d, changeset_last=%d, changeset_end=%d",
+                  self.changesetCurrent, changesetLast, self.changesetEnd)
+        
+        if self.changesetCurrent == self.changesetEnd:
+            self.changesetEnd = changesetLast
+            return -1
+        
+        self.mapWindow.UpdateMap(render = False)
+        
+        if self.changesetCurrent < 0: # disable undo tool
             self.toolbar.EnableUndo(False)
 
     def ZBulkLines(self, pos1, pos2, start, step):
@@ -1104,14 +1167,13 @@ class IVDigit:
         
         return True
 
-    def _addFeature(self, type, coords, layer, cat, bgmap, snap, threshold):
+    def _addFeature(self, type, coords, layer, cat, snap, threshold):
         """!Add new feature to the vector map
 
         @param type feature type (GV_POINT, GV_LINE, GV_BOUNDARY, ...)
         @coords tuple of coordinates ((x, y), (x, y), ...)
         @param layer layer number (-1 for no cat)
         @param cat category number
-        @param bgmap name of background vector map (None for no background) to be used for snapping
         @param snap snap to node/vertex
         @param threshold threshold for snapping
         
@@ -1128,16 +1190,6 @@ class IVDigit:
         
         if not (type & (GV_POINTS | GV_LINES)): # TODO: 3D
             return -1
-        
-        # try to open background map if asked
-        poBgMapInfo = None
-        nbgmaps     = 0
-        if bgmap:
-            poBgMapInfo = self._openBackgroundMap(bgmap)
-            if not poBgMapInfo:
-                self._error.NoMap(bgmap)
-                return -1
-            nbgmaps = 1
         
         # set category
         Vect_reset_cats(self.poCats)
@@ -1166,7 +1218,7 @@ class IVDigit:
         if snap != NO_SNAP and (type & (GV_POINT | GV_LINES)):
             # apply snapping (node or vertex)
             modeSnap = not (snap == SNAP)
-            Vedit_snap_line(self.poMapInfo, poBgMapInfo, nbgmaps,
+            Vedit_snap_line(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                             -1, self.poPoints, threshold, modeSnap)
         
         newline = Vect_write_line(self.poMapInfo, type, self.poPoints, self.poCats)
@@ -1223,53 +1275,13 @@ class IVDigit:
         if self.settings['breakLines']:
             self._breakLineAtIntersection(newline, self.poPoints, changeset)
         
-        # close background map if opened
-        if poBgMapInfo:
-            Vect_close(poBgMapInfo)
-        
         if type & GV_BOUNDARY and \
                 not self.settings['catBoundary'] and \
         	left < 1 and right < 1:
             newline = None # ?
         
         return newline
-
-    def RewriteLine(self):
-        pass
     
-    def DeleteLines(self):
-        pass
-
-    def MoveLines(self):
-        pass
-
-    def FlipLines(self):
-        pass
-
-    def MergeLines(self):
-        pass
-
-    def BreakLines(self):
-        pass
-
-    def SnapLines(self):
-        pass
-
-    def ConnectLines(self):
-        pass
-
-    def TypeConvLines(self):
-        pass
-
-    def ZBulkLabeling(self):
-        pass
-
-    def CopyLines(self):
-        pass
-
-    def MoveVertex(self):
-        pass
-
     def _ModifyLineVertex(self, coords, add = True):
         """!Add or remove vertex
         
@@ -1317,18 +1329,6 @@ class IVDigit:
                 
         return nlines + 1 # feature is write at the end of the file
     
-    def GetLineLength(self):
-        pass
-
-    def GetAreaSize(self):
-        pass
-
-    def GetAreaPerimeter(self):
-        pass
-
-    def CopyCats(self):
-        pass
-    
     def GetLineCats(self, line):
         """!Get list of layer/category(ies) for selected feature.
 
@@ -1363,9 +1363,6 @@ class IVDigit:
         
         return ret
 
-    def SetLineCats(self):
-        pass
-    
     def GetLayers(self):
         """!Get list of layers
         
@@ -1375,12 +1372,6 @@ class IVDigit:
         """
         return self.cats.keys()
     
-    def Undo(self):
-        pass
-
-    def GetUndoLevel(self):
-        pass
-
     def UpdateSettings(self, breakLines, addCentroid, catBoundary):
         """!Update digit settings
         
@@ -1411,4 +1402,27 @@ class IVDigit:
         cat += 1
         UserSettings.Set(group = 'vdigit', key = 'category', subkey = 'value',
                          value = cat)
+
+    def SelectLinesFromBackgroundMap(self, bbox):
+        """!Select features from background map
+
+        @param bbox bounding box definition
         
+        @return list of selected feature ids
+        """
+        ret = list()
+        
+        # try select features by Box
+        ids = self._display.SelectLinesByBox(bbox, poMapInfo = self.poBgMapInfo)
+        if not ids:
+            ids = [self._display.SelectLineByPoint(bbox[0], poMapInfo = self.poBgMapInfo)['line'], ]
+        
+        return ids
+
+    def GetUndoLevel(self):
+        """!Get undo level (number of active changesets)
+        
+        Note: Changesets starts wiht 0
+        """
+        return self.changesetCurrent
+    
