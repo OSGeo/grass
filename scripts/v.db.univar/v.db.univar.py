@@ -158,6 +158,8 @@ def main():
 
     tmpf = file(tmp)
     for line in tmpf:
+	if len(line.rstrip('\r\n')) == 0:
+	    continue
         x = float(line.rstrip('\r\n'))
         N += 1
         sum += x
@@ -207,14 +209,22 @@ def main():
     eostr = ['even','odd'][odd]
 
     q25pos = round(N * 0.25)
+    if q25pos == 0:
+	q25pos = 1
     q50apos = round(N * 0.50)
+    if q50apos == 0:
+	q50apos = 1
     q50bpos = q50apos + (1 - odd)
     q75pos = round(N * 0.75)
+    if q75pos == 0:
+	q75pos = 1
 
     ppos = {}
     pval = {}
     for i in range(len(perc)):
         ppos[i] = round(N * perc[i] / 100)
+	if ppos[i] == 0:
+	    ppos[i] = 1
         pval[i] = 0
 
     inf = file(tmp + ".sort")
