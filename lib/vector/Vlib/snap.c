@@ -277,7 +277,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
 	int v;
 	int changed = 0;
 
-	G_percent(line_idx, List_lines->n_values, 2);
+	G_percent(line_idx, List_lines->n_values, 1);
 
 	line = List_lines->value[line_idx];
 
@@ -475,7 +475,9 @@ Vect_snap_lines(struct Map_info *Map, int type, double thresh,
 	if (!(ltype & type))
 	    continue;
 
-	Vect_list_append(List, line);
+	/* no need to check for duplicates:
+	 * use dig_list_add() instead of Vect_list_append() */
+	dig_list_add(List, line);
     }
 
     Vect_snap_lines_list(Map, List, thresh, Err);
