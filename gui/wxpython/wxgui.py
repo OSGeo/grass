@@ -554,19 +554,13 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show(True)  
         
-    def OnWorkspace(self, event):
-        """!Workspace menu (new, load, import)"""
+    def _popupMenu(self, data):
+        """!Create popup menu
+        """
         point = wx.GetMousePosition()
         menu = wx.Menu()
-
-        for key, handler in (('workspaceNew',  self.OnWorkspaceNew),
-                             ('workspaceLoad', self.OnWorkspaceLoad),
-                             (None, None),
-                             ('rastImport',    self.OnImportGdalLayers),
-                             ('rastLink',      self.OnLinkGdalLayers),
-                             (None, None),
-                             ('vectImport',    self.OnImportOgrLayers),
-                             ('vectLink',      self.OnLinkOgrLayers)):
+        
+        for key, handler in data:
             if key is None:
                 menu.AppendSeparator()
                 continue
@@ -579,6 +573,23 @@ class GMFrame(wx.Frame):
         self.PopupMenu(menu)
         menu.Destroy()
 
+    def OnNewMenu(self, event):
+        """!New display/workspace menu
+        """
+        self._popupMenu((('newdisplay', self.OnNewDisplay),
+                         ('workspaceNew',  self.OnWorkspaceNew)))
+
+    def OnLoadMenu(self, event):
+        """!Load maps menu (new, load, import, link)
+        """
+        self._popupMenu((('workspaceLoad', self.OnWorkspaceLoad),
+                         (None, None),
+                         ('rastImport',    self.OnImportGdalLayers),
+                         ('rastLink',      self.OnLinkGdalLayers),
+                         (None, None),
+                         ('vectImport',    self.OnImportOgrLayers),
+                         ('vectLink',      self.OnLinkOgrLayers)))
+        
     def OnWorkspaceNew(self, event = None):
         """!Create new workspace file
 
@@ -1181,31 +1192,15 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.NewDisplay(show = True)
         
-        point = wx.GetMousePosition()
-        rastmenu = wx.Menu()
-        
-        for key, handler in (('addrast3d', self.OnAddRaster3D),
-                             (None, None),
-                             ('addrgb',    self.OnAddRasterRGB),
-                             ('addhis',    self.OnAddRasterHIS),
-                             (None, None),
-                             ('addshaded', self.OnAddRasterShaded),
-                             (None, None),
-                             ('addrarrow', self.OnAddRasterArrow),
-                             ('addrnum',   self.OnAddRasterNum)):
-            if key is None:
-                rastmenu.AppendSeparator()
-                continue
-            
-            item = wx.MenuItem(rastmenu, wx.ID_ANY, Icons[key].GetLabel())
-            item.SetBitmap(Icons[key].GetBitmap(self.iconsize))
-            rastmenu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, handler, item)
-            
-        # Popup the menu. If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(rastmenu)
-        rastmenu.Destroy()
+        self._popupMenu((('addrast3d', self.OnAddRaster3D),
+                         (None, None),
+                         ('addrgb',    self.OnAddRasterRGB),
+                         ('addhis',    self.OnAddRasterHIS),
+                         (None, None),
+                         ('addshaded', self.OnAddRasterShaded),
+                         (None, None),
+                         ('addrarrow', self.OnAddRasterArrow),
+                         ('addrnum',   self.OnAddRasterNum)))
         
         # show map display
         self.curr_page.maptree.mapdisplay.Show()
@@ -1225,25 +1220,9 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.NewDisplay(show = True)
 
-        point = wx.GetMousePosition()
-        vectmenu = wx.Menu()
+        self._popupMenu((('addthematic', self.OnAddVectorTheme),
+                         ('addchart',    self.OnAddVectorChart)))
         
-        for key, handler in (('addthematic', self.OnAddVectorTheme),
-                             ('addchart',    self.OnAddVectorChart)):
-            if key is None:
-                rastmenu.AppendSeparator()
-                continue
-            
-            item = wx.MenuItem(vectmenu, wx.ID_ANY, Icons[key].GetLabel())
-            item.SetBitmap(Icons[key].GetBitmap(self.iconsize))
-            vectmenu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, handler, item)
-        
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(vectmenu)
-        vectmenu.Destroy()
-
         # show map display
         self.curr_page.maptree.mapdisplay.Show()
 
@@ -1263,29 +1242,13 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.NewDisplay(show = True)
 
-        point = wx.GetMousePosition()
-        ovlmenu = wx.Menu()
-
-        for key, handler in (('addgrid',     self.OnAddGrid),
-                             ('addlabels',   self.OnAddLabels),
-                             ('addgeodesic', self.OnAddGeodesic),
-                             ('addrhumb',    self.OnAddRhumb),
-                             (None, None),
-                             ('addcmd',      self.OnAddCommand)):
-            if key is None:
-                ovlmenu.AppendSeparator()
-                continue
-            
-            item = wx.MenuItem(ovlmenu, wx.ID_ANY, Icons[key].GetLabel())
-            item.SetBitmap(Icons[key].GetBitmap(self.iconsize))
-            ovlmenu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, handler, item)
+        self._popupMenu((('addgrid',     self.OnAddGrid),
+                         ('addlabels',   self.OnAddLabels),
+                         ('addgeodesic', self.OnAddGeodesic),
+                         ('addrhumb',    self.OnAddRhumb),
+                         (None, None),
+                         ('addcmd',      self.OnAddCommand)))
         
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(ovlmenu)
-        ovlmenu.Destroy()
-
         # show map display
         self.curr_page.maptree.mapdisplay.Show()
         

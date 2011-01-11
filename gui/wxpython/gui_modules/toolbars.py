@@ -1773,12 +1773,12 @@ class LayerManagerToolbar(AbstractToolbar):
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return (
             (self.newdisplay, 'newdisplay', Icons["newdisplay"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["newdisplay"].GetLabel(), Icons["newdisplay"].GetDesc(),
-             self.parent.OnNewDisplay),
+             wx.ITEM_NORMAL, _("Start new display / create new workspace"), '',
+             self.parent.OnNewMenu),
             ('', '', '', '', '', '', ''),
             (self.workspaceLoad, 'workspaceLoad', Icons["workspaceLoad"].GetBitmap(),
-             wx.ITEM_NORMAL, Icons["workspaceLoad"].GetLabel(), Icons["workspaceLoad"].GetDesc(),
-             self.parent.OnWorkspace),
+             wx.ITEM_NORMAL, _("Load (and import) map layers into workspace"), '',
+             self.parent.OnLoadMenu),
             (self.workspaceOpen, 'workspaceOpen', Icons["workspaceOpen"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["workspaceOpen"].GetLabel(), Icons["workspaceOpen"].GetDesc(),
              self.parent.OnWorkspaceOpen),

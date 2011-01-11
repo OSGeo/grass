@@ -177,9 +177,9 @@ Icons = {
                              label=_("Print display")),
     # layer manager
     "newdisplay" : MetaIcon (img=Icons["newdisplay"],
-                             label=_("Start new display")),
+                             label=_("Start new map display")),
     "workspaceNew" : MetaIcon (img=Icons["fileNew"],
-                               label=_("Create new workspace file (Ctrl+N)")),
+                               label=_("Create new workspace (Ctrl+N)")),
     "workspaceLoad" : MetaIcon (img=Icons["fileLoad"],
                                 label=_("Load map layers into workspace (Ctrl+L)")),
     "workspaceOpen" : MetaIcon (img=Icons["fileOpen"],
