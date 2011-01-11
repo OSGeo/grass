@@ -548,6 +548,78 @@ int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
     return 0;
 }
 
+static int rtree_dump_node_file(FILE *, off_t, int, struct RTree *);
+
+/*!
+   \brief Dump R-tree branch from temp file to the file
+
+   \param fp pointer to FILE
+   \param b pointer to Branch structure
+   \param with_z non-zero value for 3D vector data
+   \param level level value
+
+   \return 0
+ */
+static int rtree_dump_branch_file(FILE * fp, struct Branch *b, int with_z,
+			     int level, struct RTree *t)
+{
+    const struct Rect *r;
+
+    r = &(b->rect);
+
+    if (level == 0)
+	fprintf(fp, "  id = %d ", b->child.id);
+
+    fprintf(fp, " %f %f %f %f %f %f\n", r->boundary[0], r->boundary[1],
+	    r->boundary[2], r->boundary[3], r->boundary[4], r->boundary[5]);
+
+    if (level > 0) {
+	rtree_dump_node_file(fp, b->child.pos, with_z, t);
+    }
+    return 0;
+}
+
+/*!
+   \brief Dump R-tree node from temp file to the file
+
+   \param fp pointer to FILE
+   \param pos position of Node in temp file
+   \param with_z non-zero value for 3D vector data
+   \param t RTree to dump
+
+   \return 0
+ */
+int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
+{
+    int i;
+    struct Node n;
+
+    /* recursive nearly-but-a-bit-messy depth-first pre-order traversal
+     * potentially filling up memory */
+    /* TODO: change to non-recursive depth-first post-order traversal */
+    /* left for comparison with GRASS6.x */
+
+    RTreeReadNode(&n, pos, t);
+    fprintf(fp, "Node level=%d  count=%d\n", n.level, n.count);
+
+    if (n.level > 0)
+	for (i = 0; i < NODECARD; i++) {
+	    if (n.branch[i].child.pos >= 0) {
+		fprintf(fp, "  Branch %d", i);
+		rtree_dump_branch_file(fp, &n.branch[i], with_z, n.level, t);
+	    }
+	}
+    else
+	for (i = 0; i < LEAFCARD; i++) {
+	    if (n.branch[i].child.id) {
+		fprintf(fp, "  Branch %d", i);
+		rtree_dump_branch_file(fp, &n.branch[i], with_z, n.level, t);
+	    }
+	}
+
+    return 0;
+}
+
 /*
  * all following methods to transfer spatial indices (rtrees) are based
  * on the same idea
@@ -1158,16 +1230,40 @@ int dig_Rd_spidx(struct gvfile * fp, struct Plus_head *Plus)
 int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
 {
     fprintf(fp, "Nodes\n");
-    rtree_dump_node(fp, Plus->Node_spidx->root, Plus->with_z);
+    if (Plus->Node_spidx->fd < 0)
+	rtree_dump_node(fp, Plus->Node_spidx->root, Plus->with_z);
+    else {
+	RTreeFlushBuffer(Plus->Node_spidx);
+	rtree_dump_node_file(fp, Plus->Node_spidx->rootpos, Plus->with_z,
+	                     Plus->Node_spidx);
+    }
 
     fprintf(fp, "Lines\n");
-    rtree_dump_node(fp, Plus->Line_spidx->root, Plus->with_z);
+    if (Plus->Line_spidx->fd < 0)
+	rtree_dump_node(fp, Plus->Line_spidx->root, Plus->with_z);
+    else {
+	RTreeFlushBuffer(Plus->Line_spidx);
+	rtree_dump_node_file(fp, Plus->Line_spidx->rootpos, Plus->with_z,
+	                     Plus->Line_spidx);
+    }
 
     fprintf(fp, "Areas\n");
-    rtree_dump_node(fp, Plus->Area_spidx->root, Plus->with_z);
+    if (Plus->Area_spidx->fd < 0)
+	rtree_dump_node(fp, Plus->Area_spidx->root, Plus->with_z);
+    else {
+	RTreeFlushBuffer(Plus->Area_spidx);
+	rtree_dump_node_file(fp, Plus->Area_spidx->rootpos, Plus->with_z,
+	                     Plus->Area_spidx);
+    }
 
     fprintf(fp, "Isles\n");
-    rtree_dump_node(fp, Plus->Isle_spidx->root, Plus->with_z);
+    if (Plus->Isle_spidx->fd < 0)
+	rtree_dump_node(fp, Plus->Isle_spidx->root, Plus->with_z);
+    else {
+	RTreeFlushBuffer(Plus->Isle_spidx);
+	rtree_dump_node_file(fp, Plus->Isle_spidx->rootpos, Plus->with_z,
+	                     Plus->Isle_spidx);
+    }
 
     return 0;
 }
