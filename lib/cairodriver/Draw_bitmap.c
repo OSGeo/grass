@@ -49,6 +49,7 @@ void Cairo_Bitmap(int ncols, int nrows, int threshold,
     for (i = 0; i < nrows; i++)
 	memcpy(&data[i * stride], &buf[i * ncols], ncols);
 
+    cairo_surface_mark_dirty(surf);
     cairo_mask_surface(cairo, surf, cur_x, cur_y);
 
     cairo_surface_destroy(surf);
