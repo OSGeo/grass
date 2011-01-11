@@ -24,6 +24,26 @@
 #define HUGE_VAL 9999999999999.0
 #endif
 
+
+/* for qsort */
+
+typedef struct {
+    int i;
+    double size;
+} BOX_SIZE;
+
+static int sort_by_size(const void *a, const void *b)
+{
+    BOX_SIZE *as = (BOX_SIZE *)a;
+    BOX_SIZE *bs = (BOX_SIZE *)b;
+    
+    if (as->size < bs->size)
+	return -1;
+    else
+	return (as->size > bs->size);
+}
+
+
 /*!
  * \brief Find the nearest node.
  *
@@ -250,12 +270,16 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     static int first = 1;
     struct bound_box box;
     static struct ilist *List;
+    static BOX_SIZE *size_list;
+    static int alloc_size_list = 0;
 
     G_debug(3, "Vect_find_area() x = %f y = %f", x, y);
 
     if (first) {
 	List = Vect_new_list();
 	first = 0;
+	alloc_size_list = 10;
+	size_list = G_malloc(alloc_size_list * sizeof(BOX_SIZE));
     }
 
     /* select areas by box */
@@ -268,8 +292,30 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     Vect_select_areas_by_box(Map, &box, List);
     G_debug(3, "  %d areas selected by box", List->n_values);
 
+    /* sort areas by size, the smallest is likely to be the nearest */
+    if (alloc_size_list < List->n_values) {
+	alloc_size_list = List->n_values;
+	size_list = G_realloc(size_list, alloc_size_list * sizeof(BOX_SIZE));
+    }
+
     for (i = 0; i < List->n_values; i++) {
-	area = List->value[i];
+	size_list[i].i = area = List->value[i];
+	Vect_get_area_box(Map, area, &box);
+	size_list[i].size = (box.N - box.S) * (box.E - box.W);
+    }
+    
+    if (List->n_values == 2) {
+	/* simple swap */
+	if (size_list[1].size < size_list[0].size) {
+	    size_list[0].i = List->value[1];
+	    size_list[1].i = List->value[0];
+	}
+    }
+    else if (List->n_values > 2)
+	qsort(size_list, List->n_values, sizeof(BOX_SIZE), sort_by_size);
+
+    for (i = 0; i < List->n_values; i++) {
+	area = size_list[i].i;
 	ret = Vect_point_in_area(Map, area, x, y);
 
 	G_debug(3, "    area = %d Vect_point_in_area() = %d", area, ret);
