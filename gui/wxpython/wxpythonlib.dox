@@ -266,16 +266,20 @@ available in GRASS 5 and GRASS 6.
 \subsection vdigit Vector digitizer
 
 - gui_modules/vdigit.py
- - gui_modules::vdigit::AbstractDigit
  - gui_modules::vdigit::VDigit
- - gui_modules::vdigit::AbstractDisplayDriver
- - gui_modules::vdigit::CDisplayDriver
  - gui_modules::vdigit::VDigitSettingsDialog
  - gui_modules::vdigit::VDigitCategoryDialog
  - gui_modules::vdigit::CategoryListCtrl
  - gui_modules::vdigit::VDigitZBulkDialog
  - gui_modules::vdigit::VDigitDuplicatesDialog
  - gui_modules::vdigit::CheckListFeature
+
+- gui_modules/wxvdriver.py
+ - gui_modules::wxvdriver::DisplayDriver
+ 
+- gui_modules/wxvdigit.py
+ - gui_modules::wxvdigit::VDigitError
+ - gui_modules::wxvdigit::IVDigit
 
 \subsection wxnviz 3D view mode (wxNviz)
 

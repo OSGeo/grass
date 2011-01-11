@@ -1168,8 +1168,7 @@ class MapFrame(wx.Frame):
             maplayer = self.toolbars['vdigit'].GetLayer()
             if maplayer:
                 self.toolbars['vdigit'].OnExit()
-                self.imgVectorMap = None
-
+        
         if self.toolbars['nviz']:
             self.toolbars['nviz'].OnExit()
         

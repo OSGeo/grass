@@ -266,8 +266,6 @@ class BufferedWindow(MapWindow, wx.Window):
         # render output objects
         self.mapfile = None   # image file to be rendered
         self.img     = None   # wx.Image object (self.mapfile)
-        # used in digitization tool (do not redraw vector map)
-        self.imgVectorMap = None
         # decoration overlays
         self.overlays = {}
         # images and their PseudoDC ID's for painting and dragging

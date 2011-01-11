@@ -114,8 +114,8 @@ class GMFrame(wx.Frame):
 
         # initialize variables
         self.disp_idx      = 0            # index value for map displays and layer trees
-        self.curr_page     = ''           # currently selected page for layer tree notebook
-        self.curr_pagenum  = ''           # currently selected page number for layer tree notebook
+        self.curr_page     = None         # currently selected page for layer tree notebook
+        self.curr_pagenum  = None         # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
         self.workspaceChanged = False     # track changes in workspace
         self.georectifying = None         # reference to GCP class or None
@@ -430,6 +430,45 @@ class GMFrame(wx.Frame):
             cmd = self.GetMenuCmd(event)
         menuform.GUI().ParseCommand(cmd, parentframe = self)
 
+    def OnVDigit(self, event):
+        """!Start vector digitizer
+        """
+        if not self.curr_page:
+            self.MsgNoLayerSelected()
+            return
+        
+        tree = self.GetLayerTree()
+        layer = tree.layer_selected
+        # no map layer selected
+        if not layer:
+            self.MsgNoLayerSelected()
+            return
+        
+        # available only for vector map layers
+        try:
+            mapLayer = tree.GetPyData(layer)[0]['maplayer']
+        except:
+            mapLayer = None
+        
+        if not mapLayer or mapLayer.GetType() != 'vector':
+            gcmd.GMessage(parent = self,
+                          message = _("Selected map layer is not vector."))
+            return
+        
+        if mapLayer.GetMapset() != grass.gisenv()['MAPSET']:
+            gcmd.GMessage(parent = self,
+                          message = _("Editing is allowed only for vector maps from the "
+                                      "current mapset."))
+            return
+        
+        if not tree.GetPyData(layer)[0]:
+            return
+        dcmd = tree.GetPyData(layer)[0]['cmd']
+        if not dcmd:
+            return
+        
+        tree.OnStartEditing(None)
+        
     def OnRunScript(self, event):
         """!Run script"""
         # open dialog and choose script file
@@ -1028,7 +1067,8 @@ class GMFrame(wx.Frame):
             self.MsgNoLayerSelected()
             return
         
-        layer = self.curr_page.maptree.layer_selected
+        tree = self.GetLayerTree()
+        layer = tree.layer_selected
         # no map layer selected
         if not layer:
             self.MsgNoLayerSelected()
@@ -1036,21 +1076,18 @@ class GMFrame(wx.Frame):
         
         # available only for vector map layers
         try:
-            maptype = self.curr_page.maptree.GetPyData(layer)[0]['maplayer'].type
+            maptype = tree.GetPyData(layer)[0]['maplayer'].type
         except:
             maptype = None
         
         if not maptype or maptype != 'vector':
-            wx.MessageBox(parent = self,
-                          message = _("Attribute management is available only "
-                                    "for vector maps."),
-                          caption = _("Message"),
-                          style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            gcmd.GMessage(parent = self,
+                          message = _("Selected map layer is not vector."))
             return
         
-        if not self.curr_page.maptree.GetPyData(layer)[0]:
+        if not tree.GetPyData(layer)[0]:
             return
-        dcmd = self.curr_page.maptree.GetPyData(layer)[0]['cmd']
+        dcmd = tree.GetPyData(layer)[0]['cmd']
         if not dcmd:
             return
         
