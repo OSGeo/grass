@@ -220,6 +220,7 @@ int rbtree_remove(struct RB_TREE *tree, const void *data)
 	f->data = q->data;
 	p->link[p->link[1] == q] = q->link[q->link[0] == NULL];
 	free(q);
+	q = NULL;
 	tree->count--;
 	removed = 1;
     }
@@ -422,7 +423,9 @@ void rbtree_destroy(struct RB_TREE *tree)
 	    /* No left links, just kill the node and move on */
 	    save = it->link[1];
 	    free(it->data);
+	    it->data = NULL;
 	    free(it);
+	    it = NULL;
 	}
 	else {
 	    /* Rotate away the left link and check again */
@@ -432,6 +435,7 @@ void rbtree_destroy(struct RB_TREE *tree)
 	}
     }
     free(tree);
+    tree = NULL;
 }
 
 /* used for debugging: check for errors in tree structure */
