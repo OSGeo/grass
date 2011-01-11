@@ -337,6 +337,14 @@ struct Rect RTreeCombineRect(struct Rect *r, struct Rect *rr, struct RTree *t)
 	j = i + NUMDIMS;
 	new_rect.boundary[j] = MAX(r->boundary[j], rr->boundary[j]);
     }
+
+    /* set remaining boundaries to zero */
+    for (; i < NUMDIMS; i++) {
+	new_rect.boundary[i] = MIN(r->boundary[i], rr->boundary[i]);
+	j = i + NUMDIMS;
+	new_rect.boundary[j] = MAX(r->boundary[j], rr->boundary[j]);
+    }
+
     return new_rect;
 }
 
