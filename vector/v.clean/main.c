@@ -175,9 +175,9 @@ int main(int argc, char *argv[])
 	threshs[i] = atof(thresh_opt->answers[i]);
 	G_debug(1, "thresh : %s -> %f ", tool_opt->answers[i], threshs[i]);
 
-	if (tools[i] != TOOL_SNAP && tools[i] != TOOL_RMDANGLE &&
-	    tools[i] != TOOL_CHDANGLE && tools[i] != TOOL_PRUNE &&
-	    tools[i] != TOOL_RMAREA) {
+	if (threshs[i] != 0 && tools[i] != TOOL_SNAP &&
+	    tools[i] != TOOL_RMDANGLE && tools[i] != TOOL_CHDANGLE && 
+	    tools[i] != TOOL_PRUNE && tools[i] != TOOL_RMAREA) {
 	    G_warning(_("Threshold for tool %d may not be > 0, set to 0"),
 		      i + 1);
 	    threshs[i] = 0.0;
