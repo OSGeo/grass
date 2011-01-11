@@ -134,7 +134,7 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
  * find orientation of polygon (clockwise or counterclockwise)
  * in theory faster than signed area for > 4 vertices, but is not robust
  * against special cases
- * use dog_find_area_poly instead
+ * use dig_find_area_poly instead
  *
  * points must be closed polygon with first point = last point
  *
