@@ -30,15 +30,13 @@ int dig_init_list(struct ilist *list)
     return 1;
 }
 
-/* Init add item to list */
+/* Add item to list, does not check for duplicates */
 int dig_list_add(struct ilist *list, int val)
 {
-    void *p;
-    int size;
-
     if (list->n_values == list->alloc_values) {
-	size = (list->n_values + 1000) * sizeof(int);
-	p = G_realloc((void *)list->value, size);
+	size_t size = (list->n_values + 1000) * sizeof(int);
+	void *p = G_realloc((void *)list->value, size);
+
 	if (p == NULL)
 	    return 0;
 	list->value = (int *)p;
