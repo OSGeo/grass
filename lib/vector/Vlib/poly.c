@@ -24,8 +24,8 @@
 
 struct Slink
 {
-    double x;
     struct Slink *next;
+    double x;
 };
 
 
