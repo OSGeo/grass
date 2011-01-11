@@ -76,6 +76,7 @@ void prn_error_mat(int out_cols, int hdr)
 	    for (k = 0; k < ncat; k++)
 		if (rlst[k] == Gstats[i].cats[1])
 		    break;
+	    /* matrix: reference in columns, classification in rows */
 	    matr[j * ncat + k] = Gstats[i].count;
 	}
 
@@ -132,7 +133,7 @@ void prn_error_mat(int out_cols, int hdr)
 		}
 		fprintf(fd, "\n");
 	    }
-	    /* marginal summation of columes */
+	    /* column marginal summation */
 	    fprintf(fd, "Col Sum\t\t");
 	    for (cndx = first_col; cndx < last_col; cndx++) {
 		t_col = 0;
