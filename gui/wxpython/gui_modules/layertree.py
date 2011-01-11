@@ -313,9 +313,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mltype = self.GetPyData(self.layer_selected)[0]['type']
         except:
             mltype = None
-        #
+
         # vector layers (specific items)
-        #
         if mltype and mltype == "vector":
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID4, text = _("Show attribute data"))
@@ -379,9 +378,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID7, False)
                 self.popupMenu.Enable(self.popupID14, False)
         
-        #
         # raster layers (specific items)
-        #
         elif mltype and mltype == "raster":
             self.popupMenu.Append(self.popupID12, text = _("Zoom to selected map(s) (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id = self.popupID12)
@@ -406,7 +403,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID6, False)
                 self.popupMenu.Enable(self.popupID11, False)
         
-        ## self.PopupMenu(self.popupMenu, pos)
+        # self.PopupMenu(self.popupMenu, pos)
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()
 
@@ -572,7 +569,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.AddToolbar('vdigit')
         else: # tool already enabled
             pass
-
+        
         # mark layer as 'edited'
         self.mapdisplay.toolbars['vdigit'].StartEditing(maplayer)
         
@@ -585,7 +582,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         
         self.mapdisplay.toolbars['vdigit'].OnExit()
-        self.mapdisplay.imgVectorMap = None
+        if self.lmgr:
+            self.lmgr.toolbar.Enable('vdigit', enable = True)
         
         self._setGradient()
         self.RefreshLine(self.layer_selected)
@@ -1129,13 +1127,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             return
         
         digitToolbar = self.mapdisplay.toolbars['vdigit']
-        mapLayer = self.GetPyData(layer)[0]['maplayer']
-        bgmap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                                 internal = True)
-        if digitToolbar and digitToolbar.GetLayer() == mapLayer:
-            self._setGradient('vdigit')
-        elif bgmap == mapLayer.GetName():
-            self._setGradient('bgmap')
+        if digitToolbar:
+            mapLayer = self.GetPyData(layer)[0]['maplayer']
+            bgmap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
+                                     internal = True)
+            
+        if digitToolbar:
+            if digitToolbar.GetLayer() == mapLayer:
+                self._setGradient('vdigit')
+            elif bgmap == mapLayer.GetName():
+                self._setGradient('bgmap')
+            else:
+                self._setGradient()
         else:
             self._setGradient()
         
@@ -1160,9 +1163,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         except:
             pass
         
-        #
         # update statusbar -> show command string
-        #
         if self.GetPyData(layer) and self.GetPyData(layer)[0]['maplayer']:
             cmd = self.GetPyData(layer)[0]['maplayer'].GetCmd(string = True)
             if len(cmd) > 0:
@@ -1177,9 +1178,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
                                                     render = render)
         
-        #
         # update nviz tools
-        #
         if self.mapdisplay.toolbars['nviz'] and \
                 self.GetPyData(self.layer_selected) is not None:
             if self.layer_selected.IsChecked():
@@ -1242,17 +1241,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.RecreateItem(child, dropTarget, parent = newItem)
                     self.Delete(child)
                     child = self.GetNextChild(old, cookie)[0]
-            #self.Expand(newItem)
-
+        
         # delete layer at original position
         try:
             self.Delete(old) # entry in render.Map layers list automatically deleted by OnDeleteLayer handler
         except AttributeError:
-            # FIXME being ugly (item.SetWindow(None))
             pass
-
-        # reorder layers in render.Map to match new order after drag and drop
-        #self.ReorderLayers()
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
@@ -1339,9 +1333,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.GetPyData(newItem)[0]['ctrl'] = None
             
         self.CheckItem(newItem, checked = checked) # causes a new render
-
-        # newItem.SetHeight(TREE_ITEM_HEIGHT)
-
+        
         return newItem
 
     def _getLayerName(self, item):

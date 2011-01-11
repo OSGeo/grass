@@ -84,6 +84,7 @@ IconsGrass2 = {
     "addlabels"  : 'layer-label-add.png',
     "delcmd"     : 'layer-remove.png',
     "attrtable"  : 'table.png',
+    "vdigit"     : 'edit.png',
     "addrgb"     : 'layer-rgb-add.png',
     "addhis"     : 'layer-his-add.png',
     "addthematic": 'layer-vector-thematic-add.png',

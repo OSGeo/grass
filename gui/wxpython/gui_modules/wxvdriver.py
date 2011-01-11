@@ -58,7 +58,7 @@ perfunc = pertype(print_progress)
 
 class DisplayDriver:
     def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
-        """Display driver used by vector digitizer
+        """!Display driver used by vector digitizer
         
         @param device    wx.PseudoDC device where to draw vector objects
         @param deviceTmp wx.PseudoDC device where to draw temporary vector objects
@@ -135,8 +135,8 @@ class DisplayDriver:
         # topology
         self._resetTopology()
         
-        self.drawSelected = False
-        self.drawSegments = False
+        self._drawSelected = False
+        self._drawSegments = False
         
         self.UpdateSettings()
         
@@ -229,7 +229,7 @@ class DisplayDriver:
             
             dcId = 1
             self.topology['highlight'] += 1
-            if not self.drawSelected:
+            if not self._drawSelected:
                 return
         else:
             pdc = self.dc
@@ -246,7 +246,7 @@ class DisplayDriver:
                 p = robj.point[i]
                 self._drawCross(pdc, p)
         else:
-            if dcId > 0 and self.drawSegments:
+            if dcId > 0 and self._drawSegments:
                 dcId = 2 # first segment
                 i = 0
                 while i < robj.npoints - 1:
@@ -362,9 +362,6 @@ class DisplayDriver:
         
         return ret
         
-    def _printIds(self):
-        pass
-
     def _isSelected(self, line, force = False):
         """!Check if vector object selected?
    
@@ -495,8 +492,8 @@ class DisplayDriver:
             return None
         
         if thisMapInfo:
-            self.drawSegments = drawSeg
-            self.drawSelected = True
+            self._drawSegments = drawSeg
+            self._drawSelected = True
         
             # select by ids
             self.selected['cats'] = list()
@@ -571,7 +568,7 @@ class DisplayDriver:
             return None
 
         if thisMapInfo:
-            self.drawSelected = True
+            self._drawSelected = True
             # select by ids 
             self.selected['cats'] = list()
         
@@ -622,7 +619,7 @@ class DisplayDriver:
         if thisMapInfo:
             # drawing segments can be very expensive
             # only one features selected
-            self.drawSegments = True
+            self._drawSegments = True
         
         return { 'line'  : line_nearest,
                  'point' : (px.value, py.value, pz.value) }
@@ -660,7 +657,7 @@ class DisplayDriver:
         
         dc_ids = list()
         
-        if not self.drawSegments:
+        if not self._drawSegments:
             dc_ids.append(1)
         elif len(self.selected['ids']) > 0:
             # only first selected feature
@@ -673,12 +670,6 @@ class DisplayDriver:
         
         return dc_ids
         
-    def GetDuplicates(self):
-        pass
-
-    def GetRegionSelected(self):
-        pass
-
     def SetSelected(self, ids, layer = -1):
         """!Set selected vector objects
 
@@ -686,9 +677,9 @@ class DisplayDriver:
         @param layer layer number for features selected based on category number
         """
         if ids:
-            self.drawSelected = True
+            self._drawSelected = True
         else:
-            self.drawSelected = False
+            self._drawSelected = False
         
         if layer > 0:
             selected.field = layer
@@ -698,19 +689,19 @@ class DisplayDriver:
             self.selected['ids'] = ids
         
     def GetSelectedVertex(self, pos):
-        """Get PseudoDC vertex id of selected line
+        """!Get PseudoDC vertex id of selected line
 
         Set bounding box for vertices of line.
         
-        \param pos position
+        @param pos position
         
-        \return id of center, left and right vertex
-        \return 0 no line found
-        \return -1 on error
+        @return id of center, left and right vertex
+        @return 0 no line found
+        @return -1 on error
         """
         returnId = list()
         # only one object can be selected
-        if len(self.selected['ids']) != 1 or not self.drawSegments:
+        if len(self.selected['ids']) != 1 or not self._drawSegments:
             return returnId
         
         startId = 1
@@ -768,7 +759,7 @@ class DisplayDriver:
         
         @param flag True to draw selected features
         """
-        self.drawSelected = bool(flag)
+        self._drawSelected = bool(flag)
         
     def CloseMap(self):
         """!Close vector map
@@ -831,12 +822,6 @@ class DisplayDriver:
         
         return self.poMapInfo
     
-    def ReloadMap(self):
-        pass
-
-    def SetDevice(self):
-        pass
-
     def GetMapBoundingBox(self):
         """!Get bounding box of (opened) vector map layer
 
@@ -850,12 +835,6 @@ class DisplayDriver:
 
         return bbox.W, bbox.S, bbox.B, \
             bbox.E, bbox.N, bbox.T
-    
-    def Is3D(self):
-        pass
-
-    def SetRegion(self):
-        pass
     
     def UpdateSettings(self, alpha = 255):
         """!Update display driver settings

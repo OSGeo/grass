@@ -87,6 +87,7 @@ IconsSilk = {
     "addlabels"  : 'tag_blue_add.png',
     "delcmd"     : 'bin_closed.png',
     "attrtable"  : 'application_view_columns.png',
+    "vdigit"     : wx.ART_ERROR,
     "addrgb"     : 'rgb.png',
     "addhis"     : 'his.png',
     "addthematic": 'thematic.png',
