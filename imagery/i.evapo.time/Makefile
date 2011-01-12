@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = i.evapo.time_integration
+PGM = i.evapo.time
 
 LIBES = $(RASTERLIB) $(GISLIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)

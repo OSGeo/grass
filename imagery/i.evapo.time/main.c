@@ -1,13 +1,13 @@
 
 /****************************************************************************
  *
- * MODULE:       i.evapo.time_integration
+ * MODULE:       i.evapo.time
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * 		 Ines Cherif - icherif@yahoo.com
  * PURPOSE:      Integrate in time the evapotranspiration from satellite,
  *		 following a daily pattern from meteorological ETo.
  *
- * COPYRIGHT:    (C) 2008-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008-2009, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU Lesser General Public
  *   	    	 License. Read the file COPYING that comes with GRASS for details.
@@ -74,14 +74,12 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description =_("Computes temporal integration of satellite "
-			   "ET actual (ETa) following the daily ET reference "
-			   "(ETo) from meteorological station(s)");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evapotranspiration"));
-    G_add_keyword(_("temporal"));
-    G_add_keyword(_("integration"));
-
+    module->description =_("Computes temporal integration of satellite "
+			   "ET actual (ETa) following the daily ET reference "
+			   "(ETo) from meteorological station(s).");
+    
     /* Define the different options */
     input = G_define_standard_option(G_OPT_R_INPUTS);
     input->key = "eta";
