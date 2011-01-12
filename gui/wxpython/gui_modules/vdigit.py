@@ -70,8 +70,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # notebook
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
         self.__CreateSymbologyPage(notebook)
-        if not UserSettings.Get(group = 'vdigit', key = 'categoryMode', subkey = 'selection'):
-            self.parent.digit.SetCategoryNextToUse()
+        self.parent.digit.SetCategory()
         self.__CreateGeneralPage(notebook)
         self.__CreateAttributesPage(notebook)
         self.__CreateQueryPage(notebook)
@@ -427,26 +426,6 @@ class VDigitSettingsDialog(wx.Dialog):
                    flag = wx.ALL | wx.EXPAND, border = 5)
 
         #
-        # digitize new area
-        #
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Digitize new area"))
-        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        
-        # add centroid
-        self.addCentroid = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                       label = _("Add centroid to left/right area"))
-        self.addCentroid.SetValue(UserSettings.Get(group = 'vdigit', key = "addCentroid", subkey = 'enabled'))
-        sizer.Add(item = self.addCentroid, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 1)
-        
-        # attach category to boundary
-        self.catBoundary = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                       label = _("Do not attach category to boundaries"))
-        self.catBoundary.SetValue(UserSettings.Get(group = 'vdigit', key = "catBoundary", subkey = 'enabled'))
-        sizer.Add(item = self.catBoundary, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 1)
-        border.Add(item = sizer, proportion = 0,
-                   flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
-        
-        #
         # delete existing record
         #
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Delete existing feature(s)"))
@@ -605,10 +584,10 @@ class VDigitSettingsDialog(wx.Dialog):
             self.category.Enable(True)
         elif self.category.IsEnabled(): # disable
             self.category.Enable(False)
-
+        
         if mode == 2 and self.addRecord.IsChecked(): # no category
             self.addRecord.SetValue(False)
-
+        
         self.parent.digit.SetCategory()
         self.category.SetValue(UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value'))
 
@@ -752,12 +731,6 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(group = 'vdigit', key = "categoryMode", subkey = 'selection',
                          value = self.categoryMode.GetSelection())
 
-        # digitize new area
-        UserSettings.Set(group = 'vdigit', key = "addCentroid", subkey = 'enabled',
-                         value = self.addCentroid.IsChecked())
-        UserSettings.Set(group = 'vdigit', key = "catBoundary", subkey = 'enabled',
-                         value = self.catBoundary.IsChecked())
-        
         # delete existing feature
         UserSettings.Set(group = 'vdigit', key = "delRecord", subkey = 'enabled',
                          value = self.deleteRecord.IsChecked())
@@ -825,7 +798,7 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(group = 'vdigit', key = "breakLines", subkey = 'enabled',
                          value = self.intersect.IsChecked())
         
-        self.parent.digit.GetDisplay().UpdateSettings()
+        self.parent.digit.UpdateSettings()
         
         # redraw map if auto-rendering is enabled
         if self.parent.statusbarWin['render'].GetValue(): 

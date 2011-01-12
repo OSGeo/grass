@@ -104,6 +104,14 @@ class VDigitError:
                parent  = self.parent,
                caption = self.caption)
 
+    def FeatureType(self, ftype):
+        """!Unknown feature type
+        """
+        GError(message = _("Unsupported feature type %d. "
+                           "Operation cancelled.") % ftype,
+               parent  = self.parent,
+               caption = self.caption)
+        
 class IVDigit:
     def __init__(self, mapwindow):
         """!Base class for vector digitizer (ctypes interface)
@@ -145,12 +153,8 @@ class IVDigit:
         # layer / max category
         self.cats = dict()
         
-        # settings
-        self.settings = {
-            'breakLines'  : False,
-            'addCentroid' : False,
-            'catBoundary' : True,
-            }
+        self._settings = dict()
+        self.UpdateSettings() # -> self._settings
         
         # undo/redo
         self.changesets = dict()
@@ -362,7 +366,7 @@ class IVDigit:
             cat   = -1
         else:
             layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
-            cat   = self.cats.get(layer, 1)
+            cat   = self.SetCategory()
         
         if ftype == 'point':
             vtype = GV_POINT
@@ -372,6 +376,8 @@ class IVDigit:
             vtype = GV_CENTROID
         elif ftype == 'boundary':
             vtype = GV_BOUNDARY
+        elif ftype == 'area':
+            vtype = GV_AREA
         else:
             GError(parent = self.mapWindow,
                    message = _("Unknown feature type '%s'") % ftype)
@@ -505,7 +511,7 @@ class IVDigit:
         else:
             del self.changesets[changeset]
         
-        if nlines > 0 and self.settings['breakLines']:
+        if nlines > 0 and self._settings['breakLines']:
             for i in range(1, nlines):
                 self._breakLineAtIntersection(nlines + i, None, changeset)
         
@@ -552,7 +558,7 @@ class IVDigit:
         else:
             del self.changesets[changeset]
         
-        if moved > 0 and self.settings['breakLines']:
+        if moved > 0 and self._settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None, changeset)
         
@@ -812,7 +818,7 @@ class IVDigit:
         else:
             del self.changesets[changeset]
 
-        if ret > 0 and self.poBgMapInfo and self.settings['breakLines']:
+        if ret > 0 and self.poBgMapInfo and self._settings['breakLines']:
             for i in range(1, ret):
                 self._breakLineAtIntersection(nlines + i, None, changeset)
         
@@ -1167,10 +1173,10 @@ class IVDigit:
         
         return True
 
-    def _addFeature(self, type, coords, layer, cat, snap, threshold):
+    def _addFeature(self, ftype, coords, layer, cat, snap, threshold):
         """!Add new feature to the vector map
 
-        @param type feature type (GV_POINT, GV_LINE, GV_BOUNDARY, ...)
+        @param ftype feature type (GV_POINT, GV_LINE, GV_BOUNDARY, ...)
         @coords tuple of coordinates ((x, y), (x, y), ...)
         @param layer layer number (-1 for no cat)
         @param cat category number
@@ -1188,23 +1194,22 @@ class IVDigit:
         Debug.msg(2, "IVDigit._addFeature(): npoints=%d, layer=%d, cat=%d, snap=%d",
                   len(coords), layer, cat, snap)
         
-        if not (type & (GV_POINTS | GV_LINES)): # TODO: 3D
+        if not (ftype & (GV_POINTS | GV_LINES | GV_AREA)): # TODO: 3D
+            self._error.FeatureType(ftype)
             return -1
         
         # set category
         Vect_reset_cats(self.poCats)
-        if layer > 0 and \
-                (type != GV_BOUNDARY or \
-                     (type == GV_BOUNDARY and self.settings['catBoundary'])):
+        if layer > 0 and ftype != GV_AREA:
             Vect_cat_set(self.poCats, layer, cat)
-            self.cats[layer] = max(cat, self.cats.get(layer, 0))
+            self.cats[layer] = max(cat, self.cats.get(layer, 1))
         
         # append points
         Vect_reset_line(self.poPoints)
         for c in coords:
             Vect_append_point(self.poPoints, c[0], c[1], 0.0)
         
-        if type & GV_BOUNDARY:
+        if ftype & (GV_BOUNDARY | GV_AREA):
             # close boundary
             points = self.poPoints.contents
             last = points.n_points - 1
@@ -1215,19 +1220,23 @@ class IVDigit:
                 points.y[last] = points.y[0]
                 points.z[last] = points.z[0]
         
-        if snap != NO_SNAP and (type & (GV_POINT | GV_LINES)):
+        if snap != NO_SNAP:
             # apply snapping (node or vertex)
             modeSnap = not (snap == SNAP)
             Vedit_snap_line(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                             -1, self.poPoints, threshold, modeSnap)
         
-        newline = Vect_write_line(self.poMapInfo, type, self.poPoints, self.poCats)
+        if ftype == GV_AREA:
+            ltype = GV_BOUNDARY
+        else:
+            ltype = ftype
+        newline = Vect_write_line(self.poMapInfo, ltype, self.poPoints, self.poCats)
         if newline < 0:
             self._error.WriteLine()
             return -1
         
         left = right = -1
-        if type & GV_BOUNDARY and self.settings['addCentroid']:
+        if ftype & GV_AREA:
             # add centroids for left/right area
             bpoints = Vect_new_line_struct()
             cleft = c_int()
@@ -1272,13 +1281,8 @@ class IVDigit:
         self._addActionToChangeset(len(self.changesets), newline, add = True)
         
         # break at intersection
-        if self.settings['breakLines']:
+        if self._settings['breakLines']:
             self._breakLineAtIntersection(newline, self.poPoints, changeset)
-        
-        if type & GV_BOUNDARY and \
-                not self.settings['catBoundary'] and \
-        	left < 1 and right < 1:
-            newline = None # ?
         
         return newline
     
@@ -1323,7 +1327,7 @@ class IVDigit:
         else:
             del self.changesets[changeset]
         
-        if not add and ret > 0 and self.settings['breakLines']:
+        if not add and ret > 0 and self._settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None, changeset)
                 
@@ -1372,36 +1376,43 @@ class IVDigit:
         """
         return self.cats.keys()
     
-    def UpdateSettings(self, breakLines, addCentroid, catBoundary):
-        """!Update digit settings
-        
-        @param breakLines break lines on intersection
-        @param addCentroid add centroid to left/right area
-        @param catBoundary attach category to boundary
+    def UpdateSettings(self):
+        """!Update digit (and display) settings
         """
-        self._settings['breakLines']  = breakLines
-        self._settings['addCentroid'] = addCentroid
-        self._settings['catBoundary'] = None # !catBoundary # do not attach
-
-    def _getCategory(self):
-        """!Get current category number to be use"""
-        if not UserSettings.Get(group = 'vdigit', key = 'categoryMode', subkey = 'selection'):
-            self.SetCategoryNextToUse()
+        self._display.UpdateSettings()
         
-        return UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value')
-
-    def SetCategoryNextToUse(self):
+        self._settings['breakLines']  = bool(UserSettings.Get(group = 'vdigit', key = "breakLines",
+                                                              subkey = 'enabled'))
+        
+    def SetCategory(self):
+        """!Update self.cats based on settings"""
+        sel = UserSettings.Get(group = 'vdigit', key = 'categoryMode', subkey = 'selection')
+        cat = None
+        if sel == 0: # next to usep
+            cat = self._setCategoryNextToUse()
+        elif sel == 1:
+            cat = UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value')
+        
+        if cat:
+            layer = UserSettings.Get(group = 'vdigit', key = 'layer', subkey = 'value')
+            self.cats[layer] = cat
+        
+        return cat
+    
+    def _setCategoryNextToUse(self):
         """!Find maximum category number for the given layer and
         update the settings
+
+        @return category to be used
         """
-        # reset 'category' to '1' (for maps with no attributes)
-        UserSettings.Set(group = 'vdigit', key = 'category', subkey = 'value', value = 1)
-        
         # get max category number for given layer and update the settings
-        cat = self.cats.get(UserSettings.Get(group = 'vdigit', key = 'layer', subkey = 'value'), 0)
-        cat += 1
+        layer = UserSettings.Get(group = 'vdigit', key = 'layer', subkey = 'value')
+        cat = self.cats.get(layer, 0) + 1
         UserSettings.Set(group = 'vdigit', key = 'category', subkey = 'value',
                          value = cat)
+        Debug.msg(1, "IVDigit._setCategoryNextToUse(): cat=%d", cat)
+        
+        return cat
 
     def SelectLinesFromBackgroundMap(self, bbox):
         """!Select features from background map

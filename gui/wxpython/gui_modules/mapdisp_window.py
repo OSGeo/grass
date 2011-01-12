@@ -1295,7 +1295,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 if addRecordDlg.mapDBInfo:
                     self.__updateATM()
         
-        elif digitToolbar.GetAction('type') in ["line", "boundary"]:
+        elif digitToolbar.GetAction('type') in ["line", "boundary", "area"]:
             # add new point to the line
             self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
             self.DrawLines(pdc = self.pdcTmp)
@@ -2105,7 +2105,7 @@ class BufferedWindow(MapWindow, wx.Window):
             digitClass = self.parent.digit
             # digitization tool (confirm action)
             if digitToolbar.GetAction() == "addLine" and \
-                    digitToolbar.GetAction('type') in ["line", "boundary"]:
+                    digitToolbar.GetAction('type') in ["line", "boundary", "area"]:
                 # -> add new line / boundary
                 try:
                     map = digitToolbar.GetLayer().GetName()
@@ -2281,7 +2281,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if self.mouse["use"] == "pointer" and digitToolbar:
             digitClass = self.parent.digit
             if (digitToolbar.GetAction() == "addLine" and \
-                    digitToolbar.GetAction('type') in ["line", "boundary"]) or \
+                    digitToolbar.GetAction('type') in ["line", "boundary", "area"]) or \
                     digitToolbar.GetAction() == "editLine":
                 # add line or boundary -> remove last point from the line
                 try:
@@ -2381,7 +2381,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mouse['end'] = event.GetPositionTuple()[:]
             Debug.msg (5, "BufferedWindow.OnMouseMoving(): coords=%f,%f" % \
                            (self.mouse['end'][0], self.mouse['end'][1]))
-            if digitToolbar.GetAction() == "addLine" and digitToolbar.GetAction('type') in ["line", "boundary"]:
+            if digitToolbar.GetAction() == "addLine" and \
+                    digitToolbar.GetAction('type') in ["line", "boundary", "area"]:
                 if len(self.polycoords) > 0:
                     self.MouseDraw(pdc = self.pdcTmp, begin = self.Cell2Pixel(self.polycoords[-1]))
             elif digitToolbar.GetAction() in ["moveLine", "moveVertex", "editLine"] \
