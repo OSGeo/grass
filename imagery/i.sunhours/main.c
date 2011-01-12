@@ -50,11 +50,11 @@ int main(int argc, char *argv[])
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->key = _("doy");
+    input1->key = _("dayofyear");
     input1->description = _("Name of the day of year input map");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = _("lat");
+    input2->key = _("latitude");
     input2->description = _("Name of the latitude input map");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);

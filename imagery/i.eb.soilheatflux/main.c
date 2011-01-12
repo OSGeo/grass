@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       i.eb.g0
+ * MODULE:       i.eb.soilheatflux
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates an approximation of soil heat flux
  *               as seen in Bastiaanssen (1995) using time of
@@ -63,16 +63,16 @@ int main(int argc, char *argv[])
     input2->description = _("Name of NDVI raster map [-1.0;+1.0]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = "tempk";
+    input3->key = "temperature";
     input3->description =
 	_("Name of Surface temperature raster map [degree Kelvin]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = "rnet";
+    input4->key = "netradiation";
     input4->description = _("Name of Net Radiation raster map [W/m2]");
 
     input5 = G_define_standard_option(G_OPT_R_INPUT);
-    input5->key = "time";
+    input5->key = "localutctime";
     input5->description =
 	_("Name of time of satellite overpass raster map [local UTC]");
 
@@ -179,4 +179,3 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
-

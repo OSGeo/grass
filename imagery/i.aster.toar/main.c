@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
     input->description = _("Names of ASTER DN layers (15 layers)");
 
     input1 = G_define_option();
-    input1->key = "doy";
+    input1->key = "dayofyear";
     input1->type = TYPE_DOUBLE;
     input1->required = YES;
     input1->gisprompt = "value";

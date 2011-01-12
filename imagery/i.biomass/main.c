@@ -60,25 +60,25 @@ int main(int argc, char *argv[])
     input1->description = _("Name of fPAR raster map");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = "luf";
+    input2->key = "lightuseefficiency";
     input2->description =
 	_("Name of light use efficiency raster map (UZB:cotton=1.9)");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = "lat";
+    input3->key = "latitude";
     input3->description = _("Name of degree latitude raster map [dd.ddd]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = "doy";
+    input4->key = "dayofyear";
     input4->description = _("Name of Day of Year raster map [1-366]");
 
     input5 = G_define_standard_option(G_OPT_R_INPUT);
-    input5->key = "tsw";
+    input5->key = "transmissivitysingleway";
     input5->description =
 	_("Name of single-way transmissivity raster map [0.0-1.0]");
 
     input6 = G_define_standard_option(G_OPT_R_INPUT);
-    input6->key = "wa";
+    input6->key = "wateravailability";
     input6->description =
 	_("Value of water availability raster map [0.0-1.0]");
 

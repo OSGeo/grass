@@ -89,65 +89,65 @@ int main(int argc, char *argv[])
 
     /* Define different options */
     input_Rn = G_define_standard_option(G_OPT_R_INPUT);
-    input_Rn->key = "rnet";
+    input_Rn->key = "netradiation";
     input_Rn->description =
 	_("Name of instantaneous Net Radiation raster map [W/m2]");
 
     input_g0 = G_define_standard_option(G_OPT_R_INPUT);
-    input_g0->key = "g0";
+    input_g0->key = "soilheatflux";
     input_g0->description =
 	_("Name of instantaneous soil heat flux raster map [W/m2]");
 
     input_z0m = G_define_standard_option(G_OPT_R_INPUT);
-    input_z0m->key = "z0m";
+    input_z0m->key = "aerodynresistance";
     input_z0m->description =
 	_("Name of aerodynamic resistance to heat momentum raster map [s/m]");
 
     input_t0dem = G_define_standard_option(G_OPT_R_INPUT);
-    input_t0dem->key = "t0dem";
+    input_t0dem->key = "temperaturemeansealevel";
     input_t0dem->description =
 	_("Name of altitude corrected surface temperature raster map [K]");
 
     input_ustar = G_define_option();
-    input_ustar->key = "ustar";
+    input_ustar->key = "frictionvelocitystar";
     input_ustar->type = TYPE_DOUBLE;
     input_ustar->required = YES;
     input_ustar->gisprompt = "old,value";
     input_ustar->answer = "0.32407";
-    input_ustar->description = _("Value of the friction velocity [m/s]");
+    input_ustar->description = _("Value of the height independent friction velocity (u*) [m/s]");
     input_ustar->guisection = _("Parameters");
 
     input_ea = G_define_option();
-    input_ea->key = "ea";
+    input_ea->key = "vapourpressureactual";
     input_ea->type = TYPE_DOUBLE;
     input_ea->required = YES;
     input_ea->answer = "1.511";
-    input_ea->description = _("Value of the actual vapour pressure [KPa]");
+    input_ea->description = _("Value of the actual vapour pressure (e_act) [KPa]");
     input_ea->guisection = _("Parameters");
 
     input_row_wet = G_define_option();
-    input_row_wet->key = "row_wet";
+    input_row_wet->key = "row_wet_pixel";
     input_row_wet->type = TYPE_DOUBLE;
     input_row_wet->required = NO;
     input_row_wet->description = _("Row value of the wet pixel");
     input_row_wet->guisection = _("Parameters");
 
     input_col_wet = G_define_option();
-    input_col_wet->key = "col_wet";
+    input_col_wet->key = "column_wet_pixel";
     input_col_wet->type = TYPE_DOUBLE;
     input_col_wet->required = NO;
     input_col_wet->description = _("Column value of the wet pixel");
     input_col_wet->guisection = _("Parameters");
 
     input_row_dry = G_define_option();
-    input_row_dry->key = "row_dry";
+    input_row_dry->key = "row_dry_pixel";
     input_row_dry->type = TYPE_DOUBLE;
     input_row_dry->required = NO;
     input_row_dry->description = _("Row value of the dry pixel");
     input_row_dry->guisection = _("Parameters");
 
     input_col_dry = G_define_option();
-    input_col_dry->key = "col_dry";
+    input_col_dry->key = "column_dry_pixel";
     input_col_dry->type = TYPE_DOUBLE;
     input_col_dry->required = NO;
     input_col_dry->description = _("Column value of the dry pixel");
