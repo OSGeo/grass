@@ -14,7 +14,7 @@ SUBDIRS = \
 	i.eb.soilheatflux \
 	i.evapo.mh \
 	i.evapo.pm \
-	i.evapo.mt \
+	i.evapo.pt \
 	i.evapo.time \
 	i.emissivity \
 	i.find \
