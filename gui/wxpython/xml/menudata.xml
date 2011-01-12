@@ -2780,6 +2780,13 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
+	      <label>Hargreaves methods Evapotranspiration</label>
+	      <help>reference evapotranspiration (Hargreaves, modified-H, H and Samani)</help>
+	      <keywords>imagery,reference evapotranspiration,Hargreaves,Samani</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.evapo.MH</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Penman-Monteith Evapotranspiration</label>
 	      <help>reference evapotranspiration (FAO 56 and Penman, 1972)</help>
 	      <keywords>imagery,reference evapotranspiration,FAO56,Penman-Monteith,HydroFOSS</keywords>
