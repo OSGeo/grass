@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-* MODULE:	i.evapo.PT
+* MODULE:	i.evapo.pt
 * AUTHOR:	Yann Chemin yann.chemin@gmail.com 
 *
 * PURPOSE:	To estimate the daily evapotranspiration by means
@@ -37,9 +37,6 @@ int main(int argc, char *argv[])
     int infd_TEMPKA, infd_PATM, infd_RNET, infd_G0;
     int outfd;
 
-    /* mapsets for input raster files */
-    char *mapset_TEMPKA, *mapset_PATM, *mapset_RNET, *mapset_G0;
-
     /* names of input-output raster files */
     char *RNET, *TEMPKA, *PATM, *G0;
     char *ETa;
@@ -58,7 +55,7 @@ int main(int argc, char *argv[])
     struct Option *input_RNET, *input_TEMPKA, *input_PATM, *input_G0,
 	*input_PT;
     struct Option *output;
-    struct Flag *flag1, *zero;
+    struct Flag *zero;
     struct Colors color;
     struct History history;
 
@@ -66,48 +63,43 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("evapotranspiration"));
     module->description =
-	_("Evapotranspiration Calculation "
+	_("Computes evapotranspiration calculation "
 	  "Prestley and Taylor formulation, 1972.");
-
+    
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
-    input_RNET->key = "RNET";
-    input_RNET->key_desc = "[W/m2]";
-    input_RNET->description = _("Name of Net Radiation raster map");
+    input_RNET->key = "rnet";
+    input_RNET->description = _("Name of input net radiation raster map [W/m2]");
 
     input_G0 = G_define_standard_option(G_OPT_R_INPUT);
-    input_G0->key = "G0";
-    input_G0->key_desc = "[W/m2]";
-    input_G0->description = _("Name of Soil Heat Flux raster map");
+    input_G0->key = "go";
+    input_G0->description = _("Name of input soil heat flux raster map [W/m2]");
 
     input_TEMPKA = G_define_standard_option(G_OPT_R_INPUT);
-    input_TEMPKA->key = "TEMPKA";
-    input_TEMPKA->key_desc = "[K]";
-    input_TEMPKA->description = _("Name of air temperature raster map");
+    input_TEMPKA->key = "tempka";
+    input_TEMPKA->description = _("Name of input air temperature raster map [K]");
 
     input_PATM = G_define_standard_option(G_OPT_R_INPUT);
-    input_PATM->key = "PATM";
-    input_PATM->key_desc = "[millibars]";
-    input_PATM->description = _("Name of Atmospheric Pressure raster map");
+    input_PATM->key = "patm";
+    input_PATM->description = _("Name of input atmospheric pressure raster map [millibars]");
 
     input_PT = G_define_option();
-    input_PT->key = "PT";
-    input_PT->key_desc = "[-]";
+    input_PT->key = "pt";
     input_PT->type = TYPE_DOUBLE;
     input_PT->required = YES;
-    input_PT->gisprompt = "old,cell,raster";
     input_PT->description = _("Prestley-Taylor Coefficient");
     input_PT->answer = "1.26";
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->key_desc = "[mm/d]";
-    output->description = _("Name of output Evapotranspiration layer");
+    output->description = _("Name of output evapotranspiration raster map [mm/d]");
 
     /* Define the different flags */
     zero = G_define_flag();
     zero->key = 'z';
-    zero->description = _("set negative ETa to zero");
+    zero->description = _("Set negative ETa to zero");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -120,10 +112,6 @@ int main(int argc, char *argv[])
     d_pt_alpha = atof(input_PT->answer);
 
     ETa = output->answer;
-
-    /* check legal output name */
-    if (G_legal_filename(ETa) < 0)
-	G_fatal_error(_("[%s] is an illegal name"), ETa);
 
     /* open pointers to input raster files */
     infd_RNET = Rast_open_old(RNET, "");
