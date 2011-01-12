@@ -2776,7 +2776,7 @@
 	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
 	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.evapo.time_integration</command>
+	      <command>i.evapo.time</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -2784,21 +2784,21 @@
 	      <help>reference evapotranspiration (Hargreaves, modified-H, H and Samani)</help>
 	      <keywords>imagery,reference evapotranspiration,Hargreaves,Samani</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.evapo.MH</command>
+	      <command>i.evapo.mh</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Penman-Monteith Evapotranspiration</label>
 	      <help>reference evapotranspiration (FAO 56 and Penman, 1972)</help>
 	      <keywords>imagery,reference evapotranspiration,FAO56,Penman-Monteith,HydroFOSS</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.evapo.PM</command>
+	      <command>i.evapo.pm</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Priestley-Taylor Evapotranspiration</label>
 	      <help>reference evapotranspiration (Priestley and Taylor, 1972)</help>
 	      <keywords>imagery,reference evapotranspiration,Priestley-Taylor</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.evapo.PT</command>
+	      <command>i.evapo.pt</command>
 	    </menuitem>
 	  </items>
 	</menu>

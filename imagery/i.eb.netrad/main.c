@@ -71,19 +71,19 @@ int main(int argc, char *argv[])
     input2->answer = _("ndvi");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = _("tempk");
+    input3->key = _("temperature");
     input3->description =
 	_("Name of the Surface temperature map [degree Kelvin]");
     input3->answer = _("tempk");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = _("time");
+    input4->key = _("localutctime");
     input4->description =
 	_("Name of the map of local UTC time of satellite overpass [hh.hhh]");
     input4->answer = _("time");
 
     input5 = G_define_standard_option(G_OPT_R_INPUT);
-    input5->key = _("dtair");
+    input5->key = _("temperaturedifference2m");
     input5->description =
 	_("Name of the difference of temperature from surface skin to about 2 m height [K]");
     input5->answer = _("dtair");
@@ -94,25 +94,23 @@ int main(int argc, char *argv[])
     input6->answer = _("emissivity");
 
     input7 = G_define_standard_option(G_OPT_R_INPUT);
-    input7->key = _("tsw");
+    input7->key = _("transmissivitysingleway");
     input7->description =
 	_("Name of the single-way atmospheric transmissivitymap [-]");
     input7->answer = _("tsw");
 
     input8 = G_define_standard_option(G_OPT_R_INPUT);
-    input8->key = _("doy");
+    input8->key = _("dayofyear");
     input8->description = _("Name of the Day Of Year (DOY) map [-]");
     input8->answer = _("doy");
 
     input9 = G_define_standard_option(G_OPT_R_INPUT);
-    input9->key = _("sunzangle");
+    input9->key = _("sunzenithangle");
     input9->description = _("Name of the sun zenith angle map [degrees]");
     input9->answer = _("sunzangle");
 
-    output1 = G_define_standard_option(G_OPT_R_INPUT);
-    output1->key = _("rnet");
-    output1->description = _("Name of the output rnet layer");
-    output1->answer = _("rnet");
+    output1 = G_define_standard_option(G_OPT_R_OUTPUT);
+    output1->description = _("Name of the output net radiation layer");
     
     /********************/ 
     if (G_parser(argc, argv))

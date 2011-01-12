@@ -65,24 +65,24 @@ int main(int argc, char *argv[])
     input_DEM->description = _("Name of input elevation raster map [m a.s.l.]");
     
     input_T = G_define_standard_option(G_OPT_R_INPUT);
-    input_T->key = "temp";
+    input_T->key = "temperature";
     input_T->description = _("Name of input temperature raster map [C]");
 
     input_RH = G_define_standard_option(G_OPT_R_INPUT);
-    input_RH->key = "ru";
-    input_RH->description = _("Name of input relative umidity raster map [%]");
+    input_RH->key = "relativehumidity";
+    input_RH->description = _("Name of input relative humidity raster map [%]");
 
     input_u2 = G_define_standard_option(G_OPT_R_INPUT);
-    input_u2->key = "ws";
+    input_u2->key = "windspeed";
     input_u2->description = _("Name of input wind speed raster map [m/s]");
 
     input_Rn = G_define_standard_option(G_OPT_R_INPUT);
-    input_Rn->key = "nsr";
+    input_Rn->key = "netradiation";
     input_Rn->description =
 	_("Name of input net solar radiation raster map [MJ/m2/h]");
 
     input_hc = G_define_standard_option(G_OPT_R_INPUT);
-    input_hc->key = "vh";
+    input_hc->key = "cropheight";
     input_hc->description = _("Name of input crop height raster map [m]");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
