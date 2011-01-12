@@ -33,6 +33,7 @@ IconsGrass = {
     "digAddLine" : 'new.line.gif',
     "digAddBoundary": 'new.boundary.gif',
     "digAddCentroid": 'new.centroid.gif',
+    "digAddArea": wx.ART_ERROR, # FIXME
     ## vertex
     "digAddVertex" : 'add.vertex.gif',
     "digMoveVertex" : 'move.vertex.gif',

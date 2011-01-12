@@ -678,6 +678,7 @@ class VDigitToolbar(AbstractToolbar):
         self.addLine = wx.NewId()
         self.addBoundary = wx.NewId()
         self.addCentroid = wx.NewId()
+        self.addArea = wx.NewId()
         self.moveVertex = wx.NewId()
         self.addVertex = wx.NewId()
         self.removeVertex = wx.NewId()
@@ -706,6 +707,9 @@ class VDigitToolbar(AbstractToolbar):
                 (self.addCentroid, "digAddCentroid", Icons["digAddCentroid"].GetBitmap(),
                  wx.ITEM_CHECK, Icons["digAddCentroid"].GetLabel(), Icons["digAddCentroid"].GetDesc(),
                  self.OnAddCentroid),
+                (self.addArea, "digAddArea", Icons["digAddArea"].GetBitmap(),
+                 wx.ITEM_CHECK, Icons["digAddArea"].GetLabel(), Icons["digAddArea"].GetDesc(),
+                 self.OnAddArea),
                 (self.moveVertex, "digMoveVertex", Icons["digMoveVertex"].GetBitmap(),
                  wx.ITEM_CHECK, Icons["digMoveVertex"].GetLabel(), Icons["digMoveVertex"].GetDesc(),
                  self.OnMoveVertex),
@@ -828,6 +832,14 @@ class VDigitToolbar(AbstractToolbar):
                         'type' : "centroid",
                         'id'   : self.addCentroid }
         self.parent.MapWindow.mouse['box'] = 'point'
+
+    def OnAddArea(self, event):
+        """!Add area to the vector map layer"""
+        Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
+        self.action = { 'desc' : "addLine",
+                        'type' : "area",
+                        'id'   : self.addArea }
+        self.parent.MapWindow.mouse['box'] = 'line'
 
     def OnExit (self, event=None):
         """!Quit digitization tool"""
@@ -1777,7 +1789,7 @@ class LayerManagerToolbar(AbstractToolbar):
              self.parent.OnNewMenu),
             ('', '', '', '', '', '', ''),
             (self.workspaceLoad, 'workspaceLoad', Icons["workspaceLoad"].GetBitmap(),
-             wx.ITEM_NORMAL, _("Load (and import) map layers into workspace"), '',
+             wx.ITEM_NORMAL, _("Load / import map layers into workspace"), '',
              self.parent.OnLoadMenu),
             (self.workspaceOpen, 'workspaceOpen', Icons["workspaceOpen"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["workspaceOpen"].GetLabel(), Icons["workspaceOpen"].GetDesc(),
