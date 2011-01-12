@@ -31,7 +31,7 @@ from grass.lib.dbmi   import *
 
 class VDigitError:
     def __init__(self, parent):
-        """!Class for managing error messages for vector digitizer
+        """!Class for managing error messages of vector digitizer
 
         @param parent parent window for dialogs
         """
@@ -218,9 +218,9 @@ class IVDigit:
     def _getSnapMode(self):
         """!Get snapping mode
 
-        - snap to vertex
-        - snap to nodes
-        - no snapping
+         - snap to vertex
+         - snap to nodes
+         - no snapping
         
         @return snap mode
         """
@@ -234,6 +234,8 @@ class IVDigit:
             return NO_SNAP
     
     def _breakLineAtIntersection(self):
+        """!@todo
+        """
         pass
     
     def _addActionsBefore(self):
