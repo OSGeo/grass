@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     input_PT->key = "pt";
     input_PT->type = TYPE_DOUBLE;
     input_PT->required = YES;
-    input_PT->description = _("Prestley-Taylor Coefficient");
+    input_PT->description = _("Prestley-Taylor coefficient");
     input_PT->answer = "1.26";
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
