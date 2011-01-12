@@ -169,9 +169,9 @@ int main(int argc, char *argv[])
     Rast_close(infd_g0);
     Rast_close(infd_h0);
     G_free(outrast1);
-    G_free(outrast2);
+    Rast_close(outfd1);
     if (makin) {
-	Rast_close(outfd1);
+        G_free(outrast2);
 	Rast_close(outfd2);
     }
     Rast_short_history(result1, "raster", &history);
