@@ -2786,6 +2786,13 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>i.evapo.PM</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>Priestley-Taylor Evapotranspiration</label>
+	      <help>reference evapotranspiration (Priestley and Taylor, 1972)</help>
+	      <keywords>imagery,reference evapotranspiration,Priestley-Taylor</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.evapo.PT</command>
+	    </menuitem>
 	  </items>
 	</menu>
 	<separator />

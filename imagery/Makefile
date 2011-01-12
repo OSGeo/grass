@@ -13,6 +13,7 @@ SUBDIRS = \
 	i.eb.netrad \
 	i.eb.soilheatflux \
 	i.evapo.PM \
+	i.evapo.PT \
 	i.evapo.time_integration \
 	i.emissivity \
 	i.find \
