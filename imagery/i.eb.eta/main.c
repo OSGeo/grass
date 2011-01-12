@@ -49,24 +49,23 @@ int main(int argc, char *argv[])
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->key = "rnetday";
+    input1->key = "netradiationdiurnal";
     input1->description = _("Name of the diurnal Net Radiation map [W/m2]");
     input1->answer = "rnetday";
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = "evapfr";
+    input2->key = "evaporativefraction";
     input2->description = _("Name of the evaporative fraction map [-]");
     input2->answer = "evapfr";
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = "tempk";
+    input3->key = "temperature";
     input3->description = _("Name of the surface skin temperature [K]");
     input3->answer = "tempk";
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
     output1->description =
 	_("Name of the output actual evapotranspiration layer [mm/d]");
-    output1->answer = "eta";
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
