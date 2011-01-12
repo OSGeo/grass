@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-* MODULE:	i.evapo.MH
+* MODULE:	i.evapo.mh
 * AUTHOR:	Yann Chemin yann.chemin@gmail.com 
 *
 * PURPOSE:	To estimate the reference evapotranspiration by means
@@ -40,10 +40,6 @@ int main(int argc, char *argv[])
     int infd_TEMPKAVG, infd_TEMPKMIN, infd_TEMPKMAX, infd_RNET, infd_P;
     int outfd;
 
-    /* mapsets for input raster files */
-    char *mapset_TEMPKAVG, *mapset_TEMPKMIN, *mapset_TEMPKMAX, *mapset_RNET,
-	*mapset_P;
-
     /* names of input-output raster files */
     char *RNET, *TEMPKAVG, *TEMPKMIN, *TEMPKMAX, *P;
     char *ETa;
@@ -70,54 +66,50 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
+    G_add_keyword(_("imagery"));
+    G_add_keyword(_("evapotranspiration"));
     module->description =
-	_("Evapotranspiration Calculation "
-	  "Modified Hargreaves formulation, 2001."
-	  "Flag for Original Hargreaves (1985).");
+	_("Computes evapotranspiration calculation "
+	  "modified or original Hargreaves formulation, 2001.");
 
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
     input_RNET->key = "rnetd";
-    input_RNET->key_desc = "[W/m2/d]";
-    input_RNET->description = _("Name of Diurnal Net Radiation raster map");
+    input_RNET->description = _("Name of input diurnal net radiation raster map [W/m2/d]");
 
     input_TEMPKAVG = G_define_standard_option(G_OPT_R_INPUT);
     input_TEMPKAVG->key = "tempkavg";
-    input_TEMPKAVG->key_desc = "[C]";
-    input_TEMPKAVG->description = _("Name of avg air temperature raster map");
+    input_TEMPKAVG->description = _("Name of input average air temperature raster map [C]");
 
     input_TEMPKMIN = G_define_standard_option(G_OPT_R_INPUT);
     input_TEMPKMIN->key = "tempkmin";
-    input_TEMPKMIN->key_desc = "[C]";
-    input_TEMPKMIN->description = _("Name of min air temperature raster map");
+    input_TEMPKMIN->description = _("Name of input minimum air temperature raster map [C]");
 
     input_TEMPKMAX = G_define_standard_option(G_OPT_R_INPUT);
-    input_TEMPKMAX->key = "TEMPKMAX";
-    input_TEMPKMAX->key_desc = "[C]";
-    input_TEMPKMAX->description = _("Name of max air temperature raster map");
+    input_TEMPKMAX->key = "tempkmax";
+    input_TEMPKMAX->description = _("Name of input maximum air temperature raster map [C]");
 
     input_P = G_define_standard_option(G_OPT_R_INPUT);
-    input_P->key = "p";
-    input_P->key_desc = "[mm/month]";
-    input_P->description =
-	_("Name of precipitation raster map, disabled if original Hargreaves (1985) is enabled.");
-
+    input_P->key = "prec";
+    input_P->label =
+	_("Name of precipitation raster map [mm/month]");
+    input_P->description = _("Disabled for original Hargreaves (1985)");
+    
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->key_desc = "[mm/d]";
-    output->description = _("Name of output Ref Evapotranspiration layer");
+    output->description = _("Name for output raster map [mm/d]");
 
     /* Define the different flags */
     zero = G_define_flag();
     zero->key = 'z';
-    zero->description = _("set negative ETa to zero");
+    zero->description = _("Set negative ETa to zero");
 
     original = G_define_flag();
     original->key = 'h';
-    original->description = _("set to original Hargreaves (1985)");
+    original->description = _("Use original Hargreaves (1985)");
 
     samani = G_define_flag();
     samani->key = 's';
-    samani->description = _("set to Hargreaves-Samani (1985)");
+    samani->description = _("Use Hargreaves-Samani (1985)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -130,10 +122,6 @@ int main(int argc, char *argv[])
     P = input_P->answer;
 
     ETa = output->answer;
-
-    /* check legal output name */
-    if (G_legal_filename(ETa) < 0)
-	G_fatal_error(_("[%s] is an illegal name"), ETa);
 
     /* open pointers to input raster files */
     infd_RNET = Rast_open_old(RNET, "");
