@@ -10,6 +10,7 @@ SUBDIRS = \
 	i.eb.evapfr \
 	i.eb.eta \
 	i.eb.h_SEBAL01 \
+	i.eb.netrad \
 	i.eb.soilheatflux \
 	i.evapo.time_integration \
 	i.emissivity \

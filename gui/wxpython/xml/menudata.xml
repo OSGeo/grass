@@ -2736,6 +2736,13 @@
 	  <label>Evapotranspiration calculation</label>
 	  <items>
 	    <menuitem>
+	      <label>Instantaneaous Net Radiation</label>
+	      <help>Instantaneous Net Radiation approximation (Bastiaanssen, 1995)</help>
+	      <keywords>imagery,Instantaneous Net Radiation,energy balance,SEBAL</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.eb.netrad</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Soil heat flux</label>
 	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
 	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
