@@ -74,23 +74,23 @@ int main(int argc, char *argv[])
 
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
-    input_RNET->key = "rnetd";
+    input_RNET->key = "netradiationdiurnal";
     input_RNET->description = _("Name of input diurnal net radiation raster map [W/m2/d]");
 
     input_TEMPKAVG = G_define_standard_option(G_OPT_R_INPUT);
-    input_TEMPKAVG->key = "tempkavg";
+    input_TEMPKAVG->key = "averagetemperature";
     input_TEMPKAVG->description = _("Name of input average air temperature raster map [C]");
 
     input_TEMPKMIN = G_define_standard_option(G_OPT_R_INPUT);
-    input_TEMPKMIN->key = "tempkmin";
+    input_TEMPKMIN->key = "minimumtemperature";
     input_TEMPKMIN->description = _("Name of input minimum air temperature raster map [C]");
 
     input_TEMPKMAX = G_define_standard_option(G_OPT_R_INPUT);
-    input_TEMPKMAX->key = "tempkmax";
+    input_TEMPKMAX->key = "maximumtemperature";
     input_TEMPKMAX->description = _("Name of input maximum air temperature raster map [C]");
 
     input_P = G_define_standard_option(G_OPT_R_INPUT);
-    input_P->key = "prec";
+    input_P->key = "precipitation";
     input_P->label =
 	_("Name of precipitation raster map [mm/month]");
     input_P->description = _("Disabled for original Hargreaves (1985)");
