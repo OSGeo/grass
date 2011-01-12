@@ -12,6 +12,7 @@ SUBDIRS = \
 	i.eb.h_SEBAL01 \
 	i.eb.netrad \
 	i.eb.soilheatflux \
+	i.evapo.MH \
 	i.evapo.PM \
 	i.evapo.PT \
 	i.evapo.time_integration \
