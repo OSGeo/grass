@@ -55,7 +55,7 @@ class VDigit(IVDigit):
     def __init__(self, mapwindow):
         """!Base class of vector digitizer
         
-        @param mapwindow reference to mapwindow (MapFrame) instance
+        @param mapwindow reference to mapwindow (mapdisp_window.BufferedWindow) instance
         """
         IVDigit.__init__(self, mapwindow)
         
@@ -69,11 +69,11 @@ class VDigitSettingsDialog(wx.Dialog):
 
         # notebook
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
-        self.__CreateSymbologyPage(notebook)
+        self._createSymbologyPage(notebook)
         self.parent.digit.SetCategory()
-        self.__CreateGeneralPage(notebook)
-        self.__CreateAttributesPage(notebook)
-        self.__CreateQueryPage(notebook)
+        self._createGeneralPage(notebook)
+        self._createAttributesPage(notebook)
+        self._createQueryPage(notebook)
 
         # buttons
         btnApply = wx.Button(self, wx.ID_APPLY)
@@ -107,9 +107,8 @@ class VDigitSettingsDialog(wx.Dialog):
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
 
-    def __CreateSymbologyPage(self, notebook):
-        """!Create notebook page concerning with symbology settings"""
-
+    def _createSymbologyPage(self, notebook):
+        """!Create notebook page concerning symbology settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Symbology"))
 
@@ -119,7 +118,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.AddGrowableCol(0)
 
         self.symbology = {}
-        for label, key in self.__SymbologyData():
+        for label, key in self._symbologyData():
             textLabel = wx.StaticText(panel, wx.ID_ANY, label)
             color = csel.ColourSelect(panel, id = wx.ID_ANY,
                                       colour = UserSettings.Get(group = 'vdigit', key = 'symbol',
@@ -145,9 +144,8 @@ class VDigitSettingsDialog(wx.Dialog):
         
         return panel
 
-    def __CreateGeneralPage(self, notebook):
-        """!Create notebook page concerning with symbology settings"""
-
+    def _createGeneralPage(self, notebook):
+        """!Create notebook page concerning general settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("General"))
 
@@ -291,7 +289,7 @@ class VDigitSettingsDialog(wx.Dialog):
         
         return panel
 
-    def __CreateQueryPage(self, notebook):
+    def _createQueryPage(self, notebook):
         """!Create notebook page for query tool"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Query tool"))
@@ -372,8 +370,8 @@ class VDigitSettingsDialog(wx.Dialog):
         
         return panel
 
-    def __CreateAttributesPage(self, notebook):
-        """!Create notebook page for query tool"""
+    def _createAttributesPage(self, notebook):
+        """!Create notebook page for attributes"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Attributes"))
 
@@ -536,8 +534,8 @@ class VDigitSettingsDialog(wx.Dialog):
         
         return panel
 
-    def __SymbologyData(self):
-        """!Data for __CreateSymbologyPage()
+    def _symbologyData(self):
+        """!Data for _createSymbologyPage()
 
         label | checkbox | color
         """
@@ -561,7 +559,8 @@ class VDigitSettingsDialog(wx.Dialog):
             (_("Direction"), "direction"),)
 
     def OnGeomAttrb(self, event):
-        """!Register geometry attributes (enable/disable)"""
+        """!Register geometry attributes (enable/disable)
+        """
         checked = event.IsChecked()
         id = event.GetId()
         key = None
@@ -577,7 +576,8 @@ class VDigitSettingsDialog(wx.Dialog):
             column.Enable(False)
         
     def OnChangeCategoryMode(self, event):
-        """!Change category mode"""
+        """!Change category mode
+        """
         mode = event.GetSelection()
         UserSettings.Set(group = 'vdigit', key = "categoryMode", subkey = 'selection', value = mode)
         if mode == 1: # manual entry
@@ -592,7 +592,8 @@ class VDigitSettingsDialog(wx.Dialog):
         self.category.SetValue(UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value'))
 
     def OnChangeLayer(self, event):
-        """!Layer changed"""
+        """!Layer changed
+        """
         layer = event.GetInt()
         if layer > 0:
             UserSettings.Set(group = 'vdigit', key = 'layer', subkey = 'value', value = layer)
@@ -602,11 +603,13 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeAddRecord(self, event):
-        """!Checkbox 'Add new record' status changed"""
+        """!Checkbox 'Add new record' status changed
+        """
         self.category.SetValue(self.parent.digit.SetCategory())
             
     def OnChangeSnappingValue(self, event):
-        """!Change snapping value - update static text"""
+        """!Change snapping value - update static text
+        """
         value = self.snappingValue.GetValue()
         
         if value < 0:
@@ -634,7 +637,8 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeSnappingUnits(self, event):
-        """!Snapping units change -> update static text"""
+        """!Snapping units change -> update static text
+        """
         value = self.snappingValue.GetValue()
         units = self.snappingUnit.GetStringSelection()
         threshold = self.parent.digit.GetDisplay().GetThreshold(value = value, units = units)
@@ -651,7 +655,8 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeQuery(self, event):
-        """!Change query"""
+        """!Change query
+        """
         if self.queryLength.GetValue():
             # length
             self.queryLengthSL.Enable(True)
@@ -666,7 +671,8 @@ class VDigitSettingsDialog(wx.Dialog):
             self.queryDangleValue.Enable(True)
 
     def OnSave(self, event):
-        """!Button 'Save' clicked"""
+        """!Button 'Save' pressed
+        """
         self.UpdateSettings()
         self.parent.toolbars['vdigit'].settingsDialog = None
 
@@ -682,11 +688,13 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
         
     def OnApply(self, event):
-        """!Button 'Apply' clicked"""
+        """!Button 'Apply' pressed
+        """
         self.UpdateSettings()
 
     def OnCancel(self, event):
-        """!Button 'Cancel' clicked"""
+        """!Button 'Cancel' pressed
+        """
         self.parent.toolbars['vdigit'].settingsDialog = None
         self.Destroy()
 
@@ -829,7 +837,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         
         # do not display dialog if no line is found (-> self.cats)
         if cats is None:
-            if self.__GetCategories(query[0], query[1]) == 0 or not self.line:
+            if self._getCategories(query[0], query[1]) == 0 or not self.line:
                 Debug.msg(3, "VDigitCategoryDialog(): nothing found!")
         else:
             self.cats = cats
@@ -961,16 +969,12 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.SetMinSize(self.GetBestSize())
 
         # bindings
-        # buttons
-        #btnReload.Bind(wx.EVT_BUTTON, self.OnReload)
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
         btnOk.Bind(wx.EVT_BUTTON, self.OnOK)
         btnAddCat.Bind(wx.EVT_BUTTON, self.OnAddCat)
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
                                      
         # list
-        # self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
-        # self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.list.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp) #wxMSW
         self.list.Bind(wx.EVT_RIGHT_UP, self.OnRightUp) #wxGTK
         self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit, self.list)
@@ -978,19 +982,23 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick, self.list)
 
     def GetListCtrl(self):
-        """!Used by ColumnSorterMixin"""
+        """!Used by ColumnSorterMixin
+        """
         return self.list
 
     def OnColClick(self, event):
-        """!Click on column header (order by)"""
+        """!Click on column header (order by)
+        """
         event.Skip()
         
     def OnBeginEdit(self, event):
-        """!Editing of item started"""
+        """!Editing of item started
+        """
         event.Allow()
 
     def OnEndEdit(self, event):
-        """!Finish editing of item"""
+        """!Finish editing of item
+        """
         itemIndex = event.GetIndex()
         layerOld = int (self.list.GetItem(itemIndex, 0).GetText())
         catOld = int (self.list.GetItem(itemIndex, 1).GetText())
@@ -1022,7 +1030,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             return False
 
     def OnRightDown(self, event):
-        """!Mouse right button down"""
+        """!Mouse right button down
+        """
         x = event.GetX()
         y = event.GetY()
         item, flags = self.list.HitTest((x, y))
@@ -1034,7 +1043,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
 
     def OnRightUp(self, event):
-        """!Mouse right button up"""
+        """!Mouse right button up
+        """
         if not hasattr(self, "popupID1"):
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
@@ -1057,11 +1067,13 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         menu.Destroy()
 
     def OnItemSelected(self, event):
-        """!Item selected"""
+        """!Item selected
+        """
         event.Skip()
 
     def OnItemDelete(self, event):
-        """!Delete selected item(s) from the list (layer/category pair)"""
+        """!Delete selected item(s) from the list (layer/category pair)
+        """
         item = self.list.GetFirstSelected()
         while item != -1:
             layer = int (self.list.GetItem(item, 0).GetText())
@@ -1074,14 +1086,16 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
         
     def OnItemDeleteAll(self, event):
-        """!Delete all items from the list"""
+        """!Delete all items from the list
+        """
         self.list.DeleteAllItems()
         self.cats[self.fid] = {}
 
         event.Skip()
 
     def OnFeature(self, event):
-        """!Feature id changed (on duplicates)"""
+        """!Feature id changed (on duplicates)
+        """
         self.fid = int(event.GetString())
         
         self.itemDataMap = self.list.Populate(self.cats[self.fid],
@@ -1096,12 +1110,12 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         
         event.Skip()
         
-    def __GetCategories(self, coords, qdist):
+    def _getCategories(self, coords, qdist):
         """!Get layer/category pairs for all available
         layers
 
-        Return True line found or False if not found"""
-        
+        Return True line found or False if not found
+        """
         ret = gcmd.RunCommand('v.what',
                               parent = self,
                               quiet = True,
@@ -1127,7 +1141,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
     def OnReload(self, event):
-        """!Reload button pressed"""
+        """!Reload button pressed
+        """
         # restore original list
         self.cats = copy.deepcopy(self.cats_orig)
 
@@ -1138,7 +1153,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
 
     def OnCancel(self, event):
-        """!Cancel button pressed"""
+        """!Cancel button pressed
+        """
         self.parent.parent.dialogs['category'] = None
         if self.parent.parent.digit:
             self.parent.parent.digit.GetDisplay().SetSelected([])
@@ -1149,13 +1165,18 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.Close()
 
     def OnApply(self, event):
-        """!Apply button pressed"""
+        """!Apply button pressed
+        """
         for fid in self.cats.keys():
             newfid = self.ApplyChanges(fid)
             if fid == self.fid:
                 self.fid = newfid
             
     def ApplyChanges(self, fid):
+        """!Apply changes 
+
+        @param fid feature id
+        """
         cats = self.cats[fid]
         cats_orig = self.cats_orig[fid]
 
@@ -1202,12 +1223,14 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return newfid
 
     def OnOK(self, event):
-        """!OK button pressed"""
+        """!OK button pressed
+        """
         self.OnApply(event)
         self.OnCancel(event)
 
     def OnAddCat(self, event):
-        """!Button 'Add' new category pressed"""
+        """!Button 'Add' new category pressed
+        """
         try:
             layer = int(self.layerNew.GetStringSelection())
             cat   = int(self.catNew.GetValue())
@@ -1241,13 +1264,14 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
     def GetLine(self):
-        """!Get id of selected line of 'None' if no line is selected"""
+        """!Get id of selected line of 'None' if no line is selected
+        """
         return self.cats.keys()
 
     def UpdateDialog(self, query = None, cats = None):
         """!Update dialog
         
-        @param query {coordinates, distance} - v.edit/v.what
+        @param query {coordinates, distance} - v.what
         @param cats  directory layer/cats    - vdigit
         Return True if updated otherwise False
         """
@@ -1255,7 +1279,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.cats = {}
         # do not display dialog if no line is found (-> self.cats)
         if cats is None:
-            ret = self.__GetCategories(query[0], query[1])
+            ret = self._getCategories(query[0], query[1])
         else:
             self.cats = cats
             for line in cats.keys():
@@ -1311,7 +1335,8 @@ class CategoryListCtrl(wx.ListCtrl,
         listmix.TextEditMixin.__init__(self)
 
     def Populate(self, cats, update = False):
-        """!Populate the list"""
+        """!Populate the list
+        """
         itemData = {} # requested by sorter
 
         if not update:
@@ -1477,7 +1502,8 @@ class VDigitDuplicatesDialog(wx.Dialog):
 class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
     def __init__(self, parent, data,
                  pos = wx.DefaultPosition, log = None):
-        """!List of mapset/owner/group"""
+        """!List of mapset/owner/group
+        """
         self.parent = parent
         self.data = data
 
@@ -1494,7 +1520,8 @@ class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Chec
         self.LoadData(self.data)
 
     def LoadData(self, data):
-        """!Load data into list"""
+        """!Load data into list
+        """
         self.InsertColumn(0, _('Feature id'))
         self.InsertColumn(1, _('Layer (Categories)'))
 
@@ -1510,5 +1537,6 @@ class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Chec
         self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE_USEHEADER)
                 
     def OnCheckItem(self, index, flag):
-        """!Mapset checked/unchecked"""
+        """!Mapset checked/unchecked
+        """
         pass

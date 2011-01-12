@@ -2094,8 +2094,7 @@ class BufferedWindow(MapWindow, wx.Window):
         event.Skip()
 
     def OnRightUp(self, event):
-        """!
-        Right mouse button released
+        """!Right mouse button released
         """
         Debug.msg (5, "BufferedWindow.OnRightUp(): use=%s" % \
                    self.mouse["use"])
