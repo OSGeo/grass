@@ -1,19 +1,20 @@
 # translation of grasslibs_de.po to Deutsch
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2004, 2008, 2010, GRASS Development Team
+# Copyright (C) 2004, 2008, 2010, 2011 GRASS Development Team
 #
 # Stephan Holl <stephan.holl intevation.de>, 2007.
 # Stephan Holl <holl gdf-hannover.de>, 2004, 2005, 2006.
 # Markus Neteler <neteler itc.it>, 2004.
 # Markus Neteler <neteler osgeo.org>, 2008.
 # Robert Nuske <rnuske gwdg.de>, 2009, 2010.
+# Robert Nuske <robert.nuske nw-fva.de>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-03 16:17+0100\n"
-"PO-Revision-Date: 2011-01-07 21:12+0100\n"
-"Last-Translator: Helmut Kudrnovsky <hellik@web.de>\n"
+"PO-Revision-Date: 2011-01-12 17:21+0100\n"
+"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
@@ -1404,14 +1405,13 @@ msgid "       valid options: %s\n"
 msgstr " Optionen: %s\n"
 
 #: ../lib/gis/parser.c:1159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ERROR: Required parameter <%s> not set:\n"
 "\t(%s)\n"
 msgstr ""
-"\n"
 "FEHLER: Benötigter Parameter <%s> wurde nicht angegeben:\n"
-"    (%s).\n"
+"\t(%s)\n"
 
 #: ../lib/gis/parser.c:1251
 #, c-format
@@ -1734,14 +1734,12 @@ msgid "Feature ids"
 msgstr "Objekt IDs"
 
 #: ../lib/gis/parser_standard_options.c:428
-#, fuzzy
 msgid "Path to input file"
-msgstr "Name der Eingabedatei"
+msgstr "Pfad zur Eingabedatei"
 
 #: ../lib/gis/parser_standard_options.c:436
-#, fuzzy
 msgid "Path for output file"
-msgstr "Name der Ausgabedatei"
+msgstr "Pfad zur Ausgabedatei"
 
 #: ../lib/gis/parser_standard_options.c:444
 msgid "Field separator"
@@ -2751,18 +2749,17 @@ msgid "vector map is not opened"
 msgstr "Vektorkarte ist nicht geöffnet."
 
 #: ../lib/vector/Vlib/geos.c:56
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Vect_read_line_geos(): feature id %d is not reasonable (max features in "
 "vector map <%s>: %d)"
 msgstr ""
-"Vect_read_line(): Objekt ID %d ist nicht sinnvoll (Max. Objekte in "
+"Vect_read_line_geos(): Objekt ID %d ist nicht sinnvoll (Max. Objekte in "
 "Vektorkarte <%s>: %d)."
 
 #: ../lib/vector/Vlib/geos.c:61
-#, fuzzy
 msgid "only native format supported"
-msgstr "für dieses Format/Level nicht unterstützt."
+msgstr "nur das native Format unterstützt"
 
 #: ../lib/vector/Vlib/geos.c:91
 #, c-format
@@ -2777,14 +2774,14 @@ msgstr ""
 "gelesen werden."
 
 #: ../lib/vector/Vlib/geos.c:203
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read line offset %ld"
-msgstr "Kann Linie %d nicht lesen"
+msgstr "Kann Linien-Offset %d nicht lesen"
 
 #: ../lib/vector/Vlib/geos.c:410
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to read points of nonexistent area id %d"
-msgstr "Versuche Punkte nicht existenter Fläche zu lesen."
+msgstr "Versuche Punkte nicht existenter Fläche id %d zu lesen."
 
 #: ../lib/vector/Vlib/geos.c:470
 #, c-format
@@ -4752,20 +4749,19 @@ msgstr ""
 #: ../lib/rst/interp_float/output2d.c:113
 #, c-format
 msgid "First change your cols number to nsizc %d %d"
-msgstr ""
+msgstr "Ändern Sie zunächst die Spaltenanzahl zu nsizc %d %d"
 
 #: ../lib/rst/interp_float/segmen2d.c:111
-#, fuzzy
 msgid ""
 "Taking too long to find points for interpolation - please change the region "
 "to area where your points are. Continuing calculations..."
 msgstr ""
-"Es dauert zu lange, um Punkte für die Interpolation zu finden -- bitte "
-"ändern Sie die Region auf den Bereich, in dem ihre Punkte sind. Fahre mit "
-"der Berechnung fort..."
+"Es dauert zu lange, um Punkte für die Interpolation zu finden - bitte ändern "
+"Sie die Region auf den Bereich, in dem ihre Punkte sind. Fahre mit der "
+"Berechnung fort..."
 
 #: ../lib/rst/interp_float/interp2d.c:214
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
 "cell. Z-value %f, zmin %f, zmax %f."
@@ -4841,26 +4837,23 @@ msgid "Negative value of smoothing detected: sm must be >= 0"
 msgstr "Negativer Wert der Glättung gefunden: sm muss >=0 sein"
 
 #: ../lib/rst/interp_float/vinput2d.c:233
-#, fuzzy
 msgid "Reading nodes from vector map ..."
 msgstr "Lese Knoten der Vektorkarte ... "
 
 #: ../lib/rst/interp_float/vinput2d.c:314
-#, fuzzy
 msgid "Strip exists with insufficient data"
 msgstr "Es gibt einen Streifen mit unzureichend Daten."
 
 #: ../lib/rst/interp_float/vinput2d.c:328
-#, fuzzy, c-format
+#, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
 msgstr ""
-"Es sind Punkte außerhalb der angegebenen 2D/3D-Region gefunden worden - "
-"ignoriere %d Punkte."
+"Es gibt Punkte außerhalb der angegebenen 2D/3D-Region - ignoriere %d Punkte."
 
 #: ../lib/rst/interp_float/vinput2d.c:331
-#, fuzzy, c-format
+#, c-format
 msgid "Ignoring %d points (too dense)"
-msgstr "Ignoriere %d Punkte -- sie liegen zu dicht beieinander."
+msgstr "Ignoriere %d Punkte (zu dicht)."
 
 #: ../lib/rst/interp_float/vinput2d.c:335
 #, c-format
@@ -4876,13 +4869,13 @@ msgid "Zero points in the given region"
 msgstr "Keine Punkte in der Gebietsausdehnung"
 
 #: ../lib/rst/interp_float/vinput2d.c:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
 "smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
-"Segmentation-Parameter mit ungültigen Werten: npmin= %d, segmax= %d for "
-"smooth connection of segments, npmin > segmax (siehe Manual)"
+"Segmentation-Parameter mit ungültigen Werten: npmin= %d, segmax= %d zum "
+"glatten Aneinandersetzen der Segmente, npmin > segmax (siehe Handbuch)."
 
 #: ../lib/rst/interp_float/vinput2d.c:351
 #, c-format
@@ -4905,9 +4898,9 @@ msgid "Number of points outside of 2D/3D region %d"
 msgstr "Anzahl der Punkte außerhalb der 2D/3D Gebietsausdehnung: %d"
 
 #: ../lib/rst/interp_float/vinput2d.c:358
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points being used %d"
-msgstr "Anzahl der Punkte: %d"
+msgstr "Anzahl der verwendeten Punkte: %d"
 
 #: ../lib/rst/interp_float/vinput2d.c:391
 msgid "Some points outside of region (ignored)"
@@ -7289,3 +7282,6 @@ msgstr "einige Punkte sind außerhalb der Region -- ignoriere dies..."
 
 #~ msgid "Unable to close input map"
 #~ msgstr "Kann die Eingabekarte nicht schließen."
+
+#~ msgid "Cairo_draw_bitmap: Failed to create source"
+#~ msgstr "Cairo_draw_bitmap: Erzeugen der Quelle fehlgeschlagen"
