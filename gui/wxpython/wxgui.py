@@ -1010,31 +1010,31 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
         
-    def OnImportDxfFile(self, event):
+    def OnImportDxfFile(self, event, cmd = None):
         """!Convert multiple DXF layers to GRASS vector map layers"""
         dlg = gdialogs.DxfImportDialog(parent = self)
         dlg.CentreOnScreen()
         dlg.ShowModal()
 
-    def OnImportGdalLayers(self, event):
+    def OnImportGdalLayers(self, event, cmd = None):
         """!Convert multiple GDAL layers to GRASS raster map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self)
         dlg.CentreOnScreen()
         dlg.ShowModal()
 
-    def OnLinkGdalLayers(self, event):
+    def OnLinkGdalLayers(self, event, cmd = None):
         """!Link multiple GDAL layers to GRASS raster map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self, link = True)
         dlg.CentreOnScreen()
         dlg.ShowModal()
         
-    def OnImportOgrLayers(self, event):
+    def OnImportOgrLayers(self, event, cmd = None):
         """!Convert multiple OGR layers to GRASS vector map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self, ogr = True)
         dlg.CentreOnScreen()
         dlg.ShowModal()
         
-    def OnLinkOgrLayers(self, event):
+    def OnLinkOgrLayers(self, event, cmd = None):
         """!Links multiple OGR layers to GRASS vector map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self, ogr = True, link = True)
         dlg.CentreOnScreen()
