@@ -65,6 +65,11 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
+GRASS_PYTHON=/c/OSGeo4W/apps/Python25
+export GRASS_PYTHON
+PYTHONHOME=/c/OSGeo4W/apps/Python25
+export PYTHONHOME
+
 echo $(date): STARTING make
 make
 
