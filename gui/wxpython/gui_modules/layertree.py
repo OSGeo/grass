@@ -250,7 +250,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             return
 
         ltype = self.GetPyData(self.layer_selected)[0]['type']
-
+        mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
+        
         Debug.msg (4, "LayerTree.OnContextMenu: layertype=%s" % \
                        ltype)
 
@@ -271,15 +272,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupID14 = wx.NewId()
             self.popupID15 = wx.NewId()
             self.popupID16 = wx.NewId()
-
+            self.popupID17 = wx.NewId()
+        
         self.popupMenu = wx.Menu()
-
+        
         numSelected = len(self.GetSelections())
         
         # general item
         self.popupMenu.Append(self.popupID1, text = _("Remove"))
         self.Bind(wx.EVT_MENU, self.lmgr.OnDeleteLayer, id = self.popupID1)
-
+        
         if ltype != "command": # rename
             self.popupMenu.Append(self.popupID2, text = _("Rename"))
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id = self.popupID2)
@@ -304,21 +306,28 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToMap, id = self.popupID9)
                 self.popupMenu.Append(self.popupID10, text = _("Set computational region from selected map(s)"))
                 self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id = self.popupID10)
+
             if numSelected > 1:
                 self.popupMenu.Enable(self.popupID8, False)
                 self.popupMenu.Enable(self.popupID3, False)
-            
+        
         # specific items
         try:
             mltype = self.GetPyData(self.layer_selected)[0]['type']
         except:
             mltype = None
-
+        
         # vector layers (specific items)
         if mltype and mltype == "vector":
             self.popupMenu.AppendSeparator()
+            self.popupMenu.Append(self.popupID17, text = _("Export"))
+            self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.ogr',
+                                                                        'input=%s' % mapLayer.GetName()]),
+                      id = self.popupID17)
+            
+            self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID4, text = _("Show attribute data"))
-            self.Bind (wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id = self.popupID4)
+            self.Bind(wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id = self.popupID4)
 
             self.popupMenu.Append(self.popupID5, text = _("Start editing"))
             self.popupMenu.Append(self.popupID6, text = _("Stop editing"))
@@ -372,11 +381,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID7, _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID7)
             if numSelected > 1:
-                self.popupMenu.Enable(self.popupID4, False)
-                self.popupMenu.Enable(self.popupID5, False)
-                self.popupMenu.Enable(self.popupID6, False)
-                self.popupMenu.Enable(self.popupID7, False)
+                self.popupMenu.Enable(self.popupID4,  False)
+                self.popupMenu.Enable(self.popupID5,  False)
+                self.popupMenu.Enable(self.popupID6,  False)
+                self.popupMenu.Enable(self.popupID7,  False)
                 self.popupMenu.Enable(self.popupID14, False)
+                self.popupMenu.Enable(self.popupID16, False)
+                self.popupMenu.Enable(self.popupID17, False)
         
         # raster layers (specific items)
         elif mltype and mltype == "raster":
@@ -384,6 +395,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id = self.popupID12)
             self.popupMenu.Append(self.popupID13, text = _("Set computational region from selected map(s) (ignore NULLs)"))
             self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id = self.popupID13)
+            
+            self.popupMenu.AppendSeparator()
+            self.popupMenu.Append(self.popupID17, text = _("Export"))
+            self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.out.gdal',
+                                                                        'input=%s' % mapLayer.GetName()]),
+                      id = self.popupID17)
+            
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID15, _("Set color table"))
             self.Bind (wx.EVT_MENU, self.OnColorTable, id = self.popupID15)
@@ -402,6 +420,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID5, False)
                 self.popupMenu.Enable(self.popupID6, False)
                 self.popupMenu.Enable(self.popupID11, False)
+                self.popupMenu.Enable(self.popupID17, False)
+
+      
         
         # self.PopupMenu(self.popupMenu, pos)
         self.PopupMenu(self.popupMenu)
