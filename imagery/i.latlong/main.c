@@ -83,14 +83,14 @@ int main(int argc, char *argv[])
     inrast = Rast_allocate_d_buf();
     
     /***************************************************/ 
-    stepx = cellhd.ew_res;
-    stepy = cellhd.ns_res;
     xmin = cellhd.west;
     xmax = cellhd.east;
     ymin = cellhd.south;
     ymax = cellhd.north;
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
+    stepx = abs(xmax-xmin)*(double)ncols;
+    stepy = abs(ymax-ymin)*(double)nrows;
     
     /*Stolen from r.sun */ 
     /* Set up parameters for projection to lat/long if necessary */ 
@@ -127,8 +127,8 @@ int main(int argc, char *argv[])
 
 	for (col = 0; col < ncols; col++)
         {
-	    latitude = ymax - (row * stepy);
-	    longitude = xmin + (col * stepx);
+	    latitude = ymax - ((double)row * stepy);
+	    longitude = xmin + ((double)col * stepx);
 	    if (not_ll) 
 		if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) 
 		    G_fatal_error(_("Error in pj_do_proj"));
