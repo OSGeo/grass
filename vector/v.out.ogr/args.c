@@ -95,6 +95,11 @@ void parse_args(int argc, char **argv,
     flags->esristyle->description = _("Use ESRI-style .prj file format "
 				      "(applies to Shapefile output only)");
     flags->esristyle->guisection = _("Creation");
+
+    flags->shapez = G_define_flag();
+    flags->shapez->key = 'z';
+    flags->shapez->description = _("Create 3D output if input is 3D "
+       			      "(applies to Shapefile output only)");
     
     flags->poly = G_define_flag();
     flags->poly->key = 'p';
