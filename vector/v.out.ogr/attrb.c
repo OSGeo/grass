@@ -4,15 +4,13 @@
 
 int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 	   int doatt, int nocat, OGRFeatureH Ogr_feature, int *noatt,
-	   int *fout)
+	   int *fout, dbCursor cursor)
 {
     int j, ogrfieldnum;
-    char buf[2000];
     int colsqltype, colctype, more;
     dbTable *Table;
     dbString dbstring;
     dbColumn *Column;
-    dbCursor cursor;
     dbValue *Value;
 
     G_debug(2, "mk_att() cat = %d, doatt = %d", cat, doatt);
@@ -30,16 +28,6 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
     /* Read & set attributes */
     if (cat >= 0) {		/* Line with category */
 	if (doatt) {
-	    sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key,
-		    cat);
-	    G_debug(2, "SQL: %s", buf);
-	    db_set_string(&dbstring, buf);
-	    if (db_open_select_cursor
-		(Driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
-		G_fatal_error(_("Cannot select attributes for cat = %d"),
-			      cat);
-	    }
-	    else {
 		if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
 		    G_fatal_error(_("Unable to fetch data from table"));
 		if (!more) {
@@ -76,10 +64,15 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 				db_get_column_name(Column), ogrfieldnum);
 
 			/* Reset */
-			OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
+			if ( ( ( nocat ) && (strcmp(Fi->key, db_get_column_name(Column)) == 0) ) == 0 ) {
+				/* if this is 'cat', then execute the following only if the '-s' flag was NOT given*/
+				OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
+			}
 
 			/* prevent writing NULL values */
 			if (!db_test_value_isnull(Value)) {
+				if ( ( (nocat) && (strcmp(Fi->key, db_get_column_name(Column)) == 0) ) == 0 ) {
+				/* if this is 'cat', then execute the following only if the '-s' flag was NOT given*/
 			    switch (colctype) {
 			    case DB_C_TYPE_INT:
 				OGR_F_SetFieldInteger(Ogr_feature,
@@ -107,9 +100,8 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 			    }
 			}
 		    }
+		    }
 		}
-		db_close_cursor(&cursor);
-	    }
 	}
 	else {			/* Use cat only */
 	    ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, "cat");

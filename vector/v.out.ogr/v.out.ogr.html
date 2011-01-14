@@ -26,6 +26,9 @@ For further available drivers go
 By default, islands will appear as holes inside surrounding areas.
 To export areas with holes into, e.g., a Shapefile, and make the 
 holes appear as filled areas, the flag <em>-c</em> has to be used.
+<p>
+The "-z" flag can be used to automatically export a 3D map to a 3D Shapefile, instead 
+of setting the correct <em>lco=</em> option manually.
 
 <h2>EXAMPLES</h2>
 
@@ -55,6 +58,11 @@ v.out.ogr points_3d type=point dsn=points_3d.shp lco="SHPT=POINTZ"
 Export 3D faces from GRASS vector map to Shapefile format:
 <div class="code"><pre>
 v.out.ogr input=objects_3d type=face dsn=faces_3d.shp lco="SHPT=POLYGONZ"
+</pre></div>
+<p>
+Export 3D faces from GRASS vector map to Shapefile format, automatic 3D setting:
+<div class="code"><pre>
+v.out.ogr input=objects_3d type=face dsn=faces_3d.shp -z"
 </pre></div>
 
 <h3>Export to GML</h3>

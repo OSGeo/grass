@@ -5,13 +5,18 @@
 #include "ogr_api.h"
 #include "cpl_string.h"
 
+
+/* some hard limits */
+#define SQL_BUFFER_SIZE 2000
+
+
 struct Options {
     struct Option *input, *dsn, *layer, *type, *format,
 	*field, *dsco, *lco;
 };
 
 struct Flags {
-    struct Flag *cat, *esristyle, *poly, *update, *nocat, *new, *append;
+    struct Flag *cat, *esristyle, *poly, *update, *nocat, *new, *append, *shapez;
 };
 
 /* args.c */
@@ -20,7 +25,7 @@ void parse_args(int, char **,
 
 /* attributes.c */
 int mk_att(int cat, struct field_info *Fi, dbDriver *Driver,
-	   int ncol, int doatt, int nocat, OGRFeatureH Ogr_feature, int *, int *);
+	   int ncol, int doatt, int nocat, OGRFeatureH Ogr_feature, int *, int *, dbCursor cursor);
 
 /* list.c */
 char *OGR_list_write_drivers();
