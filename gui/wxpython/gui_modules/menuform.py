@@ -272,7 +272,7 @@ class UpdateThread(Thread):
                         table = pTable.get('value', '')
                 
             if name == 'LayerSelect':
-                if not cparams[map]['layers']:
+                if cparams.has_key(map) and not cparams[map]['layers']:
                     win.InsertLayers(vector = map)
                     cparams[map]['layers'] = win.GetItems()
             
@@ -297,13 +297,11 @@ class UpdateThread(Thread):
                 
             elif name == 'ColumnSelect':
                 if map:
-                    try:
+                    if cparams.has_key(map):
                         if not cparams[map]['dbInfo']:
                             cparams[map]['dbInfo'] = gselect.VectorDBInfo(map)
                         self.data[win.InsertColumns] = { 'vector' : map, 'layer' : layer,
                                                          'dbInfo' : cparams[map]['dbInfo'] }
-                    except KeyError:
-                        pass
                 else: # table
                     if driver and db:
                         self.data[win.InsertTableColumns] = { 'table' : pTable.get('value'),
