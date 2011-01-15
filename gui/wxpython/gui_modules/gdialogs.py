@@ -974,7 +974,7 @@ class ImportDialog(wx.Dialog):
                 continue
             elif cmd == 'v.external' and name not in ('b'):
                 continue
-            elif cmd == 'v.in.dxf' and name not in ('e', 't', 'b', 'f', 'i', '1'):
+            elif cmd == 'v.in.dxf' and name not in ('e', 't', 'b', 'f', 'i'):
                 continue
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
@@ -1284,6 +1284,10 @@ class DxfImportDialog(ImportDialog):
                    'input=%s' % inputDxf,
                    'layers=%s' % layer,
                    'output=%s' % output]
+
+            for key in self.options.keys():
+                if self.options[key].IsChecked():
+                    cmd.append('-%s' % key)
             
             if self.overwrite.IsChecked() or \
                     UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
