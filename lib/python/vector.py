@@ -143,7 +143,7 @@ def vector_history(map):
     """
     run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
 
-# run "v.info -t" and parse output
+# run "v.info shell=topo" and parse output
 
 def vector_info_topo(map):
     """!Return information about a vector map (interface to `v.info
@@ -153,15 +153,19 @@ def vector_info_topo(map):
     >>> grass.vector_info_topo('lakes')
     {'kernels': 0, 'lines': 0, 'centroids': 15279,
     'boundaries': 27764, 'points': 0, 'faces': 0,
-    'primitives': 43043, 'islands': 7470, 'nodes': 35234, 'map3d': 0, 'areas': 15279}
+    'primitives': 43043, 'islands': 7470, 'nodes': 35234, 'map3d': False, 'areas': 15279}
     \endcode
     
     @param map map name
 
     @return parsed output
     """
-    s = read_command('v.info', flags = 't', map = map)
-    return parse_key_val(s, val_type = int)
+    s = read_command('v.info', map = map, shell = 'topo')
+    ret = parse_key_val(s, val_type = int)
+    if ret.has_key('map3d'):
+        ret['map3d'] = bool(ret['map3d'])
+    
+    return ret
 
 # interface for v.db.select
 

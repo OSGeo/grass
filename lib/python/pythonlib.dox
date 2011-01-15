@@ -15,6 +15,7 @@ See code in:
 - db.py
 - raster.py
 - vector.py
+- setup.py
 
 <b>Table of content</b>
 
@@ -24,6 +25,7 @@ See code in:
  - \subpage pythonDb
  - \subpage pythonRaster
  - \subpage pythonVector
+ - \subpage pythonSetup
 
 \section pythonScripting GRASS scripting tasks for Python provided by "grass.script"
 
@@ -82,42 +84,42 @@ if __name__ == "__main__":
 
 <b>GRASS-oriented interface to subprocess module</b>
 
- - exec_command()
+ - python::core::exec_command()
 
- - feed_command()
+ - python::core::feed_command()
 
- - make_command()
+ - python::core::make_command()
 
- - parse_command()
+ - python::core::parse_command()
 
- - pipe_command()
+ - python::core::pipe_command()
 
- - read_command()
+ - python::core::read_command()
 
- - run_command()
+ - python::core::run_command()
 
- - start_command()
+ - python::core::start_command()
 
- - write_command()
+ - python::core::write_command()
 
 <b>Interface to g.message</b>
 
 These all run g.message, differing only in which flag (if any) is
 used. fatal() is error(), but also calls sys.exit(1).
 
- - debug()
+ - python::core::debug()
 
- - error()
+ - python::core::error()
 
- - fatal()
+ - python::core::fatal()
 
- - info()
+ - python::core::info()
 
- - message()
+ - python::core::message()
 
- - verbose()
+ - python::core::verbose()
 
- - warning()
+ - python::core::warning()
 
 <b>Interface to g.parser</b>
 
@@ -129,117 +131,109 @@ Interface to g.parser, intended to be run from the top-level, e.g.
 	    main()
 \endcode
 
- - parser()
+ - python::core::parser()
 
 <b>Interface to g.tempfile</b>
 
 Returns the name of a temporary file, created with g.tempfile.
 
- - tempfile()
+ - python::core::tempfile()
 
 <b>Key-value parsers</b>
 
- - parse_key_val()
+ - python::core::parse_key_val()
 
 <b>Interface to g.gisenv</b>
 
- - gisenv()
+ - python::core::gisenv()
 
 <b>Interface to g.region</b>
 
- - del_temp_region()
+ - python::core::del_temp_region()
 
- - region()
+ - python::core::region()
 
- - use_temp_region()
+ - python::core::use_temp_region()
 
 <b>Interface to g.findfile</b>
 
- - find_file()
+ - python::core::find_file()
 
 <b>Interface to g.list</b>
 
- - list_grouped()
+ - python::core::list_grouped()
 
- - list_pairs()
+ - python::core::list_pairs()
 
- - list_strings()
+ - python::core::list_strings()
 
- - mlist_grouped()
+ - python::core::mlist_grouped()
 
 <b>Interface to g.mapsets</b>
 
- - mapsets()
+ - python::core::mapsets()
 
 <b>Color parsing</b>
 
- - parse_color()
+ - python::core::parse_color()
 
 <b>Check GRASS environment variables</b>
 
- - overwrite()
+ - python::core::overwrite()
 
- - verbosity()
+ - python::core::verbosity()
 
 <b>Various utilities, not specific to GRASS</b>
  
- - basename()
+ - python::core::basename()
 
- - find_program()
+ - python::core::find_program()
 
- - try_remove()
+ - python::core::try_remove()
 
- - try_rmdir()
+ - python::core::try_rmdir()
 
- - float_or_dms()
+ - python::core::float_or_dms()
 
 \section pythonDb Database
 
 Interface for <tt>db.*</tt> modules.
 
-\code
-from grass.script import db as grass
-\endcode
+ - python::db::db_connection()
 
- - db_connection()
+ - python::db::db_describe()
 
- - db_describe()
-
- - db_select()
+ - python::db::db_select()
 
 \section pythonRaster Raster
 
 Interface for <tt>r.*</tt> modules.
 
-\code
-from grass.script import raster as grass
-\endcode
+ - python::raster::raster_history()
 
- - raster_history()
+ - python::raster::raster_info()
 
- - raster_info()
-
- - mapcalc()
+ - python::raster::mapcalc()
 
 \section pythonVector Vector
 
 Interface for <tt>v.*</tt> modules.
 
-\code
-from grass.script import vector as grass
-\endcode
+ - python::vector::vector_columns()
 
- - vector_columns()
+ - python::vector::vector_db()
 
- - vector_db()
+ - python::vector::vector_db_select()
 
- - vector_db_select()
+ - python::vector::vector_history()
 
- - vector_history()
+ - python::vector::vector_info_topo()
 
- - vector_info_topo()
+ - python::vector::vector_layer_db()
 
- - vector_layer_db()
+\section pythonSetup Setup
+
+ - python::setup::init()
 
 \section pythonAuthors Authors
 
