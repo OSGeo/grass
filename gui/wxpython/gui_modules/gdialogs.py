@@ -20,7 +20,7 @@ List of classes:
  - StaticWrapText
  - ImageSizeDialog
 
-(C) 2008-2010 by the GRASS Development Team
+(C) 2008-2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -931,11 +931,12 @@ class LoadMapLayersDialog(wx.Dialog):
     
 class ImportDialog(wx.Dialog):
     """!Dialog for bulk import of various data (base class)"""
-    def __init__(self, parent, type,
+    def __init__(self, parent, itype,
                  id = wx.ID_ANY, title = _("Multiple import"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-        self.parent = parent # GMFrame 
-        self.importType = type
+        self.parent = parent    # GMFrame 
+        self.importType = itype
+        self.options = dict()   # list of options
         
         self.commandId = -1  # id of running command
         
@@ -952,6 +953,32 @@ class ImportDialog(wx.Dialog):
         #
         self.list = LayersList(self.panel)
         self.list.LoadData()
+
+        self.optionBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                      label=_(" Options "))
+        
+        cmd = self._getCommand()
+        task = menuform.GUI().ParseInterface(cmd = [cmd])
+        for f in task.get_options()['flags']:
+            name = f.get('name', '')
+            desc = f.get('label', '')
+            if not desc:
+                desc = f.get('description', '')
+            if not name and not desc:
+                continue
+            if cmd == 'r.in.gdal' and name not in ('o', 'e', 'l', 'k'):
+                continue
+            elif cmd == 'r.external' and name not in ('o', 'e', 'r', 'h', 'v'):
+                continue
+            elif cmd == 'v.in.ogr' and name not in ('c', 'z', 't', 'o', 'r', 'e', 'w'):
+                continue
+            elif cmd == 'v.external' and name not in ('b'):
+                continue
+            elif cmd == 'v.in.dxf' and name not in ('e', 't', 'b', 'f', 'i', '1'):
+                continue
+            self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
+                                             label = desc)
+        
         
         self.overwrite = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                      label=_("Allow output files to overwrite existing files"))
@@ -995,16 +1022,20 @@ class ImportDialog(wx.Dialog):
         
         dialogSizer.Add(item=layerSizer, proportion=1,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
-        
-        if hasattr(self, "overrideCheck"):
-            dialogSizer.Add(item=self.overrideCheck, proportion=0,
-                            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+
+        # options
+        optionSizer = wx.StaticBoxSizer(self.optionBox, wx.VERTICAL)
+        for key in self.options.keys():
+            optionSizer.Add(item=self.options[key], proportion=0)
+            
+        dialogSizer.Add(item=optionSizer, proportion=0,
+                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
         
         dialogSizer.Add(item=self.overwrite, proportion=0,
-                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
         
         dialogSizer.Add(item=self.add, proportion=0,
-                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
         
         #
         # buttons
@@ -1032,13 +1063,17 @@ class ImportDialog(wx.Dialog):
         dialogSizer.Fit(self.panel)
         
         # auto-layout seems not work here - FIXME
-        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 175, 400)
+        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 225, 550)
         self.SetMinSize(size)
         self.SetSize((size.width, size.height + 100))
         width = self.GetSize()[0]
         self.list.SetColumnWidth(col=1, width=width/2 - 50)
         self.Layout()
-        
+
+    def _getCommand(self):
+        """!Get command"""
+        return ''
+    
     def OnCancel(self, event=None):
         """!Close dialog"""
         self.Close()
@@ -1097,13 +1132,13 @@ class GdalImportDialog(ImportDialog):
         self.ogr  = ogr
         
         if ogr:
-            ImportDialog.__init__(self, parent, type = 'ogr')
+            ImportDialog.__init__(self, parent, itype = 'ogr')
             if link:
                 self.SetTitle(_("Link external vector data"))
             else:
                 self.SetTitle(_("Import vector data"))
         else:
-            ImportDialog.__init__(self, parent, type = 'gdal') 
+            ImportDialog.__init__(self, parent, itype = 'gdal') 
             if link:
                 self.SetTitle(_("Link external raster data"))
             else:
@@ -1111,10 +1146,6 @@ class GdalImportDialog(ImportDialog):
        
         self.dsnInput = gselect.GdalSelect(parent = self, panel = self.panel, ogr = ogr)
 
-        if not link:
-            self.overrideCheck = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
-                                             label=_("Override projection (use location's projection)"))
-        
         if link:
             self.add.SetLabel(_("Add linked layers into layer tree"))
         else:
@@ -1181,8 +1212,9 @@ class GdalImportDialog(ImportDialog):
             if self.overwrite.IsChecked():
                 cmd.append('--overwrite')
             
-            if not self.link and self.overrideCheck.IsChecked():
-                cmd.append('-o')
+            for key in self.options.keys():
+                if self.options[key].IsChecked():
+                    cmd.append('-%s' % key)
             
             if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
                 cmd.append('--overwrite')
@@ -1193,26 +1225,31 @@ class GdalImportDialog(ImportDialog):
         
         self.OnCancel()
 
-    def OnCmdDialog(self, event):
-        """!Show command dialog"""
+    def _getCommand(self):
+        """!Get command"""
         if self.link:
             if self.ogr:
-                name = 'v.external'
+                return 'v.external'
             else:
-                name = 'r.external'
+                return 'r.external'
         else:
             if self.ogr:
-                name = 'v.in.ogr'
+                return 'v.in.ogr'
             else:
-                name = 'r.in.gdal'
+                return 'r.in.gdal'
         
+        return ''
+    
+    def OnCmdDialog(self, event):
+        """!Show command dialog"""
+        name = self._getCommand()
         menuform.GUI().ParseCommand(cmd = [name],
                                     parentframe = self, modal = True)
         
 class DxfImportDialog(ImportDialog):
     """!Dialog for bulk import of DXF layers""" 
     def __init__(self, parent):
-        ImportDialog.__init__(self, parent, type = 'dxf',
+        ImportDialog.__init__(self, parent, itype = 'dxf',
                               title = _("Import DXF layers"))
         
         self.dsnInput = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
@@ -1228,7 +1265,11 @@ class DxfImportDialog(ImportDialog):
         self.add.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
         
         self.doLayout()
-        
+
+    def _getCommand(self):
+        """!Get command"""
+        return 'v.in.dxf'
+    
     def OnRun(self, event):
         """!Import/Link data (each layes as separate vector map)"""
         data = self.list.GetLayers()
