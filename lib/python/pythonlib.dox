@@ -63,10 +63,8 @@ import sys
 import grass.script as grass
 
 def main():
-    info = grass.parse_command('v.info',
-                               flags = 't',
-                               map = options['map'])
-    if info['map3d'] == '1':
+    info = grass.vector_info_topo(map = options['map'])
+    if info['map3d']:
         print 'Vector map is 3D'
     else:
         print 'Vector map is 2D'
