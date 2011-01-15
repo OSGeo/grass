@@ -289,7 +289,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input 3D raster map");
+	Opt->description = _("Name of 3D raster map");
 	break;
     case G_OPT_R3_MAPS:
 	Opt->key = "map";
@@ -298,7 +298,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,grid3,3d-raster";
-	Opt->description = _("Name of input 3D raster map(s)");
+	Opt->description = _("Name of 3D raster map(s)");
 	break;
 
 	/*vector maps */
@@ -309,7 +309,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->gisprompt = "old,vector,vector";
 	Opt->label = _("Name of input vector map");
-	Opt->description = _("Data source for OGR access");
+	Opt->description = _("Data source for direct OGR access");
 	break;
     case G_OPT_V_INPUTS:
 	Opt->key = "input";
@@ -319,7 +319,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,vector,vector";
 	Opt->label = _("Name of input vector map(s)");
-	Opt->description = _("Data source(s) for OGR access");
+	Opt->description = _("Data source(s) for direct OGR access");
 	break;
     case G_OPT_V_OUTPUT:
 	Opt->key = "output";
@@ -335,8 +335,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,vector,vector";
-	Opt->label = _("Name of input vector map");
-	Opt->description = _("Data source for OGR access");
+	Opt->label = _("Name of vector map");
+	Opt->description = _("Data source for direct OGR access");
 	break;
     case G_OPT_V_MAPS:
 	Opt->key = "map";
@@ -345,7 +345,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,vector,vector";
-	Opt->description = _("Name of input vector map(s)");
+	Opt->description = _("Name of vector map(s)");
 	break;
     case G_OPT_V_TYPE:
 	Opt->key = "type";
@@ -374,7 +374,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
-	      "Layer name for OGR access.");
+	      "Layer name for direct OGR access.");
 	Opt->gisprompt = "old,layer,layer";
 	break;
     case G_OPT_V_FIELD_ALL:
@@ -386,7 +386,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
-	      "Layer name for OGR access.");
+	      "Layer name for direct OGR access.");
 	Opt->gisprompt = "old,layer,layer_all";
 	break;
     case G_OPT_V_CAT:

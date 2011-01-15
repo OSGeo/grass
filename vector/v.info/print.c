@@ -107,8 +107,9 @@ void print_topo(const struct Map_info *Map)
 
     fprintf(stdout, "primitives=%ld\n", nprimitives);
     fflush(stdout);
-    
-    fprintf(stdout, "map3d=%d\n", Vect_is_3d(Map));
+
+    fprintf(stdout, "map3d=%d\n",
+	    Vect_is_3d(Map) ? 1 : 0);
     fflush(stdout);
 }
 
@@ -163,6 +164,65 @@ void print_columns(const struct Map_info *Map, const char *input_opt, const char
     db_shutdown_driver(driver);
 }
 
+void print_shell(const struct Map_info *Map)
+{
+    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
+	fprintf(stdout, "ogr_layer=%s\n",
+		Vect_get_ogr_layer_name(Map));
+	fprintf(stdout, "ogr_dsn=%s\n",
+		Vect_get_ogr_dsn_name(Map));
+    }
+    else {
+	fprintf(stdout, "name=%s\n",
+		Vect_get_name(Map));
+	fprintf(stdout, "mapset=%s\n",
+		Vect_get_mapset(Map));
+    }
+    
+    fprintf(stdout, "location=%s\n",
+	    G_location());
+    fprintf(stdout, "database=%s\n",
+	    G_gisdbase());
+    fprintf(stdout, "title=%s\n",
+	    Vect_get_map_name(Map));
+    fprintf(stdout, "scale=1:%d\n",
+	    Vect_get_scale(Map));
+    
+    if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {	
+	fprintf(stdout, "format=%s,%s\n",
+		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
+    }
+    else {
+	fprintf(stdout, "format=%s\n",
+		Vect_maptype_info(Map));
+    }
+
+    fprintf(stdout, "creator=%s\n",
+	    Vect_get_person(Map));
+    fprintf(stdout, "organization=%s\n",
+	    Vect_get_organization(Map));
+    fprintf(stdout, "source_date=%s\n",
+	    Vect_get_map_date(Map));
+    fprintf(stdout, "level=%d\n", 
+	    Vect_level(Map));
+    
+    if (Vect_level(Map) > 0) {
+	fprintf(stdout, "num_dblinks=%d\n",
+		Vect_get_num_dblinks(Map));
+    }
+
+    fprintf(stdout, "projection=%s\n",
+	    Vect_get_proj_name(Map));
+    if (G_projection() == PROJECTION_UTM) {
+	fprintf(stdout, "zone=%d\n",
+		Vect_get_zone(Map));
+    }
+    fprintf(stdout, "digitization_threshold=%f\n",
+	    Vect_get_thresh(Map));
+    fprintf(stdout, "comment=%s\n",
+	    Vect_get_comment(Map));
+}
+
 void print_info(const struct Map_info *Map)
 {
     int i;
@@ -189,6 +249,7 @@ void print_info(const struct Map_info *Map)
 		Vect_get_mapset(Map));
 	printline(line);
     }
+
     sprintf(line, "%-17s%s", _("Location:"),
 	    G_location());
     printline(line);
@@ -201,6 +262,7 @@ void print_info(const struct Map_info *Map)
     sprintf(line, "%-17s1:%d", _("Map scale:"),
 	    Vect_get_scale(Map));
     printline(line);
+    
     if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
 	sprintf(line, "%-17s%s (%s)", _("Map format:"),
 		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
@@ -209,6 +271,7 @@ void print_info(const struct Map_info *Map)
 	sprintf(line, "%-17s%s", _("Map format:"),
 		Vect_maptype_info(Map));
     }
+    
     printline(line);
     sprintf(line, "%-17s%s", _("Name of creator:"),
 	    Vect_get_person(Map));
@@ -267,6 +330,7 @@ void print_info(const struct Map_info *Map)
 	    printline(line);
 	}
 	printline("");
+	
 	sprintf(line, "  %-24s%s",
 		_("Map is 3D:"),
 		Vect_is_3d(Map) ? _("Yes") : _("No"));
@@ -289,10 +353,10 @@ void print_info(const struct Map_info *Map)
 	sprintf(line, "  %s: %s",
 		_("Projection"),
 		Vect_get_proj_name(Map));
-
+    
     printline(line);
     printline("");
-
+    
     Vect_get_map_box(Map, &box);
     
     G_format_northing(box.N, tmp1, G_projection());
@@ -315,7 +379,7 @@ void print_info(const struct Map_info *Map)
 	printline(line);
     }
     printline("");
-    
+
     format_double(Vect_get_thresh(Map), tmp1);
     sprintf(line, "  %s: %s", _("Digitization threshold"), tmp1);
     printline(line);

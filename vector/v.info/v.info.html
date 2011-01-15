@@ -4,12 +4,13 @@
 user-specified vector map and its topology status.
 
 <p>
-Vector map is opened without topology (i.e., on level 1) when
-the <b>-l</b> flag is used. With the <b>-l</b> flag set, vector map
-extends and number of features need to be counted on the fly which may
-take some time.
+If topology info is not available (i.e., vector map cannot be open on
+level 2), vector map extends and number of features need to be counted
+on the fly which may take some time.
 
 <h2>EXAMPLE</h2>
+
+<h3>Basic info</h3>
 
 <div class="code"><pre>
 v.info map=geology
@@ -45,6 +46,105 @@ v.info map=geology
  |                                                                            |
  +----------------------------------------------------------------------------+
 </pre></div>
+
+<h3>History</h3>
+
+<div class="code"><pre>
+v.info -h map=geology
+
+COMMAND: v.in.ogr dsn="geol.shp" output="geology" min_area=0.0001 snap=-1
+GISDBASE: /bigdata/grassdata05
+LOCATION: ncfromfile MAPSET: PERMANENT USER: helena DATE: Mon Nov  6 15:48:53 2006
+---------------------------------------------------------------------------------
+1832 input polygons
+total area: 1.276093e+11 (1832 areas)
+overlapping area: 0.000000e+00 (0 areas)
+area without category: 0.000000e+00 (0 areas)
+---------------------------------------------------------------------------------
+</pre></div>
+
+<h3>Attribute columns for given layer</h3>
+
+<div class="code"><pre>
+v.info -c map=geology
+
+Displaying column types/names for database connection of layer <1>:
+INTEGER|cat
+DOUBLE PRECISION|onemap_pro
+DOUBLE PRECISION|PERIMETER
+INTEGER|GEOL250_
+INTEGER|GEOL250_ID
+CHARACTER|GEO_NAME
+DOUBLE PRECISION|SHAPE_area
+DOUBLE PRECISION|SHAPE_len
+</pre></div>
+
+<h3>Basic info in shell script style</h3>
+
+<div class="code"><pre>
+v.info map=geology shell=basic,region,topo
+
+name=geology
+mapset=PERMANENT
+location=nc_spm_08
+database=/home/martin/grassdata
+title=North Carolina geology map (polygon map)
+scale=1:1
+format=native
+creator=helena
+organization=NC OneMap
+source_date=Mon Nov  6 15:48:53 2006
+level=2
+map3d=0
+num_dblinks=1
+projection=Lambert Conformal Conic
+digitization_threshold=0.000000
+comment=
+north=318117.43741634
+south=10875.82723209
+east=930172.31282271
+west=123971.19498978
+top=0.000000
+bottom=0.000000
+nodes=4556
+points=0
+lines=0
+boundaries=3649
+centroids=1832
+areas=1832
+islands=907
+primitives=5481
+</pre></div>
+
+<div class="code"><pre>
+v.info map=geology shell=region
+
+north=318117.43741634
+south=10875.82723209
+east=930172.31282271
+west=123971.19498978
+top=0.000000
+bottom=0.000000
+</pre></div>
+
+<h2>PYTHON</h2>
+
+See <em><a href="http://grass.osgeo.org/programming7/pythonlib.html">Python
+Script Library</a></em> for more info.
+
+<div class="code"><pre>
+import grass.script as grass
+    
+grass.vector_columns('geology')   # for `v.info -c`
+grass.vector_info_topo('geology') # for `v.info shell=topo`
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="r.info.html">r.info</a>,
+  <a href="r3.info.html">r3.info</a>
+</em>
 
 <h2>AUTHOR</h2>
 
