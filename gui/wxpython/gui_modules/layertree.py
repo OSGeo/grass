@@ -255,61 +255,48 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Debug.msg (4, "LayerTree.OnContextMenu: layertype=%s" % \
                        ltype)
 
-        if not hasattr (self, "popupID1"):
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
-            self.popupID4 = wx.NewId()
-            self.popupID5 = wx.NewId()
-            self.popupID6 = wx.NewId()
-            self.popupID7 = wx.NewId()
-            self.popupID8 = wx.NewId()
-            self.popupID9 = wx.NewId()
-            self.popupID10 = wx.NewId()
-            self.popupID11 = wx.NewId() # nviz
-            self.popupID12 = wx.NewId()
-            self.popupID13 = wx.NewId()
-            self.popupID14 = wx.NewId()
-            self.popupID15 = wx.NewId()
-            self.popupID16 = wx.NewId()
-            self.popupID17 = wx.NewId()
+        if not hasattr (self, "popupID"):
+            self.popupID = dict()
+            for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
+                        'region', 'export', 'attr', 'edit0', 'edit1',
+                        'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
+                        'color', 'hist', 'prof', 'properties'):
+                self.popupID[key] = wx.NewId()
         
         self.popupMenu = wx.Menu()
         
         numSelected = len(self.GetSelections())
         
-        # general item
-        self.popupMenu.Append(self.popupID1, text = _("Remove"))
-        self.Bind(wx.EVT_MENU, self.lmgr.OnDeleteLayer, id = self.popupID1)
+        self.popupMenu.Append(self.popupID['remove'], text = _("Remove"))
+        self.Bind(wx.EVT_MENU, self.lmgr.OnDeleteLayer, id = self.popupID['remove'])
         
-        if ltype != "command": # rename
-            self.popupMenu.Append(self.popupID2, text = _("Rename"))
-            self.Bind(wx.EVT_MENU, self.OnRenameLayer, id = self.popupID2)
+        if ltype != "command":
+            self.popupMenu.Append(self.popupID['rename'], text = _("Rename"))
+            self.Bind(wx.EVT_MENU, self.OnRenameLayer, id = self.popupID['rename'])
             if numSelected > 1:
-                self.popupMenu.Enable(self.popupID2, False)
-            
+                self.popupMenu.Enable(self.popupID['rename'], False)
+        
         # map layer items
-        if ltype != "group" and \
-                ltype != "command":
+        if ltype not in ("group", "command"):
             self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID8, text = _("Change opacity level"))
-            self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id = self.popupID8)
-            self.popupMenu.Append(self.popupID3, text = _("Properties"))
-            self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID3)
+            self.popupMenu.Append(self.popupID['opacity'], text = _("Change opacity level"))
+            self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id = self.popupID['opacity'])
+            self.popupMenu.Append(self.popupID['properties'], text = _("Properties"))
+            self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID['properties'])
+            
+            if numSelected > 1:
+                self.popupMenu.Enable(self.popupID['opacity'], False)
+                self.popupMenu.Enable(self.popupID['properties'], False)
             
             if ltype in ('raster', 'vector', '3d-raster') and self.mapdisplay.toolbars['nviz']:
-                self.popupMenu.Append(self.popupID11, _("3D view properties"))
-                self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID11)
+                self.popupMenu.Append(self.popupID['nviz'], _("3D view properties"))
+                self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID['nviz'])
             
             if ltype in ('raster', 'vector', 'rgb'):
-                self.popupMenu.Append(self.popupID9, text = _("Zoom to selected map(s)"))
-                self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToMap, id = self.popupID9)
-                self.popupMenu.Append(self.popupID10, text = _("Set computational region from selected map(s)"))
-                self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id = self.popupID10)
-
-            if numSelected > 1:
-                self.popupMenu.Enable(self.popupID8, False)
-                self.popupMenu.Enable(self.popupID3, False)
+                self.popupMenu.Append(self.popupID['zoom'], text = _("Zoom to selected map(s)"))
+                self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToMap, id = self.popupID['zoom'])
+                self.popupMenu.Append(self.popupID['region'], text = _("Set computational region from selected map(s)"))
+                self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id = self.popupID['region'])
         
         # specific items
         try:
@@ -320,114 +307,103 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # vector layers (specific items)
         if mltype and mltype == "vector":
             self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID17, text = _("Export"))
+            self.popupMenu.Append(self.popupID['export'], text = _("Export"))
             self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.ogr',
                                                                         'input=%s' % mapLayer.GetName()]),
-                      id = self.popupID17)
+                      id = self.popupID['export'])
             
             self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID4, text = _("Show attribute data"))
-            self.Bind(wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id = self.popupID4)
+            self.popupMenu.Append(self.popupID['attr'], text = _("Show attribute data"))
+            self.Bind(wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id = self.popupID['attr'])
 
-            self.popupMenu.Append(self.popupID5, text = _("Start editing"))
-            self.popupMenu.Append(self.popupID6, text = _("Stop editing"))
-            self.popupMenu.Enable(self.popupID6, False)
-            self.Bind (wx.EVT_MENU, self.OnStartEditing, id = self.popupID5)
-            self.Bind (wx.EVT_MENU, self.OnStopEditing,  id = self.popupID6)
-
+            self.popupMenu.Append(self.popupID['edit0'], text = _("Start editing"))
+            self.popupMenu.Append(self.popupID['edit1'], text = _("Stop editing"))
+            self.popupMenu.Enable(self.popupID['edit1'], False)
+            self.Bind (wx.EVT_MENU, self.OnStartEditing, id = self.popupID['edit0'])
+            self.Bind (wx.EVT_MENU, self.OnStopEditing,  id = self.popupID['edit1'])
+            
             layer = self.GetPyData(self.layer_selected)[0]['maplayer']
             # enable editing only for vector map layers available in the current mapset
             digitToolbar = self.mapdisplay.toolbars['vdigit']
             if digitToolbar:
                 # background vector map
-                self.popupMenu.Append(self.popupID14,
+                self.popupMenu.Append(self.popupID['bgmap'],
                                       text = _("Use as background vector map for digitizer"),
                                       kind = wx.ITEM_CHECK)
-                self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID14)
+                self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID['bgmap'])
                 if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
                                     internal = True) == layer.GetName():
-                    self.popupMenu.Check(self.popupID14, True)
+                    self.popupMenu.Check(self.popupID['bgmap'], True)
             
-            self.popupMenu.Append(self.popupID16, text = _("Rebuild topology"))
-            self.Bind(wx.EVT_MENU, self.OnTopology, id = self.popupID16)
+            self.popupMenu.Append(self.popupID['topo'], text = _("Rebuild topology"))
+            self.Bind(wx.EVT_MENU, self.OnTopology, id = self.popupID['topo'])
 
             if layer.GetMapset() != grass.gisenv()['MAPSET']:
                 # only vector map in current mapset can be edited
-                self.popupMenu.Enable (self.popupID5, False)
-                self.popupMenu.Enable (self.popupID6, False)
-                self.popupMenu.Enable (self.popupID16, False)
+                self.popupMenu.Enable (self.popupID['edit0'], False)
+                self.popupMenu.Enable (self.popupID['edit1'], False)
+                self.popupMenu.Enable (self.popupID['topo'], False)
             elif digitToolbar and digitToolbar.GetLayer():
                 # vector map already edited
                 vdigitLayer = digitToolbar.GetLayer()
                 if vdigitLayer is layer:
-                    # disable 'start editing'
-                    self.popupMenu.Enable (self.popupID5, False)
-                    # enable 'stop editing'
-                    self.popupMenu.Enable(self.popupID6, True)
-                    # disable 'remove'
-                    self.popupMenu.Enable(self.popupID1, False)
-                    # disable 'bgmap'
-                    self.popupMenu.Enable(self.popupID14, False)
-                    # disable 'topology'
-                    self.popupMenu.Enable (self.popupID16, False)
+                    self.popupMenu.Enable(self.popupID['edit0'],  False)
+                    self.popupMenu.Enable(self.popupID['edit1'],  True)
+                    self.popupMenu.Enable(self.popupID['remove'], False)
+                    self.popupMenu.Enable(self.popupID['bgmap'],  False)
+                    self.popupMenu.Enable(self.popupID['topo'],   False)
                 else:
-                    # disable 'start editing'
-                    self.popupMenu.Enable(self.popupID5, False)
-                    # disable 'stop editing'
-                    self.popupMenu.Enable(self.popupID6, False)
-                    # enable 'bgmap'
-                    self.popupMenu.Enable(self.popupID14, True)
+                    self.popupMenu.Enable(self.popupID['edit0'], False)
+                    self.popupMenu.Enable(self.popupID['edit1'], False)
+                    self.popupMenu.Enable(self.popupID['bgmap'], True)
             
-            self.popupMenu.Append(self.popupID7, _("Metadata"))
-            self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID7)
+            self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
+            self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
             if numSelected > 1:
-                self.popupMenu.Enable(self.popupID4,  False)
-                self.popupMenu.Enable(self.popupID5,  False)
-                self.popupMenu.Enable(self.popupID6,  False)
-                self.popupMenu.Enable(self.popupID7,  False)
-                self.popupMenu.Enable(self.popupID14, False)
-                self.popupMenu.Enable(self.popupID16, False)
-                self.popupMenu.Enable(self.popupID17, False)
+                self.popupMenu.Enable(self.popupID['attr'],   False)
+                self.popupMenu.Enable(self.popupID['edit0'],  False)
+                self.popupMenu.Enable(self.popupID['edit1'],  False)
+                self.popupMenu.Enable(self.popupID['meta'],   False)
+                self.popupMenu.Enable(self.popupID['bgmap'],  False)
+                self.popupMenu.Enable(self.popupID['topo'],   False)
+                self.popupMenu.Enable(self.popupID['export'], False)
         
         # raster layers (specific items)
         elif mltype and mltype == "raster":
-            self.popupMenu.Append(self.popupID12, text = _("Zoom to selected map(s) (ignore NULLs)"))
-            self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id = self.popupID12)
-            self.popupMenu.Append(self.popupID13, text = _("Set computational region from selected map(s) (ignore NULLs)"))
-            self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id = self.popupID13)
+            self.popupMenu.Append(self.popupID['zoom1'], text = _("Zoom to selected map(s) (ignore NULLs)"))
+            self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id = self.popupID['zoom1'])
+            self.popupMenu.Append(self.popupID['region1'], text = _("Set computational region from selected map(s) (ignore NULLs)"))
+            self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id = self.popupID['region1'])
             
             self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID17, text = _("Export"))
+            self.popupMenu.Append(self.popupID['export'], text = _("Export"))
             self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.out.gdal',
                                                                         'input=%s' % mapLayer.GetName()]),
-                      id = self.popupID17)
+                      id = self.popupID['export'])
             
             self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID15, _("Set color table"))
-            self.Bind (wx.EVT_MENU, self.OnColorTable, id = self.popupID15)
-            self.popupMenu.Append(self.popupID4, _("Histogram"))
-            self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID4)
-            self.popupMenu.Append(self.popupID5, _("Profile"))
-            self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID5)
-            self.popupMenu.Append(self.popupID6, _("Metadata"))
-            self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID6)
+            self.popupMenu.Append(self.popupID['color'], _("Set color table"))
+            self.Bind (wx.EVT_MENU, self.OnColorTable, id = self.popupID['color'])
+            self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
+            self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
+            self.popupMenu.Append(self.popupID['prof'], _("Profile"))
+            self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
+            self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
+            self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
             
             if numSelected > 1:
-                self.popupMenu.Enable(self.popupID12, False)
-                self.popupMenu.Enable(self.popupID13, False)
-                self.popupMenu.Enable(self.popupID15, False)
-                self.popupMenu.Enable(self.popupID4, False)
-                self.popupMenu.Enable(self.popupID5, False)
-                self.popupMenu.Enable(self.popupID6, False)
-                self.popupMenu.Enable(self.popupID11, False)
-                self.popupMenu.Enable(self.popupID17, False)
+                self.popupMenu.Enable(self.popupID['zoom1'],   False)
+                self.popupMenu.Enable(self.popupID['region1'], False)
+                self.popupMenu.Enable(self.popupID['color'],   False)
+                self.popupMenu.Enable(self.popupID['hist'],    False)
+                self.popupMenu.Enable(self.popupID['prof'],    False)
+                self.popupMenu.Enable(self.popupID['meta'],    False)
+                self.popupMenu.Enable(self.popupID['nviz'],    False)
+                self.popupMenu.Enable(self.popupID['export'],  False)
 
-      
-        
-        # self.PopupMenu(self.popupMenu, pos)
         self.PopupMenu(self.popupMenu)
         self.popupMenu.Destroy()
-
+        
     def OnTopology(self, event):
         """!Rebuild topology of selected vector map"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
