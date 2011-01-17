@@ -565,15 +565,15 @@ int G_parser(int argc, char **argv)
 	error += check_required();
     
     if (error) {
-	if (G_verbose() > G_verbose_std())
-	    G_usage();
+	G_important_message(_("Error in usage. Call `%s --help` to get usage info."),
+			    state.pgm_name);
 	return -1;
     }
 
     if (check_overwrite())
 	return -1;
 
-    return (0);
+    return 0;
 }
 
 /*!
