@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("data base files"));
     module->description =
 	_("Searches for GRASS data base files "
 	  "and sets variables for the shell.");
@@ -57,8 +58,8 @@ int main(int argc, char *argv[])
     mapset_opt->key = "mapset";
     mapset_opt->type = TYPE_STRING;
     mapset_opt->required = NO;
-    mapset_opt->description = _("Name of a mapset");
-    mapset_opt->answer = "";
+    mapset_opt->label = _("Name of a mapset (default: search path)");
+    mapset_opt->description = _("'.' for current mapset");
 
     n_flag = G_define_flag();
     n_flag->key = 'n';
@@ -68,6 +69,9 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     search_mapset = mapset_opt->answer;
+    if (!search_mapset) {
+	search_mapset = G_store("");
+    }
     if (strcmp(".", search_mapset) == 0)
 	search_mapset = G_mapset();
     
@@ -91,13 +95,17 @@ int main(int argc, char *argv[])
 
     mapset = G_find_file2(elem_opt->answer, name, search_mapset);
     if (mapset) {
+	char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 	const char *qchar = n_flag->answer ? "" : "'";
 	const char *qual = G_fully_qualified_name(name, mapset);
+	G_unqualified_name(name, mapset, xname, xmapset);
 	G__file_name(file, elem_opt->answer, name, mapset);
-	fprintf(stdout, "name=%s%s%s\n", qchar, name, qchar);
-	fprintf(stdout, "mapset=%s%s%s\n", qchar, mapset, qchar);
+	fprintf(stdout, "name=%s%s%s\n", qchar, xname, qchar);
+	fprintf(stdout, "mapset=%s%s%s\n", qchar, xmapset, qchar);
 	fprintf(stdout, "fullname=%s%s%s\n", qchar, qual, qchar);
 	fprintf(stdout, "file=%s%s%s\n", qchar, file, qchar);
+
+	return EXIT_SUCCESS;
     }
     else {
 	fprintf(stdout, "name=\n");
@@ -106,5 +114,5 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "file=\n");
     }
     
-    exit(mapset == NULL);
+    return EXIT_FAILURE;
 }
