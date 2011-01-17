@@ -861,13 +861,14 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         #
         # show new display & draw map
         #
-        self.MapWindow = self.SrcMapWindow
-        self.Map = self.SrcMap
-        self.OnZoomToMap(None)
         if self.show_target:
             self.MapWindow = self.TgtMapWindow
             self.Map = self.TgtMap
             self.OnZoomToMap(None)
+
+        self.MapWindow = self.SrcMapWindow
+        self.Map = self.SrcMap
+        self.OnZoomToMap(None)
 
         #
         # bindings
