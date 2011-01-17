@@ -452,7 +452,7 @@ int Vect_cidx_save(struct Map_info *Map)
     plus = &(Map->plus);
 
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G__file_name(fname, buf, GV_CIDX_ELEMENT, Map->mapset);
+    G_file_name(fname, buf, GV_CIDX_ELEMENT, Map->mapset);
     G_debug(2, "Open cidx: %s", fname);
     dig_file_init(&fp);
     fp.file = fopen(fname, "w");
@@ -497,7 +497,7 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     Plus = &(Map->plus);
 
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G__file_name(file_path, buf, GV_CIDX_ELEMENT, Map->mapset);
+    G_file_name(file_path, buf, GV_CIDX_ELEMENT, Map->mapset);
 
     if (access(file_path, F_OK) != 0)	/* does not exist */
 	return 1;

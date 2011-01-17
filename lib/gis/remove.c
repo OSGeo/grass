@@ -87,9 +87,9 @@ static int G__remove(int misc, const char *dir, const char *element,
 	return -1;
 
     if (misc)
-	G__file_name_misc(path, dir, element, name, mapset);
+	G_file_name_misc(path, dir, element, name, mapset);
     else
-	G__file_name(path, element, name, mapset);
+	G_file_name(path, element, name, mapset);
 
     /* if file does not exist, return 0 */
     if (access(path, 0) != 0)

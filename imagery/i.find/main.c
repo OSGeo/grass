@@ -117,7 +117,7 @@ static int find(FILE * fd, char *element)
 	struct dirent *dp;
 	DIR *dfd;
 
-	G__file_name(dir, element, "", mapset);
+	G_file_name(dir, element, "", mapset);
 	if ((dfd = opendir(dir)) == NULL)
 	    continue;
 

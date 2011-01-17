@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 	const char *qchar = n_flag->answer ? "" : "'";
 	const char *qual = G_fully_qualified_name(name, mapset);
 	G_unqualified_name(name, mapset, xname, xmapset);
-	G__file_name(file, elem_opt->answer, name, mapset);
+	G_file_name(file, elem_opt->answer, name, mapset);
 	fprintf(stdout, "name=%s%s%s\n", qchar, xname, qchar);
 	fprintf(stdout, "mapset=%s%s%s\n", qchar, xmapset, qchar);
 	fprintf(stdout, "fullname=%s%s%s\n", qchar, qual, qchar);

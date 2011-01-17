@@ -742,11 +742,11 @@ int Rast_map_is_fp(const char *name, const char *mapset)
 	G_fatal_error(_("Raster map <%s> not found"),
 		      G_fully_qualified_name(name, mapset));
 
-    G__file_name(path, "fcell", name, xmapset);
+    G_file_name(path, "fcell", name, xmapset);
     if (access(path, 0) == 0)
 	return 1;
 
-    G__file_name(path, "g3dcell", name, xmapset);
+    G_file_name(path, "g3dcell", name, xmapset);
     if (access(path, 0) == 0)
 	return 1;
 
@@ -779,12 +779,12 @@ RASTER_MAP_TYPE Rast_map_type(const char *name, const char *mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
     }
 
-    G__file_name(path, "fcell", name, xmapset);
+    G_file_name(path, "fcell", name, xmapset);
 
     if (access(path, 0) == 0)
 	return Rast__check_fp_type(name, xmapset);
 
-    G__file_name(path, "g3dcell", name, xmapset);
+    G_file_name(path, "g3dcell", name, xmapset);
 
     if (access(path, 0) == 0)
 	return DCELL_TYPE;
@@ -831,7 +831,7 @@ RASTER_MAP_TYPE Rast__check_fp_type(const char *name, const char *mapset)
 	G_fatal_error(_("Raster map <%s> not found"),
 		      G_fully_qualified_name(name, mapset));
 
-    G__file_name_misc(path, "cell_misc", FORMAT_FILE, name, xmapset);
+    G_file_name_misc(path, "cell_misc", FORMAT_FILE, name, xmapset);
 
     if (access(path, 0) != 0)
 	G_fatal_error(_("Unable to find '%s'"), path);

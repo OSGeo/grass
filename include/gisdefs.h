@@ -213,9 +213,9 @@ void G_unset_error_routine(void);
 void G_init_logging(void);
 
 /* file_name.c */
-char *G__file_name(char *, const char *, const char *, const char *);
-char *G__file_name_misc(char *, const char *, const char *, const char *,
-			const char *);
+char *G_file_name(char *, const char *, const char *, const char *);
+char *G_file_name_misc(char *, const char *, const char *, const char *,
+		       const char *);
 
 /* find_cell.c */
 const char *G_find_raster(char *, const char *);

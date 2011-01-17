@@ -259,7 +259,7 @@ static void make_list(
 	return;
     }
 
-    G__file_name(path, element, "", mapset);
+    G_file_name(path, element, "", mapset);
     if (access(path, 0) != 0)
 	return;
 

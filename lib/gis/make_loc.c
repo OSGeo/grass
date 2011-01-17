@@ -68,12 +68,12 @@ int G__make_location(const char *location_name,
 
     /* Write out the PROJ_INFO, and PROJ_UNITS if available. */
     if (proj_info != NULL) {
-	G__file_name(path, "", "PROJ_INFO", "PERMANENT");
+	G_file_name(path, "", "PROJ_INFO", "PERMANENT");
 	G_write_key_value_file(path, proj_info);
     }
 
     if (proj_units != NULL) {
-	G__file_name(path, "", "PROJ_UNITS", "PERMANENT");
+	G_file_name(path, "", "PROJ_UNITS", "PERMANENT");
 	G_write_key_value_file(path, proj_units);
     }
 

@@ -72,7 +72,7 @@ int G_get_ellipsoid_parameters(double *a, double *e2)
 
     proj_keys = NULL;
 
-    G__file_name(ipath, "", PROJECTION_FILE, PERMANENT);
+    G_file_name(ipath, "", PROJECTION_FILE, PERMANENT);
 
     if (access(ipath, 0) != 0) {
 	*a = 6378137.0;

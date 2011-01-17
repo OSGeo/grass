@@ -692,6 +692,6 @@ static int lookup(const char *file, const char *key, char *value, size_t len)
 {
     char path[GPATH_MAX];
 
-    G__file_name(path, "", file, "PERMANENT");
+    G_file_name(path, "", file, "PERMANENT");
     return G_lookup_key_value_from_file(path, key, value, (int) len) == 1;
 }

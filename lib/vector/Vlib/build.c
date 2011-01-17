@@ -251,7 +251,7 @@ int Vect_save_topo(struct Map_info *Map)
 
     /*  write out all the accumulated info to the plus file  */
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G__file_name(fname, buf, GV_TOPO_ELEMENT, Map->mapset);
+    G_file_name(fname, buf, GV_TOPO_ELEMENT, Map->mapset);
     G_debug(1, "Open topo: %s", fname);
     dig_file_init(&fp);
     fp.file = fopen(fname, "w");
@@ -533,7 +533,7 @@ int Vect_save_sidx(struct Map_info *Map)
 
 	/*  write out rtrees to sidx file  */
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-	G__file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
+	G_file_name(fname, buf, GV_SIDX_ELEMENT, Map->mapset);
 	G_debug(1, "Open sidx: %s", fname);
 	dig_file_init(&(plus->spidx_fp));
 	plus->spidx_fp.file = fopen(fname, "w+");

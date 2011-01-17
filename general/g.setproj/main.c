@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 	 * init_unit_table();
         ***/
     sprintf(set_name, "PERMANENT");
-    G__file_name(path, "", PROJECTION_FILE, set_name);
+    G_file_name(path, "", PROJECTION_FILE, set_name);
 
     /* get the output projection parameters, if existing */
     /* Check for ownership here */
@@ -502,7 +502,7 @@ int main(int argc, char *argv[])
 	G_free_key_value(old_proj_keys);
 
   write_units:
-    G__file_name(path, "", UNIT_FILE, set_name);
+    G_file_name(path, "", UNIT_FILE, set_name);
 
     /* if we got this far, the user
      ** already affirmed to write over old info

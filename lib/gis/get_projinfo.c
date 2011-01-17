@@ -27,7 +27,7 @@ struct Key_Value *G_get_projunits(void)
     struct Key_Value *in_units_keys;
     char path[GPATH_MAX];
 
-    G__file_name(path, "", UNIT_FILE, PERMANENT);
+    G_file_name(path, "", UNIT_FILE, PERMANENT);
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
 	    G_warning(_("<%s> file not found for location <%s>"),
@@ -50,7 +50,7 @@ struct Key_Value *G_get_projinfo(void)
     struct Key_Value *in_proj_keys;
     char path[GPATH_MAX];
 
-    G__file_name(path, "", PROJECTION_FILE, PERMANENT);
+    G_file_name(path, "", PROJECTION_FILE, PERMANENT);
     if (access(path, 0) != 0) {
 	if (G_projection() != PROJECTION_XY) {
 	    G_warning(_("<%s> file not found for location <%s>"),

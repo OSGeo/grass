@@ -10,7 +10,7 @@ int empty(char *elem)
     char dir[1024];
     int any;
 
-    G__file_name(dir, elem, "", G_mapset());
+    G_file_name(dir, elem, "", G_mapset());
 
     any = 0;
     if ((dirp = opendir(dir)) != NULL) {

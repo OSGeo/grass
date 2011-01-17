@@ -36,7 +36,7 @@ int check_reclass(const char *name, const char *mapset, int force)
 	if (p)
 	    *p = '\0';
 
-	G__file_name_misc(path, "cell_misc", "reclassed_to", rname, rmapset);
+	G_file_name_misc(path, "cell_misc", "reclassed_to", rname, rmapset);
 
 	if (nrmaps == 1 && !G_strcasecmp(rmaps[0], qname)) {
 

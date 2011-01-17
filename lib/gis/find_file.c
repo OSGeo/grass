@@ -70,9 +70,9 @@ static const char *find_file(
 
 	for (n = 0; (pmapset = G__mapset_name(n)); n++) {
 	    if (misc)
-		G__file_name_misc(path, dir, element, pname, pmapset);
+		G_file_name_misc(path, dir, element, pname, pmapset);
 	    else
-		G__file_name(path, element, pname, pmapset);
+		G_file_name(path, element, pname, pmapset);
 	    if (access(path, 0) == 0) {
 		if (!pselmapset)
 		    pselmapset = pmapset;
@@ -99,9 +99,9 @@ static const char *find_file(
      */
     else {
 	if (misc)
-	    G__file_name_misc(path, dir, element, pname, pmapset);
+	    G_file_name_misc(path, dir, element, pname, pmapset);
 	else
-	    G__file_name(path, element, pname, pmapset);
+	    G_file_name(path, element, pname, pmapset);
 	    
 	if (access(path, 0) == 0)
 	    return G_store(pmapset);

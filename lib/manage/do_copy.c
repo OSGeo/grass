@@ -34,7 +34,7 @@ int do_copy(int n, const char *old, const char *mapset, const char *new)
     else {
 	for (i = 0; i < list[n].nelem; i++) {
 	    G__make_mapset_element(list[n].element[i]);
-	    G__file_name(path, list[n].element[i], old, mapset);
+	    G_file_name(path, list[n].element[i], old, mapset);
 	    if (access(path, 0) != 0) {
 		G_remove(list[n].element[i], new);
 		if (G_verbose() == G_verbose_max())
@@ -42,7 +42,7 @@ int do_copy(int n, const char *old, const char *mapset, const char *new)
 
 		continue;
 	    }
-	    G__file_name(path2, list[n].element[i], new, G_mapset());
+	    G_file_name(path2, list[n].element[i], new, G_mapset());
 	    if (G_recursive_copy(path, path2) == 1) {
 		result = 1;
 	    }

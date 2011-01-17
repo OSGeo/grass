@@ -63,7 +63,7 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     if (windowName == NULL) {
-	G__file_name(path, "", G3D_WINDOW_ELEMENT, G_mapset());
+	G_file_name(path, "", G3D_WINDOW_ELEMENT, G_mapset());
 	return;
     }
 
@@ -76,11 +76,11 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
     }
 
     if (G_name_is_fully_qualified(windowName, xname, xmapset)) {
-	G__file_name(path, G3D_WINDOW_DATABASE, xname, xmapset);
+	G_file_name(path, G3D_WINDOW_DATABASE, xname, xmapset);
 	return;
     }
 
-    G__file_name(path, G3D_WINDOW_DATABASE, windowName, G_mapset());
+    G_file_name(path, G3D_WINDOW_DATABASE, windowName, G_mapset());
 }
 
 /*---------------------------------------------------------------------------*/
@@ -96,7 +96,7 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
    char *p, *slash;
 
    if (windowName == NULL) {
-   G__file_name (path, "", "", G_mapset ());
+   G_file_name (path, "", "", G_mapset ());
    return;
    }
 
@@ -104,9 +104,9 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
 
    if ((*windowName != '/') && (*windowName != '.')) {
    if (G_name_is_fully_qualified (windowName, xname, xmapset)) 
-   G__file_name (path, G3D_WINDOW_DATABASE, xname, xmapset);
+   G_file_name (path, G3D_WINDOW_DATABASE, xname, xmapset);
    else
-   G__file_name (path, G3D_WINDOW_DATABASE, windowName, G_mapset ());
+   G_file_name (path, G3D_WINDOW_DATABASE, windowName, G_mapset ());
    } else
    sprintf (path, windowName);
    p = path;

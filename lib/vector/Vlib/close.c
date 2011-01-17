@@ -79,15 +79,15 @@ int Vect_close(struct Map_info *Map)
 	/* Delete old support files if available */
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 
-	G__file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
+	G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
 	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
 
-	G__file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
+	G_file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
 	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
 
-	G__file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
+	G_file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
 	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
 

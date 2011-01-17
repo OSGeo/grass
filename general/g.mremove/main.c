@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
     for (n = 0; n < nlist; n++) {
 	if (opt[n]->answers) {
-	    G__file_name(path, list[n].element[0], "", mapset);
+	    G_file_name(path, list[n].element[0], "", mapset);
 	    if (access(path, 0) != 0)
 		continue;
 	    rast = !G_strcasecmp(list[n].alias, "rast");

@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 
     /* Get the mapset temp directory */
     G__temp_element(element);
-    G__file_name(tmppath, element, "", mapset = G_mapset());
+    G_file_name(tmppath, element, "", mapset = G_mapset());
 
     /* get user id and current time in seconds */
 #ifdef __MINGW32__

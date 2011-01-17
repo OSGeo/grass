@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	mapset = G_mapset();
 
     G__make_mapset_element(element);
-    G__file_name(path, element, name, mapset);
+    G_file_name(path, element, name, mapset);
 
     fprintf(stdout, "file='%s'\n", path);
     exit(EXIT_SUCCESS);

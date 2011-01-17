@@ -37,7 +37,7 @@ char *G_myname(void)
 
     ok = 0;
 
-    G__file_name(path, "", "MYNAME", "PERMANENT");
+    G_file_name(path, "", "MYNAME", "PERMANENT");
     if ((fd = fopen(path, "r"))) {
 	ok = G_getl(name, sizeof name, fd);
 	fclose(fd);

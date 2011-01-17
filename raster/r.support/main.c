@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
 	G_message(_("Removing null file for [%s]...\n"), raster->answer);
 
 	null_fd = G_open_new_misc("cell_misc", "null", raster->answer);
-	G__file_name_misc(path, "cell_misc", "null", raster->answer, G_mapset());
+	G_file_name_misc(path, "cell_misc", "null", raster->answer, G_mapset());
 	unlink(path);
 	close(null_fd);
 

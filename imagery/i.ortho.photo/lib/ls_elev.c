@@ -30,7 +30,7 @@ int I_list_elev(int full)
 
     any = 0;
     strcpy(buf, "cd ");
-    G__file_name(buf + strlen(buf), element, " ", " ");
+    G_file_name(buf + strlen(buf), element, " ", " ");
     strcat(buf, ";ls");
     strcat(buf, " -C");
     if (ls = popen(buf, "r")) {

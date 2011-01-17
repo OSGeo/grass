@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("Removing null file for raster map <%s>..."),
 			   name);
 	null_fd = G_open_new_misc("cell_misc", "null", name);
-	G__file_name_misc(path, "cell_misc", "null", name, mapset);
+	G_file_name_misc(path, "cell_misc", "null", name, mapset);
 	unlink(path);
 
 	G_done_msg(_("Raster map <%s> modified."), name);
