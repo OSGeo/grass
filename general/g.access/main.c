@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 #endif
 
     /* get the unix file name for the mapset directory */
-    G__file_name(path, "", "", G_mapset());
+    G_file_name(path, "", "", G_mapset());
 
     /* this part is until PERMANENT no longer holds DEFAULT_WIND and MYNAME */
     if (strcmp(G_mapset(), "PERMANENT") == 0)

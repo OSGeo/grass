@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
      /*DEBUG*/ {
 	char path[256];
 
-	G__file_name(path, "", "", iset_name);
+	G_file_name(path, "", "", iset_name);
     }
 
     if (stat >= 0) {		/* yes, we can access the mapset */

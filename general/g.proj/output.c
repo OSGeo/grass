@@ -197,12 +197,12 @@ void create_location(char *location)
 
 	    /* Write out the PROJ_INFO, and PROJ_UNITS if available. */
 	    if (projinfo != NULL) {
-		G__file_name(path, "", "PROJ_INFO", "PERMANENT");
+		G_file_name(path, "", "PROJ_INFO", "PERMANENT");
 		G_write_key_value_file(path, projinfo);
 	    }
 
 	    if (projunits != NULL) {
-		G__file_name(path, "", "PROJ_UNITS", "PERMANENT");
+		G_file_name(path, "", "PROJ_UNITS", "PERMANENT");
 		G_write_key_value_file(path, projunits);
 	    }
 

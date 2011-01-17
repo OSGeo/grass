@@ -86,7 +86,7 @@ int V2_close_ogr(struct Map_info *Map)
     if (strcmp(Map->mapset, G_mapset()) == 0 && Map->support_updated &&
 	Map->plus.built == GV_BUILD_ALL) {
 	sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
-	G__file_name(fname, elem, "fidx", Map->mapset);
+	G_file_name(fname, elem, "fidx", Map->mapset);
 	G_debug(4, "Open fidx: %s", fname);
 	dig_file_init(&fp);
 	fp.file = fopen(fname, "w");

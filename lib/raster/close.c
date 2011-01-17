@@ -227,7 +227,7 @@ static void write_support_files(int fd)
     }
     else {
 	/* remove cell_misc/name/f_quant */
-	G__file_name_misc(path, "cell_misc", QUANT_FILE, fcb->name,
+	G_file_name_misc(path, "cell_misc", QUANT_FILE, fcb->name,
 			  fcb->mapset);
 	remove(path);
     }
@@ -275,13 +275,13 @@ static int close_new_gdal(int fd, int ok)
 
 	/* create path : full null file name */
 	G__make_mapset_element_misc("cell_misc", fcb->name);
-	G__file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
+	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
 			  G_mapset());
 	remove(path);
 
 	/* write 0-length cell file */
 	G__make_mapset_element("cell");
-	G__file_name(path, "cell", fcb->name, fcb->mapset);
+	G_file_name(path, "cell", fcb->name, fcb->mapset);
 	cell_fd = creat(path, 0666);
 	close(cell_fd);
 
@@ -290,16 +290,16 @@ static int close_new_gdal(int fd, int ok)
 
 	    /* write 0-length fcell file */
 	    G__make_mapset_element("fcell");
-	    G__file_name(path, "fcell", fcb->name, fcb->mapset);
+	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
 	    cell_fd = creat(path, 0666);
 	    close(cell_fd);
 	}
 	else {
 	    /* remove fcell/name file */
-	    G__file_name(path, "fcell", fcb->name, fcb->mapset);
+	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
 	    remove(path);
 	    /* remove cell_misc/name/f_format */
-	    G__file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
+	    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
 			      fcb->mapset);
 	    remove(path);
 	}
@@ -366,7 +366,7 @@ static int close_new(int fd, int ok)
 
 	/* create path : full null file name */
 	G__make_mapset_element_misc("cell_misc", fcb->name);
-	G__file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
+	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
 			  G_mapset());
 	remove(path);
 
@@ -399,17 +399,17 @@ static int close_new(int fd, int ok)
 	    /* now write 0-length cell file */
 	    G__make_mapset_element("cell");
 	    cell_fd =
-		creat(G__file_name(path, "cell", fcb->name, fcb->mapset),
+		creat(G_file_name(path, "cell", fcb->name, fcb->mapset),
 		      0666);
 	    close(cell_fd);
 	    CELL_DIR = "fcell";
 	}
 	else {
 	    /* remove fcell/name file */
-	    G__file_name(path, "fcell", fcb->name, fcb->mapset);
+	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
 	    remove(path);
 	    /* remove cell_misc/name/f_format */
-	    G__file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
+	    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
 			      fcb->mapset);
 	    remove(path);
 	    CELL_DIR = "cell";
@@ -436,7 +436,7 @@ static int close_new(int fd, int ok)
      */
     stat = 1;
     if (ok && (fcb->temp_name != NULL)) {
-	G__file_name(path, CELL_DIR, fcb->name, fcb->mapset);
+	G_file_name(path, CELL_DIR, fcb->name, fcb->mapset);
 	remove(path);
 	if (rename(fcb->temp_name, path)) {
 	    G_warning(_("Unable to rename cell file '%s'"),
@@ -489,7 +489,7 @@ static void write_fp_format(int fd)
 	G_set_key_value("lzw_compression_bits", "-1", format_kv);
 
     G__make_mapset_element_misc("cell_misc", fcb->name);
-    G__file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name, fcb->mapset);
+    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name, fcb->mapset);
     G_write_key_value_file(path, format_kv);
 
     G_free_key_value(format_kv);

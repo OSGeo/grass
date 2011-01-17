@@ -232,7 +232,7 @@ int save_table(int t)
     /* Construct our temp name because shapelib doesn't like '.' in name */
     G__temp_element(element);
     sprintf(fname, "%d.dbf", getpid());
-    G__file_name(name, element, fname, G_mapset());
+    G_file_name(name, element, fname, G_mapset());
     G_debug(2, "Write table to tempfile: '%s'", name);
 
     dbf = DBFCreate(name);

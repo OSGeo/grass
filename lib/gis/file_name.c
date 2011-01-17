@@ -30,7 +30,7 @@
 
   \return pointer to <i>path</i>
 */
-char *G__file_name(char *path,
+char *G_file_name(char *path,
 		   const char *element, const char *name, const char *mapset)
 {
     char xname[GNAME_MAX];
@@ -67,7 +67,7 @@ char *G__file_name(char *path,
     return path;
 }
 
-char *G__file_name_misc(char *path,
+char *G_file_name_misc(char *path,
 			const char *dir,
 			const char *element,
 			const char *name, const char *mapset)

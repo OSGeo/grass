@@ -372,7 +372,7 @@ static void read_gdal_options(void)
     else {
 	char path[GPATH_MAX];
 
-	G__file_name(path, p, "", G_mapset());
+	G_file_name(path, p, "", G_mapset());
 	st->opts.dir = G_store(path);
 	if (access(path, 0) != 0)
 	    G__make_mapset_element(p);

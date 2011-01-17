@@ -32,7 +32,7 @@ int I_list_cameras(int full)
 
     any = 0;
     strcpy(buf, "cd ");
-    G__file_name(buf + strlen(buf), element, "", G_mapset());
+    G_file_name(buf + strlen(buf), element, "", G_mapset());
     strcat(buf, ";ls");
     if (!full)
 	strcat(buf, " -C");

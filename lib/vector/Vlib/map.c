@@ -247,7 +247,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     }
     mapset = inmapset;
 
-    /* remove mapset from fully qualified name, confuses G__file_name() */
+    /* remove mapset from fully qualified name, confuses G_file_name() */
     if (G_name_is_fully_qualified(in, xname, xmapset)) {
 	in = xname;
     }
@@ -271,9 +271,9 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     i = 0;
     while (files[i]) {
 	sprintf(buf, "%s/%s", in, files[i]);
-	G__file_name(old_path, GV_DIRECTORY, buf, mapset);
+	G_file_name(old_path, GV_DIRECTORY, buf, mapset);
 	sprintf(buf, "%s/%s", out, files[i]);
-	G__file_name(new_path, GV_DIRECTORY, buf, G_mapset());
+	G_file_name(new_path, GV_DIRECTORY, buf, G_mapset());
 
 	if (access(old_path, F_OK) == 0) {	/* file exists? */
 	    G_debug(2, "copy %s to %s", old_path, new_path);
@@ -285,8 +285,8 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 	i++;
     }
 
-    G__file_name(old_path, GV_DIRECTORY, in, mapset);
-    G__file_name(new_path, GV_DIRECTORY, out, G_mapset());
+    G_file_name(old_path, GV_DIRECTORY, in, mapset);
+    G_file_name(new_path, GV_DIRECTORY, out, G_mapset());
 
     /* Open input */
     Vect_set_open_level(1);

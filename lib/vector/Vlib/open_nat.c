@@ -119,11 +119,11 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     /* if overwrite OK, any existing files have already been deleted by
      * Vect_open_new(): remove this check ? */
     /* check to see if dig_plus file exists and if so, remove it */
-    G__file_name(name_buf, buf, GV_TOPO_ELEMENT, G_mapset());
+    G_file_name(name_buf, buf, GV_TOPO_ELEMENT, G_mapset());
     if (access(name_buf, F_OK) == 0)	/* file exists? */
 	unlink(name_buf);
 
-    G__file_name(name_buf, buf, GV_COOR_ELEMENT, G_mapset());
+    G_file_name(name_buf, buf, GV_COOR_ELEMENT, G_mapset());
 
     Map->head.size = 0;
     Map->head.head_size = GV_COOR_HEAD_SIZE + 4;

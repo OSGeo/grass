@@ -115,7 +115,7 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
      *
      * if lister() routine is given, the ls command must give 1 name
      */
-    G__file_name(path, element, "", mapset);
+    G_file_name(path, element, "", mapset);
     if (access(path, 0) != 0) {
 	fprintf(out, "\n");
 	return count;

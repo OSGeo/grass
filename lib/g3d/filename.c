@@ -10,5 +10,5 @@ void
 G3d_filename(char *path, const char *elementName, const char *mapName,
 	     const char *mapset)
 {
-    G__file_name_misc(path, G3D_DIRECTORY, elementName, mapName, mapset);
+    G_file_name_misc(path, G3D_DIRECTORY, elementName, mapName, mapset);
 }

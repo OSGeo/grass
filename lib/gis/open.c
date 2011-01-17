@@ -72,7 +72,7 @@ static int G__open(const char *element,
 	if (!mapset)
 	    return -1;
 
-	G__file_name(path, element, name, mapset);
+	G_file_name(path, element, name, mapset);
 
 	return open(path, 0);
     }
@@ -91,7 +91,7 @@ static int G__open(const char *element,
 	if (G_legal_filename(name) == -1)
 	    return -1;
 
-	G__file_name(path, element, name, mapset);
+	G_file_name(path, element, name, mapset);
 
 	if (mode == 1 || access(path, 0) != 0) {
 	    G__make_mapset_element(element);

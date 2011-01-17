@@ -72,10 +72,10 @@ int G_rename(const char *element, const char *oldname, const char *newname)
 	return -1;
 
     /* if file does not exist return 0 */
-    if (access(G__file_name(from, element, oldname, mapset), 0) != 0)
+    if (access(G_file_name(from, element, oldname, mapset), 0) != 0)
 	return 0;
 
-    G__file_name(to, element, newname, mapset);
+    G_file_name(to, element, newname, mapset);
 
     /* return result of rename */
     return G_rename_file(from, to) == 0 ? 1 : -1;

@@ -81,7 +81,7 @@ char *G__tempfile(int pid)
     do {
 	int uniq = G_counter_next(&unique);
 	sprintf(name, "%d.%d", pid, uniq);
-	G__file_name(path, element, name, G_mapset());
+	G_file_name(path, element, name, G_mapset());
     }
     while (access(path, F_OK) == 0);
 

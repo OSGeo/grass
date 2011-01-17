@@ -320,7 +320,7 @@ int Rast_put_reclass(const char *name, const struct Reclass *reclass)
     if ((p = strchr(buf2, '@')))
 	*p = 0;
 
-    G__file_name_misc(buf1, "cell_misc", "reclassed_to", reclass->name,
+    G_file_name_misc(buf1, "cell_misc", "reclassed_to", reclass->name,
 		      reclass->mapset);
 
     fd = fopen(buf1, "a+");

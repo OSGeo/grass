@@ -480,15 +480,15 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 
 	sprintf(buf, "%s/%s", GV_DIRECTORY, name);
 
-	G__file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
+	G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
 	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
 
-	G__file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
+	G_file_name(file_path, buf, GV_SIDX_ELEMENT, G_mapset());
 	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
 
-	G__file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
+	G_file_name(file_path, buf, GV_CIDX_ELEMENT, G_mapset());
 	if (access(file_path, F_OK) == 0)	/* file exists? */
 	    unlink(file_path);
     }
@@ -833,7 +833,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
     switch (Map->format) {
     case GV_FORMAT_NATIVE:
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-	G__file_name(path, buf, GV_COOR_ELEMENT, Map->mapset);
+	G_file_name(path, buf, GV_COOR_ELEMENT, Map->mapset);
 	G_debug(1, "get coor info: %s", path);
 	if (0 != stat(path, &stat_buf)) {
 	    G_warning(_("Unable to stat file <%s>"), path);
@@ -943,7 +943,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     Plus = &(Map->plus);
 
     sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G__file_name(file_path, buf, GV_TOPO_ELEMENT, Map->mapset);
+    G_file_name(file_path, buf, GV_TOPO_ELEMENT, Map->mapset);
 
     if (access(file_path, F_OK) != 0)	/* does not exist */
 	return 1;
@@ -1032,7 +1032,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 
     if (mode < 2) {
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-	G__file_name(file_path, buf, GV_SIDX_ELEMENT, Map->mapset);
+	G_file_name(file_path, buf, GV_SIDX_ELEMENT, Map->mapset);
 
 	if (access(file_path, F_OK) != 0)	/* does not exist */
 	    return 1;
