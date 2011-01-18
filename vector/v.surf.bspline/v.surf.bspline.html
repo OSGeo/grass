@@ -80,12 +80,6 @@ the true point value and the estimated from the interpolation for a fixed series
 of <b><i>lambda_i</i></b> values. No vector nor raster output will be created
 when cross-validation is selected. 
 
-<p>
-A raster output map ("<b><i>raster=</i></b>") of more than 2000x2000 (4 mill)
-cells is not allowed. If an output map would exceed this size, an error message
-is generated.
-
-
 <h2>EXAMPLES</h2>
 
 <h3>Basic interpolation</h3>
@@ -143,12 +137,6 @@ SQL function is used, which is not supported by the "<b>dbf</b>" driver. For
 this reason, vector map output "<b><i>output=</i></b>" is not permitted with the
 DBF driver. There are no problems with the raster map output from the DBF
 driver.
-
-<p>
-At this time, sparse vector input ("<b><i>sparse=</i></b>") can only be used
-with interpolation from 3D vector z-coordinates (<a href="http://trac.osgeo.org/grass/ticket/96">trac #96</a>).
-<p>
-
 
 <h2>SEE ALSO</h2>
 
