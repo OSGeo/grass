@@ -1676,7 +1676,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         self.bkw_rmserror = round((sumsq_bkw_err/GCPcount)**0.5,4)
         self.list.ResizeColumns()
 
-    def GetNewExtend(self, region, map = None):
+    def GetNewExtent(self, region, map = None):
 
         coord_file = utils.GetTempfile()
         newreg = { 'n' : 0.0, 's' : 0.0, 'e' : 0.0, 'w' : 0.0,}
@@ -1844,8 +1844,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             self.UpdateActive(self.TgtMapWindow)
 
         # get new N, S, E, W for target
-        newreg = self.GetNewExtend(self.SrcMap.region, 'source')
-        self.AdjustMap(newreg)
+        newreg = self.GetNewExtent(self.SrcMap.region, 'source')
+        if newreg:
+            self.AdjustMap(newreg)
 
     def OnZoomToTarget(self, event):
         """!Set source map window to match extents of target map window
@@ -1857,8 +1858,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             self.UpdateActive(self.SrcMapWindow)
 
         # get new N, S, E, W for target
-        newreg = self.GetNewExtend(self.TgtMap.region, 'target')
-        self.AdjustMap(newreg)
+        newreg = self.GetNewExtent(self.TgtMap.region, 'target')
+        if newreg:
+            self.AdjustMap(newreg)
 
     def OnZoomMenuGCP(self, event):
         """!Popup Zoom menu
@@ -1886,11 +1888,11 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         if self.toolbars['gcpdisp']:
             srcwidth, srcheight = self.SrcMapWindow.GetSize()
             tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
-            tgtwidth = (srcwidth + tgtwidth) / 2
+            srcwidth = (srcwidth + tgtwidth) / 2
             self._mgr.GetPane("target").Hide()
             self._mgr.Update()
-            self._mgr.GetPane("source").BestSize((tgtwidth, srcheight))
-            self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
+            self._mgr.GetPane("source").BestSize((srcwidth, srcheight))
+            self._mgr.GetPane("target").BestSize((srcwidth, tgtheight))
             if self.show_target:
                 self._mgr.GetPane("target").Show()
             self._mgr.Update()
@@ -2739,18 +2741,18 @@ class GrSettingsDialog(wx.Dialog):
                 if self.parent.show_target == False:
                     self.parent.show_target = True
                     self.parent._mgr.GetPane("target").Show()
+                    self.parent._mgr.Update()
                     self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = True)
                     self.parent.activemap.Enable()
                     self.parent.TgtMapWindow.ZoomToMap(layers = self.parent.TgtMap.GetListOfLayers())
-                    self.parent._mgr.Update()
             else: # tgt_map == ''
                 if self.parent.show_target == True:
                     self.parent.show_target = False
                     self.parent._mgr.GetPane("target").Hide()
+                    self.parent._mgr.Update()
                     self.parent.activemap.SetSelection(0)
                     self.parent.activemap.Enable(False)
                     self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = False)
-                    self.parent._mgr.Update()
 
         self.parent.UpdateColours(srcrender, srcrenderVector, tgtrender, tgtrenderVector)
 

@@ -23,6 +23,7 @@ import glob
 import math
 import tempfile
 import copy
+import platform
 
 import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
@@ -296,17 +297,18 @@ class MapFrame(wx.Frame):
 
         srcwidth, srcheight = self.SrcMapWindow.GetSize()
         tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
-        tgtwidth = (srcwidth + tgtwidth) / 2
+        srcwidth = (srcwidth + tgtwidth) / 2
         self._mgr.GetPane("target").Hide()
         self._mgr.Update()
-        self._mgr.GetPane("source").BestSize((tgtwidth, tgtheight))
-        self._mgr.GetPane("target").BestSize((tgtwidth, tgtheight))
+        self._mgr.GetPane("source").BestSize((srcwidth, srcheight))
+        self._mgr.GetPane("target").BestSize((srcwidth, srcheight))
         if self.show_target:
             self._mgr.GetPane("target").Show()
         else:
             self.activemap.Enable(False)
-        # called by GCPWizard
-        #self._mgr.Update()
+        # needed by Mac OS, does not harm on Linux, breaks display on Windows
+        if platform.system() != 'Windows':
+            self._mgr.Update()
 
         #
         # Init print module and classes
@@ -321,20 +323,8 @@ class MapFrame(wx.Frame):
         # set active map
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
-        #
-        # Init zoom history for TgtMapWindow
-        #
-        self.TgtMapWindow.ZoomHistory(self.Map.region['n'],
-                                   self.Map.region['s'],
-                                   self.Map.region['e'],
-                                   self.Map.region['w'])
-        #
-        # Init zoom history
-        #
-        self.MapWindow.ZoomHistory(self.Map.region['n'],
-                                   self.Map.region['s'],
-                                   self.Map.region['e'],
-                                   self.Map.region['w'])
+        
+        # do not init zoom history here, that happens when zooming to map(s)
 
         #
         # Re-use dialogs
@@ -456,8 +446,8 @@ class MapFrame(wx.Frame):
             self.Map.DeleteLayer(layer)
 
         self.SrcMapWindow.UpdateMap(render=True)
-        self.TgtMapWindow.UpdateMap(render=True)
-        self._mgr.Update()
+        if self.show_target:
+            self.TgtMapWindow.UpdateMap(render=True)
         
         # update statusbar
         self.StatusbarUpdate()
