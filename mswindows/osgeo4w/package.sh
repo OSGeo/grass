@@ -39,7 +39,7 @@ echo $(date): START > $LOG
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
-	if [ -e include/Make/Grass.make ] ; then
+	if [ -e include/Make/Platform.make ] ; then
 	    report "distclean"
 	    make distclean >>$LOG 2>&1
 	fi
@@ -67,9 +67,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-regex \
 		--with-nls \
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
-		--with-odbc \
 	        --without-cairo \
-	        --enable-largefile
+	        --enable-largefile \
 		--with-odbc >>$LOG 2>&1
 		
 	touch mswindows/osgeo4w/configure-stamp
