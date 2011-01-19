@@ -260,23 +260,18 @@
  * Defines needed to get large file support - from cdrtools-2.01
  */
 
-/* MINGW32 LFS deactivated */
-/* to activate,
- * - existing G_stat() must be used instead of stat()
- * - existing G_stat() and G_lstat() must be updated
- * - new function G_fstat() must be written and used instead of fstat()
- *   (if fstat() is used at all)
- * - new function G_lseek() must be written and used instead of lseek()
- *   (eqivalent to G_fseek(); write G_ltell()?)
- * - remove the following line and update below */
-#if 0
+/* MINGW32 LFS */
 
+/* define if we have LFS */
 #undef	HAVE_LARGEFILES
 
 #ifdef	HAVE_LARGEFILES		/* If we have working largefiles at all	   */
 				/* This is not defined with glibc-2.1.3	   */
 
-#undef _FILE_OFFSET_BITS	/* # of bits in off_t if settable	   */
+#if 0
+
+/* what to do with these four? configure comments these out */
+
 #undef _LARGEFILE_SOURCE	/* To make ftello() visible (HP-UX 10.20). */
 #undef _LARGE_FILES		/* Large file defined on AIX-style hosts.  */
 #undef _XOPEN_SOURCE		/* To make ftello() visible (glibc 2.1.3). */
@@ -285,25 +280,26 @@
 				/* XXX is bad anyway. If we define	   */
 				/* XXX _XOPEN_SOURCE we will loose caddr_t */
 
-#undef HAVE_FSEEKO		/* Do we need this? If HAVE_LARGEFILES is  */
-				/* defined, we have fseeko()		   */
+#endif
 
 #if defined(__MINGW32__) && defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64
 
 /* add/remove as needed */
-/* use own off_t definition */
-#define _OFF_T_
-typedef off_t off64_t
+/* redefine off_t */
+#include <sys/types.h>
+#define off_t off64_t
 /* fseeko and ftello are safe because not defined by MINGW */
 #define HAVE_FSEEKO
 #define fseeko fseeko64
 #define ftello ftello64
-/* lseek is not safe, defined in io.h */
-#define _g_lseek lseek64
+/* redefine lseek */
+#include <unistd.h>
+#define lseek lseek64
+/* redefine stat and fstat */
 /* use _stati64 compatible with MSVCRT < 6.1 */
-/* stat and fstat are not safe, defined in stat.h */
-#define _g_stat _stati64
-#define _g_fstat _fstati64
+#include <sys/stat.h>
+#define stat _stati64
+#define fstat _fstati64
 #define _STRUCT_STAT_
 typedef struct _stati64 STRUCT_STAT;
 
@@ -311,7 +307,6 @@ typedef struct _stati64 STRUCT_STAT;
 
 #endif	/* HAVE_LARGEFILES */
 
-#endif /* 0 */
 
 #ifndef _STRUCT_STAT_
 #define _STRUCT_STAT_
