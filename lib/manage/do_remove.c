@@ -1,15 +1,35 @@
+/*!
+  \file lib/manage/do_remove.c
+  
+  \brief Manage Library - Remove elements
+  
+  (C) 2001-2011 by the GRASS Development Team
+ 
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 #include <grass/G3d.h>
-#include "list.h"
 
-/* 
- *  returns 0 - success
- *          1 - error
- */
-int do_remove(int n, const char *old)
+#include "manage_local_proto.h"
+
+/*!
+  \brief Remove elements from data base
+
+  \param n element id
+  \param old name of element to be removed
+
+  \return 0 on success
+  \return 1 on error
+*/
+int M_do_remove(int n, const char *old)
 {
     int i, ret;
 
@@ -23,7 +43,7 @@ int do_remove(int n, const char *old)
 
     /* len = get_description_len(n); */
 
-    hold_signals(1);
+    M__hold_signals(1);
 
     if (G_name_is_fully_qualified(old, xname, xmapset)) {
 	if (strcmp(xmapset, G_mapset()) != 0)
@@ -42,7 +62,7 @@ int do_remove(int n, const char *old)
 		removed = 1;
 	    }
 	    else {
-		G_warning(_("couldn't be removed"));
+		G_warning(_("Unable to delete vector map"));
 		result = 1;
 	    }
 	}
@@ -62,16 +82,14 @@ int do_remove(int n, const char *old)
 
 	    switch (G_remove(list[n].element[i], old)) {
 	    case -1:
-		G_warning(_("%s: couldn't be removed"), list[n].desc[i]);
+		G_warning(_("Unable to remove %s element"), list[n].desc[i]);
 		result = 1;
 		break;
 	    case 0:
-		if (G_verbose() == G_verbose_max())
-		    G_message(_("%s: missing"), list[n].desc[i]);
+		G_verbose_message(_("%s is missing"), list[n].desc[i]);
 		break;
 	    case 1:
-		if (G_verbose() == G_verbose_max())
-		    G_message(_("%s: removed"), list[n].desc[i]);
+		G_verbose_message(_("%s removed"), list[n].desc[i]);
 		removed = 1;
 		break;
 	    }
@@ -84,22 +102,20 @@ int do_remove(int n, const char *old)
 	sprintf(colr2, "colr2/%s", G_mapset());
 	switch (G_remove(colr2, old)) {
 	case -1:
-	    G_warning("%s: %s", colr2, _("couldn't be removed"));
+	    G_warning(_("Unable to remove %s"), colr2);
 	    result = 1;
 	    break;
 	case 0:
-	    if (G_verbose() == G_verbose_max())
-		G_message(_("%s: missing"), colr2);
+	    G_verbose_message(_("%s is missing"), colr2);
 	    break;
 	case 1:
-	    if (G_verbose() == G_verbose_max())
-		G_message(_("%s: removed"), colr2);
+	    G_verbose_message(_("%s removed"), colr2);
 	    removed = 1;
 	    break;
 	}
     }
 
-    hold_signals(0);
+    M__hold_signals(0);
 
     if (!removed)
 	G_warning(_("<%s> nothing removed"), old);

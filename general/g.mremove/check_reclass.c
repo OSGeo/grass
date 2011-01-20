@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
-#include <grass/list.h>
+#include <grass/manage.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
@@ -15,11 +15,11 @@ int check_reclass(const char *name, const char *mapset, int force)
 	for (; *rmaps; rmaps++) {
 	    /* force remove */
 	    if (force)
-		G_warning(_("[%s@%s] is a base map for [%s]. Remove forced."),
+		G_warning(_("Raster map <%s@%s> is a base map for <%s>. Remove forced."),
 			  name, mapset, *rmaps);
 	    else
 		G_warning(_
-			  ("[%s@%s] is a base map. Remove reclassed map first: %s"),
+			  ("Raster map <%s@%s> is a base map. Remove reclassed map first: %s"),
 			  name, mapset, *rmaps);
 	}
 

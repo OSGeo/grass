@@ -18,7 +18,7 @@ DATAFILES := $(patsubst %,$(ETC)/%,$(DATASRC))
 COLORSRC := $(filter-out colors/CVS,$(wildcard colors/[abcdefghijklmnopqrstuvwxyz]*))
 COLORFILES := $(patsubst colors/%,$(ETC)/colors/%,$(COLORSRC))
 
-default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/element_list
+default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc 
 
 ifdef MINGW
 $(FMODE_OBJ): $(OBJDIR)/fmode.o

@@ -4,8 +4,14 @@ LIB = MANAGE
 DEPENDENCIES = $(GISDEP) $(VECTDEP) $(G3DDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
 
-default: lib $(ARCH_INCDIR)/list.h
+default: lib $(ETC)/element_list
+
+$(ETC)/%: %
+	$(INSTALL_DATA) $< $@
+
+DOXNAME = manage

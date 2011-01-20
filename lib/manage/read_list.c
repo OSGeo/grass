@@ -1,13 +1,36 @@
+/*!
+  \file lib/manage/read_list.c
+  
+  \brief Manage Library - Read list of elements
+  
+  (C) 2001-2011 by the GRASS Development Team
+ 
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "list.h"
 
-/*******************************************************************
-read the element list file
+#include <grass/gis.h>
+#include <grass/glocale.h>
 
-   format is:
+#include "manage_local_proto.h"
 
+int nlist;
+struct list *list;
+
+static void format_error(char *, int, char *);
+
+/*!
+  \brief Read list of elements
+
+  Format:
+
+  \code
    # ... comments
    main element:alias:description:menu text
       sub element:description
@@ -15,14 +38,14 @@ read the element list file
 	  .
 	  .
 	  .
-******************************************************************/
+  \endcode
 
-int nlist;
-struct list *list;
+  \param chech_if_empty TRUE for check if element is empty
 
-static int format_error(char *, int, char *);
-
-int read_list(int check_if_empty)
+  \return 0
+  \return 1
+*/
+int M_read_list(int check_if_empty, int *num)
 {
     FILE *fd;
     char element_list[GPATH_MAX];
@@ -47,7 +70,7 @@ int read_list(int check_if_empty)
     fd = fopen(element_list, "r");
 
     if (!fd)
-	G_fatal_error("can't open database element list <%s>", element_list);
+	G_fatal_error(_("Unable to open data base element list '%s'"), element_list);
 
     line = 0;
     while (G_getl(buf, sizeof(buf), fd)) {
@@ -65,7 +88,7 @@ int read_list(int check_if_empty)
 
 	    G_strip(elem);
 	    G_strip(desc);
-	    add_element(elem, desc);
+	    M__add_element(elem, desc);
 	}
 	else {			/* main element */
 
@@ -89,24 +112,25 @@ int read_list(int check_if_empty)
 	    list[nlist].element = 0;
 	    list[nlist].desc = 0;
 	    list[nlist].status = 0;
-	    if (!check_if_empty || !empty(elem)) {
+	    if (!check_if_empty || !M__empty(elem)) {
 		list[nlist].status = 1;
 		any = 1;
 	    }
 	    nlist++;
-	    add_element(elem, desc);
+	    M__add_element(elem, desc);
 	}
     }
+
+    if (num)
+	*num = nlist;
 
     fclose(fd);
 
     return any;
 }
 
-static int format_error(char *element_list, int line, char *buf)
+void format_error(char *element_list, int line, char *buf)
 {
-    G_fatal_error(_("Format error: <%s>\nLine: %d\n%s"), element_list, line,
+    G_fatal_error(_("Format error: file ('%s') line (%d) - %s"), element_list, line,
 		  buf);
-
-    return 1;
 }

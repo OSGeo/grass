@@ -7,12 +7,13 @@
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
+ *               Martin landa <landa.martin gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 #include <string.h>
@@ -20,6 +21,8 @@
 #include <stdio.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+#include "local_proto.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +32,7 @@ int main(int argc, char *argv[])
     struct Option *elem_opt;
     struct Option *mapset_opt;
     struct Option *file_opt;
-    struct Flag *n_flag;
+    struct Flag *n_flag, *l_flag;
 
     module = G_define_module();
     G_add_keyword(_("general"));
@@ -65,8 +68,18 @@ int main(int argc, char *argv[])
     n_flag->key = 'n';
     n_flag->description = _("Don't add quotes");
 
+    l_flag = G_define_flag();
+    l_flag->key = 'l';
+    l_flag->description = _("List available elements and exit");
+    l_flag->suppress_required = YES;
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (l_flag->answer) {
+	list_elements();
+	return EXIT_SUCCESS;
+    }
 
     search_mapset = mapset_opt->answer;
     if (!search_mapset) {

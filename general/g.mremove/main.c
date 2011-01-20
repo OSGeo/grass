@@ -29,7 +29,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
-#include <grass/list.h>
+#include <grass/manage.h>
 #include <grass/glocale.h>
 
 /* check_reclass.c */
@@ -48,9 +48,9 @@ int main(int argc, char *argv[])
     } flag;
     const char *mapset, *location_path;
     char *name, path[GPATH_MAX], **files;
-    char *buf, *buf2;
+    char *alias;
     int num_files, rast, result = EXIT_SUCCESS;
-    int i, j, n;
+    int i, j, n, nlist;
     void *filter;
 
     G_gisinit(argv[0]);
@@ -58,6 +58,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
+    G_add_keyword(_("remove"));
+    G_add_keyword(_("multi"));
     module->description =
 	_("Removes data base element files from "
 	  "the user's current mapset.");
@@ -81,22 +83,12 @@ int main(int argc, char *argv[])
     flag.basemap->key = 'b';
     flag.basemap->description = _("Remove base maps");
 
-    read_list(0);
+    M_read_list(FALSE, &nlist);
 
     opt = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
 
     for (n = 0; n < nlist; n++) {
-	o = opt[n] = G_define_option();
-	o->key = list[n].alias;
-	o->type = TYPE_STRING;
-	o->required = NO;
-	o->multiple = YES;
-	buf = G_malloc(64);
-	sprintf(buf, "old,%s,%s", list[n].mainelem, list[n].maindesc);
-	o->gisprompt = buf;
-	buf2 = G_malloc(64);
-	sprintf(buf2, _("%s file(s) to be removed"), list[n].alias);
-	o->description = buf2;
+	o = opt[n] = M_define_option(n, _("removed"), YES);
     }
 
     if (G_parser(argc, argv))
@@ -118,11 +110,12 @@ int main(int argc, char *argv[])
     mapset = G_mapset();
 
     for (n = 0; n < nlist; n++) {
+	alias = M_get_list(n)->alias;
 	if (opt[n]->answers) {
-	    G_file_name(path, list[n].element[0], "", mapset);
+	    G_file_name(path, M_get_list(n)->element[0], "", mapset);
 	    if (access(path, 0) != 0)
 		continue;
-	    rast = !G_strcasecmp(list[n].alias, "rast");
+	    rast = !G_strcasecmp(alias, "rast");
 	    for (i = 0; (name = opt[n]->answers[i]); i++) {
 		if (!flag.regex->answer && !flag.extended->answer)
 		    filter = G_ls_glob_filter(name, 0);
@@ -139,7 +132,7 @@ int main(int argc, char *argv[])
 
 		for (j = 0; j < num_files; j++) {
 		    if (!flag.force->answer) {
-			fprintf(stdout, "%s/%s@%s\n", list[n].alias, files[j],
+			fprintf(stdout, "%s/%s@%s\n", alias, files[j],
 				mapset);
 			continue;
 		    }
@@ -147,7 +140,7 @@ int main(int argc, char *argv[])
 			check_reclass(files[j], mapset, flag.basemap->answer))
 			continue;
 
-		    if (do_remove(n, (char *)files[j]) == 1)
+		    if (M_do_remove(n, (char *)files[j]) == 1)
 			result = EXIT_FAILURE;
 		}
 	    }

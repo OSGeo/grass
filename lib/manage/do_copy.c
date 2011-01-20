@@ -1,15 +1,38 @@
+/*!
+  \file lib/manage/do_copy.c
+  
+  \brief Manage Library - Copy element
+  
+  (C) 2001-2011 by the GRASS Development Team
+ 
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <grass/gis.h>
-#include <grass/vector.h>
-#include "list.h"
 
-/*
- *  returns 0 - success
- *          1 - error
- */
-int do_copy(int n, const char *old, const char *mapset, const char *new)
+#include <grass/gis.h>
+#include <grass/glocale.h>
+#include <grass/vector.h>
+
+#include "manage_local_proto.h"
+
+/*!
+  \brief Copy element
+
+  \param n   element id
+  \param old source name
+  \param mapset name of source mapset
+  \param new destination name
+
+  \return 0 on success
+  \return 1 on error
+*/
+int M_do_copy(int n, const char *old, const char *mapset, const char *new)
 {
     int i, ret, len;
     char path[GPATH_MAX], path2[GPATH_MAX];
@@ -20,13 +43,13 @@ int do_copy(int n, const char *old, const char *mapset, const char *new)
     G_message(_("Copy %s <%s> to current mapset as <%s>"),
 	      list[n].maindesc, G_fully_qualified_name(old, mapset), new);
 
-    len = get_description_len(n);
+    len = M__get_description_len(n);
 
-    hold_signals(1);
+    M__hold_signals(1);
     if (G_strcasecmp(list[n].alias, "vect") == 0) {
 	ret = Vect_copy(old, mapset, new);
 	if (ret == -1) {
-	    G_warning("Cannot copy <%s> to current mapset as <%s>",
+	    G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
 		      G_fully_qualified_name(old, mapset), new);
 	    result = 1;
 	}
@@ -37,8 +60,7 @@ int do_copy(int n, const char *old, const char *mapset, const char *new)
 	    G_file_name(path, list[n].element[i], old, mapset);
 	    if (access(path, 0) != 0) {
 		G_remove(list[n].element[i], new);
-		if (G_verbose() == G_verbose_max())
-		    G_message(_("%s: missing"), list[n].desc[i]);
+		G_verbose_message(_("%s is missing"), list[n].desc[i]);
 
 		continue;
 	    }
@@ -47,8 +69,7 @@ int do_copy(int n, const char *old, const char *mapset, const char *new)
 		result = 1;
 	    }
 	    else {
-		if (G_verbose() == G_verbose_max())
-		    G_message(_("%s: copied"), list[n].desc[i]);
+		G_verbose_message(_("%s copied"), list[n].desc[i]);
 	    }
 	}
     }
@@ -60,7 +81,7 @@ int do_copy(int n, const char *old, const char *mapset, const char *new)
 	sprintf(colr2, "colr2/%s", G_mapset());
 	G_remove(colr2, new);
     }
-    hold_signals(0);
+    M__hold_signals(0);
 
     return result;
 }

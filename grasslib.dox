@@ -92,6 +92,7 @@ undocumented.</i>
  - imagery:	\ref imagerylib 
  - init:	\ref init (GRASS initialization code + scripts)
  - linkm:	Linked list memory manager - \ref linkm (obsolete?)
+ - manage:      \ref managelib
  - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
  - pngdriver:   PNG display driver library - \ref pngdriver
  - proj:	\ref projlib (wrapper to PROJ4 projection library)
