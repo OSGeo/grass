@@ -1,14 +1,8 @@
 #!/usr/bin/python
 
 """
-Sample Python script to access vector dada using GRASS Ctypes interface
-
-Run this before starting python to append module search path:
-   export PYTHONPATH=$PYTHONPATH:/usr/local/grass-7.0.svn/etc/python
-check with "import sys; sys.path"
-
-or
-   sys.path.append("/usr/local/grass-7.0.svn/etc/python")
+Sample Python script to access vector data using GRASS Ctypes
+interface
 """
 
 import os, sys
@@ -22,7 +16,7 @@ if not os.environ.has_key("GISBASE"):
 if len(sys.argv) == 2:
   input = sys.argv[1]
 else:
-  input = raw_input("Vector Map Name? ")
+  input = raw_input("Name of vector map? ")
 
 # initialize GRASS library
 G_gisinit('')
@@ -33,19 +27,19 @@ if not mapset:
     sys.exit("Vector map <%s> not found" % input)
 
 # define map structure
-map = Map_info()
+map_info = pointer(Map_info())
 
 # define open level (level 2: topology)
 Vect_set_open_level(2)
 
 # open existing vector map
-Vect_open_old(byref(map), input, mapset)
+Vect_open_old(map_info, input, mapset)
 
 # query
-print 'Vector map     :', Vect_get_full_name(byref(map))
-print 'Vector is 3D   :', Vect_is_3d(byref(map))
-print 'Vector DB links:', Vect_get_num_dblinks(byref(map))
-print 'Map Scale:  1  :', Vect_get_scale(byref(map))
+print 'Vector map        :', Vect_get_full_name(map_info)
+print 'Vector is 3D      :', Vect_is_3d(map_info)
+print 'Vector DB links   :', Vect_get_num_dblinks(map_info)
+print 'Map Scale         : 1:%d' % Vect_get_scale(map_info)
 
 # vector box tests
 box = bound_box()
@@ -53,14 +47,14 @@ c_easting1  = 599505.0
 c_northing  = 4921010.0
 c_easting2  = 4599505.0
 
-Vect_get_map_box(byref(map), byref(box))
-print 'Position 1 in box? ', Vect_point_in_box(c_easting1, c_northing, 0, byref(box))
-print 'Position 2 in box? ', Vect_point_in_box(c_easting2, c_northing, 0, byref(box))
+Vect_get_map_box(map_info, byref(box))
+print 'Position 1 in box ?', Vect_point_in_box(c_easting1, c_northing, 0, byref(box))
+print 'Position 2 in box ?', Vect_point_in_box(c_easting2, c_northing, 0, byref(box))
 
-print 'Number of features:', Vect_get_num_lines(byref(map))
-print 'Number of points  :', Vect_get_num_primitives(byref(map), GV_POINT)
-print 'Number of lines   :', Vect_get_num_primitives(byref(map), GV_LINE)
-print 'Number of areas   :', Vect_get_num_areas(byref(map))
+print 'Number of features:', Vect_get_num_lines(map_info)
+print 'Number of points  :', Vect_get_num_primitives(map_info, GV_POINT)
+print 'Number of lines   :', Vect_get_num_primitives(map_info, GV_LINE)
+print 'Number of areas   :', Vect_get_num_areas(map_info)
 
 # close map
-Vect_close(byref(map))
+Vect_close(map_info)
