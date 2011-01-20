@@ -802,6 +802,8 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
         # polynomial order transformation for georectification
         self.gr_order = 1 
+        # interpolation method for georectification
+        self.gr_method = 'nearest'
         # region clipping for georectified map
         self.clip_to_region = False
         # number of GCPs selected to be used for georectification (checked)
@@ -1348,6 +1350,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                                   group = self.xygroup,
                                   extension = self.extension,
                                   order = self.gr_order,
+                                  method=self.gr_method,
                                   flags = flags)
 
             busy.Destroy()
@@ -2358,6 +2361,14 @@ class GrSettingsDialog(wx.Dialog):
         self.sdfactor = 0
 
         self.symbol = {}
+        
+        self.methods = ["nearest",
+                        "bilinear",
+                        "bilinear_f",
+                        "cubic", 
+                        "cubic_f",
+                        "lanczos",
+                        "lanczos_f"]
 
         # notebook
         notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
@@ -2592,13 +2603,25 @@ class GrSettingsDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         # transformation order
-        self.rb_grmethod = wx.RadioBox(parent=panel, id=wx.ID_ANY,
-                                       label=" %s " % _("Select rectification method for rasters"),
+        self.rb_grorder = wx.RadioBox(parent=panel, id=wx.ID_ANY,
+                                       label=" %s " % _("Select rectification order"),
                                        choices=[_('1st order'), _('2nd order'), _('3rd order')],
                                        majorDimension=wx.RA_SPECIFY_COLS)
-        sizer.Add(item=self.rb_grmethod, proportion=0,
+        sizer.Add(item=self.rb_grorder, proportion=0,
                        flag=wx.EXPAND | wx.ALL, border=5)
-        self.rb_grmethod.SetSelection(self.parent.gr_order - 1)
+        self.rb_grorder.SetSelection(self.parent.gr_order - 1)
+
+        # interpolation method
+        gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+        gridSizer.AddGrowableCol(1)
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY, label=_('Select interpolation method:')),
+                       pos=(0,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        self.grmethod = wx.Choice(parent=panel, id=wx.ID_ANY,
+                                  choices = self.methods)
+        gridSizer.Add(item=self.grmethod, pos=(0,1),
+                       flag=wx.ALIGN_RIGHT, border=5)
+        self.grmethod.SetStringSelection(self.parent.gr_method)
+        sizer.Add(item=gridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
         # clip to region
         self.check = wx.CheckBox(parent=panel, id=wx.ID_ANY,
@@ -2617,7 +2640,8 @@ class GrSettingsDialog(wx.Dialog):
 
         # bindings
         self.ext_txt.Bind(wx.EVT_TEXT, self.OnExtension)
-        self.Bind(wx.EVT_RADIOBOX, self.parent.OnGROrder, self.rb_grmethod)
+        self.Bind(wx.EVT_RADIOBOX, self.parent.OnGROrder, self.rb_grorder)
+        self.Bind(wx.EVT_CHOICE, self.OnMethod, self.grmethod)
         self.Bind(wx.EVT_CHECKBOX, self.OnClipRegion, self.check)
 
         panel.SetSizer(sizer)
@@ -2667,6 +2691,9 @@ class GrSettingsDialog(wx.Dialog):
 
         if not tmp_map == tgt_map:
             self.new_tgt_map = tmp_map
+
+    def OnMethod(self, event):
+        self.parent.gr_method = self.methods[event.GetSelection()]
 
     def OnClipRegion(self, event):
         self.parent.clip_to_region = event.IsChecked()
