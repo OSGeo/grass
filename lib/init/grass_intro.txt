@@ -1,5 +1,5 @@
 
-WELCOME TO GRASS              Version GRASS_VERSION_NUMBER         GRASS_VERSION_DATE
+WELCOME TO GRASS GRASS_VERSION_NUMBER (GRASS_VERSION_DATE)
 
    1) Have at your side all available GRASS tutorials
 
@@ -9,5 +9,5 @@ WELCOME TO GRASS              Version GRASS_VERSION_NUMBER         GRASS_VERSION
       - Current catalog of available computer maps
 
    3) Check the GRASS webpages for feedback mailinglists and more:
-      http://www.grass-gis.org
       http://grass.osgeo.org
+      http://www.grass-gis.org
