@@ -14,10 +14,8 @@
 *   	    	for details.
 *
 *****************************************************************************/
-#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 
 /*! 

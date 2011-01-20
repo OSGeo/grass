@@ -14,7 +14,6 @@
  * \date 2001-2008
  */
 
-#include <grass/config.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <grass/vector.h>

@@ -15,7 +15,6 @@
  *               for details.
  *
  *****************************************************************************/
-#include <grass/config.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>

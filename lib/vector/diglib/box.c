@@ -14,7 +14,6 @@
  *              for details.
  *
  *****************************************************************************/
-#include <grass/config.h>
 #include <stdlib.h>
 #include <grass/vector.h>
 
