@@ -14,11 +14,9 @@
 *   	    	for details.
 *
 *****************************************************************************/
-#include <grass/config.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <string.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 
 int dig_write_cidx_head(struct gvfile * fp, struct Plus_head *plus)

@@ -22,7 +22,6 @@
  *    returns -  (float)(-9)  if only 1 point or more points but identical
  */
 
-#include <grass/config.h>
 #include <stdio.h>
 #include <math.h>
 #include <grass/vector.h>

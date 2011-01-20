@@ -76,7 +76,6 @@
    \author Update to GRASS 5.7 Radim Blazek
 */
 
-#include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/vector.h>

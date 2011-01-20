@@ -14,8 +14,6 @@
  * \date 2001
  */
 
-#include <grass/config.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 
 /*!

@@ -14,12 +14,10 @@
  * \date 2001-2006
  */
 
-#include <grass/config.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 

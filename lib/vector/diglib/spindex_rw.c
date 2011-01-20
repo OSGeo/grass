@@ -15,12 +15,10 @@
    \author Update to GRASS 7 Markus Metz
  */
 
-#include <grass/config.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 

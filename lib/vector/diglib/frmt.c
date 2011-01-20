@@ -14,11 +14,9 @@
  *              for details.
  *
  *****************************************************************************/
-#include <grass/config.h>
 #include <string.h>
 #include <stdio.h>
 #include <grass/vector.h>
-#include <grass/gis.h>
 
 /*!
   \brief Read external vector format file

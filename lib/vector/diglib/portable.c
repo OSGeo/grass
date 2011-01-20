@@ -14,10 +14,8 @@
    \author Update to GRASS 5.7 Radim Blazek
 */
 
-#include <grass/config.h>
 #include <sys/types.h>
 #include <string.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 

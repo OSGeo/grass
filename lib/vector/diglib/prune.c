@@ -67,7 +67,6 @@
  * Value returned : - the final number of points in the pruned set.
  */
 
-#include <grass/config.h>
 #include <stdio.h>
 #include <grass/vector.h>
 #include <math.h>
