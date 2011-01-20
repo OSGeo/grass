@@ -40,7 +40,7 @@ static void format_error(char *, int, char *);
 	  .
   \endcode
 
-  \param chech_if_empty TRUE for check if element is empty
+  \param check_if_empty TRUE for check if element is empty
 
   \return 0
   \return 1
