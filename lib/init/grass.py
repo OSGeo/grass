@@ -118,7 +118,7 @@ def gfile(*args):
 help_text = r"""
 %s:
   $CMD_NAME [-h | -help | --help] [-v | --version] [-c]
-	  [-text | -gui | -wxpython | -wx]
+	  [-text | -gui]
 	  [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 
 %s:
@@ -128,8 +128,6 @@ help_text = r"""
   -text                          %s
                                    %s
   -gui                           %s
-                                   %s
-  -wxpython or -wx               %s
                                    %s
 
 %s:
@@ -153,9 +151,7 @@ help_text = r"""
        _("create given mapset if it doesn't exist"),
        _("use text based interface"),
        _("and set as default"),
-       _("use graphical user interface ($DEFAULT_GUI by default)"),
-       _("and set as default"),
-       _("use wxPython based graphical user interface"),
+       _("use $DEFAULT_GUI graphical user interface"),
        _("and set as default"),
        _("Parameters"),
        _("initial database (path to GIS data)"),
@@ -163,7 +159,7 @@ help_text = r"""
        _("initial mapset"),
        _("fully qualified initial mapset directory"),
        _("Environment variables relevant for startup"),
-       _("select GUI (text, gui, wxpython)"),
+       _("select GUI (text, gui)"),
        _("set wish shell name to override 'wish'"),
        _("set html web browser for help pages"),
        _("set additional path(s) to local GRASS modules"),
@@ -244,9 +240,7 @@ def read_gui():
 
     if grass_gui == 'gui':
 	grass_gui = default_gui
-    elif grass_gui == 'wx':
-	grass_gui = 'wxpython'
-
+    
     # FIXME oldtcltk, gis.m, d.m no longer exist
     if grass_gui in ['d.m', 'gis.m', 'oldtcltk', 'tcltk']:
 	grass_gui = default_gui
@@ -829,7 +823,7 @@ def parse_cmdline():
     for i in sys.argv[1:]:
 	# Check if the user asked for the version
 	if i in ["-v","--version"]:
-	    message(readfile(gfile("etc", "license")))
+	    message('\n' + readfile(gfile("etc", "license")))
 	    sys.exit()
 	# Check if the user asked for help
 	elif i in ["help","-h","-help","--help"]:
