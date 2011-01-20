@@ -18,9 +18,7 @@
    \author Various updates by Martin Landa <landa.martin gmail.com>, 2009
 */
 
-#include <grass/config.h>
 #include <string.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 
 /*!

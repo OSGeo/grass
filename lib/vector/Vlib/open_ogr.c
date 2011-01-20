@@ -15,13 +15,11 @@
    \author Update to GRASS 7.0 Martin Landa <landa.martin gmail.com> (2009)
  */
 
-#include <grass/config.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>

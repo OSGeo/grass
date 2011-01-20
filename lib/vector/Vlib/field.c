@@ -19,12 +19,10 @@
   \author Various updates by Martin Landa <landa.martin gmail.com>, 2009
 */
 
-#include <grass/config.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <grass/glocale.h>
-#include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 

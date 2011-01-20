@@ -14,9 +14,7 @@
    \author Updated by Martin Landa <landa.martin gmail.com> (restore lines, OGR support)
  */
 
-#include <grass/config.h>
 #include <sys/types.h>
-#include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
 

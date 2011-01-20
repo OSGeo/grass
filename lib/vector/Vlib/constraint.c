@@ -34,7 +34,6 @@
  */
 
 #include <grass/vector.h>
-#include <grass/gis.h>
 
 /*!
    \brief Set constraint region
