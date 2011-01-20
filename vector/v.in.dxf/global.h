@@ -1,7 +1,6 @@
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
-#include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/gis.h>
