@@ -195,7 +195,7 @@ def create_gisrc():
     # Set the session grassrc file
     gisrc = os.path.join(tmpdir, "gisrc")
     os.environ['GISRC'] = gisrc
-
+    
     # remove invalid GISRC file to avoid disturbing error messages:
     try:
 	s = readfile(gisrcrc)
@@ -930,12 +930,18 @@ set_browser()
 
 #predefine monitor size for certain architectures
 if os.getenv('HOSTTYPE') == 'arm':
-    #small monitor on ARM (iPAQ, zaurus... etc)
+    # small monitor on ARM (iPAQ, zaurus... etc)
     os.environ['GRASS_HEIGHT'] = "320"
-    os.environ['GRASS_WIDTH'] = "240"
+    os.environ['GRASS_WIDTH']  = "240"
 
 # First time user - GISRC is defined in the GRASS script
 if not os.access(gisrc, os.F_OK):
+    if grass_gui == 'text' and len(args) == 0:
+        fatal(_("Unable to start GRASS. You can:\n"
+                " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
+                " - Create manually GISRC file (%s)\n"
+                " - Launch GRASS with path to "
+                "the location/mapset as an argument (`grass70 /path/to/location/mapset`)") % gisrcrc)
     grass_intro()
 else:
     clean_temp()
