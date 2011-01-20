@@ -13,13 +13,11 @@
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
-#include <grass/config.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include <grass/glocale.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 
 

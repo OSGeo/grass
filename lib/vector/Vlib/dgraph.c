@@ -13,12 +13,10 @@
    \author Rewritten by Rosen Matev (Google Summer of Code 2008)
 */
 
-#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <grass/vector.h>
-#include <grass/gis.h>
 #include <grass/glocale.h>
 #include "dgraph.h"
 #include "e_intersect.h"

@@ -14,13 +14,11 @@
   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
-#include <grass/config.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
 #include <grass/vector.h>
-#include <grass/gis.h>
 #include <grass/glocale.h>
 
 static char name_buf[GPATH_MAX];

@@ -13,10 +13,8 @@
    \author Some updates for GRASS 7 by Martin Landa <landa.martin gmail.com>
 */
 
-#include <grass/config.h>
 #include <stdlib.h>
 #include <math.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 

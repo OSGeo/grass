@@ -13,7 +13,6 @@
    \author Markus Neteler
 */
 
-#include <grass/config.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -21,7 +20,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <grass/glocale.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 

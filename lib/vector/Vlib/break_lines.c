@@ -13,9 +13,7 @@
  * \author Radim Blazek
  */
 
-#include <grass/config.h>
 #include <stdlib.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -368,8 +366,8 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	}
 	G_debug(3, "nlines =  %d", nlines);
     }				/* for each line */
-
     G_percent(nlines, nlines, 1); /* finish it */
+
     G_verbose_message(_("Intersections: %d"), nbreaks);
 
     Vect_destroy_list(List);

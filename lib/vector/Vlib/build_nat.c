@@ -14,13 +14,11 @@
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
-#include <grass/config.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/glocale.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 
 /*!
@@ -127,7 +125,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
    \param Map_info vector map
    \param isle isle id
 
-   \return number of  area(s)
+   \return area id
    \return 0 if not found
  */
 int Vect_isle_find_area(struct Map_info *Map, int isle)

@@ -15,7 +15,6 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
-#include <grass/config.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>

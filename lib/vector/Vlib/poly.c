@@ -14,11 +14,9 @@
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
-#include <grass/config.h>
 #include <math.h>
 #include <stdlib.h>
 #include <grass/vector.h>
-#include <grass/gis.h>
 #include <grass/linkm.h>
 #include <grass/glocale.h>
 
@@ -445,9 +443,8 @@ Vect_get_point_in_poly_isl(const struct line_pnts *Points,
     /* get centroid */
     Vect_find_poly_centroid(Points, &cent_x, &cent_y);
     /* is it w/in poly? */
-    if (Vect_point_in_poly(cent_x, cent_y, Points) == 1)
-	/* if the point is iside the polygon */
-    {
+    if (Vect_point_in_poly(cent_x, cent_y, Points) == 1) {
+	/* if the point is inside the polygon */
 	for (i = 0; i < n_isles; i++) {
 	    if (Vect_point_in_poly(cent_x, cent_y, IPoints[i]) >= 1) {
 		point_in_sles = 1;

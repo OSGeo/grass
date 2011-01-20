@@ -14,8 +14,8 @@
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
 */
 
-#include <grass/vector.h>
 #include <stdlib.h>
+#include <grass/vector.h>
 
 /*!
   \brief Close vector map file

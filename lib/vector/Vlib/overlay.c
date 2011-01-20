@@ -16,7 +16,6 @@
    \author Radim Blazek
 */
 
-#include <grass/config.h>
 #include <string.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>

@@ -13,13 +13,10 @@
    \author Radim Blazek
  */
 
-#include <grass/config.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <string.h>
-#include <grass/glocale.h>
-#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
