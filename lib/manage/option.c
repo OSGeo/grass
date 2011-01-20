@@ -126,7 +126,7 @@ const char *M_get_option_desc(int do_all)
 	    strcat(str, list[n].text);
 	}
 	else {
-	    strcat(str, list[n].alias);
+	    strcpy(str, list[n].alias);
 	    strcat(str, ";");
 	    strcat(str, list[n].text);
 	}
