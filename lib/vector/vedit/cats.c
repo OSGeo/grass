@@ -12,7 +12,6 @@
   \author Martin Landa <landa.martin gmail.com>
 */
 
-#include <grass/config.h>
 #include <grass/glocale.h>
 #include <grass/vedit.h>
 
