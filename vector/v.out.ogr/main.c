@@ -21,7 +21,6 @@
 #include <string.h>
 
 
-#include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>

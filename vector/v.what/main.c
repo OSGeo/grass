@@ -27,7 +27,6 @@
 #include <grass/display.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-#include <grass/config.h>
 #include "what.h"
 
 char **vect;

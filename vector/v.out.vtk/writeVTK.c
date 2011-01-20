@@ -20,7 +20,6 @@
 #include <grass/glocale.h>
 #include "writeVTK.h"
 #include "local_proto.h"
-#include <grass/config.h>
 
 
 /*Prototype */
