@@ -1,0 +1,32 @@
+# @(#)Element_List
+# this file specifies the database elements that 
+# are processed by RENAME, REMOVE, COPY, and LIST
+#
+# format:
+# main_element:alias:description:menu text
+#    support_element:description
+#
+cell:rast:raster:raster map(s)
+  cellhd:header
+  cats:category
+  colr:color
+  hist:history
+  cell_misc:misc
+  fcell:fcell
+  g3dcell:g3dcell
+grid3:rast3d:raster3D:3D raster map(s)
+vector:vect:vector:vector map(s)
+dig:oldvect:old vector:old (GRASS 5.0) vector map(s)
+  dig_att:attributes
+  dig_plus:topology
+  dig_cats:category
+  dig_misc:misc
+  reg:point registration
+dig_ascii:asciivect:asciivector:ASCII vector map(s)
+icons:icon:icon:paint icon file(s)
+paint/labels:labels:label:paint label file(s)
+site_lists:sites:site list:site list file(s)
+windows:region:region definition:region definition(s)
+windows3d:region3d:region3D definition:3D region definition(s)
+group:group:imagery group:imagery group(s)
+3d.view:view3d:3D viewing parameters:3D view parameter(s)

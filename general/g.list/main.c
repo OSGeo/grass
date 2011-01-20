@@ -10,7 +10,7 @@
  * PURPOSE:      Lists available GRASS data base elements of the user-specified data type to
  *               standard output
  *
- * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2009, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -21,62 +21,39 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <grass/gis.h>
 #include <grass/spawn.h>
-#include <grass/list.h>
+#include <grass/glocale.h>
+#include <grass/manage.h>
 
 struct Option *element;
 
-int parse(const char *data_type);
-
 int main(int argc, char *argv[])
 {
-    int i, n, len;
+    int i, n, nlist;
     struct GModule *module;
     struct Option *mapset_opt;
     struct Flag *full;
     const char *mapset;
-    char *str;
 
     G_gisinit(argv[0]);
 
-    read_list(0);
+    M_read_list(0, &nlist);
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
+    G_add_keyword(_("list"));
     module->description =
 	_("Lists available GIS elements "
 	  "of the user-specified data type.");
 
-    element = G_define_option();
-    element->key = "type";
-    element->type = TYPE_STRING;
-    element->required = YES;
-    element->multiple = YES;
-    element->description = "Data type";
-
-    for (len = 0, n = 0; n < nlist; n++)
-	len += strlen(list[n].alias) + 1;
-    str = G_malloc(len);
-
-    for (n = 0; n < nlist; n++) {
-	if (n) {
-	    strcat(str, ",");
-	    strcat(str, list[n].alias);
-	}
-	else
-	    strcpy(str, list[n].alias);
-    }
-    element->options = str;
-
-    mapset_opt = G_define_option();
-    mapset_opt->key = "mapset";
-    mapset_opt->type = TYPE_STRING;
-    mapset_opt->required = NO;
-    mapset_opt->multiple = NO;
-    mapset_opt->label = _("Mapset to list (default: current search path");
-    mapset_opt->description = _("'.' for current mapset");
-
+    element = G_define_standard_option(G_OPT_M_DATATYPE);
+    element->options = M_get_options(TRUE);
+    element->descriptions = M_get_option_desc(TRUE);
+    
+    mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
+    
     full = G_define_flag();
     full->key = 'f';
     full->description = _("Verbose listing (also list map titles)");
@@ -93,37 +70,25 @@ int main(int argc, char *argv[])
 
     i = 0;
     while (element->answers[i]) {
-	n = parse(element->answers[i]);
+	n = M_get_element(element->answers[i]);
 
 	if (full->answer) {
 	    char lister[GPATH_MAX];
 
 	    sprintf(lister, "%s/etc/lister/%s", G_gisbase(),
-		    list[n].element[0]);
+		    M_get_list(n)->element[0]);
 	    G_debug(3, "lister CMD: %s", lister);
 	    if (access(lister, 1) == 0)	/* execute permission? */
 		G_spawn(lister, lister, mapset, NULL);
 	    else
-		do_list(n, mapset);
+		M_do_list(n, mapset);
 	}
 	else {
-	    do_list(n, mapset);
+	    M_do_list(n, mapset);
 	}
 
 	i++;
     }
 
     exit(EXIT_SUCCESS);
-}
-
-int parse(const char *data_type)
-{
-    int n;
-
-    for (n = 0; n < nlist; n++) {
-	if (G_strcasecmp(list[n].alias, data_type) == 0)
-	    break;
-    }
-
-    return n;
 }

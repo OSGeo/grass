@@ -20,45 +20,35 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/list.h>
+#include <grass/manage.h>
 
 int main(int argc, char *argv[])
 {
-    int i, n;
+    int i, n, nlist;
     const char *mapset;
     struct GModule *module;
-    struct Option **parm, *p;
+    struct Option **parm;
     char *from, *to;
     int result = EXIT_SUCCESS;
 
     G_gisinit(argv[0]);
 
-    read_list(0);
+    M_read_list(FALSE, &nlist);
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
+    G_add_keyword(_("copy"));
     module->description =
-	_("Copies available data files in the user's current mapset "
-	  "search path and location to the appropriate element "
-	  "directories under the user's current mapset.");
+	_("Copies available data files in the current mapset "
+	  "search path to the user's current mapset.");
 
-    parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
+    parm = (struct Option **) G_calloc(nlist, sizeof(struct Option *));
 
     for (n = 0; n < nlist; n++) {
-	char *str;
-
-	p = parm[n] = G_define_option();
-	p->key = list[n].alias;
-	p->key_desc = "from,to";
-	p->type = TYPE_STRING;
-	p->required = NO;
-	p->multiple = NO;
-	G_asprintf(&str, "old,%s,%s", list[n].mainelem, list[n].maindesc);
-	p->gisprompt = str;
-	G_asprintf(&str, _("%s file(s) to be copied"), list[n].alias);
-	p->description = str;
+      parm[n] = M_define_option(n, _("copied"), NO);
     }
 
     if (G_parser(argc, argv))
@@ -71,7 +61,7 @@ int main(int argc, char *argv[])
 	while (parm[n]->answers[i]) {
 	    from = parm[n]->answers[i++];
 	    to = parm[n]->answers[i++];
-	    mapset = find(n, from, "");
+	    mapset = M_find(n, from, "");
 	    if (!mapset) {
 		G_warning(_("<%s> not found"), from);
 		continue;
@@ -82,7 +72,7 @@ int main(int argc, char *argv[])
 			  parm[n]->key, from, to);
 		continue;
 	    }
-	    if (find(n, to, G_mapset()) && !(module->overwrite)) {
+	    if (M_find(n, to, G_mapset()) && !(module->overwrite)) {
 		G_warning(_("<%s> already exists"), to);
 		continue;
 	    }
@@ -90,7 +80,7 @@ int main(int argc, char *argv[])
 		G_warning(_("<%s> is an illegal file name"), to);
 		continue;
 	    }
-	    if (do_copy(n, from, mapset, to) == 1) {
+	    if (M_do_copy(n, from, mapset, to) == 1) {
 		result = EXIT_FAILURE;
 	    }
 	    G_remove_misc("cell_misc", "reclassed_to", to);

@@ -85,6 +85,8 @@
  *  - misc
  *
  *   - G_OPT_M_UNITS
+ *   - G_OPT_M_DATATYPE
+ *   - G_OPT_M_MAPSET
  *
  * \param opt type of Option struct to create
  *
@@ -478,6 +480,25 @@ struct Option *G_define_standard_option(int opt)
 	    "miles,feet,meters,kilometers,acres,hectares";
 	Opt->description = _("Units");
 	break;
+	
+    case G_OPT_M_DATATYPE:
+	Opt->key = "type";
+	Opt->key_desc = "datatype";
+	Opt->type = TYPE_STRING;
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->description = _("Data type(s)");
+	break;
+
+    case G_OPT_M_MAPSET:
+	Opt->key = "mapset";
+	Opt->type = TYPE_STRING;
+	Opt->required = NO;
+	Opt->multiple = NO;
+	Opt->key_desc = "name";
+	Opt->label =
+	    _("Name of mapset (default: current search path)");
+	Opt->description = _("'.' for current mapset");
     }
 
     return (Opt);

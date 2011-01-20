@@ -9,7 +9,7 @@
  *               Markus Neteler <neteler itc.it>, 
  *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1994-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1994-2007, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -22,7 +22,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/list.h>
+#include <grass/manage.h>
 
 int main(int argc, char *argv[])
 {
@@ -30,36 +30,26 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option **parm, *p;
     char *old, *new;
-    int nrmaps;
+    int nrmaps, nlist;
     const char *mapset, *location_path;
     char **rmaps;
     int result = EXIT_SUCCESS;
 
     G_gisinit(argv[0]);
 
-    read_list(0);
+    M_read_list(FALSE, &nlist);
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
+    G_add_keyword(_("rename"));
     module->description =
 	_("Renames data base element files in the user's current mapset.");
 
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
 
     for (n = 0; n < nlist; n++) {
-	char *str;
-
-	p = parm[n] = G_define_option();
-	p->key = list[n].alias;
-	p->key_desc = "old,new";
-	p->type = TYPE_STRING;
-	p->required = NO;
-	p->multiple = NO;
-	G_asprintf(&str, "old,%s,%s", list[n].mainelem, list[n].maindesc);
-	p->gisprompt = str;
-	G_asprintf(&str, _("%s file(s) to be renamed"), list[n].alias);
-	p->description = str;
+	p = parm[n] = M_define_option(n, _("renamed"), NO);
     }
 
     if (G_parser(argc, argv))
@@ -75,13 +65,13 @@ int main(int argc, char *argv[])
 	while (parm[n]->answers[i]) {
 	    old = parm[n]->answers[i++];
 	    new = parm[n]->answers[i++];
-	    if (!find(n, old, mapset)) {
-		G_warning(_("%s <%s> not found"), list[n].maindesc, old);
+	    if (!M_find(n, old, mapset)) {
+		G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc, old);
 		continue;
 	    }
-	    if (find(n, new, "") && !(module->overwrite)) {
+	    if (M_find(n, new, "") && !(module->overwrite)) {
 		G_warning(_("<%s> already exists in mapset <%s>"), new,
-			  find(n, new, ""));
+			  M_find(n, new, ""));
 		continue;
 	    }
 	    if (G_legal_filename(new) < 0) {
@@ -141,7 +131,7 @@ int main(int argc, char *argv[])
 		    fclose(fp);
 		}
 	    }
-	    if (do_rename(n, old, new) == 1) {
+	    if (M_do_rename(n, old, new) == 1) {
 		result = EXIT_FAILURE;
 	    }
 	}

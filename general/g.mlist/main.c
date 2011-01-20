@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/list.h>
+#include <grass/manage.h>
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
@@ -30,7 +30,6 @@ static int any = 0;
 static void make_list(const struct list *,
 		      const char *, const char *,
 		      int, int, int);
-static int parse(const char *);
 
 int main(int argc, char *argv[])
 {
@@ -52,42 +51,28 @@ int main(int argc, char *argv[])
 	struct Flag *pretty;
 	struct Flag *full;
     } flag;
-    int i, n, all, num_types;
+    int i, n, all, num_types, nlist;
     void *filter = NULL, *exclude = NULL;
     const char *mapset;
-    char separator[2], *buf;
+    char separator[2];
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
+    G_add_keyword(_("list"));
     module->description =
 	_("Lists available GRASS data base files "
 	  "of the user-specified data type to standard output.");
 
-    read_list(0);
+    M_read_list(FALSE, &nlist);
 
-    opt.type = G_define_option();
-    opt.type->key = "type";
-    opt.type->key_desc = "datatype";
-    opt.type->type = TYPE_STRING;
-    opt.type->required = YES;
+    opt.type = G_define_standard_option(G_OPT_M_DATATYPE);
     opt.type->multiple = YES;
-    opt.type->answer = "rast";
-    opt.type->description = "Data type";
-    for (i = 0, n = 0; n < nlist; n++)
-	i += strlen(list[n].alias) + 1;
-    buf = G_malloc(i + 4);
-
-    buf[0] = 0;
-    for (n = 0; n < nlist; n++) {
-	strcat(buf, list[n].alias);
-	strcat(buf, ",");
-    }
-    strcat(buf, "all");
-    opt.type->options = buf;
-
+    opt.type->options = M_get_options(TRUE);
+    opt.type->descriptions = M_get_option_desc(TRUE);
+    
     opt.pattern = G_define_option();
     opt.pattern->key = "pattern";
     opt.pattern->type = TYPE_STRING;
@@ -102,22 +87,12 @@ int main(int argc, char *argv[])
     opt.exclude->multiple = NO;
     opt.exclude->description = _("Map name exclusion pattern (default: none)");
 
-    opt.separator = G_define_option();
-    opt.separator->key = "separator";
-    opt.separator->type = TYPE_STRING;
-    opt.separator->required = NO;
-    opt.separator->multiple = NO;
-    opt.separator->answer = "newline";
-    opt.separator->description =
-	_("One-character output separator, newline, comma, space, or tab");
+    opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
+    opt.mapset->label =
+	_("Name of mapset to list (default: current search path)");
 
-    opt.mapset = G_define_option();
-    opt.mapset->key = "mapset";
-    opt.mapset->type = TYPE_STRING;
-    opt.mapset->required = NO;
-    opt.mapset->multiple = NO;
-    opt.mapset->description =
-	_("Mapset to list (default: current search path)");
+    opt.separator = G_define_standard_option(G_OPT_F_SEP);
+    opt.separator->answer = "newline";
 
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
@@ -147,8 +122,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    G_free(buf);
 
     if (flag.regex->answer && flag.extended->answer)
 	G_fatal_error(_("-r and -e are mutually exclusive"));
@@ -201,13 +174,13 @@ int main(int argc, char *argv[])
     }
 
     for (i = 0; i < num_types; i++) {
-	n = all ? i : parse(opt.type->answers[i]);
+	n = all ? i : M_get_element(opt.type->answers[i]);
 
 	if (flag.full->answer) {
 	    char lister[GPATH_MAX];
 
 	    sprintf(lister, "%s/etc/lister/%s", G_gisbase(),
-		    list[n].element[0]);
+		    M_get_list(n)->element[0]);
 
 	    G_debug(3, "lister CMD: %s", lister);
 
@@ -217,7 +190,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else
-	    make_list(&list[n], mapset, separator,
+	    make_list(M_get_list(n), mapset, separator,
 		      flag.pretty->answer, flag.type->answer,
 		      flag.mapset->answer);
     }
@@ -287,17 +260,5 @@ static void make_list(
     }
 
     G_free(list);
-}
-
-static int parse(const char *data_type)
-{
-    int n;
-
-    for (n = 0; n < nlist; n++) {
-	if (G_strcasecmp(list[n].alias, data_type) == 0)
-	    break;
-    }
-
-    return n;
 }
 
