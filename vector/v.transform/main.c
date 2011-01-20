@@ -1,4 +1,3 @@
-
 /****************************************************************************
 *
 * MODULE:       v.transform
@@ -224,8 +223,9 @@ int main(int argc, char *argv[])
 
     /* open vector maps */
     Vect_open_old2(&Old, vold->answer, "", field->answer);
-
-    Vect_open_new(&New, vnew->answer, Vect_is_3d(&Old) || zshift->answer);
+    Vect_open_new(&New, vnew->answer, Vect_is_3d(&Old) || tozero_flag->answer ||
+		  strcmp(zshift->answer, "0.0") || strcmp(zscale->answer, "1.0") || 
+		  strcmp(zrot->answer, "0.0") ? WITH_Z : WITHOUT_Z);
 
     /* copy and set header */
     Vect_copy_head_data(&Old, &New);
@@ -311,24 +311,24 @@ int main(int argc, char *argv[])
     trans_params[IDX_ZSCALE] = atof(zscale->answer);
     trans_params[IDX_ZROT] = atof(zrot->answer);
 
+    G_important_message(_("Tranforming features..."));
     transform_digit_file(&Old, &New, Coord.name[0] ? 1 : 0,
 			 ztozero, swap_flag->answer, trans_params,
 			 table->answer, columns_name, Vect_get_field_number(&Old, field->answer));
 
+    G_important_message(_("Copying attributes..."));
     if (Vect_copy_tables(&Old, &New, 0))
         G_warning(_("Failed to copy attribute table to output map"));
     Vect_close(&Old);
     Vect_build(&New);
 
-    if (G_verbose() > G_verbose_std()) {
-	Vect_get_map_box(&New, &box);
-	G_message(_("\nNew vector map <%s> boundary coordinates:"),
-		  vnew->answer);
-	G_message(_(" N: %-10.3f    S: %-10.3f"), box.N, box.S);
-	G_message(_(" E: %-10.3f    W: %-10.3f"), box.E, box.W);
-	G_message(_(" B: %6.3f    T: %6.3f"), box.B, box.T);
-    }
-
+    Vect_get_map_box(&New, &box);
+    G_verbose_message(_("New vector map <%s> boundary coordinates:"),
+		      vnew->answer);
+    G_verbose_message(_(" N: %-10.3f    S: %-10.3f"), box.N, box.S);
+    G_verbose_message(_(" E: %-10.3f    W: %-10.3f"), box.E, box.W);
+    G_verbose_message(_(" B: %6.3f    T: %6.3f"), box.B, box.T);
+    
     /* print the transformation matrix if requested */
     if (print_mat_flag->answer)
       print_transform_matrix();
