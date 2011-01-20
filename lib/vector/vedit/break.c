@@ -11,7 +11,6 @@
   \author Martin Landa <landa.martin gmail.com>
 */
 
-#include <grass/config.h>
 #include <math.h>
 #include <grass/vedit.h>
 
