@@ -121,10 +121,7 @@ int main(int argc, char **argv)
     
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->label =
-	_("Layer number (if -1, all layers are displayed)");
-    field_opt->gisprompt = "old_layer,layer,layer_all";
+    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     display_opt = G_define_option();
     display_opt->key = "display";
@@ -642,12 +639,16 @@ int main(int argc, char **argv)
 		    D_line_width(default_width);
 	    }
 	    else
-		G_warning(_("Unable to display areas, topology not available"));
+		G_warning(_("Unable to display areas, topology not available. "
+			    "Please try to rebuild topology using "
+			    "v.build or v.build.all."));
 	}
 
 	if (display & DISP_SHAPE) {
 	    if (id_flag->answer && level < 2) {
-		G_warning(_("Unable to display lines by id, topology not available"));
+		G_warning(_("Unable to display lines by id, topology not available. "
+			    "Please try to rebuild topology using "
+			    "v.build or v.build.all."));
 	    }
 	    else {
 		stat = plot1(&Map, type, area, Clist,
@@ -696,7 +697,9 @@ int main(int argc, char **argv)
 	    if (level >= 2)
 		stat = topo(&Map, type, area, &lattr);
 	    else
-		G_warning(_("Unable to display topology, not available"));
+		G_warning(_("Unable to display topology, not available."
+			    "Please try to rebuild topology using "
+			    "v.build or v.build.all."));
 	}
     }
 
