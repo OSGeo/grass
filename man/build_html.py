@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009, 2010
+# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009, 2010, 2011
 
 import sys
 import os
@@ -158,7 +158,7 @@ footer_tmpl = string.Template(\
 r"""<BR><BR>
 <hr>
 <p><a href="${index_url}">Help Index</a> | <a href="full_index.html">Full Index</a><br>
-&copy; 2003-2010 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+&copy; 2003-2011 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 </body>
 </html>
 """)
