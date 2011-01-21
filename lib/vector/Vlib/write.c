@@ -192,7 +192,7 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
     off_t ret, offset;
     
     G_debug(3, "Vect_rewrite_line(): name = %s, line = %d", Map->name, line);
-    fprintf(stderr, "%s", Map->head);
+    
     if (!VECT_OPEN(Map))
 	G_fatal_error(_("Unable to rewrite feature, vector map is not opened"));
 
