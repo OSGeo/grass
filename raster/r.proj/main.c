@@ -161,13 +161,8 @@ int main(int argc, char **argv)
     inlocation->gisprompt = "old,location,location";
     inlocation->key_desc = "name";
 
-    imapset = G_define_option();
-    imapset->key = "mapset";
-    imapset->type = TYPE_STRING;
-    imapset->required = NO;
+    imapset = G_define_standard_option(G_OPT_M_MAPSET);
     imapset->description = _("Mapset containing input raster map");
-    imapset->gisprompt = "old,mapset,mapset";
-    imapset->key_desc = "name";
     imapset->guisection = _("Source");
 
     indbase = G_define_option();
