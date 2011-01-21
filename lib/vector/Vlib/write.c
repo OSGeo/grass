@@ -186,14 +186,13 @@ Vect_write_line(struct Map_info *Map, int type,
    \return feature offset
    \return -1 on error
  */
-off_t
-Vect_rewrite_line(struct Map_info *Map, int line, int type,
-              const struct line_pnts *points, const struct line_cats *cats)
+off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
+			const struct line_pnts *points, const struct line_cats *cats)
 {
     off_t ret, offset;
-
+    
     G_debug(3, "Vect_rewrite_line(): name = %s, line = %d", Map->name, line);
-
+    fprintf(stderr, "%s", Map->head);
     if (!VECT_OPEN(Map))
 	G_fatal_error(_("Unable to rewrite feature, vector map is not opened"));
 
@@ -204,6 +203,7 @@ Vect_rewrite_line(struct Map_info *Map, int line, int type,
     }
 
     offset = Map->plus.Line[line]->offset;
+    G_debug(3, "   offset=%lu", Map->plus.Line[line]->offset);
     ret =
 	(*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type, offset,
 							     points, cats);
