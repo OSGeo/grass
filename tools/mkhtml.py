@@ -5,7 +5,7 @@
 # MODULE:       mkhtml.py
 # AUTHOR(S):    Markus Neteler, Glynn Clements
 # PURPOSE:      create HTML manual page snippets
-# COPYRIGHT:    (C) 2007,2009 Glynn Clements and the GRASS Development Team
+# COPYRIGHT:    (C) 2007,2009,2011 by Glynn Clements and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -40,7 +40,7 @@ header_tmpl = string.Template(\
 footer_tmpl = string.Template(\
 """<hr>
 <p><a href="index.html">Main index</a> - <a href="$INDEXNAME.html">$INDEXNAME index</a> - <a href="full_index.html">Full index</a></p>
-<p>&copy; 2003-2010 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+<p>&copy; 2003-2011 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 </body>
 </html>
 """)
