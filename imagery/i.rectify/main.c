@@ -80,7 +80,9 @@ int main(int argc, char *argv[])
     char *ipolname;		/* name of interpolation method */
     int method;
     int n, i, m, k = 0;
-    int got_file = 0;
+    int got_file = 0, target_overwrite = 0;
+    char *overstr;
+    struct Cell_head cellhd;
 
     struct Option *grp,         /* imagery group */
      *val,                      /* transformation order */
@@ -92,8 +94,6 @@ int main(int argc, char *argv[])
 				   nearest neighbor, bilinear, cubic */
     struct Flag *c, *a;
     struct GModule *module;
-
-    struct Cell_head cellhd;
 
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     if (!ifile->answers)
 	a->answer = 1;		/* force all */
 
-    /* Find out how files on command line */
+    /* Find out how many files on command line */
     if (!a->answer) {
 	for (m = 0; ifile->answers[m]; m++) {
 	    k = m;
@@ -219,24 +219,42 @@ int main(int argc, char *argv[])
 
     if (a->answer) {
 	for (n = 0; n < ref.nfiles; n++) {
-	    ref_list[n] = -1;
+	    ref_list[n] = 1;
 	}
     }
     else {
-	char xname[GNAME_MAX], xmapset[GMAPSET_MAX], *name;
+	char xname[GNAME_MAX], xmapset[GMAPSET_MAX], *name, *mapset;
+
+	for (n = 0; n < ref.nfiles; n++)
+		ref_list[n] = 0;
+
 	for (m = 0; m < k; m++) {
 	    got_file = 0;
-	    if (G_name_is_fully_qualified(ifile->answers[m], xname, xmapset))
+	    if (G_name_is_fully_qualified(ifile->answers[m], xname, xmapset)) {
 		name = xname;
-	    else
+		mapset = xmapset;
+	    }
+	    else {
 		name = ifile->answers[m];
+		mapset = 0;
+	    }
 
+	    got_file = 0;
 	    for (n = 0; n < ref.nfiles; n++) {
-		ref_list[n] = 1;
-		if (strcmp(name, ref.file[n].name) == 0) {
-		    got_file = 1;
-		    ref_list[n] = -1;
-		    break;
+		if (mapset) {
+		    if (strcmp(name, ref.file[n].name) == 0 &&
+		        strcmp(mapset, ref.file[n].mapset) == 0) {
+			got_file = 1;
+			ref_list[n] = 1;
+			break;
+		    }
+		}
+		else {
+		    if (strcmp(name, ref.file[n].name) == 0) {
+			got_file = 1;
+			ref_list[n] = 1;
+			break;
+		    }
 		}
 	    }
 	    if (got_file == 0)
@@ -249,6 +267,39 @@ int main(int argc, char *argv[])
 
     /* get the target */
     get_target(group);
+
+    /* Check the GRASS_OVERWRITE environment variable */
+    if ((overstr = getenv("GRASS_OVERWRITE")))  /* OK ? */
+	target_overwrite = atoi(overstr);
+
+    if (!target_overwrite) {
+	/* check if output exists in target location/mapset */
+	char result[GNAME_MAX];
+	
+	select_target_env();
+	for (i = 0; i < ref.nfiles; i++) {
+	    if (!ref_list[i])
+		continue;
+
+	    strcpy(result, ref.file[i].name);
+	    strcat(result, extension);
+	    
+	    if (G_legal_filename(result) < 0)
+		G_fatal_error(_("Extension <%s> is illegal"), extension);
+		
+	    if (G_find_raster2(result, G_mapset())) {
+		G_warning(_("The following raster map already exists in"));
+		G_warning(_("target LOCATION %s, MAPSET %s:"),
+			  G_location(), G_mapset());
+		G_warning("<%s>", result);
+		G_fatal_error(_("Orthorectification cancelled."));
+	    }
+	}
+	
+	select_current_env();
+    }
+    else
+	G_debug(1, "Overwriting OK");
 
     /* do not use current region in target location */
     if (!c->answer) {

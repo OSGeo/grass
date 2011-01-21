@@ -32,14 +32,14 @@ int exec_rectify(int order, char *extension, char *interp_method)
     struct Categories cats;
     struct History hist;
     int colr_ok, cats_ok;
-    long start_time, rectify_time, compress_time;
+    long start_time, rectify_time;
 
     Rast_set_output_window(&target_window);
+    G_message("-----------------------------------------------");
 
     /* rectify each file */
     for (n = 0; n < ref.nfiles; n++) {
-	if (ref_list[n] < 0) {
-	    /* continue; */
+	if (ref_list[n]) {
 	    name = ref.file[n].name;
 	    mapset = ref.file[n].mapset;
 
@@ -48,8 +48,6 @@ int exec_rectify(int order, char *extension, char *interp_method)
 		G_malloc(strlen(ref.file[n].name) + strlen(extension) + 1);
 	    strcpy(result, ref.file[n].name);
 	    strcat(result, extension);
-	    G_message(_("Rectified input raster map <%s> will be saved as <%s>"),
-		      name, result);
 
 	    select_current_env();
 
@@ -82,12 +80,10 @@ int exec_rectify(int order, char *extension, char *interp_method)
 
 		select_current_env();
 		time(&rectify_time);
-		compress_time = rectify_time;
-		report(name, mapset, result, rectify_time - start_time,
-		       compress_time - rectify_time, 1);
+		report(rectify_time - start_time, 1);
 	    }
 	    else
-		report(name, mapset, result, (long)0, (long)0, 0);
+		report((long)0, 0);
 
 	    G_free(result);
 	}

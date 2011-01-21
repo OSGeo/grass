@@ -85,7 +85,7 @@ extern block *get_block(struct cache *, int);
 #define CPTR(c,y,x) (&(*BLOCK((c),HI((y)),HI((x))))[LO((y))][LO((x))])
 
 /* report.c */
-int report(char *, char *, char *, long, long, int);
+int report(long, int);
 
 /* target.c */
 int get_target(char *);
