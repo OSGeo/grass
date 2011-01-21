@@ -19,6 +19,7 @@ List of classes:
  - SetOpacityDialog
  - StaticWrapText
  - ImageSizeDialog
+ - SqlQueryFrame
 
 (C) 2008-2011 by the GRASS Development Team
 
@@ -1672,3 +1673,55 @@ class ImageSizeDialog(wx.Dialog):
         self.width.SetValue(width)
         self.height.SetValue(height)
         
+class SqlQueryFrame(wx.Frame):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 title = _("GRASS GIS SQL Query Utility"),
+                 *kwargs):
+        """!SQL Query Utility window
+        """
+        self.parent = parent
+
+        wx.Frame.__init__(self, parent = parent, id = id, title = title, *kwargs)
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.sqlBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                   label = _(" SQL statement "))
+        self.sql = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
+                               style = wx.TE_MULTILINE)
+        
+        self.btnApply = wx.Button(parent = self.panel, id = wx.ID_APPLY)
+        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        self.Bind(wx.EVT_BUTTON, self.OnCloseWindow, self.btnCancel)
+        
+        self._layout()
+
+        self.SetMinSize(wx.Size(300, 150))
+        self.SetSize(wx.Size(500, 200))
+        
+    def _layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        sqlSizer = wx.StaticBoxSizer(self.sqlBox, wx.HORIZONTAL)
+        sqlSizer.Add(item = self.sql, proportion = 1,
+                     flag = wx.EXPAND)
+
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnApply)
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.Realize()
+        
+        sizer.Add(item = sqlSizer, proportion = 1,
+                  flag = wx.EXPAND | wx.ALL, border = 5) 
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+       
+        self.panel.SetSizer(sizer)
+        
+        self.Layout()
+
+    def OnCloseWindow(self, event):
+        """!Close window
+        """
+        self.Close()

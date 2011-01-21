@@ -17,7 +17,7 @@
 *	        one of three different methods: nearest neighbor, bilinear and
 *	        cubic convolution.
 *
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
+* COPYRIGHT:    (C) 2001, 2011 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -77,6 +77,7 @@ struct menu menu[] = {
 };
 
 static char *make_ipol_list(void);
+static char *make_ipol_desc(void);
 
 int main(int argc, char **argv)
 {
@@ -146,7 +147,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
     module->description =
-	_("Re-projects a raster map from one location to the current location.");
+	_("Re-projects a raster map from given location to the current location.");
 
     inmap = G_define_standard_option(G_OPT_R_INPUT);
     inmap->description = _("Name of input raster map to re-project");
@@ -162,7 +163,8 @@ int main(int argc, char **argv)
     inlocation->key_desc = "name";
 
     imapset = G_define_standard_option(G_OPT_M_MAPSET);
-    imapset->description = _("Mapset containing input raster map");
+    imapset->label = _("Mapset containing input raster map");
+    imapset->description = _("default: name of current mapset");
     imapset->guisection = _("Source");
 
     indbase = G_define_option();
@@ -176,7 +178,7 @@ int main(int argc, char **argv)
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outmap->required = NO;
-    outmap->description = _("Name for output raster map (default: input)");
+    outmap->description = _("Name for output raster map (default: same as 'input')");
     outmap->guisection = _("Target");
 
     ipolname = make_ipol_list();
@@ -189,6 +191,7 @@ int main(int argc, char **argv)
     interpol->options = ipolname;
     interpol->description = _("Interpolation method to use");
     interpol->guisection = _("Target");
+    interpol->descriptions = make_ipol_desc();
 
     memory = G_define_option();
     memory->key = "memory";
@@ -200,7 +203,7 @@ int main(int argc, char **argv)
     res->key = "resolution";
     res->type = TYPE_DOUBLE;
     res->required = NO;
-    res->description = _("Resolution of output map");
+    res->description = _("Resolution of output raster map");
     res->guisection = _("Target");
 
     list = G_define_flag();
@@ -536,7 +539,7 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
-static char *make_ipol_list(void)
+char *make_ipol_list(void)
 {
     int size = 0;
     int i;
@@ -552,6 +555,29 @@ static char *make_ipol_list(void)
 	if (i)
 	    strcat(buf, ",");
 	strcat(buf, menu[i].name);
+    }
+
+    return buf;
+}
+
+char *make_ipol_desc(void)
+{
+    int size = 0;
+    int i;
+    char *buf;
+
+    for (i = 0; menu[i].name; i++)
+	size += strlen(menu[i].name) + strlen(menu[i].text) + 2;
+    
+    buf = G_malloc(size);
+    *buf = '\0';
+    
+    for (i = 0; menu[i].name; i++) {
+	if (i)
+	    strcat(buf, ";");
+	strcat(buf, menu[i].name);
+	strcat(buf, ";");
+	strcat(buf, menu[i].text);
     }
 
     return buf;

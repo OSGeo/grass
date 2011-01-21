@@ -260,7 +260,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
                         'region', 'export', 'attr', 'edit0', 'edit1',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
-                        'color', 'hist', 'prof', 'properties'):
+                        'color', 'hist', 'prof', 'properties', 'sql'):
                 self.popupID[key] = wx.NewId()
         
         self.popupMenu = wx.Menu()
@@ -338,6 +338,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID['topo'], text = _("Rebuild topology"))
             self.Bind(wx.EVT_MENU, self.OnTopology, id = self.popupID['topo'])
 
+            # determine format
+            if layer and layer.GetType() == 'vector':
+                if not self.GetPyData(self.layer_selected)[0].has_key('info'):
+                    info = grass.parse_command('v.info',
+                                               map = layer.GetName(),
+                                               shell = 'basic')
+                    self.GetPyData(self.layer_selected)[0]['info'] = info
+                info = self.GetPyData(self.layer_selected)[0]['info']
+                if info and info['format'] == 'ogr,PostgreSQL':
+                    self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
+                    self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
+            
             if layer.GetMapset() != grass.gisenv()['MAPSET']:
                 # only vector map in current mapset can be edited
                 self.popupMenu.Enable (self.popupID['edit0'], False)
@@ -410,6 +422,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         cmd = ['v.build',
                'map=%s' % mapLayer.GetName()]
         self.lmgr.goutput.RunCmd(cmd, switchPage = True)
+        
+    def OnSqlQuery(self, event):
+        """!Show SQL query window for PostGIS layers
+        """
+        dlg = gdialogs.SqlQueryFrame(parent = self)
+        dlg.CentreOnScreen()
+        dlg.Show()
         
     def OnMetadata(self, event):
         """!Print metadata of raster/vector map layer
@@ -1349,7 +1368,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         
     def GetOptData(self, dcmd, layer, params, propwin):
-        """!Process layer data (when changes in propertiesdialog are applied)"""
+        """!Process layer data (when changes in properties dialog are applied)
+        """
         # set layer text to map name
         if dcmd:
             self.GetPyData(layer)[0]['cmd'] = dcmd
@@ -1369,7 +1389,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 GWarning(parent = self,
                          message = _("Map <%s> not found.") % mapName)
                 return
-            
+        
         # update layer data
         if params:
             self.SetPyData(layer, (self.GetPyData(layer)[0], params))
@@ -1377,7 +1397,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
-
+        
         # set region if auto-zooming is enabled
         if dcmd and UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
             mapLayer = self.GetPyData(layer)[0]['maplayer']
@@ -1385,7 +1405,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 render = UserSettings.Get(group = 'display', key = 'autoRendering', subkey = 'enabled')
                 self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
                                                     render = render)
-
+        
         # update nviz session        
         if self.mapdisplay.toolbars['nviz'] and dcmd:
             mapLayer = self.GetPyData(layer)[0]['maplayer']
