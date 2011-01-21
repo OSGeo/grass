@@ -300,7 +300,7 @@ int main(int argc, char **argv)
 	    fprintf(stdout, "%s\n", list[i]);
 	}
 	fflush(stdout);
-	exit(EXIT_SUCCESS);	/* leave v.proj after listing */
+	exit(EXIT_SUCCESS);	/* leave r.proj after listing */
     }
 
     if (!inmap->answer)
@@ -327,7 +327,8 @@ int main(int argc, char **argv)
     G_free_key_value(in_unit_info);
     G_free_key_value(out_proj_info);
     G_free_key_value(out_unit_info);
-    pj_print_proj_params(&iproj, &oproj);
+    if (G_verbose() > G_verbose_std())
+	pj_print_proj_params(&iproj, &oproj);
 
     /* this call causes r.proj to read the entire map into memeory */
     Rast_get_cellhd(inmap->answer, setname, &incellhd);
