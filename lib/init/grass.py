@@ -459,7 +459,7 @@ def non_interactive(arg):
 		    if not os.access(os.path.join(os.path.join(gisdbase, location_name, "PERMANENT", "DEFAULT_WIND")), os.F_OK):
 			fatal(_("The location <%s> does not exist. Please create it first.") % location_name)
 		    else:
-			os.mkdirs(location)
+			os.mkdir(location)
 			# copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
 			s = readfile(os.path.join(gisdbase, location_name, "PERMANENT", "DEFAULT_WIND"))
 			writefile(os.path.join(location, "WIND"), s)
