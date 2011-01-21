@@ -496,8 +496,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->key_desc = "name";
-	Opt->label =
-	    _("Name of mapset (default: current search path)");
+	Opt->gisprompt = "old,mapset,mapset";
+	Opt->label = _("Name of mapset (default: current search path)");
 	Opt->description = _("'.' for current mapset");
     }
 
