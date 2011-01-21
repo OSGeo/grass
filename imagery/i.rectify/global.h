@@ -28,11 +28,8 @@ struct cache
 
 extern char *seg_mb;
 
-extern int temp_fd;
 extern RASTER_MAP_TYPE map_type;
-extern char *temp_name;
 extern int *ref_list;
-extern char **new_name;
 extern struct Ref ref;
 
 typedef void (*func) (struct cache *, void *, int, double *, double *, struct Cell_head *);

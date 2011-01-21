@@ -34,11 +34,8 @@
 
 char *seg_mb;
 
-int temp_fd;
 RASTER_MAP_TYPE map_type;
-char *temp_name;
 int *ref_list;
-char **new_name;
 struct Ref ref;
 
 func interpolate;
@@ -206,7 +203,6 @@ int main(int argc, char *argv[])
     }
 
     ref_list = (int *)G_malloc(ref.nfiles * sizeof(int));
-    new_name = (char **)G_malloc(ref.nfiles * sizeof(char *));
 
     if (a->answer) {
 	for (n = 0; n < ref.nfiles; n++) {
