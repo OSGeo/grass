@@ -53,62 +53,90 @@ DCELL Rast_interp_bicubic(double u, double v,
 DCELL Rast_interp_lanczos(double u, double v, DCELL *c)
 {
     double uweight[5], vweight[5], d, d_pi;
+    double usum, vsum;
+    DCELL c0, c1, c2, c3, c4;
     double sind, sincd1, sincd2;
 
     d_pi = u * M_PI;
     sind = 2 * sin(d_pi);
     sincd1 = sind * sin(d_pi / 2);
     uweight[2] = (u == 0 ? 1 : sincd1 / (d_pi * d_pi));
+    usum = uweight[2];
 
     d = u + 2;
     d_pi = d * M_PI;
-    uweight[0] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    if (d > 2)
+	uweight[0] = 0.;
+    else
+	uweight[0] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    usum += uweight[0];
 
     d = u + 1.;
     d_pi = d * M_PI;
     sincd2 = sind * sin(d_pi / 2);
     uweight[1] = (d == 0 ? 1 : -sincd2 / (d_pi * d_pi));
+    usum += uweight[1];
 
     d = u - 1.;
     d_pi = d * M_PI;
     uweight[3] = (d == 0 ? 1 : sincd2 / (d_pi * d_pi));
+    usum += uweight[3];
 
     d = u - 2.;
     d_pi = d * M_PI;
-    uweight[4] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    if (d < -2)
+	uweight[4] = 0.;
+    else
+	uweight[4] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    usum += uweight[4];
+    
 
     d_pi = v * M_PI;
     sind = 2 * sin(d_pi);
     sincd1 = sind * sin(d_pi / 2);
     vweight[2] = (v == 0 ? 1 : sincd1 / (d_pi * d_pi));
+    vsum = vweight[2];
 
     d = v + 2;
     d_pi = d * M_PI;
-    vweight[0] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    if (d > 2)
+	vweight[0] = 0;
+    else
+	vweight[0] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    vsum += vweight[0];
 
     d = v + 1.;
     d_pi = d * M_PI;
     sincd2 = sind * sin(d_pi / 2);
     vweight[1] = (d == 0 ? 1 : -sincd2 / (d_pi * d_pi));
+    vsum += vweight[1];
 
     d = v - 1.;
     d_pi = d * M_PI;
     vweight[3] = (d == 0 ? 1 : sincd2 / (d_pi * d_pi));
+    vsum += vweight[3];
 
     d = v - 2.;
     d_pi = d * M_PI;
-    vweight[4] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    if (d < -2)
+	vweight[4] = 0;
+    else
+	vweight[4] = (d == 0 ? 1 : -sincd1 / (d_pi * d_pi));
+    vsum += vweight[4];
+    
+    c0 = (c[0] * uweight[0] + c[1] * uweight[1] + c[2] * uweight[2]
+	    + c[3] * uweight[3] + c[4] * uweight[4]);
+    c1 = (c[5] * uweight[0] + c[6] * uweight[1] + c[7] * uweight[2]
+	    + c[8] * uweight[3] + c[9] * uweight[4]);
+    c2 = (c[10] * uweight[0] + c[11] * uweight[1] + c[12] * uweight[2]
+	    + c[13] * uweight[3] + c[14] * uweight[4]);
+    c3 = (c[15] * uweight[0] + c[16] * uweight[1] + c[17] * uweight[2]
+	    + c[18] * uweight[3] + c[19] * uweight[4]);
+    c4 = (c[20] * uweight[0] + c[21] * uweight[1] + c[22] * uweight[2]
+	    + c[23] * uweight[3] + c[24] * uweight[4]);
 
-    return ((c[0] * uweight[0] + c[1] * uweight[1] + c[2] * uweight[2]
-	    + c[3] * uweight[3] + c[4] * uweight[4]) * vweight[0] +
-	    (c[5] * uweight[0] + c[6] * uweight[1] + c[7] * uweight[2]
-	    + c[8] * uweight[3] + c[9] * uweight[4]) * vweight[1] + 
-	    (c[10] * uweight[0] + c[11] * uweight[1] + c[12] * uweight[2]
-	    + c[13] * uweight[3] + c[14] * uweight[4]) * vweight[2] + 
-	    (c[15] * uweight[0] + c[16] * uweight[1] + c[17] * uweight[2]
-	    + c[18] * uweight[3] + c[19] * uweight[4]) * vweight[3] + 
-	    (c[20] * uweight[0] + c[21] * uweight[1] + c[22] * uweight[2]
-	    + c[23] * uweight[3] + c[24] * uweight[4]) * vweight[4]);
+    return ((c0 * vweight[0] + c1 * vweight[1] + c2 * vweight[2] + 
+	     c3 * vweight[3] + c4 * vweight[4]) / (usum * vsum));
 }
 
 DCELL Rast_interp_cubic_bspline(double u, DCELL c0, DCELL c1, DCELL c2, DCELL c3)
