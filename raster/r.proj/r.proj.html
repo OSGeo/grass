@@ -1,194 +1,204 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.proj</em> projects a raster map in a specified mapset of a
 specified location from the projection of the input location to a raster map
 in the current location. The projection information is taken from the
-current PROJ_INFO files, as set with <i><a href="g.setproj.html">g.setproj</a>
-</i> and viewed with <i><a href="g.proj.html">g.proj</a></i>.
+current PROJ_INFO files, as set with <em><a href="g.setproj.html">g.setproj</a>
+</em> and viewed with <em><a href="g.proj.html">g.proj</a></em>.
 
 <h3>Introduction</h3>
 
-<h5>Map projections</h5>
+<h4>Map projections</h4>
 
-Map projections are a method of representing information from a
-curved surface (usually a spheroid) in two dimensions, typically to allow
+Map projections are a method of representing information from a curved
+surface (usually a spheroid) in two dimensions, typically to allow
 indexing through cartesian coordinates.  There are a wide variety of
-projections, with common ones divided into a number of classes, including
-cylindrical and pseudo-cylindrical, conic and pseudo-conic, and azimuthal
-methods, each of which may be conformal, equal-area, or neither.  
+projections, with common ones divided into a number of classes,
+including cylindrical and pseudo-cylindrical, conic and pseudo-conic,
+and azimuthal methods, each of which may be conformal, equal-area, or
+neither.
 <p>
-The particular projection chosen depends on the purpose of the project,
-and the size, shape and location of the area of interest.  For example,
-normal cylindrical projections are good for maps which are of greater extent
-east-west than north-south and in equatorial regions, while conic
-projections are better in mid-latitudes;  transverse cylindrical projections
-are used for maps which are of greater extent north-south than east-west;
-azimuthal projections are used for polar regions.  Oblique versions of any
-of these may also be used.  Conformal projections preserve angular
-relationships, and better preserve arc-length, while equal-area projections
-are more appropriate for statistical studies and work in which the amount of
-material is important.  
+The particular projection chosen depends on the purpose of the
+project, and the size, shape and location of the area of interest.
+For example, normal cylindrical projections are good for maps which
+are of greater extent east-west than north-south and in equatorial
+regions, while conic projections are better in mid-latitudes;
+transverse cylindrical projections are used for maps which are of
+greater extent north-south than east-west; azimuthal projections are
+used for polar regions.  Oblique versions of any of these may also be
+used.  Conformal projections preserve angular relationships, and
+better preserve arc-length, while equal-area projections are more
+appropriate for statistical studies and work in which the amount of
+material is important.
 <p>
-Projections are defined by precise mathematical relations, so the method
-of projecting coordinates from a geographic reference frame
-(latitude-longitude) into a projected cartesian reference frame (eg metres)
-is governed by these equations.  Inverse projections can also be achieved. 
-The public-domain Unix software package <i>PROJ.4</i> [1] has been designed to
-perform these transformations, and the user's manual contains a detailed
-description of over 100 useful projections.  This also includes a
-programmers library of the projection methods to support other software
-development.  
+Projections are defined by precise mathematical relations, so the
+method of projecting coordinates from a geographic reference frame
+(latitude-longitude) into a projected cartesian reference frame (eg
+metres) is governed by these equations.  Inverse projections can also
+be achieved.  The public-domain Unix software package <i>PROJ.4</i>
+[1] has been designed to perform these transformations, and the user's
+manual contains a detailed description of over 100 useful projections.
+This also includes a programmers library of the projection methods to
+support other software development.
 <p>
-Thus, converting a vector map - in which objects are located
-with arbitrary spatial precision - from one projection into another is
-usually accomplished by a simple two-step process:  first the location of
-all the points in the map are converted from the source through an inverse
-projection into latitude-longitude, and then through a forward projection
-into the target.  (Of course the procedure will be one-step if either the
-source or target is in geographic coordinates.)
+Thus, converting a vector map - in which objects are located with
+arbitrary spatial precision - from one projection into another is
+usually accomplished by a simple two-step process: first the location
+of all the points in the map are converted from the source through an
+inverse projection into latitude-longitude, and then through a forward
+projection into the target.  (Of course the procedure will be one-step
+if either the source or target is in geographic coordinates.)
 <p>
-Converting a raster map, or image, between different projections, 
-however, involves additional considerations.  
-A raster may be considered to represent a sampling of a
-process at a regular, ordered set of locations.  The set of locations that
-lie at the intersections of a cartesian grid in one projection will not, in
-general, coincide with the sample points in another projection.  Thus, the
-conversion of raster maps involves an interpolation step in which the values
-of points at intermediate locations relative to the source grid are
+Converting a raster map, or image, between different projections,
+however, involves additional considerations.  A raster may be
+considered to represent a sampling of a process at a regular, ordered
+set of locations.  The set of locations that lie at the intersections
+of a cartesian grid in one projection will not, in general, coincide
+with the sample points in another projection.  Thus, the conversion of
+raster maps involves an interpolation step in which the values of
+points at intermediate locations relative to the source grid are
 estimated.
 
-<h5>Projecting vector maps within the GRASS GIS</h5>
+<h4>Projecting vector maps within the GRASS GIS</h4>
 <!-- move this into v.proj.html !! -->
 GIS data capture, import and transfer often requires a projection
 step, since the source or client will frequently be in a different
 projection to the working projection.
 <p>
-In some cases it is convenient to do the conversion outside the package,
-prior to import or after export, using software such as <i>PROJ.4</i>'s
-<i><a href="http://proj.maptools.org/">cs2cs</a></i> [1]. This is an easy
+In some cases it is convenient to do the conversion outside the
+package, prior to import or after export, using software such
+as <i>PROJ.4</i>'s
+<em><a href="http://proj.maptools.org/">cs2cs</a></em> [1]. This is an easy
 method for converting an ASCII file containing a list of coordinate points,
 since there is no topology to be preserved and <i>cs2cs</i> can be used to
 process simple lists using a one-line command. The <em>m.proj</em> module
 provides a handy front end to <tt>cs2cs</tt>. 
 
 <p>
-The format of files containing vector maps with <b>lines</b> and <b>arcs</b> is
-generally more complex, as parts of the data stored in the files will describe
-topology, and not just coordinates. In GRASS GIS the
-<i><a href="v.proj.html">v.proj</a></i> module is provided to reproject
+Vector maps is generally more complex, as parts of the data stored in
+the files will describe topology, and not just coordinates. In GRASS
+GIS the
+<em><a href="v.proj.html">v.proj</a></em> module is provided to reproject
 vector maps, transferring topology and attributes as well as node coordinates.
 This program uses the projection definition and parameters which are stored in
 the PROJ_INFO and PROJ_UNITS files in the PERMANENT mapset directory for every
 GRASS location.
-<br><br>
 
 <h3>Design of r.proj</h3>
 
 As discussed briefly above, the fundamental step in re-projecting a
 raster is resampling the source grid at locations corresponding to the
-intersections of a grid in the target projection. The basic procedure for
-accomplishing this, therefore, is as follows:
+intersections of a grid in the target projection. The basic procedure
+for accomplishing this, therefore, is as follows:
 <p>
-<em>r.proj</em> converts a map to a new geographic projection. It reads a
-map from a different location, projects it and write it out to the current
-location.
-<br>
-The projected data is resampled with one of four different methods: 
-nearest neighbor, bilinear, cubic convolution or lanczos.
+<em>r.proj</em> converts a map to a new geographic projection. It
+reads a map from a different location, projects it and write it out to
+the current location. The projected data is resampled with one of four
+different methods: nearest neighbor, bilinear, cubic convolution or
+lanczos.
 <p>
-The <em>method=nearest</em> method, which performs a nearest neighbor assignment,
-is the fastest of the three resampling methods. It is primarily used for
-categorical data such as a land use classification, since it will not change
-the values of the data cells. The <em>method=bilinear</em> method determines the new
-value of the cell based on a weighted distance average of the 4 surrounding
-cells in the input map. The <em>method=cubic</em> method determines the new value of
-the cell based on a weighted distance average of the 16 surrounding cells in
-the input map. The <em>method=lanzcos</em> method determines the new value of
-the cell based on a weighted distance average of the 25 surrounding cells in
-the input map. Compared to cubic, lanczos puts a higher weight on cells close
-to the center and a lower weight on cells away from the center, resulting in
-slightly better contrast.
+The <b>method=nearest</b> method, which performs a nearest neighbor
+assignment, is the fastest of the three resampling methods. It is
+primarily used for categorical data such as a land use classification,
+since it will not change the values of the data
+cells. The <b>method=bilinear</b> method determines the new value of
+the cell based on a weighted distance average of the 4 surrounding
+cells in the input map. The <b>method=cubic</b> method determines the
+new value of the cell based on a weighted distance average of the 16
+surrounding cells in the input map. The <b>method=lanzcos</b> method
+determines the new value of the cell based on a weighted distance
+average of the 25 surrounding cells in the input map. Compared to
+cubic, lanczos puts a higher weight on cells close to the center and a
+lower weight on cells away from the center, resulting in slightly
+better contrast.
 <p>
-The bilinear, cubic and lanczos interpolation methods are most appropriate for
-continuous data and cause some smoothing. The amount of smoothing decreases from
-bilinear to cubic to lanczos. These options should not be used
-with categorical data, since the cell values will be altered.
+The bilinear, cubic and lanczos interpolation methods are most
+appropriate for continuous data and cause some smoothing. The amount
+of smoothing decreases from bilinear to cubic to lanczos. These
+options should not be used with categorical data, since the cell
+values will be altered.
 <p>
-In the bilinear, cubic and lanczos methods, if any of the surrounding cells used to
-interpolate the new cell value are null, the resulting cell will be null, even if
-the nearest cell is not null. This will cause some thinning along null borders,
-such as the coasts of land areas in a DEM. The bilinear_f, cubic_f and lanczos_f
-interpolation methods can be used if thinning along null edges is not desired.
-These methods "fall back" to simpler interpolation methods along null borders.
-That is, from lanczos to cubic to bilinear to nearest.
+In the bilinear, cubic and lanczos methods, if any of the surrounding
+cells used to interpolate the new cell value are null, the resulting
+cell will be null, even if the nearest cell is not null. This will
+cause some thinning along null borders, such as the coasts of land
+areas in a DEM. The bilinear_f, cubic_f and lanczos_f interpolation
+methods can be used if thinning along null edges is not desired.
+These methods &quot;fall back&quot; to simpler interpolation methods
+along null borders.  That is, from lanczos to cubic to bilinear to
+nearest.
 <p>
-If nearest neighbor assignment is used, the output map has the same raster
-format as the input map. If any of the interpolations is used, the
-output map is written as floating point.
-
+If nearest neighbor assignment is used, the output map has the same
+raster format as the input map. If any of the interpolations is used,
+the output map is written as floating point.
 <p>
 Note that, following normal GRASS conventions, the coverage and
-resolution of the resulting grid is set by the current region settings,
-which may be adjusted using <i>g.region</i>.  The target raster will be
-relatively unbiased for all cases if its grid has a similar resolution to
-the source, so that the resampling/interpolation step is only a local
-operation.  If the resolution is changed significantly, then the behaviour
-of the generalisation or refinement will depend on the model of the process
-being represented.  This will be very different for categorical versus
-numerical data.  Note that three methods for the local interpolation step
-are provided.
+resolution of the resulting grid is set by the current region
+settings, which may be adjusted
+using <em><a href="g.region.html">g.region</a></em>. The target raster
+will be relatively unbiased for all cases if its grid has a similar
+resolution to the source, so that the resampling/interpolation step is
+only a local operation.  If the resolution is changed significantly,
+then the behaviour of the generalisation or refinement will depend on
+the model of the process being represented.  This will be very
+different for categorical versus numerical data.  Note that three
+methods for the local interpolation step are provided.
 
 <p>
-<em>r.proj</em> supports general datum transformations, making use of the
-<em>PROJ.4</em> co-ordinate system translation library.
-</p>
-
+<em>r.proj</em> supports general datum transformations, making use of
+the <em>PROJ.4</em> co-ordinate system translation library.
 
 <h2>NOTES</h2>
 
-To avoid excessive time consumption when reprojecting a map the region and 
-resolution of the target location should be set appropriately beforehand.
+To avoid excessive time consumption when reprojecting a map the region
+and resolution of the target location should be set appropriately
+beforehand.
 
 <p>
-A simple way to do this is to check the projected bounds of the input map
-in the current location's projection using the <b>-p</b> flag. The <b>-g</b>
-flag reports the same thing, but in a form which can be directly cut and
-pasted into a <em>g.region</em> command. After setting the region in that
-way you might check the cell resolution with "<em>g.region -p</em>" then
-snap it to a regular grid with <em>g.region</em>'s -a flag. E.g.
-<tt>g.region&nbsp;-a&nbsp;res=5 -p</tt>. Note that this is just a rough guide.
+A simple way to do this is to check the projected bounds of the input
+map in the current location's projection using the <b>-p</b>
+flag. The <b>-g</b> flag reports the same thing, but in a form which
+can be directly cut and pasted into
+a <em><a href="g.region.html">g.region</a></em> command. After setting
+the region in that way you might check the cell resolution with
+"<em>g.region -p</em>" then snap it to a regular grid
+with <em><a href="g.region.html">g.region</a></em>'s <b>-a</b>
+flag. E.g.
+<tt>g.region -a res=5 -p</tt>. Note that this is just a rough guide.
 
 <p>
-A more involved, but more accurate, way to do this is to generate a vector
-"box" map of the region in the source location using
+A more involved, but more accurate, way to do this is to generate a
+vector "box" map of the region in the source location using
  <em><a href="v.in.region.html">v.in.region</a></em>.
 This "box" map is then reprojected into the target location with
-<em><a href="v.proj.html">v.proj</a></em>.
-Next the region in the target location is set to the extent of the new vector
-map with <em><a href="g.region.html">g.region</a></em> along with the desired
-raster resolution (<em>g.region -m</em> can be used in Latitude/Longitude
-locations to measure the geodetic length of a pixel).
-<em>r.proj</em> is then run for the raster map the user wants to reproject.
-In this case a little preparation goes a long way.
+<em><a href="v.proj.html">v.proj</a></em>. Next the region in the
+target location is set to the extent of the new vector map
+with <em><a href="g.region.html">g.region</a></em> along with the
+desired raster resolution (<em>g.region -m</em> can be used in
+Latitude/Longitude locations to measure the geodetic length of a
+pixel).
+<em>r.proj</em> is then run for the raster map the user wants to
+reproject.  In this case a little preparation goes a long way.
 <p>
-When reprojecting whole-world maps the user should disable map-trimming with
-the <em>-n</em> flag. Trimming is not useful here because the module has the
-whole map in memory anyway. Besides that, world "edges" are hard (or
-impossible) to find in projections other than latitude-longitude so results
-may be odd with trimming.
+When reprojecting whole-world maps the user should disable
+map-trimming with the <b>-n</b> flag. Trimming is not useful here
+because the module has the whole map in memory anyway. Besides that,
+world "edges" are hard (or impossible) to find in projections other
+than latitude-longitude so results may be odd with trimming.
 
 
 <h2>EXAMPLES</h2>
 
 <h3>Inline method</h3>
-With GRASS running in the destination location use the <b>-g</b> flag to
-show the input map's bounds once projected into the current working projection,
-then use that to set the region bounds before performing the reprojection:
+
+With GRASS running in the destination location use the <b>-g</b> flag
+to show the input map's bounds once projected into the current working
+projection, then use that to set the region bounds before performing
+the reprojection:
 
 <div class="code"><pre>
 # calculate where output map will be
-GRASS> r.proj input=elevation location=ll_wgs84 mapset=user1 -p
+r.proj input=elevation location=ll_wgs84 mapset=user1 -p
 Source cols: 8162
 Source rows: 12277
 Local north: -4265502.30382993
@@ -197,10 +207,10 @@ Local west: 14271663.19157564
 Local east: 14409956.2693866
 
 # same calculation, but in a form which can be cut and pasted into a g.region call
-GRASS> r.proj input=elevation location=ll_wgs84 mapset=user1 -g
+r.proj input=elevation location=ll_wgs84 mapset=user1 -g
 n=-4265502.30382993 s=-4473453.15255565 w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162
 
-GRASS> g.region n=-4265502.30382993 s=-4473453.15255565 \
+g.region n=-4265502.30382993 s=-4473453.15255565 \
   w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162 -p
 projection: 99 (Mercator)
 zone:       0
@@ -217,7 +227,7 @@ cols:       8162
 cells:      100204874
 
 # round resolution to something cleaner
-GRASS> g.region res=17 -a -p
+g.region res=17 -a -p
 projection: 99 (Mercator)
 zone:       0
 datum:      wgs84
@@ -233,9 +243,8 @@ cols:       8136
 cells:      99535824
 
 # finally, perform the reprojection
-GRASS> r.proj input=elevation location=ll_wgs84 mapset=user1 memory=800
+r.proj input=elevation location=ll_wgs84 mapset=user1 memory=800
 </pre></div>
-
 
 <h3>v.in.region method</h3>
 <div class="code"><pre>
@@ -265,51 +274,51 @@ location=source_location_name mapset=PERMANENT res=5 method=cubic
 
 <h2>REFERENCES</h2>
 
-[1] Evenden, G.I.  (1990) <a href="http://proj.osgeo.org">Cartographic
-projection procedures for the UNIX environment - a user's manual.</a>
-USGS Open-File Report 90-284 (OF90-284.pdf)
-See also there: Interim Report and 2nd Interim Report on Release 4, Evenden 1994).
-<p>
-Richards, John A. (1993), Remote Sensing Digital Image Analysis,
-Springer-Verlag, Berlin, 2nd edition. 
-<p>
-<a href="http://proj.osgeo.org">PROJ.4</a>: Projection/datum support library.
-<p>
-<b>Further reading</b>
-<ul>
-<li> <a href="http://www.asprs.org/resources/grids/">ASPRS Grids and Datum</a>
-<li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ.4)
-<li> <a href="http://www.mapref.org">MapRef -
-     The Collection of Map Projections and Reference Systems for Europe</a> 
-<li> <a href="http://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a>
-</ul>
+<ol>
+  <li> Evenden, G.I.  (1990) <a href="http://proj.osgeo.org">Cartographic
+      projection procedures for the UNIX environment - a user's manual.</a>
+    USGS Open-File Report 90-284 (OF90-284.pdf)
+    See also there: Interim Report and 2nd Interim Report on Release 4, Evenden 1994).
+  <li> Richards, John A. (1993), Remote Sensing Digital Image Analysis,
+    Springer-Verlag, Berlin, 2nd edition.
+</ol>
 
+<p>
+<a href="http://proj.osgeo.org">PROJ.4</a>: Projection/datum support
+library.
+
+<p>
+  <b>Further reading</b>
+<ul>
+  <li> <a href="http://www.asprs.org/resources/grids/">ASPRS Grids and Datum</a>
+  <li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ.4)
+  <li> <a href="http://www.mapref.org">MapRef -
+      The Collection of Map Projections and Reference Systems for Europe</a> 
+  <li> <a href="http://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a>
+</ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="g.region.html">g.region</a>,
-<a href="g.proj.html">g.proj</a>,
-<a href="g.setproj.html">g.setproj</a>,
-<a href="i.rectify.html">i.rectify</a>,
-<a href="m.proj.html">m.proj</a>,
-<a href="r.support.html">r.support</a>,
-<a href="r.stats.html">r.stats</a>,
-<a href="v.proj.html">v.proj</a>,
-<a href="v.in.region.html">v.in.region</a>
+  <a href="g.region.html">g.region</a>,
+  <a href="g.proj.html">g.proj</a>,
+  <a href="g.setproj.html">g.setproj</a>,
+  <a href="i.rectify.html">i.rectify</a>,
+  <a href="m.proj.html">m.proj</a>,
+  <a href="r.support.html">r.support</a>,
+  <a href="r.stats.html">r.stats</a>,
+  <a href="v.proj.html">v.proj</a>,
+  <a href="v.in.region.html">v.in.region</a>
 </em>
 <p>
 The 'gdalwarp' and 'gdal_translate' utilities are available from the 
 <a href="http://www.gdal.org">GDAL</a> project.
-
-
+  
 <h2>AUTHORS</h2>
-
-Martin Schroeder, University of Heidelberg, Germany<p>
-Man page text from S.J.D. Cox, AGCRC, CSIRO Exploration &amp; Mining, Nedlands, WA
-<p>
-Updated by <a href="mailto:morten@ngb.se">Morten Hulden</a>
-<p>
+  
+Martin Schroeder, University of Heidelberg, Germany<br>
+Man page text from S.J.D. Cox, AGCRC, CSIRO Exploration &amp; Mining, Nedlands, WA<br>
+Updated by <a href="mailto:morten@ngb.se">Morten Hulden</a><br>
 Datum tranformation support and cleanup by Paul Kelly
 
 <p>
