@@ -94,9 +94,9 @@ undocumented.</i>
  - linkm:	Linked list memory manager - \ref linkm (obsolete?)
  - manage:      \ref managelib
  - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
- - pngdriver:   PNG display driver library - \ref pngdriver
+ - pngdriver:   \ref pngdriverlib
  - proj:	\ref projlib (wrapper to PROJ4 projection library)
- - psdriver:    \ref psdriver
+ - psdriver:    \ref psdriverlib
  - python:      \ref pythonlib
  - raster:	\ref rasterlib
  - rowio:	\ref rowiolib
