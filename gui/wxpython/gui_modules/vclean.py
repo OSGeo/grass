@@ -1,12 +1,13 @@
 """
 @package vclean.py
 
-@brief Dialog for interactive construction of vector cleaning operations
+@brief Dialog for interactive construction of vector cleaning
+operations
 
 Classes:
  - VectorCleaningFrame
 
-(C) 2010 by the GRASS Development Team
+(C) 2010-2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -458,21 +459,24 @@ class VectorCleaningFrame(wx.Frame):
 	self.GetCmdStrings()
 
         if self.log:
-	    cmdstring = '%s' % (self.cmd)
-	    # list -> string
-	    cmdstring += ' input=%s output=%s type=%s tool=%s thres=%s' % \
-		(self.inmap, self.outmap, self.ftype_string, self.tools_string, self.thresh_string)
+	    cmd = [ self.cmd,
+                    'input=%s' % self.inmap,
+                    'output=%s' % self.outmap,
+                    'tool=%s' % self.tools_string,
+                    'thres=%s' % self.thresh_string ]
+            if self.ftype_string:
+                cmd.append('type=%s' % self.ftype_string)
 	    if self.overwrite.IsChecked():
-		cmdstring += ' --overwrite'
-
-            self.log.RunCmd(cmdstring)
+		cmd.append('--overwrite')
+            
+            self.log.RunCmd(cmd)
             self.parent.Raise()
         else:
 	    if self.overwrite.IsChecked():
 		overwrite = True
 	    else:
 		overwrite = False
-
+            
 	    gcmd.RunCommand(self.cmd,
 			    input = self.inmap,
 			    output = self.outmap,
