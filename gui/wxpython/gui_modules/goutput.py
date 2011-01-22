@@ -241,7 +241,7 @@ class GMConsole(wx.SplitterWindow):
         self.btn_console_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
                                            label = _("&Clear output"), size=(125,-1))
         self.btn_cmd_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
-                                       label = _("&Clear command"), size=(125,-1))
+                                       label = _("C&lear command"), size=(125,-1))
         if self.parent.GetName() != 'LayerManager':
             self.btn_cmd_clear.Hide()
         self.btn_console_save  = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
