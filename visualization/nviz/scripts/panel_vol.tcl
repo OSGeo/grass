@@ -865,7 +865,7 @@ proc create_isosurfs_subpanel { BASE } {
 	Button $bottom.up -text "Move Up" -command "isosurf_up $pname" -bd 1\
 		-helptext "Move isosurface up in list"
     Button $bottom.down -text "Move Down" -command "isosurf_down $pname" -bd 1\
-		-helptext "Move isosurface own in list"
+		-helptext "Move isosurface down in list"
     
     pack $top.add $top.delete -side top -expand 1 -fill x
     pack $bottom.down $bottom.up -side bottom -expand 1 -fill x
