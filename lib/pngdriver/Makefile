@@ -9,8 +9,10 @@ endif
 LIB = PNGDRIVER
 PGM = pngdriver
 include $(MODULE_TOPDIR)/include/Make/Lib.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 EXTRA_CFLAGS=$(ZLIBINCPATH) $(PNGINC) -I../driver
 
-
 default: lib
+
+DOXNAME = pngdriver
