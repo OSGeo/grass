@@ -87,8 +87,8 @@ int main(int argc, char *argv[])
     field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "line,boundary";
-    type_opt->answer = "line,boundary";
+    type_opt->options = "line,boundary,area";
+    type_opt->answer = "line,boundary,area";
 
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
@@ -305,19 +305,20 @@ int main(int argc, char *argv[])
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
-    
+
     total_input = total_output = 0;
 
     chcat = 0;
     varray = NULL;
     layer = Vect_get_field_number(&In, field_opt->answer);
     /* parse filter option and select appropriate lines */
-    if (method == DISPLACEMENT || method == NETWORK)
+    if (method == DISPLACEMENT)
 	varray = parse_filter_options(&In, layer, mask_type,
 			      where_opt->answer, cat_opt->answer, &chcat);
 
     if (method == DISPLACEMENT) {
 	/* modifies only lines, all other features including boundaries are preserved */
+	/* options where, cats, and layer are respected */
 	G_message(_("Displacement..."));
 	snakes_displacement(&In, &Out, thresh, alpha, beta, 1.0, 10.0,
 			    iterations, varray);
@@ -326,6 +327,7 @@ int main(int argc, char *argv[])
     /* TODO: rearrange code below. It's really messy */
     if (method == NETWORK) {
 	/* extracts lines of selected type, all other features are discarded */
+	/* options where, cats, and layer are ignored */
 	G_message(_("Network generalization..."));
 	total_output =
 	    graph_generalization(&In, &Out, mask_type, degree_thresh, 
@@ -339,6 +341,10 @@ int main(int argc, char *argv[])
 	    copy_tables_by_cats(&In, &Out);
 	else
 	    Vect_copy_tables(&In, &Out, -1);
+    }
+    else if (where_opt->answer && method < NETWORK) {
+	G_warning(_("Attributes are needed for 'where' option, copying table"));
+	Vect_copy_tables(&In, &Out, -1);
     }
 
     /* smoothing/simplification */
@@ -355,6 +361,9 @@ int main(int argc, char *argv[])
 	varray = parse_filter_options(&Out, layer, mask_type,
 			      where_opt->answer, cat_opt->answer, &chcat);
 
+	if ((mask_type & GV_AREA) && !(mask_type & GV_BOUNDARY))
+	    mask_type |= GV_BOUNDARY;
+
 	G_message("-----------------------------------------------------");
 	G_message(_("Generalization (%s)..."), method_opt->answer);
 	G_percent_reset();
@@ -363,108 +372,123 @@ int main(int argc, char *argv[])
 
 	n_lines = Vect_get_num_lines(&Out);
 	for (i = 1; i <= n_lines; i++) {
+	    int after = 0;
+
 	    G_percent(i, n_lines, 1);
 
 	    type = Vect_read_line(&Out, APoints, Cats, i);
 
-	    if (layer != -1 && !Vect_cat_get(Cats, layer, NULL))
-		continue;
-	    
 	    if (!(type & GV_LINES) || !(mask_type & type))
 		continue;
 		
+	    if ((type & GV_LINE) && chcat && !varray->c[i])
+		continue;
+	    else if ((type & GV_BOUNDARY) && chcat) {
+		int do_line = varray->c[i];
+
+		if ((mask_type & GV_AREA) && !do_line) {
+		    int left, right;
+		    
+		    /* check if any of the centroids is selected */
+		    Vect_get_line_areas(&Out, i, &left, &right);
+		    if (left > 0) {
+			left = Vect_get_area_centroid(&Out, left);
+			do_line = varray->c[left];
+		    }
+		    if (!do_line && right > 0) {
+			right = Vect_get_area_centroid(&Out, right);
+			do_line = varray->c[right];
+		    }
+		}
+		if (!do_line)
+		    continue;
+	    }
+
 	    Vect_line_prune(APoints);
-	    
+
 	    if (APoints->n_points < 2)
-		/* Line of length zero */
+		/* Line of length zero, delete if boundary ? */
 		continue;
 
 	    total_input += APoints->n_points;
 
-	    if ((type & mask_type) && (!chcat || varray->c[i])) {
-		int after = 0;
-
-		/* copy points */
-		Vect_reset_line(Points);
-		Vect_append_points(Points, APoints, GV_FORWARD);
-		    
-		for (iter = 0; iter < iterations; iter++) {
-		    switch (method) {
-		    case DOUGLAS:
-			douglas_peucker(Points, thresh, with_z);
-			break;
-		    case DOUGLAS_REDUCTION:
-			douglas_peucker_reduction(Points, thresh, reduction,
-						  with_z);
-			break;
-		    case LANG:
-			lang(Points, thresh, look_ahead, with_z);
-			break;
-		    case VERTEX_REDUCTION:
-			vertex_reduction(Points, thresh, with_z);
-			break;
-		    case REUMANN:
-			reumann_witkam(Points, thresh, with_z);
-			break;
-		    case BOYLE:
-			boyle(Points, look_ahead, with_z);
-			break;
-		    case SLIDING_AVERAGING:
-			sliding_averaging(Points, slide, look_ahead, with_z);
-			break;
-		    case DISTANCE_WEIGHTING:
-			distance_weighting(Points, slide, look_ahead, with_z);
-			break;
-		    case CHAIKEN:
-			chaiken(Points, thresh, with_z);
-			break;
-		    case HERMITE:
-			hermite(Points, thresh, angle_thresh, with_z);
-			break;
-		    case SNAKES:
-			snakes(Points, alpha, beta, with_z);
-			break;
-		    }
+	    /* copy points */
+	    Vect_reset_line(Points);
+	    Vect_append_points(Points, APoints, GV_FORWARD);
+		
+	    for (iter = 0; iter < iterations; iter++) {
+		switch (method) {
+		case DOUGLAS:
+		    douglas_peucker(Points, thresh, with_z);
+		    break;
+		case DOUGLAS_REDUCTION:
+		    douglas_peucker_reduction(Points, thresh, reduction,
+					      with_z);
+		    break;
+		case LANG:
+		    lang(Points, thresh, look_ahead, with_z);
+		    break;
+		case VERTEX_REDUCTION:
+		    vertex_reduction(Points, thresh, with_z);
+		    break;
+		case REUMANN:
+		    reumann_witkam(Points, thresh, with_z);
+		    break;
+		case BOYLE:
+		    boyle(Points, look_ahead, with_z);
+		    break;
+		case SLIDING_AVERAGING:
+		    sliding_averaging(Points, slide, look_ahead, with_z);
+		    break;
+		case DISTANCE_WEIGHTING:
+		    distance_weighting(Points, slide, look_ahead, with_z);
+		    break;
+		case CHAIKEN:
+		    chaiken(Points, thresh, with_z);
+		    break;
+		case HERMITE:
+		    hermite(Points, thresh, angle_thresh, with_z);
+		    break;
+		case SNAKES:
+		    snakes(Points, alpha, beta, with_z);
+		    break;
 		}
+	    }
+	    
+	    /* safety check, BUG in method if not passed */
+	    if (APoints->x[0] != Points->x[0] || 
+		APoints->y[0] != Points->y[0] ||
+		APoints->z[0] != Points->z[0])
+		G_fatal_error(_("Method '%s' did not preserve first point"), method_opt->answer);
 		
-		/* safety check, BUG in method if not passed */
-		if (APoints->x[0] != Points->x[0] || 
-		    APoints->y[0] != Points->y[0] ||
-		    APoints->z[0] != Points->z[0])
-		    G_fatal_error(_("Method '%s' did not preserve first point"), method_opt->answer);
-		    
-		if (APoints->x[APoints->n_points - 1] != Points->x[Points->n_points - 1] || 
-		    APoints->y[APoints->n_points - 1] != Points->y[Points->n_points - 1] ||
-		    APoints->z[APoints->n_points - 1] != Points->z[Points->n_points - 1])
-		    G_fatal_error(_("Method '%s' did not preserve last point"), method_opt->answer);
+	    if (APoints->x[APoints->n_points - 1] != Points->x[Points->n_points - 1] || 
+		APoints->y[APoints->n_points - 1] != Points->y[Points->n_points - 1] ||
+		APoints->z[APoints->n_points - 1] != Points->z[Points->n_points - 1])
+		G_fatal_error(_("Method '%s' did not preserve last point"), method_opt->answer);
 
-		Vect_line_prune(Points);
-		
-		/* oversimplified line */
-		if (Points->n_points < 2) {
+	    Vect_line_prune(Points);
+
+	    /* oversimplified line */
+	    if (Points->n_points < 2) {
+		after = APoints->n_points;
+		n_oversimplified++;
+	    }
+	    /* check for topology corruption */
+	    else if (type == GV_BOUNDARY) {
+		if (!check_topo(&Out, i, APoints, Points, Cats)) {
 		    after = APoints->n_points;
-		    n_oversimplified++;
+		    not_modified_boundaries++;
 		}
-		/* check for topology corruption */
-		else if (type == GV_BOUNDARY) {
-		    if (!check_topo(&Out, i, APoints, Points, Cats)) {
-			after = APoints->n_points;
-			not_modified_boundaries++;
-		    }
-		    else
-			after = Points->n_points;
-		}
-		else {
-		    /* type == GV_LINE */
-		    Vect_rewrite_line(&Out, i, type, Points, Cats);
+		else
 		    after = Points->n_points;
-		}
-
-		total_output += after;
 	    }
 	    else {
-		total_output += APoints->n_points;
+		/* type == GV_LINE */
+		Vect_rewrite_line(&Out, i, type, Points, Cats);
+		after = Points->n_points;
 	    }
+
+	    total_output += after;
 	}
 	if (not_modified_boundaries > 0)
 	    G_message(_("%d boundaries were not modified because modification would damage topology"),
@@ -485,12 +509,12 @@ int main(int argc, char *argv[])
 
     G_message("-----------------------------------------------------");
     if (total_input != 0 && total_input != total_output)
-	G_done_msg(_("Number of vertices %s from %d to %d (%d%%)."),
+	G_message(_("Number of vertices for selected lines %s from %d to %d (%d%%)."),
 		  simplification ? _("reduced") : _("changed"), 
 		  total_input, total_output,
 		  (total_output * 100) / total_input);
-    else
-	G_done_msg(" ");
+
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }

@@ -39,6 +39,7 @@ int type_mask(struct Option *type_opt)
 	case 'a':
 	    res |= GV_AREA;
 	}
+
     return res;
 }
 
@@ -194,6 +195,12 @@ struct varray *parse_filter_options(struct Map_info *Map, int layer,
 {
     struct varray *varray;
 
+    /* allow selection of areas and other types */
+    if (mask_type & GV_AREA) {
+	mask_type &= ~(GV_AREA);
+	mask_type |= GV_CENTROID;
+    }
+
     if (where) {
 	if (layer < 1)
 	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
@@ -201,6 +208,7 @@ struct varray *parse_filter_options(struct Map_info *Map, int layer,
 	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
 	*chcat = 1;
 	varray = Vect_new_varray(Vect_get_num_lines(Map));
+
 	if (Vect_set_varray_from_db
 	    (Map, layer, where, mask_type, 1, varray) == -1) {
 	    G_warning(_("Unable to load data from database"));
@@ -209,12 +217,33 @@ struct varray *parse_filter_options(struct Map_info *Map, int layer,
     else if (cats) {
 	if (layer < 1)
 	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "cat");
-	varray = Vect_new_varray(Vect_get_num_lines(Map));
 	*chcat = 1;
+	varray = Vect_new_varray(Vect_get_num_lines(Map));
+
 	if (Vect_set_varray_from_cat_string
 	    (Map, layer, cats, mask_type, 1, varray) == -1) {
 	    G_warning(_("Problem loading category values"));
 	}
+    }
+    else if (layer > 0) {
+	int i, type, cat, nlines;
+	struct line_cats *Cats = Vect_new_cats_struct();
+
+	nlines = Vect_get_num_lines(Map);
+	varray = Vect_new_varray(nlines);
+	*chcat = 1;
+	
+	for (i = 1; i <= nlines; i++) {
+	    varray->c[i] = 0;
+	    type = Vect_read_line(Map, NULL, Cats, i);
+	    
+	    if (!(type & mask_type))
+		continue;
+		
+	    if (Vect_cat_get(Cats, layer, &cat))
+		varray->c[i] = 1;
+	}
+	Vect_destroy_cats_struct(Cats);
     }
     else
 	return NULL;
