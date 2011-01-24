@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		name = ifile->answers[m];
-		mapset = 0;
+		mapset = NULL;
 	    }
 
 	    got_file = 0;

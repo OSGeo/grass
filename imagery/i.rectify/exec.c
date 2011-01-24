@@ -55,7 +55,8 @@ int exec_rectify(int order, char *extension, char *interp_method)
 	    colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
 
 	    /* Initialze History */
-	    Rast_short_history(name, type, &hist);
+	    if (Rast_read_history(name, mapset, &hist) < 0)
+		Rast_short_history(result, type, &hist);
 
 	    time(&start_time);
 
@@ -71,11 +72,8 @@ int exec_rectify(int order, char *extension, char *interp_method)
 		    Rast_free_colors(&colr);
 		}
 
-		/* Write out History Structure History */
-		Rast_set_history(&hist, HIST_TITLE, result);
-		Rast_set_history(&hist, HIST_DATSRC_1, name);
-		Rast_append_history(&hist, "Created from: i.rectify");
-		Rast_append_format_history(&hist, "Transformation order = %d", order);
+		/* Write out History */
+		Rast_command_history(&hist);
 		Rast_write_history(result, &hist);
 
 		select_current_env();
