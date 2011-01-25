@@ -301,9 +301,9 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    otype = GV_BOUNDARY;
 
 	if (split_distance > 0 && otype == GV_BOUNDARY)
-	    split_line(Map, otype, Points, Cats);
+	    split_line(Map, otype, Points, BCats);
 	else
-	    Vect_write_line(Map, otype, Points, Cats);
+	    Vect_write_line(Map, otype, Points, BCats);
 
 	/* Isles */
 	IPoints =
