@@ -42,11 +42,11 @@ void parse_args(int argc, char **argv,
     options->format = G_define_option();
     options->format->key = "format";
     options->format->type = TYPE_STRING;
-    options->format->required = NO;
+    options->format->required = YES;
     options->format->multiple = NO;
     options->format->answer = "ESRI_Shapefile";
     options->format->options = OGR_list_write_drivers();
-    options->format->description = _("OGR format");
+    options->format->description = _("OGR data format");
     options->format->guisection = _("Creation");
 
     options->dsco = G_define_option();
@@ -100,7 +100,8 @@ void parse_args(int argc, char **argv,
     flags->shapez->key = 'z';
     flags->shapez->description = _("Create 3D output if input is 3D "
        			      "(applies to Shapefile output only)");
-    
+    flags->shapez->guisection = _("Creation");
+
     flags->poly = G_define_flag();
     flags->poly->key = 'p';
     flags->poly->description = _("Export lines as polygons");
@@ -109,8 +110,10 @@ void parse_args(int argc, char **argv,
     flags->new = G_define_flag();
     flags->new->key = 'n';
     flags->new->description =
-	_("Create a new empty OGR layer in defined OGR datasource and exit. Nothing is read from input.");
-
+	_("Create a new empty OGR layer in defined OGR datasource "
+	  "and exit. Nothing is read from input.");
+    flags->new->guisection = _("Creation");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 }
