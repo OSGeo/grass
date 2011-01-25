@@ -139,6 +139,7 @@ int main(int argc, char *argv[])
     flag_c->key = 'c';
     flag_c->label = _("Do not write GDAL standard colortable");
     flag_c->description = _("Only applicable to Byte or UInt16 data types.");
+    flag_c->guisection = _("Creation");
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
@@ -155,7 +156,7 @@ int main(int argc, char *argv[])
     format->key = "format";
     format->type = TYPE_STRING;
     format->description =
-	_("GIS format to write (case sensitive, see also -l flag)");
+	_("Raster data format to write (case sensitive, see also -l flag)");
 
 #ifdef __ALLOW_DYNAMIC_OPTIONS__
     /* Init GDAL */
@@ -171,18 +172,17 @@ int main(int argc, char *argv[])
     format->options = gdal_formats;
 #endif
     format->answer = "GTiff";
-    format->required = NO;
-    format->guisection = _("Format");
+    format->required = YES;
     
     type = G_define_option();
     type->key = "type";
     type->type = TYPE_STRING;
-    type->description = _("File type");
+    type->description = _("Data type");
     type->options =
 	"Byte,Int16,UInt16,Int32,UInt32,Float32,Float64,CInt16,CInt32,CFloat32,CFloat64";
     type->required = NO;
-    type->guisection = _("Format");
-
+    type->guisection = _("Creation");
+ 
     createopt = G_define_option();
     createopt->key = "createopt";
     createopt->type = TYPE_STRING;
@@ -192,6 +192,7 @@ int main(int argc, char *argv[])
 	_("In the form of \"NAME=VALUE\", separate multiple entries with a comma.");
     createopt->multiple = YES;
     createopt->required = NO;
+    createopt->guisection = _("Creation");
 
     metaopt = G_define_option();
     metaopt->key = "metaopt";
@@ -202,6 +203,7 @@ int main(int argc, char *argv[])
 	  "with a comma. Not supported by all output format drivers.");
     metaopt->multiple = YES;
     metaopt->required = NO;
+    metaopt->guisection = _("Creation");
 
     nodataopt = G_define_option();
     nodataopt->key = "nodata";
@@ -210,8 +212,8 @@ int main(int argc, char *argv[])
 	_("Assign a specified nodata value to output bands");
     nodataopt->multiple = NO;
     nodataopt->required = NO;
-
-
+    nodataopt->guisection = _("Creation");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
