@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Create a new vector as a link to OGR layer (read-only)
  *               
- * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2011 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
     
     int ilayer, is3D;
     char buf[GPATH_MAX];
-     
+    const char *output;
+    
     G_gisinit(argv[0]);
     
     module = G_define_module();
@@ -68,12 +69,10 @@ int main(int argc, char *argv[])
     }
 
     if (!options.output->answer)
-	G_fatal_error(_("Required parameter <%s> not set"), options.output->key);
+	output = options.layer->answer;
+    else
+	output = options.output->answer;
     
-    if (!options.layer->answer)
-	G_fatal_error(_("Required parameter <%s> not set"), options.layer->key);
-        
-
     ilayer = list_layers(NULL, options.dsn->answer, options.layer->answer, &is3D);
     if (ilayer == -1) {
 	G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
@@ -81,24 +80,29 @@ int main(int argc, char *argv[])
     
     G_debug(2, "layer '%s' was found", options.layer->answer);
 
-    Vect_open_new(&Map, options.output->answer, is3D);
+    if (G_find_vector2(output, G_mapset()) && !G_check_overwrite(argc, argv)) {
+	G_fatal_error(_("option <%s>: <%s> exists."),
+		      options.output->key, output);
+    }
+    
+    Vect_open_new(&Map, output, is3D);
     Vect_hist_command(&Map);
     Vect_close(&Map);
     
     /* Vect_open_new created 'head', 'coor', 'hist' -> delete 'coor' and create 'frmt' */
     sprintf(buf, "%s/%s/vector/%s/coor", G_location_path(), G_mapset(),
-	    options.output->answer);
+	    output);
     G_debug(2, "Delete '%s'", buf);
     if (unlink(buf) == -1) {
-	Vect_delete(options.output->answer);
+	Vect_delete(output);
 	G_fatal_error(_("Unable to delete '%s'"), buf);
     }
 
     /* Create frmt */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, options.output->answer);
+    sprintf(buf, "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
-	Vect_delete(options.output->answer);
+	Vect_delete(output);
 	G_fatal_error("Unable to open file '%s'", buf);
     }
     
@@ -109,12 +113,12 @@ int main(int argc, char *argv[])
     fclose(fd);
     
     if (!flags.topo->answer) {
-      Vect_open_old(&Map, options.output->answer, G_mapset());
+      Vect_open_old(&Map, output, G_mapset());
       Vect_build(&Map);
       Vect_close(&Map);
     }
 
-    G_done_msg(_("Link to vector map <%s> created."), options.output->answer);
+    G_done_msg(_("Link to vector map <%s> created."), output);
 
     exit(EXIT_SUCCESS);
 }
