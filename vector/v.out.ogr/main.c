@@ -9,7 +9,7 @@
  *
  * PURPOSE:      Converts GRASS vector to one of supported OGR vector formats.
  *
- * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2009, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     int i, j, k, centroid, otype, donocat;
     int num_to_export;
     int field;
-    int overwrite;
+    int overwrite, found;
     struct GModule *module;
     struct Options options;
     struct Flags flags;
@@ -288,11 +288,11 @@ int main(int argc, char *argv[])
 									 GV_CENTROID));
 
     if (Vect_get_num_areas(&In) > 0 && !(otype & GV_AREA))
-	G_warning(_("%d areas found, but not requested to be exported. "
+	G_warning(_("%d area(s) found, but not requested to be exported. "
 		    "Verify 'type' parameter."), Vect_get_num_areas(&In));
 
     if (Vect_get_num_primitives(&In, GV_FACE) > 0 && !(otype & GV_FACE))
-	G_warning(_("%d faces found, but not requested to be exported. "
+	G_warning(_("%d face(s) found, but not requested to be exported. "
 		    "Verify 'type' parameter."), Vect_get_num_primitives(&In,
 									 GV_FACE));
 
@@ -408,9 +408,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
     Ogr_driver = OGRGetDriver(drn);
     
-    overwrite = G_check_overwrite(argc, argv);
-    if (overwrite || flags.append->answer) {
-	G_verbose_message(_("Overwrite/Append existing layer requires "
+    if (flags.append->answer) {
+	G_verbose_message(_("Append existing layer requires "
 			    "opening data source in update mode, forcing '-%c' flag"),
 			  flags.update->key);
 	flags.update->answer = TRUE;
@@ -422,68 +421,71 @@ int main(int argc, char *argv[])
     }
     else {
 	G_debug(1, "Create OGR data source");
-	Ogr_ds =
-	    OGR_Dr_CreateDataSource(Ogr_driver, options.dsn->answer,
-				    papszDSCO);
+	Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, options.dsn->answer,
+					 papszDSCO);
     }
-
+    
     CSLDestroy(papszDSCO);
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
 		      options.dsn->answer);
-
+    
     /* check if OGR layer exists */
-    if (flags.append->answer || overwrite) {
-	if (OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer)) {
-	    if (!overwrite && !flags.append->answer) {
-		G_fatal_error(_("OGR layer <%s> already exists in '%s'"),
-			      options.layer->answer, options.dsn->answer);
-	    }
-	    else if (overwrite) {
-		G_warning(_("OGR layer <%s> already exists and will be overwritten"),
-			  options.layer->answer);
-		papszLCO = CSLSetNameValue(papszLCO, "OVERWRITE", "YES");
-	    }
+    overwrite = G_check_overwrite(argc, argv);
+    found = FALSE;
+    for (i = 0; i < OGR_DS_GetLayerCount(Ogr_ds); i++) {
+	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
+	Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
+	if (strcmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
+	    continue;
+	
+	found = TRUE;
+	if (!overwrite && !flags.append->answer) {
+	    G_fatal_error(_("Layer <%s> already exists in OGR data source '%s'"),
+			  options.layer->answer, options.dsn->answer);
 	}
-	else {
-	    if (flags.append->answer) {
-		G_warning(_("OGR layer <%s> doesn't exists, "
-			    "creating new OGR layer instead"),
-			  options.layer->answer);
-		flags.append->answer = FALSE;
-	    }
+	else if (overwrite) {
+	    G_warning(_("OGR layer <%s> already exists and will be overwritten"),
+		      options.layer->answer);
+	    OGR_DS_DeleteLayer(Ogr_ds, i);
+	    break;
 	}
     }
-
+    if (flags.append->answer && !found) {
+	G_warning(_("OGR layer <%s> doesn't exists, "
+		    "creating new OGR layer instead"),
+		  options.layer->answer);
+	flags.append->answer = FALSE;
+    }
+    
     /* Automatically append driver options for 3D output to
-	 layer creation options if 'z' is given.*/
-	if ((flags.shapez->answer) && (Vect_is_3d(&In)) && (strcmp(options.format->answer,
-			"ESRI_Shapefile") == 0)) {
-		/* find right option */
-		char shape_geom[20];
-		if ((otype & GV_POINTS) || (otype & GV_KERNEL))
-			sprintf(shape_geom, "POINTZ");
-		if ((otype & GV_LINES))
-			sprintf(shape_geom, "ARCZ");
-		if ((otype & GV_AREA) || (otype & GV_FACE))
-			sprintf(shape_geom, "POLYGONZ");
-		/* check if the right LCO is already present */
-		const char *shpt;
-		shpt = CSLFetchNameValue(papszLCO, "SHPT");
-		if ((!shpt)) {
-			/* Not set at all? Good! */
-			papszLCO = CSLSetNameValue(papszLCO, "SHPT", shape_geom);
-		} else {
-			if (strcmp(shpt, shape_geom) != 0) {
-				/* Set but to a different value? Override! */
-				G_warning(_("Overriding existing user-defined 'SHPT=' LCO."));
-			}
-			/* Set correct LCO for this geometry type */
-			papszLCO = CSLSetNameValue(papszLCO, "SHPT", shape_geom);
-		}
+       layer creation options if 'z' is given.*/
+    if ((flags.shapez->answer) && (Vect_is_3d(&In)) && (strcmp(options.format->answer,
+							       "ESRI_Shapefile") == 0)) {
+	/* find right option */
+	char shape_geom[20];
+	if ((otype & GV_POINTS) || (otype & GV_KERNEL))
+	    sprintf(shape_geom, "POINTZ");
+	if ((otype & GV_LINES))
+	    sprintf(shape_geom, "ARCZ");
+	if ((otype & GV_AREA) || (otype & GV_FACE))
+	    sprintf(shape_geom, "POLYGONZ");
+	/* check if the right LCO is already present */
+	const char *shpt;
+	shpt = CSLFetchNameValue(papszLCO, "SHPT");
+	if ((!shpt)) {
+	    /* Not set at all? Good! */
+	    papszLCO = CSLSetNameValue(papszLCO, "SHPT", shape_geom);
+	} else {
+	    if (strcmp(shpt, shape_geom) != 0) {
+		/* Set but to a different value? Override! */
+		G_warning(_("Overriding existing user-defined 'SHPT=' LCO."));
+	    }
+	    /* Set correct LCO for this geometry type */
+	    papszLCO = CSLSetNameValue(papszLCO, "SHPT", shape_geom);
 	}
-
-
+    }
+    
     /* check if the map is 3d */
     if (Vect_is_3d(&In)) {
 	/* specific check for ESRI ShapeFile */
