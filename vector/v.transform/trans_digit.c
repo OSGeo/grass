@@ -1,22 +1,3 @@
-/* **************************************************************************
- *
- * MODULE:       v.transform
- * AUTHOR(S):    See other files as well...
- *               Eric G. Miller <egm2@jps.net>
- *               Radim Blazek
- *               DB support added by Martin Landa (08/2007)
- *
- * PURPOSE:      To transform a vector layer's coordinates via a set of tie
- *               points.
- *
- * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
- *
- *****************************************************************************/
-
 #include <math.h>
 #include <grass/libtrans.h>
 #include <grass/vector.h>
@@ -27,12 +8,12 @@
 
 #define PI M_PI
 
-int
-transform_digit_file(struct Map_info *Old, struct Map_info *New,
-		     int shift_file, double ztozero, int swap, double *trans_params_def,
-		     char *table, char **columns, int field)
+int transform_digit_file(struct Map_info *Old, struct Map_info *New,
+			 int shift_file, double ztozero, int swap, double *trans_params_def,
+			 char *table, char **columns, int field)
 {
-    int i, type, cat;
+    int i, type, cat, line;
+    int verbose, format;
     unsigned int j;
     double *trans_params;
     double ang, x, y;
@@ -65,7 +46,10 @@ transform_digit_file(struct Map_info *Old, struct Map_info *New,
 	ang = PI * trans_params[IDX_ZROT] / 180;
     }
 
-    while (1) {
+    line = 0;
+    format = G_info_format();
+    verbose = G_verbose() > G_verbose_min();
+    while (TRUE) {
 	type = Vect_read_next_line(Old, Points, Cats);
 
 	if (type == -1)		/* error */
@@ -76,6 +60,13 @@ transform_digit_file(struct Map_info *Old, struct Map_info *New,
 
 	if (field != -1 && !Vect_cat_get(Cats, field, NULL))
 	    continue;
+	
+	if (verbose && line % 1000 == 0) {
+	    if (format == G_INFO_FORMAT_PLAIN)
+		fprintf(stderr, "%d..", line);
+	    else
+		fprintf(stderr, "%11d\b\b\b\b\b\b\b\b\b\b\b", line);
+	}
 	
 	if (swap) {
 	    for (i = 0; i < Points->n_points; i++) {
@@ -165,8 +156,12 @@ transform_digit_file(struct Map_info *Old, struct Map_info *New,
 	}
 
 	Vect_write_line(New, type, Points, Cats);
+	line++;
     }
 
+    if (verbose && format != G_INFO_FORMAT_PLAIN)
+	fprintf(stderr, "\r");
+    
     if (field > 0) {
 	db_close_database_shutdown_driver(driver);
 	G_free((void *)trans_params);
