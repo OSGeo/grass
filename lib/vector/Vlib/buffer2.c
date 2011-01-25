@@ -1024,7 +1024,8 @@ void Vect_area_buffer2(const struct Map_info *Map, int area, double da, double d
     struct line_pnts *tPoints, *outer;
     struct line_pnts **isles;
 
-    int isles_count = 0;
+    int isles_count = 0, n_isles;
+
     int i, isle;
     int more = 8;
     int isles_allocated = 0;
@@ -1033,8 +1034,8 @@ void Vect_area_buffer2(const struct Map_info *Map, int area, double da, double d
 
     /* initializations */
     tPoints = Vect_new_line_struct();
-    isles_count = Vect_get_area_num_isles(Map, area);
-    isles_allocated = isles_count;
+    n_isles = Vect_get_area_num_isles(Map, area);
+    isles_allocated = n_isles;
     isles = G_malloc(isles_allocated * sizeof(struct line_pnts *));
 
     /* outer contour */
@@ -1043,7 +1044,7 @@ void Vect_area_buffer2(const struct Map_info *Map, int area, double da, double d
     Vect_append_point(outer, outer->x[0], outer->y[0], outer->z[0]);
 
     /* inner contours */
-    for (i = 0; i < isles_count; i++) {
+    for (i = 0; i < n_isles; i++) {
 	isle = Vect_get_area_isle(Map, area, i);
 	Vect_get_isle_points(Map, isle, tPoints);
 
