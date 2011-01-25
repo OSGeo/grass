@@ -46,9 +46,8 @@ void parse_args(int argc, char **argv,
     options->format->multiple = NO;
     options->format->answer = "ESRI_Shapefile";
     options->format->options = OGR_list_write_drivers();
-    options->format->description = _("OGR data format");
-    options->format->guisection = _("Creation");
-
+    options->format->description = _("Vector data format to write");
+    
     options->dsco = G_define_option();
     options->dsco->key = "dsco";
     options->dsco->type = TYPE_STRING;
