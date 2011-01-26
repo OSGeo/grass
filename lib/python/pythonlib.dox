@@ -171,6 +171,10 @@ Returns the name of a temporary file, created with g.tempfile.
 
  - python::core::mapsets()
 
+<b>Interface to g.version</b>
+
+ - python::core::version()
+
 <b>Color parsing</b>
 
  - python::core::parse_color()

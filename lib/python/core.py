@@ -1065,7 +1065,22 @@ def _create_location_xy(database, location):
         os.chdir(cur_dir)
     except OSError, e:
         raise ScriptException(repr(e))
-    
+
+# interface to g.version
+
+def version():
+    """!Get GRASS version as dictionary
+
+    @code
+    version()
+
+    {'date': '2011', 'gis_revision': 'Revision: 45093 ', 'version': '7.0.svn',
+     'gis_date': 'Date: 2011-01-20 13:10:50 +0100 (Thu, 20 Jan 2011) ', 'revision': '45136M'}
+    @endcode
+    """
+    return parse_command('g.version',
+                         flags = 'rg')
+
 # get debug_level
 if find_program('g.gisenv', ['--help']):
     debug_level = int(gisenv().get('DEBUG', 0))
