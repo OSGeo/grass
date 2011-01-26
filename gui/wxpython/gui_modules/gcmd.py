@@ -543,9 +543,45 @@ class CommandThread(Thread):
         """!Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
     
+def _formatMsg(text):
+    """!Format error messages for dialogs
+    """
+    message = ''
+    for line in text.splitlines():
+        if len(line) == 0:
+            continue
+        elif 'GRASS_INFO_MESSAGE' in line:
+            message += line.split(':', 1)[1].strip() + '\n'
+        elif 'GRASS_INFO_WARNING' in line:
+            message += line.split(':', 1)[1].strip() + '\n'
+        elif 'GRASS_INFO_ERROR' in line:
+            message += line.split(':', 1)[1].strip() + '\n'
+        elif 'GRASS_INFO_END' in line:
+            return message
+        else:
+            message += line.strip() + '\n'
+    
+    return message
+
 def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = False,
                parent = None, read = False, stdin = None, getErrorMsg = False, **kwargs):
-    """!Run GRASS command"""
+    """!Run GRASS command
+
+    @param prog program to run
+    @param flags flags given as a string
+    @param overwrite, quiet, verbose flags
+    @param parent parent window for error messages
+    @param read fetch stdout
+    @param stdin stdin or None
+    @param getErrorMsg get error messages on failure
+    @param kwargs program parameters
+    
+    @return returncode (read == False and getErrorMsg == False)
+    @return returncode, messages (read == False and getErrorMsg == True)
+    @return stdout (read == True and getErrorMsg == False)
+    @return returncode, stdout, messages (read == True and getErrorMsg == True)
+    @return stdout, stderr
+    """
     Debug.msg(1, "gcmd.RunCommand(): %s" % ' '.join(grass.make_command(prog, flags, overwrite,
                                                                        quiet, verbose, **kwargs)))
     
@@ -576,12 +612,12 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         if not getErrorMsg:
             return ret
         else:
-            return ret, stderr
+            return ret, _formatMsg(stderr)
 
     if not getErrorMsg:
         return stdout
     
     if read and getErrorMsg:
-        return ret, stdout, stderr
+        return ret, stdout, _formatMsg(stderr)
     
-    return stdout, stderr
+    return stdout, _formatMsg(stderr)

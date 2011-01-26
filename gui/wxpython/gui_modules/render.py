@@ -611,14 +611,16 @@ class Map(object):
         if vect:
             cmd['vect'] = ','.join(vect)
         
-        ret = gcmd.RunCommand('g.region',
-                              read = True,
-                              **cmd)
-        if not ret:
+        ret, reg, msg = gcmd.RunCommand('g.region',
+                                        read = True,
+                                        getErrorMsg = True,
+                                        **cmd)
+        
+        if ret != 0:
             if rast:
-                message = _("Unable to zoom to raster map <%s>.") % rast[0]
+                message = _("Unable to zoom to raster map <%s>.\n\nDetails: %s") % (rast[0], msg)
             elif vect:
-                message = _("Unable to zoom to vector map <%s>.") % vect[0]
+                message = _("Unable to zoom to vector map <%s>.\n\nDetails: %s") % (vect[0], msg)
             else:
                 message = _("Unable to get current geographic extent. "
                             "Force quiting wxGUI. Please run manually g.region to "
@@ -626,8 +628,8 @@ class Map(object):
             gcmd.GError(message)
             return self.region
         
-        for reg in ret.splitlines():
-            key, val = reg.split("=", 1)
+        for r in reg.splitlines():
+            key, val = r.split("=", 1)
             try:
                 region[key] = float(val)
             except ValueError:
