@@ -36,6 +36,9 @@ struct state {
     struct Item first_item;
     struct Item *current_item;
     int n_items;
+
+    char **error;
+    int n_errors;
 };
 
 extern struct state *st;
