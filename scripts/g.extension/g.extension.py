@@ -291,7 +291,7 @@ def install_extension(svnurl, prefix, module, no_install):
     
     grass.message(_("Compiling '%s'...") % module)
     if grass.call(['make',
-                   'MODULE_TOPDIR=%s' % gisbase],
+                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ ')],
                    stdout = outdev) != 0:
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
     
