@@ -424,18 +424,18 @@ struct Option *G_define_standard_option(int opt)
     case G_OPT_F_INPUT:
 	Opt->key = "input";
 	Opt->type = TYPE_STRING;
-	Opt->key_desc = "path";
+	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,file,input";
-	Opt->description = _("Path to input file");
+	Opt->description = _("Name to input file");
 	break;
     case G_OPT_F_OUTPUT:
 	Opt->key = "output";
 	Opt->type = TYPE_STRING;
-	Opt->key_desc = "path";
+	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "new,file,output";
-	Opt->description = _("Path for output file");
+	Opt->description = _("Name for output file");
 	break;
     case G_OPT_F_SEP:
 	Opt->key = "fs";
