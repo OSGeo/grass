@@ -1,18 +1,56 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>g.version</EM>
-prints to standard output the GRASS version number, date,
-the GRASS copyright and GRASS build information.
+<em>g.version</em> prints to standard output the GRASS version number,
+date, the GRASS copyright and GRASS build information.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-This program requires no command line arguments; the user simply types 
-<B>g.version</B> on the command line to see the version number and date 
-of the GRASS software currently being run by the user. 
+This program requires no command line arguments; the user simply types
+<em>g.version</em> on the command line to see the version number and
+date of the GRASS software currently being run by the user.
 
-<H2>AUTHOR</H2>
+<h2>EXAMPLES</h2>
+
+<div class="code"><pre>
+g.version 
+
+GRASS 7.0.svn45136 (2011)
+</pre></div>
+
+<div class="code"><pre>
+g.version -r
+
+GRASS 7.0.svn45136 (2011)
+Revision: 45093 
+Date: 2011-01-20 13:10:50 +0100 (Thu, 20 Jan 2011)
+</pre></div>
+
+<div class="code"><pre>
+g.version -rg
+
+version=7.0.svn
+revision=45136
+date=2011
+gis_revision=Revision: 45093 
+gis_date=Date: 2011-01-20 13:10:50 +0100 (Thu, 20 Jan 2011) 
+</pre></div>
+
+<h2>PYTHON</h2>
+
+See <em><a href="http://grass.osgeo.org/programming7/pythonlib.html">Python
+Scripting Library</a></em> for more info.
+
+<div class="code"><pre>
+import grass.script as grass
+
+grass.version()
+</div>
+
+<h2>AUTHOR</h2>
 
 Michael Shapiro, 
 U.S. Army Construction Engineering 
 Research Laboratory
-<p><i>Last changed: $Date$</i>
+
+<p>
+<i>Last changed: $Date$</i>
