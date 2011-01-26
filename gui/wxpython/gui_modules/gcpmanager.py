@@ -1396,47 +1396,45 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                 msg = err = ''
 
                 ret, out, err = gcmd.RunCommand('v.transform',
-                           flags = '-o',
-                           input=vect,
-                           output=self.outname,
-                           pointsfile=self.file['points'],
-                           getErrorMsg=True, read=True) 
-                
-                    
+                                                flags = 'o',
+                                                input = vect,
+                                                output = self.outname,
+                                                pointsfile = self.file['points'],
+                                                getErrorMsg = True, read = True) 
+                                    
                 if ret == 0:
                     self.VectGRList.append(self.outname)
-                    print err
                     # note: WriteLog doesn't handle GRASS_INFO_PERCENT well, so using a print here
-#                    self.parent.goutput.WriteLog(text = _(err), switchPage = True)
-                    self.parent.goutput.WriteLog(text = _(out), switchPage = True)
+                    # self.parent.goutput.WriteLog(text = _(err), switchPage = True)
+                    self.parent.goutput.WriteLog(text = out, switchPage = True)
                 else:
                     self.parent.goutput.WriteError(_('Georectification of vector map <%s> failed') %
-                                                           self.outname)
-                    self.parent.goutput.WriteError(_(err))
-
+                                                   self.outname)
+                    self.parent.goutput.WriteError(err)
+                    
                 # FIXME
                 # Copying database information not working. 
                 # Does not copy from xy location to current location
                 # TODO: replace $GISDBASE etc with real paths
-#                xyLayer = []
-#                for layer in grass.vector_db(map = vect).itervalues():
-#                    xyLayer.append((layer['driver'],
-#                                    layer['database'],
-#                                    layer['table']))
-
-                        
-#                dbConnect = grass.db_connection()
-#                print 'db connection =', dbConnect
-#                for layer in xyLayer:     
-#                    self.parent.goutput.RunCmd(['db.copy',
-#                                                '--q',
-#                                                '--o',
-#                                                'from_driver=%s' % layer[0],
-#                                                'from_database=%s' % layer[1],
-#                                                'from_table=%s' % layer[2],
-#                                                'to_driver=%s' % dbConnect['driver'],
-#                                                'to_database=%s' % dbConnect['database'],
-#                                                'to_table=%s' % layer[2] + '_' + self.extension])
+                #                xyLayer = []
+                #                for layer in grass.vector_db(map = vect).itervalues():
+                #                    xyLayer.append((layer['driver'],
+                #                                    layer['database'],
+                #                                    layer['table']))
+                    
+                    
+                    #                dbConnect = grass.db_connection()
+                    #                print 'db connection =', dbConnect
+                    #                for layer in xyLayer:     
+                    #                    self.parent.goutput.RunCmd(['db.copy',
+                    #                                                '--q',
+                    #                                                '--o',
+                    #                                                'from_driver=%s' % layer[0],
+                    #                                                'from_database=%s' % layer[1],
+                    #                                                'from_table=%s' % layer[2],
+                    #                                                'to_driver=%s' % dbConnect['driver'],
+                    #                                                'to_database=%s' % dbConnect['database'],
+                    #                                                'to_table=%s' % layer[2] + '_' + self.extension])
 
             # copy all georectified vectors from source location to current location
             for name in self.VectGRList:
