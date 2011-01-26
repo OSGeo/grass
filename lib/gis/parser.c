@@ -64,7 +64,7 @@
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2009, 2011 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -99,22 +99,23 @@ struct state state;
 struct state *st = &state;
 
 /* local prototypes */
-static int set_flag(int);
+static void set_flag(int);
 static int contains(const char *, int);
 static int is_option(const char *);
-static int set_option(const char *);
-static int check_opts(void);
-static int check_an_opt(const char *, int, const char *, const char **, char **);
+static void set_option(const char *);
+static void check_opts(void);
+static void check_an_opt(const char *, int, const char *, const char **, char **);
 static int check_int(const char *, const char **);
 static int check_double(const char *, const char **);
 static int check_string(const char *, const char **, int *);
-static int check_required(void);
+static void check_required(void);
 static void split_opts(void);
-static int check_multiple_opts(void);
+static void check_multiple_opts(void);
 static int check_overwrite(void);
 static void define_keywords(void);
 static void split_gisprompt(const char *gisprompt, char *age, char *element, char *desc);
 static void module_gui_wx(void);
+static void append_error(const char *);
 
 /*!
  * \brief Disables the ability of the parser to operate interactively.
@@ -311,16 +312,17 @@ int G_parser(int argc, char **argv)
 {
     int need_first_opt;
     int opt_checked = 0;
-    int error;
-    char *ptr, *tmp_name;
+    char *ptr, *tmp_name, *err;
     int i;
     struct Option *opt;
     char force_gui = FALSE;
 
-    error = 0;
+    err = NULL;
     need_first_opt = 1;
     tmp_name = G_store(argv[0]);
     st->pgm_path = tmp_name;
+    st->n_errors = 0;
+    st->error = NULL;
     i = strlen(tmp_name);
     while (--i >= 0) {
 	if (G_is_dirsep(tmp_name[i])) {
@@ -520,12 +522,12 @@ int G_parser(int argc, char **argv)
 	    /* If we see a flag */
 	    else if (*ptr == '-') {
 		while (*(++ptr))
-		    error += set_flag(*ptr);
+		    set_flag(*ptr);
 
 	    }
 	    /* If we see standard option format (option=val) */
 	    else if (is_option(ptr)) {
-		error += set_option(ptr);
+		set_option(ptr);
 		need_first_opt = 0;
 	    }
 
@@ -537,13 +539,13 @@ int G_parser(int argc, char **argv)
 
 	    /* If we see the non valid argument (no "=", just argument) */
 	    else if (contains(ptr, '=') == 0) {
-		fprintf(stderr, _("Sorry <%s> is not a valid option\n"), ptr);
-		error = 1;
+		G_asprintf(&err, _("Sorry <%s> is not a valid option"), ptr);
+		append_error(err);
 	    }
 
 	}
     }
-
+    
     /* Split options where multiple answers are OK */
     split_opts();
 
@@ -554,19 +556,23 @@ int G_parser(int argc, char **argv)
     }
 
     /* Check multiple options */
-    error += check_multiple_opts();
+    check_multiple_opts();
 
     /* Check answers against options and check subroutines */
     if (!opt_checked)
-	error += check_opts();
+	check_opts();
 
     /* Make sure all required options are set */
     if (!st->suppress_required)
-	error += check_required();
+	check_required();
     
-    if (error) {
-	G_important_message(_("Error in usage. Call `%s --help` to get usage info."),
-			    state.pgm_name);
+    if (st->n_errors > 0) {
+	if (G_verbose() > G_verbose_min())
+	    G_usage();
+	fprintf(stderr, "\n");
+	for (i = 0; i < st->n_errors; i++) {
+	    fprintf(stderr, "%s: %s\n", _("ERROR"), st->error[i]);
+	}
 	return -1;
     }
 
@@ -799,32 +805,34 @@ static void module_gui_wx(void)
     G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script, G_recreate_command(), NULL);
 }
 
-static int set_flag(int f)
+static void set_flag(int f)
 {
     struct Flag *flag;
+    char *err;
+    
+    err = NULL;
 
     /* Flag is not valid if there are no flags to set */
-
     if (!st->n_flags) {
-	fprintf(stderr, _("Sorry, <%c> is not a valid flag\n"), f);
-	return (1);
+	G_asprintf(&err, _("Sorry, <%c> is not a valid flag"), f);
+	append_error(err);
+	return;
     }
 
     /* Find flag with corrrect keyword */
-
     flag = &st->first_flag;
     while (flag) {
 	if (flag->key == f) {
 	    flag->answer = 1;
 	    if (flag->suppress_required)
 		st->suppress_required = 1;
-	    return (0);
+	    return;
 	}
 	flag = flag->next_flag;
     }
 
-    fprintf(stderr, _("Sorry, <%c> is not a valid flag\n"), f);
-    return (1);
+    G_asprintf(&err, _("Sorry, <%c> is not a valid flag"), f);
+    append_error(err);
 }
 
 /* contents() is used to find things strings with characters like commas and
@@ -834,10 +842,10 @@ static int contains(const char *s, int c)
 {
     while (*s) {
 	if (*s == c)
-	    return (1);
+	    return TRUE;
 	s++;
     }
-    return (0);
+    return FALSE;
 }
 
 static int is_option(const char *string)
@@ -879,14 +887,16 @@ static int match_option(const char *string, const char *option)
 	&& match_option_1(string + 1, option + 1);
 }
 
-static int set_option(const char *string)
+static void set_option(const char *string)
 {
     struct Option *at_opt = NULL;
     struct Option *opt = NULL;
     int got_one;
     size_t key_len;
     char the_key[KEYLENGTH];
-    char *ptr;
+    char *ptr, *err;
+
+    err = NULL;
 
     for (ptr = the_key; *string != '='; ptr++, string++)
 	*ptr = *string;
@@ -920,14 +930,16 @@ static int set_option(const char *string)
     }
 
     if (got_one > 1) {
-	fprintf(stderr, _("Sorry, <%s=> is ambiguous\n"), the_key);
-	return (1);
+	G_asprintf(&err, _("Sorry, <%s=> is ambiguous"), the_key);
+	append_error(err);
+	return;
     }
 
     /* If there is no match, complain */
     if (got_one == 0) {
-	fprintf(stderr, _("Sorry, <%s> is not a valid parameter\n"), the_key);
-	return (1);
+	G_asprintf(&err, _("Sorry, <%s> is not a valid parameter"), the_key);
+	append_error(err);
+	return;
     }
 
     /* Allocate memory where answer is stored */
@@ -939,19 +951,15 @@ static int set_option(const char *string)
     }
     else
 	opt->answer = G_store(string);
-    return (0);
 }
 
-static int check_opts(void)
+static void check_opts(void)
 {
     struct Option *opt;
-    int error;
     int ans;
 
-    error = 0;
-
     if (!st->n_opts)
-	return (0);
+	return;
 
     opt = &st->first_option;
     while (opt) {
@@ -959,33 +967,34 @@ static int check_opts(void)
 
 	if (opt->answer) {
 	    if (opt->multiple == 0)
-		error += check_an_opt(opt->key, opt->type,
-				      opt->options, opt->opts, &opt->answer);
+		check_an_opt(opt->key, opt->type,
+			     opt->options, opt->opts, &opt->answer);
 	    else {
 		for (ans = 0; opt->answers[ans] != '\0'; ans++)
-		    error += check_an_opt(opt->key, opt->type,
-					  opt->options, opt->opts, &opt->answers[ans]);
+		    check_an_opt(opt->key, opt->type,
+				 opt->options, opt->opts, &opt->answers[ans]);
 	    }
 	}
 
 	/* Check answer against user's check subroutine if any */
 
 	if (opt->checker)
-	    error += opt->checker(opt->answer);
+	    opt->checker(opt->answer);
 
 	opt = opt->next_opt;
     }
-    return (error);
 }
 
-static int check_an_opt(const char *key, int type, const char *options,
+static void check_an_opt(const char *key, int type, const char *options,
 			const char **opts, char **answerp)
 {
     const char *answer = *answerp;
     int error;
+    char *err;
     int found;
 
     error = 0;
+    err = NULL;
 
     switch (type) {
     case TYPE_INTEGER:
@@ -1002,32 +1011,34 @@ static int check_an_opt(const char *key, int type, const char *options,
     case 0:
 	break;
     case BAD_SYNTAX:
-	fprintf(stderr,
-		_("\nERROR: illegal range syntax for parameter <%s>\n"), key);
-	fprintf(stderr, _("       Presented as: %s\n"), options);
+	G_asprintf(&err,
+		   _("Illegal range syntax for parameter <%s>\n"
+		     "\tPresented as: %s"), key, options);
+	append_error(err);
 	break;
     case OUT_OF_RANGE:
-	fprintf(stderr,
-		_("\nERROR: value <%s> out of range for parameter <%s>\n"),
-		answer, key);
-	fprintf(stderr, _("       Legal range: %s\n"), options);
+	G_asprintf(&err, 
+		   _("Value <%s> out of range for parameter <%s>\n"
+		     "\tLegal range: %s"), answer, key, options);
+	append_error(err);
 	break;
     case MISSING_VALUE:
-	fprintf(stderr, _("\nERROR: Missing value for parameter <%s>\n"),
-		key);
+	G_asprintf(&err,
+		   _("Missing value for parameter <%s>"),
+		   key);
+	append_error(err);
 	break;
     case AMBIGUOUS:
-	fprintf(stderr, _("\nERROR: value <%s> ambiguous for parameter <%s>\n"),
-		answer, key);
-	fprintf(stderr, _("       valid options: %s\n"), options);
+	G_asprintf(&err,
+		   _("Value <%s> ambiguous for parameter <%s>\n"
+		     "\tValid options: %s"), answer, key, options);
+	append_error(err);
 	break;
     case REPLACED:
 	*answerp = G_store(opts[found]);
 	error = 0;
 	break;
     }
-
-    return error;
 }
 
 static int check_int(const char *ans, const char **opts)
@@ -1142,28 +1153,26 @@ static int check_string(const char *ans, const char **opts, int *result)
     }
 }
 
-static int check_required(void)
+static void check_required(void)
 {
     struct Option *opt;
-    int err;
-
-    err = 0;
-
+    char *err;
+    
+    err = NULL;
+    
     if (!st->n_opts)
-	return (0);
+	return;
 
     opt = &st->first_option;
     while (opt) {
 	if (opt->required && !opt->answer) {
-	    fprintf(stderr,
-		    _("ERROR: Required parameter <%s> not set:\n\t(%s)\n"),
-		    opt->key, (opt->label ? opt->label : opt->description) );
-	    err++;
+	    G_asprintf(&err, _("Required parameter <%s> not set:\n"
+			       "\t(%s)"),
+		       opt->key, (opt->label ? opt->label : opt->description));
+	    append_error(err);
 	}
 	opt = opt->next_opt;
     }
-
-    return (err);
 }
 
 static void split_opts(void)
@@ -1223,18 +1232,18 @@ static void split_opts(void)
     }
 }
 
-static int check_multiple_opts(void)
+static void check_multiple_opts(void)
 {
     struct Option *opt;
     const char *ptr;
     int n_commas;
     int n;
-    int error;
+    char *err;
 
     if (!st->n_opts)
-	return (0);
+	return;
 
-    error = 0;
+    err = NULL;
     opt = &st->first_option;
     while (opt) {
 	if (opt->answer && opt->key_desc) {
@@ -1247,17 +1256,16 @@ static int check_multiple_opts(void)
 	    for (n = 0; opt->answers[n] != '\0'; n++) ;
 	    /* if not correct multiple of items */
 	    if (n % n_commas) {
-		fprintf(stderr,
-			_("\nERROR: option <%s> must be provided in multiples of %d\n"),
-			opt->key, n_commas);
-		fprintf(stderr, _("       You provided %d items:\n"), n);
-		fprintf(stderr, "       %s\n", opt->answer);
-		error++;
+		G_asprintf(&err,
+			   _("Option <%s> must be provided in multiples of %d\n"
+			     "\tYou provided %d item(s): %s"),
+			   opt->key, n_commas, n, opt->answer);
+		append_error(err);
+			   
 	    }
 	}
 	opt = opt->next_opt;
     }
-    return (error);
 }
 
 /* Check for all 'new' if element already exists */
@@ -1372,4 +1380,10 @@ static void split_gisprompt(const char *gisprompt, char *age, char *element,
 	*ptr2 = *ptr1;
     }
     *ptr2 = '\0';
+}
+
+static void append_error(const char *msg)
+{
+    st->error = G_realloc(st->error, sizeof(char *) * st->n_errors + 1);
+    st->error[st->n_errors++] = G_store(msg);
 }
