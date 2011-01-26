@@ -84,29 +84,6 @@ report "cleanup"
 mv "$OSGEO4W_ROOT_MSYS"/apps/grass/grass-$VERSION/lib/*.$VERSION.dll \
    "$OSGEO4W_ROOT_MSYS/bin"
 
-mv "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h" \
-   "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h.mingw"
-cp mswindows/osgeo4w/config.h.switch \
-   "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h"
-cp mswindows/osgeo4w/config.h.vc \
-   "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass"
-cp mswindows/osgeo4w/ini.bat.tmpl \
-   "$OSGEO4W_ROOT_MSYS/etc/ini/grass.bat.tmpl"
-cp mswindows/osgeo4w/postinstall.bat \
-   "$OSGEO4W_ROOT_MSYS/etc/postinstall/grass.bat"
-cp mswindows/osgeo4w/preremove.bat \
-   "$OSGEO4W_ROOT_MSYS/etc/preremove/grass.bat"
-
-P="$(pwd -W)"
-# portable? how about dist.amd64-pc-mingw32?
-P="${P//\//\\\\}\\\\dist.i686-pc-mingw32"
-
-sed -e "s#$P#@osgeo4w@#" "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap" \
-    > $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap.tmpl
-sed -e "s#$P#@osgeo4w_msys@#" "$OSGEO4W_ROOT_MSYS/apps/grass/bin/grass70" \
-    > $OSGEO4W_ROOT_MSYS/apps/grass/bin/grass70.tmpl
-rm "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap"
-
 echo $(date): END >> $LOG
 
 exit 0
