@@ -97,14 +97,9 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
  * values and value options (range is missing)
  * Flags are supported as boolean values.
  *
- * The mime types for vector maps are GML 2.1.2 and grass ascii and binary vectors.
- * mime type: application/grass-vector-ascii  -> a text file generated with v.out.asci
- * Example.: urn:file:///path/name
- * mime type: application/grass-vector-binary -> the binary vectors must be addressed with a non standard urn:
- * Example: urn:grass:vector:location/mapset/name
- *
- * The mime types for raster maps are tiff and png as well as grass ascii
- * and binary raster maps, following the same scheme as the vector maps
+ * The mime types for vector maps are GML, KML, dgn, shape and zipped shape. 
+*
+ * The mime types for raster maps are tiff, geotiff, hfa, netcdf, gif, jpeg and png.
  *
  * The mime types are reflecting the capabilities of gdal and may be extended.
  *
@@ -118,8 +113,11 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
  * does not allow multiple outputs with only one identifier).
  * Multiple outputs must be wrapped via a python script or created as group.
  *
- * There is not support for optional outputs.
- *
+ * In future the following mimetypes may be supported
+ * mime type: application/grass-vector-ascii  -> a text file generated with v.out.asci
+ * Example.: urn:file:///path/name
+ * mime type: application/grass-vector-binary -> the binary vectors must be addressed with a non standard urn:
+ * Example: urn:grass:vector:location/mapset/name
  * */
 
 void G__wps_print_process_description(void)
@@ -331,10 +329,10 @@ void G__wps_print_process_description(void)
     if(num_raster_inputs > 0 || num_raster_outputs > 0) {
         wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ns", "Resolution of the mapset in north-south direction in meters or degrees",
             "This parameter defines the north-south resolution of the mapset in meter or degrees, which should be used to process the input and output raster data. To enable this setting, you need to specify north-south and east-west resolution.",
-            "float", 1, NULL, 0, "25", TYPE_OTHER);
+            "float", 1, NULL, 0, NULL, TYPE_OTHER);
         wps_print_literal_input_output(WPS_INPUT, 0, 1, "grass_resolution_ew", "Resolution of the mapset in east-west direction in meters or degrees",
             "This parameter defines the east-west resolution of the mapset in meters or degrees, which should be used to process the input and output raster data.  To enable this setting, you need to specify north-south and east-west resolution.",
-            "float", 1, NULL, 0, "25", TYPE_OTHER);
+            "float", 1, NULL, 0, NULL, TYPE_OTHER);
     }
     /* In case multi band raster maps should be imported, the band number must be provided */
     if(num_raster_inputs > 0)
