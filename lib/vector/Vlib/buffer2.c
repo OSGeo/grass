@@ -563,7 +563,10 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
 	    }
 	}
 
-	//        G_debug(4, "ec: opt: side=%d opt_flag=%d opt_angle=%.18f opt_j=%d opt_step=%d", side, opt_flag, opt_angle, opt_j, opt_step);
+	/* 
+	G_debug(4, "ec: opt: side=%d opt_flag=%d opt_angle=%.18f opt_j=%d opt_step=%d",
+	        side, opt_flag, opt_angle, opt_j, opt_step);
+	*/
 
 	/* if line end is reached (no other edges at curr vertex) */
 	if (opt_flag) {
@@ -769,7 +772,7 @@ static int point_in_buf(struct line_pnts *Points, double px, double py, double d
 
 	    /*            G_debug(4, "sqrt(d)*da = %g, len' = %g, olen = %g", sqrt(d)*da, da*LENGTH(tx,ty), LENGTH((px-nx),(py-ny))); */
 	    if (d <= 1) {
-		//G_debug(1, "d=%g", d);
+		/* G_debug(1, "d=%g", d); */
 		return 1;
 	    }
 	}
@@ -969,6 +972,12 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
     int isles_allocated = 0;
 
     G_debug(2, "Vect_line_buffer()");
+    
+    Vect_line_prune((struct line_pnts *)Points);
+
+    if (Points->n_points == 1)
+	return Vect_point_buffer2(Points->x[0], Points->y[0], da, db,
+			dalpha, round, tol, oPoints);
 
     /* initializations */
     tPoints = Vect_new_line_struct();
