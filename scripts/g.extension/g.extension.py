@@ -7,7 +7,7 @@
 #               Pythonized by Martin Landa
 # PURPOSE:      Tool to download and install extensions from GRASS Addons SVN into 
 #               local GRASS installation
-# COPYRIGHT:    (C) 2009-2010 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2011 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -46,7 +46,7 @@
 #% key_desc: url
 #% description: SVN Addons repository URL
 #% required: yes
-#% answer: https://svn.osgeo.org/grass/grass-addons
+#% answer: https://svn.osgeo.org/grass/grass-addons/grass7
 #%end
 #%option
 #% key: prefix
