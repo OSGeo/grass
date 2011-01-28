@@ -163,7 +163,7 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     return Popen(args, **popts)
 
 def run_command(*args, **kwargs):
-    """!Passes all arguments to start_command, then waits for the process to
+    """!Passes all arguments to start_command(), then waits for the process to
     complete, returning its exit code. Similar to subprocess.call(), but
     with the make_command() interface.
 
@@ -176,7 +176,7 @@ def run_command(*args, **kwargs):
     return ps.wait()
 
 def pipe_command(*args, **kwargs):
-    """!Passes all arguments to start_command, but also adds
+    """!Passes all arguments to start_command(), but also adds
     "stdout = PIPE". Returns the Popen object.
 
     \code
@@ -201,7 +201,7 @@ def pipe_command(*args, **kwargs):
     return start_command(*args, **kwargs)
 
 def feed_command(*args, **kwargs):
-    """!Passes all arguments to start_command, but also adds
+    """!Passes all arguments to start_command(), but also adds
     "stdin = PIPE". Returns the Popen object.
 
     @param args list of unnamed arguments (see start_command() for details)
