@@ -38,6 +38,7 @@ import menudata
 import gcmd
 import globalvar
 import gdialogs
+import utils
 
 class HelpFrame(wx.Frame):
     """!GRASS Quickstart help window"""
@@ -665,11 +666,22 @@ class AboutWindow(wx.Frame):
         if os.path.exists(contribfile):
             contribFile = open(contribfile, 'r')
             contribs = list()
+            errLines = list()
             for line in contribFile.readlines():
-                cvs_id, name, email, country, osgeo_id, rfc2_agreed = line.split(',')
+                line = line.rstrip('\n')
+                try:
+                    cvs_id, name, email, country, osgeo_id, rfc2_agreed = line.split(',')
+                except ValueError:
+                    errLines.append(line)
+                    continue
                 contribs.append((name, email, country, osgeo_id))
             contribs[0] = (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID'))
             contribFile.close()
+            
+            if errLines:
+                gcmd.GError(parent = self,
+                            message = _("Error when reading file '%s'.\n\nLines: %s") % \
+                                (translatorsfile, os.linesep.join(map (utils.UnicodeString, errLines))))
         else:
             contribs = None
         
@@ -704,13 +716,24 @@ class AboutWindow(wx.Frame):
         if os.path.exists(translatorsfile):
             translatorsFile = open(translatorsfile, 'r')
             translators = dict()
+            errLines = list()
             for line in translatorsFile.readlines()[1:]:
-                name, email, languages = line.rstrip('\n').split(',')
+                line = line.rstrip('\n')
+                try:
+                    name, email, languages = line.split(',')
+                except ValueError:
+                    errLines.append(line)
+                    continue
                 for language in languages.split(' '):
                     if not translators.has_key(language):
                         translators[language] = list()
                     translators[language].append((name, email))
             translatorsFile.close()
+            
+            if errLines:
+                gcmd.GError(parent = self,
+                            message = _("Error when reading file '%s'.\n\nLines: %s") % \
+                                (translatorsfile, os.linesep.join(map (utils.UnicodeString, errLines))))
         else:
             translators = None
         
