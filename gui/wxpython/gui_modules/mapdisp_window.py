@@ -741,7 +741,7 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 self.mapfile = self.Map.Render(force = False, mapWindow = self.parent)
         except gcmd.GException, e:
-            gcmd.GError(message = e)
+            gcmd.GError(message = e.value)
             self.mapfile = None
         
         self.img = self.GetImage() # id=99

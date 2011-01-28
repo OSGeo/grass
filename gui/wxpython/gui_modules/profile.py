@@ -439,7 +439,7 @@ class ProfileFrame(wx.Frame):
             return datalist
         except gcmd.GException, e:
             gcmd.GError(parent = self,
-                        message = e)
+                        message = e.value)
             return None
 
     def OnCreateProfile(self, event):

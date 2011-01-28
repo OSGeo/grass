@@ -475,28 +475,27 @@ class GMConsole(wx.SplitterWindow):
                                  'd.grid'         : 'grid',
                                  'd.geodesic'     : 'geodesic',
                                  'd.rhumbline'    : 'rhumb',
-                                 'd.labels'       : 'labels'}[command[0]]
+                                 'd.labels'       : 'labels',
+                                 'd.barscale'     : 'barscale'}[command[0]]
                 except KeyError:
                     gcmd.GMessage(parent = self.parent,
                                   message = _("Command '%s' not yet implemented in the WxGUI. "
                                               "Try adding it as a command layer instead.") % command[0])
                     return None
                 
-                # add layer into layer tree
-                if command[0] == 'd.rast':
-                    lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
-                                                             layerType = 'raster')
-                elif command[0] == 'd.vect':
-                    lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
-                                                             layerType = 'vector')
+                if layertype == 'barscale':
+                    self.parent.curr_page.maptree.GetMapDisplay().OnAddBarscale(None)
+                elif layertype == 'rastleg':
+                    self.parent.curr_page.maptree.GetMapDisplay().OnAddLegend(None)
                 else:
-                    lname = None
+                    # add layer into layer tree
+                    lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
+                                                             layerType = layertype)
+                    if self.parent.GetName() == "LayerManager":
+                        self.parent.curr_page.maptree.AddLayer(ltype = layertype,
+                                                               lname = lname,
+                                                               lcmd = command)
                 
-                if self.parent.GetName() == "LayerManager":
-                    self.parent.curr_page.maptree.AddLayer(ltype=layertype,
-                                                           lname=lname,
-                                                           lcmd=command)
-            
             else:
                 # other GRASS commands (r|v|g|...)
                 # switch to 'Command output' if required
