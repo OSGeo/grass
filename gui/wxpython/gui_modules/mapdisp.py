@@ -1283,8 +1283,8 @@ class MapFrame(wx.Frame):
         for layer in self.tree.GetSelections():
             type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
             dcmd = self.tree.GetPyData(layer)[0]['cmd']
-            name = utils.GetLayerNameFromCmd(dcmd)
-            if name == '':
+            name, found = utils.GetLayerNameFromCmd(dcmd)
+            if not found:
                 continue
             if type in ('raster', 'rgb', 'his'):
                 raststr += "%s," % name

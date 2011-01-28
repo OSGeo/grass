@@ -464,13 +464,13 @@ class DecorationDialog(wx.Dialog):
         self._CreateOverlay()
 
         if len(self.parent.MapWindow.overlays[self.ovlId]['cmd']) > 1:
-            mapName = utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd'])
+            mapName, found = utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd'])
             if self.parent.MapWindow.overlays[self.ovlId]['propwin'] is None and mapName:
                 # build properties dialog
                 menuform.GUI().ParseCommand(cmd=self.cmd,
                                             completed=(self.GetOptData, self.name, ''),
                                             parentframe=self.parent, show=False)
-            if mapName:
+            if found:
                 # enable 'OK' button
                 self.btnOK.Enable()
                 if name == 'legend':

@@ -484,11 +484,11 @@ class GMConsole(wx.SplitterWindow):
                 
                 # add layer into layer tree
                 if command[0] == 'd.rast':
-                    lname = utils.GetLayerNameFromCmd(command, fullyQualified = True,
-                                                      layerType = 'raster')
+                    lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
+                                                             layerType = 'raster')
                 elif command[0] == 'd.vect':
-                    lname = utils.GetLayerNameFromCmd(command, fullyQualified = True,
-                                                      layerType = 'vector')
+                    lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
+                                                             layerType = 'vector')
                 else:
                     lname = None
                 
@@ -810,7 +810,8 @@ class GMConsole(wx.SplitterWindow):
                         if prompt in ('raster', 'vector', '3d-raster') and \
                                 p.get('age', 'old') == 'new' and \
                                 p.get('value', None):
-                            name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True, param = p.get('name', ''))
+                            name, found = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
+                                                                    param = p.get('name', ''))
                             
                             if mapTree.GetMap().GetListOfLayers(l_name = name):
                                 continue
