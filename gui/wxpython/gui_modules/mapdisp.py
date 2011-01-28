@@ -1754,7 +1754,7 @@ class MapFrame(wx.Frame):
         """
         if self.dialogs['barscale']:
             return
-
+        
         id = 0 # unique index for overlay layer
 
         # If location is latlon, only display north arrow (scale won't work)
@@ -1769,7 +1769,7 @@ class MapFrame(wx.Frame):
             gdialogs.DecorationDialog(parent = self, title = _('Scale and North arrow'),
                                       size = (350, 200),
                                       style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
-                                      cmd = ['d.barscale', 'at = 0,5'],
+                                      cmd = ['d.barscale', 'at=0,5'],
                                       ovlId = id,
                                       name = 'barscale',
                                       checktxt = _("Show/hide scale and North arrow"),

@@ -95,7 +95,7 @@ class VirtualAttributeList(wx.ListCtrl,
             keyColumn = self.LoadData(layer)
         except gcmd.GException, e:
             GError(parent = self,
-                   message = e)
+                   message = e.value)
             return
         
         #
