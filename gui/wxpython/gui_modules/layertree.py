@@ -829,7 +829,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
                 render = False
-                name = utils.GetLayerNameFromCmd(lcmd)
+                name, found = utils.GetLayerNameFromCmd(lcmd)
             else:
                 cmd = []
                 if ltype == 'command' and lname:
@@ -1359,9 +1359,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         opacity  = int(mapLayer.GetOpacity(float = True) * 100)
         if not mapname:
             dcmd    = self.GetPyData(item)[0]['cmd']
-            mapname = utils.GetLayerNameFromCmd(dcmd, layerType = mapLayer.GetType(),
-                                                fullyQualified = True)
-        if not mapname:
+            mapname, found = utils.GetLayerNameFromCmd(dcmd, layerType = mapLayer.GetType(),
+                                                       fullyQualified = True)
+        if not found:
             return None
         
         return mapname + ' (%s %d' % (_('opacity:'), opacity) + '%)'
@@ -1374,15 +1374,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if dcmd:
             self.GetPyData(layer)[0]['cmd'] = dcmd
             mapText  = self._getLayerName(layer)
-            mapName  = utils.GetLayerNameFromCmd(dcmd)
+            mapName, found = utils.GetLayerNameFromCmd(dcmd)
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             self.SetItemText(layer, mapName)
-            
-            found = True
-            if mapLayer and \
-                    mapLayer.GetType() in ('raster', '3d-raster', 'vector') and \
-                    not grass.find_file(name = mapName, element = mapLayer.GetElement())['fullname']:
-                found = False
             
             if not mapText or not found:
                 propwin.Hide()
@@ -1491,8 +1485,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
                 # determine layer name
-                layerName = utils.GetLayerNameFromCmd(cmdlist, fullyQualified = True)
-                if not layerName:
+                layerName, found = utils.GetLayerNameFromCmd(cmdlist, fullyQualified = True)
+                if not found:
                     layerName = self.GetItemText(item)
         
         maplayer = self.Map.ChangeLayer(layer = self.GetPyData(item)[0]['maplayer'], type = type,

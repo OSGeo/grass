@@ -7,12 +7,12 @@ Classes:
  - BufferedWindow
  - HistFrame
 
-COPYRIGHT: (C) 2007, 2010 by the GRASS Development Team
+COPYRIGHT: (C) 2007, 2010-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
-@author Various updates by Martin Landa
+@author Various updates by Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -30,6 +30,7 @@ from toolbars import HistogramToolbar
 from preferences import DefaultFontDialog
 from debug import Debug
 from icon import Icons
+from gcmd import GError
 
 class BufferedWindow(wx.Window):
     """!A Buffered window class.
@@ -244,7 +245,7 @@ class BufferedWindow(wx.Window):
         # update statusbar
         # Debug.msg (3, "BufferedWindow.UpdateHist(%s): region=%s" % self.Map.region)
         self.Map.SetRegion()
-        self.parent.statusbar.SetStatusText("Raster/Image map layer <%s>" % self.parent.mapname)
+        self.parent.statusbar.SetStatusText("Image/Raster map <%s>" % self.parent.mapname)
         
         # set default font and encoding environmental variables
         if oldfont != "":
@@ -325,7 +326,13 @@ class HistFrame(wx.Frame):
         created in menuform.py
         """
         if dcmd:
-            name = utils.GetLayerNameFromCmd(dcmd, fullyQualified = True)
+            name, found = utils.GetLayerNameFromCmd(dcmd, fullyQualified = True,
+                                                    layerType = 'raster')
+            if not found:
+                GError(parent = propwin,
+                       message = _("Raster map <%s> not found") % name)
+                return
+            
             self.SetHistLayer(name)
         self.params = params
         self.propwin = propwin

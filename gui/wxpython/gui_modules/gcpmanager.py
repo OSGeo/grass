@@ -15,7 +15,7 @@ Classes:
  - EditGCP
  - GrSettingsDialog
 
-(C) 2006-2010 by the GRASS Development Team
+(C) 2006-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -209,9 +209,9 @@ class GCPWizard(object):
                 cmdlist = ['d.vect', 'map=%s' % src_map]
             
             self.SwitchEnv('source')
+            name, found = utils.GetLayerNameFromCmd(cmdlist)
             self.SrcMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
-                              name=utils.GetLayerNameFromCmd(cmdlist),
-                              l_hidden=False, l_opacity=1.0, l_render=False)
+                                 name=name, l_hidden=False, l_opacity=1.0, l_render=False)
 
             if tgt_map:
                 #
@@ -225,9 +225,9 @@ class GCPWizard(object):
                     cmdlist = ['d.vect', 'map=%s' % tgt_map]
                 
                 self.SwitchEnv('target')
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.TgtMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
-                                  name=utils.GetLayerNameFromCmd(cmdlist),
-                                  l_hidden=False, l_opacity=1.0, l_render=False)
+                                     name=name, l_hidden=False, l_opacity=1.0, l_render=False)
             
             #
             # start GCP Manager
@@ -2742,9 +2742,9 @@ class GrSettingsDialog(wx.Dialog):
             src_map = self.new_src_map
             cmdlist = ['d.rast', 'map=%s' % src_map]
             self.parent.grwiz.SwitchEnv('source')
+            name, found = utils.GetLayerNameFromCmd(cmdlist),
             self.parent.grwiz.SrcMap.AddLayer(type='raster', command=cmdlist, l_active=True,
-                              name=utils.GetLayerNameFromCmd(cmdlist),
-                              l_hidden=False, l_opacity=1.0, l_render=False)
+                              name=name, l_hidden=False, l_opacity=1.0, l_render=False)
 
             self.parent.grwiz.SwitchEnv('target')
             srcrender = True
@@ -2758,9 +2758,9 @@ class GrSettingsDialog(wx.Dialog):
 
             if tgt_map != '':
                 cmdlist = ['d.rast', 'map=%s' % tgt_map]
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(type='raster', command=cmdlist, l_active=True,
-                                  name=utils.GetLayerNameFromCmd(cmdlist),
-                                  l_hidden=False, l_opacity=1.0, l_render=False)
+                                  name=name, l_hidden=False, l_opacity=1.0, l_render=False)
 
                 tgtrender = True
                 if self.parent.show_target == False:
