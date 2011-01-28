@@ -57,7 +57,7 @@ static const struct scale
     }
 };
 
-int draw_scale(int toptext)
+int draw_scale(int toptext, int size)
 {
     double meters;
     double line_len;
@@ -66,13 +66,11 @@ int draw_scale(int toptext)
     double t, b, l, r;
     int pt, pb, pl, pr;
     int i;
-    int size;
     double xarr[5], yarr[5];
     double seg_len;
     const struct scale *scales = all_scales[use_feet];
 
     /* Establish text size */
-    size = 14;
     D_text_size(size, size);
 
     D_setup_unity(0);
