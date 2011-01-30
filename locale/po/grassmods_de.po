@@ -20431,7 +20431,7 @@ msgstr "Meilenstein (Ende) %f+%f verwendet als %f+%f (ändere MP nach Integer)."
 #: ../vector/v.lrs/v.lrs.create/main.c:527
 #, c-format
 msgid "Point [%d] without category (layer [%d])"
-msgstr "Pounkt [%d] ohne Kategorie (Layer [%d])."
+msgstr "Punkt [%d] ohne Kategorie (Layer [%d])."
 
 #: ../vector/v.lrs/v.lrs.create/main.c:574
 #, c-format
