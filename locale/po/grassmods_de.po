@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-03 16:17+0100\n"
-"PO-Revision-Date: 2011-01-12 19:59+0100\n"
-"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
+"PO-Revision-Date: 2011-01-30 18:12+0100\n"
+"Last-Translator: Markus Neteler <neteler osgeo.org>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
@@ -25,34 +25,34 @@ msgstr ""
 #: ../raster3d/r3.in.v5d/main.c:222 ../raster3d/r3.out.v5d/main.c:331
 #: ../raster/r.to.rast3elev/main.c:486 ../raster/r.to.rast3/main.c:328
 msgid "Error closing 3d raster map"
-msgstr "Fehler beim Schließen der 3D-Rasterkarte."
+msgstr "Fehler beim Schließen der 3D-Rasterkarte"
 
 #: ../raster3d/r3.out.ascii/main.c:76
 msgid "3d raster map to be converted to ASCII"
-msgstr "3D-Rasterkarten, die in das ASCII-Format konvertiert werden soll."
+msgstr "3D-Rasterkarten, die in das ASCII-Format konvertiert werden soll"
 
 #: ../raster3d/r3.out.ascii/main.c:83
 msgid "Name for ASCII output file"
-msgstr "Name für eine ASCII Ausgabedatei."
+msgstr "Name für eine ASCII Ausgabedatei"
 
 #: ../raster3d/r3.out.ascii/main.c:92
 msgid "Number of decimal places for floats"
-msgstr "Anzahl der Dezimalstellen für Fließkommazahlen."
+msgstr "Anzahl der Dezimalstellen für Fließkommazahlen"
 
 #: ../raster3d/r3.out.ascii/main.c:98 ../raster/r.transect/main.c:124
 #: ../raster/r.what/main.c:117
 msgid "Char string to represent no data cell"
-msgstr "Zeichenkette, die NODATA-Zellen repräsentiert."
+msgstr "Zeichenkette, die NODATA-Zellen repräsentiert"
 
 #: ../raster3d/r3.out.ascii/main.c:103 ../raster/r.out.ascii/main.c:105
 #: ../raster/r.out.arc/main.c:89
 msgid "Suppress printing of header information"
-msgstr "Unterdrücke Headerinformationen."
+msgstr "Unterdrücke Headerinformationen"
 
 #: ../raster3d/r3.out.ascii/main.c:107 ../raster3d/r3.to.rast/main.c:91
 #: ../raster/r.to.rast3elev/main.c:182
 msgid "Use G3D mask (if exists) with input map"
-msgstr "Benutzt G3D Maske (falls existent) mit der Eingabekarte."
+msgstr "Benutzt G3D Maske (falls existent) mit der Eingabekarte"
 
 #: ../raster3d/r3.out.ascii/main.c:244 ../raster3d/r3.info/r3.info.main.c:78
 #: ../raster3d/r3.in.ascii/main.c:240
@@ -103,17 +103,17 @@ msgstr "Konvertiert eine 3D-Rasterkarte in eine ASCII-Datei."
 #: ../raster3d/r3.out.ascii/main.c:261 ../raster3d/base/r3.null.main.c:103
 #: ../raster3d/base/r3.mask.main.c:58 ../raster3d/r3.out.v5d/main.c:312
 msgid "Requested 3d raster map not found"
-msgstr "Angeforderte 3D-Rasterkarte nicht gefunden."
+msgstr "Angeforderte 3D-Rasterkarte nicht gefunden"
 
 #: ../raster3d/r3.out.ascii/main.c:270 ../raster3d/r3.in.ascii/main.c:270
 #: ../raster3d/r3.in.v5d/main.c:217 ../raster3d/r3.out.v5d/main.c:317
 #: ../raster/r.to.rast3elev/main.c:429 ../raster/r.to.rast3/main.c:296
 msgid "Error opening 3d raster map"
-msgstr "Fehler beim Öffnen der 3D-Rasterkarte."
+msgstr "Fehler beim Öffnen der 3D-Rasterkarte"
 
 #: ../raster3d/r3.out.ascii/main.c:307
 msgid "Error closing new ASCII file"
-msgstr "Fehler beim Schließen der neuen ASCII-Datei."
+msgstr "Fehler beim Schließen der neuen ASCII-Datei"
 
 #: ../raster3d/r3.info/r3.info.main.c:81
 msgid "Outputs basic information about a user-specified 3D raster map layer."
@@ -231,13 +231,13 @@ msgstr "Fehler beim Lesen der 'history'-Datei."
 
 #: ../raster3d/r3.in.ascii/main.c:79
 msgid "Ascii raster map to be imported"
-msgstr "ZU importierende ASCII Raster-Datei."
+msgstr "Zu importierende ASCII Raster-Datei"
 
 #: ../raster3d/r3.in.ascii/main.c:90
 msgid "String representing NULL value data cell (use 'none' if no such value)"
 msgstr ""
 "Zeichenkette, die NULL-Werte repräsentiert (verwenden Sie 'none' wenn keiner "
-"existiert)."
+"existiert)"
 
 #: ../raster3d/r3.in.ascii/main.c:174
 #, c-format
@@ -310,7 +310,7 @@ msgstr "Grid3 <%s> wurde nicht gefunden %s"
 
 #: ../raster3d/r3.cross.rast/main.c:56
 msgid "Could not close G3D map"
-msgstr "Konnte G3D Karte nicht schließen."
+msgstr "Konnte G3D Karte nicht schließen"
 
 #: ../raster3d/r3.cross.rast/main.c:91
 msgid "Input 3D raster map for cross section."
@@ -29409,29 +29409,29 @@ msgstr "Farben unter Verwendung der Standardabweichung"
 
 #: ../locale/scriptstrings/r.colors.stddev_to_translate.c:6
 msgid "Force center at zero"
-msgstr "Zwinge das Zentrum auf Null."
+msgstr "Zwinge das Zentrum auf Null"
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:1
 msgid ""
 "Fills no-data areas in raster maps using v.surf.rst splines interpolation"
 msgstr ""
 "Fülle Flächen ohne Daten in Rasterkarten mit Hilfe der v.surf.rst Spline-"
-"Interpolation."
+"Interpolation"
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:5
 msgid "Raster map in which to fill nulls"
-msgstr "Rasterkarte, in der die NULL-Zellen gefüllt werden sollen."
+msgstr "Rasterkarte, in der die NULL-Zellen gefüllt werden sollen"
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:6
 msgid ""
 "Output raster map with nulls filled by interpolation from surrounding values"
 msgstr ""
 "Gibt eine Rasterkarte aus, in der NULL-Gebiete durch Interpolation der "
-"umgebenden Werte gefüllt wurden."
+"umgebenden Werte gefüllt wurden"
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:7
 msgid "Spline tension parameter"
-msgstr "Spline-Spannung (Tension) Parameter."
+msgstr "Spline-Spannung (Tension) Parameter"
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:8
 msgid "Spline smoothing parameter"
@@ -33374,7 +33374,7 @@ msgstr "Layer, in dem eine Spalte hinzugefügt werden soll."
 #~ msgstr "3D-Raster, Voxel, Export"
 
 #~ msgid "Converts a 3D raster map layer into an ASCII text file"
-#~ msgstr "Konvertiert eine 3D-Rasterkarte in eine ASCII-Datei."
+#~ msgstr "Konvertiert eine 3D-Rasterkarte in eine ASCII-Datei"
 
 #~ msgid "raster3d, statistics"
 #~ msgstr "3D-Raster, Statistik"
@@ -38253,10 +38253,10 @@ msgstr "Layer, in dem eine Spalte hinzugefügt werden soll."
 #~ msgstr "nach <%s@%s> (Location <%s>) ... %s"
 
 #~ msgid "Unable to read raster map row %ld"
-#~ msgstr "Kann die Zeile %d der Rasterkarte nicht lesen."
+#~ msgstr "Kann die Zeile %ld der Rasterkarte nicht lesen."
 
 #~ msgid "Failed writing raster map row %ld"
-#~ msgstr "Schreiben der Zeile %d der Rasterkarte fehlgeschlagen."
+#~ msgstr "Schreiben der Zeile %ld der Rasterkarte fehlgeschlagen."
 
 #~ msgid "Calculating camera angle to local surface..."
 #~ msgstr "Berechne Kamerawinkel zur lokalen Oberfläche..."
