@@ -24088,7 +24088,7 @@ msgstr "Zu importierende Rasterdatei."
 
 #: ../vector/v.in.ascii/main.c:66
 msgid "point;simple x,y[,z] list;standard;GRASS vector ASCII format"
-msgstr "Punkt; einfache x,y[,z] Liste;Standard;GRASS Vektor-ASCII-Format"
+msgstr "point;einfache x,y[,z] Liste;standard;GRASS Vektor-ASCII-Format"
 
 #: ../vector/v.in.ascii/main.c:69
 msgid "Input file format"

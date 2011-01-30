@@ -23331,7 +23331,7 @@ msgstr "入力するファイル"
 
 #: ../vector/v.in.ascii/main.c:66
 msgid "point;simple x,y[,z] list;standard;GRASS vector ASCII format"
-msgstr ""
+msgstr "point；単に x,y [,z] リスト；standard；GRASSのベクトルASCIIフォーマット"
 
 #: ../vector/v.in.ascii/main.c:69
 msgid "Input file format"

@@ -23854,7 +23854,7 @@ msgstr "Импортируемый растровый файл"
 #, fuzzy
 msgid "point;simple x,y[,z] list;standard;GRASS vector ASCII format"
 msgstr ""
-"точка; простой список x,y[,z], стандарт, векторный формат GRASS для ASCII "
+"point;простой список x,y[,z];standard;векторный формат GRASS для ASCII "
 "текстового файла."
 
 #: ../vector/v.in.ascii/main.c:69
