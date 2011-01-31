@@ -172,7 +172,7 @@ class Layer(object):
                 self.maskfile = None
         
         except gcmd.GException, e:
-            sys.stderr.write(e.value)
+            # sys.stderr.write(e.value)
             # clean up after problems
             try:
                 os.remove(self.mapfile)
