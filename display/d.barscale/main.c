@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     fsize->required = NO;
     fsize->answer = "14";
     fsize->options = "1-72";
-    fsize->description = _("Font size for gridline coordinate labels");
+    fsize->description = _("Font size");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
