@@ -233,10 +233,80 @@ class IVDigit:
         else:
             return NO_SNAP
     
-    def _breakLineAtIntersection(self):
-        """!@todo
+    def _breakLineAtIntersection(self, line, pointsLine, changeset):
+        """!Break given line at intersection
+
+        \param line line id
+        \param pointsLine line geometry
+        \param changeset id
+  
+        \return number of modified lines
         """
-        pass
+        if not self._checkMap():
+            return -1
+        
+        if not Vect_line_alive(self.poMapInfo, line):
+            return 0
+        
+        if not pointsLine:
+            if Vect_read_line(self.poMapInfo, self.poPoints, None, line) < 0:
+                self._error.ReadLine(line)
+                return -1
+            points = self.poPoints
+        else:
+            points = pointsLine
+        
+        listLine  = Vect_new_list()
+        listRef   = Vect_new_list()
+        listBreak = Vect_new_list()
+    
+        pointsCheck = Vect_new_line_struct()
+    
+        lineBox = bound_box()
+        # find all relevant lines
+        Vect_get_line_box(self.poMapInfo, line, byref(lineBox))
+        Vect_select_lines_by_box(self.poMapInfo, byref(lineBox),
+                                 GV_LINES, listLine)
+    
+        # check for intersection
+        Vect_list_append(listBreak, line)
+        Vect_list_append(listRef, line)
+        for i in range(listLine.contents.n_values):
+            lineBreak = listLine.contents.value[i]
+            if lineBreak == line:
+		continue
+            
+            ltype = Vect_read_line(self.poMapInfo, pointsCheck, None, lineBreak)
+            if not (ltype & GV_LINES):
+                continue
+            
+            if Vect_line_check_intersection(self.poPoints, pointsCheck,
+                                            WITHOUT_Z):
+                Vect_list_append(listBreak, lineBreak)
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        for i in range(listBreak.contents.n_values):
+            self._addActionToChangeset(changeset, listBreak.contents.value[i], add = False)
+        
+        ret = Vect_break_lines_list(self.poMapInfo, listBreak, listRef,
+                                    GV_LINES, None)
+        
+        for i in range(listBreak.contents.n_values):
+            if Vect_line_alive(self.poMapInfo, listBreak.contents.value[i]):
+                self._removeActionFromChangeset(changeset, listBreak.contents.value[i],
+                                                add = False)
+        
+        for line in range(nlines + 1, Vect_get_num_lines(self.poMapInfo) + 1):
+            self._addActionToChangeset(changeset, line, add = True)
+        
+        Vect_destroy_line_struct(pointsCheck)
+
+        Vect_destroy_list(listLine)
+        Vect_destroy_list(listBreak)
+        Vect_destroy_list(listRef)
+        
+        return ret
     
     def _addActionsBefore(self):
         """!Register action before operation
@@ -1280,7 +1350,8 @@ class IVDigit:
             Vect_destroy_line_struct(bpoints)
         
         # register changeset
-        self._addActionToChangeset(len(self.changesets), newline, add = True)
+        changeset = len(self.changesets)
+        self._addActionToChangeset(changeset, newline, add = True)
         
         # break at intersection
         if self._settings['breakLines']:
