@@ -109,10 +109,11 @@ class AbstractToolbar(wx.ToolBar):
         if self.parent.GetName() == "GCPFrame":
             return
         
-        if self.parent.toolbars['vdigit']:
-            # update vdigit toolbar (unselect currently selected tool)
-            id = self.parent.toolbars['vdigit'].GetAction(type = 'id')
-            self.parent.toolbars['vdigit'].ToggleTool(id, False)
+        if hasattr(self.parent, 'toolbars'):
+            if self.parent.toolbars['vdigit']:
+                # update vdigit toolbar (unselect currently selected tool)
+                id = self.parent.toolbars['vdigit'].GetAction(type = 'id')
+                self.parent.toolbars['vdigit'].ToggleTool(id, False)
         
         if event:
             # deselect previously selected tool
