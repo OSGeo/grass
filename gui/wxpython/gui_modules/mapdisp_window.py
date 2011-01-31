@@ -1200,8 +1200,7 @@ class BufferedWindow(MapWindow, wx.Window):
 #        event.Skip()
 
     def OnDragging(self, event):
-        """!
-        Mouse dragging with left button down
+        """!Mouse dragging
         """
         Debug.msg (5, "BufferedWindow.MouseAction(): Dragging")
         current  = event.GetPositionTuple()[:]
@@ -1549,7 +1548,7 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Debug.msg (5, "BufferedWindow.OnLeftDown(): use=%s" % \
                    self.mouse["use"])
-
+        
         self.mouse['begin'] = event.GetPositionTuple()[:]
         
         if self.mouse["use"] in ["measure", "profile"]:
@@ -1560,68 +1559,18 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.ClearLines(pdc=self.pdcTmp)
             else:
                 self.mouse['begin'] = self.mouse['end']
+        
         elif self.mouse['use'] == 'zoom':
             pass
-
-        #
+        
         # vector digizer
-        #
         elif self.mouse["use"] == "pointer" and \
                 self.parent.toolbars['vdigit']:
-            digitToolbar = self.parent.toolbars['vdigit']
-            digitClass   = self.parent.digit
-            
-            try:
-                mapLayer = digitToolbar.GetLayer().GetName()
-            except:
-                wx.MessageBox(parent = self,
-                              message = _("No vector map selected for editing."),
-                              caption = _("Vector digitizer"),
-                              style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-                event.Skip()
-                return
-            
-            if digitToolbar.GetAction() not in ("moveVertex",
-                                                "addVertex",
-                                                "removeVertex",
-                                                "editLine"):
-                # set pen
-                self.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
-                self.polypen = wx.Pen(colour = 'dark green', width = 2, style = wx.SOLID)
-
-            if digitToolbar.GetAction() in ("addVertex",
-                                            "removeVertex",
-                                            "splitLines"):
-                # unselect
-                digitClass.GetDisplay().SetSelected([])
-
-            if digitToolbar.GetAction() == "addLine":
-                self.OnLeftDownVDigitAddLine(event)
-            
-            elif digitToolbar.GetAction() == "editLine" and \
-                    hasattr(self, "vdigitMove"):
-                self.OnLeftDownVDigitEditLine(event)
-
-            elif digitToolbar.GetAction() in ("moveLine", 
-                                              "moveVertex",
-                                              "editLine") and \
-                    not hasattr(self, "vdigitMove"):
-                self.OnLeftDownVDigitMoveLine(event)
-
-            elif digitToolbar.GetAction() in ("displayAttrs"
-                                              "displayCats"):
-                self.OnLeftDownVDigitDisplayCA(event)
-            
-            elif digitToolbar.GetAction() in ("copyCats",
-                                              "copyAttrs"):
-                self.OnLeftDownVDigitCopyCA(event)
-            
-            elif digitToolbar.GetAction() == "copyLine":
-                self.OnLeftDownVDigitCopyLine(event)
-            
-            elif digitToolbar.GetAction() == "zbulkLine":
-                self.OnLeftDownVDigitBulkLine(event)
-            
+            if event.ControlDown():
+                self.OnLeftDownVDigitUndo(event)
+            else:
+                self.OnLeftDownVDigit(event)
+        
         elif self.mouse['use'] == 'pointer':
             # get decoration or text id
             self.idlist = []
@@ -1638,7 +1587,129 @@ class BufferedWindow(MapWindow, wx.Window):
 
         event.Skip()
 
-    def OnLeftUpVDigitVarious(self, event):
+    def OnLeftDownVDigitUndo(self, event):
+        """!Left mouse button down with control key pressed - vector
+        digitizer undo functionality
+        """
+        digitToolbar = self.parent.toolbars['vdigit']
+        if self.mouse["use"] != "pointer" or not digitToolbar:
+            return
+        
+        digitClass = self.parent.digit
+        if (digitToolbar.GetAction() == "addLine" and \
+                digitToolbar.GetAction('type') in ["line", "boundary", "area"]) or \
+                digitToolbar.GetAction() == "editLine":
+            # add line or boundary -> remove last point from the line
+            try:
+                removed = self.polycoords.pop()
+                Debug.msg(4, "BufferedWindow.OnMiddleDown(): polycoords_poped=%s" % \
+                              [removed,])
+                # self.mouse['begin'] = self.Cell2Pixel(self.polycoords[-1])
+            except:
+                pass
+            
+        if digitToolbar.GetAction() == "editLine":
+            # remove last vertex & line
+            if len(self.vdigitMove['id']) > 1:
+                self.vdigitMove['id'].pop()
+                
+            self.UpdateMap(render = False, renderVector = False)
+            
+        elif digitToolbar.GetAction() in ["deleteLine", "moveLine", "splitLine",
+                                          "addVertex", "removeVertex", "moveVertex",
+                                          "copyCats", "flipLine", "mergeLine",
+                                          "snapLine", "connectLine", "copyLine",
+                                          "queryLine", "breakLine", "typeConv"]:
+            # varios tools -> unselected selected features
+            digitClass.GetDisplay().SetSelected([])
+            if digitToolbar.GetAction() in ["moveLine", "moveVertex", "editLine"] and \
+                    hasattr(self, "vdigitMove"):
+                del self.vdigitMove
+                
+            elif digitToolbar.GetAction() == "copyCats":
+                try:
+                    del self.copyCatsList
+                    del self.copyCatsIds
+                except AttributeError:
+                    pass
+                
+            elif digitToolbar.GetAction() == "copyLine":
+                del self.copyIds
+                if self.layerTmp:
+                    self.Map.DeleteLayer(self.layerTmp)
+                    self.UpdateMap(render = True, renderVector = False)
+                del self.layerTmp
+
+            self.polycoords = []
+            self.UpdateMap(render = False) # render vector
+        
+        elif digitToolbar.GetAction() == "zbulkLine":
+            # reset polyline
+            self.polycoords = []
+            digitClass.GetDisplay().SetSelected([])
+            self.UpdateMap(render = False)
+        
+        self.redrawAll = True
+        self.UpdateMap(render = False, renderVector = False)
+
+    def OnLeftDownVDigit(self, event):
+        """!Left mouse button donw - vector digitizer various actions
+        """
+        digitToolbar = self.parent.toolbars['vdigit']
+        digitClass   = self.parent.digit
+        
+        try:
+            mapLayer = digitToolbar.GetLayer().GetName()
+        except:
+            wx.MessageBox(parent = self,
+                          message = _("No vector map selected for editing."),
+                          caption = _("Vector digitizer"),
+                          style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            event.Skip()
+            return
+    
+        if digitToolbar.GetAction() not in ("moveVertex",
+                                            "addVertex",
+                                            "removeVertex",
+                                            "editLine"):
+            # set pen
+            self.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
+            self.polypen = wx.Pen(colour = 'dark green', width = 2, style = wx.SOLID)
+            
+        if digitToolbar.GetAction() in ("addVertex",
+                                        "removeVertex",
+                                        "splitLines"):
+            # unselect
+            digitClass.GetDisplay().SetSelected([])
+
+        if digitToolbar.GetAction() == "addLine":
+            self.OnLeftDownVDigitAddLine(event)
+            
+        elif digitToolbar.GetAction() == "editLine" and \
+                hasattr(self, "vdigitMove"):
+            self.OnLeftDownVDigitEditLine(event)
+
+        elif digitToolbar.GetAction() in ("moveLine", 
+                                          "moveVertex",
+                                          "editLine") and \
+                                          not hasattr(self, "vdigitMove"):
+                                          self.OnLeftDownVDigitMoveLine(event)
+
+        elif digitToolbar.GetAction() in ("displayAttrs"
+                                          "displayCats"):
+            self.OnLeftDownVDigitDisplayCA(event)
+            
+        elif digitToolbar.GetAction() in ("copyCats",
+                                          "copyAttrs"):
+            self.OnLeftDownVDigitCopyCA(event)
+            
+        elif digitToolbar.GetAction() == "copyLine":
+            self.OnLeftDownVDigitCopyLine(event)
+            
+        elif digitToolbar.GetAction() == "zbulkLine":
+            self.OnLeftDownVDigitBulkLine(event)
+    
+    def OnLeftUpVDigit(self, event):
         """!Left mouse button up - vector digitizer various actions
         """
         digitToolbar = self.parent.toolbars['vdigit']
@@ -1982,7 +2053,7 @@ class BufferedWindow(MapWindow, wx.Window):
                                             "breakLine",
                                             "typeConv",
                                             "connectLine"):
-                self.OnLeftUpVDigitVarious(event)
+                self.OnLeftUpVDigit(event)
 
             elif digitToolbar.GetAction() in ("splitLine",
                                               "addVertex",
@@ -2274,74 +2345,13 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         if event:
             self.mouse['begin'] = event.GetPositionTuple()[:]
-        
-        digitToolbar = self.parent.toolbars['vdigit']
-        # digitization tool
-        if self.mouse["use"] == "pointer" and digitToolbar:
-            digitClass = self.parent.digit
-            if (digitToolbar.GetAction() == "addLine" and \
-                    digitToolbar.GetAction('type') in ["line", "boundary", "area"]) or \
-                    digitToolbar.GetAction() == "editLine":
-                # add line or boundary -> remove last point from the line
-                try:
-                    removed = self.polycoords.pop()
-                    Debug.msg(4, "BufferedWindow.OnMiddleDown(): polycoords_poped=%s" % \
-                                  [removed,])
-
-                    self.mouse['begin'] = self.Cell2Pixel(self.polycoords[-1])
-                except:
-                    pass
-
-                if digitToolbar.GetAction() == "editLine":
-                    # remove last vertex & line
-                    if len(self.vdigitMove['id']) > 1:
-                        self.vdigitMove['id'].pop()
-                
-                self.UpdateMap(render = False, renderVector = False)
-            
-            elif digitToolbar.GetAction() in ["deleteLine", "moveLine", "splitLine",
-                                              "addVertex", "removeVertex", "moveVertex",
-                                              "copyCats", "flipLine", "mergeLine",
-                                              "snapLine", "connectLine", "copyLine",
-                                              "queryLine", "breakLine", "typeConv"]:
-                # varios tools -> unselected selected features
-                digitClass.GetDisplay().SetSelected([])
-                if digitToolbar.GetAction() in ["moveLine", "moveVertex", "editLine"] and \
-                        hasattr(self, "vdigitMove"):
-                    
-                    del self.vdigitMove
-                
-                elif digitToolbar.GetAction() == "copyCats":
-                    try:
-                        del self.copyCatsList
-                        del self.copyCatsIds
-                    except AttributeError:
-                        pass
-                
-                elif digitToolbar.GetAction() == "copyLine":
-                    del self.copyIds
-                    if self.layerTmp:
-                        self.Map.DeleteLayer(self.layerTmp)
-                        self.UpdateMap(render = True, renderVector = False)
-                    del self.layerTmp
-
-                self.polycoords = []
-                self.UpdateMap(render = False) # render vector
-
-            elif digitToolbar.GetAction() == "zbulkLine":
-                # reset polyline
-                self.polycoords = []
-                digitClass.GetDisplay().SetSelected([])
-                self.UpdateMap(render = False)
-            
-            self.redrawAll = True
-
+    
     def OnMiddleUp(self, event):
         """!Middle mouse button released
         """
-        if self.parent.toolbars['vdigit']:
-            event.Skip()
-            return
+        # if self.parent.toolbars['vdigit']:
+        #     event.Skip()
+        #     return
         
         self.mouse['end'] = event.GetPositionTuple()[:]
         
