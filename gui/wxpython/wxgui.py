@@ -1014,31 +1014,31 @@ class GMFrame(wx.Frame):
         """!Convert multiple DXF layers to GRASS vector map layers"""
         dlg = gdialogs.DxfImportDialog(parent = self)
         dlg.CentreOnScreen()
-        dlg.ShowModal()
+        dlg.Show()
 
     def OnImportGdalLayers(self, event, cmd = None):
         """!Convert multiple GDAL layers to GRASS raster map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self)
         dlg.CentreOnScreen()
-        dlg.ShowModal()
+        dlg.Show()
 
     def OnLinkGdalLayers(self, event, cmd = None):
         """!Link multiple GDAL layers to GRASS raster map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self, link = True)
         dlg.CentreOnScreen()
-        dlg.ShowModal()
+        dlg.Show()
         
     def OnImportOgrLayers(self, event, cmd = None):
         """!Convert multiple OGR layers to GRASS vector map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self, ogr = True)
         dlg.CentreOnScreen()
-        dlg.ShowModal()
+        dlg.Show()
         
     def OnLinkOgrLayers(self, event, cmd = None):
         """!Links multiple OGR layers to GRASS vector map layers"""
         dlg = gdialogs.GdalImportDialog(parent = self, ogr = True, link = True)
         dlg.CentreOnScreen()
-        dlg.ShowModal()
+        dlg.Show()
         
     def OnImportWMS(self, event):
         """!Import data from OGC WMS server"""
