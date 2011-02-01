@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
     int level;
     int count;
     double size;
-
+    char *desc;
+    
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -69,28 +70,42 @@ int main(int argc, char *argv[])
 	"break,snap,rmdangle,chdangle,rmbridge,chbridge,rmdupl,rmdac,bpol,prune,"
 	"rmarea,rmline,rmsa";
     tool_opt->description = _("Cleaning tool");
-    tool_opt->descriptions =
-	_("break;break lines at each intersection;"
-	  "rmdupl;remove duplicate geometry features (pay attention to categories!);"
-	  "rmdangle;remove dangles, threshold ignored if < 0;"
-	  "chdangle;change the type of boundary dangle to line, "
-	  "threshold ignored if < 0, input line type is ignored;"
-	  "rmbridge;remove bridges connecting area and island or 2 islands;"
-	  "chbridge;change the type of bridges connecting area and island "
-	  "or 2 islands from boundary to line;"
-	  "snap;snap lines to vertex in threshold;"
-	  "rmdac;remove duplicate area centroids ('type' option ignored);"
-	  "bpol;break (topologically clean) polygons (imported from "
-	  "non topological format, like ShapeFile). Boundaries are broken on each "
-	  "point shared between 2 and more polygons where angles of segments are different;"
-	  "prune;remove vertices in threshold from lines and boundaries, "
-	  "boundary is pruned only if topology is not damaged (new intersection, "
-	  "changed attachement of centroid), first and last segment of the boundary "
-	  "is never changed;"
-	  "rmarea;remove small areas, the longest boundary with adjacent area is removed;"
-	  "rmline;remove all lines or boundaries of zero length, threshold is ignored;"
-	  "rmsa;remove small angles between lines at nodes");
-
+    desc = NULL;
+    G_asprintf(&desc,
+	       "break;%s;"
+	       "rmdupl;%s;"
+	       "rmdangle;%s;"
+	       "chdangle;%s;"
+	       "rmbridge;%s;"
+	       "chbridge;%s;"
+	       "snap;%s;"
+	       "rmdac;%s;"
+	       "bpol;%s;"
+	       "rmarea;%s;"
+	       "rmline;%s;"
+	       "rmsa;%s",
+	       _("break lines at each intersection"),
+	       _("remove duplicate geometry features (pay attention to categories!)"),
+	       _("remove dangles, threshold ignored if < 0"),
+	       _("change the type of boundary dangle to line, "
+		 "threshold ignored if < 0, input line type is ignored"),
+	       _("remove bridges connecting area and island or 2 islands"),
+	       _("change the type of bridges connecting area and island "
+		 "or 2 islands from boundary to line"),
+	       _("snap lines to vertex in threshold"),
+	       _("remove duplicate area centroids ('type' option ignored)"),
+	       _("break (topologically clean) polygons (imported from "
+		 "non topological format, like ShapeFile). Boundaries are broken on each "
+		 "point shared between 2 and more polygons where angles of segments are different;"
+		 "prune;remove vertices in threshold from lines and boundaries, "
+		 "boundary is pruned only if topology is not damaged (new intersection, "
+		 "changed attachement of centroid), first and last segment of the boundary "
+		 "is never changed"),
+	       _("remove small areas, the longest boundary with adjacent area is removed"),
+	       _("remove all lines or boundaries of zero length, threshold is ignored"),
+	       _("remove small angles between lines at nodes"));
+    tool_opt->descriptions = desc;
+    
     thresh_opt = G_define_option();
     thresh_opt->key = "thresh";
     thresh_opt->type = TYPE_DOUBLE;
