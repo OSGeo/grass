@@ -21,7 +21,7 @@ Classes:
  - GdalSelect
  - ProjSelect
  
-(C) 2007-2010 by the GRASS Development Team This program is free
+(C) 2007-2011 by the GRASS Development Team This program is free
 software under the GNU General Public License (>=v2). Read the file
 COPYING that comes with GRASS for details.
 
@@ -1252,11 +1252,7 @@ class GdalSelect(wx.Panel):
 
     def _getExtPattern(self, ext):
         """!Get pattern for case-insensitive mask"""
-        pattern = ''
-        for c in ext:
-            pattern += '[' + c + c.upper() + ']'
-
-        return pattern
+        return '*.%s;*.%s' % (ext.lower(), ext.upper())
 
     def OnSettingsLoad(self, event):
         """!Load named settings"""
