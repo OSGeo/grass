@@ -223,7 +223,7 @@ class DisplayDriver:
         if self._isSelected(robj.fid):
             pdc = self.dcTmp
             if self.settings['highlightDupl']['enabled'] and self._isDuplicated(robj.fid):
-                pen = wx.Pen(self.settings['highlightDupl'], self.settings['lineWidth'], wx.SOLID)
+                pen = wx.Pen(self.settings['highlightDupl']['color'], self.settings['lineWidth'], wx.SOLID)
             else:            
                 pen = wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID)
             
@@ -387,10 +387,16 @@ class DisplayDriver:
         
         return False
 
+    def _isDuplicated(self, line):
+        """!Check for already marked duplicates
+        
+        \param line feature id
 
-    def _isDuplicated(self, featId):
-        return False
-
+        \return True line already marked as duplicated
+        \return False not duplicated
+        """
+        return line in self.selected['idsDupl']
+    
     def _getRegionBox(self):
         """!Get bound_box() from current region
 
@@ -445,7 +451,7 @@ class DisplayDriver:
     def _getSelectType(self):
         """!Get type(s) to be selected
 
-        Used by SelectLinesByBox() and SelectLinesByPoint()
+        Used by SelectLinesByBox() and SelectLineByPoint()
         """
         ftype = 0
         for feature in (('point',    GV_POINT),
@@ -519,6 +525,7 @@ class DisplayDriver:
         
         flist = poList.contents
         nlines = flist.n_values
+        Debug.msg(1, "DisplayDriver.SelectLinesByBox() num = %d", nlines)
         for i in range(nlines):
             line = flist.value[i]
             if UserSettings.Get(group = 'vdigit', key = 'selectInside',
@@ -540,12 +547,12 @@ class DisplayDriver:
             if not self._isSelected(line):
                 selected.append(line)
             else:
-                del selected[line]
+                selected.remove(line)
         
         Vect_destroy_line_struct(poBbox)
         Vect_destroy_list(poList)
         
-        return len(selected)
+        return nlines
 
     def SelectLineByPoint(self, point, poMapInfo = None):
         """!Select vector feature by given point in given
@@ -566,7 +573,7 @@ class DisplayDriver:
         
         if not poMapInfo:
             return None
-
+        
         if thisMapInfo:
             self._drawSelected = True
             # select by ids 
@@ -579,22 +586,23 @@ class DisplayDriver:
         
         poFound = Vect_new_list()
         
-        line_nearest = Vect_find_line_list(poMapInfo, point[0], point[1], 0,
+        lineNearest = Vect_find_line_list(poMapInfo, point[0], point[1], 0,
                                            self._getSelectType(), self.GetThreshold(), self.is3D,
                                            None, poFound)
+        Debug.msg(1, "DisplayDriver.SelectLineByPoint() found = %d", lineNearest)
         
-        if line_nearest > 0:
-            if not self._isSelected(line_nearest):
-                selected.append(line_nearest)
+        if lineNearest > 0:
+            if not self._isSelected(lineNearest):
+                selected.append(lineNearest)
             else:
-                del selected[line_nearest]
+                selected.remove(lineNearest)
         
         px = c_double()
         py = c_double()
         pz = c_double()
-        if not self._validLine(line_nearest):
+        if not self._validLine(lineNearest):
             return None
-	ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, line_nearest)
+	ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
 	Vect_line_distance (self.poPoints, point[0], point[1], 0.0, self.is3D,
 			    byref(px), byref(py), byref(pz),
 			    None, None, None)
@@ -604,15 +612,15 @@ class DisplayDriver:
             found = poFound.contents
 	    for i in range(found.n_values):
 		line = found.value[i]
-		if line != line_nearest:
+		if line != lineNearest:
                     selected.append(line)
 	    
-            self.getDuplicates()
+            self.GetDuplicates()
 	    
 	    for i in range(found.n_values):
 		line = found.value[i]
-		if line != line_nearest and not self._isDuplicated(line):
-                    del selected[line]
+		if line != lineNearest and not self._isDuplicated(line):
+                    selected.remove(line)
         
         Vect_destroy_list(poFound)
         
@@ -621,7 +629,7 @@ class DisplayDriver:
             # only one features selected
             self._drawSegments = True
         
-        return { 'line'  : line_nearest,
+        return { 'line'  : lineNearest,
                  'point' : (px.value, py.value, pz.value) }
     
     def _listToIList(self, plist):
@@ -899,4 +907,79 @@ class DisplayDriver:
             return value * res
         
         return value
+    
+    def GetDuplicates(self):
+        """!Return ids of (selected) duplicated vector features
+        """
+        if not self.poMapInfo:
+            return
         
+        ids = dict()
+        APoints = Vect_new_line_struct()
+        BPoints = Vect_new_line_struct()
+        
+        self.selected['idsDupl'] = list()
+        
+        for i in range(len(self.selected['ids'])):
+            line1 = self.selected['ids'][i]
+            if self._isDuplicated(line1):
+                continue
+            
+            Vect_read_line(self.poMapInfo, APoints, None, line1)
+            
+            for line2 in self.selected['ids']:
+                if line1 == line2 or self._isDuplicated(line2):
+                    continue
+                
+                Vect_read_line(self.poMapInfo, BPoints, None, line2)
+	    
+                if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
+                    if not ids.has_key(i):
+                        ids[i] = list()
+                        ids[i].append((line1, self._getCatString(line1)))
+                        self.selected['idsDupl'].append(line1)
+                    
+                    ids[i].append((line2, self._getCatString(line2)))
+                    self.selected['idsDupl'].append(line2)
+        
+        Vect_destroy_line_struct(APoints)
+        Vect_destroy_line_struct(BPoints)
+
+        return ids
+    
+    def _getCatString(self, line):
+        Vect_read_line(self.poMapInfo, None, self.poCats, line)
+        
+        cats = self.poCats.contents
+        catsDict = dict()
+        for i in range(cats.n_cats):
+            layer = cats.field[i]
+            if not catsDict.has_key(layer):
+                catsDict[layer] = list()
+            catsDict[layer].append(cats.cat[i])
+        
+        catsStr = ''
+        for l, c in catsDict.iteritems():
+            catsStr = '%d: (%s)' % (l, ','.join(map(str, c)))
+        
+        return catsStr
+
+    def UnSelect(self, lines):
+        """!Unselect vector features
+
+        @param lines list of feature id(s)
+        """
+        checkForDupl = False
+
+        for line in lines:
+            if self._isSelected(line):
+                self.selected['ids'].remove(line)
+            if self.settings['highlightDupl']['enabled'] and self._isDuplicated(line):
+                checkForDupl = True
+
+        if checkForDupl:
+            self.GetDuplicates()
+        
+        return len(self.selected['ids'])
+    
+
