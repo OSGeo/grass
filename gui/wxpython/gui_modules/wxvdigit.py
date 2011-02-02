@@ -1385,8 +1385,9 @@ class IVDigit:
             y = c_double()
             if left > 0 and \
                     Vect_get_area_centroid(self.poMapInfo, left) == 0:
-                if Vect_get_area_points(self.poMapInfo, left, bpoints) > 0 and \
-                        Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
+                # if Vect_get_area_points(self.poMapInfo, left, bpoints) > 0 and
+                # Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
+                if Vect_get_point_in_area(self.poMapInfo, left, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
                     newline = Vect_write_line(self.poMapInfo, GV_CENTROID,
@@ -1399,8 +1400,9 @@ class IVDigit:
                     
             if right > 0 and \
                     Vect_get_area_centroid(self.poMapInfo, right) == 0:
-                if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and \
-                        Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
+                # if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and 
+                # Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
+                if Vect_get_point_in_area(self.poMapInfo, left, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
                     newline =  Vect_write_line(byref(self.poMapInfo), GV_CENTROID,
