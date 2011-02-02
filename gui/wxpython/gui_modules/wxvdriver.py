@@ -390,10 +390,10 @@ class DisplayDriver:
     def _isDuplicated(self, line):
         """!Check for already marked duplicates
         
-        \param line feature id
+        @param line feature id
 
-        \return True line already marked as duplicated
-        \return False not duplicated
+        @return True line already marked as duplicated
+        @return False not duplicated
         """
         return line in self.selected['idsDupl']
     

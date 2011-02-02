@@ -961,13 +961,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             menuform.GUI().ParseCommand(['d.rast.num'], completed = (self.GetOptData,layer,params),
                                         parentframe = self, centreOnParent = False)
         elif ltype == 'vector':
-            types = ''
-            for type in UserSettings.Get(group = 'cmd', key = 'showType').keys():
+            types = list()
+            for ftype in ['point', 'line', 'boundary', 'centroid', 'area', 'face']:
                 if UserSettings.Get(group = 'cmd', key = 'showType', subkey = [type, 'enabled']):
-                    types += type + ','
-            types = types.rstrip(',')
+                    types.append(ftype)
             
-            menuform.GUI().ParseCommand(['d.vect', 'type=%s' % types],
+            menuform.GUI().ParseCommand(['d.vect', 'type=%s' % ','.join(types)],
                                          completed = (self.GetOptData,layer,params),
                                          parentframe = self, centreOnParent = False)
         elif ltype == 'thememap':
