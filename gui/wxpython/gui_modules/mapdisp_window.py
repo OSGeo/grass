@@ -1251,8 +1251,8 @@ class BufferedWindow(MapWindow, wx.Window):
         if digitToolbar.GetAction('type') in ['point', 'centroid']:
             # add new point / centroiud
             east, north = self.Pixel2Cell(self.mouse['begin'])
-            fid = digitClass.AddFeature(digitToolbar.GetAction('type'), [(east, north)])
-            if fid < 0:
+            nfeat, fids = digitClass.AddFeature(digitToolbar.GetAction('type'), [(east, north)])
+            if nfeat < 1:
                 return
             
             self.UpdateMap(render = False) # redraw map
@@ -1260,7 +1260,7 @@ class BufferedWindow(MapWindow, wx.Window):
             # add new record into atribute table
             if UserSettings.Get(group = 'vdigit', key = "addRecord", subkey = 'enabled'):
                 # select attributes based on layer and category
-                cats = { fid : {
+                cats = { fids[0] : {
                         UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value') :
                             (UserSettings.Get(group = 'vdigit', key = "category", subkey = 'value'), )
                         }}
@@ -1273,12 +1273,13 @@ class BufferedWindow(MapWindow, wx.Window):
                                                                    pos = posWindow,
                                                                    action = "add")
 
-                if not point:
-                    self.__geomAttrb(fid, addRecordDlg, 'area', digitClass,
-                                     digitToolbar.GetLayer())
-                    self.__geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
-                                     digitToolbar.GetLayer())
-
+                if digitToolbar.GetAction('type') == 'centroid':
+                    for fid in fids:
+                        self._geomAttrb(fid, addRecordDlg, 'area', digitClass,
+                                        digitToolbar.GetLayer())
+                        self._geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
+                                        digitToolbar.GetLayer())
+                    
                 if addRecordDlg.mapDBInfo and \
                         addRecordDlg.ShowModal() == wx.ID_OK:
                     sqlfile = tempfile.NamedTemporaryFile(mode = "w")
@@ -1299,7 +1300,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
             self.DrawLines(pdc = self.pdcTmp)
     
-    def __geomAttrb(self, fid, dialog, attrb, digit, mapLayer):
+    def _geomAttrb(self, fid, dialog, attrb, digit, mapLayer):
         """!Trac geometry attributes?"""
         item = self.tree.FindItemByData('maplayer', mapLayer)
         vdigit = self.tree.GetPyData(item)[0]['vdigit']
@@ -1324,7 +1325,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 dialog.SetColumnValue(layer, column, val)
                 dialog.OnReset()
         
-    def __geomAttrbUpdate(self, fids):
+    def _geomAttrbUpdate(self, fids):
         """!Update geometry atrributes of currently selected features
 
         @param fid list feature id
@@ -2158,7 +2159,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     if fid < 0:
                         return
 
-                    self.__geomAttrbUpdate([fid,])
+                    self._geomAttrbUpdate([fid,])
                 
                 del self.vdigitMove
                 
@@ -2178,19 +2179,24 @@ class BufferedWindow(MapWindow, wx.Window):
                     digitToolbar.GetAction('type') in ["line", "boundary", "area"]:
                 # -> add new line / boundary
                 try:
-                    map = digitToolbar.GetLayer().GetName()
+                    mapName = digitToolbar.GetLayer().GetName()
                 except:
-                    map = None
+                    mapName = None
                     wx.MessageBox(parent = self,
                                   message = _("No vector map selected for editing."),
                                   caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
                     
-                if map:
+                if mapName:
+                    if digitToolbar.GetAction('type') == 'line':
+                        line = True
+                    else:
+                        line = False
+                    
                     if len(self.polycoords) < 2: # ignore 'one-point' lines
                         return
                     
-                    fid = digitClass.AddFeature(digitToolbar.GetAction('type'), self.polycoords)
-                    if fid < 0:
+                    nfeat, fids = digitClass.AddFeature(digitToolbar.GetAction('type'), self.polycoords)
+                    if nfeat < 0:
                         return
                     
                     position = self.Cell2Pixel(self.polycoords[-1])
@@ -2202,29 +2208,30 @@ class BufferedWindow(MapWindow, wx.Window):
                     # add new record into atribute table
                     if UserSettings.Get(group = 'vdigit', key = "addRecord", subkey = 'enabled') and \
                             (line is True or \
-                                 (not line and fid > 0)):
+                                 (not line and nfeat > 0)):
                         posWindow = self.ClientToScreen((position[0] + self.dialogOffset,
                                                          position[1] + self.dialogOffset))
-
+                        
                         # select attributes based on layer and category
-                        cats = { fid : {
+                        cats = { fids[0] : {
                                 UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value') :
                                     (UserSettings.Get(group = 'vdigit', key = "category", subkey = 'value'), )
                                 }}
                         
-                        addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent = self, map = map,
+                        addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent = self, map = mapName,
                                                                            cats = cats,
                                                                            pos = posWindow,
                                                                            action = "add")
 
-                        self.__geomAttrb(fid, addRecordDlg, 'length', digitClass,
-                                         digitToolbar.GetLayer())
-                        # auto-placing centroid
-                        self.__geomAttrb(fid, addRecordDlg, 'area', digitClass,
-                                         digitToolbar.GetLayer())
-                        self.__geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
-                                         digitToolbar.GetLayer())
-
+                        for fid in fids:
+                            self._geomAttrb(fid, addRecordDlg, 'length', digitClass,
+                                            digitToolbar.GetLayer())
+                            # auto-placing centroid
+                            self._geomAttrb(fid, addRecordDlg, 'area', digitClass,
+                                            digitToolbar.GetLayer())
+                            self._geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
+                                            digitToolbar.GetLayer())
+                        
                         if addRecordDlg.mapDBInfo and \
                                addRecordDlg.ShowModal() == wx.ID_OK:
                             sqlfile = tempfile.NamedTemporaryFile(mode = "w")
@@ -2258,7 +2265,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 fid = digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin']))
                 if fid < 0:
                     return
-                self.__geomAttrbUpdate([fid,])
+                self._geomAttrbUpdate([fid,])
             elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
                 try:
                     if digitToolbar.GetAction() == 'copyCats':

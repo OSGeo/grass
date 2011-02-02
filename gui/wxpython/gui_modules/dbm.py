@@ -2568,10 +2568,10 @@ class LayerBook(wx.Notebook):
     def __createDeletePage(self):
         """!Delete layer"""
         self.deletePanel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.AddPage(page=self.deletePanel, text=_("Delete layer"))
+        self.AddPage(page=self.deletePanel, text=_("Remove layer"))
 
         label = wx.StaticText(parent=self.deletePanel, id=wx.ID_ANY,
-                              label='%s:' % _("Layer to detele"))
+                              label='%s:' % _("Layer to remove"))
 
         self.deleteLayer = wx.ComboBox(parent=self.deletePanel, id=wx.ID_ANY, size=(100, -1),
                                        style=wx.CB_SIMPLE | wx.CB_READONLY,
@@ -2592,7 +2592,7 @@ class LayerBook(wx.Notebook):
             self.deleteLayer.Enable(False)
             self.deleteTable.Enable(False)
             
-        btnDelete   = wx.Button(self.deletePanel, wx.ID_DELETE, _("&Delete layer"),
+        btnDelete   = wx.Button(self.deletePanel, wx.ID_DELETE, _("&Remove layer"),
                                 size=(125,-1))
         btnDelete.Bind(wx.EVT_BUTTON, self.OnDeleteLayer)
 

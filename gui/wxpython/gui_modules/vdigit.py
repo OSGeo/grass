@@ -514,7 +514,7 @@ class VDigitSettingsDialog(wx.Dialog):
             row += 1
         
         note = '\n'.join(textwrap.wrap(_("Note: These settings are stored "
-                                         " in the workspace not in the vector digitizer "
+                                         "in the workspace not in the vector digitizer "
                                          "preferences."), 55))
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                            label = note),
@@ -704,6 +704,7 @@ class VDigitSettingsDialog(wx.Dialog):
     def UpdateSettings(self):
         """!Update digitizer settings
         """
+        self.parent.GetLayerManager().WorkspaceChanged() # geometry attributes
         # symbology
         for key, (enabled, color) in self.symbology.iteritems():
             if enabled:

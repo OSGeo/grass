@@ -431,7 +431,7 @@ class IVDigit:
         @param ftype feature type (point, line, centroid, boundary)
         @param points tuple of points ((x, y), (x, y), ...)
         
-        @return new feature id
+        @return tuple (number of added features, feature ids)
         """
         if UserSettings.Get(group = 'vdigit', key = "categoryMode", subkey = 'selection') == 2:
             layer = -1 # -> no category
@@ -453,12 +453,12 @@ class IVDigit:
         else:
             GError(parent = self.mapWindow,
                    message = _("Unknown feature type '%s'") % ftype)
-            return
+            return (-1, None)
         
         if vtype & GV_LINES and len(points) < 2:
             GError(parent = self.mapWindow,
                    message = _("Not enough points for line"))
-            return
+            return (-1, None)
         
         self.toolbar.EnableUndo()
         
@@ -1007,7 +1007,22 @@ class IVDigit:
         @return line length
         @return -1 on error
         """
-        return self.digit.GetLineLength(line)
+        if not self._checkMap():
+            return -1
+        
+        if not Vect_line_alive(self.poMapInfo, line):
+            return -1
+    
+        ltype = Vect_read_line(self.poMapInfo, self.poPoints, None, line)
+        if ltype < 0:
+            self._error.ReadLine(line)
+            return ret
+        
+        length = -1
+        if ltype & GV_LINES: # lines & boundaries
+            length = Vect_line_length(self.poPoints)
+        
+        return length
 
     def GetAreaSize(self, centroid):
         """!Get area size
@@ -1017,18 +1032,57 @@ class IVDigit:
         @return area size
         @return -1 on error
         """
-        return self.digit.GetAreaSize(centroid)
+        if not self._checkMap():
+            return -1
+        
+        ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
+        if ltype < 0:
+            self._error.ReadLine(line)
+            return ret
+        
+        if ltype != GV_CENTROID:
+            return -1
+        
+        area = Vect_get_centroid_area(self.poMapInfo, centroid)
+        size = -1
+        if area > 0:
+            if not Vect_area_alive(self.poMapInfo, area):
+                return size
+            
+            size = Vect_get_area_area(self.poMapInfo, area)
+        
+        return size
         
     def GetAreaPerimeter(self, centroid):
         """!Get area perimeter
-
+        
         @param centroid centroid id
-
+        
         @return area size
         @return -1 on error
         """
-        return self.digit.GetAreaPerimeter(centroid)
-
+        if not self._checkMap():
+            return -1
+        
+        ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
+        if ltype < 0:
+            self._error.ReadLine(line)
+            return ret
+        
+        if ltype != GV_CENTROID:
+            return -1
+        
+        area = Vect_get_centroid_area(self.poMapInfo, centroid)
+        perimeter = -1
+        if area > 0:
+            if not Vect_area_alive(self,poMapInfo, area):
+                return -1
+            
+            Vect_get_area_points(self.poMapInfo, area, self.poPoints)
+            perimeter = Vect_area_perimeter(self.poPoints)
+        
+        return perimeter
+    
     def SetLineCats(self, line, layer, cats, add=True):
         """!Set categories for given line and layer
 
@@ -1246,7 +1300,7 @@ class IVDigit:
         return True
 
     def _addFeature(self, ftype, coords, layer, cat, snap, threshold):
-        """!Add new feature to the vector map
+        """!Add new feature(s) to the vector map
 
         @param ftype feature type (GV_POINT, GV_LINE, GV_BOUNDARY, ...)
         @coords tuple of coordinates ((x, y), (x, y), ...)
@@ -1255,11 +1309,12 @@ class IVDigit:
         @param snap snap to node/vertex
         @param threshold threshold for snapping
         
-        @return -1 on error
-        @return feature id of new feature
+        @return tuple (number of added features, list of fids)
+        @return number of features -1 on error
         """
+        fids = list()
         if not self._checkMap():
-            return -1
+            return (-1, None)
         
         is3D = bool(Vect_is_3d(self.poMapInfo))
         
@@ -1268,7 +1323,7 @@ class IVDigit:
         
         if not (ftype & (GV_POINTS | GV_LINES | GV_AREA)): # TODO: 3D
             self._error.FeatureType(ftype)
-            return -1
+            return (-1, None)
         
         # set category
         Vect_reset_cats(self.poCats)
@@ -1305,7 +1360,9 @@ class IVDigit:
         newline = Vect_write_line(self.poMapInfo, ltype, self.poPoints, self.poCats)
         if newline < 0:
             self._error.WriteLine()
-            return -1
+            return (-1, None)
+        else:
+            fids.append(newline)
         
         left = right = -1
         if ftype & GV_AREA:
@@ -1332,21 +1389,28 @@ class IVDigit:
                         Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    if Vect_write_line(self.poMapInfo, GV_CENTROID,
-                                       bpoints, self.poCats) < 0:
+                    newline = Vect_write_line(self.poMapInfo, GV_CENTROID,
+                                              bpoints, self.poCats)
+                    if newline < 0:
                         self._error.WriteLine()
-                        return -1
-            
+                        return (len(fids), fids)
+                    else:
+                        fids.append(newline)
+                    
             if right > 0 and \
                     Vect_get_area_centroid(self.poMapInfo, right) == 0:
                 if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and \
                         Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    if Vect_write_line(byref(self.poMapInfo), GV_CENTROID,
-                                       bpoints, self.poCats) < 0:
+                    newline =  Vect_write_line(byref(self.poMapInfo), GV_CENTROID,
+                                               bpoints, self.poCats)
+                    if newline < 0:
                         self._error.WriteLine()
-                        return -1
+                        return (len(fids, fids))
+                    else:
+                        fids.append(newline)
+                    
             Vect_destroy_line_struct(bpoints)
         
         # register changeset
@@ -1357,7 +1421,7 @@ class IVDigit:
         if self._settings['breakLines']:
             self._breakLineAtIntersection(newline, self.poPoints, changeset)
         
-        return newline
+        return (len(fids), fids)
     
     def _ModifyLineVertex(self, coords, add = True):
         """!Add or remove vertex
