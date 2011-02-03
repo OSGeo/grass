@@ -109,7 +109,7 @@ class DisplayAttributesDialog(wx.Dialog):
         if self.action == "update":
             self.SetTitle(_("Update attributes"))
         elif self.action == "add":
-            self.SetTitle(_("Add attributes"))
+            self.SetTitle(_("Define attributes"))
         else:
             self.SetTitle(_("Display attributes"))
 
