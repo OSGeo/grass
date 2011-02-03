@@ -1833,6 +1833,7 @@ class BufferedWindow(MapWindow, wx.Window):
         else: # no vector object found
             if not (digitToolbar.GetAction() in ("moveLine",
                                                  "moveVertex") and \
+                        hasattr(self, "vdigitMove") and \
                         len(self.vdigitMove['id']) > 0):
                 # avoid left-click when features are already selected
                 self.UpdateMap(render = False, renderVector = False)
@@ -2170,183 +2171,189 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Debug.msg (5, "BufferedWindow.OnRightUp(): use=%s" % \
                    self.mouse["use"])
-
-        digitToolbar = self.parent.toolbars['vdigit']
-        if digitToolbar:
-            digitClass = self.parent.digit
-            # digitization tool (confirm action)
-            if digitToolbar.GetAction() == "addLine" and \
-                    digitToolbar.GetAction('type') in ["line", "boundary", "area"]:
-                # -> add new line / boundary
-                try:
-                    mapName = digitToolbar.GetLayer().GetName()
-                except:
-                    mapName = None
-                    wx.MessageBox(parent = self,
-                                  message = _("No vector map selected for editing."),
-                                  caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                    
-                if mapName:
-                    if digitToolbar.GetAction('type') == 'line':
-                        line = True
-                    else:
-                        line = False
-                    
-                    if len(self.polycoords) < 2: # ignore 'one-point' lines
-                        return
-                    
-                    nfeat, fids = digitClass.AddFeature(digitToolbar.GetAction('type'), self.polycoords)
-                    if nfeat < 0:
-                        return
-                    
-                    position = self.Cell2Pixel(self.polycoords[-1])
-                    self.polycoords = []
-                    self.UpdateMap(render = False)
-                    self.redrawAll = True
-                    self.Refresh()
-                    
-                    # add new record into atribute table
-                    if UserSettings.Get(group = 'vdigit', key = "addRecord", subkey = 'enabled') and \
-                            (line is True or \
-                                 (not line and nfeat > 0)):
-                        posWindow = self.ClientToScreen((position[0] + self.dialogOffset,
-                                                         position[1] + self.dialogOffset))
-                        
-                        # select attributes based on layer and category
-                        cats = { fids[0] : {
-                                UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value') :
-                                    (UserSettings.Get(group = 'vdigit', key = "category", subkey = 'value'), )
-                                }}
-                        
-                        addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent = self, map = mapName,
-                                                                           cats = cats,
-                                                                           pos = posWindow,
-                                                                           action = "add")
-
-                        for fid in fids:
-                            self._geomAttrb(fid, addRecordDlg, 'length', digitClass,
-                                            digitToolbar.GetLayer())
-                            # auto-placing centroid
-                            self._geomAttrb(fid, addRecordDlg, 'area', digitClass,
-                                            digitToolbar.GetLayer())
-                            self._geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
-                                            digitToolbar.GetLayer())
-                        
-                        if addRecordDlg.mapDBInfo and \
-                               addRecordDlg.ShowModal() == wx.ID_OK:
-                            sqlfile = tempfile.NamedTemporaryFile(mode = "w")
-                            for sql in addRecordDlg.GetSQLString():
-                                sqlfile.file.write(sql + ";\n")
-                            sqlfile.file.flush()
-                            gcmd.RunCommand('db.execute',
-                                            parent = True,
-                                            quiet = True,
-                                            input = sqlfile.name)
-                        
-                        if addRecordDlg.mapDBInfo:
-                            self.__updateATM()
-            
-            elif digitToolbar.GetAction() == "deleteLine":
-                # -> delete selected vector features
-                if digitClass.DeleteSelectedLines() < 0:
-                    return
-                self.__updateATM()
-            elif digitToolbar.GetAction() == "splitLine":
-                # split line
-                if digitClass.SplitLine(self.Pixel2Cell(self.mouse['begin'])) < 0:
-                    return
-            elif digitToolbar.GetAction() == "addVertex":
-                # add vertex
-                fid = digitClass.AddVertex(self.Pixel2Cell(self.mouse['begin']))
-                if fid < 0:
-                    return
-            elif digitToolbar.GetAction() == "removeVertex":
-                # remove vertex
-                fid = digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin']))
-                if fid < 0:
-                    return
-                self._geomAttrbUpdate([fid,])
-            elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
-                try:
-                    if digitToolbar.GetAction() == 'copyCats':
-                        if digitClass.CopyCats(self.copyCatsList,
-                                               self.copyCatsIds, copyAttrb = False) < 0:
-                            return
-                    else:
-                        if digitClass.CopyCats(self.copyCatsList,
-                                               self.copyCatsIds, copyAttrb = True) < 0:
-                            return
-                    
-                    del self.copyCatsList
-                    del self.copyCatsIds
-                except AttributeError:
-                    pass
-                
-                self.__updateATM()
-                
-            elif digitToolbar.GetAction() == "editLine" and \
-                    hasattr(self, "vdigitMove"):
-                line = digitClass.GetDisplay().GetSelected()
-                if digitClass.EditLine(line, self.polycoords) < 0:
-                    return
-                
-                del self.vdigitMove
-                
-            elif digitToolbar.GetAction() == "flipLine":
-                if digitClass.FlipLine() < 0:
-                    return
-            elif digitToolbar.GetAction() == "mergeLine":
-                if digitClass.MergeLine() < 0:
-                    return
-            elif digitToolbar.GetAction() == "breakLine":
-                if digitClass.BreakLine() < 0:
-                    return
-            elif digitToolbar.GetAction() == "snapLine":
-                if digitClass.SnapLine() < 0:
-                    return
-            elif digitToolbar.GetAction() == "connectLine":
-                if len(digitClass.GetDisplay().GetSelected()) > 1:
-                    if digitClass.ConnectLine() < 0:
-                        return
-            elif digitToolbar.GetAction() == "copyLine":
-                if digitClass.CopyLine(self.copyIds) < 0:
-                    return
-                del self.copyIds
-                if self.layerTmp:
-                    self.Map.DeleteLayer(self.layerTmp)
-                    self.UpdateMap(render = True, renderVector = False)
-                del self.layerTmp
-
-            elif digitToolbar.GetAction() == "zbulkLine" and len(self.polycoords) == 2:
-                pos1 = self.polycoords[0]
-                pos2 = self.polycoords[1]
-
-                selected = digitClass.GetDisplay().GetSelected()
-                dlg = VDigitZBulkDialog(parent = self, title = _("Z bulk-labeling dialog"),
-                                        nselected = len(selected))
-                if dlg.ShowModal() == wx.ID_OK:
-                    if digitClass.ZBulkLines(pos1, pos2, dlg.value.GetValue(),
-                                             dlg.step.GetValue()) < 0:
-                        return
-                self.UpdateMap(render = False, renderVector = True)
-            elif digitToolbar.GetAction() == "typeConv":
-                # -> feature type conversion
-                # - point <-> centroid
-                # - line <-> boundary
-                if digitClass.TypeConvForSelectedLines() < 0:
-                    return
-
-            if digitToolbar.GetAction() != "addLine":
-                # unselect and re-render
-                digitClass.GetDisplay().SetSelected([])
-                self.polycoords = []
-                self.UpdateMap(render = False)
-
-            self.redrawAll = True
-            self.Refresh()
+        
+        self.OnRightUpVDigit(event)
+        
+        self.redrawAll = True
+        self.Refresh()
             
         event.Skip()
+    
+    def OnRightUpVDigit(self, event):
+        """!Right mouse button release (vector digitizer)
+        """
+        digitToolbar = self.parent.toolbars['vdigit']
+        if not digitToolbar:
+            return
+        
+        digitClass = self.parent.digit
+        # digitization tool (confirm action)
+        if digitToolbar.GetAction() == "addLine" and \
+                digitToolbar.GetAction('type') in ["line", "boundary", "area"]:
+            # -> add new line / boundary
+            try:
+                mapName = digitToolbar.GetLayer().GetName()
+            except:
+                mapName = None
+                gcmd.GError(parent = self,
+                            message = _("No vector map selected for editing."))
+                    
+            if mapName:
+                if digitToolbar.GetAction('type') == 'line':
+                    line = True
+                else:
+                    line = False
+                    
+                if len(self.polycoords) < 2: # ignore 'one-point' lines
+                    return
+                    
+                nfeat, fids = digitClass.AddFeature(digitToolbar.GetAction('type'), self.polycoords)
+                if nfeat < 0:
+                    return
+                    
+                position = self.Cell2Pixel(self.polycoords[-1])
+                self.polycoords = []
+                self.UpdateMap(render = False)
+                self.redrawAll = True
+                self.Refresh()
+                
+            # add new record into atribute table
+                if UserSettings.Get(group = 'vdigit', key = "addRecord", subkey = 'enabled') and \
+                        (line is True or \
+                             (not line and nfeat > 0)):
+                    posWindow = self.ClientToScreen((position[0] + self.dialogOffset,
+                                                     position[1] + self.dialogOffset))
+                        
+                    # select attributes based on layer and category
+                    cats = { fids[0] : {
+                            UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value') :
+                                (UserSettings.Get(group = 'vdigit', key = "category", subkey = 'value'), )
+                            }}
+                    
+                    addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent = self, map = mapName,
+                                                                       cats = cats,
+                                                                       pos = posWindow,
+                                                                       action = "add")
+                    
+                    for fid in fids:
+                        self._geomAttrb(fid, addRecordDlg, 'length', digitClass,
+                                        digitToolbar.GetLayer())
+                        # auto-placing centroid
+                        self._geomAttrb(fid, addRecordDlg, 'area', digitClass,
+                                        digitToolbar.GetLayer())
+                        self._geomAttrb(fid, addRecordDlg, 'perimeter', digitClass,
+                                        digitToolbar.GetLayer())
+                    
+                    if addRecordDlg.mapDBInfo and \
+                            addRecordDlg.ShowModal() == wx.ID_OK:
+                        sqlfile = tempfile.NamedTemporaryFile(mode = "w")
+                        for sql in addRecordDlg.GetSQLString():
+                            sqlfile.file.write(sql + ";\n")
+                        sqlfile.file.flush()
+                        gcmd.RunCommand('db.execute',
+                                        parent = True,
+                                        quiet = True,
+                                        input = sqlfile.name)
+                        
+                    if addRecordDlg.mapDBInfo:
+                        self.__updateATM()
+            
+        elif digitToolbar.GetAction() == "deleteLine":
+            # -> delete selected vector features
+            if digitClass.DeleteSelectedLines() < 0:
+                return
+            self.__updateATM()
+        elif digitToolbar.GetAction() == "splitLine":
+            # split line
+            if digitClass.SplitLine(self.Pixel2Cell(self.mouse['begin'])) < 0:
+                return
+        elif digitToolbar.GetAction() == "addVertex":
+            # add vertex
+            fid = digitClass.AddVertex(self.Pixel2Cell(self.mouse['begin']))
+            if fid < 0:
+                return
+        elif digitToolbar.GetAction() == "removeVertex":
+            # remove vertex
+            fid = digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin']))
+            if fid < 0:
+                return
+            self._geomAttrbUpdate([fid,])
+        elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
+            try:
+                if digitToolbar.GetAction() == 'copyCats':
+                    if digitClass.CopyCats(self.copyCatsList,
+                                           self.copyCatsIds, copyAttrb = False) < 0:
+                        return
+                else:
+                    if digitClass.CopyCats(self.copyCatsList,
+                                           self.copyCatsIds, copyAttrb = True) < 0:
+                        return
+                
+                del self.copyCatsList
+                del self.copyCatsIds
+            except AttributeError:
+                pass
+            
+            self.__updateATM()
+                
+        elif digitToolbar.GetAction() == "editLine" and \
+                hasattr(self, "vdigitMove"):
+            line = digitClass.GetDisplay().GetSelected()
+            if digitClass.EditLine(line, self.polycoords) < 0:
+                return
+                
+            del self.vdigitMove
+                
+        elif digitToolbar.GetAction() == "flipLine":
+            if digitClass.FlipLine() < 0:
+                return
+        elif digitToolbar.GetAction() == "mergeLine":
+            if digitClass.MergeLine() < 0:
+                return
+        elif digitToolbar.GetAction() == "breakLine":
+            if digitClass.BreakLine() < 0:
+                return
+        elif digitToolbar.GetAction() == "snapLine":
+            if digitClass.SnapLine() < 0:
+                return
+        elif digitToolbar.GetAction() == "connectLine":
+            if len(digitClass.GetDisplay().GetSelected()) > 1:
+                if digitClass.ConnectLine() < 0:
+                    return
+        elif digitToolbar.GetAction() == "copyLine":
+            if digitClass.CopyLine(self.copyIds) < 0:
+                return
+            del self.copyIds
+            if self.layerTmp:
+                self.Map.DeleteLayer(self.layerTmp)
+                self.UpdateMap(render = True, renderVector = False)
+            del self.layerTmp
+        
+        elif digitToolbar.GetAction() == "zbulkLine" and len(self.polycoords) == 2:
+            pos1 = self.polycoords[0]
+            pos2 = self.polycoords[1]
+            
+            selected = digitClass.GetDisplay().GetSelected()
+            dlg = VDigitZBulkDialog(parent = self, title = _("Z bulk-labeling dialog"),
+                                    nselected = len(selected))
+            if dlg.ShowModal() == wx.ID_OK:
+                if digitClass.ZBulkLines(pos1, pos2, dlg.value.GetValue(),
+                                         dlg.step.GetValue()) < 0:
+                    return
+            self.UpdateMap(render = False, renderVector = True)
+        elif digitToolbar.GetAction() == "typeConv":
+            # -> feature type conversion
+            # - point <-> centroid
+            # - line <-> boundary
+            if digitClass.TypeConvForSelectedLines() < 0:
+                return
 
+        if digitToolbar.GetAction() != "addLine":
+            # unselect and re-render
+            digitClass.GetDisplay().SetSelected([])
+            self.polycoords = []
+            self.UpdateMap(render = False)
+        
     def OnMiddleDown(self, event):
         """!Middle mouse button pressed
         """
