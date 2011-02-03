@@ -330,8 +330,8 @@ class MapFrame(wx.Frame):
                         "TCL/TK digitizer (v.digit) instead?\n\n"
                         "Details: %s" % errorMsg)
                 
-                self.mapdisplay.toolbars['map'].combo.SetValue (_("2D view"))
-                dlg = wx.MessageDialog(parent = self.mapdisplay,
+                self.toolbars['map'].combo.SetValue(_("2D view"))
+                dlg = wx.MessageDialog(parent = self,
                                        message = msg,
                                        caption=_("Vector digitizer failed"),
                                        style = wx.YES_NO | wx.CENTRE)

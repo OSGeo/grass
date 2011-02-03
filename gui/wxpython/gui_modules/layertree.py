@@ -963,7 +963,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'vector':
             types = list()
             for ftype in ['point', 'line', 'boundary', 'centroid', 'area', 'face']:
-                if UserSettings.Get(group = 'cmd', key = 'showType', subkey = [type, 'enabled']):
+                if UserSettings.Get(group = 'cmd', key = 'showType', subkey = [ftype, 'enabled']):
                     types.append(ftype)
             
             menuform.GUI().ParseCommand(['d.vect', 'type=%s' % ','.join(types)],
@@ -1004,7 +1004,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         layer = event.GetItem()
         self.layer_selected = layer
         
-        self.PropertiesDialog (layer)
+        self.PropertiesDialog(layer)
         
         if self.GetPyData(layer)[0]['type'] == 'group':
             if self.IsExpanded(layer):
