@@ -72,14 +72,14 @@ int main(int argc, char *argv[])
 
     flag_n = G_define_flag();
     flag_n->key = 'n';
-    flag_n->description = _("Don't Use shell syntax");
+    flag_n->description = _("Don't use shell syntax");
     flag_n->guisection = _("Format");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (flag_s->answer && flag_n->answer)
-	G_fatal_error(_("-s and -n are mutually exclusive"));
+	G_fatal_error(_("Flags -%c and -%c are mutually exclusive"), flag_s->key, flag_n->key);
 
     /* Print or optionally set environment variables */
     if (!get->answer && !set->answer) {
