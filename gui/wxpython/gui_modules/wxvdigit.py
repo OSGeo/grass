@@ -694,7 +694,7 @@ class IVDigit:
         changeset = self._addActionsBefore()
         
         ret = Vedit_split_lines(self.poMapInfo, poList,
-                                self.poPoints, thresh, poList)
+                                self.poPoints, thresh, None)
         Vect_destroy_list(poList)
         
         if ret > 0:
