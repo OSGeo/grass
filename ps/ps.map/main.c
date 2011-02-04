@@ -257,16 +257,18 @@ int main(int argc, char *argv[])
 	copies_set = 1;
     }
 
-    if (output_file->answer) {
-	if ((PS.fp = fopen(output_file->answer, "w")) == NULL)
-	    G_fatal_error("%s - %s: %s", G_program_name(),
-			  output_file->answer, strerror(errno));
-    }
-    else {
-	G_message(_("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
-		  output_file->key, output_file->description);
-	G_usage();
-	exit(EXIT_FAILURE);
+    if(!bflag->answer) {
+	if (output_file->answer) {
+	    if ((PS.fp = fopen(output_file->answer, "w")) == NULL)
+		G_fatal_error("%s - %s: %s", G_program_name(),
+			      output_file->answer, strerror(errno));
+	}
+	else {
+	    G_message(_("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
+		      output_file->key, output_file->description);
+	    G_usage();
+	    exit(EXIT_FAILURE);
+	}
     }
 
     /* get current mapset */
