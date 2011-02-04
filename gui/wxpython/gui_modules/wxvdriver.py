@@ -565,14 +565,13 @@ class DisplayDriver:
         @param poMapInfo use external Map_info, None for self.poMapInfo
 
         @return dict {'line' : feature id, 'point' : point on line}
-        @return None nothing found
         """
         thisMapInfo = poMapInfo is None
         if not poMapInfo:
             poMapInfo = self.poMapInfo
         
         if not poMapInfo:
-            return None
+            return { 'line' : -1, 'point': None }
         
         if thisMapInfo:
             self._drawSelected = True
@@ -601,7 +600,7 @@ class DisplayDriver:
         py = c_double()
         pz = c_double()
         if not self._validLine(lineNearest):
-            return None
+            return { 'line' : -1, 'point': None }
 	ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
 	Vect_line_distance (self.poPoints, point[0], point[1], 0.0, self.is3D,
 			    byref(px), byref(py), byref(pz),
