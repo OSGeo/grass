@@ -132,9 +132,9 @@ int main(int argc, char *argv[])
     eflag->description =
 	_("Create EPS (Encapsulated PostScript) instead of PostScript file");
 
-    eflag = G_define_flag();
-    eflag->key = 'b';
-    eflag->description =
+    bflag = G_define_flag();
+    bflag->key = 'b';
+    bflag->description =
 	_("Print map-box's position on the page and exit (inches from top-left of paper)");
 
     input_file = G_define_option();
@@ -722,8 +722,10 @@ int main(int argc, char *argv[])
     reset_map_location();
 
     if (bflag->answer) {
-	fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left,
-		PS.map_top, PS.map_right, PS.map_bot); /* +/- 0.5 ? see ps.map.c brd.* */
+	map_setup();
+	fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left / 72.0,
+		PS.map_top / 72.0, PS.map_right / 72.0, PS.map_bot / 72.0);
+		/* +/- 0.5 ? see ps.map.c brd.* */
 	exit(EXIT_SUCCESS);
     }
 
