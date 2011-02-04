@@ -257,19 +257,18 @@ int main(int argc, char *argv[])
 	copies_set = 1;
     }
 
-    if(!bflag->answer) {
-	if (output_file->answer) {
-	    if ((PS.fp = fopen(output_file->answer, "w")) == NULL)
-		G_fatal_error("%s - %s: %s", G_program_name(),
-			      output_file->answer, strerror(errno));
-	}
-	else {
-	    G_message(_("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
-		      output_file->key, output_file->description);
-	    G_usage();
-	    exit(EXIT_FAILURE);
-	}
+    if (output_file->answer) {
+	if ((PS.fp = fopen(output_file->answer, "w")) == NULL)
+	    G_fatal_error("%s - %s: %s", G_program_name(),
+			  output_file->answer, strerror(errno));
     }
+    else {
+	G_message(_("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
+		  output_file->key, output_file->description);
+	G_usage();
+	exit(EXIT_FAILURE);
+    }
+
 
     /* get current mapset */
     PS.cell_mapset = G_mapset();
@@ -728,6 +727,7 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left / 72.0,
 		PS.map_top / 72.0, PS.map_right / 72.0, PS.map_bot / 72.0);
 		/* +/- 0.5 ? see ps.map.c brd.* */
+	unlink(output_file->answer); /* fixme: don't open it in the first place */
 	exit(EXIT_SUCCESS);
     }
 
