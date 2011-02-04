@@ -725,7 +725,8 @@ int main(int argc, char *argv[])
     if (bflag->answer) {
 	map_setup();
 	fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left / 72.0,
-		PS.map_top / 72.0, PS.map_right / 72.0, PS.map_bot / 72.0);
+		PS.page_height - (PS.map_bot / 72.0), PS.map_right / 72.0,
+		PS.page_height - (PS.map_top / 72.0));
 		/* +/- 0.5 ? see ps.map.c brd.* */
 	unlink(output_file->answer); /* fixme: don't open it in the first place */
 	exit(EXIT_SUCCESS);
