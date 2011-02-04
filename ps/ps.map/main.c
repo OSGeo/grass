@@ -95,7 +95,6 @@ int main(int argc, char *argv[])
     int iflag;
     int can_reset_scale;
     int copies_set;
-    struct Option *map_scale;
     struct Option *input_file;
     struct Option *output_file;
     struct Option *copies;
@@ -147,13 +146,6 @@ int main(int argc, char *argv[])
     output_file->gisprompt = "new_file,file,output";
     output_file->description = _("PostScript output file");
     /*    output_file->required = YES;   Can omit for -p list page size & exit mode */
-
-    map_scale = G_define_option();
-    map_scale->key = "scale";
-    map_scale->key_desc = "mapscale";
-    map_scale->type = TYPE_STRING;
-    map_scale->description =
-	_("Scale of the output map, e.g. 1:25000 (default: Auto-sized to fit page)");
 
     copies = G_define_option();
     copies->key = "copies";
@@ -250,17 +242,6 @@ int main(int argc, char *argv[])
 	if (NULL == freopen(input_file->answer, "r", stdin))
 	    G_fatal_error("%s - %s: %s", G_program_name(),
 			  input_file->answer, strerror(errno));
-    }
-    if (map_scale->answer) {
-	G_warning(_("Using <%s> from the command line is depreciated. "
-		    "Please use the <%s> mapping instruction instead. "
-		    "The parameter <%s> will be removed in future versions of GRASS."),
-		  "scale", "scale", "scale");
-	can_reset_scale = isatty(0);
-	if (check_scale(map_scale->answer))
-	    strcpy(PS.scaletext, map_scale->answer);
-	else
-	    error(map_scale->answer, "", "illegal scale request");
     }
 
     if (copies->answer) {
