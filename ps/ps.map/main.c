@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     struct Option *input_file;
     struct Option *output_file;
     struct Option *copies;
-    struct Flag *rflag, *pflag, *eflag;
+    struct Flag *rflag, *pflag, *eflag, *bflag;
     struct GModule *module;
     static char *def_font = "Helvetica";
 
@@ -131,6 +131,11 @@ int main(int argc, char *argv[])
     eflag->key = 'e';
     eflag->description =
 	_("Create EPS (Encapsulated PostScript) instead of PostScript file");
+
+    eflag = G_define_flag();
+    eflag->key = 'b';
+    eflag->description =
+	_("Print map-box's position on the page and exit (inches from top-left of paper)");
 
     input_file = G_define_option();
     input_file->key = "input";
@@ -715,6 +720,12 @@ int main(int argc, char *argv[])
 
     /* reset map location base on 'paper' on 'location' */
     reset_map_location();
+
+    if (bflag->answer) {
+	fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left,
+		PS.map_top, PS.map_right, PS.map_bot); /* +/- 0.5 ? see ps.map.c brd.* */
+	exit(EXIT_SUCCESS);
+    }
 
     /* write the PostScript output file */
     ps_mask_file = G_tempfile();
