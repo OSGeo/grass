@@ -67,6 +67,12 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+   if (param.input->answers == NULL && param.rgbmaps->answers == NULL &&
+        param.vectmaps->answers == NULL) {
+        G_fatal_error(_("No input maps specified. You need to specify at least one input map or three vector maps or three rgb maps."));
+    }
+
+
     /*open the output */
     if (param.output->answer) {
 	fp = fopen(param.output->answer, "w");

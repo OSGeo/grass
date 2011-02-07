@@ -29,6 +29,9 @@
 void set_params()
 {
     param.input = G_define_standard_option(G_OPT_R_INPUTS);
+    param.input->required = NO;
+    param.input->description =
+        _("Raster map(s) to be converted to VTK-ASCII data format");
 
     param.output = G_define_option();
     param.output->key = "output";
