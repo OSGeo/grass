@@ -86,6 +86,9 @@ class DisplayDriver:
         self.window  = window
         self.log     = log        # log device
 
+        self.firstNode = True     # track PseudoDC Id of selected features
+        self.lastNodeId = -1
+        
         # GRASS lib
         self.poPoints = Vect_new_line_struct()
         self.poCats   = Vect_new_cats_struct()
@@ -242,11 +245,26 @@ class DisplayDriver:
         
         if robj.type & (TYPE_POINT | TYPE_CENTROIDIN | TYPE_CENTROIDOUT | TYPE_CENTROIDDUP |
                         TYPE_NODEONE | TYPE_NODETWO | TYPE_VERTEX): # -> point
+            if dcId > 0:
+                if robj.type == TYPE_VERTEX:
+                    dcId = 3 # first vertex
+                elif robj.type & (TYPE_NODEONE | TYPE_NODETWO):
+                    if self.firstNode:
+                        dcId = 1
+                        self.firstNode = False
+                    else:
+                        dcId = self.lastNodeId
+            
             for i in range(robj.npoints):
                 p = robj.point[i]
+                if dcId > 0:
+                    pdc.SetId(dcId)
+                    dcId += 2
                 self._drawCross(pdc, p)
         else:
             if dcId > 0 and self._drawSegments:
+                self.fisrtNode = True
+                self.lastNodeId = robj.npoints * 2 - 1
                 dcId = 2 # first segment
                 i = 0
                 while i < robj.npoints - 1:
