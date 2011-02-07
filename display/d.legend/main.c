@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     opt7->required = NO;
     opt7->options = "0-100";
     opt7->label =
-	_("Placement as percentage of screen coordinates (0,0 is lower left)");
+	_("Size and placement as percentage of screen coordinates (0,0 is lower left)");
     opt7->description = opt7->key_desc;
     opt7->answer = NULL;
 
