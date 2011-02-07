@@ -6,8 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 #include "colortable.h"
 #include "ps_info.h"
+#include "clr.h"
 #include "local_proto.h"
 
 #define KEY(x) (strcmp(key,x)==0)
@@ -33,14 +35,16 @@ int read_colortable(void)
     char buf[1024];
     char *key, *data;
     char name[GNAME_MAX], mapset[GMAPSET_MAX];
-    int color, fontsize, cols, nodata, tickbar, discrete;
+    int fontsize, cols, nodata, tickbar, discrete;
     double w, h, x, y;
     int range_override;
     double min, max, tmpD;
+    int r, g, b, ret;
+    PSCOLOR color;
 
 
     fontsize = 0;
-    color = BLACK;
+    set_color(&color, 0, 0, 0);
     cols = 1;
     h = w = x = y = 0.0;
     ct.nodata = TRUE;
@@ -55,7 +59,7 @@ int read_colortable(void)
 	if (KEY("where")) {
 	    if (sscanf(data, "%lf %lf", &x, &y) != 2) {
 		x = y = 0.0;
-		error(key, data, "illegal where request");
+		error(key, data, _("illegal where request"));
 	    }
 	    else
 		continue;
@@ -63,7 +67,7 @@ int read_colortable(void)
 
 	if (KEY("width")) {
 	    if (sscanf(data, "%lf", &w) != 1 || w <= 0) {
-		error(key, data, "illegal width request");
+		error(key, data, _("illegal width request"));
 	    }
 	    else
 		continue;
@@ -71,7 +75,7 @@ int read_colortable(void)
 
 	if (KEY("height")) {
 	    if (sscanf(data, "%lf", &h) != 1 || h <= 0) {
-		error(key, data, "illegal height request");
+		error(key, data, _("illegal height request"));
 	    }
 	    else
 		continue;
@@ -88,7 +92,7 @@ int read_colortable(void)
 	if (KEY("range")) {
 	    if (sscanf(data, "%lf %lf", &min, &max) != 2) {
 		range_override = FALSE;
-		error(key, data, "illegal range request");
+		error(key, data, _("illegal range request"));
 	    }
 	    else {
 		range_override = TRUE;
@@ -104,7 +108,7 @@ int read_colortable(void)
 	if (KEY("cols")) {
 	    if (sscanf(data, "%d", &cols) != 1) {
 		cols = 1;
-		error(key, data, "illegal columns request");
+		error(key, data, _("illegal columns request"));
 	    }
 	    else
 		continue;
@@ -118,11 +122,15 @@ int read_colortable(void)
 	}
 
 	if (KEY("color")) {
-	    color = get_color_number(data);
-	    if (color < 0) {
-		color = BLACK;
-		error(key, data, "illegal color request");
-	    }
+	    ret = G_str_to_color(data, &r, &g, &b);
+	    if (ret == 1)
+		set_color(&color, r, g, b);
+	    else if (ret == 2)	/* i.e. "none" */
+		/* unset_color(&color); */
+		error(key, data, _("Unsupported color request (colortable)"));
+	    else
+		error(key, data, _("illegal color request (colortable)"));
+
 	    continue;
 	}
 
@@ -148,7 +156,7 @@ int read_colortable(void)
 	    continue;
 	}
 
-	error(key, data, "illegal colortabe sub-request");
+	error(key, data, _("illegal colortabe sub-request"));
     }
 
     ct.x = x;
@@ -159,7 +167,7 @@ int read_colortable(void)
     /* Check for Raster */
     if (!ct.name) {
 	if (!PS.cell_name) {
-	    error(key, data, "No raster selected for colortable !");
+	    error(key, data, _("No raster selected for colortable!"));
 	}
 	else {
 	    ct.name = PS.cell_name;

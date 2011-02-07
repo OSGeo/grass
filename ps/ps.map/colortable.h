@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include "clr.h"
 
 struct colortable
 {
@@ -14,7 +15,7 @@ struct colortable
     char *name;
     const char *mapset;
     int fontsize;
-    int color;
+    PSCOLOR color;
     int cols;
     int nodata;
     int tickbar;
