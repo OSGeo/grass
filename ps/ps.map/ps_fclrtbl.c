@@ -153,7 +153,7 @@ int PS_fcolortable(void)
 
     /* Frame around */
     fprintf(PS.fp, "NP\n");
-    set_rgb_color(ct.color);
+    set_ps_color(&ct.color);
     fprintf(PS.fp, "%.8f W\n", lwidth);
     fprintf(PS.fp, "%f %f %f %f B\n", x1,
 	    t - (ncols - 1) * cwidth - (cwidth + lwidth) / 2, x2,
