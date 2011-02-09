@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "colortable.h"
