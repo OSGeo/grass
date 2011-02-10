@@ -121,7 +121,7 @@ Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *Err)
     int fd, xpntfd;
     char *filename;
     
-    G_debug(0, "File-based version of Vect_break_polygons()");
+    G_debug(1, "File-based version of Vect_break_polygons()");
 
     filename = G_tempfile();
     fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
@@ -409,7 +409,7 @@ Vect_break_polygons_mem(struct Map_info *Map, int type, struct Map_info *Err)
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point, cross;
 
-    G_debug(0, "Memory-based version of Vect_break_polygons()");
+    G_debug(1, "Memory-based version of Vect_break_polygons()");
 
     RBTree = rbtree_create(compare_xpnts, sizeof(XPNT));
 
