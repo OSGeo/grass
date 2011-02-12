@@ -990,7 +990,9 @@ else:
     show_banner()
     say_hello()
     show_info()
-
+    if grass_gui == "wxpython":
+        message(_("Launching '%s' GUI in the background, please wait...") % grass_gui)
+    
 if sh in ['csh', 'tcsh']:
     csh_startup()
 elif sh in ['bash', 'msh', 'cygwin']:

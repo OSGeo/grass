@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
 
 
-    G_message(_("Launching '%s' GUI in the background, please wait ..."), type->answer);
+    G_message(_("Launching '%s' GUI in the background, please wait..."), type->answer);
 
     if (strcmp(type->answer, "wxpython") == 0) {
 	sprintf(progname, "%s/etc/gui/wxpython/wxgui.py", G_gisbase());
