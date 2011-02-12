@@ -1075,7 +1075,7 @@ class IVDigit:
         area = Vect_get_centroid_area(self.poMapInfo, centroid)
         perimeter = -1
         if area > 0:
-            if not Vect_area_alive(self,poMapInfo, area):
+            if not Vect_area_alive(self.poMapInfo, area):
                 return -1
             
             Vect_get_area_points(self.poMapInfo, area, self.poPoints)

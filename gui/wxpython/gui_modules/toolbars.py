@@ -633,7 +633,8 @@ class VDigitToolbar(AbstractToolbar):
         self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.log           = log        # log area
         AbstractToolbar.__init__(self, parent)
-        
+        self.digit         = self.parent.MapWindow.digit
+
         # currently selected map layer for editing (reference to MapLayer instance)
         self.mapLayer = None
         # list of vector layers from Layer Manager (only in the current mapset)
@@ -790,8 +791,8 @@ class VDigitToolbar(AbstractToolbar):
         # clear tmp canvas
         if self.action['id'] != id:
             self.parent.MapWindow.ClearLines(pdc = self.parent.MapWindow.pdcTmp)
-            if self.parent.digit and \
-                    len(self.parent.digit.GetDisplay().GetSelected()) > 0:
+            if self.parent.MapWindow.digit and \
+                    len(self.parent.MapWindow.digit.GetDisplay().GetSelected()) > 0:
                 # cancel action
                 self.parent.MapWindow.OnMiddleDown(None)
         
@@ -979,7 +980,7 @@ class VDigitToolbar(AbstractToolbar):
         
     def OnUndo(self, event):
         """!Undo previous changes"""
-        self.parent.digit.Undo()
+        self.digit.Undo()
         
         event.Skip()
 
@@ -997,11 +998,11 @@ class VDigitToolbar(AbstractToolbar):
         
     def OnSettings(self, event):
         """!Show settings dialog"""
-        if self.parent.digit is None:
+        if self.digit is None:
             try:
-                self.parent.digit = VDigit(mapwindow = self.parent.MapWindow)
+                self.digit = self.parent.MapWindow.digit = VDigit(mapwindow = self.parent.MapWindow)
             except SystemExit:
-                self.parent.digit = None
+                self.digit = self.parent.MapWindow.digit = None
         
         if not self.settingsDialog:
             self.settingsDialog = VDigitSettingsDialog(parent = self.parent, title = _("Digitization settings"),
@@ -1187,7 +1188,7 @@ class VDigitToolbar(AbstractToolbar):
 
     def OnZBulk(self, event):
         """!Z bulk-labeling selected lines/boundaries"""
-        if not self.parent.digit.IsVector3D():
+        if not self.digit.IsVector3D():
             gcmd.GError(parent = self.parent,
                         message = _("Vector map is not 3D. Operation canceled."))
             return
@@ -1297,12 +1298,12 @@ class VDigitToolbar(AbstractToolbar):
                                                 0)
         
         self.parent.MapWindow.pdcVector = wx.PseudoDC()
-        self.parent.digit = VDigit(mapwindow = self.parent.MapWindow)
+        self.digit = self.parent.MapWindow.digit = VDigit(mapwindow = self.parent.MapWindow)
         
         self.mapLayer = mapLayer
         
         # open vector map
-        if self.parent.digit.OpenMap(mapLayer.GetName()) is None:
+        if self.digit.OpenMap(mapLayer.GetName()) is None:
             self.mapLayer = None
             self.StopEditing()
             return False
@@ -1326,7 +1327,7 @@ class VDigitToolbar(AbstractToolbar):
         opacity = mapLayer.GetOpacity(float = True)
         if opacity < 1.0:
             alpha = int(opacity * 255)
-            self.parent.digit.driver.UpdateSettings(alpha)
+            self.digit.UpdateSettings(alpha)
         
         return True
 
@@ -1342,7 +1343,7 @@ class VDigitToolbar(AbstractToolbar):
         if self.mapLayer:
             Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % self.mapLayer.GetName())
             if UserSettings.Get(group = 'vdigit', key = 'saveOnExit', subkey = 'enabled') is False:
-                if self.parent.digit.GetUndoLevel() > -1:
+                if self.digit.GetUndoLevel() > -1:
                     dlg = wx.MessageDialog(parent = self.parent,
                                            message = _("Do you want to save changes "
                                                      "in vector map <%s>?") % self.mapLayer.GetName(),
@@ -1350,7 +1351,7 @@ class VDigitToolbar(AbstractToolbar):
                                            style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                     if dlg.ShowModal() == wx.ID_NO:
                         # revert changes
-                        self.parent.digit.Undo(0)
+                        self.digit.Undo(0)
                     dlg.Destroy()
             
             self.parent.statusbar.SetStatusText(_("Please wait, "
@@ -1361,7 +1362,7 @@ class VDigitToolbar(AbstractToolbar):
             if lmgr:
                 lmgr.toolbar.Enable('vdigit', enable = True)
                 lmgr.notebook.SetSelection(1)
-            self.parent.digit.CloseMap()
+            self.digit.CloseMap()
             if lmgr:
                 lmgr.GetLogWindow().GetProgressBar().SetValue(0)
                 lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
@@ -1381,8 +1382,8 @@ class VDigitToolbar(AbstractToolbar):
                 self.parent.dialogs[dialog].Close()
                 self.parent.dialogs[dialog] = None
         
-        self.parent.digit.__del__() # FIXME: destructor is not called here (del)
-        self.parent.digit = None
+        self.digit.__del__() # FIXME: destructor is not called here (del)
+        self.digit = self.parent.MapWindow.digit = None
         
         self.mapLayer = None
         
