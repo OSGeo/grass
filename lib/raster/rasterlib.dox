@@ -1848,6 +1848,16 @@ Rast_get_c_row() instead.
 Modules that use Rast_put_row(). Should use Rast_put_c_row()
 instead.
 
+\section Loading_the_Raster_Library Loading the Raster Library
+
+The library is loaded by specifying
+
+\verbatim
+$(RASTERLIB)
+\endverbatim
+
+in the <tt>Makefile</tt>.
+
 \section listOfFunctios List of functions
 
 <b>TODO: Reorder functions</b>

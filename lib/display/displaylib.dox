@@ -20,6 +20,16 @@ undocumented, start with the prefix <b>D_</b>. To avoid name
 conflicts, programmers should not create variables or routines in
 their own modules which use this prefix.
 
+\section Loading_the_Display_Library Loading the Display Library
+
+The library is loaded by specifying
+
+\verbatim
+$(DISPLAYLIB)
+\endverbatim
+
+in the <tt>Makefile</tt>.
+
 \section ListOfFns List of functions
 
 The library functions are defined in <tt>display.h</tt> header.

@@ -2299,9 +2299,9 @@ this structure.
 
 \section Loading_the_GIS_Library Loading the GIS Library
 
-
-The library is loaded by specifying $(GISLIB) in the Makefile. The following
-example is a complete Makefile which compiles code that uses this library:
+The library is loaded by specifying $(GISLIB) in the Makefile. The
+following example is a complete Makefile which compiles code that uses
+this library:
 
 <b>Makefile for $(GISLIB)</b>
 
