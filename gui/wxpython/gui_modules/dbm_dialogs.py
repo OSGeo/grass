@@ -1,4 +1,4 @@
-"""
+"""!
 @package dbm_dialogs.py
 
 @brief DBM-related dialogs
@@ -7,7 +7,7 @@ List of classes:
  - DisplayAttributesDialog
  - ModifyTableRecord
 
-(C) 2007-2010 by the GRASS Development Team
+(C) 2007-2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -31,27 +31,26 @@ from preferences import globalSettings as UserSettings
 from dbm_base    import VectorDBInfo
 
 class DisplayAttributesDialog(wx.Dialog):
-    """
-    Standard dialog used to add/update/display attributes linked
-    to the vector map.
-
-    Attribute data can be selected based on layer and category number
-    or coordinates.
-
-    @param parent
-    @param map vector map
-    @param query query coordinates and distance (used for v.edit)
-    @param cats {layer: cats}
-    @param line feature id (requested for cats)
-    @param style
-    @param pos
-    @param action (add, update, display)
-    """
     def __init__(self, parent, map,
                  query=None, cats=None, line=None,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  pos=wx.DefaultPosition,
                  action="add"):
+        """!Standard dialog used to add/update/display attributes linked
+        to the vector map.
+        
+        Attribute data can be selected based on layer and category number
+        or coordinates.
+        
+        @param parent
+        @param map vector map
+        @param query query coordinates and distance (used for v.edit)
+        @param cats {layer: cats}
+        @param line feature id (requested for cats)
+        @param style
+        @param pos
+        @param action (add, update, display)
+        """
         self.parent = parent # mapdisplay.BufferedWindow
         self.map    = map
         self.action = action
@@ -268,14 +267,15 @@ class DisplayAttributesDialog(wx.Dialog):
                         self.FindWindowById(id).SetValue(str(value))
 
     def OnCancel(self, event):
-        """!Cancel button pressed"""
+        """!Cancel button pressed
+        """
         self.parent.parent.dialogs['attributes'] = None
-        if self.parent.parent.digit:
-            self.parent.parent.digit.GetDisplay().SetSelected([])
+        if self.parent.digit:
+            self.parent.digit.GetDisplay().SetSelected([])
             self.parent.UpdateMap(render = False)
         else:
             self.parent.parent.OnRender(None)
-
+        
         self.Close()
 
     def OnSubmit(self, event):
@@ -502,15 +502,16 @@ class DisplayAttributesDialog(wx.Dialog):
                 break
         
 class ModifyTableRecord(wx.Dialog):
-    """!Dialog for inserting/updating table record"""
     def __init__(self, parent, id, title, data, keyEditable=(-1, True),
                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-        """
+        """!Dialog for inserting/updating table record
+
         Notes:
-         'Data' is a list: [(column, value)]
-         'KeyEditable' (id, editable?) indicates if textarea for key column
-          is editable(True) or not.
+        'Data' is a list: [(column, value)]
+        'KeyEditable' (id, editable?) indicates if textarea for key column
+        is editable(True) or not.
         """
+        # parent -> VDigitWindow
         wx.Dialog.__init__(self, parent, id, title, style=style)
         
         self.CenterOnParent()

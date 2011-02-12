@@ -245,6 +245,8 @@ class MapFrame(wx.Frame):
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
         self.MapWindow.SetCursor(self.cursors["default"])
+        # used by vector digitizer
+        self.MapWindowVDigit = None
         # used by Nviz (3D display mode)
         self.MapWindow3D = None 
 
@@ -274,11 +276,6 @@ class MapFrame(wx.Frame):
         #
         self.printopt = disp_print.PrintOptions(self, self.MapWindow)
         
-        #
-        # Initialization of digitization tool
-        #
-        self.digit = None
-
         #
         # Init zoom history
         #
@@ -311,7 +308,7 @@ class MapFrame(wx.Frame):
         # default toolbar
         if name == "map":
             self.toolbars['map'] = toolbars.MapToolbar(self, self.Map)
-
+            
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
                               Name("maptoolbar").Caption(_("Map toolbar")).
@@ -324,6 +321,7 @@ class MapFrame(wx.Frame):
         # vector digitizer
         elif name == "vdigit":
             from vdigit import haveVDigit
+            
             if not haveVDigit:
                 from vdigit import errorMsg
                 msg = _("Unable to start wxGUI vector digitizer.\nDo you want to start "
@@ -347,10 +345,28 @@ class MapFrame(wx.Frame):
                 log = self._layerManager.goutput
             else:
                 log = None
+            
+            if not self.MapWindowVDigit:
+                from mapdisp_vdigit import VDigitWindow
+                self.MapWindowVDigit = VDigitWindow(self, id = wx.ID_ANY,
+                                                    Map = self.Map, tree = self.tree,
+                                                    lmgr = self._layerManager)
+                self.MapWindowVDigit.Show()
+            
+            self.MapWindow = self.MapWindowVDigit
+            
+            self._mgr.DetachPane(self.MapWindow2D)
+            self.MapWindow2D.Hide()
+            
             self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent = self, mapcontent = self.Map,
                                                              layerTree = self.tree,
                                                              log = log)
+            self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
             
+            self._mgr.AddPane(self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane().
+                              Dockable(False).BestSize((-1,-1)).
+                              CloseButton(False).DestroyOnClose(True).
+                              Layer(0))
             self._mgr.AddPane(self.toolbars['vdigit'],
                               wx.aui.AuiPaneInfo().
                               Name("vdigittoolbar").Caption(_("Vector digitizer toolbar")).
@@ -359,12 +375,12 @@ class MapFrame(wx.Frame):
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2).
                               BestSize((self.toolbars['vdigit'].GetSize())))
-            
+                        
             # change mouse to draw digitized line
             self.MapWindow.mouse['box'] = "point"
-            self.MapWindow.zoomtype = 0
-            self.MapWindow.pen     = wx.Pen(colour = 'red',   width = 2, style = wx.SOLID)
-            self.MapWindow.polypen = wx.Pen(colour = 'green', width = 2, style = wx.SOLID)
+            self.MapWindow.zoomtype     = 0
+            self.MapWindow.pen          = wx.Pen(colour = 'red',   width = 2, style = wx.SOLID)
+            self.MapWindow.polypen      = wx.Pen(colour = 'green', width = 2, style = wx.SOLID)
         # georectifier
         elif name == "georect":
             self.toolbars['georect'] = toolbars.GRToolbar(self, self.Map)
@@ -397,7 +413,7 @@ class MapFrame(wx.Frame):
             
             # update status bar
             self.statusbarWin['toggle'].Enable(False)
-
+            
             # erase map window
             self.MapWindow.EraseMap()
             
@@ -541,8 +557,8 @@ class MapFrame(wx.Frame):
             self.MapWindow.ClearLines()
         
         # deselect features in vdigit
-        if self.toolbars['vdigit'] and self.digit:
-            self.digit.GetDisplay().SetSelected([])
+        if self.toolbars['vdigit']:
+            self.MapWindow.display.SetSelected([])
             self.MapWindow.UpdateMap(render = True, renderVector = True)
         else:
             self.MapWindow.UpdateMap(render = True)
