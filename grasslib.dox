@@ -72,44 +72,69 @@ undocumented.</i>
 
 (the name refers to the directory name in lib/ in the source code)
 
- - arraystats:  Library of statistics for arrays of doubles - \ref arraystats (new, under development)
- - bitmap:	Bitmap library for X Window Bitmaps - \ref bitmap
- - btree:	Binary tree library - \ref btree
+\subsection displaylibs Display Libraries and Drivers
+
  - cairodriver: \ref cairodriver
- - cdhc:	Library for testing normality and exponentiality - \ref cdhc 
- - cluster:     \ref clusterlib (image processing)
- - datetime:	DateTime library - \ref datetime
- - db:		\ref dbmilib
  - display:	\ref displaylib
  - %driver:     Graphics monitor driver
- - dspf:        DSPF libary - \ref dspf (obsolete?)
- - edit:	Raster edit library (cellhd, history, cats) - \ref edit
- - external:	External libraries from other projects (such as shapelib) - \ref external
- - fonts:	Hershey library - \ref fonts
- - g3d:	        \ref g3dlib
+ - pngdriver:   \ref pngdriverlib
+ - psdriver:    \ref psdriverlib
+
+\subsection statslibs Math and Statisctics Libraries
+
+ - arraystats:  Library of statistics for arrays of doubles - \ref arraystats (new, under development)
+ - cdhc:	Library for testing normality and exponentiality - \ref cdhc 
  - gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
  - gpde:        \ref gpdelib (partial differential equations library)
- - imagery:	\ref imagerylib 
- - init:	\ref init (GRASS initialization code + scripts)
- - linkm:	Linked list memory manager - \ref linkm (obsolete?)
- - manage:      \ref managelib
- - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
- - pngdriver:   \ref pngdriverlib
- - proj:	\ref projlib (wrapper to PROJ4 projection library)
- - psdriver:    \ref psdriverlib
- - python:      \ref pythonlib
+
+\subsection rasteribs Raster Libraries
+
+ - edit:	Raster edit library (cellhd, history, cats) - \ref edit
+ - g3d:	        \ref g3dlib
  - raster:	\ref rasterlib
  - rowio:	\ref rowiolib
- - rst:	Library for interpolation with regularized splines with tension - \ref rst
+ - rst:	        \ref rst - Library for interpolation with regularized splines with tension
  - segment:	\ref segmentlib (segment library for segmented raster reading)
- - sites:	Old Sites library, now interfaced to \ref vectorlib - \ref sites
  - stats:       Raster stats library - \ref stats
- - symbol:	Drawing symbols for %point %vector data library - \ref symbol
- - vask:	Cursor management library - \ref vask
+
+\subsection imagerylibs Imagery Liraries (image processing)
+
+ - cluster:     \ref clusterlib (image processing)
+ - imagery:	\ref imagerylib 
+
+\subsection vectoribs Vector Libraries
+
+ - sites:	Old Sites library, now interfaced to \ref vectorlib - \ref sites
  - %vector:	\ref vectorlib (GRASS Vector and Direct Graph Library)
   - vedit:      \ref veditlib - %vector editing
   - neta:       \ref netalib
+
+\subsection dblibs Database Management Libraries
+
+ - db:		\ref dbmilib
+
+\subsection ogsflibs OpenGL Libraries and friends
+
+ - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
  - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
+
+\subsection projlibs Projection Libraries
+
+ - proj:	\ref projlib (wrapper to PROJ4 projection library)
+
+\subsection misclibs Misc Libraries
+
+ - bitmap:	Bitmap library for X Window Bitmaps - \ref bitmap
+ - btree:	Binary tree library - \ref btree
+ - datetime:	DateTime library - \ref datetime
+ - dspf:        DSPF libary - \ref dspf (obsolete?)
+ - external:	External libraries from other projects (such as shapelib) - \ref external
+ - fonts:	Hershey library - \ref fonts
+ - init:	\ref init (GRASS initialization code + scripts)
+ - linkm:	Linked list memory manager - \ref linkm (obsolete?)
+ - manage:      \ref managelib
+ - symbol:	Drawing symbols for %point %vector data library - \ref symbol
+ - vask:	Cursor management library - \ref vask
 
 \section interfaces Interfaces
 
@@ -180,11 +205,11 @@ code (for instance, if the source code is NFS mounted to various
 machines with differing architectures). This chapter assumes that the
 programmer is familiar with <tt>make</tt> and its accompanying
 Makefile.
-
+<!--
 \todo Explain ''auto-conf''
 
 \todo Include contents of SUBMITTING and INSTALL files from source code
-
+-->
 To compile enter following:
 
 \verbatim
@@ -218,52 +243,46 @@ compilation process and requirements are discussed in more detail now.
 libraries:
 
  - <i>GISLIB</i> - This names the <b>GIS Library</b>, which is the
-principal GRASS library. See \ref GIS_Library for details about this
+principal GRASS library. See \ref gislib for details about this
 library, and \ref Loading_the_GIS_Library for a sample Makefile which
 loads this library.
 
  - <i>SEGMENTLIB</i> - This names the <b>Segment Library</b>, which
-manages large matrix data. See \ref Segment_Library for details about
-this library, and \ref Loading_the_Vask_Library for a sample
+manages large matrix data. See \ref segmentlib for details about this
+library, and \ref Loading_the_Segment_Library for a sample
 <i>Makefile</i> which loads this library.
 
- - <i>RASTERLIB</i> - This names the <b>Raster Graphics Library</b>,
-which communicates with GRASS graphics drivers. See \ref
-Raster_Graphics_Library for details about this library, and \ref
-Loading_the_Raster_Graphics_Library for a sample <i>Makefile</i> which
-loads this library.
+ - <i>RASTERLIB</i> - This names the <b>Raster Library</b>, which is
+the principal GRASS library for raster data access. See \ref rasterlib
+for details about this library, and \ref Loading_the_Raster_Library
+for a sample <i>Makefile</i> which loads this library.
 
- - <i>DISPLAYLIB</i> - This names the <b>Display Graphics Library</b>,
-which provides a higher level graphics interface to
-<i>RASTERLIB</i>. See Display_Graphics_Library for details about this
-library, and Loading_the_Display_Graphics_Library for a sample
-<i>Makefile</i> which loads this library.
+ - <i>VECTORLIB</i> - This names the <b>Vector Library</b>, which is
+the principal GRASS library for vector data access. See \ref vectorlib
+for details about this library, and \ref Loading_the_Vector_Library
+for a sample <i>Makefile</i> which loads this library.
+
+ - <i>DISPLAYLIB</i> - This names the <b>Display Library</b>, which
+communicates with GRASS graphics drivers. See \ref displaylib for
+details about this library, and \ref
+Loading_the_Display_Library for a sample <i>Makefile</i>
+which loads this library.
 
 <b>UNIX Libraries:</b> The following variables name some useful UNIX 
 system libraries:
 
- - <i>MATHLIB</i> This names the math library. It should be used
+ - <i>MATHLIB</i> - This names the math library. It should be used
 instead of the -lm loader option.
-
- - <i>CURSES</i> This names both the curses and termcap libraries. It
-should be used instead of the -lcurses/-lncurses and
--ltermcap loader options. Do not use <tt>$CURSES</tt> if you use
-<tt>$VASK</tt>.
-
- - <i>TERMLIB</i> This names the termcap library. It should be used
--instead of the ltermcap or -ltermlib loader options. Do not use
--<tt>$TERMLIB</tt> if you use <tt>$VASK</tt> or <tt>$CURSES</tt>.
 
 <b>Compiler and loader variables.</b> The following variables are
 related to compiling and loading C programs:
 
- - <i>EXTRA\_CFLAGS</i> This variable can be used to add additional
+ - <i>EXTRA\_CFLAGS</i> - This variable can be used to add additional
 options to <tt>$CFLAGS</tt>. It has no predefined values. It is
 usually used to specify additional -I include directories, or -D
 preprocessor defines.
 
 \subsection Constructing_a_Makefile Constructing a Makefile
-
 
 The complete syntax for a <i>Makefile</i> is discussed in the UNIX
 documentation for <tt>make</tt> and will not be repeated here. The
@@ -281,16 +300,17 @@ actions
 more actions
 \endcode
 
-If the target does not exist, or if any of the dependencies have a newer 
-date than the target (i.e., have changed), the actions will be executed to 
-build the target. The actions must be indented using a TAB. <tt>make</tt> is 
-picky about this. It does not like spaces in place of the TAB.
+If the target does not exist, or if any of the dependencies have a
+newer date than the target (i.e., have changed), the actions will be
+executed to build the target. The actions must be indented using a
+TAB. <tt>make</tt> is picky about this. It does not like spaces in
+place of the TAB.
 
 \section Multiple_Architecture_Conventions Multiple-Architecture Conventions
 
-
-The following conventions allow for multiple architecture compilation on a 
-machine that uses a common or networked GRASS source code directory tree.
+The following conventions allow for multiple architecture compilation
+on a machine that uses a common or networked GRASS source code
+directory tree.
 
 Object files and library archives are compiled into subdirectories
 that represent the architecture that they were compiled on. These
@@ -304,8 +324,9 @@ would contain the object files for Linux architectures, and
 <tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
 Linux architectures.
 
-Note that 'arch' is defined for a specific architecture during setup and 
-compilation of GRASS, it is not limited to sun4 or any specific string.
+Note that 'arch' is defined for a specific architecture during setup
+and compilation of GRASS, it is not limited to sun4 or any specific
+string.
 
 \section vectmodules Vector modules and their parameters/flags
 
@@ -313,13 +334,12 @@ A module is a GRASS command invoked by the user.
 
 \subsection vectmodules_oper Modules operation
 
-Each module which modifies and writes data must read from
-<b>input=</b> and write to <b>output=</b> so that data may not be
-lost. For example <tt>v.spag</tt> works on <b>map=</b> at in GRASS GIS
-5.0 but if program (system) crashes or threshold was specified
-incorrectly and vector was not backuped, data were lost. In this case
-</b>map=</b> option should be replaced by <b>input=</b> and
-<b>output=</b>.
+Each module which modifies and writes data must read from <b>input</b>
+and write to <b>output</b> so that data may not be lost. For example
+<tt>v.spag</tt> works on <b>map</b> at in GRASS GIS 5.0 but if program
+(system) crashes or threshold was specified incorrectly and vector was
+not backuped, data were lost. In this case </b>map</b> option should
+be replaced by <b>input</b> and <b>output</b>.
 
 Topology is always built by default if the coor file was modified.
 
@@ -328,29 +348,32 @@ as 3D. There are a few modules which change the dimension on purpose.
 
 \subsection vectmodulesopt Modules parameters/flags
 
-<b>-b</b> do not build topo file; by default topo file is written
+Flags:
 
-<b>-t</b> create new table, default
+ - <b>-b</b> do not build topo file; by default topo file is written
 
-<b>-u</b> don't create new table
+ - <b>-t</b> create new table, default
 
-<b>-z</b> write 3D vector map (if input was 2D)
+ - <b>-u</b> don't create new table
 
+ - <b>-z</b> write 3D vector map (if input was 2D)
 
-<b>map=</b> input vector map for modules without output
+Parameters:
 
-<b>input=</b> input vector map
+ - <b>map</b> input vector map for modules without output
 
-<b>output=</b> output vector map
+ - <b>input</b> input vector map
 
-<b>type=</b>  type of elements:  point,line,boundary,centroid,area
+ - <b>output</b> output vector map
 
-<b>cat=</b> category or category list (example: 1,5,9-13,35)
+ - <b>type</b> type of elements: point,line,boundary,centroid,area
 
-<b>layer=</b> layer number
+ - <b>cat</b> category or category list (example: 1,5,9-13,35)
 
-<b>where=</b> condition of SQL statement for selection of records
+ - <b>layer</b> layer number or name
 
-<b>column=</b> column name (in external table)
+ - <b>where</b> condition of SQL statement for selection of records
+
+ - <b>column</b> column name (in external table)
 
 */

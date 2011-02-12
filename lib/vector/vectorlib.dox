@@ -1628,6 +1628,16 @@ points. The third feature is a centroid with category number 2. The
 boundary and the centroid form an area with category number 2. All
 vector feature mentioned above are located in layer 1.
 
+\section Loading_the_Vector_Library Loading the Vector Library
+
+The library is loaded by specifying
+
+\verbatim
+$(SEGMENTLIB)
+\endverbatim
+
+in the <tt>Makefile</tt>.
+
 \section vlibFunc List of vector library functions
 
 The vector library provides the GRASS programmer with routines to
