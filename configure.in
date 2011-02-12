@@ -8,11 +8,11 @@
 # PURPOSE:  	This configure runs all the tests to determine what components
 #   	    	are installed on the current system. It also defines certain
 #   	    	configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2009 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2009, 2011 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#   	    	License (>=v2). Read the file COPYING that comes with GRASS
-#   	    	for details.
+#               This program is free software under the GNU General
+#   	    	Public License (>=v2). Read the file COPYING that
+#   	    	comes with GRASS for details.
 #
 # MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
 # Website for   config.guess, config.sub:
@@ -266,13 +266,6 @@ AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
                           enable GDAL/OGR support (gdal-config with path,
                           e.g. '--with-gdal=/usr/local/bin/gdal-config')])
-
-AC_ARG_WITH(python,
-[  --with-python[=path/python-config]
-                          enable support for Python SWIG bindings and wxGUI
-                          Python extensions (python-config with path, e.g.
-                          '--with-python=/usr/bin/python2.5-config',
-                          default: no)],, with_python="no")
 
 AC_ARG_WITH(wxwidgets,
 [  --with-wxwidgets[=path/wx-config]
@@ -1740,79 +1733,6 @@ fi
 AC_SUBST(USE_LARGEFILES)
 # Done large file support
 
-# Python check
-
-AC_MSG_CHECKING(whether to use Python)
-
-PYTHONINC=
-PYTHONCFLAGS=
-PYTHONLDFLAGS=
-SWIG=
-USE_PYTHON=
-MACOSX_ARCHS_PYTHON=
-
-if test "$with_python" = "no" ; then
-  AC_MSG_RESULT(no)
-else
-  AC_MSG_RESULT(yes)
-  USE_PYTHON="1"
-  if test "$with_python" != "yes" ; then
-    PY_CONFIG="$with_python"
-  fi
-
-  AC_PATH_PROG(PY_CONFIG, python-config, no)
-
-  if test "$PY_CONFIG" != "no" ; then
-    # With Python includes directory 
-
-    PYTHONINC=`"$PY_CONFIG" --includes`
-    LOC_CHECK_INCLUDES(Python.h,Python,$PYTHONINC)
-
-    PYTHONCFLAGS=`"$PY_CONFIG" --cflags`
-
-    # With Python library directory
-
-    PYTHONLDFLAGS=`"$PY_CONFIG" --ldflags`
-
-    # shouldn't have arch flags in C/LD flags on OSX
-    for a in i386 ppc x86_64 ppc64
-    do
-      PYTHONCFLAGS=`echo "$PYTHONCFLAGS" | sed "s/-arch  *$a//g"`
-      PYTHONLDFLAGS=`echo "$PYTHONLDFLAGS" | sed "s/-arch  *$a//g"`
-    done
-  fi
-
-  # look for the swig program
-  AC_PATH_PROG(SWIG, swig, no)
-
-  # if test "$SWIG" = "no" ; then
-  #   AC_MSG_ERROR([*** couldn't find swig])
-  # fi
-
-  # check for available OSX archs in Python, assume framework
-  if test -n "$MACOSX_ARCHS" ; then
-    pylib=`"$PY_CONFIG" --prefix`/Python
-    pylibinfo=`file -L "$pylib"`
-    for a in i386 ppc x86_64 ppc64
-    do
-      # add only if in MACOSX_ARCHS
-      if test -n "`echo \"$pylibinfo\" | grep \"library $a\"`" ; then
-        if test -n "`echo "$MACOSX_ARCHS" | grep $a`" ; then
-          MACOSX_ARCHS_PYTHON="$MACOSX_ARCHS_PYTHON -arch $a"
-        fi
-      fi
-    done
-  fi
-
-fi # Done checking Python
-
-AC_SUBST(PYTHONINC)
-AC_SUBST(PYTHONCFLAGS)
-AC_SUBST(PYTHONLDFLAGS)
-AC_SUBST(SWIG)
-AC_SUBST(USE_PYTHON)
-AC_SUBST(MACOSX_ARCHS_PYTHON)
-
 # Enable wxWidgets support (for wxGUI)
 
 AC_MSG_CHECKING(whether to use wxWidgets)
@@ -1967,7 +1887,6 @@ LOC_MSG_USE(OGR support,USE_OGR)
 LOC_MSG_USE(OpenGL support,USE_OPENGL)
 LOC_MSG_USE(PNG support,USE_PNG)
 LOC_MSG_USE(PostgreSQL support,USE_POSTGRES)
-LOC_MSG_USE(Python support,USE_PYTHON)
 LOC_MSG_USE(Readline support,USE_READLINE)
 LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(Tcl/Tk support,USE_TCLTK)
