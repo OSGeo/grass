@@ -67,6 +67,10 @@
 
    1) Portable
 
+   TODO
+   
+   combine either lines or boundaries, but not lines with boundaries
+
    ********************************************************************** */
 
 #include <stdlib.h>
@@ -174,6 +178,13 @@ int main(int argc, char **argv)
 
 	if (type & GV_LINES)
 	    nlines++;
+
+	/* copy points to output as they are, with cats */
+	if (type & GV_POINTS) {
+	    Vect_read_line(&map, points, Cats, line);
+	    Vect_write_line(&Out, type, points, Cats);
+	    continue;
+	}
 
 	/* Skip line if already visited from another */
 	if (lines_visited[line])
