@@ -8,7 +8,7 @@
 *               a moving 2D isotropic Gaussian kernel or
 *               optionally generates a vector density map on vector network 
 *               with a 1D kernel
-* COPYRIGHT:    (C) 2004 by the GRASS Development Team
+* COPYRIGHT:    (C) 20011 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -34,7 +34,7 @@ int net = 0;
 static double dimension = 2.;
 
 
-    /* define score function L(window size) */
+/* define score function L(window size) */
 double L(double smooth)
 {
     int ii;
@@ -55,18 +55,11 @@ double L(double smooth)
     if (!net)
 	resL *= 2.;
 
-    resL =
-	(1. / (pow(n, 2.) * pow(smooth, dimension))) * (resL +
-							n *
-							(gaussianFunction
-							 (0., 2.,
-							  dimension) -
-							 2. *
-							 gaussianFunction(0.,
-									  1.,
-									  dimension)))
-	+ (2. / (n * pow(smooth, dimension))) * gaussianFunction(0., 1.,
-								 dimension);
+    resL = (1. / (pow(n, 2.) * pow(smooth, dimension))) *
+           (resL + n * (gaussianFunction(0., 2., dimension) -
+	   2. * gaussianFunction(0., 1., dimension))) + 
+	   (2. / (n * pow(smooth, dimension))) *
+	   gaussianFunction(0., 1., dimension);
 
     /* resL = (1./(pow(n,2.)*pow(smooth,dimension))) * (resL + n*( gaussianFunction(0.,2.,dimension) - 2. * gaussianKernel(0.,term)) ) + (2./(n*pow(smooth,dimension)))*gaussianKernel(0.,term);   */
     G_debug(3, "smooth = %e resL = %e", smooth, resL);
@@ -81,10 +74,12 @@ int main(int argc, char **argv)
 {
     struct Option *in_opt, *net_opt, *out_opt;
     struct Option *stddev_opt, *dsize_opt, *segmax_opt, *netmax_opt,
-	*multip_opt;
-    struct Flag *flag_o, *flag_q;
+	*multip_opt, *node_opt, *kernel_opt;
+    struct Flag *flag_o, *flag_q, *flag_normalize, *flag_multiply;
+
     struct Map_info In, Net, Out;
     int fdout = 0, maskfd = 0;
+    int node_method, kernel_function;
     int row, col;
     struct Cell_head window;
     double gaussian;
@@ -100,6 +95,7 @@ int main(int argc, char **argv)
     double term;
 
     double gausmax = 0;
+    int notreachable = 0;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -108,8 +104,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("kernel density"));
     module->description =
-	_("Generates a raster density map from vector points data using a moving 2D isotropic Gaussian kernel or "
-	 "optionally generates a vector density map on vector network with a 1D kernel.");
+	_("Generates a raster density map from vector point data using a moving kernel or "
+	 "optionally generates a vector density map on a vector network.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->description = _("Input vector with training points");
@@ -160,6 +156,26 @@ int main(int argc, char **argv)
     multip_opt->description = _("Multiply the density result by this number");
     multip_opt->answer = "1.";
 
+    node_opt = G_define_option();
+    node_opt->key = "node";
+    node_opt->type = TYPE_STRING;
+    node_opt->required = YES;
+    node_opt->description = _("Node method");
+    node_opt->options = "none,split";
+    node_opt->answer = "none";
+    node_opt->descriptions =
+	_("none;No method applied at nodes with more than 2 arcs;"
+	  "split;Equal split (Okabe 2009) applied at nodes;");
+
+    kernel_opt = G_define_option();
+    kernel_opt->key = "kernel";
+    kernel_opt->type = TYPE_STRING;
+    kernel_opt->required = YES;
+    kernel_opt->description = _("Kernel function");
+    kernel_opt->options =
+	"uniform,triangular,epanechnikov,quartic,triweight,gaussian,cosine";
+    kernel_opt->answer = "gaussian";
+
     flag_o = G_define_flag();
     flag_o->key = 'o';
     flag_o->description =
@@ -170,6 +186,16 @@ int main(int argc, char **argv)
     flag_q->description =
 	_("Only calculate optimal standard deviation and exit (no map is written)");
 
+    flag_normalize = G_define_flag();
+    flag_normalize->key = 'n';
+    flag_normalize->description =
+	_("In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * mult");
+
+    flag_multiply = G_define_flag();
+    flag_multiply->key = 'm';
+    flag_multiply->description =
+	_("In network mode, multiply the result by number of input points.");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -179,6 +205,43 @@ int main(int argc, char **argv)
     segmax = atof(segmax_opt->answer);
     netmax = atof(netmax_opt->answer);
     multip = atof(multip_opt->answer);
+
+    if (strcmp(node_opt->answer, "none") == 0)
+	node_method = NODE_NONE;
+    else if (strcmp(node_opt->answer, "split") == 0)
+	node_method = NODE_EQUAL_SPLIT;
+    else
+	G_fatal_error(_("Unknown node method"));
+
+    kernel_function = KERNEL_GAUSSIAN;
+    if (strcmp(kernel_opt->answer, "uniform") == 0)
+	kernel_function = KERNEL_UNIFORM;
+    else if (strcmp(kernel_opt->answer, "triangular") == 0)
+	kernel_function = KERNEL_TRIANGULAR;
+    else if (strcmp(kernel_opt->answer, "epanechnikov") == 0)
+	kernel_function = KERNEL_EPANECHNIKOV;
+    else if (strcmp(kernel_opt->answer, "quartic") == 0)
+	kernel_function = KERNEL_QUARTIC;
+    else if (strcmp(kernel_opt->answer, "triweight") == 0)
+	kernel_function = KERNEL_TRIWEIGHT;
+    else if (strcmp(kernel_opt->answer, "gaussian") == 0)
+	kernel_function = KERNEL_GAUSSIAN;
+    else if (strcmp(kernel_opt->answer, "cosine") == 0)
+	kernel_function = KERNEL_COSINE;
+    else
+	G_fatal_error(_("Unknown kernel function"));
+
+    if (flag_o->answer) {
+	if (net_opt->answer) {
+	    if (node_method != NODE_NONE ||
+		kernel_function != KERNEL_GAUSSIAN) {
+		G_fatal_error(_("Optimal standard deviation calculation is supported only for node method 'none' and kernel function 'gaussian'."));
+	    }
+	}
+	else if (kernel_function != KERNEL_GAUSSIAN) {
+	    G_fatal_error(_("Optimal standard deviation calculation is supported only for and kernel function 'gaussian'."));
+	}
+    }
 
     if (flag_q->answer) {
 	flag_o->answer = 1;
@@ -203,7 +266,6 @@ int main(int argc, char **argv)
 
     if (net_opt->answer) {
 	int nlines, line;
-	int notreachable = 0;
 	struct line_pnts *Points;
 
 	Points = Vect_new_line_struct();
@@ -308,12 +370,16 @@ int main(int argc, char **argv)
     }
 
     term = 1. / (pow(sigma, dimension) * pow((2. * M_PI), dimension / 2.));
-    dmax = sigma * 4.;
+
+    dmax = sigma;
+    if (kernel_function == KERNEL_GAUSSIAN)
+	dmax = sigma * 4.;
 
     if (net) {
 	int line, nlines;
 	struct line_pnts *Points, *SPoints;
 	struct line_cats *SCats;
+	double total = 0.0;
 
 	G_message(_("\nWriting output vector map using smooth parameter=%f."),
 		  sigma);
@@ -353,7 +419,8 @@ int main(int argc, char **argv)
 			offset1, x, y);
 
 		compute_net_distance(x, y, &In, &Net, netmax, sigma, term,
-				     &gaussian, dmax);
+				     &gaussian, dmax, node_method,
+				     kernel_function);
 		gaussian *= multip;
 		if (gaussian > gausmax)
 		    gausmax = gaussian;
@@ -377,9 +444,42 @@ int main(int argc, char **argv)
 		    Vect_cat_set(SCats, 1, (int)gaussian);
 
 		    Vect_write_line(&Out, GV_LINE, SPoints, SCats);
+
+		    total += length * gaussian;
 		}
 	    }
 	    G_percent(line, nlines, 1);
+	}
+
+	if (flag_normalize->answer || flag_multiply->answer) {
+	    double m = multip;
+
+	    if (flag_normalize->answer) {
+		m /= total;
+	    }
+	    if (flag_multiply->answer) {
+		m *= (Vect_get_num_primitives(&In, GV_POINT) - notreachable);
+	    }
+
+	    Vect_build(&Out);
+
+	    gausmax = 0.0;
+	    nlines = Vect_get_num_lines(&Out);
+	    for (line = 1; line <= nlines; line++) {
+		int cat;
+		double gaussian;
+
+		Vect_read_line(&Out, SPoints, SCats, line);
+
+		Vect_cat_get(SCats, 1, &cat);
+		gaussian = m * cat;
+		Vect_reset_cats(SCats);
+		Vect_cat_set(SCats, 1, (int)gaussian);
+		Vect_rewrite_line(&Out, line, GV_LINE, SPoints, SCats);
+		if (gaussian > gausmax)
+		    gausmax = gaussian;
+	    }
+	    Vect_build_partial(&Out, GV_BUILD_NONE);	/* to force rebuild */
 	}
 
 	Vect_close(&Net);
@@ -408,7 +508,10 @@ int main(int argc, char **argv)
 		N = Rast_row_to_northing(row + 0.5, &window);
 		E = Rast_col_to_easting(col + 0.5, &window);
 
-		compute_distance(N, E, &In, sigma, term, &gaussian, dmax);
+		/* compute_distance(N, E, &In, sigma, term, &gaussian, dmax); */
+		compute_distance(N, E, &In, sigma, term, &gaussian, dmax,
+				 kernel_function);
+
 		output_cell[col] = multip * gaussian;
 		if (gaussian > gausmax)
 		    gausmax = gaussian;
@@ -569,66 +672,125 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
     return (kk);
 }
 
+/* get number of arcs for a node */
+int count_node_arcs(struct Map_info *Map, int node)
+{
+    int i, n, line, type;
+    int count = 0;
+
+    n = Vect_get_node_n_lines(Map, node);
+    for (i = 0; i < n; i++) {
+	line = Vect_get_node_line(Map, node, i);
+	type = Vect_read_line(Map, NULL, NULL, abs(line));
+	if (type & GV_LINES)
+	    count++;
+    }
+    return count;
+}
 
 /* Compute gausian for x, y along Net, using all points in In */
 void compute_net_distance(double x, double y, struct Map_info *In,
 			  struct Map_info *Net, double netmax, double sigma,
-			  double term, double *gaussian, double dmax)
+			  double term, double *gaussian, double dmax,
+			  int node_method, int kernel_function)
 {
     int i;
-    double dist;
+    double dist, kernel;
     static struct line_pnts *Points = NULL;
+    static struct line_pnts *FPoints = NULL;
     struct bound_box box;
-    static struct ilist *List = NULL;
+    static struct ilist *PointsList = NULL;
+    static struct ilist *NodesList = NULL;
 
     if (!Points)
 	Points = Vect_new_line_struct();
 
-    if (!List)
-	List = Vect_new_list();
+    if (!PointsList)
+	PointsList = Vect_new_list();
+
+    if (node_method == NODE_EQUAL_SPLIT) {
+	if (!NodesList)
+	    NodesList = Vect_new_list();
+
+	if (!FPoints)
+	    FPoints = Vect_new_line_struct();
+    }
 
     *gaussian = .0;
 
     /* The network is usually much bigger than dmax and to calculate shortest path is slow
-     * -> use spatial index to select points */
-    box.E = x + dmax;
-    box.W = x - dmax;
-    box.N = y + dmax;
-    box.S = y - dmax;
+     * -> use spatial index to select points
+     * enlarge the box by netmax (max permitted distance between a point and net) */
+    box.E = x + dmax + netmax;
+    box.W = x - dmax - netmax;
+    box.N = y + dmax + netmax;
+    box.S = y - dmax - netmax;
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
 
-    Vect_select_lines_by_box(In, &box, GV_POINT, List);
-    G_debug(3, "  %d points in box", List->n_values);
+    Vect_select_lines_by_box(In, &box, GV_POINT, PointsList);
+    G_debug(3, "  %d points in box", PointsList->n_values);
 
-    for (i = 0; i < List->n_values; i++) {
+    for (i = 0; i < PointsList->n_values; i++) {
 	int line, ret;
 
-	line = List->value[i];
+	line = PointsList->value[i];
 	Vect_read_line(In, Points, NULL, line);
 
 	G_debug(3, "  SP: %f %f -> %f %f", x, y, Points->x[0], Points->y[0]);
-	ret =
-	    Vect_net_shortest_path_coor(Net, x, y, 0.0, Points->x[0],
-					Points->y[0], 0.0, netmax, netmax,
-					&dist, NULL, NULL, NULL, NULL, NULL,
-					NULL);
+	/*ret = Vect_net_shortest_path_coor(Net, x, y, 0.0, Points->x[0], */
+	/*Points->y[0], 0.0, netmax, netmax, */
+	/*&dist, NULL, NULL, NULL, NULL, NULL, */
+	/*NULL); */
+	ret = Vect_net_shortest_path_coor2(Net,
+					   Points->x[0], Points->y[0], 0.0,
+					   x, y, 0.0, netmax, 1.0,
+					   &dist, NULL,
+					   NULL, NodesList, FPoints, NULL,
+					   NULL, NULL);
 
 	if (ret == 0) {
 	    G_debug(3, "not reachable");
 	    continue;		/* Not reachable */
 	}
 
-	if (dist <= dmax)
-	    *gaussian += gaussianKernel(dist / sigma, term);
+	/* if (dist <= dmax)
+	 *gaussian += gaussianKernel(dist / sigma, term); */
 
+	if (dist > dmax)
+	    continue;
+
+	/* kernel = gaussianKernel(dist / sigma, term); */
+	kernel = kernelFunction(kernel_function, 1, sigma, dist);
+
+	if (node_method == NODE_EQUAL_SPLIT) {
+	    int j, node;
+	    double ndiv = 1.;
+	    int start = 0;
+
+	    /* Count the nodes and arcs on path (n1-1)*(n2-1)* ... (ns-1) */
+
+	    for (j = start; j < NodesList->n_values; j++) {
+		node = NodesList->value[j];
+
+		/* Divide into 2/n if point falls on a node */
+		if (j == 0 && FPoints->n_points < 3) {
+		    ndiv *= count_node_arcs(Net, node) / 2.;
+		}
+		else {
+		    ndiv *= count_node_arcs(Net, node) - 1;
+		}
+	    }
+	    kernel /= ndiv;
+	}
+	*gaussian += kernel;
 	G_debug(3, "  dist = %f gaussian = %f", dist, *gaussian);
     }
 }
 
 void compute_distance(double N, double E, struct Map_info *In,
 		      double sigma, double term, double *gaussian,
-		      double dmax)
+		      double dmax, int kernel_function)
 {
     int line, nlines;
     double a[2], b[2];
@@ -670,7 +832,9 @@ void compute_distance(double N, double E, struct Map_info *In,
 	dist = euclidean_distance(a, b, 2);
 
 	if (dist <= dmax)
-	    *gaussian += gaussianKernel(dist / sigma, term);
+	    /* *gaussian += gaussianKernel(dist / sigma, term); */
+	    *gaussian += kernelFunction(kernel_function, 2, sigma, dist);
+
 
     }
 }

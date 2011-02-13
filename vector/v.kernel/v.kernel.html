@@ -1,9 +1,12 @@
 <H2>DESCRIPTION</H2>
 
-Generates a raster density map from vector points data using
-a moving 2D isotropic Gaussian kernel or
-optionally generates a vector density map on vector network
-with a 1D kernel.
+<em>v.kernel</em> generates a raster density map from vector points data using
+a moving kernel. Available <a href="http://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use">kernel density functions</a> are <em>uniform, 
+triangular, epanechnikov, quartic, triweight, gaussian, cosine</em>, 
+default is <em>gaussian</em>.
+<p>
+The module can also generate a vector density map on a vector network, 
+optionally using the equal split algorithm of Okabe et al. 2009.
 
 <H2>NOTES</H2>
 
@@ -18,16 +21,23 @@ not just those in the current region.
 
 
 <H2>LIMITATIONS</H2>
-The modules only considers the presence of point, but not 
+The module only considers the presence of points, but not 
 (yet) any attribute values.
 
 <H2>SEE ALSO</H2>
 <A HREF="v.surf.rst.html">v.surf.rst</A>
 
-<H2>AUTHOR</H2>
+<H2>REFERENCES</H2>
+Okabe, A., Satoh, T., Sugihara, K. (2009). <i>A kernel density estimation 
+method for networks, its computational method and a GIS-based tool</i>.
+<b>International Journal of Geographical Information Science</b>, Vol 23(1), 
+pp. 7-32.<br>
+DOI: <a href="http://dx.doi.org/10.1080/13658810802475491">10.1080/13658810802475491</a>
+
+<H2>AUTHORS</H2>
 
 Stefano Menegon, <a href="http://mpa.itc.it/">ITC-irst</a>, Trento, Italy
 <BR>
-Radim Blazek (network part)
+Radim Blazek (additional kernel density functions and network part)
 
 <p><i>Last changed: $Date$</i>
