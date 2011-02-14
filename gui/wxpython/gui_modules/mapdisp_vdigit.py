@@ -116,7 +116,8 @@ class VDigitWindow(BufferedWindow):
             self.digit.GetDisplay().DrawMap()
         
         # translate tmp objects (pointer position)
-        if self.toolbar.GetAction() == 'moveLine':
+        if self.toolbar.GetAction() == 'moveLine' and \
+                hasattr(self, "moveInfo"):
             if self.moveInfo.has_key('beginDiff'):
                 # move line
                 for id in self.moveInfo['id']:
@@ -284,11 +285,11 @@ class VDigitWindow(BufferedWindow):
         """!Left mouse button pressed - vector digitizer move
         feature/vertex, edit linear feature
         """
-        self.moveInfo = {}
+        self.moveInfo = dict()
         # geographic coordinates of initial position (left-down)
         self.moveInfo['begin'] = None
         # list of ids to modify    
-        self.moveInfo['id'] = []
+        self.moveInfo['id'] = list()
         
         if self.toolbar.GetAction() in ["moveVertex", "editLine"]:
             # set pen
@@ -416,7 +417,6 @@ class VDigitWindow(BufferedWindow):
         if self.mouse["use"] != "pointer" or not self.toolbar:
             return
         
-        digitClass = self.parent.digit
         if (self.toolbar.GetAction() == "addLine" and \
                 self.toolbar.GetAction('type') in ["line", "boundary", "area"]) or \
                 self.toolbar.GetAction() == "editLine":
@@ -507,11 +507,9 @@ class VDigitWindow(BufferedWindow):
                 hasattr(self, "moveInfo"):
             self.OnLeftDownEditLine(event)
 
-        elif self.toolbar.GetAction() in ("moveLine", 
-                                          "moveVertex",
-                                          "editLine") and \
-                                          not hasattr(self, "moveInfo"):
-                                          self.OnLeftDownVDigitMoveLine(event)
+        elif self.toolbar.GetAction() in ("moveLine", "moveVertex", "editLine") and \
+                not hasattr(self, "moveInfo"):
+            self.OnLeftDownMoveLine(event)
         
         elif self.toolbar.GetAction() in ("displayAttrs"
                                           "displayCats"):
@@ -589,7 +587,7 @@ class VDigitWindow(BufferedWindow):
                     self.copyCatsIds = self.digit.GetDisplay().GetSelected()
         
         elif self.toolbar.GetAction() == "queryLine":
-            selected = digitClass.SelectLinesByQuery(bbox = (pos1, pos2))
+            selected = self.digit.SelectLinesByQuery(bbox = (pos1, pos2))
             nselected = len(selected)
             if nselected > 0:
                 self.digit.GetDisplay().SetSelected(selected)
@@ -612,8 +610,8 @@ class VDigitWindow(BufferedWindow):
                         nselected = 1
         
         if nselected > 0:
-            if self.toolbar.GetAction() in ("moveLine",
-                                            "moveVertex"):
+            if self.toolbar.GetAction() in ("moveLine", "moveVertex") and \
+                    hasattr(self, "moveInfo"):
                 # get pseudoDC id of objects which should be redrawn
                 if self.toolbar.GetAction() == "moveLine":
                     # -> move line
@@ -758,8 +756,8 @@ class VDigitWindow(BufferedWindow):
             self.UpdateMap(render = False)
         
     def OnLeftUp(self, event):
-        if hasattr(self, "infoMove"):
-            if len(digitClass.GetDisplay().GetSelected()) == 0:
+        if hasattr(self, "moveInfo"):
+            if len(self.digit.GetDisplay().GetSelected()) == 0:
                 self.moveInfo['begin'] = self.Pixel2Cell(self.mouse['begin']) # left down
             
             # eliminate initial mouse moving efect
