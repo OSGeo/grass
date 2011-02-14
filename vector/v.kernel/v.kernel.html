@@ -5,8 +5,11 @@ a moving kernel. Available <a href="http://en.wikipedia.org/wiki/Kernel_(statist
 triangular, epanechnikov, quartic, triweight, gaussian, cosine</em>, 
 default is <em>gaussian</em>.
 <p>
-The module can also generate a vector density map on a vector network, 
-optionally using the equal split algorithm of Okabe et al. 2009.
+The module can also generate a vector density map on a vector network. 
+Conventional kernel functions produce biased estimates by overestimating 
+the densities around network nodes, whereas the equal split kernel 
+function of Okabe et al. (2009) produces unbiased density estimates. 
+The equal split kernel function can be enabled with <em>node=split</em>.
 
 <H2>NOTES</H2>
 
