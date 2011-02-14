@@ -1,9 +1,9 @@
 #include <grass/gprojects.h>
 
 /* plot.c */
-int plot_grid(double, double, double, int, int, int, int, int);
+int plot_grid(double, double, double, int, int, int, int, int, double);
 int plot_geogrid(double, struct pj_info, struct pj_info, int, int, int, int,
-		 int);
+		 int, double);
 void init_proj(struct pj_info *, struct pj_info *, int);
 void get_ll_bounds(double *, double *, double *, double *, struct Cell_head,
 		   struct pj_info, struct pj_info);
