@@ -4,11 +4,12 @@
 * MODULE:       v.kernel
 *
 * AUTHOR(S):    Stefano Menegon, ITC-irst, Trento, Italy
+*               Radim Blazek (additional kernel functions, network part)
 * PURPOSE:      Generates a raster density map from vector points data using 
-*               a moving 2D isotropic Gaussian kernel or
+*               a moving kernel function or
 *               optionally generates a vector density map on vector network 
 *               with a 1D kernel
-* COPYRIGHT:    (C) 20011 by the GRASS Development Team
+* COPYRIGHT:    (C) 2004-2011 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -239,7 +240,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	else if (kernel_function != KERNEL_GAUSSIAN) {
-	    G_fatal_error(_("Optimal standard deviation calculation is supported only for and kernel function 'gaussian'."));
+	    G_fatal_error(_("Optimal standard deviation calculation is supported only for kernel function 'gaussian'."));
 	}
     }
 
@@ -318,8 +319,8 @@ int main(int argc, char **argv)
     /* valutazione distanza ottimale */
     if (flag_o->answer) {
 	/* Note: sigmaOptimal calculates using ALL points (also those outside the region) */
-	G_message(_("Automatic choose of smoothing parameter (standard deviation), maximum possible "
-		   "value of standard deviation is was set to %f"), sigma);
+	G_message(_("Automatic choice of smoothing parameter (standard deviation), maximum possible "
+		   "value of standard deviation is set to %f"), sigma);
 
 	/* maximum distance 4*sigma (3.9*sigma ~ 1.0000), keep it small, otherwise it takes 
 	 * too much points and calculation on network becomes slow */
@@ -522,7 +523,7 @@ int main(int argc, char **argv)
 	Rast_close(fdout);
     }
 
-    G_message(_("Maximum value in output: %e."), gausmax);
+    G_message(_("Maximum value in output: %e."), multip * gausmax);
 
     Vect_close(&In);
 
