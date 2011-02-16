@@ -1982,7 +1982,7 @@ class LocationWizard(wx.Object):
             
             wx.MessageBox(parent = self.wizard,
                           message = _("Location <%(loc)s> will be created "
-                                    "in GIS data directory <%(dir)s>."
+                                    "in GIS data directory <%(dir)s>. "
                                     "You will need to change the default GIS "
                                     "data directory in the GRASS startup screen.") % \
                               { 'loc' : location, 'dir' : database},
