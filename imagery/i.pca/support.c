@@ -47,7 +47,7 @@ static void write_history(int bands, char *outname, double **eigmat, double *eig
 	eigval_total += eigval[i];
 
     for (i = 0; i < bands; i++) {
-	char tmpeigen[256], tmpa[80];
+	char tmpeigen[2048], tmpa[80];  /* (bands*8)+30 instead of 2048? */
 
 	sprintf(tmpeigen, "PC%d %9.2f (", i+1, eigval[i]);
 	for (j = 0; j < bands; j++) {
