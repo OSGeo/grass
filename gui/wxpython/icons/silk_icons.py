@@ -129,4 +129,6 @@ IconsSilk = {
     "settings"       : 'color_swatch.png',
     "redraw"         : 'arrow_refresh.png',
     "help"           : wx.ART_ERROR,
+    "psScript"       : wx.ART_ERROR,
+    "psExport"       : wx.ART_ERROR,
     }
