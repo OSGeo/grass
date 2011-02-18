@@ -170,8 +170,8 @@ int do_geogrid_numbers(void)
     set_rgb_color(PS.geogrid_numbers_color);
     first = 1;
 
-    /* horizontal grid numbers
-     * these numbers only appear on the left edge of the first panel.
+    /* vertical grid numbers
+     * these numbers only appear on the right edge
      * center the numbers on each grid line.
      * suppress number if it falls off the map or would overlay the previous
      *  label
@@ -216,7 +216,7 @@ int do_geogrid_numbers(void)
 	}
     }
 
-    /* vertical grid numbers 
+    /* horizontal grid numbers along the bottom
      * center the numbers on each grid line.
      * suppress number if it falls of the map or would overlay the previous
      *  label
@@ -373,10 +373,13 @@ void get_ll_bounds(double *w, double *e, double *s, double *n)
 }
 
 
-/******************************************************
+/********************************************************************
  * check projected coords to make sure they do not 
- * go outside region -- if so re-project 
-********************************************************/
+ *   go outside region -- if so re-project 
+ * This gets a bit wobbly if the projection does not reverse-project
+ *   cleanly, e.g. if the eastern edge of a UTM region is many
+ *   degrees east of the end of the zone where things get distorted.
+ *******************************************************************/
 void check_coords(double e, double n, double *lon, double *lat, int par)
 {
     double x, y;
