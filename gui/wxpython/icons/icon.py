@@ -77,8 +77,7 @@ try:
                 else:
                     Icons[key] = os.path.join(iconpath_default, img)
 except:
-    print >> sys.stderr, _("Unable to load icon theme...")
-    sys.exit(1)
+    sys.exit(_("Unable to load icon theme..."))
 
 class MetaIcon:
     """!Handle icon metadata (image path, tooltip, ...)
@@ -416,6 +415,11 @@ Icons = {
     "modelHelp"   : MetaIcon (img=Icons["help"],
                              label=_("Show help"),
                              desc = _("Display Graphical Modeler manual page")),
+    # ps.map
+    "psScript" : MetaIcon (img=Icons["psScript"],
+                           label=_("Generate instruction file")),
+    "psExport" : MetaIcon (img=Icons["psExport"],
+                           label=_("Generate PostScript output")),
     }
 
 # testing ...

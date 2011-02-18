@@ -125,4 +125,6 @@ IconsGrass2 = {
     "settings"       : 'settings.png',
     "redraw"         : 'redraw.png',
     "help"           : 'help.png',
+    "psScript"       : 'ps-script.png',
+    "psExport"       : 'ps-export.png',
     }

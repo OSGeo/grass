@@ -127,4 +127,6 @@ IconsGrass = {
     "settings"       : 'edit-color.gif',
     "redraw"         : 'gui-display.gif',
     "help"           : wx.ART_ERROR,
+    "psScript"       : wx.ART_ERROR,
+    "psExport"       : wx.ART_ERROR,
     }
