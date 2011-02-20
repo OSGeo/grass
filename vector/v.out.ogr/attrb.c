@@ -31,6 +31,13 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 		if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
 		    G_fatal_error(_("Unable to fetch data from table"));
 		if (!more) {
+		    /* start from the beginning in case multiple grass vector features
+		     * share the same category */
+		    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+			G_fatal_error(_("Unable to fetch data from table"));
+		}
+
+		if (!more) {
 		    /* G_warning ("No database record for cat = %d", cat); */
 		    /* Set at least key column to category */
 		    if (!nocat) {
