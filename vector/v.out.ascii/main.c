@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     FILE *ascii, *att;
     char *input, *output, *delim, **columns, *where, *field_name;
-    int format, dp, field, ret, region, old_format;
+    int format, dp, field, ret, region, old_format, header;
     int ver, pnt;
 
     G_gisinit(argv[0]);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 	_("Exports a vector map to a GRASS ASCII vector representation.");
 
     parse_args(argc, argv, &input, &output, &format, &dp, &delim,
-	       &field_name, &columns, &where, &region, &old_format);
+	       &field_name, &columns, &where, &region, &old_format, &header);
     
     if (format == GV_ASCII_FORMAT_STD && columns) {
 	G_warning(_("Parameter 'column' ignored in standard mode"));
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 	G_message(_("Fetching data..."));
     ret = Vect_write_ascii(ascii, att, &Map, ver, format, dp, delim,
 			   region, field, where,
-			   columns);
+			   columns, header);
 
     if (ret < 1) {
 	if (format == GV_ASCII_FORMAT_POINT) {

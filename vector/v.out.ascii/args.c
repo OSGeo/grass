@@ -9,11 +9,11 @@
 
 void parse_args(int argc, char **argv,
 		char **input, char**output, int *format, int *dp, char **delim,
-		char **field, char ***columns, char **where, int *region, int *old_format)
+		char **field, char ***columns, char **where, int *region, int *old_format, int *header)
 {
     struct Option *input_opt, *output_opt, *format_opt, *dp_opt, *delim_opt,
 	*field_opt, *column_opt, *where_opt;
-    struct Flag *old_flag, *region_flag;
+    struct Flag *old_flag, *header_flag, *region_flag;
     
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -60,6 +60,11 @@ void parse_args(int argc, char **argv,
     old_flag = G_define_flag();
     old_flag->key = 'o';
     old_flag->description = _("Create old (version 4) ASCII file");
+
+    header_flag = G_define_flag();
+    header_flag->key = 'c';
+    header_flag->description = _("Include column names in output (points mode)");
+    header_flag->guisection = _("Points");
 
     region_flag = G_define_flag();
     region_flag->key = 'r';
@@ -110,4 +115,5 @@ void parse_args(int argc, char **argv,
     }
     *region = region_flag->answer ? 1 : 0;
     *old_format = old_flag->answer ? 1 : 0;
+    *header = header_flag->answer ? 1 : 0;
 }
