@@ -284,7 +284,7 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 int Vect_write_ascii(FILE *ascii,
 		     FILE *att, struct Map_info *Map, int ver,
 		     int format, int dp, char *fs, int region_flag,
-		     int field, char* where, char **columns)
+		     int field, char* where, char **columns, int header)
 {
     int type, ctype, i, cat, proj, n_lines;
     double *xptr, *yptr, *zptr, x, y;
@@ -293,6 +293,7 @@ int Vect_write_ascii(FILE *ascii,
     char *xstring = NULL, *ystring = NULL, *zstring = NULL;
     struct Cell_head window;
     struct ilist *fcats;
+    int count = 0;
 
     /* where */
     struct field_info *Fi;
@@ -444,6 +445,32 @@ int Vect_write_ascii(FILE *ascii,
 	    G_asprintf(&ystring, "%.*f", dp, Points->y[0]);
 	    G_trim_decimal(ystring);
 
+	    Vect_field_cat_get(Cats, field, fcats);
+
+	    /* print header */
+	    if (header && count < 1) {
+		count++;
+		if (Map->head.with_z)
+		    fprintf(ascii, "east%snorth%sheight%scat", fs, fs, fs);
+		else
+		    fprintf(ascii, "east%snorth%scat", fs, fs);
+		if (columns) {
+		    for (i = 0; columns[i]; i++) {
+			if (db_select_value
+			    (driver, Fi->table, Fi->key, fcats->value[0],
+			     columns[i], &value) < 0)
+			    G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
+					  Fi->table, Fi->key, columns[i]);
+			if (columns[i])
+			    fprintf(ascii, "%s%s", fs, columns[i]);
+			else
+			    fprintf(ascii, "%s", columns[i]);
+		    }
+		}
+		fprintf(ascii, "\n");
+
+	    }
+
 	    if (Map->head.with_z && ver == 5) {
 		if (region_flag) {
 		    if ((window.top < Points->z[0]) ||
@@ -459,7 +486,6 @@ int Vect_write_ascii(FILE *ascii,
 		fprintf(ascii, "%s%s%s", xstring, fs, ystring);
 	    }
 
-	    Vect_field_cat_get(Cats, field, fcats);
 	    
 	    if (fcats->n_values > 0) {
 		if (fcats->n_values > 1) {
