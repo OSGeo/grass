@@ -423,7 +423,7 @@ int Vect_write_ascii(FILE *ascii,
 	    break;
 	default:
 	    ctype = 'X';
-	    G_warning(_("Uknown feature type %d"), (int)type);
+	    G_warning(_("Unknown feature type %d"), (int)type);
 	    break;
 	}
 
