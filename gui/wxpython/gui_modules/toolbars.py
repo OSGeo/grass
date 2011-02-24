@@ -78,8 +78,8 @@ class AbstractToolbar(wx.ToolBar):
         bmpDisabled = wx.NullBitmap
         
         if label:
-            Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%d" % \
-                  (tool, label, bitmap.GetWidth()))
+            Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" % \
+                          (tool, label, bitmap))
             toolWin = self.AddLabelTool(tool, label, bitmap,
                                         bmpDisabled, kind,
                                         shortHelp, longHelp)
@@ -254,7 +254,7 @@ class MapToolbar(AbstractToolbar):
         self.dec = wx.NewId()
         self.savefile = wx.NewId()
         self.printmap = wx.NewId()
-        
+
         # tool, label, bitmap, kind, shortHelp, longHelp, handler
         return (
             (self.displaymap, "displaymap", Icons["displaymap"].GetBitmap(),

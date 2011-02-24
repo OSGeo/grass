@@ -9,9 +9,9 @@ import os
 
 import globalvar
 
-iconpath = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass2")
+iconPath = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass")
 
-IconsGrass2 = {
+iconSet = {
     # map display
     "displaymap" : 'show.png',
     "rendermap"  : 'layer-redraw.png',
@@ -90,6 +90,8 @@ IconsGrass2 = {
     "addhis"     : 'layer-his-add.png',
     "addthematic": 'layer-vector-thematic-add.png',
     "addchart"   : 'layer-vector-chart-add.png',
+    "addgeodesic" : 'options.png',
+    "addrhumb"    : 'options.png',
     "layeropts"  : 'options.png',
     "modeler"    : 'modeler-main.png',
     # profile analysis

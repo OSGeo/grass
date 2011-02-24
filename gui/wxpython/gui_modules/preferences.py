@@ -149,8 +149,8 @@ class Settings:
             #
             'advanced' : {
                 'iconTheme' : {
-                    'type' : 'grass2'
-                    }, # grass2, grass, silk
+                    'type' : 'grass'
+                    },
                 },
             #
             # Attribute Table Manager
@@ -615,9 +615,7 @@ class Settings:
              _("Expand all"))
         self.internalSettings['atm']['leftDbClick']['choices'] = (_('Edit selected record'),
                                                                   _('Display selected'))
-        self.internalSettings['advanced']['iconTheme']['choices'] = ('grass',
-                                                                     'grass2',
-                                                                     'silk')
+        self.internalSettings['advanced']['iconTheme']['choices'] = ('grass',)
         self.internalSettings['cmd']['verbosity']['choices'] = ('grassenv',
                                                                 'verbose',
                                                                 'quiet')
