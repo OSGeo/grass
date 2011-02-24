@@ -1,4 +1,1 @@
-all = [ "icon", "silk" ]
-        
-
-
+all = [ "grass" ]
