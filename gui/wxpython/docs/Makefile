@@ -7,7 +7,6 @@ FILES = wxGUI \
 	wxGUI.Attribute_Table_Manager \
 	wxGUI.Nviz \
 	wxGUI.GCP_Manager \
-	wxGUI.Icons \
 	wxGUI.Modeler
 
 default: $(patsubst %,$(HTMLDIR)/%.html,$(FILES))
