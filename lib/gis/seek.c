@@ -1,5 +1,5 @@
 /*!
- * \file gis/seek,c
+ * \file lib/gis/seek.c
  *
  * \brief GIS Library - file seek routines
  *
