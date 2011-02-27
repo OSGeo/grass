@@ -16,6 +16,7 @@ See code in:
 - raster.py
 - vector.py
 - setup.py
+- array.py
 
 <b>Table of content</b>
 
@@ -26,16 +27,19 @@ See code in:
  - \subpage pythonRaster
  - \subpage pythonVector
  - \subpage pythonSetup
+ - \subpage pythonArray
 
 \section pythonScripting GRASS scripting tasks for Python provided by "grass.script"
 
-Usage:
+Statement
 
 \code
 import grass.script as grass
 \endcode
 
-or just import selected module, e.g.
+imports core.py, db.py, raster.py and vector.py modules.
+
+To import only selected module
 
 \code
 from grass.script import core as grass
@@ -235,7 +239,19 @@ Interface for <tt>v.*</tt> modules.
 
 \section pythonSetup Setup
 
+\code
+from grass.script import setup as gsetup
+\endcode
+
  - python::setup::init()
+
+\section pythonArray Array
+
+\code
+from grass.script import array as garray
+\endcode
+
+ - python::array::array
 
 \section pythonAuthors Authors
 
