@@ -37,8 +37,9 @@ Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 <b>Table of contents</b>
 
-- \subpage corelibs
-- \subpage libs
+- \subpage libsOverview
+ - \subpage corelibs
+ - \subpage libs
 - \subpage interfaces
 - \subpage gui
 - \subpage location
@@ -60,7 +61,9 @@ undocumented.</i>
 
 <b>PLEASE UPDATE FOR GRASS 7</b>
 
-\section corelibs Principal library
+\section libsOverview Libraries
+
+\section corelibs Core libraries
 
 (the name refers to the directory name in lib/ in the source code)
 
