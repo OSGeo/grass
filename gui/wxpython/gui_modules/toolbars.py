@@ -41,9 +41,8 @@ from preferences import globalSettings as UserSettings
 from nviz import haveNviz
 from nviz_preferences import NvizPreferencesDialog
 
-gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
-sys.path.append(gmpath)
-from icon import Icons as Icons
+sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
+from icon import Icons
 
 class AbstractToolbar(wx.ToolBar):
     """!Abstract toolbar class"""
