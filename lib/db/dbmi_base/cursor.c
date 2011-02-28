@@ -299,7 +299,7 @@ int db_alloc_cursor_column_flags(dbCursor *cursor)
 void db_free_cursor_column_flags(dbCursor *cursor)
 {
     if (cursor->column_flags)
-	free(cursor->column_flags);
+	db_free(cursor->column_flags);
     cursor->column_flags = NULL;
 }
 

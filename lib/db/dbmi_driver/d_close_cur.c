@@ -44,7 +44,7 @@ int db_d_close_cursor(void)
     db_drop_token(token);
     db_free_cursor(cursor);
     db__drop_cursor_from_driver_state(cursor);
-    free(cursor);
+    db_free(cursor);
 
     /* send the return code */
     if (stat != DB_OK) {

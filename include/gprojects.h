@@ -105,4 +105,31 @@ int GPJ__get_ellipsoid_params(struct Key_Value *,
 			      double *, double *, double *);
 void GPJ_free_ellps(struct gpj_ellps *);
 
+
+#ifdef __MINGW32__
+/* PROJ.4's private datastructures copied from projects.h as removed
+   from osgeo4w; pending better solution. see:
+   http://trac.osgeo.org/proj/ticket/98 */
+
+typedef struct { double u, v; } LP;
+
+struct DERIVS {
+    double x_l, x_p; /* derivatives of x for lambda-phi */
+    double y_l, y_p; /* derivatives of y for lambda-phi */
+};
+
+struct FACTORS {
+	struct DERIVS der;
+	double h, k;		/* meridinal, parallel scales */
+	double omega, thetap;	/* angular distortion, theta prime */
+	double conv;		/* convergence */
+	double s;		/* areal scale factor */
+	double a, b;		/* max-min scale error */
+	int code;		/* info as to analytics, see following */
+};
+
+int pj_factors(LP, void *, double, struct FACTORS *);
+/* end of copy */
+#endif
+
 #endif

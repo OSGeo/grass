@@ -162,7 +162,7 @@
 #define HAVE_PQCMDTUPLES 1
 
 /* define if ODBC exists */
-/* #undef HAVE_SQL_H */
+#define HAVE_SQL_H 1
 
 /* define if tiffio.h exists */
 #define HAVE_TIFFIO_H 1

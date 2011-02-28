@@ -80,7 +80,7 @@ void db_free_index_array(dbIndex * list, int count)
     if (list) {
 	for (i = 0; i < count; i++)
 	    db_free_index(&list[i]);
-	free(list);
+	db_free(list);
     }
 }
 
