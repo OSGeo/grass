@@ -87,7 +87,7 @@ cp -uv $OSGEO4W_ROOT_MSYS/lib/zlib.lib mswindows/osgeo4w/lib/libz.a
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
-	if [ -e include/Make/Grass.make ] ; then
+	if [ -e include/Make/Platform.make ] ; then
 	    log make distclean
 	    make distclean
 	fi
@@ -117,7 +117,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-regex \
 		--with-nls \
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
-		--with-odbc
+		--with-odbc \
+	        --without-cairo
 
 	touch mswindows/osgeo4w/configure-stamp
 fi
