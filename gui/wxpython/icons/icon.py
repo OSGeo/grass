@@ -234,6 +234,8 @@ Icons = {
                                 label = _('Show GUI settings')),
         'modeler'    : MetaIcon(img = iconSet['modeler-main'],
                                 label = _('Start Graphical Modeler')),
+        "layerOptions"  : MetaIcon(img = iconSet['options'],
+                                   label = _('Set options')),
         },
     'vdigit' : {
         'addPoint'        : MetaIcon(img = iconSet['point-create'],
