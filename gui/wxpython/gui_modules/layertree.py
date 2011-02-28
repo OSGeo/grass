@@ -730,7 +730,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             grouptext = _('Layer group:') + str(self.groupnode)
             self.groupnode += 1
         else:
-            btnbmp = icons["layeropts"].GetBitmap((16,16))
+            btnbmp = Icons['layerManager']["layerOptions"].GetBitmap((16,16))
             ctrl = buttons.GenBitmapButton(self, id = wx.ID_ANY, bitmap = btnbmp, size = (24,24))
             ctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
@@ -1284,7 +1284,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         text    = self.GetItemText(dragItem)
         if self.GetPyData(dragItem)[0]['ctrl']:
             # recreate data layer
-            btnbmp = icons["layeropts"].GetBitmap((16,16))
+            btnbmp = Icons['layerManager']["layerOptions"].GetBitmap((16,16))
             newctrl = buttons.GenBitmapButton(self, id = wx.ID_ANY, bitmap = btnbmp, size = (24, 24))
             newctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
