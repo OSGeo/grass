@@ -244,6 +244,6 @@ void db_free_dbmscap(dbDbmscap * list)
 
     for (cur = list; cur; cur = next) {
 	next = cur->next;
-	free(cur);
+	db_free(cur);
     }
 }

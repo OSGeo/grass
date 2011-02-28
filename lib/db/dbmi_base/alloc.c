@@ -74,3 +74,14 @@ void *db_realloc(void *s, int n)
 	db_memory_error();
     return s;
 }
+
+/*!
+   \fn void *db_free (void *s)
+   \brief 
+   \return 
+   \param 
+ */
+void *db_free(void *s)
+{
+    free(s);
+}

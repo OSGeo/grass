@@ -353,15 +353,15 @@ void db_CatValArray_free(dbCatValArray * arr)
 	for (i = 0; i < arr->n_values; i++) {
 	    if (arr->ctype == DB_C_TYPE_STRING && arr->value[i].val.s) {
 		db_free_string(arr->value[i].val.s);
-		free(arr->value[i].val.s);
+		db_free(arr->value[i].val.s);
 	    }
 	    if (arr->ctype == DB_C_TYPE_DATETIME && arr->value[i].val.t) {
-		free(arr->value[i].val.t);
+		db_free(arr->value[i].val.t);
 	    }
 	}
     }
 
-    free(arr->value);
+    G_free(arr->value);
 }
 
 /*!

@@ -2,6 +2,10 @@ MODULE_TOPDIR = ../..
 
 LIB = GPROJ
 
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
+MOD_OBJS := $(filter-out ftol.o,$(AUTO_OBJS))
+
 include $(MODULE_TOPDIR)/include/Make/Lib.make 
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
@@ -27,8 +31,13 @@ NAD_SRCFILES := $(patsubst %.lla,$(NAD_SRCDIR)/%.lla,$(NAD_TABLES))
 PROJ_TABLES := proj-desc.table proj-parms.table proj-units.table
 PROJ_DSTFILES := $(patsubst %,$(ETC)/%,$(PROJ_TABLES))
 
-default: lib
+default: lib $(FTOL_OBJ)
 	$(MAKE) $(NAD_DSTFILES) $(CSV_DSTFILES) $(PROJ_DSTFILES) $(NAD_SRCFILES)
+
+ifdef MINGW
+$(FTOL_OBJ): $(OBJDIR)/ftol.o
+	$(INSTALL) $< $@
+endif
 
 $(NAD_DSTFILES): $(NAD_DIR)/%: %.lla | $(NAD_DIR)
 	$(NAD2BIN) < $< $@

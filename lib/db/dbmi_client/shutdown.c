@@ -70,7 +70,7 @@ int db_shutdown_driver(dbDriver * driver)
     driver->pid = 0;
 
     /* free the driver structure. THIS IS GOOFY */
-    free(driver);
+    db_free(driver);
 
     return status;
 }

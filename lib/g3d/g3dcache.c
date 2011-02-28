@@ -121,7 +121,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 	return 0;
     }
 
-    index = *((int *)(xdr + nBytes));
+    index = *((int *)((unsigned char *)xdr + nBytes));
     map->index[index] = -pos - 2;
 
     map->cachePosLast--;

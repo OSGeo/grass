@@ -85,7 +85,7 @@ dbDirent *db_dirent(const char *dirname, int *n)
 	dirent[i].isdir = (db_isdir(path) == DB_OK);
     }
     closedir(dp);
-    free(path);
+    db_free(path);
 
     sort_dirent(dirent, *n);
 
@@ -105,7 +105,7 @@ void db_free_dirent_array(dbDirent * dirent, int count)
     if (dirent) {
 	for (i = 0; i < count; i++)
 	    db_free_string(&dirent[i].name);
-	free(dirent);
+	db_free(dirent);
     }
 }
 

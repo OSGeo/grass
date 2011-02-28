@@ -374,7 +374,7 @@ int db__copy_table(const char *from_drvname, const char *from_dbname,
 	}
     }
     if (selcol)
-	free(ivalues);
+	G_free(ivalues);
     G_debug(3, "Table copy OK");
 
     db_close_cursor(&cursor);

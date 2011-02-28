@@ -66,8 +66,8 @@ void db__mark_database_open(const char *dbname, const char *dbschema)
 */
 void db__mark_database_closed(void)
 {
-    free(state.dbname);
-    free(state.dbschema);
+    db_free_string(state.dbname);
+    db_free_string(state.dbschema);
     state.open = 0;
 }
 
@@ -128,7 +128,7 @@ void db__close_all_cursors(void)
 	    db_driver_close_cursor(state.cursor_list[i]);
 
     if (state.cursor_list)
-	free(state.cursor_list);
+	db_free(state.cursor_list);
 
     state.ncursors = 0;
     state.cursor_list = NULL;

@@ -269,7 +269,9 @@ void #db_calloc (int n, int m)
 
 void #db_malloc (int n)
 
-void #db_realloc (void s, int n)
+void #db_realloc (void *s, int n)
+
+void #db_free (void *s, int n)
 
 
 \subsection DB_case_routines DB case routines

@@ -21,7 +21,7 @@ dbTable *db_alloc_table(int ncols)
 
     table->columns = (dbColumn *) db_calloc(sizeof(dbColumn), ncols);
     if (table->columns == NULL) {
-	free(table);
+	db_free(table);
 	return (table = NULL);
     }
     table->numColumns = ncols;
@@ -54,8 +54,8 @@ void db_free_table(dbTable * table)
     for (i = 0; i < table->numColumns; i++)
 	db_free_column(&table->columns[i]);
     if (table->columns)
-	free(table->columns);
-    free(table);
+	db_free(table->columns);
+    db_free(table);
 }
 
 /*!
