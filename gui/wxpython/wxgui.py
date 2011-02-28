@@ -564,8 +564,8 @@ class GMFrame(wx.Frame):
             if key is None:
                 menu.AppendSeparator()
                 continue
-            item = wx.MenuItem(menu, wx.ID_ANY, Icons[key].GetLabel())
-            item.SetBitmap(Icons[key].GetBitmap(self.iconsize))
+            item = wx.MenuItem(menu, wx.ID_ANY, Icons['layerManager'][key].GetLabel())
+            item.SetBitmap(Icons['layerManager'][key].GetBitmap(self.iconsize))
             menu.AppendItem(item)
             self.Bind(wx.EVT_MENU, handler, item)
         
@@ -1192,15 +1192,15 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.NewDisplay(show = True)
         
-        self._popupMenu((('addrast3d', self.OnAddRaster3D),
+        self._popupMenu((('addRast3d', self.OnAddRaster3D),
                          (None, None),
-                         ('addrgb',    self.OnAddRasterRGB),
-                         ('addhis',    self.OnAddRasterHIS),
+                         ('addRgb',    self.OnAddRasterRGB),
+                         ('addHis',    self.OnAddRasterHIS),
                          (None, None),
-                         ('addshaded', self.OnAddRasterShaded),
+                         ('addShaded', self.OnAddRasterShaded),
                          (None, None),
-                         ('addrarrow', self.OnAddRasterArrow),
-                         ('addrnum',   self.OnAddRasterNum)))
+                         ('addRArrow', self.OnAddRasterArrow),
+                         ('addRNum',   self.OnAddRasterNum)))
         
         # show map display
         self.curr_page.maptree.mapdisplay.Show()
@@ -1220,8 +1220,8 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.NewDisplay(show = True)
 
-        self._popupMenu((('addthematic', self.OnAddVectorTheme),
-                         ('addchart',    self.OnAddVectorChart)))
+        self._popupMenu((('addThematic', self.OnAddVectorTheme),
+                         ('addChart',    self.OnAddVectorChart)))
         
         # show map display
         self.curr_page.maptree.mapdisplay.Show()
@@ -1242,12 +1242,12 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.NewDisplay(show = True)
 
-        self._popupMenu((('addgrid',     self.OnAddGrid),
-                         ('addlabels',   self.OnAddLabels),
-                         ('addgeodesic', self.OnAddGeodesic),
-                         ('addrhumb',    self.OnAddRhumb),
+        self._popupMenu((('addGrid',     self.OnAddGrid),
+                         ('addLabels',   self.OnAddLabels),
+                         ('addGeodesic', self.OnAddGeodesic),
+                         ('addRhumb',    self.OnAddRhumb),
                          (None, None),
-                         ('addcmd',      self.OnAddCommand)))
+                         ('addCmd',      self.OnAddCommand)))
         
         # show map display
         self.curr_page.maptree.mapdisplay.Show()

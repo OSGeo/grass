@@ -1573,19 +1573,21 @@ class MapFrame(wx.Frame):
         """
         point = wx.GetMousePosition()
         toolsmenu = wx.Menu()
+        icons = Icons['displayWindow']
+        
         # Add items to the menu
-        measure = wx.MenuItem(toolsmenu, wx.ID_ANY, Icons["measure"].GetLabel())
-        measure.SetBitmap(Icons["measure"].GetBitmap(self.iconsize))
+        measure = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["measure"].GetLabel())
+        measure.SetBitmap(icons["measure"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(measure)
         self.Bind(wx.EVT_MENU, self.OnMeasure, measure)
-
-        profile = wx.MenuItem(toolsmenu, wx.ID_ANY, Icons["profile"].GetLabel())
-        profile.SetBitmap(Icons["profile"].GetBitmap(self.iconsize))
+        
+        profile = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["profile"].GetLabel())
+        profile.SetBitmap(icons["profile"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(profile)
         self.Bind(wx.EVT_MENU, self.Profile, profile)
 
-        histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, Icons["histogram"].GetLabel())
-        histogram.SetBitmap(Icons["histogram"].GetBitmap(self.iconsize))
+        histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["histogram"].GetLabel())
+        histogram.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(histogram)
         self.Bind(wx.EVT_MENU, self.Histogram, histogram)
 
@@ -1744,27 +1746,29 @@ class MapFrame(wx.Frame):
         """
         point = wx.GetMousePosition()
         decmenu = wx.Menu()
+        icons = Icons['displayWindow']
+        
         # Add items to the menu
-        AddScale = wx.MenuItem(decmenu, wx.ID_ANY, Icons["addbarscale"].GetLabel())
-        AddScale.SetBitmap(Icons["addbarscale"].GetBitmap(self.iconsize))
+        AddScale = wx.MenuItem(decmenu, wx.ID_ANY, icons["addBarscale"].GetLabel())
+        AddScale.SetBitmap(icons["addBarscale"].GetBitmap(self.iconsize))
         decmenu.AppendItem(AddScale)
         self.Bind(wx.EVT_MENU, self.OnAddBarscale, AddScale)
-
-        AddLegend = wx.MenuItem(decmenu, wx.ID_ANY, Icons["addlegend"].GetLabel())
-        AddLegend.SetBitmap(Icons["addlegend"].GetBitmap(self.iconsize))
+        
+        AddLegend = wx.MenuItem(decmenu, wx.ID_ANY, icons["addLegend"].GetLabel())
+        AddLegend.SetBitmap(icons["addLegend"].GetBitmap(self.iconsize))
         decmenu.AppendItem(AddLegend)
         self.Bind(wx.EVT_MENU, self.OnAddLegend, AddLegend)
-
-        AddText = wx.MenuItem(decmenu, wx.ID_ANY, Icons["addtext"].GetLabel())
-        AddText.SetBitmap(Icons["addtext"].GetBitmap(self.iconsize))
+        
+        AddText = wx.MenuItem(decmenu, wx.ID_ANY, icons["addText"].GetLabel())
+        AddText.SetBitmap(icons["addText"].GetBitmap(self.iconsize))
         decmenu.AppendItem(AddText)
         self.Bind(wx.EVT_MENU, self.OnAddText, AddText)
-
+        
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.PopupMenu(decmenu)
         decmenu.Destroy()
-
+        
     def OnAddBarscale(self, event):
         """!Handler for scale/arrow map decoration menu selection.
         """
