@@ -387,6 +387,8 @@ Icons = {
                                 label = _('Manage model variables')),
         'redraw'     : MetaIcon(img = iconSet['redraw'],
                                 label = _('Redraw model canvas')),
+        'quit'       : MetaIcon(img = iconSet['quit'],
+                                label = _('Quit Graphical Modeler')),
         },
     'psMap' : {
         'script' : MetaIcon(img = iconSet['ps-script'],
