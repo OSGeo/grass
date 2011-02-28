@@ -2,19 +2,21 @@
 /****************************************************************************
  *
  * MODULE:       ps.map
- * AUTHOR(S):    Paul W. Carlson	1992 (original contributor)
+ * AUTHOR(S):    Paul W. Carlson 1992 (original contributor)
  *               Radim Blazek <radim.blazek gmail.com>
- *               Bob Covill <bcovill tekmap.ns.ca>, Huidae Cho
- *               <grass4u gmail.com>, Glynn Clements <glynn
- *               gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>,
- *               Markus Neteler <neteler itc.it>,
+ *               Bob Covill <bcovill tekmap.ns.ca>
+ *               Huidae Cho <grass4u gmail.com>
+ *               Glynn Clements <glynn gclements.plus.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
+ *               Markus Neteler <neteler itc.it>
  *               Alessandro Frigeri <afrigeri unipg.it>
+ *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      This is an enhanced PostScript version of the p.map program
- * COPYRIGHT:    (C) 2003-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2008, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 

@@ -53,7 +53,7 @@ from grass.script import core as grass
 class ProfileFrame(wx.Frame):
     """!Mainframe for displaying profile of raster map. Uses wx.lib.plot.
     """
-    def __init__(self, parent=None, id=wx.ID_ANY, title=_("Profile Analysis"),
+    def __init__(self, parent=None, id=wx.ID_ANY, title=_("GRASS Profile Analysis Tool"),
                  rasterList=[],
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_FRAME_STYLE):

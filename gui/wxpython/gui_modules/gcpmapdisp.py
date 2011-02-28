@@ -77,7 +77,7 @@ class MapFrame(wx.Frame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
-    def __init__(self, parent=None, id=wx.ID_ANY, title=_("Manage Ground Control Points"),
+    def __init__(self, parent=None, id=wx.ID_ANY, title=_("GRASS GIS Manage Ground Control Points"),
                  style=wx.DEFAULT_FRAME_STYLE, toolbars=["gcpdisp"],
                  tree=None, notebook=None, lmgr=None, page=None,
                  Map=None, auimgr=None, **kwargs):

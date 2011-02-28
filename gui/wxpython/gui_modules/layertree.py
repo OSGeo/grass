@@ -140,49 +140,50 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.folder = il.Add(trart)
         
         bmpsize = (16, 16)
-        trgif = Icons["addrast"].GetBitmap(bmpsize)
+        icons = Icons['layerManager']
+        trgif = icons["addRast"].GetBitmap(bmpsize)
         self.rast_icon = il.Add(trgif)
         
-        trgif = Icons["addrast3d"].GetBitmap(bmpsize)
+        trgif = icons["addRast3d"].GetBitmap(bmpsize)
         self.rast3d_icon = il.Add(trgif)
         
-        trgif = Icons["addrgb"].GetBitmap(bmpsize)
+        trgif = icons["addRgb"].GetBitmap(bmpsize)
         self.rgb_icon = il.Add(trgif)
         
-        trgif = Icons["addhis"].GetBitmap(bmpsize)
+        trgif = icons["addHis"].GetBitmap(bmpsize)
         self.his_icon = il.Add(trgif)
         
-        trgif = Icons["addshaded"].GetBitmap(bmpsize)
+        trgif = icons["addShaded"].GetBitmap(bmpsize)
         self.shaded_icon = il.Add(trgif)
         
-        trgif = Icons["addrarrow"].GetBitmap(bmpsize)
+        trgif = icons["addRArrow"].GetBitmap(bmpsize)
         self.rarrow_icon = il.Add(trgif)
         
-        trgif = Icons["addrnum"].GetBitmap(bmpsize)
+        trgif = icons["addRNum"].GetBitmap(bmpsize)
         self.rnum_icon = il.Add(trgif)
         
-        trgif = Icons["addvect"].GetBitmap(bmpsize)
+        trgif = icons["addVect"].GetBitmap(bmpsize)
         self.vect_icon = il.Add(trgif)
         
-        trgif = Icons["addthematic"].GetBitmap(bmpsize)
+        trgif = icons["addThematic"].GetBitmap(bmpsize)
         self.theme_icon = il.Add(trgif)
         
-        trgif = Icons["addchart"].GetBitmap(bmpsize)
+        trgif = icons["addChart"].GetBitmap(bmpsize)
         self.chart_icon = il.Add(trgif)
         
-        trgif = Icons["addgrid"].GetBitmap(bmpsize)
+        trgif = icons["addGrid"].GetBitmap(bmpsize)
         self.grid_icon = il.Add(trgif)
         
-        trgif = Icons["addgeodesic"].GetBitmap(bmpsize)
+        trgif = icons["addGeodesic"].GetBitmap(bmpsize)
         self.geodesic_icon = il.Add(trgif)
         
-        trgif = Icons["addrhumb"].GetBitmap(bmpsize)
+        trgif = icons["addRhumb"].GetBitmap(bmpsize)
         self.rhumb_icon = il.Add(trgif)
         
-        trgif = Icons["addlabels"].GetBitmap(bmpsize)
+        trgif = icons["addLabels"].GetBitmap(bmpsize)
         self.labels_icon = il.Add(trgif)
         
-        trgif = Icons["addcmd"].GetBitmap(bmpsize)
+        trgif = icons["addCmd"].GetBitmap(bmpsize)
         self.cmd_icon = il.Add(trgif)
         
         self.AssignImageList(il)
@@ -729,7 +730,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             grouptext = _('Layer group:') + str(self.groupnode)
             self.groupnode += 1
         else:
-            btnbmp = Icons["layeropts"].GetBitmap((16,16))
+            btnbmp = icons["layeropts"].GetBitmap((16,16))
             ctrl = buttons.GenBitmapButton(self, id = wx.ID_ANY, bitmap = btnbmp, size = (24,24))
             ctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
@@ -1283,7 +1284,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         text    = self.GetItemText(dragItem)
         if self.GetPyData(dragItem)[0]['ctrl']:
             # recreate data layer
-            btnbmp = Icons["layeropts"].GetBitmap((16,16))
+            btnbmp = icons["layeropts"].GetBitmap((16,16))
             newctrl = buttons.GenBitmapButton(self, id = wx.ID_ANY, bitmap = btnbmp, size = (24, 24))
             newctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
