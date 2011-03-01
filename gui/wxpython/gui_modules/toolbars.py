@@ -176,7 +176,7 @@ class AbstractToolbar(wx.ToolBar):
         """
         if key:
             return (key, name, icon.GetBitmap(),
-                    wx.ITEM_NORMAL, icon.GetLabel(), icon.GetDesc(),
+                    item, icon.GetLabel(), icon.GetDesc(),
                     handler)
         return ("", "", "", "", "", "", "") # separator
     
