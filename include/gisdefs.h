@@ -577,7 +577,7 @@ int G_snprintf(char *, size_t, const char *, ...)
 int G_strcasecmp(const char *, const char *);
 char *G_store(const char *);
 char *G_strchg(char *, char, char);
-char *G_str_replace(char *, const char *, const char *);
+char *G_str_replace(const char *, const char *, const char *);
 void G_strip(char *);
 char *G_chop(char *);
 void G_str_to_upper(char *);

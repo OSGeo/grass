@@ -127,15 +127,14 @@ char *G_strchg(char *bug, char character, char new)
  * G_free (name);
  * \endcode
  *
- * \param[in,out] buffer main string
- * \param[in] old_str string to replace
- * \param[in] new_str new string
+ * \param buffer input string buffer
+ * \param old_str string to be replaced
+ * \param new_str new string
  *
  * \return the newly allocated string, input buffer is unchanged 
  */
-char *G_str_replace(char *buffer, const char *old_str, const char *new_str)
+char *G_str_replace(const char *buffer, const char *old_str, const char *new_str)
 {
-
     char *B, *R;
     const char *N;
     char *replace;
