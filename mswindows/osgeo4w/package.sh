@@ -124,7 +124,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 fi
 
 log make 
-#make -k || ( cat error.log >&3 && false ) 
+make -k || ( cat error.log >&3 && false ) 
 
 log make install
 make install
