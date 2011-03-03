@@ -7,7 +7,7 @@
 *  	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
 * PURPOSE: 	Output GRASS version number, date and copyright message.
 *             
-* COPYRIGHT:  	(C) 2000-2009, 2011 by the GRASS Development Team
+* COPYRIGHT:  	(C) 2000-2011 by the GRASS Development Team
 *
 *   	    	This program is free software under the GPL (>=v2)
 *   	    	Read the file COPYING that comes with GRASS for details.
@@ -91,11 +91,11 @@ int main(int argc, char *argv[])
 	char **rev_ver = G_tokenize(GIS_H_VERSION, "$");
 	char **rev_time = G_tokenize(GIS_H_DATE, "$");
 	if (shell->answer) {
-	    fprintf(stdout, "gis_revision=%s\n", rev_ver[1]);
-	    fprintf(stdout, "gis_date=%s\n", rev_time[1]);
+	    fprintf(stdout, "libgis_revision=%s\n", strstr(rev_ver[1], " ") + 1);
+	    fprintf(stdout, "libgis_date=\"%s\"\n", strstr(rev_time[1], " ") + 1);
 	}
 	else {
-	    fprintf(stdout, "%s\n%s\n", rev_ver[1], rev_time[1]);
+	    fprintf(stdout, "libgis %s\nlibgis %s\n", rev_ver[1], rev_time[1]);
 	}
 	G_free_tokens(rev_ver);
 	G_free_tokens(rev_time);

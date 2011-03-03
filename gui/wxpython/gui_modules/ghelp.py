@@ -527,8 +527,8 @@ class AboutWindow(wx.Frame):
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = svn_gis_h_rev.split(' ')[1] + ' (' +
-                                               svn_gis_h_date.split(' ')[1] + ')'),
+                                               label = svn_gis_h_rev.split(' ')[2] + ' (' +
+                                               svn_gis_h_date.split(' ')[2] + ')'),
                           pos = (2, 1),
                           flag = wx.ALIGN_LEFT)
 

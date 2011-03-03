@@ -1074,8 +1074,8 @@ def version():
     @code
     version()
 
-    {'date': '2011', 'gis_revision': 'Revision: 45093 ', 'version': '7.0.svn',
-     'gis_date': 'Date: 2011-01-20 13:10:50 +0100 (Thu, 20 Jan 2011) ', 'revision': '45136M'}
+    {'date': '2011', 'libgis_revision': '45093 ', 'version': '7.0.svn',
+     'libgis_date': '2011-01-20 13:10:50 +0100 (Thu, 20 Jan 2011) ', 'revision': '45136M'}
     @endcode
     """
     return parse_command('g.version',
