@@ -325,9 +325,11 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 first_dir = dir_node
             
             self.seltree.SetItemTextColour(dir_node, wx.Colour(50, 50, 200))
+            if not filesdict.has_key(dir):
+                continue
             try:
                 elem_list = filesdict[dir]
-                elem_list.sort(key=str.lower)
+                elem_list.sort(key = unicode.lower)
                 for elem in elem_list:
                     if elem != '':
                         fullqElem = elem + '@' + dir
@@ -341,9 +343,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                                 self.AddItem(elem, parent=dir_node)
                         else:
                             self.AddItem(elem, parent=dir_node)
-            except:
+            except StandardError, e:
+                sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
-
+            
             if self.seltree.ItemHasChildren(dir_node):
                 sel = UserSettings.Get(group='general', key='elementListExpand',
                                        subkey='selection')

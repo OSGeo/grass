@@ -30,6 +30,7 @@ import re
 import atexit
 import subprocess
 import shutil
+import locale
 
 # i18N
 import gettext
@@ -74,6 +75,13 @@ def call(*args, **kwargs):
 _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
 	       "preexec_fn", "close_fds", "cwd", "env",
 	       "universal_newlines", "startupinfo", "creationflags"]
+
+def _decode(string):
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        return string.decode(enc)
+    
+    return string
 
 def _make_val(val):
     if isinstance(val, types.StringType) or \
@@ -222,7 +230,7 @@ def read_command(*args, **kwargs):
     @return stdout
     """
     ps = pipe_command(*args, **kwargs)
-    return ps.communicate()[0]
+    return _decode(ps.communicate()[0])
 
 def parse_command(*args, **kwargs):
     """!Passes all arguments to read_command, then parses the output by

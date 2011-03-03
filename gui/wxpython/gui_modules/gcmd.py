@@ -600,8 +600,8 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         ps.stdin.close()
         ps.stdin = None
     
-    stdout, stderr = ps.communicate()
-    
+    stdout, stderr = map(lambda x: utils.DecodeString(x) if x and not 'None' else x, ps.communicate())
+        
     ret = ps.returncode
         
     if ret != 0 and parent: 

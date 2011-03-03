@@ -619,16 +619,16 @@ def GetListOfMapsets(dbase, location, selectable = False):
         
         if not ret:
             return listOfMapsets
-            
+        
         for line in ret.rstrip().splitlines():
             listOfMapsets += line.split(' ')
     else:
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
             if os.path.isdir(mapset) and \
                     os.path.isfile(os.path.join(dbase, location, mapset, "WIND")):
-                listOfMapsets.append(EncodeString(os.path.basename(mapset)))
+                listOfMapsets.append(os.path.basename(mapset))
     
-    ListSortLower(listOfMapsets)    
+    ListSortLower(listOfMapsets)
     return listOfMapsets
 
 def GetColorTables():
@@ -641,11 +641,24 @@ def GetColorTables():
     
     return ret.splitlines()
 
+def DecodeString(string):
+    """!Return decoded string using system locales
+    
+    @param string string to be decoded
+    
+    @return decoded string
+    """
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        return string.decode(enc)
+    
+    return string
+
 def EncodeString(string):
-    """!Return encoded string
-
+    """!Return encoded string using system locales
+    
     @param string string to be encoded
-
+    
     @return encoded string
     """
     enc = locale.getdefaultlocale()[1]
