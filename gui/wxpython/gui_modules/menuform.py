@@ -136,10 +136,7 @@ for (s,r) in str2rgb.items():
     rgb2str[ r ] = s
 
 """!Hide some options in the GUI"""
-_blackList = {
-    'd.legend' : { 'flags' : ['m'],
-                   'params' : [] }
-}
+_blackList = { }
 _ignoreBlackList = True
 
 def color_resolve(color):
