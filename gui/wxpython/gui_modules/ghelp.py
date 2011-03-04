@@ -665,7 +665,7 @@ class AboutWindow(wx.Frame):
         contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
             contribFile = open(contribfile, 'r')
-            contribs = list()
+            contribs = dict()
             errLines = list()
             for line in contribFile.readlines():
                 line = line.rstrip('\n')
@@ -674,8 +674,7 @@ class AboutWindow(wx.Frame):
                 except ValueError:
                     errLines.append(line)
                     continue
-                contribs.append((name, email, country, osgeo_id))
-            contribs[0] = (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID'))
+                contribs[osgeo_id] = [name, email, country]
             contribFile.close()
             
             if errLines:
@@ -698,8 +697,11 @@ class AboutWindow(wx.Frame):
                                  flag = wx.EXPAND | wx.ALL, border = 3)
         else:
             contribBox = wx.FlexGridSizer(cols = 4, vgap = 5, hgap = 5)
-            for developer in contribs:
-                for item in developer:
+            for item in (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID')):
+                contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
+                                                    label = item))
+            for osgeo_id in sorted(contribs.keys()):
+                for item in contribs[osgeo_id] + [osgeo_id]:
                     contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
                                                         label = item))
             contribwin.sizer.Add(item = contribBox, proportion = 1,
