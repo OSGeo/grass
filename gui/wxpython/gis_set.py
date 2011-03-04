@@ -620,7 +620,6 @@ class GRASSStartup(wx.Frame):
         disabled = []
         idx = 0
         for mapset in self.listOfMapsets:
-            mapset = utils.UnicodeString(mapset)
             if mapset not in self.listOfMapsetsSelectable or \
                     os.path.isfile(os.path.join(self.gisdbase,
                                                 locationName,

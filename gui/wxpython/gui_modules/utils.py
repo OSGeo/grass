@@ -642,15 +642,21 @@ def GetColorTables():
     return ret.splitlines()
 
 def DecodeString(string):
-    """!Return decoded string using system locales
+    """!Return decoded string
     
+    String is decoded as unicode, on failure
+    are used system locales.
+
     @param string string to be decoded
     
     @return decoded string
     """
-    enc = locale.getdefaultlocale()[1]
-    if enc:
-        return string.decode(enc)
+    try:
+        return string.decode('utf-8')
+    except LookupError:
+        enc = locale.getdefaultlocale()[1]
+        if enc:
+            return string.decode(enc)
     
     return string
 
