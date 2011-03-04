@@ -21,7 +21,7 @@ You need to have Python 2.4, wxPython 2.8 and python-xml.
 The XML stream is read from executing the command given in the
 command line, thus you may call it for instance this way:
 
-python menuform.py r.basins.fill
+python <this file.py> r.basins.fill
 
 Or you set an alias or wrap the call up in a nice shell script, GUI
 environment ... please contribute your idea.
@@ -134,6 +134,13 @@ str2rgb = {'aqua': (100, 128, 255),
 rgb2str = {}
 for (s,r) in str2rgb.items():
     rgb2str[ r ] = s
+
+"""!Hide some options in the GUI"""
+_blackList = {
+    'd.legend' : { 'flags' : ['m'],
+                   'params' : [] }
+}
+_ignoreBlackList = True
 
 def color_resolve(color):
     if len(color) > 0 and color[0] in "0123456789":
@@ -637,8 +644,15 @@ class processTask:
                 required = True
             else:
                 required = False
+
+            if not _ignoreBlackList and \
+                    _blackList.has_key(self.task.name) and \
+                    p.get('name') in _blackList[self.task.name]['params']:
+                hidden = True
+            else:
+                hidden = False
             
-            self.task.params.append({
+            self.task.params.append( {
                 "name"           : p.get('name'),
                 "type"           : p.get('type'),
                 "required"       : required,
@@ -655,24 +669,36 @@ class processTask:
                 "values"         : values,
                 "values_desc"    : values_desc,
                 "value"          : '',
-                "key_desc"       : key_desc })
+                "key_desc"       : key_desc,
+                "hidden"         : hidden
+                })
             
     def __processFlags(self):
         """!Process flags"""
+        global _ignoreBlackList
         for p in self.root.findall('flag'):
+            if not _ignoreBlackList and \
+                    _blackList.has_key(self.task.name) and \
+                    p.get('name') in _blackList[self.task.name]['flags']:
+                hidden = True
+            else:
+                hidden = False
+            
             if p.find('suppress_required') is not None:
                 suppress_required = True
             else:
                 suppress_required = False
             
-            self.task.flags.append({
+            self.task.flags.append( {
                     "name"              : p.get('name'),
                     "label"             : self._getNodeText(p, 'label'),
                     "description"       : self._getNodeText(p, 'description'),
                     "guisection"        : self._getNodeText(p, 'guisection'),
                     "suppress_required" : suppress_required,
-                    "value"             : False })
-            
+                    "value"             : False,
+                    "hidden"            : hidden
+                    } )
+        
     def _getNodeText(self, node, tag, default = ''):
         """!Get node text"""
         p = node.find(tag)
@@ -960,7 +986,7 @@ class mainFrame(wx.Frame):
                         display.GetRender().GetListOfLayers(l_type = 'raster') +
                         display.GetRender().GetListOfLayers(l_type = 'vector'))
         
-        task = GUI().ParseCommand(cmd, show = None)
+        task = GUI(show = None).ParseCommand(cmd)
         for p in task.get_options()['params']:
             if p.get('prompt', '') not in ('raster', 'vector'):
                 continue
@@ -1093,7 +1119,7 @@ class cmdPanel(wx.Panel):
         # Determine tab layout
         sections = []
         is_section = {}
-        not_hidden = [ p for p in self.task.params + self.task.flags if not p.get('hidden','no') ==  'yes' ]
+        not_hidden = [ p for p in self.task.params + self.task.flags if not p.get('hidden', False) ==  True ]
 
         self.label_id = [] # wrap titles on resize
 
@@ -1166,7 +1192,7 @@ class cmdPanel(wx.Panel):
         # flags
         #
         text_style = wx.FONTWEIGHT_NORMAL
-        visible_flags = [ f for f in self.task.flags if not f.get('hidden', 'no') ==  'yes' ]
+        visible_flags = [ f for f in self.task.flags if not f.get('hidden', False) ==  True ]
         for f in visible_flags:
             which_sizer = tabsizer[ f['guisection'] ]
             which_panel = tab[ f['guisection'] ]
@@ -1220,7 +1246,7 @@ class cmdPanel(wx.Panel):
         #
         # parameters
         #
-        visible_params = [ p for p in self.task.params if not p.get('hidden', 'no') ==  'yes' ]
+        visible_params = [ p for p in self.task.params if not p.get('hidden', False) ==  True ]
         
         try:
             first_param = visible_params[0]
@@ -2176,17 +2202,25 @@ class GrassGUIApp(wx.App):
         return True
 
 class GUI:
-    """
-    Parses GRASS commands when module is imported and used
-    from Layer Manager.
-    """
-    def __init__(self, parent = -1):
+    def __init__(self, parent = None, show = True, modal = False,
+                 centreOnParent = False, checkError = False):
+        """!Parses GRASS commands when module is imported and used from
+        Layer Manager.
+        """
         self.parent = parent
+        self.show   = show
+        self.modal  = modal
+        self.centreOnParent = centreOnParent
+        self.checkError     = checkError
+        
         self.grass_task = None
         self.cmd = list()
-
+        
+        global _ignoreBlackList
+        _ignoreBlackList = False if self.parent else True
+        
     def GetCmd(self):
-        """Get validated command"""
+        """!Get validated command"""
         return self.cmd
     
     def ParseInterface(self, cmd, parser = processTask):
@@ -2202,8 +2236,7 @@ class GUI:
         
         return processTask(tree).GetTask()
     
-    def ParseCommand(self, cmd, gmpath = None, completed = None, parentframe = None,
-                     show = True, modal = False, centreOnParent = False, checkError = False):
+    def ParseCommand(self, cmd, gmpath = None, completed = None):
         """!Parse command
         
         Note: cmd is given as list
@@ -2223,8 +2256,6 @@ class GUI:
             layer = completed[1]
             if completed[2]:
                 dcmd_params.update(completed[2])
-        
-        self.parent = parentframe
         
         # parse the interface decription
         self.grass_task = self.ParseInterface(cmd)
@@ -2283,7 +2314,7 @@ class GUI:
             # update original command list
             cmd = cmd_validated
         
-        if show is not None:
+        if self.show is not None:
             self.mf = mainFrame(parent = self.parent, ID = wx.ID_ANY,
                                 task_description = self.grass_task,
                                 get_dcmd = get_dcmd, layer = layer)
@@ -2295,21 +2326,21 @@ class GUI:
             get_dcmd(dcmd = None, layer = layer, params = None,
                      propwin = self.mf)
         
-        if show is not None:
+        if self.show is not None:
             self.mf.notebookpanel.OnUpdateSelection(None)
-            if show is True:
-                if self.parent and centreOnParent:
+            if self.show is True:
+                if self.parent and self.centreOnParent:
                     self.mf.CentreOnParent()
                 else:
                     self.mf.CenterOnScreen()
-                self.mf.Show(show)
-                self.mf.MakeModal(modal)
+                self.mf.Show(self.show)
+                self.mf.MakeModal(self.modal)
             else:
                 self.mf.OnApply(None)
         
         self.cmd = cmd
         
-        if checkError:
+        if self.checkError:
             return self.grass_task, err
         else:
             return self.grass_task
@@ -2416,7 +2447,7 @@ if __name__ ==  "__main__":
             },{
             "name" : "hidden_text",
             "description" : "This text should not appear in the form",
-            "hidden" : "yes"
+            "hidden" : True
             },{
             "name" : "text_default",
             "description" : "Enter text to override the default",

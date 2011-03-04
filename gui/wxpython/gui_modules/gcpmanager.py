@@ -502,10 +502,9 @@ class GroupPage(TitledPage):
         
     def OnMkGroup(self, event):
         """!Create new group in source location/mapset"""
-        menuform.GUI().ParseCommand(['i.group'],
-                                    completed=(self.GetOptData, None, ''),
-                                    parentframe=self.parent.parent, modal=True)
-
+        menuform.GUI(parent = self.parent.parent, modal = True).ParseCommand(['i.group'],
+                                                                             completed = (self.GetOptData, None, ''))
+        
     def OnVGroup(self, event):
         """!Add vector maps to group"""
         dlg = VectGroup(parent = self,
