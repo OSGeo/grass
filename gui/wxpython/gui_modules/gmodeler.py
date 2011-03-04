@@ -379,10 +379,9 @@ class Model(object):
         error string"""
         errList = list()
         for action in self.GetItems(objType = ModelAction):
-            task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
-                                               show = None)
+            task = menuform.GUI(show = None).ParseCommand(cmd = action.GetLog(string = False))
             errList += task.getCmdError()
-
+        
         return errList
 
     def Run(self, log, onDone):
@@ -1200,9 +1199,8 @@ class ModelFrame(wx.Frame):
         # show properties dialog
         win = action.GetPropDialog()
         if not win and action.GetLog(string = False):
-            module = menuform.GUI().ParseCommand(action.GetLog(string = False),
-                                                 completed = (self.GetOptData, action, action.GetParams()),
-                                                 parentframe = self, show = True)
+            module = menuform.GUI(parent = self, show = True).ParseCommand(action.GetLog(string = False),
+                                                                           completed = (self.GetOptData, action, action.GetParams()))
         elif win and not win.IsShown():
             win.Show()
         
@@ -1667,8 +1665,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             height = UserSettings.Get(group='modeler', key='action', subkey=('size', 'height'))
         
         if cmd:
-            self.task = menuform.GUI().ParseCommand(cmd = cmd,
-                                                    show = None)
+            self.task = menuform.GUI(show = None).ParseCommand(cmd = cmd)
         else:
             if task:
                 self.task = task
@@ -1944,8 +1941,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 else:
                     action = rel.GetFrom()
                 
-                task = menuform.GUI().ParseCommand(cmd = action.GetLog(string = False),
-                                                   show = None)
+                task = menuform.GUI(show = None).ParseCommand(cmd = action.GetLog(string = False))
                 task.set_param(rel.GetName(), self.value)
                 action.SetParams(params = task.get_options())
         
@@ -2133,9 +2129,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.ModelChanged()
         shape = self.GetShape()
         if isinstance(shape, ModelAction):
-            module = menuform.GUI().ParseCommand(shape.GetLog(string = False),
-                                                 completed = (self.frame.GetOptData, shape, shape.GetParams()),
-                                                 parentframe = self.frame, show = True)
+            module = menuform.GUI(parent = self.frame, show = True).ParseCommand(shape.GetLog(string = False),
+                                                                                 completed = (self.frame.GetOptData, shape, shape.GetParams()))
         
         elif isinstance(shape, ModelData):
             dlg = ModelDataDialog(parent = self.frame, shape = shape)
@@ -2720,8 +2715,7 @@ class ProcessModelFile:
             cmd.append('%s=%s' % (name,
                                   self._filterValue(self._getNodeText(p, 'value'))))
         
-        task, err = menuform.GUI().ParseCommand(cmd = cmd,
-                                                show = None, checkError = True)
+        task, err = menuform.GUI(show = None, checkError = True).ParseCommand(cmd = cmd)
         if err:
             GWarning(os.linesep.join(err))
         
@@ -4476,8 +4470,7 @@ if __name__ == "__main__":
         
     def _writePythonAction(self, item):
         """!Write model action to Python file"""
-        task = menuform.GUI().ParseCommand(cmd = item.GetLog(string = False),
-                                           show = None)
+        task = menuform.GUI(show = None).ParseCommand(cmd = item.GetLog(string = False))
         opts = task.get_options()
         flags = ''
         params = list()

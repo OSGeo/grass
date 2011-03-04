@@ -467,9 +467,9 @@ class DecorationDialog(wx.Dialog):
             mapName, found = utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd'])
             if self.parent.MapWindow.overlays[self.ovlId]['propwin'] is None and mapName:
                 # build properties dialog
-                menuform.GUI().ParseCommand(cmd=self.cmd,
-                                            completed=(self.GetOptData, self.name, ''),
-                                            parentframe=self.parent, show=False)
+                menuform.GUI(parent = self.parent, show = False).ParseCommand(cmd=self.cmd,
+                                                                              completed=(self.GetOptData, self.name, ''))
+                
             if found:
                 # enable 'OK' button
                 self.btnOK.Enable()
@@ -506,9 +506,9 @@ class DecorationDialog(wx.Dialog):
         """
         if self.parent.MapWindow.overlays[self.ovlId]['propwin'] is None:
             # build properties dialog
-            menuform.GUI().ParseCommand(cmd=self.cmd,
-                                        completed=(self.GetOptData, self.name, ''),
-                                        parentframe=self.parent)
+            menuform.GUI(parent = self.parent).ParseCommand(cmd=self.cmd,
+                                                            completed=(self.GetOptData, self.name, ''))
+            
         else:
             if self.parent.MapWindow.overlays[self.ovlId]['propwin'].IsShown():
                 self.parent.MapWindow.overlays[self.ovlId]['propwin'].SetFocus()
@@ -1244,9 +1244,8 @@ class GdalImportDialog(ImportDialog):
     def OnCmdDialog(self, event):
         """!Show command dialog"""
         name = self._getCommand()
-        menuform.GUI().ParseCommand(cmd = [name],
-                                    parentframe = self, modal = True)
-        
+        menuform.GUI(parentframe = self, modal = True).ParseCommand(cmd = [name])
+                
 class DxfImportDialog(ImportDialog):
     """!Dialog for bulk import of DXF layers""" 
     def __init__(self, parent):
@@ -1332,9 +1331,8 @@ class DxfImportDialog(ImportDialog):
 
     def OnCmdDialog(self, event):
         """!Show command dialog"""
-        menuform.GUI().ParseCommand(cmd = ['v.in.dxf'],
-                                    parentframe = self, modal = True)
-        
+        menuform.GUI(parent = self, modal = True).ParseCommand(cmd = ['v.in.dxf'])
+                
 class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
                  listmix.CheckListCtrlMixin, listmix.TextEditMixin):
     """!List of layers to be imported (dxf, shp...)"""

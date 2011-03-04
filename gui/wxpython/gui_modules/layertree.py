@@ -517,10 +517,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnColorTable(self, event):
         """!Set color table for raster map"""
         name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
-        menuform.GUI().ParseCommand(['r.colors',
-                                     'map=%s' % name],
-                                    parentframe = self,
-                                    centreOnParent = False)
+        menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['r.colors',
+                                                                          'map=%s' % name])
         
     def OnHistogram(self, event):
         """
@@ -929,10 +927,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                    ltype)
         
         if self.GetPyData(layer)[0]['cmd']:
-            module = menuform.GUI()
+            module = menuform.GUI(parent = self, show = show, centreOnParent = False)
             module.ParseCommand(self.GetPyData(layer)[0]['cmd'],
-                                completed = (self.GetOptData,layer,params),
-                                parentframe = self, show = show, centreOnParent = False)
+                                completed = (self.GetOptData,layer,params))
             
             self.GetPyData(layer)[0]['cmd'] = module.GetCmd()
         elif ltype == 'raster':
@@ -940,58 +937,69 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             if UserSettings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'):
                 cmd.append('-n')
-            menuform.GUI().ParseCommand(cmd, completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
+                                                                             completed = (self.GetOptData,layer,params))
+                         
         elif ltype == '3d-raster':
             cmd = ['d.rast3d']
-            menuform.GUI().ParseCommand(cmd, completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
+                                                                             completed = (self.GetOptData,layer,params))
+                                        
         elif ltype == 'rgb':
-            menuform.GUI().ParseCommand(['d.rgb'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.rgb'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'his':
-            menuform.GUI().ParseCommand(['d.his'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.his'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'shaded':
-            menuform.GUI().ParseCommand(['d.shadedmap'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.shadedmap'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'rastarrow':
-            menuform.GUI().ParseCommand(['d.rast.arrow'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.rast.arrow'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'rastnum':
-            menuform.GUI().ParseCommand(['d.rast.num'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.rast.num'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'vector':
             types = list()
             for ftype in ['point', 'line', 'boundary', 'centroid', 'area', 'face']:
                 if UserSettings.Get(group = 'cmd', key = 'showType', subkey = [ftype, 'enabled']):
                     types.append(ftype)
             
-            menuform.GUI().ParseCommand(['d.vect', 'type=%s' % ','.join(types)],
-                                         completed = (self.GetOptData,layer,params),
-                                         parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.vect', 'type=%s' % ','.join(types)],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed
             # should be fixed by C-based d.thematic.* modules
-            menuform.GUI().ParseCommand(['d.thematic.area'], 
-                                        completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.thematic.area'], 
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'themechart':
-            menuform.GUI().ParseCommand(['d.vect.chart'],
-                                        completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.vect.chart'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'grid':
-            menuform.GUI().ParseCommand(['d.grid'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.grid'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'geodesic':
-            menuform.GUI().ParseCommand(['d.geodesic'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.geodesic'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'rhumb':
-            menuform.GUI().ParseCommand(['d.rhumbline'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.rhumbline'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'labels':
-            menuform.GUI().ParseCommand(['d.labels'], completed = (self.GetOptData,layer,params),
-                                        parentframe = self, centreOnParent = False)
+            menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['d.labels'],
+                                                                             completed = (self.GetOptData,layer,params))
+            
         elif ltype == 'cmdlayer':
             pass
         elif ltype == 'group':
