@@ -31,6 +31,7 @@ import atexit
 import subprocess
 import shutil
 import locale
+import codecs
 
 # i18N
 import gettext
@@ -1017,8 +1018,9 @@ def create_location(dbase, location,
             raise ScriptException(repr(error))
 
     try:
-        fd = open(os.path.join(dbase, location,
-                               'PERMANENT', 'MYNAME'), 'w')
+        fd = codecs.open(os.path.join(dbase, location,
+                                      'PERMANENT', 'MYNAME'),
+                         encoding = 'utf-8', mode = 'w')
         if desc:
             fd.write(desc + os.linesep)
         else:
