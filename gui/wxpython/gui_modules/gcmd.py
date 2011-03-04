@@ -31,6 +31,7 @@ import errno
 import signal
 import locale
 import traceback
+import types
 
 import wx
 
@@ -600,8 +601,8 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         ps.stdin.close()
         ps.stdin = None
     
-    stdout, stderr = map(lambda x: utils.DecodeString(x) if x and not 'None' else x, ps.communicate())
-        
+    stdout, stderr = map(lambda x: utils.DecodeString(x) if type(x) is types.StringType else x, ps.communicate())
+    
     ret = ps.returncode
         
     if ret != 0 and parent: 
