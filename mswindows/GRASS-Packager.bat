@@ -17,7 +17,7 @@ set PACKAGE_DIR=.\GRASS-70-Devel-Package
 set OSGEO4W_DIR=c:\osgeo4w
 
 set GRASS_PREFIX=%OSGEO4W_DIR%\apps\grass\grass-7.0.svn
-set GRASS_BIN_PREFIX=%OSGEO4W_DIR%\apps\grass\bin
+set GRASS_BIN_PREFIX=%OSGEO4W_DIR%\bin
 
 set SVN_PATH=c:\Subversion
 
