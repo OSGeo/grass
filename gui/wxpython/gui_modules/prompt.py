@@ -24,6 +24,7 @@ import sys
 import shlex
 import copy
 import difflib
+import codecs
 
 import wx
 import wx.stc
@@ -505,10 +506,11 @@ class GPrompt(object):
         hist = list()
         env = grass.gisenv()
         try:
-            fileHistory = open(os.path.join(env['GISDBASE'],
-                                            env['LOCATION_NAME'],
-                                            env['MAPSET'],
-                                            '.bash_history'), 'r')
+            fileHistory = codecs.open(os.path.join(env['GISDBASE'],
+                                                   env['LOCATION_NAME'],
+                                                   env['MAPSET'],
+                                                   '.bash_history'),
+                                      encoding = 'utf-8', mode = 'r')
         except IOError:
             return hist
         
@@ -1059,6 +1061,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 cmd = utils.split(str(line))
             except UnicodeError:
                 cmd = utils.split(utils.EncodeString((line)))
+            cmd = map(utils.DecodeString, cmd)
             
             #  send the command list to the processor 
             if cmd[0] in ('r.mapcalc', 'r3.mapcalc') and len(cmd) == 1:

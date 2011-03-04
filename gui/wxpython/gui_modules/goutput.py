@@ -24,6 +24,7 @@ import textwrap
 import time
 import threading
 import Queue
+import codecs
 
 import wx
 import wx.stc
@@ -412,7 +413,7 @@ class GMConsole(wx.SplitterWindow):
 
     def WriteError(self, line):
         """!Write message in error style"""
-        self.WriteLog(line, style=self.cmd_output.StyleError, switchPage = True)
+        self.WriteLog(line, style = self.cmd_output.StyleError, switchPage = True)
 
     def RunCmd(self, command, compReg = True, switchPage = False,
                onDone = None):
@@ -435,10 +436,13 @@ class GMConsole(wx.SplitterWindow):
         # update history file
         env = grass.gisenv()
         try:
-            fileHistory = open(os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'],
-                                            '.bash_history'), 'a')
+            fileHistory = codecs.open(os.path.join(env['GISDBASE'],
+                                                   env['LOCATION_NAME'],
+                                                   env['MAPSET'],
+                                                   '.bash_history'),
+                                      encoding = 'utf-8', mode = 'a')
         except IOError, e:
-            self.WriteError(str(e))
+            self.WriteError(e)
             fileHistory = None
         
         if fileHistory:
@@ -1068,8 +1072,8 @@ class GMStc(wx.stc.StyledTextCtrl):
                 elif os.environ.has_key('GRASS_DB_ENCODING'):
                     txt = unicode(txt, os.environ['GRASS_DB_ENCODING'])
                 else:
-                    txt = _('Unable to encode text. Please set encoding in GUI preferences.') + '\n'
-                    
+                    txt = utils.EncodeString(txt)
+                
                 self.AddText(txt)
         
         # reset output window to read only
