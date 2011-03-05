@@ -133,6 +133,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
     
+    G_zero(&PS, sizeof(struct PS_data));
+    
     /* Print papers */
     if (pflag->answer) {
 	print_papers();
@@ -175,7 +177,7 @@ int main(int argc, char *argv[])
     ct.fontsize = 10;
     ct.cols = 1;
     tracefd = NULL;
-    inputfd = stdin;
+    inputfd = NULL;
     labels.count = 0;
     labels.other = NULL;
     can_reset_scale = 1;
@@ -183,8 +185,7 @@ int main(int argc, char *argv[])
     grp.do_group = 0;
     brd.R = brd.G = brd.B = 0.;
     brd.width = 1.;
-
-    G_zero(&PS, sizeof(struct PS_data));
+    
     PS.grid_color = BLACK;
     PS.min_y = 72.0 * (PS.page_height - PS.top_marg);
     PS.set_y = 100.0 * PS.min_y;
@@ -196,12 +197,22 @@ int main(int argc, char *argv[])
      * reset_map_location() to reset map size to fit to paper */
     
     /* arguments */
-    if (input_file->answer && strcmp(input_file->answer, "-")) {
-	if (NULL == freopen(input_file->answer, "r", stdin))
-	    G_fatal_error(_("Unable to open file '%s': %s"), 
-			  input_file->answer, strerror(errno));
+    if (input_file->answer) {
+	if (strcmp(input_file->answer, "-")) {
+	    inputfd = fopen(input_file->answer, "r");
+	    if (!inputfd)
+		G_fatal_error(_("Unable to open file '%s': %s"), 
+			      input_file->answer, strerror(errno));
+	}
+	else {
+	    inputfd = stdin;
+	}
     }
-
+    else {
+	G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
+		      input_file->key, input_file->label);
+    }
+    
     if (copies->answer) {
 	if (sscanf(copies->answer, "%d", &ps_copies) != 1) {
 	    ps_copies = 1;
