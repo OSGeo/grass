@@ -12,7 +12,6 @@
 #include <grass/dbmi.h>
 
 #include "vector.h"
-#include "ps_info.h"
 #include "clr.h"
 #include "local_proto.h"
 

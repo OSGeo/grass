@@ -5,8 +5,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "decorate.h"
-#include "ps_info.h"
 #include "local_proto.h"
 
 #define KEY(x) (strcmp(key,x)==0)

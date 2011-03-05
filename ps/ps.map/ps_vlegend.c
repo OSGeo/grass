@@ -6,7 +6,6 @@
  */
 
 #include "vector.h"
-#include "ps_info.h"
 #include "local_proto.h"
 
 int PS_vlegend(void)

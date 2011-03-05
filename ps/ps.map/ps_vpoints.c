@@ -12,7 +12,6 @@
 #include <grass/symbol.h>
 #include <grass/glocale.h>
 
-#include "ps_info.h"
 #include "clr.h"
 #include "local_proto.h"
 #include "vector.h"

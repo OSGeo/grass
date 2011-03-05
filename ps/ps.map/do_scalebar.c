@@ -4,8 +4,6 @@
 
 #include <string.h>
 #include <math.h>
-#include "ps_info.h"
-#include "decorate.h"
 #include "local_proto.h"
 #include "distance.h"
 

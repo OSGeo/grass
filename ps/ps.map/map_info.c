@@ -3,7 +3,6 @@
  ** Author: Paul W. Carlson     April 1992
  */
 
-#include "ps_info.h"
 #include "map_info.h"
 #include "local_proto.h"
 

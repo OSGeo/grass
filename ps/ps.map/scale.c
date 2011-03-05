@@ -10,7 +10,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
-#include "ps_info.h"
 #include "distance.h"
 
 #define PWIDTH	(PS.page_width-PS.left_marg-PS.right_marg)
