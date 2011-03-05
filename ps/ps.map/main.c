@@ -93,28 +93,32 @@ int main(int argc, char *argv[])
     G_add_keyword(_("postscript"));
     G_add_keyword(_("map"));
     G_add_keyword(_("printing"));
-    module->description = _("Hardcopy PostScript map output utility.");
+    module->description = _("Produces hardcopy PostScript map output.");
 
     rflag = G_define_flag();
     rflag->key = 'r';
     rflag->description = _("Rotate plot 90 degrees");
+    rflag->guisection = _("Output settings");
 
     pflag = G_define_flag();
     pflag->key = 'p';
     pflag->description =
 	_("List paper formats (name width height left right top bottom(margin))");
     pflag->suppress_required = YES;
-    
+    pflag->guisection = _("Print");
+
     eflag = G_define_flag();
     eflag->key = 'e';
     eflag->description =
 	_("Create EPS (Encapsulated PostScript) instead of PostScript file");
+    eflag->guisection = _("Output settings");
 
     bflag = G_define_flag();
     bflag->key = 'b';
     bflag->description =
 	_("Print map-box's position on the page and exit (inches from top-left of paper)");
     bflag->suppress_required = YES;
+    bflag->guisection = _("Print");
     
     input_file = G_define_standard_option(G_OPT_F_INPUT);
     input_file->label = _("File containing mapping instructions");
@@ -129,6 +133,7 @@ int main(int argc, char *argv[])
     copies->options = "1-20";
     copies->description = _("Number of copies to print");
     copies->required = NO;
+    copies->guisection = _("Output settings");
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
