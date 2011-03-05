@@ -3,12 +3,12 @@
  ** Author: Paul W. Carlson     March 1992
  */
 
-#include "ps_info.h"
 #include "local_proto.h"
 
 int box_path(double t, double b, double l, double r)
 {
-    fprintf(PS.fp, "%.1f %.1f %.1f %.1f B ", l, b, r, t);
+    if (PS.fp)
+	fprintf(PS.fp, "%.1f %.1f %.1f %.1f B ", l, b, r, t);
 
     return 0;
 }
@@ -16,8 +16,9 @@ int box_path(double t, double b, double l, double r)
 int box_clip(double t, double b, double l, double r)
 {
     box_path(t, b, l, r);
-    fprintf(PS.fp, "clip newpath\n");
-
+    if (PS.fp)
+	fprintf(PS.fp, "clip newpath\n");
+    
     return 0;
 }
 

@@ -8,7 +8,6 @@
 #include <grass/glocale.h>
 #include <grass/symbol.h>
 #include "clr.h"
-#include "ps_info.h"
 #include "local_proto.h"
 
 int do_plt(int after_masking)

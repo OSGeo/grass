@@ -12,7 +12,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "clr.h"
-#include "ps_info.h"
 #include "labels.h"
 #include "local_proto.h"
 

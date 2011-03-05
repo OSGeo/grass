@@ -7,9 +7,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include "ps_info.h"
 #include "vector.h"
-#include "group.h"
 #include "border.h"
 #include "colortable.h"
 #include "local_proto.h"
