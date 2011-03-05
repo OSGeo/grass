@@ -67,7 +67,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                  id = wx.ID_ANY, style = wx.SUNKEN_BORDER,
                  ctstyle = CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
-                 CT.TR_MULTIPLE, **kwargs):
+                 CT.TR_MULTIPLE | CT.TR_ALIGN_WINDOWS, **kwargs):
         
         if 'style' in kwargs:
             ctstyle |= kwargs['style']
@@ -775,48 +775,49 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.layer_selected = layer
         
         # add text and icons for each layer ltype
+        label =  _('(double click to set properties)') + ' ' * 35
         if ltype == 'raster':
             self.SetItemImage(layer, self.rast_icon)
-            self.SetItemText(layer, '%s %s' % (_('raster'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('raster'), label))
         elif ltype == '3d-raster':
             self.SetItemImage(layer, self.rast3d_icon)
-            self.SetItemText(layer, '%s %s' % (_('3d raster'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('3d raster'), label))
         elif ltype == 'rgb':
             self.SetItemImage(layer, self.rgb_icon)
-            self.SetItemText(layer, '%s %s' % (_('RGB'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('RGB'), label))
         elif ltype == 'his':
             self.SetItemImage(layer, self.his_icon)
-            self.SetItemText(layer, '%s %s' % (_('HIS'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('HIS'), label))
         elif ltype == 'shaded':
             self.SetItemImage(layer, self.shaded_icon)
-            self.SetItemText(layer, '%s %s' % (_('Shaded relief'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('Shaded relief'), label))
         elif ltype == 'rastnum':
             self.SetItemImage(layer, self.rnum_icon)
-            self.SetItemText(layer, '%s %s' % (_('raster cell numbers'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('raster cell numbers'), label))
         elif ltype == 'rastarrow':
             self.SetItemImage(layer, self.rarrow_icon)
-            self.SetItemText(layer, '%s %s' % (_('raster flow arrows'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('raster flow arrows'), label))
         elif ltype == 'vector':
             self.SetItemImage(layer, self.vect_icon)
-            self.SetItemText(layer, '%s %s' % (_('vector'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('vector'), label))
         elif ltype == 'thememap':
             self.SetItemImage(layer, self.theme_icon)
-            self.SetItemText(layer, '%s %s' % (_('thematic area (choropleth) map'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('thematic area (choropleth) map'), label))
         elif ltype == 'themechart':
             self.SetItemImage(layer, self.chart_icon)
-            self.SetItemText(layer, '%s %s' % (_('thematic charts'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('thematic charts'), label))
         elif ltype == 'grid':
             self.SetItemImage(layer, self.grid_icon)
-            self.SetItemText(layer, '%s %s' % (_('grid'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('grid'), label))
         elif ltype == 'geodesic':
             self.SetItemImage(layer, self.geodesic_icon)
-            self.SetItemText(layer, '%s %s' % (_('geodesic line'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('geodesic line'), label))
         elif ltype == 'rhumb':
             self.SetItemImage(layer, self.rhumb_icon)
-            self.SetItemText(layer, '%s %s' % (_('rhumbline'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('rhumbline'), label))
         elif ltype == 'labels':
             self.SetItemImage(layer, self.labels_icon)
-            self.SetItemText(layer, '%s %s' % (_('vector labels'), _('(double click to set properties)')))
+            self.SetItemText(layer, '%s %s' % (_('vector labels'), label))
         elif ltype == 'command':
             self.SetItemImage(layer, self.cmd_icon)
         elif ltype == 'group':
