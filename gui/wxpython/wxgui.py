@@ -428,8 +428,8 @@ class GMFrame(wx.Frame):
         """!Parse command selected from menu"""
         if event:
             cmd = self.GetMenuCmd(event)
-        menuform.GUI().ParseCommand(cmd, parentframe = self)
-
+        menuform.GUI(parent = self).ParseCommand(cmd)
+        
     def OnVDigit(self, event):
         """!Start vector digitizer
         """
