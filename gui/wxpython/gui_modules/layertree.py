@@ -67,7 +67,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                  id = wx.ID_ANY, style = wx.SUNKEN_BORDER,
                  ctstyle = CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
-                 CT.TR_MULTIPLE | CT.TR_ALIGN_WINDOWS, **kwargs):
+                 CT.TR_MULTIPLE, **kwargs):
         
         if 'style' in kwargs:
             ctstyle |= kwargs['style']
@@ -93,6 +93,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.flag = ''                       # flag for drag and drop hittest
         self.rerender = False                # layer change requires a rerendering if auto render
         self.reorder = False                 # layer change requires a reordering
+        
+        try:
+            ctstyle |= CT.TR_ALIGN_WINDOWS
+        except AttributeError:
+            pass
         
         if globalvar.hasAgw:
             super(LayerTree, self).__init__(parent, id, agwStyle = ctstyle, **kwargs)
