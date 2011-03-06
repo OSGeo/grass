@@ -49,10 +49,10 @@ wxCmdRun,      EVT_CMD_RUN      = NewEvent()
 wxCmdDone,     EVT_CMD_DONE     = NewEvent()
 wxCmdAbort,    EVT_CMD_ABORT    = NewEvent()
 
-def GrassCmd(cmd, stdout, stderr):
+def GrassCmd(cmd, stdout = None, stderr = None):
     """!Return GRASS command thread"""
     return gcmd.CommandThread(cmd,
-                              stdout=stdout, stderr=stderr)
+                              stdout = stdout, stderr = stderr)
 
 class CmdThread(threading.Thread):
     """!Thread for GRASS commands"""
@@ -70,11 +70,11 @@ class CmdThread(threading.Thread):
 
         self.start()
 
-    def RunCmd(self, callable, onDone, *args, **kwds):
+    def RunCmd(self, *args, **kwds):
         CmdThread.requestId += 1
         
         self.requestCmd = None
-        self.requestQ.put((CmdThread.requestId, callable, onDone, args, kwds))
+        self.requestQ.put((CmdThread.requestId, args, kwds))
         
         return CmdThread.requestId
 
@@ -85,24 +85,32 @@ class CmdThread(threading.Thread):
     def run(self):
         os.environ['GRASS_MESSAGE_FORMAT'] = 'gui'
         while True:
-            requestId, callable, onDone, args, kwds = self.requestQ.get()
+            requestId, args, kwds = self.requestQ.get()
+            for key in ('callable', 'onDone', 'userData'):
+                if kwds.has_key(key):
+                    vars()[key] = kwds[key]
+                    del kwds[key]
+                else:
+                    vars()[key] = None
+            
+            if not vars()['callable']:
+                vars()['callable'] = GrassCmd
             
             requestTime = time.time()
-            event = wxCmdRun(cmd=args[0],
-                             pid=requestId)
+            event = wxCmdRun(cmd = args[0],
+                             pid = requestId)
             
             wx.PostEvent(self.parent, event)
             
             time.sleep(.1)
-            
-            self.requestCmd = callable(*args, **kwds)
+            self.requestCmd = vars()['callable'](*args, **kwds)
             if self._want_abort_all:
                 self.requestCmd.abort()
                 if self.requestQ.empty():
                     self._want_abort_all = False
             
             self.resultQ.put((requestId, self.requestCmd.run()))
-
+            
             try:
                 returncode = self.requestCmd.module.returncode
             except AttributeError:
@@ -136,7 +144,7 @@ class CmdThread(threading.Thread):
                     argsColor[0] = [ 'r.colors',
                                      'map=%s' % mapName,
                                      'color=%s' % colorTable ]
-                    self.requestCmdColor = callable(*argsColor, **kwds)
+                    self.requestCmdColor = vars()['callable'](*argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
             
             event = wxCmdDone(cmd = args[0],
@@ -144,7 +152,8 @@ class CmdThread(threading.Thread):
                               returncode = returncode,
                               time = requestTime,
                               pid = requestId,
-                              onDone = onDone)
+                              onDone = vars()['onDone'],
+                              userData = vars()['userData'])
             
             # send event
             wx.PostEvent(self.parent, event)
@@ -530,10 +539,8 @@ class GMConsole(wx.SplitterWindow):
                     menuform.GUI(parent = self).ParseCommand(command)
                 else:
                     # process GRASS command with argument
-                    self.cmdThread.RunCmd(GrassCmd,
-                                          onDone,
-                                          command,
-                                          self.cmd_stdout, self.cmd_stderr)                                          
+                    self.cmdThread.RunCmd(command, stdout = self.cmd_stdout, stderr = self.cmd_stderr,
+                                          onDone = onDone)
                     self.cmd_output_timer.Start(50)
                     
                     return None
@@ -557,10 +564,8 @@ class GMConsole(wx.SplitterWindow):
                 # process GRASS command without argument
                 menuform.GUI(parent = self).ParseCommand(command)
             else:
-                self.cmdThread.RunCmd(GrassCmd,
-                                      onDone,
-                                      command,
-                                      self.cmd_stdout, self.cmd_stderr)                                         
+                self.cmdThread.RunCmd(command, stdout = self.cmd_stdout, stderr = self.cmd_stderr,
+                                      onDone = onDone)
             self.cmd_output_timer.Start(50)
         
         return None

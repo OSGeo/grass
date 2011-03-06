@@ -1221,7 +1221,7 @@ class GdalImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self.parent.goutput.RunCmd(cmd, switchPage=True,
+            self.parent.goutput.RunCmd(cmd, switchPage = True,
                                        onDone = self.AddLayers)
         
         self.OnCancel()

@@ -307,7 +307,7 @@ class MapFrame(wx.Frame):
             if dlg.ShowModal() == wx.ID_YES:
                 mapName = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetName()
                 self._layerManager.goutput.RunCmd(['v.digit', 'map=%s' % mapName],
-                                                      switchPage=False)
+                                                  switchPage = False)
             dlg.Destroy()
             
             self.toolbars['map'].combo.SetValue(_("2D view"))
