@@ -27,10 +27,10 @@ static char *help[] = {
     ""
 };
 
-void read_from_keyboard(FILE *inputfd, struct PS_data *PS,
-			int copies_set, int ps_copies, int can_reset_scale,
-			struct scalebar *sb, int *do_mapinfo, int *do_vlegend,
-			struct PS_group *grp)
+void read_instructions(FILE *inputfd, struct PS_data *PS,
+		       int copies_set, int ps_copies, int can_reset_scale,
+		       struct scalebar *sb, int *do_mapinfo, int *do_vlegend,
+		       struct PS_group *grp)
 {
     int i;
     int iflag;

@@ -198,10 +198,10 @@ int set_paper(char *);
 void reset_map_location(void);
 void print_papers(void);
 
-/* read_key.c */
-void read_from_keyboard(FILE *, struct PS_data *, int, int, int,
-			struct scalebar *, int *, int *,
-			struct PS_group *);
+/* r_instructions.c */
+void read_instructions(FILE *, struct PS_data *, int, int, int,
+		       struct scalebar *, int *, int *,
+		       struct PS_group *);
 
 /* r_border.c */
 int read_border(void);
