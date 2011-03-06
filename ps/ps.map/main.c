@@ -245,8 +245,8 @@ int main(int argc, char *argv[])
     G_get_set_window(&PS.w);
     Rast_set_window(&PS.w);
 
-    read_from_keyboard(inputfd, &PS, copies_set, ps_copies, can_reset_scale,
-		       &sb, &do_mapinfo, &do_vlegend, &grp);
+    read_instructions(inputfd, &PS, copies_set, ps_copies, can_reset_scale,
+		      &sb, &do_mapinfo, &do_vlegend, &grp);
     
     /* reset map location base on 'paper' on 'location' */
     reset_map_location();
