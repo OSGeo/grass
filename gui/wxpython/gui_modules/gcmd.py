@@ -123,13 +123,13 @@ class Popen(subprocess.Popen):
         
         subprocess.Popen.__init__(self, *args, **kwargs)
         
-    def recv(self, maxsize=None):
+    def recv(self, maxsize = None):
         return self._recv('stdout', maxsize)
     
-    def recv_err(self, maxsize=None):
+    def recv_err(self, maxsize = None):
         return self._recv('stderr', maxsize)
 
-    def send_recv(self, input='', maxsize=None):
+    def send_recv(self, input = '', maxsize = None):
         return self.send(input), self.recv(maxsize), self.recv_err(maxsize)
 
     def get_conn_maxsize(self, which, maxsize):
@@ -239,7 +239,7 @@ class Popen(subprocess.Popen):
 
 message = "Other end disconnected!"
 
-def recv_some(p, t=.1, e=1, tr=5, stderr=0):
+def recv_some(p, t = .1, e = 1, tr = 5, stderr = 0):
     if tr < 1:
         tr = 1
     x = time.time()+t
@@ -286,9 +286,9 @@ class Command:
             print 'FAILURE (%d)' % cmd.returncode
     @endcode
     """
-    def __init__ (self, cmd, stdin=None,
-                  verbose=None, wait=True, rerr=False,
-                  stdout=None, stderr=None):
+    def __init__ (self, cmd, stdin = None,
+                  verbose = None, wait = True, rerr = False,
+                  stdout = None, stderr = None):
         """
         @param cmd     command given as list
         @param stdin   standard input stream
@@ -442,8 +442,8 @@ class Command:
 class CommandThread(Thread):
     """!Create separate thread for command. Used for commands launched
     on the background."""
-    def __init__ (self, cmd, stdin=None,
-                  stdout=sys.stdout, stderr=sys.stderr):
+    def __init__ (self, cmd, stdin = None,
+                  stdout = sys.stdout, stderr = sys.stderr):
         """
         @param cmd command (given as list)
         @param stdin standard input stream 
@@ -451,7 +451,7 @@ class CommandThread(Thread):
         @param stderr redirect standard error output or None
         """
         Thread.__init__(self)
-
+        
         self.cmd    = cmd
         self.stdin  = stdin
         self.stdout = stdout
@@ -480,13 +480,15 @@ class CommandThread(Thread):
         if len(self.cmd) == 0:
             return
 
+        Debug.msg(1, "gcmd.CommandThread(): %s" % ' '.join(self.cmd))
+
         self.startTime = time.time()
         try:
             self.module = Popen(self.cmd,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                                shell=sys.platform=="win32")
+                                stdin = subprocess.PIPE,
+                                stdout = subprocess.PIPE,
+                                stderr = subprocess.PIPE,
+                                shell = sys.platform == "win32")
         except OSError, e:
             self.error = str(e)
             return 1
@@ -496,10 +498,9 @@ class CommandThread(Thread):
             self.module.stdin.close()
             
         # redirect standard outputs...
-        if self.stdout or self.stderr:
-            self.__redirect_stream()
-
-    def __redirect_stream(self):
+        self._redirect_stream()
+        
+    def _redirect_stream(self):
         """!Redirect stream"""
         if self.stdout:
             # make module stdout/stderr non-blocking
@@ -522,20 +523,20 @@ class CommandThread(Thread):
                 self.aborted = True
                 return 
             if self.stdout:
-                line = recv_some(self.module, e=0, stderr=0)
+                line = recv_some(self.module, e = 0, stderr = 0)
                 self.stdout.write(line)
             if self.stderr:
-                line = recv_some(self.module, e=0, stderr=1)
+                line = recv_some(self.module, e = 0, stderr = 1)
                 self.stderr.write(line)
                 if len(line) > 0:
                     self.error = line
 
         # get the last output
         if self.stdout:
-            line = recv_some(self.module, e=0, stderr=0)
+            line = recv_some(self.module, e = 0, stderr = 0)
             self.stdout.write(line)
         if self.stderr:
-            line = recv_some(self.module, e=0, stderr=1)
+            line = recv_some(self.module, e = 0, stderr = 1)
             self.stderr.write(line)
             if len(line) > 0:
                 self.error = line
