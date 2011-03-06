@@ -119,7 +119,7 @@ class LocationWizard(wx.Object):
         #
         # file = "loc_wizard.png"
         file = "loc_wizard_qgis.png"
-        imagePath = os.path.join(globalvar.ETCWXDIR, "images", file)
+        imagePath = os.path.join(globalvar.ETCIMGDIR, file)
         wizbmp = wx.Image(imagePath, wx.BITMAP_TYPE_PNG)
         # wizbmp.Rescale(250,600)
         wizbmp = wizbmp.ConvertToBitmap()

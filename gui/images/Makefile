@@ -1,12 +1,15 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Dir.make
+include $(MODULE_TOPDIR)/include/Make/Other.make
 
-default:
-	$(MAKE) $(ETC)/gui/images/startup_banner.png
+ETCDIR = $(ETC)/gui/images
 
-$(ETC)/gui/images/%: % | $(ETC)/gui/images
+FILES := $(wildcard *.png)
+
+default: $(patsubst %,$(ETCDIR)/%,$(FILES))
+
+$(ETCDIR)/%.png: %.png | $(ETCDIR)
 	$(INSTALL_DATA) $< $@
 
-$(ETC)/gui/images:
+$(ETCDIR):
 	$(MKDIR) $@

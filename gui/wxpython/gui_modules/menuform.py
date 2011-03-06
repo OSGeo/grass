@@ -96,8 +96,6 @@ else:
     wxbase = os.path.join(globalvar.ETCWXDIR)
 
 sys.path.append(wxbase)
-imagepath = os.path.join(wxbase, "images")
-sys.path.append(imagepath)
 
 from grass.script import core as grass
 
@@ -772,8 +770,8 @@ class mainFrame(wx.Frame):
         
         # GRASS logo
         self.logo = wx.StaticBitmap(parent = self.panel,
-                                    bitmap = wx.Bitmap(name = os.path.join(imagepath,
-                                                                       'grass_form.png'),
+                                    bitmap = wx.Bitmap(name = os.path.join(globalvar.ETCIMGDIR,
+                                                                           'grass_form.png'),
                                                      type = wx.BITMAP_TYPE_PNG))
         topsizer.Add(item = self.logo, proportion = 0, border = 3,
                      flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL)

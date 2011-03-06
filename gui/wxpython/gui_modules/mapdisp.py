@@ -71,13 +71,6 @@ from preferences import globalSettings as UserSettings
 from mapdisp_command import Command
 from mapdisp_window import BufferedWindow
 
-import images
-imagepath = images.__path__[0]
-sys.path.append(imagepath)
-
-###
-### global variables
-###
 # for standalone app
 cmdfilename = None
 

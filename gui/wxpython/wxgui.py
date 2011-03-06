@@ -57,6 +57,11 @@ except ImportError:
     import wx.lib.customtreectrl as CT
     import wx.lib.flatnotebook   as FN
 
+try:
+    import wx.lib.agw.advancedsplash as SC
+except ImportError:
+    SC = None
+
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script import core as grass
 
@@ -1474,11 +1479,22 @@ class GMApp(wx.App):
         wx.InitAllImageHandlers()
 
         # create splash screen
-        introImagePath = os.path.join(globalvar.ETCWXDIR, "images", "grass_splash.png")
+        introImagePath = os.path.join(globalvar.ETCIMGDIR, "grass_splash.png")
         introImage     = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
         introBmp       = introImage.ConvertToBitmap()
-        wx.SplashScreen (bitmap = introBmp, splashStyle = wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                         milliseconds = 2000, parent = None, id = wx.ID_ANY)
+        if SC:
+            splash = SC.AdvancedSplash(bitmap = introBmp, 
+                                       extrastyle = SC.AS_TIMEOUT | SC.AS_CENTER_ON_SCREEN,
+                                       timeout = 2000, parent = None, id = wx.ID_ANY)
+            splash.SetText(_('Starting GRASS GUI...'))
+            splash.SetTextColour(wx.Colour(45, 52, 27))
+            splash.SetTextFont(wx.Font(pointSize = 15, family = wx.DEFAULT, style = wx.NORMAL,
+                                       weight = wx.BOLD))
+            splash.SetTextPosition((150, 430))
+        else:
+            wx.SplashScreen (bitmap = introBmp, splashStyle = wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
+                             milliseconds = 2000, parent = None, id = wx.ID_ANY)
+        
         wx.Yield()
         
         w, h = wx.GetDisplaySize()
