@@ -59,10 +59,7 @@ except:
     sys.path.append(CompatPath)
     from compat import subprocess
 
-gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
-sys.path.append(gmpath)
-
-imgpath = os.path.join(globalvar.ETCWXDIR, "images")
+sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
 
 #
 # global variables
@@ -76,7 +73,7 @@ tgt_map = ''
 maptype = 'cell'
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(imgpath, 'small_up_arrow.png'), 'rb')
+    stream = open(os.path.join(globalvar.ETCIMGDIR, 'small_up_arrow.png'), 'rb')
     try:
         img = wx.ImageFromStream(stream)
     finally:
@@ -84,7 +81,7 @@ def getSmallUpArrowImage():
     return img
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(imgpath, 'small_down_arrow.png'), 'rb')
+    stream = open(os.path.join(globalvar.ETCIMGDIR, 'small_down_arrow.png'), 'rb')
     try:
         img = wx.ImageFromStream(stream)
     finally:

@@ -9,10 +9,10 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 ETCDIR = $(ETC)/gui/wxpython
 
-SRCFILES := $(wildcard scripts/* compat/* gui_modules/* icons/*.* images/* xml/*) gis_set.py gis_set_error.py wxgui.py README
+SRCFILES := $(wildcard scripts/* compat/* gui_modules/* icons/*.* xml/*) gis_set.py gis_set_error.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
-DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat gui_modules icons images scripts xml)
+DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat gui_modules icons scripts xml)
 
 default: $(DSTFILES) menustrings.py
 	$(MAKE) parsubdirs
