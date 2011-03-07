@@ -217,6 +217,15 @@ xcopy %OSGEO4W_DIR%\apps\Python25\Scripts %PACKAGE_DIR%\Python25\Scripts /S/V/F/
 copy %SVN_PATH%\svn.exe %PACKAGE_DIR%\extrabin
 copy %SVN_PATH%\*.dll %PACKAGE_DIR%\extralib
 
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy env.bat
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+copy env.bat %PACKAGE_DIR%\etc
+
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo Packaging Completed
