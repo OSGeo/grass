@@ -1115,9 +1115,9 @@ class GdalSelect(wx.Panel):
         
         # dsn widgets
         if not ogr:
-            filemask = 'GeoTIFF (*.tif)|*.%s' % self._getExtPattern('tif')
+            filemask = 'GeoTIFF (%s)|%s' % (self._getExtPattern('tif'), self._getExtPattern('tif'))
         else:
-            filemask = 'ESRI Shapefile (*.shp)|*.%s' % self._getExtPattern('shp')
+            filemask = 'ESRI Shapefile (%s)|%s' % (self._getExtPattern('shp'), self._getExtPattern('shp'))
         
         dsnFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText = '',
@@ -1253,8 +1253,15 @@ class GdalSelect(wx.Panel):
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
 
+    def _getExtPatternGlob(self, ext):
+        """!Get pattern for case-insensitive globing"""
+        pattern = '*.'
+        for c in ext:
+            pattern += '[%s%s]' % (c.lower(), c.upper())
+        return pattern
+    
     def _getExtPattern(self, ext):
-        """!Get pattern for case-insensitive mask"""
+        """!Get pattern for case-insensitive file mask"""
         return '*.%s;*.%s' % (ext.lower(), ext.upper())
 
     def OnSettingsLoad(self, event):
@@ -1340,7 +1347,7 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
-                format += ' (*.%s)|*.%s' % (ext, self._getExtPattern(ext))
+                format += ' (%s)|%s' % (self._getExtPattern(ext), self._getExtPattern(ext))
             except KeyError:
                 format += ' (*.*)|*.*'
             
@@ -1425,7 +1432,7 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(self.format.GetStringSelection())
             except KeyError:
                 ext = ''
-            for file in glob.glob(os.path.join(dsn, "*.%s") % self._getExtPattern(ext)):
+            for file in glob.glob(os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)):
                 baseName = os.path.basename(file)
                 grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
                 data.append((layerId, baseName, grassName))
@@ -1485,7 +1492,7 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
-                format += ' (*.%s)|*.%s' % (ext, self._getExtPattern(ext))
+                format += ' (%s)|%s' % (self._getExtPattern(ext), self._getExtPattern(ext))
             except KeyError:
                 format += ' (*.*)|*.*'
             
