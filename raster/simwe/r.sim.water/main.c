@@ -212,14 +212,12 @@ int main(int argc, char *argv[])
     parm.err->description = _("Name for output simulation error raster map [m]");
     parm.err->guisection = _("Output");
 
-/*
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.outwalk->key = "outwalk";
     parm.outwalk->required = NO;
     parm.outwalk->description =
-	_("Name of the output walkers vector points map");
+	_("Base name of the output walkers vector points map");
     parm.outwalk->guisection = _("Output_options");
-*/
 
     parm.nwalk = G_define_option();
     parm.nwalk->key = "nwalk";
@@ -334,7 +332,7 @@ int main(int argc, char *argv[])
     depth = parm.depth->answer;
     disch = parm.disch->answer;
     err = parm.err->answer;
-/*    outwalk = parm.outwalk->answer; */
+    outwalk = parm.outwalk->answer; 
 /*    sfile = parm.sfile->answer; */
 
     sscanf(parm.niter->answer, "%d", &timesec);

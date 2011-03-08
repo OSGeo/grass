@@ -29,6 +29,21 @@
 struct options parm;
 struct flags flag;
 
+/*
+ * Soeren 8. Mar 2011 TODO:
+ * Put all these global variables into several meaningful structures and 
+ * document use and purpose.
+ * 
+ * Example:
+ * Put all file descriptors into a input_files struct and rename the variables:
+ * input_files.elev 
+ * input_files.dx 
+ * input_files.dy 
+ * input_files.drain
+ * ... 
+ * 
+ */
+
 FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
     *fdmanin, *fddepth, *fddisch, *fderr;
 FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
@@ -46,7 +61,7 @@ char *manin;
 char *depth;
 char *disch;
 char *err;
-/* char *outwalk; */
+char *outwalk; 
 char *mapset;
 char *mscale;
 char *tserie;
@@ -69,12 +84,6 @@ struct seed seed;
 
 struct Cell_head cellhd;
 
-/*
-struct Point *points;
-int npoints;
-int npoints_alloc;
-*/
-
 double xmin, ymin, xmax, ymax;
 double mayy, miyy, maxx, mixx;
 int mx, my;
@@ -93,12 +102,10 @@ double **gama, **gammas, **si, **inf, **sigma;
 float **dc, **tau, **er, **ct, **trap;
 float **dif;
 
-/* double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; */
-double vavg[MAXW][2], w[MAXW][3];
+double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; 
 int iflag[MAXW];
 
 double hbeta;
-/* int ldemo; */
 double hhmax, sisum, vmean;
 double infsum, infmean;
 int maxw, maxwa, nwalk;
@@ -106,10 +113,9 @@ double rwalk, bresx, bresy, xrand, yrand;
 double stepx, stepy, xp0, yp0;
 double chmean, si0, deltap, deldif, cch, hhc, halpha;
 double eps;
-/* int maxwab, nstack; */
-int maxwab;
+int maxwab, nstack;
 int iterout, mx2o, my2o;
-int miter, nwalka, lwwfin;
+int miter, nwalka;
 double timec;
 int ts, timesec;
 
@@ -128,8 +134,7 @@ void main_loop(void)
 {
 
     int i, ii, l, k;
-/*    int icoub, lwout, nmult; */
-    int icoub, nmult;
+    int icoub, nmult; 
     int iw, iblock, lw;
     int itime, iter1;
     int nfiterh, nfiterw;
@@ -149,7 +154,7 @@ void main_loop(void)
     nblock = 1;
     icoub = 0;
     icfl = 0;
-/*    nstack = 0; */
+    nstack = 0; 
 
     if (maxwa > (MAXW - mx * my)) {
 	mitfac = maxwa / (MAXW - mx * my);
@@ -168,7 +173,6 @@ void main_loop(void)
 	sarea = bresx * bresy;
 	G_debug(2, " barea,sarea,rwalk,sisum: %f %f %f %f", barea, sarea,
 		rwalk, sisum);
-	lwwfin = 0;
 	/* write hh.walkers0 */
 
 	for (k = 0; k < my; k++) {
@@ -225,20 +229,11 @@ void main_loop(void)
 			    iflag[lw] = 1;
 			}
 
-/*
-			lwout = lw / ldemo;
-			lwout *= ldemo;
-
-			if (lwout == lw) {
-			    ++lwwfin;
-			}
-*/
 		    }
 		}		/*DEFined area */
 	    }
 	}
 	nwalk = lw;
-	G_debug(2, " number of written walkers: %d", lwwfin);
 	G_debug(2, " nwalk, maxw %d %d", nwalk, MAXW);
 	G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, frac);
 
@@ -283,6 +278,7 @@ void main_loop(void)
 		addac = factor * .5;
 	    }
 	    nwalka = 0;
+	    nstack = 0;
 
 	    for (lw = 1; lw <= nwalk; lw++) {
 		if (w[lw][3] > EPS) {	/* check the walker weight */
@@ -302,9 +298,7 @@ void main_loop(void)
 		    }
 
 		    if (zz[k][l] != UNDEF) {
-
 			if (infil != NULL) {	/* infiltration part */
-
 			    if (inf[k][l] - si[k][l] > 0.) {
 
 				decr = pow(addac * w[lw][3], 3. / 5.);	/* decreasing factor in m */
@@ -317,11 +311,8 @@ void main_loop(void)
 				    inf[k][l] = 0.;
 
 				}
-
 			    }
-
 			}
-
 
 			gama[k][l] += (addac * w[lw][3]);	/* add walker weigh to water depth or conc. */
 
@@ -348,9 +339,7 @@ void main_loop(void)
 				velx = -0.1 * v1[k][l];	/* move it slightly back */
 				vely = -0.1 * v2[k][l];
 			    }
-
 			}
-
 
 			gaux = gasdev();
 			gauy = gasdev();
@@ -380,59 +369,49 @@ void main_loop(void)
 			w[lw][3] = 1e-10;	/* eliminate walker if it is out of area */
 		    }
 		}
+            } /* lw loop */
+            
+            /* Changes made by Soeren 8. Mar 2011 to replace the site walker output implementation */
+            /* Save all walkers located within the computational region and with valid 
+               z coordinates */
+            if ((i == miter || i == iter1)) {	
+                nstack = 0;
+                
+                for (lw = 1; lw <= nwalk; lw++) {
+                    /* Compute the  elevation raster map index */
+                    l = (int)((w[lw][1] + stxm) / stepx) - mx - 1;
+                    k = (int)((w[lw][2] + stym) / stepy) - my - 1;
+                    
+		    /* Check for correct elevation raster map index */
+		    if(l < 0 || l >= mx || k < 0 || k >= my)
+			 continue;
 
-/* output walkers commented out */
-		/*        write the walkers which reach the box */
-/*
-		if (w[lw][1] >= xmin && w[lw][2] >= ymin && w[lw][1]
-		    <= xmax && w[lw][2] <= ymax && iflag[lw] == 0) {
+                    if (w[lw][3] > EPS && zz[k][l] != UNDEF) {
 
-		    lwout = lw / ldemo;
-		    lwout *= ldemo;
-		    if (lwout == lw && (i == miter || i == iter1)) {	
-			stack[nstack][1] = mixx / conv + w[lw][1] / conv;
-			stack[nstack][2] = miyy / conv + w[lw][2] / conv;
-			stack[nstack][3] = w[lw][3];
+                        /* Save the 3d position of the walker */
+                        stack[nstack][1] = mixx / conv + w[lw][1] / conv;
+                        stack[nstack][2] = miyy / conv + w[lw][2] / conv;
+                        stack[nstack][3] = zz[k][l];
 
-			nstack++;
-*/
-			/*                  iflag[lw] = 1; */
-/*
-		    }
-		}
-*/
+                        nstack++;
+                    }
+                }
+            } /* lw loop */
 
-		/* walker is leaving the box */
+	    if (i == iter1 && ts == 1) {
+            /* call output for iteration output */
+                if (erdep != NULL)
+                    erod(gama);	/* divergence of gama field */
 
-		/*              if (w[lw][1] <= mixx && w[lw][2] <= bymi && w[lw][1] 
-		   >= bxma && w[lw][2] >= byma && iflag[lw] == 1) {
-		   iflag[lw] = 0;
-		   } */
-
-		/* every iterout iteration write out the selected ldemo walkers */
-		/* and water depth and time */
-
-
-	    }			/* lw loop */
-
-	    if (i == iter1) {
-
-		/* call output for iteration output */
-
-		if (ts == 1) {
-		    if (erdep != NULL)
-			erod(gama);	/* divergence of gama field */
-
-		    conn = (double)nblock / (double)iblock;
-		    itime = (int)(i * deltap * timec);
-		    ii = output_data(itime, conn);
-/*		    nstack = 0; */
-		    if (ii != 1)
-			G_fatal_error(_("Unable to write raster maps"));
-		}
-
+                conn = (double)nblock / (double)iblock;
+                itime = (int)(i * deltap * timec);
+                ii = output_data(itime, conn);
+                if (ii != 1)
+                    G_fatal_error(_("Unable to write raster maps"));
 	    }
 
+            /* Soeren 8. Mar 2011 TODO:
+             *  This hould be replaced by vector functionality and sql database storage */
 /* ascii data site file output for gamma  - hydrograph or sediment*/
 /* cchez incl. sqrt(sinsl) */
 /* sediment */
@@ -469,6 +448,7 @@ void main_loop(void)
 	}			/* miter */
 
       L_800:
+      /* Soeren 8. Mar 2011: Why is this commented out?*/
 	/*        if (iwrib != nblock) {
 	   icount = icoub / iwrib;
 

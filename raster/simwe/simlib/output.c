@@ -5,13 +5,70 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-/* #include <grass/site.h> */
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
+#include <grass/vector.h>
 
 #include <grass/waterglobs.h>
 #include <grass/glocale.h>
 
+
+static void output_walker_as_vector(int tt, int ndigit);
+
+
+/* This function was added by Soeren 8. Mar 2011 
+ * It replaces the site walker output implementation */
+void output_walker_as_vector(int tt, int ndigit)
+{
+    char buf[256];
+    char *outwalk_time = NULL; 
+    double x, y, z;
+    struct Map_info Out;
+    struct line_pnts *Points;
+    struct line_cats *Cats;
+    int i;
+
+    if (outwalk != NULL) {
+
+	/* In case of time series we extent the output name with the time value */
+	if (ts == 1) {
+	    sprintf(buf, "%s_%.*d", outwalk, ndigit, tt);
+	    outwalk_time = G_store(buf);
+	    Vect_open_new(&Out, outwalk_time, WITH_Z);
+	    G_message("Writing %i walker into vector file %s", nstack, outwalk_time);
+	}
+	else {
+	    Vect_open_new(&Out, outwalk, WITH_Z);
+	    G_message("Writing %i walker into vector file %s", nstack, outwalk);
+	}
+
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
+
+	for (i = 0; i < nstack; i++) {
+	    x = (float)stack[i][1];
+	    y = (float)stack[i][2];
+	    z = (float)stack[i][3];
+
+	    Vect_reset_line(Points);
+	    Vect_reset_cats(Cats);
+			    
+	    Vect_cat_set(Cats, 1, i + 1);
+	    Vect_append_point(Points, x, y, z);
+	    Vect_write_line(&Out, GV_POINT, Points, Cats);
+	}
+	/* Close vector file */
+        Vect_close(&Out);
+                
+        Vect_destroy_line_struct(Points);
+        Vect_destroy_cats_struct(Cats);
+    }
+    
+    return;
+}
+
+/* Soeren 8. Mar 2011 TODO: 
+ * This function needs to be refractured and splittet into smaller parts */
 int output_data(int tt, double ft)
 {
 
@@ -25,7 +82,6 @@ int output_data(int tt, double ft)
     struct History hist, hist1;	/* hist2, hist3, hist4, hist5 */
     char *depth0 = NULL, *disch0 = NULL, *err0 = NULL;
     char *conc0 = NULL, *flux0 = NULL;
-/*    char *erdep0 = NULL, *outwalk0 = NULL; */
     char *erdep0 = NULL;
     const char *mapst = NULL;
     char *type;
@@ -33,9 +89,6 @@ int output_data(int tt, double ft)
     int ndigit;
     FCELL dat1, dat2;
     float a1, a2;
-/*    Site_head walkershead;
-    Site *sd;
-*/
 
     ndigit = 2;
     if (timesec >= 10)
@@ -46,50 +99,11 @@ int output_data(int tt, double ft)
 	ndigit = 5;
     if (timesec >= 10000)
 	ndigit = 6;
+    
+    /* Write the output walkers */
+    output_walker_as_vector(tt, ndigit);
 
     Rast_set_window(&cellhd);
-
-/*
-    if (outwalk) {
-	if (ts == 1) {
-	    sprintf(buf, "%s%.*d", outwalk, ndigit, tt);
-	    outwalk0 = G_store(buf);
-	    fdoutwalk = G_fopen_sites_new(outwalk0);
-	}
-	else
-	    fdoutwalk = G_fopen_sites_new(outwalk);
-
-	if (fdoutwalk == NULL)
-	    G_fatal_error("Cannot open %s", outwalk);
-	else {
-	    char buf[GNAME_MAX + 40];
-
-	    if (NULL == (sd = G_site_new_struct(-1, 2, 0, 1)))
-		G_fatal_error("memory allocation failed for site");
-
-	    if (ts == 1)
-		walkershead.name = outwalk0;
-	    else
-		walkershead.name = outwalk;
-
-	    sprintf(buf, "output walkers of %s [raster]", depth);
-	    walkershead.desc = G_store(buf);
-	    walkershead.time = NULL;
-	    walkershead.stime = NULL;
-	    walkershead.labels = NULL;
-	    walkershead.form = NULL;
-
-	    G_site_put_head(fdoutwalk, &walkershead);
-
-	    for (i = 0; i < nstack; i++) {
-		sd->east = (float)stack[i][1];
-		sd->north = (float)stack[i][2];
-		sd->fcat = (float)stack[i][3];
-		G_site_put(fdoutwalk, sd);
-	    }
-	}
-    }
-*/
     if (depth) {
 	depth_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
@@ -477,8 +491,8 @@ int output_data(int tt, double ft)
 	    &hist, "duration (sec.)=%d, time-serie iteration=%d",
 	    timesec, tt);
 	Rast_append_format_history(
-	    &hist, "written walkers=%d, deltap=%f, mean vel.=%f",
-	    lwwfin, deltap, vmean);
+	    &hist, "written deltap=%f, mean vel.=%f",
+	    deltap, vmean);
 	Rast_append_format_history(
 	    &hist, "mean source (si)=%e, mean infil=%e",
 	    si0, infmean);
@@ -517,8 +531,8 @@ int output_data(int tt, double ft)
 	    &hist, "duration (sec.)=%d, time-serie iteration=%d",
 	    timesec, tt);
 	Rast_append_format_history(
-	    &hist, "written walkers=%d, deltap=%f, mean vel.=%f",
-	    lwwfin, deltap, vmean);
+	    &hist, "written deltap=%f, mean vel.=%f",
+	    deltap, vmean);
 	Rast_append_format_history(
 	    &hist, "mean source (si)=%e, mean infil=%e",
 	    si0, infmean);
@@ -557,8 +571,8 @@ int output_data(int tt, double ft)
 	    &hist, "duration (sec.)=%d, time-serie iteration=%d",
 	    timesec, tt);
 	Rast_append_format_history(
-	    &hist, "written walkers=%d, deltap=%f, mean vel.=%f",
-	    lwwfin, deltap, vmean);
+	    &hist, "written deltap=%f, mean vel.=%f",
+	    deltap, vmean);
 	Rast_append_format_history(
 	    &hist, "mean source (si)=%f", si0);
 
