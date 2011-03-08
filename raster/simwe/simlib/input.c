@@ -18,7 +18,7 @@
 
 /*!
  * \brief allocate memory, read input rasters, assign UNDEF to NODATA
- *
+ * 
  *  \return int
  * sites related input/output commented out - needs update to vect, HM nov 2008
  */
@@ -32,7 +32,7 @@ int input_data(void)
     DCELL *dxin_cell, *dyin_cell, *rain_cell, *infil_cell, *wdepth_cell;
     int elevin_fd, dxin_fd, dyin_fd, rain_fd, infil_fd, traps_fd, manin_fd, row, row_rev;
     int detin_fd, trainin_fd, tauin_fd, wdepth_fd;
-    int l, j;
+    int j;
 /*    int nn, cc, ii, dd; */
     double unitconv = 0.0000002;	/* mm/hr to m/s */
     const char *mapset;
@@ -116,7 +116,6 @@ int input_data(void)
 	wdepth_cell = Rast_allocate_d_buf();
 
     /* Allocate some double dimension arrays for each input */
-    /* with length of matrix Y */
     zz = G_alloc_fmatrix(my, mx);
     v1 = G_alloc_matrix(my, mx);
     v2 = G_alloc_matrix(my, mx);
@@ -143,7 +142,7 @@ int input_data(void)
     if (wdepth != NULL)
 	gama = G_alloc_matrix(my, mx);
 
-    G_debug(3, "Running JAN 2010 version, started modifications on 20080211");
+    G_debug(3, "Running MAR 2011 version, started modifications on 20080211");
 
     /* Check if data available in mapsets
      * if found, then open the files */

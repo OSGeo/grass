@@ -28,7 +28,7 @@ extern char *manin;
 extern char *depth;
 extern char *disch;
 extern char *err;
-/* extern char *outwalk; */
+extern char *outwalk;
 extern char *mapset;
 extern char *mscale;
 extern char *tserie;
@@ -120,12 +120,10 @@ extern double **gama, **gammas, **si, **inf, **sigma;
 extern float **dc, **tau, **er, **ct, **trap;
 extern float **dif;
 
-/* extern double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; */
-extern double vavg[MAXW][2], w[MAXW][3];
+extern double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; 
 extern int iflag[MAXW];
 
 extern double hbeta;
-/* extern int ldemo; */
 extern double hhmax, sisum, vmean;
 extern double infsum, infmean;
 extern int maxw, maxwa, nwalk;
@@ -133,10 +131,9 @@ extern double rwalk, bresx, bresy, xrand, yrand;
 extern double stepx, stepy, xp0, yp0;
 extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
 extern double eps;
-/* extern int maxwab, nstack; */
-extern int maxwab;
+extern int maxwab, nstack; 
 extern int iterout, mx2o, my2o;
-extern int miter, nwalka, lwwfin;
+extern int miter, nwalka;
 extern double timec;
 extern int ts, timesec;
 

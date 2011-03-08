@@ -161,6 +161,13 @@ int main(int argc, char *argv[])
     parm.maninval->description = _("Name of mannings n value");
     parm.maninval->guisection = _("Input");
 
+    parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
+    parm.outwalk->key = "outwalk";
+    parm.outwalk->required = NO;
+    parm.outwalk->description =
+	_("Base name of the output walkers vector points map");
+    parm.outwalk->guisection = _("Output_options");
+    
     /* needs to be updated to GRASS 6 vector format !! 
     parm.sfile = G_define_standard_option(G_OPT_V_INPUT);
     parm.sfile->key = "vector";
@@ -309,7 +316,7 @@ int main(int argc, char *argv[])
     conc = parm.conc->answer;
     flux = parm.flux->answer;
     erdep = parm.erdep->answer;
-/*    sfile = parm.sfile->answer; */
+    outwalk = parm.outwalk->answer; 
 
     /*      sscanf(parm.nwalk->answer, "%d", &maxwa); */
     sscanf(parm.niter->answer, "%d", &timesec);
