@@ -77,7 +77,7 @@ int draw_scale(int toptext, int size)
     D_get_src(&t, &b, &l, &r);
 
     x_pos = (int)(east * (r - l) / 100.);
-    y_pos = (int)(north * (b - t) / 100.);
+    y_pos = (int)((100. - north) * (b - t) / 100.);
 
     if (draw == 1) {
 	int w, h;
