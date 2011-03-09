@@ -1797,7 +1797,7 @@ class MapFrame(wx.Frame):
             gdialogs.DecorationDialog(parent = self, title = _('Scale and North arrow'),
                                       size = (350, 200),
                                       style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE,
-                                      cmd = ['d.barscale', 'at=0,5'],
+                                      cmd = ['d.barscale', 'at=0,95'],
                                       ovlId = id,
                                       name = 'barscale',
                                       checktxt = _("Show/hide scale and North arrow"),
@@ -1807,7 +1807,7 @@ class MapFrame(wx.Frame):
         ### dialog cannot be show as modal - in the result d.barscale is not selectable
         ### self.dialogs['barscale'].ShowModal()
         self.dialogs['barscale'].Show()
-        self.MapWindow.mouse['use'] = 'pointer'        
+        self.MapWindow.mouse['use'] = 'pointer'
 
     def OnAddLegend(self, event):
         """!Handler for legend map decoration menu selection.

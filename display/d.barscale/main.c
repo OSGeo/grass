@@ -85,11 +85,11 @@ int main(int argc, char **argv)
     opt3->key = "at";
     opt3->key_desc = "x,y";
     opt3->type = TYPE_DOUBLE;
-    opt3->answer = "0.0,0.0";
+    opt3->answer = "0.0,5.0";
     opt3->options = "0-100";
     opt3->required = NO;
     opt3->description =
-	_("The screen coordinates for top-left corner of label ([0,0] is top-left of frame)");
+	_("The screen coordinates for top-left corner of label ([0,0] is lower-left of frame)");
 
     fsize = G_define_option();
     fsize->key = "fontsize";
